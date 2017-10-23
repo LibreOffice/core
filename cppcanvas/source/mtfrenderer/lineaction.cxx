@@ -18,7 +18,7 @@
  */
 
 
-#include <lineaction.hxx>
+#include "lineaction.hxx"
 #include <outdevstate.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
@@ -33,7 +33,7 @@
 
 #include <cppcanvas/canvas.hxx>
 
-#include <mtftools.hxx>
+#include "mtftools.hxx"
 
 
 using namespace ::com::sun::star;

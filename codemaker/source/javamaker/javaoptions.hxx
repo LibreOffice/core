@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_JAVAOPTIONS_HXX
 #define INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_JAVAOPTIONS_HXX
 
-#include "codemaker/options.hxx"
+#include <codemaker/options.hxx>
 
 class JavaOptions : public Options
 {

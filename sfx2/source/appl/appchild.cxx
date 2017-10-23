@@ -22,15 +22,15 @@
 #include <svl/eitem.hxx>
 
 #include <sfx2/app.hxx>
-#include "appdata.hxx"
-#include "workwin.hxx"
-#include "childwinimpl.hxx"
+#include <appdata.hxx>
+#include <workwin.hxx>
+#include <childwinimpl.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/sfxsids.hrc>
 

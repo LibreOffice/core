@@ -17,30 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "JoinTableView.hxx"
+#include <JoinTableView.hxx>
 #include <osl/diagnose.h>
-#include "querycontroller.hxx"
-#include "JoinDesignView.hxx"
-#include "strings.hrc"
-#include "TableWindow.hxx"
-#include "TableWindowListBox.hxx"
-#include "TableConnection.hxx"
-#include "TableConnectionData.hxx"
-#include "ConnectionLine.hxx"
-#include "ConnectionLineData.hxx"
-#include "browserids.hxx"
+#include <querycontroller.hxx>
+#include <JoinDesignView.hxx>
+#include <strings.hrc>
+#include <TableWindow.hxx>
+#include <TableWindowListBox.hxx>
+#include <TableConnection.hxx>
+#include <TableConnectionData.hxx>
+#include <ConnectionLine.hxx>
+#include <ConnectionLineData.hxx>
+#include <browserids.hxx>
 #include <svl/urlbmk.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include "QueryMoveTabWinUndoAct.hxx"
 #include "QuerySizeTabWinUndoAct.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include "TableWindowData.hxx"
-#include "JAccess.hxx"
+#include <TableWindowData.hxx>
+#include <JAccess.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>

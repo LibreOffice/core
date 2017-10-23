@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbase/DDriver.hxx"
-#include "dbase/DConnection.hxx"
+#include <dbase/DDriver.hxx>
+#include <dbase/DConnection.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/dbexception.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 #include <comphelper/processfactory.hxx>
 
 using namespace connectivity::dbase;

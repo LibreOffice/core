@@ -57,7 +57,7 @@
  * @file
  * Line style of Drawing object.
  ************************************************************************/
-#include "xfilter/xfdrawlinestyle.hxx"
+#include <xfilter/xfdrawlinestyle.hxx>
 
 XFDrawLineStyle::XFDrawLineStyle()
     : m_eLineStyle(enumXFLineSolid)

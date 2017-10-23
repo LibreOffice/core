@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLTRACER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLTRACER_HXX
 
-#include "global.hxx"
+#include <global.hxx>
 #include "xltools.hxx"
 
 // As Trace features become implemented, we can safely delete the enum entry as

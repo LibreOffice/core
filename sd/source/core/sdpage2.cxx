@@ -30,19 +30,19 @@
 #include <editeng/xmlcnitm.hxx>
 #include <svx/svditer.hxx>
 
-#include "Annotation.hxx"
-#include "notifydocumentevent.hxx"
-#include "sdresid.hxx"
-#include "sdpage.hxx"
-#include "glob.hxx"
-#include "strings.hrc"
-#include "drawdoc.hxx"
-#include "stlpool.hxx"
-#include "pglink.hxx"
-#include "anminfo.hxx"
+#include <Annotation.hxx>
+#include <notifydocumentevent.hxx>
+#include <sdresid.hxx>
+#include <sdpage.hxx>
+#include <glob.hxx>
+#include <strings.hrc>
+#include <drawdoc.hxx>
+#include <stlpool.hxx>
+#include <pglink.hxx>
+#include <anminfo.hxx>
 
-#include "strings.hxx"
-#include "DrawDocShell.hxx"
+#include <strings.hxx>
+#include <DrawDocShell.hxx>
 
 #include <tools/tenccvt.hxx>
 #include <svl/itemset.hxx>

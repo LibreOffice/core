@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AccessibleDrawDocumentView.hxx"
+#include <AccessibleDrawDocumentView.hxx>
 #include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
@@ -40,20 +40,20 @@
 #include <svx/svdmodel.hxx>
 #include <svx/unoapi.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include "Window.hxx"
+#include <Window.hxx>
 #include <vcl/svapp.hxx>
 
-#include "ViewShell.hxx"
-#include "View.hxx"
-#include "DrawDocShell.hxx"
+#include <ViewShell.hxx>
+#include <View.hxx>
+#include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
 #include <algorithm>
-#include "sdpage.hxx"
-#include "slideshow.hxx"
-#include "anminfo.hxx"
+#include <sdpage.hxx>
+#include <slideshow.hxx>
+#include <anminfo.hxx>
 
-#include "strings.hrc"
-#include "sdresid.hxx"
+#include <strings.hrc>
+#include <sdresid.hxx>
 #include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;

@@ -24,7 +24,7 @@
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
 #include <swdbdata.hxx>
-#include "sharedconnection.hxx"
+#include <sharedconnection.hxx>
 
 namespace com{namespace sun{namespace star{
     namespace container{

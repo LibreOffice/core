@@ -18,11 +18,11 @@
  */
 
 #include "AreaChartTypeTemplate.hxx"
-#include "macros.hxx"
-#include "servicenames_charttypes.hxx"
-#include "DiagramHelper.hxx"
-#include "DataSeriesHelper.hxx"
-#include "PropertyHelper.hxx"
+#include <macros.hxx>
+#include <servicenames_charttypes.hxx>
+#include <DiagramHelper.hxx>
+#include <DataSeriesHelper.hxx>
+#include <PropertyHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 

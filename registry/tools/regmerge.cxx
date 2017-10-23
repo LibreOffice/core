@@ -18,11 +18,11 @@
  */
 
 
-#include "registry/registry.hxx"
+#include <registry/registry.hxx>
 #include "fileurl.hxx"
 #include "options.hxx"
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 #include <stdio.h>
 #include <string.h>

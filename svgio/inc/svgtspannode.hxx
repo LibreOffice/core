@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SVGIO_INC_SVGTSPANNODE_HXX
 #define INCLUDED_SVGIO_INC_SVGTSPANNODE_HXX
 
-#include <svgcharacternode.hxx>
-#include <svgstyleattributes.hxx>
-#include <svgtools.hxx>
+#include "svgcharacternode.hxx"
+#include "svgstyleattributes.hxx"
+#include "svgtools.hxx"
 
 namespace svgio
 {

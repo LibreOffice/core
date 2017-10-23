@@ -59,28 +59,28 @@
  *  and so on.
  */
 #include <osl/thread.h>
-#include "lwpglobalmgr.hxx"
+#include <lwpglobalmgr.hxx>
 #include "lwpdrawobj.hxx"
-#include "lwptools.hxx"
+#include <lwptools.hxx>
 #include <tools/stream.hxx>
 
-#include "xfilter/xfframe.hxx"
+#include <xfilter/xfframe.hxx>
 
-#include "xfilter/xfstylemanager.hxx"
-#include "xfilter/xfdrawstyle.hxx"
-#include "xfilter/xftextstyle.hxx"
-#include "xfilter/xfparastyle.hxx"
-#include "xfilter/xfimagestyle.hxx"
-#include "xfilter/xftextboxstyle.hxx"
-#include "xfilter/xfparagraph.hxx"
-#include "xfilter/xftextspan.hxx"
-#include "xfilter/xffont.hxx"
+#include <xfilter/xfstylemanager.hxx>
+#include <xfilter/xfdrawstyle.hxx>
+#include <xfilter/xftextstyle.hxx>
+#include <xfilter/xfparastyle.hxx>
+#include <xfilter/xfimagestyle.hxx>
+#include <xfilter/xftextboxstyle.hxx>
+#include <xfilter/xfparagraph.hxx>
+#include <xfilter/xftextspan.hxx>
+#include <xfilter/xffont.hxx>
 
-#include "xfilter/xfdrawrect.hxx"
-#include "xfilter/xfdrawpath.hxx"
-#include "xfilter/xfdrawline.hxx"
-#include "xfilter/xfdrawpolygon.hxx"
-#include "xfilter/xfimage.hxx"
+#include <xfilter/xfdrawrect.hxx>
+#include <xfilter/xfdrawpath.hxx>
+#include <xfilter/xfdrawline.hxx>
+#include <xfilter/xfdrawpolygon.hxx>
+#include <xfilter/xfimage.hxx>
 
 #include "lwpcharsetmgr.hxx"
 #include "lwpsdwrect.hxx"

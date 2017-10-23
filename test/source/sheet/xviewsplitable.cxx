@@ -11,7 +11,7 @@
 
 #include <com/sun/star/sheet/XViewSplitable.hpp>
 
-#include "cppunit/extensions/HelperMacros.h"
+#include <cppunit/extensions/HelperMacros.h>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

@@ -36,7 +36,7 @@
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 
-#include "CommonConverters.hxx"
+#include <CommonConverters.hxx>
 
 using namespace com::sun::star;
 

@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "global.hxx"
-#include "overlayobject.hxx"
-#include "scmod.hxx"
+#include <global.hxx>
+#include <overlayobject.hxx>
+#include <scmod.hxx>
 
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>

@@ -22,7 +22,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/mempool.hxx>
 #include "cntfrm.hxx"
-#include "ndtxt.hxx"
+#include <ndtxt.hxx>
 
 class SwCharRange;
 class SwTextNode;

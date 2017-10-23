@@ -31,11 +31,11 @@
 #include <oox/helper/refmap.hxx>
 #include <oox/helper/refvector.hxx>
 #include "numberformatsbuffer.hxx"
-#include "patattr.hxx"
-#include "stlsheet.hxx"
+#include <patattr.hxx>
+#include <stlsheet.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/frmdir.hxx>
-#include "attarray.hxx"
+#include <attarray.hxx>
 #include <vector>
 
 namespace oox { class PropertySet;

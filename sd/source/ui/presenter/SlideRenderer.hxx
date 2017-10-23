@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_PRESENTER_SLIDERENDERER_HXX
 #define INCLUDED_SD_SOURCE_UI_PRESENTER_SLIDERENDERER_HXX
 
-#include "PreviewRenderer.hxx"
+#include <PreviewRenderer.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XSlideRenderer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

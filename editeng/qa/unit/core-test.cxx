@@ -7,29 +7,29 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "test/bootstrapfixture.hxx"
+#include <test/bootstrapfixture.hxx>
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "eerdll2.hxx"
-#include "editdoc.hxx"
+#include <eerdll2.hxx>
+#include <editdoc.hxx>
 
-#include "sfx2/app.hxx"
-#include "svl/itempool.hxx"
-#include "editeng/eerdll.hxx"
-#include "editeng/editeng.hxx"
-#include "editeng/eeitem.hxx"
-#include "editeng/editids.hrc"
-#include "editeng/svxacorr.hxx"
-#include "editeng/unofield.hxx"
-#include "editeng/wghtitem.hxx"
-#include "editeng/postitem.hxx"
-#include "editeng/section.hxx"
-#include "editeng/editobj.hxx"
-#include "editeng/flditem.hxx"
-#include "editeng/udlnitem.hxx"
-#include "svl/srchitem.hxx"
+#include <sfx2/app.hxx>
+#include <svl/itempool.hxx>
+#include <editeng/eerdll.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editids.hrc>
+#include <editeng/svxacorr.hxx>
+#include <editeng/unofield.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/section.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <svl/srchitem.hxx>
 
 #include <com/sun/star/text/textfield/Type.hpp>
 

@@ -8,7 +8,7 @@
  */
 
 #include "htmldataprovider.hxx"
-#include "datatransformation.hxx"
+#include <datatransformation.hxx>
 #include <salhelper/thread.hxx>
 
 #include <libxml/HTMLparser.h>

@@ -19,7 +19,7 @@
 
 #include <uielement/macrosmenucontroller.hxx>
 #include <uielement/menubarmanager.hxx>
-#include "services.h"
+#include <services.h>
 #include <strings.hrc>
 #include <classes/fwkresid.hxx>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
@@ -32,7 +32,7 @@
 #include <vcl/i18nhelp.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "helper/mischelper.hxx"
+#include <helper/mischelper.hxx>
 #include <osl/mutex.hxx>
 
 using namespace com::sun::star::uno;

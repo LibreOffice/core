@@ -58,7 +58,7 @@
 #include <unoport.hxx>
 #include <wrtsh.hxx>
 
-#include "flowfrm.hxx"
+#include <flowfrm.hxx>
 
 using namespace com::sun::star;
 

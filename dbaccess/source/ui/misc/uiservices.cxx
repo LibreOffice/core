@@ -18,8 +18,8 @@
  */
 
 #include <cppuhelper/factory.hxx>
-#include "dbu_reghelper.hxx"
-#include "uiservices.hxx"
+#include <dbu_reghelper.hxx>
+#include <uiservices.hxx>
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;

@@ -27,7 +27,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <CustomAnimationEffect.hxx>
+#include "CustomAnimationEffect.hxx"
 
 #include <unordered_map>
 

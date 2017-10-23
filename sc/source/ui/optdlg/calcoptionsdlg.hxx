@@ -24,7 +24,7 @@
 
 #include <svtools/treelistbox.hxx>
 
-#include "calcconfig.hxx"
+#include <calcconfig.hxx>
 
 #if HAVE_FEATURE_OPENCL
 #include <opencl/openclconfig.hxx>

@@ -33,10 +33,10 @@
 #include <limits>
 
 #include "backgroundshape.hxx"
-#include "slideshowexceptions.hxx"
-#include "slideshowcontext.hxx"
+#include <slideshowexceptions.hxx>
+#include <slideshowcontext.hxx>
 #include "gdimtftools.hxx"
-#include "shape.hxx"
+#include <shape.hxx>
 #include "viewbackgroundshape.hxx"
 
 

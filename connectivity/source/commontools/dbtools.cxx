@@ -18,7 +18,7 @@
  */
 
 #include <connectivity/CommonTools.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <connectivity/ParameterCont.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>
@@ -79,8 +79,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/implbase.hxx>
-#include "strings.hrc"
-#include "resource/sharedresources.hxx"
+#include <strings.hrc>
+#include <resource/sharedresources.hxx>
 #include <connectivity/OSubComponent.hxx>
 
 #include <algorithm>

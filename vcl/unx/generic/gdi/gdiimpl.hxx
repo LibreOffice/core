@@ -24,13 +24,13 @@
 #include <X11/Xutil.h>
 #include <X11/extensions/Xrender.h>
 
-#include "unx/saltype.h"
-#include "unx/x11/x11gdiimpl.h"
+#include <unx/saltype.h>
+#include <unx/x11/x11gdiimpl.h>
 
-#include "salgdiimpl.hxx"
+#include <salgdiimpl.hxx>
 
 #include <basegfx/polygon/b2dtrapezoid.hxx>
-#include "ControlCacheKey.hxx"
+#include <ControlCacheKey.hxx>
 
 /* From <X11/Intrinsic.h> */
 typedef unsigned long Pixel;

@@ -36,9 +36,9 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
-#include "converters.hxx"
+#include <converters.hxx>
 
-#include <xprimitive2drenderer.hxx>
+#include "xprimitive2drenderer.hxx"
 
 using namespace ::com::sun::star;
 

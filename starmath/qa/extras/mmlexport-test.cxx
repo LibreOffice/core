@@ -16,10 +16,10 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 
-#include "document.hxx"
-#include "smdll.hxx"
-#include "node.hxx"
-#include "parse.hxx"
+#include <document.hxx>
+#include <smdll.hxx>
+#include <node.hxx>
+#include <parse.hxx>
 
 #include <memory>
 

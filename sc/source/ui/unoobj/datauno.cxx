@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "datauno.hxx"
+#include <datauno.hxx>
 
 #include <svl/hint.hxx>
 #include <svl/zforlist.hxx>
@@ -35,23 +35,23 @@
 #include <com/sun/star/sheet/FilterOperator2.hpp>
 #include <com/sun/star/sheet/TableFilterField2.hpp>
 
-#include "dapiuno.hxx"
-#include "cellsuno.hxx"
-#include "miscuno.hxx"
-#include "targuno.hxx"
-#include "rangeutl.hxx"
-#include "dbdata.hxx"
-#include "docsh.hxx"
-#include "dbdocfun.hxx"
-#include "unonames.hxx"
-#include "globalnames.hxx"
-#include "globstr.hrc"
-#include "convuno.hxx"
-#include "hints.hxx"
-#include "attrib.hxx"
-#include "dpshttab.hxx"
-#include "queryentry.hxx"
-#include "dputil.hxx"
+#include <dapiuno.hxx>
+#include <cellsuno.hxx>
+#include <miscuno.hxx>
+#include <targuno.hxx>
+#include <rangeutl.hxx>
+#include <dbdata.hxx>
+#include <docsh.hxx>
+#include <dbdocfun.hxx>
+#include <unonames.hxx>
+#include <globalnames.hxx>
+#include <globstr.hrc>
+#include <convuno.hxx>
+#include <hints.hxx>
+#include <attrib.hxx>
+#include <dpshttab.hxx>
+#include <queryentry.hxx>
+#include <dputil.hxx>
 #include <sortparam.hxx>
 
 #include <comphelper/extract.hxx>

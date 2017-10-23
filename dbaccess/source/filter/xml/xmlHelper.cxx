@@ -27,8 +27,8 @@
 #include <xmloff/maptype.hxx>
 
 #include <com/sun/star/awt/TextAlign.hpp>
-#include "stringconstants.hxx"
-#include "strings.hxx"
+#include <stringconstants.hxx>
+#include <strings.hxx>
 #include "xmlEnums.hxx"
 
 namespace dbaxml

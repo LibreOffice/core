@@ -27,9 +27,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include "notemark.hxx"
-#include "document.hxx"
-#include "postit.hxx"
+#include <notemark.hxx>
+#include <document.hxx>
+#include <postit.hxx>
 
 #define SC_NOTEMARK_TIME    800
 #define SC_NOTEMARK_SHORT   70

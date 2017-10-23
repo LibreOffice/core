@@ -24,10 +24,10 @@
 
 #include <memory>
 
-#include "sal/types.h"
-#include "rtl/ref.hxx"
+#include <sal/types.h>
+#include <rtl/ref.hxx>
 
-#include "store/types.h"
+#include <store/types.h>
 #include "storbase.hxx"
 #include "object.hxx"
 

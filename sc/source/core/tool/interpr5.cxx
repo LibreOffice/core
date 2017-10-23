@@ -28,16 +28,16 @@
 #include <unotools/bootstrap.hxx>
 #include <svl/zforlist.hxx>
 
-#include "interpre.hxx"
-#include "global.hxx"
-#include "compiler.hxx"
-#include "formulacell.hxx"
-#include "document.hxx"
-#include "dociter.hxx"
-#include "scmatrix.hxx"
-#include "globstr.hrc"
-#include "cellkeytranslator.hxx"
-#include "formulagroup.hxx"
+#include <interpre.hxx>
+#include <global.hxx>
+#include <compiler.hxx>
+#include <formulacell.hxx>
+#include <document.hxx>
+#include <dociter.hxx>
+#include <scmatrix.hxx>
+#include <globstr.hrc>
+#include <cellkeytranslator.hxx>
+#include <formulagroup.hxx>
 
 #include <vector>
 

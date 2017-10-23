@@ -24,7 +24,7 @@
 #include <unotools/configitem.hxx>
 #include "swdllapi.h"
 #include "authratr.hxx"
-#include <SwCapObjType.hxx>
+#include "SwCapObjType.hxx"
 #include "tblenum.hxx"
 #include "itabenum.hxx"
 #include <tools/globname.hxx>

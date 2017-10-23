@@ -19,7 +19,7 @@
 
 #include <cstdint>
 
-#include "srtdlg.hxx"
+#include <srtdlg.hxx>
 
 #include <vcl/lstbox.hxx>
 #include <vcl/msgbox.hxx>

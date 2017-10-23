@@ -20,10 +20,10 @@
 #define INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_COLUMNLINECHARTTYPETEMPLATE_HXX
 
 #include "ChartTypeTemplate.hxx"
-#include "StackMode.hxx"
+#include <StackMode.hxx>
 
-#include "OPropertySet.hxx"
-#include "MutexContainer.hxx"
+#include <OPropertySet.hxx>
+#include <MutexContainer.hxx>
 #include <comphelper/uno3.hxx>
 
 namespace chart

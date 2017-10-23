@@ -10,7 +10,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MDATABASEMETADATAHELPER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MDATABASEMETADATAHELPER_HXX
 
-#include "FDatabaseMetaDataResultSet.hxx"
+#include <FDatabaseMetaDataResultSet.hxx>
 
 namespace connectivity
 {

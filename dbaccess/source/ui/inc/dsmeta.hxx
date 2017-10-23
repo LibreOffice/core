@@ -24,7 +24,7 @@
 
 #include <set>
 
-#include "dsntypes.hxx"
+#include <dsntypes.hxx>
 #include "dsitems.hxx"
 
 #include <memory>

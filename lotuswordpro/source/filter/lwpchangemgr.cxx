@@ -58,12 +58,12 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#include "lwpchangemgr.hxx"
+#include <lwpchangemgr.hxx>
 #include <rtl/ustring.hxx>
 #include "lwppara.hxx"
 #include "lwpfribheader.hxx"
 #include "lwpfribptr.hxx"
-#include "lwpfrib.hxx"
+#include <lwpfrib.hxx>
 #include "lwpstory.hxx"
 #include "lwpfribsection.hxx"
 #include "lwpsection.hxx"
@@ -74,12 +74,12 @@
 #include "lwpfootnote.hxx"
 #include "lwpnotes.hxx"
 #include "lwpfribmark.hxx"
-#include "xfilter/xftextspan.hxx"
-#include "xfilter/xftextcontent.hxx"
-#include "xfilter/xftabstop.hxx"
-#include "xfilter/xflinebreak.hxx"
-#include "xfilter/xfstylemanager.hxx"
-#include "xfilter/xfhyperlink.hxx"
+#include <xfilter/xftextspan.hxx>
+#include <xfilter/xftextcontent.hxx>
+#include <xfilter/xftabstop.hxx>
+#include <xfilter/xflinebreak.hxx>
+#include <xfilter/xfstylemanager.hxx>
+#include <xfilter/xfhyperlink.hxx>
 
 LwpChangeMgr::LwpChangeMgr()
 {

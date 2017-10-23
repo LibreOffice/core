@@ -19,7 +19,7 @@
 
 #include <string.h>
 
-#include "pagedata.hxx"
+#include <pagedata.hxx>
 
 #include <osl/diagnose.h>
 

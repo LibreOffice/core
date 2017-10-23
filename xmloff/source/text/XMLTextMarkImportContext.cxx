@@ -38,7 +38,7 @@
 
 #include <com/sun/star/text/XFormField.hpp>
 
-#include "RDFaImportHelper.hxx"
+#include <RDFaImportHelper.hxx>
 
 
 using namespace ::com::sun::star;

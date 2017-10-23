@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <SvXMLAutoCorrectImport.hxx>
-#include <SvXMLAutoCorrectTokenHandler.hxx>
+#include "SvXMLAutoCorrectImport.hxx"
+#include "SvXMLAutoCorrectTokenHandler.hxx"
 
 using namespace css;
 using namespace css::xml::sax;

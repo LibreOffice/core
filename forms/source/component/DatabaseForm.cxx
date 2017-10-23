@@ -18,14 +18,14 @@
  */
 
 
-#include "componenttools.hxx"
+#include <componenttools.hxx>
 #include "DatabaseForm.hxx"
 #include "EventThread.hxx"
-#include "strings.hrc"
-#include "frm_resource.hxx"
+#include <strings.hrc>
+#include <frm_resource.hxx>
 #include "GroupManager.hxx"
-#include "property.hxx"
-#include "services.hxx"
+#include <property.hxx>
+#include <services.hxx>
 
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>

@@ -23,12 +23,12 @@
 #include <cppuhelper/factory.hxx>
 
 #include "serialnumberadapter.hxx"
-#include "xmlsec/xmlelementwrapper_xmlsecimpl.hxx"
-#include "xmlsec/xmldocumentwrapper_xmlsecimpl.hxx"
+#include <xmlsec/xmlelementwrapper_xmlsecimpl.hxx>
+#include <xmlsec/xmldocumentwrapper_xmlsecimpl.hxx>
 #include "xsec_xmlsec.hxx"
 
 #if !defined(MACOSX) && !defined(WNT) && !defined(ANDROID)
-# include "gpg/xmlsignature_gpgimpl.hxx"
+# include <gpg/xmlsignature_gpgimpl.hxx>
 #endif
 
 using namespace ::cppu;

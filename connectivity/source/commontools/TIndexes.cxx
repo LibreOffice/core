@@ -24,7 +24,7 @@
 #include <com/sun/star/sdbc/IndexType.hpp>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/TTableHelper.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <comphelper/extract.hxx>
 #include <rtl/ustrbuf.hxx>
 using namespace connectivity;

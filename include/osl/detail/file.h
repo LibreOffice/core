@@ -10,7 +10,7 @@
 #ifndef INCLUDED_OSL_DETAIL_FILE_H
 #define INCLUDED_OSL_DETAIL_FILE_H
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 /** @cond INTERNAL */
 

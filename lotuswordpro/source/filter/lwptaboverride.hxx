@@ -60,8 +60,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABOVERRIDE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABOVERRIDE_HXX
 
-#include "lwpoverride.hxx"
-#include "lwpobjid.hxx"
+#include <lwpoverride.hxx>
+#include <lwpobjid.hxx>
 
 class   LwpTabOverride : public LwpOverride
 {

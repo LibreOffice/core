@@ -19,11 +19,11 @@
 
 #include <memory>
 #include "AppController.hxx"
-#include "core_resource.hxx"
-#include "stringconstants.hxx"
-#include "advancedsettingsdlg.hxx"
+#include <core_resource.hxx>
+#include <stringconstants.hxx>
+#include <advancedsettingsdlg.hxx>
 #include "subcomponentmanager.hxx"
-#include "uiservices.hxx"
+#include <uiservices.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -108,20 +108,20 @@
 
 #include <osl/mutex.hxx>
 #include "AppView.hxx"
-#include "browserids.hxx"
-#include "dbu_reghelper.hxx"
-#include "strings.hrc"
-#include "defaultobjectnamecheck.hxx"
-#include "databaseobjectview.hxx"
-#include "listviewitems.hxx"
+#include <browserids.hxx>
+#include <dbu_reghelper.hxx>
+#include <strings.hrc>
+#include <defaultobjectnamecheck.hxx>
+#include <databaseobjectview.hxx>
+#include <listviewitems.hxx>
 #include "AppDetailView.hxx"
-#include "linkeddocuments.hxx"
-#include "sqlmessage.hxx"
-#include "UITools.hxx"
-#include "dsntypes.hxx"
-#include "helpids.h"
-#include "dlgsave.hxx"
-#include "dbaccess_slotid.hrc"
+#include <linkeddocuments.hxx>
+#include <sqlmessage.hxx>
+#include <UITools.hxx>
+#include <dsntypes.hxx>
+#include <helpids.h>
+#include <dlgsave.hxx>
+#include <dbaccess_slotid.hrc>
 
 #include <functional>
 

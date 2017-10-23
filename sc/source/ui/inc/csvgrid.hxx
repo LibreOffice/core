@@ -26,7 +26,7 @@
 
 #include <vector>
 #include <memory>
-#include "scdllapi.h"
+#include <scdllapi.h>
 #include "csvcontrol.hxx"
 #include "csvsplits.hxx"
 

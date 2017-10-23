@@ -23,7 +23,7 @@
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
-#include "shapesubset.hxx"
+#include <shapesubset.hxx>
 
 
 using namespace ::com::sun::star;

@@ -18,8 +18,8 @@
  */
 
 #include "AreaChartType.hxx"
-#include "macros.hxx"
-#include "servicenames_charttypes.hxx"
+#include <macros.hxx>
+#include <servicenames_charttypes.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;

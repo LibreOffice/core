@@ -57,10 +57,10 @@
 #include <svtools/sfxecode.hxx>
 #include "xmlEnums.hxx"
 #include "xmlStyleImport.hxx"
-#include "strings.hxx"
+#include <strings.hxx>
 #include "xmlPropertyHandler.hxx"
 #include <xmloff/txtprmap.hxx>
-#include "ReportDefinition.hxx"
+#include <ReportDefinition.hxx>
 
 namespace rptxml
 {

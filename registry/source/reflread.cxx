@@ -27,11 +27,11 @@
 #include <sal/types.h>
 #include <osl/endian.h>
 #include <osl/diagnose.h>
-#include <reflread.hxx>
+#include "reflread.hxx"
 #include <sal/log.hxx>
 
-#include "registry/typereg_reader.hxx"
-#include "registry/version.h"
+#include <registry/typereg_reader.hxx>
+#include <registry/version.h>
 
 #include "reflcnst.hxx"
 

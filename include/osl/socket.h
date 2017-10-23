@@ -20,11 +20,11 @@
 #ifndef INCLUDED_OSL_SOCKET_H
 #define INCLUDED_OSL_SOCKET_H
 
-#include <rtl/ustring.h>
-#include <rtl/byteseq.h>
+#include "rtl/ustring.h"
+#include "rtl/byteseq.h"
 
-#include <osl/time.h>
-#include <rtl/tencinfo.h>
+#include "osl/time.h"
+#include "rtl/tencinfo.h"
 
 #ifdef __cplusplus
 extern "C" {

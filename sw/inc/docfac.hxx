@@ -22,7 +22,7 @@
 #include <tools/solar.h>
 #include <rtl/ref.hxx>
 
-#include <doc.hxx>
+#include "doc.hxx"
 
 class SW_DLLPUBLIC SwDocFac
 {

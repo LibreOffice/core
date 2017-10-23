@@ -27,7 +27,7 @@
 #include <unoredline.hxx>
 #include <unomid.h>
 #include <pagedesc.hxx>
-#include "poolfmt.hxx"
+#include <poolfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <docary.hxx>

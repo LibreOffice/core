@@ -18,8 +18,8 @@
  */
 
 
-#include "dp_misc.h"
-#include "dp_platform.hxx"
+#include <dp_misc.h>
+#include <dp_platform.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>

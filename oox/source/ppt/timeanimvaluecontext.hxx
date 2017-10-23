@@ -20,8 +20,8 @@
 #ifndef INCLUDED_OOX_SOURCE_PPT_TIMEANIMVALUECONTEXT_HXX
 #define INCLUDED_OOX_SOURCE_PPT_TIMEANIMVALUECONTEXT_HXX
 
-#include "oox/core/fragmenthandler2.hxx"
-#include "oox/ppt/animationspersist.hxx"
+#include <oox/core/fragmenthandler2.hxx>
+#include <oox/ppt/animationspersist.hxx>
 
 namespace oox { namespace ppt {
 

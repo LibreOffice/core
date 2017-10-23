@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuconarc.hxx"
-#include "sc.hrc"
-#include "tabvwsh.hxx"
-#include "drawview.hxx"
+#include <fuconarc.hxx>
+#include <sc.hrc>
+#include <tabvwsh.hxx>
+#include <drawview.hxx>
 
 // Create default drawing objects via keyboard
 #include <svx/svdocirc.hxx>

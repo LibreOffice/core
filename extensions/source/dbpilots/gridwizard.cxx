@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <vector>
 
@@ -30,7 +30,7 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include "dbptools.hxx"
-#include "helpids.h"
+#include <helpids.h>
 
 #define GW_STATE_DATASOURCE_SELECTION   0
 #define GW_STATE_FIELDSELECTION         1

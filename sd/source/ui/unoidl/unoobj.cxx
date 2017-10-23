@@ -53,29 +53,29 @@
 #include <filter/msfilter/msdffimp.hxx>
 #include <svl/instrm.hxx>
 #include <editeng/outlobj.hxx>
-#include "CustomAnimationPreset.hxx"
-#include "Outliner.hxx"
-#include "sdresid.hxx"
+#include <CustomAnimationPreset.hxx>
+#include <Outliner.hxx>
+#include <sdresid.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 #include <svx/svdogrp.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-#include "anminfo.hxx"
+#include <anminfo.hxx>
 #include "unoobj.hxx"
-#include "unoprnms.hxx"
-#include "unomodel.hxx"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
-#include "ViewShell.hxx"
-#include "unokywds.hxx"
-#include "unopage.hxx"
-#include "DrawDocShell.hxx"
-#include "helpids.h"
-#include "glob.hxx"
-#include "strings.hrc"
+#include <unoprnms.hxx>
+#include <unomodel.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
+#include <ViewShell.hxx>
+#include <unokywds.hxx>
+#include <unopage.hxx>
+#include <DrawDocShell.hxx>
+#include <helpids.h>
+#include <glob.hxx>
+#include <strings.hrc>
 #include "unolayer.hxx"
-#include "imapinfo.hxx"
-#include "EffectMigration.hxx"
+#include <imapinfo.hxx>
+#include <EffectMigration.hxx>
 
 using namespace ::sd;
 using namespace ::com::sun::star;

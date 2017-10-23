@@ -41,7 +41,7 @@
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 
 #include "vbaformat.hxx"
-#include "address.hxx"
+#include <address.hxx>
 #include <formula/grammar.hxx>
 #include <svl/itemset.hxx>
 

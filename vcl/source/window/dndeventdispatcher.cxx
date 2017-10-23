@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dndeventdispatcher.hxx"
-#include "dndlistenercontainer.hxx"
+#include <dndeventdispatcher.hxx>
+#include <dndlistenercontainer.hxx>
 #include <window.h>
 #include <svdata.hxx>
 

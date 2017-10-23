@@ -54,7 +54,7 @@
  *
  ************************************************************************/
 
-#include "lwpobj.hxx"
+#include <lwpobj.hxx>
 
 /**
  * @descr  construct lwpobject from stream

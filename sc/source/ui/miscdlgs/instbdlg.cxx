@@ -27,12 +27,12 @@
 #include <svtools/sfxecode.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "global.hxx"
-#include "docsh.hxx"
-#include "viewdata.hxx"
-#include "scresid.hxx"
-#include "globstr.hrc"
-#include "instbdlg.hxx"
+#include <global.hxx>
+#include <docsh.hxx>
+#include <viewdata.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
+#include <instbdlg.hxx>
 
 ScInsertTableDlg::ScInsertTableDlg( vcl::Window* pParent, ScViewData& rData, SCTAB nTabCount, bool bFromFile )
     : ModalDialog(pParent, "InsertSheetDialog", "modules/scalc/ui/insertsheet.ui")

@@ -18,8 +18,8 @@
  */
 
 
-#include "datalistener.hxx"
-#include "datanavi.hxx"
+#include <datalistener.hxx>
+#include <datanavi.hxx>
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;

@@ -32,8 +32,8 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include "unomodel.hxx"
-#include "drawdoc.hxx"
+#include <unomodel.hxx>
+#include <drawdoc.hxx>
 
 
 class SdXImpressDocument;

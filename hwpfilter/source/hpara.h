@@ -20,9 +20,9 @@
 #ifndef INCLUDED_HWPFILTER_SOURCE_HPARA_H
 #define INCLUDED_HWPFILTER_SOURCE_HPARA_H
 
-#include <hwplib.h>
-#include <hwpfile.h>
-#include <hinfo.h>
+#include "hwplib.h"
+#include "hwpfile.h"
+#include "hinfo.h"
 #include <memory>
 
 struct HBox;

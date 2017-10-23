@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_PREPAREDSTATEMENT_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_PREPAREDSTATEMENT_HXX
 
-#include "java/sql/JStatement.hxx"
+#include <java/sql/JStatement.hxx>
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>

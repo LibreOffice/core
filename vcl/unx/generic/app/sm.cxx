@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
@@ -45,7 +45,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
-#include "salsession.hxx"
+#include <salsession.hxx>
 
 namespace {
 

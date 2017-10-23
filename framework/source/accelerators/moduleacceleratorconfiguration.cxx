@@ -19,7 +19,7 @@
 
 #include <accelerators/acceleratorconfiguration.hxx>
 #include <accelerators/presethandler.hxx>
-#include "helper/mischelper.hxx"
+#include <helper/mischelper.hxx>
 
 #include <acceleratorconst.h>
 

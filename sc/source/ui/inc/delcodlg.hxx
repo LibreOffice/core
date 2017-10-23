@@ -22,7 +22,7 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include "global.hxx"
+#include <global.hxx>
 
 class ScDeleteContentsDlg : public ModalDialog
 {

@@ -27,23 +27,23 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
-#include "global.hxx"
-#include "scresid.hxx"
-#include "impex.hxx"
-#include "scuiasciiopt.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "csvtablebox.hxx"
+#include <global.hxx>
+#include <scresid.hxx>
+#include <impex.hxx>
+#include <scuiasciiopt.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <csvtablebox.hxx>
 #include <comphelper/string.hxx>
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
 #include <unotools/transliterationwrapper.hxx>
-#include "editutil.hxx"
+#include <editutil.hxx>
 
 #include <optutil.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include "miscuno.hxx"
+#include <miscuno.hxx>
 #include <tools/urlobj.hxx>
 
 //! TODO make dynamic

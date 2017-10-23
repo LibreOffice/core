@@ -24,13 +24,13 @@
 
 #include <map>
 
-#include "swtypes.hxx"
-#include "swrect.hxx"
-#include "txtfly.hxx"
-#include "swfont.hxx"
+#include <swtypes.hxx>
+#include <swrect.hxx>
+#include <txtfly.hxx>
+#include <swfont.hxx>
 #include "porlay.hxx"
-#include "txtfrm.hxx"
-#include "ndtxt.hxx"
+#include <txtfrm.hxx>
+#include <ndtxt.hxx>
 #include <editeng/paravertalignitem.hxx>
 #include <sal/log.hxx>
 

@@ -36,7 +36,7 @@
 #include <vector>
 #include <memory>
 
-#include "linguistic/misc.hxx"
+#include <linguistic/misc.hxx>
 #include "defs.hxx"
 
 class SpellCheckerDispatcher;

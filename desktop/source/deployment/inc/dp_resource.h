@@ -21,7 +21,7 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_RESOURCE_H
 
 #include <i18nlangtag/languagetag.hxx>
-#include "dp_misc.h"
+#include <dp_misc.h>
 #include "dp_misc_api.hxx"
 
 namespace dp_misc {

@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "charsets.hxx"
-#include "core_resource.hxx"
+#include <charsets.hxx>
+#include <core_resource.hxx>
 #include <osl/diagnose.h>
-#include "strings.hrc"
+#include <strings.hrc>
 #include <rtl/tencinfo.h>
 
 namespace dbaui

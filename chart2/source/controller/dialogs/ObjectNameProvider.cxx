@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ObjectNameProvider.hxx"
-#include "ResId.hxx"
-#include "strings.hrc"
-#include "macros.hxx"
-#include "AxisHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "DataSeriesHelper.hxx"
-#include "TitleHelper.hxx"
-#include "AxisIndexDefines.hxx"
-#include "ExplicitCategoriesProvider.hxx"
-#include "CommonConverters.hxx"
-#include "NumberFormatterWrapper.hxx"
-#include "RegressionCurveHelper.hxx"
+#include <ObjectNameProvider.hxx>
+#include <ResId.hxx>
+#include <strings.hrc>
+#include <macros.hxx>
+#include <AxisHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <DataSeriesHelper.hxx>
+#include <TitleHelper.hxx>
+#include <AxisIndexDefines.hxx>
+#include <ExplicitCategoriesProvider.hxx>
+#include <CommonConverters.hxx>
+#include <NumberFormatterWrapper.hxx>
+#include <RegressionCurveHelper.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/settings.hxx>

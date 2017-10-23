@@ -23,7 +23,7 @@
  **************************************************************************
 
  *************************************************************************/
-#include "ucbhelper/activedatastreamer.hxx"
+#include <ucbhelper/activedatastreamer.hxx>
 
 using namespace com::sun::star;
 

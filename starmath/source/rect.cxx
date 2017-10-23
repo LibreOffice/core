@@ -21,9 +21,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
-#include "rect.hxx"
-#include "types.hxx"
-#include "smmod.hxx"
+#include <rect.hxx>
+#include <types.hxx>
+#include <smmod.hxx>
 
 #include <cassert>
 #include <unordered_set>

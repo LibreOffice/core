@@ -25,7 +25,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <swdllapi.h>
+#include "swdllapi.h"
 
 #define FILTER_RTF      "RTF"       ///< RTF filter
 #define sRtfWH          "WH_RTF"

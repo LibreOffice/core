@@ -22,14 +22,14 @@
 #include <o3tl/make_unique.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/viewoptions.hxx>
-#include "cuihyperdlg.hxx"
-#include "hlinettp.hxx"
-#include "hlmailtp.hxx"
-#include "hldoctp.hxx"
-#include "hldocntp.hxx"
-#include "bitmaps.hlst"
+#include <cuihyperdlg.hxx>
+#include <hlinettp.hxx>
+#include <hlmailtp.hxx>
+#include <hldoctp.hxx>
+#include <hldocntp.hxx>
+#include <bitmaps.hlst>
 #include <svx/svxids.hrc>
-#include "strings.hrc"
+#include <strings.hrc>
 #include <vector>
 
 using ::com::sun::star::uno::Reference;

@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "LabeledDataSequence.hxx"
-#include "ModifyListenerHelper.hxx"
-#include "macros.hxx"
+#include <LabeledDataSequence.hxx>
+#include <ModifyListenerHelper.hxx>
+#include <macros.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;

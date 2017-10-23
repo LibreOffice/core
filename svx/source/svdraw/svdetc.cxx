@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "editeng/forbiddencharacterstable.hxx"
-#include "officecfg/Office/Common.hxx"
+#include <editeng/forbiddencharacterstable.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdtrans.hxx>
-#include "svdglob.hxx"
-#include "svx/strings.hrc"
-#include "svx/svdviter.hxx"
+#include <svdglob.hxx>
+#include <svx/strings.hrc>
+#include <svx/svdviter.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
 #include <vcl/bitmapaccess.hxx>
@@ -35,7 +35,7 @@
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/whiter.hxx>
-#include "editeng/fontitem.hxx"
+#include <editeng/fontitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <svx/xgrad.hxx>

@@ -26,7 +26,7 @@
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 
-#include <image.h>
+#include "image.h"
 #include <memory>
 
 ImplImageList::ImplImageList()

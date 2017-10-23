@@ -19,12 +19,12 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "namepast.hxx"
-#include "scresid.hxx"
-#include "docsh.hxx"
-#include "strings.hrc"
-#include "rangenam.hxx"
-#include "viewdata.hxx"
+#include <namepast.hxx>
+#include <scresid.hxx>
+#include <docsh.hxx>
+#include <strings.hrc>
+#include <rangenam.hxx>
+#include <viewdata.hxx>
 
 #include <o3tl/make_unique.hxx>
 

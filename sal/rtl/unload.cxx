@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "osl/time.h"
-#include "rtl/unload.h"
+#include <osl/time.h>
+#include <rtl/unload.h>
 
 extern "C" void rtl_moduleCount_acquire(rtl_ModuleCount *) {}
 

@@ -21,10 +21,10 @@
 #include <osl/diagnose.h>
 #include "QTableWindow.hxx"
 #include "QTableWindowData.hxx"
-#include "TableConnection.hxx"
-#include "TableConnectionData.hxx"
+#include <TableConnection.hxx>
+#include <TableConnectionData.hxx>
 #include "QueryDesignFieldUndoAct.hxx"
-#include "QueryTableView.hxx"
+#include <QueryTableView.hxx>
 
 using namespace dbaui;
 OQueryDesignFieldUndoAct::OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, const char* pCommentID)

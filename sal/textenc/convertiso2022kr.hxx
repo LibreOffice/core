@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SAL_TEXTENC_CONVERTISO2022KR_HXX
 #define INCLUDED_SAL_TEXTENC_CONVERTISO2022KR_HXX
 
-#include "sal/config.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sal/types.h>
 #include "tenchelp.hxx"
 
 struct ImplIso2022KrConverterData

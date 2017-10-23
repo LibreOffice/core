@@ -26,7 +26,7 @@
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-#include "ControllerLockGuard.hxx"
+#include <ControllerLockGuard.hxx>
 
 namespace chart
 {

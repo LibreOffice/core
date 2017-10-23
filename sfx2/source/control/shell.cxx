@@ -25,7 +25,7 @@
 #include <sal/log.hxx>
 #include <svl/itempool.hxx>
 #include <svl/undo.hxx>
-#include "itemdel.hxx"
+#include <itemdel.hxx>
 #include <svtools/asynclink.hxx>
 #include <basic/sbx.hxx>
 #include <unotools/configmgr.hxx>
@@ -37,9 +37,9 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/request.hxx>
-#include "statcach.hxx"
+#include <statcach.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sidebar/ContextChangeBroadcaster.hxx>
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>

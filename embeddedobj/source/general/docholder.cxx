@@ -73,9 +73,9 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 
-#include "docholder.hxx"
-#include "commonembobj.hxx"
-#include "intercept.hxx"
+#include <docholder.hxx>
+#include <commonembobj.hxx>
+#include <intercept.hxx>
 
 #define HATCH_BORDER_WIDTH (((m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) && \
                             m_pEmbedObj->getCurrentState()!=embed::EmbedStates::UI_ACTIVE) ? 0 : 4 )

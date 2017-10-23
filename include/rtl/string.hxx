@@ -20,7 +20,7 @@
 #ifndef INCLUDED_RTL_STRING_HXX
 #define INCLUDED_RTL_STRING_HXX
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <cassert>
 #include <cstddef>
@@ -28,15 +28,15 @@
 #include <ostream>
 #include <string.h>
 
-#include <rtl/textenc.h>
-#include <rtl/string.h>
-#include <rtl/stringutils.hxx>
+#include "rtl/textenc.h"
+#include "rtl/string.h"
+#include "rtl/stringutils.hxx"
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
-#include <rtl/stringconcat.hxx>
+#include "rtl/stringconcat.hxx"
 #endif
 
-#include <sal/log.hxx>
+#include "sal/log.hxx"
 
 #ifdef RTL_STRING_UNITTEST
 extern bool rtl_string_unittest_const_literal;

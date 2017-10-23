@@ -63,8 +63,8 @@
 
 #include "viewmediashape.hxx"
 #include "mediashape.hxx"
-#include "tools.hxx"
-#include "unoview.hxx"
+#include <tools.hxx>
+#include <unoview.hxx>
 
 using namespace ::com::sun::star;
 

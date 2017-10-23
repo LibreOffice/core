@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_MVTABDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_MVTABDLG_HXX
 
-#include "address.hxx"
+#include <address.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>

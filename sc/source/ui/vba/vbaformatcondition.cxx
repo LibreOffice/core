@@ -18,7 +18,7 @@
  */
 #include "vbaformatcondition.hxx"
 #include "vbaformatconditions.hxx"
-#include "unonames.hxx"
+#include <unonames.hxx>
 #include <ooo/vba/excel/XlFormatConditionType.hpp>
 #include <basic/sberrors.hxx>
 

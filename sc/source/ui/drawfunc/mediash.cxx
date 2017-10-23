@@ -27,14 +27,14 @@
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <vcl/EnumContext.hxx>
 
-#include "mediash.hxx"
-#include "strings.hrc"
-#include "viewdata.hxx"
-#include "drawview.hxx"
-#include "scresid.hxx"
+#include <mediash.hxx>
+#include <strings.hrc>
+#include <viewdata.hxx>
+#include <drawview.hxx>
+#include <scresid.hxx>
 
 #define ScMediaShell
-#include "scslots.hxx"
+#include <scslots.hxx>
 
 SFX_IMPL_INTERFACE(ScMediaShell, ScDrawShell)
 

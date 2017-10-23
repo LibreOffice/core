@@ -19,8 +19,8 @@
 #ifndef INCLUDED_UNO_MAPPING_H
 #define INCLUDED_UNO_MAPPING_H
 
-#include <cppu/cppudllapi.h>
-#include <rtl/ustring.h>
+#include "cppu/cppudllapi.h"
+#include "rtl/ustring.h"
 
 
 #ifdef __cplusplus

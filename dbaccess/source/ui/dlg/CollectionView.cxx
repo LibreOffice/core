@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "CollectionView.hxx"
+#include <CollectionView.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include "core_resource.hxx"
-#include "dbu_dlg.hxx"
-#include "strings.hrc"
+#include <core_resource.hxx>
+#include <dbu_dlg.hxx>
+#include <strings.hrc>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -33,9 +33,9 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/msgbox.hxx>
-#include "stringconstants.hxx"
-#include "bitmaps.hlst"
-#include "UITools.hxx"
+#include <stringconstants.hxx>
+#include <bitmaps.hlst>
+#include <UITools.hxx>
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>

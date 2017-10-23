@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DrawViewShell.hxx"
-#include "ViewShellImplementation.hxx"
+#include <DrawViewShell.hxx>
+#include <ViewShellImplementation.hxx>
 
-#include "DrawController.hxx"
+#include <DrawController.hxx>
 #include <com/sun/star/embed/EmbedStates.hpp>
 
-#include "comphelper/anytostring.hxx"
-#include "comphelper/scopeguard.hxx"
-#include "cppuhelper/exc_hlp.hxx"
-#include "rtl/ref.hxx"
+#include <comphelper/anytostring.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <rtl/ref.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>
@@ -45,38 +45,38 @@
 #include <editeng/outliner.hxx>
 #include <svx/dialogs.hrc>
 
-#include "view/viewoverlaymanager.hxx"
+#include <view/viewoverlaymanager.hxx>
 
-#include "strings.hrc"
-#include "app.hrc"
+#include <strings.hrc>
+#include <app.hrc>
 
-#include "helpids.h"
+#include <helpids.h>
 
-#include "sdmod.hxx"
-#include "fupoor.hxx"
-#include "sdresid.hxx"
-#include "fusel.hxx"
-#include "sdpage.hxx"
-#include "FrameView.hxx"
-#include "stlpool.hxx"
-#include "Window.hxx"
-#include "drawview.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "Ruler.hxx"
-#include "Client.hxx"
-#include "slideshow.hxx"
-#include "optsitem.hxx"
-#include "fusearch.hxx"
-#include "Outliner.hxx"
-#include "AnimationChildWindow.hxx"
-#include "SdUnoDrawView.hxx"
-#include "ToolBarManager.hxx"
-#include "FormShellManager.hxx"
-#include "ViewShellBase.hxx"
-#include "LayerTabBar.hxx"
-#include "ViewShellManager.hxx"
-#include "ViewShellHint.hxx"
+#include <sdmod.hxx>
+#include <fupoor.hxx>
+#include <sdresid.hxx>
+#include <fusel.hxx>
+#include <sdpage.hxx>
+#include <FrameView.hxx>
+#include <stlpool.hxx>
+#include <Window.hxx>
+#include <drawview.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <Ruler.hxx>
+#include <Client.hxx>
+#include <slideshow.hxx>
+#include <optsitem.hxx>
+#include <fusearch.hxx>
+#include <Outliner.hxx>
+#include <AnimationChildWindow.hxx>
+#include <SdUnoDrawView.hxx>
+#include <ToolBarManager.hxx>
+#include <FormShellManager.hxx>
+#include <ViewShellBase.hxx>
+#include <LayerTabBar.hxx>
+#include <ViewShellManager.hxx>
+#include <ViewShellHint.hxx>
 
 #include <sfx2/request.hxx>
 #include <comphelper/lok.hxx>

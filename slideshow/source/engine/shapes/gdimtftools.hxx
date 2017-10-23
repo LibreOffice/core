@@ -27,7 +27,7 @@
 
 #include <basegfx/range/b2drectangle.hxx>
 
-#include "tools.hxx"
+#include <tools.hxx>
 
 #include <vector>
 

@@ -51,7 +51,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::io;
 
-#include "services.hxx"
+#include <services.hxx>
 
 namespace io_stm {
 

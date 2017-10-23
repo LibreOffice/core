@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "services/uriabbreviation.hxx"
-#include "services.h"
+#include <services/uriabbreviation.hxx>
+#include <services.h>
 
 #include <sal/config.h>
 #include <cppuhelper/factory.hxx>

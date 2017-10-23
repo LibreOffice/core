@@ -53,7 +53,7 @@
  *
  *
  ************************************************************************/
-#include "lwpglobalmgr.hxx"
+#include <lwpglobalmgr.hxx>
 #include "lwplnopts.hxx"
 
 LwpLineNumberOptions::LwpLineNumberOptions(LwpObjectStream* pStrm)

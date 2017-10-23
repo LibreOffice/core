@@ -19,9 +19,9 @@
 
 #include "XMLTableSourceContext.hxx"
 #include "xmlimprt.hxx"
-#include "document.hxx"
+#include <document.hxx>
 #include "xmlsubti.hxx"
-#include "tablink.hxx"
+#include <tablink.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>

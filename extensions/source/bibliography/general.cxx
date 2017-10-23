@@ -33,11 +33,11 @@
 #include "datman.hxx"
 #include "bibconfig.hxx"
 #include "bibprop.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 #include "bibmod.hxx"
 #include "bibview.hxx"
 #include "bibtools.hxx"
-#include "helpids.h"
+#include <helpids.h>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>

@@ -26,10 +26,10 @@
 
 #include <vcl/font.hxx>
 
-#include "impfont.hxx"
-#include "fontinstance.hxx"
-#include "fontattributes.hxx"
-#include "sft.hxx"
+#include <impfont.hxx>
+#include <fontinstance.hxx>
+#include <fontattributes.hxx>
+#include <sft.hxx>
 
 #include <algorithm>
 

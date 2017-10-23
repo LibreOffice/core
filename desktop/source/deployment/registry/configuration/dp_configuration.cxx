@@ -22,12 +22,12 @@
 
 #include <config_features.h>
 
-#include "dp_backend.h"
+#include <dp_backend.h>
 #if HAVE_FEATURE_EXTENSIONS
-#include "dp_persmap.h"
+#include <dp_persmap.h>
 #endif
-#include "dp_services.hxx"
-#include "dp_ucb.h"
+#include <dp_services.hxx>
+#include <dp_ucb.h>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>

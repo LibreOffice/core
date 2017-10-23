@@ -29,7 +29,7 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include "undo/undomanager.hxx"
+#include <undo/undomanager.hxx>
 #include <vcl/waitobj.hxx>
 #include <svl/aeitem.hxx>
 #include <editeng/editstat.hxx>
@@ -63,40 +63,40 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
-#include "DrawViewShell.hxx"
-#include "slideshow.hxx"
-#include "ViewShellImplementation.hxx"
-#include "ViewShellHint.hxx"
-#include "framework/FrameworkHelper.hxx"
-#include "app.hrc"
-#include "strings.hrc"
+#include <DrawViewShell.hxx>
+#include <slideshow.hxx>
+#include <ViewShellImplementation.hxx>
+#include <ViewShellHint.hxx>
+#include <framework/FrameworkHelper.hxx>
+#include <app.hrc>
+#include <strings.hrc>
 
-#include "drawdoc.hxx"
-#include "fusel.hxx"
-#include "futext.hxx"
-#include "fuconrec.hxx"
-#include "fuconcs.hxx"
-#include "fuconuno.hxx"
-#include "fuconbez.hxx"
-#include "fuediglu.hxx"
-#include "fuconarc.hxx"
-#include "fucon3d.hxx"
-#include "sdresid.hxx"
-#include "Outliner.hxx"
-#include "PresentationViewShell.hxx"
-#include "sdpage.hxx"
-#include "FrameView.hxx"
-#include "zoomlist.hxx"
-#include "drawview.hxx"
-#include "DrawDocShell.hxx"
-#include "sdattr.hxx"
-#include "ViewShellBase.hxx"
-#include "ToolBarManager.hxx"
-#include "anminfo.hxx"
-#include "optsitem.hxx"
-#include "Window.hxx"
-#include "fuformatpaintbrush.hxx"
-#include "fuzoom.hxx"
+#include <drawdoc.hxx>
+#include <fusel.hxx>
+#include <futext.hxx>
+#include <fuconrec.hxx>
+#include <fuconcs.hxx>
+#include <fuconuno.hxx>
+#include <fuconbez.hxx>
+#include <fuediglu.hxx>
+#include <fuconarc.hxx>
+#include <fucon3d.hxx>
+#include <sdresid.hxx>
+#include <Outliner.hxx>
+#include <PresentationViewShell.hxx>
+#include <sdpage.hxx>
+#include <FrameView.hxx>
+#include <zoomlist.hxx>
+#include <drawview.hxx>
+#include <DrawDocShell.hxx>
+#include <sdattr.hxx>
+#include <ViewShellBase.hxx>
+#include <ToolBarManager.hxx>
+#include <anminfo.hxx>
+#include <optsitem.hxx>
+#include <Window.hxx>
+#include <fuformatpaintbrush.hxx>
+#include <fuzoom.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -32,11 +32,11 @@
 
 using namespace com::sun::star;
 
-#include "dapidata.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
-#include "miscuno.hxx"
-#include "dpsdbtab.hxx"
+#include <dapidata.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
+#include <miscuno.hxx>
+#include <dpsdbtab.hxx>
 
 //  entries in the "type" ListBox
 #define DP_TYPELIST_TABLE   0

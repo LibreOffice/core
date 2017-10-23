@@ -21,22 +21,22 @@
 
 #include <libxml/xmlwriter.h>
 
-#include "fldbas.hxx"
+#include <fldbas.hxx>
 #include <txtfld.hxx>
 #include <txtannotationfld.hxx>
 #include <docfld.hxx>
 #include <docufld.hxx>
 #include <doc.hxx>
 
-#include "pam.hxx"
-#include "reffld.hxx"
-#include "ddefld.hxx"
-#include "usrfld.hxx"
-#include "expfld.hxx"
-#include "swfont.hxx"
-#include "ndtxt.hxx"
-#include "calc.hxx"
-#include "hints.hxx"
+#include <pam.hxx>
+#include <reffld.hxx>
+#include <ddefld.hxx>
+#include <usrfld.hxx>
+#include <expfld.hxx>
+#include <swfont.hxx>
+#include <ndtxt.hxx>
+#include <calc.hxx>
+#include <hints.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <fieldhint.hxx>
 

@@ -27,7 +27,7 @@
 #include <vcl/graph.hxx>
 #include <unotools/fontcvt.hxx>
 #include "pptexanimations.hxx"
-#include <pptexsoundcollection.hxx>
+#include "pptexsoundcollection.hxx"
 
 #include "text.hxx"
 
@@ -74,7 +74,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
-#include <epptbase.hxx>
+#include "epptbase.hxx"
 
 #define EPP_MAINMASTER_PERSIST_KEY      0x80010000
 #define EPP_MAINNOTESMASTER_PERSIST_KEY 0x80020000

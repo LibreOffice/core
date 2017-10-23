@@ -12,7 +12,7 @@
 #define INCLUDED_VCL_INC_OPENGL_FIXEDTEXTUREATLAS_HXX
 
 #include <memory>
-#include "opengl/texture.hxx"
+#include <opengl/texture.hxx>
 
 struct FixedTexture;
 

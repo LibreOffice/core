@@ -24,7 +24,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include "slideanimations.hxx"
-#include "animationnodefactory.hxx"
+#include <animationnodefactory.hxx>
 
 using namespace ::com::sun::star;
 

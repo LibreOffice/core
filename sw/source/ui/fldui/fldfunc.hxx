@@ -26,7 +26,7 @@
 #include <vcl/group.hxx>
 #include <vcl/edit.hxx>
 
-#include "condedit.hxx"
+#include <condedit.hxx>
 #include "fldpage.hxx"
 #include <actctrl.hxx>
 

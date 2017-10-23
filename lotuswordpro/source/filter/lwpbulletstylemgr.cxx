@@ -64,13 +64,13 @@
 #include "lwpdivinfo.hxx"
 #include "lwppara.hxx"
 #include "lwpsilverbullet.hxx"
-#include "lwptools.hxx"
+#include <lwptools.hxx>
 #include "lwpparaproperty.hxx"
-#include "xfilter/xfliststyle.hxx"
-#include "xfilter/xfstylemanager.hxx"
-#include "xfilter/xflist.hxx"
-#include "lwpglobalmgr.hxx"
-#include "xfilter/xflistitem.hxx"
+#include <xfilter/xfliststyle.hxx>
+#include <xfilter/xfstylemanager.hxx>
+#include <xfilter/xflist.hxx>
+#include <lwpglobalmgr.hxx>
+#include <xfilter/xflistitem.hxx>
 
 LwpBulletStyleMgr::LwpBulletStyleMgr()
     : m_pFoundry(nullptr)

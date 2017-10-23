@@ -20,9 +20,9 @@
 #include "VPolarAxis.hxx"
 #include "VPolarAngleAxis.hxx"
 #include "VPolarRadiusAxis.hxx"
-#include "macros.hxx"
+#include <macros.hxx>
 #include "Tickmarks.hxx"
-#include "ShapeFactory.hxx"
+#include <ShapeFactory.hxx>
 
 namespace chart
 {

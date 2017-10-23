@@ -23,7 +23,7 @@
 #include <rtl/ref.hxx>
 #include <vbahelper/vbaeventshelperbase.hxx>
 #include "excelvbahelper.hxx"
-#include "rangelst.hxx"
+#include <rangelst.hxx>
 
 class ScVbaEventListener;
 

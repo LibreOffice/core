@@ -43,9 +43,9 @@
 
 #include <editeng/editdata.hxx>
 #include <editeng/unopracc.hxx>
-#include "editeng/unoedprx.hxx"
+#include <editeng/unoedprx.hxx>
 #include <editeng/AccessibleStaticTextBase.hxx>
-#include "editeng/AccessibleEditableTextPara.hxx"
+#include <editeng/AccessibleEditableTextPara.hxx>
 
 
 using namespace ::com::sun::star;

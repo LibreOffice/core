@@ -73,7 +73,7 @@
 #include <uno/environment.h>
 #include <jvmfwk/framework.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include "jni.h"
+#include <jni.h>
 
 #include <stack>
 #include <string.h>

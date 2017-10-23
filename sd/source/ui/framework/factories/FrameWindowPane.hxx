@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_FACTORIES_FRAMEWINDOWPANE_HXX
 #define INCLUDED_SD_SOURCE_UI_FRAMEWORK_FACTORIES_FRAMEWINDOWPANE_HXX
 
-#include "framework/Pane.hxx"
+#include <framework/Pane.hxx>
 
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 

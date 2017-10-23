@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_FACTORIES_CHILDWINDOWPANE_HXX
 #define INCLUDED_SD_SOURCE_UI_FRAMEWORK_FACTORIES_CHILDWINDOWPANE_HXX
 
-#include "framework/Pane.hxx"
-#include "PaneShells.hxx"
+#include <framework/Pane.hxx>
+#include <PaneShells.hxx>
 
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>

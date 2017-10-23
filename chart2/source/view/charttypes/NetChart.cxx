@@ -18,18 +18,18 @@
  */
 
 #include "NetChart.hxx"
-#include "PlottingPositionHelper.hxx"
-#include "AbstractShapeFactory.hxx"
-#include "CommonConverters.hxx"
-#include "macros.hxx"
-#include "ViewDefines.hxx"
-#include "ObjectIdentifier.hxx"
-#include "ChartTypeHelper.hxx"
-#include "LabelPositionHelper.hxx"
-#include "Clipping.hxx"
-#include "Stripe.hxx"
-#include "PolarLabelPositionHelper.hxx"
-#include "DateHelper.hxx"
+#include <PlottingPositionHelper.hxx>
+#include <AbstractShapeFactory.hxx>
+#include <CommonConverters.hxx>
+#include <macros.hxx>
+#include <ViewDefines.hxx>
+#include <ObjectIdentifier.hxx>
+#include <ChartTypeHelper.hxx>
+#include <LabelPositionHelper.hxx>
+#include <Clipping.hxx>
+#include <Stripe.hxx>
+#include <PolarLabelPositionHelper.hxx>
+#include <DateHelper.hxx>
 
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>

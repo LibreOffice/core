@@ -18,15 +18,15 @@
  */
 
 #include <memory>
-#include "dbu_reghelper.hxx"
-#include "dbu_pageids.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "stringconstants.hxx"
-#include "core_resource.hxx"
-#include "sqlmessage.hxx"
-#include "uiservices.hxx"
-#include "WCopyTable.hxx"
+#include <dbu_reghelper.hxx>
+#include <dbu_pageids.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <stringconstants.hxx>
+#include <core_resource.hxx>
+#include <sqlmessage.hxx>
+#include <uiservices.hxx>
+#include <WCopyTable.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/application/XCopyTableWizard.hpp>

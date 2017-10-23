@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "formulaparserpool.hxx"
+#include <formulaparserpool.hxx>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -25,7 +25,7 @@
 #include <rtl/instance.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/objsh.hxx>
-#include "document.hxx"
+#include <document.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;

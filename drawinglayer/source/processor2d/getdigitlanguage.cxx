@@ -7,10 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "i18nlangtag/lang.h"
-#include "svl/ctloptions.hxx"
+#include <i18nlangtag/lang.h>
+#include <svl/ctloptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

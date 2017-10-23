@@ -51,9 +51,9 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdtrans.hxx>
-#include "svx/grafctrl.hxx"
-#include "svx/tbxcolor.hxx"
-#include "bitmaps.hlst"
+#include <svx/grafctrl.hxx>
+#include <svx/tbxcolor.hxx>
+#include <bitmaps.hlst>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;

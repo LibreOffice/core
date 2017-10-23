@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbase/DCatalog.hxx"
-#include "dbase/DConnection.hxx"
-#include "dbase/DTables.hxx"
+#include <dbase/DCatalog.hxx>
+#include <dbase/DConnection.hxx>
+#include <dbase/DTables.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 

@@ -25,7 +25,7 @@
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
 
-#include "osl/mutex.hxx"
+#include <osl/mutex.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>

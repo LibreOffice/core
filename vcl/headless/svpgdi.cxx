@@ -18,11 +18,11 @@
  */
 
 #include <memory>
-#include "headless/svpgdi.hxx"
-#include "headless/svpbmp.hxx"
-#include "headless/svpframe.hxx"
-#include "headless/svpcairotextrender.hxx"
-#include "saldatabasic.hxx"
+#include <headless/svpgdi.hxx>
+#include <headless/svpbmp.hxx>
+#include <headless/svpframe.hxx>
+#include <headless/svpcairotextrender.hxx>
+#include <saldatabasic.hxx>
 
 #include <vcl/sysdata.hxx>
 #include <config_cairo_canvas.h>

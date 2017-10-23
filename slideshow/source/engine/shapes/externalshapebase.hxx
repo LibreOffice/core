@@ -22,11 +22,11 @@
 
 #include <vector>
 
-#include "iexternalmediashapebase.hxx"
-#include "unoview.hxx"
-#include "subsettableshapemanager.hxx"
-#include "slideshowexceptions.hxx"
-#include "slideshowcontext.hxx"
+#include <iexternalmediashapebase.hxx>
+#include <unoview.hxx>
+#include <subsettableshapemanager.hxx>
+#include <slideshowexceptions.hxx>
+#include <slideshowcontext.hxx>
 
 
 namespace slideshow

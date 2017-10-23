@@ -14,7 +14,7 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 
-#include "global.hxx"
+#include <global.hxx>
 
 #include "tabvwsh.hxx"
 #include <sfx2/bindings.hxx>

@@ -25,7 +25,7 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 
-#include "address.hxx"
+#include <address.hxx>
 
 #include <memory>
 #include <unordered_map>

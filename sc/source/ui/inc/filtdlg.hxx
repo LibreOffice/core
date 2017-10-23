@@ -24,11 +24,11 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/morebtn.hxx>
-#include "global.hxx"
-#include "address.hxx"
+#include <global.hxx>
+#include <address.hxx>
 #include "anyrefdg.hxx"
-#include "queryparam.hxx"
-#include "filterentries.hxx"
+#include <queryparam.hxx>
+#include <filterentries.hxx>
 
 #include <memory>
 #include <deque>

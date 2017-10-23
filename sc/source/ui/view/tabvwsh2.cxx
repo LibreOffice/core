@@ -25,21 +25,21 @@
 #include <svl/languageoptions.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include "tabvwsh.hxx"
-#include "drawsh.hxx"
-#include "drawview.hxx"
-#include "fupoor.hxx"
-#include "fuconrec.hxx"
-#include "fuconpol.hxx"
-#include "fuconarc.hxx"
-#include "fuconuno.hxx"
-#include "fusel.hxx"
-#include "futext.hxx"
-#include "fuinsert.hxx"
-#include "global.hxx"
-#include "sc.hrc"
-#include "scmod.hxx"
-#include "appoptio.hxx"
+#include <tabvwsh.hxx>
+#include <drawsh.hxx>
+#include <drawview.hxx>
+#include <fupoor.hxx>
+#include <fuconrec.hxx>
+#include <fuconpol.hxx>
+#include <fuconarc.hxx>
+#include <fuconuno.hxx>
+#include <fusel.hxx>
+#include <futext.hxx>
+#include <fuinsert.hxx>
+#include <global.hxx>
+#include <sc.hrc>
+#include <scmod.hxx>
+#include <appoptio.hxx>
 #include <gridwin.hxx>
 
 // Create default drawing objects via keyboard

@@ -18,14 +18,14 @@
  */
 
 #include "ShapeController.hxx"
-#include "ShapeController.h"
-#include "ChartController.hxx"
-#include "ChartWindow.hxx"
-#include "ViewElementListProvider.hxx"
-#include "dlg_ShapeFont.hxx"
-#include "dlg_ShapeParagraph.hxx"
-#include "chartview/DrawModelWrapper.hxx"
-#include "macros.hxx"
+#include <ShapeController.h>
+#include <ChartController.hxx>
+#include <ChartWindow.hxx>
+#include <ViewElementListProvider.hxx>
+#include <dlg_ShapeFont.hxx>
+#include <dlg_ShapeParagraph.hxx>
+#include <chartview/DrawModelWrapper.hxx>
+#include <macros.hxx>
 
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/frame/XStorable.hpp>

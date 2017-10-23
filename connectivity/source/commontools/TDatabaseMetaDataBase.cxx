@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TDatabaseMetaDataBase.hxx"
-#include "RowFunctionParser.hxx"
+#include <TDatabaseMetaDataBase.hxx>
+#include <RowFunctionParser.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/evtlistenerhlp.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
-#include "resource/sharedresources.hxx"
-#include "strings.hrc"
+#include <resource/sharedresources.hxx>
+#include <strings.hrc>
 #include <connectivity/dbexception.hxx>
 #include <sal/macros.h>
 

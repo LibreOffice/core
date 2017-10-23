@@ -60,7 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABRACK_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABRACK_HXX
 
-#include "lwpobj.hxx"
+#include <lwpobj.hxx>
 
 class   LwpObjectStream;
 class   LwpTab;

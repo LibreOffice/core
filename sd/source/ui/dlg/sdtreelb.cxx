@@ -27,25 +27,25 @@
 #include <svx/svdoole2.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
-#include "cusshow.hxx"
+#include <cusshow.hxx>
 #include <sfx2/childwin.hxx>
 
 #include <sfx2/viewfrm.hxx>
 
-#include "strmname.h"
-#include "sdtreelb.hxx"
-#include "DrawDocShell.hxx"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
-#include "sdresid.hxx"
-#include "navigatr.hxx"
-#include "strings.hrc"
+#include <strmname.h>
+#include <sdtreelb.hxx>
+#include <DrawDocShell.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
+#include <sdresid.hxx>
+#include <navigatr.hxx>
+#include <strings.hrc>
 
-#include "bitmaps.hlst"
-#include "customshowlist.hxx"
-#include "ViewShell.hxx"
-#include "DrawController.hxx"
-#include "ViewShellBase.hxx"
+#include <bitmaps.hlst>
+#include <customshowlist.hxx>
+#include <ViewShell.hxx>
+#include <DrawController.hxx>
+#include <ViewShellBase.hxx>
 
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/frame/Desktop.hpp>

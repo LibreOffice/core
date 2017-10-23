@@ -23,9 +23,9 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include "swdllapi.h"
-#include <hintids.hxx>
-#include <swtypes.hxx>
-#include <format.hxx>
+#include "hintids.hxx"
+#include "swtypes.hxx"
+#include "format.hxx"
 #include <svl/poolitem.hxx>
 
 class IntlWrapper;

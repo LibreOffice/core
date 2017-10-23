@@ -20,12 +20,12 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_ETABLE_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_ETABLE_HXX
 
-#include "file/FTable.hxx"
-#include "flat/EConnection.hxx"
+#include <file/FTable.hxx>
+#include <flat/EConnection.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <tools/urlobj.hxx>
-#include "file/quotedstring.hxx"
+#include <file/quotedstring.hxx>
 #include <unotools/syslocale.hxx>
 
 namespace connectivity

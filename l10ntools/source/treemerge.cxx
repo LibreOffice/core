@@ -17,11 +17,11 @@
 #include <libxml/xmlmemory.h>
 #include <libxml/xmlstring.h>
 
-#include "export.hxx"
-#include "helper.hxx"
-#include "common.hxx"
-#include "po.hxx"
-#include "treemerge.hxx"
+#include <export.hxx>
+#include <helper.hxx>
+#include <common.hxx>
+#include <po.hxx>
+#include <treemerge.hxx>
 
 
 namespace

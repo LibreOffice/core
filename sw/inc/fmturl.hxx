@@ -22,8 +22,8 @@
 #include <memory>
 #include <svl/poolitem.hxx>
 #include "swdllapi.h"
-#include <hintids.hxx>
-#include <format.hxx>
+#include "hintids.hxx"
+#include "format.hxx"
 
 class ImageMap;
 class IntlWrapper;

@@ -19,7 +19,7 @@
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/svdpagv.hxx>
@@ -37,15 +37,15 @@
 #include <svx/sidebar/SelectionAnalyzer.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 
-#include "drawsh.hxx"
-#include "drawview.hxx"
-#include "viewdata.hxx"
-#include "sc.hrc"
-#include "tabvwsh.hxx"
-#include "document.hxx"
-#include "drwlayer.hxx"
-#include "userdat.hxx"
-#include "drtxtob.hxx"
+#include <drawsh.hxx>
+#include <drawview.hxx>
+#include <viewdata.hxx>
+#include <sc.hrc>
+#include <tabvwsh.hxx>
+#include <document.hxx>
+#include <drwlayer.hxx>
+#include <userdat.hxx>
+#include <drtxtob.hxx>
 #include <gridwin.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdocapt.hxx>

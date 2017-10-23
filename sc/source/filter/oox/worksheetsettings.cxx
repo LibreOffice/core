@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "worksheetsettings.hxx"
+#include <worksheetsettings.hxx>
 
 #include <oox/core/binarycodec.hxx>
 #include <oox/core/filterbase.hxx>
@@ -26,9 +26,9 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "pagesettings.hxx"
-#include "tabprotection.hxx"
-#include "document.hxx"
+#include <pagesettings.hxx>
+#include <tabprotection.hxx>
+#include <document.hxx>
 
 namespace oox {
 namespace xls {

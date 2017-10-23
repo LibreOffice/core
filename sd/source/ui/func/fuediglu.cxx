@@ -17,22 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuediglu.hxx"
+#include <fuediglu.hxx>
 #include <svl/eitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svdglue.hxx>
 #include <sfx2/request.hxx>
 
-#include "app.hrc"
-#include "strings.hrc"
+#include <app.hrc>
+#include <strings.hrc>
 
-#include "Window.hxx"
-#include "drawdoc.hxx"
-#include "FrameView.hxx"
-#include "View.hxx"
-#include "ViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "ToolBarManager.hxx"
+#include <Window.hxx>
+#include <drawdoc.hxx>
+#include <FrameView.hxx>
+#include <View.hxx>
+#include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <ToolBarManager.hxx>
 
 namespace sd {
 

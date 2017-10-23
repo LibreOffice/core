@@ -57,7 +57,7 @@
  * @file
  * doc field.
  ************************************************************************/
-#include "xfilter/xfdocfield.hxx"
+#include <xfilter/xfdocfield.hxx>
 
 void XFFileName::SetType(const OUString& sType)
 {

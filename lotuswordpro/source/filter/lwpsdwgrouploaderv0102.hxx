@@ -61,7 +61,7 @@
 
 #include <rtl/ref.hxx>
 
-#include "lwpheader.hxx"
+#include <lwpheader.hxx>
 #include "lwpsdwdrawheader.hxx"
 
 class SvStream;

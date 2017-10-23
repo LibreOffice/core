@@ -17,7 +17,7 @@
  */
 
 #include <unotools/resmgr.hxx>
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 
 OUString ForResId(const char *pId)
 {

@@ -24,11 +24,11 @@
 #include <svl/itemprop.hxx>
 #include <vcl/svapp.hxx>
 
-#include "docsh.hxx"
-#include "unonames.hxx"
-#include "miscuno.hxx"
-#include "convuno.hxx"
-#include "addruno.hxx"
+#include <docsh.hxx>
+#include <unonames.hxx>
+#include <miscuno.hxx>
+#include <convuno.hxx>
+#include <addruno.hxx>
 
 using namespace com::sun::star;
 

@@ -19,8 +19,8 @@
 #ifndef INCLUDED_FORMS_SOURCE_RICHTEXT_RICHTEXTMODEL_HXX
 #define INCLUDED_FORMS_SOURCE_RICHTEXT_RICHTEXTMODEL_HXX
 
-#include "FormComponent.hxx"
-#include "formcontrolfont.hxx"
+#include <FormComponent.hxx>
+#include <formcontrolfont.hxx>
 #include "richtextunowrapper.hxx"
 #include <comphelper/propertycontainerhelper.hxx>
 #include <comphelper/listenernotification.hxx>

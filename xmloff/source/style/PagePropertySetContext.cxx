@@ -19,8 +19,8 @@
 
 #include <tools/debug.hxx>
 #include "PagePropertySetContext.hxx"
-#include "XMLBackgroundImageContext.hxx"
-#include "XMLTextColumnsContext.hxx"
+#include <XMLBackgroundImageContext.hxx>
+#include <XMLTextColumnsContext.hxx>
 #include <xmloff/PageMasterStyleMap.hxx>
 #include "XMLFootnoteSeparatorImport.hxx"
 

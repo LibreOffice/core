@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVGIO_INC_SVGSVGNODE_HXX
 #define INCLUDED_SVGIO_INC_SVGSVGNODE_HXX
 
-#include <svgstyleattributes.hxx>
+#include "svgstyleattributes.hxx"
 #include <memory>
 
 namespace svgio

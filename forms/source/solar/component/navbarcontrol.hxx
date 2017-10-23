@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FORMS_SOURCE_SOLAR_COMPONENT_NAVBARCONTROL_HXX
 #define INCLUDED_FORMS_SOURCE_SOLAR_COMPONENT_NAVBARCONTROL_HXX
 
-#include "formnavigation.hxx"
+#include <formnavigation.hxx>
 
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 

@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVGIO_INC_SVGSTYLEATTRIBUTES_HXX
 #define INCLUDED_SVGIO_INC_SVGSTYLEATTRIBUTES_HXX
 
-#include <svgpaint.hxx>
-#include <svgnode.hxx>
+#include "svgpaint.hxx"
+#include "svgnode.hxx"
 #include <vcl/vclenum.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 

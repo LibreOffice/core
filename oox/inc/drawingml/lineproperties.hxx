@@ -29,7 +29,7 @@
 #include <oox/helper/helper.hxx>
 #include <sal/types.h>
 
-#include "drawingml/fillproperties.hxx"
+#include <drawingml/fillproperties.hxx>
 
 namespace oox { class GraphicHelper; }
 

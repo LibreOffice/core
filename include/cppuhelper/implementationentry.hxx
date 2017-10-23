@@ -19,8 +19,8 @@
 #ifndef INCLUDED_CPPUHELPER_IMPLEMENTATIONENTRY_HXX
 #define INCLUDED_CPPUHELPER_IMPLEMENTATIONENTRY_HXX
 
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/cppuhelperdllapi.h>
+#include "cppuhelper/factory.hxx"
+#include "cppuhelper/cppuhelperdllapi.h"
 
 namespace cppu
 {

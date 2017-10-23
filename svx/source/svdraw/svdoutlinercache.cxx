@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svdoutlinercache.hxx"
+#include <svdoutlinercache.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdetc.hxx>

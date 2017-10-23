@@ -33,11 +33,11 @@
 #include <tools/datetime.hxx>
 #include <tools/ref.hxx>
 #include <rtl/ref.hxx>
-#include <swdllapi.h>
-#include <swtypes.hxx>
-#include <docfac.hxx>
-#include <iodetect.hxx>
-#include <IMark.hxx>
+#include "swdllapi.h"
+#include "swtypes.hxx"
+#include "docfac.hxx"
+#include "iodetect.hxx"
+#include "IMark.hxx"
 
 class SfxFilterContainer;
 class SfxFilter;

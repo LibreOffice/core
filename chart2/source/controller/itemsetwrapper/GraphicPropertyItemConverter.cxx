@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "GraphicPropertyItemConverter.hxx"
+#include <GraphicPropertyItemConverter.hxx>
 #include "SchWhichPairs.hxx"
-#include "macros.hxx"
-#include "ItemPropertyMap.hxx"
-#include "PropertyHelper.hxx"
-#include "CommonConverters.hxx"
+#include <macros.hxx>
+#include <ItemPropertyMap.hxx>
+#include <PropertyHelper.hxx>
+#include <CommonConverters.hxx>
 #include <editeng/memberids.h>
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>

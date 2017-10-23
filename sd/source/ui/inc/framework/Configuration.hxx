@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_FRAMEWORK_CONFIGURATION_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_FRAMEWORK_CONFIGURATION_HXX
 
-#include "MutexOwner.hxx"
+#include <MutexOwner.hxx>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationControllerBroadcaster.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

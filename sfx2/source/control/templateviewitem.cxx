@@ -24,7 +24,7 @@
 #include <sfx2/sfxresid.hxx>
 
 #include <sfx2/strings.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 using namespace basegfx;
 using namespace basegfx::utils;

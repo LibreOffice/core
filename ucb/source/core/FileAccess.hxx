@@ -20,12 +20,12 @@
 #ifndef INCLUDED_UCB_SOURCE_CORE_FILEACCESS_HXX
 #define INCLUDED_UCB_SOURCE_CORE_FILEACCESS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
 namespace lang { class XMultiServiceFactory; }

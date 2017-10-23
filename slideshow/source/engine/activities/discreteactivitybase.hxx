@@ -21,7 +21,7 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_DISCRETEACTIVITYBASE_HXX
 
 #include "activitybase.hxx"
-#include "wakeupevent.hxx"
+#include <wakeupevent.hxx>
 
 #include <vector>
 

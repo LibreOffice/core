@@ -64,23 +64,23 @@
 #include <memory>
 
 #include "lwpfribheader.hxx"
-#include "lwpobj.hxx"
-#include "lwpobjstrm.hxx"
+#include <lwpobj.hxx>
+#include <lwpobjstrm.hxx>
 
 #include <vector>
-#include "lwpheader.hxx"
+#include <lwpheader.hxx>
 #include "lwpdlvlist.hxx"
-#include "lwpbasetype.hxx"
-#include "lwpoverride.hxx"
-#include "lwpfoundry.hxx"
+#include <lwpbasetype.hxx>
+#include <lwpoverride.hxx>
+#include <lwpfoundry.hxx>
 #include "lwplayout.hxx"
-#include "lwpfrib.hxx"
+#include <lwpfrib.hxx>
 #include "lwpfribptr.hxx"
 #include "lwpfribtext.hxx"
-#include "xfilter/xfparagraph.hxx"
-#include "xfilter/xfdefs.hxx"
-#include "xfilter/xfparastyle.hxx"
-#include "xfilter/xfsection.hxx"
+#include <xfilter/xfparagraph.hxx>
+#include <xfilter/xfdefs.hxx>
+#include <xfilter/xfparastyle.hxx>
+#include <xfilter/xfsection.hxx>
 
 class LwpParaProperty;
 class LwpPara;

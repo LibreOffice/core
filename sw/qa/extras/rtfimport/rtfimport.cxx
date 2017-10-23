@@ -48,7 +48,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include "comphelper/configuration.hxx"
+#include <comphelper/configuration.hxx>
 
 class Test : public SwModelTestBase
 {

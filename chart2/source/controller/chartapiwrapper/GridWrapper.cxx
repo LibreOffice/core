@@ -18,15 +18,15 @@
  */
 
 #include "GridWrapper.hxx"
-#include "macros.hxx"
-#include "AxisHelper.hxx"
+#include <macros.hxx>
+#include <AxisHelper.hxx>
 #include "Chart2ModelContact.hxx"
-#include "AxisIndexDefines.hxx"
+#include <AxisIndexDefines.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#include "LinePropertiesHelper.hxx"
-#include "UserDefinedProperties.hxx"
-#include "WrappedDefaultProperty.hxx"
+#include <LinePropertiesHelper.hxx>
+#include <UserDefinedProperties.hxx>
+#include <WrappedDefaultProperty.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <algorithm>

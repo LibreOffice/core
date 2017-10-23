@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "MediaObjectBar.hxx"
+#include <MediaObjectBar.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/app.hxx>
@@ -29,21 +29,21 @@
 #include <svx/svdomedia.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 
-#include "app.hrc"
+#include <app.hrc>
 
-#include "strings.hrc"
-#include "DrawDocShell.hxx"
-#include "ViewShell.hxx"
-#include "Window.hxx"
-#include "drawview.hxx"
-#include "sdresid.hxx"
-#include "drawdoc.hxx"
+#include <strings.hrc>
+#include <DrawDocShell.hxx>
+#include <ViewShell.hxx>
+#include <Window.hxx>
+#include <drawview.hxx>
+#include <sdresid.hxx>
+#include <drawdoc.hxx>
 #include <memory>
 
 using namespace sd;
 
 #define MediaObjectBar
-#include "sdslots.hxx"
+#include <sdslots.hxx>
 
 namespace sd {
 

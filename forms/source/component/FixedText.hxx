@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_FIXEDTEXT_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_FIXEDTEXT_HXX
 
-#include "FormComponent.hxx"
+#include <FormComponent.hxx>
 
 
 namespace frm

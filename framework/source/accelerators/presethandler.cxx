@@ -21,7 +21,7 @@
 
 #include <classes/fwkresid.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 #include <services.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>

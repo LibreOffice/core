@@ -36,15 +36,15 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 
-#include "shapeuno.hxx"
-#include "miscuno.hxx"
-#include "cellsuno.hxx"
-#include "textuno.hxx"
-#include "fielduno.hxx"
-#include "docsh.hxx"
-#include "drwlayer.hxx"
-#include "userdat.hxx"
-#include "unonames.hxx"
+#include <shapeuno.hxx>
+#include <miscuno.hxx>
+#include <cellsuno.hxx>
+#include <textuno.hxx>
+#include <fielduno.hxx>
+#include <docsh.hxx>
+#include <drwlayer.hxx>
+#include <userdat.hxx>
+#include <unonames.hxx>
 
 using namespace ::com::sun::star;
 

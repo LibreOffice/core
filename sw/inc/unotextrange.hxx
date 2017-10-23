@@ -32,8 +32,8 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <pam.hxx>
-#include <unobaseclass.hxx>
+#include "pam.hxx"
+#include "unobaseclass.hxx"
 
 class SwDoc;
 class SwUnoCursor;

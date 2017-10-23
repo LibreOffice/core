@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "componenttools.hxx"
+#include <componenttools.hxx>
 
 #include <com/sun/star/container/XChild.hpp>
 #include <comphelper/sequence.hxx>

@@ -18,9 +18,9 @@
  */
 
 
-#include "svx/ActionDescriptionProvider.hxx"
-#include "svdglob.hxx"
-#include "svx/strings.hrc"
+#include <svx/ActionDescriptionProvider.hxx>
+#include <svdglob.hxx>
+#include <svx/strings.hrc>
 
 OUString ActionDescriptionProvider::createDescription( ActionType eActionType
                         , const OUString& rObjectName )

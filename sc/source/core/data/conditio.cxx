@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/itemset.hxx>
 #include <svl/zforlist.hxx>
@@ -27,21 +27,21 @@
 
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
 
-#include "conditio.hxx"
-#include "formulacell.hxx"
-#include "document.hxx"
-#include "hints.hxx"
-#include "compiler.hxx"
-#include "rechead.hxx"
-#include "rangelst.hxx"
-#include "stlpool.hxx"
-#include "rangenam.hxx"
-#include "rangeutl.hxx"
-#include "colorscale.hxx"
-#include "cellvalue.hxx"
-#include "editutil.hxx"
-#include "tokenarray.hxx"
-#include "refupdatecontext.hxx"
+#include <conditio.hxx>
+#include <formulacell.hxx>
+#include <document.hxx>
+#include <hints.hxx>
+#include <compiler.hxx>
+#include <rechead.hxx>
+#include <rangelst.hxx>
+#include <stlpool.hxx>
+#include <rangenam.hxx>
+#include <rangeutl.hxx>
+#include <colorscale.hxx>
+#include <cellvalue.hxx>
+#include <editutil.hxx>
+#include <tokenarray.hxx>
+#include <refupdatecontext.hxx>
 #include <formula/errorcodes.hxx>
 #include <svl/sharedstring.hxx>
 #include <svl/sharedstringpool.hxx>

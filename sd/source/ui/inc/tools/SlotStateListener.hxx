@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_TOOLS_SLOTSTATELISTENER_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_TOOLS_SLOTSTATELISTENER_HXX
 
-#include "MutexOwner.hxx"
+#include <MutexOwner.hxx>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>

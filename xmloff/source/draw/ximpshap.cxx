@@ -49,7 +49,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
-#include "xexptran.hxx"
+#include <xexptran.hxx>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
@@ -58,19 +58,19 @@
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
 
-#include "PropertySetMerger.hxx"
+#include <PropertySetMerger.hxx>
 #include <xmloff/families.hxx>
 #include "ximpstyl.hxx"
-#include"xmloff/xmlnmspe.hxx"
+#include<xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "EnhancedCustomShapeToken.hxx"
-#include "XMLReplacementImageContext.hxx"
-#include "XMLImageMapContext.hxx"
+#include <EnhancedCustomShapeToken.hxx>
+#include <XMLReplacementImageContext.hxx>
+#include <XMLImageMapContext.hxx>
 #include "sdpropls.hxx"
 #include "eventimp.hxx"
 #include "descriptionimp.hxx"
 #include "ximpcustomshape.hxx"
-#include "XMLEmbeddedObjectImportContext.hxx"
+#include <XMLEmbeddedObjectImportContext.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>

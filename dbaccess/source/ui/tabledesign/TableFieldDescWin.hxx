@@ -21,7 +21,7 @@
 
 #include <vcl/tabpage.hxx>
 #include "FieldDescGenWin.hxx"
-#include "IClipBoardTest.hxx"
+#include <IClipBoardTest.hxx>
 
 class FixedText;
 namespace dbaui

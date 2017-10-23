@@ -23,7 +23,7 @@
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
-#include "sdundo.hxx"
+#include <sdundo.hxx>
 #include <svx/svdopath.hxx>
 #include <tools/color.hxx>
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <helperwrongspellrenderer.hxx>
+#include "helperwrongspellrenderer.hxx"
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <tools/gen.hxx>
 #include <vcl/outdev.hxx>

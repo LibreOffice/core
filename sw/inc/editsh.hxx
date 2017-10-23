@@ -19,18 +19,18 @@
 #ifndef INCLUDED_SW_INC_EDITSH_HXX
 #define INCLUDED_SW_INC_EDITSH_HXX
 
-#include <crsrsh.hxx>
+#include "crsrsh.hxx"
 
-#include <IMark.hxx>
-#include <charfmt.hxx>
-#include <fldupde.hxx>
-#include <frmfmt.hxx>
-#include <itabenum.hxx>
-#include <swdbdata.hxx>
-#include <swdllapi.h>
-#include <swundo.hxx>
-#include <tblenum.hxx>
-#include <tox.hxx>
+#include "IMark.hxx"
+#include "charfmt.hxx"
+#include "fldupde.hxx"
+#include "frmfmt.hxx"
+#include "itabenum.hxx"
+#include "swdbdata.hxx"
+#include "swdllapi.h"
+#include "swundo.hxx"
+#include "tblenum.hxx"
+#include "tox.hxx"
 #include <svtools/embedhlp.hxx>
 
 #include <editeng/swafopt.hxx>

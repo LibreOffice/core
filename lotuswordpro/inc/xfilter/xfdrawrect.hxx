@@ -60,7 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWRECT_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWRECT_HXX
 
-#include "xfilter/xfdrawobj.hxx"
+#include <xfilter/xfdrawobj.hxx>
 
 class XFDrawRect : public XFDrawObject
 {

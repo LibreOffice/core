@@ -22,8 +22,8 @@
 #include <tools/solar.h>
 #include <sal/types.h>
 #include <editeng/langitem.hxx>
-#include <hintids.hxx>
-#include <swtypes.hxx>
+#include "hintids.hxx"
+#include "swtypes.hxx"
 #include <deque>
 
 class SwTextNode;

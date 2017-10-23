@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <svx/algitem.hxx>
@@ -31,16 +31,16 @@
 #include <svtools/rtfout.hxx>
 #include <svtools/rtfkeywd.hxx>
 
-#include "rtfexp.hxx"
-#include "filter.hxx"
-#include "cellvalue.hxx"
-#include "document.hxx"
-#include "patattr.hxx"
-#include "attrib.hxx"
-#include "cellform.hxx"
-#include "editutil.hxx"
-#include "stlpool.hxx"
-#include "ftools.hxx"
+#include <rtfexp.hxx>
+#include <filter.hxx>
+#include <cellvalue.hxx>
+#include <document.hxx>
+#include <patattr.hxx>
+#include <attrib.hxx>
+#include <cellform.hxx>
+#include <editutil.hxx>
+#include <stlpool.hxx>
+#include <ftools.hxx>
 
 void ScFormatFilterPluginImpl::ScExportRTF( SvStream& rStrm, ScDocument* pDoc,
         const ScRange& rRange, const rtl_TextEncoding /*eNach*/ )

@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLTRACKEDCHANGESCONTEXT_HXX
 
 #include "XMLChangeTrackingImportHelper.hxx"
-#include "chgtrack.hxx"
+#include <chgtrack.hxx>
 #include "xmlimprt.hxx"
 #include "importcontext.hxx"
 #include <xmloff/xmlictxt.hxx>

@@ -26,17 +26,17 @@
 #include <vcl/settings.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 
-#include "targuno.hxx"
-#include "miscuno.hxx"
-#include "docuno.hxx"
-#include "datauno.hxx"
-#include "nameuno.hxx"
-#include "docsh.hxx"
-#include "content.hxx"
-#include "scresid.hxx"
-#include "strings.hrc"
-#include "bitmaps.hlst"
-#include "unonames.hxx"
+#include <targuno.hxx>
+#include <miscuno.hxx>
+#include <docuno.hxx>
+#include <datauno.hxx>
+#include <nameuno.hxx>
+#include <docsh.hxx>
+#include <content.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
+#include <bitmaps.hlst>
+#include <unonames.hxx>
 
 using  namespace ::com::sun::star;
 

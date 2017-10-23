@@ -21,7 +21,7 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <unotools/moduleoptions.hxx>
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 
 #include <svx/dialogs.hrc>
 #include <vcl/errinf.hxx>
@@ -39,27 +39,27 @@
 #include <unotools/useroptions.hxx>
 #include <com/sun/star/uno/Sequence.h>
 
-#include "app.hrc"
-#include "strings.hrc"
+#include <app.hrc>
+#include <strings.hrc>
 
-#include "sdmod.hxx"
-#include "pres.hxx"
-#include "optsitem.hxx"
-#include "ViewShell.hxx"
-#include "sdattr.hxx"
-#include "sdpage.hxx"
-#include "DrawDocShell.hxx"
-#include "drawdoc.hxx"
-#include "assclass.hxx"
-#include "sdenumdef.hxx"
-#include "sdresid.hxx"
-#include "OutlineViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "FrameView.hxx"
-#include "FactoryIds.hxx"
-#include "sdabstdlg.hxx"
+#include <sdmod.hxx>
+#include <pres.hxx>
+#include <optsitem.hxx>
+#include <ViewShell.hxx>
+#include <sdattr.hxx>
+#include <sdpage.hxx>
+#include <DrawDocShell.hxx>
+#include <drawdoc.hxx>
+#include <assclass.hxx>
+#include <sdenumdef.hxx>
+#include <sdresid.hxx>
+#include <OutlineViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <FrameView.hxx>
+#include <FactoryIds.hxx>
+#include <sdabstdlg.hxx>
 #include <memory>
-#include "slideshow.hxx"
+#include <slideshow.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>

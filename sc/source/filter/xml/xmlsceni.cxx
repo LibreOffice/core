@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "document.hxx"
+#include <document.hxx>
 #include "xmlimprt.hxx"
 #include "xmlsceni.hxx"
-#include "docuno.hxx"
-#include "attrib.hxx"
+#include <docuno.hxx>
+#include <attrib.hxx>
 #include "XMLConverter.hxx"
-#include "rangeutl.hxx"
+#include <rangeutl.hxx>
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>

@@ -25,8 +25,8 @@
 #include "informationdialog.hxx"
 
 #include <vector>
-#include "com/sun/star/util/URL.hpp"
-#include "com/sun/star/util/XURLTransformer.hpp"
+#include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>

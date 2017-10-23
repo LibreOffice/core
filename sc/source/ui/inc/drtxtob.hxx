@@ -24,7 +24,7 @@
 #include <sfx2/module.hxx>
 #include <tools/link.hxx>
 
-#include "shellids.hxx"
+#include <shellids.hxx>
 
 sal_uInt16 ScGetFontWorkId();       // instead of SvxFontWorkChildWindow::GetChildWindowId()
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_EPREPAREDSTATEMENT_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_EPREPAREDSTATEMENT_HXX
 
-#include "file/FPreparedStatement.hxx"
+#include <file/FPreparedStatement.hxx>
 
 namespace connectivity
 {

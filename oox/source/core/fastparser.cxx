@@ -20,15 +20,15 @@
 #include <sal/config.h>
 
 #include <com/sun/star/xml/sax/FastParser.hpp>
-#include "oox/core/fastparser.hxx"
+#include <oox/core/fastparser.hxx>
 
-#include "oox/core/fasttokenhandler.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/helper.hxx"
-#include "oox/helper/storagebase.hxx"
-#include "oox/token/namespacemap.hxx"
+#include <oox/core/fasttokenhandler.hxx>
+#include <oox/helper/containerhelper.hxx>
+#include <oox/helper/helper.hxx>
+#include <oox/helper/storagebase.hxx>
+#include <oox/token/namespacemap.hxx>
 
-#include "sax/fastparser.hxx"
+#include <sax/fastparser.hxx>
 
 namespace oox {
 namespace core {

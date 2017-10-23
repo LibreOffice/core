@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "excelhandlers.hxx"
+#include <excelhandlers.hxx>
 
 #include <oox/core/filterbase.hxx>
 

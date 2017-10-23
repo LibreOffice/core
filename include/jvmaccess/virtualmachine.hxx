@@ -24,7 +24,7 @@
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
-#include "jni.h"
+#include <jni.h>
 
 namespace jvmaccess {
 

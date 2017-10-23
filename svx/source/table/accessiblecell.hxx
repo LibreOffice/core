@@ -36,7 +36,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include "cell.hxx"
+#include <cell.hxx>
 
 
 namespace accessibility

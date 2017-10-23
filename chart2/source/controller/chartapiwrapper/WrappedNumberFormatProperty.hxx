@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDNUMBERFORMATPROPERTY_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDNUMBERFORMATPROPERTY_HXX
 
-#include "WrappedDirectStateProperty.hxx"
+#include <WrappedDirectStateProperty.hxx>
 #include "Chart2ModelContact.hxx"
 
 #include <memory>

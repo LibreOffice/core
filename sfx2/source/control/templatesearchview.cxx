@@ -7,15 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "templatesearchview.hxx"
-#include "templatesearchviewitem.hxx"
+#include <templatesearchview.hxx>
+#include <templatesearchviewitem.hxx>
 #include <sfx2/templatelocalview.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
 
 #include <sfx2/strings.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 #include <vcl/builderfactory.hxx>
 

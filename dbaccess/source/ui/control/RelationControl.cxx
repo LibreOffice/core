@@ -17,22 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "RelationControl.hxx"
+#include <RelationControl.hxx>
 
 #include <svtools/editbrowsebox.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/diagnose_ex.h>
 #include <vcl/builderfactory.hxx>
-#include "TableConnectionData.hxx"
-#include "TableConnection.hxx"
-#include "TableWindow.hxx"
+#include <TableConnectionData.hxx>
+#include <TableConnection.hxx>
+#include <TableWindow.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include "RelControliFace.hxx"
-#include "strings.hrc"
-#include "helpids.h"
+#include <RelControliFace.hxx>
+#include <strings.hrc>
+#include <helpids.h>
 #include <osl/diagnose.h>
 
 #include <vector>

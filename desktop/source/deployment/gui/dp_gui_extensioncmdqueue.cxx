@@ -69,13 +69,13 @@
 #include "dp_gui_extensioncmdqueue.hxx"
 #include "dp_gui_dependencydialog.hxx"
 #include "dp_gui_dialog2.hxx"
-#include "dp_shared.hxx"
+#include <dp_shared.hxx>
 #include "dp_gui_theextmgr.hxx"
 #include "dp_gui_updatedialog.hxx"
 #include "dp_gui_updateinstalldialog.hxx"
-#include "dp_dependencies.hxx"
-#include "dp_identifier.hxx"
-#include "dp_version.hxx"
+#include <dp_dependencies.hxx>
+#include <dp_identifier.hxx>
+#include <dp_version.hxx>
 
 #include <queue>
 #include <memory>

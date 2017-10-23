@@ -20,8 +20,8 @@
 #include "alloc_arena.hxx"
 
 #include "alloc_impl.hxx"
-#include "rtllifecycle.h"
-#include "sal/macros.h"
+#include <rtllifecycle.h>
+#include <sal/macros.h>
 
 #include <cassert>
 #include <string.h>

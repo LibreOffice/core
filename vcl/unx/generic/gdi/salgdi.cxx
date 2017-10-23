@@ -27,38 +27,38 @@
 #include <X11/Xproto.h>
 
 
-#include "basegfx/polygon/b2dpolygon.hxx"
-#include "basegfx/polygon/b2dpolypolygon.hxx"
-#include "basegfx/polygon/b2dpolypolygontools.hxx"
-#include "basegfx/polygon/b2dpolygontools.hxx"
-#include "basegfx/polygon/b2dpolygonclipper.hxx"
-#include "basegfx/polygon/b2dlinegeometry.hxx"
-#include "basegfx/matrix/b2dhommatrix.hxx"
-#include "basegfx/matrix/b2dhommatrixtools.hxx"
-#include "basegfx/polygon/b2dpolypolygoncutter.hxx"
-#include "basegfx/polygon/b2dtrapezoid.hxx"
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <basegfx/polygon/b2dlinegeometry.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <basegfx/polygon/b2dtrapezoid.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 
 #include <vcl/jobdata.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 
-#include "unx/salunx.h"
-#include "unx/saldisp.hxx"
-#include "unx/salgdi.h"
-#include "unx/salvd.h"
-#include "unx/x11/x11gdiimpl.h"
+#include <unx/salunx.h>
+#include <unx/saldisp.hxx>
+#include <unx/salgdi.h>
+#include <unx/salvd.h>
+#include <unx/x11/x11gdiimpl.h>
 #include <unx/x11/xlimits.hxx>
 
-#include "salgdiimpl.hxx"
-#include "unx/nativewindowhandleprovider.hxx"
-#include "textrender.hxx"
+#include <salgdiimpl.hxx>
+#include <unx/nativewindowhandleprovider.hxx>
+#include <textrender.hxx>
 #include "gdiimpl.hxx"
-#include "opengl/x11/gdiimpl.hxx"
+#include <opengl/x11/gdiimpl.hxx>
 #include "x11cairotextrender.hxx"
 #include "openglx11cairotextrender.hxx"
 
-#include "unx/printergfx.hxx"
+#include <unx/printergfx.hxx>
 #include "xrender_peer.hxx"
 #include "cairo_xlib_cairo.hxx"
 #include <cairo-xlib.h>

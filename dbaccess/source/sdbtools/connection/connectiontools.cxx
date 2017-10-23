@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "connectiontools.hxx"
+#include <connectiontools.hxx>
 #include "tablename.hxx"
 #include "objectnames.hxx"
 #include "datasourcemetadata.hxx"

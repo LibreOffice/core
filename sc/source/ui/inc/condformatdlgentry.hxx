@@ -11,8 +11,8 @@
 #define INCLUDED_SC_SOURCE_UI_INC_CONDFORMATDLGENTRY_HXX
 
 #include <memory>
-#include "colorscale.hxx"
-#include "conditio.hxx"
+#include <colorscale.hxx>
+#include <conditio.hxx>
 #include <formula/funcutl.hxx>
 
 #include <svl/lstner.hxx>

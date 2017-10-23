@@ -26,7 +26,7 @@
 
 #include "vbaoleobject.hxx"
 #include <svx/svdobj.hxx>
-#include "drwlayer.hxx"
+#include <drwlayer.hxx>
 #include "excelvbahelper.hxx"
 #include <svtools/bindablecontrolhelper.hxx>
 using namespace com::sun::star;

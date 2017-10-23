@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "gpg/SEInitializer.hxx"
+#include <gpg/SEInitializer.hxx>
 #include "SecurityEnvironment.hxx"
 #include "XMLSecurityContext.hxx"
 

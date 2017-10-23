@@ -18,13 +18,13 @@
  */
 
 #include <svx/unoshape.hxx>
-#include "OpenglShapeFactory.hxx"
+#include <OpenglShapeFactory.hxx>
 #include "DummyXShape.hxx"
-#include "ViewDefines.hxx"
-#include "Stripe.hxx"
-#include "CommonConverters.hxx"
-#include "macros.hxx"
-#include "PropertyMapper.hxx"
+#include <ViewDefines.hxx>
+#include <Stripe.hxx>
+#include <CommonConverters.hxx>
+#include <macros.hxx>
+#include <PropertyMapper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
@@ -52,7 +52,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
-#include "RelativeSizeHelper.hxx"
+#include <RelativeSizeHelper.hxx>
 
 using namespace ::com::sun::star;
 

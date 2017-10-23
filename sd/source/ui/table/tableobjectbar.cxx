@@ -34,18 +34,18 @@
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 
-#include "app.hrc"
-#include "createtableobjectbar.hxx"
-#include "registerinterfaces.hxx"
+#include <app.hrc>
+#include <createtableobjectbar.hxx>
+#include <registerinterfaces.hxx>
 
-#include "strings.hrc"
-#include "DrawDocShell.hxx"
-#include "ViewShell.hxx"
-#include "Window.hxx"
-#include "drawview.hxx"
-#include "sdresid.hxx"
-#include "drawdoc.hxx"
-#include "DrawViewShell.hxx"
+#include <strings.hrc>
+#include <DrawDocShell.hxx>
+#include <ViewShell.hxx>
+#include <Window.hxx>
+#include <drawview.hxx>
+#include <sdresid.hxx>
+#include <drawdoc.hxx>
+#include <DrawViewShell.hxx>
 
 #include "tableobjectbar.hxx"
 
@@ -55,7 +55,7 @@ using namespace sd;
 using namespace sd::ui::table;
 
 #define TableObjectBar
-#include "sdslots.hxx"
+#include <sdslots.hxx>
 
 namespace sd { namespace ui { namespace table {
 

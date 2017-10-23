@@ -67,11 +67,11 @@
 
 #include <rtl/ustring.hxx>
 
-#include "xfilter/ixfstream.hxx"
-#include "xfilter/ixfattrlist.hxx"
+#include <xfilter/ixfstream.hxx>
+#include <xfilter/ixfattrlist.hxx>
 
-#include "xfilter/xfutil.hxx"
-#include "xfilter/xfdefs.hxx"
+#include <xfilter/xfutil.hxx>
+#include <xfilter/xfdefs.hxx>
 
 #define PI 3.1415926
 #define FLOAT_MIN   0.001

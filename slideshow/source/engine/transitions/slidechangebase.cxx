@@ -27,7 +27,7 @@
 #include <cppcanvas/basegfxfactory.hxx>
 
 #include "slidechangebase.hxx"
-#include "tools.hxx"
+#include <tools.hxx>
 
 #include <algorithm>
 

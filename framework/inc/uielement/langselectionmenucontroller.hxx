@@ -34,7 +34,7 @@
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 
-#include "helper/mischelper.hxx"
+#include <helper/mischelper.hxx>
 
 namespace framework
 {

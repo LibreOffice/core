@@ -22,13 +22,13 @@
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <comphelper/processfactory.hxx>
 #include <editeng/outliner.hxx>
-#include "CustomAnimationCloner.hxx"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
+#include <CustomAnimationCloner.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <CustomAnimationPreset.hxx>
 #include <TransitionPreset.hxx>
-#include "undoanim.hxx"
-#include "EffectMigration.hxx"
+#include <undoanim.hxx>
+#include <EffectMigration.hxx>
 
 using namespace ::sd;
 using namespace ::com::sun::star::uno;

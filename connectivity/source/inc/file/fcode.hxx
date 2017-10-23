@@ -26,7 +26,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <connectivity/FValue.hxx>
-#include "file/filedllapi.hxx"
+#include <file/filedllapi.hxx>
 
 #include <stack>
 

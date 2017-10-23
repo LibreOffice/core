@@ -29,9 +29,9 @@
 #include <cntfrm.hxx>
 #include <fmtcntnt.hxx>
 #include <ndindex.hxx>
-#include "fesh.hxx"
+#include <fesh.hxx>
 #include <hints.hxx>
-#include "accmap.hxx"
+#include <accmap.hxx>
 #include "accframebase.hxx"
 
 #include <crsrsh.hxx>

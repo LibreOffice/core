@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ppt/timenode.hxx"
+#include <oox/ppt/timenode.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -36,11 +36,11 @@
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "oox/helper/helper.hxx"
-#include "oox/core/xmlfilterbase.hxx"
+#include <oox/helper/helper.hxx>
+#include <oox/core/xmlfilterbase.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
 #include <oox/token/tokens.hxx>
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::beans;

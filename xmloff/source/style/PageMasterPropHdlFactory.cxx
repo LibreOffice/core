@@ -18,12 +18,12 @@
  */
 
 #include "PageMasterPropHdlFactory.hxx"
-#include "enummaps.hxx"
+#include <enummaps.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "xmlbahdl.hxx"
 #include <xmloff/NamedBoolPropertyHdl.hxx>
-#include "XMLTextColumnsPropertyHandler.hxx"
+#include <XMLTextColumnsPropertyHandler.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 #include "PageMasterPropHdl.hxx"
 #include <xmloff/PageMasterStyleMap.hxx>
@@ -31,11 +31,11 @@
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include "XMLFillBitmapSizePropertyHandler.hxx"
-#include "XMLBitmapLogicalSizePropertyHandler.hxx"
+#include <XMLFillBitmapSizePropertyHandler.hxx>
+#include <XMLBitmapLogicalSizePropertyHandler.hxx>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
-#include "XMLBitmapRepeatOffsetPropertyHandler.hxx"
+#include <XMLBitmapRepeatOffsetPropertyHandler.hxx>
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;

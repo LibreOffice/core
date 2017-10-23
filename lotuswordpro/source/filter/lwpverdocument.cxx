@@ -60,12 +60,12 @@
  * CVersionedGointer, so use one class
  ************************************************************************/
 
-#include "lwpglobalmgr.hxx"
+#include <lwpglobalmgr.hxx>
 #include "lwpverdocument.hxx"
 #include "lwplnopts.hxx"
 #include "lwpproplist.hxx"
-#include "xfilter/xfparastyle.hxx"
-#include "lwptools.hxx"
+#include <xfilter/xfparastyle.hxx>
+#include <lwptools.hxx>
 
 LwpVerDocument::LwpVerDocument(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)

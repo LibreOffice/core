@@ -39,8 +39,8 @@
 #include <vcl/window.hxx>
 #include <vbahelper/vbaaccesshelper.hxx>
 
-#include "cellsuno.hxx"
-#include "convuno.hxx"
+#include <cellsuno.hxx>
+#include <convuno.hxx>
 #include "vbaapplication.hxx"
 
 using namespace ::com::sun::star;

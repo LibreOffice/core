@@ -20,12 +20,12 @@
 
 #include <memory>
 #include <sal/macros.h>
-#include "fmprop.hxx"
-#include "svx/strings.hrc"
-#include "svx/fmtools.hxx"
-#include "gridcell.hxx"
-#include "gridcols.hxx"
-#include "sdbdatacolumn.hxx"
+#include <fmprop.hxx>
+#include <svx/strings.hrc>
+#include <svx/fmtools.hxx>
+#include <gridcell.hxx>
+#include <gridcols.hxx>
+#include <sdbdatacolumn.hxx>
 
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/awt/MouseWheelBehavior.hpp>

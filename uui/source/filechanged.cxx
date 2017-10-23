@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "strings.hrc"
+#include <strings.hrc>
 #include <unotools/resmgr.hxx>
 #include "filechanged.hxx"
 

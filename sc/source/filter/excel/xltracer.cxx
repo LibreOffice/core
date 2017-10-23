@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xltracer.hxx"
+#include <xltracer.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include "address.hxx"
+#include <address.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::PropertyValue;

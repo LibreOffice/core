@@ -29,19 +29,19 @@
 #define XMLSEC_NO_SIZE_T
 #endif
 
-#include "xmlsec/base64.h"
-#include "xmlsec/bn.h"
-#include "xmlsec/crypto.h"
-#include "xmlsec/errors.h"
-#include "xmlsec/io.h"
-#include "xmlsec/keysmngr.h"
-#include "xmlsec/strings.h"
-#include "xmlsec/xmldsig.h"
-#include "xmlsec/xmlenc.h"
-#include "xmlsec/xmlsec.h"
-#include "xmlsec/xmltree.h"
+#include <xmlsec/base64.h>
+#include <xmlsec/bn.h>
+#include <xmlsec/crypto.h>
+#include <xmlsec/errors.h>
+#include <xmlsec/io.h>
+#include <xmlsec/keysmngr.h>
+#include <xmlsec/strings.h>
+#include <xmlsec/xmldsig.h>
+#include <xmlsec/xmlenc.h>
+#include <xmlsec/xmlsec.h>
+#include <xmlsec/xmltree.h>
 #ifdef XMLSEC_CRYPTO_NSS
-#include "xmlsec/nss/pkikeys.h"
+#include <xmlsec/nss/pkikeys.h>
 #endif
 
 #endif

@@ -17,21 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DiagramHelper.hxx"
-#include "LegendHelper.hxx"
-#include "PropertyHelper.hxx"
-#include "macros.hxx"
-#include "DataSeriesHelper.hxx"
-#include "AxisHelper.hxx"
-#include "ContainerHelper.hxx"
-#include "ChartTypeHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "CommonConverters.hxx"
-#include "ExplicitCategoriesProvider.hxx"
-#include "servicenames_charttypes.hxx"
-#include "RelativePositionHelper.hxx"
-#include "ControllerLockGuard.hxx"
-#include "NumberFormatterWrapper.hxx"
+#include <DiagramHelper.hxx>
+#include <LegendHelper.hxx>
+#include <PropertyHelper.hxx>
+#include <macros.hxx>
+#include <DataSeriesHelper.hxx>
+#include <AxisHelper.hxx>
+#include <ContainerHelper.hxx>
+#include <ChartTypeHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <CommonConverters.hxx>
+#include <ExplicitCategoriesProvider.hxx>
+#include <servicenames_charttypes.hxx>
+#include <RelativePositionHelper.hxx>
+#include <ControllerLockGuard.hxx>
+#include <NumberFormatterWrapper.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>

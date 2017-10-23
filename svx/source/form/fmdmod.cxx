@@ -19,7 +19,7 @@
 
 #include <sal/macros.h>
 #include <svx/fmdmod.hxx>
-#include "fmservs.hxx"
+#include <fmservs.hxx>
 #include <fmobj.hxx>
 #include <svx/unoshape.hxx>
 #include <comphelper/processfactory.hxx>

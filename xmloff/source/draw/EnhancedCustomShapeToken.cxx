@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "EnhancedCustomShapeToken.hxx"
+#include <EnhancedCustomShapeToken.hxx>
 #include <osl/mutex.hxx>
 #include <unordered_map>
 #include <memory>

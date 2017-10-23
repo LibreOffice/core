@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "imoptdlg.hxx"
-#include "asciiopt.hxx"
-#include "scresid.hxx"
+#include <imoptdlg.hxx>
+#include <asciiopt.hxx>
+#include <scresid.hxx>
 #include <comphelper/string.hxx>
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>

@@ -19,7 +19,7 @@
 #include <memory>
 #include <set>
 
-#include "calcconfig.hxx"
+#include <calcconfig.hxx>
 
 namespace sc { namespace opencl {
 

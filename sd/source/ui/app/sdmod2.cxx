@@ -46,28 +46,28 @@
 
 #include <svx/sdr/contact/displayinfo.hxx>
 
-#include "sdmod.hxx"
-#include "app.hrc"
-#include "family.hrc"
-#include "strings.hrc"
+#include <sdmod.hxx>
+#include <app.hrc>
+#include <family.hrc>
+#include <strings.hrc>
 
-#include "bitmaps.hlst"
-#include "ViewShell.hxx"
-#include "FrameView.hxx"
-#include "sdattr.hxx"
-#include "optsitem.hxx"
-#include "DrawDocShell.hxx"
-#include "drawdoc.hxx"
-#include "Outliner.hxx"
-#include "sdresid.hxx"
-#include "pres.hxx"
-#include "DrawViewShell.hxx"
-#include "OutlineViewShell.hxx"
-#include "OutlineView.hxx"
-#include "ViewShellBase.hxx"
-#include "sdpage.hxx"
-#include "sdxfer.hxx"
-#include "sdabstdlg.hxx"
+#include <bitmaps.hlst>
+#include <ViewShell.hxx>
+#include <FrameView.hxx>
+#include <sdattr.hxx>
+#include <optsitem.hxx>
+#include <DrawDocShell.hxx>
+#include <drawdoc.hxx>
+#include <Outliner.hxx>
+#include <sdresid.hxx>
+#include <pres.hxx>
+#include <DrawViewShell.hxx>
+#include <OutlineViewShell.hxx>
+#include <OutlineView.hxx>
+#include <ViewShellBase.hxx>
+#include <sdpage.hxx>
+#include <sdxfer.hxx>
+#include <sdabstdlg.hxx>
 #include <svl/intitem.hxx>
 
 /** retrieves the page that is currently painted. This will only be the master page

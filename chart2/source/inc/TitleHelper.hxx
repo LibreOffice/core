@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 
-#include "ChartModel.hxx"
+#include <ChartModel.hxx>
 
 namespace chart
 {

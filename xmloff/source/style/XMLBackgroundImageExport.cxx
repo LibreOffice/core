@@ -26,7 +26,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmlexp.hxx>
-#include "XMLBackgroundImageExport.hxx"
+#include <XMLBackgroundImageExport.hxx>
 
 
 using namespace ::com::sun::star;

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "ChartToolbarController.hxx"
+#include <ChartToolbarController.hxx>
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

@@ -27,10 +27,10 @@
 
 #include "MDriver.hxx"
 #include "MStatement.hxx"
-#include "sqlbison.hxx"
+#include <sqlbison.hxx>
 #include "MResultSet.hxx"
 
-#include "strings.hrc"
+#include <strings.hrc>
 
 static ::osl::Mutex m_ThreadMutex;
 

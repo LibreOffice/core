@@ -28,7 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/ImageTree.hxx>
 
-#include <image.h>
+#include "image.h"
 #include <memory>
 
 #if OSL_DEBUG_LEVEL > 0

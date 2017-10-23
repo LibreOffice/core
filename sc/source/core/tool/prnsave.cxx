@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "prnsave.hxx"
-#include "global.hxx"
-#include "address.hxx"
+#include <prnsave.hxx>
+#include <global.hxx>
+#include <address.hxx>
 
 #include <osl/diagnose.h>
 

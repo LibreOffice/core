@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "interpre.hxx"
+#include <interpre.hxx>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <osl/thread.h>
@@ -36,28 +36,28 @@
 #include <rtl/ustring.hxx>
 #include <unicode/uchar.h>
 
-#include "patattr.hxx"
-#include "global.hxx"
-#include "document.hxx"
-#include "dociter.hxx"
-#include "formulacell.hxx"
-#include "scmatrix.hxx"
-#include "docoptio.hxx"
-#include "globstr.hrc"
-#include "attrib.hxx"
-#include "jumpmatrix.hxx"
-#include "cellkeytranslator.hxx"
-#include "lookupcache.hxx"
-#include "rangenam.hxx"
-#include "rangeutl.hxx"
-#include "compiler.hxx"
-#include "externalrefmgr.hxx"
+#include <patattr.hxx>
+#include <global.hxx>
+#include <document.hxx>
+#include <dociter.hxx>
+#include <formulacell.hxx>
+#include <scmatrix.hxx>
+#include <docoptio.hxx>
+#include <globstr.hrc>
+#include <attrib.hxx>
+#include <jumpmatrix.hxx>
+#include <cellkeytranslator.hxx>
+#include <lookupcache.hxx>
+#include <rangenam.hxx>
+#include <rangeutl.hxx>
+#include <compiler.hxx>
+#include <externalrefmgr.hxx>
 #include <basic/sbstar.hxx>
-#include "doubleref.hxx"
-#include "queryparam.hxx"
-#include "queryentry.hxx"
-#include "tokenarray.hxx"
-#include "compare.hxx"
+#include <doubleref.hxx>
+#include <queryparam.hxx>
+#include <queryentry.hxx>
+#include <tokenarray.hxx>
+#include <compare.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>

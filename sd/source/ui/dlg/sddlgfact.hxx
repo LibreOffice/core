@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_DLG_SDDLGFACT_HXX
 #define INCLUDED_SD_SOURCE_UI_DLG_SDDLGFACT_HXX
 
-#include "sdabstdlg.hxx"
+#include <sdabstdlg.hxx>
 #include <sfx2/basedlgs.hxx>
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)            \

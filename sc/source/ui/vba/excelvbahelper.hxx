@@ -20,7 +20,7 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_EXCELVBAHELPER_HXX
 
 #include <vbahelper/vbahelper.hxx>
-#include "docsh.hxx"
+#include <docsh.hxx>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
 #include <com/sun/star/table/XCellRange.hpp>

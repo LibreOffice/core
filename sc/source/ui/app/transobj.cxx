@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/justifyitem.hxx>
 
@@ -34,21 +34,21 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 
-#include "transobj.hxx"
-#include "patattr.hxx"
-#include "cellvalue.hxx"
-#include "cellform.hxx"
-#include "document.hxx"
-#include "viewopti.hxx"
-#include "editutil.hxx"
-#include "impex.hxx"
-#include "formulacell.hxx"
-#include "printfun.hxx"
-#include "docfunc.hxx"
-#include "scmod.hxx"
-#include "dragdata.hxx"
-#include "clipdata.hxx"
-#include "clipparam.hxx"
+#include <transobj.hxx>
+#include <patattr.hxx>
+#include <cellvalue.hxx>
+#include <cellform.hxx>
+#include <document.hxx>
+#include <viewopti.hxx>
+#include <editutil.hxx>
+#include <impex.hxx>
+#include <formulacell.hxx>
+#include <printfun.hxx>
+#include <docfunc.hxx>
+#include <scmod.hxx>
+#include <dragdata.hxx>
+#include <clipdata.hxx>
+#include <clipparam.hxx>
 
 #include <editeng/paperinf.hxx>
 #include <editeng/sizeitem.hxx>
@@ -56,14 +56,14 @@
 #include <svx/algitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
-#include "docsh.hxx"
-#include "markdata.hxx"
-#include "stlpool.hxx"
-#include "viewdata.hxx"
-#include "dociter.hxx"
-#include "cellsuno.hxx"
-#include "stringutil.hxx"
-#include "formulaiter.hxx"
+#include <docsh.hxx>
+#include <markdata.hxx>
+#include <stlpool.hxx>
+#include <viewdata.hxx>
+#include <dociter.hxx>
+#include <cellsuno.hxx>
+#include <stringutil.hxx>
+#include <formulaiter.hxx>
 #include <gridwin.hxx>
 
 using namespace com::sun::star;

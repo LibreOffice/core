@@ -32,8 +32,8 @@
 #include <vcl/bitmapaccess.hxx>
 
 #include <svx/sxekitm.hxx>
-#include "svx/strings.hrc"
-#include "svdglob.hxx"
+#include <svx/strings.hrc>
+#include <svdglob.hxx>
 
 #include <svx/svdmodel.hxx>
 #include "gradtrns.hxx"
@@ -67,7 +67,7 @@
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <memory>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 // #i15222#
 // Due to the resource problems in Win95/98 with bitmap resources I

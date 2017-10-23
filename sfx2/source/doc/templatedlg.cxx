@@ -10,8 +10,8 @@
 #include <sfx2/templatedlg.hxx>
 
 #include <sfx2/inputdlg.hxx>
-#include "templatesearchview.hxx"
-#include "templatesearchviewitem.hxx"
+#include <templatesearchview.hxx>
+#include <templatesearchviewitem.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -57,8 +57,8 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
-#include "sfx2/strings.hrc"
-#include "bitmaps.hlst"
+#include <sfx2/strings.hrc>
+#include <bitmaps.hlst>
 
 const char TM_SETTING_MANAGER[] = "TemplateManager";
 const char TM_SETTING_LASTFOLDER[] = "LastFolder";

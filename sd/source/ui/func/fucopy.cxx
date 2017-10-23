@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fucopy.hxx"
+#include <fucopy.hxx>
 #include <sfx2/progress.hxx>
 #include <svx/svxids.hrc>
 
-#include "sdresid.hxx"
-#include "sdattr.hxx"
-#include "strings.hrc"
-#include "ViewShell.hxx"
-#include "View.hxx"
-#include "Window.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
+#include <sdresid.hxx>
+#include <sdattr.hxx>
+#include <strings.hrc>
+#include <ViewShell.hxx>
+#include <View.hxx>
+#include <Window.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/svdobj.hxx>
 #include <vcl/msgbox.hxx>
@@ -38,7 +38,7 @@
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 #include <sfx2/request.hxx>
-#include "sdabstdlg.hxx"
+#include <sdabstdlg.hxx>
 #include <memory>
 
 using namespace com::sun::star;

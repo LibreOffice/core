@@ -43,15 +43,15 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/pathoptions.hxx>
 
-#include "sdresid.hxx"
-#include "sdattr.hxx"
-#include "pubdlg.hxx"
+#include <sdresid.hxx>
+#include <sdattr.hxx>
+#include <pubdlg.hxx>
 #include "htmlattr.hxx"
 #include "htmlex.hxx"
 #include "htmlpublishmode.hxx"
-#include "helpids.h"
+#include <helpids.h>
 #include "buttonset.hxx"
-#include "strings.hxx"
+#include <strings.hxx>
 
 using namespace std;
 using namespace com::sun::star::uno;

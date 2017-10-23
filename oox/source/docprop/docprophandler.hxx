@@ -26,8 +26,8 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include "oox/token/namespaces.hxx"
-#include "oox/token/tokens.hxx"
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 namespace oox {
 namespace docprop {

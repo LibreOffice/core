@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_PORFLD_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_PORFLD_HXX
 
-#include "swtypes.hxx"
+#include <swtypes.hxx>
 #include "porexp.hxx"
 #include <fmtornt.hxx>
 

@@ -19,10 +19,10 @@
 
 
 #include "sunversion.hxx"
-#include "osl/diagnose.h"
-#include "osl/thread.h"
-#include "osl/process.h"
-#include "osl/security.hxx"
+#include <osl/diagnose.h>
+#include <osl/thread.h>
+#include <osl/process.h>
+#include <osl/security.hxx>
 #include <rtl/character.hxx>
 #include <string.h>
 #include "diagnostics.h"

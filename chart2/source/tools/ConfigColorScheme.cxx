@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ConfigColorScheme.hxx"
-#include "macros.hxx"
+#include <ConfigColorScheme.hxx>
+#include <macros.hxx>
 
 #include <unotools/configitem.hxx>
 #include <sal/macros.h>

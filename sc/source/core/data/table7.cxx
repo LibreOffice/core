@@ -15,7 +15,7 @@
 #include <segmenttree.hxx>
 #include <sharedformula.hxx>
 #include <cellvalues.hxx>
-#include "olinetab.hxx"
+#include <olinetab.hxx>
 #include <tabprotection.hxx>
 #include <columniterator.hxx>
 

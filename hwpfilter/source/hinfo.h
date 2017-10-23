@@ -21,7 +21,7 @@
 #define INCLUDED_HWPFILTER_SOURCE_HINFO_H
 
 #include "hwplib.h"
-#include "string.h"
+#include <string.h>
 
 #include <vector>
 #include <memory>

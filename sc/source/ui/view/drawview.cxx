@@ -39,25 +39,25 @@
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
-#include "drawview.hxx"
-#include "global.hxx"
-#include "viewdata.hxx"
-#include "document.hxx"
-#include "drawutil.hxx"
-#include "futext.hxx"
-#include "globstr.hrc"
-#include "tabvwsh.hxx"
-#include "client.hxx"
-#include "scmod.hxx"
-#include "drwlayer.hxx"
-#include "docsh.hxx"
-#include "viewuno.hxx"
-#include "userdat.hxx"
-#include "postit.hxx"
-#include "undocell.hxx"
-#include "gridwin.hxx"
+#include <drawview.hxx>
+#include <global.hxx>
+#include <viewdata.hxx>
+#include <document.hxx>
+#include <drawutil.hxx>
+#include <futext.hxx>
+#include <globstr.hrc>
+#include <tabvwsh.hxx>
+#include <client.hxx>
+#include <scmod.hxx>
+#include <drwlayer.hxx>
+#include <docsh.hxx>
+#include <viewuno.hxx>
+#include <userdat.hxx>
+#include <postit.hxx>
+#include <undocell.hxx>
+#include <gridwin.hxx>
 
-#include "sc.hrc"
+#include <sc.hrc>
 
 using namespace com::sun::star;
 

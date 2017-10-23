@@ -19,10 +19,10 @@
 
 #include <sfx2/objsh.hxx>
 
-#include "drawpage.hxx"
-#include "drwlayer.hxx"
-#include "document.hxx"
-#include "pageuno.hxx"
+#include <drawpage.hxx>
+#include <drwlayer.hxx>
+#include <document.hxx>
+#include <pageuno.hxx>
 
 ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage) :
     FmFormPage(rNewModel, bMasterPage)

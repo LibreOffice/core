@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dlgattr.hxx"
+#include <dlgattr.hxx>
 
 #include <sfx2/tabdlg.hxx>
 
 #include <svx/numinf.hxx>
 
 #include <svx/dialogs.hrc>
-#include "dbu_dlg.hxx"
+#include <dbu_dlg.hxx>
 #include <svl/itemset.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/svxids.hrc>
 #include <svx/flagsdef.hxx>
 #include <svl/intitem.hxx>
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 using namespace dbaui;
 
 

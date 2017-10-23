@@ -34,25 +34,25 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/securityoptions.hxx>
 
-#include "viewuno.hxx"
-#include "AccessibleDocument.hxx"
+#include <viewuno.hxx>
+#include <AccessibleDocument.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-#include "gridwin.hxx"
-#include "viewdata.hxx"
-#include "drawview.hxx"
-#include "drwlayer.hxx"
-#include "drawpage.hxx"
-#include "document.hxx"
-#include "notemark.hxx"
-#include "chgtrack.hxx"
-#include "chgviset.hxx"
-#include "dbfunc.hxx"
-#include "tabvwsh.hxx"
-#include "userdat.hxx"
-#include "postit.hxx"
-#include "global.hxx"
-#include "globstr.hrc"
+#include <gridwin.hxx>
+#include <viewdata.hxx>
+#include <drawview.hxx>
+#include <drwlayer.hxx>
+#include <drawpage.hxx>
+#include <document.hxx>
+#include <notemark.hxx>
+#include <chgtrack.hxx>
+#include <chgviset.hxx>
+#include <dbfunc.hxx>
+#include <tabvwsh.hxx>
+#include <userdat.hxx>
+#include <postit.hxx>
+#include <global.hxx>
+#include <globstr.hrc>
 
 bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
 {

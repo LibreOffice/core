@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ImpressViewShellBase.hxx"
+#include <ImpressViewShellBase.hxx>
 
-#include "DrawDocShell.hxx"
-#include "sdresid.hxx"
-#include "strings.hrc"
-#include "app.hrc"
-#include "framework/FrameworkHelper.hxx"
-#include "framework/ImpressModule.hxx"
-#include "MasterPageObserver.hxx"
+#include <DrawDocShell.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
+#include <app.hrc>
+#include <framework/FrameworkHelper.hxx>
+#include <framework/ImpressModule.hxx>
+#include <MasterPageObserver.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>

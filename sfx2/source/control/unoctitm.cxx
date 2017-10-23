@@ -59,7 +59,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/request.hxx>
-#include "statcach.hxx"
+#include <statcach.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>

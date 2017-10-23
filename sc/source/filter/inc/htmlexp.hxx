@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_HTMLEXP_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_HTMLEXP_HXX
 
-#include "global.hxx"
+#include <global.hxx>
 #include <rtl/textenc.h>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>

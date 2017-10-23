@@ -21,8 +21,8 @@
 #define INCLUDED_SC_SOURCE_UI_INC_PRINTFUN_HXX
 
 #include <memory>
-#include "pagepar.hxx"
-#include "editutil.hxx"
+#include <pagepar.hxx>
+#include <editutil.hxx>
 
 #include <vcl/print.hxx>
 

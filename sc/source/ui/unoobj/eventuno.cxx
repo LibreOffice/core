@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "eventuno.hxx"
-#include "miscuno.hxx"
-#include "docsh.hxx"
-#include "sheetevents.hxx"
-#include "unonames.hxx"
+#include <eventuno.hxx>
+#include <miscuno.hxx>
+#include <docsh.hxx>
+#include <sheetevents.hxx>
+#include <unonames.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <vcl/svapp.hxx>
 

@@ -21,9 +21,9 @@
 
 #include <com/sun/star/i18n/WordType.hpp>
 
-#include <pam.hxx>
-#include <tblsel.hxx>
-#include <cshtyp.hxx>
+#include "pam.hxx"
+#include "tblsel.hxx"
+#include "cshtyp.hxx"
 
 struct SwCursor_SavePos;
 namespace i18nutil {

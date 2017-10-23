@@ -20,8 +20,8 @@
 
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
-#include "svx/txenctab.hxx"
-#include "txenctab.hrc"
+#include <svx/txenctab.hxx>
+#include <txenctab.hrc>
 
 const OUString SvxTextEncodingTable::GetTextString(const rtl_TextEncoding nEnc)
 {

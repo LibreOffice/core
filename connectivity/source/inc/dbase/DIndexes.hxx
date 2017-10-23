@@ -21,7 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEXES_HXX
 
 #include <connectivity/sdbcx/VCollection.hxx>
-#include "dbase/DTable.hxx"
+#include <dbase/DTable.hxx>
 
 namespace connectivity
 {

@@ -18,7 +18,7 @@
  */
 
 
-#include "propertyids.hxx"
+#include <propertyids.hxx>
 
 namespace dbtools
 {

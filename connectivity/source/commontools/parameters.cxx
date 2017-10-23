@@ -30,7 +30,7 @@
 
 #include <connectivity/dbtools.hxx>
 #include <connectivity/filtermanager.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 
 #include <tools/diagnose_ex.h>
 

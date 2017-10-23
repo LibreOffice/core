@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "writer/WTables.hxx"
+#include <writer/WTables.hxx>
 
 #include <sal/config.h>
 
 #include <comphelper/types.hxx>
 
 #include <writer/WConnection.hxx>
-#include "file/FCatalog.hxx"
-#include "file/FConnection.hxx"
-#include "writer/WCatalog.hxx"
-#include "writer/WTable.hxx"
+#include <file/FCatalog.hxx>
+#include <file/FConnection.hxx>
+#include <writer/WCatalog.hxx>
+#include <writer/WTable.hxx>
 
 using namespace ::com::sun::star;
 

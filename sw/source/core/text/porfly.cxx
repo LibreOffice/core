@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dcontact.hxx"
-#include "dflyobj.hxx"
-#include "pam.hxx"
+#include <dcontact.hxx>
+#include <dflyobj.hxx>
+#include <pam.hxx>
 #include "portab.hxx"
-#include "flyfrm.hxx"
-#include "rootfrm.hxx"
-#include "frmfmt.hxx"
-#include "viewsh.hxx"
-#include "textboxhelper.hxx"
+#include <flyfrm.hxx>
+#include <rootfrm.hxx>
+#include <frmfmt.hxx>
+#include <viewsh.hxx>
+#include <textboxhelper.hxx>
 
 #include <vcl/outdev.hxx>
 #include <editeng/lrspitem.hxx>
@@ -34,8 +34,8 @@
 #include <fmtflcnt.hxx>
 #include <fmtornt.hxx>
 #include <frmatr.hxx>
-#include "flyfrms.hxx"
-#include "txatbase.hxx"
+#include <flyfrms.hxx>
+#include <txatbase.hxx>
 #include "porfly.hxx"
 #include "porlay.hxx"
 #include "inftxt.hxx"

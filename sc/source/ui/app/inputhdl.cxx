@@ -18,8 +18,8 @@
  */
 
 #include <memory>
-#include "inputhdl.hxx"
-#include "scitems.hxx"
+#include <inputhdl.hxx>
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
@@ -59,31 +59,31 @@
 #include <comphelper/lok.hxx>
 #include <o3tl/make_unique.hxx>
 
-#include "inputwin.hxx"
-#include "tabvwsh.hxx"
-#include "docsh.hxx"
-#include "scmod.hxx"
-#include "uiitems.hxx"
-#include "global.hxx"
-#include "sc.hrc"
-#include "globstr.hrc"
-#include "patattr.hxx"
-#include "viewdata.hxx"
-#include "document.hxx"
-#include "docpool.hxx"
-#include "editutil.hxx"
-#include "appoptio.hxx"
-#include "docoptio.hxx"
-#include "validat.hxx"
-#include "userlist.hxx"
-#include "rfindlst.hxx"
-#include "inputopt.hxx"
-#include "simpleformulacalc.hxx"
-#include "compiler.hxx"
-#include "editable.hxx"
-#include "funcdesc.hxx"
-#include "markdata.hxx"
-#include "tokenarray.hxx"
+#include <inputwin.hxx>
+#include <tabvwsh.hxx>
+#include <docsh.hxx>
+#include <scmod.hxx>
+#include <uiitems.hxx>
+#include <global.hxx>
+#include <sc.hrc>
+#include <globstr.hrc>
+#include <patattr.hxx>
+#include <viewdata.hxx>
+#include <document.hxx>
+#include <docpool.hxx>
+#include <editutil.hxx>
+#include <appoptio.hxx>
+#include <docoptio.hxx>
+#include <validat.hxx>
+#include <userlist.hxx>
+#include <rfindlst.hxx>
+#include <inputopt.hxx>
+#include <simpleformulacalc.hxx>
+#include <compiler.hxx>
+#include <editable.hxx>
+#include <funcdesc.hxx>
+#include <markdata.hxx>
+#include <tokenarray.hxx>
 #include <gridwin.hxx>
 
 // Maximum Ranges in RangeFinder

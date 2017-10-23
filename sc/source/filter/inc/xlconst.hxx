@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLCONST_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLCONST_HXX
 
-#include "address.hxx"
+#include <address.hxx>
 
 // Common =====================================================================
 

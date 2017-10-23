@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/helper/modelobjecthelper.hxx"
+#include <oox/helper/modelobjecthelper.hxx>
 
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/helper.hxx"
+#include <oox/helper/containerhelper.hxx>
+#include <oox/helper/helper.hxx>
 #include <osl/diagnose.h>
 
 namespace oox {

@@ -20,11 +20,11 @@
 
 #include <com/sun/star/animations/AnimationColorSpace.hpp>
 
-#include "coloranimation.hxx"
-#include "hslcoloranimation.hxx"
+#include <coloranimation.hxx>
+#include <hslcoloranimation.hxx>
 #include "animationcolornode.hxx"
-#include "animationfactory.hxx"
-#include "activitiesfactory.hxx"
+#include <animationfactory.hxx>
+#include <activitiesfactory.hxx>
 
 using namespace com::sun::star;
 

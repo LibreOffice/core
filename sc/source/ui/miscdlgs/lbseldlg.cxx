@@ -21,9 +21,9 @@
 
 #include <vcl/msgbox.hxx>
 
-#include "lbseldlg.hxx"
-#include "scresid.hxx"
-#include "strings.hrc"
+#include <lbseldlg.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
 
 ScSelEntryDlg::ScSelEntryDlg(vcl::Window*  pParent, const std::vector<OUString> &rEntryList)
     : ModalDialog(pParent, "SelectRangeDialog", "modules/scalc/ui/selectrange.ui")

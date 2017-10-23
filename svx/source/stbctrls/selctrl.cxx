@@ -29,7 +29,7 @@
 #include <svx/strings.hrc>
 
 #include "stbctrls.h"
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxSelectionModeControl, SfxUInt16Item);
 

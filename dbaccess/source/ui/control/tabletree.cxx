@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "core_resource.hxx"
-#include "tabletree.hxx"
-#include "imageprovider.hxx"
-#include "strings.hrc"
+#include <core_resource.hxx>
+#include <tabletree.hxx>
+#include <imageprovider.hxx>
+#include <strings.hrc>
 #include <vcl/layout.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/builderfactory.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
@@ -36,13 +36,13 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "commontypes.hxx"
-#include "listviewitems.hxx"
+#include <commontypes.hxx>
+#include <listviewitems.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <connectivity/dbmetadata.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <o3tl/make_unique.hxx>
 
 #include <algorithm>

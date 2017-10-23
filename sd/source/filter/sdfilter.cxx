@@ -27,13 +27,13 @@
 #include <sfx2/progress.hxx>
 #include <svl/itemset.hxx>
 
-#include "DrawDocShell.hxx"
-#include "strings.hrc"
+#include <DrawDocShell.hxx>
+#include <strings.hrc>
 
-#include "sdresid.hxx"
-#include "pres.hxx"
-#include "drawdoc.hxx"
-#include "sdfilter.hxx"
+#include <sdresid.hxx>
+#include <pres.hxx>
+#include <drawdoc.hxx>
+#include <sdfilter.hxx>
 
 
 using namespace ::com::sun::star::uno;

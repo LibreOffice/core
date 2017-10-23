@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuprlout.hxx"
+#include <fuprlout.hxx>
 #include <vcl/wrkwin.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/itempool.hxx>
@@ -28,28 +28,28 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
-#include "pres.hxx"
-#include "DrawViewShell.hxx"
-#include "FrameView.hxx"
-#include "stlpool.hxx"
-#include "View.hxx"
-#include "strings.hrc"
-#include "glob.hxx"
-#include "strmname.h"
-#include "app.hrc"
-#include "DrawDocShell.hxx"
-#include "SlideSorterViewShell.hxx"
-#include "unprlout.hxx"
-#include "unchss.hxx"
-#include "unmovss.hxx"
-#include "sdattr.hxx"
-#include "sdresid.hxx"
-#include "drawview.hxx"
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
+#include <pres.hxx>
+#include <DrawViewShell.hxx>
+#include <FrameView.hxx>
+#include <stlpool.hxx>
+#include <View.hxx>
+#include <strings.hrc>
+#include <glob.hxx>
+#include <strmname.h>
+#include <app.hrc>
+#include <DrawDocShell.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <unprlout.hxx>
+#include <unchss.hxx>
+#include <unmovss.hxx>
+#include <sdattr.hxx>
+#include <sdresid.hxx>
+#include <drawview.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editdata.hxx>
-#include "sdabstdlg.hxx"
+#include <sdabstdlg.hxx>
 #include <memory>
 
 namespace sd

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/chart/converterbase.hxx"
+#include <drawingml/chart/converterbase.hxx>
 
 #include <com/sun/star/chart/XAxisXSupplier.hpp>
 #include <com/sun/star/chart/XAxisYSupplier.hpp>
@@ -31,9 +31,9 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <osl/diagnose.h>
-#include "basegfx/numeric/ftools.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/drawingml/theme.hxx"
+#include <basegfx/numeric/ftools.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/drawingml/theme.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <comphelper/processfactory.hxx>

@@ -23,9 +23,9 @@
 #include "MasterPageContainerProviders.hxx"
 
 #include <vcl/image.hxx>
-#include "PreviewRenderer.hxx"
+#include <PreviewRenderer.hxx>
 #include <vcl/timer.hxx>
-#include "tools/SdGlobalResourceContainer.hxx"
+#include <tools/SdGlobalResourceContainer.hxx>
 
 #include <memory>
 

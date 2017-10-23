@@ -24,8 +24,8 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/fontdefs.hxx>
 
-#include "outdev.h"
-#include "PhysicalFontCollection.hxx"
+#include <outdev.h>
+#include <PhysicalFontCollection.hxx>
 
 static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 {

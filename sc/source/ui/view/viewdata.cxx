@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <sfx2/lokhelper.hxx>
@@ -37,26 +37,26 @@
 
 #include <sax/tools/converter.hxx>
 
-#include "viewdata.hxx"
-#include "docoptio.hxx"
-#include "scmod.hxx"
-#include "global.hxx"
-#include "document.hxx"
-#include "attrib.hxx"
-#include "tabview.hxx"
-#include "tabvwsh.hxx"
-#include "docsh.hxx"
-#include "sc.hrc"
-#include "patattr.hxx"
-#include "editutil.hxx"
-#include "scextopt.hxx"
-#include "miscuno.hxx"
-#include "unonames.hxx"
-#include "inputopt.hxx"
-#include "viewutil.hxx"
-#include "markdata.hxx"
-#include "stlalgorithm.hxx"
-#include "ViewSettingsSequenceDefines.hxx"
+#include <viewdata.hxx>
+#include <docoptio.hxx>
+#include <scmod.hxx>
+#include <global.hxx>
+#include <document.hxx>
+#include <attrib.hxx>
+#include <tabview.hxx>
+#include <tabvwsh.hxx>
+#include <docsh.hxx>
+#include <sc.hrc>
+#include <patattr.hxx>
+#include <editutil.hxx>
+#include <scextopt.hxx>
+#include <miscuno.hxx>
+#include <unonames.hxx>
+#include <inputopt.hxx>
+#include <viewutil.hxx>
+#include <markdata.hxx>
+#include <stlalgorithm.hxx>
+#include <ViewSettingsSequenceDefines.hxx>
 #include <gridwin.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/flagguard.hxx>

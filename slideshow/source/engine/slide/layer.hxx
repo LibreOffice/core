@@ -23,8 +23,8 @@
 #include <basegfx/range/b2dpolyrange.hxx>
 #include <cppcanvas/spritecanvas.hxx>
 
-#include "view.hxx"
-#include "animatableshape.hxx"
+#include <view.hxx>
+#include <animatableshape.hxx>
 
 #include <vector>
 #include <memory>

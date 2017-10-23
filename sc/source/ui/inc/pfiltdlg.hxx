@@ -26,8 +26,8 @@
 #include <vcl/dialog.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
-#include "address.hxx"
-#include "queryparam.hxx"
+#include <address.hxx>
+#include <queryparam.hxx>
 #include <array>
 #include <memory>
 #include <vector>

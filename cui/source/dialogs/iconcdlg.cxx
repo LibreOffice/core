@@ -21,9 +21,9 @@
 
 #include <dialmgr.hxx>
 
-#include "iconcdlg.hxx"
+#include <iconcdlg.hxx>
 
-#include "helpids.h"
+#include <helpids.h>
 #include <unotools/viewoptions.hxx>
 #include <svtools/apearcfg.hxx>
 #include <vcl/mnemonic.hxx>

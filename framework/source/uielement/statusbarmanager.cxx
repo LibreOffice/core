@@ -25,9 +25,9 @@
 #include <uielement/statusbarmerger.hxx>
 #include <uielement/statusbaritem.hxx>
 #include <stdtypes.h>
-#include "services.h"
-#include "general.h"
-#include "properties.h"
+#include <services.h>
+#include <general.h>
+#include <properties.h>
 #include <helper/mischelper.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/theStatusbarControllerFactory.hpp>

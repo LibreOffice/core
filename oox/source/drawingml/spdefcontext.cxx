@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/spdefcontext.hxx"
-#include "drawingml/shapepropertiescontext.hxx"
-#include "drawingml/textbody.hxx"
-#include "drawingml/textbodypropertiescontext.hxx"
-#include "drawingml/textliststylecontext.hxx"
+#include <drawingml/spdefcontext.hxx>
+#include <drawingml/shapepropertiescontext.hxx>
+#include <drawingml/textbody.hxx>
+#include <drawingml/textbodypropertiescontext.hxx>
+#include <drawingml/textliststylecontext.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 

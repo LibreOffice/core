@@ -18,9 +18,9 @@
  */
 
 #include "LineChartType.hxx"
-#include "PropertyHelper.hxx"
-#include "macros.hxx"
-#include "servicenames_charttypes.hxx"
+#include <PropertyHelper.hxx>
+#include <macros.hxx>
+#include <servicenames_charttypes.hxx>
 #include <unonames.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

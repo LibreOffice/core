@@ -22,7 +22,7 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <comphelper/string.hxx>
 #include <svx/svxids.hrc>
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <tools/fract.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/svapp.hxx>
@@ -50,17 +50,17 @@
 #include <fmtsrnd.hxx>
 #include <fmtinfmt.hxx>
 #include <txtinet.hxx>
-#include "frmatr.hxx"
+#include <frmatr.hxx>
 #include <grfatr.hxx>
 #include <flypos.hxx>
 #include <docary.hxx>
 #include <ndgrf.hxx>
 
-#include "doc.hxx"
-#include "ndtxt.hxx"
-#include "pam.hxx"
-#include "swerror.h"
-#include "frmfmt.hxx"
+#include <doc.hxx>
+#include <ndtxt.hxx>
+#include <pam.hxx>
+#include <swerror.h>
+#include <frmfmt.hxx>
 #include "wrthtml.hxx"
 #include "css1kywd.hxx"
 #include "htmlatr.hxx"

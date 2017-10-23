@@ -9,7 +9,7 @@
 
 
 #include "ooxmlsecparser.hxx"
-#include "xmlsignaturehelper.hxx"
+#include <xmlsignaturehelper.hxx>
 
 using namespace com::sun::star;
 

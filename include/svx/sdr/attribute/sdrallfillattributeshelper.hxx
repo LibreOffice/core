@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_SDR_ATTRIBUTE_SDRALLFILLATTRIBUTESHELPER_HXX
 #define INCLUDED_SVX_SDR_ATTRIBUTE_SDRALLFILLATTRIBUTESHELPER_HXX
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>

@@ -36,7 +36,7 @@
 #include <unx/saltype.h>
 #include <unx/screensaverinhibitor.hxx>
 
-#include "tools/link.hxx"
+#include <tools/link.hxx>
 
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
@@ -49,7 +49,7 @@
 #include <config_dbus.h>
 #include <config_gio.h>
 
-#include "headless/svpgdi.hxx"
+#include <headless/svpgdi.hxx>
 
 class GtkSalGraphics;
 class GtkSalDisplay;

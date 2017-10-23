@@ -18,18 +18,18 @@
  */
 
 
-#include "fmcontrolbordermanager.hxx"
-#include "fmcontrollayout.hxx"
-#include "formcontroller.hxx"
-#include "formfeaturedispatcher.hxx"
-#include "fmdocumentclassification.hxx"
-#include "formcontrolling.hxx"
-#include "fmprop.hxx"
-#include "svx/dialmgr.hxx"
-#include "svx/strings.hrc"
-#include "fmservs.hxx"
-#include "svx/fmtools.hxx"
-#include "fmurl.hxx"
+#include <fmcontrolbordermanager.hxx>
+#include <fmcontrollayout.hxx>
+#include <formcontroller.hxx>
+#include <formfeaturedispatcher.hxx>
+#include <fmdocumentclassification.hxx>
+#include <formcontrolling.hxx>
+#include <fmprop.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
+#include <fmservs.hxx>
+#include <svx/fmtools.hxx>
+#include <fmurl.hxx>
 
 #include <com/sun/star/awt/FocusChangeReason.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>

@@ -16,16 +16,16 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "DefaultInspection.hxx"
+#include <DefaultInspection.hxx>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <strings.hrc>
-#include "core_resource.hxx"
-#include "helpids.h"
+#include <core_resource.hxx>
+#include <helpids.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
-#include "metadata.hxx"
+#include <metadata.hxx>
 #include <tools/urlobj.hxx>
 
 

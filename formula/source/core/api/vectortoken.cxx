@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "formula/vectortoken.hxx"
+#include <formula/vectortoken.hxx>
 
 namespace formula {
 

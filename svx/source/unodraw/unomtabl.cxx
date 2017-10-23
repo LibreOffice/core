@@ -43,9 +43,9 @@
 #include <vcl/svapp.hxx>
 
 
-#include "svx/unofill.hxx"
+#include <svx/unofill.hxx>
 
-#include "svx/unoapi.hxx"
+#include <svx/unoapi.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::cppu;

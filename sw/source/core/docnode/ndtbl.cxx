@@ -82,7 +82,7 @@
 #include <frmtool.hxx>
 #include <node2lay.hxx>
 #include <strings.hrc>
-#include "docsh.hxx"
+#include <docsh.hxx>
 #include <unochart.hxx>
 #include <node.hxx>
 #include <ndtxt.hxx>

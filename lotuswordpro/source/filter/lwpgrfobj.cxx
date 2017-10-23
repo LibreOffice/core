@@ -67,18 +67,18 @@
 #include "lwpsdwfileloader.hxx"
 #include "bento.hxx"
 
-#include "lwpglobalmgr.hxx"
+#include <lwpglobalmgr.hxx>
 #include "lwpframelayout.hxx"
 
-#include "xfilter/xfframe.hxx"
-#include "xfilter/xfimage.hxx"
-#include "xfilter/xfimagestyle.hxx"
-#include "xfilter/xfstylemanager.hxx"
-#include "xfilter/xfparagraph.hxx"
-#include "xfilter/xfannotation.hxx"
+#include <xfilter/xfframe.hxx>
+#include <xfilter/xfimage.hxx>
+#include <xfilter/xfimagestyle.hxx>
+#include <xfilter/xfstylemanager.hxx>
+#include <xfilter/xfparagraph.hxx>
+#include <xfilter/xfannotation.hxx>
 
 //For chart
-#include "string.h"
+#include <string.h>
 
 #include <osl/thread.h>
 

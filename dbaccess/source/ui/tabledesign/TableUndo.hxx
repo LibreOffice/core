@@ -19,13 +19,13 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TABLEUNDO_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TABLEUNDO_HXX
 
-#include "GeneralUndo.hxx"
+#include <GeneralUndo.hxx>
 #include <tools/multisel.hxx>
 
 #include <vector>
 
 #include <com/sun/star/uno/Any.h>
-#include "TypeInfo.hxx"
+#include <TypeInfo.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace dbaui

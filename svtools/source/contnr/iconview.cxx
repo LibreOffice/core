@@ -20,7 +20,7 @@
 #include <svtools/iconview.hxx>
 #include <svtools/treelistentry.hxx>
 #include <svtools/fileview.hxx>
-#include "iconviewimpl.hxx"
+#include <iconviewimpl.hxx>
 
 IconView::IconView( vcl::Window* pParent, WinBits nBits )
 : SvTreeListBox( pParent, nBits )

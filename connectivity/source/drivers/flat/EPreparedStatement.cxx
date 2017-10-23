@@ -18,8 +18,8 @@
  */
 
 
-#include "flat/EPreparedStatement.hxx"
-#include "flat/EResultSet.hxx"
+#include <flat/EPreparedStatement.hxx>
+#include <flat/EResultSet.hxx>
 
 using namespace connectivity::flat;
 using namespace connectivity::file;

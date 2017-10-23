@@ -19,8 +19,8 @@
 
 #include <memory>
 #include <svx/XPropertyTable.hxx>
-#include "xmlxtexp.hxx"
-#include "xmlxtimp.hxx"
+#include <xmlxtexp.hxx>
+#include <xmlxtimp.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>

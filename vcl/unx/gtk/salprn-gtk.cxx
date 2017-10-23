@@ -7,12 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "unx/gtk/gtkprintwrapper.hxx"
+#include <unx/gtk/gtkprintwrapper.hxx>
 
-#include "unx/gtk/gtkdata.hxx"
-#include "unx/gtk/gtkframe.hxx"
-#include "unx/gtk/gtkinst.hxx"
-#include "unx/gtk/gtkprn.hxx"
+#include <unx/gtk/gtkdata.hxx>
+#include <unx/gtk/gtkframe.hxx>
+#include <unx/gtk/gtkinst.hxx>
+#include <unx/gtk/gtkprn.hxx>
 
 #include <vcl/configsettings.hxx>
 #include <vcl/help.hxx>

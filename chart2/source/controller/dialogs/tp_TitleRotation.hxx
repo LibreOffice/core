@@ -23,7 +23,7 @@
 #include <svx/dialcontrol.hxx>
 #include <svx/orienthelper.hxx>
 #include <vcl/fixed.hxx>
-#include "TextDirectionListBox.hxx"
+#include <TextDirectionListBox.hxx>
 
 namespace chart
 {

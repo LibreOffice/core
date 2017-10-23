@@ -20,7 +20,7 @@
 #ifndef INCLUDED_IDLC_INC_OPTIONS_HXX
 #define INCLUDED_IDLC_INC_OPTIONS_HXX
 
-#include <idlctypes.hxx>
+#include "idlctypes.hxx"
 
 typedef std::unordered_map< OString, OString > OptionMap;
 

@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_PGGRID_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <colex.hxx>
+#include "colex.hxx"
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <svtools/ctrlbox.hxx>

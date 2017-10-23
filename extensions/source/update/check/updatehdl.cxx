@@ -19,48 +19,48 @@
 
 
 #include "updatehdl.hxx"
-#include "helpids.h"
+#include <helpids.h>
 
-#include "osl/diagnose.h"
-#include "osl/thread.hxx"
-#include "osl/file.hxx"
-#include "rtl/ustring.hxx"
-#include "rtl/bootstrap.hxx"
+#include <osl/diagnose.h>
+#include <osl/thread.hxx>
+#include <osl/file.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/bootstrap.hxx>
 
-#include "com/sun/star/uno/Sequence.h"
+#include <com/sun/star/uno/Sequence.h>
 
 #include <com/sun/star/style/VerticalAlignment.hpp>
 
-#include "com/sun/star/awt/ActionEvent.hpp"
-#include "com/sun/star/awt/PushButtonType.hpp"
-#include "com/sun/star/awt/UnoControlDialog.hpp"
-#include "com/sun/star/awt/VclWindowPeerAttribute.hpp"
-#include "com/sun/star/awt/WindowAttribute.hpp"
-#include "com/sun/star/awt/XButton.hpp"
-#include "com/sun/star/awt/XControl.hpp"
-#include "com/sun/star/awt/XControlContainer.hpp"
-#include "com/sun/star/awt/XMessageBox.hpp"
-#include "com/sun/star/awt/XAnimation.hpp"
-#include "com/sun/star/awt/XTopWindow.hpp"
-#include "com/sun/star/awt/XVclWindowPeer.hpp"
-#include "com/sun/star/awt/XVclContainer.hpp"
-#include "com/sun/star/awt/XWindow.hpp"
-#include "com/sun/star/awt/XWindow2.hpp"
+#include <com/sun/star/awt/ActionEvent.hpp>
+#include <com/sun/star/awt/PushButtonType.hpp>
+#include <com/sun/star/awt/UnoControlDialog.hpp>
+#include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
+#include <com/sun/star/awt/WindowAttribute.hpp>
+#include <com/sun/star/awt/XButton.hpp>
+#include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/awt/XControlContainer.hpp>
+#include <com/sun/star/awt/XMessageBox.hpp>
+#include <com/sun/star/awt/XAnimation.hpp>
+#include <com/sun/star/awt/XTopWindow.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/awt/XVclContainer.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XWindow2.hpp>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include "com/sun/star/beans/XPropertySet.hpp"
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 
-#include "com/sun/star/container/XNameContainer.hpp"
+#include <com/sun/star/container/XNameContainer.hpp>
 
-#include "com/sun/star/frame/Desktop.hpp"
-#include "com/sun/star/frame/TerminationVetoException.hpp"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/task/InteractionHandler.hpp"
-#include "com/sun/star/task/InteractionRequestStringResolver.hpp"
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/TerminationVetoException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/task/InteractionRequestStringResolver.hpp>
 
-#include "strings.hrc"
+#include <strings.hrc>
 #include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/settings.hxx>

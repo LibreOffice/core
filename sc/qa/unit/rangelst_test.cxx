@@ -10,10 +10,10 @@
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
 #include "helper/qahelper.hxx"
-#include "document.hxx"
-#include "docsh.hxx"
+#include <document.hxx>
+#include <docsh.hxx>
 
-#include "rangelst.hxx"
+#include <rangelst.hxx>
 
 class Test : public test::BootstrapFixture
 {

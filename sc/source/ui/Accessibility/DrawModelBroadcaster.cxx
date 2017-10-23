@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DrawModelBroadcaster.hxx"
+#include <DrawModelBroadcaster.hxx>
 #include <rtl/strbuf.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/unomod.hxx>

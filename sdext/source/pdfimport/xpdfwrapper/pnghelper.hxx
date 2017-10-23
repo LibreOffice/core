@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_XPDFWRAPPER_PNGHELPER_HXX
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_XPDFWRAPPER_PNGHELPER_HXX
 
-#include "sal/types.h"
+#include <sal/types.h>
 #include "pdfioutdev_gpl.hxx"
 
 

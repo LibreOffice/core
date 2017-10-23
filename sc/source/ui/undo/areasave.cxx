@@ -19,9 +19,9 @@
 
 #include <sfx2/linkmgr.hxx>
 
-#include "areasave.hxx"
-#include "arealink.hxx"
-#include "document.hxx"
+#include <areasave.hxx>
+#include <arealink.hxx>
+#include <document.hxx>
 #include <documentlinkmgr.hxx>
 
 ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLink& rSource ) :

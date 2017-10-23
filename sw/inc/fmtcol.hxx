@@ -20,8 +20,8 @@
 #define INCLUDED_SW_INC_FMTCOL_HXX
 
 #include "swdllapi.h"
-#include <frmatr.hxx>
-#include <swtypes.hxx>
+#include "frmatr.hxx"
+#include "swtypes.hxx"
 #include <rtl/ustring.hxx>
 
 #include <vector>

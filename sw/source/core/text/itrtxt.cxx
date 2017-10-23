@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ndtxt.hxx"
-#include "flyfrm.hxx"
-#include "paratr.hxx"
+#include <ndtxt.hxx>
+#include <flyfrm.hxx>
+#include <paratr.hxx>
 #include <vcl/outdev.hxx>
 #include <editeng/paravertalignitem.hxx>
 
@@ -30,7 +30,7 @@
 #include "porfld.hxx"
 
 #include "itrtxt.hxx"
-#include "txtfrm.hxx"
+#include <txtfrm.hxx>
 #include "porfly.hxx"
 
 void SwTextIter::CtorInitTextIter( SwTextFrame *pNewFrame, SwTextInfo *pNewInf )

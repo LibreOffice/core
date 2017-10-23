@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_EXTINPUT_HXX
 #define INCLUDED_SW_INC_EXTINPUT_HXX
 
-#include <pam.hxx>
+#include "pam.hxx"
 #include <i18nlangtag/lang.h>
 #include <vector>
 

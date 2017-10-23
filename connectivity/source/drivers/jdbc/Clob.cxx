@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "java/sql/Clob.hxx"
-#include "java/tools.hxx"
-#include "java/io/Reader.hxx"
+#include <java/sql/Clob.hxx>
+#include <java/tools.hxx>
+#include <java/io/Reader.hxx>
 #include <connectivity/dbexception.hxx>
 
 using namespace connectivity;

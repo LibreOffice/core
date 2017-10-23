@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "inspagob.hxx"
+#include <inspagob.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
-#include "bitmaps.hlst"
-#include "sdresid.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "ViewShell.hxx"
+#include <bitmaps.hlst>
+#include <sdresid.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <ViewShell.hxx>
 
 SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
     vcl::Window* pWindow, const SdDrawDocument* pInDoc,

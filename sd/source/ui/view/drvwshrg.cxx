@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "DrawViewShell.hxx"
+#include <DrawViewShell.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/infobar.hxx>
@@ -36,22 +36,22 @@
 #include <svx/hyperdlg.hxx>
 #include <avmedia/mediaplayer.hxx>
 
-#include "app.hrc"
-#include "strings.hrc"
+#include <app.hrc>
+#include <strings.hrc>
 
-#include "SpellDialogChildWindow.hxx"
-#include "sdresid.hxx"
-#include "DrawDocShell.hxx"
-#include "GraphicDocShell.hxx"
-#include "GraphicViewShell.hxx"
-#include "AnimationChildWindow.hxx"
-#include "NavigatorChildWindow.hxx"
+#include <SpellDialogChildWindow.hxx>
+#include <sdresid.hxx>
+#include <DrawDocShell.hxx>
+#include <GraphicDocShell.hxx>
+#include <GraphicViewShell.hxx>
+#include <AnimationChildWindow.hxx>
+#include <NavigatorChildWindow.hxx>
 
 using namespace sd;
 #define DrawViewShell
-#include "sdslots.hxx"
+#include <sdslots.hxx>
 #define GraphicViewShell
-#include "sdgslots.hxx"
+#include <sdgslots.hxx>
 
 namespace sd {
 

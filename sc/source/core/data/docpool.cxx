@@ -21,7 +21,7 @@
 
 #include <utility>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 
 #include <comphelper/string.hxx>
 #include <i18nutil/unicode.hxx>
@@ -66,13 +66,13 @@
 #include <editeng/xmlcnitm.hxx>
 #include <editeng/justifyitem.hxx>
 
-#include "docpool.hxx"
-#include "global.hxx"
-#include "attrib.hxx"
-#include "patattr.hxx"
-#include "globstr.hrc"
-#include "document.hxx"
-#include "sc.hrc"
+#include <docpool.hxx>
+#include <global.hxx>
+#include <attrib.hxx>
+#include <patattr.hxx>
+#include <globstr.hrc>
+#include <document.hxx>
+#include <sc.hrc>
 
 // ATTR_FONT_TWOLINES (not used) was changed to ATTR_USERDEF (not saved in binary format) in 641c
 

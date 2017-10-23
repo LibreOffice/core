@@ -19,7 +19,7 @@
 
 
 #include <sfx2/sfxresid.hxx>
-#include "unotools/resmgr.hxx"
+#include <unotools/resmgr.hxx>
 
 OUString SfxResId(const char* pId)
 {

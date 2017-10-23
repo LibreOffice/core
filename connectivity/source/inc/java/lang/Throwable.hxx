@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_LANG_THROWABLE_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_LANG_THROWABLE_HXX
 
-#include "java/lang/Object.hxx"
+#include <java/lang/Object.hxx>
 
 namespace connectivity
 {

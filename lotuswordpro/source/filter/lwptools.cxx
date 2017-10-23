@@ -58,7 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#include "lwptools.hxx"
+#include <lwptools.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>

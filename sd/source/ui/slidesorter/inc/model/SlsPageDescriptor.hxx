@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_MODEL_SLSPAGEDESCRIPTOR_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_MODEL_SLSPAGEDESCRIPTOR_HXX
 
-#include "model/SlsVisualState.hxx"
+#include <model/SlsVisualState.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <tools/gen.hxx>
 #include <vcl/bitmap.hxx>

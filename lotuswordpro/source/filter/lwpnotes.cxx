@@ -60,10 +60,10 @@
 
 #include "lwpnotes.hxx"
 #include "lwppara.hxx"
-#include "xfilter/xfannotation.hxx"
-#include "xfilter/xftextspan.hxx"
-#include "localtime.hxx"
-#include "lwptools.hxx"
+#include <xfilter/xfannotation.hxx>
+#include <xfilter/xftextspan.hxx>
+#include <localtime.hxx>
+#include <lwptools.hxx>
 
  LwpFribNote::LwpFribNote(LwpPara* pPara ):LwpFrib(pPara)
 {

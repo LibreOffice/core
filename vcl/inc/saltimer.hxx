@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 #include <vcl/dllapi.h>
-#include <salwtype.hxx>
+#include "salwtype.hxx"
 #include <iostream>
 
 /*

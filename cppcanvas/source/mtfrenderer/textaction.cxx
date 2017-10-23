@@ -42,7 +42,7 @@
 #include <memory>
 
 #include "textaction.hxx"
-#include "outdevstate.hxx"
+#include <outdevstate.hxx>
 #include "mtftools.hxx"
 
 

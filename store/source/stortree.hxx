@@ -20,13 +20,13 @@
 #ifndef INCLUDED_STORE_SOURCE_STORTREE_HXX
 #define INCLUDED_STORE_SOURCE_STORTREE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <memory>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
-#include "store/types.h"
+#include <store/types.h>
 
 #include "storbase.hxx"
 

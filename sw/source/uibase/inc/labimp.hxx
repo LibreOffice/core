@@ -25,8 +25,8 @@
 #include <svtools/svmedit.hxx>
 #include <vcl/field.hxx>
 #include <svtools/treelistbox.hxx>
-#include <label.hxx>
-#include <labimg.hxx>
+#include "label.hxx"
+#include "labimg.hxx"
 
 #define GETFLDVAL(rField)         (rField).Denormalize((rField).GetValue(FUNIT_TWIP))
 #define SETFLDVAL(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FUNIT_TWIP)

@@ -19,7 +19,7 @@
 
 #include <memory>
 #include <xmloff/MarkerStyle.hxx>
-#include "xexptran.hxx"
+#include <xexptran.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>

@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "EventMultiplexer.hxx"
+#include <EventMultiplexer.hxx>
 
-#include "MutexOwner.hxx"
-#include "ViewShellBase.hxx"
-#include "drawdoc.hxx"
-#include "DrawController.hxx"
-#include "SlideSorterViewShell.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <MutexOwner.hxx>
+#include <ViewShellBase.hxx>
+#include <drawdoc.hxx>
+#include <DrawController.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <framework/FrameworkHelper.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XFrame.hpp>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CUI_SOURCE_DIALOGS_THESDLG_IMPL_HXX
 #define INCLUDED_CUI_SOURCE_DIALOGS_THESDLG_IMPL_HXX
 
-#include "thesdlg.hxx"
+#include <thesdlg.hxx>
 
 #include <svtools/ehdl.hxx>
 #include <svtools/svlbitm.hxx>

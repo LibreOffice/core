@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "GraphicViewShell.hxx"
-#include "LayerTabBar.hxx"
-#include "FrameView.hxx"
+#include <GraphicViewShell.hxx>
+#include <LayerTabBar.hxx>
+#include <FrameView.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/scrbar.hxx>

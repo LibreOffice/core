@@ -19,8 +19,8 @@
 
 #include "RadioButton.hxx"
 #include "GroupManager.hxx"
-#include "property.hxx"
-#include "services.hxx"
+#include <property.hxx>
+#include <services.hxx>
 #include <comphelper/basicio.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>

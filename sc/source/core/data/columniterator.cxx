@@ -7,10 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "columniterator.hxx"
-#include "column.hxx"
-#include "document.hxx"
-#include "table.hxx"
+#include <columniterator.hxx>
+#include <column.hxx>
+#include <document.hxx>
+#include <table.hxx>
 
 #include <osl/diagnose.h>
 

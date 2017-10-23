@@ -16,7 +16,7 @@
 #include <svtools/treelistbox.hxx>
 
 #include "anyrefdg.hxx"
-#include "orcusxml.hxx"
+#include <orcusxml.hxx>
 
 #include <set>
 #include <memory>

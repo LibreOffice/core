@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/fontwork.hxx>
 #include <svx/svdotext.hxx>
@@ -25,11 +25,11 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdoashp.hxx>
-#include "drawsh.hxx"
-#include "drawview.hxx"
-#include "viewdata.hxx"
-#include "tabvwsh.hxx"
-#include "sc.hrc"
+#include <drawsh.hxx>
+#include <drawview.hxx>
+#include <viewdata.hxx>
+#include <tabvwsh.hxx>
+#include <sc.hrc>
 
 void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
 {

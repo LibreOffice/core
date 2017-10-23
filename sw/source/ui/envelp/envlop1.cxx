@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbmgr.hxx"
+#include <dbmgr.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/msgbox.hxx>
@@ -26,15 +26,15 @@
 #include <swwait.hxx>
 #include <viewopt.hxx>
 
-#include "wrtsh.hxx"
-#include "cmdid.h"
-#include "helpids.h"
+#include <wrtsh.hxx>
+#include <cmdid.h>
+#include <helpids.h>
 #include "envfmt.hxx"
-#include "envlop.hxx"
+#include <envlop.hxx>
 #include "envprt.hxx"
-#include "fmtcol.hxx"
-#include "poolfmt.hxx"
-#include "view.hxx"
+#include <fmtcol.hxx>
+#include <poolfmt.hxx>
+#include <view.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>

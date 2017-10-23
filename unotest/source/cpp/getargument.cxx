@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "osl/diagnose.h"
-#include "rtl/bootstrap.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
+#include <osl/diagnose.h>
+#include <rtl/bootstrap.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
 
 #include "getargument.hxx"
 

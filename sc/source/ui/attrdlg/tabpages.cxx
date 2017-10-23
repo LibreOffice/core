@@ -19,13 +19,13 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "global.hxx"
-#include "document.hxx"
-#include "attrib.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
+#include <global.hxx>
+#include <document.hxx>
+#include <attrib.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
 
-#include "tabpages.hxx"
+#include <tabpages.hxx>
 
 const sal_uInt16 ScTabPageProtection::pProtectionRanges[] =
 {

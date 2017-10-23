@@ -21,10 +21,10 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/i18n/CharType.hpp>
 
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 

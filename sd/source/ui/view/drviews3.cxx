@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "DrawViewShell.hxx"
+#include <DrawViewShell.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <editeng/eeitem.hxx>
@@ -49,33 +49,33 @@
 #include <svx/fmshell.hxx>
 #include <svx/f3dchild.hxx>
 #include <svx/float3d.hxx>
-#include "optsitem.hxx"
+#include <optsitem.hxx>
 
-#include "app.hrc"
-#include "strings.hrc"
+#include <app.hrc>
+#include <strings.hrc>
 
-#include "sdundogr.hxx"
-#include "undopage.hxx"
-#include "glob.hxx"
-#include "sdmod.hxx"
-#include "fupoor.hxx"
-#include "slideshow.hxx"
-#include "FrameView.hxx"
-#include "sdpage.hxx"
-#include "Window.hxx"
-#include "sdresid.hxx"
-#include "drawview.hxx"
-#include "drawdoc.hxx"
-#include "Ruler.hxx"
-#include "DrawDocShell.hxx"
-#include "headerfooterdlg.hxx"
-#include "masterlayoutdlg.hxx"
-#include "sdabstdlg.hxx"
+#include <sdundogr.hxx>
+#include <undopage.hxx>
+#include <glob.hxx>
+#include <sdmod.hxx>
+#include <fupoor.hxx>
+#include <slideshow.hxx>
+#include <FrameView.hxx>
+#include <sdpage.hxx>
+#include <Window.hxx>
+#include <sdresid.hxx>
+#include <drawview.hxx>
+#include <drawdoc.hxx>
+#include <Ruler.hxx>
+#include <DrawDocShell.hxx>
+#include <headerfooterdlg.hxx>
+#include <masterlayoutdlg.hxx>
+#include <sdabstdlg.hxx>
 #include <sfx2/ipclient.hxx>
 #include <tools/diagnose_ex.h>
-#include "ViewShellBase.hxx"
-#include "FormShellManager.hxx"
-#include "LayerTabBar.hxx"
+#include <ViewShellBase.hxx>
+#include <FormShellManager.hxx>
+#include <LayerTabBar.hxx>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>

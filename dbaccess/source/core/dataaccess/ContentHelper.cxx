@@ -18,7 +18,7 @@
  */
 
 #include <string.h>
-#include "ContentHelper.hxx"
+#include <ContentHelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <comphelper/property.hxx>
@@ -33,8 +33,8 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include "myucp_resultset.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
-#include "sdbcoretools.hxx"
-#include "stringconstants.hxx"
+#include <sdbcoretools.hxx>
+#include <stringconstants.hxx>
 
 namespace dbaccess
 {

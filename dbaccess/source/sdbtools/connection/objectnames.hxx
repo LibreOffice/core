@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_SDBTOOLS_CONNECTION_OBJECTNAMES_HXX
 #define INCLUDED_DBACCESS_SOURCE_SDBTOOLS_CONNECTION_OBJECTNAMES_HXX
 
-#include "connectiondependent.hxx"
+#include <connectiondependent.hxx>
 
 #include <com/sun/star/sdb/tools/XObjectNames.hpp>
 

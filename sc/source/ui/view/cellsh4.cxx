@@ -19,15 +19,15 @@
 
 #include <sfx2/request.hxx>
 
-#include "cellsh.hxx"
-#include "tabvwsh.hxx"
-#include "global.hxx"
-#include "scmod.hxx"
-#include "inputhdl.hxx"
-#include "inputwin.hxx"
-#include "document.hxx"
-#include "sc.hrc"
-#include "scabstdlg.hxx"
+#include <cellsh.hxx>
+#include <tabvwsh.hxx>
+#include <global.hxx>
+#include <scmod.hxx>
+#include <inputhdl.hxx>
+#include <inputwin.hxx>
+#include <document.hxx>
+#include <sc.hrc>
+#include <scabstdlg.hxx>
 
 #include <vcl/svapp.hxx>
 

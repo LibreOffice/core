@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_FRMINF_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_FRMINF_HXX
 
-#include "swtypes.hxx"
+#include <swtypes.hxx>
 
 class SwTextFrame;
 class SwPaM;

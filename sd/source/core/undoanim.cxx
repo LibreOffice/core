@@ -20,14 +20,14 @@
 #include <sal/config.h>
 
 #include <com/sun/star/animations/XAnimationNode.hpp>
-#include "CustomAnimationCloner.hxx"
+#include <CustomAnimationCloner.hxx>
 
-#include "undoanim.hxx"
-#include "strings.hrc"
-#include "sdpage.hxx"
-#include "sdresid.hxx"
-#include "CustomAnimationEffect.hxx"
-#include "drawdoc.hxx"
+#include <undoanim.hxx>
+#include <strings.hrc>
+#include <sdpage.hxx>
+#include <sdresid.hxx>
+#include <CustomAnimationEffect.hxx>
+#include <drawdoc.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;

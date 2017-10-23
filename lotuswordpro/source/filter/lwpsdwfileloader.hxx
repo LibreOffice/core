@@ -63,8 +63,8 @@
 
 #include <rtl/ref.hxx>
 
-#include "lwpheader.hxx"
-#include "xfilter/ixfstream.hxx"
+#include <lwpheader.hxx>
+#include <xfilter/ixfstream.hxx>
 
 class SvStream;
 class XFFrame;

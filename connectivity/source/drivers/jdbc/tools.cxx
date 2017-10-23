@@ -20,10 +20,10 @@
 
 #include <string.h>
 #include <cstdarg>
-#include "java/tools.hxx"
-#include "java/lang/String.hxx"
-#include "java/lang/Class.hxx"
-#include "java/util/Property.hxx"
+#include <java/tools.hxx>
+#include <java/lang/String.hxx>
+#include <java/lang/Class.hxx>
+#include <java/util/Property.hxx>
 #include <com/sun/star/sdbc/DriverPropertyInfo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <connectivity/dbexception.hxx>

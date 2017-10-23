@@ -26,9 +26,9 @@
 #include <sfx2/objsh.hxx>
 #include <svl/cjkoptions.hxx>
 
-#include "textdlgs.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
+#include <textdlgs.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
 #include <svl/intitem.hxx>
 #include <svx/flagsdef.hxx>
 

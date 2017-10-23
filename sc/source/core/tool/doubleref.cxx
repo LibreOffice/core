@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "doubleref.hxx"
-#include "formulacell.hxx"
-#include "global.hxx"
-#include "document.hxx"
-#include "queryparam.hxx"
-#include "queryentry.hxx"
-#include "globstr.hrc"
-#include "scmatrix.hxx"
+#include <doubleref.hxx>
+#include <formulacell.hxx>
+#include <global.hxx>
+#include <document.hxx>
+#include <queryparam.hxx>
+#include <queryentry.hxx>
+#include <globstr.hrc>
+#include <scmatrix.hxx>
 
 #include <svl/sharedstringpool.hxx>
 #include <osl/diagnose.h>

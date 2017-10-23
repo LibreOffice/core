@@ -18,19 +18,19 @@
  */
 
 #include "RecentlyUsedMasterPages.hxx"
-#include "MasterPageObserver.hxx"
+#include <MasterPageObserver.hxx>
 #include "MasterPagesSelector.hxx"
 #include "MasterPageDescriptor.hxx"
-#include "tools/ConfigurationAccess.hxx"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
+#include <tools/ConfigurationAccess.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
 
 #include <algorithm>
 #include <memory>
 #include <vector>
 
 #include <comphelper/processfactory.hxx>
-#include "unomodel.hxx"
+#include <unomodel.hxx>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

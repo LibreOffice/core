@@ -24,7 +24,7 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/rendering/XSprite.hpp>
 #include <cppcanvas/sprite.hxx>
-#include <implspritecanvas.hxx>
+#include "implspritecanvas.hxx"
 
 namespace cppcanvas
 {

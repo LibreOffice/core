@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <XBufferedThreadedStream.hxx>
+#include "XBufferedThreadedStream.hxx"
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 
 using namespace css::uno;

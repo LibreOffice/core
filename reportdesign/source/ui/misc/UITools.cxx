@@ -21,11 +21,11 @@
 #include <memory>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include "SectionView.hxx"
-#include "UITools.hxx"
-#include "Formula.hxx"
-#include "FunctionHelper.hxx"
-#include "reportformula.hxx"
+#include <SectionView.hxx>
+#include <UITools.hxx>
+#include <Formula.hxx>
+#include <FunctionHelper.hxx>
+#include <reportformula.hxx>
 
 #include <tools/diagnose_ex.h>
 
@@ -97,16 +97,16 @@
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <i18nlangtag/languagetag.hxx>
-#include "dlgpage.hxx"
+#include <dlgpage.hxx>
 #include <vcl/msgbox.hxx>
-#include "rptui_slotid.hrc"
-#include "strings.hxx"
-#include "core_resource.hxx"
-#include "RptObject.hxx"
-#include "RptDef.hxx"
-#include "strings.hrc"
-#include "ReportDefinition.hxx"
-#include "RptModel.hxx"
+#include <rptui_slotid.hrc>
+#include <strings.hxx>
+#include <core_resource.hxx>
+#include <RptObject.hxx>
+#include <RptDef.hxx>
+#include <strings.hrc>
+#include <ReportDefinition.hxx>
+#include <RptModel.hxx>
 
 #define ITEMID_FONT                     10
 #define ITEMID_FONTHEIGHT               11

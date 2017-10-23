@@ -39,7 +39,7 @@
 #include <vcl/fltcall.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphictools.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <math.h>
 #include <memory>

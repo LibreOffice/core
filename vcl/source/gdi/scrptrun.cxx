@@ -37,10 +37,10 @@
   * This file is largely copied from the ICU project,
   * under folder source/extra/scrptrun/scrptrun.cpp
   */
-#include "unicode/utypes.h"
-#include "unicode/uscript.h"
+#include <unicode/utypes.h>
+#include <unicode/uscript.h>
 
-#include "scrptrun.h"
+#include <scrptrun.h>
 #include <algorithm>
 
 namespace {

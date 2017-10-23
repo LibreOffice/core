@@ -21,7 +21,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <com/sun/star/frame/XModel.hpp>
-#include <labelcfg.hxx>
+#include "labelcfg.hxx"
 #include <vector>
 
 class SwLabItem;

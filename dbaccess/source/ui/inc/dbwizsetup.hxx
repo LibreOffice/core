@@ -21,14 +21,14 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_DBWIZSETUP_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include "dsntypes.hxx"
+#include <dsntypes.hxx>
 #include "IItemSetHelper.hxx"
 #include <comphelper/uno3.hxx>
 #include <tools/urlobj.hxx>
 #include <memory>
 #include <svtools/roadmapwizard.hxx>
 #include <connectivity/dbtools.hxx>
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace beans {

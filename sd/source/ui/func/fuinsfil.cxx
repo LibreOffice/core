@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuinsfil.hxx"
+#include <fuinsfil.hxx>
 #include <vcl/wrkwin.hxx>
 #include <sfx2/progress.hxx>
 #include <editeng/outliner.hxx>
@@ -45,23 +45,23 @@
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
-#include "sdresid.hxx"
-#include "drawdoc.hxx"
-#include "Window.hxx"
-#include "View.hxx"
-#include "strings.hrc"
-#include "stlpool.hxx"
-#include "sdpage.hxx"
-#include "strmname.h"
-#include "ViewShellBase.hxx"
-#include "DrawViewShell.hxx"
-#include "OutlineViewShell.hxx"
-#include "DrawDocShell.hxx"
-#include "GraphicDocShell.hxx"
-#include "app.hrc"
-#include "unmovss.hxx"
-#include "Outliner.hxx"
-#include "sdabstdlg.hxx"
+#include <sdresid.hxx>
+#include <drawdoc.hxx>
+#include <Window.hxx>
+#include <View.hxx>
+#include <strings.hrc>
+#include <stlpool.hxx>
+#include <sdpage.hxx>
+#include <strmname.h>
+#include <ViewShellBase.hxx>
+#include <DrawViewShell.hxx>
+#include <OutlineViewShell.hxx>
+#include <DrawDocShell.hxx>
+#include <GraphicDocShell.hxx>
+#include <app.hrc>
+#include <unmovss.hxx>
+#include <Outliner.hxx>
+#include <sdabstdlg.hxx>
 #include <memory>
 
 using namespace ::com::sun::star::lang;

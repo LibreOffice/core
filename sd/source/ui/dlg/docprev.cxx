@@ -19,7 +19,7 @@
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
-#include "slideshow.hxx"
+#include <slideshow.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
@@ -31,14 +31,14 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdorect.hxx>
 
-#include "docprev.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "ViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "drawview.hxx"
-#include "sdpage.hxx"
-#include "sfx2/viewfrm.hxx"
+#include <docprev.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <drawview.hxx>
+#include <sdpage.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
 

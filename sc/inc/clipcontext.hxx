@@ -12,7 +12,7 @@
 
 #include "address.hxx"
 #include "cellvalue.hxx"
-#include <celltextattr.hxx>
+#include "celltextattr.hxx"
 
 #include <memory>
 #include <vector>

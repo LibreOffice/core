@@ -19,7 +19,7 @@
 
 #include <uielement/fontmenucontroller.hxx>
 
-#include "services.h"
+#include <services.h>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

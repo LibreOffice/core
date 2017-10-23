@@ -68,7 +68,7 @@
 #include <unobookmark.hxx>
 #include <unorefmark.hxx>
 #include <unometa.hxx>
-#include "docsh.hxx"
+#include <docsh.hxx>
 #include <calbck.hxx>
 #include <com/sun/star/document/XCodeNameQuery.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>

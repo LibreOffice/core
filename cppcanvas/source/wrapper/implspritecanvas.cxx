@@ -22,8 +22,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <com/sun/star/rendering/InterpolationMode.hpp>
 
-#include <implspritecanvas.hxx>
-#include <implcustomsprite.hxx>
+#include "implspritecanvas.hxx"
+#include "implcustomsprite.hxx"
 
 
 using namespace ::com::sun::star;

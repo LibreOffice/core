@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFBLKRD_HXX
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFBLKRD_HXX
 
-#include <dxfentrd.hxx>
+#include "dxfentrd.hxx"
 
 
 //---------------- A Block (= Set of Entities) --------------------------

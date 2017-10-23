@@ -23,7 +23,7 @@
 #include <com/sun/star/deployment/XPackage.hpp>
 #include <rtl/ustring.hxx>
 
-#include "dp_version.hxx"
+#include <dp_version.hxx>
 
 namespace {
 

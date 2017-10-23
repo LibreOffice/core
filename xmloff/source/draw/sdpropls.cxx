@@ -31,11 +31,11 @@
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <xmloff/NamedBoolPropertyHdl.hxx>
 #include <xmloff/WordWrapPropertyHdl.hxx>
-#include "enummaps.hxx"
+#include <enummaps.hxx>
 #include "numithdl.hxx"
-#include "XMLBitmapRepeatOffsetPropertyHandler.hxx"
-#include "XMLFillBitmapSizePropertyHandler.hxx"
-#include "XMLBitmapLogicalSizePropertyHandler.hxx"
+#include <XMLBitmapRepeatOffsetPropertyHandler.hxx>
+#include <XMLFillBitmapSizePropertyHandler.hxx>
+#include <XMLBitmapLogicalSizePropertyHandler.hxx>
 #include <com/sun/star/drawing/TextAnimationKind.hpp>
 #include <com/sun/star/drawing/TextAnimationDirection.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
@@ -46,7 +46,7 @@
 #include <xmloff/controlpropertyhdl.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "sdpropls.hxx"
-#include "propimp0.hxx"
+#include <propimp0.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <com/sun/star/drawing/NormalsKind.hpp>
@@ -54,12 +54,12 @@
 #include <com/sun/star/drawing/TextureKind.hpp>
 #include <com/sun/star/drawing/TextureMode.hpp>
 #include <xmloff/txtprmap.hxx>
-#include "XMLClipPropertyHandler.hxx"
-#include "XMLIsPercentagePropertyHandler.hxx"
-#include "XMLPercentOrMeasurePropertyHandler.hxx"
-#include "animations.hxx"
+#include <XMLClipPropertyHandler.hxx>
+#include <XMLIsPercentagePropertyHandler.hxx>
+#include <XMLPercentOrMeasurePropertyHandler.hxx>
+#include <animations.hxx>
 #include <sax/tools/converter.hxx>
-#include "xmlsdtypes.hxx"
+#include <xmlsdtypes.hxx>
 
 #include "sdxmlexp_impl.hxx"
 

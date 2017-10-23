@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "formnavigation.hxx"
-#include "urltransformer.hxx"
-#include "controlfeatureinterception.hxx"
-#include "frm_strings.hxx"
+#include <formnavigation.hxx>
+#include <urltransformer.hxx>
+#include <controlfeatureinterception.hxx>
+#include <frm_strings.hxx>
 
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 

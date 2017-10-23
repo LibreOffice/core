@@ -24,7 +24,7 @@
 
 #include <memory>
 
-#include <wrtsh.hxx>
+#include "wrtsh.hxx"
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
 

@@ -24,7 +24,7 @@
 #include <unotools/viewoptions.hxx>
 #include <vcl/svapp.hxx>
 #include "LineWidthValueSet.hxx"
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 namespace svx { namespace sidebar {
 

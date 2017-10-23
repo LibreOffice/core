@@ -22,7 +22,7 @@
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
-#include <swblocks.hxx>
+#include "swblocks.hxx"
 #include <o3tl/typed_flags_set.hxx>
 
 class SwPaM;

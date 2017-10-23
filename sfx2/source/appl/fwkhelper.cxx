@@ -25,8 +25,8 @@
 
 #include <vcl/svapp.hxx>
 
-#include "fwkhelper.hxx"
-#include "workwin.hxx"
+#include <fwkhelper.hxx>
+#include <workwin.hxx>
 #include <sfx2/frame.hxx>
 
 void SAL_CALL RefreshToolbars( css::uno::Reference< css::frame::XFrame > const & xFrame )

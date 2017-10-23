@@ -21,7 +21,7 @@
 #define INCLUDED_IDL_INC_BASOBJ_HXX
 
 #include <tools/ref.hxx>
-#include <bastype.hxx>
+#include "bastype.hxx"
 #include <tools/pstm.hxx>
 #include <functional>
 #include <vector>

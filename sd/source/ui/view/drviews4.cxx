@@ -19,7 +19,7 @@
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 
-#include "DrawViewShell.hxx"
+#include <DrawViewShell.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
@@ -39,25 +39,25 @@
 #include <editeng/editview.hxx>
 #include <vcl/cursor.hxx>
 
-#include "app.hrc"
-#include "strings.hrc"
+#include <app.hrc>
+#include <strings.hrc>
 
-#include "DrawDocShell.hxx"
-#include "drawdoc.hxx"
-#include "Window.hxx"
-#include "fupoor.hxx"
-#include "fusnapln.hxx"
-#include "sdmod.hxx"
-#include "Ruler.hxx"
-#include "sdresid.hxx"
-#include "GraphicViewShell.hxx"
-#include "sdpage.hxx"
-#include "slideshow.hxx"
-#include "anminfo.hxx"
-#include "sdpopup.hxx"
-#include "drawview.hxx"
+#include <DrawDocShell.hxx>
+#include <drawdoc.hxx>
+#include <Window.hxx>
+#include <fupoor.hxx>
+#include <fusnapln.hxx>
+#include <sdmod.hxx>
+#include <Ruler.hxx>
+#include <sdresid.hxx>
+#include <GraphicViewShell.hxx>
+#include <sdpage.hxx>
+#include <slideshow.hxx>
+#include <anminfo.hxx>
+#include <sdpopup.hxx>
+#include <drawview.hxx>
 #include <svx/bmpmask.hxx>
-#include "LayerTabBar.hxx"
+#include <LayerTabBar.hxx>
 
 #include <svx/svditer.hxx>
 

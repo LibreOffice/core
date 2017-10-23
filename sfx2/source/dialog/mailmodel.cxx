@@ -55,10 +55,10 @@
 #include <vcl/layout.hxx>
 
 #include <sfx2/mailmodelapi.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxsids.hrc>
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 
 #include <unotools/tempfile.hxx>
 #include <unotools/configitem.hxx>

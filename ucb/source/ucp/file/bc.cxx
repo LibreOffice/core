@@ -21,7 +21,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/file.hxx>
 
-#include "osl/diagnose.h"
+#include <osl/diagnose.h>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>

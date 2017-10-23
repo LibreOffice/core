@@ -29,7 +29,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 
-#include "dp_identifier.hxx"
+#include <dp_identifier.hxx>
 
 namespace dp_misc {
 

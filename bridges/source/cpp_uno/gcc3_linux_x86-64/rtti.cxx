@@ -34,8 +34,8 @@
 #include <sal/log.hxx>
 #include <typelib/typedescription.h>
 
-#include <rtti.hxx>
-#include <share.hxx>
+#include "rtti.hxx"
+#include "share.hxx"
 
 namespace {
 

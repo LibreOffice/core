@@ -19,8 +19,8 @@
 
 #include "AppDetailView.hxx"
 #include <osl/diagnose.h>
-#include "helpids.h"
-#include "strings.hrc"
+#include <helpids.h>
+#include <strings.hrc>
 #include "AppView.hxx"
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
@@ -29,22 +29,22 @@
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/util/URL.hpp>
-#include "core_resource.hxx"
-#include "listviewitems.hxx"
+#include <core_resource.hxx>
+#include <listviewitems.hxx>
 #include <vcl/image.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
-#include "browserids.hxx"
+#include <browserids.hxx>
 #include "AppDetailPageHelper.hxx"
 #include <vcl/svapp.hxx>
-#include "callbacks.hxx"
+#include <callbacks.hxx>
 #include <dbaccess/IController.hxx>
-#include "svtools/treelistentry.hxx"
-#include "svtools/viewdataentry.hxx"
+#include <svtools/treelistentry.hxx>
+#include <svtools/viewdataentry.hxx>
 #include <algorithm>
-#include "dbtreelistbox.hxx"
-#include "imageprovider.hxx"
-#include "comphelper/processfactory.hxx"
+#include <dbtreelistbox.hxx>
+#include <imageprovider.hxx>
+#include <comphelper/processfactory.hxx>
 #include "AppController.hxx"
 
 using namespace ::dbaui;

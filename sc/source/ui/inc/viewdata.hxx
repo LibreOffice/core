@@ -20,9 +20,9 @@
 #define INCLUDED_SC_SOURCE_UI_INC_VIEWDATA_HXX
 
 #include <sfx2/zoomitem.hxx>
-#include "rangelst.hxx"
-#include "scdllapi.h"
-#include "viewopti.hxx"
+#include <rangelst.hxx>
+#include <scdllapi.h>
+#include <viewopti.hxx>
 #include "docsh.hxx"
 
 #include <memory>

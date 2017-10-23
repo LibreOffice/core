@@ -25,7 +25,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/XStorage.hpp>
 
-#include "SwXMLTextBlocks.hxx"
+#include <SwXMLTextBlocks.hxx>
 #include "swdllapi.h"
 
 class SW_DLLPUBLIC SwAutoCorrect : public SvxAutoCorrect

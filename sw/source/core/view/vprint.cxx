@@ -68,7 +68,7 @@
 #include <viscrs.hxx>
 #include <fmtpdsc.hxx>
 #include <globals.hrc>
-#include "PostItMgr.hxx"
+#include <PostItMgr.hxx>
 #include "vprint.hxx"
 
 using namespace ::com::sun::star;

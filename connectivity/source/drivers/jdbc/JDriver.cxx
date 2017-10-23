@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "java/sql/Driver.hxx"
-#include "java/lang/Object.hxx"
-#include "java/lang/Class.hxx"
-#include "java/sql/DriverPropertyInfo.hxx"
-#include "java/sql/Connection.hxx"
-#include "java/util/Property.hxx"
-#include "java/tools.hxx"
+#include <java/sql/Driver.hxx>
+#include <java/lang/Object.hxx>
+#include <java/lang/Class.hxx>
+#include <java/sql/DriverPropertyInfo.hxx>
+#include <java/sql/Connection.hxx>
+#include <java/util/Property.hxx>
+#include <java/tools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <jvmfwk/framework.hxx>
-#include "strings.hrc"
-#include "resource/sharedresources.hxx"
+#include <strings.hrc>
+#include <resource/sharedresources.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "strings.hxx"
+#include <strings.hxx>
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;

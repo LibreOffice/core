@@ -12,8 +12,8 @@
 #include <unotools/configmgr.hxx>
 #include "helper/qahelper.hxx"
 
-#include "global.hxx"
-#include "document.hxx"
+#include <global.hxx>
+#include <document.hxx>
 
 #include <tools/stream.hxx>
 

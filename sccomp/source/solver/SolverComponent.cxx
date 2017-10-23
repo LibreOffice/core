@@ -18,7 +18,7 @@
  */
 
 #include "SolverComponent.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>

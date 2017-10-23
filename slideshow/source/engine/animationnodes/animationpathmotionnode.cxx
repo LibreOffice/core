@@ -19,7 +19,7 @@
 
 
 #include "animationpathmotionnode.hxx"
-#include "animationfactory.hxx"
+#include <animationfactory.hxx>
 
 namespace slideshow {
 namespace internal {

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstdlib>
 #include <iostream>
@@ -25,7 +25,7 @@
 #include <string.h>
 #include <stack>
 
-#include "sal/main.h"
+#include <sal/main.h>
 
 #include <com/sun/star/lang/XComponent.hpp>
 

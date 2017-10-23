@@ -32,7 +32,7 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/weakref.hxx>
 
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <map>
 
 class FmFormObj;

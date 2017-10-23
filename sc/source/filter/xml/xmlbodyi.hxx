@@ -25,7 +25,7 @@
 #include "xmlimprt.hxx"
 #include "importcontext.hxx"
 
-#include "tabprotection.hxx"
+#include <tabprotection.hxx>
 
 class ScXMLChangeTrackingImportHelper;
 

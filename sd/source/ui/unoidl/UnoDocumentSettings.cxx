@@ -38,17 +38,17 @@
 #include <svx/xtable.hxx>
 #include <vcl/svapp.hxx>
 
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
 #include "UnoDocumentSettings.hxx"
-#include "unomodel.hxx"
+#include <unomodel.hxx>
 
-#include "optsitem.hxx"
+#include <optsitem.hxx>
 #include <sfx2/printer.hxx>
-#include "sdattr.hxx"
-#include "ViewShell.hxx"
-#include "FrameView.hxx"
-#include "Outliner.hxx"
+#include <sdattr.hxx>
+#include <ViewShell.hxx>
+#include <FrameView.hxx>
+#include <Outliner.hxx>
 #include <xmloff/settingsstore.hxx>
 #include <editeng/editstat.hxx>
 #include <svx/unoapi.hxx>

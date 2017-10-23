@@ -61,7 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFUTIL_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFUTIL_HXX
 
-#include "xfilter/xfdefs.hxx"
+#include <xfilter/xfdefs.hxx>
 #include <rtl/ustring.hxx>
 #include <string>
 

@@ -24,15 +24,15 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <connectivity/OSubComponent.hxx>
 #include <connectivity/CommonTools.hxx>
-#include "OTypeInfo.hxx"
+#include <OTypeInfo.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <connectivity/sqlparse.hxx>
 #include <connectivity/sqliterator.hxx>
-#include "TConnection.hxx"
-#include "file/filedllapi.hxx"
+#include <TConnection.hxx>
+#include <file/filedllapi.hxx>
 #include <map>
 
 namespace connectivity

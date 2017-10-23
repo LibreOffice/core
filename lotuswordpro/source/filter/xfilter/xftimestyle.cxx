@@ -58,7 +58,7 @@
  * Time style. The Time format for time field.
  ************************************************************************/
 
-#include "xfilter/xftimestyle.hxx"
+#include <xfilter/xftimestyle.hxx>
 
 XFTimePart::XFTimePart()
 {

@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <typeinfo>
 
-#include "osl/mutex.hxx"
-#include "salhelper/condition.hxx"
-#include "salhelper/dynload.hxx"
-#include "salhelper/simplereferenceobject.hxx"
+#include <osl/mutex.hxx>
+#include <salhelper/condition.hxx>
+#include <salhelper/dynload.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>

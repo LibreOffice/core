@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "SpellDialogChildWindow.hxx"
+#include <SpellDialogChildWindow.hxx>
 #include <svx/svxids.hrc>
 
-#include "ViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "DrawViewShell.hxx"
-#include "OutlineViewShell.hxx"
+#include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <DrawViewShell.hxx>
+#include <OutlineViewShell.hxx>
 #include <Outliner.hxx>
-#include "drawdoc.hxx"
+#include <drawdoc.hxx>
 
 namespace sd {
 

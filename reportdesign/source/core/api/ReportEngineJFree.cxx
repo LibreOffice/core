@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include "ReportEngineJFree.hxx"
+#include <ReportEngineJFree.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -44,10 +44,10 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/sharedunocomponent.hxx>
 
-#include "Tools.hxx"
-#include "strings.hxx"
-#include "strings.hrc"
-#include "core_resource.hxx"
+#include <Tools.hxx>
+#include <strings.hxx>
+#include <strings.hrc>
+#include <core_resource.hxx>
 
 #include <connectivity/CommonTools.hxx>
 #include <rtl/ustrbuf.hxx>

@@ -22,7 +22,7 @@
 #include <uiconfiguration/graphicnameaccess.hxx>
 #include "imagemanagerimpl.hxx"
 
-#include "properties.h"
+#include <properties.h>
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

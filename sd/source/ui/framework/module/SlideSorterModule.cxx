@@ -19,13 +19,13 @@
 
 #include "SlideSorterModule.hxx"
 
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include <com/sun/star/drawing/framework/XTabBar.hpp>
 #include <com/sun/star/drawing/framework/TabBarButton.hpp>
 
-#include "strings.hrc"
-#include "sdresid.hxx"
-#include "svtools/slidesorterbaropt.hxx"
+#include <strings.hrc>
+#include <sdresid.hxx>
+#include <svtools/slidesorterbaropt.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

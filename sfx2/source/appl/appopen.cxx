@@ -75,14 +75,14 @@
 #include <sfx2/objitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/slstitm.hxx>
-#include "appopen.hxx"
-#include "objshimp.hxx"
-#include "openflag.hxx"
+#include <appopen.hxx>
+#include <objshimp.hxx>
+#include <openflag.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/viewsh.hxx>
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/objface.hxx>
@@ -90,7 +90,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/templatedlg.hxx>
-#include "openuriexternally.hxx"
+#include <openuriexternally.hxx>
 
 #include <officecfg/Office/ProtocolHandler.hxx>
 

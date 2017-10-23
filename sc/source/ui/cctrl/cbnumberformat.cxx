@@ -18,11 +18,11 @@
  */
 
 #include <cbnumberformat.hxx>
-#include "global.hxx"
+#include <global.hxx>
 #include <globstr.hrc>
 #include <sfx2/dispatch.hxx>
 #include <svl/intitem.hxx>
-#include "sc.hrc"
+#include <sc.hrc>
 
 ScNumberFormat::ScNumberFormat(vcl::Window* pParent, WinBits nStyle) :
     ListBox(pParent, nStyle | WB_DROPDOWN|WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK)

@@ -28,7 +28,7 @@
 #include <viewsh.hxx>
 #include <accmap.hxx>
 #include "accfootnote.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

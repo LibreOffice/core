@@ -27,9 +27,9 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLTextMasterPageContext.hxx>
-#include "XMLTextHeaderFooterContext.hxx"
+#include <XMLTextHeaderFooterContext.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "PageMasterImportContext.hxx"
+#include <PageMasterImportContext.hxx>
 
 
 using namespace ::com::sun::star;

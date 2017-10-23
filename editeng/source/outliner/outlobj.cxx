@@ -27,7 +27,7 @@
 
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
-#include <outleeng.hxx>
+#include "outleeng.hxx"
 #include <editeng/editobj.hxx>
 #include <vcl/bitmap.hxx>
 #include <tools/stream.hxx>

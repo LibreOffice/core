@@ -18,7 +18,7 @@
  */
 
 #include <svx/fmpage.hxx>
-#include "fmobj.hxx"
+#include <fmobj.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/unoshape.hxx>

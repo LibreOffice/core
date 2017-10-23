@@ -29,16 +29,16 @@
 #include <signal.h>
 #endif
 
-#include "app.hxx"
-#include "dp_shared.hxx"
-#include "strings.hrc"
+#include <app.hxx>
+#include <dp_shared.hxx>
+#include <strings.hrc>
 #include "cmdlineargs.hxx"
 #include "cmdlinehelp.hxx"
 #include "dispatchwatcher.hxx"
-#include "lockfile.hxx"
+#include <lockfile.hxx>
 #include "userinstall.hxx"
 #include "desktopcontext.hxx"
-#include "migration.hxx"
+#include <migration.hxx>
 #if HAVE_FEATURE_UPDATE_MAR
 #include "updater.hxx"
 #endif
@@ -149,7 +149,7 @@
 #define GETPID getpid
 #endif
 
-#include "strings.hxx"
+#include <strings.hxx>
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;

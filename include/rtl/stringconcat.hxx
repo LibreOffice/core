@@ -10,7 +10,7 @@
 #ifndef INCLUDED_RTL_STRINGCONCAT_HXX
 #define INCLUDED_RTL_STRINGCONCAT_HXX
 
-#include <rtl/stringutils.hxx>
+#include "rtl/stringutils.hxx"
 
 #include <cstddef>
 #include <string.h>

@@ -35,7 +35,7 @@
 #include <com/sun/star/io/XTextInputStream2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include "services.hxx"
+#include <services.hxx>
 
 #include <vector>
 

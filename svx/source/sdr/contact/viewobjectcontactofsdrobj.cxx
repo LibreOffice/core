@@ -32,7 +32,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/canvastools.hxx>
 
-#include "fmobj.hxx"
+#include <fmobj.hxx>
 
 namespace sdr { namespace contact {
 

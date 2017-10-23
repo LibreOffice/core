@@ -18,7 +18,7 @@
  */
 
 #include "dsselect.hxx"
-#include "dbu_dlg.hxx"
+#include <dbu_dlg.hxx>
 #include <vcl/msgbox.hxx>
 
 #include <com/sun/star/sdbcx/XCreateCatalog.hpp>
@@ -26,12 +26,12 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/processfactory.hxx>
-#include "dsitems.hxx"
+#include <dsitems.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>

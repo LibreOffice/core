@@ -18,7 +18,7 @@
  */
 
 
-#include "formfeaturedispatcher.hxx"
+#include <formfeaturedispatcher.hxx>
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <tools/diagnose_ex.h>

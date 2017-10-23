@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DrawController.hxx"
-#include "DrawDocShell.hxx"
+#include <DrawController.hxx>
+#include <DrawDocShell.hxx>
 
-#include "DrawSubController.hxx"
-#include "sdpage.hxx"
-#include "ViewShellBase.hxx"
-#include "ViewShellManager.hxx"
-#include "FormShellManager.hxx"
-#include "Window.hxx"
+#include <DrawSubController.hxx>
+#include <sdpage.hxx>
+#include <ViewShellBase.hxx>
+#include <ViewShellManager.hxx>
+#include <FormShellManager.hxx>
+#include <Window.hxx>
 
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
@@ -40,7 +40,7 @@
 #include <com/sun/star/drawing/framework/ModuleController.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-#include "slideshow.hxx"
+#include <slideshow.hxx>
 
 #include <svx/fmshell.hxx>
 #include <vcl/svapp.hxx>

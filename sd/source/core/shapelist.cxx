@@ -18,7 +18,7 @@
  */
 
 #include <svx/svdobj.hxx>
-#include "shapelist.hxx"
+#include <shapelist.hxx>
 
 #include <algorithm>
 

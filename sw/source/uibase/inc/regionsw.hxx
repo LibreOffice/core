@@ -33,12 +33,12 @@
 #include <sfx2/tabdlg.hxx>
 #include <editeng/brushitem.hxx>
 
-#include <condedit.hxx>
+#include "condedit.hxx"
 #include <section.hxx>
 #include <fmtclds.hxx>
 #include <fmtftntx.hxx>
 #include <fmtclbl.hxx>
-#include <numberingtypelistbox.hxx>
+#include "numberingtypelistbox.hxx"
 #include <editeng/frmdiritem.hxx>
 #include <vcl/image.hxx>
 #include <svx/paraprev.hxx>

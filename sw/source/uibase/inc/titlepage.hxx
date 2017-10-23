@@ -15,7 +15,7 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-#include <numberingtypelistbox.hxx>
+#include "numberingtypelistbox.hxx"
 
 namespace vcl { class Window; }
 class SwWrtShell;

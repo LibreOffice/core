@@ -23,12 +23,12 @@
 #include <memory>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
-#include "compiler.hxx"
+#include <compiler.hxx>
 #include "root.hxx"
 #include "xiroot.hxx"
 
-#include "rangenam.hxx"
-#include "formulacell.hxx"
+#include <rangenam.hxx>
+#include <formulacell.hxx>
 
 #include <list>
 #include <unordered_map>

@@ -21,7 +21,7 @@
 #include <math.h>
 #include <stdio.h>
 
-#include "calendar_jewish.hxx"
+#include <calendar_jewish.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;

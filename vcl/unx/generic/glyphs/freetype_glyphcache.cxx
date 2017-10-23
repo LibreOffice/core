@@ -20,27 +20,27 @@
 
 #include <vcl/fontcharmap.hxx>
 
-#include "unx/freetype_glyphcache.hxx"
+#include <unx/freetype_glyphcache.hxx>
 
 #include <vcl/svapp.hxx>
 #include <fontinstance.hxx>
 #include <impfont.hxx>
-#include "fontattributes.hxx"
+#include <fontattributes.hxx>
 
 #include <config_features.h>
 #include <unotools/fontdefs.hxx>
 
-#include "tools/poly.hxx"
-#include "basegfx/matrix/b2dhommatrix.hxx"
-#include "basegfx/matrix/b2dhommatrixtools.hxx"
-#include "basegfx/polygon/b2dpolypolygon.hxx"
+#include <tools/poly.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
-#include "osl/file.hxx"
-#include "osl/thread.hxx"
+#include <osl/file.hxx>
+#include <osl/thread.hxx>
 
-#include "langboost.hxx"
-#include "PhysicalFontCollection.hxx"
-#include "sft.hxx"
+#include <langboost.hxx>
+#include <PhysicalFontCollection.hxx>
+#include <sft.hxx>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -52,7 +52,7 @@
 #include FT_TRUETYPE_TAGS_H
 #include FT_TRUETYPE_IDS_H
 
-#include "rtl/instance.hxx"
+#include <rtl/instance.hxx>
 
 #include <vector>
 
@@ -61,8 +61,8 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
-#include "unx/fontmanager.hxx"
-#include "impfontcharmap.hxx"
+#include <unx/fontmanager.hxx>
+#include <impfontcharmap.hxx>
 
 static FT_Library aLibFT = nullptr;
 

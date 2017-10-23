@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AccessibleSpreadsheet.hxx"
-#include "AccessibilityHints.hxx"
-#include "AccessibleCell.hxx"
-#include "AccessibleDocument.hxx"
-#include "tabvwsh.hxx"
-#include "document.hxx"
-#include "hints.hxx"
-#include "scmod.hxx"
-#include "markdata.hxx"
+#include <AccessibleSpreadsheet.hxx>
+#include <AccessibilityHints.hxx>
+#include <AccessibleCell.hxx>
+#include <AccessibleDocument.hxx>
+#include <tabvwsh.hxx>
+#include <document.hxx>
+#include <hints.hxx>
+#include <scmod.hxx>
+#include <markdata.hxx>
 #include <gridwin.hxx>
 
 #include <unotools/accessiblestatesethelper.hxx>
@@ -37,8 +37,8 @@
 #include <tools/gen.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/svapp.hxx>
-#include "scresid.hxx"
-#include "strings.hrc"
+#include <scresid.hxx>
+#include <strings.hrc>
 
 #include <algorithm>
 

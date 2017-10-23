@@ -26,8 +26,8 @@
 #include <editeng/fhgtitem.hxx>
 
 #include <editeng/outliner.hxx>
-#include <outleeng.hxx>
-#include <paralist.hxx>
+#include "outleeng.hxx"
+#include "paralist.hxx"
 #include <editeng/editrids.hrc>
 #include <svl/itemset.hxx>
 #include <editeng/eeitem.hxx>

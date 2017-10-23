@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "excelfilter.hxx"
+#include <excelfilter.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <osl/diagnose.h>
 
 #include <oox/helper/binaryinputstream.hxx>
-#include "excelchartconverter.hxx"
-#include "excelvbaproject.hxx"
-#include "stylesbuffer.hxx"
-#include "themebuffer.hxx"
-#include "workbookfragment.hxx"
-#include "xestream.hxx"
+#include <excelchartconverter.hxx>
+#include <excelvbaproject.hxx>
+#include <stylesbuffer.hxx>
+#include <themebuffer.hxx>
+#include <workbookfragment.hxx>
+#include <xestream.hxx>
 
 namespace oox {
 namespace xls {

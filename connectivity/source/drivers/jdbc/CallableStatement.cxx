@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "java/sql/CallableStatement.hxx"
-#include "java/tools.hxx"
-#include "java/sql/Array.hxx"
-#include "java/sql/Clob.hxx"
-#include "java/sql/Blob.hxx"
-#include "java/sql/Connection.hxx"
-#include "java/sql/Ref.hxx"
-#include "java/sql/Timestamp.hxx"
+#include <java/sql/CallableStatement.hxx>
+#include <java/tools.hxx>
+#include <java/sql/Array.hxx>
+#include <java/sql/Clob.hxx>
+#include <java/sql/Blob.hxx>
+#include <java/sql/Connection.hxx>
+#include <java/sql/Ref.hxx>
+#include <java/sql/Timestamp.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>

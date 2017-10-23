@@ -19,7 +19,7 @@
 
 #include <config_locales.h>
 
-#include "lrl_include.hxx"
+#include <lrl_include.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <i18nlangtag/languagetag.hxx>

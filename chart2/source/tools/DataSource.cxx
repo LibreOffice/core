@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DataSource.hxx"
-#include "LabeledDataSequence.hxx"
+#include <DataSource.hxx>
+#include <LabeledDataSequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using ::com::sun::star::uno::Sequence;

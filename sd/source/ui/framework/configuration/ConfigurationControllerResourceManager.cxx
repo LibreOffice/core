@@ -20,7 +20,7 @@
 #include "ConfigurationControllerResourceManager.hxx"
 #include "ConfigurationControllerBroadcaster.hxx"
 #include "ResourceFactoryManager.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <tools/diagnose_ex.h>
 #include <algorithm>

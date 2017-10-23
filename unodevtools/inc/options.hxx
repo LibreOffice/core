@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UNODEVTOOLS_INC_OPTIONS_HXX
 #define INCLUDED_UNODEVTOOLS_INC_OPTIONS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <rtl/ustrbuf.hxx>
 

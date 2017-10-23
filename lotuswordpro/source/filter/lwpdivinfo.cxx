@@ -59,8 +59,8 @@
  ************************************************************************/
 
 #include "lwpdivinfo.hxx"
-#include "lwpobjstrm.hxx"
-#include "lwpfilehdr.hxx"
+#include <lwpobjstrm.hxx>
+#include <lwpfilehdr.hxx>
 #include "lwpholder.hxx"
 #include "lwppagehint.hxx"
 

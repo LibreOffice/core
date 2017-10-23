@@ -19,15 +19,15 @@
 
 
 #include <sal/macros.h>
-#include "svx/ParseContext.hxx"
-#include "svx/strings.hrc"
+#include <svx/ParseContext.hxx>
+#include <svx/strings.hrc>
 
 #include <svx/dialmgr.hxx>
 
 #include <unotools/syslocale.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include "fmstring.hrc"
+#include <fmstring.hrc>
 
 using namespace svxform;
 using namespace ::connectivity;

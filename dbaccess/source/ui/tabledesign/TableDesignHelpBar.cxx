@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TableDesignHelpBar.hxx"
+#include <TableDesignHelpBar.hxx>
 #include <svtools/svmedit.hxx>
 #include <vcl/settings.hxx>
-#include "helpids.h"
+#include <helpids.h>
 #include <memory>
 using namespace dbaui;
 #define STANDARD_MARGIN                 6

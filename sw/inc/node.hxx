@@ -24,10 +24,10 @@
 #include <tools/mempool.hxx>
 
 #include "swdllapi.h"
-#include <ndarr.hxx>
-#include <ndtyp.hxx>
-#include <index.hxx>
-#include <fmtcol.hxx>
+#include "ndarr.hxx"
+#include "ndtyp.hxx"
+#include "index.hxx"
+#include "fmtcol.hxx"
 
 #include <memory>
 #include <vector>

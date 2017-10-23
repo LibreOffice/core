@@ -43,7 +43,7 @@
 #include <window.h>
 #include <xmlreader/xmlreader.hxx>
 #include <desktop/crashreport.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 
 #ifdef DISABLE_DYNLOADING
 #include <dlfcn.h>

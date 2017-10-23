@@ -24,7 +24,7 @@
 #include <sfx2/strings.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
-#include "helpids.h"
+#include <helpids.h>
 
 SFX_IMPL_DOCKINGWINDOW( SfxNavigatorWrapper , SID_NAVIGATOR );
 

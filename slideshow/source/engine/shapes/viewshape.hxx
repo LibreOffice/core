@@ -27,11 +27,11 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-#include "tools.hxx"
-#include "shapeattributelayer.hxx"
-#include "animatedsprite.hxx"
-#include "viewlayer.hxx"
-#include "doctreenode.hxx"
+#include <tools.hxx>
+#include <shapeattributelayer.hxx>
+#include <animatedsprite.hxx>
+#include <viewlayer.hxx>
+#include <doctreenode.hxx>
 
 #include <vector>
 #include <memory>

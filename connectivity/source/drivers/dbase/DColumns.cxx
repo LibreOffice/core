@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbase/DColumns.hxx"
-#include "dbase/DTable.hxx"
+#include <dbase/DColumns.hxx>
+#include <dbase/DTable.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/property.hxx>

@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dptabres.hxx"
+#include <dptabres.hxx>
 
-#include "dptabdat.hxx"
-#include "dptabsrc.hxx"
-#include "global.hxx"
-#include "subtotal.hxx"
-#include "globstr.hrc"
-#include "dpitemdata.hxx"
-#include "generalfunction.hxx"
+#include <dptabdat.hxx>
+#include <dptabsrc.hxx>
+#include <global.hxx>
+#include <subtotal.hxx>
+#include <globstr.hrc>
+#include <dpitemdata.hxx>
+#include <generalfunction.hxx>
 
-#include "document.hxx"
-#include "dpresfilter.hxx"
-#include "dputil.hxx"
+#include <document.hxx>
+#include <dpresfilter.hxx>
+#include <dputil.hxx>
 
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>

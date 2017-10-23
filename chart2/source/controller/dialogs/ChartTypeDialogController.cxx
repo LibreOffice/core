@@ -18,15 +18,15 @@
  */
 
 #include "ChartTypeDialogController.hxx"
-#include "ResId.hxx"
-#include "helpids.h"
-#include "strings.hrc"
-#include "bitmaps.hlst"
-#include "macros.hxx"
-#include "ChartModelHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "ControllerLockGuard.hxx"
-#include "AxisHelper.hxx"
+#include <ResId.hxx>
+#include <helpids.h>
+#include <strings.hrc>
+#include <bitmaps.hlst>
+#include <macros.hxx>
+#include <ChartModelHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <ControllerLockGuard.hxx>
+#include <AxisHelper.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>

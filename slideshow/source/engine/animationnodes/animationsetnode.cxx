@@ -18,12 +18,12 @@
  */
 
 
-#include "animationfactory.hxx"
+#include <animationfactory.hxx>
 #include "setactivity.hxx"
 #include "animationsetnode.hxx"
 #include "nodetools.hxx"
-#include "tools.hxx"
-#include "delayevent.hxx"
+#include <tools.hxx>
+#include <delayevent.hxx>
 
 using namespace com::sun::star;
 

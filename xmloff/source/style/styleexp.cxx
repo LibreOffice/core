@@ -44,7 +44,7 @@
 #include <xmloff/maptype.hxx>
 #include <memory>
 #include <set>
-#include "prstylecond.hxx"
+#include <prstylecond.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

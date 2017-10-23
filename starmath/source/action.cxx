@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "action.hxx"
-#include "document.hxx"
-#include "strings.hxx"
+#include <action.hxx>
+#include <document.hxx>
+#include <strings.hxx>
 
 SmFormatAction::SmFormatAction(SmDocShell *pDocSh,
                                const SmFormat& rOldFormat,

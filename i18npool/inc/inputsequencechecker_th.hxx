@@ -19,7 +19,7 @@
 #ifndef INCLUDED_I18NPOOL_INC_INPUTSEQUENCECHECKER_TH_HXX
 #define INCLUDED_I18NPOOL_INC_INPUTSEQUENCECHECKER_TH_HXX
 
-#include <inputsequencechecker.hxx>
+#include "inputsequencechecker.hxx"
 
 namespace i18npool {
 

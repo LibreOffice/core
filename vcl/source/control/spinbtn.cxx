@@ -21,7 +21,7 @@
 #include <vcl/spin.hxx>
 #include <vcl/settings.hxx>
 
-#include "spin.hxx"
+#include <spin.hxx>
 
 void SpinButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {

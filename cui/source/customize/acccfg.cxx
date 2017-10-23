@@ -20,8 +20,8 @@
 
 // include own files
 
-#include "acccfg.hxx"
-#include "cfgutil.hxx"
+#include <acccfg.hxx>
+#include <cfgutil.hxx>
 #include <dialmgr.hxx>
 
 #include <sfx2/msg.hxx>
@@ -30,12 +30,12 @@
 #include <sfx2/minfitem.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <svl/stritem.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 #include <sal/macros.h>
 #include <vcl/builderfactory.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 #include <sfx2/strings.hrc>
 #include <svx/svxids.hrc>
 

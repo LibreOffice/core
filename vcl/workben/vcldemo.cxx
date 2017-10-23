@@ -51,11 +51,11 @@
 
 // internal headers for OpenGLTests class.
 #if HAVE_FEATURE_OPENGL
-#include "salgdi.hxx"
-#include "salframe.hxx"
-#include "openglgdiimpl.hxx"
-#include "opengl/texture.hxx"
-#include "opengl/framebuffer.hxx"
+#include <salgdi.hxx>
+#include <salframe.hxx>
+#include <openglgdiimpl.hxx>
+#include <opengl/texture.hxx>
+#include <opengl/framebuffer.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #endif
 

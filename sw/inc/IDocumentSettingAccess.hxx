@@ -21,7 +21,7 @@
 #define INCLUDED_SW_INC_IDOCUMENTSETTINGACCESS_HXX
 
 #include <tools/solar.h>
-#include <fldupde.hxx>
+#include "fldupde.hxx"
 #include <i18nlangtag/lang.h>
 #include <memory>
 

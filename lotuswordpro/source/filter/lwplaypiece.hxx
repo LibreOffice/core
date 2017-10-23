@@ -62,7 +62,7 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYPIECE_HXX
 
 #include "lwppiece.hxx"
-#include "lwpbasetype.hxx"
+#include <lwpbasetype.hxx>
 #include "lwpmargins.hxx"
 #include "lwpborderstuff.hxx"
 #include "lwpshadow.hxx"

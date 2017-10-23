@@ -34,7 +34,7 @@
 #include <sectfrm.hxx>
 #include <notxtfrm.hxx>
 #include <pagedesc.hxx>
-#include "viewimp.hxx"
+#include <viewimp.hxx>
 #include <hints.hxx>
 #include <viewopt.hxx>
 #include <set>

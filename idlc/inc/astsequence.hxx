@@ -19,7 +19,7 @@
 #ifndef INCLUDED_IDLC_INC_ASTSEQUENCE_HXX
 #define INCLUDED_IDLC_INC_ASTSEQUENCE_HXX
 
-#include <asttype.hxx>
+#include "asttype.hxx"
 
 class AstSequence : public AstType
 {

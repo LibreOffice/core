@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_DEFNAMESBUFFER_HXX
 
 #include "formulabase.hxx"
-#include "rangenam.hxx"
+#include <rangenam.hxx>
 
 #include <memory>
 

@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#include "lwpfilehdr.hxx"
-#include "lwpdefs.hxx"
+#include <lwpfilehdr.hxx>
+#include <lwpdefs.hxx>
 
 //Word Pro 96: 0x0a,
 sal_uInt16 LwpFileHeader::m_nFileRevision = 0;

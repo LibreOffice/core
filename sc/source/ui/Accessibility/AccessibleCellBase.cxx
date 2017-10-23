@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AccessibleCellBase.hxx"
-#include "attrib.hxx"
-#include "scitems.hxx"
-#include "miscuno.hxx"
-#include "document.hxx"
-#include "docfunc.hxx"
-#include "docsh.hxx"
-#include "formulacell.hxx"
-#include "scresid.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "unonames.hxx"
-#include "detfunc.hxx"
-#include "chgtrack.hxx"
+#include <AccessibleCellBase.hxx>
+#include <attrib.hxx>
+#include <scitems.hxx>
+#include <miscuno.hxx>
+#include <document.hxx>
+#include <docfunc.hxx>
+#include <docsh.hxx>
+#include <formulacell.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <unonames.hxx>
+#include <detfunc.hxx>
+#include <chgtrack.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

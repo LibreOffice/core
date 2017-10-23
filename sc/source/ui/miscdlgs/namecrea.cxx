@@ -19,8 +19,8 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "namecrea.hxx"
-#include "scresid.hxx"
+#include <namecrea.hxx>
+#include <scresid.hxx>
 
 ScNameCreateDlg::ScNameCreateDlg( vcl::Window * pParent, CreateNameFlags nFlags )
     : ModalDialog(pParent, "CreateNamesDialog", "modules/scalc/ui/createnamesdialog.ui")

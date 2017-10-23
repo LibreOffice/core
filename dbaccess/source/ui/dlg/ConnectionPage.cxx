@@ -19,10 +19,10 @@
 
 #include <config_features.h>
 #include "ConnectionPage.hxx"
-#include "core_resource.hxx"
-#include "dbu_dlg.hxx"
-#include "strings.hrc"
-#include "dsmeta.hxx"
+#include <core_resource.hxx>
+#include <dbu_dlg.hxx>
+#include <strings.hrc>
+#include <dsmeta.hxx>
 #if HAVE_FEATURE_JAVA
 #include <jvmaccess/virtualmachine.hxx>
 #endif
@@ -32,18 +32,18 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <unotools/moduleoptions.hxx>
-#include "dsitems.hxx"
-#include "helpids.h"
+#include <dsitems.hxx>
+#include <helpids.h>
 #include <osl/process.h>
 #include <vcl/msgbox.hxx>
-#include "dbadmin.hxx"
+#include <dbadmin.hxx>
 #include <comphelper/types.hxx>
 #include <vcl/stdtext.hxx>
-#include "sqlmessage.hxx"
+#include <sqlmessage.hxx>
 #include "odbcconfig.hxx"
 #include "dsselect.hxx"
 #include <svl/filenotation.hxx>
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -52,7 +52,7 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <ucbhelper/commandenvironment.hxx>

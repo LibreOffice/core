@@ -66,23 +66,23 @@
 
 #include <rtl/ref.hxx>
 
-#include "lwpheader.hxx"
-#include "lwpobj.hxx"
-#include "lwpobjhdr.hxx"
-#include "lwpobjstrm.hxx"
-#include "lwpobjid.hxx"
+#include <lwpheader.hxx>
+#include <lwpobj.hxx>
+#include <lwpobjhdr.hxx>
+#include <lwpobjstrm.hxx>
+#include <lwpobjid.hxx>
 #include "lwpdlvlist.hxx"
-#include "lwpfilehdr.hxx"
+#include <lwpfilehdr.hxx>
 
 #include "lwplayoutdef.hxx"
-#include "xfilter/xfdefs.hxx"
-#include "xfilter/xffont.hxx"
-#include "xfilter/xfpagemaster.hxx"
-#include "xfilter/xfcolumns.hxx"
-#include "xfilter/xfborders.hxx"
-#include "xfilter/xfframestyle.hxx"
-#include "xfilter/xfframe.hxx"
-#include "xfilter/xfbgimage.hxx"
+#include <xfilter/xfdefs.hxx>
+#include <xfilter/xffont.hxx>
+#include <xfilter/xfpagemaster.hxx>
+#include <xfilter/xfcolumns.hxx>
+#include <xfilter/xfborders.hxx>
+#include <xfilter/xfframestyle.hxx>
+#include <xfilter/xfframe.hxx>
+#include <xfilter/xfbgimage.hxx>
 #include "lwpusewhen.hxx"
 #include "lwplaypiece.hxx"
 

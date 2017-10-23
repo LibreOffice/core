@@ -60,7 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFBREAKS_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFBREAKS_HXX
 
-#include "xfilter/xfglobal.hxx"
+#include <xfilter/xfglobal.hxx>
 
 /**
  * @descr   Page|Column break object.

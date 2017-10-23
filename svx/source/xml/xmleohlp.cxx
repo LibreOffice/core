@@ -43,7 +43,7 @@
 
 #include <comphelper/classids.hxx>
 #include <cppuhelper/implbase.hxx>
-#include "svx/xmleohlp.hxx"
+#include <svx/xmleohlp.hxx>
 #include <map>
 #include <memory>
 

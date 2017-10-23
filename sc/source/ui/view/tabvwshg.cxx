@@ -32,10 +32,10 @@
 
 using namespace com::sun::star;
 
-#include "tabvwsh.hxx"
-#include "document.hxx"
-#include "drawview.hxx"
-#include "globstr.hrc"
+#include <tabvwsh.hxx>
+#include <document.hxx>
+#include <drawview.hxx>
+#include <globstr.hrc>
 #include <gridwin.hxx>
 #include <avmedia/mediawindow.hxx>
 

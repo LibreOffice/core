@@ -21,7 +21,7 @@
 #define INCLUDED_SAL_TEXTENC_CONTEXT_HXX
 
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 struct ImplUnicodeToTextContext
 {

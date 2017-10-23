@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuscale.hxx"
+#include <fuscale.hxx>
 
 #include <svx/dialogs.hrc>
 
-#include "app.hrc"
-#include "View.hxx"
-#include "Window.hxx"
-#include "OutlineViewShell.hxx"
-#include "drawview.hxx"
-#include "drawdoc.hxx"
-#include "DrawViewShell.hxx"
-#include "ViewShell.hxx"
-#include "fuzoom.hxx"
+#include <app.hrc>
+#include <View.hxx>
+#include <Window.hxx>
+#include <OutlineViewShell.hxx>
+#include <drawview.hxx>
+#include <drawdoc.hxx>
+#include <DrawViewShell.hxx>
+#include <ViewShell.hxx>
+#include <fuzoom.hxx>
 
 #include <vcl/msgbox.hxx>
 #include <svx/svdpagv.hxx>

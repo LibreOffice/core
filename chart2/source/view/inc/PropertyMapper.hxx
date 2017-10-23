@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 
-#include "charttoolsdllapi.hxx"
+#include <charttoolsdllapi.hxx>
 
 namespace chart
 {

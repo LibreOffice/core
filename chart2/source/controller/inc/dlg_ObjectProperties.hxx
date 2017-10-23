@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_OBJECTPROPERTIES_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_OBJECTPROPERTIES_HXX
 
-#include "ObjectIdentifier.hxx"
+#include <ObjectIdentifier.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/dlgctrl.hxx>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>

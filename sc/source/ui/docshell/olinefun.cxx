@@ -19,13 +19,13 @@
 
 #include <sfx2/bindings.hxx>
 
-#include "olinefun.hxx"
+#include <olinefun.hxx>
 
-#include "docsh.hxx"
-#include "olinetab.hxx"
-#include "undodat.hxx"
-#include "globstr.hrc"
-#include "sc.hrc"
+#include <docsh.hxx>
+#include <olinetab.hxx>
+#include <undodat.hxx>
+#include <globstr.hrc>
+#include <sc.hrc>
 
 static void lcl_InvalidateOutliner( SfxBindings* pBindings )
 {

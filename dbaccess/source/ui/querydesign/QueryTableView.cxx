@@ -17,39 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "QueryTableView.hxx"
+#include <QueryTableView.hxx>
 #include "TableFieldInfo.hxx"
-#include "TableFieldDescription.hxx"
+#include <TableFieldDescription.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include "helpids.h"
+#include <helpids.h>
 #include "QTableWindow.hxx"
 #include "QTableConnection.hxx"
 #include "QTableConnectionData.hxx"
-#include "QueryDesignView.hxx"
-#include "querycontroller.hxx"
+#include <QueryDesignView.hxx>
+#include <querycontroller.hxx>
 #include "QueryAddTabConnUndoAction.hxx"
 #include "QueryTabWinShowUndoAct.hxx"
-#include "browserids.hxx"
+#include <browserids.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include "JAccess.hxx"
+#include <JAccess.hxx>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/sequence.hxx>
 #include "querydlg.hxx"
-#include "JoinExchange.hxx"
+#include <JoinExchange.hxx>
 #include <comphelper/extract.hxx>
-#include "strings.hrc"
-#include "strings.hxx"
+#include <strings.hrc>
+#include <strings.hxx>
 #include <vcl/msgbox.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;

@@ -20,10 +20,10 @@
 #include "VCartesianCoordinateSystem.hxx"
 #include "VCartesianGrid.hxx"
 #include "VCartesianAxis.hxx"
-#include "macros.hxx"
-#include "AxisIndexDefines.hxx"
-#include "AxisHelper.hxx"
-#include "ChartTypeHelper.hxx"
+#include <macros.hxx>
+#include <AxisIndexDefines.hxx>
+#include <AxisHelper.hxx>
+#include <ChartTypeHelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
 namespace chart

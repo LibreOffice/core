@@ -22,10 +22,10 @@
 #include <vcl/textview.hxx>
 #include <vcl/texteng.hxx>
 #include <vcl/settings.hxx>
-#include <textdoc.hxx>
+#include "textdoc.hxx"
 #include <vcl/textdata.hxx>
 #include <vcl/xtextedt.hxx>
-#include <textdat2.hxx>
+#include "textdat2.hxx"
 
 #include <svl/undo.hxx>
 #include <vcl/cursor.hxx>

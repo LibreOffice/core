@@ -64,7 +64,7 @@
 #include <fesh.hxx>
 #include <charfmt.hxx>
 #include <fmturl.hxx>
-#include "txtfrm.hxx"
+#include <txtfrm.hxx>
 #include <wrong.hxx>
 #include <calbck.hxx>
 #include <unotools/intlwrapper.hxx>

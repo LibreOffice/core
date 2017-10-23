@@ -20,10 +20,10 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include "CellAppearancePropertyPanel.hxx"
-#include "sc.hrc"
-#include "strings.hrc"
-#include "bitmaps.hlst"
-#include "scresid.hxx"
+#include <sc.hrc>
+#include <strings.hrc>
+#include <bitmaps.hlst>
+#include <scresid.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/fixed.hxx>

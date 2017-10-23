@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <SvXMLAutoCorrectExport.hxx>
+#include "SvXMLAutoCorrectExport.hxx"
 
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <xmloff/xmltoken.hxx>

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_COMMANDDISPATCH_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_COMMANDDISPATCH_HXX
 
-#include "MutexContainer.hxx"
+#include <MutexContainer.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>

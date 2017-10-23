@@ -22,18 +22,18 @@
 #include <string.h>
 #include <map>
 
-#include "filter.hxx"
-#include "document.hxx"
-#include "compiler.hxx"
-#include "scerrors.hxx"
+#include <filter.hxx>
+#include <document.hxx>
+#include <compiler.hxx>
+#include <scerrors.hxx>
 
-#include "root.hxx"
-#include "lotrange.hxx"
-#include "optab.h"
-#include "scmem.h"
-#include "decl.h"
-#include "tool.h"
-#include "fprogressbar.hxx"
+#include <root.hxx>
+#include <lotrange.hxx>
+#include <optab.h>
+#include <scmem.h>
+#include <decl.h>
+#include <tool.h>
+#include <fprogressbar.hxx>
 #include "lotfilter.hxx"
 
 static ErrCode

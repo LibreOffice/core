@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 
 #include <comphelper/lok.hxx>
 #include <svl/slstitm.hxx>
@@ -39,29 +39,29 @@
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 #include <editeng/langitem.hxx>
 
-#include "cellsh.hxx"
-#include "sc.hrc"
-#include "docsh.hxx"
-#include "attrib.hxx"
-#include "scresid.hxx"
-#include "tabvwsh.hxx"
-#include "impex.hxx"
-#include "formulacell.hxx"
-#include "scmod.hxx"
-#include "globstr.hrc"
-#include "transobj.hxx"
-#include "drwtrans.hxx"
-#include "scabstdlg.hxx"
-#include "dociter.hxx"
-#include "postit.hxx"
-#include "cliputil.hxx"
-#include "clipparam.hxx"
-#include "markdata.hxx"
+#include <cellsh.hxx>
+#include <sc.hrc>
+#include <docsh.hxx>
+#include <attrib.hxx>
+#include <scresid.hxx>
+#include <tabvwsh.hxx>
+#include <impex.hxx>
+#include <formulacell.hxx>
+#include <scmod.hxx>
+#include <globstr.hrc>
+#include <transobj.hxx>
+#include <drwtrans.hxx>
+#include <scabstdlg.hxx>
+#include <dociter.hxx>
+#include <postit.hxx>
+#include <cliputil.hxx>
+#include <clipparam.hxx>
+#include <markdata.hxx>
 #include <gridwin.hxx>
 
 #define ScCellShell
 #define CellMovement
-#include "scslots.hxx"
+#include <scslots.hxx>
 
 
 SFX_IMPL_INTERFACE(ScCellShell, ScFormatShell)

@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xiformula.hxx"
-#include "rangelst.hxx"
-#include "xistream.hxx"
+#include <xiformula.hxx>
+#include <rangelst.hxx>
+#include <xistream.hxx>
 
-#include "excform.hxx"
+#include <excform.hxx>
 
 // Formula compiler ===========================================================
 

@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "reffact.hxx"
-#include "document.hxx"
-#include "scresid.hxx"
-#include "globstr.hrc"
-#include "docsh.hxx"
-#include "crnrdlg.hxx"
+#include <reffact.hxx>
+#include <document.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
+#include <docsh.hxx>
+#include <crnrdlg.hxx>
 #include <vcl/msgbox.hxx>
 #include <memory>
 

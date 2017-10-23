@@ -22,7 +22,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <connectivity/CommonTools.hxx>
-#include "file/FDriver.hxx"
+#include <file/FDriver.hxx>
 
 namespace connectivity
 {

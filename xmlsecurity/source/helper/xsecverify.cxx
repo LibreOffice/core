@@ -18,13 +18,13 @@
  */
 
 
-#include "xsecctl.hxx"
+#include <xsecctl.hxx>
 #include "xsecparser.hxx"
 #include "ooxmlsecparser.hxx"
-#include "framework/signatureverifierimpl.hxx"
-#include "framework/saxeventkeeperimpl.hxx"
-#include "gpg/xmlsignature_gpgimpl.hxx"
-#include "gpg/SEInitializer.hxx"
+#include <framework/signatureverifierimpl.hxx>
+#include <framework/saxeventkeeperimpl.hxx>
+#include <gpg/xmlsignature_gpgimpl.hxx>
+#include <gpg/SEInitializer.hxx>
 
 #include <com/sun/star/xml/crypto/sax/XKeyCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>

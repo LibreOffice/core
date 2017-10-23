@@ -13,7 +13,7 @@
 
 #include <cstring>
 
-#include <gtv-helpers.hxx>
+#include "gtv-helpers.hxx"
 
 void GtvHelpers::userPromptDialog(GtkWindow* pWindow, const std::string& aTitle, std::map<std::string, std::string>& aEntries)
 {

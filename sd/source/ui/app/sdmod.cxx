@@ -43,18 +43,18 @@
 #include <svx/xmlsecctrl.hxx>
 #include <svtools/colorcfg.hxx>
 
-#include "sderror.hxx"
-#include "sdmod.hxx"
-#include "sdresid.hxx"
-#include "optsitem.hxx"
-#include "DrawDocShell.hxx"
-#include "drawdoc.hxx"
-#include "app.hrc"
-#include "strings.hrc"
-#include "errhdl.hrc"
+#include <sderror.hxx>
+#include <sdmod.hxx>
+#include <sdresid.hxx>
+#include <optsitem.hxx>
+#include <DrawDocShell.hxx>
+#include <drawdoc.hxx>
+#include <app.hrc>
+#include <strings.hrc>
+#include <errhdl.hrc>
 
 #define SdModule
-#include "sdslots.hxx"
+#include <sdslots.hxx>
 
 SFX_IMPL_INTERFACE(SdModule, SfxModule)
 

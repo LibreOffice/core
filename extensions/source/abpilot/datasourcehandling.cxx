@@ -18,9 +18,9 @@
  */
 
 
-#include "strings.hrc"
+#include <strings.hrc>
 #include "abptypes.hxx"
-#include "componentmodule.hxx"
+#include <componentmodule.hxx>
 #include "datasourcehandling.hxx"
 #include "addresssettings.hxx"
 

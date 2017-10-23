@@ -32,9 +32,9 @@
 
 #include <fontinstance.hxx>
 #include <sallayout.hxx>
-#include "fontattributes.hxx"
-#include "impfontmetricdata.hxx"
-#include "hb-ot.h"
+#include <fontattributes.hxx>
+#include <impfontmetricdata.hxx>
+#include <hb-ot.h>
 
 #include <unordered_map>
 

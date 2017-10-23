@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuconarc.hxx"
+#include <fuconarc.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdocirc.hxx>
 #include <sfx2/request.hxx>
@@ -30,14 +30,14 @@
 #include <svx/svxids.hrc>
 #include <math.h>
 
-#include "app.hrc"
-#include "Window.hxx"
-#include "drawdoc.hxx"
+#include <app.hrc>
+#include <Window.hxx>
+#include <drawdoc.hxx>
 
-#include "View.hxx"
-#include "ViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "ToolBarManager.hxx"
+#include <View.hxx>
+#include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <ToolBarManager.hxx>
 
 #include <svx/sxciaitm.hxx>
 

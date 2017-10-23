@@ -26,7 +26,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
-#include "rangenam.hxx"
+#include <rangenam.hxx>
 #include "anyrefdg.hxx"
 #include "namemgrtable.hxx"
 

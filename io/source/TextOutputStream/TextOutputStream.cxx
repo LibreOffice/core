@@ -33,7 +33,7 @@
 #include <com/sun/star/io/XTextOutputStream2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include "services.hxx"
+#include <services.hxx>
 
 #define IMPLEMENTATION_NAME "com.sun.star.comp.io.TextOutputStream"
 #define SERVICE_NAME "com.sun.star.io.TextOutputStream"

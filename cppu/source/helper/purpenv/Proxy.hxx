@@ -20,13 +20,13 @@
 #ifndef INCLUDED_CPPU_SOURCE_HELPER_PURPENV_PROXY_HXX
 #define INCLUDED_CPPU_SOURCE_HELPER_PURPENV_PROXY_HXX
 
-#include "osl/interlck.h"
+#include <osl/interlck.h>
 
-#include "uno/environment.hxx"
-#include "uno/mapping.hxx"
-#include "uno/dispatcher.h"
+#include <uno/environment.hxx>
+#include <uno/mapping.hxx>
+#include <uno/dispatcher.h>
 
-#include "cppu/helper/purpenv/Mapping.hxx"
+#include <cppu/helper/purpenv/Mapping.hxx>
 
 
 class Proxy : public uno_Interface

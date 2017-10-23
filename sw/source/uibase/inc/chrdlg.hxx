@@ -26,7 +26,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
-#include <chrdlgmodes.hxx>
+#include "chrdlgmodes.hxx"
 
 class SwView;
 class SvxMacroItem;

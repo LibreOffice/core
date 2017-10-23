@@ -35,12 +35,12 @@
 
 #include <comphelper/servicehelper.hxx>
 
-#include <document.hxx>
-#include <attr.hxx>
-#include <childlist.hxx>
+#include "document.hxx"
+#include "attr.hxx"
+#include "childlist.hxx"
 
-#include "eventdispatcher.hxx"
-#include "mutationevent.hxx"
+#include <eventdispatcher.hxx>
+#include <mutationevent.hxx>
 
 using namespace css;
 using namespace css::uno;

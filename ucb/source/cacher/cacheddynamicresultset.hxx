@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UCB_SOURCE_CACHER_CACHEDDYNAMICRESULTSET_HXX
 #define INCLUDED_UCB_SOURCE_CACHER_CACHEDDYNAMICRESULTSET_HXX
 
-#include <dynamicresultsetwrapper.hxx>
+#include "dynamicresultsetwrapper.hxx"
 #include <com/sun/star/ucb/XContentIdentifierMapping.hpp>
 #include <com/sun/star/ucb/XCachedDynamicResultSetFactory.hpp>
 

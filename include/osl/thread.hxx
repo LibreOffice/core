@@ -20,14 +20,14 @@
 #ifndef INCLUDED_OSL_THREAD_HXX
 #define INCLUDED_OSL_THREAD_HXX
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <cassert>
 #include <cstddef>
 
-#include <osl/time.h>
-#include <osl/thread.h>
-#include <rtl/alloc.h>
+#include "osl/time.h"
+#include "osl/thread.h"
+#include "rtl/alloc.h"
 
 namespace osl
 {

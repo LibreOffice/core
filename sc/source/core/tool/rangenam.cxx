@@ -25,16 +25,16 @@
 #include <osl/diagnose.h>
 #include <o3tl/make_unique.hxx>
 
-#include "token.hxx"
-#include "tokenarray.hxx"
-#include "rangenam.hxx"
-#include "global.hxx"
-#include "compiler.hxx"
-#include "rangeutl.hxx"
-#include "rechead.hxx"
-#include "refupdat.hxx"
-#include "document.hxx"
-#include "refupdatecontext.hxx"
+#include <token.hxx>
+#include <tokenarray.hxx>
+#include <rangenam.hxx>
+#include <global.hxx>
+#include <compiler.hxx>
+#include <rangeutl.hxx>
+#include <rechead.hxx>
+#include <refupdat.hxx>
+#include <document.hxx>
+#include <refupdatecontext.hxx>
 #include <tokenstringcontext.hxx>
 
 #include <formula/errorcodes.hxx>

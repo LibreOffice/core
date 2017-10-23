@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "autofiltercontext.hxx"
+#include <autofiltercontext.hxx>
 
-#include "autofilterbuffer.hxx"
+#include <autofilterbuffer.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 

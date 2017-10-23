@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DrawViewShell.hxx"
+#include <DrawViewShell.hxx>
 
-#include "ViewShellHint.hxx"
+#include <ViewShellHint.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/dispatch.hxx>
@@ -32,13 +32,13 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdpagv.hxx>
 
-#include "app.hrc"
-#include "strings.hrc"
+#include <app.hrc>
+#include <strings.hrc>
 
-#include "sdresid.hxx"
-#include "Window.hxx"
-#include "drawview.hxx"
-#include "zoomlist.hxx"
+#include <sdresid.hxx>
+#include <Window.hxx>
+#include <drawview.hxx>
+#include <zoomlist.hxx>
 #include <tools/helpers.hxx>
 #include <vcl/svapp.hxx>
 

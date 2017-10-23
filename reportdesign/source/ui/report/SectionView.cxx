@@ -16,17 +16,17 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "SectionView.hxx"
-#include "DesignView.hxx"
+#include <SectionView.hxx>
+#include <DesignView.hxx>
 #include <RptPage.hxx>
 #include <RptObject.hxx>
 #include <RptDef.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svddrgmt.hxx>
 #include <vcl/scrbar.hxx>
-#include "ReportSection.hxx"
-#include "ReportWindow.hxx"
-#include "strings.hxx"
+#include <ReportSection.hxx>
+#include <ReportWindow.hxx>
+#include <strings.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 

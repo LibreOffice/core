@@ -21,14 +21,14 @@
 
 #include <map>
 
-#include "ObjectIdentifier.hxx"
-#include "macros.hxx"
-#include "TitleHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "AxisHelper.hxx"
-#include "servicenames_charttypes.hxx"
-#include "DiagramHelper.hxx"
-#include "AxisIndexDefines.hxx"
+#include <ObjectIdentifier.hxx>
+#include <macros.hxx>
+#include <TitleHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <AxisHelper.hxx>
+#include <servicenames_charttypes.hxx>
+#include <DiagramHelper.hxx>
+#include <AxisIndexDefines.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>

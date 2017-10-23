@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/vml/vmlshapecontainer.hxx"
+#include <oox/vml/vmlshapecontainer.hxx>
 
-#include "oox/vml/vmldrawing.hxx"
-#include "oox/vml/vmlshape.hxx"
+#include <oox/vml/vmldrawing.hxx>
+#include <oox/vml/vmlshape.hxx>
 
 #include <osl/diagnose.h>
 

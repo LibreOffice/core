@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuparagr.hxx"
+#include <fuparagr.hxx>
 #include <editeng/eeitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/bindings.hxx>
@@ -28,13 +28,13 @@
 #include <editeng/lrspitem.hxx>
 #include <svx/svdoutl.hxx>
 
-#include "app.hrc"
-#include "View.hxx"
-#include "ViewShell.hxx"
-#include "Window.hxx"
-#include "drawdoc.hxx"
-#include "sdabstdlg.hxx"
-#include "sdattr.hrc"
+#include <app.hrc>
+#include <View.hxx>
+#include <ViewShell.hxx>
+#include <Window.hxx>
+#include <drawdoc.hxx>
+#include <sdabstdlg.hxx>
+#include <sdattr.hrc>
 #include <memory>
 
 namespace sd {

@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "View.hxx"
+#include <View.hxx>
 #include <osl/file.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
@@ -43,18 +43,18 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/embedhlp.hxx>
 #include <vcl/graphicfilter.hxx>
-#include "app.hrc"
-#include "Window.hxx"
-#include "DrawDocShell.hxx"
-#include "DrawViewShell.hxx"
-#include "fuinsfil.hxx"
-#include "drawdoc.hxx"
-#include "sdresid.hxx"
-#include "strings.hrc"
-#include "imapinfo.hxx"
-#include "sdpage.hxx"
-#include "view/SlideSorterView.hxx"
-#include "undo/undoobjects.hxx"
+#include <app.hrc>
+#include <Window.hxx>
+#include <DrawDocShell.hxx>
+#include <DrawViewShell.hxx>
+#include <fuinsfil.hxx>
+#include <drawdoc.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
+#include <imapinfo.hxx>
+#include <sdpage.hxx>
+#include <view/SlideSorterView.hxx>
+#include <undo/undoobjects.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vbahelper/vbawindowbase.hxx"
-#include "vbahelper/helperdecl.hxx"
+#include <vbahelper/vbawindowbase.hxx>
+#include <vbahelper/helperdecl.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>

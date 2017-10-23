@@ -36,8 +36,8 @@
 #include <ooo/vba/word/XApplication.hpp>
 #include <ooo/vba/word/WdCollapseDirection.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
-#include "unotbl.hxx"
-#include "unocoll.hxx"
+#include <unotbl.hxx>
+#include <unocoll.hxx>
 #include "vbatable.hxx"
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XViewCursor.hpp>

@@ -20,7 +20,7 @@
 
 #include <biginteger.hxx>
 
-#include "xmlsec-wrapper.h"
+#include <xmlsec-wrapper.h>
 #include <com/sun/star/uno/Sequence.hxx>
 
 using namespace ::com::sun::star::uno ;

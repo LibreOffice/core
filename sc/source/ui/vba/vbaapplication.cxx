@@ -47,17 +47,17 @@
 #include "vbawindows.hxx"
 #include "vbaglobals.hxx"
 #include "vbamenubars.hxx"
-#include "tabvwsh.hxx"
-#include "gridwin.hxx"
+#include <tabvwsh.hxx>
+#include <gridwin.hxx>
 #include "vbanames.hxx"
 #include <vbahelper/vbashape.hxx>
 #include "vbatextboxshape.hxx"
 #include "vbaovalshape.hxx"
 #include "vbalineshape.hxx"
 #include "vbaassistant.hxx"
-#include "sc.hrc"
-#include "macromgr.hxx"
-#include "defaultsoptions.hxx"
+#include <sc.hrc>
+#include <macromgr.hxx>
+#include <defaultsoptions.hxx>
 #include "vbafiledialog.hxx"
 
 #include <osl/file.hxx>
@@ -84,19 +84,19 @@
 #include <basic/sbuno.hxx>
 #include <basic/sbmeth.hxx>
 
-#include "convuno.hxx"
-#include "cellsuno.hxx"
-#include "miscuno.hxx"
-#include "unonames.hxx"
-#include "docsh.hxx"
+#include <convuno.hxx>
+#include <cellsuno.hxx>
+#include <miscuno.hxx>
+#include <unonames.hxx>
+#include <docsh.hxx>
 #include <vbahelper/helperdecl.hxx>
 #include "excelvbahelper.hxx"
 
 #include <basic/sbmod.hxx>
 #include <basic/sbxobj.hxx>
 
-#include "viewutil.hxx"
-#include "docoptio.hxx"
+#include <viewutil.hxx>
+#include <docoptio.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;

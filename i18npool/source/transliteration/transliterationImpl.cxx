@@ -18,8 +18,8 @@
  */
 
 
-#include "transliterationImpl.hxx"
-#include "servicename.hxx"
+#include <transliterationImpl.hxx>
+#include <servicename.hxx>
 
 #include <com/sun/star/i18n/LocaleData.hpp>
 #include <com/sun/star/i18n/TransliterationType.hpp>

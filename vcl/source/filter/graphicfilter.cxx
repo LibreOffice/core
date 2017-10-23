@@ -49,7 +49,7 @@
 #include "ixbm/xbmread.hxx"
 #include "ixpm/xpmread.hxx"
 #include "sgffilt.hxx"
-#include "osl/module.hxx"
+#include <osl/module.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/XInterface.hpp>

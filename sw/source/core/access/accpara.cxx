@@ -66,8 +66,8 @@
 #include <fmtfld.hxx>
 #include <modcfg.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "swmodule.hxx"
-#include "redline.hxx"
+#include <swmodule.hxx>
+#include <redline.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -92,7 +92,7 @@
 #include <expfld.hxx>
 #include <flddat.hxx>
 #include "../../uibase/inc/fldmgr.hxx"
-#include "fldbas.hxx"      // SwField
+#include <fldbas.hxx>      // SwField
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

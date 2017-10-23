@@ -18,12 +18,12 @@
  */
 
 
-#include "secerr.h"
+#include <secerr.h>
 #include "secerror.hxx"
-#include "sslerr.h"
-#include "nspr.h"
-#include "nss.h"
-#include "certt.h"
+#include <sslerr.h>
+#include <nspr.h>
+#include <nss.h>
+#include <certt.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/types.h>

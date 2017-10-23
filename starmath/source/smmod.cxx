@@ -27,18 +27,18 @@
 #include <unotools/resmgr.hxx>
 #include <vcl/virdev.hxx>
 #include <unotools/syslocale.hxx>
-#include "smmod.hxx"
+#include <smmod.hxx>
 #include "cfgitem.hxx"
-#include "dialog.hxx"
-#include "edit.hxx"
-#include "view.hxx"
-#include "smmod.hrc"
-#include "starmath.hrc"
-#include "svx/modctrl.hxx"
+#include <dialog.hxx>
+#include <edit.hxx>
+#include <view.hxx>
+#include <smmod.hrc>
+#include <starmath.hrc>
+#include <svx/modctrl.hxx>
 
 
 #define SmModule
-#include "smslots.hxx"
+#include <smslots.hxx>
 
 OUString SmResId(const char* pId)
 {

@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbase/dindexnode.hxx"
+#include <dbase/dindexnode.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <osl/thread.h>
-#include "dbase/DIndex.hxx"
+#include <dbase/DIndex.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 

@@ -19,9 +19,9 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "inscldlg.hxx"
-#include "scresid.hxx"
-#include "strings.hrc"
+#include <inscldlg.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
 
 static sal_uInt8 nInsItemChecked=0;
 

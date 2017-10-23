@@ -9,7 +9,7 @@
 
 #include "WrappedGL3DProperties.hxx"
 #include "Chart2ModelContact.hxx"
-#include "FastPropertyIdRanges.hxx"
+#include <FastPropertyIdRanges.hxx>
 #include <unonames.hxx>
 #include <WrappedProperty.hxx>
 #include <DiagramHelper.hxx>

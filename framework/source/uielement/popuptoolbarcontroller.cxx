@@ -18,7 +18,7 @@
  */
 
 #include <strings.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 #include <classes/fwkresid.hxx>
 
 #include <cppuhelper/implbase.hxx>

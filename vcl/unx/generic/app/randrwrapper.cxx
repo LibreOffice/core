@@ -23,8 +23,8 @@
 #include <X11/Xutil.h>
 #include <X11/extensions/Xrandr.h>
 
-#include "osl/module.h"
-#include "rtl/ustring.hxx"
+#include <osl/module.h>
+#include <rtl/ustring.hxx>
 
 namespace
 {
@@ -104,7 +104,7 @@ void RandRWrapper::releaseWrapper()
 
 #endif
 
-#include "unx/saldisp.hxx"
+#include <unx/saldisp.hxx>
 #if OSL_DEBUG_LEVEL > 1
 #include <cstdio>
 #endif

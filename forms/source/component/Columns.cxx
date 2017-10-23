@@ -20,8 +20,8 @@
 #include <string.h>
 
 #include "Columns.hxx"
-#include "property.hxx"
-#include "componenttools.hxx"
+#include <property.hxx>
+#include <componenttools.hxx>
 #include "findpos.hxx"
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
@@ -36,8 +36,8 @@
 #include <comphelper/property.hxx>
 #include <comphelper/basicio.hxx>
 #include <comphelper/servicehelper.hxx>
-#include "services.hxx"
-#include "strings.hrc"
+#include <services.hxx>
+#include <strings.hrc>
 #include <tools/debug.hxx>
 
 

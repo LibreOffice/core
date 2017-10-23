@@ -19,8 +19,8 @@
 
 #include "QTableConnection.hxx"
 #include <osl/diagnose.h>
-#include "QueryTableView.hxx"
-#include "ConnectionLine.hxx"
+#include <QueryTableView.hxx>
+#include <ConnectionLine.hxx>
 using namespace dbaui;
 // class OQueryTableConnection
 

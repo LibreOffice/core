@@ -19,8 +19,8 @@
 
 #include <editeng/forbiddencharacterstable.hxx>
 
-#include "forbiuno.hxx"
-#include "docsh.hxx"
+#include <forbiuno.hxx>
+#include <docsh.hxx>
 
 using namespace ::com::sun::star;
 

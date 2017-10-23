@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
 
@@ -28,19 +28,19 @@
 #include <editeng/boxitem.hxx>
 #include <vcl/svapp.hxx>
 
-#include "htmlimp.hxx"
-#include "htmlpars.hxx"
-#include "filter.hxx"
-#include "global.hxx"
-#include "document.hxx"
-#include "editutil.hxx"
-#include "stlpool.hxx"
-#include "stlsheet.hxx"
-#include "compiler.hxx"
-#include "rangenam.hxx"
-#include "attrib.hxx"
-#include "ftools.hxx"
-#include "tokenarray.hxx"
+#include <htmlimp.hxx>
+#include <htmlpars.hxx>
+#include <filter.hxx>
+#include <global.hxx>
+#include <document.hxx>
+#include <editutil.hxx>
+#include <stlpool.hxx>
+#include <stlsheet.hxx>
+#include <compiler.hxx>
+#include <rangenam.hxx>
+#include <attrib.hxx>
+#include <ftools.hxx>
+#include <tokenarray.hxx>
 
 ErrCode ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const OUString& rBaseURL, ScDocument *pDoc,
         ScRange& rRange, double nOutputFactor, bool bCalcWidthHeight, SvNumberFormatter* pFormatter,

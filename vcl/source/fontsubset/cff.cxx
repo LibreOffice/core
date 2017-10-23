@@ -21,7 +21,7 @@
 #include <cstring>
 #include <assert.h>
 
-#include "fontsubset.hxx"
+#include <fontsubset.hxx>
 
 #include <vcl/strhelper.hxx>
 

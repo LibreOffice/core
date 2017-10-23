@@ -37,7 +37,7 @@
 #include <fmtrowsplt.hxx>
 #include <sfx2/htmlmode.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <docsh.hxx>
 #include <wrtsh.hxx>
@@ -46,7 +46,7 @@
 #include <uitool.hxx>
 #include <frmatr.hxx>
 #include <tabledlg.hxx>
-#include <../../uibase/table/tablepg.hxx>
+#include "../../uibase/table/tablepg.hxx"
 #include <tablemgr.hxx>
 #include <pagedesc.hxx>
 #include <uiitems.hxx>

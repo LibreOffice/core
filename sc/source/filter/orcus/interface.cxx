@@ -8,22 +8,22 @@
  */
 
 #include <memory>
-#include "orcusinterface.hxx"
+#include <orcusinterface.hxx>
 
-#include "document.hxx"
-#include "formulacell.hxx"
-#include "rangenam.hxx"
-#include "tokenarray.hxx"
-#include "globalnames.hxx"
-#include "docoptio.hxx"
-#include "globstr.hrc"
-#include "compiler.hxx"
-#include "dbdata.hxx"
-#include "stlpool.hxx"
-#include "scitems.hxx"
-#include "patattr.hxx"
-#include "docpool.hxx"
-#include "attrib.hxx"
+#include <document.hxx>
+#include <formulacell.hxx>
+#include <rangenam.hxx>
+#include <tokenarray.hxx>
+#include <globalnames.hxx>
+#include <docoptio.hxx>
+#include <globstr.hrc>
+#include <compiler.hxx>
+#include <dbdata.hxx>
+#include <stlpool.hxx>
+#include <scitems.hxx>
+#include <patattr.hxx>
+#include <docpool.hxx>
+#include <attrib.hxx>
 
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>

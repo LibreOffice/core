@@ -10,8 +10,8 @@
 #ifndef INCLUDED_OOX_SOURCE_SHAPE_SHAPEDRAWINGFRAGMENTHANDLER_HXX
 #define INCLUDED_OOX_SOURCE_SHAPE_SHAPEDRAWINGFRAGMENTHANDLER_HXX
 
-#include "oox/core/fragmenthandler2.hxx"
-#include "oox/drawingml/shapegroupcontext.hxx"
+#include <oox/core/fragmenthandler2.hxx>
+#include <oox/drawingml/shapegroupcontext.hxx>
 
 namespace oox { namespace shape {
 

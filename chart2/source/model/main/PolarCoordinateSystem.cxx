@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "PolarCoordinateSystem.hxx"
-#include "macros.hxx"
-#include "servicenames_coosystems.hxx"
+#include <PolarCoordinateSystem.hxx>
+#include <macros.hxx>
+#include <servicenames_coosystems.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;

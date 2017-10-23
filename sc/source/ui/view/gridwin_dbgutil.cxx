@@ -9,14 +9,14 @@
 
 #include <iostream>
 
-#include "gridwin.hxx"
+#include <gridwin.hxx>
 #include <svx/svdpage.hxx>
 #include <libxml/xmlwriter.h>
 #include <viewdata.hxx>
-#include "document.hxx"
-#include "patattr.hxx"
+#include <document.hxx>
+#include <patattr.hxx>
 #include <svl/poolitem.hxx>
-#include "userdat.hxx"
+#include <userdat.hxx>
 #include <dpobject.hxx>
 
 namespace {

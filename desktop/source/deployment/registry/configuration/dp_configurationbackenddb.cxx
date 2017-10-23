@@ -25,7 +25,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
-#include "dp_misc.h"
+#include <dp_misc.h>
 
 #include "dp_configurationbackenddb.hxx"
 

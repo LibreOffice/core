@@ -39,11 +39,11 @@
 #include <svx/svdundo.hxx>
 #include <svx/unopage.hxx>
 #include "shapeimpl.hxx"
-#include "svdglob.hxx"
-#include "svx/globl3d.hxx"
+#include <svdglob.hxx>
+#include <svx/globl3d.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/svdopath.hxx>
-#include "svx/unoapi.hxx"
+#include <svx/unoapi.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/extrud3d.hxx>
 #include <svx/lathe3d.hxx>

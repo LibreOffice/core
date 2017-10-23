@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_SELECTIONHELPER_HXX
 
 #include "DrawViewWrapper.hxx"
-#include "ObjectIdentifier.hxx"
+#include <ObjectIdentifier.hxx>
 
 class SdrObject;
 #include <svx/svdtypes.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DrawViewShell.hxx"
-#include "ViewShellImplementation.hxx"
+#include <DrawViewShell.hxx>
+#include <ViewShellImplementation.hxx>
 #include <vcl/waitobj.hxx>
 
 #include <svx/svxids.hrc>
@@ -35,20 +35,20 @@
 #include <svl/style.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/grafctrl.hxx>
-#include "stlsheet.hxx"
+#include <stlsheet.hxx>
 
 #include <sfx2/viewfrm.hxx>
 
-#include "app.hrc"
-#include "strings.hrc"
-#include "helpids.h"
-#include "Window.hxx"
-#include "imapinfo.hxx"
-#include "sdresid.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "drawview.hxx"
-#include "sdabstdlg.hxx"
+#include <app.hrc>
+#include <strings.hrc>
+#include <helpids.h>
+#include <Window.hxx>
+#include <imapinfo.hxx>
+#include <sdresid.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <drawview.hxx>
+#include <sdabstdlg.hxx>
 #include <memory>
 
 namespace sd {

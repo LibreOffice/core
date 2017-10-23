@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "MovingAverageRegressionCurveCalculator.hxx"
-#include "RegressionCalculationHelper.hxx"
-#include "ResId.hxx"
-#include "strings.hrc"
-#include "macros.hxx"
+#include <MovingAverageRegressionCurveCalculator.hxx>
+#include <RegressionCalculationHelper.hxx>
+#include <ResId.hxx>
+#include <strings.hrc>
+#include <macros.hxx>
 
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>

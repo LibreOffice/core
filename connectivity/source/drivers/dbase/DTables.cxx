@@ -20,19 +20,19 @@
 #include <sal/config.h>
 
 #include <dbase/DConnection.hxx>
-#include "dbase/DTables.hxx"
-#include "dbase/DTable.hxx"
+#include <dbase/DTables.hxx>
+#include <dbase/DTable.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
-#include "file/FCatalog.hxx"
-#include "file/FConnection.hxx"
+#include <file/FCatalog.hxx>
+#include <file/FConnection.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include "dbase/DCatalog.hxx"
+#include <dbase/DCatalog.hxx>
 #include <comphelper/types.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 #include <connectivity/dbexception.hxx>
 
 using namespace ::comphelper;

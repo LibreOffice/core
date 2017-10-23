@@ -9,8 +9,8 @@
 
 #include "ChartLinePanel.hxx"
 
-#include "PropertyHelper.hxx"
-#include "ChartController.hxx"
+#include <PropertyHelper.hxx>
+#include <ChartController.hxx>
 
 #include <svx/xlnwtit.hxx>
 #include <svx/xlinjoit.hxx>

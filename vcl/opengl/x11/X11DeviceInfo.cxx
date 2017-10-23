@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "opengl/x11/X11DeviceInfo.hxx"
-#include "opengl/x11/glxtest.hxx"
+#include <opengl/x11/X11DeviceInfo.hxx>
+#include <opengl/x11/glxtest.hxx>
 
 #include <config_features.h>
 

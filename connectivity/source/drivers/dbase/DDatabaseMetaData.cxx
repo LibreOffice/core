@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbase/DDatabaseMetaData.hxx"
+#include <dbase/DDatabaseMetaData.hxx>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
@@ -26,9 +26,9 @@
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
-#include "FDatabaseMetaDataResultSet.hxx"
+#include <FDatabaseMetaDataResultSet.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include "dbase/DIndex.hxx"
+#include <dbase/DIndex.hxx>
 #include <connectivity/FValue.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>

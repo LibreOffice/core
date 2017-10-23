@@ -25,7 +25,7 @@
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <connectivity/CommonTools.hxx>
-#include "file/filedllapi.hxx"
+#include <file/filedllapi.hxx>
 
 namespace connectivity
 {

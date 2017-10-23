@@ -41,17 +41,17 @@
 #include <tools/diagnose_ex.h>
 
 #include "funcpage.hxx"
-#include "formula/formula.hxx"
-#include "formula/IFunctionDescription.hxx"
-#include "formula/FormulaCompiler.hxx"
-#include "formula/token.hxx"
-#include "formula/tokenarray.hxx"
-#include "formula/formdata.hxx"
-#include "formula/formulahelper.hxx"
+#include <formula/formula.hxx>
+#include <formula/IFunctionDescription.hxx>
+#include <formula/FormulaCompiler.hxx>
+#include <formula/token.hxx>
+#include <formula/tokenarray.hxx>
+#include <formula/formdata.hxx>
+#include <formula/formulahelper.hxx>
 #include "structpg.hxx"
 #include "parawin.hxx"
-#include "strings.hrc"
-#include "core_resource.hxx"
+#include <strings.hrc>
+#include <core_resource.hxx>
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>

@@ -28,7 +28,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
-#include "ChartModel.hxx"
+#include <ChartModel.hxx>
 
 #include <vector>
 

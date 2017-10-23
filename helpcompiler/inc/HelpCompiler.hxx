@@ -44,7 +44,7 @@
 #include <osl/file.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
-#include <BasCodeTagger.hxx>
+#include "BasCodeTagger.hxx"
 #include <helpcompiler/compilehelp.hxx>
 
 #if OSL_DEBUG_LEVEL > 2

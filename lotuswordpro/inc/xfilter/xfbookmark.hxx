@@ -62,9 +62,9 @@
 
 #include <sal/config.h>
 
-#include "xfilter/ixfattrlist.hxx"
-#include "xfilter/ixfstream.hxx"
-#include "xfilter/xfcontent.hxx"
+#include <xfilter/ixfattrlist.hxx>
+#include <xfilter/ixfstream.hxx>
+#include <xfilter/xfcontent.hxx>
 
 /**
  * @brief

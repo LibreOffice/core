@@ -52,17 +52,17 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <svtools/embedtransfer.hxx>
-#include "DrawDocShell.hxx"
-#include "View.hxx"
-#include "sdpage.hxx"
-#include "drawview.hxx"
-#include "drawdoc.hxx"
-#include "stlpool.hxx"
-#include "strings.hrc"
-#include "sdresid.hxx"
-#include "imapinfo.hxx"
-#include "sdxfer.hxx"
-#include "unomodel.hxx"
+#include <DrawDocShell.hxx>
+#include <View.hxx>
+#include <sdpage.hxx>
+#include <drawview.hxx>
+#include <drawdoc.hxx>
+#include <stlpool.hxx>
+#include <strings.hrc>
+#include <sdresid.hxx>
+#include <imapinfo.hxx>
+#include <sdxfer.hxx>
+#include <unomodel.hxx>
 #include <vcl/virdev.hxx>
 
 using namespace ::com::sun::star;

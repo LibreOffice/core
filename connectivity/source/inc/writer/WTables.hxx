@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WTABLES_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WTABLES_HXX
 
-#include "file/FTables.hxx"
+#include <file/FTables.hxx>
 
 namespace connectivity
 {

@@ -30,7 +30,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/confignode.hxx>
 
-#include <databaseregistrations.hxx>
+#include "databaseregistrations.hxx"
 
 namespace dbaccess
 {

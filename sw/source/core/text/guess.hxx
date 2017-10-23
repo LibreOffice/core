@@ -21,8 +21,8 @@
 #include <memory>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 
-#include "swtypes.hxx"
-#include "breakit.hxx"
+#include <swtypes.hxx>
+#include <breakit.hxx>
 #include "porrst.hxx"
 
 class SwTextFormatInfo;

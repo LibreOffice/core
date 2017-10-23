@@ -19,7 +19,7 @@
 #ifndef INCLUDED_RTL_BYTESEQ_HXX
 #define INCLUDED_RTL_BYTESEQ_HXX
 
-#include <rtl/byteseq.h>
+#include "rtl/byteseq.h"
 
 #include <cstddef>
 #include <new>

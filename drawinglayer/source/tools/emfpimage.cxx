@@ -36,7 +36,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <emfpimage.hxx>
+#include "emfpimage.hxx"
 
 namespace emfplushelper
 {

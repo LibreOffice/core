@@ -20,7 +20,7 @@
 #ifndef INCLUDED_RTL_TEXTENC_H
 #define INCLUDED_RTL_TEXTENC_H
 
-#include <sal/types.h>
+#include "sal/types.h"
 
 /** The various supported text encodings.
 

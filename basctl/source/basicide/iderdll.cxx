@@ -22,12 +22,12 @@
 #include <comphelper/processfactory.hxx>
 
 #include <iderdll.hxx>
-#include <iderdll2.hxx>
+#include "iderdll2.hxx"
 #include <iderid.hxx>
 #include <basidesh.hxx>
 #include <strings.hrc>
-#include <basdoc.hxx>
-#include <basicmod.hxx>
+#include "basdoc.hxx"
+#include "basicmod.hxx"
 
 #include <svl/srchitem.hxx>
 #include <svx/svxids.hrc>

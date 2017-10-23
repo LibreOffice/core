@@ -29,7 +29,7 @@
 #include "fldpage.hxx"
 #include <IDocumentOutlineNodes.hxx>
 #include <IDocumentListItems.hxx>
-#include <FldRefTreeListBox.hxx>
+#include "FldRefTreeListBox.hxx"
 class SwTextNode;
 
 class SwFieldRefPage : public SwFieldPage

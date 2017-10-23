@@ -17,25 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "core_resource.hxx"
-#include "sqlmessage.hxx"
-#include "dbu_dlg.hxx"
-#include "strings.hrc"
-#include "bitmaps.hlst"
+#include <core_resource.hxx>
+#include <sqlmessage.hxx>
+#include <dbu_dlg.hxx>
+#include <strings.hrc>
+#include <bitmaps.hlst>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <vcl/fixed.hxx>
 #include <osl/diagnose.h>
 #include <svtools/treelistbox.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <svtools/svmedit.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/configmgr.hxx>
 #include <sfx2/sfxuno.hxx>
-#include "helpids.h"
-#include "UITools.hxx"
+#include <helpids.h>
+#include <UITools.hxx>
 
 #include <tools/urlobj.hxx>
 

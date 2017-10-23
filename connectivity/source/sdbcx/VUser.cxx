@@ -22,7 +22,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/sequence.hxx>

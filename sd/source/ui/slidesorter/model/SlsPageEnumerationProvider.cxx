@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "model/SlsPageEnumerationProvider.hxx"
-#include "model/SlsPageEnumeration.hxx"
-#include "model/SlsPageDescriptor.hxx"
+#include <model/SlsPageEnumerationProvider.hxx>
+#include <model/SlsPageEnumeration.hxx>
+#include <model/SlsPageDescriptor.hxx>
 
 namespace sd { namespace slidesorter { namespace model {
 

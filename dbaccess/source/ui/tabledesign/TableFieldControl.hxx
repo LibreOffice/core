@@ -19,7 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TABLEFIELDCONTROL_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TABLEFIELDCONTROL_HXX
 
-#include "FieldDescControl.hxx"
+#include <FieldDescControl.hxx>
 
 namespace dbaui
 {

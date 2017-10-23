@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <com/sun/star/style/NumberingType.hpp>
@@ -46,29 +46,29 @@
 #include <math.h>
 #include <string.h>
 
-#include "global.hxx"
-#include "sc.hrc"
-#include "attrib.hxx"
-#include "patattr.hxx"
-#include "docpool.hxx"
-#include "document.hxx"
+#include <global.hxx>
+#include <sc.hrc>
+#include <attrib.hxx>
+#include <patattr.hxx>
+#include <docpool.hxx>
+#include <document.hxx>
 #include "collect.hxx"
-#include "rangenam.hxx"
-#include "dbdata.hxx"
-#include "stlsheet.hxx"
-#include "stlpool.hxx"
-#include "filter.hxx"
-#include "scflt.hxx"
-#include "formulacell.hxx"
-#include "scfobj.hxx"
-#include "docoptio.hxx"
-#include "viewopti.hxx"
-#include "postit.hxx"
-#include "globstr.hrc"
-#include "ftools.hxx"
-#include "tabprotection.hxx"
+#include <rangenam.hxx>
+#include <dbdata.hxx>
+#include <stlsheet.hxx>
+#include <stlpool.hxx>
+#include <filter.hxx>
+#include <scflt.hxx>
+#include <formulacell.hxx>
+#include <scfobj.hxx>
+#include <docoptio.hxx>
+#include <viewopti.hxx>
+#include <postit.hxx>
+#include <globstr.hrc>
+#include <ftools.hxx>
+#include <tabprotection.hxx>
 
-#include "fprogressbar.hxx"
+#include <fprogressbar.hxx>
 #include <memory>
 
 using namespace com::sun::star;

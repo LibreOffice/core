@@ -19,9 +19,9 @@
 
 
 #include "svgfilter.hxx"
-#include "svgreader.hxx"
+#include <svgreader.hxx>
 
-#include "rtl/ref.hxx"
+#include <rtl/ref.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 

@@ -21,8 +21,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/diagnose.h>
 
-#include "filtopt.hxx"
-#include "miscuno.hxx"
+#include <filtopt.hxx>
+#include <miscuno.hxx>
 
 using namespace utl;
 using namespace css::uno;

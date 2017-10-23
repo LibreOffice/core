@@ -43,7 +43,7 @@
 #include <vector>
 #include <string.h>
 
-#include <lingutil.hxx>
+#include "lingutil.hxx"
 
 #include <sal/macros.h>
 

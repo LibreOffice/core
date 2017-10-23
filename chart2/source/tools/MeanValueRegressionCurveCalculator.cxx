@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "MeanValueRegressionCurveCalculator.hxx"
-#include "macros.hxx"
+#include <MeanValueRegressionCurveCalculator.hxx>
+#include <macros.hxx>
 
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>

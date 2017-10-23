@@ -7,19 +7,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "searchresults.hxx"
+#include <searchresults.hxx>
 
 #include <svtools/simptabl.hxx>
 #include <svtools/treelistentry.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include "dociter.hxx"
-#include "document.hxx"
-#include "rangeutl.hxx"
-#include "tabvwsh.hxx"
+#include <dociter.hxx>
+#include <document.hxx>
+#include <rangeutl.hxx>
+#include <tabvwsh.hxx>
 #include <strings.hrc>
-#include "sc.hrc"
-#include "scresid.hxx"
+#include <sc.hrc>
+#include <scresid.hxx>
 
 namespace sc {
 

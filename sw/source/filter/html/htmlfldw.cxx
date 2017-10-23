@@ -27,13 +27,13 @@
 #include <breakit.hxx>
 #include <ndtxt.hxx>
 #include <txtfld.hxx>
-#include "fldbas.hxx"
-#include "docufld.hxx"
-#include "flddat.hxx"
+#include <fldbas.hxx>
+#include <docufld.hxx>
+#include <flddat.hxx>
 #include "htmlfld.hxx"
 #include "wrthtml.hxx"
 #include <rtl/strbuf.hxx>
-#include <css1atr.hxx>
+#include "css1atr.hxx"
 
 using namespace nsSwDocInfoSubType;
 

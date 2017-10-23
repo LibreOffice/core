@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "file/FResultSetMetaData.hxx"
-#include "file/FTable.hxx"
+#include <file/FResultSetMetaData.hxx>
+#include <file/FTable.hxx>
 #include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/types.hxx>

@@ -27,16 +27,16 @@
 #include <sfx2/progress.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "anminfo.hxx"
-#include "animobjs.hxx"
-#include "app.hrc"
-#include "strings.hrc"
-#include "sdresid.hxx"
-#include "View.hxx"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
+#include <anminfo.hxx>
+#include <animobjs.hxx>
+#include <app.hrc>
+#include <strings.hrc>
+#include <sdresid.hxx>
+#include <View.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
 
-#include "ViewShell.hxx"
+#include <ViewShell.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

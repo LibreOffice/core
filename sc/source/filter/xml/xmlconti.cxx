@@ -19,8 +19,8 @@
 
 #include "xmlconti.hxx"
 #include "xmlimprt.hxx"
-#include "global.hxx"
-#include "document.hxx"
+#include <global.hxx>
+#include <document.hxx>
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>

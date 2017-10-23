@@ -42,8 +42,8 @@
 #include <tools/zcodec.hxx>
 
 #include <vcl/graphicfilter.hxx>
-#include "svx/xmlgrhlp.hxx"
-#include "svx/xmleohlp.hxx"
+#include <svx/xmlgrhlp.hxx>
+#include <svx/xmleohlp.hxx>
 
 #include <algorithm>
 #include <memory>

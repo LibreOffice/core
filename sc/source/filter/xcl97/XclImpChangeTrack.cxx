@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "XclImpChangeTrack.hxx"
+#include <XclImpChangeTrack.hxx>
 #include <sot/storage.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
-#include "chgviset.hxx"
-#include "formulacell.hxx"
-#include "chgtrack.hxx"
-#include "xihelper.hxx"
-#include "xilink.hxx"
-#include "externalrefmgr.hxx"
-#include "document.hxx"
+#include <chgviset.hxx>
+#include <formulacell.hxx>
+#include <chgtrack.hxx>
+#include <xihelper.hxx>
+#include <xilink.hxx>
+#include <externalrefmgr.hxx>
+#include <document.hxx>
 
 // class XclImpChangeTrack
 

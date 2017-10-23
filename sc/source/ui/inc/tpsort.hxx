@@ -30,9 +30,9 @@
 
 #include "sortkeydlg.hxx"
 
-#include "global.hxx"
-#include "address.hxx"
-#include "sortparam.hxx"
+#include <global.hxx>
+#include <address.hxx>
+#include <sortparam.hxx>
 
 // +1 because one field is reserved for the "- undefined -" entry
 #define SC_MAXFIELDS    MAXCOLCOUNT+1

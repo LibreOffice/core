@@ -23,8 +23,8 @@
 #include <vector>
 #include <memory>
 #include <tools/mempool.hxx>
-#include "rangelst.hxx"
-#include "patattr.hxx"
+#include <rangelst.hxx>
+#include <patattr.hxx>
 #include "xladdress.hxx"
 #include "xlstyle.hxx"
 #include "xiroot.hxx"

@@ -35,7 +35,7 @@
 #include "cellvalue.hxx"
 #include <formula/types.hxx>
 #include "calcmacros.hxx"
-#include "formula/errorcodes.hxx"
+#include <formula/errorcodes.hxx>
 #include "document.hxx"
 
 #include <set>

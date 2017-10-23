@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/core/binarycodec.hxx"
+#include <oox/core/binarycodec.hxx>
 
 #include <algorithm>
 #include <string.h>
-#include "oox/helper/attributelist.hxx"
+#include <oox/helper/attributelist.hxx>
 
 #include <osl/diagnose.h>
 #include <comphelper/sequenceashashmap.hxx>

@@ -33,12 +33,12 @@
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
 
-#include "cell.hxx"
-#include "celltypes.hxx"
-#include "svx/svdotable.hxx"
-#include "svx/svdoutl.hxx"
-#include "editeng/editeng.hxx"
-#include "editeng/outlobj.hxx"
+#include <cell.hxx>
+#include <celltypes.hxx>
+#include <svx/svdotable.hxx>
+#include <svx/svdoutl.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/outlobj.hxx>
 
 
 using namespace ::com::sun::star::uno;

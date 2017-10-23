@@ -21,29 +21,29 @@
 
 #include <tools/diagnose_ex.h>
 #include <svx/svdobj.hxx>
-#include "svx/fmtools.hxx"
-#include "fmservs.hxx"
+#include <svx/fmtools.hxx>
+#include <fmservs.hxx>
 
-#include "svx/fmobjfac.hxx"
+#include <svx/fmobjfac.hxx>
 
 #include <svx/fmglob.hxx>
 
-#include "fmobj.hxx"
-#include "fmshimp.hxx"
+#include <fmobj.hxx>
+#include <fmshimp.hxx>
 
 #include <svx/fmshell.hxx>
 
 #include <svx/svxids.hrc>
-#include "tbxform.hxx"
+#include <tbxform.hxx>
 
 #include <svx/dialmgr.hxx>
-#include "tabwin.hxx"
-#include "fmexpl.hxx"
-#include "filtnav.hxx"
+#include <tabwin.hxx>
+#include <fmexpl.hxx>
+#include <filtnav.hxx>
 
-#include "fmprop.hxx"
-#include "fmPropBrw.hxx"
-#include "datanavi.hxx"
+#include <fmprop.hxx>
+#include <fmPropBrw.hxx>
+#include <datanavi.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

@@ -24,11 +24,11 @@
 
 #include <svx/fmmodel.hxx>
 
-#include "fmobj.hxx"
+#include <fmobj.hxx>
 
 #include <svx/dialmgr.hxx>
 
-#include "fmpgeimp.hxx"
+#include <fmpgeimp.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <svx/svditer.hxx>
@@ -38,9 +38,9 @@
 
 
 #include <svx/fmglob.hxx>
-#include "fmprop.hxx"
-#include "fmundo.hxx"
-#include "svx/fmtools.hxx"
+#include <fmprop.hxx>
+#include <fmundo.hxx>
+#include <svx/fmtools.hxx>
 using namespace ::svxform;
 #include <comphelper/property.hxx>
 

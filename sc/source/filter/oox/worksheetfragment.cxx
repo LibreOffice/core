@@ -17,32 +17,32 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "worksheetfragment.hxx"
+#include <worksheetfragment.hxx>
 
 #include <oox/core/filterbase.hxx>
 #include <oox/core/relations.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
-#include "addressconverter.hxx"
-#include "autofilterbuffer.hxx"
-#include "autofiltercontext.hxx"
-#include "commentsfragment.hxx"
-#include "condformatcontext.hxx"
-#include "drawingfragment.hxx"
-#include "externallinkbuffer.hxx"
-#include "pagesettings.hxx"
-#include "pivottablefragment.hxx"
-#include "querytablefragment.hxx"
-#include "scenariobuffer.hxx"
-#include "scenariocontext.hxx"
-#include "sheetdatabuffer.hxx"
-#include "sheetdatacontext.hxx"
-#include "tablefragment.hxx"
-#include "extlstcontext.hxx"
-#include "viewsettings.hxx"
-#include "workbooksettings.hxx"
-#include "worksheetsettings.hxx"
+#include <addressconverter.hxx>
+#include <autofilterbuffer.hxx>
+#include <autofiltercontext.hxx>
+#include <commentsfragment.hxx>
+#include <condformatcontext.hxx>
+#include <drawingfragment.hxx>
+#include <externallinkbuffer.hxx>
+#include <pagesettings.hxx>
+#include <pivottablefragment.hxx>
+#include <querytablefragment.hxx>
+#include <scenariobuffer.hxx>
+#include <scenariocontext.hxx>
+#include <sheetdatabuffer.hxx>
+#include <sheetdatacontext.hxx>
+#include <tablefragment.hxx>
+#include <extlstcontext.hxx>
+#include <viewsettings.hxx>
+#include <workbooksettings.hxx>
+#include <worksheetsettings.hxx>
 
 namespace oox {
 namespace xls {

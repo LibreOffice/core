@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "SlideSorter.hxx"
-#include "model/SlideSorterModel.hxx"
-#include "model/SlsPageDescriptor.hxx"
-#include "controller/SlsPageSelector.hxx"
-#include "controller/SlideSorterController.hxx"
-#include "controller/SlsCurrentSlideManager.hxx"
-#include "controller/SlsFocusManager.hxx"
-#include "view/SlideSorterView.hxx"
-#include "ViewShellBase.hxx"
-#include "ViewShell.hxx"
-#include "DrawViewShell.hxx"
-#include "sdpage.hxx"
-#include "FrameView.hxx"
+#include <SlideSorter.hxx>
+#include <model/SlideSorterModel.hxx>
+#include <model/SlsPageDescriptor.hxx>
+#include <controller/SlsPageSelector.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsCurrentSlideManager.hxx>
+#include <controller/SlsFocusManager.hxx>
+#include <view/SlideSorterView.hxx>
+#include <ViewShellBase.hxx>
+#include <ViewShell.hxx>
+#include <DrawViewShell.hxx>
+#include <sdpage.hxx>
+#include <FrameView.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace ::com::sun::star;

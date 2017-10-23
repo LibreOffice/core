@@ -28,12 +28,12 @@
 
 #include <cppcanvas/vclfactory.hxx>
 
-#include <implbitmapcanvas.hxx>
-#include <implspritecanvas.hxx>
-#include <implpolypolygon.hxx>
-#include <implbitmap.hxx>
+#include "implbitmapcanvas.hxx"
+#include "implspritecanvas.hxx"
+#include "implpolypolygon.hxx"
+#include "implbitmap.hxx"
 #include <implrenderer.hxx>
-#include <implsprite.hxx>
+#include "implsprite.hxx"
 
 using namespace ::com::sun::star;
 

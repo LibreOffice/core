@@ -15,8 +15,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
-#include "3DChartObjects.hxx"
-#include "GL3DRenderer.hxx"
+#include <3DChartObjects.hxx>
+#include <GL3DRenderer.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <DataSeriesHelper.hxx>
 

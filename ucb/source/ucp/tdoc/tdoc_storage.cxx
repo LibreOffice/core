@@ -19,15 +19,15 @@
 
 #include <memory>
 
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/embed/ElementModes.hpp"
-#include "com/sun/star/embed/InvalidStorageException.hpp"
-#include "com/sun/star/embed/StorageFactory.hpp"
-#include "com/sun/star/embed/StorageWrappedTargetException.hpp"
-#include "com/sun/star/io/IOException.hpp"
-#include "com/sun/star/packages/NoEncryptionException.hpp"
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/InvalidStorageException.hpp>
+#include <com/sun/star/embed/StorageFactory.hpp>
+#include <com/sun/star/embed/StorageWrappedTargetException.hpp>
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/packages/NoEncryptionException.hpp>
 #include <osl/diagnose.h>
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
 
 #include "tdoc_uri.hxx"
 #include "tdoc_docmgr.hxx"

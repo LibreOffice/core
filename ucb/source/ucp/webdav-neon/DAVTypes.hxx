@@ -33,7 +33,7 @@
 #include <memory>
 #include <list>
 #include <map>
-#include "osl/mutex.hxx"
+#include <osl/mutex.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>

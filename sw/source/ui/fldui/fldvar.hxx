@@ -28,8 +28,8 @@
 #include <vcl/edit.hxx>
 
 #include "fldpage.hxx"
-#include "condedit.hxx"
-#include "numfmtlb.hxx"
+#include <condedit.hxx>
+#include <numfmtlb.hxx>
 
 class SwFieldVarPage;
 

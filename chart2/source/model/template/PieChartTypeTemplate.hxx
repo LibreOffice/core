@@ -19,8 +19,8 @@
 #ifndef INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_PIECHARTTYPETEMPLATE_HXX
 #define INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_PIECHARTTYPETEMPLATE_HXX
 
-#include "OPropertySet.hxx"
-#include "MutexContainer.hxx"
+#include <OPropertySet.hxx>
+#include <MutexContainer.hxx>
 #include <comphelper/uno3.hxx>
 
 #include "ChartTypeTemplate.hxx"

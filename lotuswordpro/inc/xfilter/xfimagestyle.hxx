@@ -60,8 +60,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFIMAGESTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFIMAGESTYLE_HXX
 
-#include "xfilter/xfframestyle.hxx"
-#include "xfilter/xfrect.hxx"
+#include <xfilter/xfframestyle.hxx>
+#include <xfilter/xfrect.hxx>
 
 class XFImageStyle : public XFFrameStyle
 {

@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/refcountedmutex.hxx>
 
-#include <HashMaps.hxx>
+#include "HashMaps.hxx"
 #include <osl/file.h>
 #include <vector>
 #include <memory>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vbalistcontrolhelper.hxx>
+#include "vbalistcontrolhelper.hxx"
 #include <vector>
 #include <vbahelper/vbapropvalue.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

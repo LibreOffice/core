@@ -21,7 +21,7 @@
 #define INCLUDED_XMLSCRIPT_SOURCE_XMLDLG_IMEXP_EXP_SHARE_HXX
 
 #include "common.hxx"
-#include "misc.hxx"
+#include <misc.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <xmlscript/xml_helper.hxx>
 #include <osl/diagnose.h>

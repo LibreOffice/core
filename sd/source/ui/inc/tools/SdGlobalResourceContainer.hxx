@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_TOOLS_SDGLOBALRESOURCECONTAINER_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_TOOLS_SDGLOBALRESOURCECONTAINER_HXX
 
-#include "sdmod.hxx"
+#include <sdmod.hxx>
 #include <memory>
 #include <com/sun/star/uno/XInterface.hpp>
 

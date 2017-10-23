@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_CONTEXTCLASSLOADER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_CONTEXTCLASSLOADER_HXX
 
-#include "java/GlobalRef.hxx"
+#include <java/GlobalRef.hxx>
 
 namespace comphelper
 {

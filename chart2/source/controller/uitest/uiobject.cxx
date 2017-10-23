@@ -8,12 +8,12 @@
  */
 
 #include <memory>
-#include "uiobject.hxx"
+#include <uiobject.hxx>
 
-#include "ChartWindow.hxx"
-#include "ChartController.hxx"
-#include "ObjectHierarchy.hxx"
-#include "chartview/ExplicitValueProvider.hxx"
+#include <ChartWindow.hxx>
+#include <ChartController.hxx>
+#include <ObjectHierarchy.hxx>
+#include <chartview/ExplicitValueProvider.hxx>
 
 #include <vcl/svapp.hxx>
 

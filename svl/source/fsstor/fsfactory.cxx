@@ -18,7 +18,7 @@
  */
 
 
-#include "fsfactory.hxx"
+#include <fsfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>

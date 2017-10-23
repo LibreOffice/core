@@ -18,11 +18,11 @@
  */
 
 
-#include "basecontainernode.hxx"
-#include "eventqueue.hxx"
-#include "tools.hxx"
+#include <basecontainernode.hxx>
+#include <eventqueue.hxx>
+#include <tools.hxx>
 #include "nodetools.hxx"
-#include "delayevent.hxx"
+#include <delayevent.hxx>
 
 #include <functional>
 #include <algorithm>

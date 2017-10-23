@@ -26,8 +26,8 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/virdev.hxx>
-#include "scdllapi.h"
-#include "scitems.hxx"
+#include <scdllapi.h>
+#include <scitems.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <cppuhelper/weakref.hxx>
 

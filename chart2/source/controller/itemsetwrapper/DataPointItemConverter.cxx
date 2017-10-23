@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DataPointItemConverter.hxx"
+#include <DataPointItemConverter.hxx>
 #include "SchWhichPairs.hxx"
-#include "macros.hxx"
-#include "ItemPropertyMap.hxx"
+#include <macros.hxx>
+#include <ItemPropertyMap.hxx>
 
-#include "GraphicPropertyItemConverter.hxx"
-#include "CharacterPropertyItemConverter.hxx"
-#include "StatisticsItemConverter.hxx"
-#include "SeriesOptionsItemConverter.hxx"
-#include "DataSeriesHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "ChartTypeHelper.hxx"
+#include <GraphicPropertyItemConverter.hxx>
+#include <CharacterPropertyItemConverter.hxx>
+#include <StatisticsItemConverter.hxx>
+#include <SeriesOptionsItemConverter.hxx>
+#include <DataSeriesHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <ChartTypeHelper.hxx>
 #include <unonames.hxx>
 
 #include <svx/chrtitem.hxx>

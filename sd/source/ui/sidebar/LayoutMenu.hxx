@@ -26,8 +26,8 @@
 
 #include <com/sun/star/frame/XStatusListener.hpp>
 
-#include "glob.hxx"
-#include "pres.hxx"
+#include <glob.hxx>
+#include <pres.hxx>
 
 #include <vcl/ctrl.hxx>
 #include <svtools/valueset.hxx>

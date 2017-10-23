@@ -23,7 +23,7 @@
 #include <svx/svdobj.hxx>
 
 #include "pres.hxx"
-#include "sal/types.h"
+#include <sal/types.h>
 #include <memory>
 #include <vector>
 

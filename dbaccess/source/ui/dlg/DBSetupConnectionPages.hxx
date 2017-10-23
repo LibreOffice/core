@@ -24,7 +24,7 @@
 
 #include "adminpages.hxx"
 #include "admincontrols.hxx"
-#include "curledit.hxx"
+#include <curledit.hxx>
 #include "TextConnectionHelper.hxx"
 
 #include <svtools/roadmapwizard.hxx>

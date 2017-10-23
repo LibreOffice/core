@@ -22,10 +22,10 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include "sddll.hxx"
-#include "facreg.hxx"
-#include "DrawDocShell.hxx"
-#include "GraphicDocShell.hxx"
+#include <sddll.hxx>
+#include <facreg.hxx>
+#include <DrawDocShell.hxx>
+#include <GraphicDocShell.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;

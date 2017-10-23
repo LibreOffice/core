@@ -19,9 +19,9 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QTABLECONNECTIONDATA_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QTABLECONNECTIONDATA_HXX
 
-#include "TableConnectionData.hxx"
-#include "TableFieldDescription.hxx"
-#include "QEnumTypes.hxx"
+#include <TableConnectionData.hxx>
+#include <TableFieldDescription.hxx>
+#include <QEnumTypes.hxx>
 
 namespace dbaui
 {

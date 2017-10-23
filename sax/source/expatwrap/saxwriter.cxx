@@ -53,7 +53,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
 
-#include "xml2utf.hxx"
+#include <xml2utf.hxx>
 #include <memory>
 
 #define LINEFEED 10

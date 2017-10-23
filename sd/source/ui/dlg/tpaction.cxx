@@ -27,7 +27,7 @@
 #include <com/sun/star/embed/VerbAttributes.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
-#include "sdattr.hxx"
+#include <sdattr.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
 
@@ -52,16 +52,16 @@
 #include <svl/urihelper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svx/drawitem.hxx>
-#include "View.hxx"
-#include "sdresid.hxx"
-#include "tpaction.hxx"
-#include "strmname.h"
-#include "ViewShell.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "strings.hrc"
+#include <View.hxx>
+#include <sdresid.hxx>
+#include <tpaction.hxx>
+#include <strmname.h>
+#include <ViewShell.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <strings.hrc>
 
-#include "filedlg.hxx"
+#include <filedlg.hxx>
 
 #include <algorithm>
 

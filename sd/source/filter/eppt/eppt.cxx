@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <eppt.hxx>
+#include "eppt.hxx"
 #include "epptdef.hxx"
 #include <o3tl/any.hxx>
 #include <tools/globname.hxx>

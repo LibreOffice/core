@@ -19,7 +19,7 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_CHART_XMLLABELSEPARATORCONTEXT_HXX
 #define INCLUDED_XMLOFF_SOURCE_CHART_XMLLABELSEPARATORCONTEXT_HXX
 
-#include "XMLElementPropertyContext.hxx"
+#include <XMLElementPropertyContext.hxx>
 
 class XMLLabelSeparatorContext : public XMLElementPropertyContext
 {

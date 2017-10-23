@@ -56,9 +56,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPARROWSTYLES_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPARROWSTYLES_HXX
 
-#include "xfilter/xfarrowstyle.hxx"
-#include "xfilter/xfstylemanager.hxx"
-#include "lwpglobalmgr.hxx"
+#include <xfilter/xfarrowstyle.hxx>
+#include <xfilter/xfstylemanager.hxx>
+#include <lwpglobalmgr.hxx>
 
 /**
  * @descr   Register arrow styles that are not directly support by SODC.

@@ -18,12 +18,12 @@
 #include <com/sun/star/text/XText.hpp>
 #include <unonames.hxx>
 
-#include "tabvwsh.hxx"
-#include "docsh.hxx"
-#include "svx/svdocirc.hxx"
-#include "scitems.hxx"
+#include <tabvwsh.hxx>
+#include <docsh.hxx>
+#include <svx/svdocirc.hxx>
+#include <scitems.hxx>
 
-#include "sc.hrc"
+#include <sc.hrc>
 
 using namespace css;
 

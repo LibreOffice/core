@@ -20,14 +20,14 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "slideshowcontext.hxx"
-#include "subsettableshapemanager.hxx"
-#include "screenupdater.hxx"
-#include "eventqueue.hxx"
-#include "activitiesqueue.hxx"
-#include "usereventqueue.hxx"
-#include "eventmultiplexer.hxx"
-#include "unoviewcontainer.hxx"
+#include <slideshowcontext.hxx>
+#include <subsettableshapemanager.hxx>
+#include <screenupdater.hxx>
+#include <eventqueue.hxx>
+#include <activitiesqueue.hxx>
+#include <usereventqueue.hxx>
+#include <eventmultiplexer.hxx>
+#include <unoviewcontainer.hxx>
 
 
 using namespace ::com::sun::star;

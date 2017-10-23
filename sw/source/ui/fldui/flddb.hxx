@@ -24,9 +24,9 @@
 #include <vcl/button.hxx>
 #include <vcl/group.hxx>
 
-#include "condedit.hxx"
-#include "dbtree.hxx"
-#include "numfmtlb.hxx"
+#include <condedit.hxx>
+#include <dbtree.hxx>
+#include <numfmtlb.hxx>
 
 #include "fldpage.hxx"
 

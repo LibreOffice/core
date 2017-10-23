@@ -19,7 +19,7 @@
 
 
 #include <math.h>
-#include <dxfvec.hxx>
+#include "dxfvec.hxx"
 #include <tools/gen.hxx>
 
 

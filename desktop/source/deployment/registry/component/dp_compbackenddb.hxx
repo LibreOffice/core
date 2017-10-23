@@ -24,7 +24,7 @@
 #include <rtl/string.hxx>
 #include <vector>
 #include <list>
-#include "dp_backenddb.hxx"
+#include <dp_backenddb.hxx>
 
 namespace com { namespace sun { namespace star {
         namespace uno {

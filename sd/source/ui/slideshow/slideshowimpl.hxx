@@ -21,18 +21,18 @@
 #define INCLUDED_SD_SOURCE_UI_SLIDESHOW_SLIDESHOWIMPL_HXX
 
 #include <memory>
-#include "sal/config.h"
-#include "com/sun/star/uno/XComponentContext.hpp"
+#include <sal/config.h>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
-#include "cppuhelper/basemutex.hxx"
-#include "cppuhelper/propertysetmixin.hxx"
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/propertysetmixin.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/awt/XActivateListener.hpp>
 #include <com/sun/star/presentation/XSlideShow.hpp>
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
-#include "com/sun/star/presentation/XShapeEventListener.hpp"
+#include <com/sun/star/presentation/XShapeEventListener.hpp>
 #include <com/sun/star/awt/WindowEvent.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -60,23 +60,23 @@
 #include <svx/fmshell.hxx>
 
 #include <svx/svxids.hrc>
-#include "sdmod.hxx"
-#include "cusshow.hxx"
-#include "ViewShellBase.hxx"
-#include "PresentationViewShell.hxx"
-#include "ViewShell.hxx"
-#include "drawview.hxx"
-#include "drawdoc.hxx"
+#include <sdmod.hxx>
+#include <cusshow.hxx>
+#include <ViewShellBase.hxx>
+#include <PresentationViewShell.hxx>
+#include <ViewShell.hxx>
+#include <drawview.hxx>
+#include <drawdoc.hxx>
 
 #include "showwindow.hxx"
 
-#include "optsitem.hxx"
-#include "FrameView.hxx"
-#include "DrawDocShell.hxx"
+#include <optsitem.hxx>
+#include <FrameView.hxx>
+#include <DrawDocShell.hxx>
 
-#include "app.hrc"
+#include <app.hrc>
 
-#include "slideshow.hxx"
+#include <slideshow.hxx>
 
 class SfxViewFrame;
 class SfxRequest;

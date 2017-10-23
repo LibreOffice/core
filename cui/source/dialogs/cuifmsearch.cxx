@@ -25,8 +25,8 @@
 #include <sfx2/app.hxx>
 #include <svx/fmsrccfg.hxx>
 #include <svx/fmsrcimp.hxx>
-#include "strings.hrc"
-#include "cuifmsearch.hxx"
+#include <strings.hrc>
+#include <cuifmsearch.hxx>
 #include <svx/srchdlg.hxx>
 #include <svl/cjkoptions.hxx>
 #include <comphelper/processfactory.hxx>

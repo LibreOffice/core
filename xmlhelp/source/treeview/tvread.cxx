@@ -21,7 +21,7 @@
 #include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
-#include "tvread.hxx"
+#include <tvread.hxx>
 #include <expat.h>
 #include <osl/file.hxx>
 #include <unotools/configmgr.hxx>

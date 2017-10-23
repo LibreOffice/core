@@ -30,7 +30,7 @@
 #include <jvmfwk/jvmfwkdllapi.hxx>
 #include <rtl/byteseq.hxx>
 #include <rtl/ustring.hxx>
-#include "jni.h"
+#include <jni.h>
 
 /** @file
     <p>This library can operate in two modes, application mode and direct mode.</p>

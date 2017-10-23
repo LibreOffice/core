@@ -18,7 +18,7 @@
  */
 
 #include "SchXMLChartContext.hxx"
-#include "SchXMLImport.hxx"
+#include <SchXMLImport.hxx>
 #include "SchXMLLegendContext.hxx"
 #include "SchXMLPlotAreaContext.hxx"
 #include "SchXMLParagraphContext.hxx"
@@ -36,7 +36,7 @@
 #include <xmloff/prstylei.hxx>
 #include <xmloff/SchXMLSeriesHelper.hxx>
 
-#include "vector"
+#include <vector>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XDiagram.hpp>

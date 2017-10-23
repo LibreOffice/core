@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_TABSH_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_TABSH_HXX
 
-#include <basesh.hxx>
+#include "basesh.hxx"
 #include <swdllapi.h>
 
 class SfxItemSet;

@@ -17,27 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "core_resource.hxx"
-#include "dbwiz.hxx"
-#include "dbu_dlg.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "dsitems.hxx"
+#include <core_resource.hxx>
+#include <dbwiz.hxx>
+#include <dbu_dlg.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <dsitems.hxx>
 #include "dsnItem.hxx"
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/msgbox.hxx>
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include "adminpages.hxx"
 #include "generalpage.hxx"
-#include "stringlistitem.hxx"
-#include "propertysetitem.hxx"
+#include <stringlistitem.hxx>
+#include <propertysetitem.hxx>
 #include <unotools/confignode.hxx>
 #include "ConnectionPage.hxx"
 #include "DriverSettings.hxx"
 #include "DbAdminImpl.hxx"
-#include "helpids.h"
+#include <helpids.h>
 
 namespace dbaui
 {

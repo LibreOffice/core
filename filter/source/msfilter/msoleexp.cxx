@@ -43,7 +43,7 @@
 #include <svtools/embedhlp.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 
-#include "filter/msfilter/msoleexp.hxx"
+#include <filter/msfilter/msoleexp.hxx>
 
 using namespace ::com::sun::star;
 

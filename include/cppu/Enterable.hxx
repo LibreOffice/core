@@ -20,8 +20,8 @@
 #ifndef INCLUDED_CPPU_ENTERABLE_HXX
 #define INCLUDED_CPPU_ENTERABLE_HXX
 
-#include <uno/Enterable.h>
-#include <rtl/ustring.hxx>
+#include "uno/Enterable.h"
+#include "rtl/ustring.hxx"
 
 namespace cppu
 {

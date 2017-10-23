@@ -20,9 +20,9 @@
 #include <config_options.h>
 
 #include <svx/svxids.hrc>
-#include "sc.hrc"
-#include "mid.h"
-#include "scitems.hxx"
+#include <sc.hrc>
+#include <mid.h>
+#include <scitems.hxx>
 #include <editeng/memberids.h>
 
 #include <sfx2/msg.hxx>
@@ -95,7 +95,7 @@
 #include <svl/aeitem.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <sfx2/frame.hxx>
-#include "attrib.hxx"
+#include <attrib.hxx>
 #include <svx/sdprcitm.hxx>
 #include <svx/sdmetitm.hxx>
 
@@ -125,7 +125,7 @@
 #endif
 
 #define SFX_TYPEMAP
-#include "scslots.hxx"
+#include <scslots.hxx>
 
 #ifdef DISABLE_DYNLOADING
 #undef aSfxBoolItem_Impl

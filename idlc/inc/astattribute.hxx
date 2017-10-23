@@ -19,7 +19,7 @@
 #ifndef INCLUDED_IDLC_INC_ASTATTRIBUTE_HXX
 #define INCLUDED_IDLC_INC_ASTATTRIBUTE_HXX
 
-#include <astdeclaration.hxx>
+#include "astdeclaration.hxx"
 #include "astscope.hxx"
 
 #include <registry/types.hxx>

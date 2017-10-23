@@ -29,7 +29,7 @@
 #include <sal/macros.h>
 #include <osl/time.h>
 #include <tools/urlobj.hxx>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ui;

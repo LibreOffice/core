@@ -18,11 +18,11 @@
  */
 
 
-#include "codemaker/unotype.hxx"
+#include <codemaker/unotype.hxx>
 
-#include "osl/diagnose.h"
-#include "rtl/string.hxx"
-#include "sal/types.h"
+#include <osl/diagnose.h>
+#include <rtl/string.hxx>
+#include <sal/types.h>
 
 
 OString codemaker::UnoType::decompose(

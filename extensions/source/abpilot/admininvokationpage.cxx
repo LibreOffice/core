@@ -20,7 +20,7 @@
 #include "admininvokationpage.hxx"
 #include "abspilot.hxx"
 #include "admininvokationimpl.hxx"
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
 
 namespace abp
 {

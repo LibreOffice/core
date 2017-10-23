@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <fstream>
 #include <functional>
@@ -28,7 +28,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "helpmerge.hxx"
+#include <helpmerge.hxx>
 #include <algorithm>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -44,10 +44,10 @@
 #include <direct.h>
 #endif
 
-#include "export.hxx"
-#include "common.hxx"
-#include "helper.hxx"
-#include "po.hxx"
+#include <export.hxx>
+#include <common.hxx>
+#include <helper.hxx>
+#include <po.hxx>
 
 #if OSL_DEBUG_LEVEL > 2
 void HelpParser::Dump(XMLHashMap* rElem_in)

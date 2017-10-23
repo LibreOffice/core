@@ -31,7 +31,7 @@
 #include <config_lgpl.h>
 #include <ne_uri.h>
 #include <rtl/ustring.hxx>
-#include <DAVException.hxx>
+#include "DAVException.hxx"
 
 namespace webdav_ucp
 {

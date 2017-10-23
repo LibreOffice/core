@@ -19,13 +19,13 @@
 
 #include <hintids.hxx>
 
-#include "cmdid.h"
+#include <cmdid.h>
 #include <docsh.hxx>
-#include "swmodule.hxx"
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "globals.hrc"
-#include "strings.hrc"
+#include <swmodule.hxx>
+#include <view.hxx>
+#include <wrtsh.hxx>
+#include <globals.hrc>
+#include <strings.hrc>
 
 #include <vcl/metric.hxx>
 #include <vcl/settings.hxx>
@@ -44,12 +44,12 @@
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include "charatr.hxx"
-#include "viewopt.hxx"
-#include "drpcps.hxx"
-#include "paratr.hxx"
-#include "uitool.hxx"
-#include "charfmt.hxx"
+#include <charatr.hxx>
+#include <viewopt.hxx>
+#include <drpcps.hxx>
+#include <paratr.hxx>
+#include <uitool.hxx>
+#include <charfmt.hxx>
 
 using namespace css;
 using namespace css::uno;

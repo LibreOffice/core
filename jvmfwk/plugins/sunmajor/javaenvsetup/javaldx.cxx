@@ -25,12 +25,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
-#include "sal/main.h"
-#include "sal/types.h"
-#include "osl/thread.h"
-#include "rtl/ustring.hxx"
-#include "rtl/byteseq.hxx"
-#include "jvmfwk/framework.hxx"
+#include <sal/main.h>
+#include <sal/types.h>
+#include <osl/thread.h>
+#include <rtl/ustring.hxx>
+#include <rtl/byteseq.hxx>
+#include <jvmfwk/framework.hxx>
 
 
 static bool hasOption(char const * szOption, int argc, char** argv);

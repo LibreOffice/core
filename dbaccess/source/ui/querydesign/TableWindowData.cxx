@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TableWindowData.hxx"
+#include <TableWindowData.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>

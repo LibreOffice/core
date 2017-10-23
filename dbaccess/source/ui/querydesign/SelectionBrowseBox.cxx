@@ -20,29 +20,29 @@
 #include "SelectionBrowseBox.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include "QueryDesignView.hxx"
-#include "querycontroller.hxx"
-#include "sqlbison.hxx"
-#include "QueryTableView.hxx"
-#include "browserids.hxx"
+#include <QueryDesignView.hxx>
+#include <querycontroller.hxx>
+#include <sqlbison.hxx>
+#include <QueryTableView.hxx>
+#include <browserids.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include "TableFieldInfo.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "helpids.h"
+#include <strings.hrc>
+#include <strings.hxx>
+#include <helpids.h>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include "QTableWindow.hxx"
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include "QueryDesignFieldUndoAct.hxx"
-#include "sqlmessage.hxx"
-#include "UITools.hxx"
+#include <sqlmessage.hxx>
+#include <UITools.hxx>
 #include <osl/diagnose.h>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 using namespace ::svt;
 using namespace ::dbaui;

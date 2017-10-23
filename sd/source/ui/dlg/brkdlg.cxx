@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "BreakDlg.hxx"
+#include <BreakDlg.hxx>
 #include <sfx2/progress.hxx>
 
 #include <svx/svdedtv.hxx>
@@ -25,12 +25,12 @@
 #include <sfx2/app.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "sdattr.hxx"
-#include "sdresid.hxx"
-#include "View.hxx"
-#include "drawview.hxx"
-#include "strings.hrc"
-#include "DrawDocShell.hxx"
+#include <sdattr.hxx>
+#include <sdresid.hxx>
+#include <View.hxx>
+#include <drawview.hxx>
+#include <strings.hrc>
+#include <DrawDocShell.hxx>
 
 namespace sd {
 

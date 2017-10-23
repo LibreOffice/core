@@ -30,7 +30,7 @@
 #include <services.h>
 #include <targets.h>
 #include <general.h>
-#include <isstartmoduledispatch.hxx>
+#include "isstartmoduledispatch.hxx"
 
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>

@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "RangeHighlighter.hxx"
-#include "WeakListenerAdapter.hxx"
-#include "ChartModelHelper.hxx"
-#include "DataSourceHelper.hxx"
-#include "macros.hxx"
-#include "ObjectIdentifier.hxx"
-#include "DataSeriesHelper.hxx"
+#include <RangeHighlighter.hxx>
+#include <WeakListenerAdapter.hxx>
+#include <ChartModelHelper.hxx>
+#include <DataSourceHelper.hxx>
+#include <macros.hxx>
+#include <ObjectIdentifier.hxx>
+#include <DataSeriesHelper.hxx>
 
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>

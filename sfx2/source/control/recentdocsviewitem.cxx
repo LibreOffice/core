@@ -24,7 +24,7 @@
 #include <vcl/svapp.hxx>
 
 #include <sfx2/strings.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 using namespace basegfx;
 using namespace com::sun::star;

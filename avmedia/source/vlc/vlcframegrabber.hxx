@@ -23,7 +23,7 @@
 #include <com/sun/star/media/XFrameGrabber.hpp>
 #include <cppuhelper/implbase.hxx>
 #include "vlccommon.hxx"
-#include "wrapper/Wrapper.hxx"
+#include <wrapper/Wrapper.hxx>
 
 namespace avmedia {
 namespace vlc {

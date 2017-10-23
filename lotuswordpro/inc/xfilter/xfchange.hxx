@@ -61,10 +61,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCHANGE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCHANGE_HXX
 
-#include "xfilter/xfglobal.hxx"
-#include "xfilter/ixfstream.hxx"
-#include "xfilter/xfcontent.hxx"
-#include "xfilter/xfcontentcontainer.hxx"
+#include <xfilter/xfglobal.hxx>
+#include <xfilter/ixfstream.hxx>
+#include <xfilter/xfcontent.hxx>
+#include <xfilter/xfcontentcontainer.hxx>
 #include <rtl/ustring.hxx>
 
 class XFChangeList : public XFContentContainer

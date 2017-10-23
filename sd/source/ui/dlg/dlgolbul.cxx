@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "OutlineBulletDlg.hxx"
+#include <OutlineBulletDlg.hxx>
 
 #include <svx/svxids.hrc>
 #include <sfx2/objsh.hxx>
@@ -31,17 +31,17 @@
 #include <svx/dialogs.hrc>
 #include <svl/intitem.hxx>
 #include <svx/svdmark.hxx>
-#include "View.hxx"
+#include <View.hxx>
 #include <svx/svdobj.hxx>
 #include <svl/style.hxx>
 #include <drawdoc.hxx>
 
-#include "sdresid.hxx"
+#include <sdresid.hxx>
 
-#include "strings.hrc"
-#include "strings.hxx"
-#include "bulmaper.hxx"
-#include "DrawDocShell.hxx"
+#include <strings.hrc>
+#include <strings.hxx>
+#include <bulmaper.hxx>
+#include <DrawDocShell.hxx>
 #include <svl/aeitem.hxx>
 
 namespace sd {

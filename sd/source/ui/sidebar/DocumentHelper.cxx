@@ -19,20 +19,20 @@
 
 #include "DocumentHelper.hxx"
 
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "sdpage.hxx"
-#include "glob.hxx"
-#include "unmovss.hxx"
-#include "strings.hrc"
-#include "sdresid.hxx"
-#include "undoback.hxx"
-#include "ViewShell.hxx"
-#include "ViewShellBase.hxx"
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <sdpage.hxx>
+#include <glob.hxx>
+#include <unmovss.hxx>
+#include <strings.hrc>
+#include <sdresid.hxx>
+#include <undoback.hxx>
+#include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include "stlpool.hxx"
+#include <stlpool.hxx>
 #include <svx/xfillit0.hxx>
 #include <tools/diagnose_ex.h>
 #include <xmloff/autolayout.hxx>

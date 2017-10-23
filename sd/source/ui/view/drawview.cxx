@@ -38,35 +38,35 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
-#include "stlsheet.hxx"
+#include <stlsheet.hxx>
 
 #include <svx/svdoutl.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
-#include "strings.hrc"
-#include "View.hxx"
-#include "sdattr.hxx"
-#include "drawview.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "sdpage.hxx"
-#include "ViewShellBase.hxx"
-#include "DrawViewShell.hxx"
-#include "pres.hxx"
-#include "sdresid.hxx"
-#include "Window.hxx"
-#include "unchss.hxx"
-#include "FrameView.hxx"
-#include "anminfo.hxx"
-#include "slideshow.hxx"
+#include <strings.hrc>
+#include <View.hxx>
+#include <sdattr.hxx>
+#include <drawview.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <sdpage.hxx>
+#include <ViewShellBase.hxx>
+#include <DrawViewShell.hxx>
+#include <pres.hxx>
+#include <sdresid.hxx>
+#include <Window.hxx>
+#include <unchss.hxx>
+#include <FrameView.hxx>
+#include <anminfo.hxx>
+#include <slideshow.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 
-#include "undo/undomanager.hxx"
+#include <undo/undomanager.hxx>
 
 using namespace ::com::sun::star;
 

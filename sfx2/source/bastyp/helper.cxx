@@ -18,7 +18,7 @@
  */
 
 
-#include "helper.hxx"
+#include <helper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>

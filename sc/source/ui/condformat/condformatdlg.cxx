@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "condformatdlg.hxx"
+#include <condformatdlg.hxx>
 
 #include <vcl/vclevent.hxx>
 #include <svl/style.hxx>
@@ -21,20 +21,20 @@
 #include <vcl/builderfactory.hxx>
 #include <libxml/tree.h>
 
-#include "anyrefdg.hxx"
-#include "document.hxx"
-#include "conditio.hxx"
-#include "stlpool.hxx"
-#include "tabvwsh.hxx"
-#include "colorscale.hxx"
-#include "colorformat.hxx"
-#include "reffact.hxx"
-#include "docsh.hxx"
-#include "docfunc.hxx"
-#include "condformatdlgentry.hxx"
-#include "condformatdlgitem.hxx"
+#include <anyrefdg.hxx>
+#include <document.hxx>
+#include <conditio.hxx>
+#include <stlpool.hxx>
+#include <tabvwsh.hxx>
+#include <colorscale.hxx>
+#include <colorformat.hxx>
+#include <reffact.hxx>
+#include <docsh.hxx>
+#include <docfunc.hxx>
+#include <condformatdlgentry.hxx>
+#include <condformatdlgitem.hxx>
 
-#include "globstr.hrc"
+#include <globstr.hrc>
 
 ScCondFormatList::ScCondFormatList(vcl::Window* pParent, WinBits nStyle)
     : Control(pParent, nStyle | WB_DIALOGCONTROL)

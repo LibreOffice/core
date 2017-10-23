@@ -19,7 +19,7 @@
 
 #include <uielement/langselectionmenucontroller.hxx>
 
-#include "services.h"
+#include <services.h>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -42,7 +42,7 @@
 
 #include <strings.hrc>
 
-#include "helper/mischelper.hxx"
+#include <helper/mischelper.hxx>
 #include <osl/mutex.hxx>
 
 #include <map>

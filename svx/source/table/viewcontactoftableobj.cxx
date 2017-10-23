@@ -39,7 +39,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/framelink.hxx>
 
-#include "cell.hxx"
+#include <cell.hxx>
 #include "tablelayouter.hxx"
 
 

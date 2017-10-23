@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_TXTFLCNT_HXX
 #define INCLUDED_SW_INC_TXTFLCNT_HXX
 
-#include <txatbase.hxx>
+#include "txatbase.hxx"
 
 class SwFlyInContentFrame;
 class SwFrame;

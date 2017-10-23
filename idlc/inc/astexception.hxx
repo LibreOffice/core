@@ -19,7 +19,7 @@
 #ifndef INCLUDED_IDLC_INC_ASTEXCEPTION_HXX
 #define INCLUDED_IDLC_INC_ASTEXCEPTION_HXX
 
-#include <aststruct.hxx>
+#include "aststruct.hxx"
 
 class AstException : public AstStruct
 {

@@ -18,11 +18,11 @@
  */
 
 
-#include "delayevent.hxx"
-#include "eventqueue.hxx"
-#include "usereventqueue.hxx"
+#include <delayevent.hxx>
+#include <eventqueue.hxx>
+#include <usereventqueue.hxx>
 #include "sequentialtimecontainer.hxx"
-#include "tools.hxx"
+#include <tools.hxx>
 
 #include <algorithm>
 

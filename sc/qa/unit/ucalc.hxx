@@ -11,7 +11,7 @@
 #define INCLUDED_SC_QA_UNIT_UCALC_HXX
 
 #include "helper/qahelper.hxx"
-#include "document.hxx"
+#include <document.hxx>
 #include <stringutil.hxx>
 #include <memory>
 

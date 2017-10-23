@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "osl/time.h"
+#include <osl/time.h>
 
 #include <boost/property_tree/json_parser.hpp>
 
@@ -41,11 +41,11 @@
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
-#include "Annotation.hxx"
-#include "drawdoc.hxx"
-#include "notifydocumentevent.hxx"
-#include "sdpage.hxx"
-#include "textapi.hxx"
+#include <Annotation.hxx>
+#include <drawdoc.hxx>
+#include <notifydocumentevent.hxx>
+#include <sdpage.hxx>
+#include <textapi.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

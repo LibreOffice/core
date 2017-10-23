@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TableConnection.hxx"
-#include "ConnectionLine.hxx"
-#include "TableConnectionData.hxx"
-#include "JoinTableView.hxx"
+#include <TableConnection.hxx>
+#include <ConnectionLine.hxx>
+#include <TableConnectionData.hxx>
+#include <JoinTableView.hxx>
 #include <comphelper/stl_types.hxx>
-#include "ConnectionLineAccess.hxx"
+#include <ConnectionLineAccess.hxx>
 
 using namespace dbaui;
 using namespace comphelper;

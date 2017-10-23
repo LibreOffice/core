@@ -122,7 +122,7 @@
 #include <svl/srchitem.hxx>
 #include <cellsuno.hxx>
 #include <dbdata.hxx>
-#include "docfunc.hxx"
+#include <docfunc.hxx>
 #include <docuno.hxx>
 
 #include <sfx2/dispatch.hxx>
@@ -146,18 +146,18 @@
 #include "vbavalidation.hxx"
 #include "vbahyperlinks.hxx"
 
-#include "tabvwsh.hxx"
-#include "rangelst.hxx"
-#include "convuno.hxx"
-#include "compiler.hxx"
-#include "attrib.hxx"
-#include "undodat.hxx"
-#include "dbdocfun.hxx"
-#include "patattr.hxx"
-#include "olinetab.hxx"
-#include "transobj.hxx"
-#include "queryentry.hxx"
-#include "markdata.hxx"
+#include <tabvwsh.hxx>
+#include <rangelst.hxx>
+#include <convuno.hxx>
+#include <compiler.hxx>
+#include <attrib.hxx>
+#include <undodat.hxx>
+#include <dbdocfun.hxx>
+#include <patattr.hxx>
+#include <olinetab.hxx>
+#include <transobj.hxx>
+#include <queryentry.hxx>
+#include <markdata.hxx>
 #include <basic/sberrors.hxx>
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -175,8 +175,8 @@
 
 #include <ooo/vba/excel/Range.hpp>
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
-#include "tokenarray.hxx"
-#include "tokenuno.hxx"
+#include <tokenarray.hxx>
+#include <tokenuno.hxx>
 #include <columnspanset.hxx>
 
 #include <memory>

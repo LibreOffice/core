@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/dump/pptxdumper.hxx"
+#include <oox/dump/pptxdumper.hxx>
 
-#include "oox/dump/oledumper.hxx"
-#include "oox/dump/xlsbdumper.hxx"
-#include "oox/helper/zipstorage.hxx"
-#include "oox/ole/olestorage.hxx"
+#include <oox/dump/oledumper.hxx>
+#include <oox/dump/xlsbdumper.hxx>
+#include <oox/helper/zipstorage.hxx>
+#include <oox/ole/olestorage.hxx>
 
 #if OOX_INCLUDE_DUMPER
 

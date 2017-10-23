@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_DRAWSHAPESUBSETTING_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_DRAWSHAPESUBSETTING_HXX
 
-#include "doctreenode.hxx"
-#include "attributableshape.hxx"
+#include <doctreenode.hxx>
+#include <attributableshape.hxx>
 
 
 class GDIMetaFile;

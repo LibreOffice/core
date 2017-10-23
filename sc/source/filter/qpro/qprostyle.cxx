@@ -20,9 +20,9 @@
 #include <sal/config.h>
 #include <sfx2/docfile.hxx>
 
-#include "qproform.hxx"
-#include "qpro.hxx"
-#include "qprostyle.hxx"
+#include <qproform.hxx>
+#include <qpro.hxx>
+#include <qprostyle.hxx>
 
 #include <scitems.hxx>
 #include <svx/algitem.hxx>
@@ -35,13 +35,13 @@
 #include <editeng/justifyitem.hxx>
 #include <map>
 
-#include "global.hxx"
-#include "scerrors.hxx"
-#include "docpool.hxx"
-#include "patattr.hxx"
-#include "filter.hxx"
-#include "document.hxx"
-#include "formulacell.hxx"
+#include <global.hxx>
+#include <scerrors.hxx>
+#include <docpool.hxx>
+#include <patattr.hxx>
+#include <filter.hxx>
+#include <document.hxx>
+#include <formulacell.hxx>
 
 ScQProStyle::ScQProStyle()
 {

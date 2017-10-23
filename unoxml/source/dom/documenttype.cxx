@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <documenttype.hxx>
+#include "documenttype.hxx"
 
 #include <string.h>
 
 #include <osl/diagnose.h>
 
-#include <entitiesmap.hxx>
-#include <notationsmap.hxx>
+#include "entitiesmap.hxx"
+#include "notationsmap.hxx"
 
 using namespace css::uno;
 using namespace css::xml::dom;

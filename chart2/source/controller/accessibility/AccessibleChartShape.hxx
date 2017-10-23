@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_ACCESSIBILITY_ACCESSIBLECHARTSHAPE_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_ACCESSIBILITY_ACCESSIBLECHARTSHAPE_HXX
 
-#include "AccessibleBase.hxx"
+#include <AccessibleBase.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <cppuhelper/implbase.hxx>

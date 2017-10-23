@@ -22,14 +22,14 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "RptDef.hxx"
+#include <RptDef.hxx>
 #include "xmlHelper.hxx"
 #include "xmlEnums.hxx"
 #include "xmlColumn.hxx"
 #include <com/sun/star/report/ForceNewPage.hpp>
 #include "xmlCondPrtExpr.hxx"
 #include "xmlStyleImport.hxx"
-#include "strings.hxx"
+#include <strings.hxx>
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>

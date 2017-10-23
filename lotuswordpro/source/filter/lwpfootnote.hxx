@@ -61,8 +61,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFOOTNOTE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFOOTNOTE_HXX
 
-#include "lwpfrib.hxx"
-#include "lwpobj.hxx"
+#include <lwpfrib.hxx>
+#include <lwpobj.hxx>
 #include "lwpsection.hxx"
 #include "lwpborderstuff.hxx"
 #include "lwptable.hxx"

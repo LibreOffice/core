@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -38,16 +38,16 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include "pam.hxx"
-#include "swcrsr.hxx"
-#include "viscrs.hxx"
-#include "swtable.hxx"
-#include "htmltbl.hxx"
-#include "tblsel.hxx"
-#include "swtblfmt.hxx"
-#include "docary.hxx"
-#include "ndindex.hxx"
-#include "undobj.hxx"
+#include <pam.hxx>
+#include <swcrsr.hxx>
+#include <viscrs.hxx>
+#include <swtable.hxx>
+#include <htmltbl.hxx>
+#include <tblsel.hxx>
+#include <swtblfmt.hxx>
+#include <docary.hxx>
+#include <ndindex.hxx>
+#include <undobj.hxx>
 #include <calbck.hxx>
 #include <UndoTable.hxx>
 #include <o3tl/enumrange.hxx>

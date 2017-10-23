@@ -21,7 +21,7 @@
 #include "Communicator.hxx"
 #include "Listener.hxx"
 #include "Receiver.hxx"
-#include "RemoteServer.hxx"
+#include <RemoteServer.hxx>
 
 using namespace sd;
 using namespace std;

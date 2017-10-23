@@ -20,15 +20,15 @@
 
 #include "pdfiadaptor.hxx"
 #include "filterdet.hxx"
-#include "saxemitter.hxx"
-#include "odfemitter.hxx"
+#include <saxemitter.hxx>
+#include <odfemitter.hxx>
 #include "inc/wrapper.hxx"
 #include "inc/contentsink.hxx"
-#include "pdfiprocessor.hxx"
+#include <pdfiprocessor.hxx>
 
 #include <osl/file.h>
 #include <osl/thread.h>
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>

@@ -18,12 +18,12 @@
  */
 
 
-#include "xfm_addcondition.hxx"
+#include <xfm_addcondition.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include "datanavi.hxx"
-#include "fmservs.hxx"
+#include <datanavi.hxx>
+#include <fmservs.hxx>
 #include <vcl/msgbox.hxx>
 
 

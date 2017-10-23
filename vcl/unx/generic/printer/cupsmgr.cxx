@@ -24,13 +24,13 @@
 
 #include <unistd.h>
 
-#include "unx/cupsmgr.hxx"
+#include <unx/cupsmgr.hxx>
 
-#include "osl/thread.h"
-#include "osl/diagnose.h"
-#include "osl/conditn.hxx"
+#include <osl/thread.h>
+#include <osl/diagnose.h>
+#include <osl/conditn.hxx>
 
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
 #include <officecfg/Office/Common.hxx>
 

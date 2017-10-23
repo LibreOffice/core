@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_INC_UNDORANGENAME_HXX
 #define INCLUDED_SC_INC_UNDORANGENAME_HXX
 
-#include "undobase.hxx"
+#include <undobase.hxx>
 #include "rangenam.hxx"
 
 #include <memory>

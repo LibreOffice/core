@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_VIEW_SLSLAYEREDDEVICE_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_VIEW_SLSLAYEREDDEVICE_HXX
 
-#include "view/SlsILayerPainter.hxx"
-#include "SlideSorter.hxx"
+#include <view/SlsILayerPainter.hxx>
+#include <SlideSorter.hxx>
 
 #include <vcl/region.hxx>
 #include <vcl/virdev.hxx>

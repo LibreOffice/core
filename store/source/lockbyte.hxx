@@ -24,13 +24,13 @@
 
 #include <memory>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
-#include "rtl/ref.hxx"
-#include "rtl/ustring.h"
-#include "salhelper/simplereferenceobject.hxx"
+#include <rtl/ref.hxx>
+#include <rtl/ustring.h>
+#include <salhelper/simplereferenceobject.hxx>
 
-#include "store/types.h"
+#include <store/types.h>
 #include "storbase.hxx"
 
 namespace store

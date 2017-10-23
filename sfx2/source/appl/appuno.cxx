@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fltoptint.hxx"
-#include "objshimp.hxx"
+#include <fltoptint.hxx>
+#include <objshimp.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/brokenpackageint.hxx>
 #include <sfx2/dispatch.hxx>
@@ -34,8 +34,8 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/unoctitm.hxx>
-#include "sfxslots.hxx"
-#include "sfxtypes.hxx"
+#include <sfxslots.hxx>
+#include <sfxtypes.hxx>
 
 #include <sal/config.h>
 #include <basic/basmgr.hxx>

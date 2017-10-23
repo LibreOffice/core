@@ -20,9 +20,9 @@
 #define INCLUDED_SW_INC_FMTANCHR_HXX
 
 #include "swdllapi.h"
-#include <hintids.hxx>
-#include <swtypes.hxx>
-#include <format.hxx>
+#include "hintids.hxx"
+#include "swtypes.hxx"
+#include "format.hxx"
 #include <svl/poolitem.hxx>
 
 #include <memory>

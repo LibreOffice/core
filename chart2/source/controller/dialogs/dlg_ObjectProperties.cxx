@@ -18,9 +18,9 @@
  */
 
 #include <svl/zforlist.hxx>
-#include "dlg_ObjectProperties.hxx"
+#include <dlg_ObjectProperties.hxx>
 #include "TabPageIds.h"
-#include "strings.hrc"
+#include <strings.hrc>
 #include "tp_AxisLabel.hxx"
 #include "tp_DataLabel.hxx"
 #include "tp_LegendPosition.hxx"
@@ -32,20 +32,20 @@
 #include "tp_SeriesToAxis.hxx"
 #include "tp_TitleRotation.hxx"
 #include "tp_PolarOptions.hxx"
-#include "ResId.hxx"
-#include "ViewElementListProvider.hxx"
-#include "macros.hxx"
-#include "ChartModelHelper.hxx"
-#include "ChartTypeHelper.hxx"
-#include "ObjectNameProvider.hxx"
-#include "DiagramHelper.hxx"
-#include "NumberFormatterWrapper.hxx"
-#include "AxisIndexDefines.hxx"
-#include "AxisHelper.hxx"
-#include "ExplicitCategoriesProvider.hxx"
-#include "ChartModel.hxx"
-#include "CommonConverters.hxx"
-#include "RegressionCalculationHelper.hxx"
+#include <ResId.hxx>
+#include <ViewElementListProvider.hxx>
+#include <macros.hxx>
+#include <ChartModelHelper.hxx>
+#include <ChartTypeHelper.hxx>
+#include <ObjectNameProvider.hxx>
+#include <DiagramHelper.hxx>
+#include <NumberFormatterWrapper.hxx>
+#include <AxisIndexDefines.hxx>
+#include <AxisHelper.hxx>
+#include <ExplicitCategoriesProvider.hxx>
+#include <ChartModel.hxx>
+#include <CommonConverters.hxx>
+#include <RegressionCalculationHelper.hxx>
 
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>

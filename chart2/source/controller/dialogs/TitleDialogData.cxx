@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TitleDialogData.hxx"
-#include "TitleHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "AxisHelper.hxx"
+#include <TitleDialogData.hxx>
+#include <TitleHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <AxisHelper.hxx>
 
 namespace chart
 {

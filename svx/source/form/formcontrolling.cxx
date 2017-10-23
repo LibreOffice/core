@@ -19,11 +19,11 @@
 
 
 #include <sal/macros.h>
-#include "formcontrolling.hxx"
-#include "fmurl.hxx"
-#include "svx/svxids.hrc"
-#include "fmprop.hxx"
-#include "svx/fmtools.hxx"
+#include <formcontrolling.hxx>
+#include <fmurl.hxx>
+#include <svx/svxids.hrc>
+#include <fmprop.hxx>
+#include <svx/fmtools.hxx>
 
 #include <com/sun/star/form/runtime/FormOperations.hpp>
 #include <com/sun/star/form/runtime/FormFeature.hpp>

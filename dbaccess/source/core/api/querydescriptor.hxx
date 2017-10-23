@@ -28,10 +28,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include "apitools.hxx"
-#include "column.hxx"
-#include "datasettings.hxx"
-#include "commandbase.hxx"
+#include <apitools.hxx>
+#include <column.hxx>
+#include <datasettings.hxx>
+#include <commandbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
 

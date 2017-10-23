@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fprogressbar.hxx"
-#include "global.hxx"
-#include "progress.hxx"
+#include <fprogressbar.hxx>
+#include <global.hxx>
+#include <progress.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/make_unique.hxx>
 

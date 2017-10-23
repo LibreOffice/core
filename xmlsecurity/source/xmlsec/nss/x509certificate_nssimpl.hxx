@@ -31,7 +31,7 @@
 #include <com/sun/star/security/XCertificate.hpp>
 
 #include <certificate.hxx>
-#include "cert.h"
+#include <cert.h>
 
 class X509Certificate_NssImpl : public ::cppu::WeakImplHelper<
     css::security::XCertificate ,

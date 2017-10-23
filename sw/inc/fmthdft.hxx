@@ -19,11 +19,11 @@
 #ifndef INCLUDED_SW_INC_FMTHDFT_HXX
 #define INCLUDED_SW_INC_FMTHDFT_HXX
 
-#include <hintids.hxx>
-#include <format.hxx>
+#include "hintids.hxx"
+#include "format.hxx"
 #include <svl/poolitem.hxx>
-#include <calbck.hxx>
-#include <frmfmt.hxx>
+#include "calbck.hxx"
+#include "frmfmt.hxx"
 
 class IntlWrapper;
 class SwFormat;

@@ -21,15 +21,15 @@
 #include <sfx2/new.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
-#include "bitmaps.hlst"
-#include "sdpreslt.hxx"
-#include "sdattr.hxx"
-#include "sdresid.hxx"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
-#include "DrawDocShell.hxx"
+#include <bitmaps.hlst>
+#include <sdpreslt.hxx>
+#include <sdattr.hxx>
+#include <sdresid.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
+#include <DrawDocShell.hxx>
 #include <memory>
 
 SdPresLayoutDlg::SdPresLayoutDlg(::sd::DrawDocShell* pDocShell,

@@ -21,8 +21,8 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_BROWSER_DBTREEMODEL_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
-#include "unodatbr.hxx"
-#include "commontypes.hxx"
+#include <unodatbr.hxx>
+#include <commontypes.hxx>
 
 // syntax of the tree           userdata
 // datasource                   holds the connection

@@ -15,7 +15,7 @@
 
 #include <vcl/builder.hxx>
 
-#include "pivot.hxx"
+#include <pivot.hxx>
 
 class ScPivotLayoutDialog;
 class ScItemValue;

@@ -19,10 +19,10 @@
 
 #include <sal/config.h>
 
-#include "dp_services.hxx"
-#include "strings.hrc"
-#include "dp_backend.h"
-#include "dp_ucb.h"
+#include <dp_services.hxx>
+#include <strings.hrc>
+#include <dp_backend.h>
+#include <dp_ucb.h>
 #include "dp_parceldesc.hxx"
 #include <rtl/uri.hxx>
 #include <ucbhelper/content.hxx>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/msgbox.hxx>
@@ -26,25 +26,25 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/childwin.hxx>
 
-#include "attrib.hxx"
-#include "pagedata.hxx"
-#include "tabview.hxx"
-#include "tabvwsh.hxx"
-#include "printfun.hxx"
-#include "stlpool.hxx"
-#include "docsh.hxx"
-#include "gridwin.hxx"
-#include "olinewin.hxx"
-#include "uiitems.hxx"
-#include "sc.hrc"
-#include "viewutil.hxx"
-#include "colrowba.hxx"
-#include "waitoff.hxx"
-#include "globstr.hrc"
-#include "scmod.hxx"
-#include "tabprotection.hxx"
-#include "markdata.hxx"
-#include "inputopt.hxx"
+#include <attrib.hxx>
+#include <pagedata.hxx>
+#include <tabview.hxx>
+#include <tabvwsh.hxx>
+#include <printfun.hxx>
+#include <stlpool.hxx>
+#include <docsh.hxx>
+#include <gridwin.hxx>
+#include <olinewin.hxx>
+#include <uiitems.hxx>
+#include <sc.hrc>
+#include <viewutil.hxx>
+#include <colrowba.hxx>
+#include <waitoff.hxx>
+#include <globstr.hrc>
+#include <scmod.hxx>
+#include <tabprotection.hxx>
+#include <markdata.hxx>
+#include <inputopt.hxx>
 #include <comphelper/lok.hxx>
 
 namespace {

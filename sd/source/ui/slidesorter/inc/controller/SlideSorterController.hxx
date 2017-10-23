@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLIDESORTERCONTROLLER_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLIDESORTERCONTROLLER_HXX
 
-#include "model/SlsSharedPageDescriptor.hxx"
-#include "ViewShell.hxx"
+#include <model/SlsSharedPageDescriptor.hxx>
+#include <ViewShell.hxx>
 
 #include <com/sun/star/drawing/XDrawPages.hpp>
 
@@ -30,7 +30,7 @@
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 
-#include "sddllapi.h"
+#include <sddllapi.h>
 
 #include <memory>
 

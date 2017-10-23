@@ -32,8 +32,8 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <rtl/ref.hxx>
 
-#include "shellio.hxx"
-#include "wrt_fn.hxx"
+#include <shellio.hxx>
+#include <wrt_fn.hxx>
 #include "htmlfly.hxx"
 
 // some forward declarations

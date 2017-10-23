@@ -30,11 +30,11 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/metric.hxx>
 
-#include "salgdi.hxx"
-#include "salgeom.hxx"
-#include "sallayout.hxx"
-#include "vclpluginapi.h"
-#include "ControlCacheKey.hxx"
+#include <salgdi.hxx>
+#include <salgeom.hxx>
+#include <sallayout.hxx>
+#include <vclpluginapi.h>
+#include <ControlCacheKey.hxx>
 
 #include <deque>
 #include <memory>

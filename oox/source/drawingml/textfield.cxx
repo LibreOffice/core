@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/textfield.hxx"
+#include <drawingml/textfield.hxx>
 
 #include <list>
 
@@ -27,11 +27,11 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 
-#include "oox/helper/helper.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "drawingml/textparagraphproperties.hxx"
-#include "drawingml/textcharacterproperties.hxx"
+#include <oox/helper/helper.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <drawingml/textparagraphproperties.hxx>
+#include <drawingml/textcharacterproperties.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

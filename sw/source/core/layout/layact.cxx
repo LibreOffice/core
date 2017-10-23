@@ -20,18 +20,18 @@
 #include <config_features.h>
 
 #include <ctime>
-#include "rootfrm.hxx"
-#include "pagefrm.hxx"
-#include "viewimp.hxx"
-#include "crsrsh.hxx"
-#include "dflyobj.hxx"
-#include "frmtool.hxx"
-#include "dcontact.hxx"
-#include "viewopt.hxx"
-#include "dbg_lay.hxx"
-#include "layouter.hxx"
-#include "docstat.hxx"
-#include "swevent.hxx"
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+#include <viewimp.hxx>
+#include <crsrsh.hxx>
+#include <dflyobj.hxx>
+#include <frmtool.hxx>
+#include <dcontact.hxx>
+#include <viewopt.hxx>
+#include <dbg_lay.hxx>
+#include <layouter.hxx>
+#include <docstat.hxx>
+#include <swevent.hxx>
 #include <IDocumentStatistics.hxx>
 #include <IDocumentLayoutAccess.hxx>
 
@@ -42,18 +42,18 @@
 #include <editeng/opaqitem.hxx>
 #include <SwSmartTagMgr.hxx>
 
-#include "layact.hxx"
+#include <layact.hxx>
 #include <swwait.hxx>
 #include <fmtsrnd.hxx>
 #include <docsh.hxx>
 
-#include "tabfrm.hxx"
-#include "ftnfrm.hxx"
-#include "txtfrm.hxx"
-#include "notxtfrm.hxx"
-#include "flyfrms.hxx"
-#include "mdiexp.hxx"
-#include "sectfrm.hxx"
+#include <tabfrm.hxx>
+#include <ftnfrm.hxx>
+#include <txtfrm.hxx>
+#include <notxtfrm.hxx>
+#include <flyfrms.hxx>
+#include <mdiexp.hxx>
+#include <sectfrm.hxx>
 #include <acmplwrd.hxx>
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>

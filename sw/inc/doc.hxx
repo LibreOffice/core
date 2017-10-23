@@ -20,20 +20,20 @@
 #define INCLUDED_SW_INC_DOC_HXX
 
 // SwDoc interfaces
-#include <IDocumentMarkAccess.hxx>
+#include "IDocumentMarkAccess.hxx"
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <sal/macros.h>
 #include "swdllapi.h"
-#include <swtypes.hxx>
-#include <swatrset.hxx>
-#include <toxe.hxx>
-#include <flyenum.hxx>
-#include <flypos.hxx>
-#include <itabenum.hxx>
-#include <swdbdata.hxx>
+#include "swtypes.hxx"
+#include "swatrset.hxx"
+#include "toxe.hxx"
+#include "flyenum.hxx"
+#include "flypos.hxx"
+#include "itabenum.hxx"
+#include "swdbdata.hxx"
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <sfx2/objsh.hxx>
@@ -41,11 +41,11 @@
 #include <editeng/numitem.hxx>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
-#include <tox.hxx>
-#include <frmfmt.hxx>
-#include <charfmt.hxx>
-#include <docary.hxx>
-#include <pagedesc.hxx>
+#include "tox.hxx"
+#include "frmfmt.hxx"
+#include "charfmt.hxx"
+#include "docary.hxx"
+#include "pagedesc.hxx"
 #include "tblenum.hxx"
 
 #include <svtools/embedhlp.hxx>

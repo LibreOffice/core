@@ -19,13 +19,13 @@
 
 #include "textundo.hxx"
 #include "textund2.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <vcl/texteng.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/textdata.hxx>
-#include <textdoc.hxx>
-#include <textdat2.hxx>
+#include "textdoc.hxx"
+#include "textdat2.hxx"
 #include <svdata.hxx>
 
 namespace

@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "uiitems.hxx"
+#include <uiitems.hxx>
 
-#include "userlist.hxx"
-#include "dpsave.hxx"
-#include "queryparam.hxx"
+#include <userlist.hxx>
+#include <dpsave.hxx>
+#include <queryparam.hxx>
 
 #include <osl/diagnose.h>
 #include <editeng/editobj.hxx>

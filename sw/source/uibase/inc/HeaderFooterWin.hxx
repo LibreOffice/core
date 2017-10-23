@@ -9,7 +9,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_HEADERFOOTERWIN_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_HEADERFOOTERWIN_HXX
 
-#include <FrameControl.hxx>
+#include "FrameControl.hxx"
 #include <vcl/builder.hxx>
 #include <vcl/menubtn.hxx>
 

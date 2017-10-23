@@ -45,11 +45,11 @@
 #include "backgroundshape.hxx"
 #include "mediashape.hxx"
 #include "appletshape.hxx"
-#include "shapeimporter.hxx"
-#include "slideshowexceptions.hxx"
+#include <shapeimporter.hxx>
+#include <slideshowexceptions.hxx>
 #include "gdimtftools.hxx"
-#include "tools.hxx"
-#include "slideshowcontext.hxx"
+#include <tools.hxx>
+#include <slideshowcontext.hxx>
 
 #include <memory>
 

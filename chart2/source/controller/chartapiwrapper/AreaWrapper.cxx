@@ -18,15 +18,15 @@
  */
 
 #include "AreaWrapper.hxx"
-#include "macros.hxx"
+#include <macros.hxx>
 #include "Chart2ModelContact.hxx"
-#include "WrappedDirectStateProperty.hxx"
+#include <WrappedDirectStateProperty.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
-#include "LinePropertiesHelper.hxx"
-#include "FillProperties.hxx"
-#include "UserDefinedProperties.hxx"
+#include <LinePropertiesHelper.hxx>
+#include <FillProperties.hxx>
+#include <UserDefinedProperties.hxx>
 
 #include <algorithm>
 

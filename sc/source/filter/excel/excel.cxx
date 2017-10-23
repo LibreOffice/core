@@ -30,19 +30,19 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svl/stritem.hxx>
-#include "filter.hxx"
-#include "document.hxx"
-#include "optuno.hxx"
-#include "xistream.hxx"
+#include <filter.hxx>
+#include <document.hxx>
+#include <optuno.hxx>
+#include <xistream.hxx>
 
-#include "scerrors.hxx"
-#include "root.hxx"
-#include "imp_op.hxx"
-#include "excimp8.hxx"
-#include "exp_op.hxx"
-#include "scdll.hxx"
+#include <scerrors.hxx>
+#include <root.hxx>
+#include <imp_op.hxx>
+#include <excimp8.hxx>
+#include <exp_op.hxx>
+#include <scdll.hxx>
 
 #include <memory>
 

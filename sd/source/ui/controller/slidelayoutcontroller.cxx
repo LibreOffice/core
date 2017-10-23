@@ -39,15 +39,15 @@
 
 #include <xmloff/autolayout.hxx>
 
-#include "app.hrc"
-#include "facreg.hxx"
-#include "strings.hrc"
+#include <app.hrc>
+#include <facreg.hxx>
+#include <strings.hrc>
 
-#include "bitmaps.hlst"
-#include "sdresid.hxx"
-#include "pres.hxx"
+#include <bitmaps.hlst>
+#include <sdresid.hxx>
+#include <pres.hxx>
 #include "slidelayoutcontroller.hxx"
-#include "ViewShellBase.hxx"
+#include <ViewShellBase.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

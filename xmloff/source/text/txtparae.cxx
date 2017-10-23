@@ -84,13 +84,13 @@
 #include <xmloff/xmlnume.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "XMLAnchorTypePropHdl.hxx"
-#include "xexptran.hxx"
+#include <xexptran.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlexp.hxx>
-#include "txtflde.hxx"
+#include <txtflde.hxx>
 #include <xmloff/txtprmap.hxx>
-#include "XMLImageMapExport.hxx"
+#include <XMLImageMapExport.hxx>
 #include "XMLTextNumRuleInfo.hxx"
 #include <xmloff/XMLTextListAutoStylePool.hxx>
 #include <xmloff/txtparae.hxx>
@@ -98,7 +98,7 @@
 #include "XMLIndexMarkExport.hxx"
 #include <xmloff/XMLEventExport.hxx>
 #include "XMLRedlineExport.hxx"
-#include "MultiPropertySetHelper.hxx"
+#include <MultiPropertySetHelper.hxx>
 #include <xmloff/formlayerexport.hxx>
 #include "XMLTextCharStyleNamesElementExport.hxx"
 #include <xmloff/odffields.hxx>

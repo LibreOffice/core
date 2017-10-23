@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ManifestReader.hxx>
-#include <ManifestImport.hxx>
+#include "ManifestReader.hxx"
+#include "ManifestImport.hxx"
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/factory.hxx>

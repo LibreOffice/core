@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TokenWriter.hxx"
+#include <TokenWriter.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
 #include <osl/diagnose.h>
-#include "RtfReader.hxx"
-#include "HtmlReader.hxx"
-#include "stringconstants.hxx"
-#include "strings.hxx"
+#include <RtfReader.hxx>
+#include <HtmlReader.hxx>
+#include <stringconstants.hxx>
+#include <strings.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
@@ -50,7 +50,7 @@
 #include <sfx2/frmhtmlw.hxx>
 #include <svl/numuno.hxx>
 #include <vcl/svapp.hxx>
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>

@@ -18,8 +18,8 @@
 #include <unotest/filters-test.hxx>
 #include <unotest/macros_test.hxx>
 
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/color.hxx>

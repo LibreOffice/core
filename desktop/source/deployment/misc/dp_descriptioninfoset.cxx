@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dp_descriptioninfoset.hxx"
+#include <dp_descriptioninfoset.hxx>
 
-#include "dp_resource.h"
+#include <dp_resource.h>
 #include <sal/config.h>
 
 #include <comphelper/sequence.hxx>

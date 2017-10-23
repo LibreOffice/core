@@ -58,15 +58,15 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdview.hxx>
-#include "View.hxx"
-#include "DrawDocShell.hxx"
-#include "ViewShell.hxx"
-#include "DrawViewShell.hxx"
+#include <View.hxx>
+#include <DrawDocShell.hxx>
+#include <ViewShell.hxx>
+#include <DrawViewShell.hxx>
 #include "unoobj.hxx"
 
-#include "strings.hxx"
-#include "bitmaps.hlst"
-#include "unokywds.hxx"
+#include <strings.hxx>
+#include <bitmaps.hlst>
+#include <unokywds.hxx>
 #include "unopback.hxx"
 #include <vcl/dibtools.hxx>
 #include <svx/svdograf.hxx>

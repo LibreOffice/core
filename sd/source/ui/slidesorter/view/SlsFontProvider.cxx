@@ -18,9 +18,9 @@
  */
 
 #include <memory>
-#include "view/SlsFontProvider.hxx"
+#include <view/SlsFontProvider.hxx>
 
-#include "controller/SlideSorterController.hxx"
+#include <controller/SlideSorterController.hxx>
 
 #include <sfx2/app.hxx>
 #include <osl/getglobalmutex.hxx>

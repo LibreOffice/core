@@ -21,7 +21,7 @@
 #include "diagramdefinitioncontext.hxx"
 #include "diagramfragmenthandler.hxx"
 #include "datamodelcontext.hxx"
-#include "drawingml/colorchoicecontext.hxx"
+#include <drawingml/colorchoicecontext.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 

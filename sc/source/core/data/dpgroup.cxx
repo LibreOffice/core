@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dpgroup.hxx"
+#include <dpgroup.hxx>
 
-#include "global.hxx"
-#include "document.hxx"
-#include "dpfilteredcache.hxx"
-#include "dptabsrc.hxx"
-#include "dptabres.hxx"
-#include "dpobject.hxx"
-#include "dpglobal.hxx"
-#include "dputil.hxx"
-#include "globalnames.hxx"
+#include <global.hxx>
+#include <document.hxx>
+#include <dpfilteredcache.hxx>
+#include <dptabsrc.hxx>
+#include <dptabres.hxx>
+#include <dpobject.hxx>
+#include <dpglobal.hxx>
+#include <dputil.hxx>
+#include <globalnames.hxx>
 
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>

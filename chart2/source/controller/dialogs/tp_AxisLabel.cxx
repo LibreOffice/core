@@ -19,9 +19,9 @@
 
 #include "tp_AxisLabel.hxx"
 
-#include "ResId.hxx"
+#include <ResId.hxx>
 #include "TabPageIds.h"
-#include "chartview/ChartSfxItemIds.hxx"
+#include <chartview/ChartSfxItemIds.hxx>
 
 #include <svx/chrtitem.hxx>
 #include <svl/intitem.hxx>

@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ScaleAutomatism.hxx"
-#include "macros.hxx"
+#include <ScaleAutomatism.hxx>
+#include <macros.hxx>
 #include "Tickmarks_Equidistant.hxx"
-#include "DateHelper.hxx"
+#include <DateHelper.hxx>
 #include "DateScaling.hxx"
-#include "AxisHelper.hxx"
+#include <AxisHelper.hxx>
 #include <com/sun/star/chart/TimeUnit.hpp>
 
 #include <rtl/math.hxx>

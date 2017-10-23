@@ -21,9 +21,9 @@
 
 #include "MinimumAndMaximumSupplier.hxx"
 #include "ScaleAutomatism.hxx"
-#include "ThreeDHelper.hxx"
-#include "ExplicitCategoriesProvider.hxx"
-#include "chartview/ExplicitScaleValues.hxx"
+#include <ThreeDHelper.hxx>
+#include <ExplicitCategoriesProvider.hxx>
+#include <chartview/ExplicitScaleValues.hxx>
 
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>

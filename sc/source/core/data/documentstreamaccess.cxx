@@ -7,11 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "documentstreamaccess.hxx"
-#include "document.hxx"
-#include "table.hxx"
-#include "column.hxx"
-#include "mtvelements.hxx"
+#include <documentstreamaccess.hxx>
+#include <document.hxx>
+#include <table.hxx>
+#include <column.hxx>
+#include <mtvelements.hxx>
 
 #include <svl/sharedstringpool.hxx>
 

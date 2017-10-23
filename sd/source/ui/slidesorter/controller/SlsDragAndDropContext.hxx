@@ -22,8 +22,8 @@
 
 #include <tools/gen.hxx>
 
-#include "model/SlsSharedPageDescriptor.hxx"
-#include "controller/SlsInsertionIndicatorHandler.hxx"
+#include <model/SlsSharedPageDescriptor.hxx>
+#include <controller/SlsInsertionIndicatorHandler.hxx>
 #include <vector>
 
 namespace sd { namespace slidesorter {

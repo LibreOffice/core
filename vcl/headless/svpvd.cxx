@@ -19,10 +19,10 @@
 
 #ifndef IOS
 
-#include "headless/svpbmp.hxx"
-#include "headless/svpinst.hxx"
-#include "headless/svpvd.hxx"
-#include "headless/svpgdi.hxx"
+#include <headless/svpbmp.hxx>
+#include <headless/svpinst.hxx>
+#include <headless/svpvd.hxx>
+#include <headless/svpgdi.hxx>
 
 #include <basegfx/vector/b2ivector.hxx>
 

@@ -19,9 +19,9 @@
 #ifndef INCLUDED_CPPUHELPER_SHLIB_HXX
 #define INCLUDED_CPPUHELPER_SHLIB_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <cppuhelper/cppuhelperdllapi.h>
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/registry/XRegistryKey.hpp"
+#include "cppuhelper/cppuhelperdllapi.h"
 
 
 namespace cppu

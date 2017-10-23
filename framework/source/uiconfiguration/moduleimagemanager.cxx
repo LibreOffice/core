@@ -23,7 +23,7 @@
 #include <services.h>
 #include "imagemanagerimpl.hxx"
 
-#include "properties.h"
+#include <properties.h>
 
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>

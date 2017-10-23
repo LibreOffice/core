@@ -19,7 +19,7 @@
 
 
 #include <string.h>
-#include <dxfentrd.hxx>
+#include "dxfentrd.hxx"
 
 //--------------------------DXFBasicEntity--------------------------------------
 

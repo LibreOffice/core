@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <processinginstruction.hxx>
+#include "processinginstruction.hxx"
 
 #include <string.h>
 

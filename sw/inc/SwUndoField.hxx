@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_SWUNDOFIELD_HXX
 #define INCLUDED_SW_INC_SWUNDOFIELD_HXX
 
-#include <undobj.hxx>
+#include "undobj.hxx"
 
 #include <com/sun/star/uno/Any.h>
 

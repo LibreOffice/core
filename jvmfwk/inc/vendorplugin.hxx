@@ -24,13 +24,13 @@
 #include <jvmfwk/framework.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.h>
-#include "jni.h"
+#include <jni.h>
 
 #include <memory>
 #include <vector>
 #include <utility>
 #include "elements.hxx"
-#include <vendorbase.hxx>
+#include "vendorbase.hxx"
 
 /**
    @file

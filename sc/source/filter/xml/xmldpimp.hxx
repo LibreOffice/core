@@ -27,10 +27,10 @@
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
 
-#include "global.hxx"
-#include "dpobject.hxx"
-#include "dpsave.hxx"
-#include "queryparam.hxx"
+#include <global.hxx>
+#include <dpobject.hxx>
+#include <dpsave.hxx>
+#include <queryparam.hxx>
 #include "xmlimprt.hxx"
 #include "importcontext.hxx"
 

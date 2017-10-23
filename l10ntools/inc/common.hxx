@@ -12,7 +12,7 @@
 #ifndef INCLUDED_L10NTOOLS_INC_COMMON_HXX
 #define INCLUDED_L10NTOOLS_INC_COMMON_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <iostream>
 #include <rtl/string.hxx>

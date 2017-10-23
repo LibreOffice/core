@@ -25,7 +25,7 @@
 #include <windows.h>
 #undef min
 #endif
-#include <osl_Security_Const.h>
+#include "osl_Security_Const.h"
 #include <osl/thread.h>
 #include <rtl/process.h>
 #include <rtl/strbuf.hxx>

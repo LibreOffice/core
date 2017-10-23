@@ -21,7 +21,7 @@
 
 #include "datacolumn.hxx"
 #include "RowSetRow.hxx"
-#include "columnsettings.hxx"
+#include <columnsettings.hxx>
 
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/proparrhlp.hxx>

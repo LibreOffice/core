@@ -21,7 +21,7 @@
 #define INCLUDED_OOX_DRAWINGML_SCENE3DCONTEXT_HXX
 
 #include <oox/core/contexthandler2.hxx>
-#include "drawingml/shape3dproperties.hxx"
+#include <drawingml/shape3dproperties.hxx>
 
 namespace oox { namespace drawingml {
 

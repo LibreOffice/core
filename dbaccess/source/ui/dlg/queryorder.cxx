@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "strings.hrc"
-#include "strings.hxx"
-#include "core_resource.hxx"
-#include "queryorder.hxx"
-#include "stringconstants.hxx"
+#include <strings.hrc>
+#include <strings.hxx>
+#include <core_resource.hxx>
+#include <queryorder.hxx>
+#include <stringconstants.hxx>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

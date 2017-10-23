@@ -50,9 +50,9 @@
 #include <tools/link.hxx>
 #include <vcl/timer.hxx>
 
-#include <calbck.hxx>
-#include <frmfmt.hxx>
-#include <unocrsr.hxx>
+#include "calbck.hxx"
+#include "frmfmt.hxx"
+#include "unocrsr.hxx"
 
 class SfxItemPropertySet;
 class SwDoc;

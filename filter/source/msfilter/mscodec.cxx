@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "filter/msfilter/mscodec.hxx"
+#include <filter/msfilter/mscodec.hxx>
 
 #include <osl/diagnose.h>
 #include <algorithm>

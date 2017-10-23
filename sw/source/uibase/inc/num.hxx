@@ -28,7 +28,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
 #include <svx/stddlg.hxx>
-#include <numprevw.hxx>
+#include "numprevw.hxx"
 #include <numrule.hxx>
 
 class SwWrtShell;

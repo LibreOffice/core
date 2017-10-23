@@ -27,9 +27,9 @@
 #include <tools/color.hxx>
 #include <vcl/vclenum.hxx>
 
-#include "olinetab.hxx"
-#include "filter.hxx"
-#include "rangelst.hxx"
+#include <olinetab.hxx>
+#include <filter.hxx>
+#include <rangelst.hxx>
 #include "xerecord.hxx"
 #include "xeroot.hxx"
 #include "xeformula.hxx"

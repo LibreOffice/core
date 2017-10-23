@@ -24,7 +24,7 @@
 #include <rtl/ref.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include <stgelem.hxx>
+#include "stgelem.hxx"
 #include <salhelper/simplereferenceobject.hxx>
 
 #include <memory>

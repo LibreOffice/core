@@ -18,9 +18,9 @@
  */
 
 
-#include "osl/file.hxx"
+#include <osl/file.hxx>
 
-#include "vendorbase.hxx"
+#include <vendorbase.hxx>
 #include "util.hxx"
 #include "sunjre.hxx"
 

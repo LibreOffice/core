@@ -25,7 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
-#include <impvect.hxx>
+#include "impvect.hxx"
 #include <memory>
 
 #define VECT_POLY_MAX 8192

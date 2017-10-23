@@ -18,6 +18,6 @@
  */
 
 
-#include "componentmodule.cxx"
+#include <componentmodule.cxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

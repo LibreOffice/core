@@ -62,9 +62,9 @@
 #include "escher.hxx"
 //Added for i120568
 #include "ww8attributeoutput.hxx"
-#include "fmturl.hxx"
+#include <fmturl.hxx>
 
-#include "docsh.hxx"
+#include <docsh.hxx>
 #include <cstdio>
 #include <o3tl/enumrange.hxx>
 

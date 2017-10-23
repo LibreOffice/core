@@ -19,10 +19,10 @@
 
 #include "ImageControl.hxx"
 
-#include "strings.hrc"
-#include "frm_resource.hxx"
-#include "services.hxx"
-#include "componenttools.hxx"
+#include <strings.hrc>
+#include <frm_resource.hxx>
+#include <services.hxx>
+#include <componenttools.hxx>
 
 #include <svtools/imageresourceaccess.hxx>
 #include <sfx2/filedlghelper.hxx>

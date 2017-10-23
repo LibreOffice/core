@@ -46,7 +46,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/Date.hpp>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/processfactory.hxx>
 #include <connectivity/dbtools.hxx>

@@ -176,7 +176,7 @@ public:
 };
 
 #if OSL_DEBUG_LEVEL > 0
-#include "shellio.hxx"
+#include <shellio.hxx>
 void CheckTable( const SwTable& );
 #define CHECKTABLE(t) CheckTable( t );
 #else

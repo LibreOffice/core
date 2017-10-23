@@ -23,7 +23,7 @@
 #include <map>
 #include <vector>
 
-#include <vclhelperbufferdevice.hxx>
+#include "vclhelperbufferdevice.hxx"
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/bitmapex.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

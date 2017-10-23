@@ -26,19 +26,19 @@
 #include <vcl/checksum.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/salbtype.hxx>
-#include "svdata.hxx"
-#include "salgdi.hxx"
-#include "vcleventlisteners.hxx"
+#include <svdata.hxx>
+#include <salgdi.hxx>
+#include <vcleventlisteners.hxx>
 #include <vcl/lazydelete.hxx>
 
 #include <o3tl/make_unique.hxx>
 #include <o3tl/make_shared.hxx>
 
-#include "opengl/zone.hxx"
-#include "opengl/program.hxx"
-#include "opengl/salbmp.hxx"
-#include "opengl/RenderState.hxx"
-#include "opengl/FixedTextureAtlas.hxx"
+#include <opengl/zone.hxx>
+#include <opengl/program.hxx>
+#include <opengl/salbmp.hxx>
+#include <opengl/RenderState.hxx>
+#include <opengl/FixedTextureAtlas.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
 #  define CANARY "tex-canary"

@@ -30,7 +30,7 @@
 #include <svtools/simptabl.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
-#include "mailmergehelper.hxx"
+#include <mailmergehelper.hxx>
 
 class SwMailMergeWizard;
 class SfxPrinter;

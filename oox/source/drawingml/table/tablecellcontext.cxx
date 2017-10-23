@@ -18,11 +18,11 @@
  */
 
 
-#include "drawingml/table/tablecellcontext.hxx"
-#include "drawingml/textbodycontext.hxx"
-#include "drawingml/linepropertiescontext.hxx"
-#include "drawingml/misccontexts.hxx"
-#include "oox/helper/attributelist.hxx"
+#include <drawingml/table/tablecellcontext.hxx>
+#include <drawingml/textbodycontext.hxx>
+#include <drawingml/linepropertiescontext.hxx>
+#include <drawingml/misccontexts.hxx>
+#include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 

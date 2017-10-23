@@ -42,7 +42,7 @@
 #include "containerapprove.hxx"
 #include <comphelper/uno3.hxx>
 #include <rtl/ref.hxx>
-#include "apitools.hxx"
+#include <apitools.hxx>
 
 namespace dbaccess
 {

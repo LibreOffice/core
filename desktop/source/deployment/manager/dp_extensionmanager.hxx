@@ -20,10 +20,10 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_EXTENSIONMANAGER_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_EXTENSIONMANAGER_HXX
 
-#include "strings.hrc"
-#include "dp_misc.h"
-#include "dp_shared.hxx"
-#include "dp_interact.h"
+#include <strings.hrc>
+#include <dp_misc.h>
+#include <dp_shared.hxx>
+#include <dp_interact.h>
 #include "dp_activepackages.hxx"
 #include <rtl/ref.hxx>
 #include <cppuhelper/compbase.hxx>

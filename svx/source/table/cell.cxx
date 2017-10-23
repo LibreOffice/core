@@ -36,24 +36,24 @@
 #include <vcl/svapp.hxx>
 #include <libxml/xmlwriter.h>
 
-#include "sdr/properties/textproperties.hxx"
-#include "editeng/outlobj.hxx"
-#include "editeng/writingmodeitem.hxx"
-#include "svx/svdotable.hxx"
-#include "svx/svdoutl.hxx"
-#include "svx/unoshtxt.hxx"
-#include "svx/svdmodel.hxx"
+#include <sdr/properties/textproperties.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/writingmodeitem.hxx>
+#include <svx/svdotable.hxx>
+#include <svx/svdoutl.hxx>
+#include <svx/unoshtxt.hxx>
+#include <svx/svdmodel.hxx>
 
-#include "getallcharpropids.hxx"
+#include <getallcharpropids.hxx>
 #include "tableundo.hxx"
-#include "cell.hxx"
-#include "svx/unoshprp.hxx"
-#include "svx/unoshape.hxx"
-#include "editeng/editobj.hxx"
-#include "editeng/boxitem.hxx"
+#include <cell.hxx>
+#include <svx/unoshprp.hxx>
+#include <svx/unoshape.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/boxitem.hxx>
 #include <editeng/charrotateitem.hxx>
-#include "svx/xflbstit.hxx"
-#include "svx/xflbmtit.hxx"
+#include <svx/xflbstit.hxx>
+#include <svx/xflbmtit.hxx>
 #include <svx/svdpool.hxx>
 
 

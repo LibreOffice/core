@@ -24,15 +24,15 @@
 
 #include <viewopt.hxx>
 
-#include "swtypes.hxx"
-#include "cmdid.h"
-#include "label.hxx"
-#include "labimp.hxx"
-#include "labimg.hxx"
+#include <swtypes.hxx>
+#include <cmdid.h>
+#include <label.hxx>
+#include <labimp.hxx>
+#include <labimg.hxx>
 #include "labfmt.hxx"
-#include "uitool.hxx"
+#include <uitool.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 #include <unomid.h>
 
 using namespace utl;

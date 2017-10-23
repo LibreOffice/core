@@ -51,7 +51,7 @@
 
 #include "pdfexport.hxx"
 #include "impdialog.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>

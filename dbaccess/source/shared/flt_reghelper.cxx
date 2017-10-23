@@ -18,7 +18,7 @@
  */
 
 
-#include "flt_reghelper.hxx"
+#include <flt_reghelper.hxx>
 
 #include <comphelper/sequence.hxx>
 

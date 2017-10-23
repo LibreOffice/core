@@ -18,9 +18,9 @@
  */
 
 #include "ChartFrameloader.hxx"
-#include "servicenames.hxx"
-#include "MediaDescriptorHelper.hxx"
-#include "macros.hxx"
+#include <servicenames.hxx>
+#include <MediaDescriptorHelper.hxx>
+#include <macros.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/document/XImporter.hpp>

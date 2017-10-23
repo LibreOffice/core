@@ -27,7 +27,7 @@
 #include <tools/debug.hxx>
 #include <vcl/msgbox.hxx>
 #include <connectivity/dbtools.hxx>
-#include "helpids.h"
+#include <helpids.h>
 #include <comphelper/extract.hxx>
 
 

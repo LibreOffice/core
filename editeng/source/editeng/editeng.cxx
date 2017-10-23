@@ -27,11 +27,11 @@
 #include <svtools/ctrltool.hxx>
 
 #include <editeng/svxfont.hxx>
-#include <impedit.hxx>
+#include "impedit.hxx"
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editstat.hxx>
-#include <editdbg.hxx>
+#include "editdbg.hxx"
 #include <eerdll2.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>

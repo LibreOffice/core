@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fmexch.hxx"
+#include <fmexch.hxx>
 
 #include <sot/storage.hxx>
 #include <svl/itempool.hxx>
 
 #include <sot/formats.hxx>
 #include <svtools/treelistbox.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <tools/diagnose_ex.h>
 
 

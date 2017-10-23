@@ -11,11 +11,11 @@
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include "officecfg/Office/Calc.hxx"
+#include <officecfg/Office/Calc.hxx>
 #include <rtl/strbuf.hxx>
 
 #include "htmldataprovider.hxx"
-#include "datatransformation.hxx"
+#include <datatransformation.hxx>
 
 using namespace com::sun::star;
 

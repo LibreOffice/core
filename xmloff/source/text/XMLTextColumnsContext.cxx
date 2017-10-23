@@ -30,7 +30,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "XMLTextColumnsContext.hxx"
+#include <XMLTextColumnsContext.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

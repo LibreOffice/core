@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "odbc/OResultSet.hxx"
-#include "odbc/OTools.hxx"
-#include "odbc/OResultSetMetaData.hxx"
+#include <odbc/OResultSet.hxx>
+#include <odbc/OTools.hxx>
+#include <odbc/OResultSetMetaData.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyVetoException.hpp>

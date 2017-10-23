@@ -61,15 +61,15 @@
 #include <memory>
 #include "lwpframelayout.hxx"
 #include "lwppara.hxx"
-#include "xfilter/xfstylemanager.hxx"
-#include "xfilter/xfparagraph.hxx"
-#include "xfilter/xffloatframe.hxx"
-#include "xfilter/xfrubystyle.hxx"
+#include <xfilter/xfstylemanager.hxx>
+#include <xfilter/xfparagraph.hxx>
+#include <xfilter/xffloatframe.hxx>
+#include <xfilter/xfrubystyle.hxx>
 #include "lwppagelayout.hxx"
 #include "lwpoleobject.hxx"
 #include "lwptablelayout.hxx"
 #include "lwpgrfobj.hxx"
-#include "lwpglobalmgr.hxx"
+#include <lwpglobalmgr.hxx>
 
 LwpFrame::LwpFrame(LwpPlacableLayout* pLayout):m_pLayout(pLayout)
 {

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSTHEME_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSTHEME_HXX
 
-#include "model/SlsVisualState.hxx"
+#include <model/SlsVisualState.hxx>
 
 #include <vcl/bitmapex.hxx>
 #include <vcl/font.hxx>

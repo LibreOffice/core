@@ -27,12 +27,12 @@
 
 #include <docstyle.hxx>
 
-#include "fldbas.hxx"
-#include "lineinfo.hxx"
-#include "linenum.hxx"
-#include "uitool.hxx"
+#include <fldbas.hxx>
+#include <lineinfo.hxx>
+#include <linenum.hxx>
+#include <uitool.hxx>
 #include <fmtline.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <IDocumentStylePoolAccess.hxx>
 

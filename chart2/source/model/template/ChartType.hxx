@@ -19,11 +19,11 @@
 #ifndef INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_CHARTTYPE_HXX
 #define INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_CHARTTYPE_HXX
 
-#include "MutexContainer.hxx"
-#include "OPropertySet.hxx"
+#include <MutexContainer.hxx>
+#include <OPropertySet.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
-#include "ModifyListenerHelper.hxx"
+#include <ModifyListenerHelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

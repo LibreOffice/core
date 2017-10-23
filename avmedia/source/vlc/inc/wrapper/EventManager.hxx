@@ -11,7 +11,7 @@
 #define INCLUDED_AVMEDIA_SOURCE_VLC_INC_WRAPPER_EVENTMANAGER_HXX
 
 #include <functional>
-#include "wrapper/Player.hxx"
+#include <wrapper/Player.hxx>
 
 struct libvlc_event_manager_t;
 struct libvlc_event_t;

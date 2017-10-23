@@ -37,21 +37,21 @@
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
 #include <sfx2/docfile.hxx>
-#include "xmloff/xmlnmspe.hxx"
-#include "xmloff/nmspmap.hxx"
+#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/nmspmap.hxx>
 
-#include "xmloff/xmltoken.hxx"
-#include "xmloff/xmlmetae.hxx"
-#include "xmloff/DashStyle.hxx"
-#include "xmloff/GradientStyle.hxx"
-#include "xmloff/HatchStyle.hxx"
-#include "xmloff/ImageStyle.hxx"
-#include "xmloff/MarkerStyle.hxx"
+#include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlmetae.hxx>
+#include <xmloff/DashStyle.hxx>
+#include <xmloff/GradientStyle.hxx>
+#include <xmloff/HatchStyle.hxx>
+#include <xmloff/ImageStyle.hxx>
+#include <xmloff/MarkerStyle.hxx>
 #include <xmloff/xmlictxt.hxx>
-#include "svx/xmlgrhlp.hxx"
-#include "xmloff/attrlist.hxx"
+#include <svx/xmlgrhlp.hxx>
+#include <xmloff/attrlist.hxx>
 
-#include "xmlxtimp.hxx"
+#include <xmlxtimp.hxx>
 
 #include <cstdio>
 

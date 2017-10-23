@@ -18,11 +18,11 @@
  */
 
 #include <mailmergewizard.hxx>
-#include <mmdocselectpage.hxx>
-#include <mmoutputtypepage.hxx>
-#include <mmaddressblockpage.hxx>
-#include <mmgreetingspage.hxx>
-#include <mmlayoutpage.hxx>
+#include "mmdocselectpage.hxx"
+#include "mmoutputtypepage.hxx"
+#include "mmaddressblockpage.hxx"
+#include "mmgreetingspage.hxx"
+#include "mmlayoutpage.hxx"
 #include <mmconfigitem.hxx>
 #include <swabstdlg.hxx>
 #include <dbui.hrc>

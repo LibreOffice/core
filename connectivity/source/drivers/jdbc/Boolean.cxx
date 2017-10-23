@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "java/lang/Boolean.hxx"
+#include <java/lang/Boolean.hxx>
 using namespace connectivity;
 
 //************ Class: java.lang.Boolean

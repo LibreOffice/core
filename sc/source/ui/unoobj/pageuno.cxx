@@ -19,8 +19,8 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
-#include "pageuno.hxx"
-#include "shapeuno.hxx"
+#include <pageuno.hxx>
+#include <shapeuno.hxx>
 
 using namespace ::com::sun::star;
 

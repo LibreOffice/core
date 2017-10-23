@@ -22,14 +22,14 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <connectivity/odbc.hxx>
-#include "odbc/odbcbasedllapi.hxx"
+#include <odbc/odbcbasedllapi.hxx>
 #include <connectivity/OSubComponent.hxx>
 #include <connectivity/CommonTools.hxx>
-#include "TConnection.hxx"
-#include "OTypeInfo.hxx"
-#include "odbc/OTools.hxx"
+#include <TConnection.hxx>
+#include <OTypeInfo.hxx>
+#include <odbc/OTools.hxx>
 #include <cppuhelper/weakref.hxx>
-#include "AutoRetrievingBase.hxx"
+#include <AutoRetrievingBase.hxx>
 #include <osl/module.h>
 
 

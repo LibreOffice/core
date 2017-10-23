@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fumorph.hxx"
+#include <fumorph.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/xlineit.hxx>
 #include <vcl/msgbox.hxx>
@@ -27,18 +27,18 @@
 #include <svx/svdogrp.hxx>
 #include <editeng/eeitem.hxx>
 
-#include "View.hxx"
-#include "ViewShell.hxx"
-#include "Window.hxx"
+#include <View.hxx>
+#include <ViewShell.hxx>
+#include <Window.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-#include "strings.hrc"
-#include "sdresid.hxx"
+#include <strings.hrc>
+#include <sdresid.hxx>
 
-#include "sdabstdlg.hxx"
+#include <sdabstdlg.hxx>
 
 #include <svx/svditer.hxx>
 

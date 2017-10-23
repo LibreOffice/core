@@ -19,9 +19,9 @@
 #ifndef INCLUDED_CPPUHELPER_ACCESS_CONTROL_HXX
 #define INCLUDED_CPPUHELPER_ACCESS_CONTROL_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/security/XAccessController.hpp>
-#include <cppuhelper/cppuhelperdllapi.h>
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/security/XAccessController.hpp"
+#include "cppuhelper/cppuhelperdllapi.h"
 
 
 namespace cppu

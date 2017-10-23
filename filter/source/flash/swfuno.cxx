@@ -21,7 +21,7 @@
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include <swfuno.hxx>
+#include "swfuno.hxx"
 
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;

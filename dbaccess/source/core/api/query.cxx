@@ -18,11 +18,11 @@
  */
 
 #include "query.hxx"
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include <connectivity/warningscontainer.hxx>
 #include "HelperCollections.hxx"
-#include "core_resource.hxx"
-#include "strings.hrc"
+#include <core_resource.hxx>
+#include <strings.hrc>
 
 #include <cppuhelper/queryinterface.hxx>
 #include <tools/debug.hxx>
@@ -39,14 +39,14 @@
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>
 #include <unotools/sharedunocomponent.hxx>
-#include "definitioncolumn.hxx"
+#include <definitioncolumn.hxx>
 
 #include <functional>
 
-#include "sdbcoretools.hxx"
-#include "querycomposer.hxx"
+#include <sdbcoretools.hxx>
+#include <querycomposer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include "ContainerMediator.hxx"
+#include <ContainerMediator.hxx>
 
 using namespace dbaccess;
 using namespace ::com::sun::star::uno;

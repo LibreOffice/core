@@ -21,10 +21,10 @@
 
 #include <basic/sbxdef.hxx>
 
-#include "docsh.hxx"
-#include "patattr.hxx"
-#include "scitems.hxx"
-#include "document.hxx"
+#include <docsh.hxx>
+#include <patattr.hxx>
+#include <scitems.hxx>
+#include <document.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

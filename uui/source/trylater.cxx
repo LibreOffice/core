@@ -18,7 +18,7 @@
  */
 
 #include <unotools/resmgr.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 #include "trylater.hxx"
 
 TryLaterQueryBox::TryLaterQueryBox(vcl::Window* pParent, const std::locale& rResLocale, const OUString& aMessage)

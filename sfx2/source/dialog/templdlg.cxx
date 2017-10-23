@@ -40,9 +40,9 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/templdlg.hxx>
-#include "templdgi.hxx"
-#include "tplcitem.hxx"
-#include "sfxtypes.hxx"
+#include <templdgi.hxx>
+#include <tplcitem.hxx>
+#include <sfxtypes.hxx>
 #include <sfx2/styfitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
@@ -50,15 +50,15 @@
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/sfxresid.hxx>
 
-#include "sfx2/strings.hrc"
-#include "arrdecl.hxx"
+#include <sfx2/strings.hrc>
+#include <arrdecl.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/module.hxx>
-#include "helpids.h"
-#include "bitmaps.hlst"
-#include "appdata.hxx"
+#include <helpids.h>
+#include <bitmaps.hlst>
+#include <appdata.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <svtools/svlbitm.hxx>

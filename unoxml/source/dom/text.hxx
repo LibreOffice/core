@@ -30,7 +30,7 @@
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XText.hpp>
 
-#include <characterdata.hxx>
+#include "characterdata.hxx"
 
 namespace DOM
 {

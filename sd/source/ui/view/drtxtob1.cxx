@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TextObjectBar.hxx"
+#include <TextObjectBar.hxx>
 
 #include <svx/svxids.hrc>
 
@@ -56,21 +56,21 @@
 #include <svl/itemiter.hxx>
 #include <editeng/cmapitem.hxx>
 
-#include "app.hrc"
-#include "strings.hrc"
-#include "sdresid.hxx"
-#include "prlayout.hxx"
-#include "ViewShell.hxx"
-#include "drawview.hxx"
-#include "drawdoc.hxx"
-#include "stlpool.hxx"
-#include "stlsheet.hxx"
-#include "OutlineView.hxx"
-#include "Window.hxx"
-#include "futempl.hxx"
-#include "DrawDocShell.hxx"
-#include "Outliner.hxx"
-#include "futext.hxx"
+#include <app.hrc>
+#include <strings.hrc>
+#include <sdresid.hxx>
+#include <prlayout.hxx>
+#include <ViewShell.hxx>
+#include <drawview.hxx>
+#include <drawdoc.hxx>
+#include <stlpool.hxx>
+#include <stlsheet.hxx>
+#include <OutlineView.hxx>
+#include <Window.hxx>
+#include <futempl.hxx>
+#include <DrawDocShell.hxx>
+#include <Outliner.hxx>
+#include <futext.hxx>
 
 #include <memory>
 

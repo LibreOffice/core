@@ -23,7 +23,7 @@
 #include <vcl/virdev.hxx>
 #include "csvcontrol.hxx"
 #include "csvsplits.hxx"
-#include "scdllapi.h"
+#include <scdllapi.h>
 
 class ScAccessibleCsvControl;
 

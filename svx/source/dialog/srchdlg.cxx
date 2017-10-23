@@ -52,8 +52,8 @@
 #include <sfx2/app.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include "svx/srchdlg.hxx"
-#include "svx/strarray.hxx"
+#include <svx/srchdlg.hxx>
+#include <svx/strarray.hxx>
 
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
@@ -64,7 +64,7 @@
 #include <svx/pageitem.hxx>
 #include "srchctrl.hxx"
 #include <svx/dialmgr.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <editeng/brushitem.hxx>
 #include <tools/resary.hxx>
 #include <svx/svxdlg.hxx>

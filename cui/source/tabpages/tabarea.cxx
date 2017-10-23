@@ -27,11 +27,11 @@
 #include <svx/dialogs.hrc>
 
 #include <svx/xtable.hxx>
-#include "svx/globl3d.hxx"
+#include <svx/globl3d.hxx>
 #include <svx/svdmodel.hxx>
-#include "svx/drawitem.hxx"
-#include "cuitabarea.hxx"
-#include "dlgname.hxx"
+#include <svx/drawitem.hxx>
+#include <cuitabarea.hxx>
+#include <dlgname.hxx>
 #include <dialmgr.hxx>
 
 SvxAreaTabDialog::SvxAreaTabDialog

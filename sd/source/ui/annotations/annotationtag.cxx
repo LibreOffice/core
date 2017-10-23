@@ -34,17 +34,17 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svddrgmt.hxx>
 
-#include "View.hxx"
-#include "sdresid.hxx"
-#include "strings.hrc"
+#include <View.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
 #include "annotationmanagerimpl.hxx"
 #include "annotationwindow.hxx"
 #include "annotationtag.hxx"
-#include "sdpage.hxx"
-#include "ViewShell.hxx"
-#include "app.hrc"
-#include "Window.hxx"
-#include "drawdoc.hxx"
+#include <sdpage.hxx>
+#include <ViewShell.hxx>
+#include <app.hrc>
+#include <Window.hxx>
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

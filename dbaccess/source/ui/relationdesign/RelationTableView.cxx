@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "RelationTableView.hxx"
-#include "JoinExchange.hxx"
+#include <RelationTableView.hxx>
+#include <JoinExchange.hxx>
 #include <comphelper/extract.hxx>
-#include "core_resource.hxx"
-#include "browserids.hxx"
+#include <core_resource.hxx>
+#include <browserids.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
@@ -30,23 +30,23 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/sequence.hxx>
-#include "helpids.h"
-#include "RelationDesignView.hxx"
-#include "JoinController.hxx"
-#include "TableWindow.hxx"
-#include "TableWindowData.hxx"
+#include <helpids.h>
+#include <RelationDesignView.hxx>
+#include <JoinController.hxx>
+#include <TableWindow.hxx>
+#include <TableWindowData.hxx>
 #include "RTableConnection.hxx"
-#include "RTableConnectionData.hxx"
-#include "RelationDlg.hxx"
-#include "sqlmessage.hxx"
-#include "strings.hrc"
-#include "UITools.hxx"
+#include <RTableConnectionData.hxx>
+#include <RelationDlg.hxx>
+#include <sqlmessage.hxx>
+#include <strings.hrc>
+#include <UITools.hxx>
 #include <connectivity/dbexception.hxx>
 #include "RTableWindow.hxx"
-#include "JAccess.hxx"
+#include <JAccess.hxx>
 #include <svl/undo.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 

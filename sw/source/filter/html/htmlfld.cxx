@@ -20,7 +20,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
-#include "docsh.hxx"
+#include <docsh.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <svtools/htmltokn.h>
 #include <svl/zformat.hxx>

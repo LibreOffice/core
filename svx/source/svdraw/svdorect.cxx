@@ -34,8 +34,8 @@
 #include <svx/svdview.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdopath.hxx>
-#include "svdglob.hxx"
-#include "svx/strings.hrc"
+#include <svdglob.hxx>
+#include <svx/strings.hrc>
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>

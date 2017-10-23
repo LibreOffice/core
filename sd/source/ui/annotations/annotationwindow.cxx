@@ -73,16 +73,16 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 #include "annotationwindow.hxx"
 #include "annotationmanagerimpl.hxx"
 
-#include "DrawDocShell.hxx"
-#include "ViewShell.hxx"
-#include "drawdoc.hxx"
-#include "View.hxx"
-#include "textapi.hxx"
-#include "sdresid.hxx"
+#include <DrawDocShell.hxx>
+#include <ViewShell.hxx>
+#include <drawdoc.hxx>
+#include <View.hxx>
+#include <textapi.hxx>
+#include <sdresid.hxx>
 
 #include <memory>
 

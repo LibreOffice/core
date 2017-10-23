@@ -21,7 +21,7 @@
 #define INCLUDED_IDL_INC_PARSER_HXX
 
 #include <rtl/ustring.hxx>
-#include <types.hxx>
+#include "types.hxx"
 
 class SvTokenStream;
 class SvIdlDataBase;

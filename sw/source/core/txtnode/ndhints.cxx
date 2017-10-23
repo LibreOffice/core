@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "txatbase.hxx"
-#include "ndhints.hxx"
+#include <txatbase.hxx>
+#include <ndhints.hxx>
 #include <txtatr.hxx>
 
 #ifdef DBG_UTIL

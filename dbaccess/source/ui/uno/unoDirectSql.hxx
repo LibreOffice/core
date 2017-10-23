@@ -21,11 +21,11 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_UNO_UNODIRECTSQL_HXX
 
 #include <svtools/genericunodialog.hxx>
-#include "apitools.hxx"
+#include <apitools.hxx>
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
 namespace dbaui

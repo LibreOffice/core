@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSSCROLLBARMANAGER_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSSCROLLBARMANAGER_HXX
 
-#include "SlideSorter.hxx"
+#include <SlideSorter.hxx>
 
 #include <tools/link.hxx>
 #include <tools/gen.hxx>

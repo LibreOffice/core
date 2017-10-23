@@ -7,22 +7,22 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "namedefdlg.hxx"
+#include <namedefdlg.hxx>
 
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <formula/errorcodes.hxx>
 #include <sfx2/app.hxx>
 
-#include "document.hxx"
-#include "globstr.hrc"
-#include "globalnames.hxx"
-#include "rangenam.hxx"
-#include "reffact.hxx"
-#include "undorangename.hxx"
-#include "tabvwsh.hxx"
-#include "tokenarray.hxx"
-#include "sc.hrc"
+#include <document.hxx>
+#include <globstr.hrc>
+#include <globalnames.hxx>
+#include <rangenam.hxx>
+#include <reffact.hxx>
+#include <undorangename.hxx>
+#include <tabvwsh.hxx>
+#include <tokenarray.hxx>
+#include <sc.hrc>
 
 ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
         const ScViewData* pViewData, const std::map<OUString, ScRangeName*>& aRangeMap,

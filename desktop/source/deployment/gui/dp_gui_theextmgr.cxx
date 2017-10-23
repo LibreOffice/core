@@ -34,8 +34,8 @@
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
 #include "dp_gui_theextmgr.hxx"
-#include "dp_identifier.hxx"
-#include "dp_update.hxx"
+#include <dp_identifier.hxx>
+#include <dp_update.hxx>
 
 #define USER_PACKAGE_MANAGER    "user"
 #define SHARED_PACKAGE_MANAGER  "shared"

@@ -17,40 +17,40 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "SlideSorterViewShell.hxx"
-#include "ViewShellImplementation.hxx"
+#include <SlideSorterViewShell.hxx>
+#include <ViewShellImplementation.hxx>
 
-#include "SlideSorter.hxx"
-#include "controller/SlideSorterController.hxx"
-#include "controller/SlsClipboard.hxx"
-#include "controller/SlsFocusManager.hxx"
-#include "controller/SlsScrollBarManager.hxx"
-#include "controller/SlsPageSelector.hxx"
-#include "controller/SlsSlotManager.hxx"
-#include "controller/SlsCurrentSlideManager.hxx"
-#include "controller/SlsSelectionManager.hxx"
-#include "controller/SlsSelectionFunction.hxx"
-#include "controller/SlsProperties.hxx"
-#include "view/SlideSorterView.hxx"
-#include "view/SlsLayouter.hxx"
-#include "model/SlideSorterModel.hxx"
-#include "model/SlsPageEnumeration.hxx"
-#include "model/SlsPageDescriptor.hxx"
-#include "framework/FrameworkHelper.hxx"
-#include "ViewShellBase.hxx"
-#include "drawdoc.hxx"
-#include "app.hrc"
-#include "strings.hrc"
-#include "sdattr.hrc"
-#include "sdresid.hxx"
-#include "AccessibleSlideSorterView.hxx"
-#include "DrawDocShell.hxx"
-#include "DrawViewShell.hxx"
-#include "FrameView.hxx"
-#include "SdUnoSlideView.hxx"
-#include "ViewShellManager.hxx"
-#include "Window.hxx"
-#include "drawview.hxx"
+#include <SlideSorter.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsClipboard.hxx>
+#include <controller/SlsFocusManager.hxx>
+#include <controller/SlsScrollBarManager.hxx>
+#include <controller/SlsPageSelector.hxx>
+#include <controller/SlsSlotManager.hxx>
+#include <controller/SlsCurrentSlideManager.hxx>
+#include <controller/SlsSelectionManager.hxx>
+#include <controller/SlsSelectionFunction.hxx>
+#include <controller/SlsProperties.hxx>
+#include <view/SlideSorterView.hxx>
+#include <view/SlsLayouter.hxx>
+#include <model/SlideSorterModel.hxx>
+#include <model/SlsPageEnumeration.hxx>
+#include <model/SlsPageDescriptor.hxx>
+#include <framework/FrameworkHelper.hxx>
+#include <ViewShellBase.hxx>
+#include <drawdoc.hxx>
+#include <app.hrc>
+#include <strings.hrc>
+#include <sdattr.hrc>
+#include <sdresid.hxx>
+#include <AccessibleSlideSorterView.hxx>
+#include <DrawDocShell.hxx>
+#include <DrawViewShell.hxx>
+#include <FrameView.hxx>
+#include <SdUnoSlideView.hxx>
+#include <ViewShellManager.hxx>
+#include <Window.hxx>
+#include <drawview.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
@@ -70,7 +70,7 @@
 
 using namespace ::sd::slidesorter;
 #define SlideSorterViewShell
-#include "sdslots.hxx"
+#include <sdslots.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -18,19 +18,19 @@
  */
 
 #include <UndoSplitMove.hxx>
-#include "doc.hxx"
+#include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
-#include "pam.hxx"
-#include "swtable.hxx"
-#include "ndtxt.hxx"
-#include "swundo.hxx"
+#include <pam.hxx>
+#include <swtable.hxx>
+#include <ndtxt.hxx>
+#include <swundo.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
 #include <UndoCore.hxx>
-#include "rolbck.hxx"
-#include "redline.hxx"
-#include "docary.hxx"
+#include <rolbck.hxx>
+#include <redline.hxx>
+#include <docary.hxx>
 #include <IShellCursorSupplier.hxx>
 
 // SPLITNODE

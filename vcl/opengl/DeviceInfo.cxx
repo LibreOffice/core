@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "opengl/DeviceInfo.hxx"
+#include <opengl/DeviceInfo.hxx>
 
 OpenGLDeviceInfo::~OpenGLDeviceInfo()
 {

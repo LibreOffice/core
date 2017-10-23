@@ -35,7 +35,7 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
-#include "apitools.hxx"
+#include <apitools.hxx>
 
 #include "FilteredContainer.hxx"
 

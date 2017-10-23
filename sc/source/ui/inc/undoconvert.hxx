@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_UNDOCONVERT_HXX
 #define INCLUDED_SC_UNDOCONVERT_HXX
 
-#include <undobase.hxx>
+#include "undobase.hxx"
 #include <cellvalues.hxx>
 
 namespace sc {

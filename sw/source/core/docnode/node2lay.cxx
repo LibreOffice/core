@@ -23,12 +23,12 @@
 #include <swtable.hxx>
 #include <ftnfrm.hxx>
 #include <sectfrm.hxx>
-#include "frmfmt.hxx"
-#include "cntfrm.hxx"
-#include "tabfrm.hxx"
-#include "frmtool.hxx"
-#include "section.hxx"
-#include "node2lay.hxx"
+#include <frmfmt.hxx>
+#include <cntfrm.hxx>
+#include <tabfrm.hxx>
+#include <frmtool.hxx>
+#include <section.hxx>
+#include <node2lay.hxx>
 
 /**
  * The SwNode2LayImpl class does the actual work, the SwNode2Layout class is

@@ -17,23 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "RegressionCurveHelper.hxx"
-#include "MeanValueRegressionCurveCalculator.hxx"
-#include "LinearRegressionCurveCalculator.hxx"
-#include "PolynomialRegressionCurveCalculator.hxx"
-#include "MovingAverageRegressionCurveCalculator.hxx"
-#include "LogarithmicRegressionCurveCalculator.hxx"
-#include "ExponentialRegressionCurveCalculator.hxx"
-#include "PotentialRegressionCurveCalculator.hxx"
-#include "CommonConverters.hxx"
+#include <RegressionCurveHelper.hxx>
+#include <MeanValueRegressionCurveCalculator.hxx>
+#include <LinearRegressionCurveCalculator.hxx>
+#include <PolynomialRegressionCurveCalculator.hxx>
+#include <MovingAverageRegressionCurveCalculator.hxx>
+#include <LogarithmicRegressionCurveCalculator.hxx>
+#include <ExponentialRegressionCurveCalculator.hxx>
+#include <PotentialRegressionCurveCalculator.hxx>
+#include <CommonConverters.hxx>
 #include "RegressionCurveModel.hxx"
-#include "ChartTypeHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "macros.hxx"
-#include "PropertyHelper.hxx"
-#include "ResId.hxx"
-#include "strings.hrc"
-#include "DiagramHelper.hxx"
+#include <ChartTypeHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <macros.hxx>
+#include <PropertyHelper.hxx>
+#include <ResId.hxx>
+#include <strings.hrc>
+#include <DiagramHelper.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 using namespace ::com::sun::star;

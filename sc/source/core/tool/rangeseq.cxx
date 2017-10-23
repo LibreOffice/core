@@ -24,11 +24,11 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/string.hxx>
-#include "rangeseq.hxx"
-#include "document.hxx"
-#include "dociter.hxx"
-#include "scmatrix.hxx"
-#include "formulacell.hxx"
+#include <rangeseq.hxx>
+#include <document.hxx>
+#include <dociter.hxx>
+#include <scmatrix.hxx>
+#include <formulacell.hxx>
 
 using namespace com::sun::star;
 

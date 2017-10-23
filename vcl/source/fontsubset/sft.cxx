@@ -33,7 +33,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #endif
-#include "sft.hxx"
+#include <sft.hxx>
 #include "ttcr.hxx"
 #include "xlat.hxx"
 #include <rtl/crc.h>

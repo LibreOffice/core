@@ -36,7 +36,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vcl/canvastools.hxx>
 #include <implrenderer.hxx>
-#include <emfpfont.hxx>
+#include "emfpfont.hxx"
 
 
 namespace cppcanvas

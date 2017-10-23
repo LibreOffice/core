@@ -18,12 +18,12 @@
  */
 
 
-#include "xsecctl.hxx"
-#include "documentsignaturehelper.hxx"
-#include "framework/saxeventkeeperimpl.hxx"
-#include "xmlsec/xmldocumentwrapper_xmlsecimpl.hxx"
+#include <xsecctl.hxx>
+#include <documentsignaturehelper.hxx>
+#include <framework/saxeventkeeperimpl.hxx>
+#include <xmlsec/xmldocumentwrapper_xmlsecimpl.hxx>
 #if !defined(MACOSX) && !defined(WNT) && !defined(ANDROID)
-# include "gpg/xmlsignature_gpgimpl.hxx"
+# include <gpg/xmlsignature_gpgimpl.hxx>
 #endif
 
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
@@ -42,7 +42,7 @@
 #include <unotools/datetime.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 #include <sax/tools/converter.hxx>
-#include <ooxmlsecexporter.hxx>
+#include "ooxmlsecexporter.hxx"
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;

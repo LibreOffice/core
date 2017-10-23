@@ -30,7 +30,7 @@
 #include <typelib/typedescription.h>
 #include <uno/dispatcher.h>
 #include <uno/environment.h>
-#include <vtablefactory.hxx>
+#include "vtablefactory.hxx"
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XInterface;

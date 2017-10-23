@@ -19,13 +19,13 @@
 
 #include <svx/dialogs.hrc>
 
-#include "sdattr.hxx"
-#include "strings.hrc"
+#include <sdattr.hxx>
+#include <strings.hrc>
 
-#include "diactrl.hxx"
+#include <diactrl.hxx>
 
-#include "sdresid.hxx"
-#include "app.hrc"
+#include <sdresid.hxx>
+#include <app.hrc>
 
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>

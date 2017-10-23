@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbregister.hxx"
+#include <dbregister.hxx>
 #include "dbregistersettings.hxx"
 #include "connpooloptions.hxx"
 #include <svl/filenotation.hxx>
-#include "helpids.h"
+#include <helpids.h>
 #include <svtools/editbrowsebox.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <vcl/field.hxx>

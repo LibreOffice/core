@@ -27,11 +27,11 @@
 #include "vbaglobals.hxx"
 #include <vector>
 #include <vcl/msgbox.hxx>
-#include "tabvwsh.hxx"
-#include "viewdata.hxx"
-#include "compiler.hxx"
-#include "tokenarray.hxx"
-#include "cellsuno.hxx"
+#include <tabvwsh.hxx>
+#include <viewdata.hxx>
+#include <compiler.hxx>
+#include <tokenarray.hxx>
+#include <cellsuno.hxx>
 
 #include <memory>
 

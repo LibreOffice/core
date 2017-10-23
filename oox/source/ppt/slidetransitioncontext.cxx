@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ppt/slidetransitioncontext.hxx"
+#include <oox/ppt/slidetransitioncontext.hxx>
 
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
 #include <oox/ppt/backgroundproperties.hxx>
-#include "oox/ppt/slidefragmenthandler.hxx"
-#include "oox/ppt/soundactioncontext.hxx"
-#include "oox/drawingml/shapegroupcontext.hxx"
-#include "oox/helper/attributelist.hxx"
+#include <oox/ppt/slidefragmenthandler.hxx>
+#include <oox/ppt/soundactioncontext.hxx>
+#include <oox/drawingml/shapegroupcontext.hxx>
+#include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 

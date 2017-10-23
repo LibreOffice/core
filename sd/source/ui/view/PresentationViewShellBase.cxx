@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "PresentationViewShellBase.hxx"
-#include "sdresid.hxx"
-#include "DrawDocShell.hxx"
-#include "strings.hrc"
-#include "framework/FrameworkHelper.hxx"
-#include "framework/PresentationModule.hxx"
+#include <PresentationViewShellBase.hxx>
+#include <sdresid.hxx>
+#include <DrawDocShell.hxx>
+#include <strings.hrc>
+#include <framework/FrameworkHelper.hxx>
+#include <framework/PresentationModule.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>

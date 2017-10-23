@@ -8,14 +8,14 @@
  */
 
 #include <memory>
-#include "PivotTableDataSequence.hxx"
+#include <PivotTableDataSequence.hxx>
 
 #include <sal/config.h>
 
-#include "miscuno.hxx"
-#include "document.hxx"
-#include "docsh.hxx"
-#include "hints.hxx"
+#include <miscuno.hxx>
+#include <document.hxx>
+#include <docsh.hxx>
+#include <hints.hxx>
 
 #include <com/sun/star/chart/ChartDataChangeEvent.hpp>
 

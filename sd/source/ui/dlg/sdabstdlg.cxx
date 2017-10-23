@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "sdabstdlg.hxx"
+#include <sdabstdlg.hxx>
 
 #include <osl/module.hxx>
 #include <rtl/ustring.hxx>

@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "CommandDispatchContainer.hxx"
+#include <CommandDispatchContainer.hxx>
 #include "UndoCommandDispatch.hxx"
 #include "StatusBarCommandDispatch.hxx"
-#include "DisposeHelper.hxx"
-#include "macros.hxx"
-#include "ChartController.hxx"
+#include <DisposeHelper.hxx>
+#include <macros.hxx>
+#include <ChartController.hxx>
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"
 

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "types.hxx"
-#include "scmatrix.hxx"
+#include <types.hxx>
+#include <scmatrix.hxx>
 
 namespace sc {
 

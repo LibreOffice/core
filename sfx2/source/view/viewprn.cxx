@@ -42,7 +42,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objsh.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -50,7 +50,7 @@
 
 #include <toolkit/awt/vclxdevice.hxx>
 
-#include "helpids.h"
+#include <helpids.h>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

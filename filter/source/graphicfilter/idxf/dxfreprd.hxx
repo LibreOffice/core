@@ -20,8 +20,8 @@
 #ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFREPRD_HXX
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFREPRD_HXX
 
-#include <dxfblkrd.hxx>
-#include <dxftblrd.hxx>
+#include "dxfblkrd.hxx"
+#include "dxftblrd.hxx"
 #include <array>
 
 

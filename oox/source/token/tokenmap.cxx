@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/token/tokenmap.hxx"
+#include <oox/token/tokenmap.hxx>
 
 #include <string.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
-#include "oox/token/tokens.hxx"
+#include <oox/token/tokens.hxx>
 
 namespace oox {
 
@@ -37,7 +37,7 @@ namespace {
 #pragma GCC diagnostic ignored "-Wdeprecated-register"
 #endif
 #endif
-#include "tokenhash.inc"
+#include <tokenhash.inc>
 #if defined __clang__
 #pragma GCC diagnostic pop
 #endif
@@ -51,7 +51,7 @@ TokenMap::TokenMap() :
     static const sal_Char* sppcTokenNames[] =
     {
 // include auto-generated C array with token names as C strings
-#include "tokennames.inc"
+#include <tokennames.inc>
         ""
     };
 

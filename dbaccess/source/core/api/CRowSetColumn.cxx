@@ -18,8 +18,8 @@
  */
 
 
-#include "stringconstants.hxx"
-#include "apitools.hxx"
+#include <stringconstants.hxx>
+#include <apitools.hxx>
 #include "CRowSetColumn.hxx"
 
 #include <com/sun/star/sdb/XColumn.hpp>

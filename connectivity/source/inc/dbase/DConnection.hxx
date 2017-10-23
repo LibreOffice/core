@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DCONNECTION_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DCONNECTION_HXX
 
-#include "file/FConnection.hxx"
+#include <file/FConnection.hxx>
 
 namespace connectivity
 {

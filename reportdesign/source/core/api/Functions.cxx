@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "Functions.hxx"
-#include "Function.hxx"
-#include "core_resource.hxx"
-#include "strings.hrc"
+#include <Functions.hxx>
+#include <Function.hxx>
+#include <core_resource.hxx>
+#include <strings.hrc>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <comphelper/property.hxx>
 #include <algorithm>

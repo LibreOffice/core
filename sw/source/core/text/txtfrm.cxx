@@ -35,7 +35,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
-#include "rootfrm.hxx"
+#include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <viewsh.hxx>
 #include <pam.hxx>

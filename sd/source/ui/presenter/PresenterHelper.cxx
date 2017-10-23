@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 
 #include "PresenterHelper.hxx"
 #include "CanvasUpdateRequester.hxx"
 #include "PresenterCanvas.hxx"
-#include "facreg.hxx"
+#include <facreg.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/WindowClass.hpp>
@@ -35,8 +35,8 @@
 #include <vcl/wrkwin.hxx>
 
 
-#include "bitmaps.hlst"
-#include "sdresid.hxx"
+#include <bitmaps.hlst>
+#include <sdresid.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

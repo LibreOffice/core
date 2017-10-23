@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 
-#include "layfrm.hxx"
-#include "ftnboss.hxx"
-#include "ndtxt.hxx"
-#include "paratr.hxx"
+#include <layfrm.hxx>
+#include <ftnboss.hxx>
+#include <ndtxt.hxx>
+#include <paratr.hxx>
 #include <editeng/orphitem.hxx>
 #include <editeng/widwitem.hxx>
 #include <editeng/keepitem.hxx>
@@ -33,11 +33,11 @@
 #include <rowfrm.hxx>
 
 #include "widorp.hxx"
-#include "txtfrm.hxx"
+#include <txtfrm.hxx>
 #include "itrtxt.hxx"
-#include "sectfrm.hxx"
-#include "ftnfrm.hxx"
-#include "pagefrm.hxx"
+#include <sectfrm.hxx>
+#include <ftnfrm.hxx>
+#include <pagefrm.hxx>
 
 #undef WIDOWTWIPS
 

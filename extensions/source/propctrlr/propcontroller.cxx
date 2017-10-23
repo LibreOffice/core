@@ -22,7 +22,7 @@
 #include "pcrstrings.hxx"
 #include "standardcontrol.hxx"
 #include "linedescriptor.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 #include "propertyeditor.hxx"
 #include "modulepcr.hxx"
 #include "formstrings.hxx"

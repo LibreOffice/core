@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVGIO_INC_SVGGRADIENTSTOPNODE_HXX
 #define INCLUDED_SVGIO_INC_SVGGRADIENTSTOPNODE_HXX
 
-#include <svgnode.hxx>
-#include <svgstyleattributes.hxx>
+#include "svgnode.hxx"
+#include "svgstyleattributes.hxx"
 
 namespace svgio
 {

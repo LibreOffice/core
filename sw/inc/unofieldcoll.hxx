@@ -24,7 +24,7 @@
 
 #include <com/sun/star/util/XRefreshable.hpp>
 
-#include <unocoll.hxx>
+#include "unocoll.hxx"
 
 class SwFieldType;
 

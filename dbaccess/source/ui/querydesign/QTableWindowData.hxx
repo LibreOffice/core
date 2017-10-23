@@ -19,7 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QTABLEWINDOWDATA_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QTABLEWINDOWDATA_HXX
 
-#include "TableWindowData.hxx"
+#include <TableWindowData.hxx>
 #include <vector>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>

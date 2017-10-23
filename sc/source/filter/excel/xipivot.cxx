@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xipivot.hxx"
+#include <xipivot.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
@@ -28,26 +28,26 @@
 #include <svl/zformat.hxx>
 #include <svl/intitem.hxx>
 
-#include "document.hxx"
-#include "formulacell.hxx"
-#include "dpsave.hxx"
-#include "dpdimsave.hxx"
-#include "dpobject.hxx"
-#include "dpshttab.hxx"
-#include "dpoutputgeometry.hxx"
-#include "scitems.hxx"
-#include "attrib.hxx"
+#include <document.hxx>
+#include <formulacell.hxx>
+#include <dpsave.hxx>
+#include <dpdimsave.hxx>
+#include <dpobject.hxx>
+#include <dpshttab.hxx>
+#include <dpoutputgeometry.hxx>
+#include <scitems.hxx>
+#include <attrib.hxx>
 
-#include "xltracer.hxx"
-#include "xistream.hxx"
-#include "xihelper.hxx"
-#include "xilink.hxx"
-#include "xiescher.hxx"
+#include <xltracer.hxx>
+#include <xistream.hxx>
+#include <xihelper.hxx>
+#include <xilink.hxx>
+#include <xiescher.hxx>
 
 //TODO ExcelToSc usage
-#include "excform.hxx"
-#include "xltable.hxx"
-#include "documentimport.hxx"
+#include <excform.hxx>
+#include <xltable.hxx>
+#include <documentimport.hxx>
 
 #include <vector>
 

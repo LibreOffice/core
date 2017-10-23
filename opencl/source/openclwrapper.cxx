@@ -9,7 +9,7 @@
 
 #include <config_folders.h>
 
-#include "opencl_device.hxx"
+#include <opencl_device.hxx>
 
 #include <comphelper/string.hxx>
 #include <opencl/openclconfig.hxx>

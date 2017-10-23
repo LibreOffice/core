@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/ChainablePropertySet.hxx>
-#include <usrpref.hxx>
+#include "usrpref.hxx"
 
 class SwView;
 class SwViewOption;

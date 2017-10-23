@@ -10,10 +10,10 @@
 #ifndef INCLUDED_SC_QA_UNIT_HELPER_QAHELPER_HXX
 #define INCLUDED_SC_QA_UNIT_HELPER_QAHELPER_HXX
 
-#include "scdllapi.h"
+#include <scdllapi.h>
 #include "debughelper.hxx"
-#include "docsh.hxx"
-#include "address.hxx"
+#include <docsh.hxx>
+#include <address.hxx>
 
 #include <cppunit/SourceLine.h>
 

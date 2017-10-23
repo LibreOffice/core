@@ -20,8 +20,8 @@
 #ifndef INCLUDED_UNO_THREADPOOL_H
 #define INCLUDED_UNO_THREADPOOL_H
 
-#include <cppu/cppudllapi.h>
-#include <sal/types.h>
+#include "cppu/cppudllapi.h"
+#include "sal/types.h"
 
 #ifdef __cplusplus
 extern "C" {

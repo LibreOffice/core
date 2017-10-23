@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fmobj.hxx"
-#include "fmprop.hxx"
-#include "fmvwimp.hxx"
-#include "fmpgeimp.hxx"
-#include "svx/fmview.hxx"
-#include "svx/fmglob.hxx"
-#include "svx/fmpage.hxx"
-#include "editeng/editeng.hxx"
-#include "svx/svdovirt.hxx"
-#include "svx/fmmodel.hxx"
-#include "svx/dialmgr.hxx"
+#include <fmobj.hxx>
+#include <fmprop.hxx>
+#include <fmvwimp.hxx>
+#include <fmpgeimp.hxx>
+#include <svx/fmview.hxx>
+#include <svx/fmglob.hxx>
+#include <svx/fmpage.hxx>
+#include <editeng/editeng.hxx>
+#include <svx/svdovirt.hxx>
+#include <svx/fmmodel.hxx>
+#include <svx/dialmgr.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
@@ -35,7 +35,7 @@
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include "svx/fmtools.hxx"
+#include <svx/fmtools.hxx>
 
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>

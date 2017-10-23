@@ -24,7 +24,7 @@
 
 #define NC_(Context, String) (Context "\004" u8##String)
 
-#include "svx/svxerr.hxx"
+#include <svx/svxerr.hxx>
 #include <editeng/editerr.hxx>
 
 // Error-Context ---------------------------------------------------------

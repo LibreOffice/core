@@ -23,7 +23,7 @@
 
 #include <osl/thread.h>
 #include <osl/file.hxx>
-#include <osl_File_Const.h>
+#include "osl_File_Const.h"
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>

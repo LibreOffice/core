@@ -21,7 +21,7 @@
 #include "MasterPageDescriptor.hxx"
 
 #include "DocumentHelper.hxx"
-#include "sdpage.hxx"
+#include <sdpage.hxx>
 #include <tools/urlobj.hxx>
 
 namespace sd { namespace sidebar {

@@ -34,7 +34,7 @@
 #include <unx/i18n_status.hxx>
 #include <unx/i18n_ic.hxx>
 #include <unx/i18n_im.hxx>
-#include "salframe.hxx"
+#include <salframe.hxx>
 
 // i. preedit start callback
 

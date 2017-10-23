@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
-#include "AccessiblePreviewTable.hxx"
-#include "AccessiblePreviewCell.hxx"
-#include "AccessiblePreviewHeaderCell.hxx"
-#include "AccessibilityHints.hxx"
-#include "prevwsh.hxx"
-#include "miscuno.hxx"
-#include "prevloc.hxx"
-#include "attrib.hxx"
-#include "document.hxx"
-#include "scresid.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
+#include <scitems.hxx>
+#include <AccessiblePreviewTable.hxx>
+#include <AccessiblePreviewCell.hxx>
+#include <AccessiblePreviewHeaderCell.hxx>
+#include <AccessibilityHints.hxx>
+#include <prevwsh.hxx>
+#include <miscuno.hxx>
+#include <prevloc.hxx>
+#include <attrib.hxx>
+#include <document.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

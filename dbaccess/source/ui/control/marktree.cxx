@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "marktree.hxx"
-#include "strings.hrc"
+#include <marktree.hxx>
+#include <strings.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

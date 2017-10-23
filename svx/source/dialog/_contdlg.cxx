@@ -31,7 +31,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <svx/dialmgr.hxx>
-#include "svx/xoutbmp.hxx"
+#include <svx/xoutbmp.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <svx/contdlg.hxx>
@@ -39,7 +39,7 @@
 #include "contwnd.hxx"
 #include <svx/svdtrans.hxx>
 #include <svx/svdopath.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>

@@ -22,9 +22,9 @@
 #include <iostream>
 #endif
 #include <connectivity/sdbcx/VColumn.hxx>
-#include "file/FResultSet.hxx"
-#include "sqlbison.hxx"
-#include "file/FResultSetMetaData.hxx"
+#include <file/FResultSet.hxx>
+#include <sqlbison.hxx>
+#include <file/FResultSetMetaData.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <comphelper/property.hxx>
@@ -46,8 +46,8 @@
 #include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/types.hxx>
-#include "resource/sharedresources.hxx"
-#include "strings.hrc"
+#include <resource/sharedresources.hxx>
+#include <strings.hrc>
 
 using namespace ::comphelper;
 using namespace connectivity;

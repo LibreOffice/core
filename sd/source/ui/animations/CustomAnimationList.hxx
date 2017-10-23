@@ -27,8 +27,8 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <svtools/treelistbox.hxx>
 #include <CustomAnimationEffect.hxx>
-#include "CustomAnimationPreset.hxx"
-#include "strings.hrc"
+#include <CustomAnimationPreset.hxx>
+#include <strings.hrc>
 
 namespace sd {
 

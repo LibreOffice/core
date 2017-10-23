@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_JSTATEMENT_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_JSTATEMENT_HXX
 
-#include "java/lang/Object.hxx"
+#include <java/lang/Object.hxx>
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbc/XMultipleResults.hpp>
@@ -36,7 +36,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <java/sql/Connection.hxx>
-#include "java/sql/ConnectionLog.hxx"
+#include <java/sql/ConnectionLog.hxx>
 
 namespace connectivity
 {

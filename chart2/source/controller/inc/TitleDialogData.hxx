@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_TITLEDIALOGDATA_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_TITLEDIALOGDATA_HXX
 
-#include "ReferenceSizeProvider.hxx"
+#include <ReferenceSizeProvider.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

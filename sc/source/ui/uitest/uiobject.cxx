@@ -8,14 +8,14 @@
  */
 
 #include <memory>
-#include "uiobject.hxx"
+#include <uiobject.hxx>
 
-#include "rangeutl.hxx"
-#include "gridwin.hxx"
+#include <rangeutl.hxx>
+#include <gridwin.hxx>
 
-#include "viewdata.hxx"
-#include "dbfunc.hxx"
-#include "tabvwsh.hxx"
+#include <viewdata.hxx>
+#include <dbfunc.hxx>
+#include <tabvwsh.hxx>
 
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>

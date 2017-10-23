@@ -7,13 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "rtl/ustring.hxx"
-#include "chpfld.hxx"
-#include "ndtxt.hxx"
-#include "tox.hxx"
-#include "txmsrt.hxx"
-#include "ToxTextGenerator.hxx"
-#include "ToxTabStopTokenHandler.hxx"
+#include <rtl/ustring.hxx>
+#include <chpfld.hxx>
+#include <ndtxt.hxx>
+#include <tox.hxx>
+#include <txmsrt.hxx>
+#include <ToxTextGenerator.hxx>
+#include <ToxTabStopTokenHandler.hxx>
 
 #include <memory>
 

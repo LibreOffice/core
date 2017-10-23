@@ -19,7 +19,7 @@
 
 #include <swacorr.hxx>
 #include <swblocks.hxx>
-#include "SwXMLTextBlocks.hxx"
+#include <SwXMLTextBlocks.hxx>
 #include <swerror.h>
 #include <docsh.hxx>
 #include <editsh.hxx>

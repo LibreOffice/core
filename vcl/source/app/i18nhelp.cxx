@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "comphelper/processfactory.hxx"
-#include "unotools/localedatawrapper.hxx"
-#include "unotools/transliterationwrapper.hxx"
+#include <comphelper/processfactory.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <unotools/transliterationwrapper.hxx>
 
-#include "i18nlangtag/languagetag.hxx"
-#include "i18nutil/transliteration.hxx"
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nutil/transliteration.hxx>
 
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
 #include <vcl/i18nhelp.hxx>
 
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 using namespace ::com::sun::star;
 

@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TableDesignControl.hxx"
-#include "strings.hrc"
-#include "TableDesignView.hxx"
-#include "TableController.hxx"
-#include "browserids.hxx"
+#include <TableDesignControl.hxx>
+#include <strings.hrc>
+#include <TableDesignView.hxx>
+#include <TableController.hxx>
+#include <browserids.hxx>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/builder.hxx>
-#include "helpids.h"
+#include <helpids.h>
 
 using namespace ::dbaui;
 using namespace ::svt;

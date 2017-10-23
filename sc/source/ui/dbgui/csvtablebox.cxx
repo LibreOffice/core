@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "csvtablebox.hxx"
+#include <csvtablebox.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
-#include "editutil.hxx"
-#include "AccessibleCsvControl.hxx"
+#include <editutil.hxx>
+#include <AccessibleCsvControl.hxx>
 
 ScCsvTableBox::ScCsvTableBox( vcl::Window* pParent, WinBits nBits ) :
     ScCsvControl( pParent, maData, nBits ),

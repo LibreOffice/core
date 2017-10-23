@@ -20,12 +20,12 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_RECENTLYUSEDMASTERPAGES_HXX
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_RECENTLYUSEDMASTERPAGES_HXX
 
-#include "tools/SdGlobalResourceContainer.hxx"
+#include <tools/SdGlobalResourceContainer.hxx>
 #include <tools/link.hxx>
 #include <vcl/image.hxx>
 #include <vector>
 
-#include "DrawDocShell.hxx"
+#include <DrawDocShell.hxx>
 #include "MasterPageContainer.hxx"
 #include <com/sun/star/uno/XInterface.hpp>
 

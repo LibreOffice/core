@@ -21,7 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_BRWCTRLR_HXX
 
 #include <dbaccess/genericcontroller.hxx>
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 #include "brwview.hxx"
 #include "sbagrid.hxx"
 

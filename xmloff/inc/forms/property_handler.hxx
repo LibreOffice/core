@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLOFF_INC_FORMS_PROPERTY_HANDLER_HXX
 #define INCLUDED_XMLOFF_INC_FORMS_PROPERTY_HANDLER_HXX
 
-#include "forms/property_ids.hxx"
+#include <forms/property_ids.hxx>
 
 #include <com/sun/star/uno/Any.hxx>
 

@@ -18,15 +18,15 @@
  */
 
 #include "ColumnModel.hxx"
-#include "uiservices.hxx"
+#include <uiservices.hxx>
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/extract.hxx>
-#include "stringconstants.hxx"
-#include "dbu_reghelper.hxx"
+#include <stringconstants.hxx>
+#include <dbu_reghelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/property.hxx>
 

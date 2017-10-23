@@ -17,22 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ChartModel.hxx"
-#include "servicenames.hxx"
-#include "MediaDescriptorHelper.hxx"
-#include "macros.hxx"
-#include "DataSourceHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "DisposeHelper.hxx"
-#include "ControllerLockGuard.hxx"
-#include "ObjectIdentifier.hxx"
+#include <ChartModel.hxx>
+#include <servicenames.hxx>
+#include <MediaDescriptorHelper.hxx>
+#include <macros.hxx>
+#include <DataSourceHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <DisposeHelper.hxx>
+#include <ControllerLockGuard.hxx>
+#include <ObjectIdentifier.hxx>
 #include "PageBackground.hxx"
-#include "CloneHelper.hxx"
-#include "NameContainer.hxx"
+#include <CloneHelper.hxx>
+#include <NameContainer.hxx>
 #include "UndoManager.hxx"
-#include "ChartView.hxx"
-#include "PopupRequest.hxx"
+#include <ChartView.hxx>
+#include <PopupRequest.hxx>
 #include <svx/charthelper.hxx>
 
 #include <vcl/openglwin.hxx>

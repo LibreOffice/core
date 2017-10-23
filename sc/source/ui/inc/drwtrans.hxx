@@ -25,9 +25,9 @@
 #include <svtools/transfer.hxx>
 
 #include <sfx2/objsh.hxx>
-#include "global.hxx"
-#include "charthelper.hxx"
-#include "rangelst.hxx"
+#include <global.hxx>
+#include <charthelper.hxx>
+#include <rangelst.hxx>
 
 class SdrModel;
 class ScDocShell;

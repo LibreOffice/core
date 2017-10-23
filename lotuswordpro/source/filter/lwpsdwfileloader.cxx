@@ -59,7 +59,7 @@
 #include "lwpsdwfileloader.hxx"
 #include "lwpsdwgrouploaderv0102.hxx"
 
-#include "xfilter/xfframe.hxx"
+#include <xfilter/xfframe.hxx>
 
 LwpSdwFileLoader::LwpSdwFileLoader(SvStream* pStream, LwpGraphicObject* pGraphicObj)
     : m_pStream(pStream)

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLTABI_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLTABI_HXX
 
-#include "externalrefmgr.hxx"
+#include <externalrefmgr.hxx>
 #include "xmlimprt.hxx"
 #include "importcontext.hxx"
 

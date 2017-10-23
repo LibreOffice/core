@@ -19,11 +19,11 @@
 
 #include "tp_3D_SceneGeometry.hxx"
 
-#include "BaseGFXHelper.hxx"
-#include "macros.hxx"
-#include "DiagramHelper.hxx"
-#include "ChartTypeHelper.hxx"
-#include "ThreeDHelper.hxx"
+#include <BaseGFXHelper.hxx>
+#include <macros.hxx>
+#include <DiagramHelper.hxx>
+#include <ChartTypeHelper.hxx>
+#include <ThreeDHelper.hxx>
 #include <rtl/math.hxx>
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/drawing/ProjectionMode.hpp>

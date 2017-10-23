@@ -43,9 +43,9 @@
 #include <osl/mutex.hxx>
 #include <memory>
 
-#include "svx/svxids.hrc"
+#include <svx/svxids.hrc>
 
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 // See svx/source/form/fmshimp.cxx for other use of this .ui
 

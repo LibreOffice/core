@@ -46,9 +46,9 @@
 
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/module.hxx>
-#include "arrdecl.hxx"
+#include <arrdecl.hxx>
 #include <sfx2/app.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>
@@ -60,23 +60,23 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/minfitem.hxx>
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/request.hxx>
-#include "appdata.hxx"
+#include <appdata.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <basic/basmgr.hxx>
 #include <svtools/strings.hrc>
 #include <unotools/configmgr.hxx>
-#include "sorgitm.hxx"
-#include "appbaslib.hxx"
+#include <sorgitm.hxx>
+#include <appbaslib.hxx>
 #include <basic/basicmanagerrepository.hxx>
 
 #include <svl/srchitem.hxx>
 #include <osl/socket.hxx>
 
 #define SFX_TYPEMAP
-#include "sfxslots.hxx"
+#include <sfxslots.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

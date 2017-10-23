@@ -22,11 +22,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include "MutexContainer.hxx"
-#include "OPropertySet.hxx"
+#include <MutexContainer.hxx>
+#include <OPropertySet.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include "ModifyListenerHelper.hxx"
+#include <ModifyListenerHelper.hxx>
 #include <comphelper/uno3.hxx>
 
 namespace chart

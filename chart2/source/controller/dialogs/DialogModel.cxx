@@ -18,19 +18,19 @@
  */
 
 #include "DialogModel.hxx"
-#include "RangeSelectionHelper.hxx"
-#include "PropertyHelper.hxx"
-#include "DataSeriesHelper.hxx"
-#include "DataSourceHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "macros.hxx"
-#include "strings.hrc"
-#include "ResId.hxx"
-#include "ContainerHelper.hxx"
-#include "CommonFunctors.hxx"
-#include "ControllerLockGuard.hxx"
-#include "ChartTypeHelper.hxx"
-#include "ThreeDHelper.hxx"
+#include <RangeSelectionHelper.hxx>
+#include <PropertyHelper.hxx>
+#include <DataSeriesHelper.hxx>
+#include <DataSourceHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <macros.hxx>
+#include <strings.hrc>
+#include <ResId.hxx>
+#include <ContainerHelper.hxx>
+#include <CommonFunctors.hxx>
+#include <ControllerLockGuard.hxx>
+#include <ChartTypeHelper.hxx>
+#include <ThreeDHelper.hxx>
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>

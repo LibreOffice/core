@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <svx/svdoutl.hxx>
@@ -27,20 +27,20 @@
 #include <sfx2/bindings.hxx>
 #include <svl/ptitem.hxx>
 
-#include "tabvwsh.hxx"
-#include "gridwin.hxx"
-#include "dbfunc.hxx"
-#include "viewdata.hxx"
-#include "output.hxx"
-#include "drawview.hxx"
-#include "fupoor.hxx"
+#include <tabvwsh.hxx>
+#include <gridwin.hxx>
+#include <dbfunc.hxx>
+#include <viewdata.hxx>
+#include <output.hxx>
+#include <drawview.hxx>
+#include <fupoor.hxx>
 
-#include "drawutil.hxx"
-#include "document.hxx"
-#include "drwlayer.hxx"
+#include <drawutil.hxx>
+#include <document.hxx>
+#include <drwlayer.hxx>
 #include <vcl/svapp.hxx>
-#include "userdat.hxx"
-#include "unitconv.hxx"
+#include <userdat.hxx>
+#include <unitconv.hxx>
 #include <svx/svdpage.hxx>
 #include <comphelper/lok.hxx>
 

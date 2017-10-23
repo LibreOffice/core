@@ -25,8 +25,8 @@
 #include <editeng/langitem.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "docstat.hxx"
-#include "docsh.hxx"
+#include <docstat.hxx>
+#include <docsh.hxx>
 #include <doc.hxx>
 #include <IDocumentStatistics.hxx>
 #include "xmlimp.hxx"

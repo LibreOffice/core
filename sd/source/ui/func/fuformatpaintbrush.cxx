@@ -30,18 +30,18 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
 
-#include "sdmod.hxx"
+#include <sdmod.hxx>
 
-#include "fuformatpaintbrush.hxx"
-#include "drawview.hxx"
-#include "DrawDocShell.hxx"
-#include "DrawViewShell.hxx"
-#include "FrameView.hxx"
-#include "drawdoc.hxx"
-#include "Outliner.hxx"
-#include "ViewShellBase.hxx"
+#include <fuformatpaintbrush.hxx>
+#include <drawview.hxx>
+#include <DrawDocShell.hxx>
+#include <DrawViewShell.hxx>
+#include <FrameView.hxx>
+#include <drawdoc.hxx>
+#include <Outliner.hxx>
+#include <ViewShellBase.hxx>
 
-#include "Window.hxx"
+#include <Window.hxx>
 
 namespace sd {
 

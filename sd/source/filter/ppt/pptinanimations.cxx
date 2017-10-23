@@ -62,10 +62,10 @@
 #include <svx/svdotext.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
-#include <pptinanimations.hxx>
-#include <pptatom.hxx>
+#include "pptinanimations.hxx"
+#include "pptatom.hxx"
 #include "pptin.hxx"
-#include "randomnode.hxx"
+#include <randomnode.hxx>
 
 #include <algorithm>
 #include <memory>

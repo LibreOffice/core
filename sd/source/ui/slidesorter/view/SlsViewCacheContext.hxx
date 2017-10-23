@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_VIEW_SLSVIEWCACHECONTEXT_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_VIEW_SLSVIEWCACHECONTEXT_HXX
 
-#include "cache/SlsCacheContext.hxx"
-#include "model/SlsSharedPageDescriptor.hxx"
+#include <cache/SlsCacheContext.hxx>
+#include <model/SlsSharedPageDescriptor.hxx>
 
 namespace sd { namespace slidesorter { namespace model {
 class SlideSorterModel;

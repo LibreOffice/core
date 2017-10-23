@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_ERESULTSET_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_ERESULTSET_HXX
 
-#include "file/FResultSet.hxx"
+#include <file/FResultSet.hxx>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <cppuhelper/implbase1.hxx>
 

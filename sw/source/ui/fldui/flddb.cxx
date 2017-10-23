@@ -25,7 +25,7 @@
 #include <fldtdlg.hxx>
 #include <numrule.hxx>
 
-#include <flddb.hxx>
+#include "flddb.hxx"
 #include <dbconfig.hxx>
 #include <dbmgr.hxx>
 

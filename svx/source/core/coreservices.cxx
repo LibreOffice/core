@@ -20,8 +20,8 @@
 /** this file contains the uno service registrations for all services in the svxcore lib */
 
 
-#include "sal/types.h"
-#include "cppuhelper/factory.hxx"
+#include <sal/types.h>
+#include <cppuhelper/factory.hxx>
 
 #include <coreservices.hxx>
 

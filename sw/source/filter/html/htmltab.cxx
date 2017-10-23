@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <editeng/boxitem.hxx>
@@ -42,17 +42,17 @@
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtlsplt.hxx>
-#include "frmatr.hxx"
-#include "pam.hxx"
-#include "doc.hxx"
+#include <frmatr.hxx>
+#include <pam.hxx>
+#include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include "ndtxt.hxx"
-#include "shellio.hxx"
-#include "poolfmt.hxx"
-#include "swtable.hxx"
-#include "cellatr.hxx"
-#include "htmltbl.hxx"
-#include "swtblfmt.hxx"
+#include <ndtxt.hxx>
+#include <shellio.hxx>
+#include <poolfmt.hxx>
+#include <swtable.hxx>
+#include <cellatr.hxx>
+#include <htmltbl.hxx>
+#include <swtblfmt.hxx>
 #include "htmlnum.hxx"
 #include "swhtml.hxx"
 #include "swcss1.hxx"

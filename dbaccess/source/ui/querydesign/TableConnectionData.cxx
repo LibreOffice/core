@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TableConnectionData.hxx"
+#include <TableConnectionData.hxx>
 #include <osl/diagnose.h>
 
 using namespace dbaui;

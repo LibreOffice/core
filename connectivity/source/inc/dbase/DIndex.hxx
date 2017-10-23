@@ -22,8 +22,8 @@
 
 #include <connectivity/sdbcx/VIndex.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include "dbase/DTable.hxx"
-#include "dbase/dindexnode.hxx"
+#include <dbase/DTable.hxx>
+#include <dbase/dindexnode.hxx>
 
 #define dBASE_III_GROUP "dBase III"
 

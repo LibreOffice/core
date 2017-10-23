@@ -30,7 +30,7 @@
 #include <com/sun/star/presentation/XSlideShowView.hpp>
 
 #include "waitsymbol.hxx"
-#include "eventmultiplexer.hxx"
+#include <eventmultiplexer.hxx>
 
 #include <algorithm>
 

@@ -20,8 +20,8 @@
 #define INCLUDED_SW_SOURCE_CORE_TEXT_ITRATR_HXX
 #include "atrhndl.hxx"
 
-#include "swtypes.hxx"
-#include "swfont.hxx"
+#include <swtypes.hxx>
+#include <swfont.hxx>
 #include "porlay.hxx"
 
 class OutputDevice;

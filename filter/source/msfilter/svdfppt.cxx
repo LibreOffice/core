@@ -52,7 +52,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/numdef.hxx>
 #include <svx/svdattr.hxx>
-#include "svx/xattr.hxx"
+#include <svx/xattr.hxx>
 #include <svx/svdetc.hxx>
 #include <editeng/bulletitem.hxx>
 #include <editeng/hngpnctitem.hxx>
@@ -112,7 +112,7 @@
 #include <svx/sdtfchim.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <editeng/scripttypeitem.hxx>
-#include "com/sun/star/awt/Gradient.hpp"
+#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>

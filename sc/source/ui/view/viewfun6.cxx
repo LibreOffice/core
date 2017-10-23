@@ -26,26 +26,26 @@
 #include <svl/zformat.hxx>
 #include <editeng/editview.hxx>
 
-#include "viewfunc.hxx"
-#include "detfunc.hxx"
-#include "detdata.hxx"
-#include "viewdata.hxx"
-#include "drwlayer.hxx"
-#include "docsh.hxx"
-#include "undocell.hxx"
-#include "futext.hxx"
-#include "docfunc.hxx"
-#include "globstr.hrc"
-#include "sc.hrc"
-#include "fusel.hxx"
-#include "reftokenhelper.hxx"
-#include "externalrefmgr.hxx"
-#include "formulacell.hxx"
-#include "markdata.hxx"
-#include "drawview.hxx"
-#include "globalnames.hxx"
-#include "inputhdl.hxx"
-#include "tabvwsh.hxx"
+#include <viewfunc.hxx>
+#include <detfunc.hxx>
+#include <detdata.hxx>
+#include <viewdata.hxx>
+#include <drwlayer.hxx>
+#include <docsh.hxx>
+#include <undocell.hxx>
+#include <futext.hxx>
+#include <docfunc.hxx>
+#include <globstr.hrc>
+#include <sc.hrc>
+#include <fusel.hxx>
+#include <reftokenhelper.hxx>
+#include <externalrefmgr.hxx>
+#include <formulacell.hxx>
+#include <markdata.hxx>
+#include <drawview.hxx>
+#include <globalnames.hxx>
+#include <inputhdl.hxx>
+#include <tabvwsh.hxx>
 
 #include <vector>
 

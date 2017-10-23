@@ -31,7 +31,7 @@
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include "biginteger.hxx"
+#include <biginteger.hxx>
 
 #include "serialnumberadapter.hxx"
 

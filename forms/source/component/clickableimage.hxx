@@ -21,7 +21,7 @@
 #define INCLUDED_FORMS_SOURCE_COMPONENT_CLICKABLEIMAGE_HXX
 
 #include <memory>
-#include "FormComponent.hxx"
+#include <FormComponent.hxx>
 #include "EventThread.hxx"
 #include "imgprod.hxx"
 #include <tools/link.hxx>

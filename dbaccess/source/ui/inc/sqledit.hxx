@@ -19,7 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_SQLEDIT_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_SQLEDIT_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <rtl/ref.hxx>
 #include <svtools/editsyntaxhighlighter.hxx>

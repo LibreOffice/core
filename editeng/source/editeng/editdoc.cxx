@@ -47,16 +47,16 @@
 #include <editeng/charreliefitem.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <editeng/editids.hrc>
-#include "editeng/editdata.hxx"
-#include "editeng/lrspitem.hxx"
-#include "editeng/ulspitem.hxx"
-#include "editeng/lspcitem.hxx"
+#include <editeng/editdata.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lspcitem.hxx>
 
 #include <editdoc.hxx>
-#include <editdbg.hxx>
+#include "editdbg.hxx"
 #include <editeng/eerdll.hxx>
 #include <eerdll2.hxx>
-#include <impedit.hxx>
+#include "impedit.hxx"
 
 #include <rtl/ustrbuf.hxx>
 

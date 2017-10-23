@@ -24,11 +24,11 @@
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
 
-#include "docuno.hxx"
-#include "tabvwsh.hxx"
-#include "transobj.hxx"
-#include "scmod.hxx"
-#include "cellsuno.hxx"
+#include <docuno.hxx>
+#include <tabvwsh.hxx>
+#include <transobj.hxx>
+#include <scmod.hxx>
+#include <cellsuno.hxx>
 #include <gridwin.hxx>
 
 #include <com/sun/star/script/vba/VBAEventId.hpp>

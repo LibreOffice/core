@@ -25,15 +25,15 @@
 #include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
 
-#include "fmtuno.hxx"
-#include "miscuno.hxx"
-#include "validat.hxx"
-#include "document.hxx"
-#include "unonames.hxx"
-#include "styleuno.hxx"
-#include "tokenarray.hxx"
-#include "tokenuno.hxx"
-#include "stylehelper.hxx"
+#include <fmtuno.hxx>
+#include <miscuno.hxx>
+#include <validat.hxx>
+#include <document.hxx>
+#include <unonames.hxx>
+#include <styleuno.hxx>
+#include <tokenarray.hxx>
+#include <tokenuno.hxx>
+#include <stylehelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::formula;

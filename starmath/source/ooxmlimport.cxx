@@ -9,7 +9,7 @@
 
 
 #include "ooxmlimport.hxx"
-#include "types.hxx"
+#include <types.hxx>
 
 #include <oox/mathml/importutils.hxx>
 #include <oox/token/tokens.hxx>

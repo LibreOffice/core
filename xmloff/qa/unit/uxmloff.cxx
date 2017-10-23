@@ -13,9 +13,9 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlaustp.hxx>
-#include "SchXMLExport.hxx"
-#include "XMLChartPropertySetMapper.hxx"
-#include "impastpl.hxx"
+#include <SchXMLExport.hxx>
+#include <XMLChartPropertySetMapper.hxx>
+#include <impastpl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/util/MeasureUnit.hpp>
 

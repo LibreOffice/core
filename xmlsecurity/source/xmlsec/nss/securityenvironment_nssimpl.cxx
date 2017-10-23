@@ -18,9 +18,9 @@
  */
 
 #include "nssrenam.h"
-#include "cert.h"
-#include "secerr.h"
-#include "ocsp.h"
+#include <cert.h>
+#include <secerr.h>
+#include <ocsp.h>
 
 #include <sal/config.h>
 #include <sal/macros.h>
@@ -29,7 +29,7 @@
 #include "x509certificate_nssimpl.hxx"
 #include <comphelper/servicehelper.hxx>
 
-#include "xmlsec-wrapper.h"
+#include <xmlsec-wrapper.h>
 
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>

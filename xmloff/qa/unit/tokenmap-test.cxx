@@ -13,8 +13,8 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include "xmloff/fasttokenhandler.hxx"
-#include "xmloff/token/tokens.hxx"
+#include <xmloff/fasttokenhandler.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmltoken.hxx>
 
 using namespace std;

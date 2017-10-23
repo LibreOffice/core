@@ -26,7 +26,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
 #include "swdllapi.h"
-#include <shellid.hxx>
+#include "shellid.hxx"
 
 #include <svl/lstner.hxx>
 #include <svtools/embedhlp.hxx>

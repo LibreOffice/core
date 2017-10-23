@@ -23,7 +23,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/msgpool.hxx>
-#include "statcach.hxx"
+#include <statcach.hxx>
 #include <sfx2/viewfrm.hxx>
 
 // returns the next registered SfxControllerItem with the same id

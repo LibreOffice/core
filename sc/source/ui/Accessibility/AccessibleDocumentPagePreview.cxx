@@ -17,24 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AccessibleDocumentPagePreview.hxx"
-#include "AccessiblePreviewTable.hxx"
-#include "AccessiblePageHeader.hxx"
-#include "AccessibilityHints.hxx"
-#include "AccessibleText.hxx"
-#include "document.hxx"
-#include "prevwsh.hxx"
-#include "prevloc.hxx"
-#include "drwlayer.hxx"
-#include "editsrc.hxx"
-#include "scresid.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "DrawModelBroadcaster.hxx"
-#include "docsh.hxx"
-#include "drawview.hxx"
-#include "preview.hxx"
-#include "postit.hxx"
+#include <AccessibleDocumentPagePreview.hxx>
+#include <AccessiblePreviewTable.hxx>
+#include <AccessiblePageHeader.hxx>
+#include <AccessibilityHints.hxx>
+#include <AccessibleText.hxx>
+#include <document.hxx>
+#include <prevwsh.hxx>
+#include <prevloc.hxx>
+#include <drwlayer.hxx>
+#include <editsrc.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <DrawModelBroadcaster.hxx>
+#include <docsh.hxx>
+#include <drawview.hxx>
+#include <preview.hxx>
+#include <postit.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

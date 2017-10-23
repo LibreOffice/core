@@ -19,23 +19,23 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svl/style.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "tphf.hxx"
-#include "sc.hrc"
-#include "scabstdlg.hxx"
-#include "globstr.hrc"
-#include "tabvwsh.hxx"
-#include "viewdata.hxx"
-#include "document.hxx"
-#include "hfedtdlg.hxx"
-#include "styledlg.hxx"
-#include "scresid.hxx"
-#include "scuitphfedit.hxx"
+#include <tphf.hxx>
+#include <sc.hrc>
+#include <scabstdlg.hxx>
+#include <globstr.hrc>
+#include <tabvwsh.hxx>
+#include <viewdata.hxx>
+#include <document.hxx>
+#include <hfedtdlg.hxx>
+#include <styledlg.hxx>
+#include <scresid.hxx>
+#include <scuitphfedit.hxx>
 #include <memory>
 
 // class ScHFPage

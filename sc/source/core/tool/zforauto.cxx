@@ -22,8 +22,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include "zforauto.hxx"
-#include "global.hxx"
+#include <zforauto.hxx>
+#include <global.hxx>
 
 ScNumFormatAbbrev::ScNumFormatAbbrev() :
     sFormatstring   ( "Standard" ),

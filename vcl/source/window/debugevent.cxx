@@ -16,8 +16,8 @@
 #include <vcl/debugevent.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/menu.hxx>
-#include "window.h"
-#include "salwtype.hxx"
+#include <window.h>
+#include <salwtype.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
 

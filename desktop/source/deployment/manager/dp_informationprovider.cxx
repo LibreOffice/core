@@ -40,13 +40,13 @@
 #include <rtl/ustring.hxx>
 #include <ucbhelper/content.hxx>
 
-#include "dp_dependencies.hxx"
-#include "dp_descriptioninfoset.hxx"
-#include "dp_identifier.hxx"
-#include "dp_services.hxx"
-#include "dp_version.hxx"
-#include "dp_misc.h"
-#include "dp_update.hxx"
+#include <dp_dependencies.hxx>
+#include <dp_descriptioninfoset.hxx>
+#include <dp_identifier.hxx>
+#include <dp_services.hxx>
+#include <dp_version.hxx>
+#include <dp_misc.h>
+#include <dp_update.hxx>
 
 namespace beans      = com::sun::star::beans ;
 namespace deployment = com::sun::star::deployment ;

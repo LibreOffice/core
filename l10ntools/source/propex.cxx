@@ -7,10 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/main.h"
+#include <sal/main.h>
 
-#include "common.hxx"
-#include "propmerge.hxx"
+#include <common.hxx>
+#include <propmerge.hxx>
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {

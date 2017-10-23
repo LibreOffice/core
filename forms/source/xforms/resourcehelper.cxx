@@ -19,7 +19,7 @@
 
 
 #include "resourcehelper.hxx"
-#include "frm_resource.hxx"
+#include <frm_resource.hxx>
 
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>

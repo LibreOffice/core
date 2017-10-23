@@ -22,7 +22,7 @@
 
 #include "ItemConverter.hxx"
 #include "GraphicPropertyItemConverter.hxx"
-#include "NumberFormatterWrapper.hxx"
+#include <NumberFormatterWrapper.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

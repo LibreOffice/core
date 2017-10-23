@@ -19,7 +19,7 @@
 #ifndef INCLUDED_IDLC_INC_ASTDECLARATION_HXX
 #define INCLUDED_IDLC_INC_ASTDECLARATION_HXX
 
-#include <idlc.hxx>
+#include "idlc.hxx"
 #include <registry/registry.hxx>
 
 class AstScope;

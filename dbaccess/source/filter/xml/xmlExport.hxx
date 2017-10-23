@@ -36,7 +36,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "dsntypes.hxx"
+#include <dsntypes.hxx>
 #include <comphelper/stl_types.hxx>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 

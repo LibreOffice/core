@@ -23,18 +23,18 @@
 #include <sfx2/dispatch.hxx>
 #include <editeng/outliner.hxx>
 
-#include "fusel.hxx"
-#include "tabvwsh.hxx"
-#include "document.hxx"
-#include "detfunc.hxx"
-#include "futext.hxx"
-#include "sc.hrc"
-#include "attrib.hxx"
-#include "scitems.hxx"
-#include "userdat.hxx"
-#include "drwlayer.hxx"
-#include "docsh.hxx"
-#include "drawview.hxx"
+#include <fusel.hxx>
+#include <tabvwsh.hxx>
+#include <document.hxx>
+#include <detfunc.hxx>
+#include <futext.hxx>
+#include <sc.hrc>
+#include <attrib.hxx>
+#include <scitems.hxx>
+#include <userdat.hxx>
+#include <drwlayer.hxx>
+#include <docsh.hxx>
+#include <drawview.hxx>
 #include <svx/sdrhittesthelper.hxx>
 
 inline long Diff( const Point& rP1, const Point& rP2 )

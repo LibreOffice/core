@@ -29,7 +29,7 @@
 #include <vcl/scrbar.hxx>
 
 #include <vector>
-#include "formula/funcutl.hxx"
+#include <formula/funcutl.hxx>
 #include "ControlHelper.hxx"
 
 namespace formula

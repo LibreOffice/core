@@ -22,7 +22,7 @@
 
 #include "ViewShell.hxx"
 #include <svx/svdview.hxx>
-#include "pres.hxx"
+#include <pres.hxx>
 
 class SdDrawDocument;
 class SdOptions;

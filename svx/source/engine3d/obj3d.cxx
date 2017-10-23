@@ -19,14 +19,14 @@
 
 #include <o3tl/numeric.hxx>
 
-#include "svx/strings.hrc"
-#include "svdglob.hxx"
+#include <svx/strings.hrc>
+#include <svdglob.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
-#include "svx/svditer.hxx"
-#include "svx/globl3d.hxx"
+#include <svx/svditer.hxx>
+#include <svx/globl3d.hxx>
 #include <svx/camera3d.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/cube3d.hxx>

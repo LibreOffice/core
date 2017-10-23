@@ -20,15 +20,15 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLIDESORTERVIEW_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLIDESORTERVIEW_HXX
 
-#include "SlideSorter.hxx"
-#include "model/SlsPageDescriptor.hxx"
-#include "model/SlsSharedPageDescriptor.hxx"
-#include "view/SlsLayouter.hxx"
-#include "view/SlsILayerPainter.hxx"
+#include <SlideSorter.hxx>
+#include <model/SlsPageDescriptor.hxx>
+#include <model/SlsSharedPageDescriptor.hxx>
+#include <view/SlsLayouter.hxx>
+#include <view/SlsILayerPainter.hxx>
 
-#include "View.hxx"
+#include <View.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "pres.hxx"
+#include <pres.hxx>
 #include <o3tl/deleter.hxx>
 #include <tools/gen.hxx>
 #include <svx/svdmodel.hxx>

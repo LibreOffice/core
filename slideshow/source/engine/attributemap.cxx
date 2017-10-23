@@ -20,8 +20,8 @@
 
 #include <canvas/canvastools.hxx>
 
-#include "attributemap.hxx"
-#include "tools.hxx"
+#include <attributemap.hxx>
+#include <tools.hxx>
 
 
 namespace slideshow

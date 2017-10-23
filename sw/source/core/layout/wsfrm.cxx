@@ -27,7 +27,7 @@
 #include <anchoreddrawobject.hxx>
 #include <fmtanchr.hxx>
 #include <viewimp.hxx>
-#include "viewopt.hxx"
+#include <viewopt.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <fesh.hxx>

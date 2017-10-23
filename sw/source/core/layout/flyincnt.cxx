@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "doc.hxx"
-#include "frmtool.hxx"
-#include "hints.hxx"
+#include <doc.hxx>
+#include <frmtool.hxx>
+#include <hints.hxx>
 #include <fmtornt.hxx>
-#include "rootfrm.hxx"
-#include "txtfrm.hxx"
-#include "flyfrms.hxx"
+#include <rootfrm.hxx>
+#include <txtfrm.hxx>
+#include <flyfrms.hxx>
 #include <dflyobj.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>

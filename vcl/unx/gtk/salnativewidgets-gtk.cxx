@@ -21,14 +21,14 @@
 
 #include <vcl/svapp.hxx>
 
-#include "unx/gtk/gtkframe.hxx"
-#include "unx/gtk/gtkdata.hxx"
-#include "unx/gtk/gtkinst.hxx"
-#include "unx/gtk/gtkgdi.hxx"
+#include <unx/gtk/gtkframe.hxx>
+#include <unx/gtk/gtkdata.hxx>
+#include <unx/gtk/gtkinst.hxx>
+#include <unx/gtk/gtkgdi.hxx>
 
-#include "unx/pixmap.hxx"
-#include "saldatabasic.hxx"
-#include "unx/saldisp.hxx"
+#include <unx/pixmap.hxx>
+#include <saldatabasic.hxx>
+#include <unx/saldisp.hxx>
 
 #include <cstdio>
 #include <cmath>
@@ -41,11 +41,11 @@
 
 #include <vcl/vclenum.hxx>
 #include <vcl/settings.hxx>
-#include "unx/fontmanager.hxx"
+#include <unx/fontmanager.hxx>
 #include <vcl/decoview.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
-#include "ControlCacheKey.hxx"
+#include <ControlCacheKey.hxx>
 
 typedef struct _cairo_font_options cairo_font_options_t;
 const char* const tabPrelitDataName="libreoffice-tab-is-prelit";

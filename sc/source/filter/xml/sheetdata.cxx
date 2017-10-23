@@ -23,7 +23,7 @@
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/nmspmap.hxx>
 
-#include "sheetdata.hxx"
+#include <sheetdata.hxx>
 
 ScSheetSaveData::ScSheetSaveData() :
     mnStartTab( -1 ),

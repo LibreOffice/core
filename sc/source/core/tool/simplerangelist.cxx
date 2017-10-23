@@ -21,8 +21,8 @@
 
 #include <algorithm>
 
-#include "simplerangelist.hxx"
-#include "rangelst.hxx"
+#include <simplerangelist.hxx>
+#include <rangelst.hxx>
 
 using ::std::list;
 using ::std::pair;

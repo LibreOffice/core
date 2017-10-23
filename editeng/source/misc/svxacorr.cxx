@@ -62,9 +62,9 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/FastTokenHandler.hpp>
 #include <unotools/streamwrap.hxx>
-#include <SvXMLAutoCorrectImport.hxx>
-#include <SvXMLAutoCorrectExport.hxx>
-#include <SvXMLAutoCorrectTokenHandler.hxx>
+#include "SvXMLAutoCorrectImport.hxx"
+#include "SvXMLAutoCorrectExport.hxx"
+#include "SvXMLAutoCorrectTokenHandler.hxx"
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>

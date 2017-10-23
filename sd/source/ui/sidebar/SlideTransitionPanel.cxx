@@ -18,9 +18,9 @@
  */
 
 #include "SlideTransitionPanel.hxx"
-#include "createslidetransitionpanel.hxx"
+#include <createslidetransitionpanel.hxx>
 
-#include "ViewShellBase.hxx"
+#include <ViewShellBase.hxx>
 
 namespace sd { namespace sidebar {
 

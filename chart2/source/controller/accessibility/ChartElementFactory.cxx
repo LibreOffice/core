@@ -18,7 +18,7 @@
  */
 
 #include "ChartElementFactory.hxx"
-#include "ObjectIdentifier.hxx"
+#include <ObjectIdentifier.hxx>
 #include "AccessibleChartElement.hxx"
 
 namespace chart

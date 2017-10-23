@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_ODBCCONFIG_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_DLG_ODBCCONFIG_HXX
 
-#include "commontypes.hxx"
+#include <commontypes.hxx>
 
 #if defined(_WIN32) || (defined (UNX) && !defined(ANDROID) && !defined(IOS))
 #define HAVE_ODBC_SUPPORT

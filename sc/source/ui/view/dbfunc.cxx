@@ -17,26 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
 
-#include "dbfunc.hxx"
-#include "docsh.hxx"
-#include "attrib.hxx"
-#include "sc.hrc"
-#include "undodat.hxx"
-#include "dbdata.hxx"
-#include "globstr.hrc"
-#include "global.hxx"
-#include "dbdocfun.hxx"
-#include "editable.hxx"
-#include "queryentry.hxx"
-#include "markdata.hxx"
-#include "tabvwsh.hxx"
+#include <dbfunc.hxx>
+#include <docsh.hxx>
+#include <attrib.hxx>
+#include <sc.hrc>
+#include <undodat.hxx>
+#include <dbdata.hxx>
+#include <globstr.hrc>
+#include <global.hxx>
+#include <dbdocfun.hxx>
+#include <editable.hxx>
+#include <queryentry.hxx>
+#include <markdata.hxx>
+#include <tabvwsh.hxx>
 
 ScDBFunc::ScDBFunc( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     ScViewFunc( pParent, rDocSh, pViewShell )

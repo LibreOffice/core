@@ -10,13 +10,13 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/diagnose.h>
 
-#include "defaultsoptions.hxx"
-#include "miscuno.hxx"
-#include "global.hxx"
-#include "attrib.hxx"
-#include "scitems.hxx"
-#include "globstr.hrc"
-#include "sc.hrc"
+#include <defaultsoptions.hxx>
+#include <miscuno.hxx>
+#include <global.hxx>
+#include <attrib.hxx>
+#include <scitems.hxx>
+#include <globstr.hrc>
+#include <sc.hrc>
 
 using namespace utl;
 using namespace com::sun::star::uno;

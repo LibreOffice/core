@@ -26,8 +26,8 @@
 #include <drawingml/textfont.hxx>
 #include <oox/drawingml/shape.hxx>
 
-#include "drawingml/fillproperties.hxx"
-#include "drawingml/lineproperties.hxx"
+#include <drawingml/fillproperties.hxx>
+#include <drawingml/lineproperties.hxx>
 
 #include <map>
 

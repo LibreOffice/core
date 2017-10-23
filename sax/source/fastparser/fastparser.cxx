@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sax/fastparser.hxx"
-#include "sax/fastattribs.hxx"
-#include "xml2utf.hxx"
+#include <sax/fastparser.hxx>
+#include <sax/fastattribs.hxx>
+#include <xml2utf.hxx>
 
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

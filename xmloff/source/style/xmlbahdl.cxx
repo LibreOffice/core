@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <xmlbahdl.hxx>
+#include "xmlbahdl.hxx"
 
 #include <o3tl/any.hxx>
 #include <sax/tools/converter.hxx>

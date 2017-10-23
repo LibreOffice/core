@@ -24,7 +24,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <vector>
-#include "unonames.hxx"
+#include <unonames.hxx>
 #include "vbaformatconditions.hxx"
 #include "vbaformatcondition.hxx"
 #include "vbaworkbook.hxx"

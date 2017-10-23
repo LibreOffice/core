@@ -19,11 +19,11 @@
 
 #include <tools/multisel.hxx>
 
-#include "pfuncache.hxx"
-#include "printfun.hxx"
-#include "docsh.hxx"
-#include "markdata.hxx"
-#include "prevloc.hxx"
+#include <pfuncache.hxx>
+#include <printfun.hxx>
+#include <docsh.hxx>
+#include <markdata.hxx>
+#include <prevloc.hxx>
 
 ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
                                     const ScPrintSelectionStatus& rStatus ) :

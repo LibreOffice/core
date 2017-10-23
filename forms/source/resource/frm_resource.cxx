@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "frm_resource.hxx"
+#include <frm_resource.hxx>
 #include <unotools/resmgr.hxx>
 
 namespace frm

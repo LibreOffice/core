@@ -19,7 +19,7 @@
 
 #include <string.h>
 
-#include "pagepar.hxx"
+#include <pagepar.hxx>
 
 // struct ScPageTableParam:
 

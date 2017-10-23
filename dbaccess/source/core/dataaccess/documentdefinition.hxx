@@ -22,10 +22,10 @@
 
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/implbase4.hxx>
-#include "ContentHelper.hxx"
+#include <ContentHelper.hxx>
 #include <comphelper/propertystatecontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include "apitools.hxx"
+#include <apitools.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/frame/XController.hpp>

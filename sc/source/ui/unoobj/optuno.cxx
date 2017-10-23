@@ -21,10 +21,10 @@
 
 #include <com/sun/star/util/Date.hpp>
 
-#include "optuno.hxx"
-#include "miscuno.hxx"
-#include "unonames.hxx"
-#include "docoptio.hxx"
+#include <optuno.hxx>
+#include <miscuno.hxx>
+#include <unonames.hxx>
+#include <docoptio.hxx>
 
 using namespace com::sun::star;
 

@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "VLegendSymbolFactory.hxx"
-#include "macros.hxx"
-#include "PropertyMapper.hxx"
-#include "AbstractShapeFactory.hxx"
-#include "ObjectIdentifier.hxx"
+#include <VLegendSymbolFactory.hxx>
+#include <macros.hxx>
+#include <PropertyMapper.hxx>
+#include <AbstractShapeFactory.hxx>
+#include <ObjectIdentifier.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 

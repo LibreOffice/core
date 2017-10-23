@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "futransf.hxx"
+#include <futransf.hxx>
 
 #include <svx/dialogs.hrc>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 
-#include "strings.hrc"
-#include "ViewShell.hxx"
-#include "View.hxx"
-#include "sdresid.hxx"
-#include "drawdoc.hxx"
+#include <strings.hrc>
+#include <ViewShell.hxx>
+#include <View.hxx>
+#include <sdresid.hxx>
+#include <drawdoc.hxx>
 #include <svx/svxdlg.hxx>
 
 #include <memory>

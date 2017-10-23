@@ -10,8 +10,8 @@
 #ifndef INCLUDED_SC_GROUPAREALISTENER_HXX
 #define INCLUDED_SC_GROUPAREALISTENER_HXX
 
-#include <address.hxx>
-#include <calcmacros.hxx>
+#include "address.hxx"
+#include "calcmacros.hxx"
 
 #include <svl/listener.hxx>
 

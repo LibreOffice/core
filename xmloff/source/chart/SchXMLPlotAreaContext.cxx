@@ -21,7 +21,7 @@
 
 #include "SchXMLPlotAreaContext.hxx"
 #include "SchXMLRegressionCurveObjectContext.hxx"
-#include "SchXMLImport.hxx"
+#include <SchXMLImport.hxx>
 #include "SchXMLAxisContext.hxx"
 #include "SchXMLSeries2Context.hxx"
 #include "SchXMLTools.hxx"
@@ -33,7 +33,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlstyle.hxx>
-#include "xexptran.hxx"
+#include <xexptran.hxx>
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>

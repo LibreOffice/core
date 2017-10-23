@@ -19,9 +19,9 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "crdlg.hxx"
-#include "scresid.hxx"
-#include "strings.hrc"
+#include <crdlg.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
 
 ScColOrRowDlg::ScColOrRowDlg(vcl::Window* pParent, const OUString& rStrTitle,
     const OUString& rStrLabel)

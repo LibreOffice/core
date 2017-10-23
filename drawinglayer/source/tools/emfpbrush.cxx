@@ -35,8 +35,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vcl/canvastools.hxx>
-#include <emfpbrush.hxx>
-#include <emfppath.hxx>
+#include "emfpbrush.hxx"
+#include "emfppath.hxx"
 
 namespace emfplushelper
 {

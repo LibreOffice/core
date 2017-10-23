@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbinsdlg.hxx"
+#include <dbinsdlg.hxx>
 
 #include <float.h>
 
@@ -83,9 +83,9 @@
 #include <helpids.h>
 #include <SwStyleNameMapper.hxx>
 #include <comphelper/uno3.hxx>
-#include "tabsh.hxx"
-#include "swabstdlg.hxx"
-#include "strings.hrc"
+#include <tabsh.hxx>
+#include <swabstdlg.hxx>
+#include <strings.hrc>
 #include <unomid.h>
 #include <IDocumentMarkAccess.hxx>
 

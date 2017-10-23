@@ -59,7 +59,7 @@
  ************************************************************************/
 
 #include "lwpdivopts.hxx"
-#include "lwpfilehdr.hxx"
+#include <lwpfilehdr.hxx>
 
 LwpHyphenOptions::LwpHyphenOptions()
     : m_nFlags(0)

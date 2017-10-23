@@ -19,9 +19,9 @@
 
 #include "WrappedSymbolProperties.hxx"
 #include "WrappedSeriesOrDiagramProperty.hxx"
-#include "macros.hxx"
-#include "FastPropertyIdRanges.hxx"
-#include "ChartTypeHelper.hxx"
+#include <macros.hxx>
+#include <FastPropertyIdRanges.hxx>
+#include <ChartTypeHelper.hxx>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/awt/Size.hpp>

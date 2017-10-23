@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include "propertyset.hxx"
-#include "tablemodel.hxx"
+#include <tablemodel.hxx>
 
 
 namespace sdr { namespace table {

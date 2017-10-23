@@ -28,7 +28,7 @@
 #include <xmloff/xmltoken.hxx>
 #include "XMLTextListItemContext.hxx"
 #include "XMLTextListBlockContext.hxx"
-#include "txtlists.hxx"
+#include <txtlists.hxx>
 
 
 using namespace ::com::sun::star;

@@ -8,7 +8,7 @@
  *
  */
 
-#include "ChartTools.hxx"
+#include <ChartTools.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>

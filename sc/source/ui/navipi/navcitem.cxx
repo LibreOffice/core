@@ -20,10 +20,10 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 
-#include "navcitem.hxx"
-#include "global.hxx"
-#include "navipi.hxx"
-#include "sc.hrc"
+#include <navcitem.hxx>
+#include <global.hxx>
+#include <navipi.hxx>
+#include <sc.hrc>
 
 ScNavigatorControllerItem::ScNavigatorControllerItem( sal_uInt16          nIdP,
                                                       ScNavigatorDlg& rDlg,

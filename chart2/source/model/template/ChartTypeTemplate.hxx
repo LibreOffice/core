@@ -21,7 +21,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include "DataInterpreter.hxx"
-#include "StackMode.hxx"
+#include <StackMode.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>

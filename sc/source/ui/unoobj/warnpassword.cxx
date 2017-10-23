@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "warnpassword.hxx"
+#include <warnpassword.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <svl/itemset.hxx>
 #include <sfx2/docfile.hxx>

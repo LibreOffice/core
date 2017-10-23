@@ -21,12 +21,12 @@
 #include <comphelper/configuration.hxx>
 #include <sal/log.hxx>
 
-#include "sddll.hxx"
+#include <sddll.hxx>
 
 #include "DiscoveryService.hxx"
 #include "Listener.hxx"
 #include "Receiver.hxx"
-#include "RemoteServer.hxx"
+#include <RemoteServer.hxx>
 #include "BluetoothServer.hxx"
 #include "Communicator.hxx"
 #include "BufferedStreamSocket.hxx"

@@ -23,7 +23,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>
 
-#include "svx/svxcommands.h"
+#include <svx/svxcommands.h>
 #include "helpids.h"
 
 // areas

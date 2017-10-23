@@ -18,7 +18,7 @@
  */
 
 #include "FormsCollection.hxx"
-#include "services.hxx"
+#include <services.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>

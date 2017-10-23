@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbu_reghelper.hxx"
-#include "stringconstants.hxx"
-#include "strings.hxx"
-#include "uiservices.hxx"
-#include "UITools.hxx"
+#include <dbu_reghelper.hxx>
+#include <stringconstants.hxx>
+#include <strings.hxx>
+#include <uiservices.hxx>
+#include <UITools.hxx>
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

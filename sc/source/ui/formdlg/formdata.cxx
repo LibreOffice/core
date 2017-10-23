@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "formdata.hxx"
+#include <formdata.hxx>
 
 ScFormEditData::ScFormEditData()
     : formula::FormEditData()

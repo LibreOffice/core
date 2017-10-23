@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ole/axcontrolfragment.hxx"
+#include <oox/ole/axcontrolfragment.hxx>
 
-#include "oox/core/xmlfilterbase.hxx"
+#include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
-#include "oox/helper/binaryinputstream.hxx"
-#include "oox/helper/binaryoutputstream.hxx"
-#include "oox/ole/axcontrol.hxx"
-#include "oox/ole/olehelper.hxx"
-#include "oox/ole/olestorage.hxx"
+#include <oox/helper/binaryinputstream.hxx>
+#include <oox/helper/binaryoutputstream.hxx>
+#include <oox/ole/axcontrol.hxx>
+#include <oox/ole/olehelper.hxx>
+#include <oox/ole/olestorage.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 

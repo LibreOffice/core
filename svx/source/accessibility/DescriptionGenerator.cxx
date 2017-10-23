@@ -18,7 +18,7 @@
  */
 
 
-#include "svx/DescriptionGenerator.hxx"
+#include <svx/DescriptionGenerator.hxx>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -38,11 +38,11 @@
 #include <com/sun/star/uno/Exception.hpp>
 
 // Includes for string resources.
-#include "svx/strings.hrc"
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
 #include <svx/xdef.hxx>
-#include "svx/unoapi.hxx"
+#include <svx/unoapi.hxx>
 #include "lookupcolorname.hxx"
 
 using namespace ::com::sun::star;

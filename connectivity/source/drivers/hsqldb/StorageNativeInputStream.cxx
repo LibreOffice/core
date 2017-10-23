@@ -27,8 +27,8 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/types.hxx>
-#include "hsqldb/HStorageAccess.hxx"
-#include "hsqldb/HStorageMap.hxx"
+#include <hsqldb/HStorageAccess.hxx>
+#include <hsqldb/HStorageMap.hxx>
 
 #include <jvmaccess/virtualmachine.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>

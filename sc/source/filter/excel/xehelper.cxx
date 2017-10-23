@@ -26,7 +26,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/outlobj.hxx>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/colritem.hxx>
@@ -35,18 +35,18 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/svxfont.hxx>
 
-#include "document.hxx"
-#include "docpool.hxx"
-#include "formulacell.hxx"
-#include "editutil.hxx"
-#include "patattr.hxx"
-#include "scmatrix.hxx"
-#include "xestyle.hxx"
-#include "fprogressbar.hxx"
-#include "xltracer.hxx"
-#include "xecontent.hxx"
-#include "xelink.hxx"
-#include "xehelper.hxx"
+#include <document.hxx>
+#include <docpool.hxx>
+#include <formulacell.hxx>
+#include <editutil.hxx>
+#include <patattr.hxx>
+#include <scmatrix.hxx>
+#include <xestyle.hxx>
+#include <fprogressbar.hxx>
+#include <xltracer.hxx>
+#include <xecontent.hxx>
+#include <xelink.hxx>
+#include <xehelper.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::i18n::XBreakIterator;

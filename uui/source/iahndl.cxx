@@ -77,9 +77,9 @@
 #include <typelib/typedescription.hxx>
 #include <unotools/confignode.hxx>
 
-#include "ids.hxx"
-#include "ids.hrc"
-#include "strings.hrc"
+#include <ids.hxx>
+#include <ids.hrc>
+#include <strings.hrc>
 
 #include "getcontinuations.hxx"
 #include "secmacrowarnings.hxx"

@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "interpre.hxx"
+#include <interpre.hxx>
 
 #include <comphelper/string.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -29,24 +29,24 @@
 #include <svl/sharedstringpool.hxx>
 #include <sal/macros.h>
 
-#include "attrib.hxx"
-#include "sc.hrc"
-#include "ddelink.hxx"
-#include "scmatrix.hxx"
-#include "compiler.hxx"
-#include "formulacell.hxx"
-#include "document.hxx"
-#include "dociter.hxx"
-#include "docoptio.hxx"
-#include "unitconv.hxx"
-#include "globstr.hrc"
-#include "hints.hxx"
-#include "dpobject.hxx"
-#include "postit.hxx"
-#include "tokenarray.hxx"
-#include "globalnames.hxx"
-#include "stlsheet.hxx"
-#include "dpcache.hxx"
+#include <attrib.hxx>
+#include <sc.hrc>
+#include <ddelink.hxx>
+#include <scmatrix.hxx>
+#include <compiler.hxx>
+#include <formulacell.hxx>
+#include <document.hxx>
+#include <dociter.hxx>
+#include <docoptio.hxx>
+#include <unitconv.hxx>
+#include <globstr.hrc>
+#include <hints.hxx>
+#include <dpobject.hxx>
+#include <postit.hxx>
+#include <tokenarray.hxx>
+#include <globalnames.hxx>
+#include <stlsheet.hxx>
+#include <dpcache.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 

@@ -18,10 +18,10 @@
  */
 
 
-#include "hsqldb/HView.hxx"
-#include "hsqldb/HTools.hxx"
+#include <hsqldb/HView.hxx>
+#include <hsqldb/HTools.hxx>
 
-#include "propertyids.hxx"
+#include <propertyids.hxx>
 
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>

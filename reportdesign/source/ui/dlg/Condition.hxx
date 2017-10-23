@@ -20,7 +20,7 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_DLG_CONDITION_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_DLG_CONDITION_HXX
 
-#include "conditionalexpression.hxx"
+#include <conditionalexpression.hxx>
 
 #include <com/sun/star/report/XFormatCondition.hpp>
 

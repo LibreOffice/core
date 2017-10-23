@@ -8,7 +8,7 @@
  *
  */
 
-#include "oox/crypto/CryptTools.hxx"
+#include <oox/crypto/CryptTools.hxx>
 #include <filter/msfilter/mscodec.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 

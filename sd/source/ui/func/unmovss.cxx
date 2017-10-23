@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "unmovss.hxx"
-#include "DrawDocShell.hxx"
-#include "drawdoc.hxx"
-#include "stlsheet.hxx"
-#include "stlpool.hxx"
+#include <unmovss.hxx>
+#include <DrawDocShell.hxx>
+#include <drawdoc.hxx>
+#include <stlsheet.hxx>
+#include <stlpool.hxx>
 
 SdMoveStyleSheetsUndoAction::SdMoveStyleSheetsUndoAction( SdDrawDocument* pTheDoc, SdStyleSheetVector& rTheStyles, bool bInserted)
 : SdUndoAction(pTheDoc)

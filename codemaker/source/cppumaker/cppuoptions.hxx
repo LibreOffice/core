@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_CPPUOPTIONS_HXX
 #define INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_CPPUOPTIONS_HXX
 
-#include "codemaker/options.hxx"
+#include <codemaker/options.hxx>
 
 class CppuOptions : public Options
 {

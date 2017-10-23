@@ -66,21 +66,21 @@
 #include <jni.h>
 #endif
 
-#include "salinst.hxx"
-#include "salwtype.hxx"
-#include "svdata.hxx"
+#include <salinst.hxx>
+#include <salwtype.hxx>
+#include <svdata.hxx>
 #include <vcl/svmain.hxx>
-#include "dbggui.hxx"
-#include "accmgr.hxx"
-#include "outdev.h"
-#include "fontinstance.hxx"
-#include "PhysicalFontCollection.hxx"
-#include "print.h"
-#include "salgdi.hxx"
-#include "salsys.hxx"
-#include "saltimer.hxx"
-#include "salimestatus.hxx"
-#include "displayconnectiondispatch.hxx"
+#include <dbggui.hxx>
+#include <accmgr.hxx>
+#include <outdev.h>
+#include <fontinstance.hxx>
+#include <PhysicalFontCollection.hxx>
+#include <print.h>
+#include <salgdi.hxx>
+#include <salsys.hxx>
+#include <saltimer.hxx>
+#include <salimestatus.hxx>
+#include <displayconnectiondispatch.hxx>
 
 #include <config_features.h>
 #if HAVE_FEATURE_OPENGL

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_ECONNECTION_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_ECONNECTION_HXX
 
-#include "file/FConnection.hxx"
+#include <file/FConnection.hxx>
 
 namespace connectivity
 {

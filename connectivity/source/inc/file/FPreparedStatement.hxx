@@ -20,14 +20,14 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FPREPAREDSTATEMENT_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FPREPAREDSTATEMENT_HXX
 
-#include "file/filedllapi.hxx"
-#include "file/FStatement.hxx"
+#include <file/filedllapi.hxx>
+#include <file/FStatement.hxx>
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include "file/FResultSet.hxx"
+#include <file/FResultSet.hxx>
 
 namespace connectivity
 {

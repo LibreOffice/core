@@ -23,7 +23,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>
 
-#include "AttributeContainerHandler.hxx"
+#include <AttributeContainerHandler.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

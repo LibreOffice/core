@@ -25,7 +25,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <o3tl/any.hxx>
 #include <osl/endian.h>
-#include <eppt.hxx>
+#include "eppt.hxx"
 #include "text.hxx"
 #include "epptdef.hxx"
 #include "escherex.hxx"
@@ -79,7 +79,7 @@
 #include <com/sun/star/table/BorderLine.hpp>
 #include <set>
 #include <oox/ole/olehelper.hxx>
-#include "i18nlangtag/languagetag.hxx"
+#include <i18nlangtag/languagetag.hxx>
 
 using namespace ::com::sun::star;
 

@@ -22,18 +22,18 @@
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/sfxresid.hxx>
 #include "helpinterceptor.hxx"
-#include "helper.hxx"
+#include <helper.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/app.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include "panelist.hxx"
-#include "srchdlg.hxx"
+#include <srchdlg.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <svtools/treelistentry.hxx>
 
-#include "sfx2/strings.hrc"
-#include "helpids.h"
-#include "bitmaps.hlst"
+#include <sfx2/strings.hrc>
+#include <helpids.h>
+#include <bitmaps.hlst>
 
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/configurationhelper.hxx>

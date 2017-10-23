@@ -29,8 +29,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
-#include "xsecfwdllapi.h"
-#include "framework/signatureengine.hxx"
+#include <xsecfwdllapi.h>
+#include <framework/signatureengine.hxx>
 
 typedef cppu::ImplInheritanceHelper
 <

@@ -9,8 +9,8 @@
 
 #include <sal/config.h>
 
-#include "services.h"
-#include "dispatch/dispatchdisabler.hxx"
+#include <services.h>
+#include <dispatch/dispatchdisabler.hxx>
 
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 

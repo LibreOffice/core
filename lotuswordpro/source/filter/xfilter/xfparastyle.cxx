@@ -59,11 +59,11 @@
  * Styles for paragraph may include many style,include font,indent,margin,
  * shadow,line height,and so on.
  ************************************************************************/
-#include "xfilter/xfparastyle.hxx"
-#include "xfilter/xffont.hxx"
-#include "xfilter/xfborders.hxx"
+#include <xfilter/xfparastyle.hxx>
+#include <xfilter/xffont.hxx>
+#include <xfilter/xfborders.hxx>
 #include "xftabstyle.hxx"
-#include "xfilter/xfbgimage.hxx"
+#include <xfilter/xfbgimage.hxx>
 
 XFParaStyle::XFParaStyle()
     : m_eAlignType(enumXFAlignNone)

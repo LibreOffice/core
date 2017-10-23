@@ -28,7 +28,7 @@
 #include "global.hxx"
 #include "pivot.hxx"
 #include <i18nlangtag/lang.h>
-#include "asciiopt.hxx"
+#include <asciiopt.hxx>
 
 #include <tabvwsh.hxx>
 

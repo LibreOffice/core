@@ -47,13 +47,13 @@
 #include <svtools/langtab.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/configmgr.hxx>
-#include "cuioptgenrl.hxx"
-#include "optpath.hxx"
+#include <cuioptgenrl.hxx>
+#include <optpath.hxx>
 #include "optsave.hxx"
-#include "optlingu.hxx"
+#include <optlingu.hxx>
 #include <svx/xpool.hxx>
 #include <svx/dlgutil.hxx>
-#include "cuitabarea.hxx"
+#include <cuitabarea.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
 #include <comphelper/processfactory.hxx>

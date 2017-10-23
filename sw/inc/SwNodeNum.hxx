@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_INC_SWNODENUM_HXX
 #define INCLUDED_SW_INC_SWNODENUM_HXX
 
-#include <SwNumberTree.hxx>
+#include "SwNumberTree.hxx"
 
 class SwTextNode;
 struct SwPosition;

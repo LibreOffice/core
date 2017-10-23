@@ -18,13 +18,13 @@
  */
 
 #include "RegressionCurveModel.hxx"
-#include "macros.hxx"
-#include "LinePropertiesHelper.hxx"
-#include "RegressionCurveHelper.hxx"
-#include "RegressionCalculationHelper.hxx"
+#include <macros.hxx>
+#include <LinePropertiesHelper.hxx>
+#include <RegressionCurveHelper.hxx>
+#include <RegressionCalculationHelper.hxx>
 #include "RegressionEquation.hxx"
-#include "CloneHelper.hxx"
-#include "PropertyHelper.hxx"
+#include <CloneHelper.hxx>
+#include <PropertyHelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <rtl/math.hxx>

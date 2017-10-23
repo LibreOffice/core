@@ -8,7 +8,7 @@
  *
  */
 
-#include "mergecellsdialog.hxx"
+#include <mergecellsdialog.hxx>
 
 ScMergeCellsDialog::ScMergeCellsDialog( vcl::Window * pParent )
             : ModalDialog( pParent, "MergeCellsDialog",

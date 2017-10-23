@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ChartController.hxx"
+#include <ChartController.hxx>
 
-#include "ResId.hxx"
+#include <ResId.hxx>
 #include "UndoGuard.hxx"
-#include "DrawViewWrapper.hxx"
-#include "ChartWindow.hxx"
-#include "TitleHelper.hxx"
-#include "ObjectIdentifier.hxx"
-#include "macros.hxx"
-#include "ControllerLockGuard.hxx"
-#include "AccessibleTextHelper.hxx"
-#include "strings.hrc"
-#include "chartview/DrawModelWrapper.hxx"
+#include <DrawViewWrapper.hxx>
+#include <ChartWindow.hxx>
+#include <TitleHelper.hxx>
+#include <ObjectIdentifier.hxx>
+#include <macros.hxx>
+#include <ControllerLockGuard.hxx>
+#include <AccessibleTextHelper.hxx>
+#include <strings.hrc>
+#include <chartview/DrawModelWrapper.hxx>
 
 #include <svx/svdotext.hxx>
 #include <vcl/msgbox.hxx>

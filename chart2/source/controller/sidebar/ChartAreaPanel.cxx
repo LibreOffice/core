@@ -9,11 +9,11 @@
 
 #include "ChartAreaPanel.hxx"
 
-#include "ChartController.hxx"
-#include "ViewElementListProvider.hxx"
-#include "PropertyHelper.hxx"
+#include <ChartController.hxx>
+#include <ViewElementListProvider.hxx>
+#include <PropertyHelper.hxx>
 
-#include "chartview/DrawModelWrapper.hxx"
+#include <chartview/DrawModelWrapper.hxx>
 
 #include <svx/xfltrit.hxx>
 #include <svx/xflftrit.hxx>

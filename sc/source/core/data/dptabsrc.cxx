@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dptabsrc.hxx"
+#include <dptabsrc.hxx>
 
 #include <algorithm>
 #include <set>
@@ -30,23 +30,23 @@
 #include <svl/intitem.hxx>
 #include <vcl/svapp.hxx>
 
-#include "scitems.hxx"
-#include "document.hxx"
-#include "docpool.hxx"
-#include "patattr.hxx"
-#include "formulacell.hxx"
+#include <scitems.hxx>
+#include <document.hxx>
+#include <docpool.hxx>
+#include <patattr.hxx>
+#include <formulacell.hxx>
 
-#include "dptabres.hxx"
-#include "dptabdat.hxx"
-#include "global.hxx"
-#include "datauno.hxx"
-#include "miscuno.hxx"
-#include "unonames.hxx"
-#include "dpitemdata.hxx"
-#include "dputil.hxx"
-#include "dpresfilter.hxx"
-#include "calcmacros.hxx"
-#include "generalfunction.hxx"
+#include <dptabres.hxx>
+#include <dptabdat.hxx>
+#include <global.hxx>
+#include <datauno.hxx>
+#include <miscuno.hxx>
+#include <unonames.hxx>
+#include <dpitemdata.hxx>
+#include <dputil.hxx>
+#include <dpresfilter.hxx>
+#include <calcmacros.hxx>
+#include <generalfunction.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>

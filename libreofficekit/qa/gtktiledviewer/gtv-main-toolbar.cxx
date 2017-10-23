@@ -9,12 +9,12 @@
 
 #include <gtk/gtk.h>
 
-#include <gtv-application-window.hxx>
-#include <gtv-main-toolbar.hxx>
-#include <gtv-signal-handlers.hxx>
-#include <gtv-helpers.hxx>
-#include <gtv-calc-header-bar.hxx>
-#include <gtv-lok-dialog.hxx>
+#include "gtv-application-window.hxx"
+#include "gtv-main-toolbar.hxx"
+#include "gtv-signal-handlers.hxx"
+#include "gtv-helpers.hxx"
+#include "gtv-calc-header-bar.hxx"
+#include "gtv-lok-dialog.hxx"
 
 #include <map>
 #include <memory>

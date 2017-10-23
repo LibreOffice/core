@@ -49,7 +49,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/SchXMLSeriesHelper.hxx>
-#include "SchXMLImport.hxx"
+#include <SchXMLImport.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlprmap.hxx>
 

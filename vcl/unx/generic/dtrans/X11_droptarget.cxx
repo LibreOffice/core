@@ -18,7 +18,7 @@
  */
 
 #include <cppuhelper/supportsservice.hxx>
-#include <X11_selection.hxx>
+#include "X11_selection.hxx"
 
 using namespace x11;
 using namespace com::sun::star::uno;

@@ -17,23 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "RelationDlg.hxx"
+#include <RelationDlg.hxx>
 
 #include <vcl/wrkwin.hxx>
 
 #include <vcl/svapp.hxx>
-#include "dbu_dlg.hxx"
-#include "helpids.h"
+#include <dbu_dlg.hxx>
+#include <helpids.h>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include "UITools.hxx"
-#include "JoinDesignView.hxx"
-#include "JoinController.hxx"
+#include <UITools.hxx>
+#include <JoinDesignView.hxx>
+#include <JoinController.hxx>
 #include <connectivity/dbexception.hxx>
-#include "RTableConnectionData.hxx"
-#include "RelationControl.hxx"
+#include <RTableConnectionData.hxx>
+#include <RelationControl.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>
 

@@ -68,9 +68,9 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>
-#include "statcach.hxx"
+#include <statcach.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/docfile.hxx>
@@ -78,8 +78,8 @@
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/unoctitm.hxx>
-#include "helpids.h"
-#include "workwin.hxx"
+#include <helpids.h>
+#include <workwin.hxx>
 #include <ctrlfactoryimpl.hxx>
 
 using namespace ::com::sun::star;

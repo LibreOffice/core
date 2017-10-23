@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_UNDOHEADERFOOTER_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_UNDOHEADERFOOTER_HXX
 
-#include "sdundo.hxx"
-#include "sdpage.hxx"
-#include "sddllapi.h"
+#include <sdundo.hxx>
+#include <sdpage.hxx>
+#include <sddllapi.h>
 
 class SdDrawDocument;
 

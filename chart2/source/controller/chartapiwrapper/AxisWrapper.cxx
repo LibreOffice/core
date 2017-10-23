@@ -18,14 +18,14 @@
  */
 
 #include "AxisWrapper.hxx"
-#include "AxisHelper.hxx"
-#include "TitleHelper.hxx"
+#include <AxisHelper.hxx>
+#include <TitleHelper.hxx>
 #include "Chart2ModelContact.hxx"
-#include "macros.hxx"
-#include "WrappedDirectStateProperty.hxx"
+#include <macros.hxx>
+#include <WrappedDirectStateProperty.hxx>
 #include "GridWrapper.hxx"
 #include "TitleWrapper.hxx"
-#include "DisposeHelper.hxx"
+#include <DisposeHelper.hxx>
 #include <unonames.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
@@ -35,14 +35,14 @@
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 
-#include "CharacterProperties.hxx"
-#include "LinePropertiesHelper.hxx"
-#include "UserDefinedProperties.hxx"
+#include <CharacterProperties.hxx>
+#include <LinePropertiesHelper.hxx>
+#include <UserDefinedProperties.hxx>
 #include "WrappedCharacterHeightProperty.hxx"
 #include "WrappedTextRotationProperty.hxx"
 #include "WrappedGapwidthProperty.hxx"
 #include "WrappedScaleProperty.hxx"
-#include "WrappedDefaultProperty.hxx"
+#include <WrappedDefaultProperty.hxx>
 #include "WrappedNumberFormatProperty.hxx"
 #include "WrappedScaleTextProperties.hxx"
 

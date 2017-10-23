@@ -9,13 +9,13 @@
 
 #include <memory>
 #include "ucalc.hxx"
-#include "editutil.hxx"
-#include "formulacell.hxx"
-#include "cellvalue.hxx"
-#include "docsh.hxx"
-#include "clipparam.hxx"
-#include "undoblk.hxx"
-#include "scopetools.hxx"
+#include <editutil.hxx>
+#include <formulacell.hxx>
+#include <cellvalue.hxx>
+#include <docsh.hxx>
+#include <clipparam.hxx>
+#include <undoblk.hxx>
+#include <scopetools.hxx>
 #include <docfunc.hxx>
 #include <dbdocfun.hxx>
 #include <tokenarray.hxx>

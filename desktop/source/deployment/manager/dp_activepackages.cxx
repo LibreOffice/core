@@ -33,7 +33,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 
-#include "dp_identifier.hxx"
+#include <dp_identifier.hxx>
 #include "dp_activepackages.hxx"
 
 // Old format of database entry:

@@ -16,14 +16,14 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "DataProviderHandler.hxx"
+#include <DataProviderHandler.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "strings.hxx"
+#include <strings.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/syslocale.hxx>
 #include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
@@ -45,13 +45,13 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <tools/fldunit.hxx>
-#include "metadata.hxx"
+#include <metadata.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include "core_resource.hxx"
-#include "helpids.h"
-#include "strings.hrc"
-#include "PropertyForward.hxx"
+#include <core_resource.hxx>
+#include <helpids.h>
+#include <strings.hrc>
+#include <PropertyForward.hxx>
 
 namespace rptui
 {

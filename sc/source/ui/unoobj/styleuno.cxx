@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/memberids.h>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -54,19 +54,19 @@
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include "styleuno.hxx"
-#include "docsh.hxx"
-#include "attrib.hxx"
-#include "stlpool.hxx"
-#include "docpool.hxx"
-#include "miscuno.hxx"
-#include "convuno.hxx"
-#include "tablink.hxx"
-#include "unonames.hxx"
-#include "unowids.hxx"
-#include "globstr.hrc"
-#include "cellsuno.hxx"
-#include "stylehelper.hxx"
+#include <styleuno.hxx>
+#include <docsh.hxx>
+#include <attrib.hxx>
+#include <stlpool.hxx>
+#include <docpool.hxx>
+#include <miscuno.hxx>
+#include <convuno.hxx>
+#include <tablink.hxx>
+#include <unonames.hxx>
+#include <unowids.hxx>
+#include <globstr.hrc>
+#include <cellsuno.hxx>
+#include <stylehelper.hxx>
 
 using namespace ::com::sun::star;
 

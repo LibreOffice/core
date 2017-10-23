@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "undoutil.hxx"
+#include <undoutil.hxx>
 
-#include "docsh.hxx"
-#include "tabvwsh.hxx"
-#include "document.hxx"
-#include "dbdata.hxx"
-#include "globstr.hrc"
-#include "globalnames.hxx"
-#include "global.hxx"
-#include "markdata.hxx"
+#include <docsh.hxx>
+#include <tabvwsh.hxx>
+#include <document.hxx>
+#include <dbdata.hxx>
+#include <globstr.hrc>
+#include <globalnames.hxx>
+#include <global.hxx>
+#include <markdata.hxx>
 
 void ScUndoUtil::MarkSimpleBlock( const ScDocShell* pDocShell,
                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,

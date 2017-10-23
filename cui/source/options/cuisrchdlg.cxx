@@ -31,15 +31,15 @@
 #include <sfx2/basedlgs.hxx>
 #include <svl/cjkoptions.hxx>
 
-#include "cuisrchdlg.hxx"
+#include <cuisrchdlg.hxx>
 
 #include <svl/srchitem.hxx>
 #include <svx/pageitem.hxx>
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
-#include <optjsearch.hxx>
+#include "optjsearch.hxx"
 #include <editeng/brushitem.hxx>
-#include "backgrnd.hxx"
+#include <backgrnd.hxx>
 
 
 // class SvxJSearchOptionsDialog -----------------------------------------

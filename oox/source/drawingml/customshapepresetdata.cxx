@@ -12,9 +12,9 @@
 #include <tools/stream.hxx>
 #include <comphelper/sequence.hxx>
 
-#include "drawingml/customshapeproperties.hxx"
+#include <drawingml/customshapeproperties.hxx>
 #include <oox/token/properties.hxx>
-#include "oox/token/tokenmap.hxx"
+#include <oox/token/tokenmap.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>

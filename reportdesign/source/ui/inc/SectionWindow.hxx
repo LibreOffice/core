@@ -27,7 +27,7 @@
 #include <cppuhelper/basemutex.hxx>
 
 #include "UITools.hxx"
-#include "UndoActions.hxx"
+#include <UndoActions.hxx>
 #include "StartMarker.hxx"
 #include "EndMarker.hxx"
 #include "ReportSection.hxx"

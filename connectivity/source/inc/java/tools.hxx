@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Sequence.h>
 
 #include <jni.h>
-#include "java/sql/SQLException.hxx"
+#include <java/sql/SQLException.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>

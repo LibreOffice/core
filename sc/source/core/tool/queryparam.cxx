@@ -18,9 +18,9 @@
  */
 
 #include <memory>
-#include "queryparam.hxx"
-#include "queryentry.hxx"
-#include "scmatrix.hxx"
+#include <queryparam.hxx>
+#include <queryentry.hxx>
+#include <scmatrix.hxx>
 
 #include <svl/sharedstringpool.hxx>
 #include <svl/zforlist.hxx>

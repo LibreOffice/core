@@ -19,8 +19,8 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "strindlg.hxx"
-#include "scresid.hxx"
+#include <strindlg.hxx>
+#include <scresid.hxx>
 
 ScStringInputDlg::ScStringInputDlg( vcl::Window*         pParent,
                                     const OUString&   rTitle,

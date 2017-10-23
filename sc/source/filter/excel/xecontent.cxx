@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "xecontent.hxx"
+#include <xecontent.hxx>
 
 #include <list>
 #include <algorithm>
@@ -29,21 +29,21 @@
 #include <tools/urlobj.hxx>
 #include <svl/itemset.hxx>
 #include <formula/grammar.hxx>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
-#include "document.hxx"
-#include "validat.hxx"
-#include "unonames.hxx"
-#include "convuno.hxx"
-#include "rangenam.hxx"
-#include "tokenarray.hxx"
-#include "stlpool.hxx"
-#include "patattr.hxx"
-#include "fapihelper.hxx"
-#include "xehelper.hxx"
-#include "xestyle.hxx"
-#include "xename.hxx"
+#include <document.hxx>
+#include <validat.hxx>
+#include <unonames.hxx>
+#include <convuno.hxx>
+#include <rangenam.hxx>
+#include <tokenarray.hxx>
+#include <stlpool.hxx>
+#include <patattr.hxx>
+#include <fapihelper.hxx>
+#include <xehelper.hxx>
+#include <xestyle.hxx>
+#include <xename.hxx>
 #include <rtl/uuid.h>
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>

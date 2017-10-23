@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <xpathapi.hxx>
+#include "xpathapi.hxx"
 
 #include <stdarg.h>
 #include <string.h>
@@ -29,10 +29,10 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include <nodelist.hxx>
-#include <xpathobject.hxx>
+#include "nodelist.hxx"
+#include "xpathobject.hxx"
 
-#include "node.hxx"
+#include <node.hxx>
 #include "../dom/document.hxx"
 
 #include <cppuhelper/supportsservice.hxx>

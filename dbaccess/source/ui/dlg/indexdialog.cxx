@@ -17,26 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <set>
 
-#include "core_resource.hxx"
-#include "indexdialog.hxx"
-#include "dbu_dlg.hxx"
-#include "strings.hrc"
-#include "bitmaps.hlst"
-#include "helpids.h"
-#include "indexfieldscontrol.hxx"
-#include "indexcollection.hxx"
+#include <core_resource.hxx>
+#include <indexdialog.hxx>
+#include <dbu_dlg.hxx>
+#include <strings.hrc>
+#include <bitmaps.hlst>
+#include <helpids.h>
+#include <indexfieldscontrol.hxx>
+#include <indexcollection.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include <svtools/imgdef.hxx>
-#include "svtools/treelistentry.hxx"
-#include "browserids.hxx"
+#include <svtools/treelistentry.hxx>
+#include <browserids.hxx>
 #include <connectivity/dbtools.hxx>
 #include <osl/diagnose.h>
 

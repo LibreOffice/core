@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "controller/SlsAnimator.hxx"
-#include "view/SlideSorterView.hxx"
-#include "View.hxx"
+#include <controller/SlsAnimator.hxx>
+#include <view/SlideSorterView.hxx>
+#include <View.hxx>
 
 namespace sd { namespace slidesorter { namespace controller {
 

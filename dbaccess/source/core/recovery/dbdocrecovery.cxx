@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "recovery/dbdocrecovery.hxx"
-#include "sdbcoretools.hxx"
+#include <recovery/dbdocrecovery.hxx>
+#include <sdbcoretools.hxx>
 #include "storagetextstream.hxx"
 #include "subcomponentrecovery.hxx"
 #include "subcomponents.hxx"
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>

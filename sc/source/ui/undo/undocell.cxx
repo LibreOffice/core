@@ -17,33 +17,33 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "undocell.hxx"
+#include <undocell.hxx>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <sfx2/app.hxx>
 
-#include "document.hxx"
-#include "docpool.hxx"
-#include "patattr.hxx"
-#include "docsh.hxx"
-#include "tabvwsh.hxx"
-#include "globstr.hrc"
-#include "global.hxx"
-#include "formulacell.hxx"
-#include "target.hxx"
-#include "undoolk.hxx"
-#include "detdata.hxx"
-#include "stlpool.hxx"
-#include "printfun.hxx"
-#include "rangenam.hxx"
-#include "chgtrack.hxx"
-#include "sc.hrc"
-#include "docuno.hxx"
-#include "stringutil.hxx"
+#include <document.hxx>
+#include <docpool.hxx>
+#include <patattr.hxx>
+#include <docsh.hxx>
+#include <tabvwsh.hxx>
+#include <globstr.hrc>
+#include <global.hxx>
+#include <formulacell.hxx>
+#include <target.hxx>
+#include <undoolk.hxx>
+#include <detdata.hxx>
+#include <stlpool.hxx>
+#include <printfun.hxx>
+#include <rangenam.hxx>
+#include <chgtrack.hxx>
+#include <sc.hrc>
+#include <docuno.hxx>
+#include <stringutil.hxx>
 
 using std::shared_ptr;
 

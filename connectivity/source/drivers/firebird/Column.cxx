@@ -10,7 +10,7 @@
 #include "Columns.hxx"
 #include "Column.hxx"
 
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 
 using namespace connectivity;
 using namespace connectivity::firebird;

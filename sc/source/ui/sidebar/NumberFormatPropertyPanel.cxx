@@ -19,8 +19,8 @@
 
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include "NumberFormatPropertyPanel.hxx"
-#include "sc.hrc"
-#include "scresid.hxx"
+#include <sc.hrc>
+#include <scresid.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/fixed.hxx>

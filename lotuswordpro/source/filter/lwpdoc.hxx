@@ -61,15 +61,15 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDOC_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDOC_HXX
 
-#include "lwpobj.hxx"
+#include <lwpobj.hxx>
 #include "lwpsortopt.hxx"
 #include "lwpuidoc.hxx"
 #include "lwplnopts.hxx"
 #include "lwpusrdicts.hxx"
 #include "lwpprtinfo.hxx"
 #include "lwpdlvlist.hxx"
-#include "lwpheader.hxx"
-#include "lwpfoundry.hxx"
+#include <lwpheader.hxx>
+#include <lwpfoundry.hxx>
 
 class IXFStream;
 class LwpVirtualLayout;

@@ -20,7 +20,7 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <continuouskeytimeactivitybase.hxx>
+#include "continuouskeytimeactivitybase.hxx"
 
 #include <algorithm>
 #include <iterator>

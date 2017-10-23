@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -27,23 +27,23 @@
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/app.hxx>
-#include "globstr.hrc"
-#include "scmod.hxx"
-#include "appoptio.hxx"
-#include "tabvwsh.hxx"
-#include "document.hxx"
-#include "sc.hrc"
-#include "docsh.hxx"
-#include "reffact.hxx"
-#include "uiitems.hxx"
-#include "autoform.hxx"
-#include "autofmt.hxx"
-#include "cellsh.hxx"
-#include "inputhdl.hxx"
-#include "editable.hxx"
-#include "markdata.hxx"
-#include "scabstdlg.hxx"
-#include "columnspanset.hxx"
+#include <globstr.hrc>
+#include <scmod.hxx>
+#include <appoptio.hxx>
+#include <tabvwsh.hxx>
+#include <document.hxx>
+#include <sc.hrc>
+#include <docsh.hxx>
+#include <reffact.hxx>
+#include <uiitems.hxx>
+#include <autoform.hxx>
+#include <autofmt.hxx>
+#include <cellsh.hxx>
+#include <inputhdl.hxx>
+#include <editable.hxx>
+#include <markdata.hxx>
+#include <scabstdlg.hxx>
+#include <columnspanset.hxx>
 
 #include <memory>
 

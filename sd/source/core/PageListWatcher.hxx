@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_CORE_PAGELISTWATCHER_HXX
 #define INCLUDED_SD_SOURCE_CORE_PAGELISTWATCHER_HXX
 
-#include "pres.hxx"
+#include <pres.hxx>
 #include <sal/types.h>
 #include <vector>
 

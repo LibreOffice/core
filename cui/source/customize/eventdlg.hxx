@@ -23,7 +23,7 @@
 
 #include <vcl/fixed.hxx>
 #include <sfx2/evntconf.hxx>
-#include "macropg.hxx"
+#include <macropg.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 

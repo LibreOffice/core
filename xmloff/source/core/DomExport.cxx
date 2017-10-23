@@ -18,7 +18,7 @@
  */
 
 
-#include "DomExport.hxx"
+#include <DomExport.hxx>
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlexp.hxx>

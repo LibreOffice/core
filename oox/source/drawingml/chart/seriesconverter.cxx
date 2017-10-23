@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/chart/seriesconverter.hxx"
+#include <drawingml/chart/seriesconverter.hxx>
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
@@ -29,18 +29,18 @@
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <osl/diagnose.h>
 #include <basegfx/numeric/ftools.hxx>
-#include "drawingml/chart/datasourceconverter.hxx"
-#include "drawingml/chart/seriesmodel.hxx"
-#include "drawingml/chart/titleconverter.hxx"
-#include "drawingml/chart/typegroupconverter.hxx"
-#include "drawingml/chart/typegroupmodel.hxx"
+#include <drawingml/chart/datasourceconverter.hxx>
+#include <drawingml/chart/seriesmodel.hxx>
+#include <drawingml/chart/titleconverter.hxx>
+#include <drawingml/chart/typegroupconverter.hxx>
+#include <drawingml/chart/typegroupmodel.hxx>
 #include <oox/core/xmlfilterbase.hxx>
-#include "oox/helper/containerhelper.hxx"
+#include <oox/helper/containerhelper.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "drawingml/lineproperties.hxx"
+#include <drawingml/lineproperties.hxx>
 
 namespace oox {
 namespace drawingml {

@@ -7,10 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "orcusfiltersimpl.hxx"
-#include "orcusinterface.hxx"
+#include <orcusfiltersimpl.hxx>
+#include <orcusinterface.hxx>
 
-#include "document.hxx"
+#include <document.hxx>
 
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>

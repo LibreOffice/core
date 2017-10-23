@@ -39,7 +39,7 @@
 #include <editeng/numitem.hxx>
 #include <editeng/eeitem.hxx>
 
-#include "bulmaper.hxx"
+#include <bulmaper.hxx>
 
 #define GetWhich(nSlot) rSet.GetPool()->GetWhich( nSlot )
 

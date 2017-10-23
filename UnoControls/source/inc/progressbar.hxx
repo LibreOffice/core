@@ -25,7 +25,7 @@
 
 #include <vcl/vclptr.hxx>
 
-#include "basecontrol.hxx"
+#include <basecontrol.hxx>
 
 //  namespaces
 

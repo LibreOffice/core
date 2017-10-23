@@ -59,7 +59,7 @@
  ************************************************************************/
 
 #include "lwpparaproperty.hxx"
-#include "lwpobjtags.hxx"
+#include <lwpobjtags.hxx>
 #include "lwppara.hxx"
 
 void LwpPara::ReadPropertyList(LwpObjectStream* pFile)

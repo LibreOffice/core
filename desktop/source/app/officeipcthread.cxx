@@ -22,7 +22,7 @@
 #include <config_dbus.h>
 #include <config_features.h>
 
-#include "app.hxx"
+#include <app.hxx>
 #include "officeipcthread.hxx"
 #include "cmdlineargs.hxx"
 #include "dispatchwatcher.hxx"

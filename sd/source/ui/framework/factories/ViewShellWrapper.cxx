@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "framework/ViewShellWrapper.hxx"
-#include "framework/Pane.hxx"
-#include "sdpage.hxx"
-#include "ViewShell.hxx"
-#include "Window.hxx"
+#include <framework/ViewShellWrapper.hxx>
+#include <framework/Pane.hxx>
+#include <sdpage.hxx>
+#include <ViewShell.hxx>
+#include <Window.hxx>
 
-#include "SlideSorter.hxx"
-#include "SlideSorterViewShell.hxx"
-#include "controller/SlsPageSelector.hxx"
-#include "controller/SlsCurrentSlideManager.hxx"
-#include "controller/SlideSorterController.hxx"
-#include "model/SlsPageEnumerationProvider.hxx"
-#include "model/SlideSorterModel.hxx"
-#include "model/SlsPageDescriptor.hxx"
+#include <SlideSorter.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <controller/SlsPageSelector.hxx>
+#include <controller/SlsCurrentSlideManager.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <model/SlsPageEnumerationProvider.hxx>
+#include <model/SlideSorterModel.hxx>
+#include <model/SlsPageDescriptor.hxx>
 
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

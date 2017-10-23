@@ -19,31 +19,31 @@
 
 #include <sal/config.h>
 
-#include "java/sql/Connection.hxx"
-#include "java/lang/Class.hxx"
-#include "java/tools.hxx"
-#include "java/ContextClassLoader.hxx"
-#include "java/sql/DatabaseMetaData.hxx"
-#include "java/sql/JStatement.hxx"
-#include "java/sql/Driver.hxx"
-#include "java/sql/PreparedStatement.hxx"
-#include "java/sql/CallableStatement.hxx"
-#include "java/sql/SQLWarning.hxx"
+#include <java/sql/Connection.hxx>
+#include <java/lang/Class.hxx>
+#include <java/tools.hxx>
+#include <java/ContextClassLoader.hxx>
+#include <java/sql/DatabaseMetaData.hxx>
+#include <java/sql/JStatement.hxx>
+#include <java/sql/Driver.hxx>
+#include <java/sql/PreparedStatement.hxx>
+#include <java/sql/CallableStatement.hxx>
+#include <java/sql/SQLWarning.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <connectivity/sqlparse.hxx>
 #include <connectivity/dbexception.hxx>
-#include "java/util/Property.hxx"
-#include "java/LocalRef.hxx"
+#include <java/util/Property.hxx>
+#include <java/LocalRef.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <jvmaccess/classpath.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <jni.h>
-#include "strings.hrc"
+#include <strings.hrc>
 #include <unotools/confignode.hxx>
-#include "strings.hxx"
+#include <strings.hxx>
 
 #include <vector>
 #include <memory>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "workbookfragment.hxx"
+#include <workbookfragment.hxx>
 
 #include <oox/core/filterbase.hxx>
 #include <oox/core/xmlfilterbase.hxx>
@@ -29,31 +29,31 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 
-#include "chartsheetfragment.hxx"
-#include "connectionsfragment.hxx"
-#include "externallinkbuffer.hxx"
-#include "externallinkfragment.hxx"
-#include "formulabuffer.hxx"
-#include "pivotcachebuffer.hxx"
-#include "sharedstringsbuffer.hxx"
-#include "sharedstringsfragment.hxx"
-#include "revisionfragment.hxx"
-#include "stylesfragment.hxx"
-#include "tablebuffer.hxx"
-#include "themebuffer.hxx"
-#include "viewsettings.hxx"
-#include "workbooksettings.hxx"
-#include "worksheetbuffer.hxx"
-#include "worksheethelper.hxx"
-#include "worksheetfragment.hxx"
-#include "sheetdatacontext.hxx"
-#include "extlstcontext.hxx"
-#include "officecfg/Office/Common.hxx"
+#include <chartsheetfragment.hxx>
+#include <connectionsfragment.hxx>
+#include <externallinkbuffer.hxx>
+#include <externallinkfragment.hxx>
+#include <formulabuffer.hxx>
+#include <pivotcachebuffer.hxx>
+#include <sharedstringsbuffer.hxx>
+#include <sharedstringsfragment.hxx>
+#include <revisionfragment.hxx>
+#include <stylesfragment.hxx>
+#include <tablebuffer.hxx>
+#include <themebuffer.hxx>
+#include <viewsettings.hxx>
+#include <workbooksettings.hxx>
+#include <worksheetbuffer.hxx>
+#include <worksheethelper.hxx>
+#include <worksheetfragment.hxx>
+#include <sheetdatacontext.hxx>
+#include <extlstcontext.hxx>
+#include <officecfg/Office/Common.hxx>
 
-#include "document.hxx"
-#include "docsh.hxx"
-#include "calcconfig.hxx"
-#include "globstr.hrc"
+#include <document.hxx>
+#include <docsh.hxx>
+#include <calcconfig.hxx>
+#include <globstr.hrc>
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>

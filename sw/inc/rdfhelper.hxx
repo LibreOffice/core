@@ -14,7 +14,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <swdllapi.h>
+#include "swdllapi.h"
 
 #include <com/sun/star/uno/Reference.hxx>
 

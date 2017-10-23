@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "config_kde4.h"
+#include <config_kde4.h>
 
 #include "KDEXLib.hxx"
 #include "VCLKDEApplication.hxx"
@@ -34,18 +34,18 @@
 #include <QtCore/QThread>
 #include <QtGui/QFrame>
 
-#include "unx/i18n_im.hxx"
-#include "unx/i18n_xkb.hxx"
-#include "unx/saldata.hxx"
+#include <unx/i18n_im.hxx>
+#include <unx/i18n_xkb.hxx>
+#include <unx/saldata.hxx>
 #include <o3tl/make_unique.hxx>
-#include "osl/process.h"
+#include <osl/process.h>
 
 #include "KDESalDisplay.hxx"
 
 #if KDE4_HAVE_GLIB
 #include "KDE4FilePicker.hxx"
-#include "tst_exclude_socket_notifiers.moc"
-#include "tst_exclude_posted_events.moc"
+#include <tst_exclude_socket_notifiers.moc>
+#include <tst_exclude_posted_events.moc>
 #endif
 
 KDEXLib::KDEXLib() :
@@ -420,6 +420,6 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDEXLib::createFilePicker(
 #endif
 }
 
-#include "KDEXLib.moc"
+#include <KDEXLib.moc>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

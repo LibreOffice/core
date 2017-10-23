@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_BARPOSITIONHELPER_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_BARPOSITIONHELPER_HXX
 
-#include "PlottingPositionHelper.hxx"
+#include <PlottingPositionHelper.hxx>
 #include "CategoryPositionHelper.hxx"
 
 namespace chart

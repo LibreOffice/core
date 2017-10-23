@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 #include <cstdlib>
@@ -26,20 +26,20 @@
 #include <vector>
 #include <algorithm>
 
-#include "osl/file.h"
-#include "osl/file.hxx"
-#include "osl/thread.h"
-#include "rtl/string.h"
-#include "rtl/string.hxx"
-#include "rtl/textcvt.h"
-#include "rtl/strbuf.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/macros.h"
-#include "sal/main.h"
-#include "sal/types.h"
+#include <osl/file.h>
+#include <osl/file.hxx>
+#include <osl/thread.h>
+#include <rtl/string.h>
+#include <rtl/string.hxx>
+#include <rtl/textcvt.h>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/macros.h>
+#include <sal/main.h>
+#include <sal/types.h>
 
-#include "po.hxx"
+#include <po.hxx>
 
 using namespace std;
 

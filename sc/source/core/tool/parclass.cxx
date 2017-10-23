@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "parclass.hxx"
-#include "token.hxx"
-#include "global.hxx"
-#include "callform.hxx"
-#include "addincol.hxx"
-#include "funcdesc.hxx"
+#include <parclass.hxx>
+#include <token.hxx>
+#include <global.hxx>
+#include <callform.hxx>
+#include <addincol.hxx>
+#include <funcdesc.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/diagnose.h>
 #include <sal/macros.h>

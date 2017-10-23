@@ -19,27 +19,27 @@
 
 #include <vcl/svapp.hxx>
 
-#include "document.hxx"
-#include "brdcst.hxx"
-#include "bcaslot.hxx"
-#include "formulacell.hxx"
+#include <document.hxx>
+#include <brdcst.hxx>
+#include <bcaslot.hxx>
+#include <formulacell.hxx>
 #include <formula/errorcodes.hxx>
-#include "scerrors.hxx"
-#include "docoptio.hxx"
-#include "refupdat.hxx"
-#include "table.hxx"
-#include "progress.hxx"
-#include "scmod.hxx"
-#include "inputopt.hxx"
-#include "conditio.hxx"
-#include "colorscale.hxx"
-#include "sheetevents.hxx"
-#include "tokenarray.hxx"
-#include "listenercontext.hxx"
-#include "formulagroup.hxx"
+#include <scerrors.hxx>
+#include <docoptio.hxx>
+#include <refupdat.hxx>
+#include <table.hxx>
+#include <progress.hxx>
+#include <scmod.hxx>
+#include <inputopt.hxx>
+#include <conditio.hxx>
+#include <colorscale.hxx>
+#include <sheetevents.hxx>
+#include <tokenarray.hxx>
+#include <listenercontext.hxx>
+#include <formulagroup.hxx>
 #include <refhint.hxx>
 
-#include "globstr.hrc"
+#include <globstr.hrc>
 
 void ScDocument::StartListeningArea(
     const ScRange& rRange, bool bGroupListening, SvtListener* pListener )

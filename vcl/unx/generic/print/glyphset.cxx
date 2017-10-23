@@ -20,20 +20,20 @@
 #include "glyphset.hxx"
 #include "psputil.hxx"
 
-#include "sft.hxx"
+#include <sft.hxx>
 
-#include "unx/printergfx.hxx"
-#include "fontsubset.hxx"
-#include "unx/fontmanager.hxx"
+#include <unx/printergfx.hxx>
+#include <fontsubset.hxx>
+#include <unx/fontmanager.hxx>
 
 #include <tools/gen.hxx>
 
-#include "osl/thread.h"
+#include <osl/thread.h>
 
-#include "sal/alloca.h"
+#include <sal/alloca.h>
 
-#include "rtl/ustring.hxx"
-#include "rtl/strbuf.hxx"
+#include <rtl/ustring.hxx>
+#include <rtl/strbuf.hxx>
 
 #include <unotools/tempfile.hxx>
 

@@ -33,7 +33,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
-#include "officecfg/Office/Common.hxx"
+#include <officecfg/Office/Common.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>

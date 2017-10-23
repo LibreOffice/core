@@ -8,29 +8,29 @@
  */
 
 #include "ucalc.hxx"
-#include "markdata.hxx"
-#include "calcconfig.hxx"
-#include "clipparam.hxx"
-#include "interpre.hxx"
-#include "compiler.hxx"
-#include "tokenarray.hxx"
-#include "refdata.hxx"
-#include "scopetools.hxx"
-#include "formulacell.hxx"
-#include "formulagroup.hxx"
-#include "scmod.hxx"
-#include "docsh.hxx"
-#include "docfunc.hxx"
-#include "paramisc.hxx"
-#include "tokenstringcontext.hxx"
+#include <markdata.hxx>
+#include <calcconfig.hxx>
+#include <clipparam.hxx>
+#include <interpre.hxx>
+#include <compiler.hxx>
+#include <tokenarray.hxx>
+#include <refdata.hxx>
+#include <scopetools.hxx>
+#include <formulacell.hxx>
+#include <formulagroup.hxx>
+#include <scmod.hxx>
+#include <docsh.hxx>
+#include <docfunc.hxx>
+#include <paramisc.hxx>
+#include <tokenstringcontext.hxx>
 #include <refupdatecontext.hxx>
-#include "dbdata.hxx"
-#include "scmatrix.hxx"
+#include <dbdata.hxx>
+#include <scmatrix.hxx>
 #include <validat.hxx>
 #include <scitems.hxx>
 #include <patattr.hxx>
 #include <docpool.hxx>
-#include "docoptio.hxx"
+#include <docoptio.hxx>
 
 #include <formula/vectortoken.hxx>
 #include <o3tl/make_unique.hxx>

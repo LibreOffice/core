@@ -18,13 +18,13 @@
  */
 
 #include "ChartType.hxx"
-#include "PropertyHelper.hxx"
-#include "CommonFunctors.hxx"
-#include "macros.hxx"
-#include "CartesianCoordinateSystem.hxx"
-#include "AxisHelper.hxx"
-#include "CloneHelper.hxx"
-#include "AxisIndexDefines.hxx"
+#include <PropertyHelper.hxx>
+#include <CommonFunctors.hxx>
+#include <macros.hxx>
+#include <CartesianCoordinateSystem.hxx>
+#include <AxisHelper.hxx>
+#include <CloneHelper.hxx>
+#include <AxisIndexDefines.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

@@ -45,7 +45,7 @@
 #include <swmodule.hxx>
 #include <unocrsr.hxx>
 
-#include "swrenamexnameddlg.hxx"
+#include <swrenamexnameddlg.hxx>
 
 using namespace ::com::sun::star;
 

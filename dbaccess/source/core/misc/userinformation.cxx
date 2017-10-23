@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "userinformation.hxx"
+#include <userinformation.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/configmgr.hxx>

@@ -57,10 +57,10 @@
  * @file
  * Table cell style. Number format, string value, and so on...
  ************************************************************************/
-#include "xfilter/xfcellstyle.hxx"
-#include "xfilter/xfborders.hxx"
-#include "xfilter/xffont.hxx"
-#include "xfilter/xfbgimage.hxx"
+#include <xfilter/xfcellstyle.hxx>
+#include <xfilter/xfborders.hxx>
+#include <xfilter/xffont.hxx>
+#include <xfilter/xfbgimage.hxx>
 
 XFCellStyle::XFCellStyle()
     : m_eHoriAlign(enumXFAlignNone)

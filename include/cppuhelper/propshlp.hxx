@@ -20,16 +20,16 @@
 #ifndef INCLUDED_CPPUHELPER_PROPSHLP_HXX
 #define INCLUDED_CPPUHELPER_PROPSHLP_HXX
 
-#include <rtl/alloc.h>
+#include "rtl/alloc.h"
 
-#include <cppuhelper/interfacecontainer.h>
+#include "cppuhelper/interfacecontainer.h"
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetOption.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
+#include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/beans/XPropertySetOption.hpp"
+#include "com/sun/star/beans/XMultiPropertySet.hpp"
+#include "com/sun/star/beans/XFastPropertySet.hpp"
 
-#include <cppuhelper/cppuhelperdllapi.h>
+#include "cppuhelper/cppuhelperdllapi.h"
 
 
 namespace cppu

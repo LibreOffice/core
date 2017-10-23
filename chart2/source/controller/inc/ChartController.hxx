@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CHARTCONTROLLER_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CHARTCONTROLLER_HXX
 
-#include "LifeTime.hxx"
+#include <LifeTime.hxx>
 #include "CommandDispatchContainer.hxx"
 #include "SelectionHelper.hxx"
 

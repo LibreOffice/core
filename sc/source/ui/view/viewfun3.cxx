@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
@@ -40,36 +40,36 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 
-#include "attrib.hxx"
-#include "patattr.hxx"
-#include "dociter.hxx"
-#include "viewfunc.hxx"
-#include "tabvwsh.hxx"
-#include "docsh.hxx"
-#include "docfunc.hxx"
-#include "undoblk.hxx"
-#include "refundo.hxx"
-#include "globstr.hrc"
-#include "global.hxx"
-#include "transobj.hxx"
-#include "drwtrans.hxx"
-#include "rangenam.hxx"
-#include "dbdata.hxx"
-#include "impex.hxx"
-#include "chgtrack.hxx"
-#include "waitoff.hxx"
-#include "scmod.hxx"
-#include "sc.hrc"
-#include "inputopt.hxx"
-#include "warnbox.hxx"
-#include "drwlayer.hxx"
-#include "editable.hxx"
-#include "docuno.hxx"
-#include "clipparam.hxx"
-#include "undodat.hxx"
-#include "drawview.hxx"
-#include "cliputil.hxx"
-#include "clipoptions.hxx"
+#include <attrib.hxx>
+#include <patattr.hxx>
+#include <dociter.hxx>
+#include <viewfunc.hxx>
+#include <tabvwsh.hxx>
+#include <docsh.hxx>
+#include <docfunc.hxx>
+#include <undoblk.hxx>
+#include <refundo.hxx>
+#include <globstr.hrc>
+#include <global.hxx>
+#include <transobj.hxx>
+#include <drwtrans.hxx>
+#include <rangenam.hxx>
+#include <dbdata.hxx>
+#include <impex.hxx>
+#include <chgtrack.hxx>
+#include <waitoff.hxx>
+#include <scmod.hxx>
+#include <sc.hrc>
+#include <inputopt.hxx>
+#include <warnbox.hxx>
+#include <drwlayer.hxx>
+#include <editable.hxx>
+#include <docuno.hxx>
+#include <clipparam.hxx>
+#include <undodat.hxx>
+#include <drawview.hxx>
+#include <cliputil.hxx>
+#include <clipoptions.hxx>
 #include <gridwin.hxx>
 #include <com/sun/star/util/XCloneable.hpp>
 

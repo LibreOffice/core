@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "editeng/justifyitem.hxx"
-#include "editeng/memberids.h"
-#include "editeng/editrids.hrc"
-#include "editeng/eerdll.hxx"
+#include <editeng/justifyitem.hxx>
+#include <editeng/memberids.h>
+#include <editeng/editrids.hrc>
+#include <editeng/eerdll.hxx>
 
 #include <tools/stream.hxx>
 

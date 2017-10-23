@@ -19,11 +19,11 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_REDLNITR_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_REDLNITR_HXX
 
-#include "ndhints.hxx"
+#include <ndhints.hxx>
 
 #include <IDocumentRedlineAccess.hxx>
 
-#include "swfont.hxx"
+#include <swfont.hxx>
 
 #include <cstddef>
 #include <memory>

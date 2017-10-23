@@ -21,7 +21,7 @@
 #include "XMLLineNumberingSeparatorImportContext.hxx"
 
 #include <sax/tools/converter.hxx>
-#include "XMLLineNumberingImportContext.hxx"
+#include <XMLLineNumberingImportContext.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>

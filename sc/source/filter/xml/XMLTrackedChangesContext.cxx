@@ -22,10 +22,10 @@
 #include "xmlimprt.hxx"
 #include "xmlconti.hxx"
 #include "XMLConverter.hxx"
-#include "formulacell.hxx"
-#include "textuno.hxx"
-#include "editutil.hxx"
-#include "document.hxx"
+#include <formulacell.hxx>
+#include <textuno.hxx>
+#include <editutil.hxx>
+#include <document.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>

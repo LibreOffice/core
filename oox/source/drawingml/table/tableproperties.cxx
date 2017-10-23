@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/table/tableproperties.hxx"
-#include "drawingml/table/tablestylelist.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
+#include <drawingml/table/tableproperties.hxx>
+#include <drawingml/table/tablestylelist.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -27,8 +27,8 @@
 #include <com/sun/star/table/XMergeableCellRange.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <rtl/instance.hxx>
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/helper/propertyset.hxx"
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/helper/propertyset.hxx>
 #include <oox/token/tokens.hxx>
 
 using namespace ::oox::core;

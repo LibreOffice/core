@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "svx/sidebar/SelectionChangeHandler.hxx"
-#include "svx/sidebar/SelectionAnalyzer.hxx"
-#include "svx/sidebar/ContextChangeEventMultiplexer.hxx"
-#include "svx/svdmrkv.hxx"
+#include <svx/sidebar/SelectionChangeHandler.hxx>
+#include <svx/sidebar/SelectionAnalyzer.hxx>
+#include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
+#include <svx/svdmrkv.hxx>
 
 #include <vcl/EnumContext.hxx>
 #include <sfx2/shell.hxx>

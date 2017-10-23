@@ -19,30 +19,30 @@
 
 #include <sfx2/app.hxx>
 
-#include "undodat.hxx"
-#include "undoutil.hxx"
-#include "undoolk.hxx"
-#include "document.hxx"
-#include "docsh.hxx"
-#include "tabvwsh.hxx"
-#include "olinetab.hxx"
-#include "dbdata.hxx"
-#include "rangenam.hxx"
-#include "pivot.hxx"
-#include "globstr.hrc"
-#include "global.hxx"
-#include "globalnames.hxx"
-#include "target.hxx"
-#include "chartarr.hxx"
-#include "dbdocfun.hxx"
-#include "olinefun.hxx"
-#include "dpobject.hxx"
-#include "attrib.hxx"
-#include "hints.hxx"
-#include "sc.hrc"
-#include "chgtrack.hxx"
-#include "refundo.hxx"
-#include "markdata.hxx"
+#include <undodat.hxx>
+#include <undoutil.hxx>
+#include <undoolk.hxx>
+#include <document.hxx>
+#include <docsh.hxx>
+#include <tabvwsh.hxx>
+#include <olinetab.hxx>
+#include <dbdata.hxx>
+#include <rangenam.hxx>
+#include <pivot.hxx>
+#include <globstr.hrc>
+#include <global.hxx>
+#include <globalnames.hxx>
+#include <target.hxx>
+#include <chartarr.hxx>
+#include <dbdocfun.hxx>
+#include <olinefun.hxx>
+#include <dpobject.hxx>
+#include <attrib.hxx>
+#include <hints.hxx>
+#include <sc.hrc>
+#include <chgtrack.hxx>
+#include <refundo.hxx>
+#include <markdata.hxx>
 
 
 // Show or hide outline groups

@@ -60,11 +60,11 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCONFIGMANAGER_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCONFIGMANAGER_HXX
 
-#include "xfilter/xfstylecont.hxx"
-#include "xfilter/xflinenumberconfig.hxx"
-#include "xfilter/xffootnoteconfig.hxx"
-#include "xfilter/xfendnoteconfig.hxx"
-#include "xfilter/xfdefs.hxx"
+#include <xfilter/xfstylecont.hxx>
+#include <xfilter/xflinenumberconfig.hxx>
+#include <xfilter/xffootnoteconfig.hxx>
+#include <xfilter/xfendnoteconfig.hxx>
+#include <xfilter/xfdefs.hxx>
 
 /**
  * @brief

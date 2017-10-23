@@ -18,9 +18,9 @@
  */
 
 #include <memory>
-#include "tools/AsynchronousCall.hxx"
+#include <tools/AsynchronousCall.hxx>
 
-#include "DrawViewShell.hxx"
+#include <DrawViewShell.hxx>
 
 namespace sd { namespace tools {
 

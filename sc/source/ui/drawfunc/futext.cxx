@@ -32,14 +32,14 @@
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 
-#include "futext.hxx"
-#include "drwlayer.hxx"
-#include "sc.hrc"
-#include "tabvwsh.hxx"
-#include "drawview.hxx"
+#include <futext.hxx>
+#include <drwlayer.hxx>
+#include <sc.hrc>
+#include <tabvwsh.hxx>
+#include <drawview.hxx>
 
 // Create default drawing objects via keyboard
-#include "scresid.hxx"
+#include <scresid.hxx>
 
 // maximum of mouse movement which allows to start Drag&Drop
 //! fusel,fuconstr,futext - combined!

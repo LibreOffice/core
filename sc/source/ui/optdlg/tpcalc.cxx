@@ -19,20 +19,20 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "global.hxx"
-#include "globstr.hrc"
-#include "uiitems.hxx"
-#include "docsh.hxx"
-#include "document.hxx"
-#include "docoptio.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
+#include <global.hxx>
+#include <globstr.hrc>
+#include <uiitems.hxx>
+#include <docsh.hxx>
+#include <document.hxx>
+#include <docoptio.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
 #include <officecfg/Office/Calc.hxx>
 
-#include "tpcalc.hxx"
+#include <tpcalc.hxx>
 
 #include <math.h>
 

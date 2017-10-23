@@ -17,22 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hsqldb/HTables.hxx"
-#include "hsqldb/HViews.hxx"
-#include "hsqldb/HTable.hxx"
+#include <hsqldb/HTables.hxx>
+#include <hsqldb/HViews.hxx>
+#include <hsqldb/HTable.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
-#include "hsqldb/HCatalog.hxx"
+#include <hsqldb/HCatalog.hxx>
 #include <comphelper/extract.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/types.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 
 using namespace ::comphelper;
 using namespace connectivity;

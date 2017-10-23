@@ -22,7 +22,7 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <tools/color.hxx>
-#include "rangelst.hxx"
+#include <rangelst.hxx>
 #include "importcontext.hxx"
 
 class ScXMLImport;

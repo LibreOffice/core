@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ContainerMediator.hxx"
-#include "stringconstants.hxx"
-#include "PropertyForward.hxx"
+#include <ContainerMediator.hxx>
+#include <stringconstants.hxx>
+#include <PropertyForward.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>

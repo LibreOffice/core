@@ -24,7 +24,7 @@
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <unotools/tempfile.hxx>
-#include <sane.hxx>
+#include "sane.hxx"
 #include <dlfcn.h>
 #include <stdio.h>
 #include <unistd.h>

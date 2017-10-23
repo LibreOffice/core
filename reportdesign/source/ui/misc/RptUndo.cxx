@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "RptUndo.hxx"
-#include "strings.hxx"
-#include "rptui_slotid.hrc"
-#include "UITools.hxx"
-#include "UndoEnv.hxx"
+#include <RptUndo.hxx>
+#include <strings.hxx>
+#include <rptui_slotid.hrc>
+#include <UITools.hxx>
+#include <UndoEnv.hxx>
 
 #include <dbaccess/IController.hxx>
 #include <com/sun/star/report/XSection.hpp>

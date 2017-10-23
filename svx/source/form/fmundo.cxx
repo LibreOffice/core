@@ -22,16 +22,16 @@
 #include <map>
 
 #include <sal/macros.h>
-#include "fmundo.hxx"
-#include "fmpgeimp.hxx"
-#include "svx/svditer.hxx"
-#include "fmobj.hxx"
-#include "fmprop.hxx"
-#include "svx/strings.hrc"
-#include "svx/fmglob.hxx"
-#include "svx/dialmgr.hxx"
-#include "svx/fmmodel.hxx"
-#include "svx/fmpage.hxx"
+#include <fmundo.hxx>
+#include <fmpgeimp.hxx>
+#include <svx/svditer.hxx>
+#include <fmobj.hxx>
+#include <fmprop.hxx>
+#include <svx/strings.hrc>
+#include <svx/fmglob.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/fmmodel.hxx>
+#include <svx/fmpage.hxx>
 
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -43,7 +43,7 @@
 #include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
-#include "svx/fmtools.hxx"
+#include <svx/fmtools.hxx>
 #include <svl/macitem.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/objsh.hxx>

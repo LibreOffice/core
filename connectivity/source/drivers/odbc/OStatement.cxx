@@ -19,11 +19,11 @@
 
 
 #include <osl/diagnose.h>
-#include "odbc/OStatement.hxx"
-#include "odbc/OConnection.hxx"
-#include "odbc/OResultSet.hxx"
+#include <odbc/OStatement.hxx>
+#include <odbc/OConnection.hxx>
+#include <odbc/OResultSet.hxx>
 #include <comphelper/property.hxx>
-#include "odbc/OTools.hxx"
+#include <odbc/OTools.hxx>
 #include <osl/thread.h>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
@@ -35,7 +35,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <algorithm>
-#include "strings.hrc"
+#include <strings.hrc>
 #include <connectivity/dbexception.hxx>
 
 using namespace ::comphelper;

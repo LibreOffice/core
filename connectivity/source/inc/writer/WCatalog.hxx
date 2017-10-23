@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WCATALOG_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WCATALOG_HXX
 
-#include "file/FCatalog.hxx"
+#include <file/FCatalog.hxx>
 
 namespace connectivity
 {

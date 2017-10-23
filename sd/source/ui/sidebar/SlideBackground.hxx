@@ -28,12 +28,12 @@
 #include <vcl/field.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svx/pagectrl.hxx>
-#include "ViewShellBase.hxx"
+#include <ViewShellBase.hxx>
 #include <svx/itemwin.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <com/sun/star/drawing/XDrawView.hpp>
-#include "fupage.hxx"
+#include <fupage.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/papersizelistbox.hxx>
 #include <svx/rulritem.hxx>
@@ -44,7 +44,7 @@
 #include <svx/xflbckit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflhtit.hxx>
-#include "EventMultiplexer.hxx"
+#include <EventMultiplexer.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 
 class SvxColorListBox;

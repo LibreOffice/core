@@ -18,7 +18,7 @@
  */
 
 #include <vector>
-#include <sortdynres.hxx>
+#include "sortdynres.hxx"
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/ucb/ContentResultSetCapability.hpp>

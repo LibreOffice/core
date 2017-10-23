@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ThreeDHelper.hxx"
-#include "macros.hxx"
-#include "DiagramHelper.hxx"
-#include "ChartTypeHelper.hxx"
-#include "BaseGFXHelper.hxx"
-#include "DataSeriesHelper.hxx"
-#include "defines.hxx"
+#include <ThreeDHelper.hxx>
+#include <macros.hxx>
+#include <DiagramHelper.hxx>
+#include <ChartTypeHelper.hxx>
+#include <BaseGFXHelper.hxx>
+#include <DataSeriesHelper.hxx>
+#include <defines.hxx>
 
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>

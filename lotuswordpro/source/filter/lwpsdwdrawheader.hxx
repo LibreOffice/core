@@ -62,8 +62,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWDRAWHEADER_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWDRAWHEADER_HXX
 
-#include "lwpheader.hxx"
-#include "lwptools.hxx"
+#include <lwpheader.hxx>
+#include <lwptools.hxx>
 
 const sal_uInt8 DRAW_FACESIZE = 32;
 const double THRESHOLD = 0.0001;

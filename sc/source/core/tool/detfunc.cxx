@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svtools/colorcfg.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/outlobj.hxx>
@@ -53,22 +53,22 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-#include "detfunc.hxx"
-#include "document.hxx"
-#include "dociter.hxx"
-#include "drwlayer.hxx"
-#include "userdat.hxx"
-#include "validat.hxx"
-#include "formulacell.hxx"
-#include "docpool.hxx"
-#include "patattr.hxx"
-#include "attrib.hxx"
-#include "scmod.hxx"
-#include "postit.hxx"
-#include "rangelst.hxx"
-#include "reftokenhelper.hxx"
-#include "formulaiter.hxx"
-#include "cellvalue.hxx"
+#include <detfunc.hxx>
+#include <document.hxx>
+#include <dociter.hxx>
+#include <drwlayer.hxx>
+#include <userdat.hxx>
+#include <validat.hxx>
+#include <formulacell.hxx>
+#include <docpool.hxx>
+#include <patattr.hxx>
+#include <attrib.hxx>
+#include <scmod.hxx>
+#include <postit.hxx>
+#include <rangelst.hxx>
+#include <reftokenhelper.hxx>
+#include <formulaiter.hxx>
+#include <cellvalue.hxx>
 
 #include <vector>
 #include <memory>

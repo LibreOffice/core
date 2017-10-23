@@ -19,7 +19,7 @@
 #ifndef INCLUDED_IDLC_INC_ASTSERVICEMEMBER_HXX
 #define INCLUDED_IDLC_INC_ASTSERVICEMEMBER_HXX
 
-#include <astservice.hxx>
+#include "astservice.hxx"
 
 class AstServiceMember : public AstDeclaration
 {

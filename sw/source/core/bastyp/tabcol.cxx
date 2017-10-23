@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "tabcol.hxx"
+#include <tabcol.hxx>
 #include <limits.h>
 
 SwTabCols::SwTabCols( sal_uInt16 nSize ) :

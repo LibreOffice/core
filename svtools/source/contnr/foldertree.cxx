@@ -11,7 +11,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/dialog.hxx>
 #include "contentenumeration.hxx"
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 FolderTree::FolderTree( vcl::Window* pParent, WinBits nBits )
     : SvTreeListBox( pParent, nBits | WB_SORT | WB_TABSTOP )

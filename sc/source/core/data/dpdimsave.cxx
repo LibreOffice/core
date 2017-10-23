@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dpdimsave.hxx"
-#include "dpgroup.hxx"
-#include "dpobject.hxx"
-#include "dputil.hxx"
-#include "document.hxx"
+#include <dpdimsave.hxx>
+#include <dpgroup.hxx>
+#include <dpobject.hxx>
+#include <dputil.hxx>
+#include <document.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
@@ -30,9 +30,9 @@
 #include <rtl/math.hxx>
 #include <algorithm>
 
-#include "global.hxx"
-#include "scresid.hxx"
-#include "globstr.hrc"
+#include <global.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
 
 using namespace com::sun::star;
 

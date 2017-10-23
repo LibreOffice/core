@@ -46,7 +46,7 @@
 #include <iostream>
 #include <fstream>
 
-#include <boxclipper.hxx>
+#include "boxclipper.hxx"
 
 using namespace ::basegfx;
 

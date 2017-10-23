@@ -16,18 +16,18 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "PageNumber.hxx"
+#include <PageNumber.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "strings.hrc"
-#include "rptui_slotid.hrc"
-#include "RptDef.hxx"
-#include "helpids.h"
+#include <strings.hrc>
+#include <rptui_slotid.hrc>
+#include <RptDef.hxx>
+#include <helpids.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 
-#include "UITools.hxx"
-#include "strings.hxx"
-#include "ReportController.hxx"
+#include <UITools.hxx>
+#include <strings.hxx>
+#include <ReportController.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <algorithm>
 

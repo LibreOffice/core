@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "RDFaImportHelper.hxx"
+#include <RDFaImportHelper.hxx>
 
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>

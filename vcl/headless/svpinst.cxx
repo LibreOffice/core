@@ -41,11 +41,11 @@
 #include <headless/svpbmp.hxx>
 #include <headless/svpgdi.hxx>
 
-#include "salframe.hxx"
-#include "svdata.hxx"
-#include "unx/gendata.hxx"
+#include <salframe.hxx>
+#include <svdata.hxx>
+#include <unx/gendata.hxx>
 // FIXME: remove when we re-work the svp mainloop
-#include "unx/salunxtime.h"
+#include <unx/salunxtime.h>
 
 SvpSalInstance* SvpSalInstance::s_pDefaultInstance = nullptr;
 

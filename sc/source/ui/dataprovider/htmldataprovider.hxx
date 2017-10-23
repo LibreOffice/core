@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_DATAPROVIDER_HTMLDATAPROVIDER_HXX
 #define INCLUDED_SC_SOURCE_UI_DATAPROVIDER_HTMLDATAPROVIDER_HXX
 
-#include "dataprovider.hxx"
+#include <dataprovider.hxx>
 
 namespace sc {
 

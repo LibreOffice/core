@@ -28,8 +28,8 @@
 #include "xerecord.hxx"
 #include "xlstyle.hxx"
 #include "xeroot.hxx"
-#include "conditio.hxx"
-#include "fonthelper.hxx"
+#include <conditio.hxx>
+#include <fonthelper.hxx>
 #include <memory>
 #include <vector>
 

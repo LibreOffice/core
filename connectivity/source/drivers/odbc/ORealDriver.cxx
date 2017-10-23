@@ -18,9 +18,9 @@
  */
 
 #include "ORealDriver.hxx"
-#include "odbc/ODriver.hxx"
-#include "odbc/OTools.hxx"
-#include "odbc/OFunctions.hxx"
+#include <odbc/ODriver.hxx>
+#include <odbc/OTools.hxx>
+#include <odbc/OFunctions.hxx>
 
 namespace connectivity
 {

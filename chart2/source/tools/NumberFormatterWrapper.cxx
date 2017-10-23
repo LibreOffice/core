@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "NumberFormatterWrapper.hxx"
-#include "macros.hxx"
+#include <NumberFormatterWrapper.hxx>
+#include <macros.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svl/numuno.hxx>
 #include <svl/zformat.hxx>

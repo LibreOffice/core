@@ -20,8 +20,8 @@
 #ifndef INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_DIAGRAMFRAGMENTHANDLER_HXX
 #define INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_DIAGRAMFRAGMENTHANDLER_HXX
 
-#include "oox/core/fragmenthandler2.hxx"
-#include "drawingml/diagram/diagram.hxx"
+#include <oox/core/fragmenthandler2.hxx>
+#include <drawingml/diagram/diagram.hxx>
 
 namespace oox { namespace drawingml {
 

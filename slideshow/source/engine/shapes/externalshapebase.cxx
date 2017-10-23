@@ -25,10 +25,10 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include "externalshapebase.hxx"
-#include "eventmultiplexer.hxx"
-#include "vieweventhandler.hxx"
-#include "intrinsicanimationeventhandler.hxx"
-#include "tools.hxx"
+#include <eventmultiplexer.hxx>
+#include <vieweventhandler.hxx>
+#include <intrinsicanimationeventhandler.hxx>
+#include <tools.hxx>
 
 
 using namespace ::com::sun::star;

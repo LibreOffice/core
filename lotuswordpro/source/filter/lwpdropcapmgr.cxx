@@ -58,7 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#include "lwpdropcapmgr.hxx"
+#include <lwpdropcapmgr.hxx>
 
 LwpDropcapMgr::LwpDropcapMgr()
 {

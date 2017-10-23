@@ -20,23 +20,23 @@
 #ifndef INCLUDED_SD_SOURCE_UI_DLG_REMOTEDIALOGCLIENTBOX_HXX
 #define INCLUDED_SD_SOURCE_UI_DLG_REMOTEDIALOGCLIENTBOX_HXX
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/field.hxx>
 
-#include "svtools/extensionlistbox.hxx"
+#include <svtools/extensionlistbox.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include "com/sun/star/lang/Locale.hpp"
-#include "com/sun/star/lang/XEventListener.hpp"
-#include "com/sun/star/deployment/XPackage.hpp"
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/deployment/XPackage.hpp>
 
 #include <memory>
 
-#include "sdresid.hxx"
+#include <sdresid.hxx>
 
 namespace sd {
 

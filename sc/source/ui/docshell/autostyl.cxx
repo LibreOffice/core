@@ -19,10 +19,10 @@
 
 #include <time.h>
 
-#include "attrib.hxx"
-#include "autostyl.hxx"
-#include "docsh.hxx"
-#include "sc.hrc"
+#include <attrib.hxx>
+#include <autostyl.hxx>
+#include <docsh.hxx>
+#include <sc.hrc>
 
 static inline sal_uLong TimeNow()          // seconds
 {

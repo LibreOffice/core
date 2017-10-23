@@ -19,8 +19,8 @@
 
 #include <string.h>
 #include <rtl/ustrbuf.hxx>
-#include "headless/svpdummies.hxx"
-#include "headless/svpinst.hxx"
+#include <headless/svpdummies.hxx>
+#include <headless/svpinst.hxx>
 
 // SalObject
 SvpSalObject::SvpSalObject()

@@ -38,21 +38,21 @@
 #include <com/sun/star/sheet/XCompatibilityNames.hpp>
 #include <com/sun/star/sheet/NoConvergenceException.hpp>
 
-#include "addincol.hxx"
-#include "addinhelpid.hxx"
-#include "compiler.hxx"
-#include "scmatrix.hxx"
-#include "addinlis.hxx"
+#include <addincol.hxx>
+#include <addinhelpid.hxx>
+#include <compiler.hxx>
+#include <scmatrix.hxx>
+#include <addinlis.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/funcvarargs.h>
-#include "sc.hrc"
-#include "optutil.hxx"
-#include "addincfg.hxx"
-#include "scmod.hxx"
-#include "rangeseq.hxx"
-#include "funcdesc.hxx"
+#include <sc.hrc>
+#include <optutil.hxx>
+#include <addincfg.hxx>
+#include <scmod.hxx>
+#include <rangeseq.hxx>
+#include <funcdesc.hxx>
 #include <svl/sharedstring.hxx>
-#include "formulaopt.hxx"
+#include <formulaopt.hxx>
 #include <memory>
 
 using namespace com::sun::star;

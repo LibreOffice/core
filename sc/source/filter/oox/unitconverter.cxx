@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "unitconverter.hxx"
+#include <unitconverter.hxx>
 
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -31,7 +31,7 @@
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>
-#include "stylesbuffer.hxx"
+#include <stylesbuffer.hxx>
 
 namespace oox {
 namespace xls {

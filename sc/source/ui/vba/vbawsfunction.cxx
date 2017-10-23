@@ -32,7 +32,7 @@
 #include <comphelper/anytostring.hxx>
 
 #include "vbawsfunction.hxx"
-#include "compiler.hxx"
+#include <compiler.hxx>
 
 using namespace com::sun::star;
 using namespace ooo::vba;

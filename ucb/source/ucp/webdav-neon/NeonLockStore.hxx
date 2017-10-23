@@ -33,8 +33,8 @@
 
 #include <ne_locks.h>
 
-#include "osl/mutex.hxx"
-#include "rtl/ref.hxx"
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 #include "NeonTypes.hxx"
 
 namespace webdav_ucp

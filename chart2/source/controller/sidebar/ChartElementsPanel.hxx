@@ -25,7 +25,7 @@
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/layout.hxx>
 #include "ChartSidebarModifyListener.hxx"
-#include "TitleHelper.hxx"
+#include <TitleHelper.hxx>
 
 #include <com/sun/star/util/XModifyListener.hpp>
 

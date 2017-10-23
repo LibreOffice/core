@@ -26,12 +26,12 @@
 #include <svtools/headbar.hxx>
 #include <svtools/simptabl.hxx>
 #include <svtools/svtabbx.hxx>
-#include "rangenam.hxx"
+#include <rangenam.hxx>
 #include "anyrefdg.hxx"
 #include <vcl/lstbox.hxx>
 #include <svx/ctredlin.hxx>
-#include "chgtrack.hxx"
-#include "chgviset.hxx"
+#include <chgtrack.hxx>
+#include <chgviset.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 

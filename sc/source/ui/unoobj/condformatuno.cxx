@@ -8,18 +8,18 @@
  */
 
 #include <memory>
-#include "condformatuno.hxx"
+#include <condformatuno.hxx>
 
-#include "document.hxx"
-#include "conditio.hxx"
-#include "colorscale.hxx"
-#include "docsh.hxx"
-#include "miscuno.hxx"
-#include "compiler.hxx"
-#include "tokenarray.hxx"
+#include <document.hxx>
+#include <conditio.hxx>
+#include <colorscale.hxx>
+#include <docsh.hxx>
+#include <miscuno.hxx>
+#include <compiler.hxx>
+#include <tokenarray.hxx>
 
-#include "cellsuno.hxx"
-#include "convuno.hxx"
+#include <cellsuno.hxx>
+#include <convuno.hxx>
 
 #include <vcl/svapp.hxx>
 #include <rtl/ustring.hxx>

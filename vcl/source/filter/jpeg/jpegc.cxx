@@ -32,8 +32,8 @@ extern "C" {
 }
 
 #include "jpeg.h"
-#include <JpegReader.hxx>
-#include <JpegWriter.hxx>
+#include "JpegReader.hxx"
+#include "JpegWriter.hxx"
 #include <memory>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graphicfilter.hxx>

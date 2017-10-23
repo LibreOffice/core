@@ -24,10 +24,10 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <basegfx/vector/b2dvector.hxx>
 
-#include "event.hxx"
-#include "slideshowcontext.hxx"
-#include "subsettableshapemanager.hxx"
-#include "animationnode.hxx"
+#include <event.hxx>
+#include <slideshowcontext.hxx>
+#include <subsettableshapemanager.hxx>
+#include <animationnode.hxx>
 
 namespace com { namespace sun { namespace star { namespace animations
 {

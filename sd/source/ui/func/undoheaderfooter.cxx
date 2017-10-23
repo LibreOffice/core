@@ -20,10 +20,10 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include "app.hrc"
-#include "DrawViewShell.hxx"
-#include "drawview.hxx"
-#include "undoheaderfooter.hxx"
+#include <app.hrc>
+#include <DrawViewShell.hxx>
+#include <drawview.hxx>
+#include <undoheaderfooter.hxx>
 
 
 SdHeaderFooterUndoAction::SdHeaderFooterUndoAction( SdDrawDocument* pDoc, SdPage* pPage, const sd::HeaderFooterSettings& rNewSettings )

@@ -21,14 +21,14 @@
 #include <svl/style.hxx>
 
 // due to pSlotPool
-#include "appdata.hxx"
+#include <appdata.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/sfxresid.hxx>
-#include "arrdecl.hxx"
+#include <arrdecl.hxx>
 #include <sfx2/module.hxx>
 
 #include <sfx2/strings.hrc>

@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CONDFORMATUNO_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CONDFORMATUNO_HXX
 
-#include "address.hxx"
+#include <address.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XConditionalFormats.hpp>

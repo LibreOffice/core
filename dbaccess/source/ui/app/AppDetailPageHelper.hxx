@@ -25,7 +25,7 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
-#include "AppElementType.hxx"
+#include <AppElementType.hxx>
 #include <svtools/treelistbox.hxx>
 #include <svtools/DocumentInfoPreview.hxx>
 #include <vcl/fixed.hxx>
@@ -33,7 +33,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/grfmgr.hxx>
-#include "callbacks.hxx"
+#include <callbacks.hxx>
 #include <memory>
 
 namespace com{ namespace sun { namespace star { namespace awt   { class XWindow; } } } }

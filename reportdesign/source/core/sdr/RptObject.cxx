@@ -16,21 +16,21 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "RptObject.hxx"
+#include <RptObject.hxx>
 #include <vector>
 #include <algorithm>
 
 #include <RptDef.hxx>
 #include <svx/unoshape.hxx>
-#include "RptModel.hxx"
-#include "RptObjectListener.hxx"
+#include <RptModel.hxx>
+#include <RptObjectListener.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
-#include "RptPage.hxx"
+#include <RptPage.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 
 #include <strings.hrc>
-#include "strings.hxx"
+#include <strings.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlndsit.hxx>
@@ -63,11 +63,11 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <tools/diagnose_ex.h>
-#include "PropertyForward.hxx"
+#include <PropertyForward.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
-#include "UndoActions.hxx"
-#include "UndoEnv.hxx"
+#include <UndoActions.hxx>
+#include <UndoEnv.hxx>
 #include <functional>
 
 namespace rptui

@@ -22,7 +22,7 @@
 #include <cstddef>
 
 #include <vcl/textdata.hxx>
-#include <textdat2.hxx>
+#include "textdat2.hxx"
 
 
 TextSelection::TextSelection()

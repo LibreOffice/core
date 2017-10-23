@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "java/sql/SQLWarning.hxx"
+#include <java/sql/SQLWarning.hxx>
 using namespace connectivity;
 
 //************ Class: java.sql.SQLWarning

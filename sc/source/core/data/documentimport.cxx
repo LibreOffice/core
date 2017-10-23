@@ -7,19 +7,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "documentimport.hxx"
-#include "document.hxx"
-#include "table.hxx"
-#include "column.hxx"
-#include "formulacell.hxx"
-#include "docoptio.hxx"
-#include "globalnames.hxx"
-#include "mtvelements.hxx"
-#include "tokenarray.hxx"
-#include "stringutil.hxx"
-#include "compiler.hxx"
-#include "paramisc.hxx"
-#include "listenercontext.hxx"
+#include <documentimport.hxx>
+#include <document.hxx>
+#include <table.hxx>
+#include <column.hxx>
+#include <formulacell.hxx>
+#include <docoptio.hxx>
+#include <globalnames.hxx>
+#include <mtvelements.hxx>
+#include <tokenarray.hxx>
+#include <stringutil.hxx>
+#include <compiler.hxx>
+#include <paramisc.hxx>
+#include <listenercontext.hxx>
 #include <attarray.hxx>
 #include <sharedformula.hxx>
 

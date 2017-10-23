@@ -28,7 +28,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/jobdata.hxx>
 #include <osl/file.hxx>
-#include <unx/helper.hxx>
+#include "unx/helper.hxx"
 
 #include <cstdio>
 

@@ -20,11 +20,11 @@
 #ifndef INCLUDED_VCL_GENERIC_PRINT_GLYPHSET_HXX
 #define INCLUDED_VCL_GENERIC_PRINT_GLYPHSET_HXX
 
-#include "unx/fontmanager.hxx"
+#include <unx/fontmanager.hxx>
 
-#include "osl/file.hxx"
+#include <osl/file.hxx>
 
-#include "rtl/string.hxx"
+#include <rtl/string.hxx>
 
 #include <list>
 #include <unordered_map>

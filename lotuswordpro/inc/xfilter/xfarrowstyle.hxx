@@ -60,7 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFARROWSTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFARROWSTYLE_HXX
 
-#include "xfilter/xfstyle.hxx"
+#include <xfilter/xfstyle.hxx>
 
 class XFArrowStyle : public XFStyle
 {

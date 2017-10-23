@@ -26,7 +26,7 @@
 #include "pres.hxx"
 #include <svx/svdobj.hxx>
 #include <tools/color.hxx>
-#include <sddllapi.h>
+#include "sddllapi.h"
 
 class SdrObject;
 class SdrPathObj;

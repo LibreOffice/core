@@ -29,10 +29,10 @@
 #include <unotools/datetime.hxx>
 #include <svtools/treelistentry.hxx>
 
-#include "strings.hrc"
-#include "resourcemanager.hxx"
-#include "svtools/controldims.hxx"
-#include "bitmaps.hlst"
+#include <strings.hrc>
+#include <resourcemanager.hxx>
+#include <svtools/controldims.hxx>
+#include <bitmaps.hlst>
 
 #include <vcl/settings.hxx>
 

@@ -15,9 +15,9 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlerror.hxx>
 
-#include "datamapper.hxx"
-#include "document.hxx"
-#include "dbdata.hxx"
+#include <datamapper.hxx>
+#include <document.hxx>
+#include <dbdata.hxx>
 
 #include <sax/tools/converter.hxx>
 

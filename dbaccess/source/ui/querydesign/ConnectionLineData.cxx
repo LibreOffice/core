@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ConnectionLineData.hxx"
+#include <ConnectionLineData.hxx>
 
 using namespace dbaui;
 //class OConnectionLineData

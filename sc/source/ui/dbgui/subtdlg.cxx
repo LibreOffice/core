@@ -19,9 +19,9 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "tpsubt.hxx"
-#include "scresid.hxx"
-#include "subtdlg.hxx"
+#include <tpsubt.hxx>
+#include <scresid.hxx>
+#include <subtdlg.hxx>
 
 ScSubTotalDlg::ScSubTotalDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
     : SfxTabDialog(pParent, "SubTotalDialog",

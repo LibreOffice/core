@@ -43,12 +43,12 @@
 #include "sha1context.hxx"
 #include <ZipFile.hxx>
 #include <ZipEnumeration.hxx>
-#include <XUnbufferedStream.hxx>
-#include <XBufferedThreadedStream.hxx>
+#include "XUnbufferedStream.hxx"
+#include "XBufferedThreadedStream.hxx"
 #include <PackageConstants.hxx>
 #include <EncryptedDataHeader.hxx>
 #include <EncryptionData.hxx>
-#include <MemoryByteGrabber.hxx>
+#include "MemoryByteGrabber.hxx"
 
 #include <CRC32.hxx>
 

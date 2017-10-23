@@ -22,7 +22,7 @@
 
 #include <tools/urlobj.hxx>
 #include <vcl/graph.hxx>
-#include "svx/galmisc.hxx"
+#include <svx/galmisc.hxx>
 
 #define S_THUMB 80
 

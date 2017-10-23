@@ -21,8 +21,8 @@
 #include <com/sun/star/animations/AnimationTransformType.hpp>
 
 #include "animationtransformnode.hxx"
-#include "animationfactory.hxx"
-#include "activitiesfactory.hxx"
+#include <animationfactory.hxx>
+#include <activitiesfactory.hxx>
 
 using namespace com::sun::star;
 

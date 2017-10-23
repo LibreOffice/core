@@ -61,18 +61,18 @@
 #include <memory>
 
 #include "lwpparastyle.hxx"
-#include "lwpfilehdr.hxx"
-#include "lwpoverride.hxx"
+#include <lwpfilehdr.hxx>
+#include <lwpoverride.hxx>
 #include "lwpparaborderoverride.hxx"
 #include "lwpbreaksoverride.hxx"
 #include "lwpnumberingoverride.hxx"
 #include "lwptaboverride.hxx"
 #include "lwpbackgroundoverride.hxx"
-#include "xfilter/xfdefs.hxx"
-#include "xfilter/xfparastyle.hxx"
-#include "xfilter/xfborders.hxx"
-#include "lwpfont.hxx"
-#include "lwpfoundry.hxx"
+#include <xfilter/xfdefs.hxx>
+#include <xfilter/xfparastyle.hxx>
+#include <xfilter/xfborders.hxx>
+#include <lwpfont.hxx>
+#include <lwpfoundry.hxx>
 #include "lwppiece.hxx"
 #include "lwpshadow.hxx"
 #include "lwpborderstuff.hxx"

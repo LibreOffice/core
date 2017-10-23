@@ -25,8 +25,8 @@
 #include <vcl/msgbox.hxx>
 #include <unotools/viewoptions.hxx>
 
-#include "appdata.hxx"
-#include "sfxtypes.hxx"
+#include <appdata.hxx>
+#include <sfxtypes.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
@@ -37,10 +37,10 @@
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/itemconnect.hxx>
 
-#include "uitest/sfx_uiobject.hxx"
+#include <uitest/sfx_uiobject.hxx>
 
-#include "sfx2/strings.hrc"
-#include "helpids.h"
+#include <sfx2/strings.hrc>
+#include <helpids.h>
 
 using namespace ::com::sun::star::uno;
 

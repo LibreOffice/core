@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <SvXMLAutoCorrectTokenHandler.hxx>
+#include "SvXMLAutoCorrectTokenHandler.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #if defined __clang__

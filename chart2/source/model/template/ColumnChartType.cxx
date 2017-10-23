@@ -18,9 +18,9 @@
  */
 
 #include "ColumnChartType.hxx"
-#include "macros.hxx"
-#include "servicenames_charttypes.hxx"
-#include "PropertyHelper.hxx"
+#include <macros.hxx>
+#include <servicenames_charttypes.hxx>
+#include <PropertyHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/supportsservice.hxx>
 

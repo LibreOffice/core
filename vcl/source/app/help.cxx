@@ -19,8 +19,8 @@
 
 #include <comphelper/string.hxx>
 
-#include "tools/diagnose_ex.h"
-#include "tools/time.hxx"
+#include <tools/diagnose_ex.h>
+#include <tools/time.hxx>
 
 #include <vcl/window.hxx>
 #include <vcl/event.hxx>
@@ -29,9 +29,9 @@
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 
-#include "helpwin.hxx"
-#include "salframe.hxx"
-#include "svdata.hxx"
+#include <helpwin.hxx>
+#include <salframe.hxx>
+#include <svdata.hxx>
 
 #define HELPWINSTYLE_QUICK      0
 #define HELPWINSTYLE_BALLOON    1

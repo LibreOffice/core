@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbase/DIndexIter.hxx"
+#include <dbase/DIndexIter.hxx>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 
 using namespace ::com::sun::star::sdb;

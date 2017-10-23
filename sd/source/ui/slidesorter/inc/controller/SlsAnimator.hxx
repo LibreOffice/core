@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSANIMATOR_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSANIMATOR_HXX
 
-#include "SlideSorter.hxx"
-#include "view/SlideSorterView.hxx"
+#include <SlideSorter.hxx>
+#include <view/SlideSorterView.hxx>
 #include <canvas/elapsedtime.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>

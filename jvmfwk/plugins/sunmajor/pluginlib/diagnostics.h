@@ -20,9 +20,9 @@
 #ifndef INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_DIAGNOSTICS_H
 #define INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_DIAGNOSTICS_H
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
 #define JFW_ENSURE(c, m) SAL_WARN_IF(!(c), "jfw", m)

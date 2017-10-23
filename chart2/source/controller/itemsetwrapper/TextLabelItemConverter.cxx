@@ -24,7 +24,7 @@
 #include <DataSeriesHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <ItemPropertyMap.hxx>
-#include <SchWhichPairs.hxx>
+#include "SchWhichPairs.hxx"
 #include <macros.hxx>
 #include <unonames.hxx>
 

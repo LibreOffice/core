@@ -21,9 +21,9 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <osl/thread.h>
 #include <osl/diagnose.h>
-#include "xistream.hxx"
-#include "xlstring.hxx"
-#include "xiroot.hxx"
+#include <xistream.hxx>
+#include <xlstring.hxx>
+#include <xiroot.hxx>
 
 #include <vector>
 #include <memory>

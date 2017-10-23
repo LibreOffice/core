@@ -28,7 +28,7 @@
 #include <vector>
 
 #if HAVE_FEATURE_EXTENSIONS
-#include "dp_persmap.h"
+#include <dp_persmap.h>
 #endif
 
 

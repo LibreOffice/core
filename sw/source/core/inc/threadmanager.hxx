@@ -28,12 +28,12 @@
 #include <deque>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/util/XJobManager.hpp>
-#include <observablethread.hxx>
-#include "cancellablejob.hxx"
-#include <threadlistener.hxx>
+#include "observablethread.hxx"
+#include <cancellablejob.hxx>
+#include "threadlistener.hxx"
 
 #include <memory>
-#include <ifinishedthreadlistener.hxx>
+#include "ifinishedthreadlistener.hxx"
 
 
 /** class to manage threads

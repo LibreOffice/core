@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_SQLPARSERCLIENT_HXX
 #define INCLUDED_SVX_SOURCE_INC_SQLPARSERCLIENT_HXX
 
-#include "svx/ParseContext.hxx"
+#include <svx/ParseContext.hxx>
 
 namespace com { namespace sun { namespace star {
 namespace util {

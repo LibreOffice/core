@@ -25,19 +25,19 @@
 #include <sfx2/viewsh.hxx>
 #include <formula/funcvarargs.h>
 
-#include "sc.hrc"
-#include "global.hxx"
-#include "scresid.hxx"
-#include "reffact.hxx"
-#include "document.hxx"
-#include "formulacell.hxx"
-#include "scmod.hxx"
-#include "inputhdl.hxx"
-#include "tabvwsh.hxx"
-#include "appoptio.hxx"
-#include "compiler.hxx"
+#include <sc.hrc>
+#include <global.hxx>
+#include <scresid.hxx>
+#include <reffact.hxx>
+#include <document.hxx>
+#include <formulacell.hxx>
+#include <scmod.hxx>
+#include <inputhdl.hxx>
+#include <tabvwsh.hxx>
+#include <appoptio.hxx>
+#include <compiler.hxx>
 
-#include "dwfunctr.hxx"
+#include <dwfunctr.hxx>
 
 /*************************************************************************
 #*  Member:     ScFunctionWin

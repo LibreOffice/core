@@ -24,7 +24,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 
-#include "sdpage.hxx"
+#include <sdpage.hxx>
 
 class SdUndoGroup;
 

@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 #include <unotools/resmgr.hxx>
 
 // ---- needed as long as we have no contexts for components ---

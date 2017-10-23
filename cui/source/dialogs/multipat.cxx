@@ -24,7 +24,7 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/filedlghelper.hxx>
 
-#include "multipat.hxx"
+#include <multipat.hxx>
 #include <dialmgr.hxx>
 
 #include <strings.hrc>
@@ -34,7 +34,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <unotools/pathoptions.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;

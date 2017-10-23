@@ -18,16 +18,16 @@
  */
 
 #include "BubbleChart.hxx"
-#include "PlottingPositionHelper.hxx"
-#include "AbstractShapeFactory.hxx"
-#include "CommonConverters.hxx"
-#include "macros.hxx"
-#include "ViewDefines.hxx"
-#include "ObjectIdentifier.hxx"
+#include <PlottingPositionHelper.hxx>
+#include <AbstractShapeFactory.hxx>
+#include <CommonConverters.hxx>
+#include <macros.hxx>
+#include <ViewDefines.hxx>
+#include <ObjectIdentifier.hxx>
 #include "Splines.hxx"
-#include "LabelPositionHelper.hxx"
-#include "Clipping.hxx"
-#include "Stripe.hxx"
+#include <LabelPositionHelper.hxx>
+#include <Clipping.hxx>
+#include <Stripe.hxx>
 
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>

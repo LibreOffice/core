@@ -33,7 +33,7 @@
 #include <xmloff/xmlement.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/shapeexport.hxx>
-#include "anim.hxx"
+#include <anim.hxx>
 
 
 using namespace ::std;

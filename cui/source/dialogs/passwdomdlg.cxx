@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "passwdomdlg.hxx"
+#include <passwdomdlg.hxx>
 
-#include "strings.hrc"
-#include "dialmgr.hxx"
+#include <strings.hrc>
+#include <dialmgr.hxx>
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>

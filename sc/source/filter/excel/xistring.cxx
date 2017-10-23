@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xistring.hxx"
-#include "xlstyle.hxx"
-#include "xistream.hxx"
-#include "xiroot.hxx"
+#include <xistring.hxx>
+#include <xlstyle.hxx>
+#include <xistream.hxx>
+#include <xiroot.hxx>
 
 // Byte/Unicode strings =======================================================
 

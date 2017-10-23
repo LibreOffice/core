@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dlg_ChartType.hxx"
-#include "ResId.hxx"
+#include <dlg_ChartType.hxx>
+#include <ResId.hxx>
 #include "TabPageIds.h"
-#include "strings.hrc"
+#include <strings.hrc>
 #include "tp_ChartType.hxx"
-#include "macros.hxx"
+#include <macros.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <vcl/layout.hxx>
 

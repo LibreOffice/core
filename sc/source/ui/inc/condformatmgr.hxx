@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CONDFORMATMGR_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CONDFORMATMGR_HXX
 
-#include "scres.hrc"
+#include <scres.hrc>
 
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
@@ -19,7 +19,7 @@
 #include <vcl/fixed.hxx>
 #include <svtools/simptabl.hxx>
 
-#include "conditio.hxx"
+#include <conditio.hxx>
 
 #include <map>
 

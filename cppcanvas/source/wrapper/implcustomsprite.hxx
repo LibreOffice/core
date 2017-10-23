@@ -23,8 +23,8 @@
 #include <sal/types.h>
 #include <cppcanvas/canvas.hxx>
 #include <cppcanvas/customsprite.hxx>
-#include <implsprite.hxx>
-#include <implspritecanvas.hxx>
+#include "implsprite.hxx"
+#include "implspritecanvas.hxx"
 
 namespace cppcanvas
 {

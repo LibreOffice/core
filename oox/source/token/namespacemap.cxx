@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/token/namespacemap.hxx"
+#include <oox/token/namespacemap.hxx>
 
 namespace oox {
 
 NamespaceMap::NamespaceMap()
 {
     maTransitionalNamespaceMap = std::map<sal_Int32, OUString>{
-#include "namespacenames.inc"
+#include <namespacenames.inc>
     };
 
     maStrictNamespaceMap = std::map<sal_Int32, OUString>{
-#include "namespaces-strictnames.inc"
+#include <namespaces-strictnames.inc>
     };
 }
 

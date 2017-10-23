@@ -29,20 +29,20 @@
 #include <sax/fshelper.hxx>
 #include <unotools/streamwrap.hxx>
 
-#include "docuno.hxx"
-#include "xestream.hxx"
-#include "xladdress.hxx"
-#include "xlstring.hxx"
-#include "xeroot.hxx"
-#include "xestyle.hxx"
-#include "xcl97rec.hxx"
-#include "rangelst.hxx"
-#include "compiler.hxx"
-#include "formulacell.hxx"
-#include "tokenarray.hxx"
-#include "tokenstringcontext.hxx"
-#include "refreshtimerprotector.hxx"
-#include "globstr.hrc"
+#include <docuno.hxx>
+#include <xestream.hxx>
+#include <xladdress.hxx>
+#include <xlstring.hxx>
+#include <xeroot.hxx>
+#include <xestyle.hxx>
+#include <xcl97rec.hxx>
+#include <rangelst.hxx>
+#include <compiler.hxx>
+#include <formulacell.hxx>
+#include <tokenarray.hxx>
+#include <tokenstringcontext.hxx>
+#include <refreshtimerprotector.hxx>
+#include <globstr.hrc>
 
 #include <docsh.hxx>
 #include <viewdata.hxx>

@@ -32,10 +32,10 @@
 #include <map>
 #include <vector>
 
-#include <stlfamily.hxx>
-#include <stlsheet.hxx>
+#include "stlfamily.hxx"
+#include "stlsheet.hxx"
 
-#include <sddllapi.h>
+#include "sddllapi.h"
 
 class SdStyleSheet;
 class SdDrawDocument;

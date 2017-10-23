@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "controlfeatureinterception.hxx"
-#include "urltransformer.hxx"
+#include <controlfeatureinterception.hxx>
+#include <urltransformer.hxx>
 #include <osl/diagnose.h>
 
 

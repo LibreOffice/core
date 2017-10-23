@@ -20,14 +20,14 @@
 #include <svx/xoutbmp.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
-#include <contwnd.hxx>
+#include "contwnd.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xfillit.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include "svx/sdrpaintwindow.hxx"
+#include <svx/sdrpaintwindow.hxx>
 
 using namespace css;
 

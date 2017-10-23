@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_INC_CNTTAB_HRC
 #define INCLUDED_SW_INC_CNTTAB_HRC
 
-#include <tox.hxx>
+#include "tox.hxx"
 
 #define NC_(Context, String) (Context "\004" u8##String)
 

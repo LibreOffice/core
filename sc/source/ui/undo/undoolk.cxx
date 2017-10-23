@@ -19,9 +19,9 @@
 
 #include <svx/svdundo.hxx>
 
-#include "document.hxx"
-#include "drwlayer.hxx"
-#include "undoolk.hxx"
+#include <document.hxx>
+#include <drwlayer.hxx>
+#include <undoolk.hxx>
 
 SdrUndoAction* GetSdrUndoAction( ScDocument* pDoc )
 {

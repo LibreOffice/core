@@ -30,7 +30,7 @@
 #include <tools/datetime.hxx>
 #include "ftools.hxx"
 #include "xladdress.hxx"
-#include "dpobject.hxx"
+#include <dpobject.hxx>
 
 #include <memory>
 

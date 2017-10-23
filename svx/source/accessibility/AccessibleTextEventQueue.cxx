@@ -20,11 +20,11 @@
 #include <memory>
 #include "AccessibleTextEventQueue.hxx"
 #include <svx/unoshape.hxx>
-#include "editeng/unolingu.hxx"
+#include <editeng/unolingu.hxx>
 #include <editeng/unotext.hxx>
 
-#include "editeng/unoedhlp.hxx"
-#include "editeng/unopracc.hxx"
+#include <editeng/unoedhlp.hxx>
+#include <editeng/unopracc.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpntv.hxx>
 #include <editeng/editdata.hxx>

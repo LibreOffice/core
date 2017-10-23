@@ -25,10 +25,10 @@
 #include "jni_bridge.h"
 #include "jniunoenvironmentdata.hxx"
 
-#include "jvmaccess/unovirtualmachine.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/strbuf.hxx"
-#include "uno/lbnames.h"
+#include <jvmaccess/unovirtualmachine.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/strbuf.hxx>
+#include <uno/lbnames.h>
 
 using namespace ::osl;
 using namespace ::jni_uno;

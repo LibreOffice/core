@@ -10,13 +10,13 @@
  */
 
 #include <memory>
-#include "PivotLayoutTreeList.hxx"
-#include "PivotLayoutDialog.hxx"
+#include <PivotLayoutTreeList.hxx>
+#include <PivotLayoutDialog.hxx>
 
 #include <vcl/builderfactory.hxx>
 #include <svtools/treelistentry.hxx>
-#include "pivot.hxx"
-#include "scabstdlg.hxx"
+#include <pivot.hxx>
+#include <scabstdlg.hxx>
 
 VCL_BUILDER_FACTORY_ARGS(ScPivotLayoutTreeList,
                          WB_BORDER | WB_TABSTOP | WB_CLIPCHILDREN)

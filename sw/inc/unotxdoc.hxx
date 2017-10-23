@@ -73,8 +73,8 @@
 #include <vcl/IDialogRenderable.hxx>
 #include <com/sun/star/tiledrendering/XTiledRenderable.hpp>
 
-#include <unobaseclass.hxx>
-#include <viewopt.hxx>
+#include "unobaseclass.hxx"
+#include "viewopt.hxx"
 
 #include <deque>
 

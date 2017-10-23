@@ -31,7 +31,7 @@
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/numehelp.hxx>
 #include "xmlHelper.hxx"
-#include "strings.hxx"
+#include <strings.hxx>
 #include "xmlPropertyHandler.hxx"
 #include <sax/tools/converter.hxx>
 #include <com/sun/star/awt/ImagePosition.hpp>
@@ -51,7 +51,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
-#include "RptDef.hxx"
+#include <RptDef.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/macros.h>
 

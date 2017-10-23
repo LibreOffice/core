@@ -25,7 +25,7 @@
 
 #include <com/sun/star/uno/Sequence.h>
 
-#include <xsecxmlsecdllapi.h>
+#include "xsecxmlsecdllapi.h"
 
 namespace xmlsecurity
 {

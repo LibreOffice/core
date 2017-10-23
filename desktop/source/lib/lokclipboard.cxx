@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <lokclipboard.hxx>
+#include "lokclipboard.hxx"
 #include <comphelper/sequence.hxx>
 
 using namespace com::sun::star;

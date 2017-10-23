@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ViewShell.hxx"
-#include "smarttag.hxx"
-#include "Window.hxx"
-#include "View.hxx"
+#include <ViewShell.hxx>
+#include <smarttag.hxx>
+#include <Window.hxx>
+#include <View.hxx>
 
 namespace sd
 {

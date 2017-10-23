@@ -25,10 +25,10 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
-#include "QEnumTypes.hxx"
+#include <QEnumTypes.hxx>
 
-#include "RelControliFace.hxx"
-#include "JoinTableView.hxx"
+#include <RelControliFace.hxx>
+#include <JoinTableView.hxx>
 
 
 namespace dbaui

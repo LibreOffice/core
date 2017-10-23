@@ -25,12 +25,12 @@
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include "basenode.hxx"
-#include "eventmultiplexer.hxx"
-#include "basecontainernode.hxx"
-#include "eventqueue.hxx"
-#include "delayevent.hxx"
-#include "tools.hxx"
+#include <basenode.hxx>
+#include <eventmultiplexer.hxx>
+#include <basecontainernode.hxx>
+#include <eventqueue.hxx>
+#include <delayevent.hxx>
+#include <tools.hxx>
 #include "nodetools.hxx"
 #include "generateevent.hxx"
 

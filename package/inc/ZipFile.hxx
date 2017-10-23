@@ -28,9 +28,9 @@
 
 #include <comphelper/refcountedmutex.hxx>
 #include <package/Inflater.hxx>
-#include <ByteGrabber.hxx>
-#include <HashMaps.hxx>
-#include <EncryptionData.hxx>
+#include "ByteGrabber.hxx"
+#include "HashMaps.hxx"
+#include "EncryptionData.hxx"
 
 #include <memory>
 

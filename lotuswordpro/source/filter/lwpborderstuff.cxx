@@ -59,8 +59,8 @@
 ************************************************************************/
 #include "lwpborderstuff.hxx"
 #include "lwpstyledef.hxx"
-#include "lwpfilehdr.hxx"
-#include "lwptools.hxx"
+#include <lwpfilehdr.hxx>
+#include <lwptools.hxx>
 
 LwpBorderStuff::LwpBorderStuff()
 {

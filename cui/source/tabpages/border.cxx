@@ -26,19 +26,19 @@
 
 #include <strings.hrc>
 #include <bitmaps.hlst>
-#include "helpids.h"
+#include <helpids.h>
 
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
-#include "border.hxx"
+#include <border.hxx>
 #include <svx/dlgutil.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
-#include "svx/flagsdef.hxx"
+#include <svx/flagsdef.hxx>
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
 #include <svl/ilstitem.hxx>

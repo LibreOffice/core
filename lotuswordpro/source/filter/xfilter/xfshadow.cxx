@@ -57,7 +57,7 @@
  * @file
  * Shadow object,now only used by paragraph object.
  ************************************************************************/
-#include "xfilter/xfshadow.hxx"
+#include <xfilter/xfshadow.hxx>
 
 XFShadow::XFShadow()
     : m_ePosition(enumXFShadowNone)

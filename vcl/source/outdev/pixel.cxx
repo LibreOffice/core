@@ -26,8 +26,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 
-#include "outdata.hxx"
-#include "salgdi.hxx"
+#include <outdata.hxx>
+#include <salgdi.hxx>
 
 Color OutputDevice::GetPixel( const Point& rPt ) const
 {

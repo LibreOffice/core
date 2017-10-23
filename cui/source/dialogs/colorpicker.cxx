@@ -43,8 +43,8 @@
 #include <svx/hexcolorcontrol.hxx>
 #include <sax/tools/converter.hxx>
 #include <basegfx/color/bcolortools.hxx>
-#include "dialmgr.hxx"
-#include "colorpicker.hxx"
+#include <dialmgr.hxx>
+#include <colorpicker.hxx>
 #include <cmath>
 #include <limits>
 #include <o3tl/typed_flags_set.hxx>

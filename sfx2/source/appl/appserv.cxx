@@ -99,23 +99,23 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/new.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/tabdlg.hxx>
-#include "arrdecl.hxx"
-#include "sfx2/strings.hrc"
+#include <arrdecl.hxx>
+#include <sfx2/strings.hrc>
 #include <sfx2/passwd.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/childwin.hxx>
-#include "appdata.hxx"
+#include <appdata.hxx>
 #include <sfx2/minfitem.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "sfxpicklist.hxx"
+#include <sfxpicklist.hxx>
 #include "imestatuswindow.hxx"
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/sfxsids.hrc>
-#include "sorgitm.hxx"
+#include <sorgitm.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <sfx2/templatedlg.hxx>
@@ -131,7 +131,7 @@
 #include <officecfg/Setup.hxx>
 #include <memory>
 
-#include "openuriexternally.hxx"
+#include <openuriexternally.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;

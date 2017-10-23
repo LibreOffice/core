@@ -16,11 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "ReportComponentHandler.hxx"
+#include <ReportComponentHandler.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include "strings.hxx"
+#include <strings.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -29,7 +29,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <tools/fldunit.hxx>
-#include "metadata.hxx"
+#include <metadata.hxx>
 
 
 namespace rptui

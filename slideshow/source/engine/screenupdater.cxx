@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "screenupdater.hxx"
-#include "listenercontainer.hxx"
+#include <screenupdater.hxx>
+#include <listenercontainer.hxx>
 
 #include <osl/diagnose.h>
 

@@ -16,7 +16,7 @@
 #include <vcl/svapp.hxx>
 #include <comphelper/threadpool.hxx>
 
-#include <isheadless.hxx>
+#include "isheadless.hxx"
 
 namespace {
 

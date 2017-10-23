@@ -20,7 +20,7 @@
 #include <memory>
 #include <sal/config.h>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
@@ -36,21 +36,21 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <editeng/unoipset.hxx>
-#include "textuno.hxx"
-#include "fielduno.hxx"
-#include "servuno.hxx"
-#include "editsrc.hxx"
-#include "docsh.hxx"
-#include "editutil.hxx"
-#include "miscuno.hxx"
-#include "cellsuno.hxx"
-#include "hints.hxx"
-#include "cellvalue.hxx"
-#include "cellform.hxx"
-#include "patattr.hxx"
-#include "formulacell.hxx"
-#include "docfunc.hxx"
-#include "scmod.hxx"
+#include <textuno.hxx>
+#include <fielduno.hxx>
+#include <servuno.hxx>
+#include <editsrc.hxx>
+#include <docsh.hxx>
+#include <editutil.hxx>
+#include <miscuno.hxx>
+#include <cellsuno.hxx>
+#include <hints.hxx>
+#include <cellvalue.hxx>
+#include <cellform.hxx>
+#include <patattr.hxx>
+#include <formulacell.hxx>
+#include <docfunc.hxx>
+#include <scmod.hxx>
 
 using namespace com::sun::star;
 

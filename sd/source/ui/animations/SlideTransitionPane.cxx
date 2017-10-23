@@ -19,18 +19,18 @@
 
 #include <com/sun/star/animations/XAnimationNode.hpp>
 
-#include "SlideTransitionPane.hxx"
-#include "createslidetransitionpanel.hxx"
+#include <SlideTransitionPane.hxx>
+#include <createslidetransitionpanel.hxx>
 
-#include "TransitionPreset.hxx"
-#include "sdresid.hxx"
-#include "ViewShellBase.hxx"
-#include "DrawDocShell.hxx"
-#include "SlideSorterViewShell.hxx"
-#include "drawdoc.hxx"
-#include "filedlg.hxx"
-#include "strings.hrc"
-#include "DrawController.hxx"
+#include <TransitionPreset.hxx>
+#include <sdresid.hxx>
+#include <ViewShellBase.hxx>
+#include <DrawDocShell.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <drawdoc.hxx>
+#include <filedlg.hxx>
+#include <strings.hrc>
+#include <DrawController.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <svtools/controldims.hxx>
@@ -38,13 +38,13 @@
 #include <unotools/pathoptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
-#include "DrawViewShell.hxx"
-#include "slideshow.hxx"
-#include "drawview.hxx"
-#include "sdundogr.hxx"
-#include "undoanim.hxx"
-#include "optsitem.hxx"
-#include "sddll.hxx"
+#include <DrawViewShell.hxx>
+#include <slideshow.hxx>
+#include <drawview.hxx>
+#include <sdundogr.hxx>
+#include <undoanim.hxx>
+#include <optsitem.hxx>
+#include <sddll.hxx>
 
 #include <sfx2/sidebar/Theme.hxx>
 

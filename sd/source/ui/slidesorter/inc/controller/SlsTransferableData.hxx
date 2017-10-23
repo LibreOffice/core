@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSTRANSFERABLEDATA_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSTRANSFERABLEDATA_HXX
 
-#include "sdxfer.hxx"
+#include <sdxfer.hxx>
 
 #include <vector>
 #include <functional>

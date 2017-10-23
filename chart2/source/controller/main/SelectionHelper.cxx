@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "SelectionHelper.hxx"
-#include "ObjectIdentifier.hxx"
-#include "macros.hxx"
-#include "DiagramHelper.hxx"
-#include "ChartModelHelper.hxx"
+#include <SelectionHelper.hxx>
+#include <ObjectIdentifier.hxx>
+#include <macros.hxx>
+#include <DiagramHelper.hxx>
+#include <ChartModelHelper.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
-#include "svx/obj3d.hxx"
+#include <svx/obj3d.hxx>
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
 #include <basegfx/point/b2dpoint.hxx>

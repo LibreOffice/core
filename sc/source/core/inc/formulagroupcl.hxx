@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_INC_FORMULAGROUPCL_HXX
 #define INCLUDED_SC_SOURCE_CORE_INC_FORMULAGROUPCL_HXX
 
-#include "formulagroup.hxx"
+#include <formulagroup.hxx>
 
 namespace sc { namespace opencl {
 

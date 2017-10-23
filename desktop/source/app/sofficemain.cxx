@@ -24,7 +24,7 @@
 
 #include <desktop/dllapi.h>
 
-#include "app.hxx"
+#include <app.hxx>
 #include "cmdlineargs.hxx"
 #include "cmdlinehelp.hxx"
 

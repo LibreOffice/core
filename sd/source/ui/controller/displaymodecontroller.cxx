@@ -13,10 +13,10 @@
 #include <svtools/valueset.hxx>
 #include <vcl/toolbox.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
-#include "bitmaps.hlst"
-#include "sdresid.hxx"
+#include <bitmaps.hlst>
+#include <sdresid.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -20,7 +20,7 @@
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_REPORTSECTION_HXX
 
 #include <vcl/window.hxx>
-#include "RptPage.hxx"
+#include <RptPage.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <comphelper/propmultiplex.hxx>
 #include <cppuhelper/basemutex.hxx>

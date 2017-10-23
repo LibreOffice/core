@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_CACHE_SLSGENERICPAGECACHE_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_CACHE_SLSGENERICPAGECACHE_HXX
 
-#include "SlideSorter.hxx"
+#include <SlideSorter.hxx>
 #include "SlsRequestQueue.hxx"
 #include <memory>
 

@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "FieldDescriptions.hxx"
+#include <FieldDescriptions.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include "strings.hrc"
-#include "strings.hxx"
+#include <strings.hrc>
+#include <strings.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/extract.hxx>
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>
 
 #define DEFAULT_VARCHAR_PRECISION    100

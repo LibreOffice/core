@@ -9,10 +9,10 @@
 
 #include <iostream>
 #include <cstring>
-#include "sal/main.h"
+#include <sal/main.h>
 
-#include "common.hxx"
-#include "treemerge.hxx"
+#include <common.hxx>
+#include <treemerge.hxx>
 
 void WriteUsage()
 {

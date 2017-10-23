@@ -41,7 +41,7 @@
 #include "RowSetRow.hxx"
 #include <comphelper/broadcasthelper.hxx>
 #include "RowSetCacheIterator.hxx"
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 
 #include <functional>
 

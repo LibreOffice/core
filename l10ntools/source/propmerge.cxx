@@ -14,9 +14,9 @@
 #include <fstream>
 #include <iomanip>
 
-#include "export.hxx"
-#include "common.hxx"
-#include "propmerge.hxx"
+#include <export.hxx>
+#include <common.hxx>
+#include <propmerge.hxx>
 
 namespace
 {

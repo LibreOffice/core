@@ -25,10 +25,10 @@
 #include <smmod.hxx>
 #include <view.hxx>
 #include <visitors.hxx>
-#include "document.hxx"
-#include "node.hxx"
+#include <document.hxx>
+#include <node.hxx>
 #include "uiobject.hxx"
-#include "strings.hxx"
+#include <strings.hxx>
 
 #include <o3tl/make_unique.hxx>
 #include <svl/stritem.hxx>

@@ -30,7 +30,7 @@
 #include <memory>
 
 #include "gdimtftools.hxx"
-#include "viewlayer.hxx"
+#include <viewlayer.hxx>
 
 
 namespace slideshow

@@ -19,8 +19,8 @@
 
 #include <config_features.h>
 
-#include "fmscriptingenv.hxx"
-#include "svx/fmmodel.hxx"
+#include <fmscriptingenv.hxx>
+#include <svx/fmmodel.hxx>
 
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/frame/Desktop.hpp>

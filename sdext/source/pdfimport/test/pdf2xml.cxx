@@ -19,10 +19,10 @@
 
 
 #include "outputwrap.hxx"
-#include "contentsink.hxx"
-#include "pdfihelper.hxx"
-#include "wrapper.hxx"
-#include "pdfparse.hxx"
+#include <contentsink.hxx>
+#include <pdfihelper.hxx>
+#include <wrapper.hxx>
+#include <pdfparse.hxx>
 #include "../pdfiadaptor.hxx"
 
 #include <sal/main.h>

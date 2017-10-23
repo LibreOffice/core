@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <officecfg/Office/Common.hxx>
 #include <svtools/ctrltool.hxx>
@@ -27,7 +27,7 @@
 #include <svtools/fontsubstconfig.hxx>
 #include "fontsubs.hxx"
 #include <dialmgr.hxx>
-#include "helpids.h"
+#include <helpids.h>
 #include <o3tl/make_unique.hxx>
 
 /*********************************************************************/

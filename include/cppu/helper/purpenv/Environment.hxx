@@ -20,8 +20,8 @@
 #ifndef INCLUDED_CPPU_HELPER_PURPENV_ENVIRONMENT_HXX
 #define INCLUDED_CPPU_HELPER_PURPENV_ENVIRONMENT_HXX
 
-#include <cppu/cppudllapi.h>
-#include <uno/environment.h>
+#include "cppu/cppudllapi.h"
+#include "uno/environment.h"
 
 namespace cppu { class Enterable; }
 

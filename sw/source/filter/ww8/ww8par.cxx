@@ -99,7 +99,7 @@
 
 #include "writerwordglue.hxx"
 
-#include "ndgrf.hxx"
+#include <ndgrf.hxx>
 #include <editeng/editids.hrc>
 #include <txtflcnt.hxx>
 #include <fmtflcnt.hxx>
@@ -127,7 +127,7 @@
 #endif
 
 #include <svx/hlnkitem.hxx>
-#include "swdll.hxx"
+#include <swdll.hxx>
 #include "WW8Sttbf.hxx"
 #include "WW8FibData.hxx"
 #include <unordered_set>

@@ -19,7 +19,7 @@
 
 
 #include <cmath>
-#include "file/FNumericFunctions.hxx"
+#include <file/FNumericFunctions.hxx>
 #include <rtl/math.hxx>
 
 using namespace connectivity;

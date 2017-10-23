@@ -22,7 +22,7 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <vcl/svapp.hxx>
 
-#include <isheadless.hxx>
+#include "isheadless.hxx"
 
 namespace {
 

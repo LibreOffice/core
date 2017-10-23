@@ -20,9 +20,9 @@
 #define INCLUDED_SW_INC_FCHRFMT_HXX
 
 #include <svl/poolitem.hxx>
-#include <calbck.hxx>
-#include <format.hxx>
-#include <charfmt.hxx>
+#include "calbck.hxx"
+#include "format.hxx"
+#include "charfmt.hxx"
 
 class SwTextCharFormat;
 class IntlWrapper;

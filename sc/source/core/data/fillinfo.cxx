@@ -18,29 +18,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/brushitem.hxx>
 
-#include "fillinfo.hxx"
-#include "document.hxx"
-#include "formulacell.hxx"
-#include "table.hxx"
-#include "attrib.hxx"
-#include "attarray.hxx"
-#include "markarr.hxx"
-#include "markdata.hxx"
-#include "patattr.hxx"
-#include "poolhelp.hxx"
-#include "docpool.hxx"
-#include "conditio.hxx"
-#include "colorscale.hxx"
-#include "stlpool.hxx"
-#include "cellvalue.hxx"
-#include "mtvcellfunc.hxx"
+#include <fillinfo.hxx>
+#include <document.hxx>
+#include <formulacell.hxx>
+#include <table.hxx>
+#include <attrib.hxx>
+#include <attarray.hxx>
+#include <markarr.hxx>
+#include <markdata.hxx>
+#include <patattr.hxx>
+#include <poolhelp.hxx>
+#include <docpool.hxx>
+#include <conditio.hxx>
+#include <colorscale.hxx>
+#include <stlpool.hxx>
+#include <cellvalue.hxx>
+#include <mtvcellfunc.hxx>
 
 #include <vector>
 #include <memory>

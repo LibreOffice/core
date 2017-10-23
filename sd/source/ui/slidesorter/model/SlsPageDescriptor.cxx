@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "model/SlsPageDescriptor.hxx"
+#include <model/SlsPageDescriptor.hxx>
 
-#include "sdpage.hxx"
-#include "drawdoc.hxx"
+#include <sdpage.hxx>
+#include <drawdoc.hxx>
 
 #include <svx/svdopage.hxx>
 #include <svx/svdpagv.hxx>

@@ -18,10 +18,10 @@
  */
 
 #include "prtsetup.hxx"
-#include "svdata.hxx"
-#include "strings.hrc"
+#include <svdata.hxx>
+#include <strings.hrc>
 
-#include "osl/thread.h"
+#include <osl/thread.h>
 
 #include <officecfg/Office/Common.hxx>
 

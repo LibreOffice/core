@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_INC_ACCESSIBLEFILTERMENUITEM_HXX
 #define INCLUDED_SC_INC_ACCESSIBLEFILTERMENUITEM_HXX
 
-#include "AccessibleContextBase.hxx"
+#include <AccessibleContextBase.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>

@@ -22,7 +22,7 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
-#include "zoom.hxx"
+#include <zoom.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <dialmgr.hxx>

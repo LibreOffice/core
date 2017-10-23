@@ -30,8 +30,8 @@
 #include <flypos.hxx>
 #include <docary.hxx>
 
-#include "doc.hxx"
-#include "frmfmt.hxx"
+#include <doc.hxx>
+#include <frmfmt.hxx>
 
 using namespace css;
 

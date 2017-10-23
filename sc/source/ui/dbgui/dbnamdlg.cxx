@@ -25,13 +25,13 @@
 #include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "reffact.hxx"
-#include "document.hxx"
-#include "scresid.hxx"
-#include "globstr.hrc"
-#include "rangenam.hxx"
-#include "globalnames.hxx"
-#include "dbnamdlg.hxx"
+#include <reffact.hxx>
+#include <document.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
+#include <rangenam.hxx>
+#include <globalnames.hxx>
+#include <dbnamdlg.hxx>
 #include <dbdocfun.hxx>
 
 class DBSaveData;

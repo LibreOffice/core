@@ -22,10 +22,10 @@
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase.hxx>
-#include "odbc/OFunctions.hxx"
-#include "odbc/odbcbasedllapi.hxx"
+#include <odbc/OFunctions.hxx>
+#include <odbc/odbcbasedllapi.hxx>
 #include <vector>
-#include "odbc/OConnection.hxx"
+#include <odbc/OConnection.hxx>
 
 namespace connectivity
 {

@@ -28,11 +28,11 @@
 #include <vector>
 #include <rangenam.hxx>
 #include <vcl/msgbox.hxx>
-#include "tabvwsh.hxx"
-#include "viewdata.hxx"
-#include "nameuno.hxx"
-#include "compiler.hxx"
-#include "tokenarray.hxx"
+#include <tabvwsh.hxx>
+#include <viewdata.hxx>
+#include <nameuno.hxx>
+#include <compiler.hxx>
+#include <tokenarray.hxx>
 
 #include <memory>
 

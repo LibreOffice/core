@@ -24,7 +24,7 @@
 
 #include <vector>
 
-#include "dbadllapi.hxx"
+#include <dbadllapi.hxx>
 #include <connectivity/DriversConfig.hxx>
 
 namespace dbaccess

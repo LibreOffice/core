@@ -20,7 +20,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstdio>
 

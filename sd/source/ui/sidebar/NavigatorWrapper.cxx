@@ -18,7 +18,7 @@
  */
 
 #include "NavigatorWrapper.hxx"
-#include "ViewShellBase.hxx"
+#include <ViewShellBase.hxx>
 
 #include <sfx2/sidebar/Theme.hxx>
 

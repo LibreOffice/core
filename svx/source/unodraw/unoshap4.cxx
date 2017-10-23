@@ -46,11 +46,11 @@
 
 #include <svx/unoshprp.hxx>
 
-#include "svx/unoapi.hxx"
-#include "svx/svdpagv.hxx"
-#include "svx/svdview.hxx"
-#include "svdglob.hxx"
-#include "svx/strings.hrc"
+#include <svx/unoapi.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdview.hxx>
+#include <svdglob.hxx>
+#include <svx/strings.hrc>
 #include <vcl/wmf.hxx>
 #include <svtools/embedhlp.hxx>
 

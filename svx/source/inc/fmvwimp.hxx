@@ -24,7 +24,7 @@
 #include <map>
 #include <memory>
 
-#include "svx/svdmark.hxx"
+#include <svx/svdmark.hxx>
 #include "fmdocumentclassification.hxx"
 
 #include <com/sun/star/form/XForm.hpp>

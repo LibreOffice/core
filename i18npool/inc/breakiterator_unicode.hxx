@@ -19,7 +19,7 @@
 #ifndef INCLUDED_I18NPOOL_INC_BREAKITERATOR_UNICODE_HXX
 #define INCLUDED_I18NPOOL_INC_BREAKITERATOR_UNICODE_HXX
 
-#include <breakiteratorImpl.hxx>
+#include "breakiteratorImpl.hxx"
 
 #include <unicode/brkiter.h>
 #include <memory>

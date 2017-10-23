@@ -19,12 +19,12 @@
 #ifndef INCLUDED_COM_SUN_STAR_UNO_REFERENCE_H
 #define INCLUDED_COM_SUN_STAR_UNO_REFERENCE_H
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <cassert>
 #include <cstddef>
 
-#include <rtl/alloc.h>
+#include "rtl/alloc.h"
 
 namespace com
 {

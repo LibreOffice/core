@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuconuno.hxx"
+#include <fuconuno.hxx>
 #include <svl/aeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -28,15 +28,15 @@
 
 #include <svx/dialogs.hrc>
 
-#include "app.hrc"
-#include "strings.hrc"
-#include "ViewShell.hxx"
-#include "View.hxx"
-#include "Window.hxx"
-#include "ViewShellBase.hxx"
-#include "ToolBarManager.hxx"
-#include "drawdoc.hxx"
-#include "sdresid.hxx"
+#include <app.hrc>
+#include <strings.hrc>
+#include <ViewShell.hxx>
+#include <View.hxx>
+#include <Window.hxx>
+#include <ViewShellBase.hxx>
+#include <ToolBarManager.hxx>
+#include <drawdoc.hxx>
+#include <sdresid.hxx>
 
 
 namespace sd {

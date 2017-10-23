@@ -31,7 +31,7 @@
 #include <filter/msfilter/msvbahelper.hxx>
 #include <svx/unoshape.hxx>
 #include "vbafont.hxx"
-#include "drwlayer.hxx"
+#include <drwlayer.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;

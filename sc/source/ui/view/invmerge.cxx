@@ -19,7 +19,7 @@
 
 #include <vcl/window.hxx>
 
-#include "invmerge.hxx"
+#include <invmerge.hxx>
 
 ScInvertMerger::ScInvertMerger( ::std::vector< tools::Rectangle >* pRectangles ) :
     pRects( pRectangles )

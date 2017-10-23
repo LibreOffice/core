@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <svx/svxdlg.hxx>
@@ -31,14 +31,14 @@
 #include <vcl/msgbox.hxx>
 #include <svtools/transfer.hxx>
 
-#include "sc.hrc"
-#include "drtxtob.hxx"
-#include "drawview.hxx"
-#include "viewdata.hxx"
-#include "scresid.hxx"
+#include <sc.hrc>
+#include <drtxtob.hxx>
+#include <drawview.hxx>
+#include <viewdata.hxx>
+#include <scresid.hxx>
 #include <gridwin.hxx>
 
-#include "scabstdlg.hxx"
+#include <scabstdlg.hxx>
 #include <memory>
 
 bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,

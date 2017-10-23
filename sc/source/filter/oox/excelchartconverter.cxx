@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "excelchartconverter.hxx"
+#include <excelchartconverter.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
@@ -28,7 +28,7 @@
 #include <oox/core/filterbase.hxx>
 #include <oox/drawingml/chart/datasourcemodel.hxx>
 #include <oox/helper/containerhelper.hxx>
-#include "formulaparser.hxx"
+#include <formulaparser.hxx>
 
 namespace oox {
 namespace xls {

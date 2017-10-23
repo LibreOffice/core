@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "statusindicator.hxx"
+#include <statusindicator.hxx>
 
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-#include "progressbar.hxx"
+#include <progressbar.hxx>
 
 using namespace ::cppu;
 using namespace ::osl;

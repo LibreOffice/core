@@ -60,11 +60,11 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTABLESTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTABLESTYLE_HXX
 
-#include "xfilter/xfstyle.hxx"
-#include "xfilter/xfmargins.hxx"
-#include "xfilter/xfshadow.hxx"
-#include "xfilter/xfcolor.hxx"
-#include "xfilter/xfbreaks.hxx"
+#include <xfilter/xfstyle.hxx>
+#include <xfilter/xfmargins.hxx>
+#include <xfilter/xfshadow.hxx>
+#include <xfilter/xfcolor.hxx>
+#include <xfilter/xfbreaks.hxx>
 #include <memory>
 
 class XFBGImage;

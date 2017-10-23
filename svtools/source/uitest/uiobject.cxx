@@ -8,7 +8,7 @@
  */
 
 #include <memory>
-#include "uitest/uiobject.hxx"
+#include <uitest/uiobject.hxx>
 
 #include <svtools/treelistbox.hxx>
 #include <svtools/simptabl.hxx>

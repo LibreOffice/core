@@ -52,30 +52,30 @@
 #include <svx/bmpmask.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
-#include "AnimationChildWindow.hxx"
-#include "notifydocumentevent.hxx"
-#include <slideshowimpl.hxx>
-#include <slideshowviewimpl.hxx>
+#include <AnimationChildWindow.hxx>
+#include <notifydocumentevent.hxx>
+#include "slideshowimpl.hxx"
+#include "slideshowviewimpl.hxx"
 #include <pgjump.hxx>
 #include "PaneHider.hxx"
 
-#include "strings.hrc"
+#include <strings.hrc>
 
-#include "bitmaps.hlst"
-#include "sdresid.hxx"
+#include <bitmaps.hlst>
+#include <sdresid.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>
 
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
-#include "rtl/ref.hxx"
-#include "canvas/elapsedtime.hxx"
-#include "avmedia/mediawindow.hxx"
-#include "svtools/colrdlg.hxx"
-#include "RemoteServer.hxx"
-#include "customshowlist.hxx"
-#include "unopage.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <rtl/ref.hxx>
+#include <canvas/elapsedtime.hxx>
+#include <avmedia/mediawindow.hxx>
+#include <svtools/colrdlg.hxx>
+#include <RemoteServer.hxx>
+#include <customshowlist.hxx>
+#include <unopage.hxx>
 
 #define CM_SLIDES       21
 

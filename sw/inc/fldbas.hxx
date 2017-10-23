@@ -21,13 +21,13 @@
 
 #include <i18nlangtag/lang.h>
 #include "swdllapi.h"
-#include <calbck.hxx>
+#include "calbck.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <editeng/svxenum.hxx>
 #include <vector>
-#include <toxe.hxx>
+#include "toxe.hxx"
 
 class SwDoc;
 class SvNumberFormatter;

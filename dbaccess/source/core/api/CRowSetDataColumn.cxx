@@ -19,8 +19,8 @@
 
 
 #include "CRowSetDataColumn.hxx"
-#include "stringconstants.hxx"
-#include "apitools.hxx"
+#include <stringconstants.hxx>
+#include <apitools.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/typeprovider.hxx>

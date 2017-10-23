@@ -18,10 +18,10 @@
  */
 
 
-#include "regapi.hxx"
+#include <regapi.hxx>
 #include "fileurl.hxx"
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 #include <stdio.h>
 #include <string.h>

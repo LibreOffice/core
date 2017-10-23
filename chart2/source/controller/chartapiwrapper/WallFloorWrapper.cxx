@@ -18,16 +18,16 @@
  */
 
 #include "WallFloorWrapper.hxx"
-#include "macros.hxx"
+#include <macros.hxx>
 #include "Chart2ModelContact.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 
-#include "FillProperties.hxx"
-#include "LinePropertiesHelper.hxx"
-#include "UserDefinedProperties.hxx"
-#include "WrappedDirectStateProperty.hxx"
+#include <FillProperties.hxx>
+#include <LinePropertiesHelper.hxx>
+#include <UserDefinedProperties.hxx>
+#include <WrappedDirectStateProperty.hxx>
 
 #include <algorithm>
 #include <rtl/ustrbuf.hxx>

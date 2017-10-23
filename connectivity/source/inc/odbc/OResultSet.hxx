@@ -34,12 +34,12 @@
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include "odbc/OFunctions.hxx"
-#include "odbc/OStatement.hxx"
-#include "odbc/odbcbasedllapi.hxx"
+#include <odbc/OFunctions.hxx>
+#include <odbc/OStatement.hxx>
+#include <odbc/odbcbasedllapi.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/FValue.hxx>
-#include "TSkipDeletedSet.hxx"
+#include <TSkipDeletedSet.hxx>
 #include <memory>
 
 namespace connectivity

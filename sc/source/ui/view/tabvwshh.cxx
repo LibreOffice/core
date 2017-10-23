@@ -30,14 +30,14 @@
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "tabvwsh.hxx"
-#include "client.hxx"
-#include "document.hxx"
-#include "docsh.hxx"
-#include "sc.hrc"
-#include "drwlayer.hxx"
-#include "retypepassdlg.hxx"
-#include "tabprotection.hxx"
+#include <tabvwsh.hxx>
+#include <client.hxx>
+#include <document.hxx>
+#include <docsh.hxx>
+#include <sc.hrc>
+#include <drwlayer.hxx>
+#include <retypepassdlg.hxx>
+#include <tabprotection.hxx>
 
 using namespace com::sun::star;
 

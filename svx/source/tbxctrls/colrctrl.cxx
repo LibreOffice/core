@@ -32,13 +32,13 @@
 #include <svx/colrctrl.hxx>
 
 #include <svx/svdview.hxx>
-#include "svx/drawitem.hxx"
+#include <svx/drawitem.hxx>
 #include <editeng/colritem.hxx>
-#include "svx/xattr.hxx"
+#include <svx/xattr.hxx>
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
-#include "svx/xexch.hxx"
-#include "helpids.h"
+#include <svx/xexch.hxx>
+#include <helpids.h>
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CACHE_SLSPAGECACHE_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CACHE_SLSPAGECACHE_HXX
 
-#include "cache/SlsCacheContext.hxx"
+#include <cache/SlsCacheContext.hxx>
 #include <sal/types.h>
 #include <vcl/bitmap.hxx>
 #include <memory>

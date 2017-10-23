@@ -14,7 +14,7 @@
 #include <xmloff/xmlictxt.hxx>
 #include "xmlimprt.hxx"
 #include "importcontext.hxx"
-#include "rangelst.hxx"
+#include <rangelst.hxx>
 
 class ScColorScaleFormat;
 class ScColorScaleEntry;

@@ -7,11 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "colorformat.hxx"
-#include "colorscale.hxx"
+#include <colorformat.hxx>
+#include <colorscale.hxx>
 
-#include "document.hxx"
-#include "sc.hrc"
+#include <document.hxx>
+#include <sc.hrc>
 
 #include <svx/colorbox.hxx>
 #include <svx/xtable.hxx>

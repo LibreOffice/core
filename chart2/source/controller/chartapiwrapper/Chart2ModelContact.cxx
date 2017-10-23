@@ -18,18 +18,18 @@
  */
 
 #include "Chart2ModelContact.hxx"
-#include "ChartModelHelper.hxx"
-#include "LegendHelper.hxx"
-#include "CommonConverters.hxx"
-#include "macros.hxx"
-#include "servicenames.hxx"
-#include "ObjectIdentifier.hxx"
-#include "chartview/ExplicitValueProvider.hxx"
-#include "chartview/DrawModelWrapper.hxx"
-#include "AxisHelper.hxx"
-#include "DiagramHelper.hxx"
+#include <ChartModelHelper.hxx>
+#include <LegendHelper.hxx>
+#include <CommonConverters.hxx>
+#include <macros.hxx>
+#include <servicenames.hxx>
+#include <ObjectIdentifier.hxx>
+#include <chartview/ExplicitValueProvider.hxx>
+#include <chartview/DrawModelWrapper.hxx>
+#include <AxisHelper.hxx>
+#include <DiagramHelper.hxx>
 
-#include "ChartModel.hxx"
+#include <ChartModel.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

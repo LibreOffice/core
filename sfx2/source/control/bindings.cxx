@@ -35,20 +35,20 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <comphelper/processfactory.hxx>
-#include "itemdel.hxx"
+#include <itemdel.hxx>
 
 //Includes below due to nInReschedule
-#include "appdata.hxx"
+#include <appdata.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/msg.hxx>
-#include "statcach.hxx"
+#include <statcach.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
-#include "sfxtypes.hxx"
-#include "workwin.hxx"
+#include <sfxtypes.hxx>
+#include <workwin.hxx>
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/viewfrm.hxx>

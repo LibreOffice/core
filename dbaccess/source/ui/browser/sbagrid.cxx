@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sbagrid.hrc"
-#include "core_resource.hxx"
-#include "helpids.h"
-#include "uiservices.hxx"
+#include <sbagrid.hrc>
+#include <core_resource.hxx>
+#include <helpids.h>
+#include <uiservices.hxx>
 
 #include <sot/exchange.hxx>
 #include <svx/svxids.hrc>
@@ -29,9 +29,9 @@
 #include <svx/dbaexchange.hxx>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
-#include "sbagrid.hxx"
-#include "dlgattr.hxx"
-#include "dlgsize.hxx"
+#include <sbagrid.hxx>
+#include <dlgattr.hxx>
+#include <dlgsize.hxx>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/form/ControlFontDialog.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -71,19 +71,19 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <vcl/msgbox.hxx>
-#include "browserids.hxx"
-#include "stringconstants.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "dbu_reghelper.hxx"
-#include "dbexchange.hxx"
-#include "TableRowExchange.hxx"
-#include "TableRow.hxx"
-#include "FieldDescriptions.hxx"
+#include <browserids.hxx>
+#include <stringconstants.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <dbu_reghelper.hxx>
+#include <dbexchange.hxx>
+#include <TableRowExchange.hxx>
+#include <TableRow.hxx>
+#include <FieldDescriptions.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <vcl/stdtext.hxx>
-#include "UITools.hxx"
-#include "TokenWriter.hxx"
+#include <UITools.hxx>
+#include <TokenWriter.hxx>
 #include <osl/diagnose.h>
 #include <algorithm>
 

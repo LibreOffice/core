@@ -29,7 +29,7 @@
 #include <svtools/svmedit.hxx>
 
 #include "anyrefdg.hxx"
-#include "sc.hrc"
+#include <sc.hrc>
 
 struct ScRefHandlerCaller : public virtual VclReferenceBase {
 };

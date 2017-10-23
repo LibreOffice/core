@@ -19,16 +19,16 @@
 
 #include <rtl/math.hxx>
 
-#include "dif.hxx"
-#include "filter.hxx"
-#include "document.hxx"
-#include "formulacell.hxx"
-#include "globstr.hrc"
-#include "global.hxx"
-#include "progress.hxx"
+#include <dif.hxx>
+#include <filter.hxx>
+#include <document.hxx>
+#include <formulacell.hxx>
+#include <globstr.hrc>
+#include <global.hxx>
+#include <progress.hxx>
 #include <rtl/tencinfo.h>
-#include "ftools.hxx"
-#include "cellvalue.hxx"
+#include <ftools.hxx>
+#include <cellvalue.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 #include <formula/errorcodes.hxx>

@@ -18,15 +18,15 @@
  */
 
 
-#include "strings.hrc"
-#include "dp_package.hxx"
-#include "dp_backend.h"
-#include "dp_ucb.h"
-#include "dp_interact.h"
-#include "dp_dependencies.hxx"
-#include "dp_platform.hxx"
-#include "dp_descriptioninfoset.hxx"
-#include "dp_identifier.hxx"
+#include <strings.hrc>
+#include <dp_package.hxx>
+#include <dp_backend.h>
+#include <dp_ucb.h>
+#include <dp_interact.h>
+#include <dp_dependencies.hxx>
+#include <dp_platform.hxx>
+#include <dp_descriptioninfoset.hxx>
+#include <dp_identifier.hxx>
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <cppuhelper/exc_hlp.hxx>

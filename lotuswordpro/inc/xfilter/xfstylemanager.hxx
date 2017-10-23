@@ -60,10 +60,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSTYLEMANAGER_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSTYLEMANAGER_HXX
 
-#include "xfilter/xfglobal.hxx"
-#include "xfilter/xffontdecl.hxx"
-#include "xfilter/xfstylecont.hxx"
-#include "xfilter/xfconfigmanager.hxx"
+#include <xfilter/xfglobal.hxx>
+#include <xfilter/xffontdecl.hxx>
+#include <xfilter/xfstylecont.hxx>
+#include <xfilter/xfconfigmanager.hxx>
 #include <map>
 #include <vector>
 

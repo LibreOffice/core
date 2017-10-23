@@ -25,7 +25,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include "GroupProperties.hxx"
+#include <GroupProperties.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 

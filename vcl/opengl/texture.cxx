@@ -21,15 +21,15 @@
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 
-#include "svdata.hxx"
+#include <svdata.hxx>
 
 #include <vcl/salbtype.hxx>
 #include <vcl/pngwrite.hxx>
 
-#include "opengl/framebuffer.hxx"
-#include "opengl/texture.hxx"
-#include "opengl/zone.hxx"
-#include "opengl/RenderState.hxx"
+#include <opengl/framebuffer.hxx>
+#include <opengl/texture.hxx>
+#include <opengl/zone.hxx>
+#include <opengl/RenderState.hxx>
 
 namespace
 {

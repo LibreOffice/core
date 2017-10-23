@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbase/DIndexColumns.hxx"
-#include "dbase/DTable.hxx"
+#include <dbase/DIndexColumns.hxx>
+#include <dbase/DTable.hxx>
 #include <connectivity/sdbcx/VIndexColumn.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>

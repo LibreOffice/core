@@ -22,7 +22,7 @@
 
 #include <sfx2/printer.hxx>
 #include <sfx2/app.hxx>
-#include "Outliner.hxx"
+#include <Outliner.hxx>
 #include <editeng/paperinf.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdoole2.hxx>
@@ -49,25 +49,25 @@
 #include <comphelper/lok.hxx>
 #include <xmloff/autolayout.hxx>
 
-#include "sdresid.hxx"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
-#include "pglink.hxx"
-#include "strings.hrc"
-#include "glob.hxx"
-#include "stlpool.hxx"
-#include "sdiocmpt.hxx"
-#include "anminfo.hxx"
-#include "imapinfo.hxx"
-#include "cusshow.hxx"
-#include "undo/undomanager.hxx"
+#include <sdresid.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
+#include <pglink.hxx>
+#include <strings.hrc>
+#include <glob.hxx>
+#include <stlpool.hxx>
+#include <sdiocmpt.hxx>
+#include <anminfo.hxx>
+#include <imapinfo.hxx>
+#include <cusshow.hxx>
+#include <undo/undomanager.hxx>
 
-#include "DrawDocShell.hxx"
-#include "FrameView.hxx"
+#include <DrawDocShell.hxx>
+#include <FrameView.hxx>
 
 #include "PageListWatcher.hxx"
 #include <vcl/virdev.hxx>
-#include "customshowlist.hxx"
+#include <customshowlist.hxx>
 
 using namespace ::sd;
 

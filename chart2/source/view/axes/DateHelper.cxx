@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DateHelper.hxx"
+#include <DateHelper.hxx>
 #include "DateScaling.hxx"
 #include <rtl/math.hxx>
 #include <com/sun/star/chart/TimeUnit.hpp>

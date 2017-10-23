@@ -36,7 +36,7 @@
 #include <rtl/ref.hxx>
 
 #include <vbahelper/vbahelperinterface.hxx>
-#include "address.hxx"
+#include <address.hxx>
 
 namespace ooo { namespace vba { namespace excel {
     class XChartObjects;

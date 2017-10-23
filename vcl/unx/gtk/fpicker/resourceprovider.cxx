@@ -22,9 +22,9 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 
-#include "strings.hrc"
-#include "svdata.hxx"
-#include "gtk/fpicker/SalGtkPicker.hxx"
+#include <strings.hrc>
+#include <svdata.hxx>
+#include <gtk/fpicker/SalGtkPicker.hxx>
 
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;

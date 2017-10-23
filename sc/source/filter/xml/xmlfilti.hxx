@@ -27,7 +27,7 @@
 #include "xmldrani.hxx"
 #include "xmldpimp.hxx"
 #include "importcontext.hxx"
-#include "queryentry.hxx"
+#include <queryentry.hxx>
 
 #include <stack>
 #include <vector>

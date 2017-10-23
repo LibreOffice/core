@@ -18,15 +18,15 @@
  */
 
 #include "ElementSelector.hxx"
-#include "macros.hxx"
-#include "ObjectNameProvider.hxx"
-#include "ObjectHierarchy.hxx"
-#include "servicenames.hxx"
+#include <macros.hxx>
+#include <ObjectNameProvider.hxx>
+#include <ObjectHierarchy.hxx>
+#include <servicenames.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
-#include "DrawViewWrapper.hxx"
-#include "ResId.hxx"
-#include "strings.hrc"
-#include "ObjectIdentifier.hxx"
+#include <DrawViewWrapper.hxx>
+#include <ResId.hxx>
+#include <strings.hrc>
+#include <ObjectIdentifier.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

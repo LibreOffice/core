@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
@@ -34,26 +34,26 @@
 #include <formula/IFunctionDescription.hxx>
 #include <formula/errorcodes.hxx>
 
-#include "tokenuno.hxx"
-#include "formula.hxx"
-#include "formdata.hxx"
-#include "globstr.hrc"
-#include "scresid.hxx"
-#include "reffact.hxx"
-#include "document.hxx"
-#include "simpleformulacalc.hxx"
-#include "scmod.hxx"
-#include "inputhdl.hxx"
-#include "tabvwsh.hxx"
-#include "appoptio.hxx"
-#include "docsh.hxx"
-#include "funcdesc.hxx"
+#include <tokenuno.hxx>
+#include <formula.hxx>
+#include <formdata.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
+#include <reffact.hxx>
+#include <document.hxx>
+#include <simpleformulacalc.hxx>
+#include <scmod.hxx>
+#include <inputhdl.hxx>
+#include <tabvwsh.hxx>
+#include <appoptio.hxx>
+#include <docsh.hxx>
+#include <funcdesc.hxx>
 #include <formula/token.hxx>
-#include "tokenarray.hxx"
-#include "sc.hrc"
-#include "servuno.hxx"
-#include "unonames.hxx"
-#include "externalrefmgr.hxx"
+#include <tokenarray.hxx>
+#include <sc.hrc>
+#include <servuno.hxx>
+#include <unonames.hxx>
+#include <externalrefmgr.hxx>
 
 #include <com/sun/star/table/CellAddress.hpp>
 

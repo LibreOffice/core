@@ -31,19 +31,19 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-#include "nameuno.hxx"
-#include "miscuno.hxx"
-#include "cellsuno.hxx"
-#include "convuno.hxx"
-#include "targuno.hxx"
-#include "tokenuno.hxx"
-#include "tokenarray.hxx"
-#include "docsh.hxx"
-#include "docfunc.hxx"
-#include "rangenam.hxx"
-#include "unonames.hxx"
+#include <nameuno.hxx>
+#include <miscuno.hxx>
+#include <cellsuno.hxx>
+#include <convuno.hxx>
+#include <targuno.hxx>
+#include <tokenuno.hxx>
+#include <tokenarray.hxx>
+#include <docsh.hxx>
+#include <docfunc.hxx>
+#include <rangenam.hxx>
+#include <unonames.hxx>
 
-#include "scui_def.hxx"
+#include <scui_def.hxx>
 
 static const SfxItemPropertyMapEntry* lcl_GetNamedRangeMap()
 {

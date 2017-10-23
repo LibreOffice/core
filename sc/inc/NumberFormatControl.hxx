@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SC_NUMBERFORMATCONTROL_HXX
 #define INCLUDED_SC_NUMBERFORMATCONTROL_HXX
 
-#include <scdllapi.h>
+#include "scdllapi.h"
 #include <sfx2/tbxctrl.hxx>
 
 #include <functional>

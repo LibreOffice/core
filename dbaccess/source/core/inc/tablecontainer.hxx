@@ -38,7 +38,7 @@
 #include "FilteredContainer.hxx"
 #include <connectivity/warningscontainer.hxx>
 #include "RefreshListener.hxx"
-#include "apitools.hxx"
+#include <apitools.hxx>
 
 namespace dbaccess
 {

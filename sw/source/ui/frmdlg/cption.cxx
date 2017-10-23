@@ -41,7 +41,7 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <comphelper/string.hxx>
-#include "initui.hxx"
+#include <initui.hxx>
 #include <globals.hrc>
 #include <strings.hrc>
 #include <SwStyleNameMapper.hxx>

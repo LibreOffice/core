@@ -10,9 +10,9 @@
 #ifndef INCLUDED_CPPUHELPER_SUPPORTSSERVICE_HXX
 #define INCLUDED_CPPUHELPER_SUPPORTSSERVICE_HXX
 
-#include <sal/config.h>
+#include "sal/config.h"
 
-#include <cppuhelper/cppuhelperdllapi.h>
+#include "cppuhelper/cppuhelperdllapi.h"
 
 namespace com { namespace sun { namespace star { namespace lang {
     class XServiceInfo;

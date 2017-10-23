@@ -58,17 +58,17 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxhelp.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
-#include "objshimp.hxx"
+#include <objshimp.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/evntconf.hxx>
-#include "appdata.hxx"
-#include "workwin.hxx"
-#include "helper.hxx"
-#include "sfx2/strings.hrc"
+#include <appdata.hxx>
+#include <workwin.hxx>
+#include <helper.hxx>
+#include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include "shutdownicon.hxx"
 

@@ -59,25 +59,25 @@
  ************************************************************************/
 
 #include "lwppara.hxx"
-#include "lwpglobalmgr.hxx"
-#include "lwpfilehdr.hxx"
+#include <lwpglobalmgr.hxx>
+#include <lwpfilehdr.hxx>
 #include "lwpparaproperty.hxx"
-#include "lwptools.hxx"
+#include <lwptools.hxx>
 #include "lwpparastyle.hxx"
-#include "xfilter/xffont.hxx"
-#include "xfilter/xftextstyle.hxx"
-#include "xfilter/xfstylemanager.hxx"
-#include "xfilter/xfparagraph.hxx"
-#include "xfilter/xftextcontent.hxx"
-#include "xfilter/xftextspan.hxx"
-#include "xfilter/xfmargins.hxx"
-#include "xfilter/xftabstop.hxx"
-#include "xfilter/xflinebreak.hxx"
-#include "xfilter/xfsection.hxx"
-#include "xfilter/xfsectionstyle.hxx"
-#include "xfilter/xfcolor.hxx"
-#include "xfilter/xfhyperlink.hxx"
-#include "xfilter/xfliststyle.hxx"
+#include <xfilter/xffont.hxx>
+#include <xfilter/xftextstyle.hxx>
+#include <xfilter/xfstylemanager.hxx>
+#include <xfilter/xfparagraph.hxx>
+#include <xfilter/xftextcontent.hxx>
+#include <xfilter/xftextspan.hxx>
+#include <xfilter/xfmargins.hxx>
+#include <xfilter/xftabstop.hxx>
+#include <xfilter/xflinebreak.hxx>
+#include <xfilter/xfsection.hxx>
+#include <xfilter/xfsectionstyle.hxx>
+#include <xfilter/xfcolor.hxx>
+#include <xfilter/xfhyperlink.hxx>
+#include <xfilter/xfliststyle.hxx>
 #include "lwpcharsetmgr.hxx"
 #include "lwpsection.hxx"
 #include "lwplayout.hxx"
@@ -85,15 +85,15 @@
 #include "lwpbulletstylemgr.hxx"
 #include "lwpstory.hxx"
 #include "lwpsilverbullet.hxx"
-#include "xfilter/xflist.hxx"
-#include "xfilter/xfframe.hxx"
+#include <xfilter/xflist.hxx>
+#include <xfilter/xfframe.hxx>
 
 #include "lwpdivinfo.hxx"
 #include "lwpdoc.hxx"
 #include "lwpholder.hxx"
 #include "lwppagehint.hxx"
 
-#include "lwpdropcapmgr.hxx"
+#include <lwpdropcapmgr.hxx>
 #include "lwptable.hxx"
 #include <memory>
 

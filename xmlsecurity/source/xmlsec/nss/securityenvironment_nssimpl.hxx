@@ -38,12 +38,12 @@
 
 #include <osl/mutex.hxx>
 
-#include "pk11func.h"
-#include "keyhi.h"
-#include "certdb.h"
-#include "list"
+#include <pk11func.h>
+#include <keyhi.h>
+#include <certdb.h>
+#include <list>
 
-#include "xmlsec-wrapper.h"
+#include <xmlsec-wrapper.h>
 
 class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper<
     css::xml::crypto::XSecurityEnvironment ,

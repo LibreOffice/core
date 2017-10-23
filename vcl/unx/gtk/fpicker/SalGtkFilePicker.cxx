@@ -42,8 +42,8 @@
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <comphelper/string.hxx>
-#include "unx/gtk/gtkdata.hxx"
-#include "unx/gtk/gtkinst.hxx"
+#include <unx/gtk/gtkdata.hxx>
+#include <unx/gtk/gtkinst.hxx>
 
 #include <vcl/svapp.hxx>
 
@@ -53,7 +53,7 @@
 #include <set>
 #include <string.h>
 
-#include "gtk/fpicker/SalGtkFilePicker.hxx"
+#include <gtk/fpicker/SalGtkFilePicker.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;

@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "screenshotannotationdlg.hxx"
+#include <screenshotannotationdlg.hxx>
 
-#include "strings.hrc"
-#include "dialmgr.hxx"
+#include <strings.hrc>
+#include <dialmgr.hxx>
 
 #include <basegfx/range/b2irange.hxx>
 #include <cppuhelper/bootstrap.hxx>

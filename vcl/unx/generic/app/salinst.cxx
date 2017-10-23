@@ -36,7 +36,7 @@
 
 #include <vcl/inputtypes.hxx>
 
-#include "salwtype.hxx"
+#include <salwtype.hxx>
 #include <sal/macros.h>
 
 // plugin factory function

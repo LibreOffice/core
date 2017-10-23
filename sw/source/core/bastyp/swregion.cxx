@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "swrect.hxx"
-#include "swregion.hxx"
-#include "swtypes.hxx"
+#include <swrect.hxx>
+#include <swregion.hxx>
+#include <swtypes.hxx>
 
 SwRegionRects::SwRegionRects( const SwRect &rStartRect, sal_uInt16 nInit ) :
     SwRects(),

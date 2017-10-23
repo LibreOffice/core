@@ -20,14 +20,14 @@
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 
-#include "tabview.hxx"
-#include "document.hxx"
-#include "docsh.hxx"
-#include "scmod.hxx"
-#include "gridwin.hxx"
-#include "globstr.hrc"
-#include "formulacell.hxx"
-#include "dociter.hxx"
+#include <tabview.hxx>
+#include <document.hxx>
+#include <docsh.hxx>
+#include <scmod.hxx>
+#include <gridwin.hxx>
+#include <globstr.hrc>
+#include <formulacell.hxx>
+#include <dociter.hxx>
 
 // ---  Referenz-Eingabe / Fill-Cursor
 

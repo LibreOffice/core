@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "core_resource.hxx"
-#include "indexfieldscontrol.hxx"
-#include "dbu_dlg.hxx"
-#include "strings.hrc"
+#include <core_resource.hxx>
+#include <indexfieldscontrol.hxx>
+#include <dbu_dlg.hxx>
+#include <strings.hrc>
 #include <osl/diagnose.h>
-#include "helpids.h"
+#include <helpids.h>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 

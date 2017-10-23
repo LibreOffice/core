@@ -19,10 +19,10 @@
 
 #include <sal/config.h>
 
-#include "createpresentation.hxx"
-#include "drawdoc.hxx"
-#include "cusshow.hxx"
-#include "customshowlist.hxx"
+#include <createpresentation.hxx>
+#include <drawdoc.hxx>
+#include <cusshow.hxx>
+#include <customshowlist.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;

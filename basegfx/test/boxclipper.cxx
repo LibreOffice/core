@@ -35,7 +35,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <comphelper/random.hxx>
 
-#include <boxclipper.hxx>
+#include "boxclipper.hxx"
 
 using namespace ::basegfx;
 

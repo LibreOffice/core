@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_UNDOUTIL_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_UNDOUTIL_HXX
 
-#include "address.hxx"
+#include <address.hxx>
 
 class ScRange;
 class ScDocShell;

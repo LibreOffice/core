@@ -26,8 +26,8 @@
 #include <sal/macros.h>
 #include <sot/storage.hxx>
 #include <oox/helper/helper.hxx>
-#include "filter.hxx"
-#include "scdllapi.h"
+#include <filter.hxx>
+#include <scdllapi.h>
 
 // Common macros ==============================================================
 

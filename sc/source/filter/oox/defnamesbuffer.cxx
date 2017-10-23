@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "defnamesbuffer.hxx"
+#include <defnamesbuffer.hxx>
 
 #include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/ExternalReference.hpp>
@@ -32,13 +32,13 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/tokens.hxx>
-#include "addressconverter.hxx"
-#include "externallinkbuffer.hxx"
-#include "formulaparser.hxx"
-#include "worksheetbuffer.hxx"
-#include "tokenarray.hxx"
-#include "tokenuno.hxx"
-#include "compiler.hxx"
+#include <addressconverter.hxx>
+#include <externallinkbuffer.hxx>
+#include <formulaparser.hxx>
+#include <worksheetbuffer.hxx>
+#include <tokenarray.hxx>
+#include <tokenuno.hxx>
+#include <compiler.hxx>
 
 namespace oox {
 namespace xls {

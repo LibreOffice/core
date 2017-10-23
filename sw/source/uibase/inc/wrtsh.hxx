@@ -24,7 +24,7 @@
 #include <sortopt.hxx>
 #include <swurl.hxx>
 #include <IMark.hxx>
-#include <navmgr.hxx>
+#include "navmgr.hxx"
 #include <boost/optional.hpp>
 #include <o3tl/typed_flags_set.hxx>
 

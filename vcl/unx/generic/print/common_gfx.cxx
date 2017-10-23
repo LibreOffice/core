@@ -24,15 +24,15 @@
 #include "psputil.hxx"
 #include "glyphset.hxx"
 
-#include "unx/printergfx.hxx"
-#include "unx/printerjob.hxx"
-#include "unx/fontmanager.hxx"
+#include <unx/printergfx.hxx>
+#include <unx/printerjob.hxx>
+#include <unx/fontmanager.hxx>
 #include <vcl/strhelper.hxx>
-#include "printerinfomanager.hxx"
+#include <printerinfomanager.hxx>
 
-#include "tools/color.hxx"
-#include "tools/poly.hxx"
-#include "tools/stream.hxx"
+#include <tools/color.hxx>
+#include <tools/poly.hxx>
+#include <tools/stream.hxx>
 
 using namespace psp ;
 

@@ -23,7 +23,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 
-#include <impedit.hxx>
+#include "impedit.hxx"
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/unolingu.hxx>
@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <editeng/langitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <textconv.hxx>
+#include "textconv.hxx"
 
 
 using namespace com::sun::star;

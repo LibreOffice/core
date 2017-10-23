@@ -16,13 +16,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "RptPage.hxx"
-#include "RptModel.hxx"
-#include "Section.hxx"
-#include "RptObject.hxx"
+#include <RptPage.hxx>
+#include <RptModel.hxx>
+#include <Section.hxx>
+#include <RptObject.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unoshape.hxx>
-#include "ReportDrawPage.hxx"
+#include <ReportDrawPage.hxx>
 
 namespace rptui
 {

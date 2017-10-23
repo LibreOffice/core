@@ -33,8 +33,8 @@
 #include <svx/dialmgr.hxx>
 #include <svx/svxdlg.hxx>
 
-#include "charmapacc.hxx"
-#include "uiobject.hxx"
+#include <charmapacc.hxx>
+#include <uiobject.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -49,7 +49,7 @@
 #include <svl/itemset.hxx>
 #include <unicode/uchar.h>
 #include <vcl/textview.hxx>
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;

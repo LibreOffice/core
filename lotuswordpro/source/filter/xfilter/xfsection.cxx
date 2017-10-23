@@ -57,7 +57,7 @@
  * @file
  * Section object.
  ************************************************************************/
-#include "xfilter/xfsection.hxx"
+#include <xfilter/xfsection.hxx>
 
 XFSection::XFSection()
 {

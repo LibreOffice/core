@@ -26,13 +26,13 @@
 #include <comphelper/extract.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include "createunocustomshow.hxx"
-#include "unomodel.hxx"
-#include "drawdoc.hxx"
+#include <createunocustomshow.hxx>
+#include <unomodel.hxx>
+#include <drawdoc.hxx>
 #include "unocpres.hxx"
-#include "cusshow.hxx"
-#include "unopage.hxx"
-#include "customshowlist.hxx"
+#include <cusshow.hxx>
+#include <unopage.hxx>
+#include <customshowlist.hxx>
 
 using namespace ::com::sun::star;
 

@@ -30,7 +30,7 @@
 #include <com/sun/star/deployment/XPackageRegistry.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include "dp_misc_api.hxx"
+#include <dp_misc_api.hxx>
 
 namespace dp_misc {
 

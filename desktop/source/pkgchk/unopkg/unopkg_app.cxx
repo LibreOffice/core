@@ -19,10 +19,10 @@
 
 
 #include <desktop/dllapi.h>
-#include "dp_misc.h"
+#include <dp_misc.h>
 #include "unopkg_main.h"
 #include "unopkg_shared.h"
-#include "dp_identifier.hxx"
+#include <dp_identifier.hxx>
 #include <tools/extendapplicationenvironment.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>

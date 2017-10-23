@@ -25,11 +25,11 @@
 #include <sfx2/viewfrm.hxx>
 
 
-#include "slideshow.hxx"
-#include "ViewShellBase.hxx"
-#include "sdresid.hxx"
-#include "helpids.h"
-#include "strings.hrc"
+#include <slideshow.hxx>
+#include <ViewShellBase.hxx>
+#include <sdresid.hxx>
+#include <helpids.h>
+#include <strings.hrc>
 
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Client.hxx"
+#include <Client.hxx>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
@@ -25,12 +25,12 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include "strings.hrc"
-#include "ViewShell.hxx"
-#include "DrawViewShell.hxx"
-#include "View.hxx"
-#include "Window.hxx"
-#include "sdresid.hxx"
+#include <strings.hrc>
+#include <ViewShell.hxx>
+#include <DrawViewShell.hxx>
+#include <View.hxx>
+#include <Window.hxx>
+#include <sdresid.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;

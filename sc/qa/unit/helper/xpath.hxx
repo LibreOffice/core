@@ -28,7 +28,7 @@
 #define SCQAHELPER_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
 #endif
 
-#include "docsh.hxx"
+#include <docsh.hxx>
 
 using namespace com::sun::star;
 

@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "warnbox.hxx"
+#include <warnbox.hxx>
 
-#include "scmod.hxx"
-#include "inputopt.hxx"
-#include "scresid.hxx"
-#include "strings.hrc"
-#include "helpids.h"
+#include <scmod.hxx>
+#include <inputopt.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
+#include <helpids.h>
 
 ScReplaceWarnBox::ScReplaceWarnBox( vcl::Window* pParent ) :
     WarningBox( pParent, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, ScResId( STR_REPLCELLSWARN ) )

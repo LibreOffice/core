@@ -19,9 +19,9 @@
 
 #include "MasterPageContainerProviders.hxx"
 
-#include "DrawDocShell.hxx"
-#include "drawdoc.hxx"
-#include "PreviewRenderer.hxx"
+#include <DrawDocShell.hxx>
+#include <drawdoc.hxx>
+#include <PreviewRenderer.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>

@@ -18,7 +18,7 @@
  */
 
 #include <rtl/ustrbuf.hxx>
-#include "propimp0.hxx"
+#include <propimp0.hxx>
 #include "sdxmlexp_impl.hxx"
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/util/Duration.hpp>

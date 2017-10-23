@@ -20,8 +20,8 @@
 #define INCLUDED_SW_INC_AUTHFLD_HXX
 
 #include "swdllapi.h"
-#include <fldbas.hxx>
-#include <toxe.hxx>
+#include "fldbas.hxx"
+#include "toxe.hxx"
 #include <sal/log.hxx>
 
 #include <memory>

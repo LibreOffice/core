@@ -21,11 +21,11 @@
 #define INCLUDED_SC_SOURCE_UI_INC_DOCFUNC_HXX
 
 #include <tools/link.hxx>
-#include "global.hxx"
+#include <global.hxx>
 #include <formula/grammar.hxx>
-#include "tabbgcolor.hxx"
-#include "token.hxx"
-#include "rangenam.hxx"
+#include <tabbgcolor.hxx>
+#include <token.hxx>
+#include <rangenam.hxx>
 
 #include <memory>
 #include <vector>

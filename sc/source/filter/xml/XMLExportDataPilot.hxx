@@ -22,7 +22,7 @@
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <rtl/ustring.hxx>
-#include "global.hxx"
+#include <global.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <unotools/textsearch.hxx>
 

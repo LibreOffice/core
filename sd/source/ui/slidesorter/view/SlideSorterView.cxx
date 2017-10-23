@@ -17,36 +17,36 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "view/SlideSorterView.hxx"
+#include <view/SlideSorterView.hxx>
 
-#include "ViewShellBase.hxx"
-#include "SlideSorter.hxx"
-#include "SlideSorterViewShell.hxx"
-#include "ViewShell.hxx"
+#include <ViewShellBase.hxx>
+#include <SlideSorter.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <ViewShell.hxx>
 #include "SlsViewCacheContext.hxx"
 #include "SlsLayeredDevice.hxx"
-#include "view/SlsLayouter.hxx"
-#include "view/SlsPageObjectLayouter.hxx"
-#include "view/SlsPageObjectPainter.hxx"
-#include "view/SlsILayerPainter.hxx"
-#include "view/SlsToolTip.hxx"
-#include "controller/SlideSorterController.hxx"
-#include "controller/SlsProperties.hxx"
-#include "controller/SlsClipboard.hxx"
-#include "model/SlideSorterModel.hxx"
-#include "model/SlsPageEnumerationProvider.hxx"
-#include "model/SlsPageDescriptor.hxx"
-#include "cache/SlsPageCache.hxx"
-#include "cache/SlsPageCacheManager.hxx"
-#include "cache/SlsCacheContext.hxx"
-#include "DrawDocShell.hxx"
-#include "PaneDockingWindow.hxx"
+#include <view/SlsLayouter.hxx>
+#include <view/SlsPageObjectLayouter.hxx>
+#include <view/SlsPageObjectPainter.hxx>
+#include <view/SlsILayerPainter.hxx>
+#include <view/SlsToolTip.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsProperties.hxx>
+#include <controller/SlsClipboard.hxx>
+#include <model/SlideSorterModel.hxx>
+#include <model/SlsPageEnumerationProvider.hxx>
+#include <model/SlsPageDescriptor.hxx>
+#include <cache/SlsPageCache.hxx>
+#include <cache/SlsPageCacheManager.hxx>
+#include <cache/SlsCacheContext.hxx>
+#include <DrawDocShell.hxx>
+#include <PaneDockingWindow.hxx>
 
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
-#include "Window.hxx"
-#include "sdresid.hxx"
-#include "strings.hrc"
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
+#include <Window.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
 
 #include <svl/itempool.hxx>
 #include <svx/svdpagv.hxx>

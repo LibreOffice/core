@@ -9,11 +9,11 @@
 
 #include "qahelper.hxx"
 #include "csv_handler.hxx"
-#include "drwlayer.hxx"
-#include "compiler.hxx"
-#include "conditio.hxx"
-#include "stlsheet.hxx"
-#include "formulacell.hxx"
+#include <drwlayer.hxx>
+#include <compiler.hxx>
+#include <conditio.hxx>
+#include <stlsheet.hxx>
+#include <formulacell.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoole2.hxx>
 #include <tools/urlobj.hxx>

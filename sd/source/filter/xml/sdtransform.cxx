@@ -30,8 +30,8 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/numitem.hxx>
 
-#include "drawdoc.hxx"
-#include "glob.hxx"
+#include <drawdoc.hxx>
+#include <glob.hxx>
 #include "sdtransform.hxx"
 
 using namespace ::com::sun::star::style;

@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "datatableview.hxx"
+#include <datatableview.hxx>
 
-#include "document.hxx"
-#include "viewdata.hxx"
-#include "output.hxx"
-#include "fillinfo.hxx"
-#include "table.hxx"
+#include <document.hxx>
+#include <viewdata.hxx>
+#include <output.hxx>
+#include <fillinfo.hxx>
+#include <table.hxx>
 
 #include <vcl/builderfactory.hxx>
 

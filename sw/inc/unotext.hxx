@@ -29,7 +29,7 @@
 #include <com/sun/star/text/XRelativeTextContentRemove.hpp>
 #include <com/sun/star/text/XTextAppendAndConvert.hpp>
 
-#include <unobaseclass.hxx>
+#include "unobaseclass.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace text {

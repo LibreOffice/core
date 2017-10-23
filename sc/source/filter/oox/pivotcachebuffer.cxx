@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "pivotcachebuffer.hxx"
+#include <pivotcachebuffer.hxx>
 
 #include <set>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -36,16 +36,16 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "defnamesbuffer.hxx"
-#include "excelhandlers.hxx"
-#include "pivotcachefragment.hxx"
-#include "sheetdatabuffer.hxx"
-#include "tablebuffer.hxx"
-#include "unitconverter.hxx"
-#include "worksheetbuffer.hxx"
-#include "dpobject.hxx"
-#include "dpsave.hxx"
-#include "dpdimsave.hxx"
+#include <defnamesbuffer.hxx>
+#include <excelhandlers.hxx>
+#include <pivotcachefragment.hxx>
+#include <sheetdatabuffer.hxx>
+#include <tablebuffer.hxx>
+#include <unitconverter.hxx>
+#include <worksheetbuffer.hxx>
+#include <dpobject.hxx>
+#include <dpsave.hxx>
+#include <dpdimsave.hxx>
 
 namespace oox {
 namespace xls {

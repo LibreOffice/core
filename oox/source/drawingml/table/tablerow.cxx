@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/table/tablerow.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
+#include <drawingml/table/tablerow.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include "oox/helper/propertyset.hxx"
+#include <oox/helper/propertyset.hxx>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>

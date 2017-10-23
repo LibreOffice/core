@@ -40,19 +40,19 @@
 #include <scrwnd.hxx>
 #include <helpwin.hxx>
 #include <vcl/dialog.hxx>
-#include "salinst.hxx"
-#include "salframe.hxx"
-#include "salgdi.hxx"
-#include "svdata.hxx"
-#include "window.h"
-#include "salimestatus.hxx"
-#include "salsys.hxx"
-#include "strings.hrc"
-#include "units.hrc"
+#include <salinst.hxx>
+#include <salframe.hxx>
+#include <salgdi.hxx>
+#include <svdata.hxx>
+#include <window.h>
+#include <salimestatus.hxx>
+#include <salsys.hxx>
+#include <strings.hrc>
+#include <units.hrc>
 
-#include "com/sun/star/accessibility/MSAAService.hpp"
+#include <com/sun/star/accessibility/MSAAService.hpp>
 
-#include "officecfg/Office/Common.hxx"
+#include <officecfg/Office/Common.hxx>
 
 #include <config_folders.h>
 #include <config_features.h>

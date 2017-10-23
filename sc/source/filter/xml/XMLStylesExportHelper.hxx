@@ -24,7 +24,7 @@
 #include <memory>
 #include <list>
 
-#include "address.hxx"
+#include <address.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/sheet/ConditionOperator.hpp>

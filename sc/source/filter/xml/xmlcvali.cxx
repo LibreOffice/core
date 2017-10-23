@@ -20,7 +20,7 @@
 #include "xmlcvali.hxx"
 #include "xmlimprt.hxx"
 #include "xmlconti.hxx"
-#include "document.hxx"
+#include <document.hxx>
 #include "XMLConverter.hxx"
 
 #include <xmloff/xmltkmap.hxx>

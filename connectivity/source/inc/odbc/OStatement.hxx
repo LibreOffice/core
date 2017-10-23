@@ -33,9 +33,9 @@
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
-#include "odbc/OFunctions.hxx"
-#include "odbc/OConnection.hxx"
-#include "odbc/odbcbasedllapi.hxx"
+#include <odbc/OFunctions.hxx>
+#include <odbc/OConnection.hxx>
+#include <odbc/odbcbasedllapi.hxx>
 #include <vector>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 

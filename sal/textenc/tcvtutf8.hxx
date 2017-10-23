@@ -10,9 +10,9 @@
 #ifndef INCLUDED_SAL_TEXTENC_TCVTUTF8_HXX
 #define INCLUDED_SAL_TEXTENC_TCVTUTF8_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 void * ImplCreateUtf8ToUnicodeContext();
 

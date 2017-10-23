@@ -18,18 +18,18 @@
  */
 
 #include "UpDownBarWrapper.hxx"
-#include "macros.hxx"
+#include <macros.hxx>
 #include "Chart2ModelContact.hxx"
-#include "DiagramHelper.hxx"
-#include "servicenames_charttypes.hxx"
+#include <DiagramHelper.hxx>
+#include <servicenames_charttypes.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <comphelper/sequence.hxx>
 
-#include "LinePropertiesHelper.hxx"
-#include "FillProperties.hxx"
-#include "UserDefinedProperties.hxx"
+#include <LinePropertiesHelper.hxx>
+#include <FillProperties.hxx>
+#include <UserDefinedProperties.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

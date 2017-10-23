@@ -21,10 +21,10 @@
 #define INCLUDED_VCL_INC_GENERIC_GENPRN_H
 
 #include <vcl/jobdata.hxx>
-#include "unx/printergfx.hxx"
-#include "unx/printerjob.hxx"
-#include "salprn.hxx"
-#include "vclpluginapi.h"
+#include <unx/printergfx.hxx>
+#include <unx/printerjob.hxx>
+#include <salprn.hxx>
+#include <vclpluginapi.h>
 
 class GenPspGraphics;
 class VCL_DLLPUBLIC PspSalInfoPrinter : public SalInfoPrinter

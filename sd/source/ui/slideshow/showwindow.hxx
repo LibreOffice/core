@@ -25,7 +25,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/graph.hxx>
 
-#include "Window.hxx"
+#include <Window.hxx>
 
 #include "slideshowimpl.hxx"
 

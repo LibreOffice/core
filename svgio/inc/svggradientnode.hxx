@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVGIO_INC_SVGGRADIENTNODE_HXX
 #define INCLUDED_SVGIO_INC_SVGGRADIENTNODE_HXX
 
-#include <svgnode.hxx>
-#include <svgstyleattributes.hxx>
+#include "svgnode.hxx"
+#include "svgstyleattributes.hxx"
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <memory>
 

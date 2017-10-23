@@ -7,10 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "orcusfiltersimpl.hxx"
-#include "orcusinterface.hxx"
-#include "orcusxml.hxx"
-#include "document.hxx"
+#include <orcusfiltersimpl.hxx>
+#include <orcusinterface.hxx>
+#include <orcusxml.hxx>
+#include <document.hxx>
 
 #include <svtools/treelistbox.hxx>
 #include <svtools/treelistentry.hxx>

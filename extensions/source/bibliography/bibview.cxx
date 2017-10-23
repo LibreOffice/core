@@ -18,7 +18,7 @@
  */
 
 
-#include "strings.hrc"
+#include <strings.hrc>
 #include "bibcont.hxx"
 #include "bibbeam.hxx"
 #include "general.hxx"

@@ -18,20 +18,20 @@
  */
 
 #include "nssrenam.h"
-#include "nspr.h"
-#include "nss.h"
-#include "secder.h"
+#include <nspr.h>
+#include <nss.h>
+#include <secder.h>
 
-#include "hasht.h"
-#include "secoid.h"
-#include "pk11func.h"
+#include <hasht.h>
+#include <secoid.h>
+#include <pk11func.h>
 
 #include <sal/config.h>
 #include <comphelper/servicehelper.hxx>
 #include <rtl/ref.hxx>
 #include "x509certificate_nssimpl.hxx"
 
-#include "certificateextension_xmlsecimpl.hxx"
+#include <certificateextension_xmlsecimpl.hxx>
 
 #include "sanextension_nssimpl.hxx"
 #include <tools/time.hxx>

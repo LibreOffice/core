@@ -28,7 +28,7 @@
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "XMLEventImportHelper.hxx"
+#include <XMLEventImportHelper.hxx>
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlnumfi.hxx>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>

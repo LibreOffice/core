@@ -37,7 +37,7 @@
 #include <ooo/vba/word/WdProtectionType.hpp>
 
 #include <vbahelper/helperdecl.hxx>
-#include <wordvbahelper.hxx>
+#include "wordvbahelper.hxx"
 #include <docsh.hxx>
 #include "vbatemplate.hxx"
 #include "vbaparagraph.hxx"

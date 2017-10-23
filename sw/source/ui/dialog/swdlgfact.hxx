@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UI_DIALOG_SWDLGFACT_HXX
 #define INCLUDED_SW_SOURCE_UI_DIALOG_SWDLGFACT_HXX
 
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 
 class SwInsertAbstractDlg;
 class SwAsciiFilterDlg;
@@ -37,7 +37,7 @@ class SwModalRedlineAcceptDlg;
 class SwTOXMark;
 class SwSplitTableDlg;
 
-#include "itabenum.hxx"
+#include <itabenum.hxx>
 
 #include <boost/optional.hpp>
 

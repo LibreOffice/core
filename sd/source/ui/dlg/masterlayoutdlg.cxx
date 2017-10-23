@@ -19,11 +19,11 @@
 
 #include <svx/dialogs.hrc>
 
-#include "sdresid.hxx"
+#include <sdresid.hxx>
 
-#include "strings.hrc"
-#include "masterlayoutdlg.hxx"
-#include "drawdoc.hxx"
+#include <strings.hrc>
+#include <masterlayoutdlg.hxx>
+#include <drawdoc.hxx>
 
 using namespace ::sd;
 

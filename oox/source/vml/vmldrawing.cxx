@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/vml/vmldrawing.hxx"
+#include <oox/vml/vmldrawing.hxx>
 
 #include <algorithm>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -29,11 +29,11 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/ole/axcontrol.hxx"
-#include "oox/vml/vmlshape.hxx"
-#include "oox/vml/vmlshapecontainer.hxx"
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/helper/containerhelper.hxx>
+#include <oox/ole/axcontrol.hxx>
+#include <oox/vml/vmlshape.hxx>
+#include <oox/vml/vmlshapecontainer.hxx>
 
 namespace oox {
 namespace vml {

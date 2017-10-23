@@ -18,16 +18,16 @@
  */
 
 #include "tp_Wizard_TitlesAndObjects.hxx"
-#include "strings.hrc"
-#include "res_Titles.hxx"
-#include "res_LegendPosition.hxx"
-#include "ResId.hxx"
-#include "helpids.h"
-#include "macros.hxx"
-#include "ChartModelHelper.hxx"
-#include "AxisHelper.hxx"
-#include "LegendHelper.hxx"
-#include "ControllerLockGuard.hxx"
+#include <strings.hrc>
+#include <res_Titles.hxx>
+#include <res_LegendPosition.hxx>
+#include <ResId.hxx>
+#include <helpids.h>
+#include <macros.hxx>
+#include <ChartModelHelper.hxx>
+#include <AxisHelper.hxx>
+#include <LegendHelper.hxx>
+#include <ControllerLockGuard.hxx>
 
 namespace chart
 {

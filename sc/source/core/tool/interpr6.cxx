@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "interpre.hxx"
-#include "columnspanset.hxx"
-#include "column.hxx"
-#include "document.hxx"
-#include "cellvalue.hxx"
-#include "dociter.hxx"
-#include "mtvcellfunc.hxx"
-#include "scmatrix.hxx"
+#include <interpre.hxx>
+#include <columnspanset.hxx>
+#include <column.hxx>
+#include <document.hxx>
+#include <cellvalue.hxx>
+#include <dociter.hxx>
+#include <mtvcellfunc.hxx>
+#include <scmatrix.hxx>
 
-#include "arraysumfunctor.hxx"
+#include <arraysumfunctor.hxx>
 
 #include <formula/token.hxx>
 

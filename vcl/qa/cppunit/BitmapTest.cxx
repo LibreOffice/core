@@ -26,7 +26,7 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 #endif
 
-#include "BitmapSymmetryCheck.hxx"
+#include <BitmapSymmetryCheck.hxx>
 
 namespace
 {

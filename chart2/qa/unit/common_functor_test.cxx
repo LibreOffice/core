@@ -18,7 +18,7 @@
 #include <iterator>
 #include <vector>
 
-#include "CommonFunctors.hxx"
+#include <CommonFunctors.hxx>
 
 
 class CommonFunctorsTest : public CppUnit::TestFixture

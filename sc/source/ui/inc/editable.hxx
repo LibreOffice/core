@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_EDITABLE_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_EDITABLE_HXX
 
-#include "address.hxx"
+#include <address.hxx>
 
 class ScDocument;
 class ScViewFunc;

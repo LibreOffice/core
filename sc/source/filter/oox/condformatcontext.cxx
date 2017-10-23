@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "condformatcontext.hxx"
-#include "extlstcontext.hxx"
+#include <condformatcontext.hxx>
+#include <extlstcontext.hxx>
 
-#include "condformatbuffer.hxx"
+#include <condformatbuffer.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 

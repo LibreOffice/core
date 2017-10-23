@@ -28,7 +28,7 @@
 
 
 #include "Section.hxx"
-#include "strings.hxx"
+#include <strings.hxx>
 
 namespace reportdesign
 {

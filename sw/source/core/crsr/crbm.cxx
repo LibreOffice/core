@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "crsrsh.hxx"
-#include "ndtxt.hxx"
+#include <crsrsh.hxx>
+#include <ndtxt.hxx>
 #include <docary.hxx>
-#include "IMark.hxx"
+#include <IMark.hxx>
 #include "callnk.hxx"
-#include "swcrsr.hxx"
+#include <swcrsr.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 

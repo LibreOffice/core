@@ -22,7 +22,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <config_features.h>
 
-#include "BitmapProcessor.hxx"
+#include <BitmapProcessor.hxx>
 
 
 namespace

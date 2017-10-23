@@ -27,18 +27,18 @@
 #include <tools/urlobj.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include "drawview.hxx"
-#include "global.hxx"
-#include "drwlayer.hxx"
-#include "viewdata.hxx"
-#include "document.hxx"
-#include "docsh.hxx"
-#include "drwtrans.hxx"
-#include "transobj.hxx"
-#include "drawutil.hxx"
-#include "scmod.hxx"
-#include "globstr.hrc"
-#include "chartarr.hxx"
+#include <drawview.hxx>
+#include <global.hxx>
+#include <drwlayer.hxx>
+#include <viewdata.hxx>
+#include <document.hxx>
+#include <docsh.hxx>
+#include <drwtrans.hxx>
+#include <transobj.hxx>
+#include <drawutil.hxx>
+#include <scmod.hxx>
+#include <globstr.hrc>
+#include <chartarr.hxx>
 #include <gridwin.hxx>
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>

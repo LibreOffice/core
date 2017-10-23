@@ -18,10 +18,10 @@
  */
 
 #include <sfx2/sfxsids.hrc>
-#include "strings.hrc"
-#include "browserids.hxx"
+#include <strings.hrc>
+#include <browserids.hxx>
 #include <comphelper/types.hxx>
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/container/XChild.hpp>
@@ -42,17 +42,17 @@
 #include <comphelper/seqstream.hxx>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
-#include "sqlmessage.hxx"
-#include "JoinController.hxx"
+#include <sqlmessage.hxx>
+#include <JoinController.hxx>
 #include <vcl/msgbox.hxx>
-#include "TableWindowData.hxx"
-#include "TableWindow.hxx"
-#include "TableConnectionData.hxx"
-#include "adtabdlg.hxx"
+#include <TableWindowData.hxx>
+#include <TableWindow.hxx>
+#include <TableConnectionData.hxx>
+#include <adtabdlg.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star::uno;

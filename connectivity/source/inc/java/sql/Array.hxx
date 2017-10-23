@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_ARRAY_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_ARRAY_HXX
 
-#include "java/lang/Object.hxx"
+#include <java/lang/Object.hxx>
 #include <com/sun/star/sdbc/XArray.hpp>
 #include <cppuhelper/implbase.hxx>
 

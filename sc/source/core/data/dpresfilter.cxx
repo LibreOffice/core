@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "dpresfilter.hxx"
-#include "global.hxx"
+#include <dpresfilter.hxx>
+#include <global.hxx>
 
 #include <unotools/charclass.hxx>
 #include <rtl/math.hxx>

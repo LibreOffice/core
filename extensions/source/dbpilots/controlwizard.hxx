@@ -31,8 +31,8 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include "dbptypes.hxx"
-#include "strings.hrc"
-#include "componentmodule.hxx"
+#include <strings.hrc>
+#include <componentmodule.hxx>
 #include "wizardcontext.hxx"
 
 class ResId;

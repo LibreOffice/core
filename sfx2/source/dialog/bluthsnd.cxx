@@ -14,7 +14,7 @@
 
 #include <stdio.h>
 
-#include "bluthsndapi.hxx"
+#include <bluthsndapi.hxx>
 
 SfxBluetoothModel::SendMailResult SfxBluetoothModel::SaveAndSend( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {

@@ -18,17 +18,17 @@
  */
 
 #include "VCartesianAxis.hxx"
-#include "PlottingPositionHelper.hxx"
-#include "AbstractShapeFactory.hxx"
-#include "CommonConverters.hxx"
-#include "macros.hxx"
-#include "ViewDefines.hxx"
-#include "PropertyMapper.hxx"
-#include "NumberFormatterWrapper.hxx"
-#include "LabelPositionHelper.hxx"
-#include "TrueGuard.hxx"
-#include "BaseGFXHelper.hxx"
-#include "AxisHelper.hxx"
+#include <PlottingPositionHelper.hxx>
+#include <AbstractShapeFactory.hxx>
+#include <CommonConverters.hxx>
+#include <macros.hxx>
+#include <ViewDefines.hxx>
+#include <PropertyMapper.hxx>
+#include <NumberFormatterWrapper.hxx>
+#include <LabelPositionHelper.hxx>
+#include <TrueGuard.hxx>
+#include <BaseGFXHelper.hxx>
+#include <AxisHelper.hxx>
 #include "Tickmarks_Equidistant.hxx"
 
 #include <rtl/math.hxx>

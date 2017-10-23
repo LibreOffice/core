@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "java/sql/SQLException.hxx"
-#include "java/tools.hxx"
+#include <java/sql/SQLException.hxx>
+#include <java/tools.hxx>
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;

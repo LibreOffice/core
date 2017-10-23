@@ -11,11 +11,11 @@
 #include <svx/charthelper.hxx>
 #include <svtools/embedhlp.hxx>
 
-#include "miscuno.hxx"
-#include "docsh.hxx"
+#include <miscuno.hxx>
+#include <docsh.hxx>
 
-#include "TablePivotChart.hxx"
-#include "ChartTools.hxx"
+#include <TablePivotChart.hxx>
+#include <ChartTools.hxx>
 
 using namespace css;
 

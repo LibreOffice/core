@@ -24,12 +24,12 @@
 
 #include <xmloff/xmlprmap.hxx>
 
-#include "SchXMLExport.hxx"
-#include "XMLChartPropertySetMapper.hxx"
+#include <SchXMLExport.hxx>
+#include <XMLChartPropertySetMapper.hxx>
 #include "ColorPropertySet.hxx"
 #include "SchXMLTools.hxx"
 #include "SchXMLEnumConverter.hxx"
-#include "facreg.hxx"
+#include <facreg.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <tools/globname.hxx>
@@ -44,7 +44,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlmetae.hxx>
 #include <xmloff/SchXMLSeriesHelper.hxx>
-#include "xexptran.hxx"
+#include <xexptran.hxx>
 #include <rtl/math.hxx>
 #include <comphelper/extract.hxx>
 

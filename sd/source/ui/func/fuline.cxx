@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuline.hxx"
+#include <fuline.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/tabline.hxx>
@@ -29,11 +29,11 @@
 #include <svx/xdef.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "ViewShell.hxx"
-#include "View.hxx"
-#include "Window.hxx"
-#include "drawdoc.hxx"
-#include "app.hrc"
+#include <ViewShell.hxx>
+#include <View.hxx>
+#include <Window.hxx>
+#include <drawdoc.hxx>
+#include <app.hrc>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <memory>

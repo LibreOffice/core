@@ -24,7 +24,7 @@
 #include <svx/svddef.hxx>
 #include <editeng/eeitem.hxx>
 
-#include "chartview/ChartSfxItemIds.hxx"
+#include <chartview/ChartSfxItemIds.hxx>
 
 #define CHARACTER_WHICHPAIRS \
     EE_ITEMS_START, EE_ITEMS_END,  \

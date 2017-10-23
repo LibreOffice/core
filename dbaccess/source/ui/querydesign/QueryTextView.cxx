@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "QueryTextView.hxx"
-#include "querycontainerwindow.hxx"
-#include "QueryViewSwitch.hxx"
-#include "sqledit.hxx"
-#include "undosqledit.hxx"
-#include "browserids.hxx"
-#include "querycontroller.hxx"
-#include "strings.hrc"
-#include "stringconstants.hxx"
+#include <QueryTextView.hxx>
+#include <querycontainerwindow.hxx>
+#include <QueryViewSwitch.hxx>
+#include <sqledit.hxx>
+#include <undosqledit.hxx>
+#include <browserids.hxx>
+#include <querycontroller.hxx>
+#include <strings.hrc>
+#include <stringconstants.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/types.hxx>
-#include "QueryDesignView.hxx"
+#include <QueryDesignView.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;

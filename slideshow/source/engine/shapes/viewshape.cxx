@@ -42,7 +42,7 @@
 #include <cppcanvas/basegfxfactory.hxx>
 
 #include "viewshape.hxx"
-#include "tools.hxx"
+#include <tools.hxx>
 
 using namespace ::com::sun::star;
 

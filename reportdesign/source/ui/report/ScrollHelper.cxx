@@ -16,11 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "ScrollHelper.hxx"
-#include "DesignView.hxx"
-#include "ReportController.hxx"
-#include "ReportWindow.hxx"
-#include "UITools.hxx"
+#include <ScrollHelper.hxx>
+#include <DesignView.hxx>
+#include <ReportController.hxx>
+#include <ReportWindow.hxx>
+#include <UITools.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <toolkit/helper/convert.hxx>
 

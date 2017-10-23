@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <memory>
-#include "ReportSection.hxx"
-#include "ReportWindow.hxx"
-#include "DesignView.hxx"
-#include "strings.hxx"
-#include "RptObject.hxx"
-#include "RptModel.hxx"
-#include "SectionView.hxx"
-#include "RptPage.hxx"
-#include "ReportController.hxx"
-#include "UITools.hxx"
-#include "ViewsWindow.hxx"
+#include <ReportSection.hxx>
+#include <ReportWindow.hxx>
+#include <DesignView.hxx>
+#include <strings.hxx>
+#include <RptObject.hxx>
+#include <RptModel.hxx>
+#include <SectionView.hxx>
+#include <RptPage.hxx>
+#include <ReportController.hxx>
+#include <UITools.hxx>
+#include <ViewsWindow.hxx>
 
 #include <svx/svdpagv.hxx>
 #include <editeng/eeitemid.hxx>
@@ -47,18 +47,18 @@
 #include <comphelper/propertyvalue.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/convert.hxx>
-#include "RptDef.hxx"
-#include "SectionWindow.hxx"
-#include "helpids.h"
-#include "strings.hrc"
-#include "dlgedclip.hxx"
-#include "UndoActions.hxx"
-#include "rptui_slotid.hrc"
+#include <RptDef.hxx>
+#include <SectionWindow.hxx>
+#include <helpids.h>
+#include <strings.hrc>
+#include <dlgedclip.hxx>
+#include <UndoActions.hxx>
+#include <rptui_slotid.hrc>
 
 #include <connectivity/dbtools.hxx>
 
 #include <vcl/lineinfo.hxx>
-#include "ColorChanger.hxx"
+#include <ColorChanger.hxx>
 
 #include <svl/itempool.hxx>
 #include <svtools/extcolorcfg.hxx>

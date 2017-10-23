@@ -31,7 +31,7 @@
 #include <ftninfo.hxx>
 #include <sectfrm.hxx>
 #include <objectformatter.hxx>
-#include "viewopt.hxx"
+#include <viewopt.hxx>
 #include <calbck.hxx>
 
 #define ENDNOTE 0x80000000

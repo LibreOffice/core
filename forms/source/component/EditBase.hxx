@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_EDITBASE_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_EDITBASE_HXX
 
-#include "FormComponent.hxx"
+#include <FormComponent.hxx>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XKeyListener.hpp>

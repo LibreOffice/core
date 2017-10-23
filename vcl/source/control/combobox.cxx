@@ -30,7 +30,7 @@
 #include <vcl/uitest/uiobject.hxx>
 
 #include <svdata.hxx>
-#include "listbox.hxx"
+#include <listbox.hxx>
 #include <controldata.hxx>
 
 

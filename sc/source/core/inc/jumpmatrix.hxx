@@ -24,9 +24,9 @@
 #include <formula/errorcodes.hxx>
 #include <limits.h>
 #include <vector>
-#include "types.hxx"
-#include "address.hxx"
-#include "token.hxx"
+#include <types.hxx>
+#include <address.hxx>
+#include <token.hxx>
 
 typedef ::std::vector< const formula::FormulaToken*> ScTokenVec;
 

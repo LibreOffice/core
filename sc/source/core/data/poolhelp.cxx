@@ -20,10 +20,10 @@
 #include <svl/zforlist.hxx>
 #include <editeng/editeng.hxx>
 
-#include "poolhelp.hxx"
-#include "document.hxx"
-#include "docpool.hxx"
-#include "stlpool.hxx"
+#include <poolhelp.hxx>
+#include <document.hxx>
+#include <docpool.hxx>
+#include <stlpool.hxx>
 
 ScPoolHelper::ScPoolHelper( ScDocument* pSourceDoc )
 :pFormTable(nullptr)

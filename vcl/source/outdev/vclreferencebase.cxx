@@ -18,10 +18,10 @@
  */
 
 #include <vcl/vclreferencebase.hxx>
-#include "svdata.hxx"
-#include "window.h"
-#include "outdev.h"
-#include "outdevstatestack.hxx"
+#include <svdata.hxx>
+#include <window.h>
+#include <outdev.h>
+#include <outdevstatestack.hxx>
 
 VclReferenceBase::VclReferenceBase() :
     mnRefCnt(1), // cf. VclPtrInstance and README.lifecycle

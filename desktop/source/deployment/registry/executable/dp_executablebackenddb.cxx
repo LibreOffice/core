@@ -20,7 +20,7 @@
 
 #include <rtl/string.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include "dp_misc.h"
+#include <dp_misc.h>
 #include "dp_executablebackenddb.hxx"
 
 

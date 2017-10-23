@@ -20,8 +20,8 @@
 #include <algorithm>
 
 #include <osl/diagnose.h>
-#include "oox/drawingml/clrscheme.hxx"
-#include "oox/token/tokens.hxx"
+#include <oox/drawingml/clrscheme.hxx>
+#include <oox/token/tokens.hxx>
 
 namespace oox { namespace drawingml {
 

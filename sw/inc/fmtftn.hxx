@@ -24,7 +24,7 @@
 #include <svl/poolitem.hxx>
 
 #include "swdllapi.h"
-#include <calbck.hxx>
+#include "calbck.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace text { class XFootnote; }

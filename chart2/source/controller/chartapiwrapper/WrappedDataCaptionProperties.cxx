@@ -19,8 +19,8 @@
 
 #include "WrappedDataCaptionProperties.hxx"
 #include "WrappedSeriesOrDiagramProperty.hxx"
-#include "macros.hxx"
-#include "FastPropertyIdRanges.hxx"
+#include <macros.hxx>
+#include <FastPropertyIdRanges.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/chart2/DataPointLabel.hpp>

@@ -10,11 +10,11 @@
 #include <rtl/ustring.hxx>
 
 #include "helper/qahelper.hxx"
-#include "document.hxx"
+#include <document.hxx>
 #include <stringutil.hxx>
-#include "address.hxx"
-#include "dataprovider.hxx"
-#include "datatransformation.hxx"
+#include <address.hxx>
+#include <dataprovider.hxx>
+#include <datatransformation.hxx>
 #include <vcl/scheduler.hxx>
 
 #include <memory>

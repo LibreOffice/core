@@ -25,12 +25,12 @@
 #include <vcl/edit.hxx>
 #include <vcl/group.hxx>
 #include <vcl/button.hxx>
-#include <actctrl.hxx>
+#include "actctrl.hxx"
 
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include <wrtsh.hxx>
-#include <optload.hxx>
+#include "wrtsh.hxx"
+#include "optload.hxx"
 
 class SwFieldMgr;
 class SwView;

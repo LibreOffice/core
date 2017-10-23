@@ -21,8 +21,8 @@
 #define INCLUDED_VCL_INC_GENERIC_PRINTERJOB_HXX
 
 #include <vcl/jobdata.hxx>
-#include "osl/file.hxx"
-#include "rtl/string.hxx"
+#include <osl/file.hxx>
+#include <rtl/string.hxx>
 
 #include <vector>
 

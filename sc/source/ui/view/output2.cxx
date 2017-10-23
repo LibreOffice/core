@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <editeng/adjustitem.hxx>
@@ -46,22 +46,22 @@
 #include <vcl/settings.hxx>
 #include <o3tl/make_unique.hxx>
 
-#include "output.hxx"
-#include "document.hxx"
-#include "formulacell.hxx"
-#include "attrib.hxx"
-#include "patattr.hxx"
-#include "cellform.hxx"
-#include "editutil.hxx"
-#include "progress.hxx"
-#include "scmod.hxx"
-#include "fillinfo.hxx"
-#include "viewdata.hxx"
-#include "tabvwsh.hxx"
-#include "docsh.hxx"
-#include "markdata.hxx"
-#include "stlsheet.hxx"
-#include "spellcheckcontext.hxx"
+#include <output.hxx>
+#include <document.hxx>
+#include <formulacell.hxx>
+#include <attrib.hxx>
+#include <patattr.hxx>
+#include <cellform.hxx>
+#include <editutil.hxx>
+#include <progress.hxx>
+#include <scmod.hxx>
+#include <fillinfo.hxx>
+#include <viewdata.hxx>
+#include <tabvwsh.hxx>
+#include <docsh.hxx>
+#include <markdata.hxx>
+#include <stlsheet.hxx>
+#include <spellcheckcontext.hxx>
 #include <scopetools.hxx>
 
 #include <com/sun/star/i18n/DirectionProperty.hpp>

@@ -24,7 +24,7 @@
 #include <com/sun/star/xml/dom/XComment.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <characterdata.hxx>
+#include "characterdata.hxx"
 
 namespace DOM
 {

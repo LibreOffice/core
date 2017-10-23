@@ -19,11 +19,11 @@
 
 
 #include <memory>
-#include "dp_misc.h"
-#include "dp_backend.h"
-#include "dp_services.hxx"
-#include "dp_ucb.h"
-#include "dp_interact.h"
+#include <dp_misc.h>
+#include <dp_backend.h>
+#include <dp_services.hxx>
+#include <dp_ucb.h>
+#include <dp_interact.h>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <rtl/string.hxx>
 #include <osl/file.hxx>

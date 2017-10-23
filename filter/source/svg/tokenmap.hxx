@@ -9,7 +9,7 @@
 #ifndef INCLUDED_FILTER_SOURCE_SVG_TOKENMAP_HXX
 #define INCLUDED_FILTER_SOURCE_SVG_TOKENMAP_HXX
 
-#include "tokens.hxx"
+#include <tokens.hxx>
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>

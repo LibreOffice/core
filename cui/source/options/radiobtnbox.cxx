@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "radiobtnbox.hxx"
+#include <radiobtnbox.hxx>
 #include <dialmgr.hxx>
 
-#include "svtools/svlbitm.hxx"
+#include <svtools/svlbitm.hxx>
 
 namespace svx {
 

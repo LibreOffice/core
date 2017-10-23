@@ -19,40 +19,40 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include "ViewShellBase.hxx"
+#include <ViewShellBase.hxx>
 #include <algorithm>
-#include "EventMultiplexer.hxx"
-#include "cache/SlsPageCacheManager.hxx"
-#include "sdresid.hxx"
-#include "app.hrc"
-#include "strings.hrc"
-#include "slideshow.hxx"
-#include "unokywds.hxx"
+#include <EventMultiplexer.hxx>
+#include <cache/SlsPageCacheManager.hxx>
+#include <sdresid.hxx>
+#include <app.hrc>
+#include <strings.hrc>
+#include <slideshow.hxx>
+#include <unokywds.hxx>
 #include <svx/svxids.hrc>
-#include "DrawDocShell.hxx"
+#include <DrawDocShell.hxx>
 #include <sfx2/app.hxx>
-#include "PaneChildWindows.hxx"
-#include "ViewShellManager.hxx"
-#include "DrawController.hxx"
-#include "FrameView.hxx"
-#include "ViewTabBar.hxx"
+#include <PaneChildWindows.hxx>
+#include <ViewShellManager.hxx>
+#include <DrawController.hxx>
+#include <FrameView.hxx>
+#include <ViewTabBar.hxx>
 #include <sfx2/event.hxx>
-#include "drawdoc.hxx"
+#include <drawdoc.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
-#include "DrawViewShell.hxx"
-#include "GraphicViewShell.hxx"
-#include "OutlineViewShell.hxx"
-#include "SlideSorterViewShell.hxx"
-#include "PresentationViewShell.hxx"
-#include "FormShellManager.hxx"
-#include "ToolBarManager.hxx"
-#include "Window.hxx"
-#include "framework/ConfigurationController.hxx"
-#include "DocumentRenderer.hxx"
-#include "sdattr.hxx"
-#include "optsitem.hxx"
+#include <DrawViewShell.hxx>
+#include <GraphicViewShell.hxx>
+#include <OutlineViewShell.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <PresentationViewShell.hxx>
+#include <FormShellManager.hxx>
+#include <ToolBarManager.hxx>
+#include <Window.hxx>
+#include <framework/ConfigurationController.hxx>
+#include <DocumentRenderer.hxx>
+#include <sdattr.hxx>
+#include <optsitem.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
@@ -62,7 +62,7 @@
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 
 #include <rtl/ref.hxx>
 #include <sfx2/msg.hxx>
@@ -80,12 +80,12 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <editeng/editview.hxx>
 
-#include "fubullet.hxx"
-#include "drawview.hxx"
+#include <fubullet.hxx>
+#include <drawview.hxx>
 
 using namespace sd;
 #define ViewShellBase
-#include "sdslots.hxx"
+#include <sdslots.hxx>
 
 using ::sd::framework::FrameworkHelper;
 

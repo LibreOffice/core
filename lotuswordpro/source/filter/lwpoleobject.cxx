@@ -59,14 +59,14 @@
  */
 
 #include <tools/stream.hxx>
-#include "lwpglobalmgr.hxx"
+#include <lwpglobalmgr.hxx>
 #include "lwpoleobject.hxx"
-#include "lwpobjfactory.hxx"
-#include "lwpidxmgr.hxx"
+#include <lwpobjfactory.hxx>
+#include <lwpidxmgr.hxx>
 #include "lwp9reader.hxx"
-#include "xfilter/xfparagraph.hxx"
+#include <xfilter/xfparagraph.hxx>
 #include "lwpframelayout.hxx"
-#include "xfilter/xfstylemanager.hxx"
+#include <xfilter/xfstylemanager.hxx>
 #include "bento.hxx"
 
 /**

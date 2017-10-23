@@ -12,7 +12,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/frame/XController.hpp>
 
-#include "ObjectIdentifier.hxx"
+#include <ObjectIdentifier.hxx>
 
 namespace chart {
 namespace sidebar {

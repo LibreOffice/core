@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <svx/svdobj.hxx>
@@ -31,45 +31,45 @@
 #include <sfx2/objsh.hxx>
 #include <rtl/ustring.hxx>
 
-#include "formulacell.hxx"
-#include "dociter.hxx"
-#include "document.hxx"
-#include "dbdata.hxx"
-#include "global.hxx"
-#include "globstr.hrc"
-#include "progress.hxx"
-#include "conditio.hxx"
-#include "dpobject.hxx"
-#include "attrib.hxx"
-#include "scextopt.hxx"
-#include "stlsheet.hxx"
-#include "stlpool.hxx"
-#include "olinetab.hxx"
-#include "unonames.hxx"
-#include "convuno.hxx"
-#include "patattr.hxx"
-#include "docoptio.hxx"
-#include "tabprotection.hxx"
-#include "postit.hxx"
+#include <formulacell.hxx>
+#include <dociter.hxx>
+#include <document.hxx>
+#include <dbdata.hxx>
+#include <global.hxx>
+#include <globstr.hrc>
+#include <progress.hxx>
+#include <conditio.hxx>
+#include <dpobject.hxx>
+#include <attrib.hxx>
+#include <scextopt.hxx>
+#include <stlsheet.hxx>
+#include <stlpool.hxx>
+#include <olinetab.hxx>
+#include <unonames.hxx>
+#include <convuno.hxx>
+#include <patattr.hxx>
+#include <docoptio.hxx>
+#include <tabprotection.hxx>
+#include <postit.hxx>
 
-#include "excdoc.hxx"
-#include "namebuff.hxx"
-#include "xeextlst.hxx"
-#include "biffhelper.hxx"
+#include <excdoc.hxx>
+#include <namebuff.hxx>
+#include <xeextlst.hxx>
+#include <biffhelper.hxx>
 
-#include "xcl97rec.hxx"
-#include "xcl97esc.hxx"
-#include "xetable.hxx"
-#include "xelink.hxx"
-#include "xename.hxx"
-#include "xepage.hxx"
-#include "xeview.hxx"
-#include "xecontent.hxx"
-#include "xeescher.hxx"
-#include "xepivot.hxx"
-#include "XclExpChangeTrack.hxx"
+#include <xcl97rec.hxx>
+#include <xcl97esc.hxx>
+#include <xetable.hxx>
+#include <xelink.hxx>
+#include <xename.hxx>
+#include <xepage.hxx>
+#include <xeview.hxx>
+#include <xecontent.hxx>
+#include <xeescher.hxx>
+#include <xepivot.hxx>
+#include <XclExpChangeTrack.hxx>
 #include <xepivotxml.hxx>
-#include "xedbdata.hxx"
+#include <xedbdata.hxx>
 
 #include <math.h>
 

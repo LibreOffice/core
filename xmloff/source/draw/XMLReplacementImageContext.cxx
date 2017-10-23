@@ -25,7 +25,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
-#include "XMLReplacementImageContext.hxx"
+#include <XMLReplacementImageContext.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::makeAny;

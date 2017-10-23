@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "querycontainerwindow.hxx"
-#include "QueryDesignView.hxx"
+#include <querycontainerwindow.hxx>
+#include <QueryDesignView.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include "JoinController.hxx"
+#include <JoinController.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include "stringconstants.hxx"
-#include "strings.hxx"
+#include <stringconstants.hxx>
+#include <strings.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <vcl/fixed.hxx>
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/util/XCloseable.hpp>

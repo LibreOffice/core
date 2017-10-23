@@ -24,7 +24,7 @@
 #include <targets.h>
 #include <services.h>
 #include <general.h>
-#include <isstartmoduledispatch.hxx>
+#include "isstartmoduledispatch.hxx"
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XController.hpp>

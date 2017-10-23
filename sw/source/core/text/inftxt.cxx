@@ -61,7 +61,7 @@
 #include <doc.hxx>
 #include <pam.hxx>
 #include <SwGrammarMarkUp.hxx>
-#include "numrule.hxx"
+#include <numrule.hxx>
 #include <EnhancedPDFExportHelper.hxx>
 #include <docufld.hxx>
 #include <frmfmt.hxx>

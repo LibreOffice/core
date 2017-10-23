@@ -44,7 +44,7 @@
 #include <com/sun/star/awt/Command.hpp>
 #include <svl/languageoptions.hxx>
 
-#include "helper/mischelper.hxx"
+#include <helper/mischelper.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>

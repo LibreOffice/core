@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SALHELPER_DYNLOAD_HXX
 #define INCLUDED_SALHELPER_DYNLOAD_HXX
 
-#include <sal/types.h>
-#include <rtl/ustring.hxx>
-#include <osl/module.h>
-#include <salhelper/salhelperdllapi.h>
+#include "sal/types.h"
+#include "rtl/ustring.hxx"
+#include "osl/module.h"
+#include "salhelper/salhelperdllapi.h"
 
 namespace salhelper
 {

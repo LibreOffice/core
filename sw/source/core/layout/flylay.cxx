@@ -17,23 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "pagefrm.hxx"
-#include "rootfrm.hxx"
-#include "cntfrm.hxx"
-#include "dflyobj.hxx"
-#include "dcontact.hxx"
-#include "ftnfrm.hxx"
-#include "frmtool.hxx"
-#include "hints.hxx"
-#include "sectfrm.hxx"
+#include <pagefrm.hxx>
+#include <rootfrm.hxx>
+#include <cntfrm.hxx>
+#include <dflyobj.hxx>
+#include <dcontact.hxx>
+#include <ftnfrm.hxx>
+#include <frmtool.hxx>
+#include <hints.hxx>
+#include <sectfrm.hxx>
 
 #include <svx/svdpage.hxx>
 #include <editeng/ulspitem.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
-#include "ndole.hxx"
-#include "tabfrm.hxx"
-#include "flyfrms.hxx"
+#include <ndole.hxx>
+#include <tabfrm.hxx>
+#include <flyfrms.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <environmentofanchoredobject.hxx>
 #include <sortedobjs.hxx>

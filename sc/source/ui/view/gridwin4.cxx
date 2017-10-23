@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <svtools/colorcfg.hxx>
@@ -35,36 +35,36 @@
 #include <sfx2/lokhelper.hxx>
 
 #include <svx/svdview.hxx>
-#include "tabvwsh.hxx"
+#include <tabvwsh.hxx>
 
-#include "gridwin.hxx"
-#include "viewdata.hxx"
-#include "output.hxx"
-#include "document.hxx"
-#include "attrib.hxx"
-#include "patattr.hxx"
-#include "dbdata.hxx"
-#include "docoptio.hxx"
-#include "notemark.hxx"
-#include "dbfunc.hxx"
-#include "scmod.hxx"
-#include "inputhdl.hxx"
-#include "rfindlst.hxx"
-#include "hiranges.hxx"
-#include "pagedata.hxx"
-#include "docpool.hxx"
-#include "globstr.hrc"
-#include "docsh.hxx"
-#include "cbutton.hxx"
-#include "invmerge.hxx"
-#include "editutil.hxx"
-#include "inputopt.hxx"
-#include "fillinfo.hxx"
-#include "dpcontrol.hxx"
-#include "queryparam.hxx"
-#include "queryentry.hxx"
-#include "markdata.hxx"
-#include "sc.hrc"
+#include <gridwin.hxx>
+#include <viewdata.hxx>
+#include <output.hxx>
+#include <document.hxx>
+#include <attrib.hxx>
+#include <patattr.hxx>
+#include <dbdata.hxx>
+#include <docoptio.hxx>
+#include <notemark.hxx>
+#include <dbfunc.hxx>
+#include <scmod.hxx>
+#include <inputhdl.hxx>
+#include <rfindlst.hxx>
+#include <hiranges.hxx>
+#include <pagedata.hxx>
+#include <docpool.hxx>
+#include <globstr.hrc>
+#include <docsh.hxx>
+#include <cbutton.hxx>
+#include <invmerge.hxx>
+#include <editutil.hxx>
+#include <inputopt.hxx>
+#include <fillinfo.hxx>
+#include <dpcontrol.hxx>
+#include <queryparam.hxx>
+#include <queryentry.hxx>
+#include <markdata.hxx>
+#include <sc.hrc>
 #include <vcl/virdev.hxx>
 #include <svx/sdrpaintwindow.hxx>
 

@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuzoom.hxx"
+#include <fuzoom.hxx>
 
 #include <svx/svxids.hrc>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "app.hrc"
+#include <app.hrc>
 #include <svx/svdpagv.hxx>
 
-#include "FrameView.hxx"
-#include "ViewShell.hxx"
-#include "View.hxx"
-#include "Window.hxx"
-#include "drawdoc.hxx"
-#include "zoomlist.hxx"
+#include <FrameView.hxx>
+#include <ViewShell.hxx>
+#include <View.hxx>
+#include <Window.hxx>
+#include <drawdoc.hxx>
+#include <zoomlist.hxx>
 
 namespace sd {
 

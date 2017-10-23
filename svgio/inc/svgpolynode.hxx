@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVGIO_INC_SVGPOLYNODE_HXX
 #define INCLUDED_SVGIO_INC_SVGPOLYNODE_HXX
 
-#include <svgnode.hxx>
-#include <svgstyleattributes.hxx>
+#include "svgnode.hxx"
+#include "svgstyleattributes.hxx"
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 namespace svgio

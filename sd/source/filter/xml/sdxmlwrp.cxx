@@ -28,17 +28,17 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/sfxsids.hrc>
-#include "drawdoc.hxx"
-#include "Outliner.hxx"
+#include <drawdoc.hxx>
+#include <Outliner.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/xmlgrhlp.hxx>
 
-#include "DrawDocShell.hxx"
+#include <DrawDocShell.hxx>
 
-#include "sdxmlwrp.hxx"
-#include "strmname.h"
+#include <sdxmlwrp.hxx>
+#include <strmname.h>
 #include <svx/xmleohlp.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/document/XFilter.hpp>
@@ -70,11 +70,11 @@
 #include <svl/stritem.hxx>
 #include <svtools/sfxecode.hxx>
 
-#include "sddll.hxx"
-#include "sderror.hxx"
-#include "sdresid.hxx"
+#include <sddll.hxx>
+#include <sderror.hxx>
+#include <sdresid.hxx>
 #include "sdtransform.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <sfx2/frame.hxx>
 

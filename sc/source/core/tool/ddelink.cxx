@@ -24,15 +24,15 @@
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
 
-#include "ddelink.hxx"
-#include "brdcst.hxx"
-#include "document.hxx"
-#include "scmatrix.hxx"
-#include "patattr.hxx"
-#include "rechead.hxx"
-#include "rangeseq.hxx"
-#include "sc.hrc"
-#include "hints.hxx"
+#include <ddelink.hxx>
+#include <brdcst.hxx>
+#include <document.hxx>
+#include <scmatrix.hxx>
+#include <patattr.hxx>
+#include <rechead.hxx>
+#include <rangeseq.hxx>
+#include <sc.hrc>
+#include <hints.hxx>
 
 
 #define DDE_TXT_ENCODING    osl_getThreadTextEncoding()

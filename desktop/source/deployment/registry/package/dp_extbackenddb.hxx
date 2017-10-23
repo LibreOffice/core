@@ -25,7 +25,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include "dp_backenddb.hxx"
+#include <dp_backenddb.hxx>
 
 namespace com { namespace sun { namespace star {
         namespace uno {

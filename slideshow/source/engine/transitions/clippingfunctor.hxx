@@ -25,7 +25,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <transitioninfo.hxx>
-#include <parametricpolypolygon.hxx>
+#include "parametricpolypolygon.hxx"
 
 
 namespace slideshow

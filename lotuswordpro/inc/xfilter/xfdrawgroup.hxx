@@ -60,9 +60,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWGROUP_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWGROUP_HXX
 
-#include "xfilter/xfdrawobj.hxx"
-#include "xfilter/xfframe.hxx"
-#include "xfilter/xfcontentcontainer.hxx"
+#include <xfilter/xfdrawobj.hxx>
+#include <xfilter/xfframe.hxx>
+#include <xfilter/xfcontentcontainer.hxx>
 
 /**
  * @brief

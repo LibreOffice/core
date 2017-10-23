@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ole/oleobjecthelper.hxx"
+#include <oox/ole/oleobjecthelper.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <osl/diagnose.h>
 #include <comphelper/sequenceashashmap.hxx>
-#include "oox/helper/propertymap.hxx"
+#include <oox/helper/propertymap.hxx>
 #include <oox/token/properties.hxx>
 
 namespace oox {

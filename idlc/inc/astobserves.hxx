@@ -19,7 +19,7 @@
 #ifndef INCLUDED_IDLC_INC_ASTOBSERVES_HXX
 #define INCLUDED_IDLC_INC_ASTOBSERVES_HXX
 
-#include <astinterface.hxx>
+#include "astinterface.hxx"
 
 class AstObserves : public AstDeclaration
 {

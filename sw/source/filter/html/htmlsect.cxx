@@ -29,7 +29,7 @@
 #include <svtools/htmlkywd.hxx>
 #include <sfx2/linkmgr.hxx>
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <fmtornt.hxx>
 #include <fmthdft.hxx>
 #include <fmtcntnt.hxx>
@@ -39,16 +39,16 @@
 #include <fmtpdsc.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtflcnt.hxx>
-#include "frmatr.hxx"
-#include "doc.hxx"
-#include "pam.hxx"
-#include "ndtxt.hxx"
-#include "shellio.hxx"
-#include "section.hxx"
-#include "poolfmt.hxx"
-#include "pagedesc.hxx"
-#include "swtable.hxx"
-#include "viewsh.hxx"
+#include <frmatr.hxx>
+#include <doc.hxx>
+#include <pam.hxx>
+#include <ndtxt.hxx>
+#include <shellio.hxx>
+#include <section.hxx>
+#include <poolfmt.hxx>
+#include <pagedesc.hxx>
+#include <swtable.hxx>
+#include <viewsh.hxx>
 #include "swcss1.hxx"
 #include "swhtml.hxx"
 

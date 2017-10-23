@@ -40,7 +40,7 @@
 #include <linguistic/lngprophelp.hxx>
 
 #include <osl/file.hxx>
-#include "mythes.hxx"
+#include <mythes.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

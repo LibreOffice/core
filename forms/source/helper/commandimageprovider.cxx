@@ -18,7 +18,7 @@
  */
 
 
-#include "commandimageprovider.hxx"
+#include <commandimageprovider.hxx>
 
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>

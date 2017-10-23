@@ -18,8 +18,8 @@
  */
 
 #include "xmlithlp.hxx"
-#include "hintids.hxx"
-#include "unomid.h"
+#include <hintids.hxx>
+#include <unomid.h>
 #include <sax/tools/converter.hxx>
 #include <svx/unomid.hxx>
 #include <editeng/lrspitem.hxx>
@@ -29,11 +29,11 @@
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/brushitem.hxx>
-#include "fmtpdsc.hxx"
-#include "fmtornt.hxx"
-#include "fmtfsize.hxx"
+#include <fmtpdsc.hxx>
+#include <fmtornt.hxx>
+#include <fmtfsize.hxx>
 
-#include "fmtlsplt.hxx"
+#include <fmtlsplt.hxx>
 #include <xmloff/xmluconv.hxx>
 
 using ::editeng::SvxBorderLine;

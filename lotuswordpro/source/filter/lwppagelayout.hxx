@@ -58,7 +58,7 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPAGELAYOUT_HXX
 
 #include "lwplayout.hxx"
-#include "xfilter/xfmasterpage.hxx"
+#include <xfilter/xfmasterpage.hxx>
 
 
 class LwpHeaderLayout;

@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbexchange.hxx"
-#include "dbtreelistbox.hxx"
+#include <dbexchange.hxx>
+#include <dbtreelistbox.hxx>
 #include "dbtreemodel.hxx"
 #include "dbtreeview.hxx"
-#include "strings.hrc"
-#include "stringconstants.hxx"
-#include "QEnumTypes.hxx"
-#include "UITools.hxx"
-#include "unodatbr.hxx"
+#include <strings.hrc>
+#include <stringconstants.hxx>
+#include <QEnumTypes.hxx>
+#include <UITools.hxx>
+#include <unodatbr.hxx>
 
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -37,7 +37,7 @@
 #include <svx/dataaccessdescriptor.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 #include <algorithm>
 #include <functional>

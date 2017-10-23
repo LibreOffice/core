@@ -21,7 +21,7 @@
 
 #include "GeneralUndo.hxx"
 #include <vcl/vclptr.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 
 namespace dbaui
 {

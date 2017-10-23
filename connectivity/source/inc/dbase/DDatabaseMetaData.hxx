@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DDATABASEMETADATA_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DDATABASEMETADATA_HXX
 
-#include "file/FDatabaseMetaData.hxx"
+#include <file/FDatabaseMetaData.hxx>
 
 namespace connectivity
 {

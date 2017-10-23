@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WTABLE_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WTABLE_HXX
 
-#include "component/CTable.hxx"
+#include <component/CTable.hxx>
 #include <tools/date.hxx>
 
 namespace com

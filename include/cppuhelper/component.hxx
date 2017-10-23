@@ -19,14 +19,14 @@
 #ifndef INCLUDED_CPPUHELPER_COMPONENT_HXX
 #define INCLUDED_CPPUHELPER_COMPONENT_HXX
 
-#include <cppuhelper/weakagg.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include "cppuhelper/weakagg.hxx"
+#include "cppuhelper/interfacecontainer.h"
 
-#include <cppuhelper/implbase1.hxx>
+#include "cppuhelper/implbase1.hxx"
 
-#include <com/sun/star/lang/XComponent.hpp>
+#include "com/sun/star/lang/XComponent.hpp"
 
-#include <cppuhelper/cppuhelperdllapi.h>
+#include "cppuhelper/cppuhelperdllapi.h"
 
 namespace osl { class Mutex; }
 

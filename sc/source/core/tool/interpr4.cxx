@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "interpre.hxx"
+#include <interpre.hxx>
 
 #include <rangelst.hxx>
 #include <rtl/math.hxx>
@@ -43,29 +43,29 @@
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include "global.hxx"
-#include "dbdata.hxx"
-#include "formulacell.hxx"
-#include "callform.hxx"
-#include "addincol.hxx"
-#include "document.hxx"
-#include "dociter.hxx"
-#include "docoptio.hxx"
-#include "scmatrix.hxx"
-#include "adiasync.hxx"
-#include "sc.hrc"
-#include "cellsuno.hxx"
-#include "optuno.hxx"
-#include "rangeseq.hxx"
-#include "addinlis.hxx"
-#include "jumpmatrix.hxx"
-#include "parclass.hxx"
-#include "externalrefmgr.hxx"
+#include <global.hxx>
+#include <dbdata.hxx>
+#include <formulacell.hxx>
+#include <callform.hxx>
+#include <addincol.hxx>
+#include <document.hxx>
+#include <dociter.hxx>
+#include <docoptio.hxx>
+#include <scmatrix.hxx>
+#include <adiasync.hxx>
+#include <sc.hrc>
+#include <cellsuno.hxx>
+#include <optuno.hxx>
+#include <rangeseq.hxx>
+#include <addinlis.hxx>
+#include <jumpmatrix.hxx>
+#include <parclass.hxx>
+#include <externalrefmgr.hxx>
 #include <formula/FormulaCompiler.hxx>
-#include "macromgr.hxx"
-#include "doubleref.hxx"
-#include "queryparam.hxx"
-#include "tokenarray.hxx"
+#include <macromgr.hxx>
+#include <doubleref.hxx>
+#include <queryparam.hxx>
+#include <tokenarray.hxx>
 
 #include <math.h>
 #include <float.h>

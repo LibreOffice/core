@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xexptran.hxx"
+#include <xexptran.hxx>
 #include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>

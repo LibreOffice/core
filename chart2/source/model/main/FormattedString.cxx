@@ -19,9 +19,9 @@
 
 #include "FormattedString.hxx"
 
-#include "CharacterProperties.hxx"
-#include "PropertyHelper.hxx"
-#include "macros.hxx"
+#include <CharacterProperties.hxx>
+#include <PropertyHelper.hxx>
+#include <macros.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/supportsservice.hxx>
 

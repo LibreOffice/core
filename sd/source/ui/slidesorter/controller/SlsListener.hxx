@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_CONTROLLER_SLSLISTENER_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_CONTROLLER_SLSLISTENER_HXX
 
-#include "MutexOwner.hxx"
-#include "controller/SlideSorterController.hxx"
+#include <MutexOwner.hxx>
+#include <controller/SlideSorterController.hxx>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>

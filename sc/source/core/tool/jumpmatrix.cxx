@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "jumpmatrix.hxx"
-#include "scmatrix.hxx"
+#include <jumpmatrix.hxx>
+#include <scmatrix.hxx>
 
 #include <osl/diagnose.h>
 

@@ -19,7 +19,7 @@
 
 
 #include "propertyanimationnode.hxx"
-#include "animationfactory.hxx"
+#include <animationfactory.hxx>
 
 using namespace com::sun::star;
 

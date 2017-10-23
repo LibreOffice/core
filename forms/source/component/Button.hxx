@@ -21,9 +21,9 @@
 #define INCLUDED_FORMS_SOURCE_COMPONENT_BUTTON_HXX
 
 #include "clickableimage.hxx"
-#include "togglestate.hxx"
-#include "formnavigation.hxx"
-#include "resettable.hxx"
+#include <togglestate.hxx>
+#include <formnavigation.hxx>
+#include <resettable.hxx>
 
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/lang/EventObject.hpp>

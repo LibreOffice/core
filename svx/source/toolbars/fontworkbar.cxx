@@ -22,7 +22,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewsh.hxx>
-#include "svx/unoapi.hxx"
+#include <svx/unoapi.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <svx/dialmgr.hxx>
@@ -30,7 +30,7 @@
 #include <svx/strings.hrc>
 #include <svx/svdview.hxx>
 #include <svx/sdasitm.hxx>
-#include "svx/gallery.hxx"
+#include <svx/gallery.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svl/itempool.hxx>
@@ -43,7 +43,7 @@
 
 #include <svx/svxids.hrc>
 #include <svx/fontworkbar.hxx>
-#include "svx/fontworkgallery.hxx"
+#include <svx/fontworkgallery.hxx>
 
 
 using namespace ::svx;

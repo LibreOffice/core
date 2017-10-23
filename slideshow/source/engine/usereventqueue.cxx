@@ -27,10 +27,10 @@
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 
-#include "delayevent.hxx"
-#include "usereventqueue.hxx"
-#include "cursormanager.hxx"
-#include "slideshowexceptions.hxx"
+#include <delayevent.hxx>
+#include <usereventqueue.hxx>
+#include <cursormanager.hxx>
+#include <slideshowexceptions.hxx>
 
 #include <vector>
 #include <queue>

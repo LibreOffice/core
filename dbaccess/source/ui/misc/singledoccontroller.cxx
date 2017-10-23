@@ -19,11 +19,11 @@
 
 #include <dbaccess/dbaundomanager.hxx>
 #include <dbaccess/dataview.hxx>
-#include "core_resource.hxx"
-#include "singledoccontroller.hxx"
-#include "browserids.hxx"
-#include "strings.hrc"
-#include "stringconstants.hxx"
+#include <core_resource.hxx>
+#include <singledoccontroller.hxx>
+#include <browserids.hxx>
+#include <strings.hrc>
+#include <stringconstants.hxx>
 
 #include <svl/undo.hxx>
 

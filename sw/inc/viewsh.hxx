@@ -22,9 +22,9 @@
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include "swdllapi.h"
-#include <swtypes.hxx>
-#include <ring.hxx>
-#include <swrect.hxx>
+#include "swtypes.hxx"
+#include "ring.hxx"
+#include "swrect.hxx"
 #include <memory>
 #include <stack>
 #include <vcl/mapmod.hxx>

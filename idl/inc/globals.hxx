@@ -20,7 +20,7 @@
 #ifndef INCLUDED_IDL_INC_GLOBALS_HXX
 #define INCLUDED_IDL_INC_GLOBALS_HXX
 
-#include <hash.hxx>
+#include "hash.hxx"
 
 struct SvGlobalHashNames
 {

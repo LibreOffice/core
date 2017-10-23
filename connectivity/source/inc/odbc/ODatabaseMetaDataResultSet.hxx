@@ -35,9 +35,9 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include "odbc/OStatement.hxx"
-#include "odbc/ODatabaseMetaData.hxx"
-#include "odbc/odbcbasedllapi.hxx"
+#include <odbc/OStatement.hxx>
+#include <odbc/ODatabaseMetaData.hxx>
+#include <odbc/odbcbasedllapi.hxx>
 #include <connectivity/StdTypeDefs.hxx>
 #include <memory>
 

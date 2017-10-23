@@ -22,7 +22,7 @@
 #ifdef DBG_UTIL
 
 #include <rtl/ustring.hxx>
-#include <tox.hxx>
+#include "tox.hxx"
 #include <cstdio>
 #include <unordered_map>
 

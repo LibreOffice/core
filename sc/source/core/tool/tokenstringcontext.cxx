@@ -7,12 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "tokenstringcontext.hxx"
-#include "compiler.hxx"
-#include "document.hxx"
-#include "dbdata.hxx"
-#include "externalrefmgr.hxx"
-#include "globstr.hrc"
+#include <tokenstringcontext.hxx>
+#include <compiler.hxx>
+#include <document.hxx>
+#include <dbdata.hxx>
+#include <externalrefmgr.hxx>
+#include <globstr.hrc>
 
 using namespace com::sun::star;
 

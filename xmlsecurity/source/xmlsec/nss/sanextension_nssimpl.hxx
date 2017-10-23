@@ -29,7 +29,7 @@
 #include <com/sun/star/security/XCertificateExtension.hpp>
 #include <com/sun/star/security/XSanExtension.hpp>
 #include <com/sun/star/security/CertAltNameEntry.hpp>
-#include "certificateextension_certextn.hxx"
+#include <certificateextension_certextn.hxx>
 #include <vector>
 
 class SanExtensionImpl : public ::cppu::WeakImplHelper<

@@ -20,7 +20,7 @@
 
 #include <set>
 
-#include "svx/UnoNamespaceMap.hxx"
+#include <svx/UnoNamespaceMap.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -28,8 +28,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svl/itempool.hxx>
-#include "svx/unoapi.hxx"
-#include "editeng/xmlcnitm.hxx"
+#include <svx/unoapi.hxx>
+#include <editeng/xmlcnitm.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star;

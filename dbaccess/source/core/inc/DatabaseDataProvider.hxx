@@ -19,26 +19,26 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_DATABASEDATAPROVIDER_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_DATABASEDATAPROVIDER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/chart2/data/XDatabaseDataProvider.hpp"
-#include "com/sun/star/chart2/XInternalDataProvider.hpp"
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
+#include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
 #include <cppuhelper/compbase.hxx>
-#include "cppuhelper/basemutex.hxx"
-#include "cppuhelper/propertysetmixin.hxx"
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/propertysetmixin.hxx>
 #include <cppuhelper/implementationentry.hxx>
 
 #include <comphelper/sequence.hxx>
 
-#include "connectivity/parameters.hxx"
-#include "connectivity/filtermanager.hxx"
+#include <connectivity/parameters.hxx>
+#include <connectivity/filtermanager.hxx>
 
 
 namespace dbaccess

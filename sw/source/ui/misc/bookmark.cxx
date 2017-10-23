@@ -26,16 +26,16 @@
 #include <svtools/treelistentry.hxx>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 
-#include "swabstdlg.hxx"
-#include "swuiexp.hxx"
-#include "view.hxx"
-#include "basesh.hxx"
-#include "wrtsh.hxx"
-#include "cmdid.h"
-#include "bookmark.hxx"
-#include "docsh.hxx"
-#include "globals.hrc"
-#include "strings.hrc"
+#include <swabstdlg.hxx>
+#include <swuiexp.hxx>
+#include <view.hxx>
+#include <basesh.hxx>
+#include <wrtsh.hxx>
+#include <cmdid.h>
+#include <bookmark.hxx>
+#include <docsh.hxx>
+#include <globals.hrc>
+#include <strings.hrc>
 
 using namespace ::com::sun::star;
 

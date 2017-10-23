@@ -28,7 +28,7 @@
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
-#include "converters.hxx"
+#include <converters.hxx>
 
 using namespace com::sun::star;
 

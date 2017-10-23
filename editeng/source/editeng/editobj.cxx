@@ -27,10 +27,10 @@
 
 #include <tools/stream.hxx>
 
-#include "editeng/fieldupdater.hxx"
-#include "editeng/macros.hxx"
-#include "editeng/section.hxx"
-#include <editobj2.hxx>
+#include <editeng/fieldupdater.hxx>
+#include <editeng/macros.hxx>
+#include <editeng/section.hxx>
+#include "editobj2.hxx"
 #include <editeng/editdata.hxx>
 #include <editattr.hxx>
 #include <editeng/editeng.hxx>
@@ -45,7 +45,7 @@
 
 #include <vcl/graph.hxx>
 #include <svl/intitem.hxx>
-#include "svl/sharedstringpool.hxx"
+#include <svl/sharedstringpool.hxx>
 #include <unotools/fontcvt.hxx>
 #include <tools/tenccvt.hxx>
 

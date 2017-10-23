@@ -62,22 +62,22 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <cppuhelper/bootstrap.hxx>
 
-#include "PivotTableDataProvider.hxx"
-#include "chart2uno.hxx"
-#include "fuinsert.hxx"
-#include "tabvwsh.hxx"
-#include "sc.hrc"
-#include "chartarr.hxx"
-#include "docsh.hxx"
-#include "document.hxx"
-#include "undotab.hxx"
-#include "chartlis.hxx"
-#include "uiitems.hxx"
-#include "globstr.hrc"
-#include "drawview.hxx"
-#include "markdata.hxx"
-#include "gridwin.hxx"
-#include "dpobject.hxx"
+#include <PivotTableDataProvider.hxx>
+#include <chart2uno.hxx>
+#include <fuinsert.hxx>
+#include <tabvwsh.hxx>
+#include <sc.hrc>
+#include <chartarr.hxx>
+#include <docsh.hxx>
+#include <document.hxx>
+#include <undotab.hxx>
+#include <chartlis.hxx>
+#include <uiitems.hxx>
+#include <globstr.hrc>
+#include <drawview.hxx>
+#include <markdata.hxx>
+#include <gridwin.hxx>
+#include <dpobject.hxx>
 #include <memory>
 
 using namespace css;

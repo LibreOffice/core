@@ -25,8 +25,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
-#include <ManifestDefines.hxx>
-#include <ManifestExport.hxx>
+#include "ManifestDefines.hxx"
+#include "ManifestExport.hxx"
 #include <sax/tools/converter.hxx>
 
 #include <osl/diagnose.h>

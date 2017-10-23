@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "swuiidxmrk.hxx"
+#include <swuiidxmrk.hxx>
 #include <hintids.hxx>
 #include <helpids.h>
 #include <comphelper/processfactory.hxx>

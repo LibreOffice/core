@@ -22,7 +22,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include "provider.hxx"
-#include "tvfactory.hxx"
+#include <tvfactory.hxx>
 
 using namespace com::sun::star;
 

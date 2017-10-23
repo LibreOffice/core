@@ -19,7 +19,7 @@
 
 #include <vcl/outdev.hxx>
 
-#include "gridmerg.hxx"
+#include <gridmerg.hxx>
 
 #define PAGEBREAK_LINE_DISTANCE_PIXEL 5
 #define PAGEBREAK_LINE_DASH_LEN_PIXEL 5

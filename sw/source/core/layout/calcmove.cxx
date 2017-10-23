@@ -18,12 +18,12 @@
  */
 
 #include <memory>
-#include "rootfrm.hxx"
-#include "pagefrm.hxx"
-#include "viewopt.hxx"
-#include "frmtool.hxx"
-#include "txtftn.hxx"
-#include "fmtftn.hxx"
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+#include <viewopt.hxx>
+#include <frmtool.hxx>
+#include <txtftn.hxx>
+#include <fmtftn.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <svx/sdtaitm.hxx>
@@ -32,11 +32,11 @@
 #include <fmtanchr.hxx>
 #include <fmtclbl.hxx>
 
-#include "tabfrm.hxx"
-#include "ftnfrm.hxx"
-#include "txtfrm.hxx"
-#include "sectfrm.hxx"
-#include "dbg_lay.hxx"
+#include <tabfrm.hxx>
+#include <ftnfrm.hxx>
+#include <txtfrm.hxx>
+#include <sectfrm.hxx>
+#include <dbg_lay.hxx>
 
 #include <sortedobjs.hxx>
 #include <layouter.hxx>

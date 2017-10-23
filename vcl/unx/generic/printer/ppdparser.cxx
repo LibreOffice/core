@@ -26,23 +26,23 @@
 #include <vcl/settings.hxx>
 
 #include <unx/helper.hxx>
-#include "unx/cupsmgr.hxx"
-#include "unx/cpdmgr.hxx"
+#include <unx/cupsmgr.hxx>
+#include <unx/cpdmgr.hxx>
 
-#include "tools/urlobj.hxx"
-#include "tools/stream.hxx"
-#include "tools/zcodec.hxx"
-#include "osl/mutex.hxx"
-#include "osl/file.hxx"
-#include "osl/process.h"
-#include "osl/thread.h"
-#include "rtl/strbuf.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/instance.hxx"
+#include <tools/urlobj.hxx>
+#include <tools/stream.hxx>
+#include <tools/zcodec.hxx>
+#include <osl/mutex.hxx>
+#include <osl/file.hxx>
+#include <osl/process.h>
+#include <osl/thread.h>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/instance.hxx>
 #include <sal/macros.h>
 #include <salhelper/linkhelper.hxx>
 
-#include "com/sun/star/lang/Locale.hpp"
+#include <com/sun/star/lang/Locale.hpp>
 
 #include <unordered_map>
 

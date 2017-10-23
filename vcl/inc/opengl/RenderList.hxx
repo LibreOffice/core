@@ -19,7 +19,7 @@
 #include <vcl/salgtype.hxx>
 #include <basegfx/range/b2drange.hxx>
 
-#include "opengl/texture.hxx"
+#include <opengl/texture.hxx>
 
 #include <com/sun/star/drawing/LineCap.hpp>
 

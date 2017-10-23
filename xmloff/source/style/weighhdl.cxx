@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <weighhdl.hxx>
+#include "weighhdl.hxx"
 
 #include <sax/tools/converter.hxx>
 

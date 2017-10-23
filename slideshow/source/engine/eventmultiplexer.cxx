@@ -34,13 +34,13 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
-#include "tools.hxx"
-#include "eventqueue.hxx"
-#include "eventmultiplexer.hxx"
-#include "listenercontainer.hxx"
-#include "delayevent.hxx"
-#include "unoview.hxx"
-#include "unoviewcontainer.hxx"
+#include <tools.hxx>
+#include <eventqueue.hxx>
+#include <eventmultiplexer.hxx>
+#include <listenercontainer.hxx>
+#include <delayevent.hxx>
+#include <unoview.hxx>
+#include <unoviewcontainer.hxx>
 
 #include <functional>
 #include <memory>

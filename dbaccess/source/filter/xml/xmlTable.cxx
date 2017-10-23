@@ -25,8 +25,8 @@
 #include "xmlEnums.hxx"
 #include "xmlStyleImport.hxx"
 #include "xmlHierarchyCollection.hxx"
-#include "stringconstants.hxx"
-#include "strings.hxx"
+#include <stringconstants.hxx>
+#include <strings.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>

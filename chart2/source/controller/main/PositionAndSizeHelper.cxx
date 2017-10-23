@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "PositionAndSizeHelper.hxx"
-#include "macros.hxx"
-#include "ChartModelHelper.hxx"
-#include "ControllerLockGuard.hxx"
+#include <PositionAndSizeHelper.hxx>
+#include <macros.hxx>
+#include <ChartModelHelper.hxx>
+#include <ControllerLockGuard.hxx>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
-#include "chartview/ExplicitValueProvider.hxx"
+#include <chartview/ExplicitValueProvider.hxx>
 
 #include <tools/gen.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -24,7 +24,7 @@
 #include <stdio.h>
 #include <sal/macros.h>
 
-#include <hwplib.h>
+#include "hwplib.h"
 
 
 struct FormulaEntry{

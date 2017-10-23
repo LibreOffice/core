@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_SCALEAUTOMATISM_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_SCALEAUTOMATISM_HXX
 
-#include "chartview/ExplicitScaleValues.hxx"
+#include <chartview/ExplicitScaleValues.hxx>
 #include <com/sun/star/chart2/ScaleData.hpp>
 
 #include <tools/date.hxx>

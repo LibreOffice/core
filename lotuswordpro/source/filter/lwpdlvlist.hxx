@@ -61,8 +61,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDLVLIST_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDLVLIST_HXX
 
-#include "lwpatomholder.hxx"
-#include "lwpobj.hxx"
+#include <lwpatomholder.hxx>
+#include <lwpobj.hxx>
 #include <memory>
 
 /**

@@ -19,11 +19,11 @@
 
 #include <string.h>
 
-#include "TableDeco.hxx"
+#include <TableDeco.hxx>
 #include <definitioncolumn.hxx>
-#include "stringconstants.hxx"
-#include "core_resource.hxx"
-#include "strings.hrc"
+#include <stringconstants.hxx>
+#include <core_resource.hxx>
+#include <strings.hrc>
 #include <osl/diagnose.h>
 
 #include <cppuhelper/typeprovider.hxx>
@@ -40,7 +40,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/extract.hxx>
-#include "ContainerMediator.hxx"
+#include <ContainerMediator.hxx>
 
 using namespace dbaccess;
 using namespace ::com::sun::star::uno;

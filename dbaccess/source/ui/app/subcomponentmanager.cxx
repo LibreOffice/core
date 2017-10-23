@@ -19,8 +19,8 @@
 
 #include "subcomponentmanager.hxx"
 #include "AppController.hxx"
-#include "stringconstants.hxx"
-#include "strings.hxx"
+#include <stringconstants.hxx>
+#include <strings.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>

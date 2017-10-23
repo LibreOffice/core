@@ -11,7 +11,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
 namespace test { namespace oustringbuffer {
 

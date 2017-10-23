@@ -21,7 +21,7 @@
 #define INCLUDED_SW_INC_IDOCUMENTMARKACCESS_HXX
 
 #include <sal/types.h>
-#include <IMark.hxx>
+#include "IMark.hxx"
 #include <memory>
 
 class SwPaM;

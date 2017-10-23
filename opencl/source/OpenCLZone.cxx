@@ -9,7 +9,7 @@
 
 #include <opencl/openclwrapper.hxx>
 #include <opencl/OpenCLZone.hxx>
-#include "opencl_device.hxx"
+#include <opencl_device.hxx>
 
 #include <memory>
 

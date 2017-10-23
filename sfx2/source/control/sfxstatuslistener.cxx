@@ -23,7 +23,7 @@
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
-#include "itemdel.hxx"
+#include <itemdel.hxx>
 #include <svl/visitem.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/processfactory.hxx>

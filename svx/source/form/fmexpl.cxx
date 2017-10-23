@@ -19,22 +19,22 @@
 
 
 #include <svx/strings.hrc>
-#include "fmexpl.hxx"
+#include <fmexpl.hxx>
 
-#include "helpids.h"
+#include <helpids.h>
 #include <svx/fmglob.hxx>
-#include "fmservs.hxx"
+#include <fmservs.hxx>
 #include <svx/fmmodel.hxx>
-#include "fmexch.hxx"
-#include "fmundo.hxx"
-#include "fmpgeimp.hxx"
+#include <fmexch.hxx>
+#include <fmundo.hxx>
+#include <fmpgeimp.hxx>
 
 #include <svx/svxids.hrc>
 
-#include "fmprop.hxx"
-#include "bitmaps.hlst"
+#include <fmprop.hxx>
+#include <bitmaps.hlst>
 #include <svx/dialmgr.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdobj.hxx>
 #include <vcl/msgbox.hxx>
@@ -51,7 +51,7 @@
 
 #include <vcl/wrkwin.hxx>
 #include <svx/fmshell.hxx>
-#include "fmshimp.hxx"
+#include <fmshimp.hxx>
 #include <svx/fmpage.hxx>
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>

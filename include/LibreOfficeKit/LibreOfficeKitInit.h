@@ -28,7 +28,7 @@ extern "C"
 
 #ifndef _WIN32
 
-    #include "dlfcn.h"
+    #include <dlfcn.h>
 
     #ifdef  _AIX
     #  include <sys/ldr.h>

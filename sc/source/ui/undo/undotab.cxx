@@ -22,31 +22,31 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/hint.hxx>
 
-#include "undotab.hxx"
-#include "document.hxx"
-#include "docsh.hxx"
-#include "tabvwsh.hxx"
-#include "globstr.hrc"
-#include "global.hxx"
-#include "sc.hrc"
-#include "strings.hrc"
-#include "undoolk.hxx"
-#include "target.hxx"
-#include "uiitems.hxx"
-#include "prnsave.hxx"
-#include "printfun.hxx"
-#include "chgtrack.hxx"
-#include "tabprotection.hxx"
-#include "viewdata.hxx"
-#include "progress.hxx"
-#include "markdata.hxx"
+#include <undotab.hxx>
+#include <document.hxx>
+#include <docsh.hxx>
+#include <tabvwsh.hxx>
+#include <globstr.hrc>
+#include <global.hxx>
+#include <sc.hrc>
+#include <strings.hrc>
+#include <undoolk.hxx>
+#include <target.hxx>
+#include <uiitems.hxx>
+#include <prnsave.hxx>
+#include <printfun.hxx>
+#include <chgtrack.hxx>
+#include <tabprotection.hxx>
+#include <viewdata.hxx>
+#include <progress.hxx>
+#include <markdata.hxx>
 
 // for ScUndoRenameObject - might me moved to another file later
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
-#include "drwlayer.hxx"
-#include "scresid.hxx"
+#include <drwlayer.hxx>
+#include <scresid.hxx>
 
 #include <memory>
 #include <utility>

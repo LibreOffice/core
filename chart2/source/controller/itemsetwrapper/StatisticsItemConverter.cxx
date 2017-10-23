@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "StatisticsItemConverter.hxx"
+#include <StatisticsItemConverter.hxx>
 #include "SchWhichPairs.hxx"
-#include "macros.hxx"
-#include "RegressionCurveHelper.hxx"
-#include "ItemPropertyMap.hxx"
-#include "ErrorBar.hxx"
-#include "PropertyHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "ChartTypeHelper.hxx"
-#include "StatisticsHelper.hxx"
+#include <macros.hxx>
+#include <RegressionCurveHelper.hxx>
+#include <ItemPropertyMap.hxx>
+#include <ErrorBar.hxx>
+#include <PropertyHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <ChartTypeHelper.hxx>
+#include <StatisticsHelper.hxx>
 
-#include "GraphicPropertyItemConverter.hxx"
+#include <GraphicPropertyItemConverter.hxx>
 #include <unonames.hxx>
 
 #include <svl/stritem.hxx>

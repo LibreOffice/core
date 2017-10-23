@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SVGIO_INC_SVGNODE_HXX
 #define INCLUDED_SVGIO_INC_SVGNODE_HXX
 
-#include <svgtools.hxx>
-#include <svgtoken.hxx>
-#include <svgpaint.hxx>
+#include "svgtools.hxx"
+#include "svgtoken.hxx"
+#include "svgpaint.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <memory>

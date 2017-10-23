@@ -18,9 +18,9 @@
  */
 
 #include "TableDesignPanel.hxx"
-#include "createtabledesignpanel.hxx"
+#include <createtabledesignpanel.hxx>
 
-#include "ViewShellBase.hxx"
+#include <ViewShellBase.hxx>
 
 namespace sd { namespace sidebar {
 

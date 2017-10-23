@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TableRow.hxx"
+#include <TableRow.hxx>
 #include <tools/stream.hxx>
-#include "FieldDescriptions.hxx"
+#include <FieldDescriptions.hxx>
 #include <algorithm>
 #include <comphelper/types.hxx>
 

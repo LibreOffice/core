@@ -31,7 +31,7 @@
 #include <editeng/editobj.hxx>
 
 #include <editeng/unofored.hxx>
-#include <unofored_internal.hxx>
+#include "unofored_internal.hxx"
 
 using namespace ::com::sun::star;
 

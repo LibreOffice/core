@@ -18,7 +18,7 @@
  */
 
 
-#include "odfemitter.hxx"
+#include <odfemitter.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>

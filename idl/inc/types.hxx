@@ -22,7 +22,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <tools/ref.hxx>
-#include <basobj.hxx>
+#include "basobj.hxx"
 
 class SvMetaType;
 class SvMetaSlot;

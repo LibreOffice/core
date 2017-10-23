@@ -18,7 +18,7 @@
  */
 
 
-#include "XMLEventImportHelper.hxx"
+#include <XMLEventImportHelper.hxx>
 #include <tools/debug.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>

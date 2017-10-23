@@ -29,11 +29,11 @@
 #include <vcl/svapp.hxx>
 
 #include <svx/graphctl.hxx>
-#include "GraphCtlAccessibleContext.hxx"
-#include "svx/xoutbmp.hxx"
+#include <GraphCtlAccessibleContext.hxx>
+#include <svx/xoutbmp.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdpage.hxx>
-#include "svx/sdrpaintwindow.hxx"
+#include <svx/sdrpaintwindow.hxx>
 
 void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, const tools::Rectangle& /*rOldBoundRect*/ )
 {

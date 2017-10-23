@@ -26,10 +26,10 @@
 #include <sfx2/viewsh.hxx>
 #include <vcl/prntypes.hxx>
 #include <svtools/transfer.hxx>
-#include "glob.hxx"
-#include "pres.hxx"
+#include <glob.hxx>
+#include <pres.hxx>
 #include "View.hxx"
-#include "sddllapi.h"
+#include <sddllapi.h>
 
 #include <com/sun/star/drawing/XDrawSubController.hpp>
 #include <memory>

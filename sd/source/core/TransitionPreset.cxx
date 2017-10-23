@@ -43,7 +43,7 @@
 
 #include <algorithm>
 
-#include "sdpage.hxx"
+#include <sdpage.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;

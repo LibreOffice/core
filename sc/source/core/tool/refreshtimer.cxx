@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "refreshtimer.hxx"
-#include "refreshtimerprotector.hxx"
+#include <refreshtimer.hxx>
+#include <refreshtimerprotector.hxx>
 
 void ScRefreshTimerControl::SetAllowRefresh( bool b )
 {

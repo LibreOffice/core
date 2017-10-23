@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sfx2/sidebar/ControlFactory.hxx>
-#include <GraphicPropertyPanel.hxx>
+#include "GraphicPropertyPanel.hxx"
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>

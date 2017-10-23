@@ -22,7 +22,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "txtparai.hxx"
-#include "txtlists.hxx"
+#include <txtlists.hxx>
 #include "XMLTextListBlockContext.hxx"
 #include <xmloff/txtimp.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>

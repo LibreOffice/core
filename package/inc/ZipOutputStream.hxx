@@ -22,7 +22,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 
-#include <ByteChucker.hxx>
+#include "ByteChucker.hxx"
 #include <comphelper/threadpool.hxx>
 
 #include <vector>

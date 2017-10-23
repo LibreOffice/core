@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
-#include "component/CResultSet.hxx"
+#include <component/CResultSet.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>

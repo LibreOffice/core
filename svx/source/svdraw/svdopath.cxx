@@ -31,8 +31,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdview.hxx>
-#include "svdglob.hxx"
-#include "svx/strings.hrc"
+#include <svdglob.hxx>
+#include <svx/strings.hrc>
 
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnclit.hxx>

@@ -19,11 +19,11 @@
 #ifndef INCLUDED_CPPUHELPER_INTERFACECONTAINER_HXX
 #define INCLUDED_CPPUHELPER_INTERFACECONTAINER_HXX
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <cstddef>
 
-#include <cppuhelper/interfacecontainer.h>
+#include "cppuhelper/interfacecontainer.h"
 
 
 namespace cppu

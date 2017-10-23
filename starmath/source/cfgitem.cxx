@@ -30,10 +30,10 @@
 #include <officecfg/Office/Math.hxx>
 #include "cfgitem.hxx"
 
-#include "starmath.hrc"
-#include "smmod.hxx"
-#include "symbol.hxx"
-#include "format.hxx"
+#include <starmath.hrc>
+#include <smmod.hxx>
+#include <symbol.hxx>
+#include <format.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;

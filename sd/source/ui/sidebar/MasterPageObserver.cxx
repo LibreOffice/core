@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "MasterPageObserver.hxx"
+#include <MasterPageObserver.hxx>
 
 #include <algorithm>
 #include <iterator>
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <set>
 #include <unordered_map>
 #include <memory>

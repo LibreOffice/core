@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "PlotterBase.hxx"
-#include "PlottingPositionHelper.hxx"
-#include "AbstractShapeFactory.hxx"
+#include <PlotterBase.hxx>
+#include <PlottingPositionHelper.hxx>
+#include <AbstractShapeFactory.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/chart2/DataPointLabel.hpp>

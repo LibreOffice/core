@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_TXTTXMRK_HXX
 #define INCLUDED_SW_INC_TXTTXMRK_HXX
 
-#include <txatbase.hxx>
+#include "txatbase.hxx"
 
 class SwTextNode;
 class SwDoc;

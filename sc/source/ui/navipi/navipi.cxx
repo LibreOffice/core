@@ -30,23 +30,23 @@
 #include <unotools/charclass.hxx>
 #include <stdlib.h>
 
-#include "viewdata.hxx"
-#include "tabvwsh.hxx"
-#include "docsh.hxx"
-#include "document.hxx"
-#include "dbdata.hxx"
-#include "rangenam.hxx"
-#include "rangeutl.hxx"
-#include "sc.hrc"
-#include "strings.hrc"
-#include "bitmaps.hlst"
-#include "scresid.hxx"
-#include "scmod.hxx"
-#include "navicfg.hxx"
-#include "navcitem.hxx"
-#include "navipi.hxx"
-#include "navsett.hxx"
-#include "markdata.hxx"
+#include <viewdata.hxx>
+#include <tabvwsh.hxx>
+#include <docsh.hxx>
+#include <document.hxx>
+#include <dbdata.hxx>
+#include <rangenam.hxx>
+#include <rangeutl.hxx>
+#include <sc.hrc>
+#include <strings.hrc>
+#include <bitmaps.hlst>
+#include <scresid.hxx>
+#include <scmod.hxx>
+#include <navicfg.hxx>
+#include <navcitem.hxx>
+#include <navipi.hxx>
+#include <navsett.hxx>
+#include <markdata.hxx>
 
 #include <algorithm>
 

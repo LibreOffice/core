@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SW_INC_ANCHOREDOBJECT_HXX
 #define INCLUDED_SW_INC_ANCHOREDOBJECT_HXX
 
-#include <swtypes.hxx>
-#include <swrect.hxx>
+#include "swtypes.hxx"
+#include "swrect.hxx"
 #include <libxml/xmlwriter.h>
 
 class SdrObject;

@@ -18,7 +18,7 @@
  */
 
 
-#include "XMLFootnoteConfigurationImportContext.hxx"
+#include <XMLFootnoteConfigurationImportContext.hxx>
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>

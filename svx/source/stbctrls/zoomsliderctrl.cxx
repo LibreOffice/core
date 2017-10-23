@@ -27,7 +27,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <basegfx/utils/zoomtools.hxx>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 #include <set>
 

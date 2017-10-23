@@ -12,8 +12,8 @@
 #ifndef INCLUDED_L10NTOOLS_INC_HELPER_HXX
 #define INCLUDED_L10NTOOLS_INC_HELPER_HXX
 
-#include "sal/config.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sal/types.h>
 
 #include <libxml/parser.h>
 

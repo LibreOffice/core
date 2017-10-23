@@ -29,10 +29,10 @@
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
-#include "svdata.hxx"
-#include "controldata.hxx"
-#include "listbox.hxx"
-#include "dndeventdispatcher.hxx"
+#include <svdata.hxx>
+#include <controldata.hxx>
+#include <listbox.hxx>
+#include <dndeventdispatcher.hxx>
 
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 

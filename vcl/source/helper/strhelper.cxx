@@ -18,7 +18,7 @@
  */
 
 #include <vcl/strhelper.hxx>
-#include "sal/alloca.h"
+#include <sal/alloca.h>
 
 namespace  {
 

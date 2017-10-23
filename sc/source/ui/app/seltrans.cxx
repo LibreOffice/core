@@ -27,15 +27,15 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdouno.hxx>
 
-#include "seltrans.hxx"
-#include "transobj.hxx"
-#include "drwtrans.hxx"
-#include "scmod.hxx"
-#include "dbfunc.hxx"
-#include "docsh.hxx"
-#include "drawview.hxx"
-#include "drwlayer.hxx"
-#include "markdata.hxx"
+#include <seltrans.hxx>
+#include <transobj.hxx>
+#include <drwtrans.hxx>
+#include <scmod.hxx>
+#include <dbfunc.hxx>
+#include <docsh.hxx>
+#include <drawview.hxx>
+#include <drwlayer.hxx>
+#include <markdata.hxx>
 
 using namespace com::sun::star;
 

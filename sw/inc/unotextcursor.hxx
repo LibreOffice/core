@@ -40,8 +40,8 @@
 
 #include <comphelper/uno3.hxx>
 
-#include <unobaseclass.hxx>
-#include <TextCursorHelper.hxx>
+#include "unobaseclass.hxx"
+#include "TextCursorHelper.hxx"
 
 class SwDoc;
 struct SwPosition;

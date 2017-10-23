@@ -16,16 +16,16 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <iterator> /* std::iterator*/
 
 #include <cassert>
 #include <stdio.h>
 
-#include "helper.hxx"
-#include "common.hxx"
-#include "xmlparse.hxx"
+#include <helper.hxx>
+#include <common.hxx>
+#include <xmlparse.hxx>
 #include <fstream>
 #include <iostream>
 #include <osl/thread.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <main.hxx>
-#include <chart.hxx>
+#include "main.hxx"
+#include "chart.hxx"
 
 
 CGMChart::CGMChart()

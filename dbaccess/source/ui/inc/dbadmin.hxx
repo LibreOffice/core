@@ -21,7 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_DBADMIN_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include "dsntypes.hxx"
+#include <dsntypes.hxx>
 #include "IItemSetHelper.hxx"
 #include <comphelper/uno3.hxx>
 #include <memory>

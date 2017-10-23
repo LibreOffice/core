@@ -19,7 +19,7 @@
 
 
 #include <vector>
-#include <sortresult.hxx>
+#include "sortresult.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>

@@ -18,9 +18,9 @@
  */
 
 
-#include "hsqldb/HConnection.hxx"
-#include "hsqldb/HTools.hxx"
-#include "bitmaps.hlst"
+#include <hsqldb/HConnection.hxx>
+#include <hsqldb/HTools.hxx>
+#include <bitmaps.hlst>
 
 #include <connectivity/dbtools.hxx>
 
@@ -40,8 +40,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 
-#include "resource/sharedresources.hxx"
-#include "strings.hrc"
+#include <resource/sharedresources.hxx>
+#include <strings.hrc>
 
 using ::com::sun::star::util::XFlushListener;
 using ::com::sun::star::lang::EventObject;

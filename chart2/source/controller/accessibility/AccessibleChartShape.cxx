@@ -18,8 +18,8 @@
  */
 
 #include "AccessibleChartShape.hxx"
-#include "ObjectHierarchy.hxx"
-#include "ObjectIdentifier.hxx"
+#include <ObjectHierarchy.hxx>
+#include <ObjectIdentifier.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/ShapeTypeHandler.hxx>

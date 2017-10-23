@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "writer/WTable.hxx"
+#include <writer/WTable.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -30,8 +30,8 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <svl/converter.hxx>
-#include "writer/WConnection.hxx"
-#include "component/CColumns.hxx"
+#include <writer/WConnection.hxx>
+#include <component/CColumns.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/thread.h>

@@ -25,7 +25,7 @@
 #include <editeng/editids.hrc>
 #include <editeng/udlnitem.hxx>
 #include <vcl/settings.hxx>
-#include "helpids.h"
+#include <helpids.h>
 
 namespace svx {
 

@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SW_INC_UNOSETT_HXX
 #define INCLUDED_SW_INC_UNOSETT_HXX
 
-#include <swtypes.hxx>
-#include <calbck.hxx>
+#include "swtypes.hxx"
+#include "calbck.hxx"
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -33,7 +33,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <svl/itemprop.hxx>
-#include <unobaseclass.hxx>
+#include "unobaseclass.hxx"
 
 class SwDoc;
 class SwFormatCol;

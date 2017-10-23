@@ -17,7 +17,7 @@
 #include <vcl/window.hxx>
 #include <basegfx/vector/b2isize.hxx>
 
-#include "unx/gtk/gtkgdi.hxx"
+#include <unx/gtk/gtkgdi.hxx>
 
 namespace cairo
 {

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/textliststyle.hxx"
+#include <drawingml/textliststyle.hxx>
 
 namespace oox { namespace drawingml {
 

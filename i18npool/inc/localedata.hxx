@@ -46,7 +46,7 @@
 #include <osl/module.hxx>
 
 
-#include <defaultnumberingprovider.hxx>
+#include "defaultnumberingprovider.hxx"
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>

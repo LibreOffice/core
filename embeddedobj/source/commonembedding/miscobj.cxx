@@ -35,8 +35,8 @@
 
 #include <vcl/svapp.hxx>
 
-#include "closepreventer.hxx"
-#include "intercept.hxx"
+#include <closepreventer.hxx>
+#include <intercept.hxx>
 #include "persistence.hxx"
 
 using namespace ::com::sun::star;

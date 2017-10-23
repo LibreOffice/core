@@ -62,7 +62,7 @@
 #include <svx/strings.hrc>
 #include <svx/svxitems.hrc>
 #include <svx/svxids.hrc>
-#include "helpids.h"
+#include <helpids.h>
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
@@ -86,9 +86,9 @@
 #include <editeng/cmapitem.hxx>
 #include <svx/colorwindow.hxx>
 #include <svx/colorbox.hxx>
-#include "svx/drawitem.hxx"
+#include <svx/drawitem.hxx>
 #include <svx/tbcontrl.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
 #include <memory>
 
@@ -104,7 +104,7 @@
 #include <cppu/unotype.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 #define MAX_MRU_FONTNAME_ENTRIES    5
 

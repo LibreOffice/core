@@ -52,13 +52,13 @@
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 
-#include "dp_descriptioninfoset.hxx"
-#include "strings.hrc"
+#include <dp_descriptioninfoset.hxx>
+#include <strings.hrc>
 #include "dp_gui_updateinstalldialog.hxx"
-#include "dp_shared.hxx"
-#include "dp_ucb.h"
-#include "dp_misc.h"
-#include "dp_version.hxx"
+#include <dp_shared.hxx>
+#include <dp_ucb.h>
+#include <dp_misc.h>
+#include <dp_version.hxx>
 #include "dp_gui_extensioncmdqueue.hxx"
 #include <ucbhelper/content.hxx>
 #include <rtl/ref.hxx>

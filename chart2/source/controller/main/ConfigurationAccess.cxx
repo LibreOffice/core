@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ConfigurationAccess.hxx"
-#include "macros.hxx"
+#include <ConfigurationAccess.hxx>
+#include <macros.hxx>
 
 #include <unotools/syslocale.hxx>
 #include <unotools/configitem.hxx>

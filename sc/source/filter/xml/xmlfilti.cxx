@@ -19,12 +19,12 @@
 
 #include "xmlfilti.hxx"
 #include "xmlimprt.hxx"
-#include "docuno.hxx"
-#include "convuno.hxx"
+#include <docuno.hxx>
+#include <convuno.hxx>
 #include "XMLConverter.hxx"
-#include "rangeutl.hxx"
-#include "queryentry.hxx"
-#include "document.hxx"
+#include <rangeutl.hxx>
+#include <queryentry.hxx>
+#include <document.hxx>
 
 #include <svl/sharedstringpool.hxx>
 #include <xmloff/xmltkmap.hxx>

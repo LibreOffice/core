@@ -27,7 +27,7 @@
 #include <vcl/lstbox.hxx>
 #include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
-#include "chartview/ChartSfxItemIds.hxx"
+#include <chartview/ChartSfxItemIds.hxx>
 #include "RangeSelectionListener.hxx"
 
 #include <com/sun/star/chart2/XChartDocument.hpp>

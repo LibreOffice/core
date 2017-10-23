@@ -23,8 +23,8 @@
  *  Import of all text fields except those from txtvfldi.cxx
  *  (variable related text fields and database display fields)
  */
-#include "txtfldi.hxx"
-#include "txtvfldi.hxx"
+#include <txtfldi.hxx>
+#include <txtvfldi.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumi.hxx>
 #include <xmloff/txtimp.hxx>
@@ -33,7 +33,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlement.hxx>
-#include "XMLStringBufferImportContext.hxx"
+#include <XMLStringBufferImportContext.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/text/UserDataPart.hpp>

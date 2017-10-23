@@ -18,7 +18,7 @@
  */
 
 #include "Currency.hxx"
-#include "services.hxx"
+#include <services.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/syslocale.hxx>

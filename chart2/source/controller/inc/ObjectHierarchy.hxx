@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_OBJECTHIERARCHY_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_OBJECTHIERARCHY_HXX
 
-#include "ObjectIdentifier.hxx"
+#include <ObjectIdentifier.hxx>
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>

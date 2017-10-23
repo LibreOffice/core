@@ -19,12 +19,12 @@
 
 #include <basic/basmgr.hxx>
 
-#include "macropg.hxx"
+#include <macropg.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/svlbitm.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <svl/eitem.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/app.hxx>
@@ -32,13 +32,13 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <dialmgr.hxx>
-#include "cfgutil.hxx"
-#include "cfg.hxx"
-#include "helpids.h"
-#include "headertablistbox.hxx"
+#include <cfgutil.hxx>
+#include <cfg.hxx>
+#include <helpids.h>
+#include <headertablistbox.hxx>
 #include "macropg_impl.hxx"
 #include <svx/dialogs.hrc>
-#include "strings.hrc"
+#include <strings.hrc>
 #include <vcl/builderfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <o3tl/make_unique.hxx>

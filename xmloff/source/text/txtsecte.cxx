@@ -38,7 +38,7 @@
 #include "XMLTextNumRuleInfo.hxx"
 #include "XMLSectionExport.hxx"
 #include "XMLRedlineExport.hxx"
-#include "MultiPropertySetHelper.hxx"
+#include <MultiPropertySetHelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;

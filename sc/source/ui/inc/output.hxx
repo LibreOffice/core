@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_OUTPUT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_OUTPUT_HXX
 
-#include "address.hxx"
-#include "cellvalue.hxx"
+#include <address.hxx>
+#include <cellvalue.hxx>
 #include <tools/color.hxx>
 #include <tools/fract.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>

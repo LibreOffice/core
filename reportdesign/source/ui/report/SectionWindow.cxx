@@ -16,21 +16,21 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "SectionWindow.hxx"
-#include "ReportWindow.hxx"
-#include "rptui_slotid.hrc"
-#include "ReportController.hxx"
-#include "SectionView.hxx"
-#include "RptDef.hxx"
-#include "ReportSection.hxx"
-#include "DesignView.hxx"
-#include "strings.hxx"
-#include "core_resource.hxx"
-#include "helpids.h"
-#include "strings.hrc"
-#include "StartMarker.hxx"
-#include "EndMarker.hxx"
-#include "ViewsWindow.hxx"
+#include <SectionWindow.hxx>
+#include <ReportWindow.hxx>
+#include <rptui_slotid.hrc>
+#include <ReportController.hxx>
+#include <SectionView.hxx>
+#include <RptDef.hxx>
+#include <ReportSection.hxx>
+#include <DesignView.hxx>
+#include <strings.hxx>
+#include <core_resource.hxx>
+#include <helpids.h>
+#include <strings.hrc>
+#include <StartMarker.hxx>
+#include <EndMarker.hxx>
+#include <ViewsWindow.hxx>
 
 #include <svtools/colorcfg.hxx>
 #include <functional>

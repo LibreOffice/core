@@ -22,9 +22,9 @@
 
 #include <vcl/mapmod.hxx>
 #include <vcl/timer.hxx>
-#include "global.hxx"
-#include "address.hxx"
-#include "postit.hxx"
+#include <global.hxx>
+#include <address.hxx>
+#include <postit.hxx>
 
 class SdrModel;
 

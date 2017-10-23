@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <svtools/colorcfg.hxx>
@@ -34,33 +34,33 @@
 #include <vcl/settings.hxx>
 #include <o3tl/deleter.hxx>
 
-#include "preview.hxx"
-#include "prevwsh.hxx"
-#include "prevloc.hxx"
-#include "docsh.hxx"
-#include "docfunc.hxx"
-#include "printfun.hxx"
-#include "printopt.hxx"
-#include "stlpool.hxx"
-#include "undostyl.hxx"
-#include "drwlayer.hxx"
-#include "scmod.hxx"
-#include "markdata.hxx"
-#include "globstr.hrc"
-#include "sc.hrc"
-#include "AccessibleDocumentPagePreview.hxx"
+#include <preview.hxx>
+#include <prevwsh.hxx>
+#include <prevloc.hxx>
+#include <docsh.hxx>
+#include <docfunc.hxx>
+#include <printfun.hxx>
+#include <printopt.hxx>
+#include <stlpool.hxx>
+#include <undostyl.hxx>
+#include <drwlayer.hxx>
+#include <scmod.hxx>
+#include <markdata.hxx>
+#include <globstr.hrc>
+#include <sc.hrc>
+#include <AccessibleDocumentPagePreview.hxx>
 #include <vcl/lineinfo.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include "attrib.hxx"
-#include "pagepar.hxx"
+#include <attrib.hxx>
+#include <pagepar.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include "AccessibilityHints.hxx"
+#include <AccessibilityHints.hxx>
 #include <vcl/svapp.hxx>
-#include "viewutil.hxx"
+#include <viewutil.hxx>
 #include <columnspanset.hxx>
 #include <docpool.hxx>
 #include <patattr.hxx>

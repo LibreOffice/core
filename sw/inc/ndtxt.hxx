@@ -22,12 +22,12 @@
 #include <cppuhelper/weakref.hxx>
 
 #include "swdllapi.h"
-#include <node.hxx>
-#include <hintids.hxx>
-#include <ndhints.hxx>
-#include <modeltoviewhelper.hxx>
-#include <SwNumberTreeTypes.hxx>
-#include <IDocumentContentOperations.hxx>
+#include "node.hxx"
+#include "hintids.hxx"
+#include "ndhints.hxx"
+#include "modeltoviewhelper.hxx"
+#include "SwNumberTreeTypes.hxx"
+#include "IDocumentContentOperations.hxx"
 
 #include <sfx2/Metadatable.hxx>
 

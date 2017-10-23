@@ -61,7 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPNOTES_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPNOTES_HXX
 
-#include "lwpfrib.hxx"
+#include <lwpfrib.hxx>
 #include "lwpframelayout.hxx"
 
 /**

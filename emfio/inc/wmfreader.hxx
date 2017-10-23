@@ -20,7 +20,7 @@
 #ifndef INCLUDED_EMFIO_INC_WMFREADER_HXX
 #define INCLUDED_EMFIO_INC_WMFREADER_HXX
 
-#include <mtftools.hxx>
+#include "mtftools.hxx"
 #include <tools/stream.hxx>
 
 // predefines

@@ -22,7 +22,7 @@
 
 #include "ximp3dscene.hxx"
 #include <xmloff/xmluconv.hxx>
-#include "xexptran.hxx"
+#include <xexptran.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <com/sun/star/drawing/Direction3D.hpp>

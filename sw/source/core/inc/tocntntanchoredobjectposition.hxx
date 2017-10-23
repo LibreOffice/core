@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_TOCNTNTANCHOREDOBJECTPOSITION_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_TOCNTNTANCHOREDOBJECTPOSITION_HXX
-#include <anchoredobjectposition.hxx>
+#include "anchoredobjectposition.hxx"
 
 class SwFrame;
 class SwTextFrame;

@@ -18,14 +18,14 @@
  */
 
 #include "Condition.hxx"
-#include "UITools.hxx"
-#include "CondFormat.hxx"
-#include "core_resource.hxx"
-#include "strings.hrc"
-#include "ReportController.hxx"
-#include "ColorChanger.hxx"
-#include "helpids.h"
-#include "reportformula.hxx"
+#include <UITools.hxx>
+#include <CondFormat.hxx>
+#include <core_resource.hxx>
+#include <strings.hrc>
+#include <ReportController.hxx>
+#include <ColorChanger.hxx>
+#include <helpids.h>
+#include <reportformula.hxx>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>

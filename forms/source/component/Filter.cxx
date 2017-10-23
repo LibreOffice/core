@@ -18,11 +18,11 @@
  */
 
 #include "Filter.hxx"
-#include "FormComponent.hxx"
-#include "strings.hrc"
-#include "frm_resource.hxx"
-#include "property.hxx"
-#include "services.hxx"
+#include <FormComponent.hxx>
+#include <strings.hrc>
+#include <frm_resource.hxx>
+#include <property.hxx>
+#include <services.hxx>
 
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>

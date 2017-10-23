@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ErrorBar.hxx"
-#include "macros.hxx"
-#include "ContainerHelper.hxx"
-#include "EventListenerHelper.hxx"
-#include "PropertyHelper.hxx"
-#include "CloneHelper.hxx"
+#include <ErrorBar.hxx>
+#include <macros.hxx>
+#include <ContainerHelper.hxx>
+#include <EventListenerHelper.hxx>
+#include <PropertyHelper.hxx>
+#include <CloneHelper.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <svl/itemprop.hxx>

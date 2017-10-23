@@ -12,8 +12,8 @@
 
 #include <cppuhelper/supportsservice.hxx>
 
-#include "xmlsec/xmlstreamio.hxx"
-#include "xmlsec-wrapper.h"
+#include <xmlsec/xmlstreamio.hxx>
+#include <xmlsec-wrapper.h>
 
 using namespace css::uno;
 using namespace css::lang;

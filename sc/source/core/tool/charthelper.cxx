@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "charthelper.hxx"
-#include "document.hxx"
-#include "drwlayer.hxx"
-#include "rangelst.hxx"
-#include "chartlis.hxx"
-#include "docuno.hxx"
+#include <charthelper.hxx>
+#include <document.hxx>
+#include <drwlayer.hxx>
+#include <rangelst.hxx>
+#include <chartlis.hxx>
+#include <docuno.hxx>
 
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>

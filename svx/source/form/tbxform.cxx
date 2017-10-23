@@ -25,16 +25,16 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/settings.hxx>
-#include "fmitems.hxx"
-#include "formtoolbars.hxx"
+#include <fmitems.hxx>
+#include <formtoolbars.hxx>
 
 
 #include <svx/dialmgr.hxx>
 #include <svx/svxids.hrc>
 #include <svx/strings.hrc>
-#include "svx/tbxctl.hxx"
-#include "tbxform.hxx"
-#include "helpids.h"
+#include <svx/tbxctl.hxx>
+#include <tbxform.hxx>
+#include <helpids.h>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 

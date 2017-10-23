@@ -18,13 +18,13 @@
  */
 
 #include "ScatterChartTypeTemplate.hxx"
-#include "macros.hxx"
+#include <macros.hxx>
 #include "XYDataInterpreter.hxx"
-#include "CartesianCoordinateSystem.hxx"
-#include "DiagramHelper.hxx"
-#include "servicenames_charttypes.hxx"
-#include "DataSeriesHelper.hxx"
-#include "PropertyHelper.hxx"
+#include <CartesianCoordinateSystem.hxx>
+#include <DiagramHelper.hxx>
+#include <servicenames_charttypes.hxx>
+#include <DataSeriesHelper.hxx>
+#include <PropertyHelper.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/chart2/SymbolStyle.hpp>

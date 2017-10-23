@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "flat/EConnection.hxx"
-#include "flat/EDatabaseMetaData.hxx"
-#include "flat/ECatalog.hxx"
-#include "flat/EDriver.hxx"
+#include <flat/EConnection.hxx>
+#include <flat/EDatabaseMetaData.hxx>
+#include <flat/ECatalog.hxx>
+#include <flat/EDriver.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include "flat/EPreparedStatement.hxx"
-#include "flat/EStatement.hxx"
+#include <flat/EPreparedStatement.hxx>
+#include <flat/EStatement.hxx>
 #include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 

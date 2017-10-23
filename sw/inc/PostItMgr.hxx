@@ -30,11 +30,11 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <tools/link.hxx>
-#include <swrect.hxx>
+#include "swrect.hxx"
 #include <unotools/configitem.hxx>
 #include <unotools/options.hxx>
 #include <com/sun/star/uno/Any.hxx>
-#include <SidebarWindowsTypes.hxx>
+#include "SidebarWindowsTypes.hxx"
 #include <svl/lstner.hxx>
 #include <vcl/vclptr.hxx>
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>

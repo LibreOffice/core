@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_VIEWUTIL_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_VIEWUTIL_HXX
 
-#include "address.hxx"
+#include <address.hxx>
 #include <sal/types.h>
 #include <i18nlangtag/lang.h>
 

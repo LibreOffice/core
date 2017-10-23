@@ -33,7 +33,7 @@
 #endif
 
 #define SFX_TYPEMAP
-#include "smslots.hxx"
+#include <smslots.hxx>
 
 #ifdef DISABLE_DYNLOADING
 #undef aSfxInt16Item_Impl

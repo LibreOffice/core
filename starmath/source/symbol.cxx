@@ -19,10 +19,10 @@
 
 #include <vector>
 
-#include "symbol.hxx"
-#include "utility.hxx"
+#include <symbol.hxx>
+#include <utility.hxx>
 #include "cfgitem.hxx"
-#include "smmod.hxx"
+#include <smmod.hxx>
 
 
 SmSym::SmSym() :

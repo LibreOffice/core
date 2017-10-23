@@ -19,7 +19,7 @@
 
 
 #include <memory>
-#include <bibconfig.hxx>
+#include "bibconfig.hxx"
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

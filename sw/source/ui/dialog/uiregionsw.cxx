@@ -56,7 +56,7 @@
 #include <cmdid.h>
 #include <strings.hrc>
 #include <globals.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 #include <sfx2/bindings.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svx/dlgutil.hxx>

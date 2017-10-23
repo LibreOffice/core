@@ -58,7 +58,7 @@
 #include <svx/grafctrl.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lineitem.hxx>
-#include "sdattr.hxx"
+#include <sdattr.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <editeng/memberids.h>
 #include <svx/xftstit.hxx>
@@ -104,7 +104,7 @@
 #include <svx/galleryitem.hxx>
 
 #define SFX_TYPEMAP
-#include "sdslots.hxx"
+#include <sdslots.hxx>
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

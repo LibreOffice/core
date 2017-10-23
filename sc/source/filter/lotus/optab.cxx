@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "op.h"
-#include "optab.h"
+#include <op.h>
+#include <optab.h>
 #include "lotfilter.hxx"
 
 // edit function sal_Char *X( sal_Char * )

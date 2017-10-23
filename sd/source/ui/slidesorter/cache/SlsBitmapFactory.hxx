@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_CACHE_SLSBITMAPFACTORY_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_CACHE_SLSBITMAPFACTORY_HXX
 
-#include "PreviewRenderer.hxx"
+#include <PreviewRenderer.hxx>
 #include <memory>
 
 class SdPage;

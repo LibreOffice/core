@@ -27,9 +27,9 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 
-#include "OPropertySet.hxx"
-#include "MutexContainer.hxx"
-#include "ModifyListenerHelper.hxx"
+#include <OPropertySet.hxx>
+#include <MutexContainer.hxx>
+#include <ModifyListenerHelper.hxx>
 
 namespace chart
 {

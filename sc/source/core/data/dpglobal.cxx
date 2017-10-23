@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "dpglobal.hxx"
+#include <dpglobal.hxx>
 
 ScDPValue::ScDPValue() : mfValue(0.0), meType(String) {}
 

@@ -21,10 +21,10 @@
 #include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
 
-#include "sdresid.hxx"
-#include "dlgpage.hxx"
+#include <sdresid.hxx>
+#include <dlgpage.hxx>
 
-#include "DrawDocShell.hxx"
+#include <DrawDocShell.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/flagsdef.hxx>
 #include <svx/svxdlg.hxx>

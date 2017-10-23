@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ShapeFactory.hxx"
-#include "ViewDefines.hxx"
-#include "Stripe.hxx"
-#include "CommonConverters.hxx"
-#include "macros.hxx"
-#include "RelativeSizeHelper.hxx"
-#include "PropertyMapper.hxx"
+#include <ShapeFactory.hxx>
+#include <ViewDefines.hxx>
+#include <Stripe.hxx>
+#include <CommonConverters.hxx>
+#include <macros.hxx>
+#include <RelativeSizeHelper.hxx>
+#include <PropertyMapper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>

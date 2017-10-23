@@ -19,7 +19,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <comphelper/servicedecl.hxx>
 
-#include <service.hxx>
+#include "service.hxx"
 
 // component exports
 

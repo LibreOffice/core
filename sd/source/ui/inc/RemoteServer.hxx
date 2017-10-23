@@ -26,7 +26,7 @@
 
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 
-#include "sddllapi.h"
+#include <sddllapi.h>
 
 /**
 * The port for use for the main communication between LibO and remote control app.

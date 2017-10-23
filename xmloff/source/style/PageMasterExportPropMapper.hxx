@@ -21,8 +21,8 @@
 #define INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTEREXPORTPROPMAPPER_HXX
 
 #include <xmloff/xmlexppr.hxx>
-#include "XMLBackgroundImageExport.hxx"
-#include "XMLTextColumnsExport.hxx"
+#include <XMLBackgroundImageExport.hxx>
+#include <XMLTextColumnsExport.hxx>
 #include "XMLFootnoteSeparatorExport.hxx"
 
 class XMLPageMasterExportPropMapper : public SvXMLExportPropertyMapper

@@ -29,7 +29,7 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
-#include <fldfunc.hxx>
+#include "fldfunc.hxx"
 #include <flddropdown.hxx>
 
 #define USER_DATA_VERSION_1 "1"

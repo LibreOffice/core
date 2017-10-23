@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "resource/sharedresources.hxx"
+#include <resource/sharedresources.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 

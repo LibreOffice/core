@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "tablefragment.hxx"
+#include <tablefragment.hxx>
 
-#include "autofilterbuffer.hxx"
-#include "autofiltercontext.hxx"
-#include "tablecolumnsbuffer.hxx"
-#include "tablecolumnscontext.hxx"
-#include "tablebuffer.hxx"
+#include <autofilterbuffer.hxx>
+#include <autofiltercontext.hxx>
+#include <tablecolumnsbuffer.hxx>
+#include <tablecolumnscontext.hxx>
+#include <tablebuffer.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 

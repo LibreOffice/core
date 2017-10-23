@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svl/srchitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
@@ -27,20 +27,20 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/EnumContext.hxx>
 
-#include "sc.hrc"
-#include "pivotsh.hxx"
-#include "tabvwsh.hxx"
-#include "docsh.hxx"
-#include "scresid.hxx"
-#include "document.hxx"
-#include "dpobject.hxx"
-#include "dpshttab.hxx"
-#include "dbdocfun.hxx"
-#include "uiitems.hxx"
-#include "scabstdlg.hxx"
+#include <sc.hrc>
+#include <pivotsh.hxx>
+#include <tabvwsh.hxx>
+#include <docsh.hxx>
+#include <scresid.hxx>
+#include <document.hxx>
+#include <dpobject.hxx>
+#include <dpshttab.hxx>
+#include <dbdocfun.hxx>
+#include <uiitems.hxx>
+#include <scabstdlg.hxx>
 
 #define ScPivotShell
-#include "scslots.hxx"
+#include <scslots.hxx>
 #include <memory>
 
 

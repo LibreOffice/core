@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/helper/propertymap.hxx"
-#include "oox/helper/helper.hxx"
+#include <oox/helper/propertymap.hxx>
+#include <oox/helper/helper.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
 # include <cstdio>
@@ -49,7 +49,7 @@ using ::com::sun::star::text::WritingMode;
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <oox/token/properties.hxx>
-#include "oox/token/propertynames.hxx"
+#include <oox/token/propertynames.hxx>
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;

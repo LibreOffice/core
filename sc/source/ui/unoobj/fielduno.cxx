@@ -18,16 +18,16 @@
  */
 
 #include <memory>
-#include "fielduno.hxx"
-#include "textuno.hxx"
-#include "miscuno.hxx"
-#include "docsh.hxx"
-#include "hints.hxx"
-#include "editsrc.hxx"
-#include "cellsuno.hxx"
-#include "servuno.hxx"
-#include "unonames.hxx"
-#include "editutil.hxx"
+#include <fielduno.hxx>
+#include <textuno.hxx>
+#include <miscuno.hxx>
+#include <docsh.hxx>
+#include <hints.hxx>
+#include <editsrc.hxx>
+#include <cellsuno.hxx>
+#include <servuno.hxx>
+#include <unonames.hxx>
+#include <editutil.hxx>
 
 #include <svl/hint.hxx>
 #include <vcl/svapp.hxx>

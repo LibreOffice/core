@@ -12,7 +12,7 @@
 #include <com/sun/star/sheet/XDataPilotFieldGrouping.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
-#include "cppunit/extensions/HelperMacros.h"
+#include <cppunit/extensions/HelperMacros.h>
 
 using namespace css;
 using namespace css::uno;

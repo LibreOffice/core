@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include "unogaltheme.hxx"
-#include "svx/gallery1.hxx"
+#include <svx/gallery1.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>

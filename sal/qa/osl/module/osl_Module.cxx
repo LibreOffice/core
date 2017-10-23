@@ -19,7 +19,7 @@
 
 // include files
 
-#include <osl_Module_Const.h>
+#include "osl_Module_Const.h"
 
 using namespace osl;
 

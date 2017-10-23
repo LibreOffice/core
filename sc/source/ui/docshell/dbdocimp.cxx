@@ -37,22 +37,22 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
-#include "dbdocfun.hxx"
-#include "docsh.hxx"
-#include "globstr.hrc"
-#include "scerrors.hxx"
-#include "dbdata.hxx"
-#include "markdata.hxx"
-#include "undodat.hxx"
-#include "progress.hxx"
-#include "patattr.hxx"
-#include "docpool.hxx"
-#include "attrib.hxx"
-#include "dbdocutl.hxx"
-#include "editable.hxx"
-#include "hints.hxx"
-#include "miscuno.hxx"
-#include "chgtrack.hxx"
+#include <dbdocfun.hxx>
+#include <docsh.hxx>
+#include <globstr.hrc>
+#include <scerrors.hxx>
+#include <dbdata.hxx>
+#include <markdata.hxx>
+#include <undodat.hxx>
+#include <progress.hxx>
+#include <patattr.hxx>
+#include <docpool.hxx>
+#include <attrib.hxx>
+#include <dbdocutl.hxx>
+#include <editable.hxx>
+#include <hints.hxx>
+#include <miscuno.hxx>
+#include <chgtrack.hxx>
 #include <refupdatecontext.hxx>
 
 using namespace com::sun::star;

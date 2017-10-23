@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fupage.hxx"
+#include <fupage.hxx>
 
 #include <sfx2/viewfrm.hxx>
 
@@ -50,23 +50,23 @@
 #include <sfx2/app.hxx>
 #include <sfx2/opengrf.hxx>
 
-#include "strings.hrc"
-#include "sdpage.hxx"
-#include "View.hxx"
-#include "Window.hxx"
-#include "pres.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "ViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "DrawViewShell.hxx"
-#include "app.hrc"
-#include "unchss.hxx"
-#include "undoback.hxx"
-#include "sdabstdlg.hxx"
-#include "sdresid.hxx"
-#include "sdundogr.hxx"
-#include "helpids.h"
+#include <strings.hrc>
+#include <sdpage.hxx>
+#include <View.hxx>
+#include <Window.hxx>
+#include <pres.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <DrawViewShell.hxx>
+#include <app.hrc>
+#include <unchss.hxx>
+#include <undoback.hxx>
+#include <sdabstdlg.hxx>
+#include <sdresid.hxx>
+#include <sdundogr.hxx>
+#include <helpids.h>
 
 #include <memory>
 

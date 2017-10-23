@@ -9,12 +9,12 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "tpdefaults.hxx"
-#include "sc.hrc"
-#include "scresid.hxx"
-#include "scmod.hxx"
-#include "defaultsoptions.hxx"
-#include "document.hxx"
+#include <tpdefaults.hxx>
+#include <sc.hrc>
+#include <scresid.hxx>
+#include <scmod.hxx>
+#include <defaultsoptions.hxx>
+#include <document.hxx>
 
 ScTpDefaultsOptions::ScTpDefaultsOptions(vcl::Window *pParent, const SfxItemSet &rCoreSet) :
     SfxTabPage(pParent, "OptDefaultPage", "modules/scalc/ui/optdefaultpage.ui", &rCoreSet)

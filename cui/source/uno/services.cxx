@@ -18,8 +18,8 @@
  */
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include "sal/types.h"
-#include "cppuhelper/factory.hxx"
+#include <sal/types.h>
+#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 
 #include <colorpicker.hxx>

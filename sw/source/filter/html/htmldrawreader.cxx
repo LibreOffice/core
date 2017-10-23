@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/svdmodel.hxx>
@@ -38,16 +38,16 @@
 #include <svtools/htmlkywd.hxx>
 #include <svx/svdpool.hxx>
 
-#include "charatr.hxx"
-#include "drawdoc.hxx"
+#include <charatr.hxx>
+#include <drawdoc.hxx>
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
-#include "ndtxt.hxx"
-#include "doc.hxx"
+#include <ndtxt.hxx>
+#include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-#include "dcontact.hxx"
-#include "poolfmt.hxx"
+#include <dcontact.hxx>
+#include <poolfmt.hxx>
 #include "swcss1.hxx"
 #include "swhtml.hxx"
 #include <shellio.hxx>

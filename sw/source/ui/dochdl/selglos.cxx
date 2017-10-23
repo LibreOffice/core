@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "swtypes.hxx"
+#include <swtypes.hxx>
 
-#include "selglos.hxx"
+#include <selglos.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 #include <vcl/layout.hxx>
 
 SwSelGlossaryDlg::SwSelGlossaryDlg(vcl::Window * pParent, const OUString &rShortName)

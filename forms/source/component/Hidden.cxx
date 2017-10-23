@@ -18,8 +18,8 @@
  */
 
 #include "Hidden.hxx"
-#include "property.hxx"
-#include "services.hxx"
+#include <property.hxx>
+#include <services.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/basicio.hxx>
 #include <comphelper/processfactory.hxx>

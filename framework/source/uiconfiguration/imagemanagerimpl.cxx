@@ -22,7 +22,7 @@
 #include <uiconfiguration/graphicnameaccess.hxx>
 #include <services.h>
 
-#include "properties.h"
+#include <properties.h>
 
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>

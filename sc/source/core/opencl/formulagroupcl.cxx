@@ -7,17 +7,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "formulagroup.hxx"
-#include "formulagroupcl.hxx"
-#include "grouptokenconverter.hxx"
-#include "document.hxx"
-#include "formulacell.hxx"
-#include "tokenarray.hxx"
-#include "compiler.hxx"
-#include "interpre.hxx"
+#include <formulagroup.hxx>
+#include <formulagroupcl.hxx>
+#include <grouptokenconverter.hxx>
+#include <document.hxx>
+#include <formulacell.hxx>
+#include <tokenarray.hxx>
+#include <compiler.hxx>
+#include <interpre.hxx>
 #include <comphelper/random.hxx>
 #include <formula/vectortoken.hxx>
-#include "scmatrix.hxx"
+#include <scmatrix.hxx>
 
 #include <opencl/openclwrapper.hxx>
 

@@ -7,15 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "xmlsourcedlg.hxx"
-#include "sc.hrc"
-#include "bitmaps.hlst"
-#include "scresid.hxx"
-#include "document.hxx"
-#include "orcusfilters.hxx"
-#include "filter.hxx"
-#include "reffact.hxx"
-#include "tabvwsh.hxx"
+#include <xmlsourcedlg.hxx>
+#include <sc.hrc>
+#include <bitmaps.hlst>
+#include <scresid.hxx>
+#include <document.hxx>
+#include <orcusfilters.hxx>
+#include <filter.hxx>
+#include <reffact.hxx>
+#include <tabvwsh.hxx>
 
 #include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>

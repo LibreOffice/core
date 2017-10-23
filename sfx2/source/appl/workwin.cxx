@@ -24,14 +24,14 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
-#include "workwin.hxx"
+#include <workwin.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/viewsh.hxx>
-#include "splitwin.hxx"
-#include "childwinimpl.hxx"
+#include <splitwin.hxx>
+#include <childwinimpl.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/request.hxx>

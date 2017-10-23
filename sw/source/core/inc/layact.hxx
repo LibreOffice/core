@@ -23,8 +23,8 @@
 
 #include <ctime>
 
-#include "swtypes.hxx"
-#include "swrect.hxx"
+#include <swtypes.hxx>
+#include <swrect.hxx>
 
 class SwRootFrame;
 class SwLayoutFrame;

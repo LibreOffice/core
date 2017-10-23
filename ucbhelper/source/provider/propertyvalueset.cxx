@@ -32,8 +32,8 @@
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/Converter.hpp>
 
-#include "osl/diagnose.h"
-#include "osl/mutex.hxx"
+#include <osl/diagnose.h>
+#include <osl/mutex.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <o3tl/typed_flags_set.hxx>
 

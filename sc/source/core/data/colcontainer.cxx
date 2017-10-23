@@ -18,9 +18,9 @@
  */
 
 
-#include "colcontainer.hxx"
-#include "column.hxx"
-#include "document.hxx"
+#include <colcontainer.hxx>
+#include <column.hxx>
+#include <document.hxx>
 
 ScColContainer::ScColContainer( const size_t nSize )
 {

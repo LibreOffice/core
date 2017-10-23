@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DataSeriesHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "DataSource.hxx"
-#include "macros.hxx"
-#include "ContainerHelper.hxx"
+#include <DataSeriesHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <DataSource.hxx>
+#include <macros.hxx>
+#include <ContainerHelper.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>

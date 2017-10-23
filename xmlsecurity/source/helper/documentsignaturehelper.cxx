@@ -40,7 +40,7 @@
 #include <rtl/uri.hxx>
 #include <xmloff/attrlist.hxx>
 
-#include "xsecctl.hxx"
+#include <xsecctl.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

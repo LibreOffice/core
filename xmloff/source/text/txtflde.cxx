@@ -22,7 +22,7 @@
  *
  *  export of all text fields
  */
-#include "txtflde.hxx"
+#include <txtflde.hxx>
 #include <xmloff/XMLEventExport.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/nmspmap.hxx>

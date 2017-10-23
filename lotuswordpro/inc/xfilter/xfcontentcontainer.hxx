@@ -66,7 +66,7 @@
 
 #include <rtl/ref.hxx>
 
-#include "xfilter/xfcontent.hxx"
+#include <xfilter/xfcontent.hxx>
 
 /**
  * @brief

@@ -18,17 +18,17 @@
  */
 
 #include "QTableWindow.hxx"
-#include "QueryTableView.hxx"
-#include "stringconstants.hxx"
+#include <QueryTableView.hxx>
+#include <stringconstants.hxx>
 #include <osl/diagnose.h>
-#include "helpids.h"
-#include "QueryDesignView.hxx"
-#include "browserids.hxx"
-#include "querycontroller.hxx"
+#include <helpids.h>
+#include <QueryDesignView.hxx>
+#include <browserids.hxx>
+#include <querycontroller.hxx>
 #include <vcl/image.hxx>
-#include "TableWindowListBox.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
+#include <TableWindowListBox.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -39,8 +39,8 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/uno3.hxx>
-#include "UITools.hxx"
-#include "svtools/treelistentry.hxx"
+#include <UITools.hxx>
+#include <svtools/treelistentry.hxx>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;

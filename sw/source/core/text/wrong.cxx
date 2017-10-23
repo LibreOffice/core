@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "swtypes.hxx"
+#include <swtypes.hxx>
 
-#include "SwGrammarMarkUp.hxx"
+#include <SwGrammarMarkUp.hxx>
 #include <osl/diagnose.h>
 
 SwWrongArea::SwWrongArea( const OUString& rType, WrongListType listType,

@@ -24,8 +24,8 @@
 
 #include <svl/undo.hxx>
 #include <tools/solar.h>
-#include <SwRewriter.hxx>
-#include <swundo.hxx>
+#include "SwRewriter.hxx"
+#include "swundo.hxx"
 #include <o3tl/typed_flags_set.hxx>
 
 class SwHistory;

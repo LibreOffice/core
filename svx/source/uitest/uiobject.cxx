@@ -8,7 +8,7 @@
  */
 
 #include <memory>
-#include "uiobject.hxx"
+#include <uiobject.hxx>
 
 #include <svx/charmap.hxx>
 

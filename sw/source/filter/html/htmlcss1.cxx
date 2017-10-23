@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
 #include <svl/urihelper.hxx>
@@ -42,19 +42,19 @@
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtfsize.hxx>
-#include "frmatr.hxx"
+#include <frmatr.hxx>
 #include <charfmt.hxx>
 #include <docary.hxx>
 #include <svx/svxids.hrc>
 
-#include "doc.hxx"
+#include <doc.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include "pam.hxx"
-#include "ndtxt.hxx"
-#include "poolfmt.hxx"
-#include "docsh.hxx"
-#include "paratr.hxx"
-#include "pagedesc.hxx"
+#include <pam.hxx>
+#include <ndtxt.hxx>
+#include <poolfmt.hxx>
+#include <docsh.hxx>
+#include <paratr.hxx>
+#include <pagedesc.hxx>
 #include "css1kywd.hxx"
 #include "swcss1.hxx"
 #include "htmlnum.hxx"

@@ -20,8 +20,8 @@
 #include <tools/time.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/scheduler.hxx>
-#include "saltimer.hxx"
-#include "schedulerimpl.hxx"
+#include <saltimer.hxx>
+#include <schedulerimpl.hxx>
 
 void Timer::SetDeletionFlags()
 {

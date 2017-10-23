@@ -23,17 +23,17 @@
 #include <tools/poly.hxx>
 #include <svtools/colorcfg.hxx>
 
-#include "scresid.hxx"
-#include "sc.hrc"
-#include "tabvwsh.hxx"
-#include "hdrcont.hxx"
-#include "scmod.hxx"
-#include "inputopt.hxx"
-#include "gridmerg.hxx"
-#include "document.hxx"
-#include "markdata.hxx"
-#include "tabview.hxx"
-#include "viewdata.hxx"
+#include <scresid.hxx>
+#include <sc.hrc>
+#include <tabvwsh.hxx>
+#include <hdrcont.hxx>
+#include <scmod.hxx>
+#include <inputopt.hxx>
+#include <gridmerg.hxx>
+#include <document.hxx>
+#include <markdata.hxx>
+#include <tabview.hxx>
+#include <viewdata.hxx>
 
 #define SC_DRAG_MIN     2
 

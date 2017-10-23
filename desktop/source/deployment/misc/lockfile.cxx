@@ -39,7 +39,7 @@
 #include <unotools/bootstrap.hxx>
 #include <tools/config.hxx>
 
-#include "lockfile.hxx"
+#include <lockfile.hxx>
 
 using namespace ::osl;
 using namespace ::utl;

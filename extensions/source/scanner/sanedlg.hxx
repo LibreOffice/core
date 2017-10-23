@@ -28,7 +28,7 @@
 #include <vcl/edit.hxx>
 #include <svtools/treelistbox.hxx>
 
-#include <sane.hxx>
+#include "sane.hxx"
 
 class ScanPreview;
 

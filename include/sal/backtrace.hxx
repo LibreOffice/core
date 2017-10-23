@@ -10,10 +10,10 @@
 #ifndef INCLUDED_SAL_BACKTRACE_HXX
 #define INCLUDED_SAL_BACKTRACE_HXX
 
-#include <sal/config.h>
-#include <sal/saldllapi.h>
-#include <sal/types.h>
-#include <rtl/ustring.hxx>
+#include "sal/config.h"
+#include "sal/saldllapi.h"
+#include "sal/types.h"
+#include "rtl/ustring.hxx"
 #include <memory>
 
 /// @cond INTERNAL

@@ -32,7 +32,7 @@
 #include <editeng/unotext.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
-#include "svx/shapepropertynotifier.hxx"
+#include <svx/shapepropertynotifier.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -42,43 +42,43 @@
 #include <vcl/virdev.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
-#include "svx/svdopage.hxx"
-#include "svx/xflbstit.hxx"
-#include "svx/xflbmtit.hxx"
-#include "svx/xlnstit.hxx"
-#include "svx/xlnedit.hxx"
-#include "svx/svdogrp.hxx"
-#include "svx/scene3d.hxx"
-#include "svx/svdmodel.hxx"
-#include "svx/globl3d.hxx"
-#include "svx/fmglob.hxx"
-#include "svx/unopage.hxx"
-#include "svx/view3d.hxx"
-#include "svx/unoshape.hxx"
-#include "svx/svxids.hrc"
-#include "svx/unoshtxt.hxx"
-#include "svx/svdpage.hxx"
-#include "svx/unoshprp.hxx"
-#include "svx/sxciaitm.hxx"
-#include "svx/svdograf.hxx"
-#include "svx/unoapi.hxx"
-#include "svx/svdomeas.hxx"
-#include "svx/svdpagv.hxx"
-#include "svx/svdpool.hxx"
+#include <svx/svdopage.hxx>
+#include <svx/xflbstit.hxx>
+#include <svx/xflbmtit.hxx>
+#include <svx/xlnstit.hxx>
+#include <svx/xlnedit.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/scene3d.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/globl3d.hxx>
+#include <svx/fmglob.hxx>
+#include <svx/unopage.hxx>
+#include <svx/view3d.hxx>
+#include <svx/unoshape.hxx>
+#include <svx/svxids.hrc>
+#include <svx/unoshtxt.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/unoshprp.hxx>
+#include <svx/sxciaitm.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/unoapi.hxx>
+#include <svx/svdomeas.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdpool.hxx>
 #include <tools/gen.hxx>
-#include "svx/dialmgr.hxx"
-#include "svx/strings.hrc"
-#include "svx/svdocapt.hxx"
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
+#include <svx/svdocapt.hxx>
 #include <svx/obj3d.hxx>
 #include <tools/diagnose_ex.h>
-#include "svx/xflftrit.hxx"
-#include "svx/xtable.hxx"
-#include "svx/xbtmpit.hxx"
-#include "svx/xflgrit.hxx"
-#include "svx/xflhtit.hxx"
-#include "svx/xlndsit.hxx"
-#include "svdglob.hxx"
-#include "svx/unomaster.hxx"
+#include <svx/xflftrit.hxx>
+#include <svx/xtable.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xlndsit.hxx>
+#include <svdglob.hxx>
+#include <svx/unomaster.hxx>
 #include <editeng/outlobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -88,8 +88,8 @@
 #include "shapeimpl.hxx"
 #include <sal/log.hxx>
 
-#include "svx/lathe3d.hxx"
-#include "svx/extrud3d.hxx"
+#include <svx/lathe3d.hxx>
+#include <svx/extrud3d.hxx>
 
 #include <vcl/wmf.hxx>
 
@@ -97,7 +97,7 @@
 #include <vector>
 #include <iostream>
 
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 using namespace ::osl;
 using namespace ::cppu;

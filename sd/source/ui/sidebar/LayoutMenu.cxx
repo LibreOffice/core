@@ -19,24 +19,24 @@
 
 #include "LayoutMenu.hxx"
 
-#include "app.hrc"
-#include "drawdoc.hxx"
-#include "framework/FrameworkHelper.hxx"
-#include "strings.hrc"
-#include "glob.hxx"
-#include "helpids.h"
-#include "pres.hxx"
+#include <app.hrc>
+#include <drawdoc.hxx>
+#include <framework/FrameworkHelper.hxx>
+#include <strings.hrc>
+#include <glob.hxx>
+#include <helpids.h>
+#include <pres.hxx>
 
-#include "sdpage.hxx"
-#include "sdresid.hxx"
-#include "bitmaps.hlst"
-#include "tools/SlotStateListener.hxx"
-#include "DrawController.hxx"
-#include "DrawDocShell.hxx"
-#include "DrawViewShell.hxx"
-#include "EventMultiplexer.hxx"
-#include "SlideSorterViewShell.hxx"
-#include "ViewShellBase.hxx"
+#include <sdpage.hxx>
+#include <sdresid.hxx>
+#include <bitmaps.hlst>
+#include <tools/SlotStateListener.hxx>
+#include <DrawController.hxx>
+#include <DrawDocShell.hxx>
+#include <DrawViewShell.hxx>
+#include <EventMultiplexer.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <ViewShellBase.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 
 #include <comphelper/processfactory.hxx>

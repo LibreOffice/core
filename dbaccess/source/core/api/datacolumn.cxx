@@ -24,9 +24,9 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include "stringconstants.hxx"
-#include "strings.hxx"
-#include "apitools.hxx"
+#include <stringconstants.hxx>
+#include <strings.hxx>
+#include <apitools.hxx>
 
 using namespace dbaccess;
 using namespace ::com::sun::star::sdbc;

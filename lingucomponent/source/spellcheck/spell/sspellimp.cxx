@@ -30,7 +30,7 @@
 
 #include <lingutil.hxx>
 #include <hunspell.hxx>
-#include <sspellimp.hxx>
+#include "sspellimp.hxx"
 
 #include <linguistic/lngprops.hxx>
 #include <linguistic/spelldta.hxx>

@@ -18,16 +18,16 @@
  */
 
 #include <sal/macros.h>
-#include "java/sql/DatabaseMetaData.hxx"
-#include "java/sql/Connection.hxx"
-#include "java/sql/ResultSet.hxx"
-#include "java/tools.hxx"
-#include "java/lang/String.hxx"
+#include <java/sql/DatabaseMetaData.hxx>
+#include <java/sql/Connection.hxx>
+#include <java/sql/ResultSet.hxx>
+#include <java/tools.hxx>
+#include <java/lang/String.hxx>
 #include <connectivity/CommonTools.hxx>
-#include "FDatabaseMetaDataResultSet.hxx"
+#include <FDatabaseMetaDataResultSet.hxx>
 #include <comphelper/types.hxx>
-#include "TPrivilegesResultSet.hxx"
-#include "strings.hxx"
+#include <TPrivilegesResultSet.hxx>
+#include <strings.hxx>
 
 using namespace ::comphelper;
 

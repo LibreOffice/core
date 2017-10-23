@@ -18,9 +18,9 @@
 #include <config_global.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "rtl/string.h"
-#include "rtl/ustring.hxx"
-#include "rtl/ustrbuf.hxx"
+#include <rtl/string.h>
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 
 extern bool rtl_string_unittest_const_literal;
 bool rtl_string_unittest_invalid_conversion;

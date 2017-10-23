@@ -30,10 +30,10 @@
 #include <svl/style.hxx>
 #include <vcl/wrkwin.hxx>
 #include <editeng/outliner.hxx>
-#include <paralist.hxx>
+#include "paralist.hxx"
 #include <editeng/outlobj.hxx>
-#include <outleeng.hxx>
-#include <outlundo.hxx>
+#include "outleeng.hxx"
+#include "outlundo.hxx"
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/scripttypeitem.hxx>

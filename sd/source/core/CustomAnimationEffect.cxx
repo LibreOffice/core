@@ -72,9 +72,9 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
-#include "CustomAnimationEffect.hxx"
+#include <CustomAnimationEffect.hxx>
 #include <CustomAnimationPreset.hxx>
-#include "animations.hxx"
+#include <animations.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

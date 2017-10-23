@@ -9,7 +9,7 @@
 
 #include <gtk/gtk.h>
 
-#include <gtv-application.hxx>
+#include "gtv-application.hxx"
 
 int main(int argc, char* argv[])
 {

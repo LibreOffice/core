@@ -58,22 +58,22 @@
 
 #include "lwpsdwgrouploaderv0102.hxx"
 #include "lwpdrawobj.hxx"
-#include "lwptools.hxx"
+#include <lwptools.hxx>
 #include "lwpcharsetmgr.hxx"
 #include "lwpgrfobj.hxx"
 #include "lwpframelayout.hxx"
 
-#include "xfilter/xfcolor.hxx"
-#include "xfilter/xfdrawline.hxx"
-#include "xfilter/xfdrawpath.hxx"
-#include "xfilter/xfdrawpolyline.hxx"
-#include "xfilter/xfdrawrect.hxx"
-#include "xfilter/xfdrawpolygon.hxx"
-#include "xfilter/xfdrawgroup.hxx"
-#include "xfilter/xfdrawstyle.hxx"
-#include "xfilter/xfdrawlinestyle.hxx"
-#include "xfilter/xfparagraph.hxx"
-#include "xfilter/xfstylemanager.hxx"
+#include <xfilter/xfcolor.hxx>
+#include <xfilter/xfdrawline.hxx>
+#include <xfilter/xfdrawpath.hxx>
+#include <xfilter/xfdrawpolyline.hxx>
+#include <xfilter/xfdrawrect.hxx>
+#include <xfilter/xfdrawpolygon.hxx>
+#include <xfilter/xfdrawgroup.hxx>
+#include <xfilter/xfdrawstyle.hxx>
+#include <xfilter/xfdrawlinestyle.hxx>
+#include <xfilter/xfparagraph.hxx>
+#include <xfilter/xfstylemanager.hxx>
 
 LwpSdwGroupLoaderV0102::LwpSdwGroupLoaderV0102(SvStream* pStream, LwpGraphicObject* pGraphicObj)
     : m_pStream(pStream)

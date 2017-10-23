@@ -21,21 +21,21 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/waitobj.hxx>
 
-#include "uiitems.hxx"
-#include "dbdata.hxx"
-#include "reffact.hxx"
-#include "viewdata.hxx"
-#include "document.hxx"
-#include "docsh.hxx"
-#include "scresid.hxx"
-#include "queryentry.hxx"
+#include <uiitems.hxx>
+#include <dbdata.hxx>
+#include <reffact.hxx>
+#include <viewdata.hxx>
+#include <document.hxx>
+#include <docsh.hxx>
+#include <scresid.hxx>
+#include <queryentry.hxx>
 
-#include "foptmgr.hxx"
+#include <foptmgr.hxx>
 
-#include "globstr.hrc"
-#include "strings.hrc"
+#include <globstr.hrc>
+#include <strings.hrc>
 
-#include "filtdlg.hxx"
+#include <filtdlg.hxx>
 #include <vcl/layout.hxx>
 #include <svl/sharedstringpool.hxx>
 

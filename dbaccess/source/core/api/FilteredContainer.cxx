@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "stringconstants.hxx"
-#include "strings.hxx"
-#include "FilteredContainer.hxx"
-#include "RefreshListener.hxx"
-#include "sdbcoretools.hxx"
+#include <stringconstants.hxx>
+#include <strings.hxx>
+#include <FilteredContainer.hxx>
+#include <RefreshListener.hxx>
+#include <sdbcoretools.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <connectivity/dbtools.hxx>
 #include <tools/wldcrd.hxx>

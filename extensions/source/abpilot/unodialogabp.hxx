@@ -22,7 +22,7 @@
 
 #include <svtools/genericunodialog.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include "componentmodule.hxx"
+#include <componentmodule.hxx>
 #include <com/sun/star/task/XJob.hpp>
 #include <cppuhelper/implbase1.hxx>
 

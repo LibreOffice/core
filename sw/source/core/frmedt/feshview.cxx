@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <svx/strings.hrc>
 #include <svx/sdrobjectfilter.hxx>
 #include <svx/svddrgmt.hxx>
@@ -67,27 +67,27 @@
 #include <swmodule.hxx>
 #include <swtable.hxx>
 #include <flyfrms.hxx>
-#include "fesh.hxx"
-#include "rootfrm.hxx"
-#include "pagefrm.hxx"
-#include "sectfrm.hxx"
-#include "doc.hxx"
+#include <fesh.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+#include <sectfrm.hxx>
+#include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include "dview.hxx"
-#include "dflyobj.hxx"
-#include "dcontact.hxx"
-#include "viewimp.hxx"
-#include "flyfrm.hxx"
-#include "pam.hxx"
-#include "ndole.hxx"
-#include "ndgrf.hxx"
-#include "ndtxt.hxx"
-#include "viewopt.hxx"
-#include "swundo.hxx"
-#include "notxtfrm.hxx"
-#include "txtfrm.hxx"
-#include "txatbase.hxx"
-#include "mdiexp.hxx"
+#include <dview.hxx>
+#include <dflyobj.hxx>
+#include <dcontact.hxx>
+#include <viewimp.hxx>
+#include <flyfrm.hxx>
+#include <pam.hxx>
+#include <ndole.hxx>
+#include <ndgrf.hxx>
+#include <ndtxt.hxx>
+#include <viewopt.hxx>
+#include <swundo.hxx>
+#include <notxtfrm.hxx>
+#include <txtfrm.hxx>
+#include <txatbase.hxx>
+#include <mdiexp.hxx>
 #include <sortedobjs.hxx>
 #include <HandleAnchorNodeChg.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

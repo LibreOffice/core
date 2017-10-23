@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "doc.hxx"
-#include "swundo.hxx"
-#include "pam.hxx"
-#include "ndtxt.hxx"
+#include <doc.hxx>
+#include <swundo.hxx>
+#include <pam.hxx>
+#include <ndtxt.hxx>
 #include <UndoCore.hxx>
-#include "rolbck.hxx"
-#include "docary.hxx"
+#include <rolbck.hxx>
+#include <docary.hxx>
 
 SwUndoFormatColl::SwUndoFormatColl( const SwPaM& rRange,
                               SwFormatColl* pColl,

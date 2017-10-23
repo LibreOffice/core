@@ -22,9 +22,9 @@
 #include <tools/fract.hxx>
 #include <scriptinfo.hxx>
 
-#include "swrect.hxx"
+#include <swrect.hxx>
 #include "portxt.hxx"
-#include "swfont.hxx"
+#include <swfont.hxx>
 
 #include <vector>
 #include <deque>

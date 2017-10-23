@@ -9,7 +9,7 @@
 #ifndef INCLUDED_FPICKER_SOURCE_OFFICE_PLACESLISTBOX_HXX
 #define INCLUDED_FPICKER_SOURCE_OFFICE_PLACESLISTBOX_HXX
 
-#include <iodlg.hxx>
+#include "iodlg.hxx"
 
 #include <svtools/place.hxx>
 #include <svtools/svtabbx.hxx>

@@ -59,7 +59,7 @@
  ************************************************************************/
 
 #include "lwpusrdicts.hxx"
-#include "lwpatomholder.hxx"
+#include <lwpatomholder.hxx>
 
 LwpUserDictFiles::LwpUserDictFiles(LwpObjectStream *pStrm)
 {

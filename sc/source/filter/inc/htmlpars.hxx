@@ -27,7 +27,7 @@
 #include <vector>
 #include <o3tl/sorted_vector.hxx>
 
-#include "rangelst.hxx"
+#include <rangelst.hxx>
 #include "eeparser.hxx"
 
 const sal_uInt32 SC_HTML_FONTSIZES = 7;        // like export, HTML options

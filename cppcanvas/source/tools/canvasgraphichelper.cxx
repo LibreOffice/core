@@ -29,7 +29,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <cppcanvas/polypolygon.hxx>
-#include "tools.hxx"
+#include <tools.hxx>
 
 
 using namespace ::com::sun::star;

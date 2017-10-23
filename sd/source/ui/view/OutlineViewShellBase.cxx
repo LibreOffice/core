@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "OutlineViewShellBase.hxx"
-#include "sdresid.hxx"
-#include "DrawDocShell.hxx"
-#include "strings.hrc"
-#include "framework/FrameworkHelper.hxx"
+#include <OutlineViewShellBase.hxx>
+#include <sdresid.hxx>
+#include <DrawDocShell.hxx>
+#include <strings.hrc>
+#include <framework/FrameworkHelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 

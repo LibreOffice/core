@@ -10,7 +10,7 @@
 #include <sal/config.h>
 
 #include <unotest/filters-test.hxx>
-#include "scdll.hxx"
+#include <scdll.hxx>
 #include "helper/qahelper.hxx"
 
 class SCQAHELPER_DLLPUBLIC FunctionsTest : public ScBootstrapFixture, public test::FiltersTest

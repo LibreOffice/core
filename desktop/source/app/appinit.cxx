@@ -22,10 +22,10 @@
 
 #include <config_vclplug.h>
 
-#include "app.hxx"
-#include "dp_shared.hxx"
+#include <app.hxx>
+#include <dp_shared.hxx>
 #include "cmdlineargs.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

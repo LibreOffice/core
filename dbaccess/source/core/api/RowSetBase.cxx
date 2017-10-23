@@ -21,9 +21,9 @@
 #include "CRowSetDataColumn.hxx"
 #include <connectivity/sdbcx/VCollection.hxx>
 #include "RowSetCache.hxx"
-#include "stringconstants.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
+#include <stringconstants.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>

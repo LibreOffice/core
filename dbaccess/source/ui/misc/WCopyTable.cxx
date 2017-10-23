@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "strings.hrc"
-#include "strings.hxx"
-#include "stringconstants.hxx"
-#include "core_resource.hxx"
-#include "sqlmessage.hxx"
-#include "UITools.hxx"
-#include "WColumnSelect.hxx"
-#include "WCopyTable.hxx"
-#include "WCPage.hxx"
-#include "WExtendPages.hxx"
-#include "WNameMatch.hxx"
-#include "WTypeSelect.hxx"
+#include <strings.hrc>
+#include <strings.hxx>
+#include <stringconstants.hxx>
+#include <core_resource.hxx>
+#include <sqlmessage.hxx>
+#include <UITools.hxx>
+#include <WColumnSelect.hxx>
+#include <WCopyTable.hxx>
+#include <WCPage.hxx>
+#include <WExtendPages.hxx>
+#include <WNameMatch.hxx>
+#include <WTypeSelect.hxx>
 
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>

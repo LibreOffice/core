@@ -57,7 +57,7 @@
  * @file
  * Implement for font factory which will manage all font.
  ************************************************************************/
-#include "xfilter/xffontfactory.hxx"
+#include <xfilter/xffontfactory.hxx>
 
 XFFontFactory::XFFontFactory()
 {

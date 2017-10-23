@@ -30,7 +30,7 @@ typedef struct _GDBusProxy GDBusProxy;
 typedef struct _GDBusConnection GDBusConnection;
 #endif
 
-#include "printerinfomanager.hxx"
+#include <printerinfomanager.hxx>
 #include "cupsmgr.hxx"
 
 #define BACKEND_DIR "/usr/share/print-backends"

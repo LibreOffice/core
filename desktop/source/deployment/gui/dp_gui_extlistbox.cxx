@@ -19,13 +19,13 @@
 
 #include <svtools/controldims.hxx>
 
-#include "dp_shared.hxx"
+#include <dp_shared.hxx>
 #include "dp_gui.h"
 #include "dp_gui_extlistbox.hxx"
 #include "dp_gui_theextmgr.hxx"
 #include "dp_gui_dialog2.hxx"
-#include "dp_dependencies.hxx"
-#include "bitmaps.hlst"
+#include <dp_dependencies.hxx>
+#include <bitmaps.hlst>
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>

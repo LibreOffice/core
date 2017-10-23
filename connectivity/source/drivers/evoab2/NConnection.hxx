@@ -27,7 +27,7 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/warningscontainer.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <osl/module.h>
 #include "EApi.h"

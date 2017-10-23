@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "cellform.hxx"
+#include <cellform.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstring.hxx>
 
-#include "formulacell.hxx"
-#include "document.hxx"
-#include "cellvalue.hxx"
+#include <formulacell.hxx>
+#include <document.hxx>
+#include <cellvalue.hxx>
 #include <formula/errorcodes.hxx>
-#include "sc.hrc"
+#include <sc.hrc>
 #include <editutil.hxx>
 
 void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString& rString,

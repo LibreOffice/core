@@ -60,10 +60,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTABLE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTABLE_HXX
 
-#include "xfilter/xfcontent.hxx"
-#include "xfilter/xfrow.hxx"
-#include "xfilter/xfcell.hxx"
-#include "xfilter/xfcontentcontainer.hxx"
+#include <xfilter/xfcontent.hxx>
+#include <xfilter/xfrow.hxx>
+#include <xfilter/xfcell.hxx>
+#include <xfilter/xfcontentcontainer.hxx>
 #include <map>
 #include <vector>
 

@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "java/sql/Array.hxx"
-#include "java/tools.hxx"
-#include "java/sql/ResultSet.hxx"
+#include <java/sql/Array.hxx>
+#include <java/tools.hxx>
+#include <java/sql/ResultSet.hxx>
 
 using namespace connectivity;
 

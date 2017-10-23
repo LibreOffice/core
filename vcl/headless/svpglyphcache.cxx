@@ -24,9 +24,9 @@
 
 #include <rtl/instance.hxx>
 
-#include "unx/geninst.h"
-#include "unx/glyphcache.hxx"
-#include "headless/svpgdi.hxx"
+#include <unx/geninst.h>
+#include <unx/glyphcache.hxx>
+#include <headless/svpgdi.hxx>
 
 namespace
 {

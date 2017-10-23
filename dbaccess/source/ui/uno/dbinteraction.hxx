@@ -22,8 +22,8 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include "core_resource.hxx"
-#include "apitools.hxx"
+#include <core_resource.hxx>
+#include <apitools.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>

@@ -19,10 +19,10 @@
 
 
 #include <vcl/layout.hxx>
-#include "dp_shared.hxx"
-#include "strings.hrc"
+#include <dp_shared.hxx>
+#include <strings.hrc>
 #include <tools/config.hxx>
-#include "lockfile.hxx"
+#include <lockfile.hxx>
 
 
 namespace desktop {

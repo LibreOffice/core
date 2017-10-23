@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <memory>
-#include "propbrw.hxx"
-#include "RptObject.hxx"
-#include "ReportController.hxx"
+#include <propbrw.hxx>
+#include <RptObject.hxx>
+#include <ReportController.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <strings.hrc>
-#include "rptui_slotid.hrc"
+#include <rptui_slotid.hrc>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
@@ -47,13 +47,13 @@
 #include <comphelper/types.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
-#include "core_resource.hxx"
-#include "SectionView.hxx"
-#include "ReportSection.hxx"
-#include "strings.hxx"
-#include "DesignView.hxx"
-#include "ViewsWindow.hxx"
-#include "UITools.hxx"
+#include <core_resource.hxx>
+#include <SectionView.hxx>
+#include <ReportSection.hxx>
+#include <strings.hxx>
+#include <DesignView.hxx>
+#include <ViewsWindow.hxx>
+#include <UITools.hxx>
 #include <unotools/confignode.hxx>
 
 namespace rptui

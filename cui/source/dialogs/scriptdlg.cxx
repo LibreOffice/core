@@ -28,9 +28,9 @@
 
 #include <strings.hrc>
 #include <bitmaps.hlst>
-#include "scriptdlg.hxx"
+#include <scriptdlg.hxx>
 #include <dialmgr.hxx>
-#include "cfgutil.hxx"
+#include <cfgutil.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
@@ -57,7 +57,7 @@
 
 #include <basic/sbx.hxx>
 #include <svtools/imagemgr.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <tools/urlobj.hxx>
 #include <vector>
 #include <algorithm>

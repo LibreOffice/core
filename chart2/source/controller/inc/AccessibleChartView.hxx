@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_ACCESSIBLECHARTVIEW_HXX
 
 #include "AccessibleBase.hxx"
-#include "MutexContainer.hxx"
+#include <MutexContainer.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>

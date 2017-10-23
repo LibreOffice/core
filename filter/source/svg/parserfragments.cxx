@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "parserfragments.hxx"
+#include <parserfragments.hxx>
 #include "spirit_supplements.hxx"
-#include "gfxtypes.hxx"
+#include <gfxtypes.hxx>
 
 #include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
@@ -23,7 +23,7 @@
 
 #include "units.hxx"
 #include "tokenmap.hxx"
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 

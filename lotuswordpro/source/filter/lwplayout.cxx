@@ -61,9 +61,9 @@
 #include <memory>
 #include "lwplayout.hxx"
 #include "lwpusewhen.hxx"
-#include "lwptools.hxx"
+#include <lwptools.hxx>
 #include "lwplaypiece.hxx"
-#include "xfilter/xfcolumns.hxx"
+#include <xfilter/xfcolumns.hxx>
 #include "lwpstory.hxx"
 #include "lwpparastyle.hxx"
 #include "lwpholder.hxx"

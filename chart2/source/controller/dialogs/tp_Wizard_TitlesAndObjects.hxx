@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_WIZARD_TITLESANDOBJECTS_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_WIZARD_TITLESANDOBJECTS_HXX
 
-#include "TimerTriggeredControllerLock.hxx"
+#include <TimerTriggeredControllerLock.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <svtools/wizardmachine.hxx>
@@ -30,8 +30,8 @@
 
 #include <memory>
 
-#include "res_LegendPosition.hxx"
-#include "res_Titles.hxx"
+#include <res_LegendPosition.hxx>
+#include <res_Titles.hxx>
 
 namespace chart
 {

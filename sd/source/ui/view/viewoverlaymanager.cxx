@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sddll.hxx"
+#include <sddll.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -35,21 +35,21 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svxids.hrc>
 
-#include "view/viewoverlaymanager.hxx"
+#include <view/viewoverlaymanager.hxx>
 
 
-#include "DrawDocShell.hxx"
-#include "DrawViewShell.hxx"
-#include "DrawController.hxx"
-#include "strings.hrc"
-#include "bitmaps.hlst"
-#include "sdresid.hxx"
-#include "EventMultiplexer.hxx"
-#include "ViewShellManager.hxx"
-#include "helpids.h"
-#include "sdpage.hxx"
-#include "drawdoc.hxx"
-#include "smarttag.hxx"
+#include <DrawDocShell.hxx>
+#include <DrawViewShell.hxx>
+#include <DrawController.hxx>
+#include <strings.hrc>
+#include <bitmaps.hlst>
+#include <sdresid.hxx>
+#include <EventMultiplexer.hxx>
+#include <ViewShellManager.hxx>
+#include <helpids.h>
+#include <sdpage.hxx>
+#include <drawdoc.hxx>
+#include <smarttag.hxx>
 
 using namespace ::com::sun::star::uno;
 

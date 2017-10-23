@@ -21,7 +21,7 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONTRANSFORMNODE_HXX
 
 #include "animationbasenode.hxx"
-#include "com/sun/star/animations/XAnimateTransform.hpp"
+#include <com/sun/star/animations/XAnimateTransform.hpp>
 
 namespace slideshow {
 namespace internal {

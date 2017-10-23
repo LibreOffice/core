@@ -53,7 +53,7 @@
  *
  *
  ************************************************************************/
-#include "lwpbookmarkmgr.hxx"
+#include <lwpbookmarkmgr.hxx>
 
 void LwpBookmarkMgr::AddXFBookmarkStart(const OUString& sName,XFBookmarkStart* pMark)
 {

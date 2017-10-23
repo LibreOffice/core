@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Outliner.hxx"
+#include <Outliner.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <vcl/wrkwin.hxx>
 #include <vcl/settings.hxx>
@@ -52,23 +52,23 @@
 #include <svtools/langtab.hxx>
 #include <tools/diagnose_ex.h>
 
-#include "strings.hrc"
+#include <strings.hrc>
 #include <editeng/outliner.hxx>
-#include "sdpage.hxx"
-#include "sdmod.hxx"
-#include "Window.hxx"
-#include "sdresid.hxx"
-#include "DrawViewShell.hxx"
-#include "OutlineViewShell.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "FrameView.hxx"
-#include "optsitem.hxx"
-#include "drawview.hxx"
-#include "ViewShellBase.hxx"
-#include "SpellDialogChildWindow.hxx"
-#include "ToolBarManager.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <sdpage.hxx>
+#include <sdmod.hxx>
+#include <Window.hxx>
+#include <sdresid.hxx>
+#include <DrawViewShell.hxx>
+#include <OutlineViewShell.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <FrameView.hxx>
+#include <optsitem.hxx>
+#include <drawview.hxx>
+#include <ViewShellBase.hxx>
+#include <SpellDialogChildWindow.hxx>
+#include <ToolBarManager.hxx>
+#include <framework/FrameworkHelper.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/editerr.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

@@ -18,11 +18,11 @@
  */
 
 #include <memory>
-#include "imp_op.hxx"
+#include <imp_op.hxx>
 
 #include <filter/msfilter/countryid.hxx>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <editeng/editdata.hxx>
@@ -38,46 +38,46 @@
 
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
-#include "docuno.hxx"
+#include <docuno.hxx>
 
-#include "formulacell.hxx"
-#include "document.hxx"
-#include "rangenam.hxx"
-#include "compiler.hxx"
-#include "patattr.hxx"
-#include "attrib.hxx"
-#include "globstr.hrc"
-#include "global.hxx"
-#include "markdata.hxx"
-#include "olinetab.hxx"
-#include "stlsheet.hxx"
-#include "stlpool.hxx"
-#include "viewopti.hxx"
-#include "docoptio.hxx"
-#include "scextopt.hxx"
-#include "editutil.hxx"
-#include "filtopt.hxx"
-#include "scerrors.hxx"
-#include "unonames.hxx"
-#include "paramisc.hxx"
-#include "postit.hxx"
+#include <formulacell.hxx>
+#include <document.hxx>
+#include <rangenam.hxx>
+#include <compiler.hxx>
+#include <patattr.hxx>
+#include <attrib.hxx>
+#include <globstr.hrc>
+#include <global.hxx>
+#include <markdata.hxx>
+#include <olinetab.hxx>
+#include <stlsheet.hxx>
+#include <stlpool.hxx>
+#include <viewopti.hxx>
+#include <docoptio.hxx>
+#include <scextopt.hxx>
+#include <editutil.hxx>
+#include <filtopt.hxx>
+#include <scerrors.hxx>
+#include <unonames.hxx>
+#include <paramisc.hxx>
+#include <postit.hxx>
 
-#include "fapihelper.hxx"
-#include "namebuff.hxx"
-#include "xltools.hxx"
-#include "xltable.hxx"
-#include "xlview.hxx"
-#include "xltracer.hxx"
-#include "xihelper.hxx"
-#include "xipage.hxx"
-#include "xiview.hxx"
-#include "xilink.hxx"
-#include "xiescher.hxx"
-#include "xicontent.hxx"
+#include <fapihelper.hxx>
+#include <namebuff.hxx>
+#include <xltools.hxx>
+#include <xltable.hxx>
+#include <xlview.hxx>
+#include <xltracer.hxx>
+#include <xihelper.hxx>
+#include <xipage.hxx>
+#include <xiview.hxx>
+#include <xilink.hxx>
+#include <xiescher.hxx>
+#include <xicontent.hxx>
 
-#include "excimp8.hxx"
-#include "excform.hxx"
-#include "documentimport.hxx"
+#include <excimp8.hxx>
+#include <excform.hxx>
+#include <documentimport.hxx>
 
 #if defined(_WIN32)
 #include <math.h>

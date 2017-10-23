@@ -67,7 +67,7 @@
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
 #include <swtable.hxx>
-#include "fldbas.hxx"
+#include <fldbas.hxx>
 #include <breakit.hxx>
 #include "htmlatr.hxx"
 #include "htmlnum.hxx"

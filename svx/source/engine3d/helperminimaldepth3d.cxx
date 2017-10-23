@@ -18,7 +18,7 @@
  */
 
 
-#include <helperminimaldepth3d.hxx>
+#include "helperminimaldepth3d.hxx"
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>

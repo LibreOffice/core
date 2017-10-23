@@ -23,7 +23,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>
-#include <actctrl.hxx>
+#include "actctrl.hxx"
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 

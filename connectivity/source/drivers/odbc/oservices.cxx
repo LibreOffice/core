@@ -18,7 +18,7 @@
  */
 
 #include "ORealDriver.hxx"
-#include "odbc/ODriver.hxx"
+#include <odbc/ODriver.hxx>
 #include <cppuhelper/factory.hxx>
 
 using namespace connectivity::odbc;

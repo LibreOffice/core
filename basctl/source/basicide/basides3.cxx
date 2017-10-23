@@ -18,7 +18,7 @@
  */
 
 
-#include <baside2.hxx>
+#include "baside2.hxx"
 #include <baside3.hxx>
 #include <localizationmgr.hxx>
 #include <dlgedview.hxx>

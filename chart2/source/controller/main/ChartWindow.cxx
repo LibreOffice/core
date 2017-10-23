@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ChartWindow.hxx"
-#include "ChartController.hxx"
-#include "helpids.h"
-#include "uiobject.hxx"
+#include <ChartWindow.hxx>
+#include <ChartController.hxx>
+#include <helpids.h>
+#include <uiobject.hxx>
 
 #include <vcl/help.hxx>
 #include <vcl/openglwin.hxx>

@@ -18,14 +18,14 @@
  */
 
 
-#include "node.hxx"
-#include "parse.hxx"
-#include "rect.hxx"
-#include "symbol.hxx"
-#include "smmod.hxx"
+#include <node.hxx>
+#include <parse.hxx>
+#include <rect.hxx>
+#include <symbol.hxx>
+#include <smmod.hxx>
 #include "mathtype.hxx"
 #include "tmpdevice.hxx"
-#include "visitors.hxx"
+#include <visitors.hxx>
 
 #include <comphelper/string.hxx>
 #include <tools/color.hxx>

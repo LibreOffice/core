@@ -24,9 +24,9 @@
 #include <pagefrm.hxx>
 #include <sectfrm.hxx>
 #include <tabfrm.hxx>
-#include "rootfrm.hxx"
-#include "viewopt.hxx"
-#include "viewsh.hxx"
+#include <rootfrm.hxx>
+#include <viewopt.hxx>
+#include <viewsh.hxx>
 #include <frmfmt.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <fmtsrnd.hxx>

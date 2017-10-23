@@ -24,9 +24,9 @@
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 
-#include "openuriexternally.hxx"
+#include <openuriexternally.hxx>
 
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 
 bool sfx2::openUriExternally(
     OUString const & uri, bool handleSystemShellExecuteException)

@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "PreviewRenderer.hxx"
+#include <PreviewRenderer.hxx>
 
-#include "DrawDocShell.hxx"
-#include "drawdoc.hxx"
-#include "drawview.hxx"
-#include "sdpage.hxx"
-#include "ViewShell.hxx"
+#include <DrawDocShell.hxx>
+#include <drawdoc.hxx>
+#include <drawview.hxx>
+#include <sdpage.hxx>
+#include <ViewShell.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 

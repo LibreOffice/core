@@ -18,7 +18,7 @@
  */
 
 #include "alloc_impl.hxx"
-#include "rtl/alloc.h"
+#include <rtl/alloc.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
 
@@ -26,7 +26,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "rtllifecycle.h"
+#include <rtllifecycle.h>
 #include <oslmemory.h>
 
 AllocMode alloc_mode = AllocMode::UNSET;

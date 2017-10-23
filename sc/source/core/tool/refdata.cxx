@@ -21,7 +21,7 @@
 
 #include <algorithm>
 
-#include "refdata.hxx"
+#include <refdata.hxx>
 
 void ScSingleRefData::InitAddress( const ScAddress& rAdr )
 {

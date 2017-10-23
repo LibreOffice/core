@@ -21,10 +21,10 @@
 #include <vcl/fontcharmap.hxx>
 #include <vcl/metric.hxx>
 
-#include "impfontmetric.hxx"
-#include "impfontmetricdata.hxx"
-#include "PhysicalFontFace.hxx"
-#include "sft.hxx"
+#include <impfontmetric.hxx>
+#include <impfontmetricdata.hxx>
+#include <PhysicalFontFace.hxx>
+#include <sft.hxx>
 
 #include <vector>
 #include <set>

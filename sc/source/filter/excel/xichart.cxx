@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xichart.hxx"
+#include <xichart.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -80,21 +80,21 @@
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
 
-#include "document.hxx"
-#include "drwlayer.hxx"
-#include "rangeutl.hxx"
-#include "tokenarray.hxx"
-#include "token.hxx"
-#include "compiler.hxx"
-#include "reftokenhelper.hxx"
-#include "chartlis.hxx"
-#include "fprogressbar.hxx"
-#include "xltracer.hxx"
-#include "xistream.hxx"
-#include "xiformula.hxx"
-#include "xistyle.hxx"
-#include "xipage.hxx"
-#include "xiview.hxx"
+#include <document.hxx>
+#include <drwlayer.hxx>
+#include <rangeutl.hxx>
+#include <tokenarray.hxx>
+#include <token.hxx>
+#include <compiler.hxx>
+#include <reftokenhelper.hxx>
+#include <chartlis.hxx>
+#include <fprogressbar.hxx>
+#include <xltracer.hxx>
+#include <xistream.hxx>
+#include <xiformula.hxx>
+#include <xistyle.hxx>
+#include <xipage.hxx>
+#include <xiview.hxx>
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;

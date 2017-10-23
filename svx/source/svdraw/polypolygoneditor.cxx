@@ -21,7 +21,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
-#include "svx/polypolygoneditor.hxx"
+#include <svx/polypolygoneditor.hxx>
 
 namespace sdr {
 

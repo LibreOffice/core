@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "macroass.hxx"
+#include <macroass.hxx>
 
 #include <basic/basmgr.hxx>
 #include <comphelper/string.hxx>
@@ -26,14 +26,14 @@
 #include <svx/dialogs.hrc>
 #include <svtools/svmedit.hxx>
 #include <vcl/idle.hxx>
-#include "cfgutil.hxx"
+#include <cfgutil.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/fixed.hxx>
-#include "headertablistbox.hxx"
-#include "svtools/svlbitm.hxx"
-#include "svtools/treelistentry.hxx"
+#include <headertablistbox.hxx>
+#include <svtools/svlbitm.hxx>
+#include <svtools/treelistentry.hxx>
 #include <o3tl/make_unique.hxx>
 
 using ::com::sun::star::uno::Reference;

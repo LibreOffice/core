@@ -16,9 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "dlgedfac.hxx"
-#include "strings.hxx"
-#include "RptObject.hxx"
+#include <dlgedfac.hxx>
+#include <strings.hxx>
+#include <RptObject.hxx>
 #include <RptDef.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

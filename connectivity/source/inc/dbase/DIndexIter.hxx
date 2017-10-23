@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEXITER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEXITER_HXX
 
-#include "file/fcode.hxx"
-#include "dbase/DIndex.hxx"
-#include "dbase/dindexnode.hxx"
+#include <file/fcode.hxx>
+#include <dbase/DIndex.hxx>
+#include <dbase/dindexnode.hxx>
 
 namespace connectivity
 {

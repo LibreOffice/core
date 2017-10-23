@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "svtaccessiblefactory.hxx"
+#include <svtaccessiblefactory.hxx>
 
 #include <osl/module.h>
 

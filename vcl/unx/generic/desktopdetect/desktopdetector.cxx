@@ -23,13 +23,13 @@
 
 #include <unx/desktops.hxx>
 
-#include "rtl/bootstrap.hxx"
-#include "rtl/process.h"
-#include "rtl/ustrbuf.hxx"
-#include "osl/module.h"
-#include "osl/thread.h"
+#include <rtl/bootstrap.hxx>
+#include <rtl/process.h>
+#include <rtl/ustrbuf.hxx>
+#include <osl/module.h>
+#include <osl/thread.h>
 
-#include "vclpluginapi.h"
+#include <vclpluginapi.h>
 
 #include <unistd.h>
 #include <string.h>

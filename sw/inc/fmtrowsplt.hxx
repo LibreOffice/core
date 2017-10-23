@@ -21,8 +21,8 @@
 
 #include <svl/eitem.hxx>
 #include "swdllapi.h"
-#include <hintids.hxx>
-#include <format.hxx>
+#include "hintids.hxx"
+#include "format.hxx"
 
 class IntlWrapper;
 

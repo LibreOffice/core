@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_SWGRAMMARMARKUP_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_SWGRAMMARMARKUP_HXX
 
-#include <wrong.hxx>
+#include "wrong.hxx"
 #include <vector>
 
 /* SwGrammarMarkUp extends the functionality of a "normal" SwWrongList by memorizing

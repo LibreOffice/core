@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "file/fcode.hxx"
+#include <file/fcode.hxx>
 #include <osl/diagnose.h>
 #include <connectivity/sqlparse.hxx>
-#include "sqlbison.hxx"
+#include <sqlbison.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <comphelper/types.hxx>
 

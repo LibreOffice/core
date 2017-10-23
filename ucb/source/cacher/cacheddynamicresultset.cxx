@@ -18,9 +18,9 @@
  */
 
 
-#include <cacheddynamicresultset.hxx>
+#include "cacheddynamicresultset.hxx"
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include <cachedcontentresultset.hxx>
+#include "cachedcontentresultset.hxx"
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 

@@ -8,7 +8,7 @@
  *
  */
 
-#include "oox/crypto/DocumentEncryption.hxx"
+#include <oox/crypto/DocumentEncryption.hxx>
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>

@@ -10,10 +10,10 @@
 #ifndef INCLUDED_SD_SOURCE_UI_DLG_PHOTOALBUMDIALOG_HXX
 #define INCLUDED_SD_SOURCE_UI_DLG_PHOTOALBUMDIALOG_HXX
 
-#include "tools/link.hxx"
-#include "sdpage.hxx"
-#include "pres.hxx"
-#include "drawdoc.hxx"
+#include <tools/link.hxx>
+#include <sdpage.hxx>
+#include <pres.hxx>
+#include <drawdoc.hxx>
 
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>

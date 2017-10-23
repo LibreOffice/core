@@ -24,7 +24,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <eeobj.hxx>
+#include "eeobj.hxx"
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <editeng/editeng.hxx>

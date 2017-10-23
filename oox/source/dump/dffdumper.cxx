@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/dump/dffdumper.hxx"
+#include <oox/dump/dffdumper.hxx>
 
 #if OOX_INCLUDE_DUMPER
 

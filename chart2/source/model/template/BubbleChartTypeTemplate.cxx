@@ -18,15 +18,15 @@
  */
 
 #include "BubbleChartTypeTemplate.hxx"
-#include "macros.hxx"
+#include <macros.hxx>
 #include "BubbleDataInterpreter.hxx"
-#include "CartesianCoordinateSystem.hxx"
-#include "Scaling.hxx"
-#include "DiagramHelper.hxx"
-#include "servicenames_charttypes.hxx"
-#include "DataSeriesHelper.hxx"
+#include <CartesianCoordinateSystem.hxx>
+#include <Scaling.hxx>
+#include <DiagramHelper.hxx>
+#include <servicenames_charttypes.hxx>
+#include <DataSeriesHelper.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include "PropertyHelper.hxx"
+#include <PropertyHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <algorithm>

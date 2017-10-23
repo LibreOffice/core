@@ -30,9 +30,9 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
-#include "apitools.hxx"
+#include <apitools.hxx>
 #include "datasettings.hxx"
-#include <column.hxx>
+#include "column.hxx"
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/TTableHelper.hxx>
 #include <comphelper/uno3.hxx>

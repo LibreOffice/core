@@ -22,22 +22,22 @@
 
 #include <utility>
 
-#include "AccessibleCell.hxx"
-#include "scitems.hxx"
+#include <AccessibleCell.hxx>
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
-#include "AccessibleText.hxx"
-#include "AccessibleDocument.hxx"
-#include "tabvwsh.hxx"
-#include "document.hxx"
-#include "attrib.hxx"
-#include "miscuno.hxx"
-#include "editsrc.hxx"
-#include "dociter.hxx"
-#include "markdata.hxx"
-#include "cellvalue.hxx"
-#include "formulaiter.hxx"
-#include "validat.hxx"
+#include <AccessibleText.hxx>
+#include <AccessibleDocument.hxx>
+#include <tabvwsh.hxx>
+#include <document.hxx>
+#include <attrib.hxx>
+#include <miscuno.hxx>
+#include <editsrc.hxx>
+#include <dociter.hxx>
+#include <markdata.hxx>
+#include <cellvalue.hxx>
+#include <formulaiter.hxx>
+#include <validat.hxx>
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -49,7 +49,7 @@
 #include <float.h>
 #include <vcl/svapp.hxx>
 
-#include "AccessibleSpreadsheet.hxx"
+#include <AccessibleSpreadsheet.hxx>
 #include <o3tl/make_unique.hxx>
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

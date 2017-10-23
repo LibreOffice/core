@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xepivot.hxx"
+#include <xepivot.hxx>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
@@ -31,17 +31,17 @@
 #include <tools/date.hxx>
 #include <svl/zformat.hxx>
 #include <sot/storage.hxx>
-#include "document.hxx"
-#include "dpobject.hxx"
-#include "dpsave.hxx"
-#include "dpdimsave.hxx"
-#include "dpshttab.hxx"
-#include "globstr.hrc"
-#include "fapihelper.hxx"
-#include "xestring.hxx"
-#include "xelink.hxx"
-#include "dputil.hxx"
-#include "generalfunction.hxx"
+#include <document.hxx>
+#include <dpobject.hxx>
+#include <dpsave.hxx>
+#include <dpdimsave.hxx>
+#include <dpshttab.hxx>
+#include <globstr.hrc>
+#include <fapihelper.hxx>
+#include <xestring.hxx>
+#include <xelink.hxx>
+#include <dputil.hxx>
+#include <generalfunction.hxx>
 
 using namespace ::oox;
 

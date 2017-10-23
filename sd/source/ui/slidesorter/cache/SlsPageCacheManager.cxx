@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "cache/SlsPageCacheManager.hxx"
+#include <cache/SlsPageCacheManager.hxx>
 
 #include "SlsBitmapCache.hxx"
-#include "view/SlideSorterView.hxx"
-#include "model/SlideSorterModel.hxx"
+#include <view/SlideSorterView.hxx>
+#include <model/SlideSorterModel.hxx>
 
 #include <deque>
 #include <map>

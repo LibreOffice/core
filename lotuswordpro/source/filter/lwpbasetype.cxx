@@ -53,7 +53,7 @@
  *
  *
  ************************************************************************/
-#include "lwpbasetype.hxx"
+#include <lwpbasetype.hxx>
 /**
  * @descr       read PonoseNumber from object stream
 */

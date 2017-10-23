@@ -29,11 +29,11 @@
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
-#include "dp_ucb.h"
-#include "dp_misc.h"
+#include <dp_ucb.h>
+#include <dp_misc.h>
 #include <ucbhelper/content.hxx>
 #include <xmlscript/xml_helper.hxx>
-#include "dp_backenddb.hxx"
+#include <dp_backenddb.hxx>
 
 
 using namespace ::com::sun::star::uno;

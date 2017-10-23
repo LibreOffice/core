@@ -22,7 +22,7 @@
 #include <tools/diagnose_ex.h>
 
 #include "viewbackgroundshape.hxx"
-#include "tools.hxx"
+#include <tools.hxx>
 
 #include <rtl/math.hxx>
 

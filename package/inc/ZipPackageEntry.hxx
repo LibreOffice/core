@@ -27,7 +27,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <ZipEntry.hxx>
+#include "ZipEntry.hxx"
 #include <cppuhelper/implbase.hxx>
 
 #include <vector>

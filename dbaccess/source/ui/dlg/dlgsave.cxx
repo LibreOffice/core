@@ -17,25 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dlgsave.hxx"
+#include <dlgsave.hxx>
 #include <vcl/msgbox.hxx>
-#include "core_resource.hxx"
-#include "dbu_dlg.hxx"
-#include "strings.hrc"
+#include <core_resource.hxx>
+#include <dbu_dlg.hxx>
+#include <strings.hrc>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include "sqlmessage.hxx"
+#include <sqlmessage.hxx>
 #include <connectivity/dbtools.hxx>
-#include "UITools.hxx"
-#include "helpids.h"
-#include "SqlNameEdit.hxx"
+#include <UITools.hxx>
+#include <helpids.h>
+#include <SqlNameEdit.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include "objectnamecheck.hxx"
+#include <objectnamecheck.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace dbaui;

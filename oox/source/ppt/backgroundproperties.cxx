@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ppt/backgroundproperties.hxx"
-#include "drawingml/misccontexts.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/core/contexthandler2.hxx"
+#include <oox/ppt/backgroundproperties.hxx>
+#include <drawingml/misccontexts.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/core/contexthandler2.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 

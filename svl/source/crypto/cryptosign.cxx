@@ -30,13 +30,13 @@
 
 #if HAVE_FEATURE_NSS && !defined(_WIN32)
 // NSS headers for PDF signing
-#include "nss.h"
-#include "cert.h"
-#include "hasht.h"
-#include "secerr.h"
-#include "sechash.h"
-#include "cms.h"
-#include "cmst.h"
+#include <nss.h>
+#include <cert.h>
+#include <hasht.h>
+#include <secerr.h>
+#include <sechash.h>
+#include <cms.h>
+#include <cmst.h>
 
 // We use curl for RFC3161 time stamp requests
 #include <curl/curl.h>

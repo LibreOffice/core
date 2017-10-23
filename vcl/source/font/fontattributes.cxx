@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sallayout.hxx"
-#include "svdata.hxx"
+#include <sallayout.hxx>
+#include <svdata.hxx>
 
-#include "fontattributes.hxx"
+#include <fontattributes.hxx>
 
 FontAttributes::FontAttributes()
 :   meWeight( WEIGHT_DONTKNOW ),

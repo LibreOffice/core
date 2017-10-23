@@ -18,7 +18,7 @@
  */
 
 #include <rtl/ustring.hxx>
-#include "prstylecond.hxx"
+#include <prstylecond.hxx>
 #include <xmloff/xmltoken.hxx>
 
 using namespace ::xmloff::token;

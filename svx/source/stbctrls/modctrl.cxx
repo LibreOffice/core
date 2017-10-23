@@ -30,7 +30,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include "modctrl_internal.hxx"
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::PropertyValue;

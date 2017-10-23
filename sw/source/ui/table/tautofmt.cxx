@@ -33,15 +33,15 @@
 #include <svx/framelinkarray.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 
-#include "app.hrc"
-#include "strings.hrc"
-#include "swmodule.hxx"
-#include "swtypes.hxx"
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "tblafmt.hxx"
-#include "tautofmt.hxx"
-#include "shellres.hxx"
+#include <app.hrc>
+#include <strings.hrc>
+#include <swmodule.hxx>
+#include <swtypes.hxx>
+#include <view.hxx>
+#include <wrtsh.hxx>
+#include <tblafmt.hxx>
+#include <tautofmt.hxx>
+#include <shellres.hxx>
 
 using namespace com::sun::star;
 

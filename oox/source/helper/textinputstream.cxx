@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/helper/textinputstream.hxx"
+#include <oox/helper/textinputstream.hxx>
 
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
-#include "oox/helper/binaryinputstream.hxx"
+#include <oox/helper/binaryinputstream.hxx>
 
 namespace oox {
 

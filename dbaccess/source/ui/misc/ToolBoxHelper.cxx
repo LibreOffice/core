@@ -21,7 +21,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/miscopt.hxx>
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include <svtools/imgdef.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>

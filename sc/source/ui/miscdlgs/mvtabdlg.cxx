@@ -21,13 +21,13 @@
 
 #include <vcl/msgbox.hxx>
 
-#include "mvtabdlg.hxx"
-#include "document.hxx"
-#include "docsh.hxx"
-#include "strings.hrc"
-#include "global.hxx"
-#include "scresid.hxx"
-#include "globstr.hrc"
+#include <mvtabdlg.hxx>
+#include <document.hxx>
+#include <docsh.hxx>
+#include <strings.hrc>
+#include <global.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
 
 ScMoveTableDlg::ScMoveTableDlg(vcl::Window* pParent, const OUString& rDefault)
 

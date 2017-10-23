@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 #include <tools/mempool.hxx>
-#include "swcache.hxx"
+#include <swcache.hxx>
 #include <memory>
 
 class SwParaPortion;

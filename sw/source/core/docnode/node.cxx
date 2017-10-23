@@ -64,7 +64,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <calbck.hxx>
-#include "ndole.hxx"
+#include <ndole.hxx>
 #include <memory>
 #include <swcrsr.hxx>
 #include <svl/itemiter.hxx>

@@ -8,10 +8,10 @@
  */
 
 #include <memory>
-#include "ToxLinkProcessor.hxx"
+#include <ToxLinkProcessor.hxx>
 
-#include "SwStyleNameMapper.hxx"
-#include "ndtxt.hxx"
+#include <SwStyleNameMapper.hxx>
+#include <ndtxt.hxx>
 #include <o3tl/make_unique.hxx>
 #include <strings.hrc>
 

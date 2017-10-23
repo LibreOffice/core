@@ -22,7 +22,7 @@
 #include <cppuhelper/factory.hxx>
 
 #include "xfactory.hxx"
-#include "xcreator.hxx"
+#include <xcreator.hxx>
 
 using namespace ::com::sun::star;
 

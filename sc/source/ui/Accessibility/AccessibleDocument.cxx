@@ -17,23 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AccessibleDocument.hxx"
-#include "AccessibleSpreadsheet.hxx"
-#include "tabvwsh.hxx"
-#include "AccessibilityHints.hxx"
-#include "document.hxx"
-#include "drwlayer.hxx"
-#include "shapeuno.hxx"
-#include "DrawModelBroadcaster.hxx"
-#include "drawview.hxx"
-#include "gridwin.hxx"
-#include "AccessibleEditObject.hxx"
-#include "userdat.hxx"
-#include "scresid.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "table.hxx"
-#include "markdata.hxx"
+#include <AccessibleDocument.hxx>
+#include <AccessibleSpreadsheet.hxx>
+#include <tabvwsh.hxx>
+#include <AccessibilityHints.hxx>
+#include <document.hxx>
+#include <drwlayer.hxx>
+#include <shapeuno.hxx>
+#include <DrawModelBroadcaster.hxx>
+#include <drawview.hxx>
+#include <gridwin.hxx>
+#include <AccessibleEditObject.hxx>
+#include <userdat.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <table.hxx>
+#include <markdata.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -71,10 +71,10 @@
 #include <list>
 #include <algorithm>
 
-#include "AccessibleCell.hxx"
+#include <AccessibleCell.hxx>
 
 #include <svx/unoapi.hxx>
-#include "scmod.hxx"
+#include <scmod.hxx>
 
 #ifdef indices
 #undef indices

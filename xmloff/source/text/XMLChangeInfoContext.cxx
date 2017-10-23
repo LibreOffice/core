@@ -19,7 +19,7 @@
 
 #include "XMLChangeInfoContext.hxx"
 #include "XMLChangedRegionImportContext.hxx"
-#include "XMLStringBufferImportContext.hxx"
+#include <XMLStringBufferImportContext.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>

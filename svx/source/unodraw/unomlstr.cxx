@@ -20,7 +20,7 @@
 #include <svx/svdobj.hxx>
 #include <vcl/svapp.hxx>
 
-#include "unomlstr.hxx"
+#include <unomlstr.hxx>
 
 using namespace ::com::sun::star;
 

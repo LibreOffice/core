@@ -18,7 +18,7 @@
  */
 
 
-#include <continuousactivitybase.hxx>
+#include "continuousactivitybase.hxx"
 
 
 namespace slideshow

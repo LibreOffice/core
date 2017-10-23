@@ -18,15 +18,15 @@
  */
 
 #include <memory>
-#include "ViewShell.hxx"
-#include "ViewShellImplementation.hxx"
-#include "createtableobjectbar.hxx"
+#include <ViewShell.hxx>
+#include <ViewShellImplementation.hxx>
+#include <createtableobjectbar.hxx>
 
 #include <com/sun/star/embed/EmbedStates.hpp>
-#include "ViewShellBase.hxx"
-#include "ShellFactory.hxx"
-#include "DrawController.hxx"
-#include "LayerTabBar.hxx"
+#include <ViewShellBase.hxx>
+#include <ShellFactory.hxx>
+#include <DrawController.hxx>
+#include <LayerTabBar.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -36,32 +36,32 @@
 #include <svx/ruler.hxx>
 #include <svx/svxids.hrc>
 #include <svx/fmshell.hxx>
-#include "WindowUpdater.hxx"
-#include "GraphicViewShell.hxx"
+#include <WindowUpdater.hxx>
+#include <GraphicViewShell.hxx>
 #include <sfx2/childwin.hxx>
 #include <sdxfer.hxx>
 
-#include "app.hrc"
-#include "helpids.h"
+#include <app.hrc>
+#include <helpids.h>
 
-#include "OutlineView.hxx"
-#include "Client.hxx"
-#include "sdresid.hxx"
-#include "DrawDocShell.hxx"
-#include "slideshow.hxx"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
-#include "zoomlist.hxx"
-#include "FrameView.hxx"
-#include "optsitem.hxx"
-#include "BezierObjectBar.hxx"
-#include "TextObjectBar.hxx"
-#include "GraphicObjectBar.hxx"
-#include "MediaObjectBar.hxx"
-#include "SlideSorter.hxx"
-#include "SlideSorterViewShell.hxx"
-#include "ViewShellManager.hxx"
-#include "FormShellManager.hxx"
+#include <OutlineView.hxx>
+#include <Client.hxx>
+#include <sdresid.hxx>
+#include <DrawDocShell.hxx>
+#include <slideshow.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
+#include <zoomlist.hxx>
+#include <FrameView.hxx>
+#include <optsitem.hxx>
+#include <BezierObjectBar.hxx>
+#include <TextObjectBar.hxx>
+#include <GraphicObjectBar.hxx>
+#include <MediaObjectBar.hxx>
+#include <SlideSorter.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <ViewShellManager.hxx>
+#include <FormShellManager.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
@@ -71,17 +71,17 @@
 
 #include <svl/slstitm.hxx>
 #include <sfx2/request.hxx>
-#include "SpellDialogChildWindow.hxx"
-#include "controller/SlideSorterController.hxx"
-#include "controller/SlsPageSelector.hxx"
-#include "controller/SlsSelectionObserver.hxx"
-#include "view/SlideSorterView.hxx"
+#include <SpellDialogChildWindow.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsPageSelector.hxx>
+#include <controller/SlsSelectionObserver.hxx>
+#include <view/SlideSorterView.hxx>
 
 #include <basegfx/utils/zoomtools.hxx>
 
-#include "Window.hxx"
-#include "fupoor.hxx"
-#include "futext.hxx"
+#include <Window.hxx>
+#include <fupoor.hxx>
+#include <futext.hxx>
 
 #include <editeng/numitem.hxx>
 #include <editeng/eeitem.hxx>
@@ -89,8 +89,8 @@
 #include <editeng/editeng.hxx>
 #include <svl/poolitem.hxx>
 #include <strings.hrc>
-#include "strings.hxx"
-#include "AccessibleDocumentViewBase.hxx"
+#include <strings.hxx>
+#include <AccessibleDocumentViewBase.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

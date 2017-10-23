@@ -8,7 +8,7 @@
  */
 #include <officecfg/Office/Common.hxx>
 #include "sdmodeltestbase.hxx"
-#include "Outliner.hxx"
+#include <Outliner.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/editobj.hxx>

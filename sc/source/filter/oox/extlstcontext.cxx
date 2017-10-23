@@ -8,18 +8,18 @@
  */
 
 #include <memory>
-#include "extlstcontext.hxx"
-#include "worksheethelper.hxx"
+#include <extlstcontext.hxx>
+#include <worksheethelper.hxx>
 #include <oox/core/contexthandler.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
-#include "colorscale.hxx"
-#include "condformatbuffer.hxx"
-#include "condformatcontext.hxx"
-#include "document.hxx"
+#include <colorscale.hxx>
+#include <condformatbuffer.hxx>
+#include <condformatcontext.hxx>
+#include <document.hxx>
 
-#include "rangeutl.hxx"
+#include <rangeutl.hxx>
 #include <o3tl/make_unique.hxx>
 
 using ::oox::core::ContextHandlerRef;

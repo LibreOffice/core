@@ -53,13 +53,13 @@
  *
  *
  ************************************************************************/
-#include "lwpglobalmgr.hxx"
-#include "lwpfont.hxx"
-#include "xfilter/xfstylemanager.hxx"
-#include "xfilter/xffontfactory.hxx"
-#include "xfilter/xftextstyle.hxx"
-#include "xfilter/xfdefs.hxx"
-#include "xfilter/xfcolor.hxx"
+#include <lwpglobalmgr.hxx>
+#include <lwpfont.hxx>
+#include <xfilter/xfstylemanager.hxx>
+#include <xfilter/xffontfactory.hxx>
+#include <xfilter/xftextstyle.hxx>
+#include <xfilter/xfdefs.hxx>
+#include <xfilter/xfcolor.hxx>
 
 void LwpFontAttrEntry::Read(LwpObjectStream *pStrm)
 {

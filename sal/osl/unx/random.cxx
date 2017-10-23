@@ -8,7 +8,7 @@
  */
 
 #include "system.hxx"
-#include "oslrandom.h"
+#include <oslrandom.h>
 
 #include <assert.h>
 

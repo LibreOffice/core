@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AccessibleBase.hxx"
+#include <AccessibleBase.hxx>
 #include "AccessibleChartShape.hxx"
-#include "ObjectHierarchy.hxx"
-#include "ObjectIdentifier.hxx"
-#include "chartview/ExplicitValueProvider.hxx"
-#include "macros.hxx"
+#include <ObjectHierarchy.hxx>
+#include <ObjectIdentifier.hxx>
+#include <chartview/ExplicitValueProvider.hxx>
+#include <macros.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

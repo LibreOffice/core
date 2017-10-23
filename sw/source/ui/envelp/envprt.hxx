@@ -27,8 +27,8 @@
 #include <vcl/group.hxx>
 #include <vcl/button.hxx>
 
-#include "envimg.hxx"
-#include "envlop.hxx"
+#include <envimg.hxx>
+#include <envlop.hxx>
 
 class SwEnvDlg;
 

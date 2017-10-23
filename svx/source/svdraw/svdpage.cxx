@@ -38,7 +38,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/svdoole2.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdotext.hxx>

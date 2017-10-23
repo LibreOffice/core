@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include "itemdel.hxx"
+#include <itemdel.hxx>
 #include <vcl/idle.hxx>
 
 #include <svl/itempool.hxx>

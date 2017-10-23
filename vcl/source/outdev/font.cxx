@@ -25,16 +25,16 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/fontcharmap.hxx>
 
-#include "sallayout.hxx"
-#include "salgdi.hxx"
-#include "svdata.hxx"
+#include <sallayout.hxx>
+#include <salgdi.hxx>
+#include <svdata.hxx>
 
-#include "outdev.h"
-#include "window.h"
+#include <outdev.h>
+#include <window.h>
 
-#include "PhysicalFontCollection.hxx"
+#include <PhysicalFontCollection.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
 FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
 {

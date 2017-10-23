@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "propertybaghelper.hxx"
+#include <propertybaghelper.hxx>
 
-#include "property.hxx"
+#include <property.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/PropertyExistException.hpp>
@@ -30,7 +30,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <comphelper/sequence.hxx>
-#include "rtl/instance.hxx"
+#include <rtl/instance.hxx>
 
 
 #define NEW_HANDLE_BASE 10000

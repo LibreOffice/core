@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "docsh.hxx"
+#include <docsh.hxx>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <vcl/errinf.hxx>
 #include <editeng/justifyitem.hxx>
 #include <comphelper/classids.hxx>
@@ -40,8 +40,8 @@
 #include <svl/sharecontrolfile.hxx>
 #include <svl/urihelper.hxx>
 #include <osl/file.hxx>
-#include "chgtrack.hxx"
-#include "chgviset.hxx"
+#include <chgtrack.hxx>
+#include <chgviset.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
@@ -66,54 +66,54 @@
 
 #include <config_folders.h>
 
-#include "scabstdlg.hxx"
+#include <scabstdlg.hxx>
 #include <sot/formats.hxx>
 #include <svx/dialogs.hrc>
 
-#include "formulacell.hxx"
-#include "postit.hxx"
-#include "global.hxx"
-#include "filter.hxx"
-#include "scmod.hxx"
-#include "tabvwsh.hxx"
-#include "docfunc.hxx"
-#include "imoptdlg.hxx"
-#include "impex.hxx"
-#include "scresid.hxx"
-#include "strings.hrc"
-#include "globstr.hrc"
-#include "scerrors.hxx"
-#include "brdcst.hxx"
-#include "stlpool.hxx"
-#include "autostyl.hxx"
-#include "attrib.hxx"
-#include "asciiopt.hxx"
-#include "waitoff.hxx"
-#include "docpool.hxx"
-#include "progress.hxx"
-#include "pntlock.hxx"
-#include "docuno.hxx"
-#include "appoptio.hxx"
-#include "detdata.hxx"
-#include "printfun.hxx"
-#include "dociter.hxx"
-#include "cellform.hxx"
-#include "chartlis.hxx"
-#include "hints.hxx"
-#include "xmlwrap.hxx"
-#include "drwlayer.hxx"
-#include "refreshtimer.hxx"
-#include "dbdata.hxx"
-#include "scextopt.hxx"
-#include "compiler.hxx"
-#include "warnpassword.hxx"
-#include "optsolver.hxx"
-#include "sheetdata.hxx"
-#include "tabprotection.hxx"
-#include "docparam.hxx"
+#include <formulacell.hxx>
+#include <postit.hxx>
+#include <global.hxx>
+#include <filter.hxx>
+#include <scmod.hxx>
+#include <tabvwsh.hxx>
+#include <docfunc.hxx>
+#include <imoptdlg.hxx>
+#include <impex.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
+#include <globstr.hrc>
+#include <scerrors.hxx>
+#include <brdcst.hxx>
+#include <stlpool.hxx>
+#include <autostyl.hxx>
+#include <attrib.hxx>
+#include <asciiopt.hxx>
+#include <waitoff.hxx>
+#include <docpool.hxx>
+#include <progress.hxx>
+#include <pntlock.hxx>
+#include <docuno.hxx>
+#include <appoptio.hxx>
+#include <detdata.hxx>
+#include <printfun.hxx>
+#include <dociter.hxx>
+#include <cellform.hxx>
+#include <chartlis.hxx>
+#include <hints.hxx>
+#include <xmlwrap.hxx>
+#include <drwlayer.hxx>
+#include <refreshtimer.hxx>
+#include <dbdata.hxx>
+#include <scextopt.hxx>
+#include <compiler.hxx>
+#include <warnpassword.hxx>
+#include <optsolver.hxx>
+#include <sheetdata.hxx>
+#include <tabprotection.hxx>
+#include <docparam.hxx>
 #include "docshimp.hxx"
-#include "sizedev.hxx"
-#include "refreshtimerprotector.hxx"
+#include <sizedev.hxx>
+#include <refreshtimerprotector.hxx>
 #include <orcus/orcus_import_ods.hpp>
 #include <orcusfiltersimpl.hxx>
 
@@ -121,12 +121,12 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/configmgr.hxx>
-#include "uiitems.hxx"
-#include "cellsuno.hxx"
-#include "dpobject.hxx"
-#include "markdata.hxx"
-#include "optuno.hxx"
-#include "orcusfilters.hxx"
+#include <uiitems.hxx>
+#include <cellsuno.hxx>
+#include <dpobject.hxx>
+#include <markdata.hxx>
+#include <optuno.hxx>
+#include <orcusfilters.hxx>
 #include <datastream.hxx>
 #include <documentlinkmgr.hxx>
 #include <refupdatecontext.hxx>
@@ -163,7 +163,7 @@ static const sal_Char pFilterHtmlWebQ[] = "calc_HTML_WebQuery";
 static const sal_Char pFilterRtf[]      = "Rich Text Format (StarCalc)";
 
 #define ScDocShell
-#include "scslots.hxx"
+#include <scslots.hxx>
 
 SFX_IMPL_INTERFACE(ScDocShell,SfxObjectShell)
 

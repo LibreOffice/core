@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_HTML_SWCSS1_HXX
 #define INCLUDED_SW_SOURCE_FILTER_HTML_SWCSS1_HXX
 
-#include "poolfmt.hxx"
+#include <poolfmt.hxx>
 
 #include "svxcss1.hxx"
 

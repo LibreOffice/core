@@ -21,9 +21,9 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
-#include "intercept.hxx"
-#include "docholder.hxx"
-#include "commonembobj.hxx"
+#include <intercept.hxx>
+#include <docholder.hxx>
+#include <commonembobj.hxx>
 
 using namespace ::com::sun::star;
 

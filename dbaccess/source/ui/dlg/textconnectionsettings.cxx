@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "textconnectionsettings.hxx"
+#include <textconnectionsettings.hxx>
 #include "TextConnectionHelper.hxx"
-#include "dbu_pageids.hxx"
-#include "core_resource.hxx"
-#include "dsitems.hxx"
-#include "stringconstants.hxx"
+#include <dbu_pageids.hxx>
+#include <core_resource.hxx>
+#include <dsitems.hxx>
+#include <stringconstants.hxx>
 
 #include <vcl/msgbox.hxx>
 

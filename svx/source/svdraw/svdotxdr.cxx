@@ -23,8 +23,8 @@
 #include <svx/svddrag.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdorect.hxx>
-#include "svdglob.hxx"
-#include "svx/strings.hrc"
+#include <svdglob.hxx>
+#include <svx/strings.hrc>
 #include <svx/svdoashp.hxx>
 #include <tools/bigint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

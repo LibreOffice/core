@@ -24,7 +24,7 @@
 #include <oox/helper/refmap.hxx>
 #include <oox/helper/refvector.hxx>
 #include "workbookhelper.hxx"
-#include "documentimport.hxx"
+#include <documentimport.hxx>
 
 
 namespace oox {

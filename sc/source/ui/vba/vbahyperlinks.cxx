@@ -22,7 +22,7 @@
 #include <vector>
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/office/MsoHyperlinkType.hpp>
-#include "rangelst.hxx"
+#include <rangelst.hxx>
 #include "vbahyperlink.hxx"
 #include "vbarange.hxx"
 

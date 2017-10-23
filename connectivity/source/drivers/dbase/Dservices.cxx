@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbase/DDriver.hxx"
+#include <dbase/DDriver.hxx>
 #include <cppuhelper/factory.hxx>
 
 using namespace connectivity::dbase;

@@ -23,31 +23,31 @@
 #include <txttypes.hxx>
 
 // for portion replacement in Special()
-#include "strings.hrc"
-#include "viewopt.hxx"
+#include <strings.hrc>
+#include <viewopt.hxx>
 
 // for GetWordBoundary(...), GetSentenceBoundary(...):
 #include <breakit.hxx>
 #include <ndtxt.hxx>
 
 // for FillSpecialPos(...)
-#include "crstate.hxx"
+#include <crstate.hxx>
 
 // for SwAccessibleContext::GetResource()
 #include "acccontext.hxx"
 
 // for Post-It replacement text:
-#include "txatbase.hxx"
-#include "fmtfld.hxx"
-#include "fldbas.hxx"
-#include "docufld.hxx"
+#include <txatbase.hxx>
+#include <fmtfld.hxx>
+#include <fldbas.hxx>
+#include <docufld.hxx>
 
 // for in-line graphics replacement:
-#include "ndindex.hxx"
-#include "ndnotxt.hxx"
-#include "fmtflcnt.hxx"
-#include "frmfmt.hxx"
-#include "fmtcntnt.hxx"
+#include <ndindex.hxx>
+#include <ndnotxt.hxx>
+#include <fmtflcnt.hxx>
+#include <frmfmt.hxx>
+#include <fmtcntnt.hxx>
 
 using namespace ::com::sun::star;
 

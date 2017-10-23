@@ -19,9 +19,9 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "inscodlg.hxx"
-#include "scresid.hxx"
-#include "strings.hrc"
+#include <inscodlg.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
 
 bool       ScInsertContentsDlg::bPreviousAllCheck = false;
 InsertDeleteFlags ScInsertContentsDlg::nPreviousChecks   = (InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING);

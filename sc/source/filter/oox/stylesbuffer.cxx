@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "stylesbuffer.hxx"
+#include <stylesbuffer.hxx>
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontFamily.hpp>
@@ -64,18 +64,18 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "condformatbuffer.hxx"
-#include "excelhandlers.hxx"
-#include "themebuffer.hxx"
-#include "unitconverter.hxx"
-#include "document.hxx"
-#include "stlpool.hxx"
-#include "docpool.hxx"
-#include "ftools.hxx"
-#include "scitems.hxx"
-#include "attrib.hxx"
-#include "globstr.hrc"
-#include "xlconst.hxx"
+#include <condformatbuffer.hxx>
+#include <excelhandlers.hxx>
+#include <themebuffer.hxx>
+#include <unitconverter.hxx>
+#include <document.hxx>
+#include <stlpool.hxx>
+#include <docpool.hxx>
+#include <ftools.hxx>
+#include <scitems.hxx>
+#include <attrib.hxx>
+#include <globstr.hrc>
+#include <xlconst.hxx>
 #include <documentimport.hxx>
 #include <numformat.hxx>
 

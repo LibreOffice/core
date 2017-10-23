@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svx/EnhancedCustomShape2d.hxx"
-#include "svx/EnhancedCustomShapeGeometry.hxx"
-#include "svx/EnhancedCustomShapeTypeNames.hxx"
+#include <svx/EnhancedCustomShape2d.hxx>
+#include <svx/EnhancedCustomShapeGeometry.hxx>
+#include <svx/EnhancedCustomShapeTypeNames.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdocirc.hxx>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "unosrch.hxx"
+#include <unosrch.hxx>
 #include <doc.hxx>
 #include <hints.hxx>
 #include <unomap.hxx>

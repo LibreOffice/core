@@ -17,7 +17,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include "xsecctl.hxx"
+#include <xsecctl.hxx>
 
 /// Parses an OOXML digital signature.
 class OOXMLSecParser: public cppu::WeakImplHelper

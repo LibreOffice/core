@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
-#include "XMLBase64Export.hxx"
+#include <XMLBase64Export.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

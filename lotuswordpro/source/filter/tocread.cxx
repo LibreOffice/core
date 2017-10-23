@@ -59,7 +59,7 @@
 #include <cstring>
 
 #include "first.hxx"
-#include "assert.h"
+#include <assert.h>
 namespace OpenStormBento
 {
 

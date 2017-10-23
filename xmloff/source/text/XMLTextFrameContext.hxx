@@ -24,7 +24,7 @@
 
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <xmloff/xmlictxt.hxx>
-#include "xmlmultiimagehelper.hxx"
+#include <xmlmultiimagehelper.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace text { class XTextCursor; class XTextContent; }

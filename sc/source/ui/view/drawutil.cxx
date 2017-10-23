@@ -19,10 +19,10 @@
 
 #include <vcl/outdev.hxx>
 
-#include "drawutil.hxx"
-#include "document.hxx"
-#include "global.hxx"
-#include "viewdata.hxx"
+#include <drawutil.hxx>
+#include <document.hxx>
+#include <global.hxx>
+#include <viewdata.hxx>
 
 void ScDrawUtil::CalcScale( const ScDocument* pDoc, SCTAB nTab,
                             SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,

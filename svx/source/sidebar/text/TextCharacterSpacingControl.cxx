@@ -29,7 +29,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/lstbox.hxx>
 #include <svl/itempool.hxx>
-#include "helpids.h"
+#include <helpids.h>
 
 #define SPACING_VERY_TIGHT  -30
 #define SPACING_TIGHT       -15

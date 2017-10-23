@@ -60,11 +60,11 @@
         2. the content of layout object
  ************************************************************************/
 
-#include "lwpglobalmgr.hxx"
+#include <lwpglobalmgr.hxx>
 #include "lwpstory.hxx"
-#include "xfilter/xfstylemanager.hxx"
+#include <xfilter/xfstylemanager.hxx>
 #include "lwppara.hxx"
-#include "lwpobjfactory.hxx"
+#include <lwpobjfactory.hxx>
 #include "lwppagelayout.hxx"
 
 

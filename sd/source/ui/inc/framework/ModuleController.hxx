@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_FRAMEWORK_MODULECONTROLLER_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_FRAMEWORK_MODULECONTROLLER_HXX
 
-#include "MutexOwner.hxx"
+#include <MutexOwner.hxx>
 
 #include <com/sun/star/drawing/framework/XModuleController.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

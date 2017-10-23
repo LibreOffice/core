@@ -33,7 +33,7 @@
 #include <rtl/math.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
-#include "sfx2/sfxsids.hrc"
+#include <sfx2/sfxsids.hrc>
 #include <osl/diagnose.h>
 #include <unotools/saveopt.hxx>
 #include <svl/itemset.hxx>

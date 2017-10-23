@@ -53,16 +53,16 @@
 #include <fmtanchr.hxx>
 #include <docary.hxx>
 #include <viewsh.hxx>
-#include "pam.hxx"
-#include "doc.hxx"
+#include <pam.hxx>
+#include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-#include "ndtxt.hxx"
-#include "flypos.hxx"
+#include <ndtxt.hxx>
+#include <flypos.hxx>
 #include "wrthtml.hxx"
 #include "htmlfly.hxx"
 #include "htmlform.hxx"
-#include "frmfmt.hxx"
+#include <frmfmt.hxx>
 #include <rtl/strbuf.hxx>
 #include <memory>
 

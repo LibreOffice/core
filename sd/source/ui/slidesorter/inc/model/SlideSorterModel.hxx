@@ -22,10 +22,10 @@
 
 class SdDrawDocument;
 
-#include "model/SlsPageEnumeration.hxx"
-#include "model/SlsSharedPageDescriptor.hxx"
+#include <model/SlsPageEnumeration.hxx>
+#include <model/SlsSharedPageDescriptor.hxx>
 
-#include "pres.hxx"
+#include <pres.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/region.hxx>

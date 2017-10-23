@@ -25,20 +25,20 @@
 
 #include <oox/ole/vbaexport.hxx>
 
-#include "scerrors.hxx"
-#include "scextopt.hxx"
+#include <scerrors.hxx>
+#include <scextopt.hxx>
 
-#include "root.hxx"
-#include "excdoc.hxx"
-#include "exp_op.hxx"
+#include <root.hxx>
+#include <excdoc.hxx>
+#include <exp_op.hxx>
 
-#include "xcl97esc.hxx"
+#include <xcl97esc.hxx>
 
-#include "document.hxx"
-#include "rangenam.hxx"
-#include "filtopt.hxx"
-#include "xltools.hxx"
-#include "xelink.hxx"
+#include <document.hxx>
+#include <rangenam.hxx>
+#include <filtopt.hxx>
+#include <xltools.hxx>
+#include <xelink.hxx>
 
 #include <officecfg/Office/Calc.hxx>
 

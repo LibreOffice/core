@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <SyncDbusSessionHelper.hxx>
+#include "SyncDbusSessionHelper.hxx"
 
 #include <gio/gio.h>
 #include <memory>

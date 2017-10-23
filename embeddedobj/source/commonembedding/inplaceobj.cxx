@@ -21,7 +21,7 @@
 #include <com/sun/star/embed/WrongStateException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-#include "commonembobj.hxx"
+#include <commonembobj.hxx>
 #include "embedobj.hxx"
 
 

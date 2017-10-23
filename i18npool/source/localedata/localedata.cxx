@@ -30,7 +30,7 @@
 #include <osl/diagnose.h>
 #include <string.h>
 #include <stdio.h>
-#include "rtl/instance.hxx"
+#include <rtl/instance.hxx>
 #include <sal/macros.h>
 
 using namespace com::sun::star::i18n;

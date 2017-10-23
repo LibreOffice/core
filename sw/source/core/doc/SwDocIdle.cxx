@@ -23,8 +23,8 @@
 #include <viewopt.hxx>
 #include <vcl/scheduler.hxx>
 
-#include "SwDocIdle.hxx"
-#include "IDocumentTimerAccess.hxx"
+#include <SwDocIdle.hxx>
+#include <IDocumentTimerAccess.hxx>
 
 namespace sw
 {

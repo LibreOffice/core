@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ODATABASEMETADATA_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ODATABASEMETADATA_HXX
 
-#include "odbc/OConnection.hxx"
-#include "odbc/odbcbasedllapi.hxx"
-#include "TDatabaseMetaDataBase.hxx"
+#include <odbc/OConnection.hxx>
+#include <odbc/odbcbasedllapi.hxx>
+#include <TDatabaseMetaDataBase.hxx>
 
 namespace connectivity
 {

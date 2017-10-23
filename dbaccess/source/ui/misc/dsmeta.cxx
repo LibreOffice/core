@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dsmeta.hxx"
+#include <dsmeta.hxx>
 #include <connectivity/DriversConfig.hxx>
-#include "dsntypes.hxx"
+#include <dsntypes.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <map>

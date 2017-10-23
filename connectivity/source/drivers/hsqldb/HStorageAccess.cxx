@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hsqldb/HStorageAccess.hxx"
+#include <hsqldb/HStorageAccess.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include "hsqldb/HStorageMap.hxx"
+#include <hsqldb/HStorageMap.hxx>
 #include "accesslog.hxx"
 #include <osl/diagnose.h>
 

@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ViewTabBar.hxx"
+#include <ViewTabBar.hxx>
 
-#include "ViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "DrawViewShell.hxx"
-#include "FrameView.hxx"
-#include "framework/FrameworkHelper.hxx"
-#include "framework/Pane.hxx"
-#include "DrawController.hxx"
+#include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <DrawViewShell.hxx>
+#include <FrameView.hxx>
+#include <framework/FrameworkHelper.hxx>
+#include <framework/Pane.hxx>
+#include <DrawController.hxx>
 
-#include "sdresid.hxx"
-#include "strings.hrc"
-#include "helpids.h"
-#include "Client.hxx"
+#include <sdresid.hxx>
+#include <strings.hrc>
+#include <helpids.h>
+#include <Client.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/settings.hxx>

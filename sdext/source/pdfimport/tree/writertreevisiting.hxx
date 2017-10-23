@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_TREE_WRITERTREEVISITING_HXX
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_TREE_WRITERTREEVISITING_HXX
 
-#include "treevisiting.hxx"
+#include <treevisiting.hxx>
 
 namespace pdfi
 {

@@ -17,8 +17,8 @@
 #include <vector>
 #include <string>
 
-#include "po.hxx"
-#include "helper.hxx"
+#include <po.hxx>
+#include <helper.hxx>
 
 /** Container of po entry
 

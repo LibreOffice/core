@@ -28,7 +28,7 @@
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/strings.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 #include <svtools/viewdataentry.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include "contentenumeration.hxx"

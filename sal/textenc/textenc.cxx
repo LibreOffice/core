@@ -21,19 +21,19 @@
    implementation of rtl/textenc.h.  Rather, it should be called
    gettextencodingdata.c. */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 #include <cstdlib>
 
-#include "osl/module.hxx"
-#include "rtl/instance.hxx"
-#include "rtl/textenc.h"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/log.hxx"
-#include "sal/macros.h"
-#include "sal/types.h"
+#include <osl/module.hxx>
+#include <rtl/instance.hxx>
+#include <rtl/textenc.h>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/log.hxx>
+#include <sal/macros.h>
+#include <sal/types.h>
 
 #include "convertsimple.hxx"
 #include "gettextencodingdata.hxx"

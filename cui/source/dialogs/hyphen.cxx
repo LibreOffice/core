@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hyphen.hxx"
-#include "dialmgr.hxx"
+#include <hyphen.hxx>
+#include <dialmgr.hxx>
 
 #include <editeng/splwrap.hxx>
 #include <editeng/svxenum.hxx>

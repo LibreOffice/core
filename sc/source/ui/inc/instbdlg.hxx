@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_INSTBDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_INSTBDLG_HXX
 
-#include "address.hxx"
+#include <address.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/group.hxx>

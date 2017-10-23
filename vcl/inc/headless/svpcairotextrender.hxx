@@ -10,7 +10,7 @@
 #ifndef INCLUDED_VCL_UNX_GTK3_GDI_GTK3CAIROTEXTRENDER_HXX
 #define INCLUDED_VCL_UNX_GTK3_GDI_GTK3CAIROTEXTRENDER_HXX
 
-#include "unx/cairotextrender.hxx"
+#include <unx/cairotextrender.hxx>
 
 class SvpSalGraphics;
 

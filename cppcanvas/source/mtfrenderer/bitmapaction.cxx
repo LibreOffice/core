@@ -32,7 +32,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include "cachedprimitivebase.hxx"
 #include "bitmapaction.hxx"
-#include "outdevstate.hxx"
+#include <outdevstate.hxx>
 #include "mtftools.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 

@@ -22,17 +22,17 @@
 #include <iterator>
 
 #include "connection.hxx"
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include "datasource.hxx"
-#include "strings.hrc"
-#include "core_resource.hxx"
-#include "statement.hxx"
-#include "preparedstatement.hxx"
-#include "callablestatement.hxx"
-#include "ContainerMediator.hxx"
-#include "SingleSelectQueryComposer.hxx"
-#include "querycomposer.hxx"
-#include "sdbcoretools.hxx"
+#include <strings.hrc>
+#include <core_resource.hxx>
+#include <statement.hxx>
+#include <preparedstatement.hxx>
+#include <callablestatement.hxx>
+#include <ContainerMediator.hxx>
+#include <SingleSelectQueryComposer.hxx>
+#include <querycomposer.hxx>
+#include <sdbcoretools.hxx>
 
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>

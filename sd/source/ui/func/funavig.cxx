@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "funavig.hxx"
+#include <funavig.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include "app.hrc"
-#include "sdpage.hxx"
+#include <app.hrc>
+#include <sdpage.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include "drawdoc.hxx"
-#include "DrawViewShell.hxx"
-#include "ViewShell.hxx"
-#include "slideshow.hxx"
+#include <drawdoc.hxx>
+#include <DrawViewShell.hxx>
+#include <ViewShell.hxx>
+#include <slideshow.hxx>
 
 namespace sd {
 

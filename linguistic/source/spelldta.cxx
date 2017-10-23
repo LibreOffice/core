@@ -26,7 +26,7 @@
 #include <algorithm>
 #include <vector>
 
-#include "linguistic/spelldta.hxx"
+#include <linguistic/spelldta.hxx>
 #include "lngsvcmgr.hxx"
 
 

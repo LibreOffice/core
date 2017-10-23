@@ -20,7 +20,7 @@
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sdbcx/VTable.hxx>
 #include <connectivity/sqlparse.hxx>
-#include "sqlbison.hxx"
+#include <sqlbison.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
@@ -33,7 +33,7 @@
 #endif
 #include <connectivity/PColumn.hxx>
 #include <tools/diagnose_ex.h>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>

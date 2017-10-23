@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DrawViewShell.hxx"
+#include <DrawViewShell.hxx>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <svl/aeitem.hxx>
 #include <svx/svxids.hrc>
@@ -37,16 +37,16 @@
 #include <sfx2/docfile.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include "app.hrc"
+#include <app.hrc>
 
-#include "Outliner.hxx"
-#include "sdpage.hxx"
-#include "fupoor.hxx"
-#include "fusel.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "drawview.hxx"
-#include "optsitem.hxx"
+#include <Outliner.hxx>
+#include <sdpage.hxx>
+#include <fupoor.hxx>
+#include <fusel.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <drawview.hxx>
+#include <optsitem.hxx>
 
 using namespace com::sun::star;
 

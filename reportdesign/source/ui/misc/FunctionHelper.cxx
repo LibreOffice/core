@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "FunctionHelper.hxx"
+#include <FunctionHelper.hxx>
 
 #include <osl/diagnose.h>
 #include <formula/funcvarargs.h>

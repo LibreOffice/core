@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_PNTLOCK_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_PNTLOCK_HXX
 
-#include "rangelst.hxx"
+#include <rangelst.hxx>
 
 class ScPaintLockData
 {

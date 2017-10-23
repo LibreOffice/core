@@ -18,7 +18,7 @@
  */
 
 
-#include "svx/svdviter.hxx"
+#include <svx/svdviter.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>

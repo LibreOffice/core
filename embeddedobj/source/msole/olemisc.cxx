@@ -31,7 +31,7 @@
 #include <cppuhelper/interfacecontainer.h>
 
 #include <oleembobj.hxx>
-#include <olepersist.hxx>
+#include "olepersist.hxx"
 
 #include "ownview.hxx"
 

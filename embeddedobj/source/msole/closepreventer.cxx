@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "closepreventer.hxx"
+#include <closepreventer.hxx>
 
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <osl/diagnose.h>

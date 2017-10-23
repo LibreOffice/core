@@ -19,8 +19,8 @@
 #ifndef INCLUDED_UNO_DISPATCHER_H
 #define INCLUDED_UNO_DISPATCHER_H
 
-#include <sal/types.h>
-#include <uno/any2.h>
+#include "sal/types.h"
+#include "uno/any2.h"
 
 #ifdef __cplusplus
 extern "C"

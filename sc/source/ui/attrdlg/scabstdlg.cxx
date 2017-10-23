@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "scabstdlg.hxx"
+#include <scabstdlg.hxx>
 
 #include <osl/module.hxx>
 #include <rtl/ustrbuf.hxx>

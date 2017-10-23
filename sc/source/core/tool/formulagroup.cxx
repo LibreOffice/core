@@ -9,15 +9,15 @@
 
 #include <config_features.h>
 
-#include "formulagroup.hxx"
-#include "formulagroupcl.hxx"
-#include "document.hxx"
-#include "formulacell.hxx"
-#include "tokenarray.hxx"
-#include "compiler.hxx"
-#include "interpre.hxx"
-#include "scmatrix.hxx"
-#include "globalnames.hxx"
+#include <formulagroup.hxx>
+#include <formulagroupcl.hxx>
+#include <document.hxx>
+#include <formulacell.hxx>
+#include <tokenarray.hxx>
+#include <compiler.hxx>
+#include <interpre.hxx>
+#include <scmatrix.hxx>
+#include <globalnames.hxx>
 
 #include <formula/vectortoken.hxx>
 #include <officecfg/Office/Common.hxx>

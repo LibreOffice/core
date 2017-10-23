@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "richstringcontext.hxx"
+#include <richstringcontext.hxx>
 
-#include "stylesfragment.hxx"
+#include <stylesfragment.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 

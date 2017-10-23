@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "compare.hxx"
+#include <compare.hxx>
 
-#include "document.hxx"
-#include "docoptio.hxx"
+#include <document.hxx>
+#include <docoptio.hxx>
 
 #include <unotools/textsearch.hxx>
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "workbooksettings.hxx"
+#include <workbooksettings.hxx>
 
 #include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -32,7 +32,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "unitconverter.hxx"
+#include <unitconverter.hxx>
 
 namespace oox {
 namespace xls {

@@ -20,20 +20,20 @@
 #ifndef INCLUDED_OSL_FILE_HXX
 #define INCLUDED_OSL_FILE_HXX
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <string.h>
 
 #include <cassert>
 #include <cstddef>
 
-#include <sal/log.hxx>
-#include <osl/time.h>
-#include <rtl/ustring.hxx>
+#include "sal/log.hxx"
+#include "osl/time.h"
+#include "rtl/ustring.hxx"
 
-#include <osl/file.h>
-#include <osl/diagnose.h>
-#include <rtl/byteseq.hxx>
+#include "osl/file.h"
+#include "osl/diagnose.h"
+#include "rtl/byteseq.hxx"
 
 #include <stdio.h>
 

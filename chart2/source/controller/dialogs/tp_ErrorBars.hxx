@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_ERRORBARS_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_ERRORBARS_HXX
 
-#include "res_ErrorBar.hxx"
+#include <res_ErrorBar.hxx>
 
 #include <sfx2/tabdlg.hxx>
 

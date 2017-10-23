@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fupoor.hxx"
+#include <fupoor.hxx>
 
 #include <svx/svxids.hrc>
 #include <svl/aeitem.hxx>
@@ -35,19 +35,19 @@
 #include <com/sun/star/drawing/XLayerManager.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
-#include "FrameView.hxx"
-#include "app.hrc"
-#include "fusel.hxx"
-#include "sdpage.hxx"
-#include "drawview.hxx"
-#include "DrawViewShell.hxx"
-#include "Window.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "zoomlist.hxx"
-#include "Client.hxx"
-#include "slideshow.hxx"
-#include "LayerTabBar.hxx"
+#include <FrameView.hxx>
+#include <app.hrc>
+#include <fusel.hxx>
+#include <sdpage.hxx>
+#include <drawview.hxx>
+#include <DrawViewShell.hxx>
+#include <Window.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <zoomlist.hxx>
+#include <Client.hxx>
+#include <slideshow.hxx>
+#include <LayerTabBar.hxx>
 
 #include <sfx2/viewfrm.hxx>
 

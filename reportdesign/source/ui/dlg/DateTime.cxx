@@ -16,18 +16,18 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "DateTime.hxx"
+#include <DateTime.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "strings.hrc"
-#include "rptui_slotid.hrc"
-#include "helpids.h"
+#include <strings.hrc>
+#include <rptui_slotid.hrc>
+#include <helpids.h>
 #include <vcl/msgbox.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <unotools/syslocale.hxx>
-#include "UITools.hxx"
-#include "RptDef.hxx"
-#include "strings.hxx"
-#include "ReportController.hxx"
+#include <UITools.hxx>
+#include <RptDef.hxx>
+#include <strings.hxx>
+#include <ReportController.hxx>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatPreviewer.hpp>

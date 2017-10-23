@@ -18,9 +18,9 @@
  */
 
 #include "CustomAnimationPanel.hxx"
-#include "createcustomanimationpanel.hxx"
+#include <createcustomanimationpanel.hxx>
 
-#include "ViewShellBase.hxx"
+#include <ViewShellBase.hxx>
 
 namespace sd { namespace sidebar {
 

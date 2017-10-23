@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/ulspitem.hxx>

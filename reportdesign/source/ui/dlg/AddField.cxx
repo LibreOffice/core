@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "AddField.hxx"
-#include "UITools.hxx"
+#include <AddField.hxx>
+#include <UITools.hxx>
 #include <svx/dbaexchange.hxx>
 #include <svx/svdpagv.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -30,14 +30,14 @@
 #include <vcl/settings.hxx>
 
 #include <tools/diagnose_ex.h>
-#include "rptui_slotid.hrc"
+#include <rptui_slotid.hrc>
 
 #include <connectivity/dbtools.hxx>
-#include "core_resource.hxx"
-#include "helpids.h"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "ColumnInfo.hxx"
+#include <core_resource.hxx>
+#include <helpids.h>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <ColumnInfo.hxx>
 
 #include <comphelper/property.hxx>
 #include <svtools/imgdef.hxx>

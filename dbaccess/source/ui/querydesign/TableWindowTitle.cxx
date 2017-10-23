@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TableWindowTitle.hxx"
-#include "TableWindow.hxx"
-#include "QueryTableView.hxx"
+#include <TableWindowTitle.hxx>
+#include <TableWindow.hxx>
+#include <QueryTableView.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
-#include "stringconstants.hxx"
-#include "TableWindowListBox.hxx"
-#include "TableConnection.hxx"
-#include "strings.hrc"
-#include "QueryDesignView.hxx"
-#include "JoinController.hxx"
+#include <stringconstants.hxx>
+#include <TableWindowListBox.hxx>
+#include <TableConnection.hxx>
+#include <strings.hrc>
+#include <QueryDesignView.hxx>
+#include <JoinController.hxx>
 
 #include <algorithm>
 

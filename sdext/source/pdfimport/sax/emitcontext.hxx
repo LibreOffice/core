@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_SAX_EMITCONTEXT_HXX
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_SAX_EMITCONTEXT_HXX
 
-#include "xmlemitter.hxx"
+#include <xmlemitter.hxx>
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 

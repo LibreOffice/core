@@ -23,11 +23,11 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 
-#include "tabvwsh.hxx"
-#include "global.hxx"
-#include "scmod.hxx"
-#include "docsh.hxx"
-#include "sc.hrc"
+#include <tabvwsh.hxx>
+#include <global.hxx>
+#include <scmod.hxx>
+#include <docsh.hxx>
+#include <sc.hrc>
 #include <gridwin.hxx>
 
 //!         parent window for dialogs

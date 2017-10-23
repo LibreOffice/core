@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AccessibleTableBase.hxx"
-#include "miscuno.hxx"
-#include "document.hxx"
-#include "scresid.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "table.hxx"
+#include <AccessibleTableBase.hxx>
+#include <miscuno.hxx>
+#include <document.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <table.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>

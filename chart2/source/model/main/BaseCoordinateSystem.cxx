@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "BaseCoordinateSystem.hxx"
-#include "macros.hxx"
-#include "PropertyHelper.hxx"
-#include "UserDefinedProperties.hxx"
-#include "ContainerHelper.hxx"
-#include "CloneHelper.hxx"
+#include <BaseCoordinateSystem.hxx>
+#include <macros.hxx>
+#include <PropertyHelper.hxx>
+#include <UserDefinedProperties.hxx>
+#include <ContainerHelper.hxx>
+#include <CloneHelper.hxx>
 #include "Axis.hxx"
-#include "AxisHelper.hxx"
+#include <AxisHelper.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 

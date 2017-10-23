@@ -19,8 +19,8 @@
 #ifndef INCLUDED_IDLC_INC_ASTBASETYPE_HXX
 #define INCLUDED_IDLC_INC_ASTBASETYPE_HXX
 
-#include <asttype.hxx>
-#include <astexpression.hxx>
+#include "asttype.hxx"
+#include "astexpression.hxx"
 
 
 class AstBaseType : public AstType

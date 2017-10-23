@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "osl/module.h"
-#include "osl/process.h"
+#include <osl/module.h>
+#include <osl/process.h>
 
-#include "rtl/bootstrap.hxx"
-#include "rtl/process.h"
+#include <rtl/bootstrap.hxx>
+#include <rtl/process.h>
 
-#include "salinst.hxx"
-#include "unx/gensys.h"
-#include "unx/gendata.hxx"
-#include "headless/svpinst.hxx"
-#include "unx/desktops.hxx"
-#include "printerinfomanager.hxx"
+#include <salinst.hxx>
+#include <unx/gensys.h>
+#include <unx/gendata.hxx>
+#include <headless/svpinst.hxx>
+#include <unx/desktops.hxx>
+#include <printerinfomanager.hxx>
 #include <config_vclplug.h>
 #include <desktop/crashreport.hxx>
 

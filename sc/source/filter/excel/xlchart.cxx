@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xlchart.hxx"
+#include <xlchart.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -46,9 +46,9 @@
 #include <svx/unomid.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <editeng/memberids.h>
-#include "global.hxx"
-#include "xlroot.hxx"
-#include "xlstyle.hxx"
+#include <global.hxx>
+#include <xlroot.hxx>
+#include <xlstyle.hxx>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Any;

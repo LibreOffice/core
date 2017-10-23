@@ -19,12 +19,12 @@
 
 #include "timetargetelementcontext.hxx"
 
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
 
-#include "oox/helper/attributelist.hxx"
-#include "drawingml/embeddedwavaudiofile.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <drawingml/embeddedwavaudiofile.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 

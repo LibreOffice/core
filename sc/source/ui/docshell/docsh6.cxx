@@ -17,25 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 
 #include <o3tl/make_unique.hxx>
 #include <svx/pageitem.hxx>
 #include <sfx2/linkmgr.hxx>
 
-#include "docsh.hxx"
+#include <docsh.hxx>
 
-#include "stlsheet.hxx"
-#include "stlpool.hxx"
-#include "global.hxx"
-#include "viewdata.hxx"
-#include "tabvwsh.hxx"
-#include "tablink.hxx"
-#include "globstr.hrc"
-#include "scmod.hxx"
-#include "compiler.hxx"
-#include "interpre.hxx"
-#include "calcconfig.hxx"
+#include <stlsheet.hxx>
+#include <stlpool.hxx>
+#include <global.hxx>
+#include <viewdata.hxx>
+#include <tabvwsh.hxx>
+#include <tablink.hxx>
+#include <globstr.hrc>
+#include <scmod.hxx>
+#include <compiler.hxx>
+#include <interpre.hxx>
+#include <calcconfig.hxx>
 
 #include <vcl/msgbox.hxx>
 

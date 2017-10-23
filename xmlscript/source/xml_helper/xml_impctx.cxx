@@ -19,8 +19,8 @@
 
 #include <sal/config.h>
 
-#include "unoservices.hxx"
-#include "xml_import.hxx"
+#include <unoservices.hxx>
+#include <xml_import.hxx>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>

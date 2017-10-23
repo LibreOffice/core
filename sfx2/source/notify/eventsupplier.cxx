@@ -35,13 +35,13 @@
 #include <unotools/securityoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include "eventsupplier.hxx"
+#include <eventsupplier.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
 
 #include <sfx2/sfxsids.hrc>
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/frame.hxx>

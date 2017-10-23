@@ -19,7 +19,7 @@
 
 
 #include <sal/macros.h>
-#include "objshimp.hxx"
+#include <objshimp.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfac.hxx>

@@ -1,1 +1,1 @@
-#include <smoketest.cxx>
+#include "smoketest.cxx"

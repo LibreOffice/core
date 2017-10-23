@@ -22,7 +22,7 @@
 #include "EventMultiplexer.hxx"
 
 #include "SlideSorterViewShell.hxx"
-#include "TransitionPreset.hxx"
+#include <TransitionPreset.hxx>
 
 #include <vcl/ctrl.hxx>
 #include <vcl/lstbox.hxx>

@@ -31,7 +31,7 @@
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 
 #include <svx/strings.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 using namespace ::com::sun::star;
 using namespace ::editeng;

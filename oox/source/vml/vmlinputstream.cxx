@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/vml/vmlinputstream.hxx"
+#include <oox/vml/vmlinputstream.hxx>
 
 #include <com/sun/star/io/XTextInputStream2.hpp>
 #include <map>
 #include <string.h>
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
-#include "oox/helper/helper.hxx"
-#include "oox/helper/textinputstream.hxx"
+#include <oox/helper/helper.hxx>
+#include <oox/helper/textinputstream.hxx>
 
 namespace oox {
 namespace vml {

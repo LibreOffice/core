@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AccessibleDocumentViewBase.hxx"
+#include <AccessibleDocumentViewBase.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -38,16 +38,16 @@
 #include <svx/svdmodel.hxx>
 #include <svx/unoapi.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include "Window.hxx"
+#include <Window.hxx>
 #include <vcl/svapp.hxx>
-#include "OutlineViewShell.hxx"
+#include <OutlineViewShell.hxx>
 
 #include <svx/svdlayer.hxx>
 #include <editeng/editobj.hxx>
-#include "LayerTabBar.hxx"
+#include <LayerTabBar.hxx>
 #include <svtools/colorcfg.hxx>
-#include "ViewShell.hxx"
-#include "View.hxx"
+#include <ViewShell.hxx>
+#include <View.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

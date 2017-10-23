@@ -18,8 +18,8 @@
  */
 
 #include "x11cairotextrender.hxx"
-#include "unx/saldisp.hxx"
-#include "unx/salvd.h"
+#include <unx/saldisp.hxx>
+#include <unx/salvd.h>
 #include "gcach_xpeer.hxx"
 #include <X11/Xregion.h>
 #include <cairo.h>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuoltext.hxx"
+#include <fuoltext.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <editeng/outliner.hxx>
@@ -28,12 +28,12 @@
 #include <sfx2/dispatch.hxx>
 
 #include <svx/svxids.hrc>
-#include "app.hrc"
-#include "OutlineView.hxx"
-#include "Window.hxx"
-#include "DrawDocShell.hxx"
-#include "ViewShell.hxx"
-#include "OutlineViewShell.hxx"
+#include <app.hrc>
+#include <OutlineView.hxx>
+#include <Window.hxx>
+#include <DrawDocShell.hxx>
+#include <ViewShell.hxx>
+#include <OutlineViewShell.hxx>
 
 #include <memory>
 

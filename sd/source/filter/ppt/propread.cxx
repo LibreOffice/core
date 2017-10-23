@@ -18,9 +18,9 @@
  */
 
 #include <memory>
-#include <propread.hxx>
-#include "rtl/tencinfo.h"
-#include "rtl/textenc.h"
+#include "propread.hxx"
+#include <rtl/tencinfo.h>
+#include <rtl/textenc.h>
 #include <osl/diagnose.h>
 #include <o3tl/make_unique.hxx>
 

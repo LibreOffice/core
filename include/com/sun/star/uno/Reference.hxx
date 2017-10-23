@@ -19,16 +19,16 @@
 #ifndef INCLUDED_COM_SUN_STAR_UNO_REFERENCE_HXX
 #define INCLUDED_COM_SUN_STAR_UNO_REFERENCE_HXX
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <cstddef>
 #include <ostream>
 
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/Any.hxx>
-#include <cppu/cppudllapi.h>
+#include "com/sun/star/uno/Reference.h"
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/XInterface.hpp"
+#include "com/sun/star/uno/Any.hxx"
+#include "cppu/cppudllapi.h"
 
 extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
     typelib_TypeDescriptionReference * pType )

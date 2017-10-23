@@ -10,7 +10,7 @@
 #ifndef INCLUDED_WRITERPERFECT_QA_UNIT_WPFTFILTERFIXTURE_HXX
 #define INCLUDED_WRITERPERFECT_QA_UNIT_WPFTFILTERFIXTURE_HXX
 
-#include "config_writerperfect.h"
+#include <config_writerperfect.h>
 
 #include "wpftqahelperdllapi.h"
 

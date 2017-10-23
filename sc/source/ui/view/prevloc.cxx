@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "prevloc.hxx"
-#include "document.hxx"
+#include <prevloc.hxx>
+#include <document.hxx>
 
 #include <vcl/outdev.hxx>
 

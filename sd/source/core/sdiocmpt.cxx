@@ -19,7 +19,7 @@
 
 #include <tools/debug.hxx>
 
-#include "sdiocmpt.hxx"
+#include <sdiocmpt.hxx>
 
 old_SdrDownCompat::old_SdrDownCompat(SvStream& rNewStream, StreamMode nNewMode)
 :   rStream(rNewStream),

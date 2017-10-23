@@ -50,7 +50,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltkmap.hxx>
-#include "txtflde.hxx"
+#include <txtflde.hxx>
 
 
 using namespace ::com::sun::star;

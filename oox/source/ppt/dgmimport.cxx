@@ -18,10 +18,10 @@
  */
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include "oox/ppt/dgmimport.hxx"
-#include "oox/drawingml/theme.hxx"
-#include "drawingml/diagram/diagram.hxx"
-#include "oox/dump/pptxdumper.hxx"
+#include <oox/ppt/dgmimport.hxx>
+#include <oox/drawingml/theme.hxx>
+#include <drawingml/diagram/diagram.hxx>
+#include <oox/dump/pptxdumper.hxx>
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>

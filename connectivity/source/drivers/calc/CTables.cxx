@@ -20,11 +20,11 @@
 #include <sal/config.h>
 
 #include <calc/CConnection.hxx>
-#include "calc/CTables.hxx"
-#include "calc/CTable.hxx"
-#include "file/FCatalog.hxx"
-#include "file/FConnection.hxx"
-#include "calc/CCatalog.hxx"
+#include <calc/CTables.hxx>
+#include <calc/CTable.hxx>
+#include <file/FCatalog.hxx>
+#include <file/FConnection.hxx>
+#include <calc/CCatalog.hxx>
 #include <comphelper/types.hxx>
 
 using namespace ::comphelper;

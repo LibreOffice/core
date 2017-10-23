@@ -20,10 +20,10 @@
 #include <sfx2/printer.hxx>
 #include <vcl/virdev.hxx>
 
-#include "sizedev.hxx"
-#include "docsh.hxx"
-#include "scmod.hxx"
-#include "inputopt.hxx"
+#include <sizedev.hxx>
+#include <docsh.hxx>
+#include <scmod.hxx>
+#include <inputopt.hxx>
 
 ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
 {

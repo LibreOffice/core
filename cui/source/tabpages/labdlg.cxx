@@ -32,9 +32,9 @@
 #include <svx/sxcllitm.hxx>
 #include <svx/sxctitm.hxx>
 
-#include "svx/dlgutil.hxx"
-#include "labdlg.hxx"
-#include "transfrm.hxx"
+#include <svx/dlgutil.hxx>
+#include <labdlg.hxx>
+#include <transfrm.hxx>
 
 // define ----------------------------------------------------------------
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "RTableConnectionData.hxx"
+#include <RTableConnectionData.hxx>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
@@ -26,11 +26,11 @@
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include "stringconstants.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "UITools.hxx"
-#include "core_resource.hxx"
+#include <stringconstants.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <UITools.hxx>
+#include <core_resource.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 

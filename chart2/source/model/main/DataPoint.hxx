@@ -26,9 +26,9 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include "OPropertySet.hxx"
-#include "MutexContainer.hxx"
-#include "ModifyListenerHelper.hxx"
+#include <OPropertySet.hxx>
+#include <MutexContainer.hxx>
+#include <ModifyListenerHelper.hxx>
 
 namespace chart
 {

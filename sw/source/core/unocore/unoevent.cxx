@@ -18,14 +18,14 @@
  */
 
 // HINTIDs must be on top; it is required for the macitem.hxx header
-#include "hintids.hxx"
-#include "unoevent.hxx"
-#include "unoframe.hxx"
-#include "unostyle.hxx"
-#include "swevent.hxx"
-#include "docstyle.hxx"
+#include <hintids.hxx>
+#include <unoevent.hxx>
+#include <unoframe.hxx>
+#include <unostyle.hxx>
+#include <swevent.hxx>
+#include <docstyle.hxx>
 #include <svx/svxids.hrc>
-#include "fmtinfmt.hxx"
+#include <fmtinfmt.hxx>
 #include <svl/macitem.hxx>
 #include <rtl/ustrbuf.hxx>
 

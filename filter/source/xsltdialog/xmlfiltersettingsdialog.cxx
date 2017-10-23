@@ -22,7 +22,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/headbar.hxx>
@@ -34,19 +34,19 @@
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 #include <rtl/uri.hxx>
 
 #include <algorithm>
 #include <memory>
 
-#include "strings.hrc"
+#include <strings.hrc>
 #include "xmlfiltersettingsdialog.hxx"
 #include "xmlfiltertabdialog.hxx"
 #include "xmlfiltertestdialog.hxx"
 #include "xmlfilterjar.hxx"
-#include "strings.hxx"
+#include <strings.hxx>
 
 using namespace osl;
 using namespace com::sun::star::lang;

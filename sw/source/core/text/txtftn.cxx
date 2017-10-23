@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "viewsh.hxx"
-#include "doc.hxx"
+#include <viewsh.hxx>
+#include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include "pagefrm.hxx"
-#include "rootfrm.hxx"
-#include "ndtxt.hxx"
-#include "txtatr.hxx"
+#include <pagefrm.hxx>
+#include <rootfrm.hxx>
+#include <ndtxt.hxx>
+#include <txtatr.hxx>
 #include <SwPortionHandler.hxx>
 #include <txtftn.hxx>
 #include <flyfrm.hxx>
@@ -39,19 +39,19 @@
 #include <tabfrm.hxx>
 #include <sortedobjs.hxx>
 
-#include "swfont.hxx"
+#include <swfont.hxx>
 #include "porftn.hxx"
 #include "porfly.hxx"
 #include "porlay.hxx"
-#include "txtfrm.hxx"
+#include <txtfrm.hxx>
 #include "itrform2.hxx"
-#include "ftnfrm.hxx"
-#include "pagedesc.hxx"
+#include <ftnfrm.hxx>
+#include <pagedesc.hxx>
 #include "redlnitr.hxx"
-#include "sectfrm.hxx"
-#include "layouter.hxx"
-#include "frmtool.hxx"
-#include "ndindex.hxx"
+#include <sectfrm.hxx>
+#include <layouter.hxx>
+#include <frmtool.hxx>
+#include <ndindex.hxx>
 
 using namespace ::com::sun::star;
 

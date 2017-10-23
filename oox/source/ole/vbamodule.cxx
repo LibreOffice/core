@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ole/vbamodule.hxx"
+#include <oox/ole/vbamodule.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
@@ -27,11 +27,11 @@
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
-#include "oox/helper/binaryinputstream.hxx"
-#include "oox/helper/storagebase.hxx"
-#include "oox/helper/textinputstream.hxx"
-#include "oox/ole/vbahelper.hxx"
-#include "oox/ole/vbainputstream.hxx"
+#include <oox/helper/binaryinputstream.hxx>
+#include <oox/helper/storagebase.hxx>
+#include <oox/helper/textinputstream.hxx>
+#include <oox/ole/vbahelper.hxx>
+#include <oox/ole/vbainputstream.hxx>
 
 namespace oox {
 namespace ole {

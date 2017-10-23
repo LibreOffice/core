@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ReportController.hxx"
-#include "ReportDefinition.hxx"
-#include "CondFormat.hxx"
-#include "UITools.hxx"
-#include "AddField.hxx"
+#include <ReportController.hxx>
+#include <ReportDefinition.hxx>
+#include <CondFormat.hxx>
+#include <UITools.hxx>
+#include <AddField.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include "DateTime.hxx"
+#include <DateTime.hxx>
 
 #include <sfx2/filedlghelper.hxx>
 #include <tools/diagnose_ex.h>
-#include "rptui_slotid.hrc"
-#include "reportformula.hxx"
+#include <rptui_slotid.hrc>
+#include <reportformula.hxx>
 
 #include <comphelper/documentconstants.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -112,17 +112,17 @@
 #include <svx/zoom_def.hxx>
 #include <svx/dialogs.hrc>
 
-#include "core_resource.hxx"
-#include "DesignView.hxx"
-#include "RptObject.hxx"
-#include "RptUndo.hxx"
-#include "strings.hxx"
-#include "RptDef.hxx"
-#include "ReportSection.hxx"
-#include "SectionView.hxx"
-#include "UndoActions.hxx"
-#include "dlgpage.hxx"
-#include "strings.hrc"
+#include <core_resource.hxx>
+#include <DesignView.hxx>
+#include <RptObject.hxx>
+#include <RptUndo.hxx>
+#include <strings.hxx>
+#include <RptDef.hxx>
+#include <ReportSection.hxx>
+#include <SectionView.hxx>
+#include <UndoActions.hxx>
+#include <dlgpage.hxx>
+#include <strings.hrc>
 
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
@@ -132,13 +132,13 @@
 #include <unotools/viewoptions.hxx>
 
 #include <osl/mutex.hxx>
-#include "PropertyForward.hxx"
-#include "SectionWindow.hxx"
+#include <PropertyForward.hxx>
+#include <SectionWindow.hxx>
 
 #include <toolkit/helper/convert.hxx>
-#include "GroupsSorting.hxx"
-#include "PageNumber.hxx"
-#include "UndoEnv.hxx"
+#include <GroupsSorting.hxx>
+#include <PageNumber.hxx>
+#include <UndoEnv.hxx>
 
 #include <memory>
 

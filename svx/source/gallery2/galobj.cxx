@@ -32,15 +32,15 @@
 #include <svx/fmmodel.hxx>
 #include <svx/fmview.hxx>
 #include <svx/fmpage.hxx>
-#include "svx/strings.hrc"
-#include "svx/galmisc.hxx"
-#include "galobj.hxx"
+#include <svx/strings.hrc>
+#include <svx/galmisc.hxx>
+#include <galobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/dibtools.hxx>
 #include "gallerydrawmodel.hxx"
 #include <memory>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 using namespace ::com::sun::star;
 

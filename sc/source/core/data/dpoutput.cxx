@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -25,24 +25,24 @@
 #include <editeng/justifyitem.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
-#include "dpoutput.hxx"
-#include "dptabsrc.hxx"
-#include "dpfilteredcache.hxx"
-#include "document.hxx"
-#include "patattr.hxx"
-#include "docpool.hxx"
-#include "markdata.hxx"
-#include "attrib.hxx"
+#include <dpoutput.hxx>
+#include <dptabsrc.hxx>
+#include <dpfilteredcache.hxx>
+#include <document.hxx>
+#include <patattr.hxx>
+#include <docpool.hxx>
+#include <markdata.hxx>
+#include <attrib.hxx>
 #include <formula/errorcodes.hxx>
-#include "miscuno.hxx"
-#include "globstr.hrc"
-#include "stlpool.hxx"
-#include "stlsheet.hxx"
-#include "scresid.hxx"
-#include "unonames.hxx"
-#include "strings.hrc"
-#include "stringutil.hxx"
-#include "dputil.hxx"
+#include <miscuno.hxx>
+#include <globstr.hrc>
+#include <stlpool.hxx>
+#include <stlsheet.hxx>
+#include <scresid.hxx>
+#include <unonames.hxx>
+#include <strings.hrc>
+#include <stringutil.hxx>
+#include <dputil.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>

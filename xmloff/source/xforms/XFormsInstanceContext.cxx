@@ -20,7 +20,7 @@
 
 #include "XFormsInstanceContext.hxx"
 
-#include "DomBuilderContext.hxx"
+#include <DomBuilderContext.hxx>
 #include "xformsapi.hxx"
 
 #include <rtl/ustring.hxx>

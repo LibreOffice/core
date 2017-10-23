@@ -26,10 +26,10 @@
 #include <toolkit/helper/property.hxx>
 #include <toolkit/controls/geometrycontrolmodel.hxx>
 #include <toolkit/controls/unocontrols.hxx>
-#include "toolkit/controls/formattedcontrol.hxx"
-#include "toolkit/controls/roadmapcontrol.hxx"
-#include "toolkit/controls/tkscrollbar.hxx"
-#include "toolkit/controls/tabpagemodel.hxx"
+#include <toolkit/controls/formattedcontrol.hxx>
+#include <toolkit/controls/roadmapcontrol.hxx>
+#include <toolkit/controls/tkscrollbar.hxx>
+#include <toolkit/controls/tabpagemodel.hxx>
 #include <toolkit/controls/stdtabcontroller.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
@@ -55,12 +55,12 @@
 
 #include <map>
 #include <algorithm>
-#include "tools/urlobj.hxx"
-#include "osl/file.hxx"
-#include "toolkit/controls/dialogcontrol.hxx"
+#include <tools/urlobj.hxx>
+#include <osl/file.hxx>
+#include <toolkit/controls/dialogcontrol.hxx>
 
-#include "helper/tkresmgr.hxx"
-#include "helper/unopropertyarrayhelper.hxx"
+#include <helper/tkresmgr.hxx>
+#include <helper/unopropertyarrayhelper.hxx>
 #include "controlmodelcontainerbase_internal.hxx"
 
 using namespace ::com::sun::star;

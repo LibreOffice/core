@@ -15,12 +15,12 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include "window.h"
+#include <window.h>
 #include <boost/multi_array.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <vcl/abstdlg.hxx>
 
-#include "svdata.hxx"
+#include <svdata.hxx>
 #include <strings.hrc>
 
 VclContainer::VclContainer(vcl::Window *pParent, WinBits nStyle)

@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/color.hxx"
+#include <oox/drawingml/color.hxx>
 #include <algorithm>
 #include <math.h>
 #include <osl/diagnose.h>
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/graphichelper.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/token/namespaces.hxx"
-#include "oox/token/tokens.hxx"
+#include <oox/helper/containerhelper.hxx>
+#include <oox/helper/graphichelper.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 
 namespace oox {
 namespace drawingml {

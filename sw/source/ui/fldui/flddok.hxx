@@ -27,7 +27,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
 
-#include "numfmtlb.hxx"
+#include <numfmtlb.hxx>
 #include "fldpage.hxx"
 
 class SwFieldDokPage : public SwFieldPage

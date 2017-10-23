@@ -24,7 +24,7 @@
 
 #include "attributeoutputbase.hxx"
 #include "fields.hxx"
-#include "IMark.hxx"
+#include <IMark.hxx>
 #include "docxexport.hxx"
 
 #include <sax/fshelper.hxx>

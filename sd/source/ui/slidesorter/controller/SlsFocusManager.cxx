@@ -17,21 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "controller/SlsFocusManager.hxx"
+#include <controller/SlsFocusManager.hxx>
 
-#include "SlideSorter.hxx"
-#include "PaneDockingWindow.hxx"
-#include "controller/SlideSorterController.hxx"
-#include "controller/SlsCurrentSlideManager.hxx"
-#include "controller/SlsVisibleAreaManager.hxx"
-#include "model/SlideSorterModel.hxx"
-#include "model/SlsPageDescriptor.hxx"
-#include "view/SlideSorterView.hxx"
-#include "view/SlsLayouter.hxx"
+#include <SlideSorter.hxx>
+#include <PaneDockingWindow.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsCurrentSlideManager.hxx>
+#include <controller/SlsVisibleAreaManager.hxx>
+#include <model/SlideSorterModel.hxx>
+#include <model/SlsPageDescriptor.hxx>
+#include <view/SlideSorterView.hxx>
+#include <view/SlsLayouter.hxx>
 #include <vcl/toolbox.hxx>
 
-#include "Window.hxx"
-#include "sdpage.hxx"
+#include <Window.hxx>
+#include <sdpage.hxx>
 
 namespace sd { namespace slidesorter { namespace controller {
 

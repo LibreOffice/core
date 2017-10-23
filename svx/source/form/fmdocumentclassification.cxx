@@ -18,7 +18,7 @@
  */
 
 
-#include "fmdocumentclassification.hxx"
+#include <fmdocumentclassification.hxx>
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

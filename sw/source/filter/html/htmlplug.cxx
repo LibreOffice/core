@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <rtl/strbuf.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/svapp.hxx>
@@ -43,17 +43,17 @@
 #include <svl/ownlist.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
-#include "pam.hxx"
-#include "doc.hxx"
-#include "ndtxt.hxx"
-#include "swerror.h"
-#include "ndole.hxx"
-#include "swtable.hxx"
+#include <pam.hxx>
+#include <doc.hxx>
+#include <ndtxt.hxx>
+#include <swerror.h>
+#include <ndole.hxx>
+#include <swtable.hxx>
 #include "swhtml.hxx"
 #include "wrthtml.hxx"
 #include "htmlfly.hxx"
 #include "swcss1.hxx"
-#include "unoframe.hxx"
+#include <unoframe.hxx>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

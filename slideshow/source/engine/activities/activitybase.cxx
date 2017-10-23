@@ -21,7 +21,7 @@
 #include <tools/diagnose_ex.h>
 #include <canvas/canvastools.hxx>
 
-#include <activitybase.hxx>
+#include "activitybase.hxx"
 
 
 namespace slideshow

@@ -10,11 +10,11 @@
 #ifndef INCLUDED_UNOIDL_SOURCE_LEGACYPROVIDER_HXX
 #define INCLUDED_UNOIDL_SOURCE_LEGACYPROVIDER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "registry/registry.hxx"
-#include "rtl/ref.hxx"
-#include "unoidl/unoidl.hxx"
+#include <registry/registry.hxx>
+#include <rtl/ref.hxx>
+#include <unoidl/unoidl.hxx>
 
 namespace unoidl { namespace detail {
 

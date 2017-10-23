@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 #include "migrationerror.hxx"
 #include "migrationlog.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <comphelper/anytostring.hxx>
 #include <osl/diagnose.h>

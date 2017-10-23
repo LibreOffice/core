@@ -49,11 +49,11 @@
 #include <editeng/charreliefitem.hxx>
 #include <editeng/frmdiritem.hxx>
 
-#include <impedit.hxx>
+#include "impedit.hxx"
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editdoc.hxx>
-#include <editdbg.hxx>
+#include "editdbg.hxx"
 
 #include <rtl/strbuf.hxx>
 

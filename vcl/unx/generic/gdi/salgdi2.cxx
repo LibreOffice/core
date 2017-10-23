@@ -18,27 +18,27 @@
  */
 
 #include <poll.h>
-#include "salgdiimpl.hxx"
+#include <salgdiimpl.hxx>
 
 #include <vcl/salbtype.hxx>
 #include <vcl/sysdata.hxx>
 
-#include "unx/pixmap.hxx"
-#include "unx/salunx.h"
-#include "unx/saldisp.hxx"
-#include "unx/salbmp.h"
-#include "unx/salgdi.h"
-#include "unx/salvd.h"
-#include "unx/x11/x11gdiimpl.h"
+#include <unx/pixmap.hxx>
+#include <unx/salunx.h>
+#include <unx/saldisp.hxx>
+#include <unx/salbmp.h>
+#include <unx/salgdi.h>
+#include <unx/salvd.h>
+#include <unx/x11/x11gdiimpl.h>
 #include <unx/x11/xlimits.hxx>
 #include "xrender_peer.hxx"
-#include "salframe.hxx"
+#include <salframe.hxx>
 
-#include "unx/printergfx.hxx"
+#include <unx/printergfx.hxx>
 
 #include <vcl/bitmapaccess.hxx>
 #include <outdata.hxx>
-#include "ControlCacheKey.hxx"
+#include <ControlCacheKey.hxx>
 
 void X11SalGraphics::CopyScreenArea( Display* pDisplay,
                                      Drawable aSrc, SalX11Screen nXScreenSrc, int nSrcDepth,

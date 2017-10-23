@@ -7,12 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "PivotTableDataSource.hxx"
+#include <PivotTableDataSource.hxx>
 
 #include <sal/config.h>
 
-#include "miscuno.hxx"
-#include "docsh.hxx"
+#include <miscuno.hxx>
+#include <docsh.hxx>
 
 #include <comphelper/sequence.hxx>
 

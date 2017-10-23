@@ -25,7 +25,7 @@
 #include <vcl/group.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/morebtn.hxx>
-#include "global.hxx"
+#include <global.hxx>
 #include "anyrefdg.hxx"
 
 class ScViewData;

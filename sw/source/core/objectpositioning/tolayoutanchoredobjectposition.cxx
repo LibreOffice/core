@@ -28,9 +28,9 @@
 #include <fmtsrnd.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <frmatr.hxx>
-#include "viewsh.hxx"
-#include "viewopt.hxx"
-#include "rootfrm.hxx"
+#include <viewsh.hxx>
+#include <viewopt.hxx>
+#include <rootfrm.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 

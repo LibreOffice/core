@@ -18,11 +18,11 @@
  */
 
 #include "LineChartTypeTemplate.hxx"
-#include "macros.hxx"
-#include "DiagramHelper.hxx"
-#include "servicenames_charttypes.hxx"
-#include "DataSeriesHelper.hxx"
-#include "PropertyHelper.hxx"
+#include <macros.hxx>
+#include <DiagramHelper.hxx>
+#include <servicenames_charttypes.hxx>
+#include <DataSeriesHelper.hxx>
+#include <PropertyHelper.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/chart2/SymbolStyle.hpp>

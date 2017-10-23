@@ -26,7 +26,7 @@
 #include <vclpluginapi.h>
 #include <salinst.hxx>
 #include <saldatabasic.hxx>
-#include "unx/genprn.h"
+#include <unx/genprn.h>
 
 class VCL_DLLPUBLIC SalYieldMutex : public comphelper::GenericSolarMutex
 {

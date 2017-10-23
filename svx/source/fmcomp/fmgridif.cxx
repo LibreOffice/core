@@ -18,16 +18,16 @@
  */
 
 
-#include "svx/fmgridif.hxx"
-#include "fmprop.hxx"
-#include "fmservs.hxx"
-#include "svx/fmtools.hxx"
-#include "fmurl.hxx"
-#include "formcontrolfactory.hxx"
-#include "gridcell.hxx"
-#include "sdbdatacolumn.hxx"
-#include "svx/fmgridcl.hxx"
-#include "svx/svxids.hrc"
+#include <svx/fmgridif.hxx>
+#include <fmprop.hxx>
+#include <fmservs.hxx>
+#include <svx/fmtools.hxx>
+#include <fmurl.hxx>
+#include <formcontrolfactory.hxx>
+#include <gridcell.hxx>
+#include <sdbdatacolumn.hxx>
+#include <svx/fmgridcl.hxx>
+#include <svx/svxids.hrc>
 #include <tools/urlobj.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>

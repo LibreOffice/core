@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "spelleng.hxx"
+#include <spelleng.hxx>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <editeng/langitem.hxx>
@@ -31,16 +31,16 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include "spelldialog.hxx"
-#include "tabvwsh.hxx"
-#include "docsh.hxx"
-#include "cellvalue.hxx"
-#include "cellform.hxx"
-#include "formulacell.hxx"
-#include "patattr.hxx"
-#include "waitoff.hxx"
-#include "globstr.hrc"
-#include "markdata.hxx"
+#include <spelldialog.hxx>
+#include <tabvwsh.hxx>
+#include <docsh.hxx>
+#include <cellvalue.hxx>
+#include <cellform.hxx>
+#include <formulacell.hxx>
+#include <patattr.hxx>
+#include <waitoff.hxx>
+#include <globstr.hrc>
+#include <markdata.hxx>
 
 #include <memory>
 

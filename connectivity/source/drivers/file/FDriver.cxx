@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "file/FDriver.hxx"
-#include "file/FConnection.hxx"
-#include "file/fcode.hxx"
+#include <file/FDriver.hxx>
+#include <file/FConnection.hxx>
+#include <file/fcode.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>
-#include "strings.hrc"
-#include "resource/sharedresources.hxx"
+#include <strings.hrc>
+#include <resource/sharedresources.hxx>
 
 
 using namespace connectivity::file;

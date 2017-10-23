@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_ACCESSIBLEBASE_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_ACCESSIBLEBASE_HXX
 
-#include "ObjectIdentifier.hxx"
+#include <ObjectIdentifier.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -41,7 +41,7 @@
 #include <memory>
 #include <vector>
 
-#include "MutexContainer.hxx"
+#include <MutexContainer.hxx>
 
 class SdrView;
 

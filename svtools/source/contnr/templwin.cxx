@@ -20,7 +20,7 @@
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include "templwin.hxx"
-#include "templwin.hrc"
+#include <templwin.hrc>
 
 namespace SvtDocInfoTable_Impl
 {

@@ -60,7 +60,7 @@
 
 #include "lwplaypiece.hxx"
 #include "lwpstyledef.hxx"
-#include "lwpfilehdr.hxx"
+#include <lwpfilehdr.hxx>
 
 
 LwpRotor::LwpRotor()

@@ -21,21 +21,21 @@
 
 #include <vcl/waitobj.hxx>
 
-#include "viewdata.hxx"
-#include "document.hxx"
-#include "uiitems.hxx"
-#include "global.hxx"
-#include "globalnames.hxx"
-#include "dbdata.hxx"
-#include "scresid.hxx"
-#include "queryentry.hxx"
-#include "filterentries.hxx"
+#include <viewdata.hxx>
+#include <document.hxx>
+#include <uiitems.hxx>
+#include <global.hxx>
+#include <globalnames.hxx>
+#include <dbdata.hxx>
+#include <scresid.hxx>
+#include <queryentry.hxx>
+#include <filterentries.hxx>
 
-#include "sc.hrc"
-#include "strings.hrc"
-#include "globstr.hrc"
+#include <sc.hrc>
+#include <strings.hrc>
+#include <globstr.hrc>
 
-#include "pfiltdlg.hxx"
+#include <pfiltdlg.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
 

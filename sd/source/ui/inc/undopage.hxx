@@ -23,7 +23,7 @@
 #include <tools/gen.hxx>
 #include <vcl/prntypes.hxx>
 
-#include "sdundo.hxx"
+#include <sdundo.hxx>
 
 class SdDrawDocument;
 class SdPage;

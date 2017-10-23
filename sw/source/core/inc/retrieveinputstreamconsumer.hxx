@@ -22,7 +22,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <osl/interlck.h>
-#include <retrievedinputstreamdata.hxx>
+#include "retrievedinputstreamdata.hxx"
 
 class SwGrfNode;
 

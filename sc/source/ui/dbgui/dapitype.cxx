@@ -19,9 +19,9 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "dapitype.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
+#include <dapitype.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
 
 using namespace com::sun::star;
 

@@ -57,10 +57,10 @@
 #include "lwpfribtable.hxx"
 #include "lwppara.hxx"
 #include "lwptablelayout.hxx"
-#include "lwpchangemgr.hxx"
-#include "lwpglobalmgr.hxx"
-#include "xfilter/xfstylemanager.hxx"
-#include "xfilter/xfchange.hxx"
+#include <lwpchangemgr.hxx>
+#include <lwpglobalmgr.hxx>
+#include <xfilter/xfstylemanager.hxx>
+#include <xfilter/xfchange.hxx>
 
 /**
  * @short:   Read table frib

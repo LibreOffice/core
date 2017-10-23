@@ -21,8 +21,8 @@
 
 #include "UnoGraphicExporter.hxx"
 #include "shapeimpl.hxx"
-#include "svx/unoshprp.hxx"
-#include "svx/svdotable.hxx"
+#include <svx/unoshprp.hxx>
+#include <svx/svdotable.hxx>
 #include <svx/svdpool.hxx>
 
 

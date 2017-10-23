@@ -32,10 +32,10 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumfi.hxx>
-#include "XMLEventImportHelper.hxx"
-#include "XMLStarBasicContextFactory.hxx"
-#include "XMLScriptContextFactory.hxx"
-#include "StyleMap.hxx"
+#include <XMLEventImportHelper.hxx>
+#include <XMLStarBasicContextFactory.hxx>
+#include <XMLScriptContextFactory.hxx>
+#include <StyleMap.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -61,7 +61,7 @@
 
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <com/sun/star/rdf/XRepositorySupplier.hpp>
-#include "RDFaImportHelper.hxx"
+#include <RDFaImportHelper.hxx>
 
 using ::com::sun::star::beans::XPropertySetInfo;
 

@@ -20,12 +20,12 @@
 #ifndef INCLUDED_SAL_TYPES_H
 #define INCLUDED_SAL_TYPES_H
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <stddef.h>
 
-#include <sal/macros.h>
-#include <sal/typesizes.h>
+#include "sal/macros.h"
+#include "sal/typesizes.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <list>
 #include <boost/optional.hpp>
-#include "dp_backenddb.hxx"
+#include <dp_backenddb.hxx>
 
 namespace com { namespace sun { namespace star {
         namespace uno {

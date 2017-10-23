@@ -18,11 +18,11 @@
  */
 
 #include <memory>
-#include "markdata.hxx"
-#include "markarr.hxx"
-#include "markmulti.hxx"
-#include "rangelst.hxx"
-#include "segmenttree.hxx"
+#include <markdata.hxx>
+#include <markarr.hxx>
+#include <markmulti.hxx>
+#include <rangelst.hxx>
+#include <segmenttree.hxx>
 #include <columnspanset.hxx>
 #include <fstalgorithm.hxx>
 #include <unordered_map>

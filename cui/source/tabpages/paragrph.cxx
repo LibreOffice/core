@@ -30,7 +30,7 @@
 #include <svl/cjkoptions.hxx>
 #include <editeng/pgrditem.hxx>
 #include <strings.hrc>
-#include "paragrph.hxx"
+#include <paragrph.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
@@ -44,7 +44,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <editeng/paravertalignitem.hxx>

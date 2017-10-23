@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "core_resource.hxx"
-#include "directsql.hxx"
-#include "dbu_dlg.hxx"
-#include "strings.hrc"
+#include <core_resource.hxx>
+#include <directsql.hxx>
+#include <dbu_dlg.hxx>
+#include <strings.hrc>
 #include <vcl/layout.hxx>
 #include <comphelper/types.hxx>
 #include <vcl/svapp.hxx>

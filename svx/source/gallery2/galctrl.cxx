@@ -22,21 +22,21 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <avmedia/mediaplayer.hxx>
-#include "helpids.h"
-#include "galbrws2.hxx"
-#include "svx/dialmgr.hxx"
-#include "svx/galtheme.hxx"
-#include "svx/galmisc.hxx"
-#include "svx/galctrl.hxx"
-#include "editeng/AccessibleStringWrap.hxx"
+#include <helpids.h>
+#include <galbrws2.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/galtheme.hxx>
+#include <svx/galmisc.hxx>
+#include <svx/galctrl.hxx>
+#include <editeng/AccessibleStringWrap.hxx>
 #include <editeng/svxfont.hxx>
-#include "galobj.hxx"
+#include <galobj.hxx>
 #include <avmedia/mediawindow.hxx>
-#include "svx/strings.hrc"
+#include <svx/strings.hrc>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 #define GALLERY_BRWBOX_TITLE    1
 

@@ -40,7 +40,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <swfont.hxx>
 #include <wrong.hxx>
-#include "dbg_lay.hxx"
+#include <dbg_lay.hxx>
 #include <txtfrm.hxx>
 #include <pagefrm.hxx>
 #include <pagedesc.hxx>

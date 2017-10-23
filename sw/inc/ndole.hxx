@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_NDOLE_HXX
 #define INCLUDED_SW_INC_NDOLE_HXX
 
-#include <ndnotxt.hxx>
+#include "ndnotxt.hxx"
 #include <svtools/embedhlp.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <rtl/ref.hxx>

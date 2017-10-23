@@ -36,8 +36,8 @@
 #include <sal/log.hxx>
 
 #define SfxModule
-#include "sfxslots.hxx"
-#include "childwinimpl.hxx"
+#include <sfxslots.hxx>
+#include <childwinimpl.hxx>
 #include <ctrlfactoryimpl.hxx>
 
 class SfxModule_Impl

@@ -20,11 +20,11 @@
 #ifndef INCLUDED_UNO_DISPATCHER_HXX
 #define INCLUDED_UNO_DISPATCHER_HXX
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <cstddef>
 
-#include <uno/dispatcher.h>
+#include "uno/dispatcher.h"
 
 /// @cond INTERNAL
 

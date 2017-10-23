@@ -22,7 +22,7 @@
 #include <sax/tools/converter.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
-#include "XMLBitmapRepeatOffsetPropertyHandler.hxx"
+#include <XMLBitmapRepeatOffsetPropertyHandler.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

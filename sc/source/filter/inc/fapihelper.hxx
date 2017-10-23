@@ -30,7 +30,7 @@
 #include <tools/color.hxx>
 #include <comphelper/types.hxx>
 #include "ftools.hxx"
-#include "scdllapi.h"
+#include <scdllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }

@@ -30,8 +30,8 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include "stringhelper.hxx"
-#include "valueequal.hxx"
+#include <stringhelper.hxx>
+#include <valueequal.hxx>
 
 namespace rtl_OUString
 {

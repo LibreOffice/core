@@ -18,19 +18,19 @@
  */
 
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "codemaker/commonjava.hxx"
+#include <codemaker/commonjava.hxx>
 
-#include "codemaker/options.hxx"
-#include "codemaker/typemanager.hxx"
-#include "codemaker/unotype.hxx"
+#include <codemaker/options.hxx>
+#include <codemaker/typemanager.hxx>
+#include <codemaker/unotype.hxx>
 
-#include "rtl/strbuf.h"
-#include "rtl/string.h"
-#include "rtl/string.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <rtl/strbuf.h>
+#include <rtl/string.h>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 #include <vector>
 

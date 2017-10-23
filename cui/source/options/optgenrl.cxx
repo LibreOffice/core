@@ -27,7 +27,7 @@
 #include <vcl/settings.hxx>
 
 #include <unotools/useroptions.hxx>
-#include "cuioptgenrl.hxx"
+#include <cuioptgenrl.hxx>
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/svxids.hrc>

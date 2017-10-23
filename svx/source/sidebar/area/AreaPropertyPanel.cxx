@@ -18,7 +18,7 @@
  */
 
 #include <sfx2/sidebar/ControlFactory.hxx>
-#include <AreaPropertyPanel.hxx>
+#include "AreaPropertyPanel.hxx"
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>

@@ -22,9 +22,9 @@
 
 #include <vector>
 #include <memory>
-#include "globstr.hrc"
+#include <globstr.hrc>
 #include "ftools.hxx"
-#include "scdllapi.h"
+#include <scdllapi.h>
 
 class SfxObjectShell;
 class ScProgress;

@@ -23,7 +23,7 @@
 #include <xmloff/GradientStyle.hxx>
 #include <xmloff/HatchStyle.hxx>
 #include <xmloff/ImageStyle.hxx>
-#include "TransGradientStyle.hxx"
+#include <TransGradientStyle.hxx>
 #include <xmloff/MarkerStyle.hxx>
 #include <xmloff/DashStyle.hxx>
 #include <xmloff/families.hxx>

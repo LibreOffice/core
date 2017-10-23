@@ -18,8 +18,8 @@
  */
 
 #include "CellBorderStyleControl.hxx"
-#include "sc.hrc"
-#include "scresid.hxx"
+#include <sc.hrc>
+#include <scresid.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/borderline.hxx>
 #include "CellAppearancePropertyPanel.hxx"

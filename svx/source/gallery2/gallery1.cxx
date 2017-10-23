@@ -26,7 +26,7 @@
 #include <postmac.h>
 #endif
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -38,13 +38,13 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/docfile.hxx>
-#include "svx/dialmgr.hxx"
-#include "svx/gallery.hxx"
-#include "svx/strings.hrc"
-#include "strings.hxx"
-#include "svx/galmisc.hxx"
-#include "svx/galtheme.hxx"
-#include "svx/gallery1.hxx"
+#include <svx/dialmgr.hxx>
+#include <svx/gallery.hxx>
+#include <svx/strings.hrc>
+#include <strings.hxx>
+#include <svx/galmisc.hxx>
+#include <svx/galtheme.hxx>
+#include <svx/gallery1.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <memory>

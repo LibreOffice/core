@@ -19,13 +19,13 @@
 
 #include <sal/types.h>
 #include <rtl/string.hxx>
-#include <rtl_String_Const.h>
+#include "rtl_String_Const.h"
 #include <rtl/strbuf.hxx>
 
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 #include <string.h>
 
 using ::rtl::OStringBuffer;

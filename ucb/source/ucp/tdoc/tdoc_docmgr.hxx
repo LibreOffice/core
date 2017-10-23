@@ -23,16 +23,16 @@
 #include <map>
 
 #include <rtl/ref.hxx>
-#include "osl/mutex.hxx"
+#include <osl/mutex.hxx>
 
 #include <cppuhelper/implbase.hxx>
 
-#include "com/sun/star/document/XDocumentEventListener.hpp"
-#include "com/sun/star/embed/XStorage.hpp"
-#include "com/sun/star/frame/XModel.hpp"
-#include "com/sun/star/frame/XModuleManager2.hpp"
-#include "com/sun/star/frame/XGlobalEventBroadcaster.hpp"
-#include "com/sun/star/util/XCloseListener.hpp"
+#include <com/sun/star/document/XDocumentEventListener.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
+#include <com/sun/star/frame/XGlobalEventBroadcaster.hpp>
+#include <com/sun/star/util/XCloseListener.hpp>
 
 namespace tdoc_ucp {
 

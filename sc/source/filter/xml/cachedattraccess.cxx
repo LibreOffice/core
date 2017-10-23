@@ -8,7 +8,7 @@
  */
 
 #include "cachedattraccess.hxx"
-#include "document.hxx"
+#include <document.hxx>
 
 ScXMLCachedRowAttrAccess::Cache::Cache() :
     mnTab(-1), mnRow1(-1), mnRow2(-1), mbValue(false) {}

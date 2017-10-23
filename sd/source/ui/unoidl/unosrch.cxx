@@ -30,8 +30,8 @@
 
 #include <comphelper/extract.hxx>
 
-#include "unoprnms.hxx"
-#include "unosrch.hxx"
+#include <unoprnms.hxx>
+#include <unosrch.hxx>
 
 using namespace ::com::sun::star;
 

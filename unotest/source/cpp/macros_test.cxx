@@ -7,14 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "unotest/macros_test.hxx"
+#include <unotest/macros_test.hxx>
 
 #include <vector>
 
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 
-#include "cppunit/TestAssert.h"
+#include <cppunit/TestAssert.h>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/sequence.hxx>
 

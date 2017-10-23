@@ -22,7 +22,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <propertysetbase.hxx>
+#include "propertysetbase.hxx"
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
 #include <com/sun/star/form/validation/XValidator.hpp>

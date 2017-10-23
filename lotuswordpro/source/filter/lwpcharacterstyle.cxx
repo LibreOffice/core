@@ -59,15 +59,15 @@
  ************************************************************************/
 
 #include "lwpcharacterstyle.hxx"
-#include "lwpfilehdr.hxx"
-#include "lwptools.hxx"
-#include "lwpoverride.hxx"
-#include "lwpatomholder.hxx"
-#include "lwpfont.hxx"
-#include "lwpfoundry.hxx"
+#include <lwpfilehdr.hxx>
+#include <lwptools.hxx>
+#include <lwpoverride.hxx>
+#include <lwpatomholder.hxx>
+#include <lwpfont.hxx>
+#include <lwpfoundry.hxx>
 #include "lwpcharborderoverride.hxx"
-#include "xfilter/xfparastyle.hxx"
-#include "xfilter/xffont.hxx"
+#include <xfilter/xfparastyle.hxx>
+#include <xfilter/xffont.hxx>
 
 
 /*class LwpTextStyle*/

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "validat.hxx"
-#include "tabvwsh.hxx"
+#include <validat.hxx>
+#include <tabvwsh.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
 #include "helper/qahelper.hxx"
 

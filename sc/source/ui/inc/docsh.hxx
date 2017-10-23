@@ -26,14 +26,14 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/viewsh.hxx>
 
-#include "scdllapi.h"
-#include "scdll.hxx"
-#include "document.hxx"
-#include "appoptio.hxx"
-#include "formulaopt.hxx"
-#include "shellids.hxx"
-#include "optutil.hxx"
-#include "docuno.hxx"
+#include <scdllapi.h>
+#include <scdll.hxx>
+#include <document.hxx>
+#include <appoptio.hxx>
+#include <formulaopt.hxx>
+#include <shellids.hxx>
+#include <optutil.hxx>
+#include <docuno.hxx>
 
 #include <memory>
 #include <unordered_map>

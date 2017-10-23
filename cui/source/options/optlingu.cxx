@@ -45,7 +45,7 @@
 #include <unotools/extendedsecurityoptions.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistbox.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <svtools/langhelp.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -54,9 +54,9 @@
 
 #include <svx/svxdlg.hxx>
 #include <editeng/optitems.hxx>
-#include "optlingu.hxx"
+#include <optlingu.hxx>
 #include <dialmgr.hxx>
-#include "helpids.h"
+#include <helpids.h>
 #include <strings.hrc>
 
 #include <ucbhelper/content.hxx>

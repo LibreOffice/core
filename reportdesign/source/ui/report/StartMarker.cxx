@@ -16,15 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "StartMarker.hxx"
+#include <StartMarker.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
-#include "strings.hrc"
-#include "bitmaps.hlst"
-#include "ColorChanger.hxx"
-#include "ReportDefines.hxx"
-#include "SectionWindow.hxx"
-#include "helpids.h"
+#include <strings.hrc>
+#include <bitmaps.hlst>
+#include <ColorChanger.hxx>
+#include <ReportDefines.hxx>
+#include <SectionWindow.hxx>
+#include <helpids.h>
 #include <vcl/help.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>

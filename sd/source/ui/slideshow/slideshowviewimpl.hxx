@@ -50,20 +50,20 @@
 #include <svx/fmshell.hxx>
 
 #include <svx/svxids.hrc>
-#include "sdmod.hxx"
-#include "cusshow.hxx"
-#include "ViewShellBase.hxx"
-#include "PresentationViewShell.hxx"
-#include "ViewShell.hxx"
-#include "drawview.hxx"
-#include "slideshow.hxx"
-#include "drawdoc.hxx"
+#include <sdmod.hxx>
+#include <cusshow.hxx>
+#include <ViewShellBase.hxx>
+#include <PresentationViewShell.hxx>
+#include <ViewShell.hxx>
+#include <drawview.hxx>
+#include <slideshow.hxx>
+#include <drawdoc.hxx>
 #include "showwindow.hxx"
-#include "optsitem.hxx"
-#include "FrameView.hxx"
-#include "DrawDocShell.hxx"
+#include <optsitem.hxx>
+#include <FrameView.hxx>
+#include <DrawDocShell.hxx>
 
-#include "app.hrc"
+#include <app.hrc>
 
 namespace sd
 {

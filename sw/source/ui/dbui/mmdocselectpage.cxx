@@ -26,7 +26,7 @@
 #include <vcl/msgbox.hxx>
 #include <view.hxx>
 #include <docsh.hxx>
-#include <mmdocselectpage.hxx>
+#include "mmdocselectpage.hxx"
 #include <mailmergewizard.hxx>
 #include <shellio.hxx>
 #include <swabstdlg.hxx>

@@ -7,20 +7,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "formulabuffer.hxx"
-#include "formulaparser.hxx"
+#include <formulabuffer.hxx>
+#include <formulaparser.hxx>
 #include <externallinkbuffer.hxx>
-#include "formulacell.hxx"
-#include "document.hxx"
-#include "documentimport.hxx"
+#include <formulacell.hxx>
+#include <document.hxx>
+#include <documentimport.hxx>
 
-#include "rangelst.hxx"
-#include "autonamecache.hxx"
-#include "tokenuno.hxx"
-#include "tokenarray.hxx"
-#include "sharedformulagroups.hxx"
-#include "externalrefmgr.hxx"
-#include "tokenstringcontext.hxx"
+#include <rangelst.hxx>
+#include <autonamecache.hxx>
+#include <tokenuno.hxx>
+#include <tokenarray.hxx>
+#include <sharedformulagroups.hxx>
+#include <externalrefmgr.hxx>
+#include <tokenstringcontext.hxx>
 #include <oox/token/tokens.hxx>
 #include <svl/sharedstringpool.hxx>
 

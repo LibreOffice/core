@@ -66,7 +66,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <stdexcept>
 
-#include "xfilter/xfdefs.hxx"
+#include <xfilter/xfdefs.hxx>
 
 class IXFStream;
 

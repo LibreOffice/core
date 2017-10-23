@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_PDFIADAPTOR_HXX
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_PDFIADAPTOR_HXX
 
-#include "xmlemitter.hxx"
-#include "treevisitorfactory.hxx"
+#include <xmlemitter.hxx>
+#include <treevisitorfactory.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>

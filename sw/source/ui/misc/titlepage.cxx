@@ -17,13 +17,13 @@
 #include <charfmt.hxx>
 #include <docstyle.hxx>
 
-#include "fldbas.hxx"
-#include "lineinfo.hxx"
-#include "globals.hrc"
-#include "titlepage.hxx"
-#include "uitool.hxx"
-#include "fmtpdsc.hxx"
-#include "pagedesc.hxx"
+#include <fldbas.hxx>
+#include <lineinfo.hxx>
+#include <globals.hrc>
+#include <titlepage.hxx>
+#include <uitool.hxx>
+#include <fmtpdsc.hxx>
+#include <pagedesc.hxx>
 
 #include <IDocumentStylePoolAccess.hxx>
 

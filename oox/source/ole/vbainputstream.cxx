@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ole/vbainputstream.hxx"
+#include <oox/ole/vbainputstream.hxx>
 #include <osl/diagnose.h>
 
 namespace oox {

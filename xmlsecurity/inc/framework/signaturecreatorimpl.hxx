@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/implbase.hxx>
 
-#include "framework/signatureengine.hxx"
+#include <framework/signatureengine.hxx>
 
 typedef cppu::ImplInheritanceHelper
 <

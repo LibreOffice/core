@@ -57,7 +57,7 @@
 #include <svx/svdotext.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
-#include <pptexanimations.hxx>
+#include "pptexanimations.hxx"
 #include <osl/endian.h>
 
 #include <algorithm>

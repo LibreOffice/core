@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "lookupcache.hxx"
-#include "document.hxx"
-#include "queryentry.hxx"
+#include <lookupcache.hxx>
+#include <document.hxx>
+#include <queryentry.hxx>
 #include <brdcst.hxx>
 
 ScLookupCache::QueryCriteria::QueryCriteria( const ScQueryEntry& rEntry ) :

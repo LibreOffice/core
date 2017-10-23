@@ -19,10 +19,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_RESULTSETMETADATA_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_RESULTSETMETADATA_HXX
 
-#include "java/lang/Object.hxx"
+#include <java/lang/Object.hxx>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase.hxx>
-#include "java/sql/ConnectionLog.hxx"
+#include <java/sql/ConnectionLog.hxx>
 
 namespace connectivity
 {

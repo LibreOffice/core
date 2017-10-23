@@ -21,7 +21,7 @@
 #define INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include <propertysetbase.hxx>
+#include "propertysetbase.hxx"
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/xml/dom/events/XEventListener.hpp>
@@ -34,7 +34,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <computedexpression.hxx>
+#include "computedexpression.hxx"
 
 // forward declaractions
 namespace com { namespace sun { namespace star {

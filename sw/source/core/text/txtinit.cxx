@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "swcache.hxx"
-#include "fntcache.hxx"
-#include "swfntcch.hxx"
-#include "txtfrm.hxx"
+#include <swcache.hxx>
+#include <fntcache.hxx>
+#include <swfntcch.hxx>
+#include <txtfrm.hxx>
 #include "txtcache.hxx"
 #include "porlay.hxx"
 #include "porglue.hxx"
@@ -33,10 +33,10 @@
 #include "porftn.hxx"
 #include "porhyph.hxx"
 #include "pordrop.hxx"
-#include "blink.hxx"
-#include "init.hxx"
-#include "txtfly.hxx"
-#include "dbg_lay.hxx"
+#include <blink.hxx>
+#include <init.hxx>
+#include <txtfly.hxx>
+#include <dbg_lay.hxx>
 
 SwCache *SwTextFrame::pTextCache = nullptr;
 long SwTextFrame::nMinPrtLine = 0;

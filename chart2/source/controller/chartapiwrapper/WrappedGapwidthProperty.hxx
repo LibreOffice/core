@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDGAPWIDTHPROPERTY_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDGAPWIDTHPROPERTY_HXX
 
-#include "WrappedDefaultProperty.hxx"
+#include <WrappedDefaultProperty.hxx>
 #include "Chart2ModelContact.hxx"
 
 #include <memory>

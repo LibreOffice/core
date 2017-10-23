@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "condformatbuffer.hxx"
+#include <condformatbuffer.hxx>
 
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
 #include <rtl/ustrbuf.hxx>
@@ -32,16 +32,16 @@
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "addressconverter.hxx"
-#include "stylesbuffer.hxx"
-#include "themebuffer.hxx"
+#include <addressconverter.hxx>
+#include <stylesbuffer.hxx>
+#include <themebuffer.hxx>
 
-#include "colorscale.hxx"
-#include "conditio.hxx"
-#include "document.hxx"
-#include "docfunc.hxx"
-#include "tokenarray.hxx"
-#include "tokenuno.hxx"
+#include <colorscale.hxx>
+#include <conditio.hxx>
+#include <document.hxx>
+#include <docfunc.hxx>
+#include <tokenarray.hxx>
+#include <tokenuno.hxx>
 
 namespace oox {
 namespace xls {

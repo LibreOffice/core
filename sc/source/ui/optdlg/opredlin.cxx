@@ -24,20 +24,20 @@
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
 
-#include "appoptio.hxx"
-#include "scmod.hxx"
-#include "scitems.hxx"
-#include "tpview.hxx"
-#include "global.hxx"
-#include "viewopti.hxx"
-#include "tabvwsh.hxx"
-#include "uiitems.hxx"
-#include "scresid.hxx"
-#include "docsh.hxx"
-#include "sc.hrc"
-#include "globstr.hrc"
+#include <appoptio.hxx>
+#include <scmod.hxx>
+#include <scitems.hxx>
+#include <tpview.hxx>
+#include <global.hxx>
+#include <viewopti.hxx>
+#include <tabvwsh.hxx>
+#include <uiitems.hxx>
+#include <scresid.hxx>
+#include <docsh.hxx>
+#include <sc.hrc>
+#include <globstr.hrc>
 
-#include "opredlin.hxx"
+#include <opredlin.hxx>
 
 ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( vcl::Window* pParent,
                                                     const SfxItemSet& rSet )

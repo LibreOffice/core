@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "oox/mathml/importutils.hxx"
+#include <oox/mathml/importutils.hxx>
 
 #include <assert.h>
 

@@ -22,9 +22,9 @@
 
 #include "appletshape.hxx"
 #include "externalshapebase.hxx"
-#include "vieweventhandler.hxx"
+#include <vieweventhandler.hxx>
 #include "viewappletshape.hxx"
-#include "tools.hxx"
+#include <tools.hxx>
 
 #include <algorithm>
 

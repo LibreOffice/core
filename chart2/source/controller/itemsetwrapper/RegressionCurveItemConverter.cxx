@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "RegressionCurveHelper.hxx"
-#include "RegressionCurveItemConverter.hxx"
+#include <RegressionCurveHelper.hxx>
+#include <RegressionCurveItemConverter.hxx>
 #include "SchWhichPairs.hxx"
-#include "macros.hxx"
-#include "ItemPropertyMap.hxx"
-#include "GraphicPropertyItemConverter.hxx"
+#include <macros.hxx>
+#include <ItemPropertyMap.hxx>
+#include <GraphicPropertyItemConverter.hxx>
 
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <osl/diagnose.h>

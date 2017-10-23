@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "formulaparser.hxx"
+#include <formulaparser.hxx>
 
 #include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/ExternalReference.hpp>
@@ -27,11 +27,11 @@
 #include <oox/core/filterbase.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/helper/binaryinputstream.hxx>
-#include "addressconverter.hxx"
-#include "defnamesbuffer.hxx"
-#include "externallinkbuffer.hxx"
-#include "tablebuffer.hxx"
-#include "worksheethelper.hxx"
+#include <addressconverter.hxx>
+#include <defnamesbuffer.hxx>
+#include <externallinkbuffer.hxx>
+#include <tablebuffer.hxx>
+#include <worksheethelper.hxx>
 
 namespace oox {
 namespace xls {

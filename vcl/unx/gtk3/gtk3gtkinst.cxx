@@ -11,20 +11,20 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/lang/XSingleServiceFactory.hpp"
-#include "com/sun/star/lang/XInitialization.hpp"
-#include "com/sun/star/datatransfer/XTransferable.hpp"
-#include "com/sun/star/datatransfer/clipboard/XClipboard.hpp"
-#include "com/sun/star/datatransfer/clipboard/XClipboardEx.hpp"
-#include "com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp"
-#include "com/sun/star/datatransfer/clipboard/XClipboardListener.hpp"
-#include "com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp"
-#include "com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp"
-#include "com/sun/star/datatransfer/dnd/DNDConstants.hpp"
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
+#include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include "cppuhelper/compbase.hxx"
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

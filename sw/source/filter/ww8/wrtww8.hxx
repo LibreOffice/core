@@ -33,7 +33,7 @@
 #include "fields.hxx"
 #include "types.hxx"
 #include "writerhelper.hxx"
-#include "msfilter.hxx"
+#include <msfilter.hxx>
 #include <expfld.hxx>
 #include "WW8TableInfo.hxx"
 

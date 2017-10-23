@@ -23,21 +23,21 @@
 #include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <strings.hrc>
-#include "helpids.h"
+#include <helpids.h>
 #include <svx/dialmgr.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdopath.hxx>
-#include "svx/drawitem.hxx"
+#include <svx/drawitem.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
-#include "cuitabline.hxx"
-#include "cuitabarea.hxx"
+#include <cuitabline.hxx>
+#include <cuitabarea.hxx>
 #include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

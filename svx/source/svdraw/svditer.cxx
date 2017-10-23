@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdobj.hxx>

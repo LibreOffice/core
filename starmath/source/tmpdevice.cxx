@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "smmod.hxx"
+#include <smmod.hxx>
 #include "tmpdevice.hxx"
 
 #include <vcl/window.hxx>

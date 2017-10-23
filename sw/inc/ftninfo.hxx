@@ -21,9 +21,9 @@
 
 #include <rtl/ustring.hxx>
 #include "swdllapi.h"
-#include <calbck.hxx>
+#include "calbck.hxx"
 #include <editeng/numitem.hxx>
-#include <fmtcol.hxx>
+#include "fmtcol.hxx"
 
 class SwTextFormatColl;
 class SwPageDesc;

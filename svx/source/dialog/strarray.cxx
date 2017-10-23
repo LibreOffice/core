@@ -22,8 +22,8 @@
 #include <svx/strarray.hxx>
 #include <tools/resary.hxx>
 #include <svx/svxitems.hrc>
-#include "fieldunit.hrc"
-#include "numberingtype.hrc"
+#include <fieldunit.hrc>
+#include <numberingtype.hrc>
 
 sal_uInt32 SvxFieldUnitTable::Count()
 {

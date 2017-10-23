@@ -58,7 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#include "lwpcolor.hxx"
+#include <lwpcolor.hxx>
 
 /**
  * @descr       return the BGR format

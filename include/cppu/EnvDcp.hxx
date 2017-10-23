@@ -20,8 +20,8 @@
 #ifndef INCLUDED_CPPU_ENVDCP_HXX
 #define INCLUDED_CPPU_ENVDCP_HXX
 
-#include <rtl/ustring.hxx>
-#include <uno/EnvDcp.h>
+#include "rtl/ustring.hxx"
+#include "uno/EnvDcp.h"
 
 
 namespace cppu

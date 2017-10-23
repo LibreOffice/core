@@ -27,7 +27,7 @@
 #include <documentlinkmgr.hxx>
 #include <o3tl/enumarray.hxx>
 
-#include "officecfg/Office/Calc.hxx"
+#include <officecfg/Office/Calc.hxx>
 
 
 #if defined(_WIN32)

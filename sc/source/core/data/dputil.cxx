@@ -7,12 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "dputil.hxx"
-#include "dpitemdata.hxx"
-#include "dpnumgroupinfo.hxx"
-#include "globalnames.hxx"
-#include "globstr.hrc"
-#include "generalfunction.hxx"
+#include <dputil.hxx>
+#include <dpitemdata.hxx>
+#include <dpnumgroupinfo.hxx>
+#include <globalnames.hxx>
+#include <globstr.hrc>
+#include <generalfunction.hxx>
 
 #include <comphelper/string.hxx>
 #include <unotools/localedatawrapper.hxx>

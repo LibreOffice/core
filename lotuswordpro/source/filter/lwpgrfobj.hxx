@@ -64,8 +64,8 @@
 #include <sal/types.h>
 
 #include "lwpoleobject.hxx"
-#include "lwpheader.hxx"
-#include "xfilter/xfrect.hxx"
+#include <lwpheader.hxx>
+#include <xfilter/xfrect.hxx>
 
 struct ImageProcessingData
 {

@@ -66,17 +66,17 @@
 
 #include <rtl/ref.hxx>
 
-#include "xfilter/xffont.hxx"
-#include "xfilter/xfglobal.hxx"
-#include "xfilter/xfstyle.hxx"
-#include "xfilter/xfcolor.hxx"
-#include "xfilter/xfmargins.hxx"
-#include "xfilter/xfbreaks.hxx"
-#include "xfilter/xfpadding.hxx"
-#include "xfilter/xfshadow.hxx"
-#include "xfilter/xfdropcap.hxx"
-#include "xfilter/xfstylecont.hxx"
-#include "xfilter/xflineheight.hxx"
+#include <xfilter/xffont.hxx>
+#include <xfilter/xfglobal.hxx>
+#include <xfilter/xfstyle.hxx>
+#include <xfilter/xfcolor.hxx>
+#include <xfilter/xfmargins.hxx>
+#include <xfilter/xfbreaks.hxx>
+#include <xfilter/xfpadding.hxx>
+#include <xfilter/xfshadow.hxx>
+#include <xfilter/xfdropcap.hxx>
+#include <xfilter/xfstylecont.hxx>
+#include <xfilter/xflineheight.hxx>
 
 #define     XFPARA_FLAG_FONT        0X00000001
 #define     XFPARA_FLAG_DROPCAP     0X00000002

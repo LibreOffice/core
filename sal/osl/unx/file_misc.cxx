@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "osl/file.hxx"
-#include "osl/detail/file.h"
+#include <osl/file.hxx>
+#include <osl/detail/file.h>
 
-#include "osl/diagnose.h"
-#include "osl/thread.h"
+#include <osl/diagnose.h>
+#include <osl/thread.h>
 #include <osl/signal.h>
-#include "rtl/alloc.h"
+#include <rtl/alloc.h>
 #include <rtl/string.hxx>
 
 #include "system.hxx"

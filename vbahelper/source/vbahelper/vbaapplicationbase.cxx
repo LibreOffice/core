@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vbahelper/vbaapplicationbase.hxx"
+#include <vbahelper/vbaapplicationbase.hxx>
 #include <sal/macros.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>

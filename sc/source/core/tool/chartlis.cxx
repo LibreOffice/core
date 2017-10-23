@@ -20,10 +20,10 @@
 #include <memory>
 #include <vcl/svapp.hxx>
 
-#include "chartlis.hxx"
-#include "brdcst.hxx"
-#include "document.hxx"
-#include "reftokenhelper.hxx"
+#include <chartlis.hxx>
+#include <brdcst.hxx>
+#include <document.hxx>
+#include <reftokenhelper.hxx>
 
 using namespace com::sun::star;
 using ::std::vector;

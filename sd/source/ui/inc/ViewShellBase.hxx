@@ -22,7 +22,7 @@
 
 #include "ViewShell.hxx"
 
-#include "glob.hxx"
+#include <glob.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfac.hxx>
 #include <memory>

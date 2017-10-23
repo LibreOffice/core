@@ -20,9 +20,9 @@
 #define INCLUDED_CHART2_SOURCE_VIEW_AXES_VAXISPROPERTIES_HXX
 
 #include "TickmarkProperties.hxx"
-#include "PlottingPositionHelper.hxx"
-#include "LabelAlignment.hxx"
-#include "ExplicitCategoriesProvider.hxx"
+#include <PlottingPositionHelper.hxx>
+#include <LabelAlignment.hxx>
+#include <ExplicitCategoriesProvider.hxx>
 
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>

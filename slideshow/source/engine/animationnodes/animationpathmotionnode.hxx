@@ -20,7 +20,7 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONPATHMOTIONNODE_HXX
 
 #include "animationbasenode.hxx"
-#include "com/sun/star/animations/XAnimateMotion.hpp"
+#include <com/sun/star/animations/XAnimateMotion.hpp>
 
 namespace slideshow {
 namespace internal {

@@ -60,7 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFRECT_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFRECT_HXX
 
-#include "xfilter/xfpoint.hxx"
+#include <xfilter/xfpoint.hxx>
 
 class XFRect
 {

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_OSL_SOCKET_HXX
 #define INCLUDED_OSL_SOCKET_HXX
 
-#include <osl/socket_decl.hxx>
+#include "osl/socket_decl.hxx"
 
 namespace osl
 {

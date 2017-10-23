@@ -33,8 +33,8 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <vcl/svapp.hxx>
-#include "unx/gtk/gtkinst.hxx"
-#include "gtk/fpicker/SalGtkFolderPicker.hxx"
+#include <unx/gtk/gtkinst.hxx>
+#include <gtk/fpicker/SalGtkFolderPicker.hxx>
 
 #include <string.h>
 

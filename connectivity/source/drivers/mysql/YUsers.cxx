@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "mysql/YUsers.hxx"
-#include "mysql/YUser.hxx"
-#include "mysql/YTable.hxx"
+#include <mysql/YUsers.hxx>
+#include <mysql/YUser.hxx>
+#include <mysql/YTable.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 
 using namespace ::comphelper;
 using namespace connectivity;

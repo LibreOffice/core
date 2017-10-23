@@ -22,10 +22,10 @@
 #include <vcl/layout.hxx>
 
 #include <sfx2/passwd.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/sfxresid.hxx>
 
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 
 
 IMPL_LINK( SfxPasswordDialog, EditModifyHdl, Edit&, rEdit, void )

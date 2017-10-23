@@ -19,7 +19,7 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "pvfundlg.hxx"
+#include <pvfundlg.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
@@ -30,14 +30,14 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "scresid.hxx"
-#include "dpobject.hxx"
-#include "dpsave.hxx"
-#include "pvfundlg.hrc"
-#include "strings.hrc"
-#include "scmod.hxx"
-#include "globstr.hrc"
-#include "dputil.hxx"
+#include <scresid.hxx>
+#include <dpobject.hxx>
+#include <dpsave.hxx>
+#include <pvfundlg.hrc>
+#include <strings.hrc>
+#include <scmod.hxx>
+#include <globstr.hrc>
+#include <dputil.hxx>
 
 #include <vector>
 

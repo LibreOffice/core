@@ -21,10 +21,10 @@
 // Include GLM
 #include <list>
 #include <map>
-#include "glm/glm.hpp"
-#include "glm/gtx/transform.hpp"
-#include "glm/gtx/euler_angles.hpp"
-#include "glm/gtx/quaternion.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 #define DEBUG_POSITIONING 0
 

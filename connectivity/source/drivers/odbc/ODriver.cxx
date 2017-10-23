@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "odbc/ODriver.hxx"
-#include "odbc/OConnection.hxx"
-#include "odbc/OFunctions.hxx"
-#include "odbc/OTools.hxx"
+#include <odbc/ODriver.hxx>
+#include <odbc/OConnection.hxx>
+#include <odbc/OFunctions.hxx>
+#include <odbc/OTools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "strings.hrc"
-#include "resource/sharedresources.hxx"
+#include <strings.hrc>
+#include <resource/sharedresources.hxx>
 
 using namespace connectivity::odbc;
 using namespace com::sun::star::uno;

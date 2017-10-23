@@ -108,7 +108,7 @@
 #include <svl/documentlockfile.hxx>
 #include <com/sun/star/document/DocumentRevisionListPersistence.hpp>
 
-#include "helper.hxx"
+#include <helper.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/frame.hxx>
@@ -117,8 +117,8 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/sfxsids.hrc>
-#include "sfx2/strings.hrc"
-#include "openflag.hxx"
+#include <sfx2/strings.hrc>
+#include <openflag.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <officecfg/Office/Common.hxx>
 

@@ -60,9 +60,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFROWSTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFROWSTYLE_HXX
 
-#include "xfilter/xfglobal.hxx"
-#include "xfilter/xfstyle.hxx"
-#include "xfilter/xfcolor.hxx"
+#include <xfilter/xfglobal.hxx>
+#include <xfilter/xfstyle.hxx>
+#include <xfilter/xfcolor.hxx>
 
 class XFBGImage;
 class XFRowStyle : public XFStyle

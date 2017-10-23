@@ -61,9 +61,9 @@
 #include <sal/config.h>
 
 #include <xfilter/xfparastyle.hxx>
-#include "xfilter/xfstylemanager.hxx"
+#include <xfilter/xfstylemanager.hxx>
 #include <xfilter/xftextstyle.hxx>
-#include "xfilter/ixfstyle.hxx"
+#include <xfilter/ixfstyle.hxx>
 
 XFStyleManager::XFStyleManager() : s_aStdArrowStyles( "arrow" ), s_aTextStyles( "T" ),
     s_aParaStyles( "P" ),s_aListStyles( "L" ),s_aSectionStyles( "Sect" ),

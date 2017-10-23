@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "SvxConfigPageHelper.hxx"
+#include <SvxConfigPageHelper.hxx>
 
 static sal_Int16 theImageType =
     css::ui::ImageType::COLOR_NORMAL |

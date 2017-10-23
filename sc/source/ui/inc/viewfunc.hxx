@@ -21,7 +21,7 @@
 
 #include "tabview.hxx"
 
-#include "tabbgcolor.hxx"
+#include <tabbgcolor.hxx>
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/Aspects.hpp>

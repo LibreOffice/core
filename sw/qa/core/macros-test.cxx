@@ -55,7 +55,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentContentOperations.hxx>
-#include "docsh.hxx"
+#include <docsh.hxx>
 #include <unotxdoc.hxx>
 
 typedef tools::SvRef<SwDocShell> SwDocShellRef;

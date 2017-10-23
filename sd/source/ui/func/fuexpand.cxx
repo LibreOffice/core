@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuexpand.hxx"
+#include <fuexpand.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdotext.hxx>
@@ -28,19 +28,19 @@
 #include <svx/svdetc.hxx>
 #include <xmloff/autolayout.hxx>
 
-#include "app.hrc"
-#include "strings.hrc"
-#include "pres.hxx"
-#include "View.hxx"
-#include "sdpage.hxx"
-#include "Outliner.hxx"
-#include "drawview.hxx"
-#include "drawdoc.hxx"
-#include "ViewShell.hxx"
-#include "DrawDocShell.hxx"
-#include "sdresid.hxx"
-#include "optsitem.hxx"
-#include "sdmod.hxx"
+#include <app.hrc>
+#include <strings.hrc>
+#include <pres.hxx>
+#include <View.hxx>
+#include <sdpage.hxx>
+#include <Outliner.hxx>
+#include <drawview.hxx>
+#include <drawdoc.hxx>
+#include <ViewShell.hxx>
+#include <DrawDocShell.hxx>
+#include <sdresid.hxx>
+#include <optsitem.hxx>
+#include <sdmod.hxx>
 #include <sfx2/dispatch.hxx>
 #include <editeng/eeitem.hxx>
 

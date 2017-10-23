@@ -18,13 +18,13 @@
  */
 
 #include "PieChart.hxx"
-#include "PlottingPositionHelper.hxx"
-#include "AbstractShapeFactory.hxx"
-#include "PolarLabelPositionHelper.hxx"
-#include "macros.hxx"
-#include "CommonConverters.hxx"
-#include "ViewDefines.hxx"
-#include "ObjectIdentifier.hxx"
+#include <PlottingPositionHelper.hxx>
+#include <AbstractShapeFactory.hxx>
+#include <PolarLabelPositionHelper.hxx>
+#include <macros.hxx>
+#include <CommonConverters.hxx>
+#include <ViewDefines.hxx>
+#include <ObjectIdentifier.hxx>
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/XColorScheme.hpp>

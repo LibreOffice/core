@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "file/fanalyzer.hxx"
+#include <file/fanalyzer.hxx>
 #include <connectivity/sqlparse.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/extract.hxx>
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/dbexception.hxx>
-#include "file/FConnection.hxx"
-#include "strings.hrc"
+#include <file/FConnection.hxx>
+#include <strings.hrc>
 
 using namespace ::connectivity;
 using namespace ::connectivity::file;

@@ -26,9 +26,9 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 
-#include "MutexContainer.hxx"
-#include "OPropertySet.hxx"
-#include "ModifyListenerHelper.hxx"
+#include <MutexContainer.hxx>
+#include <OPropertySet.hxx>
+#include <ModifyListenerHelper.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>

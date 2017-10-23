@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "WExtendPages.hxx"
-#include "RtfReader.hxx"
-#include "HtmlReader.hxx"
-#include "WCopyTable.hxx"
+#include <WExtendPages.hxx>
+#include <RtfReader.hxx>
+#include <HtmlReader.hxx>
+#include <WCopyTable.hxx>
 
 using namespace dbaui;
 using namespace com::sun::star;

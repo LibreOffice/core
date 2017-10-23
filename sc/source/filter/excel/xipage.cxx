@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xipage.hxx"
+#include <xipage.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/graph.hxx>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/pageitem.hxx>
@@ -28,12 +28,12 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/brushitem.hxx>
-#include "document.hxx"
-#include "stlsheet.hxx"
-#include "attrib.hxx"
-#include "xistream.hxx"
-#include "xihelper.hxx"
-#include "xiescher.hxx"
+#include <document.hxx>
+#include <stlsheet.hxx>
+#include <attrib.hxx>
+#include <xistream.hxx>
+#include <xihelper.hxx>
+#include <xiescher.hxx>
 
 // Page settings ==============================================================
 

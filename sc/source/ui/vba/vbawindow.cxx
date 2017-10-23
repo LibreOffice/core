@@ -43,8 +43,8 @@
 #include <sc.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/wrkwin.hxx>
-#include "unonames.hxx"
-#include "markdata.hxx"
+#include <unonames.hxx>
+#include <markdata.hxx>
 #include <unordered_map>
 
 using namespace ::com::sun::star;

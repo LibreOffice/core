@@ -21,7 +21,7 @@
 #include <memory>
 #include <rtl/math.hxx>
 
-#include <sgvspln.hxx>
+#include "sgvspln.hxx"
 #include <cmath>
 
 #include <android/compatibility.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "jni.h"
-#include "osl/security.h"
+#include <jni.h>
+#include <osl/security.h>
 #include <osl/pipe.h>
 
 /* On Windows, jpipe.dll must not have static dependencies on any other URE DLLs

@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "svx/XPropertyTable.hxx"
+#include <svx/XPropertyTable.hxx>
 #include <unotools/pathoptions.hxx>
 
 #include <svx/strings.hrc>

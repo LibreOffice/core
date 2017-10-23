@@ -32,7 +32,7 @@
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include "insdlg.hxx"
+#include <insdlg.hxx>
 #include <dialmgr.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/strings.hrc>
@@ -54,7 +54,7 @@
 #include <svl/ownlist.hxx>
 #include <comphelper/seqstream.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <osl/file.hxx>
 

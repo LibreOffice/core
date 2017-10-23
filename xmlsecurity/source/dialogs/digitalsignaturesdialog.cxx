@@ -49,8 +49,8 @@
 #include <tools/time.hxx>
 #include <svtools/treelistentry.hxx>
 
-#include "strings.hrc"
-#include "resourcemanager.hxx"
+#include <strings.hrc>
+#include <resourcemanager.hxx>
 
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>

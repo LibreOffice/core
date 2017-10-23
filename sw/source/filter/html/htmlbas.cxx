@@ -37,10 +37,10 @@
 #include <fmtornt.hxx>
 #include <fmtfld.hxx>
 
-#include "doc.hxx"
+#include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
-#include "docsh.hxx"
-#include "docufld.hxx"
+#include <docsh.hxx>
+#include <docufld.hxx>
 #include "wrthtml.hxx"
 #include "swhtml.hxx"
 

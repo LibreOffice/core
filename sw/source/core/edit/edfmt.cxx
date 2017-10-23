@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "doc.hxx"
+#include <doc.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include "editsh.hxx"
-#include "swtable.hxx"
-#include "pam.hxx"
+#include <editsh.hxx>
+#include <swtable.hxx>
+#include <pam.hxx>
 #include <docary.hxx>
 #include <fchrfmt.hxx>
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
-#include "ndtxt.hxx"
-#include "hints.hxx"
+#include <ndtxt.hxx>
+#include <hints.hxx>
 
 sal_uInt16 SwEditShell::GetCharFormatCount() const
 {

@@ -19,21 +19,21 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include "DocumentRenderer.hxx"
-#include "DocumentRenderer.hrc"
+#include <DocumentRenderer.hxx>
+#include <DocumentRenderer.hrc>
 
-#include "drawdoc.hxx"
-#include "optsitem.hxx"
-#include "sdresid.hxx"
-#include "strings.hrc"
-#include "sdattr.hxx"
-#include "Window.hxx"
-#include "drawview.hxx"
-#include "DrawViewShell.hxx"
-#include "FrameView.hxx"
-#include "Outliner.hxx"
-#include "OutlineViewShell.hxx"
-#include "SlideSorterViewShell.hxx"
+#include <drawdoc.hxx>
+#include <optsitem.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
+#include <sdattr.hxx>
+#include <Window.hxx>
+#include <drawview.hxx>
+#include <DrawViewShell.hxx>
+#include <FrameView.hxx>
+#include <Outliner.hxx>
+#include <OutlineViewShell.hxx>
+#include <SlideSorterViewShell.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

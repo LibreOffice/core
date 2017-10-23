@@ -18,7 +18,7 @@
  */
 
 #include <swtypes.hxx>
-#include <dbtablepreviewdialog.hxx>
+#include "dbtablepreviewdialog.hxx"
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/Frame.hpp>
 #include <toolkit/helper/vclunohelper.hxx>

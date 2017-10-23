@@ -18,14 +18,14 @@
  */
 
 
-#include "codemaker/exceptiontree.hxx"
-#include "codemaker/typemanager.hxx"
+#include <codemaker/exceptiontree.hxx>
+#include <codemaker/typemanager.hxx>
 
-#include "rtl/ref.hxx"
-#include "rtl/string.hxx"
-#include "rtl/textenc.h"
-#include "rtl/ustring.hxx"
-#include "unoidl/unoidl.hxx"
+#include <rtl/ref.hxx>
+#include <rtl/string.hxx>
+#include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
+#include <unoidl/unoidl.hxx>
 
 #include <memory>
 #include <vector>

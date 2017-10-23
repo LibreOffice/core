@@ -23,7 +23,7 @@
 #include <sfx2/app.hxx>
 #include <svl/aeitem.hxx>
 #include <svtools/svtabbx.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/defaultoptions.hxx>
@@ -32,10 +32,10 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/viewoptions.hxx>
 
-#include "optpath.hxx"
+#include <optpath.hxx>
 #include <dialmgr.hxx>
-#include "helpids.h"
-#include "strings.hrc"
+#include <helpids.h>
+#include <strings.hrc>
 #include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>

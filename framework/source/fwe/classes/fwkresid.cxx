@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "classes/fwkresid.hxx"
+#include <classes/fwkresid.hxx>
 #include <unotools/resmgr.hxx>
 
 OUString FwkResId(const char* pId)

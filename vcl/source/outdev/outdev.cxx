@@ -23,12 +23,12 @@
 #include <vcl/sysdata.hxx>
 #include <comphelper/lok.hxx>
 
-#include "salgdi.hxx"
-#include "svdata.hxx"
-#include "window.h"
-#include "outdev.h"
-#include "outdevstatestack.hxx"
-#include "PhysicalFontCollection.hxx"
+#include <salgdi.hxx>
+#include <svdata.hxx>
+#include <window.h>
+#include <outdev.h>
+#include <outdevstatestack.hxx>
+#include <PhysicalFontCollection.hxx>
 
 #ifdef DISABLE_DYNLOADING
 // Linking all needed LO code into one .so/executable, these already

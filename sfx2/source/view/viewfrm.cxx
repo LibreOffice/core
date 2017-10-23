@@ -100,17 +100,17 @@ using ::com::sun::star::document::XViewDataSupplier;
 using ::com::sun::star::container::XIndexContainer;
 
 // Due to ViewFrame::Current
-#include "appdata.hxx"
+#include <appdata.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
-#include "openflag.hxx"
-#include "objshimp.hxx"
+#include <openflag.hxx>
+#include <objshimp.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include "arrdecl.hxx"
-#include "sfxtypes.hxx"
+#include <arrdecl.hxx>
+#include <sfxtypes.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/ipclient.hxx>
@@ -128,14 +128,14 @@ using ::com::sun::star::container::XIndexContainer;
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
-#include "workwin.hxx"
-#include "helper.hxx"
+#include <workwin.hxx>
+#include <helper.hxx>
 #include <sfx2/minfitem.hxx>
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 #include "impviewframe.hxx"
 
 #define SfxViewFrame
-#include "sfxslots.hxx"
+#include <sfxslots.hxx>
 #undef SfxViewFrame
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxViewFrame,SfxShell)

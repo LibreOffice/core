@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_TEXTSH_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_TEXTSH_HXX
 
-#include <basesh.hxx>
+#include "basesh.hxx"
 #include <unotools/caserotate.hxx>
 
 class AbstractSvxPostItDialog;

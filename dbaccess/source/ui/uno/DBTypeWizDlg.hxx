@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_UNO_DBTYPEWIZDLG_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_UNO_DBTYPEWIZDLG_HXX
 
-#include "unoadmin.hxx"
+#include <unoadmin.hxx>
 
 namespace dbaui
 {

@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dpcache.hxx"
+#include <dpcache.hxx>
 
-#include "document.hxx"
-#include "queryentry.hxx"
-#include "queryparam.hxx"
-#include "dpglobal.hxx"
-#include "dpobject.hxx"
-#include "globstr.hrc"
-#include "docoptio.hxx"
-#include "dpitemdata.hxx"
-#include "dputil.hxx"
-#include "dpnumgroupinfo.hxx"
+#include <document.hxx>
+#include <queryentry.hxx>
+#include <queryparam.hxx>
+#include <dpglobal.hxx>
+#include <dpobject.hxx>
+#include <globstr.hrc>
+#include <docoptio.hxx>
+#include <dpitemdata.hxx>
+#include <dputil.hxx>
+#include <dpnumgroupinfo.hxx>
 #include <columniterator.hxx>
 #include <cellvalue.hxx>
 

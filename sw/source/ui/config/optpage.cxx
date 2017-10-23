@@ -73,7 +73,7 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 
-#include "optload.hxx"
+#include <optload.hxx>
 
 using namespace ::com::sun::star;
 

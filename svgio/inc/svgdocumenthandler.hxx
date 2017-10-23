@@ -21,7 +21,7 @@
 #define INCLUDED_SVGIO_INC_SVGDOCUMENTHANDLER_HXX
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <svgdocument.hxx>
+#include "svgdocument.hxx"
 #include <cppuhelper/implbase.hxx>
 
 namespace svgio { namespace svgreader { class SvgCharacterNode; }}

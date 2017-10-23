@@ -23,12 +23,12 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <editeng/borderline.hxx>
-#include "swtypes.hxx"
-#include "swrect.hxx"
-#include "calbck.hxx"
+#include <swtypes.hxx>
+#include <swrect.hxx>
+#include <calbck.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include "IDocumentDrawModelAccess.hxx"
+#include <IDocumentDrawModelAccess.hxx>
 
 #include <com/sun/star/style/TabStop.hpp>
 

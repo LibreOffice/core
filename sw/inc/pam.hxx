@@ -22,10 +22,10 @@
 #include <stddef.h>
 #include <sal/types.h>
 #include <tools/mempool.hxx>
-#include <cshtyp.hxx>
-#include <ring.hxx>
-#include <index.hxx>
-#include <ndindex.hxx>
+#include "cshtyp.hxx"
+#include "ring.hxx"
+#include "index.hxx"
+#include "ndindex.hxx"
 #include "swdllapi.h"
 
 #include <iostream>

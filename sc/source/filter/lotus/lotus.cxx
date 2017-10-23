@@ -18,15 +18,15 @@
  */
 
 #include "lotfilter.hxx"
-#include "lotimpop.hxx"
+#include <lotimpop.hxx>
 
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
 
-#include "scerrors.hxx"
-#include "root.hxx"
-#include "filtopt.hxx"
-#include "ftools.hxx"
+#include <scerrors.hxx>
+#include <root.hxx>
+#include <filtopt.hxx>
+#include <ftools.hxx>
 
 ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, rtl_TextEncoding eSrc )
 {

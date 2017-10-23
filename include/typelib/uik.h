@@ -19,7 +19,7 @@
 #ifndef INCLUDED_TYPELIB_UIK_H
 #define INCLUDED_TYPELIB_UIK_H
 
-#include <sal/types.h>
+#include "sal/types.h"
 
 #if defined( SAL_W32)
 #pragma pack(push, 8)

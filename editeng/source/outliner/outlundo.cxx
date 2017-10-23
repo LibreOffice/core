@@ -27,7 +27,7 @@
 #include <editeng/fhgtitem.hxx>
 
 #include <editeng/outliner.hxx>
-#include <outlundo.hxx>
+#include "outlundo.hxx"
 
 
 OutlinerUndoBase::OutlinerUndoBase( sal_uInt16 _nId, Outliner* pOutliner )

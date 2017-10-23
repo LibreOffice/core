@@ -24,7 +24,7 @@
 
 #include <svx/strings.hrc>
 
-#include "svx/insctrl.hxx"
+#include <svx/insctrl.hxx>
 #include <svx/dialmgr.hxx>
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxInsertStatusBarControl, SfxBoolItem);

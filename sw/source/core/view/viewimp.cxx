@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "crsrsh.hxx"
-#include "rootfrm.hxx"
-#include "pagefrm.hxx"
-#include "viewimp.hxx"
-#include "viewopt.hxx"
-#include "flyfrm.hxx"
-#include "frmfmt.hxx"
-#include "layact.hxx"
-#include "swregion.hxx"
-#include "dflyobj.hxx"
-#include "dview.hxx"
+#include <crsrsh.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+#include <viewimp.hxx>
+#include <viewopt.hxx>
+#include <flyfrm.hxx>
+#include <frmfmt.hxx>
+#include <layact.hxx>
+#include <swregion.hxx>
+#include <dflyobj.hxx>
+#include <dview.hxx>
 #include <swmodule.hxx>
 #include <svx/svdpage.hxx>
 #include <accmap.hxx>

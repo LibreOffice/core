@@ -26,7 +26,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <svx/optgrid.hxx>
 #include <svx/dlgutil.hxx>
-#include "sddllapi.h"
+#include <sddllapi.h>
 #include <memory>
 
 class SdOptions;

@@ -20,13 +20,13 @@
 #include <vcl/print.hxx>
 #include <svtools/prnsetup.hxx>
 
-#include "swtypes.hxx"
-#include "cmdid.h"
+#include <swtypes.hxx>
+#include <cmdid.h>
 #include "envprt.hxx"
-#include "envlop.hxx"
-#include "uitool.hxx"
+#include <envlop.hxx>
+#include <uitool.hxx>
 
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 SwEnvPrtPage::SwEnvPrtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "EnvPrinterPage",

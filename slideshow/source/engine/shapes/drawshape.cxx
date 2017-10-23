@@ -53,12 +53,12 @@
 
 #include "drawshapesubsetting.hxx"
 #include "drawshape.hxx"
-#include "eventqueue.hxx"
-#include "wakeupevent.hxx"
-#include "subsettableshapemanager.hxx"
+#include <eventqueue.hxx>
+#include <wakeupevent.hxx>
+#include <subsettableshapemanager.hxx>
 #include "intrinsicanimationactivity.hxx"
-#include "slideshowexceptions.hxx"
-#include "tools.hxx"
+#include <slideshowexceptions.hxx>
+#include <tools.hxx>
 #include "gdimtftools.hxx"
 #include "drawinglayeranimation.hxx"
 

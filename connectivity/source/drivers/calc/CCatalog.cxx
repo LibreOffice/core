@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "calc/CCatalog.hxx"
-#include "calc/CConnection.hxx"
-#include "calc/CTables.hxx"
+#include <calc/CCatalog.hxx>
+#include <calc/CConnection.hxx>
+#include <calc/CTables.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 

@@ -38,8 +38,8 @@
 #include <salgdi.hxx>
 #include <salframe.hxx>
 
-#include "dndlistenercontainer.hxx"
-#include "dndeventdispatcher.hxx"
+#include <dndlistenercontainer.hxx>
+#include <dndeventdispatcher.hxx>
 
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>

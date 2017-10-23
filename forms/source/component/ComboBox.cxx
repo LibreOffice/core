@@ -19,11 +19,11 @@
 
 
 #include "ComboBox.hxx"
-#include "property.hxx"
-#include "services.hxx"
+#include <property.hxx>
+#include <services.hxx>
 
-#include "frm_resource.hxx"
-#include "strings.hrc"
+#include <frm_resource.hxx>
+#include <strings.hrc>
 #include "BaseListBox.hxx"
 
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>

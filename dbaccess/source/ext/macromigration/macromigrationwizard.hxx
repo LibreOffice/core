@@ -25,8 +25,8 @@
 
 #include <svtools/genericunodialog.hxx>
 
-#include "core_resource.hxx"
-#include "strings.hrc"
+#include <core_resource.hxx>
+#include <strings.hrc>
 
 namespace dbmm
 {

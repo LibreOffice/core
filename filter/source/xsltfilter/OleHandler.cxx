@@ -40,7 +40,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
-#include <OleHandler.hxx>
+#include "OleHandler.hxx"
 #include <memory>
 
 using namespace ::com::sun::star::uno;

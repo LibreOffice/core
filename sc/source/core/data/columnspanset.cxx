@@ -7,13 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "columnspanset.hxx"
-#include "column.hxx"
-#include "table.hxx"
-#include "document.hxx"
-#include "mtvfunctions.hxx"
-#include "markdata.hxx"
-#include "rangelst.hxx"
+#include <columnspanset.hxx>
+#include <column.hxx>
+#include <table.hxx>
+#include <document.hxx>
+#include <mtvfunctions.hxx>
+#include <markdata.hxx>
+#include <rangelst.hxx>
 #include <fstalgorithm.hxx>
 
 #include <algorithm>

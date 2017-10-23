@@ -22,8 +22,8 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include "appopen.hxx"
-#include "openflag.hxx"
+#include <appopen.hxx>
+#include <openflag.hxx>
 #include <sfx2/passwd.hxx>
 
 #include <sfx2/sfxsids.hrc>

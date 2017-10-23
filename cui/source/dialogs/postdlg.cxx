@@ -30,10 +30,10 @@
 #include <svx/svxids.hrc>
 
 #include <svx/postattr.hxx>
-#include "postdlg.hxx"
+#include <postdlg.hxx>
 #include <dialmgr.hxx>
 
-#include "helpids.h"
+#include <helpids.h>
 
 // class SvxPostItDialog -------------------------------------------------
 

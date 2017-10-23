@@ -36,7 +36,7 @@
 // FIXME: we can't use #if POPPLER_CHECK_VERSION(0, 21, 0) && !POPPLER_CHECK_VERSION(0, 21, 1)
 //        because the internal poppler does not provide poppler-version.h and the macro always returns 0
 #if POPPLER_CHECK_VERSION(0, 21, 1)
-#include "UTF8.h"
+#include <UTF8.h>
 #elif POPPLER_CHECK_VERSION(0, 21, 0)
 #include "UTF.h"
 #else

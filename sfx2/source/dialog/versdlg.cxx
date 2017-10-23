@@ -34,8 +34,8 @@
 #include <svtools/treelistentry.hxx>
 #include <svtools/miscopt.hxx>
 
-#include "versdlg.hxx"
-#include "sfx2/strings.hrc"
+#include <versdlg.hxx>
+#include <sfx2/strings.hrc>
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxresid.hxx>

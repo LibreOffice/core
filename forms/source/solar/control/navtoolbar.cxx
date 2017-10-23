@@ -18,11 +18,11 @@
  */
 
 
-#include "navtoolbar.hxx"
-#include "frm_resource.hxx"
-#include "featuredispatcher.hxx"
-#include "strings.hrc"
-#include "commandimageprovider.hxx"
+#include <navtoolbar.hxx>
+#include <frm_resource.hxx>
+#include <featuredispatcher.hxx>
+#include <strings.hrc>
+#include <commandimageprovider.hxx>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/form/runtime/FormFeature.hpp>

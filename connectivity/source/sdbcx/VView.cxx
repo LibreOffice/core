@@ -21,7 +21,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbtools.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 
 
 using namespace connectivity;

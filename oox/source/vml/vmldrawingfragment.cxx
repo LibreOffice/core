@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/vml/vmldrawingfragment.hxx"
+#include <oox/vml/vmldrawingfragment.hxx>
 
-#include "oox/core/xmlfilterbase.hxx"
+#include <oox/core/xmlfilterbase.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
-#include "oox/vml/vmldrawing.hxx"
-#include "oox/vml/vmlinputstream.hxx"
-#include "oox/vml/vmlshapecontext.hxx"
+#include <oox/vml/vmldrawing.hxx>
+#include <oox/vml/vmlinputstream.hxx>
+#include <oox/vml/vmlshapecontext.hxx>
 
 namespace oox {
 namespace vml {

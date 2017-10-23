@@ -20,14 +20,14 @@
 #ifndef INCLUDED_SALHELPER_SINGLETONREF_HXX
 #define INCLUDED_SALHELPER_SINGLETONREF_HXX
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <cstddef>
 
-#include <osl/mutex.hxx>
-#include <rtl/instance.hxx>
-#include <osl/diagnose.h>
-#include <osl/getglobalmutex.hxx>
+#include "osl/mutex.hxx"
+#include "rtl/instance.hxx"
+#include "osl/diagnose.h"
+#include "osl/getglobalmutex.hxx"
 
 
 namespace salhelper{

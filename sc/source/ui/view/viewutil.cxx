@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
@@ -37,12 +37,12 @@
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 
-#include "viewutil.hxx"
-#include "global.hxx"
-#include "chgtrack.hxx"
-#include "chgviset.hxx"
-#include "markdata.hxx"
-#include "document.hxx"
+#include <viewutil.hxx>
+#include <global.hxx>
+#include <chgtrack.hxx>
+#include <chgviset.hxx>
+#include <markdata.hxx>
+#include <document.hxx>
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>

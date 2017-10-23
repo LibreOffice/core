@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuvect.hxx"
+#include <fuvect.hxx>
 #include <tools/poly.hxx>
 #include <svx/svdograf.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/svdedtv.hxx>
 
-#include "View.hxx"
-#include "ViewShell.hxx"
-#include "Window.hxx"
-#include "strings.hrc"
-#include "sdresid.hxx"
-#include "sdabstdlg.hxx"
+#include <View.hxx>
+#include <ViewShell.hxx>
+#include <Window.hxx>
+#include <strings.hrc>
+#include <sdresid.hxx>
+#include <sdabstdlg.hxx>
 #include <memory>
 
 namespace sd

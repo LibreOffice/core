@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 #include "adminpages.hxx"
 #include "DbAdminImpl.hxx"
-#include "dbu_dlg.hxx"
-#include "strings.hrc"
+#include <dbu_dlg.hxx>
+#include <strings.hrc>
 #include "DriverSettings.hxx"
-#include "dsitems.hxx"
-#include "propertysetitem.hxx"
-#include "UITools.hxx"
+#include <dsitems.hxx>
+#include <propertysetitem.hxx>
+#include <UITools.hxx>
 #include "UserAdmin.hxx"
-#include "UserAdminDlg.hxx"
+#include <UserAdminDlg.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <connectivity/dbmetadata.hxx>

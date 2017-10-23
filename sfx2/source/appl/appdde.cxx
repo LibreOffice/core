@@ -34,13 +34,13 @@
 #include <unotools/pathoptions.hxx>
 
 #include <sfx2/app.hxx>
-#include "appdata.hxx"
+#include <appdata.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/sfxsids.hrc>
-#include "helper.hxx"
+#include <helper.hxx>
 #include <sfx2/docfile.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>

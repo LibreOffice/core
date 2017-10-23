@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CANVAS_SOURCE_VCL_CANVASBITMAPHELPER_HXX
 #define INCLUDED_CANVAS_SOURCE_VCL_CANVASBITMAPHELPER_HXX
 
-#include <canvashelper.hxx>
+#include "canvashelper.hxx"
 #include <canvas/vclwrapper.hxx>
 
 #include <vcl/bitmapex.hxx>

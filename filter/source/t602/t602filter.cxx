@@ -18,7 +18,7 @@
  */
 
 #include "t602filter.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <stdio.h>
 

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_LAYOUTER_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_LAYOUTER_HXX
 
-#include "swtypes.hxx"
+#include <swtypes.hxx>
 #include <unordered_map>
 
 class SwEndnoter;

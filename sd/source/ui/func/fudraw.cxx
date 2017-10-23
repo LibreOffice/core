@@ -38,28 +38,28 @@
 #include <svx/scene3d.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include "anminfo.hxx"
-#include "imapinfo.hxx"
-#include "app.hrc"
-#include "strings.hrc"
+#include <anminfo.hxx>
+#include <imapinfo.hxx>
+#include <app.hrc>
+#include <strings.hrc>
 
 
-#include "sdmod.hxx"
-#include "GraphicDocShell.hxx"
-#include "fudraw.hxx"
-#include "ViewShell.hxx"
-#include "FrameView.hxx"
-#include "View.hxx"
-#include "Window.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "Client.hxx"
-#include "sdresid.hxx"
-#include "drawview.hxx"
-#include "fusel.hxx"
+#include <sdmod.hxx>
+#include <GraphicDocShell.hxx>
+#include <fudraw.hxx>
+#include <ViewShell.hxx>
+#include <FrameView.hxx>
+#include <View.hxx>
+#include <Window.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <Client.hxx>
+#include <sdresid.hxx>
+#include <drawview.hxx>
+#include <fusel.hxx>
 #include <svl/aeitem.hxx>
 #include <vcl/msgbox.hxx>
-#include "slideshow.hxx"
+#include <slideshow.hxx>
 #include <svx/sdrhittesthelper.hxx>
 
 using namespace ::com::sun::star;

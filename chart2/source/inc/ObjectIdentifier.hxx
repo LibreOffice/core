@@ -26,7 +26,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "TitleHelper.hxx"
 #include "charttoolsdllapi.hxx"
-#include "ChartModel.hxx"
+#include <ChartModel.hxx>
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/frame/XModel.hpp>

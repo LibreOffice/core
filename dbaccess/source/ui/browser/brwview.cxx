@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "brwctrlr.hxx"
-#include "brwview.hxx"
-#include "sbagrid.hxx"
+#include <brwctrlr.hxx>
+#include <brwview.hxx>
+#include <sbagrid.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/types.hxx>
 #include <vcl/split.hxx>
 #include "dbtreeview.hxx"
-#include "stringconstants.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
+#include <stringconstants.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include <osl/diagnose.h>
 
 using namespace dbaui;

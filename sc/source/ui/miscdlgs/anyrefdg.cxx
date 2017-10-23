@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "rangelst.hxx"
+#include <rangelst.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/viewsh.hxx>
@@ -26,21 +26,21 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include "anyrefdg.hxx"
-#include "sc.hrc"
-#include "inputhdl.hxx"
-#include "scmod.hxx"
-#include "scresid.hxx"
-#include "inputwin.hxx"
-#include "tabvwsh.hxx"
-#include "docsh.hxx"
-#include "rfindlst.hxx"
-#include "compiler.hxx"
-#include "formulacell.hxx"
-#include "global.hxx"
-#include "inputopt.hxx"
-#include "rangeutl.hxx"
-#include "tokenarray.hxx"
+#include <anyrefdg.hxx>
+#include <sc.hrc>
+#include <inputhdl.hxx>
+#include <scmod.hxx>
+#include <scresid.hxx>
+#include <inputwin.hxx>
+#include <tabvwsh.hxx>
+#include <docsh.hxx>
+#include <rfindlst.hxx>
+#include <compiler.hxx>
+#include <formulacell.hxx>
+#include <global.hxx>
+#include <inputopt.hxx>
+#include <rangeutl.hxx>
+#include <tokenarray.hxx>
 
 #include <memory>
 

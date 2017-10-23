@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <element.hxx>
+#include "element.hxx"
 
 #include <string.h>
 
@@ -31,12 +31,12 @@
 #include <comphelper/attributelist.hxx>
 
 #include <node.hxx>
-#include <attr.hxx>
-#include <elementlist.hxx>
-#include <attributesmap.hxx>
-#include <document.hxx>
+#include "attr.hxx"
+#include "elementlist.hxx"
+#include "attributesmap.hxx"
+#include "document.hxx"
 
-#include "mutationevent.hxx"
+#include <mutationevent.hxx>
 
 using namespace css::uno;
 using namespace css::xml::dom;

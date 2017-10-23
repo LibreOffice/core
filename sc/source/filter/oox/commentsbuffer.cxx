@@ -20,7 +20,7 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 
-#include "commentsbuffer.hxx"
+#include <commentsbuffer.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
@@ -31,10 +31,10 @@
 #include <osl/diagnose.h>
 #include <oox/helper/attributelist.hxx>
 #include <oox/vml/vmlshape.hxx>
-#include "addressconverter.hxx"
-#include "drawingfragment.hxx"
+#include <addressconverter.hxx>
+#include <drawingfragment.hxx>
 #include <svx/sdtaitm.hxx>
-#include "unitconverter.hxx"
+#include <unitconverter.hxx>
 
 namespace oox {
 namespace xls {

@@ -37,12 +37,12 @@
 #include <svx/svdouno.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdmodel.hxx>
-#include "svdglob.hxx"
-#include "svx/strings.hrc"
+#include <svdglob.hxx>
+#include <svx/strings.hrc>
 #include <svx/svdetc.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdorect.hxx>
-#include "svx/svdviter.hxx"
+#include <svx/svdviter.hxx>
 #include <rtl/ref.hxx>
 #include <set>
 #include <svx/sdrpagewindow.hxx>

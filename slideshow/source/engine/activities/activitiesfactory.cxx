@@ -23,12 +23,12 @@
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
 #include <comphelper/sequence.hxx>
 
-#include "activitiesfactory.hxx"
-#include "smilfunctionparser.hxx"
+#include <activitiesfactory.hxx>
+#include <smilfunctionparser.hxx>
 #include "accumulation.hxx"
 #include "activityparameters.hxx"
 #include "interpolation.hxx"
-#include "tools.hxx"
+#include <tools.hxx>
 #include "simplecontinuousactivitybase.hxx"
 #include "discreteactivitybase.hxx"
 #include "continuousactivitybase.hxx"

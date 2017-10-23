@@ -24,7 +24,7 @@
 #include "excrecds.hxx"
 #include "xcl97esc.hxx"
 #include "xlstyle.hxx"
-#include "tabprotection.hxx"
+#include <tabprotection.hxx>
 
 class XclObj;
 class XclExpMsoDrawing;

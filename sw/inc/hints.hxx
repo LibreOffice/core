@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SW_INC_HINTS_HXX
 #define INCLUDED_SW_INC_HINTS_HXX
 
-#include <swatrset.hxx>
-#include <swtypes.hxx>
+#include "swatrset.hxx"
+#include "swtypes.hxx"
 #include <vcl/vclptr.hxx>
 #include <vector>
 

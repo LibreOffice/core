@@ -10,11 +10,11 @@
 #ifndef INCLUDED_OOX_SOURCE_PPT_EXTDRAWINGFRAGMENTHANDLER_HXX
 #define INCLUDED_OOX_SOURCE_PPT_EXTDRAWINGFRAGMENTHANDLER_HXX
 
-#include "oox/core/fragmenthandler2.hxx"
-#include "oox/drawingml/shapegroupcontext.hxx"
-#include "oox/ppt/slidepersist.hxx"
-#include "oox/ppt/pptshapegroupcontext.hxx"
-#include "oox/ppt/pptshape.hxx"
+#include <oox/core/fragmenthandler2.hxx>
+#include <oox/drawingml/shapegroupcontext.hxx>
+#include <oox/ppt/slidepersist.hxx>
+#include <oox/ppt/pptshapegroupcontext.hxx>
+#include <oox/ppt/pptshape.hxx>
 
 namespace oox { namespace ppt {
 

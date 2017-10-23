@@ -21,17 +21,17 @@
 #include "xmlimprt.hxx"
 #include "xmlfilti.hxx"
 #include "xmlsorti.hxx"
-#include "document.hxx"
-#include "docuno.hxx"
-#include "dpshttab.hxx"
-#include "dpsdbtab.hxx"
-#include "attrib.hxx"
+#include <document.hxx>
+#include <docuno.hxx>
+#include <dpshttab.hxx>
+#include <dpsdbtab.hxx>
+#include <attrib.hxx>
 #include "XMLConverter.hxx"
-#include "dpgroup.hxx"
-#include "dpdimsave.hxx"
-#include "rangeutl.hxx"
-#include "dpoutputgeometry.hxx"
-#include "generalfunction.hxx"
+#include <dpgroup.hxx>
+#include <dpdimsave.hxx>
+#include <rangeutl.hxx>
+#include <dpoutputgeometry.hxx>
+#include <generalfunction.hxx>
 
 #include "pivotsource.hxx"
 

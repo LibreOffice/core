@@ -14,9 +14,9 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/eeitem.hxx>
 
-#include "editutil.hxx"
+#include <editutil.hxx>
 
-#include "TableFillingAndNavigationTools.hxx"
+#include <TableFillingAndNavigationTools.hxx>
 
 FormulaTemplate::FormulaTemplate(ScDocument* pDoc)
     : mpDoc(pDoc)

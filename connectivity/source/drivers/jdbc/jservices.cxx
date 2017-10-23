@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "java/sql/Driver.hxx"
+#include <java/sql/Driver.hxx>
 #include <cppuhelper/factory.hxx>
 
 using namespace connectivity;

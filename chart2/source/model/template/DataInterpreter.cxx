@@ -18,11 +18,11 @@
  */
 
 #include "DataInterpreter.hxx"
-#include "DataSeries.hxx"
-#include "DataSourceHelper.hxx"
-#include "DataSeriesHelper.hxx"
-#include "macros.hxx"
-#include "CommonConverters.hxx"
+#include <DataSeries.hxx>
+#include <DataSourceHelper.hxx>
+#include <DataSeriesHelper.hxx>
+#include <macros.hxx>
+#include <CommonConverters.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <cppuhelper/supportsservice.hxx>

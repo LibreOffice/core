@@ -20,14 +20,14 @@
 #include <string.h>
 
 #include "querydescriptor.hxx"
-#include "apitools.hxx"
-#include "stringconstants.hxx"
+#include <apitools.hxx>
+#include <stringconstants.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include "definitioncolumn.hxx"
+#include <definitioncolumn.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;

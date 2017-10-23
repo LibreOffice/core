@@ -18,14 +18,14 @@
  */
 
 
-#include "cppu/helper/purpenv/Environment.hxx"
+#include <cppu/helper/purpenv/Environment.hxx>
 
-#include "osl/diagnose.h"
-#include "uno/lbnames.h"
+#include <osl/diagnose.h>
+#include <uno/lbnames.h>
 #include <cppu/Enterable.hxx>
 
-#include "typelib/typedescription.h"
-#include "osl/interlck.h"
+#include <typelib/typedescription.h>
+#include <osl/interlck.h>
 
 extern "C" {
 typedef void SAL_CALL EnvFun_P   (uno_Environment *);

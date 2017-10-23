@@ -58,9 +58,9 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#include "lwpobjhdr.hxx"
-#include "lwpdefs.hxx"
-#include "lwpfilehdr.hxx"
+#include <lwpobjhdr.hxx>
+#include <lwpdefs.hxx>
+#include <lwpfilehdr.hxx>
 
 LwpObjectHeader::LwpObjectHeader()
     : m_nTag(0), m_ID(), m_nSize(0), m_bCompressed(false)

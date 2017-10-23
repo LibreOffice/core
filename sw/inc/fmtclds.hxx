@@ -23,8 +23,8 @@
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
 #include "swdllapi.h"
-#include <hintids.hxx>
-#include <format.hxx>
+#include "hintids.hxx"
+#include "format.hxx"
 
 #include <vector>
 

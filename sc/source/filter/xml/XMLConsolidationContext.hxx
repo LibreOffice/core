@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLCONSOLIDATIONCONTEXT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLCONSOLIDATIONCONTEXT_HXX
 
-#include "global.hxx"
-#include "address.hxx"
+#include <global.hxx>
+#include <address.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "xmlimprt.hxx"
 #include "importcontext.hxx"

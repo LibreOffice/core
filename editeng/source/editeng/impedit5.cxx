@@ -22,9 +22,9 @@
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <impedit.hxx>
+#include "impedit.hxx"
 #include <editeng/editeng.hxx>
-#include <editdbg.hxx>
+#include "editdbg.hxx"
 #include <svl/hint.hxx>
 #include <editeng/lrspitem.hxx>
 #include <sfx2/app.hxx>

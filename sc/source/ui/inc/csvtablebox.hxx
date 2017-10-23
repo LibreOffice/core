@@ -23,7 +23,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/vclptr.hxx>
-#include "scdllapi.h"
+#include <scdllapi.h>
 #include "csvcontrol.hxx"
 #include "csvruler.hxx"
 #include "csvgrid.hxx"

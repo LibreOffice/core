@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "writer/WDriver.hxx"
+#include <writer/WDriver.hxx>
 #include <cppuhelper/factory.hxx>
 
 using namespace com::sun::star;

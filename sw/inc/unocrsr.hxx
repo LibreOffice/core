@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_UNOCRSR_HXX
 #define INCLUDED_SW_INC_UNOCRSR_HXX
 
-#include <swcrsr.hxx>
+#include "swcrsr.hxx"
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/lstner.hxx>
 

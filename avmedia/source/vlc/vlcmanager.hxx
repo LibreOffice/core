@@ -21,7 +21,7 @@
 #define INCLUDED_AVMEDIA_SOURCE_VLC_VLCMANAGER_HXX
 #include <com/sun/star/media/XManager.hpp>
 #include "vlccommon.hxx"
-#include "wrapper/Wrapper.hxx"
+#include <wrapper/Wrapper.hxx>
 #include <memory>
 #include <cppuhelper/implbase.hxx>
 

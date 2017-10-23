@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "RegressionCurveCalculator.hxx"
-#include "RegressionCalculationHelper.hxx"
-#include "servicenames_coosystems.hxx"
+#include <RegressionCurveCalculator.hxx>
+#include <RegressionCalculationHelper.hxx>
+#include <servicenames_coosystems.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <rtl/math.hxx>

@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "odbc/OTools.hxx"
-#include "odbc/OConnection.hxx"
-#include "odbc/ODatabaseMetaData.hxx"
-#include "odbc/OFunctions.hxx"
-#include "odbc/ODriver.hxx"
-#include "odbc/OStatement.hxx"
-#include "odbc/OPreparedStatement.hxx"
+#include <odbc/OTools.hxx>
+#include <odbc/OConnection.hxx>
+#include <odbc/ODatabaseMetaData.hxx>
+#include <odbc/OFunctions.hxx>
+#include <odbc/ODriver.hxx>
+#include <odbc/OStatement.hxx>
+#include <odbc/OPreparedStatement.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

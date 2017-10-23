@@ -22,7 +22,7 @@
 
 #include <vector>
 #include <deque>
-#include "swscanner.hxx"
+#include <swscanner.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 

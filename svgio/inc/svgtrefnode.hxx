@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SVGIO_INC_SVGTREFNODE_HXX
 #define INCLUDED_SVGIO_INC_SVGTREFNODE_HXX
 
-#include <svgnode.hxx>
-#include <svgstyleattributes.hxx>
-#include <svgtextnode.hxx>
+#include "svgnode.hxx"
+#include "svgstyleattributes.hxx"
+#include "svgtextnode.hxx"
 
 namespace svgio
 {

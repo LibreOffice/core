@@ -26,11 +26,11 @@
 #include <vcl/field.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
-#include "CustomAnimationPreset.hxx"
+#include <CustomAnimationPreset.hxx>
 #include "CustomAnimationList.hxx"
 #include "CategoryListBox.hxx"
 #include "motionpathtag.hxx"
-#include "misc/scopelock.hxx"
+#include <misc/scopelock.hxx>
 
 #include <vector>
 

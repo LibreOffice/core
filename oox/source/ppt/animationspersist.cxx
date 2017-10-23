@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ppt/animationspersist.hxx"
+#include <oox/ppt/animationspersist.hxx>
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -26,7 +26,7 @@
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 
-#include "oox/drawingml/shape.hxx"
+#include <oox/drawingml/shape.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/addtosequence.hxx>
 #include <oox/token/namespaces.hxx>

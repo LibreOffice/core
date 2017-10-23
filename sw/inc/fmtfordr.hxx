@@ -20,8 +20,8 @@
 #define INCLUDED_SW_INC_FMTFORDR_HXX
 
 #include <svl/eitem.hxx>
-#include <hintids.hxx>
-#include <format.hxx>
+#include "hintids.hxx"
+#include "format.hxx"
 
 enum SwFillOrder
 {

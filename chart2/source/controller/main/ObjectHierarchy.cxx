@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ObjectHierarchy.hxx"
-#include "ObjectIdentifier.hxx"
-#include "ChartModelHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "RegressionCurveHelper.hxx"
-#include "AxisHelper.hxx"
-#include "chartview/ExplicitValueProvider.hxx"
-#include "macros.hxx"
-#include "ChartTypeHelper.hxx"
-#include "DataSeriesHelper.hxx"
-#include "LegendHelper.hxx"
-#include "chartview/DrawModelWrapper.hxx"
+#include <ObjectHierarchy.hxx>
+#include <ObjectIdentifier.hxx>
+#include <ChartModelHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <RegressionCurveHelper.hxx>
+#include <AxisHelper.hxx>
+#include <chartview/ExplicitValueProvider.hxx>
+#include <macros.hxx>
+#include <ChartTypeHelper.hxx>
+#include <DataSeriesHelper.hxx>
+#include <LegendHelper.hxx>
+#include <chartview/DrawModelWrapper.hxx>
 #include <unonames.hxx>
 
 #include <map>

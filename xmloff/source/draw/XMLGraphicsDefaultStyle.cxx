@@ -31,7 +31,7 @@
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/maptype.hxx>
 
-#include "XMLShapePropertySetContext.hxx"
+#include <XMLShapePropertySetContext.hxx>
 #include <algorithm>
 
 using namespace ::com::sun::star;

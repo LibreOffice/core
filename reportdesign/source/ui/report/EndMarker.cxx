@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "EndMarker.hxx"
-#include "ColorChanger.hxx"
-#include "SectionWindow.hxx"
-#include "helpids.h"
+#include <EndMarker.hxx>
+#include <ColorChanger.hxx>
+#include <SectionWindow.hxx>
+#include <helpids.h>
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

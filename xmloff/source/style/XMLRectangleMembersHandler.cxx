@@ -22,7 +22,7 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
-#include "XMLRectangleMembersHandler.hxx"
+#include <XMLRectangleMembersHandler.hxx>
 #include <xmloff/xmltypes.hxx>
 
 using namespace ::com::sun::star;

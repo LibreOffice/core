@@ -29,11 +29,11 @@
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 
-#include "transitionfactory.hxx"
+#include <transitionfactory.hxx>
 #include "transitionfactorytab.hxx"
 #include "transitiontools.hxx"
 #include "parametricpolypolygonfactory.hxx"
-#include "animationfactory.hxx"
+#include <animationfactory.hxx>
 #include "clippingfunctor.hxx"
 
 using namespace ::com::sun::star;

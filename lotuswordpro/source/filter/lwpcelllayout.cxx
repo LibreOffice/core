@@ -60,19 +60,19 @@
 
 #include <memory>
 #include "lwpcelllayout.hxx"
-#include "lwpfoundry.hxx"
-#include "lwpobjfactory.hxx"
+#include <lwpfoundry.hxx>
+#include <lwpobjfactory.hxx>
 #include "lwptblcell.hxx"
 #include "lwptblformula.hxx"
 #include "lwpholder.hxx"
 #include "lwpnumericfmt.hxx"
 #include "lwptable.hxx"
-#include "lwpglobalmgr.hxx"
+#include <lwpglobalmgr.hxx>
 
-#include "xfilter/xfstylemanager.hxx"
-#include "xfilter/xfcell.hxx"
-#include "xfilter/xfcellstyle.hxx"
-#include "xfilter/xfcolstyle.hxx"
+#include <xfilter/xfstylemanager.hxx>
+#include <xfilter/xfcell.hxx>
+#include <xfilter/xfcellstyle.hxx>
+#include <xfilter/xfcolstyle.hxx>
 
 LwpCellLayout::LwpCellLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpMiddleLayout(objHdr, pStrm)

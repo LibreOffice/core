@@ -29,7 +29,7 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 
 #include "ChartSeriesPanel.hxx"
-#include "ChartController.hxx"
+#include <ChartController.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/fixed.hxx>
@@ -40,10 +40,10 @@
 #include <svl/stritem.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include "ChartModel.hxx"
-#include "DataSeriesHelper.hxx"
-#include "RegressionCurveHelper.hxx"
-#include "StatisticsHelper.hxx"
+#include <ChartModel.hxx>
+#include <DataSeriesHelper.hxx>
+#include <RegressionCurveHelper.hxx>
+#include <StatisticsHelper.hxx>
 
 using namespace css;
 using namespace css::uno;

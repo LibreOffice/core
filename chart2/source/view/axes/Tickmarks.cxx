@@ -20,7 +20,7 @@
 #include "Tickmarks.hxx"
 #include "Tickmarks_Equidistant.hxx"
 #include "Tickmarks_Dates.hxx"
-#include "ViewDefines.hxx"
+#include <ViewDefines.hxx>
 #include <rtl/math.hxx>
 
 using namespace ::com::sun::star;

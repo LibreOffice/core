@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "cuihyperdlg.hxx"
+#include <cuihyperdlg.hxx>
 #include <osl/file.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
-#include "hldoctp.hxx"
-#include "hlmarkwn_def.hxx"
-#include "bitmaps.hlst"
+#include <hldoctp.hxx>
+#include <hlmarkwn_def.hxx>
+#include <bitmaps.hlst>
 
 sal_Char const sHash[]          = "#";
 sal_Char const sFileScheme[]    = INET_FILE_SCHEME;

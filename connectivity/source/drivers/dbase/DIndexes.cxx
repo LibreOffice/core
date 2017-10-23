@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbase/DIndexes.hxx"
-#include "dbase/DIndex.hxx"
+#include <dbase/DIndexes.hxx>
+#include <dbase/DIndex.hxx>
 #include <connectivity/dbexception.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/types.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace ::comphelper;
 

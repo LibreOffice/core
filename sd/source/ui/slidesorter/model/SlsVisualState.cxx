@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "model/SlsVisualState.hxx"
-#include "model/SlsPageDescriptor.hxx"
-#include "controller/SlsAnimator.hxx"
+#include <model/SlsVisualState.hxx>
+#include <model/SlsPageDescriptor.hxx>
+#include <controller/SlsAnimator.hxx>
 
 namespace sd { namespace slidesorter { namespace model {
 

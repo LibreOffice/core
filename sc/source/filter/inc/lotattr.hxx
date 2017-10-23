@@ -23,8 +23,8 @@
 #include <vector>
 #include <memory>
 
-#include "address.hxx"
-#include "scitems.hxx"
+#include <address.hxx>
+#include <scitems.hxx>
 
 class ScDocumentPool;
 class ScPatternAttr;

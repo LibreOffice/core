@@ -19,18 +19,18 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "scitems.hxx"
-#include "uiitems.hxx"
-#include "global.hxx"
-#include "userlist.hxx"
-#include "viewdata.hxx"
-#include "document.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
-#include "strings.hrc"
+#include <scitems.hxx>
+#include <uiitems.hxx>
+#include <global.hxx>
+#include <userlist.hxx>
+#include <viewdata.hxx>
+#include <document.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
+#include <strings.hrc>
 
-#include "subtdlg.hxx"
-#include "tpsubt.hxx"
+#include <subtdlg.hxx>
+#include <tpsubt.hxx>
 #include <memory>
 
 // Subtotals group tabpage:

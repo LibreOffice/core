@@ -19,7 +19,7 @@
 
 
 #include <string.h>
-#include <dxfblkrd.hxx>
+#include "dxfblkrd.hxx"
 
 
 //---------------- DXFBlock --------------------------------------------------

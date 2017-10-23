@@ -25,7 +25,7 @@
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#include "IUpdateHelper.hxx"
+#include <IUpdateHelper.hxx>
 
 namespace dbaui
 {

@@ -18,7 +18,7 @@
  */
 
 #include <ZipPackage.hxx>
-#include <ZipPackageSink.hxx>
+#include "ZipPackageSink.hxx"
 #include <ZipEnumeration.hxx>
 #include <ZipPackageStream.hxx>
 #include <ZipPackageFolder.hxx>
@@ -59,13 +59,13 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <ContentInfo.hxx>
+#include "ContentInfo.hxx"
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/random.h>
 #include <osl/time.h>
 #include <osl/diagnose.h>
-#include "com/sun/star/io/XAsyncOutputMonitor.hpp"
+#include <com/sun/star/io/XAsyncOutputMonitor.hpp>
 
 #include <cstring>
 #include <memory>

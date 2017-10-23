@@ -21,9 +21,9 @@
 #include "NDatabaseMetaData.hxx"
 #include "NConnection.hxx"
 #include "NResultSet.hxx"
-#include "propertyids.hxx"
-#include "strings.hrc"
-#include "TSortIndex.hxx"
+#include <propertyids.hxx>
+#include <strings.hrc>
+#include <TSortIndex.hxx>
 #include <algorithm>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>

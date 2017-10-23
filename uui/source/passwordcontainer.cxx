@@ -30,7 +30,7 @@
 #include <com/sun/star/ucb/URLAuthenticationRequest.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
-#include "officecfg/Office/Common.hxx"
+#include <officecfg/Office/Common.hxx>
 
 #include "passwordcontainer.hxx"
 

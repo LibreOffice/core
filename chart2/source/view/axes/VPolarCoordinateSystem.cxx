@@ -20,8 +20,8 @@
 #include "VPolarCoordinateSystem.hxx"
 #include "VPolarGrid.hxx"
 #include "VPolarAxis.hxx"
-#include "AxisIndexDefines.hxx"
-#include "AxisHelper.hxx"
+#include <AxisIndexDefines.hxx>
+#include <AxisHelper.hxx>
 
 namespace chart
 {

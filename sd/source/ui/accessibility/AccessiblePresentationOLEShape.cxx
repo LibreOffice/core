@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AccessiblePresentationOLEShape.hxx"
+#include <AccessiblePresentationOLEShape.hxx>
 
-#include "SdShapeTypes.hxx"
+#include <SdShapeTypes.hxx>
 
 #include <svx/DescriptionGenerator.hxx>
 #include <rtl/ustring.h>

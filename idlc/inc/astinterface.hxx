@@ -19,8 +19,8 @@
 #ifndef INCLUDED_IDLC_INC_ASTINTERFACE_HXX
 #define INCLUDED_IDLC_INC_ASTINTERFACE_HXX
 
-#include <asttype.hxx>
-#include <astscope.hxx>
+#include "asttype.hxx"
+#include "astscope.hxx"
 #include "inheritedinterface.hxx"
 
 #include <map>

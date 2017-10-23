@@ -32,15 +32,15 @@
 #include <editeng/fontitem.hxx>
 
 #include <fuhhconv.hxx>
-#include "drawdoc.hxx"
-#include "Outliner.hxx"
-#include "DrawViewShell.hxx"
-#include "OutlineViewShell.hxx"
-#include "Window.hxx"
-#include "ViewShellBase.hxx"
+#include <drawdoc.hxx>
+#include <Outliner.hxx>
+#include <DrawViewShell.hxx>
+#include <OutlineViewShell.hxx>
+#include <Window.hxx>
+#include <ViewShellBase.hxx>
 
-#include "sdresid.hxx"
-#include "strings.hrc"
+#include <sdresid.hxx>
+#include <strings.hrc>
 
 class SfxRequest;
 

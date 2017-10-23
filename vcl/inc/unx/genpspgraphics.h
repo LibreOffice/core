@@ -23,10 +23,10 @@
 #include <vcl/vclenum.hxx>
 #include <config_cairo_canvas.h>
 
-#include "unx/fontmanager.hxx"
-#include "salgdi.hxx"
-#include "sallayout.hxx"
-#include "vclpluginapi.h"
+#include <unx/fontmanager.hxx>
+#include <salgdi.hxx>
+#include <sallayout.hxx>
+#include <vclpluginapi.h>
 
 class PhysicalFontFace;
 class PhysicalFontCollection;

@@ -18,11 +18,11 @@
  */
 
 #include "StatusBarCommandDispatch.hxx"
-#include "ObjectNameProvider.hxx"
-#include "macros.hxx"
+#include <ObjectNameProvider.hxx>
+#include <macros.hxx>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
-#include "ResId.hxx"
+#include <ResId.hxx>
 
 using namespace ::com::sun::star;
 

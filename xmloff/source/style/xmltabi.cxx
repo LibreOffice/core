@@ -28,7 +28,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/i18nmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmltabi.hxx"
+#include <xmltabi.hxx>
 
 
 using namespace ::com::sun::star;

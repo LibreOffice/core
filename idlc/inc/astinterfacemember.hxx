@@ -19,7 +19,7 @@
 #ifndef INCLUDED_IDLC_INC_ASTINTERFACEMEMBER_HXX
 #define INCLUDED_IDLC_INC_ASTINTERFACEMEMBER_HXX
 
-#include <astinterface.hxx>
+#include "astinterface.hxx"
 
 class AstInterfaceMember : public AstDeclaration
 {

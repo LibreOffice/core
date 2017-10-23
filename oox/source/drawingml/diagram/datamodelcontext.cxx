@@ -18,10 +18,10 @@
  */
 
 #include "datamodelcontext.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "drawingml/misccontexts.hxx"
-#include "drawingml/shapepropertiescontext.hxx"
-#include "drawingml/textbodycontext.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <drawingml/misccontexts.hxx>
+#include <drawingml/shapepropertiescontext.hxx>
+#include <drawingml/textbodycontext.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 

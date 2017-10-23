@@ -20,9 +20,9 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <vcl/msgbox.hxx>
-#include "tpsort.hxx"
-#include "sortdlg.hxx"
-#include "scresid.hxx"
+#include <tpsort.hxx>
+#include <sortdlg.hxx>
+#include <scresid.hxx>
 
 ScSortDlg::ScSortDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
     : SfxTabDialog(pParent, "SortDialog", "modules/scalc/ui/sortdialog.ui", pArgSet)

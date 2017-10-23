@@ -56,9 +56,9 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 
-#include "app.hxx"
+#include <app.hxx>
 
-#include "dp_misc.h"
+#include <dp_misc.h>
 
 using namespace desktop;
 using namespace com::sun::star;

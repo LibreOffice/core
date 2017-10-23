@@ -32,15 +32,15 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include "file/FStatement.hxx"
+#include <file/FStatement.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/propertycontainer.hxx>
-#include "file/fanalyzer.hxx"
-#include "file/FTable.hxx"
-#include "file/filedllapi.hxx"
+#include <file/fanalyzer.hxx>
+#include <file/FTable.hxx>
+#include <file/filedllapi.hxx>
 #include <connectivity/StdTypeDefs.hxx>
-#include "TSortIndex.hxx"
-#include "TSkipDeletedSet.hxx"
+#include <TSortIndex.hxx>
+#include <TSkipDeletedSet.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 
 namespace connectivity

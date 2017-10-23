@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tabsthdl.hxx>
+#include "tabsthdl.hxx"
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/style/TabStop.hpp>
 

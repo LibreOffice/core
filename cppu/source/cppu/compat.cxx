@@ -7,13 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <cstdlib>
 
-#include <typelib/typedescription.h>
-#include <rtl/ustring.h>
-#include <sal/types.h>
+#include "typelib/typedescription.h"
+#include "rtl/ustring.h"
+#include "sal/types.h"
 
 // Stubs for removed functionality, to be killed when we bump sal SONAME
 

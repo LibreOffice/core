@@ -25,7 +25,7 @@
 #include <vcl/layout.hxx>
 #include <osl/file.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 #include "xmlfiltertabdialog.hxx"
 #include "xmlfiltertabpagebasic.hxx"
 #include "xmlfiltertabpagexslt.hxx"

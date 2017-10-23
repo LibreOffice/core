@@ -20,18 +20,18 @@
 #include <config_features.h>
 
 #include "DBSetupConnectionPages.hxx"
-#include "core_resource.hxx"
-#include "sqlmessage.hxx"
-#include "dbu_dlg.hxx"
-#include "strings.hrc"
-#include "dbu_pageids.hxx"
+#include <core_resource.hxx>
+#include <sqlmessage.hxx>
+#include <dbu_dlg.hxx>
+#include <strings.hrc>
+#include <dbu_pageids.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include "dsitems.hxx"
+#include <dsitems.hxx>
 #include "dsnItem.hxx"
-#include "helpids.h"
+#include <helpids.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/cjkoptions.hxx>
@@ -42,12 +42,12 @@
 
 #include <connectivity/CommonTools.hxx>
 #include "DriverSettings.hxx"
-#include "dbadmin.hxx"
+#include <dbadmin.hxx>
 #include <comphelper/types.hxx>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include <svl/filenotation.hxx>
 
 #include <unotools/localfilehelper.hxx>

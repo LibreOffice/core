@@ -23,8 +23,8 @@
 
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
-#include "bitmaps.hlst"
-#include "docrecovery.hxx"
+#include <bitmaps.hlst>
+#include <docrecovery.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -54,7 +54,7 @@
 #include <osl/security.hxx>
 #include <rtl/bootstrap.hxx>
 #include <unotools/pathoptions.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <officecfg/Office/Recovery.hxx>
 #include <o3tl/make_unique.hxx>
 namespace svx{

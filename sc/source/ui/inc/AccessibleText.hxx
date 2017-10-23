@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLETEXT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLETEXT_HXX
 
-#include "textuno.hxx"
-#include "global.hxx"
+#include <textuno.hxx>
+#include <global.hxx>
 #include "viewdata.hxx"
 #include <editeng/svxenum.hxx>
 #include <svl/SfxBroadcaster.hxx>

@@ -19,7 +19,7 @@
 
 
 #include "DriverSettings.hxx"
-#include "dsmeta.hxx"
+#include <dsmeta.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>

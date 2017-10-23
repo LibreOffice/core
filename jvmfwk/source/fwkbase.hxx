@@ -19,7 +19,7 @@
 #ifndef INCLUDED_JVMFWK_SOURCE_FWKBASE_HXX
 #define INCLUDED_JVMFWK_SOURCE_FWKBASE_HXX
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include "libxmlutil.hxx"
 
 namespace jfw

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_FORMSCOLLECTION_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_FORMSCOLLECTION_HXX
 
-#include "InterfaceContainer.hxx"
+#include <InterfaceContainer.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <comphelper/uno3.hxx>

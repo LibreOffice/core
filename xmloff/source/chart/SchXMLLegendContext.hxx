@@ -19,7 +19,7 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLLEGENDCONTEXT_HXX
 #define INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLLEGENDCONTEXT_HXX
 
-#include "SchXMLImport.hxx"
+#include <SchXMLImport.hxx>
 
 class SchXMLLegendContext : public SvXMLImportContext
 {

@@ -20,13 +20,13 @@
 #include <sfx2/objsh.hxx>
 #include <svl/listener.hxx>
 
-#include "document.hxx"
-#include "brdcst.hxx"
-#include "bcaslot.hxx"
-#include "scerrors.hxx"
-#include "docoptio.hxx"
-#include "refupdat.hxx"
-#include "table.hxx"
+#include <document.hxx>
+#include <brdcst.hxx>
+#include <bcaslot.hxx>
+#include <scerrors.hxx>
+#include <docoptio.hxx>
+#include <refupdat.hxx>
+#include <table.hxx>
 #include <bulkdatahint.hxx>
 
 #if DEBUG_AREA_BROADCASTER

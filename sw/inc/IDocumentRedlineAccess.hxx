@@ -32,7 +32,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-#include <docary.hxx>
+#include "docary.hxx"
 
 class SwRangeRedline;
 class SwTableRowRedline;

@@ -18,16 +18,16 @@
  */
 
 #include "TableFieldControl.hxx"
-#include "TableController.hxx"
-#include "TableDesignView.hxx"
+#include <TableController.hxx>
+#include <TableDesignView.hxx>
 #include "TEditControl.hxx"
-#include "stringconstants.hxx"
-#include "strings.hxx"
+#include <stringconstants.hxx>
+#include <strings.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/types.hxx>
-#include "TypeInfo.hxx"
-#include "UITools.hxx"
+#include <TypeInfo.hxx>
+#include <UITools.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

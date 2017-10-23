@@ -60,8 +60,8 @@
 #include "stylesettings.hxx"
 #include <tools/urlobj.hxx>
 
-#include "helper/accessibilityclient.hxx"
-#include "helper/unopropertyarrayhelper.hxx"
+#include <helper/accessibilityclient.hxx>
+#include <helper/unopropertyarrayhelper.hxx>
 
 using namespace ::com::sun::star;
 

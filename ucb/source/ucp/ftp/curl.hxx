@@ -24,7 +24,7 @@
 #pragma warning(push, 1)
 #endif
 
-#include "curl/curl.h"
+#include <curl/curl.h>
 
 #if defined _MSC_VER
 #pragma warning(pop)

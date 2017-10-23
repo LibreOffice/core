@@ -18,7 +18,7 @@
  */
 
 
-#include "comphelper_module.hxx"
+#include <comphelper_module.hxx>
 
 
 namespace comphelper { namespace module

@@ -49,7 +49,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 
-#include "xml2utf.hxx"
+#include <xml2utf.hxx>
 
 namespace {
 

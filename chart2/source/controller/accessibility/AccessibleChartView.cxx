@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AccessibleChartView.hxx"
-#include "chartview/ExplicitValueProvider.hxx"
-#include "servicenames.hxx"
-#include "macros.hxx"
-#include "ObjectHierarchy.hxx"
-#include "ObjectIdentifier.hxx"
-#include "ResId.hxx"
-#include "strings.hrc"
+#include <AccessibleChartView.hxx>
+#include <chartview/ExplicitValueProvider.hxx>
+#include <servicenames.hxx>
+#include <macros.hxx>
+#include <ObjectHierarchy.hxx>
+#include <ObjectIdentifier.hxx>
+#include <ResId.hxx>
+#include <strings.hrc>
 #include "AccessibleViewForwarder.hxx"
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

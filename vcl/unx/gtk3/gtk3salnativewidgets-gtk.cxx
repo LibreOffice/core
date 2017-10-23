@@ -18,7 +18,7 @@
 #include <unx/gtk/gtkgdi.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
-#include "unx/fontmanager.hxx"
+#include <unx/fontmanager.hxx>
 #include "cairo_gtk3_cairo.hxx"
 #if defined(GDK_WINDOWING_WAYLAND)
 #   include <gdk/gdkwayland.h>

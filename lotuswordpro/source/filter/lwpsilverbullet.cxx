@@ -59,15 +59,15 @@
  ************************************************************************/
 
 #include <memory>
-#include "lwpglobalmgr.hxx"
+#include <lwpglobalmgr.hxx>
 #include "lwpsilverbullet.hxx"
 #include "lwpdoc.hxx"
 #include "lwpdivinfo.hxx"
-#include "lwpfoundry.hxx"
+#include <lwpfoundry.hxx>
 #include "lwpstory.hxx"
 #include "lwppara.hxx"
-#include "xfilter/xfliststyle.hxx"
-#include "xfilter/xfstylemanager.hxx"
+#include <xfilter/xfliststyle.hxx>
+#include <xfilter/xfstylemanager.hxx>
 
 LwpSilverBullet::LwpSilverBullet(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpDLNFVList(objHdr, pStrm)

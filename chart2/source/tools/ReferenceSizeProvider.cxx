@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ReferenceSizeProvider.hxx"
-#include "RelativeSizeHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "macros.hxx"
-#include "AxisHelper.hxx"
-#include "DataSeriesHelper.hxx"
+#include <ReferenceSizeProvider.hxx>
+#include <RelativeSizeHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <macros.hxx>
+#include <AxisHelper.hxx>
+#include <DataSeriesHelper.hxx>
 
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>

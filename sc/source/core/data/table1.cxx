@@ -17,37 +17,37 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <unotools/textsearch.hxx>
 #include <sfx2/objsh.hxx>
 
-#include "attrib.hxx"
-#include "patattr.hxx"
-#include "formulacell.hxx"
-#include "table.hxx"
-#include "document.hxx"
-#include "drwlayer.hxx"
-#include "olinetab.hxx"
-#include "stlsheet.hxx"
-#include "global.hxx"
-#include "globstr.hrc"
-#include "refupdat.hxx"
-#include "markdata.hxx"
-#include "progress.hxx"
-#include "hints.hxx"
-#include "prnsave.hxx"
-#include "tabprotection.hxx"
-#include "sheetevents.hxx"
-#include "segmenttree.hxx"
-#include "dbdata.hxx"
-#include "colorscale.hxx"
-#include "conditio.hxx"
-#include "globalnames.hxx"
-#include "cellvalue.hxx"
-#include "scmatrix.hxx"
-#include "refupdatecontext.hxx"
+#include <attrib.hxx>
+#include <patattr.hxx>
+#include <formulacell.hxx>
+#include <table.hxx>
+#include <document.hxx>
+#include <drwlayer.hxx>
+#include <olinetab.hxx>
+#include <stlsheet.hxx>
+#include <global.hxx>
+#include <globstr.hrc>
+#include <refupdat.hxx>
+#include <markdata.hxx>
+#include <progress.hxx>
+#include <hints.hxx>
+#include <prnsave.hxx>
+#include <tabprotection.hxx>
+#include <sheetevents.hxx>
+#include <segmenttree.hxx>
+#include <dbdata.hxx>
+#include <colorscale.hxx>
+#include <conditio.hxx>
+#include <globalnames.hxx>
+#include <cellvalue.hxx>
+#include <scmatrix.hxx>
+#include <refupdatecontext.hxx>
 #include <rowheightcontext.hxx>
 
 #include <formula/vectortoken.hxx>

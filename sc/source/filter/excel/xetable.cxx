@@ -17,23 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xetable.hxx"
+#include <xetable.hxx>
 
 #include <map>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svl/intitem.hxx>
-#include "document.hxx"
-#include "dociter.hxx"
-#include "olinetab.hxx"
-#include "formulacell.hxx"
-#include "patattr.hxx"
-#include "attrib.hxx"
-#include "xehelper.hxx"
-#include "xecontent.hxx"
-#include "xeescher.hxx"
-#include "xeextlst.hxx"
-#include "tokenarray.hxx"
+#include <document.hxx>
+#include <dociter.hxx>
+#include <olinetab.hxx>
+#include <formulacell.hxx>
+#include <patattr.hxx>
+#include <attrib.hxx>
+#include <xehelper.hxx>
+#include <xecontent.hxx>
+#include <xeescher.hxx>
+#include <xeextlst.hxx>
+#include <tokenarray.hxx>
 #include <formula/errorcodes.hxx>
 #include <thread>
 #include <comphelper/threadpool.hxx>

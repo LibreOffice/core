@@ -39,18 +39,18 @@
 #include <sfx2/docfile.hxx>
 
 #include <sot/exchange.hxx>
-#include "xeescher.hxx"
+#include <xeescher.hxx>
 
-#include "global.hxx"
-#include "document.hxx"
-#include "drwlayer.hxx"
-#include "xecontent.hxx"
+#include <global.hxx>
+#include <document.hxx>
+#include <drwlayer.hxx>
+#include <xecontent.hxx>
 #include <editeng/flditem.hxx>
-#include "userdat.hxx"
-#include "xcl97rec.hxx"
-#include "xehelper.hxx"
-#include "xechart.hxx"
-#include "xcl97esc.hxx"
+#include <userdat.hxx>
+#include <xcl97rec.hxx>
+#include <xehelper.hxx>
+#include <xechart.hxx>
+#include <xcl97esc.hxx>
 #include <unotools/streamwrap.hxx>
 #include <oox/ole/olehelper.hxx>
 #include <sfx2/objsh.hxx>

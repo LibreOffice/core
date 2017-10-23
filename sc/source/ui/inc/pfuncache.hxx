@@ -22,8 +22,8 @@
 
 #include <vector>
 #include <tools/gen.hxx>
-#include "rangelst.hxx"
-#include "printopt.hxx"
+#include <rangelst.hxx>
+#include <printopt.hxx>
 
 class ScDocShell;
 class ScMarkData;

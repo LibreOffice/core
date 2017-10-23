@@ -33,7 +33,7 @@
 
 #include "cachedprimitivebase.hxx"
 #include "polypolyaction.hxx"
-#include "outdevstate.hxx"
+#include <outdevstate.hxx>
 #include "mtftools.hxx"
 
 

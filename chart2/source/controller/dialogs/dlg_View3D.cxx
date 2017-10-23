@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dlg_View3D.hxx"
-#include "strings.hrc"
+#include <dlg_View3D.hxx>
+#include <strings.hrc>
 #include "TabPageIds.h"
-#include "ResId.hxx"
+#include <ResId.hxx>
 #include "tp_3D_SceneGeometry.hxx"
 #include "tp_3D_SceneAppearance.hxx"
 #include "tp_3D_SceneIllumination.hxx"
-#include "ChartModelHelper.hxx"
-#include "macros.hxx"
-#include "ControllerLockGuard.hxx"
+#include <ChartModelHelper.hxx>
+#include <macros.hxx>
+#include <ControllerLockGuard.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <vcl/msgbox.hxx>

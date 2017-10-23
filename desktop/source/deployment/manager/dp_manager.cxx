@@ -19,13 +19,13 @@
 
 #include <config_features.h>
 
-#include "dp_registry.hxx"
-#include "dp_shared.hxx"
-#include "dp_ucb.h"
-#include "dp_resource.h"
-#include "dp_platform.hxx"
+#include <dp_registry.hxx>
+#include <dp_shared.hxx>
+#include <dp_ucb.h>
+#include <dp_resource.h>
+#include <dp_platform.hxx>
 #include "dp_manager.h"
-#include "dp_identifier.hxx"
+#include <dp_identifier.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/uri.hxx>
@@ -62,7 +62,7 @@
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>
 #include <unotools/tempfile.hxx>
 
-#include "dp_descriptioninfoset.hxx"
+#include <dp_descriptioninfoset.hxx>
 #include "dp_commandenvironments.hxx"
 #include "dp_properties.hxx"
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SCRIPTING_SOURCE_BASPROV_BASSCRIPT_HXX
 #define INCLUDED_SCRIPTING_SOURCE_BASPROV_BASSCRIPT_HXX
 
-#include "bcholder.hxx"
+#include <bcholder.hxx>
 #include <com/sun/star/script/provider/XScript.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <cppuhelper/implbase.hxx>

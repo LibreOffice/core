@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSTOOLTIP_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSTOOLTIP_HXX
 
-#include "SlideSorter.hxx"
-#include "model/SlsSharedPageDescriptor.hxx"
+#include <SlideSorter.hxx>
+#include <model/SlsSharedPageDescriptor.hxx>
 
 namespace sd { namespace slidesorter { namespace view {
 

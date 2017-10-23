@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 #include "dsnItem.hxx"
 #include "ConnectionHelper.hxx"
-#include "dbu_dlg.hxx"
-#include "strings.hrc"
+#include <dbu_dlg.hxx>
+#include <strings.hrc>
 #include <svl/itemset.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -29,20 +29,20 @@
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include "dsitems.hxx"
-#include "helpids.h"
+#include <dsitems.hxx>
+#include <helpids.h>
 #include <osl/process.h>
 #include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include "dbadmin.hxx"
+#include <dbadmin.hxx>
 #include <comphelper/types.hxx>
 #include <vcl/stdtext.hxx>
-#include "sqlmessage.hxx"
+#include <sqlmessage.hxx>
 #include "odbcconfig.hxx"
 #include "dsselect.hxx"
 #include <svl/filenotation.hxx>
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -50,7 +50,7 @@
 #include <com/sun/star/mozilla/MozillaBootstrap.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <ucbhelper/commandenvironment.hxx>

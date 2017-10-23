@@ -12,23 +12,23 @@
 #include <algorithm>
 #include <cmath>
 
-#include "calcconfig.hxx"
+#include <calcconfig.hxx>
 #include "calcoptionsdlg.hxx"
-#include "docfunc.hxx"
-#include "docsh.hxx"
-#include "interpre.hxx"
-#include "sc.hrc"
-#include "scresid.hxx"
-#include "scopetools.hxx"
-#include "viewdata.hxx"
+#include <docfunc.hxx>
+#include <docsh.hxx>
+#include <interpre.hxx>
+#include <sc.hrc>
+#include <scresid.hxx>
+#include <scopetools.hxx>
+#include <viewdata.hxx>
 
 #include <comphelper/random.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
 
 #if HAVE_FEATURE_OPENCL
-#include "formulagroup.hxx"
-#include "globalnames.hxx"
+#include <formulagroup.hxx>
+#include <globalnames.hxx>
 #endif
 
 namespace {

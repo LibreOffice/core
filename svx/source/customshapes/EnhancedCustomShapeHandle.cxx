@@ -18,8 +18,8 @@
  */
 
 #include "EnhancedCustomShapeHandle.hxx"
-#include "svx/EnhancedCustomShape2d.hxx"
-#include "svx/unoapi.hxx"
+#include <svx/EnhancedCustomShape2d.hxx>
+#include <svx/unoapi.hxx>
 
 
 EnhancedCustomShapeHandle::EnhancedCustomShapeHandle( css::uno::Reference< css::drawing::XShape > const & xCustomShape, sal_uInt32 nIndex ) :

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_LISTBOX_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_LISTBOX_HXX
 
-#include "FormComponent.hxx"
+#include <FormComponent.hxx>
 #include "cachedrowset.hxx"
 #include "errorbroadcaster.hxx"
 #include "entrylisthelper.hxx"

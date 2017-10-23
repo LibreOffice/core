@@ -38,16 +38,16 @@
 
 
 #include <sfx2/app.hxx>
-#include "sfxpicklist.hxx"
+#include <sfxpicklist.hxx>
 #include <sfx2/sfxuno.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/event.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
-#include "objshimp.hxx"
+#include <objshimp.hxx>
 #include <openurlhint.hxx>
 #include <sfx2/docfilt.hxx>
 

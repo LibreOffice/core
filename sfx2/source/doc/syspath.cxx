@@ -18,7 +18,7 @@
  */
 
 #include "syspath.hxx"
-#include <syspathw32.hxx>
+#include "syspathw32.hxx"
 
 bool SystemPath::GetUserTemplateLocation( sal_Unicode* pFolder, int nSize )
 {

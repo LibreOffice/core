@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "delayedevent.hxx"
+#include <delayedevent.hxx>
 #include <vcl/svapp.hxx>
 
 namespace svxform

@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
-#include "flyfrm.hxx"
-#include "viewopt.hxx"
-#include "txtatr.hxx"
+#include <hintids.hxx>
+#include <flyfrm.hxx>
+#include <viewopt.hxx>
+#include <txtatr.hxx>
 #include <tools/multisel.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/udlnitem.hxx>
@@ -39,19 +39,19 @@
 #include <EnhancedPDFExportHelper.hxx>
 #include <IDocumentSettingAccess.hxx>
 
-#include "flyfrms.hxx"
-#include "viewsh.hxx"
+#include <flyfrms.hxx>
+#include <viewsh.hxx>
 #include "itrpaint.hxx"
-#include "txtfrm.hxx"
-#include "txtfly.hxx"
-#include "swfont.hxx"
+#include <txtfrm.hxx>
+#include <txtfly.hxx>
+#include <swfont.hxx>
 #include "txtpaint.hxx"
 #include "portab.hxx"
 #include "porfly.hxx"
 #include "porfld.hxx"
-#include "frmfmt.hxx"
-#include "txatbase.hxx"
-#include "charfmt.hxx"
+#include <frmfmt.hxx>
+#include <txatbase.hxx>
+#include <charfmt.hxx>
 #include "redlnitr.hxx"
 #include "porrst.hxx"
 #include "pormulti.hxx"

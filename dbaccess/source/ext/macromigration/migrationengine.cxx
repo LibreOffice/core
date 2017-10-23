@@ -25,8 +25,8 @@
 #include "migrationlog.hxx"
 #include "progresscapture.hxx"
 #include "progressmixer.hxx"
-#include "core_resource.hxx"
-#include "strings.hrc"
+#include <core_resource.hxx>
+#include <strings.hrc>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>

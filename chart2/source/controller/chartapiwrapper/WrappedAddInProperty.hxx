@@ -19,8 +19,8 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDADDINPROPERTY_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDADDINPROPERTY_HXX
 
-#include "WrappedProperty.hxx"
-#include "ChartDocumentWrapper.hxx"
+#include <WrappedProperty.hxx>
+#include <ChartDocumentWrapper.hxx>
 
 namespace chart
 {

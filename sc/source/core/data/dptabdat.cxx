@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dptabdat.hxx"
+#include <dptabdat.hxx>
 
-#include "global.hxx"
-#include "dpfilteredcache.hxx"
-#include "dptabres.hxx"
-#include "document.hxx"
-#include "dpobject.hxx"
+#include <global.hxx>
+#include <dpfilteredcache.hxx>
+#include <dptabres.hxx>
+#include <document.hxx>
+#include <dpobject.hxx>
 
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>

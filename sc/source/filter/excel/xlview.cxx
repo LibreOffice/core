@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xlview.hxx"
-#include "ftools.hxx"
+#include <xlview.hxx>
+#include <ftools.hxx>
 #include <osl/diagnose.h>
 
 // Structs ====================================================================

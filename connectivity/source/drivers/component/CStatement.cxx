@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "component/CStatement.hxx"
-#include "component/CResultSet.hxx"
+#include <component/CStatement.hxx>
+#include <component/CResultSet.hxx>
 
 using namespace connectivity::component;
 using namespace connectivity::file;

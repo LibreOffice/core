@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/tstpitem.hxx>
@@ -26,11 +26,11 @@
 #include <frmatr.hxx>
 #include <SwPortionHandler.hxx>
 
-#include "viewopt.hxx"
+#include <viewopt.hxx>
 #include "portab.hxx"
 #include "inftxt.hxx"
 #include "itrform2.hxx"
-#include "txtfrm.hxx"
+#include <txtfrm.hxx>
 #include <numrule.hxx>
 #include "porfld.hxx"
 #include <memory>

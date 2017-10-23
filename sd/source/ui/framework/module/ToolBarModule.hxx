@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_MODULE_TOOLBARMODULE_HXX
 #define INCLUDED_SD_SOURCE_UI_FRAMEWORK_MODULE_TOOLBARMODULE_HXX
 
-#include "ToolBarManager.hxx"
+#include <ToolBarManager.hxx>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XTabBar.hpp>

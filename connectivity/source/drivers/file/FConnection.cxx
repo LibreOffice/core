@@ -21,11 +21,11 @@
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include "file/FConnection.hxx"
-#include "file/FDatabaseMetaData.hxx"
-#include "file/FDriver.hxx"
-#include "file/FStatement.hxx"
-#include "file/FPreparedStatement.hxx"
+#include <file/FConnection.hxx>
+#include <file/FDatabaseMetaData.hxx>
+#include <file/FDriver.hxx>
+#include <file/FStatement.hxx>
+#include <file/FPreparedStatement.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -33,14 +33,14 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <tools/urlobj.hxx>
-#include "file/FCatalog.hxx"
+#include <file/FCatalog.hxx>
 #include <unotools/pathoptions.hxx>
 #include <ucbhelper/content.hxx>
 #include <connectivity/dbcharset.hxx>
 #include <connectivity/dbexception.hxx>
 #include <osl/thread.h>
 #include <osl/nlsupport.h>
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace connectivity::file;
 using namespace dbtools;

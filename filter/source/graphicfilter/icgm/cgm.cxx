@@ -23,10 +23,10 @@
 #include <vcl/virdev.hxx>
 #include <vcl/graph.hxx>
 #include <tools/stream.hxx>
-#include <chart.hxx>
-#include <main.hxx>
-#include <elements.hxx>
-#include <outact.hxx>
+#include "chart.hxx"
+#include "main.hxx"
+#include "elements.hxx"
+#include "outact.hxx"
 #include <memory>
 
 using namespace ::com::sun::star;

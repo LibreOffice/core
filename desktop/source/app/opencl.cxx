@@ -12,7 +12,7 @@
  * calculate using OpenCL.
  */
 
-#include "app.hxx"
+#include <app.hxx>
 
 #include <config_version.h>
 #include <config_features.h>

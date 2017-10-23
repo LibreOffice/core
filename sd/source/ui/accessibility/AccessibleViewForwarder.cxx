@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AccessibleViewForwarder.hxx"
+#include <AccessibleViewForwarder.hxx>
 #include <svx/svdpntv.hxx>
 #include <vcl/outdev.hxx>
 #include <svx/sdrpaintwindow.hxx>

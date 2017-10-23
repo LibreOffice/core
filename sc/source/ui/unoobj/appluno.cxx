@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "appluno.hxx"
+#include <appluno.hxx>
 #include <sal/types.h>
 #include <osl/diagnose.h>
 #include <cppuhelper/factory.hxx>
@@ -25,18 +25,18 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
-#include "afmtuno.hxx"
-#include "funcuno.hxx"
-#include "filtuno.hxx"
-#include "miscuno.hxx"
-#include "scmod.hxx"
-#include "appoptio.hxx"
-#include "inputopt.hxx"
-#include "printopt.hxx"
-#include "userlist.hxx"
-#include "sc.hrc"
-#include "unonames.hxx"
-#include "funcdesc.hxx"
+#include <afmtuno.hxx>
+#include <funcuno.hxx>
+#include <filtuno.hxx>
+#include <miscuno.hxx>
+#include <scmod.hxx>
+#include <appoptio.hxx>
+#include <inputopt.hxx>
+#include <printopt.hxx>
+#include <userlist.hxx>
+#include <sc.hrc>
+#include <unonames.hxx>
+#include <funcdesc.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/sheet/FunctionArgument.hpp>
 #include <memory>

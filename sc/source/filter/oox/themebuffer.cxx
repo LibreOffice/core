@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "themebuffer.hxx"
+#include <themebuffer.hxx>
 
-#include "stylesbuffer.hxx"
+#include <stylesbuffer.hxx>
 
 namespace oox {
 namespace xls {

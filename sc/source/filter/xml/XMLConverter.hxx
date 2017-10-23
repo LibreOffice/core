@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLCONVERTER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLCONVERTER_HXX
 
-#include "global.hxx"
-#include "detfunc.hxx"
-#include "detdata.hxx"
+#include <global.hxx>
+#include <detfunc.hxx>
+#include <detdata.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/ConditionOperator.hpp>

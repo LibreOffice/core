@@ -11,7 +11,7 @@
 #define INCLUDED_PACKAGE_SOURCE_ZIPAPI_XBUFFEREDTHREADEDSTREAM_HXX
 
 #include <salhelper/thread.hxx>
-#include <XUnbufferedStream.hxx>
+#include "XUnbufferedStream.hxx"
 #include <queue>
 #include <vector>
 #include <mutex>

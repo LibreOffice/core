@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "CommonConverters.hxx"
+#include <CommonConverters.hxx>
 
 #include <rtl/ustring.hxx>
 

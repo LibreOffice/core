@@ -21,18 +21,18 @@
 
 #include <unotools/transliterationwrapper.hxx>
 
-#include "dbdata.hxx"
-#include "globalnames.hxx"
-#include "refupdat.hxx"
-#include "rechead.hxx"
-#include "document.hxx"
-#include "queryparam.hxx"
-#include "queryentry.hxx"
-#include "globstr.hrc"
-#include "subtotalparam.hxx"
-#include "sortparam.hxx"
-#include "dociter.hxx"
-#include "brdcst.hxx"
+#include <dbdata.hxx>
+#include <globalnames.hxx>
+#include <refupdat.hxx>
+#include <rechead.hxx>
+#include <document.hxx>
+#include <queryparam.hxx>
+#include <queryentry.hxx>
+#include <globstr.hrc>
+#include <subtotalparam.hxx>
+#include <sortparam.hxx>
+#include <dociter.hxx>
+#include <brdcst.hxx>
 
 #include <comphelper/stl_types.hxx>
 #include <o3tl/make_unique.hxx>

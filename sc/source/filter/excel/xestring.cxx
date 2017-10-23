@@ -21,10 +21,10 @@
 #include <cassert>
 
 #include <osl/diagnose.h>
-#include "xlstyle.hxx"
-#include "xestyle.hxx"
-#include "xestream.hxx"
-#include "xestring.hxx"
+#include <xlstyle.hxx>
+#include <xestyle.hxx>
+#include <xestream.hxx>
+#include <xestring.hxx>
 
 using namespace ::oox;
 

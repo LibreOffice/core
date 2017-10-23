@@ -8,7 +8,7 @@
  */
 
 #include <memory>
-#include "sharedformulagroups.hxx"
+#include <sharedformulagroups.hxx>
 
 namespace sc {
 

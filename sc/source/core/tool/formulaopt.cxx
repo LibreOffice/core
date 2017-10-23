@@ -11,11 +11,11 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <osl/diagnose.h>
 
-#include "formulaopt.hxx"
-#include "miscuno.hxx"
-#include "global.hxx"
-#include "formulagroup.hxx"
-#include "sc.hrc"
+#include <formulaopt.hxx>
+#include <miscuno.hxx>
+#include <global.hxx>
+#include <formulagroup.hxx>
+#include <sc.hrc>
 
 using namespace utl;
 using namespace com::sun::star::uno;

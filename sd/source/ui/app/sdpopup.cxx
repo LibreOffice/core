@@ -26,12 +26,12 @@
 #include <sfx2/docfile.hxx>
 #include <unotools/useroptions.hxx>
 
-#include "strings.hrc"
-#include "sdpopup.hxx"
-#include "sdresid.hxx"
-#include "sdmod.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
+#include <strings.hrc>
+#include <sdpopup.hxx>
+#include <sdresid.hxx>
+#include <sdmod.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
 
 /*
  * Popup menu for editing of field command

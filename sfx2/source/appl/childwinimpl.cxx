@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "childwinimpl.hxx"
+#include <childwinimpl.hxx>
 
 size_t SfxChildWinContextArr_Impl::size() const
 {

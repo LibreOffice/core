@@ -25,7 +25,7 @@
 #endif
 
 #include <sal/types.h>
-#include <fontmap.hxx>
+#include "fontmap.hxx"
 
 struct FontEntry
 {

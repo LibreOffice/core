@@ -26,27 +26,27 @@
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include "strings.hrc"
-#include "strings.hxx"
-#include "stringconstants.hxx"
-#include "browserids.hxx"
-#include "helpids.h"
+#include <strings.hrc>
+#include <strings.hxx>
+#include <stringconstants.hxx>
+#include <browserids.hxx>
+#include <helpids.h>
 #include <comphelper/types.hxx>
-#include "FieldDescControl.hxx"
-#include "FieldDescriptions.hxx"
+#include <FieldDescControl.hxx>
+#include <FieldDescriptions.hxx>
 #include <vcl/msgbox.hxx>
 #include "TableUndo.hxx"
-#include "TableController.hxx"
+#include <TableController.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <connectivity/dbtools.hxx>
-#include "SqlNameEdit.hxx"
-#include "TableRowExchange.hxx"
+#include <SqlNameEdit.hxx>
+#include <TableRowExchange.hxx>
 #include <sot/storage.hxx>
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include "TableFieldControl.hxx"
-#include "dsntypes.hxx"
+#include <dsntypes.hxx>
 
-#include "dbaccess_slotid.hrc"
+#include <dbaccess_slotid.hrc>
 
 using namespace ::dbaui;
 using namespace ::comphelper;

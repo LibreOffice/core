@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svx/algitem.hxx>
@@ -44,17 +44,17 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include "sc.hrc"
-#include "attrib.hxx"
-#include "global.hxx"
-#include "globstr.hrc"
-#include "document.hxx"
-#include "docpool.hxx"
-#include "stlpool.hxx"
-#include "stlsheet.hxx"
-#include "rechead.hxx"
-#include "editutil.hxx"
-#include "patattr.hxx"
+#include <sc.hrc>
+#include <attrib.hxx>
+#include <global.hxx>
+#include <globstr.hrc>
+#include <document.hxx>
+#include <docpool.hxx>
+#include <stlpool.hxx>
+#include <stlsheet.hxx>
+#include <rechead.hxx>
+#include <editutil.hxx>
+#include <patattr.hxx>
 
 ScStyleSheetPool::ScStyleSheetPool( const SfxItemPool& rPoolP,
                                     ScDocument*     pDocument )

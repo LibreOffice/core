@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "externallinkbuffer.hxx"
+#include <externallinkbuffer.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/DDELinkInfo.hpp>
@@ -32,10 +32,10 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "addressconverter.hxx"
-#include "excelhandlers.hxx"
-#include "formulaparser.hxx"
-#include "worksheetbuffer.hxx"
+#include <addressconverter.hxx>
+#include <excelhandlers.hxx>
+#include <formulaparser.hxx>
+#include <worksheetbuffer.hxx>
 
 namespace oox {
 namespace xls {

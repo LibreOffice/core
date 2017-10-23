@@ -27,8 +27,8 @@
 
 #include "XMLTableShapeResizer.hxx"
 #include <formula/grammar.hxx>
-#include "tabprotection.hxx"
-#include "rangelst.hxx"
+#include <tabprotection.hxx>
+#include <rangelst.hxx>
 
 class ScXMLImport;
 

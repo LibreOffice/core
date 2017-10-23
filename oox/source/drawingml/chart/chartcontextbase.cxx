@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/chart/chartcontextbase.hxx"
+#include <drawingml/chart/chartcontextbase.hxx>
 
-#include "oox/drawingml/chart/modelbase.hxx"
+#include <oox/drawingml/chart/modelbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
-#include "drawingml/shapepropertiescontext.hxx"
+#include <drawingml/shapepropertiescontext.hxx>
 
 namespace oox {
 namespace drawingml {

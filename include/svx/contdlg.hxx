@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_CONTDLG_HXX
 #define INCLUDED_SVX_CONTDLG_HXX
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>

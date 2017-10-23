@@ -25,9 +25,9 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
-#include "TConnection.hxx"
-#include "strings.hrc"
-#include "resource/sharedresources.hxx"
+#include <TConnection.hxx>
+#include <strings.hrc>
+#include <resource/sharedresources.hxx>
 
 namespace dbtools
 {

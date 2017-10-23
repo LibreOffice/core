@@ -24,7 +24,7 @@
 #include "NumberFormatPropertyPanel.hxx"
 #include <navipi.hxx>
 #include <dwfunctr.hxx>
-#include "sc.hrc"
+#include <sc.hrc>
 
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sfxbasecontroller.hxx>

@@ -17,29 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "FrameView.hxx"
+#include <FrameView.hxx>
 
 #include <svx/svxids.hrc>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <rtl/ustrbuf.hxx>
-#include "unokywds.hxx"
+#include <unokywds.hxx>
 #include <vcl/settings.hxx>
 
 #include <vector>
-#include "ViewShell.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "optsitem.hxx"
-#include "ViewShellBase.hxx"
-#include "DrawViewShell.hxx"
-#include "OutlineViewShell.hxx"
-#include "sdmod.hxx"
-#include "sdresid.hxx"
-#include "pres.hxx"
-#include "strings.hrc"
-#include "sdiocmpt.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <ViewShell.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <optsitem.hxx>
+#include <ViewShellBase.hxx>
+#include <DrawViewShell.hxx>
+#include <OutlineViewShell.hxx>
+#include <sdmod.hxx>
+#include <sdresid.hxx>
+#include <pres.hxx>
+#include <strings.hrc>
+#include <sdiocmpt.hxx>
+#include <framework/FrameworkHelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
 

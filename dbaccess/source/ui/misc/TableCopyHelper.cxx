@@ -17,28 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TableCopyHelper.hxx"
-#include "core_resource.hxx"
-#include "stringconstants.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "sqlmessage.hxx"
+#include <TableCopyHelper.hxx>
+#include <core_resource.hxx>
+#include <stringconstants.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <sqlmessage.hxx>
 #include <vcl/msgbox.hxx>
-#include "WCopyTable.hxx"
+#include <WCopyTable.hxx>
 #include <dbaccess/genericcontroller.hxx>
-#include "WCPage.hxx"
+#include <WCPage.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
 #include <com/sun/star/sdb/application/CopyTableWizard.hpp>
 #include <com/sun/star/sdb/DataAccessDescriptorFactory.hpp>
 
-#include "RtfReader.hxx"
-#include "HtmlReader.hxx"
-#include "TokenWriter.hxx"
-#include "UITools.hxx"
+#include <RtfReader.hxx>
+#include <HtmlReader.hxx>
+#include <TokenWriter.hxx>
+#include <UITools.hxx>
 #include <dbaccess/dataview.hxx>
-#include "dbu_pageids.hxx"
+#include <dbu_pageids.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
@@ -57,7 +57,7 @@
 #include <unotools/tempfile.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
-#include "dbexchange.hxx"
+#include <dbexchange.hxx>
 namespace dbaui
 {
 using namespace ::dbtools;

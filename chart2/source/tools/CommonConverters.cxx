@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "CommonConverters.hxx"
+#include <CommonConverters.hxx>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>

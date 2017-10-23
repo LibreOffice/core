@@ -18,7 +18,7 @@
  */
 
 
-#include "resourcemanager.hxx"
+#include <resourcemanager.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/fixed.hxx>

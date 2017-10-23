@@ -28,7 +28,7 @@
 #include <vcl/dialog.hxx>
 #include <svtools/scriptedtext.hxx>
 #include <svx/framelinkarray.hxx>
-#include "scdllapi.h"
+#include <scdllapi.h>
 #include "viewdata.hxx"
 
 class ScAutoFormatData;

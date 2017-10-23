@@ -39,14 +39,14 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdpagv.hxx>
 
-#include "strings.hrc"
-#include "DrawViewShell.hxx"
-#include "DrawDocShell.hxx"
-#include "ClientView.hxx"
-#include "FrameView.hxx"
+#include <strings.hrc>
+#include <DrawViewShell.hxx>
+#include <DrawDocShell.hxx>
+#include <ClientView.hxx>
+#include <FrameView.hxx>
 
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>
@@ -54,11 +54,11 @@
 #include <vcl/graphicfilter.hxx>
 #include <svx/xoutbmp.hxx>
 
-#include "sdpage.hxx"
-#include "drawdoc.hxx"
-#include "sdresid.hxx"
-#include "sdgrffilter.hxx"
-#include "ViewShellBase.hxx"
+#include <sdpage.hxx>
+#include <drawdoc.hxx>
+#include <sdresid.hxx>
+#include <sdgrffilter.hxx>
+#include <ViewShellBase.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -67,7 +67,7 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
-#include "DrawController.hxx"
+#include <DrawController.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>

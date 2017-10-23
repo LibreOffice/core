@@ -22,9 +22,9 @@
 #include <tools/gen.hxx>
 #include <svl/poolitem.hxx>
 #include "swdllapi.h"
-#include <hintids.hxx>
-#include <swtypes.hxx>
-#include <format.hxx>
+#include "hintids.hxx"
+#include "swtypes.hxx"
+#include "format.hxx"
 
 class IntlWrapper;
 

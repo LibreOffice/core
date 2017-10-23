@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
@@ -41,51 +41,51 @@
 #include <basic/sbstar.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 
-#include "viewfunc.hxx"
+#include <viewfunc.hxx>
 
-#include "sc.hrc"
-#include "globstr.hrc"
+#include <sc.hrc>
+#include <globstr.hrc>
 
-#include "attrib.hxx"
-#include "autoform.hxx"
-#include "formulacell.hxx"
-#include "cellmergeoption.hxx"
-#include "compiler.hxx"
-#include "docfunc.hxx"
-#include "docpool.hxx"
-#include "docsh.hxx"
-#include "docoptio.hxx"
-#include "global.hxx"
-#include "patattr.hxx"
-#include "printfun.hxx"
-#include "rangenam.hxx"
-#include "rangeutl.hxx"
-#include "refundo.hxx"
-#include "table.hxx"
-#include "tablink.hxx"
-#include "tabvwsh.hxx"
-#include "uiitems.hxx"
-#include "undoblk.hxx"
-#include "undocell.hxx"
-#include "undotab.hxx"
-#include "sizedev.hxx"
-#include "editable.hxx"
-#include "scmod.hxx"
-#include "inputhdl.hxx"
-#include "inputwin.hxx"
-#include "funcdesc.hxx"
-#include "docuno.hxx"
-#include "charthelper.hxx"
-#include "tabbgcolor.hxx"
-#include "clipparam.hxx"
-#include "prnsave.hxx"
-#include "searchresults.hxx"
-#include "tokenarray.hxx"
+#include <attrib.hxx>
+#include <autoform.hxx>
+#include <formulacell.hxx>
+#include <cellmergeoption.hxx>
+#include <compiler.hxx>
+#include <docfunc.hxx>
+#include <docpool.hxx>
+#include <docsh.hxx>
+#include <docoptio.hxx>
+#include <global.hxx>
+#include <patattr.hxx>
+#include <printfun.hxx>
+#include <rangenam.hxx>
+#include <rangeutl.hxx>
+#include <refundo.hxx>
+#include <table.hxx>
+#include <tablink.hxx>
+#include <tabvwsh.hxx>
+#include <uiitems.hxx>
+#include <undoblk.hxx>
+#include <undocell.hxx>
+#include <undotab.hxx>
+#include <sizedev.hxx>
+#include <editable.hxx>
+#include <scmod.hxx>
+#include <inputhdl.hxx>
+#include <inputwin.hxx>
+#include <funcdesc.hxx>
+#include <docuno.hxx>
+#include <charthelper.hxx>
+#include <tabbgcolor.hxx>
+#include <clipparam.hxx>
+#include <prnsave.hxx>
+#include <searchresults.hxx>
+#include <tokenarray.hxx>
 #include <columnspanset.hxx>
 #include <rowheightcontext.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
-#include "mergecellsdialog.hxx"
+#include <mergecellsdialog.hxx>
 
 #include <vector>
 #include <memory>

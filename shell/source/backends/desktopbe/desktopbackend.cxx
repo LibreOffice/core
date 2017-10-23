@@ -17,39 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/beans/Optional.hpp"
-#include "com/sun/star/beans/PropertyVetoException.hpp"
-#include "com/sun/star/beans/UnknownPropertyException.hpp"
-#include "com/sun/star/beans/XPropertyChangeListener.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/beans/XPropertySetInfo.hpp"
-#include "com/sun/star/beans/XVetoableChangeListener.hpp"
-#include "com/sun/star/lang/IllegalArgumentException.hpp"
-#include "com/sun/star/lang/WrappedTargetException.hpp"
-#include "com/sun/star/lang/XMultiComponentFactory.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/uno/XCurrentContext.hpp"
-#include "cppuhelper/factory.hxx"
+#include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/beans/PropertyVetoException.hpp>
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/beans/XVetoableChangeListener.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XCurrentContext.hpp>
+#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include "cppuhelper/implementationentry.hxx"
-#include "cppuhelper/weak.hxx"
-#include "osl/file.hxx"
-#include "osl/security.hxx"
-#include "rtl/string.h"
-#include "rtl/textenc.h"
-#include "rtl/ustring.h"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "uno/current_context.hxx"
+#include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/weak.hxx>
+#include <osl/file.hxx>
+#include <osl/security.hxx>
+#include <rtl/string.h>
+#include <rtl/textenc.h>
+#include <rtl/ustring.h>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <uno/current_context.hxx>
 
 namespace {
 

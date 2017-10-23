@@ -69,8 +69,8 @@
 #include "bibconfig.hxx"
 #include "bibbeam.hxx"
 #include "general.hxx"
-#include "strings.hrc"
-#include "helpids.h"
+#include <strings.hrc>
+#include <helpids.h>
 #include <connectivity/dbtools.hxx>
 #include <memory>
 

@@ -9,15 +9,15 @@
 
 //ScRangeManagerTable
 #include <memory>
-#include "global.hxx"
-#include "reffact.hxx"
-#include "document.hxx"
-#include "docfunc.hxx"
-#include "scresid.hxx"
-#include "globstr.hrc"
-#include "namedlg.hxx"
-#include "viewdata.hxx"
-#include "globalnames.hxx"
+#include <global.hxx>
+#include <reffact.hxx>
+#include <document.hxx>
+#include <docfunc.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
+#include <namedlg.hxx>
+#include <viewdata.hxx>
+#include <globalnames.hxx>
 
 #include <sfx2/app.hxx>
 

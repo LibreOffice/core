@@ -31,7 +31,7 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <o3tl/lru_map.hxx>
-#include "ControlCacheKey.hxx"
+#include <ControlCacheKey.hxx>
 
 static std::vector<GLXContext> g_vShareList;
 static bool g_bAnyCurrent;

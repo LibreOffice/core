@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "formcontrolfont.hxx"
-#include "frm_strings.hxx"
-#include "property.hxx"
+#include <formcontrolfont.hxx>
+#include <frm_strings.hxx>
+#include <property.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>

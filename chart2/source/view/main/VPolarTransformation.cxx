@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "VPolarTransformation.hxx"
-#include "ViewDefines.hxx"
-#include "CommonConverters.hxx"
+#include <VPolarTransformation.hxx>
+#include <ViewDefines.hxx>
+#include <CommonConverters.hxx>
 #include <algorithm>
 
 using namespace ::com::sun::star;

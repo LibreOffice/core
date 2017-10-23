@@ -20,7 +20,7 @@
 #include <sal/macros.h>
 #include <unotools/resmgr.hxx>
 #include <vcl/layout.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 #include "masterpasscrtdlg.hxx"
 
 // MasterPasswordCreateDialog---------------------------------------------------

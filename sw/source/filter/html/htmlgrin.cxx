@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -49,8 +49,8 @@
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
-#include "frmatr.hxx"
-#include "charatr.hxx"
+#include <frmatr.hxx>
+#include <charatr.hxx>
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
 #include <docary.hxx>

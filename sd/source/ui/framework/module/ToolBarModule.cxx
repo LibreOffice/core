@@ -18,10 +18,10 @@
  */
 
 #include "ToolBarModule.hxx"
-#include "ViewShellBase.hxx"
-#include "DrawController.hxx"
-#include "framework/FrameworkHelper.hxx"
-#include "framework/ConfigurationController.hxx"
+#include <ViewShellBase.hxx>
+#include <DrawController.hxx>
+#include <framework/FrameworkHelper.hxx>
+#include <framework/ConfigurationController.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

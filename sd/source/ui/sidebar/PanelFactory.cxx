@@ -18,10 +18,10 @@
  */
 
 #include "PanelFactory.hxx"
-#include "facreg.hxx"
-#include "framework/Pane.hxx"
-#include "ViewShellBase.hxx"
-#include "DrawController.hxx"
+#include <facreg.hxx>
+#include <framework/Pane.hxx>
+#include <ViewShellBase.hxx>
+#include <DrawController.hxx>
 #include "LayoutMenu.hxx"
 #include "CurrentMasterPagesSelector.hxx"
 #include "RecentMasterPagesSelector.hxx"

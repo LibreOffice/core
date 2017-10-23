@@ -19,7 +19,7 @@
 
 #include <connectivity/sdbcx/VIndexColumn.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 
 using namespace connectivity;
 using namespace connectivity::sdbcx;

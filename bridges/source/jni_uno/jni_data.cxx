@@ -24,8 +24,8 @@
 
 #include "jni_bridge.h"
 
-#include "rtl/strbuf.hxx"
-#include "uno/sequence2.h"
+#include <rtl/strbuf.hxx>
+#include <uno/sequence2.h>
 
 namespace jni_uno
 {

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <characterdata.hxx>
+#include "characterdata.hxx"
 
 #include <string.h>
 
@@ -27,7 +27,7 @@
 
 #include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
 
-#include "mutationevent.hxx"
+#include <mutationevent.hxx>
 
 using namespace css::uno;
 using namespace css::xml::dom;

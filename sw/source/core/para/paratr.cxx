@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <swtypes.hxx>
-#include "unomid.h"
+#include <unomid.h>
 #include <com/sun/star/style/DropCapFormat.hpp>
 #include <o3tl/any.hxx>
 #include <unostyle.hxx>
 #include <SwStyleNameMapper.hxx>
-#include "paratr.hxx"
-#include "charfmt.hxx"
-#include "cmdid.h"
+#include <paratr.hxx>
+#include <charfmt.hxx>
+#include <cmdid.h>
 #include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;

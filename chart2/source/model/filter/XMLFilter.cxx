@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "XMLFilter.hxx"
-#include "macros.hxx"
-#include "MediaDescriptorHelper.hxx"
+#include <XMLFilter.hxx>
+#include <macros.hxx>
+#include <MediaDescriptorHelper.hxx>
 
 #include <svtools/sfxecode.hxx>
 #include <unotools/saveopt.hxx>

@@ -25,14 +25,14 @@
 
 #include <editeng/lspcitem.hxx>
 #include <editeng/flditem.hxx>
-#include <impedit.hxx>
+#include "impedit.hxx"
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
-#include <editdbg.hxx>
+#include "editdbg.hxx"
 #include <eerdll2.hxx>
 #include <editeng/eerdll.hxx>
 #include <edtspell.hxx>
-#include <eeobj.hxx>
+#include "eeobj.hxx"
 #include <editeng/txtrange.hxx>
 #include <svl/urlbmk.hxx>
 #include <sfx2/app.hxx>

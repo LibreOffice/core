@@ -45,7 +45,7 @@
 #include <chrono>
 #include <iostream>
 
-#include "test/outputdevice.hxx"
+#include <test/outputdevice.hxx>
 
 using namespace css;
 

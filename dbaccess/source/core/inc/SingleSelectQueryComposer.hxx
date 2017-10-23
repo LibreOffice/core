@@ -28,7 +28,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sqlparse.hxx>
-#include "apitools.hxx"
+#include <apitools.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>

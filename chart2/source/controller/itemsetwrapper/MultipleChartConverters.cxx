@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "MultipleChartConverters.hxx"
+#include <MultipleChartConverters.hxx>
 
-#include "chartview/ChartSfxItemIds.hxx"
+#include <chartview/ChartSfxItemIds.hxx>
 #include "SchWhichPairs.hxx"
-#include "AxisItemConverter.hxx"
-#include "StatisticsItemConverter.hxx"
-#include "GraphicPropertyItemConverter.hxx"
-#include "DataPointItemConverter.hxx"
-#include "ChartModelHelper.hxx"
-#include "TitleHelper.hxx"
-#include "TitleItemConverter.hxx"
-#include "AxisHelper.hxx"
-#include "chartview/ExplicitValueProvider.hxx"
-#include "DiagramHelper.hxx"
+#include <AxisItemConverter.hxx>
+#include <StatisticsItemConverter.hxx>
+#include <GraphicPropertyItemConverter.hxx>
+#include <DataPointItemConverter.hxx>
+#include <ChartModelHelper.hxx>
+#include <TitleHelper.hxx>
+#include <TitleItemConverter.hxx>
+#include <AxisHelper.hxx>
+#include <chartview/ExplicitValueProvider.hxx>
+#include <DiagramHelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

@@ -22,16 +22,16 @@
 #include <editeng/editobj.hxx>
 #include <osl/diagnose.h>
 
-#include "table.hxx"
-#include "formulacell.hxx"
-#include "document.hxx"
-#include "stlpool.hxx"
-#include "stlsheet.hxx"
-#include "markdata.hxx"
-#include "editutil.hxx"
-#include "detfunc.hxx"
-#include "postit.hxx"
-#include "stringutil.hxx"
+#include <table.hxx>
+#include <formulacell.hxx>
+#include <document.hxx>
+#include <stlpool.hxx>
+#include <stlsheet.hxx>
+#include <markdata.hxx>
+#include <editutil.hxx>
+#include <detfunc.hxx>
+#include <postit.hxx>
+#include <stringutil.hxx>
 
 namespace {
 

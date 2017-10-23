@@ -34,23 +34,23 @@
 #include "XMLTableHeaderFooterContext.hxx"
 #include "XMLConverter.hxx"
 #include "XMLTableShapeImportHelper.hxx"
-#include "sheetdata.hxx"
+#include <sheetdata.hxx>
 #include "xmlannoi.hxx"
-#include "textuno.hxx"
-#include "cellsuno.hxx"
+#include <textuno.hxx>
+#include <cellsuno.hxx>
 
-#include "docuno.hxx"
-#include "unonames.hxx"
-#include "document.hxx"
-#include "conditio.hxx"
+#include <docuno.hxx>
+#include <unonames.hxx>
+#include <document.hxx>
+#include <conditio.hxx>
 #include <svl/intitem.hxx>
-#include "rangelst.hxx"
-#include "rangeutl.hxx"
-#include "docfunc.hxx"
-#include "markdata.hxx"
-#include "docpool.hxx"
-#include "scitems.hxx"
-#include "patattr.hxx"
+#include <rangelst.hxx>
+#include <rangeutl.hxx>
+#include <docfunc.hxx>
+#include <markdata.hxx>
+#include <docpool.hxx>
+#include <scitems.hxx>
+#include <patattr.hxx>
 
 #define XML_LINE_LEFT 0
 #define XML_LINE_RIGHT 1

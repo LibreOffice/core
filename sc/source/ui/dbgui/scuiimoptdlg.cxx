@@ -19,11 +19,11 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "scuiimoptdlg.hxx"
-#include "tabvwsh.hxx"
-#include "scresid.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
+#include <scuiimoptdlg.hxx>
+#include <tabvwsh.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
 #include <comphelper/string.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <osl/thread.h>

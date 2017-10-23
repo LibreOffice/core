@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "RangeSelectionHelper.hxx"
-#include "RangeSelectionListener.hxx"
-#include "macros.hxx"
+#include <RangeSelectionHelper.hxx>
+#include <RangeSelectionListener.hxx>
+#include <macros.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>
 
 using namespace ::com::sun::star;

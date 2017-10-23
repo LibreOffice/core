@@ -18,10 +18,10 @@
  */
 
 #include "VTitle.hxx"
-#include "CommonConverters.hxx"
-#include "macros.hxx"
-#include "PropertyMapper.hxx"
-#include "AbstractShapeFactory.hxx"
+#include <CommonConverters.hxx>
+#include <macros.hxx>
+#include <PropertyMapper.hxx>
+#include <AbstractShapeFactory.hxx>
 #include <com/sun/star/chart2/XFormattedString.hpp>
 #include <rtl/math.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

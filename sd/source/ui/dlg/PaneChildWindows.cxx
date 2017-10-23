@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "PaneChildWindows.hxx"
-#include "PaneDockingWindow.hxx"
-#include "ViewShellBase.hxx"
-#include "framework/FrameworkHelper.hxx"
-#include "app.hrc"
-#include "strings.hrc"
-#include "sdresid.hxx"
+#include <PaneChildWindows.hxx>
+#include <PaneDockingWindow.hxx>
+#include <ViewShellBase.hxx>
+#include <framework/FrameworkHelper.hxx>
+#include <app.hrc>
+#include <strings.hrc>
+#include <sdresid.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/dockwin.hxx>

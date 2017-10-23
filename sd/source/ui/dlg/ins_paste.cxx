@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ins_paste.hxx"
+#include <ins_paste.hxx>
 
 SdInsertPasteDlg::SdInsertPasteDlg(vcl::Window* pWindow)
     : ModalDialog( pWindow, "InsertSlidesDialog",

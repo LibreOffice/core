@@ -20,13 +20,13 @@
 #include "xmlrowi.hxx"
 #include "xmlimprt.hxx"
 #include "xmlcelli.hxx"
-#include "global.hxx"
+#include <global.hxx>
 #include "xmlstyli.hxx"
-#include "document.hxx"
-#include "docuno.hxx"
-#include "olinetab.hxx"
-#include "sheetdata.hxx"
-#include "documentimport.hxx"
+#include <document.hxx>
+#include <docuno.hxx>
+#include <olinetab.hxx>
+#include <sheetdata.hxx>
+#include <documentimport.hxx>
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>

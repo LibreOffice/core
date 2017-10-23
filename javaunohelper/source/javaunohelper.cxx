@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <osl/module.hxx>
 #include <osl/thread.h>
@@ -33,9 +33,9 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
-#include "jni.h"
-#include "jvmaccess/virtualmachine.hxx"
-#include "jvmaccess/unovirtualmachine.hxx"
+#include <jni.h>
+#include <jvmaccess/virtualmachine.hxx>
+#include <jvmaccess/unovirtualmachine.hxx>
 
 #include "juhx-export-functions.hxx"
 #include "vm.hxx"

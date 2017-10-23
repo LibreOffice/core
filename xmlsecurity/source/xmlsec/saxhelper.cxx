@@ -20,8 +20,8 @@
 
 #include <rtl/ustring.hxx>
 
-#include "xmlsec/saxhelper.hxx"
-#include "libxml/parserInternals.h"
+#include <xmlsec/saxhelper.hxx>
+#include <libxml/parserInternals.h>
 
 #ifndef XMLSEC_NO_XSLT
 #include "libxslt/xslt.h"

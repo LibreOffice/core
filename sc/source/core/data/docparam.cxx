@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "docparam.hxx"
+#include <docparam.hxx>
 
 ScColWidthParam::ScColWidthParam() :
     mnMaxTextRow(-1), mnMaxTextLen(0), mbSimpleText(true) {}

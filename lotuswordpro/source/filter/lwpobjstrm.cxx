@@ -54,8 +54,8 @@
  *
  ************************************************************************/
 
-#include "lwpobjstrm.hxx"
-#include "lwptools.hxx"
+#include <lwpobjstrm.hxx>
+#include <lwptools.hxx>
 
 #include <sal/types.h>
 #include <tools/solar.h>

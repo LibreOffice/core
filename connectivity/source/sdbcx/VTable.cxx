@@ -22,7 +22,7 @@
 #include <connectivity/sdbcx/VIndex.hxx>
 #include <comphelper/sequence.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <connectivity/sdbcx/VKey.hxx>
 #include <connectivity/dbtools.hxx>

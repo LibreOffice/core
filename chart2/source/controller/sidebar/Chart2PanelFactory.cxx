@@ -31,7 +31,7 @@
 
 #include "ChartElementsPanel.hxx"
 #include "ChartSeriesPanel.hxx"
-#include "ChartController.hxx"
+#include <ChartController.hxx>
 #include "ChartAxisPanel.hxx"
 #include "ChartErrorBarPanel.hxx"
 #include "ChartAreaPanel.hxx"

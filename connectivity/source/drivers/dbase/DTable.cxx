@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbase/DTable.hxx"
+#include <dbase/DTable.hxx>
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <svl/converter.hxx>
-#include "dbase/DConnection.hxx"
-#include "dbase/DColumns.hxx"
+#include <dbase/DConnection.hxx>
+#include <dbase/DColumns.hxx>
 #include <osl/thread.h>
 #include <tools/config.hxx>
-#include "dbase/DIndex.hxx"
-#include "dbase/DIndexes.hxx"
+#include <dbase/DIndex.hxx>
+#include <dbase/DIndexes.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <svl/zforlist.hxx>
@@ -50,7 +50,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/dbconversion.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 #include <rtl/strbuf.hxx>
 
 #include <algorithm>

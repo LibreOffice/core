@@ -22,7 +22,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/builderfactory.hxx>
-#include "formula/IFunctionDescription.hxx"
+#include <formula/IFunctionDescription.hxx>
 
 #include "funcpage.hxx"
 #include <unotools/syslocale.hxx>

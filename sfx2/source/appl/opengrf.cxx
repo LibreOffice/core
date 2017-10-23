@@ -44,7 +44,7 @@
 #include <sfx2/docfile.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/opengrf.hxx>
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 
 

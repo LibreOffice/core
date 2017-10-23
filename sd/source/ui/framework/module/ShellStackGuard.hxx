@@ -22,7 +22,7 @@
 
 #include <cppuhelper/basemutex.hxx>
 
-#include "framework/ConfigurationController.hxx"
+#include <framework/ConfigurationController.hxx>
 
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>

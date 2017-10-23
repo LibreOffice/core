@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <algorithm>
 #include <cassert>
@@ -29,21 +29,21 @@
 #include <utility>
 #include <vector>
 
-#include "codemaker/codemaker.hxx"
-#include "codemaker/exceptiontree.hxx"
-#include "codemaker/generatedtypeset.hxx"
-#include "codemaker/global.hxx"
-#include "codemaker/options.hxx"
-#include "codemaker/typemanager.hxx"
-#include "codemaker/unotype.hxx"
-#include "codemaker/commonjava.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/strbuf.hxx"
-#include "rtl/string.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "unoidl/unoidl.hxx"
+#include <codemaker/codemaker.hxx>
+#include <codemaker/exceptiontree.hxx>
+#include <codemaker/generatedtypeset.hxx>
+#include <codemaker/global.hxx>
+#include <codemaker/options.hxx>
+#include <codemaker/typemanager.hxx>
+#include <codemaker/unotype.hxx>
+#include <codemaker/commonjava.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <unoidl/unoidl.hxx>
 
 #include "classfile.hxx"
 #include "javaoptions.hxx"

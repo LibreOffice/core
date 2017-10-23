@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "framework/ModuleController.hxx"
+#include <framework/ModuleController.hxx>
 
-#include "tools/ConfigurationAccess.hxx"
+#include <tools/ConfigurationAccess.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unordered_map>
 

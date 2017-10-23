@@ -23,10 +23,10 @@
 #include <sfx2/templdlg.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/tplpitem.hxx>
-#include "tplcitem.hxx"
-#include "templdgi.hxx"
+#include <tplcitem.hxx>
+#include <templdgi.hxx>
 
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 
 // Constructor
 

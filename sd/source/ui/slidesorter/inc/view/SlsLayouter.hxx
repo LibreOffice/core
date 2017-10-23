@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSLAYOUTER_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSLAYOUTER_HXX
 
-#include "SlideSorter.hxx"
-#include "view/SlsPageObjectLayouter.hxx"
-#include "view/SlsTheme.hxx"
+#include <SlideSorter.hxx>
+#include <view/SlsPageObjectLayouter.hxx>
+#include <view/SlsTheme.hxx>
 #include <sal/types.h>
 #include <tools/fract.hxx>
 #include <vcl/mapmod.hxx>

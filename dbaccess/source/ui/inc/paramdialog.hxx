@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <connectivity/predicateinput.hxx>
-#include "svx/ParseContext.hxx"
+#include <svx/ParseContext.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 namespace connectivity

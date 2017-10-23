@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fumeasur.hxx"
+#include <fumeasur.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
-#include "View.hxx"
-#include "ViewShell.hxx"
-#include "drawdoc.hxx"
+#include <View.hxx>
+#include <ViewShell.hxx>
+#include <drawdoc.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <memory>

@@ -58,10 +58,10 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#include "lwpobjid.hxx"
-#include "lwpfilehdr.hxx"
-#include "lwpobjfactory.hxx"
-#include "lwpglobalmgr.hxx"
+#include <lwpobjid.hxx>
+#include <lwpfilehdr.hxx>
+#include <lwpobjfactory.hxx>
+#include <lwpglobalmgr.hxx>
 
 LwpObjectID::LwpObjectID()
     :m_nLow(0), m_nHigh(0), m_nIndex(0), m_bIsCompressed(false)

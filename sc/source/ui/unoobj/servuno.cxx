@@ -28,24 +28,24 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 
-#include "servuno.hxx"
-#include "unonames.hxx"
-#include "cellsuno.hxx"
-#include "fielduno.hxx"
-#include "styleuno.hxx"
-#include "afmtuno.hxx"
-#include "defltuno.hxx"
-#include "drdefuno.hxx"
-#include "docsh.hxx"
-#include "drwlayer.hxx"
-#include "confuno.hxx"
-#include "shapeuno.hxx"
+#include <servuno.hxx>
+#include <unonames.hxx>
+#include <cellsuno.hxx>
+#include <fielduno.hxx>
+#include <styleuno.hxx>
+#include <afmtuno.hxx>
+#include <defltuno.hxx>
+#include <drdefuno.hxx>
+#include <docsh.hxx>
+#include <drwlayer.hxx>
+#include <confuno.hxx>
+#include <shapeuno.hxx>
 #include "cellvaluebinding.hxx"
 #include "celllistsource.hxx"
-#include "addruno.hxx"
-#include "chart2uno.hxx"
-#include "tokenuno.hxx"
-#include "PivotTableDataProvider.hxx"
+#include <addruno.hxx>
+#include <chart2uno.hxx>
+#include <tokenuno.hxx>
+#include <PivotTableDataProvider.hxx>
 
 // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>

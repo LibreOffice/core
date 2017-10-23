@@ -18,16 +18,16 @@
  */
 
 #include "CandleStickChart.hxx"
-#include "ShapeFactory.hxx"
-#include "CommonConverters.hxx"
-#include "ObjectIdentifier.hxx"
-#include "LabelPositionHelper.hxx"
+#include <ShapeFactory.hxx>
+#include <CommonConverters.hxx>
+#include <ObjectIdentifier.hxx>
+#include <LabelPositionHelper.hxx>
 #include "BarPositionHelper.hxx"
-#include "macros.hxx"
-#include "VLegendSymbolFactory.hxx"
-#include "FormattedStringHelper.hxx"
-#include "DataSeriesHelper.hxx"
-#include "DateHelper.hxx"
+#include <macros.hxx>
+#include <VLegendSymbolFactory.hxx>
+#include <FormattedStringHelper.hxx>
+#include <DataSeriesHelper.hxx>
+#include <DateHelper.hxx>
 #include <rtl/math.hxx>
 #include <editeng/unoprnms.hxx>
 

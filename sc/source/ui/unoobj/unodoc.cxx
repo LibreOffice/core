@@ -22,11 +22,11 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include "appluno.hxx"
-#include "scmod.hxx"
+#include <appluno.hxx>
+#include <scmod.hxx>
 #include <vcl/svapp.hxx>
 
-#include "docsh.hxx"
+#include <docsh.hxx>
 
 using namespace ::com::sun::star;
 

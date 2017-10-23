@@ -21,8 +21,8 @@
 
 #include <svl/style.hxx>
 #include <svl/lstner.hxx>
-#include <unocoll.hxx>
-#include <unomap.hxx>
+#include "unocoll.hxx"
+#include "unomap.hxx"
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/style/XStyleLoader.hpp>
@@ -33,13 +33,13 @@
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include <calbck.hxx>
+#include "calbck.hxx"
 
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
 #include <com/sun/star/style/XAutoStyles.hpp>
 #include <com/sun/star/style/XAutoStyle.hpp>
 
-#include <istyleaccess.hxx>
+#include "istyleaccess.hxx"
 #include <memory>
 
 class SwDocShell;

@@ -7,10 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "edittextiterator.hxx"
-#include "document.hxx"
-#include "table.hxx"
-#include "column.hxx"
+#include <edittextiterator.hxx>
+#include <document.hxx>
+#include <table.hxx>
+#include <column.hxx>
 
 namespace sc {
 

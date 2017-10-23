@@ -19,7 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_RELATIONDESIGN_RTABLEWINDOW_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_RELATIONDESIGN_RTABLEWINDOW_HXX
 
-#include "TableWindow.hxx"
+#include <TableWindow.hxx>
 
 namespace dbaui
 {

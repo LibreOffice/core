@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_SQLEXCEPTION_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_SQLEXCEPTION_HXX
 
-#include "java/lang/Exception.hxx"
+#include <java/lang/Exception.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
 
 namespace connectivity

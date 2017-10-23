@@ -117,13 +117,13 @@
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #endif
-#include "toolkit/awt/vclxspinbutton.hxx"
+#include <toolkit/awt/vclxspinbutton.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/awt/scrollabledialog.hxx>
 #include <comphelper/profilezone.hxx>
 
-#include "helper/unowrapper.hxx"
+#include <helper/unowrapper.hxx>
 
 #if defined(_WIN32)
 #define SYSTEM_DEPENDENT_TYPE css::lang::SystemDependent::SYSTEM_WIN32

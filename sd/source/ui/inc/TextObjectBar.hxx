@@ -22,7 +22,7 @@
 
 #include <sfx2/module.hxx>
 #include <sfx2/shell.hxx>
-#include "glob.hxx"
+#include <glob.hxx>
 
 class CommandEvent;
 

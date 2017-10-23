@@ -24,7 +24,7 @@
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <vcl/virdev.hxx>
 
-#include "converters.hxx"
+#include <converters.hxx>
 
 #ifdef DBG_UTIL
 #include <tools/stream.hxx>

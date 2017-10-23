@@ -19,7 +19,7 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLREGRESSIONCURVEOBJECTCONTEXT_HXX
 #define INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLREGRESSIONCURVEOBJECTCONTEXT_HXX
 
-#include "SchXMLImport.hxx"
+#include <SchXMLImport.hxx>
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/shapeimport.hxx>

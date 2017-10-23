@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "mediamisc.hxx"
+#include <mediamisc.hxx>
 #include "gstmanager.hxx"
 
 using namespace ::com::sun::star;

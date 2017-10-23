@@ -13,10 +13,10 @@
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 
-#include "opengl/framebuffer.hxx"
-#include "opengl/texture.hxx"
+#include <opengl/framebuffer.hxx>
+#include <opengl/texture.hxx>
 
-#include "opengl/FixedTextureAtlas.hxx"
+#include <opengl/FixedTextureAtlas.hxx>
 
 #include <o3tl/make_unique.hxx>
 

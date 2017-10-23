@@ -8,8 +8,8 @@
  */
 
 #include <memory>
-#include "sortkeydlg.hxx"
-#include "sortdlg.hxx"
+#include <sortkeydlg.hxx>
+#include <sortdlg.hxx>
 #include <vcl/layout.hxx>
 
 ScSortKeyItem::ScSortKeyItem(vcl::Window* pParent)

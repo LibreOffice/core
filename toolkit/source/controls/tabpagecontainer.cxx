@@ -32,7 +32,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 
-#include "helper/unopropertyarrayhelper.hxx"
+#include <helper/unopropertyarrayhelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

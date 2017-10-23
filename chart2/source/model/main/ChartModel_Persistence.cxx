@@ -18,15 +18,15 @@
  */
 
 #include <memory>
-#include "ChartModel.hxx"
-#include "MediaDescriptorHelper.hxx"
-#include "macros.hxx"
-#include "ChartViewHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "DataSourceHelper.hxx"
-#include "AxisHelper.hxx"
-#include "ThreeDHelper.hxx"
-#include "DiagramHelper.hxx"
+#include <ChartModel.hxx>
+#include <MediaDescriptorHelper.hxx>
+#include <macros.hxx>
+#include <ChartViewHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <DataSourceHelper.hxx>
+#include <AxisHelper.hxx>
+#include <ThreeDHelper.hxx>
+#include <DiagramHelper.hxx>
 
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

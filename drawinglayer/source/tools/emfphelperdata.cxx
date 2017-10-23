@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <emfphelperdata.hxx>
-#include <emfpbrush.hxx>
-#include <emfppen.hxx>
-#include <emfppath.hxx>
-#include <emfpregion.hxx>
-#include <emfpimage.hxx>
-#include <emfpfont.hxx>
-#include <emfpstringformat.hxx>
+#include "emfphelperdata.hxx"
+#include "emfpbrush.hxx"
+#include "emfppen.hxx"
+#include "emfppath.hxx"
+#include "emfpregion.hxx"
+#include "emfpimage.hxx"
+#include "emfpfont.hxx"
+#include "emfpstringformat.hxx"
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <wmfemfhelper.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>

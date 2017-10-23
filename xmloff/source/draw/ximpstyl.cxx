@@ -41,11 +41,11 @@
 #include <xmloff/families.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <svl/zforlist.hxx>
-#include "PropertySetMerger.hxx"
+#include <PropertySetMerger.hxx>
 #include "sdpropls.hxx"
 #include "layerimp.hxx"
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
-#include "XMLNumberStylesImport.hxx"
+#include <XMLNumberStylesImport.hxx>
 #include <xmloff/xmlerror.hxx>
 
 using namespace ::com::sun::star;

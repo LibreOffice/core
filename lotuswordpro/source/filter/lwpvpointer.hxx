@@ -63,7 +63,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPVPOINTER_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPVPOINTER_HXX
 
-#include "lwpobj.hxx"
+#include <lwpobj.hxx>
 class LwpVersionedPointer : public LwpObject
 {
 public:

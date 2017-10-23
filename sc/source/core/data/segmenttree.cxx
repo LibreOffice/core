@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "segmenttree.hxx"
+#include <segmenttree.hxx>
 
 #include <mdds/flat_segment_tree.hpp>
 

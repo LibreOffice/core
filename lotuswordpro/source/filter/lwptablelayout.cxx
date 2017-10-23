@@ -58,10 +58,10 @@
  *  For LWP filter architecture prototype - table layouts
  */
 
-#include "lwpglobalmgr.hxx"
+#include <lwpglobalmgr.hxx>
 #include "lwptablelayout.hxx"
-#include "lwpfoundry.hxx"
-#include "lwpobjfactory.hxx"
+#include <lwpfoundry.hxx>
+#include <lwpobjfactory.hxx>
 #include "lwpholder.hxx"
 #include "lwptable.hxx"
 #include "lwptblcell.hxx"
@@ -69,19 +69,19 @@
 #include "lwpdlvlist.hxx"
 #include "lwppara.hxx"
 
-#include "xfilter/xfstylemanager.hxx"
-#include "xfilter/xftablestyle.hxx"
-#include "xfilter/xftable.hxx"
-#include "xfilter/xfrow.hxx"
-#include "xfilter/xfrowstyle.hxx"
-#include "xfilter/xfcell.hxx"
-#include "xfilter/xfcellstyle.hxx"
-#include "xfilter/xfcolstyle.hxx"
-#include "xfilter/xfframestyle.hxx"
-#include "xfilter/xfframe.hxx"
-#include "xfilter/xffloatframe.hxx"
+#include <xfilter/xfstylemanager.hxx>
+#include <xfilter/xftablestyle.hxx>
+#include <xfilter/xftable.hxx>
+#include <xfilter/xfrow.hxx>
+#include <xfilter/xfrowstyle.hxx>
+#include <xfilter/xfcell.hxx>
+#include <xfilter/xfcellstyle.hxx>
+#include <xfilter/xfcolstyle.hxx>
+#include <xfilter/xfframestyle.hxx>
+#include <xfilter/xfframe.hxx>
+#include <xfilter/xffloatframe.hxx>
 #include "lwpframelayout.hxx"
-#include "xfilter/xfparastyle.hxx"
+#include <xfilter/xfparastyle.hxx>
 #include <memory>
 
 LwpSuperTableLayout::LwpSuperTableLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)

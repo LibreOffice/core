@@ -29,7 +29,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/form/XReset.hpp>
-#include "fmvwimp.hxx"
+#include <fmvwimp.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -37,21 +37,21 @@
 #include <sfx2/dispatch.hxx>
 #include <basic/sbuno.hxx>
 #include <basic/sbx.hxx>
-#include "fmitems.hxx"
-#include "fmobj.hxx"
-#include "svx/svditer.hxx"
+#include <fmitems.hxx>
+#include <fmobj.hxx>
+#include <svx/svditer.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/fmview.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/fmshell.hxx>
-#include "fmpgeimp.hxx"
-#include "svx/fmtools.hxx"
-#include "fmshimp.hxx"
-#include "fmservs.hxx"
-#include "fmprop.hxx"
-#include "fmundo.hxx"
+#include <fmpgeimp.hxx>
+#include <svx/fmtools.hxx>
+#include <fmshimp.hxx>
+#include <fmservs.hxx>
+#include <fmprop.hxx>
+#include <fmundo.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -64,7 +64,7 @@
 #include <vcl/stdtext.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include "svx/sdrpaintwindow.hxx"
+#include <svx/sdrpaintwindow.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

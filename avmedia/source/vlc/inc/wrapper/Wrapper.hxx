@@ -10,12 +10,12 @@
 #ifndef INCLUDED_AVMEDIA_SOURCE_VLC_INC_WRAPPER_WRAPPER_HXX
 #define INCLUDED_AVMEDIA_SOURCE_VLC_INC_WRAPPER_WRAPPER_HXX
 
-#include "wrapper/Common.hxx"
-#include "wrapper/EventHandler.hxx"
-#include "wrapper/EventManager.hxx"
-#include "wrapper/Instance.hxx"
-#include "wrapper/Media.hxx"
-#include "wrapper/Player.hxx"
+#include <wrapper/Common.hxx>
+#include <wrapper/EventHandler.hxx>
+#include <wrapper/EventManager.hxx>
+#include <wrapper/Instance.hxx>
+#include <wrapper/Media.hxx>
+#include <wrapper/Player.hxx>
 
 #endif
 

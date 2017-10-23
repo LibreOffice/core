@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dpcontrol.hxx"
+#include <dpcontrol.hxx>
 
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
-#include "global.hxx"
-#include "scitems.hxx"
-#include "document.hxx"
-#include "docpool.hxx"
-#include "patattr.hxx"
+#include <global.hxx>
+#include <scitems.hxx>
+#include <document.hxx>
+#include <docpool.hxx>
+#include <patattr.hxx>
 
 ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX, const Fraction* pZoomY, ScDocument* pDoc) :
     mpDoc(pDoc),

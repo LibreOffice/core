@@ -25,8 +25,8 @@
 #include <oox/token/tokens.hxx>
 #include <oox/token/relationship.hxx>
 #include <oox/ole/vbaproject.hxx>
-#include <epptooxml.hxx>
-#include <epptdef.hxx>
+#include "epptooxml.hxx"
+#include "epptdef.hxx"
 #include <oox/export/shapes.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>

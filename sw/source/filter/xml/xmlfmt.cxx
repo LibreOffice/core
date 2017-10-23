@@ -28,12 +28,12 @@
 #include <charfmt.hxx>
 #include <paratr.hxx>
 #include <doc.hxx>
-#include "docary.hxx"
+#include <docary.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include "unostyle.hxx"
-#include "unoprnms.hxx"
-#include "fmtpdsc.hxx"
-#include "pagedesc.hxx"
+#include <unostyle.hxx>
+#include <unoprnms.hxx>
+#include <fmtpdsc.hxx>
+#include <pagedesc.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/i18nmap.hxx>
 #include <xmloff/xmltkmap.hxx>
@@ -48,7 +48,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "xmlimp.hxx"
 #include "xmltbli.hxx"
-#include "cellatr.hxx"
+#include <cellatr.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <xmloff/attrlist.hxx>
 #include <unotxdoc.hxx>

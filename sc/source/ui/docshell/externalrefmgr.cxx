@@ -17,22 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "externalrefmgr.hxx"
-#include "document.hxx"
-#include "token.hxx"
-#include "tokenarray.hxx"
-#include "address.hxx"
-#include "tablink.hxx"
-#include "docsh.hxx"
-#include "scextopt.hxx"
-#include "rangenam.hxx"
-#include "formulacell.hxx"
-#include "viewdata.hxx"
-#include "tabvwsh.hxx"
-#include "sc.hrc"
-#include "globstr.hrc"
-#include "cellvalue.hxx"
-#include "defaultsoptions.hxx"
+#include <externalrefmgr.hxx>
+#include <document.hxx>
+#include <token.hxx>
+#include <tokenarray.hxx>
+#include <address.hxx>
+#include <tablink.hxx>
+#include <docsh.hxx>
+#include <scextopt.hxx>
+#include <rangenam.hxx>
+#include <formulacell.hxx>
+#include <viewdata.hxx>
+#include <tabvwsh.hxx>
+#include <sc.hrc>
+#include <globstr.hrc>
+#include <cellvalue.hxx>
+#include <defaultsoptions.hxx>
 
 #include <osl/file.hxx>
 #include <sfx2/app.hxx>
@@ -51,8 +51,8 @@
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <vcl/msgbox.hxx>
-#include "stringutil.hxx"
-#include "scmatrix.hxx"
+#include <stringutil.hxx>
+#include <scmatrix.hxx>
 #include <columnspanset.hxx>
 #include <column.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>

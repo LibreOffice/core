@@ -60,8 +60,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFHEADER_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFHEADER_HXX
 
-#include "xfilter/xfcontentcontainer.hxx"
-#include "xfilter/xfparagraph.hxx"
+#include <xfilter/xfcontentcontainer.hxx>
+#include <xfilter/xfparagraph.hxx>
 #include <vector>
 
 class XFHeader : public XFContentContainer

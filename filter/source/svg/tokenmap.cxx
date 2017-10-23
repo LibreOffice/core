@@ -30,7 +30,7 @@ namespace svgi
 #pragma GCC diagnostic ignored "-Wdeprecated-register"
 #endif
 #endif
-#include "tokens.cxx"
+#include <tokens.cxx>
 #if defined __clang__
 #pragma GCC diagnostic pop
 #endif

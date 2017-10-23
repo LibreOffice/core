@@ -22,7 +22,7 @@
 
 #include <vcl/region.hxx>
 
-#include "textrender.hxx"
+#include <textrender.hxx>
 
 #include <deque>
 

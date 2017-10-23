@@ -19,13 +19,13 @@
 
 #include "xmlcoli.hxx"
 #include "xmlimprt.hxx"
-#include "global.hxx"
+#include <global.hxx>
 #include "xmlstyli.hxx"
-#include "document.hxx"
-#include "docuno.hxx"
-#include "olinetab.hxx"
-#include "sheetdata.hxx"
-#include "unonames.hxx"
+#include <document.hxx>
+#include <docuno.hxx>
+#include <olinetab.hxx>
+#include <sheetdata.hxx>
+#include <unonames.hxx>
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>

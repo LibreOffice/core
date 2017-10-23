@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPCUSTOMLINECAP_HXX
 #define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPCUSTOMLINECAP_HXX
 
-#include <emfphelperdata.hxx>
+#include "emfphelperdata.hxx"
 
 namespace emfplushelper
 {

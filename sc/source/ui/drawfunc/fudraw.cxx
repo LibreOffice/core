@@ -29,17 +29,17 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include "sc.hrc"
-#include "fudraw.hxx"
-#include "futext.hxx"
-#include "tabvwsh.hxx"
-#include "drwlayer.hxx"
-#include "scresid.hxx"
-#include "userdat.hxx"
-#include "docsh.hxx"
-#include "postit.hxx"
-#include "globstr.hrc"
-#include "drawview.hxx"
+#include <sc.hrc>
+#include <fudraw.hxx>
+#include <futext.hxx>
+#include <tabvwsh.hxx>
+#include <drwlayer.hxx>
+#include <scresid.hxx>
+#include <userdat.hxx>
+#include <docsh.hxx>
+#include <postit.hxx>
+#include <globstr.hrc>
+#include <drawview.hxx>
 
 // base class for draw module specific functions
 FuDraw::FuDraw(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,

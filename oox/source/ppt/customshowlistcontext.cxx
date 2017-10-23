@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ppt/customshowlistcontext.hxx"
+#include <oox/ppt/customshowlistcontext.hxx>
 
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>

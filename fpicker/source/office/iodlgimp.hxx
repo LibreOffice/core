@@ -19,7 +19,7 @@
 #ifndef INCLUDED_FPICKER_SOURCE_OFFICE_IODLGIMP_HXX
 #define INCLUDED_FPICKER_SOURCE_OFFICE_IODLGIMP_HXX
 
-#include <PlacesListBox.hxx>
+#include "PlacesListBox.hxx"
 
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>

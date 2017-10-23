@@ -27,9 +27,9 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/swframeposstrings.hxx>
 #include <swtypes.hxx>
-#include <bmpwin.hxx>
+#include "bmpwin.hxx"
 #include <svx/swframeexample.hxx>
-#include <prcntfld.hxx>
+#include "prcntfld.hxx"
 #include <globals.hrc>
 #include <svx/dialcontrol.hxx>
 

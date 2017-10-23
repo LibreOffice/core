@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "undo/undoobjects.hxx"
-#include "sdpage.hxx"
-#include "CustomAnimationEffect.hxx"
-#include "drawdoc.hxx"
-#include "undoanim.hxx"
-#include "ViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "DrawDocShell.hxx"
+#include <undo/undoobjects.hxx>
+#include <sdpage.hxx>
+#include <CustomAnimationEffect.hxx>
+#include <drawdoc.hxx>
+#include <undoanim.hxx>
+#include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <DrawDocShell.hxx>
 
 using namespace sd;
 

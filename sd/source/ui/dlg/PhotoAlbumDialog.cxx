@@ -32,8 +32,8 @@
 #include <xmloff/autolayout.hxx>
 
 #include "PhotoAlbumDialog.hxx"
-#include "strings.hrc"
-#include "sdresid.hxx"
+#include <strings.hrc>
+#include <sdresid.hxx>
 
 namespace sd
 {

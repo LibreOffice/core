@@ -38,7 +38,7 @@
 #include <com/sun/star/task/DocumentPasswordRequest2.hpp>
 #include <com/sun/star/task/DocumentMSPasswordRequest2.hpp>
 
-#include <../../inc/lib/init.hxx>
+#include "../../inc/lib/init.hxx"
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/lokhelper.hxx>

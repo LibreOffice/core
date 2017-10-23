@@ -26,13 +26,13 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
-#include <sanedlg.hxx>
-#include <grid.hxx>
+#include "sanedlg.hxx"
+#include "grid.hxx"
 #include <math.h>
 #include <sal/macros.h>
 #include <rtl/strbuf.hxx>
 #include <memory>
-#include "strings.hrc"
+#include <strings.hrc>
 
 #define PREVIEW_WIDTH       113
 #define PREVIEW_HEIGHT      160

@@ -18,14 +18,14 @@
  */
 
 #include <memory>
-#include "unx/fontmanager.hxx"
-#include "impfont.hxx"
+#include <unx/fontmanager.hxx>
+#include <impfont.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/wrkwin.hxx>
-#include "fontinstance.hxx"
-#include "sallayout.hxx"
+#include <fontinstance.hxx>
+#include <sallayout.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/unicode.hxx>
 #include <rtl/strbuf.hxx>
@@ -49,11 +49,11 @@ using namespace psp;
 
 #include <unotools/configmgr.hxx>
 
-#include "osl/module.h"
-#include "osl/thread.h"
-#include "osl/process.h"
+#include <osl/module.h>
+#include <osl/thread.h>
+#include <osl/process.h>
 
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
 #include <utility>
 #include <algorithm>

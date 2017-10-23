@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "OutlineViewShell.hxx"
+#include <OutlineViewShell.hxx>
 
-#include "ViewShellImplementation.hxx"
-#include "helpids.h"
-#include "app.hrc"
+#include <ViewShellImplementation.hxx>
+#include <helpids.h>
+#include <app.hrc>
 #include <svx/hyperdlg.hxx>
 #include <svx/zoomslideritem.hxx>
 
@@ -59,30 +59,30 @@
 #include <svtools/cliplistener.hxx>
 #include <svl/srchitem.hxx>
 #include <editeng/editobj.hxx>
-#include "fubullet.hxx"
-#include "optsitem.hxx"
+#include <fubullet.hxx>
+#include <optsitem.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
-#include "Outliner.hxx"
-#include "Window.hxx"
-#include "TextObjectBar.hxx"
-#include "drawdoc.hxx"
-#include "sdresid.hxx"
-#include "sdpage.hxx"
-#include "fuoltext.hxx"
-#include "FrameView.hxx"
-#include "zoomlist.hxx"
-#include "stlsheet.hxx"
-#include "slideshow.hxx"
-#include "SdUnoOutlineView.hxx"
-#include "SpellDialogChildWindow.hxx"
+#include <Outliner.hxx>
+#include <Window.hxx>
+#include <TextObjectBar.hxx>
+#include <drawdoc.hxx>
+#include <sdresid.hxx>
+#include <sdpage.hxx>
+#include <fuoltext.hxx>
+#include <FrameView.hxx>
+#include <zoomlist.hxx>
+#include <stlsheet.hxx>
+#include <slideshow.hxx>
+#include <SdUnoOutlineView.hxx>
+#include <SpellDialogChildWindow.hxx>
 
-#include "AccessibleOutlineView.hxx"
-#include "ViewShellBase.hxx"
-#include "ViewShellManager.hxx"
-#include "DrawController.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <AccessibleOutlineView.hxx>
+#include <ViewShellBase.hxx>
+#include <ViewShellManager.hxx>
+#include <DrawController.hxx>
+#include <framework/FrameworkHelper.hxx>
 
 #include <memory>
 
@@ -94,7 +94,7 @@ using namespace ::com::sun::star::linguistic2;
 using namespace sd;
 
 #define OutlineViewShell
-#include "sdslots.hxx"
+#include <sdslots.hxx>
 
 namespace sd {
 

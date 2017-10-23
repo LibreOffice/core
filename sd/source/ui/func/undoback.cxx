@@ -18,11 +18,11 @@
  */
 
 #include <memory>
-#include "undoback.hxx"
+#include <undoback.hxx>
 
-#include "sdpage.hxx"
-#include "sdresid.hxx"
-#include "strings.hrc"
+#include <sdpage.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
 
 #include <com/sun/star/drawing/FillStyle.hpp>
 

@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "reffind.hxx"
-#include "global.hxx"
-#include "compiler.hxx"
-#include "document.hxx"
+#include <reffind.hxx>
+#include <global.hxx>
+#include <compiler.hxx>
+#include <document.hxx>
 
 namespace {
 

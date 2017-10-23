@@ -27,25 +27,25 @@
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
-#include "xecontent.hxx"
-#include "xltracer.hxx"
-#include "xeescher.hxx"
-#include "xeformula.hxx"
-#include "xehelper.hxx"
-#include "xelink.hxx"
-#include "xename.hxx"
-#include "xepivot.hxx"
-#include "xestyle.hxx"
-#include "xeroot.hxx"
+#include <xecontent.hxx>
+#include <xltracer.hxx>
+#include <xeescher.hxx>
+#include <xeformula.hxx>
+#include <xehelper.hxx>
+#include <xelink.hxx>
+#include <xename.hxx>
+#include <xepivot.hxx>
+#include <xestyle.hxx>
+#include <xeroot.hxx>
 #include <xepivotxml.hxx>
-#include "xedbdata.hxx"
+#include <xedbdata.hxx>
 
-#include "excrecds.hxx"
-#include "tabprotection.hxx"
-#include "document.hxx"
-#include "scextopt.hxx"
+#include <excrecds.hxx>
+#include <tabprotection.hxx>
+#include <document.hxx>
+#include <scextopt.hxx>
 
-#include "formulabase.hxx"
+#include <formulabase.hxx>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 
 using namespace ::com::sun::star;

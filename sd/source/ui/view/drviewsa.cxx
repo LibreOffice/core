@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DrawViewShell.hxx"
+#include <DrawViewShell.hxx>
 #include <com/sun/star/scanner/ScannerManager.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
@@ -45,28 +45,28 @@
 #include <svx/float3d.hxx>
 #include <svx/extedit.hxx>
 #include <svx/sidebar/SelectionAnalyzer.hxx>
-#include "helpids.h"
+#include <helpids.h>
 
-#include "view/viewoverlaymanager.hxx"
-#include "app.hrc"
-#include "strings.hrc"
+#include <view/viewoverlaymanager.hxx>
+#include <app.hrc>
+#include <strings.hrc>
 
-#include "sdpage.hxx"
-#include "FrameView.hxx"
-#include "drawdoc.hxx"
-#include "sdresid.hxx"
-#include "DrawDocShell.hxx"
-#include "Window.hxx"
-#include "fupoor.hxx"
-#include "fusel.hxx"
-#include "funavig.hxx"
-#include "drawview.hxx"
-#include "SdUnoDrawView.hxx"
-#include "ViewShellBase.hxx"
-#include "slideshow.hxx"
-#include "ToolBarManager.hxx"
-#include "annotationmanager.hxx"
-#include "DrawController.hxx"
+#include <sdpage.hxx>
+#include <FrameView.hxx>
+#include <drawdoc.hxx>
+#include <sdresid.hxx>
+#include <DrawDocShell.hxx>
+#include <Window.hxx>
+#include <fupoor.hxx>
+#include <fusel.hxx>
+#include <funavig.hxx>
+#include <drawview.hxx>
+#include <SdUnoDrawView.hxx>
+#include <ViewShellBase.hxx>
+#include <slideshow.hxx>
+#include <ToolBarManager.hxx>
+#include <annotationmanager.hxx>
+#include <DrawController.hxx>
 
 #include <memory>
 

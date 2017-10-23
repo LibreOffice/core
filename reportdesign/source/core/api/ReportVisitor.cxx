@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ReportVisitor.hxx"
+#include <ReportVisitor.hxx>
 
 #include <osl/diagnose.h>
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "tabbgcolor.hxx"
+#include <tabbgcolor.hxx>
 
 ScUndoTabColorInfo::ScUndoTabColorInfo(SCTAB nTab) :
     mnTabId(nTab),

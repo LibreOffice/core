@@ -64,11 +64,11 @@
 #include <osl/diagnose.h>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlprhdl.hxx>
-#include "anim.hxx"
-#include "facreg.hxx"
+#include <anim.hxx>
+#include <facreg.hxx>
 
-#include "animations.hxx"
-#include "animationimport.hxx"
+#include <animations.hxx>
+#include <animationimport.hxx>
 
 using namespace ::std;
 using namespace ::cppu;

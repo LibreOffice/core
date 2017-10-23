@@ -20,16 +20,16 @@
 #include <UndoBookmark.hxx>
 
 #include <strings.hrc>
-#include "doc.hxx"
-#include "docary.hxx"
-#include "swundo.hxx"
-#include "pam.hxx"
+#include <doc.hxx>
+#include <docary.hxx>
+#include <swundo.hxx>
+#include <pam.hxx>
 
 #include <UndoCore.hxx>
-#include "IMark.hxx"
-#include "rolbck.hxx"
+#include <IMark.hxx>
+#include <rolbck.hxx>
 
-#include "SwRewriter.hxx"
+#include <SwRewriter.hxx>
 
 SwUndoBookmark::SwUndoBookmark( SwUndoId nUndoId,
             const ::sw::mark::IMark& rBkmk )

@@ -22,7 +22,7 @@
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include "charttoolsdllapi.hxx"
-#include "ChartModel.hxx"
+#include <ChartModel.hxx>
 
 #include <vector>
 

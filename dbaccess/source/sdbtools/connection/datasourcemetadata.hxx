@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_SDBTOOLS_CONNECTION_DATASOURCEMETADATA_HXX
 #define INCLUDED_DBACCESS_SOURCE_SDBTOOLS_CONNECTION_DATASOURCEMETADATA_HXX
 
-#include "connectiondependent.hxx"
+#include <connectiondependent.hxx>
 
 #include <com/sun/star/sdb/tools/XDataSourceMetaData.hpp>
 

@@ -61,10 +61,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPAGEMASTER_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPAGEMASTER_HXX
 
-#include "xfilter/xfglobal.hxx"
-#include "xfilter/xfstyle.hxx"
-#include "xfilter/xfcolor.hxx"
-#include "xfilter/xfmargins.hxx"
+#include <xfilter/xfglobal.hxx>
+#include <xfilter/xfstyle.hxx>
+#include <xfilter/xfcolor.hxx>
+#include <xfilter/xfmargins.hxx>
 
 class XFBorders;
 class XFShadow;

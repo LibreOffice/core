@@ -18,7 +18,7 @@
  */
 
 #include <swtypes.hxx>
-#include <mmlayoutpage.hxx>
+#include "mmlayoutpage.hxx"
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
 #include <mailmergehelper.hxx>

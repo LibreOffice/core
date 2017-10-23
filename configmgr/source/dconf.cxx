@@ -26,14 +26,14 @@ extern "C" {
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <data.hxx>
-#include <dconf.hxx>
-#include <groupnode.hxx>
-#include <localizedpropertynode.hxx>
-#include <localizedvaluenode.hxx>
-#include <nodemap.hxx>
-#include <propertynode.hxx>
-#include <setnode.hxx>
+#include "data.hxx"
+#include "dconf.hxx"
+#include "groupnode.hxx"
+#include "localizedpropertynode.hxx"
+#include "localizedvaluenode.hxx"
+#include "nodemap.hxx"
+#include "propertynode.hxx"
+#include "setnode.hxx"
 
 // component-data is encoded in dconf as follows:
 //

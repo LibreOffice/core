@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_INC_DDELINK_HXX
 #define INCLUDED_SC_SOURCE_CORE_INC_DDELINK_HXX
 
-#include "address.hxx"
+#include <address.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <svl/broadcast.hxx>
-#include "types.hxx"
+#include <types.hxx>
 
 class ScDocument;
 class ScMultipleReadHeader;

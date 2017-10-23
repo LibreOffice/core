@@ -8,11 +8,11 @@
  */
 
 #include <rtl/ustring.h>
-#include "wrapper/Media.hxx"
+#include <wrapper/Media.hxx>
 #include "SymbolLoader.hxx"
-#include "wrapper/Instance.hxx"
+#include <wrapper/Instance.hxx>
 #include "Types.hxx"
-#include "wrapper/Common.hxx"
+#include <wrapper/Common.hxx>
 
 struct libvlc_instance_t;
 

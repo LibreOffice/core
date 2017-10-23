@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svx/xmlexchg.hxx"
+#include <svx/xmlexchg.hxx>
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>
 

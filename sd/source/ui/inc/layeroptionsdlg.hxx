@@ -27,8 +27,8 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/vclmedit.hxx>
-#include "sdresid.hxx"
-#include "strings.hrc"
+#include <sdresid.hxx>
+#include <strings.hrc>
 
 class SfxItemSet;
 

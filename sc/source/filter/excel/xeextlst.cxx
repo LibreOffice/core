@@ -7,13 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "xeextlst.hxx"
-#include "xeroot.hxx"
-#include "xehelper.hxx"
-#include "xestyle.hxx"
-#include "xename.hxx"
-#include "xecontent.hxx"
-#include "tokenarray.hxx"
+#include <xeextlst.hxx>
+#include <xeroot.hxx>
+#include <xehelper.hxx>
+#include <xestyle.hxx>
+#include <xename.hxx>
+#include <xecontent.hxx>
+#include <tokenarray.hxx>
 
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>

@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "StatisticsHelper.hxx"
-#include "DataSeriesHelper.hxx"
-#include "ErrorBar.hxx"
-#include "macros.hxx"
+#include <StatisticsHelper.hxx>
+#include <DataSeriesHelper.hxx>
+#include <ErrorBar.hxx>
+#include <macros.hxx>
 #include <unonames.hxx>
 
 #include <rtl/math.hxx>

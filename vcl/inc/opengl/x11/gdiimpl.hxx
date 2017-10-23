@@ -12,10 +12,10 @@
 
 #include <vcl/dllapi.h>
 
-#include "unx/salgdi.h"
-#include "unx/x11/x11gdiimpl.h"
-#include "openglgdiimpl.hxx"
-#include "ControlCacheKey.hxx"
+#include <unx/salgdi.h>
+#include <unx/x11/x11gdiimpl.h>
+#include <openglgdiimpl.hxx>
+#include <ControlCacheKey.hxx>
 
 struct TextureCombo;
 

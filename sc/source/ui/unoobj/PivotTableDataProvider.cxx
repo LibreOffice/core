@@ -10,19 +10,19 @@
 #include <memory>
 #include <sal/config.h>
 
-#include "PivotTableDataProvider.hxx"
-#include "PivotTableDataSource.hxx"
-#include "PivotTableDataSequence.hxx"
+#include <PivotTableDataProvider.hxx>
+#include <PivotTableDataSource.hxx>
+#include <PivotTableDataSequence.hxx>
 
-#include "miscuno.hxx"
-#include "document.hxx"
-#include "unonames.hxx"
-#include "docsh.hxx"
-#include "scresid.hxx"
-#include "globstr.hrc"
-#include "strings.hrc"
-#include "dpobject.hxx"
-#include "hints.hxx"
+#include <miscuno.hxx>
+#include <document.hxx>
+#include <unonames.hxx>
+#include <docsh.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
+#include <strings.hrc>
+#include <dpobject.hxx>
+#include <hints.hxx>
 
 #include <vcl/svapp.hxx>
 #include <sfx2/objsh.hxx>

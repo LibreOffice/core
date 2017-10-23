@@ -28,18 +28,18 @@
 #include <osl/mutex.hxx>
 #include <libxml/xmlwriter.h>
 
-#include "cell.hxx"
+#include <cell.hxx>
 #include "cellcursor.hxx"
-#include "tablemodel.hxx"
+#include <tablemodel.hxx>
 #include "tablerow.hxx"
 #include "tablerows.hxx"
 #include "tablecolumn.hxx"
 #include "tablecolumns.hxx"
 #include "tableundo.hxx"
-#include "svx/svdotable.hxx"
-#include "svx/svdmodel.hxx"
-#include "svx/strings.hrc"
-#include "svdglob.hxx"
+#include <svx/svdotable.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/strings.hrc>
+#include <svdglob.hxx>
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;

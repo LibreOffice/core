@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dlg_CreationWizard.hxx"
-#include "ResId.hxx"
-#include "macros.hxx"
-#include "strings.hrc"
-#include "helpids.h"
+#include <dlg_CreationWizard.hxx>
+#include <ResId.hxx>
+#include <macros.hxx>
+#include <strings.hrc>
+#include <helpids.h>
 
 #include "tp_ChartType.hxx"
 #include "tp_RangeChooser.hxx"

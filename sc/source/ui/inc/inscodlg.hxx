@@ -23,7 +23,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include "global.hxx"
+#include <global.hxx>
 
 #include "scui_def.hxx"
 

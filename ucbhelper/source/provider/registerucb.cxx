@@ -28,7 +28,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
-#include "osl/diagnose.h"
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 

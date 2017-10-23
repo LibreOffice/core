@@ -40,8 +40,8 @@
 #include <vector>
 #include <map>
 
-#include "MutexContainer.hxx"
-#include "OPropertySet.hxx"
+#include <MutexContainer.hxx>
+#include <OPropertySet.hxx>
 
 namespace chart
 {

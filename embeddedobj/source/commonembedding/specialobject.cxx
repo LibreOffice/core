@@ -37,8 +37,8 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-#include "specialobject.hxx"
-#include "intercept.hxx"
+#include <specialobject.hxx>
+#include <intercept.hxx>
 
 using namespace ::com::sun::star;
 

@@ -29,18 +29,18 @@
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "chartsh.hxx"
-#include "drwlayer.hxx"
-#include "sc.hrc"
-#include "viewdata.hxx"
-#include "document.hxx"
-#include "docpool.hxx"
-#include "drawview.hxx"
-#include "gridwin.hxx"
-#include "scresid.hxx"
+#include <chartsh.hxx>
+#include <drwlayer.hxx>
+#include <sc.hrc>
+#include <viewdata.hxx>
+#include <document.hxx>
+#include <docpool.hxx>
+#include <drawview.hxx>
+#include <gridwin.hxx>
+#include <scresid.hxx>
 
 #define ScChartShell
-#include "scslots.hxx"
+#include <scslots.hxx>
 
 using namespace css::uno;
 

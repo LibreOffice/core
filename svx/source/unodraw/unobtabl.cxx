@@ -26,10 +26,10 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xflhtit.hxx>
-#include "svx/unoapi.hxx"
+#include <svx/unoapi.hxx>
 #include <svx/unomid.hxx>
 #include <editeng/unoprnms.hxx>
-#include "svx/unofill.hxx"
+#include <svx/unofill.hxx>
 #include <editeng/memberids.h>
 
 using namespace ::com::sun::star;

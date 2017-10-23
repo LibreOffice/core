@@ -55,14 +55,14 @@
  ************************************************************************/
 
 #include "lwp9reader.hxx"
-#include "lwpglobalmgr.hxx"
+#include <lwpglobalmgr.hxx>
 #include "lwparrowstyles.hxx"
-#include "lwpobjhdr.hxx"
+#include <lwpobjhdr.hxx>
 #include "lwpdoc.hxx"
-#include "xfilter/xfstylemanager.hxx"
-#include "lwpdocdata.hxx"
-#include "lwpbookmarkmgr.hxx"
-#include "lwpchangemgr.hxx"
+#include <xfilter/xfstylemanager.hxx>
+#include <lwpdocdata.hxx>
+#include <lwpbookmarkmgr.hxx>
+#include <lwpchangemgr.hxx>
 #include <tools/stream.hxx>
 
 Lwp9Reader::Lwp9Reader (LwpSvStream* pInputStream, IXFStream* pStream)

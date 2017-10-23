@@ -28,7 +28,7 @@
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <connectivity/TTableHelper.hxx>
 #include <comphelper/property.hxx>
 

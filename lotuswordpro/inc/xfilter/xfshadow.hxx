@@ -60,8 +60,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSHADOW_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSHADOW_HXX
 
-#include "xfilter/xfglobal.hxx"
-#include "xfilter/xfcolor.hxx"
+#include <xfilter/xfglobal.hxx>
+#include <xfilter/xfcolor.hxx>
 
 /**
  * @brief

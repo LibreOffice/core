@@ -19,8 +19,8 @@
 
 #include <svl/urlbmk.hxx>
 
-#include "lnktrans.hxx"
-#include "scmod.hxx"
+#include <lnktrans.hxx>
+#include <scmod.hxx>
 
 using namespace com::sun::star;
 

@@ -18,13 +18,13 @@
  */
 
 #include "dbinteraction.hxx"
-#include "dbu_reghelper.hxx"
-#include "uiservices.hxx"
+#include <dbu_reghelper.hxx>
+#include <uiservices.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <connectivity/dbexception.hxx>
-#include "sqlmessage.hxx"
+#include <sqlmessage.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
@@ -33,11 +33,11 @@
 #include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
 #include <com/sun/star/sdb/XInteractionDocumentSave.hpp>
 #include <sfx2/QuerySaveDocument.hxx>
-#include "strings.hrc"
-#include "paramdialog.hxx"
+#include <strings.hrc>
+#include <paramdialog.hxx>
 #include <vcl/svapp.hxx>
-#include "CollectionView.hxx"
-#include "UITools.hxx"
+#include <CollectionView.hxx>
+#include <UITools.hxx>
 #include <comphelper/processfactory.hxx>
 
 extern "C" void SAL_CALL createRegistryInfo_OInteractionHandler()

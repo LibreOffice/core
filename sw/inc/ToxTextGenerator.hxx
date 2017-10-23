@@ -20,8 +20,8 @@
 #ifndef SW_TOXTEXTGENERATOR_HXX_
 #define SW_TOXTEXTGENERATOR_HXX_
 
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include "swdllapi.h"
 
 #include <memory>

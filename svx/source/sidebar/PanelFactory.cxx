@@ -25,9 +25,9 @@
 #include "graphic/GraphicPropertyPanel.hxx"
 #include "line/LinePropertyPanel.hxx"
 #include "possize/PosSizePropertyPanel.hxx"
-#include "DefaultShapesPanel.hxx"
+#include <DefaultShapesPanel.hxx>
 #include "media/MediaPlaybackPanel.hxx"
-#include "GalleryControl.hxx"
+#include <GalleryControl.hxx>
 #include "EmptyPanel.hxx"
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/Tools.hxx>

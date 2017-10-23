@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_POSITIONANDSIZEHELPER_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_POSITIONANDSIZEHELPER_HXX
 
-#include "ObjectIdentifier.hxx"
+#include <ObjectIdentifier.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 
 namespace chart

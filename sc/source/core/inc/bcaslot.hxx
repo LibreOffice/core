@@ -28,8 +28,8 @@
 
 #include <svl/broadcast.hxx>
 
-#include "global.hxx"
-#include "brdcst.hxx"
+#include <global.hxx>
+#include <brdcst.hxx>
 #include <columnspanset.hxx>
 
 class ScBroadcastArea;

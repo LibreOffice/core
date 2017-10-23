@@ -50,17 +50,17 @@
 #include <sot/exchange.hxx>
 #include <tools/diagnose_ex.h>
 
-#include "tabvwsh.hxx"
-#include "globstr.hrc"
-#include "scmod.hxx"
-#include "document.hxx"
-#include "sc.hrc"
-#include "client.hxx"
-#include "fuinsert.hxx"
-#include "docsh.hxx"
-#include "chartarr.hxx"
-#include "drawview.hxx"
-#include "ChartRangeSelectionListener.hxx"
+#include <tabvwsh.hxx>
+#include <globstr.hrc>
+#include <scmod.hxx>
+#include <document.hxx>
+#include <sc.hrc>
+#include <client.hxx>
+#include <fuinsert.hxx>
+#include <docsh.hxx>
+#include <chartarr.hxx>
+#include <drawview.hxx>
+#include <ChartRangeSelectionListener.hxx>
 #include <gridwin.hxx>
 
 #include <tools/urlobj.hxx>

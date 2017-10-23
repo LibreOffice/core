@@ -24,8 +24,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
 
-#include <element.hxx>
-#include <document.hxx>
+#include "element.hxx"
+#include "document.hxx"
 
 using namespace css::uno;
 using namespace css::xml::dom;

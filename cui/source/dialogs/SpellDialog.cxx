@@ -23,7 +23,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
-#include <SpellAttrib.hxx>
+#include "SpellAttrib.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/undo.hxx>
@@ -47,12 +47,12 @@
 #include <editeng/optitems.hxx>
 #include <editeng/svxenum.hxx>
 #include <svx/SpellDialogChildWindow.hxx>
-#include "SpellDialog.hxx"
+#include <SpellDialog.hxx>
 #include <svx/dlgutil.hxx>
-#include "optlingu.hxx"
+#include <optlingu.hxx>
 #include <dialmgr.hxx>
 #include <svx/svxerr.hxx>
-#include "treeopt.hxx"
+#include <treeopt.hxx>
 #include <svtools/langtab.hxx>
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>

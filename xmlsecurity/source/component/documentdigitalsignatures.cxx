@@ -18,7 +18,7 @@
  */
 
 #include "documentdigitalsignatures.hxx"
-#include "resourcemanager.hxx"
+#include <resourcemanager.hxx>
 
 #include <digitalsignaturesdialog.hxx>
 #include <certificatechooser.hxx>

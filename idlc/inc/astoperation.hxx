@@ -19,8 +19,8 @@
 #ifndef INCLUDED_IDLC_INC_ASTOPERATION_HXX
 #define INCLUDED_IDLC_INC_ASTOPERATION_HXX
 
-#include <astdeclaration.hxx>
-#include <astscope.hxx>
+#include "astdeclaration.hxx"
+#include "astscope.hxx"
 
 namespace typereg { class Writer; }
 

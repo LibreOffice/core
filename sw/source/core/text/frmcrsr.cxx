@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ndtxt.hxx"
-#include "pam.hxx"
-#include "frmtool.hxx"
-#include "viewopt.hxx"
-#include "paratr.hxx"
-#include "rootfrm.hxx"
-#include "pagefrm.hxx"
-#include "colfrm.hxx"
-#include "swtypes.hxx"
+#include <ndtxt.hxx>
+#include <pam.hxx>
+#include <frmtool.hxx>
+#include <viewopt.hxx>
+#include <paratr.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+#include <colfrm.hxx>
+#include <swtypes.hxx>
 #include <sfx2/printer.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/tstpitem.hxx>
@@ -38,13 +38,13 @@
 
 #include <unicode/ubidi.h>
 
-#include "txtfrm.hxx"
+#include <txtfrm.hxx>
 #include "inftxt.hxx"
 #include "itrtxt.hxx"
-#include "crstate.hxx"
-#include "viewsh.hxx"
-#include "swfntcch.hxx"
-#include "flyfrm.hxx"
+#include <crstate.hxx>
+#include <viewsh.hxx>
+#include <swfntcch.hxx>
+#include <flyfrm.hxx>
 
 #define MIN_OFFSET_STEP 10
 

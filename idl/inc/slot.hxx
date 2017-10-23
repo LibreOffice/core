@@ -20,8 +20,8 @@
 #ifndef INCLUDED_IDL_INC_SLOT_HXX
 #define INCLUDED_IDL_INC_SLOT_HXX
 
-#include <types.hxx>
-#include <command.hxx>
+#include "types.hxx"
+#include "command.hxx"
 
 class SvMetaSlot : public SvMetaAttribute
 {

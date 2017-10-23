@@ -13,7 +13,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <document.hxx>
-#include <mathtype.hxx>
+#include "mathtype.hxx"
 #include <unomodel.hxx>
 
 using namespace ::com::sun::star;

@@ -37,9 +37,9 @@
 #include <vcl/salbtype.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/tbcontrl.hxx>
-#include "sfx2/opengrf.hxx"
+#include <sfx2/opengrf.hxx>
 #include <o3tl/make_unique.hxx>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 using namespace css;
 using namespace css::uno;

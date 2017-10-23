@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "querycontainer.hxx"
-#include "stringconstants.hxx"
+#include <querycontainer.hxx>
+#include <stringconstants.hxx>
 #include "query.hxx"
-#include "objectnameapproval.hxx"
-#include "veto.hxx"
+#include <objectnameapproval.hxx>
+#include <veto.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContainer.hpp>

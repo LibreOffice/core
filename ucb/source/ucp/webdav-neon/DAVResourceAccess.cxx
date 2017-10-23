@@ -27,14 +27,14 @@
  ************************************************************************/
 
 
-#include "com/sun/star/io/IOException.hpp"
-#include "com/sun/star/lang/IllegalArgumentException.hpp"
-#include "com/sun/star/task/XInteractionAbort.hpp"
-#include "com/sun/star/ucb/XWebDAVCommandEnvironment.hpp"
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/task/XInteractionAbort.hpp>
+#include <com/sun/star/ucb/XWebDAVCommandEnvironment.hpp>
 
-#include "ucbhelper/simpleauthenticationrequest.hxx"
-#include "comphelper/processfactory.hxx"
-#include "comphelper/seekableinput.hxx"
+#include <ucbhelper/simpleauthenticationrequest.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/seekableinput.hxx>
 
 #include "DAVAuthListenerImpl.hxx"
 #include "DAVResourceAccess.hxx"

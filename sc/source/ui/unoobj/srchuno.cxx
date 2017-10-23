@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svl/srchitem.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include "srchuno.hxx"
-#include "docsh.hxx"
-#include "undoblk.hxx"
-#include "hints.hxx"
-#include "markdata.hxx"
-#include "miscuno.hxx"
-#include "unonames.hxx"
+#include <srchuno.hxx>
+#include <docsh.hxx>
+#include <undoblk.hxx>
+#include <hints.hxx>
+#include <markdata.hxx>
+#include <miscuno.hxx>
+#include <unonames.hxx>
 
 using namespace com::sun::star;
 

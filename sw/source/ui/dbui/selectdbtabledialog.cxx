@@ -18,8 +18,8 @@
  */
 
 #include <swtypes.hxx>
-#include <selectdbtabledialog.hxx>
-#include <dbtablepreviewdialog.hxx>
+#include "selectdbtabledialog.hxx"
+#include "dbtablepreviewdialog.hxx"
 #include <svtools/simptabl.hxx>
 #include <svtools/treelistentry.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "writer/WDatabaseMetaData.hxx"
-#include "writer/WConnection.hxx"
+#include <writer/WDatabaseMetaData.hxx>
+#include <writer/WConnection.hxx>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 
 using namespace ::com::sun::star;

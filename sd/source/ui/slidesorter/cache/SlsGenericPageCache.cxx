@@ -22,10 +22,10 @@
 #include "SlsQueueProcessor.hxx"
 #include "SlsRequestPriorityClass.hxx"
 #include "SlsRequestFactory.hxx"
-#include "cache/SlsPageCacheManager.hxx"
-#include "model/SlideSorterModel.hxx"
-#include "model/SlsPageDescriptor.hxx"
-#include "controller/SlideSorterController.hxx"
+#include <cache/SlsPageCacheManager.hxx>
+#include <model/SlideSorterModel.hxx>
+#include <model/SlsPageDescriptor.hxx>
+#include <controller/SlideSorterController.hxx>
 
 namespace sd { namespace slidesorter { namespace cache {
 

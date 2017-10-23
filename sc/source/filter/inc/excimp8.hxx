@@ -27,7 +27,7 @@
 #include "excscen.hxx"
 #include "excdefs.hxx"
 #include "ftools.hxx"
-#include "queryparam.hxx"
+#include <queryparam.hxx>
 
 class ScDBData;
 class XclImpStream;

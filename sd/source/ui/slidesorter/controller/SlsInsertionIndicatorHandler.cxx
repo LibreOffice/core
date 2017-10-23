@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "controller/SlsInsertionIndicatorHandler.hxx"
-#include "controller/SlsProperties.hxx"
-#include "view/SlideSorterView.hxx"
-#include "view/SlsLayouter.hxx"
-#include "view/SlsInsertionIndicatorOverlay.hxx"
-#include "model/SlideSorterModel.hxx"
-#include "model/SlsPageEnumerationProvider.hxx"
+#include <controller/SlsInsertionIndicatorHandler.hxx>
+#include <controller/SlsProperties.hxx>
+#include <view/SlideSorterView.hxx>
+#include <view/SlsLayouter.hxx>
+#include <view/SlsInsertionIndicatorOverlay.hxx>
+#include <model/SlideSorterModel.hxx>
+#include <model/SlsPageEnumerationProvider.hxx>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
-#include "SlideSorter.hxx"
+#include <SlideSorter.hxx>
 
 using namespace ::com::sun::star::datatransfer::dnd::DNDConstants;
 

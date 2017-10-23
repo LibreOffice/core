@@ -29,7 +29,7 @@
 #include <svtools/svmedit.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <unotools/configitem.hxx>
-#include <numfmtlb.hxx>
+#include "numfmtlb.hxx"
 #include <swdbdata.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>

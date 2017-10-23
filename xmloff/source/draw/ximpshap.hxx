@@ -35,10 +35,10 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/awt/Point.hpp>
-#include "xexptran.hxx"
+#include <xexptran.hxx>
 #include <vector>
 #include <xmloff/shapeimport.hxx>
-#include "xmlmultiimagehelper.hxx"
+#include <xmlmultiimagehelper.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 template<typename EnumT> struct SvXMLEnumMapEntry;

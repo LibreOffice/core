@@ -21,7 +21,7 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_EXECUTABLE_DP_EXECUTABLEBACKENDDB_HXX
 
 #include <rtl/ustring.hxx>
-#include "dp_backenddb.hxx"
+#include <dp_backenddb.hxx>
 
 namespace com { namespace sun { namespace star {
         namespace uno {

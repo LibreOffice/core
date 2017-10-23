@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_INC_PAGE_HRC
 #define INCLUDED_SVX_INC_PAGE_HRC
 
-#include "page.h"
+#include <page.h>
 #include <utility>
 
 #define NC_(Context, String) (Context "\004" u8##String)

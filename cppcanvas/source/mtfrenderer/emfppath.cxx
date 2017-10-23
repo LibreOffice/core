@@ -36,7 +36,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vcl/canvastools.hxx>
 #include <implrenderer.hxx>
-#include <emfppath.hxx>
+#include "emfppath.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::basegfx;

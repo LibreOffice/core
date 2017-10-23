@@ -21,10 +21,10 @@
 #include <tools/fontenum.hxx>
 #include <unotools/fontdefs.hxx>
 
-#include "fontinstance.hxx"
-#include "fontattributes.hxx"
+#include <fontinstance.hxx>
+#include <fontattributes.hxx>
 
-#include "PhysicalFontFace.hxx"
+#include <PhysicalFontFace.hxx>
 
 PhysicalFontFace::PhysicalFontFace( const FontAttributes& rDFA )
     : FontAttributes( rDFA )

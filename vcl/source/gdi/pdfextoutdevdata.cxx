@@ -21,9 +21,9 @@
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/gfxlink.hxx>
-#include "vcl/dllapi.h"
-#include "basegfx/polygon/b2dpolygon.hxx"
-#include "basegfx/polygon/b2dpolygontools.hxx"
+#include <vcl/dllapi.h>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 #include <set>
 #include <memory>

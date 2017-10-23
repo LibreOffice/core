@@ -20,8 +20,8 @@
 #include <memory>
 #include <unotools/charclass.hxx>
 
-#include "global.hxx"
-#include "userlist.hxx"
+#include <global.hxx>
+#include <userlist.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>

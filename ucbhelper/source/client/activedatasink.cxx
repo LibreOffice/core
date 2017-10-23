@@ -23,7 +23,7 @@
  **************************************************************************
 
  *************************************************************************/
-#include "ucbhelper/activedatasink.hxx"
+#include <ucbhelper/activedatasink.hxx>
 
 using namespace com::sun::star;
 

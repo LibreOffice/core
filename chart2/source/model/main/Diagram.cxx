@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Diagram.hxx"
-#include "macros.hxx"
-#include "PropertyHelper.hxx"
+#include <Diagram.hxx>
+#include <macros.hxx>
+#include <PropertyHelper.hxx>
 #include "Wall.hxx"
-#include "UserDefinedProperties.hxx"
-#include "ConfigColorScheme.hxx"
-#include "DiagramHelper.hxx"
-#include "ThreeDHelper.hxx"
-#include "CloneHelper.hxx"
-#include "AxisHelper.hxx"
-#include "SceneProperties.hxx"
-#include "DisposeHelper.hxx"
-#include "BaseGFXHelper.hxx"
+#include <UserDefinedProperties.hxx>
+#include <ConfigColorScheme.hxx>
+#include <DiagramHelper.hxx>
+#include <ThreeDHelper.hxx>
+#include <CloneHelper.hxx>
+#include <AxisHelper.hxx>
+#include <SceneProperties.hxx>
+#include <DisposeHelper.hxx>
+#include <BaseGFXHelper.hxx>
 #include <unonames.hxx>
 
 #include <basegfx/numeric/ftools.hxx>

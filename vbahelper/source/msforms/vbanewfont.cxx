@@ -18,7 +18,7 @@
  */
 
 #include <rtl/tencinfo.h>
-#include <vbanewfont.hxx>
+#include "vbanewfont.hxx"
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>

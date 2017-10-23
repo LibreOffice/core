@@ -19,15 +19,15 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CONNECTION_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CONNECTION_HXX
 
-#include "java/lang/Object.hxx"
-#include "TConnection.hxx"
+#include <java/lang/Object.hxx>
+#include <TConnection.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/OSubComponent.hxx>
 #include <cppuhelper/weakref.hxx>
-#include "AutoRetrievingBase.hxx"
-#include "java/sql/ConnectionLog.hxx"
-#include "java/LocalRef.hxx"
-#include "java/GlobalRef.hxx"
+#include <AutoRetrievingBase.hxx>
+#include <java/sql/ConnectionLog.hxx>
+#include <java/LocalRef.hxx>
+#include <java/GlobalRef.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 

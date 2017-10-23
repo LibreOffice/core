@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_NUMBERANIMATION_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_NUMBERANIMATION_HXX
 
-#include <animation.hxx>
+#include "animation.hxx"
 
 
 /* Definition of NumberAnimation interface */

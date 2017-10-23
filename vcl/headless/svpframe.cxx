@@ -20,9 +20,9 @@
 #include <string.h>
 #include <vcl/syswin.hxx>
 
-#include "headless/svpframe.hxx"
-#include "headless/svpinst.hxx"
-#include "headless/svpgdi.hxx"
+#include <headless/svpframe.hxx>
+#include <headless/svpinst.hxx>
+#include <headless/svpgdi.hxx>
 
 #include <basegfx/vector/b2ivector.hxx>
 

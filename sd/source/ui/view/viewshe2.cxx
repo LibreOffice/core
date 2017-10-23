@@ -24,11 +24,11 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
-#include "ViewShell.hxx"
-#include "ViewShellHint.hxx"
+#include <ViewShell.hxx>
+#include <ViewShellHint.hxx>
 
-#include "ViewShellImplementation.hxx"
-#include "FactoryIds.hxx"
+#include <ViewShellImplementation.hxx>
+#include <FactoryIds.hxx>
 
 #include <svx/svxids.hrc>
 #include <vcl/scrbar.hxx>
@@ -46,26 +46,26 @@
 #include <svx/dialogs.hrc>
 #include <comphelper/classids.hxx>
 
-#include "strings.hrc"
-#include "app.hrc"
-#include "unokywds.hxx"
+#include <strings.hrc>
+#include <app.hrc>
+#include <unokywds.hxx>
 
-#include "sdundogr.hxx"
-#include "FrameView.hxx"
-#include "undopage.hxx"
-#include "sdresid.hxx"
-#include "drawdoc.hxx"
-#include "View.hxx"
-#include "fupoor.hxx"
-#include "Client.hxx"
-#include "DrawDocShell.hxx"
-#include "fusearch.hxx"
-#include "slideshow.hxx"
-#include "sdpage.hxx"
-#include "DrawViewShell.hxx"
-#include "ViewShellBase.hxx"
+#include <sdundogr.hxx>
+#include <FrameView.hxx>
+#include <undopage.hxx>
+#include <sdresid.hxx>
+#include <drawdoc.hxx>
+#include <View.hxx>
+#include <fupoor.hxx>
+#include <Client.hxx>
+#include <DrawDocShell.hxx>
+#include <fusearch.hxx>
+#include <slideshow.hxx>
+#include <sdpage.hxx>
+#include <DrawViewShell.hxx>
+#include <ViewShellBase.hxx>
 
-#include "Window.hxx"
+#include <Window.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <svtools/soerr.hxx>

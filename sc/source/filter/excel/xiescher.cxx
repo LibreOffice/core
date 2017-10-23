@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xiescher.hxx"
+#include <xiescher.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -70,7 +70,7 @@
 #include <editeng/writingmodeitem.hxx>
 #include <svx/charthelper.hxx>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/colritem.hxx>
 #include <svx/xflclit.hxx>
@@ -83,29 +83,29 @@
 #include <svx/xbitmap.hxx>
 #include <svtools/embedhlp.hxx>
 
-#include "document.hxx"
-#include "drwlayer.hxx"
-#include "userdat.hxx"
-#include "chartarr.hxx"
-#include "detfunc.hxx"
-#include "unonames.hxx"
-#include "convuno.hxx"
-#include "postit.hxx"
-#include "globstr.hrc"
+#include <document.hxx>
+#include <drwlayer.hxx>
+#include <userdat.hxx>
+#include <chartarr.hxx>
+#include <detfunc.hxx>
+#include <unonames.hxx>
+#include <convuno.hxx>
+#include <postit.hxx>
+#include <globstr.hrc>
 
-#include "fprogressbar.hxx"
-#include "xltracer.hxx"
-#include "xistream.hxx"
-#include "xihelper.hxx"
-#include "xiformula.hxx"
-#include "xilink.hxx"
-#include "xistyle.hxx"
-#include "xipage.hxx"
-#include "xichart.hxx"
-#include "xicontent.hxx"
-#include "scextopt.hxx"
+#include <fprogressbar.hxx>
+#include <xltracer.hxx>
+#include <xistream.hxx>
+#include <xihelper.hxx>
+#include <xiformula.hxx>
+#include <xilink.hxx>
+#include <xistyle.hxx>
+#include <xipage.hxx>
+#include <xichart.hxx>
+#include <xicontent.hxx>
+#include <scextopt.hxx>
 
-#include "namebuff.hxx"
+#include <namebuff.hxx>
 #include <sfx2/docfile.hxx>
 #include <memory>
 #include <utility>

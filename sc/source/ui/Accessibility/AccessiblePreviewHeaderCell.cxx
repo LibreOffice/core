@@ -19,20 +19,20 @@
 
 #include <sal/config.h>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <tools/gen.hxx>
-#include "AccessibleText.hxx"
-#include "editsrc.hxx"
+#include <AccessibleText.hxx>
+#include <editsrc.hxx>
 #include <svx/AccessibleTextHelper.hxx>
-#include "AccessiblePreviewHeaderCell.hxx"
-#include "AccessibilityHints.hxx"
-#include "prevwsh.hxx"
-#include "miscuno.hxx"
-#include "prevloc.hxx"
-#include "scresid.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
+#include <AccessiblePreviewHeaderCell.hxx>
+#include <AccessibilityHints.hxx>
+#include <prevwsh.hxx>
+#include <miscuno.hxx>
+#include <prevloc.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

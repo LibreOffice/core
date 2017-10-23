@@ -22,7 +22,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <eehtml.hxx>
+#include "eehtml.hxx"
 #include <editeng/adjustitem.hxx>
 #include <editeng/flditem.hxx>
 #include <tools/urlobj.hxx>
@@ -34,7 +34,7 @@
 #include <svtools/htmlkywd.hxx>
 #include <tools/tenccvt.hxx>
 
-#include "editeng/editeng.hxx"
+#include <editeng/editeng.hxx>
 
 #define STYLE_PRE               101
 

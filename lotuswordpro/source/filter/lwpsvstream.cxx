@@ -53,7 +53,7 @@
  *
  *
  ************************************************************************/
-#include "lwpsvstream.hxx"
+#include <lwpsvstream.hxx>
 #include <tools/stream.hxx>
 
 const sal_uInt32 LwpSvStream::LWP_STREAM_BASE = 0x0010;

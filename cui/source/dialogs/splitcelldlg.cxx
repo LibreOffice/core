@@ -20,8 +20,8 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
-#include "dialmgr.hxx"
-#include "splitcelldlg.hxx"
+#include <dialmgr.hxx>
+#include <splitcelldlg.hxx>
 
 namespace {
     class NoApplyDialog : public SvxStandardDialog

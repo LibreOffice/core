@@ -27,7 +27,7 @@
 #include <vcl/layout.hxx>
 
 #include "anyrefdg.hxx"
-#include "dbdata.hxx"
+#include <dbdata.hxx>
 
 class ScViewData;
 class ScDocument;

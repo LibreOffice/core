@@ -19,20 +19,20 @@
 
 #include <config_features.h>
 
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 #include "TextConnectionHelper.hxx"
-#include "sqlmessage.hxx"
-#include "dbu_dlg.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "dbu_pageids.hxx"
+#include <sqlmessage.hxx>
+#include <dbu_dlg.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <dbu_pageids.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include "dsitems.hxx"
+#include <dsitems.hxx>
 #include "dbfindex.hxx"
-#include "helpids.h"
+#include <helpids.h>
 #include <vcl/layout.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/cjkoptions.hxx>
@@ -41,7 +41,7 @@
 #endif
 #include <connectivity/CommonTools.hxx>
 #include "DriverSettings.hxx"
-#include "dbadmin.hxx"
+#include <dbadmin.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>

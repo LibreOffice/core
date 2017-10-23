@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "NavigatorChildWindow.hxx"
-#include "navigatr.hxx"
-#include "app.hrc"
+#include <NavigatorChildWindow.hxx>
+#include <navigatr.hxx>
+#include <app.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>

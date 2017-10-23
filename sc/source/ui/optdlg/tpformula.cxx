@@ -22,11 +22,11 @@
 #include <scmod.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include "tpformula.hxx"
-#include "formulaopt.hxx"
-#include "sc.hrc"
-#include "strings.hrc"
-#include "scresid.hxx"
+#include <tpformula.hxx>
+#include <formulaopt.hxx>
+#include <sc.hrc>
+#include <strings.hrc>
+#include <scresid.hxx>
 #include <formula/grammar.hxx>
 #include "calcoptionsdlg.hxx"
 #include <vcl/msgbox.hxx>

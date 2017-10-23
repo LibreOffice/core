@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_CHARTSH_HXX
 
 #include <sfx2/shell.hxx>
-#include "shellids.hxx"
+#include <shellids.hxx>
 #include <sfx2/module.hxx>
 
 class ScViewData;

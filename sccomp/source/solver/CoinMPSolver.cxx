@@ -21,7 +21,7 @@
 #include <CoinError.hpp>
 
 #include "SolverComponent.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/table/CellAddress.hpp>

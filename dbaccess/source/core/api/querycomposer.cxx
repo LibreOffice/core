@@ -28,7 +28,7 @@
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <comphelper/processfactory.hxx>
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <unotools/configmgr.hxx>
@@ -38,9 +38,9 @@
 #include <unotools/syslocale.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
-#include "querycomposer.hxx"
+#include <querycomposer.hxx>
 #include "HelperCollections.hxx"
-#include "composertools.hxx"
+#include <composertools.hxx>
 #include <algorithm>
 
 using namespace dbaccess;

@@ -26,19 +26,19 @@
 #include <vcl/keycod.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-#include <IShellCursorSupplier.hxx>
+#include "IShellCursorSupplier.hxx"
 #include "swdllapi.h"
-#include <docary.hxx>
-#include <swtypes.hxx>
-#include <viewsh.hxx>
-#include <calbck.hxx>
-#include <cshtyp.hxx>
-#include <crstate.hxx>
-#include <toxe.hxx>
-#include <tblsel.hxx>
-#include <viscrs.hxx>
-#include <node.hxx>
-#include <IDocumentMarkAccess.hxx>
+#include "docary.hxx"
+#include "swtypes.hxx"
+#include "viewsh.hxx"
+#include "calbck.hxx"
+#include "cshtyp.hxx"
+#include "crstate.hxx"
+#include "toxe.hxx"
+#include "tblsel.hxx"
+#include "viscrs.hxx"
+#include "node.hxx"
+#include "IDocumentMarkAccess.hxx"
 
 class SfxItemSet;
 class SfxPoolItem;

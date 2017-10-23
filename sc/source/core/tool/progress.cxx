@@ -26,10 +26,10 @@
 #include <svl/itemset.hxx>
 
 #define SC_PROGRESS_CXX
-#include "progress.hxx"
-#include "document.hxx"
-#include "global.hxx"
-#include "globstr.hrc"
+#include <progress.hxx>
+#include <document.hxx>
+#include <global.hxx>
+#include <globstr.hrc>
 
 using namespace com::sun::star;
 

@@ -31,7 +31,7 @@
 #include <svx/langbox.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 #include <vcl/builderfactory.hxx>
 #include <vcl/i18nhelp.hxx>
 

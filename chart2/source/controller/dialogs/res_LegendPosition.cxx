@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "res_LegendPosition.hxx"
-#include "ChartModelHelper.hxx"
-#include "macros.hxx"
-#include "LegendHelper.hxx"
-#include "ChartModel.hxx"
+#include <res_LegendPosition.hxx>
+#include <ChartModelHelper.hxx>
+#include <macros.hxx>
+#include <LegendHelper.hxx>
+#include <ChartModel.hxx>
 
 #include <svtools/controldims.hxx>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 
 //itemset stuff
-#include "chartview/ChartSfxItemIds.hxx"
+#include <chartview/ChartSfxItemIds.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 

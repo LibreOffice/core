@@ -8,14 +8,14 @@
  */
 
 #include <memory>
-#include "colorscale.hxx"
-#include "document.hxx"
-#include "formulacell.hxx"
-#include "fillinfo.hxx"
-#include "bitmaps.hlst"
-#include "scresid.hxx"
-#include "tokenarray.hxx"
-#include "refupdatecontext.hxx"
+#include <colorscale.hxx>
+#include <document.hxx>
+#include <formulacell.hxx>
+#include <fillinfo.hxx>
+#include <bitmaps.hlst>
+#include <scresid.hxx>
+#include <tokenarray.hxx>
+#include <refupdatecontext.hxx>
 
 #include <formula/token.hxx>
 #include <o3tl/make_unique.hxx>

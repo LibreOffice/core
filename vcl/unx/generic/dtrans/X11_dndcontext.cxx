@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <X11_dndcontext.hxx>
-#include <X11_selection.hxx>
+#include "X11_dndcontext.hxx"
+#include "X11_selection.hxx"
 
 using namespace cppu;
 using namespace x11;

@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "rangelst.hxx"
-#include "scitems.hxx"
+#include <rangelst.hxx>
+#include <scitems.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "uiitems.hxx"
-#include "reffact.hxx"
-#include "document.hxx"
-#include "scresid.hxx"
-#include "globstr.hrc"
-#include "sc.hrc"
-#include "solvrdlg.hxx"
+#include <uiitems.hxx>
+#include <reffact.hxx>
+#include <document.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
+#include <sc.hrc>
+#include <solvrdlg.hxx>
 
 namespace
 {

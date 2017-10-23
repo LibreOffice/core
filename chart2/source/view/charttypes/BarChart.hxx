@@ -21,7 +21,7 @@
 #define INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_BARCHART_HXX
 
 #include <memory>
-#include "VSeriesPlotter.hxx"
+#include <VSeriesPlotter.hxx>
 
 namespace chart
 {
