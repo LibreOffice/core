@@ -202,10 +202,10 @@
                     "dest-filename": "external/tarballs/libe-book-0.1.2.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libetonyek-0.1.6.tar.bz2",
-                    "sha256": "032f53e8d7691e48a73ddbe74fa84c906ff6ff32a33e6ee2a935b6fdb6aecb78",
+                    "url": "https://dev-www.libreoffice.org/src/libetonyek-0.1.7.tar.bz2",
+                    "sha256": "69dbe10d4426d52f09060d489f8eb90dfa1df592e82eb0698d9dbaf38cc734ac",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libetonyek-0.1.6.tar.bz2"
+                    "dest-filename": "external/tarballs/libetonyek-0.1.7.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libexttextcat-3.4.5.tar.xz",
@@ -280,10 +280,10 @@
                     "dest-filename": "external/tarballs/ltm-1.0.zip"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libvisio-0.1.5.tar.bz2",
-                    "sha256": "b83b7991a40b4e7f07d0cac7bb46ddfac84dece705fd18e21bfd119a09be458e",
+                    "url": "https://dev-www.libreoffice.org/src/libvisio-0.1.6.tar.xz",
+                    "sha256": "fe1002d3671d53c09bc65e47ec948ec7b67e6fb112ed1cd10966e211a8bb50f9",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libvisio-0.1.5.tar.bz2"
+                    "dest-filename": "external/tarballs/libvisio-0.1.6.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libwpd-0.10.2.tar.xz",
