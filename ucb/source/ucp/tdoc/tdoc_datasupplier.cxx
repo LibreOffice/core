@@ -26,9 +26,9 @@
 
 #include <vector>
 
-#include "com/sun/star/ucb/IllegalIdentifierException.hpp"
-#include "osl/diagnose.h"
-#include "ucbhelper/contentidentifier.hxx"
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
+#include <osl/diagnose.h>
+#include <ucbhelper/contentidentifier.hxx>
 
 #include "tdoc_datasupplier.hxx"
 #include "tdoc_content.hxx"

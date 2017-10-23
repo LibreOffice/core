@@ -18,7 +18,7 @@
  */
 
 
-#include <contentresultsetwrapper.hxx>
+#include "contentresultsetwrapper.hxx"
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/ucb/FetchError.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

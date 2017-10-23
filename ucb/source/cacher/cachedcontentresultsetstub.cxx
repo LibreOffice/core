@@ -18,7 +18,7 @@
  */
 
 
-#include <cachedcontentresultsetstub.hxx>
+#include "cachedcontentresultsetstub.hxx"
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/ucb/FetchError.hpp>

@@ -24,7 +24,7 @@
 
  *************************************************************************/
 
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 #include "../inc/urihelper.hxx"
 
 #include "tdoc_uri.hxx"

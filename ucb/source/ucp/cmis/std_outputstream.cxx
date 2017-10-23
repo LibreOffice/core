@@ -12,7 +12,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <sal/log.hxx>
 
-#include <std_outputstream.hxx>
+#include "std_outputstream.hxx"
 
 using namespace std;
 using namespace com::sun::star;

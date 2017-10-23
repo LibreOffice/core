@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UCB_SOURCE_INC_REGEXPMAP_HXX
 #define INCLUDED_UCB_SOURCE_INC_REGEXPMAP_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <list>
 #include <memory>

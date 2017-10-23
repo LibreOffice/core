@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UCB_SOURCE_CACHER_CACHEDDYNAMICRESULTSETSTUB_HXX
 #define INCLUDED_UCB_SOURCE_CACHER_CACHEDDYNAMICRESULTSETSTUB_HXX
 
-#include <dynamicresultsetwrapper.hxx>
+#include "dynamicresultsetwrapper.hxx"
 #include <com/sun/star/ucb/XCachedDynamicResultSetStubFactory.hpp>
 
 #define CACHED_DRS_STUB_SERVICE_NAME "com.sun.star.ucb.CachedDynamicResultSetStub"

@@ -20,9 +20,9 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_INC_URIHELPER_HXX
 #define INCLUDED_UCB_SOURCE_UCP_INC_URIHELPER_HXX
 
-#include "rtl/ustring.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/uri.hxx"
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/uri.hxx>
 
 
 namespace ucb_impl { namespace urihelper {

@@ -22,17 +22,17 @@
 
 #include <memory>
 
-#include "osl/mutex.hxx"
-#include "rtl/ref.hxx"
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 
 #include <cppuhelper/implbase.hxx>
 
-#include "com/sun/star/embed/XStorage.hpp"
-#include "com/sun/star/embed/XTransactedObject.hpp"
-#include "com/sun/star/io/XOutputStream.hpp"
-#include "com/sun/star/io/XStream.hpp"
-#include "com/sun/star/io/XTruncate.hpp"
-#include "com/sun/star/lang/XComponent.hpp"
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/io/XTruncate.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 
 #include "tdoc_storage.hxx"
 

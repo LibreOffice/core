@@ -13,7 +13,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <sal/log.hxx>
 
-#include <std_inputstream.hxx>
+#include "std_inputstream.hxx"
 
 using namespace std;
 using namespace com::sun::star;

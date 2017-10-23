@@ -27,7 +27,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include "com/sun/star/io/XAsyncOutputMonitor.hpp"
+#include <com/sun/star/io/XAsyncOutputMonitor.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <cppuhelper/implbase.hxx>
 

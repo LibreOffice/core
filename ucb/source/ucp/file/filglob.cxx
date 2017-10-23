@@ -34,16 +34,16 @@
 #include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
-#include "com/sun/star/beans/PropertyState.hpp"
-#include "com/sun/star/beans/PropertyValue.hpp"
+#include <com/sun/star/beans/PropertyState.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "osl/diagnose.h"
-#include "rtl/ustrbuf.hxx"
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
-#include "sal/types.h"
+#include <sal/types.h>
 
 using namespace ucbhelper;
 using namespace osl;

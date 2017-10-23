@@ -26,13 +26,13 @@
  *
  ************************************************************************/
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <string.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "ne_alloc.h"
+#include <ne_alloc.h>
 #include "NeonUri.hxx"
 #include "DAVException.hxx"
 

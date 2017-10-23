@@ -60,7 +60,7 @@
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <osl/diagnose.h>
 #include <sal/macros.h>
-#include <tdoc_content.hxx>
+#include "tdoc_content.hxx"
 
 namespace com { namespace sun { namespace star { namespace embed {
     class XStorage;

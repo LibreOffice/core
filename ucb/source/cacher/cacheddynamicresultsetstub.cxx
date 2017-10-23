@@ -18,9 +18,9 @@
  */
 
 
-#include <cacheddynamicresultsetstub.hxx>
+#include "cacheddynamicresultsetstub.hxx"
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include <cachedcontentresultsetstub.hxx>
+#include "cachedcontentresultsetstub.hxx"
 #include <com/sun/star/ucb/ContentResultSetCapability.hpp>
 #include <com/sun/star/ucb/SortedDynamicResultSetFactory.hpp>
 #include <osl/diagnose.h>

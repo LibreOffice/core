@@ -60,8 +60,8 @@
 #include "cmis_provider.hxx"
 #include "cmis_resultset.hxx"
 #include "cmis_strings.hxx"
-#include <std_inputstream.hxx>
-#include <std_outputstream.hxx>
+#include "std_inputstream.hxx"
+#include "std_outputstream.hxx"
 
 #define OUSTR_TO_STDSTR(s) string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
 #define STD_TO_OUSTR( str ) OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )

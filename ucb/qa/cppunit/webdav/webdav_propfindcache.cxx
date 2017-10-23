@@ -10,7 +10,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cmath>
-#include "PropfindCache.hxx"
+#include <PropfindCache.hxx>
 
 using namespace webdav_ucp;
 

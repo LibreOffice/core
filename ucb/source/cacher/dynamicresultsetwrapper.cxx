@@ -18,7 +18,7 @@
  */
 
 
-#include <dynamicresultsetwrapper.hxx>
+#include "dynamicresultsetwrapper.hxx"
 #include <ucbhelper/macros.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>

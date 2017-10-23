@@ -18,9 +18,9 @@
  */
 
 
-#include "cppuhelper/factory.hxx"
+#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "com/sun/star/lang/IllegalArgumentException.hpp"
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include "cmdenv.hxx"
 

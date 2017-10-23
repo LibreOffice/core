@@ -30,8 +30,8 @@
 #include <unordered_map>
 #include <vector>
 #include <string.h>
-#include "osl/diagnose.h"
-#include "osl/time.h"
+#include <osl/diagnose.h>
+#include <osl/time.h>
 #include <rtl/string.h>
 #include <ne_socket.h>
 #include <ne_auth.h>
@@ -43,11 +43,11 @@ extern "C" {
 #include <ne_compress.h>
 }
 
-#include "libxml/parser.h"
-#include "rtl/ustrbuf.hxx"
-#include "comphelper/processfactory.hxx"
-#include "comphelper/sequence.hxx"
-#include "ucbhelper/simplecertificatevalidationrequest.hxx"
+#include <libxml/parser.h>
+#include <rtl/ustrbuf.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
+#include <ucbhelper/simplecertificatevalidationrequest.hxx>
 
 #include "DAVAuthListener.hxx"
 #include "NeonTypes.hxx"

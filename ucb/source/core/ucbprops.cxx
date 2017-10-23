@@ -35,7 +35,7 @@
 #include <com/sun/star/ucb/VerificationMode.hpp>
 #include <com/sun/star/ucb/XDataContainer.hpp>
 
-#include <ucbprops.hxx>
+#include "ucbprops.hxx"
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;

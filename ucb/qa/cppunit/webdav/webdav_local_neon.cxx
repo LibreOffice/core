@@ -10,7 +10,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
-#include "NeonUri.hxx"
+#include <NeonUri.hxx>
 
 using namespace webdav_ucp;
 

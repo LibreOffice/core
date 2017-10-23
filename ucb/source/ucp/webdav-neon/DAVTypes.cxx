@@ -8,7 +8,7 @@
  */
 
 
-#include "osl/time.h"
+#include <osl/time.h>
 
 #include "DAVTypes.hxx"
 #include "../inc/urihelper.hxx"

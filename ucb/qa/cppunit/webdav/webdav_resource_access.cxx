@@ -9,8 +9,8 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <cppunit/plugin/TestPlugIn.h>
-#include "DAVResourceAccess.hxx"
-#include "DAVException.hxx"
+#include <DAVResourceAccess.hxx>
+#include <DAVException.hxx>
 
 using namespace webdav_ucp;
 

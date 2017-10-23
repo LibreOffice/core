@@ -18,7 +18,7 @@
  */
 
 
-#include <cachedcontentresultset.hxx>
+#include "cachedcontentresultset.hxx"
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/ucb/FetchError.hpp>
 #include <com/sun/star/ucb/ResultSetException.hpp>

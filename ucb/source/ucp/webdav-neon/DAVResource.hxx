@@ -32,8 +32,8 @@
 #include <config_lgpl.h>
 #include <vector>
 
-#include "rtl/ustring.hxx"
-#include "com/sun/star/uno/Any.hxx"
+#include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Any.hxx>
 
 namespace webdav_ucp
 {

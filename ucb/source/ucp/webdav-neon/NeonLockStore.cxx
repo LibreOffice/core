@@ -28,10 +28,10 @@
 
 
 #include <ne_uri.h>
-#include "rtl/ustring.hxx"
-#include "osl/time.h"
-#include "osl/thread.hxx"
-#include "salhelper/thread.hxx"
+#include <rtl/ustring.hxx>
+#include <osl/time.h>
+#include <osl/thread.hxx>
+#include <salhelper/thread.hxx>
 #include "NeonSession.hxx"
 #include "NeonLockStore.hxx"
 
