@@ -32,18 +32,18 @@
 #include <vcl/graphicfilter.hxx>
 #include <svtools/langhelp.hxx>
 
-#include "com/sun/star/system/SystemShellExecuteFlags.hpp"
-#include "com/sun/star/system/SystemShellExecute.hpp"
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <comphelper/processfactory.hxx>
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
-#include "cppuhelper/bootstrap.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/bootstrap.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <svtools/optionsdrawinglayer.hxx>
 
 #include <sfx2/sfxuno.hxx>
-#include "about.hxx"
+#include <about.hxx>
 #include <config_buildid.h>
 #include <sfx2/app.hxx>
 #include <rtl/ustrbuf.hxx>

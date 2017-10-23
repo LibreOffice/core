@@ -31,7 +31,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <svtools/miscopt.hxx>
 
-#include "helpids.h"
+#include <helpids.h>
 #include <strings.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
@@ -41,7 +41,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/restartdialog.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/inputdlg.hxx>
 #include <comphelper/processfactory.hxx>

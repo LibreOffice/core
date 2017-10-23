@@ -44,7 +44,7 @@
 #include <svx/sxmtritm.hxx>
 #include <svx/sxmuitm.hxx>
 
-#include "measure.hxx"
+#include <measure.hxx>
 
 const sal_uInt16 SvxMeasurePage::pRanges[] =
 {

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "CommandCategoryListBox.hxx"
+#include <CommandCategoryListBox.hxx>
 #include <svtools/treelistentry.hxx>
 
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
@@ -30,8 +30,8 @@
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <unotools/textsearch.hxx>
 
-#include "dialmgr.hxx"
-#include "strings.hrc"
+#include <dialmgr.hxx>
+#include <strings.hrc>
 #include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/make_unique.hxx>
 #include <i18nutil/searchopt.hxx>

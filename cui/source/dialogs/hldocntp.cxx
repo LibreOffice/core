@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hldocntp.hxx"
+#include <hldocntp.hxx>
 #include <osl/file.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfac.hxx>
@@ -38,8 +38,8 @@
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
-#include "bitmaps.hlst"
-#include "strings.hrc"
+#include <bitmaps.hlst>
+#include <strings.hrc>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;

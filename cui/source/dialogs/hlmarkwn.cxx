@@ -37,11 +37,11 @@
 #include <com/sun/star/io/IOException.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 #include <strings.hrc>
-#include "hlmarkwn.hxx"
-#include "hltpbase.hxx"
+#include <hlmarkwn.hxx>
+#include <hltpbase.hxx>
 
 using namespace ::com::sun::star;
 

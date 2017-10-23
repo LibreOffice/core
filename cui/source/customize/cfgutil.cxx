@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "cfgutil.hxx"
-#include "cfg.hxx"
+#include <cfgutil.hxx>
+#include <cfg.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -36,7 +36,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/ui/theUICategoryDescription.hpp>
 
-#include "helpids.h"
+#include <helpids.h>
 #include <basic/sbx.hxx>
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/sbstar.hxx>
@@ -44,8 +44,8 @@
 #include <basic/sbmod.hxx>
 #include <basic/basmgr.hxx>
 #include <tools/urlobj.hxx>
-#include "strings.hrc"
-#include "bitmaps.hlst"
+#include <strings.hrc>
+#include <bitmaps.hlst>
 #include <sfx2/app.hxx>
 #include <sfx2/minfitem.hxx>
 #include <comphelper/documentinfo.hxx>
@@ -53,10 +53,10 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
 #include <svtools/imagemgr.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/configmgr.hxx>
-#include "dialmgr.hxx"
+#include <dialmgr.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/button.hxx>

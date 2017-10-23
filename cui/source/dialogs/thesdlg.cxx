@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "thesdlg.hxx"
+#include <thesdlg.hxx>
 #include "thesdlg_impl.hxx"
-#include "strings.hrc"
-#include "dialmgr.hxx"
+#include <strings.hrc>
+#include <dialmgr.hxx>
 
 #include <svl/lngmisc.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistbox.hxx>
-#include "svtools/treelistentry.hxx"
-#include "svtools/viewdataentry.hxx"
+#include <svtools/treelistentry.hxx>
+#include <svtools/viewdataentry.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>

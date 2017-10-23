@@ -24,27 +24,27 @@
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <strings.hrc>
-#include "helpids.h"
+#include <helpids.h>
 
-#include "svx/xattr.hxx"
+#include <svx/xattr.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
 
-#include "svx/drawitem.hxx"
-#include "cuitabline.hxx"
-#include "dlgname.hxx"
-#include "defdlgname.hxx"
+#include <svx/drawitem.hxx>
+#include <cuitabline.hxx>
+#include <dlgname.hxx>
+#include <defdlgname.hxx>
 #include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
 #include <o3tl/make_unique.hxx>
-#include "cuitabarea.hxx"
+#include <cuitabarea.hxx>
 
 #define XOUT_WIDTH    150
 

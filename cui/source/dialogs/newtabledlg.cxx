@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dialmgr.hxx"
-#include "newtabledlg.hxx"
+#include <dialmgr.hxx>
+#include <newtabledlg.hxx>
 
 SvxNewTableDialog::SvxNewTableDialog()
     : m_pDialog( VclPtr<ModalDialog>::Create( nullptr, "NewTableDialog", "cui/ui/newtabledialog.ui" ) )

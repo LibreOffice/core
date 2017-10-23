@@ -41,7 +41,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
-#include "cuicharmap.hxx"
+#include <cuicharmap.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/xtable.hxx>
@@ -66,7 +66,7 @@
 #include <algorithm>
 #include <memory>
 #include <vector>
-#include "sfx2/opengrf.hxx"
+#include <sfx2/opengrf.hxx>
 
 #include <strings.hrc>
 #include <sfx2/request.hxx>
@@ -74,8 +74,8 @@
 #include <svl/stritem.hxx>
 #include <svl/slstitm.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include "svx/gallery1.hxx"
-#include "svx/galtheme.hxx"
+#include <svx/gallery1.hxx>
+#include <svx/galtheme.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <rtl/ustring.h>

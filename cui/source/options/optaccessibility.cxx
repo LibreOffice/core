@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <optaccessibility.hxx>
+#include "optaccessibility.hxx"
 #include <dialmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

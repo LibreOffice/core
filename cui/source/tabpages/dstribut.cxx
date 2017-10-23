@@ -18,7 +18,7 @@
  */
 
 #include <sfx2/basedlgs.hxx>
-#include "dstribut.hxx"
+#include <dstribut.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svddef.hxx>
 #include <dialmgr.hxx>

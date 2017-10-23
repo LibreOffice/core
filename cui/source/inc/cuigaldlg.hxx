@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_CUIGALDLG_HXX
 #define INCLUDED_CUI_SOURCE_INC_CUIGALDLG_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <salhelper/thread.hxx>
 #include <vcl/dialog.hxx>

@@ -34,7 +34,7 @@
 #include <svx/sxelditm.hxx>
 #include <svx/sxenditm.hxx>
 
-#include "connect.hxx"
+#include <connect.hxx>
 
 const sal_uInt16 SvxConnectionPage::pRanges[] =
 {

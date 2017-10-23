@@ -34,7 +34,7 @@
 
 #include <linguistic/misc.hxx>
 #include <strings.hrc>
-#include "optdict.hxx"
+#include <optdict.hxx>
 #include <dialmgr.hxx>
 #include <svx/svxerr.hxx>
 

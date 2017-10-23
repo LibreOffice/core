@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "bbdlg.hxx"
-#include "border.hxx"
-#include "backgrnd.hxx"
-#include "svx/svxids.hrc"
-#include "cuitabarea.hxx"
+#include <bbdlg.hxx>
+#include <border.hxx>
+#include <backgrnd.hxx>
+#include <svx/svxids.hrc>
+#include <cuitabarea.hxx>
 
 SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(vcl::Window *pParent,
     const SfxItemSet& rCoreSet,

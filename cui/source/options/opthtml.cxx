@@ -20,7 +20,7 @@
 #include <svtools/langtab.hxx>
 #include <svtools/htmlcfg.hxx>
 #include "opthtml.hxx"
-#include "helpids.h"
+#include <helpids.h>
 #include <dialmgr.hxx>
 #include <sal/macros.h>
 

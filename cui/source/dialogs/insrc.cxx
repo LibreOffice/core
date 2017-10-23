@@ -20,7 +20,7 @@
 #include <dialmgr.hxx>
 #include <svx/svxdlg.hxx>
 #include <strings.hrc>
-#include "insrc.hxx"
+#include <insrc.hxx>
 
 bool SvxInsRowColDlg::isInsertBefore() const
 {

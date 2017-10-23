@@ -23,7 +23,7 @@
 #include <vcl/builderfactory.hxx>
 #include "connpoolsettings.hxx"
 #include <svl/eitem.hxx>
-#include "helpids.h"
+#include <helpids.h>
 #include <strings.hrc>
 #include <dialmgr.hxx>
 

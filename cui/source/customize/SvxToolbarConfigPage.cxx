@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <stdlib.h>
@@ -47,19 +47,19 @@
 #include <svl/stritem.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/svlbitm.hxx>
-#include "svtools/treelistentry.hxx"
-#include "svtools/viewdataentry.hxx"
+#include <svtools/treelistentry.hxx>
+#include <svtools/viewdataentry.hxx>
 #include <tools/diagnose_ex.h>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <algorithm>
-#include "helpids.h"
-#include "strings.hrc"
+#include <helpids.h>
+#include <strings.hrc>
 
-#include "acccfg.hxx"
-#include "cfg.hxx"
-#include "SvxToolbarConfigPage.hxx"
-#include "SvxConfigPageHelper.hxx"
+#include <acccfg.hxx>
+#include <cfg.hxx>
+#include <SvxToolbarConfigPage.hxx>
+#include <SvxConfigPageHelper.hxx>
 #include "eventdlg.hxx"
 #include <dialmgr.hxx>
 
@@ -96,11 +96,11 @@
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/ui/theWindowStateConfiguration.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
 
-#include "dlgname.hxx"
+#include <dlgname.hxx>
 
 SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     : SvxConfigPage(pParent, rSet)

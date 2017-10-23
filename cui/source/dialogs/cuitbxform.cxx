@@ -25,7 +25,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
 #include <dialmgr.hxx>
-#include "cuitbxform.hxx"
+#include <cuitbxform.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 

@@ -22,22 +22,22 @@
 
 #include <svx/dialogs.hrc>
 
-#include "strings.hrc"
-#include "treeopt.hrc"
-#include "helpids.h"
+#include <strings.hrc>
+#include <treeopt.hrc>
+#include <helpids.h>
 
 #include "cfgchart.hxx"
 #include "connpoolconfig.hxx"
 #include "connpooloptions.hxx"
-#include "cuioptgenrl.hxx"
-#include "cuitabarea.hxx"
-#include "dbregister.hxx"
+#include <cuioptgenrl.hxx>
+#include <cuitabarea.hxx>
+#include <dbregister.hxx>
 #include "dbregisterednamesconfig.hxx"
-#include "dialmgr.hxx"
+#include <dialmgr.hxx>
 #include "fontsubs.hxx"
 #include "optaboutconfig.hxx"
 #include "optaccessibility.hxx"
-#include "optasian.hxx"
+#include <optasian.hxx>
 #include "optchart.hxx"
 #include "optcolor.hxx"
 #include "optctl.hxx"
@@ -47,15 +47,15 @@
 #include "optinet2.hxx"
 #include "optjava.hxx"
 #include "optjsearch.hxx"
-#include "optlingu.hxx"
+#include <optlingu.hxx>
 #if HAVE_FEATURE_OPENCL
 #include "optopencl.hxx"
 #endif
-#include "optpath.hxx"
+#include <optpath.hxx>
 #include "optsave.hxx"
 #include "optupdt.hxx"
 #include "personalization.hxx"
-#include "treeopt.hxx"
+#include <treeopt.hxx>
 #include "optbasic.hxx"
 
 #include <com/sun/star/awt/XContainerWindowEventHandler.hpp>
@@ -104,7 +104,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 #ifdef LINUX
 #include <sys/stat.h>

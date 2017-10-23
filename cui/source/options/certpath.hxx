@@ -14,7 +14,7 @@
 #include <svtools/simptabl.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include "radiobtnbox.hxx"
+#include <radiobtnbox.hxx>
 
 class CertPathDialog : public ModalDialog
 {

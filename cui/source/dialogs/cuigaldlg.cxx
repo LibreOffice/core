@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <algorithm>
 #include <cassert>
@@ -32,9 +32,9 @@
 #include <vcl/graphicfilter.hxx>
 #include <svx/gallery1.hxx>
 #include <svx/galtheme.hxx>
-#include "cuigaldlg.hxx"
-#include "helpids.h"
-#include "bitmaps.hlst"
+#include <cuigaldlg.hxx>
+#include <helpids.h>
+#include <bitmaps.hlst>
 #include <unotools/syslocale.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -46,8 +46,8 @@
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <sfx2/sfxuno.hxx>
-#include "dialmgr.hxx"
-#include "strings.hrc"
+#include <dialmgr.hxx>
+#include <strings.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>

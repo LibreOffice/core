@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hangulhanjadlg.hxx"
+#include <hangulhanjadlg.hxx>
 #include <dialmgr.hxx>
 
-#include "helpids.h"
-#include "strings.hrc"
+#include <helpids.h>
+#include <strings.hrc>
 
 #include <algorithm>
 #include <vcl/controllayout.hxx>
@@ -40,7 +40,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <svtools/svlbitm.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 #define HHC editeng::HangulHanjaConversion
 #define LINE_CNT        static_cast< sal_uInt16 >(2)

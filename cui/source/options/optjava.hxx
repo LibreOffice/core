@@ -33,7 +33,7 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <svtools/dialogclosedlistener.hxx>
 #include <svtools/simptabl.hxx>
-#include "radiobtnbox.hxx"
+#include <radiobtnbox.hxx>
 
 // forward ---------------------------------------------------------------
 

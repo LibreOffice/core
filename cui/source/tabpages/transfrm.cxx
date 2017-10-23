@@ -29,11 +29,11 @@
 #include <svx/transfrmhelper.hxx>
 #include <editeng/sizeitem.hxx>
 
-#include "transfrm.hxx"
+#include <transfrm.hxx>
 #include <dialmgr.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <editeng/svxenum.hxx>
-#include "svx/anchorid.hxx"
+#include <svx/anchorid.hxx>
 #include <sfx2/module.hxx>
 #include <svl/rectitem.hxx>
 #include <svl/aeitem.hxx>

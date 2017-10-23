@@ -47,12 +47,12 @@
 #include <rtl/strbuf.hxx>
 #include <o3tl/make_unique.hxx>
 
-#include "autocdlg.hxx"
-#include "helpids.h"
+#include <autocdlg.hxx>
+#include <helpids.h>
 #include <editeng/acorrcfg.hxx>
 #include <editeng/svxacorr.hxx>
-#include "cuicharmap.hxx"
-#include "strings.hrc"
+#include <cuicharmap.hxx>
+#include <strings.hrc>
 #include <editeng/unolingu.hxx>
 #include <dialmgr.hxx>
 #include <svx/svxids.hrc>

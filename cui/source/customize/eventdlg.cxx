@@ -41,13 +41,13 @@
 #include <unotools/eventcfg.hxx>
 #include <svtools/treelistentry.hxx>
 
-#include "headertablistbox.hxx"
+#include <headertablistbox.hxx>
 #include "macropg_impl.hxx"
 
 #include <dialmgr.hxx>
-#include "helpids.h"
-#include "cfgutil.hxx"
-#include "cfg.hxx"
+#include <helpids.h>
+#include <cfgutil.hxx>
+#include <cfg.hxx>
 
 
 using namespace ::com::sun::star;

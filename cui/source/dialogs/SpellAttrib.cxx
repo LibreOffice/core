@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <SpellAttrib.hxx>
+#include "SpellAttrib.hxx"
 #include <vcl/font.hxx>
 
 using namespace svx;

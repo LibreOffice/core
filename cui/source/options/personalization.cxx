@@ -28,14 +28,14 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/mnemonic.hxx>
 #include <dialmgr.hxx>
-#include "strings.hrc"
-#include "personalization.hrc"
+#include <strings.hrc>
+#include <personalization.hrc>
 
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
-#include "ucbhelper/content.hxx"
+#include <ucbhelper/content.hxx>
 #include <comphelper/simplefileaccessinteraction.hxx>
 
 #define MAX_RESULTS 9

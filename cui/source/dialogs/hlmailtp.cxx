@@ -25,8 +25,8 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 
-#include "hlmailtp.hxx"
-#include "bitmaps.hlst"
+#include <hlmailtp.hxx>
+#include <bitmaps.hlst>
 
 using namespace ::com::sun::star;
 

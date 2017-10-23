@@ -21,8 +21,8 @@
 #include <unotools/useroptions.hxx>
 #include <svl/adrparse.hxx>
 
-#include "hlinettp.hxx"
-#include "hlmarkwn_def.hxx"
+#include <hlinettp.hxx>
+#include <hlmarkwn_def.hxx>
 
 sal_Char const sAnonymous[]    = "anonymous";
 sal_Char const sFTPScheme[]    = INET_FTP_SCHEME;

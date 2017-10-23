@@ -28,9 +28,9 @@
 #include <sfx2/sfxsids.hrc>
 #include <svl/macitem.hxx>
 #include <ucbhelper/content.hxx>
-#include "cuihyperdlg.hxx"
-#include "hltpbase.hxx"
-#include "macroass.hxx"
+#include <cuihyperdlg.hxx>
+#include <hltpbase.hxx>
+#include <macroass.hxx>
 #include <svx/svxdlg.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>

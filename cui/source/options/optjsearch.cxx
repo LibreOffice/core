@@ -20,7 +20,7 @@
 #include <unotools/searchopt.hxx>
 #include <i18nutil/transliteration.hxx>
 #include <dialmgr.hxx>
-#include <optjsearch.hxx>
+#include "optjsearch.hxx"
 
 using namespace com::sun::star::i18n;
 

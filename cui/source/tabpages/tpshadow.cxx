@@ -22,13 +22,13 @@
 #include <svx/colorbox.hxx>
 #include <svx/dialogs.hrc>
 
-#include "svx/xattr.hxx"
+#include <svx/xattr.hxx>
 #include <svx/xpool.hxx>
 #include <svx/svdattr.hxx>
-#include "svx/drawitem.hxx"
-#include "cuitabarea.hxx"
+#include <svx/drawitem.hxx>
+#include <cuitabarea.hxx>
 #include <dialmgr.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <cuitabline.hxx>
 #include <svx/xlineit0.hxx>
 #include <sfx2/request.hxx>

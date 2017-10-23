@@ -19,11 +19,11 @@
 
 #include <svl/cjkoptions.hxx>
 #include <svx/flagsdef.hxx>
-#include "sdrcelldlg.hxx"
-#include "dialmgr.hxx"
-#include "cuitabarea.hxx"
-#include "svx/svdmodel.hxx"
-#include "border.hxx"
+#include <sdrcelldlg.hxx>
+#include <dialmgr.hxx>
+#include <cuitabarea.hxx>
+#include <svx/svdmodel.hxx>
+#include <border.hxx>
 #include <svx/dialogs.hrc>
 
 SvxFormatCellsDialog::SvxFormatCellsDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel const * pModel )

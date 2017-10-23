@@ -38,7 +38,7 @@
 
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
-#include "backgrnd.hxx"
+#include <backgrnd.hxx>
 
 #include <svx/xtable.hxx>
 #include <sfx2/opengrf.hxx>

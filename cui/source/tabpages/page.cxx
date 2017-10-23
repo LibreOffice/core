@@ -31,8 +31,8 @@
 #include <sal/macros.h>
 
 #include <strings.hrc>
-#include "helpids.h"
-#include "page.hxx"
+#include <helpids.h>
+#include <page.hxx>
 #include <svx/pageitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -42,7 +42,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <editeng/paperinf.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/module.hxx>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "srchxtra.hxx"
+#include <srchxtra.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/whiter.hxx>
@@ -26,14 +26,14 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strarray.hxx>
 #include <editeng/flstitem.hxx>
-#include "chardlg.hxx"
-#include "paragrph.hxx"
+#include <chardlg.hxx>
+#include <paragrph.hxx>
 #include <dialmgr.hxx>
-#include "backgrnd.hxx"
+#include <backgrnd.hxx>
 #include <svx/dialogs.hrc>
 #include <tools/resary.hxx>
 #include <rtl/strbuf.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 SvxSearchFormatDialog::SvxSearchFormatDialog(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabDialog(pParent, "SearchFormatDialog", "cui/ui/searchformatdialog.ui", &rSet)
