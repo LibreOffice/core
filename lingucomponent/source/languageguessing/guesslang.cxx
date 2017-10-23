@@ -28,8 +28,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <simpleguesser.hxx>
-#include <guess.hxx>
+#include "simpleguesser.hxx"
+#include "guess.hxx"
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

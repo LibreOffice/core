@@ -26,7 +26,7 @@
 #include <textcat.h>
 #endif
 
-#include <guess.hxx>
+#include "guess.hxx"
 
 /* Old textcat.h versions defined bad spelled constants. */
 #ifndef TEXTCAT_RESULT_UNKNOWN_STR

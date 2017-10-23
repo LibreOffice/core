@@ -27,7 +27,7 @@
 #include <osl/mutex.hxx>
 
 #include <hyphen.h>
-#include <hyphenimp.hxx>
+#include "hyphenimp.hxx"
 
 #include <linguistic/hyphdta.hxx>
 #include <rtl/ustring.hxx>
