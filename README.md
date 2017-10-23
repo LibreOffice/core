@@ -33,17 +33,17 @@ These are the current minimal operating system and compiler versions to
 run and compile LibreOffice, also used by the TDF builds:
 
 * Windows:
- * Runtime: Windows 7
- * Build: Cygwin + Visual Studio 2015 Update 3
+    * Runtime: Windows 7
+    * Build: Cygwin + Visual Studio 2015 Update 3
 * macOS:
- * Runtime: 10.9
- * Build: 10.12 + Xcode 8
+    * Runtime: 10.9
+    * Build: 10.12 + Xcode 8
 * Linux:
- * Runtime: RHEL 6 or CentOS 6
- * Build: GCC 4.8.1 or Clang
+    * Runtime: RHEL 6 or CentOS 6
+    * Build: GCC 4.8.1 or Clang
 * iOS (only for LibreOfficeKit):
- * Runtime: 11.0 (only support for newer i devices == 64 bit)
- * Build: Xcode 9.0 and iPhone SDK 11.0
+    * Runtime: 11.0 (only support for newer i devices == 64 bit)
+    * Build: Xcode 9.0 and iPhone SDK 11.0
 
 If you want to use Clang with the LibreOffice compiler plugins, the minimal
 version of Clang is 3.4. Since Xcode doesn't provide the compiler plugin
