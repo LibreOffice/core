@@ -30,6 +30,7 @@
 #include <sal/macros.h>
 #include <tools/solar.h>
 #include <unotools/charclass.hxx>
+#include <unotools/configmgr.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
@@ -4144,7 +4145,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     if ( cSymbol[0] < 128 )
     {
         bMayBeFuncName = rtl::isAsciiAlpha( cSymbol[0] );
-        if (!bMayBeFuncName && (cSymbol[0] == '_' && cSymbol[1] == '_') )
+        if (!bMayBeFuncName && (cSymbol[0] == '_' && cSymbol[1] == '_') && !utl::ConfigManager::IsAvoidConfig())
         {
             SvtMiscOptions aOpt;
             bMayBeFuncName = aOpt.IsExperimentalMode();
