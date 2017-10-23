@@ -25,7 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 
-#include "i18nutil/paper.hxx"
+#include <i18nutil/paper.hxx>
 
 #include <utility>
 #include <cstdlib>

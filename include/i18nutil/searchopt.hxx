@@ -20,9 +20,9 @@
 #define INCLUDED_I18NUTIL_SEARCHOPT_HXX
 
 #include <sal/types.h>
-#include "com/sun/star/lang/Locale.hpp"
-#include "com/sun/star/util/SearchAlgorithms.hpp"
-#include "com/sun/star/util/SearchOptions2.hpp"
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/util/SearchAlgorithms.hpp>
+#include <com/sun/star/util/SearchOptions2.hpp>
 #include <i18nutil/i18nutildllapi.h>
 #include <i18nutil/transliteration.hxx>
 

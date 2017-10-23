@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "i18nutil/casefolding.hxx"
+#include <i18nutil/casefolding.hxx>
 #include "casefolding_data.h"
-#include "i18nutil/widthfolding.hxx"
-#include "i18nutil/transliteration.hxx"
+#include <i18nutil/widthfolding.hxx>
+#include <i18nutil/transliteration.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
