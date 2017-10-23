@@ -152,23 +152,6 @@ public:
             mfFirst(r.mfFirst), mfRest(r.mfRest), mnCount(r.mnCount) {}
     };
 
-    /// The maximum number of elements a matrix may have at runtime.
-    static size_t GetElementsMax()
-    {
-        // Arbitrarily assuming 12 bytes per element, 8 bytes double plus
-        // overhead. Stored as an array in an mdds container it's less, but for
-        // strings or mixed matrix it can be much more..
-        constexpr size_t nPerElem = 12;
-        // Arbitrarily assuming 1GB memory. Could be dynamic at some point.
-        constexpr size_t nMemMax = 0x40000000;
-        // With 1GB that's ~85M elements, or 85 whole columns.
-        constexpr size_t nElemMax = nMemMax / nPerElem;
-        // With MAXROWCOUNT==1048576 and 128 columns => 128M elements, 1.5GB
-        constexpr size_t nArbitraryLimit = (size_t)MAXROWCOUNT * 128;
-        // With the constant 1GB from above that's the actual value.
-        return nElemMax < nArbitraryLimit ? nElemMax : nArbitraryLimit;
-    }
-
     /** Checks nC or nR for zero and uses GetElementsMax() whether a matrix of
         the size of nC*nR could be allocated. A zero size (both nC and nR zero)
         matrix is allowed for later resize.
