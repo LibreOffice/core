@@ -7690,7 +7690,7 @@ libo_CHECK_SYSTEM_MODULE([libwpd],[WPD],[libwpd-0.10],["-I${WORKDIR}/UnpackedTar
 libo_CHECK_SYSTEM_MODULE([libwpg],[WPG],[libwpg-0.3])
 
 libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.4])
-libo_PKG_VERSION([WPS], [libwps-0.4], [0.4.6])
+libo_PKG_VERSION([WPS], [libwps-0.4], [0.4.7])
 
 libo_CHECK_SYSTEM_MODULE([libvisio],[VISIO],[libvisio-0.1])
 
@@ -7718,7 +7718,7 @@ libo_CHECK_SYSTEM_MODULE([libqxp],[QXP],[libqxp-0.0])
 libo_CHECK_SYSTEM_MODULE([libzmf],[ZMF],[libzmf-0.0])
 
 libo_CHECK_SYSTEM_MODULE([libstaroffice],[STAROFFICE],[libstaroffice-0.0])
-libo_PKG_VERSION([STAROFFICE], [libstaroffice-0.0], [0.0.3])
+libo_PKG_VERSION([STAROFFICE], [libstaroffice-0.0], [0.0.4])
 
 dnl ===================================================================
 dnl Check for system libcmis
