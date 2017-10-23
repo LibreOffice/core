@@ -747,7 +747,6 @@ sal_Bool SAL_CALL Hyphenator::removeLinguServiceEventListener(
 
 OUString SAL_CALL Hyphenator::getServiceDisplayName( const Locale& /*rLocale*/ )
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return OUString( "Libhyphen Hyphenator" );
 }
 
