@@ -20,7 +20,7 @@
 #ifndef INCLUDED_EMFIO_INC_EMFREADER_HXX
 #define INCLUDED_EMFIO_INC_EMFREADER_HXX
 
-#include <mtftools.hxx>
+#include "mtftools.hxx"
 
 namespace emfio
 {
