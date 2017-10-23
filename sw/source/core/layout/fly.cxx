@@ -1742,9 +1742,13 @@ SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
                 {
                     m_bFormatHeightOnly = true;
                 }
-                static_cast<SwFlyFreeFrame*>(this)->SetNoMoveOnCheckClip( true );
-                static_cast<SwFlyFreeFrame*>(this)->SwFlyFreeFrame::MakeAll(getRootFrame()->GetCurrShell()->GetOut());
-                static_cast<SwFlyFreeFrame*>(this)->SetNoMoveOnCheckClip( false );
+                SwViewShell* pSh = getRootFrame()->GetCurrShell();
+                if (pSh)
+                {
+                    static_cast<SwFlyFreeFrame*>(this)->SetNoMoveOnCheckClip( true );
+                    static_cast<SwFlyFreeFrame*>(this)->SwFlyFreeFrame::MakeAll(pSh->GetOut());
+                    static_cast<SwFlyFreeFrame*>(this)->SetNoMoveOnCheckClip( false );
+                }
                 // #i55416#
                 if ( rFrameSz.GetWidthSizeType() != ATT_FIX_SIZE )
                 {
