@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_UNX_GENERIC_DTRANS_X11_CLIPBOARD_HXX
 #define INCLUDED_VCL_UNX_GENERIC_DTRANS_X11_CLIPBOARD_HXX
 
-#include <X11_selection.hxx>
+#include "X11_selection.hxx"
 
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_SCHEDULERIMPL_HXX
 #define INCLUDED_VCL_INC_SCHEDULERIMPL_HXX
 
-#include <salwtype.hxx>
+#include "salwtype.hxx"
 #include <osl/mutex.hxx>
 #include <vcl/scheduler.hxx>
 

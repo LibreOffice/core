@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "openglgdiimpl.hxx"
+#include <openglgdiimpl.hxx>
 
 #include <vcl/gradient.hxx>
 #include <vcl/idle.hxx>
 #include <salframe.hxx>
-#include "salvd.hxx"
+#include <salvd.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -31,13 +31,13 @@
 #include <basegfx/polygon/b2dtrapezoid.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
-#include "salgdi.hxx"
-#include "svdata.hxx"
-#include "opengl/zone.hxx"
-#include "opengl/salbmp.hxx"
-#include "opengl/RenderState.hxx"
-#include "opengl/VertexUtils.hxx"
-#include "opengl/BufferObject.hxx"
+#include <salgdi.hxx>
+#include <svdata.hxx>
+#include <opengl/zone.hxx>
+#include <opengl/salbmp.hxx>
+#include <opengl/RenderState.hxx>
+#include <opengl/VertexUtils.hxx>
+#include <opengl/BufferObject.hxx>
 
 #include <vector>
 

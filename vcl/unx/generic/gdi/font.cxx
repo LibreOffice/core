@@ -20,11 +20,11 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/fontcharmap.hxx>
 
-#include "unx/saldisp.hxx"
-#include "unx/salgdi.h"
-#include "unx/salvd.h"
-#include "textrender.hxx"
-#include "CommonSalLayout.hxx"
+#include <unx/saldisp.hxx>
+#include <unx/salgdi.h>
+#include <unx/salvd.h>
+#include <textrender.hxx>
+#include <CommonSalLayout.hxx>
 
 GC
 X11SalGraphics::GetFontGC()

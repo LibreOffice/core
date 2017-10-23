@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "salinst.hxx"
-#include "salgdi.hxx"
-#include "salvd.hxx"
-#include "outdev.h"
-#include "PhysicalFontCollection.hxx"
-#include "svdata.hxx"
+#include <salinst.hxx>
+#include <salgdi.hxx>
+#include <salvd.hxx>
+#include <outdev.h>
+#include <PhysicalFontCollection.hxx>
+#include <svdata.hxx>
 #include <vcl/ITiledRenderable.hxx>
 
 using namespace ::com::sun::star::uno;

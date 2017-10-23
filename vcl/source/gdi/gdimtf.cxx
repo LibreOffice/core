@@ -34,7 +34,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <vcl/canvastools.hxx>
 
-#include "svmconverter.hxx"
+#include <svmconverter.hxx>
 
 #include <salbmp.hxx>
 #include <salinst.hxx>

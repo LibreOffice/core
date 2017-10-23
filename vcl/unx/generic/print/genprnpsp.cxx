@@ -35,7 +35,7 @@
 #include <sys/stat.h>
 
 #include <comphelper/fileurl.hxx>
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
@@ -45,18 +45,18 @@
 #include <vcl/svapp.hxx>
 #include <vcl/print.hxx>
 #include <vcl/pdfwriter.hxx>
-#include "printerinfomanager.hxx"
+#include <printerinfomanager.hxx>
 #include <vcl/settings.hxx>
-#include "strings.hrc"
-#include "saldatabasic.hxx"
-#include "unx/genprn.h"
-#include "unx/geninst.h"
-#include "unx/genpspgraphics.h"
+#include <strings.hrc>
+#include <saldatabasic.hxx>
+#include <unx/genprn.h>
+#include <unx/geninst.h>
+#include <unx/genpspgraphics.h>
 
-#include "jobset.h"
-#include "print.h"
+#include <jobset.h>
+#include <print.h>
 #include "prtsetup.hxx"
-#include "salptype.hxx"
+#include <salptype.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 

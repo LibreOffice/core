@@ -35,7 +35,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/syswin.hxx>
 
-#include "osl/file.h"
+#include <osl/file.h>
 
 #include "FPServiceInfo.hxx"
 #include "VCLKDEApplication.hxx"
@@ -56,9 +56,9 @@
 
 #undef Region
 
-#include "unx/geninst.h"
+#include <unx/geninst.h>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
 // The dialog should check whether LO also supports the protocol
 // provided by KIO, and KFileWidget::dirOperator() is only 4.3+ .
@@ -799,6 +799,6 @@ void KDE4FilePicker::selectionChanged()
         m_xListener->fileSelectionChanged( aEvent );
 }
 
-#include "KDE4FilePicker.moc"
+#include <KDE4FilePicker.moc>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

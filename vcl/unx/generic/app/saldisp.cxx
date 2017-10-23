@@ -34,8 +34,8 @@
 #include <X11/XKBlib.h>
 
 #include <X11/cursorfont.h>
-#include "unx/x11_cursors/salcursors.h"
-#include "unx/x11_cursors/invert50.h"
+#include <unx/x11_cursors/salcursors.h>
+#include <unx/x11_cursors/invert50.h>
 #ifdef __sun
 #define XK_KOREAN
 #endif
@@ -54,8 +54,8 @@
 #include <unx/salunx.h>
 #include <sal/log.hxx>
 #include <sal/types.h>
-#include "unx/i18n_im.hxx"
-#include "unx/i18n_xkb.hxx"
+#include <unx/i18n_im.hxx>
+#include <unx/i18n_xkb.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/saldata.hxx>
 #include <salinst.hxx>

@@ -20,7 +20,7 @@
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/lazydelete.hxx>
-#include "svdata.hxx"
+#include <svdata.hxx>
 
 namespace vcl {
 

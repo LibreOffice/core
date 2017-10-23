@@ -23,15 +23,15 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "tools/debug.hxx"
+#include <tools/debug.hxx>
 
-#include "sal/alloca.h"
+#include <sal/alloca.h>
 
 #include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/layout.hxx>
-#include "printerinfomanager.hxx"
+#include <printerinfomanager.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
@@ -44,31 +44,31 @@
 #include "FWS.hxx"
 #include <X11/extensions/shape.h>
 
-#include "unx/salunx.h"
-#include "saldatabasic.hxx"
-#include "unx/saldisp.hxx"
-#include "unx/salgdi.h"
-#include "unx/salframe.h"
-#include "unx/sm.hxx"
-#include "unx/wmadaptor.hxx"
-#include "unx/genprn.h"
-#include "unx/salbmp.h"
-#include "unx/i18n_ic.hxx"
-#include "unx/i18n_keysym.hxx"
-#include "unx/i18n_status.hxx"
+#include <unx/salunx.h>
+#include <saldatabasic.hxx>
+#include <unx/saldisp.hxx>
+#include <unx/salgdi.h>
+#include <unx/salframe.h>
+#include <unx/sm.hxx>
+#include <unx/wmadaptor.hxx>
+#include <unx/genprn.h>
+#include <unx/salbmp.h>
+#include <unx/i18n_ic.hxx>
+#include <unx/i18n_keysym.hxx>
+#include <unx/i18n_status.hxx>
 #include <unx/x11/xlimits.hxx>
-#include "opengl/zone.hxx"
+#include <opengl/zone.hxx>
 
-#include "unx/gensys.h"
-#include "sallayout.hxx"
+#include <unx/gensys.h>
+#include <sallayout.hxx>
 
 #include <sal/macros.h>
 #include <com/sun/star/uno/Exception.hpp>
 
-#include "svdata.hxx"
-#include "strings.hrc"
-#include "bitmaps.hlst"
-#include "impbmp.hxx"
+#include <svdata.hxx>
+#include <strings.hrc>
+#include <bitmaps.hlst>
+#include <impbmp.hxx>
 
 #include <boost/optional.hpp>
 

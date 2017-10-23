@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>

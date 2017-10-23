@@ -29,13 +29,13 @@
 #endif
 #include <memory>
 
-#include "impbmp.hxx"
-#include "impoctree.hxx"
+#include <impbmp.hxx>
+#include <impoctree.hxx>
 #include "impvect.hxx"
 
 #include <bitmapscalesuper.hxx>
-#include "octree.hxx"
-#include "BitmapScaleConvolution.hxx"
+#include <octree.hxx>
+#include <BitmapScaleConvolution.hxx>
 
 #define RGB15( _def_cR, _def_cG, _def_cB )  (((sal_uLong)(_def_cR)<<10)|((sal_uLong)(_def_cG)<<5)|(sal_uLong)(_def_cB))
 #define GAMMA( _def_cVal, _def_InvGamma )   ((sal_uInt8)MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255))

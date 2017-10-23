@@ -19,12 +19,12 @@
 
 #include <unistd.h>
 
-#include "unx/cpdmgr.hxx"
+#include <unx/cpdmgr.hxx>
 
-#include "osl/diagnose.h"
-#include "osl/thread.h"
+#include <osl/diagnose.h>
+#include <osl/thread.h>
 
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
 #include <config_dbus.h>
 #include <config_gio.h>

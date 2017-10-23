@@ -18,8 +18,8 @@
  */
 
 #include <X11/Xatom.h>
-#include <X11_clipboard.hxx>
-#include <X11_transferable.hxx>
+#include "X11_clipboard.hxx"
+#include "X11_transferable.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/datatransfer/clipboard/RenderingCapabilities.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

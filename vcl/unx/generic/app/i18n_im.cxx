@@ -32,15 +32,15 @@
 #include <X11/Xlocale.h>
 #include <unx/XIM.h>
 
-#include "unx/salunx.h"
-#include "unx/saldisp.hxx"
-#include "unx/i18n_im.hxx"
-#include "unx/i18n_status.hxx"
+#include <unx/salunx.h>
+#include <unx/saldisp.hxx>
+#include <unx/i18n_im.hxx>
+#include <unx/i18n_status.hxx>
 
 #include <osl/thread.h>
 #include <osl/process.h>
 
-#include "unx/i18n_cb.hxx"
+#include <unx/i18n_cb.hxx>
 
 using namespace vcl;
 

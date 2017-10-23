@@ -20,7 +20,7 @@
 
 #include <svdata.hxx>
 
-#include <dlgctrl.hxx>
+#include "dlgctrl.hxx"
 #include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>

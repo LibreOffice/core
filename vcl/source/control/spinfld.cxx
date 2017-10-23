@@ -23,9 +23,9 @@
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
-#include "controldata.hxx"
-#include "spin.hxx"
-#include "svdata.hxx"
+#include <controldata.hxx>
+#include <spin.hxx>
+#include <svdata.hxx>
 
 namespace {
 

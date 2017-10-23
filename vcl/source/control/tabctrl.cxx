@@ -34,9 +34,9 @@
 #include <strings.hrc>
 #include <bitmaps.hlst>
 
-#include "controldata.hxx"
-#include "svdata.hxx"
-#include "window.h"
+#include <controldata.hxx>
+#include <svdata.hxx>
+#include <window.h>
 
 #include <unordered_map>
 #include <vector>

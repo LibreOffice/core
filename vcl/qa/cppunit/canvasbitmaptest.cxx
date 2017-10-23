@@ -40,7 +40,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapex.hxx>
 
-#include "canvasbitmap.hxx"
+#include <canvasbitmap.hxx>
 #include <algorithm>
 
 using namespace ::com::sun::star;

@@ -21,9 +21,9 @@
 #include <cstdio>
 #include <cstring>
 
-#include <bmp.hxx>
+#include "bmp.hxx"
 
-#include <X11_selection.hxx>
+#include "X11_selection.hxx"
 #include <unx/x11/xlimits.hxx>
 
 #include <sal/macros.h>

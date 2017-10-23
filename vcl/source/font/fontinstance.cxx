@@ -18,8 +18,8 @@
  */
 
 
-#include "svdata.hxx"
-#include "fontinstance.hxx"
+#include <svdata.hxx>
+#include <fontinstance.hxx>
 
 // extend std namespace to add custom hash needed for LogicalFontInstance
 

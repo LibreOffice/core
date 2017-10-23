@@ -56,7 +56,7 @@
 #include <outdev.h>
 #include <brdwin.hxx>
 #include <helpwin.hxx>
-#include "dndlistenercontainer.hxx"
+#include <dndlistenercontainer.hxx>
 
 #include <com/sun/star/awt/XDisplayConnection.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>

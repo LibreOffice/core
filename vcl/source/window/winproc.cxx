@@ -48,7 +48,7 @@
 #include <helpwin.hxx>
 #include <brdwin.hxx>
 #include <salgdi.hxx>
-#include "dndlistenercontainer.hxx"
+#include <dndlistenercontainer.hxx>
 
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>

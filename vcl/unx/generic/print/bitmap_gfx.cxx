@@ -21,7 +21,7 @@
 #include <memory>
 #include "psputil.hxx"
 
-#include "unx/printergfx.hxx"
+#include <unx/printergfx.hxx>
 #include <vcl/strhelper.hxx>
 
 namespace psp {

@@ -22,7 +22,7 @@
 #include <tools/helpers.hxx>
 #include <osl/diagnose.hxx>
 
-#include "regband.hxx"
+#include <regband.hxx>
 
 // ImplRegionBand
 

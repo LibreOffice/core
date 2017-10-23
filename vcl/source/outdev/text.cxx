@@ -33,12 +33,12 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/controllayout.hxx>
 
-#include "outdata.hxx"
-#include "outdev.h"
-#include "salgdi.hxx"
-#include "svdata.hxx"
-#include "textlayout.hxx"
-#include "textlineinfo.hxx"
+#include <outdata.hxx>
+#include <outdev.h>
+#include <salgdi.hxx>
+#include <svdata.hxx>
+#include <textlayout.hxx>
+#include <textlineinfo.hxx>
 
 #define TEXT_DRAW_ELLIPSIS  (DrawTextFlags::EndEllipsis | DrawTextFlags::PathEllipsis | DrawTextFlags::NewsEllipsis)
 

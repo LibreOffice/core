@@ -21,9 +21,9 @@
 
 #include <cstring>
 
-#include "headless/svpbmp.hxx"
-#include "headless/svpgdi.hxx"
-#include "headless/svpinst.hxx"
+#include <headless/svpbmp.hxx>
+#include <headless/svpgdi.hxx>
+#include <headless/svpinst.hxx>
 
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/range/b2ibox.hxx>

@@ -33,7 +33,7 @@
 #include "unx/freetype_glyphcache.hxx"
 #endif
 
-#include <sallayout.hxx>
+#include "sallayout.hxx"
 #include <hb-icu.h>
 #include <hb-ot.h>
 

@@ -28,11 +28,11 @@
 #include <comphelper/sequence.hxx>
 #include <sal/types.h>
 
-#include "printdlg.hxx"
-#include "svdata.hxx"
-#include "salinst.hxx"
-#include "salprn.hxx"
-#include "strings.hrc"
+#include <printdlg.hxx>
+#include <svdata.hxx>
+#include <salinst.hxx>
+#include <salprn.hxx>
+#include <strings.hrc>
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>

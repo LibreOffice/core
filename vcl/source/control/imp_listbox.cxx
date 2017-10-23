@@ -28,7 +28,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/i18nhelp.hxx>
 
-#include "listbox.hxx"
+#include <listbox.hxx>
 #include <controldata.hxx>
 #include <svdata.hxx>
 #include <window.h>

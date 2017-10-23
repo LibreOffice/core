@@ -20,8 +20,8 @@
 #ifndef INCLUDED_VCL_INC_VCLPLUGINAPI_H
 #define INCLUDED_VCL_INC_VCLPLUGINAPI_H
 
-#include "sal/config.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sal/types.h>
 
 #if defined VCLPLUG_GEN_IMPLEMENTATION
 #define VCLPLUG_GEN_PUBLIC SAL_DLLPUBLIC_EXPORT

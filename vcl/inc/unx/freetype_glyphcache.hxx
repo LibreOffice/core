@@ -20,8 +20,8 @@
 #ifndef INCLUDED_VCL_GENERIC_GLYPHS_GCACH_FTYP_HXX
 #define INCLUDED_VCL_GENERIC_GLYPHS_GCACH_FTYP_HXX
 
-#include "unx/glyphcache.hxx"
-#include "PhysicalFontFace.hxx"
+#include <unx/glyphcache.hxx>
+#include <PhysicalFontFace.hxx>
 
 // FreetypeFontFile has the responsibility that a font file is only mapped once.
 // (#86621#) the old directly ft-managed solution caused it to be mapped

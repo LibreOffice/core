@@ -18,13 +18,13 @@
  */
 
 #include <memory>
-#include "impanmvw.hxx"
+#include <impanmvw.hxx>
 
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <tools/helpers.hxx>
 
-#include "window.h"
+#include <window.h>
 
 ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
                             const Point& rPt, const Size& rSz,

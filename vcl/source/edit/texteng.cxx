@@ -21,10 +21,10 @@
 
 #include <vcl/texteng.hxx>
 #include <vcl/textview.hxx>
-#include <textdoc.hxx>
-#include <textdat2.hxx>
-#include <textundo.hxx>
-#include <textund2.hxx>
+#include "textdoc.hxx"
+#include "textdat2.hxx"
+#include "textundo.hxx"
+#include "textund2.hxx"
 #include <svl/ctloptions.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>

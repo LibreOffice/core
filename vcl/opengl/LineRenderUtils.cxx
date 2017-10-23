@@ -8,7 +8,7 @@
  *
  */
 
-#include "opengl/LineRenderUtils.hxx"
+#include <opengl/LineRenderUtils.hxx>
 
 namespace vcl
 {

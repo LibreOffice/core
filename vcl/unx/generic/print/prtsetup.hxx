@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_GENERIC_PRINT_PRTSETUP_HXX
 #define INCLUDED_VCL_GENERIC_PRINT_PRTSETUP_HXX
 
-#include "tools/link.hxx"
+#include <tools/link.hxx>
 
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
@@ -32,7 +32,7 @@
 #include <vcl/field.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/ppdparser.hxx>
-#include "printerinfomanager.hxx"
+#include <printerinfomanager.hxx>
 
 class RTSPaperPage;
 class RTSDevicePage;

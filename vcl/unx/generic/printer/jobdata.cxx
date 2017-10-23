@@ -19,8 +19,8 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <vcl/jobdata.hxx>
-#include "printerinfomanager.hxx"
-#include "tools/stream.hxx"
+#include <printerinfomanager.hxx>
+#include <tools/stream.hxx>
 
 #include <rtl/strbuf.hxx>
 #include <memory>

@@ -21,10 +21,10 @@
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 
-#include "outdev.h"
-#include "outdata.hxx"
-#include "outdevstatestack.hxx"
-#include "salgdi.hxx"
+#include <outdev.h>
+#include <outdata.hxx>
+#include <outdevstatestack.hxx>
+#include <salgdi.hxx>
 
 OutDevState::OutDevState()
     : mpMapMode(nullptr)

@@ -13,7 +13,7 @@
 
 #include <vcl/dialog.hxx>
 
-#include "svdata.hxx"
+#include <svdata.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
 

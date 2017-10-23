@@ -42,7 +42,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "unx/gtk/gtkprintwrapper.hxx"
+#include <unx/gtk/gtkprintwrapper.hxx>
 
 extern "C"
 {

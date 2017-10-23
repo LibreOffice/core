@@ -25,10 +25,10 @@
 #include <vcl/metric.hxx>
 #include <config_cairo_canvas.h>
 
-#include "salgdi.hxx"
-#include "sallayout.hxx"
+#include <salgdi.hxx>
+#include <sallayout.hxx>
 #include "svpcairotextrender.hxx"
-#include "impfontmetricdata.hxx"
+#include <impfontmetricdata.hxx>
 
 #ifdef IOS
 #define SvpSalGraphics AquaSalGraphics

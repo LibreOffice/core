@@ -33,28 +33,28 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/jobdata.hxx>
-#include "printerinfomanager.hxx"
+#include <printerinfomanager.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <config_cairo_canvas.h>
 
-#include "fontsubset.hxx"
-#include "unx/geninst.h"
-#include "unx/genpspgraphics.h"
-#include "unx/glyphcache.hxx"
-#include "unx/printergfx.hxx"
-#include "impfont.hxx"
-#include "langboost.hxx"
-#include "fontinstance.hxx"
-#include "fontattributes.hxx"
-#include "impfontmetricdata.hxx"
-#include "PhysicalFontCollection.hxx"
-#include "PhysicalFontFace.hxx"
-#include "salbmp.hxx"
-#include "salprn.hxx"
-#include "CommonSalLayout.hxx"
+#include <fontsubset.hxx>
+#include <unx/geninst.h>
+#include <unx/genpspgraphics.h>
+#include <unx/glyphcache.hxx>
+#include <unx/printergfx.hxx>
+#include <impfont.hxx>
+#include <langboost.hxx>
+#include <fontinstance.hxx>
+#include <fontattributes.hxx>
+#include <impfontmetricdata.hxx>
+#include <PhysicalFontCollection.hxx>
+#include <PhysicalFontFace.hxx>
+#include <salbmp.hxx>
+#include <salprn.hxx>
+#include <CommonSalLayout.hxx>
 
 using namespace psp;
 

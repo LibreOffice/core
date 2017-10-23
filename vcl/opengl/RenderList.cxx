@@ -8,9 +8,9 @@
  *
  */
 
-#include "opengl/RenderList.hxx"
-#include "opengl/VertexUtils.hxx"
-#include "opengl/LineRenderUtils.hxx"
+#include <opengl/RenderList.hxx>
+#include <opengl/VertexUtils.hxx>
+#include <opengl/LineRenderUtils.hxx>
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>

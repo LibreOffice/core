@@ -32,7 +32,7 @@
 #include <svdata.hxx>
 #include <window.h>
 
-#include "sallayout.hxx"
+#include <sallayout.hxx>
 
 #define STATUSBAR_OFFSET_X      STATUSBAR_OFFSET
 #define STATUSBAR_OFFSET_Y      2

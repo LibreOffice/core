@@ -21,10 +21,10 @@
 #define INCLUDED_VCL_INC_GENERIC_PRINTERGFX_HXX
 
 #include <unx/helper.hxx>
-#include "sallayout.hxx"
-#include "osl/file.hxx"
-#include "tools/gen.hxx"
-#include "vclpluginapi.h"
+#include <sallayout.hxx>
+#include <osl/file.hxx>
+#include <tools/gen.hxx>
+#include <vclpluginapi.h>
 
 #include <list>
 #include <vector>

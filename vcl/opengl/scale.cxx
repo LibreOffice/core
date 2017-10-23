@@ -23,11 +23,11 @@
 
 #include <vcl/bitmap.hxx>
 
-#include "opengl/zone.hxx"
-#include "opengl/salbmp.hxx"
-#include "opengl/program.hxx"
-#include "opengl/texture.hxx"
-#include "opengl/RenderState.hxx"
+#include <opengl/zone.hxx>
+#include <opengl/salbmp.hxx>
+#include <opengl/program.hxx>
+#include <opengl/texture.hxx>
+#include <opengl/RenderState.hxx>
 
 #include <ResampleKernel.hxx>
 

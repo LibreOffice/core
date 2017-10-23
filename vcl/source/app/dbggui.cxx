@@ -25,17 +25,17 @@
 
 #include <tools/debug.hxx>
 #include <tools/lineend.hxx>
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/threadex.hxx>
 
-#include "svdata.hxx"
-#include "dbggui.hxx"
+#include <svdata.hxx>
+#include <dbggui.hxx>
 
-#include "salinst.hxx"
-#include "svsys.h"
+#include <salinst.hxx>
+#include <svsys.h>
 
 #include <algorithm>
 #include <memory>

@@ -11,7 +11,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include "unx/gtk/gtkprintwrapper.hxx"
+#include <unx/gtk/gtkprintwrapper.hxx>
 
 namespace vcl
 {

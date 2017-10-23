@@ -20,8 +20,8 @@
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/scheduler.hxx>
-#include "svdata.hxx"
-#include "salinst.hxx"
+#include <svdata.hxx>
+#include <salinst.hxx>
 
 // #define TEST_WATCHDOG
 

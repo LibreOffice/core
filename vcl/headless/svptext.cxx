@@ -20,10 +20,10 @@
 #include <sal/types.h>
 #include <vcl/fontcharmap.hxx>
 #include <basegfx/range/b2ibox.hxx>
-#include "headless/svpgdi.hxx"
+#include <headless/svpgdi.hxx>
 #include <config_cairo_canvas.h>
-#include "impfontmetricdata.hxx"
-#include "CommonSalLayout.hxx"
+#include <impfontmetricdata.hxx>
+#include <CommonSalLayout.hxx>
 
 void SvpSalGraphics::SetFont( FontSelectPattern* pIFSD, int nFallbackLevel )
 {

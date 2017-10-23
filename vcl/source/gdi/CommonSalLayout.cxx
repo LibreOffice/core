@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "CommonSalLayout.hxx"
+#include <CommonSalLayout.hxx>
 
 #include <vcl/unohelp.hxx>
 #include <scrptrun.h>

@@ -10,7 +10,7 @@
 #ifndef INCLUDED_VCL_GLM_GLMHELPER_HXX
 #define INCLUDED_VCL_GLM_GLMHELPER_HXX
 
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 #include <vcl/dllapi.h>
 
 #include <ostream>

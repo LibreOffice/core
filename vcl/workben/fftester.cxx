@@ -42,10 +42,10 @@
 #include <vcl/fltcall.hxx>
 #include <osl/file.hxx>
 
-#include <../source/filter/igif/gifread.hxx>
-#include <../source/filter/ixbm/xbmread.hxx>
-#include <../source/filter/ixpm/xpmread.hxx>
-#include <../source/filter/jpeg/jpeg.hxx>
+#include "../source/filter/igif/gifread.hxx"
+#include "../source/filter/ixbm/xbmread.hxx"
+#include "../source/filter/ixpm/xpmread.hxx"
+#include "../source/filter/jpeg/jpeg.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

@@ -56,18 +56,18 @@
 #endif
 #include <saltimer.hxx>
 
-#include "salinst.hxx"
-#include "salframe.hxx"
-#include "salsys.hxx"
-#include "svdata.hxx"
-#include "salimestatus.hxx"
-#include "displayconnectiondispatch.hxx"
-#include "window.h"
-#include "accmgr.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
+#include <salinst.hxx>
+#include <salframe.hxx>
+#include <salsys.hxx>
+#include <svdata.hxx>
+#include <salimestatus.hxx>
+#include <displayconnectiondispatch.hxx>
+#include <window.h>
+#include <accmgr.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
 #if OSL_DEBUG_LEVEL > 0
-#include "schedulerimpl.hxx"
+#include <schedulerimpl.hxx>
 #endif
 
 #include <com/sun/star/uno/Reference.h>

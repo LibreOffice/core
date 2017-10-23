@@ -16,11 +16,11 @@
 #include <vcl/svapp.hxx>
 #include <vcl/embeddedfontshelper.hxx>
 
-#include "fontsubset.hxx"
-#include "outdev.h"
-#include "PhysicalFontCollection.hxx"
-#include "salgdi.hxx"
-#include "sft.hxx"
+#include <fontsubset.hxx>
+#include <outdev.h>
+#include <PhysicalFontCollection.hxx>
+#include <salgdi.hxx>
+#include <sft.hxx>
 
 
 #if ENABLE_EOT

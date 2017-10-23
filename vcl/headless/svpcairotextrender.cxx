@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "headless/svpcairotextrender.hxx"
-#include "headless/svpgdi.hxx"
+#include <headless/svpcairotextrender.hxx>
+#include <headless/svpgdi.hxx>
 #include <cairo.h>
 
 SvpCairoTextRender::SvpCairoTextRender(SvpSalGraphics& rParent)

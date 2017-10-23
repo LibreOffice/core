@@ -24,7 +24,7 @@
 #include <vcl/window.hxx>
 #include <vcl/dibtools.hxx>
 
-#include "impanmvw.hxx"
+#include <impanmvw.hxx>
 
 #define MIN_TIMEOUT 2
 #define INC_TIMEOUT 0

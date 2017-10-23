@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "unx/nativewindowhandleprovider.hxx"
+#include <unx/nativewindowhandleprovider.hxx>
 
 NativeWindowHandleProvider::~NativeWindowHandleProvider()
 {

@@ -16,7 +16,7 @@
 
 #include <vcl/metric.hxx>
 
-#include "impfont.hxx"
+#include <impfont.hxx>
 
 class VclFontMetricTest : public test::BootstrapFixture
 {

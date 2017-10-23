@@ -31,18 +31,18 @@
 #include <deque>
 #include <unordered_map>
 
-#include "svdata.hxx"
-#include "salgdi.hxx"
-#include "salinst.hxx"
-#include "opengl/zone.hxx"
-#include "opengl/watchdog.hxx"
+#include <svdata.hxx>
+#include <salgdi.hxx>
+#include <salinst.hxx>
+#include <opengl/zone.hxx>
+#include <opengl/watchdog.hxx>
 #include <osl/conditn.hxx>
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <desktop/crashreport.hxx>
 
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
-#include "opengl/x11/X11DeviceInfo.hxx"
+#include <opengl/x11/X11DeviceInfo.hxx>
 #elif defined (_WIN32)
 #include "opengl/win/WinDeviceInfo.hxx"
 #endif

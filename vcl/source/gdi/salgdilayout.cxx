@@ -20,15 +20,15 @@
 #include <memory>
 #include <config_features.h>
 #if HAVE_FEATURE_OPENGL
-#include "openglgdiimpl.hxx"
+#include <openglgdiimpl.hxx>
 #include <opengl/zone.hxx>
 #include <desktop/exithelper.h>
 #ifdef _WIN32
 #include <svsys.h>
 #endif
 #endif
-#include "salgdi.hxx"
-#include "salframe.hxx"
+#include <salgdi.hxx>
+#include <salframe.hxx>
 #include <basegfx/numeric/ftools.hxx> //for F_PI180
 
 // The only common SalFrame method

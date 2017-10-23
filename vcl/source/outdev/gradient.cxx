@@ -28,7 +28,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 
-#include "salgdi.hxx"
+#include <salgdi.hxx>
 
 #define GRADIENT_DEFAULT_STEPCOUNT  0
 

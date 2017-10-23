@@ -21,16 +21,16 @@
 
 #include <osl/thread.hxx>
 
-#include "svdata.hxx"
-#include "salgdi.hxx"
-#include "salinst.hxx"
+#include <svdata.hxx>
+#include <salgdi.hxx>
+#include <salinst.hxx>
 
 #include <opengl/framebuffer.hxx>
 #include <opengl/program.hxx>
 #include <opengl/texture.hxx>
 #include <opengl/zone.hxx>
 
-#include "opengl/RenderState.hxx"
+#include <opengl/RenderState.hxx>
 
 using namespace com::sun::star;
 

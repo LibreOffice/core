@@ -26,15 +26,15 @@
 #include "psputil.hxx"
 #include "glyphset.hxx"
 
-#include "unx/printerjob.hxx"
-#include "unx/printergfx.hxx"
+#include <unx/printerjob.hxx>
+#include <unx/printergfx.hxx>
 #include <vcl/ppdparser.hxx>
 #include <vcl/strhelper.hxx>
-#include "printerinfomanager.hxx"
+#include <printerinfomanager.hxx>
 
-#include "rtl/ustring.hxx"
-#include "rtl/strbuf.hxx"
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustring.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <osl/thread.h>
 #include <osl/security.hxx>

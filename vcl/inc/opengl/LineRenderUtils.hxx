@@ -11,8 +11,8 @@
 #ifndef INCLUDED_VCL_INC_OPENGL_LINERENDERUTILS_H
 #define INCLUDED_VCL_INC_OPENGL_LINERENDERUTILS_H
 
-#include "opengl/VertexUtils.hxx"
-#include "opengl/RenderList.hxx"
+#include <opengl/VertexUtils.hxx>
+#include <opengl/RenderList.hxx>
 
 namespace vcl
 {

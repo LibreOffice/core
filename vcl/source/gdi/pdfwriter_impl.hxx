@@ -42,10 +42,10 @@
 #include <vcl/wall.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-#include "sallayout.hxx"
-#include "outdata.hxx"
+#include <sallayout.hxx>
+#include <outdata.hxx>
 #include "pdffontcache.hxx"
-#include "PhysicalFontFace.hxx"
+#include <PhysicalFontFace.hxx>
 
 class StyleSettings;
 class FontSelectPattern;

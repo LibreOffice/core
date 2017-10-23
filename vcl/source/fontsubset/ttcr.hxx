@@ -27,7 +27,7 @@
 #ifndef INCLUDED_VCL_SOURCE_FONTSUBSET_TTCR_HXX
 #define INCLUDED_VCL_SOURCE_FONTSUBSET_TTCR_HXX
 
-#include "sft.hxx"
+#include <sft.hxx>
 
 namespace vcl
 {

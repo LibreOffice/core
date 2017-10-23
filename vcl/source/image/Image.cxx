@@ -31,7 +31,7 @@
 #include <sal/types.h>
 #include <image.h>
 
-#include "BitmapProcessor.hxx"
+#include <BitmapProcessor.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
 #include <rtl/strbuf.hxx>

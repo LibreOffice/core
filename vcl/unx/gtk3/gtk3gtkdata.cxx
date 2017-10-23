@@ -39,11 +39,11 @@
 #include <osl/thread.h>
 #include <osl/process.h>
 
-#include "unx/i18n_im.hxx"
-#include "unx/i18n_xkb.hxx"
+#include <unx/i18n_im.hxx>
+#include <unx/i18n_xkb.hxx>
 #include <unx/wmadaptor.hxx>
 
-#include "unx/x11_cursors/salcursors.h"
+#include <unx/x11_cursors/salcursors.h>
 
 #include <vcl/svapp.hxx>
 

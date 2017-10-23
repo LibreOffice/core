@@ -23,9 +23,9 @@
 #include <vcl/timer.hxx>
 #include <vcl/settings.hxx>
 
-#include "svdata.hxx"
+#include <svdata.hxx>
 
-#include "rtl/string.hxx"
+#include <rtl/string.hxx>
 
 /*  #i77549#
     HACK: for scrollbars in case of thumb rect, page up and page down rect we

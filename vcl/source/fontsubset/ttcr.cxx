@@ -28,7 +28,7 @@
 
 #include "ttcr.hxx"
 #include "list.h"
-#include "string.h"
+#include <string.h>
 
 namespace vcl
 {

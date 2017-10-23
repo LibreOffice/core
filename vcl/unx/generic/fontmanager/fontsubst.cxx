@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "unx/geninst.h"
-#include "unx/genpspgraphics.h"
-#include "outdev.h"
-#include "PhysicalFontCollection.hxx"
+#include <unx/geninst.h>
+#include <unx/genpspgraphics.h>
+#include <outdev.h>
+#include <PhysicalFontCollection.hxx>
 
 // platform specific font substitution hooks
 

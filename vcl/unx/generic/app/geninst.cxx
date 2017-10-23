@@ -33,7 +33,7 @@
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLContext.hxx>
 #endif
-#include "unx/geninst.h"
+#include <unx/geninst.h>
 
 // SalYieldMutex
 

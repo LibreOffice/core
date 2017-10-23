@@ -13,10 +13,10 @@
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 
-#include "opengl/framebuffer.hxx"
-#include "opengl/texture.hxx"
+#include <opengl/framebuffer.hxx>
+#include <opengl/texture.hxx>
 
-#include "opengl/PackedTextureAtlas.hxx"
+#include <opengl/PackedTextureAtlas.hxx>
 
 struct Node
 {

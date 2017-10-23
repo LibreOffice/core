@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -29,12 +29,12 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include "strings.hrc"
-#include "svdata.hxx"
+#include <strings.hrc>
+#include <svdata.hxx>
 
-#include "i18nutil/unicode.hxx"
+#include <i18nutil/unicode.hxx>
 
-#include "rtl/math.hxx"
+#include <rtl/math.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 

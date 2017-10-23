@@ -19,9 +19,9 @@
 
 #include <vcl/svapp.hxx>
 
-#include "displayconnectiondispatch.hxx"
-#include "svdata.hxx"
-#include "salinst.hxx"
+#include <displayconnectiondispatch.hxx>
+#include <svdata.hxx>
+#include <salinst.hxx>
 
 using namespace osl;
 using namespace vcl;

@@ -30,7 +30,7 @@
 #include <vcl/lineinfo.hxx>
 #include <rtl/strbuf.hxx>
 
-#include "svmconverter.hxx"
+#include <svmconverter.hxx>
 
 #include <memory>
 #include <o3tl/make_unique.hxx>

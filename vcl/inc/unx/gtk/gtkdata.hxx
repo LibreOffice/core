@@ -30,7 +30,7 @@
 #include <unx/gtk/gtksys.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <osl/conditn.hxx>
-#include "saltimer.hxx"
+#include <saltimer.hxx>
 #include <o3tl/enumarray.hxx>
 
 #include <list>

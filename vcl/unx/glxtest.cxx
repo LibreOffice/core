@@ -23,18 +23,18 @@
 #include <unistd.h>
 #include <dlfcn.h>
 #include <fcntl.h>
-#include "stdint.h"
+#include <stdint.h>
 #include <string.h>
 #include <signal.h>
 
-#include "opengl/x11/glxtest.hxx"
+#include <opengl/x11/glxtest.hxx>
 
 #ifdef __SUNPRO_CC
 #include <stdio.h>
 #endif
 
-#include "X11/Xlib.h"
-#include "X11/Xutil.h"
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 
 // stuff from glx.h
 typedef struct __GLXcontextRec *GLXContext;

@@ -41,18 +41,18 @@
 
 #include <osl/process.h>
 
-#include "unx/saldisp.hxx"
-#include "unx/saldata.hxx"
-#include "unx/sm.hxx"
-#include "unx/i18n_im.hxx"
-#include "unx/i18n_xkb.hxx"
+#include <unx/saldisp.hxx>
+#include <unx/saldata.hxx>
+#include <unx/sm.hxx>
+#include <unx/i18n_im.hxx>
+#include <unx/i18n_xkb.hxx>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xproto.h>
 
-#include "salinst.hxx"
-#include "saltimer.hxx"
+#include <salinst.hxx>
+#include <saltimer.hxx>
 
 #include <osl/signal.h>
 #include <osl/thread.h>

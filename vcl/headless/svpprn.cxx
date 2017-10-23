@@ -19,17 +19,17 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
-#include "printerinfomanager.hxx"
+#include <printerinfomanager.hxx>
 
-#include "jobset.h"
-#include "print.h"
-#include "salptype.hxx"
-#include "saldatabasic.hxx"
+#include <jobset.h>
+#include <print.h>
+#include <salptype.hxx>
+#include <saldatabasic.hxx>
 
-#include "unx/genpspgraphics.h"
+#include <unx/genpspgraphics.h>
 
-#include "headless/svpprn.hxx"
-#include "headless/svpinst.hxx"
+#include <headless/svpprn.hxx>
+#include <headless/svpinst.hxx>
 
 using namespace psp;
 

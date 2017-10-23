@@ -8,7 +8,7 @@
  *
  */
 
-#include "test/outputdevice.hxx"
+#include <test/outputdevice.hxx>
 
 
 namespace vcl {

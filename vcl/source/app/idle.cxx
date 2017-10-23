@@ -20,7 +20,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/scheduler.hxx>
 #include <svdata.hxx>
-#include "saltimer.hxx"
+#include <saltimer.hxx>
 
 Idle::Idle( bool bAuto, const sal_Char *pDebugName )
     : Timer( bAuto, pDebugName )

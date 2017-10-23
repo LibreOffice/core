@@ -75,13 +75,13 @@
 #include <vcl/filter/pdfdocument.hxx>
 #include <comphelper/hash.hxx>
 
-#include "fontsubset.hxx"
-#include "outdev.h"
-#include "PhysicalFontFace.hxx"
-#include "salgdi.hxx"
-#include "sallayout.hxx"
-#include "textlayout.hxx"
-#include "textlineinfo.hxx"
+#include <fontsubset.hxx>
+#include <outdev.h>
+#include <PhysicalFontFace.hxx>
+#include <salgdi.hxx>
+#include <sallayout.hxx>
+#include <textlayout.hxx>
+#include <textlineinfo.hxx>
 
 #include "pdfwriter_impl.hxx"
 

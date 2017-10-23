@@ -30,7 +30,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 
-#include "salgdi.hxx"
+#include <salgdi.hxx>
 
 void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
 {

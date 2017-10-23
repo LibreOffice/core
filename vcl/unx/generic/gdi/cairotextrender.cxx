@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "unx/cairotextrender.hxx"
+#include <unx/cairotextrender.hxx>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/settings.hxx>
@@ -26,18 +26,18 @@
 #include <vcl/fontcharmap.hxx>
 #include <android/compatibility.hxx>
 
-#include "unx/printergfx.hxx"
-#include "unx/genpspgraphics.h"
-#include "unx/geninst.h"
-#include "unx/glyphcache.hxx"
-#include "unx/fc_fontoptions.hxx"
-#include "PhysicalFontFace.hxx"
-#include "impfont.hxx"
-#include "impfontmetricdata.hxx"
+#include <unx/printergfx.hxx>
+#include <unx/genpspgraphics.h>
+#include <unx/geninst.h>
+#include <unx/glyphcache.hxx>
+#include <unx/fc_fontoptions.hxx>
+#include <PhysicalFontFace.hxx>
+#include <impfont.hxx>
+#include <impfontmetricdata.hxx>
 
 #include <cairo.h>
 #include <cairo-ft.h>
-#include "CommonSalLayout.hxx"
+#include <CommonSalLayout.hxx>
 
 namespace {
 

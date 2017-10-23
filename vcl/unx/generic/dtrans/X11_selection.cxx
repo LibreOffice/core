@@ -21,7 +21,7 @@
 
 #include <cstdlib>
 
-#include "unx/saldisp.hxx"
+#include <unx/saldisp.hxx>
 
 #include <unistd.h>
 #include <stdio.h>
@@ -42,23 +42,23 @@
 #include <sal/alloca.h>
 #include <sal/macros.h>
 
-#include <X11_selection.hxx>
-#include <X11_clipboard.hxx>
-#include <X11_transferable.hxx>
-#include <X11_dndcontext.hxx>
-#include <bmp.hxx>
+#include "X11_selection.hxx"
+#include "X11_clipboard.hxx"
+#include "X11_transferable.hxx"
+#include "X11_dndcontext.hxx"
+#include "bmp.hxx"
 
 #include <vcl/svapp.hxx>
 
 // pointer bitmaps
-#include <copydata_curs.h>
-#include <copydata_mask.h>
-#include <movedata_curs.h>
-#include <movedata_mask.h>
-#include <linkdata_curs.h>
-#include <linkdata_mask.h>
-#include <nodrop_curs.h>
-#include <nodrop_mask.h>
+#include "copydata_curs.h"
+#include "copydata_mask.h"
+#include "movedata_curs.h"
+#include "movedata_mask.h"
+#include "linkdata_curs.h"
+#include "linkdata_mask.h"
+#include "nodrop_curs.h"
+#include "nodrop_mask.h"
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>

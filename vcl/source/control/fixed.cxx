@@ -26,8 +26,8 @@
 #include <vcl/settings.hxx>
 
 #include <comphelper/string.hxx>
-#include "controldata.hxx"
-#include "window.h"
+#include <controldata.hxx>
+#include <window.h>
 
 #define FIXEDLINE_TEXT_BORDER    4
 

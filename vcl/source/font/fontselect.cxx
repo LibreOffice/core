@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <PhysicalFontFace.hxx>
-#include "svdata.hxx"
+#include <svdata.hxx>
 
 // These mustn't conflict with font name lists which use ; and ,
 const char FontSelectPatternAttributes::FEAT_PREFIX = ':';
