@@ -11,7 +11,7 @@
 #include <string>
 
 #include <sal/types.h>
-#include "cppunit/TestFixture.h"
+#include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
