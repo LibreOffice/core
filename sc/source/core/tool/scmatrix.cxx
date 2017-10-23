@@ -339,13 +339,23 @@ private:
 static bool bElementsMaxFetched;
 static size_t nElementsMax;
 
-/// The maximum number of elements a matrix may have at runtime.
-static size_t GetElementsMax()
+/** The maximum number of elements a matrix or the pool may have at runtime.
+
+    @param  nMemory
+            If 0, the arbitrary limit of one matrix is returned.
+            If >0, the given memory pool divided by the average size of a
+            matrix element is returned, which is used to initialize
+            nElementsMax.
+ */
+static size_t GetElementsMax( size_t nMemory )
 {
     // Arbitrarily assuming 12 bytes per element, 8 bytes double plus
     // overhead. Stored as an array in an mdds container it's less, but for
     // strings or mixed matrix it can be much more..
     constexpr size_t nPerElem = 12;
+    if (nMemory)
+        return nMemory / nPerElem;
+
     // Arbitrarily assuming 1GB memory. Could be dynamic at some point.
     constexpr size_t nMemMax = 0x40000000;
     // With 1GB that's ~85M elements, or 85 whole columns.
@@ -2797,8 +2807,21 @@ bool ScMatrix::IsSizeAllocatable( SCSIZE nC, SCSIZE nR )
 
     if (!bElementsMaxFetched)
     {
-        nElementsMax = std::getenv("SC_MAX_MATRIX_ELEMENTS") ? std::atoi(std::getenv("SC_MAX_MATRIX_ELEMENTS"))
-                                                                       : GetElementsMax();
+        const char* pEnv = std::getenv("SC_MAX_MATRIX_ELEMENTS");
+        if (pEnv)
+        {
+            // Environment specifies the overall elements pool.
+            nElementsMax = std::atoi(pEnv);
+        }
+        else
+        {
+            // GetElementsMax() uses an (~arbitrary) elements limit.
+            // Assume 6GB memory could be consumed by matrices.
+            // The actual allocation depends on the types of individual matrix
+            // elements and is averaged for type double.
+            constexpr size_t nMemMax = 0x180000000;
+            nElementsMax = GetElementsMax( nMemMax);
+        }
         bElementsMaxFetched = true;
     }
 
