@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "tokstack.hxx"
-#include "compiler.hxx"
-#include "global.hxx"
-#include "scmatrix.hxx"
+#include <tokstack.hxx>
+#include <compiler.hxx>
+#include <global.hxx>
+#include <scmatrix.hxx>
 
 #include <svl/sharedstringpool.hxx>
 

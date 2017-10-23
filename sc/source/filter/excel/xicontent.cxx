@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xicontent.hxx"
+#include <xicontent.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
@@ -25,7 +25,7 @@
 #include <editeng/editobj.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <svl/itemset.hxx>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
@@ -36,30 +36,30 @@
 #include <editeng/postitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/crossedoutitem.hxx>
-#include "stringutil.hxx"
-#include "cellform.hxx"
-#include "cellvalue.hxx"
-#include "document.hxx"
-#include "editutil.hxx"
-#include "formulacell.hxx"
-#include "validat.hxx"
-#include "patattr.hxx"
-#include "docpool.hxx"
-#include "rangenam.hxx"
-#include "arealink.hxx"
-#include "stlsheet.hxx"
-#include "scextopt.hxx"
-#include "xlformula.hxx"
-#include "xltracer.hxx"
-#include "xistream.hxx"
-#include "xihelper.hxx"
-#include "xistyle.hxx"
-#include "xiescher.hxx"
-#include "xiname.hxx"
+#include <stringutil.hxx>
+#include <cellform.hxx>
+#include <cellvalue.hxx>
+#include <document.hxx>
+#include <editutil.hxx>
+#include <formulacell.hxx>
+#include <validat.hxx>
+#include <patattr.hxx>
+#include <docpool.hxx>
+#include <rangenam.hxx>
+#include <arealink.hxx>
+#include <stlsheet.hxx>
+#include <scextopt.hxx>
+#include <xlformula.hxx>
+#include <xltracer.hxx>
+#include <xistream.hxx>
+#include <xihelper.hxx>
+#include <xistyle.hxx>
+#include <xiescher.hxx>
+#include <xiname.hxx>
 
-#include "excform.hxx"
-#include "tabprotection.hxx"
-#include "documentimport.hxx"
+#include <excform.hxx>
+#include <tabprotection.hxx>
+#include <documentimport.hxx>
 
 #include <memory>
 #include <utility>

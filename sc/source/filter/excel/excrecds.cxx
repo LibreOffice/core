@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "excrecds.hxx"
+#include <excrecds.hxx>
 
 #include <map>
 #include <filter/msfilter/countryid.hxx>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <sfx2/objsh.hxx>
@@ -51,35 +51,35 @@
 
 #include <string.h>
 
-#include "global.hxx"
-#include "globstr.hrc"
-#include "docpool.hxx"
-#include "patattr.hxx"
-#include "formulacell.hxx"
-#include "document.hxx"
-#include "scextopt.hxx"
-#include "attrib.hxx"
-#include "progress.hxx"
-#include "dociter.hxx"
-#include "rangenam.hxx"
-#include "dbdata.hxx"
-#include "stlsheet.hxx"
-#include "stlpool.hxx"
-#include "editutil.hxx"
+#include <global.hxx>
+#include <globstr.hrc>
+#include <docpool.hxx>
+#include <patattr.hxx>
+#include <formulacell.hxx>
+#include <document.hxx>
+#include <scextopt.hxx>
+#include <attrib.hxx>
+#include <progress.hxx>
+#include <dociter.hxx>
+#include <rangenam.hxx>
+#include <dbdata.hxx>
+#include <stlsheet.hxx>
+#include <stlpool.hxx>
+#include <editutil.hxx>
 #include <formula/errorcodes.hxx>
 #include <oox/export/utils.hxx>
-#include "queryentry.hxx"
-#include "queryparam.hxx"
+#include <queryentry.hxx>
+#include <queryparam.hxx>
 
-#include "excdoc.hxx"
-#include "xeescher.hxx"
-#include "xeformula.hxx"
-#include "xelink.hxx"
-#include "xename.hxx"
-#include "xecontent.hxx"
+#include <excdoc.hxx>
+#include <xeescher.hxx>
+#include <xeformula.hxx>
+#include <xelink.hxx>
+#include <xename.hxx>
+#include <xecontent.hxx>
 
-#include "xcl97rec.hxx"
-#include "tabprotection.hxx"
+#include <xcl97rec.hxx>
+#include <tabprotection.hxx>
 
 using namespace ::oox;
 

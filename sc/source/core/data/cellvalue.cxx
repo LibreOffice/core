@@ -7,15 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "cellvalue.hxx"
-#include "document.hxx"
-#include "column.hxx"
-#include "formulacell.hxx"
+#include <cellvalue.hxx>
+#include <document.hxx>
+#include <column.hxx>
+#include <formulacell.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
-#include "stringutil.hxx"
-#include "editutil.hxx"
-#include "tokenarray.hxx"
+#include <stringutil.hxx>
+#include <editutil.hxx>
+#include <tokenarray.hxx>
 #include <formula/token.hxx>
 #include <formula/errorcodes.hxx>
 #include <svl/sharedstring.hxx>

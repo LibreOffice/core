@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "overlayobject.hxx"
+#include <overlayobject.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/lineinfo.hxx>
 #include <tools/fract.hxx>

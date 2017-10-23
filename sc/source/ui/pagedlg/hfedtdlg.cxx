@@ -19,14 +19,14 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svl/eitem.hxx>
 
-#include "hfedtdlg.hxx"
-#include "global.hxx"
-#include "globstr.hrc"
-#include "scresid.hxx"
-#include "scuitphfedit.hxx"
+#include <hfedtdlg.hxx>
+#include <global.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
+#include <scuitphfedit.hxx>
 
 //  macros from docsh4.cxx
 //! use SIDs?

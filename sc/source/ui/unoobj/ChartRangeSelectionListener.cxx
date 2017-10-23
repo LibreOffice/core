@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ChartRangeSelectionListener.hxx"
+#include <ChartRangeSelectionListener.hxx>
 
 #include <com/sun/star/chart2/data/XRangeHighlighter.hpp>
 
 #include <sfx2/viewfrm.hxx>
-#include "tabvwsh.hxx"
-#include "unonames.hxx"
-#include "miscuno.hxx"
+#include <tabvwsh.hxx>
+#include <unonames.hxx>
+#include <miscuno.hxx>
 
 using namespace ::com::sun::star;
 

@@ -29,15 +29,15 @@
 #include <svl/zforlist.hxx>
 #include <formula/errorcodes.hxx>
 
-#include "global.hxx"
-#include "rangeutl.hxx"
-#include "rechead.hxx"
-#include "compiler.hxx"
-#include "paramisc.hxx"
-#include "calcconfig.hxx"
+#include <global.hxx>
+#include <rangeutl.hxx>
+#include <rechead.hxx>
+#include <compiler.hxx>
+#include <paramisc.hxx>
+#include <calcconfig.hxx>
 
-#include "sc.hrc"
-#include "globstr.hrc"
+#include <sc.hrc>
+#include <globstr.hrc>
 
 
 // struct ScImportParam:

@@ -19,7 +19,7 @@
 
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <comphelper/string.hxx>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <i18nutil/unicode.hxx>
 
@@ -58,26 +58,26 @@
 #include <svtools/transfer.hxx>
 #include <svl/stritem.hxx>
 
-#include "editsh.hxx"
-#include "scresid.hxx"
-#include "global.hxx"
-#include "sc.hrc"
-#include "scmod.hxx"
-#include "inputhdl.hxx"
-#include "viewutil.hxx"
-#include "viewdata.hxx"
-#include "document.hxx"
-#include "reffind.hxx"
-#include "tabvwsh.hxx"
-#include "editutil.hxx"
-#include "globstr.hrc"
+#include <editsh.hxx>
+#include <scresid.hxx>
+#include <global.hxx>
+#include <sc.hrc>
+#include <scmod.hxx>
+#include <inputhdl.hxx>
+#include <viewutil.hxx>
+#include <viewdata.hxx>
+#include <document.hxx>
+#include <reffind.hxx>
+#include <tabvwsh.hxx>
+#include <editutil.hxx>
+#include <globstr.hrc>
 #include <gridwin.hxx>
 
 #define ScEditShell
-#include "scslots.hxx"
+#include <scslots.hxx>
 
-#include "scui_def.hxx"
-#include "scabstdlg.hxx"
+#include <scui_def.hxx>
+#include <scabstdlg.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;

@@ -18,12 +18,12 @@
  */
 
 #include <memory>
-#include "xistyle.hxx"
+#include <xistyle.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/ctrltool.hxx>
 #include <editeng/editobj.hxx>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -45,20 +45,20 @@
 #include <editeng/justifyitem.hxx>
 #include <sal/macros.h>
 #include <vcl/fontcharmap.hxx>
-#include "document.hxx"
-#include "docpool.hxx"
-#include "attrib.hxx"
-#include "stlpool.hxx"
-#include "stlsheet.hxx"
-#include "formulacell.hxx"
-#include "globstr.hrc"
-#include "attarray.hxx"
-#include "xltracer.hxx"
-#include "xistream.hxx"
-#include "xicontent.hxx"
+#include <document.hxx>
+#include <docpool.hxx>
+#include <attrib.hxx>
+#include <stlpool.hxx>
+#include <stlsheet.hxx>
+#include <formulacell.hxx>
+#include <globstr.hrc>
+#include <attarray.hxx>
+#include <xltracer.hxx>
+#include <xistream.hxx>
+#include <xicontent.hxx>
 
-#include "root.hxx"
-#include "colrowst.hxx"
+#include <root.hxx>
+#include <colrowst.hxx>
 #include <svl/poolcach.hxx>
 #include <o3tl/make_unique.hxx>
 

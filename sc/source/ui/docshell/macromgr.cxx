@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "macromgr.hxx"
-#include "document.hxx"
+#include <macromgr.hxx>
+#include <document.hxx>
 
 #include <basic/basmgr.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <sfx2/objsh.hxx>
-#include "formulacell.hxx"
+#include <formulacell.hxx>
 #include <vector>
 #include <com/sun/star/container/XContainer.hpp>
 

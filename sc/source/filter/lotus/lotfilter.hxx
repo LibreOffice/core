@@ -21,10 +21,10 @@
 #define INCLUDED_SC_SOURCE_FILTER_LOTUS_FILTER_HXX
 
 #include <map>
-#include "decl.h"
-#include "op.h"
-#include "optab.h"
-#include "root.hxx"
+#include <decl.h>
+#include <op.h>
+#include <optab.h>
+#include <root.hxx>
 
 class SvxHorJustifyItem;
 class ScProtectionAttr;

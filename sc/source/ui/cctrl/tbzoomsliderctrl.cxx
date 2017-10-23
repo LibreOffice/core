@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "tbzoomsliderctrl.hxx"
+#include <tbzoomsliderctrl.hxx>
 #include <vcl/image.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>
@@ -30,11 +30,11 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <set>
-#include "docsh.hxx"
-#include "stlpool.hxx"
-#include "scitems.hxx"
-#include "printfun.hxx"
-#include "bitmaps.hlst"
+#include <docsh.hxx>
+#include <stlpool.hxx>
+#include <scitems.hxx>
+#include <printfun.hxx>
+#include <bitmaps.hlst>
 
 // class ScZoomSliderControl ---------------------------------------
 

@@ -21,11 +21,11 @@
 
 #include <svl/eitem.hxx>
 
-#include "tpprint.hxx"
-#include "printopt.hxx"
-#include "scmod.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
+#include <tpprint.hxx>
+#include <printopt.hxx>
+#include <scmod.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
 
 ScTpPrintOptions::ScTpPrintOptions( vcl::Window*           pParent,
                                     const SfxItemSet& rCoreAttrs )

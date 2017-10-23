@@ -25,26 +25,26 @@
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "arealink.hxx"
+#include <arealink.hxx>
 
-#include "tablink.hxx"
-#include "document.hxx"
-#include "docsh.hxx"
-#include "rangenam.hxx"
-#include "dbdata.hxx"
-#include "undoblk.hxx"
-#include "globstr.hrc"
-#include "markdata.hxx"
-#include "hints.hxx"
-#include "filter.hxx"
+#include <tablink.hxx>
+#include <document.hxx>
+#include <docsh.hxx>
+#include <rangenam.hxx>
+#include <dbdata.hxx>
+#include <undoblk.hxx>
+#include <globstr.hrc>
+#include <markdata.hxx>
+#include <hints.hxx>
+#include <filter.hxx>
 
-#include "attrib.hxx"
-#include "patattr.hxx"
-#include "docpool.hxx"
+#include <attrib.hxx>
+#include <patattr.hxx>
+#include <docpool.hxx>
 
-#include "sc.hrc"
-#include "scabstdlg.hxx"
-#include "clipparam.hxx"
+#include <sc.hrc>
+#include <scabstdlg.hxx>
+#include <clipparam.hxx>
 
 struct AreaLink_Impl
 {

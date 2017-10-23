@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_INPUTHDL_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_INPUTHDL_HXX
 
-#include "global.hxx"
-#include "address.hxx"
-#include "typedstrdata.hxx"
+#include <global.hxx>
+#include <address.hxx>
+#include <typedstrdata.hxx>
 
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>

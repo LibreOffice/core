@@ -19,9 +19,9 @@
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include "sc.hrc"
+#include <sc.hrc>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 
 #include <editeng/eeitem.hxx>
 #include <svx/fontwork.hxx>
@@ -35,25 +35,25 @@
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "drawsh.hxx"
-#include "drwlayer.hxx"
-#include "strings.hrc"
-#include "viewdata.hxx"
-#include "document.hxx"
-#include "docpool.hxx"
-#include "drawview.hxx"
-#include "scresid.hxx"
+#include <drawsh.hxx>
+#include <drwlayer.hxx>
+#include <strings.hrc>
+#include <viewdata.hxx>
+#include <document.hxx>
+#include <docpool.hxx>
+#include <drawview.hxx>
+#include <scresid.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
-#include "tabvwsh.hxx"
+#include <tabvwsh.hxx>
 #include <gridwin.hxx>
 #include <sfx2/bindings.hxx>
 
 #define ScDrawShell
-#include "scslots.hxx"
+#include <scslots.hxx>
 
-#include "userdat.hxx"
+#include <userdat.hxx>
 #include <svl/macitem.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/viewsh.hxx>

@@ -8,8 +8,8 @@
  */
 
 #include <rtl/ustrbuf.hxx>
-#include "condformathelper.hxx"
-#include "globstr.hrc"
+#include <condformathelper.hxx>
+#include <globstr.hrc>
 
 namespace {
 

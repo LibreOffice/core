@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_CRNRDLG_HXX
 
 #include "anyrefdg.hxx"
-#include "rangelst.hxx"
+#include <rangelst.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 

@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "listenercontext.hxx"
-#include "document.hxx"
-#include "mtvelements.hxx"
+#include <listenercontext.hxx>
+#include <document.hxx>
+#include <mtvelements.hxx>
 
 namespace sc {
 

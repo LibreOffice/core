@@ -21,8 +21,8 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_EXPBASE_HXX
 
 #include <memory>
-#include "global.hxx"
-#include "address.hxx"
+#include <global.hxx>
+#include <address.hxx>
 
 class SvStream;
 class ScFieldEditEngine;

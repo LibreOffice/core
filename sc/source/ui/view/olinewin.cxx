@@ -21,13 +21,13 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/settings.hxx>
 
-#include "olinewin.hxx"
-#include "olinetab.hxx"
-#include "document.hxx"
-#include "dbfunc.hxx"
-#include "strings.hrc"
-#include "scresid.hxx"
-#include "bitmaps.hlst"
+#include <olinewin.hxx>
+#include <olinetab.hxx>
+#include <document.hxx>
+#include <dbfunc.hxx>
+#include <strings.hrc>
+#include <scresid.hxx>
+#include <bitmaps.hlst>
 
 const long SC_OL_BITMAPSIZE                 = 12;
 const long SC_OL_POSOFFSET                  = 2;

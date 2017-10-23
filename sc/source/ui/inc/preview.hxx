@@ -21,7 +21,7 @@
 
 #include <vcl/window.hxx>
 #include "printfun.hxx"
-#include "markdata.hxx"
+#include <markdata.hxx>
 
 #include <vector>
 

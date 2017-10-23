@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLADDRESS_HXX
 
 #include <vector>
-#include "address.hxx"
+#include <address.hxx>
 
 class XclImpStream;
 class XclExpStream;

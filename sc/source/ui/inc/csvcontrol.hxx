@@ -21,9 +21,9 @@
 #define INCLUDED_SC_SOURCE_UI_INC_CSVCONTROL_HXX
 
 #include <vcl/ctrl.hxx>
-#include "scdllapi.h"
-#include "global.hxx"
-#include "address.hxx"
+#include <scdllapi.h>
+#include <global.hxx>
+#include <address.hxx>
 #include "csvsplits.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/typed_flags_set.hxx>

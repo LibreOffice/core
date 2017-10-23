@@ -23,15 +23,15 @@
 #include <vcl/idle.hxx>
 
 #include "docsh.hxx"
-#include "scdllapi.h"
-#include "datamapper.hxx"
+#include <scdllapi.h>
+#include <datamapper.hxx>
 #include <rtl/strbuf.hxx>
 
 #include <queue>
 #include <vector>
 #include <map>
 
-#include "officecfg/Office/Calc.hxx"
+#include <officecfg/Office/Calc.hxx>
 
 #if defined(_WIN32)
 #define __ORCUS_STATIC_LIB

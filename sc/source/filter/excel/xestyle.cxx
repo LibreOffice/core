@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "xestyle.hxx"
+#include <xestyle.hxx>
 
 #include <iostream>
 #include <algorithm>
@@ -31,7 +31,7 @@
 #include <svl/itempool.hxx>
 #include <svl/languageoptions.hxx>
 #include <sfx2/printer.hxx>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lineitem.hxx>
@@ -43,14 +43,14 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/justifyitem.hxx>
-#include "document.hxx"
-#include "stlpool.hxx"
-#include "stlsheet.hxx"
-#include "patattr.hxx"
-#include "attrib.hxx"
-#include "globstr.hrc"
-#include "xestring.hxx"
-#include "conditio.hxx"
+#include <document.hxx>
+#include <stlpool.hxx>
+#include <stlsheet.hxx>
+#include <patattr.hxx>
+#include <attrib.hxx>
+#include <globstr.hrc>
+#include <xestring.hxx>
+#include <conditio.hxx>
 
 #include <oox/export/utils.hxx>
 #include <oox/token/tokens.hxx>

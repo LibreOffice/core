@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "numberformatsbuffer.hxx"
+#include <numberformatsbuffer.hxx>
 
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
@@ -37,9 +37,9 @@
 #include <oox/helper/propertymap.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "scitems.hxx"
-#include "document.hxx"
-#include "ftools.hxx"
+#include <scitems.hxx>
+#include <document.hxx>
+#include <ftools.hxx>
 
 namespace oox {
 namespace xls {

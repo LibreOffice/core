@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xlstyle.hxx"
+#include <xlstyle.hxx>
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
@@ -30,8 +30,8 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/unohelp.hxx>
 #include <editeng/svxfont.hxx>
-#include "global.hxx"
-#include "xlroot.hxx"
+#include <global.hxx>
+#include <xlroot.hxx>
 // Color data =================================================================
 
 /** Standard EGA colors, bright. */

@@ -7,12 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "condformatmgr.hxx"
-#include "scresid.hxx"
-#include "globstr.hrc"
-#include "condformatdlg.hxx"
+#include <condformatmgr.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
+#include <condformatdlg.hxx>
 #include <vcl/msgbox.hxx>
-#include "document.hxx"
+#include <document.hxx>
 
 ScCondFormatManagerWindow::ScCondFormatManagerWindow(SvSimpleTableContainer& rParent,
     ScDocument* pDoc, ScConditionalFormatList* pFormatList)

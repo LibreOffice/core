@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "viewsettings.hxx"
+#include <viewsettings.hxx>
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -37,10 +37,10 @@
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "addressconverter.hxx"
-#include "unitconverter.hxx"
-#include "workbooksettings.hxx"
-#include "worksheetbuffer.hxx"
+#include <addressconverter.hxx>
+#include <unitconverter.hxx>
+#include <workbooksettings.hxx>
+#include <worksheetbuffer.hxx>
 
 namespace oox {
 namespace xls {

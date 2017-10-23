@@ -23,8 +23,8 @@
 #include <svl/lstner.hxx>
 #include <svl/listener.hxx>
 #include <sfx2/linksrc.hxx>
-#include "global.hxx"
-#include "address.hxx"
+#include <global.hxx>
+#include <address.hxx>
 
 class ScDocShell;
 class ScServerObject;

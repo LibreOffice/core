@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "postit.hxx"
+#include <postit.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <unotools/useroptions.hxx>
@@ -28,7 +28,7 @@
 #include <editeng/editobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnstcit.hxx>
@@ -38,15 +38,15 @@
 #include <svx/sdsxyitm.hxx>
 #include <tools/gen.hxx>
 
-#include "table.hxx"
-#include "document.hxx"
-#include "docpool.hxx"
-#include "patattr.hxx"
-#include "formulacell.hxx"
-#include "drwlayer.hxx"
-#include "userdat.hxx"
-#include "detfunc.hxx"
-#include "editutil.hxx"
+#include <table.hxx>
+#include <document.hxx>
+#include <docpool.hxx>
+#include <patattr.hxx>
+#include <formulacell.hxx>
+#include <drwlayer.hxx>
+#include <userdat.hxx>
+#include <detfunc.hxx>
+#include <editutil.hxx>
 
 #include <utility>
 

@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "lotfntbf.hxx"
+#include <lotfntbf.hxx>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/eeitem.hxx>
@@ -30,12 +30,12 @@
 #include <editeng/wghtitem.hxx>
 #include <sfx2/printer.hxx>
 
-#include "attrib.hxx"
-#include "document.hxx"
-#include "global.hxx"
-#include "docpool.hxx"
-#include "patattr.hxx"
-#include "ftools.hxx"
+#include <attrib.hxx>
+#include <document.hxx>
+#include <global.hxx>
+#include <docpool.hxx>
+#include <patattr.hxx>
+#include <ftools.hxx>
 
 void LotusFontBuffer::Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet )
 {

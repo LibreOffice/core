@@ -19,8 +19,8 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "groupdlg.hxx"
-#include "scresid.hxx"
+#include <groupdlg.hxx>
+#include <scresid.hxx>
 
 ScGroupDlg::ScGroupDlg(vcl::Window* pParent, bool bUngroup, bool bRows)
     : ModalDialog(pParent,

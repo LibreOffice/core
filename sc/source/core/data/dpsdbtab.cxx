@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dpsdbtab.hxx"
-#include "global.hxx"
-#include "globstr.hrc"
-#include "dpfilteredcache.hxx"
-#include "dptabres.hxx"
-#include "document.hxx"
-#include "dpobject.hxx"
+#include <dpsdbtab.hxx>
+#include <global.hxx>
+#include <globstr.hrc>
+#include <dpfilteredcache.hxx>
+#include <dptabres.hxx>
+#include <document.hxx>
+#include <dpobject.hxx>
 
 #include <com/sun/star/sdb/CommandType.hpp>
 

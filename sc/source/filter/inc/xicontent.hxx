@@ -20,13 +20,13 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XICONTENT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XICONTENT_HXX
 
-#include "global.hxx"
-#include "rangelst.hxx"
+#include <global.hxx>
+#include <rangelst.hxx>
 #include "xlcontent.hxx"
 #include "xistring.hxx"
 #include "xiroot.hxx"
-#include "validat.hxx"
-#include "tabprotection.hxx"
+#include <validat.hxx>
+#include <tabprotection.hxx>
 
 #include <map>
 #include <vector>

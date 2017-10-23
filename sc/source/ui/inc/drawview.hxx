@@ -22,7 +22,7 @@
 
 #include <svx/fmview.hxx>
 
-#include "global.hxx"
+#include <global.hxx>
 
 namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xerecord.hxx"
-#include "xeroot.hxx"
+#include <xerecord.hxx>
+#include <xeroot.hxx>
 
 #include <oox/export/utils.hxx>
 #include <osl/diagnose.h>

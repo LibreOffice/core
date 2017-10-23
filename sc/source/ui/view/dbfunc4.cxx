@@ -21,9 +21,9 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 
-#include "dbfunc.hxx"
-#include "drwlayer.hxx"
-#include "document.hxx"
+#include <dbfunc.hxx>
+#include <drwlayer.hxx>
+#include <document.hxx>
 
 using namespace com::sun::star;
 

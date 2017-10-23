@@ -13,7 +13,7 @@
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
-#include "scdll.hxx"
+#include <scdll.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
@@ -22,22 +22,22 @@
 
 #include "helper/qahelper.hxx"
 
-#include "docsh.hxx"
-#include "inputopt.hxx"
-#include "postit.hxx"
-#include "patattr.hxx"
-#include "scitems.hxx"
-#include "document.hxx"
-#include "cellform.hxx"
-#include "drwlayer.hxx"
-#include "userdat.hxx"
-#include "formulacell.hxx"
-#include "tabprotection.hxx"
+#include <docsh.hxx>
+#include <inputopt.hxx>
+#include <postit.hxx>
+#include <patattr.hxx>
+#include <scitems.hxx>
+#include <document.hxx>
+#include <cellform.hxx>
+#include <drwlayer.hxx>
+#include <userdat.hxx>
+#include <formulacell.hxx>
+#include <tabprotection.hxx>
 #include <dbdocfun.hxx>
 #include <globalnames.hxx>
 #include <dbdata.hxx>
 #include <sortparam.hxx>
-#include "scopetools.hxx"
+#include <scopetools.hxx>
 
 #include <svx/svdpage.hxx>
 

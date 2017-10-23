@@ -18,15 +18,15 @@
  */
 
 #include <memory>
-#include "dpsave.hxx"
-#include "dpdimsave.hxx"
-#include "miscuno.hxx"
-#include "scerrors.hxx"
-#include "unonames.hxx"
-#include "global.hxx"
-#include "dptabsrc.hxx"
-#include "dputil.hxx"
-#include "generalfunction.hxx"
+#include <dpsave.hxx>
+#include <dpdimsave.hxx>
+#include <miscuno.hxx>
+#include <scerrors.hxx>
+#include <unonames.hxx>
+#include <global.hxx>
+#include <dptabsrc.hxx>
+#include <dputil.hxx>
+#include <generalfunction.hxx>
 
 #include <sal/types.h>
 #include <osl/diagnose.h>

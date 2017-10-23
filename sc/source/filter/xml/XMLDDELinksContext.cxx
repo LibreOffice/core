@@ -19,8 +19,8 @@
 
 #include "XMLDDELinksContext.hxx"
 #include "xmlimprt.hxx"
-#include "document.hxx"
-#include "scmatrix.hxx"
+#include <document.hxx>
+#include <scmatrix.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>

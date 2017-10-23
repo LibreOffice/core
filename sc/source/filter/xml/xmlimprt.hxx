@@ -28,9 +28,9 @@
 #include <xmloff/xmlstyle.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include "xmlsubti.hxx"
-#include "global.hxx"
+#include <global.hxx>
 #include <formula/grammar.hxx>
-#include "compiler.hxx"
+#include <compiler.hxx>
 
 #include "xmlstyle.hxx"
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>

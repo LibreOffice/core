@@ -24,7 +24,7 @@
 #include <o3tl/any.hxx>
 #include <vcl/svapp.hxx>
 
-#include "miscuno.hxx"
+#include <miscuno.hxx>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;

@@ -22,18 +22,18 @@
 #include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "global.hxx"
-#include "document.hxx"
-#include "tabvwsh.hxx"
-#include "viewdata.hxx"
-#include "uiitems.hxx"
-#include "userlist.hxx"
-#include "rangeutl.hxx"
-#include "crdlg.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
-#include "globstr.hrc"
-#include "tpusrlst.hxx"
+#include <global.hxx>
+#include <document.hxx>
+#include <tabvwsh.hxx>
+#include <viewdata.hxx>
+#include <uiitems.hxx>
+#include <userlist.hxx>
+#include <rangeutl.hxx>
+#include <crdlg.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
+#include <globstr.hrc>
+#include <tpusrlst.hxx>
 
 #define CR  u'\x000D'
 #define LF  u'\x000A'

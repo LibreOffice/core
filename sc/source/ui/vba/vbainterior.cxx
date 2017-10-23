@@ -39,7 +39,7 @@
 
 #include "vbainterior.hxx"
 #include "vbapalette.hxx"
-#include "document.hxx"
+#include <document.hxx>
 
 #define COLORMAST 0xFFFFFF
 typedef std::map< sal_Int32, sal_Int32 >  PatternMap;

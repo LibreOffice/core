@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_FUINSERT_HXX
 
 #include "fupoor.hxx"
-#include "scdllapi.h"
+#include <scdllapi.h>
 
 class FuInsertGraphic : public FuPoor
 {

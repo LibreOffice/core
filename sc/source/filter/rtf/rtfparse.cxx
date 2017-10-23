@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -26,10 +26,10 @@
 #include <vcl/outdev.hxx>
 #include <svtools/rtftoken.h>
 
-#include "rtfparse.hxx"
-#include "global.hxx"
-#include "document.hxx"
-#include "docpool.hxx"
+#include <rtfparse.hxx>
+#include <global.hxx>
+#include <document.hxx>
+#include <docpool.hxx>
 
 #define SC_RTFTWIPTOL 10        // 10 Twips tolerance when determining columns
 

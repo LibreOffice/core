@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_LOTFNTBF_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_LOTFNTBF_HXX
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/colritem.hxx>

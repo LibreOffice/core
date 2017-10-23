@@ -29,11 +29,11 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/sheet/XSheetAnnotation.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include "global.hxx"
-#include "detfunc.hxx"
-#include "detdata.hxx"
-#include "postit.hxx"
-#include "cellvalue.hxx"
+#include <global.hxx>
+#include <detfunc.hxx>
+#include <detdata.hxx>
+#include <postit.hxx>
+#include <cellvalue.hxx>
 
 #include <memory>
 

@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "compiler.hxx"
+#include <compiler.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
@@ -44,28 +44,28 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "rangenam.hxx"
-#include "dbdata.hxx"
-#include "document.hxx"
-#include "callform.hxx"
-#include "addincol.hxx"
-#include "refupdat.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
-#include "globstr.hrc"
-#include "formulacell.hxx"
-#include "dociter.hxx"
-#include "docoptio.hxx"
+#include <rangenam.hxx>
+#include <dbdata.hxx>
+#include <document.hxx>
+#include <callform.hxx>
+#include <addincol.hxx>
+#include <refupdat.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
+#include <globstr.hrc>
+#include <formulacell.hxx>
+#include <dociter.hxx>
+#include <docoptio.hxx>
 #include <formula/errorcodes.hxx>
-#include "parclass.hxx"
-#include "autonamecache.hxx"
-#include "externalrefmgr.hxx"
-#include "rangeutl.hxx"
-#include "convuno.hxx"
-#include "tokenuno.hxx"
-#include "formulaparserpool.hxx"
-#include "tokenarray.hxx"
-#include "scmatrix.hxx"
+#include <parclass.hxx>
+#include <autonamecache.hxx>
+#include <externalrefmgr.hxx>
+#include <rangeutl.hxx>
+#include <convuno.hxx>
+#include <tokenuno.hxx>
+#include <formulaparserpool.hxx>
+#include <tokenarray.hxx>
+#include <scmatrix.hxx>
 #include <tokenstringcontext.hxx>
 
 using namespace formula;

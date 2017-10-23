@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XECONTENT_HXX
 
 #include <memory>
-#include "rangelst.hxx"
+#include <rangelst.hxx>
 #include "xlcontent.hxx"
 #include "xladdress.hxx"
 #include "xerecord.hxx"
@@ -30,7 +30,7 @@
 #include "xeformula.hxx"
 #include "xeextlst.hxx"
 
-#include "colorscale.hxx"
+#include <colorscale.hxx>
 
 /* ============================================================================
 Classes to export the big Excel document contents (related to several cells or

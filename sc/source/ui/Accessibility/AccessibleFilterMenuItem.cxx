@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AccessibleGlobal.hxx"
-#include "AccessibleFilterMenuItem.hxx"
-#include "checklistmenu.hxx"
+#include <AccessibleGlobal.hxx>
+#include <AccessibleFilterMenuItem.hxx>
+#include <checklistmenu.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>

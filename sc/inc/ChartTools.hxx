@@ -15,7 +15,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svditer.hxx>
 
-#include "docsh.hxx"
+#include <docsh.hxx>
 #include "drwlayer.hxx"
 
 namespace sc {

@@ -21,7 +21,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/eeitem.hxx>
 
@@ -58,30 +58,30 @@
 #include <editeng/justifyitem.hxx>
 #include <editeng/fhgtitem.hxx>
 
-#include "formatsh.hxx"
-#include "sc.hrc"
-#include "scres.hrc"
-#include "globstr.hrc"
-#include "docsh.hxx"
-#include "patattr.hxx"
-#include "scmod.hxx"
-#include "stlpool.hxx"
-#include "stlsheet.hxx"
-#include "printfun.hxx"
-#include "docpool.hxx"
-#include "scresid.hxx"
-#include "tabvwsh.hxx"
-#include "undostyl.hxx"
-#include "markdata.hxx"
-#include "markarr.hxx"
-#include "attrib.hxx"
+#include <formatsh.hxx>
+#include <sc.hrc>
+#include <scres.hrc>
+#include <globstr.hrc>
+#include <docsh.hxx>
+#include <patattr.hxx>
+#include <scmod.hxx>
+#include <stlpool.hxx>
+#include <stlsheet.hxx>
+#include <printfun.hxx>
+#include <docpool.hxx>
+#include <scresid.hxx>
+#include <tabvwsh.hxx>
+#include <undostyl.hxx>
+#include <markdata.hxx>
+#include <markarr.hxx>
+#include <attrib.hxx>
 
 #define ScFormatShell
 #define TableFont
 #define FormatForSelection
-#include "scslots.hxx"
+#include <scslots.hxx>
 
-#include "scabstdlg.hxx"
+#include <scabstdlg.hxx>
 #include <editeng/fontitem.hxx>
 #include <sfx2/classificationhelper.hxx>
 

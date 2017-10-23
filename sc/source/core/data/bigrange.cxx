@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "bigrange.hxx"
-#include "document.hxx"
+#include <bigrange.hxx>
+#include <document.hxx>
 
 bool ScBigAddress::IsValid( const ScDocument* pDoc ) const
 {   // min/max interval bounds define whole col/row/tab

@@ -30,16 +30,16 @@
 #include <svtools/embedhlp.hxx>
 #include <comphelper/sequence.hxx>
 
-#include "TablePivotChart.hxx"
-#include "TablePivotCharts.hxx"
-#include "PivotTableDataProvider.hxx"
-#include "ChartTools.hxx"
+#include <TablePivotChart.hxx>
+#include <TablePivotCharts.hxx>
+#include <PivotTableDataProvider.hxx>
+#include <ChartTools.hxx>
 
-#include "miscuno.hxx"
-#include "docsh.hxx"
-#include "drwlayer.hxx"
-#include "undodat.hxx"
-#include "convuno.hxx"
+#include <miscuno.hxx>
+#include <docsh.hxx>
+#include <drwlayer.hxx>
+#include <undodat.hxx>
+#include <convuno.hxx>
 
 using namespace css;
 

@@ -27,8 +27,8 @@
 
 #include <rtl/ustring.hxx>
 
-#include "address.hxx"
-#include "global.hxx"
+#include <address.hxx>
+#include <global.hxx>
 
 class SvStream;
 class SvNumberFormatter;

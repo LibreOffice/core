@@ -18,8 +18,8 @@
  */
 
 #include "XMLCodeNameProvider.hxx"
-#include "document.hxx"
-#include "comphelper/sequence.hxx"
+#include <document.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace com::sun::star;
 

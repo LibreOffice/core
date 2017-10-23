@@ -28,7 +28,7 @@
 #include <vcl/scrbar.hxx>
 #include <svx/checklbx.hxx>
 
-#include "tabprotection.hxx"
+#include <tabprotection.hxx>
 
 #include <memory>
 

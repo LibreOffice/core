@@ -28,20 +28,20 @@
 #include <sfx2/objsh.hxx>
 #include <editeng/writingmodeitem.hxx>
 
-#include "global.hxx"
-#include "drwlayer.hxx"
-#include "userdat.hxx"
-#include "tabvwsh.hxx"
-#include "document.hxx"
-#include "editutil.hxx"
-#include "futext.hxx"
-#include "docsh.hxx"
-#include "postit.hxx"
-#include "globstr.hrc"
-#include "attrib.hxx"
-#include "scitems.hxx"
-#include "drawview.hxx"
-#include "undocell.hxx"
+#include <global.hxx>
+#include <drwlayer.hxx>
+#include <userdat.hxx>
+#include <tabvwsh.hxx>
+#include <document.hxx>
+#include <editutil.hxx>
+#include <futext.hxx>
+#include <docsh.hxx>
+#include <postit.hxx>
+#include <globstr.hrc>
+#include <attrib.hxx>
+#include <scitems.hxx>
+#include <drawview.hxx>
+#include <undocell.hxx>
 
 //  Editing of Note-Key-Objects has to be stopped always via StopEditMode,
 //  so that changes are taken over into the document!

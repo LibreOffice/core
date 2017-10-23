@@ -19,7 +19,7 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -36,18 +36,18 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
-#include "strings.hrc"
-#include "scmod.hxx"
-#include "attrib.hxx"
-#include "zforauto.hxx"
-#include "global.hxx"
-#include "globstr.hrc"
-#include "autoform.hxx"
-#include "strindlg.hxx"
-#include "scuiautofmt.hxx"
-#include "scresid.hxx"
-#include "document.hxx"
-#include "helpids.h"
+#include <strings.hrc>
+#include <scmod.hxx>
+#include <attrib.hxx>
+#include <zforauto.hxx>
+#include <global.hxx>
+#include <globstr.hrc>
+#include <autoform.hxx>
+#include <strindlg.hxx>
+#include <scuiautofmt.hxx>
+#include <scresid.hxx>
+#include <document.hxx>
+#include <helpids.h>
 
 // AutoFormat-Dialog:
 

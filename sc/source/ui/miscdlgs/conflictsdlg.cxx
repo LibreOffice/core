@@ -20,11 +20,11 @@
 #include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "conflictsdlg.hxx"
-#include "strings.hrc"
-#include "scresid.hxx"
-#include "viewdata.hxx"
-#include "dbfunc.hxx"
+#include <conflictsdlg.hxx>
+#include <strings.hrc>
+#include <scresid.hxx>
+#include <viewdata.hxx>
+#include <dbfunc.hxx>
 
 // struct ScConflictsListEntry
 

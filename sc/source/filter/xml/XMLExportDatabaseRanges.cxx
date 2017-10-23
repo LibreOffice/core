@@ -26,16 +26,16 @@
 #include "xmlexprt.hxx"
 #include "XMLExportIterator.hxx"
 #include "XMLConverter.hxx"
-#include "unonames.hxx"
-#include "dbdata.hxx"
-#include "document.hxx"
-#include "globstr.hrc"
-#include "globalnames.hxx"
+#include <unonames.hxx>
+#include <dbdata.hxx>
+#include <document.hxx>
+#include <globstr.hrc>
+#include <globalnames.hxx>
 #include "XMLExportSharedData.hxx"
-#include "rangeutl.hxx"
-#include "subtotalparam.hxx"
-#include "queryparam.hxx"
-#include "queryentry.hxx"
+#include <rangeutl.hxx>
+#include <subtotalparam.hxx>
+#include <queryparam.hxx>
+#include <queryentry.hxx>
 #include <sortparam.hxx>
 
 #include <svx/dataaccessdescriptor.hxx>

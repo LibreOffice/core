@@ -31,16 +31,16 @@
 #include <svx/graphichelper.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "graphsh.hxx"
-#include "strings.hrc"
-#include "viewdata.hxx"
-#include "drawview.hxx"
-#include "scresid.hxx"
+#include <graphsh.hxx>
+#include <strings.hrc>
+#include <viewdata.hxx>
+#include <drawview.hxx>
+#include <scresid.hxx>
 #include <svx/extedit.hxx>
-#include "tabvwsh.hxx"
+#include <tabvwsh.hxx>
 
 #define ScGraphicShell
-#include "scslots.hxx"
+#include <scslots.hxx>
 
 SFX_IMPL_INTERFACE(ScGraphicShell, ScDrawShell)
 

@@ -8,10 +8,10 @@
  *
  */
 
-#include "docsh.hxx"
-#include "reffact.hxx"
-#include "CovarianceDialog.hxx"
-#include "strings.hrc"
+#include <docsh.hxx>
+#include <reffact.hxx>
+#include <CovarianceDialog.hxx>
+#include <strings.hrc>
 
 ScCovarianceDialog::ScCovarianceDialog(
                         SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,

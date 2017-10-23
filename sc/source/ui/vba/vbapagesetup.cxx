@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbapagesetup.hxx"
-#include "cellsuno.hxx"
-#include "convuno.hxx"
-#include "rangelst.hxx"
+#include <cellsuno.hxx>
+#include <convuno.hxx>
+#include <rangelst.hxx>
 #include "excelvbahelper.hxx"
 #include "vbarange.hxx"
 #include <com/sun/star/sheet/XPrintAreas.hpp>

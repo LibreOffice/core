@@ -20,9 +20,9 @@
 #include <svl/style.hxx>
 #include <osl/diagnose.h>
 
-#include "stylehelper.hxx"
-#include "global.hxx"
-#include "globstr.hrc"
+#include <stylehelper.hxx>
+#include <global.hxx>
+#include <globstr.hrc>
 
 //  conversion programmatic <-> display (visible) name
 //  currently, the core always has the visible names

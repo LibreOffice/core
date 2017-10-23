@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include "cursuno.hxx"
-#include "cellsuno.hxx"
-#include "docsh.hxx"
-#include "hints.hxx"
-#include "markdata.hxx"
-#include "dociter.hxx"
-#include "miscuno.hxx"
+#include <cursuno.hxx>
+#include <cellsuno.hxx>
+#include <docsh.hxx>
+#include <hints.hxx>
+#include <markdata.hxx>
+#include <dociter.hxx>
+#include <miscuno.hxx>
 
 using namespace com::sun::star;
 

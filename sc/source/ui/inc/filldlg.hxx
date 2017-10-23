@@ -24,7 +24,7 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
-#include "global.hxx"
+#include <global.hxx>
 
 class ScDocument;
 

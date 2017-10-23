@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sortparam.hxx"
-#include "global.hxx"
-#include "address.hxx"
-#include "queryparam.hxx"
-#include "subtotalparam.hxx"
+#include <sortparam.hxx>
+#include <global.hxx>
+#include <address.hxx>
+#include <queryparam.hxx>
+#include <subtotalparam.hxx>
 
 #include <osl/diagnose.h>
 

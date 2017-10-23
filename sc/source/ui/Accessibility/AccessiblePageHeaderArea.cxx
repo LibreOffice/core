@@ -20,15 +20,15 @@
 #include <sal/config.h>
 
 #include <tools/gen.hxx>
-#include "AccessiblePageHeaderArea.hxx"
-#include "AccessibleText.hxx"
-#include "AccessibilityHints.hxx"
-#include "editsrc.hxx"
-#include "prevwsh.hxx"
-#include "prevloc.hxx"
-#include "scresid.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
+#include <AccessiblePageHeaderArea.hxx>
+#include <AccessibleText.hxx>
+#include <AccessibilityHints.hxx>
+#include <editsrc.hxx>
+#include <prevwsh.hxx>
+#include <prevloc.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

@@ -27,9 +27,9 @@
 #include <o3tl/make_unique.hxx>
 #include <memory>
 
-#include "callform.hxx"
-#include "global.hxx"
-#include "adiasync.hxx"
+#include <callform.hxx>
+#include <global.hxx>
+#include <adiasync.hxx>
 
 extern "C" {
 

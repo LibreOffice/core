@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "richstring.hxx"
+#include <richstring.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -27,7 +27,7 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/tokens.hxx>
-#include "editutil.hxx"
+#include <editutil.hxx>
 
 #include <vcl/svapp.hxx>
 

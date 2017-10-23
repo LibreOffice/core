@@ -9,7 +9,7 @@
 
 
 #include "functions_test.hxx"
-#include "document.hxx"
+#include <document.hxx>
 
 FunctionsTest::FunctionsTest(const OUString& rPath):
     ScBootstrapFixture(rPath)

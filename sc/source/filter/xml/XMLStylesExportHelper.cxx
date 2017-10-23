@@ -18,12 +18,12 @@
  */
 
 #include "XMLStylesExportHelper.hxx"
-#include "global.hxx"
-#include "unonames.hxx"
+#include <global.hxx>
+#include <unonames.hxx>
 #include "XMLConverter.hxx"
 #include "xmlexprt.hxx"
-#include "document.hxx"
-#include "rangeutl.hxx"
+#include <document.hxx>
+#include <rangeutl.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/XMLEventExport.hxx>

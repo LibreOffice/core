@@ -21,8 +21,8 @@
 #define INCLUDED_SC_SOURCE_UI_INC_TRANSOBJ_HXX
 
 #include <svtools/transfer.hxx>
-#include "global.hxx"
-#include "address.hxx"
+#include <global.hxx>
+#include <address.hxx>
 #include <sfx2/objsh.hxx>
 
 

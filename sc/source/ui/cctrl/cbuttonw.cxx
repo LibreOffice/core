@@ -22,7 +22,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include "cbutton.hxx"
+#include <cbutton.hxx>
 
 //  class ScDDComboBoxButton
 

@@ -22,8 +22,8 @@
 
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
-#include "global.hxx"
-#include "address.hxx"
+#include <global.hxx>
+#include <address.hxx>
 #include "anyrefdg.hxx"
 
 enum ScTabOpErr

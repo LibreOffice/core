@@ -22,7 +22,7 @@
 
 #include <memory>
 #include <svx/SpellDialogChildWindow.hxx>
-#include "document.hxx"
+#include <document.hxx>
 
 class ScConversionEngineBase;
 class ScSelectionState;

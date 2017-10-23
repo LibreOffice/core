@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "document.hxx"
-#include "stlsheet.hxx"
-#include "stlpool.hxx"
+#include <document.hxx>
+#include <stlsheet.hxx>
+#include <stlpool.hxx>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -34,12 +34,12 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/hint.hxx>
-#include "attrib.hxx"
+#include <attrib.hxx>
 
 #include <vcl/svapp.hxx>
 
-#include "globstr.hrc"
-#include "sc.hrc"
+#include <globstr.hrc>
+#include <sc.hrc>
 
 
 #define TWO_CM      1134

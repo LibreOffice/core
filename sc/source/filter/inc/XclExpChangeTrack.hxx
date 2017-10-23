@@ -24,9 +24,9 @@
 #include <stack>
 #include <tools/datetime.hxx>
 #include <rtl/uuid.h>
-#include "bigrange.hxx"
-#include "chgtrack.hxx"
-#include "document.hxx"
+#include <bigrange.hxx>
+#include <chgtrack.hxx>
+#include <document.hxx>
 #include "xelink.hxx"
 #include "ftools.hxx"
 #include "excrecds.hxx"

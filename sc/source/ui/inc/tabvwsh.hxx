@@ -27,12 +27,12 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfac.hxx>
 #include <editeng/svxenum.hxx>
-#include "scdllapi.h"
+#include <scdllapi.h>
 #include "dbfunc.hxx"
 #include "target.hxx"
-#include "rangelst.hxx"
-#include "shellids.hxx"
-#include "tabprotection.hxx"
+#include <rangelst.hxx>
+#include <shellids.hxx>
+#include <tabprotection.hxx>
 
 #include <memory>
 #include <map>

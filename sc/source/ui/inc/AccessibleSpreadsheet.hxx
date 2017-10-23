@@ -29,7 +29,7 @@
 
 #include <vector>
 
-#include "rangelst.hxx"
+#include <rangelst.hxx>
 #include <map>
 
 class ScMyAddress : public ScAddress

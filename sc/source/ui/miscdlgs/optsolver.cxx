@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "rangelst.hxx"
-#include "scitems.hxx"
+#include <rangelst.hxx>
+#include <scitems.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/builderfactory.hxx>
@@ -26,20 +26,20 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 
-#include "uiitems.hxx"
-#include "reffact.hxx"
-#include "docsh.hxx"
-#include "docfunc.hxx"
-#include "formulacell.hxx"
-#include "rangeutl.hxx"
-#include "scresid.hxx"
-#include "convuno.hxx"
-#include "unonames.hxx"
-#include "solveroptions.hxx"
-#include "solverutil.hxx"
-#include "globstr.hrc"
+#include <uiitems.hxx>
+#include <reffact.hxx>
+#include <docsh.hxx>
+#include <docfunc.hxx>
+#include <formulacell.hxx>
+#include <rangeutl.hxx>
+#include <scresid.hxx>
+#include <convuno.hxx>
+#include <unonames.hxx>
+#include <solveroptions.hxx>
+#include <solverutil.hxx>
+#include <globstr.hrc>
 
-#include "optsolver.hxx"
+#include <optsolver.hxx>
 
 #include <com/sun/star/sheet/Solver.hpp>
 #include <com/sun/star/sheet/XSolverDescription.hpp>

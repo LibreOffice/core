@@ -17,23 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <memory>
-#include "AccessibleText.hxx"
-#include "AccessibleCell.hxx"
-#include "tabvwsh.hxx"
-#include "editutil.hxx"
-#include "cellvalue.hxx"
-#include "formulacell.hxx"
-#include "document.hxx"
-#include "scmod.hxx"
-#include "prevwsh.hxx"
-#include "docsh.hxx"
-#include "prevloc.hxx"
-#include "patattr.hxx"
-#include "inputwin.hxx"
+#include <AccessibleText.hxx>
+#include <AccessibleCell.hxx>
+#include <tabvwsh.hxx>
+#include <editutil.hxx>
+#include <cellvalue.hxx>
+#include <formulacell.hxx>
+#include <document.hxx>
+#include <scmod.hxx>
+#include <prevwsh.hxx>
+#include <docsh.hxx>
+#include <prevloc.hxx>
+#include <patattr.hxx>
+#include <inputwin.hxx>
 #include <editeng/unofored.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/unoedhlp.hxx>

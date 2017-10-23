@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_ATTRDLG_SCDLGFACT_HXX
 #define INCLUDED_SC_SOURCE_UI_ATTRDLG_SCDLGFACT_HXX
 
-#include "scabstdlg.hxx"
+#include <scabstdlg.hxx>
 class Dialog;
 class ScImportAsciiDlg;
 class ScAutoFormatDlg;

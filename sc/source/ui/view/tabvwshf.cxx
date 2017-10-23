@@ -21,7 +21,7 @@
 
 #include <memory>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -34,24 +34,24 @@
 #include <svx/svxdlg.hxx>
 #include <editeng/colritem.hxx>
 
-#include "tabvwsh.hxx"
-#include "sc.hrc"
-#include "docsh.hxx"
-#include "document.hxx"
-#include "shtabdlg.hxx"
-#include "scresid.hxx"
-#include "globstr.hrc"
-#include "strings.hrc"
-#include "docfunc.hxx"
-#include "eventuno.hxx"
-#include "dpobject.hxx"
-#include "dpshttab.hxx"
+#include <tabvwsh.hxx>
+#include <sc.hrc>
+#include <docsh.hxx>
+#include <document.hxx>
+#include <shtabdlg.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
+#include <strings.hrc>
+#include <docfunc.hxx>
+#include <eventuno.hxx>
+#include <dpobject.hxx>
+#include <dpshttab.hxx>
 
-#include "scabstdlg.hxx"
+#include <scabstdlg.hxx>
 
-#include "tabbgcolor.hxx"
-#include "tabbgcolordlg.hxx"
-#include "markdata.hxx"
+#include <tabbgcolor.hxx>
+#include <tabbgcolordlg.hxx>
+#include <markdata.hxx>
 
 #include <vector>
 

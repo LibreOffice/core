@@ -38,16 +38,16 @@
 #include <svx/charthelper.hxx>
 #include <svtools/embedhlp.hxx>
 
-#include "ChartTools.hxx"
-#include "chartuno.hxx"
-#include "miscuno.hxx"
-#include "docsh.hxx"
-#include "drwlayer.hxx"
-#include "undodat.hxx"
-#include "chartarr.hxx"
-#include "chartlis.hxx"
-#include "chart2uno.hxx"
-#include "convuno.hxx"
+#include <ChartTools.hxx>
+#include <chartuno.hxx>
+#include <miscuno.hxx>
+#include <docsh.hxx>
+#include <drwlayer.hxx>
+#include <undodat.hxx>
+#include <chartarr.hxx>
+#include <chartlis.hxx>
+#include <chart2uno.hxx>
+#include <convuno.hxx>
 
 using namespace css;
 

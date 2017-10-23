@@ -19,9 +19,9 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "delcldlg.hxx"
-#include "scresid.hxx"
-#include "strings.hrc"
+#include <delcldlg.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
 
 static sal_uInt8 nDelItemChecked=0;
 

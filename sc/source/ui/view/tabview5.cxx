@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <svx/fmshell.hxx>
@@ -29,26 +29,26 @@
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/objsh.hxx>
 
-#include "tabview.hxx"
-#include "tabvwsh.hxx"
-#include "document.hxx"
-#include "gridwin.hxx"
-#include "olinewin.hxx"
-#include "tabsplit.hxx"
-#include "colrowba.hxx"
-#include "tabcont.hxx"
-#include "sc.hrc"
-#include "pagedata.hxx"
-#include "hiranges.hxx"
-#include "drawview.hxx"
-#include "drwlayer.hxx"
-#include "fusel.hxx"
-#include "seltrans.hxx"
-#include "scmod.hxx"
-#include "AccessibilityHints.hxx"
-#include "docsh.hxx"
-#include "viewuno.hxx"
-#include "postit.hxx"
+#include <tabview.hxx>
+#include <tabvwsh.hxx>
+#include <document.hxx>
+#include <gridwin.hxx>
+#include <olinewin.hxx>
+#include <tabsplit.hxx>
+#include <colrowba.hxx>
+#include <tabcont.hxx>
+#include <sc.hrc>
+#include <pagedata.hxx>
+#include <hiranges.hxx>
+#include <drawview.hxx>
+#include <drwlayer.hxx>
+#include <fusel.hxx>
+#include <seltrans.hxx>
+#include <scmod.hxx>
+#include <AccessibilityHints.hxx>
+#include <docsh.hxx>
+#include <viewuno.hxx>
+#include <postit.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

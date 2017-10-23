@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "stringutil.hxx"
-#include "global.hxx"
+#include <stringutil.hxx>
+#include <global.hxx>
 #include <svl/zforlist.hxx>
 
 #include <rtl/ustrbuf.hxx>

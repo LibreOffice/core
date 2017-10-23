@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xiview.hxx"
-#include "document.hxx"
-#include "scextopt.hxx"
-#include "viewopti.hxx"
-#include "xistream.hxx"
-#include "xihelper.hxx"
-#include "xistyle.hxx"
+#include <xiview.hxx>
+#include <document.hxx>
+#include <scextopt.hxx>
+#include <viewopti.hxx>
+#include <xistream.hxx>
+#include <xihelper.hxx>
+#include <xistyle.hxx>
 
 // Document view settings =====================================================
 

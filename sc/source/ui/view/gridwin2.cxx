@@ -17,32 +17,32 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <comphelper/lok.hxx>
 
-#include "gridwin.hxx"
-#include "tabvwsh.hxx"
-#include "docsh.hxx"
-#include "viewdata.hxx"
-#include "pivot.hxx"
-#include "uiitems.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
-#include "globstr.hrc"
-#include "strings.hrc"
-#include "pagedata.hxx"
-#include "dpobject.hxx"
-#include "dpsave.hxx"
-#include "dpoutput.hxx"
-#include "dpshttab.hxx"
-#include "dbdocfun.hxx"
-#include "checklistmenu.hxx"
-#include "dpcontrol.hxx"
-#include "userlist.hxx"
-#include "scabstdlg.hxx"
-#include "spellcheckcontext.hxx"
+#include <gridwin.hxx>
+#include <tabvwsh.hxx>
+#include <docsh.hxx>
+#include <viewdata.hxx>
+#include <pivot.hxx>
+#include <uiitems.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
+#include <globstr.hrc>
+#include <strings.hrc>
+#include <pagedata.hxx>
+#include <dpobject.hxx>
+#include <dpsave.hxx>
+#include <dpoutput.hxx>
+#include <dpshttab.hxx>
+#include <dbdocfun.hxx>
+#include <checklistmenu.hxx>
+#include <dpcontrol.hxx>
+#include <userlist.hxx>
+#include <scabstdlg.hxx>
+#include <spellcheckcontext.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 

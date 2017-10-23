@@ -12,8 +12,8 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include "address.hxx"
-#include "chartlis.hxx"
+#include <address.hxx>
+#include <chartlis.hxx>
 
 namespace {
 

@@ -19,19 +19,19 @@
 
 #include <sfx2/dispatch.hxx>
 
-#include "tabvwsh.hxx"
-#include "uiitems.hxx"
-#include "dbdata.hxx"
-#include "rangenam.hxx"
-#include "rangeutl.hxx"
-#include "reffact.hxx"
-#include "document.hxx"
-#include "scresid.hxx"
+#include <tabvwsh.hxx>
+#include <uiitems.hxx>
+#include <dbdata.hxx>
+#include <rangenam.hxx>
+#include <rangeutl.hxx>
+#include <reffact.hxx>
+#include <document.hxx>
+#include <scresid.hxx>
 
-#include "globstr.hrc"
-#include "strings.hrc"
+#include <globstr.hrc>
+#include <strings.hrc>
 
-#include "consdlg.hxx"
+#include <consdlg.hxx>
 #include <vcl/msgbox.hxx>
 
 #define INFOBOX(id) ScopedVclPtrInstance<InfoBox>(this, ScGlobal::GetRscString(id))->Execute()

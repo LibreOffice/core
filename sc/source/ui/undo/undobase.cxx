@@ -19,18 +19,18 @@
 
 #include <vcl/virdev.hxx>
 
-#include "undobase.hxx"
-#include "refundo.hxx"
-#include "docsh.hxx"
-#include "tabvwsh.hxx"
-#include "undoolk.hxx"
-#include "undodraw.hxx"
-#include "dbdata.hxx"
-#include "attrib.hxx"
-#include "queryparam.hxx"
-#include "subtotalparam.hxx"
-#include "bcaslot.hxx"
-#include "globstr.hrc"
+#include <undobase.hxx>
+#include <refundo.hxx>
+#include <docsh.hxx>
+#include <tabvwsh.hxx>
+#include <undoolk.hxx>
+#include <undodraw.hxx>
+#include <dbdata.hxx>
+#include <attrib.hxx>
+#include <queryparam.hxx>
+#include <subtotalparam.hxx>
+#include <bcaslot.hxx>
+#include <globstr.hrc>
 #include <rowheightcontext.hxx>
 #include <column.hxx>
 #include <sortparam.hxx>

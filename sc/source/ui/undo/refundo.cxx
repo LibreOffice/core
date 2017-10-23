@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "refundo.hxx"
-#include "undobase.hxx"
-#include "document.hxx"
-#include "dbdata.hxx"
-#include "rangenam.hxx"
-#include "pivot.hxx"
-#include "chartarr.hxx"
-#include "stlpool.hxx"
-#include "detdata.hxx"
-#include "prnsave.hxx"
-#include "chartlis.hxx"
-#include "dpobject.hxx"
-#include "areasave.hxx"
-#include "unoreflist.hxx"
+#include <refundo.hxx>
+#include <undobase.hxx>
+#include <document.hxx>
+#include <dbdata.hxx>
+#include <rangenam.hxx>
+#include <pivot.hxx>
+#include <chartarr.hxx>
+#include <stlpool.hxx>
+#include <detdata.hxx>
+#include <prnsave.hxx>
+#include <chartlis.hxx>
+#include <dpobject.hxx>
+#include <areasave.hxx>
+#include <unoreflist.hxx>
 #include <scopetools.hxx>
 #include <refupdatecontext.hxx>
 

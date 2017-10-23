@@ -21,12 +21,12 @@
 #include "XMLTableShapeImportHelper.hxx"
 #include "xmlimprt.hxx"
 #include "XMLConverter.hxx"
-#include "drwlayer.hxx"
+#include <drwlayer.hxx>
 #include "xmlannoi.hxx"
-#include "rangeutl.hxx"
-#include "userdat.hxx"
-#include "docuno.hxx"
-#include "sheetdata.hxx"
+#include <rangeutl.hxx>
+#include <userdat.hxx>
+#include <docuno.hxx>
+#include <sheetdata.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>

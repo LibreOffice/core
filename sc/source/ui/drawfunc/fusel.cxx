@@ -33,21 +33,21 @@
 #include <svx/svdocapt.hxx>
 #include <sfx2/app.hxx>
 
-#include "fusel.hxx"
-#include "sc.hrc"
-#include "fudraw.hxx"
-#include "futext.hxx"
-#include "drawview.hxx"
-#include "tabvwsh.hxx"
-#include "drawpage.hxx"
-#include "globstr.hrc"
-#include "drwlayer.hxx"
-#include "userdat.hxx"
-#include "scmod.hxx"
-#include "client.hxx"
-#include "charthelper.hxx"
-#include "docuno.hxx"
-#include "docsh.hxx"
+#include <fusel.hxx>
+#include <sc.hrc>
+#include <fudraw.hxx>
+#include <futext.hxx>
+#include <drawview.hxx>
+#include <tabvwsh.hxx>
+#include <drawpage.hxx>
+#include <globstr.hrc>
+#include <drwlayer.hxx>
+#include <userdat.hxx>
+#include <scmod.hxx>
+#include <client.hxx>
+#include <charthelper.hxx>
+#include <docuno.hxx>
+#include <docsh.hxx>
 
 //  maximal permitted mouse movement to start Drag&Drop
 //! fusel,fuconstr,futext - combine them!

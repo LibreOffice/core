@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "selectionstate.hxx"
+#include <selectionstate.hxx>
 
 #include <editeng/editview.hxx>
-#include "viewdata.hxx"
-#include "markdata.hxx"
+#include <viewdata.hxx>
+#include <markdata.hxx>
 
 ScSelectionState::ScSelectionState( ScViewData& rViewData ) :
     meType( SC_SELECTTYPE_NONE )

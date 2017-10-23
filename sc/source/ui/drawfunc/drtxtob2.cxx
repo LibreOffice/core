@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/adjustitem.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/fontwork.hxx>
@@ -33,16 +33,16 @@
 #include <sot/formats.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svdoashp.hxx>
-#include "sc.hrc"
-#include "drtxtob.hxx"
-#include "viewdata.hxx"
-#include "drawview.hxx"
-#include "tabvwsh.hxx"
-#include "impex.hxx"
-#include "docsh.hxx"
-#include "transobj.hxx"
-#include "drwtrans.hxx"
-#include "drwlayer.hxx"
+#include <sc.hrc>
+#include <drtxtob.hxx>
+#include <viewdata.hxx>
+#include <drawview.hxx>
+#include <tabvwsh.hxx>
+#include <impex.hxx>
+#include <docsh.hxx>
+#include <transobj.hxx>
+#include <drwtrans.hxx>
+#include <drwlayer.hxx>
 
 sal_uInt16 ScGetFontWorkId()
 {

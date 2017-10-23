@@ -27,8 +27,8 @@
 #include <ooo/vba/excel/XlFormatConditionOperator.hpp>
 #include <ooo/vba/excel/XlDVAlertStyle.hpp>
 
-#include "unonames.hxx"
-#include "rangelst.hxx"
+#include <unonames.hxx>
+#include <rangelst.hxx>
 #include "excelvbahelper.hxx"
 #include "vbarange.hxx"
 

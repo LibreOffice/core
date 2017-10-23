@@ -21,10 +21,10 @@
 #undef SC_DLLIMPLEMENTATION
 #endif
 
-#include "dpgroupdlg.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
-#include "globstr.hrc"
+#include <dpgroupdlg.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
+#include <globstr.hrc>
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 

@@ -27,13 +27,13 @@
 #include <formula/errorcodes.hxx>
 #include <formula/tokenarray.hxx>
 #include <sfx2/linkmgr.hxx>
-#include "scdll.hxx"
-#include "scdllapi.h"
-#include "types.hxx"
-#include "externalrefmgr.hxx"
-#include "calcconfig.hxx"
-#include "token.hxx"
-#include "math.hxx"
+#include <scdll.hxx>
+#include <scdllapi.h>
+#include <types.hxx>
+#include <externalrefmgr.hxx>
+#include <calcconfig.hxx>
+#include <token.hxx>
+#include <math.hxx>
 #include "parclass.hxx"
 
 #include <map>

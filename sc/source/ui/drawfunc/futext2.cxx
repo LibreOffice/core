@@ -21,8 +21,8 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdetc.hxx>
 
-#include "futext.hxx"
-#include "tabvwsh.hxx"
+#include <futext.hxx>
+#include <tabvwsh.hxx>
 
 SdrOutliner* FuText::MakeOutliner()
 {

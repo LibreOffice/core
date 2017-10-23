@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <editeng/adjustitem.hxx>
@@ -39,23 +39,23 @@
 #include <unotools/charclass.hxx>
 #include <comphelper/string.hxx>
 
-#include "eeimport.hxx"
-#include "global.hxx"
-#include "document.hxx"
-#include "editutil.hxx"
-#include "stlsheet.hxx"
-#include "docpool.hxx"
-#include "attrib.hxx"
-#include "patattr.hxx"
-#include "eeparser.hxx"
-#include "drwlayer.hxx"
-#include "rangenam.hxx"
-#include "progress.hxx"
-#include "stringutil.hxx"
+#include <eeimport.hxx>
+#include <global.hxx>
+#include <document.hxx>
+#include <editutil.hxx>
+#include <stlsheet.hxx>
+#include <docpool.hxx>
+#include <attrib.hxx>
+#include <patattr.hxx>
+#include <eeparser.hxx>
+#include <drwlayer.hxx>
+#include <rangenam.hxx>
+#include <progress.hxx>
+#include <stringutil.hxx>
 #include <rowheightcontext.hxx>
-#include "fuinsert.hxx"
+#include <fuinsert.hxx>
 
-#include "globstr.hrc"
+#include <globstr.hrc>
 
 #include <memory>
 

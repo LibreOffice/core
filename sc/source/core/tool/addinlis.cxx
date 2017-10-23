@@ -20,11 +20,11 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 
-#include "addinlis.hxx"
-#include "miscuno.hxx"
-#include "document.hxx"
-#include "brdcst.hxx"
-#include "sc.hrc"
+#include <addinlis.hxx>
+#include <miscuno.hxx>
+#include <document.hxx>
+#include <brdcst.hxx>
+#include <sc.hrc>
 
 using namespace com::sun::star;
 

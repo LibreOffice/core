@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "rfindlst.hxx"
+#include <rfindlst.hxx>
 #include <tools/debug.hxx>
 
 #define SC_RANGECOLORS  8

@@ -19,7 +19,7 @@
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/editdata.hxx>
@@ -42,28 +42,28 @@
 #include <vcl/settings.hxx>
 #include <svx/unoapi.hxx>
 
-#include "output.hxx"
-#include "document.hxx"
-#include "drwlayer.hxx"
-#include "formulacell.hxx"
-#include "attrib.hxx"
-#include "patattr.hxx"
-#include "docpool.hxx"
-#include "tabvwsh.hxx"
-#include "progress.hxx"
-#include "pagedata.hxx"
-#include "chgtrack.hxx"
-#include "chgviset.hxx"
-#include "viewutil.hxx"
-#include "gridmerg.hxx"
-#include "invmerge.hxx"
-#include "fillinfo.hxx"
-#include "scmod.hxx"
-#include "appoptio.hxx"
-#include "postit.hxx"
+#include <output.hxx>
+#include <document.hxx>
+#include <drwlayer.hxx>
+#include <formulacell.hxx>
+#include <attrib.hxx>
+#include <patattr.hxx>
+#include <docpool.hxx>
+#include <tabvwsh.hxx>
+#include <progress.hxx>
+#include <pagedata.hxx>
+#include <chgtrack.hxx>
+#include <chgviset.hxx>
+#include <viewutil.hxx>
+#include <gridmerg.hxx>
+#include <invmerge.hxx>
+#include <fillinfo.hxx>
+#include <scmod.hxx>
+#include <appoptio.hxx>
+#include <postit.hxx>
 
-#include "scresid.hxx"
-#include "colorscale.hxx"
+#include <scresid.hxx>
+#include <colorscale.hxx>
 
 #include <math.h>
 #include <iostream>

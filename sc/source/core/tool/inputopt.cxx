@@ -21,12 +21,12 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/diagnose.h>
 
-#include "inputopt.hxx"
-#include "rechead.hxx"
-#include "scresid.hxx"
-#include "global.hxx"
-#include "sc.hrc"
-#include "miscuno.hxx"
+#include <inputopt.hxx>
+#include <rechead.hxx>
+#include <scresid.hxx>
+#include <global.hxx>
+#include <sc.hrc>
+#include <miscuno.hxx>
 
 using namespace utl;
 using namespace com::sun::star::uno;

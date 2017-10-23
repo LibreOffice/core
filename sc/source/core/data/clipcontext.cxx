@@ -8,9 +8,9 @@
  */
 
 #include <memory>
-#include "clipcontext.hxx"
-#include "document.hxx"
-#include "mtvelements.hxx"
+#include <clipcontext.hxx>
+#include <document.hxx>
+#include <mtvelements.hxx>
 #include <column.hxx>
 #include <scitems.hxx>
 #include <tokenarray.hxx>

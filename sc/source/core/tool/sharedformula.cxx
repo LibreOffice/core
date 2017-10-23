@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sharedformula.hxx"
-#include "calcmacros.hxx"
-#include "tokenarray.hxx"
+#include <sharedformula.hxx>
+#include <calcmacros.hxx>
+#include <tokenarray.hxx>
 #include <listenercontext.hxx>
 #include <document.hxx>
 #include <grouparealistener.hxx>

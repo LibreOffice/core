@@ -21,8 +21,8 @@
 #define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLETABLEBASE_HXX
 
 #include "AccessibleContextBase.hxx"
-#include "global.hxx"
-#include "address.hxx"
+#include <global.hxx>
+#include <address.hxx>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>

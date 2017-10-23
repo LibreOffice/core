@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include "scdllapi.h"
 #include <i18nlangtag/lang.h>
-#include <types.hxx>
+#include "types.hxx"
 
 class SvNumberFormatter;
 

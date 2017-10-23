@@ -19,19 +19,19 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svx/numinf.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/style.hxx>
 #include <svl/cjkoptions.hxx>
 
-#include "styledlg.hxx"
-#include "tabpages.hxx"
-#include "tphf.hxx"
-#include "tptable.hxx"
-#include "scresid.hxx"
-#include "scres.hrc"
-#include "strings.hrc"
+#include <styledlg.hxx>
+#include <tabpages.hxx>
+#include <tphf.hxx>
+#include <tptable.hxx>
+#include <scresid.hxx>
+#include <scres.hrc>
+#include <strings.hrc>
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>

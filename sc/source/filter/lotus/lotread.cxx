@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "document.hxx"
+#include <document.hxx>
 
-#include "scerrors.hxx"
-#include "root.hxx"
+#include <scerrors.hxx>
+#include <root.hxx>
 #include "lotfilter.hxx"
-#include "lotimpop.hxx"
-#include "lotattr.hxx"
-#include "fprogressbar.hxx"
+#include <lotimpop.hxx>
+#include <lotattr.hxx>
+#include <fprogressbar.hxx>
 
 class ScFormulaCell;
 

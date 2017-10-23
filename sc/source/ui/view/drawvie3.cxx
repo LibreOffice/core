@@ -22,17 +22,17 @@
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include "strings.hrc"
-#include "scresid.hxx"
-#include "drawview.hxx"
-#include "drwlayer.hxx"
+#include <strings.hrc>
+#include <scresid.hxx>
+#include <drawview.hxx>
+#include <drwlayer.hxx>
 #include "imapwrap.hxx"
-#include "viewdata.hxx"
-#include "dbfunc.hxx"
-#include "document.hxx"
-#include "userdat.hxx"
-#include "tabvwsh.hxx"
-#include "docsh.hxx"
+#include <viewdata.hxx>
+#include <dbfunc.hxx>
+#include <document.hxx>
+#include <userdat.hxx>
+#include <tabvwsh.hxx>
+#include <docsh.hxx>
 
 ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
     FmFormView( pData->GetDocument()->GetDrawLayer(), pOut ),

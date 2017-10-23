@@ -58,16 +58,16 @@
 #include <rtl/strbuf.hxx>
 #include <unotools/saveopt.hxx>
 
-#include "document.hxx"
-#include "xmlwrap.hxx"
+#include <document.hxx>
+#include <xmlwrap.hxx>
 #include "xmlimprt.hxx"
 #include "xmlexprt.hxx"
-#include "global.hxx"
-#include "globstr.hrc"
-#include "scerrors.hxx"
+#include <global.hxx>
+#include <globstr.hrc>
+#include <scerrors.hxx>
 #include "XMLExportSharedData.hxx"
-#include "docuno.hxx"
-#include "sheetdata.hxx"
+#include <docuno.hxx>
+#include <sheetdata.hxx>
 #include "XMLCodeNameProvider.hxx"
 #include <docsh.hxx>
 #include <unonames.hxx>

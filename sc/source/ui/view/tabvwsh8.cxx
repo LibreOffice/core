@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/boxitem.hxx>
 
-#include "tabvwsh.hxx"
-#include "document.hxx"
+#include <tabvwsh.hxx>
+#include <document.hxx>
 
 void ScTabViewShell::SetDefaultFrameLine( const ::editeng::SvxBorderLine* pLine )
 {

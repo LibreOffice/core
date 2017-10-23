@@ -22,7 +22,7 @@
 
 #include <sal/types.h>
 
-#include "address.hxx"
+#include <address.hxx>
 
 #include <vcl/mapmod.hxx>
 #include <vcl/vclptr.hxx>

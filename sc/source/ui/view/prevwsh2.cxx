@@ -20,11 +20,11 @@
 #include <svx/svdmodel.hxx>
 #include <svl/hint.hxx>
 
-#include "prevwsh.hxx"
-#include "docsh.hxx"
-#include "preview.hxx"
-#include "hints.hxx"
-#include "sc.hrc"
+#include <prevwsh.hxx>
+#include <docsh.hxx>
+#include <preview.hxx>
+#include <hints.hxx>
+#include <sc.hrc>
 
 void ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "spelldialog.hxx"
+#include <spelldialog.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
@@ -26,14 +26,14 @@
 #include <editeng/editstat.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/unolingu.hxx>
-#include "selectionstate.hxx"
+#include <selectionstate.hxx>
 
-#include "spelleng.hxx"
-#include "tabvwsh.hxx"
-#include "docsh.hxx"
-#include "scmod.hxx"
-#include "editable.hxx"
-#include "undoblk.hxx"
+#include <spelleng.hxx>
+#include <tabvwsh.hxx>
+#include <docsh.hxx>
+#include <scmod.hxx>
+#include <editable.hxx>
+#include <undoblk.hxx>
 #include <gridwin.hxx>
 #include <refupdatecontext.hxx>
 

@@ -11,7 +11,7 @@
 #include <test/bootstrapfixture.hxx>
 #include "helper/qahelper.hxx"
 
-#include "markdata.hxx"
+#include <markdata.hxx>
 #include "../../source/core/data/markarr.cxx"
 #include "../../source/core/data/markmulti.cxx"
 #include "../../source/core/data/segmenttree.cxx"

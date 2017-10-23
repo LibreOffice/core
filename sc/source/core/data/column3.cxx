@@ -17,37 +17,37 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "column.hxx"
+#include <column.hxx>
 
-#include "scitems.hxx"
-#include "formulacell.hxx"
-#include "document.hxx"
-#include "attarray.hxx"
-#include "patattr.hxx"
-#include "cellform.hxx"
-#include "typedstrdata.hxx"
+#include <scitems.hxx>
+#include <formulacell.hxx>
+#include <document.hxx>
+#include <attarray.hxx>
+#include <patattr.hxx>
+#include <cellform.hxx>
+#include <typedstrdata.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/token.hxx>
-#include "brdcst.hxx"
-#include "docoptio.hxx"
-#include "subtotal.hxx"
-#include "markdata.hxx"
-#include "detfunc.hxx"
-#include "postit.hxx"
-#include "stringutil.hxx"
-#include "docpool.hxx"
-#include "globalnames.hxx"
-#include "cellvalue.hxx"
-#include "tokenarray.hxx"
-#include "stlalgorithm.hxx"
-#include "clipcontext.hxx"
-#include "columnspanset.hxx"
-#include "mtvcellfunc.hxx"
-#include "scopetools.hxx"
-#include "editutil.hxx"
-#include "sharedformula.hxx"
+#include <brdcst.hxx>
+#include <docoptio.hxx>
+#include <subtotal.hxx>
+#include <markdata.hxx>
+#include <detfunc.hxx>
+#include <postit.hxx>
+#include <stringutil.hxx>
+#include <docpool.hxx>
+#include <globalnames.hxx>
+#include <cellvalue.hxx>
+#include <tokenarray.hxx>
+#include <stlalgorithm.hxx>
+#include <clipcontext.hxx>
+#include <columnspanset.hxx>
+#include <mtvcellfunc.hxx>
+#include <scopetools.hxx>
+#include <editutil.hxx>
+#include <sharedformula.hxx>
 #include <listenercontext.hxx>
-#include "filterentries.hxx"
+#include <filterentries.hxx>
 
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 

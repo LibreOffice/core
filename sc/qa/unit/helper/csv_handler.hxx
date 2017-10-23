@@ -12,13 +12,13 @@
 
 #include <iostream>
 
-#include "docsh.hxx"
-#include "postit.hxx"
-#include "patattr.hxx"
-#include "scitems.hxx"
-#include "document.hxx"
-#include "cellform.hxx"
-#include "cellvalue.hxx"
+#include <docsh.hxx>
+#include <postit.hxx>
+#include <patattr.hxx>
+#include <scitems.hxx>
+#include <document.hxx>
+#include <cellform.hxx>
+#include <cellvalue.hxx>
 
 #include <rtl/strbuf.hxx>
 

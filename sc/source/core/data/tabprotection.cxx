@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "tabprotection.hxx"
+#include <tabprotection.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <osl/diagnose.h>
-#include "document.hxx"
+#include <document.hxx>
 
 #include <vector>
 

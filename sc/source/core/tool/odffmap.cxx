@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "compiler.hxx"
+#include <compiler.hxx>
 #include <sal/macros.h>
 
 // ODFF, English, MapDupToInternal when writing ODFF, Programmatical, ODF_11

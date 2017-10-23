@@ -26,17 +26,17 @@
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include "acredlin.hxx"
-#include "global.hxx"
-#include "reffact.hxx"
-#include "document.hxx"
-#include "docsh.hxx"
-#include "scresid.hxx"
-#include "globstr.hrc"
-#include "strings.hrc"
-#include "simpref.hxx"
-#include "scmod.hxx"
-#include "tabvwsh.hxx"
+#include <acredlin.hxx>
+#include <global.hxx>
+#include <reffact.hxx>
+#include <document.hxx>
+#include <docsh.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
+#include <strings.hrc>
+#include <simpref.hxx>
+#include <scmod.hxx>
+#include <tabvwsh.hxx>
 
 // defines -------------------------------------------------------------------
 

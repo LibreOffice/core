@@ -19,9 +19,9 @@
 
 #include <svx/svdundo.hxx>
 
-#include "undodraw.hxx"
-#include "docsh.hxx"
-#include "tabvwsh.hxx"
+#include <undodraw.hxx>
+#include <docsh.hxx>
+#include <tabvwsh.hxx>
 
 
 ScUndoDraw::ScUndoDraw( SfxUndoAction* pUndo, ScDocShell* pDocSh ) :

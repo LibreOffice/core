@@ -22,7 +22,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/seleng.hxx>
-#include "address.hxx"
+#include <address.hxx>
 
 #define HDR_SIZE_OPTIMUM    0xFFFF
 

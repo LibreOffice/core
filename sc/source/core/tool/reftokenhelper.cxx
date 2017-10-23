@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "reftokenhelper.hxx"
-#include "document.hxx"
-#include "rangeutl.hxx"
-#include "compiler.hxx"
-#include "tokenarray.hxx"
+#include <reftokenhelper.hxx>
+#include <document.hxx>
+#include <rangeutl.hxx>
+#include <compiler.hxx>
+#include <tokenarray.hxx>
 
 #include <rtl/ustring.hxx>
 #include <formula/grammar.hxx>

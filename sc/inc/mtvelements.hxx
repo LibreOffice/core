@@ -17,7 +17,7 @@
 #include <editeng/editobj.hxx>
 #include "calcmacros.hxx"
 #include "postit.hxx"
-#include <celltextattr.hxx>
+#include "celltextattr.hxx"
 #include <osl/mutex.hxx>
 
 #if DEBUG_COLUMN_STORAGE

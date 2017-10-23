@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "querytablebuffer.hxx"
+#include <querytablebuffer.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -29,9 +29,9 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "addressconverter.hxx"
-#include "connectionsbuffer.hxx"
-#include "defnamesbuffer.hxx"
+#include <addressconverter.hxx>
+#include <connectionsbuffer.hxx>
+#include <defnamesbuffer.hxx>
 
 namespace oox {
 namespace xls {

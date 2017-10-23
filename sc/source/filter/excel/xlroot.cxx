@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "xlroot.hxx"
+#include <xlroot.hxx>
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -35,22 +35,22 @@
 #include <vcl/settings.hxx>
 
 #include <editeng/editstat.hxx>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
-#include "document.hxx"
-#include "docpool.hxx"
-#include "docuno.hxx"
-#include "editutil.hxx"
-#include "drwlayer.hxx"
-#include "scextopt.hxx"
-#include "patattr.hxx"
-#include "fapihelper.hxx"
-#include "xlconst.hxx"
-#include "xlstyle.hxx"
-#include "xlchart.hxx"
-#include "xltracer.hxx"
+#include <document.hxx>
+#include <docpool.hxx>
+#include <docuno.hxx>
+#include <editutil.hxx>
+#include <drwlayer.hxx>
+#include <scextopt.hxx>
+#include <patattr.hxx>
+#include <fapihelper.hxx>
+#include <xlconst.hxx>
+#include <xlstyle.hxx>
+#include <xlchart.hxx>
+#include <xltracer.hxx>
 #include <unotools/useroptions.hxx>
-#include "root.hxx"
+#include <root.hxx>
 
 namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 

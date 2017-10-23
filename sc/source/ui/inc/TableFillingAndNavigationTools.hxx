@@ -11,13 +11,13 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_TABLEFILLINGANDNAVIGATIONTOOLS_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_TABLEFILLINGANDNAVIGATIONTOOLS_HXX
 
-#include "address.hxx"
-#include "rangelst.hxx"
+#include <address.hxx>
+#include <rangelst.hxx>
 
 #include "docsh.hxx"
-#include "document.hxx"
+#include <document.hxx>
 #include "docfunc.hxx"
-#include "formulacell.hxx"
+#include <formulacell.hxx>
 
 #include <vector>
 

@@ -19,9 +19,9 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include "unitconv.hxx"
-#include "global.hxx"
-#include "viewopti.hxx"
+#include <unitconv.hxx>
+#include <global.hxx>
+#include <viewopti.hxx>
 
 using namespace utl;
 using namespace com::sun::star::uno;

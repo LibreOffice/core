@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 
 #include <editeng/eeitem.hxx>
 
 #include <xmloff/XMLFontAutoStylePool.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/editeng.hxx>
-#include "document.hxx"
-#include "docpool.hxx"
+#include <document.hxx>
+#include <docpool.hxx>
 #include "xmlexprt.hxx"
-#include "stlpool.hxx"
-#include "attrib.hxx"
+#include <stlpool.hxx>
+#include <attrib.hxx>
 
 class ScXMLFontAutoStylePool_Impl: public XMLFontAutoStylePool
 {

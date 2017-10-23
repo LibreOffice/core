@@ -20,11 +20,11 @@
 #define INCLUDED_SC_SOURCE_UI_INC_UNDOBLK_HXX
 
 #include "undobase.hxx"
-#include "markdata.hxx"
+#include <markdata.hxx>
 #include "viewutil.hxx"
 #include "spellparam.hxx"
 #include "cellmergeoption.hxx"
-#include "paramisc.hxx"
+#include <paramisc.hxx>
 
 #include <memory>
 

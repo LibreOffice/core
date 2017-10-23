@@ -35,18 +35,18 @@
 #include <rtl/math.hxx>
 #include <rtl/uuid.h>
 #include <svl/zformat.hxx>
-#include "formulacell.hxx"
-#include "drwlayer.hxx"
+#include <formulacell.hxx>
+#include <drwlayer.hxx>
 
-#include "xcl97rec.hxx"
-#include "xcl97esc.hxx"
-#include "editutil.hxx"
-#include "xecontent.hxx"
-#include "xeescher.hxx"
-#include "xestyle.hxx"
-#include "xelink.hxx"
+#include <xcl97rec.hxx>
+#include <xcl97esc.hxx>
+#include <editutil.hxx>
+#include <xecontent.hxx>
+#include <xeescher.hxx>
+#include <xestyle.hxx>
+#include <xelink.hxx>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 
 #include <unotools/fltrcfg.hxx>
 #include <editeng/brushitem.hxx>
@@ -60,15 +60,15 @@
 
 #include <stdio.h>
 
-#include "document.hxx"
-#include "conditio.hxx"
-#include "rangelst.hxx"
-#include "stlpool.hxx"
-#include "viewopti.hxx"
-#include "scextopt.hxx"
-#include "docoptio.hxx"
-#include "patattr.hxx"
-#include "tabprotection.hxx"
+#include <document.hxx>
+#include <conditio.hxx>
+#include <rangelst.hxx>
+#include <stlpool.hxx>
+#include <viewopti.hxx>
+#include <scextopt.hxx>
+#include <docoptio.hxx>
+#include <patattr.hxx>
+#include <tabprotection.hxx>
 
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>

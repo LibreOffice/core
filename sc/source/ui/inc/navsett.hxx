@@ -24,7 +24,7 @@
 
 #include <vector>
 #include <o3tl/enumarray.hxx>
-#include <content.hxx>
+#include "content.hxx"
 
 /** Contains settings of the navigator listbox. This includes the expand state
     of each listbox entry and the index of the selected entry and sub entry. */

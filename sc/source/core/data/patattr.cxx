@@ -19,7 +19,7 @@
 
 #include <memory>
 #include <utility>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/adjustitem.hxx>
 #include <o3tl/make_unique.hxx>
 #include <svx/algitem.hxx>
@@ -53,17 +53,17 @@
 #include <vcl/svapp.hxx>
 #include <tools/fract.hxx>
 
-#include "patattr.hxx"
-#include "docpool.hxx"
-#include "stlsheet.hxx"
-#include "stlpool.hxx"
-#include "document.hxx"
-#include "global.hxx"
-#include "globstr.hrc"
-#include "conditio.hxx"
-#include "validat.hxx"
-#include "scmod.hxx"
-#include "fillinfo.hxx"
+#include <patattr.hxx>
+#include <docpool.hxx>
+#include <stlsheet.hxx>
+#include <stlpool.hxx>
+#include <document.hxx>
+#include <global.hxx>
+#include <globstr.hrc>
+#include <conditio.hxx>
+#include <validat.hxx>
+#include <scmod.hxx>
+#include <fillinfo.hxx>
 
 using sc::HMMToTwips;
 using sc::TwipsToHMM;

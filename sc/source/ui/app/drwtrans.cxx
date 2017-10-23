@@ -48,19 +48,19 @@
 #include <svl/urlbmk.hxx>
 #include <tools/urlobj.hxx>
 
-#include "drwtrans.hxx"
-#include "docsh.hxx"
-#include "drwlayer.hxx"
-#include "drawview.hxx"
-#include "viewdata.hxx"
-#include "scmod.hxx"
-#include "chartlis.hxx"
-#include "rangeutl.hxx"
+#include <drwtrans.hxx>
+#include <docsh.hxx>
+#include <drwlayer.hxx>
+#include <drawview.hxx>
+#include <viewdata.hxx>
+#include <scmod.hxx>
+#include <chartlis.hxx>
+#include <rangeutl.hxx>
 #include <formula/grammar.hxx>
-#include "dragdata.hxx"
-#include "clipdata.hxx"
+#include <dragdata.hxx>
+#include <clipdata.hxx>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 
 #include <editeng/eeitem.hxx>
 

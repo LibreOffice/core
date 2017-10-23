@@ -23,14 +23,14 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include "reffact.hxx"
-#include "tabvwsh.hxx"
-#include "sc.hrc"
-#include "acredlin.hxx"
-#include "simpref.hxx"
-#include "scmod.hxx"
-#include "scres.hrc"
-#include "validate.hxx"
+#include <reffact.hxx>
+#include <tabvwsh.hxx>
+#include <sc.hrc>
+#include <acredlin.hxx>
+#include <simpref.hxx>
+#include <scmod.hxx>
+#include <scres.hrc>
+#include <validate.hxx>
 
 SFX_IMPL_MODELESSDIALOG_WITHID(ScNameDlgWrapper, FID_DEFINE_NAME )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScNameDefDlgWrapper, FID_ADD_NAME )

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -38,18 +38,18 @@
 #include <comphelper/processfactory.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 
-#include "strings.hrc"
-#include "scmod.hxx"
-#include "attrib.hxx"
-#include "zforauto.hxx"
-#include "global.hxx"
-#include "globstr.hrc"
-#include "autoform.hxx"
-#include "autofmt.hxx"
-#include "scresid.hxx"
-#include "document.hxx"
-#include "docsh.hxx"
-#include "tabvwsh.hxx"
+#include <strings.hrc>
+#include <scmod.hxx>
+#include <attrib.hxx>
+#include <zforauto.hxx>
+#include <global.hxx>
+#include <globstr.hrc>
+#include <autoform.hxx>
+#include <autofmt.hxx>
+#include <scresid.hxx>
+#include <document.hxx>
+#include <docsh.hxx>
+#include <tabvwsh.hxx>
 
 #define FRAME_OFFSET 4
 

@@ -20,14 +20,14 @@
 #include "XMLChangeTrackingExportHelper.hxx"
 #include "xmlexprt.hxx"
 #include "XMLConverter.hxx"
-#include "document.hxx"
-#include "chgtrack.hxx"
-#include "chgviset.hxx"
-#include "formulacell.hxx"
-#include "textuno.hxx"
-#include "rangeutl.hxx"
-#include "cellvalue.hxx"
-#include "editutil.hxx"
+#include <document.hxx>
+#include <chgtrack.hxx>
+#include <chgviset.hxx>
+#include <formulacell.hxx>
+#include <textuno.hxx>
+#include <rangeutl.hxx>
+#include <cellvalue.hxx>
+#include <editutil.hxx>
 
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>

@@ -26,8 +26,8 @@
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>
 
-#include "calcconfig.hxx"
-#include "docoptio.hxx"
+#include <calcconfig.hxx>
+#include <docoptio.hxx>
 
 class ScTpFormulaOptions : public SfxTabPage
 {

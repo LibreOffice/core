@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xlescher.hxx"
+#include <xlescher.hxx>
 
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <svx/unoapi.hxx>
-#include "document.hxx"
-#include "xestream.hxx"
-#include "xistream.hxx"
-#include "xlroot.hxx"
-#include "xltools.hxx"
+#include <document.hxx>
+#include <xestream.hxx>
+#include <xistream.hxx>
+#include <xlroot.hxx>
+#include <xltools.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;

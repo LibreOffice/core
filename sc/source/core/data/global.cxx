@@ -18,7 +18,7 @@
  */
 
 #include <vcl/svapp.hxx>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/editobj.hxx>
@@ -58,26 +58,26 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 
-#include "global.hxx"
-#include "scresid.hxx"
-#include "autoform.hxx"
-#include "document.hxx"
-#include "patattr.hxx"
-#include "addincol.hxx"
-#include "adiasync.hxx"
-#include "userlist.hxx"
-#include "interpre.hxx"
-#include "docpool.hxx"
-#include "unitconv.hxx"
-#include "compiler.hxx"
-#include "parclass.hxx"
-#include "funcdesc.hxx"
-#include "globstr.hrc"
-#include "strings.hrc"
-#include "scmod.hxx"
-#include "appoptio.hxx"
-#include "editutil.hxx"
-#include "docsh.hxx"
+#include <global.hxx>
+#include <scresid.hxx>
+#include <autoform.hxx>
+#include <document.hxx>
+#include <patattr.hxx>
+#include <addincol.hxx>
+#include <adiasync.hxx>
+#include <userlist.hxx>
+#include <interpre.hxx>
+#include <docpool.hxx>
+#include <unitconv.hxx>
+#include <compiler.hxx>
+#include <parclass.hxx>
+#include <funcdesc.hxx>
+#include <globstr.hrc>
+#include <strings.hrc>
+#include <scmod.hxx>
+#include <appoptio.hxx>
+#include <editutil.hxx>
+#include <docsh.hxx>
 
 tools::SvRef<ScDocShell>  ScGlobal::xDrawClipDocShellRef;
 SvxSearchItem*  ScGlobal::pSearchItem = nullptr;

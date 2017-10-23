@@ -43,29 +43,29 @@
 #include <unotools/resmgr.hxx>
 #include <sot/formats.hxx>
 
-#include "scitems.hxx"
-#include "scmod.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
+#include <scitems.hxx>
+#include <scmod.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
 
-#include "docsh.hxx"
-#include "tabvwsh.hxx"
-#include "prevwsh.hxx"
-#include "drawsh.hxx"
-#include "drformsh.hxx"
-#include "drtxtob.hxx"
-#include "editsh.hxx"
-#include "pivotsh.hxx"
-#include "auditsh.hxx"
-#include "cellsh.hxx"
-#include "oleobjsh.hxx"
-#include "chartsh.hxx"
-#include "graphsh.hxx"
-#include "mediash.hxx"
-#include "pgbrksh.hxx"
+#include <docsh.hxx>
+#include <tabvwsh.hxx>
+#include <prevwsh.hxx>
+#include <drawsh.hxx>
+#include <drformsh.hxx>
+#include <drtxtob.hxx>
+#include <editsh.hxx>
+#include <pivotsh.hxx>
+#include <auditsh.hxx>
+#include <cellsh.hxx>
+#include <oleobjsh.hxx>
+#include <chartsh.hxx>
+#include <graphsh.hxx>
+#include <mediash.hxx>
+#include <pgbrksh.hxx>
 
-#include "docpool.hxx"
-#include "appoptio.hxx"
+#include <docpool.hxx>
+#include <appoptio.hxx>
 #include <searchresults.hxx>
 
 // Controls
@@ -85,28 +85,28 @@
 #include <svx/lboxctrl.hxx>
 #include <svx/verttexttbxctrl.hxx>
 #include <svx/formatpaintbrushctrl.hxx>
-#include "tbzoomsliderctrl.hxx"
+#include <tbzoomsliderctrl.hxx>
 #include <svx/zoomsliderctrl.hxx>
 #include <sfx2/emojipopup.hxx>
 #include <sfx2/charmappopup.hxx>
 
 #include <svx/xmlsecctrl.hxx>
 // Child windows
-#include "reffact.hxx"
-#include "navipi.hxx"
-#include "inputwin.hxx"
-#include "spelldialog.hxx"
+#include <reffact.hxx>
+#include <navipi.hxx>
+#include <inputwin.hxx>
+#include <spelldialog.hxx>
 #include <svx/fontwork.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/imapdlg.hxx>
 
-#include "editutil.hxx"
+#include <editutil.hxx>
 
-#include "dwfunctr.hxx"
-#include "acredlin.hxx"
+#include <dwfunctr.hxx>
+#include <acredlin.hxx>
 #include <o3tl/make_unique.hxx>
-#include "scabstdlg.hxx"
+#include <scabstdlg.hxx>
 
 OUString ScResId(const char* pId)
 {

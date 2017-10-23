@@ -20,9 +20,9 @@
 #include <vcl/msgbox.hxx>
 #include <unotools/localedatawrapper.hxx>
 
-#include "redcom.hxx"
-#include "docsh.hxx"
-#include "tabvwsh.hxx"
+#include <redcom.hxx>
+#include <docsh.hxx>
+#include <tabvwsh.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 

@@ -10,7 +10,7 @@
 #ifndef SC_LISTENERQUERY_HXX
 #define SC_LISTENERQUERY_HXX
 
-#include <address.hxx>
+#include "address.hxx"
 #include <svl/listener.hxx>
 
 #include <unordered_map>

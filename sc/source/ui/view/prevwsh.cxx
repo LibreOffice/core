@@ -21,7 +21,7 @@
 
 #include <cstdlib>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
 
@@ -42,23 +42,23 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 
-#include "prevwsh.hxx"
-#include "preview.hxx"
-#include "printfun.hxx"
-#include "attrib.hxx"
-#include "scmod.hxx"
-#include "inputhdl.hxx"
-#include "docsh.hxx"
-#include "tabvwsh.hxx"
-#include "stlpool.hxx"
-#include "editutil.hxx"
-#include "scresid.hxx"
-#include "globstr.hrc"
-#include "sc.hrc"
-#include "ViewSettingsSequenceDefines.hxx"
-#include "tpprint.hxx"
-#include "printopt.hxx"
-#include "viewuno.hxx"
+#include <prevwsh.hxx>
+#include <preview.hxx>
+#include <printfun.hxx>
+#include <attrib.hxx>
+#include <scmod.hxx>
+#include <inputhdl.hxx>
+#include <docsh.hxx>
+#include <tabvwsh.hxx>
+#include <stlpool.hxx>
+#include <editutil.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
+#include <sc.hrc>
+#include <ViewSettingsSequenceDefines.hxx>
+#include <tpprint.hxx>
+#include <printopt.hxx>
+#include <viewuno.hxx>
 #include <sax/tools/converter.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -69,7 +69,7 @@
 #include <svx/zoom_def.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
-#include "scabstdlg.hxx"
+#include <scabstdlg.hxx>
 //  for mouse wheel
 #define MINZOOM_SLIDER 10
 #define MAXZOOM_SLIDER 400
@@ -79,7 +79,7 @@
 using namespace com::sun::star;
 
 #define ScPreviewShell
-#include "scslots.hxx"
+#include <scslots.hxx>
 
 #include <memory>
 

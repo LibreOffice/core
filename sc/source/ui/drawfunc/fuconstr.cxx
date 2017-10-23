@@ -23,14 +23,14 @@
 #include <svx/svdouno.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include "fuconstr.hxx"
-#include "fudraw.hxx"
-#include "tabvwsh.hxx"
-#include "futext.hxx"
-#include "sc.hrc"
-#include "drawview.hxx"
-#include "document.hxx"
-#include "gridwin.hxx"
+#include <fuconstr.hxx>
+#include <fudraw.hxx>
+#include <tabvwsh.hxx>
+#include <futext.hxx>
+#include <sc.hrc>
+#include <drawview.hxx>
+#include <document.hxx>
+#include <gridwin.hxx>
 
 //  maximal permitted mouse movement to start Drag&Drop
 //! fusel,fuconstr,futext - combine them!

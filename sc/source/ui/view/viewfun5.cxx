@@ -48,22 +48,22 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 
-#include "viewfunc.hxx"
-#include "docsh.hxx"
-#include "drawview.hxx"
-#include "impex.hxx"
-#include "dbfunc.hxx"
-#include "dbdata.hxx"
-#include "sc.hrc"
-#include "filter.hxx"
-#include "scextopt.hxx"
-#include "tabvwsh.hxx"
-#include "compiler.hxx"
+#include <viewfunc.hxx>
+#include <docsh.hxx>
+#include <drawview.hxx>
+#include <impex.hxx>
+#include <dbfunc.hxx>
+#include <dbdata.hxx>
+#include <sc.hrc>
+#include <filter.hxx>
+#include <scextopt.hxx>
+#include <tabvwsh.hxx>
+#include <compiler.hxx>
 
-#include "asciiopt.hxx"
-#include "scabstdlg.hxx"
-#include "clipparam.hxx"
-#include "markdata.hxx"
+#include <asciiopt.hxx>
+#include <scabstdlg.hxx>
+#include <clipparam.hxx>
+#include <markdata.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/dbaexchange.hxx>

@@ -23,9 +23,9 @@
 #include <xmloff/nmspmap.hxx>
 #include <sax/tools/converter.hxx>
 #include "xmlexprt.hxx"
-#include "unonames.hxx"
-#include "document.hxx"
-#include "scmatrix.hxx"
+#include <unonames.hxx>
+#include <document.hxx>
+#include <scmatrix.hxx>
 #include <com/sun/star/sheet/XDDELink.hpp>
 
 class ScMatrix;

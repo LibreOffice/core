@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "tabsplit.hxx"
-#include "viewdata.hxx"
-#include "dbfunc.hxx"
+#include <tabsplit.hxx>
+#include <viewdata.hxx>
+#include <dbfunc.hxx>
 
 #include <vcl/settings.hxx>
 

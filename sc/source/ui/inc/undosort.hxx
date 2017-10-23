@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_UNDOSORT_HXX
 #define INCLUDED_SC_UNDOSORT_HXX
 
-#include <undobase.hxx>
+#include "undobase.hxx"
 #include <sortparam.hxx>
 
 namespace sc {

@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
 
-#include "dbdata.hxx"
+#include <dbdata.hxx>
 #include "xmlimprt.hxx"
 #include "importcontext.hxx"
 

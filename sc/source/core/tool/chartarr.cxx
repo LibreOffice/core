@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
 #include <float.h>
 
-#include "chartarr.hxx"
-#include "cellvalue.hxx"
-#include "document.hxx"
-#include "rechead.hxx"
-#include "globstr.hrc"
-#include "formulacell.hxx"
-#include "docoptio.hxx"
+#include <chartarr.hxx>
+#include <cellvalue.hxx>
+#include <document.hxx>
+#include <rechead.hxx>
+#include <globstr.hrc>
+#include <formulacell.hxx>
+#include <docoptio.hxx>
 
 #include <comphelper/stl_types.hxx>
 #include <o3tl/make_unique.hxx>

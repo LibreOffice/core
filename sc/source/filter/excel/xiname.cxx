@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xiname.hxx"
-#include "rangenam.hxx"
-#include "xistream.hxx"
-#include "excform.hxx"
-#include "excimp8.hxx"
-#include "scextopt.hxx"
-#include "document.hxx"
+#include <xiname.hxx>
+#include <rangenam.hxx>
+#include <xistream.hxx>
+#include <excform.hxx>
+#include <excimp8.hxx>
+#include <scextopt.hxx>
+#include <document.hxx>
 #include <o3tl/make_unique.hxx>
 
 // *** Implementation ***

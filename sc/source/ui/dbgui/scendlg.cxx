@@ -19,7 +19,7 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <comphelper/string.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/drawitem.hxx>
@@ -29,13 +29,13 @@
 #include <vcl/msgbox.hxx>
 #include <unotools/localedatawrapper.hxx>
 
-#include "global.hxx"
-#include "globstr.hrc"
-#include "tabvwsh.hxx"
-#include "viewdata.hxx"
-#include "document.hxx"
-#include "scresid.hxx"
-#include "scendlg.hxx"
+#include <global.hxx>
+#include <globstr.hrc>
+#include <tabvwsh.hxx>
+#include <viewdata.hxx>
+#include <document.hxx>
+#include <scresid.hxx>
+#include <scendlg.hxx>
 
 ScNewScenarioDlg::ScNewScenarioDlg( vcl::Window* pParent, const OUString& rName, bool bEdit, bool bSheetProtected)
 

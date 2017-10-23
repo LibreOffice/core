@@ -27,9 +27,9 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
-#include "sharedocdlg.hxx"
-#include "scresid.hxx"
-#include "viewdata.hxx"
+#include <sharedocdlg.hxx>
+#include <scresid.hxx>
+#include <viewdata.hxx>
 
 using namespace ::com::sun::star;
 

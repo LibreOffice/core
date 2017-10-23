@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "excimp8.hxx"
+#include <excimp8.hxx>
 
 #include <scitems.hxx>
 #include <comphelper/processfactory.hxx>
@@ -63,35 +63,35 @@
 #include <unotools/charclass.hxx>
 #include <drwlayer.hxx>
 
-#include "formulacell.hxx"
-#include "document.hxx"
-#include "patattr.hxx"
-#include "docpool.hxx"
-#include "attrib.hxx"
-#include "conditio.hxx"
-#include "dbdata.hxx"
-#include "globalnames.hxx"
-#include "editutil.hxx"
-#include "markdata.hxx"
-#include "rangenam.hxx"
-#include "docoptio.hxx"
-#include "globstr.hrc"
-#include "fprogressbar.hxx"
-#include "xltracer.hxx"
-#include "xihelper.hxx"
-#include "xipage.hxx"
-#include "xicontent.hxx"
-#include "xilink.hxx"
-#include "xiescher.hxx"
-#include "xipivot.hxx"
+#include <formulacell.hxx>
+#include <document.hxx>
+#include <patattr.hxx>
+#include <docpool.hxx>
+#include <attrib.hxx>
+#include <conditio.hxx>
+#include <dbdata.hxx>
+#include <globalnames.hxx>
+#include <editutil.hxx>
+#include <markdata.hxx>
+#include <rangenam.hxx>
+#include <docoptio.hxx>
+#include <globstr.hrc>
+#include <fprogressbar.hxx>
+#include <xltracer.hxx>
+#include <xihelper.hxx>
+#include <xipage.hxx>
+#include <xicontent.hxx>
+#include <xilink.hxx>
+#include <xiescher.hxx>
+#include <xipivot.hxx>
 
-#include "excform.hxx"
-#include "scextopt.hxx"
-#include "stlpool.hxx"
-#include "stlsheet.hxx"
-#include "detfunc.hxx"
-#include "macromgr.hxx"
-#include "queryentry.hxx"
+#include <excform.hxx>
+#include <scextopt.hxx>
+#include <stlpool.hxx>
+#include <stlsheet.hxx>
+#include <detfunc.hxx>
+#include <macromgr.hxx>
+#include <queryentry.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>

@@ -7,18 +7,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "cliputil.hxx"
-#include "viewdata.hxx"
-#include "tabvwsh.hxx"
-#include "transobj.hxx"
-#include "document.hxx"
-#include "dpobject.hxx"
-#include "globstr.hrc"
-#include "clipparam.hxx"
-#include "clipoptions.hxx"
-#include "rangelst.hxx"
-#include "viewutil.hxx"
-#include "markdata.hxx"
+#include <cliputil.hxx>
+#include <viewdata.hxx>
+#include <tabvwsh.hxx>
+#include <transobj.hxx>
+#include <document.hxx>
+#include <dpobject.hxx>
+#include <globstr.hrc>
+#include <clipparam.hxx>
+#include <clipoptions.hxx>
+#include <rangelst.hxx>
+#include <viewutil.hxx>
+#include <markdata.hxx>
 #include <gridwin.hxx>
 
 #include <vcl/waitobj.hxx>

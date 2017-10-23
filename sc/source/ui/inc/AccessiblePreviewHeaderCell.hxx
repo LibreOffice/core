@@ -23,8 +23,8 @@
 #include "AccessibleContextBase.hxx"
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <tools/gen.hxx>
-#include "global.hxx"
-#include "address.hxx"
+#include <global.hxx>
+#include <address.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 class ScPreviewShell;

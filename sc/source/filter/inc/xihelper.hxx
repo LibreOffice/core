@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XIHELPER_HXX
 
 #include <editeng/editdata.hxx>
-#include "types.hxx"
+#include <types.hxx>
 #include "xladdress.hxx"
 #include "xiroot.hxx"
 #include "xistring.hxx"

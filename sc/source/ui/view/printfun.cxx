@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
-#include "printfun.hxx"
+#include <printfun.hxx>
 
 #include <svx/svxids.hrc>
 #include <editeng/adjustitem.hxx>
@@ -44,29 +44,29 @@
 #include <tools/urlobj.hxx>
 #include <svx/xoutbmp.hxx>
 
-#include "editutil.hxx"
-#include "docsh.hxx"
-#include "output.hxx"
-#include "viewdata.hxx"
-#include "viewopti.hxx"
-#include "stlpool.hxx"
-#include "pagepar.hxx"
-#include "attrib.hxx"
-#include "patattr.hxx"
-#include "docpool.hxx"
-#include "dociter.hxx"
-#include "formulacell.hxx"
-#include "drawutil.hxx"
-#include "globstr.hrc"
-#include "scresid.hxx"
-#include "sc.hrc"
-#include "pagedata.hxx"
-#include "printopt.hxx"
-#include "prevloc.hxx"
-#include "scmod.hxx"
-#include "drwlayer.hxx"
-#include "fillinfo.hxx"
-#include "postit.hxx"
+#include <editutil.hxx>
+#include <docsh.hxx>
+#include <output.hxx>
+#include <viewdata.hxx>
+#include <viewopti.hxx>
+#include <stlpool.hxx>
+#include <pagepar.hxx>
+#include <attrib.hxx>
+#include <patattr.hxx>
+#include <docpool.hxx>
+#include <dociter.hxx>
+#include <formulacell.hxx>
+#include <drawutil.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
+#include <sc.hrc>
+#include <pagedata.hxx>
+#include <printopt.hxx>
+#include <prevloc.hxx>
+#include <scmod.hxx>
+#include <drwlayer.hxx>
+#include <fillinfo.hxx>
+#include <postit.hxx>
 
 #include <vcl/lineinfo.hxx>
 

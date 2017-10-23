@@ -19,18 +19,18 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "scitems.hxx"
-#include "tpview.hxx"
-#include "global.hxx"
-#include "viewopti.hxx"
-#include "tabvwsh.hxx"
-#include "uiitems.hxx"
-#include "scresid.hxx"
-#include "docsh.hxx"
-#include "sc.hrc"
-#include "strings.hrc"
-#include "globstr.hrc"
-#include "units.hrc"
+#include <scitems.hxx>
+#include <tpview.hxx>
+#include <global.hxx>
+#include <viewopti.hxx>
+#include <tabvwsh.hxx>
+#include <uiitems.hxx>
+#include <scresid.hxx>
+#include <docsh.hxx>
+#include <sc.hrc>
+#include <strings.hrc>
+#include <globstr.hrc>
+#include <units.hrc>
 #include <appoptio.hxx>
 #include <scmod.hxx>
 #include <svx/colorbox.hxx>

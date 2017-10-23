@@ -19,11 +19,11 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "document.hxx"
-#include "docsh.hxx"
-#include "scresid.hxx"
+#include <document.hxx>
+#include <docsh.hxx>
+#include <scresid.hxx>
 
-#include "tpstat.hxx"
+#include <tpstat.hxx>
 
 // Dokumentinfo-Tabpage:
 

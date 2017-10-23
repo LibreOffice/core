@@ -34,19 +34,19 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/embed/Aspects.hpp>
 
-#include "document.hxx"
-#include "viewfunc.hxx"
-#include "tabvwsh.hxx"
-#include "drawview.hxx"
-#include "scmod.hxx"
-#include "drwlayer.hxx"
-#include "drwtrans.hxx"
-#include "globstr.hrc"
-#include "chartlis.hxx"
-#include "docuno.hxx"
-#include "docsh.hxx"
-#include "convuno.hxx"
-#include "dragdata.hxx"
+#include <document.hxx>
+#include <viewfunc.hxx>
+#include <tabvwsh.hxx>
+#include <drawview.hxx>
+#include <scmod.hxx>
+#include <drwlayer.hxx>
+#include <drwtrans.hxx>
+#include <globstr.hrc>
+#include <chartlis.hxx>
+#include <docuno.hxx>
+#include <docsh.hxx>
+#include <convuno.hxx>
+#include <dragdata.hxx>
 #include <gridwin.hxx>
 
 bool bPasteIsMove = false;

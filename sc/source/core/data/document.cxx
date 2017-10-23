@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <editeng/boxitem.hxx>
@@ -46,56 +46,56 @@
 #include <com/sun/star/sheet/TablePageBreakData.hpp>
 #include <com/sun/star/lang/NotInitializedException.hpp>
 
-#include "document.hxx"
-#include "table.hxx"
-#include "column.hxx"
-#include "attrib.hxx"
-#include "attarray.hxx"
-#include "markarr.hxx"
-#include "patattr.hxx"
-#include "rangenam.hxx"
-#include "poolhelp.hxx"
-#include "docpool.hxx"
-#include "stlpool.hxx"
-#include "stlsheet.hxx"
-#include "globstr.hrc"
-#include "rechead.hxx"
-#include "dbdata.hxx"
-#include "pivot.hxx"
-#include "chartlis.hxx"
-#include "rangelst.hxx"
-#include "markdata.hxx"
-#include "drwlayer.hxx"
-#include "conditio.hxx"
-#include "colorscale.hxx"
-#include "validat.hxx"
-#include "prnsave.hxx"
-#include "chgtrack.hxx"
-#include "sc.hrc"
-#include "scresid.hxx"
-#include "hints.hxx"
-#include "detdata.hxx"
-#include "dpobject.hxx"
-#include "detfunc.hxx"
-#include "scmod.hxx"
-#include "dociter.hxx"
-#include "progress.hxx"
-#include "autonamecache.hxx"
-#include "bcaslot.hxx"
-#include "postit.hxx"
-#include "externalrefmgr.hxx"
-#include "tabprotection.hxx"
-#include "clipparam.hxx"
-#include "defaultsoptions.hxx"
-#include "editutil.hxx"
-#include "stringutil.hxx"
-#include "formulaiter.hxx"
-#include "formulacell.hxx"
-#include "clipcontext.hxx"
-#include "listenercontext.hxx"
-#include "scopetools.hxx"
-#include "refupdatecontext.hxx"
-#include "formulagroup.hxx"
+#include <document.hxx>
+#include <table.hxx>
+#include <column.hxx>
+#include <attrib.hxx>
+#include <attarray.hxx>
+#include <markarr.hxx>
+#include <patattr.hxx>
+#include <rangenam.hxx>
+#include <poolhelp.hxx>
+#include <docpool.hxx>
+#include <stlpool.hxx>
+#include <stlsheet.hxx>
+#include <globstr.hrc>
+#include <rechead.hxx>
+#include <dbdata.hxx>
+#include <pivot.hxx>
+#include <chartlis.hxx>
+#include <rangelst.hxx>
+#include <markdata.hxx>
+#include <drwlayer.hxx>
+#include <conditio.hxx>
+#include <colorscale.hxx>
+#include <validat.hxx>
+#include <prnsave.hxx>
+#include <chgtrack.hxx>
+#include <sc.hrc>
+#include <scresid.hxx>
+#include <hints.hxx>
+#include <detdata.hxx>
+#include <dpobject.hxx>
+#include <detfunc.hxx>
+#include <scmod.hxx>
+#include <dociter.hxx>
+#include <progress.hxx>
+#include <autonamecache.hxx>
+#include <bcaslot.hxx>
+#include <postit.hxx>
+#include <externalrefmgr.hxx>
+#include <tabprotection.hxx>
+#include <clipparam.hxx>
+#include <defaultsoptions.hxx>
+#include <editutil.hxx>
+#include <stringutil.hxx>
+#include <formulaiter.hxx>
+#include <formulacell.hxx>
+#include <clipcontext.hxx>
+#include <listenercontext.hxx>
+#include <scopetools.hxx>
+#include <refupdatecontext.hxx>
+#include <formulagroup.hxx>
 #include <tokenarray.hxx>
 #include <tokenstringcontext.hxx>
 
@@ -109,7 +109,7 @@
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
-#include "mtvelements.hxx"
+#include <mtvelements.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;

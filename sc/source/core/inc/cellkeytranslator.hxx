@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_INC_CELLKEYTRANSLATOR_HXX
 #define INCLUDED_SC_SOURCE_CORE_INC_CELLKEYTRANSLATOR_HXX
 
-#include "global.hxx"
+#include <global.hxx>
 #include <formula/opcode.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <list>

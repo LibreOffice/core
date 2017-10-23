@@ -23,13 +23,13 @@
 #include <docpool.hxx>
 #include <columniterator.hxx>
 
-#include "dociter.hxx"
-#include "patattr.hxx"
-#include "refupdatecontext.hxx"
+#include <dociter.hxx>
+#include <patattr.hxx>
+#include <refupdatecontext.hxx>
 #include <svl/whiter.hxx>
 #include <editeng/colritem.hxx>
-#include "scitems.hxx"
-#include "datamapper.hxx"
+#include <scitems.hxx>
+#include <datamapper.hxx>
 
 // Add totally brand-new methods to this source file.
 

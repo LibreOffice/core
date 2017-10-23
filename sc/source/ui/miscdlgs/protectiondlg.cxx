@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "protectiondlg.hxx"
-#include "scresid.hxx"
-#include "tabprotection.hxx"
+#include <protectiondlg.hxx>
+#include <scresid.hxx>
+#include <tabprotection.hxx>
 
 #include <sal/macros.h>
 #include <vcl/msgbox.hxx>

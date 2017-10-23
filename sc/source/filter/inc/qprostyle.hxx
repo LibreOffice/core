@@ -22,11 +22,11 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
-#include "filter.hxx"
+#include <filter.hxx>
 
 #include "flttypes.hxx"
 #include "ftools.hxx"
-#include "address.hxx"
+#include <address.hxx>
 
 class ScDocument;
 

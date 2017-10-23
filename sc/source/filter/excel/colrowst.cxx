@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "colrowst.hxx"
+#include <colrowst.hxx>
 
 #include <string.h>
 
-#include "document.hxx"
-#include "root.hxx"
-#include "ftools.hxx"
-#include "xltable.hxx"
-#include "xistream.hxx"
-#include "xistyle.hxx"
-#include "queryparam.hxx"
-#include "excimp8.hxx"
-#include "table.hxx"
+#include <document.hxx>
+#include <root.hxx>
+#include <ftools.hxx>
+#include <xltable.hxx>
+#include <xistream.hxx>
+#include <xistyle.hxx>
+#include <queryparam.hxx>
+#include <excimp8.hxx>
+#include <table.hxx>
 
 XclImpColRowSettings::XclImpColRowSettings( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),

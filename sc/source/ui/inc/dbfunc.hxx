@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_DBFUNC_HXX
 
 #include "viewfunc.hxx"
-#include "dptypes.hxx"
+#include <dptypes.hxx>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldFilter;

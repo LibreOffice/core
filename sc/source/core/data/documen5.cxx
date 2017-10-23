@@ -30,19 +30,19 @@
 #include <svx/svdpage.hxx>
 #include <svtools/embedhlp.hxx>
 
-#include "document.hxx"
-#include "table.hxx"
-#include "drwlayer.hxx"
-#include "chartarr.hxx"
-#include "chartlis.hxx"
-#include "chartlock.hxx"
-#include "refupdat.hxx"
+#include <document.hxx>
+#include <table.hxx>
+#include <drwlayer.hxx>
+#include <chartarr.hxx>
+#include <chartlis.hxx>
+#include <chartlock.hxx>
+#include <refupdat.hxx>
 #include <tools/globname.hxx>
 #include <sot/exchange.hxx>
 
-#include "miscuno.hxx"
-#include "chart2uno.hxx"
-#include "charthelper.hxx"
+#include <miscuno.hxx>
+#include <chart2uno.hxx>
+#include <charthelper.hxx>
 
 using namespace ::com::sun::star;
 

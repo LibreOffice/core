@@ -32,12 +32,12 @@ using namespace com::sun::star;
 #include <sot/storage.hxx>
 #include <sfx2/app.hxx>
 #include <comphelper/classids.hxx>
-#include "address.hxx"
+#include <address.hxx>
 
-#include "scfobj.hxx"
-#include "document.hxx"
-#include "drwlayer.hxx"
-#include "chartarr.hxx"
+#include <scfobj.hxx>
+#include <document.hxx>
+#include <drwlayer.hxx>
+#include <chartarr.hxx>
 
 void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const tools::Rectangle& rRect,
                                 SCTAB nSrcTab, sal_uInt16 nX1, sal_uInt16 nY1, sal_uInt16 nX2, sal_uInt16 nY2 )

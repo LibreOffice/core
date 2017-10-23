@@ -20,13 +20,13 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/app.hxx>
 
-#include "reffact.hxx"
-#include "document.hxx"
-#include "scresid.hxx"
-#include "globstr.hrc"
-#include "rangenam.hxx"
-#include "simpref.hxx"
-#include "scmod.hxx"
+#include <reffact.hxx>
+#include <document.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
+#include <rangenam.hxx>
+#include <simpref.hxx>
+#include <scmod.hxx>
 
 ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent)
     : ScAnyRefDlg(pB, pCW, pParent, "SimpleRefDialog", "modules/scalc/ui/simplerefdialog.ui")

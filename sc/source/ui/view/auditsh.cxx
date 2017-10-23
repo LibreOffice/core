@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svl/srchitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objface.hxx>
@@ -25,14 +25,14 @@
 #include <sfx2/request.hxx>
 #include <vcl/EnumContext.hxx>
 
-#include "auditsh.hxx"
-#include "tabvwsh.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
-#include "document.hxx"
+#include <auditsh.hxx>
+#include <tabvwsh.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
+#include <document.hxx>
 
 #define ScAuditingShell
-#include "scslots.hxx"
+#include <scslots.hxx>
 
 
 SFX_IMPL_INTERFACE(ScAuditingShell, SfxShell)

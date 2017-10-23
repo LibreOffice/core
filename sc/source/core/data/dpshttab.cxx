@@ -19,15 +19,15 @@
 
 #include <svl/zforlist.hxx>
 
-#include "dpshttab.hxx"
-#include "dptabres.hxx"
-#include "document.hxx"
-#include "formulacell.hxx"
-#include "dpfilteredcache.hxx"
-#include "dpobject.hxx"
-#include "globstr.hrc"
-#include "rangenam.hxx"
-#include "queryentry.hxx"
+#include <dpshttab.hxx>
+#include <dptabres.hxx>
+#include <document.hxx>
+#include <formulacell.hxx>
+#include <dpfilteredcache.hxx>
+#include <dpobject.hxx>
+#include <globstr.hrc>
+#include <rangenam.hxx>
+#include <queryentry.hxx>
 
 #include <osl/diagnose.h>
 

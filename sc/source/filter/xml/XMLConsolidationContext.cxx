@@ -18,8 +18,8 @@
  */
 
 #include "XMLConsolidationContext.hxx"
-#include "document.hxx"
-#include "rangeutl.hxx"
+#include <document.hxx>
+#include <rangeutl.hxx>
 #include "xmlimprt.hxx"
 #include "XMLConverter.hxx"
 #include <xmloff/nmspmap.hxx>

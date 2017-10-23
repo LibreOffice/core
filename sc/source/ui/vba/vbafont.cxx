@@ -30,8 +30,8 @@
 #include <svl/itemset.hxx>
 #include "excelvbahelper.hxx"
 #include "vbafont.hxx"
-#include "scitems.hxx"
-#include "cellsuno.hxx"
+#include <scitems.hxx>
+#include <cellsuno.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;

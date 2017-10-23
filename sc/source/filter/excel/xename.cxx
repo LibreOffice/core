@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xename.hxx"
+#include <xename.hxx>
 
 #include <map>
 
-#include "globstr.hrc"
-#include "document.hxx"
-#include "rangenam.hxx"
-#include "dbdata.hxx"
-#include "xehelper.hxx"
-#include "xelink.hxx"
-#include "globalnames.hxx"
-#include "excrecds.hxx"
+#include <globstr.hrc>
+#include <document.hxx>
+#include <rangenam.hxx>
+#include <dbdata.hxx>
+#include <xehelper.hxx>
+#include <xelink.hxx>
+#include <globalnames.hxx>
+#include <excrecds.hxx>
 
 #include <formula/grammar.hxx>
 #include <oox/export/utils.hxx>

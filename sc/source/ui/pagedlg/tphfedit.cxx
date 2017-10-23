@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <editeng/editobj.hxx>
@@ -32,20 +32,20 @@
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 
-#include "tphfedit.hxx"
-#include "editutil.hxx"
-#include "global.hxx"
-#include "attrib.hxx"
-#include "patattr.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
-#include "globstr.hrc"
-#include "strings.hrc"
-#include "tabvwsh.hxx"
-#include "prevwsh.hxx"
-#include "AccessibleEditObject.hxx"
+#include <tphfedit.hxx>
+#include <editutil.hxx>
+#include <global.hxx>
+#include <attrib.hxx>
+#include <patattr.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
+#include <globstr.hrc>
+#include <strings.hrc>
+#include <tabvwsh.hxx>
+#include <prevwsh.hxx>
+#include <AccessibleEditObject.hxx>
 
-#include "scabstdlg.hxx"
+#include <scabstdlg.hxx>
 #include <memory>
 
 

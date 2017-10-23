@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "connectionsbuffer.hxx"
+#include <connectionsbuffer.hxx>
 
 #include <osl/diagnose.h>
 #include <oox/helper/attributelist.hxx>

@@ -18,16 +18,16 @@
  */
 
 #include <arraysumfunctor.hxx>
-#include "scmatrix.hxx"
-#include "global.hxx"
-#include "address.hxx"
+#include <scmatrix.hxx>
+#include <global.hxx>
+#include <address.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/vectortoken.hxx>
-#include "interpre.hxx"
-#include "mtvelements.hxx"
-#include "compare.hxx"
-#include "matrixoperators.hxx"
-#include "math.hxx"
+#include <interpre.hxx>
+#include <mtvelements.hxx>
+#include <compare.hxx>
+#include <matrixoperators.hxx>
+#include <math.hxx>
 
 #include <svl/zforlist.hxx>
 #include <svl/sharedstring.hxx>

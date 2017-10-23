@@ -18,20 +18,20 @@
  */
 
 #include <memory>
-#include "lotattr.hxx"
+#include <lotattr.hxx>
 
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svx/algitem.hxx>
 
-#include "attrib.hxx"
-#include "docpool.hxx"
-#include "document.hxx"
-#include "lotfntbf.hxx"
-#include "patattr.hxx"
-#include "root.hxx"
-#include "scitems.hxx"
+#include <attrib.hxx>
+#include <docpool.hxx>
+#include <document.hxx>
+#include <lotfntbf.hxx>
+#include <patattr.hxx>
+#include <root.hxx>
+#include <scitems.hxx>
 
 using namespace ::com::sun::star;
 

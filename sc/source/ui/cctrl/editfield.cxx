@@ -20,12 +20,12 @@
 #ifdef SC_DLLIMPLEMENTATION
 #undef SC_DLLIMPLEMENTATION
 #endif
-#include "editfield.hxx"
+#include <editfield.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/math.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/builderfactory.hxx>
-#include "global.hxx"
+#include <global.hxx>
 
 namespace {
 

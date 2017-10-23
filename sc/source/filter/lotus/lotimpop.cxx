@@ -18,26 +18,26 @@
  */
 
 #include "lotfilter.hxx"
-#include "lotimpop.hxx"
+#include <lotimpop.hxx>
 #include <osl/mutex.hxx>
 
-#include "attrib.hxx"
-#include "document.hxx"
-#include "rangenam.hxx"
-#include "formulacell.hxx"
-#include "patattr.hxx"
-#include "docpool.hxx"
-#include "compiler.hxx"
-#include "global.hxx"
+#include <attrib.hxx>
+#include <document.hxx>
+#include <rangenam.hxx>
+#include <formulacell.hxx>
+#include <patattr.hxx>
+#include <docpool.hxx>
+#include <compiler.hxx>
+#include <global.hxx>
 
-#include "root.hxx"
-#include "lotfntbf.hxx"
-#include "lotform.hxx"
-#include "tool.h"
-#include "namebuff.hxx"
-#include "lotrange.hxx"
-#include "lotattr.hxx"
-#include "stringutil.hxx"
+#include <root.hxx>
+#include <lotfntbf.hxx>
+#include <lotform.hxx>
+#include <tool.h>
+#include <namebuff.hxx>
+#include <lotrange.hxx>
+#include <lotattr.hxx>
+#include <stringutil.hxx>
 
 LOTUS_ROOT::LOTUS_ROOT( ScDocument* pDocP, rtl_TextEncoding eQ )
     :

@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "autoform.hxx"
+#include <autoform.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
@@ -35,8 +35,8 @@
 #include <tools/tenccvt.hxx>
 #include <o3tl/make_unique.hxx>
 
-#include "globstr.hrc"
-#include "document.hxx"
+#include <globstr.hrc>
+#include <document.hxx>
 
 /*
  * XXX: BIG RED NOTICE! Changes MUST be binary file format compatible and MUST

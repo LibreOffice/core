@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svl/hint.hxx>
 #include <comphelper/lok.hxx>
 #include <svl/zforlist.hxx>
@@ -27,18 +27,18 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 
-#include "tabvwsh.hxx"
-#include "sc.hrc"
-#include "global.hxx"
-#include "docsh.hxx"
-#include "document.hxx"
-#include "formulacell.hxx"
-#include "globstr.hrc"
-#include "scmod.hxx"
-#include "uiitems.hxx"
-#include "editsh.hxx"
-#include "hints.hxx"
-#include "cellvalue.hxx"
+#include <tabvwsh.hxx>
+#include <sc.hrc>
+#include <global.hxx>
+#include <docsh.hxx>
+#include <document.hxx>
+#include <formulacell.hxx>
+#include <globstr.hrc>
+#include <scmod.hxx>
+#include <uiitems.hxx>
+#include <editsh.hxx>
+#include <hints.hxx>
+#include <cellvalue.hxx>
 #include <svl/sharedstring.hxx>
 
 void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )

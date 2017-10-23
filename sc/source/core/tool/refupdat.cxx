@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "refupdat.hxx"
-#include "document.hxx"
-#include "compiler.hxx"
-#include "bigrange.hxx"
-#include "chgtrack.hxx"
+#include <refupdat.hxx>
+#include <document.hxx>
+#include <compiler.hxx>
+#include <bigrange.hxx>
+#include <chgtrack.hxx>
 
 #include <osl/diagnose.h>
 

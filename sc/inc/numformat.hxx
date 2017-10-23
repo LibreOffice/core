@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_NUMFORMAT_HXX
 #define INCLUDED_SC_NUMFORMAT_HXX
 
-#include <scdllapi.h>
+#include "scdllapi.h"
 
 #include <tools/solar.h>
 

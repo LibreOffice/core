@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuconrec.hxx"
-#include "tabvwsh.hxx"
-#include "sc.hrc"
-#include "drawview.hxx"
+#include <fuconrec.hxx>
+#include <tabvwsh.hxx>
+#include <sc.hrc>
+#include <drawview.hxx>
 
 #include <editeng/outlobj.hxx>
 // Create default drawing objects via keyboard
@@ -40,7 +40,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 
-#include "scresid.hxx"
+#include <scresid.hxx>
 
 FuConstRectangle::FuConstRectangle(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, const SfxRequest& rReq)

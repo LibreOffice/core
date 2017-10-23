@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dpgroup.hxx"
-#include "dpsave.hxx"
-#include "xestream.hxx"
-#include "xistream.hxx"
-#include "xestring.hxx"
-#include "xlpivot.hxx"
-#include "generalfunction.hxx"
+#include <dpgroup.hxx>
+#include <dpsave.hxx>
+#include <xestream.hxx>
+#include <xistream.hxx>
+#include <xestring.hxx>
+#include <xlpivot.hxx>
+#include <generalfunction.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 

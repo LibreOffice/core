@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 
 #include "xlroot.hxx"
-#include "compiler.hxx"
+#include <compiler.hxx>
 #include <memory>
 
 // Forward declarations of objects in public use ==============================

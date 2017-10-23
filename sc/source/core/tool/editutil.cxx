@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
 
@@ -38,15 +38,15 @@
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
-#include "editutil.hxx"
-#include "global.hxx"
-#include "attrib.hxx"
-#include "document.hxx"
-#include "docpool.hxx"
-#include "patattr.hxx"
-#include "scmod.hxx"
-#include "inputopt.hxx"
-#include "compiler.hxx"
+#include <editutil.hxx>
+#include <global.hxx>
+#include <attrib.hxx>
+#include <document.hxx>
+#include <docpool.hxx>
+#include <patattr.hxx>
+#include <scmod.hxx>
+#include <inputopt.hxx>
+#include <compiler.hxx>
 
 using namespace com::sun::star;
 

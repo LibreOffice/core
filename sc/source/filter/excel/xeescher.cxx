@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xeescher.hxx"
+#include <xeescher.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -43,30 +43,30 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/embedhlp.hxx>
 
-#include "editutil.hxx"
-#include "unonames.hxx"
-#include "convuno.hxx"
-#include "postit.hxx"
+#include <editutil.hxx>
+#include <unonames.hxx>
+#include <convuno.hxx>
+#include <postit.hxx>
 
-#include "fapihelper.hxx"
-#include "xechart.hxx"
-#include "xeformula.hxx"
-#include "xelink.hxx"
-#include "xename.hxx"
-#include "xestyle.hxx"
-#include "userdat.hxx"
-#include "drwlayer.hxx"
+#include <fapihelper.hxx>
+#include <xechart.hxx>
+#include <xeformula.hxx>
+#include <xelink.hxx>
+#include <xename.hxx>
+#include <xestyle.hxx>
+#include <userdat.hxx>
+#include <drwlayer.hxx>
 #include <svl/itemset.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/algitem.hxx>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svx/sdtaitm.hxx>
-#include "attrib.hxx"
-#include "document.hxx"
+#include <attrib.hxx>
+#include <document.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/sdr/properties/properties.hxx>
-#include "detfunc.hxx"
+#include <detfunc.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnstit.hxx>

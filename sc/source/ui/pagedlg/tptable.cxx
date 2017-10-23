@@ -19,16 +19,16 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 
 #include <vcl/settings.hxx>
 
-#include "tptable.hxx"
-#include "global.hxx"
-#include "attrib.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
-#include "bitmaps.hlst"
+#include <tptable.hxx>
+#include <global.hxx>
+#include <attrib.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
+#include <bitmaps.hlst>
 
 // Static Data
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DBDOCFUN_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DBDOCFUN_HXX
 
-#include "address.hxx"
+#include <address.hxx>
 #include <tools/solar.h>
 #include <com/sun/star/uno/Sequence.hxx>
 

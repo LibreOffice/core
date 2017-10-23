@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "pntlock.hxx"
+#include <pntlock.hxx>
 
 ScPaintLockData::ScPaintLockData() :
     nLevel( 0 ),

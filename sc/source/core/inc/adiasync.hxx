@@ -23,7 +23,7 @@
 #include <svl/broadcast.hxx>
 #include <set>
 
-#include "callform.hxx"
+#include <callform.hxx>
 
 extern "C" {
 void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData );

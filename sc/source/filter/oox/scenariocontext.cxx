@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scenariocontext.hxx"
+#include <scenariocontext.hxx>
 
-#include "scenariobuffer.hxx"
+#include <scenariobuffer.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 

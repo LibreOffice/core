@@ -25,18 +25,18 @@
 #include <vcl/svapp.hxx>
 #include <svl/sharedstringpool.hxx>
 
-#include "linkuno.hxx"
-#include "miscuno.hxx"
-#include "convuno.hxx"
-#include "docsh.hxx"
-#include "docfunc.hxx"
-#include "tablink.hxx"
-#include "arealink.hxx"
-#include "hints.hxx"
-#include "unonames.hxx"
-#include "rangeseq.hxx"
-#include "token.hxx"
-#include "scmatrix.hxx"
+#include <linkuno.hxx>
+#include <miscuno.hxx>
+#include <convuno.hxx>
+#include <docsh.hxx>
+#include <docfunc.hxx>
+#include <tablink.hxx>
+#include <arealink.hxx>
+#include <hints.hxx>
+#include <unonames.hxx>
+#include <rangeseq.hxx>
+#include <token.hxx>
+#include <scmatrix.hxx>
 #include <documentlinkmgr.hxx>
 
 #include <vector>

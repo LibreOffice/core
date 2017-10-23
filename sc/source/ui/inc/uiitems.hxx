@@ -20,11 +20,11 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_UIITEMS_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_UIITEMS_HXX
 
-#include "scdllapi.h"
-#include "conditio.hxx"
-#include "sortparam.hxx"
-#include "subtotalparam.hxx"
-#include "paramisc.hxx"
+#include <scdllapi.h>
+#include <conditio.hxx>
+#include <sortparam.hxx>
+#include <subtotalparam.hxx>
+#include <paramisc.hxx>
 #include <svl/poolitem.hxx>
 
 #include <memory>

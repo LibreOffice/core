@@ -22,7 +22,7 @@
 
 #include <comphelper/string.hxx>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <svtools/htmlcfg.hxx>
@@ -52,10 +52,10 @@
 
 #include <rtl/tencinfo.h>
 
-#include "htmlpars.hxx"
-#include "global.hxx"
-#include "document.hxx"
-#include "rangelst.hxx"
+#include <htmlpars.hxx>
+#include <global.hxx>
+#include <document.hxx>
+#include <rangelst.hxx>
 
 #include <o3tl/make_unique.hxx>
 #include <orcus/css_parser.hpp>

@@ -9,15 +9,15 @@
  * This file incorporates work covered by the following license notice:
  */
 
-#include "PivotLayoutTreeList.hxx"
-#include "PivotLayoutDialog.hxx"
+#include <PivotLayoutTreeList.hxx>
+#include <PivotLayoutDialog.hxx>
 #include <reffact.hxx>
 #include <svtools/treelistentry.hxx>
 
-#include "rangeutl.hxx"
-#include "uiitems.hxx"
-#include "dputil.hxx"
-#include "dbdocfun.hxx"
+#include <rangeutl.hxx>
+#include <uiitems.hxx>
+#include <dputil.hxx>
+#include <dbdocfun.hxx>
 
 #include <memory>
 #include <vector>

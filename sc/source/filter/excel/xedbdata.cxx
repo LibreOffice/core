@@ -7,11 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "xedbdata.hxx"
-#include "excrecds.hxx"
-#include "xltools.hxx"
-#include "dbdata.hxx"
-#include "document.hxx"
+#include <xedbdata.hxx>
+#include <excrecds.hxx>
+#include <xltools.hxx>
+#include <dbdata.hxx>
+#include <document.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
 

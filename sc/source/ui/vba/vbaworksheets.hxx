@@ -27,7 +27,7 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 
-#include "address.hxx"
+#include <address.hxx>
 
 typedef CollTestImplHelper< ov::excel::XWorksheets > ScVbaWorksheets_BASE;
 

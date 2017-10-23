@@ -24,7 +24,7 @@
 #include <svx/checklbx.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-#include "global.hxx"
+#include <global.hxx>
 
 // +1 because one field is reserved for the "- none -" entry
 #define SC_MAXFIELDS    MAXCOLCOUNT+1

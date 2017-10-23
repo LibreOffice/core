@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "pivottablebuffer.hxx"
+#include <pivottablebuffer.hxx>
 
 #include <set>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -44,15 +44,15 @@
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "addressconverter.hxx"
+#include <addressconverter.hxx>
 
-#include "dapiuno.hxx"
-#include "dpobject.hxx"
-#include "dpsave.hxx"
-#include "dpdimsave.hxx"
-#include "document.hxx"
-#include "documentimport.hxx"
-#include "workbooksettings.hxx"
+#include <dapiuno.hxx>
+#include <dpobject.hxx>
+#include <dpsave.hxx>
+#include <dpdimsave.hxx>
+#include <document.hxx>
+#include <documentimport.hxx>
+#include <workbooksettings.hxx>
 
 namespace oox {
 namespace xls {

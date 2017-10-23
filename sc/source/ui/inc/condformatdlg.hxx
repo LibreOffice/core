@@ -19,7 +19,7 @@
 #include <svx/fntctrl.hxx>
 #include <svtools/ctrlbox.hxx>
 
-#include "rangelst.hxx"
+#include <rangelst.hxx>
 #include "condformathelper.hxx"
 #include "viewdata.hxx"
 #include "condformatdlgitem.hxx"

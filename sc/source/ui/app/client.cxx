@@ -32,9 +32,9 @@
 #include <svx/svdograf.hxx>
 #include <svtools/embedhlp.hxx>
 
-#include "client.hxx"
-#include "tabvwsh.hxx"
-#include "docsh.hxx"
+#include <client.hxx>
+#include <tabvwsh.hxx>
+#include <docsh.hxx>
 #include <gridwin.hxx>
 
 using namespace com::sun::star;

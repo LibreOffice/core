@@ -19,11 +19,11 @@
 
 #include <limits.h>
 
-#include "olinetab.hxx"
-#include "global.hxx"
-#include "rechead.hxx"
-#include "address.hxx"
-#include "table.hxx"
+#include <olinetab.hxx>
+#include <global.hxx>
+#include <rechead.hxx>
+#include <address.hxx>
+#include <table.hxx>
 
 #include <o3tl/make_unique.hxx>
 

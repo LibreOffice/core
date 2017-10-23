@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "subtotalparam.hxx"
+#include <subtotalparam.hxx>
 
 #include <osl/diagnose.h>
 

@@ -19,7 +19,7 @@
 
 #include <vcl/window.hxx>
 
-#include "waitoff.hxx"
+#include <waitoff.hxx>
 
 ScWaitCursorOff::ScWaitCursorOff( vcl::Window* pWinP )
         :

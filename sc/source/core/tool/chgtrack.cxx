@@ -17,23 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "chgtrack.hxx"
-#include "compiler.hxx"
-#include "formulacell.hxx"
-#include "document.hxx"
-#include "dociter.hxx"
-#include "global.hxx"
-#include "rechead.hxx"
-#include "scerrors.hxx"
-#include "scmod.hxx"
-#include "inputopt.hxx"
-#include "patattr.hxx"
-#include "hints.hxx"
-#include "markdata.hxx"
-#include "globstr.hrc"
-#include "editutil.hxx"
-#include "tokenarray.hxx"
-#include "refupdatecontext.hxx"
+#include <chgtrack.hxx>
+#include <compiler.hxx>
+#include <formulacell.hxx>
+#include <document.hxx>
+#include <dociter.hxx>
+#include <global.hxx>
+#include <rechead.hxx>
+#include <scerrors.hxx>
+#include <scmod.hxx>
+#include <inputopt.hxx>
+#include <patattr.hxx>
+#include <hints.hxx>
+#include <markdata.hxx>
+#include <globstr.hrc>
+#include <editutil.hxx>
+#include <tokenarray.hxx>
+#include <refupdatecontext.hxx>
 #include <refupdat.hxx>
 
 #include <svl/zforlist.hxx>

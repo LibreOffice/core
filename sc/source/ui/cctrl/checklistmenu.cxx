@@ -17,25 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "checklistmenu.hxx"
-#include "globstr.hrc"
-#include "scresid.hxx"
-#include "strings.hrc"
-#include "bitmaps.hlst"
+#include <checklistmenu.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
+#include <strings.hrc>
+#include <bitmaps.hlst>
 
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
 #include <tools/wintypes.hxx>
 
-#include "AccessibleFilterMenu.hxx"
-#include "AccessibleFilterTopWindow.hxx"
+#include <AccessibleFilterMenu.hxx>
+#include <AccessibleFilterTopWindow.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <svtools/fmtfield.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
-#include "document.hxx"
+#include <document.hxx>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;

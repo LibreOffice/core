@@ -17,30 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
-#include "attrib.hxx"
-#include "patattr.hxx"
-#include "docpool.hxx"
-#include "formulacell.hxx"
-#include "table.hxx"
-#include "column.hxx"
-#include "document.hxx"
-#include "drwlayer.hxx"
-#include "olinetab.hxx"
-#include "userlist.hxx"
-#include "stlsheet.hxx"
-#include "global.hxx"
-#include "rechead.hxx"
-#include "stlpool.hxx"
-#include "brdcst.hxx"
-#include "tabprotection.hxx"
-#include "globstr.hrc"
-#include "segmenttree.hxx"
-#include "columniterator.hxx"
-#include "globalnames.hxx"
-#include "scmod.hxx"
-#include "printopt.hxx"
-#include "bcaslot.hxx"
+#include <scitems.hxx>
+#include <attrib.hxx>
+#include <patattr.hxx>
+#include <docpool.hxx>
+#include <formulacell.hxx>
+#include <table.hxx>
+#include <column.hxx>
+#include <document.hxx>
+#include <drwlayer.hxx>
+#include <olinetab.hxx>
+#include <userlist.hxx>
+#include <stlsheet.hxx>
+#include <global.hxx>
+#include <rechead.hxx>
+#include <stlpool.hxx>
+#include <brdcst.hxx>
+#include <tabprotection.hxx>
+#include <globstr.hrc>
+#include <segmenttree.hxx>
+#include <columniterator.hxx>
+#include <globalnames.hxx>
+#include <scmod.hxx>
+#include <printopt.hxx>
+#include <bcaslot.hxx>
 
 #include <com/sun/star/sheet/TablePageBreakData.hpp>
 

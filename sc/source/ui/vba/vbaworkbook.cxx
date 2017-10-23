@@ -32,7 +32,7 @@
 #include <ooo/vba/excel/XlFileFormat.hpp>
 #include <ooo/vba/excel/XApplication.hpp>
 
-#include "scextopt.hxx"
+#include <scextopt.hxx>
 #include "service.hxx"
 #include "vbaworksheet.hxx"
 #include "vbaworksheets.hxx"
@@ -43,9 +43,9 @@
 #include "vbapalette.hxx"
 #include <osl/file.hxx>
 #include "vbanames.hxx"
-#include "nameuno.hxx"
-#include "docoptio.hxx"
-#include "unonames.hxx"
+#include <nameuno.hxx>
+#include <docoptio.hxx>
+#include <unonames.hxx>
 
 // Much of the impl. for the equivalent UNO module is
 // sc/source/ui/unoobj/docuno.cxx, viewuno.cxx

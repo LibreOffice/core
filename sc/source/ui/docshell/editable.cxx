@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "editable.hxx"
-#include "document.hxx"
-#include "viewfunc.hxx"
-#include "globstr.hrc"
-#include "markdata.hxx"
+#include <editable.hxx>
+#include <document.hxx>
+#include <viewfunc.hxx>
+#include <globstr.hrc>
+#include <markdata.hxx>
 
 ScEditableTester::ScEditableTester() :
     mbIsEditable(true),

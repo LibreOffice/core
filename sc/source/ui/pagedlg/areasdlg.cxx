@@ -26,15 +26,15 @@
 #include <unotools/charclass.hxx>
 #include <stdlib.h>
 
-#include "areasdlg.hxx"
-#include "scresid.hxx"
-#include "rangenam.hxx"
-#include "reffact.hxx"
-#include "tabvwsh.hxx"
-#include "docsh.hxx"
-#include "globstr.hrc"
-#include "compiler.hxx"
-#include "markdata.hxx"
+#include <areasdlg.hxx>
+#include <scresid.hxx>
+#include <rangenam.hxx>
+#include <reffact.hxx>
+#include <tabvwsh.hxx>
+#include <docsh.hxx>
+#include <globstr.hrc>
+#include <compiler.hxx>
+#include <markdata.hxx>
 
 // List box positions for print range (PR)
 enum {

@@ -23,10 +23,10 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include "convuno.hxx"
+#include <convuno.hxx>
 #include "xmlimprt.hxx"
 #include "XMLConverter.hxx"
-#include "rangeutl.hxx"
+#include <rangeutl.hxx>
 
 #include <algorithm>
 

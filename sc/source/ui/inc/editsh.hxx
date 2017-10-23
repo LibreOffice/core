@@ -24,7 +24,7 @@
 #include <sfx2/module.hxx>
 #include <tools/link.hxx>
 
-#include "shellids.hxx"
+#include <shellids.hxx>
 #include <editeng/editview.hxx>
 
 class EditView;

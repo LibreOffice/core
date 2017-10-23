@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/memberids.h>
 #include <svl/poolitem.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/unomid.hxx>
-#include "unowids.hxx"
+#include <unowids.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
@@ -51,12 +51,12 @@
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
 
-#include "afmtuno.hxx"
-#include "miscuno.hxx"
-#include "autoform.hxx"
-#include "scdll.hxx"
-#include "unonames.hxx"
-#include "cellsuno.hxx"
+#include <afmtuno.hxx>
+#include <miscuno.hxx>
+#include <autoform.hxx>
+#include <scdll.hxx>
+#include <unonames.hxx>
+#include <cellsuno.hxx>
 
 using namespace ::com::sun::star;
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "brdcst.hxx"
+#include <brdcst.hxx>
 
 ScHint::ScHint( SfxHintId n, const ScAddress& a ) :
     SfxHint(n), aAddress(a) {}

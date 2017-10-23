@@ -20,7 +20,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <osl/diagnose.h>
 
-#include "listenercalls.hxx"
+#include <listenercalls.hxx>
 
 using namespace com::sun::star;
 

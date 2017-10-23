@@ -17,9 +17,9 @@
 #include <sfx2/objsh.hxx>
 #include <unotools/configmgr.hxx>
 
-#include "calcconfig.hxx"
-#include "compiler.hxx"
-#include "docsh.hxx"
+#include <calcconfig.hxx>
+#include <compiler.hxx>
+#include <docsh.hxx>
 
 #include <comphelper/configurationlistener.hxx>
 

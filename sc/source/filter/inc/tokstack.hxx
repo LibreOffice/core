@@ -21,8 +21,8 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_TOKSTACK_HXX
 
 #include <string.h>
-#include "compiler.hxx"
-#include "tokenarray.hxx"
+#include <compiler.hxx>
+#include <tokenarray.hxx>
 #include <osl/diagnose.h>
 
 #include <memory>

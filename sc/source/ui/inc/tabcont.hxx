@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_TABCONT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_TABCONT_HXX
 
-#include "address.hxx"
+#include <address.hxx>
 #include <svtools/tabbar.hxx>
 #include <svtools/transfer.hxx>
 

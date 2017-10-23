@@ -23,7 +23,7 @@
 #include "formulaparser.hxx"
 #include "worksheethelper.hxx"
 #include <tools/color.hxx>
-#include "rangelst.hxx"
+#include <rangelst.hxx>
 
 #include <memory>
 #include <vector>

@@ -13,8 +13,8 @@
 #include "xerecord.hxx"
 #include "xeroot.hxx"
 
-#include "colorscale.hxx"
-#include "formulaopt.hxx"
+#include <colorscale.hxx>
+#include <formulaopt.hxx>
 
 #include <memory>
 

@@ -22,7 +22,7 @@
 
 #include <osl/diagnose.h>
 #include <formula/opcode.hxx>
-#include "address.hxx"
+#include <address.hxx>
 #include "ftools.hxx"
 #include <map>
 #include <memory>

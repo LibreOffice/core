@@ -8,7 +8,7 @@
 #ifndef INCLUDED_SC_DOCFUNCUTIL_HXX
 #define INCLUDED_SC_DOCFUNCUTIL_HXX
 
-#include <undobase.hxx>
+#include "undobase.hxx"
 
 #include <memory>
 

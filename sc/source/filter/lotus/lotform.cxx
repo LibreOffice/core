@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "decl.h"
-#include "lotform.hxx"
-#include "compiler.hxx"
+#include <decl.h>
+#include <lotform.hxx>
+#include <compiler.hxx>
 #include "lotfilter.hxx"
-#include "lotrange.hxx"
-#include "namebuff.hxx"
-#include "root.hxx"
-#include "ftools.hxx"
-#include "tool.h"
+#include <lotrange.hxx>
+#include <namebuff.hxx>
+#include <root.hxx>
+#include <ftools.hxx>
+#include <tool.h>
 
 #include <math.h>
 #include <comphelper/string.hxx>

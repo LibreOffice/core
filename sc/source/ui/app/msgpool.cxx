@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svx/dialogs.hrc>
 
-#include "sc.hrc"
-#include "docpool.hxx"
-#include "msgpool.hxx"
+#include <sc.hrc>
+#include <docpool.hxx>
+#include <msgpool.hxx>
 
 static SfxItemInfo const aMsgItemInfos[] =
 {

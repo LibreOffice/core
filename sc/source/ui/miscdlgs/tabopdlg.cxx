@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/layout.hxx>
 
-#include "uiitems.hxx"
-#include "global.hxx"
-#include "document.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
-#include "strings.hrc"
-#include "reffact.hxx"
+#include <uiitems.hxx>
+#include <global.hxx>
+#include <document.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
+#include <strings.hrc>
+#include <reffact.hxx>
 
-#include "tabopdlg.hxx"
+#include <tabopdlg.hxx>
 
 //  class ScTabOpDlg
 

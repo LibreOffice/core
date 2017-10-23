@@ -24,7 +24,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 
-#include "docsh.hxx"
+#include <docsh.hxx>
 
 using namespace css::uno;
 using namespace css::lang;

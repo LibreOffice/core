@@ -21,18 +21,18 @@
 
 #include <svl/zforlist.hxx>
 #include <osl/diagnose.h>
-#include "attrib.hxx"
-#include "dif.hxx"
-#include "docpool.hxx"
-#include "document.hxx"
-#include "filter.hxx"
-#include "fprogressbar.hxx"
-#include "ftools.hxx"
-#include "patattr.hxx"
-#include "scerrors.hxx"
-#include "scitems.hxx"
-#include "stringutil.hxx"
-#include "table.hxx"
+#include <attrib.hxx>
+#include <dif.hxx>
+#include <docpool.hxx>
+#include <document.hxx>
+#include <filter.hxx>
+#include <fprogressbar.hxx>
+#include <ftools.hxx>
+#include <patattr.hxx>
+#include <scerrors.hxx>
+#include <scitems.hxx>
+#include <stringutil.hxx>
+#include <table.hxx>
 #include <memory>
 
 const sal_Unicode pKeyTABLE[]   = { 'T', 'A', 'B', 'L', 'E', 0 };

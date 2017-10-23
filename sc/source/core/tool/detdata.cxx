@@ -18,9 +18,9 @@
  */
 
 #include <memory>
-#include "detdata.hxx"
-#include "refupdat.hxx"
-#include "rechead.hxx"
+#include <detdata.hxx>
+#include <refupdat.hxx>
+#include <rechead.hxx>
 
 ScDetOpList::ScDetOpList(const ScDetOpList& rList) :
     bHasAddError( false )

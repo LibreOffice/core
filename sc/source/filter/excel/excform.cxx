@@ -17,25 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "excform.hxx"
+#include <excform.hxx>
 
-#include "formulacell.hxx"
-#include "document.hxx"
-#include "rangenam.hxx"
-#include "global.hxx"
-#include "scmatrix.hxx"
+#include <formulacell.hxx>
+#include <document.hxx>
+#include <rangenam.hxx>
+#include <global.hxx>
+#include <scmatrix.hxx>
 
 #include <formula/errorcodes.hxx>
 #include <svl/sharedstringpool.hxx>
 
-#include "imp_op.hxx"
-#include "namebuff.hxx"
-#include "root.hxx"
-#include "xltracer.hxx"
-#include "xihelper.hxx"
-#include "xilink.hxx"
-#include "xiname.hxx"
-#include "documentimport.hxx"
+#include <imp_op.hxx>
+#include <namebuff.hxx>
+#include <root.hxx>
+#include <xltracer.hxx>
+#include <xihelper.hxx>
+#include <xilink.hxx>
+#include <xiname.hxx>
+#include <documentimport.hxx>
 
 using ::std::vector;
 

@@ -11,8 +11,8 @@
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 
-#include "docsh.hxx"
-#include "tabvwsh.hxx"
+#include <docsh.hxx>
+#include <tabvwsh.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel2.hpp>

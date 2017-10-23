@@ -23,11 +23,11 @@
 #include <vcl/layout.hxx>
 #include <limits.h>
 
-#include "scresid.hxx"
-#include "document.hxx"
-#include "globstr.hrc"
-#include "strings.hrc"
-#include "filldlg.hxx"
+#include <scresid.hxx>
+#include <document.hxx>
+#include <globstr.hrc>
+#include <strings.hrc>
+#include <filldlg.hxx>
 
 // class ScFillSeriesDlg
 

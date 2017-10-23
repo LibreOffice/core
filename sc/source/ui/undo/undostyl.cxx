@@ -20,14 +20,14 @@
 #include <svl/itemset.hxx>
 #include <vcl/virdev.hxx>
 
-#include "undostyl.hxx"
-#include "docsh.hxx"
-#include "docpool.hxx"
-#include "stlpool.hxx"
-#include "printfun.hxx"
-#include "scmod.hxx"
-#include "inputhdl.hxx"
-#include "globstr.hrc"
+#include <undostyl.hxx>
+#include <docsh.hxx>
+#include <docpool.hxx>
+#include <stlpool.hxx>
+#include <printfun.hxx>
+#include <scmod.hxx>
+#include <inputhdl.hxx>
+#include <globstr.hrc>
 
 
 //      modify style (cell or page style)

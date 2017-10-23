@@ -10,8 +10,8 @@
 #ifndef INCLUDED_SC_FILTER_XEPIVOTXML_HXX
 #define INCLUDED_SC_FILTER_XEPIVOTXML_HXX
 
-#include <xerecord.hxx>
-#include <xeroot.hxx>
+#include "xerecord.hxx"
+#include "xeroot.hxx"
 
 #include <memory>
 #include <map>

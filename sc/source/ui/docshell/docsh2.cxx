@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <svx/drawitem.hxx>
@@ -29,13 +29,13 @@
 #include <config_folders.h>
 #include <unotools/configmgr.hxx>
 
-#include "drwlayer.hxx"
-#include "stlpool.hxx"
-#include "docsh.hxx"
+#include <drwlayer.hxx>
+#include <stlpool.hxx>
+#include <docsh.hxx>
 #include "docshimp.hxx"
-#include "docfunc.hxx"
-#include "sc.hrc"
-#include "filter.hxx"
+#include <docfunc.hxx>
+#include <sc.hrc>
+#include <filter.hxx>
 
 using namespace com::sun::star;
 

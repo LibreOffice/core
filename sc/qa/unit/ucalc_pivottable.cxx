@@ -9,17 +9,17 @@
 
 #include <memory>
 #include "ucalc.hxx"
-#include "dpshttab.hxx"
-#include "dpobject.hxx"
-#include "dpsave.hxx"
-#include "dpdimsave.hxx"
-#include "dpcache.hxx"
-#include "dpfilteredcache.hxx"
-#include "scopetools.hxx"
-#include "queryentry.hxx"
-#include "stringutil.hxx"
-#include "dbdocfun.hxx"
-#include "generalfunction.hxx"
+#include <dpshttab.hxx>
+#include <dpobject.hxx>
+#include <dpsave.hxx>
+#include <dpdimsave.hxx>
+#include <dpcache.hxx>
+#include <dpfilteredcache.hxx>
+#include <scopetools.hxx>
+#include <queryentry.hxx>
+#include <stringutil.hxx>
+#include <dbdocfun.hxx>
+#include <generalfunction.hxx>
 
 #include <formula/errorcodes.hxx>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>

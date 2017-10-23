@@ -27,7 +27,7 @@
 #include <vcl/layout.hxx>
 #include <svx/checklbx.hxx>
 
-#include "scdllapi.h"
+#include <scdllapi.h>
 
 namespace vcl { class Window; }
 class ScTableProtection;

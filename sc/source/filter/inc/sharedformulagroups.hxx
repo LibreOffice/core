@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_SHAREDFORMULAGROUPS_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_SHAREDFORMULAGROUPS_HXX
 
-#include "tokenarray.hxx"
+#include <tokenarray.hxx>
 
 #include <memory>
 #include <map>

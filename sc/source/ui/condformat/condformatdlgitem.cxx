@@ -10,8 +10,8 @@
 
 #include <utility>
 
-#include "scitems.hxx"
-#include "condformatdlgitem.hxx"
+#include <scitems.hxx>
+#include <condformatdlgitem.hxx>
 
 ScCondFormatDlgItem::ScCondFormatDlgItem(std::shared_ptr<ScConditionalFormatList> pCondFormats,
         sal_Int32 nItem, bool bManaged):

@@ -26,10 +26,10 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 
-#include "dispuno.hxx"
-#include "tabvwsh.hxx"
-#include "dbdocfun.hxx"
-#include "dbdata.hxx"
+#include <dispuno.hxx>
+#include <tabvwsh.hxx>
+#include <dbdocfun.hxx>
+#include <dbdata.hxx>
 
 using namespace com::sun::star;
 

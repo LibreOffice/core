@@ -23,15 +23,15 @@
 
 #include <config_features.h>
 
-#include "confuno.hxx"
-#include "unonames.hxx"
-#include "scdll.hxx"
-#include "docsh.hxx"
-#include "miscuno.hxx"
-#include "forbiuno.hxx"
-#include "viewopti.hxx"
-#include "docpool.hxx"
-#include "sc.hrc"
+#include <confuno.hxx>
+#include <unonames.hxx>
+#include <scdll.hxx>
+#include <docsh.hxx>
+#include <miscuno.hxx>
+#include <forbiuno.hxx>
+#include <viewopti.hxx>
+#include <docpool.hxx>
+#include <sc.hrc>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/LinkUpdateModes.hpp>

@@ -19,25 +19,25 @@
 
 #include <stdlib.h>
 
-#include "document.hxx"
-#include "scerrors.hxx"
-#include "fprogressbar.hxx"
-#include "xltracer.hxx"
-#include "xltable.hxx"
-#include "xihelper.hxx"
-#include "xipage.hxx"
-#include "xiview.hxx"
-#include "xilink.hxx"
-#include "xiname.hxx"
-#include "xicontent.hxx"
-#include "xiescher.hxx"
-#include "xipivot.hxx"
-#include "XclImpChangeTrack.hxx"
-#include "documentimport.hxx"
+#include <document.hxx>
+#include <scerrors.hxx>
+#include <fprogressbar.hxx>
+#include <xltracer.hxx>
+#include <xltable.hxx>
+#include <xihelper.hxx>
+#include <xipage.hxx>
+#include <xiview.hxx>
+#include <xilink.hxx>
+#include <xiname.hxx>
+#include <xicontent.hxx>
+#include <xiescher.hxx>
+#include <xipivot.hxx>
+#include <XclImpChangeTrack.hxx>
+#include <documentimport.hxx>
 
-#include "root.hxx"
-#include "imp_op.hxx"
-#include "excimp8.hxx"
+#include <root.hxx>
+#include <imp_op.hxx>
+#include <excimp8.hxx>
 
 #include <memory>
 

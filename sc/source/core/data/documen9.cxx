@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <sot/exchange.hxx>
@@ -41,21 +41,21 @@
 #include <unotools/saveopt.hxx>
 #include <unotools/pathoptions.hxx>
 
-#include "document.hxx"
-#include "docoptio.hxx"
-#include "table.hxx"
-#include "drwlayer.hxx"
-#include "markdata.hxx"
-#include "patattr.hxx"
-#include "rechead.hxx"
-#include "poolhelp.hxx"
-#include "docpool.hxx"
-#include "detfunc.hxx"
-#include "editutil.hxx"
-#include "postit.hxx"
-#include "charthelper.hxx"
-#include "interpre.hxx"
-#include "conditio.hxx"
+#include <document.hxx>
+#include <docoptio.hxx>
+#include <table.hxx>
+#include <drwlayer.hxx>
+#include <markdata.hxx>
+#include <patattr.hxx>
+#include <rechead.hxx>
+#include <poolhelp.hxx>
+#include <docpool.hxx>
+#include <detfunc.hxx>
+#include <editutil.hxx>
+#include <postit.hxx>
+#include <charthelper.hxx>
+#include <interpre.hxx>
+#include <conditio.hxx>
 #include <documentlinkmgr.hxx>
 
 using namespace ::com::sun::star;

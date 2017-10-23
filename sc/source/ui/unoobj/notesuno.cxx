@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "notesuno.hxx"
+#include <notesuno.hxx>
 
 #include <vcl/svapp.hxx>
 #include <svl/hint.hxx>
@@ -28,13 +28,13 @@
 #include <svx/unoshape.hxx>
 #include <svx/svdocapt.hxx>
 
-#include "postit.hxx"
-#include "cellsuno.hxx"
-#include "docsh.hxx"
-#include "docfunc.hxx"
-#include "hints.hxx"
-#include "editsrc.hxx"
-#include "miscuno.hxx"
+#include <postit.hxx>
+#include <cellsuno.hxx>
+#include <docsh.hxx>
+#include <docfunc.hxx>
+#include <hints.hxx>
+#include <editsrc.hxx>
+#include <miscuno.hxx>
 
 using namespace com::sun::star;
 

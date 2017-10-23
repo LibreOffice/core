@@ -22,11 +22,11 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>
 
-#include "fupoor.hxx"
-#include "tabvwsh.hxx"
-#include "drawview.hxx"
-#include "detfunc.hxx"
-#include "document.hxx"
+#include <fupoor.hxx>
+#include <tabvwsh.hxx>
+#include <drawview.hxx>
+#include <detfunc.hxx>
+#include <document.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdrhittesthelper.hxx>
 

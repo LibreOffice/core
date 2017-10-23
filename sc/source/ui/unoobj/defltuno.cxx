@@ -26,13 +26,13 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#include "scitems.hxx"
-#include "defltuno.hxx"
-#include "miscuno.hxx"
-#include "docsh.hxx"
-#include "docpool.hxx"
-#include "unonames.hxx"
-#include "docoptio.hxx"
+#include <scitems.hxx>
+#include <defltuno.hxx>
+#include <miscuno.hxx>
+#include <docsh.hxx>
+#include <docpool.hxx>
+#include <unonames.hxx>
+#include <docoptio.hxx>
 
 #include <limits>
 

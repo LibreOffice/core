@@ -20,13 +20,13 @@
 #include <rtl/strbuf.hxx>
 #include <sal/config.h>
 #include <sal/macros.h>
-#include "qpro.hxx"
+#include <qpro.hxx>
 
-#include "qproform.hxx"
-#include "formel.hxx"
-#include "compiler.hxx"
+#include <qproform.hxx>
+#include <formel.hxx>
+#include <compiler.hxx>
 #include <tokstack.hxx>
-#include "ftools.hxx"
+#include <ftools.hxx>
 
 void QProToSc::ReadSRD( ScSingleRefData& rSRD, sal_Int8 nPage, sal_Int8 nCol, sal_uInt16 nRelBit )
 {

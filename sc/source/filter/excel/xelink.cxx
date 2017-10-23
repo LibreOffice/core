@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xelink.hxx"
+#include <xelink.hxx>
 
 #include <algorithm>
 #include <formula/errorcodes.hxx>
@@ -25,12 +25,12 @@
 #include <oox/token/relationship.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <svl/zforlist.hxx>
-#include "document.hxx"
-#include "formulacell.hxx"
-#include "scextopt.hxx"
-#include "externalrefmgr.hxx"
-#include "tokenarray.hxx"
-#include "xecontent.hxx"
+#include <document.hxx>
+#include <formulacell.hxx>
+#include <scextopt.hxx>
+#include <externalrefmgr.hxx>
+#include <tokenarray.hxx>
+#include <xecontent.hxx>
 
 #include <vector>
 #include <memory>

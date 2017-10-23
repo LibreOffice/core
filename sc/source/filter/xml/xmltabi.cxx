@@ -24,16 +24,16 @@
 #include "xmlsceni.hxx"
 #include "xmlexternaltabi.hxx"
 #include "xmlnexpi.hxx"
-#include "document.hxx"
-#include "docuno.hxx"
-#include "olinetab.hxx"
+#include <document.hxx>
+#include <docuno.hxx>
+#include <olinetab.hxx>
 #include "XMLConverter.hxx"
 #include "XMLTableShapesContext.hxx"
 #include "XMLTableSourceContext.hxx"
 #include "XMLStylesImportHelper.hxx"
-#include "rangeutl.hxx"
-#include "externalrefmgr.hxx"
-#include "sheetdata.hxx"
+#include <rangeutl.hxx>
+#include <externalrefmgr.hxx>
+#include <sheetdata.hxx>
 #include "xmlcondformat.hxx"
 
 #include <xmloff/xmltkmap.hxx>

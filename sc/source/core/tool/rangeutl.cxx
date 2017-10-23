@@ -19,17 +19,17 @@
 
 #include <memory>
 #include <osl/diagnose.h>
-#include "rangeutl.hxx"
-#include "document.hxx"
-#include "global.hxx"
-#include "dbdata.hxx"
-#include "rangenam.hxx"
-#include "scresid.hxx"
-#include "globstr.hrc"
-#include "convuno.hxx"
-#include "externalrefmgr.hxx"
-#include "compiler.hxx"
-#include "refupdatecontext.hxx"
+#include <rangeutl.hxx>
+#include <document.hxx>
+#include <global.hxx>
+#include <dbdata.hxx>
+#include <rangenam.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
+#include <convuno.hxx>
+#include <externalrefmgr.hxx>
+#include <compiler.hxx>
+#include <refupdatecontext.hxx>
 
 using ::formula::FormulaGrammar;
 using namespace ::com::sun::star;

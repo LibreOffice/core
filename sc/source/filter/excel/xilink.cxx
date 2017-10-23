@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xilink.hxx"
-#include "document.hxx"
-#include "formulacell.hxx"
-#include "scextopt.hxx"
-#include "tablink.hxx"
-#include "xistream.hxx"
-#include "xihelper.hxx"
-#include "xiname.hxx"
-#include "excform.hxx"
-#include "tokenarray.hxx"
-#include "externalrefmgr.hxx"
-#include "scmatrix.hxx"
+#include <xilink.hxx>
+#include <document.hxx>
+#include <formulacell.hxx>
+#include <scextopt.hxx>
+#include <tablink.hxx>
+#include <xistream.hxx>
+#include <xihelper.hxx>
+#include <xiname.hxx>
+#include <excform.hxx>
+#include <tokenarray.hxx>
+#include <externalrefmgr.hxx>
+#include <scmatrix.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <o3tl/make_unique.hxx>
 

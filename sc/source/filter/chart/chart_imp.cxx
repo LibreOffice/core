@@ -8,7 +8,7 @@
  */
 
 #include <sfx2/docfile.hxx>
-#include "xmlwrap.hxx"
+#include <xmlwrap.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>

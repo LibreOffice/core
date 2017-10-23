@@ -25,9 +25,9 @@
 #include <comphelper/extract.hxx>
 #include <rtl/ref.hxx>
 
-#include "unonames.hxx"
+#include <unonames.hxx>
 #include "xmlexprt.hxx"
-#include "textuno.hxx"
+#include <textuno.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

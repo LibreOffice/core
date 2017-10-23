@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "validat.hxx"
+#include <validat.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
@@ -36,19 +36,19 @@
 #include <vcl/msgbox.hxx>
 #include <rtl/math.hxx>
 
-#include "scitems.hxx"
-#include "document.hxx"
-#include "formulacell.hxx"
-#include "patattr.hxx"
-#include "rechead.hxx"
-#include "globstr.hrc"
-#include "rangenam.hxx"
-#include "dbdata.hxx"
-#include "typedstrdata.hxx"
-#include "dociter.hxx"
-#include "editutil.hxx"
-#include "tokenarray.hxx"
-#include "scmatrix.hxx"
+#include <scitems.hxx>
+#include <document.hxx>
+#include <formulacell.hxx>
+#include <patattr.hxx>
+#include <rechead.hxx>
+#include <globstr.hrc>
+#include <rangenam.hxx>
+#include <dbdata.hxx>
+#include <typedstrdata.hxx>
+#include <dociter.hxx>
+#include <editutil.hxx>
+#include <tokenarray.hxx>
+#include <scmatrix.hxx>
 
 #include <math.h>
 #include <memory>

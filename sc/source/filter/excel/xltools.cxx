@@ -25,17 +25,17 @@
 #include <sal/macros.h>
 #include <editeng/editstat.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
-#include "xestream.hxx"
-#include "document.hxx"
-#include "docuno.hxx"
-#include "editutil.hxx"
+#include <xestream.hxx>
+#include <document.hxx>
+#include <docuno.hxx>
+#include <editutil.hxx>
 #include <formula/errorcodes.hxx>
-#include "globstr.hrc"
-#include "xlstyle.hxx"
-#include "xlname.hxx"
-#include "xistream.hxx"
-#include "xiroot.hxx"
-#include "xltools.hxx"
+#include <globstr.hrc>
+#include <xlstyle.hxx>
+#include <xlname.hxx>
+#include <xistream.hxx>
+#include <xiroot.hxx>
+#include <xltools.hxx>
 
 // GUID import/export
 

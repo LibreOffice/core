@@ -22,7 +22,7 @@
 
 #include "richstring.hxx"
 #include "worksheethelper.hxx"
-#include "tabprotection.hxx"
+#include <tabprotection.hxx>
 
 namespace oox {
 namespace xls {

@@ -26,19 +26,19 @@
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "oleobjsh.hxx"
-#include "drwlayer.hxx"
-#include "sc.hrc"
-#include "viewdata.hxx"
-#include "document.hxx"
-#include "docpool.hxx"
-#include "drawview.hxx"
-#include "scresid.hxx"
+#include <oleobjsh.hxx>
+#include <drwlayer.hxx>
+#include <sc.hrc>
+#include <viewdata.hxx>
+#include <document.hxx>
+#include <docpool.hxx>
+#include <drawview.hxx>
+#include <scresid.hxx>
 #include <svx/svdobj.hxx>
 #include <vcl/EnumContext.hxx>
 
 #define ScOleObjectShell
-#include "scslots.hxx"
+#include <scslots.hxx>
 
 SFX_IMPL_INTERFACE(ScOleObjectShell, ScDrawShell)
 

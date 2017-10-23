@@ -21,8 +21,8 @@
 #define INCLUDED_SC_SOURCE_UI_INC_UNDOBASE_HXX
 
 #include <svl/undo.hxx>
-#include "global.hxx"
-#include "address.hxx"
+#include <global.hxx>
+#include <address.hxx>
 #include "docsh.hxx"
 #include <columnspanset.hxx>
 

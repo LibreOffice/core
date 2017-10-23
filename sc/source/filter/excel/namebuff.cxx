@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "namebuff.hxx"
+#include <namebuff.hxx>
 
-#include "document.hxx"
-#include "compiler.hxx"
-#include "scextopt.hxx"
+#include <document.hxx>
+#include <compiler.hxx>
+#include <scextopt.hxx>
 
-#include "root.hxx"
-#include "tokstack.hxx"
-#include "xltools.hxx"
-#include "xiroot.hxx"
+#include <root.hxx>
+#include <tokstack.hxx>
+#include <xltools.hxx>
+#include <xiroot.hxx>
 
 #include <string.h>
 

@@ -27,7 +27,7 @@
 #include <vcl/idle.hxx>
 #include <svx/ctredlin.hxx>
 
-#include "chgtrack.hxx"
+#include <chgtrack.hxx>
 #include "docsh.hxx"
 
 class ScViewData;

@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "biffhelper.hxx"
+#include <biffhelper.hxx>
 
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
 #include <osl/diagnose.h>
-#include "worksheethelper.hxx"
+#include <worksheethelper.hxx>
 #include <oox/helper/binaryoutputstream.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 

@@ -24,17 +24,17 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <connectivity/dbtools.hxx>
 
-#include "editutil.hxx"
-#include "filtuno.hxx"
-#include "miscuno.hxx"
-#include "scdll.hxx"
-#include "imoptdlg.hxx"
-#include "asciiopt.hxx"
-#include "docsh.hxx"
-#include "globstr.hrc"
+#include <editutil.hxx>
+#include <filtuno.hxx>
+#include <miscuno.hxx>
+#include <scdll.hxx>
+#include <imoptdlg.hxx>
+#include <asciiopt.hxx>
+#include <docsh.hxx>
+#include <globstr.hrc>
 
-#include "sc.hrc"
-#include "scabstdlg.hxx"
+#include <sc.hrc>
+#include <scabstdlg.hxx>
 #include <i18nlangtag/lang.h>
 
 #include <optutil.hxx>

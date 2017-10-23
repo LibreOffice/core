@@ -21,8 +21,8 @@
 #define INCLUDED_SC_SOURCE_UI_INC_IMPEX_HXX
 
 #include <sot/exchange.hxx>
-#include "global.hxx"
-#include "address.hxx"
+#include <global.hxx>
+#include <address.hxx>
 
 class ScDocShell;
 class ScDocument;

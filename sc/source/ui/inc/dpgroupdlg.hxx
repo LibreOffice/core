@@ -26,7 +26,7 @@
 #include <vcl/field.hxx>
 #include <svx/checklbx.hxx>
 #include "editfield.hxx"
-#include "dpgroup.hxx"
+#include <dpgroup.hxx>
 
 class ScDPGroupEditHelper
 {

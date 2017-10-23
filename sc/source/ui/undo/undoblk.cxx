@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
 #include <editeng/boxitem.hxx>
@@ -26,30 +26,30 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 
-#include "undoblk.hxx"
-#include "undoutil.hxx"
-#include "document.hxx"
-#include "patattr.hxx"
-#include "docsh.hxx"
-#include "tabvwsh.hxx"
-#include "rangenam.hxx"
-#include "rangeutl.hxx"
-#include "dbdata.hxx"
-#include "stlpool.hxx"
-#include "stlsheet.hxx"
-#include "globstr.hrc"
-#include "global.hxx"
-#include "target.hxx"
-#include "docpool.hxx"
-#include "docfunc.hxx"
-#include "attrib.hxx"
-#include "chgtrack.hxx"
-#include "transobj.hxx"
-#include "refundo.hxx"
-#include "undoolk.hxx"
-#include "clipparam.hxx"
+#include <undoblk.hxx>
+#include <undoutil.hxx>
+#include <document.hxx>
+#include <patattr.hxx>
+#include <docsh.hxx>
+#include <tabvwsh.hxx>
+#include <rangenam.hxx>
+#include <rangeutl.hxx>
+#include <dbdata.hxx>
+#include <stlpool.hxx>
+#include <stlsheet.hxx>
+#include <globstr.hrc>
+#include <global.hxx>
+#include <target.hxx>
+#include <docpool.hxx>
+#include <docfunc.hxx>
+#include <attrib.hxx>
+#include <chgtrack.hxx>
+#include <transobj.hxx>
+#include <refundo.hxx>
+#include <undoolk.hxx>
+#include <clipparam.hxx>
 #include <brdcst.hxx>
-#include "sc.hrc"
+#include <sc.hrc>
 #include <rowheightcontext.hxx>
 #include <refhint.hxx>
 #include <refupdatecontext.hxx>

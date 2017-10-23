@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "tokenuno.hxx"
+#include <tokenuno.hxx>
 
 #include <sal/macros.h>
 
@@ -32,15 +32,15 @@
 #include <svl/itemprop.hxx>
 #include <vcl/svapp.hxx>
 
-#include "miscuno.hxx"
-#include "convuno.hxx"
-#include "unonames.hxx"
-#include "token.hxx"
-#include "compiler.hxx"
-#include "tokenarray.hxx"
-#include "docsh.hxx"
-#include "rangeseq.hxx"
-#include "externalrefmgr.hxx"
+#include <miscuno.hxx>
+#include <convuno.hxx>
+#include <unonames.hxx>
+#include <token.hxx>
+#include <compiler.hxx>
+#include <tokenarray.hxx>
+#include <docsh.hxx>
+#include <rangeseq.hxx>
+#include <externalrefmgr.hxx>
 
 using namespace ::formula;
 using namespace ::com::sun::star;

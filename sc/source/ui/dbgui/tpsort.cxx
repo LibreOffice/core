@@ -26,25 +26,25 @@
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include "scitems.hxx"
-#include "uiitems.hxx"
-#include "viewdata.hxx"
-#include "document.hxx"
-#include "global.hxx"
-#include "globalnames.hxx"
-#include "dbdata.hxx"
-#include "userlist.hxx"
-#include "rangeutl.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
-#include "strings.hrc"
-#include "globstr.hrc"
+#include <scitems.hxx>
+#include <uiitems.hxx>
+#include <viewdata.hxx>
+#include <document.hxx>
+#include <global.hxx>
+#include <globalnames.hxx>
+#include <dbdata.hxx>
+#include <userlist.hxx>
+#include <rangeutl.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
+#include <strings.hrc>
+#include <globstr.hrc>
 
-#include "sortkeydlg.hxx"
+#include <sortkeydlg.hxx>
 
-#include "sortdlg.hxx"
+#include <sortdlg.hxx>
 
-#include "tpsort.hxx"
+#include <tpsort.hxx>
 
 using namespace com::sun::star;
 

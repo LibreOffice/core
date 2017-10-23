@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <editeng/editobj.hxx>
@@ -47,27 +47,27 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include "viewfunc.hxx"
-#include "docsh.hxx"
-#include "document.hxx"
-#include "docpool.hxx"
-#include "globstr.hrc"
-#include "global.hxx"
-#include "undoblk.hxx"
-#include "undocell.hxx"
-#include "formulacell.hxx"
-#include "scmod.hxx"
-#include "spelleng.hxx"
-#include "patattr.hxx"
-#include "sc.hrc"
-#include "tabvwsh.hxx"
-#include "impex.hxx"
-#include "editutil.hxx"
-#include "editable.hxx"
-#include "dociter.hxx"
-#include "reffind.hxx"
-#include "compiler.hxx"
-#include "tokenarray.hxx"
+#include <viewfunc.hxx>
+#include <docsh.hxx>
+#include <document.hxx>
+#include <docpool.hxx>
+#include <globstr.hrc>
+#include <global.hxx>
+#include <undoblk.hxx>
+#include <undocell.hxx>
+#include <formulacell.hxx>
+#include <scmod.hxx>
+#include <spelleng.hxx>
+#include <patattr.hxx>
+#include <sc.hrc>
+#include <tabvwsh.hxx>
+#include <impex.hxx>
+#include <editutil.hxx>
+#include <editable.hxx>
+#include <dociter.hxx>
+#include <reffind.hxx>
+#include <compiler.hxx>
+#include <tokenarray.hxx>
 #include <refupdatecontext.hxx>
 #include <gridwin.hxx>
 

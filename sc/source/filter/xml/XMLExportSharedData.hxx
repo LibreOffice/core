@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTSHAREDDATA_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTSHAREDDATA_HXX
 
-#include "global.hxx"
+#include <global.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
 #include <vector>

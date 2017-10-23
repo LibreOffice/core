@@ -12,15 +12,15 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 
-#include "colorscale.hxx"
-#include "conditio.hxx"
-#include "document.hxx"
+#include <colorscale.hxx>
+#include <conditio.hxx>
+#include <document.hxx>
 #include <sax/tools/converter.hxx>
-#include "rangelst.hxx"
-#include "rangeutl.hxx"
-#include "docfunc.hxx"
+#include <rangelst.hxx>
+#include <rangeutl.hxx>
+#include <docfunc.hxx>
 #include "XMLConverter.hxx"
-#include "stylehelper.hxx"
+#include <stylehelper.hxx>
 
 using namespace xmloff::token;
 

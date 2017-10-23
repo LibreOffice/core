@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "address.hxx"
-#include "global.hxx"
-#include "compiler.hxx"
-#include "document.hxx"
-#include "externalrefmgr.hxx"
+#include <address.hxx>
+#include <global.hxx>
+#include <compiler.hxx>
+#include <document.hxx>
+#include <externalrefmgr.hxx>
 
-#include "globstr.hrc"
+#include <globstr.hrc>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/frame/XModel.hpp>

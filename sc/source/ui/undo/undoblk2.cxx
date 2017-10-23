@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 
-#include "undoblk.hxx"
-#include "document.hxx"
-#include "docsh.hxx"
-#include "tabvwsh.hxx"
-#include "olinetab.hxx"
-#include "globstr.hrc"
-#include "global.hxx"
-#include "target.hxx"
+#include <undoblk.hxx>
+#include <document.hxx>
+#include <docsh.hxx>
+#include <tabvwsh.hxx>
+#include <olinetab.hxx>
+#include <globstr.hrc>
+#include <global.hxx>
+#include <target.hxx>
 
-#include "undoolk.hxx"
+#include <undoolk.hxx>
 
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>

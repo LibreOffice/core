@@ -20,12 +20,12 @@
 #include <sot/formats.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/linkmgr.hxx>
-#include "servobj.hxx"
-#include "docsh.hxx"
-#include "impex.hxx"
-#include "brdcst.hxx"
-#include "rangenam.hxx"
-#include "sc.hrc"
+#include <servobj.hxx>
+#include <docsh.hxx>
+#include <impex.hxx>
+#include <brdcst.hxx>
+#include <rangenam.hxx>
+#include <sc.hrc>
 
 using namespace formula;
 

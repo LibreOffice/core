@@ -7,10 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "interpre.hxx"
-#include "jumpmatrix.hxx"
-#include "formulacell.hxx"
-#include "scmatrix.hxx"
+#include <interpre.hxx>
+#include <jumpmatrix.hxx>
+#include <formulacell.hxx>
+#include <scmatrix.hxx>
 #include <rtl/strbuf.hxx>
 #include <formula/errorcodes.hxx>
 #include <svtools/miscopt.hxx>
@@ -19,7 +19,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
-#include "libxml/xpath.h"
+#include <libxml/xpath.h>
 #include <datastreamgettime.hxx>
 #include <dpobject.hxx>
 #include <document.hxx>

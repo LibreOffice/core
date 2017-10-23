@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "workbookhelper.hxx"
+#include <workbookhelper.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -36,40 +36,40 @@
 #include <oox/helper/propertyset.hxx>
 #include <oox/ole/vbaproject.hxx>
 #include <oox/token/properties.hxx>
-#include "addressconverter.hxx"
-#include "connectionsbuffer.hxx"
-#include "defnamesbuffer.hxx"
-#include "excelchartconverter.hxx"
-#include "excelfilter.hxx"
-#include "externallinkbuffer.hxx"
-#include "formulaparser.hxx"
-#include "pagesettings.hxx"
-#include "pivotcachebuffer.hxx"
-#include "pivottablebuffer.hxx"
-#include "scenariobuffer.hxx"
-#include "sharedstringsbuffer.hxx"
-#include "stylesbuffer.hxx"
-#include "tablebuffer.hxx"
-#include "themebuffer.hxx"
-#include "unitconverter.hxx"
-#include "viewsettings.hxx"
-#include "workbooksettings.hxx"
-#include "worksheetbuffer.hxx"
-#include "docsh.hxx"
-#include "document.hxx"
-#include "docuno.hxx"
-#include "rangenam.hxx"
-#include "tokenarray.hxx"
-#include "tokenuno.hxx"
-#include "dbdata.hxx"
-#include "datauno.hxx"
-#include "globalnames.hxx"
-#include "documentimport.hxx"
-#include "drwlayer.hxx"
-#include "globstr.hrc"
+#include <addressconverter.hxx>
+#include <connectionsbuffer.hxx>
+#include <defnamesbuffer.hxx>
+#include <excelchartconverter.hxx>
+#include <excelfilter.hxx>
+#include <externallinkbuffer.hxx>
+#include <formulaparser.hxx>
+#include <pagesettings.hxx>
+#include <pivotcachebuffer.hxx>
+#include <pivottablebuffer.hxx>
+#include <scenariobuffer.hxx>
+#include <sharedstringsbuffer.hxx>
+#include <stylesbuffer.hxx>
+#include <tablebuffer.hxx>
+#include <themebuffer.hxx>
+#include <unitconverter.hxx>
+#include <viewsettings.hxx>
+#include <workbooksettings.hxx>
+#include <worksheetbuffer.hxx>
+#include <docsh.hxx>
+#include <document.hxx>
+#include <docuno.hxx>
+#include <rangenam.hxx>
+#include <tokenarray.hxx>
+#include <tokenuno.hxx>
+#include <dbdata.hxx>
+#include <datauno.hxx>
+#include <globalnames.hxx>
+#include <documentimport.hxx>
+#include <drwlayer.hxx>
+#include <globstr.hrc>
 
-#include "formulabuffer.hxx"
-#include "editutil.hxx"
+#include <formulabuffer.hxx>
+#include <editutil.hxx>
 #include <editeng/editstat.hxx>
 
 #include <memory>

@@ -24,8 +24,8 @@
 
 #include <memory>
 
-#include "address.hxx"
-#include "types.hxx"
+#include <address.hxx>
+#include <types.hxx>
 
 class ScDocument;
 struct ScDBQueryParamBase;

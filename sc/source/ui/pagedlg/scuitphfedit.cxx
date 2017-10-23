@@ -19,7 +19,7 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <editeng/editobj.hxx>
@@ -34,19 +34,19 @@
 
 #include <unotools/useroptions.hxx>
 
-#include "editutil.hxx"
-#include "global.hxx"
-#include "attrib.hxx"
-#include "patattr.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
-#include "globstr.hrc"
-#include "tabvwsh.hxx"
-#include "prevwsh.hxx"
-#include "textdlgs.hxx"
-#include "AccessibleEditObject.hxx"
+#include <editutil.hxx>
+#include <global.hxx>
+#include <attrib.hxx>
+#include <patattr.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
+#include <globstr.hrc>
+#include <tabvwsh.hxx>
+#include <prevwsh.hxx>
+#include <textdlgs.hxx>
+#include <AccessibleEditObject.hxx>
 
-#include "scuitphfedit.hxx"
+#include <scuitphfedit.hxx>
 #include <memory>
 
 // class ScHFEditPage

@@ -22,13 +22,13 @@
 #include <memory>
 #include <utility>
 
-#include "AccessibleEditObject.hxx"
-#include "scitems.hxx"
+#include <AccessibleEditObject.hxx>
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
-#include "AccessibleText.hxx"
-#include "editsrc.hxx"
-#include "scmod.hxx"
-#include "inputhdl.hxx"
+#include <AccessibleText.hxx>
+#include <editsrc.hxx>
+#include <scmod.hxx>
+#include <inputhdl.hxx>
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -43,9 +43,9 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/objsh.hxx>
 
-#include "unonames.hxx"
-#include "document.hxx"
-#include "AccessibleDocument.hxx"
+#include <unonames.hxx>
+#include <document.hxx>
+#include <AccessibleDocument.hxx>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>

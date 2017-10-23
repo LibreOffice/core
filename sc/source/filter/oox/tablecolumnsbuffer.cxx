@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "tablecolumnsbuffer.hxx"
+#include <tablecolumnsbuffer.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <oox/helper/attributelist.hxx>
@@ -25,9 +25,9 @@
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "addressconverter.hxx"
-#include "defnamesbuffer.hxx"
-#include "dbdata.hxx"
+#include <addressconverter.hxx>
+#include <defnamesbuffer.hxx>
+#include <dbdata.hxx>
 
 namespace oox {
 namespace xls {

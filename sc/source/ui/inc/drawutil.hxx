@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DRAWUTIL_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DRAWUTIL_HXX
 
-#include "address.hxx"
+#include <address.hxx>
 
 class Fraction;
 class OutputDevice;

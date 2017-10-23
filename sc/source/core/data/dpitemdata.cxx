@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dpitemdata.hxx"
+#include <dpitemdata.hxx>
 
-#include "document.hxx"
-#include "dpobject.hxx"
-#include "formulacell.hxx"
-#include "globstr.hrc"
-#include "dptabdat.hxx"
+#include <document.hxx>
+#include <dpobject.hxx>
+#include <formulacell.hxx>
+#include <globstr.hrc>
+#include <dptabdat.hxx>
 #include <rtl/math.hxx>
 
 const sal_Int32 ScDPItemData::DateFirst = -1;

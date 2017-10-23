@@ -9,12 +9,12 @@
 
 #include "op_spreadsheet.hxx"
 
-#include "formulagroup.hxx"
-#include "document.hxx"
-#include "formulacell.hxx"
-#include "tokenarray.hxx"
-#include "compiler.hxx"
-#include "interpre.hxx"
+#include <formulagroup.hxx>
+#include <document.hxx>
+#include <formulacell.hxx>
+#include <tokenarray.hxx>
+#include <compiler.hxx>
+#include <interpre.hxx>
 #include <formula/vectortoken.hxx>
 #include <sstream>
 

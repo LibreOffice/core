@@ -25,7 +25,7 @@
 #include <oox/helper/storagebase.hxx>
 #include <oox/drawingml/chart/chartconverter.hxx>
 #include "biffhelper.hxx"
-#include "rangenam.hxx"
+#include <rangenam.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }

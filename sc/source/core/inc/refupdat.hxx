@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_INC_REFUPDAT_HXX
 #define INCLUDED_SC_SOURCE_CORE_INC_REFUPDAT_HXX
 
-#include "global.hxx"
+#include <global.hxx>
 
 class ScDocument;
 class ScBigRange;

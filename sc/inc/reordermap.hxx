@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_REORDERMAP_HXX
 #define INCLUDED_SC_REORDERMAP_HXX
 
-#include <types.hxx>
+#include "types.hxx"
 #include <unordered_map>
 
 namespace sc {

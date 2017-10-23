@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "autofilterbuffer.hxx"
+#include <autofilterbuffer.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/FilterConnection.hpp>
@@ -35,8 +35,8 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "addressconverter.hxx"
-#include "defnamesbuffer.hxx"
+#include <addressconverter.hxx>
+#include <defnamesbuffer.hxx>
 
 namespace oox {
 namespace xls {

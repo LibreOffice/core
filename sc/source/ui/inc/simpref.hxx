@@ -28,7 +28,7 @@
 
 #include <vcl/morebtn.hxx>
 #include "anyrefdg.hxx"
-#include "dbdata.hxx"
+#include <dbdata.hxx>
 
 class ScDocument;
 

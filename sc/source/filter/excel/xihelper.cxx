@@ -18,25 +18,25 @@
  */
 
 #include <memory>
-#include "xihelper.hxx"
+#include <xihelper.hxx>
 #include <svl/itemset.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <editeng/editobj.hxx>
 #include <tools/urlobj.hxx>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
-#include "document.hxx"
-#include "rangelst.hxx"
-#include "editutil.hxx"
-#include "attrib.hxx"
-#include "xltracer.hxx"
-#include "xistream.hxx"
-#include "xistyle.hxx"
-#include "excform.hxx"
-#include "stringutil.hxx"
-#include "scmatrix.hxx"
-#include "documentimport.hxx"
+#include <document.hxx>
+#include <rangelst.hxx>
+#include <editutil.hxx>
+#include <attrib.hxx>
+#include <xltracer.hxx>
+#include <xistream.hxx>
+#include <xistyle.hxx>
+#include <excform.hxx>
+#include <stringutil.hxx>
+#include <scmatrix.hxx>
+#include <documentimport.hxx>
 #include <o3tl/make_unique.hxx>
 
 // Excel->Calc cell address/range conversion ==================================

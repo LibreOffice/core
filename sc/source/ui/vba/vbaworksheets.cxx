@@ -39,17 +39,17 @@
 #include <com/sun/star/script/XTypeConverter.hpp>
 
 #include <ooo/vba/excel/XApplication.hpp>
-#include "tabvwsh.hxx"
+#include <tabvwsh.hxx>
 
 #include "vbaglobals.hxx"
 #include "vbaworksheet.hxx"
 #include "vbaworkbook.hxx"
-#include "unonames.hxx"
-#include "markdata.hxx"
+#include <unonames.hxx>
+#include <markdata.hxx>
 
 #include <vector>
-#include "prevwsh.hxx"
-#include "preview.hxx"
+#include <prevwsh.hxx>
+#include <preview.hxx>
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 

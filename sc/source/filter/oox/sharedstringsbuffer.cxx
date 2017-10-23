@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sharedstringsbuffer.hxx"
+#include <sharedstringsbuffer.hxx>
 
 namespace oox {
 namespace xls {

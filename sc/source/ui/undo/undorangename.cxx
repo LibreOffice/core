@@ -7,11 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "undorangename.hxx"
-#include "globstr.hrc"
-#include "global.hxx"
-#include "docfunc.hxx"
-#include "sc.hrc"
+#include <undorangename.hxx>
+#include <globstr.hrc>
+#include <global.hxx>
+#include <docfunc.hxx>
+#include <sc.hrc>
 
 #include <sfx2/app.hxx>
 

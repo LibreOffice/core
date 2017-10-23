@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "strings.hrc"
-#include "retypepassdlg.hxx"
-#include "scresid.hxx"
-#include "document.hxx"
-#include "tabprotection.hxx"
+#include <strings.hrc>
+#include <retypepassdlg.hxx>
+#include <scresid.hxx>
+#include <document.hxx>
+#include <tabprotection.hxx>
 
 #include <vcl/msgbox.hxx>
 

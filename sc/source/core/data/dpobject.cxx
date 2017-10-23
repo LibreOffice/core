@@ -17,30 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dpobject.hxx"
-#include "dptabsrc.hxx"
-#include "dpsave.hxx"
-#include "dpdimsave.hxx"
-#include "dpoutput.hxx"
-#include "dpshttab.hxx"
-#include "dpsdbtab.hxx"
-#include "dpgroup.hxx"
-#include "document.hxx"
-#include "rechead.hxx"
-#include "pivot.hxx"
-#include "dapiuno.hxx"
-#include "miscuno.hxx"
-#include "scerrors.hxx"
-#include "refupdat.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
-#include "attrib.hxx"
-#include "scitems.hxx"
-#include "unonames.hxx"
-#include "dpglobal.hxx"
-#include "globstr.hrc"
-#include "queryentry.hxx"
-#include "dputil.hxx"
+#include <dpobject.hxx>
+#include <dptabsrc.hxx>
+#include <dpsave.hxx>
+#include <dpdimsave.hxx>
+#include <dpoutput.hxx>
+#include <dpshttab.hxx>
+#include <dpsdbtab.hxx>
+#include <dpgroup.hxx>
+#include <document.hxx>
+#include <rechead.hxx>
+#include <pivot.hxx>
+#include <dapiuno.hxx>
+#include <miscuno.hxx>
+#include <scerrors.hxx>
+#include <refupdat.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
+#include <attrib.hxx>
+#include <scitems.hxx>
+#include <unonames.hxx>
+#include <dpglobal.hxx>
+#include <globstr.hrc>
+#include <queryentry.hxx>
+#include <dputil.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>

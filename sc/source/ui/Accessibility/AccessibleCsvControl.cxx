@@ -22,7 +22,7 @@
 
 #include <utility>
 
-#include "AccessibleCsvControl.hxx"
+#include <AccessibleCsvControl.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -35,22 +35,22 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/langitem.hxx>
-#include "csvcontrol.hxx"
-#include "csvruler.hxx"
-#include "csvgrid.hxx"
-#include "AccessibleText.hxx"
-#include "editsrc.hxx"
-#include "scresid.hxx"
-#include "strings.hrc"
-#include "scmod.hxx"
+#include <csvcontrol.hxx>
+#include <csvruler.hxx>
+#include <csvgrid.hxx>
+#include <AccessibleText.hxx>
+#include <editsrc.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
+#include <scmod.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include "editutil.hxx"
+#include <editutil.hxx>
 #include <o3tl/make_unique.hxx>
 using ::utl::AccessibleRelationSetHelper;
 using ::utl::AccessibleStateSetHelper;

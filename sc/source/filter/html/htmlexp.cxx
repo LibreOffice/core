@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
 
@@ -50,21 +50,21 @@
 #include <vcl/outdev.hxx>
 #include <stdio.h>
 
-#include "htmlexp.hxx"
-#include "filter.hxx"
-#include "global.hxx"
-#include "postit.hxx"
-#include "document.hxx"
-#include "attrib.hxx"
-#include "patattr.hxx"
-#include "stlpool.hxx"
-#include "scresid.hxx"
-#include "formulacell.hxx"
-#include "cellform.hxx"
-#include "docoptio.hxx"
-#include "editutil.hxx"
-#include "ftools.hxx"
-#include "cellvalue.hxx"
+#include <htmlexp.hxx>
+#include <filter.hxx>
+#include <global.hxx>
+#include <postit.hxx>
+#include <document.hxx>
+#include <attrib.hxx>
+#include <patattr.hxx>
+#include <stlpool.hxx>
+#include <scresid.hxx>
+#include <formulacell.hxx>
+#include <cellform.hxx>
+#include <docoptio.hxx>
+#include <editutil.hxx>
+#include <ftools.hxx>
+#include <cellvalue.hxx>
 
 #include <editeng/flditem.hxx>
 #include <editeng/borderline.hxx>
@@ -75,8 +75,8 @@
 // at
 // const String aStrTable( ScResId( SCSTR_TABLE ) ); aStrOut = aStrTable;
 // ?!???
-#include "strings.hrc"
-#include "globstr.hrc"
+#include <strings.hrc>
+#include <globstr.hrc>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/document/XDocumentProperties.hpp>

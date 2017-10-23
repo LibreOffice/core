@@ -21,15 +21,15 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/docfile.hxx>
 
-#include "select.hxx"
-#include "sc.hrc"
-#include "tabvwsh.hxx"
-#include "scmod.hxx"
-#include "document.hxx"
-#include "transobj.hxx"
-#include "docsh.hxx"
-#include "tabprotection.hxx"
-#include "markdata.hxx"
+#include <select.hxx>
+#include <sc.hrc>
+#include <tabvwsh.hxx>
+#include <scmod.hxx>
+#include <document.hxx>
+#include <transobj.hxx>
+#include <docsh.hxx>
+#include <tabprotection.hxx>
+#include <markdata.hxx>
 #include <gridwin.hxx>
 
 #if defined(_WIN32)

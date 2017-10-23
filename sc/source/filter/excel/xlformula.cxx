@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xlformula.hxx"
+#include <xlformula.hxx>
 
 #include <algorithm>
-#include "compiler.hxx"
-#include "rangenam.hxx"
-#include "token.hxx"
-#include "tokenarray.hxx"
-#include "xestream.hxx"
-#include "xistream.hxx"
-#include "xlroot.hxx"
+#include <compiler.hxx>
+#include <rangenam.hxx>
+#include <token.hxx>
+#include <tokenarray.hxx>
+#include <xestream.hxx>
+#include <xistream.hxx>
+#include <xlroot.hxx>
 
 #include <comphelper/string.hxx>
 #include <svl/sharedstringpool.hxx>

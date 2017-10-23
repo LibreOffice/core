@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sheetdatacontext.hxx"
+#include <sheetdatacontext.hxx>
 
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
-#include "addressconverter.hxx"
-#include "formulaparser.hxx"
-#include "richstringcontext.hxx"
-#include "unitconverter.hxx"
+#include <addressconverter.hxx>
+#include <formulaparser.hxx>
+#include <richstringcontext.hxx>
+#include <unitconverter.hxx>
 
 namespace oox {
 namespace xls {

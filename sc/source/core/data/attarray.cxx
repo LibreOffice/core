@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "attarray.hxx"
-#include "scitems.hxx"
+#include <attarray.hxx>
+#include <scitems.hxx>
 #include <o3tl/make_unique.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -31,20 +31,20 @@
 #include <editeng/fontitem.hxx>
 #include <unotools/fontcvt.hxx>
 
-#include "global.hxx"
-#include "document.hxx"
-#include "docpool.hxx"
-#include "patattr.hxx"
-#include "stlsheet.hxx"
-#include "stlpool.hxx"
-#include "markarr.hxx"
-#include "rechead.hxx"
-#include "globstr.hrc"
-#include "segmenttree.hxx"
-#include "editdataarray.hxx"
-#include "formulacell.hxx"
-#include "cellvalue.hxx"
-#include "editutil.hxx"
+#include <global.hxx>
+#include <document.hxx>
+#include <docpool.hxx>
+#include <patattr.hxx>
+#include <stlsheet.hxx>
+#include <stlpool.hxx>
+#include <markarr.hxx>
+#include <rechead.hxx>
+#include <globstr.hrc>
+#include <segmenttree.hxx>
+#include <editdataarray.hxx>
+#include <formulacell.hxx>
+#include <cellvalue.hxx>
+#include <editutil.hxx>
 #include <rtl/strbuf.hxx>
 #include <memory>
 

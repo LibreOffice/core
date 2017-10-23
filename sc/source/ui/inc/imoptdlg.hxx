@@ -26,8 +26,8 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <svx/txencbox.hxx>
-#include "scdllapi.h"
-#include "global.hxx"
+#include <scdllapi.h>
+#include <global.hxx>
 
 class SC_DLLPUBLIC ScImportOptions
 {

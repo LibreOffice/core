@@ -25,12 +25,12 @@
 #include <vcl/accel.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
-#include "address.hxx"
-#include "compiler.hxx"
+#include <address.hxx>
+#include <compiler.hxx>
 #include <formula/funcutl.hxx>
 #include "IAnyRefDialog.hxx"
-#include "scresid.hxx"
-#include "scmod.hxx"
+#include <scresid.hxx>
+#include <scmod.hxx>
 
 #include <memory>
 

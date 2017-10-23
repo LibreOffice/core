@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuconuno.hxx"
-#include "tabvwsh.hxx"
-#include "sc.hrc"
-#include "drawview.hxx"
+#include <fuconuno.hxx>
+#include <tabvwsh.hxx>
+#include <sc.hrc>
+#include <drawview.hxx>
 
 FuConstUnoControl::FuConstUnoControl(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, const SfxRequest& rReq)

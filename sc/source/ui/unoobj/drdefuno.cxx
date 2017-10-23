@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drdefuno.hxx"
-#include "docsh.hxx"
-#include "drwlayer.hxx"
+#include <drdefuno.hxx>
+#include <docsh.hxx>
+#include <drwlayer.hxx>
 
 using namespace ::com::sun::star;
 

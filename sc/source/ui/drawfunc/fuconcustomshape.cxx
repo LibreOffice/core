@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuconcustomshape.hxx"
+#include <fuconcustomshape.hxx>
 #include <editeng/svxenum.hxx>
 #include <svx/gallery.hxx>
 #include <sfx2/request.hxx>
@@ -27,10 +27,10 @@
 #include <svx/svdoashp.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/sdtagitm.hxx>
-#include "fuconuno.hxx"
-#include "tabvwsh.hxx"
-#include "sc.hrc"
-#include "drawview.hxx"
+#include <fuconuno.hxx>
+#include <tabvwsh.hxx>
+#include <sc.hrc>
+#include <drawview.hxx>
 #include <editeng/adjustitem.hxx>
 
 #include <math.h>

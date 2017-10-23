@@ -13,8 +13,8 @@
 #include <svtools/simptabl.hxx>
 #include <vcl/ctrl.hxx>
 
-#include "scresid.hxx"
-#include "address.hxx"
+#include <scresid.hxx>
+#include <address.hxx>
 
 #include <memory>
 #include <vector>

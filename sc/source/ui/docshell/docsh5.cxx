@@ -22,7 +22,7 @@
 
 #include <cassert>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <sfx2/app.hxx>
@@ -30,28 +30,28 @@
 
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
-#include "docsh.hxx"
-#include "global.hxx"
-#include "globstr.hrc"
-#include "globalnames.hxx"
-#include "undodat.hxx"
-#include "undotab.hxx"
-#include "undoblk.hxx"
-#include "dpobject.hxx"
-#include "dpshttab.hxx"
-#include "dbdocfun.hxx"
-#include "consoli.hxx"
-#include "dbdata.hxx"
-#include "progress.hxx"
-#include "olinetab.hxx"
-#include "patattr.hxx"
-#include "attrib.hxx"
-#include "docpool.hxx"
-#include "uiitems.hxx"
-#include "sc.hrc"
-#include "waitoff.hxx"
-#include "sizedev.hxx"
-#include "clipparam.hxx"
+#include <docsh.hxx>
+#include <global.hxx>
+#include <globstr.hrc>
+#include <globalnames.hxx>
+#include <undodat.hxx>
+#include <undotab.hxx>
+#include <undoblk.hxx>
+#include <dpobject.hxx>
+#include <dpshttab.hxx>
+#include <dbdocfun.hxx>
+#include <consoli.hxx>
+#include <dbdata.hxx>
+#include <progress.hxx>
+#include <olinetab.hxx>
+#include <patattr.hxx>
+#include <attrib.hxx>
+#include <docpool.hxx>
+#include <uiitems.hxx>
+#include <sc.hrc>
+#include <waitoff.hxx>
+#include <sizedev.hxx>
+#include <clipparam.hxx>
 #include <rowheightcontext.hxx>
 #include <refupdatecontext.hxx>
 

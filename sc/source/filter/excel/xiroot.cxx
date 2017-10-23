@@ -17,25 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xiroot.hxx"
-#include "addincol.hxx"
-#include "document.hxx"
-#include "scextopt.hxx"
-#include "xltracer.hxx"
-#include "xihelper.hxx"
-#include "xiformula.hxx"
-#include "xilink.hxx"
-#include "xiname.hxx"
-#include "xistyle.hxx"
-#include "xicontent.hxx"
-#include "xiescher.hxx"
-#include "xipivot.hxx"
-#include "xipage.hxx"
-#include "xiview.hxx"
+#include <xiroot.hxx>
+#include <addincol.hxx>
+#include <document.hxx>
+#include <scextopt.hxx>
+#include <xltracer.hxx>
+#include <xihelper.hxx>
+#include <xiformula.hxx>
+#include <xilink.hxx>
+#include <xiname.hxx>
+#include <xistyle.hxx>
+#include <xicontent.hxx>
+#include <xiescher.hxx>
+#include <xipivot.hxx>
+#include <xipage.hxx>
+#include <xiview.hxx>
 
-#include "root.hxx"
-#include "excimp8.hxx"
-#include "documentimport.hxx"
+#include <root.hxx>
+#include <excimp8.hxx>
+#include <documentimport.hxx>
 
 // Global data ================================================================
 

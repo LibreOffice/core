@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_REDCOM_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_REDCOM_HXX
 
-#include "chgtrack.hxx"
+#include <chgtrack.hxx>
 
 class ScDocShell;
 class AbstractSvxPostItDialog;

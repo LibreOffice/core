@@ -22,7 +22,7 @@
 
 #include <xmloff/shapeimport.hxx>
 #include <svx/svdtypes.hxx>
-#include "address.hxx"
+#include <address.hxx>
 
 class ScXMLImport;
 class ScXMLAnnotationContext;

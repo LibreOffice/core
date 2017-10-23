@@ -23,10 +23,10 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include "test/container/xnamed.hxx"
-#include "test/sheet/xdatapilottable.hxx"
-#include "test/sheet/xdatapilotdescriptor.hxx"
-#include "test/beans/xpropertyset.hxx"
+#include <test/container/xnamed.hxx>
+#include <test/sheet/xdatapilottable.hxx>
+#include <test/sheet/xdatapilotdescriptor.hxx>
+#include <test/beans/xpropertyset.hxx>
 //check the DataPilot of Calc.
 
 using namespace css;

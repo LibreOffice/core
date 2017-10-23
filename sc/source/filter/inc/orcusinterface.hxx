@@ -10,8 +10,8 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_ORCUSINTERFACE_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_ORCUSINTERFACE_HXX
 
-#include "address.hxx"
-#include "documentimport.hxx"
+#include <address.hxx>
+#include <documentimport.hxx>
 
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
@@ -19,7 +19,7 @@
 
 #include "sharedformulagroups.hxx"
 
-#include "conditio.hxx"
+#include <conditio.hxx>
 
 #include <rtl/strbuf.hxx>
 #include <editeng/borderline.hxx>

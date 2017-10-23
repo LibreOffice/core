@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "datatransformation.hxx"
+#include <datatransformation.hxx>
 
-#include "document.hxx"
+#include <document.hxx>
 
 namespace sc {
 

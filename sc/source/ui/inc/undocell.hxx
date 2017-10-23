@@ -21,8 +21,8 @@
 #define INCLUDED_SC_SOURCE_UI_INC_UNDOCELL_HXX
 
 #include "undobase.hxx"
-#include "postit.hxx"
-#include "cellvalue.hxx"
+#include <postit.hxx>
+#include <cellvalue.hxx>
 #include <cellvalues.hxx>
 
 #include <memory>

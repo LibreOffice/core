@@ -27,11 +27,11 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include "output.hxx"
-#include "drwlayer.hxx"
-#include "document.hxx"
-#include "tabvwsh.hxx"
-#include "fillinfo.hxx"
+#include <output.hxx>
+#include <drwlayer.hxx>
+#include <document.hxx>
+#include <tabvwsh.hxx>
+#include <fillinfo.hxx>
 
 #include <svx/fmview.hxx>
 

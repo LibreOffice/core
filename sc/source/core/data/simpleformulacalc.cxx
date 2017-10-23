@@ -8,11 +8,11 @@
  */
 
 #include <memory>
-#include "simpleformulacalc.hxx"
-#include "document.hxx"
-#include "tokenarray.hxx"
-#include "interpre.hxx"
-#include "compiler.hxx"
+#include <simpleformulacalc.hxx>
+#include <document.hxx>
+#include <tokenarray.hxx>
+#include <interpre.hxx>
+#include <compiler.hxx>
 
 #define DISPLAY_LEN 15
 

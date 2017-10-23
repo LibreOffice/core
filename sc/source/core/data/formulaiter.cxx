@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "formulaiter.hxx"
+#include <formulaiter.hxx>
 
-#include "formulacell.hxx"
-#include "tokenarray.hxx"
+#include <formulacell.hxx>
+#include <tokenarray.hxx>
 #include <formula/token.hxx>
 
 using namespace formula;

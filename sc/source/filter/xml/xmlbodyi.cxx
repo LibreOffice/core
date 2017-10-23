@@ -19,9 +19,9 @@
 
 #include <cstdio>
 
-#include "document.hxx"
-#include "docuno.hxx"
-#include "sheetdata.hxx"
+#include <document.hxx>
+#include <docuno.hxx>
+#include <sheetdata.hxx>
 
 #include "xmlbodyi.hxx"
 #include "xmltabi.hxx"
@@ -39,8 +39,8 @@
 #include "XMLTrackedChangesContext.hxx"
 #include "XMLEmptyContext.hxx"
 #include "XMLDetectiveContext.hxx"
-#include "scerrors.hxx"
-#include "tabprotection.hxx"
+#include <scerrors.hxx>
+#include <tabprotection.hxx>
 #include "datastreamimport.hxx"
 #include <sax/fastattribs.hxx>
 

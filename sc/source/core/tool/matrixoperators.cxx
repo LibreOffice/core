@@ -8,7 +8,7 @@
  */
 
 #include <functional>
-#include "matrixoperators.hxx"
+#include <matrixoperators.hxx>
 
 
 namespace sc {

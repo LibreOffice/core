@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AccessibleGlobal.hxx"
+#include <AccessibleGlobal.hxx>
 
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;

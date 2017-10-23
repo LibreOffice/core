@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sc.hrc"
+#include <sc.hrc>
 
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -25,34 +25,34 @@
 #include <sfx2/mieclip.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 
-#include "global.hxx"
-#include "scerrors.hxx"
-#include "docsh.hxx"
-#include "undoblk.hxx"
-#include "rangenam.hxx"
-#include "viewdata.hxx"
-#include "tabvwsh.hxx"
-#include "filter.hxx"
-#include "asciiopt.hxx"
-#include "formulacell.hxx"
-#include "cellform.hxx"
-#include "docoptio.hxx"
-#include "progress.hxx"
-#include "scitems.hxx"
-#include "editable.hxx"
-#include "compiler.hxx"
-#include "warnbox.hxx"
-#include "clipparam.hxx"
-#include "impex.hxx"
-#include "editutil.hxx"
-#include "patattr.hxx"
-#include "docpool.hxx"
-#include "stringutil.hxx"
-#include "cellvalue.hxx"
-#include "tokenarray.hxx"
-#include "documentimport.hxx"
+#include <global.hxx>
+#include <scerrors.hxx>
+#include <docsh.hxx>
+#include <undoblk.hxx>
+#include <rangenam.hxx>
+#include <viewdata.hxx>
+#include <tabvwsh.hxx>
+#include <filter.hxx>
+#include <asciiopt.hxx>
+#include <formulacell.hxx>
+#include <cellform.hxx>
+#include <docoptio.hxx>
+#include <progress.hxx>
+#include <scitems.hxx>
+#include <editable.hxx>
+#include <compiler.hxx>
+#include <warnbox.hxx>
+#include <clipparam.hxx>
+#include <impex.hxx>
+#include <editutil.hxx>
+#include <patattr.hxx>
+#include <docpool.hxx>
+#include <stringutil.hxx>
+#include <cellvalue.hxx>
+#include <tokenarray.hxx>
+#include <documentimport.hxx>
 
-#include "globstr.hrc"
+#include <globstr.hrc>
 #include <vcl/svapp.hxx>
 
 #include <memory>

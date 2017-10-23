@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "pagesettings.hxx"
+#include <pagesettings.hxx>
 
 #include <algorithm>
 #include <set>
@@ -41,10 +41,10 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "excelhandlers.hxx"
-#include "stylesbuffer.hxx"
-#include "unitconverter.hxx"
-#include "document.hxx"
+#include <excelhandlers.hxx>
+#include <stylesbuffer.hxx>
+#include <unitconverter.hxx>
+#include <document.hxx>
 #include <filter/msfilter/util.hxx>
 
 namespace oox {

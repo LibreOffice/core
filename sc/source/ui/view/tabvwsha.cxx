@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zformat.hxx>
@@ -34,28 +34,28 @@
 #include <sfx2/request.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "global.hxx"
-#include "attrib.hxx"
-#include "patattr.hxx"
-#include "cellform.hxx"
-#include "document.hxx"
-#include "formulacell.hxx"
-#include "globstr.hrc"
-#include "scmod.hxx"
-#include "inputhdl.hxx"
-#include "inputwin.hxx"
-#include "docsh.hxx"
-#include "viewdata.hxx"
-#include "appoptio.hxx"
-#include "sc.hrc"
-#include "stlpool.hxx"
-#include "tabvwsh.hxx"
-#include "dwfunctr.hxx"
-#include "scabstdlg.hxx"
-#include "compiler.hxx"
-#include "markdata.hxx"
-#include "cellvalue.hxx"
-#include "tokenarray.hxx"
+#include <global.hxx>
+#include <attrib.hxx>
+#include <patattr.hxx>
+#include <cellform.hxx>
+#include <document.hxx>
+#include <formulacell.hxx>
+#include <globstr.hrc>
+#include <scmod.hxx>
+#include <inputhdl.hxx>
+#include <inputwin.hxx>
+#include <docsh.hxx>
+#include <viewdata.hxx>
+#include <appoptio.hxx>
+#include <sc.hrc>
+#include <stlpool.hxx>
+#include <tabvwsh.hxx>
+#include <dwfunctr.hxx>
+#include <scabstdlg.hxx>
+#include <compiler.hxx>
+#include <markdata.hxx>
+#include <cellvalue.hxx>
+#include <tokenarray.hxx>
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
 

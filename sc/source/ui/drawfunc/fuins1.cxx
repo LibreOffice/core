@@ -33,15 +33,15 @@
 #include <avmedia/mediawindow.hxx>
 #include <vcl/svapp.hxx>
 
-#include "fuinsert.hxx"
-#include "tabvwsh.hxx"
-#include "drwlayer.hxx"
-#include "drawview.hxx"
-#include "document.hxx"
-#include "scresid.hxx"
-#include "progress.hxx"
-#include "strings.hrc"
-#include "globstr.hrc"
+#include <fuinsert.hxx>
+#include <tabvwsh.hxx>
+#include <drwlayer.hxx>
+#include <drawview.hxx>
+#include <document.hxx>
+#include <scresid.hxx>
+#include <progress.hxx>
+#include <strings.hrc>
+#include <globstr.hrc>
 
 using namespace ::com::sun::star;
 

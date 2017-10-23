@@ -19,25 +19,25 @@
 
 #include <svl/zforlist.hxx>
 
-#include "scitems.hxx"
-#include "global.hxx"
-#include "dociter.hxx"
-#include "document.hxx"
-#include "table.hxx"
-#include "column.hxx"
-#include "formulacell.hxx"
-#include "attarray.hxx"
-#include "patattr.hxx"
-#include "docoptio.hxx"
-#include "cellform.hxx"
-#include "segmenttree.hxx"
-#include "progress.hxx"
-#include "queryparam.hxx"
-#include "queryentry.hxx"
-#include "globstr.hrc"
-#include "editutil.hxx"
-#include "cellvalue.hxx"
-#include "scmatrix.hxx"
+#include <scitems.hxx>
+#include <global.hxx>
+#include <dociter.hxx>
+#include <document.hxx>
+#include <table.hxx>
+#include <column.hxx>
+#include <formulacell.hxx>
+#include <attarray.hxx>
+#include <patattr.hxx>
+#include <docoptio.hxx>
+#include <cellform.hxx>
+#include <segmenttree.hxx>
+#include <progress.hxx>
+#include <queryparam.hxx>
+#include <queryentry.hxx>
+#include <globstr.hrc>
+#include <editutil.hxx>
+#include <cellvalue.hxx>
+#include <scmatrix.hxx>
 #include <rowheightcontext.hxx>
 
 #include <tools/fract.hxx>

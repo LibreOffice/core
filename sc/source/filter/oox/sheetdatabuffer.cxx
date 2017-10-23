@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sheetdatabuffer.hxx"
+#include <sheetdatabuffer.hxx>
 
 #include <algorithm>
 #include <com/sun/star/sheet/XArrayFormulaTokens.hpp>
@@ -34,19 +34,19 @@
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "addressconverter.hxx"
-#include "formulaparser.hxx"
-#include "sharedstringsbuffer.hxx"
-#include "unitconverter.hxx"
-#include "markdata.hxx"
-#include "rangelst.hxx"
-#include "document.hxx"
-#include "scitems.hxx"
-#include "formulacell.hxx"
-#include "docpool.hxx"
-#include "paramisc.hxx"
-#include "documentimport.hxx"
-#include "formulabuffer.hxx"
+#include <addressconverter.hxx>
+#include <formulaparser.hxx>
+#include <sharedstringsbuffer.hxx>
+#include <unitconverter.hxx>
+#include <markdata.hxx>
+#include <rangelst.hxx>
+#include <document.hxx>
+#include <scitems.hxx>
+#include <formulacell.hxx>
+#include <docpool.hxx>
+#include <paramisc.hxx>
+#include <documentimport.hxx>
+#include <formulabuffer.hxx>
 #include <numformat.hxx>
 #include <sax/tools/converter.hxx>
 

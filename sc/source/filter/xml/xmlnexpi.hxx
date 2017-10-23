@@ -21,7 +21,7 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "address.hxx"
+#include <address.hxx>
 #include "xmlimprt.hxx"
 #include "importcontext.hxx"
 

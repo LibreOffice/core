@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xechart.hxx"
+#include <xechart.hxx>
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -59,17 +59,17 @@
 #include <vcl/outdev.hxx>
 #include <filter/msfilter/escherex.hxx>
 
-#include "document.hxx"
-#include "rangelst.hxx"
-#include "rangeutl.hxx"
-#include "compiler.hxx"
-#include "tokenarray.hxx"
-#include "token.hxx"
-#include "xeescher.hxx"
-#include "xeformula.hxx"
-#include "xehelper.hxx"
-#include "xepage.hxx"
-#include "xestyle.hxx"
+#include <document.hxx>
+#include <rangelst.hxx>
+#include <rangeutl.hxx>
+#include <compiler.hxx>
+#include <tokenarray.hxx>
+#include <token.hxx>
+#include <xeescher.hxx>
+#include <xeformula.hxx>
+#include <xehelper.hxx>
+#include <xepage.hxx>
+#include <xestyle.hxx>
 
 #include <memory>
 

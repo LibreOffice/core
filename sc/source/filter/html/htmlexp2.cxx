@@ -31,11 +31,11 @@
 #include <svl/urihelper.hxx>
 #include <tools/urlobj.hxx>
 
-#include "htmlexp.hxx"
-#include "global.hxx"
-#include "document.hxx"
-#include "drwlayer.hxx"
-#include "ftools.hxx"
+#include <htmlexp.hxx>
+#include <global.hxx>
+#include <document.hxx>
+#include <drwlayer.hxx>
+#include <ftools.hxx>
 #include <rtl/strbuf.hxx>
 
 using namespace com::sun::star;

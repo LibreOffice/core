@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "externallinkfragment.hxx"
+#include <externallinkfragment.hxx>
 
 #include <com/sun/star/sheet/XExternalSheetCache.hpp>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
-#include "defnamesbuffer.hxx"
-#include "sheetdatacontext.hxx"
-#include "unitconverter.hxx"
+#include <defnamesbuffer.hxx>
+#include <sheetdatacontext.hxx>
+#include <unitconverter.hxx>
 
 namespace oox {
 namespace xls {

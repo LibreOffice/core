@@ -20,12 +20,12 @@
 #include <memory>
 #include <stdio.h>
 #include <sot/storage.hxx>
-#include "XclExpChangeTrack.hxx"
-#include "xeformula.hxx"
-#include "formulacell.hxx"
-#include "xcl97rec.hxx"
-#include "document.hxx"
-#include "editutil.hxx"
+#include <XclExpChangeTrack.hxx>
+#include <xeformula.hxx>
+#include <formulacell.hxx>
+#include <xcl97rec.hxx>
+#include <document.hxx>
+#include <editutil.hxx>
 
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>

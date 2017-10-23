@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "csvcontrol.hxx"
+#include <csvcontrol.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include "AccessibleCsvControl.hxx"
+#include <AccessibleCsvControl.hxx>
 
 ScCsvLayoutData::ScCsvLayoutData() :
     mnPosCount( 1 ),

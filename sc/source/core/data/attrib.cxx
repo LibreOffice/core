@@ -19,7 +19,7 @@
 
 #include <com/sun/star/util/CellProtection.hpp>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <android/compatibility.hxx>
 
 #include <editeng/eeitem.hxx>
@@ -32,13 +32,13 @@
 
 #include <libxml/xmlwriter.h>
 
-#include "attrib.hxx"
-#include "global.hxx"
-#include "editutil.hxx"
-#include "sc.hrc"
-#include "mid.h"
-#include "globstr.hrc"
-#include "textuno.hxx"
+#include <attrib.hxx>
+#include <global.hxx>
+#include <editutil.hxx>
+#include <sc.hrc>
+#include <mid.h>
+#include <globstr.hrc>
+#include <textuno.hxx>
 
 using namespace com::sun::star;
 

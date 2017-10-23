@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "pivotcachefragment.hxx"
+#include <pivotcachefragment.hxx>
 
 #include <osl/diagnose.h>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
-#include "addressconverter.hxx"
-#include "formulabuffer.hxx"
-#include "pivotcachebuffer.hxx"
-#include "worksheetbuffer.hxx"
+#include <addressconverter.hxx>
+#include <formulabuffer.hxx>
+#include <pivotcachebuffer.hxx>
+#include <worksheetbuffer.hxx>
 
 namespace oox {
 namespace xls {

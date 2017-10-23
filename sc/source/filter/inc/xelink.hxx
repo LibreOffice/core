@@ -20,12 +20,12 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XELINK_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XELINK_HXX
 
-#include "markdata.hxx"
+#include <markdata.hxx>
 #include "xllink.hxx"
 #include "xerecord.hxx"
 #include "xehelper.hxx"
 #include "xeformula.hxx"
-#include "externalrefmgr.hxx"
+#include <externalrefmgr.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
 

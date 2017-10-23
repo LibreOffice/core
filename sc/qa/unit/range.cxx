@@ -11,13 +11,13 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotools/configmgr.hxx>
 #include "helper/qahelper.hxx"
-#include "document.hxx"
-#include "docsh.hxx"
-#include "global.hxx"
+#include <document.hxx>
+#include <docsh.hxx>
+#include <global.hxx>
 
-#include "address.hxx"
-#include "rangeutl.hxx"
-#include "refupdatecontext.hxx"
+#include <address.hxx>
+#include <rangeutl.hxx>
+#include <refupdatecontext.hxx>
 
 class ScAddressTest : public test::BootstrapFixture
 {

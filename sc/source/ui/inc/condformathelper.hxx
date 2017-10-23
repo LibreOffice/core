@@ -11,9 +11,9 @@
 #define INCLUDED_SC_SOURCE_UI_INC_CONDFORMATHELPER_HXX
 
 #include <rtl/ustring.hxx>
-#include "conditio.hxx"
+#include <conditio.hxx>
 
-#include "global.hxx"
+#include <global.hxx>
 
 enum ScCondFormatEntryType
 {

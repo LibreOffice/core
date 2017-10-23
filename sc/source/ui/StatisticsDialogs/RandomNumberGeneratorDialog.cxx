@@ -13,18 +13,18 @@
 #include <svl/undo.hxx>
 #include <rtl/math.hxx>
 
-#include "rangelst.hxx"
-#include "scitems.hxx"
-#include "docsh.hxx"
-#include "document.hxx"
-#include "uiitems.hxx"
-#include "reffact.hxx"
-#include "docfunc.hxx"
-#include "strings.hrc"
+#include <rangelst.hxx>
+#include <scitems.hxx>
+#include <docsh.hxx>
+#include <document.hxx>
+#include <uiitems.hxx>
+#include <reffact.hxx>
+#include <docfunc.hxx>
+#include <strings.hrc>
 
 #include <random>
 
-#include "RandomNumberGeneratorDialog.hxx"
+#include <RandomNumberGeneratorDialog.hxx>
 
 namespace
 {

@@ -10,10 +10,10 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <scmod.hxx>
-#include "tpcompatibility.hxx"
-#include "sc.hrc"
-#include "scresid.hxx"
-#include "appoptio.hxx"
+#include <tpcompatibility.hxx>
+#include <sc.hrc>
+#include <scresid.hxx>
+#include <appoptio.hxx>
 
 ScTpCompatOptions::ScTpCompatOptions(vcl::Window *pParent, const SfxItemSet &rCoreAttrs) :
     SfxTabPage(pParent, "OptCompatibilityPage","modules/scalc/ui/optcompatibilitypage.ui", &rCoreAttrs)

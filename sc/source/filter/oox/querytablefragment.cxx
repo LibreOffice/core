@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "querytablefragment.hxx"
-#include "querytablebuffer.hxx"
+#include <querytablefragment.hxx>
+#include <querytablebuffer.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 

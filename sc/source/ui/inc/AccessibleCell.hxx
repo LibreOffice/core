@@ -22,7 +22,7 @@
 
 #include <memory>
 #include "AccessibleCellBase.hxx"
-#include "global.hxx"
+#include <global.hxx>
 #include "viewdata.hxx"
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>

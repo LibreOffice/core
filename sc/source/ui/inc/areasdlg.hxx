@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_AREASDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_AREASDLG_HXX
 
-#include "address.hxx"
+#include <address.hxx>
 
 #include <svl/stritem.hxx>
 #include <vcl/lstbox.hxx>

@@ -22,8 +22,8 @@
 #include "xmlnexpi.hxx"
 #include "xmlimprt.hxx"
 #include "xmlcelli.hxx"
-#include "docuno.hxx"
-#include "document.hxx"
+#include <docuno.hxx>
+#include <document.hxx>
 
 #include <xmloff/xmlnmspe.hxx>
 

@@ -21,9 +21,9 @@
 
 #include <vcl/msgbox.hxx>
 
-#include "shtabdlg.hxx"
-#include "scresid.hxx"
-#include "strings.hrc"
+#include <shtabdlg.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
 
 ScShowTabDlg::ScShowTabDlg(vcl::Window* pParent)
     : ModalDialog(pParent, "ShowSheetDialog", "modules/scalc/ui/showsheetdialog.ui")

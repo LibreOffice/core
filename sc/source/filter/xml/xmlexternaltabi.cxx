@@ -22,8 +22,8 @@
 #include "xmltabi.hxx"
 #include "xmlstyli.hxx"
 
-#include "token.hxx"
-#include "document.hxx"
+#include <token.hxx>
+#include <document.hxx>
 #include <documentimport.hxx>
 
 #include <svl/sharedstringpool.hxx>

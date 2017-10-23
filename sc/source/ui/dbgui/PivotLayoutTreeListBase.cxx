@@ -9,12 +9,12 @@
  * This file incorporates work covered by the following license notice:
  */
 
-#include "PivotLayoutTreeListBase.hxx"
-#include "PivotLayoutDialog.hxx"
+#include <PivotLayoutTreeListBase.hxx>
+#include <PivotLayoutDialog.hxx>
 
 #include <reffact.hxx>
 #include <svtools/treelistentry.hxx>
-#include "scabstdlg.hxx"
+#include <scabstdlg.hxx>
 
 ScPivotLayoutTreeListBase::ScPivotLayoutTreeListBase(vcl::Window* pParent, WinBits nBits, SvPivotTreeListType eType)
     : SvTreeListBox(pParent, nBits)

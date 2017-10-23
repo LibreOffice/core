@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <comphelper/string.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -42,24 +42,24 @@
 #include <rtl/math.hxx>
 #include <unotools/charclass.hxx>
 
-#include "attrib.hxx"
-#include "patattr.hxx"
-#include "formulacell.hxx"
-#include "table.hxx"
-#include "globstr.hrc"
-#include "global.hxx"
-#include "document.hxx"
-#include "autoform.hxx"
-#include "userlist.hxx"
-#include "zforauto.hxx"
-#include "subtotal.hxx"
+#include <attrib.hxx>
+#include <patattr.hxx>
+#include <formulacell.hxx>
+#include <table.hxx>
+#include <globstr.hrc>
+#include <global.hxx>
+#include <document.hxx>
+#include <autoform.hxx>
+#include <userlist.hxx>
+#include <zforauto.hxx>
+#include <subtotal.hxx>
 #include <formula/errorcodes.hxx>
-#include "rangenam.hxx"
-#include "docpool.hxx"
-#include "progress.hxx"
-#include "segmenttree.hxx"
-#include "conditio.hxx"
-#include "editutil.hxx"
+#include <rangenam.hxx>
+#include <docpool.hxx>
+#include <progress.hxx>
+#include <segmenttree.hxx>
+#include <conditio.hxx>
+#include <editutil.hxx>
 #include <columnspanset.hxx>
 #include <listenercontext.hxx>
 

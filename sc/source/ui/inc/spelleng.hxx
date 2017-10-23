@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_SPELLENG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_SPELLENG_HXX
 
-#include "editutil.hxx"
+#include <editutil.hxx>
 #include "selectionstate.hxx"
 #include "spellparam.hxx"
 

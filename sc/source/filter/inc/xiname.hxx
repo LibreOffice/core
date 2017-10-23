@@ -24,7 +24,7 @@
 #include "xiroot.hxx"
 #include "xistream.hxx"
 
-#include "rangenam.hxx"
+#include <rangenam.hxx>
 
 #include <memory>
 #include <vector>

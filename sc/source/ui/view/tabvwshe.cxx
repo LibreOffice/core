@@ -20,7 +20,7 @@
 #include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/hlnkitem.hxx>
@@ -31,15 +31,15 @@
 #include <sfx2/objface.hxx>
 #include <svl/stritem.hxx>
 
-#include "tabvwsh.hxx"
-#include "sc.hrc"
-#include "scmod.hxx"
-#include "impex.hxx"
-#include "editsh.hxx"
-#include "dociter.hxx"
-#include "inputhdl.hxx"
+#include <tabvwsh.hxx>
+#include <sc.hrc>
+#include <scmod.hxx>
+#include <impex.hxx>
+#include <editsh.hxx>
+#include <dociter.hxx>
+#include <inputhdl.hxx>
 #include <svx/srchdlg.hxx>
-#include "document.hxx"
+#include <document.hxx>
 #include <gridwin.hxx>
 
 OUString ScTabViewShell::GetSelectionText( bool bWholeWord )

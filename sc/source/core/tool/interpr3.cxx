@@ -21,15 +21,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "interpre.hxx"
-#include "global.hxx"
-#include "compiler.hxx"
-#include "formulacell.hxx"
-#include "document.hxx"
-#include "dociter.hxx"
-#include "matrixoperators.hxx"
-#include "scmatrix.hxx"
-#include "globstr.hrc"
+#include <interpre.hxx>
+#include <global.hxx>
+#include <compiler.hxx>
+#include <formulacell.hxx>
+#include <document.hxx>
+#include <dociter.hxx>
+#include <matrixoperators.hxx>
+#include <scmatrix.hxx>
+#include <globstr.hrc>
 
 #include <math.h>
 #include <memory>

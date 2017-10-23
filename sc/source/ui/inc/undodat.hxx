@@ -21,12 +21,12 @@
 #define INCLUDED_SC_SOURCE_UI_INC_UNDODAT_HXX
 
 #include "undobase.hxx"
-#include "rangeutl.hxx"
-#include "rangelst.hxx"
-#include "sortparam.hxx"
-#include "queryparam.hxx"
-#include "subtotalparam.hxx"
-#include "pivot.hxx"
+#include <rangeutl.hxx>
+#include <rangelst.hxx>
+#include <sortparam.hxx>
+#include <queryparam.hxx>
+#include <subtotalparam.hxx>
+#include <pivot.hxx>
 
 #include <memory>
 

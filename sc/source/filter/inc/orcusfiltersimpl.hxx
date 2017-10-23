@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_ORCUSFILTERSIMPL_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_ORCUSFILTERSIMPL_HXX
 
-#include "orcusfilters.hxx"
+#include <orcusfilters.hxx>
 
 #define __ORCUS_STATIC_LIB
 #include <orcus/xml_namespace.hpp>

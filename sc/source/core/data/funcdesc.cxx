@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "funcdesc.hxx"
+#include <funcdesc.hxx>
 
-#include "addincol.hxx"
-#include "appoptio.hxx"
-#include "callform.hxx"
-#include "compiler.hxx"
-#include "compiler.hrc"
-#include "global.hxx"
-#include "sc.hrc"
-#include "scfuncs.hrc"
-#include "scmod.hxx"
-#include "scresid.hxx"
-#include "helpids.h"
+#include <addincol.hxx>
+#include <appoptio.hxx>
+#include <callform.hxx>
+#include <compiler.hxx>
+#include <compiler.hrc>
+#include <global.hxx>
+#include <sc.hrc>
+#include <scfuncs.hrc>
+#include <scmod.hxx>
+#include <scresid.hxx>
+#include <helpids.h>
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>

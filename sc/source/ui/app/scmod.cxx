@@ -23,7 +23,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/make_unique.hxx>
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <sfx2/app.hxx>
 #include <editeng/eeitem.hxx>
 
@@ -35,8 +35,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 
-#include "IAnyRefDialog.hxx"
-#include "anyrefdg.hxx"
+#include <IAnyRefDialog.hxx>
+#include <anyrefdg.hxx>
 
 #include <svtools/ehdl.hxx>
 #include <svtools/accessibilityoptions.hxx>
@@ -72,51 +72,51 @@
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
-#include "scmod.hxx"
-#include "global.hxx"
-#include "viewopti.hxx"
-#include "docoptio.hxx"
-#include "appoptio.hxx"
-#include "defaultsoptions.hxx"
-#include "formulaopt.hxx"
-#include "inputopt.hxx"
-#include "printopt.hxx"
-#include "navicfg.hxx"
-#include "addincfg.hxx"
-#include "tabvwsh.hxx"
-#include "prevwsh.hxx"
-#include "docsh.hxx"
-#include "drwlayer.hxx"
-#include "uiitems.hxx"
-#include "sc.hrc"
-#include "scerrors.hrc"
-#include "scstyles.hrc"
-#include "globstr.hrc"
-#include "strings.hrc"
-#include "bitmaps.hlst"
-#include "inputhdl.hxx"
-#include "inputwin.hxx"
-#include "msgpool.hxx"
-#include "scresid.hxx"
-#include "dwfunctr.hxx"
-#include "formdata.hxx"
-#include "tpprint.hxx"
-#include "tpdefaults.hxx"
-#include "transobj.hxx"
-#include "detfunc.hxx"
-#include "preview.hxx"
-#include "dragdata.hxx"
-#include "clipdata.hxx"
-#include "markdata.hxx"
+#include <scmod.hxx>
+#include <global.hxx>
+#include <viewopti.hxx>
+#include <docoptio.hxx>
+#include <appoptio.hxx>
+#include <defaultsoptions.hxx>
+#include <formulaopt.hxx>
+#include <inputopt.hxx>
+#include <printopt.hxx>
+#include <navicfg.hxx>
+#include <addincfg.hxx>
+#include <tabvwsh.hxx>
+#include <prevwsh.hxx>
+#include <docsh.hxx>
+#include <drwlayer.hxx>
+#include <uiitems.hxx>
+#include <sc.hrc>
+#include <scerrors.hrc>
+#include <scstyles.hrc>
+#include <globstr.hrc>
+#include <strings.hrc>
+#include <bitmaps.hlst>
+#include <inputhdl.hxx>
+#include <inputwin.hxx>
+#include <msgpool.hxx>
+#include <scresid.hxx>
+#include <dwfunctr.hxx>
+#include <formdata.hxx>
+#include <tpprint.hxx>
+#include <tpdefaults.hxx>
+#include <transobj.hxx>
+#include <detfunc.hxx>
+#include <preview.hxx>
+#include <dragdata.hxx>
+#include <clipdata.hxx>
+#include <markdata.hxx>
 
 #include <svx/xmlsecctrl.hxx>
 
 #define ScModule
-#include "scslots.hxx"
+#include <scslots.hxx>
 
-#include "scabstdlg.hxx"
+#include <scabstdlg.hxx>
 #include <formula/errorcodes.hxx>
-#include "formulagroup.hxx"
+#include <formulagroup.hxx>
 #include <documentlinkmgr.hxx>
 
 #define SC_IDLE_MIN     150

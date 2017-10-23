@@ -7,11 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "dataproviderdlg.hxx"
+#include <dataproviderdlg.hxx>
 
-#include "document.hxx"
-#include "dataprovider.hxx"
-#include "datatransformation.hxx"
+#include <document.hxx>
+#include <dataprovider.hxx>
+#include <datatransformation.hxx>
 
 #include <vcl/lstbox.hxx>
 

@@ -22,9 +22,9 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 
-#include "chartlock.hxx"
-#include "document.hxx"
-#include "drwlayer.hxx"
+#include <chartlock.hxx>
+#include <document.hxx>
+#include <drwlayer.hxx>
 
 #include <com/sun/star/embed/XComponentSupplier.hpp>
 

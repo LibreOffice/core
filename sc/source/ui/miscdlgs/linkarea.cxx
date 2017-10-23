@@ -30,12 +30,12 @@
 #include <svtools/sfxecode.hxx>
 #include <vcl/waitobj.hxx>
 
-#include "linkarea.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
-#include "rangeutl.hxx"
-#include "docsh.hxx"
-#include "tablink.hxx"
+#include <linkarea.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
+#include <rangeutl.hxx>
+#include <docsh.hxx>
+#include <tablink.hxx>
 
 ScLinkedAreaDlg::ScLinkedAreaDlg(vcl::Window* pParent)
     : ModalDialog(pParent, "ExternalDataDialog", "modules/scalc/ui/externaldata.ui")

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "csvgrid.hxx"
+#include <csvgrid.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -26,13 +26,13 @@
 #include <svtools/colorcfg.hxx>
 #include <sal/macros.h>
 #include <tools/poly.hxx>
-#include "scmod.hxx"
-#include "asciiopt.hxx"
-#include "impex.hxx"
-#include "AccessibleCsvControl.hxx"
+#include <scmod.hxx>
+#include <asciiopt.hxx>
+#include <impex.hxx>
+#include <AccessibleCsvControl.hxx>
 
 // *** edit engine ***
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <vcl/settings.hxx>
 
@@ -40,7 +40,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <svl/itemset.hxx>
-#include "editutil.hxx"
+#include <editutil.hxx>
 // *** edit engine ***
 
 struct Func_SetType

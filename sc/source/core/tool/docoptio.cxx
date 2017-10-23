@@ -23,13 +23,13 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include "docoptio.hxx"
-#include "rechead.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
-#include "miscuno.hxx"
-#include "global.hxx"
-#include "globstr.hrc"
+#include <docoptio.hxx>
+#include <rechead.hxx>
+#include <scresid.hxx>
+#include <sc.hrc>
+#include <miscuno.hxx>
+#include <global.hxx>
+#include <globstr.hrc>
 
 using namespace utl;
 using namespace com::sun::star::uno;

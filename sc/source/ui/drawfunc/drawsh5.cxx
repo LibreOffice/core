@@ -45,20 +45,20 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 
-#include "drawsh.hxx"
-#include "drawview.hxx"
-#include "viewdata.hxx"
-#include "tabvwsh.hxx"
-#include "docsh.hxx"
-#include "scresid.hxx"
-#include "undotab.hxx"
-#include "drwlayer.hxx"
-#include "userdat.hxx"
-#include "postit.hxx"
-#include "drtxtob.hxx"
+#include <drawsh.hxx>
+#include <drawview.hxx>
+#include <viewdata.hxx>
+#include <tabvwsh.hxx>
+#include <docsh.hxx>
+#include <scresid.hxx>
+#include <undotab.hxx>
+#include <drwlayer.hxx>
+#include <userdat.hxx>
+#include <postit.hxx>
+#include <drtxtob.hxx>
 #include <memory>
 
-#include "sc.hrc"
+#include <sc.hrc>
 
 using namespace com::sun::star;
 

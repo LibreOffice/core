@@ -33,20 +33,20 @@
 #include <basic/sbmod.hxx>
 #include <sfx2/app.hxx>
 
-#include "scresid.hxx"
-#include "strings.hrc"
+#include <scresid.hxx>
+#include <strings.hrc>
 
-#include "stringutil.hxx"
-#include "validat.hxx"
-#include "validate.hxx"
-#include "compiler.hxx"
+#include <stringutil.hxx>
+#include <validat.hxx>
+#include <validate.hxx>
+#include <compiler.hxx>
 #include <formula/opcode.hxx>
 
 // cell range picker
-#include "tabvwsh.hxx"
+#include <tabvwsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/childwin.hxx>
-#include "reffact.hxx"
+#include <reffact.hxx>
 
 /*  Position indexes for "Allow" list box.
     They do not map directly to ScValidationMode and can safely be modified to

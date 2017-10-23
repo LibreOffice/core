@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingfragment.hxx"
+#include <drawingfragment.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -30,8 +30,8 @@
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <rtl/strbuf.hxx>
 #include <svx/svdobj.hxx>
-#include "drwlayer.hxx"
-#include "userdat.hxx"
+#include <drwlayer.hxx>
+#include <userdat.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/drawingml/connectorshapecontext.hxx>
 #include <oox/drawingml/graphicshapecontext.hxx>
@@ -42,11 +42,11 @@
 #include <oox/token/tokens.hxx>
 #include <oox/vml/vmlshape.hxx>
 #include <oox/vml/vmlshapecontainer.hxx>
-#include "formulaparser.hxx"
-#include "stylesbuffer.hxx"
-#include "themebuffer.hxx"
-#include "unitconverter.hxx"
-#include "worksheetbuffer.hxx"
+#include <formulaparser.hxx>
+#include <stylesbuffer.hxx>
+#include <themebuffer.hxx>
+#include <unitconverter.hxx>
+#include <worksheetbuffer.hxx>
 namespace oox {
 namespace xls {
 

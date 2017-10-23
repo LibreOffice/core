@@ -9,12 +9,12 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include "datafdlg.hxx"
-#include "scresid.hxx"
-#include "viewdata.hxx"
-#include "docsh.hxx"
-#include "refundo.hxx"
-#include "undodat.hxx"
+#include <datafdlg.hxx>
+#include <scresid.hxx>
+#include <viewdata.hxx>
+#include <docsh.hxx>
+#include <refundo.hxx>
+#include <undodat.hxx>
 
 #include <rtl/ustrbuf.hxx>
 

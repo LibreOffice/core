@@ -18,20 +18,20 @@
  */
 
 #include "xmlsubti.hxx"
-#include "global.hxx"
+#include <global.hxx>
 #include "xmlstyli.hxx"
 #include "xmlimprt.hxx"
-#include "document.hxx"
-#include "markdata.hxx"
+#include <document.hxx>
+#include <markdata.hxx>
 #include "XMLConverter.hxx"
-#include "docuno.hxx"
-#include "cellsuno.hxx"
+#include <docuno.hxx>
+#include <cellsuno.hxx>
 #include "XMLStylesImportHelper.hxx"
-#include "sheetdata.hxx"
-#include "tabprotection.hxx"
-#include "tokenarray.hxx"
-#include "convuno.hxx"
-#include "documentimport.hxx"
+#include <sheetdata.hxx>
+#include <tabprotection.hxx>
+#include <tokenarray.hxx>
+#include <convuno.hxx>
+#include <documentimport.hxx>
 
 #include <svx/svdpage.hxx>
 

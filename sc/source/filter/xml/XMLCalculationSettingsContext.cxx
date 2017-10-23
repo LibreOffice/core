@@ -19,9 +19,9 @@
 
 #include "XMLCalculationSettingsContext.hxx"
 #include "xmlimprt.hxx"
-#include "unonames.hxx"
-#include "docoptio.hxx"
-#include "document.hxx"
+#include <unonames.hxx>
+#include <docoptio.hxx>
+#include <document.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>

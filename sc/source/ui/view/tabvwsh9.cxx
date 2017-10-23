@@ -30,12 +30,12 @@
 #include <svl/whiter.hxx>
 
 #include "imapwrap.hxx"
-#include "tabvwsh.hxx"
-#include "viewdata.hxx"
-#include "tabview.hxx"
-#include "drwlayer.hxx"
-#include "userdat.hxx"
-#include "docsh.hxx"
+#include <tabvwsh.hxx>
+#include <viewdata.hxx>
+#include <tabview.hxx>
+#include <drwlayer.hxx>
+#include <userdat.hxx>
+#include <docsh.hxx>
 
 #include <svx/galleryitem.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>

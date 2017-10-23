@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fapihelper.hxx"
+#include <fapihelper.hxx>
 
 #include <algorithm>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -35,7 +35,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <svl/stritem.hxx>
 #include <svl/itemset.hxx>
-#include "miscuno.hxx"
+#include <miscuno.hxx>
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;

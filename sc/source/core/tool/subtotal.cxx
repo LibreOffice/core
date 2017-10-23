@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "subtotal.hxx"
-#include "interpre.hxx"
+#include <subtotal.hxx>
+#include <interpre.hxx>
 
 bool SubTotal::SafePlus(double& fVal1, double fVal2)
 {

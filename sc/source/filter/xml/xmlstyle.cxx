@@ -22,8 +22,8 @@
 #include "xmlimprt.hxx"
 
 #include "XMLConverter.hxx"
-#include "rangeutl.hxx"
-#include "unonames.hxx"
+#include <rangeutl.hxx>
+#include <unonames.hxx>
 
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltypes.hxx>

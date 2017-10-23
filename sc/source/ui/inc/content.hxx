@@ -21,8 +21,8 @@
 #define INCLUDED_SC_SOURCE_UI_INC_CONTENT_HXX
 
 #include <svtools/treelistbox.hxx>
-#include "global.hxx"
-#include "address.hxx"
+#include <global.hxx>
+#include <address.hxx>
 #include <tools/solar.h>
 #include <o3tl/enumarray.hxx>
 

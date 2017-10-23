@@ -23,7 +23,7 @@
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-#include "scitems.hxx"
+#include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <sot/exchange.hxx>
@@ -57,20 +57,20 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
-#include "drwlayer.hxx"
-#include "drawpage.hxx"
-#include "global.hxx"
-#include "document.hxx"
-#include "rechead.hxx"
-#include "userdat.hxx"
-#include "markdata.hxx"
-#include "globstr.hrc"
-#include "scmod.hxx"
-#include "chartarr.hxx"
-#include "postit.hxx"
-#include "attrib.hxx"
-#include "charthelper.hxx"
-#include "table.hxx"
+#include <drwlayer.hxx>
+#include <drawpage.hxx>
+#include <global.hxx>
+#include <document.hxx>
+#include <rechead.hxx>
+#include <userdat.hxx>
+#include <markdata.hxx>
+#include <globstr.hrc>
+#include <scmod.hxx>
+#include <chartarr.hxx>
+#include <postit.hxx>
+#include <attrib.hxx>
+#include <charthelper.hxx>
+#include <table.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <vcl/field.hxx>

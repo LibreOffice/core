@@ -8,11 +8,11 @@
  */
 
 #include <memory>
-#include "condformatdlg.hxx"
-#include "condformatdlgentry.hxx"
-#include "conditio.hxx"
+#include <condformatdlg.hxx>
+#include <condformatdlgentry.hxx>
+#include <conditio.hxx>
 
-#include "document.hxx"
+#include <document.hxx>
 
 #include <vcl/vclevent.hxx>
 #include <svl/style.hxx>
@@ -26,15 +26,15 @@
 #include <vcl/settings.hxx>
 #include <formula/token.hxx>
 #include <formula/errorcodes.hxx>
-#include "tokenarray.hxx"
-#include "stlpool.hxx"
-#include "tabvwsh.hxx"
-#include "simpleformulacalc.hxx"
+#include <tokenarray.hxx>
+#include <stlpool.hxx>
+#include <tabvwsh.hxx>
+#include <simpleformulacalc.hxx>
 
-#include "colorformat.hxx"
+#include <colorformat.hxx>
 
-#include "globstr.hrc"
-#include "strings.hrc"
+#include <globstr.hrc>
+#include <strings.hrc>
 
 #include <set>
 

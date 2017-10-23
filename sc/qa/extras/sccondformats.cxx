@@ -20,10 +20,10 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <unonames.hxx>
 
-#include "tabvwsh.hxx"
-#include "docsh.hxx"
+#include <tabvwsh.hxx>
+#include <docsh.hxx>
 
-#include "sc.hrc"
+#include <sc.hrc>
 
 using namespace css;
 

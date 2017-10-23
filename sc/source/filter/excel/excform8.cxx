@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "excform.hxx"
+#include <excform.hxx>
 
-#include "formulacell.hxx"
-#include "document.hxx"
-#include "rangenam.hxx"
-#include "xltracer.hxx"
-#include "xistream.hxx"
-#include "xihelper.hxx"
-#include "xilink.hxx"
-#include "xiname.hxx"
+#include <formulacell.hxx>
+#include <document.hxx>
+#include <rangenam.hxx>
+#include <xltracer.hxx>
+#include <xistream.hxx>
+#include <xihelper.hxx>
+#include <xilink.hxx>
+#include <xiname.hxx>
 
-#include "externalrefmgr.hxx"
+#include <externalrefmgr.hxx>
 
 #include <vector>
 #include <cstring>

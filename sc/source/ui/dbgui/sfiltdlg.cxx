@@ -20,21 +20,21 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/idle.hxx>
 
-#include "uiitems.hxx"
-#include "rangenam.hxx"
-#include "dbdata.hxx"
-#include "reffact.hxx"
-#include "viewdata.hxx"
-#include "document.hxx"
-#include "docsh.hxx"
-#include "scresid.hxx"
+#include <uiitems.hxx>
+#include <rangenam.hxx>
+#include <dbdata.hxx>
+#include <reffact.hxx>
+#include <viewdata.hxx>
+#include <document.hxx>
+#include <docsh.hxx>
+#include <scresid.hxx>
 
-#include "foptmgr.hxx"
+#include <foptmgr.hxx>
 
-#include "globstr.hrc"
-#include "strings.hrc"
+#include <globstr.hrc>
+#include <strings.hrc>
 
-#include "filtdlg.hxx"
+#include <filtdlg.hxx>
 #include <vcl/msgbox.hxx>
 
 // DEFINE --------------------------------------------------------------------

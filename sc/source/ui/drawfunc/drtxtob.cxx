@@ -19,7 +19,7 @@
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <comphelper/string.hxx>
-#include "scitems.hxx"
+#include <scitems.hxx>
 
 #include <editeng/adjustitem.hxx>
 #include <svx/clipfmtitem.hxx>
@@ -62,21 +62,21 @@
 #include <svx/dialogs.hrc>
 #include <vcl/EnumContext.hxx>
 
-#include "sc.hrc"
-#include "globstr.hrc"
-#include "scmod.hxx"
-#include "drtxtob.hxx"
-#include "fudraw.hxx"
-#include "viewdata.hxx"
-#include "document.hxx"
-#include "drawview.hxx"
-#include "viewutil.hxx"
-#include "scresid.hxx"
-#include "tabvwsh.hxx"
+#include <sc.hrc>
+#include <globstr.hrc>
+#include <scmod.hxx>
+#include <drtxtob.hxx>
+#include <fudraw.hxx>
+#include <viewdata.hxx>
+#include <document.hxx>
+#include <drawview.hxx>
+#include <viewutil.hxx>
+#include <scresid.hxx>
+#include <tabvwsh.hxx>
 #include <gridwin.hxx>
 
 #define ScDrawTextObjectBar
-#include "scslots.hxx"
+#include <scslots.hxx>
 
 #include <memory>
 

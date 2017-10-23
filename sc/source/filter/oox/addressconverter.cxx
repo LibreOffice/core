@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "addressconverter.hxx"
+#include <addressconverter.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>

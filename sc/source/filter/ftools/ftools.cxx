@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "ftools.hxx"
+#include <ftools.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
@@ -30,13 +30,13 @@
 #include <sot/storage.hxx>
 
 #include <math.h>
-#include "global.hxx"
-#include "document.hxx"
-#include "stlpool.hxx"
-#include "stlsheet.hxx"
-#include "compiler.hxx"
+#include <global.hxx>
+#include <document.hxx>
+#include <stlpool.hxx>
+#include <stlsheet.hxx>
+#include <compiler.hxx>
 
-#include "orcusfiltersimpl.hxx"
+#include <orcusfiltersimpl.hxx>
 
 
 // ScFilterTools::ReadLongDouble()

@@ -22,8 +22,8 @@
 
 #include <vcl/ctrl.hxx>
 
-#include "scdllapi.h"
-#include "types.hxx"
+#include <scdllapi.h>
+#include <types.hxx>
 #include "hdrcont.hxx"
 
 class ScDocument;
