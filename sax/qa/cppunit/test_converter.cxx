@@ -32,9 +32,9 @@
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 
-#include "sax/tools/converter.hxx"
+#include <sax/tools/converter.hxx>
 #include <comphelper/sequence.hxx>
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 
 using namespace ::com::sun::star;

@@ -25,7 +25,7 @@
 
 #include <sax/fastattribs.hxx>
 #include <sax/fshelper.hxx>
-#include <CachedOutputStream.hxx>
+#include "CachedOutputStream.hxx"
 
 #include <stack>
 #include <map>
