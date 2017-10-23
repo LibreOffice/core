@@ -2816,10 +2816,15 @@ bool ScMatrix::IsSizeAllocatable( SCSIZE nC, SCSIZE nR )
         else
         {
             // GetElementsMax() uses an (~arbitrary) elements limit.
-            // Assume 6GB memory could be consumed by matrices.
             // The actual allocation depends on the types of individual matrix
             // elements and is averaged for type double.
+#if SAL_TYPES_SIZEOFPOINTER < 8
+            // Assume 1GB memory could be consumed by matrices.
+            constexpr size_t nMemMax = 0x40000000;
+#else
+            // Assume 6GB memory could be consumed by matrices.
             constexpr size_t nMemMax = 0x180000000;
+#endif
             nElementsMax = GetElementsMax( nMemMax);
         }
         bElementsMaxFetched = true;
