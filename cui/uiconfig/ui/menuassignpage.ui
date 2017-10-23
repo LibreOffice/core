@@ -23,6 +23,16 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-go-back</property>
   </object>
+  <object class="GtkImage" id="image5">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">svtools/res/list_add.png</property>
+  </object>
+  <object class="GtkImage" id="image6">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">extensions/res/buttonminus.png</property>
+  </object>
   <object class="GtkBox" id="MenuAssignPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -291,12 +301,11 @@
             </child>
             <child>
               <object class="GtkButton" id="plusbtn">
-                <property name="label" translatable="yes" context="menuassignpage|plusbtn">_+</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="hexpand">True</property>
-                <property name="use_underline">True</property>
+                <property name="image">image5</property>
                 <property name="always_show_image">True</property>
               </object>
               <packing>
@@ -306,12 +315,12 @@
             </child>
             <child>
               <object class="GtkButton" id="minusbtn">
-                <property name="label" translatable="yes" context="menuassignpage|minusbtn">_-</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="hexpand">True</property>
-                <property name="use_underline">True</property>
+                <property name="image">image6</property>
+                <property name="always_show_image">True</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
