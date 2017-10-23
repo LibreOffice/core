@@ -322,12 +322,11 @@ public:
 
 
 // Spiegelachse
-class SdrHdlLine: public SdrHdl
+class SdrHdlLine final : public SdrHdl
 {
     // create marker for this kind
     virtual void CreateB2dIAObject() override;
 
-protected:
     SdrHdl*                     pHdl1;
     SdrHdl*                     pHdl2;
 
@@ -341,18 +340,18 @@ public:
 // a SdrHdlBezWgt knows about its "base handle". Its draw method
 // draws additionally a line from its position to the position
 // of the base handle
-class SdrHdlBezWgt: public SdrHdl
+class SdrHdlBezWgt final : public SdrHdl
 {
-    // create marker for this kind
-    virtual void CreateB2dIAObject() override;
-
-protected:
-    const SdrHdl* pHdl1;
-
 public:
     // this is not a Copy-Ctor!!!
     SdrHdlBezWgt(const SdrHdl* pRefHdl1, SdrHdlKind eNewKind=SdrHdlKind::BezierWeight) { eKind=eNewKind; pHdl1=pRefHdl1; }
     virtual ~SdrHdlBezWgt() override;
+
+private:
+    // create marker for this kind
+    virtual void CreateB2dIAObject() override;
+
+    const SdrHdl* pHdl1;
 };
 
 
@@ -468,14 +467,8 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SdrCropHdl : public SdrHdl
+class SVX_DLLPUBLIC SdrCropHdl final : public SdrHdl
 {
-private:
-    // evtl. shear and rotation, equal to the object's one to allow adaption of
-    // the visualization handles
-    double          mfShearX;
-    double          mfRotation;
-
 public:
     SdrCropHdl(
         const Point& rPnt,
@@ -483,11 +476,16 @@ public:
         double fShearX,
         double fRotation);
 
-protected:
+private:
     // create marker for this kind
     virtual void CreateB2dIAObject() override;
 
     BitmapEx GetBitmapForHandle( const BitmapEx& rBitmap, int nSize );
+
+    // evtl. shear and rotation, equal to the object's one to allow adaption of
+    // the visualization handles
+    double          mfShearX;
+    double          mfRotation;
 };
 
 

@@ -36,10 +36,9 @@ class SfxItemSet;
 //   SdrObjGroup
 
 
-class SVX_DLLPUBLIC SdrObjGroup : public SdrObject
+class SVX_DLLPUBLIC SdrObjGroup final : public SdrObject
 {
 private:
-protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 

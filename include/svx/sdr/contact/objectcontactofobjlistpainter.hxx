@@ -45,9 +45,8 @@ public:
 // typedef for transferring SdrObject
 typedef ::std::vector< SdrObject* > SdrObjectVector;
 
-class SVX_DLLPUBLIC ObjectContactOfObjListPainter : public ObjectContactPainter
+class SVX_DLLPUBLIC ObjectContactOfObjListPainter final : public ObjectContactPainter
 {
-protected:
     // Target OutputDevice
     OutputDevice&                                   mrTargetOutputDevice;
 

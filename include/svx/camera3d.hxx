@@ -31,9 +31,8 @@
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC Camera3D : public Viewport3D
+class SAL_WARN_UNUSED SVX_DLLPUBLIC Camera3D final : public Viewport3D
 {
- protected:
     basegfx::B3DPoint   aResetPos;
     basegfx::B3DPoint   aResetLookAt;
 
@@ -44,7 +43,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC Camera3D : public Viewport3D
 
     bool bAutoAdjustProjection;
 
- public:
+public:
     Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
              double fFocalLen = 35.0);
     Camera3D();

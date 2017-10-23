@@ -44,7 +44,7 @@ class FrameSelector;
 namespace a11y {
 
 
-class AccFrameSelector :
+class AccFrameSelector final :
     public ::cppu::WeakImplHelper<
                 css::accessibility::XAccessible,
                 css::accessibility::XAccessibleContext,
@@ -97,10 +97,9 @@ public:
     void    NotifyFocusListeners(bool bGetFocus);
     void    NotifyAccessibleEvent( const sal_Int16 _nEventId, const css::uno::Any& _rOldValue, const css::uno::Any& _rNewValue );
 
-protected:
+private:
     DECL_LINK( WindowEventListener, VclWindowEvent&, void );
 
-private:
     /// @throws css::uno::RuntimeException
     void                IsValid();
     void                RemoveFrameSelEventListener();

@@ -134,12 +134,10 @@ class Gallery;
 class GalleryTheme;
 class GraphicObject;
 
-class GalleryTransferable : public TransferableHelper
+class GalleryTransferable final : public TransferableHelper
 {
 friend class GalleryTheme;
 using TransferableHelper::CopyToClipboard;
-
-private:
 
     GalleryTheme*                   mpTheme;
     SgaObjKind                      meObjectKind;
@@ -148,8 +146,6 @@ private:
     GraphicObject*                  mpGraphicObject;
     ImageMap*                       mpImageMap;
     INetURLObject*                  mpURL;
-
-protected:
 
                                     GalleryTransferable( GalleryTheme* pTheme, sal_uIntPtr nObjectPos, bool bLazy );
                                     virtual ~GalleryTransferable() override;

@@ -37,9 +37,8 @@ namespace sdr
 {
     namespace animation
     {
-        class PrimitiveAnimation : public Event
+        class PrimitiveAnimation final : public Event
         {
-        protected:
             // the animated VOC
             sdr::contact::ViewObjectContact&                    mrVOContact;
 

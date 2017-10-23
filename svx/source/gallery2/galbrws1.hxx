@@ -43,10 +43,8 @@ public:
 };
 
 
-class GalleryThemeListBox : public ListBox
+class GalleryThemeListBox final : public ListBox
 {
-protected:
-
     void            InitSettings();
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;

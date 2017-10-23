@@ -28,9 +28,14 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewContactOfGroup : public ViewContactOfSdrObj
+        class ViewContactOfGroup final : public ViewContactOfSdrObj
         {
-        protected:
+        public:
+            // basic constructor, used from SdrObject.
+            explicit ViewContactOfGroup(SdrObjGroup& rGroup);
+            virtual ~ViewContactOfGroup() override;
+
+        private:
             // Create a Object-Specific ViewObjectContact, set ViewContact and
             // ObjectContact. Always needs to return something. Default is to create
             // a standard ViewObjectContact containing the given ObjectContact and *this
@@ -42,12 +47,6 @@ namespace sdr
                 return static_cast<const SdrObjGroup&>(GetSdrObject());
             }
 
-        public:
-            // basic constructor, used from SdrObject.
-            explicit ViewContactOfGroup(SdrObjGroup& rGroup);
-            virtual ~ViewContactOfGroup() override;
-
-        protected:
             // This method is responsible for creating the graphical visualisation data
             // ONLY based on model data
             virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;

@@ -28,21 +28,20 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewContactOfSdrCircObj : public ViewContactOfSdrRectObj
+        class ViewContactOfSdrCircObj final : public ViewContactOfSdrRectObj
         {
-        protected:
+        public:
+            // basic constructor, used from SdrObject.
+            explicit ViewContactOfSdrCircObj(SdrCircObj& rCircObj);
+            virtual ~ViewContactOfSdrCircObj() override;
+
+        private:
             // internal access to SdrCircObj
             const SdrCircObj& GetCircObj() const
             {
                 return static_cast<const SdrCircObj&>(GetSdrObject());
             }
 
-        public:
-            // basic constructor, used from SdrObject.
-            explicit ViewContactOfSdrCircObj(SdrCircObj& rCircObj);
-            virtual ~ViewContactOfSdrCircObj() override;
-
-        protected:
             // This method is responsible for creating the graphical visualisation data
             // ONLY based on model data
             virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;

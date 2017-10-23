@@ -287,13 +287,14 @@ public:
     const tools::Rectangle& GetUserArea() const                   { return aUserArea; }
 };
 
-class SVX_DLLPUBLIC SdrPageGridFrameList {
+class SVX_DLLPUBLIC SdrPageGridFrameList final
+{
     std::vector<SdrPageGridFrame*> aList;
-private:
+
     SdrPageGridFrameList(const SdrPageGridFrameList& rSrcList) = delete;
     void           operator=(const SdrPageGridFrameList& rSrcList) = delete;
-protected:
     SdrPageGridFrame* GetObject(sal_uInt16 i) const { return aList[i]; }
+
 public:
     SdrPageGridFrameList(): aList()                                    {}
     ~SdrPageGridFrameList()                                            { Clear(); }

@@ -29,7 +29,7 @@
 
 class SdrObject;
 
-class EnhancedCustomShape3d
+class EnhancedCustomShape3d final
 {
     class Transformation2D
     {
@@ -59,11 +59,10 @@ class EnhancedCustomShape3d
 
     friend class Transformation2D;
 
-    protected:
-        static tools::Rectangle CalculateNewSnapRect( const SdrObject* pCustomShape, const tools::Rectangle& rSnapRect, const tools::Rectangle& rBoundRect, const double* pMap );
+    static tools::Rectangle CalculateNewSnapRect( const SdrObject* pCustomShape, const tools::Rectangle& rSnapRect, const tools::Rectangle& rBoundRect, const double* pMap );
 
-    public:
-        static SdrObject* Create3DObject( const SdrObject* pShape2d, const SdrObject* pCustomShape );
+public:
+    static SdrObject* Create3DObject( const SdrObject* pShape2d, const SdrObject* pCustomShape );
 };
 
 #endif

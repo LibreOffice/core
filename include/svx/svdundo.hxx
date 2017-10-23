@@ -83,9 +83,8 @@ public:
  * added (FIFO).
  */
 
-class SVX_DLLPUBLIC SdrUndoGroup : public SdrUndoAction
+class SVX_DLLPUBLIC SdrUndoGroup final : public SdrUndoAction
 {
-protected:
     std::vector<SdrUndoAction*> aBuf;
 
     // No expanded description of the Action (contains %O)
@@ -181,9 +180,8 @@ public:
  * Create Action right before moving.
  */
 
-class SVX_DLLPUBLIC SdrUndoMoveObj : public SdrUndoObj
+class SVX_DLLPUBLIC SdrUndoMoveObj final : public SdrUndoObj
 {
-protected:
     Size                        aDistance;     // Distance by which we move
 
 public:
@@ -368,9 +366,8 @@ public:
     virtual OUString GetComment() const override;
 };
 
-class SdrUndoObjOrdNum : public SdrUndoObj
+class SdrUndoObjOrdNum final : public SdrUndoObj
 {
-protected:
     sal_uInt32                      nOldOrdNum;
     sal_uInt32                      nNewOrdNum;
 
@@ -386,9 +383,8 @@ public:
 
 // #i11702#
 
-class SVX_DLLPUBLIC SdrUndoObjectLayerChange : public SdrUndoObj
+class SVX_DLLPUBLIC SdrUndoObjectLayerChange final : public SdrUndoObj
 {
-protected:
     SdrLayerID                  maOldLayer;
     SdrLayerID                  maNewLayer;
 
@@ -429,7 +425,7 @@ public:
  * Implement Title/Description Elements UI for Writer
  * text frames, graphics and embedded objects (#i73249#)
  */
-class SdrUndoObjStrAttr : public SdrUndoObj
+class SdrUndoObjStrAttr final : public SdrUndoObj
 {
 public:
     enum class ObjStrAttrType
@@ -439,12 +435,6 @@ public:
         Description
     };
 
-protected:
-    const ObjStrAttrType meObjStrAttr;
-    const OUString msOldStr;
-    const OUString msNewStr;
-
-public:
     SdrUndoObjStrAttr( SdrObject& rNewObj,
                        const ObjStrAttrType eObjStrAttr,
                        const OUString& sOldStr,
@@ -454,6 +444,12 @@ public:
     virtual void Redo() override;
 
     virtual OUString GetComment() const override;
+
+private:
+    const ObjStrAttrType meObjStrAttr;
+    const OUString msOldStr;
+    const OUString msNewStr;
+
 };
 
 
@@ -644,9 +640,8 @@ public:
  * Create Action before moving the Page.
  */
 
-class SVX_DLLPUBLIC SdrUndoSetPageNum : public SdrUndoPage
+class SVX_DLLPUBLIC SdrUndoSetPageNum final : public SdrUndoPage
 {
-protected:
     sal_uInt16                      nOldPageNum;
     sal_uInt16                      nNewPageNum;
 
@@ -705,9 +700,8 @@ public:
  * Create Action before changing the MasterPageDescriptors.
  */
 
-class SVX_DLLPUBLIC SdrUndoPageChangeMasterPage : public SdrUndoPageMasterPage
+class SVX_DLLPUBLIC SdrUndoPageChangeMasterPage final : public SdrUndoPageMasterPage
 {
-protected:
     bool                        mbNewHadMasterPage;
     SdrLayerIDSet                   maNewSet;
     sal_uInt16                  maNewMasterPageNumber;

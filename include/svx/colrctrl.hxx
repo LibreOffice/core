@@ -46,15 +46,12 @@ class SfxHint;
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SvxColorValueSet_docking : public SvxColorValueSet, public DragSourceHelper
+class SAL_WARN_UNUSED SvxColorValueSet_docking final : public SvxColorValueSet, public DragSourceHelper
 {
-private:
-    using SvxColorValueSet::StartDrag;
-
     bool            mbLeftButton;
     Point           aDragPosPixel;
 
-protected:
+    using SvxColorValueSet::StartDrag;
 
     void            DoDrag();
 

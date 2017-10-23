@@ -38,7 +38,7 @@ public:
 
 // class SdrCircObj
 
-class SVX_DLLPUBLIC SdrCircObj : public SdrRectObj
+class SVX_DLLPUBLIC SdrCircObj final : public SdrRectObj
 {
 private:
     // to allow sdr::properties::CircleProperties access to ImpSetAttrToCircInfo()
@@ -47,15 +47,14 @@ private:
     // only for SdrCircleAttributes
     SdrObjKind GetCircleKind() const { return meCircleKind; }
 
-protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
     SdrObjKind                  meCircleKind;
     long                        nStartAngle;
     long                        nEndAngle;
-private:
-     SVX_DLLPRIVATE basegfx::B2DPolygon ImpCalcXPolyCirc(const SdrObjKind eKind, const tools::Rectangle& rRect1, long nStart, long nEnd) const;
+
+    SVX_DLLPRIVATE basegfx::B2DPolygon ImpCalcXPolyCirc(const SdrObjKind eKind, const tools::Rectangle& rRect1, long nStart, long nEnd) const;
     SVX_DLLPRIVATE static void ImpSetCreateParams(SdrDragStat& rStat);
     SVX_DLLPRIVATE void ImpSetAttrToCircInfo(); // copy values from pool
     SVX_DLLPRIVATE void ImpSetCircInfoToAttr(); // copy values into pool
@@ -64,7 +63,6 @@ private:
     SVX_DLLPRIVATE bool PaintNeedsXPolyCirc() const; // PaintNeedsXPoly-> PaintNeedsXPolyCirc
     SVX_DLLPRIVATE virtual void RecalcXPoly() override;
 
-protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
 public:
@@ -115,7 +113,7 @@ public:
     virtual void NbcShear (const Point& rRef, long nAngle, double tn, bool bVShear) override;
     virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
-protected:
+private:
     virtual SdrObjGeoData* NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;

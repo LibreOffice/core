@@ -62,18 +62,8 @@ public:
 
 };
 
-class FmUndoContainerAction: public SdrUndoAction
+class FmUndoContainerAction final : public SdrUndoAction
 {
-    css::uno::Reference< css::container::XIndexContainer >
-                    m_xContainer;   // container which the action applies to
-    css::uno::Reference< css::uno::XInterface >
-                    m_xElement;     // object not owned by the action
-    css::uno::Reference< css::uno::XInterface >
-                    m_xOwnElement;  // object owned by the action
-    sal_Int32       m_nIndex;       // index of the object within it's container
-    css::uno::Sequence< css::script::ScriptEventDescriptor >
-                    m_aEvents;      // events of the object
-
 public:
     enum Action
     {
@@ -81,10 +71,6 @@ public:
         Removed  = 2
     };
 
-private:
-    Action              m_eAction;
-
-public:
     FmUndoContainerAction(FmFormModel& rMod,
                           Action _eAction,
                           const css::uno::Reference< css::container::XIndexContainer >& xCont,
@@ -97,9 +83,20 @@ public:
 
     static void DisposeElement( const css::uno::Reference< css::uno::XInterface >& xElem );
 
-protected:
+private:
     void    implReInsert( );
     void    implReRemove( );
+
+    css::uno::Reference< css::container::XIndexContainer >
+                    m_xContainer;   // container which the action applies to
+    css::uno::Reference< css::uno::XInterface >
+                    m_xElement;     // object not owned by the action
+    css::uno::Reference< css::uno::XInterface >
+                    m_xOwnElement;  // object owned by the action
+    sal_Int32       m_nIndex;       // index of the object within it's container
+    css::uno::Sequence< css::script::ScriptEventDescriptor >
+                    m_aEvents;      // events of the object
+    Action          m_eAction;
 };
 
 class FmUndoModelReplaceAction : public SdrUndoAction
@@ -120,23 +117,13 @@ public:
 };
 
 
-class FmXUndoEnvironment
+class FmXUndoEnvironment final
     : public ::cppu::WeakImplHelper<   css::beans::XPropertyChangeListener
                                     ,   css::container::XContainerListener
                                     ,   css::util::XModifyListener
                                     >
     , public SfxListener
-                           //   public ::cppu::OWeakObject
 {
-    FmFormModel& rModel;
-
-    void*                                   m_pPropertySetCache;
-    ::svxform::PFormScriptingEnvironment    m_pScriptingEnv;
-    oslInterlockedCount                     m_Locks;
-    ::osl::Mutex                            m_aMutex;
-    bool                                    bReadOnly;
-    bool                                    m_bDisposed;
-
 public:
     FmXUndoEnvironment(FmFormModel& _rModel);
     virtual ~FmXUndoEnvironment() override;
@@ -161,7 +148,15 @@ public:
     void SetReadOnly( bool bRead, const Accessor& ) { bReadOnly = bRead; }
     bool IsReadOnly() const {return bReadOnly;}
 
-protected:
+    // Methods for assigning controls to forms,
+    // used by the page and the undo environment
+    void Inserted(SdrObject* pObj);
+    void Removed(SdrObject* pObj);
+
+    static void Inserted(FmFormObj* pObj);
+    static void Removed(FmFormObj* pObj);
+
+private:
     // XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
@@ -181,7 +176,6 @@ protected:
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-private:
     void AddElement(const css::uno::Reference< css::uno::XInterface>& Element);
     void RemoveElement(const css::uno::Reference< css::uno::XInterface>& Element);
     void TogglePropertyListening(const css::uno::Reference< css::uno::XInterface>& Element);
@@ -190,15 +184,15 @@ private:
 
     void    switchListening( const css::uno::Reference< css::container::XIndexContainer >& _rxContainer, bool _bStartListening );
     void    switchListening( const css::uno::Reference< css::uno::XInterface >& _rxObject, bool _bStartListening );
-    css::uno::Reference< css::script::XScriptListener > m_vbaListener;
-public:
-    // Methods for assigning controls to forms,
-    // used by the page and the undo environment
-    void Inserted(SdrObject* pObj);
-    void Removed(SdrObject* pObj);
 
-    static void Inserted(FmFormObj* pObj);
-    static void Removed(FmFormObj* pObj);
+    FmFormModel&                            rModel;
+    void*                                   m_pPropertySetCache;
+    ::svxform::PFormScriptingEnvironment    m_pScriptingEnv;
+    oslInterlockedCount                     m_Locks;
+    ::osl::Mutex                            m_aMutex;
+    bool                                    bReadOnly;
+    bool                                    m_bDisposed;
+    css::uno::Reference< css::script::XScriptListener > m_vbaListener;
 };
 
 

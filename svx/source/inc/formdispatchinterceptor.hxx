@@ -52,29 +52,11 @@ namespace svxform
                                             ,   css::lang::XEventListener
                                             >   DispatchInterceptionMultiplexer_BASE;
 
-    class DispatchInterceptionMultiplexer : public DispatchInterceptionMultiplexer_BASE
+    class DispatchInterceptionMultiplexer final : public DispatchInterceptionMultiplexer_BASE
     {
-        ::osl::Mutex    m_aFallback;
-        ::osl::Mutex*   m_pMutex;
-
-        // the component which's dispatches we're intercepting
-        css::uno::WeakReference< css::frame::XDispatchProviderInterception >
-                        m_xIntercepted;
-        bool            m_bListening;
-
-        // the real interceptor
-        DispatchInterceptor*            m_pMaster;
-
-        // chaining
-        css::uno::Reference< css::frame::XDispatchProvider>           m_xSlaveDispatcher;
-        css::uno::Reference< css::frame::XDispatchProvider>           m_xMasterDispatcher;
-
-        virtual ~DispatchInterceptionMultiplexer() override;
-
     public:
         css::uno::Reference< css::frame::XDispatchProviderInterception> getIntercepted() const { return m_xIntercepted; }
 
-    public:
         DispatchInterceptionMultiplexer(
             const css::uno::Reference< css::frame::XDispatchProviderInterception>& _rToIntercept,
             DispatchInterceptor* _pMaster
@@ -96,8 +78,25 @@ namespace svxform
         // OComponentHelper
         virtual void SAL_CALL disposing() override;
 
-    protected:
+    private:
+        virtual ~DispatchInterceptionMultiplexer() override;
+
         void ImplDetach();
+
+        ::osl::Mutex    m_aFallback;
+        ::osl::Mutex*   m_pMutex;
+
+        // the component which's dispatches we're intercepting
+        css::uno::WeakReference< css::frame::XDispatchProviderInterception >
+                        m_xIntercepted;
+        bool            m_bListening;
+
+        // the real interceptor
+        DispatchInterceptor*            m_pMaster;
+
+        // chaining
+        css::uno::Reference< css::frame::XDispatchProvider>           m_xSlaveDispatcher;
+        css::uno::Reference< css::frame::XDispatchProvider>           m_xMasterDispatcher;
     };
 
 

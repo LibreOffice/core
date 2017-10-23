@@ -43,9 +43,8 @@ class SvdProgressInfo;
 
 
 // Helper Class ImpSdrGDIMetaFileImport
-class ImpSdrGDIMetaFileImport
+class ImpSdrGDIMetaFileImport final
 {
-protected:
     ::std::vector< SdrObject* > maTmpList;
     ScopedVclPtr<VirtualDevice> mpVD;
     tools::Rectangle                   maScaleRect;
@@ -82,7 +81,6 @@ protected:
     // clipregion
     basegfx::B2DPolyPolygon     maClip;
 
-protected:
     // check for clip and evtl. fill maClip
     void checkClip();
     bool isClip() const;
@@ -153,7 +151,6 @@ protected:
 
     void DoLoopActions(GDIMetaFile const & rMtf, SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport);
 
-private:
     // Copy assignment is forbidden and not implemented.
     ImpSdrGDIMetaFileImport (const ImpSdrGDIMetaFileImport &) = delete;
     ImpSdrGDIMetaFileImport & operator= (const ImpSdrGDIMetaFileImport &) = delete;

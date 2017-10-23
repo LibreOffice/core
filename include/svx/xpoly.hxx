@@ -41,9 +41,8 @@ class OutputDevice;
 
 class ImpXPolygon;
 
-class SVX_DLLPUBLIC XPolygon
+class SVX_DLLPUBLIC XPolygon final
 {
-protected:
     o3tl::cow_wrapper< ImpXPolygon > pImpXPolygon;
 
     // auxiliary functions for Bezier conversion
@@ -111,9 +110,8 @@ public:
 
 class ImpXPolyPolygon;
 
-class SVX_DLLPUBLIC XPolyPolygon
+class SVX_DLLPUBLIC XPolyPolygon final
 {
-protected:
     o3tl::cow_wrapper< ImpXPolyPolygon > pImpXPolyPolygon;
 
 public:

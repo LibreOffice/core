@@ -28,9 +28,8 @@
 // class XHatch
 
 
-class SVX_DLLPUBLIC XHatch
+class SVX_DLLPUBLIC XHatch final
 {
-protected:
     css::drawing::HatchStyle     eStyle;
     Color           aColor;
     long            nDistance;

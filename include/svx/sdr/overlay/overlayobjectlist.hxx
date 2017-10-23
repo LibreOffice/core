@@ -31,9 +31,8 @@ namespace sdr
 {
     namespace overlay
     {
-        class SVX_DLLPUBLIC OverlayObjectList
+        class SVX_DLLPUBLIC OverlayObjectList final
         {
-        protected:
             // the vector of OverlayObjects
             OverlayObjectVector                     maVector;
 

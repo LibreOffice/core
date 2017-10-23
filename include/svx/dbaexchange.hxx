@@ -50,13 +50,8 @@ namespace svx
 
     //= OColumnTransferable
 
-    class SAL_WARN_UNUSED SVX_DLLPUBLIC OColumnTransferable : public TransferableHelper
+    class SAL_WARN_UNUSED SVX_DLLPUBLIC OColumnTransferable final : public TransferableHelper
     {
-    protected:
-        ODataAccessDescriptor      m_aDescriptor;
-        OUString                   m_sCompatibleFormat;
-        ColumnTransferFormatFlags  m_nFormatFlags;
-
     public:
         /** construct the transferable
         */
@@ -152,14 +147,13 @@ namespace svx
         */
         void addDataToContainer( TransferDataContainer* _pContainer );
 
-    protected:
+    private:
         // TransferableHelper overridables
         virtual void        AddSupportedFormats() override;
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
 
         static SotClipboardFormatId  getDescriptorFormatId();
 
-    private:
         SVX_DLLPRIVATE void implConstruct(
             const OUString&  _rDatasource
             ,const OUString& _rConnectionResource
@@ -167,6 +161,10 @@ namespace svx
             ,const OUString& _rCommand
             ,const OUString& _rFieldName
         );
+
+        ODataAccessDescriptor      m_aDescriptor;
+        OUString                   m_sCompatibleFormat;
+        ColumnTransferFormatFlags  m_nFormatFlags;
     };
 
 
@@ -260,10 +258,8 @@ namespace svx
 
     /** class for transferring multiple columns
     */
-    class SAL_WARN_UNUSED SVX_DLLPUBLIC OMultiColumnTransferable : public TransferableHelper
+    class SAL_WARN_UNUSED SVX_DLLPUBLIC OMultiColumnTransferable final : public TransferableHelper
     {
-        css::uno::Sequence< css::beans::PropertyValue >   m_aDescriptors;
-
     public:
         OMultiColumnTransferable(const css::uno::Sequence< css::beans::PropertyValue >& _aDescriptors);
 
@@ -279,11 +275,13 @@ namespace svx
         */
         static css::uno::Sequence< css::beans::PropertyValue > extractDescriptor(const TransferableDataHelper& _rData);
 
-    protected:
+    private:
         virtual void        AddSupportedFormats() override;
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
         virtual void        ObjectReleased() override;
         static SotClipboardFormatId  getDescriptorFormatId();
+
+        css::uno::Sequence< css::beans::PropertyValue >   m_aDescriptors;
     };
 
 

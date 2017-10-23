@@ -124,7 +124,7 @@ namespace svxform
                                                     >   FormController_BASE;
 
     class ColumnInfoCache;
-    class FormController :public ::cppu::BaseMutex
+    class FormController final : public ::cppu::BaseMutex
                                         ,public FormController_BASE
                                         ,public ::cppu::OPropertySetHelper
                                         ,public DispatchInterceptor
@@ -207,7 +207,7 @@ namespace svxform
     public:
         FormController( const css::uno::Reference< css::uno::XComponentContext > & _rxORB );
 
-    protected:
+    private:
         virtual ~FormController() override;
 
     // XInterface
@@ -411,7 +411,6 @@ namespace svxform
             css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
             ) const override;
 
-    protected:
         // DispatchInterceptor
         virtual css::uno::Reference< css::frame::XDispatch>
             interceptedQueryDispatch(

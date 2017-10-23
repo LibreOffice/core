@@ -29,7 +29,7 @@
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dExtrudeObj : public E3dCompoundObject
+class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dExtrudeObj final : public E3dCompoundObject
 {
 private:
     // to allow sdr::properties::E3dExtrudeProperties access to SetGeometryValid()
@@ -38,7 +38,6 @@ private:
     // geometry, which determines the object
     basegfx::B2DPolyPolygon         maExtrudePolygon;
 
-protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
     void SetDefaultAttributes(E3dDefaultAttributes const & rDefault);

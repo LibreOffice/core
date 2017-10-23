@@ -34,18 +34,8 @@ namespace svx
     typedef ::cppu::WeakImplHelper <   css::frame::XDispatch
                                     >   OSingleFeatureDispatcher_Base;
 
-    class OSingleFeatureDispatcher : public OSingleFeatureDispatcher_Base
+    class OSingleFeatureDispatcher final : public OSingleFeatureDispatcher_Base
     {
-    private:
-        ::osl::Mutex&                       m_rMutex;
-        ::comphelper::OInterfaceContainerHelper2   m_aStatusListeners;
-        css::uno::Reference< css::form::runtime::XFormOperations >
-                                            m_xFormOperations;
-        const css::util::URL                m_aFeatureURL;
-        css::uno::Any                       m_aLastKnownState;
-        const sal_Int16                     m_nFormFeature;
-        bool                                m_bLastKnownEnabled;
-
     public:
         /** constructs the dispatcher
 
@@ -73,13 +63,12 @@ namespace svx
         */
         void    updateAllListeners();
 
-    protected:
+    private:
         // XDispatch
         virtual void SAL_CALL dispatch( const css::util::URL& _rURL, const css::uno::Sequence< css::beans::PropertyValue >& _rArguments ) override;
         virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& _rxControl, const css::util::URL& _rURL ) override;
         virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& _rxControl, const css::util::URL& _rURL ) override;
 
-    protected:
         /** notifies our current state to one or all listeners
 
             @param _rxListener
@@ -95,8 +84,6 @@ namespace svx
                     ::osl::ClearableMutexGuard& _rFreeForNotification
                 );
 
-    private:
-
         /** retrieves the current status of our feature, in a format which can be used
             for UNO notifications
 
@@ -104,6 +91,16 @@ namespace svx
                 our mutex is locked
         */
         void    getUnoState( css::frame::FeatureStateEvent& /* [out] */ _rState ) const;
+
+        ::osl::Mutex&                       m_rMutex;
+        ::comphelper::OInterfaceContainerHelper2   m_aStatusListeners;
+        css::uno::Reference< css::form::runtime::XFormOperations >
+                                            m_xFormOperations;
+        const css::util::URL                m_aFeatureURL;
+        css::uno::Any                       m_aLastKnownState;
+        const sal_Int16                     m_nFormFeature;
+        bool                                m_bLastKnownEnabled;
+
     };
 
 

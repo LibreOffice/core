@@ -42,11 +42,9 @@ struct SvxGraphicHelperStream_Impl
     css::uno::Reference < css::io::XStream > xStream;
 };
 
-class SVX_DLLPUBLIC SvXMLGraphicHelper : public cppu::WeakComponentImplHelper< css::document::XGraphicObjectResolver,
+class SVX_DLLPUBLIC SvXMLGraphicHelper final : public cppu::WeakComponentImplHelper< css::document::XGraphicObjectResolver,
                                                                     css::document::XBinaryStreamResolver >
 {
-private:
-
     typedef ::std::pair< OUString, OUString >                                             URLPair;
     typedef ::std::vector< URLPair >                                                                    URLPairVector;
     typedef ::std::vector< GraphicObject >                                                              GraphicObjectVector;
@@ -80,7 +78,6 @@ private:
                                                   bool bUseGfxLink );
     SVX_DLLPRIVATE void                     ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt32 nInsertPos, OUString const & rRequestedFileName );
 
-protected:
                                 SvXMLGraphicHelper();
                                 virtual ~SvXMLGraphicHelper() override;
     void                        Init( const css::uno::Reference < css::embed::XStorage >& xXMLStorage,
@@ -96,8 +93,6 @@ public:
                                         SvXMLGraphicHelperMode eCreateMode,
                                         bool bDirect = true );
     static rtl::Reference<SvXMLGraphicHelper> Create( SvXMLGraphicHelperMode eCreateMode );
-
-public:
 
     // XGraphicObjectResolver
     virtual OUString SAL_CALL resolveGraphicObjectURL( const OUString& aURL ) override;

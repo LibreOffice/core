@@ -33,17 +33,15 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC E3dLatheObj : public E3dCompoundObject
+class SVX_DLLPUBLIC E3dLatheObj final : public E3dCompoundObject
 {
-private:
     basegfx::B2DPolyPolygon maPolyPoly2D;
 
- protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
     void SetDefaultAttributes(E3dDefaultAttributes const & rDefault);
 
- public:
+public:
     E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon& rPoly2D);
     E3dLatheObj();
 

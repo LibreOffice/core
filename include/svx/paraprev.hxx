@@ -33,10 +33,8 @@ enum class SvxPrevLineSpace
     Leading
 };
 
-class SVX_DLLPUBLIC SvxParaPrevWindow : public vcl::Window
+class SVX_DLLPUBLIC SvxParaPrevWindow final : public vcl::Window
 {
-    using Window::Draw;
-private:
     Size                aSize;
 
     // indentation
@@ -56,7 +54,8 @@ private:
     OUString            aText;
     tools::Rectangle    Lines[9];
 
-protected:
+    using Window::Draw;
+
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual Size GetOptimalSize() const override;
 

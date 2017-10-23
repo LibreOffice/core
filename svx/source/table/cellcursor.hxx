@@ -32,7 +32,7 @@ struct CellPos;
 
 typedef ::cppu::ImplInheritanceHelper< CellRange, css::table::XCellCursor, css::table::XMergeableCellRange > CellCursorBase;
 
-class CellCursor : public CellCursorBase
+class CellCursor final : public CellCursorBase
 {
 public:
     CellCursor( const TableModelRef& xTableModel, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom );
@@ -55,7 +55,7 @@ public:
     virtual void SAL_CALL split( ::sal_Int32 Columns, ::sal_Int32 Rows ) override;
     virtual sal_Bool SAL_CALL isMergeable(  ) override;
 
-protected:
+private:
     bool GetMergedSelection( CellPos& rStart, CellPos& rEnd );
 
     void split_column( sal_Int32 nCol, sal_Int32 nColumns, std::vector< sal_Int32 >& rLeftOvers );

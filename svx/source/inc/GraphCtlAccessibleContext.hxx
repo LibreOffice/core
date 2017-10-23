@@ -76,7 +76,7 @@ typedef ::cppu::WeakAggComponentImplHelper7<
                 css::lang::XServiceName >
                 SvxGraphCtrlAccessibleContext_Base;
 
-class SvxGraphCtrlAccessibleContext:
+class SvxGraphCtrlAccessibleContext final :
     private cppu::BaseMutex, public SvxGraphCtrlAccessibleContext_Base,
     public SfxListener, public ::accessibility::IAccessibleViewForwarder
 {
@@ -90,9 +90,6 @@ public:
 
     void Notify( SfxBroadcaster& aBC, const SfxHint& aHint ) override;
 
-protected:
-    virtual ~SvxGraphCtrlAccessibleContext() override;
-public:
     // XAccessible
     /// Return the XAccessibleContext.
     virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL
@@ -122,8 +119,6 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> SAL_CALL getAccessibleRelationSet() override;
     virtual css::uno::Reference< css::accessibility::XAccessibleStateSet> SAL_CALL getAccessibleStateSet() override;
     virtual css::lang::Locale SAL_CALL getLocale() override;
-//  virtual void SAL_CALL addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) throw (css::uno::RuntimeException) {}
-//  virtual void SAL_CALL removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) throw (css::uno::RuntimeException) {}
 
     // XAccessibleEventBroadcaster
     virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener>& xListener) override;
@@ -154,18 +149,15 @@ public:
     virtual Point LogicToPixel (const Point& rPoint) const override;
     virtual Size LogicToPixel (const Size& rSize) const override;
 
-protected:
-    /// @throws css::lang::IndexOutOfBoundsException
-    void checkChildIndexOnSelection( long nIndexOfChild );
-
-public:
-
     /** This method is used by the graph control to tell the
         accessibility object about a new model and view.
     */
     void setModelAndView (SdrModel* pModel, SdrView* pView);
 
-protected:
+private:
+    virtual ~SvxGraphCtrlAccessibleContext() override;
+    /// @throws css::lang::IndexOutOfBoundsException
+    void checkChildIndexOnSelection( long nIndexOfChild );
 
     /** Return the object's current bounding box relative to the desktop,
         i.e in absolute pixel coordinates.
@@ -185,7 +177,6 @@ protected:
 
     virtual void SAL_CALL disposing() final override;
 
-private:
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IndexOutOfBoundsException
     SdrObject* getSdrObject( sal_Int32 nIndex );

@@ -33,9 +33,8 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewObjectContactOfGraphic : public ViewObjectContactOfSdrObj
+        class ViewObjectContactOfGraphic final : public ViewObjectContactOfSdrObj
         {
-        private:
             // allow async loading event helper to call tooling methods
             friend class sdr::event::AsynchGraphicLoadingEvent;
 
@@ -50,7 +49,6 @@ namespace sdr
             void doAsynchGraphicLoading();
             void forgetAsynchGraphicLoadingEvent(sdr::event::AsynchGraphicLoadingEvent const * pEvent);
 
-        protected:
             const SdrGrafObj& getSdrGrafObj() const;
             SdrGrafObj& getSdrGrafObj();
 

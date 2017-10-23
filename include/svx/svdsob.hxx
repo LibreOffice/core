@@ -30,9 +30,8 @@
  Stores a bitfield of the layer values that have been set.
 */
 
-class SVX_DLLPUBLIC SdrLayerIDSet
+class SVX_DLLPUBLIC SdrLayerIDSet final
 {
-protected:
     sal_uInt8 aData[32];
 
 public:

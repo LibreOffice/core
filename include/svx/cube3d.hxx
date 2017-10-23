@@ -61,9 +61,8 @@ namespace o3tl
     template<> struct typed_flags<CubeFaces> : is_typed_flags<CubeFaces, 0x003f> {};
 }
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dCubeObj : public E3dCompoundObject
+class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dCubeObj final : public E3dCompoundObject
 {
-private:
     // Parameter
     basegfx::B3DPoint                   aCubePos;
     basegfx::B3DVector                  aCubeSize;
@@ -71,7 +70,6 @@ private:
     // BOOLeans
     bool                                bPosIsCenter : 1;
 
-protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 

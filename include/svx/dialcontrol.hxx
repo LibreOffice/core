@@ -30,7 +30,7 @@ class NumericField;
 namespace svx {
 
 
-class SAL_WARN_UNUSED DialControlBmp : public VirtualDevice
+class SAL_WARN_UNUSED DialControlBmp final : public VirtualDevice
 {
 public:
     explicit            DialControlBmp( vcl::Window& rParent );
@@ -42,10 +42,6 @@ public:
     void                DrawBackground();
     void                DrawElements( const OUString& rText, sal_Int32 nAngle );
 
-protected:
-    tools::Rectangle           maRect;
-    bool                mbEnabled;
-
 private:
     const Color&        GetBackgroundColor() const;
     const Color&        GetTextColor() const;
@@ -55,6 +51,8 @@ private:
 
     void                Init();
 
+    tools::Rectangle    maRect;
+    bool                mbEnabled;
     vcl::Window&        mrParent;
     long                mnCenterX;
     long                mnCenterY;

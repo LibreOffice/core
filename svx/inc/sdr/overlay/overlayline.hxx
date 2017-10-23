@@ -27,9 +27,8 @@ namespace sdr
 {
     namespace overlay
     {
-        class OverlayLineStriped : public OverlayObjectWithBasePosition
+        class OverlayLineStriped final : public OverlayObjectWithBasePosition
         {
-        protected:
             // second position in pixel
             basegfx::B2DPoint                       maSecondPosition;
 

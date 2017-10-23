@@ -24,8 +24,7 @@
 
 namespace svx { namespace sidebar {
 
-class LineWidthValueSet
-    : public ValueSet
+class LineWidthValueSet final : public ValueSet
 {
 public:
     explicit LineWidthValueSet(vcl::Window* pParent);
@@ -42,7 +41,7 @@ public:
     virtual void    Resize() override;
     virtual Size    GetOptimalSize() const override;
 
-protected:
+private:
     VclPtr<VirtualDevice> pVDev;
     sal_uInt16          nSelItem;
     OUString*      strUnit;

@@ -17,9 +17,8 @@
 namespace sdr { namespace overlay {
 
 
-class SVX_DLLPUBLIC OverlayHandle : public OverlayObjectWithBasePosition
+class SVX_DLLPUBLIC OverlayHandle final : public OverlayObjectWithBasePosition
 {
-protected:
     basegfx::B2DSize maSize;
     Color maStrokeColor;
 

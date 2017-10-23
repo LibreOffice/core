@@ -69,9 +69,8 @@ namespace svx
     class FormControllerHelper;
     /** easier access to an FormControllerHelper instance
     */
-    class ControllerFeatures
+    class ControllerFeatures final
     {
-    protected:
         IControllerFeatureInvalidation* m_pInvalidationCallback;    // necessary as long as m_pImpl is not yet constructed
         rtl::Reference<FormControllerHelper>  m_pImpl;
 
