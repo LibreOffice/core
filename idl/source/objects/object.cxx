@@ -195,10 +195,10 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
         }
     }
 
-    // All Interfaces already imported by SuperShells should not be
+    // All Interfaces already imported by SuperShell should not be
     // written any more.
     // It is prohibited that Shell and SuperShell directly import the same
-    //class.
+    // class.
     if( GetMetaTypeType() == MetaTypeType::Shell && aSuperClass.is() )
         aSuperClass->FillClasses( rClassList );
 
