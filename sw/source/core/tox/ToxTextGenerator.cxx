@@ -300,6 +300,9 @@ ToxTextGenerator::HandleTextToken(const SwTOXSortTabBase& source, SwAttrPool& po
     ToxWhitespaceStripper stripper(source.GetText().sText);
     result.text = stripper.GetStrippedString();
 
+    if( source.aTOXSources.empty() )
+        return result;
+
     const SwTextNode* pSrc = source.aTOXSources.at(0).pNd->GetTextNode();
     if (!pSrc->HasHints()) {
         return result;
