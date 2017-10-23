@@ -20,11 +20,11 @@
 #ifndef INCLUDED_JAVAUNOHELPER_SOURCE_VM_HXX
 #define INCLUDED_JAVAUNOHELPER_SOURCE_VM_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "jni.h"
-#include "com/sun/star/uno/Reference.hxx"
-#include "rtl/ref.hxx"
+#include <jni.h>
+#include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ref.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;

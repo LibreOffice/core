@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "jni.h"
+#include <jni.h>
 
-#include "rtl/ustring.hxx"
-#include "osl/module.hxx"
+#include <rtl/ustring.hxx>
+#include <osl/module.hxx>
 
 #include "juhx-export-types.hxx"
 
