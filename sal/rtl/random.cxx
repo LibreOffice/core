@@ -24,7 +24,7 @@
 #include <rtl/alloc.h>
 #include <rtl/digest.h>
 #include <rtl/random.h>
-#include "oslrandom.h"
+#include <oslrandom.h>
 
 #define RTL_RANDOM_RNG_1(a) ((a) * 16807L)
 #define RTL_RANDOM_RNG_2(a) ((a) * 65539L)

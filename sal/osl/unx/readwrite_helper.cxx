@@ -10,7 +10,7 @@
 #include "readwrite_helper.hxx"
 
 #include <osl/diagnose.h>
-#include <system.hxx>
+#include "system.hxx"
 
 bool safeWrite(int fd, void* data, sal_uInt32 dataSize)
 {

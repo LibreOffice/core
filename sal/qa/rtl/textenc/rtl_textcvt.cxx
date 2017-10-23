@@ -19,7 +19,7 @@
 
 #include <config_locales.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 #include <cstring>
@@ -27,12 +27,12 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "rtl/string.hxx"
-#include "rtl/ustring.hxx"
-#include "rtl/tencinfo.h"
-#include "rtl/textcvt.h"
-#include "rtl/textenc.h"
-#include "sal/types.h"
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/tencinfo.h>
+#include <rtl/textcvt.h>
+#include <rtl/textenc.h>
+#include <sal/types.h>
 #include <sal/macros.h>
 #include <osl/diagnose.h>
 

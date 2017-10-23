@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "rtl/math.h"
+#include <rtl/math.h>
 
-#include "osl/diagnose.h"
-#include "rtl/alloc.h"
-#include "rtl/character.hxx"
-#include "rtl/math.hxx"
-#include "rtl/strbuf.h"
-#include "rtl/string.h"
-#include "rtl/ustrbuf.h"
-#include "rtl/ustring.h"
-#include "sal/mathconf.h"
-#include "sal/types.h"
+#include <osl/diagnose.h>
+#include <rtl/alloc.h>
+#include <rtl/character.hxx>
+#include <rtl/math.hxx>
+#include <rtl/strbuf.h>
+#include <rtl/string.h>
+#include <rtl/ustrbuf.h>
+#include <rtl/ustring.h>
+#include <sal/mathconf.h>
+#include <sal/types.h>
 
 #include <algorithm>
 #include <cassert>

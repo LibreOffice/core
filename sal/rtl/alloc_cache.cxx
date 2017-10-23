@@ -20,8 +20,8 @@
 #include "alloc_cache.hxx"
 #include "alloc_impl.hxx"
 #include "alloc_arena.hxx"
-#include "rtllifecycle.h"
-#include "sal/macros.h"
+#include <rtllifecycle.h>
+#include <sal/macros.h>
 #include <osl/thread.hxx>
 
 #include <cassert>

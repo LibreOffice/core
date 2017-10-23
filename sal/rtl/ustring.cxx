@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #ifdef _MSC_VER
 #pragma warning(disable:4738) // storing 32-bit float result in memory, possible loss of performance
@@ -44,7 +44,7 @@
 #include <rtl/character.hxx>
 #include <rtl/ustring.h>
 
-#include "rtl/math.h"
+#include <rtl/math.h>
 
 /* ======================================================================= */
 

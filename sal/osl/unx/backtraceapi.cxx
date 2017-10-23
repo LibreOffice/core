@@ -21,7 +21,7 @@
 #include <sal/backtrace.hxx>
 
 #include "backtrace.h"
-#include "backtraceasstring.hxx"
+#include <backtraceasstring.hxx>
 
 namespace {
 

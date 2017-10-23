@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "rtl/strbuf.hxx"
-#include "rtl/string.hxx"
-#include "rtl/ustring.hxx"
-#include "osl/process.h"
-#include "osl/diagnose.hxx"
-#include "sal/log.hxx"
+#include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <osl/process.h>
+#include <osl/diagnose.hxx>
+#include <sal/log.hxx>
 
 #include <algorithm>
 #include <vector>

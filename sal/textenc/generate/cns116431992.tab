@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 static sal_uInt16 const aImplCns116431992ToUnicodeData[] = {
  /* plane 1, row 1 */

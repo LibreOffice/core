@@ -19,7 +19,7 @@
 
 #include <rtl/instance.hxx>
 
-#include "rtllifecycle.h"
+#include <rtllifecycle.h>
 
 namespace
 {

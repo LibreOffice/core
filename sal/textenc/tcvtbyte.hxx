@@ -10,9 +10,9 @@
 #ifndef INCLUDED_SAL_TEXTENC_TCVTBYTE_HXX
 #define INCLUDED_SAL_TEXTENC_TCVTBYTE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 sal_Size ImplSymbolToUnicode(
     void const * pData, void * pContext, char const * pSrcBuf,

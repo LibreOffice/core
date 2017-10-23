@@ -10,7 +10,7 @@
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include <iostream>
 
 namespace test { namespace strings {

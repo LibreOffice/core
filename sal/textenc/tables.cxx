@@ -19,13 +19,13 @@
 
 #include <config_locales.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <cstddef>
 
-#include "rtl/textenc.h"
-#include "sal/types.h"
+#include <rtl/textenc.h>
+#include <sal/types.h>
 
 #define NOTABUNI_START 0xFF
 #define NOTABUNI_END 0x00

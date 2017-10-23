@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <strimp.hxx>
+#include "strimp.hxx"
 
 #if USE_SDT_PROBES
 #define RTL_LOG_STRING_BITS         16

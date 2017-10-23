@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "rtl/character.hxx"
-#include "rtl/strbuf.hxx"
-#include "rtl/textenc.h"
-#include "rtl/textcvt.h"
-#include "rtl/uri.h"
-#include "rtl/ustrbuf.h"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "sal/macros.h"
+#include <rtl/character.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/textenc.h>
+#include <rtl/textcvt.h>
+#include <rtl/uri.h>
+#include <rtl/ustrbuf.h>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <sal/macros.h>
 
 #include <algorithm>
 #include <cstddef>

@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SAL_RTL_ALLOC_CACHE_HXX
 #define INCLUDED_SAL_RTL_ALLOC_CACHE_HXX
 
-#include "sal/types.h"
-#include "rtl/alloc.h"
+#include <sal/types.h>
+#include <rtl/alloc.h>
 #include "alloc_impl.hxx"
 
 /**

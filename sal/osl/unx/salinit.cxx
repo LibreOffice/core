@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #if defined MACOSX
 #include <cassert>
@@ -28,11 +28,11 @@
 #include <sys/stat.h>
 #endif
 
-#include "osl/process.h"
-#include "sal/main.h"
-#include "sal/types.h"
+#include <osl/process.h>
+#include <sal/main.h>
+#include <sal/types.h>
 
-#include <saltime.hxx>
+#include "saltime.hxx"
 #include <salusesyslog.hxx>
 
 #if HAVE_SYSLOG_H

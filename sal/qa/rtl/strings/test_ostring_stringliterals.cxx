@@ -13,9 +13,9 @@
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "rtl/string.h"
-#include "rtl/string.hxx"
-#include "rtl/strbuf.hxx"
+#include <rtl/string.h>
+#include <rtl/string.hxx>
+#include <rtl/strbuf.hxx>
 
 bool rtl_string_unittest_const_literal;
 bool rtl_string_unittest_const_literal_function;
