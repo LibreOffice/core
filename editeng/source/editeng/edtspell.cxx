@@ -23,7 +23,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 
-#include <impedit.hxx>
+#include "impedit.hxx"
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
 #include <edtspell.hxx>

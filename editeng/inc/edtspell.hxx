@@ -24,7 +24,7 @@
 #include <editeng/splwrap.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/svxenum.hxx>
-#include "editeng/misspellrange.hxx"
+#include <editeng/misspellrange.hxx>
 #include <tools/link.hxx>
 #include <vcl/outdev.hxx>
 

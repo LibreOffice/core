@@ -28,15 +28,15 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/tstpitem.hxx>
 
-#include <eertfpar.hxx>
+#include "eertfpar.hxx"
 #include <editeng/editeng.hxx>
-#include <impedit.hxx>
+#include "impedit.hxx"
 #include <editeng/editview.hxx>
-#include <eehtml.hxx>
-#include <editobj2.hxx>
+#include "eehtml.hxx"
+#include "editobj2.hxx"
 #include <i18nlangtag/lang.h>
 
-#include "editxml.hxx"
+#include <editxml.hxx>
 
 #include <editeng/autokernitem.hxx>
 #include <editeng/contouritem.hxx>
@@ -56,7 +56,7 @@
 #include <editeng/charreliefitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/emphasismarkitem.hxx>
-#include <textconv.hxx>
+#include "textconv.hxx"
 #include <rtl/tencinfo.h>
 #include <svtools/rtfout.hxx>
 #include <edtspell.hxx>

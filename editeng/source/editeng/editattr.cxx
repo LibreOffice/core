@@ -47,7 +47,7 @@
 #include <editeng/charreliefitem.hxx>
 #include <editeng/cmapitem.hxx>
 
-#include "editattr.hxx"
+#include <editattr.hxx>
 
 
 // class EditCharAttrib

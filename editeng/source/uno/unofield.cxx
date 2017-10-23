@@ -31,7 +31,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include "editeng/unonames.hxx"
+#include <editeng/unonames.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star;

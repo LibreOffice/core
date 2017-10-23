@@ -36,7 +36,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include "editsource.hxx"
-#include "editxml.hxx"
+#include <editxml.hxx>
 #include <editdoc.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/unotext.hxx>

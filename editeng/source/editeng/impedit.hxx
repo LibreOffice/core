@@ -21,15 +21,15 @@
 
 #include <eerdll2.hxx>
 #include <editdoc.hxx>
-#include <editsel.hxx>
-#include <editundo.hxx>
-#include <editobj2.hxx>
-#include <editstt2.hxx>
+#include "editsel.hxx"
+#include "editundo.hxx"
+#include "editobj2.hxx"
+#include "editstt2.hxx"
 #include <editeng/editdata.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/SpellPortions.hxx>
 #include <editeng/eedata.hxx>
-#include "editeng/editeng.hxx"
+#include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/virdev.hxx>

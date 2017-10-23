@@ -33,7 +33,7 @@
 // Project-local header
 
 
-#include "editeng/unoedprx.hxx"
+#include <editeng/unoedprx.hxx>
 #include <editeng/unotext.hxx>
 #include <editeng/unoedhlp.hxx>
 #include <editeng/editdata.hxx>

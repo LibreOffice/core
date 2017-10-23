@@ -34,9 +34,9 @@
 #include <i18nlangtag/languagetag.hxx>
 
 #include <editeng/outliner.hxx>
-#include <outleeng.hxx>
-#include <paralist.hxx>
-#include <outlundo.hxx>
+#include "outleeng.hxx"
+#include "paralist.hxx"
+#include "outlundo.hxx"
 #include <editeng/outlobj.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/eeitem.hxx>

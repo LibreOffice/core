@@ -38,7 +38,7 @@
 
 #include <svl/srchitem.hxx>
 
-#include <impedit.hxx>
+#include "impedit.hxx"
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/flditem.hxx>

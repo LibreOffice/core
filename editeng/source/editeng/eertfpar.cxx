@@ -24,14 +24,14 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 
-#include <eertfpar.hxx>
-#include <impedit.hxx>
+#include "eertfpar.hxx"
+#include "impedit.hxx"
 #include <svl/intitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/flditem.hxx>
-#include "editeng/editeng.hxx"
+#include <editeng/editeng.hxx>
 
 #include <svtools/rtftoken.h>
 #include <svtools/htmltokn.h>

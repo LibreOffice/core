@@ -25,7 +25,7 @@
 
 #include <editeng/flditem.hxx>
 #include <editeng/measfld.hxx>
-#include "editeng/unonames.hxx"
+#include <editeng/unonames.hxx>
 
 #include <tools/tenccvt.hxx>
 

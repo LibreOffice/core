@@ -23,7 +23,7 @@
 #include <comphelper/accessiblekeybindinghelper.hxx>
 
 #include "AccessibleHyperlink.hxx"
-#include "editeng/unoedprx.hxx"
+#include <editeng/unoedprx.hxx>
 #include <editeng/flditem.hxx>
 #include <vcl/keycodes.hxx>
 

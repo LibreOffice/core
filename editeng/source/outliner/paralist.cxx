@@ -18,7 +18,7 @@
  */
 
 
-#include <paralist.hxx>
+#include "paralist.hxx"
 
 #include <editeng/outliner.hxx>
 #include <editeng/numdef.hxx>
