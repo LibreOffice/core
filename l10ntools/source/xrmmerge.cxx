@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstring>
 
 #include <stdio.h>
 
-#include "common.hxx"
-#include "export.hxx"
-#include "po.hxx"
-#include "xrmlex.hxx"
-#include "xrmmerge.hxx"
-#include "tokens.h"
-#include "helper.hxx"
+#include <common.hxx>
+#include <export.hxx>
+#include <po.hxx>
+#include <xrmlex.hxx>
+#include <xrmmerge.hxx>
+#include <tokens.h>
+#include <helper.hxx>
 #include <iostream>
 #include <fstream>
 #include <vector>

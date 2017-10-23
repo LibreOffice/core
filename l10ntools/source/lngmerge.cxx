@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 #include <fstream>
@@ -25,8 +25,8 @@
 #include <memory>
 #include <string>
 
-#include "po.hxx"
-#include "lngmerge.hxx"
+#include <po.hxx>
+#include <lngmerge.hxx>
 
 namespace {
 

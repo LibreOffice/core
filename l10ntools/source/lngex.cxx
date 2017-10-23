@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/main.h"
+#include <sal/main.h>
 
-#include "lngmerge.hxx"
+#include <lngmerge.hxx>
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
 

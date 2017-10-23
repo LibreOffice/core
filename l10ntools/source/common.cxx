@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "common.hxx"
+#include <common.hxx>
 
 //flags for handleArguments()
 enum class State {

@@ -14,7 +14,7 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
-#include "po.hxx"
+#include <po.hxx>
 
 // Translated style names must be unique
 static void checkStyleNames(const OString& aLanguage)

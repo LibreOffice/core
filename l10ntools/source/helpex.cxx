@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <cstring>
 
-#include "sal/main.h"
+#include <sal/main.h>
 
-#include "helpmerge.hxx"
-#include "common.hxx"
+#include <helpmerge.hxx>
+#include <common.hxx>
 #include <memory>
 
 #ifndef TESTDRIVER

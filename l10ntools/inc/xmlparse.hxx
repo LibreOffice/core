@@ -20,7 +20,7 @@
 #ifndef INCLUDED_L10NTOOLS_INC_XMLPARSE_HXX
 #define INCLUDED_L10NTOOLS_INC_XMLPARSE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 #include <memory>
