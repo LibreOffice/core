@@ -34,7 +34,6 @@ $(eval $(call gb_Executable_use_libraries,qpwfuzzer,\
 $(eval $(call gb_Executable_use_static_libraries,qpwfuzzer,\
     findsofficepath \
     ulingu \
-    fuzzer_calc \
     fuzzerstubs \
 ))
 
