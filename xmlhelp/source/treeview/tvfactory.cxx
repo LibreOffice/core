@@ -23,8 +23,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "tvfactory.hxx"
-#include "tvread.hxx"
+#include <tvfactory.hxx>
+#include <tvread.hxx>
 
 using namespace treeview;
 using namespace com::sun::star;
