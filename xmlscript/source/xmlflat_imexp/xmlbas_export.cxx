@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include "unoservices.hxx"
+#include <unoservices.hxx>
 #include "xmlbas_export.hxx"
 #include <sal/log.hxx>
 #include <xmlscript/xmlns.h>

@@ -21,7 +21,7 @@
 #define INCLUDED_XMLSCRIPT_SOURCE_XMLDLG_IMEXP_IMP_SHARE_HXX
 
 #include "common.hxx"
-#include "misc.hxx"
+#include <misc.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <xmlscript/xmllib_imexp.hxx>
 #include <xmlscript/xmlmod_imexp.hxx>
