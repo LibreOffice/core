@@ -23,14 +23,14 @@
 
 #include "jni_bridge.h"
 
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 
-#include "jvmaccess/unovirtualmachine.hxx"
-#include "rtl/string.hxx"
-#include "rtl/strbuf.hxx"
-#include "rtl/ustrbuf.hxx"
+#include <jvmaccess/unovirtualmachine.hxx>
+#include <rtl/string.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 
-#include "uno/lbnames.h"
+#include <uno/lbnames.h>
 
 
 using namespace ::std;

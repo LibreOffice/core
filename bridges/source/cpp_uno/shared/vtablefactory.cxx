@@ -18,21 +18,21 @@
  */
 
 
-#include "vtablefactory.hxx"
+#include <vtablefactory.hxx>
 
 #include "guardedarray.hxx"
 
-#include "vtables.hxx"
+#include <vtables.hxx>
 
-#include "osl/thread.h"
-#include "osl/security.hxx"
-#include "osl/file.hxx"
-#include "osl/mutex.hxx"
-#include "rtl/alloc.h"
-#include "rtl/ustring.hxx"
-#include "sal/log.hxx"
-#include "sal/types.h"
-#include "typelib/typedescription.hxx"
+#include <osl/thread.h>
+#include <osl/security.hxx>
+#include <osl/file.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/alloc.h>
+#include <rtl/ustring.hxx>
+#include <sal/log.hxx>
+#include <sal/types.h>
+#include <typelib/typedescription.hxx>
 
 #include <new>
 #include <unordered_map>
