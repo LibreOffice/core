@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_c3d3ff5d",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 5927,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2017-10-23T16:26:55Z",
+      "side": 1,
+      "message": "building 32bit version doesn\u0027t automatically mean targeting XP. So checking for $with_windows_sdk !\u003d \"7.1A\" instead would be more targeted",
+      "range": {
+        "startLine": 5927,
+        "startChar": 52,
+        "endLine": 5927,
+        "endChar": 79
+      },
+      "revId": "5ecedd1648c49741448a0e10b7f5b20a80668421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
