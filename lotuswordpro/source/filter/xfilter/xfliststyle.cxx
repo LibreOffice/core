@@ -57,7 +57,7 @@
  * @file
  * Styles for ordered list and unordered list.
  ************************************************************************/
-#include "xfilter/xfliststyle.hxx"
+#include <xfilter/xfliststyle.hxx>
 
 XFListLevel::XFListLevel()
     : m_nLevel(0)

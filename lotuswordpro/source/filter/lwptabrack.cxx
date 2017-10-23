@@ -58,7 +58,7 @@
  * Tabrack for LwpTabPiece object.
  ************************************************************************/
 #include "lwptabrack.hxx"
-#include "lwpobjstrm.hxx"
+#include <lwpobjstrm.hxx>
 
 #include <stdexcept>
 

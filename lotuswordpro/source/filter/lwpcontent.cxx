@@ -59,7 +59,7 @@
  ************************************************************************/
 
 #include "lwpstory.hxx"
-#include "lwpfilehdr.hxx"
+#include <lwpfilehdr.hxx>
 #include "lwpholder.hxx"
 
 LwpHeadContent::LwpHeadContent(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)

@@ -62,11 +62,11 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARAPROPERTY_HXX
 
 #include <memory>
-#include "lwpobj.hxx"
-#include "lwpobjstrm.hxx"
+#include <lwpobj.hxx>
+#include <lwpobjstrm.hxx>
 #include "lwpdllist.hxx"
 
-#include "lwpoverride.hxx"
+#include <lwpoverride.hxx>
 #include "lwppiece.hxx"
 
 /* paragraph property ID's */

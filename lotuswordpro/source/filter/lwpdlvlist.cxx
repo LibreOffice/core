@@ -59,7 +59,7 @@
  ************************************************************************/
 
 #include "lwpdlvlist.hxx"
-#include "lwpfilehdr.hxx"
+#include <lwpfilehdr.hxx>
 #include "lwpproplist.hxx"
 
 LwpDLVList::LwpDLVList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)

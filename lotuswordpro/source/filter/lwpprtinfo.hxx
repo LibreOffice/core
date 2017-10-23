@@ -61,8 +61,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPRTINFO_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPRTINFO_HXX
 
-#include "lwpatomholder.hxx"
-#include "lwpobjstrm.hxx"
+#include <lwpatomholder.hxx>
+#include <lwpobjstrm.hxx>
 /**
  * @brief   printer info used in VO_DOCUMENT
  *      not parsed yet

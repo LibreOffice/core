@@ -61,7 +61,7 @@
 #include <cstring>
 #include <string>
 #include <vector>
-#include "lwpsvstream.hxx"
+#include <lwpsvstream.hxx>
 
 #define BEN_CC __stdcall
 #ifdef COMP_BENTO

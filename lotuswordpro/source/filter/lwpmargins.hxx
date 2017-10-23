@@ -57,8 +57,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPMARGINS_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPMARGINS_HXX
 
-#include "lwpobjstrm.hxx"
-#include "lwptools.hxx"
+#include <lwpobjstrm.hxx>
+#include <lwptools.hxx>
 
 const sal_uInt8 MARGIN_LEFT = 0;
 const sal_uInt8 MARGIN_RIGHT = 1;

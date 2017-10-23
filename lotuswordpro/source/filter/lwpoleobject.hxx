@@ -61,9 +61,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOLEOBJECT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOLEOBJECT_HXX
 
-#include "lwpobj.hxx"
-#include "lwpobjhdr.hxx"
-#include "lwpobjid.hxx"
+#include <lwpobj.hxx>
+#include <lwpobjhdr.hxx>
+#include <lwpobjid.hxx>
 #include "lwpstory.hxx"
 #include <tools/gen.hxx>
 #include <svx/svdoole2.hxx>

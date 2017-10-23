@@ -57,13 +57,13 @@
  * @file
  * Font object to serial to xml filter.
  ************************************************************************/
-#include "xfilter/xfstylecont.hxx"
-#include "xfilter/ixfstyle.hxx"
-#include "xfilter/xffont.hxx"
-#include "xfilter/xftextstyle.hxx"
-#include "xfilter/xfparastyle.hxx"
-#include "xfilter/xffontfactory.hxx"
-#include "lwpglobalmgr.hxx"
+#include <xfilter/xfstylecont.hxx>
+#include <xfilter/ixfstyle.hxx>
+#include <xfilter/xffont.hxx>
+#include <xfilter/xftextstyle.hxx>
+#include <xfilter/xfparastyle.hxx>
+#include <xfilter/xffontfactory.hxx>
+#include <lwpglobalmgr.hxx>
 
 XFStyleContainer::XFStyleContainer(const OUString& strStyleNamePrefix)
     :m_strStyleNamePrefix(strStyleNamePrefix)

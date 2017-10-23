@@ -58,8 +58,8 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#include "lwpobjfactory.hxx"
-#include "lwpdefs.hxx"
+#include <lwpobjfactory.hxx>
+#include <lwpdefs.hxx>
 #include "lwpdoc.hxx"
 #include "lwpstory.hxx"
 #include "lwplayout.hxx"
@@ -91,7 +91,7 @@
 #include "lwpnumericfmt.hxx"
 #include "lwpfnlayout.hxx"
 #include "lwptoc.hxx"
-#include "lwpdocdata.hxx"
+#include <lwpdocdata.hxx>
 #include "lwpnotes.hxx"
 #include "lwpverdocument.hxx"
 

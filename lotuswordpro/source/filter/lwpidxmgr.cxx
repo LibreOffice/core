@@ -66,8 +66,8 @@
 
 **********************************************************************************************************************/
 
-#include "lwpidxmgr.hxx"
-#include "lwptools.hxx"
+#include <lwpidxmgr.hxx>
+#include <lwptools.hxx>
 #include <memory>
 
 const sal_uInt8 LwpIndexManager::MAXOBJECTIDS = 255;

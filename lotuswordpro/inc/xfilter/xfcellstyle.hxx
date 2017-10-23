@@ -64,11 +64,11 @@
 
 #include <rtl/ref.hxx>
 
-#include "xfilter/xfstyle.hxx"
-#include "xfilter/xfcolor.hxx"
-#include "xfilter/xfmargins.hxx"
-#include "xfilter/xfpadding.hxx"
-#include "xfilter/xfshadow.hxx"
+#include <xfilter/xfstyle.hxx>
+#include <xfilter/xfcolor.hxx>
+#include <xfilter/xfmargins.hxx>
+#include <xfilter/xfpadding.hxx>
+#include <xfilter/xfshadow.hxx>
 
 #include <memory>
 

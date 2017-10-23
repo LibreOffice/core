@@ -63,16 +63,16 @@
 #include "lwppagehint.hxx"
 #include "lwpdivinfo.hxx"
 #include "lwpstory.hxx"
-#include "xfilter/xfstylemanager.hxx"
-#include "xfilter/xfmasterpage.hxx"
-#include "xfilter/xfcontentcontainer.hxx"
-#include "xfilter/xfheader.hxx"
-#include "xfilter/xfheaderstyle.hxx"
-#include "xfilter/xffooterstyle.hxx"
-#include "xfilter/xffooter.hxx"
+#include <xfilter/xfstylemanager.hxx>
+#include <xfilter/xfmasterpage.hxx>
+#include <xfilter/xfcontentcontainer.hxx>
+#include <xfilter/xfheader.hxx>
+#include <xfilter/xfheaderstyle.hxx>
+#include <xfilter/xffooterstyle.hxx>
+#include <xfilter/xffooter.hxx>
 #include <sfx2/printer.hxx>
-#include "lwpchangemgr.hxx"
-#include "lwpglobalmgr.hxx"
+#include <lwpchangemgr.hxx>
+#include <lwpglobalmgr.hxx>
 
 LwpPageLayout::LwpPageLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpLayout(objHdr, pStrm)

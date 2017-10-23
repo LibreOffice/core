@@ -60,7 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBORDERSTUFF_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBORDERSTUFF_HXX
 
-#include "lwpcolor.hxx"
+#include <lwpcolor.hxx>
 
 class LwpBorderStuff
 {

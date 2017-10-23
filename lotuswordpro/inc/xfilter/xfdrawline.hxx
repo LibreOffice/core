@@ -60,8 +60,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWLINE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWLINE_HXX
 
-#include "xfilter/xfdrawobj.hxx"
-#include "xfilter/xfpoint.hxx"
+#include <xfilter/xfdrawobj.hxx>
+#include <xfilter/xfpoint.hxx>
 
 /**
  * @brief

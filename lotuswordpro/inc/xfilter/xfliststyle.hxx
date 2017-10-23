@@ -60,10 +60,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLISTSTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLISTSTYLE_HXX
 
-#include "xfilter/xfglobal.hxx"
-#include "xfilter/xfstyle.hxx"
-#include "xfilter/xfnumfmt.hxx"
-#include "unicode/utypes.h"
+#include <xfilter/xfglobal.hxx>
+#include <xfilter/xfstyle.hxx>
+#include <xfilter/xfnumfmt.hxx>
+#include <unicode/utypes.h>
 #include <memory>
 #include <vector>
 

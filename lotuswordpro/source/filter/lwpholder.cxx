@@ -59,7 +59,7 @@
  ************************************************************************/
 
 #include "lwpholder.hxx"
-#include "lwpfilehdr.hxx"
+#include <lwpfilehdr.hxx>
 
 LwpDLVListHeadHolder::LwpDLVListHeadHolder(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)

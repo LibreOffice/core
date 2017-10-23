@@ -60,11 +60,11 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFHEADERSTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFHEADERSTYLE_HXX
 
-#include "xfilter/xfstyle.hxx"
-#include "xfilter/xfmargins.hxx"
-#include "xfilter/xfborders.hxx"
-#include "xfilter/xfpadding.hxx"
-#include "xfilter/xfshadow.hxx"
+#include <xfilter/xfstyle.hxx>
+#include <xfilter/xfmargins.hxx>
+#include <xfilter/xfborders.hxx>
+#include <xfilter/xfpadding.hxx>
+#include <xfilter/xfshadow.hxx>
 
 /**
  * @brief

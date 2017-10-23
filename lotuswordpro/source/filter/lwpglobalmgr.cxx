@@ -53,7 +53,7 @@
  *
  *
  ************************************************************************/
-#include "lwpglobalmgr.hxx"
+#include <lwpglobalmgr.hxx>
 #include <osl/thread.hxx>
 std::map< sal_uInt32,LwpGlobalMgr* > LwpGlobalMgr::m_ThreadMap;
 LwpGlobalMgr::LwpGlobalMgr(LwpSvStream* pSvStream)

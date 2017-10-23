@@ -61,9 +61,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCONTENT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCONTENT_HXX
 
-#include "lwpheader.hxx"
-#include "lwpobj.hxx"
-#include "lwpatomholder.hxx"
+#include <lwpheader.hxx>
+#include <lwpobj.hxx>
+#include <lwpatomholder.hxx>
 #include "lwplayout.hxx"
 #include "lwphyperlinkmgr.hxx"
 /**

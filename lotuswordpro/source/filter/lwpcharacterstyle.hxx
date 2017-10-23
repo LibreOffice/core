@@ -61,9 +61,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCHARACTERSTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCHARACTERSTYLE_HXX
 
-#include "lwpobj.hxx"
+#include <lwpobj.hxx>
 #include "lwpdlvlist.hxx"
-#include "lwpoverride.hxx"
+#include <lwpoverride.hxx>
 #include "lwpcharborderoverride.hxx"
 
 class LwpAtomHolder;

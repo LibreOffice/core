@@ -60,7 +60,7 @@
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDLLIST_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDLLIST_HXX
-#include "lwpheader.hxx"
+#include <lwpheader.hxx>
 class LwpDLList
 {
 public:

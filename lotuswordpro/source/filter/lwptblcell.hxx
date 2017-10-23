@@ -61,11 +61,11 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTBLCELL_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTBLCELL_HXX
 
-#include "lwpobj.hxx"
-#include "lwpatomholder.hxx"
+#include <lwpobj.hxx>
+#include <lwpatomholder.hxx>
 #include "lwpstory.hxx"
 
-#include "xfilter/xfcell.hxx"
+#include <xfilter/xfcell.hxx>
 
 // temporily added for compile
 class LwpObject;

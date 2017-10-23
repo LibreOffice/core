@@ -59,11 +59,11 @@
  ************************************************************************/
 #include "lwpfilter.hxx"
 #include "lwpresource.hxx"
-#include "xfilter/xfsaxstream.hxx"
+#include <xfilter/xfsaxstream.hxx>
 #include "lwp9reader.hxx"
-#include "lwpsvstream.hxx"
-#include "xfilter/xffontfactory.hxx"
-#include "xfilter/xfstylemanager.hxx"
+#include <lwpsvstream.hxx>
+#include <xfilter/xffontfactory.hxx>
+#include <xfilter/xfstylemanager.hxx>
 
 #include <osl/file.h>
 #include <osl/file.hxx>

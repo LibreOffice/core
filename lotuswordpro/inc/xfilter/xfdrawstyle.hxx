@@ -60,8 +60,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWSTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWSTYLE_HXX
 
-#include "xfilter/xfstyle.hxx"
-#include "xfilter/xfcolor.hxx"
+#include <xfilter/xfstyle.hxx>
+#include <xfilter/xfcolor.hxx>
 #include <cassert>
 
 class XFDrawLineStyle;

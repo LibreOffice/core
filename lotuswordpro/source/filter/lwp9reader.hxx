@@ -56,11 +56,11 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWP9READER_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWP9READER_HXX
 
-#include "lwpheader.hxx"
-#include "lwpsvstream.hxx"
-#include "lwpfilehdr.hxx"
-#include "lwpobjfactory.hxx"
-#include "xfilter/ixfstream.hxx"
+#include <lwpheader.hxx>
+#include <lwpsvstream.hxx>
+#include <lwpfilehdr.hxx>
+#include <lwpobjfactory.hxx>
+#include <xfilter/ixfstream.hxx>
 
 /**
  * @brief   Reader framework class for Lotus Word Pro 9 file

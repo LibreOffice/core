@@ -58,13 +58,13 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#include "lwpcolor.hxx"
-#include "lwpatomholder.hxx"
+#include <lwpcolor.hxx>
+#include <lwpatomholder.hxx>
 #include "lwplayout.hxx"
 #include "lwpdlvlist.hxx"
-#include "lwpobj.hxx"
+#include <lwpobj.hxx>
 #include "lwpsection.hxx"
-#include "xfilter/xfsection.hxx"
+#include <xfilter/xfsection.hxx>
 
 LwpOrderedObject::LwpOrderedObject(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpDLNFVList(objHdr, pStrm)

@@ -59,7 +59,7 @@
 ************************************************************************/
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBACKGROUNDSTUFF_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBACKGROUNDSTUFF_HXX
-#include "lwpcolor.hxx"
+#include <lwpcolor.hxx>
 
 /* background patterns */
 #define BACK_TRANSPARENT    0

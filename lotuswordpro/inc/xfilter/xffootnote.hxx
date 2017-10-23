@@ -60,9 +60,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFOOTNOTE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFOOTNOTE_HXX
 
-#include "xfilter/xfglobal.hxx"
-#include "xfilter/xfcontent.hxx"
-#include "xfilter/xfcontentcontainer.hxx"
+#include <xfilter/xfglobal.hxx>
+#include <xfilter/xfcontent.hxx>
+#include <xfilter/xfcontentcontainer.hxx>
 
 /**
  * @brief

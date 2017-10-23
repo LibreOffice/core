@@ -61,7 +61,7 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBREAKSOVERRIDE_HXX
 
 #include <memory>
-#include "lwpoverride.hxx"
+#include <lwpoverride.hxx>
 
 class LwpObjectStream;
 class LwpAtomHolder;

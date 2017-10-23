@@ -64,8 +64,8 @@
 
 #include <salhelper/simplereferenceobject.hxx>
 
-#include "xfilter/xfglobal.hxx"
-#include "xfilter/xfcolor.hxx"
+#include <xfilter/xfglobal.hxx>
+#include <xfilter/xfcolor.hxx>
 
 #define     XFFONT_FLAG_NAME            0X00000001
 #define     XFFONT_FLAG_NAME_ASIA       0X00000002

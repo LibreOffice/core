@@ -62,9 +62,9 @@
 #include <map>
 #include <vector>
 
-#include "xfilter/xfcontent.hxx"
-#include "xfilter/xfcontentcontainer.hxx"
-#include "xfilter/xftabstop.hxx"
+#include <xfilter/xfcontent.hxx>
+#include <xfilter/xfcontentcontainer.hxx>
+#include <xfilter/xftabstop.hxx>
 
 class XFIndex;
 class XFIndexTemplate;

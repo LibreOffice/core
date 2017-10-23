@@ -57,13 +57,13 @@
  * @file
  * Table cell.
  ************************************************************************/
-#include "xfilter/xfcell.hxx"
+#include <xfilter/xfcell.hxx>
 
 #include <stdexcept>
 
-#include "xfilter/xfparagraph.hxx"
-#include "xfilter/xftable.hxx"
-#include "xfilter/xfrow.hxx"
+#include <xfilter/xfparagraph.hxx>
+#include <xfilter/xftable.hxx>
+#include <xfilter/xfrow.hxx>
 
 XFCell::XFCell()
     : m_pOwnerRow(nullptr)

@@ -57,7 +57,7 @@
  * @file
  * Font object to serial to xml filter.
  ************************************************************************/
-#include "xfilter/xffont.hxx"
+#include <xfilter/xffont.hxx>
 
 XFFont::XFFont()
     : m_nFontSize(0)

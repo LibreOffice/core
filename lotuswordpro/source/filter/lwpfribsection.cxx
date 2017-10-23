@@ -62,12 +62,12 @@
 #include "lwpfribbreaks.hxx"
 #include "lwpstory.hxx"
 #include "lwpsection.hxx"
-#include "xfilter/xfstylemanager.hxx"
-#include "xfilter/xfsectionstyle.hxx"
-#include "xfilter/xfsection.hxx"
-#include "xfilter/xfindex.hxx"
+#include <xfilter/xfstylemanager.hxx>
+#include <xfilter/xfsectionstyle.hxx>
+#include <xfilter/xfsection.hxx>
+#include <xfilter/xfindex.hxx>
 #include "lwpfribptr.hxx"
-#include "lwpglobalmgr.hxx"
+#include <lwpglobalmgr.hxx>
 
 LwpFribSection::LwpFribSection(LwpPara *pPara)
      : LwpFrib(pPara),m_pMasterPage(nullptr)

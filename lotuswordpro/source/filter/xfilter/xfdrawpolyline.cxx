@@ -57,7 +57,7 @@
  * @file
  * Polyline.
  ************************************************************************/
-#include "xfilter/xfdrawpolyline.hxx"
+#include <xfilter/xfdrawpolyline.hxx>
 
 XFDrawPolyline::XFDrawPolyline()
 {

@@ -59,9 +59,9 @@
  */
 
 #include "lwpfribframe.hxx"
-#include "xfilter/xfstylemanager.hxx"
-#include "lwpglobalmgr.hxx"
-#include "xfilter/xfchange.hxx"
+#include <xfilter/xfstylemanager.hxx>
+#include <lwpglobalmgr.hxx>
+#include <xfilter/xfchange.hxx>
 /**
  * @short:   Read frame frib
  */

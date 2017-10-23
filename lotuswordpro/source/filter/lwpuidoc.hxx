@@ -61,15 +61,15 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPUIDOC_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPUIDOC_HXX
 
-#include "lwpheader.hxx"
-#include "lwpdefs.hxx"
+#include <lwpheader.hxx>
+#include <lwpdefs.hxx>
 
 class LwpNamedProperties;
 class LwpAutoRunMacroOptions;
 class LwpMergeOptions;
 
-#include "lwpobjstrm.hxx"
-#include "lwpatomholder.hxx"
+#include <lwpobjstrm.hxx>
+#include <lwpatomholder.hxx>
 /**
  * @brief       Properties in UIDocument structure
  *          not parsed yet

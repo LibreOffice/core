@@ -58,23 +58,23 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#include "lwpglobalmgr.hxx"
+#include <lwpglobalmgr.hxx>
 #include "lwpfribtext.hxx"
 #include "lwpcharsetmgr.hxx"
 #include "lwphyperlinkmgr.hxx"
-#include "lwptools.hxx"
-#include "xfilter/xfstylemanager.hxx"
-#include "xfilter/xftextspan.hxx"
-#include "xfilter/xfbookmark.hxx"
-#include "xfilter/xfentry.hxx"
-#include "xfilter/xftextcontent.hxx"
-#include "xfilter/xfcrossref.hxx"
-#include "xfilter/xfpagenumber.hxx"
-#include "xfilter/xfdocfield.hxx"
-#include "xfilter/xfdatestyle.hxx"
-#include "xfilter/xftimestyle.hxx"
-#include "xfilter/xfdate.hxx"
-#include "xfilter/xfannotation.hxx"
+#include <lwptools.hxx>
+#include <xfilter/xfstylemanager.hxx>
+#include <xfilter/xftextspan.hxx>
+#include <xfilter/xfbookmark.hxx>
+#include <xfilter/xfentry.hxx>
+#include <xfilter/xftextcontent.hxx>
+#include <xfilter/xfcrossref.hxx>
+#include <xfilter/xfpagenumber.hxx>
+#include <xfilter/xfdocfield.hxx>
+#include <xfilter/xfdatestyle.hxx>
+#include <xfilter/xftimestyle.hxx>
+#include <xfilter/xfdate.hxx>
+#include <xfilter/xfannotation.hxx>
 
 LwpFribText::LwpFribText( LwpPara *pPara, bool bNoUnicode )
     : LwpFrib(pPara), m_bNoUnicode(bNoUnicode)

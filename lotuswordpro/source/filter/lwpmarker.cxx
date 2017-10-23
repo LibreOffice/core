@@ -58,14 +58,14 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#include "lwpfoundry.hxx"
-#include "lwpfilehdr.hxx"
+#include <lwpfoundry.hxx>
+#include <lwpfilehdr.hxx>
 #include "lwpstory.hxx"
 #include "lwpmarker.hxx"
 #include "lwpproplist.hxx"
-#include "lwpglobalmgr.hxx"
-#include "xfilter/xfplaceholder.hxx"
-#include "xfilter/xfinputlist.hxx"
+#include <lwpglobalmgr.hxx>
+#include <xfilter/xfplaceholder.hxx>
+#include <xfilter/xfinputlist.hxx>
 
 LwpMarker::LwpMarker(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     : LwpDLNFPVList(objHdr,pStrm)

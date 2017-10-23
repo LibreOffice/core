@@ -59,23 +59,23 @@
  ************************************************************************/
 
 #include "lwpfribmark.hxx"
-#include "lwptools.hxx"
-#include "lwpglobalmgr.hxx"
+#include <lwptools.hxx>
+#include <lwpglobalmgr.hxx>
 #include "lwpdoc.hxx"
 #include "lwpdivinfo.hxx"
-#include "xfilter/xfstylemanager.hxx"
-#include "xfilter/xftextspan.hxx"
-#include "xfilter/xfbookmark.hxx"
-#include "xfilter/xfentry.hxx"
-#include "xfilter/xftextcontent.hxx"
-#include "xfilter/xfcrossref.hxx"
-#include "xfilter/xfdocfield.hxx"
-#include "xfilter/xfdatestyle.hxx"
-#include "xfilter/xftimestyle.hxx"
-#include "xfilter/xfdate.hxx"
-#include "xfilter/xfruby.hxx"
-#include "lwpchangemgr.hxx"
-#include "xfilter/xfchange.hxx"
+#include <xfilter/xfstylemanager.hxx>
+#include <xfilter/xftextspan.hxx>
+#include <xfilter/xfbookmark.hxx>
+#include <xfilter/xfentry.hxx>
+#include <xfilter/xftextcontent.hxx>
+#include <xfilter/xfcrossref.hxx>
+#include <xfilter/xfdocfield.hxx>
+#include <xfilter/xfdatestyle.hxx>
+#include <xfilter/xftimestyle.hxx>
+#include <xfilter/xfdate.hxx>
+#include <xfilter/xfruby.hxx>
+#include <lwpchangemgr.hxx>
+#include <xfilter/xfchange.hxx>
 
 /**
  * @short:   Read hyperlink frib and Click here block

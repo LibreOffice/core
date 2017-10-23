@@ -64,25 +64,25 @@
 #include "lwpfribtext.hxx"
 #include "lwppara.hxx"
 #include "lwpstory.hxx"
-#include "xfilter/xftextspan.hxx"
-#include "xfilter/xftextcontent.hxx"
-#include "xfilter/xftabstop.hxx"
-#include "xfilter/xflinebreak.hxx"
+#include <xfilter/xftextspan.hxx>
+#include <xfilter/xftextcontent.hxx>
+#include <xfilter/xftabstop.hxx>
+#include <xfilter/xflinebreak.hxx>
 #include "lwpfribsection.hxx"
 #include "lwpsection.hxx"
 #include "lwpfribbreaks.hxx"
 #include "lwpfribframe.hxx"
 #include "lwpfribtable.hxx"
-#include "xfilter/xfstylemanager.hxx"
+#include <xfilter/xfstylemanager.hxx>
 #include "lwphyperlinkmgr.hxx"
-#include "xfilter/xfhyperlink.hxx"
+#include <xfilter/xfhyperlink.hxx>
 #include "lwpfootnote.hxx"
 #include "lwpnotes.hxx"
 #include "lwpfribmark.hxx"
-#include "xfilter/xfchange.hxx"
-#include "lwpchangemgr.hxx"
-#include "lwpglobalmgr.hxx"
-#include "lwpdropcapmgr.hxx"
+#include <xfilter/xfchange.hxx>
+#include <lwpchangemgr.hxx>
+#include <lwpglobalmgr.hxx>
+#include <lwpdropcapmgr.hxx>
 
 LwpFribPtr::LwpFribPtr()
     : m_pFribs(nullptr),m_pXFPara(nullptr),m_pPara(nullptr)

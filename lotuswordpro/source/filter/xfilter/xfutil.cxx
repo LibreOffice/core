@@ -57,9 +57,9 @@
  * @file
  * Util functions for xml filter.
  ************************************************************************/
-#include "xfilter/xfutil.hxx"
-#include "xfilter/xfparagraph.hxx"
-#include "xfilter/xfcontentcontainer.hxx"
+#include <xfilter/xfutil.hxx>
+#include <xfilter/xfparagraph.hxx>
+#include <xfilter/xfcontentcontainer.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sstream>
 

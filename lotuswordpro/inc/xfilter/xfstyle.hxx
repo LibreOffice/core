@@ -60,7 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSTYLE_HXX
 
-#include "xfilter/ixfstyle.hxx"
+#include <xfilter/ixfstyle.hxx>
 
 /**
  * @brief

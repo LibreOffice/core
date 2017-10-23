@@ -61,10 +61,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFRAME_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFRAME_HXX
 
-#include "xfilter/xfglobal.hxx"
-#include "xfilter/xfcontent.hxx"
-#include "xfilter/xfrect.hxx"
-#include "xfilter/xfcontentcontainer.hxx"
+#include <xfilter/xfglobal.hxx>
+#include <xfilter/xfcontent.hxx>
+#include <xfilter/xfrect.hxx>
+#include <xfilter/xfcontentcontainer.hxx>
 
 #define     XFFRAME_FLAG_HEIGHT         0x00000001
 #define     XFFRAME_FLAG_MINHEIGHT      0x00000002

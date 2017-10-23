@@ -57,16 +57,16 @@
 #include <memory>
 #include "lwpfootnote.hxx"
 #include "lwpstory.hxx"
-#include "xfilter/xffootnote.hxx"
-#include "xfilter/xfendnote.hxx"
-#include "xfilter/xffootnoteconfig.hxx"
-#include "xfilter/xfendnoteconfig.hxx"
-#include "xfilter/xfstylemanager.hxx"
-#include "xfilter/xftextspan.hxx"
+#include <xfilter/xffootnote.hxx>
+#include <xfilter/xfendnote.hxx>
+#include <xfilter/xffootnoteconfig.hxx>
+#include <xfilter/xfendnoteconfig.hxx>
+#include <xfilter/xfstylemanager.hxx>
+#include <xfilter/xftextspan.hxx>
 #include "lwppara.hxx"
 #include "lwpdoc.hxx"
 #include "lwpfnlayout.hxx"
-#include "lwpglobalmgr.hxx"
+#include <lwpglobalmgr.hxx>
 
 LwpFribFootnote::LwpFribFootnote(LwpPara* pPara ):LwpFrib(pPara)
 {

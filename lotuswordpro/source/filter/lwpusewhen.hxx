@@ -61,7 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPUSEWHEN_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPUSEWHEN_HXX
 
-#include "lwpheader.hxx"
+#include <lwpheader.hxx>
 
 #define STYLE_USEONALLPAGES     0x0001U /* repeat on all pages */
 #define STYLE_USEONALLEVENPAGES 0x0002U /* repeat on all even pages */

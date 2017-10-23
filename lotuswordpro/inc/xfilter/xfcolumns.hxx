@@ -60,8 +60,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCOLUMNS_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFCOLUMNS_HXX
 
-#include "xfilter/xfglobal.hxx"
-#include "xfilter/xfcolor.hxx"
+#include <xfilter/xfglobal.hxx>
+#include <xfilter/xfcolor.hxx>
 #include <vector>
 
 #define     XFCOLUMNS_FLAG_SEPARATOR    0X00000001

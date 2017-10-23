@@ -61,13 +61,13 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPNUMERICFMT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPNUMERICFMT_HXX
 
-#include "lwpatomholder.hxx"
+#include <lwpatomholder.hxx>
 #include "lwptblcell.hxx"
-#include "lwpcolor.hxx"
+#include <lwpcolor.hxx>
 #include "lwppiece.hxx"
 
 //For converting to xml
-#include "xfilter/xfnumberstyle.hxx"
+#include <xfilter/xfnumberstyle.hxx>
 
 class LwpObjectStream;
 

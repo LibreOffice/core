@@ -58,8 +58,8 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#include "lwpfoundry.hxx"
-#include "lwpfilehdr.hxx"
+#include <lwpfoundry.hxx>
+#include <lwpfilehdr.hxx>
 #include "lwpdoc.hxx"
 #include "lwpmarker.hxx"
 #include "lwpholder.hxx"
@@ -68,8 +68,8 @@
 #include "lwpvpointer.hxx"
 #include "lwpsection.hxx"
 #include "lwpcharacterstyle.hxx"
-#include "lwpglobalmgr.hxx"
-#include "xfilter/xfstylemanager.hxx"
+#include <lwpglobalmgr.hxx>
+#include <xfilter/xfstylemanager.hxx>
 #include "lwplayout.hxx"
 
 #include <osl/diagnose.h>

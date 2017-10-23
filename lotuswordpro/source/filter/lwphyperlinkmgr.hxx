@@ -61,7 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPHYPERLINKMGR_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPHYPERLINKMGR_HXX
 
-#include "lwpfilehdr.hxx"
+#include <lwpfilehdr.hxx>
 
 class LwpHyperlinkMgr
 {

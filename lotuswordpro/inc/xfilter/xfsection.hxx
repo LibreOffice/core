@@ -60,9 +60,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSECTION_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSECTION_HXX
 
-#include "xfilter/xfcontentcontainer.hxx"
-#include "xfilter/xfcontent.hxx"
-#include "xfilter/xfcolor.hxx"
+#include <xfilter/xfcontentcontainer.hxx>
+#include <xfilter/xfcontent.hxx>
+#include <xfilter/xfcolor.hxx>
 #include <vector>
 
 /**

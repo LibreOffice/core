@@ -57,7 +57,7 @@
  * @file
  * Polygon object.
  */
-#include "xfilter/xfdrawpolygon.hxx"
+#include <xfilter/xfdrawpolygon.hxx>
 
 XFDrawPolygon::XFDrawPolygon()
 {

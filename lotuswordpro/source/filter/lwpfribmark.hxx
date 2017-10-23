@@ -61,11 +61,11 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBMARK_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBMARK_HXX
 
-#include "lwpfrib.hxx"
+#include <lwpfrib.hxx>
 #include "lwpstory.hxx"
 #include "lwpmarker.hxx"
-#include "xfilter/xftextspan.hxx"
-#include "xfilter/xfbookmark.hxx"
+#include <xfilter/xftextspan.hxx>
+#include <xfilter/xfbookmark.hxx>
 
 class LwpFribCHBlock : public LwpFrib
 {

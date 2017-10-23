@@ -60,7 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFRUBY_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFRUBY_HXX
 
-#include "xfilter/xfcontent.hxx"
+#include <xfilter/xfcontent.hxx>
 
 class XFRubyStart : public XFContent
 {

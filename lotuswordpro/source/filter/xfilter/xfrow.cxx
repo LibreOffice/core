@@ -60,11 +60,11 @@
 
 #include <sal/config.h>
 
-#include "xfilter/ixfattrlist.hxx"
-#include "xfilter/ixfstream.hxx"
-#include "xfilter/xfrow.hxx"
-#include "xfilter/xfcell.hxx"
-#include "xfilter/xftable.hxx"
+#include <xfilter/ixfattrlist.hxx>
+#include <xfilter/ixfstream.hxx>
+#include <xfilter/xfrow.hxx>
+#include <xfilter/xfcell.hxx>
+#include <xfilter/xftable.hxx>
 
 XFRow::XFRow()
     : m_pOwnerTable(nullptr)

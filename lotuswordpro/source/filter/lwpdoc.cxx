@@ -53,7 +53,7 @@
  *
  *
  ************************************************************************/
-#include "lwpglobalmgr.hxx"
+#include <lwpglobalmgr.hxx>
 #include "lwpdoc.hxx"
 #include "lwpfootnote.hxx"
 #include "lwppagehint.hxx"
@@ -66,7 +66,7 @@
 #include "lwplayout.hxx"
 #include "lwppagelayout.hxx"
 #include "lwpverdocument.hxx"
-#include "xfilter/xfstylemanager.hxx"
+#include <xfilter/xfstylemanager.hxx>
 #include <osl/thread.h>
 
 LwpDocument::LwpDocument(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)

@@ -54,7 +54,7 @@
  *
  ************************************************************************/
 #include "first.hxx"
-#include "assert.h"
+#include <assert.h>
 #include <stdio.h>
 #include <osl/diagnose.h>
 #include <sot/storinfo.hxx>

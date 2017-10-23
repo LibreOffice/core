@@ -63,12 +63,12 @@
 
 #include <memory>
 
-#include "lwpheader.hxx"
-#include "lwpfoundry.hxx"
-#include "lwpobjid.hxx"
+#include <lwpheader.hxx>
+#include <lwpfoundry.hxx>
+#include <lwpobjid.hxx>
 #include "lwpnumberingoverride.hxx"
 #include <utility>
-#include "xfilter/xfcontentcontainer.hxx"
+#include <xfilter/xfcontentcontainer.hxx>
 
 class XFList;
 class LwpPara;

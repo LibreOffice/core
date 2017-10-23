@@ -60,8 +60,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSHADOW_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSHADOW_HXX
 
-#include "lwpcolor.hxx"
-#include "lwptools.hxx"
+#include <lwpcolor.hxx>
+#include <lwptools.hxx>
 
 class LwpShadow
 {

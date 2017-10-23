@@ -56,7 +56,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBTABLE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBTABLE_HXX
 
-#include "lwpfrib.hxx"
+#include <lwpfrib.hxx>
 
 class LwpSuperTableLayout;
 class LwpFribTable : public LwpFrib

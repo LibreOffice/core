@@ -60,7 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSAXSTREAM_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSAXSTREAM_HXX
 
-#include "xfilter/ixfstream.hxx"
+#include <xfilter/ixfstream.hxx>
 #include <memory>
 
 #include <cppuhelper/factory.hxx>

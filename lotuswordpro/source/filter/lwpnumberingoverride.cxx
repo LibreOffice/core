@@ -59,7 +59,7 @@
 ************************************************************************/
 
 #include "lwpnumberingoverride.hxx"
-#include "lwpobjstrm.hxx"
+#include <lwpobjstrm.hxx>
 
 LwpNumberingOverride::LwpNumberingOverride()
 {

@@ -54,12 +54,12 @@
  *
  ************************************************************************/
 #include <memory>
-#include "lwpdocdata.hxx"
-#include "xfilter/xfofficemeta.hxx"
-#include "localtime.hxx"
+#include <lwpdocdata.hxx>
+#include <xfilter/xfofficemeta.hxx>
+#include <localtime.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "lwpfilehdr.hxx"
-#include "lwpglobalmgr.hxx"
+#include <lwpfilehdr.hxx>
+#include <lwpglobalmgr.hxx>
 
 LwpDocData::LwpDocData(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     :LwpObject(objHdr, pStrm)//m_pEditorAttrList(0)

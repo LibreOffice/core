@@ -61,7 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPHOLDER_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPHOLDER_HXX
 
-#include "lwpobj.hxx"
+#include <lwpobj.hxx>
 #include "lwpdlvlist.hxx"
 /**
  * @brief   VO_HEADHOLDER, LwpDLVListHeadHolder,
