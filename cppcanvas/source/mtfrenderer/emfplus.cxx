@@ -44,20 +44,20 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <comphelper/propertysequence.hxx>
 
-#include <bitmapaction.hxx>
+#include "bitmapaction.hxx"
 #include <implrenderer.hxx>
 #include <outdevstate.hxx>
-#include <polypolyaction.hxx>
-#include <textaction.hxx>
+#include "polypolyaction.hxx"
+#include "textaction.hxx"
 
-#include <emfpbrush.hxx>
-#include <emfpcustomlinecap.hxx>
-#include <emfpfont.hxx>
-#include <emfpimage.hxx>
-#include <emfppath.hxx>
-#include <emfppen.hxx>
-#include <emfpregion.hxx>
-#include <emfpstringformat.hxx>
+#include "emfpbrush.hxx"
+#include "emfpcustomlinecap.hxx"
+#include "emfpfont.hxx"
+#include "emfpimage.hxx"
+#include "emfppath.hxx"
+#include "emfppen.hxx"
+#include "emfpregion.hxx"
+#include "emfpstringformat.hxx"
 
 namespace
 {

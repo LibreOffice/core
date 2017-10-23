@@ -24,7 +24,7 @@
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <cppcanvas/spritecanvas.hxx>
-#include <implcanvas.hxx>
+#include "implcanvas.hxx"
 
 namespace cppcanvas
 {

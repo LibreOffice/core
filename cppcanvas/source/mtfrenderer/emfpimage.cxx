@@ -37,7 +37,7 @@
 #include <vcl/canvastools.hxx>
 #include <implrenderer.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <emfpimage.hxx>
+#include "emfpimage.hxx"
 
 
 namespace cppcanvas

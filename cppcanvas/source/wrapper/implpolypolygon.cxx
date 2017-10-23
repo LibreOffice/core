@@ -29,7 +29,7 @@
 #include <basegfx/utils/canvastools.hxx>
 
 #include "implpolypolygon.hxx"
-#include "tools.hxx"
+#include <tools.hxx>
 
 
 using namespace ::com::sun::star;

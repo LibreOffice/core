@@ -37,9 +37,9 @@
 #include <vcl/canvastools.hxx>
 #include <implrenderer.hxx>
 
-#include <emfpcustomlinecap.hxx>
-#include <emfppath.hxx>
-#include <emfppen.hxx>
+#include "emfpcustomlinecap.hxx"
+#include "emfppath.hxx"
+#include "emfppen.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::basegfx;

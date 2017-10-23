@@ -29,8 +29,8 @@
 #include <canvas/canvastools.hxx>
 
 #include "pointaction.hxx"
-#include "outdevstate.hxx"
-#include "cppcanvas/canvas.hxx"
+#include <outdevstate.hxx>
+#include <cppcanvas/canvas.hxx>
 #include "mtftools.hxx"
 
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_EMFPPEN_HXX
 #define INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_EMFPPEN_HXX
 
-#include <emfpbrush.hxx>
+#include "emfpbrush.hxx"
 #include <vector>
 
 namespace cppcanvas

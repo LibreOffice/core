@@ -24,9 +24,9 @@
 #include <cppcanvas/renderer.hxx>
 #include <cppcanvas/canvas.hxx>
 
-#include <canvasgraphichelper.hxx>
-#include <action.hxx>
-#include <outdevstate.hxx>
+#include "canvasgraphichelper.hxx"
+#include "action.hxx"
+#include "outdevstate.hxx"
 
 #include <com/sun/star/rendering/FontRequest.hpp>
 #include <com/sun/star/rendering/StrokeAttributes.hpp>

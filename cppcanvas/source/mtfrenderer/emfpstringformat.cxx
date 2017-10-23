@@ -20,7 +20,7 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <vcl/canvastools.hxx>
 #include <implrenderer.hxx>
-#include <emfpstringformat.hxx>
+#include "emfpstringformat.hxx"
 
 namespace cppcanvas
 {

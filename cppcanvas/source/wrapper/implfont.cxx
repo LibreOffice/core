@@ -18,7 +18,7 @@
  */
 
 
-#include <implfont.hxx>
+#include "implfont.hxx"
 #include <canvas/canvastools.hxx>
 
 

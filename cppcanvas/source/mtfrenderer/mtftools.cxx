@@ -34,7 +34,7 @@
 #include <vcl/metric.hxx>
 #include <tools/poly.hxx>
 #include "mtftools.hxx"
-#include "outdevstate.hxx"
+#include <outdevstate.hxx>
 #include "polypolyaction.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 

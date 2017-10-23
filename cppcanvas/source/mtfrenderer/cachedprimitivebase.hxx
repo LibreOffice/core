@@ -25,7 +25,7 @@
 
 #include <cppcanvas/canvas.hxx>
 
-#include "action.hxx"
+#include <action.hxx>
 
 namespace basegfx { class B2DHomMatrix; }
 

@@ -49,9 +49,9 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include "transparencygroupaction.hxx"
-#include "outdevstate.hxx"
+#include <outdevstate.hxx>
 #include "mtftools.hxx"
-#include "cppcanvas/vclfactory.hxx"
+#include <cppcanvas/vclfactory.hxx>
 
 
 using namespace ::com::sun::star;
