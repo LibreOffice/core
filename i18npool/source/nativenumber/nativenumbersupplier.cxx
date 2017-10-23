@@ -22,7 +22,7 @@
 #include <sal/macros.h>
 #include <nativenumbersupplier.hxx>
 #include <localedata.hxx>
-#include <data/numberchar.h>
+#include "data/numberchar.h"
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <memory>

@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <transliteration_body.hxx>
+#include "transliteration_body.hxx"
 #include <o3tl/typed_flags_set.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {

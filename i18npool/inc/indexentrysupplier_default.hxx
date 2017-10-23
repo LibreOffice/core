@@ -19,7 +19,7 @@
 #ifndef INCLUDED_I18NPOOL_INC_INDEXENTRYSUPPLIER_DEFAULT_HXX
 #define INCLUDED_I18NPOOL_INC_INDEXENTRYSUPPLIER_DEFAULT_HXX
 
-#include <indexentrysupplier_common.hxx>
+#include "indexentrysupplier_common.hxx"
 
 #include <memory>
 

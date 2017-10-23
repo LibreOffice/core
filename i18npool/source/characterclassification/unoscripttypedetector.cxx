@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include "unoscripttypedetector.hxx"
+#include <unoscripttypedetector.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nutil/scripttypedetector.hxx>
 

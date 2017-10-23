@@ -27,10 +27,10 @@
 
 #include <string.h>
 
-#include "characterclassificationImpl.hxx"
-#include "breakiteratorImpl.hxx"
+#include <characterclassificationImpl.hxx>
+#include <breakiteratorImpl.hxx>
 
-#include "transliteration_body.hxx"
+#include <transliteration_body.hxx>
 #include <memory>
 
 using namespace ::com::sun::star::uno;

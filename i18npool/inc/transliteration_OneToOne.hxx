@@ -19,7 +19,7 @@
 #ifndef INCLUDED_I18NPOOL_INC_TRANSLITERATION_ONETOONE_HXX
 #define INCLUDED_I18NPOOL_INC_TRANSLITERATION_ONETOONE_HXX
 
-#include <transliteration_commonclass.hxx>
+#include "transliteration_commonclass.hxx"
 #include <i18nutil/oneToOneMapping.hxx>
 
 namespace i18npool {

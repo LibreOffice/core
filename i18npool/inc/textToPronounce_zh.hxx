@@ -19,8 +19,8 @@
 #ifndef INCLUDED_I18NPOOL_INC_TEXTTOPRONOUNCE_ZH_HXX
 #define INCLUDED_I18NPOOL_INC_TEXTTOPRONOUNCE_ZH_HXX
 
-#include <transliteration_Ignore.hxx>
-#include <indexentrysupplier_asian.hxx>
+#include "transliteration_Ignore.hxx"
+#include "indexentrysupplier_asian.hxx"
 
 namespace i18npool {
 

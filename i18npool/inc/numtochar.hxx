@@ -20,7 +20,7 @@
 #ifndef INCLUDED_I18NPOOL_INC_NUMTOCHAR_HXX
 #define INCLUDED_I18NPOOL_INC_NUMTOCHAR_HXX
 
-#include <transliteration_Numeric.hxx>
+#include "transliteration_Numeric.hxx"
 
 namespace i18npool {
 

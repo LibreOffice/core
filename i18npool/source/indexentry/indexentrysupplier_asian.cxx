@@ -20,7 +20,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <indexentrysupplier_asian.hxx>
-#include <data/indexdata_alphanumeric.h>
+#include "data/indexdata_alphanumeric.h"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

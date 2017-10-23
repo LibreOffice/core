@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "calendarImpl.hxx"
-#include "localedata.hxx"
+#include <calendarImpl.hxx>
+#include <localedata.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

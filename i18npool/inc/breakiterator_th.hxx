@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_I18NPOOL_INC_BREAKITERATOR_TH_HXX
 #define INCLUDED_I18NPOOL_INC_BREAKITERATOR_TH_HXX
-#include <breakiterator_ctl.hxx>
+#include "breakiterator_ctl.hxx"
 
 namespace i18npool {
 

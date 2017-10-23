@@ -24,7 +24,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <rtl/ref.hxx>
-#include <collatorImpl.hxx>
+#include "collatorImpl.hxx"
 
 #include <memory>
 

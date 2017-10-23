@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "calendar_hijri.hxx"
+#include <calendar_hijri.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

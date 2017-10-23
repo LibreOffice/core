@@ -20,7 +20,7 @@
 #ifndef INCLUDED_I18NPOOL_INC_INDEXENTRYSUPPLIER_JA_PHONETIC_HXX
 #define INCLUDED_I18NPOOL_INC_INDEXENTRYSUPPLIER_JA_PHONETIC_HXX
 
-#include <indexentrysupplier_common.hxx>
+#include "indexentrysupplier_common.hxx"
 
 namespace i18npool {
 

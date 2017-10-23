@@ -24,7 +24,7 @@
 #include <i18nutil/casefolding.hxx>
 #include <i18nutil/transliteration.hxx>
 
-#include "transliteration_caseignore.hxx"
+#include <transliteration_caseignore.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;

@@ -28,7 +28,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
-#include <transliterationImpl.hxx>
+#include "transliterationImpl.hxx"
 
 #include <memory>
 

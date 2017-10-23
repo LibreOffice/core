@@ -19,8 +19,8 @@
 #ifndef INCLUDED_I18NPOOL_INC_BREAKITERATOR_CJK_HXX
 #define INCLUDED_I18NPOOL_INC_BREAKITERATOR_CJK_HXX
 
-#include <breakiterator_unicode.hxx>
-#include <xdictionary.hxx>
+#include "breakiterator_unicode.hxx"
+#include "xdictionary.hxx"
 
 #include <memory>
 

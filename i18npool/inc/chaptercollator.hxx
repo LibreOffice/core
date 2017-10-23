@@ -19,7 +19,7 @@
 #ifndef INCLUDED_I18NPOOL_INC_CHAPTERCOLLATOR_HXX
 #define INCLUDED_I18NPOOL_INC_CHAPTERCOLLATOR_HXX
 
-#include <collatorImpl.hxx>
+#include "collatorImpl.hxx"
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 
 namespace i18npool {

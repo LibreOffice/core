@@ -23,7 +23,7 @@
 #include <sal/log.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <string.h>
-#include "ordinalsuffix.hxx"
+#include <ordinalsuffix.hxx>
 
 #include <unicode/rbnf.h>
 #include <unicode/normlzr.h>

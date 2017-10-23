@@ -20,7 +20,7 @@
 #ifndef INCLUDED_I18NPOOL_INC_INDEXENTRYSUPPLIER_ASIAN_HXX
 #define INCLUDED_I18NPOOL_INC_INDEXENTRYSUPPLIER_ASIAN_HXX
 
-#include <indexentrysupplier_common.hxx>
+#include "indexentrysupplier_common.hxx"
 #include <osl/module.h>
 
 namespace i18npool {

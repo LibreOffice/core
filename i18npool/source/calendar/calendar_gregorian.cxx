@@ -19,8 +19,8 @@
 
 #include <algorithm>
 
-#include "calendar_gregorian.hxx"
-#include "localedata.hxx"
+#include <calendar_gregorian.hxx>
+#include <localedata.hxx>
 #include <com/sun/star/i18n/AmPmValue.hpp>
 #include <com/sun/star/i18n/Months.hpp>
 #include <com/sun/star/i18n/Weekdays.hpp>
