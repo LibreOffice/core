@@ -43,14 +43,14 @@
 #include <xmloff/txtstyli.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlnumfi.hxx>
-#include "XMLChartStyleContext.hxx"
-#include "XMLChartPropertySetMapper.hxx"
+#include <XMLChartStyleContext.hxx>
+#include <XMLChartPropertySetMapper.hxx>
 #include <xmloff/XMLShapeStyleContext.hxx>
 #include "FillStyleContext.hxx"
-#include "XMLFootnoteConfigurationImportContext.hxx"
-#include "XMLIndexBibliographyConfigurationContext.hxx"
-#include "XMLLineNumberingImportContext.hxx"
-#include "PageMasterImportContext.hxx"
+#include <XMLFootnoteConfigurationImportContext.hxx>
+#include <XMLIndexBibliographyConfigurationContext.hxx>
+#include <XMLLineNumberingImportContext.hxx>
+#include <PageMasterImportContext.hxx>
 #include "PageMasterImportPropMapper.hxx"
 
 #include <memory>

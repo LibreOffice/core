@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "XMLStarBasicContextFactory.hxx"
+#include <XMLStarBasicContextFactory.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>

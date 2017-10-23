@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "xmloff/fasttokenhandler.hxx"
+#include <xmloff/fasttokenhandler.hxx>
 
 #include <xmloff/token/tokens.hxx>
 
@@ -22,7 +22,7 @@ namespace {
 #pragma GCC diagnostic ignored "-Wdeprecated-register"
 #endif
 #endif
-#include "tokenhash.inc"
+#include <tokenhash.inc>
 #if defined __clang__
 #pragma GCC diagnostic pop
 #endif
@@ -39,7 +39,7 @@ TokenMap::TokenMap() :
 {
     static const sal_Char* sppcTokenNames[] =
     {
-#include "tokennames.inc"
+#include <tokennames.inc>
         ""
     };
 

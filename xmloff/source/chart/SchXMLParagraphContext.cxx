@@ -18,7 +18,7 @@
  */
 
 
-#include "SchXMLImport.hxx"
+#include <SchXMLImport.hxx>
 #include "SchXMLParagraphContext.hxx"
 
 #include <xmloff/xmlnmspe.hxx>

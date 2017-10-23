@@ -41,7 +41,7 @@
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/txtimppr.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "txtvfldi.hxx"
+#include <txtvfldi.hxx>
 #include <xmloff/i18nmap.hxx>
 #include "XMLTextListItemContext.hxx"
 #include "XMLTextListBlockContext.hxx"
@@ -56,7 +56,7 @@
 #include "XMLAutoMarkFileContext.hxx"
 
 #include "XMLCalculationSettingsContext.hxx"
-#include "XMLNumberStylesImport.hxx"
+#include <XMLNumberStylesImport.hxx>
 // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <txtlists.hxx>

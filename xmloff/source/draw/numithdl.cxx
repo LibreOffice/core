@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <numithdl.hxx>
+#include "numithdl.hxx"
 
 using namespace ::com::sun::star;
 

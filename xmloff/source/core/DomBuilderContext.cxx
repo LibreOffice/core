@@ -18,7 +18,7 @@
  */
 
 
-#include "DomBuilderContext.hxx"
+#include <DomBuilderContext.hxx>
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlimp.hxx>

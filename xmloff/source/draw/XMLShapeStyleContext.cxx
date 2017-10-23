@@ -19,7 +19,7 @@
 
 #include <tools/debug.hxx>
 #include <xmloff/XMLShapeStyleContext.hxx>
-#include "XMLShapePropertySetContext.hxx"
+#include <XMLShapePropertySetContext.hxx>
 #include <xmloff/contextid.hxx>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>

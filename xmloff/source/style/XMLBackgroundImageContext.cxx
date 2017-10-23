@@ -32,7 +32,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
-#include "XMLBackgroundImageContext.hxx"
+#include <XMLBackgroundImageContext.hxx>
 
 
 using namespace ::com::sun::star;

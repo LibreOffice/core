@@ -18,7 +18,7 @@
  */
 
 #include <rtl/ustring.hxx>
-#include "xmlmultiimagehelper.hxx"
+#include <xmlmultiimagehelper.hxx>
 
 using namespace ::com::sun::star;
 

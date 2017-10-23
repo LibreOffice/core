@@ -19,7 +19,7 @@
 
 #include <xmloff/XMLEventsImportContext.hxx>
 
-#include "XMLEventImportHelper.hxx"
+#include <XMLEventImportHelper.hxx>
 
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <xmloff/xmlimp.hxx>

@@ -26,7 +26,7 @@
 
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include "XMLBase64Export.hxx"
+#include <XMLBase64Export.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;

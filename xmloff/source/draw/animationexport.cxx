@@ -65,7 +65,7 @@
 #include <xmloff/shapeexport.hxx>
 #include <xmloff/xmlprhdl.hxx>
 
-#include "animations.hxx"
+#include <animations.hxx>
 #include <xmloff/animationexport.hxx>
 #include <comphelper/storagehelper.hxx>
 

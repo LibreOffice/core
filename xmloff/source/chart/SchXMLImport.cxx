@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "SchXMLImport.hxx"
+#include <SchXMLImport.hxx>
 #include "SchXMLChartContext.hxx"
 #include "contexts.hxx"
-#include "XMLChartPropertySetMapper.hxx"
+#include <XMLChartPropertySetMapper.hxx>
 #include "SchXMLTools.hxx"
-#include "facreg.hxx"
+#include <facreg.hxx>
 
 #include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>

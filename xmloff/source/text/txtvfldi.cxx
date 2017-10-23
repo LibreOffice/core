@@ -22,7 +22,7 @@
  *
  *  export of all variable related text fields (and database display field)
  */
-#include "txtvfldi.hxx"
+#include <txtvfldi.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmlnumi.hxx>

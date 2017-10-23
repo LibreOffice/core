@@ -29,7 +29,7 @@
 
 #include <xmloff/PageMasterStyleMap.hxx>
 #include "PageMasterExportPropMapper.hxx"
-#include "XMLBackgroundImageExport.hxx"
+#include <XMLBackgroundImageExport.hxx>
 
 
 using namespace ::std;

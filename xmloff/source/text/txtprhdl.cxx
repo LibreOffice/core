@@ -41,20 +41,20 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "XMLAnchorTypePropHdl.hxx"
-#include "enummaps.hxx"
+#include <enummaps.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
-#include "XMLClipPropertyHandler.hxx"
-#include "XMLTextColumnsPropertyHandler.hxx"
+#include <XMLClipPropertyHandler.hxx>
+#include <XMLTextColumnsPropertyHandler.hxx>
 #include <xmloff/NamedBoolPropertyHdl.hxx>
 #include "txtprhdl.hxx"
 #include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <xmloff/EnumPropertyHdl.hxx>
-#include "XMLFillBitmapSizePropertyHandler.hxx"
-#include "XMLBitmapLogicalSizePropertyHandler.hxx"
+#include <XMLFillBitmapSizePropertyHandler.hxx>
+#include <XMLBitmapLogicalSizePropertyHandler.hxx>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
-#include "XMLBitmapRepeatOffsetPropertyHandler.hxx"
+#include <XMLBitmapRepeatOffsetPropertyHandler.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

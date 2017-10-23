@@ -32,7 +32,7 @@
 #include "layerimp.hxx"
 
 
-#include "XMLStringBufferImportContext.hxx"
+#include <XMLStringBufferImportContext.hxx>
 
 using namespace ::std;
 using namespace ::cppu;

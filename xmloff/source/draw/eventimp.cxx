@@ -34,7 +34,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "eventimp.hxx"
-#include "anim.hxx"
+#include <anim.hxx>
 
 using namespace ::std;
 using namespace ::cppu;

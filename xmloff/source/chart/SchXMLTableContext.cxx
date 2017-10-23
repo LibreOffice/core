@@ -22,10 +22,10 @@
 #include "SchXMLTableContext.hxx"
 #include "SchXMLParagraphContext.hxx"
 #include "SchXMLTextListContext.hxx"
-#include "SchXMLImport.hxx"
+#include <SchXMLImport.hxx>
 #include "SchXMLTools.hxx"
 #include "transporttypes.hxx"
-#include "XMLStringBufferImportContext.hxx"
+#include <XMLStringBufferImportContext.hxx>
 #include <rtl/math.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>

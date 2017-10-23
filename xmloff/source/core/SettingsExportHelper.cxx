@@ -40,7 +40,7 @@
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <xmloff/XMLSettingsExportContext.hxx>
-#include <xmlenums.hxx>
+#include "xmlenums.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;

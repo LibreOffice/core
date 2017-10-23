@@ -44,7 +44,7 @@
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltypes.hxx>
-#include "xmlsdtypes.hxx"
+#include <xmlsdtypes.hxx>
 #include <xmloff/maptype.hxx>
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/txtprmap.hxx>

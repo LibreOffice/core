@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "MetaExportComponent.hxx"
-#include "facreg.hxx"
+#include <MetaExportComponent.hxx>
+#include <facreg.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -33,7 +33,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlmetae.hxx>
-#include "PropertySetMerger.hxx"
+#include <PropertySetMerger.hxx>
 
 #include <unotools/docinfohelper.hxx>
 

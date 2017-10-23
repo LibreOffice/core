@@ -33,8 +33,8 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "anim.hxx"
-#include "animimp.hxx"
+#include <anim.hxx>
+#include <animimp.hxx>
 
 using namespace ::std;
 using namespace ::cppu;

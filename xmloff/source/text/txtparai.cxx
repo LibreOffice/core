@@ -47,7 +47,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/txtimp.hxx>
 #include "txtparai.hxx"
-#include "txtfldi.hxx"
+#include <txtfldi.hxx>
 #include "XMLFootnoteImportContext.hxx"
 #include "XMLTextMarkImportContext.hxx"
 #include "XMLTextFrameContext.hxx"
@@ -55,9 +55,9 @@
 #include "XMLTextFrameHyperlinkContext.hxx"
 #include <xmloff/XMLEventsImportContext.hxx>
 #include "XMLChangeImportContext.hxx"
-#include "txtlists.hxx"
+#include <txtlists.hxx>
 
-#include <txtparaimphint.hxx>
+#include "txtparaimphint.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

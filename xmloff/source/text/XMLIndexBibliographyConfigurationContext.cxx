@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "XMLIndexBibliographyConfigurationContext.hxx"
+#include <XMLIndexBibliographyConfigurationContext.hxx>
 #include "XMLIndexBibliographyEntryContext.hxx"
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>

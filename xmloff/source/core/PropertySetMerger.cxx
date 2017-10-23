@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include "PropertySetMerger.hxx"
+#include <PropertySetMerger.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

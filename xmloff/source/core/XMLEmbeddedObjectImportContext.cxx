@@ -29,7 +29,7 @@
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/XMLFilterServiceNames.h>
-#include "XMLEmbeddedObjectImportContext.hxx"
+#include <XMLEmbeddedObjectImportContext.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;

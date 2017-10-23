@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_TEXT_TXTDROPI_HXX
 #define INCLUDED_XMLOFF_SOURCE_TEXT_TXTDROPI_HXX
 
-#include "XMLElementPropertyContext.hxx"
+#include <XMLElementPropertyContext.hxx>
 
 
 class XMLTextDropCapImportContext :public XMLElementPropertyContext

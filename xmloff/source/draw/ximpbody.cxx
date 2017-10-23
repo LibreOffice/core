@@ -35,8 +35,8 @@
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/families.hxx>
 #include "ximpshow.hxx"
-#include "PropertySetMerger.hxx"
-#include "animationimport.hxx"
+#include <PropertySetMerger.hxx>
+#include <animationimport.hxx>
 #include <osl/diagnose.hxx>
 
 using namespace ::com::sun::star;

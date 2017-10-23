@@ -32,7 +32,7 @@
 #include <com/sun/star/form/submission/XSubmissionSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <rtl/ustring.hxx>
-#include <xformsapi.hxx>
+#include "xformsapi.hxx"
 #include <comphelper/namedvaluecollection.hxx>
 #include <tools/diagnose_ex.h>
 

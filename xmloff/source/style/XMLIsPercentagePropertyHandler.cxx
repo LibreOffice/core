@@ -20,7 +20,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
-#include "XMLIsPercentagePropertyHandler.hxx"
+#include <XMLIsPercentagePropertyHandler.hxx>
 
 using namespace ::com::sun::star;
 using namespace css::uno;

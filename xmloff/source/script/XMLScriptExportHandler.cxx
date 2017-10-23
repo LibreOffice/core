@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "XMLScriptExportHandler.hxx"
+#include <XMLScriptExportHandler.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <xmloff/xmlexp.hxx>

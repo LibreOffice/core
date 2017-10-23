@@ -18,7 +18,7 @@
  */
 
 
-#include <XMLCalculationSettingsContext.hxx>
+#include "XMLCalculationSettingsContext.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>

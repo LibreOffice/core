@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "SchXMLAutoStylePoolP.hxx"
+#include <SchXMLAutoStylePoolP.hxx>
 #include "PropertyMap.hxx"
-#include "SchXMLExport.hxx"
-#include "XMLChartPropertySetMapper.hxx"
+#include <SchXMLExport.hxx>
+#include <XMLChartPropertySetMapper.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>

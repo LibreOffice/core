@@ -110,15 +110,15 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 
-#include "anim.hxx"
-#include "EnhancedCustomShapeToken.hxx"
-#include "PropertySetMerger.hxx"
+#include <anim.hxx>
+#include <EnhancedCustomShapeToken.hxx>
+#include <PropertySetMerger.hxx>
 #include "sdpropls.hxx"
 #include "sdxmlexp_impl.hxx"
-#include "xexptran.hxx"
+#include <xexptran.hxx>
 #include "ximpshap.hxx"
-#include "XMLBase64Export.hxx"
-#include "XMLImageMapExport.hxx"
+#include <XMLBase64Export.hxx>
+#include <XMLImageMapExport.hxx>
 #include <memory>
 
 #include <config_features.h>

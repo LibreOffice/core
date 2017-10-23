@@ -19,7 +19,7 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLAXISCONTEXT_HXX
 #define INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLAXISCONTEXT_HXX
 
-#include "SchXMLImport.hxx"
+#include <SchXMLImport.hxx>
 #include "transporttypes.hxx"
 
 class SchXMLAxisContext : public SvXMLImportContext

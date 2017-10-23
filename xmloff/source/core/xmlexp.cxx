@@ -48,8 +48,8 @@
 #include <xmloff/XMLSettingsExportContext.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/XMLEventExport.hxx>
-#include "XMLStarBasicExportHandler.hxx"
-#include "XMLScriptExportHandler.hxx"
+#include <XMLStarBasicExportHandler.hxx>
+#include <XMLScriptExportHandler.hxx>
 #include <xmloff/SettingsExportHelper.hxx>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
@@ -61,21 +61,21 @@
 #include <xmloff/MarkerStyle.hxx>
 #include <xmloff/DashStyle.hxx>
 #include <xmloff/XMLFontAutoStylePool.hxx>
-#include "XMLImageMapExport.hxx"
-#include "XMLBase64Export.hxx"
+#include <XMLImageMapExport.hxx>
+#include <XMLBase64Export.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <xmloff/XMLFilterServiceNames.h>
 #include <xmloff/XMLEmbeddedObjectExportFilter.hxx>
-#include "XMLBasicExportFilter.hxx"
+#include <XMLBasicExportFilter.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/servicehelper.hxx>
-#include "PropertySetMerger.hxx"
+#include <PropertySetMerger.hxx>
 
 #include <svl/urihelper.hxx>
 #include <xmloff/xformsexport.hxx>
@@ -88,7 +88,7 @@
 #include <com/sun/star/document/XMLOasisBasicExporter.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
 #include <com/sun/star/rdf/XMetadatable.hpp>
-#include "RDFaExportHelper.hxx"
+#include <RDFaExportHelper.hxx>
 
 #include <comphelper/xmltools.hxx>
 

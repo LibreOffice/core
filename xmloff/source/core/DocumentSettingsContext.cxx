@@ -45,7 +45,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <unotools/configmgr.hxx>
-#include <xmlenums.hxx>
+#include "xmlenums.hxx"
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;

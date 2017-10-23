@@ -22,7 +22,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <xmloff/xmlscripti.hxx>
-#include "facreg.hxx"
+#include <facreg.hxx>
 #include "sdxmlimp_impl.hxx"
 #include "ximpbody.hxx"
 

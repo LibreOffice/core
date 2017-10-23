@@ -24,7 +24,7 @@
 #include "sdxmlimp_impl.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <ximpshap.hxx>
+#include "ximpshap.hxx"
 
 // dr3d:3dscene context
 

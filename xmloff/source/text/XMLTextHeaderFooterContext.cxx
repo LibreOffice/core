@@ -23,7 +23,7 @@
 #include <o3tl/any.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include "XMLTextHeaderFooterContext.hxx"
+#include <XMLTextHeaderFooterContext.hxx>
 #include <xmloff/XMLTextTableContext.hxx>
 #include <xmloff/xmlimp.hxx>
 

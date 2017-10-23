@@ -23,8 +23,8 @@
 #include <xmloff/xmlexppr.hxx>
 #include "txtdrope.hxx"
 #include <xmloff/xmltabe.hxx>
-#include "XMLTextColumnsExport.hxx"
-#include "XMLBackgroundImageExport.hxx"
+#include <XMLTextColumnsExport.hxx>
+#include <XMLBackgroundImageExport.hxx>
 
 class SvXMLExport;
 class XMLTextExportPropertySetMapper: public SvXMLExportPropertyMapper

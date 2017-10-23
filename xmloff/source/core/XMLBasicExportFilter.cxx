@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "XMLBasicExportFilter.hxx"
+#include <XMLBasicExportFilter.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

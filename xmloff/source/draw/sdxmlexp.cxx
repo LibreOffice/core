@@ -61,13 +61,13 @@
 #include "sdpropls.hxx"
 #include <xmloff/xmlexppr.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include "facreg.hxx"
-#include "xexptran.hxx"
+#include <facreg.hxx>
+#include <xexptran.hxx>
 
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include "PropertySetMerger.hxx"
+#include <PropertySetMerger.hxx>
 #include "layerexp.hxx"
 
 #include "XMLNumberStylesExport.hxx"

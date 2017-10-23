@@ -19,7 +19,7 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_CHART_XMLSYMBOLIMAGECONTEXT_HXX
 #define INCLUDED_XMLOFF_SOURCE_CHART_XMLSYMBOLIMAGECONTEXT_HXX
 
-#include "XMLElementPropertyContext.hxx"
+#include <XMLElementPropertyContext.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace io { class XOutputStream; }

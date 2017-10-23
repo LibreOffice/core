@@ -34,7 +34,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlexp.hxx>
-#include "XMLTextColumnsExport.hxx"
+#include <XMLTextColumnsExport.hxx>
 
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;

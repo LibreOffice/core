@@ -19,12 +19,12 @@
 
 #include <tools/debug.hxx>
 #include "XMLTextPropertySetContext.hxx"
-#include "XMLTextColumnsContext.hxx"
-#include "XMLBackgroundImageContext.hxx"
+#include <XMLTextColumnsContext.hxx>
+#include <XMLBackgroundImageContext.hxx>
 #include "XMLSectionFootnoteConfigImport.hxx"
 
 #include <xmloff/txtprmap.hxx>
-#include "xmltabi.hxx"
+#include <xmltabi.hxx>
 #include "txtdropi.hxx"
 
 

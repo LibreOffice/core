@@ -42,7 +42,7 @@
 #include "TransformerActions.hxx"
 #include "FamilyType.hxx"
 #include "XMLFilterRegistration.hxx"
-#include "facreg.hxx"
+#include <facreg.hxx>
 #include <comphelper/servicehelper.hxx>
 #include "Oasis2OOo.hxx"
 #include <cppuhelper/supportsservice.hxx>

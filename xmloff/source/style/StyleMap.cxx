@@ -21,7 +21,7 @@
 
 #include <comphelper/servicehelper.hxx>
 
-#include "StyleMap.hxx"
+#include <StyleMap.hxx>
 
 using namespace css::uno;
 using namespace css::lang;

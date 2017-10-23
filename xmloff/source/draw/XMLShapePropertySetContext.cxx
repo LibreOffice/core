@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "XMLShapePropertySetContext.hxx"
+#include <XMLShapePropertySetContext.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumi.hxx>
-#include "xmltabi.hxx"
+#include <xmltabi.hxx>
 #include <xmloff/txtprmap.hxx>
 
 #include "sdpropls.hxx"

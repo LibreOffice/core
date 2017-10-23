@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "RDFaExportHelper.hxx"
+#include <RDFaExportHelper.hxx>
 
 #include <xmloff/xmlnmspe.hxx>
 

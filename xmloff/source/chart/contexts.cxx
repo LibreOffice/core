@@ -21,7 +21,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlstyle.hxx>
-#include "SchXMLImport.hxx"
+#include <SchXMLImport.hxx>
 #include "SchXMLCalculationSettingsContext.hxx"
 
 #include "contexts.hxx"

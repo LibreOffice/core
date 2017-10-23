@@ -24,18 +24,18 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <sax/tools/converter.hxx>
-#include "XMLNumberStylesImport.hxx"
+#include <XMLNumberStylesImport.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include "ximppage.hxx"
 #include "ximpshap.hxx"
-#include "animimp.hxx"
-#include "XMLStringBufferImportContext.hxx"
+#include <animimp.hxx>
+#include <XMLStringBufferImportContext.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include "ximpstyl.hxx"
 #include <xmloff/prstylei.hxx>
-#include "PropertySetMerger.hxx"
+#include <PropertySetMerger.hxx>
 #include <osl/diagnose.h>
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>

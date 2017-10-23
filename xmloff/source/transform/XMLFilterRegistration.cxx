@@ -22,7 +22,7 @@
 #include <cppuhelper/factory.hxx>
 #include <osl/diagnose.h>
 
-#include <XMLFilterRegistration.hxx>
+#include "XMLFilterRegistration.hxx"
 
 using namespace ::com::sun::star;
 
