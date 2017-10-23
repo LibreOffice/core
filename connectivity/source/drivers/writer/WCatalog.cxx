@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "writer/WCatalog.hxx"
-#include "writer/WTables.hxx"
+#include <writer/WCatalog.hxx>
+#include <writer/WTables.hxx>
 
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 
 #include <connectivity/sdbcx/VCollection.hxx>
 
-#include "writer/WConnection.hxx"
+#include <writer/WConnection.hxx>
 
 using namespace ::com::sun::star;
 

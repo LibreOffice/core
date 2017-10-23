@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 
-#include "odbc/ODatabaseMetaDataResultSet.hxx"
+#include <odbc/ODatabaseMetaDataResultSet.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbc/ProcedureResult.hpp>
@@ -28,10 +28,10 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
-#include "odbc/OResultSetMetaData.hxx"
-#include "odbc/OTools.hxx"
+#include <odbc/OResultSetMetaData.hxx>
+#include <odbc/OTools.hxx>
 #include <comphelper/types.hxx>
-#include "FDatabaseMetaDataResultSetMetaData.hxx"
+#include <FDatabaseMetaDataResultSetMetaData.hxx>
 #include <connectivity/dbexception.hxx>
 
 using namespace ::comphelper;

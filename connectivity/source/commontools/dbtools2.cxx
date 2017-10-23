@@ -22,8 +22,8 @@
 #include <connectivity/dbcharset.hxx>
 #include <connectivity/SQLStatementHelper.hxx>
 #include <unotools/confignode.hxx>
-#include "resource/sharedresources.hxx"
-#include "strings.hrc"
+#include <resource/sharedresources.hxx>
+#include <strings.hrc>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -38,7 +38,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/container/XChild.hpp>

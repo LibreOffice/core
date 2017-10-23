@@ -21,7 +21,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 
 using namespace connectivity;

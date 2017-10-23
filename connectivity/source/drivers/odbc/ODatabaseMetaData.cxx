@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "odbc/ODatabaseMetaData.hxx"
-#include "odbc/OTools.hxx"
-#include "odbc/ODatabaseMetaDataResultSet.hxx"
-#include "FDatabaseMetaDataResultSet.hxx"
+#include <odbc/ODatabaseMetaData.hxx>
+#include <odbc/OTools.hxx>
+#include <odbc/ODatabaseMetaDataResultSet.hxx>
+#include <FDatabaseMetaDataResultSet.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include <connectivity/odbc.hxx>
-#include "TPrivilegesResultSet.hxx"
+#include <TPrivilegesResultSet.hxx>
 #include <connectivity/dbexception.hxx>
 #include <rtl/ustrbuf.hxx>
 

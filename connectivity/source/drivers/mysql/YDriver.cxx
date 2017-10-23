@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "mysql/YDriver.hxx"
-#include "mysql/YCatalog.hxx"
+#include <mysql/YDriver.hxx>
+#include <mysql/YCatalog.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -26,9 +26,9 @@
 #include <connectivity/dbcharset.hxx>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include "TConnection.hxx"
-#include "strings.hrc"
-#include "resource/sharedresources.hxx"
+#include <TConnection.hxx>
+#include <strings.hrc>
+#include <resource/sharedresources.hxx>
 
 namespace connectivity
 {

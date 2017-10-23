@@ -18,9 +18,9 @@
  */
 
 
-#include "ParameterSubstitution.hxx"
-#include "FDatabaseMetaDataResultSet.hxx"
-#include "FDatabaseMetaDataResultSetMetaData.hxx"
+#include <ParameterSubstitution.hxx>
+#include <FDatabaseMetaDataResultSet.hxx>
+#include <FDatabaseMetaDataResultSetMetaData.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
@@ -38,8 +38,8 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>
-#include "strings.hrc"
-#include "TConnection.hxx"
+#include <strings.hrc>
+#include <TConnection.hxx>
 
 using namespace connectivity;
 using namespace dbtools;

@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hsqldb/HUser.hxx"
+#include <hsqldb/HUser.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
-#include "TConnection.hxx"
-#include "strings.hrc"
+#include <TConnection.hxx>
+#include <strings.hrc>
 
 using namespace connectivity;
 using namespace connectivity::hsqldb;

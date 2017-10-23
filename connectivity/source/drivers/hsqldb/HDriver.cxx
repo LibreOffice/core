@@ -19,8 +19,8 @@
 
 #include <config_folders.h>
 
-#include "hsqldb/HDriver.hxx"
-#include "hsqldb/HConnection.hxx"
+#include <hsqldb/HDriver.hxx>
+#include <hsqldb/HConnection.hxx>
 #include <osl/diagnose.h>
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -30,8 +30,8 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include "TConnection.hxx"
-#include "hsqldb/HStorageMap.hxx"
+#include <TConnection.hxx>
+#include <hsqldb/HStorageMap.hxx>
 #include <jvmfwk/framework.hxx>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -39,7 +39,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include "HTerminateListener.hxx"
-#include "hsqldb/HCatalog.hxx"
+#include <hsqldb/HCatalog.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/file.h>
 #include <osl/process.h>
@@ -50,8 +50,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include "strings.hrc"
-#include "resource/sharedresources.hxx"
+#include <strings.hrc>
+#include <resource/sharedresources.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/diagnose_ex.h>
 

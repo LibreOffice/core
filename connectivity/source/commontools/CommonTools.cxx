@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <comphelper/extract.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/java/JavaVirtualMachine.hpp>
 #if HAVE_FEATURE_JAVA

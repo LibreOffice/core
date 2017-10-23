@@ -19,7 +19,7 @@
 
 
 #include "HTerminateListener.hxx"
-#include "hsqldb/HDriver.hxx"
+#include <hsqldb/HDriver.hxx>
 
 
 namespace connectivity

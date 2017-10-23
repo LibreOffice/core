@@ -23,7 +23,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sqlparse.hxx>
-#include "TSortIndex.hxx"
+#include <TSortIndex.hxx>
 #include "MTable.hxx"
 
 #include <memory>

@@ -21,8 +21,8 @@
 #include <connectivity/dbmetadata.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/DriversConfig.hxx>
-#include "strings.hrc"
-#include "resource/sharedresources.hxx"
+#include <strings.hrc>
+#include <resource/sharedresources.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/container/XChild.hpp>

@@ -18,11 +18,11 @@
  */
 
 #include <osl/diagnose.h>
-#include "file/FStatement.hxx"
-#include "file/FConnection.hxx"
-#include "sqlbison.hxx"
-#include "file/FDriver.hxx"
-#include "file/FResultSet.hxx"
+#include <file/FStatement.hxx>
+#include <file/FConnection.hxx>
+#include <sqlbison.hxx>
+#include <file/FDriver.hxx>
+#include <file/FResultSet.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/uno3.hxx>
 #include <osl/thread.h>
@@ -34,7 +34,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 #include <algorithm>
 
 namespace connectivity

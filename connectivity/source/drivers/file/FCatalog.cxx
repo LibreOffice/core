@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "file/FCatalog.hxx"
-#include "file/FConnection.hxx"
-#include "file/FTables.hxx"
+#include <file/FCatalog.hxx>
+#include <file/FConnection.hxx>
+#include <file/FTables.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 

@@ -18,8 +18,8 @@
  */
 
 #include <string.h>
-#include "hsqldb/HTable.hxx"
-#include "hsqldb/HTables.hxx"
+#include <hsqldb/HTable.hxx>
+#include <hsqldb/HTables.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
@@ -36,9 +36,9 @@
 #include <connectivity/TKeys.hxx>
 #include <connectivity/TIndexes.hxx>
 #include <connectivity/TColumnsHelper.hxx>
-#include "hsqldb/HCatalog.hxx"
-#include "hsqldb/HColumns.hxx"
-#include "TConnection.hxx"
+#include <hsqldb/HCatalog.hxx>
+#include <hsqldb/HColumns.hxx>
+#include <TConnection.hxx>
 
 #include <tools/diagnose_ex.h>
 

@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "file/FTables.hxx"
-#include "file/FTable.hxx"
+#include <file/FTables.hxx>
+#include <file/FTable.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
-#include "file/FCatalog.hxx"
-#include "file/FConnection.hxx"
+#include <file/FCatalog.hxx>
+#include <file/FConnection.hxx>
 
 using namespace connectivity;
 using namespace connectivity::file;

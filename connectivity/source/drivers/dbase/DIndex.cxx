@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbase/DIndex.hxx"
-#include "dbase/DIndexColumns.hxx"
+#include <dbase/DIndex.hxx>
+#include <dbase/DIndexColumns.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <comphelper/sequence.hxx>
-#include "dbase/DTable.hxx"
-#include "dbase/DIndexIter.hxx"
+#include <dbase/DTable.hxx>
+#include <dbase/DIndexIter.hxx>
 #include <osl/file.hxx>
 #include <tools/config.hxx>
 #include <connectivity/CommonTools.hxx>
@@ -35,8 +35,8 @@
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
-#include "dbase/DResultSet.hxx"
-#include "strings.hrc"
+#include <dbase/DResultSet.hxx>
+#include <strings.hrc>
 #include <unotools/sharedunocomponent.hxx>
 
 using namespace ::comphelper;

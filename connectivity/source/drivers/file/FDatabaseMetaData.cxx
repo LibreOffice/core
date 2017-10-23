@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "file/FDatabaseMetaData.hxx"
-#include "FDatabaseMetaDataResultSet.hxx"
+#include <file/FDatabaseMetaData.hxx>
+#include <FDatabaseMetaDataResultSet.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
@@ -28,8 +28,8 @@
 #include <com/sun/star/ucb/SortedDynamicResultSetFactory.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <tools/urlobj.hxx>
-#include "file/FDriver.hxx"
-#include "file/FTable.hxx"
+#include <file/FDriver.hxx>
+#include <file/FTable.hxx>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 

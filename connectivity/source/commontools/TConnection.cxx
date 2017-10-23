@@ -18,7 +18,7 @@
  */
 
 #include <string.h>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>

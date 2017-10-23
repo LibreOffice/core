@@ -17,23 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "java/sql/PreparedStatement.hxx"
-#include "java/sql/ResultSet.hxx"
-#include "java/sql/ResultSetMetaData.hxx"
-#include "java/sql/Connection.hxx"
-#include "java/sql/Timestamp.hxx"
-#include "java/math/BigDecimal.hxx"
-#include "java/tools.hxx"
+#include <java/sql/PreparedStatement.hxx>
+#include <java/sql/ResultSet.hxx>
+#include <java/sql/ResultSetMetaData.hxx>
+#include <java/sql/Connection.hxx>
+#include <java/sql/Timestamp.hxx>
+#include <java/math/BigDecimal.hxx>
+#include <java/tools.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/dbexception.hxx>
-#include "strings.hrc"
-#include "resource/sharedresources.hxx"
-#include "java/LocalRef.hxx"
-#include "strings.hxx"
+#include <strings.hrc>
+#include <resource/sharedresources.hxx>
+#include <java/LocalRef.hxx>
+#include <strings.hxx>
 #include <string.h>
 #include <memory>
 

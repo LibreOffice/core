@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "flat/EDriver.hxx"
-#include "flat/EConnection.hxx"
+#include <flat/EDriver.hxx>
+#include <flat/EConnection.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/sequence.hxx>
-#include "strings.hrc"
-#include "resource/sharedresources.hxx"
+#include <strings.hrc>
+#include <resource/sharedresources.hxx>
 #include <comphelper/processfactory.hxx>
 
 

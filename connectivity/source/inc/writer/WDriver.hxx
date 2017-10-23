@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WDRIVER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WDRIVER_HXX
 
-#include "file/FDriver.hxx"
+#include <file/FDriver.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 

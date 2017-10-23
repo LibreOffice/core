@@ -22,12 +22,12 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include "propertyids.hxx"
+#include <propertyids.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace connectivity::evoab;
 using namespace com::sun::star::uno;

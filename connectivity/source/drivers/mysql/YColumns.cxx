@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "mysql/YColumns.hxx"
-#include "TConnection.hxx"
+#include <mysql/YColumns.hxx>
+#include <TConnection.hxx>
 
 
 using namespace ::comphelper;

@@ -25,12 +25,12 @@
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/typeprovider.hxx>
-#include "propertyids.hxx"
+#include <propertyids.hxx>
 #include "NStatement.hxx"
 #include "NConnection.hxx"
 #include "NDatabaseMetaData.hxx"
 #include "NResultSet.hxx"
-#include "sqlbison.hxx"
+#include <sqlbison.hxx>
 #include <strings.hrc>
 #include <connectivity/dbexception.hxx>
 #include <tools/diagnose_ex.h>

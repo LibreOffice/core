@@ -22,7 +22,7 @@
 
 #include <connectivity/sdbcx/VCatalog.hxx>
 
-#include "file/filedllapi.hxx"
+#include <file/filedllapi.hxx>
 
 namespace connectivity
 {

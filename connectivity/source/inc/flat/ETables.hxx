@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_ETABLES_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_ETABLES_HXX
 
-#include "file/FTables.hxx"
+#include <file/FTables.hxx>
 
 namespace connectivity
 {

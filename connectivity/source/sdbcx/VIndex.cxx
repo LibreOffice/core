@@ -24,7 +24,7 @@
 #include <comphelper/sequence.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 
 using namespace ::connectivity;
 using namespace ::dbtools;

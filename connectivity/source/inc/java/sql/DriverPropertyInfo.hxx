@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_DRIVERPROPERTYINFO_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_DRIVERPROPERTYINFO_HXX
 
-#include "java/lang/Object.hxx"
+#include <java/lang/Object.hxx>
 #include <com/sun/star/sdbc/DriverPropertyInfo.hpp>
 
 namespace connectivity

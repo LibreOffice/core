@@ -24,7 +24,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <rtl/ref.hxx>
-#include "file/filedllapi.hxx"
+#include <file/filedllapi.hxx>
 
 namespace connectivity
 {

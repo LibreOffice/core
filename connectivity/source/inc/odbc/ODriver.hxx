@@ -25,10 +25,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <connectivity/odbc.hxx>
-#include "odbc/odbcbasedllapi.hxx"
+#include <odbc/odbcbasedllapi.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <osl/module.h>
-#include "odbc/OTools.hxx"
+#include <odbc/OTools.hxx>
 
 namespace connectivity
 {

@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "calc/CDriver.hxx"
-#include "calc/CConnection.hxx"
+#include <calc/CDriver.hxx>
+#include <calc/CConnection.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/dbexception.hxx>
-#include "resource/sharedresources.hxx"
+#include <resource/sharedresources.hxx>
 #include <comphelper/processfactory.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace connectivity::calc;
 using namespace connectivity::file;

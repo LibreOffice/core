@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "flat/EColumns.hxx"
-#include "flat/ETable.hxx"
+#include <flat/EColumns.hxx>
+#include <flat/ETable.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 
 using namespace connectivity::flat;

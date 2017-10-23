@@ -40,7 +40,7 @@
 #include <comphelper/propertycontainer.hxx>
 
 #include "EApi.h"
-#include <NConnection.hxx>
+#include "NConnection.hxx"
 
 #include <list>
 

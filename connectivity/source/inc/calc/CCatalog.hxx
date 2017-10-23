@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CCATALOG_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CCATALOG_HXX
 
-#include "file/FCatalog.hxx"
+#include <file/FCatalog.hxx>
 
 namespace connectivity
 {

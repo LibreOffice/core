@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DSTATEMENT_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DSTATEMENT_HXX
 
-#include "file/FStatement.hxx"
+#include <file/FStatement.hxx>
 
 namespace connectivity
 {

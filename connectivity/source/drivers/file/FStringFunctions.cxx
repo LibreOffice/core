@@ -18,7 +18,7 @@
  */
 
 
-#include "file/FStringFunctions.hxx"
+#include <file/FStringFunctions.hxx>
 #include <rtl/ustrbuf.hxx>
 
 using namespace connectivity;

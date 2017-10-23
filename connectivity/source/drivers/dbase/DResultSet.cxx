@@ -18,15 +18,15 @@
  */
 
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
-#include "dbase/DResultSet.hxx"
+#include <dbase/DResultSet.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "dbase/DIndex.hxx"
-#include "dbase/DIndexIter.hxx"
+#include <dbase/DIndex.hxx>
+#include <dbase/DIndexIter.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace ::comphelper;
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CLOB_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CLOB_HXX
 
-#include "java/lang/Object.hxx"
+#include <java/lang/Object.hxx>
 #include <com/sun/star/sdbc/XClob.hpp>
 #include <cppuhelper/implbase.hxx>
 

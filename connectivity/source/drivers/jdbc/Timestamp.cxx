@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "java/sql/Timestamp.hxx"
-#include "java/tools.hxx"
+#include <java/sql/Timestamp.hxx>
+#include <java/tools.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbconversion.hxx>
 

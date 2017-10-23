@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "odbc/OResultSetMetaData.hxx"
-#include "odbc/OTools.hxx"
+#include <odbc/OResultSetMetaData.hxx>
+#include <odbc/OTools.hxx>
 
 using namespace connectivity::odbc;
 using namespace com::sun::star::uno;

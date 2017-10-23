@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hsqldb/HColumns.hxx"
-#include "TConnection.hxx"
+#include <hsqldb/HColumns.hxx>
+#include <TConnection.hxx>
 
 
 using namespace ::comphelper;

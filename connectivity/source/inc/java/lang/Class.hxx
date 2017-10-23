@@ -21,7 +21,7 @@
 
 //************ Class: java.lang.Class
 
-#include "java/lang/Object.hxx"
+#include <java/lang/Object.hxx>
 
 namespace connectivity
 {

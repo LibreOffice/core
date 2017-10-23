@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_RESULTSET_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_RESULTSET_HXX
 
-#include "java/lang/Object.hxx"
+#include <java/lang/Object.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
@@ -32,9 +32,9 @@
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <connectivity/CommonTools.hxx>
-#include "java/sql/JStatement.hxx"
+#include <java/sql/JStatement.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include "java/sql/ConnectionLog.hxx"
+#include <java/sql/ConnectionLog.hxx>
 
 namespace connectivity
 {

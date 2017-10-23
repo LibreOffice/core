@@ -11,7 +11,7 @@
 #include "Tables.hxx"
 #include "Catalog.hxx"
 
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 
 #include <connectivity/dbtools.hxx>
 

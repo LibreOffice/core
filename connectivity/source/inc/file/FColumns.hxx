@@ -23,8 +23,8 @@
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <connectivity/sdbcx/IRefreshable.hxx>
-#include "file/FTable.hxx"
-#include "file/filedllapi.hxx"
+#include <file/FTable.hxx>
+#include <file/filedllapi.hxx>
 
 namespace connectivity
 {

@@ -30,7 +30,7 @@
 #include <algorithm>
 #include <string.h>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <unotools/textsearch.hxx>
 

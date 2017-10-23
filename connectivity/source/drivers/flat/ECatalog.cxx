@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "flat/ECatalog.hxx"
+#include <flat/ECatalog.hxx>
 
-#include "flat/EConnection.hxx"
-#include "flat/ETables.hxx"
+#include <flat/EConnection.hxx>
+#include <flat/ETables.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 

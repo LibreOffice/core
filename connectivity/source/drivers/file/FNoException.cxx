@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "file/FCatalog.hxx"
-#include "file/fcomp.hxx"
-#include "file/fanalyzer.hxx"
-#include "file/FResultSet.hxx"
-#include "file/FPreparedStatement.hxx"
+#include <file/FCatalog.hxx>
+#include <file/fcomp.hxx>
+#include <file/fanalyzer.hxx>
+#include <file/FResultSet.hxx>
+#include <file/FPreparedStatement.hxx>
 #include <connectivity/FValue.hxx>
 #include <tools/debug.hxx>
-#include "TKeyValue.hxx"
+#include <TKeyValue.hxx>
 
 using namespace connectivity;
 using namespace connectivity::file;

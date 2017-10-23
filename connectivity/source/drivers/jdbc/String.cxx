@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "java/lang/String.hxx"
-#include "java/tools.hxx"
+#include <java/lang/String.hxx>
+#include <java/tools.hxx>
 using namespace connectivity;
 
 //************ Class: java.lang.String

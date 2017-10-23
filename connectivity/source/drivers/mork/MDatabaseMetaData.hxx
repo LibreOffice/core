@@ -11,7 +11,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MDATABASEMETADATA_HXX
 
 #include <memory>
-#include "TDatabaseMetaDataBase.hxx"
+#include <TDatabaseMetaDataBase.hxx>
 
 namespace connectivity
 {

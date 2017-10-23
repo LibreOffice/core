@@ -18,7 +18,7 @@
  */
 
 
-#include "hsqldb/HDriver.hxx"
+#include <hsqldb/HDriver.hxx>
 #include <cppuhelper/factory.hxx>
 
 using namespace connectivity::hsqldb;

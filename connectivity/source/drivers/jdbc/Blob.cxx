@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "java/sql/Blob.hxx"
-#include "java/tools.hxx"
-#include "java/io/InputStream.hxx"
+#include <java/sql/Blob.hxx>
+#include <java/tools.hxx>
+#include <java/io/InputStream.hxx>
 #include <connectivity/dbexception.hxx>
 
 #include <string.h>

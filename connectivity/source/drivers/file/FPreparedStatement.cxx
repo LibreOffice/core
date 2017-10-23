@@ -20,9 +20,9 @@
 
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <osl/diagnose.h>
-#include "file/FPreparedStatement.hxx"
+#include <file/FPreparedStatement.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include "file/FResultSetMetaData.hxx"
+#include <file/FResultSetMetaData.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
@@ -33,7 +33,7 @@
 #include <connectivity/PColumn.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace connectivity;
 using namespace comphelper;

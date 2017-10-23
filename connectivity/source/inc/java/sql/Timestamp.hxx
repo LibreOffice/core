@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_TIMESTAMP_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_TIMESTAMP_HXX
 
-#include "java/util/Date.hxx"
+#include <java/util/Date.hxx>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 

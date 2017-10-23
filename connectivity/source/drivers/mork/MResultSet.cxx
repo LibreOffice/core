@@ -26,11 +26,11 @@
 #include <vector>
 #include <algorithm>
 #include "MResultSet.hxx"
-#include "sqlbison.hxx"
+#include <sqlbison.hxx>
 #include "MResultSetMetaData.hxx"
-#include "FDatabaseMetaDataResultSet.hxx"
+#include <FDatabaseMetaDataResultSet.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace ::comphelper;
 using namespace connectivity;

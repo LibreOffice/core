@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_SQLWARNING_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_SQLWARNING_HXX
 
-#include "java/sql/SQLException.hxx"
+#include <java/sql/SQLException.hxx>
 
 namespace connectivity
 {

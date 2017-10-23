@@ -26,7 +26,7 @@
 #include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 
 namespace connectivity
 {

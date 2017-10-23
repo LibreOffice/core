@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "writer/WConnection.hxx"
-#include "writer/WDatabaseMetaData.hxx"
-#include "writer/WCatalog.hxx"
-#include "writer/WDriver.hxx"
-#include "resource/sharedresources.hxx"
-#include "strings.hrc"
+#include <writer/WConnection.hxx>
+#include <writer/WDatabaseMetaData.hxx>
+#include <writer/WCatalog.hxx>
+#include <writer/WDriver.hxx>
+#include <resource/sharedresources.hxx>
+#include <strings.hrc>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <tools/urlobj.hxx>
-#include "component/CPreparedStatement.hxx"
-#include "component/CStatement.hxx"
+#include <component/CPreparedStatement.hxx>
+#include <component/CStatement.hxx>
 #include <unotools/pathoptions.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>

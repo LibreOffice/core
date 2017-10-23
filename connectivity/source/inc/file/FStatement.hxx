@@ -33,13 +33,13 @@
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
-#include "file/FConnection.hxx"
-#include "file/filedllapi.hxx"
+#include <file/FConnection.hxx>
+#include <file/filedllapi.hxx>
 #include <list>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/propertycontainer.hxx>
-#include "file/fanalyzer.hxx"
-#include "TSortIndex.hxx"
+#include <file/fanalyzer.hxx>
+#include <TSortIndex.hxx>
 
 namespace connectivity
 {

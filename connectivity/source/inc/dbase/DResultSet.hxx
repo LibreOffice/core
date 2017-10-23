@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DRESULTSET_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DRESULTSET_HXX
 
-#include "file/FResultSet.hxx"
+#include <file/FResultSet.hxx>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
 #include <cppuhelper/implbase2.hxx>

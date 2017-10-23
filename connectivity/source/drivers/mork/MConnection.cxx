@@ -16,7 +16,7 @@
 
 #include <connectivity/dbexception.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 

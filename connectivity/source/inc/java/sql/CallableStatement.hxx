@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CALLABLESTATEMENT_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CALLABLESTATEMENT_HXX
 
-#include "java/sql/PreparedStatement.hxx"
+#include <java/sql/PreparedStatement.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XOutParameters.hpp>
 

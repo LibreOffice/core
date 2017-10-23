@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CCOLUMNS_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CCOLUMNS_HXX
 
-#include "file/FColumns.hxx"
+#include <file/FColumns.hxx>
 
 namespace connectivity
 {

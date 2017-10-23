@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "component/CColumns.hxx"
-#include "file/FTable.hxx"
+#include <component/CColumns.hxx>
+#include <file/FTable.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 
 using namespace connectivity::component;

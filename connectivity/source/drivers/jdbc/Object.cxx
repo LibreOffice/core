@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "java/lang/Class.hxx"
+#include <java/lang/Class.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include "java/tools.hxx"
-#include "java/sql/SQLException.hxx"
+#include <java/tools.hxx>
+#include <java/sql/SQLException.hxx>
 #include <osl/thread.h>
-#include "java/LocalRef.hxx"
-#include "strings.hxx"
+#include <java/LocalRef.hxx>
+#include <strings.hxx>
 
 #include <comphelper/logging.hxx>
 

@@ -17,33 +17,33 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "java/lang/String.hxx"
-#include "java/lang/Boolean.hxx"
-#include "java/sql/ResultSet.hxx"
-#include "java/math/BigDecimal.hxx"
-#include "java/sql/JStatement.hxx"
-#include "java/sql/SQLWarning.hxx"
-#include "java/sql/Timestamp.hxx"
-#include "java/sql/Array.hxx"
-#include "java/sql/Ref.hxx"
-#include "java/sql/Clob.hxx"
-#include "java/sql/Blob.hxx"
-#include "java/sql/ResultSetMetaData.hxx"
-#include "java/io/InputStream.hxx"
-#include "java/io/Reader.hxx"
-#include "java/tools.hxx"
+#include <java/lang/String.hxx>
+#include <java/lang/Boolean.hxx>
+#include <java/sql/ResultSet.hxx>
+#include <java/math/BigDecimal.hxx>
+#include <java/sql/JStatement.hxx>
+#include <java/sql/SQLWarning.hxx>
+#include <java/sql/Timestamp.hxx>
+#include <java/sql/Array.hxx>
+#include <java/sql/Ref.hxx>
+#include <java/sql/Clob.hxx>
+#include <java/sql/Blob.hxx>
+#include <java/sql/ResultSetMetaData.hxx>
+#include <java/io/InputStream.hxx>
+#include <java/io/Reader.hxx>
+#include <java/tools.hxx>
 #include <comphelper/property.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
-#include "strings.hrc"
-#include "resource/sharedresources.hxx"
-#include "java/LocalRef.hxx"
+#include <strings.hrc>
+#include <resource/sharedresources.hxx>
+#include <java/LocalRef.hxx>
 
 #include <string.h>
 #include <memory>

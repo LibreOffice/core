@@ -19,10 +19,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_DATABASEMETADATA_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_DATABASEMETADATA_HXX
 
-#include "java/lang/Object.hxx"
-#include "TDatabaseMetaDataBase.hxx"
+#include <java/lang/Object.hxx>
+#include <TDatabaseMetaDataBase.hxx>
 
-#include "java/sql/ConnectionLog.hxx"
+#include <java/sql/ConnectionLog.hxx>
 
 namespace connectivity
 {

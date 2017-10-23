@@ -34,7 +34,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <unotools/sharedunocomponent.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 
 #include <o3tl/functional.hxx>
 

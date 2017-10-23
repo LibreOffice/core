@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FDATABASEMETADATA_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FDATABASEMETADATA_HXX
 
-#include "TDatabaseMetaDataBase.hxx"
-#include "file/FConnection.hxx"
-#include "file/filedllapi.hxx"
+#include <TDatabaseMetaDataBase.hxx>
+#include <file/FConnection.hxx>
+#include <file/filedllapi.hxx>
 
 namespace connectivity
 {

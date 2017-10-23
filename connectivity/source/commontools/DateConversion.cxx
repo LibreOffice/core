@@ -27,7 +27,7 @@
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/extract.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <comphelper/numbers.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>

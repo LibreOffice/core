@@ -23,11 +23,11 @@
 #include <connectivity/sdbcx/VTable.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include "file/FConnection.hxx"
-#include "file/filedllapi.hxx"
+#include <file/FConnection.hxx>
+#include <file/filedllapi.hxx>
 #include <tools/stream.hxx>
 #include <connectivity/FValue.hxx>
-#include "TResultSetHelper.hxx"
+#include <TResultSetHelper.hxx>
 
 namespace connectivity
 {

@@ -11,7 +11,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MCONNECTION_HXX
 
 #include <connectivity/OSubComponent.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include "MColumnAlias.hxx"
 
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>

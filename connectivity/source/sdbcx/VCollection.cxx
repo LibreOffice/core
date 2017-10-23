@@ -28,10 +28,10 @@
 #include <comphelper/container.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "strings.hrc"
-#include "resource/sharedresources.hxx"
+#include <strings.hrc>
+#include <resource/sharedresources.hxx>
 
 using namespace connectivity::sdbcx;
 using namespace connectivity;

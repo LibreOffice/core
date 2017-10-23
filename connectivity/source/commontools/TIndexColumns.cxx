@@ -26,7 +26,7 @@
 #include <comphelper/property.hxx>
 #include <connectivity/TIndex.hxx>
 #include <connectivity/TTableHelper.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 
 using namespace connectivity;
 using namespace connectivity::sdbcx;

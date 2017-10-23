@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbase/DStatement.hxx"
-#include "dbase/DResultSet.hxx"
+#include <dbase/DStatement.hxx>
+#include <dbase/DResultSet.hxx>
 
 using namespace connectivity::dbase;
 using namespace connectivity::file;

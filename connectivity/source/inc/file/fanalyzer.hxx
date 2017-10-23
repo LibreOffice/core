@@ -20,8 +20,8 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FANALYZER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FANALYZER_HXX
 
-#include "file/fcomp.hxx"
-#include "file/filedllapi.hxx"
+#include <file/fcomp.hxx>
+#include <file/filedllapi.hxx>
 
 namespace connectivity
 {

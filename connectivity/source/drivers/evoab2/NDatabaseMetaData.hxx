@@ -21,8 +21,8 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NDATABASEMETADATA_HXX
 
 #include "NConnection.hxx"
-#include "TDatabaseMetaDataBase.hxx"
-#include "FDatabaseMetaDataResultSet.hxx"
+#include <TDatabaseMetaDataBase.hxx>
+#include <FDatabaseMetaDataResultSet.hxx>
 
 
 namespace connectivity

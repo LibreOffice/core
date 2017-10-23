@@ -21,7 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_QUOTEDSTRING_HXX
 
 #include <rtl/ustring.hxx>
-#include "file/filedllapi.hxx"
+#include <file/filedllapi.hxx>
 
 namespace connectivity
 {
