@@ -18,8 +18,8 @@
  */
 
 
-#include "comphelper_module.hxx"
-#include "comphelper_services.hxx"
+#include <comphelper_module.hxx>
+#include <comphelper_services.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/anycompare.hxx>
 #include <comphelper/componentbase.hxx>
