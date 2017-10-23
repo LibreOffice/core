@@ -26,9 +26,9 @@
 #include <svtools/simptabl.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <documentsignaturehelper.hxx>
-#include <xmlsignaturehelper.hxx>
-#include <documentsignaturemanager.hxx>
+#include "documentsignaturehelper.hxx"
+#include "xmlsignaturehelper.hxx"
+#include "documentsignaturemanager.hxx"
 
 #include <vector>
 

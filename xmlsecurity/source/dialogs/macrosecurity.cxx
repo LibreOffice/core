@@ -41,8 +41,8 @@
 
 #include <vcl/msgbox.hxx>
 
-#include "strings.hrc"
-#include "resourcemanager.hxx"
+#include <strings.hrc>
+#include <resourcemanager.hxx>
 
 using namespace ::com::sun::star;
 

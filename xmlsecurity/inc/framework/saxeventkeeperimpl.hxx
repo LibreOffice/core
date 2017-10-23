@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include "xsecfwdllapi.h"
+#include <xsecfwdllapi.h>
 #include <cppuhelper/implbase.hxx>
 
 class BufferNode;

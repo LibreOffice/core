@@ -21,16 +21,16 @@
 #include <rtl/uuid.h>
 #include "xmlsignature_nssimpl.hxx"
 
-#include "xmlsec/xmldocumentwrapper_xmlsecimpl.hxx"
-#include "xmlsec/xmlelementwrapper_xmlsecimpl.hxx"
-#include "xmlsec/xmlstreamio.hxx"
-#include "xmlsec/errorcallback.hxx"
+#include <xmlsec/xmldocumentwrapper_xmlsecimpl.hxx>
+#include <xmlsec/xmlelementwrapper_xmlsecimpl.hxx>
+#include <xmlsec/xmlstreamio.hxx>
+#include <xmlsec/errorcallback.hxx>
 
 #include "securityenvironment_nssimpl.hxx"
 
 #include "xmlsecuritycontext_nssimpl.hxx"
 
-#include "xmlsec-wrapper.h"
+#include <xmlsec-wrapper.h>
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;

@@ -18,7 +18,7 @@
  */
 
 
-#include "xsecctl.hxx"
+#include <xsecctl.hxx>
 
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
@@ -29,8 +29,8 @@
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <rtl/uuid.h>
 
-#include "framework/signaturecreatorimpl.hxx"
-#include "framework/saxeventkeeperimpl.hxx"
+#include <framework/signaturecreatorimpl.hxx>
+#include <framework/saxeventkeeperimpl.hxx>
 
 using namespace com::sun::star;
 namespace cssu = com::sun::star::uno;

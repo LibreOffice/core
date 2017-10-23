@@ -16,7 +16,7 @@
 
 #include <key.h>
 #include <keylistresult.h>
-#include "xmlsec-wrapper.h"
+#include <xmlsec-wrapper.h>
 
 using namespace css;
 using namespace css::security;

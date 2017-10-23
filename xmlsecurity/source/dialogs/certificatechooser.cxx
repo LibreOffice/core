@@ -28,7 +28,7 @@
 #include <com/sun/star/security/NoPasswordException.hpp>
 #include <com/sun/star/security/CertificateCharacters.hpp>
 
-#include "resourcemanager.hxx"
+#include <resourcemanager.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/treelistentry.hxx>
 

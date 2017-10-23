@@ -21,12 +21,12 @@
 /*
  * Implementation of the I/O interfaces based on stream and URI binding
  */
-#include "xmlsec/xmlstreamio.hxx"
+#include <xmlsec/xmlstreamio.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/uri.hxx>
 
 #include <libxml/uri.h>
-#include "xmlsec-wrapper.h"
+#include <xmlsec-wrapper.h>
 
 #define XMLSTREAMIO_INITIALIZED 0x01
 #define XMLSTREAMIO_REGISTERED  0x02

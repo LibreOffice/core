@@ -35,9 +35,9 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
-#include "xsecfwdllapi.h"
-#include "framework/securityengine.hxx"
-#include "framework/xmlsignaturetemplateimpl.hxx"
+#include <xsecfwdllapi.h>
+#include <framework/securityengine.hxx>
+#include <framework/xmlsignaturetemplateimpl.hxx>
 
 #include <vector>
 

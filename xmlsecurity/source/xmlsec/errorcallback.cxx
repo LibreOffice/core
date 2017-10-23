@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "xmlsec/errorcallback.hxx"
+#include <xmlsec/errorcallback.hxx>
 
-#include "xmlsec-wrapper.h"
+#include <xmlsec-wrapper.h>
 
 #ifdef _WIN32
 #include <prewin.h>

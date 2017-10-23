@@ -22,8 +22,8 @@
 #include <unotools/datetime.hxx>
 #include <xmloff/attrlist.hxx>
 
-#include "documentsignaturehelper.hxx"
-#include "xsecctl.hxx"
+#include <documentsignaturehelper.hxx>
+#include <xsecctl.hxx>
 
 using namespace com::sun::star;
 

@@ -20,7 +20,7 @@
 #include <sal/config.h>
 #include <rtl/uuid.h>
 #include <cppuhelper/supportsservice.hxx>
-#include "gpg/xmlsignature_gpgimpl.hxx"
+#include <gpg/xmlsignature_gpgimpl.hxx>
 
 #include <gpgme.h>
 #include <context.h>
@@ -29,13 +29,13 @@
 #include <signingresult.h>
 #include <importresult.h>
 
-#include "xmlsec/xmldocumentwrapper_xmlsecimpl.hxx"
-#include "xmlsec/xmlelementwrapper_xmlsecimpl.hxx"
-#include "xmlsec/xmlstreamio.hxx"
-#include "xmlsec/errorcallback.hxx"
+#include <xmlsec/xmldocumentwrapper_xmlsecimpl.hxx>
+#include <xmlsec/xmlelementwrapper_xmlsecimpl.hxx>
+#include <xmlsec/xmlstreamio.hxx>
+#include <xmlsec/errorcallback.hxx>
 
 #include "SecurityEnvironment.hxx"
-#include "xmlsec-wrapper.h"
+#include <xmlsec-wrapper.h>
 
 using namespace css::uno;
 using namespace css::lang;

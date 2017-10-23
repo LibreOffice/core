@@ -22,8 +22,8 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include "xmlsec/xmldocumentwrapper_xmlsecimpl.hxx"
-#include "xmlsec/xmlelementwrapper_xmlsecimpl.hxx"
+#include <xmlsec/xmldocumentwrapper_xmlsecimpl.hxx>
+#include <xmlsec/xmlelementwrapper_xmlsecimpl.hxx>
 
 #include <xmloff/attrlist.hxx>
 

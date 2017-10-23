@@ -7,12 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "xmlsec/xmlsec_init.hxx"
+#include <xmlsec/xmlsec_init.hxx>
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 
-#include "xmlsec/xmlstreamio.hxx"
-#include "xmlsec-wrapper.h"
+#include <xmlsec/xmlstreamio.hxx>
+#include <xmlsec-wrapper.h>
 
 using namespace css::uno;
 

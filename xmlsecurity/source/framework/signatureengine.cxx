@@ -18,8 +18,8 @@
  */
 
 
-#include "framework/signatureengine.hxx"
-#include "framework/xmlsignaturetemplateimpl.hxx"
+#include <framework/signatureengine.hxx>
+#include <framework/xmlsignaturetemplateimpl.hxx>
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ref.hxx>

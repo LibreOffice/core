@@ -26,8 +26,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 
-#include "xmlsec/saxhelper.hxx"
-#include "xsecxmlsecdllapi.h"
+#include <xmlsec/saxhelper.hxx>
+#include <xsecxmlsecdllapi.h>
 
 #define NODEPOSITION_NORMAL        1
 #define NODEPOSITION_STARTELEMENT  2

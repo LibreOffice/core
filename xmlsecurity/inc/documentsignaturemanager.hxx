@@ -25,11 +25,11 @@
 #include <memory>
 
 #include <svl/sigstruct.hxx>
-#include <xmlsignaturehelper.hxx>
-#include <pdfsignaturehelper.hxx>
+#include "xmlsignaturehelper.hxx"
+#include "pdfsignaturehelper.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <documentsignaturehelper.hxx>
+#include "documentsignaturehelper.hxx"
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 /// Manages signatures (addition, removal), used by DigitalSignaturesDialog.

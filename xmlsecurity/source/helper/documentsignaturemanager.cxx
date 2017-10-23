@@ -18,7 +18,7 @@
  */
 
 #include <documentsignaturemanager.hxx>
-#include "gpg/SEInitializer.hxx"
+#include <gpg/SEInitializer.hxx>
 
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
