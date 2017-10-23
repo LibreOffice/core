@@ -22,7 +22,7 @@
 #pragma warning(push, 1)
 #endif
 
-#include "pdfparse.hxx"
+#include <pdfparse.hxx>
 
 // workaround windows compiler: do not include multi_pass.hpp
 #include <boost/spirit/include/classic_core.hpp>

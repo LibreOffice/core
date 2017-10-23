@@ -20,20 +20,20 @@
 #include <zlib.h>
 
 #include "outputwrap.hxx"
-#include "contentsink.hxx"
-#include "pdfihelper.hxx"
-#include "wrapper.hxx"
-#include "pdfparse.hxx"
+#include <contentsink.hxx>
+#include <pdfihelper.hxx>
+#include <wrapper.hxx>
+#include <pdfparse.hxx>
 #include "../pdfiadaptor.hxx"
 
 #include <rtl/math.hxx>
 #include <osl/file.hxx>
 #include <comphelper/sequence.hxx>
 
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 #include <test/bootstrapfixture.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>

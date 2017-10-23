@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 
-#include "pdfparse.hxx"
+#include <pdfparse.hxx>
 
 using namespace pdfparse;
 

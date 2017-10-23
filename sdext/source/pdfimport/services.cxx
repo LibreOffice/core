@@ -20,7 +20,7 @@
 
 #include "pdfiadaptor.hxx"
 #include "filterdet.hxx"
-#include "treevisitorfactory.hxx"
+#include <treevisitorfactory.hxx>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>

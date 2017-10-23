@@ -18,7 +18,7 @@
  */
 
 
-#include "pdfihelper.hxx"
+#include <pdfihelper.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <basegfx/numeric/ftools.hxx>

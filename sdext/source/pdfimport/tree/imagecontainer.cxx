@@ -18,9 +18,9 @@
  */
 
 
-#include "imagecontainer.hxx"
-#include "genericelements.hxx"
-#include "xmlemitter.hxx"
+#include <imagecontainer.hxx>
+#include <genericelements.hxx>
+#include <xmlemitter.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>

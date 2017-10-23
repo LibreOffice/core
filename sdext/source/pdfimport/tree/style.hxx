@@ -20,12 +20,12 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_TREE_STYLE_HXX
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_TREE_STYLE_HXX
 
-#include "pdfihelper.hxx"
+#include <pdfihelper.hxx>
 #include <unordered_map>
 #include <vector>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
-#include "treevisiting.hxx"
+#include <treevisiting.hxx>
 
 namespace pdfi
 {

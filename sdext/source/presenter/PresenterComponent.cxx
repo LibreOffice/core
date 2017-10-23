@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "cppuhelper/factory.hxx"
-#include "cppuhelper/implementationentry.hxx"
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
 
 #include "PresenterProtocolHandler.hxx"
 #include "PresenterScreen.hxx"

@@ -18,24 +18,24 @@
  */
 
 
-#include "pdfiprocessor.hxx"
-#include "xmlemitter.hxx"
-#include "pdfihelper.hxx"
-#include "imagecontainer.hxx"
+#include <pdfiprocessor.hxx>
+#include <xmlemitter.hxx>
+#include <pdfihelper.hxx>
+#include <imagecontainer.hxx>
 #include "style.hxx"
 #include "drawtreevisiting.hxx"
-#include "genericelements.hxx"
+#include <genericelements.hxx>
 
-#include "basegfx/polygon/b2dpolypolygontools.hxx"
-#include "basegfx/range/b2drange.hxx"
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/range/b2drange.hxx>
 #include <config_global.h>
 #include <osl/diagnose.h>
-#include "com/sun/star/i18n/BreakIterator.hpp"
-#include "com/sun/star/i18n/CharacterClassification.hpp"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "comphelper/processfactory.hxx"
-#include "com/sun/star/i18n/ScriptType.hpp"
-#include "com/sun/star/i18n/DirectionProperty.hpp"
+#include <com/sun/star/i18n/BreakIterator.hpp>
+#include <com/sun/star/i18n/CharacterClassification.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/i18n/DirectionProperty.hpp>
 
 #include <string.h>
 

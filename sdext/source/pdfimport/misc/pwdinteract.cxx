@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
-#include "pdfihelper.hxx"
+#include <pdfihelper.hxx>
 
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>

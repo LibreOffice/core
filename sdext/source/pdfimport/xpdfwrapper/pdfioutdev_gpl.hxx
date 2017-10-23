@@ -31,14 +31,14 @@
 #pragma warning(push, 1)
 #endif
 
-#include "GfxState.h"
-#include "GfxFont.h"
-#include "UnicodeMap.h"
-#include "Link.h"
-#include "Object.h"
-#include "OutputDev.h"
-#include "GlobalParams.h"
-#include "PDFDoc.h"
+#include <GfxState.h>
+#include <GfxFont.h>
+#include <UnicodeMap.h>
+#include <Link.h>
+#include <Object.h>
+#include <OutputDev.h>
+#include <GlobalParams.h>
+#include <PDFDoc.h>
 
 #if defined __GNUC__ || defined __clang__
 # pragma GCC diagnostic pop

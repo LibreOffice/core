@@ -18,16 +18,16 @@
  */
 
 
-#include "pdfiprocessor.hxx"
-#include "xmlemitter.hxx"
-#include "pdfihelper.hxx"
-#include "imagecontainer.hxx"
+#include <pdfiprocessor.hxx>
+#include <xmlemitter.hxx>
+#include <pdfihelper.hxx>
+#include <imagecontainer.hxx>
 #include "style.hxx"
 #include "writertreevisiting.hxx"
-#include "genericelements.hxx"
+#include <genericelements.hxx>
 
-#include "basegfx/polygon/b2dpolypolygontools.hxx"
-#include "basegfx/range/b2drange.hxx"
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/range/b2drange.hxx>
 #include <config_global.h>
 #include <osl/diagnose.h>
 

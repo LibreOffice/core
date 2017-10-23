@@ -20,12 +20,12 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_TREE_DRAWTREEVISITING_HXX
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_TREE_DRAWTREEVISITING_HXX
 
-#include "treevisiting.hxx"
+#include <treevisiting.hxx>
 
-#include "com/sun/star/i18n/XBreakIterator.hpp"
-#include "com/sun/star/i18n/XCharacterClassification.hpp"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace pdfi
 {

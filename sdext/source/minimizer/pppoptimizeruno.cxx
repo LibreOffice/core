@@ -20,7 +20,7 @@
 
 #include <osl/thread.h>
 #include <cppuhelper/factory.hxx>
-#include <pppoptimizerdialog.hxx>
+#include "pppoptimizerdialog.hxx"
 
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;

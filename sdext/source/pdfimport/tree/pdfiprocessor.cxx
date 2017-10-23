@@ -18,13 +18,13 @@
  */
 
 
-#include "pdfiprocessor.hxx"
-#include "xmlemitter.hxx"
-#include "pdfihelper.hxx"
-#include "imagecontainer.hxx"
-#include "genericelements.hxx"
+#include <pdfiprocessor.hxx>
+#include <xmlemitter.hxx>
+#include <pdfihelper.hxx>
+#include <imagecontainer.hxx>
+#include <genericelements.hxx>
 #include "style.hxx"
-#include "treevisiting.hxx"
+#include <treevisiting.hxx>
 
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>

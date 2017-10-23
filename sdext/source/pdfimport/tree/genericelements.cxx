@@ -18,10 +18,10 @@
  */
 
 
-#include "xmlemitter.hxx"
-#include "genericelements.hxx"
-#include "pdfiprocessor.hxx"
-#include "pdfihelper.hxx"
+#include <xmlemitter.hxx>
+#include <genericelements.hxx>
+#include <pdfiprocessor.hxx>
+#include <pdfihelper.hxx>
 #include "style.hxx"
 
 
