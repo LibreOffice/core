@@ -20,18 +20,18 @@
 #ifndef INCLUDED_RTL_STRBUF_HXX
 #define INCLUDED_RTL_STRBUF_HXX
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <cassert>
 #include <cstddef>
 #include <cstring>
 
-#include <rtl/strbuf.h>
-#include <rtl/string.hxx>
-#include <rtl/stringutils.hxx>
+#include "rtl/strbuf.h"
+#include "rtl/string.hxx"
+#include "rtl/stringutils.hxx"
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
-#include <rtl/stringconcat.hxx>
+#include "rtl/stringconcat.hxx"
 #endif
 
 #ifdef RTL_STRING_UNITTEST

@@ -19,8 +19,8 @@
 #ifndef INCLUDED_CPPUHELPER_COMPBASE11_HXX
 #define INCLUDED_CPPUHELPER_COMPBASE11_HXX
 
-#include <cppuhelper/implbase11.hxx>
-#include <cppuhelper/compbase_ex.hxx>
+#include "cppuhelper/implbase11.hxx"
+#include "cppuhelper/compbase_ex.hxx"
 
 namespace cppu
 {

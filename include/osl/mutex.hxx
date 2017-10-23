@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OSL_MUTEX_HXX
 #define INCLUDED_OSL_MUTEX_HXX
 
-#include <osl/mutex.h>
+#include "osl/mutex.h"
 
 
 namespace osl

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_COM_SUN_STAR_UNO_GENFUNC_H
 #define INCLUDED_COM_SUN_STAR_UNO_GENFUNC_H
 
-#include <sal/types.h>
+#include "sal/types.h"
 
 typedef struct _typelib_TypeDescriptionReference typelib_TypeDescriptionReference;
 

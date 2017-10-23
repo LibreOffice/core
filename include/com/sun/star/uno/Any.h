@@ -19,16 +19,16 @@
 #ifndef INCLUDED_COM_SUN_STAR_UNO_ANY_H
 #define INCLUDED_COM_SUN_STAR_UNO_ANY_H
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <cstddef>
 
-#include <rtl/ustring.hxx>
-#include <uno/any2.h>
-#include <typelib/typedescription.h>
-#include <cppu/unotype.hxx>
-#include <com/sun/star/uno/TypeClass.hdl>
-#include <rtl/alloc.h>
+#include "rtl/ustring.hxx"
+#include "uno/any2.h"
+#include "typelib/typedescription.h"
+#include "cppu/unotype.hxx"
+#include "com/sun/star/uno/TypeClass.hdl"
+#include "rtl/alloc.h"
 
 namespace com
 {

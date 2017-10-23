@@ -21,19 +21,19 @@
 
 /// @cond INTERNAL
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <cstddef>
 #include <typeinfo>
 #include <unordered_set>
 
-#include <osl/diagnose.h>
-#include <osl/interlck.h>
-#include <osl/mutex.hxx>
-#include <rtl/instance.hxx>
-#include <sal/log.hxx>
-#include <sal/saldllapi.h>
-#include <sal/types.h>
+#include "osl/diagnose.h"
+#include "osl/interlck.h"
+#include "osl/mutex.hxx"
+#include "rtl/instance.hxx"
+#include "sal/log.hxx"
+#include "sal/saldllapi.h"
+#include "sal/types.h"
 
 namespace osl {
 namespace detail {

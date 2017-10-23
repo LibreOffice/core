@@ -10,12 +10,12 @@
 #ifndef INCLUDED_RTL_STRINGUTILS_HXX
 #define INCLUDED_RTL_STRINGUTILS_HXX
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <cstddef>
 #include <cstring>
 
-#include <sal/types.h>
+#include "sal/types.h"
 
 // The unittest uses slightly different code to help check that the proper
 // calls are made. The class is put into a different namespace to make

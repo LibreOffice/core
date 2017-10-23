@@ -19,9 +19,9 @@
 #ifndef INCLUDED_CPPUHELPER_IMPLBASE_EX_HXX
 #define INCLUDED_CPPUHELPER_IMPLBASE_EX_HXX
 
-#include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakagg.hxx>
-#include <com/sun/star/lang/XTypeProvider.hpp>
+#include "cppuhelper/weak.hxx"
+#include "cppuhelper/weakagg.hxx"
+#include "com/sun/star/lang/XTypeProvider.hpp"
 
 
 /* If you need to define implementation helper classes that deal with more than

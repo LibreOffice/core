@@ -20,8 +20,8 @@
 #ifndef INCLUDED_UNO_ENVDCP_H
 #define INCLUDED_UNO_ENVDCP_H
 
-#include <cppu/cppudllapi.h>
-#include <rtl/ustring.h>
+#include "cppu/cppudllapi.h"
+#include "rtl/ustring.h"
 
 #ifdef __cplusplus
 extern "C"

@@ -20,12 +20,12 @@
 #ifndef INCLUDED_OSL_CONDITN_HXX
 #define INCLUDED_OSL_CONDITN_HXX
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <cstddef>
 
-#include <osl/time.h>
-#include <osl/conditn.h>
+#include "osl/time.h"
+#include "osl/conditn.h"
 
 #if defined(MACOSX) && defined(__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES)
 #   if __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES == 1

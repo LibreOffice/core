@@ -19,19 +19,19 @@
 #ifndef INCLUDED_UNO_MAPPING_HXX
 #define INCLUDED_UNO_MAPPING_HXX
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <cstddef>
 
-#include <uno/lbnames.h>
-#include <rtl/alloc.h>
-#include <rtl/ustring.hxx>
-#include <osl/diagnose.h>
-#include <uno/mapping.h>
-#include <com/sun/star/uno/Type.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-#include <cppu/unotype.hxx>
-#include <uno/environment.hxx>
+#include "uno/lbnames.h"
+#include "rtl/alloc.h"
+#include "rtl/ustring.hxx"
+#include "osl/diagnose.h"
+#include "uno/mapping.h"
+#include "com/sun/star/uno/Type.hxx"
+#include "com/sun/star/uno/Reference.hxx"
+#include "cppu/unotype.hxx"
+#include "uno/environment.hxx"
 
 typedef struct _typelib_TypeDescription typelib_TypeDescription;
 typedef struct _typelib_InterfaceTypeDescription typelib_InterfaceTypeDescription;

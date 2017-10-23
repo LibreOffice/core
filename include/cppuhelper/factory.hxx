@@ -19,19 +19,19 @@
 #ifndef INCLUDED_CPPUHELPER_FACTORY_HXX
 #define INCLUDED_CPPUHELPER_FACTORY_HXX
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <cstddef>
 
-#include <rtl/ustring.hxx>
-#include <rtl/unload.h>
+#include "rtl/ustring.hxx"
+#include "rtl/unload.h"
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <cppuhelper/cppuhelperdllapi.h>
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/lang/XSingleComponentFactory.hpp"
+#include "com/sun/star/lang/XSingleServiceFactory.hpp"
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/registry/XRegistryKey.hpp"
+#include "cppuhelper/cppuhelperdllapi.h"
 
 
 #define COMPONENT_GETENV            "component_getImplementationEnvironment"

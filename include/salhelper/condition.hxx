@@ -22,9 +22,9 @@
 #define INCLUDED_SALHELPER_CONDITION_HXX
 
 
-#include <osl/conditn.hxx>
-#include <osl/mutex.hxx>
-#include <salhelper/salhelperdllapi.h>
+#include "osl/conditn.hxx"
+#include "osl/mutex.hxx"
+#include "salhelper/salhelperdllapi.h"
 
 namespace salhelper
 {

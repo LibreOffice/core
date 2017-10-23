@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CPPU_UNOTYPE_HXX
 #define INCLUDED_CPPU_UNOTYPE_HXX
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <cstddef>
 
@@ -28,9 +28,9 @@
 #include <type_traits>
 #endif
 
-#include <sal/types.h>
-#include <typelib/typeclass.h>
-#include <typelib/typedescription.h>
+#include "sal/types.h"
+#include "typelib/typeclass.h"
+#include "typelib/typedescription.h"
 
 namespace com { namespace sun { namespace star { namespace uno {
     class Type;

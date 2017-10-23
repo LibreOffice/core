@@ -20,8 +20,8 @@
 #ifndef INCLUDED_OSL_PROFILE_HXX
 #define INCLUDED_OSL_PROFILE_HXX
 
-#include <osl/profile.h>
-#include <rtl/ustring.hxx>
+#include "osl/profile.h"
+#include "rtl/ustring.hxx"
 
 #include <string.h>
 #include <exception>

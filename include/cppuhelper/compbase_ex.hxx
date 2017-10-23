@@ -19,10 +19,10 @@
 #ifndef INCLUDED_CPPUHELPER_COMPBASE_EX_HXX
 #define INCLUDED_CPPUHELPER_COMPBASE_EX_HXX
 
-#include <cppuhelper/implbase_ex.hxx>
-#include <cppuhelper/interfacecontainer.h>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <cppuhelper/cppuhelperdllapi.h>
+#include "cppuhelper/implbase_ex.hxx"
+#include "cppuhelper/interfacecontainer.h"
+#include "com/sun/star/lang/XComponent.hpp"
+#include "cppuhelper/cppuhelperdllapi.h"
 
 /// @cond INTERNAL
 

@@ -21,9 +21,9 @@
 #ifndef INCLUDED_SALHELPER_TIMER_HXX
 #define INCLUDED_SALHELPER_TIMER_HXX
 
-#include <salhelper/simplereferenceobject.hxx>
-#include <osl/time.h>
-#include <salhelper/salhelperdllapi.h>
+#include "salhelper/simplereferenceobject.hxx"
+#include "osl/time.h"
+#include "salhelper/salhelperdllapi.h"
 
 namespace salhelper
 {

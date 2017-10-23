@@ -20,11 +20,11 @@
 #ifndef INCLUDED_RTL_URI_HXX
 #define INCLUDED_RTL_URI_HXX
 
-#include <rtl/malformeduriexception.hxx>
-#include <rtl/uri.h>
-#include <rtl/textenc.h>
-#include <rtl/ustring.hxx>
-#include <sal/types.h>
+#include "rtl/malformeduriexception.hxx"
+#include "rtl/uri.h"
+#include "rtl/textenc.h"
+#include "rtl/ustring.hxx"
+#include "sal/types.h"
 
 namespace rtl {
 

@@ -19,12 +19,12 @@
 #ifndef INCLUDED_RTL_UNLOAD_H
 #define INCLUDED_RTL_UNLOAD_H
 
-#include <sal/config.h>
+#include "sal/config.h"
 
-#include <osl/interlck.h>
-#include <osl/time.h>
-#include <sal/saldllapi.h>
-#include <sal/types.h>
+#include "osl/interlck.h"
+#include "osl/time.h"
+#include "sal/saldllapi.h"
+#include "sal/types.h"
 
 /** @file
     Backwards-compatibility remainders of a removed library unloading feature.

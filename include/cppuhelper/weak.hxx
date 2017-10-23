@@ -21,10 +21,10 @@
 
 #include <cassert>
 #include <cstddef>
-#include <osl/interlck.h>
-#include <rtl/alloc.h>
-#include <com/sun/star/uno/XWeak.hpp>
-#include <cppuhelper/cppuhelperdllapi.h>
+#include "osl/interlck.h"
+#include "rtl/alloc.h"
+#include "com/sun/star/uno/XWeak.hpp"
+#include "cppuhelper/cppuhelperdllapi.h"
 
 
 namespace cppu

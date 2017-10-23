@@ -19,7 +19,7 @@
 #ifndef INCLUDED_UNO_DATA_H
 #define INCLUDED_UNO_DATA_H
 
-#include <cppu/cppudllapi.h>
+#include "cppu/cppudllapi.h"
 
 #ifdef __cplusplus
 extern "C"

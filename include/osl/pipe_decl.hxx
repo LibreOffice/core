@@ -19,9 +19,9 @@
 #ifndef INCLUDED_OSL_PIPE_DECL_HXX
 #define INCLUDED_OSL_PIPE_DECL_HXX
 
-#include <osl/pipe.h>
-#   include <osl/security.hxx>
-#include <rtl/ustring.hxx>
+#include "osl/pipe.h"
+#   include "osl/security.hxx"
+#include "rtl/ustring.hxx"
 
 namespace osl {
 

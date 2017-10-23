@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CPPUHELPER_UNOURL_HXX
 #define INCLUDED_CPPUHELPER_UNOURL_HXX
 
-#include <sal/config.h>
+#include "sal/config.h"
 
-#include <cppuhelper/cppuhelperdllapi.h>
+#include "cppuhelper/cppuhelperdllapi.h"
 
 namespace rtl { class OUString; }
 

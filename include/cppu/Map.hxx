@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CPPU_MAP_HXX
 #define INCLUDED_CPPU_MAP_HXX
 
-#include <uno/mapping.hxx>
+#include "uno/mapping.hxx"
 
 
 namespace cppu

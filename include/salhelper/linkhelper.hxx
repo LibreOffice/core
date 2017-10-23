@@ -10,8 +10,8 @@
 #ifndef INCLUDED_SALHELPER_LINKHELPER_HXX
 #define INCLUDED_SALHELPER_LINKHELPER_HXX
 
-#include <rtl/ustring.hxx>
-#include <osl/file.hxx>
+#include "rtl/ustring.hxx"
+#include "osl/file.hxx"
 
 namespace salhelper
 {

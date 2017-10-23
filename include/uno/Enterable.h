@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UNO_ENTERABLE_H
 #define INCLUDED_UNO_ENTERABLE_H
 
-#include <uno/environment.h>
+#include "uno/environment.h"
 
 
 #ifdef __cplusplus

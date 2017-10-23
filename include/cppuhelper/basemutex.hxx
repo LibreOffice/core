@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CPPUHELPER_BASEMUTEX_HXX
 #define INCLUDED_CPPUHELPER_BASEMUTEX_HXX
 
-#include <osl/mutex.hxx>
+#include "osl/mutex.hxx"
 
 namespace cppu
 {

@@ -20,8 +20,8 @@
 #ifndef INCLUDED_OSL_SECURITY_DECL_HXX
 #define INCLUDED_OSL_SECURITY_DECL_HXX
 
-#include <rtl/ustring.hxx>
-#include <osl/security.h>
+#include "rtl/ustring.hxx"
+#include "osl/security.h"
 
 namespace osl
 {

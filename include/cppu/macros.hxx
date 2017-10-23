@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CPPU_MACROS_HXX
 #define INCLUDED_CPPU_MACROS_HXX
 
-#include <sal/types.h>
+#include "sal/types.h"
 
 /** Namespace name for compiler/ platform, e.g. gcc3, msci
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OSL_ENDIAN_H
 #define INCLUDED_OSL_ENDIAN_H
 
-#include <sal/types.h>
+#include "sal/types.h"
 
 #ifdef __cplusplus
 extern "C" {

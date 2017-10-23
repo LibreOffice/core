@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OSL_GETGLOBALMUTEX_HXX
 #define INCLUDED_OSL_GETGLOBALMUTEX_HXX
 
-#include <osl/mutex.hxx>
+#include "osl/mutex.hxx"
 
 namespace osl {
 

@@ -2,7 +2,7 @@
 #ifndef INCLUDED_CPPU_CPPUDLLAPI_H
 #define INCLUDED_CPPU_CPPUDLLAPI_H
 
-#include <sal/types.h>
+#include "sal/types.h"
 
 #if defined(CPPU_DLLIMPLEMENTATION)
 #define CPPU_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT

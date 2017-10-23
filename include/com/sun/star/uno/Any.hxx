@@ -19,7 +19,7 @@
 #ifndef INCLUDED_COM_SUN_STAR_UNO_ANY_HXX
 #define INCLUDED_COM_SUN_STAR_UNO_ANY_HXX
 
-#include <sal/config.h>
+#include "sal/config.h"
 
 #include <algorithm>
 #include <cassert>
@@ -27,15 +27,15 @@
 #include <iomanip>
 #include <ostream>
 
-#include <com/sun/star/uno/Any.h>
-#include <uno/data.h>
-#include <uno/sequence2.h>
-#include <com/sun/star/uno/Type.hxx>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/genfunc.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <cppu/cppudllapi.h>
-#include <cppu/unotype.hxx>
+#include "com/sun/star/uno/Any.h"
+#include "uno/data.h"
+#include "uno/sequence2.h"
+#include "com/sun/star/uno/Type.hxx"
+#include "com/sun/star/uno/Reference.h"
+#include "com/sun/star/uno/genfunc.hxx"
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "cppu/cppudllapi.h"
+#include "cppu/unotype.hxx"
 
 extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_Any_extraction_failure_msg(
     uno_Any const * pAny, typelib_TypeDescriptionReference * pType )

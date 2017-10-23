@@ -20,8 +20,8 @@
 #ifndef INCLUDED_CPPUHELPER_EXC_HLP_HXX
 #define INCLUDED_CPPUHELPER_EXC_HLP_HXX
 
-#include <com/sun/star/uno/Any.hxx>
-#include <cppuhelper/cppuhelperdllapi.h>
+#include "com/sun/star/uno/Any.hxx"
+#include "cppuhelper/cppuhelperdllapi.h"
 
 namespace cppu
 {

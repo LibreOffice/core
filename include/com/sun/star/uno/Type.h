@@ -19,10 +19,10 @@
 #ifndef INCLUDED_COM_SUN_STAR_UNO_TYPE_H
 #define INCLUDED_COM_SUN_STAR_UNO_TYPE_H
 
-#include <typelib/typedescription.h>
-#include <com/sun/star/uno/TypeClass.hdl>
-#include <rtl/ustring.hxx>
-#include <rtl/alloc.h>
+#include "typelib/typedescription.h"
+#include "com/sun/star/uno/TypeClass.hdl"
+#include "rtl/ustring.hxx"
+#include "rtl/alloc.h"
 
 
 namespace com
