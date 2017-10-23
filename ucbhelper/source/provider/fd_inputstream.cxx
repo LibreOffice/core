@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ucbhelper/fd_inputstream.hxx"
+#include <ucbhelper/fd_inputstream.hxx>
 
 #include <com/sun/star/io/IOException.hpp>
 #include <rtl/alloc.h>

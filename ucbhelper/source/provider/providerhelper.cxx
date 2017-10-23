@@ -32,9 +32,9 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/providerhelper.hxx>
 
-#include "osl/diagnose.h"
-#include "osl/mutex.hxx"
-#include "cppuhelper/weakref.hxx"
+#include <osl/diagnose.h>
+#include <osl/mutex.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include <unordered_map>
 

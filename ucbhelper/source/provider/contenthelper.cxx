@@ -36,9 +36,9 @@
 #include <ucbhelper/contentinfo.hxx>
 #include <ucbhelper/providerhelper.hxx>
 
-#include "osl/diagnose.h"
-#include "osl/mutex.hxx"
-#include "rtl/ref.hxx"
+#include <osl/diagnose.h>
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 
 #include <unordered_map>
 

@@ -32,7 +32,7 @@
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <cppuhelper/implbase.hxx>
-#include "ucbhelper/proxydecider.hxx"
+#include <ucbhelper/proxydecider.hxx>
 
 using namespace com::sun::star;
 using namespace ucbhelper;
