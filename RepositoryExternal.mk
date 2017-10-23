@@ -1896,9 +1896,16 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,curl/include) \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_use_libraries,$(1),\
-	curl \
+
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,curl)/builds/libcurl-vc11-$(if $(filter X86_64,$(CPUNAME)),x64,x86)-$(if $(MSVC_USE_DEBUG_RUNTIME),debug,release)-dll-ipv6-sspi-winssl/lib/libcurl$(if $(MSVC_USE_DEBUG_RUNTIME),_debug).lib \
 )
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,curl)/lib/.libs -lcurl \
+)
+endif
 
 endef
 

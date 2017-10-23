@@ -68,10 +68,17 @@ else ifeq ($(COM),MSC)
 
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_ExternalProject_run,build,\
-		MAKEFLAGS= LIB="$(ILIB)" nmake -f Makefile.vc11 \
-			cfg=$(if $(MSVC_USE_DEBUG_RUNTIME),debug-dll,release-dll) \
-			EXCFLAGS="/EHa /Zc:wchar_t- /D_CRT_SECURE_NO_DEPRECATE /DUSE_WINDOWS_SSPI $(SOLARINC)" $(if $(filter X86_64,$(CPUNAME)),MACHINE=X64) \
-	,lib)
+		CC="$(shell cygpath -w $(filter-out -%,$(CC))) $(filter -%,$(CC))" \
+		MAKEFLAGS= LIB="$(ILIB)" nmake -f Makefile.vc \
+			mode=dll \
+			VC=11 \
+			$(if $(filter X86_64,$(CPUNAME)),MACHINE=x64,MACHINE=x86) \
+			GEN_PDB=$(if $(gb_SYMBOL),yes,no) \
+			DEBUG=$(if $(MSVC_USE_DEBUG_RUNTIME),yes,no) \
+			ENABLE_IPV6=yes \
+			ENABLE_SSPI=yes \
+			ENABLE_WINSSL=yes \
+	,winbuild)
 
 endif
 
