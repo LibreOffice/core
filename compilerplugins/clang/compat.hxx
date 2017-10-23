@@ -10,6 +10,7 @@
 #ifndef INCLUDED_COMPILERPLUGINS_CLANG_COMPAT_HXX
 #define INCLUDED_COMPILERPLUGINS_CLANG_COMPAT_HXX
 
+#include <cstddef>
 #include <memory>
 #include <string>
 
@@ -35,6 +36,15 @@
 
 // Compatibility wrapper to abstract over (trivial) changes in the Clang API:
 namespace compat {
+
+inline llvm::StringRef take_front(llvm::StringRef ref, std::size_t N = 1) {
+#if CLANG_VERSION >= 40000
+    return ref.take_front(N);
+#else
+    auto const size = ref.size();
+    return N >= size ? ref : ref.drop_back(size - N);
+#endif
+}
 
 inline bool isLookupContext(clang::DeclContext const & ctxt) {
 #if CLANG_VERSION >= 30700
