@@ -32,13 +32,13 @@
 #include <sal/types.h>
 #include <unotools/configmgr.hxx>
 
-#include "strings.hrc"
-#include "dp_resource.h"
-#include "dp_shared.hxx"
+#include <strings.hrc>
+#include <dp_resource.h>
+#include <dp_shared.hxx>
 
-#include "dp_dependencies.hxx"
-#include "dp_descriptioninfoset.hxx"
-#include "dp_version.hxx"
+#include <dp_dependencies.hxx>
+#include <dp_descriptioninfoset.hxx>
+#include <dp_version.hxx>
 
 namespace {
 

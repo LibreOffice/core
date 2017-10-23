@@ -18,8 +18,8 @@
  */
 
 
-#include "dp_misc.h"
-#include "dp_services.hxx"
+#include <dp_misc.h>
+#include <dp_services.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/time.h>
 #include <osl/thread.h>

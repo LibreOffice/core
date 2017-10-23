@@ -18,11 +18,11 @@
  */
 
 
-#include "strings.hrc"
-#include "dp_services.hxx"
+#include <strings.hrc>
+#include <dp_services.hxx>
 #include "dp_lib_container.h"
-#include "dp_backend.h"
-#include "dp_ucb.h"
+#include <dp_backend.h>
+#include <dp_ucb.h>
 #include <rtl/uri.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/exc_hlp.hxx>

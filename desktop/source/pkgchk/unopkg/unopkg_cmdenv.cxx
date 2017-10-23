@@ -18,8 +18,8 @@
  */
 
 
-#include "strings.hrc"
-#include "dp_shared.hxx"
+#include <strings.hrc>
+#include <dp_shared.hxx>
 #include "unopkg_shared.h"
 #include <osl/thread.h>
 #include <unotools/resmgr.hxx>
@@ -40,7 +40,7 @@
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 
 #include <stdio.h>
-#include "dp_version.hxx"
+#include <dp_version.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ucb;

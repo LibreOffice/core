@@ -21,9 +21,9 @@
 #include <config_features.h>
 #include <chrono>
 
-#include "dp_misc.h"
-#include "dp_version.hxx"
-#include "dp_interact.h"
+#include <dp_misc.h>
+#include <dp_version.hxx>
+#include <dp_interact.h>
 #include <rtl/uri.hxx>
 #include <rtl/digest.h>
 #include <rtl/random.h>

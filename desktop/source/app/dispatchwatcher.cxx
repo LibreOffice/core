@@ -26,7 +26,7 @@
 #include <sfx2/app.hxx>
 #include <svl/fstathelper.hxx>
 
-#include "app.hxx"
+#include <app.hxx>
 #include "dispatchwatcher.hxx"
 #include <rtl/ustring.hxx>
 #include <comphelper/processfactory.hxx>

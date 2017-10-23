@@ -103,7 +103,7 @@
 #include <lib/init.hxx>
 
 #include "lokinteractionhandler.hxx"
-#include <lokclipboard.hxx>
+#include "lokclipboard.hxx"
 
 using namespace css;
 using namespace vcl;

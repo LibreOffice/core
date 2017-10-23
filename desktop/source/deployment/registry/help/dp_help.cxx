@@ -20,11 +20,11 @@
 #include <memory>
 #include <config_features.h>
 
-#include "strings.hrc"
-#include "dp_backend.h"
+#include <strings.hrc>
+#include <dp_backend.h>
 #include "dp_helpbackenddb.hxx"
-#include "dp_services.hxx"
-#include "dp_ucb.h"
+#include <dp_services.hxx>
+#include <dp_ucb.h>
 #include <rtl/uri.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>

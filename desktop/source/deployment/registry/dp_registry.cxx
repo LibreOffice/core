@@ -19,14 +19,14 @@
 
 #include <sal/config.h>
 
-#include "dp_shared.hxx"
-#include "dp_package.hxx"
-#include "strings.hrc"
-#include "dp_registry.hxx"
-#include "dp_misc.h"
-#include "dp_resource.h"
-#include "dp_interact.h"
-#include "dp_ucb.h"
+#include <dp_shared.hxx>
+#include <dp_package.hxx>
+#include <strings.hrc>
+#include <dp_registry.hxx>
+#include <dp_misc.h>
+#include <dp_resource.h>
+#include <dp_interact.h>
+#include <dp_ucb.h>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>

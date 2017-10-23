@@ -18,7 +18,7 @@
  */
 
 
-#include "dp_interact.h"
+#include <dp_interact.h>
 
 #include <comphelper/interaction.hxx>
 

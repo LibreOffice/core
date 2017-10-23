@@ -19,8 +19,8 @@
 
 
 #include "dp_manager.h"
-#include "dp_resource.h"
-#include "dp_services.hxx"
+#include <dp_resource.h>
+#include <dp_services.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <com/sun/star/deployment/thePackageManagerFactory.hpp>

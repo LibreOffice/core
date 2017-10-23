@@ -20,10 +20,10 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_INC_DP_BACKEND_H
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_INC_DP_BACKEND_H
 
-#include "dp_misc.h"
-#include "dp_resource.h"
-#include "dp_shared.hxx"
-#include "dp_interact.h"
+#include <dp_misc.h>
+#include <dp_resource.h>
+#include <dp_shared.hxx>
+#include <dp_interact.h>
 #include <rtl/ref.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -34,7 +34,7 @@
 #include <com/sun/star/deployment/InvalidRemovedParameterException.hpp>
 #include <list>
 #include <unordered_map>
-#include "strings.hrc"
+#include <strings.hrc>
 
 namespace dp_registry
 {

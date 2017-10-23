@@ -19,10 +19,10 @@
 
 #include <config_folders.h>
 
-#include "dp_update.hxx"
-#include "dp_version.hxx"
-#include "dp_identifier.hxx"
-#include "dp_descriptioninfoset.hxx"
+#include <dp_update.hxx>
+#include <dp_version.hxx>
+#include <dp_identifier.hxx>
+#include <dp_descriptioninfoset.hxx>
 
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>

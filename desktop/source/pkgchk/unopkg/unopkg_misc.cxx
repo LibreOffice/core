@@ -38,11 +38,11 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 
-#include "strings.hrc"
+#include <strings.hrc>
 #include "unopkg_shared.h"
-#include "dp_identifier.hxx"
-#include "dp_shared.hxx"
-#include "lockfile.hxx"
+#include <dp_identifier.hxx>
+#include <dp_shared.hxx>
+#include <lockfile.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -24,7 +24,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "migration.hxx"
+#include <migration.hxx>
 
 #include <sal/types.h>
 #include <rtl/string.hxx>

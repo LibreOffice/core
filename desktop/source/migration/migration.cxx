@@ -25,7 +25,7 @@
 #include <new>
 #include <set>
 
-#include "migration.hxx"
+#include <migration.hxx>
 #include "migration_impl.hxx"
 
 #include <sal/log.hxx>

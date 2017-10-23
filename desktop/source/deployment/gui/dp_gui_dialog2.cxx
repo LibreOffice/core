@@ -17,24 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "strings.hrc"
-#include "helpids.h"
+#include <strings.hrc>
+#include <helpids.h>
 #include <svtools/controldims.hxx>
 #include <svtools/strings.hrc>
 
 #include "dp_gui.h"
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extlistbox.hxx"
-#include "dp_shared.hxx"
+#include <dp_shared.hxx>
 #include "dp_gui_theextmgr.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
-#include "dp_misc.h"
-#include "dp_ucb.h"
-#include "dp_update.hxx"
-#include "dp_identifier.hxx"
-#include "dp_descriptioninfoset.hxx"
+#include <dp_misc.h>
+#include <dp_ucb.h>
+#include <dp_update.hxx>
+#include <dp_identifier.hxx>
+#include <dp_descriptioninfoset.hxx>
 
-#include "fpicker/strings.hrc"
+#include <fpicker/strings.hrc>
 
 #include <vcl/ctrl.hxx>
 #include <vcl/menu.hxx>

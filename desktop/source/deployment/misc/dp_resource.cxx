@@ -18,8 +18,8 @@
  */
 
 
-#include "dp_misc.h"
-#include "dp_resource.h"
+#include <dp_misc.h>
+#include <dp_resource.h>
 #include <osl/module.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/resmgr.hxx>

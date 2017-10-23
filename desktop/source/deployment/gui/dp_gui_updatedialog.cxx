@@ -97,19 +97,19 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include "dp_dependencies.hxx"
-#include "dp_descriptioninfoset.hxx"
-#include "dp_identifier.hxx"
-#include "dp_version.hxx"
-#include "dp_misc.h"
-#include "dp_update.hxx"
+#include <dp_dependencies.hxx>
+#include <dp_descriptioninfoset.hxx>
+#include <dp_identifier.hxx>
+#include <dp_version.hxx>
+#include <dp_misc.h>
+#include <dp_update.hxx>
 
 #include "dp_gui.h"
-#include "strings.hrc"
-#include "bitmaps.hlst"
+#include <strings.hrc>
+#include <bitmaps.hlst>
 #include "dp_gui_updatedata.hxx"
 #include "dp_gui_updatedialog.hxx"
-#include "dp_shared.hxx"
+#include <dp_shared.hxx>
 
 class KeyEvent;
 class MouseEvent;

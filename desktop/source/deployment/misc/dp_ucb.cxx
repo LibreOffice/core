@@ -18,9 +18,9 @@
  */
 
 
-#include "strings.hrc"
-#include "dp_misc.h"
-#include "dp_ucb.h"
+#include <strings.hrc>
+#include <dp_misc.h>
+#include <dp_ucb.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <ucbhelper/content.hxx>

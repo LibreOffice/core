@@ -18,12 +18,12 @@
  */
 
 
-#include "strings.hrc"
-#include "dp_shared.hxx"
-#include "dp_backend.h"
-#include "dp_platform.hxx"
-#include "dp_services.hxx"
-#include "dp_ucb.h"
+#include <strings.hrc>
+#include <dp_shared.hxx>
+#include <dp_backend.h>
+#include <dp_platform.hxx>
+#include <dp_services.hxx>
+#include <dp_ucb.h>
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
