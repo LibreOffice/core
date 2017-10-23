@@ -18,7 +18,7 @@
  */
 
 #include <emfplushelper.hxx>
-#include <emfphelperdata.hxx>
+#include "emfphelperdata.hxx"
 
 namespace emfplushelper
 {

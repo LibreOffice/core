@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <EnhancedShapeDumper.hxx>
+#include "EnhancedShapeDumper.hxx"
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 

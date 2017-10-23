@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <sal/config.h>
 #include <memory>
-#include <wmfemfhelper.hxx>
+#include "wmfemfhelper.hxx"
 
 namespace emfplushelper { struct EmfPlusHelperData; }
 namespace wmfemfhelper { class TargetHolders; }

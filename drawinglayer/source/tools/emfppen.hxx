@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPPEN_HXX
 #define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPPEN_HXX
 
-#include <emfpbrush.hxx>
+#include "emfpbrush.hxx"
 #include <com/sun/star/rendering/StrokeAttributes.hpp>
 #include <vector>
 

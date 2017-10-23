@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPPATH_HXX
 #define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPPATH_HXX
 
-#include <emfphelperdata.hxx>
+#include "emfphelperdata.hxx"
 #include <memory>
 
 namespace emfplushelper

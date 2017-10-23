@@ -38,7 +38,7 @@
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
-#include <helperwrongspellrenderer.hxx>
+#include "helperwrongspellrenderer.hxx"
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <vcl/hatch.hxx>

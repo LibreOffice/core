@@ -35,7 +35,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vcl/canvastools.hxx>
-#include <emfpregion.hxx>
+#include "emfpregion.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::basegfx;

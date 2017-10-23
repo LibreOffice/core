@@ -35,8 +35,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vcl/canvastools.hxx>
-#include <emfppen.hxx>
-#include <emfpcustomlinecap.hxx>
+#include "emfppen.hxx"
+#include "emfpcustomlinecap.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::basegfx;

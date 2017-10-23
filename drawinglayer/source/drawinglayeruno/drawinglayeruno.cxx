@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/factory.hxx>
 
-#include <xprimitive2drenderer.hxx>
+#include "xprimitive2drenderer.hxx"
 
 using namespace ::com::sun::star;
 

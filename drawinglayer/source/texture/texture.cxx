@@ -22,7 +22,7 @@
 #include <basegfx/utils/gradienttools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-#include "converters.hxx"
+#include <converters.hxx>
 
 namespace drawinglayer
 {
