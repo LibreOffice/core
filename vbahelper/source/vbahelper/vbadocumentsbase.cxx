@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vbahelper/vbadocumentsbase.hxx"
+#include <vbahelper/vbadocumentsbase.hxx>
 
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
@@ -42,9 +42,9 @@
 #include <osl/file.hxx>
 #include <unordered_map>
 
-#include "vbahelper/vbahelper.hxx"
-#include "vbahelper/vbaapplicationbase.hxx"
-#include "vbahelper/vbadocumentbase.hxx"
+#include <vbahelper/vbahelper.hxx>
+#include <vbahelper/vbaapplicationbase.hxx>
+#include <vbahelper/vbadocumentbase.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vbahelper/vbadocumentbase.hxx"
-#include "vbahelper/helperdecl.hxx"
+#include <vbahelper/vbadocumentbase.hxx>
+#include <vbahelper/helperdecl.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>

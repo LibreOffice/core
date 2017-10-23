@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vbahelper/vbaeventshelperbase.hxx"
+#include <vbahelper/vbaeventshelperbase.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/frame/XModel.hpp>
