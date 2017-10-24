@@ -29,9 +29,9 @@
 #include <cppuhelper/queryinterface.hxx>
 
 #ifdef MACOSX
-#include "premac.h"
+#include <premac.h>
 #include <Cocoa/Cocoa.h>
-#include "postmac.h"
+#include <postmac.h>
 #endif
 
 #include <vcl/svapp.hxx>

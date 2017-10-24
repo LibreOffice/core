@@ -24,9 +24,9 @@
 #include <com/sun/star/awt/SystemDependentXWindow.hpp>
 
 #if defined ( MACOSX )
-#include "premac.h"
+#include <premac.h>
 #include <Cocoa/Cocoa.h>
-#include "postmac.h"
+#include <postmac.h>
 #endif
 
 #include <vcl/syschild.hxx>
