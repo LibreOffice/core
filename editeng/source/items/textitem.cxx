@@ -2496,7 +2496,7 @@ bool SvxTwoLinesItem::QueryValue( css::uno::Any& rVal,
     switch( nMemberId )
     {
     case MID_TWOLINES:
-        rVal <<= (bool) bOn;
+        rVal <<= bOn;
         break;
     case MID_START_BRACKET:
         {
