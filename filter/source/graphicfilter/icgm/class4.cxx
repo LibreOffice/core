@@ -28,13 +28,13 @@ using namespace ::com::sun::star;
 
 double CGM::ImplGetOrientation( FloatPoint const & rCenter, FloatPoint const & rPoint )
 {
-    double fOrientation;
-
     double nX = rPoint.X - rCenter.X;
     double nY = rPoint.Y - rCenter.Y;
 
-    fOrientation = acos( nX / sqrt( nX * nX + nY * nY ) ) * 57.29577951308;
-    if ( nY > 0 )
+    double fSqrt = sqrt(nX * nX + nY * nY);
+
+    double fOrientation = fSqrt != 0.0 ? (acos(nX / fSqrt) * 57.29577951308) : 0.0;
+    if (nY > 0)
         fOrientation = 360 - fOrientation;
 
     return fOrientation;
