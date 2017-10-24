@@ -1479,7 +1479,10 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         else
         {
             if (!GetError())
+            {
+                SAL_WARN("sc.filter", "No match for filter '" << aFltName << "' in ConvertFrom");
                 SetError(SCERR_IMPORT_NI);
+            }
         }
 
         if (!bCalc3)
