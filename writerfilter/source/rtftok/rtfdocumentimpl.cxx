@@ -617,9 +617,12 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
     writerfilter::Reference<Properties>::Pointer_t pProperties = std::make_shared<RTFReferenceProperties>(aAttributes, aSprms);
 
     if (bFinal && !m_pSuperstream)
+    {
         // This is the end of the document, not just the end of e.g. a header.
         // This makes sure that dmapper can set DontBalanceTextColumns=true for this section if necessary.
+
         Mapper().markLastSectionGroup();
+    }
 
     // The trick is that we send properties of the previous section right now, which will be exactly what dmapper expects.
     Mapper().props(pProperties);
@@ -630,8 +633,6 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
     {
         m_hasFHeader = false;
         m_hasRHeader = false;
-        m_hasLHeader = false;
-        m_hasLFooter = false;
         m_hasRFooter = false;
         m_hasFFooter = false;
         Mapper().endSectionGroup();
