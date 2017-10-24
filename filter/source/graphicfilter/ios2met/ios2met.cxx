@@ -2048,8 +2048,12 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdSChCel: {
             sal_uInt8 nbyte;
             sal_uInt16 nLen=nOrderLen;
-            aAttr.aChrCellSize.Width()=ReadCoord(bCoord32);
-            aAttr.aChrCellSize.Height()=ReadCoord(bCoord32);
+            auto nWidth = ReadCoord(bCoord32);
+            auto nHeight = ReadCoord(bCoord32);
+            if (nWidth < 0 || nHeight < 0)
+                aAttr.aChrCellSize = aDefAttr.aChrCellSize;
+            else
+                aAttr.aChrCellSize = Size(nWidth, nHeight);
             if (bCoord32) nLen-=8; else nLen-=4;
             if (nLen>=4) {
                 pOS2MET->SeekRel(4); nLen-=4;
@@ -2057,7 +2061,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             if (nLen>=2) {
                 pOS2MET->ReadUChar( nbyte );
                 if ((nbyte&0x80)==0 && aAttr.aChrCellSize==Size(0,0))
-                    aAttr.aChrCellSize=aDefAttr.aChrCellSize;
+                    aAttr.aChrCellSize = aDefAttr.aChrCellSize;
             }
             break;
         }
