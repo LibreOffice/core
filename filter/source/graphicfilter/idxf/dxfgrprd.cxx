@@ -178,15 +178,13 @@ long DXFGroupReader::ReadI()
         return 0;
     }
 
-    long res = 0, nv = 1;
+    OStringBuffer aNumber;
     if (*p == '-') {
-        nv=-1;
-        p++;
+        aNumber.append(*p++);
     }
 
     while ((p != end) && *p >= '0' && *p <= '9') {
-        res=res*10+static_cast<long>(*p-'0');
-        p++;
+        aNumber.append(*p++);
     }
 
     while ((p != end) && (*p==0x20)) p++;
@@ -195,7 +193,7 @@ long DXFGroupReader::ReadI()
         return 0;
     }
 
-    return res*nv;
+    return aNumber.toString().toInt32();
 }
 
 double DXFGroupReader::ReadF()
