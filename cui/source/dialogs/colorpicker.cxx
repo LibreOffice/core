@@ -45,6 +45,7 @@
 #include <basegfx/color/bcolortools.hxx>
 #include <dialmgr.hxx>
 #include <colorpicker.hxx>
+#include <bitmaps.hlst>
 #include <cmath>
 #include <limits>
 #include <o3tl/typed_flags_set.hxx>
@@ -906,7 +907,7 @@ ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sa
 : ModalDialog( pParent, "ColorPicker", "cui/ui/colorpickerdialog.ui" )
 , mnDialogMode( nMode )
 , meMode( DefaultMode )
-, maSliderImage( FixedImage::loadThemeImage("res/colorslider.png") )
+, maSliderImage( BitmapEx( RID_SVXBMP_COLORSLIDER ) )
 {
     get(mpColorField, "colorField");
     get(mpColorSlider, "colorSlider");
