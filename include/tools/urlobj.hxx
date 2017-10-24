@@ -441,7 +441,7 @@ public:
     { return decode(m_aHost, eMechanism, eCharset); }
 
     OUString GetHostPort(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
-                          rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
+                          rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8) const;
 
     sal_uInt32 GetPort() const;
 
@@ -790,7 +790,7 @@ public:
         const;
 
     // Data URLs:
-    std::unique_ptr<SvMemoryStream> getData();
+    std::unique_ptr<SvMemoryStream> getData() const;
 
     // Coding:
 

@@ -125,7 +125,7 @@ FastSerializerHelper* FastSerializerHelper::writeId(sal_Int32 tokenId)
     return this;
 }
 
-css::uno::Reference< css::io::XOutputStream > FastSerializerHelper::getOutputStream()
+css::uno::Reference< css::io::XOutputStream > FastSerializerHelper::getOutputStream() const
 {
     return mpSerializer->getOutputStream();
 }

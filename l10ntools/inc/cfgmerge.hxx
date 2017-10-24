@@ -54,8 +54,8 @@ public:
         : sTagType( rTag ), sIdentifier( rId )
     {}
 
-    const OString &GetTagType() { return sTagType; }
-    const OString &GetIdentifier() { return sIdentifier; }
+    const OString &GetTagType() const { return sTagType; }
+    const OString &GetIdentifier() const { return sIdentifier; }
 
 };
 

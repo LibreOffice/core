@@ -51,7 +51,7 @@ public:
     explicit FastSaxSerializer(const css::uno::Reference< css::io::XOutputStream >& xOutputStream);
     ~FastSaxSerializer();
 
-    css::uno::Reference< css::io::XOutputStream > getOutputStream();
+    css::uno::Reference< css::io::XOutputStream > getOutputStream() const;
     /// called by FSHelper to put data in for writeTokenValueList
     TokenValueList& getTokenValueList() { return maTokenValues; }
 

@@ -99,7 +99,7 @@ public:
     // Texture
 
     // aspect ratio accessors and the defined method of keeping defined aspect ratio
-    double GetRatio() { return mfRatio; }
+    double GetRatio() const { return mfRatio; }
     void SetRatio(double fNew);
 
     // Parameters of ViewportTransformation

@@ -56,7 +56,7 @@ protected:
         const OString &rCloseTag
     )=0;
 
-    const OString& GetGID() { return sGID; }
+    const OString& GetGID() const { return sGID; }
 
 public:
     XRMResParser();
@@ -65,7 +65,7 @@ public:
     void Execute( int nToken, char * pToken );
 
     void SetError() { bError = true; }
-    bool GetError() { return bError; }
+    bool GetError() const { return bError; }
 };
 
 

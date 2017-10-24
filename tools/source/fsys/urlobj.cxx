@@ -589,7 +589,7 @@ std::unique_ptr<SvMemoryStream> memoryStream(
 
 }
 
-std::unique_ptr<SvMemoryStream> INetURLObject::getData()
+std::unique_ptr<SvMemoryStream> INetURLObject::getData() const
 {
     if( GetProtocol() != INetProtocol::Data )
     {
@@ -3906,7 +3906,7 @@ INetProtocol INetURLObject::CompareProtocolScheme(OUString const &
 }
 
 OUString INetURLObject::GetHostPort(DecodeMechanism eMechanism,
-                                     rtl_TextEncoding eCharset)
+                                     rtl_TextEncoding eCharset) const
 {
     // Check because PROT_VND_SUN_STAR_HELP, PROT_VND_SUN_STAR_HIER, and
     // PROT_VND_SUN_STAR_PKG misuse m_aHost:

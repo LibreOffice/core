@@ -346,15 +346,15 @@ public:
 protected:
     using OComponentHelper::disposing;
 
-    const css::uno::Reference< css::uno::XComponentContext >& impl_getComponentContext() { return m_xComponentContext;}
+    const css::uno::Reference< css::uno::XComponentContext >& impl_getComponentContext() const { return m_xComponentContext;}
 
-    const css::uno::Reference< css::awt::XWindow >& impl_getPeerWindow() { return m_xPeerWindow;}
+    const css::uno::Reference< css::awt::XWindow >& impl_getPeerWindow() const { return m_xPeerWindow;}
 
-    const css::uno::Reference< css::awt::XGraphics >& impl_getGraphicsPeer() { return m_xGraphicsPeer;}
+    const css::uno::Reference< css::awt::XGraphics >& impl_getGraphicsPeer() const { return m_xGraphicsPeer;}
 
-    const sal_Int32& impl_getWidth() { return m_nWidth;}
+    sal_Int32 impl_getWidth() const { return m_nWidth;}
 
-    const sal_Int32& impl_getHeight() { return m_nHeight;}
+    sal_Int32 impl_getHeight() const { return m_nHeight;}
 
     virtual css::awt::WindowDescriptor* impl_getWindowDescriptor(
         const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
@@ -366,7 +366,7 @@ protected:
 
     virtual void impl_recalcLayout( const css::awt::WindowEvent& aEvent );
 
-    const css::uno::Reference< css::uno::XInterface >& impl_getDelegator() { return m_xDelegator;}
+    const css::uno::Reference< css::uno::XInterface >& impl_getDelegator() const { return m_xDelegator;}
 
 private:
 
