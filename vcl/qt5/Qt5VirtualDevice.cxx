@@ -20,6 +20,7 @@
 #include "Qt5VirtualDevice.hxx"
 
 #include "Qt5Graphics.hxx"
+#include "Qt5Tools.hxx"
 
 #include <QtGui/QImage>
 
@@ -76,9 +77,9 @@ bool Qt5VirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
     else
     {
         if ( pBuffer )
-            m_pImage.reset( new QImage( pBuffer, nNewDX, nNewDY, QImage::Format_ARGB32 ) );
+            m_pImage.reset( new QImage( pBuffer, nNewDX, nNewDY, Qt5_DefaultFormat32 ) );
         else
-            m_pImage.reset( new QImage( nNewDX, nNewDY, QImage::Format_ARGB32 ) );
+            m_pImage.reset( new QImage( nNewDX, nNewDY, Qt5_DefaultFormat32 ) );
     }
 
     m_pImage->setDevicePixelRatio( m_fScale );

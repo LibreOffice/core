@@ -25,7 +25,10 @@
 #include <QtGui/QImage>
 
 #include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
+
+#include <memory>
 
 inline OUString toOUString(const QString& s)
 {
@@ -55,6 +58,8 @@ inline Size toSize( const QSize& rSize )
     return Size( rSize.width(), rSize.height() );
 }
 
+static constexpr QImage::Format Qt5_DefaultFormat32 = QImage::Format_ARGB32;
+
 inline QImage::Format getBitFormat( sal_uInt16 nBitCount )
 {
     switch ( nBitCount )
@@ -63,7 +68,7 @@ inline QImage::Format getBitFormat( sal_uInt16 nBitCount )
     case 8  : return QImage::Format_Indexed8;
     case 16 : return QImage::Format_RGB16;
     case 24 : return QImage::Format_RGB888;
-    case 32 : return QImage::Format_ARGB32;
+    case 32 : return Qt5_DefaultFormat32;
     default :
         std::abort();
         break;
@@ -79,11 +84,19 @@ inline sal_uInt16 getFormatBits( QImage::Format eFormat )
         case QImage::Format_Indexed8 : return 8;
         case QImage::Format_RGB16 : return 16;
         case QImage::Format_RGB888 : return 24;
-        case QImage::Format_ARGB32 : return 32;
+        case Qt5_DefaultFormat32 : return 32;
         default :
             std::abort();
             return 0;
     }
 }
+
+typedef struct _cairo_surface cairo_surface_t;
+struct CairoDeleter
+{
+    void operator()(cairo_surface_t *pSurface) const;
+};
+
+typedef std::unique_ptr<cairo_surface_t, CairoDeleter> UniqueCairoSurface;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
