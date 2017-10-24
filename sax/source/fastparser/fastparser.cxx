@@ -332,7 +332,7 @@ public:
 
     void dispose() { mpParser = nullptr; }
     /// @throws RuntimeException
-    void checkDispose() { if( !mpParser ) throw DisposedException(); }
+    void checkDispose() const { if( !mpParser ) throw DisposedException(); }
 
     //XLocator
     virtual sal_Int32 SAL_CALL getColumnNumber() override;

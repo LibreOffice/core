@@ -902,7 +902,7 @@ void Polygon::Clear()
     mpImplPolygon = static_cast<ImplPolygon*>(&aStaticImplPolygon);
 }
 
-double Polygon::CalcDistance( sal_uInt16 nP1, sal_uInt16 nP2 )
+double Polygon::CalcDistance( sal_uInt16 nP1, sal_uInt16 nP2 ) const
 {
     DBG_ASSERT( nP1 < mpImplPolygon->mnPoints,
                 "Polygon::CalcDistance(): nPos1 >= nPoints" );

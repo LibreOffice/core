@@ -193,7 +193,7 @@ protected:
 
     // encrypt and write in blocks
     std::size_t     CryptAndWriteBuffer( const void* pStart, std::size_t nLen );
-    bool            EncryptBuffer( void* pStart, std::size_t nLen );
+    bool            EncryptBuffer( void* pStart, std::size_t nLen ) const;
 
 public:
                     SvStream();
@@ -383,7 +383,7 @@ public:
     bool            IsWritable() const { return m_isWritable; }
     StreamMode      GetStreamMode() const { return m_eStreamMode; }
 
-    sal_Int32       GetVersion() { return m_nVersion; }
+    sal_Int32       GetVersion() const { return m_nVersion; }
     void            SetVersion( sal_Int32 n ) { m_nVersion = n; }
 
     friend SvStream& operator<<( SvStream& rStr, SvStrPtr f ); // for Manips
