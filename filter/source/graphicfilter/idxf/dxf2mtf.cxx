@@ -761,7 +761,7 @@ DXF2GDIMetaFile::~DXF2GDIMetaFile()
 
 bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF, sal_uInt16 nminpercent, sal_uInt16 nmaxpercent)
 {
-    double fWidth,fHeight,fScale;
+    double fWidth,fHeight,fScale(0.0);
     DXFTransform aTransform;
     Size aPrefSize;
     const DXFLayer * pLayer;
@@ -824,13 +824,12 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
             fHeight=pDXF->aBoundingBox.fMaxY-pDXF->aBoundingBox.fMinY;
             if (fWidth<=0 || fHeight<=0) {
                 bStatus=false;
-                fScale = 0;  // -Wall added this...
             }
             else {
-                    if (fWidth>fHeight)
-                        fScale=10000.0/fWidth;
-                    else
-                        fScale=10000.0/fHeight;
+                if (fWidth>fHeight)
+                    fScale=10000.0/fWidth;
+                else
+                    fScale=10000.0/fHeight;
                 aTransform=DXFTransform(fScale,-fScale,fScale,
                                         DXFVector(-pDXF->aBoundingBox.fMinX*fScale,
                                                    pDXF->aBoundingBox.fMaxY*fScale,
@@ -843,17 +842,21 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     else {
         fHeight=pVPort->fHeight;
         fWidth=fHeight*pVPort->fAspectRatio;
+        if (fWidth<=0 || fHeight<=0) {
+            bStatus=false;
+        } else {
             if (fWidth>fHeight)
                 fScale=10000.0/fWidth;
             else
                 fScale=10000.0/fHeight;
-        aTransform=DXFTransform(
-            DXFTransform(pVPort->aDirection,pVPort->aTarget),
-            DXFTransform(
-                DXFTransform(1.0,-1.0,1.0,DXFVector(fWidth/2-pVPort->fCenterX,fHeight/2+pVPort->fCenterY,0)),
-                DXFTransform(fScale,fScale,fScale,DXFVector(0,0,0))
-            )
-        );
+            aTransform=DXFTransform(
+                DXFTransform(pVPort->aDirection,pVPort->aTarget),
+                DXFTransform(
+                    DXFTransform(1.0,-1.0,1.0,DXFVector(fWidth/2-pVPort->fCenterX,fHeight/2+pVPort->fCenterY,0)),
+                    DXFTransform(fScale,fScale,fScale,DXFVector(0,0,0))
+                )
+            );
+        }
         aPrefSize.Width() =(long)(fWidth*fScale+1.5);
         aPrefSize.Height()=(long)(fHeight*fScale+1.5);
     }
