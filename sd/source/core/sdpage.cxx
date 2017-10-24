@@ -3064,7 +3064,7 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
         aPartArea.Height() = ((aArea.Height() - ((nRowCnt-1) * nGapH) ) / nRowCnt);
 
         SdrPage* pFirstPage = rModel.GetMasterSdPage(0, PageKind::Standard);
-        if ( pFirstPage )
+        if (pFirstPage && pFirstPage->GetWidth() && pFirstPage->GetHeight())
         {
             // scale actual size into handout rect
             double fScale = (double)aPartArea.Width() / (double)pFirstPage->GetWidth();
