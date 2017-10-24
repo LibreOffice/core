@@ -478,12 +478,20 @@ namespace emfio
                     break;
                     default :
                     {
-                        fWidth /= mnWinExtX;
-                        fHeight /= mnWinExtY;
-                        fWidth *= mnDevWidth;
-                        fHeight *= mnDevHeight;
-                        fWidth *= (double)mnMillX * 100 / (double)mnPixX;
-                        fHeight *= (double)mnMillY * 100 / (double)mnPixY;
+                        if (mnPixX == 0 || mnPixY == 0)
+                        {
+                            SAL_WARN("vcl.emf", "invalid scaling factor");
+                            return Size();
+                        }
+                        else
+                        {
+                            fWidth /= mnWinExtX;
+                            fHeight /= mnWinExtY;
+                            fWidth *= mnDevWidth;
+                            fHeight *= mnDevHeight;
+                            fWidth *= (double)mnMillX * 100.0 / (double)mnPixX;
+                            fHeight *= (double)mnMillY * 100.0 / (double)mnPixY;
+                        }
                     }
                     break;
                 }
