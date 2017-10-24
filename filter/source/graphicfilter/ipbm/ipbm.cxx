@@ -86,7 +86,7 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
         case 0:
         {
             const size_t nRemainingSize = mrPBM.remainingSize();
-            const size_t nDataRequired = mnWidth * (mnHeight / 8);
+            const size_t nDataRequired = static_cast<size_t>(mnWidth) * (mnHeight / 8);
             if (nRemainingSize < nDataRequired)
                 return false;
 
