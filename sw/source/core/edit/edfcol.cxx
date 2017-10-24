@@ -744,25 +744,25 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
             {
                 const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
-                    aResult.push_back({ svx::ClassificationType::TEXT, aValue, nParagraph });
+                    aResult.push_back({ svx::ClassificationType::TEXT, aValue, "", nParagraph });
             }
             else if (aName.startsWith(sPolicy + "BusinessAuthorizationCategory:Name"))
             {
                 const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
-                    aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, nParagraph });
+                    aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, "", nParagraph });
             }
             else if (aName.startsWith(sPolicy + "Extension:Marking"))
             {
                 const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
-                    aResult.push_back({ svx::ClassificationType::MARKING, aValue, nParagraph });
+                    aResult.push_back({ svx::ClassificationType::MARKING, aValue, "", nParagraph });
             }
             else if (aName.startsWith(sPolicy + "Extension:IntellectualPropertyPart"))
             {
                 const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
-                    aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, nParagraph });
+                    aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, "", nParagraph });
             }
         }
         ++nParagraph;
@@ -928,11 +928,10 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
         }
 
         uno::Reference<text::XTextField> xTextField = lcl_InsertParagraphClassification(xModel, xParent);
-        const OUString sValue = rResult.msString;
-        OUString sDisplayText = (isFirst ? ("(" + sValue) : sValue);
+        OUString sDisplayText = (isFirst ? ("(" + rResult.msAbbreviatedString) : rResult.msAbbreviatedString);
         if (isLast)
             sDisplayText += ")";
-        lcl_UpdateParagraphClassificationField(GetDoc(), xModel, xTextField, sKey, sValue, sDisplayText);
+        lcl_UpdateParagraphClassificationField(GetDoc(), xModel, xTextField, sKey, rResult.msString, sDisplayText);
     }
 }
 
@@ -983,19 +982,19 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectParagraphClassificati
         const OUString aValue = rdfValuePair.second;
         if (aName.startsWith(sPolicy + "Marking:Text:"))
         {
-            aResult.push_back({ svx::ClassificationType::TEXT, aValue, nParagraph });
+            aResult.push_back({ svx::ClassificationType::TEXT, aValue, "", nParagraph });
         }
         else if (aName.startsWith(sPolicy + "BusinessAuthorizationCategory:Name"))
         {
-            aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, nParagraph });
+            aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, "", nParagraph });
         }
         else if (aName.startsWith(sPolicy + "Extension:Marking"))
         {
-            aResult.push_back({ svx::ClassificationType::MARKING, aValue, nParagraph });
+            aResult.push_back({ svx::ClassificationType::MARKING, aValue, "", nParagraph });
         }
         else if (aName.startsWith(sPolicy + "Extension:IntellectualPropertyPart"))
         {
-            aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, xTextRange->getString(), nParagraph });
+            aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, xTextRange->getString(), "", nParagraph });
         }
     }
 
@@ -1572,6 +1571,80 @@ bool SwEditShell::RemoveParagraphMetadataFieldAtCursor(const bool bBackspaceNotD
     }
 
     return false;
+}
+
+OUString lcl_GetParagraphClassification(const uno::Reference<frame::XModel>& xModel, const uno::Reference<text::XTextContent>& xParagraph)
+{
+    const OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
+    uno::Reference<text::XTextField> xTextField = lcl_FindParagraphClassificationField(xModel, xParagraph, sPolicy + "BusinessAuthorizationCategory:Name");
+    if (xTextField.is())
+    {
+        const std::pair<OUString, OUString> rdfValuePair = lcl_getFieldRDF(xModel, xTextField, ParagraphClassificationValueRDFName);
+        return rdfValuePair.second;
+    }
+
+    return OUString();
+}
+
+OUString lcl_GetHighestClassificationParagraphClass(SwPaM* pCursor)
+{
+    OUString sHighestClass;
+
+    SwTextNode* pNode = pCursor->Start()->nNode.GetNode().GetTextNode();
+    if (pNode == nullptr)
+        return sHighestClass;
+
+    SwDocShell* pDocShell = pNode->GetDoc()->GetDocShell();
+    if (!pDocShell)
+        return sHighestClass;
+
+    SfxClassificationHelper aHelper(pDocShell->getDocProperties());
+
+    uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
+    const uno::Reference< text::XTextDocument > xDoc(xModel, uno::UNO_QUERY);
+    uno::Reference<text::XText> xParent = xDoc->getText();
+
+    uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(xParent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphEnumerationAccess->createEnumeration();
+    while (xParagraphs->hasMoreElements())
+    {
+        uno::Reference<text::XTextContent> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
+        sHighestClass = aHelper.GetHigherClass(sHighestClass, lcl_GetParagraphClassification(xModel, xParagraph));
+    }
+
+    return sHighestClass;
+}
+
+void SwEditShell::ClassifyDocPerHighestParagraphClass()
+{
+    SwDocShell* pDocShell = GetDoc()->GetDocShell();
+    if (!pDocShell)
+        return;
+
+    SfxClassificationHelper aHelper(pDocShell->getDocProperties());
+
+    const OUString sHighestParaClass = lcl_GetHighestClassificationParagraphClass(GetCursor());
+
+    std::vector<svx::ClassificationResult> results = CollectAdvancedClassification();
+    for (const svx::ClassificationResult& rResult : results)
+    {
+        switch (rResult.meType)
+        {
+        case svx::ClassificationType::CATEGORY:
+        {
+            const OUString sHighestClass = aHelper.GetHigherClass(sHighestParaClass, rResult.msString);
+            const auto eType = SfxClassificationHelper::stringToPolicyType(sHighestClass);
+            SetClassification(sHighestClass, eType);
+        }
+        break;
+        }
+    }
+
+    if (results.empty())
+    {
+        const auto eType = SfxClassificationHelper::stringToPolicyType(sHighestParaClass);
+        SetClassification(sHighestParaClass, eType);
+    }
 }
 
 // #i62675#
