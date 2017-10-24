@@ -49,7 +49,7 @@ private:
     DECL_LINK(SelectIPPartNumbersHdl, ListBox&, void);
     DECL_LINK(DoubleClickIPPartHdl, ListBox&, void);
 
-    void insertField(ClassificationType eType, OUString const & rString);
+    void insertField(ClassificationType eType, OUString const & rString, OUString const & rFullString);
 
 public:
     ClassificationDialog(vcl::Window* pParent, bool bPerParagraph, const std::function<void()>& rParagraphSignHandler = [](){});

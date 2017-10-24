@@ -30,16 +30,18 @@ class SVX_DLLPUBLIC ClassificationField : public SvxFieldData
 public:
     ClassificationType meType;
     OUString msDescription;
+    OUString msFullClassName;
 
-    ClassificationField(ClassificationType eType, OUString const & sDescription)
+    ClassificationField(ClassificationType eType, OUString const & sDescription, OUString const & sFullClassName)
         : SvxFieldData()
         , meType(eType)
         , msDescription(sDescription)
+        , msFullClassName(sFullClassName)
     {}
 
     ClassificationField* Clone() const override
     {
-        return new ClassificationField(meType, msDescription);
+        return new ClassificationField(meType, msDescription, msFullClassName);
     }
 
     bool operator==(const SvxFieldData& rOther) const override
@@ -49,7 +51,8 @@ public:
 
         const ClassificationField& rOtherField = static_cast<const ClassificationField&>(rOther);
         return (meType == rOtherField.meType &&
-                msDescription == rOtherField.msDescription);
+                msDescription == rOtherField.msDescription &&
+                msFullClassName == rOtherField.msFullClassName);
     }
 };
 
@@ -57,6 +60,7 @@ struct SVX_DLLPUBLIC ClassificationResult
 {
     ClassificationType meType;
     OUString msString;
+    OUString msAbbreviatedString;
     sal_Int32 mnParagraph;
 };
 

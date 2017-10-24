@@ -102,9 +102,9 @@ void ClassificationDialog::dispose()
     ModalDialog::dispose();
 }
 
-void ClassificationDialog::insertField(ClassificationType eType, OUString const & rString)
+void ClassificationDialog::insertField(ClassificationType eType, OUString const & rString, OUString const & rFullString)
 {
-    ClassificationField aField(eType, rString);
+    ClassificationField aField(eType, rString, rFullString);
     m_pEditWindow->InsertField(SvxFieldItem(aField, EE_FEATURE_FIELD));
 }
 
@@ -112,6 +112,10 @@ void ClassificationDialog::setupValues(std::vector<ClassificationResult> const &
 {
     for (ClassificationResult const & rClassificationResult : rInput)
     {
+        OUString msAbbreviatedString = rClassificationResult.msAbbreviatedString;
+        if (msAbbreviatedString.isEmpty())
+            msAbbreviatedString = maHelper.GetAbbreviatedBACName(rClassificationResult.msString);
+
         switch (rClassificationResult.meType)
         {
             case svx::ClassificationType::TEXT:
@@ -124,20 +128,20 @@ void ClassificationDialog::setupValues(std::vector<ClassificationResult> const &
             {
                 m_pClassificationListBox->SelectEntry(rClassificationResult.msString);
                 m_pInternationalClassificationListBox->SelectEntryPos(m_pClassificationListBox->GetSelectedEntryPos());
-                insertField(rClassificationResult.meType, rClassificationResult.msString);
+                insertField(rClassificationResult.meType, msAbbreviatedString, rClassificationResult.msString);
             }
             break;
 
             case svx::ClassificationType::MARKING:
             {
                 m_pMarkingListBox->SelectEntry(rClassificationResult.msString);
-                insertField(rClassificationResult.meType, rClassificationResult.msString);
+                insertField(rClassificationResult.meType, msAbbreviatedString, rClassificationResult.msString);
             }
             break;
 
             case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
             {
-                insertField(rClassificationResult.meType, rClassificationResult.msString);
+                insertField(rClassificationResult.meType, msAbbreviatedString, rClassificationResult.msString);
             }
             break;
 
@@ -161,16 +165,16 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
         const SvxFieldItem* pFieldItem = findField(rSection);
 
         ESelection aSelection(rSection.mnParagraph, rSection.mnStart, rSection.mnParagraph, rSection.mnEnd);
-        OUString sString = m_pEditWindow->pEdEngine->GetText(aSelection);
+        const OUString sDisplayString = m_pEditWindow->pEdEngine->GetText(aSelection);
         const ClassificationField* pClassificationField = pFieldItem ? dynamic_cast<const ClassificationField*>(pFieldItem->GetField()) : nullptr;
 
         if (pClassificationField)
         {
-            aClassificationResults.push_back({ pClassificationField->meType , sString, rSection.mnParagraph });
+            aClassificationResults.push_back({ pClassificationField->meType, pClassificationField->msFullClassName, sDisplayString, rSection.mnParagraph });
         }
         else
         {
-            aClassificationResults.push_back({ ClassificationType::TEXT, sString, rSection.mnParagraph });
+            aClassificationResults.push_back({ ClassificationType::TEXT, pClassificationField->msFullClassName, sDisplayString, rSection.mnParagraph });
         }
     }
     return aClassificationResults;
@@ -198,8 +202,9 @@ IMPL_LINK(ClassificationDialog, SelectClassificationHdl, ListBox&, rBox, void)
             }
         }
 
-        const OUString aString = maHelper.GetAbbreviatedBACNames()[nSelected];
-        insertField(ClassificationType::CATEGORY, aString);
+        const OUString aFullString = maHelper.GetBACNames()[nSelected];
+        const OUString aAbbreviatedString = maHelper.GetAbbreviatedBACNames()[nSelected];
+        insertField(ClassificationType::CATEGORY, aAbbreviatedString, aFullString);
 
         m_pInternationalClassificationListBox->SelectEntryPos(nSelected);
         m_pClassificationListBox->SelectEntryPos(nSelected);
@@ -229,7 +234,7 @@ IMPL_LINK(ClassificationDialog, SelectMarkingHdl, ListBox&, rBox, void)
         }
 
         const OUString aString = maHelper.GetMarkings()[nSelected];
-        insertField(ClassificationType::MARKING, aString);
+        insertField(ClassificationType::MARKING, aString, aString);
     }
 }
 
@@ -245,10 +250,10 @@ IMPL_LINK(ClassificationDialog, SelectIPPartNumbersHdl, ListBox&, rBox, void)
 
 IMPL_LINK(ClassificationDialog, DoubleClickIPPartHdl, ListBox&, rBox, void)
 {
-    sal_Int32 nSelected = rBox.GetSelectedEntryPos();
+    const sal_Int32 nSelected = rBox.GetSelectedEntryPos();
     if (nSelected >= 0)
     {
-        OUString sString = maHelper.GetIntellectualPropertyParts()[nSelected];
+        const OUString sString = maHelper.GetIntellectualPropertyParts()[nSelected];
         m_pIntellectualPropertyPartEdit->SetText(m_pIntellectualPropertyPartEdit->GetText() + sString);
     }
 }
@@ -265,7 +270,8 @@ IMPL_LINK(ClassificationDialog, ButtonClicked, Button*, pButton, void)
     }
     else if (pButton == m_pIntellectualPropertyPartAddButton)
     {
-        insertField(ClassificationType::INTELLECTUAL_PROPERTY_PART, m_pIntellectualPropertyPartEdit->GetText());
+        const OUString sString = m_pIntellectualPropertyPartEdit->GetText();
+        insertField(ClassificationType::INTELLECTUAL_PROPERTY_PART, sString, sString);
     }
 }
 
