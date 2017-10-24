@@ -969,21 +969,15 @@ static Result
 readUnsignedNumber(const OUString & rString,
     sal_Int32 & io_rnPos, sal_Int32 & o_rNumber)
 {
-    bool bOverflow(false);
-    sal_Int64 nTemp(0);
     sal_Int32 nPos(io_rnPos);
 
+    OUStringBuffer aNumber;
     while (nPos < rString.getLength())
     {
         const sal_Unicode c = rString[nPos];
         if (('0' <= c) && (c <= '9'))
         {
-            nTemp *= 10;
-            nTemp += (c - u'0');
-            if (nTemp >= SAL_MAX_INT32)
-            {
-                bOverflow = true;
-            }
+            aNumber.append(c);
         }
         else
         {
@@ -997,6 +991,9 @@ readUnsignedNumber(const OUString & rString,
         o_rNumber = -1;
         return R_NOTHING;
     }
+
+    const sal_Int64 nTemp = aNumber.toString().toInt64();
+    const bool bOverflow = (nTemp >= SAL_MAX_INT32);
 
     io_rnPos = nPos;
     o_rNumber = nTemp;
