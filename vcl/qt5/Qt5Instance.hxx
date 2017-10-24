@@ -39,6 +39,7 @@ class Qt5Instance
 
     osl::Condition m_aWaitingYieldCond;
     int m_postUserEventId;
+    const bool m_bUseCairo;
 
 public:
     std::unique_ptr< QApplication > m_pQApplication;
@@ -53,7 +54,7 @@ Q_SIGNALS:
     bool ImplYieldSignal( bool bWait, bool bHandleAllCurrentEvents );
 
 public:
-    explicit Qt5Instance( SalYieldMutex* pMutex );
+    explicit Qt5Instance( SalYieldMutex* pMutex, bool bUseCairo = false );
     virtual ~Qt5Instance() override;
 
     virtual SalFrame*          CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;

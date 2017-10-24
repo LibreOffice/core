@@ -54,6 +54,7 @@ $(eval $(call gb_Library_use_libraries,vclplug_qt5,\
 
 $(eval $(call gb_Library_use_externals,vclplug_qt5,\
 	boost_headers \
+	cairo \
 	icuuc \
 	qt5 \
 	epoxy \
@@ -89,6 +90,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/Qt5Object \
     vcl/qt5/Qt5Printer \
     vcl/qt5/Qt5Timer \
+    vcl/qt5/Qt5Tools \
     vcl/qt5/Qt5VirtualDevice \
     vcl/qt5/Qt5Widget \
 ))
