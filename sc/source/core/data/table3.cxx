@@ -3323,10 +3323,10 @@ bool ScTable::HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCR
 
     if (nStartCol == nEndCol)
     {
-        CellType eFstCellType = GetCellType(nStartCol, nStartRow);
-        CellType eSndCellType = GetCellType(nStartCol, nStartRow+1);
-        return ((eFstCellType == CELLTYPE_STRING || eFstCellType == CELLTYPE_EDIT) &&
-                (eSndCellType != CELLTYPE_STRING && eSndCellType != CELLTYPE_EDIT));
+        CellType eFirstCellType = GetCellType(nStartCol, nStartRow);
+        CellType eSecondCellType = GetCellType(nStartCol, nStartRow+1);
+        return ((eFirstCellType == CELLTYPE_STRING || eFirstCellType == CELLTYPE_EDIT) &&
+                (eSecondCellType != CELLTYPE_STRING && eSecondCellType != CELLTYPE_EDIT));
     }
 
     for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
@@ -3360,10 +3360,10 @@ bool ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCR
 
     if (nStartRow == nEndRow)
     {
-        CellType eFstCellType = GetCellType(nStartCol, nStartRow);
-        CellType eSndCellType = GetCellType(nStartCol+1, nStartRow);
-        return ((eFstCellType == CELLTYPE_STRING || eFstCellType == CELLTYPE_EDIT) &&
-                (eSndCellType != CELLTYPE_STRING && eSndCellType != CELLTYPE_EDIT));
+        CellType eFirstCellType = GetCellType(nStartCol, nStartRow);
+        CellType eSecondCellType = GetCellType(nStartCol+1, nStartRow);
+        return ((eFirstCellType == CELLTYPE_STRING || eFirstCellType == CELLTYPE_EDIT) &&
+                (eSecondCellType != CELLTYPE_STRING && eSecondCellType != CELLTYPE_EDIT));
     }
 
     for (SCROW nRow=nStartRow; nRow<=nEndRow; nRow++)
