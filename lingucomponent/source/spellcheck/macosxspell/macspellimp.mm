@@ -26,7 +26,7 @@
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 
-#include <macspellimp.hxx>
+#include "macspellimp.hxx"
 
 #include <linguistic/spelldta.hxx>
 #include <unotools/pathoptions.hxx>
