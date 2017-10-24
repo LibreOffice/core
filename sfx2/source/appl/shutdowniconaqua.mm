@@ -27,7 +27,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <sfx2/app.hxx>
 #include <sal/macros.h>
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 #include "shutdownicon.hxx"
 
 #include <com/sun/star/util/XStringWidth.hpp>
@@ -37,10 +37,10 @@
 #include <set>
 #include <vector>
 
-#include "premac.h"
+#include <premac.h>
 #include <objc/objc-runtime.h>
 #include <Cocoa/Cocoa.h>
-#include "postmac.h"
+#include <postmac.h>
 
 #define MI_OPEN                    1
 #define MI_WRITER                  2
