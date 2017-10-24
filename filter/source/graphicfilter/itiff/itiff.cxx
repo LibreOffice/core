@@ -1336,7 +1336,9 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     if ( nBitsPerSample == 32 )         // sj: i93300, compiler bug, 1 << 32 gives 1 one 32bit windows platforms,
                         nMaxSampleValue = 0xffffffff;   // (up from 80286 only the lower 5 bits are used when shifting a 32bit register)
                     else
-                        nMaxSampleValue = ( 1 << nBitsPerSample ) - 1;
+                    {
+                        nMaxSampleValue = (1U << nBitsPerSample) - 1;
+                    }
                 }
                 if ( nPhotometricInterpretation == 2 || nPhotometricInterpretation == 5 || nPhotometricInterpretation == 6 )
                     nDstBitsPerPixel = 24;
