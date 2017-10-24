@@ -28,7 +28,7 @@
 
 #if defined MACOSX
 #include <dirent.h>
-#include "osl/thread.h"
+#include <osl/thread.h>
 #endif
 
 namespace unoidl { namespace detail {
