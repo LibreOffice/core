@@ -361,9 +361,9 @@ void Font::GetFontAttributes( FontAttributes& rAttrs ) const
 SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
 {
     VersionCompat   aCompat( rIStm, StreamMode::READ );
-    sal_uInt16      nTmp16;
-    bool            bTmp;
-    sal_uInt8       nTmp8;
+    sal_uInt16      nTmp16(0);
+    bool            bTmp(false);
+    sal_uInt8       nTmp8(0);
 
     rImplFont.SetFamilyName( rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet()) );
     rImplFont.maStyleName = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
