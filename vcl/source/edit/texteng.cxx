@@ -2494,7 +2494,10 @@ void TextEngine::RemoveAttribs( sal_uInt32 nPara, sal_uInt16 nWhich )
             for(sal_uInt16 nAttr = rAttribs.Count(); nAttr; --nAttr)
             {
                 if(rAttribs.GetAttrib( nAttr - 1 ).Which() == nWhich)
-                    rAttribs.RemoveAttrib( nAttr -1 );
+                {
+                    // tdf#113400 destroy unique_ptr returned
+                    rAttribs.RemoveAttrib( nAttr -1 ).reset();
+                }
             }
             TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
             pTEParaPortion->MarkSelectionInvalid( 0 );
