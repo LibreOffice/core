@@ -137,19 +137,6 @@ public class DocumentProperties
 
         System.out.println("...done");
 
-        System.out.println("(Not) Checking preservation of custom meta data ...");
-
-        xDP2.loadFromMedium(TestDocument.getUrl("CUSTOM.odt"),
-            noArgs);
-        assertEquals("Author", "", xDP2.getAuthor());
-        xDP2.storeToMedium(temp + "CUSTOM.odt", mimeArgs);
-
-        //FIXME: now what? comparing for binary equality seems useless
-        // we could unzip the written file and grep for the custom stuff
-        // but would that work on windows...
-
-        System.out.println("...done");
-
         System.out.println("Checking loading from test document...");
 
         String file = TestDocument.getUrl("TEST.odt");
