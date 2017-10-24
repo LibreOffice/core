@@ -1534,6 +1534,9 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
     if ( ((8 > m_pWw8Fib->m_nVersion) && !pWwF->m_fComplex) || !pWwF->m_lcbClx )
         return nullptr;
 
+    if (pWwF->m_lcbClx < 0)
+        return nullptr;
+
     WW8_FC nClxPos = pWwF->m_fcClx;
 
     if (!checkSeek(*pStr, nClxPos))
