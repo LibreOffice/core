@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <_getopt.h>
+#include "_getopt.h"
 
 #define EPR                 fprintf(stderr,
 #define ERR(str, chr)       if(opterr) { EPR "%s%c\n", str, chr); }

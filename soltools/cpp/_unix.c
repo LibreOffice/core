@@ -32,7 +32,7 @@
 #include "cpp.h"
 
 #if defined(MACOSX) || defined(AIX) || defined(_WIN32)
-#include <_getopt.h>
+#include "_getopt.h"
 #else
 #include <getopt.h>
 #endif
