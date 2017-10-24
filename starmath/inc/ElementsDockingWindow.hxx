@@ -155,11 +155,10 @@ public:
     virtual void ToggleFloatingMode() override;
 };
 
-class SmElementsDockingWindowWrapper : public SfxChildWindow
+class SmElementsDockingWindowWrapper final : public SfxChildWindow
 {
     SFX_DECL_CHILDWINDOW_WITHID(SmElementsDockingWindowWrapper);
 
-protected:
     SmElementsDockingWindowWrapper( vcl::Window* pParentWindow,
                                     sal_uInt16 nId,
                                     SfxBindings* pBindings,

@@ -133,9 +133,8 @@ public:
 //  SmFontPickListBox
 
 
-class SmFontPickListBox : public SmFontPickList, public ListBox
+class SmFontPickListBox final : public SmFontPickList, public ListBox
 {
-protected:
     DECL_LINK(SelectHdl, ListBox&, void);
 
 public:

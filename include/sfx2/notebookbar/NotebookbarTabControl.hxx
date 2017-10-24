@@ -19,7 +19,7 @@ namespace com { namespace sun { namespace star { namespace ui {
     class XUIConfigurationListener;
 } } } }
 
-class SFX2_DLLPUBLIC NotebookbarTabControl : public NotebookbarTabControlBase
+class SFX2_DLLPUBLIC NotebookbarTabControl final : public NotebookbarTabControlBase
 {
 friend class ChangedUIEventListener;
 
@@ -40,8 +40,6 @@ private:
 
     css::uno::Reference<css::ui::XUIConfigurationListener> m_pListener;
     css::uno::Reference<css::frame::XFrame> m_xFrame;
-
-protected:
     bool m_bInitialized;
     bool m_bInvalidate;
 };

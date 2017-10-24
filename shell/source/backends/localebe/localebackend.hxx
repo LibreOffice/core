@@ -32,9 +32,10 @@
 namespace uno = css::uno ;
 namespace lang = css::lang ;
 
-class LocaleBackend : public ::cppu::WeakImplHelper <
+class LocaleBackend final : public ::cppu::WeakImplHelper <
         css::beans::XPropertySet,
-        lang::XServiceInfo > {
+        lang::XServiceInfo >
+{
 
     public:
 
@@ -94,7 +95,7 @@ class LocaleBackend : public ::cppu::WeakImplHelper <
             css::uno::Reference< css::beans::XVetoableChangeListener > const &) override
         {}
 
-    protected:
+    private:
         /**
           Service constructor from a service factory.
 
@@ -105,7 +106,6 @@ class LocaleBackend : public ::cppu::WeakImplHelper <
         /** Destructor */
         virtual ~LocaleBackend() override ;
 
-    private:
         // Returns the user locale
         static css::beans::Optional<css::uno::Any> getLocale();
 

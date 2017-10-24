@@ -63,13 +63,12 @@ public:
 };
 
 
-class SmXMLExport : public SvXMLExport
+class SmXMLExport final : public SvXMLExport
 {
     const SmNode *  pTree;
     OUString        aText;
     bool        bSuccess;
 
-protected:
     void ExportNodes(const SmNode *pNode, int nLevel);
     void ExportTable(const SmNode *pNode, int nLevel);
     void ExportLine(const SmNode *pNode, int nLevel);

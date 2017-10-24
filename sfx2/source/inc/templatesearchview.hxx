@@ -15,7 +15,7 @@
 class TemplateViewItem;
 class PopupMenu;
 
-class TemplateSearchView : public ThumbnailView
+class TemplateSearchView final : public ThumbnailView
 {
 public:
 
@@ -41,7 +41,7 @@ public:
 
     static BitmapEx getDefaultThumbnail( const OUString& rPath );
 
-protected:
+private:
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
@@ -50,7 +50,6 @@ protected:
 
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
-protected:
     TemplateViewItem *maSelectedItem;
 
     Point maPosition;

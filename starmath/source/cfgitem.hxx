@@ -92,7 +92,7 @@ public:
     void    SetModified( bool bVal )    { bModified = bVal; }
 };
 
-class SmMathConfig : public utl::ConfigItem, public SfxBroadcaster
+class SmMathConfig final : public utl::ConfigItem, public SfxBroadcaster
 {
     std::unique_ptr<SmFormat>         pFormat;
     std::unique_ptr<SmCfgOther>       pOther;
@@ -117,9 +117,8 @@ class SmMathConfig : public utl::ConfigItem, public SfxBroadcaster
                         const OUString &rSymbolName,
                         const OUString &rBaseNode ) const;
 
-    void            SetOtherIfNotEqual( bool &rbItem, bool bNewVal );
+    void    SetOtherIfNotEqual( bool &rbItem, bool bNewVal );
 
-protected:
     void    LoadOther();
     void    SaveOther();
     void    LoadFormat();

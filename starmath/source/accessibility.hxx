@@ -56,7 +56,7 @@ cppu::WeakImplHelper
     >
 SmGraphicAccessibleBaseClass;
 
-class SmGraphicAccessible :
+class SmGraphicAccessible final :
     public SmGraphicAccessibleBaseClass
 {
     OUString                            aAccName;
@@ -68,7 +68,6 @@ class SmGraphicAccessible :
     SmGraphicAccessible( const SmGraphicAccessible & ) = delete;
     SmGraphicAccessible & operator = ( const SmGraphicAccessible & ) = delete;
 
-protected:
     SmDocShell *    GetDoc_Impl();
     OUString        GetAccessibleText_Impl();
 
