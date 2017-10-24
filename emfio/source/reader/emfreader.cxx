@@ -1470,10 +1470,12 @@ namespace emfio
                                 ReadDIB(aBitmap, aTmp, true);
 
                                 // test if it is sensible to crop
-                                if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
-                                    ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
-                                        ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
-                                            ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
+                                if ( (cxSrc > 0) && (cySrc > 0) &&
+                                     (xSrc >= 0) && (ySrc >= 0) &&
+                                     (aBitmap.GetSizePixel().Width() >= cxSrc) &&
+                                     (xSrc <= aBitmap.GetSizePixel().Width() - cxSrc) &&
+                                     (aBitmap.GetSizePixel().Height() >= cySrc) &&
+                                     (ySrc <= aBitmap.GetSizePixel().Height() - cySrc) )
                                 {
                                     tools::Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                                     aBitmap.Crop( aCropRect );
