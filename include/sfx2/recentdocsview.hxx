@@ -52,7 +52,7 @@ template<> struct typed_flags<sfx2::ApplicationType> : is_typed_flags<sfx2::Appl
 namespace sfx2
 {
 
-class SFX2_DLLPUBLIC RecentDocsView : public ThumbnailView
+class SFX2_DLLPUBLIC RecentDocsView final : public ThumbnailView
 {
 public:
     RecentDocsView( vcl::Window* pParent );
@@ -71,7 +71,7 @@ public:
 
     DECL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, void*, void );
 
-protected:
+private:
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
     virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;

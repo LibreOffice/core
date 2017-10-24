@@ -42,14 +42,8 @@ class SmViewShell;
 class SmPrintUIOptions;
 class SmGraphicAccessible;
 
-class SmGraphicWindow : public ScrollableWindow
+class SmGraphicWindow final : public ScrollableWindow
 {
-    Point aFormulaDrawPos;
-    // old style editing pieces
-    tools::Rectangle aCursorRect;
-    bool bIsCursorVisible;
-    bool bIsLineVisible;
-    AutoTimer aCaretBlinkTimer;
 public:
     bool IsCursorVisible() const
     {
@@ -62,35 +56,7 @@ public:
     }
     void ShowLine(bool bShow);
     const SmNode * SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol);
-protected:
-    void SetIsCursorVisible(bool bVis)
-    {
-        bIsCursorVisible = bVis;
-    }
-    using Window::SetCursor;
-    void SetCursor(const SmNode *pNode);
-    void SetCursor(const tools::Rectangle &rRect);
-    bool IsInlineEditEnabled() const;
 
-private:
-    rtl::Reference<SmGraphicAccessible> mxAccessible;
-
-    SmViewShell* pViewShell;
-    sal_uInt16 nZoom;
-
-protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
-    virtual void KeyInput(const KeyEvent& rKEvt) override;
-    virtual void Command(const CommandEvent& rCEvt) override;
-    virtual void StateChanged( StateChangedType eChanged ) override;
-
-private:
-    void RepaintViewShellDoc();
-    DECL_LINK(CaretBlinkTimerHdl, Timer *, void);
-    void CaretBlinkInit();
-    void CaretBlinkStart();
-    void CaretBlinkStop();
-public:
     explicit SmGraphicWindow(SmViewShell* pShell);
     virtual ~SmGraphicWindow() override;
     virtual void dispose() override;
@@ -133,11 +99,41 @@ public:
     {
         return mxAccessible.get();
     }
+
+private:
+    void SetIsCursorVisible(bool bVis)
+    {
+        bIsCursorVisible = bVis;
+    }
+    using Window::SetCursor;
+    void SetCursor(const SmNode *pNode);
+    void SetCursor(const tools::Rectangle &rRect);
+    bool IsInlineEditEnabled() const;
+
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+    virtual void KeyInput(const KeyEvent& rKEvt) override;
+    virtual void Command(const CommandEvent& rCEvt) override;
+    virtual void StateChanged( StateChangedType eChanged ) override;
+
+    void RepaintViewShellDoc();
+    DECL_LINK(CaretBlinkTimerHdl, Timer *, void);
+    void CaretBlinkInit();
+    void CaretBlinkStart();
+    void CaretBlinkStop();
+
+    Point aFormulaDrawPos;
+    // old style editing pieces
+    tools::Rectangle aCursorRect;
+    bool bIsCursorVisible;
+    bool bIsLineVisible;
+    AutoTimer aCaretBlinkTimer;
+    rtl::Reference<SmGraphicAccessible> mxAccessible;
+    SmViewShell* pViewShell;
+    sal_uInt16 nZoom;
 };
 
-class SmGraphicController: public SfxControllerItem
+class SmGraphicController final : public SfxControllerItem
 {
-protected:
     SmGraphicWindow &rGraphic;
 public:
     SmGraphicController(SmGraphicWindow &, sal_uInt16, SfxBindings & );
@@ -146,9 +142,8 @@ public:
                               const SfxPoolItem* pState) override;
 };
 
-class SmEditController: public SfxControllerItem
+class SmEditController final : public SfxControllerItem
 {
-protected:
     SmEditWindow &rEdit;
 
 public:
@@ -198,11 +193,10 @@ public:
     SmViewShell* GetView();
 };
 
-class SmCmdBoxWrapper : public SfxChildWindow
+class SmCmdBoxWrapper final : public SfxChildWindow
 {
     SFX_DECL_CHILDWINDOW_WITHID(SmCmdBoxWrapper);
 
-protected:
     SmCmdBoxWrapper(vcl::Window* pParentWindow, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo);
 
 public:

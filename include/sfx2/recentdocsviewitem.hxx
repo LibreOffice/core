@@ -12,7 +12,7 @@
 
 #include <sfx2/thumbnailview.hxx>
 
-class RecentDocsViewItem : public ThumbnailViewItem
+class RecentDocsViewItem final : public ThumbnailViewItem
 {
 public:
     RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL,
@@ -37,11 +37,10 @@ public:
     /// Called when the user clicks a document - it will open it.
     void OpenDocument();
 
-protected:
+private:
     /// Return area where is the icon to remove document from the recent documents.
     tools::Rectangle getRemoveIconArea() const;
 
-private:
     OUString maURL;
 
     OUString m_sHelpText;

@@ -34,7 +34,7 @@
 class SfxStyleFamilyItem;
 class SfxStyleSheetBase;
 
-class SfxManageStyleSheetPage : public SfxTabPage
+class SfxManageStyleSheetPage final : public SfxTabPage
 {
     VclPtr<VclMultiLineEdit> m_pNameRo;
     VclPtr<Edit>             m_pNameRw;
@@ -66,7 +66,6 @@ class SfxManageStyleSheetPage : public SfxTabPage
     OUString aParent;
     sal_uInt16 nFlags;
 
-private:
 friend class SfxStyleDialog;
 
     DECL_LINK( GetFocusHdl, Control&, void );
@@ -84,15 +83,14 @@ friend class SfxStyleDialog;
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );
 
-protected:
     virtual bool        FillItemSet(SfxItemSet *) override;
     virtual void        Reset(const SfxItemSet *) override;
 
     static bool    Execute_Impl( sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
                           sal_uInt16 nFamily, sal_uInt16 nMask = 0 );
     using TabPage::ActivatePage;
-        virtual void        ActivatePage(const SfxItemSet &) override;
-        using TabPage::DeactivatePage;
+    virtual void        ActivatePage(const SfxItemSet &) override;
+    using TabPage::DeactivatePage;
     virtual DeactivateRC DeactivatePage(SfxItemSet *) override;
 
 public:

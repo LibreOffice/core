@@ -32,14 +32,15 @@
  * - can be initialized (css::lang::XInitialization)
  * with a specific language (i.e. css::lang::Locale)
  */
-class SvNumberFormatsSupplierServiceObject
+class SvNumberFormatsSupplierServiceObject final
             :public SvNumberFormatsSupplierObj
             ,public css::lang::XInitialization
             ,public css::lang::XServiceInfo
 {
-protected:
     SvNumberFormatter*                                  m_pOwnFormatter;
     css::uno::Reference< css::uno::XComponentContext >  m_xORB;
+
+    void implEnsureFormatter();
 
 public:
     explicit SvNumberFormatsSupplierServiceObject(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
@@ -70,9 +71,6 @@ public:
 
     // XUnoTunnler
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-
-protected:
-    void implEnsureFormatter();
 };
 
 

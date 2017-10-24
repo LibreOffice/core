@@ -30,12 +30,8 @@ namespace svt
 
     //= OFileNotation
 
-    class SVL_DLLPUBLIC OFileNotation
+    class SVL_DLLPUBLIC OFileNotation final
     {
-    protected:
-        OUString     m_sSystem;
-        OUString     m_sFileURL;
-
     public:
         enum NOTATION
         {
@@ -52,6 +48,9 @@ namespace svt
         SVL_DLLPRIVATE void construct( const OUString& _rUrlOrPath );
         SVL_DLLPRIVATE bool    implInitWithSystemNotation( const OUString& _rSystemPath );
         SVL_DLLPRIVATE bool    implInitWithURLNotation( const OUString& _rURL );
+
+        OUString     m_sSystem;
+        OUString     m_sFileURL;
     };
 
 

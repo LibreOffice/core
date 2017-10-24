@@ -52,7 +52,7 @@ private:
 };
 
 
-class EmojiView : public ThumbnailView
+class EmojiView final : public ThumbnailView
 {
 public:
     EmojiView ( vcl::Window* pParent);
@@ -66,14 +66,13 @@ public:
 
     void AppendItem(const OUString &rTitle, const OUString &rCategory, const OUString &rName );
 
-protected:
+private:
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
-protected:
     std::string msJSONData;
 
     Link<ThumbnailViewItem*, void> maInsertEmojiHdl;

@@ -12,7 +12,7 @@
 
 #include <sfx2/templatelocalview.hxx>
 
-class SFX2_DLLPUBLIC TemplateDefaultView : public TemplateLocalView
+class SFX2_DLLPUBLIC TemplateDefaultView final : public TemplateLocalView
 {
 public:
     TemplateDefaultView(Window *pParent);
@@ -28,7 +28,8 @@ public:
     void createContextMenu();
 
     DECL_LINK(ContextMenuSelectHdl, Menu*, void);
-protected:
+
+private:
     long    mnItemMaxSize;
     long    mnTextHeight;
 };
