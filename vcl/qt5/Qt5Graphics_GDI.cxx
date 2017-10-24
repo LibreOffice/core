@@ -194,6 +194,7 @@ void Qt5Graphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBi
 
     PreparePainter();
     const QImage *pImage = static_cast< const Qt5Bitmap* >( &rSalBitmap )->GetQImage();
+    assert( pImage );
 
     m_pPainter->drawImage( QPoint( rPosAry.mnDestX, rPosAry.mnDestY ),
         *pImage, QRect( rPosAry.mnSrcX, rPosAry.mnSrcY,
@@ -208,12 +209,24 @@ void Qt5Graphics::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSalBitmap,
                               const SalBitmap& rTransparentBitmap )
 {
+    if( rPosAry.mnSrcWidth <= 0 || rPosAry.mnSrcHeight <= 0
+            || rPosAry.mnDestWidth <= 0 || rPosAry.mnDestHeight <= 0 )
+        return;
+
+    assert( rPosAry.mnSrcWidth == rPosAry.mnDestWidth );
+    assert( rPosAry.mnSrcHeight == rPosAry.mnDestHeight );
 }
 
 void Qt5Graphics::drawMask( const SalTwoRect& rPosAry,
-                                      const SalBitmap& rSalBitmap,
-                                      SalColor nMaskColor )
+                            const SalBitmap& rSalBitmap,
+                            SalColor nMaskColor )
 {
+    if( rPosAry.mnSrcWidth <= 0 || rPosAry.mnSrcHeight <= 0
+            || rPosAry.mnDestWidth <= 0 || rPosAry.mnDestHeight <= 0 )
+        return;
+
+    assert( rPosAry.mnSrcWidth == rPosAry.mnDestWidth );
+    assert( rPosAry.mnSrcHeight == rPosAry.mnDestHeight );
 }
 
 SalBitmap* Qt5Graphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
