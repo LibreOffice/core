@@ -365,6 +365,7 @@ SfxClassificationHelper::Impl::Impl(uno::Reference<document::XDocumentProperties
     : m_xDocumentProperties(std::move(xDocumentProperties))
     , m_bUseLocalized(bUseLocalized)
 {
+    parsePolicy();
 }
 
 void SfxClassificationHelper::Impl::parsePolicy()
@@ -595,9 +596,30 @@ const OUString& SfxClassificationHelper::GetBACName(SfxClassificationPolicyType 
     return m_pImpl->m_aCategory[eType].m_aName;
 }
 
-const OUString& SfxClassificationHelper::GetAbbreviatedBACName(SfxClassificationPolicyType eType)
+const OUString& SfxClassificationHelper::GetAbbreviatedBACName(const OUString& sFullName)
 {
-    return m_pImpl->m_aCategory[eType].m_aAbbreviatedName;
+    for (const auto& category : m_pImpl->m_aCategories)
+    {
+        if (category.m_aName == sFullName)
+            return category.m_aAbbreviatedName;
+    }
+
+    return sFullName;
+}
+
+OUString SfxClassificationHelper::GetHigherClass(const OUString& first, const OUString& second)
+{
+    size_t nFirstSensitivity = INT_MAX;
+    size_t nSecondSensitivity = INT_MAX;
+    for (const auto& category : m_pImpl->m_aCategories)
+    {
+        if (category.m_aName == first)
+            nFirstSensitivity = category.m_nSensitivity;
+        if (category.m_aName == second)
+            nSecondSensitivity = category.m_nSensitivity;
+    }
+
+    return nFirstSensitivity <= nSecondSensitivity ? first : second;
 }
 
 bool SfxClassificationHelper::HasImpactLevel()
