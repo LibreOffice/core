@@ -540,7 +540,7 @@ namespace emfio
                 SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "vcl.wmf", "SJ: ETO_PDY || ETO_GLYPH_INDEX in WMF" );
 
                 // output only makes sense if the text contains characters
-                if( nLen )
+                if (nLen && nRecordSize >= 0)
                 {
                     sal_Int32 nOriginalTextLen = nLen;
                     sal_Int32 nOriginalBlockLen = ( nOriginalTextLen + 1 ) &~ 1;
