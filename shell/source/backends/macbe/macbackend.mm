@@ -28,11 +28,11 @@
 
 #include "macbackend.hxx"
 
-#include "com/sun/star/beans/Optional.hpp"
+#include <com/sun/star/beans/Optional.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
-#include "osl/file.h"
+#include <osl/file.h>
 
 #define SPACE      ' '
 #define SEMI_COLON ';'
