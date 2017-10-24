@@ -178,10 +178,8 @@ struct LOKDocViewPrivateImpl
     /// Cached document type, returned by getDocumentType().
     LibreOfficeKitDocumentType m_eDocumentType;
 
-    /**
-     * Contains a freshly set zoom level: logic size of a tile.
-     * It gets reset back to 0 when LOK was informed about this zoom change.
-    */
+    /// Contains a freshly set zoom level: logic size of a tile.
+    /// It gets reset back to 0 when LOK was informed about this zoom change.
     int m_nTileSizeTwips;
 
     GdkRectangle m_aVisibleArea;
