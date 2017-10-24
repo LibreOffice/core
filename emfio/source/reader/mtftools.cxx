@@ -411,7 +411,7 @@ namespace emfio
                 fX2 -= mrclFrame.Left();
                 fY2 -= mrclFrame.Top();
             }
-            return Point( FRound( fX2 ), FRound( fY2 ) );
+            return Point(basegfx::fround(fX2), basegfx::fround(fY2));
         }
         else
             return Point();
