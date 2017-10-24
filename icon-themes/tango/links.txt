@@ -595,7 +595,7 @@ cmd/sc_diagramwall.png cmd/sc_diagramtype.png
 cmd/sc_displaymode.png cmd/sc_ok.png
 cmd/sc_legend.png cmd/sc_ok.png
 cmd/sc_dataranges.png cmd/sc_ok.png
-cmd/sc_jumptospecificpage.png cmd/sc_ok.png
+cmd/sc_updateall.png cmd/sc_reload.png
 
 cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png
