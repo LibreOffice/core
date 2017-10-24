@@ -119,7 +119,7 @@ public:
 
     tools::Rectangle           GetBoundRect() const;
     bool                IsInside( const Point& rPt ) const;
-    double              CalcDistance( sal_uInt16 nPt1, sal_uInt16 nPt2 );
+    double              CalcDistance( sal_uInt16 nPt1, sal_uInt16 nPt2 ) const;
     void                Clip( const tools::Rectangle& rRect );
     void                Optimize( PolyOptimizeFlags nOptimizeFlags );
 

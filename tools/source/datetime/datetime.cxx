@@ -223,7 +223,7 @@ double operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 )
     return double(nDays);
 }
 
-void DateTime::GetWin32FileDateTime( sal_uInt32 & rLower, sal_uInt32 & rUpper )
+void DateTime::GetWin32FileDateTime( sal_uInt32 & rLower, sal_uInt32 & rUpper ) const
 {
     const sal_Int64 a100nPerSecond = SAL_CONST_INT64( 10000000 );
     const sal_Int64 a100nPerDay = a100nPerSecond * sal_Int64( 60 * 60 * 24 );

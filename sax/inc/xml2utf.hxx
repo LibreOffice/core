@@ -32,7 +32,7 @@ public:
     ~Text2UnicodeConverter();
 
     css::uno::Sequence < sal_Unicode > convert( const css::uno::Sequence<sal_Int8> & );
-    bool canContinue() {  return m_bCanContinue; }
+    bool canContinue() const { return m_bCanContinue; }
 
 private:
     void init( rtl_TextEncoding encoding );

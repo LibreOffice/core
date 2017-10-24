@@ -98,7 +98,7 @@ public:
     DateTime&       operator =( const DateTime& rDateTime );
     DateTime&       operator =( const css::util::DateTime& rUDateTime );
 
-    void            GetWin32FileDateTime( sal_uInt32 & rLower, sal_uInt32 & rUpper );
+    void            GetWin32FileDateTime( sal_uInt32 & rLower, sal_uInt32 & rUpper ) const;
     static DateTime CreateFromWin32FileDateTime( sal_uInt32 rLower, sal_uInt32 rUpper );
 
     /// Creates DateTime given a unix time, which is the number of seconds

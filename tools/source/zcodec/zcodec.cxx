@@ -310,7 +310,7 @@ void ZCodec::SetBreak( size_t nInToRead )
     mnInToRead = nInToRead;
 }
 
-size_t ZCodec::GetBreak()
+size_t ZCodec::GetBreak() const
 {
     return ( mnInToRead + PZSTREAM->avail_in );
 }

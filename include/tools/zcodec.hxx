@@ -73,9 +73,9 @@ public:
     long            ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize );
 
     void            SetBreak( size_t );
-    size_t          GetBreak();
+    size_t          GetBreak() const;
     void            SetCRC( sal_uInt32 nCurrentCRC );
-    sal_uInt32      GetCRC() { return mnCRC;}
+    sal_uInt32      GetCRC() const { return mnCRC;}
 };
 
 #endif
