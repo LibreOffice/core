@@ -666,7 +666,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                             for (long y = 0; bIsValid && y < nHeight; ++y)
                             {
                                 int nBitsLeft = 0;
-                                for (long x = 0; bIsValid && x < nWidth; ++x)
+                                for (long x = 0; x < nWidth; ++x)
                                 {
                                     if ( --nBitsLeft < 0 )
                                     {
@@ -711,6 +711,8 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                                             }
                                         }
                                     }
+                                    if (!bIsValid)
+                                        break;
                                     if ( nBitDepth == 1 )
                                         pAcc->SetPixelIndex( y, x, static_cast<sal_uInt8>(nDat >> nBitsLeft) & 1 );
                                     else
