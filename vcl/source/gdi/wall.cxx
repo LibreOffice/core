@@ -57,7 +57,6 @@ ImplWallpaper::~ImplWallpaper()
 SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 {
     VersionCompat   aCompat( rIStm, StreamMode::READ );
-    sal_uInt16          nTmp16;
 
     rImplWallpaper.mpRect.reset();
     rImplWallpaper.mpGradient.reset();
@@ -65,12 +64,14 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 
     // version 1
     ReadColor( rIStm, rImplWallpaper.maColor );
-    rIStm.ReadUInt16( nTmp16 ); rImplWallpaper.meStyle = (WallpaperStyle) nTmp16;
+    sal_uInt16 nTmp16(0);
+    rIStm.ReadUInt16(nTmp16);
+    rImplWallpaper.meStyle = static_cast<WallpaperStyle>(nTmp16);
 
     // version 2
     if( aCompat.GetVersion() >= 2 )
     {
-        bool bRect, bGrad, bBmp, bDummy;
+        bool bRect(false), bGrad(false), bBmp(false), bDummy;
 
         rIStm.ReadCharAsBool( bRect ).ReadCharAsBool( bGrad ).ReadCharAsBool( bBmp ).ReadCharAsBool( bDummy ).ReadCharAsBool( bDummy ).ReadCharAsBool( bDummy );
 
