@@ -712,7 +712,7 @@ void SyntaxHighlighter::getHighlightPortions(const OUString& rLine,
     m_tokenizer->getHighlightPortions( rLine, portions );
 }
 
-HighlighterLanguage SyntaxHighlighter::GetLanguage()
+HighlighterLanguage SyntaxHighlighter::GetLanguage() const
 {
     return m_tokenizer->aLanguage;
 }

@@ -226,12 +226,12 @@ OUString EmbeddedObjectContainer::CreateUniqueObjectName()
     return aStr;
 }
 
-uno::Sequence < OUString > EmbeddedObjectContainer::GetObjectNames()
+uno::Sequence < OUString > EmbeddedObjectContainer::GetObjectNames() const
 {
     return comphelper::mapKeysToSequence(pImpl->maObjectContainer);
 }
 
-bool EmbeddedObjectContainer::HasEmbeddedObjects()
+bool EmbeddedObjectContainer::HasEmbeddedObjects() const
 {
     return pImpl->maObjectContainer.size() != 0;
 }
@@ -247,7 +247,7 @@ bool EmbeddedObjectContainer::HasEmbeddedObject( const OUString& rName )
     return xAccess->hasByName(rName);
 }
 
-bool EmbeddedObjectContainer::HasEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj )
+bool EmbeddedObjectContainer::HasEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj ) const
 {
     for( const auto& rObj : pImpl->maObjectContainer )
     {
@@ -266,7 +266,7 @@ bool EmbeddedObjectContainer::HasInstantiatedEmbeddedObject( const OUString& rNa
     return ( aIt != pImpl->maObjectContainer.end() );
 }
 
-OUString EmbeddedObjectContainer::GetEmbeddedObjectName( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj )
+OUString EmbeddedObjectContainer::GetEmbeddedObjectName( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj ) const
 {
     for( const auto& rObj : pImpl->maObjectContainer )
     {

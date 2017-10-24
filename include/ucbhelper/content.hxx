@@ -663,7 +663,7 @@ public:
                      bool bMajorVersion = false,
                      const OUString & rCommentVersion = OUString( ),
                      OUString* pResultURL = nullptr,
-                     const OUString & rDocumentId = OUString( ) );
+                     const OUString & rDocumentId = OUString( ) ) const;
 
     /**
       *  This method lock the resource.

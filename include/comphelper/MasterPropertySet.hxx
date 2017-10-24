@@ -39,7 +39,7 @@ namespace comphelper
         bool                                             mbInit;
 
         SlaveData ( ChainablePropertySet *pSlave);
-        bool IsInit () { return mbInit;}
+        bool IsInit () const { return mbInit;}
         void SetInit ( bool bInit) { mbInit = bInit; }
     };
 }

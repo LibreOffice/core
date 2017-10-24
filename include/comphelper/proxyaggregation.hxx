@@ -88,7 +88,7 @@ namespace comphelper
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
 
     protected:
-        const css::uno::Reference< css::uno::XComponentContext >& getComponentContext()
+        const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() const
         {
             return m_xContext;
         }

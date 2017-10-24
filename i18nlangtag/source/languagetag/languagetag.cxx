@@ -1010,16 +1010,25 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
 }
 
 
-LanguageTag::ImplPtr const & LanguageTag::getImpl() const
+LanguageTagImpl const * LanguageTag::getImpl() const
 {
     if (!mpImpl)
     {
         mpImpl = registerImpl();
         syncVarsFromRawImpl();
     }
-    return mpImpl;
+    return mpImpl.get();
 }
 
+LanguageTagImpl * LanguageTag::getImpl()
+{
+    if (!mpImpl)
+    {
+        mpImpl = registerImpl();
+        syncVarsFromRawImpl();
+    }
+    return mpImpl.get();
+}
 
 void LanguageTag::resetVars()
 {
@@ -1277,8 +1286,7 @@ bool LanguageTagImpl::synCanonicalize()
 
 void LanguageTag::syncFromImpl()
 {
-    ImplPtr xImpl = getImpl();
-    LanguageTagImpl* pImpl = xImpl.get();
+    LanguageTagImpl* pImpl = getImpl();
     bool bRegister = ((mbInitializedBcp47 && maBcp47 != pImpl->maBcp47) ||
             (mbInitializedLangID && mnLangID != pImpl->mnLangID));
     SAL_INFO_IF( bRegister, "i18nlangtag",
@@ -1829,7 +1837,7 @@ OUString const & LanguageTagImpl::getLanguage() const
 
 OUString LanguageTag::getLanguage() const
 {
-    ImplPtr pImpl = getImpl();
+    LanguageTagImpl const* pImpl = getImpl();
     if (pImpl->mbCachedLanguage)
         return pImpl->maCachedLanguage;
     OUString aRet( pImpl->getLanguage());
@@ -1851,7 +1859,7 @@ OUString const & LanguageTagImpl::getScript() const
 
 OUString LanguageTag::getScript() const
 {
-    ImplPtr pImpl = getImpl();
+    LanguageTagImpl const* pImpl = getImpl();
     if (pImpl->mbCachedScript)
         return pImpl->maCachedScript;
     OUString aRet( pImpl->getScript());
@@ -1887,7 +1895,7 @@ OUString const & LanguageTagImpl::getCountry() const
 
 OUString LanguageTag::getCountry() const
 {
-    ImplPtr pImpl = getImpl();
+    LanguageTagImpl const* pImpl = getImpl();
     if (pImpl->mbCachedCountry)
         return pImpl->maCachedCountry;
     OUString aRet( pImpl->getCountry());
@@ -1915,7 +1923,7 @@ OUString const & LanguageTagImpl::getVariants() const
 
 OUString LanguageTag::getVariants() const
 {
-    ImplPtr pImpl = getImpl();
+    LanguageTagImpl const * pImpl = getImpl();
     if (pImpl->mbCachedVariants)
         return pImpl->maCachedVariants;
     OUString aRet( pImpl->getVariants());

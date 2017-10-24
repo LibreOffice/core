@@ -174,7 +174,7 @@ public:
     const OUString&           getURL() const;
     Reference< XContent >          getContent();
     Reference< XCommandProcessor > getCommandProcessor();
-    Reference< XComponentContext > const & getComponentContext()
+    Reference< XComponentContext > const & getComponentContext() const
     { assert(m_xCtx.is()); return m_xCtx; }
 
     Any  executeCommand( const Command& rCommand );
@@ -944,7 +944,7 @@ bool Content::transferContent( const Content& rSourceContent,
                                    bool bMajorVersion,
                                    const OUString & rVersionComment,
                                    OUString* pResultURL,
-                                   const OUString & rDocumentId )
+                                   const OUString & rDocumentId ) const
 {
     Reference< XUniversalContentBroker > pBroker(
         UniversalContentBroker::create( m_xImpl->getComponentContext() ) );

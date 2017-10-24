@@ -74,14 +74,14 @@ namespace comphelper
             <p>Already implemented by this base class, no need to override</p>
             @precond <arg>_nHandle</arg> is a valid property handle
         */
-        css::beans::PropertyState  getPropertyStateByHandle( sal_Int32 _nHandle );
+        css::beans::PropertyState  getPropertyStateByHandle( sal_Int32 _nHandle ) const;
 
         /** set the property denoted by the given handle to its default value
 
             <p>Already implemented by this base class, no need to override</p>
             @precond <arg>_nHandle</arg> is a valid property handle
         */
-        void                                    setPropertyToDefaultByHandle( sal_Int32 _nHandle );
+        void                       setPropertyToDefaultByHandle( sal_Int32 _nHandle );
 
         /** get the default value for the property denoted by the given handle
 

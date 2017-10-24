@@ -149,7 +149,7 @@ namespace comphelper
     }
 
 
-    PropertyState OPropertyStateContainer::getPropertyStateByHandle( sal_Int32 _nHandle )
+    PropertyState OPropertyStateContainer::getPropertyStateByHandle( sal_Int32 _nHandle ) const
     {
         // simply compare the current and the default value
         Any aCurrentValue; getFastPropertyValue( aCurrentValue, _nHandle );

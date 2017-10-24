@@ -544,7 +544,8 @@ private:
     mutable bool                            mbInitializedLangID : 1;
             bool                            mbIsFallback        : 1;
 
-    ImplPtr const &     getImpl() const;
+    LanguageTagImpl*    getImpl();
+    LanguageTagImpl const* getImpl() const;
     ImplPtr             registerImpl() const;
     void                syncFromImpl();
     void                syncVarsFromRawImpl() const;
