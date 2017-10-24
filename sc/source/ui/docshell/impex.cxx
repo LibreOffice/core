@@ -53,6 +53,7 @@
 #include <documentimport.hxx>
 
 #include <globstr.hrc>
+#include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 
 #include <memory>
@@ -1752,37 +1753,45 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     switch( ch )
                     {
                         case 'X':
-                            nCol = static_cast<SCCOL>(OUString(p).toInt32()) + nStartCol - 1;
-                            if (nCol < 0 || MAXCOL < nCol)
+                        {
+                            bool bFail = o3tl::checked_add<SCCOL>(OUString(p).toInt32(), nStartCol - 1, nCol);
+                            if (bFail || nCol < 0 || MAXCOL < nCol)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;X invalid nCol=" << nCol);
-                                nCol = std::max<SCCOL>( 0, std::min<SCCOL>( nCol, MAXCOL));
+                                nCol = std::max<SCCOL>(0, std::min<SCCOL>(nCol, MAXCOL));
                             }
                             break;
+                        }
                         case 'Y':
-                            nRow = OUString(p).toInt32() + nStartRow - 1;
-                            if (nRow < 0 || MAXROW < nRow)
+                        {
+                            bool bFail = o3tl::checked_add(OUString(p).toInt32(), nStartRow - 1, nRow);
+                            if (bFail || nRow < 0 || MAXROW < nRow)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;Y invalid nRow=" << nRow);
-                                nRow = std::max<SCROW>( 0, std::min<SCROW>( nRow, MAXROW));
+                                nRow = std::max<SCROW>(0, std::min<SCROW>(nRow, MAXROW));
                             }
                             break;
+                        }
                         case 'C':
-                            nRefCol = static_cast<SCCOL>(OUString(p).toInt32()) + nStartCol - 1;
-                            if (nRefCol < 0 || MAXCOL < nRefCol)
+                        {
+                            bool bFail = o3tl::checked_add<SCCOL>(OUString(p).toInt32(), nStartCol - 1, nRefCol);
+                            if (bFail || nRefCol < 0 || MAXCOL < nRefCol)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;C invalid nRefCol=" << nRefCol);
-                                nRefCol = std::max<SCCOL>( 0, std::min<SCCOL>( nRefCol, MAXCOL));
+                                nRefCol = std::max<SCCOL>(0, std::min<SCCOL>(nRefCol, MAXCOL));
                             }
                             break;
+                        }
                         case 'R':
-                            nRefRow = OUString(p).toInt32() + nStartRow - 1;
-                            if (nRefRow < 0 || MAXROW < nRefRow)
+                        {
+                            bool bFail = o3tl::checked_add(OUString(p).toInt32(), nStartRow - 1, nRefRow);
+                            if (bFail || nRefRow < 0 || MAXROW < nRefRow)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;R invalid nRefRow=" << nRefRow);
-                                nRefRow = std::max<SCROW>( 0, std::min<SCROW>( nRefRow, MAXROW));
+                                nRefRow = std::max<SCROW>(0, std::min<SCROW>(nRefRow, MAXROW));
                             }
                             break;
+                        }
                         case 'K':
                         {
                             if( !bSingle &&
@@ -1892,21 +1901,25 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     switch( ch )
                     {
                         case 'X':
-                            nCol = static_cast<SCCOL>(OUString(p).toInt32()) + nStartCol - 1;
-                            if (nCol < 0 || MAXCOL < nCol)
+                        {
+                            bool bFail = o3tl::checked_add<SCCOL>(OUString(p).toInt32(), nStartCol - 1, nCol);
+                            if (bFail || nCol < 0 || MAXCOL < nCol)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;X invalid nCol=" << nCol);
-                                nCol = std::max<SCCOL>( 0, std::min<SCCOL>( nCol, MAXCOL));
+                                nCol = std::max<SCCOL>(0, std::min<SCCOL>(nCol, MAXCOL));
                             }
                             break;
+                        }
                         case 'Y':
-                            nRow = OUString(p).toInt32() + nStartRow - 1;
-                            if (nRow < 0 || MAXROW < nRow)
+                        {
+                            bool bFail = o3tl::checked_add(OUString(p).toInt32(), nStartRow - 1, nRow);
+                            if (bFail || nRow < 0 || MAXROW < nRow)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;Y invalid nRow=" << nRow);
-                                nRow = std::max<SCROW>( 0, std::min<SCROW>( nRow, MAXROW));
+                                nRow = std::max<SCROW>(0, std::min<SCROW>(nRow, MAXROW));
                             }
                             break;
+                        }
                         case 'P' :
                             if ( bData )
                             {
