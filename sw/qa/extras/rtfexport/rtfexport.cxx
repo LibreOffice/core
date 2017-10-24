@@ -1307,6 +1307,12 @@ DECLARE_RTFEXPORT_TEST(testTdf112211, "tdf112211.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-635), aRule["FirstLineIndent"].get<sal_Int32>());
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf113202, "tdf113202.rtf")
+{
+    // This failed, contextual spacing in 4th paragraph was lost.
+    CPPUNIT_ASSERT(getProperty<bool>(getParagraph(4), "ParaContextMargin"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
