@@ -250,6 +250,9 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
             return false;
     }
 
+    if (rHeader.nHeight == SAL_MIN_INT32)
+        return false;
+
     if ( rHeader.nHeight < 0 )
     {
         bTopDown = true;
