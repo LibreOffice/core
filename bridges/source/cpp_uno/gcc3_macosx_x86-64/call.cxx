@@ -20,7 +20,7 @@
 
 #include <sal/config.h>
 
-#include <call.hxx>
+#include "call.hxx"
 
 void privateSnippetExecutor()
 {
