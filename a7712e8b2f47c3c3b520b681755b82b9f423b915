@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_a7b51eef",
+        "filename": "sfx2/source/appl/childwin.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-24T17:14:44Z",
+      "side": 1,
+      "message": "Better to keep the signs (i.e. +, +\u003d etc) aligned for readability. I mean: edit this portion:\nOUString aWinData \u003d \"V\"\n        + OUString::number(static_cast\u003csal_Int32\u003e(nVersion))\n\nlike this:\nOUString aWinData \u003d \"V\"\n                  + OUString::number(static_cast\u003csal_Int32\u003e(nVersion))",
+      "range": {
+        "startLine": 290,
+        "startChar": 8,
+        "endLine": 290,
+        "endChar": 9
+      },
+      "revId": "a7712e8b2f47c3c3b520b681755b82b9f423b915",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_87be62d2",
+        "filename": "sfx2/source/appl/childwin.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-24T17:14:44Z",
+      "side": 1,
+      "message": "Why not just use\n    (rInfo.bVisible ? \"V\" : \"H\")\ninstead of this if-else block?",
+      "range": {
+        "startLine": 293,
+        "startChar": 4,
+        "endLine": 296,
+        "endChar": 22
+      },
+      "revId": "a7712e8b2f47c3c3b520b681755b82b9f423b915",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_c7b86ae8",
+        "filename": "sfx2/source/appl/childwin.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-24T17:14:44Z",
+      "side": 1,
+      "message": "Respect alignment also here please.",
+      "range": {
+        "startLine": 299,
+        "startChar": 8,
+        "endLine": 299,
+        "endChar": 9
+      },
+      "revId": "a7712e8b2f47c3c3b520b681755b82b9f423b915",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_67bb36e6",
+        "filename": "sfx2/source/dialog/versdlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-24T17:14:44Z",
+      "side": 1,
+      "message": "Since these appends are not chained, and are in a loop, it might be better to leave these out of the patch.",
+      "range": {
+        "startLine": 265,
+        "startChar": 4,
+        "endLine": 283,
+        "endChar": 22
+      },
+      "revId": "a7712e8b2f47c3c3b520b681755b82b9f423b915",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
