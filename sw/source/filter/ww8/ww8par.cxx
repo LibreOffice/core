@@ -6277,30 +6277,18 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportWW2(SvStream &rStream)
     return TestImportDOC(rStream, "WW6");
 }
 
-ErrCode WW8Reader::OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uInt16& rBuffSize )
+ErrCode WW8Reader::OpenMainStream(tools::SvRef<SotStorageStream>& rRef)
 {
     ErrCode nRet = ERR_SWG_READ_ERROR;
     OSL_ENSURE( pStg.get(), "Where is my Storage?" );
     rRef = pStg->OpenSotStream( "WordDocument", StreamMode::READ | StreamMode::SHARE_DENYALL);
-
-    if( rRef.is() )
-    {
-        if( ERRCODE_NONE == rRef->GetError() )
-        {
-            sal_uInt16 nOld = rRef->GetBufferSize();
-            rRef->SetBufferSize( rBuffSize );
-            rBuffSize = nOld;
-            nRet = ERRCODE_NONE;
-        }
-        else
-            nRet = rRef->GetError();
-    }
+    if (rRef.is())
+        nRet = rRef->GetError();
     return nRet;
 }
 
 ErrCode WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, const OUString & /* FileName */)
 {
-    sal_uInt16 nOldBuffSize = 32768;
     bool bNew = !bInsertMode; // New Doc (no inserting)
 
     tools::SvRef<SotStorageStream> refStrm; // So that no one else can steal the Stream
@@ -6329,7 +6317,7 @@ ErrCode WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, cons
 
         if( pStg.is() )
         {
-            nRet = OpenMainStream( refStrm, nOldBuffSize );
+            nRet = OpenMainStream(refStrm);
             pIn = refStrm.get();
         }
         else
@@ -6363,7 +6351,6 @@ ErrCode WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, cons
 
         if( refStrm.is() )
         {
-            refStrm->SetBufferSize( nOldBuffSize );
             refStrm.clear();
         }
         else
@@ -6391,9 +6378,8 @@ bool WW8Reader::ReadGlossaries(SwTextBlocks& rBlocks, bool bSaveRelFiles) const
 
     WW8Reader *pThis = const_cast<WW8Reader *>(this);
 
-    sal_uInt16 nOldBuffSize = 32768;
     tools::SvRef<SotStorageStream> refStrm;
-    if (!pThis->OpenMainStream(refStrm, nOldBuffSize))
+    if (!pThis->OpenMainStream(refStrm))
     {
         WW8Glossary aGloss( refStrm, 8, pStg.get() );
         bRet = aGloss.Load( rBlocks, bSaveRelFiles );

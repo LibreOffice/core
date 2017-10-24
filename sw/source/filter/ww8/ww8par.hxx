@@ -131,7 +131,7 @@ struct WW8LFOInfo;
 class WW8Reader : public StgReader
 {
     virtual ErrCode Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
-    ErrCode OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uInt16& rBuffSize );
+    ErrCode OpenMainStream(tools::SvRef<SotStorageStream>& rRef);
 public:
     virtual int GetReaderType() override;
 
