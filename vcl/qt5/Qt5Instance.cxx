@@ -27,8 +27,11 @@
 #include "Qt5Object.hxx"
 #include "Qt5Bitmap.hxx"
 
+#include <headless/svpvd.hxx>
+
 #include <QtCore/QThread>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QWidget>
 #include <QtCore/QAbstractEventDispatcher>
 
 #include <vclpluginapi.h>
@@ -38,9 +41,10 @@
 #include <headless/svpdummies.hxx>
 #include <headless/svpbmp.hxx>
 
-Qt5Instance::Qt5Instance( SalYieldMutex* pMutex )
+Qt5Instance::Qt5Instance( SalYieldMutex* pMutex, bool bUseCairo )
     : SalGenericInstance( pMutex )
     , m_postUserEventId( -1 )
+    , m_bUseCairo( bUseCairo )
 {
     m_postUserEventId = QEvent::registerEventType();
 
@@ -61,13 +65,13 @@ Qt5Instance::~Qt5Instance()
 
 SalFrame* Qt5Instance::CreateChildFrame( SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle )
 {
-    return new Qt5Frame( nullptr, nStyle );
+    return new Qt5Frame( nullptr, nStyle, m_bUseCairo );
 }
 
 SalFrame* Qt5Instance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
 {
     assert( !pParent || dynamic_cast<Qt5Frame*>( pParent ) );
-    return new Qt5Frame( static_cast<Qt5Frame*>( pParent ), nStyle );
+    return new Qt5Frame( static_cast<Qt5Frame*>( pParent ), nStyle, m_bUseCairo );
 }
 
 void Qt5Instance::DestroyFrame( SalFrame* pFrame )
@@ -91,9 +95,18 @@ SalVirtualDevice* Qt5Instance::CreateVirtualDevice( SalGraphics* /* pGraphics */
                                                     DeviceFormat eFormat,
                                                     const SystemGraphicsData* /* pData */ )
 {
-    Qt5VirtualDevice* pVD = new Qt5VirtualDevice( eFormat, 1 );
-    pVD->SetSize( nDX, nDY );
-    return pVD;
+    if ( m_bUseCairo )
+    {
+        SvpSalVirtualDevice *pVD = new SvpSalVirtualDevice( eFormat, 1 );
+        pVD->SetSize( nDX, nDY );
+        return pVD;
+    }
+    else
+    {
+        Qt5VirtualDevice* pVD = new Qt5VirtualDevice( eFormat, 1 );
+        pVD->SetSize( nDX, nDY );
+        return pVD;
+    }
 }
 
 SalTimer* Qt5Instance::CreateSalTimer()
@@ -108,7 +121,10 @@ SalSystem* Qt5Instance::CreateSalSystem()
 
 SalBitmap* Qt5Instance::CreateSalBitmap()
 {
-    return new Qt5Bitmap();
+    if ( m_bUseCairo )
+        return new SvpSalBitmap();
+    else
+        return new Qt5Bitmap();
 }
 
 bool Qt5Instance::ImplYield( bool bWait, bool bHandleAllCurrentEvents )
@@ -198,7 +214,7 @@ extern "C" {
     VCLPLUG_QT5_PUBLIC SalInstance* create_SalInstance()
     {
         OString aVersion( qVersion() );
-        SAL_INFO( "vcl.kf5", "qt version string is " << aVersion );
+        SAL_INFO( "vcl.qt5", "qt version string is " << aVersion );
 
         QApplication *pQApplication;
         char **pFakeArgvFreeable = nullptr;
@@ -261,7 +277,8 @@ extern "C" {
 
         QApplication::setQuitOnLastWindowClosed(false);
 
-        Qt5Instance* pInstance = new Qt5Instance( new SalYieldMutex() );
+        const bool bUseCairo = (nullptr != getenv( "SAL_VCL_QT5_USE_CAIRO" ));
+        Qt5Instance* pInstance = new Qt5Instance( new SalYieldMutex(), bUseCairo );
 
         // initialize SalData
         new Qt5Data( pInstance );
