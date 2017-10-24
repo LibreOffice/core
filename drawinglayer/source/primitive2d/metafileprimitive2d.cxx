@@ -74,6 +74,24 @@ namespace drawinglayer
             {
                 // get target size
                 const ::tools::Rectangle aMtfTarget(getMetaFile().GetPrefMapMode().GetOrigin(), getMetaFile().GetPrefSize());
+                const basegfx::B2DRange aMtfRange(aMtfTarget.Left(), aMtfTarget.Top(), aMtfTarget.Right(), aMtfTarget.Bottom());
+
+                // tdf#113197 get content range and check if we have an overlap with
+                // defined target range (aMtfRange)
+                const basegfx::B2DRange aContentRange(xRetval.getB2DRange(rViewInformation));
+
+                if(aMtfRange.overlaps(aContentRange))
+                {
+                    // content overlaps traget size/range, clipping is needed
+                    const drawinglayer::primitive2d::Primitive2DReference xMask(
+                        new drawinglayer::primitive2d::MaskPrimitive2D(
+                            basegfx::B2DPolyPolygon(
+                                basegfx::utils::createPolygonFromRect(
+                                    aMtfRange)),
+                                    xRetval));
+
+                    xRetval = drawinglayer::primitive2d::Primitive2DContainer { xMask };
+                }
 
                 // create transformation
                 basegfx::B2DHomMatrix aAdaptedTransform;
