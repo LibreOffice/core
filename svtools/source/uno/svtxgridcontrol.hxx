@@ -48,17 +48,8 @@ typedef ::cppu::ImplInheritanceHelper  <   VCLXWindow
                                         ,   css::awt::grid::XGridDataListener
                                         ,   css::container::XContainerListener
                                         >   SVTXGridControl_Base;
-class SVTXGridControl : public SVTXGridControl_Base
+class SVTXGridControl final : public SVTXGridControl_Base
 {
-private:
-    std::shared_ptr< ::svt::table::UnoControlTableModel >   m_xTableModel;
-    bool                                                        m_bTableModelInitCompleted;
-    SelectionListenerMultiplexer                                m_aSelectionListeners;
-
-protected:
-    virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
-    void            ImplCallItemListeners();
-
 public:
     SVTXGridControl();
     virtual ~SVTXGridControl() override;
@@ -104,16 +95,22 @@ public:
     // XWindow
     void SAL_CALL setEnable( sal_Bool bEnable ) override;
 
-protected:
+private:
     // VCLXWindow
     virtual void    SetWindow( const VclPtr< vcl::Window > &pWindow ) override;
 
-private:
     void    impl_updateColumnsFromModel_nothrow();
     void    impl_checkTableModelInit();
 
     void    impl_checkColumnIndex_throw( ::svt::table::TableControl const & i_table, sal_Int32 const i_columnIndex ) const;
     void    impl_checkRowIndex_throw( ::svt::table::TableControl const & i_table, sal_Int32 const i_rowIndex ) const;
+
+    virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
+    void            ImplCallItemListeners();
+
+    std::shared_ptr< ::svt::table::UnoControlTableModel >   m_xTableModel;
+    bool                                                    m_bTableModelInitCompleted;
+    SelectionListenerMultiplexer                            m_aSelectionListeners;
 };
 #endif // INCLUDED_SVTOOLS_SOURCE_UNO_SVTXGRIDCONTROL_HXX
 

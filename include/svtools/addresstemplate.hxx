@@ -46,29 +46,8 @@ namespace svt
     // = AddressBookSourceDialog
 
     struct AddressBookSourceDialogData;
-    class SVT_DLLPUBLIC AddressBookSourceDialog : public ModalDialog
+    class SVT_DLLPUBLIC AddressBookSourceDialog final : public ModalDialog
     {
-    private:
-        // Controls
-        VclPtr<ComboBox>       m_pDatasource;
-        VclPtr<PushButton>     m_pAdministrateDatasources;
-        VclPtr<ComboBox>       m_pTable;
-        VclPtr<ScrollBar>      m_pFieldScroller;
-
-        // string to display for "no selection"
-        const OUString         m_sNoFieldSelection;
-
-        /// the DatabaseContext for selecting data sources
-        css::uno::Reference< css::sdb::XDatabaseContext >
-                               m_xDatabaseContext;
-        // the ORB for creating objects
-        css::uno::Reference< css::uno::XComponentContext >
-                               m_xORB;
-        css::uno::Reference< css::container::XNameAccess >
-                               m_xCurrentDatasourceTables;
-
-        std::unique_ptr<AddressBookSourceDialogData> m_pImpl;
-
     public:
         AddressBookSourceDialog( vcl::Window* _pParent,
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
@@ -107,7 +86,7 @@ namespace svt
         void        getFieldMapping(
             css::uno::Sequence< css::util::AliasProgrammaticPair >& _rMapping) const;
 
-    protected:
+    private:
         void    implConstruct();
 
         // Window overridables
@@ -134,6 +113,26 @@ namespace svt
         DECL_LINK(OnComboSelect, ComboBox&, void);
         DECL_LINK(OnOkClicked, Button*, void);
         DECL_LINK(OnDelayedInitialize, void*, void);
+
+        // Controls
+        VclPtr<ComboBox>       m_pDatasource;
+        VclPtr<PushButton>     m_pAdministrateDatasources;
+        VclPtr<ComboBox>       m_pTable;
+        VclPtr<ScrollBar>      m_pFieldScroller;
+
+        // string to display for "no selection"
+        const OUString         m_sNoFieldSelection;
+
+        /// the DatabaseContext for selecting data sources
+        css::uno::Reference< css::sdb::XDatabaseContext >
+                               m_xDatabaseContext;
+        // the ORB for creating objects
+        css::uno::Reference< css::uno::XComponentContext >
+                               m_xORB;
+        css::uno::Reference< css::container::XNameAccess >
+                               m_xCurrentDatasourceTables;
+
+        std::unique_ptr<AddressBookSourceDialogData> m_pImpl;
     };
 
 

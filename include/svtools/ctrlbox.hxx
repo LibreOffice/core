@@ -192,29 +192,8 @@ inline Color sameDistColor( Color /*rMain*/, Color rDefault )
     return rDefault;
 }
 
-class SVT_DLLPUBLIC LineListBox : public ListBox
+class SVT_DLLPUBLIC LineListBox final : public ListBox
 {
-    ImpLineList*    pLineList;
-    long            m_nWidth;
-    OUString        m_sNone;
-
-    ScopedVclPtr<VirtualDevice>   aVirDev;
-    Size            aTxtSize;
-    Color           aColor;
-    Color           maPaintCol;
-    FieldUnit       eSourceUnit;
-
-    SVT_DLLPRIVATE void         ImpGetLine( long nLine1, long nLine2, long nDistance,
-                                    Color nColor1, Color nColor2, Color nColorDist,
-                                    SvxBorderLineStyle nStyle, Bitmap& rBmp );
-    using Window::ImplInit;
-    SVT_DLLPRIVATE void         ImplInit();
-    void            UpdatePaintLineColor();       // returns sal_True if maPaintCol has changed
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-    void            UpdateEntries( long nOldWidth );
-    sal_Int32       GetStylePos( sal_Int32  nListPos, long nWidth );
-
 public:
     typedef Color (*ColorFunc)(Color);
     typedef Color (*ColorDistFunc)(Color, Color);
@@ -248,16 +227,35 @@ public:
     void            SetColor( const Color& rColor );
     const Color&    GetColor() const { return aColor; }
 
-protected:
+private:
+
+    SVT_DLLPRIVATE void         ImpGetLine( long nLine1, long nLine2, long nDistance,
+                                    Color nColor1, Color nColor2, Color nColorDist,
+                                    SvxBorderLineStyle nStyle, Bitmap& rBmp );
+    using Window::ImplInit;
+    SVT_DLLPRIVATE void         ImplInit();
+    void            UpdatePaintLineColor();       // returns sal_True if maPaintCol has changed
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+
+    void            UpdateEntries( long nOldWidth );
+    sal_Int32       GetStylePos( sal_Int32  nListPos, long nWidth );
 
     inline const Color&    GetPaintColor() const;
     Color   GetColorLine1( sal_Int32  nPos );
     Color   GetColorLine2( sal_Int32  nPos );
     Color   GetColorDist( sal_Int32  nPos );
 
-private:
                     LineListBox( const LineListBox& ) = delete;
     LineListBox&    operator =( const LineListBox& ) = delete;
+
+    ImpLineList*    pLineList;
+    long            m_nWidth;
+    OUString        m_sNone;
+    ScopedVclPtr<VirtualDevice>   aVirDev;
+    Size            aTxtSize;
+    Color           aColor;
+    Color           maPaintCol;
+    FieldUnit       eSourceUnit;
 };
 
 inline void LineListBox::SetColor( const Color& rColor )

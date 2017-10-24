@@ -59,15 +59,13 @@ typedef ::cppu::WeakAggComponentImplHelper5<
             css::lang::XServiceInfo >
             SvtRulerAccessible_Base;
 
-class SvtRulerAccessible : public ::cppu::BaseMutex, public SvtRulerAccessible_Base
+class SvtRulerAccessible final : public ::cppu::BaseMutex, public SvtRulerAccessible_Base
 {
 public:
     //=====  internal  ========================================================
     SvtRulerAccessible(
         const css::uno::Reference< css::accessibility::XAccessible>& rxParent, Ruler& rRepresentation, const ::rtl::OUString& rName );
-protected:
-    virtual ~SvtRulerAccessible() override;
-public:
+
     /// @throws css::uno::RuntimeException
     bool SAL_CALL
         isVisible();
@@ -160,7 +158,17 @@ public:
     virtual css::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId() override;
 
-protected:
+private:
+
+    virtual ~SvtRulerAccessible() override;
+
+    virtual void SAL_CALL disposing() override;
+
+    /// @returns true if it's disposed or in disposing
+    inline bool IsAlive() const;
+
+    /// @throws DisposedException if it's not alive
+    void ThrowExceptionIfNotAlive();
 
     /// @Return the object's current bounding box relative to the desktop.
     ///
@@ -172,18 +180,7 @@ protected:
     /// @throws css::uno::RuntimeException
     tools::Rectangle GetBoundingBox();
 
-
-    virtual void SAL_CALL disposing() override;
-
-    /// @returns true if it's disposed or in disposing
-    inline bool IsAlive() const;
-
-    /// @throws DisposedException if it's not alive
-    void ThrowExceptionIfNotAlive();
-
-private:
-    /** Name of this object.
-    */
+    /// Name of this object.
     ::rtl::OUString                     msName;
 
     /// Reference to the parent object.
@@ -193,10 +190,8 @@ private:
     /// pointer to internal representation
     VclPtr<Ruler>                       mpRepr;
 
-        /// client id in the AccessibleEventNotifier queue
+    /// client id in the AccessibleEventNotifier queue
     sal_uInt32 mnClientId;
-
-
 };
 
 inline bool SvtRulerAccessible::IsAlive() const

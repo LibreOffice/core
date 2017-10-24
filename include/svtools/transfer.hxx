@@ -261,11 +261,9 @@ public:
 
 struct TransferableDataHelper_Impl;
 
-class SVT_DLLPUBLIC TransferableDataHelper
+class SVT_DLLPUBLIC TransferableDataHelper final
 {
     friend class DropTargetHelper;
-
-private:
 
     css::uno::Reference< css::datatransfer::XTransferable >           mxTransfer;
     css::uno::Reference< css::datatransfer::clipboard::XClipboard >   mxClipboard;
@@ -273,7 +271,6 @@ private:
     std::unique_ptr<TransferableObjectDescriptor>                     mxObjDesc;
     std::unique_ptr<TransferableDataHelper_Impl>                      mxImpl;
 
-protected:
     void                        InitFormats();
 
 public:
@@ -307,8 +304,6 @@ public:
     void                        StopClipboardListening( );
 
     void                        Rebind( const css::uno::Reference< css::datatransfer::XTransferable >& _rxNewData );
-
-public:
 
     css::uno::Any GetAny( SotClipboardFormatId nFormat, const OUString& rDestDoc ) const;
     css::uno::Any GetAny( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) const;
@@ -356,8 +351,6 @@ public:
 
     css::uno::Reference<css::io::XInputStream> GetInputStream( SotClipboardFormatId nFormat, const OUString& rDestDoc );
     css::uno::Reference<css::io::XInputStream> GetInputStream( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
-
-public:
 
     static TransferableDataHelper   CreateFromSystemClipboard( vcl::Window * pWindow );
     static TransferableDataHelper   CreateFromSelection( vcl::Window * pWindow );

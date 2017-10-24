@@ -41,14 +41,8 @@ public:
 class RoadmapImpl;
 class RoadmapItem;
 
-class SVT_DLLPUBLIC ORoadmap : public Control, public RoadmapTypes
+class SVT_DLLPUBLIC ORoadmap final : public Control, public RoadmapTypes
 {
-protected:
-    std::unique_ptr<RoadmapImpl>    m_pImpl;
-    // Window overridables
-    void            Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect) override;
-    void            implInit(vcl::RenderContext& rRenderContext);
-
 public:
     ORoadmap( vcl::Window* _pParent, WinBits _nWinStyle );
     virtual ~ORoadmap( ) override;
@@ -83,14 +77,12 @@ public:
     virtual void    GetFocus() override;
     virtual void    ApplySettings( vcl::RenderContext& rRenderContext ) override;
 
-protected:
+private:
     bool            PreNotify( NotifyEvent& rNEvt ) override;
 
-protected:
     /// called when an item has been selected by any means
-    void    Select();
+    void            Select();
 
-private:
     DECL_LINK(ImplClickHdl, HyperLabel*, void);
 
     RoadmapItem*         GetByIndex( ItemIndex _nItemIndex );
@@ -107,6 +99,12 @@ private:
     RoadmapItem*         GetByPointer(vcl::Window const * pWindow);
     RoadmapItem*         InsertHyperLabel( ItemIndex Index, const OUString& _aStr, ItemId RMID, bool _bEnabled, bool _bIncomplete  );
     void                 UpdatefollowingHyperLabels( ItemIndex Index );
+
+    // Window overridables
+    void            Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect) override;
+    void            implInit(vcl::RenderContext& rRenderContext);
+
+    std::unique_ptr<RoadmapImpl>    m_pImpl;
 };
 
 }   // namespace svt

@@ -122,9 +122,8 @@ calls or by ending a selection.
 typedef std::set<sal_Int32> IntDateSet;
 
 
-class SVT_DLLPUBLIC Calendar : public Control
+class SVT_DLLPUBLIC Calendar final : public Control
 {
-private:
     IntDateSet*     mpSelectTable;
     IntDateSet*     mpOldSelectTable;
     OUString        maDayTexts[31];
@@ -204,8 +203,6 @@ private:
     SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, bool bRepeat );
     SVT_DLLPRIVATE void         ImplEndTracking( bool bCancel );
     SVT_DLLPRIVATE DayOfWeek    ImplGetWeekStart() const;
-
-protected:
 
     DECL_LINK( ScrollHdl, Timer *, void );
 
