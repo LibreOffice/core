@@ -19,6 +19,7 @@ void * emfio_component_getFactory( const char* , void* , void* );
 void * sd_component_getFactory( const char* , void* , void* );
 void * i18npool_component_getFactory( const char* , void* , void* );
 void * ucb_component_getFactory( const char* , void* , void* );
+void * lng_component_getFactory( const char* , void* , void* );
 
 void * com_sun_star_i18n_LocaleDataImpl_get_implementation( void *, void * );
 void * com_sun_star_i18n_BreakIterator_Unicode_get_implementation( void *, void * );
@@ -57,6 +58,7 @@ lo_get_factory_map(void)
         { "libunoxmllo.a", unoxml_component_getFactory },
         { "libi18npoollo.a", i18npool_component_getFactory },
         { "libucb1.a", ucb_component_getFactory },
+        { "liblnglo.a", lng_component_getFactory },
         { 0, 0 }
     };
 
