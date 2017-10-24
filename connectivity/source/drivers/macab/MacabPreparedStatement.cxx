@@ -20,11 +20,11 @@
 
 #include "MacabPreparedStatement.hxx"
 #include "MacabAddressBook.hxx"
-#include "propertyids.hxx"
+#include <propertyids.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
-#include "strings.hrc"
-#include "resource/sharedresources.hxx"
+#include <strings.hrc>
+#include <resource/sharedresources.hxx>
 
 using namespace connectivity::macab;
 using namespace com::sun::star::uno;

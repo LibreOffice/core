@@ -19,7 +19,7 @@
 
 
 #include "MacabStatement.hxx"
-#include "sqlbison.hxx"
+#include <sqlbison.hxx>
 #include "MacabConnection.hxx"
 #include "MacabAddressBook.hxx"
 #include "MacabDriver.hxx"
@@ -27,10 +27,10 @@
 #include "MacabResultSetMetaData.hxx"
 #include "macabcondition.hxx"
 #include "macaborder.hxx"
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <connectivity/dbexception.hxx>
-#include "resource/sharedresources.hxx"
-#include "strings.hrc"
+#include <resource/sharedresources.hxx>
+#include <strings.hrc>
 
 using namespace connectivity::macab;
 using namespace com::sun::star::uno;

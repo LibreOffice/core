@@ -23,7 +23,7 @@
 #include "MacabRecords.hxx"
 #include "MacabAddressBook.hxx"
 #include "macabutilities.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace connectivity::macab;
 using namespace com::sun::star::uno;

@@ -30,7 +30,7 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/compbase.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 
 namespace connectivity
 {

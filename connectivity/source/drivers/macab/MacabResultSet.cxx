@@ -28,10 +28,10 @@
 #include "macaborder.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <connectivity/dbexception.hxx>
-#include "resource/sharedresources.hxx"
-#include "strings.hrc"
+#include <resource/sharedresources.hxx>
+#include <strings.hrc>
 
 using namespace connectivity::macab;
 using namespace cppu;
