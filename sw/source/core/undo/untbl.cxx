@@ -2141,42 +2141,42 @@ void SwUndoTableMerge::SaveCollection( const SwTableBox& rBox )
 SwUndoTableNumFormat::SwUndoTableNumFormat( const SwTableBox& rBox,
                                     const SfxItemSet* pNewSet )
     : SwUndo(SwUndoId::TBLNUMFMT, rBox.GetFrameFormat()->GetDoc())
-    , pBoxSet(nullptr)
-    , pHistory(nullptr)
-    , nFormatIdx(css::util::NumberFormat::TEXT)
-    , nNewFormatIdx(0)
-    , fNum(0.0)
-    , fNewNum(0.0)
-    , bNewFormat(false)
-    , bNewFormula(false)
-    , bNewValue(false)
+    , m_pBoxSet(nullptr)
+    , m_pHistory(nullptr)
+    , m_nFormatIdx(css::util::NumberFormat::TEXT)
+    , m_nNewFormatIdx(0)
+    , m_fNum(0.0)
+    , m_fNewNum(0.0)
+    , m_bNewFormat(false)
+    , m_bNewFormula(false)
+    , m_bNewValue(false)
 {
-    nNode = rBox.GetSttIdx();
+    m_nNode = rBox.GetSttIdx();
 
-    nNdPos = rBox.IsValidNumTextNd( nullptr == pNewSet );
+    m_nNodePos = rBox.IsValidNumTextNd( nullptr == pNewSet );
     SwDoc* pDoc = rBox.GetFrameFormat()->GetDoc();
 
-    if( ULONG_MAX != nNdPos )
+    if( ULONG_MAX != m_nNodePos )
     {
-        SwTextNode* pTNd = pDoc->GetNodes()[ nNdPos ]->GetTextNode();
+        SwTextNode* pTNd = pDoc->GetNodes()[ m_nNodePos ]->GetTextNode();
 
-        pHistory = new SwHistory;
-        SwRegHistory aRHst( *rBox.GetSttNd(), pHistory );
+        m_pHistory = new SwHistory;
+        SwRegHistory aRHst( *rBox.GetSttNd(), m_pHistory );
         // always save all text atttibutes because of possibly overlapping
         // areas of on/off
-        pHistory->CopyAttr( pTNd->GetpSwpHints(), nNdPos, 0,
+        m_pHistory->CopyAttr( pTNd->GetpSwpHints(), m_nNodePos, 0,
                             pTNd->GetText().getLength(), true );
 
         if( pTNd->HasSwAttrSet() )
-            pHistory->CopyFormatAttr( *pTNd->GetpSwAttrSet(), nNdPos );
+            m_pHistory->CopyFormatAttr( *pTNd->GetpSwAttrSet(), m_nNodePos );
 
-        aStr = pTNd->GetText();
+        m_aStr = pTNd->GetText();
         if( pTNd->GetpSwpHints() )
             pTNd->GetpSwpHints()->DeRegister();
     }
 
-    pBoxSet = new SfxItemSet( pDoc->GetAttrPool(), aTableBoxSetRange );
-    pBoxSet->Put( rBox.GetFrameFormat()->GetAttrSet() );
+    m_pBoxSet = new SfxItemSet( pDoc->GetAttrPool(), aTableBoxSetRange );
+    m_pBoxSet->Put( rBox.GetFrameFormat()->GetAttrSet() );
 
     if( pNewSet )
     {
@@ -2184,40 +2184,40 @@ SwUndoTableNumFormat::SwUndoTableNumFormat( const SwTableBox& rBox,
         if( SfxItemState::SET == pNewSet->GetItemState( RES_BOXATR_FORMAT,
                 false, &pItem ))
         {
-            bNewFormat = true;
-            nNewFormatIdx = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
+            m_bNewFormat = true;
+            m_nNewFormatIdx = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
         }
         if( SfxItemState::SET == pNewSet->GetItemState( RES_BOXATR_FORMULA,
                 false, &pItem ))
         {
-            bNewFormula = true;
-            aNewFormula = static_cast<const SwTableBoxFormula*>(pItem)->GetFormula();
+            m_bNewFormula = true;
+            m_aNewFormula = static_cast<const SwTableBoxFormula*>(pItem)->GetFormula();
         }
         if( SfxItemState::SET == pNewSet->GetItemState( RES_BOXATR_VALUE,
                 false, &pItem ))
         {
-            bNewValue = true;
-            fNewNum = static_cast<const SwTableBoxValue*>(pItem)->GetValue();
+            m_bNewValue = true;
+            m_fNewNum = static_cast<const SwTableBoxValue*>(pItem)->GetValue();
         }
     }
 
     // is a history needed at all?
-    if( pHistory && !pHistory->Count() )
-        DELETEZ( pHistory );
+    if( m_pHistory && !m_pHistory->Count() )
+        DELETEZ( m_pHistory );
 }
 
 SwUndoTableNumFormat::~SwUndoTableNumFormat()
 {
-    delete pHistory;
-    delete pBoxSet;
+    delete m_pHistory;
+    delete m_pBoxSet;
 }
 
 void SwUndoTableNumFormat::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    OSL_ENSURE( pBoxSet, "Where's the stored item set?" );
+    OSL_ENSURE( m_pBoxSet, "Where's the stored item set?" );
 
     SwDoc & rDoc = rContext.GetDoc();
-    SwStartNode* pSttNd = rDoc.GetNodes()[ nNode ]->
+    SwStartNode* pSttNd = rDoc.GetNodes()[ m_nNode ]->
                             FindSttNodeByType( SwTableBoxStartNode );
     OSL_ENSURE( pSttNd, "without StartNode no TableBox" );
     SwTableBox* pBox = pSttNd->FindTableNode()->GetTable().GetTableBox(
@@ -2225,46 +2225,46 @@ void SwUndoTableNumFormat::UndoImpl(::sw::UndoRedoContext & rContext)
     OSL_ENSURE( pBox, "found no TableBox" );
 
     SwTableBoxFormat* pFormat = rDoc.MakeTableBoxFormat();
-    pFormat->SetFormatAttr( *pBoxSet );
+    pFormat->SetFormatAttr( *m_pBoxSet );
     pBox->ChgFrameFormat( pFormat );
 
-    if( ULONG_MAX == nNdPos )
+    if( ULONG_MAX == m_nNodePos )
         return;
 
-    SwTextNode* pTextNd = rDoc.GetNodes()[ nNdPos ]->GetTextNode();
+    SwTextNode* pTextNd = rDoc.GetNodes()[ m_nNodePos ]->GetTextNode();
     // If more than one node was deleted than all "node" attributes were also
     // saved
     if( pTextNd->HasSwAttrSet() )
         pTextNd->ResetAllAttr();
 
-    if( pTextNd->GetpSwpHints() && !aStr.isEmpty() )
+    if( pTextNd->GetpSwpHints() && !m_aStr.isEmpty() )
         pTextNd->ClearSwpHintsArr( true );
 
     // ChgTextToNum(..) only acts when the strings are different. We need to do
     // the same here.
-    if( pTextNd->GetText() != aStr )
+    if( pTextNd->GetText() != m_aStr )
     {
         rDoc.getIDocumentRedlineAccess().DeleteRedline( *( pBox->GetSttNd() ), false, USHRT_MAX );
 
         SwIndex aIdx( pTextNd, 0 );
-        if( !aStr.isEmpty() )
+        if( !m_aStr.isEmpty() )
         {
             pTextNd->EraseText( aIdx );
-            pTextNd->InsertText( aStr, aIdx,
+            pTextNd->InsertText( m_aStr, aIdx,
                 SwInsertFlags::NOHINTEXPAND );
         }
     }
 
-    if( pHistory )
+    if( m_pHistory )
     {
-        sal_uInt16 nTmpEnd = pHistory->GetTmpEnd();
-        pHistory->TmpRollback( &rDoc, 0 );
-        pHistory->SetTmpEnd( nTmpEnd );
+        sal_uInt16 nTmpEnd = m_pHistory->GetTmpEnd();
+        m_pHistory->TmpRollback( &rDoc, 0 );
+        m_pHistory->SetTmpEnd( nTmpEnd );
     }
 
     SwPaM *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
     pPam->DeleteMark();
-    pPam->GetPoint()->nNode = nNode + 1;
+    pPam->GetPoint()->nNode = m_nNode + 1;
     pPam->GetPoint()->nContent.Assign( pTextNd, 0 );
 }
 
@@ -2306,14 +2306,14 @@ RedlineFlagsInternGuard::~RedlineFlagsInternGuard()
 void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     // Could the box be changed?
-    if( !pBoxSet )
+    if( !m_pBoxSet )
         return ;
 
     SwDoc & rDoc = rContext.GetDoc();
     SwPaM *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
 
     pPam->DeleteMark();
-    pPam->GetPoint()->nNode = nNode;
+    pPam->GetPoint()->nNode = m_nNode;
 
     SwNode * pNd = & pPam->GetPoint()->nNode.GetNode();
     SwStartNode* pSttNd = pNd->FindSttNodeByType( SwTableBoxStartNode );
@@ -2323,7 +2323,7 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     OSL_ENSURE( pBox, "found no TableBox" );
 
     SwFrameFormat* pBoxFormat = pBox->ClaimFrameFormat();
-    if( bNewFormat || bNewFormula || bNewValue )
+    if( m_bNewFormat || m_bNewFormula || m_bNewValue )
     {
         SfxItemSet aBoxSet( rDoc.GetAttrPool(),
                                 svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{} );
@@ -2332,16 +2332,16 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
         // text will be also formatted correctly.
         pBoxFormat->LockModify();
 
-        if( bNewFormula )
-            aBoxSet.Put( SwTableBoxFormula( aNewFormula ));
+        if( m_bNewFormula )
+            aBoxSet.Put( SwTableBoxFormula( m_aNewFormula ));
         else
             pBoxFormat->ResetFormatAttr( RES_BOXATR_FORMULA );
-        if( bNewFormat )
-            aBoxSet.Put( SwTableBoxNumFormat( nNewFormatIdx ));
+        if( m_bNewFormat )
+            aBoxSet.Put( SwTableBoxNumFormat( m_nNewFormatIdx ));
         else
             pBoxFormat->ResetFormatAttr( RES_BOXATR_FORMAT );
-        if( bNewValue )
-            aBoxSet.Put( SwTableBoxValue( fNewNum ));
+        if( m_bNewValue )
+            aBoxSet.Put( SwTableBoxValue( m_fNewNum ));
         else
             pBoxFormat->ResetFormatAttr( RES_BOXATR_VALUE );
         pBoxFormat->UnlockModify();
@@ -2352,13 +2352,13 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
         RedlineFlagsInternGuard aGuard( rDoc, RedlineFlags::NONE, RedlineFlags::Ignore );
         pBoxFormat->SetFormatAttr( aBoxSet );
     }
-    else if( css::util::NumberFormat::TEXT != static_cast<sal_Int16>(nFormatIdx) )
+    else if( css::util::NumberFormat::TEXT != static_cast<sal_Int16>(m_nFormatIdx) )
     {
         SfxItemSet aBoxSet( rDoc.GetAttrPool(),
                             svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{} );
 
-        aBoxSet.Put( SwTableBoxNumFormat( nFormatIdx ));
-        aBoxSet.Put( SwTableBoxValue( fNum ));
+        aBoxSet.Put( SwTableBoxNumFormat( m_nFormatIdx ));
+        aBoxSet.Put( SwTableBoxValue( m_fNum ));
 
         // Resetting attributes is not enough. In addition, take care that the
         // text will be also formatted correctly.
@@ -2383,7 +2383,7 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
         pBoxFormat->ResetFormatAttr( RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
     }
 
-    if( bNewFormula )
+    if( m_bNewFormula )
     {
         // No matter what was set, an update of the table is always a good idea
         SwTableFormulaUpdate aTableUpdate( &pSttNd->FindTableNode()->GetTable() );
@@ -2397,7 +2397,7 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoTableNumFormat::SetBox( const SwTableBox& rBox )
 {
-    nNode = rBox.GetSttIdx();
+    m_nNode = rBox.GetSttIdx();
 }
 
 UndoTableCpyTable_Entry::UndoTableCpyTable_Entry( const SwTableBox& rBox )

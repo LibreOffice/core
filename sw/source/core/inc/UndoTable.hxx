@@ -251,18 +251,18 @@ public:
 
 class SwUndoTableNumFormat : public SwUndo
 {
-    SfxItemSet *pBoxSet;
-    SwHistory* pHistory;
-    OUString aStr, aNewFormula;
+    SfxItemSet *m_pBoxSet;
+    SwHistory* m_pHistory;
+    OUString m_aStr, m_aNewFormula;
 
-    sal_uLong nFormatIdx, nNewFormatIdx;
-    double fNum, fNewNum;
-    sal_uLong nNode;
-    sal_uLong nNdPos;
+    sal_uLong m_nFormatIdx, m_nNewFormatIdx;
+    double m_fNum, m_fNewNum;
+    sal_uLong m_nNode;
+    sal_uLong m_nNodePos;
 
-    bool bNewFormat : 1;
-    bool bNewFormula : 1;
-    bool bNewValue : 1;
+    bool m_bNewFormat : 1;
+    bool m_bNewFormula : 1;
+    bool m_bNewValue : 1;
 
 public:
     SwUndoTableNumFormat( const SwTableBox& rBox, const SfxItemSet* pNewSet = nullptr );
@@ -273,7 +273,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
     void SetNumFormat( sal_uLong nNewNumFormatIdx, const double& rNewNumber )
-            { nFormatIdx = nNewNumFormatIdx; fNum = rNewNumber; }
+            { m_nFormatIdx = nNewNumFormatIdx; m_fNum = rNewNumber; }
     void SetBox( const SwTableBox& rBox );
 };
 
