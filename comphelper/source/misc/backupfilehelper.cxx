@@ -1653,7 +1653,7 @@ namespace
             }
         }
 
-        bool empty()
+        bool empty() const
         {
             return maPackedFileEntryVector.empty();
         }
@@ -1940,7 +1940,7 @@ namespace comphelper
         return bDidPop;
     }
 
-    bool BackupFileHelper::isPopPossibleExtensionInfo()
+    bool BackupFileHelper::isPopPossibleExtensionInfo() const
     {
         bool bPopPossible(false);
 

@@ -45,7 +45,7 @@ public:
 
     void resetInterceptions();
     void resetErrorStates();
-    bool wasWriteError() { return (m_bUsed && m_bHandledByMySelf);}
+    bool wasWriteError() const { return (m_bUsed && m_bHandledByMySelf);}
 
 private:
     css::uno::Reference< css::task::XInteractionHandler > m_xAuxiliaryHandler;

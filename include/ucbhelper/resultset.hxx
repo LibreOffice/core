@@ -259,7 +259,7 @@ public:
       * @param rEvt is a property change event.
       */
     void propertyChanged(
-                const css::beans::PropertyChangeEvent& rEvt );
+                const css::beans::PropertyChangeEvent& rEvt ) const;
 
     /**
       * This method should be called by the data supplier for the result set
@@ -283,7 +283,7 @@ public:
       * @return a sequence of properties.
       */
     const css::uno::Sequence< css::beans::Property >&
-    getProperties();
+    getProperties() const;
 
     /**
       * This method returns the environment to use for interactions, progress
@@ -292,7 +292,7 @@ public:
       * @return an environment or an empty reference.
       */
     const css::uno::Reference< css::ucb::XCommandEnvironment >&
-    getEnvironment();
+    getEnvironment() const;
 };
 
 

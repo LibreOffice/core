@@ -80,18 +80,18 @@ public:
     OUString     CreateUniqueObjectName();
 
     // get a list of object names that have been added so far
-    css::uno::Sequence < OUString > GetObjectNames();
+    css::uno::Sequence < OUString > GetObjectNames() const;
 
     // check for existence of objects at all
-    bool            HasEmbeddedObjects();
+    bool            HasEmbeddedObjects() const;
 
     // check existence of an object - either by identity or by name
     bool            HasEmbeddedObject( const OUString& );
-    bool            HasEmbeddedObject( const css::uno::Reference < css::embed::XEmbeddedObject >& );
+    bool            HasEmbeddedObject( const css::uno::Reference < css::embed::XEmbeddedObject >& ) const;
     bool            HasInstantiatedEmbeddedObject( const OUString& );
 
     // get the object name of an object - this is the persist name if the object has persistence
-    OUString        GetEmbeddedObjectName( const css::uno::Reference < css::embed::XEmbeddedObject >& );
+    OUString        GetEmbeddedObjectName( const css::uno::Reference < css::embed::XEmbeddedObject >& ) const;
 
     // retrieve an embedded object by name that either has been added already or is available in the container storage
     css::uno::Reference<css::embed::XEmbeddedObject> GetEmbeddedObject(const OUString&, OUString const* pBaseURL = nullptr);

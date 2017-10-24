@@ -88,7 +88,7 @@ class PropertySetInfo :
 
 private:
     bool queryProperty(
-        const OUString& aName, beans::Property& rProp );
+        const OUString& aName, beans::Property& rProp ) const;
 
 public:
     PropertySetInfo(
@@ -1362,7 +1362,7 @@ void SAL_CALL ResultSet::removeVetoableChangeListener(
 // Non-interface methods.
 
 
-void ResultSet::propertyChanged( const beans::PropertyChangeEvent& rEvt )
+void ResultSet::propertyChanged( const beans::PropertyChangeEvent& rEvt ) const
 {
     if ( !m_pImpl->m_pPropertyChangeListeners )
         return;
@@ -1427,14 +1427,14 @@ void ResultSet::rowCountFinal()
 }
 
 
-const uno::Sequence< beans::Property >& ResultSet::getProperties()
+const uno::Sequence< beans::Property >& ResultSet::getProperties() const
 {
     return m_pImpl->m_aProperties;
 }
 
 
 const uno::Reference< css::ucb::XCommandEnvironment >&
-ResultSet::getEnvironment()
+ResultSet::getEnvironment() const
 {
     return m_pImpl->m_xEnv;
 }
@@ -1537,7 +1537,7 @@ sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName(
 
 
 bool PropertySetInfo::queryProperty(
-    const OUString& aName, beans::Property& rProp )
+    const OUString& aName, beans::Property& rProp ) const
 {
     sal_Int32 nCount = m_pProps->getLength();
     const beans::Property* pProps = m_pProps->getConstArray();

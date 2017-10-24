@@ -137,7 +137,7 @@ namespace comphelper
          * isPopPossibleExtensionInfo is the specialized version for ExtensionInfo
          */
         bool isPopPossible();
-        bool isPopPossibleExtensionInfo();
+        bool isPopPossibleExtensionInfo() const;
 
         /** tries to execute a restore. Will overwrite the base file
          *  in that case and take one version off the 'stack' of copies.

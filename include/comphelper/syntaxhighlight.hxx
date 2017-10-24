@@ -81,7 +81,7 @@ public:
     void getHighlightPortions( const OUString& rLine,
                                std::vector<HighlightPortion>& pPortions ) const;
 
-    HighlighterLanguage GetLanguage();
+    HighlighterLanguage GetLanguage() const;
 };
 
 #endif

@@ -68,7 +68,7 @@ class OFOPXMLHelper_Impl
 
 
 public:
-    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > const & GetParsingResult();
+    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > const & GetParsingResult() const;
 
     explicit OFOPXMLHelper_Impl( sal_uInt16 nFormat ); // must not be created directly
 
@@ -269,7 +269,7 @@ OFOPXMLHelper_Impl::OFOPXMLHelper_Impl( sal_uInt16 nFormat )
 {
 }
 
-uno::Sequence< uno::Sequence< beans::StringPair > > const & OFOPXMLHelper_Impl::GetParsingResult()
+uno::Sequence< uno::Sequence< beans::StringPair > > const & OFOPXMLHelper_Impl::GetParsingResult() const
 {
     if ( m_aElementsSeq.size() )
         throw uno::RuntimeException(); // the parsing has still not finished!
