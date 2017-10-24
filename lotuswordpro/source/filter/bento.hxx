@@ -369,7 +369,7 @@ class CBenTypeName : public CBenNamedObject
 {
 public: // Internal methods
     CBenTypeName(LtcBenContainer * pContainer, BenObjectID ObjectID,
-    CBenObject * pPrevObject, const OString& rName,
+    CUtListElmt * pPrevObject, const OString& rName,
     CUtListElmt * pPrevNamedObjectListElmt) :
     CBenNamedObject(pContainer, ObjectID, pPrevObject, rName,
     pPrevNamedObjectListElmt) { ; }
