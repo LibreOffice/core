@@ -412,7 +412,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 uno::Any aContextualSpacingFromStyle = m_pImpl->GetPropertyFromStyleSheet(PROP_PARA_CONTEXT_MARGIN);
                 if (aContextualSpacingFromStyle.hasValue())
                     // Setting "after" spacing means Writer doesn't inherit
-                    // contexual spacing anymore from style, but Word does.
+                    // contextual spacing anymore from style, but Word does.
                     m_pImpl->GetTopContext()->Insert(PROP_PARA_CONTEXT_MARGIN, aContextualSpacingFromStyle);
             }
             break;
