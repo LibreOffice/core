@@ -234,7 +234,7 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
         double nFrac2Dec = nWholeNum + (double)nNum/nDenom; // Convert to double for floating point precision
         aStrFrac.append(nFrac2Dec);
         // Reconvert division result to string and parse
-        nDecPos = aStrFrac.indexOf( rLocaleDataWrappper.getNumDecimalSep() );
+        nDecPos = aStrFrac.indexOf('.');
         if ( nDecPos >= 0)
         {
             aStr1.append(aStrFrac.getStr(), nDecPos);
