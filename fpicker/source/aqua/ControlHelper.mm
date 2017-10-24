@@ -26,7 +26,7 @@
 #include "CFStringUtilities.hxx"
 #include "resourceprovider.hxx"
 #include "NSString_OOoAdditions.hxx"
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 #include "ControlHelper.hxx"
 

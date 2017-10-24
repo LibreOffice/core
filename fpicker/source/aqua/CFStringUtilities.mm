@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 #include "CFStringUtilities.hxx"
 
 rtl::OUString CFStringToOUString(const CFStringRef sOrig)

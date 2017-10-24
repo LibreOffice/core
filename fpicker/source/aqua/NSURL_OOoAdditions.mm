@@ -19,7 +19,7 @@
 
 #include "NSString_OOoAdditions.hxx"
 #include "NSURL_OOoAdditions.hxx"
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 @implementation NSURL (OOoAdditions)
 - (rtl::OUString) OUStringForInfo:(InfoType)info

@@ -26,7 +26,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <FPServiceInfo.hxx>
+#include "FPServiceInfo.hxx"
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "SalAquaFolderPicker.hxx"

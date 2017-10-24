@@ -30,7 +30,7 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 
 #include "NSString_OOoAdditions.hxx"
-#include "fpsofficeResMgr.hxx"
+#include <fpsofficeResMgr.hxx>
 #include "resourceprovider.hxx"
 
 using rtl::OUString;
