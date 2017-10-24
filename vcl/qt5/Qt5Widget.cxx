@@ -22,10 +22,14 @@
 
 #include "Qt5Frame.hxx"
 #include "Qt5Graphics.hxx"
+#include "Qt5Tools.hxx"
 
 #include <QtGui/QImage>
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
+
+#include <cairo.h>
+#include <headless/svpgdi.hxx>
 
 Qt5Widget::Qt5Widget( Qt5Frame &rFrame, QWidget *parent, Qt::WindowFlags f )
     : QWidget( parent, f )
@@ -41,14 +45,40 @@ Qt5Widget::~Qt5Widget()
 void Qt5Widget::paintEvent( QPaintEvent *pEvent )
 {
     QPainter p( this );
-    p.drawImage( pEvent->rect().topLeft(), *m_pFrame->m_pQImage, pEvent->rect() );
+    if( m_pFrame->m_bUseCairo )
+    {
+        cairo_surface_t *pSurface = m_pFrame->m_pSurface.get();
+        cairo_surface_flush( pSurface );
+
+        QImage aImage( cairo_image_surface_get_data( pSurface ),
+            size().width(), size().height(), Qt5_DefaultFormat32 );
+        p.drawImage( QPoint( 0, 0 ), aImage );
+        p.drawImage( pEvent->rect().topLeft(), aImage, pEvent->rect() );
+    }
+    else
+        p.drawImage( pEvent->rect().topLeft(),
+                     *m_pFrame->m_pQImage, pEvent->rect() );
 }
 
 void Qt5Widget::resizeEvent( QResizeEvent* )
 {
-    QImage *pImage = new QImage( m_pFrame->m_pQWidget->size(), QImage::Format_ARGB32 );
-    m_pFrame->m_pGraphics->ChangeQImage( pImage );
-    m_pFrame->m_pQImage.reset( pImage );
+    if( m_pFrame->m_bUseCairo )
+    {
+        int width = size().width();
+        int height = size().height();
+        cairo_surface_t *pSurface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32, width, height );
+        cairo_surface_set_user_data( pSurface, SvpSalGraphics::getDamageKey(),
+                                     &m_pFrame->m_aDamageHandler, nullptr );
+        m_pFrame->m_pSvpGraphics->setSurface( pSurface, basegfx::B2IVector(width, height) );
+        m_pFrame->m_pSurface.reset( pSurface );
+    }
+    else
+    {
+        QImage *pImage = new QImage( size(), Qt5_DefaultFormat32 );
+        m_pFrame->m_pQt5Graphics->ChangeQImage( pImage );
+        m_pFrame->m_pQImage.reset( pImage );
+    }
+
     m_pFrame->CallCallback( SalEvent::Resize, nullptr );
 }
 

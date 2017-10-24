@@ -21,7 +21,9 @@
 
 #include <salframe.hxx>
 
-#include <memory>
+#include "Qt5Tools.hxx"
+
+#include <headless/svpgdi.hxx>
 
 class Qt5Graphics;
 class Qt5Instance;
@@ -29,15 +31,22 @@ class Qt5Widget;
 class QWidget;
 class QPaintDevice;
 class QImage;
+class SvpSalGraphics;
 
 class Qt5Frame
     : public SalFrame
 {
     friend class Qt5Widget;
 
-    std::unique_ptr< QWidget >      m_pQWidget;
-    std::unique_ptr< QImage >       m_pQImage;
-    std::unique_ptr< Qt5Graphics >  m_pGraphics;
+    std::unique_ptr< QWidget >        m_pQWidget;
+
+    const bool                        m_bUseCairo;
+    std::unique_ptr< QImage >         m_pQImage;
+    std::unique_ptr< Qt5Graphics >    m_pQt5Graphics;
+    UniqueCairoSurface                m_pSurface;
+    std::unique_ptr< SvpSalGraphics>  m_pSvpGraphics;
+    DamageHandler                     m_aDamageHandler;
+
     bool                            m_bGraphicsInUse;
     SalFrameStyleFlags              m_nStyle;
     Qt5Frame                       *m_pParent;
@@ -53,13 +62,18 @@ class Qt5Frame
     }
 
     void TriggerPaintEvent();
+    void TriggerPaintEvent( QRect aRect );
 
 public:
     Qt5Frame( Qt5Frame* pParent,
-              SalFrameStyleFlags nSalFrameStyle );
+              SalFrameStyleFlags nSalFrameStyle,
+              bool bUseCairo );
     virtual ~Qt5Frame() override;
 
     QWidget* GetQWidget() const { return m_pQWidget.get(); }
+
+    void Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY,
+                sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight) const;
 
     virtual SalGraphics*        AcquireGraphics() override;
     virtual void                ReleaseGraphics( SalGraphics* pGraphics ) override;

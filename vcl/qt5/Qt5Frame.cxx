@@ -32,11 +32,26 @@
 #include <saldatabasic.hxx>
 #include <vcl/syswin.hxx>
 
-Qt5Frame::Qt5Frame( Qt5Frame* pParent, SalFrameStyleFlags nStyle )
-    : m_bGraphicsInUse( false )
+#include <cairo.h>
+#include <headless/svpgdi.hxx>
+
+static void SvpDamageHandler( void *handle,
+                              sal_Int32 nExtentsX, sal_Int32 nExtentsY,
+                              sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight )
+{
+    Qt5Frame* pThis = static_cast< Qt5Frame* >( handle );
+    pThis->Damage( nExtentsX, nExtentsY, nExtentsWidth, nExtentsHeight );
+}
+
+Qt5Frame::Qt5Frame( Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo )
+    : m_bUseCairo( bUseCairo )
+    , m_bGraphicsInUse( false )
 {
     Qt5Instance *pInst = static_cast<Qt5Instance*>( GetSalData()->m_pInstance );
     pInst->insertFrame( this );
+
+    m_aDamageHandler.handle = this;
+    m_aDamageHandler.damaged = ::SvpDamageHandler;
 
     if( nStyle & SalFrameStyleFlags::DEFAULT ) // ensure default style
     {
@@ -85,11 +100,24 @@ Qt5Frame::~Qt5Frame()
     pInst->eraseFrame( this );
 }
 
+void Qt5Frame::Damage( sal_Int32 nExtentsX, sal_Int32 nExtentsY,
+                       sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight) const
+{
+    m_pQWidget->update( nExtentsX, nExtentsY, nExtentsWidth, nExtentsHeight );
+}
+
 void Qt5Frame::TriggerPaintEvent()
 {
     QSize aSize( m_pQWidget->size() );
-    SalPaintEvent aPaintEvt(0, 0, aSize.width(), aSize.height(), true);
-    CallCallback(SalEvent::Paint, &aPaintEvt);
+    SalPaintEvent aPaintEvt( 0, 0, aSize.width(), aSize.height(), true );
+    CallCallback( SalEvent::Paint, &aPaintEvt );
+}
+
+void Qt5Frame::TriggerPaintEvent( QRect aRect )
+{
+    SalPaintEvent aPaintEvt( aRect.x(), aRect.y(),
+                             aRect.width(), aRect.height(), true );
+    CallCallback( SalEvent::Paint, &aPaintEvt );
 }
 
 SalGraphics* Qt5Frame::AcquireGraphics()
@@ -97,22 +125,43 @@ SalGraphics* Qt5Frame::AcquireGraphics()
     if( m_bGraphicsInUse )
         return nullptr;
 
-    if( !m_pGraphics.get() )
-    {
-        m_pGraphics.reset( new Qt5Graphics( this ) );
-        m_pQImage.reset( new QImage( m_pQWidget->size(), QImage::Format_ARGB32 ) );
-        m_pGraphics->ChangeQImage( m_pQImage.get() );
-        TriggerPaintEvent();
-    }
     m_bGraphicsInUse = true;
 
-    return m_pGraphics.get();
+    if( m_bUseCairo )
+    {
+        if( !m_pSvpGraphics.get() )
+        {
+            int width = m_pQWidget->size().width();
+            int height = m_pQWidget->size().height();
+            m_pSvpGraphics.reset( new SvpSalGraphics() );
+            m_pSurface.reset( cairo_image_surface_create( CAIRO_FORMAT_ARGB32, width, height ));
+            m_pSvpGraphics->setSurface( m_pSurface.get(), basegfx::B2IVector(width, height) );
+            cairo_surface_set_user_data( m_pSurface.get(), SvpSalGraphics::getDamageKey(),
+                                         &m_aDamageHandler, nullptr );
+            TriggerPaintEvent();
+        }
+        return m_pSvpGraphics.get();
+    }
+    else
+    {
+        if( !m_pQt5Graphics.get() )
+        {
+            m_pQt5Graphics.reset( new Qt5Graphics( this ) );
+            m_pQImage.reset( new QImage( m_pQWidget->size(), Qt5_DefaultFormat32 ) );
+            m_pQt5Graphics->ChangeQImage( m_pQImage.get() );
+            TriggerPaintEvent();
+        }
+        return m_pQt5Graphics.get();
+    }
 }
 
 void Qt5Frame::ReleaseGraphics( SalGraphics* pSalGraph )
 {
     (void) pSalGraph;
-    assert( pSalGraph == m_pGraphics.get() );
+    if( m_bUseCairo )
+        assert( pSalGraph == m_pSvpGraphics.get() );
+    else
+        assert( pSalGraph == m_pQt5Graphics.get() );
     m_bGraphicsInUse = false;
 }
 
@@ -269,7 +318,6 @@ bool Qt5Frame::GetWindowState( SalFrameState* pState )
                            WindowStateMask::Height;
     }
 
-    TriggerPaintEvent();
     return true;
 }
 
