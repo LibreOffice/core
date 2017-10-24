@@ -38,17 +38,13 @@ namespace o3tl
 }
 
 
-class SVT_DLLPUBLIC FileControl : public vcl::Window
+class SVT_DLLPUBLIC FileControl final : public vcl::Window
 {
-private:
     VclPtr<Edit>       maEdit;
     VclPtr<PushButton> maButton;
-
-    OUString        maButtonText;
-
+    OUString           maButtonText;
     FileControlMode_Internal    mnInternalFlags;
 
-protected:
     SVT_DLLPRIVATE void     Resize() override;
     SVT_DLLPRIVATE void     GetFocus() override;
     SVT_DLLPRIVATE void     StateChanged( StateChangedType nType ) override;

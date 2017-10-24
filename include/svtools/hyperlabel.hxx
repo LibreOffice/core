@@ -32,9 +32,8 @@ namespace svt
 {
     class HyperLabelImpl;
 
-    class HyperLabel : public FixedText
+    class HyperLabel final : public FixedText
     {
-    protected:
         std::unique_ptr<HyperLabelImpl>     m_pImpl;
         Link<HyperLabel*,void>  maClickHdl;
 
@@ -46,8 +45,9 @@ namespace svt
         void                DeactivateHyperMode(vcl::Font aFont, const Color aColor);
         void                ActivateHyperMode(vcl::Font aFont, const Color aColor);
 
-    protected:
         void                implInit();
+
+        using FixedText::CalcMinimumSize;
 
     public:
         HyperLabel( vcl::Window* _pParent, WinBits _nWinStyle );
@@ -70,9 +70,6 @@ namespace svt
         void                SetClickHdl( const Link<HyperLabel*,void>& rLink ) { maClickHdl = rLink; }
 
         Size                CalcMinimumSize( long nMaxWidth ) const;
-
-    private:
-        using FixedText::CalcMinimumSize;
     };
 }
 

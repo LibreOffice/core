@@ -112,9 +112,8 @@ public:
 
 //  class VCLXFileControl
 
-class VCLXFileControl : public css::awt::XTextComponent, public css::awt::XTextLayoutConstrains, public VCLXWindow
+class VCLXFileControl final : public css::awt::XTextComponent, public css::awt::XTextLayoutConstrains, public VCLXWindow
 {
-protected:
     DECL_LINK(ModifyHdl, Edit&, void);
     void ModifyHdl();
     TextListenerMultiplexer maTextListeners;
@@ -233,20 +232,8 @@ typedef ::cppu::ImplInheritanceHelper  <   VCLXGraphicControl
                                         ,   css::beans::XPropertyChangeListener
                                         ,   css::awt::XItemEventBroadcaster
                                         >   SVTXRoadmap_Base;
-class SVTXRoadmap : public SVTXRoadmap_Base
-
-
+class SVTXRoadmap final : public SVTXRoadmap_Base
 {
-private:
-    ItemListenerMultiplexer     maItemListeners;
-
-    static RMItemData GetRMItemData( const css::container::ContainerEvent& _rEvent );
-
-protected:
-    virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
-
-    virtual ~SVTXRoadmap() override;
-
 public:
     SVTXRoadmap();
 
@@ -269,13 +256,21 @@ public:
     // XPropertyChangeListener
     virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
 
-protected:
+private:
 
     // VCLXGraphicControl overridables
     virtual void    ImplSetNewImage() override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
+
+    static RMItemData GetRMItemData( const css::container::ContainerEvent& _rEvent );
+
+    virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
+
+    virtual ~SVTXRoadmap() override;
+
+    ItemListenerMultiplexer     maItemListeners;
 };
 
 
@@ -364,7 +359,7 @@ public:
 
 //  class VCLXProgressBar
 
-class VCLXProgressBar : public css::awt::XProgressBar,
+class VCLXProgressBar final : public css::awt::XProgressBar,
                         public VCLXWindow
 {
 private:
@@ -372,7 +367,6 @@ private:
     sal_Int32   m_nValueMin;
     sal_Int32   m_nValueMax;
 
-protected:
     void            ImplUpdateValue();
 
 public:

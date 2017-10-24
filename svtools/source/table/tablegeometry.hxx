@@ -64,12 +64,8 @@ namespace svt { namespace table
 
     //= TableRowGeometry
 
-    class TableRowGeometry : public TableGeometry
+    class TableRowGeometry final : public TableGeometry
     {
-    protected:
-        RowPos  m_nRowPos;
-        bool    m_bAllowVirtualRows;
-
     public:
         TableRowGeometry(
             TableControl_Impl const & _rControl,
@@ -87,16 +83,16 @@ namespace svt { namespace table
     private:
         void    impl_initRect();
         bool    impl_isValidRow( RowPos const i_row ) const;
+
+        RowPos  m_nRowPos;
+        bool    m_bAllowVirtualRows;
     };
 
 
     //= TableColumnGeometry
 
-    class TableColumnGeometry : public TableGeometry
+    class TableColumnGeometry final : public TableGeometry
     {
-    protected:
-        ColPos  m_nColPos;
-
     public:
         TableColumnGeometry(
             TableControl_Impl const & _rControl,
@@ -112,6 +108,8 @@ namespace svt { namespace table
     private:
         void    impl_initRect();
         bool    impl_isValidColumn( ColPos const i_column ) const;
+
+        ColPos  m_nColPos;
     };
 
 

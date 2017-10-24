@@ -252,11 +252,8 @@ protected:
 };
 
 
-class SVT_DLLPUBLIC DoubleNumericField : public FormattedField
+class SVT_DLLPUBLIC DoubleNumericField final : public FormattedField
 {
-protected:
-    validation::NumberValidator*    m_pNumberValidator;
-
 public:
     DoubleNumericField(vcl::Window* pParent, WinBits nStyle)
         :FormattedField(pParent, nStyle)
@@ -268,20 +265,18 @@ public:
     virtual ~DoubleNumericField() override;
     virtual void dispose() override;
 
-protected:
+private:
     virtual bool CheckText(const OUString& sText) const override;
 
     virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat) override;
     void ResetConformanceTester();
+
+    validation::NumberValidator*    m_pNumberValidator;
 };
 
 
-class DoubleCurrencyField : public FormattedField
+class DoubleCurrencyField final : public FormattedField
 {
-    OUString   m_sCurrencySymbol;
-    bool       m_bPrependCurrSym;
-    bool       m_bChangingFormat;
-
 public:
     DoubleCurrencyField(vcl::Window* pParent, WinBits nStyle);
 
@@ -291,10 +286,14 @@ public:
     bool        getPrependCurrSym() const { return m_bPrependCurrSym; }
     void        setPrependCurrSym(bool _bPrepend);
 
-protected:
+private:
     virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat) override;
 
     void UpdateCurrencyFormat();
+
+    OUString   m_sCurrencySymbol;
+    bool       m_bPrependCurrSym;
+    bool       m_bChangingFormat;
 };
 
 #endif // INCLUDED_SVTOOLS_FMTFIELD_HXX

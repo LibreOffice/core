@@ -30,18 +30,17 @@ namespace svt
 
     //= OStringTransferable
 
-    class SVT_DLLPUBLIC OStringTransferable : public TransferableHelper
+    class SVT_DLLPUBLIC OStringTransferable final : public TransferableHelper
     {
-    protected:
-        OUString     m_sContent;
-
     public:
         OStringTransferable(const OUString& _rContent);
 
-    protected:
+    private:
         // TransferableHelper overridables
         virtual void AddSupportedFormats() override;
         virtual bool GetData( const css::datatransfer::DataFlavor& _rFlavor, const OUString& rDestDoc ) override;
+
+        OUString     m_sContent;
     };
 
 

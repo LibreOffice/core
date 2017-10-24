@@ -47,14 +47,12 @@ typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessible,
     css::lang::XServiceInfo > VCLXAccessibleHeaderBarItem_BASE;
 
-class VCLXAccessibleHeaderBarItem : public comphelper::OAccessibleExtendedComponentHelper,
+class VCLXAccessibleHeaderBarItem final : public comphelper::OAccessibleExtendedComponentHelper,
                                     public VCLXAccessibleHeaderBarItem_BASE
 {
 private:
     VclPtr<HeaderBar>        m_pHeadBar;
     sal_Int32                m_nIndexInParent;
-
-protected:
 
     void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
