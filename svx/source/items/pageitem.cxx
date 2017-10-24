@@ -166,7 +166,7 @@ bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
         case MID_PAGE_ORIENTATION:
-            rVal <<= (bool) bLandscape;
+            rVal <<= bLandscape;
         break;
         case MID_PAGE_LAYOUT     :
         {
