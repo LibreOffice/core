@@ -630,8 +630,6 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
     {
         m_hasFHeader = false;
         m_hasRHeader = false;
-        m_hasLHeader = false;
-        m_hasLFooter = false;
         m_hasRFooter = false;
         m_hasFFooter = false;
         Mapper().endSectionGroup();
