@@ -543,9 +543,6 @@ bool Converter::convertNumber64( sal_Int64& rValue,
                                  const OUString& rString,
                                  sal_Int64 nMin, sal_Int64 nMax )
 {
-    bool bNeg = false;
-    rValue = 0;
-
     sal_Int32 nPos = 0;
     sal_Int32 const nLen = rString.getLength();
 
@@ -553,10 +550,11 @@ bool Converter::convertNumber64( sal_Int64& rValue,
     while( (nPos < nLen) && (rString[nPos] <= ' ') )
         nPos++;
 
+    OUStringBuffer sNumber;
+
     if( nPos < nLen && '-' == rString[nPos] )
     {
-        bNeg = true;
-        nPos++;
+        sNumber.append(rString[nPos++]);
     }
 
     // get number
@@ -564,14 +562,10 @@ bool Converter::convertNumber64( sal_Int64& rValue,
            '0' <= rString[nPos] &&
            '9' >= rString[nPos] )
     {
-        // TODO: check overflow!
-        rValue *= 10;
-        rValue += (rString[nPos] - u'0');
-        nPos++;
+        sNumber.append(rString[nPos++]);
     }
 
-    if( bNeg )
-        rValue *= -1;
+    rValue = sNumber.toString().toInt64();
 
     if( rValue < nMin )
         rValue = nMin;
