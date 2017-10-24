@@ -26,7 +26,7 @@
 
 namespace o3tl {
 
-template<typename EA>
+template<typename EA, typename V>
 class enumarray_iterator;
 
 ///
@@ -44,7 +44,8 @@ class enumarray final
 {
 public:
     typedef enumarray<E, V> self_type;
-    typedef enumarray_iterator<self_type> iterator;
+    typedef enumarray_iterator<self_type, V> iterator;
+    typedef enumarray_iterator<self_type const, V const> const_iterator;
 
     typedef V             value_type;
     typedef E             key_type;
@@ -70,6 +71,8 @@ public:
     static size_type size() { return max_index + 1; }
     iterator  begin()      { return iterator(*this, 0); }
     iterator  end()        { return iterator(*this, size()); }
+    const_iterator begin() const { return const_iterator(*this, 0); }
+    const_iterator end() const   { return const_iterator(*this, size()); }
 
     V*        data()       { return detail_values; }
 
@@ -78,13 +81,12 @@ public:
 };
 
 
-template<typename EA>
+template<typename EA, typename value_type>
 class enumarray_iterator {
     EA         *m_buf;
     size_t      m_pos;
 public:
-    typedef enumarray_iterator<EA>  self_type;
-    typedef typename EA::value_type value_type;
+    typedef enumarray_iterator<EA, value_type>  self_type;
     typedef typename EA::key_type   key_type;
     typedef std::bidirectional_iterator_tag iterator_category; //should be random access, but that would require define subtraction operators on the enums
     typedef
