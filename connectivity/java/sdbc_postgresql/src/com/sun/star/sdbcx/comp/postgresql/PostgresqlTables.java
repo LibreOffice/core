@@ -26,6 +26,7 @@ import java.util.List;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.ElementExistException;
+import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdbc.SQLException;
@@ -33,6 +34,7 @@ import com.sun.star.sdbc.XDatabaseMetaData;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRow;
 import com.sun.star.sdbc.XStatement;
+import com.sun.star.sdbcx.XDrop;
 import com.sun.star.sdbcx.comp.postgresql.comphelper.CompHelper;
 import com.sun.star.sdbcx.comp.postgresql.sdbcx.OContainer;
 import com.sun.star.sdbcx.comp.postgresql.sdbcx.descriptors.SdbcxTableDescriptor;
@@ -95,7 +97,15 @@ public class PostgresqlTables extends OContainer {
 
             String composedName = DbTools.composeTableName(metadata, nameComponents.getCatalog(), nameComponents.getSchema(), nameComponents.getTable(),
                     true, ComposeRule.InDataManipulation);
-            String sql = String.format("DROP %s %s", isView ? "VIEW" : "TABLE", composedName);
+            if (isView) {
+                XDrop dropView = UnoRuntime.queryInterface(XDrop.class, catalog.getViews());
+                String unquotedName = DbTools.composeTableName(metadata, nameComponents.getCatalog(), nameComponents.getSchema(), nameComponents.getTable(),
+                        false, ComposeRule.InDataManipulation);
+                dropView.dropByName(unquotedName);
+                return;
+            }
+
+            String sql = "DROP TABLE " + composedName;
 
             XStatement statement = null;
             try {
@@ -104,8 +114,7 @@ public class PostgresqlTables extends OContainer {
             } finally {
                 CompHelper.disposeComponent(statement);
             }
-            // FIXME: delete it from our views
-        } catch (IllegalArgumentException | UnknownPropertyException | WrappedTargetException wrappedTargetException) {
+        } catch (IllegalArgumentException | UnknownPropertyException | WrappedTargetException | NoSuchElementException wrappedTargetException) {
             throw new SQLException("Error", this, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, wrappedTargetException);
         }
     }

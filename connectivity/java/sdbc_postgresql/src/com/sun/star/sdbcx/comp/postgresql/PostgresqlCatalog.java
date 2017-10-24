@@ -71,7 +71,7 @@ public class PostgresqlCatalog extends OCatalog {
                 String name = buildName(row);
                 names.add(name);
             }
-            return new PostgresqlTables(this, metadata, this, names);
+            return new PostgresqlViews(this, metadata, this, names);
         } catch (ElementExistException | SQLException exception) {
             throw new com.sun.star.uno.RuntimeException("Error", exception);
         } finally {
@@ -87,5 +87,9 @@ public class PostgresqlCatalog extends OCatalog {
     @Override
     public OContainer refreshUsers() {
         return null;
+    }
+
+    synchronized OContainer getTablesInternal() {
+        return tables;
     }
 }

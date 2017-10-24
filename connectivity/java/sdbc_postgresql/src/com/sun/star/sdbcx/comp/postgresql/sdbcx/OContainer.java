@@ -280,6 +280,15 @@ public abstract class OContainer extends WeakBase implements
 
     }
 
+    public void insertElement(String name, XPropertySet element) {
+        synchronized (lock) {
+            if (!entriesByName.containsKey(name)) {
+                entriesByName.put(name, element);
+                namesByIndex.add(name);
+            }
+        }
+    }
+
     // XDrop
 
     @Override
