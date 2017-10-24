@@ -216,18 +216,10 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     }
                     break;
                 case RTF_HEADERL:
-                    if (!m_hasLHeader)
-                    {
-                        nId = NS_ooxml::LN_headerl;
-                        m_hasLHeader = true;
-                    }
+                    nId = NS_ooxml::LN_headerl;
                     break;
                 case RTF_HEADERR:
-                    if (!m_hasRHeader)
-                    {
-                        nId = NS_ooxml::LN_headerr;
-                        m_hasRHeader = true;
-                    }
+                    nId = NS_ooxml::LN_headerr;
                     break;
                 case RTF_HEADERF:
                     if (!m_hasFHeader)
@@ -237,18 +229,10 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     }
                     break;
                 case RTF_FOOTERL:
-                    if (!m_hasLFooter)
-                    {
-                        nId = NS_ooxml::LN_footerl;
-                        m_hasLFooter = true;
-                    }
+                    nId = NS_ooxml::LN_footerl;
                     break;
                 case RTF_FOOTERR:
-                    if (!m_hasRFooter)
-                    {
-                        nId = NS_ooxml::LN_footerr;
-                        m_hasRFooter = true;
-                    }
+                    nId = NS_ooxml::LN_footerr;
                     break;
                 case RTF_FOOTERF:
                     if (!m_hasFFooter)
