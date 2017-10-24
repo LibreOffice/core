@@ -31,6 +31,7 @@
 #include <rtl/tencinfo.h>
 #include <vcl/virdev.hxx>
 #include <o3tl/make_unique.hxx>
+#include <o3tl/safeint.hxx>
 #include <officecfg/Setup.hxx>
 #include <officecfg/Office/Linguistic.hxx>
 #include <unotools/configmgr.hxx>
@@ -518,7 +519,9 @@ namespace emfio
 
         rFont.SetFontSize( aFontSize );
 
-        if( ( mnWinExtX * mnWinExtY ) < 0 )
+        sal_Int32 nResult;
+        const bool bFail = o3tl::checked_multiply(mnWinExtX, mnWinExtY, nResult);
+        if (!bFail && nResult < 0)
             rFont.SetOrientation( 3600 - rFont.GetOrientation() );
     }
 
