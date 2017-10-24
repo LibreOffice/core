@@ -26,7 +26,7 @@
 
 namespace o3tl {
 
-template<typename EA>
+template<typename EA, typename V>
 class enumarray_iterator;
 
 ///
@@ -44,7 +44,8 @@ class enumarray final
 {
 public:
     typedef enumarray<E, V> self_type;
-    typedef enumarray_iterator<self_type> iterator;
+    typedef enumarray_iterator<self_type, V> iterator;
+    typedef enumarray_iterator<self_type const, V const> const_iterator;
 
     typedef V             value_type;
     typedef E             key_type;
@@ -67,38 +68,39 @@ public:
     void fill(V val)
     { for (size_type i=0; i<=max_index; ++i) detail_values[i] = val; }
 
-    static size_type size() { return max_index + 1; }
-    iterator  begin()      { return iterator(*this, 0); }
-    iterator  end()        { return iterator(*this, size()); }
+    static size_type size()        { return max_index + 1; }
+    iterator         begin()       { return iterator(*this, 0); }
+    iterator         end()         { return iterator(*this, size()); }
+    const_iterator   begin() const { return const_iterator(*this, 0); }
+    const_iterator   end() const   { return const_iterator(*this, size()); }
 
-    V*        data()       { return detail_values; }
+    V*               data()       { return detail_values; }
 
 //private:
     V detail_values[max_index + 1];
 };
 
 
-template<typename EA>
+template<typename EA, typename value_type>
 class enumarray_iterator {
     EA         *m_buf;
     size_t      m_pos;
 public:
-    typedef enumarray_iterator<EA>  self_type;
-    typedef typename EA::value_type value_type;
+    typedef enumarray_iterator<EA, value_type>  self_type;
     typedef typename EA::key_type   key_type;
     typedef std::bidirectional_iterator_tag iterator_category; //should be random access, but that would require define subtraction operators on the enums
     typedef
         typename std::make_signed<
             typename std::underlying_type<typename EA::key_type>::type>::type
         difference_type;
-    typedef typename EA::value_type*   pointer;
-    typedef typename EA::value_type&   reference;
+    typedef value_type*   pointer;
+    typedef value_type&   reference;
 
     enumarray_iterator(EA& b, size_t start_pos)
          : m_buf(&b), m_pos(start_pos) {}
-    value_type &operator*()  { return (*m_buf)[static_cast<key_type>(m_pos)]; }
-    value_type *operator->() { return &(operator*()); }
-    self_type  &operator++() { ++m_pos; return *this; }
+    value_type& operator*()  const { return (*m_buf)[static_cast<key_type>(m_pos)]; }
+    value_type* operator->() const { return &(operator*()); }
+    self_type&  operator++() { ++m_pos; return *this; }
     bool        operator!=(const self_type& other) const { return m_buf != other.m_buf || m_pos != other.m_pos; }
     bool        operator==(const self_type& other) const { return m_buf == other.m_buf && m_pos == other.m_pos; }
 };
