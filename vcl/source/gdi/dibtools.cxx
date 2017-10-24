@@ -773,11 +773,14 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
     const sal_uLong nStmPos = rIStm.Tell();
     bool bTopDown(false);
 
-    if (!ImplReadDIBInfoHeader(rIStm, aHeader, bTopDown, bMSOFormat) && aHeader.nWidth && aHeader.nHeight && aHeader.nBitCount)
+    if (!ImplReadDIBInfoHeader(rIStm, aHeader, bTopDown, bMSOFormat))
         return false;
 
     //BI_BITCOUNT_0 jpeg/png is unsupported
     if (aHeader.nBitCount == 0)
+        return false;
+
+    if (aHeader.nWidth <= 0 || aHeader.nHeight <= 0)
         return false;
 
     // In case ImplReadDIB() didn't call ImplReadDIBFileHeader() before
