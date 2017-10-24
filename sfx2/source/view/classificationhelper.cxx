@@ -93,7 +93,7 @@ public:
     /// PROP_BACNAME() is stored separately for easier lookup.
     OUString m_aName;
     OUString m_aAbbreviatedName;
-    size_t m_nSensitivity; //< 0 is the highest (most-sensitive).
+    size_t m_nConfidentiality; //< 0 is the lowest (least-sensitive).
     std::map<OUString, OUString> m_aLabels;
 };
 
@@ -184,7 +184,6 @@ void SAL_CALL SfxClassificationParser::startElement(const OUString& rName, const
             rCategory.m_aName = aName;
             // Set the abbreviated name, if any, otherwise fallback on the full name.
             rCategory.m_aAbbreviatedName = !aAbbreviatedName.isEmpty() ? aAbbreviatedName : aName;
-            rCategory.m_nSensitivity = m_aCategories.size() - 1; // 0-based class sensitivity; first is highest.
             rCategory.m_aLabels["PolicyAuthority:Name"] = m_aPolicyAuthorityName;
             rCategory.m_aLabels["Policy:Name"] = m_aPolicyName;
             rCategory.m_aLabels["BusinessAuthorization:Identifier"] = m_aProgramID;
@@ -281,6 +280,7 @@ void SAL_CALL SfxClassificationParser::endElement(const OUString& rName)
         {
             std::map<OUString, OUString>& rLabels = m_pCategory->m_aLabels;
             rLabels[PROP_IMPACTLEVEL()] = m_aConfidentalityValue;
+            m_pCategory->m_nConfidentiality = m_aConfidentalityValue.toInt32(); // 0-based class sensitivity; 0 is lowest.
             // Set the two other type of levels as well, if they're not set
             // yet: they're optional in BAF, but not in BAILS.
             if (rLabels.find("Impact:Level:Integrity") == rLabels.end())
@@ -365,6 +365,7 @@ SfxClassificationHelper::Impl::Impl(uno::Reference<document::XDocumentProperties
     : m_xDocumentProperties(std::move(xDocumentProperties))
     , m_bUseLocalized(bUseLocalized)
 {
+    parsePolicy();
 }
 
 void SfxClassificationHelper::Impl::parsePolicy()
@@ -595,9 +596,30 @@ const OUString& SfxClassificationHelper::GetBACName(SfxClassificationPolicyType 
     return m_pImpl->m_aCategory[eType].m_aName;
 }
 
-const OUString& SfxClassificationHelper::GetAbbreviatedBACName(SfxClassificationPolicyType eType)
+const OUString& SfxClassificationHelper::GetAbbreviatedBACName(const OUString& sFullName)
 {
-    return m_pImpl->m_aCategory[eType].m_aAbbreviatedName;
+    for (const auto& category : m_pImpl->m_aCategories)
+    {
+        if (category.m_aName == sFullName)
+            return category.m_aAbbreviatedName;
+    }
+
+    return sFullName;
+}
+
+OUString SfxClassificationHelper::GetHigherClass(const OUString& first, const OUString& second)
+{
+    size_t nFirstConfidentiality = 0;
+    size_t nSecondConfidentiality = 0;
+    for (const auto& category : m_pImpl->m_aCategories)
+    {
+        if (category.m_aName == first)
+            nFirstConfidentiality = category.m_nConfidentiality;
+        if (category.m_aName == second)
+            nSecondConfidentiality = category.m_nConfidentiality;
+    }
+
+    return nFirstConfidentiality >= nSecondConfidentiality ? first : second;
 }
 
 bool SfxClassificationHelper::HasImpactLevel()
@@ -797,7 +819,7 @@ void SfxClassificationHelper::SetBACName(const OUString& rName, SfxClassificatio
 
     m_pImpl->m_aCategory[eType].m_aName = it->m_aName;
     m_pImpl->m_aCategory[eType].m_aAbbreviatedName = it->m_aAbbreviatedName;
-    m_pImpl->m_aCategory[eType].m_nSensitivity = it->m_nSensitivity;
+    m_pImpl->m_aCategory[eType].m_nConfidentiality = it->m_nConfidentiality;
     m_pImpl->m_aCategory[eType].m_aLabels.clear();
     const OUString& rPrefix = policyTypeToString(eType);
     for (const auto& rLabel : it->m_aLabels)

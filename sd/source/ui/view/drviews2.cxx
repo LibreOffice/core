@@ -322,6 +322,7 @@ public:
                         {
                             bFound = true;
                             m_pRectObject = pRectObject;
+                            const OUString sBlank("");
                             for (editeng::Section const & rSection : aSections)
                             {
                                 const SvxFieldItem* pFieldItem = findField(rSection);
@@ -332,22 +333,22 @@ public:
                                     if (aKey.startsWith(sPolicy + "Marking:Text:"))
                                     {
                                         OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                                        m_aResults.push_back({ svx::ClassificationType::TEXT, aValue, nParagraph });
+                                        m_aResults.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, nParagraph });
                                     }
                                     else if (aKey.startsWith(sPolicy + "BusinessAuthorizationCategory:Name"))
                                     {
                                         OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                                        m_aResults.push_back({ svx::ClassificationType::CATEGORY, aValue, nParagraph });
+                                        m_aResults.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, nParagraph });
                                     }
                                     else if (aKey.startsWith(sPolicy + "Extension:Marking"))
                                     {
                                         OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                                        m_aResults.push_back({ svx::ClassificationType::MARKING, aValue, nParagraph });
+                                        m_aResults.push_back({ svx::ClassificationType::MARKING, aValue, sBlank, nParagraph });
                                     }
                                     else if (aKey.startsWith(sPolicy + "Extension:IntellectualPropertyPart"))
                                     {
                                         OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                                        m_aResults.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, nParagraph });
+                                        m_aResults.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, sBlank, nParagraph });
                                     }
                                 }
                             }
