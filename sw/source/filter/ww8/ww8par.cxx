@@ -4116,7 +4116,10 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
             // Call all 64 CRs; not for Header and the like
             if ((nCrCount++ & 0x40) == 0 && nType == MAN_MAINTEXT)
             {
-                m_nProgress = (sal_uInt16)( l * 100 / nTextLen );
+                if (nTextLen < WW8_CP_MAX/100)
+                    m_nProgress = (sal_uInt16)(l * 100 / nTextLen);
+                else
+                    m_nProgress = (sal_uInt16)(l / nTextLen * 100);
                 m_xProgress->Update(m_nProgress); // Update
             }
         }
