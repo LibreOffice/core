@@ -1300,15 +1300,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
         aPos.X -= aParentPos.X;
         aPos.Y -= aParentPos.Y;
     }
-    else if (m_xParent.is())
-    {
-        SdrObject* pShape = GetSdrObjectFromXShape(rXShape);
-        if (pShape)
-        {
-            aPos.X = pShape->GetRelativePos().getX();
-            aPos.Y = pShape->GetRelativePos().getY();
-        }
-    }
+
 
     if ( aSize.Width < 0 )
         aSize.Width = 1000;
@@ -1324,6 +1316,13 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
             int facsin=bFlipH ? -1 : 1;
             aPos.X-=(1-faccos*cos(nRotation*F_PI18000))*aSize.Width/2-facsin*sin(nRotation*F_PI18000)*aSize.Height/2;
             aPos.Y-=(1-faccos*cos(nRotation*F_PI18000))*aSize.Height/2+facsin*sin(nRotation*F_PI18000)*aSize.Width/2;
+        }
+        else if(nRotation == 18000)
+        {
+            if (!bFlipH)
+                aPos.X -= aSize.Width;
+            if (!bFlipV)
+                aPos.Y -= aSize.Height;
         }
 
         // The RotateAngle property's value is independent from any flipping, and that's exactly what we need here.
