@@ -68,9 +68,14 @@ void DXFLType::Read(DXFGroupReader & rDGR)
                 rDGR.SetError();
                 return;
             }
-            if (nDashIndex<nDashCount)
+            if (nDashIndex < nDashCount)
             {
-                fDash[nDashIndex++]=rDGR.GetF();
+                if (nDashIndex < 0)
+                {
+                    rDGR.SetError();
+                    return;
+                }
+                fDash[nDashIndex++] = rDGR.GetF();
             }
             break;
         }
