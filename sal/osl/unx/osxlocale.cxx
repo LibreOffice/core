@@ -29,7 +29,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include <nlsupport.hxx>
+#include "nlsupport.hxx"
 
 namespace
 {
