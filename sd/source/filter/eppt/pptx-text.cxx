@@ -1076,14 +1076,15 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                                 default:
                                     break;
                             }
-                            break;
-                            default: break;
                         }
                         nParaFlags |= 0x2f;
                         nBulletFlags |= 6;
                         if ( mbIsBullet && bNumberingIsNumber )
                             nBulletFlags |= 1;
+                        break;
                     }
+                    default:
+                        break;
                 }
             }
         }
