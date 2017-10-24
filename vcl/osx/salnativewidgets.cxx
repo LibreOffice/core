@@ -25,16 +25,16 @@
 #include <vcl/timer.hxx>
 #include <vcl/settings.hxx>
 
-#include "quartz/salgdi.h"
-#include "osx/salnativewidgets.h"
-#include "osx/saldata.hxx"
-#include "osx/salframe.h"
+#include <quartz/salgdi.h>
+#include <osx/salnativewidgets.h>
+#include <osx/saldata.hxx>
+#include <osx/salframe.h>
 
-#include "premac.h"
+#include <premac.h>
 #include <Carbon/Carbon.h>
-#include "postmac.h"
+#include <postmac.h>
 
-#include <cuidraw.hxx>
+#include "cuidraw.hxx"
 
 #if !HAVE_FEATURE_MACOSX_SANDBOX
 

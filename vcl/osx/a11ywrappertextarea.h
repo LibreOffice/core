@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_OSX_A11YWRAPPERTEXTAREA_H
 #define INCLUDED_VCL_OSX_A11YWRAPPERTEXTAREA_H
 
-#include "osx/a11ywrapper.h"
+#include <osx/a11ywrapper.h>
 
 @interface AquaA11yWrapperTextArea : AquaA11yWrapper
 {

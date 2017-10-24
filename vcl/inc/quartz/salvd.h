@@ -20,17 +20,17 @@
 #ifndef INCLUDED_VCL_INC_QUARTZ_SALVD_H
 #define INCLUDED_VCL_INC_QUARTZ_SALVD_H
 
-#include "premac.h"
+#include <premac.h>
 #ifdef MACOSX
 #include <ApplicationServices/ApplicationServices.h>
 #else
 #include <CoreGraphics/CoreGraphics.h>
 #endif
-#include "postmac.h"
+#include <postmac.h>
 
-#include "quartz/salgdi.h"
+#include <quartz/salgdi.h>
 
-#include "salvd.hxx"
+#include <salvd.hxx>
 
 class AquaSalGraphics;
 

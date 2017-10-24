@@ -21,11 +21,11 @@
 
 #include <vcl/window.hxx>
 
-#include "osx/salinst.h"
-#include "osx/saldata.hxx"
-#include "osx/salframe.h"
-#include "osx/salmenu.h"
-#include "osx/salnsmenu.h"
+#include <osx/salinst.h>
+#include <osx/saldata.hxx>
+#include <osx/salframe.h>
+#include <osx/salmenu.h>
+#include <osx/salnsmenu.h>
 
 @implementation SalNSMenu
 -(id)initWithMenu: (AquaSalMenu*)pMenu

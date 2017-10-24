@@ -23,18 +23,18 @@
 #include <vcl/sysdata.hxx>
 
 #ifdef MACOSX
-#include "osx/salinst.h"
-#include "osx/saldata.hxx"
-#include "osx/salframe.h"
+#include <osx/salinst.h>
+#include <osx/saldata.hxx>
+#include <osx/salframe.h>
 #else
 #include "headless/svpframe.hxx"
 #include "headless/svpgdi.hxx"
 #include "headless/svpinst.hxx"
 #include "headless/svpvd.hxx"
 #endif
-#include "quartz/salgdi.h"
-#include "quartz/salvd.h"
-#include "quartz/utils.h"
+#include <quartz/salgdi.h>
+#include <quartz/salvd.h>
+#include <quartz/utils.h>
 
 SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
                                                         long &nDX, long &nDY,

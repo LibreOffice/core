@@ -25,7 +25,7 @@
 #include <rtl/alloc.h>
 #include <rtl/ustrbuf.hxx>
 
-#include "quartz/utils.h"
+#include <quartz/utils.h>
 
 OUString GetOUString( CFStringRef rStr )
 {

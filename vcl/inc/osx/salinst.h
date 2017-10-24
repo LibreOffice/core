@@ -28,13 +28,13 @@
 #include <osl/thread.hxx>
 
 #ifdef MACOSX
-#include "osx/osxvcltypes.h"
+#include <osx/osxvcltypes.h>
 #endif
-#include "salinst.hxx"
+#include <salinst.hxx>
 
-#include "osx/runinmain.hxx"
+#include <osx/runinmain.hxx>
 
-#include "salusereventlist.hxx"
+#include <salusereventlist.hxx>
 
 class AquaSalFrame;
 class SalFrame;

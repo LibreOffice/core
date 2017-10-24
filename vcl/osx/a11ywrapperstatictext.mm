@@ -18,7 +18,7 @@
  */
 
 
-#include "osx/salinst.h"
+#include <osx/salinst.h>
 #include "a11ywrapperstatictext.h"
 
 // Wrapper for AXStaticText role

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_OSX_SALFRAMEVIEW_H
 #define INCLUDED_VCL_INC_OSX_SALFRAMEVIEW_H
 
-#include "osx/a11ywrapper.h"
+#include <osx/a11ywrapper.h>
 
 enum class SalEvent;
 

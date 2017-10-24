@@ -21,7 +21,7 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 
@@ -30,7 +30,7 @@
 #include "clipboard.hxx"
 #include "DragActionConversion.hxx"
 
-#include "osx/salframe.h"
+#include <osx/salframe.h>
 
 #include <cassert>
 

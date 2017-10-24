@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_INC_OSX_SALOBJ_H
 
 #include <vcl/sysdata.hxx>
-#include "salobj.hxx"
+#include <salobj.hxx>
 
 class AquaSalFrame;
 class AquaSalObject;

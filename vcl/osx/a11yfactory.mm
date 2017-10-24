@@ -18,9 +18,9 @@
  */
 
 
-#include "osx/salinst.h"
-#include "osx/a11yfactory.h"
-#include "osx/a11yfocustracker.hxx"
+#include <osx/salinst.h>
+#include <osx/a11yfactory.h>
+#include <osx/a11yfocustracker.hxx>
 
 #include "a11yfocuslistener.hxx"
 #include "a11yrolehelper.h"

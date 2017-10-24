@@ -20,11 +20,11 @@
 #ifndef INCLUDED_VCL_INC_QUARTZ_CTFONTS_HXX
 #define INCLUDED_VCL_INC_QUARTZ_CTFONTS_HXX
 
-#include "quartz/salgdi.h"
+#include <quartz/salgdi.h>
 #ifdef IOS
 #include "headless/svpgdi.hxx"
 #endif
-#include "sallayout.hxx"
+#include <sallayout.hxx>
 
 SystemFontList* GetCoretextFontList();
 FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef, bool* );

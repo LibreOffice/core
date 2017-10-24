@@ -28,18 +28,18 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
-#include "osx/saldata.hxx"
-#include "osx/salframe.h"
-#include "osx/salframeview.h"
-#include "osx/salinst.h"
-#include "osx/vclnsapp.h"
-#include "quartz/utils.h"
+#include <osx/saldata.hxx>
+#include <osx/salframe.h>
+#include <osx/salframeview.h>
+#include <osx/salinst.h>
+#include <osx/vclnsapp.h>
+#include <quartz/utils.h>
 
-#include "premac.h"
+#include <premac.h>
 #include <objc/objc-runtime.h>
 #import "Carbon/Carbon.h"
 #import "apple_remote/RemoteControl.h"
-#include "postmac.h"
+#include <postmac.h>
 
 
 @implementation CocoaThreadEnabler

@@ -26,12 +26,12 @@
 
 #include <vcl/sysdata.hxx>
 
-#include "osx/salinst.h"
-#include "osx/salmenu.h"
-#include "osx/saldata.hxx"
-#include "osx/osxvcltypes.h"
+#include <osx/salinst.h>
+#include <osx/salmenu.h>
+#include <osx/saldata.hxx>
+#include <osx/osxvcltypes.h>
 
-#include "salframe.hxx"
+#include <salframe.hxx>
 
 #include <vector>
 #include <utility>

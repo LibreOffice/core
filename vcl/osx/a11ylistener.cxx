@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "osx/salinst.h"
-#include "osx/a11ylistener.hxx"
-#include "osx/a11yfactory.h"
-#include "osx/a11yfocustracker.hxx"
-#include "osx/a11ywrapper.h"
+#include <osx/salinst.h>
+#include <osx/a11ylistener.hxx>
+#include <osx/a11yfactory.h>
+#include <osx/a11yfocustracker.hxx>
+#include <osx/a11ywrapper.h>
 
 #include "a11ytextwrapper.h"
 

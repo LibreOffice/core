@@ -25,18 +25,18 @@
 #include <vcl/settings.hxx>
 
 
-#include "quartz/ctfonts.hxx"
-#include "impfont.hxx"
+#include <quartz/ctfonts.hxx>
+#include <impfont.hxx>
 #ifdef MACOSX
-#include "osx/saldata.hxx"
-#include "osx/salinst.h"
+#include <osx/saldata.hxx>
+#include <osx/salinst.h>
 #endif
-#include "fontinstance.hxx"
-#include "fontattributes.hxx"
-#include "PhysicalFontCollection.hxx"
-#include "quartz/salgdi.h"
-#include "quartz/utils.h"
-#include "sallayout.hxx"
+#include <fontinstance.hxx>
+#include <fontattributes.hxx>
+#include <PhysicalFontCollection.hxx>
+#include <quartz/salgdi.h>
+#include <quartz/utils.h>
+#include <sallayout.hxx>
 
 
 inline double toRadian(int nDegree)

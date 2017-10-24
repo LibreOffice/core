@@ -20,33 +20,33 @@
 #include <string>
 
 #include <comphelper/fileurl.hxx>
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
-#include "osl/file.h"
+#include <osl/file.h>
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/settings.hxx>
 
-#include "osx/saldata.hxx"
-#include "quartz/salgdi.h"
-#include "osx/salframe.h"
-#include "osx/salmenu.h"
-#include "osx/salinst.h"
-#include "osx/salframeview.h"
-#include "osx/a11yfactory.h"
-#include "osx/runinmain.hxx"
-#include "quartz/utils.h"
+#include <osx/saldata.hxx>
+#include <quartz/salgdi.h>
+#include <osx/salframe.h>
+#include <osx/salmenu.h>
+#include <osx/salinst.h>
+#include <osx/salframeview.h>
+#include <osx/a11yfactory.h>
+#include <osx/runinmain.hxx>
+#include <quartz/utils.h>
 
-#include "salwtype.hxx"
+#include <salwtype.hxx>
 
-#include "premac.h"
+#include <premac.h>
 #include <objc/objc-runtime.h>
 // needed for theming
 // FIXME: move theming code to salnativewidgets.cxx
 #include <Carbon/Carbon.h>
-#include "postmac.h"
+#include <postmac.h>
 
 using namespace std;
 

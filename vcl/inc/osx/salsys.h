@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_OSX_SALSYS_H
 #define INCLUDED_VCL_INC_OSX_SALSYS_H
 
-#include "salsys.hxx"
+#include <salsys.hxx>
 
 #include <list>
 

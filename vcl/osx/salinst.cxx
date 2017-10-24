@@ -23,11 +23,11 @@
 
 #include <comphelper/solarmutex.hxx>
 
-#include "comphelper/lok.hxx"
+#include <comphelper/lok.hxx>
 
-#include "osl/process.h"
+#include <osl/process.h>
 
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -35,34 +35,34 @@
 #include <vcl/svmain.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 
-#include "osx/saldata.hxx"
-#include "osx/salinst.h"
-#include "osx/salframe.h"
-#include "osx/salobj.h"
-#include "osx/salsys.h"
-#include "quartz/salvd.h"
-#include "quartz/salbmp.h"
-#include "quartz/utils.h"
-#include "osx/salprn.h"
-#include "osx/saltimer.h"
-#include "osx/vclnsapp.h"
-#include "osx/runinmain.hxx"
+#include <osx/saldata.hxx>
+#include <osx/salinst.h>
+#include <osx/salframe.h>
+#include <osx/salobj.h>
+#include <osx/salsys.h>
+#include <quartz/salvd.h>
+#include <quartz/salbmp.h>
+#include <quartz/utils.h>
+#include <osx/salprn.h>
+#include <osx/saltimer.h>
+#include <osx/vclnsapp.h>
+#include <osx/runinmain.hxx>
 
-#include "print.h"
-#include "impbmp.hxx"
-#include "salimestatus.hxx"
+#include <print.h>
+#include <impbmp.hxx>
+#include <salimestatus.hxx>
 
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "premac.h"
+#include <premac.h>
 #include <Foundation/Foundation.h>
 #include <ApplicationServices/ApplicationServices.h>
 #import "apple_remote/RemoteMainController.h"
-#include "apple_remote/RemoteControl.h"
-#include "postmac.h"
+#include <apple_remote/RemoteControl.h>
+#include <postmac.h>
 
 extern "C" {
 #include <crt_externs.h>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_OSX_A11YWRAPPERCOMBOBOX_H
 #define INCLUDED_VCL_OSX_A11YWRAPPERCOMBOBOX_H
 
-#include "osx/a11ywrapper.h"
+#include <osx/a11ywrapper.h>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
 @interface AquaA11yWrapperComboBox : AquaA11yWrapper

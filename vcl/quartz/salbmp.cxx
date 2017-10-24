@@ -28,12 +28,12 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/salbtype.hxx>
 
-#include "bmpfast.hxx"
-#include "quartz/salbmp.h"
-#include "quartz/utils.h"
+#include <bmpfast.hxx>
+#include <quartz/salbmp.h>
+#include <quartz/utils.h>
 
 #ifdef MACOSX
-#include "osx/saldata.hxx"
+#include <osx/saldata.hxx>
 #else
 #include "saldatabasic.hxx"
 #endif

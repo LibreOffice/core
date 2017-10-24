@@ -18,7 +18,7 @@
  */
 
 
-#include "osx/salinst.h"
+#include <osx/salinst.h>
 
 #include "a11ywrapperbutton.h"
 #include "a11ytextwrapper.h"

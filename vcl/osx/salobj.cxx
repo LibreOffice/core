@@ -22,11 +22,11 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <opengl/zone.hxx>
 
-#include "osx/saldata.hxx"
-#include "osx/salframe.h"
-#include "osx/salinst.h"
-#include "osx/salobj.h"
-#include "osx/runinmain.hxx"
+#include <osx/saldata.hxx>
+#include <osx/salframe.h>
+#include <osx/salinst.h>
+#include <osx/salobj.h>
+#include <osx/runinmain.hxx>
 
 #include <AppKit/NSOpenGLView.h>
 

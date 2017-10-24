@@ -20,8 +20,8 @@
 
 #include <vcl/svapp.hxx>
 
-#include "osx/saldata.hxx"
-#include "osx/salinst.h"
+#include <osx/saldata.hxx>
+#include <osx/salinst.h>
 
 #include "DragSource.hxx"
 #include "DropTarget.hxx"

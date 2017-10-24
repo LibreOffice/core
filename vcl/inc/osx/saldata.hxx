@@ -22,16 +22,16 @@
 
 #include <config_features.h>
 
-#include "premac.h"
+#include <premac.h>
 #include <Cocoa/Cocoa.h>
-#include "postmac.h"
+#include <postmac.h>
 
-#include "com/sun/star/uno/Reference.hxx"
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <vcl/ptrstyle.hxx>
 
-#include "svdata.hxx"
-#include "salwtype.hxx"
+#include <svdata.hxx>
+#include <salwtype.hxx>
 
 #include <functional>
 #include <list>
@@ -43,7 +43,7 @@
 #include <cstdio>
 #include <cstdarg>
 
-#include "apple_remote/RemoteMainController.h"
+#include <apple_remote/RemoteMainController.h>
 
 class AquaSalFrame;
 class AquaSalInstance;

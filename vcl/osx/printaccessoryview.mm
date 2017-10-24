@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <vcl/print.hxx>
 #include <vcl/image.hxx>
@@ -26,16 +26,16 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/settings.hxx>
 
-#include "osx/printview.h"
-#include "osx/salinst.h"
-#include "quartz/utils.h"
+#include <osx/printview.h>
+#include <osx/salinst.h>
+#include <quartz/utils.h>
 
-#include "svdata.hxx"
-#include "strings.hrc"
-#include "printaccessoryview.hrc"
+#include <svdata.hxx>
+#include <strings.hrc>
+#include <printaccessoryview.hrc>
 
-#include "com/sun/star/i18n/XBreakIterator.hpp"
-#include "com/sun/star/i18n/WordType.hpp"
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
 
 #include <map>
 

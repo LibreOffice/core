@@ -20,9 +20,9 @@
 #ifndef INCLUDED_VCL_INC_OSX_PRINTVIEW_H
 #define INCLUDED_VCL_INC_OSX_PRINTVIEW_H
 
-#include "premac.h"
+#include <premac.h>
 #include <Cocoa/Cocoa.h>
-#include "postmac.h"
+#include <postmac.h>
 
 #include <vcl/print.hxx>
 

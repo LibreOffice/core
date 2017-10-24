@@ -22,9 +22,9 @@
 
 #include <config_features.h>
 
-#include "premac.h"
-#include "Cocoa/Cocoa.h"
-#include "postmac.h"
+#include <premac.h>
+#include <Cocoa/Cocoa.h>
+#include <postmac.h>
 
 class AquaSalFrame;
 

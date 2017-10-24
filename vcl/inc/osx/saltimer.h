@@ -20,11 +20,11 @@
 #ifndef INCLUDED_VCL_INC_OSX_SALTIMER_H
 #define INCLUDED_VCL_INC_OSX_SALTIMER_H
 
-#include "premac.h"
+#include <premac.h>
 #include <Cocoa/Cocoa.h>
-#include "postmac.h"
+#include <postmac.h>
 
-#include "saltimer.hxx"
+#include <saltimer.hxx>
 
 /**
  * if NO == bAtStart, then it has to be run in the main thread,

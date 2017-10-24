@@ -20,15 +20,15 @@
 #ifndef INCLUDED_VCL_INC_QUARTZ_SALBMP_H
 #define INCLUDED_VCL_INC_QUARTZ_SALBMP_H
 
-#include "tools/gen.hxx"
+#include <tools/gen.hxx>
 
 #include <vcl/salbtype.hxx>
 
-#include "quartz/salgdi.h"
+#include <quartz/salgdi.h>
 
-#include "salinst.hxx"
-#include "salvd.hxx"
-#include "salbmp.hxx"
+#include <salinst.hxx>
+#include <salvd.hxx>
+#include <salbmp.hxx>
 
 #include <memory>
 

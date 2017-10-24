@@ -20,11 +20,11 @@
 #ifndef INCLUDED_VCL_INC_OSX_SALMENU_H
 #define INCLUDED_VCL_INC_OSX_SALMENU_H
 
-#include "premac.h"
+#include <premac.h>
 #include <Cocoa/Cocoa.h>
-#include "postmac.h"
+#include <postmac.h>
 
-#include "salmenu.hxx"
+#include <salmenu.hxx>
 
 #include <vector>
 

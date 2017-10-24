@@ -18,7 +18,7 @@
  */
 
 
-#include "osx/salinst.h"
+#include <osx/salinst.h>
 #include "a11ywrappertextarea.h"
 
 // Wrapper for AXTextArea role

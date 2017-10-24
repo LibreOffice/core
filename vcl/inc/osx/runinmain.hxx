@@ -45,7 +45,7 @@
 #include <osl/thread.h>
 
 #include "saltimer.h"
-#include "salframe.hxx"
+#include <salframe.hxx>
 
 union RuninmainResult
 {

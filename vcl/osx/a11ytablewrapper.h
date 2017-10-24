@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_OSX_A11YTABLEWRAPPER_H
 #define INCLUDED_VCL_OSX_A11YTABLEWRAPPER_H
 
-#include "osx/a11ywrapper.h"
+#include <osx/a11ywrapper.h>
 
 #define MAXIMUM_ACCESSIBLE_TABLE_CELLS 1000
 

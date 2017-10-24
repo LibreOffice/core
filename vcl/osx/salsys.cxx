@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
 #include <vcl/button.hxx>
 
-#include "osx/salsys.h"
-#include "osx/saldata.hxx"
-#include "osx/salinst.h"
-#include "quartz/utils.h"
+#include <osx/salsys.h>
+#include <osx/saldata.hxx>
+#include <osx/salinst.h>
+#include <quartz/utils.h>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
 AquaSalSystem::~AquaSalSystem()
 {

@@ -35,24 +35,24 @@
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 
-#include "quartz/ctfonts.hxx"
-#include "fontsubset.hxx"
-#include "impfont.hxx"
-#include "impfontcharmap.hxx"
-#include "impfontmetricdata.hxx"
-#include "CommonSalLayout.hxx"
-#include "outdev.h"
-#include "PhysicalFontCollection.hxx"
+#include <quartz/ctfonts.hxx>
+#include <fontsubset.hxx>
+#include <impfont.hxx>
+#include <impfontcharmap.hxx>
+#include <impfontmetricdata.hxx>
+#include <CommonSalLayout.hxx>
+#include <outdev.h>
+#include <PhysicalFontCollection.hxx>
 
 #ifdef MACOSX
-#include "osx/salframe.h"
+#include <osx/salframe.h>
 #endif
-#include "quartz/utils.h"
+#include <quartz/utils.h>
 #ifdef IOS
 #include "saldatabasic.hxx"
 #endif
-#include "sallayout.hxx"
-#include "sft.hxx"
+#include <sallayout.hxx>
+#include <sft.hxx>
 
 using namespace vcl;
 

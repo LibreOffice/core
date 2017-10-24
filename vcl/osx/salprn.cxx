@@ -17,24 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "officecfg/Office/Common.hxx"
+#include <officecfg/Office/Common.hxx>
 
 #include <vcl/print.hxx>
 #include <sal/macros.h>
 
-#include "osx/salinst.h"
-#include "osx/salprn.h"
-#include "osx/printview.h"
-#include "quartz/salgdi.h"
-#include "osx/saldata.hxx"
-#include "quartz/utils.h"
+#include <osx/salinst.h>
+#include <osx/salprn.h>
+#include <osx/printview.h>
+#include <quartz/salgdi.h>
+#include <osx/saldata.hxx>
+#include <quartz/utils.h>
 
-#include "jobset.h"
-#include "salptype.hxx"
+#include <jobset.h>
+#include <salptype.hxx>
 
-#include "com/sun/star/beans/PropertyValue.hpp"
-#include "com/sun/star/awt/Size.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include <algorithm>
 #include <cstdlib>

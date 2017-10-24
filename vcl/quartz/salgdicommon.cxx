@@ -29,16 +29,16 @@
 
 #include <vcl/sysdata.hxx>
 
-#include "fontsubset.hxx"
-#include "quartz/salbmp.h"
+#include <fontsubset.hxx>
+#include <quartz/salbmp.h>
 #ifdef MACOSX
-#include "quartz/salgdi.h"
+#include <quartz/salgdi.h>
 #endif
-#include "quartz/utils.h"
+#include <quartz/utils.h>
 #ifdef IOS
 #include "saldatabasic.hxx"
 #endif
-#include "sft.hxx"
+#include <sft.hxx>
 
 
 #if defined(IOS) && defined(DBG_UTIL)

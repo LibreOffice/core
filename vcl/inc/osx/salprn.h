@@ -20,9 +20,9 @@
 #ifndef INCLUDED_VCL_INC_OSX_SALPRN_H
 #define INCLUDED_VCL_INC_OSX_SALPRN_H
 
-#include "osx/osxvcltypes.h"
+#include <osx/osxvcltypes.h>
 
-#include "salprn.hxx"
+#include <salprn.hxx>
 
 #include <memory>
 

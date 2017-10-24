@@ -19,11 +19,11 @@
 
 #include <sal/config.h>
 
-#include "osx/saltimer.h"
-#include "osx/salnstimer.h"
-#include "osx/salinst.h"
-#include "osx/saldata.hxx"
-#include "svdata.hxx"
+#include <osx/saltimer.h>
+#include <osx/salnstimer.h>
+#include <osx/salinst.h>
+#include <osx/saldata.hxx>
+#include <svdata.hxx>
 
 @implementation TimerCallbackCaller
 

@@ -20,8 +20,8 @@
 #ifndef INCLUDED_VCL_OSX_A11YFOCUSLISTENER_HXX
 #define INCLUDED_VCL_OSX_A11YFOCUSLISTENER_HXX
 
-#include "osx/keyboardfocuslistener.hxx"
-#include "osx/osxvcltypes.h"
+#include <osx/keyboardfocuslistener.hxx>
+#include <osx/osxvcltypes.h>
 
 class AquaA11yFocusListener : public KeyboardFocusListener
 {

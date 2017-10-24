@@ -29,15 +29,15 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 
-#include "osx/saldata.hxx"
-#include "osx/salinst.h"
-#include "osx/salmenu.h"
-#include "osx/salnsmenu.h"
-#include "osx/salframe.h"
-#include "osx/a11ywrapper.h"
-#include "quartz/utils.h"
-#include "strings.hrc"
-#include "window.h"
+#include <osx/saldata.hxx>
+#include <osx/salinst.h>
+#include <osx/salmenu.h>
+#include <osx/salnsmenu.h>
+#include <osx/salframe.h>
+#include <osx/a11ywrapper.h>
+#include <quartz/utils.h>
+#include <strings.hrc>
+#include <window.h>
 
 namespace {
 

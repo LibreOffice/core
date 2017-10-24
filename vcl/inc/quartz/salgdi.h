@@ -22,28 +22,28 @@
 
 #include <vector>
 
-#include "basegfx/polygon/b2dpolypolygon.hxx"
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
-#include "premac.h"
+#include <premac.h>
 #ifdef MACOSX
 #include <ApplicationServices/ApplicationServices.h>
-#include "osx/osxvcltypes.h"
-#include "osx/salframe.h"
+#include <osx/osxvcltypes.h>
+#include <osx/salframe.h>
 #else
 #include <CoreGraphics/CoreGraphics.h>
 #include <CoreText/CoreText.h>
 #endif
-#include "postmac.h"
+#include <postmac.h>
 
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/metric.hxx>
 
-#include "fontinstance.hxx"
-#include "impfontmetricdata.hxx"
-#include "PhysicalFontFace.hxx"
-#include "salgdi.hxx"
+#include <fontinstance.hxx>
+#include <impfontmetricdata.hxx>
+#include <PhysicalFontFace.hxx>
+#include <salgdi.hxx>
 
-#include "quartz/salgdicommon.hxx"
+#include <quartz/salgdicommon.hxx>
 #include <unordered_map>
 #include <hb-ot.h>
 

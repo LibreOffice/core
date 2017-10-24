@@ -18,9 +18,9 @@
  */
 
 
-#include "osx/salinst.h"
-#include "quartz/utils.h"
-#include "quartz/salgdi.h"
+#include <osx/salinst.h>
+#include <quartz/utils.h>
+#include <quartz/salgdi.h>
 
 #include "a11ytextattributeswrapper.h"
 
