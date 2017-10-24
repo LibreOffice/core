@@ -1830,7 +1830,7 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
     rF.nLen = rF.nId = rF.nOpt = 0;
     rF.bCodeNest = rF.bResNest = false;
 
-    if( !rPLCF.Get( rF.nSCode, pData ) )             // end of PLCFspecial?
+    if (!rPLCF.Get(rF.nSCode, pData) || rF.nSCode < 0)             // end of PLCFspecial?
         goto Err;
 
     rPLCF.advance();
