@@ -351,7 +351,7 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString("\tcountryDefaultName,\n");
     of.writeAsciiString("\tVariant\n");
     of.writeAsciiString("};\n\n");
-    of.writeFunction("getLCInfo_", "0", "LCInfoArray");
+    of.writeFunction("getLCInfo_", "(sizeof(LCInfoArray)/sizeof(LCInfoArray[0]))", "LCInfoArray");
 }
 
 
@@ -574,7 +574,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     of.writeAsciiString("\tLongDateMonthSeparator,\n");
     of.writeAsciiString("\tLongDateYearSeparator\n");
     of.writeAsciiString("};\n\n");
-    of.writeFunction("getLocaleItem_", "0", "LCType");
+    of.writeFunction("getLocaleItem_", "(sizeof(LCType)/sizeof(LCType[0]))", "LCType");
 }
 
 
