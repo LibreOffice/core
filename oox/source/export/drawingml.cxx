@@ -1316,6 +1316,12 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
             aPos.X-=(1-faccos*cos(nRotation*F_PI18000))*aSize.Width/2-facsin*sin(nRotation*F_PI18000)*aSize.Height/2;
             aPos.Y-=(1-faccos*cos(nRotation*F_PI18000))*aSize.Height/2+facsin*sin(nRotation*F_PI18000)*aSize.Width/2;
         }
+        else if(nRotation == 18000)
+        {
+            int faccos = bFlipV ? -1 : 1;
+            aPos.X -= (1 - faccos) * aSize.Width / 2;
+            aPos.Y -= (1 - faccos) * aSize.Height / 2;
+        }
 
         // The RotateAngle property's value is independent from any flipping, and that's exactly what we need here.
         uno::Reference<beans::XPropertySet> xPropertySet(rXShape, uno::UNO_QUERY);
