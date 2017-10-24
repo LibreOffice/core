@@ -58,7 +58,6 @@ public:
 
     ScPerfObj();
 
-    virtual void setUp() override;
     virtual void tearDown() override;
 
     uno::Reference< uno::XInterface > init(const OUString& aFileName);
@@ -124,11 +123,6 @@ uno::Reference< uno::XInterface > ScPerfObj::init(const OUString& aFileName)
     CPPUNIT_ASSERT(mxComponent.is());
 
     return mxComponent;
-}
-
-void ScPerfObj::setUp()
-{
-    CalcUnoApiTest::setUp();
 }
 
 void ScPerfObj::tearDown()
