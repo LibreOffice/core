@@ -2474,11 +2474,13 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             pB->pBMP=nullptr; pB->nWidth=0; pB->nHeight=0; pB->nBitsPerPixel=0;
             pB->nMapPos=0;
             // determine ID of the bitmap:
-            sal_uInt8 i,nbyte,nbyte2;
             pB->nID=0;
-            for (i=0; i<4; i++) {
-                pOS2MET->ReadUChar( nbyte ).ReadUChar( nbyte2 );
-                nbyte=((nbyte-0x30)<<4)|(nbyte2-0x30);
+            for (sal_uInt8 i = 0; i < 4; ++i) {
+                sal_uInt8 nbyte(0),nbyte2(0);
+                pOS2MET->ReadUChar(nbyte).ReadUChar(nbyte2);
+                nbyte -= 0x30;
+                nbyte2 -= 0x30;
+                nbyte = (nbyte << 4) | nbyte2;
                 pB->nID=(pB->nID>>8)|(((sal_uLong)nbyte)<<24);
             }
             // put new palette on the palette stack: (will be filled later)
