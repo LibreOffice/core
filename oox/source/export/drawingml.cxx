@@ -1294,11 +1294,17 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
     awt::Point aPos = rXShape->getPosition();
     awt::Size aSize = rXShape->getSize();
 
+    bool bPositiveY = true;
+    bool bPositiveX = true;
+
     if (GetDocumentType() == DOCUMENT_DOCX && m_xParent.is())
     {
         awt::Point aParentPos = m_xParent->getPosition();
         aPos.X -= aParentPos.X;
         aPos.Y -= aParentPos.Y;
+
+        bPositiveX = aParentPos.X >= 0;
+        bPositiveY = aParentPos.Y >= 0;
     }
 
     if ( aSize.Width < 0 )
@@ -1315,6 +1321,17 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
             int facsin=bFlipH ? -1 : 1;
             aPos.X-=(1-faccos*cos(nRotation*F_PI18000))*aSize.Width/2-facsin*sin(nRotation*F_PI18000)*aSize.Height/2;
             aPos.Y-=(1-faccos*cos(nRotation*F_PI18000))*aSize.Height/2+facsin*sin(nRotation*F_PI18000)*aSize.Width/2;
+        }
+        else if(nRotation == 18000)
+        {
+            if (!bFlipV && bPositiveX)
+            {
+                aPos.X -= aSize.Width;
+            }
+            if (!bFlipH && bPositiveY)
+            {
+                aPos.Y -= aSize.Height;
+            }
         }
 
         // The RotateAngle property's value is independent from any flipping, and that's exactly what we need here.
