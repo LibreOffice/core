@@ -3361,8 +3361,17 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                                     nFcStart,bIsUnicode );
                             }
 
-                            nLimitFC = nFcStart + (nCpEnd - nCpStart) *
-                                (bIsUnicode ? 2 : 1);
+                            WW8_CP nCpLen = (nCpEnd - nCpStart);
+                            if (bIsUnicode)
+                            {
+                                const bool bFail = o3tl::checked_multiply<WW8_CP>(nCpLen, 2, nCpLen);
+                                if (bFail)
+                                {
+                                    SAL_WARN("sw.ww8", "broken offset, ignoring");
+                                    continue;
+                                }
+                            }
+                            nLimitFC = nFcStart + nCpLen;
 
                             //if it doesn't exist, skip it
                             if (!SeekPos(nCpStart))
