@@ -1754,7 +1754,7 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, ListBox&, rListBox, void )
     }
 
     const NfCurrencyEntry* pCurr = &SvNumberFormatter::GetCurrencyEntry(
-            ((eLang == LANGUAGE_USER_SYSTEM_CONFIG) ? MsLangId::getSystemLanguage() : eLang));
+            (eLang == LANGUAGE_USER_SYSTEM_CONFIG) ? MsLangId::getSystemLanguage() : eLang);
     sal_Int32 nPos = m_pCurrencyLB->GetEntryPos( nullptr );
     if (pCurr)
     {

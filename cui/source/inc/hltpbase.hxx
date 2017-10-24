@@ -127,7 +127,7 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     bool IsMarkWndVisible ()      { return static_cast<vcl::Window*>(mpMarkWnd)->IsVisible(); }
-    Size GetSizeExtraWnd ()       { return ( mpMarkWnd->GetSizePixel() ); }
+    Size GetSizeExtraWnd ()       { return mpMarkWnd->GetSizePixel(); }
     bool MoveToExtraWnd ( Point aNewPos, bool bDisConnectDlg = false );
 
     using TabPage::ActivatePage;
