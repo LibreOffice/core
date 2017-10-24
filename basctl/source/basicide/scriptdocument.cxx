@@ -1475,6 +1475,7 @@ namespace basctl
                 case LibraryType::All:      aTitle = IDEResId(RID_STR_USERMACROSDIALOGS); break;
                 default:
                     break;
+                }
             }
             break;
             case LIBRARY_LOCATION_SHARE:
@@ -1494,7 +1495,6 @@ namespace basctl
                 break;
             default:
                 break;
-            }
         }
 
         return aTitle;
