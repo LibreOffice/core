@@ -380,6 +380,10 @@ public:
     /// Validate paragraph signatures, if any, at the cursor.
     void ValidateParagraphSignatures(bool updateDontRemove);
 
+    /// Ensure that the classification of the doc is never lower than
+    /// the paragraph with the highest classification.
+    void ClassifyDocPerHighestParagraphClass();
+
     /// Apply the classification to the paragraph at cursor.
     void ApplyParagraphClassification(std::vector<svx::ClassificationResult> aResult);
     std::vector<svx::ClassificationResult> CollectParagraphClassification();

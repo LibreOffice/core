@@ -64,11 +64,13 @@ public:
     /// Return all possible valid category names, based on the policy.
     std::vector<OUString> GetBACNames();
     /// Get the currently selected category abbreviation for eType. Returns full name if no abbreviation defined.
-    const OUString& GetAbbreviatedBACName(SfxClassificationPolicyType eType);
+    const OUString& GetAbbreviatedBACName(const OUString& sFullName);
     /// Return all possible valid abbreviated category names, based on the policy.
     std::vector<OUString> GetAbbreviatedBACNames();
     /// Setting this sets all the other properties, based on the policy.
     void SetBACName(const OUString& rName, SfxClassificationPolicyType eType);
+    /// Returns the class with the higher priority (based on sensitivity).
+    OUString GetHigherClass(const OUString& first, const OUString& second);
     /// If GetImpactScale() and GetImpactLevel*() will return something meaningful.
     bool HasImpactLevel();
     InfoBarType GetImpactLevelType();

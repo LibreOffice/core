@@ -474,6 +474,8 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
             // Remove invalid signatures.
             m_pWrtShell->ValidateParagraphSignatures(false);
+
+            m_pWrtShell->ClassifyDocPerHighestParagraphClass();
         }
 
         // Remember and preserve Modified-Flag without calling the Link
