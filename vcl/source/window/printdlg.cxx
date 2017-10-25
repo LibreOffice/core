@@ -1563,10 +1563,14 @@ IMPL_LINK( PrintDialog, ToggleHdl, CheckBox&, rButton, void )
 
 IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton, void )
 {
-    if( pButton == mpOKButton || pButton == mpCancelButton )
+    if( pButton == mpOKButton )
     {
         storeToSettings();
-        EndDialog( pButton == mpOKButton ? RET_OK : RET_CANCEL );
+        EndDialog( RET_OK );
+    }
+    else if( pButton == mpCancelButton )
+    {
+        EndDialog( RET_CANCEL );
     }
     else if( pButton == mpHelpButton )
     {
