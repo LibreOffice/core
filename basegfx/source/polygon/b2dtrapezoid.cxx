@@ -167,7 +167,7 @@ namespace basegfx
             }
 
             // method for cut support
-            B2DPoint getCutPointForGivenY(double fGivenY)
+            B2DPoint getCutPointForGivenY(double fGivenY) const
             {
                 // Calculate cut point locally (do not use interpolate) since it is numerically
                 // necessary to guarantee the new, equal Y-coordinate

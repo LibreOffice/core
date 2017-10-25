@@ -573,7 +573,7 @@ public:
         CPPUNIT_ASSERT_EQUAL_MESSAGE("multiply: none compact", perspectivePerspectiveProd, temp);
     }
 
-    void impFillMatrix(B2DHomMatrix& rSource, double fScaleX, double fScaleY, double fShearX, double fRotate)
+    void impFillMatrix(B2DHomMatrix& rSource, double fScaleX, double fScaleY, double fShearX, double fRotate) const
     {
         // fill rSource with a linear combination of scale, shear and rotate
         rSource.identity();
@@ -582,7 +582,7 @@ public:
         rSource.rotate(fRotate);
     }
 
-    bool impDecomposeComposeTest(double fScaleX, double fScaleY, double fShearX, double fRotate)
+    bool impDecomposeComposeTest(double fScaleX, double fScaleY, double fShearX, double fRotate) const
     {
         // linear combine matrix with given values
         B2DHomMatrix aSource;

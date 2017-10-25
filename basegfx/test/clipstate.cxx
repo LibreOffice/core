@@ -86,7 +86,7 @@ public:
         aSubtract.subtractRange(aEast);
     }
 
-    void verifyPoly(const char* sName, const char* sSvg, const utils::B2DClipState& toTest)
+    void verifyPoly(const char* sName, const char* sSvg, const utils::B2DClipState& toTest) const
     {
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s - svg:d=\"%s\"\n",

@@ -60,7 +60,7 @@ protected:
     SvStream* m_pStrm;                        // physical stream
     bool  m_bMyStream;                        // true: delete stream in dtor
     bool  m_bFile;                            // true: file stream
-    sal_Int32 Page2Pos( sal_Int32 );        // page address --> file position
+    sal_Int32 Page2Pos( sal_Int32 ) const;    // page address --> file position
 public:
     StgCache();
     ~StgCache();
@@ -73,7 +73,7 @@ public:
     void  SetStrm( SvStream*, bool );
     void  SetStrm( UCBStorageStream* );
     bool  Good() const                      { return m_nError == ERRCODE_NONE; }
-    ErrCode GetError()                      { return m_nError;    }
+    ErrCode GetError() const                { return m_nError;    }
     void  MoveError( StorageBase const & );
     void  SetError( ErrCode );
     void  ResetError();
@@ -108,9 +108,9 @@ public:
     StgPage& operator=(const StgPage&) = delete;
     static rtl::Reference< StgPage > Create( short nData, sal_Int32 nPage );
 
-    sal_Int32 GetPage()  { return mnPage; }
+    sal_Int32 GetPage() const { return mnPage; }
     void*     GetData()  { return mpData.get(); }
-    short     GetSize()  { return mnSize; }
+    short     GetSize() const { return mnSize; }
 
 public:
     static bool IsPageGreater( const StgPage *pA, const StgPage *pB );

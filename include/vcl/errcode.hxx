@@ -100,7 +100,7 @@ public:
         return ErrCode(m_value | ERRCODE_WARNING_MASK);
     }
 
-    bool IsError() {
+    bool IsError() const {
         return m_value && !IsWarning();
     }
 
