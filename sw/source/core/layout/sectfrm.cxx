@@ -708,7 +708,7 @@ void SwSectionFrame::MoveContentAndDelete( SwSectionFrame* pDel, bool bSave )
     }
 }
 
-void SwSectionFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
+void SwSectionFrame::MakeAll(vcl::RenderContext* pRenderContext)
 {
     if ( IsJoinLocked() || IsColLocked() || StackHack::IsLocked() || StackHack::Count() > 50 )
         return;
@@ -775,6 +775,19 @@ void SwSectionFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         mbValidSize = false;
 
     SwLayoutFrame::MakeAll(getRootFrame()->GetCurrShell()->GetOut());
+
+    if (IsInTab())
+    {
+        // In case the section is in a table, then calculate the lower right
+        // now. Just setting the valid size flag of the lower to false may not
+        // be enough, as lcl_RecalcRow() can call
+        // SwFrame::ValidateThisAndAllLowers(), and then we don't attempt
+        // calculating the proper position of the lower.
+        SwFrame* pLower = Lower();
+        if (pLower && !pLower->GetValidPosFlag())
+            pLower->Calc(pRenderContext);
+    }
+
     UnlockJoin();
     if( m_pSection && IsSuperfluous() )
         DelEmpty( false );
