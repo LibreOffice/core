@@ -691,6 +691,11 @@ void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWDa
 
                                 double fAngle = atan2( -fvx, -fvy );
                                 double fL = hypot( fvx, fvy );
+                                if (fL == 0.0)
+                                {
+                                    SAL_WARN("svx", "FitTextOutlinesToShapeOutlines div-by-zero, abandon fit");
+                                    break;
+                                }
                                 fvx = fvx / fL;
                                 fvy = fvy / fL;
                                 fL = aTextAreaIter->aBoundRect.GetHeight() / 2.0 + aTextAreaIter->aBoundRect.Top() - aParagraphIter->aBoundRect.Center().Y();
