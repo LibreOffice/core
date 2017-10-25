@@ -557,7 +557,6 @@ bool SdrEscherImport::ReadString( OUString& rStr ) const
         bool bUniCode =
             (aStrHd.nRecType == PPT_PST_TextCharsAtom
             || aStrHd.nRecType == PPT_PST_CString);
-        bRet = true;
         sal_uLong nBytes = aStrHd.nRecLen;
         rStr = MSDFFReadZString( rStCtrl, nBytes, bUniCode );
         bRet = aStrHd.SeekToEndOfRecord( rStCtrl );
