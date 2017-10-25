@@ -83,12 +83,10 @@ RTSDialog::RTSDialog(const PrinterInfo& rJobData, vcl::Window* pParent)
     get(m_pCancelButton, "cancel");
     get(m_pTabControl, "notebook");
 
-    sal_uInt16 nPageCount = m_pTabControl->GetPageCount();
-    for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
-    {
-        sal_uInt16 nPageId = m_pTabControl->GetPageId(nPage);
-        m_pTabControl->SetTabPage(nPageId, nullptr);
-    }
+    m_pPaperPage = VclPtr<RTSPaperPage>::Create( this );
+    m_pDevicePage = VclPtr<RTSDevicePage>::Create( this );
+    m_pTabControl->SetTabPage(m_pTabControl->GetPageId("paper"), m_pPaperPage);
+    m_pTabControl->SetTabPage(m_pTabControl->GetPageId("device"), m_pDevicePage);
 
     OUString aTitle(GetText());
     SetText(aTitle.replaceAll("%s", m_aJobData.m_aPrinterName));
@@ -114,28 +112,12 @@ void RTSDialog::dispose()
     TabDialog::dispose();
 }
 
-IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl, void )
+IMPL_LINK_NOARG(RTSDialog, ActivatePage, TabControl*, void)
 {
-    if( pTabCtrl != m_pTabControl )
-        return;
-
     sal_uInt16 nId = m_pTabControl->GetCurPageId();
     OString sPage = m_pTabControl->GetPageName(nId);
-    if ( ! m_pTabControl->GetTabPage( nId ) )
-    {
-        TabPage *pPage = nullptr;
-        if (sPage == "paper")
-            pPage = m_pPaperPage = VclPtr<RTSPaperPage>::Create( this );
-        else if (sPage == "device")
-            pPage = m_pDevicePage = VclPtr<RTSDevicePage>::Create( this );
-        if( pPage )
-            m_pTabControl->SetTabPage( nId, pPage );
-    }
-    else
-    {
-        if (sPage == "paper")
-            m_pPaperPage->update();
-    }
+    if (sPage == "paper")
+        m_pPaperPage->update();
 }
 
 IMPL_LINK( RTSDialog, ClickButton, Button*, pButton, void )
