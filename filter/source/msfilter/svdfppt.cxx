@@ -838,7 +838,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 {
                     bVerticalText = !bVerticalText;
                 }
-                const bool bFail = o3tl::checked_multiply(nFontDirection, 9000, nFontDirection);
+                const bool bFail = o3tl::checked_multiply<sal_Int32>(nFontDirection, 9000, nFontDirection);
                 if (!bFail)
                     nTextRotationAngle -= nFontDirection;
                 else
