@@ -72,7 +72,7 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
 
         virtual void Notify( const Sequence< OUString >& seqPropertyNames ) override;
 
-        SvtExtendedSecurityOptions::OpenHyperlinkMode   GetOpenHyperlinkMode() { return m_eOpenHyperlinkMode;}
+        SvtExtendedSecurityOptions::OpenHyperlinkMode   GetOpenHyperlinkMode() const { return m_eOpenHyperlinkMode;}
 
     private:
         virtual void ImplCommit() override;
@@ -265,7 +265,7 @@ SvtExtendedSecurityOptions::~SvtExtendedSecurityOptions()
 
 //  public method
 
-SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions::GetOpenHyperlinkMode()
+SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions::GetOpenHyperlinkMode() const
 {
     MutexGuard aGuard( GetInitMutex() );
     return m_pImpl->GetOpenHyperlinkMode();

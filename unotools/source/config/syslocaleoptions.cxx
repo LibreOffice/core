@@ -107,8 +107,8 @@ public:
             void                SetIgnoreLanguageChange( bool bSet);
 
             bool                IsReadOnly( SvtSysLocaleOptions::EOption eOption ) const;
-            const LanguageTag&  GetRealLocale() { return m_aRealLocale; }
-            const LanguageTag&  GetRealUILocale() { return m_aRealUILocale; }
+            const LanguageTag&  GetRealLocale() const { return m_aRealLocale; }
+            const LanguageTag&  GetRealUILocale() const { return m_aRealUILocale; }
 };
 
 #define ROOTNODE_SYSLOCALE              "Setup/L10N"
@@ -555,7 +555,7 @@ SvtSysLocaleOptions::~SvtSysLocaleOptions()
     pImpl.reset();
 }
 
-bool SvtSysLocaleOptions::IsModified()
+bool SvtSysLocaleOptions::IsModified() const
 {
     MutexGuard aGuard( GetMutex() );
     return pImpl->IsModified();

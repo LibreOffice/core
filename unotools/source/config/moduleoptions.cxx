@@ -1120,7 +1120,7 @@ css::uno::Sequence < OUString > SvtModuleOptions::GetAllServiceNames()
     return m_pImpl->GetAllServiceNames();
 }
 
-OUString SvtModuleOptions::GetDefaultModuleName()
+OUString SvtModuleOptions::GetDefaultModuleName() const
 {
     OUString aModule;
     if (m_pImpl->IsModuleInstalled(SvtModuleOptions::EModule::WRITER))

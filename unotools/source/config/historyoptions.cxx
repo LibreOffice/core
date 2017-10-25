@@ -69,7 +69,7 @@ public:
     SvtHistoryOptions_Impl();
 
     /// Returns the maximum size of the internal lists, ie. the capacity not the size.
-    sal_uInt32 GetCapacity(EHistoryType eHistory);
+    sal_uInt32 GetCapacity(EHistoryType eHistory) const;
 
     /// Clear the specified history list.
     void Clear(EHistoryType eHistory);
@@ -121,7 +121,7 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
     }
 }
 
-sal_uInt32 SvtHistoryOptions_Impl::GetCapacity(EHistoryType eHistory)
+sal_uInt32 SvtHistoryOptions_Impl::GetCapacity(EHistoryType eHistory) const
 {
     uno::Reference<beans::XPropertySet> xListAccess(m_xCommonXCU, uno::UNO_QUERY);
 

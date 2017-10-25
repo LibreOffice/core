@@ -113,8 +113,8 @@ public:
     /// @throws css::uno::RuntimeException
     static css::uno::Type SAL_CALL getElementType(  );
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL hasElements(  );
-    OUString GetEventName( GlobalEventId nID );
+    bool SAL_CALL hasElements() const;
+    OUString const & GetEventName( GlobalEventId nID ) const;
 };
 
 
@@ -141,7 +141,7 @@ GlobalEventConfig_Impl::~GlobalEventConfig_Impl()
     assert(!IsModified()); // should have been committed
 }
 
-OUString GlobalEventConfig_Impl::GetEventName( GlobalEventId nIndex )
+OUString const & GlobalEventConfig_Impl::GetEventName( GlobalEventId nIndex ) const
 {
     return m_supportedEvents[nIndex];
 }
@@ -306,7 +306,7 @@ Type SAL_CALL GlobalEventConfig_Impl::getElementType(  )
     return cppu::UnoType<Sequence<beans::PropertyValue>>::get();
 }
 
-bool SAL_CALL GlobalEventConfig_Impl::hasElements(  )
+bool SAL_CALL GlobalEventConfig_Impl::hasElements() const
 {
     return m_eventBindingHash.empty();
 }

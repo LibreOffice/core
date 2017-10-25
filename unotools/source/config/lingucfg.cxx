@@ -831,12 +831,12 @@ SvtLinguConfigItem & SvtLinguConfig::GetConfigItem()
     return *pCfgItem;
 }
 
-uno::Sequence< OUString > SvtLinguConfig::GetNodeNames( const OUString &rNode )
+uno::Sequence< OUString > SvtLinguConfig::GetNodeNames( const OUString &rNode ) const
 {
     return GetConfigItem().GetNodeNames( rNode );
 }
 
-uno::Sequence< uno::Any > SvtLinguConfig::GetProperties( const uno::Sequence< OUString > &rNames )
+uno::Sequence< uno::Any > SvtLinguConfig::GetProperties( const uno::Sequence< OUString > &rNames ) const
 {
     return GetConfigItem().GetProperties(rNames);
 }
@@ -1008,7 +1008,7 @@ uno::Sequence< OUString > SvtLinguConfig::GetDisabledDictionaries() const
 }
 
 std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionariesByFormat(
-    const OUString &rFormatName )
+    const OUString &rFormatName ) const
 {
     std::vector< SvtLinguConfigDictionaryEntry > aRes;
     if (rFormatName.isEmpty())

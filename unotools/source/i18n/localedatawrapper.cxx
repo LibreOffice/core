@@ -662,7 +662,7 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
 
 void LocaleDataWrapper::scanCurrFormatImpl( const OUString& rCode,
         sal_Int32 nStart, sal_Int32& nSign, sal_Int32& nPar,
-        sal_Int32& nNum, sal_Int32& nBlank, sal_Int32& nSym )
+        sal_Int32& nNum, sal_Int32& nBlank, sal_Int32& nSym ) const
 {
     nSign = nPar = nNum = nBlank = nSym = -1;
     const sal_Unicode* const pStr = rCode.getStr();
@@ -901,7 +901,7 @@ DateOrder LocaleDataWrapper::getLongDateOrder() const
     return (DateOrder) nLongDateOrder;
 }
 
-DateOrder LocaleDataWrapper::scanDateOrderImpl( const OUString& rCode )
+DateOrder LocaleDataWrapper::scanDateOrderImpl( const OUString& rCode ) const
 {
     // Only some european versions were translated, the ones with different
     // keyword combinations are:

@@ -66,7 +66,7 @@ public:
     Bridge * getBridge() { return pBridge; }
     uno_Interface * getUnoI() { return pUnoI; }
     typelib_InterfaceTypeDescription * getTypeDescr() { return pTypeDescr; }
-    const OUString& getOid() { return oid; }
+    const OUString& getOid() const { return oid; }
 
     // non virtual methods called on incoming vtable calls #1, #2
     void acquireProxy();
