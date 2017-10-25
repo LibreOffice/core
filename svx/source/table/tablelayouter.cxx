@@ -25,6 +25,7 @@
 
 #include <cell.hxx>
 #include "cellrange.hxx"
+#include <o3tl/safeint.hxx>
 #include <tablemodel.hxx>
 #include "tablerow.hxx"
 #include "tablerows.hxx"
@@ -467,11 +468,12 @@ sal_Int32 TableLayouter::distribute( LayoutVector& rLayouts, sal_Int32 nDistribu
                 Layout& rLayout = rLayouts[nIndex];
                 if( (nDistribute > 0) || (rLayout.mnSize > rLayout.mnMinSize) )
                 {
-                    sal_Int32 n;
-                    if( nIndex == (nCount-1) )
-                        n = nDistributed; // for last entity use up rest
-                    else
-                        n  = (nDistribute * rLayout.mnSize) / nCurrentWidth;
+                    sal_Int32 n(nDistributed); // for last entity use up rest
+                    if (nIndex != (nCount-1))
+                    {
+                        bConstrainsBroken |= o3tl::checked_multiply(nDistribute, rLayout.mnSize, n);
+                        n  /= nCurrentWidth;
+                    }
 
                     nDistributed -= n;
                     rLayout.mnSize += n;
