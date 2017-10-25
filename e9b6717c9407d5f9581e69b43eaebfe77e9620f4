@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_0dac51ec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-25T17:49:33Z",
+      "side": 1,
+      "message": "It seems like a \u0027+\u0027 is missing at the end.",
+      "range": {
+        "startLine": 7,
+        "startChar": 13,
+        "endLine": 7,
+        "endChar": 69
+      },
+      "revId": "e9b6717c9407d5f9581e69b43eaebfe77e9620f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_edb0e545",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-25T17:49:33Z",
+      "side": 1,
+      "message": "Please remove this line. You don\u0027t need to write a description if just the title is enough.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 70
+      },
+      "revId": "e9b6717c9407d5f9581e69b43eaebfe77e9620f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
