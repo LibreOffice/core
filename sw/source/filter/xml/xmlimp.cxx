@@ -30,6 +30,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlictxt.hxx>
@@ -970,6 +971,26 @@ SvXMLImportContext *SwXMLImport::CreateFontDeclsContext(
     SetFontDecls( pFSContext );
     return pFSContext;
 }
+
+namespace
+{
+    // return (n >= 0)? (n*72+63)/127: (n*72-63)/127;
+    sal_Int64 sanitiseMm100ToTwip(sal_Int64 n)
+    {
+        if (n >= 0)
+        {
+            if (o3tl::checked_multiply<sal_Int64>(n, 72, n) || o3tl::checked_add<sal_Int64>(n, 63, n))
+                n = SAL_MAX_INT64;
+        }
+        else
+        {
+            if (o3tl::checked_multiply<sal_Int64>(n, 72, n) || o3tl::checked_sub<sal_Int64>(n, 63, n))
+                n = SAL_MIN_INT64;
+        }
+        return n / 127;
+    }
+}
+
 void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
 {
     if (IsInsertMode() || IsStylesOnlyMode() || IsBlockMode() || m_bOrganizerMode || !GetModel().is() )
@@ -1001,25 +1022,25 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
         if ( pValue->Name == "ViewAreaTop" )
         {
             pValue->Value >>= nTmp;
-            aRect.setY( static_cast< long >(bTwip ? convertMm100ToTwip ( nTmp ) : nTmp) );
+            aRect.setY( static_cast< long >(bTwip ? sanitiseMm100ToTwip(nTmp) : nTmp) );
         }
         else if ( pValue->Name == "ViewAreaLeft" )
         {
             pValue->Value >>= nTmp;
-            aRect.setX( static_cast< long >(bTwip ? convertMm100ToTwip ( nTmp ) : nTmp) );
+            aRect.setX( static_cast< long >(bTwip ? sanitiseMm100ToTwip(nTmp) : nTmp) );
         }
         else if ( pValue->Name == "ViewAreaWidth" )
         {
             pValue->Value >>= nTmp;
             Size aSize( aRect.GetSize() );
-            aSize.Width() = static_cast< long >(bTwip ? convertMm100ToTwip ( nTmp ) : nTmp);
+            aSize.Width() = static_cast< long >(bTwip ? sanitiseMm100ToTwip(nTmp) : nTmp);
             aRect.SetSize( aSize );
         }
         else if ( pValue->Name == "ViewAreaHeight" )
         {
             pValue->Value >>= nTmp;
             Size aSize( aRect.GetSize() );
-            aSize.Height() = static_cast< long >(bTwip ? convertMm100ToTwip ( nTmp ) : nTmp);
+            aSize.Height() = static_cast< long >(bTwip ? sanitiseMm100ToTwip(nTmp) : nTmp);
             aRect.SetSize( aSize );
         }
         else if ( pValue->Name == "ShowRedlineChanges" )
