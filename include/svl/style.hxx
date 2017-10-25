@@ -193,7 +193,7 @@ protected:
 
 
 private:
-    SVL_DLLPRIVATE bool         IsTrivialSearch();
+    SVL_DLLPRIVATE bool         IsTrivialSearch() const;
 
     SfxStyleSheetBase*      pAktStyle;
     sal_uInt16              nAktPosition;

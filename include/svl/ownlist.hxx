@@ -64,7 +64,7 @@ public:
     void           Append( const OUString & rCommand, const OUString & rArg );
 
     void FillFromSequence( const css::uno::Sequence < css::beans::PropertyValue >& );
-    void FillSequence( css::uno::Sequence < css::beans::PropertyValue >& );
+    void FillSequence( css::uno::Sequence < css::beans::PropertyValue >& ) const;
 
     size_t          size() const { return aCommandList.size(); }
 

@@ -73,7 +73,7 @@ LockFileCommon::~LockFileCommon()
 }
 
 
-INetURLObject LockFileCommon::ResolveLinks( const INetURLObject& aDocURL )
+INetURLObject LockFileCommon::ResolveLinks( const INetURLObject& aDocURL ) const
 {
     if ( aDocURL.HasError() )
         throw lang::IllegalArgumentException();

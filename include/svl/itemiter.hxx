@@ -43,7 +43,7 @@ public:
         m_nCurrent = m_nStart;
         return m_rSet.m_nCount ? *(m_rSet.m_pItems + m_nCurrent) : nullptr;
     }
-    const SfxPoolItem* GetCurItem()
+    const SfxPoolItem* GetCurItem() const
     {
         return m_rSet.m_nCount ? *(m_rSet.m_pItems + m_nCurrent) : nullptr;
     }

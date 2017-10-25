@@ -116,7 +116,7 @@ VendorSettings::VendorSettings():
     }
 }
 
-VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
+VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor) const
 {
     OSL_ASSERT(!sVendor.isEmpty());
     VersionInfo aVersionInfo;
@@ -198,7 +198,7 @@ VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
     return aVersionInfo;
 }
 
-std::vector<OUString> VendorSettings::getSupportedVendors()
+std::vector<OUString> VendorSettings::getSupportedVendors() const
 {
     std::vector<OUString> vecVendors;
     //get the nodeset for the vendor elements

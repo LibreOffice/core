@@ -49,7 +49,7 @@ protected:
     ::osl::Mutex m_aMutex;
     OUString m_aURL;
 
-    INetURLObject ResolveLinks( const INetURLObject& aDocURL );
+    INetURLObject ResolveLinks( const INetURLObject& aDocURL ) const;
 
 public:
     LockFileCommon( const OUString& aOrigURL, const OUString& aPrefix );
