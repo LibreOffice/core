@@ -745,7 +745,10 @@ namespace emfio
                     case EMR_SCALEWINDOWEXTEX :
                     {
                         mpInputStream->ReadUInt32( nNom1 ).ReadUInt32( nDen1 ).ReadUInt32( nNom2 ).ReadUInt32( nDen2 );
-                        ScaleWinExt( (double)nNom1 / nDen1, (double)nNom2 / nDen2 );
+                        if (nDen1 != 0 && nDen2 != 0)
+                            ScaleWinExt( (double)nNom1 / nDen1, (double)nNom2 / nDen2 );
+                        else
+                            SAL_WARN("vcl.emf", "ignoring bogus divide by zero");
                     }
                     break;
 
@@ -759,7 +762,10 @@ namespace emfio
                     case EMR_SCALEVIEWPORTEXTEX :
                     {
                         mpInputStream->ReadUInt32( nNom1 ).ReadUInt32( nDen1 ).ReadUInt32( nNom2 ).ReadUInt32( nDen2 );
-                        ScaleDevExt( (double)nNom1 / nDen1, (double)nNom2 / nDen2 );
+                        if (nDen1 != 0 && nDen2 != 0)
+                            ScaleDevExt( (double)nNom1 / nDen1, (double)nNom2 / nDen2 );
+                        else
+                            SAL_WARN("vcl.emf", "ignoring bogus divide by zero");
                     }
                     break;
 
