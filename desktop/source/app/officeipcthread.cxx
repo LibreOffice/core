@@ -449,6 +449,7 @@ private:
     void close() override;
 
     DbusConnectionHolder connection_;
+    osl::Condition closeDone_;
 };
 
 RequestHandler::Status DbusIpcThread::enable(rtl::Reference<IpcThread> * thread)
@@ -569,6 +570,19 @@ void DbusIpcThread::execute()
         if (dbus_message_is_method_call(
                 msg.message, "org.libreoffice.LibreOfficeIpcIfc0", "Close"))
         {
+            DbusMessageHolder repl(dbus_message_new_method_return(msg.message));
+            if (repl.message == nullptr) {
+                SAL_WARN(
+                    "desktop.app", "dbus_message_new_method_return failed");
+            } else {
+                dbus_uint32_t serial = 0;
+                if (!dbus_connection_send(
+                        connection_.connection, repl.message, &serial)) {
+                    SAL_WARN("desktop.app", "dbus_connection_send failed");
+                } else {
+                    dbus_connection_flush(connection_.connection);
+                }
+            }
             break;
         }
         if (!dbus_message_is_method_call(
@@ -612,6 +626,7 @@ void DbusIpcThread::execute()
         }
         dbus_connection_flush(connection_.connection);
     }
+    closeDone_.wait();
     DBusError e;
     dbus_error_init(&e);
     int n = dbus_bus_release_name(
@@ -639,37 +654,46 @@ void DbusIpcThread::execute()
 }
 
 void DbusIpcThread::close() {
-    assert(connection_.connection != nullptr);
-    DBusError e;
-    dbus_error_init(&e);
-    // Let DbusIpcThread::execute return from dbus_connection_read_write; for
-    // now, just abort on failure (the process would otherwise block, with
-    // DbusIpcThread::execute hanging in dbus_connection_read_write); this
-    // apparently needs a more DBus-y design anyway:
-    DbusConnectionHolder con(dbus_bus_get_private(DBUS_BUS_SESSION, &e));
-    assert((con.connection == nullptr) == bool(dbus_error_is_set(&e)));
-    if (con.connection == nullptr) {
-        SAL_WARN(
-            "desktop.app",
-            "dbus_bus_get_private failed with: " << e.name << ": "
-                << e.message);
-        dbus_error_free(&e);
-        std::abort();
+    {
+        assert(connection_.connection != nullptr);
+        DBusError e;
+        dbus_error_init(&e);
+        // Let DbusIpcThread::execute return from dbus_connection_read_write;
+        // for now, just abort on failure (the process would otherwise block,
+        // with DbusIpcThread::execute hanging in dbus_connection_read_write);
+        // this apparently needs a more DBus-y design anyway:
+        DbusConnectionHolder con(dbus_bus_get_private(DBUS_BUS_SESSION, &e));
+        assert((con.connection == nullptr) == bool(dbus_error_is_set(&e)));
+        if (con.connection == nullptr) {
+            SAL_WARN(
+                "desktop.app",
+                "dbus_bus_get_private failed with: " << e.name << ": "
+                    << e.message);
+            dbus_error_free(&e);
+            std::abort();
+        }
+        DbusMessageHolder msg(
+            dbus_message_new_method_call(
+                "org.libreoffice.LibreOfficeIpc0",
+                "/org/libreoffice/LibreOfficeIpc0",
+                "org.libreoffice.LibreOfficeIpcIfc0", "Close"));
+        if (msg.message == nullptr) {
+            SAL_WARN("desktop.app", "dbus_message_new_method_call failed");
+            std::abort();
+        }
+        DbusMessageHolder repl(
+            dbus_connection_send_with_reply_and_block(
+                con.connection, msg.message, 0x7FFFFFFF, &e));
+        assert((repl.message == nullptr) == bool(dbus_error_is_set(&e)));
+        if (repl.message == nullptr) {
+            SAL_INFO(
+                "desktop.app",
+                "dbus_connection_send_with_reply_and_block failed with: "
+                    << e.name << ": " << e.message);
+            dbus_error_free(&e);
+        }
     }
-    DbusMessageHolder msg(
-        dbus_message_new_method_call(
-            "org.libreoffice.LibreOfficeIpc0",
-            "/org/libreoffice/LibreOfficeIpc0",
-            "org.libreoffice.LibreOfficeIpcIfc0", "Close"));
-    if (msg.message == nullptr) {
-        SAL_WARN("desktop.app", "dbus_message_new_method_call failed");
-        std::abort();
-    }
-    if (!dbus_connection_send(con.connection, msg.message, nullptr)) {
-        SAL_WARN("desktop.app", "dbus_connection_send failed");
-        std::abort();
-    }
-    dbus_connection_flush(con.connection);
+    closeDone_.set();
 }
 
 #endif
