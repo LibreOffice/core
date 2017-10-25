@@ -120,6 +120,7 @@
 #include <svtools/embedhlp.hxx>
 #include <o3tl/enumrange.hxx>
 #include <o3tl/make_unique.hxx>
+#include <o3tl/safeint.hxx>
 #include <boost/optional.hpp>
 
 #include <algorithm>
@@ -833,11 +834,15 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     }
                 }
                 sal_Int32 nFontDirection = GetPropertyValue( DFF_Prop_cdirFont, mso_cdir0 );
-                nTextRotationAngle -= nFontDirection * 9000;
                 if ( ( nFontDirection == 1 ) || ( nFontDirection == 3 ) )
                 {
                     bVerticalText = !bVerticalText;
                 }
+                const bool bFail = o3tl::checked_multiply(nFontDirection, 9000, nFontDirection);
+                if (!bFail)
+                    nTextRotationAngle -= nFontDirection;
+                else
+                    SAL_WARN("filter.ms", "Parsing error: bad fontdirection: " << nFontDirection);
                 aTextObj.SetVertical( bVerticalText );
                 if ( pRet )
                 {
