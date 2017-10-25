@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_2a31f305",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-10-25T15:12:26Z",
+      "side": 1,
+      "message": "You need to prefix the bug id with \"tdf#\".",
+      "revId": "ebc0b98b4e44ff17151fe59736cdf5c226de3bd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
