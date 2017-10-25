@@ -23,6 +23,17 @@ $(eval $(call gb_StaticLibrary_add_cxxflags,libcmis,\
 ))
 endif
 
+# Build as C++03 if necessary to avoid GCC C++17 "error: ISO C++1z does not
+# allow dynamic exception specifications", until upstream libcmis is ported to
+# C++17:
+ifeq ($(COM)-$(COM_IS_CLANG),GCC-)
+$(eval $(call gb_StaticLibrary_add_cxxflags,libcmis, \
+    $(if $(filter -std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z, \
+            $(CXXFLAGS_CXX11)), \
+        $(gb_CXX03FLAGS)) \
+))
+endif
+
 $(eval $(call gb_StaticLibrary_set_include,libcmis, \
     -I$(call gb_UnpackedTarball_get_dir,libcmis/src/libcmis) \
     $$(INCLUDE) \

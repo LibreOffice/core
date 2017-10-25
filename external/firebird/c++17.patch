@@ -1,0 +1,301 @@
+--- src/common/DynamicStrings.cpp
++++ src/common/DynamicStrings.cpp
+@@ -37,7 +37,7 @@
+ 
+ namespace Firebird {
+ 
+-unsigned makeDynamicStrings(unsigned length, ISC_STATUS* const dst, const ISC_STATUS* const src) throw(BadAlloc)
++unsigned makeDynamicStrings(unsigned length, ISC_STATUS* const dst, const ISC_STATUS* const src)
+ {
+ 	const ISC_STATUS* end = &src[length];
+ 
+--- src/common/DynamicStrings.h
++++ src/common/DynamicStrings.h
+@@ -34,7 +34,7 @@
+ 
+ namespace Firebird {
+ 
+-unsigned makeDynamicStrings(unsigned len, ISC_STATUS* const dst, const ISC_STATUS* const src) throw(BadAlloc);
++unsigned makeDynamicStrings(unsigned len, ISC_STATUS* const dst, const ISC_STATUS* const src);
+ char* findDynamicStrings(unsigned len, ISC_STATUS* ptr) throw();
+ 
+ } // namespace Firebird
+--- src/common/StatusArg.cpp
++++ src/common/StatusArg.cpp
+@@ -53,7 +53,7 @@
+ 
+ namespace Arg {
+ 
+-Base::Base(ISC_STATUS k, ISC_STATUS c) throw(Firebird::BadAlloc) :
++Base::Base(ISC_STATUS k, ISC_STATUS c) :
+ 	implementation(FB_NEW_POOL(*getDefaultMemoryPool()) ImplBase(k, c))
+ {
+ }
+@@ -94,28 +94,28 @@
+ 	assign(ex);
+ }
+ 
+-StatusVector::StatusVector(ISC_STATUS k, ISC_STATUS c) throw(Firebird::BadAlloc) :
++StatusVector::StatusVector(ISC_STATUS k, ISC_STATUS c) :
+ 	Base(FB_NEW_POOL(*getDefaultMemoryPool()) ImplStatusVector(k, c))
+ {
+ 	operator<<(*(static_cast<Base*>(this)));
+ }
+ 
+-StatusVector::StatusVector(const ISC_STATUS* s) throw(Firebird::BadAlloc) :
++StatusVector::StatusVector(const ISC_STATUS* s) :
+ 	Base(FB_NEW_POOL(*getDefaultMemoryPool()) ImplStatusVector(s))
+ {
+ }
+ 
+-StatusVector::StatusVector(const IStatus* s) throw(Firebird::BadAlloc) :
++StatusVector::StatusVector(const IStatus* s) :
+ 	Base(FB_NEW_POOL(*getDefaultMemoryPool()) ImplStatusVector(s))
+ {
+ }
+ 
+-StatusVector::StatusVector(const Exception& ex) throw(Firebird::BadAlloc) :
++StatusVector::StatusVector(const Exception& ex) :
+ 	Base(FB_NEW_POOL(*getDefaultMemoryPool()) ImplStatusVector(ex))
+ {
+ }
+ 
+-StatusVector::StatusVector() throw(Firebird::BadAlloc) :
++StatusVector::StatusVector() :
+ 	Base(FB_NEW_POOL(*getDefaultMemoryPool()) ImplStatusVector(0, 0))
+ {
+ }
+--- src/common/StatusArg.h
++++ src/common/StatusArg.h
+@@ -86,7 +86,7 @@
+ 		virtual ~ImplBase() { }
+ 	};
+ 
+-	Base(ISC_STATUS k, ISC_STATUS c) throw(Firebird::BadAlloc);
++	Base(ISC_STATUS k, ISC_STATUS c);
+ 	explicit Base(ImplBase* i) throw() : implementation(i) { }
+ 	~Base() throw() { delete implementation; }
+ 
+@@ -142,13 +142,13 @@
+ 		explicit ImplStatusVector(const Exception& ex) throw();
+ 	};
+ 
+-	StatusVector(ISC_STATUS k, ISC_STATUS v) throw(Firebird::BadAlloc);
++	StatusVector(ISC_STATUS k, ISC_STATUS v);
+ 
+ public:
+-	explicit StatusVector(const ISC_STATUS* s) throw(Firebird::BadAlloc);
+-	explicit StatusVector(const IStatus* s) throw(Firebird::BadAlloc);
+-	explicit StatusVector(const Exception& ex) throw(Firebird::BadAlloc);
+-	StatusVector() throw(Firebird::BadAlloc);
++	explicit StatusVector(const ISC_STATUS* s);
++	explicit StatusVector(const IStatus* s);
++	explicit StatusVector(const Exception& ex);
++	StatusVector();
+ 	~StatusVector() { }
+ 
+ 	const ISC_STATUS* value() const throw() { return implementation->value(); }
+--- src/common/classes/alloc.cpp
++++ src/common/classes/alloc.cpp
+@@ -1431,7 +1431,7 @@
+ 
+ 	~FreeObjects();
+ 
+-	FreeObjPtr allocateBlock(MemPool* pool, size_t from, size_t& size) throw (OOM_EXCEPTION)
++	FreeObjPtr allocateBlock(MemPool* pool, size_t from, size_t& size)
+ 	{
+ 		size_t full_size = size + (from ? 0 : ListBuilder::MEM_OVERHEAD);
+ 		if (full_size > Limits::TOP_LIMIT)
+@@ -1498,7 +1498,7 @@
+ 	ListBuilder listBuilder;
+ 	Extent* currentExtent;
+ 
+-	MemBlock* newBlock(MemPool* pool, unsigned slot) throw (OOM_EXCEPTION);
++	MemBlock* newBlock(MemPool* pool, unsigned slot);
+ };
+ 
+ 
+@@ -1538,26 +1538,26 @@
+ 	AtomicCounter used_memory, mapped_memory;
+ 
+ private:
+-	MemBlock* alloc(size_t from, size_t& length, bool flagRedirect) throw (OOM_EXCEPTION);
++	MemBlock* alloc(size_t from, size_t& length, bool flagRedirect);
+ 	void releaseBlock(MemBlock *block) throw ();
+ 
+ public:
+-	void* allocate(size_t size ALLOC_PARAMS) throw (OOM_EXCEPTION);
+-	MemBlock* allocate2(size_t from, size_t& size ALLOC_PARAMS) throw (OOM_EXCEPTION);
++	void* allocate(size_t size ALLOC_PARAMS);
++	MemBlock* allocate2(size_t from, size_t& size ALLOC_PARAMS);
+ 
+ private:
+-	virtual void memoryIsExhausted(void) throw (OOM_EXCEPTION);
+-	void* allocRaw(size_t length) throw (OOM_EXCEPTION);
++	virtual void memoryIsExhausted(void);
++	void* allocRaw(size_t length);
+ 	static void release(void* block, bool flagDecr) throw ();
+ 	static void releaseRaw(bool destroying, void *block, size_t size, bool use_cache = true) throw ();
+-	void* getExtent(size_t from, size_t& to) throw (OOM_EXCEPTION);
++	void* getExtent(size_t from, size_t& to);
+ 
+ public:
+ 	static void releaseExtent(bool destroying, void *block, size_t size, MemPool* pool) throw ();
+ 
+ 	// pass desired size, return actual extent size
+ 	template <class Extent>
+-	void newExtent(size_t& size, Extent** linkedList) throw (OOM_EXCEPTION);
++	void newExtent(size_t& size, Extent** linkedList);
+ 
+ private:
+ #ifdef USE_VALGRIND
+@@ -1667,7 +1667,7 @@
+ 
+ 
+ template <class ListBuilder, class Limits>
+-MemBlock* FreeObjects<ListBuilder, Limits>::newBlock(MemPool* pool, unsigned slot) throw (OOM_EXCEPTION)
++MemBlock* FreeObjects<ListBuilder, Limits>::newBlock(MemPool* pool, unsigned slot)
+ {
+ 	size_t size = Limits::getSize(slot);
+ 
+@@ -1902,7 +1902,7 @@
+ }
+ 
+ template <class Extent>
+-void MemPool::newExtent(size_t& size, Extent** linkedList) throw(OOM_EXCEPTION)
++void MemPool::newExtent(size_t& size, Extent** linkedList)
+ {
+ 	// No large enough block found. We need to extend the pool
+ 	void* memory = NULL;
+@@ -1967,7 +1967,7 @@
+ 	pool->setStatsGroup(newStats);
+ }
+ 
+-MemBlock* MemPool::alloc(size_t from, size_t& length, bool flagRedirect) throw (OOM_EXCEPTION)
++MemBlock* MemPool::alloc(size_t from, size_t& length, bool flagRedirect)
+ {
+ 	MutexEnsureUnlock guard(mutex, "MemPool::alloc");
+ 	guard.enter();
+@@ -2026,7 +2026,7 @@
+ #ifdef DEBUG_GDS_ALLOC
+ 	, const char* fileName, int line
+ #endif
+-) throw (OOM_EXCEPTION)
++)
+ {
+ 	size_t length = from ? size : ROUNDUP(size + VALGRIND_REDZONE, roundingSize) + GUARD_BYTES;
+ 	MemBlock* memory = alloc(from, length, true);
+@@ -2055,7 +2055,7 @@
+ }
+ 
+ 
+-void* MemPool::allocate(size_t size ALLOC_PARAMS) throw (OOM_EXCEPTION)
++void* MemPool::allocate(size_t size ALLOC_PARAMS)
+ {
+ 	MemBlock* memory = allocate2(0, size ALLOC_PASS_ARGS);
+ 
+@@ -2180,12 +2180,12 @@
+ 	releaseRaw(pool_destroying, hunk, hunk->length, false);
+ }
+ 
+-void MemPool::memoryIsExhausted(void) throw (OOM_EXCEPTION)
++void MemPool::memoryIsExhausted(void)
+ {
+ 	Firebird::BadAlloc::raise();
+ }
+ 
+-void* MemPool::allocRaw(size_t size) throw (OOM_EXCEPTION)
++void* MemPool::allocRaw(size_t size)
+ {
+ #ifndef USE_VALGRIND
+ 	if (size == DEFAULT_ALLOCATION)
+@@ -2245,7 +2245,7 @@
+ }
+ 
+ 
+-void* MemPool::getExtent(size_t from, size_t& to) throw(OOM_EXCEPTION)		// pass desired minimum size, return actual extent size
++void* MemPool::getExtent(size_t from, size_t& to)                     		// pass desired minimum size, return actual extent size
+ {
+ 	MemBlock* extent = allocate2(from, to ALLOC_ARGS);
+ 	return &extent->body;
+@@ -2348,7 +2348,7 @@
+ 	deallocate(block);
+ }
+ 
+-void* MemoryPool::calloc(size_t size ALLOC_PARAMS) throw (OOM_EXCEPTION)
++void* MemoryPool::calloc(size_t size ALLOC_PARAMS)
+ {
+ 	void* block = allocate(size ALLOC_PASS_ARGS);
+ 	memset(block, 0, size);
+@@ -2489,7 +2489,7 @@
+ 	MemPool::globalFree(block);
+ }
+ 
+-void* MemoryPool::allocate(size_t size ALLOC_PARAMS) throw (OOM_EXCEPTION)
++void* MemoryPool::allocate(size_t size ALLOC_PARAMS)
+ {
+ 	return pool->allocate(size ALLOC_PASS_ARGS);
+ }
+@@ -2547,11 +2547,11 @@
+ // in a case when we actually need "new" only with file/line information
+ // this version should be also present as a pair for "delete".
+ #ifdef DEBUG_GDS_ALLOC
+-void* operator new(size_t s) throw (OOM_EXCEPTION)
++void* operator new(size_t s)
+ {
+ 	return MemoryPool::globalAlloc(s ALLOC_ARGS);
+ }
+-void* operator new[](size_t s) throw (OOM_EXCEPTION)
++void* operator new[](size_t s)
+ {
+ 	return MemoryPool::globalAlloc(s ALLOC_ARGS);
+ }
+--- src/common/classes/alloc.h
++++ src/common/classes/alloc.h
+@@ -186,18 +186,18 @@
+ #define ALLOC_PASS_ARGS
+ #endif // DEBUG_GDS_ALLOC
+ 
+-	void* calloc(size_t size ALLOC_PARAMS) throw (OOM_EXCEPTION);
++	void* calloc(size_t size ALLOC_PARAMS);
+ 
+ #ifdef LIBC_CALLS_NEW
+ 	static void* globalAlloc(size_t s ALLOC_PARAMS) throw (OOM_EXCEPTION);
+ #else
+-	static void* globalAlloc(size_t s ALLOC_PARAMS) throw (OOM_EXCEPTION)
++	static void* globalAlloc(size_t s ALLOC_PARAMS)
+ 	{
+ 		return defaultMemoryManager->allocate(s ALLOC_PASS_ARGS);
+ 	}
+ #endif // LIBC_CALLS_NEW
+ 
+-	void* allocate(size_t size ALLOC_PARAMS) throw (OOM_EXCEPTION);
++	void* allocate(size_t size ALLOC_PARAMS);
+ 
+ 	static void globalFree(void* mem) throw ();
+ 	void deallocate(void* mem) throw ();
+@@ -295,20 +295,20 @@
+ 
+ // operators new and delete
+ 
+-inline void* operator new(size_t s ALLOC_PARAMS) throw (OOM_EXCEPTION)
++inline void* operator new(size_t s ALLOC_PARAMS)
+ {
+ 	return MemoryPool::globalAlloc(s ALLOC_PASS_ARGS);
+ }
+-inline void* operator new[](size_t s ALLOC_PARAMS) throw (OOM_EXCEPTION)
++inline void* operator new[](size_t s ALLOC_PARAMS)
+ {
+ 	return MemoryPool::globalAlloc(s ALLOC_PASS_ARGS);
+ }
+ 
+-inline void* operator new(size_t s, Firebird::MemoryPool& pool ALLOC_PARAMS) throw (OOM_EXCEPTION)
++inline void* operator new(size_t s, Firebird::MemoryPool& pool ALLOC_PARAMS)
+ {
+ 	return pool.allocate(s ALLOC_PASS_ARGS);
+ }
+-inline void* operator new[](size_t s, Firebird::MemoryPool& pool ALLOC_PARAMS) throw (OOM_EXCEPTION)
++inline void* operator new[](size_t s, Firebird::MemoryPool& pool ALLOC_PARAMS)
+ {
+ 	return pool.allocate(s ALLOC_PASS_ARGS);
+ }

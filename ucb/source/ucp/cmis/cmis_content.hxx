@@ -28,15 +28,10 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated"
 #pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
-#elif defined __clang__ && __cplusplus > 201402L
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdynamic-exception-spec"
 #endif
 #include <libcmis/libcmis.hxx>
 #if defined __GNUC__ && __GNUC__ >= 7
 #pragma GCC diagnostic pop
-#elif defined __clang__ && __cplusplus > 201402L
-#pragma clang diagnostic pop
 #endif
 
 #include <list>
