@@ -779,7 +779,7 @@ void SwShellTableCursor::FillRects()
     bool bStart = true;
     SwRegionRects aReg( GetShell()->VisArea() );
     if (comphelper::LibreOfficeKit::isActive())
-        aReg = GetShell()->getIDocumentLayoutAccess().GetCurrentLayout()->Frame();
+        aReg = GetShell()->getIDocumentLayoutAccess().GetCurrentLayout()->getSwFrame();
     SwNodes& rNds = GetDoc()->GetNodes();
     SwFrame* pEndFrame = nullptr;
     for (size_t n = 0; n < m_SelectedBoxes.size(); ++n)
@@ -812,13 +812,13 @@ void SwShellTableCursor::FillRects()
 
         while ( pFrame )
         {
-            if( aReg.GetOrigin().IsOver( pFrame->Frame() ) )
+            if( aReg.GetOrigin().IsOver( pFrame->getSwFrame() ) )
             {
-                aReg -= pFrame->Frame();
+                aReg -= pFrame->getSwFrame();
                 if (bStart)
                 {
                     bStart = false;
-                    m_aStart = SwRect(pFrame->Frame().Left(), pFrame->Frame().Top(), 1, pFrame->Frame().Height());
+                    m_aStart = SwRect(pFrame->getSwFrame().Left(), pFrame->getSwFrame().Top(), 1, pFrame->getSwFrame().Height());
                 }
             }
 
@@ -827,7 +827,7 @@ void SwShellTableCursor::FillRects()
         }
     }
     if (pEndFrame)
-        m_aEnd = SwRect(pEndFrame->Frame().Right(), pEndFrame->Frame().Top(), 1, pEndFrame->Frame().Height());
+        m_aEnd = SwRect(pEndFrame->getSwFrame().Right(), pEndFrame->getSwFrame().Top(), 1, pEndFrame->getSwFrame().Height());
     aReg.Invert();
     insert( begin(), aReg.begin(), aReg.end() );
 }
@@ -857,7 +857,7 @@ bool SwShellTableCursor::IsInside( const Point& rPt ) const
         while( pFrame && !pFrame->IsCellFrame() )
             pFrame = pFrame->GetUpper();
         OSL_ENSURE( pFrame, "Node not in a table" );
-        if( pFrame && pFrame->Frame().IsInside( rPt ) )
+        if( pFrame && pFrame->getSwFrame().IsInside( rPt ) )
             return true;
     }
     return false;

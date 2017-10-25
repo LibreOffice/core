@@ -317,13 +317,13 @@ bool SwCursorShell::GotoFlyAnchor()
 
     // jump in BodyFrame closest to FlyFrame
     SwRect aTmpRect( m_aCharRect );
-    if( !pFrame->Frame().IsInside( aTmpRect ))
-        aTmpRect = pFrame->Frame();
+    if( !pFrame->getSwFrame().IsInside( aTmpRect ))
+        aTmpRect = pFrame->getSwFrame();
     Point aPt( aTmpRect.Left(), aTmpRect.Top() +
                 ( aTmpRect.Bottom() - aTmpRect.Top() ) / 2 );
-    aPt.setX(aPt.getX() > (pFrame->Frame().Left() + (pFrame->Frame().SSize().Width() / 2 ))
-                ? pFrame->Frame().Right()
-                : pFrame->Frame().Left());
+    aPt.setX(aPt.getX() > (pFrame->getSwFrame().Left() + (pFrame->getSwFrame().SSize().Width() / 2 ))
+                ? pFrame->getSwFrame().Right()
+                : pFrame->getSwFrame().Left());
 
     const SwPageFrame* pPageFrame = pFrame->FindPageFrame();
     const SwContentFrame* pFndFrame = pPageFrame->GetContentPos( aPt, false, true );

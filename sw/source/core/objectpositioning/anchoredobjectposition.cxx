@@ -158,7 +158,7 @@ SwTwips SwAnchoredObjectPosition::GetTopForObjPos( const SwFrame& _rFrame,
                                                     const SwRectFn& _fnRect,
                                                     const bool _bVert ) const
 {
-    SwTwips nTopOfFrameForObjPos = (_rFrame.Frame().*_fnRect->fnGetTop)();
+    SwTwips nTopOfFrameForObjPos = (_rFrame.getSwFrame().*_fnRect->fnGetTop)();
 
     if ( _rFrame.IsTextFrame() )
     {
@@ -213,14 +213,14 @@ void SwAnchoredObjectPosition::GetVertAlignmentValues(
         case text::RelOrientation::FRAME:
         {
             // #i11860# - consider upper space of previous frame
-            nHeight = aRectFnSet.GetHeight(_rVertOrientFrame.Frame()) -
+            nHeight = aRectFnSet.GetHeight(_rVertOrientFrame.getSwFrame()) -
                       nVertOrientUpperSpaceForPrevFrameAndPageGrid;
             nOffset = 0;
         }
         break;
         case text::RelOrientation::PRINT_AREA:
         {
-            nHeight = aRectFnSet.GetHeight(_rVertOrientFrame.Prt());
+            nHeight = aRectFnSet.GetHeight(_rVertOrientFrame.getSwPrint());
             // #i11860# - consider upper space of previous frame
             nOffset = aRectFnSet.GetTopMargin(_rVertOrientFrame) -
                       nVertOrientUpperSpaceForPrevFrameAndPageGrid;
@@ -234,12 +234,12 @@ void SwAnchoredObjectPosition::GetVertAlignmentValues(
                 {
                     if( pPrtFrame->IsHeaderFrame() )
                     {
-                        nHeight -= pPrtFrame->Frame().Height();
-                        nOffset += pPrtFrame->Frame().Height();
+                        nHeight -= pPrtFrame->getSwFrame().Height();
+                        nOffset += pPrtFrame->getSwFrame().Height();
                     }
                     else if( pPrtFrame->IsFooterFrame() )
                     {
-                        nHeight -= pPrtFrame->Frame().Height();
+                        nHeight -= pPrtFrame->getSwFrame().Height();
                     }
                     pPrtFrame = pPrtFrame->GetNext();
                 }
@@ -248,18 +248,18 @@ void SwAnchoredObjectPosition::GetVertAlignmentValues(
         break;
         case text::RelOrientation::PAGE_FRAME:
         {
-            nHeight = aRectFnSet.GetHeight(_rPageAlignLayFrame.Frame());
+            nHeight = aRectFnSet.GetHeight(_rPageAlignLayFrame.getSwFrame());
             nOffset = aRectFnSet.YDiff(
-                        aRectFnSet.GetTop(_rPageAlignLayFrame.Frame()),
+                        aRectFnSet.GetTop(_rPageAlignLayFrame.getSwFrame()),
                         nVertOrientTop );
         }
         break;
         case text::RelOrientation::PAGE_PRINT_AREA:
         {
-            nHeight = aRectFnSet.GetHeight(_rPageAlignLayFrame.Prt());
+            nHeight = aRectFnSet.GetHeight(_rPageAlignLayFrame.getSwPrint());
             nOffset = aRectFnSet.GetTopMargin(_rPageAlignLayFrame) +
                       aRectFnSet.YDiff(
-                        aRectFnSet.GetTop(_rPageAlignLayFrame.Frame()),
+                        aRectFnSet.GetTop(_rPageAlignLayFrame.getSwFrame()),
                         nVertOrientTop );
             // if aligned to page in horizontal layout, consider header and
             // footer frame height appropriately.
@@ -271,12 +271,12 @@ void SwAnchoredObjectPosition::GetVertAlignmentValues(
                 {
                     if( pPrtFrame->IsHeaderFrame() )
                     {
-                        nHeight -= pPrtFrame->Frame().Height();
-                        nOffset += pPrtFrame->Frame().Height();
+                        nHeight -= pPrtFrame->getSwFrame().Height();
+                        nOffset += pPrtFrame->getSwFrame().Height();
                     }
                     else if( pPrtFrame->IsFooterFrame() )
                     {
-                        nHeight -= pPrtFrame->Frame().Height();
+                        nHeight -= pPrtFrame->getSwFrame().Height();
                     }
                     pPrtFrame = pPrtFrame->GetNext();
                 }
@@ -426,11 +426,11 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
              ( !bFollowTextFlow ||
                !GetAnchoredObj().GetAnchorFrame()->IsInTab() ) )
         {
-            aPgAlignArea = rPageAlignLayFrame.FindPageFrame()->Frame();
+            aPgAlignArea = rPageAlignLayFrame.FindPageFrame()->getSwFrame();
         }
         else
         {
-            aPgAlignArea = rPageAlignLayFrame.Frame();
+            aPgAlignArea = rPageAlignLayFrame.getSwFrame();
         }
     }
 
@@ -530,34 +530,34 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustHoriRelPos(
 
     if( bVert )
     {
-        if ( rAnchorFrame.Frame().Top() + nAdjustedRelPosX + aObjSize.Height() >
-                _rPageAlignLayFrame.Frame().Bottom() )
+        if ( rAnchorFrame.getSwFrame().Top() + nAdjustedRelPosX + aObjSize.Height() >
+                _rPageAlignLayFrame.getSwFrame().Bottom() )
         {
-            nAdjustedRelPosX = _rPageAlignLayFrame.Frame().Bottom() -
-                               rAnchorFrame.Frame().Top() -
+            nAdjustedRelPosX = _rPageAlignLayFrame.getSwFrame().Bottom() -
+                               rAnchorFrame.getSwFrame().Top() -
                                aObjSize.Height();
         }
-        if ( rAnchorFrame.Frame().Top() + nAdjustedRelPosX <
-                _rPageAlignLayFrame.Frame().Top() )
+        if ( rAnchorFrame.getSwFrame().Top() + nAdjustedRelPosX <
+                _rPageAlignLayFrame.getSwFrame().Top() )
         {
-            nAdjustedRelPosX = _rPageAlignLayFrame.Frame().Top() -
-                               rAnchorFrame.Frame().Top();
+            nAdjustedRelPosX = _rPageAlignLayFrame.getSwFrame().Top() -
+                               rAnchorFrame.getSwFrame().Top();
         }
     }
     else
     {
-        if ( rAnchorFrame.Frame().Left() + nAdjustedRelPosX + aObjSize.Width() >
-                _rPageAlignLayFrame.Frame().Right() )
+        if ( rAnchorFrame.getSwFrame().Left() + nAdjustedRelPosX + aObjSize.Width() >
+                _rPageAlignLayFrame.getSwFrame().Right() )
         {
-            nAdjustedRelPosX = _rPageAlignLayFrame.Frame().Right() -
-                               rAnchorFrame.Frame().Left() -
+            nAdjustedRelPosX = _rPageAlignLayFrame.getSwFrame().Right() -
+                               rAnchorFrame.getSwFrame().Left() -
                                aObjSize.Width();
         }
-        if ( rAnchorFrame.Frame().Left() + nAdjustedRelPosX <
-                _rPageAlignLayFrame.Frame().Left() )
+        if ( rAnchorFrame.getSwFrame().Left() + nAdjustedRelPosX <
+                _rPageAlignLayFrame.getSwFrame().Left() )
         {
-            nAdjustedRelPosX = _rPageAlignLayFrame.Frame().Left() -
-                               rAnchorFrame.Frame().Left();
+            nAdjustedRelPosX = _rPageAlignLayFrame.getSwFrame().Left() -
+                               rAnchorFrame.getSwFrame().Left();
         }
     }
 
@@ -580,7 +580,7 @@ void SwAnchoredObjectPosition::GetHoriAlignmentValues( const SwFrame&  _rHoriOri
     {
         case text::RelOrientation::PRINT_AREA:
         {
-            nWidth = aRectFnSet.GetWidth(_rHoriOrientFrame.Prt());
+            nWidth = aRectFnSet.GetWidth(_rHoriOrientFrame.getSwPrint());
             nOffset = aRectFnSet.GetLeftMargin(_rHoriOrientFrame);
             if ( _rHoriOrientFrame.IsTextFrame() )
             {
@@ -597,12 +597,12 @@ void SwAnchoredObjectPosition::GetHoriAlignmentValues( const SwFrame&  _rHoriOri
                 {
                     if( pPrtFrame->IsHeaderFrame() )
                     {
-                        nWidth -= pPrtFrame->Frame().Height();
-                        nOffset += pPrtFrame->Frame().Height();
+                        nWidth -= pPrtFrame->getSwFrame().Height();
+                        nOffset += pPrtFrame->getSwFrame().Height();
                     }
                     else if( pPrtFrame->IsFooterFrame() )
                     {
-                        nWidth -= pPrtFrame->Frame().Height();
+                        nWidth -= pPrtFrame->getSwFrame().Height();
                     }
                     pPrtFrame = pPrtFrame->GetNext();
                 }
@@ -614,8 +614,8 @@ void SwAnchoredObjectPosition::GetHoriAlignmentValues( const SwFrame&  _rHoriOri
             // align at left border of page frame/fly frame/cell frame
             nWidth = aRectFnSet.GetLeftMargin(_rPageAlignLayFrame);
             nOffset = aRectFnSet.XDiff(
-                      aRectFnSet.GetLeft(_rPageAlignLayFrame.Frame()),
-                      aRectFnSet.GetLeft(_rHoriOrientFrame.Frame()) );
+                      aRectFnSet.GetLeft(_rPageAlignLayFrame.getSwFrame()),
+                      aRectFnSet.GetLeft(_rHoriOrientFrame.getSwFrame()) );
             _obAlignedRelToPage = true;
         }
         break;
@@ -625,7 +625,7 @@ void SwAnchoredObjectPosition::GetHoriAlignmentValues( const SwFrame&  _rHoriOri
             nWidth = aRectFnSet.GetRightMargin(_rPageAlignLayFrame);
             nOffset = aRectFnSet.XDiff(
                       aRectFnSet.GetPrtRight(_rPageAlignLayFrame),
-                      aRectFnSet.GetLeft(_rHoriOrientFrame.Frame()) );
+                      aRectFnSet.GetLeft(_rHoriOrientFrame.getSwFrame()) );
             _obAlignedRelToPage = true;
         }
         break;
@@ -641,7 +641,7 @@ void SwAnchoredObjectPosition::GetHoriAlignmentValues( const SwFrame&  _rHoriOri
             // align at right border of anchor frame
             // Unify and simplify
             nWidth = aRectFnSet.GetRightMargin(_rHoriOrientFrame);
-            nOffset = aRectFnSet.GetRight(_rHoriOrientFrame.Prt());
+            nOffset = aRectFnSet.GetRight(_rHoriOrientFrame.getSwPrint());
         }
         break;
         case text::RelOrientation::CHAR:
@@ -653,17 +653,17 @@ void SwAnchoredObjectPosition::GetHoriAlignmentValues( const SwFrame&  _rHoriOri
                 nWidth = 0;
                 nOffset = aRectFnSet.XDiff(
                             aRectFnSet.GetLeft(*ToCharRect()),
-                            aRectFnSet.GetLeft(ToCharOrientFrame()->Frame()) );
+                            aRectFnSet.GetLeft(ToCharOrientFrame()->getSwFrame()) );
                 break;
             }
             SAL_FALLTHROUGH;
         }
         case text::RelOrientation::PAGE_PRINT_AREA:
         {
-            nWidth = aRectFnSet.GetWidth(_rPageAlignLayFrame.Prt());
+            nWidth = aRectFnSet.GetWidth(_rPageAlignLayFrame.getSwPrint());
             nOffset = aRectFnSet.XDiff(
                         aRectFnSet.GetPrtLeft(_rPageAlignLayFrame),
-                        aRectFnSet.GetLeft(_rHoriOrientFrame.Frame()) );
+                        aRectFnSet.GetLeft(_rHoriOrientFrame.getSwFrame()) );
             if ( _rHoriOrientFrame.IsPageFrame() && aRectFnSet.IsVert() )
             {
                 // for to-page anchored objects, consider header/footer frame
@@ -674,12 +674,12 @@ void SwAnchoredObjectPosition::GetHoriAlignmentValues( const SwFrame&  _rHoriOri
                 {
                     if( pPrtFrame->IsHeaderFrame() )
                     {
-                        nWidth -= pPrtFrame->Frame().Height();
-                        nOffset += pPrtFrame->Frame().Height();
+                        nWidth -= pPrtFrame->getSwFrame().Height();
+                        nOffset += pPrtFrame->getSwFrame().Height();
                     }
                     else if( pPrtFrame->IsFooterFrame() )
                     {
-                        nWidth -= pPrtFrame->Frame().Height();
+                        nWidth -= pPrtFrame->getSwFrame().Height();
                     }
                     pPrtFrame = pPrtFrame->GetNext();
                 }
@@ -689,16 +689,16 @@ void SwAnchoredObjectPosition::GetHoriAlignmentValues( const SwFrame&  _rHoriOri
         }
         case text::RelOrientation::PAGE_FRAME:
         {
-            nWidth = aRectFnSet.GetWidth(_rPageAlignLayFrame.Frame());
+            nWidth = aRectFnSet.GetWidth(_rPageAlignLayFrame.getSwFrame());
             nOffset = aRectFnSet.XDiff(
-                        aRectFnSet.GetLeft(_rPageAlignLayFrame.Frame()),
-                        aRectFnSet.GetLeft(_rHoriOrientFrame.Frame()) );
+                        aRectFnSet.GetLeft(_rPageAlignLayFrame.getSwFrame()),
+                        aRectFnSet.GetLeft(_rHoriOrientFrame.getSwFrame()) );
             _obAlignedRelToPage = true;
             break;
         }
         default:
         {
-            nWidth = aRectFnSet.GetWidth(_rHoriOrientFrame.Frame());
+            nWidth = aRectFnSet.GetWidth(_rHoriOrientFrame.getSwFrame());
 
             bool bWrapThrough = _bObjWrapThrough;
             // If the frame format is a TextBox of a draw shape, then use the
@@ -846,8 +846,8 @@ SwTwips SwAnchoredObjectPosition::CalcRelPosX(
     // the frame, the object is oriented at.
     if ( &rAnchorFrame != &_rHoriOrientFrame )
     {
-        SwTwips nLeftOrient = aRectFnSet.GetLeft(_rHoriOrientFrame.Frame());
-        SwTwips nLeftAnchor = aRectFnSet.GetLeft(rAnchorFrame.Frame());
+        SwTwips nLeftOrient = aRectFnSet.GetLeft(_rHoriOrientFrame.getSwFrame());
+        SwTwips nLeftAnchor = aRectFnSet.GetLeft(rAnchorFrame.getSwFrame());
         nRelPosX += aRectFnSet.XDiff( nLeftOrient, nLeftAnchor );
     }
 
@@ -913,7 +913,7 @@ SwTwips SwAnchoredObjectPosition::AdjustHoriRelPosForDrawAside(
     SwTwips nAdjustedRelPosX = _nProposedRelPosX;
 
     // determine proposed object bound rectangle
-    Point aTmpPos = aRectFnSet.GetPos(rAnchorTextFrame.Frame());
+    Point aTmpPos = aRectFnSet.GetPos(rAnchorTextFrame.getSwFrame());
     if( aRectFnSet.IsVert() )
     {
         aTmpPos.X() -= _nRelPosY + aObjBoundRect.Width();
@@ -940,19 +940,19 @@ SwTwips SwAnchoredObjectPosition::AdjustHoriRelPosForDrawAside(
             if( aRectFnSet.IsVert() )
             {
                 const SvxULSpaceItem& rOtherUL = pFly->GetFormat()->GetULSpace();
-                const SwTwips nOtherTop = pFly->Frame().Top() - rOtherUL.GetUpper();
-                const SwTwips nOtherBot = pFly->Frame().Bottom() + rOtherUL.GetLower();
+                const SwTwips nOtherTop = pFly->getSwFrame().Top() - rOtherUL.GetUpper();
+                const SwTwips nOtherBot = pFly->getSwFrame().Bottom() + rOtherUL.GetLower();
                 if ( nOtherTop <= aTmpObjRect.Bottom() + _rULSpacing.GetLower() &&
                      nOtherBot >= aTmpObjRect.Top() - _rULSpacing.GetUpper() )
                 {
                     if ( _eHoriOrient == text::HoriOrientation::LEFT )
                     {
                         SwTwips nTmp = nOtherBot + 1 + _rULSpacing.GetUpper() -
-                                       rAnchorTextFrame.Frame().Top();
+                                       rAnchorTextFrame.getSwFrame().Top();
                         if ( nTmp > nAdjustedRelPosX &&
-                             rAnchorTextFrame.Frame().Top() + nTmp +
+                             rAnchorTextFrame.getSwFrame().Top() + nTmp +
                              aObjBoundRect.Height() + _rULSpacing.GetLower()
-                             <= pObjPage->Frame().Height() + pObjPage->Frame().Top() )
+                             <= pObjPage->getSwFrame().Height() + pObjPage->getSwFrame().Top() )
                         {
                             nAdjustedRelPosX = nTmp;
                         }
@@ -961,34 +961,34 @@ SwTwips SwAnchoredObjectPosition::AdjustHoriRelPosForDrawAside(
                     {
                         SwTwips nTmp = nOtherTop - 1 - _rULSpacing.GetLower() -
                                        aObjBoundRect.Height() -
-                                       rAnchorTextFrame.Frame().Top();
+                                       rAnchorTextFrame.getSwFrame().Top();
                         if ( nTmp < nAdjustedRelPosX &&
-                             rAnchorTextFrame.Frame().Top() + nTmp - _rULSpacing.GetUpper()
-                              >= pObjPage->Frame().Top() )
+                             rAnchorTextFrame.getSwFrame().Top() + nTmp - _rULSpacing.GetUpper()
+                              >= pObjPage->getSwFrame().Top() )
                         {
                             nAdjustedRelPosX = nTmp;
                         }
                     }
-                    aTmpObjRect.Pos().Y() = rAnchorTextFrame.Frame().Top() +
+                    aTmpObjRect.Pos().Y() = rAnchorTextFrame.getSwFrame().Top() +
                                             nAdjustedRelPosX;
                 }
             }
             else
             {
                 const SvxLRSpaceItem& rOtherLR = pFly->GetFormat()->GetLRSpace();
-                const SwTwips nOtherLeft = pFly->Frame().Left() - rOtherLR.GetLeft();
-                const SwTwips nOtherRight = pFly->Frame().Right() + rOtherLR.GetRight();
+                const SwTwips nOtherLeft = pFly->getSwFrame().Left() - rOtherLR.GetLeft();
+                const SwTwips nOtherRight = pFly->getSwFrame().Right() + rOtherLR.GetRight();
                 if( nOtherLeft <= aTmpObjRect.Right() + _rLRSpacing.GetRight() &&
                     nOtherRight >= aTmpObjRect.Left() - _rLRSpacing.GetLeft() )
                 {
                     if ( _eHoriOrient == text::HoriOrientation::LEFT )
                     {
                         SwTwips nTmp = nOtherRight + 1 + _rLRSpacing.GetLeft() -
-                                       rAnchorTextFrame.Frame().Left();
+                                       rAnchorTextFrame.getSwFrame().Left();
                         if ( nTmp > nAdjustedRelPosX &&
-                             rAnchorTextFrame.Frame().Left() + nTmp +
+                             rAnchorTextFrame.getSwFrame().Left() + nTmp +
                              aObjBoundRect.Width() + _rLRSpacing.GetRight()
-                             <= pObjPage->Frame().Width() + pObjPage->Frame().Left() )
+                             <= pObjPage->getSwFrame().Width() + pObjPage->getSwFrame().Left() )
                         {
                             nAdjustedRelPosX = nTmp;
                         }
@@ -997,15 +997,15 @@ SwTwips SwAnchoredObjectPosition::AdjustHoriRelPosForDrawAside(
                     {
                         SwTwips nTmp = nOtherLeft - 1 - _rLRSpacing.GetRight() -
                                        aObjBoundRect.Width() -
-                                       rAnchorTextFrame.Frame().Left();
+                                       rAnchorTextFrame.getSwFrame().Left();
                         if ( nTmp < nAdjustedRelPosX &&
-                             rAnchorTextFrame.Frame().Left() + nTmp - _rLRSpacing.GetLeft()
-                             >= pObjPage->Frame().Left() )
+                             rAnchorTextFrame.getSwFrame().Left() + nTmp - _rLRSpacing.GetLeft()
+                             >= pObjPage->getSwFrame().Left() )
                         {
                             nAdjustedRelPosX = nTmp;
                         }
                     }
-                    aTmpObjRect.Pos().X() = rAnchorTextFrame.Frame().Left() +
+                    aTmpObjRect.Pos().X() = rAnchorTextFrame.getSwFrame().Left() +
                                             nAdjustedRelPosX;
                 }
             } // end of <if (bVert)>
@@ -1035,8 +1035,8 @@ bool SwAnchoredObjectPosition::DrawAsideFly( const SwFlyFrame* _pFly,
     SwRectFnSet aRectFnSet(&GetAnchorFrame());
 
     if ( _pFly->IsFlyAtContentFrame() &&
-         aRectFnSet.BottomDist( _pFly->Frame(), aRectFnSet.GetTop(_rObjRect) ) < 0 &&
-         aRectFnSet.BottomDist( _rObjRect, aRectFnSet.GetTop(_pFly->Frame()) ) < 0 &&
+         aRectFnSet.BottomDist( _pFly->getSwFrame(), aRectFnSet.GetTop(_rObjRect) ) < 0 &&
+         aRectFnSet.BottomDist( _rObjRect, aRectFnSet.GetTop(_pFly->getSwFrame()) ) < 0 &&
          ::FindContext( _pFly->GetAnchorFrame(), SwFrameType::Column ) == _pObjContext )
     {
         sal_uLong nOtherIndex =

@@ -73,7 +73,12 @@ void SwFlyInContentFrame::SetRefPoint( const Point& rPoint,
     aRef = rPoint;
     SetCurrRelPos( rRelAttr );
     SwRectFnSet aRectFnSet(GetAnchorFrame());
-    aRectFnSet.SetPos( Frame(), rPoint + rRelPos );
+
+    {
+        SwFrameRect::FrameWriteAccess aFrm(*this);
+        aRectFnSet.SetPos( aFrm, rPoint + rRelPos );
+    }
+
     // #i68520#
     InvalidateObjRectWithSpaces();
     if( pNotify )
@@ -130,7 +135,7 @@ void SwFlyInContentFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pN
 /// Here the content gets formatted initially.
 void SwFlyInContentFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs )
 {
-    if ( !Frame().Height() )
+    if ( !getSwFrame().Height() )
     {
         Lock(); //don't format the anchor on the crook.
         SwContentFrame *pContent = ContainsContent();
@@ -255,10 +260,11 @@ void SwFlyInContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
              GetFormat()->getIDocumentSettingAccess().get( DocumentSettingId::CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME ) )
         {
             SwFrame* pFrame = AnchorFrame();
-            if ( Frame().Left() == (pFrame->Frame().Left()+pFrame->Prt().Left()) &&
-                 Frame().Width() > pFrame->Prt().Width() )
+            if ( getSwFrame().Left() == (pFrame->getSwFrame().Left()+pFrame->getSwPrint().Left()) &&
+                 getSwFrame().Width() > pFrame->getSwPrint().Width() )
             {
-                Frame().Width( pFrame->Prt().Width() );
+                SwFrameRect::FrameWriteAccess aFrm(*this);
+                aFrm.Width( pFrame->getSwPrint().Width() );
                 mbValidPrtArea = false;
                 m_bWidthClipped = true;
             }
