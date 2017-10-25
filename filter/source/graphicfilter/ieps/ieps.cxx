@@ -760,12 +760,15 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                 {
                     nNumb[ i ] = ImplGetNumber(pDest, nSecurityCount);
                 }
-                if ( nSecurityCount)
+                bool bFail = nSecurityCount == 0;
+                long nWidth(0), nHeight(0);
+                if (!bFail)
+                    bFail = o3tl::checked_sub(nNumb[2], nNumb[0], nWidth) || o3tl::checked_add(nWidth, 1L, nWidth);
+                if (!bFail)
+                    bFail = o3tl::checked_sub(nNumb[3], nNumb[1], nHeight) || o3tl::checked_add(nWidth, 1L, nHeight);
+                if (!bFail)
                 {
                     GDIMetaFile aMtf;
-
-                    long nWidth =  nNumb[2] - nNumb[0] + 1;
-                    long nHeight = nNumb[3] - nNumb[1] + 1;
 
                     // if there is no preview -> try with gs to make one
                     if (!bHasPreview && !utl::ConfigManager::IsAvoidConfig())
