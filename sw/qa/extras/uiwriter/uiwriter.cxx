@@ -276,6 +276,7 @@ public:
     void testTdf112741();
     void testTdf112860();
     void testTdf113287();
+    void testTdf113445();
 #endif
     void testLinesInSectionInTable();
     void testParagraphOfTextRange();
@@ -440,6 +441,7 @@ public:
     CPPUNIT_TEST(testTdf112741);
     CPPUNIT_TEST(testTdf112860);
     CPPUNIT_TEST(testTdf113287);
+    CPPUNIT_TEST(testTdf113445);
 #endif
     CPPUNIT_TEST(testLinesInSectionInTable);
     CPPUNIT_TEST(testParagraphOfTextRange);
@@ -5340,6 +5342,41 @@ void SwUiWriterTest::testTdf113287()
     // Make sure section frame is inside the cell frame.
     // Expected greater than 4593, was only 3714.
     CPPUNIT_ASSERT_GREATER(nCellTop, nSectionTop);
+}
+
+void SwUiWriterTest::testTdf113445()
+{
+    // Force multiple-page view.
+    SwDoc* pDoc = createDoc("tdf113445.fodt");
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwView* pView = pDocShell->GetView();
+    pView->SetViewLayout(/*nColumns=*/2, /*bBookMode=*/false);
+    calcLayout();
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page", 2);
+    sal_uInt32 nPage1Left = getXPath(pXmlDoc, "//page[1]/infos/bounds", "left").toUInt32();
+    sal_uInt32 nPage2Left = getXPath(pXmlDoc, "//page[2]/infos/bounds", "left").toUInt32();
+    // Make sure that page 2 is on the right hand side of page 1, not below it.
+    CPPUNIT_ASSERT_GREATER(nPage1Left, nPage2Left);
+
+    // Insert a new paragaph at the start of the document.
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttDoc();
+    pWrtShell->SplitNode();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    // Make sure that Table2:C5 and Table2:D5 has its section frame inside the cell frame.
+    sal_uInt32 nCell3Top = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell/tab/row[4]/cell[3]/infos/bounds", "top").toUInt32();
+    sal_uInt32 nSection3Top = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell/tab/row[4]/cell[3]/section/infos/bounds", "top").toUInt32();
+    CPPUNIT_ASSERT_GREATER(nCell3Top, nSection3Top);
+    sal_uInt32 nCell4Top = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell/tab/row[4]/cell[4]/infos/bounds", "top").toUInt32();
+    sal_uInt32 nSection4Top = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell/tab/row[4]/cell[4]/section/infos/bounds", "top").toUInt32();
+    CPPUNIT_ASSERT_GREATER(nCell4Top, nSection4Top);
+    // Also check if the two cells in the same row have the same top position.
+    // This was 4818, expected only 1672.
+    CPPUNIT_ASSERT_EQUAL(nCell3Top, nCell4Top);
 }
 
 void SwUiWriterTest::testTableInSectionInTable()
