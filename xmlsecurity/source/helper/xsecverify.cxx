@@ -98,7 +98,7 @@ void XSecController::addSignature()
 
     if (m_bVerifyCurrentSignature)
     {
-        chainOn(true);
+        chainOn();
         xReferenceResolvedListener = prepareSignatureToRead( m_nReservedSignatureId );
         m_bVerifyCurrentSignature = false;
         nSignatureId = m_nReservedSignatureId;
@@ -416,7 +416,7 @@ void XSecController::collectToVerify( const OUString& referenceId )
 
                 if (refInfor.ouURI == referenceId)
                 {
-                    if (chainOn(false))
+                    if (chainOn())
                     {
                         bJustChainingOn = true;
                         xHandler = m_xSAXEventKeeper->setNextHandler(nullptr);

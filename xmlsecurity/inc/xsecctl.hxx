@@ -228,7 +228,7 @@ private:
      */
     void createXSecComponent( );
     int findSignatureInfor( sal_Int32 nSecurityId ) const;
-    bool chainOn( bool bRetrievingLastEvent );
+    bool chainOn();
     void chainOff();
     void checkChainingStatus();
     void initializeSAXChain();

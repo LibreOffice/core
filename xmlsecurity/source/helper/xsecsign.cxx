@@ -299,7 +299,7 @@ bool XSecController::WriteSignature(
     /*
      * chain the SAXEventKeeper to the SAX chain
      */
-    chainOn(true);
+    chainOn();
 
     if ( m_eStatusOfSecurityComponents == InitializationState::INITIALIZED )
     /*
@@ -354,7 +354,7 @@ bool XSecController::WriteOOXMLSignature(const uno::Reference<embed::XStorage>& 
     SAL_WARN_IF(!xDocumentHandler.is(), "xmlsecurity.helper", "empty xDocumentHandler reference");
 
     // Chain the SAXEventKeeper to the SAX chain.
-    chainOn(/*bRetrievingLastEvent=*/true);
+    chainOn();
 
     if (m_eStatusOfSecurityComponents == InitializationState::INITIALIZED)
     {

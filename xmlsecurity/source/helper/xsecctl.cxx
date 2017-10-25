@@ -198,14 +198,14 @@ void XSecController::createXSecComponent( )
     }
 }
 
-bool XSecController::chainOn( bool /*bRetrievingLastEvent*/ )
+bool XSecController::chainOn()
 /****** XSecController/chainOn ************************************************
  *
  *   NAME
  *  chainOn -- tries to connect the SAXEventKeeper with the SAX chain.
  *
  *   SYNOPSIS
- *  bJustChainingOn = chainOn( bRetrievingLastEvent );
+ *  bJustChainingOn = chainOn();
  *
  *   FUNCTION
  *  First, checks whether the SAXEventKeeper is on the SAX chain. If not,
@@ -214,10 +214,6 @@ bool XSecController::chainOn( bool /*bRetrievingLastEvent*/ )
  *  Before being chained in, the SAXEventKeeper needs to receive all
  *  missed key SAX events, which can promise the DOM tree bufferred by the
  *  SAXEventKeeper has the same structure with the original document.
- *
- *   INPUTS
- *  bRetrievingLastEvent - whether to retrieve the last key SAX event from
- *                         the ElementStackKeeper.
  *
  *   RESULT
  *  bJustChainingOn - whether the SAXEventKeeper is just chained into the
@@ -349,7 +345,7 @@ void XSecController::checkChainingStatus()
 {
     if ( m_bIsCollectingElement || m_bIsBlocking )
     {
-        chainOn(true);
+        chainOn();
     }
     else
     {
