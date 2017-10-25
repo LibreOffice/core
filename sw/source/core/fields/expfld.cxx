@@ -206,7 +206,7 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
             else
             {
                 pLayout->FindPageFrame()->GetContentPosition(
-                                                pLayout->Frame().Pos(), rPos );
+                                                pLayout->FrameRA().Pos(), rPos );
                 pTextNode = rPos.nNode.GetNode().GetTextNode();
             }
         }
@@ -246,7 +246,7 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
             }
             else
             {
-                Point aPt( pLayout->Frame().Pos() );
+                Point aPt( pLayout->FrameRA().Pos() );
                 aPt.Y()++;      // get out of the header
                 pContentFrame = pPgFrame->GetContentPos( aPt, false, true );
                 pTextNode = GetFirstTextNode( rDoc, rPos, pContentFrame, aPt );

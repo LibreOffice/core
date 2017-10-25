@@ -126,7 +126,7 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrame* pPageFra
         pControl.swap( pNewControl );
     }
 
-    tools::Rectangle aPageRect = m_pEditWin->LogicToPixel( pPageFrame->Frame().SVRect() );
+    tools::Rectangle aPageRect = m_pEditWin->LogicToPixel( pPageFrame->FrameRA().SVRect() );
 
     SwHeaderFooterWin* pWin = dynamic_cast<SwHeaderFooterWin *>(pControl->GetWindow());
     assert( pWin != nullptr) ;

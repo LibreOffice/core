@@ -1695,8 +1695,8 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
 
         nMaxWidth = pUpperFrame ?
                     ( rInf.GetTextFrame()->IsVertical() ?
-                      pUpperFrame->Prt().Width() :
-                      pUpperFrame->Prt().Height() ) :
+                      pUpperFrame->PrintRA().Width() :
+                      pUpperFrame->PrintRA().Height() ) :
                     USHRT_MAX;
     }
     else

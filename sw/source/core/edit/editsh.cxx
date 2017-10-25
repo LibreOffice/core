@@ -887,7 +887,7 @@ void SwEditShell::SetLineNumberInfo(const SwLineNumberInfo& rInfo)
     StartAllAction();
     SET_CURR_SHELL( this );
     GetDoc()->SetLineNumberInfo(rInfo);
-    AddPaintRect( GetLayout()->Frame() );
+    AddPaintRect( GetLayout()->FrameRA() );
     EndAllAction();
 }
 
