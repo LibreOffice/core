@@ -19,6 +19,7 @@
 
 #include <rtl/math.h>
 
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
@@ -938,7 +939,9 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                     if ( bExpSign )
                         nExp = -nExp;
 
-                    long nAllExp = ( bOverflow ? 0 : nExp + nValExp );
+                    long nAllExp(0);
+                    if (!bOverflow)
+                        bOverflow = o3tl::checked_add(nExp, nValExp, nAllExp);
                     if ( nAllExp > DBL_MAX_10_EXP || (bOverflow && !bExpSign) )
                     {   // overflow
                         fVal = HUGE_VAL;
