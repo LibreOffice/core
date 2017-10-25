@@ -53,7 +53,7 @@ MediaFloater::MediaFloater( SfxBindings* _pBindings, SfxChildWindow* pCW, vcl::W
     SfxDockingWindow( _pBindings, pCW, pParent, WB_CLOSEABLE | WB_MOVEABLE | WB_SIZEABLE | WB_DOCKABLE ),
     mpMediaWindow( new MediaWindow( this, true ) )
 {
-    const Size aSize( 378, 256 );
+    const Size aSize( mpMediaWindow->getPreferredSize() );
 
     SetPosSizePixel( Point( 0, 0 ), aSize );
     SetMinOutputSizePixel( aSize );
