@@ -25,7 +25,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineWidth"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FillColor"/>
+ <toolbar:toolbaritem xlink:href=".uno:FillColor" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FillStyle"/>
  <toolbar:toolbarseparator/>
@@ -34,8 +34,8 @@
  <toolbar:toolbaritem xlink:href=".uno:WrapOff"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapOn"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapIdeal"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapLeft" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapRight" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapLeft"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapRight"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapThrough"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapContour" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
