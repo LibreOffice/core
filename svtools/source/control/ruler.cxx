@@ -118,7 +118,7 @@ static const RulerUnitData aImplRulerUnitTab[RULER_UNIT_COUNT] =
 { MapUnit::Map100thInch,     1200,   120.0,   120.0,    600.0,   1200.0,  "'"      }, // FOOT
 { MapUnit::Map10thInch,    633600, 63360.0, 63360.0, 316800.0, 633600.0,  " miles" }, // MILE
 { MapUnit::MapPoint,             1,    12.0,    12.0,     12.0,     36.0,  " pt"    }, // POINT
-{ MapUnit::Map100thMM,        423,   423.0,   423.0,    423.0,    846.0,  " pi"    }, // PICA
+{ MapUnit::Map100thMM,        423,   423.0,   423.0,    423.0,    846.0,  " pc"    }, // PICA
 { MapUnit::Map100thMM,        371,   371.0,   371.0,    371.0,    743.0,  " ch"    }, // CHAR
 { MapUnit::Map100thMM,        551,   551.0,   551.0,    551.0,   1102.0,  " li"    }  // LINE
 };
