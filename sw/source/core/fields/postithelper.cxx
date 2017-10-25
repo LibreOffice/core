@@ -74,8 +74,8 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
                     o_rInfo.mnStartNodeIdx = 0;
                     o_rInfo.mnStartContent = -1;
                 }
-                o_rInfo.mPageFrame = pPage->Frame();
-                o_rInfo.mPagePrtArea = pPage->Prt();
+                o_rInfo.mPageFrame = pPage->FrameRA();
+                o_rInfo.mPagePrtArea = pPage->PrintRA();
                 o_rInfo.mPagePrtArea.Pos() += o_rInfo.mPageFrame.Pos();
                 o_rInfo.mnPageNumber = pPage->GetPhyPageNum();
                 o_rInfo.meSidebarPosition = pPage->SidebarPosition();
@@ -105,7 +105,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
 
 long SwPostItHelper::getLayoutHeight( const SwRootFrame* pRoot )
 {
-    long nRet = pRoot ? pRoot->Frame().Height() : 0;
+    long nRet = pRoot ? pRoot->FrameRA().Height() : 0;
     return nRet;
 }
 
@@ -126,7 +126,7 @@ unsigned long SwPostItHelper::getPageInfo( SwRect& rPageFrame, const SwRootFrame
     if( pPage )
     {
         nRet = pPage->GetPhyPageNum();
-        rPageFrame = pPage->Frame();
+        rPageFrame = pPage->FrameRA();
     }
     return nRet;
 }

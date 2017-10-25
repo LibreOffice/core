@@ -1578,8 +1578,8 @@ SwTwips SwTableLine::GetTableLineHeight( bool& bLayoutAvailable ) const
         {
             const SwTabFrame* pTab = pLast->FindTabFrame();
             bLayoutAvailable = ( pTab && pTab->IsVertical() ) ?
-                               ( 0 < pTab->Frame().Height() ) :
-                               ( 0 < pTab->Frame().Width() );
+                               ( 0 < pTab->FrameRA().Height() ) :
+                               ( 0 < pTab->FrameRA().Width() );
 
             // The first one defines the chain, if a chain is defined, only members of the chain
             // will be added.
@@ -1587,9 +1587,9 @@ SwTwips SwTableLine::GetTableLineHeight( bool& bLayoutAvailable ) const
             {
                 pChain = pTab; // defines my chain (even it is already)
                 if( pTab->IsVertical() )
-                    nRet += pLast->Frame().Width();
+                    nRet += pLast->FrameRA().Width();
                 else
-                    nRet += pLast->Frame().Height();
+                    nRet += pLast->FrameRA().Height();
                 // Optimization, if there are no master/follows in my chain, nothing more to add
                 if( !pTab->HasFollow() && !pTab->IsFollow() )
                     break;
@@ -2707,7 +2707,7 @@ SwRect SwTableCellInfo::getRect() const
     SwRect aRet;
 
     if (getCellFrame() != nullptr)
-        aRet = getCellFrame()->Frame();
+        aRet = getCellFrame()->FrameRA();
 
     return aRet;
 }

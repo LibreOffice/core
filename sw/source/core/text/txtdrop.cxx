@@ -52,8 +52,8 @@ static bool lcl_IsDropFlyInter( const SwTextFormatInfo &rInf,
     const SwTextFly& rTextFly = rInf.GetTextFly();
     if( rTextFly.IsOn() )
     {
-        SwRect aRect( rInf.GetTextFrame()->Frame().Pos(), Size( nWidth, nHeight) );
-        aRect.Pos() += rInf.GetTextFrame()->Prt().Pos();
+        SwRect aRect( rInf.GetTextFrame()->FrameRA().Pos(), Size( nWidth, nHeight) );
+        aRect.Pos() += rInf.GetTextFrame()->PrintRA().Pos();
         aRect.Pos().X() += rInf.X();
         aRect.Pos().Y() = rInf.Y();
         aRect = rTextFly.GetFrame( aRect );

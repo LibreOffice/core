@@ -61,12 +61,12 @@ static SwTwips lcl_CalcContentHeight(SwLayoutFrame & frm)
     {
         SwTwips nTmp;
 
-        nTmp = pFrame->Frame().Height();
+        nTmp = pFrame->FrameRA().Height();
         nRemaining += nTmp;
         if( pFrame->IsTextFrame() && static_cast<SwTextFrame*>(pFrame)->IsUndersized() )
         {
             nTmp = static_cast<SwTextFrame*>(pFrame)->GetParHeight()
-                - pFrame->Prt().Height();
+                - pFrame->PrintRA().Height();
             // This TextFrame would like to be a bit bigger
             nRemaining += nTmp;
         }
@@ -85,9 +85,9 @@ static void lcl_LayoutFrameEnsureMinHeight(SwLayoutFrame & rFrame)
 {
     SwTwips nMinHeight = lcl_GetFrameMinHeight(rFrame);
 
-    if (rFrame.Frame().Height() < nMinHeight)
+    if (rFrame.FrameRA().Height() < nMinHeight)
     {
-        rFrame.Grow(nMinHeight - rFrame.Frame().Height());
+        rFrame.Grow(nMinHeight - rFrame.FrameRA().Height());
     }
 }
 
@@ -172,36 +172,36 @@ void SwHeadFootFrame::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
         // OD 23.01.2003 #106895# - add first parameter to <SwBorderAttrs::CalcRight(..)>
         SwTwips nLR = pAttrs->CalcLeft( this ) + pAttrs->CalcRight( this );
 
-        maPrt.Left(pAttrs->CalcLeft(this));
+        PrintWA().Left(pAttrs->CalcLeft(this));
 
         if (IsHeaderFrame())
-            maPrt.Top(pAttrs->CalcTop());
+            PrintWA().Top(pAttrs->CalcTop());
         else
-            maPrt.Top(nSpace);
+            PrintWA().Top(nSpace);
 
-        maPrt.Width(maFrame.Width() - nLR);
+        PrintWA().Width(FrameRA().Width() - nLR);
 
         SwTwips nNewHeight;
 
-        if (nUL < maFrame.Height())
-            nNewHeight = maFrame.Height() - nUL;
+        if (nUL < FrameRA().Height())
+            nNewHeight = FrameRA().Height() - nUL;
         else
             nNewHeight = 0;
 
-        maPrt.Height(nNewHeight);
+        PrintWA().Height(nNewHeight);
     }
     else
     {
         // Set position
-        maPrt.Left( pAttrs->CalcLeft( this ) );
-        maPrt.Top ( pAttrs->CalcTop()  );
+        PrintWA().Left( pAttrs->CalcLeft( this ) );
+        PrintWA().Top ( pAttrs->CalcTop()  );
 
         // Set sizes - the sizes are given by the surrounding Frame, just
         // subtract the borders.
         // OD 23.01.2003 #106895# - add first parameter to <SwBorderAttrs::CalcRight(..)>
         SwTwips nLR = pAttrs->CalcLeft( this ) + pAttrs->CalcRight( this );
-        maPrt.Width ( maFrame.Width() - nLR );
-        maPrt.Height( maFrame.Height()- nUL );
+        PrintWA().Width ( FrameRA().Width() - nLR );
+        PrintWA().Height( FrameRA().Height()- nUL );
 
     }
 
@@ -235,14 +235,14 @@ void SwHeadFootFrame::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
 
             do
             {
-                nOldHeight = Prt().Height();
+                nOldHeight = PrintRA().Height();
                 SwFrame* pFrame = Lower();
                 // #i64301#
                 if ( pFrame &&
-                     aOldFooterPrtPos != ( Frame().Pos() + Prt().Pos() ) )
+                     aOldFooterPrtPos != ( FrameRA().Pos() + PrintRA().Pos() ) )
                 {
                     pFrame->InvalidatePos_();
-                    aOldFooterPrtPos = Frame().Pos() + Prt().Pos();
+                    aOldFooterPrtPos = FrameRA().Pos() + PrintRA().Pos();
                 }
                 int nLoopControl = 0;
                 while( pFrame )
@@ -279,13 +279,13 @@ void SwHeadFootFrame::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
 
                 while ( pFrame )
                 {
-                    nRemaining += pFrame->Frame().Height();
+                    nRemaining += pFrame->FrameRA().Height();
 
                     if( pFrame->IsTextFrame() &&
                         static_cast<SwTextFrame*>(pFrame)->IsUndersized() )
                         // This TextFrame would like to be a bit bigger
                         nRemaining += static_cast<SwTextFrame*>(pFrame)->GetParHeight()
-                            - pFrame->Prt().Height();
+                            - pFrame->PrintRA().Height();
                     else if( pFrame->IsSctFrame() &&
                              static_cast<SwSectionFrame*>(pFrame)->IsUndersized() )
                         nRemaining += static_cast<SwSectionFrame*>(pFrame)->Undersize();
@@ -362,19 +362,19 @@ void SwHeadFootFrame::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                 else
                     break;
                 // Don't overwrite the lower edge of the upper
-                if ( GetUpper() && Frame().Height() )
+                if ( GetUpper() && FrameRA().Height() )
                 {
-                    const SwTwips nDeadLine = GetUpper()->Frame().Top() +
-                        GetUpper()->Prt().Bottom();
-                    const SwTwips nBot = Frame().Bottom();
+                    const SwTwips nDeadLine = GetUpper()->FrameRA().Top() +
+                        GetUpper()->PrintRA().Bottom();
+                    const SwTwips nBot = FrameRA().Bottom();
                     if ( nBot > nDeadLine )
                     {
-                        Frame().Bottom( nDeadLine );
-                        Prt().SSize().Height() = Frame().Height() - nBorder;
+                        FrameWA().Bottom( nDeadLine );
+                        PrintWA().SSize().Height() = FrameRA().Height() - nBorder;
                     }
                 }
                 mbValidSize = mbValidPrtArea = true;
-            } while( nRemaining<=nMaxHeight && nOldHeight!=Prt().Height() );
+            } while( nRemaining<=nMaxHeight && nOldHeight!=PrintRA().Height() );
             ColUnlock();
         }
         mbValidSize = mbValidPrtArea = true;
@@ -383,8 +383,8 @@ void SwHeadFootFrame::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
     {
         do
         {
-            if ( Frame().Height() != pAttrs->GetSize().Height() )
-                ChgSize( Size( Frame().Width(), pAttrs->GetSize().Height()));
+            if ( FrameRA().Height() != pAttrs->GetSize().Height() )
+                ChgSize( Size( FrameRA().Width(), pAttrs->GetSize().Height()));
             mbValidSize = true;
             MakePos();
         } while ( !mbValidSize );
@@ -444,9 +444,9 @@ SwTwips SwHeadFootFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
 
         /* calculate maximum eatable spacing */
         if (IsHeaderFrame())
-            nMaxEat = maFrame.Height() - maPrt.Top() - maPrt.Height() - pAttrs->CalcBottomLine();
+            nMaxEat = FrameRA().Height() - PrintRA().Top() - PrintRA().Height() - pAttrs->CalcBottomLine();
         else
-            nMaxEat = maPrt.Top() - pAttrs->CalcTopLine();
+            nMaxEat = PrintRA().Top() - pAttrs->CalcTopLine();
 
         if (nMaxEat < 0)
             nMaxEat = 0;
@@ -454,7 +454,7 @@ SwTwips SwHeadFootFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
         /* If the frame is too small, eat less spacing thus letting the frame
            grow more. */
         SwTwips nMinHeight = lcl_GetFrameMinHeight(*this);
-        SwTwips nFrameTooSmall = nMinHeight - Frame().Height();
+        SwTwips nFrameTooSmall = nMinHeight - FrameRA().Height();
 
         if (nFrameTooSmall > 0)
             nEat -= nFrameTooSmall;
@@ -475,8 +475,8 @@ SwTwips SwHeadFootFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
             {
                 if (! IsHeaderFrame())
                 {
-                    maPrt.Top(maPrt.Top() - nEat);
-                    maPrt.Height(maPrt.Height() - nEat);
+                    PrintWA().Top(PrintRA().Top() - nEat);
+                    PrintWA().Height(PrintRA().Height() - nEat);
                 }
 
                 InvalidateAll();
@@ -532,7 +532,7 @@ SwTwips SwHeadFootFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         nResult = 0;
 
         SwTwips nMinHeight = lcl_GetFrameMinHeight(*this);
-        SwTwips nOldHeight = Frame().Height();
+        SwTwips nOldHeight = FrameRA().Height();
         SwTwips nRest = 0; // Amount to shrink by spitting out spacing
 
         if ( nOldHeight >= nMinHeight )
@@ -578,7 +578,7 @@ SwTwips SwHeadFootFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
             SwTwips nShrink = nRest;
 
             /* calculate maximum shrinking */
-            SwTwips nMaxShrink = maPrt.Height() - nMinPrtHeight;
+            SwTwips nMaxShrink = PrintRA().Height() - nMinPrtHeight;
 
             /* shrink no more than maximum shrinking */
             if (nShrink > nMaxShrink)
@@ -591,8 +591,8 @@ SwTwips SwHeadFootFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
             {
                 if (! IsHeaderFrame() )
                 {
-                    maPrt.Top(maPrt.Top() + nShrink);
-                    maPrt.Height(maPrt.Height() - nShrink);
+                    PrintWA().Top(PrintRA().Top() + nShrink);
+                    PrintWA().Height(PrintRA().Height() - nShrink);
                 }
 
                 InvalidateAll();

@@ -147,7 +147,7 @@ size_t SwFEShell::GetMousePageDesc( const Point &rPt ) const
             static_cast<const SwPageFrame*>( GetLayout()->Lower() );
         if( pPage )
         {
-            while( pPage->GetNext() && rPt.Y() > pPage->Frame().Bottom() )
+            while( pPage->GetNext() && rPt.Y() > pPage->FrameRA().Bottom() )
                 pPage = static_cast<const SwPageFrame*>( pPage->GetNext() );
             SwDoc *pMyDoc = GetDoc();
             size_t nPos;

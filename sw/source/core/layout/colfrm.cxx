@@ -294,7 +294,7 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
 {
     if( !Lower()->GetNext() )
     {
-        Lower()->ChgSize( Prt().SSize() );
+        Lower()->ChgSize( PrintRA().SSize() );
         return;
     }
 
@@ -309,11 +309,11 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
         pAttr = &GetFormat()->GetCol();
         if ( !bAdjustAttributes )
         {
-            long nAvail = (Prt().*fnRect->fnGetWidth)();
+            long nAvail = (PrintRA().*fnRect->fnGetWidth)();
             for ( SwLayoutFrame *pCol = static_cast<SwLayoutFrame*>(Lower());
                   pCol;
                   pCol = static_cast<SwLayoutFrame*>(pCol->GetNext()) )
-                nAvail -= (pCol->Frame().*fnRect->fnGetWidth)();
+                nAvail -= (pCol->FrameRA().*fnRect->fnGetWidth)();
             if ( !nAvail )
                 return;
         }
@@ -321,7 +321,7 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
 
     //The columns can now be easily adjusted.
     //The widths get counted so we can give the reminder to the last one.
-    SwTwips nAvail = (Prt().*fnRect->fnGetWidth)();
+    SwTwips nAvail = (PrintRA().*fnRect->fnGetWidth)();
     const bool bLine = pAttr->GetLineAdj() != COLADJ_NONE;
     const sal_uInt16 nMin = bLine ? sal_uInt16( 20 + ( pAttr->GetLineWidth() / 2) ) : 0;
 
@@ -340,11 +340,11 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
         {
             const SwTwips nWidth = i == (pAttr->GetNumCols() - 1) ?
                                    nAvail :
-                                   pAttr->CalcColWidth( i, sal_uInt16( (Prt().*fnRect->fnGetWidth)() ) );
+                                   pAttr->CalcColWidth( i, sal_uInt16( (PrintRA().*fnRect->fnGetWidth)() ) );
 
             const Size aColSz = bVert ?
-                                Size( Prt().Width(), nWidth ) :
-                                Size( nWidth, Prt().Height() );
+                                Size( PrintRA().Width(), nWidth ) :
+                                Size( nWidth, PrintRA().Height() );
 
             pCol->ChgSize( aColSz );
 
@@ -425,8 +425,8 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
                 nWidth = 0;
 
             const Size aColSz = bVert ?
-                                Size( Prt().Width(), nWidth ) :
-                                Size( nWidth, Prt().Height() );
+                                Size( PrintRA().Width(), nWidth ) :
+                                Size( nWidth, PrintRA().Height() );
 
             pCol->ChgSize( aColSz );
 

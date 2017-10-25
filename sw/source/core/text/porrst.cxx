@@ -188,11 +188,11 @@ SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :
 SwArrowPortion::SwArrowPortion( const SwTextPaintInfo &rInf )
     : bLeft( false )
 {
-    Height( (sal_uInt16)(rInf.GetTextFrame()->Prt().Height()) );
-    aPos.X() = rInf.GetTextFrame()->Frame().Left() +
-               rInf.GetTextFrame()->Prt().Right();
-    aPos.Y() = rInf.GetTextFrame()->Frame().Top() +
-               rInf.GetTextFrame()->Prt().Bottom();
+    Height( (sal_uInt16)(rInf.GetTextFrame()->PrintRA().Height()) );
+    aPos.X() = rInf.GetTextFrame()->FrameRA().Left() +
+               rInf.GetTextFrame()->PrintRA().Right();
+    aPos.Y() = rInf.GetTextFrame()->FrameRA().Top() +
+               rInf.GetTextFrame()->PrintRA().Bottom();
     SetWhichPor( POR_ARROW );
 }
 
@@ -264,8 +264,8 @@ SwTwips SwTextFrame::EmptyHeight() const
     SwTwips nRet;
     if( !pOut )
         nRet = IsVertical() ?
-               Prt().SSize().Width() + 1 :
-               Prt().SSize().Height() + 1;
+               PrintRA().SSize().Width() + 1 :
+               PrintRA().SSize().Height() + 1;
     else
     {
         pFnt->SetFntChg( true );
@@ -301,7 +301,7 @@ bool SwTextFrame::FormatEmpty()
 
     SwTextFly aTextFly( this );
     SwRect aRect;
-    bool bFirstFlyCheck = 0 != Prt().Height();
+    bool bFirstFlyCheck = 0 != PrintRA().Height();
     if ( !bCollapse && bFirstFlyCheck &&
             aTextFly.IsOn() && aTextFly.IsAnyObj( aRect ) )
         return false;
@@ -317,7 +317,7 @@ bool SwTextFrame::FormatEmpty()
     }
 
     SwRectFnSet aRectFnSet(this);
-    const SwTwips nChg = nHeight - aRectFnSet.GetHeight(Prt());
+    const SwTwips nChg = nHeight - aRectFnSet.GetHeight(PrintRA());
 
     if( !nChg )
         SetUndersized( false );

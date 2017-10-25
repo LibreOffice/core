@@ -44,7 +44,7 @@ void SwTextIter::CtorInitTextIter( SwTextFrame *pNewFrame, SwTextInfo *pNewInf )
     m_pFrame = pNewFrame;
     m_pInf = pNewInf;
     m_aLineInf.CtorInitLineInfo( pNode->GetSwAttrSet(), *pNode );
-    m_nFrameStart = m_pFrame->Frame().Pos().Y() + m_pFrame->Prt().Pos().Y();
+    m_nFrameStart = m_pFrame->FrameRA().Pos().Y() + m_pFrame->PrintRA().Pos().Y();
     SwTextIter::Init();
 
     // Order is important: only execute FillRegister if GetValue!=0

@@ -1123,7 +1123,7 @@ void SwAccessibleContext::InvalidatePosOrSize( const SwRect& )
 {
     SolarMutexGuard aGuard;
 
-    OSL_ENSURE( GetFrame() && !GetFrame()->Frame().IsEmpty(), "context should have a size" );
+    OSL_ENSURE( GetFrame() && !GetFrame()->FrameRA().IsEmpty(), "context should have a size" );
 
     bool bIsOldShowingState;
     bool bIsNewShowingState = IsShowing( *(GetMap()) );
@@ -1170,7 +1170,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
     // this happens during layout, e.g. when a page is deleted and next page's
     // header/footer moves backward such an event is generated
     SAL_INFO_IF(rChildFrameOrObj.GetSwFrame() &&
-            rChildFrameOrObj.GetSwFrame()->Frame().IsEmpty(),
+            rChildFrameOrObj.GetSwFrame()->FrameRA().IsEmpty(),
             "sw.a11y", "child context should have a size");
 
     if ( rChildFrameOrObj.AlwaysIncludeAsChild() )

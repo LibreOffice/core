@@ -133,7 +133,7 @@ void SwPagePreviewLayout::CalcPreviewLayoutSizes()
 
         ++mnPages;
         pPage->Calc(pRenderContext);
-        const Size& rPageSize = pPage->Frame().SSize();
+        const Size& rPageSize = pPage->FrameRA().SSize();
         if ( rPageSize.Width() > maMaxPageSize.Width() )
             maMaxPageSize.Width() = rPageSize.Width();
         if ( rPageSize.Height() > maMaxPageSize.Height() )
@@ -659,12 +659,12 @@ bool SwPagePreviewLayout::CalcPreviewDataForPage( const SwPageFrame& _rPage,
     if ( _rPage.IsEmptyPage() )
     {
         if ( _rPage.GetPhyPageNum() % 2 == 0 )
-            _opPreviewPage->aPageSize = _rPage.GetPrev()->Frame().SSize();
+            _opPreviewPage->aPageSize = _rPage.GetPrev()->FrameRA().SSize();
         else
-            _opPreviewPage->aPageSize = _rPage.GetNext()->Frame().SSize();
+            _opPreviewPage->aPageSize = _rPage.GetNext()->FrameRA().SSize();
     }
     else
-        _opPreviewPage->aPageSize = _rPage.Frame().SSize();
+        _opPreviewPage->aPageSize = _rPage.FrameRA().SSize();
     // position of page in preview window
     Point aPreviewWinOffset( _rPreviewOffset );
     if ( _opPreviewPage->aPageSize.Width() < maMaxPageSize.Width() )
@@ -680,7 +680,7 @@ bool SwPagePreviewLayout::CalcPreviewDataForPage( const SwPageFrame& _rPage,
     }
     else
     {
-        _opPreviewPage->aLogicPos = _rPage.Frame().Pos();
+        _opPreviewPage->aLogicPos = _rPage.FrameRA().Pos();
         _opPreviewPage->aMapOffset = _opPreviewPage->aPreviewWinPos - _opPreviewPage->aLogicPos;
     }
 

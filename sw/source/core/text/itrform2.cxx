@@ -141,9 +141,9 @@ sal_uInt16 SwTextFormatter::GetFrameRstHeight() const
     // GetFrameRstHeight() is being called with Footnote.
     // Wrong: const SwFrame *pUpper = pFrame->GetUpper();
     const SwFrame *pPage = static_cast<const SwFrame*>(m_pFrame->FindPageFrame());
-    const SwTwips nHeight = pPage->Frame().Top()
-                          + pPage->Prt().Top()
-                          + pPage->Prt().Height() - Y();
+    const SwTwips nHeight = pPage->FrameRA().Top()
+                          + pPage->PrintRA().Top()
+                          + pPage->PrintRA().Height() - Y();
     if( 0 > nHeight )
         return m_pCurr->Height();
     else
@@ -1864,8 +1864,8 @@ void SwTextFormatter::FeedInf( SwTextFormatInfo &rInf ) const
          nTmpFirst > USHRT_MAX )
     {
         SwRectFnSet aRectFnSet(rInf.GetTextFrame());
-        nTmpLeft = aRectFnSet.GetLeft(rInf.GetTextFrame()->Frame());
-        nTmpRight = aRectFnSet.GetRight(rInf.GetTextFrame()->Frame());
+        nTmpLeft = aRectFnSet.GetLeft(rInf.GetTextFrame()->FrameRA());
+        nTmpRight = aRectFnSet.GetRight(rInf.GetTextFrame()->FrameRA());
         nTmpFirst = nTmpLeft;
     }
 
@@ -1915,8 +1915,8 @@ SwTwips SwTextFormatter::CalcBottomLine() const
     SwTwips nMin = GetInfo().GetTextFly().GetMinBottom();
     if( nMin && ++nMin > nRet )
     {
-        SwTwips nDist = m_pFrame->Frame().Height() - m_pFrame->Prt().Height()
-                        - m_pFrame->Prt().Top();
+        SwTwips nDist = m_pFrame->FrameRA().Height() - m_pFrame->PrintRA().Height()
+                        - m_pFrame->PrintRA().Top();
         if( nRet + nDist < nMin )
         {
             const bool bRepaint = HasTruncLines() &&
@@ -2329,16 +2329,16 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         bool bForced = false;
         if( aInter.Left() <= nLeftMin )
         {
-            SwTwips nFrameLeft = GetTextFrame()->Frame().Left();
-            if( GetTextFrame()->Prt().Left() < 0 )
-                nFrameLeft += GetTextFrame()->Prt().Left();
+            SwTwips nFrameLeft = GetTextFrame()->FrameRA().Left();
+            if( GetTextFrame()->PrintRA().Left() < 0 )
+                nFrameLeft += GetTextFrame()->PrintRA().Left();
             if( aInter.Left() < nFrameLeft )
                 aInter.Left( nFrameLeft );
 
             long nAddMar = 0;
             if ( m_pFrame->IsRightToLeft() )
             {
-                nAddMar = m_pFrame->Frame().Right() - Right();
+                nAddMar = m_pFrame->FrameRA().Right() - Right();
                 if ( nAddMar < 0 )
                     nAddMar = 0;
             }
