@@ -1331,9 +1331,7 @@ namespace emfplushelper
                     case EmfPlusRecordTypeSetWorldTransform:
                     {
                         SAL_INFO("cppcanvas.emf", "EMF+ SetWorldTransform");
-                        basegfx::B2DHomMatrix transform;
-                        readXForm(rMS, transform);
-                        maWorldTransform = transform;
+                        readXForm(rMS, maWorldTransform);
                         mappingChanged();
                         SAL_INFO("cppcanvas.emf",
                             "EMF+\tm11: " << maWorldTransform.get(0,0) << "\tm12: " << maWorldTransform.get(1,0) <<
@@ -1381,30 +1379,14 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeTranslateWorldTransform:
                     {
-                        SAL_INFO("cppcanvas.emf", "EMF+ TranslateWorldTransform");
-
-                        basegfx::B2DHomMatrix transform;
                         float eDx, eDy;
                         rMS.ReadFloat(eDx).ReadFloat(eDy);
-                        transform.set(0, 2, eDx);
-                        transform.set(1, 2, eDy);
 
-                        SAL_INFO("cppcanvas.emf",
-                            "EMF+\tmatrix m11: " << transform.get(0, 0) << "m12: " << transform.get(0, 1) <<
-                            "EMF+\tm21: " << transform.get(1, 0) << "m22: " << transform.get(1, 1) <<
-                            "EMF+\tdx: " << transform.get(2, 0) << "dy: " << transform.get(2, 1));
+                        SAL_INFO("cppcanvas.emf", "EMF+ TranslateWorldTransform eDx: " << eDx << ", eDy: " << eDy);
 
-                        if (flags & 0x2000)
-                        {
-                            // post multiply
-                            maWorldTransform *= transform;
-                        }
-                        else
-                        {
-                            // pre multiply
-                            transform *= maWorldTransform;
-                            maWorldTransform = transform;
-                        }
+                        // Skipping flags & 0x2000
+                        // For translate transformation there is no difference between post and pre multiply
+                        maWorldTransform.translate(eDx, eDy);
 
                         mappingChanged();
 
@@ -1416,29 +1398,14 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeScaleWorldTransform:
                     {
-                        basegfx::B2DHomMatrix transform;
-                        float eM11, eM22;
-                        rMS.ReadFloat(eM11).ReadFloat(eM22);
-                        transform.set(0, 0, eM11);
-                        transform.set(1, 1, eM22);
+                        float eSx, eSy;
+                        rMS.ReadFloat(eSx).ReadFloat(eSy);
 
-                        SAL_INFO("cppcanvas.emf", "EMF+ ScaleWorldTransform Sx: " << transform.get(0,0) << " Sy: " << transform.get(1,1));
-                        SAL_INFO("cppcanvas.emf",
-                            "EMF+\t m11: " << maWorldTransform.get(0,0) << ", m12: " << maWorldTransform.get(0,1) <<
-                            "EMF+\t m21: " << maWorldTransform.get(1,0) << ", m22: " << maWorldTransform.get(1,1) <<
-                            "EMF+\t dx: " << maWorldTransform.get(2,0) << ", dy: " << maWorldTransform.get(2,1));
+                        SAL_INFO("cppcanvas.emf", "EMF+ ScaleWorldTransform Sx: " << eSx << ", Sy: " << eSy);
 
-                        if (flags & 0x2000)
-                        {
-                            // post multiply
-                            maWorldTransform *= transform;
-                        }
-                        else
-                        {
-                            // pre multiply
-                            transform *= maWorldTransform;
-                            maWorldTransform = transform;
-                        }
+                        // Skipping flags & 0x2000
+                        // For scale transformation there is no difference between post and pre multiply
+                        maWorldTransform.scale(eSx, eSy);
 
                         mappingChanged();
 
