@@ -1926,9 +1926,12 @@ sal_Int32 WW8ScannerBase::WW8ReadString( SvStream& rStrm, OUString& rStr,
     // Read in plain text, which can extend over several pieces
     rStr.clear();
 
-    long nTotalRead = 0;
+    if (nAktStartCp < 0 || nTotalLen < 0)
+        return 0;
+
     WW8_CP nBehindTextCp = nAktStartCp + nTotalLen;
     WW8_CP nNextPieceCp  = nBehindTextCp; // Initialization, important for Ver6
+    long nTotalRead = 0;
     do
     {
         bool bIsUnicode(false), bPosOk(false);
