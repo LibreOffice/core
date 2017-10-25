@@ -1982,11 +1982,6 @@ sal_uInt16 SvNumberFormatter::GetFormatIntegerDigits( sal_uInt32 nFormat ) const
         return 1;
 }
 
-sal_Unicode SvNumberFormatter::GetDecSep() const
-{
-    return GetNumDecimalSep()[0];
-}
-
 OUString SvNumberFormatter::GetFormatDecimalSep( sal_uInt32 nFormat ) const
 {
     const SvNumberformat* pFormat = GetFormatEntry(nFormat);

@@ -536,7 +536,7 @@ OUString SwValueFieldType::DoubleToString( const double &rVal,
 
     pFormatter->ChangeIntl( nLng ); // get separator in the correct language
     return ::rtl::math::doubleToUString( rVal, rtl_math_StringFormat_F, 12,
-                                    pFormatter->GetDecSep(), true );
+                                    pFormatter->GetNumDecimalSep()[0], true );
 }
 
 SwValueField::SwValueField( SwValueFieldType* pFieldType, sal_uInt32 nFormat,
