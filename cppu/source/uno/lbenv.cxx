@@ -88,7 +88,7 @@ struct ObjectEntry
         uno_freeProxyFunc fpFreeProxy );
     inline InterfaceEntry * find(
         typelib_InterfaceTypeDescription * pTypeDescr );
-    inline sal_Int32 find( void const * iface_ptr, std::size_t pos );
+    inline sal_Int32 find( void const * iface_ptr, std::size_t pos ) const;
 };
 
 
@@ -211,7 +211,7 @@ inline InterfaceEntry * ObjectEntry::find(
 
 
 inline sal_Int32 ObjectEntry::find(
-    void const * iface_ptr, std::size_t pos )
+    void const * iface_ptr, std::size_t pos ) const
 {
     std::size_t size = aInterfaces.size();
     for ( ; pos < size; ++pos )

@@ -153,7 +153,7 @@ sal_Int32 FastAttributeList::getOptionalValueToken( ::sal_Int32 Token, ::sal_Int
 }
 
 // performance sensitive shortcuts to avoid allocation ...
-bool FastAttributeList::getAsInteger( sal_Int32 nToken, sal_Int32 &rInt)
+bool FastAttributeList::getAsInteger( sal_Int32 nToken, sal_Int32 &rInt) const
 {
     rInt = 0;
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
@@ -165,7 +165,7 @@ bool FastAttributeList::getAsInteger( sal_Int32 nToken, sal_Int32 &rInt)
     return false;
 }
 
-bool FastAttributeList::getAsDouble( sal_Int32 nToken, double &rDouble)
+bool FastAttributeList::getAsDouble( sal_Int32 nToken, double &rDouble) const
 {
     rDouble = 0.0;
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)

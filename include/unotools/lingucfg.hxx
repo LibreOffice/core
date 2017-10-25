@@ -158,11 +158,11 @@ public:
     // borrowed from utl::ConfigItem
 
     css::uno::Sequence< OUString >
-        GetNodeNames( const OUString &rNode );
+        GetNodeNames( const OUString &rNode ) const;
 
     css::uno::Sequence< css::uno::Any >
         GetProperties(
-            const css::uno::Sequence< OUString > &rNames );
+            const css::uno::Sequence< OUString > &rNames ) const;
 
     bool
         ReplaceSetProperties(
@@ -195,7 +195,7 @@ public:
 
     css::uno::Sequence< OUString > GetDisabledDictionaries() const;
 
-    std::vector< SvtLinguConfigDictionaryEntry > GetActiveDictionariesByFormat( const OUString &rFormatName );
+    std::vector< SvtLinguConfigDictionaryEntry > GetActiveDictionariesByFormat( const OUString &rFormatName ) const;
 
     // functions returning file URLs to the respective images (if found) and empty string otherwise
     OUString     GetSpellAndGrammarContextSuggestionImage( const OUString &rServiceImplName ) const;

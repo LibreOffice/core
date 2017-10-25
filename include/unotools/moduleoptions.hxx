@@ -153,7 +153,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtModuleOptions : public utl::detail::
 
         static OUString GetFactoryShortName(EFactory eFactory);
 
-        OUString GetDefaultModuleName();
+        OUString GetDefaultModuleName() const;
 
         bool   IsMath     () const;
         bool   IsChart    () const;

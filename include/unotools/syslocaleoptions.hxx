@@ -51,7 +51,7 @@ public:
 
     // ConfigItem methods
 
-            bool                IsModified();
+            bool                IsModified() const;
             void                Commit();
 
                                 /** Add a listener to react on config changes

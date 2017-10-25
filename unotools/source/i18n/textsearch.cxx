@@ -307,7 +307,7 @@ bool TextSearch::SearchBackward( const OUString & rStr, sal_Int32* pStart,
     return bRet;
 }
 
-void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, const OUString &rStr, const SearchResult& rResult )
+void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, const OUString &rStr, const SearchResult& rResult ) const
 {
     if( rResult.subRegExpressions > 0 )
     {

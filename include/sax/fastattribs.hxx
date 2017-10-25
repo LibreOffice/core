@@ -89,8 +89,8 @@ public:
     sal_Int32 AttributeValueLength(size_t i) const { return maAttributeValues[i + 1] - maAttributeValues[i] - 1; }
 
     // performance sensitive shortcuts to avoid allocation ...
-    bool getAsInteger( sal_Int32 nToken, sal_Int32 &rInt);
-    bool getAsDouble( sal_Int32 nToken, double &rDouble);
+    bool getAsInteger( sal_Int32 nToken, sal_Int32 &rInt) const;
+    bool getAsDouble( sal_Int32 nToken, double &rDouble) const;
     bool getAsChar( sal_Int32 nToken, const char*& rPos ) const;
 
     // XFastAttributeList

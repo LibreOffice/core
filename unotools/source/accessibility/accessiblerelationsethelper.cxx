@@ -36,14 +36,14 @@ public:
     AccessibleRelationSetHelperImpl(const AccessibleRelationSetHelperImpl& rImpl);
 
     /// @throws uno::RuntimeException
-    sal_Int32 getRelationCount(  );
+    sal_Int32 getRelationCount() const;
     /// @throws lang::IndexOutOfBoundsException
     /// @throws uno::RuntimeException
-    AccessibleRelation getRelation( sal_Int32 nIndex );
+    AccessibleRelation getRelation( sal_Int32 nIndex ) const;
     /// @throws uno::RuntimeException
-    bool containsRelation( sal_Int16 aRelationType );
+    bool containsRelation( sal_Int16 aRelationType ) const;
     /// @throws uno::RuntimeException
-    AccessibleRelation getRelationByType( sal_Int16 aRelationType );
+    AccessibleRelation getRelationByType( sal_Int16 aRelationType ) const;
     /// @throws uno::RuntimeException
     void AddRelation(const AccessibleRelation& rRelation);
 
@@ -60,26 +60,26 @@ AccessibleRelationSetHelperImpl::AccessibleRelationSetHelperImpl(const Accessibl
 {
 }
 
-sal_Int32 AccessibleRelationSetHelperImpl::getRelationCount(  )
+sal_Int32 AccessibleRelationSetHelperImpl::getRelationCount() const
 {
     return maRelations.size();
 }
 
-AccessibleRelation AccessibleRelationSetHelperImpl::getRelation( sal_Int32 nIndex )
+AccessibleRelation AccessibleRelationSetHelperImpl::getRelation( sal_Int32 nIndex ) const
 {
     if ((nIndex < 0) || (static_cast<sal_uInt32>(nIndex) >= maRelations.size()))
         throw lang::IndexOutOfBoundsException();
     return maRelations[nIndex];
 }
 
-bool AccessibleRelationSetHelperImpl::containsRelation( sal_Int16 aRelationType )
+bool AccessibleRelationSetHelperImpl::containsRelation( sal_Int16 aRelationType ) const
 {
     AccessibleRelation defaultRelation; // default is INVALID
     AccessibleRelation relationByType = getRelationByType(aRelationType);
     return relationByType.RelationType != defaultRelation.RelationType;
 }
 
-AccessibleRelation AccessibleRelationSetHelperImpl::getRelationByType( sal_Int16 aRelationType )
+AccessibleRelation AccessibleRelationSetHelperImpl::getRelationByType( sal_Int16 aRelationType ) const
 {
     sal_Int32 nCount(getRelationCount());
     sal_Int32 i(0);

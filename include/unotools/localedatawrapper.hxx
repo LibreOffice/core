@@ -99,10 +99,10 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     void                scanCurrFormatImpl( const OUString& rCode,
                             sal_Int32 nStart, sal_Int32& nSign,
                             sal_Int32& nPar, sal_Int32& nNum,
-                            sal_Int32& nBlank, sal_Int32& nSym );
+                            sal_Int32& nBlank, sal_Int32& nSym ) const;
 
     void                getDateOrdersImpl();
-    DateOrder           scanDateOrderImpl( const OUString& rCode );
+    DateOrder           scanDateOrderImpl( const OUString& rCode ) const;
 
     void                getDefaultCalendarImpl();
     void                getSecondaryCalendarImpl();
