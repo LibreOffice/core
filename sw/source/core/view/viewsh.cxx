@@ -561,7 +561,7 @@ const SwRect& SwViewShell::VisArea() const
 {
     // when using the tiled rendering, consider the entire document as our
     // visible area
-    return comphelper::LibreOfficeKit::isActive()? GetLayout()->Frame(): maVisArea;
+    return comphelper::LibreOfficeKit::isActive()? GetLayout()->FrameRA(): maVisArea;
 }
 
 void SwViewShell::MakeVisible( const SwRect &rRect )
@@ -576,11 +576,11 @@ void SwViewShell::MakeVisible( const SwRect &rRect )
                 int nLoopCnt = 3;
                 long nOldH;
                 do{
-                    nOldH = pRoot->Frame().Height();
+                    nOldH = pRoot->FrameRA().Height();
                     StartAction();
                     ScrollMDI( this, rRect, USHRT_MAX, USHRT_MAX );
                     EndAction();
-                } while( nOldH != pRoot->Frame().Height() && nLoopCnt-- );
+                } while( nOldH != pRoot->FrameRA().Height() && nLoopCnt-- );
             }
 #if OSL_DEBUG_LEVEL > 0
             else
@@ -1094,7 +1094,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
             // (PaintDesktop).  Also limit the left and right side of
             // the scroll range to the pages.
             const SwPageFrame *pPage = static_cast<SwPageFrame*>(GetLayout()->Lower());
-            if ( pPage->Frame().Top() > pOldPage->Frame().Top() )
+            if ( pPage->FrameRA().Top() > pOldPage->FrameRA().Top() )
                 pPage = static_cast<const SwPageFrame*>(pOldPage);
             SwRect aBoth( VisArea() );
             aBoth.Union( aPrevArea );
@@ -1104,7 +1104,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
 
             const bool bBookMode = GetViewOptions()->IsViewLayoutBookMode();
 
-            while ( pPage && pPage->Frame().Top() <= nBottom )
+            while ( pPage && pPage->FrameRA().Top() <= nBottom )
             {
                 SwRect aPageRect( pPage->GetBoundRect(GetWin()) );
                 if ( bBookMode )
@@ -1462,12 +1462,12 @@ void SwViewShell::PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect 
     //as these are not painted at VisPortChgd.
     bool bBorderOnly = false;
     const SwRootFrame *pRoot = GetLayout();
-    if ( rRect.Top() > pRoot->Frame().Bottom() )
+    if ( rRect.Top() > pRoot->FrameRA().Bottom() )
     {
         const SwFrame *pPg = pRoot->Lower();
         while ( pPg && pPg->GetNext() )
             pPg = pPg->GetNext();
-        if ( !pPg || !pPg->Frame().IsOver( VisArea() ) )
+        if ( !pPg || !pPg->FrameRA().IsOver( VisArea() ) )
             bBorderOnly = true;
     }
 
@@ -1487,10 +1487,10 @@ void SwViewShell::PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect 
         SwRect aLeft( rRect ), aRight( rRect );
         while ( pPage )
         {
-            long nTmp = pPage->Frame().Left();
+            long nTmp = pPage->FrameRA().Left();
             if ( nTmp < aLeft.Right() )
                 aLeft.Right( nTmp );
-            nTmp = pPage->Frame().Right();
+            nTmp = pPage->FrameRA().Right();
             if ( nTmp > aRight.Left() )
             {
                 aRight.Left( nTmp + nSidebarWidth );
@@ -1508,13 +1508,13 @@ void SwViewShell::PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect 
         const SwFrame *pPage = Imp()->GetFirstVisPage(&rRenderContext);
         const SwTwips nBottom = rRect.Bottom();
         while ( pPage && !aRegion.empty() &&
-                (pPage->Frame().Top() <= nBottom) )
+                (pPage->FrameRA().Top() <= nBottom) )
         {
-            SwRect aPageRect( pPage->Frame() );
+            SwRect aPageRect( pPage->FrameRA() );
             if ( bBookMode )
             {
                 const SwPageFrame& rFormatPage = static_cast<const SwPageFrame*>(pPage)->GetFormatPage();
-                aPageRect.SSize() = rFormatPage.Frame().SSize();
+                aPageRect.SSize() = rFormatPage.FrameRA().SSize();
             }
 
             const bool bSidebarRight =
@@ -1593,8 +1593,8 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
     const SwTwips nBottom = VisArea().Bottom();
     const SwTwips nRight  = VisArea().Right();
     bool bRet = false;
-    while ( !bRet && pPage && !((pPage->Frame().Top()  > nBottom) ||
-                                   (pPage->Frame().Left() > nRight)))
+    while ( !bRet && pPage && !((pPage->FrameRA().Top()  > nBottom) ||
+                                   (pPage->FrameRA().Left() > nRight)))
     {
         if ( pPage->IsInvalid() || pPage->IsInvalidFly() )
             bRet = true;
@@ -1995,7 +1995,7 @@ void SwViewShell::InvalidateLayout( bool bSizeChanged )
     // That leads to problems with Invalidate, e.g. when setting up an new View
     // the content is inserted and formatted (regardless of empty VisArea).
     // Therefore the pages must be roused for formatting.
-    if( !GetLayout()->Frame().Height() )
+    if( !GetLayout()->FrameRA().Height() )
     {
         SwFrame* pPage = GetLayout()->Lower();
         while( pPage )
@@ -2072,7 +2072,7 @@ Size SwViewShell::GetDocSize() const
     Size aSz;
     const SwRootFrame* pRoot = GetLayout();
     if( pRoot )
-        aSz = pRoot->Frame().SSize();
+        aSz = pRoot->FrameRA().SSize();
 
     return aSz;
 }
@@ -2488,7 +2488,7 @@ const Size SwViewShell::GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages )
         if( !bSkipEmptyPages && pPage->IsEmptyPage() && pPage->GetNext() )
             pPage = static_cast<const SwPageFrame*>( pPage->GetNext() );
 
-        aSize = pPage->Frame().SSize();
+        aSize = pPage->FrameRA().SSize();
     }
     return aSize;
 }
@@ -2502,14 +2502,14 @@ sal_Int32 SwViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const S
 
     // #i40059# Position out of bounds:
     SwRect aRect( rRect );
-    aRect.Pos().X() = std::max( aRect.Left(), GetLayout()->Frame().Left() );
+    aRect.Pos().X() = std::max( aRect.Left(), GetLayout()->FrameRA().Left() );
 
     const SwPageFrame* pPage = GetLayout()->GetPageAtPos( aRect.Center() );
     if ( pPage )
     {
         OSL_ENSURE( pPage, "GetPageNumAndSetOffsetForPDF: No page found" );
 
-        Point aOffset( pPage->Frame().Pos() );
+        Point aOffset( pPage->FrameRA().Pos() );
         aOffset.X() = -aOffset.X();
         aOffset.Y() = -aOffset.Y();
 

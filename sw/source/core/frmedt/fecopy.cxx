@@ -239,7 +239,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
 static const Point &lcl_FindBasePos( const SwFrame *pFrame, const Point &rPt )
 {
     const SwFrame *pF = pFrame;
-    while ( pF && !pF->Frame().IsInside( rPt ) )
+    while ( pF && !pF->FrameRA().IsInside( rPt ) )
     {
         if ( pF->IsContentFrame() )
             pF = static_cast<const SwContentFrame*>(pF)->GetFollow();
@@ -247,9 +247,9 @@ static const Point &lcl_FindBasePos( const SwFrame *pFrame, const Point &rPt )
             pF = nullptr;
     }
     if ( pF )
-        return pF->Frame().Pos();
+        return pF->FrameRA().Pos();
     else
-        return pFrame->Frame().Pos();
+        return pFrame->FrameRA().Pos();
 }
 
 static bool lcl_SetAnchor( const SwPosition& rPos, const SwNode& rNd, SwFlyFrame const * pFly,
@@ -271,14 +271,14 @@ static bool lcl_SetAnchor( const SwPosition& rPos, const SwNode& rNd, SwFlyFrame
             const SwNodeIndex& rIdx = *pTmpFly->GetFormat()->GetContent().GetContentIdx();
             SwPosition aPos( rIdx );
             rAnchor.SetAnchor( &aPos );
-            rNewPos = pTmpFly->Frame().Pos();
+            rNewPos = pTmpFly->FrameRA().Pos();
         }
         else
         {
             rAnchor.SetType( RndStdIds::FLY_AT_PAGE );
             rAnchor.SetPageNum( rDestShell.GetPageNumber( rInsPt ) );
             const SwFrame *pPg = pTmpFrame->FindPageFrame();
-            rNewPos = pPg->Frame().Pos();
+            rNewPos = pPg->FrameRA().Pos();
         }
     }
     else
@@ -377,7 +377,7 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                 const SwRootFrame* pTmpRoot = pDestShell->GetLayout();
                 const SwFrame* pPg = pTmpRoot->GetPageAtPos( rInsPt, nullptr, true );
                 if ( pPg )
-                    aNewAnch = pPg->Frame().Pos();
+                    aNewAnch = pPg->FrameRA().Pos();
             }
 
             if( bRet )
@@ -496,7 +496,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 // from the passed DocumentPosition
                 SwPosition aPos( *GetCursor()->GetPoint() );
                 Point aPt( rInsPt );
-                aPt -= rSttPt - pFly->Frame().Pos();
+                aPt -= rSttPt - pFly->FrameRA().Pos();
                 SwCursorMoveState aState( MV_SETONLYTEXT );
                 GetLayout()->GetCursorOfst( &aPos, aPt, &aState );
                 const SwNode *pNd;
@@ -533,7 +533,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             const SwRootFrame* pTmpRoot = pDestShell->GetLayout();
             const SwFrame* pPg = pTmpRoot->GetPageAtPos( rInsPt, nullptr, true );
             if ( pPg )
-                aNewAnch = pPg->Frame().Pos();
+                aNewAnch = pPg->FrameRA().Pos();
         }
         else {
             OSL_ENSURE( false, "what anchor is it?" );
@@ -548,7 +548,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             {
                 Point aPos( rInsPt );
                 aPos -= aNewAnch;
-                aPos -= rSttPt - pFly->Frame().Pos();
+                aPos -= rSttPt - pFly->FrameRA().Pos();
                 pFlyFormat->SetFormatAttr( SwFormatHoriOrient( aPos.getX(),text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
                 pFlyFormat->SetFormatAttr( SwFormatVertOrient( aPos.getY(),text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
             }
@@ -1244,7 +1244,7 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf )
                         // Not the original size, but the current one.
                         // Otherwise it could happen that for vector graphics
                         // many MB's of memory are allocated.
-                        const Size aSz( GetSelectedFlyFrame()->Prt().SSize() );
+                        const Size aSz( GetSelectedFlyFrame()->PrintRA().SSize() );
                         ScopedVclPtrInstance< VirtualDevice > pVirtDev(*GetWin());
 
                         MapMode aTmp( MapUnit::MapTwip );
