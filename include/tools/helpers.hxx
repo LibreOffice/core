@@ -10,6 +10,7 @@
 #define INCLUDED_TOOLS_HELPERS_HXX
 
 #include <sal/config.h>
+#include <sal/types.h>
 
 #include <cassert>
 #include <type_traits>
@@ -40,9 +41,13 @@ MinMax(T nVal, long nMin, long nMax)
            : nMin);
 }
 
-inline long AlignedWidth4Bytes( long nWidthBits )
+inline sal_uInt32 AlignedWidth4Bytes(sal_uInt32 nWidthBits)
 {
-    return ( ( nWidthBits + 31 ) >> 5 ) << 2;
+    if (nWidthBits > SAL_MAX_UINT32 - 31)
+        nWidthBits = SAL_MAX_UINT32;
+    else
+        nWidthBits += 31;
+    return (nWidthBits >> 5) << 2;
 }
 
 inline long FRound( double fVal )
