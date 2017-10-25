@@ -1014,7 +1014,7 @@ void SvxBorderTabPage::FillPresetVS()
     for( sal_uInt16 nVSIdx = 1; nVSIdx <= SVX_BORDER_PRESET_COUNT; ++nVSIdx )
     {
         m_pWndPresets->InsertItem( nVSIdx );
-        m_pWndPresets->SetItemImage(nVSIdx, Image(m_aBorderImgVec[nVSIdx-1]));
+        m_pWndPresets->SetItemImage(nVSIdx, Image(m_aBorderImgVec[GetPresetImageId(nVSIdx) - 1]));
         m_pWndPresets->SetItemText( nVSIdx, CuiResId( GetPresetStringId( nVSIdx ) ) );
     }
 
