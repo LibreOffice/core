@@ -420,14 +420,14 @@ namespace emfio
             mpInputStream->ReadUInt16( type ).ReadUInt16( flags ).ReadUInt32( size ).ReadUInt32( dataSize );
             nRemainder -= nRequiredHeaderSize;
 
-            SAL_INFO ("vcl.emf", "\t\tEMF+ record type: " << std::hex << type << std::dec);
+            SAL_INFO ("emfio", "\t\tEMF+ record type: " << std::hex << type << std::dec);
 
             // Get Device Context
             // TODO We should use  EmfPlusRecordType::GetDC instead
             if( type == 0x4004 )
             {
                 bHaveDC = true;
-                SAL_INFO ("vcl.emf", "\t\tEMF+ lock DC (device context)");
+                SAL_INFO ("emfio", "\t\tEMF+ lock DC (device context)");
             }
 
             // look for the "dual mode" in header
@@ -493,7 +493,7 @@ namespace emfio
     tools::Polygon EmfReader::ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints)
     {
         bool bRecordOk = nPoints <= SAL_MAX_UINT16;
-        SAL_WARN_IF(!bRecordOk, "vcl.emf", "polygon record has more polygons than we can handle");
+        SAL_WARN_IF(!bRecordOk, "emfio", "polygon record has more polygons than we can handle");
         if (!bRecordOk)
             return tools::Polygon();
 
@@ -504,7 +504,7 @@ namespace emfio
             *mpInputStream >> nX >> nY;
             if (!mpInputStream->good())
             {
-                SAL_WARN("vcl.emf", "short read on polygon, truncating");
+                SAL_WARN("emfio", "short read on polygon, truncating");
                 aPolygon.SetSize(i);
                 break;
             }
@@ -656,21 +656,21 @@ namespace emfio
 
             bool bFlag = false;
 
-            SAL_INFO ("vcl.emf", "0x" << std::hex << (nNextPos - nRecSize) <<  "-0x" << nNextPos << " " << record_type_name(nRecType) << " size: " <<  nRecSize << std::dec);
+            SAL_INFO ("emfio", "0x" << std::hex << (nNextPos - nRecSize) <<  "-0x" << nNextPos << " " << record_type_name(nRecType) << " size: " <<  nRecSize << std::dec);
 
             if( bEnableEMFPlus && nRecType == EMR_COMMENT ) {
                 sal_uInt32 length;
 
                 mpInputStream->ReadUInt32( length );
 
-                SAL_INFO("vcl.emf", "\tGDI comment, length: " << length);
+                SAL_INFO("emfio", "\tGDI comment, length: " << length);
 
                 if( mpInputStream->good() && length >= 4 && length <= mpInputStream->remainingSize() ) {
                     sal_uInt32 nCommentId;
 
                     mpInputStream->ReadUInt32( nCommentId );
 
-                    SAL_INFO ("vcl.emf", "\t\tbegin " << (char)(nCommentId & 0xff) << (char)((nCommentId & 0xff00) >> 8) << (char)((nCommentId & 0xff0000) >> 16) << (char)((nCommentId & 0xff000000) >> 24) << " id: 0x" << std::hex << nCommentId << std::dec);
+                    SAL_INFO ("emfio", "\t\tbegin " << (char)(nCommentId & 0xff) << (char)((nCommentId & 0xff00) >> 8) << (char)((nCommentId & 0xff0000) >> 16) << (char)((nCommentId & 0xff000000) >> 24) << " id: 0x" << std::hex << nCommentId << std::dec);
 
                     if( nCommentId == EMR_COMMENT_EMFPLUS && nRecSize >= 12 )
                     {
@@ -689,7 +689,7 @@ namespace emfio
                     }
                     else
                     {
-                        SAL_INFO ("vcl.emf", "\t\tunknown id: 0x" << std::hex << nCommentId << std::dec);
+                        SAL_INFO ("emfio", "\t\tunknown id: 0x" << std::hex << nCommentId << std::dec);
                     }
                 }
             }
@@ -1565,7 +1565,7 @@ namespace emfio
                         if ( nOptions & ETO_RTLREADING )
                             nTextLayoutMode = ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
                         SetTextLayoutMode( nTextLayoutMode );
-                        SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "vcl.emf", "SJ: ETO_PDY || ETO_GLYPH_INDEX in EMF" );
+                        SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "emfio", "SJ: ETO_PDY || ETO_GLYPH_INDEX in EMF" );
 
                         Point aPos( ptlReferenceX, ptlReferenceY );
                         bool bLenSane = nLen > 0 && nLen < static_cast<sal_Int32>( SAL_MAX_UINT32 / sizeof(sal_Int32) );
@@ -1736,62 +1736,62 @@ namespace emfio
                     }
                     break;
 
-                    case EMR_MASKBLT :                  SAL_INFO("vcl.emf", "not implemented 'MaskBlt'");                   break;
-                    case EMR_PLGBLT :                   SAL_INFO("vcl.emf", "not implemented 'PlgBlt'");                    break;
-                    case EMR_SETDIBITSTODEVICE :        SAL_INFO("vcl.emf", "not implemented 'SetDIBitsToDevice'");         break;
-                    case EMR_FRAMERGN :                 SAL_INFO("vcl.emf", "not implemented 'FrameRgn'");                  break;
-                    case EMR_INVERTRGN :                SAL_INFO("vcl.emf", "not implemented 'InvertRgn'");                 break;
-                    case EMR_PAINTRGN :                 SAL_INFO("vcl.emf", "not implemented 'PaintRgn'");                  break;
-                    case EMR_FLATTENPATH :              SAL_INFO("vcl.emf", "not implemented 'FlattenPath'");               break;
-                    case EMR_WIDENPATH :                SAL_INFO("vcl.emf", "not implemented 'WidenPath'");                 break;
-                    case EMR_POLYDRAW :                 SAL_INFO("vcl.emf", "not implemented 'Polydraw'");                  break;
-                    case EMR_SETARCDIRECTION :          SAL_INFO("vcl.emf", "not implemented 'SetArcDirection'");           break;
-                    case EMR_SETPALETTEENTRIES :        SAL_INFO("vcl.emf", "not implemented 'SetPaletteEntries'");         break;
-                    case EMR_RESIZEPALETTE :            SAL_INFO("vcl.emf", "not implemented 'ResizePalette'");             break;
-                    case EMR_EXTFLOODFILL :             SAL_INFO("vcl.emf", "not implemented 'ExtFloodFill'");              break;
-                    case EMR_ANGLEARC :                 SAL_INFO("vcl.emf", "not implemented 'AngleArc'");                  break;
-                    case EMR_SETCOLORADJUSTMENT :       SAL_INFO("vcl.emf", "not implemented 'SetColorAdjustment'");        break;
-                    case EMR_POLYDRAW16 :               SAL_INFO("vcl.emf", "not implemented 'PolyDraw16'");                break;
-                    case EMR_POLYTEXTOUTA :             SAL_INFO("vcl.emf", "not implemented 'PolyTextOutA'");              break;
-                    case EMR_POLYTEXTOUTW :             SAL_INFO("vcl.emf", "not implemented 'PolyTextOutW'");              break;
-                    case EMR_CREATECOLORSPACE :         SAL_INFO("vcl.emf", "not implemented 'CreateColorSpace'");          break;
-                    case EMR_SETCOLORSPACE :            SAL_INFO("vcl.emf", "not implemented 'SetColorSpace'");             break;
-                    case EMR_DELETECOLORSPACE :         SAL_INFO("vcl.emf", "not implemented 'DeleteColorSpace'");          break;
-                    case EMR_GLSRECORD :                SAL_INFO("vcl.emf", "not implemented 'GlsRecord'");                 break;
-                    case EMR_GLSBOUNDEDRECORD :         SAL_INFO("vcl.emf", "not implemented 'GlsBoundRecord'");            break;
-                    case EMR_PIXELFORMAT :              SAL_INFO("vcl.emf", "not implemented 'PixelFormat'");               break;
-                    case EMR_DRAWESCAPE :               SAL_INFO("vcl.emf", "not implemented 'DrawEscape'");                break;
-                    case EMR_EXTESCAPE :                SAL_INFO("vcl.emf", "not implemented 'ExtEscape'");                 break;
-                    case EMR_STARTDOC :                 SAL_INFO("vcl.emf", "not implemented 'StartDoc'");                  break;
-                    case EMR_SMALLTEXTOUT :             SAL_INFO("vcl.emf", "not implemented 'SmallTextOut'");              break;
-                    case EMR_FORCEUFIMAPPING :          SAL_INFO("vcl.emf", "not implemented 'ForceUFIMapping'");           break;
-                    case EMR_NAMEDESCAPE :              SAL_INFO("vcl.emf", "not implemented 'NamedEscape'");               break;
-                    case EMR_COLORCORRECTPALETTE :      SAL_INFO("vcl.emf", "not implemented 'ColorCorrectPalette'");       break;
-                    case EMR_SETICMPROFILEA :           SAL_INFO("vcl.emf", "not implemented 'SetICMProfileA'");            break;
-                    case EMR_SETICMPROFILEW :           SAL_INFO("vcl.emf", "not implemented 'SetICMProfileW'");            break;
-                    case EMR_TRANSPARENTBLT :           SAL_INFO("vcl.emf", "not implemented 'TransparenBlt'");             break;
-                    case EMR_TRANSPARENTDIB :           SAL_INFO("vcl.emf", "not implemented 'TransparenDib'");             break;
-                    case EMR_GRADIENTFILL :             SAL_INFO("vcl.emf", "not implemented 'GradientFill'");              break;
-                    case EMR_SETLINKEDUFIS :            SAL_INFO("vcl.emf", "not implemented 'SetLinkedUFIS'");             break;
+                    case EMR_MASKBLT :                  SAL_INFO("emfio", "not implemented 'MaskBlt'");                   break;
+                    case EMR_PLGBLT :                   SAL_INFO("emfio", "not implemented 'PlgBlt'");                    break;
+                    case EMR_SETDIBITSTODEVICE :        SAL_INFO("emfio", "not implemented 'SetDIBitsToDevice'");         break;
+                    case EMR_FRAMERGN :                 SAL_INFO("emfio", "not implemented 'FrameRgn'");                  break;
+                    case EMR_INVERTRGN :                SAL_INFO("emfio", "not implemented 'InvertRgn'");                 break;
+                    case EMR_PAINTRGN :                 SAL_INFO("emfio", "not implemented 'PaintRgn'");                  break;
+                    case EMR_FLATTENPATH :              SAL_INFO("emfio", "not implemented 'FlattenPath'");               break;
+                    case EMR_WIDENPATH :                SAL_INFO("emfio", "not implemented 'WidenPath'");                 break;
+                    case EMR_POLYDRAW :                 SAL_INFO("emfio", "not implemented 'Polydraw'");                  break;
+                    case EMR_SETARCDIRECTION :          SAL_INFO("emfio", "not implemented 'SetArcDirection'");           break;
+                    case EMR_SETPALETTEENTRIES :        SAL_INFO("emfio", "not implemented 'SetPaletteEntries'");         break;
+                    case EMR_RESIZEPALETTE :            SAL_INFO("emfio", "not implemented 'ResizePalette'");             break;
+                    case EMR_EXTFLOODFILL :             SAL_INFO("emfio", "not implemented 'ExtFloodFill'");              break;
+                    case EMR_ANGLEARC :                 SAL_INFO("emfio", "not implemented 'AngleArc'");                  break;
+                    case EMR_SETCOLORADJUSTMENT :       SAL_INFO("emfio", "not implemented 'SetColorAdjustment'");        break;
+                    case EMR_POLYDRAW16 :               SAL_INFO("emfio", "not implemented 'PolyDraw16'");                break;
+                    case EMR_POLYTEXTOUTA :             SAL_INFO("emfio", "not implemented 'PolyTextOutA'");              break;
+                    case EMR_POLYTEXTOUTW :             SAL_INFO("emfio", "not implemented 'PolyTextOutW'");              break;
+                    case EMR_CREATECOLORSPACE :         SAL_INFO("emfio", "not implemented 'CreateColorSpace'");          break;
+                    case EMR_SETCOLORSPACE :            SAL_INFO("emfio", "not implemented 'SetColorSpace'");             break;
+                    case EMR_DELETECOLORSPACE :         SAL_INFO("emfio", "not implemented 'DeleteColorSpace'");          break;
+                    case EMR_GLSRECORD :                SAL_INFO("emfio", "not implemented 'GlsRecord'");                 break;
+                    case EMR_GLSBOUNDEDRECORD :         SAL_INFO("emfio", "not implemented 'GlsBoundRecord'");            break;
+                    case EMR_PIXELFORMAT :              SAL_INFO("emfio", "not implemented 'PixelFormat'");               break;
+                    case EMR_DRAWESCAPE :               SAL_INFO("emfio", "not implemented 'DrawEscape'");                break;
+                    case EMR_EXTESCAPE :                SAL_INFO("emfio", "not implemented 'ExtEscape'");                 break;
+                    case EMR_STARTDOC :                 SAL_INFO("emfio", "not implemented 'StartDoc'");                  break;
+                    case EMR_SMALLTEXTOUT :             SAL_INFO("emfio", "not implemented 'SmallTextOut'");              break;
+                    case EMR_FORCEUFIMAPPING :          SAL_INFO("emfio", "not implemented 'ForceUFIMapping'");           break;
+                    case EMR_NAMEDESCAPE :              SAL_INFO("emfio", "not implemented 'NamedEscape'");               break;
+                    case EMR_COLORCORRECTPALETTE :      SAL_INFO("emfio", "not implemented 'ColorCorrectPalette'");       break;
+                    case EMR_SETICMPROFILEA :           SAL_INFO("emfio", "not implemented 'SetICMProfileA'");            break;
+                    case EMR_SETICMPROFILEW :           SAL_INFO("emfio", "not implemented 'SetICMProfileW'");            break;
+                    case EMR_TRANSPARENTBLT :           SAL_INFO("emfio", "not implemented 'TransparenBlt'");             break;
+                    case EMR_TRANSPARENTDIB :           SAL_INFO("emfio", "not implemented 'TransparenDib'");             break;
+                    case EMR_GRADIENTFILL :             SAL_INFO("emfio", "not implemented 'GradientFill'");              break;
+                    case EMR_SETLINKEDUFIS :            SAL_INFO("emfio", "not implemented 'SetLinkedUFIS'");             break;
 
-                    case EMR_SETMAPPERFLAGS :           SAL_INFO("vcl.emf", "not implemented 'SetMapperFlags'");            break;
-                    case EMR_SETICMMODE :               SAL_INFO("vcl.emf", "not implemented 'SetICMMode'");                break;
-                    case EMR_CREATEMONOBRUSH :          SAL_INFO("vcl.emf", "not implemented 'CreateMonoBrush'");           break;
-                    case EMR_SETBRUSHORGEX :            SAL_INFO("vcl.emf", "not implemented 'SetBrushOrgEx'");             break;
-                    case EMR_SETMETARGN :               SAL_INFO("vcl.emf", "not implemented 'SetMetArgn'");                break;
-                    case EMR_SETMITERLIMIT :            SAL_INFO("vcl.emf", "not implemented 'SetMiterLimit'");             break;
-                    case EMR_EXCLUDECLIPRECT :          SAL_INFO("vcl.emf", "not implemented 'ExcludeClipRect'");           break;
-                    case EMR_REALIZEPALETTE :           SAL_INFO("vcl.emf", "not implemented 'RealizePalette'");            break;
-                    case EMR_SELECTPALETTE :            SAL_INFO("vcl.emf", "not implemented 'SelectPalette'");             break;
-                    case EMR_CREATEPALETTE :            SAL_INFO("vcl.emf", "not implemented 'CreatePalette'");             break;
-                    case EMR_ALPHADIBBLEND :            SAL_INFO("vcl.emf", "not implemented 'AlphaDibBlend'");             break;
-                    case EMR_SETTEXTJUSTIFICATION :     SAL_INFO("vcl.emf", "not implemented 'SetTextJustification'");      break;
+                    case EMR_SETMAPPERFLAGS :           SAL_INFO("emfio", "not implemented 'SetMapperFlags'");            break;
+                    case EMR_SETICMMODE :               SAL_INFO("emfio", "not implemented 'SetICMMode'");                break;
+                    case EMR_CREATEMONOBRUSH :          SAL_INFO("emfio", "not implemented 'CreateMonoBrush'");           break;
+                    case EMR_SETBRUSHORGEX :            SAL_INFO("emfio", "not implemented 'SetBrushOrgEx'");             break;
+                    case EMR_SETMETARGN :               SAL_INFO("emfio", "not implemented 'SetMetArgn'");                break;
+                    case EMR_SETMITERLIMIT :            SAL_INFO("emfio", "not implemented 'SetMiterLimit'");             break;
+                    case EMR_EXCLUDECLIPRECT :          SAL_INFO("emfio", "not implemented 'ExcludeClipRect'");           break;
+                    case EMR_REALIZEPALETTE :           SAL_INFO("emfio", "not implemented 'RealizePalette'");            break;
+                    case EMR_SELECTPALETTE :            SAL_INFO("emfio", "not implemented 'SelectPalette'");             break;
+                    case EMR_CREATEPALETTE :            SAL_INFO("emfio", "not implemented 'CreatePalette'");             break;
+                    case EMR_ALPHADIBBLEND :            SAL_INFO("emfio", "not implemented 'AlphaDibBlend'");             break;
+                    case EMR_SETTEXTJUSTIFICATION :     SAL_INFO("emfio", "not implemented 'SetTextJustification'");      break;
 
                     case EMR_COMMENT :
                     case EMR_HEADER :               // has already been read at ReadHeader()
                     break;
 
-                    default :                           SAL_INFO("vcl.emf", "Unknown Meta Action");                                     break;
+                    default :                           SAL_INFO("emfio", "Unknown Meta Action");                                     break;
                 }
             }
             mpInputStream->Seek( nNextPos );
@@ -1814,7 +1814,7 @@ namespace emfio
         if (nType != 0x00000001)
         {
             // per [MS-EMF] 2.3.4.2 EMF Header Record Types, type MUST be 0x00000001
-            SAL_WARN("vcl.emf", "EMF header type is not set to 0x00000001 - possibly corrupted file?");
+            SAL_WARN("emfio", "EMF header type is not set to 0x00000001 - possibly corrupted file?");
             return false;
         }
 
@@ -1833,7 +1833,7 @@ namespace emfio
         // and 2.1.14 FormatSignature Enumeration
         if (nSignature != 0x464d4520)
         {
-            SAL_WARN("vcl.emf", "EMF\t\tSignature is not 0x464d4520 (\"FME\") - possibly corrupted file?");
+            SAL_WARN("emfio", "EMF\t\tSignature is not 0x464d4520 (\"FME\") - possibly corrupted file?");
             return false;
         }
 
@@ -1842,7 +1842,7 @@ namespace emfio
                                        // Microsoft note that not even Windows checks this...
         if (nVersion != 0x00010000)
         {
-            SAL_WARN("vcl.emf", "EMF\t\tThis really should be 0x00010000, though not absolutely essential...");
+            SAL_WARN("emfio", "EMF\t\tThis really should be 0x00010000, though not absolutely essential...");
         }
 
         mpInputStream->ReadUInt32(mnEndPos); // size of metafile
@@ -1853,7 +1853,7 @@ namespace emfio
 
         if ( nActualFileSize < mnEndPos )
         {
-            SAL_WARN("vcl.emf", "EMF\t\tEMF Header object records number of bytes as " << mnEndPos
+            SAL_WARN("emfio", "EMF\t\tEMF Header object records number of bytes as " << mnEndPos
                                 << ", however the file size is actually " << nActualFileSize
                                 << " bytes. Possible file corruption?");
             mnEndPos = nActualFileSize;
@@ -1863,7 +1863,7 @@ namespace emfio
 
         if (mnRecordCount <= 0)
         {
-            SAL_WARN("vcl.emf", "EMF\t\tEMF Header object shows record counter as <= 0! This shouldn't "
+            SAL_WARN("emfio", "EMF\t\tEMF Header object shows record counter as <= 0! This shouldn't "
                                 "be possible... indicator of possible file corruption?");
             return false;
         }
@@ -1882,7 +1882,7 @@ namespace emfio
 
         if ( nReserved != 0x0000 )
         {
-            SAL_WARN("vcl.emf", "EMF\t\tEMF Header object's reserved field is NOT 0x0000... possible "
+            SAL_WARN("emfio", "EMF\t\tEMF Header object's reserved field is NOT 0x0000... possible "
                                 "corruption?");
         }
 

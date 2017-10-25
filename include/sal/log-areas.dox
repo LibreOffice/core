@@ -127,6 +127,10 @@ certain functionality.
 
 @li @c drawinglayer
 
+@section emfio
+
+@li @c emfio - EMF and VMF image file formats import module
+
 @section Calc
 
 @li @c sc
