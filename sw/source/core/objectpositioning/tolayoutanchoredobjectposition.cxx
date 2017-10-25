@@ -125,8 +125,8 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         if ( !bFlyAtFly && GetAnchorFrame().IsPageFrame() &&
              pSh && pSh->GetViewOptions()->getBrowseMode() )
         {
-            const long nAnchorBottom = GetAnchorFrame().Frame().Bottom();
-            const long nBottom = GetAnchorFrame().Frame().Top() +
+            const long nAnchorBottom = GetAnchorFrame().FrameRA().Bottom();
+            const long nBottom = GetAnchorFrame().FrameRA().Top() +
                                  aRelPos.Y() + aObjBoundRect.Height();
             if ( nAnchorBottom < nBottom )
             {

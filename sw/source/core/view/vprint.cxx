@@ -303,7 +303,7 @@ void SwViewShell::CalcPagesForPrint( sal_uInt16 nMax )
     {
         pPage->Calc(GetOut());
         SwRect aOldVis( VisArea() );
-        maVisArea = pPage->Frame();
+        maVisArea = pPage->FrameRA();
         Imp()->SetFirstVisPageInvalid();
         aAction.Reset();
         aAction.SetPaint( false );
@@ -524,13 +524,13 @@ bool SwViewShell::PrintOrPDFExport(
 
         //!! applying view options and formatting the document should now only be done in getRendererCount!
 
-        ::SetSwVisArea( pViewSh2, pStPage->Frame() );
+        ::SetSwVisArea( pViewSh2, pStPage->FrameRA() );
 
         pShell->InitPrt(pOutDev);
 
-        ::SetSwVisArea( pViewSh2, pStPage->Frame() );
+        ::SetSwVisArea( pViewSh2, pStPage->FrameRA() );
 
-        pStPage->GetUpper()->Paint( *pOutDev, pStPage->Frame(), &rPrintData );
+        pStPage->GetUpper()->Paint( *pOutDev, pStPage->FrameRA(), &rPrintData );
 
         SwPaintQueue::Repaint();
 
@@ -553,7 +553,7 @@ bool SwViewShell::PrintOrPDFExport(
             //Now scale the recorded page down so the notes
             //will fit in the final page
             double fScale = 0.75;
-            long nOrigHeight = pStPage->Frame().Height();
+            long nOrigHeight = pStPage->FrameRA().Height();
             long nNewHeight = nOrigHeight*fScale;
             long nShiftY = (nOrigHeight-nNewHeight)/2;
             pMetaFile->Scale( fScale, fScale );

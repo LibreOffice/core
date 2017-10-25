@@ -529,12 +529,12 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                 else if ( aVert.GetRelationOrient() == text::RelOrientation::PAGE_FRAME )
                 {
                     nVertOffsetToFrameAnchorPos += aRectFnSet.YDiff(
-                                    aRectFnSet.GetTop(rPageAlignLayFrame.Frame()),
+                                    aRectFnSet.GetTop(rPageAlignLayFrame.FrameRA()),
                                     nTopOfOrient );
                 }
                 else if ( aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA )
                 {
-                    SwRect aPgPrtRect( rPageAlignLayFrame.Frame() );
+                    SwRect aPgPrtRect( rPageAlignLayFrame.FrameRA() );
                     if ( rPageAlignLayFrame.IsPageFrame() )
                     {
                         aPgPrtRect =
@@ -661,7 +661,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                                     pUpperOfOrientFrame = pTmp;
                                     bMoveable = rAnchorTextFrame.IsMoveable( pUpperOfOrientFrame );
                                     aRectFnSet.Refresh(pUpperOfOrientFrame);
-                                    nAvail = aRectFnSet.GetHeight(pUpperOfOrientFrame->Prt());
+                                    nAvail = aRectFnSet.GetHeight(pUpperOfOrientFrame->PrintRA());
                                 }
                                 else
                                 {
@@ -904,7 +904,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                         SwRectFnSet fnRectX(pNextLay);
                         if ( !bInSct ||
                              ( pUpperOfOrientFrame->FindSctFrame()->IsAnFollow( pNextLay->FindSctFrame() ) &&
-                               fnRectX.GetHeight(pNextLay->Prt()) ) )
+                               fnRectX.GetHeight(pNextLay->PrintRA()) ) )
                         {
                             SwTwips nTmpRelPosY =
                                 aRectFnSet.YDiff( aRectFnSet.GetPrtTop(*pNextLay),
@@ -1052,12 +1052,12 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
         {
             GetAnchoredObj().SetObjLeft( nTopOfAnch + aRelPos.X() );
         }
-        GetAnchoredObj().SetObjTop( rAnchorTextFrame.Frame().Top() +
+        GetAnchoredObj().SetObjTop( rAnchorTextFrame.FrameRA().Top() +
                                     aRelPos.Y() );
     }
     else
     {
-        GetAnchoredObj().SetObjLeft( rAnchorTextFrame.Frame().Left() +
+        GetAnchoredObj().SetObjLeft( rAnchorTextFrame.FrameRA().Left() +
                                      aRelPos.X() );
         GetAnchoredObj().SetObjTop( nTopOfAnch + aRelPos.Y() );
     }

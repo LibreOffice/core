@@ -223,7 +223,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFormatAnchor& rAnch,
             {
                 const SwFrame* pOld = static_cast<const SwFlyFrameFormat*>(pFlyFormat)->GetFrame( &aRet );
                 if( pOld )
-                    aRet = pOld->Frame().Pos();
+                    aRet = pOld->FrameRA().Pos();
             }
             break;
 
@@ -235,7 +235,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFormatAnchor& rAnch,
                 const SwContentNode* pNd = pPos->nNode.GetNode().GetContentNode();
                 const SwFrame* pOld = pNd ? pNd->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aRet, nullptr, false ) : nullptr;
                 if( pOld )
-                    aRet = pOld->Frame().Pos();
+                    aRet = pOld->FrameRA().Pos();
             }
             break;
 
@@ -246,7 +246,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFormatAnchor& rAnch,
                                                 nNode.GetNode().GetFlyFormat());
                 const SwFrame* pOld = pFormat ? pFormat->GetFrame( &aRet ) : nullptr;
                 if( pOld )
-                    aRet = pOld->Frame().Pos();
+                    aRet = pOld->FrameRA().Pos();
             }
             break;
 
@@ -258,7 +258,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFormatAnchor& rAnch,
                                     pPage =static_cast<const SwPageFrame*>(pPage->GetNext()) )
                     if( i == nPgNum )
                     {
-                        aRet = pPage->Frame().Pos();
+                        aRet = pPage->FrameRA().Pos();
                         break;
                     }
             }
@@ -840,7 +840,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
             case RndStdIds::FLY_AT_PAGE:
                 {
                     pNewAnchorFrame = getIDocumentLayoutAccess().GetCurrentLayout()->Lower();
-                    while ( pNewAnchorFrame && !pNewAnchorFrame->Frame().IsInside( aPt ) )
+                    while ( pNewAnchorFrame && !pNewAnchorFrame->FrameRA().IsInside( aPt ) )
                         pNewAnchorFrame = pNewAnchorFrame->GetNext();
                     if ( !pNewAnchorFrame )
                         continue;
@@ -873,7 +873,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     aPoint.setX(aPoint.getX() - 1);    // Do not load in the DrawObj!
                     aNewAnch.SetType( RndStdIds::FLY_AS_CHAR );
                     SwPosition aPos( *static_cast<const SwContentFrame*>(pNewAnchorFrame)->GetNode() );
-                    if ( pNewAnchorFrame->Frame().IsInside( aPoint ) )
+                    if ( pNewAnchorFrame->FrameRA().IsInside( aPoint ) )
                     {
                     // We need to find a TextNode, because only there we can anchor a
                     // content-bound DrawObject.
@@ -884,7 +884,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     {
                         SwContentNode &rCNd = const_cast<SwContentNode&>(
                             *static_cast<const SwContentFrame*>(pNewAnchorFrame)->GetNode());
-                        if ( pNewAnchorFrame->Frame().Bottom() < aPt.Y() )
+                        if ( pNewAnchorFrame->FrameRA().Bottom() < aPt.Y() )
                             rCNd.MakeStartIndex( &aPos.nContent );
                         else
                             rCNd.MakeEndIndex( &aPos.nContent );
@@ -1096,7 +1096,7 @@ SwChainRet SwDoc::Chain( SwFrameFormat &rSource, const SwFrameFormat &rDest )
         {
             SwFlyFrame *pFly = SwIterator<SwFlyFrame,SwFormat>( rSource ).First();
             if ( pFly )
-                aSize.SetHeight( pFly->Frame().Height() );
+                aSize.SetHeight( pFly->FrameRA().Height() );
             aSize.SetHeightSizeType( ATT_FIX_SIZE );
             aSet.Put( aSize );
         }

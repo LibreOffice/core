@@ -53,15 +53,15 @@ inline SwTwips lcl_GetTopForObjPos(const SwContentFrame* pCnt, const bool bVert,
 {
     if ( bVert )
     {
-        SwTwips aResult = pCnt->Frame().Left();
+        SwTwips aResult = pCnt->FrameRA().Left();
         if ( bVertL2R )
             aResult += pCnt->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
         else
-            aResult += pCnt->Frame().Width() - pCnt->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
+            aResult += pCnt->FrameRA().Width() - pCnt->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
         return aResult;
     }
     else
-        return pCnt->Frame().Top() + pCnt->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
+        return pCnt->FrameRA().Top() + pCnt->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
 }
 
 }
@@ -160,7 +160,7 @@ void SwFlyAtContentFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pN
         if ( !pContent )
         {
             SwContentNode *pNode = aNewIdx.GetNode().GetContentNode();
-            pContent = pNode->getLayoutFrame( getRootFrame(), &pOldAnchor->Frame().Pos(), nullptr, false );
+            pContent = pNode->getLayoutFrame( getRootFrame(), &pOldAnchor->FrameRA().Pos(), nullptr, false );
             OSL_ENSURE( pContent, "New anchor not found" );
         }
         //Flys are never attached to a follow, but always on the master which
@@ -385,10 +385,10 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
             bool bConsiderWrapInfluenceDueToMovedFwdAnchor( false );
             do {
                 SwRectFnSet aRectFnSet(this);
-                Point aOldPos( aRectFnSet.GetPos(Frame()) );
+                Point aOldPos( aRectFnSet.GetPos(FrameRA()) );
                 SwFlyFreeFrame::MakeAll(pRenderContext);
                 const bool bPosChgDueToOwnFormat =
-                                        aOldPos != aRectFnSet.GetPos(Frame());
+                                        aOldPos != aRectFnSet.GetPos(FrameRA());
                 // #i3317#
                 if ( !ConsiderObjWrapInfluenceOnObjPos() &&
                      OverlapsPrevColumn() )
@@ -446,7 +446,7 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     }
                 }
 
-                if ( aOldPos != aRectFnSet.GetPos(Frame()) ||
+                if ( aOldPos != aRectFnSet.GetPos(FrameRA()) ||
                      ( !GetValidPosFlag() &&
                        ( pFooter || bPosChgDueToOwnFormat ) ) )
                 {
@@ -507,8 +507,8 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 if ( pCellFrame )
                 {
                     SwRectFnSet aRectFnSet(pCellFrame);
-                    if ( aRectFnSet.GetTop(pCellFrame->Frame()) == 0 &&
-                         aRectFnSet.GetHeight(pCellFrame->Frame()) == 0 )
+                    if ( aRectFnSet.GetTop(pCellFrame->FrameRA()) == 0 &&
+                         aRectFnSet.GetHeight(pCellFrame->FrameRA()) == 0 )
                     {
                         bConsiderWrapInfluenceDueToMovedFwdAnchor = false;
                     }
@@ -559,7 +559,7 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
     rRet.nSub = 0;
     //If the point stays inside the Cnt everything is clear already; the Content
     //automatically has a distance of 0.
-    if ( pCnt->Frame().IsInside( rPt ) )
+    if ( pCnt->FrameRA().IsInside( rPt ) )
     {
         rRet.nMain = 0;
         return pCnt;
@@ -578,7 +578,7 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
         // #i70582#
         // --> OD 2009-03-05 - adopted for Support for Classical Mongolian Script
         const SwTwips nTopForObjPos = lcl_GetTopForObjPos(pCnt, bVert, bVertL2R);
-        if ( pUp->Frame().IsInside( rPt ) )
+        if ( pUp->FrameRA().IsInside( rPt ) )
         {
             // <rPt> point is inside environment of given content frame
             // #i70582#
@@ -593,21 +593,21 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                 rRet.nMain =  rPt.Y() - nTopForObjPos;
             return pCnt;
         }
-        else if ( rPt.Y() <= pUp->Frame().Top() )
+        else if ( rPt.Y() <= pUp->FrameRA().Top() )
         {
             // <rPt> point is above environment of given content frame
             // correct for vertical layout?
             rRet.nMain = LONG_MAX;
         }
-        else if( rPt.X() < pUp->Frame().Left() &&
-                 rPt.Y() <= ( bVert ? pUp->Frame().Top() : pUp->Frame().Bottom() ) )
+        else if( rPt.X() < pUp->FrameRA().Left() &&
+                 rPt.Y() <= ( bVert ? pUp->FrameRA().Top() : pUp->FrameRA().Bottom() ) )
         {
             // <rPt> point is left of environment of given content frame
             // seems not to be correct for vertical layout!?
             const SwFrame *pLay = pUp->GetLeaf( MAKEPAGE_NONE, false, pCnt );
             if( !pLay ||
-                (bVert && (pLay->Frame().Top() + pLay->Prt().Bottom()) <rPt.Y())||
-                (!bVert && (pLay->Frame().Left() + pLay->Prt().Right())<rPt.X()) )
+                (bVert && (pLay->FrameRA().Top() + pLay->PrintRA().Bottom()) <rPt.Y())||
+                (!bVert && (pLay->FrameRA().Left() + pLay->PrintRA().Right())<rPt.X()) )
             {
                 // <rPt> point is in left border of environment
                 // #i70582#
@@ -629,9 +629,9 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
         {
             rRet.nMain = bVert
                 ? ( bVertL2R
-                    ? ( (pUp->Frame().Left() + pUp->Prt().Right()) - nTopForObjPos )
-                    : ( nTopForObjPos - (pUp->Frame().Left() + pUp->Prt().Left() ) ) )
-                : ( (pUp->Frame().Top() + pUp->Prt().Bottom()) - nTopForObjPos );
+                    ? ( (pUp->FrameRA().Left() + pUp->PrintRA().Right()) - nTopForObjPos )
+                    : ( nTopForObjPos - (pUp->FrameRA().Left() + pUp->PrintRA().Left() ) ) )
+                : ( (pUp->FrameRA().Top() + pUp->PrintRA().Bottom()) - nTopForObjPos );
 
             const SwFrame *pPre = pCnt;
             const SwFrame *pLay = pUp->GetLeaf( MAKEPAGE_NONE, true, pCnt );
@@ -653,15 +653,15 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                     if( pLay->IsVertical() )
                     {
                         if ( pLay->IsVertLR() )
-                            nFrameTop = pLay->Frame().Left();
+                            nFrameTop = pLay->FrameRA().Left();
                         else
-                            nFrameTop = pLay->Frame().Left() + pLay->Frame().Width();
-                        nPrtHeight = pLay->Prt().Width();
+                            nFrameTop = pLay->FrameRA().Left() + pLay->FrameRA().Width();
+                        nPrtHeight = pLay->PrintRA().Width();
                     }
                     else
                     {
-                        nFrameTop = pLay->Frame().Top();
-                        nPrtHeight = pLay->Prt().Height();
+                        nFrameTop = pLay->FrameRA().Top();
+                        nPrtHeight = pLay->PrintRA().Height();
                     }
                     pSect = pNxtSect;
                 }
@@ -672,24 +672,24 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                     {
                         if ( pLay->IsVertLR() )
                         {
-                            nFrameTop = pSect->Frame().Right();
-                            nPrtHeight = pLay->Frame().Left() + pLay->Prt().Left()
-                                         + pLay->Prt().Width() - pSect->Frame().Left()
-                                         - pSect->Frame().Width();
+                            nFrameTop = pSect->FrameRA().Right();
+                            nPrtHeight = pLay->FrameRA().Left() + pLay->PrintRA().Left()
+                                         + pLay->PrintRA().Width() - pSect->FrameRA().Left()
+                                         - pSect->FrameRA().Width();
                          }
                          else
                          {
-                             nFrameTop = pSect->Frame().Left();
-                             nPrtHeight = pSect->Frame().Left() - pLay->Frame().Left()
-                                     - pLay->Prt().Left();
+                             nFrameTop = pSect->FrameRA().Left();
+                             nPrtHeight = pSect->FrameRA().Left() - pLay->FrameRA().Left()
+                                     - pLay->PrintRA().Left();
                           }
                     }
                     else
                     {
-                        nFrameTop = pSect->Frame().Bottom();
-                        nPrtHeight = pLay->Frame().Top() + pLay->Prt().Top()
-                                     + pLay->Prt().Height() - pSect->Frame().Top()
-                                     - pSect->Frame().Height();
+                        nFrameTop = pSect->FrameRA().Bottom();
+                        nPrtHeight = pLay->FrameRA().Top() + pLay->PrintRA().Top()
+                                     + pLay->PrintRA().Height() - pSect->FrameRA().Top()
+                                     - pSect->FrameRA().Height();
                     }
                     pSect = nullptr;
                 }
@@ -700,26 +700,26 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                 {
                     if ( pLay->IsVertLR() )
                     {
-                        nFrameTop = pLay->Frame().Left();
-                        nPrtHeight = pLay->Prt().Width();
+                        nFrameTop = pLay->FrameRA().Left();
+                        nPrtHeight = pLay->PrintRA().Width();
                     }
                     else
                     {
-                        nFrameTop = pLay->Frame().Left() + pLay->Frame().Width();
-                        nPrtHeight = pLay->Prt().Width();
+                        nFrameTop = pLay->FrameRA().Left() + pLay->FrameRA().Width();
+                        nPrtHeight = pLay->PrintRA().Width();
                     }
                 }
                 else
                 {
-                    nFrameTop = pLay->Frame().Top();
-                    nPrtHeight = pLay->Prt().Height();
+                    nFrameTop = pLay->FrameRA().Top();
+                    nPrtHeight = pLay->PrintRA().Height();
                 }
                 bSct = nullptr != pSect;
             }
-            while ( pLay && !pLay->Frame().IsInside( rPt ) &&
-                    ( pLay->Frame().Top() <= rPt.Y() || pLay->IsInFly() ||
+            while ( pLay && !pLay->FrameRA().IsInside( rPt ) &&
+                    ( pLay->FrameRA().Top() <= rPt.Y() || pLay->IsInFly() ||
                       ( pLay->IsInSct() &&
-                      pLay->FindSctFrame()->GetUpper()->Frame().Top() <= rPt.Y())) )
+                      pLay->FindSctFrame()->GetUpper()->FrameRA().Top() <= rPt.Y())) )
             {
                 if ( pLay->IsFootnoteContFrame() )
                 {
@@ -753,19 +753,19 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                             {
                                 if ( pLay->IsVertLR() )
                                 {
-                                    nFrameTop = pLay->Frame().Left();
-                                    nPrtHeight = pLay->Prt().Width();
+                                    nFrameTop = pLay->FrameRA().Left();
+                                    nPrtHeight = pLay->PrintRA().Width();
                                 }
                                 else
                                 {
-                                    nFrameTop = pLay->Frame().Left() + pLay->Frame().Width();
-                                    nPrtHeight = pLay->Prt().Width();
+                                    nFrameTop = pLay->FrameRA().Left() + pLay->FrameRA().Width();
+                                    nPrtHeight = pLay->PrintRA().Width();
                                 }
                             }
                             else
                             {
-                                nFrameTop = pLay->Frame().Top();
-                                nPrtHeight = pLay->Prt().Height();
+                                nFrameTop = pLay->FrameRA().Top();
+                                nPrtHeight = pLay->PrintRA().Height();
                             }
                         }
                         else
@@ -775,24 +775,24 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                             {
                                 if ( pLay->IsVertLR() )
                                 {
-                                    nFrameTop = pSect->Frame().Right();
-                                    nPrtHeight = pLay->Frame().Left()+pLay->Prt().Left()
-                                             + pLay->Prt().Width() - pSect->Frame().Left()
-                                             - pSect->Frame().Width();
+                                    nFrameTop = pSect->FrameRA().Right();
+                                    nPrtHeight = pLay->FrameRA().Left()+pLay->PrintRA().Left()
+                                             + pLay->PrintRA().Width() - pSect->FrameRA().Left()
+                                             - pSect->FrameRA().Width();
                                 }
                                 else
                                 {
-                                    nFrameTop = pSect->Frame().Left();
-                                    nPrtHeight = pSect->Frame().Left() -
-                                            pLay->Frame().Left() - pLay->Prt().Left();
+                                    nFrameTop = pSect->FrameRA().Left();
+                                    nPrtHeight = pSect->FrameRA().Left() -
+                                            pLay->FrameRA().Left() - pLay->PrintRA().Left();
                                 }
                             }
                             else
                             {
-                                nFrameTop = pSect->Frame().Bottom();
-                                nPrtHeight = pLay->Frame().Top()+pLay->Prt().Top()
-                                     + pLay->Prt().Height() - pSect->Frame().Top()
-                                     - pSect->Frame().Height();
+                                nFrameTop = pSect->FrameRA().Bottom();
+                                nPrtHeight = pLay->FrameRA().Top()+pLay->PrintRA().Top()
+                                     + pLay->PrintRA().Height() - pSect->FrameRA().Top()
+                                     - pSect->FrameRA().Height();
                             }
                             pSect = nullptr;
                         }
@@ -803,19 +803,19 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                         {
                              if ( pLay->IsVertLR() )
                               {
-                                 nFrameTop = pLay->Frame().Left();
-                                 nPrtHeight = pLay->Prt().Width();
+                                 nFrameTop = pLay->FrameRA().Left();
+                                 nPrtHeight = pLay->PrintRA().Width();
                              }
                              else
                              {
-                                 nFrameTop = pLay->Frame().Left() + pLay->Frame().Width();
-                                 nPrtHeight = pLay->Prt().Width();
+                                 nFrameTop = pLay->FrameRA().Left() + pLay->FrameRA().Width();
+                                 nPrtHeight = pLay->PrintRA().Width();
                              }
                         }
                         else
                         {
-                            nFrameTop = pLay->Frame().Top();
-                            nPrtHeight = pLay->Prt().Height();
+                            nFrameTop = pLay->FrameRA().Top();
+                            nPrtHeight = pLay->PrintRA().Height();
                         }
                         bSct = nullptr != pSect;
                     }
@@ -823,7 +823,7 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
             }
             if ( pLay )
             {
-                if ( pLay->Frame().IsInside( rPt ) )
+                if ( pLay->FrameRA().IsInside( rPt ) )
                 {
                     SwTwips nDiff = pLay->IsVertical() ? ( pLay->IsVertLR() ? ( rPt.X() - nFrameTop ) : ( nFrameTop - rPt.X() ) )
                                                        : ( rPt.Y() - nFrameTop );
@@ -874,13 +874,13 @@ static sal_uInt64 lcl_FindCntDiff( const Point &rPt, const SwLayoutFrame *pLay,
         {
             //Calculate the distance between those two points.
             //'delta' X^2 + 'delta' Y^2 = 'distance'^2
-            sal_uInt64 dX = std::max( pCnt->Frame().Left(), rPt.X() ) -
-                       std::min( pCnt->Frame().Left(), rPt.X() ),
-                  dY = std::max( pCnt->Frame().Top(), rPt.Y() ) -
-                       std::min( pCnt->Frame().Top(), rPt.Y() );
+            sal_uInt64 dX = std::max( pCnt->FrameRA().Left(), rPt.X() ) -
+                       std::min( pCnt->FrameRA().Left(), rPt.X() ),
+                  dY = std::max( pCnt->FrameRA().Top(), rPt.Y() ) -
+                       std::min( pCnt->FrameRA().Top(), rPt.Y() );
             // square of the difference will do fine here
             const sal_uInt64 nDiff = (dX * dX) + (dY * dY);
-            if ( pCnt->Frame().Top() <= rPt.Y() )
+            if ( pCnt->FrameRA().Top() <= rPt.Y() )
             {
                 if ( nDiff < nDistance )
                 {
@@ -943,7 +943,7 @@ static const SwContentFrame * lcl_FindCnt( const Point &rPt, const SwContentFram
             const sal_uInt64 nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFootnote );
             if ( nNew < nDist )
             {
-                if ( pNew->Frame().Top() <= rPt.Y() )
+                if ( pNew->FrameRA().Top() <= rPt.Y() )
                 {
                     pRet = pNearest = pNew;
                     nDist = nNearest = nNew;
@@ -968,7 +968,7 @@ static const SwContentFrame * lcl_FindCnt( const Point &rPt, const SwContentFram
             const sal_uInt64 nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFootnote );
             if ( nNew < nDist )
             {
-                if ( pNew->Frame().Top() <= rPt.Y() )
+                if ( pNew->FrameRA().Top() <= rPt.Y() )
                 {
                     pRet = pNearest = pNew;
                     nDist = nNearest = nNew;
@@ -985,7 +985,7 @@ static const SwContentFrame * lcl_FindCnt( const Point &rPt, const SwContentFram
                 nOldNew = nNew;
         }
     }
-    if ( pRet->Frame().Top() > rPt.Y() )
+    if ( pRet->FrameRA().Top() > rPt.Y() )
         return pNearest;
     else
         return pRet;
@@ -993,8 +993,8 @@ static const SwContentFrame * lcl_FindCnt( const Point &rPt, const SwContentFram
 
 static void lcl_PointToPrt( Point &rPoint, const SwFrame *pFrame )
 {
-    SwRect aTmp( pFrame->Prt() );
-    aTmp += pFrame->Frame().Pos();
+    SwRect aTmp( pFrame->PrintRA() );
+    aTmp += pFrame->FrameRA().Pos();
     if ( rPoint.getX() < aTmp.Left() )
         rPoint.setX(aTmp.Left());
     else if ( rPoint.getX() > aTmp.Right() )
@@ -1049,7 +1049,7 @@ const SwContentFrame *FindAnchor( const SwFrame *pOldAnch, const Point &rNew,
         ::lcl_PointToPrt( aNew, pPage );
     }
 
-    if ( pCnt->IsInDocBody() == bBody && pCnt->Frame().IsInside( aNew ) )
+    if ( pCnt->IsInDocBody() == bBody && pCnt->FrameRA().IsInside( aNew ) )
         return pCnt;
     else if ( pOldAnch->IsInDocBody() || pOldAnch->IsPageFrame() )
     {
@@ -1058,7 +1058,7 @@ const SwContentFrame *FindAnchor( const SwFrame *pOldAnch, const Point &rNew,
         Point aTmp( aNew );
         const SwContentFrame *pTmp = pCnt->FindPageFrame()->
                                         GetContentPos( aTmp, false, true );
-        if ( pTmp && pTmp->Frame().IsInside( aNew ) )
+        if ( pTmp && pTmp->FrameRA().IsInside( aNew ) )
             return pTmp;
     }
 
@@ -1169,7 +1169,7 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
     Point aNew( rNew );
 
     if( ( GetAnchorFrame()->IsVertical() && !GetAnchorFrame()->IsVertLR() ) || GetAnchorFrame()->IsRightToLeft() )
-        aNew.setX(aNew.getX() + Frame().Width());
+        aNew.setX(aNew.getX() + FrameRA().Width());
     SwContentFrame *pCnt = const_cast<SwContentFrame*>(::FindAnchor( GetAnchorFrame(), aNew ));
     if( pCnt->IsProtected() )
         pCnt = const_cast<SwContentFrame*>(static_cast<const SwContentFrame*>(GetAnchorFrame()));
@@ -1184,9 +1184,9 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
         ( !bRTL !=  !GetAnchorFrame()->IsRightToLeft() ) )
     {
         if( bVert || bRTL )
-            aNew.setX(aNew.getX() + Frame().Width());
+            aNew.setX(aNew.getX() + FrameRA().Width());
         else
-            aNew.setX(aNew.getX() - Frame().Width());
+            aNew.setX(aNew.getX() - FrameRA().Width());
     }
 
     if ( pCnt->IsInDocBody() )
@@ -1205,20 +1205,20 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
 //!!!!!We can optimize here: FindAnchor could also return RelPos!
     const SwFrame *pFrame = nullptr;
     SwTwips nY;
-    if ( pCnt->Frame().IsInside( aNew ) )
+    if ( pCnt->FrameRA().IsInside( aNew ) )
     {
         // #i70582#
         if ( bVert )
         {
-            nY = pCnt->Frame().Left() - rNew.X();
+            nY = pCnt->FrameRA().Left() - rNew.X();
             if ( bVertL2R )
                 nY = -nY;
             else
-                nY += pCnt->Frame().Width() - Frame().Width();
+                nY += pCnt->FrameRA().Width() - FrameRA().Width();
             nY -= pCnt->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
         }
         else
-            nY = rNew.Y() - pCnt->Frame().Top() - pCnt->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
+            nY = rNew.Y() - pCnt->FrameRA().Top() - pCnt->GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
     }
     else
     {
@@ -1256,20 +1256,20 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
             if( pUp->IsVertical() )
             {
                 if ( pUp->IsVertLR()  )
-                    nDiff += pUp->Prt().Width() - pFollow->GetRelPos().getX();
+                    nDiff += pUp->PrintRA().Width() - pFollow->GetRelPos().getX();
                 else
-                       nDiff += pFollow->Frame().Left() + pFollow->Frame().Width()
-                             - pUp->Frame().Left() - pUp->Prt().Left();
+                       nDiff += pFollow->FrameRA().Left() + pFollow->FrameRA().Width()
+                             - pUp->FrameRA().Left() - pUp->PrintRA().Left();
             }
             else
-                nDiff += pUp->Prt().Height() - pFollow->GetRelPos().Y();
+                nDiff += pUp->PrintRA().Height() - pFollow->GetRelPos().Y();
             pFollow = pFollow->GetFollow();
         } while ( pFollow != pOriginal );
         nY += nDiff;
         if( bVert )
-            nX = pCnt->Frame().Top() - pOriginal->Frame().Top();
+            nX = pCnt->FrameRA().Top() - pOriginal->FrameRA().Top();
         else
-            nX = pCnt->Frame().Left() - pOriginal->Frame().Left();
+            nX = pCnt->FrameRA().Left() - pOriginal->FrameRA().Left();
     }
 
     if ( nY == LONG_MAX )
@@ -1294,25 +1294,25 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
     if( bVert )
     {
         if( !pFrame )
-            nX += rNew.Y() - pCnt->Frame().Top();
+            nX += rNew.Y() - pCnt->FrameRA().Top();
         else
-            nX = rNew.Y() - pFrame->Frame().Top();
+            nX = rNew.Y() - pFrame->FrameRA().Top();
     }
     else
     {
         if( !pFrame )
         {
             if ( pCnt->IsRightToLeft() )
-                nX += pCnt->Frame().Right() - rNew.X() - Frame().Width();
+                nX += pCnt->FrameRA().Right() - rNew.X() - FrameRA().Width();
             else
-                nX += rNew.X() - pCnt->Frame().Left();
+                nX += rNew.X() - pCnt->FrameRA().Left();
         }
         else
         {
             if ( pFrame->IsRightToLeft() )
-                nX += pFrame->Frame().Right() - rNew.X() - Frame().Width();
+                nX += pFrame->FrameRA().Right() - rNew.X() - FrameRA().Width();
             else
-                nX = rNew.X() - pFrame->Frame().Left();
+                nX = rNew.X() - pFrame->FrameRA().Left();
         }
     }
     GetFormat()->GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );

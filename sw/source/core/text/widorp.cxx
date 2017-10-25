@@ -74,8 +74,8 @@ SwTextFrameBreak::SwTextFrameBreak( SwTextFrame *pNewFrame, const SwTwips nRst )
     if( !m_nRstHeight && !m_pFrame->IsFollow() && m_pFrame->IsInFootnote() && m_pFrame->HasPara() )
     {
         m_nRstHeight = m_pFrame->GetFootnoteFrameHeight();
-        m_nRstHeight += aRectFnSet.GetHeight(m_pFrame->Prt()) -
-                      aRectFnSet.GetHeight(m_pFrame->Frame());
+        m_nRstHeight += aRectFnSet.GetHeight(m_pFrame->PrintRA()) -
+                      aRectFnSet.GetHeight(m_pFrame->FrameRA());
         if( m_nRstHeight < 0 )
             m_nRstHeight = 0;
     }
@@ -382,10 +382,10 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
     if ( aRectFnSet.IsVert() )
     {
         nTmpY = pFrame->SwitchHorizontalToVertical( nTmpY );
-        nOldHeight = -aRectFnSet.GetHeight(pFrame->Prt());
+        nOldHeight = -aRectFnSet.GetHeight(pFrame->PrintRA());
     }
     else
-        nOldHeight = aRectFnSet.GetHeight(pFrame->Prt());
+        nOldHeight = aRectFnSet.GetHeight(pFrame->PrintRA());
 
     const SwTwips nChg = aRectFnSet.YDiff( nTmpY, nDocPrtTop + nOldHeight );
 
@@ -404,7 +404,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
             // multiple lines (e.g. via frames).
             if( !pMaster->IsLocked() && pMaster->GetUpper() )
             {
-                const SwTwips nTmpRstHeight = aRectFnSet.BottomDist( pMaster->Frame(),
+                const SwTwips nTmpRstHeight = aRectFnSet.BottomDist( pMaster->FrameRA(),
                     aRectFnSet.GetPrtBottom(*pMaster->GetUpper()) );
                 if ( nTmpRstHeight >=
                      SwTwips(rLine.GetInfo().GetParaPortion()->Height() ) )
@@ -427,7 +427,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
 
     if( 0 > nChg && !pMaster->IsLocked() && pMaster->GetUpper() )
     {
-        SwTwips nTmpRstHeight = aRectFnSet.BottomDist( pMaster->Frame(),
+        SwTwips nTmpRstHeight = aRectFnSet.BottomDist( pMaster->FrameRA(),
             aRectFnSet.GetPrtBottom(*pMaster->GetUpper()) );
         if( nTmpRstHeight >= SwTwips(rLine.GetInfo().GetParaPortion()->Height() ) )
         {
