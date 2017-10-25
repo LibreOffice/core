@@ -172,10 +172,8 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTreeListBox *, pSvTabListBox, void 
     if(nSelectionCount > 1)
     {
         // possibly deselect old entries in case of multi-selection
-        SvTreeListEntry* pEntry = nullptr;
-        SvBaseLink* pLink = nullptr;
-        pEntry = pSvTabListBox->GetHdlEntry();
-        pLink = static_cast<SvBaseLink*>(pEntry->GetUserData());
+        SvTreeListEntry* pEntry = pSvTabListBox->GetHdlEntry();
+        SvBaseLink* pLink = static_cast<SvBaseLink*>(pEntry->GetUserData());
         sal_uInt16 nObjectType = pLink->GetObjType();
         if((OBJECT_CLIENT_FILE & nObjectType) != OBJECT_CLIENT_FILE)
         {
