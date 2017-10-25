@@ -148,8 +148,8 @@ public:
 
     public:
         FrameWriteAccess(SwFrameRect& rTarget) : SwRect(rTarget.getSwFrame()), mrTarget(rTarget) {}
-        ~FrameWriteAccess() { mrTarget.maFrameRect = *this; }
-        void setSwRect(const SwRect& rNew) { *(reinterpret_cast< SwRect* >(this)) = rNew; }
+        ~FrameWriteAccess();
+        void setSwRect(const SwRect& rNew) { *reinterpret_cast< SwRect* >(this) = rNew; }
     };
 
     // same for print
@@ -163,8 +163,8 @@ public:
 
     public:
         PrintWriteAccess(SwFrameRect& rTarget) : SwRect(rTarget.getSwPrint()), mrTarget(rTarget) {}
-        ~PrintWriteAccess() { mrTarget.maPrintRect = *this; }
-        void setSwRect(const SwRect& rNew) { *(reinterpret_cast< SwRect* >(this)) = rNew; }
+        ~PrintWriteAccess();
+        void setSwRect(const SwRect& rNew) { *reinterpret_cast< SwRect* >(this) = rNew; }
     };
 };
 

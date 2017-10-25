@@ -59,6 +59,22 @@ SwFrameRect::SwFrameRect()
 {
 }
 
+SwFrameRect::FrameWriteAccess::~FrameWriteAccess()
+{
+    if(mrTarget.maFrameRect != *this)
+    {
+        mrTarget.maFrameRect = *this;
+    }
+}
+
+SwFrameRect::PrintWriteAccess::~PrintWriteAccess()
+{
+    if(mrTarget.maPrintRect != *this)
+    {
+        mrTarget.maPrintRect = *this;
+    }
+}
+
 SwFrame::SwFrame( SwModify *pMod, SwFrame* pSib )
 :   SwFrameRect(),
     SwClient( pMod ),
