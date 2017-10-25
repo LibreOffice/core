@@ -708,35 +708,24 @@ ImplFontSubstEntry::ImplFontSubstEntry( const OUString& rFontName,
     maSearchReplaceName = GetEnglishSearchFontName( rSubstFontName );
 }
 
-void OutputDevice::RemoveFontSubstitute( sal_uInt16 n )
+void OutputDevice::RemoveFontsSubstitute()
 {
     ImplDirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
     if( pSubst )
-        pSubst->RemoveFontSubstitute( n );
+        pSubst->RemoveFontsSubstitute();
 }
 
-void ImplDirectFontSubstitution::RemoveFontSubstitute( int nIndex )
+void ImplDirectFontSubstitution::RemoveFontsSubstitute()
 {
-    std::list<ImplFontSubstEntry>::iterator it = maFontSubstList.begin();
-    for( int nCount = 0; (it != maFontSubstList.end()) && (nCount++ != nIndex); ++it ) ;
-    if( it != maFontSubstList.end() )
-        maFontSubstList.erase( it );
-}
-
-sal_uInt16 OutputDevice::GetFontSubstituteCount()
-{
-    const ImplDirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
-    if( !pSubst )
-        return 0;
-    int nCount =  pSubst->GetFontSubstituteCount();
-    return (sal_uInt16)nCount;
+    maFontSubstList.clear();
 }
 
 bool ImplDirectFontSubstitution::FindFontSubstitute( OUString& rSubstName,
     const OUString& rSearchName ) const
 {
     // TODO: get rid of O(N) searches
-    std::list<ImplFontSubstEntry>::const_iterator it = maFontSubstList.begin();
+//TODOJUL
+    std::vector<ImplFontSubstEntry>::const_iterator it = maFontSubstList.begin();
     for(; it != maFontSubstList.end(); ++it )
     {
         const ImplFontSubstEntry& rEntry = *it;
