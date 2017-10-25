@@ -68,6 +68,11 @@ template<typename T> inline bool checked_add(T a, T b, T& result)
     return !msl::utilities::SafeAdd(a, b, result);
 }
 
+template<typename T> inline bool checked_sub(T a, T b, T& result)
+{
+    return !msl::utilities::SafeSubtract(a, b, result);
+}
+
 #elif (defined __GNUC__ && __GNUC__ >= 5) || (__has_builtin(__builtin_mul_overflow) && !(defined ANDROID && defined __clang__))
 
 template<typename T> inline bool checked_multiply(T a, T b, T& result)
@@ -78,6 +83,11 @@ template<typename T> inline bool checked_multiply(T a, T b, T& result)
 template<typename T> inline bool checked_add(T a, T b, T& result)
 {
     return __builtin_add_overflow(a, b, &result);
+}
+
+template<typename T> inline bool checked_sub(T a, T b, T& result)
+{
+    return __builtin_sub_overflow(a, b, &result);
 }
 
 #else
@@ -145,6 +155,31 @@ template<typename T> inline typename std::enable_if<std::is_unsigned<T>::value, 
     }
 
     result = a + b;
+
+    return false;
+}
+
+//https://www.securecoding.cert.org/confluence/display/c/INT32-C.+Ensure+that+operations+on+signed+integers+do+not+result+in+overflow
+template<typename T> inline typename std::enable_if<std::is_signed<T>::value, bool>::type checked_sub(T a, T b, T& result)
+{
+    if ((b > 0 && a < std::numeric_limits<T>::min() + b) ||
+        (b < 0 && a > std::numeric_limits<T>::max() + b)) {
+        return true;
+    }
+
+    result = a - b;
+
+    return false;
+}
+
+//https://www.securecoding.cert.org/confluence/display/c/INT30-C.+Ensure+that+unsigned+integer+operations+do+not+wrap
+template<typename T> inline typename std::enable_if<std::is_unsigned<T>::value, bool>::type checked_sub(T a, T b, T& result)
+{
+    if (a < b) {
+        return true;
+    }
+
+    result = a - b;
 
     return false;
 }
