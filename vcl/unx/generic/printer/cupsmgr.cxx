@@ -349,21 +349,21 @@ void CUPSManager::initialize()
 
     // remove everything that is not a CUPS printer and not
     // a special purpose printer (PDF, Fax)
-    std::list< OUString > aRemovePrinters;
-    for( std::unordered_map< OUString, Printer >::iterator it = m_aPrinters.begin();
-         it != m_aPrinters.end(); ++it )
+    std::unordered_map< OUString, Printer >::iterator it = m_aPrinters.begin();
+    while(it != m_aPrinters.end())
     {
         if( m_aCUPSDestMap.find( it->first ) != m_aCUPSDestMap.end() )
+        {
+            ++it;
             continue;
+        }
 
         if( !it->second.m_aInfo.m_aFeatures.isEmpty() )
+        {
+            ++it;
             continue;
-        aRemovePrinters.push_back( it->first );
-    }
-    while( aRemovePrinters.begin() != aRemovePrinters.end() )
-    {
-        m_aPrinters.erase( aRemovePrinters.front() );
-        aRemovePrinters.pop_front();
+        }
+        it = m_aPrinters.erase(it);
     }
 
     cupsSetPasswordCB( setPasswordCallback );
