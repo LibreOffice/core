@@ -1955,8 +1955,12 @@ sal_Int32 WW8ScannerBase::WW8ReadString( SvStream& rStrm, OUString& rStr,
         if (!bValid)
             break;
 
-        long nLen = ( (nNextPieceCp < nBehindTextCp) ? nNextPieceCp
-            : nBehindTextCp ) - nAktStartCp;
+        WW8_CP nEnd = (nNextPieceCp < nBehindTextCp) ? nNextPieceCp
+            : nBehindTextCp;
+        WW8_CP nLen;
+        const bool bFail = o3tl::checked_sub(nEnd, nAktStartCp, nLen);
+        if (bFail)
+            break;
 
         if( nLen > USHRT_MAX - 1 )
             nLen = USHRT_MAX - 1;
