@@ -389,7 +389,7 @@ namespace emfio
                     {
                         if (mnPixX == 0 || mnPixY == 0)
                         {
-                            SAL_WARN("vcl.emf", "invalid scaling factor");
+                            SAL_WARN("emfio", "invalid scaling factor");
                             return Point();
                         }
                         else
@@ -481,7 +481,7 @@ namespace emfio
                     {
                         if (mnPixX == 0 || mnPixY == 0)
                         {
-                            SAL_WARN("vcl.emf", "invalid scaling factor");
+                            SAL_WARN("emfio", "invalid scaling factor");
                             return Size();
                         }
                         else
