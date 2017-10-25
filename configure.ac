@@ -5962,6 +5962,24 @@ AC_MSG_RESULT([$cpp_library_name])
 AC_LANG_POP([C++])
 
 dnl ===================================================================
+dnl Check for gperf
+dnl ===================================================================
+AC_PATH_PROG(GPERF, gperf)
+if test -z "$GPERF"; then
+    AC_MSG_ERROR([gperf not found but needed. Install it.])
+fi
+if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
+    GPERF=`cygpath -m $GPERF`
+fi
+AC_MSG_CHECKING([gperf version])
+if test "`$GPERF --version | $EGREP ^GNU\ gperf | $AWK '{ print $3 }' | cut -d. -f1`" -ge "3"; then
+    AC_MSG_RESULT([OK])
+else
+    AC_MSG_ERROR([too old, you need at least 3.0.0])
+fi
+AC_SUBST(GPERF)
+
+dnl ===================================================================
 dnl C++11
 dnl ===================================================================
 
@@ -5972,8 +5990,11 @@ if test "$COM" = MSC; then
     # MSVC supports (a subset of) CXX11 without any switch
 elif test "$GCC" = "yes"; then
     HAVE_CXX11=
-    AC_MSG_CHECKING([whether $CXX supports C++14 or C++11])
-    for flag in -std=gnu++14 -std=gnu++1y -std=c++14 -std=c++1y -std=gnu++11 -std=gnu++0x -std=c++11 -std=c++0x ; do
+    AC_MSG_CHECKING([whether $CXX supports C++17, C++14, or C++11])
+    dnl But only use C++17 if the gperf that is being used knows not to emit
+    dnl "register" in C++ output:
+    printf 'foo\n' | $GPERF -L C++ > conftest.inc
+    for flag in -std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z -std=gnu++14 -std=gnu++1y -std=c++14 -std=c++1y -std=gnu++11 -std=gnu++0x -std=c++11 -std=c++0x ; do
         save_CXXFLAGS=$CXXFLAGS
         CXXFLAGS="$CXXFLAGS $flag -Werror"
         AC_LANG_PUSH([C++])
@@ -5981,6 +6002,16 @@ elif test "$GCC" = "yes"; then
             #include <algorithm>
             #include <functional>
             #include <vector>
+
+            #include <string.h>
+            #pragma GCC diagnostic push
+            #pragma GCC diagnostic ignored "-Wpragmas"
+                // make GCC not warn about next pragma
+            #pragma GCC diagnostic ignored "-Wdeprecated-register"
+                // make Clang with -std < C++17 not even warn about register
+            #include "conftest.inc"
+            #pragma GCC diagnostic pop
+
             void f(std::vector<int> & v, std::function<bool(int, int)> fn) {
                 std::sort(v.begin(), v.end(), fn);
             }
@@ -5992,6 +6023,7 @@ elif test "$GCC" = "yes"; then
             break
         fi
     done
+    rm conftest.inc
     if test "$HAVE_CXX11" = TRUE; then
         AC_MSG_RESULT([yes ($CXXFLAGS_CXX11)])
     else
@@ -7260,24 +7292,6 @@ if test "$enable_lotuswordpro" = "yes"; then
     ENABLE_LWP="TRUE"
 fi
 AC_SUBST(ENABLE_LWP)
-
-dnl ===================================================================
-dnl Check for gperf
-dnl ===================================================================
-AC_PATH_PROG(GPERF, gperf)
-if test -z "$GPERF"; then
-    AC_MSG_ERROR([gperf not found but needed. Install it.])
-fi
-if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
-    GPERF=`cygpath -m $GPERF`
-fi
-AC_MSG_CHECKING([gperf version])
-if test "`$GPERF --version | $EGREP ^GNU\ gperf | $AWK '{ print $3 }' | cut -d. -f1`" -ge "3"; then
-    AC_MSG_RESULT([OK])
-else
-    AC_MSG_ERROR([too old, you need at least 3.0.0])
-fi
-AC_SUBST(GPERF)
 
 dnl ===================================================================
 dnl Check for building ODK
