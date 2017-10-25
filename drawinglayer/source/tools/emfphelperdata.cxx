@@ -1323,14 +1323,10 @@ namespace emfplushelper
                     case EmfPlusRecordTypeSetWorldTransform:
                     {
                         SAL_INFO("drawinglayer", "EMF+ SetWorldTransform");
-                        basegfx::B2DHomMatrix transform;
-                        readXForm(rMS, transform);
-                        maWorldTransform = transform;
+                        readXForm(rMS, maWorldTransform);
                         mappingChanged();
                         SAL_INFO("drawinglayer",
-                            "EMF+\tm11: " << maWorldTransform.get(0,0) << "\tm12: " << maWorldTransform.get(1,0) <<
-                            "\tm21: " << maWorldTransform.get(0,1) << "\tm22: " << maWorldTransform.get(1,1) <<
-                            "\tdx: " << maWorldTransform.get(0,2) << "\tdy: " << maWorldTransform.get(1,2));
+                            "EMF+\t WorldTransform: " << maWorldTransform);
                         break;
                     }
                     case EmfPlusRecordTypeResetWorldTransform:
@@ -1347,9 +1343,7 @@ namespace emfplushelper
                         readXForm(rMS, transform);
 
                         SAL_INFO("drawinglayer",
-                            "EMF+\tmatrix m11: " << transform.get(0,0) << "m12: " << transform.get(0,1) <<
-                            "EMF+\tm21: " << transform.get(1,0) << "m22: " << transform.get(1,1) <<
-                            "EMF+\tdx: " << transform.get(2,0) << "dy: " << transform.get(2,1));
+                            "EMF+\t Transform: " << transform);
 
                         if (flags & 0x2000)
                         {
@@ -1366,78 +1360,41 @@ namespace emfplushelper
                         mappingChanged();
 
                         SAL_INFO("drawinglayer",
-                            "EMF+\tmatrix m11: " << maWorldTransform.get(0, 0) << "m12: " << maWorldTransform.get(0, 1) <<
-                            "EMF+\tm21: " << maWorldTransform.get(1, 0) << "m22: " << maWorldTransform.get(1, 1) <<
-                            "EMF+\tdx: " << maWorldTransform.get(2, 0) << "dy: " << maWorldTransform.get(2, 1));
+                            "EMF+\t WorldTransform: " << maWorldTransform);
                         break;
                     }
                     case EmfPlusRecordTypeTranslateWorldTransform:
                     {
-                        SAL_INFO("drawinglayer", "EMF+ TranslateWorldTransform");
-
-                        basegfx::B2DHomMatrix transform;
                         float eDx, eDy;
                         rMS.ReadFloat(eDx).ReadFloat(eDy);
-                        transform.set(0, 2, eDx);
-                        transform.set(1, 2, eDy);
 
-                        SAL_INFO("drawinglayer",
-                            "EMF+\tmatrix m11: " << transform.get(0, 0) << "m12: " << transform.get(0, 1) <<
-                            "EMF+\tm21: " << transform.get(1, 0) << "m22: " << transform.get(1, 1) <<
-                            "EMF+\tdx: " << transform.get(2, 0) << "dy: " << transform.get(2, 1));
+                        SAL_INFO("drawinglayer", "EMF+ TranslateWorldTransform eDx: " << eDx << ", eDy: " << eDy);
 
-                        if (flags & 0x2000)
-                        {
-                            // post multiply
-                            maWorldTransform *= transform;
-                        }
-                        else
-                        {
-                            // pre multiply
-                            transform *= maWorldTransform;
-                            maWorldTransform = transform;
-                        }
+                        // Skipping flags & 0x2000
+                        // For translate transformation there is no difference between post and pre multiply
+                        maWorldTransform.translate(eDx, eDy);
 
                         mappingChanged();
 
                         SAL_INFO("drawinglayer",
-                            "EMF+\tmatrix m11: " << maWorldTransform.get(0, 0) << "m12: " << maWorldTransform.get(0, 1) <<
-                            "EMF+\tm21: " << maWorldTransform.get(1, 0) << "m22: " << maWorldTransform.get(1, 1) <<
-                            "EMF+\tdx: " << maWorldTransform.get(2, 0) << "dy: " << maWorldTransform.get(2, 1));
+                            "EMF+\t WorldTransform: " << maWorldTransform);
                         break;
                     }
                     case EmfPlusRecordTypeScaleWorldTransform:
                     {
-                        basegfx::B2DHomMatrix transform;
-                        float eM11, eM22;
-                        rMS.ReadFloat(eM11).ReadFloat(eM22);
-                        transform.set(0, 0, eM11);
-                        transform.set(1, 1, eM22);
+                        float eSx, eSy;
+                        rMS.ReadFloat(eSx).ReadFloat(eSy);
 
-                        SAL_INFO("drawinglayer", "EMF+ ScaleWorldTransform Sx: " << transform.get(0,0) << " Sy: " << transform.get(1,1));
-                        SAL_INFO("drawinglayer",
-                            "EMF+\t m11: " << maWorldTransform.get(0,0) << ", m12: " << maWorldTransform.get(0,1) <<
-                            "EMF+\t m21: " << maWorldTransform.get(1,0) << ", m22: " << maWorldTransform.get(1,1) <<
-                            "EMF+\t dx: " << maWorldTransform.get(2,0) << ", dy: " << maWorldTransform.get(2,1));
+                        SAL_INFO("drawinglayer", "EMF+ ScaleWorldTransform Sx: " << eSx << ", Sy: " << eSy);
 
-                        if (flags & 0x2000)
-                        {
-                            // post multiply
-                            maWorldTransform *= transform;
-                        }
-                        else
-                        {
-                            // pre multiply
-                            transform *= maWorldTransform;
-                            maWorldTransform = transform;
-                        }
+                        // Skipping flags & 0x2000
+                        // For scale transformation there is no difference between post and pre multiply
+                        maWorldTransform.scale(eSx, eSy);
 
                         mappingChanged();
 
                         SAL_INFO("drawinglayer",
-                            "EMF+\t m11: " << maWorldTransform.get(0, 0) << ", m12: " << maWorldTransform.get(0, 1) <<
-                            "EMF+\t m21: " << maWorldTransform.get(1, 0) << ", m22: " << maWorldTransform.get(1, 1) <<
-                            "EMF+\t dx: " << maWorldTransform.get(2, 0) << ", dy: " << maWorldTransform.get(2, 1));
+                            "EMF+\t WorldTransform: " << maWorldTransform);
                         break;
                     }
                     case EmfPlusRecordTypeRotateWorldTransform:
@@ -1446,7 +1403,7 @@ namespace emfplushelper
                         float eAngle;
                         rMS.ReadFloat(eAngle);
 
-                        SAL_INFO("cppcanvas.emf", "EMF+ EmfPlusRecordTypeRotateWorldTransform Angle: " << eAngle);
+                        SAL_INFO("drawinglayer", "EMF+ EmfPlusRecordTypeRotateWorldTransform Angle: " << eAngle);
 
                         // Skipping flags & 0x2000
                         // For rotation transformation there is no difference between post and pre multiply
@@ -1454,7 +1411,7 @@ namespace emfplushelper
 
                         mappingChanged();
 
-                        SAL_INFO("cppcanvas.emf",
+                        SAL_INFO("drawinglayer",
                                 "EMF+\t " << maWorldTransform);
                         break;
                     }
