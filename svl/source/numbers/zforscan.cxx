@@ -585,7 +585,7 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
     return pResult;
 }
 
-short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos )
+short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos ) const
 {
     OUString sString = pFormatter->GetCharClass()->uppercase( sSymbol, nPos, sSymbol.getLength() - nPos );
     const NfKeywordTable & rKeyword = GetKeywords();
@@ -761,7 +761,7 @@ enum ScanState
 
 short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                                           sal_Int32& nPos,
-                                          OUString& sSymbol )
+                                          OUString& sSymbol ) const
 {
     InitKeywords();
     const CharClass* pChrCls = pFormatter->GetCharClass();
@@ -1065,7 +1065,7 @@ sal_Int32 ImpSvNumberformatScan::Symbol_Division(const OUString& rString)
     return 0; // 0 => ok
 }
 
-void ImpSvNumberformatScan::SkipStrings(sal_uInt16& i, sal_Int32& nPos)
+void ImpSvNumberformatScan::SkipStrings(sal_uInt16& i, sal_Int32& nPos) const
 {
     while (i < nStringsCnt && (   nTypeArray[i] == NF_SYMBOLTYPE_STRING
                                || nTypeArray[i] == NF_SYMBOLTYPE_BLANK
@@ -1076,7 +1076,7 @@ void ImpSvNumberformatScan::SkipStrings(sal_uInt16& i, sal_Int32& nPos)
     }
 }
 
-sal_uInt16 ImpSvNumberformatScan::PreviousKeyword(sal_uInt16 i)
+sal_uInt16 ImpSvNumberformatScan::PreviousKeyword(sal_uInt16 i) const
 {
     short res = 0;
     if (i > 0 && i < nStringsCnt)
@@ -1094,7 +1094,7 @@ sal_uInt16 ImpSvNumberformatScan::PreviousKeyword(sal_uInt16 i)
     return res;
 }
 
-sal_uInt16 ImpSvNumberformatScan::NextKeyword(sal_uInt16 i)
+sal_uInt16 ImpSvNumberformatScan::NextKeyword(sal_uInt16 i) const
 {
     short res = 0;
     if (i < nStringsCnt-1)
@@ -1112,7 +1112,7 @@ sal_uInt16 ImpSvNumberformatScan::NextKeyword(sal_uInt16 i)
     return res;
 }
 
-short ImpSvNumberformatScan::PreviousType( sal_uInt16 i )
+short ImpSvNumberformatScan::PreviousType( sal_uInt16 i ) const
 {
     if ( i > 0 && i < nStringsCnt )
     {
@@ -1126,7 +1126,7 @@ short ImpSvNumberformatScan::PreviousType( sal_uInt16 i )
     return 0;
 }
 
-sal_Unicode ImpSvNumberformatScan::PreviousChar(sal_uInt16 i)
+sal_Unicode ImpSvNumberformatScan::PreviousChar(sal_uInt16 i) const
 {
     sal_Unicode res = ' ';
     if (i > 0 && i < nStringsCnt)
@@ -1148,7 +1148,7 @@ sal_Unicode ImpSvNumberformatScan::PreviousChar(sal_uInt16 i)
     return res;
 }
 
-sal_Unicode ImpSvNumberformatScan::NextChar(sal_uInt16 i)
+sal_Unicode ImpSvNumberformatScan::NextChar(sal_uInt16 i) const
 {
     sal_Unicode res = ' ';
     if (i < nStringsCnt-1)
@@ -1170,7 +1170,7 @@ sal_Unicode ImpSvNumberformatScan::NextChar(sal_uInt16 i)
     return res;
 }
 
-bool ImpSvNumberformatScan::IsLastBlankBeforeFrac(sal_uInt16 i)
+bool ImpSvNumberformatScan::IsLastBlankBeforeFrac(sal_uInt16 i) const
 {
     bool res = true;
     if (i < nStringsCnt-1)
@@ -1224,7 +1224,7 @@ void ImpSvNumberformatScan::Reset()
     nNatNumModifier = 0;
 }
 
-bool ImpSvNumberformatScan::Is100SecZero( sal_uInt16 i, bool bHadDecSep )
+bool ImpSvNumberformatScan::Is100SecZero( sal_uInt16 i, bool bHadDecSep ) const
 {
     sal_uInt16 nIndexPre = PreviousKeyword( i );
     return (nIndexPre == NF_KEY_S || nIndexPre == NF_KEY_SS) &&

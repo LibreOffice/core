@@ -1566,7 +1566,7 @@ static bool lcl_matchKeywordAndGetNumber( const OUString & rString, const sal_In
 
 short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                                     sal_Int32& nPos,
-                                    OUString& sSymbol)
+                                    OUString& sSymbol) const
 {
     short eSymbolType = BRACKET_SYMBOLTYPE_FORMAT;
     sal_Unicode cToken;
@@ -1967,14 +1967,14 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr,
     return aTmp;
 }
 
-void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUStringBuffer& rOutString)
+void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUStringBuffer& rOutString) const
 {
     OUString sTemp;
     ImpGetOutputStandard(fNumber, sTemp);
     rOutString = sTemp;
 }
 
-void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUString& rOutString)
+void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUString& rOutString) const
 {
     sal_uInt16 nStandardPrec = rScan.GetStandardPrec();
 
@@ -2012,7 +2012,7 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutS
     rOutString = impTransliterate(rOutString, NumFor[0].GetNatNum());
 }
 
-void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString)
+void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString) const
 {
     bool bModified = false;
     if ( (eType & css::util::NumberFormat::PERCENT) && (fabs(fNumber) < D_MAX_D_BY_100))

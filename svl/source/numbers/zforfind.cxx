@@ -289,7 +289,7 @@ bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
 // near SV_MAX_COUNT_INPUT_STRINGS, in NumberStringDivision().
 
 bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
-                                          OUString& rSymbol )
+                                          OUString& rSymbol ) const
 {
     bool res = false;
     OUStringBuffer sBuff(rSymbol);
@@ -427,7 +427,7 @@ bool ImpSvNumberInputScan::StringPtrContainsImpl( const OUString& rWhat,
  * Whether rString contains word rWhat at nPos
  */
 bool ImpSvNumberInputScan::StringContainsWord( const OUString& rWhat,
-                                               const OUString& rString, sal_Int32 nPos )
+                                               const OUString& rString, sal_Int32 nPos ) const
 {
     if (rWhat.isEmpty() || rString.getLength() < nPos + rWhat.getLength())
         return false;
@@ -535,7 +535,7 @@ inline bool ImpSvNumberInputScan::SkipString( const OUString& rWhat,
  */
 inline bool ImpSvNumberInputScan::GetThousandSep( const OUString& rString,
                                                   sal_Int32& nPos,
-                                                  sal_uInt16 nStringPos )
+                                                  sal_uInt16 nStringPos ) const
 {
     const OUString& rSep = pFormatter->GetNumThousandSep();
     // Is it an ordinary space instead of a no-break space?
@@ -574,7 +574,7 @@ inline bool ImpSvNumberInputScan::GetThousandSep( const OUString& rString,
  *  "false"=> -1:
  *  else   =>  0:
  */
-short ImpSvNumberInputScan::GetLogical( const OUString& rString )
+short ImpSvNumberInputScan::GetLogical( const OUString& rString ) const
 {
     short res;
 
@@ -784,7 +784,7 @@ bool ImpSvNumberInputScan::GetTimeAmPm( const OUString& rString, sal_Int32& nPos
  * ','   => true
  * else => false
  */
-inline bool ImpSvNumberInputScan::GetDecSep( const OUString& rString, sal_Int32& nPos )
+inline bool ImpSvNumberInputScan::GetDecSep( const OUString& rString, sal_Int32& nPos ) const
 {
     if ( rString.getLength() > nPos )
     {
@@ -802,7 +802,7 @@ inline bool ImpSvNumberInputScan::GetDecSep( const OUString& rString, sal_Int32&
 /**
  * Reading a hundredth seconds separator
  */
-inline bool ImpSvNumberInputScan::GetTime100SecSep( const OUString& rString, sal_Int32& nPos )
+inline bool ImpSvNumberInputScan::GetTime100SecSep( const OUString& rString, sal_Int32& nPos ) const
 {
     if ( rString.getLength() > nPos )
     {
@@ -888,7 +888,7 @@ short ImpSvNumberInputScan::GetESign( const OUString& rString, sal_Int32& nPos )
  * i counts string portions, j counts numbers thereof.
  * It should had been called SkipNumber instead.
  */
-inline bool ImpSvNumberInputScan::GetNextNumber( sal_uInt16& i, sal_uInt16& j )
+inline bool ImpSvNumberInputScan::GetNextNumber( sal_uInt16& i, sal_uInt16& j ) const
 {
     if ( i < nStringsCnt && IsNum[i] )
     {
@@ -902,7 +902,7 @@ inline bool ImpSvNumberInputScan::GetNextNumber( sal_uInt16& i, sal_uInt16& j )
 
 bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
                                        sal_uInt16 nIndex, // j-value of the first numeric time part of input, default 0
-                                       sal_uInt16 nCnt )  // count of numeric time parts
+                                       sal_uInt16 nCnt ) const // count of numeric time parts
 {
     bool bRet = true;
     sal_uInt16 nHour;
@@ -961,7 +961,7 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
 }
 
 
-sal_uInt16 ImpSvNumberInputScan::ImplGetDay( sal_uInt16 nIndex )
+sal_uInt16 ImpSvNumberInputScan::ImplGetDay( sal_uInt16 nIndex ) const
 {
     sal_uInt16 nRes = 0;
 
@@ -978,7 +978,7 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetDay( sal_uInt16 nIndex )
 }
 
 
-sal_uInt16 ImpSvNumberInputScan::ImplGetMonth( sal_uInt16 nIndex )
+sal_uInt16 ImpSvNumberInputScan::ImplGetMonth( sal_uInt16 nIndex ) const
 {
     // Preset invalid month number
     sal_uInt16 nRes = pFormatter->GetCalendar()->getNumberOfMonthsInYear();

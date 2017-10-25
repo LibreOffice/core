@@ -45,7 +45,7 @@ class SVL_DLLPUBLIC ShareControlFile : public LockFileCommon
     std::vector< LockFileEntry >                  m_aUsersData;
 
     void Close();
-    bool IsValid()
+    bool IsValid() const
     {
         return ( m_xStream.is() && m_xInputStream.is() && m_xOutputStream.is() && m_xSeekable.is() && m_xTruncate.is() );
     }

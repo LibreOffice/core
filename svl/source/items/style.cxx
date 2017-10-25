@@ -368,7 +368,7 @@ SfxStyleFamily SfxStyleSheetIterator::GetSearchFamily() const
     return nSearchFamily;
 }
 
-inline bool SfxStyleSheetIterator::IsTrivialSearch()
+inline bool SfxStyleSheetIterator::IsTrivialSearch() const
 {
     return (( nMask & SFXSTYLEBIT_ALL_VISIBLE ) == SFXSTYLEBIT_ALL_VISIBLE) &&
         (GetSearchFamily() == SfxStyleFamily::All);

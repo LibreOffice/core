@@ -209,31 +209,31 @@ private: // Private section
 
     void SetDependentKeywords();
                                                 // Sets the language dependent keywords
-    void SkipStrings(sal_uInt16& i, sal_Int32& nPos);// Skips StringSymbols
-    sal_uInt16 PreviousKeyword(sal_uInt16 i);   // Returns index of the preceding one
+    void SkipStrings(sal_uInt16& i, sal_Int32& nPos) const;// Skips StringSymbols
+    sal_uInt16 PreviousKeyword(sal_uInt16 i) const;  // Returns index of the preceding one
                                                 // Keyword or 0
-    sal_uInt16 NextKeyword(sal_uInt16 i);       // Returns index of the next one
+    sal_uInt16 NextKeyword(sal_uInt16 i) const; // Returns index of the next one
                                                 // Keyword or 0
-    sal_Unicode PreviousChar(sal_uInt16 i);     // Returns last char before index skips EMPTY, STRING, STAR, BLANK
-    sal_Unicode NextChar(sal_uInt16 i);         // Returns first following char
-    short PreviousType( sal_uInt16 i );         // Returns type before position skips EMPTY
-    bool IsLastBlankBeforeFrac(sal_uInt16 i);   // True <=> there won't be a ' ' until the '/'
+    sal_Unicode PreviousChar(sal_uInt16 i) const; // Returns last char before index skips EMPTY, STRING, STAR, BLANK
+    sal_Unicode NextChar(sal_uInt16 i) const;   // Returns first following char
+    short PreviousType( sal_uInt16 i ) const;   // Returns type before position skips EMPTY
+    bool IsLastBlankBeforeFrac(sal_uInt16 i) const; // True <=> there won't be a ' ' until the '/'
     void Reset();                               // Reset all variables before starting the analysis
     short GetKeyWord( const OUString& sSymbol,  // Determine keyword at nPos
-                      sal_Int32 nPos );         // Return 0 <=> not found
+                      sal_Int32 nPos ) const;   // Return 0 <=> not found
 
-    bool IsAmbiguousE( short nKey )      // whether nKey is ambiguous E of NF_KEY_E/NF_KEY_EC
+    bool IsAmbiguousE( short nKey ) const  // whether nKey is ambiguous E of NF_KEY_E/NF_KEY_EC
         {
             return (nKey == NF_KEY_EC || nKey == NF_KEY_E) &&
                 (GetKeywords()[NF_KEY_EC] == GetKeywords()[NF_KEY_E]);
         }
 
     // if 0 at strArray[i] is of S,00 or SS,00 or SS"any"00 in ScanType() or FinalScan()
-    bool Is100SecZero( sal_uInt16 i, bool bHadDecSep );
+    bool Is100SecZero( sal_uInt16 i, bool bHadDecSep ) const;
 
     short Next_Symbol(const OUString& rStr,
                       sal_Int32& nPos,
-                      OUString& sSymbol); // Next Symbol
+                      OUString& sSymbol) const; // Next Symbol
     sal_Int32 Symbol_Division(const OUString& rString);// Initial lexical scan
     sal_Int32 ScanType(); // Analysis of the Format type
     sal_Int32 FinalScan( OUString& rString ); // Final analysis with supplied type

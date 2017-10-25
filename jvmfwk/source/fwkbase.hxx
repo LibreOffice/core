@@ -34,9 +34,9 @@ class VendorSettings
 public:
     VendorSettings();
 
-    VersionInfo getVersionInformation(const OUString & sVendor);
+    VersionInfo getVersionInformation(const OUString & sVendor) const;
 
-    ::std::vector< OUString> getSupportedVendors();
+    ::std::vector< OUString> getSupportedVendors() const;
 };
 
 /* The class offers functions to retrieve verified bootstrap parameters.

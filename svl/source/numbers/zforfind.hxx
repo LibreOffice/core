@@ -194,7 +194,7 @@ private:
 
     // Concatenate ,000,23 blocks
     // in input to 000123
-    bool SkipThousands( const sal_Unicode*& pStr, OUString& rSymbol );
+    bool SkipThousands( const sal_Unicode*& pStr, OUString& rSymbol ) const;
 
     // Divide numbers/strings into
     // arrays and variables above.
@@ -208,7 +208,7 @@ private:
      */
     bool StringContainsWord( const OUString& rWhat,
                              const OUString& rString,
-                             sal_Int32 nPos );
+                             sal_Int32 nPos ) const;
 
     // optimized substring versions
 
@@ -268,9 +268,9 @@ private:
     // Recognizes exactly ,111 as group separator
     inline bool GetThousandSep( const OUString& rString,
                                 sal_Int32& nPos,
-                                sal_uInt16 nStringPos );
+                                sal_uInt16 nStringPos ) const;
     // Get boolean value
-    short GetLogical( const OUString& rString );
+    short GetLogical( const OUString& rString ) const;
 
     // Get month and advance string position
     short GetMonth( const OUString& rString,
@@ -291,11 +291,11 @@ private:
 
     // Get decimal separator and advance string position
     inline bool GetDecSep( const OUString& rString,
-                           sal_Int32& nPos );
+                           sal_Int32& nPos ) const;
 
     // Get hundredth seconds separator and advance string position
     inline bool GetTime100SecSep( const OUString& rString,
-                                  sal_Int32& nPos );
+                                  sal_Int32& nPos ) const;
 
     // Get sign  and advance string position
     // Including special case '('
@@ -308,7 +308,7 @@ private:
 
     // Get next number as array offset
     inline bool GetNextNumber( sal_uInt16& i,
-                               sal_uInt16& j );
+                               sal_uInt16& j ) const;
 
     /** Converts time -> double (only decimals)
 
@@ -316,9 +316,9 @@ private:
      */
     bool GetTimeRef( double& fOutNumber,                     // result as double
                      sal_uInt16 nIndex,                      // Index of hour in input
-                     sal_uInt16 nCnt );                      // Count of time substrings in input
-    sal_uInt16 ImplGetDay  ( sal_uInt16 nIndex );   // Day input, 0 if no match
-    sal_uInt16 ImplGetMonth( sal_uInt16 nIndex );   // Month input, zero based return, NumberOfMonths if no match
+                     sal_uInt16 nCnt ) const;                // Count of time substrings in input
+    sal_uInt16 ImplGetDay  ( sal_uInt16 nIndex ) const;      // Day input, 0 if no match
+    sal_uInt16 ImplGetMonth( sal_uInt16 nIndex ) const;      // Month input, zero based return, NumberOfMonths if no match
     sal_uInt16 ImplGetYear ( sal_uInt16 nIndex );   // Year input, 0 if no match
 
     // Conversion of date to number

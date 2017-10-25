@@ -52,7 +52,7 @@ void SvCommandList::FillFromSequence( const css::uno::Sequence < css::beans::Pro
     }
 }
 
-void SvCommandList::FillSequence( css::uno::Sequence < css::beans::PropertyValue >& aCommandSequence )
+void SvCommandList::FillSequence( css::uno::Sequence < css::beans::PropertyValue >& aCommandSequence ) const
 {
     const sal_Int32 nCount = aCommandList.size();
     aCommandSequence.realloc( nCount );

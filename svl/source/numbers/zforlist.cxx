@@ -175,7 +175,7 @@ public:
 
     void                    Remove( SvNumberFormatter const * pThis );
 
-    size_t                  Count()
+    size_t                  Count() const
                                 { return aFormatters.size(); }
 
     virtual void            ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
@@ -395,7 +395,7 @@ void SvNumberFormatter::ChangeNullDate(sal_uInt16 nDay,
     pStringScanner->ChangeNullDate(nDay, nMonth, nYear);
 }
 
-const Date& SvNumberFormatter::GetNullDate()
+const Date& SvNumberFormatter::GetNullDate() const
 {
     return pFormatScanner->GetNullDate();
 }
@@ -410,12 +410,12 @@ void SvNumberFormatter::SetNoZero(bool bNZ)
     bNoZero = bNZ;
 }
 
-sal_uInt16 SvNumberFormatter::GetStandardPrec()
+sal_uInt16 SvNumberFormatter::GetStandardPrec() const
 {
     return pFormatScanner->GetStandardPrec();
 }
 
-bool SvNumberFormatter::GetNoZero()
+bool SvNumberFormatter::GetNoZero() const
 {
     return bNoZero;
 }
@@ -2768,7 +2768,7 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
 }
 
 
-sal_Int32 SvNumberFormatter::ImpPosToken ( const OUStringBuffer & sFormat, sal_Unicode token, sal_Int32 nStartPos /* = 0*/ )
+sal_Int32 SvNumberFormatter::ImpPosToken ( const OUStringBuffer & sFormat, sal_Unicode token, sal_Int32 nStartPos /* = 0*/ ) const
 {
     sal_Int32 nLength = sFormat.getLength();
     for ( sal_Int32 i=nStartPos; i<nLength && i>=0 ; i++ )

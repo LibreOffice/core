@@ -155,7 +155,7 @@ public:
     /** putUrl/queryUrl.
     */
     void putUrl   (const OUString &rUrl);
-    bool queryUrl (const OUString &rUrl);
+    bool queryUrl (const OUString &rUrl) const;
 };
 
 INetURLHistory_Impl::INetURLHistory_Impl()
@@ -272,7 +272,7 @@ void INetURLHistory_Impl::putUrl (const OUString &rUrl)
     }
 }
 
-bool INetURLHistory_Impl::queryUrl (const OUString &rUrl)
+bool INetURLHistory_Impl::queryUrl (const OUString &rUrl) const
 {
     sal_uInt32 h = crc32 (rUrl);
     sal_uInt16 k = find (h);

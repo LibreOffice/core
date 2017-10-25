@@ -589,11 +589,11 @@ public:
                               LanguageType eLnge, SvNumberformat* pFormat );
 
     /// Return the reference date
-    const Date& GetNullDate();
+    const Date& GetNullDate() const;
     /// Return the standard decimal precision
-    sal_uInt16 GetStandardPrec();
+    sal_uInt16 GetStandardPrec() const;
     /// Return whether zero suppression is switched on
-    bool GetNoZero();
+    bool GetNoZero() const;
     /** Get the type of a format (or css::util::NumberFormat::UNDEFINED if no entry),
          but with css::util::NumberFormat::DEFINED masked out */
     short GetType(sal_uInt32 nFIndex);
@@ -902,7 +902,7 @@ private:
     DECL_DLLPRIVATE_STATIC_LINK( SvNumberFormatter, CurrencyChangeLink, LinkParamNone*, void );
 
     // return position of a special character
-    sal_Int32 ImpPosToken ( const OUStringBuffer & sFormat, sal_Unicode token, sal_Int32 nStartPos = 0 );
+    sal_Int32 ImpPosToken ( const OUStringBuffer & sFormat, sal_Unicode token, sal_Int32 nStartPos = 0 ) const;
 
     // Substitute a format during GetFormatEntry(), i.e. system formats.
     SvNumberformat* ImpSubstituteEntry( SvNumberformat* pFormat, sal_uInt32 * o_pRealKey = nullptr );

@@ -105,7 +105,7 @@ namespace svt
         OSL_ENSURE( bSuccess, "OFileNotation::OFileNotation: could not detect the format!" );
     }
 
-    OUString OFileNotation::get(NOTATION _eOutputNotation)
+    OUString OFileNotation::get(NOTATION _eOutputNotation) const
     {
         switch (_eOutputNotation)
         {

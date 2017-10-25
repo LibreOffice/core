@@ -468,7 +468,7 @@ public:
 #endif
 
     /// Whether it's a (YY)YY-M(M)-D(D) format.
-    bool IsIso8601( sal_uInt16 nNumFor )
+    bool IsIso8601( sal_uInt16 nNumFor ) const
         {
             if ( nNumFor < 4 )
                 return ImpIsIso8601( NumFor[nNumFor]);
@@ -535,7 +535,7 @@ private:
     // divide in substrings and color conditions
     SVL_DLLPRIVATE short ImpNextSymbol( OUStringBuffer& rString,
                                         sal_Int32& nPos,
-                                        OUString& sSymbol );
+                                        OUString& sSymbol ) const;
 
     // read string until ']' and strip blanks (after condition)
     SVL_DLLPRIVATE static sal_Int32 ImpGetNumber( OUStringBuffer& rString,
@@ -585,11 +585,11 @@ private:
                                                           const LocaleType & aTmpLocale );
 
     // standard number output
-    SVL_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, OUString& OutString );
-    SVL_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, OUStringBuffer& OutString );
+    SVL_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, OUString& OutString ) const;
+    SVL_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, OUStringBuffer& OutString ) const;
     SVL_DLLPRIVATE void ImpGetOutputStdToPrecision( double& rNumber, OUString& rOutString, sal_uInt16 nPrecision ) const;
     // numbers in input line
-    SVL_DLLPRIVATE void ImpGetOutputInputLine( double fNumber, OUString& OutString );
+    SVL_DLLPRIVATE void ImpGetOutputInputLine( double fNumber, OUString& OutString ) const;
 
     // check subcondition
     // OP undefined => -1

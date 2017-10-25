@@ -148,7 +148,7 @@ public:
 
     /** The next position (in integer digits) from the right where to insert a
         group separator. */
-    sal_Int32 getPos()
+    sal_Int32 getPos() const
     {
         return mnNextPos;
     }
