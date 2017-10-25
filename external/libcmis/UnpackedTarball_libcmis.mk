@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libcmis, \
 						external/libcmis/libcmis-fix-google-drive-2.patch \
 						external/libcmis/libcmis-sharepoint-repository-root.patch \
 						external/libcmis/libcmis-fix-error-handling.patch \
+						external/libcmis/c++17.patch.0 \
 ))
 
 ifeq ($(OS),WNT)
