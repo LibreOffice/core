@@ -286,15 +286,17 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
 {
     sal_uInt16 nID = GetType();
 
-    OUStringBuffer aWinData;
-    aWinData.append('V').append(static_cast<sal_Int32>(nVersion)).
-        append(',').append(rInfo.bVisible ? 'V' : 'H').append(',').
-        append(static_cast<sal_Int32>(rInfo.nFlags));
+    OUString rInfoVisible = rInfo.bVisible ? OUString("V") : OUString("H");
+
+    OUString aWinData = "V"
+                      + OUString::number(static_cast<sal_Int32>(nVersion))
+                      + ","
+                      + rInfoVisible
+                      + ","
+                      + OUString::number(static_cast<sal_Int32>(rInfo.nFlags));
+
     if ( !rInfo.aExtraString.isEmpty() )
-    {
-        aWinData.append(',');
-        aWinData.append(rInfo.aExtraString);
-    }
+        aWinData += "," + rInfo.aExtraString;
 
     OUString sName(OUString::number(nID));
     //Try and save window state per-module, e.g. sidebar on in one application
@@ -305,7 +307,7 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     aWinOpt.SetWindowState(OStringToOUString(rInfo.aWinState, RTL_TEXTENCODING_UTF8));
 
     css::uno::Sequence < css::beans::NamedValue > aSeq
-        { { "Data", css::uno::makeAny(aWinData.makeStringAndClear()) } };
+        { { "Data", css::uno::makeAny(aWinData) } };
     aWinOpt.SetUserData( aSeq );
 
     // ... but save status at runtime!
