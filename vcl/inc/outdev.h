@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_INC_OUTDEV_H
 #define INCLUDED_VCL_INC_OUTDEV_H
 
-#include <list>
 #include <set>
 #include <vector>
 
@@ -96,10 +95,10 @@ class ImplDirectFontSubstitution
 :   public ImplFontSubstitution
 {
 private:
-    std::list<ImplFontSubstEntry> maFontSubstList;
+    std::vector<ImplFontSubstEntry> maFontSubstList;
 public:
     void    AddFontSubstitute( const OUString& rFontName, const OUString& rSubstName, AddFontSubstituteFlags nFlags );
-    void    RemoveFontSubstitute( int nIndex );
+    void    RemoveFontsSubstitute();
     int     GetFontSubstituteCount() const { return maFontSubstList.size(); };
 
     bool    FindFontSubstitute( OUString& rSubstName, const OUString& rFontName ) const;
