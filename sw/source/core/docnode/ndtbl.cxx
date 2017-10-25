@@ -1043,8 +1043,8 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
 
                 aPosArr.push_back(
                                 static_cast<sal_uInt16>(aFInfo.GetFrame()->IsVertical() ?
-                                aFInfo.GetFrame()->Prt().Bottom() :
-                                aFInfo.GetFrame()->Prt().Right()) );
+                                aFInfo.GetFrame()->PrintRA().Bottom() :
+                                aFInfo.GetFrame()->PrintRA().Right()) );
 
             }
         }
@@ -2511,14 +2511,14 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
     // Set fixed points, LeftMin in Document coordinates, all others relative
     SwRectFnSet aRectFnSet(pTab);
     const SwPageFrame* pPage = pTab->FindPageFrame();
-    const sal_uLong nLeftMin = aRectFnSet.GetLeft(pTab->Frame()) -
-                           aRectFnSet.GetLeft(pPage->Frame());
-    const sal_uLong nRightMax = aRectFnSet.GetRight(pTab->Frame()) -
-                            aRectFnSet.GetLeft(pPage->Frame());
+    const sal_uLong nLeftMin = aRectFnSet.GetLeft(pTab->FrameRA()) -
+                           aRectFnSet.GetLeft(pPage->FrameRA());
+    const sal_uLong nRightMax = aRectFnSet.GetRight(pTab->FrameRA()) -
+                            aRectFnSet.GetLeft(pPage->FrameRA());
 
     rFill.SetLeftMin ( nLeftMin );
-    rFill.SetLeft    ( aRectFnSet.GetLeft(pTab->Prt()) );
-    rFill.SetRight   ( aRectFnSet.GetRight(pTab->Prt()));
+    rFill.SetLeft    ( aRectFnSet.GetLeft(pTab->PrintRA()) );
+    rFill.SetRight   ( aRectFnSet.GetRight(pTab->PrintRA()));
     rFill.SetRightMax( nRightMax - nLeftMin );
 
     pTab->GetTable()->GetTabCols( rFill, pBox );
@@ -2590,10 +2590,10 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
     SwRectFnSet aRectFnSet(pTab);
     const SwPageFrame* pPage = pTab->FindPageFrame();
     const long nLeftMin  = ( aRectFnSet.IsVert() ?
-                             pTab->GetPrtLeft() - pPage->Frame().Left() :
-                             pTab->GetPrtTop() - pPage->Frame().Top() );
+                             pTab->GetPrtLeft() - pPage->FrameRA().Left() :
+                             pTab->GetPrtTop() - pPage->FrameRA().Top() );
     const long nLeft     = aRectFnSet.IsVert() ? LONG_MAX : 0;
-    const long nRight    = aRectFnSet.GetHeight(pTab->Prt());
+    const long nRight    = aRectFnSet.GetHeight(pTab->PrintRA());
     const long nRightMax = aRectFnSet.IsVert() ? nRight : LONG_MAX;
 
     rFill.SetLeftMin( nLeftMin );
@@ -2615,8 +2615,8 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
         if ( pFrame->IsCellFrame() && pFrame->FindTabFrame() == pTab )
         {
             // upper and lower borders of current cell frame:
-            long nUpperBorder = aRectFnSet.GetTop(pFrame->Frame());
-            long nLowerBorder = aRectFnSet.GetBottom(pFrame->Frame());
+            long nUpperBorder = aRectFnSet.GetTop(pFrame->FrameRA());
+            long nLowerBorder = aRectFnSet.GetBottom(pFrame->FrameRA());
 
             // get boundaries for nUpperBorder:
             aIter = aBoundaries.find( nUpperBorder );
@@ -2709,7 +2709,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
     // #i17174# - With fix for #i9040# the shadow size is taken
     // from the table width. Thus, add its left and right size to current table
     // printing area width in order to get the correct table size attribute.
-    SwTwips nPrtWidth = aRectFnSet.GetWidth(pTab->Prt());
+    SwTwips nPrtWidth = aRectFnSet.GetWidth(pTab->PrintRA());
     {
         SvxShadowItem aShadow( rTab.GetFrameFormat()->GetShadow() );
         nPrtWidth += aShadow.CalcShadowSpace( SvxShadowItemSide::LEFT ) +
@@ -2725,15 +2725,15 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
     SwTabCols aOld( rNew.Count() );
 
     const SwPageFrame* pPage = pTab->FindPageFrame();
-    const sal_uLong nLeftMin = aRectFnSet.GetLeft(pTab->Frame()) -
-                           aRectFnSet.GetLeft(pPage->Frame());
-    const sal_uLong nRightMax = aRectFnSet.GetRight(pTab->Frame()) -
-                            aRectFnSet.GetLeft(pPage->Frame());
+    const sal_uLong nLeftMin = aRectFnSet.GetLeft(pTab->FrameRA()) -
+                           aRectFnSet.GetLeft(pPage->FrameRA());
+    const sal_uLong nRightMax = aRectFnSet.GetRight(pTab->FrameRA()) -
+                            aRectFnSet.GetLeft(pPage->FrameRA());
 
     // Set fixed points, LeftMin in Document coordinates, all others relative
     aOld.SetLeftMin ( nLeftMin );
-    aOld.SetLeft    ( aRectFnSet.GetLeft(pTab->Prt()) );
-    aOld.SetRight   ( aRectFnSet.GetRight(pTab->Prt()));
+    aOld.SetLeft    ( aRectFnSet.GetLeft(pTab->PrintRA()) );
+    aOld.SetRight   ( aRectFnSet.GetRight(pTab->PrintRA()));
     aOld.SetRightMax( nRightMax - nLeftMin );
 
     rTab.GetTabCols( aOld, pBox );
@@ -2763,18 +2763,18 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
     // Set fixed points, LeftMin in Document coordinates, all others relative
     const SwPageFrame* pPage = pTab->FindPageFrame();
 
-    aOld.SetRight( aRectFnSet.GetHeight(pTab->Prt()) );
+    aOld.SetRight( aRectFnSet.GetHeight(pTab->PrintRA()) );
     long nLeftMin;
     if ( aRectFnSet.IsVert() )
     {
-        nLeftMin = pTab->GetPrtLeft() - pPage->Frame().Left();
+        nLeftMin = pTab->GetPrtLeft() - pPage->FrameRA().Left();
         aOld.SetLeft    ( LONG_MAX );
         aOld.SetRightMax( aOld.GetRight() );
 
     }
     else
     {
-        nLeftMin = pTab->GetPrtTop() - pPage->Frame().Top();
+        nLeftMin = pTab->GetPrtTop() - pPage->FrameRA().Top();
         aOld.SetLeft    ( 0 );
         aOld.SetRightMax( LONG_MAX );
     }
@@ -2819,7 +2819,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
             {
                 if ( pFrame->IsCellFrame() && pFrame->FindTabFrame() == pTab )
                 {
-                    const long nLowerBorder = aRectFnSet.GetBottom(pFrame->Frame());
+                    const long nLowerBorder = aRectFnSet.GetBottom(pFrame->FrameRA());
                     const sal_uLong nTabTop = aRectFnSet.GetPrtTop(*pTab);
                     if ( std::abs( aRectFnSet.YInc( nTabTop, nOldRowEnd ) - nLowerBorder ) <= ROWFUZZY )
                     {
@@ -2839,7 +2839,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
                                 {
                                     // The new row height must not to be calculated from a overlapping box
                                     SwFormatFrameSize aNew( pLine->GetFrameFormat()->GetFrameSize() );
-                                    const long nNewSize = aRectFnSet.GetHeight(pFrame->Frame()) + nDiff;
+                                    const long nNewSize = aRectFnSet.GetHeight(pFrame->FrameRA()) + nDiff;
                                     if( nNewSize != aNew.GetHeight() )
                                     {
                                         aNew.SetHeight( nNewSize );

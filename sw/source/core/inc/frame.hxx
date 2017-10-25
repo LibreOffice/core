@@ -116,6 +116,27 @@ namespace drawinglayer { namespace attribute {
     typedef std::shared_ptr< SdrAllFillAttributesHelper > SdrAllFillAttributesHelperPtr;
 }}
 
+/// Helper class to isolate gerometry-defining members of SwFrame
+/// and to control their accesses. Moved to own class to have no
+/// hidden accesses to 'private' members anymore
+class SW_DLLPUBLIC SwFrameRect
+{
+private:
+    SwRect  maFrameRect;   // absolute position in document and size of the Frame
+    SwRect  maPrintRect;   // position relatively to Frame and size of PrtArea
+
+public:
+    SwFrameRect();
+
+    // read accesses
+    const SwRect& FrameRA() const { return maFrameRect; }
+    const SwRect& PrintRA() const { return maPrintRect; }
+
+    // write accesses
+    SwRect& FrameWA() { return maFrameRect; }
+    SwRect& PrintWA() { return maPrintRect; }
+};
+
 /**
  * Base class of the Writer layout elements.
  *
@@ -123,7 +144,7 @@ namespace drawinglayer { namespace attribute {
  * level: pages, headers, footers, etc. (Inside a paragraph SwLinePortion
  * instances are used.)
  */
-class SW_DLLPUBLIC SwFrame: public SwClient, public SfxBroadcaster
+class SW_DLLPUBLIC SwFrame : public SwFrameRect, public SwClient, public SfxBroadcaster
 {
     // the hidden Frame
     friend class SwFlowFrame;
@@ -143,8 +164,6 @@ class SW_DLLPUBLIC SwFrame: public SwClient, public SfxBroadcaster
 
     // cache for (border) attributes
     static SwCache *mpCache;
-
-    bool mbInDtor;
 
     // #i65250#
     // frame ID is now in general available - used for layout loop control
@@ -225,12 +244,9 @@ class SW_DLLPUBLIC SwFrame: public SwClient, public SfxBroadcaster
 
 protected:
     SwSortedObjs* mpDrawObjs;    // draw objects, can be 0
-
-    SwRect  maFrame;   // absolute position in document and size of the Frame
-    SwRect  maPrt;   // position relatively to Frame and size of PrtArea
-
     SwFrameType mnFrameType;  //Who am I?
 
+    bool mbInDtor      : 1;
     bool mbReverse     : 1; // Next line above/at the right side instead
                                  // under/at the left side of the previous line
     bool mbInvalidR2L  : 1;
@@ -548,10 +564,7 @@ public:
     virtual void Calc(vcl::RenderContext* pRenderContext) const; // here might be "formatted"
     inline void OptCalc() const;    // here we assume (for optimization) that
                                     // the predecessors are already formatted
-
     Point   GetRelPos() const;
-    const  SwRect &Frame() const { return maFrame; }
-    const  SwRect &Prt() const { return maPrt; }
 
     // PaintArea is the area where content might be displayed.
     // The margin of a page or the space between columns belongs to it.
@@ -559,13 +572,6 @@ public:
     // UnionFrame is the union of Frame- and PrtArea, normally identical
     // to the FrameArea except in case of negative Prt margins.
     const SwRect UnionFrame( bool bBorder = false ) const;
-
-    // HACK: Here we exceptionally allow direct access to members.
-    // This should not delude into changing those value randomly; it is the
-    // only option to circumvent compiler problems (same method with public
-    // and protected).
-    SwRect &Frame() { return maFrame; }
-    SwRect &Prt() { return maPrt; }
 
     virtual Size ChgSize( const Size& aNewSize );
 
