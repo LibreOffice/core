@@ -16,6 +16,24 @@
       "revId": "588de821f898e204b7ecf208787ad2cbd7f18ef5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_4a555f1b",
+        "filename": "sw/source/core/inc/frame.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2017-10-25T14:42:26Z",
+      "side": 1,
+      "message": "Hi Noel,\nlater - currently I want to get it isolated at all. Problem is that there are *many* places which work on a returned reference. I am working onn getting this to a set\u003cname\u003e method later which is the target and can then be used.\nThis isolation is so big that I need to do it in steps...",
+      "parentUuid": "1a430d35_4a7e3faf",
+      "revId": "588de821f898e204b7ecf208787ad2cbd7f18ef5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
