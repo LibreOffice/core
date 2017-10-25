@@ -1,0 +1,11 @@
+--- src/lib/KEY1Token.inc
++++ src/lib/KEY1Token.inc
+@@ -524,7 +524,7 @@
+ 
+   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
+     {
+-      register int key = hash (str, len);
++      int key = hash (str, len);
+ 
+       if (key <= MAX_HASH_VALUE && key >= 0)
+         {
