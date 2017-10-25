@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_27084e2c",
+        "filename": "i18npool/source/localedata/LocaleNode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-25T06:35:45Z",
+      "side": 1,
+      "message": "SAL_N_ELEMENTS ?",
+      "revId": "3ee3d99e64a4a8ea7aa3e911544cb671913917dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
