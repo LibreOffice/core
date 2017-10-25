@@ -66,7 +66,7 @@ public:
 
     void validate(const char* pName,
                   const char* pValidSvgD,
-                  B2DPolyPolygon (*pFunc)(const B2DPolyPolygon&, const B2DPolyPolygon&))
+                  B2DPolyPolygon (*pFunc)(const B2DPolyPolygon&, const B2DPolyPolygon&)) const
     {
         const B2DPolyPolygon aSelfIntersect(
             utils::prepareForPolygonOperation(aSelfIntersecting));
@@ -127,7 +127,7 @@ public:
 
     void validateCrossover(const char* pName,
                            const char* pInputSvgD,
-                           const char* pValidSvgD)
+                           const char* pValidSvgD) const
     {
         OUString aInput=OUString::createFromAscii(pInputSvgD);
         OUString aValid=OUString::createFromAscii(pValidSvgD);

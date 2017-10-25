@@ -77,7 +77,7 @@ public:
 
     void  OpenStream( StgIo& );     // set up an appropriate stream
     void  Close();
-    sal_Int32 GetSize();
+    sal_Int32 GetSize() const;
     bool  SetSize( sal_Int32 );
     sal_Int32 Seek( sal_Int32 );
     sal_Int32 Read( void*, sal_Int32 );

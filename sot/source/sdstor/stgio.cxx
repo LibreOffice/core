@@ -122,7 +122,7 @@ void StgIo::SetupStreams()
 
 // get the logical data page size
 
-short StgIo::GetDataPageSize()
+short StgIo::GetDataPageSize() const
 {
     return 1 << m_aHdr.GetDataPageSize();
 }
@@ -166,10 +166,10 @@ class EasyFat
 public:
     EasyFat( StgIo & rIo, StgStrm *pFatStream, sal_Int32 nPSize );
 
-    sal_Int32 GetPageSize() { return nPageSize; }
+    sal_Int32 GetPageSize() const { return nPageSize; }
 
     FatError Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect );
-    bool HasUnrefChains();
+    bool HasUnrefChains() const;
 };
 
 EasyFat::EasyFat( StgIo& rIo, StgStrm* pFatStream, sal_Int32 nPSize )
@@ -196,7 +196,7 @@ EasyFat::EasyFat( StgIo& rIo, StgStrm* pFatStream, sal_Int32 nPSize )
     }
 }
 
-bool EasyFat::HasUnrefChains()
+bool EasyFat::HasUnrefChains() const
 {
     for( sal_Int32 nPage = 0; nPage < nPages; nPage++ )
     {
@@ -247,12 +247,12 @@ class Validator
 
     FatError ValidateMasterFATs();
     FatError ValidateDirectoryEntries();
-    FatError FindUnrefedChains();
+    FatError FindUnrefedChains() const;
     FatError MarkAll( StgDirEntry *pEntry );
 
 public:
     explicit Validator( StgIo &rIo );
-    bool IsError() { return nError != FatError::Ok; }
+    bool IsError() const { return nError != FatError::Ok; }
 };
 
 Validator::Validator( StgIo &rIoP )
@@ -344,7 +344,7 @@ FatError Validator::ValidateDirectoryEntries()
     return nErr;
 }
 
-FatError Validator::FindUnrefedChains()
+FatError Validator::FindUnrefedChains() const
 {
     if( aSmallFat.HasUnrefChains() ||
         aFat.HasUnrefChains() )

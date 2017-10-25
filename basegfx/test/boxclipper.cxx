@@ -167,7 +167,7 @@ public:
 #endif
     }
 
-    B2DPolyPolygon normalizePoly( const B2DPolyPolygon& rPoly )
+    B2DPolyPolygon normalizePoly( const B2DPolyPolygon& rPoly ) const
     {
         B2DPolyPolygon aRes;
         for( sal_uInt32 i=0; i<rPoly.count(); ++i )
@@ -214,7 +214,7 @@ public:
         return aRes;
     }
 
-    void verifyPoly(const char* sName, const char* sSvg, const B2DPolyRange& toTest)
+    void verifyPoly(const char* sName, const char* sSvg, const B2DPolyRange& toTest) const
     {
         B2DPolyPolygon aTmp1;
         CPPUNIT_ASSERT_MESSAGE(sName,
@@ -293,7 +293,7 @@ public:
     }
 
     void dumpSvg(const char* pName,
-                 const ::basegfx::B2DPolyPolygon& rPoly)
+                 const ::basegfx::B2DPolyPolygon& rPoly) const
     {
         (void)pName; (void)rPoly;
 #if OSL_DEBUG_LEVEL > 2
@@ -325,7 +325,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("getPolyPolygon", true );
     }
 
-    void validatePoly( const char* pName, const B2DPolyRange& rRange )
+    void validatePoly( const char* pName, const B2DPolyRange& rRange ) const
     {
         B2DPolyPolygon genericClip;
         const sal_uInt32 nCount=rRange.count();

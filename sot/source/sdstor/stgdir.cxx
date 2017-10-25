@@ -290,7 +290,7 @@ void StgDirEntry::Close()
 
 // Get the current stream size
 
-sal_Int32 StgDirEntry::GetSize()
+sal_Int32 StgDirEntry::GetSize() const
 {
     sal_Int32 n;
     if( m_pTmpStrm )

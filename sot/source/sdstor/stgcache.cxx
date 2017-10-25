@@ -416,7 +416,7 @@ void StgCache::MoveError( StorageBase const & r )
 
 // Utility functions
 
-sal_Int32 StgCache::Page2Pos( sal_Int32 nPage )
+sal_Int32 StgCache::Page2Pos( sal_Int32 nPage ) const
 {
     if( nPage < 0 ) nPage = 0;
     return( nPage * m_nPageSize ) + m_nPageSize;

@@ -53,7 +53,7 @@ public:
     sal_Int32 GetNextPage( sal_Int32 nPg );
     sal_Int32 AllocPages( sal_Int32 nStart, sal_Int32 nPages );
     bool  FreePages( sal_Int32 nStart, bool bAll );
-    sal_Int32 GetMaxPage() { return m_nMaxPage; }
+    sal_Int32 GetMaxPage() const { return m_nMaxPage; }
     void  SetLimit( sal_Int32 n ) { m_nLimit = n; }
 };
 

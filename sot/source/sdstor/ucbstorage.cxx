@@ -558,11 +558,11 @@ struct UCBStorageElement_Impl
                                 }
 
     ::ucbhelper::Content*       GetContent();
-    bool                        IsModified();
-    OUString                    GetContentType();
+    bool                        IsModified() const;
+    OUString                    GetContentType() const;
     void                        SetContentType( const OUString& );
-    OUString                    GetOriginalContentType();
-    bool                        IsLoaded()
+    OUString                    GetOriginalContentType() const;
+    bool                        IsLoaded() const
                                 { return m_xStream.is() || m_xStorage.is(); }
 };
 
@@ -576,7 +576,7 @@ struct UCBStorageElement_Impl
         return nullptr;
 }
 
-OUString UCBStorageElement_Impl::GetContentType()
+OUString UCBStorageElement_Impl::GetContentType() const
 {
     if ( m_xStream.is() )
         return m_xStream->m_aContentType;
@@ -602,7 +602,7 @@ void UCBStorageElement_Impl::SetContentType( const OUString& rType )
     }
 }
 
-OUString UCBStorageElement_Impl::GetOriginalContentType()
+OUString UCBStorageElement_Impl::GetOriginalContentType() const
 {
     if ( m_xStream.is() )
         return m_xStream->m_aOriginalContentType;
@@ -612,7 +612,7 @@ OUString UCBStorageElement_Impl::GetOriginalContentType()
         return OUString();
 }
 
-bool UCBStorageElement_Impl::IsModified()
+bool UCBStorageElement_Impl::IsModified() const
 {
     bool bModified = m_bIsRemoved || m_bIsInserted || m_aName != m_aOriginalName;
     if ( bModified )
