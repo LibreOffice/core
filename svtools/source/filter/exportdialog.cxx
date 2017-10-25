@@ -400,8 +400,7 @@ void ExportDialog::GetGraphicStream()
 {
     if ( !IsTempExportAvailable() )
     {
-        delete mpTempStream;
-        mpTempStream = new SvMemoryStream();
+        mpTempStream.reset(new SvMemoryStream());
         maBitmap = Bitmap();
         return;
     }
@@ -419,8 +418,7 @@ void ExportDialog::GetGraphicStream()
     {
         if ( bRecreateOutputStream )
         {
-            delete mpTempStream;
-            mpTempStream = new SvMemoryStream();
+            mpTempStream.reset(new SvMemoryStream());
             maBitmap = Bitmap();
 
             uno::Reference< graphic::XGraphic > xGraphic;
@@ -1012,6 +1010,7 @@ ExportDialog::~ExportDialog()
 
 void ExportDialog::dispose()
 {
+    mpTempStream.reset();
     delete mpFilterOptionsItem;
     delete mpOptionsItem;
     mpMfSizeX.clear();

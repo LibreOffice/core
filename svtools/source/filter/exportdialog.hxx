@@ -34,6 +34,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <memory>
 
 /*************************************************************************
 |*
@@ -118,7 +119,7 @@ private:
     sal_Int16           mnFormat;
     sal_Int32           mnMaxFilesizeForRealtimePreview;
 
-    SvMemoryStream*     mpTempStream;
+    std::unique_ptr<SvMemoryStream> mpTempStream;
     Bitmap              maBitmap;
 
     css::awt::Size      maOriginalSize;     // the original graphic size in 1/100mm
