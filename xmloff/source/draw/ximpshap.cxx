@@ -852,18 +852,18 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rL
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
                     maSize.Width, rValue);
             if (maSize.Width > 0)
-                maSize.Width = o3tl::saturating_add(maSize.Width, 1);
+                maSize.Width = o3tl::saturating_add<sal_Int32>(maSize.Width, 1);
             else if (maSize.Width < 0)
-                maSize.Width = o3tl::saturating_add(maSize.Width, -1);
+                maSize.Width = o3tl::saturating_add<sal_Int32>(maSize.Width, -1);
         }
         else if( IsXMLToken( rLocalName, XML_HEIGHT ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
                     maSize.Height, rValue);
             if (maSize.Height > 0)
-                maSize.Height = o3tl::saturating_add(maSize.Height, 1);
+                maSize.Height = o3tl::saturating_add<sal_Int32>(maSize.Height, 1);
             else if (maSize.Height < 0)
-                maSize.Height = o3tl::saturating_add(maSize.Height, -1);
+                maSize.Height = o3tl::saturating_add<sal_Int32>(maSize.Height, -1);
         }
         else if( IsXMLToken( rLocalName, XML_TRANSFORM ) )
         {
