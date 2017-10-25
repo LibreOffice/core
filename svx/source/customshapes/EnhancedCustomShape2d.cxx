@@ -1388,14 +1388,14 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
 void EnhancedCustomShape2d::SwapStartAndEndArrow( SdrObject* pObj ) //#108274
 {
     XLineStartItem       aLineStart;
-    aLineStart.SetLineStartValue(static_cast<const XLineStartItem&>(pObj->GetMergedItem( XATTR_LINEEND )).GetLineStartValue());
-    XLineStartWidthItem  aLineStartWidth(static_cast<const XLineStartWidthItem&>(pObj->GetMergedItem( XATTR_LINEENDWIDTH )).GetValue());
-    XLineStartCenterItem aLineStartCenter(static_cast<const XLineStartCenterItem&>(pObj->GetMergedItem( XATTR_LINEENDCENTER )).GetValue());
+    aLineStart.SetLineStartValue(static_cast<const XLineEndItem&>(pObj->GetMergedItem( XATTR_LINEEND )).GetLineEndValue());
+    XLineStartWidthItem  aLineStartWidth(static_cast<const XLineEndWidthItem&>(pObj->GetMergedItem( XATTR_LINEENDWIDTH )).GetValue());
+    XLineStartCenterItem aLineStartCenter(static_cast<const XLineEndCenterItem&>(pObj->GetMergedItem( XATTR_LINEENDCENTER )).GetValue());
 
     XLineEndItem         aLineEnd;
-    aLineEnd.SetLineEndValue(static_cast<const XLineEndItem&>(pObj->GetMergedItem( XATTR_LINESTART )).GetLineEndValue());
-    XLineEndWidthItem    aLineEndWidth(static_cast<const XLineEndWidthItem&>(pObj->GetMergedItem( XATTR_LINESTARTWIDTH )).GetValue());
-    XLineEndCenterItem   aLineEndCenter(static_cast<const XLineEndCenterItem&>(pObj->GetMergedItem( XATTR_LINESTARTCENTER )).GetValue());
+    aLineEnd.SetLineEndValue(static_cast<const XLineStartItem&>(pObj->GetMergedItem( XATTR_LINESTART )).GetLineStartValue());
+    XLineEndWidthItem    aLineEndWidth(static_cast<const XLineStartWidthItem&>(pObj->GetMergedItem( XATTR_LINESTARTWIDTH )).GetValue());
+    XLineEndCenterItem   aLineEndCenter(static_cast<const XLineStartCenterItem&>(pObj->GetMergedItem( XATTR_LINESTARTCENTER )).GetValue());
 
     pObj->SetMergedItem( aLineStart );
     pObj->SetMergedItem( aLineStartWidth );
