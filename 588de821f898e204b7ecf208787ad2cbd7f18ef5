@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_4a7e3faf",
+        "filename": "sw/source/core/inc/frame.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-25T14:37:55Z",
+      "side": 1,
+      "message": "this is pretty non-standard naming for our codebase?\n\nhow about SetFrameRect/GetFrameRect/SetPrintRect/GetPrintRect\n\nor\n\n    const SwRect\u0026 GetFrameRect() const\n    SwRect GetFrameRect()\n    const SwRect\u0026 GetPrintRect() const\n    SwRect GetPrintRect()\n\n?",
+      "revId": "588de821f898e204b7ecf208787ad2cbd7f18ef5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
