@@ -290,7 +290,7 @@ bool MediaWindowImpl::isValid() const
 
 Size MediaWindowImpl::getPreferredSize() const
 {
-    Size aRet;
+    Size aRet(480, 360);
 
     if( mxPlayer.is() )
     {
