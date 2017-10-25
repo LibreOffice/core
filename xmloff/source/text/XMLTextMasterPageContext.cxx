@@ -160,6 +160,9 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         if ( xPropSetInfo->hasPropertyByName( "GridDisplay" ) )
             xPropSet->setPropertyValue( "GridDisplay", Any(false) );
 
+        if ( xPropSetInfo->hasPropertyByName( "GridPrint" ) )
+            xPropSet->setPropertyValue( "GridPrint", Any(false) );
+
         bInsertHeader = bInsertFooter = true;
         bInsertHeaderLeft = bInsertFooterLeft = true;
         bInsertHeaderFirst = bInsertFooterFirst = true;
