@@ -74,7 +74,7 @@ class ViewShell;
     The implementation of the XControllerManager interface is not yet in its
     final form.
 */
-class DrawController
+class DrawController final
     : public DrawControllerInterfaceBase,
       private BroadcastHelperOwner,
       public ::cppu::OPropertySetHelper
@@ -226,7 +226,7 @@ public:
 
     virtual sal_Int64 SAL_CALL getSomething (const css::uno::Sequence<sal_Int8>& rId) override;
 
-protected:
+private:
     /** This method must return the name to index table. This table
         contains all property names and types of this object.
      */
@@ -280,7 +280,6 @@ protected:
     using cppu::OPropertySetHelper::disposing;
     using cppu::OPropertySetHelper::getFastPropertyValue;
 
-private:
     const css::uno::Type m_aSelectionTypeIdentifier;
 
     /** This pointer to the ViewShellBase can be NULL (after a call to

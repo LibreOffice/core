@@ -96,7 +96,7 @@ struct WrappedMouseMotionEvent : public css::lang::EventObject
 
 // SlideShowViewListeners
 typedef std::vector< css::uno::WeakReference< css::util::XModifyListener > > ViewListenerVector;
-class SlideShowViewListeners
+class SlideShowViewListeners final
 {
 public:
     SlideShowViewListeners( ::osl::Mutex& rMutex );
@@ -107,7 +107,7 @@ public:
     void    notify( const css::lang::EventObject& _rEvent );
     void    disposing( const css::lang::EventObject& _rEventSource );
 
-protected:
+private:
     ViewListenerVector maListeners;
     ::osl::Mutex& mrMutex;
 };

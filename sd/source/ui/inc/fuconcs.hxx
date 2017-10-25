@@ -28,7 +28,7 @@ class SdrObject;
 
 namespace sd {
 
-class FuConstructCustomShape
+class FuConstructCustomShape final
     : public FuConstruct
 {
 public:
@@ -50,7 +50,7 @@ public:
     // #i33136#
     virtual bool doConstructOrthogonal() const override;
 
-protected:
+private:
     FuConstructCustomShape (
         ViewShell* pViewSh,
         ::sd::Window* pWin,
@@ -58,7 +58,6 @@ protected:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
-private:
     OUString aCustomShape;
 };
 

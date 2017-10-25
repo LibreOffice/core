@@ -118,9 +118,8 @@ public:
 
 /** this class holds a sequence that is a result from a find all and
     lets people access it through the XIndexAccess Interface. */
-class SdUnoFindAllAccess : public ::cppu::WeakImplHelper< css::container::XIndexAccess > // public css::container::XElementAccess
+class SdUnoFindAllAccess final : public ::cppu::WeakImplHelper< css::container::XIndexAccess > // public css::container::XElementAccess
 {
-protected:
     css::uno::Sequence< css::uno::Reference< css::uno::XInterface >  > maSequence;
 
 public:

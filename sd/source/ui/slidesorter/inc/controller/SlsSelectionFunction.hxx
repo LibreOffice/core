@@ -35,7 +35,7 @@ namespace sd { namespace slidesorter { namespace controller {
 
 class SlideSorterController;
 
-class SelectionFunction
+class SelectionFunction final
     : public FuPoor
 {
 public:
@@ -97,7 +97,7 @@ public:
     */
     void ResetMouseAnchor();
 
-protected:
+private:
     SlideSorter& mrSlideSorter;
     SlideSorterController& mrController;
 
@@ -107,7 +107,6 @@ protected:
 
     virtual ~SelectionFunction() override;
 
-private:
     /** Remember the slide where the shift key was pressed and started a
         multiselection via keyboard.
     */

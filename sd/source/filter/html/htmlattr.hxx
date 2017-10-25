@@ -23,10 +23,8 @@
 #include <vcl/ctrl.hxx>
 #include <tools/color.hxx>
 
-class SdHtmlAttrPreview : public Control
+class SdHtmlAttrPreview final : public Control
 {
-protected:
-
     Color   m_aBackColor, m_aTextColor, m_aLinkColor;
     Color   m_aVLinkColor, m_aALinkColor;
 

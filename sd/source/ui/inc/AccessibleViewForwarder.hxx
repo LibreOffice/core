@@ -38,7 +38,7 @@ namespace accessibility {
         different transformations between internal and screen coordinates or
         change the validity of the forwarder have to be signaled separately.
 */
-class AccessibleViewForwarder
+class AccessibleViewForwarder final
     :   public IAccessibleViewForwarder
 {
 public:
@@ -81,11 +81,10 @@ public:
      */
     virtual Size LogicToPixel (const Size& rSize) const override;
 
-protected:
+private:
     SdrPaintView* mpView;
     sal_uInt16 mnWindowId;
 
-private:
     AccessibleViewForwarder (AccessibleViewForwarder&) = delete;
     AccessibleViewForwarder& operator= (AccessibleViewForwarder&) = delete;
 };

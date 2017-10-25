@@ -29,24 +29,22 @@ namespace sd {
 class View;
 class ViewShell;
 
-class BezierObjectBar
+class BezierObjectBar final
     : public SfxShell
 {
 public:
     SFX_DECL_INTERFACE(SD_IF_SDDRAWBEZIEROBJECTBAR)
 
-private:
-    /// SfxInterface initializer.
-    static void InitInterface_Impl();
-
-public:
     BezierObjectBar(ViewShell* pSdViewShell, View* pSdView);
     virtual ~BezierObjectBar() override;
 
     void GetAttrState(SfxItemSet& rSet);
     void Execute(SfxRequest &rReq);
 
-protected:
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
     View* mpView;
     ViewShell* mpViewSh;
 };

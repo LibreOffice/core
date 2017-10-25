@@ -27,7 +27,7 @@ class SdOutliner;
 
 namespace sd {
 
-class FuSearch : public FuPoor
+class FuSearch final : public FuPoor
 {
 public:
 
@@ -36,13 +36,12 @@ public:
 
     void SearchAndReplace( const SvxSearchItem* pSearchItem );
 
-protected:
+private:
     virtual ~FuSearch() override;
 
     SdOutliner* pSdOutliner;
     bool bOwnOutliner;
 
-private:
     FuSearch (
         ViewShell* pViewSh,
         ::sd::Window* pWin,

@@ -29,7 +29,7 @@ class SdrObject;
 
 namespace sd {
 
-class FuSelection
+class FuSelection final
     : public FuDraw
 {
 public:
@@ -62,7 +62,8 @@ public:
 
     //let mouse cursor move
     virtual void ForcePointer(const MouseEvent* pMEvt = nullptr) override;
-protected:
+
+private:
     FuSelection (ViewShell* pViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
@@ -79,7 +80,6 @@ protected:
     sal_uInt16      nEditMode;
     css::uno::Reference< css::media::XPlayer > mxPlayer;
 
-private:
     /** This pointer stores a canidate for assigning a style in the water
         can mode between mouse button down and mouse button up.
     */

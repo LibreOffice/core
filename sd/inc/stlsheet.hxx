@@ -50,7 +50,7 @@ typedef cppu::ImplInheritanceHelper< SfxUnoStyleSheet,
                                     css::util::XModifyBroadcaster,
                                     css::lang::XComponent > SdStyleSheetBase ;
 
-class SdStyleSheet : public SdStyleSheetBase, private ::cppu::BaseMutex
+class SdStyleSheet final : public SdStyleSheetBase, private ::cppu::BaseMutex
 {
 public:
     SdStyleSheet( const OUString& rDisplayName, SfxStyleSheetBasePool& rPool, SfxStyleFamily eFamily, sal_uInt16 nMask );
@@ -125,7 +125,7 @@ public:
 
     void notifyModifyListener();
 
-protected:
+private:
     /// @throws css::uno::RuntimeException
     static const SfxItemPropertySimpleEntry* getPropertyMapEntry( const OUString& rPropertyName );
 
@@ -147,7 +147,6 @@ protected:
 
     std::unique_ptr< ModifyListenerForewarder > mpModifyListenerForewarder;
 
-private:
     SdStyleSheet( const SdStyleSheet& ) = delete;
     SdStyleSheet& operator=( const SdStyleSheet& ) = delete;
 };

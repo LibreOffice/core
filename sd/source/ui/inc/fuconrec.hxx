@@ -32,7 +32,7 @@ namespace sd {
 /**
  * draw rectangle
  */
-class FuConstructRectangle
+class FuConstructRectangle final
     : public FuConstruct
 {
 public:
@@ -52,7 +52,7 @@ public:
 
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
 
-protected:
+private:
     FuConstructRectangle (
         ViewShell* pViewSh,
         ::sd::Window* pWin,

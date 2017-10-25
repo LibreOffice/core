@@ -111,12 +111,10 @@ public:
     PropItem&       operator=( PropItem& rPropItem );
 };
 
-class Section
+class Section final
 {
         sal_uInt16              mnTextEnc;
         std::vector<std::unique_ptr<PropEntry> > maEntries;
-
-    protected:
 
         sal_uInt8                   aFMTID[ 16 ];
 

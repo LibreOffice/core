@@ -90,7 +90,7 @@ namespace sd {
     class UndoAttrObject;
 }
 
-class SD_DLLPUBLIC SdPage : public FmFormPage, public SdrObjUserCall
+class SD_DLLPUBLIC SdPage final : public FmFormPage, public SdrObjUserCall
 {
     SdPage& operator=(const SdPage&) = delete;
 
@@ -102,7 +102,6 @@ friend class ModifyPageUndoAction;
 friend class sd::UndoGeoObject;
 friend class sd::UndoAttrObject;
 
-protected:
     PageKind    mePageKind;               ///< page type
     AutoLayout  meAutoLayout;             ///< AutoLayout
     sd::ShapeList maPresentationShapeList;///< presentation objects

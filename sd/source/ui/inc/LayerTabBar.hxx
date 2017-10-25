@@ -30,7 +30,7 @@ namespace sd {
  */
 class DrawViewShell;
 
-class LayerTabBar
+class LayerTabBar final
     : public TabBar,
       public DropTargetHelper
 {
@@ -53,7 +53,7 @@ public:
     */
     void SendDeactivatePageEvent();
 
-protected:
+private:
     DrawViewShell* pDrViewSh;
 
     // TabBar

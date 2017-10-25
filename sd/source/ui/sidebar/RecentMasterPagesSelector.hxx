@@ -26,7 +26,7 @@ namespace sd { namespace sidebar {
 
 /** Show the recently used master pages (that are not currently used).
 */
-class RecentMasterPagesSelector
+class RecentMasterPagesSelector final
     : public MasterPagesSelector
 {
     friend class VclPtrInstance<RecentMasterPagesSelector>;
@@ -36,7 +36,7 @@ public:
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
 
-protected:
+private:
     DECL_LINK(MasterPageListListener, LinkParamNone*, void);
     virtual void Fill (ItemList& rItemList) override;
 
@@ -58,7 +58,6 @@ protected:
 
     virtual void ProcessPopupMenu (Menu& rMenu) override;
 
-private:
     RecentMasterPagesSelector (
         vcl::Window* pParent,
         SdDrawDocument& rDocument,

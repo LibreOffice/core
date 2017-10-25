@@ -37,7 +37,7 @@ class OutlineViewShell;
 /**
  * text functions in outline mode
  */
-class FuOutlineText
+class FuOutlineText final
     : public FuPoor
 {
 public:
@@ -62,7 +62,7 @@ public:
     */
     void UpdateForKeyPress (const KeyEvent& rEvent);
 
-protected:
+private:
     FuOutlineText (
         ViewShell* pViewShell,
         ::sd::Window* pWin,

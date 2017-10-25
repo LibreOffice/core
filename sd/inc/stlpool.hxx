@@ -51,7 +51,7 @@ typedef ::cppu::ImplInheritanceHelper< SfxStyleSheetPool,
                                         css::container::XNameAccess,
                                         css::lang::XComponent > SdStyleSheetPoolBase;
 
-class SdStyleSheetPool : public SdStyleSheetPoolBase, public SfxListener
+class SdStyleSheetPool final : public SdStyleSheetPoolBase, public SfxListener
 {
     friend class SdDrawDocument;
 public:
@@ -121,7 +121,7 @@ public:
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
-protected:
+private:
     void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily );
     void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets );
     void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets, const OUString &rRenameSuffix );
@@ -134,7 +134,6 @@ protected:
     void AddStyleFamily( const SdPage* pPage );
     void RemoveStyleFamily( const SdPage* pPage );
 
-private:
     SfxStyleSheetBase*      mpActualStyleSheet;
     SdDrawDocument*         mpDoc;
     SdStyleFamilyRef        mxGraphicFamily;

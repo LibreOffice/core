@@ -54,7 +54,7 @@ public:
     it to destroy the resource when the sd module is at the end of its
     lifetime.
 */
-class SdGlobalResourceContainer
+class SdGlobalResourceContainer final
 {
 public:
     static SdGlobalResourceContainer& Instance();
@@ -81,7 +81,7 @@ public:
     */
     void AddResource (const css::uno::Reference<css::uno::XInterface>& rxResource);
 
-protected:
+private:
     friend class SdGlobalResourceContainerInstance;
     friend struct ::std::default_delete<SdGlobalResourceContainer>;
 

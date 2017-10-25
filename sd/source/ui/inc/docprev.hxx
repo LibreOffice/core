@@ -35,9 +35,8 @@ namespace sd {
     class SlideShow;
 }
 
-class SD_DLLPUBLIC SdDocPreviewWin : public Control, public SfxListener
+class SD_DLLPUBLIC SdDocPreviewWin final : public Control, public SfxListener
 {
-protected:
     Color           maDocumentColor;
     rtl::Reference< sd::SlideShow > mxSlideShow;
 

@@ -29,17 +29,11 @@ namespace sd {
 class View;
 class ViewShell;
 
-class MediaObjectBar
+class MediaObjectBar final
     : public SfxShell
 {
 public:
     SFX_DECL_INTERFACE( SD_IF_SDDRAWMEDIAOBJECTBAR )
-
-private:
-    /// SfxInterface initializer.
-    static void InitInterface_Impl();
-
-public:
 
     MediaObjectBar (ViewShell* pSdViewShell, ::sd::View* pSdView);
     virtual ~MediaObjectBar() override;
@@ -47,7 +41,10 @@ public:
     void            GetState( SfxItemSet& rSet );
     void            Execute( SfxRequest const & rReq );
 
-protected:
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
     ::sd::View* mpView;
     ViewShell*  mpViewSh;
 };

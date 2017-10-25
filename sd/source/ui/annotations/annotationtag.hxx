@@ -31,7 +31,7 @@ class View;
 class AnnotationManagerImpl;
 class AnnotationWindow;
 
-class AnnotationTag : public SmartTag
+class AnnotationTag final : public SmartTag
 {
 public:
     AnnotationTag( AnnotationManagerImpl& rManager, ::sd::View& rView, const css::uno::Reference< css::office::XAnnotation >& xAnnotation, Color const & rColor, int nIndex, const vcl::Font& rFont );
@@ -66,7 +66,7 @@ public:
     void OpenPopup( bool bEdit );
     void ClosePopup();
 
-protected:
+private:
     virtual void addCustomHandles( SdrHdlList& rHandlerList ) override;
     virtual bool getContext( SdrViewContext& rContext ) override;
     virtual void disposing() override;
@@ -76,7 +76,6 @@ protected:
     DECL_LINK( WindowEventHandler, VclWindowEvent&, void );
     DECL_LINK( ClosePopupHdl, void*, void );
 
-private:
     AnnotationManagerImpl& mrManager;
     css::uno::Reference< css::office::XAnnotation > mxAnnotation;
     VclPtr<AnnotationWindow>                        mpAnnotationWindow;
