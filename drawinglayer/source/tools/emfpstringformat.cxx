@@ -51,11 +51,11 @@ namespace emfplushelper
         // keep only the last 16 bits of language
         language >>= 16;
         digitLanguage >>= 16;
-        SAL_WARN_IF((header >> 12) != 0xdbc01, "cppcanvas.emf", "Invalid header - not 0xdbc01");
-        SAL_INFO("cppcanvas.emf", "EMF+\t string format\nEMF+\theader: 0x" << std::hex << (header >> 12) << " version: 0x" << (header & 0x1fff) << " StringFormatFlags: " << std::dec << stringFormatFlags << " Language: " << language);
-        SAL_INFO("cppcanvas.emf", "EMF+\t StringAlignment: " << stringAlignment << " LineAlign: " << lineAlign << " DigitSubstitution: " << digitSubstitution << " DigitLanguage: " << digitLanguage);
-        SAL_INFO("cppcanvas.emf", "EMF+\t FirstTabOffset: " << firstTabOffset << " HotkeyPrefix: " << hotkeyPrefix << " LeadingMargin: " << leadingMargin << " TrailingMargin: " << trailingMargin << " Tracking: " << tracking);
-        SAL_INFO("cppcanvas.emf", "EMF+\t Trimming: " << trimming << " TabStopCount: " << tabStopCount << " RangeCount: " << rangeCount);
+        SAL_WARN_IF((header >> 12) != 0xdbc01, "drawinglayer", "Invalid header - not 0xdbc01");
+        SAL_INFO("drawinglayer", "EMF+\t string format\nEMF+\theader: 0x" << std::hex << (header >> 12) << " version: 0x" << (header & 0x1fff) << " StringFormatFlags: " << std::dec << stringFormatFlags << " Language: " << language);
+        SAL_INFO("drawinglayer", "EMF+\t StringAlignment: " << stringAlignment << " LineAlign: " << lineAlign << " DigitSubstitution: " << digitSubstitution << " DigitLanguage: " << digitLanguage);
+        SAL_INFO("drawinglayer", "EMF+\t FirstTabOffset: " << firstTabOffset << " HotkeyPrefix: " << hotkeyPrefix << " LeadingMargin: " << leadingMargin << " TrailingMargin: " << trailingMargin << " Tracking: " << tracking);
+        SAL_INFO("drawinglayer", "EMF+\t Trimming: " << trimming << " TabStopCount: " << tabStopCount << " RangeCount: " << rangeCount);
     }
 }
 
