@@ -32,7 +32,6 @@ double CGM::ImplGetOrientation( FloatPoint const & rCenter, FloatPoint const & r
     double nY = rPoint.Y - rCenter.Y;
 
     double fSqrt = sqrt(nX * nX + nY * nY);
-
     double fOrientation = fSqrt != 0.0 ? (acos(nX / fSqrt) * 57.29577951308) : 0.0;
     if (nY > 0)
         fOrientation = 360 - fOrientation;
