@@ -1509,17 +1509,30 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
         else
             *pIsUnicode = m_pWw8Fib->m_fExtChar;
 
-        WW8_CP nCpLen = nCpPos - nCpStart;
+        WW8_CP nCpLen;
+        bool bFail = o3tl::checked_sub(nCpPos, nCpStart, nCpLen);
+        if (bFail)
+        {
+            SAL_WARN("sw.ww8", "broken offset, ignoring");
+            return WW8_CP_MAX;
+        }
+
         if (*pIsUnicode)
         {
-            const bool bFail = o3tl::checked_multiply<WW8_CP>(nCpLen, 2, nCpLen);
+            bFail = o3tl::checked_multiply<WW8_CP>(nCpLen, 2, nCpLen);
             if (bFail)
             {
                 SAL_WARN("sw.ww8", "broken offset, ignoring");
                 return WW8_CP_MAX;
             }
         }
-        nRet += nCpLen;
+
+        bFail = o3tl::checked_add(nRet, nCpLen, nRet);
+        if (bFail)
+        {
+            SAL_WARN("sw.ww8", "broken offset, ignoring");
+            return WW8_CP_MAX;
+        }
 
         return nRet;
     }
