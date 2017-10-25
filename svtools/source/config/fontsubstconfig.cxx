@@ -161,10 +161,7 @@ void SvtFontSubstConfig::Apply()
     OutputDevice::BeginFontSubstitution();
 
     // remove old substitutions
-    sal_uInt16 nOldCount = OutputDevice::GetFontSubstituteCount();
-
-    while (nOldCount)
-        OutputDevice::RemoveFontSubstitute(--nOldCount);
+    OutputDevice::RemoveFontsSubstitute();
 
     // read new substitutions
     sal_Int32 nCount = IsEnabled() ? SubstitutionCount() : 0;

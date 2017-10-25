@@ -1253,8 +1253,7 @@ public:
     static void                 AddFontSubstitute( const OUString& rFontName,
                                                    const OUString& rReplaceFontName,
                                                    AddFontSubstituteFlags nFlags );
-    static void                 RemoveFontSubstitute( sal_uInt16 n );
-    static sal_uInt16           GetFontSubstituteCount();
+    static void                 RemoveFontsSubstitute();
 
     static vcl::Font            GetDefaultFont( DefaultFontType nType,
                                                 LanguageType eLang,
