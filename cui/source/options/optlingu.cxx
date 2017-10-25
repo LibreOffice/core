@@ -1358,13 +1358,12 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     m_pLinguOptionsCLB->Clear();
 
     SvTreeList *pModel = m_pLinguOptionsCLB->GetModel();
-    SvTreeListEntry* pEntry = nullptr;
 
     sal_Int16 nVal = 0;
     bool  bVal  = false;
     sal_uLong nUserData = 0;
 
-    pEntry = CreateEntry( sSpellAuto,       CBCOL_FIRST );
+    SvTreeListEntry* pEntry = CreateEntry( sSpellAuto,       CBCOL_FIRST );
     aLngCfg.GetProperty( UPN_IS_SPELL_AUTO ) >>= bVal;
     const SfxPoolItem* pItem = GetItem( *rSet, SID_AUTOSPELL_CHECK );
     if (pItem)
