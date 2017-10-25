@@ -1440,6 +1440,24 @@ namespace emfplushelper
                             "EMF+\t dx: " << maWorldTransform.get(2, 0) << ", dy: " << maWorldTransform.get(2, 1));
                         break;
                     }
+                    case EmfPlusRecordTypeRotateWorldTransform:
+                    {
+                        // Angle of rotation in degrees
+                        float eAngle;
+                        rMS.ReadFloat(eAngle);
+
+                        SAL_INFO("cppcanvas.emf", "EMF+ EmfPlusRecordTypeRotateWorldTransform Angle: " << eAngle);
+
+                        // Skipping flags & 0x2000
+                        // For rotation transformation there is no difference between post and pre multiply
+                        maWorldTransform.rotate(eAngle * F_PI180);
+
+                        mappingChanged();
+
+                        SAL_INFO("cppcanvas.emf",
+                                "EMF+\t " << maWorldTransform);
+                        break;
+                    }
                     case EmfPlusRecordTypeSetClipRect:
                     {
                         int combineMode = (flags >> 8) & 0xf;
