@@ -512,8 +512,10 @@ void CGM::ImplDoClass4()
                 ImplMapDouble( aRadius.X );
                 aRadius.Y = aRadius.X;
 
-                fStartAngle = acos( vector[ 0 ] / sqrt( vector[ 0 ] * vector[ 0 ] + vector[ 1 ] * vector[ 1 ] ) ) * 57.29577951308;
-                fEndAngle = acos( vector[ 2 ] / sqrt( vector[ 2 ] * vector[ 2 ] + vector[ 3 ] * vector[ 3 ] ) ) * 57.29577951308;
+                const double fStartSqrt = sqrt(vector[0] * vector[ 0 ] + vector[1] * vector[1]);
+                fStartAngle = fStartSqrt != 0.0 ? (acos(vector[0] / fStartSqrt) * 57.29577951308) : 0.0;
+                const double fEndSqrt = sqrt(vector[2] * vector[ 2 ] + vector[3] * vector[3]);
+                fEndAngle = fEndSqrt != 0.0 ? (acos(vector[ 2 ] / fEndSqrt) * 57.29577951308) : 0.0;
 
                 if ( vector[ 1 ] > 0 )
                     fStartAngle = 360 - fStartAngle;
