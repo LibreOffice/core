@@ -68,7 +68,7 @@ typedef std::map< sal_uInt32, css::uno::Sequence< css::uno::Type> > SdTypesCache
 
 */
 
-class SdModule : public SfxModule, public SfxListener
+class SdModule final : public SfxModule, public SfxListener
 {
 public:
                             SFX_DECL_INTERFACE(SD_IF_SDAPP)
@@ -120,7 +120,7 @@ public:
 
     svtools::ColorConfig& GetColorConfig();
 
-protected:
+private:
 
     SdOptions*              pImpressOptions;
     SdOptions*              pDrawOptions;
@@ -137,7 +137,6 @@ protected:
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-private:
     SfxFrame* ExecuteNewDocument( SfxRequest const & rReq );
 
     static SfxFrame* CreateEmptyDocument( const css::uno::Reference< css::frame::XFrame >& i_rFrame );

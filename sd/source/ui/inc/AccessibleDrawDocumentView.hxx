@@ -34,7 +34,7 @@ namespace accessibility {
     Please see the documentation of the base class for further
     explanations of the individual methods.
 */
-class AccessibleDrawDocumentView :
+class AccessibleDrawDocumentView final :
     public AccessibleDocumentViewBase
     ,public css::accessibility::XAccessibleGroupPosition
 {
@@ -94,7 +94,7 @@ public:
         getGroupPosition( const css::uno::Any& rAny ) override;
     virtual OUString SAL_CALL getObjectLink( const css::uno::Any& accoject ) override;
 
-protected:
+private:
 
     //=====  XServiceInfo  ====================================================
 
@@ -122,10 +122,9 @@ protected:
     */
     virtual void
         implSelect( sal_Int32 nAccessibleChildIndex, bool bSelect ) override;
-private:
+
     ::sd::ViewShell* mpSdViewSh;
 
-protected:
     /** This object manages the shapes of the represented draw page.  It is
         responsible to determine the visible shapes and create on demand the
         accessible objects representing them.
@@ -168,7 +167,6 @@ protected:
     css::uno::Reference< css::accessibility::XAccessible >
         GetSelAccContextInTable();
 
-private:
     void UpdateAccessibleName();
 };
 

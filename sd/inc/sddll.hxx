@@ -35,9 +35,8 @@ class SdModule;
 |*
 \************************************************************************/
 
-class SD_DLLPUBLIC SdDLL
+class SD_DLLPUBLIC SdDLL final
 {
-protected:
 #ifdef ENABLE_SDREMOTE
     static void     RegisterRemotes();
 #endif

@@ -60,7 +60,7 @@ enum PlaceholderType
     Subtitle
 };
 
-class PowerPointExport : public XmlFilterBase, public PPTWriterBase
+class PowerPointExport final : public XmlFilterBase, public PPTWriterBase
 {
     friend class PowerPointShapeExport;
 public:
@@ -84,7 +84,7 @@ public:
     static const char* Get8Direction( sal_uInt8 nDirection );
     static       int   GetPPTXLayoutId( int nOffset );
 
-protected:
+private:
 
     virtual void ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 nMode,
                                  bool bHasBackground, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
@@ -129,7 +129,6 @@ protected:
     sal_uInt32 GetNewSlideMasterId() { return mnSlideMasterIdMax ++; }
     sal_Int32 GetAuthorIdAndLastIndex( const OUString& sAuthor, sal_Int32& nLastIndex );
 
-private:
     // Write docProps/core.xml and docprops/custom.xml and docprops/app.xml
     void writeDocumentProperties();
 

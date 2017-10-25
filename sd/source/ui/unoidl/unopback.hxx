@@ -39,14 +39,13 @@ const SvxItemPropertySet* ImplGetPageBackgroundPropertySet();
 class SdDrawDocument;
 class SfxItemSet;
 
-class SdUnoPageBackground : public ::cppu::WeakImplHelper<
+class SdUnoPageBackground final : public ::cppu::WeakImplHelper<
                                     css::beans::XPropertySet,
                                     css::lang::XServiceInfo,
                                     css::beans::XPropertyState,
                                     css::lang::XUnoTunnel>,
                             public SfxListener
 {
-protected:
     const SvxItemPropertySet*  mpPropSet;
     std::unique_ptr<SfxItemSet> mpSet;
     SdrModel*           mpDoc;

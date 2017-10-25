@@ -29,17 +29,12 @@ namespace sd {
 class View;
 class ViewShell;
 
-class GraphicObjectBar
+class GraphicObjectBar final
     : public SfxShell
 {
 public:
     SFX_DECL_INTERFACE( SD_IF_SDDRAWGRAFOBJECTBAR )
 
-private:
-    /// SfxInterface initializer.
-    static void InitInterface_Impl();
-
-public:
     GraphicObjectBar (ViewShell* pSdViewShell, ::sd::View* pSdView);
     virtual ~GraphicObjectBar() override;
 
@@ -49,7 +44,10 @@ public:
     void            GetFilterState( SfxItemSet& rSet );
     void            ExecuteFilter( SfxRequest const & rReq );
 
-protected:
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
     ::sd::View* mpView;
     ViewShell*  mpViewSh;
 };

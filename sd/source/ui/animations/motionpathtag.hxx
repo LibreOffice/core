@@ -35,7 +35,7 @@ class View;
 class CustomAnimationPane;
 
 /// Base class for all functions.
-class MotionPathTag : public SmartTag, public IPolyPolygonEditorController, public SfxListener, public css::util::XChangesListener
+class MotionPathTag final : public SmartTag, public IPolyPolygonEditorController, public SfxListener, public css::util::XChangesListener
 {
 public:
     MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, const CustomAnimationEffectPtr& pEffect );
@@ -91,7 +91,7 @@ public:
     virtual void SAL_CALL acquire(  ) throw () override;
     virtual void SAL_CALL release(  ) throw () override;
 
-protected:
+private:
     virtual void addCustomHandles( SdrHdlList& rHandlerList ) override;
     virtual bool getContext( SdrViewContext& rContext ) override;
     virtual void disposing() override;
@@ -100,7 +100,6 @@ protected:
     void updatePathAttributes();
     void selectionChanged();
 
-private:
     CustomAnimationPane& mrPane;
     CustomAnimationEffectPtr mpEffect;
     ::basegfx::B2DPolyPolygon mxPolyPoly;

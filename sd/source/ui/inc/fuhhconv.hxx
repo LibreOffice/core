@@ -26,7 +26,7 @@ class SdOutliner;
 
 namespace sd {
 
-class FuHangulHanjaConversion : public FuPoor
+class FuHangulHanjaConversion final : public FuPoor
 {
 public:
 
@@ -39,13 +39,12 @@ public:
 
     void ConvertStyles( LanguageType nTargetLanguage, const vcl::Font *pTargetFont );
 
-protected:
+private:
     virtual ~FuHangulHanjaConversion() override;
 
     SdOutliner*     pSdOutliner;
     bool            bOwnOutliner;
 
-private:
     FuHangulHanjaConversion (
         ViewShell* pViewSh,
         ::sd::Window* pWin,

@@ -57,16 +57,15 @@ namespace svt {
 /**
  * Effect-Tab-Dialog
  */
-class SD_DLLPUBLIC SdPageObjsTLB : public SvTreeListBox
+class SD_DLLPUBLIC SdPageObjsTLB final : public SvTreeListBox
 {
-private:
-
     static bool  SAL_DLLPRIVATE bIsInDrag;      ///< static, in the case the navigator is deleted in ExecuteDrag
 
     // set contenttree in SdNavigatorWin
     bool                           bisInSdNavigatorWin;
 
     ::std::unique_ptr< ::svt::AcceleratorExecute> m_pAccel;
+
 public:
 
     // nested class to implement the TransferableHelper
@@ -121,7 +120,7 @@ public:
     */
     bool PageBelongsToCurrentShow (const SdPage* pPage) const;
 
-protected:
+private:
 
     VclPtr<vcl::Window>     mpParent;
     const SdDrawDocument*   mpDoc;

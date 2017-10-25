@@ -114,12 +114,10 @@ struct FieldEntry
     }
 };
 
-class PortionObj : public PropStateValue
+class PortionObj final : public PropStateValue
 {
 
     friend class ParagraphObj;
-
-    protected:
 
         void            ImplClear();
         void            ImplConstruct( const PortionObj& rPortionObj );

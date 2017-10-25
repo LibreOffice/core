@@ -27,7 +27,7 @@ class SdDrawDocument;
 
 namespace sd {
 
-class FuConstructBezierPolygon
+class FuConstructBezierPolygon final
     : public FuConstruct
 {
 public:
@@ -49,7 +49,7 @@ public:
 
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
 
-protected:
+private:
     FuConstructBezierPolygon (
         ViewShell* pViewSh,
         ::sd::Window* pWin,
@@ -57,8 +57,7 @@ protected:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
-    sal_uInt16      nEditMode;
-
+    sal_uInt16    nEditMode;
     css::uno::Any maTargets;   // used for creating a path for custom animations
 };
 

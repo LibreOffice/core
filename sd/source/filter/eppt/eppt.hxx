@@ -144,7 +144,7 @@ public:
 };
 
 struct CellBorder;
-class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
+class PPTWriter final : public PPTWriterBase, public PPTExBulletProvider
 {
         sal_uInt32                      mnCnvrtFlags;
         bool                        mbStatus;
@@ -199,7 +199,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
     public:
         static void         WriteCString( SvStream&, const OUString&, sal_uInt32 nInstance = 0 );
 
-    protected:
+    private:
 
         bool                ImplCreateDocumentSummaryInformation();
         bool                ImplCreateCurrentUserStream();

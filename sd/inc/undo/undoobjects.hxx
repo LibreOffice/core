@@ -100,7 +100,7 @@ private:
 
 // Undo for SdrObject::SetUserCall()
 
-class UndoObjectUserCall : public SdrUndoObj
+class UndoObjectUserCall final : public SdrUndoObj
 {
 public:
     UndoObjectUserCall(SdrObject& rNewObj);
@@ -108,7 +108,7 @@ public:
     virtual void Undo() override;
     virtual void Redo() override;
 
-protected:
+private:
     SdrObjUserCall* mpOldUserCall;
     SdrObjUserCall* mpNewUserCall;
     SdrObjectWeakRef mxSdrObject;
@@ -116,7 +116,7 @@ protected:
 
 // Undo for SdPage::InsertPresObj() and SdPage::RemovePresObj()
 
-class UndoObjectPresentationKind : public SdrUndoObj
+class UndoObjectPresentationKind final : public SdrUndoObj
 {
 public:
     UndoObjectPresentationKind(SdrObject& rObject);
@@ -124,7 +124,7 @@ public:
     virtual void Undo() override;
     virtual void Redo() override;
 
-protected:
+private:
     PresObjKind meOldKind;
     PresObjKind meNewKind;
     SdrPageWeakRef mxPage;
@@ -134,7 +134,7 @@ protected:
 // Restores correct position and size for presentation shapes with user call
 // on undo
 
-class UndoAutoLayoutPosAndSize : public SfxUndoAction
+class UndoAutoLayoutPosAndSize final : public SfxUndoAction
 {
 public:
     UndoAutoLayoutPosAndSize( SdPage& rPage );
@@ -142,11 +142,11 @@ public:
     virtual void Undo() override;
     virtual void Redo() override;
 
-protected:
+private:
     SdrPageWeakRef mxPage;
 };
 
-class UndoGeoObject : public SdrUndoGeoObj
+class UndoGeoObject final : public SdrUndoGeoObj
 {
 public:
     UndoGeoObject( SdrObject& rNewObj );
@@ -154,12 +154,12 @@ public:
     virtual void Undo() override;
     virtual void Redo() override;
 
-protected:
+private:
     SdrPageWeakRef mxPage;
     SdrObjectWeakRef mxSdrObject;
 };
 
-class UndoAttrObject : public SdrUndoAttrObj
+class UndoAttrObject final : public SdrUndoAttrObj
 {
 public:
     UndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText );
@@ -167,7 +167,7 @@ public:
     virtual void Undo() override;
     virtual void Redo() override;
 
-protected:
+private:
     SdrPageWeakRef mxPage;
     SdrObjectWeakRef mxSdrObject;
 };

@@ -30,7 +30,7 @@ namespace sd {
 /**
  * draw control
  */
-class FuConstructUnoControl
+class FuConstructUnoControl final
     : public FuConstruct
 {
 public:
@@ -47,7 +47,7 @@ public:
 
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
 
-protected:
+private:
     FuConstructUnoControl(
         ViewShell* pViewSh,
         ::sd::Window* pWin,
@@ -55,9 +55,7 @@ protected:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
-    OUString aOldLayer;
-
-private:
+    OUString    aOldLayer;
     SdrInventor nInventor;
     sal_uInt16  nIdentifier;
 };

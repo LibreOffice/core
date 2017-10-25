@@ -29,7 +29,7 @@ class RulerCtrlItem;
 class View;
 class Window;
 
-class Ruler
+class Ruler final
     : public SvxRuler
 {
 public:
@@ -48,7 +48,8 @@ public:
     bool IsHorizontal() const { return bHorz; }
 
     using ::Ruler::SetNullOffset;
-protected:
+
+private:
     DrawViewShell* pDrViewShell;
     RulerCtrlItem* pCtrlItem;
     bool bHorz;

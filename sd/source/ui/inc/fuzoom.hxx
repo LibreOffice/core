@@ -27,7 +27,7 @@ namespace sd {
 
 extern const sal_uInt16 SidArrayZoom[];
 
-class FuZoom
+class FuZoom final
     : public FuPoor
 {
 public:
@@ -42,7 +42,7 @@ public:
     virtual void Activate() override;        ///< activates the function
     virtual void Deactivate() override;      ///< deactivates the function
 
-protected:
+private:
     virtual ~FuZoom() override;
 
     Point       aBeginPosPix;
@@ -53,7 +53,6 @@ protected:
     bool        bStartDrag;
     Pointer     aPtr;
 
-private:
     FuZoom (
         ViewShell* pViewSh,
         ::sd::Window* pWin,

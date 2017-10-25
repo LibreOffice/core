@@ -24,7 +24,7 @@
 
 namespace sd {
 
-class FuConstructArc
+class FuConstructArc final
     : public FuConstruct
 {
 public:
@@ -40,7 +40,7 @@ public:
 
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
 
-protected:
+private:
     FuConstructArc (
         ViewShell* pViewSh,
         ::sd::Window* pWin,
