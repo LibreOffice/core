@@ -3256,6 +3256,8 @@ SvxListBoxColorWrapper::SvxListBoxColorWrapper(SvxColorListBox* pControl)
 
 void SvxListBoxColorWrapper::operator()(const OUString& /*rCommand*/, const NamedColor& rColor)
 {
+    if (!mxControl)
+        return;
     mxControl->Selected(rColor);
 }
 
