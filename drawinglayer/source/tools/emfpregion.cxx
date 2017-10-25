@@ -66,8 +66,8 @@ namespace emfplushelper
     {
         sal_uInt32 header;
         s.ReadUInt32(header).ReadInt32(parts);
-        SAL_INFO("cppcanvas.emf", "EMF+\tregion");
-        SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " parts: " << parts << std::dec);
+        SAL_INFO("drawinglayer", "EMF+\tregion");
+        SAL_INFO("drawinglayer", "EMF+\theader: 0x" << std::hex << header << " parts: " << parts << std::dec);
 
         if (parts)
         {
@@ -81,12 +81,12 @@ namespace emfplushelper
             for (int i = 0; i < parts; i++)
             {
                 s.ReadInt32(combineMode[i]);
-                SAL_INFO("cppcanvas.emf", "EMF+\tcombine mode [" << i << "]: 0x" << std::hex << combineMode[i] << std::dec);
+                SAL_INFO("drawinglayer", "EMF+\tcombine mode [" << i << "]: 0x" << std::hex << combineMode[i] << std::dec);
             }
         }
 
         s.ReadInt32(initialState);
-        SAL_INFO("cppcanvas.emf", "EMF+\tinitial state: 0x" << std::hex << initialState << std::dec);
+        SAL_INFO("drawinglayer", "EMF+\tinitial state: 0x" << std::hex << initialState << std::dec);
     }
 }
 

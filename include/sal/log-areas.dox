@@ -123,6 +123,10 @@ certain functionality.
 @li @c cui.options
 @li @c cui.tabpages
 
+@section drawinglayer
+
+@li @c drawinglayer
+
 @section Calc
 
 @li @c sc
@@ -577,7 +581,6 @@ certain functionality.
 @li @c configmgr.dconf
 @li @c cppcanvas
 @li @c cppcanvas.emf
-@li @c drawinglayer
 @li @c dtrans
 @li @c helpcompiler
 @li @c idl

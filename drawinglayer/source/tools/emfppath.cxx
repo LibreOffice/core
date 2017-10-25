@@ -70,7 +70,7 @@ namespace emfplushelper
                 // EMFPlusPointR: points are stored in EMFPlusInteger7 or
                 // EMFPlusInteger15 objects, see section 2.2.2.21/22
                 // If 0x800 bit is set, the 0x4000 bit is undefined and must be ignored
-                SAL_WARN("cppcanvas.emf", "EMF+\t\t TODO - parse EMFPlusPointR object (section 2.2.1.6)");
+                SAL_WARN("drawinglayer", "EMF+\t\t TODO - parse EMFPlusPointR object (section 2.2.1.6)");
             }
             else if (pathFlags & 0x4000)
             {
@@ -78,7 +78,7 @@ namespace emfplushelper
                 sal_Int16 x, y;
 
                 s.ReadInt16( x ).ReadInt16( y );
-                SAL_INFO ("cppcanvas.emf", "EMF+\t EMFPlusPoint [x,y]: " << x << "," << y);
+                SAL_INFO ("drawinglayer", "EMF+\t EMFPlusPoint [x,y]: " << x << "," << y);
                 pPoints [i*2] = x;
                 pPoints [i*2 + 1] = y;
             }
@@ -86,7 +86,7 @@ namespace emfplushelper
             {
                 // EMFPlusPointF: stored in Single (float) format
                 s.ReadFloat( pPoints [i*2] ).ReadFloat( pPoints [i*2 + 1] );
-                SAL_INFO ("cppcanvas.emf", "EMF+\t EMFPlusPointF [x,y]: " << pPoints [i*2] << "," << pPoints [i*2 + 1]);
+                SAL_INFO ("drawinglayer", "EMF+\t EMFPlusPointF [x,y]: " << pPoints [i*2] << "," << pPoints [i*2 + 1]);
             }
         }
 
@@ -95,7 +95,7 @@ namespace emfplushelper
             for (int i = 0; i < nPoints; i++)
             {
                 s.ReadUChar(pPointTypes[i]);
-                SAL_INFO("cppcanvas.emf", "EMF+\tpoint type: " << (int)pPointTypes[i]);
+                SAL_INFO("drawinglayer", "EMF+\tpoint type: " << (int)pPointTypes[i]);
             }
         }
 
@@ -104,7 +104,7 @@ namespace emfplushelper
 #if OSL_DEBUG_LEVEL > 1
         const ::basegfx::B2DRectangle aBounds (::basegfx::utils::getRange (GetPolygon (rR)));
 
-        SAL_INFO ("cppcanvas.emf",
+        SAL_INFO ("drawinglayer",
                     "EMF+\tpolygon bounding box: " << aBounds.getMinX () << "," << aBounds.getMinY () << aBounds.getWidth () << "x" << aBounds.getHeight () << " (mapped)");
 #else
         (void) rR; // avoid warnings
@@ -141,7 +141,7 @@ namespace emfplushelper
                     if (((i - last_normal )% 3) == 1)
                     {
                         polygon.setNextControlPoint (p - 1, mapped);
-                        SAL_INFO ("cppcanvas.emf", "polygon append  next: " << p - 1 << " mapped: " << mapped.getX () << "," << mapped.getY ());
+                        SAL_INFO ("drawinglayer", "polygon append  next: " << p - 1 << " mapped: " << mapped.getX () << "," << mapped.getY ());
                         continue;
                     }
                     else if (((i - last_normal) % 3) == 2)
@@ -158,12 +158,12 @@ namespace emfplushelper
             }
 
             polygon.append (mapped);
-            SAL_INFO ("cppcanvas.emf", "polygon append point: " << pPoints [i*2] << "," << pPoints [i*2 + 1] << " mapped: " << mapped.getX () << ":" << mapped.getY ());
+            SAL_INFO ("drawinglayer", "polygon append point: " << pPoints [i*2] << "," << pPoints [i*2 + 1] << " mapped: " << mapped.getX () << ":" << mapped.getY ());
 
             if (hasPrev)
             {
                 polygon.setPrevControlPoint (p, prev);
-                SAL_INFO ("cppcanvas.emf", "polygon append  prev: " << p << " mapped: " << prev.getX () << "," << prev.getY ());
+                SAL_INFO ("drawinglayer", "polygon append  prev: " << p << " mapped: " << prev.getX () << "," << prev.getY ());
                 hasPrev = false;
             }
 
@@ -174,7 +174,7 @@ namespace emfplushelper
                 // closed polygon
                 polygon.setClosed (true);
                 aPolygon.append (polygon);
-                SAL_INFO ("cppcanvas.emf", "close polygon");
+                SAL_INFO ("drawinglayer", "close polygon");
                 last_normal = i + 1;
                 p = 0;
                 polygon.clear ();
@@ -197,17 +197,17 @@ namespace emfplushelper
 #if OSL_DEBUG_LEVEL > 1
             for (unsigned int i=0; i<aPolygon.count(); i++) {
                 polygon = aPolygon.getB2DPolygon(i);
-                SAL_INFO ("cppcanvas.emf", "polygon: " << i);
+                SAL_INFO ("drawinglayer", "polygon: " << i);
                 for (unsigned int j=0; j<polygon.count(); j++) {
                     ::basegfx::B2DPoint point = polygon.getB2DPoint(j);
-                    SAL_INFO ("cppcanvas.emf", "point: " << point.getX() << "," << point.getY());
+                    SAL_INFO ("drawinglayer", "point: " << point.getX() << "," << point.getY());
                     if (polygon.isPrevControlPointUsed(j)) {
                         point = polygon.getPrevControlPoint(j);
-                        SAL_INFO ("cppcanvas.emf", "prev: " << point.getX() << "," << point.getY());
+                        SAL_INFO ("drawinglayer", "prev: " << point.getX() << "," << point.getY());
                     }
                     if (polygon.isNextControlPointUsed(j)) {
                         point = polygon.getNextControlPoint(j);
-                        SAL_INFO ("cppcanvas.emf", "next: " << point.getX() << "," << point.getY());
+                        SAL_INFO ("drawinglayer", "next: " << point.getX() << "," << point.getY());
                     }
                 }
             }

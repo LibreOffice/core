@@ -73,12 +73,12 @@ namespace emfplushelper
     {
         sal_Int32 pathLength;
         s.ReadInt32(pathLength);
-        SAL_INFO("cppcanvas.emf", "EMF+\t\tpath length: " << pathLength);
+        SAL_INFO("drawinglayer", "EMF+\t\tpath length: " << pathLength);
         sal_uInt32 pathHeader;
         sal_Int32 pathPoints, pathFlags;
         s.ReadUInt32(pathHeader).ReadInt32(pathPoints).ReadInt32(pathFlags);
-        SAL_INFO("cppcanvas.emf", "EMF+\t\tpath (custom cap line path)");
-        SAL_INFO("cppcanvas.emf", "EMF+\t\theader: 0x" << std::hex << pathHeader << " points: " << std::dec << pathPoints << " additional flags: 0x" << std::hex << pathFlags << std::dec);
+        SAL_INFO("drawinglayer", "EMF+\t\tpath (custom cap line path)");
+        SAL_INFO("drawinglayer", "EMF+\t\theader: 0x" << std::hex << pathHeader << " points: " << std::dec << pathPoints << " additional flags: 0x" << std::hex << pathFlags << std::dec);
 
         EMFPPath path(pathPoints);
         path.Read(s, pathFlags, rR);
@@ -96,8 +96,8 @@ namespace emfplushelper
     {
         sal_uInt32 header;
         s.ReadUInt32(header).ReadUInt32(type);
-        SAL_INFO("cppcanvas.emf", "EMF+\t\tcustom cap");
-        SAL_INFO("cppcanvas.emf", "EMF+\t\theader: 0x" << std::hex << header << " type: " << type << std::dec);
+        SAL_INFO("drawinglayer", "EMF+\t\tcustom cap");
+        SAL_INFO("drawinglayer", "EMF+\t\theader: 0x" << std::hex << header << " type: " << type << std::dec);
 
         if (type == EmfPlusCustomLineCapDataTypeDefault)
         {
@@ -111,14 +111,14 @@ namespace emfplushelper
                 .ReadFloat(miterLimit).ReadFloat(widthScale)
                 .ReadFloat(fillHotSpotX).ReadFloat(fillHotSpotY).ReadFloat(strokeHotSpotX).ReadFloat(strokeHotSpotY);
 
-            SAL_INFO("cppcanvas.emf", "EMF+\t\tcustomLineCapDataFlags: 0x" << std::hex << customLineCapDataFlags);
-            SAL_INFO("cppcanvas.emf", "EMF+\t\tbaseCap: 0x" << std::hex << baseCap);
-            SAL_INFO("cppcanvas.emf", "EMF+\t\tbaseInset: " << baseInset);
-            SAL_INFO("cppcanvas.emf", "EMF+\t\tstrokeStartCap: 0x" << std::hex << strokeStartCap);
-            SAL_INFO("cppcanvas.emf", "EMF+\t\tstrokeEndCap: 0x" << std::hex << strokeEndCap);
-            SAL_INFO("cppcanvas.emf", "EMF+\t\tstrokeJoin: 0x" << std::hex << strokeJoin);
-            SAL_INFO("cppcanvas.emf", "EMF+\t\tmiterLimit: " << miterLimit);
-            SAL_INFO("cppcanvas.emf", "EMF+\t\twidthScale: " << widthScale);
+            SAL_INFO("drawinglayer", "EMF+\t\tcustomLineCapDataFlags: 0x" << std::hex << customLineCapDataFlags);
+            SAL_INFO("drawinglayer", "EMF+\t\tbaseCap: 0x" << std::hex << baseCap);
+            SAL_INFO("drawinglayer", "EMF+\t\tbaseInset: " << baseInset);
+            SAL_INFO("drawinglayer", "EMF+\t\tstrokeStartCap: 0x" << std::hex << strokeStartCap);
+            SAL_INFO("drawinglayer", "EMF+\t\tstrokeEndCap: 0x" << std::hex << strokeEndCap);
+            SAL_INFO("drawinglayer", "EMF+\t\tstrokeJoin: 0x" << std::hex << strokeJoin);
+            SAL_INFO("drawinglayer", "EMF+\t\tmiterLimit: " << miterLimit);
+            SAL_INFO("drawinglayer", "EMF+\t\twidthScale: " << widthScale);
 
             if (customLineCapDataFlags & EmfPlusCustomLineCapDataFillPath)
             {
@@ -143,7 +143,7 @@ namespace emfplushelper
                 .ReadInt32(lineEndCap).ReadInt32(lineJoin).ReadFloat(miterLimit).ReadInt32(widthScale)
                 .ReadFloat(fillHotSpotX).ReadFloat(fillHotSpotY).ReadFloat(lineHotSpotX).ReadFloat(lineHotSpotY);
 
-            SAL_INFO("cppcanvas.emf", "EMF+\t\tTODO - actually read EmfPlusCustomLineCapArrowData object (section 2.2.2.12)");
+            SAL_INFO("drawinglayer", "EMF+\t\tTODO - actually read EmfPlusCustomLineCapArrowData object (section 2.2.2.12)");
         }
     }
 }
