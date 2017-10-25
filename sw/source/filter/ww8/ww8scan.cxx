@@ -3388,7 +3388,13 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                                     continue;
                                 }
                             }
-                            nLimitFC = nFcStart + nCpLen;
+
+                            const bool bFail = o3tl::checked_add(nFcStart, nCpLen, nLimitFC);
+                            if (bFail)
+                            {
+                                SAL_WARN("sw.ww8", "broken offset, ignoring");
+                                continue;
+                            }
 
                             //if it doesn't exist, skip it
                             if (!SeekPos(nCpStart))
