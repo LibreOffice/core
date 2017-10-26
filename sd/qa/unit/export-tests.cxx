@@ -94,6 +94,7 @@ public:
     void testTransparentBackground();
     void testEmbeddedPdf();
     void testTdf100926();
+    void testTextRotation();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -110,6 +111,7 @@ public:
     CPPUNIT_TEST(testTransparentBackground);
     CPPUNIT_TEST(testEmbeddedPdf);
     CPPUNIT_TEST(testTdf100926);
+    CPPUNIT_TEST(testTextRotation);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -680,6 +682,28 @@ void SdExportTest::testTdf100926()
     xCell.set(xTable->getCellByPosition(2, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("RotateAngle") >>= nRotation;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nRotation);
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testTextRotation()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/shape-text-rotate.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
+
+    uno::Reference<drawing::XDrawPage> xPage(getPage(0, xDocShRef));
+    uno::Reference<beans::XPropertySet> xPropSet(getShape(0, xPage));
+
+    CPPUNIT_ASSERT(xPropSet.is());
+
+    auto aGeomPropSeq = xPropSet->getPropertyValue("CustomShapeGeometry").get<uno::Sequence<beans::PropertyValue>>();
+    comphelper::SequenceAsHashMap aCustomShapeGeometry(aGeomPropSeq);
+
+    auto it = aCustomShapeGeometry.find("TextRotateAngle");
+    CPPUNIT_ASSERT(it != aCustomShapeGeometry.end());
+
+    CPPUNIT_ASSERT_EQUAL((double)(-90), aCustomShapeGeometry["TextRotateAngle"].get<double>());
 
     xDocShRef->DoClose();
 }
