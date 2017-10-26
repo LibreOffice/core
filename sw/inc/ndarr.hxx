@@ -219,8 +219,7 @@ public:
                             const OUString& rFltName,
                             const Graphic* pGraphic,
                             SwGrfFormatColl *pColl,
-                            SwAttrSet const * pAutoAttr = nullptr,
-                            bool bDelayed = false );    ///< in ndgrf.cxx
+                            SwAttrSet const * pAutoAttr = nullptr );    ///< in ndgrf.cxx
 
     static SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,
                             const GraphicObject& rGrfObj,
