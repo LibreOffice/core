@@ -3391,10 +3391,17 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                                     nFcStart,bIsUnicode );
                             }
 
-                            WW8_CP nCpLen = (nCpEnd - nCpStart);
+                            WW8_CP nCpLen;
+                            bool bFail = o3tl::checked_sub(nCpEnd, nCpStart, nCpLen);
+                            if (bFail)
+                            {
+                                SAL_WARN("sw.ww8", "broken offset, ignoring");
+                                continue;
+                            }
+
                             if (bIsUnicode)
                             {
-                                const bool bFail = o3tl::checked_multiply<WW8_CP>(nCpLen, 2, nCpLen);
+                                bFail = o3tl::checked_multiply<WW8_CP>(nCpLen, 2, nCpLen);
                                 if (bFail)
                                 {
                                     SAL_WARN("sw.ww8", "broken offset, ignoring");
@@ -3402,7 +3409,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                                 }
                             }
 
-                            const bool bFail = o3tl::checked_add(nFcStart, nCpLen, nLimitFC);
+                            bFail = o3tl::checked_add(nFcStart, nCpLen, nLimitFC);
                             if (bFail)
                             {
                                 SAL_WARN("sw.ww8", "broken offset, ignoring");
