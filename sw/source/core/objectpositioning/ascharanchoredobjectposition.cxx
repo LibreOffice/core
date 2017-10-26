@@ -303,7 +303,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             // set new anchor position and relative position
             SwFlyInContentFrame* pFlyInContentFrame = &const_cast<SwFlyInContentFrame&>(rFlyInContentFrame);
             pFlyInContentFrame->SetRefPoint( aAnchorPos, aRelAttr, aRelPos );
-            if( nObjWidth != aRectFnSet.GetWidth(pFlyInContentFrame->FrameRA()) )
+            if( nObjWidth != aRectFnSet.GetWidth(pFlyInContentFrame->getSwFrame()) )
             {
                 // recalculate object bound rectangle, if object width has changed.
                 aObjBoundRect = GetAnchoredObj().GetObjRect();
@@ -313,7 +313,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
                 aObjBoundRect.Height( aObjBoundRect.Height() + rULSpace.GetLower() );
             }
         }
-        OSL_ENSURE( aRectFnSet.GetHeight(rFlyInContentFrame.FrameRA()),
+        OSL_ENSURE( aRectFnSet.GetHeight(rFlyInContentFrame.getSwFrame()),
             "SwAnchoredObjectPosition::CalcPosition(..) - fly frame has an invalid height" );
     }
 

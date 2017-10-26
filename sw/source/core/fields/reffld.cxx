@@ -146,22 +146,22 @@ bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
             if( bVert )
             {
                 if( bR2L )
-                    bRefIsLower = pRefFrame->FrameRA().Top() < pFieldFrame->FrameRA().Top() ||
-                            ( pRefFrame->FrameRA().Top() == pFieldFrame->FrameRA().Top() &&
-                              pRefFrame->FrameRA().Left() < pFieldFrame->FrameRA().Left() );
+                    bRefIsLower = pRefFrame->getSwFrame().Top() < pFieldFrame->getSwFrame().Top() ||
+                            ( pRefFrame->getSwFrame().Top() == pFieldFrame->getSwFrame().Top() &&
+                              pRefFrame->getSwFrame().Left() < pFieldFrame->getSwFrame().Left() );
                 else
-                    bRefIsLower = pRefFrame->FrameRA().Top() < pFieldFrame->FrameRA().Top() ||
-                            ( pRefFrame->FrameRA().Top() == pFieldFrame->FrameRA().Top() &&
-                              pRefFrame->FrameRA().Left() > pFieldFrame->FrameRA().Left() );
+                    bRefIsLower = pRefFrame->getSwFrame().Top() < pFieldFrame->getSwFrame().Top() ||
+                            ( pRefFrame->getSwFrame().Top() == pFieldFrame->getSwFrame().Top() &&
+                              pRefFrame->getSwFrame().Left() > pFieldFrame->getSwFrame().Left() );
             }
             else if( bR2L )
-                bRefIsLower = pRefFrame->FrameRA().Left() > pFieldFrame->FrameRA().Left() ||
-                            ( pRefFrame->FrameRA().Left() == pFieldFrame->FrameRA().Left() &&
-                              pRefFrame->FrameRA().Top() < pFieldFrame->FrameRA().Top() );
+                bRefIsLower = pRefFrame->getSwFrame().Left() > pFieldFrame->getSwFrame().Left() ||
+                            ( pRefFrame->getSwFrame().Left() == pFieldFrame->getSwFrame().Left() &&
+                              pRefFrame->getSwFrame().Top() < pFieldFrame->getSwFrame().Top() );
             else
-                bRefIsLower = pRefFrame->FrameRA().Left() < pFieldFrame->FrameRA().Left() ||
-                            ( pRefFrame->FrameRA().Left() == pFieldFrame->FrameRA().Left() &&
-                              pRefFrame->FrameRA().Top() < pFieldFrame->FrameRA().Top() );
+                bRefIsLower = pRefFrame->getSwFrame().Left() < pFieldFrame->getSwFrame().Left() ||
+                            ( pRefFrame->getSwFrame().Left() == pFieldFrame->getSwFrame().Left() &&
+                              pRefFrame->getSwFrame().Top() < pFieldFrame->getSwFrame().Top() );
             pRefFrame = nullptr;
         }
         else if( ( SwFrameType::Column | SwFrameType::Cell ) & pFieldFrame->GetType() )
@@ -175,22 +175,22 @@ bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
         if( bVert )
         {
             if( bR2L )
-                bRefIsLower = pRefFrame->FrameRA().Left() < pFieldFrame->FrameRA().Left() ||
-                            ( pRefFrame->FrameRA().Left() == pFieldFrame->FrameRA().Left() &&
-                                pRefFrame->FrameRA().Top() < pFieldFrame->FrameRA().Top() );
+                bRefIsLower = pRefFrame->getSwFrame().Left() < pFieldFrame->getSwFrame().Left() ||
+                            ( pRefFrame->getSwFrame().Left() == pFieldFrame->getSwFrame().Left() &&
+                                pRefFrame->getSwFrame().Top() < pFieldFrame->getSwFrame().Top() );
             else
-                bRefIsLower = pRefFrame->FrameRA().Left() > pFieldFrame->FrameRA().Left() ||
-                            ( pRefFrame->FrameRA().Left() == pFieldFrame->FrameRA().Left() &&
-                                pRefFrame->FrameRA().Top() < pFieldFrame->FrameRA().Top() );
+                bRefIsLower = pRefFrame->getSwFrame().Left() > pFieldFrame->getSwFrame().Left() ||
+                            ( pRefFrame->getSwFrame().Left() == pFieldFrame->getSwFrame().Left() &&
+                                pRefFrame->getSwFrame().Top() < pFieldFrame->getSwFrame().Top() );
         }
         else if( bR2L )
-            bRefIsLower = pRefFrame->FrameRA().Top() < pFieldFrame->FrameRA().Top() ||
-                        ( pRefFrame->FrameRA().Top() == pFieldFrame->FrameRA().Top() &&
-                            pRefFrame->FrameRA().Left() > pFieldFrame->FrameRA().Left() );
+            bRefIsLower = pRefFrame->getSwFrame().Top() < pFieldFrame->getSwFrame().Top() ||
+                        ( pRefFrame->getSwFrame().Top() == pFieldFrame->getSwFrame().Top() &&
+                            pRefFrame->getSwFrame().Left() > pFieldFrame->getSwFrame().Left() );
         else
-            bRefIsLower = pRefFrame->FrameRA().Top() < pFieldFrame->FrameRA().Top() ||
-                        ( pRefFrame->FrameRA().Top() == pFieldFrame->FrameRA().Top() &&
-                            pRefFrame->FrameRA().Left() < pFieldFrame->FrameRA().Left() );
+            bRefIsLower = pRefFrame->getSwFrame().Top() < pFieldFrame->getSwFrame().Top() ||
+                        ( pRefFrame->getSwFrame().Top() == pFieldFrame->getSwFrame().Top() &&
+                            pRefFrame->getSwFrame().Left() < pFieldFrame->getSwFrame().Left() );
     }
     return bRefIsLower;
 }

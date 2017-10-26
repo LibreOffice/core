@@ -176,12 +176,12 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
     Point aPoint( rPoint );
 
     // check, if we have to adjust the point
-    if ( !FrameRA().IsInside( aPoint ) )
+    if ( !getSwFrame().IsInside( aPoint ) )
     {
-        aPoint.X() = std::max( aPoint.X(), FrameRA().Left() );
-        aPoint.X() = std::min( aPoint.X(), FrameRA().Right() );
-        aPoint.Y() = std::max( aPoint.Y(), FrameRA().Top() );
-        aPoint.Y() = std::min( aPoint.Y(), FrameRA().Bottom() );
+        aPoint.X() = std::max( aPoint.X(), getSwFrame().Left() );
+        aPoint.X() = std::min( aPoint.X(), getSwFrame().Right() );
+        aPoint.Y() = std::max( aPoint.Y(), getSwFrame().Top() );
+        aPoint.Y() = std::min( aPoint.Y(), getSwFrame().Bottom() );
     }
 
     bool bTextRet = false;
@@ -398,9 +398,9 @@ bool SwRootFrame::FillSelection( SwSelectionList& aSelList, const SwRect& rRect)
     const long nBottom = rRect.Bottom();
     while( pPage )
     {
-        if( pPage->FrameRA().Top() < nBottom )
+        if( pPage->getSwFrame().Top() < nBottom )
         {
-            if( pPage->FrameRA().Bottom() > rRect.Top() )
+            if( pPage->getSwFrame().Bottom() > rRect.Top() )
                 pPage->FillSelection( aSelList, rRect );
             pPage = pPage->GetNext();
         }
@@ -430,8 +430,8 @@ bool SwRootFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
     // #i95626#
     // special handling for <rPoint> beyond root frames area
     if ( !pPage &&
-         rPoint.X() > FrameRA().Right() &&
-         rPoint.Y() > FrameRA().Bottom() )
+         rPoint.X() > getSwFrame().Right() &&
+         rPoint.Y() > getSwFrame().Bottom() )
     {
         pPage = dynamic_cast<const SwPageFrame*>(Lower());
         while ( pPage && pPage->GetNext() )
@@ -496,7 +496,7 @@ bool SwCellFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
             while ( pFrame && !bRet )
             {
                 pFrame->Calc(pRenderContext);
-                if ( pFrame->FrameRA().IsInside( rPoint ) )
+                if ( pFrame->getSwFrame().IsInside( rPoint ) )
                 {
                     bRet = pFrame->GetCursorOfst( pPos, rPoint, pCMS );
                     if ( pCMS && pCMS->m_bStop )
@@ -539,7 +539,7 @@ bool SwFlyFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
     //However if the Point sits inside a Fly which is completely located inside
     //the current one, we call GetCursorOfst for it.
     Calc(pRenderContext);
-    bool bInside = FrameRA().IsInside( rPoint ) && Lower();
+    bool bInside = getSwFrame().IsInside( rPoint ) && Lower();
     bool bRet = false;
 
     //If an Frame contains a graphic, but only text was requested, it basically
@@ -557,8 +557,8 @@ bool SwFlyFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
         {
             const SwVirtFlyDrawObj* pObj = static_cast<const SwVirtFlyDrawObj*>(aIter());
             const SwFlyFrame* pFly = pObj ? pObj->GetFlyFrame() : nullptr;
-            if ( pFly && pFly->FrameRA().IsInside( rPoint ) &&
-                 FrameRA().IsInside( pFly->FrameRA() ) )
+            if ( pFly && pFly->getSwFrame().IsInside( rPoint ) &&
+                 getSwFrame().IsInside( pFly->getSwFrame() ) )
             {
                 if (g_OszCtrl.ChkOsz(pFly))
                     break;
@@ -578,7 +578,7 @@ bool SwFlyFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
         while ( pFrame && !bRet )
         {
             pFrame->Calc(pRenderContext);
-            if ( pFrame->FrameRA().IsInside( rPoint ) )
+            if ( pFrame->getSwFrame().IsInside( rPoint ) )
             {
                 bRet = pFrame->GetCursorOfst( pPos, rPoint, pCMS );
                 if ( pCMS && pCMS->m_bStop )
@@ -741,7 +741,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
     if ( bTab )
     {
         // pStart or pCnt is inside a table. nX will be used for travelling:
-        SwRect aRect( pStart->FrameRA() );
+        SwRect aRect( pStart->getSwFrame() );
         pStart->GetCharRect( aRect, *pPam->GetPoint() );
         Point aCenter = aRect.Center();
         nX = aRectFnSet.IsVert() ? aCenter.Y() : aCenter.X();
@@ -758,16 +758,16 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
             while ( pCell && !pCell->IsCellFrame() )
                 pCell = pCell->GetUpper();
             OSL_ENSURE( pCell, "could not find the cell" );
-            nX =  aRectFnSet.GetLeft(pCell->FrameRA()) +
-                  aRectFnSet.GetWidth(pCell->FrameRA()) / 2;
+            nX =  aRectFnSet.GetLeft(pCell->getSwFrame()) +
+                  aRectFnSet.GetWidth(pCell->getSwFrame()) / 2;
 
             //The flow leads from one table to the next. The X-value needs to be
             //corrected based on the middle of the starting cell by the amount
             //of the offset of the tables.
             if ( pStTab != pTable )
             {
-                nX += aRectFnSet.GetLeft(pTable->FrameRA()) -
-                      aRectFnSet.GetLeft(pStTab->FrameRA());
+                nX += aRectFnSet.GetLeft(pTable->getSwFrame()) -
+                      aRectFnSet.GetLeft(pStTab->getSwFrame());
             }
         }
 
@@ -870,7 +870,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
                          if ( pTable &&
                               !pTab->GetUpper()->IsInTab() &&
                             !pTable->GetUpper()->IsInTab() )
-                            nX += pTab->FrameRA().Left() - pTable->FrameRA().Left();
+                            nX += pTab->getSwFrame().Left() - pTable->getSwFrame().Left();
                         pTable = pTab;
                     }
                     const SwLayoutFrame *pCell = pCnt->GetUpper();
@@ -881,7 +881,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
                     Point aInsideCnt;
                     if ( pCell )
                     {
-                        long nTmpTop = aRectFnSet.GetTop(pCell->FrameRA());
+                        long nTmpTop = aRectFnSet.GetTop(pCell->getSwFrame());
                         if ( aRectFnSet.IsVert() )
                         {
                             if ( nTmpTop )
@@ -893,7 +893,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
                             aInsideCell = Point( nX, nTmpTop );
                     }
 
-                    long nTmpTop = aRectFnSet.GetTop(pCnt->FrameRA());
+                    long nTmpTop = aRectFnSet.GetTop(pCnt->getSwFrame());
                     if ( aRectFnSet.IsVert() )
                     {
                         if ( nTmpTop )
@@ -904,11 +904,11 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
                     else
                         aInsideCnt = Point( nX, nTmpTop );
 
-                    if ( pCell && pCell->FrameRA().IsInside( aInsideCell ) )
+                    if ( pCell && pCell->getSwFrame().IsInside( aInsideCell ) )
                     {
                         bEnd = true;
                         //Get the right Content out of the cell.
-                        if ( !pCnt->FrameRA().IsInside( aInsideCnt ) )
+                        if ( !pCnt->getSwFrame().IsInside( aInsideCnt ) )
                         {
                             pCnt = pCell->ContainsContent();
                             if ( fnNxtPrv == lcl_GetPrvCnt )
@@ -916,7 +916,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
                                     pCnt = pCnt->GetNextContentFrame();
                         }
                     }
-                    else if ( pCnt->FrameRA().IsInside( aInsideCnt ) )
+                    else if ( pCnt->getSwFrame().IsInside( aInsideCnt ) )
                         bEnd = true;
                 }
             }
@@ -1022,8 +1022,8 @@ sal_uInt16 SwRootFrame::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
         if( pSCursor )
         {
             Point &rPt = pSCursor->GetPtPos();
-            rPt = pContent->FrameRA().Pos();
-            rPt += pContent->PrintRA().Pos();
+            rPt = pContent->getSwFrame().Pos();
+            rPt += pContent->getSwPrint().Pos();
         }
         return pPage->GetPhyPageNum();
     }
@@ -1147,12 +1147,12 @@ static const SwLayoutFrame* lcl_Inside( const SwContentFrame *pCnt, Point& rPt )
     {
         if( pUp->IsPageBodyFrame() || pUp->IsFooterFrame() || pUp->IsHeaderFrame() )
         {
-            if( rPt.Y() >= pUp->FrameRA().Top() && rPt.Y() <= pUp->FrameRA().Bottom() )
+            if( rPt.Y() >= pUp->getSwFrame().Top() && rPt.Y() <= pUp->getSwFrame().Bottom() )
                 return pUp;
             return nullptr;
         }
         if( pUp->IsFootnoteContFrame() )
-            return pUp->FrameRA().IsInside( rPt ) ? pUp : nullptr;
+            return pUp->getSwFrame().IsInside( rPt ) ? pUp : nullptr;
         pUp = pUp->GetUpper();
     }
     return nullptr;
@@ -1195,7 +1195,7 @@ const SwContentFrame *SwLayoutFrame::GetContentPos( Point& rPoint,
                 ((!bDontLeave || IsAnLower( pContent )) &&
                 (pContent->GetPhyPageNum() <= nMaxPage)) )
         {
-            if ( pContent->FrameRA().Width() &&
+            if ( pContent->getSwFrame().Width() &&
                  ( !bBodyOnly || pContent->IsInDocBody() ) )
             {
                 //If the Content lies in a protected area (cell, Footnote, section),
@@ -1319,34 +1319,34 @@ const SwContentFrame *SwLayoutFrame::GetContentPos( Point& rPoint,
     }
 
     //A small correction at the first/last
-    Size aActualSize( pActual->PrintRA().SSize() );
-    if ( aActualSize.Height() > pActual->GetUpper()->PrintRA().Height() )
-        aActualSize.Height() = pActual->GetUpper()->PrintRA().Height();
+    Size aActualSize( pActual->getSwPrint().SSize() );
+    if ( aActualSize.Height() > pActual->GetUpper()->getSwPrint().Height() )
+        aActualSize.Height() = pActual->GetUpper()->getSwPrint().Height();
 
     SwRectFnSet aRectFnSet(pActual);
     if ( !pActual->GetPrev() &&
          aRectFnSet.YDiff( aRectFnSet.GetPrtTop(*pActual),
                               aRectFnSet.IsVert() ? rPoint.X() : rPoint.Y() ) > 0 )
     {
-        aPoint.Y() = pActual->FrameRA().Top() + pActual->PrintRA().Top();
-        aPoint.X() = pActual->FrameRA().Left() +
+        aPoint.Y() = pActual->getSwFrame().Top() + pActual->getSwPrint().Top();
+        aPoint.X() = pActual->getSwFrame().Left() +
                         ( pActual->IsRightToLeft() || aRectFnSet.IsVert() ?
-                          pActual->PrintRA().Right() :
-                          pActual->PrintRA().Left() );
+                          pActual->getSwPrint().Right() :
+                          pActual->getSwPrint().Left() );
     }
     else if ( !pActual->GetNext() &&
               aRectFnSet.YDiff( aRectFnSet.GetPrtBottom(*pActual),
                                    aRectFnSet.IsVert() ? rPoint.X() : rPoint.Y() ) < 0 )
     {
-        aPoint.Y() = pActual->FrameRA().Top() + pActual->PrintRA().Bottom();
-        aPoint.X() = pActual->FrameRA().Left() +
+        aPoint.Y() = pActual->getSwFrame().Top() + pActual->getSwPrint().Bottom();
+        aPoint.X() = pActual->getSwFrame().Left() +
                         ( pActual->IsRightToLeft() || aRectFnSet.IsVert() ?
-                          pActual->PrintRA().Left() :
-                          pActual->PrintRA().Right() );
+                          pActual->getSwPrint().Left() :
+                          pActual->getSwPrint().Right() );
     }
 
     //Bring the Point in to the PrtArea
-    const SwRect aRect( pActual->FrameRA().Pos() + pActual->PrintRA().Pos(),
+    const SwRect aRect( pActual->getSwFrame().Pos() + pActual->getSwPrint().Pos(),
                         aActualSize );
     if ( aPoint.Y() < aRect.Top() )
         aPoint.Y() = aRect.Top();
@@ -1413,7 +1413,7 @@ void SwPageFrame::GetContentPosition( const Point &rPt, SwPosition &rPos ) const
             nDist   = nDiff;
             pAct    = pContent;
         }
-        else if ( aContentFrame.Top() > FrameRA().Bottom() )
+        else if ( aContentFrame.Top() > getSwFrame().Bottom() )
             //In terms of fields, it's not possible to be closer any more!
             break;
 
@@ -1423,7 +1423,7 @@ void SwPageFrame::GetContentPosition( const Point &rPt, SwPosition &rPos ) const
     }
 
     //Bring the point into the PrtArea.
-    const SwRect aRect( pAct->FrameRA().Pos() + pAct->PrintRA().Pos(), pAct->PrintRA().SSize() );
+    const SwRect aRect( pAct->getSwFrame().Pos() + pAct->getSwPrint().Pos(), pAct->getSwPrint().SSize() );
     if ( aAct.Y() < aRect.Top() )
         aAct.Y() = aRect.Top();
     else if ( aAct.Y() > aRect.Bottom() )
@@ -1466,7 +1466,7 @@ Point SwRootFrame::GetNextPrevContentPos( const Point& rPoint, bool bNext ) cons
     //page.
     const SwLayoutFrame *pPage = static_cast<const SwLayoutFrame*>(Lower());
     if( pPage )
-        while( pPage->GetNext() && pPage->FrameRA().Bottom() < rPoint.Y() )
+        while( pPage->GetNext() && pPage->getSwFrame().Bottom() < rPoint.Y() )
             pPage = static_cast<const SwLayoutFrame*>(pPage->GetNext());
 
     const SwContentFrame *pCnt = pPage ? pPage->ContainsContent() : ContainsContent();
@@ -1481,7 +1481,7 @@ Point SwRootFrame::GetNextPrevContentPos( const Point& rPoint, bool bNext ) cons
     {
         // As long as the point lies before the first ContentFrame and there are
         // still precedent pages I'll go to the next page.
-        while ( rPoint.Y() < pCnt->FrameRA().Top() && pPage->GetPrev() )
+        while ( rPoint.Y() < pCnt->getSwFrame().Top() && pPage->GetPrev() )
         {
             pPage = static_cast<const SwLayoutFrame*>(pPage->GetPrev());
             pCnt = pPage->ContainsContent();
@@ -1498,7 +1498,7 @@ Point SwRootFrame::GetNextPrevContentPos( const Point& rPoint, bool bNext ) cons
     }
 
     //Does the point lie above the first ContentFrame?
-    if ( rPoint.Y() < pCnt->FrameRA().Top() && !lcl_IsInRepeatedHeadline( pCnt ) )
+    if ( rPoint.Y() < pCnt->getSwFrame().Top() && !lcl_IsInRepeatedHeadline( pCnt ) )
         return pCnt->UnionFrame().Pos();
 
     Point aRet(0, 0);
@@ -1530,12 +1530,12 @@ Point SwRootFrame::GetNextPrevContentPos( const Point& rPoint, bool bNext ) cons
         //searched.
         const SwTabFrame* pTFrame;
         pNxt->Calc(pRenderContext);
-        if( pNxt->FrameRA().Top() > rPoint.Y() &&
+        if( pNxt->getSwFrame().Top() > rPoint.Y() &&
             !lcl_IsInRepeatedHeadline( pCnt, &pTFrame ) &&
-            ( !pTFrame || pNxt->FrameRA().Left() > rPoint.X() ))
+            ( !pTFrame || pNxt->getSwFrame().Left() > rPoint.X() ))
         {
             if (bNext)
-                aRet = pNxt->FrameRA().Pos();
+                aRet = pNxt->getSwFrame().Pos();
             else
                 aRet = Point( aContentFrame.Right(), aContentFrame.Bottom() );
             break;
@@ -1564,7 +1564,7 @@ Point SwRootFrame::GetPagePos( sal_uInt16 nPageNum ) const
             break;
         pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
     }
-    return pPage->FrameRA().Pos();
+    return pPage->getSwFrame().Pos();
 }
 
 /** get page frame by phyiscal page number
@@ -1771,10 +1771,10 @@ void SwFrame::Calc(vcl::RenderContext* pRenderContext) const
 
 Point SwFrame::GetRelPos() const
 {
-    Point aRet( FrameRA().Pos() );
+    Point aRet( getSwFrame().Pos() );
     // here we cast since SwLayoutFrame is declared only as forwarded
-    aRet -= GetUpper()->PrintRA().Pos();
-    aRet -= GetUpper()->FrameRA().Pos();
+    aRet -= GetUpper()->getSwPrint().Pos();
+    aRet -= GetUpper()->getSwFrame().Pos();
     return aRet;
 }
 
@@ -1893,7 +1893,7 @@ bool SwRootFrame::MakeTableCursors( SwTableCursor& rTableCursor )
 
             while ( pRow )
             {
-                if ( pRow->FrameRA().IsOver( rUnion.GetUnion() ) )
+                if ( pRow->getSwFrame().IsOver( rUnion.GetUnion() ) )
                 {
                     const SwLayoutFrame *pCell = pRow->FirstCell();
 
@@ -1995,7 +1995,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
     // #i12836# enhanced pdf
     SwRegionRects aRegion( !bIgnoreVisArea ?
                            pSh->VisArea() :
-                           FrameRA() );
+                           getSwFrame() );
     if( !pStartPos->nNode.GetNode().IsContentNode() ||
         !pStartPos->nNode.GetNode().GetContentNode()->getLayoutFrame(this) ||
         ( pStartPos->nNode != pEndPos->nNode &&
@@ -2387,8 +2387,8 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             }
             else
             {
-                lLeft = aRectFnSet.GetLeft(pStartFrame->FrameRA()) +
-                    aRectFnSet.GetLeft(pStartFrame->PrintRA());
+                lLeft = aRectFnSet.GetLeft(pStartFrame->getSwFrame()) +
+                    aRectFnSet.GetLeft(pStartFrame->getSwPrint());
                 lRight = aRectFnSet.GetRight(aEndFrame);
             }
             if( lLeft < aRectFnSet.GetLeft(aStFrame) )
@@ -2556,7 +2556,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
                     }
                 }
                 if( inSelection )
-                        Add( aRegion, pFly->FrameRA() );
+                        Add( aRegion, pFly->getSwFrame() );
                 else if ( !pFly->IsAnLower( pStartFrame ) &&
                     (rSur.GetSurround() != css::text::WrapTextMode_THROUGH &&
                     !rSur.IsContour()) )
@@ -2584,7 +2584,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
                         } while ( bSub && pTmp );
                     }
                     if ( bSub )
-                        Sub( aRegion, pFly->FrameRA() );
+                        Sub( aRegion, pFly->getSwFrame() );
                 }
             }
         }

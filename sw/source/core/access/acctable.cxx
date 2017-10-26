@@ -156,14 +156,14 @@ void SwAccessibleTableData_Impl::CollectData( const SwFrame *pFrame )
                 // #i77106#
                 if ( IncludeRow( *pLower ) )
                 {
-                    maRows.insert( pLower->FrameRA().Top() - maTabFramePos.getY() );
+                    maRows.insert( pLower->getSwFrame().Top() - maTabFramePos.getY() );
                     CollectData( pLower );
                 }
             }
             else if( pLower->IsCellFrame() &&
                      rLower.IsAccessible( mbIsInPagePreview ) )
             {
-                maColumns.insert( pLower->FrameRA().Left() - maTabFramePos.getX() );
+                maColumns.insert( pLower->getSwFrame().Left() - maTabFramePos.getX() );
             }
             else
             {
@@ -196,7 +196,7 @@ void SwAccessibleTableData_Impl::CollectRowHeaderData( const SwFrame *pFrame )
                 //if(mpTabFrame->GetTable()->GetTabLines()[ 0 ] != pLine)
                 //return ;
 
-                maRows.insert( pLower->FrameRA().Top() - maTabFramePos.Y() );
+                maRows.insert( pLower->getSwFrame().Top() - maTabFramePos.Y() );
 
                 CollectRowHeaderData( pLower );
 
@@ -206,7 +206,7 @@ void SwAccessibleTableData_Impl::CollectRowHeaderData( const SwFrame *pFrame )
             {
                 //Added by yanjun. Can't find the "GetRowHeaderFlag" function (need verify).
                 //if(static_cast<SwCellFrame*>(pLower)->GetRowHeaderFlag())
-                //  maColumns.insert( pLower->FrameRA().Left() - maTabFramePos.X() );
+                //  maColumns.insert( pLower->getSwFrame().Left() - maTabFramePos.X() );
             }
             else
             {
@@ -244,7 +244,7 @@ void SwAccessibleTableData_Impl::CollectColumnHeaderData( const SwFrame *pFrame 
                 if(iCurrentRowIndex >= mpTabFrame->GetTable()->GetRowsToRepeat_())
                     return ;
 
-                maRows.insert( pLower->FrameRA().Top() - maTabFramePos.Y() );
+                maRows.insert( pLower->getSwFrame().Top() - maTabFramePos.Y() );
 
                 CollectColumnHeaderData( pLower );
 
@@ -252,7 +252,7 @@ void SwAccessibleTableData_Impl::CollectColumnHeaderData( const SwFrame *pFrame 
             else if( pLower->IsCellFrame() &&
                      rLower.IsAccessible( mbIsInPagePreview ) )
             {
-                maColumns.insert( pLower->FrameRA().Left() - maTabFramePos.X() );
+                maColumns.insert( pLower->getSwFrame().Left() - maTabFramePos.X() );
             }
             else
             {
@@ -279,7 +279,7 @@ void SwAccessibleTableData_Impl::CollectExtents( const SwFrame *pFrame )
             {
                 sal_Int32 nRow, nCol;
                 Int32Pair_Impl aCellExtents;
-                GetRowColumnAndExtent( pLower->FrameRA(), nRow, nCol,
+                GetRowColumnAndExtent( pLower->getSwFrame(), nRow, nCol,
                                        aCellExtents.first,
                                        aCellExtents.second );
 
@@ -318,7 +318,7 @@ bool SwAccessibleTableData_Impl::FindCell(
             if( rLower.IsAccessible( mbIsInPagePreview ) )
             {
                 OSL_ENSURE( pLower->IsCellFrame(), "lower is not a cell frame" );
-                const SwRect& rFrame = pLower->FrameRA();
+                const SwRect& rFrame = pLower->getSwFrame();
                 if( rFrame.Right() >= rPos.X() && rFrame.Bottom() >= rPos.Y() )
                 {
                     // We have found the cell
@@ -432,7 +432,7 @@ void SwAccessibleTableData_Impl::GetSelection(
                           SwAccTableSelHander_Impl& rSelHdl,
                        bool bColumns ) const
 {
-    SwRect aArea( mpTabFrame->FrameRA() );
+    SwRect aArea( mpTabFrame->getSwFrame() );
     Point aPos( aArea.Pos() );
 
     const Int32Set_Impl& rRowsOrColumns = bColumns ? maColumns : maRows;
@@ -463,7 +463,7 @@ void SwAccessibleTableData_Impl::GetSelection(
 const SwFrame *SwAccessibleTableData_Impl::GetCellAtPos(
         sal_Int32 nLeft, sal_Int32 nTop ) const
 {
-    Point aPos( mpTabFrame->FrameRA().Pos() );
+    Point aPos( mpTabFrame->getSwFrame().Pos() );
     aPos.Move( nLeft, nTop );
     const SwFrame *pRet = nullptr;
     FindCell( aPos, mpTabFrame, false/*bExact*/, pRet );
@@ -497,7 +497,7 @@ SwAccessibleTableData_Impl::SwAccessibleTableData_Impl( SwAccessibleMap& rAccMap
                                                         bool bIsInPagePreview,
                                                         bool bOnlyTableColumnHeader )
     : mrAccMap( rAccMap )
-    , maTabFramePos( pTabFrame->FrameRA().Pos() )
+    , maTabFramePos( pTabFrame->getSwFrame().Pos() )
     , mpTabFrame( pTabFrame )
     , mbIsInPagePreview( bIsInPagePreview )
     , mbOnlyTableColumnHeader( bOnlyTableColumnHeader )
@@ -1016,8 +1016,8 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowExtentAt(
     const SwFrame *pCellFrame = GetTableData().GetCellAtPos( *aSttCol, *aSttRow );
     if( pCellFrame )
     {
-        sal_Int32 nBottom = pCellFrame->FrameRA().Bottom();
-        nBottom -= GetFrame()->FrameRA().Top();
+        sal_Int32 nBottom = pCellFrame->getSwFrame().Bottom();
+        nBottom -= GetFrame()->getSwFrame().Top();
         Int32Set_Impl::const_iterator aEndRow(
                 GetTableData().GetRows().upper_bound( nBottom ) );
         nExtend =
@@ -1046,8 +1046,8 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumnExtentAt(
     const SwFrame *pCellFrame = GetTableData().GetCellAtPos( *aSttCol, *aSttRow );
     if( pCellFrame )
     {
-        sal_Int32 nRight = pCellFrame->FrameRA().Right();
-        nRight -= GetFrame()->FrameRA().Left();
+        sal_Int32 nRight = pCellFrame->getSwFrame().Right();
+        nRight -= GetFrame()->getSwFrame().Left();
         Int32Set_Impl::const_iterator aEndCol(
                 GetTableData().GetColumns().upper_bound( nRight ) );
         nExtend =
@@ -1271,8 +1271,8 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRow( sal_Int32 nChildIndex )
     SwAccessibleChild aCell( GetChild( *(GetMap()), nChildIndex ) );
     if ( aCell.GetSwFrame()  )
     {
-        sal_Int32 nTop = aCell.GetSwFrame()->FrameRA().Top();
-        nTop -= GetFrame()->FrameRA().Top();
+        sal_Int32 nTop = aCell.GetSwFrame()->getSwFrame().Top();
+        nTop -= GetFrame()->getSwFrame().Top();
         Int32Set_Impl::const_iterator aRow(
                 GetTableData().GetRows().lower_bound( nTop ) );
         nRet = static_cast< sal_Int32 >( std::distance(
@@ -1308,8 +1308,8 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
     SwAccessibleChild aCell( GetChild( *(GetMap()), nChildIndex ) );
     if ( aCell.GetSwFrame()  )
     {
-        sal_Int32 nLeft = aCell.GetSwFrame()->FrameRA().Left();
-        nLeft -= GetFrame()->FrameRA().Left();
+        sal_Int32 nLeft = aCell.GetSwFrame()->getSwFrame().Left();
+        nLeft -= GetFrame()->getSwFrame().Left();
         Int32Set_Impl::const_iterator aCol(
                 GetTableData().GetColumns().lower_bound( nLeft ) );
         nRet = static_cast< sal_Int32 >( std::distance(
@@ -1359,7 +1359,7 @@ void SwAccessibleTable::InvalidatePosOrSize( const SwRect& rOldBox )
         FireTableChangeEvent(*mpTableData);
     }
     if( HasTableData() )
-        GetTableData().SetTablePos( GetFrame()->FrameRA().Pos() );
+        GetTableData().SetTablePos( GetFrame()->getSwFrame().Pos() );
 
     SwAccessibleContext::InvalidatePosOrSize( rOldBox );
 }
@@ -1405,7 +1405,7 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChil
     if( HasTableData() )
     {
         SAL_WARN_IF( HasTableData() &&
-                GetFrame()->FrameRA().Pos() != GetTableData().GetTablePos(),
+                GetFrame()->getSwFrame().Pos() != GetTableData().GetTablePos(),
                 "sw.a11y", "table has invalid position" );
         if( HasTableData() )
         {

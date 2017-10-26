@@ -187,8 +187,8 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
     if ( m_pFrame->IsRightToLeft() )
     {
         // this calculation is identical this the calculation for L2R layout - see below
-        nLeft = m_pFrame->FrameRA().Left() +
-                m_pFrame->PrintRA().Left() +
+        nLeft = m_pFrame->getSwFrame().Left() +
+                m_pFrame->getSwPrint().Left() +
                 nLMWithNum -
                 pNode->GetLeftMarginWithNum() -
                 // #i95907#
@@ -206,8 +206,8 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
              !pNode->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
         {
             // this calculation is identical this the calculation for R2L layout - see above
-            nLeft = m_pFrame->FrameRA().Left() +
-                    m_pFrame->PrintRA().Left() +
+            nLeft = m_pFrame->getSwFrame().Left() +
+                    m_pFrame->getSwPrint().Left() +
                     nLMWithNum -
                     pNode->GetLeftMarginWithNum() -
                     // #i95907#
@@ -218,13 +218,13 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
         }
         else
         {
-            nLeft = m_pFrame->FrameRA().Left() +
+            nLeft = m_pFrame->getSwFrame().Left() +
                     std::max( long( rSpace.GetTextLeft() + nLMWithNum ),
-                         m_pFrame->PrintRA().Left() );
+                         m_pFrame->getSwPrint().Left() );
         }
     }
 
-    nRight = m_pFrame->FrameRA().Left() + m_pFrame->PrintRA().Left() + m_pFrame->PrintRA().Width();
+    nRight = m_pFrame->getSwFrame().Left() + m_pFrame->getSwPrint().Left() + m_pFrame->getSwPrint().Width();
 
     if( nLeft >= nRight &&
          // #i53066# Omit adjustment of nLeft for numbered
@@ -233,7 +233,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
           !m_pFrame->IsInTab() ||
           !nLMWithNum ) )
     {
-        nLeft = m_pFrame->PrintRA().Left() + m_pFrame->FrameRA().Left();
+        nLeft = m_pFrame->getSwPrint().Left() + m_pFrame->getSwFrame().Left();
         if( nLeft >= nRight )   // e.g. with large paragraph indentations in slim table columns
             nRight = nLeft + 1; // einen goennen wir uns immer
     }
@@ -311,9 +311,9 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
         }
         else
         {
-              nFirst = m_pFrame->FrameRA().Left() +
+              nFirst = m_pFrame->getSwFrame().Left() +
                      std::max( rSpace.GetTextLeft() + nLMWithNum+ nFirstLineOfs,
-                          m_pFrame->PrintRA().Left() );
+                          m_pFrame->getSwPrint().Left() );
         }
 
         // Note: <SwTextFrame::GetAdditionalFirstLineOffset()> returns a negative
@@ -1232,13 +1232,13 @@ bool SwTextCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                 pCMS->m_aRealHeight.Y() = nMax - nTmp;
         }
     }
-    long nOut = pOrig->Right() - GetTextFrame()->FrameRA().Right();
+    long nOut = pOrig->Right() - GetTextFrame()->getSwFrame().Right();
     if( nOut > 0 )
     {
-        if( GetTextFrame()->FrameRA().Width() < GetTextFrame()->PrintRA().Left()
-                                   + GetTextFrame()->PrintRA().Width() )
-            nOut += GetTextFrame()->FrameRA().Width() - GetTextFrame()->PrintRA().Left()
-                    - GetTextFrame()->PrintRA().Width();
+        if( GetTextFrame()->getSwFrame().Width() < GetTextFrame()->getSwPrint().Left()
+                                   + GetTextFrame()->getSwPrint().Width() )
+            nOut += GetTextFrame()->getSwFrame().Width() - GetTextFrame()->getSwPrint().Left()
+                    - GetTextFrame()->getSwPrint().Width();
         if( nOut > 0 )
             pOrig->Pos().X() -= nOut + 10;
     }
@@ -1702,7 +1702,7 @@ sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
                 if ( m_pFrame->IsVertical() )
                     m_pFrame->SwitchHorizontalToVertical( aTmpPoint );
 
-                if( bChgNodeInner && pTmp->FrameRA().IsInside( aTmpPoint ) &&
+                if( bChgNodeInner && pTmp->getSwFrame().IsInside( aTmpPoint ) &&
                     !( pTmp->IsProtected() ) )
                 {
                     pFlyPor->GetFlyCursorOfst(aTmpPoint, *pPos, pCMS);
@@ -1752,7 +1752,7 @@ sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
 bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect ) const
 {
     bool bRet = false;
-    // PaintArea() instead FrameRA() for negative indents
+    // PaintArea() instead getSwFrame() for negative indents
     SwRect aTmpFrame( PaintArea() );
     if( !rRect.IsOver( aTmpFrame ) )
         return false;

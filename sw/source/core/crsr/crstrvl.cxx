@@ -90,12 +90,12 @@ void SwCursorShell::MoveCursorToNum()
     if( pFrame->IsVertical() )
     {
         aPt.setX(m_aCharRect.Center().getX());
-        aPt.setY(pFrame->FrameRA().Top() + GetUpDownX());
+        aPt.setY(pFrame->getSwFrame().Top() + GetUpDownX());
     }
     else
     {
         aPt.setY(m_aCharRect.Center().getY());
-        aPt.setX(pFrame->FrameRA().Left() + GetUpDownX());
+        aPt.setX(pFrame->getSwFrame().Left() + GetUpDownX());
     }
     pFrame->GetCursorOfst( m_pCurrentCursor->GetPoint(), aPt );
     if ( !m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::Toggle |
@@ -142,7 +142,7 @@ bool SwCursorShell::GotoHeaderText()
         SwCursor *pTmpCursor = getShellCursor( true );
         SwCursorSaveState aSaveState( *pTmpCursor );
         pFrame->Calc(GetOut());
-        Point aPt( pFrame->FrameRA().Pos() + pFrame->PrintRA().Pos() );
+        Point aPt( pFrame->getSwFrame().Pos() + pFrame->getSwPrint().Pos() );
         pFrame->GetCursorOfst( pTmpCursor->GetPoint(), aPt );
         if( !pTmpCursor->IsSelOvr() )
             UpdateCursor();
@@ -174,7 +174,7 @@ bool SwCursorShell::GotoFooterText()
             SwCallLink aLk( *this ); // watch Cursor-Moves
             SwCursorSaveState aSaveState( *pTmpCursor );
             pLower->Calc(GetOut());
-            Point aPt( pLower->FrameRA().Pos() + pLower->PrintRA().Pos() );
+            Point aPt( pLower->getSwFrame().Pos() + pLower->getSwPrint().Pos() );
             pLower->GetCursorOfst( pTmpCursor->GetPoint(), aPt );
             if( !pTmpCursor->IsSelOvr() )
                 UpdateCursor();
@@ -1443,8 +1443,8 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                                 pFrame->GetCharRect(aEnd, aEndPos, &aTmpState);
                                 if (aStart.Top() != aEnd.Top() || aStart.Bottom() != aEnd.Bottom())
                                 {
-                                    aStart.Left(pFrame->FrameRA().Left());
-                                    aEnd.Right(pFrame->FrameRA().Right());
+                                    aStart.Left(pFrame->getSwFrame().Left());
+                                    aEnd.Right(pFrame->getSwFrame().Right());
                                 }
                                 *pFieldRect = aStart.Union(aEnd);
                             }
@@ -1471,8 +1471,8 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             pFrame->GetCharRect(aEnd, *pRedl->End(), &aTmpState);
                             if (aStart.Top() != aEnd.Top() || aStart.Bottom() != aEnd.Bottom())
                             {
-                                aStart.Left(pFrame->FrameRA().Left());
-                                aEnd.Right(pFrame->FrameRA().Right());
+                                aStart.Left(pFrame->getSwFrame().Left());
+                                aEnd.Right(pFrame->getSwFrame().Right());
                             }
                             *pFieldRect = aStart.Union(aEnd);
                         }
@@ -1516,7 +1516,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
                     if( aTmpState.m_bPosCorr )
                     {
-                        if( pF && !pF->FrameRA().IsInside( aPt ))
+                        if( pF && !pF->getSwFrame().IsInside( aPt ))
                             pF = nullptr;
                     }
                     else if( !pF )
@@ -1551,8 +1551,8 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                         {
                             if( pFieldRect )
                             {
-                                *pFieldRect = pF->PrintRA();
-                                *pFieldRect += pF->FrameRA().Pos();
+                                *pFieldRect = pF->getSwPrint();
+                                *pFieldRect += pF->getSwFrame().Pos();
                             }
                             rContentAtPos.pFndTextAttr = nullptr;
                             rContentAtPos.aFnd.pAttr = pItem;

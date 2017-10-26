@@ -680,7 +680,7 @@ const SwFrame* SwDrawView::CalcAnchor()
     if ( bFly )
     {
         pAnch = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrame()->GetAnchorFrame();
-        aMyRect = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrame()->FrameRA().SVRect();
+        aMyRect = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrame()->getSwFrame().SVRect();
     }
     else
     {
