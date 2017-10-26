@@ -955,8 +955,6 @@ void WW8AttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTe
 
 void WW8AttributeOutput::StartRunProperties()
 {
-    WW8_WrPlcField* pCurrentFields = m_rWW8Export.CurrentFieldPlc();
-    m_nFieldResults = pCurrentFields ? pCurrentFields->ResultCount() : 0;
 }
 
 void WW8AttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool /*bSingleEmptyRun*/ )
@@ -984,22 +982,6 @@ void WW8AttributeOutput::OnTOXEnding()
 void WW8AttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
 {
     Redline( pRedlineData );
-
-    WW8_WrPlcField* pCurrentFields = m_rWW8Export.CurrentFieldPlc();
-    sal_uInt16 nNewFieldResults = pCurrentFields ? pCurrentFields->ResultCount() : 0;
-
-    bool bExportedFieldResult = ( m_nFieldResults != nNewFieldResults );
-
-    // If we have exported a field result, then we will have been forced to
-    // split up the text into a 0x13, 0x14, <result> 0x15 sequence with the
-    // properties forced out at the end of the result, so the 0x15 itself
-    // should remain clean of all other attributes to avoid #iXXXXX#
-    if ( !bExportedFieldResult )
-    {
-        m_rWW8Export.m_pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(),
-                m_rWW8Export.pO->size(), m_rWW8Export.pO->data() );
-    }
-    m_rWW8Export.pO->clear();
 }
 
 void WW8AttributeOutput::RunText( const OUString& rText, rtl_TextEncoding eCharSet )

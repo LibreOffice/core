@@ -450,12 +450,6 @@ protected:
     /// Used between StartStyles() and EndStyles().
     sal_uLong m_nStyleCountPos;
 
-    /// For output of run properties.
-    ///
-    /// We have to remember the number of field results, and do not export end
-    /// of the field results if we were forced to split text.
-    sal_uInt16 m_nFieldResults;
-
     bool mbOnTOXEnding;
 
 public:
@@ -467,7 +461,6 @@ public:
         , m_nStyleStartSize(0)
         , m_nStyleLenPos(0)
         , m_nStyleCountPos(0)
-        , m_nFieldResults(0)
         , mbOnTOXEnding(false)
     {
     }
