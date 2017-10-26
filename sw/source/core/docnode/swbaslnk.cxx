@@ -82,22 +82,22 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 ::sfx2::SvBaseLink::UpdateResult SwBaseLink::DataChanged(
     const OUString& rMimeType, const uno::Any & rValue )
 {
-    if( !pContentNode )
+    if( !m_pContentNode )
     {
         OSL_ENSURE(false, "DataChanged without ContentNode" );
         return ERROR_GENERAL;
     }
 
-    SwDoc* pDoc = pContentNode->GetDoc();
-    if( pDoc->IsInDtor() || ChkNoDataFlag() || bIgnoreDataChanged )
+    SwDoc* pDoc = m_pContentNode->GetDoc();
+    if( pDoc->IsInDtor() || ChkNoDataFlag() || m_bIgnoreDataChanged )
     {
-        bIgnoreDataChanged = false;
+        m_bIgnoreDataChanged = false;
         return SUCCESS;
     }
 
     SotClipboardFormatId nFormat = SotExchange::GetFormatIdFromMimeType( rMimeType );
 
-    if( pContentNode->IsNoTextNode() &&
+    if( m_pContentNode->IsNoTextNode() &&
         nFormat == sfx2::LinkManager::RegisterStatusInfoId() )
     {
         // Only a status change - serve Events?
@@ -114,7 +114,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
             }
 
             SwFrameFormat* pFormat;
-            if( nEvent != SvMacroItemId::NONE && nullptr != ( pFormat = pContentNode->GetFlyFormat() ))
+            if( nEvent != SvMacroItemId::NONE && nullptr != ( pFormat = m_pContentNode->GetFlyFormat() ))
             {
                 SwCallMouseEvent aCallEvent;
                 aCallEvent.Set( EVENT_OBJECT_IMAGE, pFormat );
@@ -127,19 +127,19 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     bool bUpdate = false;
     bool bGraphicArrived = false;
     bool bGraphicPieceArrived = false;
-    bool bDontNotify = false;
+    bool bFrameInPaint = false;
     Size aGrfSz, aOldSz;
 
     SwGrfNode* pSwGrfNode = nullptr;
 
-    if (pContentNode->IsGrfNode())
+    if (m_pContentNode->IsGrfNode())
     {
-        pSwGrfNode = pContentNode->GetGrfNode();
+        pSwGrfNode = m_pContentNode->GetGrfNode();
         assert(pSwGrfNode && "Error, pSwGrfNode expected when node answers IsGrfNode() with true (!)");
         aOldSz = pSwGrfNode->GetTwipSize();
         const GraphicObject& rGrfObj = pSwGrfNode->GetGrfObj();
 
-        bDontNotify = pSwGrfNode->IsFrameInPaint();
+        bFrameInPaint = pSwGrfNode->IsFrameInPaint();
 
         bGraphicArrived = GetObj()->IsDataComplete();
         bGraphicPieceArrived = GetObj()->IsPending();
@@ -184,26 +184,28 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
         if ( bUpdate && !bGraphicArrived && !bGraphicPieceArrived )
             pSwGrfNode->SetTwipSize( Size(0,0) );
     }
-    else if( pContentNode->IsOLENode() )
+    else if( m_pContentNode->IsOLENode() )
         bUpdate = true;
+
+    if ( !bUpdate || bFrameInPaint )
+        return SUCCESS;
 
     SwViewShell *pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     SwEditShell* pESh = pDoc->GetEditShell();
 
-    if ( bUpdate && bGraphicPieceArrived && !(bSwapIn || bDontNotify) )
+    if ( bGraphicPieceArrived && !m_bInSwapIn )
     {
         // Send hint without Actions; triggers direct paint
         if ( (!pSh || !pSh->ActionPend()) && (!pESh || !pESh->ActionPend()) )
         {
             SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
-            pContentNode->ModifyNotification( &aMsgHint, &aMsgHint );
+            m_pContentNode->ModifyNotification( &aMsgHint, &aMsgHint );
             bUpdate = false;
         }
     }
 
     static bool bInNotifyLinks = false;
-    if( bUpdate && !bDontNotify && (!bSwapIn || bGraphicArrived) &&
-        !bInNotifyLinks)
+    if( (!m_bInSwapIn || bGraphicArrived) && !bInNotifyLinks)
     {
         bool bLockView = false;
         if( pSh )
@@ -233,19 +235,19 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
                     dynamic_cast<const SwBaseLink*>( pLnk) !=  nullptr && pLnk->GetObj() == GetObj() )
                 {
                     SwBaseLink* pBLink = static_cast<SwBaseLink*>(pLnk);
-                    SwGrfNode* pGrfNd = static_cast<SwGrfNode*>(pBLink->pContentNode);
+                    SwGrfNode* pGrfNd = static_cast<SwGrfNode*>(pBLink->m_pContentNode);
 
                     if( pBLink != this &&
-                        ( !bSwapIn ||
+                        ( !m_bInSwapIn ||
                             GraphicType::Default == pGrfNd->GetGrfObj().GetType()))
                     {
                         Size aPreArriveSize(pGrfNd->GetTwipSize());
 
-                        pBLink->bIgnoreDataChanged = false;
+                        pBLink->m_bIgnoreDataChanged = false;
                         pBLink->DataChanged( rMimeType, rValue );
-                        pBLink->bIgnoreDataChanged = true;
+                        pBLink->m_bIgnoreDataChanged = true;
 
-                        pGrfNd->SetGraphicArrived( static_cast<SwGrfNode*>(pContentNode)->
+                        pGrfNd->SetGraphicArrived( static_cast<SwGrfNode*>(m_pContentNode)->
                                                     IsGraphicArrived() );
 
                         // Adjust the Fly's graphic
@@ -268,7 +270,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
         }
         else
         {
-            pContentNode->ModifyNotification( &aMsgHint, &aMsgHint );
+            m_pContentNode->ModifyNotification( &aMsgHint, &aMsgHint );
         }
 
         if( pESh )
@@ -372,7 +374,7 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
 
 bool SwBaseLink::SwapIn( bool bWaitForData, bool bNativFormat )
 {
-    bSwapIn = true;
+    m_bInSwapIn = true;
 
     if( !GetObj() && ( bNativFormat || ( !IsSynchron() && bWaitForData ) ))
     {
@@ -400,7 +402,7 @@ bool SwBaseLink::SwapIn( bool bWaitForData, bool bNativFormat )
             {
                 // The Flag needs to be reset on a SwapIn, because
                 // we want to reapply the data.
-                bIgnoreDataChanged = false;
+                m_bIgnoreDataChanged = false;
                 DataChanged( aMimeType, aValue );
             }
         }
@@ -414,26 +416,26 @@ bool SwBaseLink::SwapIn( bool bWaitForData, bool bNativFormat )
     else
         bRes = Update();
 
-    bSwapIn = false;
+    m_bInSwapIn = false;
     return bRes;
 }
 
 void SwBaseLink::Closed()
 {
-    if( pContentNode && !pContentNode->GetDoc()->IsInDtor() )
+    if( m_pContentNode && !m_pContentNode->GetDoc()->IsInDtor() )
     {
         // Delete the connection
-        if( pContentNode->IsGrfNode() )
-            static_cast<SwGrfNode*>(pContentNode)->ReleaseLink();
+        if( m_pContentNode->IsGrfNode() )
+            static_cast<SwGrfNode*>(m_pContentNode)->ReleaseLink();
     }
     SvBaseLink::Closed();
 }
 
 const SwNode* SwBaseLink::GetAnchor() const
 {
-    if (pContentNode)
+    if (m_pContentNode)
     {
-        SwFrameFormat *const pFormat = pContentNode->GetFlyFormat();
+        SwFrameFormat *const pFormat = m_pContentNode->GetFlyFormat();
         if (pFormat)
         {
             const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
