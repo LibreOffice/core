@@ -4420,7 +4420,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         aFont.SetFamilyName( aFontName );
                         auto nTextWidth = pOut->GetTextWidth( aObjectText );
 
-                        if ( nTextWidth && aObjData.eShapeType == mso_sptTextPlainText )
+                        OUString aObjName = GetPropertyString(DFF_Prop_wzName, rSt);
+                        if ( nTextWidth && aObjData.eShapeType == mso_sptTextPlainText && aObjName.match("PowerPlusWaterMarkObject"))
                         {
                             fRatio = aFont.GetFontSize().Height();
                             fRatio /= nTextWidth;
