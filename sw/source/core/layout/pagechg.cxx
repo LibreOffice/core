@@ -90,13 +90,22 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             }
             pFrame = pFrame->GetNext();
         } while ( pFrame );
-        if ( nHeight < 0 )
-            nHeight = 0;
-        FrameWA().Height( nHeight );
 
-        if( IsVertical() && !IsVertLR() && !IsReverse() && nWidth != FrameRA().Width() )
-            FrameWA().Pos().setX(FrameRA().Pos().getX() + FrameRA().Width() - nWidth);
-        FrameWA().Width( nWidth );
+        if ( nHeight < 0 )
+        {
+            nHeight = 0;
+        }
+
+        SwRect aFrm(FrameRA());
+        aFrm.Height( nHeight );
+
+        if( IsVertical() && !IsVertLR() && !IsReverse() && nWidth != aFrm.Width() )
+        {
+            aFrm.Pos().setX(aFrm.Pos().getX() + aFrm.Width() - nWidth);
+        }
+
+        aFrm.Width( nWidth );
+        setFrame(aFrm);
     }
 
     bool bNoGrid = true;
@@ -179,16 +188,26 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
     const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
     vcl::RenderContext* pRenderContext = pSh ? pSh->GetOut() : nullptr;
+    SwRect aFrm(FrameRA());
+
     if ( bBrowseMode )
     {
-        FrameWA().Height( 0 );
+        aFrm.Height( 0 );
         long nWidth = pSh->VisArea().Width();
+
         if ( !nWidth )
+        {
             nWidth = 5000;     // changes anyway
-        FrameWA().Width ( nWidth );
+        }
+
+        aFrm.Width ( nWidth );
     }
     else
-        FrameWA().SSize( pFormat->GetFrameSize().GetSize() );
+    {
+        aFrm.SSize( pFormat->GetFrameSize().GetSize() );
+    }
+
+    setFrame(aFrm);
 
     // create and insert body area if it is not a blank page
     SwDoc *pDoc = pFormat->GetDoc();
@@ -600,11 +619,15 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                         static_cast<const SwFormatChg*>(pNew)->pChangedFormat->GetFrameSize() :
                         static_cast<const SwFormatFrameSize&>(*pNew);
 
-                FrameWA().Height( std::max( rSz.GetHeight(), long(MINLAY) ) );
-                FrameWA().Width ( std::max( rSz.GetWidth(),  long(MINLAY) ) );
+                SwRect aFrm(FrameRA());
+                aFrm.Height( std::max( rSz.GetHeight(), long(MINLAY) ) );
+                aFrm.Width ( std::max( rSz.GetWidth(),  long(MINLAY) ) );
+                setFrame(aFrm);
 
                 if ( GetUpper() )
+                {
                     static_cast<SwRootFrame*>(GetUpper())->CheckViewLayout( nullptr, nullptr );
+                }
             }
             // cleanup Window
             if( pSh && pSh->GetWin() && aOldPageFrameRect.HasArea() )
@@ -1326,7 +1349,12 @@ sw::sidebarwindows::SidebarPosition SwPageFrame::SidebarPosition() const
 SwTwips SwRootFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
 {
     if ( !bTst )
-        FrameWA().SSize().Height() += nDist;
+    {
+        SwRect aFrm(FrameRA());
+        aFrm.SSize().Height() += nDist;
+        setFrame(aFrm);
+    }
+
     return nDist;
 }
 
@@ -1336,7 +1364,12 @@ SwTwips SwRootFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool )
     OSL_ENSURE( nDist <= FrameRA().Height(), "nDist greater than current size." );
 
     if ( !bTst )
-        FrameWA().SSize().Height() -= nDist;
+    {
+        SwRect aFrm(FrameRA());
+        aFrm.SSize().Height() -= nDist;
+        setFrame(aFrm);
+    }
+
     return nDist;
 }
 
@@ -1550,7 +1583,10 @@ void SwRootFrame::AssertPageFlys( SwPageFrame *pPage )
 
 Size SwRootFrame::ChgSize( const Size& aNewSize )
 {
-    FrameWA().SSize() = aNewSize;
+    SwRect aFrm(FrameRA());
+    aFrm.SSize() = aNewSize;
+    setFrame(aFrm);
+
     InvalidatePrt_();
     mbFixSize = false;
     return FrameRA().SSize();
@@ -1559,19 +1595,27 @@ Size SwRootFrame::ChgSize( const Size& aNewSize )
 void SwRootFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 {
     if ( !mbValidPos )
-    {   mbValidPos = true;
-        FrameWA().Pos().setX(DOCUMENTBORDER);
-        FrameWA().Pos().setY(DOCUMENTBORDER);
+    {
+        mbValidPos = true;
+
+        SwRect aFrm(FrameRA());
+        aFrm.Pos().setX(DOCUMENTBORDER);
+        aFrm.Pos().setY(DOCUMENTBORDER);
+        setFrame(aFrm);
     }
+
     if ( !mbValidPrtArea )
     {   mbValidPrtArea = true;
         PrintWA().Pos().setX(0);
         PrintWA().Pos().setY(0);
         PrintWA().SSize( FrameRA().SSize() );
     }
+
     if ( !mbValidSize )
+    {
         // SSize is set by the pages (Cut/Paste).
         mbValidSize = true;
+    }
 }
 
 void SwRootFrame::ImplInvalidateBrowseWidth()
@@ -1877,10 +1921,19 @@ static void lcl_MoveAllLowers( SwFrame* pFrame, const Point& rOffset )
     const SwRect aFrame( pFrame->FrameRA() );
 
     // first move the current frame
-    if (pFrame->FrameRA().Pos().X() != FAR_AWAY)
-        pFrame->FrameWA().Pos().X() += rOffset.X();
-    if (pFrame->FrameRA().Pos().Y() != FAR_AWAY)
-        pFrame->FrameWA().Pos().Y() += rOffset.Y();
+    SwRect aFrm(pFrame->FrameRA());
+
+    if (aFrm.Pos().X() != FAR_AWAY)
+    {
+        aFrm.Pos().X() += rOffset.X();
+    }
+
+    if (aFrm.Pos().Y() != FAR_AWAY)
+    {
+        aFrm.Pos().Y() += rOffset.Y();
+    }
+
+    pFrame->setFrame(aFrm);
 
     // Don't forget accessibility:
     if( pFrame->IsAccessibleFrame() )

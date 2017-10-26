@@ -103,8 +103,11 @@ void SwTextFrame::SwapWidthAndHeight()
     }
 
     const long nFrameWidth = FrameRA().Width();
-    FrameWA().Width( FrameRA().Height() );
-    FrameWA().Height( nFrameWidth );
+    SwRect aFrm(FrameRA());
+    aFrm.Width( aFrm.Height() );
+    aFrm.Height( nFrameWidth );
+    setFrame(aFrm);
+
     const long nPrtWidth = PrintRA().Width();
     PrintWA().Width( PrintRA().Height() );
     PrintWA().Height( nPrtWidth );
@@ -1532,25 +1535,33 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
 
     switch( ePrep )
     {
-        case PREP_MOVEFTN :     FrameWA().Height(0);
-                                PrintWA().Height(0);
-                                InvalidatePrt_();
-                                InvalidateSize_();
-                                SAL_FALLTHROUGH;
-        case PREP_ADJUST_FRM :  pPara->SetPrepAdjust();
-                                if( IsFootnoteNumFrame() != pPara->IsFootnoteNum() ||
-                                    IsUndersized() )
-                                {
-                                    InvalidateRange( SwCharRange( 0, 1 ), 1);
-                                    if( GetOfst() && !IsFollow() )
-                                        SetOfst_( 0 );
-                                }
-                                break;
-        case PREP_MUST_FIT :        pPara->SetPrepMustFit(true);
-                                    SAL_FALLTHROUGH;
-        case PREP_WIDOWS_ORPHANS :  pPara->SetPrepAdjust();
-                                    break;
+        case PREP_MOVEFTN :
+            {
+                SwRect aFrm(FrameRA());
+                aFrm.Height(0);
+                setFrame(aFrm);
+            }
 
+            PrintWA().Height(0);
+            InvalidatePrt_();
+            InvalidateSize_();
+            SAL_FALLTHROUGH;
+        case PREP_ADJUST_FRM :
+            pPara->SetPrepAdjust();
+            if( IsFootnoteNumFrame() != pPara->IsFootnoteNum() ||
+                IsUndersized() )
+            {
+                InvalidateRange( SwCharRange( 0, 1 ), 1);
+                if( GetOfst() && !IsFollow() )
+                    SetOfst_( 0 );
+            }
+            break;
+        case PREP_MUST_FIT :
+            pPara->SetPrepMustFit(true);
+            SAL_FALLTHROUGH;
+        case PREP_WIDOWS_ORPHANS :
+            pPara->SetPrepAdjust();
+            break;
         case PREP_WIDOWS :
             // MustFit is stronger than anything else
             if( pPara->IsPrepMustFit() )
@@ -1862,14 +1873,19 @@ SwTestFormat::SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPre, SwTwip
     SwRectFnSet aRectFnSet(pFrame);
     SwTwips nLower = aRectFnSet.GetBottomMargin(*pFrame);
 
-    pFrame->FrameWA() = pFrame->GetUpper()->PrintRA();
-    pFrame->FrameWA() += pFrame->GetUpper()->FrameRA().Pos();
+    SwRect aFrm(pFrame->FrameRA());
+    aFrm = pFrame->GetUpper()->PrintRA();
+    aFrm += pFrame->GetUpper()->FrameRA().Pos();
+    aRectFnSet.SetHeight( aFrm, nMaxHeight );
 
-    aRectFnSet.SetHeight( pFrame->FrameWA(), nMaxHeight );
     if( pFrame->GetPrev() )
-        aRectFnSet.SetPosY( pFrame->FrameWA(),
-            aRectFnSet.GetBottom(pFrame->GetPrev()->FrameRA()) -
-                ( aRectFnSet.IsVert() ? nMaxHeight + 1 : 0 ) );
+    {
+        aRectFnSet.SetPosY(
+            aFrm,
+            aRectFnSet.GetBottom(pFrame->GetPrev()->FrameRA()) - ( aRectFnSet.IsVert() ? nMaxHeight + 1 : 0 ) );
+    }
+
+    pFrame->setFrame(aFrm);
 
     SwBorderAttrAccess aAccess( SwFrame::GetCache(), pFrame );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
@@ -1907,7 +1923,10 @@ SwTestFormat::SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPre, SwTwip
 
 SwTestFormat::~SwTestFormat()
 {
-    pFrame->FrameWA() = aOldFrame;
+    SwRect aFrm(pFrame->FrameRA());
+    aFrm = aOldFrame;
+    pFrame->setFrame(aFrm);
+
     pFrame->PrintWA() = aOldPrt;
     pFrame->SetPara( pOldPara );
 }
@@ -2118,12 +2137,17 @@ SwTwips SwTextFrame::CalcFitToContent()
                                pPage->PrintRA().Height() :
                                pPage->PrintRA().Width();
 
-    FrameWA().Width( nPageWidth );
+    SwRect aFrm(FrameRA());
+    aFrm.Width( nPageWidth );
+    setFrame(aFrm);
+
     PrintWA().Width( nPageWidth );
 
     // i#25422 objects anchored as character in RTL
     if ( IsRightToLeft() )
-        FrameWA().Pos().X() += nOldFrameWidth - nPageWidth;
+    {
+        aFrm.Pos().X() += nOldFrameWidth - nPageWidth;
+    }
 
     TextFrameLockGuard aLock( this );
 
@@ -2133,16 +2157,17 @@ SwTwips SwTextFrame::CalcFitToContent()
     SwHookOut aHook( aInf );
 
     // i#54031 - assure mininum of MINLAY twips.
-    const SwTwips nMax = std::max( (SwTwips)MINLAY,
-                              aLine.CalcFitToContent_() + 1 );
-
-    FrameWA().Width( nOldFrameWidth );
+    const SwTwips nMax = std::max( (SwTwips)MINLAY, aLine.CalcFitToContent_() + 1 );
+    aFrm.Width( nOldFrameWidth );
     PrintWA().Width( nOldPrtWidth );
 
     // i#25422 objects anchored as character in RTL
     if ( IsRightToLeft() )
-        FrameWA().Pos() = aOldFramePos;
+    {
+        aFrm.Pos() = aOldFramePos;
+    }
 
+    setFrame(aFrm);
     SetPara( pOldPara );
 
     return nMax;
