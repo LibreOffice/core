@@ -130,8 +130,8 @@ private:
     SwDoc& m_rDoc;
 
     RedlineFlags meRedlineFlags;     //< Current Redline Mode.
-    SwRedlineTable        *mpRedlineTable;           //< List of all Ranged Redlines.
-    SwExtraRedlineTable   *mpExtraRedlineTable;      //< List of all Extra Redlines.
+    std::unique_ptr<SwRedlineTable> mpRedlineTable;           //< List of all Ranged Redlines.
+    std::unique_ptr<SwExtraRedlineTable> mpExtraRedlineTable;      //< List of all Extra Redlines.
     std::unique_ptr<OUString> mpAutoFormatRedlnComment;  //< Comment for Redlines inserted via AutoFormat.
     bool mbIsRedlineMove;    //< true: Redlines are moved into to / out of the section.
     bool mbReadlineChecked;    //< true: if the query was already shown
