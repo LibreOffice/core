@@ -663,10 +663,16 @@ bool SwWW8AttrIter::IsTextAttr( sal_Int32 nSwPos )
         for (size_t i = 0; i < pTextAttrs->Count(); ++i)
         {
             const SwTextAttr* pHt = pTextAttrs->Get(i);
-            if ( ( pHt->HasDummyChar() || pHt->HasContent() )
-                 && (pHt->GetStart() == nSwPos) )
+            if (nSwPos == pHt->GetStart())
             {
-                return true;
+                if (pHt->HasDummyChar() || pHt->HasContent() )
+                {
+                    return true;
+                }
+            }
+            else if (nSwPos < pHt->GetStart())
+            {
+                break; // sorted by start
             }
         }
     }
