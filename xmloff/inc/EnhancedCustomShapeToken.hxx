@@ -93,6 +93,7 @@ namespace xmloff { namespace EnhancedCustomShapeToken {
         EAS_MirroredY,
         EAS_ViewBox,
         EAS_TextRotateAngle,
+        EAS_TextPreRotateAngle,
         EAS_ExtrusionAllowed,
         EAS_ConcentricGradientFillAllowed,
         EAS_TextPathAllowed,
