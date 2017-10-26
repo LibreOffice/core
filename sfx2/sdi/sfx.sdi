@@ -1080,9 +1080,9 @@ SfxVoidItem EditStyle SID_STYLE_EDIT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Template;
 ]
 
