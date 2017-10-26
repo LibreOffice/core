@@ -1890,8 +1890,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
     {
         const PropertyValue* pNewValues = aProps.getConstArray();
 
-        typedef std::list< PropertyChangeEvent > Events;
-        Events aEvents;
+        std::vector< PropertyChangeEvent > aEvents;
 
         OUString aFullPropNamePrefix( getFullKey() );
         aFullPropNamePrefix += "/";
@@ -1980,13 +1979,9 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
         if ( m_pImpl->m_pPropertyChangeListeners )
         {
             // Notify property changes.
-            Events::const_iterator it  = aEvents.begin();
-            Events::const_iterator end = aEvents.end();
-
-            while ( it != end )
+            for (auto const& event : aEvents)
             {
-                notifyPropertyChangeEvent( *it );
-                ++it;
+                notifyPropertyChangeEvent( event );
             }
         }
 
