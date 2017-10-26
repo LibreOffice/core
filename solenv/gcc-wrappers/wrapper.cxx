@@ -82,9 +82,45 @@ void setupccenv() {
     }
 }
 
+
+void WaitFileIsFree(string buildfile)
+{
+    HANDLE hFile;
+    int waittime = 10; //ms
+    int maxloops = 1000;
+    DWORD lasterror;
+
+    do
+    {
+        hFile = CreateFile(buildfile.c_str(),
+            GENERIC_READ | GENERIC_WRITE,
+            0,
+            NULL,
+            OPEN_EXISTING,
+            FILE_ATTRIBUTE_NORMAL, NULL);
+
+        lasterror = GetLastError();
+
+        if (hFile != INVALID_HANDLE_VALUE)
+            CloseHandle(hFile);
+
+        if (lasterror != ERROR_ACCESS_DENIED)
+            return;
+
+        Sleep(waittime);
+
+    } while (--maxloops > 0);
+
+    cerr << "Error: " << buildfile << " it is locked, skip compile" << endl;
+
+    exit(1);
+}
+
+
 string processccargs(vector<string> rawargs) {
     // suppress the msvc banner
     string args=" -nologo";
+    string buildfile;
     // TODO: should these options be enabled globally?
     args.append(" -EHsc");
     const char *const pDebugRuntime(getenv("MSVC_USE_DEBUG_RUNTIME"));
@@ -109,16 +145,19 @@ string processccargs(vector<string> rawargs) {
             {
                 args.append("-Fo");
                 args.append(*i);
+                buildfile = *i;
             }
             else if(!(*i).compare(dot+1,3,"exe"))
             {
                 args.append("-Fe");
                 args.append(*i);
+                buildfile = *i;
             }
             else if(!(*i).compare(dot+1,3,"dll"))
             {   // apparently cl.exe has no flag for dll?
                 linkargs.append(" -dll -out:");
                 linkargs.append(*i);
+                buildfile = *i;
             }
             else
             {
@@ -162,6 +201,9 @@ string processccargs(vector<string> rawargs) {
             args.append(*i);
     }
     args.append(linkargs);
+
+    WaitFileIsFree(buildfile);
+
     return args;
 }
 
@@ -245,5 +287,8 @@ int startprocess(string command, string args) {
     CloseHandle(pi.hProcess);
     return int(ret);
 }
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
