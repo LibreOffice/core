@@ -3467,7 +3467,7 @@ $(call gb_LinkTarget_use_package,$(1),gpgme)
 
 endef
 
-ifneq ($(filter-out MACOSX LINUX,$(OS)),)
+ifneq ($(filter MACOSX LINUX,$(OS)),)
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	gpgme \
