@@ -353,14 +353,12 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrame& rRow )
                     if (bAllRowsCollapsed)
                     {
                         // All rows of this table have 0 height -> set height of the table itself as well.
-                        SwRect aFrm(pTmp->getSwFrame());
+                        SwFrameRect::FrameWriteAccess aFrm(*pTmp);
                         aRectFnSet.SetHeight(aFrm, 0);
-                        pTmp->setSwFrame(aFrm);
 
-                        SwRect aPrt(pTmp->getSwPrint());
+                        SwFrameRect::PrintWriteAccess aPrt(*pTmp);
                         aRectFnSet.SetTop(aPrt, 0);
                         aRectFnSet.SetHeight(aPrt, 0);
-                        pTmp->setSwPrint(aPrt);
                     }
                     else
                         bAllLowersCollapsed = false;
@@ -368,7 +366,7 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrame& rRow )
                 else
                 {
                     pTmp->Shrink(aRectFnSet.GetHeight(pTmp->getSwFrame()));
-                    SwRect aPrt(pTmp->getSwPrint());
+                    SwFrameRect::PrintWriteAccess aPrt(*pTmp);
                     aRectFnSet.SetTop(aPrt, 0);
                     aRectFnSet.SetHeight(aPrt, 0);
 
@@ -376,8 +374,6 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrame& rRow )
                     {
                         bAllLowersCollapsed = false;
                     }
-
-                    pTmp->setSwPrint(aPrt);
                 }
 
                 pTmp = pTmp->GetPrev();
@@ -392,14 +388,12 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrame& rRow )
         if (bAllLowersCollapsed)
         {
             // All lower frame of this cell have 0 height -> set height of the cell itself as well.
-            SwRect aFrm(pCurrMasterCell->getSwFrame());
+            SwFrameRect::FrameWriteAccess aFrm(*pCurrMasterCell);
             aRectFnSet.SetHeight(aFrm, 0);
-            pCurrMasterCell->setSwFrame(aFrm);
 
-            SwRect aPrt(pCurrMasterCell->getSwPrint());
+            SwFrameRect::PrintWriteAccess aPrt(*pCurrMasterCell);
             aRectFnSet.SetTop(aPrt, 0);
             aRectFnSet.SetHeight(aPrt, 0);
-            pCurrMasterCell->setSwPrint(aPrt);
         }
         else
             bAllCellsCollapsed = false;
@@ -410,14 +404,12 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrame& rRow )
     if (bAllCellsCollapsed)
     {
         // All cells have 0 height -> set height of row as well.
-        SwRect aFrm(rRow.getSwFrame());
+        SwFrameRect::FrameWriteAccess aFrm(rRow);
         aRectFnSet.SetHeight(aFrm, 0);
-        rRow.setSwFrame(aFrm);
 
-        SwRect aPrt(rRow.getSwPrint());
+        SwFrameRect::PrintWriteAccess aPrt(rRow);
         aRectFnSet.SetTop(aPrt, 0);
         aRectFnSet.SetHeight(aPrt, 0);
-        rRow.setSwPrint(aPrt);
     }
 }
 
@@ -805,9 +797,8 @@ static void lcl_AdjustRowSpanCells( SwRowFrame* pRow )
 
             if ( nDiff )
             {
-                SwRect aFrm(pCellFrame->getSwFrame());
+                SwFrameRect::FrameWriteAccess aFrm(*pCellFrame);
                 aRectFnSet.AddBottom(aFrm, nDiff);
-                pCellFrame->setSwFrame(aFrm);
             }
         }
 
@@ -1164,14 +1155,16 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         pFoll = new SwTabFrame( *this );
 
         // We give the follow table an initial width.
-        SwRect aFrm(pFoll->getSwFrame());
-        aRectFnSet.AddWidth(aFrm, aRectFnSet.GetWidth(getSwFrame()));
-        aRectFnSet.SetLeft(aFrm, aRectFnSet.GetLeft(getSwFrame()));
-        pFoll->setSwFrame(aFrm);
+        {
+            SwFrameRect::FrameWriteAccess aFrm(*pFoll);
+            aRectFnSet.AddWidth(aFrm, aRectFnSet.GetWidth(getSwFrame()));
+            aRectFnSet.SetLeft(aFrm, aRectFnSet.GetLeft(getSwFrame()));
+        }
 
-        SwRect aPrt(pFoll->getSwPrint());
-        aRectFnSet.AddWidth(aPrt, aRectFnSet.GetWidth(getSwPrint()));
-        pFoll->setSwPrint(aPrt);
+        {
+            SwFrameRect::PrintWriteAccess aPrt(*pFoll);
+            aRectFnSet.AddWidth(aPrt, aRectFnSet.GetWidth(getSwPrint()));
+        }
 
         // Insert the new follow table
         pFoll->InsertBehind( GetUpper(), this );
@@ -2762,9 +2755,8 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                      aRectFnSet.GetWidth(getSwFrame());
         if( nDiff )
         {
-            SwRect aFrm(getSwFrame());
+            SwFrameRect::FrameWriteAccess aFrm(*this);
             aRectFnSet.AddRight( aFrm, nDiff );
-            setSwFrame(aFrm);
         }
     }
 
@@ -2984,9 +2976,8 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
             nWidth -= getSwPrint().Left();
             nWidth -= pAttrs->CalcRightLine();
 
-            SwRect aPrt(getSwPrint());
+            SwFrameRect::PrintWriteAccess aPrt(*this);
             aPrt.Width( std::min( nWidth, aPrt.Width() ) );
-            setSwPrint(aPrt);
         }
 
         if ( nOldHeight != aRectFnSet.GetHeight(getSwPrint()) )
@@ -3053,9 +3044,10 @@ SwTwips SwTabFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
 
         if ( !bTst )
         {
-            SwRect aFrm(getSwFrame());
-            aRectFnSet.AddBottom( aFrm, nDist );
-            setSwFrame(aFrm);
+            {
+                SwFrameRect::FrameWriteAccess aFrm(*this);
+                aRectFnSet.AddBottom( aFrm, nDist );
+            }
 
             SwRootFrame *pRootFrame = getRootFrame();
             if( pRootFrame && pRootFrame->IsAnyShellAccessible() &&
@@ -4101,12 +4093,14 @@ void SwRowFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         //RowFrames don't have borders and so on therefore the PrtArea always
         //matches the Frame.
         mbValidPrtArea = true;
-        SwRect aPrt(getSwPrint());
-        aPrt.Left( 0 );
-        aPrt.Top( 0 );
-        aPrt.Width ( getSwFrame().Width() );
-        aPrt.Height( getSwFrame().Height() );
-        setSwPrint(aPrt);
+
+        {
+            SwFrameRect::PrintWriteAccess aPrt(*this);
+            aPrt.Left( 0 );
+            aPrt.Top( 0 );
+            aPrt.Width ( getSwFrame().Width() );
+            aPrt.Height( getSwFrame().Height() );
+        }
 
         // #i29550#
         // Here we calculate the top-printing area for the lower cell frames
@@ -4283,9 +4277,10 @@ void SwRowFrame::AdjustCells( const SwTwips nHeight, const bool bHeight )
                 const long nDiff = nHeight - aRectFnSet.GetHeight(pCellFrame->getSwFrame());
                 if ( nDiff )
                 {
-                    SwRect aFrm(pCellFrame->getSwFrame());
-                    aRectFnSet.AddBottom( aFrm, nDiff );
-                    pCellFrame->setSwFrame(aFrm);
+                    {
+                        SwFrameRect::FrameWriteAccess aFrm(*pCellFrame);
+                        aRectFnSet.AddBottom( aFrm, nDiff );
+                    }
 
                     pCellFrame->InvalidatePrt_();
                 }
@@ -4330,11 +4325,8 @@ void SwRowFrame::AdjustCells( const SwTwips nHeight, const bool bHeight )
             if ( nDiff )
             {
                 aOldFrame = pToAdjust->getSwFrame();
-
-                SwRect aFrm(pToAdjust->getSwFrame());
+                SwFrameRect::FrameWriteAccess aFrm(*pToAdjust);
                 aRectFnSet.AddBottom( aFrm, nDiff );
-                pToAdjust->setSwFrame(aFrm);
-
                 pNotify = pToAdjust;
             }
 
@@ -4401,9 +4393,8 @@ SwTwips SwRowFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
             nDist -= nReal;
             if ( !bTst )
             {
-                SwRect aFrm(getSwFrame());
+                SwFrameRect::FrameWriteAccess aFrm(*this);
                 aRectFnSet.AddBottom( aFrm, nReal );
-                setSwFrame(aFrm);
             }
         }
     }
@@ -4485,15 +4476,13 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         if ( !bTst )
         {
             SwTwips nHeight = aRectFnSet.GetHeight(getSwFrame());
-            SwRect aFrm(getSwFrame());
+            SwFrameRect::FrameWriteAccess aFrm(*this);
             aRectFnSet.SetHeight( aFrm, nHeight - nReal );
 
             if( IsVertical() && !IsVertLR() && !aRectFnSet.IsRev() )
             {
                 aFrm.Pos().X() += nReal;
             }
-
-            setSwFrame(aFrm);
         }
 
         SwLayoutFrame* pFrame = GetUpper();
@@ -4506,15 +4495,13 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
             {
                 nReal -= nTmp;
                 SwTwips nHeight = aRectFnSet.GetHeight(getSwFrame());
-                SwRect aFrm(getSwFrame());
+                SwFrameRect::FrameWriteAccess aFrm(*this);
                 aRectFnSet.SetHeight( aFrm, nHeight + nReal );
 
                 if( IsVertical() && !IsVertLR() && !aRectFnSet.IsRev() )
                 {
                     aFrm.Pos().X() -= nReal;
                 }
-
-                setSwFrame(aFrm);
             }
             nReal = nTmp;
         }
@@ -4646,10 +4633,13 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, long lYStart, bool bInva )
             bRet = true;
             const long lDiff = aRectFnSet.YDiff( lYStart, nFrameTop );
             const long lDiffX = lYStart - nFrameTop;
-            SwRect aFrm(pFrame->getSwFrame());
-            aRectFnSet.SubTop( aFrm, -lDiff );
-            aRectFnSet.AddBottom( aFrm, lDiff );
-            pFrame->setSwFrame(aFrm);
+
+            {
+                SwFrameRect::FrameWriteAccess aFrm(*pFrame);
+                aRectFnSet.SubTop( aFrm, -lDiff );
+                aRectFnSet.AddBottom( aFrm, lDiff );
+            }
+
             pFrame->SetCompletePaint();
 
             if ( !pFrame->GetNext() )
@@ -4705,10 +4695,11 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, long lYStart, bool bInva )
                                 !pFly->ConsiderObjWrapInfluenceOnObjPos();
                         if ( bDirectMove )
                         {
-                            SwRect aFrm(pFly->getSwFrame());
-                            aRectFnSet.SubTop( aFrm, -lDiff );
-                            aRectFnSet.AddBottom( aFrm, lDiff );
-                            pFly->setSwFrame(aFrm);
+                            {
+                                SwFrameRect::FrameWriteAccess aFrm(*pFly);
+                                aRectFnSet.SubTop( aFrm, -lDiff );
+                                aRectFnSet.AddBottom( aFrm, lDiff );
+                            }
 
                             pFly->GetVirtDrawObj()->SetRectsDirty();
                             // --> OD 2004-08-17 - also notify view of <SdrObject>
@@ -4979,23 +4970,26 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                 pPre = pPre->GetNext();
             }
         }
+
         const long nDiff = nWidth - aRectFnSet.GetWidth(getSwFrame());
-        SwRect aFrm(getSwFrame());
 
-        if( IsNeighbourFrame() && IsRightToLeft() )
         {
-            aRectFnSet.SubLeft( aFrm, nDiff );
+            SwFrameRect::FrameWriteAccess aFrm(*this);
+
+            if( IsNeighbourFrame() && IsRightToLeft() )
+            {
+                aRectFnSet.SubLeft( aFrm, nDiff );
+            }
+            else
+            {
+                aRectFnSet.AddRight( aFrm, nDiff );
+            }
         }
-        else
+
         {
-            aRectFnSet.AddRight( aFrm, nDiff );
+            SwFrameRect::PrintWriteAccess aPrt(*this);
+            aRectFnSet.AddRight( aPrt, nDiff );
         }
-
-        setSwFrame(aFrm);
-
-        SwRect aPrt(getSwPrint());
-        aRectFnSet.AddRight( aPrt, nDiff );
-        setSwPrint(aPrt);
 
         //Adjust the height, it's defined through the content and the border.
         const long nDiffHeight = nRemaining - aRectFnSet.GetHeight(getSwFrame());

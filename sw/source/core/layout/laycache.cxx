@@ -806,10 +806,11 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                     {
                         mrpFrame->InsertBehind( mrpLay, mrpPrv );
 
-                        SwRect aFrm(mrpFrame->getSwFrame());
-                        aFrm.Pos() = mrpLay->getSwFrame().Pos();
-                        aFrm.Pos().Y() += 1;
-                        mrpFrame->setSwFrame(aFrm);
+                        {
+                            SwFrameRect::FrameWriteAccess aFrm(*mrpFrame);
+                            aFrm.Pos() = mrpLay->getSwFrame().Pos();
+                            aFrm.Pos().Y() += 1;
+                        }
 
                         mrpPrv = mrpFrame;
                         if( mrpFrame->IsTabFrame() )
@@ -881,9 +882,8 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                 CheckFlyCache_( pLastPage );
                 if( mrpPrv && mrpPrv->IsTextFrame() && !mrpPrv->GetValidSizeFlag() )
                 {
-                    SwRect aFrm(mrpPrv->getSwFrame());
+                    SwFrameRect::FrameWriteAccess aFrm(*mrpPrv);
                     aFrm.Height( mrpPrv->GetUpper()->getSwPrint().Height() );
-                    mrpPrv->setSwFrame(aFrm);
                 }
 
                 bRet = true;
@@ -916,10 +916,11 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                         pSct->Init();
                     }
 
-                    SwRect aFrm(pSct->getSwFrame());
-                    aFrm.Pos() = mrpLay->getSwFrame().Pos();
-                    aFrm.Pos().Y() += 1; //because of the notifications
-                    pSct->setSwFrame(aFrm);
+                    {
+                        SwFrameRect::FrameWriteAccess aFrm(*pSct);
+                        aFrm.Pos() = mrpLay->getSwFrame().Pos();
+                        aFrm.Pos().Y() += 1; //because of the notifications
+                    }
 
                     mrpLay = pSct;
                     if ( mrpLay->Lower() && mrpLay->Lower()->IsLayoutFrame() )
@@ -1018,7 +1019,7 @@ void SwLayHelper::CheckFlyCache_( SwPageFrame* pPage )
                 if ( pFly->getSwFrame().Left() == FAR_AWAY )
                 {
                     // we get the stored information
-                    SwRect aFrm(pFly->getSwFrame());
+                    SwFrameRect::FrameWriteAccess aFrm(*pFly);
                     aFrm.Pos().X() = pFlyCache->Left() + pPage->getSwFrame().Left();
                     aFrm.Pos().Y() = pFlyCache->Top() + pPage->getSwFrame().Top();
 
@@ -1027,8 +1028,6 @@ void SwLayHelper::CheckFlyCache_( SwPageFrame* pPage )
                         aFrm.Width( pFlyCache->Width() );
                         aFrm.Height( pFlyCache->Height() );
                     }
-
-                    pFly->setSwFrame(aFrm);
                 }
 
                 ++aFlyCacheSetIt;

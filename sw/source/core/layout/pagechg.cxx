@@ -96,7 +96,7 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             nHeight = 0;
         }
 
-        SwRect aFrm(getSwFrame());
+        SwFrameRect::FrameWriteAccess aFrm(*this);
         aFrm.Height( nHeight );
 
         if( IsVertical() && !IsVertLR() && !IsReverse() && nWidth != aFrm.Width() )
@@ -105,7 +105,6 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
         }
 
         aFrm.Width( nWidth );
-        setSwFrame(aFrm);
     }
 
     bool bNoGrid = true;
@@ -128,7 +127,8 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                 nSize -= nBorder;
                 nBorder /= 2;
             }
-            SwRect aPrt(getSwPrint());
+
+            SwFrameRect::PrintWriteAccess aPrt(*this);
             aRectFnSet.SetPosX( aPrt, nBorder );
             aRectFnSet.SetWidth( aPrt, nSize );
 
@@ -151,18 +151,16 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
 
             aRectFnSet.SetPosY( aPrt, bAdjust ? nBorder : 0 );
             aRectFnSet.SetHeight( aPrt, nSize );
-            setSwPrint(aPrt);
         }
     }
 
     if( bNoGrid )
     {
-        SwRect aPrt(getSwPrint());
+        SwFrameRect::PrintWriteAccess aPrt(*this);
         aPrt.Pos().setX(0);
         aPrt.Pos().setY(0);
         aPrt.Height( getSwFrame().Height() );
         aPrt.Width( getSwFrame().Width() );
-        setSwPrint(aPrt);
     }
 
     mbValidSize = mbValidPrtArea = true;
@@ -194,26 +192,27 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
     const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
     vcl::RenderContext* pRenderContext = pSh ? pSh->GetOut() : nullptr;
-    SwRect aFrm(getSwFrame());
 
-    if ( bBrowseMode )
     {
-        aFrm.Height( 0 );
-        long nWidth = pSh->VisArea().Width();
+        SwFrameRect::FrameWriteAccess aFrm(*this);
 
-        if ( !nWidth )
+        if ( bBrowseMode )
         {
-            nWidth = 5000;     // changes anyway
+            aFrm.Height( 0 );
+            long nWidth = pSh->VisArea().Width();
+
+            if ( !nWidth )
+            {
+                nWidth = 5000;     // changes anyway
+            }
+
+            aFrm.Width ( nWidth );
         }
-
-        aFrm.Width ( nWidth );
+        else
+        {
+            aFrm.SSize( pFormat->GetFrameSize().GetSize() );
+        }
     }
-    else
-    {
-        aFrm.SSize( pFormat->GetFrameSize().GetSize() );
-    }
-
-    setSwFrame(aFrm);
 
     // create and insert body area if it is not a blank page
     SwDoc *pDoc = pFormat->GetDoc();
@@ -625,10 +624,11 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                         static_cast<const SwFormatChg*>(pNew)->pChangedFormat->GetFrameSize() :
                         static_cast<const SwFormatFrameSize&>(*pNew);
 
-                SwRect aFrm(getSwFrame());
-                aFrm.Height( std::max( rSz.GetHeight(), long(MINLAY) ) );
-                aFrm.Width ( std::max( rSz.GetWidth(),  long(MINLAY) ) );
-                setSwFrame(aFrm);
+                {
+                    SwFrameRect::FrameWriteAccess aFrm(*this);
+                    aFrm.Height( std::max( rSz.GetHeight(), long(MINLAY) ) );
+                    aFrm.Width ( std::max( rSz.GetWidth(),  long(MINLAY) ) );
+                }
 
                 if ( GetUpper() )
                 {
@@ -1356,9 +1356,8 @@ SwTwips SwRootFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
 {
     if ( !bTst )
     {
-        SwRect aFrm(getSwFrame());
+        SwFrameRect::FrameWriteAccess aFrm(*this);
         aFrm.SSize().Height() += nDist;
-        setSwFrame(aFrm);
     }
 
     return nDist;
@@ -1371,9 +1370,8 @@ SwTwips SwRootFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool )
 
     if ( !bTst )
     {
-        SwRect aFrm(getSwFrame());
+        SwFrameRect::FrameWriteAccess aFrm(*this);
         aFrm.SSize().Height() -= nDist;
-        setSwFrame(aFrm);
     }
 
     return nDist;
@@ -1589,9 +1587,10 @@ void SwRootFrame::AssertPageFlys( SwPageFrame *pPage )
 
 Size SwRootFrame::ChgSize( const Size& aNewSize )
 {
-    SwRect aFrm(getSwFrame());
-    aFrm.SSize() = aNewSize;
-    setSwFrame(aFrm);
+    {
+        SwFrameRect::FrameWriteAccess aFrm(*this);
+        aFrm.SSize() = aNewSize;
+    }
 
     InvalidatePrt_();
     mbFixSize = false;
@@ -1604,21 +1603,18 @@ void SwRootFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     {
         mbValidPos = true;
 
-        SwRect aFrm(getSwFrame());
+        SwFrameRect::FrameWriteAccess aFrm(*this);
         aFrm.Pos().setX(DOCUMENTBORDER);
         aFrm.Pos().setY(DOCUMENTBORDER);
-        setSwFrame(aFrm);
     }
 
     if ( !mbValidPrtArea )
     {
         mbValidPrtArea = true;
-
-        SwRect aPrt(getSwPrint());
+        SwFrameRect::PrintWriteAccess aPrt(*this);
         aPrt.Pos().setX(0);
         aPrt.Pos().setY(0);
         aPrt.SSize( getSwFrame().SSize() );
-        setSwPrint(aPrt);
     }
 
     if ( !mbValidSize )
@@ -1931,19 +1927,19 @@ static void lcl_MoveAllLowers( SwFrame* pFrame, const Point& rOffset )
     const SwRect aFrame( pFrame->getSwFrame() );
 
     // first move the current frame
-    SwRect aFrm(pFrame->getSwFrame());
-
-    if (aFrm.Pos().X() != FAR_AWAY)
     {
-        aFrm.Pos().X() += rOffset.X();
-    }
+        SwFrameRect::FrameWriteAccess aFrm(*pFrame);
 
-    if (aFrm.Pos().Y() != FAR_AWAY)
-    {
-        aFrm.Pos().Y() += rOffset.Y();
-    }
+        if (aFrm.Pos().X() != FAR_AWAY)
+        {
+            aFrm.Pos().X() += rOffset.X();
+        }
 
-    pFrame->setSwFrame(aFrm);
+        if (aFrm.Pos().Y() != FAR_AWAY)
+        {
+            aFrm.Pos().Y() += rOffset.Y();
+        }
+    }
 
     // Don't forget accessibility:
     if( pFrame->IsAccessibleFrame() )

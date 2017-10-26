@@ -102,18 +102,21 @@ void SwSectionFrame::Init()
     SwRectFnSet aRectFnSet(this);
     long nWidth = aRectFnSet.GetWidth(GetUpper()->getSwPrint());
 
-    SwRect aFrm(getSwFrame());
-    aRectFnSet.SetWidth( aFrm, nWidth );
-    aRectFnSet.SetHeight( aFrm, 0 );
-    setSwFrame(aFrm);
+    {
+        SwFrameRect::FrameWriteAccess aFrm(*this);
+        aRectFnSet.SetWidth( aFrm, nWidth );
+        aRectFnSet.SetHeight( aFrm, 0 );
+    }
 
     // #109700# LRSpace for sections
     const SvxLRSpaceItem& rLRSpace = GetFormat()->GetLRSpace();
-    SwRect aPrt(getSwPrint());
-    aRectFnSet.SetLeft( aPrt, rLRSpace.GetLeft() );
-    aRectFnSet.SetWidth( aPrt, nWidth - rLRSpace.GetLeft() - rLRSpace.GetRight() );
-    aRectFnSet.SetHeight( aPrt, 0 );
-    setSwPrint(aPrt);
+
+    {
+        SwFrameRect::PrintWriteAccess aPrt(*this);
+        aRectFnSet.SetLeft( aPrt, rLRSpace.GetLeft() );
+        aRectFnSet.SetWidth( aPrt, nWidth - rLRSpace.GetLeft() - rLRSpace.GetRight() );
+        aRectFnSet.SetHeight( aPrt, 0 );
+    }
 
     const SwFormatCol &rCol = GetFormat()->GetCol();
     if( ( rCol.GetNumCols() > 1 || IsAnyNoteAtEnd() ) && !IsInFootnote() )
@@ -201,9 +204,10 @@ void SwSectionFrame::DelEmpty( bool bRemove )
     SetFollow(nullptr);
     if( pUp )
     {
-        SwRect aFrm(getSwFrame());
-        aFrm.Height( 0 );
-        setSwFrame(aFrm);
+        {
+            SwFrameRect::FrameWriteAccess aFrm(*this);
+            aFrm.Height( 0 );
+        }
 
         // If we are destroyed immediately anyway, we don't need
         // to put us into the list
@@ -215,7 +219,10 @@ void SwSectionFrame::DelEmpty( bool bRemove )
                 getRootFrame()->RemoveFromList( this );
         }
         else if( getRootFrame() )
+        {
             getRootFrame()->InsertEmptySct( this );
+        }
+
         m_pSection = nullptr;  // like this a reanimation is virtually impossible though
     }
 }
@@ -293,13 +300,11 @@ void SwSectionFrame::Cut_( bool bRemove )
         {
             if( !bRemove )
             {
-                SwRect aFrm(getSwFrame());
+                SwFrameRect::FrameWriteAccess aFrm(*this);
                 aRectFnSet.SetHeight( aFrm, 0 );
-                setSwFrame(aFrm);
 
-                SwRect aPrt(getSwPrint());
+                SwFrameRect::PrintWriteAccess aPrt(*this);
                 aRectFnSet.SetHeight( aPrt, 0 );
-                setSwPrint(aPrt);
             }
 
             pUp->Shrink( nFrameHeight );
@@ -1070,9 +1075,10 @@ void SwSectionFrame::CheckClipping( bool bGrow, bool bMaximize )
         const Size aOldSz( getSwPrint().SSize() );
         long nTop = aRectFnSet.GetTopMargin(*this);
 
-        SwRect aFrm(getSwFrame());
-        aRectFnSet.SetBottom( aFrm, nDeadLine );
-        setSwFrame(aFrm);
+        {
+            SwFrameRect::FrameWriteAccess aFrm(*this);
+            aRectFnSet.SetBottom( aFrm, nDeadLine );
+        }
 
         nDiff = aRectFnSet.GetHeight(getSwFrame());
         if( nTop > nDiff )
@@ -1127,9 +1133,10 @@ void SwSectionFrame::SimpleFormat()
     // order to get calculated lowers, not only if there space left in its upper.
     if( aRectFnSet.BottomDist( getSwFrame(), nDeadLine ) >= 0 )
     {
-        SwRect aFrm(getSwFrame());
-        aRectFnSet.SetBottom( aFrm, nDeadLine );
-        setSwFrame(aFrm);
+        {
+            SwFrameRect::FrameWriteAccess aFrm(*this);
+            aRectFnSet.SetBottom( aFrm, nDeadLine );
+        }
 
         long nHeight = aRectFnSet.GetHeight(getSwFrame());
         long nTop = CalcUpperSpace();
@@ -1213,9 +1220,10 @@ class ExtraFormatToPositionObjs
                 Size aOldSectPrtSize( mpSectFrame->getSwPrint().SSize() );
                 SwTwips nDiff = aRectFnSet.BottomDist( mpSectFrame->getSwFrame(), aRectFnSet.GetPrtBottom(*mpSectFrame->GetUpper()) );
 
-                SwRect aFrm(mpSectFrame->getSwFrame());
-                aRectFnSet.AddBottom( aFrm, nDiff );
-                mpSectFrame->setSwFrame(aFrm);
+                {
+                    SwFrameRect::FrameWriteAccess aFrm(*mpSectFrame);
+                    aRectFnSet.AddBottom( aFrm, nDiff );
+                }
 
                 aRectFnSet.SetYMargins( *mpSectFrame, nTopMargin, 0 );
                 // #i59789#
@@ -1341,16 +1349,19 @@ void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderA
 
         if( GetUpper() )
         {
-            long nWidth = aRectFnSet.GetWidth(GetUpper()->getSwPrint());
-            SwRect aFrm(getSwFrame());
-            aRectFnSet.SetWidth( aFrm, nWidth );
-            setSwFrame(aFrm);
+            const long nWidth = aRectFnSet.GetWidth(GetUpper()->getSwPrint());
+
+            {
+                SwFrameRect::FrameWriteAccess aFrm(*this);
+                aRectFnSet.SetWidth( aFrm, nWidth );
+            }
 
             // #109700# LRSpace for sections
-            const SvxLRSpaceItem& rLRSpace = GetFormat()->GetLRSpace();
-            SwRect aPrt(getSwPrint());
-            aRectFnSet.SetWidth( aPrt, nWidth - rLRSpace.GetLeft() - rLRSpace.GetRight() );
-            setSwPrint(aPrt);
+            {
+                const SvxLRSpaceItem& rLRSpace = GetFormat()->GetLRSpace();
+                SwFrameRect::PrintWriteAccess aPrt(*this);
+                aRectFnSet.SetWidth( aPrt, nWidth - rLRSpace.GetLeft() - rLRSpace.GetRight() );
+            }
 
             // OD 15.10.2002 #103517# - allow grow in online layout
             // Thus, set <..IsBrowseMode()> as parameter <bGrow> on calling
@@ -1437,9 +1448,10 @@ void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderA
                 long nTmp = nRemaining - aRectFnSet.GetHeight(getSwFrame());
                 long nTop = aRectFnSet.GetTopMargin(*this);
 
-                SwRect aFrm(getSwFrame());
-                aRectFnSet.AddBottom( aFrm, nTmp );
-                setSwFrame(aFrm);
+                {
+                    SwFrameRect::FrameWriteAccess aFrm(*this);
+                    aRectFnSet.AddBottom( aFrm, nTmp );
+                }
 
                 aRectFnSet.SetYMargins( *this, nTop, 0 );
                 InvalidateNextPos();
@@ -2053,14 +2065,16 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
                         GetUpper()->InvalidateSize();
                 }
 
-                SwRect aFrm(getSwFrame());
-                aRectFnSet.AddBottom( aFrm, nGrow );
-                setSwFrame(aFrm);
+                {
+                    SwFrameRect::FrameWriteAccess aFrm(*this);
+                    aRectFnSet.AddBottom( aFrm, nGrow );
+                }
 
-                long nPrtHeight = aRectFnSet.GetHeight(getSwPrint()) + nGrow;
-                SwRect aPrt(getSwPrint());
-                aRectFnSet.SetHeight( aPrt, nPrtHeight );
-                setSwPrint(aPrt);
+                {
+                    const long nPrtHeight = aRectFnSet.GetHeight(getSwPrint()) + nGrow;
+                    SwFrameRect::PrintWriteAccess aPrt(*this);
+                    aRectFnSet.SetHeight( aPrt, nPrtHeight );
+                }
 
                 if( Lower() && Lower()->IsColumnFrame() && Lower()->GetNext() )
                 {
@@ -2142,14 +2156,16 @@ SwTwips SwSectionFrame::Shrink_( SwTwips nDist, bool bTst )
                     InvalidatePage();
                 }
 
-                SwRect aFrm(getSwFrame());
-                aRectFnSet.AddBottom( aFrm, -nDist );
-                setSwFrame(aFrm);
+                {
+                    SwFrameRect::FrameWriteAccess aFrm(*this);
+                    aRectFnSet.AddBottom( aFrm, -nDist );
+                }
 
-                long nPrtHeight = aRectFnSet.GetHeight(getSwPrint()) - nDist;
-                SwRect aPrt(getSwPrint());
-                aRectFnSet.SetHeight( aPrt, nPrtHeight );
-                setSwPrint(aPrt);
+                {
+                    const long nPrtHeight = aRectFnSet.GetHeight(getSwPrint()) - nDist;
+                    SwFrameRect::PrintWriteAccess aPrt(*this);
+                    aRectFnSet.SetHeight( aPrt, nPrtHeight );
+                }
 
                 // We do not allow a section frame to shrink the its upper
                 // footer frame. This is because in the calculation of a
