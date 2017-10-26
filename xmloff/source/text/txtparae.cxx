@@ -3068,7 +3068,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
         sRet.append( '(' );
         ::sax::Converter::convertNumber( sRet, (sal_Int32)nVal );
         sRet.append( ')' );
-        GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_TRANSFORM,
+        GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_TRANSFORM,
                                   sRet.makeStringAndClear() );
     }
 
