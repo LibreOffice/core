@@ -41,6 +41,8 @@
 #include <o3tl/make_unique.hxx>
 #include <vcl/gdimetafiletools.hxx>
 
+#include <pdfread.hxx>
+
 #define GRAPHIC_MTFTOBMP_MAXEXT     2048
 #define GRAPHIC_STREAMBUFSIZE       8192UL
 
@@ -1574,13 +1576,14 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                 // Stream in PDF data.
                 sal_uInt32 nPdfDataLength = 0;
                 rIStm.ReadUInt32(nPdfDataLength);
+                Bitmap aBitmap;
 
-                if (nPdfDataLength)
+                if (nPdfDataLength && !rIStm.GetError() &&
+                    vcl::ImportPDF(rIStm, aBitmap, rImpGraphic.maPdfData,
+                                   rIStm.Tell(), nPdfDataLength))
                 {
-                    uno::Sequence<sal_Int8> aPdfData(nPdfDataLength);
-                    rIStm.ReadBytes(aPdfData.getArray(), nPdfDataLength);
-                    if (!rIStm.GetError())
-                        rImpGraphic.maPdfData = aPdfData;
+                    rImpGraphic.maEx = aBitmap;
+                    rImpGraphic.meType = GraphicType::Bitmap;
                 }
             }
             else
