@@ -538,9 +538,9 @@ TaskManager::registerNotifier( const OUString& aUnqPath, Notifier* pNotifier )
     if( ! it->second.notifier )
         it->second.notifier = new NotifierList;
 
-    std::list< Notifier* >& nlist = *( it->second.notifier );
+    std::vector< Notifier* >& nlist = *( it->second.notifier );
 
-    std::list<Notifier*>::iterator it1 = nlist.begin();
+    std::vector<Notifier*>::iterator it1 = nlist.begin();
     while( it1 != nlist.end() )               // Every "Notifier" only once
     {
         if( *it1 == pNotifier ) return;
@@ -559,7 +559,7 @@ TaskManager::deregisterNotifier( const OUString& aUnqPath,Notifier* pNotifier )
     if( it == m_aContent.end() )
         return;
 
-    it->second.notifier->remove( pNotifier );
+    it->second.notifier->erase(std::remove(it->second.notifier->begin(), it->second.notifier->end(), pNotifier), it->second.notifier->end());
 
     if( it->second.notifier->empty() )
         m_aContent.erase( it );
@@ -1991,16 +1991,10 @@ void SAL_CALL TaskManager::insertDefaultProperties( const OUString& aUnqPath )
     PropertySet& properties = *(it->second.properties);
     bool ContentNotDefau = properties.find( ContentTProperty ) != properties.end();
 
-    TaskManager::PropertySet::iterator it1 = m_aDefaultProperties.begin();
-    while( it1 != m_aDefaultProperties.end() )
+    for (auto const& defaultprop : m_aDefaultProperties)
     {
-        if( ContentNotDefau && it1->getPropertyName() == ContentType )
-        {
-            // No insertion
-        }
-        else
-            properties.insert( *it1 );
-        ++it1;
+        if( !ContentNotDefau || defaultprop.getPropertyName() != ContentType )
+            properties.insert( defaultprop );
     }
 }
 
@@ -2610,25 +2604,22 @@ TaskManager::getv(
 // EventListener
 
 
-std::list< ContentEventNotifier* >* SAL_CALL
+std::vector< ContentEventNotifier* >* SAL_CALL
 TaskManager::getContentEventListeners( const OUString& aName )
 {
-    std::list< ContentEventNotifier* >* p = new std::list< ContentEventNotifier* >;
-    std::list< ContentEventNotifier* >& listeners = *p;
+    std::vector< ContentEventNotifier* >* p = new std::vector< ContentEventNotifier* >;
+    std::vector< ContentEventNotifier* >& listeners = *p;
     {
         osl::MutexGuard aGuard( m_aMutex );
         TaskManager::ContentMap::iterator it = m_aContent.find( aName );
         if( it != m_aContent.end() && it->second.notifier )
         {
-            std::list<Notifier*>& listOfNotifiers = *( it->second.notifier );
-            std::list<Notifier*>::iterator it1 = listOfNotifiers.begin();
-            while( it1 != listOfNotifiers.end() )
+            std::vector<Notifier*>& listOfNotifiers = *( it->second.notifier );
+            for (auto const& pointer : listOfNotifiers)
             {
-                Notifier* pointer = *it1;
                 ContentEventNotifier* notifier = pointer->cCEL();
                 if( notifier )
                     listeners.push_back( notifier );
-                ++it1;
             }
         }
     }
@@ -2636,25 +2627,22 @@ TaskManager::getContentEventListeners( const OUString& aName )
 }
 
 
-std::list< ContentEventNotifier* >* SAL_CALL
+std::vector< ContentEventNotifier* >* SAL_CALL
 TaskManager::getContentDeletedEventListeners( const OUString& aName )
 {
-    std::list< ContentEventNotifier* >* p = new std::list< ContentEventNotifier* >;
-    std::list< ContentEventNotifier* >& listeners = *p;
+    std::vector< ContentEventNotifier* >* p = new std::vector< ContentEventNotifier* >;
+    std::vector< ContentEventNotifier* >& listeners = *p;
     {
         osl::MutexGuard aGuard( m_aMutex );
         TaskManager::ContentMap::iterator it = m_aContent.find( aName );
         if( it != m_aContent.end() && it->second.notifier )
         {
-            std::list<Notifier*>& listOfNotifiers = *( it->second.notifier );
-            std::list<Notifier*>::iterator it1 = listOfNotifiers.begin();
-            while( it1 != listOfNotifiers.end() )
+            std::vector<Notifier*>& listOfNotifiers = *( it->second.notifier );
+            for (auto const& pointer : listOfNotifiers)
             {
-                Notifier* pointer = *it1;
                 ContentEventNotifier* notifier = pointer->cDEL();
                 if( notifier )
                     listeners.push_back( notifier );
-                ++it1;
             }
         }
     }
@@ -2663,9 +2651,9 @@ TaskManager::getContentDeletedEventListeners( const OUString& aName )
 
 
 void SAL_CALL
-TaskManager::notifyInsert( std::list< ContentEventNotifier* >* listeners,const OUString& aChildName )
+TaskManager::notifyInsert( std::vector< ContentEventNotifier* >* listeners,const OUString& aChildName )
 {
-    std::list< ContentEventNotifier* >::iterator it = listeners->begin();
+    std::vector< ContentEventNotifier* >::iterator it = listeners->begin();
     while( it != listeners->end() )
     {
         (*it)->notifyChildInserted( aChildName );
@@ -2677,9 +2665,9 @@ TaskManager::notifyInsert( std::list< ContentEventNotifier* >* listeners,const O
 
 
 void SAL_CALL
-TaskManager::notifyContentDeleted( std::list< ContentEventNotifier* >* listeners )
+TaskManager::notifyContentDeleted( std::vector< ContentEventNotifier* >* listeners )
 {
-    std::list< ContentEventNotifier* >::iterator it = listeners->begin();
+    std::vector< ContentEventNotifier* >::iterator it = listeners->begin();
     while( it != listeners->end() )
     {
         (*it)->notifyDeleted();
@@ -2691,10 +2679,10 @@ TaskManager::notifyContentDeleted( std::list< ContentEventNotifier* >* listeners
 
 
 void SAL_CALL
-TaskManager::notifyContentRemoved( std::list< ContentEventNotifier* >* listeners,
+TaskManager::notifyContentRemoved( std::vector< ContentEventNotifier* >* listeners,
                              const OUString& aChildName )
 {
-    std::list< ContentEventNotifier* >::iterator it = listeners->begin();
+    std::vector< ContentEventNotifier* >::iterator it = listeners->begin();
     while( it != listeners->end() )
     {
         (*it)->notifyRemoved( aChildName );
@@ -2705,25 +2693,22 @@ TaskManager::notifyContentRemoved( std::list< ContentEventNotifier* >* listeners
 }
 
 
-std::list< PropertySetInfoChangeNotifier* >* SAL_CALL
+std::vector< PropertySetInfoChangeNotifier* >* SAL_CALL
 TaskManager::getPropertySetListeners( const OUString& aName )
 {
-    std::list< PropertySetInfoChangeNotifier* >* p = new std::list< PropertySetInfoChangeNotifier* >;
-    std::list< PropertySetInfoChangeNotifier* >& listeners = *p;
+    std::vector< PropertySetInfoChangeNotifier* >* p = new std::vector< PropertySetInfoChangeNotifier* >;
+    std::vector< PropertySetInfoChangeNotifier* >& listeners = *p;
     {
         osl::MutexGuard aGuard( m_aMutex );
         TaskManager::ContentMap::iterator it = m_aContent.find( aName );
         if( it != m_aContent.end() && it->second.notifier )
         {
-            std::list<Notifier*>& listOfNotifiers = *( it->second.notifier );
-            std::list<Notifier*>::iterator it1 = listOfNotifiers.begin();
-            while( it1 != listOfNotifiers.end() )
+            std::vector<Notifier*>& listOfNotifiers = *( it->second.notifier );
+            for (auto const& pointer : listOfNotifiers)
             {
-                Notifier* pointer = *it1;
                 PropertySetInfoChangeNotifier* notifier = pointer->cPSL();
                 if( notifier )
                     listeners.push_back( notifier );
-                ++it1;
             }
         }
     }
@@ -2732,10 +2717,10 @@ TaskManager::getPropertySetListeners( const OUString& aName )
 
 
 void SAL_CALL
-TaskManager::notifyPropertyAdded( std::list< PropertySetInfoChangeNotifier* >* listeners,
+TaskManager::notifyPropertyAdded( std::vector< PropertySetInfoChangeNotifier* >* listeners,
                             const OUString& aPropertyName )
 {
-    std::list< PropertySetInfoChangeNotifier* >::iterator it = listeners->begin();
+    std::vector< PropertySetInfoChangeNotifier* >::iterator it = listeners->begin();
     while( it != listeners->end() )
     {
         (*it)->notifyPropertyAdded( aPropertyName );
@@ -2747,10 +2732,10 @@ TaskManager::notifyPropertyAdded( std::list< PropertySetInfoChangeNotifier* >* l
 
 
 void SAL_CALL
-TaskManager::notifyPropertyRemoved( std::list< PropertySetInfoChangeNotifier* >* listeners,
+TaskManager::notifyPropertyRemoved( std::vector< PropertySetInfoChangeNotifier* >* listeners,
                               const OUString& aPropertyName )
 {
-    std::list< PropertySetInfoChangeNotifier* >::iterator it = listeners->begin();
+    std::vector< PropertySetInfoChangeNotifier* >::iterator it = listeners->begin();
     while( it != listeners->end() )
     {
         (*it)->notifyPropertyRemoved( aPropertyName );
@@ -2761,15 +2746,15 @@ TaskManager::notifyPropertyRemoved( std::list< PropertySetInfoChangeNotifier* >*
 }
 
 
-std::vector< std::list< ContentEventNotifier* >* >* SAL_CALL
+std::vector< std::vector< ContentEventNotifier* >* >* SAL_CALL
 TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
                                           const OUString& aNewPrefix,
                                           bool withChildren )
 {
 
-    std::vector< std::list< ContentEventNotifier* >* >* aVectorOnHeap =
-        new std::vector< std::list< ContentEventNotifier* >* >;
-    std::vector< std::list< ContentEventNotifier* >* >&  aVector = *aVectorOnHeap;
+    std::vector< std::vector< ContentEventNotifier* >* >* aVectorOnHeap =
+        new std::vector< std::vector< ContentEventNotifier* >* >;
+    std::vector< std::vector< ContentEventNotifier* >* >&  aVector = *aVectorOnHeap;
 
     sal_Int32 count;
     OUString aOldName;
@@ -2787,14 +2772,12 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
         }
         else
         {
-            ContentMap::iterator itnames = m_aContent.begin();
-            while( itnames != m_aContent.end() )
+            for (auto const& content : m_aContent)
             {
-                if( isChild( aOldPrefix,itnames->first ) )
+                if( isChild( aOldPrefix,content.first ) )
                 {
-                    oldChildList.push_back( itnames->first );
+                    oldChildList.push_back( content.first );
                 }
-                ++itnames;
             }
             count = oldChildList.size();
         }
@@ -2802,8 +2785,8 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
 
         for( sal_Int32 j = 0; j < count; ++j )
         {
-            std::list< ContentEventNotifier* >* p = new std::list< ContentEventNotifier* >;
-            std::list< ContentEventNotifier* >& listeners = *p;
+            std::vector< ContentEventNotifier* >* p = new std::vector< ContentEventNotifier* >;
+            std::vector< ContentEventNotifier* >& listeners = *p;
 
             if( withChildren )
             {
@@ -2823,7 +2806,7 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
                 itold->second.properties = nullptr;
 
                 // copy existing list
-                std::list< Notifier* >* copyList = itnew->second.notifier;
+                std::vector< Notifier* >* copyList = itnew->second.notifier;
                 itnew->second.notifier = itold->second.notifier;
                 itold->second.notifier = nullptr;
 
@@ -2831,15 +2814,12 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
 
                 if( itnew != m_aContent.end() && itnew->second.notifier )
                 {
-                    std::list<Notifier*>& listOfNotifiers = *( itnew->second.notifier );
-                    std::list<Notifier*>::iterator it1 = listOfNotifiers.begin();
-                    while( it1 != listOfNotifiers.end() )
+                    std::vector<Notifier*>& listOfNotifiers = *( itnew->second.notifier );
+                    for (auto const& pointer : listOfNotifiers)
                     {
-                        Notifier* pointer = *it1;
                         ContentEventNotifier* notifier = pointer->cEXC( aNewName );
                         if( notifier )
                             listeners.push_back( notifier );
-                        ++it1;
                     }
                 }
 
@@ -2847,7 +2827,7 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
                 // However, these may be in status BaseContent::Deleted
                 if( copyList != nullptr )
                 {
-                    std::list< Notifier* >::iterator copyIt = copyList->begin();
+                    std::vector< Notifier* >::iterator copyIt = copyList->begin();
                     while( copyIt != copyList->end() )
                     {
                         itnew->second.notifier->push_back( *copyIt );
@@ -2865,11 +2845,11 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
 
 
 void SAL_CALL
-TaskManager::notifyContentExchanged( std::vector< std::list< ContentEventNotifier* >* >* listeners_vec )
+TaskManager::notifyContentExchanged( std::vector< std::vector< ContentEventNotifier* >* >* listeners_vec )
 {
-    for( std::list< ContentEventNotifier* >* listeners : *listeners_vec)
+    for( std::vector< ContentEventNotifier* >* listeners : *listeners_vec)
     {
-        std::list< ContentEventNotifier* >::iterator it = listeners->begin();
+        std::vector< ContentEventNotifier* >::iterator it = listeners->begin();
         while( it != listeners->end() )
         {
             (*it)->notifyExchanged();
@@ -2882,25 +2862,22 @@ TaskManager::notifyContentExchanged( std::vector< std::list< ContentEventNotifie
 }
 
 
-std::list< PropertyChangeNotifier* >* SAL_CALL
+std::vector< PropertyChangeNotifier* >* SAL_CALL
 TaskManager::getPropertyChangeNotifier( const OUString& aName )
 {
-    std::list< PropertyChangeNotifier* >* p = new std::list< PropertyChangeNotifier* >;
-    std::list< PropertyChangeNotifier* >& listeners = *p;
+    std::vector< PropertyChangeNotifier* >* p = new std::vector< PropertyChangeNotifier* >;
+    std::vector< PropertyChangeNotifier* >& listeners = *p;
     {
         osl::MutexGuard aGuard( m_aMutex );
         TaskManager::ContentMap::iterator it = m_aContent.find( aName );
         if( it != m_aContent.end() && it->second.notifier )
         {
-            std::list<Notifier*>& listOfNotifiers = *( it->second.notifier );
-            std::list<Notifier*>::iterator it1 = listOfNotifiers.begin();
-            while( it1 != listOfNotifiers.end() )
+            std::vector<Notifier*>& listOfNotifiers = *( it->second.notifier );
+            for (auto const& pointer : listOfNotifiers)
             {
-                Notifier* pointer = *it1;
                 PropertyChangeNotifier* notifier = pointer->cPCL();
                 if( notifier )
                     listeners.push_back( notifier );
-                ++it1;
             }
         }
     }
@@ -2908,10 +2885,10 @@ TaskManager::getPropertyChangeNotifier( const OUString& aName )
 }
 
 
-void SAL_CALL TaskManager::notifyPropertyChanges( std::list< PropertyChangeNotifier* >* listeners,
+void SAL_CALL TaskManager::notifyPropertyChanges( std::vector< PropertyChangeNotifier* >* listeners,
                                             const uno::Sequence< beans::PropertyChangeEvent >& seqChanged )
 {
-    std::list< PropertyChangeNotifier* >::iterator it = listeners->begin();
+    std::vector< PropertyChangeNotifier* >::iterator it = listeners->begin();
     while( it != listeners->end() )
     {
         (*it)->notifyPropertyChanged( seqChanged );

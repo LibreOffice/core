@@ -56,7 +56,6 @@
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include "filerror.hxx"
 #include "filnot.hxx"
-#include <list>
 #include <unordered_map>
 #include <functional>
 #include <unordered_set>
@@ -225,7 +224,7 @@ namespace fileaccess
         };
 
         typedef std::unordered_set< MyProperty,hMyProperty,eMyProperty > PropertySet;
-        typedef std::list< Notifier* >                              NotifierList;
+        typedef std::vector< Notifier* >                              NotifierList;
 
 
         class UnqPathData
@@ -517,21 +516,21 @@ namespace fileaccess
         /*                              get eventListeners                              */
         /********************************************************************************/
 
-        std::list< ContentEventNotifier* >* SAL_CALL
+        std::vector< ContentEventNotifier* >* SAL_CALL
         getContentEventListeners( const OUString& aName );
 
-        std::list< ContentEventNotifier* >* SAL_CALL
+        std::vector< ContentEventNotifier* >* SAL_CALL
         getContentDeletedEventListeners( const OUString& aName );
 
-        std::vector< std::list< ContentEventNotifier* >* >* SAL_CALL
+        std::vector< std::vector< ContentEventNotifier* >* >* SAL_CALL
         getContentExchangedEventListeners( const OUString& aOldPrefix,
                                            const OUString& aNewPrefix,
                                            bool withChildren );
 
-        std::list< PropertyChangeNotifier* >* SAL_CALL
+        std::vector< PropertyChangeNotifier* >* SAL_CALL
         getPropertyChangeNotifier( const OUString& aName );
 
-        std::list< PropertySetInfoChangeNotifier* >* SAL_CALL
+        std::vector< PropertySetInfoChangeNotifier* >* SAL_CALL
         getPropertySetListeners( const OUString& aName );
 
 
@@ -540,28 +539,28 @@ namespace fileaccess
         /********************************************************************************/
 
         static void SAL_CALL notifyPropertyChanges(
-            std::list< PropertyChangeNotifier* >* listeners,
+            std::vector< PropertyChangeNotifier* >* listeners,
             const css::uno::Sequence< css::beans::PropertyChangeEvent >& seqChanged );
 
         static void SAL_CALL notifyContentExchanged(
-            std::vector< std::list< ContentEventNotifier* >* >* listeners_vec );
+            std::vector< std::vector< ContentEventNotifier* >* >* listeners_vec );
 
         static void SAL_CALL notifyInsert(
-            std::list< ContentEventNotifier* >* listeners,const OUString& aChildName );
+            std::vector< ContentEventNotifier* >* listeners,const OUString& aChildName );
 
         static void SAL_CALL notifyContentDeleted(
-            std::list< ContentEventNotifier* >* listeners );
+            std::vector< ContentEventNotifier* >* listeners );
 
         static void SAL_CALL notifyContentRemoved(
-            std::list< ContentEventNotifier* >* listeners,
+            std::vector< ContentEventNotifier* >* listeners,
             const OUString& aChildName );
 
         static void SAL_CALL notifyPropertyAdded(
-            std::list< PropertySetInfoChangeNotifier* >* listeners,
+            std::vector< PropertySetInfoChangeNotifier* >* listeners,
             const OUString& aPropertyName );
 
         static void SAL_CALL notifyPropertyRemoved(
-            std::list< PropertySetInfoChangeNotifier* >* listeners,
+            std::vector< PropertySetInfoChangeNotifier* >* listeners,
             const OUString& aPropertyName );
 
 
