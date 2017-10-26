@@ -441,12 +441,14 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
             aFrm.Width ( std::max( long(MINLAY), aFrameRect.Width() ) );
             setFrame(aFrm);
 
+            SwRect aPrt(PrintRA());
+
             if ( Lower() && Lower()->IsColumnFrame() )
             {
                 ColLock();  //lock grow/shrink
-                const Size aTmpOldSize( PrintRA().SSize() );
-                PrintWA().Height( FrameRA().Height() - nPrtHeightDiff );
-                PrintWA().Width ( FrameRA().Width()  - nPrtWidthDiff );
+                const Size aTmpOldSize( aPrt.SSize() );
+                aPrt.Height( FrameRA().Height() - nPrtHeightDiff );
+                aPrt.Width ( FrameRA().Width()  - nPrtWidthDiff );
                 ChgLowersProp( aTmpOldSize );
                 SwFrame *pLow = Lower();
                 do
@@ -463,9 +465,11 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
             }
             else
             {
-                PrintWA().Height( FrameRA().Height() - nPrtHeightDiff );
-                PrintWA().Width ( FrameRA().Width()  - nPrtWidthDiff );
+                aPrt.Height( FrameRA().Height() - nPrtHeightDiff );
+                aPrt.Width ( FrameRA().Width()  - nPrtWidthDiff );
             }
+
+            setPrint(aPrt);
         }
     }
 

@@ -1225,8 +1225,10 @@ SwTwips SwFrame::Grow( SwTwips nDist, bool bTst, bool bInfo )
             if( !bTst )
             {
                 nPrtHeight = aRectFnSet.GetHeight(PrintRA());
-                aRectFnSet.SetHeight( PrintWA(), nPrtHeight +
-                        ( IsContentFrame() ? nDist : nReal ) );
+
+                SwRect aPrt(PrintRA());
+                aRectFnSet.SetHeight( aPrt, nPrtHeight + ( IsContentFrame() ? nDist : nReal ) );
+                setPrint(aPrt);
             }
             return nReal;
         }
@@ -1266,8 +1268,9 @@ SwTwips SwFrame::Shrink( SwTwips nDist, bool bTst, bool bInfo )
             if( !bTst )
             {
                 const SwTwips nPrtHeight = aRectFnSet.GetHeight(PrintRA());
-                aRectFnSet.SetHeight( PrintWA(), nPrtHeight -
-                        ( IsContentFrame() ? nDist : nReal ) );
+                SwRect aPrt(PrintRA());
+                aRectFnSet.SetHeight( aPrt, nPrtHeight - ( IsContentFrame() ? nDist : nReal ) );
+                setPrint(aPrt);
             }
             return nReal;
         }
@@ -1404,7 +1407,11 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                 pUp->setFrame(aFrm);
             }
 
-            pUp->PrintWA().SSize().Height() += nChg;
+            {
+                SwRect aPrt(pUp->PrintRA());
+                aPrt.SSize().Height() += nChg;
+                pUp->setPrint(aPrt);
+            }
 
             if ( pViewShell )
                 pViewShell->Imp()->SetFirstVisPageInvalid();
@@ -1430,18 +1437,26 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                 const long nOldFrameHeight = FrameRA().Height();
                 const long nOldPrtHeight = PrintRA().Height();
                 const bool bOldComplete = IsCompletePaint();
+
                 if ( IsBodyFrame() )
-                    PrintWA().SSize().Height() = nOldFrameHeight;
+                {
+                    SwRect aPrt(PrintRA());
+                    aPrt.SSize().Height() = nOldFrameHeight;
+                    setPrint(aPrt);
+                }
 
                 if ( pUp->GetUpper() )
+                {
                     static_cast<SwRootFrame*>(pUp->GetUpper())->CheckViewLayout( nullptr, nullptr );
-                //static_cast<SwPageFrame*>(pUp)->AdjustRootSize( CHG_CHGPAGE, &aOldRect );
+                }
 
                 SwRect aFrm(FrameRA());
                 aFrm.SSize().Height() = nOldFrameHeight;
                 setFrame(aFrm);
 
-                PrintWA().SSize().Height() = nOldPrtHeight;
+                SwRect aPrt(PrintRA());
+                aPrt.SSize().Height() = nOldPrtHeight;
+                setPrint(aPrt);
 
                 mbCompletePaint = bOldComplete;
             }
