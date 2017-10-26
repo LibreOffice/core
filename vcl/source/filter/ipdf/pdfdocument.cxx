@@ -123,18 +123,9 @@ public:
     sal_uInt64 GetLocation() const;
 };
 
-XRefEntry::XRefEntry()
-    : m_eType(XRefEntryType::NOT_COMPRESSED),
-      m_nOffset(0),
-      m_bDirty(false)
-{
-}
+XRefEntry::XRefEntry() = default;
 
-PDFDocument::PDFDocument()
-    : m_pTrailer(nullptr),
-      m_pXRefStream(nullptr)
-{
-}
+PDFDocument::PDFDocument() = default;
 
 bool PDFDocument::RemoveSignature(size_t nPosition)
 {
@@ -1332,11 +1323,9 @@ size_t PDFDocument::FindStartXRef(SvStream& rStream)
         it = std::search(it, aBuf.end(), aPrefix.getStr(), aPrefix.getStr() + aPrefix.getLength());
         if (it == aBuf.end())
             break;
-        else
-        {
-            itLastValid = it;
-            ++it;
-        }
+
+        itLastValid = it;
+        ++it;
     }
     if (itLastValid == aBuf.end())
     {
@@ -2864,11 +2853,7 @@ bool PDFEndDictionaryElement::Read(SvStream& rStream)
     return true;
 }
 
-PDFNameElement::PDFNameElement()
-    : m_nLocation(0),
-      m_nLength(0)
-{
-}
+PDFNameElement::PDFNameElement() = default;
 
 bool PDFNameElement::Read(SvStream& rStream)
 {
