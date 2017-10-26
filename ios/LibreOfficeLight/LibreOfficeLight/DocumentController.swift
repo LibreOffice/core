@@ -35,7 +35,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentPickerDelega
     // Show sidemenu (part of documentcontroller)
     @IBAction func doMenu(_ sender: UIBarButtonItem)
     {
-        if (sender.tag == 10) {
+        if (sender.tag == 99) {
             sender.tag = 0;
 
             let viewMenuBack : UIView = view.subviews.last!
@@ -53,7 +53,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentPickerDelega
         }
 
         sender.isEnabled = false
-        sender.tag = 10
+        sender.tag = 99
 
         let sidebar : SidebarController = self.storyboard!.instantiateViewController(withIdentifier: "SidebarController") as! SidebarController
         view.addSubview(sidebar.view)
@@ -129,13 +129,22 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentPickerDelega
                 popover.sourceView = janTest
                 popover.sourceRect = janTest.bounds
                 present(vc, animated: true, completion: nil)
-
                 print("menu Save as... to be done")
+
             case 5: // Save as PDF...
                 print("menu Save as PDF... to be done")
 
             case 6: // Print...
                 print("menu Print... to be done")
+
+            case 7: // Copy...
+                print("menu Copy... to be done")
+
+            case 8: // Move...
+                print("menu Move... to be done")
+
+            case 9: // Delete...
+                print("menu Delete... to be done")
 
             default: // should not happen
                 print("unknown menu" + String(tag))
@@ -180,21 +189,21 @@ class DocumentActions: UITableViewController
     var isDocActive : Bool = false
 
     // Calling class might enable/disable each button
-    @IBOutlet weak var buttonNew: UIButton!
-    @IBOutlet weak var buttonOpen: UIButton!
-    @IBOutlet weak var buttonSave: UIButton!
-    @IBOutlet weak var buttonSaveAs: UIButton!
-    @IBOutlet weak var buttonSaveAsPDF: UIButton!
-    @IBOutlet weak var buttonPrint: UIButton!
-
-
-
     @IBAction func actionMenuSelect(_ sender: UIButton)
     {
         dismiss(animated: false)
         delegate?.actionMenuSelected(sender.tag)
     }
 
+    @IBOutlet weak var buttonNew: UIButton!
+    @IBOutlet weak var buttonOpen: UIButton!
+    @IBOutlet weak var buttonSave: UIButton!
+    @IBOutlet weak var buttonSaveAs: UIButton!
+    @IBOutlet weak var buttonSaveAsPDF: UIButton!
+    @IBOutlet weak var buttonPrint: UIButton!
+    @IBOutlet weak var buttonCopy: UIButton!
+    @IBOutlet weak var buttonMove: UIButton!
+    @IBOutlet weak var buttonDelete: UIButton!
 
     override func viewDidLoad()
     {
