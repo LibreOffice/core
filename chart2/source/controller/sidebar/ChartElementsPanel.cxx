@@ -416,6 +416,7 @@ void ChartElementsPanel::updateData()
     SolarMutexGuard aGuard;
 
     mpCBLegend->Check(isLegendVisible(mxModel));
+    mpBoxLegend->Enable( isLegendVisible(mxModel) );
     mpCBTitle->Check(isTitleVisisble(mxModel, TitleHelper::MAIN_TITLE));
     mpCBSubtitle->Check(isTitleVisisble(mxModel, TitleHelper::SUB_TITLE));
     mpCBXAxisTitle->Check(isTitleVisisble(mxModel, TitleHelper::X_AXIS_TITLE));
