@@ -1043,6 +1043,7 @@ SwRangeRedline::SwRangeRedline( const SwRangeRedline& rCpy )
 
 SwRangeRedline::~SwRangeRedline()
 {
+    fprintf(stderr, "start death of %p\n", this);
     if( pContentSect )
     {
         // delete the ContentSection
@@ -1051,6 +1052,7 @@ SwRangeRedline::~SwRangeRedline()
         delete pContentSect;
     }
     delete pRedlineData;
+    fprintf(stderr, "end death of %p\n", this);
 }
 
 void SwRangeRedline::MaybeNotifyModification()
