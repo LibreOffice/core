@@ -148,65 +148,65 @@ TableStyle* CreateTableStyle(const OUString& styleId)
         pTableStyle = new TableStyle();
         //first row style
         //fill color and type
-        oox::drawingml::FillPropertiesPtr pFstRowFillProperties( new oox::drawingml::FillProperties );
-        pFstRowFillProperties->moFillType.set(XML_solidFill);
-        pFstRowFillProperties->maFillColor.setSchemeClr(XML_accent1);
-        pTableStyle->getFirstRow().getFillProperties() = pFstRowFillProperties;
+        oox::drawingml::FillPropertiesPtr pFirstRowFillProperties( new oox::drawingml::FillProperties );
+        pFirstRowFillProperties->moFillType.set(XML_solidFill);
+        pFirstRowFillProperties->maFillColor.setSchemeClr(XML_accent1);
+        pTableStyle->getFirstRow().getFillProperties() = pFirstRowFillProperties;
         //text color
-        ::oox::drawingml::Color fstRowTextColor;
-        fstRowTextColor.setSchemeClr(XML_lt1);
-        pTableStyle->getFirstRow().getTextColor() = fstRowTextColor;
+        ::oox::drawingml::Color firstRowTextColor;
+        firstRowTextColor.setSchemeClr(XML_lt1);
+        pTableStyle->getFirstRow().getTextColor() = firstRowTextColor;
         //bottom line border
-        oox::drawingml::LinePropertiesPtr pFstBottomBorder( new oox::drawingml::LineProperties);
-        pFstBottomBorder->moLineWidth = 38100;
-        pFstBottomBorder->moPresetDash = XML_sng;
-        pFstBottomBorder->maLineFill.moFillType.set(XML_solidFill);
-        pFstBottomBorder->maLineFill.maFillColor.setSchemeClr(XML_lt1);
-        pTableStyle->getFirstRow().getLineBorders().insert(std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_bottom,pFstBottomBorder));
+        oox::drawingml::LinePropertiesPtr pFirstBottomBorder( new oox::drawingml::LineProperties);
+        pFirstBottomBorder->moLineWidth = 38100;
+        pFirstBottomBorder->moPresetDash = XML_sng;
+        pFirstBottomBorder->maLineFill.moFillType.set(XML_solidFill);
+        pFirstBottomBorder->maLineFill.maFillColor.setSchemeClr(XML_lt1);
+        pTableStyle->getFirstRow().getLineBorders().insert(std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_bottom,pFirstBottomBorder));
 
         //last row style
-        pTableStyle->getLastRow().getFillProperties() = pFstRowFillProperties;
-        pTableStyle->getLastRow().getTextColor() = fstRowTextColor;
-        pTableStyle->getLastRow().getLineBorders().insert(std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_top,pFstBottomBorder));
+        pTableStyle->getLastRow().getFillProperties() = pFirstRowFillProperties;
+        pTableStyle->getLastRow().getTextColor() = firstRowTextColor;
+        pTableStyle->getLastRow().getLineBorders().insert(std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_top,pFirstBottomBorder));
 
         //first column style
-        pTableStyle->getFirstRow().getFillProperties() = pFstRowFillProperties;
-        pTableStyle->getFirstRow().getTextColor() = fstRowTextColor;
+        pTableStyle->getFirstRow().getFillProperties() = pFirstRowFillProperties;
+        pTableStyle->getFirstRow().getTextColor() = firstRowTextColor;
 
         //last column style
-        pTableStyle->getLastCol().getFillProperties() = pFstRowFillProperties;
-        pTableStyle->getLastCol().getTextColor() = fstRowTextColor;
+        pTableStyle->getLastCol().getFillProperties() = pFirstRowFillProperties;
+        pTableStyle->getLastCol().getTextColor() = firstRowTextColor;
 
         SetTableStyleProperties(pTableStyle, XML_accent1, XML_dk1, XML_lt1);
     }
     else if (styleId == "{21E4AEA4-8DFA-4A89-87EB-49C32662AFE0}")         //Medium Style 2 Accent 2
     {
         pTableStyle = new TableStyle();
-        oox::drawingml::FillPropertiesPtr pFstRowFillProperties( new oox::drawingml::FillProperties );
-        pFstRowFillProperties->moFillType.set(XML_solidFill);
-        pFstRowFillProperties->maFillColor.setSchemeClr(XML_accent2);
-        pTableStyle->getFirstRow().getFillProperties() = pFstRowFillProperties;
+        oox::drawingml::FillPropertiesPtr pFirstRowFillProperties( new oox::drawingml::FillProperties );
+        pFirstRowFillProperties->moFillType.set(XML_solidFill);
+        pFirstRowFillProperties->maFillColor.setSchemeClr(XML_accent2);
+        pTableStyle->getFirstRow().getFillProperties() = pFirstRowFillProperties;
 
-        ::oox::drawingml::Color fstRowTextColor;
-        fstRowTextColor.setSchemeClr(XML_lt1);
-        pTableStyle->getFirstRow().getTextColor() = fstRowTextColor;
+        ::oox::drawingml::Color firstRowTextColor;
+        firstRowTextColor.setSchemeClr(XML_lt1);
+        pTableStyle->getFirstRow().getTextColor() = firstRowTextColor;
 
-        oox::drawingml::LinePropertiesPtr pFstBottomBorder( new oox::drawingml::LineProperties);
-        pFstBottomBorder->moLineWidth = 38100;
-        pFstBottomBorder->moPresetDash = XML_sng;
-        pFstBottomBorder->maLineFill.moFillType.set(XML_solidFill);
-        pFstBottomBorder->maLineFill.maFillColor.setSchemeClr(XML_lt1);
-        pTableStyle->getFirstRow().getLineBorders().insert(std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_bottom,pFstBottomBorder));
+        oox::drawingml::LinePropertiesPtr pFirstBottomBorder( new oox::drawingml::LineProperties);
+        pFirstBottomBorder->moLineWidth = 38100;
+        pFirstBottomBorder->moPresetDash = XML_sng;
+        pFirstBottomBorder->maLineFill.moFillType.set(XML_solidFill);
+        pFirstBottomBorder->maLineFill.maFillColor.setSchemeClr(XML_lt1);
+        pTableStyle->getFirstRow().getLineBorders().insert(std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_bottom,pFirstBottomBorder));
 
-        pTableStyle->getLastRow().getFillProperties() = pFstRowFillProperties;
-        pTableStyle->getLastRow().getTextColor() = fstRowTextColor;
-        pTableStyle->getLastRow().getLineBorders().insert(std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_top,pFstBottomBorder));
+        pTableStyle->getLastRow().getFillProperties() = pFirstRowFillProperties;
+        pTableStyle->getLastRow().getTextColor() = firstRowTextColor;
+        pTableStyle->getLastRow().getLineBorders().insert(std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_top,pFirstBottomBorder));
 
-        pTableStyle->getFirstCol().getFillProperties() = pFstRowFillProperties;
-        pTableStyle->getFirstCol().getTextColor() = fstRowTextColor;
+        pTableStyle->getFirstCol().getFillProperties() = pFirstRowFillProperties;
+        pTableStyle->getFirstCol().getTextColor() = firstRowTextColor;
 
-        pTableStyle->getLastCol().getFillProperties() = pFstRowFillProperties;
-        pTableStyle->getLastCol().getTextColor() = fstRowTextColor;
+        pTableStyle->getLastCol().getFillProperties() = pFirstRowFillProperties;
+        pTableStyle->getLastCol().getTextColor() = firstRowTextColor;
 
         SetTableStyleProperties(pTableStyle, XML_accent2, XML_dk1, XML_lt1);
     }
