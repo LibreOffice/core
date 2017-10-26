@@ -111,8 +111,6 @@ SwHeadFootFrame::SwHeadFootFrame( SwFrameFormat * pFormat, SwFrame* pSib, SwFram
 
 void SwHeadFootFrame::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
 {
-    SwRect aPrt(getSwPrint());
-
     if (GetEatSpacing())
     {
         /* The minimal height of the print area is the minimal height of the
@@ -173,6 +171,7 @@ void SwHeadFootFrame::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
         /* set print area */
         // OD 23.01.2003 #106895# - add first parameter to <SwBorderAttrs::CalcRight(..)>
         SwTwips nLR = pAttrs->CalcLeft( this ) + pAttrs->CalcRight( this );
+        SwFrameRect::PrintWriteAccess aPrt(*this);
 
         aPrt.Left(pAttrs->CalcLeft(this));
 
@@ -203,6 +202,7 @@ void SwHeadFootFrame::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
     else
     {
         // Set position
+        SwFrameRect::PrintWriteAccess aPrt(*this);
         aPrt.Left( pAttrs->CalcLeft( this ) );
         aPrt.Top ( pAttrs->CalcTop()  );
 
@@ -212,10 +212,8 @@ void SwHeadFootFrame::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
         SwTwips nLR = pAttrs->CalcLeft( this ) + pAttrs->CalcRight( this );
         aPrt.Width ( getSwFrame().Width() - nLR );
         aPrt.Height( getSwFrame().Height()- nUL );
-
     }
 
-    setSwPrint(aPrt);
     mbValidPrtArea = true;
 }
 
@@ -380,13 +378,11 @@ void SwHeadFootFrame::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
 
                     if ( nBot > nDeadLine )
                     {
-                        SwRect aFrm(getSwFrame());
+                        SwFrameRect::FrameWriteAccess aFrm(*this);
                         aFrm.Bottom( nDeadLine );
-                        setSwFrame(aFrm);
 
-                        SwRect aPrt(getSwPrint());
+                        SwFrameRect::PrintWriteAccess aPrt(*this);
                         aPrt.SSize().Height() = getSwFrame().Height() - nBorder;
-                        setSwPrint(aPrt);
                     }
                 }
                 mbValidSize = mbValidPrtArea = true;
@@ -491,10 +487,9 @@ SwTwips SwHeadFootFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
             {
                 if (! IsHeaderFrame())
                 {
-                    SwRect aPrt(getSwPrint());
+                    SwFrameRect::PrintWriteAccess aPrt(*this);
                     aPrt.Top(aPrt.Top() - nEat);
                     aPrt.Height(aPrt.Height() - nEat);
-                    setSwPrint(aPrt);
                 }
 
                 InvalidateAll();
@@ -609,10 +604,9 @@ SwTwips SwHeadFootFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
             {
                 if (! IsHeaderFrame() )
                 {
-                    SwRect aPrt(getSwPrint());
+                    SwFrameRect::PrintWriteAccess aPrt(*this);
                     aPrt.Top(aPrt.Top() + nShrink);
                     aPrt.Height(aPrt.Height() - nShrink);
-                    setSwPrint(aPrt);
                 }
 
                 InvalidateAll();

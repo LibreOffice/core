@@ -480,9 +480,8 @@ void SwNoTextFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
         if ( !mbValidSize )
         {
-            SwRect aFrm(getSwFrame());
+            SwFrameRect::FrameWriteAccess aFrm(*this);
             aFrm.Width( GetUpper()->getSwPrint().Width() );
-            setSwFrame(aFrm);
         }
 
         MakePrtArea( rAttrs );

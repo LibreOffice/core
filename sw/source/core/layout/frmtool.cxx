@@ -1120,7 +1120,7 @@ static void lcl_SetPos( SwFrame&             _rNewFrame,
                  const SwLayoutFrame& _rLayFrame )
 {
     SwRectFnSet aRectFnSet(&_rLayFrame);
-    SwRect aFrm(_rNewFrame.getSwFrame());
+    SwFrameRect::FrameWriteAccess aFrm(_rNewFrame);
     aRectFnSet.SetPos( aFrm, aRectFnSet.GetPos(_rLayFrame.getSwFrame()) );
 
     // move position by one SwTwip in text flow direction in order to get
@@ -1133,8 +1133,6 @@ static void lcl_SetPos( SwFrame&             _rNewFrame,
     {
         aFrm.Pos().Y() += 1;
     }
-
-    _rNewFrame.setSwFrame(aFrm);
 }
 
 void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,

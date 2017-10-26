@@ -82,48 +82,50 @@
 /// Switches width and height of the text frame
 void SwTextFrame::SwapWidthAndHeight()
 {
-    SwRect aPrt(getSwPrint());
-
-    if ( ! mbIsSwapped )
     {
-        const long nPrtOfstX = aPrt.Pos().X();
-        aPrt.Pos().X() = aPrt.Pos().Y();
+        SwFrameRect::PrintWriteAccess aPrt(*this);
 
-        if( IsVertLR() )
+        if ( ! mbIsSwapped )
         {
-            aPrt.Pos().Y() = nPrtOfstX;
+            const long nPrtOfstX = aPrt.Pos().X();
+            aPrt.Pos().X() = aPrt.Pos().Y();
+
+            if( IsVertLR() )
+            {
+                aPrt.Pos().Y() = nPrtOfstX;
+            }
+            else
+            {
+                aPrt.Pos().Y() = getSwFrame().Width() - ( nPrtOfstX + aPrt.Width() );
+            }
         }
         else
         {
-            aPrt.Pos().Y() = getSwFrame().Width() - ( nPrtOfstX + aPrt.Width() );
+            const long nPrtOfstY = aPrt.Pos().Y();
+            aPrt.Pos().Y() = aPrt.Pos().X();
+
+            if( IsVertLR() )
+            {
+                aPrt.Pos().X() = nPrtOfstY;
+            }
+            else
+            {
+                aPrt.Pos().X() = getSwFrame().Height() - ( nPrtOfstY + aPrt.Height() );
+            }
         }
+
+        const long nPrtWidth = aPrt.Width();
+        aPrt.Width( aPrt.Height() );
+        aPrt.Height( nPrtWidth );
     }
-    else
+
     {
-        const long nPrtOfstY = aPrt.Pos().Y();
-        aPrt.Pos().Y() = aPrt.Pos().X();
-
-        if( IsVertLR() )
-        {
-            aPrt.Pos().X() = nPrtOfstY;
-        }
-        else
-        {
-            aPrt.Pos().X() = getSwFrame().Height() - ( nPrtOfstY + aPrt.Height() );
-        }
+        const long nFrameWidth = getSwFrame().Width();
+        SwFrameRect::FrameWriteAccess aFrm(*this);
+        aFrm.Width( aFrm.Height() );
+        aFrm.Height( nFrameWidth );
     }
 
-    const long nFrameWidth = getSwFrame().Width();
-    SwRect aFrm(getSwFrame());
-    aFrm.Width( aFrm.Height() );
-    aFrm.Height( nFrameWidth );
-    setSwFrame(aFrm);
-
-    const long nPrtWidth = aPrt.Width();
-    aPrt.Width( aPrt.Height() );
-    aPrt.Height( nPrtWidth );
-
-    setSwPrint(aPrt);
     mbIsSwapped = ! mbIsSwapped;
 }
 
@@ -1549,15 +1551,13 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
     {
         case PREP_MOVEFTN :
             {
-                SwRect aFrm(getSwFrame());
+                SwFrameRect::FrameWriteAccess aFrm(*this);
                 aFrm.Height(0);
-                setSwFrame(aFrm);
             }
 
             {
-                SwRect aPrt(getSwPrint());
+                SwFrameRect::PrintWriteAccess aPrt(*this);
                 aPrt.Height(0);
-                setSwPrint(aPrt);
             }
 
             InvalidatePrt_();
@@ -1890,36 +1890,41 @@ SwTestFormat::SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPre, SwTwip
     SwRectFnSet aRectFnSet(pFrame);
     SwTwips nLower = aRectFnSet.GetBottomMargin(*pFrame);
 
-    SwRect aFrm(pFrame->getSwFrame());
-    aFrm = pFrame->GetUpper()->getSwPrint();
-    aFrm += pFrame->GetUpper()->getSwFrame().Pos();
-    aRectFnSet.SetHeight( aFrm, nMaxHeight );
-
-    if( pFrame->GetPrev() )
     {
-        aRectFnSet.SetPosY(
-            aFrm,
-            aRectFnSet.GetBottom(pFrame->GetPrev()->getSwFrame()) - ( aRectFnSet.IsVert() ? nMaxHeight + 1 : 0 ) );
-    }
+        // indeed, here the GetUpper()->getSwPrint() gets copied and manipulated
+        SwFrameRect::FrameWriteAccess aFrm(*pFrame);
+        aFrm.setSwRect(pFrame->GetUpper()->getSwPrint());
+        aFrm += pFrame->GetUpper()->getSwFrame().Pos();
+        aRectFnSet.SetHeight( aFrm, nMaxHeight );
 
-    pFrame->setSwFrame(aFrm);
+        if( pFrame->GetPrev() )
+        {
+            aRectFnSet.SetPosY(
+                aFrm,
+                aRectFnSet.GetBottom(pFrame->GetPrev()->getSwFrame()) - ( aRectFnSet.IsVert() ? nMaxHeight + 1 : 0 ) );
+        }
+    }
 
     SwBorderAttrAccess aAccess( SwFrame::GetCache(), pFrame );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
-    SwRect aPrt(pFrame->getSwPrint());
-    aRectFnSet.SetPosX(aPrt, rAttrs.CalcLeft( pFrame ) );
+
+    {
+        SwFrameRect::PrintWriteAccess aPrt(*pFrame);
+        aRectFnSet.SetPosX(aPrt, rAttrs.CalcLeft( pFrame ) );
+    }
 
     if( pPre )
     {
-        pFrame->setSwPrint(aPrt); // better set here, not sure if pFrame->CalcUpperSpace uses it
         SwTwips nUpper = pFrame->CalcUpperSpace( &rAttrs, pPre );
-        aPrt = pFrame->getSwPrint(); // also read back, if pFrame->CalcUpperSpace may have changed it
+        SwFrameRect::PrintWriteAccess aPrt(*pFrame);
         aRectFnSet.SetPosY(aPrt, nUpper );
     }
 
-    aRectFnSet.SetHeight( aPrt, std::max( 0L , aRectFnSet.GetHeight(pFrame->getSwFrame()) - aRectFnSet.GetTop(aPrt) - nLower ) );
-    aRectFnSet.SetWidth( aPrt, aRectFnSet.GetWidth(pFrame->getSwFrame()) - ( rAttrs.CalcLeft( pFrame ) + rAttrs.CalcRight( pFrame ) ) );
-    pFrame->setSwPrint(aPrt);
+    {
+        SwFrameRect::PrintWriteAccess aPrt(*pFrame);
+        aRectFnSet.SetHeight( aPrt, std::max( 0L , aRectFnSet.GetHeight(pFrame->getSwFrame()) - aRectFnSet.GetTop(aPrt) - nLower ) );
+        aRectFnSet.SetWidth( aPrt, aRectFnSet.GetWidth(pFrame->getSwFrame()) - ( rAttrs.CalcLeft( pFrame ) + rAttrs.CalcRight( pFrame ) ) );
+    }
 
     pOldPara = pFrame->HasPara() ? pFrame->GetPara() : nullptr;
     pFrame->SetPara( new SwParaPortion(), false );
@@ -1941,13 +1946,15 @@ SwTestFormat::SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPre, SwTwip
 
 SwTestFormat::~SwTestFormat()
 {
-    SwRect aFrm(pFrame->getSwFrame());
-    aFrm = aOldFrame;
-    pFrame->setSwFrame(aFrm);
+    {
+        SwFrameRect::FrameWriteAccess aFrm(*pFrame);
+        aFrm.setSwRect(aOldFrame);
+    }
 
-    SwRect aPrt(pFrame->getSwPrint());
-    aPrt = aOldPrt;
-    pFrame->setSwPrint(aPrt);
+    {
+        SwFrameRect::PrintWriteAccess aPrt(*pFrame);
+        aPrt.setSwRect(aOldPrt);
+    }
 
     pFrame->SetPara( pOldPara );
 }
@@ -2158,17 +2165,20 @@ SwTwips SwTextFrame::CalcFitToContent()
                                pPage->getSwPrint().Height() :
                                pPage->getSwPrint().Width();
 
-    SwRect aFrm(getSwFrame());
-    aFrm.Width( nPageWidth );
-    setSwFrame(aFrm);
+    {
+        SwFrameRect::FrameWriteAccess aFrm(*this);
+        aFrm.Width( nPageWidth );
+    }
 
-    SwRect aPrt(getSwPrint());
-    aPrt.Width( nPageWidth );
-    setSwPrint(aPrt);
+    {
+        SwFrameRect::PrintWriteAccess aPrt(*this);
+        aPrt.Width( nPageWidth );
+    }
 
     // i#25422 objects anchored as character in RTL
     if ( IsRightToLeft() )
     {
+        SwFrameRect::FrameWriteAccess aFrm(*this);
         aFrm.Pos().X() += nOldFrameWidth - nPageWidth;
     }
 
@@ -2181,20 +2191,23 @@ SwTwips SwTextFrame::CalcFitToContent()
 
     // i#54031 - assure mininum of MINLAY twips.
     const SwTwips nMax = std::max( (SwTwips)MINLAY, aLine.CalcFitToContent_() + 1 );
-    aFrm = getSwFrame();
-    aFrm.Width( nOldFrameWidth );
 
-    aPrt = getSwPrint();
-    aPrt.Width( nOldPrtWidth );
-    setSwPrint(aPrt);
-
-    // i#25422 objects anchored as character in RTL
-    if ( IsRightToLeft() )
     {
-        aFrm.Pos() = aOldFramePos;
+        SwFrameRect::FrameWriteAccess aFrm(*this);
+        aFrm.Width( nOldFrameWidth );
+
+        // i#25422 objects anchored as character in RTL
+        if ( IsRightToLeft() )
+        {
+            aFrm.Pos() = aOldFramePos;
+        }
     }
 
-    setSwFrame(aFrm);
+    {
+        SwFrameRect::PrintWriteAccess aPrt(*this);
+        aPrt.Width( nOldPrtWidth );
+    }
+
     SetPara( pOldPara );
 
     return nMax;
