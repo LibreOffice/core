@@ -144,6 +144,22 @@ static void SetTableStyleProperties(TableStyle* &pTableStyle , sal_Int32 tblFill
 TableStyle* CreateTableStyle(const OUString& styleId)
 {
     TableStyle* pTableStyle = nullptr;
+
+    // It is a bit silly to handle styleIds specifically and separately like this. Also note that
+    // the first two code blocks below are mostly copy-pasted, modulo the comments and the fact that
+    // one uses XML_accent1 and the other XML_accent2. Presumably it would be better to use a
+    // table-based approach, to have a mapping from style ids to the parameters that actually change
+    // between styles. See
+    // https://msdn.microsoft.com/en-us/library/office/hh273476(v=office.14).aspx for an unofficial
+    // list of these ids (that is said on that page to be undocumented, which doesn't sound credible?).
+
+    // But the odd thing is that even if the code here handles only three specific style ids, if I
+    // edit the bug doc from AOO bug #i120723# (for which this code was added) and choose some other
+    // style, the table shows up mostly fine in Impress anyway. Thus I wonder whether this whole
+    // code is actually unnecessary, and the .pptx contains explicit values for all the components
+    // of a style anyway, and LibreOffice's code (at least now, maybe not when this code was added
+    // to AOO in 2012) knows to look at that?
+
     if(styleId == "{5C22544A-7EE6-4342-B048-85BDC9FD1C3A}") {           //Medium Style 2 Accent 1
         pTableStyle = new TableStyle();
         //first row style
