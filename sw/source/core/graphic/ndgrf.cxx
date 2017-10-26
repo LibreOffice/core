@@ -60,7 +60,8 @@ using namespace com::sun::star;
 
 SwGrfNode::SwGrfNode(
         const SwNodeIndex & rWhere,
-        const OUString& rGrfName, const OUString& rFltName,
+        const OUString& rGrfName,
+        const OUString& rFltName,
         const Graphic* pGraphic,
         SwGrfFormatColl *pGrfColl,
         SwAttrSet const * pAutoAttr ) :
@@ -80,8 +81,9 @@ SwGrfNode::SwGrfNode(
 }
 
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
-                          const GraphicObject& rGrfObj,
-                      SwGrfFormatColl *pGrfColl, SwAttrSet const * pAutoAttr ) :
+                      const GraphicObject& rGrfObj,
+                      SwGrfFormatColl *pGrfColl,
+                      SwAttrSet const * pAutoAttr ) :
     SwNoTextNode( rWhere, SwNodeType::Grf, pGrfColl, pAutoAttr ),
     maGrfObj(rGrfObj),
     mpReplacementGraphic(nullptr),
@@ -102,7 +104,8 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
  * @note Does not read/open the image itself!
  */
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
-                      const OUString& rGrfName, const OUString& rFltName,
+                      const OUString& rGrfName,
+                      const OUString& rFltName,
                       SwGrfFormatColl *pGrfColl,
                       SwAttrSet const * pAutoAttr ) :
     SwNoTextNode( rWhere, SwNodeType::Grf, pGrfColl, pAutoAttr ),
@@ -119,7 +122,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
 
     bInSwapIn = bChgTwipSize =
         bFrameInPaint = bScaleImageMap = false;
-    bGraphicArrived = true;
+    bGraphicArrived = false;
 
     InsertLink( rGrfName, rFltName );
     if( IsLinkedFile() )
@@ -425,13 +428,12 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
                                 const OUString& rFltName,
                                 const Graphic* pGraphic,
                                 SwGrfFormatColl* pGrfColl,
-                                SwAttrSet const * pAutoAttr,
-                                bool bDelayed )
+                                SwAttrSet const * pAutoAttr )
 {
     OSL_ENSURE( pGrfColl, "MakeGrfNode: Formatpointer is 0." );
     SwGrfNode *pNode;
     // create object delayed, only from a SW/G-reader
-    if( bDelayed )
+    if( !pGraphic )
         pNode = new SwGrfNode( rWhere, rGrfName,
                                 rFltName, pGrfColl, pAutoAttr );
     else

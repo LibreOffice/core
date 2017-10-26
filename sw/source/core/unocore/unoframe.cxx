@@ -2836,7 +2836,8 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         }
         Graphic aGraphic;
         const ::uno::Any* pGraphic;
-        if( pProps->GetProperty( FN_UNO_GRAPHIC, 0, pGraphic ))
+        const bool bHasGraphic = pProps->GetProperty( FN_UNO_GRAPHIC, 0, pGraphic );
+        if( bHasGraphic )
         {
             uno::Reference< graphic::XGraphic > xGraphic;
             (*pGraphic) >>= xGraphic;
@@ -2854,7 +2855,8 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             ? pDoc->getIDocumentContentOperations().InsertGraphicObject(
                     aPam, *pGrfObj, &aFrameSet, &aGrSet, pParentFrameFormat)
             : pDoc->getIDocumentContentOperations().InsertGraphic(
-                    aPam, sGraphicURL, sFltName, &aGraphic,
+                    aPam, sGraphicURL, sFltName,
+                    (!bHasGraphic && !sGraphicURL.isEmpty()) ? nullptr : &aGraphic,
                     &aFrameSet, &aGrSet, pParentFrameFormat);
         delete pGrfObj;
         if(pFormat)
