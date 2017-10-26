@@ -25,7 +25,7 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include "excelvbahelper.hxx"
 
-class ScVbaPane : public cppu::WeakImplHelper< ov::excel::XPane >
+class ScVbaPane final : public cppu::WeakImplHelper< ov::excel::XPane >
 {
 public:
     /// @throws css::uno::RuntimeException
@@ -46,11 +46,9 @@ public:
     virtual void SAL_CALL SmallScroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft ) override;
     virtual void SAL_CALL LargeScroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft ) override;
 
-protected:
+private:
     css::uno::Reference< css::frame::XModel > m_xModel;
     css::uno::Reference< css::sheet::XViewPane > m_xViewPane;
-
-private:
     css::uno::WeakReference< ov::XHelperInterface > m_xParent;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 };

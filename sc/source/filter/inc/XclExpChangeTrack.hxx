@@ -461,17 +461,14 @@ struct XclExpChTrData
 
 // XclExpChTrCellContent - changed cell content
 
-class XclExpChTrCellContent : public XclExpChTrAction, protected XclExpRoot
+class XclExpChTrCellContent final : public XclExpChTrAction, protected XclExpRoot
 {
-private:
     XclExpChTrData*             pOldData;
     XclExpChTrData*             pNewData;
     sal_uInt16                  nOldLength;     // this is not the record size
+    ScAddress                   aPosition;
 
     static void                 MakeEmptyChTrData( XclExpChTrData*& rpData );
-
-protected:
-    ScAddress                   aPosition;
 
     void GetCellData(
         const XclExpRoot& rRoot, const ScCellValue& rScCell, XclExpChTrData*& rpData,
@@ -546,9 +543,8 @@ public:
 
 // XclExpChTrMoveRange - move cell range
 
-class XclExpChTrMoveRange : public XclExpChTrAction
+class XclExpChTrMoveRange final : public XclExpChTrAction
 {
-protected:
     ScRange                     aSourceRange;
     ScRange                     aDestRange;
 

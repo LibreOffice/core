@@ -27,9 +27,8 @@
 
 typedef InheritedHelperInterfaceWeakImpl< ov::excel::XOLEObject > OLEObjectImpl_BASE;
 
-class ScVbaOLEObject : public OLEObjectImpl_BASE
+class ScVbaOLEObject final : public OLEObjectImpl_BASE
 {
-protected:
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
     css::uno::Reference< ov::msforms::XControl> m_xControl;

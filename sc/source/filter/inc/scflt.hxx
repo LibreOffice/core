@@ -598,16 +598,15 @@ public:
 };
 
 // Font-Collection
-class Sc10FontCollection : public ScCollection
+class Sc10FontCollection final : public ScCollection
 {
-protected:
-    ErrCode             nError;
 public:
                         Sc10FontCollection( SvStream& rStream );
     ErrCode             GetError() { return nError; }
     Sc10FontData*       At(sal_uInt16 nIndex) { return static_cast<Sc10FontData*>(ScCollection::At(nIndex)); }
 private:
     using               ScCollection::At;
+    ErrCode             nError;
 };
 
 //Range-Data
@@ -632,16 +631,15 @@ public:
 };
 
 // Range-Collection
-class Sc10NameCollection : public ScCollection
+class Sc10NameCollection final : public ScCollection
 {
-protected:
-    ErrCode             nError;
 public:
                         Sc10NameCollection(SvStream& rStream);
     ErrCode             GetError() { return nError; }
     Sc10NameData*       At(sal_uInt16 nIndex) { return static_cast<Sc10NameData*>(ScCollection::At(nIndex)); }
 private:
     using               ScCollection::At;
+    ErrCode             nError;
 };
 
 // Template-Data
@@ -683,16 +681,15 @@ virtual ScDataObject*       Clone() const override { return new Sc10PatternData(
 };
 
 // Template-Collection
-class Sc10PatternCollection : public ScCollection
+class Sc10PatternCollection final : public ScCollection
 {
-protected:
-    ErrCode             nError;
 public:
                         Sc10PatternCollection(SvStream& rStream);
     ErrCode             GetError() { return nError; }
     Sc10PatternData*    At(sal_uInt16 nIndex) { return static_cast<Sc10PatternData*>(ScCollection::At(nIndex)); }
 private:
     using               ScCollection::At;
+    ErrCode             nError;
 };
 
 // DataBank-Data
@@ -711,17 +708,16 @@ virtual ScDataObject*       Clone() const override { return new Sc10DataBaseData
 };
 
 // DataBank-Collection
-class Sc10DataBaseCollection : public ScCollection
+class Sc10DataBaseCollection final : public ScCollection
 {
-protected:
-    ErrCode             nError;
-    sal_Char            ActName[32];
 public:
                         Sc10DataBaseCollection(SvStream& rStream);
     ErrCode             GetError() { return nError; }
     Sc10DataBaseData*   At(sal_uInt16 nIndex) { return static_cast<Sc10DataBaseData*>(ScCollection::At(nIndex)); }
 private:
     using               ScCollection::At;
+    ErrCode             nError;
+    sal_Char            ActName[32];
 };
 
 class Sc10PageData : public ScDataObject

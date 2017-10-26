@@ -28,9 +28,8 @@
 
 typedef ScVbaFormat< ov::excel::XStyle > ScVbaStyle_BASE;
 
-class ScVbaStyle : public ScVbaStyle_BASE
+class ScVbaStyle final : public ScVbaStyle_BASE
 {
-protected:
     css::uno::Reference< css::style::XStyle > mxStyle;
     css::uno::Reference< css::container::XNameContainer > mxStyleFamilyNameContainer;
     /// @throws css::uno::RuntimeException

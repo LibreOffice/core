@@ -43,16 +43,14 @@ public:
     const OUString& GetValue() const { return aValue; }
 };
 
-class ExcScenario
+class ExcScenario final
 {
 public:
-
     ExcScenario( XclImpStream& rIn, const RootData& rRoot );
 
     void Apply( const XclImpRoot& rRoot, const bool bLast );
 
-protected:
-
+private:
     OUString         aName;
     OUString         aComment;
     OUString         aUserName;

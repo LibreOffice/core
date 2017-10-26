@@ -15,11 +15,8 @@
 #include <vector>
 #include <memory>
 
-class ScPivotLayoutTreeListData : public ScPivotLayoutTreeListBase
+class ScPivotLayoutTreeListData final : public ScPivotLayoutTreeListBase
 {
-private:
-    std::vector<std::unique_ptr<ScItemValue> > maDataItemValues;
-
 public:
     ScPivotLayoutTreeListData(vcl::Window* pParent, WinBits nBits);
     virtual ~ScPivotLayoutTreeListData() override;
@@ -28,13 +25,15 @@ public:
     void FillDataField(ScPivotFieldVector& rDataFields);
     void PushDataFieldNames(std::vector<ScDPName>& rDataFieldNames);
 
-protected:
+private:
     virtual void InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget) override;
     virtual void InsertEntryForItem(ScItemValue* pItemValue, sal_uLong nPosition) override;
 
     void AdjustDuplicateCount(ScItemValue* pInputItemValue);
 
     virtual void KeyInput(const KeyEvent& rKeyEvent) override;
+
+    std::vector<std::unique_ptr<ScItemValue> > maDataItemValues;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

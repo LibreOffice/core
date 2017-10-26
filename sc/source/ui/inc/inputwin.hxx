@@ -221,7 +221,7 @@ private:
     DECL_LINK( Impl_ScrollHdl, ScrollBar*, void );
 };
 
-class ScInputWindow : public ToolBox                        // Parent toolbox
+class ScInputWindow final : public ToolBox                        // Parent toolbox
 {
 public:
                     ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind );
@@ -266,10 +266,9 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
 
-protected:
+private:
     bool IsPointerAtResizePos();
 
-private:
     VclPtr<ScPosWnd>  aWndPos;
     VclPtr<ScTextWndBase> pRuntimeWindow;
     ScTextWndBase&  aTextWindow;
