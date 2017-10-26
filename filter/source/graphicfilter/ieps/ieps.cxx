@@ -97,10 +97,10 @@ static long ImplGetNumber(sal_uInt8* &rBuf, sal_uInt32& nSecurityCount)
                     nSecurityCount = 1;         // error parsing the bounding box values
                 else if ( bValid )
                 {
-                    const bool bFail = o3tl::checked_multiply(nRetValue, 10L, nRetValue);
+                    const bool bFail = o3tl::checked_multiply<long>(nRetValue, 10, nRetValue) ||
+                                       o3tl::checked_add<long>(nRetValue, *rBuf - '0', nRetValue);
                     if (bFail)
                         return 0;
-                    nRetValue += *rBuf - '0';
                 }
                 break;
         }
