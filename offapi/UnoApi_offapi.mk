@@ -228,6 +228,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/i18n,\
 	LocaleCalendar \
 	LocaleCalendar2 \
 	LocaleData \
+	LocaleData2 \
 	NativeNumberSupplier \
 	NumberFormatMapper \
 	OrdinalSuffix \
@@ -2738,6 +2739,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/i18n,\
 	LineBreakResults \
 	LineBreakUserOptions \
 	LocaleDataItem \
+	LocaleDataItem2 \
 	LocaleItem \
 	Months \
 	MultipleCharsOutputException \
@@ -2777,6 +2779,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/i18n,\
 	XLocaleData2 \
 	XLocaleData3 \
 	XLocaleData4 \
+	XLocaleData5 \
 	XNativeNumberSupplier \
 	XNumberFormatCode \
 	XOrdinalSuffix \

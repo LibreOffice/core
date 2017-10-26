@@ -1,0 +1,41 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_i18n_XLocaleData5_idl__
+#define __com_sun_star_i18n_XLocaleData5_idl__
+
+#include <com/sun/star/i18n/XLocaleData4.idl>
+
+
+module com { module sun { module star { module i18n {
+
+
+/**
+    Access locale specific data.
+
+    <p> Derived from ::com::sun::star::i18n::XLocaleData4
+    this provides an additional method to return an instance of
+    com::sun::star::i18n::LocaleDataItem2
+
+    @since LibreOffice 6.0
+ */
+
+interface XLocaleData5 : com::sun::star::i18n::XLocaleData4
+{
+    /** returns an instance of com::sun::star::i18n::LocaleDataItem2 for
+        a Locale.
+     */
+    com::sun::star::i18n::LocaleDataItem2   getLocaleItem2( [in] com::sun::star::lang::Locale Locale );
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
