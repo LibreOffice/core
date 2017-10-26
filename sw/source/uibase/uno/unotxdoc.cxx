@@ -3735,7 +3735,7 @@ void SwXTextDocument::paintDialog(const vcl::DialogID& rDialogID, VirtualDevice&
 
     Dialog* pDlg = static_cast<Dialog*>(pChild->GetWindow());
     // register the instance so that vcl::Dialog can emit LOK callbacks
-    pDlg->registerDialogRenderable(this);
+    pDlg->registerDialogRenderable(this, rDialogID);
     pDlg->paintDialog(rDevice);
     const Size aSize = pDlg->GetOptimalSize();
     nWidth = aSize.getWidth();

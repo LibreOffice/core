@@ -63,7 +63,8 @@ private:
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag = InitFlag::Default );
-    OUString               maID; // identifier for this dialog
+    OUString               maID; // Dialog ID (UNO name) for this dialog (set
+                                 // and used by LOK for now)
 
 public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
@@ -74,7 +75,7 @@ public:
                    Size    PaintActiveFloatingWindow(VirtualDevice& rDevice);
 
     /// Necessary to register dialog renderable instance to emit LOK callbacks
-    void registerDialogRenderable(vcl::IDialogRenderable* pDialogRenderable);
+    void registerDialogRenderable(vcl::IDialogRenderable* pDialogRenderable, const OUString& aDialogId);
     /// Paints the current dialog to the given virtual device
     void paintDialog(VirtualDevice& rDevice);
     void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
