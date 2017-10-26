@@ -7294,7 +7294,14 @@ bool WW8PLCF_HdFt::GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rSta
         SAL_WARN("sw.ww8", "End " << nEnd << " before Start " << rStart);
         return false;
     }
-    rLen = nEnd - rStart;
+
+    bool bFail = o3tl::checked_sub(nEnd, rStart, rLen);
+    if (bFail)
+    {
+        SAL_WARN("sw.ww8", "broken offset, ignoring");
+        return false;
+    }
+
     aPLCF.advance();
 
     return true;
