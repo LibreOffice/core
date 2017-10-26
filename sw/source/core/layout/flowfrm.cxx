@@ -523,7 +523,7 @@ bool SwFlowFrame::PasteTree( SwFrame *pStart, SwLayoutFrame *pParent, SwFrame *p
         else
             bRet = true;
 
-        nGrowVal += aRectFnSet.GetHeight(pFloat->FrameRA());
+        nGrowVal += aRectFnSet.GetHeight(pFloat->getSwFrame());
         if ( pFloat->GetNext() )
             pFloat = pFloat->GetNext();
         else
@@ -1555,7 +1555,7 @@ SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPageGrid_(
                 SwRectFnSet aRectFnSet(&m_rThis);
                 const SwTwips nBodyPrtTop = aRectFnSet.GetPrtTop(*pBodyFrame);
                 const SwTwips nProposedPrtTop =
-                        aRectFnSet.YInc( aRectFnSet.GetTop(m_rThis.FrameRA()),
+                        aRectFnSet.YInc( aRectFnSet.GetTop(m_rThis.getSwFrame()),
                                            _nUpperSpaceWithoutGrid );
 
                 const SwTwips nSpaceAbovePrtTop =
@@ -1571,7 +1571,7 @@ SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPageGrid_(
 
                 const SwTwips nNewUpperSpace =
                         aRectFnSet.YDiff( nNewPrtTop,
-                                            aRectFnSet.GetTop(m_rThis.FrameRA()) );
+                                            aRectFnSet.GetTop(m_rThis.getSwFrame()) );
 
                 nUpperSpaceAmountConsideredForPageGrid =
                         nNewUpperSpace - _nUpperSpaceWithoutGrid;
@@ -1915,7 +1915,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
             // silly things...
             SwRectFnSet aRectFnSet(pOldBoss);
             SwSaveFootnoteHeight aHeight( pOldBoss,
-                aRectFnSet.GetBottom(pOldBoss->FrameRA()) );
+                aRectFnSet.GetBottom(pOldBoss->getSwFrame()) );
             SwContentFrame* pStart = m_rThis.IsContentFrame() ?
                 static_cast<SwContentFrame*>(&m_rThis) : static_cast<SwLayoutFrame&>(m_rThis).ContainsContent();
             OSL_ENSURE( pStart || ( m_rThis.IsTabFrame() && !static_cast<SwTabFrame&>(m_rThis).Lower() ),

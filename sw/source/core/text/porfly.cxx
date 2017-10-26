@@ -216,10 +216,10 @@ void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
         rInf.GetTextFrame()->SwitchHorizontalToVertical(aRepaintRect);
 
     if((m_pFly->IsCompletePaint() ||
-            m_pFly->FrameRA().IsOver(aRepaintRect)) &&
+            m_pFly->getSwFrame().IsOver(aRepaintRect)) &&
             SwFlyFrame::IsPaint(m_pFly->GetVirtDrawObj(), m_pFly->getRootFrame()->GetCurrShell()))
     {
-        SwRect aRect(m_pFly->FrameRA());
+        SwRect aRect(m_pFly->getSwFrame());
         if(!m_pFly->IsCompletePaint())
             aRect.Intersection_(aRepaintRect);
 
@@ -358,12 +358,12 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
 
             SwFormatHoriOrient aHori(pTextBox->GetHoriOrient());
             aHori.SetHoriOrient(css::text::HoriOrientation::NONE);
-            sal_Int32 nLeft = aTextRectangle.getX() - rFrame.FrameRA().Left();
+            sal_Int32 nLeft = aTextRectangle.getX() - rFrame.getSwFrame().Left();
             aHori.SetPos(nLeft);
 
             SwFormatVertOrient aVert(pTextBox->GetVertOrient());
             aVert.SetVertOrient(css::text::VertOrientation::NONE);
-            sal_Int32 nTop = aTextRectangle.getY() - rFrame.FrameRA().Top() - nFlyAsc;
+            sal_Int32 nTop = aTextRectangle.getY() - rFrame.getSwFrame().Top() - nFlyAsc;
             aVert.SetPos(nTop);
 
             pTextBox->LockModify();

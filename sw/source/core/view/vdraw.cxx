@@ -142,7 +142,7 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
             rSdrView.setHideDraw( !pPrintData->IsPrintDraw() );
         }
         basegfx::B2IRectangle const pageFrame(
-            vcl::unotools::b2IRectangleFromRectangle(rPageFrame.FrameRA().SVRect()));
+            vcl::unotools::b2IRectangleFromRectangle(rPageFrame.getSwFrame().SVRect()));
         GetPageView()->DrawLayer(_nLayerID, pOutDev, pRedirector, aPaintRect.SVRect(), &pageFrame);
         pOutDev->Pop();
 
@@ -180,7 +180,7 @@ bool SwViewShellImp::IsDragPossible( const Point &rPoint )
         aRect.Union( aTmp );
     }
     else
-        aRect = GetShell()->GetLayout()->FrameRA();
+        aRect = GetShell()->GetLayout()->getSwFrame();
 
     aRect.Top(    aRect.Top()    - FUZZY_EDGE );
     aRect.Bottom( aRect.Bottom() + FUZZY_EDGE );

@@ -163,12 +163,12 @@ void SwAnchoredObject::SetPageFrame( SwPageFrame* _pNewPageFrame )
 
 SwTwips SwAnchoredObject::GetRelCharX( const SwFrame* pFrame ) const
 {
-    return maLastCharRect.Left() - pFrame->FrameRA().Left();
+    return maLastCharRect.Left() - pFrame->getSwFrame().Left();
 }
 
 SwTwips SwAnchoredObject::GetRelCharY( const SwFrame* pFrame ) const
 {
-    return maLastCharRect.Bottom() - pFrame->FrameRA().Top();
+    return maLastCharRect.Bottom() - pFrame->getSwFrame().Top();
 }
 
 void SwAnchoredObject::AddLastCharY( long nDiff )
@@ -783,7 +783,7 @@ bool SwAnchoredObject::OverlapsPrevColumn() const
             SwRect aChkRect;
             while ( pTmpColFrame )
             {
-                aChkRect.Union( pTmpColFrame->FrameRA() );
+                aChkRect.Union( pTmpColFrame->getSwFrame() );
                 pTmpColFrame = pTmpColFrame->GetPrev();
             }
             bOverlapsPrevColumn = GetObjRect().IsOver( aChkRect );
@@ -805,7 +805,7 @@ Point SwAnchoredObject::GetRelPosToAnchorFrame() const
 
     assert(GetAnchorFrame());
     aRelPos = GetObjRect().Pos();
-    aRelPos -= GetAnchorFrame()->FrameRA().Pos();
+    aRelPos -= GetAnchorFrame()->getSwFrame().Pos();
 
     return aRelPos;
 }
@@ -848,12 +848,12 @@ Point SwAnchoredObject::GetRelPosToPageFrame( const bool _bFollowTextFlow,
     }
     if ( pFrame->IsCellFrame() )
     {
-        aRelPos -= ( pFrame->FrameRA().Pos() + pFrame->PrintRA().Pos() );
+        aRelPos -= ( pFrame->getSwFrame().Pos() + pFrame->getSwPrint().Pos() );
         _obRelToTableCell = true;
     }
     else
     {
-        aRelPos -= pFrame->FrameRA().Pos();
+        aRelPos -= pFrame->getSwFrame().Pos();
     }
 
     return aRelPos;

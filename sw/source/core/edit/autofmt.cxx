@@ -251,10 +251,10 @@ SwTextFrame* SwAutoFormat::GetFrame( const SwTextNode& rTextNd ) const
     if( m_aFlags.bAFormatByInput && !pFrame->IsValid() )
     {
         DisableCallbackAction a(const_cast<SwRootFrame&>(*pFrame->getRootFrame()));
-        SwRect aTmpFrame( pFrame->FrameRA() );
-        SwRect aTmpPrt( pFrame->PrintRA() );
+        SwRect aTmpFrame( pFrame->getSwFrame() );
+        SwRect aTmpPrt( pFrame->getSwPrint() );
         pFrame->Calc(pFrame->getRootFrame()->GetCurrShell()->GetOut());
-        if( pFrame->FrameRA() != aTmpFrame || pFrame->PrintRA() != aTmpPrt ||
+        if( pFrame->getSwFrame() != aTmpFrame || pFrame->getSwPrint() != aTmpPrt ||
             ( pFrame->IsTextFrame() && !const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pFrame))->Paint().IsEmpty() ) )
             pFrame->SetCompletePaint();
     }
@@ -652,7 +652,7 @@ bool SwAutoFormat::DoTable()
             {
                 eHori = text::HoriOrientation::NONE;
                 // then - as last - we need to add the current frame width into the array
-                aPosArr.push_back( static_cast<sal_uInt16>(m_pCurTextFrame->FrameRA().Width()) );
+                aPosArr.push_back( static_cast<sal_uInt16>(m_pCurTextFrame->getSwFrame().Width()) );
             }
             else
                 eHori = text::HoriOrientation::LEFT;
@@ -1374,7 +1374,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
     bool bBreak = true;
 
     // first, determine current indentation and frame width
-    SwTwips nFrameWidth = m_pCurTextFrame->PrintRA().Width();
+    SwTwips nFrameWidth = m_pCurTextFrame->getSwPrint().Width();
     SwTwips nLeftTextPos;
     {
         sal_Int32 nPos(0);

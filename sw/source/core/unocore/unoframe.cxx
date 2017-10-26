@@ -2242,7 +2242,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             if ( pTmpFrame )
             {
                 OSL_ENSURE( pTmpFrame->IsValid(), "frame not valid" );
-                const SwRect &rRect = pTmpFrame->FrameRA();
+                const SwRect &rRect = pTmpFrame->getSwFrame();
                 Size aMM100Size = OutputDevice::LogicToLogic(
                         Size( rRect.Width(), rRect.Height() ),
                         MapMode( MapUnit::MapTwip ), MapMode( MapUnit::Map100thMM ));
