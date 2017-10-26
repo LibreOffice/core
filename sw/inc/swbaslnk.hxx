@@ -26,16 +26,16 @@ class SwContentNode;
 
 class SwBaseLink : public ::sfx2::SvBaseLink
 {
-    SwContentNode* pContentNode;
-    bool bSwapIn : 1;
-    bool bNoDataFlag : 1;
-    bool bIgnoreDataChanged : 1;
+    SwContentNode* m_pContentNode;
+    bool m_bInSwapIn : 1;   ///< Prevent recursion and notifications during SwapIn
+    bool m_bNoDataFlag : 1;
+    bool m_bIgnoreDataChanged : 1;
 
 public:
 
     SwBaseLink( SfxLinkUpdateMode nMode, SotClipboardFormatId nFormat, SwContentNode* pNode = nullptr )
-        : ::sfx2::SvBaseLink( nMode, nFormat ), pContentNode( pNode ),
-        bSwapIn( false ), bNoDataFlag( false ), bIgnoreDataChanged( false )
+        : ::sfx2::SvBaseLink( nMode, nFormat ), m_pContentNode( pNode ),
+        m_bInSwapIn( false ), m_bNoDataFlag( false ), m_bIgnoreDataChanged( false )
     {}
     virtual ~SwBaseLink() override;
 
@@ -58,9 +58,9 @@ public:
     virtual bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, sal_Int32 nStt = 0,
                             sal_Int32 nEnd = -1 ) const;
 
-    void SetNoDataFlag() { bNoDataFlag = true; }
-    bool ChkNoDataFlag() { const bool bRet = bNoDataFlag; bNoDataFlag = false; return bRet; }
-    bool IsNoDataFlag() const { return bNoDataFlag; }
+    void SetNoDataFlag() { m_bNoDataFlag = true; }
+    bool ChkNoDataFlag() { const bool bRet = m_bNoDataFlag; m_bNoDataFlag = false; return bRet; }
+    bool IsNoDataFlag() const { return m_bNoDataFlag; }
 };
 
 #endif
