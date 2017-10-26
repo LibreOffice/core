@@ -168,9 +168,9 @@ class VCL_DLLPUBLIC PDFNameElement : public PDFElement
 {
     OString m_aValue;
     /// Offset after the '/' token.
-    sal_uInt64 m_nLocation;
+    sal_uInt64 m_nLocation = 0;
     /// Length till the next token start.
-    sal_uInt64 m_nLength;
+    sal_uInt64 m_nLength = 0;
 public:
     PDFNameElement();
     bool Read(SvStream& rStream) override;
@@ -234,16 +234,16 @@ enum class XRefEntryType
 /// An entry in a cross-reference stream.
 struct XRefEntry
 {
-    XRefEntryType m_eType;
+    XRefEntryType m_eType = XRefEntryType::NOT_COMPRESSED;
     /**
      * Non-compressed: The byte offset of the object, starting from the
      * beginning of the file.
      * Compressed: The object number of the object stream in which this object is
      * stored.
      */
-    sal_uInt64 m_nOffset;
+    sal_uInt64 m_nOffset = 0;
     /// Are changed as part of an incremental update?.
-    bool m_bDirty;
+    bool m_bDirty = false;
 
     XRefEntry();
 };
@@ -308,16 +308,16 @@ class VCL_DLLPUBLIC PDFDocument
     std::map<size_t, PDFTrailerElement*> m_aOffsetTrailers;
     /// List of EOF offsets we know.
     std::vector<size_t> m_aEOFs;
-    PDFTrailerElement* m_pTrailer;
+    PDFTrailerElement* m_pTrailer = nullptr;
     /// When m_pTrailer is nullptr, this can still have a dictionary.
-    PDFObjectElement* m_pXRefStream;
+    PDFObjectElement* m_pXRefStream = nullptr;
     /// All editing takes place in this buffer, if it happens.
     SvMemoryStream m_aEditBuffer;
 
     /// Suggest a minimal, yet free signature ID to use for the next signature.
     sal_uInt32 GetNextSignature();
     /// Write the signature object as part of signing.
-    sal_Int32 WriteSignatureObject(const OUString& rDescription, bool bAdES, sal_uInt64& rLastByteRangeOffset, sal_Int64& rSignatureContentOffset);
+    sal_Int32 WriteSignatureObject(const OUString& rDescription, bool bAdES, sal_uInt64& rLastByteRangeOffset, sal_Int64& rContentOffset);
     /// Write the appearance object as part of signing.
     sal_Int32 WriteAppearanceObject();
     /// Write the annot object as part of signing.
@@ -354,7 +354,7 @@ public:
     /// Access to the input document, even after the input stream is gone.
     SvMemoryStream& GetEditBuffer();
     /// Tokenize elements from current offset.
-    bool Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< std::unique_ptr<PDFElement> >& rElements, PDFObjectElement* pObject);
+    bool Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< std::unique_ptr<PDFElement> >& rElements, PDFObjectElement* pObjectElement);
     /// Register an object (owned directly or indirectly by m_aElements) as a provider for a given ID.
     void SetIDObject(size_t nID, PDFObjectElement* pObject);
     //@}
