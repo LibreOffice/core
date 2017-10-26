@@ -76,10 +76,9 @@ private:
     void SelectHdl(const void *);
 };
 
-class ScTpSubTotalGroup1 : public ScTpSubTotalGroup
+class ScTpSubTotalGroup1 final : public ScTpSubTotalGroup
 {
     friend class VclPtr<ScTpSubTotalGroup1>;
-protected:
     ScTpSubTotalGroup1( vcl::Window*              pParent,
                         const SfxItemSet&    rArgSet );
 
@@ -92,10 +91,9 @@ public:
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 };
 
-class ScTpSubTotalGroup2 : public ScTpSubTotalGroup
+class ScTpSubTotalGroup2 final : public ScTpSubTotalGroup
 {
     friend class VclPtr<ScTpSubTotalGroup2>;
-protected:
     ScTpSubTotalGroup2( vcl::Window*              pParent,
                         const SfxItemSet&    rArgSet );
 
@@ -108,10 +106,9 @@ public:
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 };
 
-class ScTpSubTotalGroup3 : public ScTpSubTotalGroup
+class ScTpSubTotalGroup3 final : public ScTpSubTotalGroup
 {
     friend class VclPtr<ScTpSubTotalGroup3>;
-protected:
     ScTpSubTotalGroup3( vcl::Window*              pParent,
                         const SfxItemSet&    rArgSet );
 
@@ -124,13 +121,8 @@ public:
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 };
 
-class ScTpSubTotalOptions : public SfxTabPage
+class ScTpSubTotalOptions final : public SfxTabPage
 {
-    friend class VclPtr<ScTpSubTotalOptions>;
-protected:
-    ScTpSubTotalOptions( vcl::Window*             pParent,
-                         const SfxItemSet&  rArgSet );
-
 public:
     virtual ~ScTpSubTotalOptions() override;
     virtual void        dispose() override;
@@ -140,6 +132,16 @@ public:
     virtual void        Reset       ( const SfxItemSet* rArgSet ) override;
 
 private:
+    friend class VclPtr<ScTpSubTotalOptions>;
+    ScTpSubTotalOptions( vcl::Window*             pParent,
+                         const SfxItemSet&  rArgSet );
+
+    void Init                   ();
+    void FillUserSortListBox    ();
+
+    // Handler ------------------------
+    DECL_LINK( CheckHdl, Button*, void );
+
     VclPtr<CheckBox>    pBtnPagebreak;
     VclPtr<CheckBox>    pBtnCase;
     VclPtr<CheckBox>    pBtnSort;
@@ -149,18 +151,10 @@ private:
     VclPtr<CheckBox>    pBtnFormats;
     VclPtr<CheckBox>    pBtnUserDef;
     VclPtr<ListBox>     pLbUserDef;
-
     ScViewData*             pViewData;
     ScDocument*             pDoc;
-    const sal_uInt16            nWhichSubTotals;
+    const sal_uInt16        nWhichSubTotals;
     const ScSubTotalParam&  rSubTotalData;
-
-private:
-    void Init                   ();
-    void FillUserSortListBox    ();
-
-    // Handler ------------------------
-    DECL_LINK( CheckHdl, Button*, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TPSUBT_HXX

@@ -131,9 +131,8 @@ public:
     virtual DataCellIterator iterateCells() = 0;
 };
 
-class DataRangeByColumnIterator : public DataRangeIterator
+class DataRangeByColumnIterator final : public DataRangeIterator
 {
-protected:
     SCCOL mCol;
 
 public:
@@ -147,9 +146,8 @@ public:
     virtual DataCellIterator iterateCells() override;
 };
 
-class DataRangeByRowIterator : public DataRangeIterator
+class DataRangeByRowIterator final : public DataRangeIterator
 {
-protected:
     SCROW mRow;
 
 public:

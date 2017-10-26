@@ -97,10 +97,8 @@ private:
     std::function<void (ScEditWindow&)> m_GetFocusLink;
 };
 
-class SC_DLLPUBLIC ScExtIButton : public ImageButton
+class SC_DLLPUBLIC ScExtIButton final : public ImageButton
 {
-private:
-
     Idle            aIdle;
     VclPtr<PopupMenu>        pPopupMenu;
     Link<ScExtIButton&,void> aMLink;
@@ -108,8 +106,6 @@ private:
     OString         aSelectedIdent;
 
                     DECL_DLLPRIVATE_LINK( TimerHdl, Timer*, void );
-
-protected:
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt) override;

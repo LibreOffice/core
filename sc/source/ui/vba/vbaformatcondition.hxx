@@ -28,15 +28,15 @@
 #include "vbacondition.hxx"
 
 typedef ScVbaCondition< ov::excel::XFormatCondition >  ScVbaFormatCondition_BASE;
-class ScVbaFormatCondition : public ScVbaFormatCondition_BASE
+class ScVbaFormatCondition final : public ScVbaFormatCondition_BASE
 {
-protected:
     OUString msStyleName;
     css::uno::Reference< css::sheet::XSheetConditionalEntry > mxSheetConditionalEntry;
     css::uno::Reference< css::sheet::XSheetConditionalEntries > mxSheetConditionalEntries;
     css::uno::Reference< ov::excel::XFormatConditions> moFormatConditions;
     css::uno::Reference< ov::excel::XStyle > mxStyle;
     css::uno::Reference< css::beans::XPropertySet > mxParentRangePropertySet;
+
 public:
     /// @throws css::uno::RuntimeException
     /// @throws css::script::BasicErrorException

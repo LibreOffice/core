@@ -25,9 +25,8 @@
 enum class SdrInventor : sal_uInt32;
 
 /** Draw Control */
-class FuConstUnoControl : public FuConstruct
+class FuConstUnoControl final : public FuConstruct
 {
-protected:
     SdrInventor nInventor;
     sal_uInt16  nIdentifier;
 

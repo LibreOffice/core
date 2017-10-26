@@ -236,7 +236,7 @@ public:
 };
 
 /** A group object. */
-class XclImpGroupObj : public XclImpDrawObjBase
+class XclImpGroupObj final : public XclImpDrawObjBase
 {
 public:
     explicit            XclImpGroupObj( const XclImpRoot& rRoot );
@@ -244,7 +244,7 @@ public:
     /** Tries to insert the drawing object into this or a nested group. */
     bool                TryInsert( XclImpDrawObjRef const & xDrawObj );
 
-protected:
+private:
     /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
     virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
@@ -256,18 +256,17 @@ protected:
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
     virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
 
-protected:
     XclImpDrawObjVector maChildren;         /// Grouped objects.
     sal_uInt16          mnFirstUngrouped;   /// Object identifier of first object not grouped into this group.
 };
 
 /** A line object. */
-class XclImpLineObj : public XclImpDrawObjBase
+class XclImpLineObj final : public XclImpDrawObjBase
 {
 public:
     explicit            XclImpLineObj( const XclImpRoot& rRoot );
 
-protected:
+private:
     /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
     virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
@@ -277,7 +276,6 @@ protected:
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
     virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
 
-protected:
     XclObjLineData      maLineData;     /// BIFF5 line formatting.
     sal_uInt16          mnArrows;       /// Line arrows.
     sal_uInt8           mnStartPoint;   /// Starting point.
@@ -323,12 +321,12 @@ protected:
 };
 
 /** An arc object. */
-class XclImpArcObj : public XclImpDrawObjBase
+class XclImpArcObj final : public XclImpDrawObjBase
 {
 public:
     explicit            XclImpArcObj( const XclImpRoot& rRoot );
 
-protected:
+private:
     /** Reads the contents of the a BIFF3 OBJ record from the passed stream. */
     virtual void        DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the a BIFF4 OBJ record from the passed stream. */
@@ -338,19 +336,18 @@ protected:
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
     virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
 
-protected:
     XclObjFillData      maFillData;     /// BIFF5 fill formatting.
     XclObjLineData      maLineData;     /// BIFF5 line formatting.
     sal_uInt8           mnQuadrant;     /// Visible quadrant of the circle.
 };
 
 /** A polygon object. */
-class XclImpPolygonObj : public XclImpRectObj
+class XclImpPolygonObj final : public XclImpRectObj
 {
 public:
     explicit            XclImpPolygonObj( const XclImpRoot& rRoot );
 
-protected:
+private:
     /** Reads the COORDLIST record following the OBJ record. */
     void                ReadCoordList( XclImpStream& rStrm );
 
@@ -361,7 +358,6 @@ protected:
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
     virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
 
-protected:
     typedef std::vector< Point > PointVector;
     PointVector         maCoords;       /// Coordinates relative to bounding rectangle.
     sal_uInt16          mnPolyFlags;    /// Additional flags.
@@ -573,12 +569,12 @@ protected:
 };
 
 /** An option button control. */
-class XclImpOptionButtonObj : public XclImpCheckBoxObj
+class XclImpOptionButtonObj final : public XclImpCheckBoxObj
 {
 public:
     explicit            XclImpOptionButtonObj( const XclImpRoot& rRoot );
 
-protected:
+private:
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
     virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
@@ -590,7 +586,6 @@ protected:
     /** Returns the type of the macro event to be created. */
     virtual XclTbxEventType DoGetEventType() const override;
 
-protected:
     sal_uInt16          mnNextInGroup;      /// Next option button in a group.
     sal_uInt16          mnFirstInGroup;     /// 1 = Button is the first in a group.
 };
@@ -611,12 +606,12 @@ protected:
 };
 
 /** A groupbox control. */
-class XclImpGroupBoxObj : public XclImpTbxObjBase
+class XclImpGroupBoxObj final : public XclImpTbxObjBase
 {
 public:
     explicit            XclImpGroupBoxObj( const XclImpRoot& rRoot );
 
-protected:
+private:
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
     virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
@@ -628,7 +623,6 @@ protected:
     /** Returns the type of the macro event to be created. */
     virtual XclTbxEventType DoGetEventType() const override;
 
-protected:
     sal_uInt16          mnGroupBoxFlags;
 };
 
@@ -648,12 +642,12 @@ protected:
 };
 
 /** An edit control. */
-class XclImpEditObj : public XclImpTbxObjBase
+class XclImpEditObj final : public XclImpTbxObjBase
 {
 public:
     explicit            XclImpEditObj( const XclImpRoot& rRoot );
 
-protected:
+private:
     /** REturns true, if the field type is numeric. */
     bool                IsNumeric() const;
 
@@ -668,7 +662,6 @@ protected:
     /** Returns the type of the macro event to be created. */
     virtual XclTbxEventType DoGetEventType() const override;
 
-protected:
     sal_uInt16          mnContentType;
     sal_uInt16          mnMultiLine;
     sal_uInt16          mnScrollBar;
@@ -754,12 +747,12 @@ protected:
 };
 
 /** A listbox control. */
-class XclImpListBoxObj : public XclImpTbxObjListBase
+class XclImpListBoxObj final : public XclImpTbxObjListBase
 {
 public:
     explicit            XclImpListBoxObj( const XclImpRoot& rRoot );
 
-protected:
+private:
     /** Reads listbox settings and selection. */
     void                ReadFullLbsData( XclImpStream& rStrm, std::size_t nRecLeft );
 
@@ -774,17 +767,16 @@ protected:
     /** Returns the type of the macro event to be created. */
     virtual XclTbxEventType DoGetEventType() const override;
 
-protected:
     ScfUInt8Vec         maSelection;
 };
 
 /** A dropdown listbox control. */
-class XclImpDropDownObj : public XclImpTbxObjListBase
+class XclImpDropDownObj final : public XclImpTbxObjListBase
 {
 public:
     explicit            XclImpDropDownObj( const XclImpRoot& rRoot );
 
-protected:
+private:
     /** Returns the type of the dropdown control. */
     sal_uInt16          GetDropDownType() const;
 
@@ -802,7 +794,6 @@ protected:
     /** Returns the type of the macro event to be created. */
     virtual XclTbxEventType DoGetEventType() const override;
 
-protected:
     sal_uInt16          mnLeft;
     sal_uInt16          mnTop;
     sal_uInt16          mnRight;

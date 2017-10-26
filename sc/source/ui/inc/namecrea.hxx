@@ -25,9 +25,8 @@
 #include <vcl/fixed.hxx>
 #include "scui_def.hxx"
 
-class ScNameCreateDlg : public ModalDialog
+class ScNameCreateDlg final : public ModalDialog
 {
-protected:
     VclPtr<CheckBox> m_pTopBox;
     VclPtr<CheckBox> m_pLeftBox;
     VclPtr<CheckBox> m_pBottomBox;

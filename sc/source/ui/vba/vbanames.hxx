@@ -30,12 +30,11 @@ class ScDocShell;
 
 typedef CollTestImplHelper< ov::excel::XNames > ScVbaNames_BASE;
 
-class ScVbaNames : public ScVbaNames_BASE
+class ScVbaNames final : public ScVbaNames_BASE
 {
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::sheet::XNamedRanges > mxNames;
 
-protected:
     const css::uno::Reference< css::frame::XModel >&  getModel() { return mxModel; }
 
 public:

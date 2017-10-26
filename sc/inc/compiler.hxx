@@ -92,13 +92,12 @@ class CompileFormulaContext;
 
 // constants and data types internal to compiler
 
-struct ScRawToken
+struct ScRawToken final
 {
     friend class ScCompiler;
     // Friends that use a temporary ScRawToken on the stack (and therefore need
     // the private dtor) and know what they're doing..
     friend class ScTokenArray;
-protected:
     OpCode              eOp;
     formula::StackVar   eType;  // type of data; this determines how the unions are used
 public:
