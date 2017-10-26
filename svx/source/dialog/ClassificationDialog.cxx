@@ -172,8 +172,9 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
         {
             aClassificationResults.push_back({ pClassificationField->meType, pClassificationField->msFullClassName, sDisplayString, rSection.mnParagraph });
         }
-        else
+        else if (!sDisplayString.isEmpty())
         {
+            // When the user deletes everything, EditEng still gives us an empty section.
             aClassificationResults.push_back({ ClassificationType::TEXT, pClassificationField->msFullClassName, sDisplayString, rSection.mnParagraph });
         }
     }
