@@ -423,6 +423,47 @@ LocaleDataImpl::getLocaleItem( const Locale& rLocale )
     }
 }
 
+
+LocaleDataItem2 SAL_CALL
+LocaleDataImpl::getLocaleItem2( const Locale& rLocale )
+{
+    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getLocaleItem" ));
+
+    if ( func ) {
+        sal_Int16 dataItemCount = 0;
+        sal_Unicode **dataItem = func(dataItemCount);
+
+        assert(dataItemCount >= 18);
+
+        LocaleDataItem2 item(
+                dataItem[0],
+                dataItem[1],
+                dataItem[2],
+                dataItem[3],
+                dataItem[4],
+                dataItem[5],
+                dataItem[6],
+                dataItem[7],
+                dataItem[8],
+                dataItem[9],
+                dataItem[10],
+                dataItem[11],
+                dataItem[12],
+                dataItem[13],
+                dataItem[14],
+                dataItem[15],
+                dataItem[16],
+                dataItem[17],
+                dataItemCount >= 19 ? dataItem[18] : OUString()
+                );
+        return item;
+    }
+    else {
+        LocaleDataItem2 item1;
+        return item1;
+    }
+}
+
 #ifndef DISABLE_DYNLOADING
 
 extern "C" { static void SAL_CALL thisModule() {} }
@@ -1560,7 +1601,10 @@ sal_Bool SAL_CALL LocaleDataImpl::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 LocaleDataImpl::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet { "com.sun.star.i18n.LocaleData" };
+    Sequence< OUString > aRet {
+        "com.sun.star.i18n.LocaleData",
+        "com.sun.star.i18n.LocaleData2"
+    };
     return aRet;
 }
 
