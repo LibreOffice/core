@@ -555,9 +555,8 @@ public:
     inline ConvertDataClass Class() const;
 };
 
-class ConvertDataLinear : public ConvertData
+class ConvertDataLinear final : public ConvertData
 {
-protected:
     double                  fOffs;
 public:
     inline                  ConvertDataLinear(

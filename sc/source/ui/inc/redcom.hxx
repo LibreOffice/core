@@ -25,10 +25,8 @@
 class ScDocShell;
 class AbstractSvxPostItDialog;
 
-class ScRedComDialog
+class ScRedComDialog final
 {
-private:
-
     ScChangeAction  *pChangeAction;
     ScDocShell      *pDocShell;
     OUString        aComment;
@@ -36,8 +34,6 @@ private:
 
     DECL_LINK( PrevHdl, AbstractSvxPostItDialog&, void );
     DECL_LINK( NextHdl, AbstractSvxPostItDialog&, void );
-
-protected:
 
     void    ReInit(ScChangeAction *);
     void    SelectCell();

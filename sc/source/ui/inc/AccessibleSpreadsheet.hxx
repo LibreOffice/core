@@ -56,17 +56,29 @@ class ScRangeList;
         This base class provides an implementation of the
         <code>AccessibleTable</code> service.
 */
-class ScAccessibleSpreadsheet
+class ScAccessibleSpreadsheet final
     :   public  ScAccessibleTableBase
 {
 public:
-    //=====  internal  ========================================================
     ScAccessibleSpreadsheet(
         ScAccessibleDocument* pAccDoc,
         ScTabViewShell* pViewShell,
         SCTAB   nTab,
         ScSplitPos eSplitPos);
-protected:
+
+    using ScAccessibleTableBase::disposing;
+
+    virtual void SAL_CALL disposing() override;
+
+    void CompleteSelectionChanged(bool bNewState);
+
+    void LostFocus();
+    void GotFocus();
+
+    void BoundingBoxChanged();
+    void VisAreaChanged();
+
+private:
     ScAccessibleSpreadsheet(
         ScAccessibleSpreadsheet& rParent,
         const ScRange& rRange );
@@ -81,20 +93,6 @@ protected:
 
     using ScAccessibleTableBase::IsDefunc;
 
-public:
-    using ScAccessibleTableBase::disposing;
-
-     virtual void SAL_CALL disposing() override;
-
-    void CompleteSelectionChanged(bool bNewState);
-
-    void LostFocus();
-    void GotFocus();
-
-    void BoundingBoxChanged();
-    void VisAreaChanged();
-
-private:
     ///=====  SfxListener  =====================================================
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -209,13 +207,12 @@ private:
     virtual sal_Bool SAL_CALL unselectRow( sal_Int32 row ) override;
     virtual sal_Bool SAL_CALL unselectColumn( sal_Int32 column ) override;
 
-protected:
     /// Return the object's current bounding box relative to the desktop.
     virtual tools::Rectangle GetBoundingBoxOnScreen() const override;
 
     /// Return the object's current bounding box relative to the parent object.
     virtual tools::Rectangle GetBoundingBox() const override;
-private:
+
     ScTabViewShell* mpViewShell;
     ScRangeList*    mpMarkedRanges;
     ScAccessibleDocument* mpAccDoc;

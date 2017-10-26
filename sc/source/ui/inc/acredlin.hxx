@@ -52,9 +52,8 @@ public:
     bool            bIsAcceptable;
 };
 
-class ScAcceptChgDlg : public SfxModelessDialog
+class ScAcceptChgDlg final : public SfxModelessDialog
 {
-private:
     Idle                    aSelectionIdle;
     Idle                    aReOpenIdle;
     VclPtr<PopupMenu>       m_xPopup;
@@ -107,8 +106,6 @@ private:
     DECL_LINK( CommandHdl, SvSimpleTable*, void );
     DECL_LINK( ReOpenTimerHdl, Timer*, void );
     DECL_LINK( ColCompareHdl, const SvSortData*, sal_Int32 );
-
-protected:
 
     void            RejectFiltered();
     void            AcceptFiltered();

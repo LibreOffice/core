@@ -33,19 +33,18 @@ class ScDocument;
 
 typedef InheritedHelperInterfaceWeakImpl< ov::excel::XInterior > ScVbaInterior_BASE;
 
-class ScVbaInterior :  public ScVbaInterior_BASE
+class ScVbaInterior final :  public ScVbaInterior_BASE
 {
     css::uno::Reference< css::beans::XPropertySet > m_xProps;
     ScDocument* m_pScDoc;
     Color m_aPattColor;
     sal_Int32 m_nPattern;
 
-        css::uno::Reference< css::container::XIndexAccess > getPalette();
+    css::uno::Reference< css::container::XIndexAccess > getPalette();
     css::uno::Reference< css::container::XNameContainer > GetAttributeContainer();
     static css::uno::Any SetAttributeData( sal_Int32 nValue );
     static sal_Int32 GetAttributeData( css::uno::Any const & aValue );
     Color GetBackColor();
-protected:
     static Color GetPatternColor( const Color& rPattColor, const Color& rBackColor, sal_uInt32 nXclPattern );
     static Color GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt8 nTrans );
     static sal_uInt8 GetMixedColorComp( sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt8 nTrans );
@@ -54,6 +53,7 @@ protected:
     css::uno::Any GetUserDefinedAttributes( const OUString& sName );
     void SetUserDefinedAttributes( const OUString& sName, const css::uno::Any& aValue );
     void SetMixedColor();
+
 public:
         /// @throws css::lang::IllegalArgumentException
         ScVbaInterior( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext,

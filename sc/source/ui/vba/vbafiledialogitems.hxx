@@ -16,9 +16,8 @@
 
 typedef CollTestImplHelper< ov::excel::XFileDialogSelectedItems > FileDialogSelectedItems_BASE;
 
-class ScVbaFileDialogSelectedItems : public FileDialogSelectedItems_BASE
+class ScVbaFileDialogSelectedItems final : public FileDialogSelectedItems_BASE
 {
-protected:
     const std::vector<OUString> m_sItems;
 public:
     ScVbaFileDialogSelectedItems( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const std::vector<OUString>& sItems);
