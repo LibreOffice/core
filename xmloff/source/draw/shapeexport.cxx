@@ -4251,10 +4251,11 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                         }
                     }
                     break;
+                    case EAS_TextPreRotateAngle :
                     case EAS_TextRotateAngle :
                     {
                         double fTextRotateAngle = 0;
-                        if ( rGeoProp.Value >>= fTextRotateAngle )
+                        if ( ( rGeoProp.Value >>= fTextRotateAngle ) && fTextRotateAngle != 0 )
                         {
                             ::sax::Converter::convertDouble(
                                     aStrBuffer, fTextRotateAngle );
