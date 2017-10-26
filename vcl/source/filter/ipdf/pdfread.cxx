@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "pdfread.hxx"
+#include <pdfread.hxx>
 
 #include <config_features.h>
 
@@ -56,7 +56,8 @@ double pointToPixel(double fPoint)
 }
 
 /// Does PDF to bitmap conversion using pdfium.
-bool generatePreview(SvStream& rStream, Graphic& rGraphic)
+bool generatePreview(SvStream& rStream, Bitmap& rBitmap,
+                     sal_uInt64 nPos, sal_uInt64 nSize)
 {
     FPDF_LIBRARY_CONFIG aConfig;
     aConfig.version = 2;
@@ -67,7 +68,8 @@ bool generatePreview(SvStream& rStream, Graphic& rGraphic)
 
     // Read input into a buffer.
     SvMemoryStream aInBuffer;
-    aInBuffer.WriteStream(rStream);
+    rStream.Seek(nPos);
+    aInBuffer.WriteStream(rStream, nSize);
 
     // Load the buffer using pdfium.
     FPDF_DOCUMENT pPdfDocument = FPDF_LoadMemDocument(aInBuffer.GetData(), aInBuffer.GetSize(), /*password=*/nullptr);
@@ -103,7 +105,7 @@ bool generatePreview(SvStream& rStream, Graphic& rGraphic)
             pWriteAccess->CopyScanline(nRow, pPdfLine, ScanlineFormat::N32BitTcBgra, nStride);
         }
     }
-    rGraphic = aBitmap;
+    rBitmap = aBitmap;
 
     FPDFBitmap_Destroy(pPdfBitmap);
     FPDF_ClosePage(pPdfPage);
@@ -114,11 +116,14 @@ bool generatePreview(SvStream& rStream, Graphic& rGraphic)
 }
 
 /// Decide if PDF data is old enough to be compatible.
-bool isCompatible(SvStream& rInStream)
+bool isCompatible(SvStream& rInStream, sal_uInt64 nPos, sal_uInt64 nSize)
 {
+    if (nSize < 8)
+        return false;
+
     // %PDF-x.y
     sal_uInt8 aFirstBytes[8];
-    rInStream.Seek(STREAM_SEEK_TO_BEGIN);
+    rInStream.Seek(nPos);
     sal_uLong nRead = rInStream.ReadBytes(aFirstBytes, 8);
     if (nRead < 8)
         return false;
@@ -133,13 +138,14 @@ bool isCompatible(SvStream& rInStream)
 
 /// Takes care of transparently downgrading the version of the PDF stream in
 /// case it's too new for our PDF export.
-bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
+bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream,
+                         sal_uInt64 nPos, sal_uInt64 nSize)
 {
-    bool bCompatible = isCompatible(rInStream);
-    rInStream.Seek(STREAM_SEEK_TO_BEGIN);
+    bool bCompatible = isCompatible(rInStream, nPos, nSize);
+    rInStream.Seek( nPos );
     if (bCompatible)
         // Not converting.
-        rOutStream.WriteStream(rInStream);
+        rOutStream.WriteStream(rInStream, nSize);
     else
     {
         // Downconvert to PDF-1.4.
@@ -152,7 +158,7 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
 
         // Read input into a buffer.
         SvMemoryStream aInBuffer;
-        aInBuffer.WriteStream(rInStream);
+        aInBuffer.WriteStream(rInStream, nSize);
 
         // Load the buffer using pdfium.
         FPDF_DOCUMENT pPdfDocument = FPDF_LoadMemDocument(aInBuffer.GetData(), aInBuffer.GetSize(), /*password=*/nullptr);
@@ -174,18 +180,22 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
     return rOutStream.good();
 }
 #else
-bool generatePreview(SvStream& rStream, Graphic& rGraphic)
+bool generatePreview(SvStream& rStream, Bitmap& rBitmap
+                     sal_uInt64 nPos, sal_uInt64 nSize)
 {
     (void)rStream;
-    (void)rGraphic;
+    (void)rBitmap;
+    (void)nPos;
+    (void)nSize;
 
     return true;
 }
 
-bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
+bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream,
+                         sal_uInt64 nPos, sal_uInt64 nSize)
 {
-    rInStream.Seek(STREAM_SEEK_TO_BEGIN);
-    rOutStream.WriteStream(rInStream);
+    rInStream.Seek(nPos);
+    rOutStream.WriteStream(rInStream, nSize);
     return rOutStream.good();
 }
 #endif // HAVE_FEATURE_PDFIUM
@@ -195,24 +205,36 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
 namespace vcl
 {
 
-bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
+bool ImportPDF(SvStream& rStream, Bitmap &rBitmap,
+               css::uno::Sequence<sal_Int8> &rPdfData,
+               sal_uInt64 nPos, sal_uInt64 nSize)
 {
     // Get the preview of the first page.
-    if (!generatePreview(rStream, rGraphic))
+    if (!generatePreview(rStream, rBitmap, nPos, nSize))
         return false;
 
     // Save the original PDF stream for later use.
     SvMemoryStream aMemoryStream;
-    if (!getCompatibleStream(rStream, aMemoryStream))
+    if (!getCompatibleStream(rStream, aMemoryStream, nPos, nSize))
         return false;
 
     aMemoryStream.Seek(STREAM_SEEK_TO_END);
-    uno::Sequence<sal_Int8> aPdfData(aMemoryStream.Tell());
+    rPdfData = css::uno::Sequence<sal_Int8>(aMemoryStream.Tell());
     aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
-    aMemoryStream.ReadBytes(aPdfData.getArray(), aPdfData.getLength());
-    rGraphic.setPdfData(aPdfData);
+    aMemoryStream.ReadBytes(rPdfData.getArray(), rPdfData.getLength());
 
     return true;
+}
+
+
+bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
+{
+    uno::Sequence<sal_Int8> aPdfData;
+    Bitmap aBitmap;
+    bool bRet = ImportPDF(rStream, aBitmap, aPdfData);
+    rGraphic = aBitmap;
+    rGraphic.setPdfData(aPdfData);
+    return bRet;
 }
 
 }
