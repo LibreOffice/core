@@ -103,6 +103,111 @@ Property Get ObjectType() As String
 End Property		&apos;	ObjectType (get)
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnCreate() As String
+	OnCreate = _PropertyGet(&quot;OnCreate&quot;)
+End Property		&apos;	OnCreate (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnFocus() As String
+	OnFocus = _PropertyGet(&quot;OnFocus&quot;)
+End Property		&apos;	OnFocus (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnLoad() As String
+	OnLoad = _PropertyGet(&quot;OnLoad&quot;)
+End Property		&apos;	OnLoad (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnLoadFinished() As String
+	OnLoadFinished = _PropertyGet(&quot;OnLoadFinished&quot;)
+End Property		&apos;	OnLoadFinished (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnModifyChanged() As String
+	OnModifyChanged = _PropertyGet(&quot;OnModifyChanged&quot;)
+End Property		&apos;	OnModifyChanged (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnNew() As String
+	OnNew = _PropertyGet(&quot;OnNew&quot;)
+End Property		&apos;	OnNew (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnPrepareUnload() As String
+	OnPrepareUnload = _PropertyGet(&quot;OnPrepareUnload&quot;)
+End Property		&apos;	OnPrepareUnload (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnPrepareViewClosing() As String
+	OnPrepareViewClosing = _PropertyGet(&quot;OnPrepareViewClosing&quot;)
+End Property		&apos;	OnPrepareViewClosing (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnSave() As String
+	OnSave = _PropertyGet(&quot;OnSave&quot;)
+End Property		&apos;	OnSave (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnSaveAs() As String
+	OnSaveAs = _PropertyGet(&quot;OnSaveAs&quot;)
+End Property		&apos;	OnSaveAs (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnSaveAsDone() As String
+	OnSaveAsDone = _PropertyGet(&quot;OnSaveAsDone&quot;)
+End Property		&apos;	OnSaveAsDone (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnSaveAsFailed() As String
+	OnSaveAsFailed = _PropertyGet(&quot;OnSaveAsFailed&quot;)
+End Property		&apos;	OnSaveAsFailed (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnSaveDone() As String
+	OnSaveDone = _PropertyGet(&quot;OnSaveDone&quot;)
+End Property		&apos;	OnSaveDone (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnSaveFailed() As String
+	OnSaveFailed = _PropertyGet(&quot;OnSaveFailed&quot;)
+End Property		&apos;	OnSaveFailed (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnSubComponentClosed() As String
+	OnSubComponentClosed = _PropertyGet(&quot;OnSubComponentClosed&quot;)
+End Property		&apos;	OnSubComponentClosed (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnSubComponentOpened() As String
+	OnSubComponentOpened = _PropertyGet(&quot;OnSubComponentOpened&quot;)
+End Property		&apos;	OnSubComponentOpened (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnTitleChanged() As String
+	OnTitleChanged = _PropertyGet(&quot;OnTitleChanged&quot;)
+End Property		&apos;	OnTitleChanged (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnUnfocus() As String
+	OnUnfocus = _PropertyGet(&quot;OnUnfocus&quot;)
+End Property		&apos;	OnUnfocus (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnUnload() As String
+	OnUnload = _PropertyGet(&quot;OnUnload&quot;)
+End Property		&apos;	OnUnload (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnViewClosed() As String
+	OnViewClosed = _PropertyGet(&quot;OnViewClosed&quot;)
+End Property		&apos;	OnViewClosed (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get OnViewCreated() As String
+	OnViewCreated = _PropertyGet(&quot;OnViewCreated&quot;)
+End Property		&apos;	OnViewCreated (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Property Get Version() As String
 	Version = _PropertyGet(&quot;Version&quot;)
 End Property		&apos;	Version (get)
@@ -1654,13 +1759,22 @@ End Function	&apos;	_OutputToHTML	V1.4.0
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _PropertiesList() As Variant
 
-	_PropertiesList = Array(&quot;Connect&quot;, &quot;Name&quot;, &quot;ObjectType&quot;, &quot;Version&quot;)
+	_PropertiesList = Array(&quot;Connect&quot;, &quot;Name&quot;, &quot;ObjectType&quot; _
+						, &quot;OnCreate&quot;, &quot;OnFocus&quot;, &quot;OnLoad&quot;, &quot;OnLoadFinished&quot;, &quot;OnModifyChanged&quot; _
+						, &quot;OnNew&quot;, &quot;OnPrepareUnload&quot;, &quot;OnPrepareViewClosing&quot;, &quot;OnSave&quot;, &quot;OnSaveAs&quot; _
+						, &quot;OnSaveAsDone&quot;, &quot;OnSaveAsFailed&quot;, &quot;OnSaveDone&quot;, &quot;OnSaveFailed&quot;, &quot;OnSaveTo&quot; _
+						, &quot;OnSaveToDone&quot;, &quot;OnSaveToFailed&quot;, &quot;OnSubComponentClosed&quot;, &quot;OnSubComponentOpened&quot; _
+						, &quot;OnTitleChanged&quot;, &quot;OnUnfocus&quot;, &quot;OnUnload&quot;, &quot;OnViewClosed&quot;, &quot;OnViewCreated&quot; _
+						, &quot;Version&quot; _
+						)
 
 End Function	&apos;	_PropertiesList
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _PropertyGet(ByVal psProperty As String) As Variant
 &apos;	Return property value of the psProperty property name
+
+Dim i As Integer, vEvents As Variant, sEvent As String, vEvent As Variant
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	Utils._SetCalledSub(&quot;Database.get&quot; &amp; psProperty)
@@ -1675,6 +1789,29 @@ Private Function _PropertyGet(ByVal psProperty As String) As Variant
 			_PropertyGet = Title
 		Case UCase(&quot;ObjectType&quot;)
 			_PropertyGet = _Type
+		Case UCase(&quot;OnCreate&quot;), UCase(&quot;OnFocus&quot;), UCase(&quot;OnLoad&quot;), UCase(&quot;OnLoadFinished&quot;), UCase(&quot;OnModifyChanged&quot;) _
+						, UCase(&quot;OnNew&quot;), UCase(&quot;OnPrepareUnload&quot;), UCase(&quot;OnPrepareViewClosing&quot;), UCase(&quot;OnSave&quot;), UCase(&quot;OnSaveAs&quot;) _
+						, UCase(&quot;OnSaveAsDone&quot;), UCase(&quot;OnSaveAsFailed&quot;), UCase(&quot;OnSaveDone&quot;), UCase(&quot;OnSaveFailed&quot;), UCase(&quot;OnSaveTo&quot;) _
+						, UCase(&quot;OnSaveToDone&quot;), UCase(&quot;OnSaveToFailed&quot;), UCase(&quot;OnSubComponentClosed&quot;), UCase(&quot;OnSubComponentOpened&quot;) _
+						, UCase(&quot;OnTitleChanged&quot;), UCase(&quot;OnUnfocus&quot;), UCase(&quot;OnUnload&quot;), UCase(&quot;OnViewClosed&quot;), UCase(&quot;OnViewCreated&quot;)
+			&apos;	Find script event
+			sEvent = &quot;&quot;
+			vEvents = Document.getEvents().ElementNames			&apos;	Returns an array
+			For i = 0 To UBound(vEvents)
+				If UCase(vEvents(i)) = UCase(psProperty) Then sEvent = vEvents(i)
+			Next i
+			If sEvent = &quot;&quot; Then
+				_PropertyGet = &quot;&quot;
+			Else
+				vEvent = Document.getEvents().getByName(sEvent)
+				If IsEmpty(vEvent) Then
+					_PropertyGet = &quot;&quot;
+				ElseIf vEvent(0).Value &lt;&gt; &quot;Script&quot; Then
+					_PropertyGet = &quot;&quot;
+				Else
+					_PropertyGet = vEvent(1).Value
+				End If
+			End If
 		Case UCase(&quot;Version&quot;)
 			_PropertyGet = MetaData.getDatabaseProductName() &amp; &quot; &quot; &amp; MetaData.getDatabaseProductVersion
 		Case Else
