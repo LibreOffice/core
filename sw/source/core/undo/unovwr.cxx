@@ -345,8 +345,6 @@ SwUndoTransliterate::SwUndoTransliterate(
 
 SwUndoTransliterate::~SwUndoTransliterate()
 {
-    for (UndoTransliterate_Data* p : aChanges)
-        delete p;
 }
 
 void SwUndoTransliterate::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -389,7 +387,7 @@ void SwUndoTransliterate::AddChanges( SwTextNode& rTNd,
                         rTNd.GetIndex(), nStart, (sal_Int32)nOffsLen,
                         rTNd.GetText().copy(nStart, nLen));
 
-    aChanges.push_back( pNew );
+    aChanges.push_back( std::unique_ptr<UndoTransliterate_Data>(pNew) );
 
     const sal_Int32* pOffsets = rOffsets.getConstArray();
     // where did we need less memory ?
@@ -426,7 +424,7 @@ void SwUndoTransliterate::AddChanges( SwTextNode& rTNd,
         // but this data must moved every time to the last in the chain!
         for (size_t i = 0; i + 1 < aChanges.size(); ++i)    // check all changes but not the current one
         {
-            UndoTransliterate_Data* pD = aChanges[i];
+            UndoTransliterate_Data* pD = aChanges[i].get();
             if( pD->nNdIdx == pNew->nNdIdx && pD->pHistory )
             {
                 // same node and have a history?
