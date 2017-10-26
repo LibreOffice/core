@@ -24,6 +24,8 @@
 #include <tools/mapunit.hxx>
 #include <o3tl/cow_wrapper.hxx>
 
+#include <ostream>
+
 class Point;
 class Fraction;
 class SvStream;
@@ -72,6 +74,14 @@ private:
 
     SAL_DLLPRIVATE bool IsSimple() const;
 };
+
+template<typename charT, typename traits>
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & rStream, const MapMode& rMode)
+{
+    rStream << "MapMode(" << (unsigned)rMode.GetMapUnit() << ",(" << rMode.GetScaleX() << "," << rMode.GetScaleY() << ")@(" << rMode.GetOrigin() << "))";
+    return rStream;
+}
 
 #endif // INCLUDED_VCL_MAPMOD_HXX
 
