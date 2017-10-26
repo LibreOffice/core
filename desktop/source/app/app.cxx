@@ -130,16 +130,9 @@
 #endif
 
 #ifdef _WIN32
-#ifdef _MSC_VER
-#pragma warning(push, 1) /* disable warnings within system headers */
-#pragma warning (disable: 4005)
-#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
 #endif
-#endif //WNT
 
 #if defined(_WIN32)
 #include <process.h>

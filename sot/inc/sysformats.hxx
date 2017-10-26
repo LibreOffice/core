@@ -21,14 +21,7 @@
 #define INCLUDED_SOT_SYSFORMATS_HXX
 
 #ifdef _WIN32
-#ifdef _MSC_VER
-#pragma warning(push, 1)
-#pragma warning(disable: 4917)
-#endif
 #include <shlobj.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 #endif
 
 #endif // INCLUDED_SOT_SYSFORMATS_HXX

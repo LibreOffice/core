@@ -39,10 +39,6 @@ class AstScope;
 AstDeclaration* scopeAsDecl(AstScope* pScope);
 AstScope* declAsScope(AstDeclaration* pDecl);
 
-#ifdef _MSC_VER
-#pragma warning( disable : 4541 )
-#endif
-
 // flags used for attributes, properties and services
 #define AF_INVALID          0x0000
 #define AF_READONLY         0x0001

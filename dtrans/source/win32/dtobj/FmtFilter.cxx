@@ -23,17 +23,10 @@
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 
-#if defined _MSC_VER
-#pragma warning(push,1)
-#pragma warning(disable:4917)
-#endif
 #include <shobjidl.h>
 #include <shlguid.h>
 #include <objidl.h>
 #include <shellapi.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 #include <string>
 #include <sstream>

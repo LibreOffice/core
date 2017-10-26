@@ -18,21 +18,11 @@
  */
 
 #define _WIN32_DCOM
-#ifdef _MSC_VER
-#pragma warning(disable : 4917 4555)
-#endif
 
 #include <stdafx.h>
 
 #include <atlbase.h>
-#ifdef _MSC_VER
-#pragma warning( push )
-#pragma warning( disable: 4710 )
-#endif
 CComModule _Module;
-#ifdef _MSC_VER
-#pragma warning( pop )
-#endif
 #include <atlcom.h>
 
 BEGIN_OBJECT_MAP(ObjectMap)

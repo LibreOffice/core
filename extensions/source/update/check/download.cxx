@@ -18,17 +18,7 @@
  */
 
 
-#if defined(_WIN32)
-#   ifdef _MSC_VER
-#       pragma warning(push, 1) /* disable warnings within system headers */
-#   endif
-#   include <curl/curl.h>
-#   ifdef _MSC_VER
-#       pragma warning(pop)
-#   endif
-#else
-#   include <curl/curl.h>
-#endif
+#include <curl/curl.h>
 
 #include <osl/diagnose.h>
 #include <com/sun/star/beans/PropertyValue.hpp>

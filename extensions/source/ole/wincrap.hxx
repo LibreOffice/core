@@ -29,11 +29,6 @@
 //#define _ATL_DEBUG_INTERFACES
 #endif
 
-#pragma warning (push,1)
-#pragma warning (disable:4917)
-#pragma warning (disable:4005)
-#pragma warning (disable:4548)
-
 #include <dispex.h>
 
 #include <prewin.h>
@@ -66,8 +61,6 @@ extern CComModule _Module;
 #include <olectl.h>
 
 #include <postwin.h>
-
-#pragma warning (pop)
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_OLE_WINCRAP_HXX
 

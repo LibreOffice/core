@@ -19,10 +19,6 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_WINDATA_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_OLE_WINDATA_HXX
 
-#pragma warning (push,1)
-#pragma warning (disable:4668)
-#pragma warning (disable:4548)
-
 #include <oleidl.h>
 
 #if defined __clang__
@@ -42,8 +38,6 @@
 #if defined __clang__
 #pragma clang diagnostic pop
 #endif
-
-#pragma warning (pop)
 
 #include <osl/diagnose.h>
 

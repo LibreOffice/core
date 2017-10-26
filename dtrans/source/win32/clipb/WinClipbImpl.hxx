@@ -27,16 +27,10 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 #include "MtaOleClipb.hxx"
 
-#if defined _MSC_VER
-#pragma warning(push,1)
-#endif
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 class CWinClipboard;
 class CXNotifyingDataObject;

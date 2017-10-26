@@ -21,16 +21,12 @@
 #define INCLUDED_SHELL_INC_INTERNAL_UTILITIES_HXX
 
 #include <malloc.h>
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
+
 #if !defined WIN32_LEAN_AND_MEAN
   #define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
+
 #include <stdio.h>
 #include <fcntl.h>
 #include <io.h>

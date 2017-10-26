@@ -21,15 +21,9 @@
 
 #include <sal/config.h>
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <shellapi.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 #include "resource.h"
 #include <systools/win32/uwinapi.h>

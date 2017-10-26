@@ -20,15 +20,9 @@
 
 #include <sal/config.h>
 
-#ifdef _MSC_VER
-#pragma warning(push,1) // disable warnings within system headers
-#endif
 #include <windef.h>
 #include <winbase.h>
 #include <winnls.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <i18nlangtag/mslangid.hxx>

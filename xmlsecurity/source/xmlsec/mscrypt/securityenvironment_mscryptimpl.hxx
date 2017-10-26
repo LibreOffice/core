@@ -20,17 +20,11 @@
 #ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_SECURITYENVIRONMENT_MSCRYPTIMPL_HXX
 #define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_SECURITYENVIRONMENT_MSCRYPTIMPL_HXX
 
-#ifdef _MSC_VER
-#pragma warning(push,1)
-#endif
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
 #include <wincrypt.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/factory.hxx>

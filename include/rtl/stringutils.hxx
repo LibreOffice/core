@@ -78,7 +78,7 @@ struct SAL_WARN_UNUSED OUStringLiteral1_ {
 #if defined _MSC_VER && _MSC_VER <= 1900 && !defined __clang__
     // Visual Studio 2015
 using OUStringLiteral1 = OUStringLiteral1_;
-#pragma warning(disable: 4239)
+#pragma warning(disable: 4239) // nonstandard extension used: 'argument': conversion from 'rtl::OUStringLiteral1_' to 'rtl::OUStringLiteral1_ &'
 #else
 using OUStringLiteral1 = OUStringLiteral1_ const;
 #endif

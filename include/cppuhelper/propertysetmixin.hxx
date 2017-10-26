@@ -56,12 +56,6 @@ namespace cppu {
 
 template< typename T > class PropertySetMixin;
 
-// Suppress warnings about virtual functions but non-virtual destructor:
-#if defined _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 4265)
-#endif
-
 /**
    @short A helper base class for <code>cppu::PropertySetMixin</code>.
 
@@ -427,10 +421,6 @@ private:
 };
 #if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic pop
-#endif
-
-#if defined _MSC_VER
-#pragma warning(pop)
 #endif
 
 }

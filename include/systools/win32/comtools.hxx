@@ -22,13 +22,7 @@
 
 #include <string>
 #include <stdexcept>
-#if defined _MSC_VER
-#pragma warning(push,1)
-#endif
 #include <objbase.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 namespace sal
 {

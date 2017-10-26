@@ -58,10 +58,6 @@
 #include <string.h>
 #include <algorithm>
 
-#if defined( _MSC_VER )
-#pragma warning(once: 4068)
-#endif
-
 #include "levdis.hxx"
 
 #define LEVDISBIG   (nLimit + 1)    // Return value if distance > nLimit

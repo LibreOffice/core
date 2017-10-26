@@ -22,13 +22,7 @@
 
 #include "metainforeader.hxx"
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
 #include <shlobj.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 #include <string>
 #include <memory>
 #include "filepath.hxx"

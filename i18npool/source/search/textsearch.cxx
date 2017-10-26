@@ -40,13 +40,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
-#ifdef _MSC_VER
-// get rid of that dumb compiler warning
-// identifier was truncated to '255' characters in the debug information
-// for STL template usage, if .pdb files are to be created
-#pragma warning( disable: 4786 )
-#endif
-
 #include <string.h>
 
 using namespace ::com::sun::star::util;

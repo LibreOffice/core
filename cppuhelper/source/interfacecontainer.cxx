@@ -55,10 +55,6 @@ static void sequenceRemoveElementAt( Sequence< Reference< XInterface > > & rSeq,
     rSeq = aDestSeq;
 }
 
-#ifdef _MSC_VER
-#pragma warning( disable: 4786 )
-#endif
-
 OInterfaceIteratorHelper::OInterfaceIteratorHelper( OInterfaceContainerHelper & rCont_ )
     : rCont( rCont_ )
 {

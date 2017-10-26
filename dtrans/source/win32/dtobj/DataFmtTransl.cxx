@@ -30,18 +30,11 @@
 #include "Fetc.hxx"
 #include <com/sun/star/datatransfer/DataFormatTranslator.hpp>
 
-#if defined _MSC_VER
-#pragma warning(push,1)
-#pragma warning(disable:4917)
-#endif
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
 #include <shlobj.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 using namespace std;
 using namespace com::sun::star::uno;

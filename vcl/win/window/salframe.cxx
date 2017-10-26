@@ -51,10 +51,6 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 
-// Warning in SDK header
-#ifdef _MSC_VER
-#pragma warning( disable: 4242 )
-#endif
 #include <win/wincomp.hxx>
 #include <win/salids.hrc>
 #include <win/saldata.hxx>
@@ -74,7 +70,7 @@
 
 #define COMPILE_MULTIMON_STUBS
 #pragma warning(push)
-#pragma warning(disable:4996)
+#pragma warning(disable:4996) // 'GetVersionExA': was declared deprecated
 #include <multimon.h>
 #pragma warning(pop)
 #include <vector>

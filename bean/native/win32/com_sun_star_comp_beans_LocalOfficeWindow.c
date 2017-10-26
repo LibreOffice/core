@@ -17,19 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 #if defined _MSC_VER
-#pragma warning(push, 1)
+#pragma warning(push)
+#pragma warning(disable : 4201) /* nonstandard extension used: nameless struct/union */
 #endif
 #include <jawt_md.h>
 #if defined _MSC_VER

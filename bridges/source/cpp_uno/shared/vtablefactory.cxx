@@ -45,13 +45,7 @@
 #include <sys/mman.h>
 #elif defined _WIN32
 #define WIN32_LEAN_AND_MEAN
-#ifdef _MSC_VER
-#pragma warning(push,1) // disable warnings within system headers
-#endif
 #include <windows.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 #else
 #error Unsupported platform
 #endif

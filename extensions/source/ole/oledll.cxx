@@ -21,9 +21,6 @@
 #define STRICT
 #define _WIN32_DCOM
 
-#pragma warning (push,1)
-#pragma warning (disable:4548)
-
 #if defined __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wall"
@@ -44,8 +41,6 @@ static CComModule _Module;
 #if defined __clang__
 #pragma clang diagnostic pop
 #endif
-
-#pragma warning (pop)
 
 BEGIN_OBJECT_MAP(ObjectMap)
 #if defined __clang__

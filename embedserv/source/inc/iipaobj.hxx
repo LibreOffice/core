@@ -19,9 +19,6 @@
 
 #ifndef INCLUDED_EMBEDSERV_SOURCE_INC_IIPAOBJ_HXX
 #define INCLUDED_EMBEDSERV_SOURCE_INC_IIPAOBJ_HXX
-#ifdef _MSC_VER
-#pragma warning(disable : 4917 4555)
-#endif
 
 #include "stdafx.h"
 #include <oleidl.h>

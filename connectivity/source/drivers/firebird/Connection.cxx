@@ -55,11 +55,6 @@
 
 #include <rtl/strbuf.hxx>
 
-#ifdef _WIN32
-// for ADD_SPB_NUMERIC
-#pragma warning(disable: 4310) // cast truncates data
-#endif
-
 using namespace connectivity::firebird;
 using namespace connectivity;
 
@@ -637,7 +632,14 @@ void Connection::runBackupService(const short nAction)
         aRequest.append(char(isc_spb_options)); // 4-Byte bitmask
         char sOptions[4];
         char * pOptions = sOptions;
+#ifdef _WIN32
+#pragma warning(push)
+#pragma warning(disable: 4310) // cast truncates data
+#endif
         ADD_SPB_NUMERIC(pOptions, isc_spb_res_create);
+#ifdef _WIN32
+#pragma warning(pop)
+#endif
         aRequest.append(sOptions, 4);
     }
 

@@ -23,11 +23,6 @@
 
 #if defined(_WIN32)
 
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable:4005)
-#endif
-
 #include <prewin.h>
 
 // just to go with calling convention of windows
@@ -44,10 +39,6 @@
 #endif
 #undef SQL_API
 #define SQL_API __stdcall
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 #ifndef SQL_C_BOOKMARK
 #define SQL_C_BOOKMARK   SQL_C_ULONG                     /* BOOKMARK         */

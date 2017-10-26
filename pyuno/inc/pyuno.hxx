@@ -21,13 +21,7 @@
 #define INCLUDED_PYUNO_INC_PYUNO_HXX
 
 #ifndef Py_PYTHON_H
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
 #include <Python.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 #endif // #ifdef Py_PYTHON_H
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>

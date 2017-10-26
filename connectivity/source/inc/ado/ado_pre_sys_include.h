@@ -21,11 +21,6 @@
     #error "ado_pre_sys_include.h included twice!"
 #endif
 
-#ifdef _MSC_VER
-#pragma warning(push,1)
-#pragma warning(disable:4917)
-#endif
-
 #include <sdkddkver.h>
 
 #define ADO_REDUCED_WARN_LEVEL

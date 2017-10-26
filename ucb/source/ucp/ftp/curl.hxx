@@ -20,15 +20,7 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_FTP_CURL_HXX
 #define INCLUDED_UCB_SOURCE_UCP_FTP_CURL_HXX
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
-
 #include <curl/curl.h>
-
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 #endif
 

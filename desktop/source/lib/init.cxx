@@ -201,10 +201,6 @@ static const ExtensionMap aDrawExtensionMap[] =
  * by css, it might turn out to be worth mapping some of these missing cursors
  * to available cursors?
  */
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning( disable : 4592)
-#endif
 static const std::map <PointerStyle, OString> aPointerMap {
     { PointerStyle::Arrow, "default" },
     // PointerStyle::Null ?
@@ -246,9 +242,6 @@ static const std::map <PointerStyle, OString> aPointerMap {
     // Pivot Delete, TabSelectS through TabSelectSW
     // PaintBrush, HideWhiteSpace, ShowWhiteSpace
 };
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 static OUString getUString(const char* pString)
 {

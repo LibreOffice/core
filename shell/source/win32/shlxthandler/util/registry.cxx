@@ -18,26 +18,15 @@
  */
 
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
+
 #include <malloc.h>
 #include <registry.hxx>
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
 #include <objbase.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 bool SetRegistryKey(HKEY RootKey, const wchar_t* KeyName, const wchar_t* ValueName, const wchar_t* Value)
 {
