@@ -617,9 +617,9 @@ void PresenterAccessible::NotifyCurrentSlideChange ()
     {
         PresenterPaneContainer::SharedPaneDescriptor pPreviewPane (GetPreviewPane());
         mpAccessiblePreview->SetAccessibleName(
-            (pPreviewPane&&pPreviewPane->mxPane.is()
+            pPreviewPane&&pPreviewPane->mxPane.is()
                 ? pPreviewPane->mxPane->GetTitle()
-                : OUString()));
+                : OUString());
     }
 
     // Play some focus ping-pong to trigger AT tools.

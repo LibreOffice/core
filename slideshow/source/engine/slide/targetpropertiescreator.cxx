@@ -225,7 +225,7 @@ namespace internal
                         {
                             // no parent-supplied target, retrieve
                             // node target
-                            if( (xAnimateNode->getTarget() >>= aTarget.mxRef) )
+                            if( xAnimateNode->getTarget() >>= aTarget.mxRef )
                             {
                                 // pure shape target - set paragraph
                                 // index to magic

@@ -337,7 +337,7 @@ sal_Bool SAL_CALL PieChartTypeTemplate::matchesTemplate(
                         if(xPointProp.is())
                         {
                             double fPointOffset=0.0;
-                            if( (xProp->getPropertyValue( "Offset") >>= fPointOffset ) )
+                            if( xProp->getPropertyValue( "Offset") >>= fPointOffset )
                             {
                                 if( ! ::rtl::math::approxEqual( fPointOffset, fOffset ) )
                                 {

@@ -389,11 +389,11 @@ AnimationBaseNode::fillCommonParameters() const
 
     boost::optional<double> aRepeats;
     double nRepeats = 0;
-    if( (mxAnimateNode->getRepeatCount() >>= nRepeats) ) {
+    if( mxAnimateNode->getRepeatCount() >>= nRepeats ) {
         aRepeats.reset( nRepeats );
     }
     else {
-        if( (mxAnimateNode->getRepeatDuration() >>= nRepeats) ) {
+        if( mxAnimateNode->getRepeatDuration() >>= nRepeats ) {
             // when repeatDuration is given,
             // autoreverse does _not_ modify the
             // active duration. Thus, calc repeat

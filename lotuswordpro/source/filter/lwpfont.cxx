@@ -231,7 +231,7 @@ void LwpFontTableEntry::Read(LwpObjectStream *pStrm)
 
 OUString LwpFontTableEntry::GetFaceName()
 {
-    return (m_WindowsFaceName.str());
+    return m_WindowsFaceName.str();
 }
 
 void LwpFontTableEntry::RegisterFontDecl()

@@ -2119,7 +2119,7 @@ void SchXMLExportHelper_Impl::exportDateScale( const Reference< beans::XProperty
         return;
 
     chart::TimeIncrement aIncrement;
-    if( (rAxisProps->getPropertyValue("TimeIncrement") >>= aIncrement) )
+    if( rAxisProps->getPropertyValue("TimeIncrement") >>= aIncrement )
     {
         sal_Int32 nTimeResolution = css::chart::TimeUnit::DAY;
         if( aIncrement.TimeResolution >>= nTimeResolution )

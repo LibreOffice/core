@@ -296,7 +296,7 @@ sal_Bool SAL_CALL ConfigurationAccess_WindowState::hasByName( const OUString& rR
 // XElementAccess
 Type SAL_CALL ConfigurationAccess_WindowState::getElementType()
 {
-    return( cppu::UnoType<Sequence< PropertyValue >>::get() );
+    return cppu::UnoType<Sequence< PropertyValue >>::get();
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_WindowState::hasElements()
@@ -1378,7 +1378,7 @@ sal_Bool SAL_CALL WindowStateConfiguration::hasByName( const OUString& aName )
 // XElementAccess
 Type SAL_CALL WindowStateConfiguration::getElementType()
 {
-    return( cppu::UnoType<XNameAccess>::get());
+    return cppu::UnoType<XNameAccess>::get();
 }
 
 sal_Bool SAL_CALL WindowStateConfiguration::hasElements()

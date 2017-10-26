@@ -23,6 +23,26 @@ look for unnecessary parentheses
 
 namespace {
 
+// Like clang::Stmt::IgnoreImplicit (lib/AST/Stmt.cpp), but also ignoring
+// CXXConstructExpr:
+Expr const * ignoreAllImplicit(Expr const * expr) {
+    if (auto const e = dyn_cast<ExprWithCleanups>(expr)) {
+        expr = e->getSubExpr();
+    }
+    if (auto const e = dyn_cast<CXXConstructExpr>(expr)) {
+        if (e->getNumArgs() == 1) {
+            expr = e->getArg(0);
+        }
+    }
+    if (auto const e = dyn_cast<MaterializeTemporaryExpr>(expr)) {
+        expr = e->GetTemporaryExpr();
+    }
+    if (auto const e = dyn_cast<CXXBindTemporaryExpr>(expr)) {
+        expr = e->getSubExpr();
+    }
+    return expr->IgnoreImpCasts();
+}
+
 class UnnecessaryParen:
     public RecursiveASTVisitor<UnnecessaryParen>, public loplugin::Plugin
 {
@@ -63,16 +83,16 @@ public:
     bool TraverseConditionalOperator(ConditionalOperator *);
 private:
     void VisitSomeStmt(const Stmt *parent, const Expr* cond, StringRef stmtName);
-    Expr* insideSizeof = nullptr;
-    Expr* insideCaseStmt = nullptr;
-    Expr* insideConditionalOperator = nullptr;
+    Expr const * insideSizeof = nullptr;
+    Expr const * insideCaseStmt = nullptr;
+    Expr const * insideConditionalOperator = nullptr;
 };
 
 bool UnnecessaryParen::TraverseUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr * expr)
 {
     auto old = insideSizeof;
     if (expr->getKind() == UETT_SizeOf && !expr->isArgumentType()) {
-        insideSizeof = expr->getArgumentExpr()->IgnoreImpCasts();
+        insideSizeof = ignoreAllImplicit(expr->getArgumentExpr());
     }
     bool ret = RecursiveASTVisitor::TraverseUnaryExprOrTypeTraitExpr(expr);
     insideSizeof = old;
@@ -82,7 +102,7 @@ bool UnnecessaryParen::TraverseUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr
 bool UnnecessaryParen::TraverseCaseStmt(CaseStmt * caseStmt)
 {
     auto old = insideCaseStmt;
-    insideCaseStmt = caseStmt->getLHS()->IgnoreImpCasts();
+    insideCaseStmt = ignoreAllImplicit(caseStmt->getLHS());
     bool ret = RecursiveASTVisitor::TraverseCaseStmt(caseStmt);
     insideCaseStmt = old;
     return ret;
@@ -91,7 +111,7 @@ bool UnnecessaryParen::TraverseCaseStmt(CaseStmt * caseStmt)
 bool UnnecessaryParen::TraverseConditionalOperator(ConditionalOperator * conditionalOperator)
 {
     auto old = insideConditionalOperator;
-    insideConditionalOperator = conditionalOperator->getCond()->IgnoreImpCasts();
+    insideConditionalOperator = ignoreAllImplicit(conditionalOperator->getCond());
     bool ret = RecursiveASTVisitor::TraverseConditionalOperator(conditionalOperator);
     insideConditionalOperator = old;
     return ret;
@@ -110,7 +130,7 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
     if (insideConditionalOperator && parenExpr == insideConditionalOperator)
         return true;
 
-    auto subExpr = parenExpr->getSubExpr()->IgnoreImpCasts();
+    auto subExpr = ignoreAllImplicit(parenExpr->getSubExpr());
 
     if (auto subParenExpr = dyn_cast<ParenExpr>(subExpr))
     {
@@ -191,7 +211,7 @@ bool UnnecessaryParen::VisitReturnStmt(const ReturnStmt* returnStmt)
 
     if (!returnStmt->getRetValue())
         return true;
-    auto parenExpr = dyn_cast<ParenExpr>(returnStmt->getRetValue()->IgnoreImpCasts());
+    auto parenExpr = dyn_cast<ParenExpr>(ignoreAllImplicit(returnStmt->getRetValue()));
     if (!parenExpr)
         return true;
     if (parenExpr->getLocStart().isMacroID())
@@ -220,7 +240,7 @@ void UnnecessaryParen::VisitSomeStmt(const Stmt *parent, const Expr* cond, Strin
     if (parent->getLocStart().isMacroID())
         return;
 
-    auto parenExpr = dyn_cast<ParenExpr>(cond->IgnoreImpCasts());
+    auto parenExpr = dyn_cast<ParenExpr>(ignoreAllImplicit(cond));
     if (parenExpr) {
         if (parenExpr->getLocStart().isMacroID())
             return;
@@ -251,7 +271,7 @@ bool UnnecessaryParen::VisitCallExpr(const CallExpr* callExpr)
     if (callExpr->getNumArgs() != 1 || isa<CXXOperatorCallExpr>(callExpr))
         return true;
 
-    auto parenExpr = dyn_cast<ParenExpr>(callExpr->getArg(0)->IgnoreImpCasts());
+    auto parenExpr = dyn_cast<ParenExpr>(ignoreAllImplicit(callExpr->getArg(0)));
     if (parenExpr) {
         if (parenExpr->getLocStart().isMacroID())
             return true;

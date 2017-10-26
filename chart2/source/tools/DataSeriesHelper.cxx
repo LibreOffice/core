@@ -541,7 +541,7 @@ void switchSymbolsOnOrOff( const Reference< beans::XPropertySet > & xSeriesPrope
         return;
 
     chart2::Symbol aSymbProp;
-    if( (xSeriesProperties->getPropertyValue( "Symbol") >>= aSymbProp ) )
+    if( xSeriesProperties->getPropertyValue( "Symbol") >>= aSymbProp )
     {
         if( !bSymbolsOn )
             aSymbProp.Style = chart2::SymbolStyle_NONE;
@@ -722,7 +722,7 @@ bool hasDataLabelsAtSeries( const Reference< chart2::XDataSeries >& xSeries )
         if( xProp.is() )
         {
             DataPointLabel aLabel;
-            if( (xProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel) )
+            if( xProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel )
                 bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName;
         }
     }
@@ -750,7 +750,7 @@ bool hasDataLabelsAtPoints( const Reference< chart2::XDataSeries >& xSeries )
                     if( xPointProp.is() )
                     {
                         DataPointLabel aLabel;
-                        if( (xPointProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel) )
+                        if( xPointProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel )
                             bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName;
                         if( bRet )
                             break;
@@ -788,7 +788,7 @@ bool hasDataLabelAtPoint( const Reference< chart2::XDataSeries >& xSeries, sal_I
             if( xProp.is() )
             {
                 DataPointLabel aLabel;
-                if( (xProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel) )
+                if( xProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel )
                     bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName;
             }
         }

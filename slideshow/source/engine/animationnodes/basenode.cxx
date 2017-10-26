@@ -702,7 +702,7 @@ void BaseNode::showState() const
             css::presentation::ParagraphTarget aTarget;
 
             // no shape provided. Maybe a ParagraphTarget?
-            if( (xAnimate->getTarget() >>= aTarget) )
+            if( xAnimate->getTarget() >>= aTarget )
                 xTargetShape = aTarget.Shape;
         }
 

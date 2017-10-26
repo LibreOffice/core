@@ -166,15 +166,15 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
                 if( xEntryNameAccess.is() )
                 {
                     Sequence<OUString> implementationList;
-                    if( (xEntryNameAccess->getByName("PreferredImplementations") >>= implementationList) )
+                    if( xEntryNameAccess->getByName("PreferredImplementations") >>= implementationList )
                     {
                         m_aAvailableImplementations.emplace_back(*pCurr,implementationList );
                     }
-                    if( (xEntryNameAccess->getByName("AcceleratedImplementations") >>= implementationList) )
+                    if( xEntryNameAccess->getByName("AcceleratedImplementations") >>= implementationList )
                     {
                         m_aAcceleratedImplementations.emplace_back(*pCurr,implementationList );
                     }
-                    if( (xEntryNameAccess->getByName("AntialiasingImplementations") >>= implementationList) )
+                    if( xEntryNameAccess->getByName("AntialiasingImplementations") >>= implementationList )
                     {
                         m_aAAImplementations.emplace_back(*pCurr,implementationList );
                     }

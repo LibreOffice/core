@@ -757,7 +757,7 @@ bool lcl_shouldSymbolsBePlacedOnTheLeftSide( const Reference< beans::XPropertySe
             if(xLegendProp.is())
             {
                 sal_Int16 nWritingMode=-1;
-                if( (xLegendProp->getPropertyValue( "WritingMode" ) >>= nWritingMode) )
+                if( xLegendProp->getPropertyValue( "WritingMode" ) >>= nWritingMode )
                 {
                     if( nWritingMode == text::WritingMode2::PAGE )
                         nWritingMode = nDefaultWritingMode;

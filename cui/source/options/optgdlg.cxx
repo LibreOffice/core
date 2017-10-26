@@ -473,7 +473,7 @@ CanvasSettings::CanvasSettings() :
             if( xEntryNameAccess.is() )
             {
                 Sequence<OUString> preferredImplementations;
-                if( (xEntryNameAccess->getByName("PreferredImplementations") >>= preferredImplementations) )
+                if( xEntryNameAccess->getByName("PreferredImplementations") >>= preferredImplementations )
                     maAvailableImplementations.emplace_back(*pCurr,preferredImplementations );
             }
 
@@ -516,7 +516,7 @@ bool CanvasSettings::IsHardwareAccelerationAvailable() const
                                                           pCurrImpl->trim() ),
                                                       UNO_QUERY_THROW );
                     bool bHasAccel(false);
-                    if( (xPropSet->getPropertyValue("HardwareAcceleration") >>= bHasAccel) )
+                    if( xPropSet->getPropertyValue("HardwareAcceleration") >>= bHasAccel )
                         if( bHasAccel )
                         {
                             mbHWAccelAvailable = true;

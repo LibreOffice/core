@@ -497,7 +497,7 @@ ScVbaFormat< Ifc... >::getIndentLevel(  )
         if (!isAmbiguous(sParaIndent))
         {
             sal_Int16 IndentLevel = 0;
-            if ( ( mxPropertySet->getPropertyValue(sParaIndent) >>= IndentLevel  ) )
+            if ( mxPropertySet->getPropertyValue(sParaIndent) >>= IndentLevel )
                 NRetIndentLevel <<= sal_Int32( rtl::math::round(static_cast<double>( IndentLevel ) / 352.8));
             else
                 NRetIndentLevel <<= sal_Int32(0);

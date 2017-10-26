@@ -115,7 +115,7 @@ Sequence< PropertyValue > ImpSVGDialog::GetFilterData()
     maConfigItem.WriteBool( SVG_PROP_EMBEDFONTS, maCBEmbedFonts->IsChecked() );
     maConfigItem.WriteBool( SVG_PROP_NATIVEDECORATION, maCBUseNativeDecoration->IsChecked() );
 
-    return( maConfigItem.GetFilterData() );
+    return maConfigItem.GetFilterData();
 }
 
 

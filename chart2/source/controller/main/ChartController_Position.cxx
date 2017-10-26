@@ -118,7 +118,7 @@ void ChartController::executeDispatch_PositionAndSize()
     awt::Size aSelectedSize;
     ExplicitValueProvider* pProvider( ExplicitValueProvider::getExplicitValueProvider( m_xChartView ) );
     if( pProvider )
-        aSelectedSize = ToSize( ( pProvider->getRectangleOfObject( aCID ) ) );
+        aSelectedSize = ToSize( pProvider->getRectangleOfObject( aCID ) );
 
     ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
 

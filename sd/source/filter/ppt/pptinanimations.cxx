@@ -1025,7 +1025,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
     if( rSet.hasProperty( DFF_ANIM_PRESET_SUB_TYPE ) )
     {
         sal_Int32 nPresetSubType = 0;
-        if( (rSet.getProperty( DFF_ANIM_PRESET_SUB_TYPE ) >>= nPresetSubType) )
+        if( rSet.getProperty( DFF_ANIM_PRESET_SUB_TYPE ) >>= nPresetSubType )
         {
             if( nPresetSubType )
             {

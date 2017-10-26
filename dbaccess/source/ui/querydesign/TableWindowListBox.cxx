@@ -103,7 +103,7 @@ SvTreeListEntry* OTableWindowListBox::GetEntryFromText( const OUString& rEntryTe
         }
         while( pEntry )
         {
-            if((bCase ? rEntryText == GetEntryText(pEntry) : rEntryText.equalsIgnoreAsciiCase(GetEntryText(pEntry))))
+            if(bCase ? rEntryText == GetEntryText(pEntry) : rEntryText.equalsIgnoreAsciiCase(GetEntryText(pEntry)))
             {
                 return pEntry;
             }

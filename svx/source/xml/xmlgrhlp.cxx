@@ -625,7 +625,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
 void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt32 nInsertPos, OUString const & rRequestedFileName )
 {
     OUString aPictureStorageName, aPictureStreamName;
-    if( ( maURLSet.find( rURLStr ) != maURLSet.end() ) )
+    if( maURLSet.find( rURLStr ) != maURLSet.end() )
     {
         for (URLPairVector::const_iterator aIter( maGrfURLs.begin() ), aEnd( maGrfURLs.end() ); aIter != aEnd ; ++aIter)
         {

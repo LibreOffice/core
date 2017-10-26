@@ -79,7 +79,7 @@ VbaFontBase::getSuperscript()
     // not supported in form controls
     if( !mbFormControl )
        mxFont->getPropertyValue( "CharEscapement" ) >>= nValue;
-    return uno::makeAny( ( nValue == SUPERSCRIPT ) );
+    return uno::makeAny( nValue == SUPERSCRIPT );
 }
 
 void SAL_CALL
@@ -112,7 +112,7 @@ VbaFontBase::getSubscript()
     // not supported in form controls
     if( !mbFormControl )
        mxFont->getPropertyValue( "CharEscapement" ) >>= nValue;
-    return uno::makeAny( ( nValue == SUBSCRIPT ) );
+    return uno::makeAny( nValue == SUBSCRIPT );
 }
 
 void SAL_CALL

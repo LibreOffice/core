@@ -312,7 +312,7 @@ bool EffectRewinder::notifyAnimationStart (const AnimationNodeSharedPtr& rpNode)
     if (xNode.is())
     {
         animations::Event aEvent;
-        if ((xNode->getBegin() >>= aEvent))
+        if (xNode->getBegin() >>= aEvent)
             bIsUserTriggered = (aEvent.Trigger == animations::EventTrigger::ON_NEXT);
     }
 

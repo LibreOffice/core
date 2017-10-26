@@ -17,7 +17,7 @@ public:
 
 protected:
     bool mustTestImportOf(const char* filename) const override {
-        return (OString(filename).endsWith(".docx"));
+        return OString(filename).endsWith(".docx");
     }
 };
 

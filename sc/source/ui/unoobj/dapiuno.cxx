@@ -2991,7 +2991,7 @@ void ScDataPilotFieldGroupsObj::renameFieldGroup( const OUString& rOldName, cons
     if( aOldIt == maGroups.end() )
         throw RuntimeException("Field Group with name \"" + rOldName + "\" not found", static_cast<cppu::OWeakObject*>(this));
     // new name must not exist yet
-    if( ((aNewIt != maGroups.end()) && (aNewIt != aOldIt)) )
+    if( (aNewIt != maGroups.end()) && (aNewIt != aOldIt) )
         throw RuntimeException("Field Group with name \"" + rOldName + "\" already exists", static_cast<cppu::OWeakObject*>(this));
     aOldIt->maName = rNewName;
 }

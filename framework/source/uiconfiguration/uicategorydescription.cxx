@@ -158,7 +158,7 @@ sal_Bool SAL_CALL ConfigurationAccess_UICategory::hasByName( const OUString& rId
 // XElementAccess
 Type SAL_CALL ConfigurationAccess_UICategory::getElementType()
 {
-    return( cppu::UnoType<OUString>::get());
+    return cppu::UnoType<OUString>::get();
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_UICategory::hasElements()

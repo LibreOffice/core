@@ -151,7 +151,7 @@ namespace dbaui
                 m_pConnectionURL->SetHelpId(HID_DSADMIN_CALC_PATH);
                 break;
             case  ::dbaccess::DST_WRITER:
-                m_pFT_Connection->SetText((DBA_RES(STR_WRITER_PATH_OR_FILE)));
+                m_pFT_Connection->SetText(DBA_RES(STR_WRITER_PATH_OR_FILE));
                 m_pConnectionURL->SetHelpId(HID_DSADMIN_WRITER_PATH);
                 break;
             case  ::dbaccess::DST_ADO:

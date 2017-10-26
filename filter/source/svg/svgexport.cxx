@@ -1572,7 +1572,7 @@ bool SVGFilter::implExportPage( const OUString & sPageId,
         SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
 
         // In case the page has a background object we append it .
-        if( (mpObjects->find( rxPage ) != mpObjects->end()) )
+        if( mpObjects->find( rxPage ) != mpObjects->end() )
         {
             const GDIMetaFile& rMtf = (*mpObjects)[ rxPage ].GetRepresentation();
             if( rMtf.GetActionSize() )

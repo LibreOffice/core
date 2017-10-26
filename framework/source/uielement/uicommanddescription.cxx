@@ -265,7 +265,7 @@ sal_Bool SAL_CALL ConfigurationAccess_UICommand::hasByName( const OUString& rCom
 // XElementAccess
 Type SAL_CALL ConfigurationAccess_UICommand::getElementType()
 {
-    return( cppu::UnoType<Sequence< PropertyValue >>::get() );
+    return cppu::UnoType<Sequence< PropertyValue >>::get();
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_UICommand::hasElements()
@@ -706,7 +706,7 @@ sal_Bool SAL_CALL UICommandDescription::hasByName( const OUString& aName )
 // XElementAccess
 Type SAL_CALL UICommandDescription::getElementType()
 {
-    return( cppu::UnoType<XNameAccess>::get());
+    return cppu::UnoType<XNameAccess>::get();
 }
 
 sal_Bool SAL_CALL UICommandDescription::hasElements()
