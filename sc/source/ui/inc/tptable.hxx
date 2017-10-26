@@ -46,6 +46,9 @@ private:
     void            ShowImage();
 
 private:
+    sal_uInt16              m_nOrigScalePageWidth;
+    sal_uInt16              m_nOrigScalePageHeight;
+
     VclPtr<RadioButton>     m_pBtnTopDown;
     VclPtr<RadioButton>     m_pBtnLeftRight;
     VclPtr<FixedImage>      m_pBmpPageDir;
@@ -66,7 +69,9 @@ private:
     VclPtr<MetricField>         m_pEdScaleAll;
     VclPtr<VclGrid>             m_pGrHeightWidth;
     VclPtr<NumericField>        m_pEdScalePageWidth;
+    VclPtr<CheckBox>            m_pCbScalePageWidth;
     VclPtr<NumericField>        m_pEdScalePageHeight;
+    VclPtr<CheckBox>            m_pCbScalePageHeight;
     VclPtr<VclHBox>             m_pBxScalePageNum;
     VclPtr<NumericField>        m_pEdScalePageNum;
 
@@ -74,8 +79,9 @@ private:
 
     // Handler:
     DECL_LINK(PageDirHdl, Button*, void);
-    DECL_LINK( PageNoHdl, Button*, void );
+    DECL_LINK(PageNoHdl, Button*, void);
     DECL_LINK(ScaleHdl, ListBox&, void);
+    DECL_LINK(ToggleHdl, CheckBox&, void);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TPTABLE_HXX
