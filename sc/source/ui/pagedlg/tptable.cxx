@@ -55,9 +55,11 @@ static bool lcl_PutScaleItem2( sal_uInt16               nWhich,
                        SfxItemSet&          rCoreSet,
                        const SfxItemSet&    rOldSet,
                        const ListBox&       rListBox,
-                       sal_uInt16               nLBEntry,
+                       sal_uInt16           nLBEntry,
                        const NumericField&  rEd1,
-                       const NumericField&  rEd2 );
+                       sal_uInt16           nOrigScalePageWidth,
+                       const NumericField&  rEd2,
+                       sal_uInt16           nOrigScalePageHeight );
 
 static bool lcl_PutBoolItem( sal_uInt16            nWhich,
                       SfxItemSet&       rCoreSet,
@@ -84,9 +86,10 @@ bool WAS_DEFAULT(sal_uInt16 w, SfxItemSet const & s)
 #define SC_TPTABLE_SCALE_TO         1
 #define SC_TPTABLE_SCALE_TO_PAGES   2
 
-ScTablePage::ScTablePage( vcl::Window* pParent, const SfxItemSet& rCoreAttrs ) :
-
-        SfxTabPage( pParent, "SheetPrintPage","modules/scalc/ui/sheetprintpage.ui", &rCoreAttrs )
+ScTablePage::ScTablePage(vcl::Window* pParent, const SfxItemSet& rCoreAttrs)
+    : SfxTabPage(pParent, "SheetPrintPage","modules/scalc/ui/sheetprintpage.ui", &rCoreAttrs)
+    , m_nOrigScalePageWidth(0)
+    , m_nOrigScalePageHeight(0)
 {
     get(m_pBtnTopDown,"radioBTN_TOPDOWN");
     get(m_pBtnLeftRight,"radioBTN_LEFTRIGHT");
@@ -108,7 +111,9 @@ ScTablePage::ScTablePage( vcl::Window* pParent, const SfxItemSet& rCoreAttrs ) :
     get(m_pEdScaleAll,"spinED_SCALEALL");
     get(m_pGrHeightWidth,"gridWH");
     get(m_pEdScalePageWidth,"spinED_SCALEPAGEWIDTH");
+    get(m_pCbScalePageWidth,"unsetwidth");
     get(m_pEdScalePageHeight,"spinED_SCALEPAGEHEIGHT");
+    get(m_pCbScalePageHeight,"unsetheight");
     get(m_pBxScalePageNum,"boxNP");
     get(m_pEdScalePageNum,"spinED_SCALEPAGENUM");
 
@@ -118,7 +123,8 @@ ScTablePage::ScTablePage( vcl::Window* pParent, const SfxItemSet& rCoreAttrs ) :
     m_pBtnTopDown->SetClickHdl( PAGEDIR_HDL );
     m_pBtnLeftRight->SetClickHdl( PAGEDIR_HDL );
     m_pLbScaleMode->SetSelectHdl( LINK(this,ScTablePage,ScaleHdl) );
-
+    m_pCbScalePageWidth->SetToggleHdl(LINK(this, ScTablePage, ToggleHdl));
+    m_pCbScalePageHeight->SetToggleHdl(LINK(this, ScTablePage, ToggleHdl));
 }
 
 void ScTablePage::ShowImage()
@@ -152,7 +158,9 @@ void ScTablePage::dispose()
     m_pBxScaleAll.clear();
     m_pEdScaleAll.clear();
     m_pGrHeightWidth.clear();
+    m_pCbScalePageWidth.clear();
     m_pEdScalePageWidth.clear();
+    m_pCbScalePageHeight.clear();
     m_pEdScalePageHeight.clear();
     m_pBxScalePageNum.clear();
     m_pEdScalePageNum.clear();
@@ -209,10 +217,12 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
         /*  width==0 and height==0 is invalid state, used as "not selected".
             Dialog shows width=height=1 then. */
         bool bValid = nWidth || nHeight;
-        if( bValid )
+        if (bValid)
             m_pLbScaleMode->SelectEntryPos( SC_TPTABLE_SCALE_TO );
         m_pEdScalePageWidth->SetValue( bValid ? nWidth : 1 );
         m_pEdScalePageHeight->SetValue( bValid ? nHeight : 1 );
+        m_pCbScalePageWidth->Check(bValid && !nWidth);
+        m_pCbScalePageHeight->Check(bValid && !nHeight);
     }
 
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALETOPAGES);
@@ -250,8 +260,8 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
     m_pBtnPageNo->SaveValue();
     m_pEdPageNo->SaveValue();
     m_pEdScaleAll->SaveValue();
-    m_pEdScalePageWidth->SaveValue();
-    m_pEdScalePageHeight->SaveValue();
+    m_nOrigScalePageWidth = m_pEdScalePageWidth->IsEnabled() ? m_pEdScalePageWidth->GetValue() : 0;
+    m_nOrigScalePageHeight = m_pEdScalePageHeight->IsEnabled() ? m_pEdScalePageHeight->GetValue() : 0;
     m_pEdScalePageNum->SaveValue();
 }
 
@@ -323,7 +333,7 @@ bool ScTablePage::FillItemSet( SfxItemSet* rCoreSet )
                                          *rCoreSet, rOldSet, *m_pBtnDrawings );
 
     // scaling:
-    if( !m_pEdScalePageWidth->GetValue() && !m_pEdScalePageHeight->GetValue() )
+    if( !m_pEdScalePageWidth->IsEnabled() && !m_pEdScalePageHeight->IsEnabled() )
     {
         m_pLbScaleMode->SelectEntryPos( SC_TPTABLE_SCALE_PERCENT );
         m_pEdScaleAll->SetValue( 100 );
@@ -337,7 +347,8 @@ bool ScTablePage::FillItemSet( SfxItemSet* rCoreSet )
     bDataChanged |= lcl_PutScaleItem2( GetWhich(SID_SCATTR_PAGE_SCALETO),
                                       *rCoreSet, rOldSet,
                                       *m_pLbScaleMode, SC_TPTABLE_SCALE_TO,
-                                      *m_pEdScalePageWidth, *m_pEdScalePageHeight );
+                                      *m_pEdScalePageWidth, m_nOrigScalePageWidth,
+                                      *m_pEdScalePageHeight, m_nOrigScalePageHeight );
 
     bDataChanged |= lcl_PutScaleItem( GetWhich(SID_SCATTR_PAGE_SCALETOPAGES),
                                       *rCoreSet, rOldSet,
@@ -391,6 +402,36 @@ IMPL_LINK_NOARG(ScTablePage, ScaleHdl, ListBox&, void)
 
     // controls for Box "Scale to pages"
     m_pBxScalePageNum->Show(m_pLbScaleMode->GetSelectedEntryPos() == SC_TPTABLE_SCALE_TO_PAGES);
+}
+
+IMPL_LINK(ScTablePage, ToggleHdl, CheckBox&, rBox, void)
+{
+    if (&rBox == m_pCbScalePageWidth)
+    {
+        if (rBox.IsChecked())
+        {
+            m_pEdScalePageWidth->SetText(OUString());
+            m_pEdScalePageWidth->Disable();
+        }
+        else
+        {
+            m_pEdScalePageWidth->SetValue(1);
+            m_pEdScalePageWidth->Enable();
+        }
+    }
+    else
+    {
+        if (rBox.IsChecked())
+        {
+            m_pEdScalePageHeight->SetText(OUString());
+            m_pEdScalePageHeight->Disable();
+        }
+        else
+        {
+            m_pEdScalePageHeight->SetValue(1);
+            m_pEdScalePageHeight->Enable();
+        }
+    }
 }
 
 // Helper functions for FillItemSet:
@@ -456,16 +497,18 @@ static bool lcl_PutScaleItem2( sal_uInt16               nWhich,
                       SfxItemSet&           rCoreSet,
                       const SfxItemSet&     rOldSet,
                       const ListBox&        rListBox,
-                      sal_uInt16                nLBEntry,
+                      sal_uInt16            nLBEntry,
                       const NumericField&   rEd1,
-                      const NumericField&   rEd2 )
+                      sal_uInt16            nOrigScalePageWidth,
+                      const NumericField&   rEd2,
+                      sal_uInt16            nOrigScalePageHeight )
 {
-    sal_uInt16 nValue1 = (sal_uInt16)rEd1.GetValue();
-    sal_uInt16 nValue2 = (sal_uInt16)rEd2.GetValue();
+    sal_uInt16 nValue1 = rEd1.IsEnabled() ? rEd1.GetValue() : 0;
+    sal_uInt16 nValue2 = rEd2.IsEnabled() ? rEd2.GetValue() : 0;
     bool bIsSel = (rListBox.GetSelectedEntryPos() == nLBEntry);
     bool bDataChanged = (rListBox.GetSavedValue() != nLBEntry) ||
-                        rEd1.IsValueChangedFromSaved() ||
-                        rEd2.IsValueChangedFromSaved() ||
+                        nValue1 != nOrigScalePageWidth ||
+                        nValue1 != nOrigScalePageHeight ||
                         !WAS_DEFAULT( nWhich, rOldSet );
 
     if( bDataChanged )
