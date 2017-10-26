@@ -374,11 +374,19 @@ void SwTextFrame::AdjustFrame( const SwTwips nChgHght, bool bHasToFit )
 
                     if( aRectFnSet.BottomDist( pCont->FrameRA(), nBot ) > 0 )
                     {
-                        aRectFnSet.AddBottom( FrameWA(), nChgHght );
+                        SwRect aFrm(FrameRA());
+                        aRectFnSet.AddBottom( aFrm, nChgHght );
+                        setFrame(aFrm);
+
                         if( aRectFnSet.IsVert() )
+                        {
                             PrintWA().SSize().Width() += nChgHght;
+                        }
                         else
+                        {
                             PrintWA().SSize().Height() += nChgHght;
+                        }
+
                         return;
                     }
                 }
@@ -793,16 +801,23 @@ bool SwTextFrame::CalcPreps()
                 }
                 else if ( aRectFnSet.IsVert() )
                 {
-                    FrameWA().Width( FrameRA().Width() + FrameRA().Left() );
+                    SwRect aFrm(FrameRA());
+                    aFrm.Width( aFrm.Width() + aFrm.Left() );
+                    aFrm.Left( 0 );
+                    setFrame(aFrm);
+
                     PrintWA().Width( PrintRA().Width() + FrameRA().Left() );
-                    FrameWA().Left( 0 );
                     SetWidow( true );
                 }
                 else
                 {
                     SwTwips nTmp  = TWIPS_MAX/2 - (FrameRA().Top()+10000);
                     SwTwips nDiff = nTmp - FrameRA().Height();
-                    FrameWA().Height( nTmp );
+
+                    SwRect aFrm(FrameRA());
+                    aFrm.Height( nTmp );
+                    setFrame(aFrm);
+
                     PrintWA().Height( PrintRA().Height() + nDiff );
                     SetWidow( true );
                 }
@@ -1788,10 +1803,17 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
             if( pMaster )
                 pMaster->Prepare( PREP_FOLLOW_FOLLOWS );
             SwTwips nMaxY = aRectFnSet.GetPrtBottom(*GetUpper());
+
             if( aRectFnSet.OverStep( FrameRA(), nMaxY  ) )
+            {
                 aRectFnSet.SetLimit( *this, nMaxY );
+            }
             else if( aRectFnSet.BottomDist( FrameRA(), nMaxY  ) < 0 )
-                aRectFnSet.AddBottom( FrameWA(), -aRectFnSet.GetHeight(FrameRA()) );
+            {
+                SwRect aFrm(FrameRA());
+                aRectFnSet.AddBottom( aFrm, -aRectFnSet.GetHeight(aFrm) );
+                setFrame(aFrm);
+            }
         }
         else
         {

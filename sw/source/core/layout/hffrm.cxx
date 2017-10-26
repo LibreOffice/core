@@ -364,12 +364,15 @@ void SwHeadFootFrame::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                 // Don't overwrite the lower edge of the upper
                 if ( GetUpper() && FrameRA().Height() )
                 {
-                    const SwTwips nDeadLine = GetUpper()->FrameRA().Top() +
-                        GetUpper()->PrintRA().Bottom();
+                    const SwTwips nDeadLine = GetUpper()->FrameRA().Top() + GetUpper()->PrintRA().Bottom();
                     const SwTwips nBot = FrameRA().Bottom();
+
                     if ( nBot > nDeadLine )
                     {
-                        FrameWA().Bottom( nDeadLine );
+                        SwRect aFrm(FrameRA());
+                        aFrm.Bottom( nDeadLine );
+                        setFrame(aFrm);
+
                         PrintWA().SSize().Height() = FrameRA().Height() - nBorder;
                     }
                 }

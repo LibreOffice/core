@@ -132,8 +132,12 @@ public:
     const SwRect& FrameRA() const { return maFrameRect; }
     const SwRect& PrintRA() const { return maPrintRect; }
 
+    // set methods
+    void setFrame(const SwRect& rNew) { maFrameRect = rNew; }
+    void setPrint(const SwRect& rNew) { maPrintRect = rNew; }
+
     // write accesses
-    SwRect& FrameWA() { return maFrameRect; }
+//    SwRect& FrameWA() { return maFrameRect; }
     SwRect& PrintWA() { return maPrintRect; }
 };
 

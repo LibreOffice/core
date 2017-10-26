@@ -500,35 +500,52 @@ void SwFrame::MakePos()
         SwRectFnSet aRectFnSet((IsCellFrame() && GetUpper() ? GetUpper() : this));
         if ( !bUseUpper && pPrv )
         {
-            FrameWA().Pos( pPrv->FrameRA().Pos() );
+            SwRect aFrm(FrameRA());
+            aFrm.Pos( pPrv->FrameRA().Pos() );
+
             if( FRM_NEIGHBOUR & nMyType )
             {
-                bool bR2L = IsRightToLeft();
+                const bool bR2L = IsRightToLeft();
+
                 if( bR2L )
-                    aRectFnSet.SetPosX( FrameWA(), aRectFnSet.GetLeft(FrameRA()) -
-                                                 aRectFnSet.GetWidth(FrameRA()) );
+                {
+                    aRectFnSet.SetPosX( aFrm, aRectFnSet.GetLeft(aFrm) - aRectFnSet.GetWidth(aFrm) );
+                }
                 else
-                    aRectFnSet.SetPosX( FrameWA(), aRectFnSet.GetLeft(FrameRA()) +
-                                          aRectFnSet.GetWidth(pPrv->FrameRA()) );
+                {
+                    aRectFnSet.SetPosX( aFrm, aRectFnSet.GetLeft(aFrm) + aRectFnSet.GetWidth(pPrv->FrameRA()) );
+                }
 
                 // cells may now leave their uppers
                 if( aRectFnSet.IsVert() && SwFrameType::Cell & nMyType && !mbReverse )
-                    FrameWA().Pos().setX(FrameRA().Pos().getX() - FrameRA().Width() + pPrv->FrameRA().Width());
+                {
+                    aFrm.Pos().setX(aFrm.Pos().getX() - aFrm.Width() + pPrv->FrameRA().Width());
+                }
             }
             else if( aRectFnSet.IsVert() && FRM_NOTE_VERT & nMyType )
             {
                 if( mbReverse )
-                    FrameWA().Pos().setX(FrameRA().Pos().getX() + pPrv->FrameRA().Width());
+                {
+                    aFrm.Pos().setX(aFrm.Pos().getX() + pPrv->FrameRA().Width());
+                }
                 else
                 {
                     if ( aRectFnSet.IsVertL2R() )
-                           FrameWA().Pos().setX(FrameRA().Pos().getX() + pPrv->FrameRA().Width());
+                    {
+                        aFrm.Pos().setX(aFrm.Pos().getX() + pPrv->FrameRA().Width());
+                    }
                     else
-                           FrameWA().Pos().setX(FrameRA().Pos().getX() - FrameRA().Width());
-                  }
+                    {
+                        aFrm.Pos().setX(aFrm.Pos().getX() - aFrm.Width());
+                    }
+                }
             }
             else
-                FrameWA().Pos().setY(FrameRA().Pos().getY() + pPrv->FrameRA().Height());
+            {
+                aFrm.Pos().setY(aFrm.Pos().getY() + pPrv->FrameRA().Height());
+            }
+
+            setFrame(aFrm);
         }
         else if ( GetUpper() )
         {
@@ -554,60 +571,93 @@ void SwFrame::MakePos()
             pPrv = lcl_Prev( this, false );
             if ( !bUseUpper && pPrv )
             {
-                FrameWA().Pos( pPrv->FrameRA().Pos() );
+                SwRect aFrm(FrameRA());
+                aFrm.Pos( pPrv->FrameRA().Pos() );
+
                 if( FRM_NEIGHBOUR & nMyType )
                 {
-                    bool bR2L = IsRightToLeft();
+                    const bool bR2L = IsRightToLeft();
+
                     if( bR2L )
-                        aRectFnSet.SetPosX( FrameWA(), aRectFnSet.GetLeft(FrameRA()) -
-                                                 aRectFnSet.GetWidth(FrameRA()) );
+                    {
+                        aRectFnSet.SetPosX( aFrm, aRectFnSet.GetLeft(aFrm) - aRectFnSet.GetWidth(aFrm) );
+                    }
                     else
-                        aRectFnSet.SetPosX( FrameWA(), aRectFnSet.GetLeft(FrameRA()) +
-                                          aRectFnSet.GetWidth(pPrv->FrameRA()) );
+                    {
+                        aRectFnSet.SetPosX( aFrm, aRectFnSet.GetLeft(aFrm) + aRectFnSet.GetWidth(pPrv->FrameRA()) );
+                    }
 
                     // cells may now leave their uppers
                     if( aRectFnSet.IsVert() && SwFrameType::Cell & nMyType && !mbReverse )
-                        FrameWA().Pos().setX(FrameRA().Pos().getX() - FrameRA().Width() + pPrv->FrameRA().Width());
+                    {
+                        aFrm.Pos().setX(aFrm.Pos().getX() - aFrm.Width() + pPrv->FrameRA().Width());
+                    }
                 }
                 else if( aRectFnSet.IsVert() && FRM_NOTE_VERT & nMyType )
                 {
                     if( mbReverse )
-                        FrameWA().Pos().setX(FrameRA().Pos().getX() + pPrv->FrameRA().Width());
+                    {
+                        aFrm.Pos().setX(aFrm.Pos().getX() + pPrv->FrameRA().Width());
+                    }
                     else
-                        FrameWA().Pos().setX(FrameRA().Pos().getX() - FrameRA().Width());
+                    {
+                        aFrm.Pos().setX(aFrm.Pos().getX() - aFrm.Width());
+                    }
                 }
                 else
-                    FrameWA().Pos().setY(FrameRA().Pos().getY() + pPrv->FrameRA().Height());
+                {
+                    aFrm.Pos().setY(aFrm.Pos().getY() + pPrv->FrameRA().Height());
+                }
+
+                setFrame(aFrm);
             }
             else
             {
-                FrameWA().Pos( GetUpper()->FrameRA().Pos() );
+                SwRect aFrm(FrameRA());
+                aFrm.Pos( GetUpper()->FrameRA().Pos() );
+
                 if( GetUpper()->IsFlyFrame() )
-                    FrameWA().Pos() += static_cast<SwFlyFrame*>(GetUpper())->ContentPos();
+                {
+                    aFrm.Pos() += static_cast<SwFlyFrame*>(GetUpper())->ContentPos();
+                }
                 else
-                    FrameWA().Pos() += GetUpper()->PrintRA().Pos();
+                {
+                    aFrm.Pos() += GetUpper()->PrintRA().Pos();
+                }
 
                 if( FRM_NEIGHBOUR & nMyType && IsRightToLeft() )
                 {
                     if( aRectFnSet.IsVert() )
-                        FrameWA().Pos().setY(FrameRA().Pos().getY() + GetUpper()->PrintRA().Height()
-                                          - FrameRA().Height());
+                    {
+                        aFrm.Pos().setY(aFrm.Pos().getY() + GetUpper()->PrintRA().Height() - aFrm.Height());
+                    }
                     else
-                        FrameWA().Pos().setX(FrameRA().Pos().getX() + GetUpper()->PrintRA().Width()
-                                          - FrameRA().Width());
+                    {
+                        aFrm.Pos().setX(aFrm.Pos().getX() + GetUpper()->PrintRA().Width() - aFrm.Width());
+                    }
                 }
                 else if( aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() && FRM_NOTE_VERT & nMyType && !mbReverse )
-                    FrameWA().Pos().setX(FrameRA().Pos().getX() - FrameRA().Width() + GetUpper()->PrintRA().Width());
+                {
+                    aFrm.Pos().setX(aFrm.Pos().getX() - aFrm.Width() + GetUpper()->PrintRA().Width());
+                }
+
+                setFrame(aFrm);
             }
         }
         else
         {
-            FrameWA().Pos().setX(0);
-            FrameWA().Pos().setY(0);
+            SwRect aFrm(FrameRA());
+            aFrm.Pos().setX(0);
+            aFrm.Pos().setY(0);
+            setFrame(aFrm);
         }
 
         if( IsBodyFrame() && aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() && !mbReverse && GetUpper() )
-            FrameWA().Pos().setX(FrameRA().Pos().getX() + GetUpper()->PrintRA().Width() - FrameRA().Width());
+        {
+            SwRect aFrm(FrameRA());
+            aFrm.Pos().setX(aFrm.Pos().getX() + GetUpper()->PrintRA().Width() - aFrm.Width());
+            setFrame(aFrm);
+        }
         mbValidPos = true;
     }
 }
@@ -730,9 +780,15 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
         {
             if ( IsEmptyPage() )
             {
-                FrameWA().Width( 0 );  PrintWA().Width( 0 );
-                FrameWA().Height( 0 ); PrintWA().Height( 0 );
-                PrintWA().Left( 0 );   PrintWA().Top( 0 );
+                SwRect aFrm(FrameRA());
+                aFrm.Width( 0 );
+                aFrm.Width( 0 );
+                setFrame(aFrm);
+
+                PrintWA().Height( 0 );
+                PrintWA().Height( 0 );
+                PrintWA().Left( 0 );
+                PrintWA().Top( 0 );
                 mbValidSize = mbValidPrtArea = true;
             }
             else
@@ -758,15 +814,16 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     if (nWidth < nDefWidth)
                         nWidth = nDefWidth;
                     nWidth += + 2 * aBorder.Width();
-
                     nWidth = std::max( nWidth, 2L * aBorder.Width() + 4*MM50 );
-                    FrameWA().Width( nWidth );
+
+                    SwRect aFrm(FrameRA());
+                    aFrm.Width( nWidth );
 
                     SwLayoutFrame *pBody = FindBodyCont();
                     if ( pBody && pBody->Lower() && pBody->Lower()->IsColumnFrame() )
                     {
                         // Columns have a fixed height
-                        FrameWA().Height( pAttrs->GetSize().Height() );
+                        aFrm.Height( pAttrs->GetSize().Height() );
                     }
                     else
                     {
@@ -782,13 +839,15 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         }
                         // #i35143# - Assure, that the page
                         // doesn't exceed the defined browse height.
-                        FrameWA().Height( std::min( nBot, BROWSE_HEIGHT ) );
+                        aFrm.Height( std::min( nBot, BROWSE_HEIGHT ) );
                     }
+                    setFrame(aFrm);
+
                     PrintWA().Left ( pAttrs->CalcLeftLine() + aBorder.Width() );
                     PrintWA().Top  ( nTop );
-                    PrintWA().Width( FrameRA().Width() - ( PrintRA().Left()
-                        + pAttrs->CalcRightLine() + aBorder.Width() ) );
+                    PrintWA().Width( FrameRA().Width() - ( PrintRA().Left() + pAttrs->CalcRightLine() + aBorder.Width() ) );
                     PrintWA().Height( FrameRA().Height() - (nTop + nBottom) );
+
                     mbValidSize = mbValidPrtArea = true;
                     continue;
                 }
@@ -825,7 +884,11 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 // Set FixSize. For pages, this is not done from Upper, but from
                 // the attribute.
                 //FIXME: This resets the size when (mbValidSize && !mbValidPrtArea).
-                FrameWA().SSize( pAttrs->GetSize() );
+                {
+                    SwRect aFrm(FrameRA());
+                    aFrm.SSize( pAttrs->GetSize() );
+                    setFrame(aFrm);
+                }
                 Format( pRenderContext, pAttrs );
             }
         }
@@ -887,11 +950,18 @@ void SwLayoutFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                     }
 
                     const long nDiff = nPrtWidth - (FrameRA().*fnRect->fnGetWidth)();
+                    SwRect aFrm(FrameRA());
 
                     if( IsNeighbourFrame() && IsRightToLeft() )
-                        (FrameWA().*fnRect->fnSubLeft)( nDiff );
+                    {
+                        (aFrm.*fnRect->fnSubLeft)( nDiff );
+                    }
                     else
-                        (FrameWA().*fnRect->fnAddRight)( nDiff );
+                    {
+                        (aFrm.*fnRect->fnAddRight)( nDiff );
+                    }
+
+                    setFrame(aFrm);
                 }
                 else
                 {
@@ -1295,7 +1365,9 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                 mbValidPrtArea = false;
             }
 
-            aRectFnSet.SetWidth( FrameWA(), nNewFrameWidth );
+            SwRect aFrm(FrameRA());
+            aRectFnSet.SetWidth( aFrm, nNewFrameWidth );
+            setFrame(aFrm);
 
             // When a lower of a vertically aligned fly frame changes its size we need to recalculate content pos.
             if( GetUpper() && GetUpper()->IsFlyFrame() &&
@@ -1422,7 +1494,10 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                     Prepare( PREP_POS_CHGD, static_cast<const void*>(&bFormatted), false );
                     if ( !mbValidSize )
                     {
-                        aRectFnSet.SetWidth( FrameWA(), aRectFnSet.GetWidth(GetUpper()->PrintRA()) );
+                        SwRect aFrm(FrameRA());
+                        aRectFnSet.SetWidth( aFrm, aRectFnSet.GetWidth(GetUpper()->PrintRA()) );
+                        setFrame(aFrm);
+
                         if ( !mbValidPrtArea )
                         {
                             const long nOldW = aRectFnSet.GetWidth(PrintRA());
@@ -1780,10 +1855,18 @@ void MakeNxt( SwFrame *pFrame, SwFrame *pNxt )
         const SwBorderAttrs &rAttrs = *aAccess.Get();
         if ( !pNxt->GetValidSizeFlag() )
         {
+            SwRect aFrm(pNxt->FrameRA());
+
             if( pNxt->IsVertical() )
-                pNxt->FrameWA().Height( pNxt->GetUpper()->PrintRA().Height() );
+            {
+                aFrm.Height( pNxt->GetUpper()->PrintRA().Height() );
+            }
             else
-                pNxt->FrameWA().Width( pNxt->GetUpper()->PrintRA().Width() );
+            {
+                aFrm.Width( pNxt->GetUpper()->PrintRA().Width() );
+            }
+
+            pNxt->setFrame(aFrm);
         }
         static_cast<SwContentFrame*>(pNxt)->MakePrtArea( rAttrs );
         pNxt->Format( pNxt->getRootFrame()->GetCurrShell()->GetOut(), &rAttrs );
@@ -1795,10 +1878,18 @@ void MakeNxt( SwFrame *pFrame, SwFrame *pNxt )
         const SwBorderAttrs &rAttrs = *aAccess.Get();
         if ( !pNxt->GetValidSizeFlag() )
         {
+            SwRect aFrm(pNxt->FrameRA());
+
             if( pNxt->IsVertical() )
-                pNxt->FrameWA().Height( pNxt->GetUpper()->PrintRA().Height() );
+            {
+                aFrm.Height( pNxt->GetUpper()->PrintRA().Height() );
+            }
             else
-                pNxt->FrameWA().Width( pNxt->GetUpper()->PrintRA().Width() );
+            {
+                aFrm.Width( pNxt->GetUpper()->PrintRA().Width() );
+            }
+
+            pNxt->setFrame(aFrm);
         }
         pNxt->Format( pNxt->getRootFrame()->GetCurrShell()->GetOut(), &rAttrs );
     }

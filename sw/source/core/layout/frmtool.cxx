@@ -1120,13 +1120,21 @@ static void lcl_SetPos( SwFrame&             _rNewFrame,
                  const SwLayoutFrame& _rLayFrame )
 {
     SwRectFnSet aRectFnSet(&_rLayFrame);
-    aRectFnSet.SetPos( _rNewFrame.FrameWA(), aRectFnSet.GetPos(_rLayFrame.FrameRA()) );
+    SwRect aFrm(_rNewFrame.FrameRA());
+    aRectFnSet.SetPos( aFrm, aRectFnSet.GetPos(_rLayFrame.FrameRA()) );
+
     // move position by one SwTwip in text flow direction in order to get
     // notifications for a new calculated position after its formatting.
     if ( aRectFnSet.IsVert() )
-        _rNewFrame.FrameWA().Pos().X() -= 1;
+    {
+        aFrm.Pos().X() -= 1;
+    }
     else
-        _rNewFrame.FrameWA().Pos().Y() += 1;
+    {
+        aFrm.Pos().Y() += 1;
+    }
+
+    _rNewFrame.setFrame(aFrm);
 }
 
 void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
