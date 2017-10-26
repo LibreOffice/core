@@ -42,6 +42,21 @@
 
 namespace emfplushelper
 {
+
+#ifdef OSL_BIGENDIAN
+    // little endian <-> big endian switch
+    static float GetSwapFloat(SvStream& rStream)
+    {
+        float fTmp;
+        sal_Int8* pPtr = (sal_Int8*)&fTmp;
+        rStream.ReadSChar(pPtr[3]);
+        rStream.ReadSChar(pPtr[2]);
+        rStream.ReadSChar(pPtr[1]);
+        rStream.ReadSChar(pPtr[0]);
+        return fTmp;
+    }
+#endif
+
     const char* emfTypeToName(sal_uInt16 type)
     {
         switch (type)
