@@ -6703,35 +6703,30 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                         sal_uInt32 nCharIdx = pSpecInfo->nCharIdx;
 
                                         // portions and text have to been splitted in some cases
-                                        for ( ; nI < aStyleTextPropReader.aCharPropList.size(); )
+                                        for ( ; nI < aStyleTextPropReader.aCharPropList.size(); ++nI)
                                         {
-                                            PPTCharPropSet* pSet = aStyleTextPropReader.aCharPropList[ nI ];
-                                            if ( pSet->mnOriginalTextPos < nCharIdx )
-                                            {
-                                                pSet->mnLanguage[ 0 ] = pSpecInfo->nLanguage[ 0 ];
-                                                pSet->mnLanguage[ 1 ] = pSpecInfo->nLanguage[ 1 ];
-                                                pSet->mnLanguage[ 2 ] = pSpecInfo->nLanguage[ 2 ];
-                                                // test if the current portion needs to be splitted
-                                                if ( pSet->maString.getLength() > 1 )
-                                                {
-                                                    sal_Int32 nIndexOfNextPortion = pSet->maString.getLength() + pSet->mnOriginalTextPos;
-                                                    sal_Int32 nNewLen = nIndexOfNextPortion - nCharIdx;
-                                                    sal_Int32 nOldLen = pSet->maString.getLength() - nNewLen;
-
-                                                    if ( ( nNewLen > 0 ) && ( nOldLen > 0 ) )
-                                                    {
-                                                        OUString aString( pSet->maString );
-                                                        PPTCharPropSet* pNew = new PPTCharPropSet( *pSet );
-                                                        pSet->maString = aString.copy( 0, nOldLen);
-                                                        pNew->maString = aString.copy( nOldLen, nNewLen);
-                                                        pNew->mnOriginalTextPos += nOldLen;
-                                                        aStyleTextPropReader.aCharPropList.insert( aStyleTextPropReader.aCharPropList.begin() + nI + 1, pNew );
-                                                    }
-                                                }
-                                            }
-                                            else
+                                            PPTCharPropSet* pSet = aStyleTextPropReader.aCharPropList[nI];
+                                            if (pSet->mnOriginalTextPos >= nCharIdx)
                                                 break;
-                                            nI++;
+                                            pSet->mnLanguage[0] = pSpecInfo->nLanguage[0];
+                                            pSet->mnLanguage[1] = pSpecInfo->nLanguage[1];
+                                            pSet->mnLanguage[2] = pSpecInfo->nLanguage[2];
+                                            // test if the current portion needs to be splitted
+                                            if (pSet->maString.getLength() <= 1)
+                                                continue;
+                                            sal_Int32 nIndexOfNextPortion = pSet->maString.getLength() + pSet->mnOriginalTextPos;
+                                            sal_Int32 nNewLen = nIndexOfNextPortion - nCharIdx;
+                                            if (nNewLen <= 0)
+                                                continue;
+                                            sal_Int32 nOldLen = pSet->maString.getLength() - nNewLen;
+                                            if (nOldLen <= 0)
+                                                continue;
+                                            OUString aString(pSet->maString);
+                                            PPTCharPropSet* pNew = new PPTCharPropSet(*pSet);
+                                            pSet->maString = aString.copy(0, nOldLen);
+                                            pNew->maString = aString.copy(nOldLen, nNewLen);
+                                            pNew->mnOriginalTextPos += nOldLen;
+                                            aStyleTextPropReader.aCharPropList.insert(aStyleTextPropReader.aCharPropList.begin() + nI + 1, pNew);
                                         }
                                     }
                                 }
