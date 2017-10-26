@@ -116,10 +116,10 @@ SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, size_t nObjNum )
 
 void InsertGridFrame( SdrPageGridFrameList *pLst, const SwFrame *pPg )
 {
-    SwRect aPrt( pPg->PrintRA() );
-    aPrt += pPg->FrameRA().Pos();
+    SwRect aPrt( pPg->getSwPrint() );
+    aPrt += pPg->getSwFrame().Pos();
     const tools::Rectangle aUser( aPrt.SVRect() );
-    const tools::Rectangle aPaper( pPg->FrameRA().SVRect() );
+    const tools::Rectangle aPaper( pPg->getSwFrame().SVRect() );
     pLst->Insert( SdrPageGridFrame( aPaper, aUser ) );
 }
 
@@ -148,7 +148,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
             const SwRect aRect( *pRect );
             const SwFrame *pPg = pSh->GetLayout()->Lower();
             do
-            {   if ( pPg->FrameRA().IsOver( aRect ) )
+            {   if ( pPg->getSwFrame().IsOver( aRect ) )
                     ::InsertGridFrame( const_cast<SwDPage*>(this)->pGridLst.get(), pPg );
                 pPg = pPg->GetNext();
             } while ( pPg );
@@ -161,7 +161,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
                 do
                 {   ::InsertGridFrame( const_cast<SwDPage*>(this)->pGridLst.get(), pPg );
                     pPg = pPg->GetNext();
-                } while ( pPg && pPg->FrameRA().IsOver( pSh->VisArea() ) );
+                } while ( pPg && pPg->getSwFrame().IsOver( pSh->VisArea() ) );
         }
     }
     return pGridLst.get();
@@ -210,7 +210,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
                 {
                     // then append the relative pixel position!!
                     Point aPt( aPos );
-                    aPt -= pFly->FrameRA().Pos();
+                    aPt -= pFly->getSwFrame().Pos();
                     // without MapMode-Offset !!!!!
                     // without MapMode-Offset, without Offset, w ... !!!!!
                     aPt = pWindow->LogicToPixel(

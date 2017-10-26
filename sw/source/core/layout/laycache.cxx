@@ -281,7 +281,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                 {
                     if (SwFlyFrame *pFly = dynamic_cast<SwFlyFrame*>(pAnchoredObj))
                     {
-                        if( pFly->FrameRA().Left() != FAR_AWAY &&
+                        if( pFly->getSwFrame().Left() != FAR_AWAY &&
                             !pFly->GetAnchorFrame()->FindFooterOrHeader() )
                         {
                             const SwContact *pC =
@@ -294,9 +294,9 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                 aIo.OpenRec( SW_LAYCACHE_IO_REC_FLY );
                                 aIo.OpenFlagRec( 0, 0 );
                                 aIo.CloseFlagRec();
-                                const SwRect& rRct = pFly->FrameRA();
-                                sal_Int32 nX = rRct.Left() - pPage->FrameRA().Left();
-                                sal_Int32 nY = rRct.Top() - pPage->FrameRA().Top();
+                                const SwRect& rRct = pFly->getSwFrame();
+                                sal_Int32 nX = rRct.Left() - pPage->getSwFrame().Left();
+                                sal_Int32 nY = rRct.Top() - pPage->getSwFrame().Top();
                                 aIo.GetStream().WriteUInt16( nPageNum ).WriteUInt32( nOrdNum )
                                                .WriteInt32( nX ).WriteInt32( nY )
                                                .WriteInt32( rRct.Width() )
@@ -806,10 +806,10 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                     {
                         mrpFrame->InsertBehind( mrpLay, mrpPrv );
 
-                        SwRect aFrm(mrpFrame->FrameRA());
-                        aFrm.Pos() = mrpLay->FrameRA().Pos();
+                        SwRect aFrm(mrpFrame->getSwFrame());
+                        aFrm.Pos() = mrpLay->getSwFrame().Pos();
                         aFrm.Pos().Y() += 1;
-                        mrpFrame->setFrame(aFrm);
+                        mrpFrame->setSwFrame(aFrm);
 
                         mrpPrv = mrpFrame;
                         if( mrpFrame->IsTabFrame() )
@@ -881,9 +881,9 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                 CheckFlyCache_( pLastPage );
                 if( mrpPrv && mrpPrv->IsTextFrame() && !mrpPrv->GetValidSizeFlag() )
                 {
-                    SwRect aFrm(mrpPrv->FrameRA());
-                    aFrm.Height( mrpPrv->GetUpper()->PrintRA().Height() );
-                    mrpPrv->setFrame(aFrm);
+                    SwRect aFrm(mrpPrv->getSwFrame());
+                    aFrm.Height( mrpPrv->GetUpper()->getSwPrint().Height() );
+                    mrpPrv->setSwFrame(aFrm);
                 }
 
                 bRet = true;
@@ -916,10 +916,10 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                         pSct->Init();
                     }
 
-                    SwRect aFrm(pSct->FrameRA());
-                    aFrm.Pos() = mrpLay->FrameRA().Pos();
+                    SwRect aFrm(pSct->getSwFrame());
+                    aFrm.Pos() = mrpLay->getSwFrame().Pos();
                     aFrm.Pos().Y() += 1; //because of the notifications
-                    pSct->setFrame(aFrm);
+                    pSct->setSwFrame(aFrm);
 
                     mrpLay = pSct;
                     if ( mrpLay->Lower() && mrpLay->Lower()->IsLayoutFrame() )
@@ -1015,12 +1015,12 @@ void SwLayHelper::CheckFlyCache_( SwPageFrame* pPage )
                 const SwFlyCache* pFlyCache = *aFlyCacheSetIt;
                 SwFlyFrame* pFly = const_cast<SwVirtFlyDrawObj*>(static_cast<const SwVirtFlyDrawObj*>(*aFlySetIt))->GetFlyFrame();
 
-                if ( pFly->FrameRA().Left() == FAR_AWAY )
+                if ( pFly->getSwFrame().Left() == FAR_AWAY )
                 {
                     // we get the stored information
-                    SwRect aFrm(pFly->FrameRA());
-                    aFrm.Pos().X() = pFlyCache->Left() + pPage->FrameRA().Left();
-                    aFrm.Pos().Y() = pFlyCache->Top() + pPage->FrameRA().Top();
+                    SwRect aFrm(pFly->getSwFrame());
+                    aFrm.Pos().X() = pFlyCache->Left() + pPage->getSwFrame().Left();
+                    aFrm.Pos().Y() = pFlyCache->Top() + pPage->getSwFrame().Top();
 
                     if ( mpImpl->IsUseFlyCache() )
                     {
@@ -1028,7 +1028,7 @@ void SwLayHelper::CheckFlyCache_( SwPageFrame* pPage )
                         aFrm.Height( pFlyCache->Height() );
                     }
 
-                    pFly->setFrame(aFrm);
+                    pFly->setSwFrame(aFrm);
                 }
 
                 ++aFlyCacheSetIt;

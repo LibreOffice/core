@@ -338,14 +338,14 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
     {
         const SwContentFrame* pFrame = static_cast<const SwContentNode*>(pNd)->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
         if ( (SwCursorSelOverFlags::ChangePos & eFlags)   //allowed to change position if it's a bad one
-            && pFrame && pFrame->IsValid() && !pFrame->FrameRA().Height()     //a bad zero height position
+            && pFrame && pFrame->IsValid() && !pFrame->getSwFrame().Height()     //a bad zero height position
             && !InputFieldAtPos(GetPoint()) )                       //unless it's a (vertical) input field
         {
             // skip to the next/prev valid paragraph with a layout
             SwNodeIndex& rPtIdx = GetPoint()->nNode;
             bool bGoNxt = m_pSavePos->nNode < rPtIdx.GetIndex();
             while( nullptr != ( pFrame = ( bGoNxt ? pFrame->GetNextContentFrame() : pFrame->GetPrevContentFrame() ))
-                   && 0 == pFrame->FrameRA().Height() )
+                   && 0 == pFrame->getSwFrame().Height() )
                 ;
 
             // #i72394# skip to prev/next valid paragraph with a layout in case
@@ -354,7 +354,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
             {
                 bGoNxt = !bGoNxt;
                 pFrame = static_cast<const SwContentNode*>(pNd)->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
-                while ( pFrame && 0 == pFrame->FrameRA().Height() )
+                while ( pFrame && 0 == pFrame->getSwFrame().Height() )
                 {
                     pFrame = bGoNxt ? pFrame->GetNextContentFrame()
                         :   pFrame->GetPrevContentFrame();
@@ -1800,8 +1800,8 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
             aPt = aTmpRect.Pos();
 
             nUpDownX = pFrame->IsVertical() ?
-                aPt.getY() - pFrame->FrameRA().Top() :
-                aPt.getX() - pFrame->FrameRA().Left();
+                aPt.getY() - pFrame->getSwFrame().Top() :
+                aPt.getX() - pFrame->getSwFrame().Left();
         }
 
         // It is allowed to move footnotes in other footnotes but not sections
@@ -1853,13 +1853,13 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
                 {
                     aPt.setX(aTmpRect.Center().getX());
                     pFrame->Calc(pFrame->getRootFrame()->GetCurrShell()->GetOut());
-                    aPt.setY(pFrame->FrameRA().Top() + nUpDownX);
+                    aPt.setY(pFrame->getSwFrame().Top() + nUpDownX);
                 }
                 else
                 {
                     aPt.setY(aTmpRect.Center().getY());
                     pFrame->Calc(pFrame->getRootFrame()->GetCurrShell()->GetOut());
-                    aPt.setX(pFrame->FrameRA().Left() + nUpDownX);
+                    aPt.setX(pFrame->getSwFrame().Left() + nUpDownX);
                 }
                 pFrame->GetCursorOfst( GetPoint(), aPt, &eTmpState );
             }

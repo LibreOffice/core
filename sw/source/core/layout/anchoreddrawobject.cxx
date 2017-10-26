@@ -237,7 +237,7 @@ bool SwAnchoredDrawObject::IsOutsidePage() const
     {
         SwRect aTmpRect( GetObjRect() );
         bOutsidePage =
-            ( aTmpRect.Intersection( GetPageFrame()->FrameRA() ) != GetObjRect() );
+            ( aTmpRect.Intersection( GetPageFrame()->getSwFrame() ) != GetObjRect() );
     }
 
     return bOutsidePage;
@@ -351,7 +351,7 @@ void SwAnchoredDrawObject::MakeObjPos()
     if ( mbCaptureAfterLayoutDirChange &&
          GetPageFrame() )
     {
-        SwRect aPageRect( GetPageFrame()->FrameRA() );
+        SwRect aPageRect( GetPageFrame()->getSwFrame() );
         SwRect aObjRect( GetObjRect() );
         if ( aObjRect.Right() >= aPageRect.Right() + 10 )
         {
@@ -491,7 +491,7 @@ void SwAnchoredDrawObject::MakeObjPosAnchoredAtLayout()
     SetCurrRelPos( aObjPositioning.GetRelPos() );
     const SwFrame* pAnchorFrame = GetAnchorFrame();
     SwRectFnSet aRectFnSet(pAnchorFrame);
-    const Point aAnchPos( aRectFnSet.GetPos(pAnchorFrame->FrameRA()) );
+    const Point aAnchPos( aRectFnSet.GetPos(pAnchorFrame->getSwFrame()) );
     SetObjLeft( aAnchPos.X() + GetCurrRelPos().X() );
     SetObjTop( aAnchPos.Y() + GetCurrRelPos().Y() );
 }
@@ -637,7 +637,7 @@ const SwRect SwAnchoredDrawObject::GetObjBoundRect() const
             tools::Rectangle aPageRect;
             if (GetDrawObj()->GetRelativeWidthRelation() == text::RelOrientation::FRAME)
                 // Exclude margins.
-                aPageRect = GetPageFrame()->PrintRA().SVRect();
+                aPageRect = GetPageFrame()->getSwPrint().SVRect();
             else
                 aPageRect = GetPageFrame( )->GetBoundRect( GetPageFrame()->getRootFrame()->GetCurrShell()->GetOut() ).SVRect();
             nTargetWidth = aPageRect.GetWidth( ) * (*GetDrawObj( )->GetRelativeWidth());
@@ -649,7 +649,7 @@ const SwRect SwAnchoredDrawObject::GetObjBoundRect() const
             tools::Rectangle aPageRect;
             if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::FRAME)
                 // Exclude margins.
-                aPageRect = GetPageFrame()->PrintRA().SVRect();
+                aPageRect = GetPageFrame()->getSwPrint().SVRect();
             else
                 aPageRect = GetPageFrame( )->GetBoundRect( GetPageFrame()->getRootFrame()->GetCurrShell()->GetOut() ).SVRect();
             nTargetHeight = aPageRect.GetHeight( ) * (*GetDrawObj( )->GetRelativeHeight());

@@ -34,34 +34,34 @@
 
     // No inline cause we need the function pointers
 long SwFrame::GetTopMargin() const
-    { return PrintRA().Top(); }
+    { return getSwPrint().Top(); }
 long SwFrame::GetBottomMargin() const
-    { return FrameRA().Height() -PrintRA().Height() -PrintRA().Top(); }
+    { return getSwFrame().Height() -getSwPrint().Height() -getSwPrint().Top(); }
 long SwFrame::GetLeftMargin() const
-    { return PrintRA().Left(); }
+    { return getSwPrint().Left(); }
 long SwFrame::GetRightMargin() const
-    { return FrameRA().Width() - PrintRA().Width() - PrintRA().Left(); }
+    { return getSwFrame().Width() - getSwPrint().Width() - getSwPrint().Left(); }
 long SwFrame::GetPrtLeft() const
-    { return FrameRA().Left() + PrintRA().Left(); }
+    { return getSwFrame().Left() + getSwPrint().Left(); }
 long SwFrame::GetPrtBottom() const
-    { return FrameRA().Top() + PrintRA().Height() + PrintRA().Top(); }
+    { return getSwFrame().Top() + getSwPrint().Height() + getSwPrint().Top(); }
 long SwFrame::GetPrtRight() const
-    { return FrameRA().Left() + PrintRA().Width() + PrintRA().Left(); }
+    { return getSwFrame().Left() + getSwPrint().Width() + getSwPrint().Left(); }
 long SwFrame::GetPrtTop() const
-    { return FrameRA().Top() + PrintRA().Top(); }
+    { return getSwFrame().Top() + getSwPrint().Top(); }
 
 bool SwFrame::SetMinLeft( long nDeadline )
 {
-    SwTwips nDiff = nDeadline - FrameRA().Left();
+    SwTwips nDiff = nDeadline - getSwFrame().Left();
     if( nDiff > 0 )
     {
-        SwRect aFrm(FrameRA());
+        SwRect aFrm(getSwFrame());
         aFrm.Left( nDeadline );
-        setFrame(aFrm);
+        setSwFrame(aFrm);
 
-        SwRect aPrt(PrintRA());
+        SwRect aPrt(getSwPrint());
         aPrt.Width( aPrt.Width() - nDiff );
-        setPrint(aPrt);
+        setSwPrint(aPrt);
 
         return true;
     }
@@ -70,16 +70,16 @@ bool SwFrame::SetMinLeft( long nDeadline )
 
 bool SwFrame::SetMaxBottom( long nDeadline )
 {
-    SwTwips nDiff = FrameRA().Top() + FrameRA().Height() - nDeadline;
+    SwTwips nDiff = getSwFrame().Top() + getSwFrame().Height() - nDeadline;
     if( nDiff > 0 )
     {
-        SwRect aFrm(FrameRA());
+        SwRect aFrm(getSwFrame());
         aFrm.Height( aFrm.Height() - nDiff );
-        setFrame(aFrm);
+        setSwFrame(aFrm);
 
-        SwRect aPrt(PrintRA());
+        SwRect aPrt(getSwPrint());
         aPrt.Height( aPrt.Height() - nDiff );
-        setPrint(aPrt);
+        setSwPrint(aPrt);
 
         return true;
     }
@@ -88,16 +88,16 @@ bool SwFrame::SetMaxBottom( long nDeadline )
 
 bool SwFrame::SetMinTop( long nDeadline )
 {
-    SwTwips nDiff = nDeadline - FrameRA().Top();
+    SwTwips nDiff = nDeadline - getSwFrame().Top();
     if( nDiff > 0 )
     {
-        SwRect aFrm(FrameRA());
+        SwRect aFrm(getSwFrame());
         aFrm.Top( nDeadline );
-        setFrame(aFrm);
+        setSwFrame(aFrm);
 
-        SwRect aPrt(PrintRA());
+        SwRect aPrt(getSwPrint());
         aPrt.Height( aPrt.Height() - nDiff );
-        setPrint(aPrt);
+        setSwPrint(aPrt);
 
         return true;
     }
@@ -106,16 +106,16 @@ bool SwFrame::SetMinTop( long nDeadline )
 
 bool SwFrame::SetMaxRight( long nDeadline )
 {
-    SwTwips nDiff = FrameRA().Left() + FrameRA().Width() - nDeadline;
+    SwTwips nDiff = getSwFrame().Left() + getSwFrame().Width() - nDeadline;
     if( nDiff > 0 )
     {
-        SwRect aFrm(FrameRA());
+        SwRect aFrm(getSwFrame());
         aFrm.Width( aFrm.Width() - nDiff );
-        setFrame(aFrm);
+        setSwFrame(aFrm);
 
-        SwRect aPrt(PrintRA());
+        SwRect aPrt(getSwPrint());
         aPrt.Width( aPrt.Width() - nDiff );
-        setPrint(aPrt);
+        setSwPrint(aPrt);
 
         return true;
     }
@@ -124,17 +124,17 @@ bool SwFrame::SetMaxRight( long nDeadline )
 
 void SwFrame::MakeBelowPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify )
 {
-    SwRect aFrm(FrameRA());
+    SwRect aFrm(getSwFrame());
 
     if( pPrv )
     {
-        aFrm.Pos( pPrv->FrameRA().Pos() );
-        aFrm.Pos().Y() += pPrv->FrameRA().Height();
+        aFrm.Pos( pPrv->getSwFrame().Pos() );
+        aFrm.Pos().Y() += pPrv->getSwFrame().Height();
     }
     else
     {
-        aFrm.Pos( pUp->FrameRA().Pos() );
-        aFrm.Pos() += pUp->PrintRA().Pos();
+        aFrm.Pos( pUp->getSwFrame().Pos() );
+        aFrm.Pos() += pUp->getSwPrint().Pos();
     }
 
     if( bNotify )
@@ -142,23 +142,23 @@ void SwFrame::MakeBelowPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
         aFrm.Pos().Y() += 1;
     }
 
-    setFrame(aFrm);
+    setSwFrame(aFrm);
 }
 
 void SwFrame::MakeUpperPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify )
 {
-    SwRect aFrm(FrameRA());
+    SwRect aFrm(getSwFrame());
 
     if( pPrv )
     {
-        aFrm.Pos( pPrv->FrameRA().Pos() );
+        aFrm.Pos( pPrv->getSwFrame().Pos() );
         aFrm.Pos().Y() -= aFrm.Height();
     }
     else
     {
-        aFrm.Pos( pUp->FrameRA().Pos() );
-        aFrm.Pos() += pUp->PrintRA().Pos();
-        aFrm.Pos().Y() += pUp->PrintRA().Height() - aFrm.Height();
+        aFrm.Pos( pUp->getSwFrame().Pos() );
+        aFrm.Pos() += pUp->getSwPrint().Pos();
+        aFrm.Pos().Y() += pUp->getSwPrint().Height() - aFrm.Height();
     }
 
     if( bNotify )
@@ -166,23 +166,23 @@ void SwFrame::MakeUpperPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
         aFrm.Pos().Y() -= 1;
     }
 
-    setFrame(aFrm);
+    setSwFrame(aFrm);
 }
 
 void SwFrame::MakeLeftPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify )
 {
-    SwRect aFrm(FrameRA());
+    SwRect aFrm(getSwFrame());
 
     if( pPrv )
     {
-        aFrm.Pos( pPrv->FrameRA().Pos() );
+        aFrm.Pos( pPrv->getSwFrame().Pos() );
         aFrm.Pos().X() -= aFrm.Width();
     }
     else
     {
-        aFrm.Pos( pUp->FrameRA().Pos() );
-        aFrm.Pos() += pUp->PrintRA().Pos();
-        aFrm.Pos().X() += pUp->PrintRA().Width() - aFrm.Width();
+        aFrm.Pos( pUp->getSwFrame().Pos() );
+        aFrm.Pos() += pUp->getSwPrint().Pos();
+        aFrm.Pos().X() += pUp->getSwPrint().Width() - aFrm.Width();
     }
 
     if( bNotify )
@@ -190,22 +190,22 @@ void SwFrame::MakeLeftPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify
         aFrm.Pos().X() -= 1;
     }
 
-    setFrame(aFrm);
+    setSwFrame(aFrm);
 }
 
 void SwFrame::MakeRightPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify )
 {
-    SwRect aFrm(FrameRA());
+    SwRect aFrm(getSwFrame());
 
     if( pPrv )
     {
-        aFrm.Pos( pPrv->FrameRA().Pos() );
-        aFrm.Pos().X() += pPrv->FrameRA().Width();
+        aFrm.Pos( pPrv->getSwFrame().Pos() );
+        aFrm.Pos().X() += pPrv->getSwFrame().Width();
     }
     else
     {
-        aFrm.Pos( pUp->FrameRA().Pos() );
-        aFrm.Pos() += pUp->PrintRA().Pos();
+        aFrm.Pos( pUp->getSwFrame().Pos() );
+        aFrm.Pos() += pUp->getSwPrint().Pos();
     }
 
     if( bNotify )
@@ -213,39 +213,39 @@ void SwFrame::MakeRightPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
         aFrm.Pos().X() += 1;
     }
 
-    setFrame(aFrm);
+    setSwFrame(aFrm);
 }
 
 void SwFrame::SetTopBottomMargins( long nTop, long nBot )
 {
-    SwRect aPrt(PrintRA());
+    SwRect aPrt(getSwPrint());
     aPrt.Top( nTop );
-    aPrt.Height( FrameRA().Height() - nTop - nBot );
-    setPrint(aPrt);
+    aPrt.Height( getSwFrame().Height() - nTop - nBot );
+    setSwPrint(aPrt);
 }
 
 void SwFrame::SetBottomTopMargins( long nBot, long nTop )
 {
-    SwRect aPrt(PrintRA());
+    SwRect aPrt(getSwPrint());
     aPrt.Top( nTop );
-    aPrt.Height( FrameRA().Height() - nTop - nBot );
-    setPrint(aPrt);
+    aPrt.Height( getSwFrame().Height() - nTop - nBot );
+    setSwPrint(aPrt);
 }
 
 void SwFrame::SetLeftRightMargins( long nLeft, long nRight)
 {
-    SwRect aPrt(PrintRA());
+    SwRect aPrt(getSwPrint());
     aPrt.Left( nLeft );
-    aPrt.Width( FrameRA().Width() - nLeft - nRight );
-    setPrint(aPrt);
+    aPrt.Width( getSwFrame().Width() - nLeft - nRight );
+    setSwPrint(aPrt);
 }
 
 void SwFrame::SetRightLeftMargins( long nRight, long nLeft)
 {
-    SwRect aPrt(PrintRA());
+    SwRect aPrt(getSwPrint());
     aPrt.Left( nLeft );
-    aPrt.Width( FrameRA().Width() - nLeft - nRight );
-    setPrint(aPrt);
+    aPrt.Width( getSwFrame().Width() - nLeft - nRight );
+    setSwPrint(aPrt);
 }
 
 /// checks the layout direction and invalidates the lower frames recursively, if necessary.
@@ -351,10 +351,10 @@ void SwFrame::CheckDirChange()
 // previous frame according to new option 'Use former object positioning'
 Point SwFrame::GetFrameAnchorPos( bool bIgnoreFlysAnchoredAtThisFrame ) const
 {
-    Point aAnchor = FrameRA().Pos();
+    Point aAnchor = getSwFrame().Pos();
 
     if ( ( IsVertical() && !IsVertLR() ) || IsRightToLeft() )
-        aAnchor.X() += FrameRA().Width();
+        aAnchor.X() += getSwFrame().Width();
 
     if ( IsTextFrame() )
     {
@@ -610,14 +610,14 @@ SwLayoutFrame::~SwLayoutFrame()
 
 /**
 |*  The paintarea is the area, in which the content of a frame is allowed
-|*  to be displayed. This region could be larger than the printarea (PrintRA())
+|*  to be displayed. This region could be larger than the printarea (getSwPrint())
 |*  of the upper, it includes e.g. often the margin of the page.
 |*/
 const SwRect SwFrame::PaintArea() const
 {
     // NEW TABLES
     // Cell frames may not leave their upper:
-    SwRect aRect = IsRowFrame() ? GetUpper()->FrameRA() : FrameRA();
+    SwRect aRect = IsRowFrame() ? GetUpper()->getSwFrame() : getSwFrame();
     const bool bVert = IsVertical();
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
     long nRight = (aRect.*fnRect->fnGetRight)();
@@ -631,17 +631,17 @@ const SwRect SwFrame::PaintArea() const
         if( pTmp->IsCellFrame() && pTmp->GetUpper() &&
             pTmp->GetUpper()->IsVertical() != pTmp->IsVertical() )
             nRowSpan = static_cast<const SwCellFrame*>(pTmp)->GetTabBox()->getRowSpan();
-        long nTmpRight = (pTmp->FrameRA().*fnRect->fnGetRight)();
-        long nTmpLeft = (pTmp->FrameRA().*fnRect->fnGetLeft)();
+        long nTmpRight = (pTmp->getSwFrame().*fnRect->fnGetRight)();
+        long nTmpLeft = (pTmp->getSwFrame().*fnRect->fnGetLeft)();
         if( pTmp->IsRowFrame() && nRowSpan > 1 )
         {
             const SwFrame* pNxt = pTmp;
             while( --nRowSpan > 0 && pNxt->GetNext() )
                 pNxt = pNxt->GetNext();
             if( pTmp->IsVertical() )
-                nTmpLeft = (pNxt->FrameRA().*fnRect->fnGetLeft)();
+                nTmpLeft = (pNxt->getSwFrame().*fnRect->fnGetLeft)();
             else
-                nTmpRight = (pNxt->FrameRA().*fnRect->fnGetRight)();
+                nTmpRight = (pNxt->getSwFrame().*fnRect->fnGetRight)();
         }
         OSL_ENSURE( pTmp, "PaintArea lost in time and space" );
         if( pTmp->IsPageFrame() || pTmp->IsFlyFrame() ||
@@ -704,17 +704,17 @@ const SwRect SwFrame::PaintArea() const
 }
 
 /**
-|*  The unionframe is the framearea (FrameRA()) of a frame expanded by the
+|*  The unionframe is the framearea (getSwFrame()) of a frame expanded by the
 |*  printarea, if there's a negative margin at the left or right side.
 |*/
 const SwRect SwFrame::UnionFrame( bool bBorder ) const
 {
     bool bVert = IsVertical();
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
-    long nLeft = (FrameRA().*fnRect->fnGetLeft)();
-    long nWidth = (FrameRA().*fnRect->fnGetWidth)();
-    long nPrtLeft = (PrintRA().*fnRect->fnGetLeft)();
-    long nPrtWidth = (PrintRA().*fnRect->fnGetWidth)();
+    long nLeft = (getSwFrame().*fnRect->fnGetLeft)();
+    long nWidth = (getSwFrame().*fnRect->fnGetWidth)();
+    long nPrtLeft = (getSwPrint().*fnRect->fnGetLeft)();
+    long nPrtWidth = (getSwPrint().*fnRect->fnGetWidth)();
     if( nPrtLeft + nPrtWidth > nWidth )
         nWidth = nPrtLeft + nPrtWidth;
     if( nPrtLeft < 0 )
@@ -751,7 +751,7 @@ const SwRect SwFrame::UnionFrame( bool bBorder ) const
             nAdd = nTmp;
     }
     nWidth = nRight + nAdd - nLeft;
-    SwRect aRet( FrameRA() );
+    SwRect aRet( getSwFrame() );
     (aRet.*fnRect->fnSetPosX)( nLeft );
     (aRet.*fnRect->fnSetWidth)( nWidth );
     return aRet;

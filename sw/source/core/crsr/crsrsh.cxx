@@ -770,7 +770,7 @@ int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
         {
             if( pFrame )
             {
-                if( pFrame->FrameRA().IsInside( rAktCursorPt ))
+                if( pFrame->getSwFrame().IsInside( rAktCursorPt ))
                     return bRet;
             }
             else if( aPos.nNode.GetNode().IsContentNode() )
@@ -789,7 +789,7 @@ int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
     {
         // SSelection over not allowed sections or if in header/footer -> different
         if( !CheckNodesRange( aPos.nNode, pCursor->GetMark()->nNode, true )
-            || ( pFrame && !pFrame->FrameRA().IsInside( pCursor->GetMkPos() ) ))
+            || ( pFrame && !pFrame->getSwFrame().IsInside( pCursor->GetMkPos() ) ))
             return bRet;
 
         // is at same position but not in header/footer
@@ -1117,7 +1117,7 @@ sal_uInt16 SwCursorShell::GetNextPrevPageNum( bool bNext )
     const SwPageFrame *pPg = Imp()->GetFirstVisPage(GetOut());
     if( pPg )
     {
-        const SwTwips nPageTop = pPg->FrameRA().Top();
+        const SwTwips nPageTop = pPg->getSwFrame().Top();
 
         if( bNext )
         {
@@ -1126,7 +1126,7 @@ sal_uInt16 SwCursorShell::GetNextPrevPageNum( bool bNext )
             {
                 pPg = static_cast<const SwPageFrame *>(pPg->GetNext());
             }
-            while( pPg && pPg->FrameRA().Top() == nPageTop );
+            while( pPg && pPg->getSwFrame().Top() == nPageTop );
 
             while( pPg && pPg->IsEmptyPage() )
                 pPg = static_cast<const SwPageFrame *>(pPg->GetNext());
@@ -1138,7 +1138,7 @@ sal_uInt16 SwCursorShell::GetNextPrevPageNum( bool bNext )
             {
                 pPg = static_cast<const SwPageFrame *>(pPg->GetPrev());
             }
-            while( pPg && pPg->FrameRA().Top() == nPageTop );
+            while( pPg && pPg->getSwFrame().Top() == nPageTop );
 
             while( pPg && pPg->IsEmptyPage() )
                 pPg = static_cast<const SwPageFrame *>(pPg->GetPrev());
@@ -1162,13 +1162,13 @@ OUString SwCursorShell::getPageRectangles()
     OUStringBuffer aBuf;
     for (const SwFrame* pFrame = pLayout->GetLower(); pFrame; pFrame = pFrame->GetNext())
     {
-        aBuf.append(pFrame->FrameRA().Left());
+        aBuf.append(pFrame->getSwFrame().Left());
         aBuf.append(", ");
-        aBuf.append(pFrame->FrameRA().Top());
+        aBuf.append(pFrame->getSwFrame().Top());
         aBuf.append(", ");
-        aBuf.append(pFrame->FrameRA().Width());
+        aBuf.append(pFrame->getSwFrame().Width());
         aBuf.append(", ");
-        aBuf.append(pFrame->FrameRA().Height());
+        aBuf.append(pFrame->getSwFrame().Height());
         aBuf.append("; ");
     }
     if (!aBuf.isEmpty())
@@ -1561,8 +1561,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
                 SwFrame* pBoxFrame = pTableFrame;
                 while( pBoxFrame && !pBoxFrame->IsCellFrame() )
                     pBoxFrame = pBoxFrame->GetUpper();
-                if( pBoxFrame && pBoxFrame->FrameRA().HasArea() )
-                    MakeVisible( pBoxFrame->FrameRA() );
+                if( pBoxFrame && pBoxFrame->getSwFrame().HasArea() )
+                    MakeVisible( pBoxFrame->getSwFrame() );
                 else
                     MakeVisible( m_aCharRect );
             }
@@ -1807,8 +1807,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             DisableCallbackAction a(*GetLayout());
             pFrame->Calc(GetOut());
             m_nUpDownX = pFrame->IsVertical() ?
-                       m_aCharRect.Top() - pFrame->FrameRA().Top() :
-                       m_aCharRect.Left() - pFrame->FrameRA().Left();
+                       m_aCharRect.Top() - pFrame->getSwFrame().Top() :
+                       m_aCharRect.Left() - pFrame->getSwFrame().Left();
         }
 
         // scroll Cursor to visible area
@@ -1893,9 +1893,9 @@ void SwCursorShell::RefreshBlockCursor()
         if( pFrame )
         {
             if( pFrame->IsVertical() )
-                aPt.setY(pFrame->FrameRA().Top() + GetUpDownX());
+                aPt.setY(pFrame->getSwFrame().Top() + GetUpDownX());
             else
-                aPt.setX(pFrame->FrameRA().Left() + GetUpDownX());
+                aPt.setX(pFrame->getSwFrame().Left() + GetUpDownX());
         }
         aMk = rBlock.GetMkPos();
     }

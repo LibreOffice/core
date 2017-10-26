@@ -230,7 +230,7 @@ long SwCallLink::getLayoutFrame( const SwRootFrame* pRoot, SwTextNode const & rN
                     nCntPos >= pNext->GetOfst() )
                 pFrame = pNext;
 
-        return pFrame->FrameRA().Left();
+        return pFrame->getSwFrame().Left();
     }
     return 0;
 }
