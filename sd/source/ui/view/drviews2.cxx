@@ -325,9 +325,9 @@ public:
                             for (editeng::Section const & rSection : aSections)
                             {
                                 const SvxFieldItem* pFieldItem = findField(rSection);
-                                if (pFieldItem)
+                                const editeng::CustomPropertyField* pCustomPropertyField = pFieldItem ? dynamic_cast<const editeng::CustomPropertyField*>(pFieldItem->GetField()) : nullptr;
+                                if (pCustomPropertyField)
                                 {
-                                    const auto* pCustomPropertyField = dynamic_cast<const editeng::CustomPropertyField*>(pFieldItem->GetField());
                                     OUString aKey = pCustomPropertyField->GetKey();
                                     if (aKey.startsWith(sPolicy + "Marking:Text:"))
                                     {
