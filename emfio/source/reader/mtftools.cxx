@@ -488,7 +488,7 @@ namespace emfio
                     break;
                 }
             }
-            return Size( FRound( fWidth ), FRound( fHeight ) );
+            return Size(basegfx::fround(fWidth), basegfx::fround(fHeight));
         }
         else
             return Size();
@@ -1975,10 +1975,10 @@ namespace emfio
         }
     }
 
-    void MtfTools::ScaleDevExt( double fX, double fY )
+    void MtfTools::ScaleDevExt(double fX, double fY)
     {
-        mnDevWidth = FRound( mnDevWidth * fX );
-        mnDevHeight = FRound( mnDevHeight * fY );
+        mnDevWidth = basegfx::fround(mnDevWidth * fX);
+        mnDevHeight = basegfx::fround(mnDevHeight * fY);
     }
 
     void MtfTools::SetWinOrg( const Point& rPoint , bool bIsEMF)
@@ -2033,10 +2033,10 @@ namespace emfio
         }
     }
 
-    void MtfTools::ScaleWinExt( double fX, double fY )
+    void MtfTools::ScaleWinExt(double fX, double fY)
     {
-        mnWinExtX = FRound( mnWinExtX * fX );
-        mnWinExtY = FRound( mnWinExtY * fY );
+        mnWinExtX = basegfx::fround(mnWinExtX * fX);
+        mnWinExtY = basegfx::fround(mnWinExtY * fY);
     }
 
     void MtfTools::SetrclBounds( const tools::Rectangle& rRect )
