@@ -643,7 +643,10 @@ void gtv_lok_dialog_child_close(GtvLokDialog* dialog)
 
     GtvLokDialogPrivate* priv = getPrivate(dialog);
     if (priv->pFloatingWin)
+    {
         gtk_widget_destroy(priv->pFloatingWin);
+        priv->pFloatingWin = nullptr;
+    }
 }
 
 
