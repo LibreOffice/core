@@ -55,7 +55,10 @@ bool SwFrame::SetMinLeft( long nDeadline )
     SwTwips nDiff = nDeadline - FrameRA().Left();
     if( nDiff > 0 )
     {
-        FrameWA().Left( nDeadline );
+        SwRect aFrm(FrameRA());
+        aFrm.Left( nDeadline );
+        setFrame(aFrm);
+
         PrintWA().Width( PrintRA().Width() - nDiff );
         return true;
     }
@@ -67,7 +70,10 @@ bool SwFrame::SetMaxBottom( long nDeadline )
     SwTwips nDiff = FrameRA().Top() + FrameRA().Height() - nDeadline;
     if( nDiff > 0 )
     {
-        FrameWA().Height( FrameRA().Height() - nDiff );
+        SwRect aFrm(FrameRA());
+        aFrm.Height( aFrm.Height() - nDiff );
+        setFrame(aFrm);
+
         PrintWA().Height( PrintRA().Height() - nDiff );
         return true;
     }
@@ -79,7 +85,10 @@ bool SwFrame::SetMinTop( long nDeadline )
     SwTwips nDiff = nDeadline - FrameRA().Top();
     if( nDiff > 0 )
     {
-        FrameWA().Top( nDeadline );
+        SwRect aFrm(FrameRA());
+        aFrm.Top( nDeadline );
+        setFrame(aFrm);
+
         PrintWA().Height( PrintRA().Height() - nDiff );
         return true;
     }
@@ -91,7 +100,10 @@ bool SwFrame::SetMaxRight( long nDeadline )
     SwTwips nDiff = FrameRA().Left() + FrameRA().Width() - nDeadline;
     if( nDiff > 0 )
     {
-        FrameWA().Width( FrameRA().Width() - nDiff );
+        SwRect aFrm(FrameRA());
+        aFrm.Width( aFrm.Width() - nDiff );
+        setFrame(aFrm);
+
         PrintWA().Width( PrintRA().Width() - nDiff );
         return true;
     }
@@ -100,68 +112,96 @@ bool SwFrame::SetMaxRight( long nDeadline )
 
 void SwFrame::MakeBelowPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify )
 {
+    SwRect aFrm(FrameRA());
+
     if( pPrv )
     {
-        FrameWA().Pos( pPrv->FrameRA().Pos() );
-        FrameWA().Pos().Y() += pPrv->FrameRA().Height();
+        aFrm.Pos( pPrv->FrameRA().Pos() );
+        aFrm.Pos().Y() += pPrv->FrameRA().Height();
     }
     else
     {
-        FrameWA().Pos( pUp->FrameRA().Pos() );
-        FrameWA().Pos() += pUp->PrintRA().Pos();
+        aFrm.Pos( pUp->FrameRA().Pos() );
+        aFrm.Pos() += pUp->PrintRA().Pos();
     }
+
     if( bNotify )
-        FrameWA().Pos().Y() += 1;
+    {
+        aFrm.Pos().Y() += 1;
+    }
+
+    setFrame(aFrm);
 }
 
 void SwFrame::MakeUpperPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify )
 {
+    SwRect aFrm(FrameRA());
+
     if( pPrv )
     {
-        FrameWA().Pos( pPrv->FrameRA().Pos() );
-        FrameWA().Pos().Y() -= FrameRA().Height();
+        aFrm.Pos( pPrv->FrameRA().Pos() );
+        aFrm.Pos().Y() -= aFrm.Height();
     }
     else
     {
-        FrameWA().Pos( pUp->FrameRA().Pos() );
-        FrameWA().Pos() += pUp->PrintRA().Pos();
-        FrameWA().Pos().Y() += pUp->PrintRA().Height() - FrameRA().Height();
+        aFrm.Pos( pUp->FrameRA().Pos() );
+        aFrm.Pos() += pUp->PrintRA().Pos();
+        aFrm.Pos().Y() += pUp->PrintRA().Height() - aFrm.Height();
     }
+
     if( bNotify )
-        FrameWA().Pos().Y() -= 1;
+    {
+        aFrm.Pos().Y() -= 1;
+    }
+
+    setFrame(aFrm);
 }
 
 void SwFrame::MakeLeftPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify )
 {
+    SwRect aFrm(FrameRA());
+
     if( pPrv )
     {
-        FrameWA().Pos( pPrv->FrameRA().Pos() );
-        FrameWA().Pos().X() -= FrameRA().Width();
+        aFrm.Pos( pPrv->FrameRA().Pos() );
+        aFrm.Pos().X() -= aFrm.Width();
     }
     else
     {
-        FrameWA().Pos( pUp->FrameRA().Pos() );
-        FrameWA().Pos() += pUp->PrintRA().Pos();
-        FrameWA().Pos().X() += pUp->PrintRA().Width() - FrameRA().Width();
+        aFrm.Pos( pUp->FrameRA().Pos() );
+        aFrm.Pos() += pUp->PrintRA().Pos();
+        aFrm.Pos().X() += pUp->PrintRA().Width() - aFrm.Width();
     }
+
     if( bNotify )
-        FrameWA().Pos().X() -= 1;
+    {
+        aFrm.Pos().X() -= 1;
+    }
+
+    setFrame(aFrm);
 }
 
 void SwFrame::MakeRightPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify )
 {
+    SwRect aFrm(FrameRA());
+
     if( pPrv )
     {
-        FrameWA().Pos( pPrv->FrameRA().Pos() );
-        FrameWA().Pos().X() += pPrv->FrameRA().Width();
+        aFrm.Pos( pPrv->FrameRA().Pos() );
+        aFrm.Pos().X() += pPrv->FrameRA().Width();
     }
     else
     {
-        FrameWA().Pos( pUp->FrameRA().Pos() );
-        FrameWA().Pos() += pUp->PrintRA().Pos();
+        aFrm.Pos( pUp->FrameRA().Pos() );
+        aFrm.Pos() += pUp->PrintRA().Pos();
     }
+
     if( bNotify )
-        FrameWA().Pos().X() += 1;
+    {
+        aFrm.Pos().X() += 1;
+    }
+
+    setFrame(aFrm);
 }
 
 void SwFrame::SetTopBottomMargins( long nTop, long nBot )

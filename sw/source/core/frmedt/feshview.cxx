@@ -836,7 +836,9 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
             {
                 bCheckNeighbours = true;
                 pFly->InvalidatePos();
-                pFly->FrameWA().Pos().Y() += 1;
+                SwRect aFrm(pFly->FrameRA());
+                aFrm.Pos().Y() += 1;
+                pFly->setFrame(aFrm);
             }
 
             pPage = pFly->FindPageFrame();
@@ -882,7 +884,9 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
                      pAct->FrameRA().Bottom() >= aRect.Top() )
                 {
                     pAct->InvalidatePos();
-                    pAct->FrameWA().Pos().Y() += 1;
+                    SwRect aFrm(pAct->FrameRA());
+                    aFrm.Pos().Y() += 1;
+                    pAct->setFrame(aFrm);
                 }
             }
         }
