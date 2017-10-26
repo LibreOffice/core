@@ -514,8 +514,9 @@ namespace emfio
         // must later be made portable in SV (KA 1996-02-08)
         Size  aFontSize = ImplMap (rFont.GetFontSize(), false);
 
-        if( aFontSize.Height() < 0 )
-            aFontSize.Height() *= -1;
+        const auto nHeight = aFontSize.Height();
+        if (nHeight < 0)
+            aFontSize.Height() = o3tl::saturating_toggle_sign(nHeight);
 
         rFont.SetFontSize( aFontSize );
 

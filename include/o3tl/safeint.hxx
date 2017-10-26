@@ -56,6 +56,15 @@ typename std::enable_if<std::is_unsigned<T>::value, T>::type saturating_add(
     }
 }
 
+template<typename T> inline
+typename std::enable_if<std::is_signed<T>::value, T>::type saturating_toggle_sign(
+    T a)
+{
+    if (a == std::numeric_limits<T>::min())
+        return std::numeric_limits<T>::max();
+    return a * -1;
+}
+
 #if defined(_MSC_VER)
 
 template<typename T> inline bool checked_multiply(T a, T b, T& result)
