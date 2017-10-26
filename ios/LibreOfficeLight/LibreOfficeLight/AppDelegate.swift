@@ -37,9 +37,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         defaults.synchronize()
 
         // start LibreOfficeKit
-        BridgeLOkit_Init(Bundle.main.bundlePath)
-        BridgeLOkit_open("jan");
-        BridgeLOkit_ClientCommand("jan");
+        //FIX BridgeLOkit_Init(Bundle.main.bundlePath)
+        //FIX BridgeLOkit_open("jan");
+        //FIX BridgeLOkit_ClientCommand("jan");
 
         // Override point for customization after application launch.
         return true

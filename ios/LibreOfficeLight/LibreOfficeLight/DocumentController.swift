@@ -13,6 +13,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentPickerDelega
 {
     var currentDocumentName : String?
     var currentCloudUrl : URL?
+    var currentStorageLocal : Bool = false
 
 
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL)
@@ -68,6 +69,16 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentPickerDelega
             }, completion:nil)
     }
 
+
+    @IBOutlet weak var buttonSelectStorage: UIBarButtonItem!
+
+
+    @IBAction func doSelectStorage(_ sender: UIBarButtonItem)
+    {
+        currentStorageLocal = !currentStorageLocal
+        sender.image = currentStorageLocal ? #imageLiteral(resourceName: "iCloudDrive") : #imageLiteral(resourceName: "iPhone")
+        self.presentedViewController?.dismiss(animated: true, completion: nil)
+    }
 
 
     // Last stop before displaying popover

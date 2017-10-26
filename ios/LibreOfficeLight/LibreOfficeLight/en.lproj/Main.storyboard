@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="DGj-7d-jfR">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="DGj-7d-jfR">
     <device id="ipad9_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -34,11 +35,18 @@
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Document" id="5c6-32-T4J">
-                        <barButtonItem key="leftBarButtonItem" image="menu" id="fdq-Uw-536">
-                            <connections>
-                                <action selector="doMenu:" destination="vXZ-lx-hvc" id="mHw-Uf-vh2"/>
-                            </connections>
-                        </barButtonItem>
+                        <leftBarButtonItems>
+                            <barButtonItem image="menu" id="fdq-Uw-536" userLabel="Button Side Menu">
+                                <connections>
+                                    <action selector="doMenu:" destination="vXZ-lx-hvc" id="mHw-Uf-vh2"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="iCloudDrive" id="BNN-MQ-25d" userLabel="Button Select Storage">
+                                <connections>
+                                    <action selector="doSelectStorage:" destination="vXZ-lx-hvc" id="77L-yW-vcR"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
                         <barButtonItem key="rightBarButtonItem" systemItem="action" id="BNq-ol-ZVK">
                             <connections>
                                 <segue destination="IER-X5-Ax8" kind="popoverPresentation" identifier="showActions" popoverAnchorBarButtonItem="BNq-ol-ZVK" id="xmZ-1A-ZrW">
@@ -49,6 +57,7 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="buttonSelectStorage" destination="BNN-MQ-25d" id="c5F-NA-mbv"/>
                         <outlet property="janTest" destination="D1P-q2-3PT" id="ERV-pa-Fs9"/>
                     </connections>
                 </viewController>
@@ -154,7 +163,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="DGj-7d-jfR" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="mjw-Ry-qIh">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="768" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="barTintColor" red="0.0" green="0.58367598684210531" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -187,10 +196,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K3a-CQ-sBC">
-                                <rect key="frame" x="20" y="359" width="150" height="45"/>
+                                <rect key="frame" x="20" y="359" width="72" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="Rg4-bW-MQk"/>
-                                    <constraint firstAttribute="width" constant="150" id="y0o-Nq-4z4"/>
                                 </constraints>
                                 <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" title="Style6" image="document">
@@ -201,9 +209,8 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hk4-yl-lM9">
-                                <rect key="frame" x="20" y="304" width="150" height="45"/>
+                                <rect key="frame" x="20" y="304" width="72" height="45"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="150" id="UL6-xy-1qB"/>
                                     <constraint firstAttribute="height" constant="45" id="hty-y5-gVo"/>
                                 </constraints>
                                 <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -215,9 +222,8 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CBj-V3-BKJ">
-                                <rect key="frame" x="20" y="249" width="150" height="45"/>
+                                <rect key="frame" x="20" y="249" width="72" height="45"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="150" id="U6W-G1-H2J"/>
                                     <constraint firstAttribute="height" constant="45" id="wOH-9b-B8P"/>
                                 </constraints>
                                 <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -229,10 +235,9 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eZV-Rh-hCf">
-                                <rect key="frame" x="20" y="194" width="150" height="45"/>
+                                <rect key="frame" x="20" y="194" width="72" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="N7I-YK-5uo"/>
-                                    <constraint firstAttribute="width" constant="150" id="eLW-p8-QBZ"/>
                                 </constraints>
                                 <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" title="Style3" image="document">
@@ -243,10 +248,9 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YTV-Y5-L8R">
-                                <rect key="frame" x="20" y="139" width="150" height="45"/>
+                                <rect key="frame" x="20" y="139" width="71" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="4H0-0k-rm5"/>
-                                    <constraint firstAttribute="width" constant="150" id="Q1z-1N-WMF"/>
                                 </constraints>
                                 <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" title="Style2" image="document">
@@ -257,10 +261,9 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Mv-7b-xjF">
-                                <rect key="frame" x="20" y="414" width="150" height="45"/>
+                                <rect key="frame" x="20" y="414" width="70" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="Fyt-Iq-YWv"/>
-                                    <constraint firstAttribute="width" constant="150" id="eFy-qB-RER"/>
                                 </constraints>
                                 <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" title="Style7" image="document">
@@ -271,9 +274,8 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g5y-SJ-jU1">
-                                <rect key="frame" x="20" y="84" width="150" height="45"/>
+                                <rect key="frame" x="20" y="84" width="69" height="45"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="150" id="Uuo-01-tfU"/>
                                     <constraint firstAttribute="height" constant="45" id="v75-o1-ii6"/>
                                 </constraints>
                                 <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -501,6 +503,7 @@
     </scenes>
     <resources>
         <image name="document" width="20" height="20"/>
+        <image name="iCloudDrive" width="22" height="22"/>
         <image name="menu" width="22" height="22"/>
     </resources>
 </document>
