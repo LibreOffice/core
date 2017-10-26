@@ -340,7 +340,7 @@ sal_uInt16 SwHTMLTableLayout::GetBrowseWidth( const SwDoc& rDoc )
     {
         const SwFrame *pPageFrame = pRootFrame->GetLower();
         if( pPageFrame )
-            return (sal_uInt16)pPageFrame->PrintRA().Width();
+            return (sal_uInt16)pPageFrame->getSwPrint().Width();
     }
 
     // #i91658#
@@ -364,13 +364,13 @@ sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByTabFrame(
         // For paragraph-bound frames we don't respect paragraph indents.
         const SwFrame *pAnchor = static_cast<const SwFlyFrame *>(pUpper)->GetAnchorFrame();
         if( pAnchor->IsTextFrame() )
-            nWidth = pAnchor->FrameRA().Width();
+            nWidth = pAnchor->getSwFrame().Width();
         else
-            nWidth = pAnchor->PrintRA().Width();
+            nWidth = pAnchor->getSwPrint().Width();
     }
     else
     {
-        nWidth = pUpper->PrintRA().Width();
+        nWidth = pUpper->getSwPrint().Width();
     }
 
     SwTwips nUpperDummy = 0;

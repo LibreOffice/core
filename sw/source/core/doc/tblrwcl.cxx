@@ -1060,7 +1060,7 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
             const SwRowFrame* pRow = GetRowFrame( *pSelBox->GetUpper() );
             OSL_ENSURE( pRow, "Where is the SwTableLine's Frame?" );
             SwRectFnSet aRectFnSet(pRow);
-            pRowHeights[ n ] = aRectFnSet.GetHeight(pRow->FrameRA());
+            pRowHeights[ n ] = aRectFnSet.GetHeight(pRow->getSwFrame());
         }
     }
 
@@ -3549,9 +3549,9 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                     {
                         SwTabFrame* pTabFrame = SwIterator<SwTabFrame,SwFormat>( *GetFrameFormat() ).First();
                         if( pTabFrame &&
-                            pTabFrame->PrintRA().Width() != rSz.GetWidth() )
+                            pTabFrame->getSwPrint().Width() != rSz.GetWidth() )
                         {
-                            nFrameWidth = pTabFrame->PrintRA().Width();
+                            nFrameWidth = pTabFrame->getSwPrint().Width();
                             if( bBigger )
                                 nFrameWidth += nAbsDiff;
                             else
@@ -3904,7 +3904,7 @@ void SetLineHeight( SwTableLine& rLine, SwTwips nOldHeight, SwTwips nNewHeight,
 
     SwFrameFormat* pFormat = rLine.ClaimFrameFormat();
 
-    SwTwips nMyNewH, nMyOldH = pLineFrame->FrameRA().Height();
+    SwTwips nMyNewH, nMyOldH = pLineFrame->getSwFrame().Height();
     if( !nOldHeight )                       // the BaseLine and absolute
         nMyNewH = nMyOldH + nNewHeight;
     else
@@ -3967,7 +3967,7 @@ static bool lcl_SetOtherLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam
 
             if( TableChgMode::FixedWidthChangeProp == rParam.nMode )
             {
-                nDist *= pLineFrame->FrameRA().Height();
+                nDist *= pLineFrame->getSwFrame().Height();
                 nDist /= rParam.nMaxHeight;
             }
             bRet = nDist <= CalcRowRstHeight( pLineFrame );
@@ -3987,7 +3987,7 @@ static bool lcl_SetOtherLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam
             // via the max height.
             if( (true) /*!rParam.bBigger*/ )
             {
-                nDist *= pLineFrame->FrameRA().Height();
+                nDist *= pLineFrame->getSwFrame().Height();
                 nDist /= rParam.nMaxHeight;
             }
             else
@@ -4152,7 +4152,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, TableChgWidthHeightType eType,
         {
             if( bInsDel && !bBigger )       // By how much does it get higher?
             {
-                nAbsDiff = GetRowFrame( *pBaseLine )->FrameRA().Height();
+                nAbsDiff = GetRowFrame( *pBaseLine )->getSwFrame().Height();
             }
 
             if( TableChgMode::VarWidthChangeAbs == m_eTableChgMode )
@@ -4220,7 +4220,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                         SwLayoutFrame* pLineFrame = GetRowFrame( *(*pLines)[ n ] );
                         OSL_ENSURE( pLineFrame, "Where is the Frame from the SwTableLine??" );
                         aParam.nMaxSpace += CalcRowRstHeight( pLineFrame );
-                        aParam.nMaxHeight += pLineFrame->FrameRA().Height();
+                        aParam.nMaxHeight += pLineFrame->getSwFrame().Height();
                     }
                     if( bBigger && aParam.nMaxSpace < nAbsDiff )
                         bRet = false;

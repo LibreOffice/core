@@ -176,7 +176,7 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
         if ( !mbValidPos )
         {
-            const Point aOldPos( aRectFnSet.GetPos(FrameRA()) );
+            const Point aOldPos( aRectFnSet.GetPos(getSwFrame()) );
             // #i26791# - use new method <MakeObjPos()>
             // #i34753# - no positioning, if requested.
             if ( IsNoMakePos() )
@@ -184,7 +184,7 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             else
                 // #i26791# - use new method <MakeObjPos()>
                 MakeObjPos();
-            if( aOldPos == aRectFnSet.GetPos(FrameRA()) )
+            if( aOldPos == aRectFnSet.GetPos(getSwFrame()) )
             {
                 if( !mbValidPos && GetAnchorFrame()->IsInSct() &&
                     !GetAnchorFrame()->FindSctFrame()->IsValid() )
@@ -217,8 +217,8 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
 #if OSL_DEBUG_LEVEL > 0
     SwRectFnSet aRectFnSet(this);
-    OSL_ENSURE( m_bHeightClipped || ( aRectFnSet.GetHeight(FrameRA()) > 0 &&
-            aRectFnSet.GetHeight(PrintRA()) > 0),
+    OSL_ENSURE( m_bHeightClipped || ( aRectFnSet.GetHeight(getSwFrame()) > 0 &&
+            aRectFnSet.GetHeight(getSwPrint()) > 0),
             "SwFlyFreeFrame::Format(), flipping Fly." );
 
 #endif
@@ -275,8 +275,8 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
     ::CalcClipRect( pObj, aTmpStretch, false );
     aClip.Intersection_( aTmpStretch );
 
-    const long nBot = FrameRA().Top() + FrameRA().Height();
-    const long nRig = FrameRA().Left() + FrameRA().Width();
+    const long nBot = getSwFrame().Top() + getSwFrame().Height();
+    const long nRig = getSwFrame().Left() + getSwFrame().Width();
     const long nClipBot = aClip.Top() + aClip.Height();
     const long nClipRig = aClip.Left() + aClip.Width();
 
@@ -296,12 +296,12 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
             // now the flyframe can change its position and so on ...
             if ( !pHeader || !pHeader->IsHeaderFrame() )
             {
-                const long nOld = FrameRA().Top();
-                SwRect aFrm(FrameRA());
+                const long nOld = getSwFrame().Top();
+                SwRect aFrm(getSwFrame());
                 aFrm.Pos().Y() = std::max( aClip.Top(), nClipBot - aFrm.Height() );
-                setFrame(aFrm);
+                setSwFrame(aFrm);
 
-                if ( FrameRA().Top() != nOld )
+                if ( getSwFrame().Top() != nOld )
                 {
                     bAgain = true;
                 }
@@ -311,21 +311,21 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
         }
         if ( bRig )
         {
-            const long nOld = FrameRA().Left();
-            SwRect aFrm(FrameRA());
+            const long nOld = getSwFrame().Left();
+            SwRect aFrm(getSwFrame());
             aFrm.Pos().X() = std::max( aClip.Left(), nClipRig - aFrm.Width() );
-            setFrame(aFrm);
+            setSwFrame(aFrm);
 
-            if ( FrameRA().Left() != nOld )
+            if ( getSwFrame().Left() != nOld )
             {
                 const SwFormatHoriOrient &rH = GetFormat()->GetHoriOrient();
                 // Left-aligned ones may not be moved to the left when they
                 // are avoiding another one.
                 if( rH.GetHoriOrient() == text::HoriOrientation::LEFT )
                 {
-                    SwRect aFrm(FrameRA());
+                    SwRect aFrm(getSwFrame());
                     aFrm.Pos().X() = nOld;
-                    setFrame(aFrm);
+                    setSwFrame(aFrm);
                 }
                 else
                 {
@@ -344,10 +344,10 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
 
             // For Flys with OLE objects as lower, we make sure that
             // we always resize proportionally
-            Size aOldSize( FrameRA().SSize() );
+            Size aOldSize( getSwFrame().SSize() );
 
             // First, setup the FrameRect, then transfer it to the Frame.
-            SwRect aFrameRect( FrameRA() );
+            SwRect aFrameRect( getSwFrame() );
 
             if ( bBot )
             {
@@ -432,23 +432,23 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
 
             // Now change the Frame; for columns, we put the new values into the attributes,
             // otherwise we'll end up with unwanted side-effects/oscillations
-            const long nPrtHeightDiff = FrameRA().Height() - PrintRA().Height();
-            const long nPrtWidthDiff  = FrameRA().Width()  - PrintRA().Width();
-            maUnclippedFrame = FrameRA();
+            const long nPrtHeightDiff = getSwFrame().Height() - getSwPrint().Height();
+            const long nPrtWidthDiff  = getSwFrame().Width()  - getSwPrint().Width();
+            maUnclippedFrame = getSwFrame();
 
-            SwRect aFrm(FrameRA());
+            SwRect aFrm(getSwFrame());
             aFrm.Height( aFrameRect.Height() );
             aFrm.Width ( std::max( long(MINLAY), aFrameRect.Width() ) );
-            setFrame(aFrm);
+            setSwFrame(aFrm);
 
-            SwRect aPrt(PrintRA());
+            SwRect aPrt(getSwPrint());
 
             if ( Lower() && Lower()->IsColumnFrame() )
             {
                 ColLock();  //lock grow/shrink
                 const Size aTmpOldSize( aPrt.SSize() );
-                aPrt.Height( FrameRA().Height() - nPrtHeightDiff );
-                aPrt.Width ( FrameRA().Width()  - nPrtWidthDiff );
+                aPrt.Height( getSwFrame().Height() - nPrtHeightDiff );
+                aPrt.Width ( getSwFrame().Width()  - nPrtWidthDiff );
                 ChgLowersProp( aTmpOldSize );
                 SwFrame *pLow = Lower();
                 do
@@ -465,16 +465,16 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
             }
             else
             {
-                aPrt.Height( FrameRA().Height() - nPrtHeightDiff );
-                aPrt.Width ( FrameRA().Width()  - nPrtWidthDiff );
+                aPrt.Height( getSwFrame().Height() - nPrtHeightDiff );
+                aPrt.Width ( getSwFrame().Width()  - nPrtWidthDiff );
             }
 
-            setPrint(aPrt);
+            setSwPrint(aPrt);
         }
     }
 
     // #i26945#
-    OSL_ENSURE( FrameRA().Height() >= 0,
+    OSL_ENSURE( getSwFrame().Height() >= 0,
             "<SwFlyFreeFrame::CheckClip(..)> - fly frame has negative height now." );
 }
 
@@ -948,7 +948,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                 pClip = pFly->GetAnchorFrame();
             }
 
-            rRect = pClip->FrameRA();
+            rRect = pClip->getSwFrame();
             SwRectFnSet aRectFnSet(pClip);
 
             // vertical clipping: Top and Bottom, also to PrtArea if necessary
@@ -987,8 +987,8 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                             "if you can reproduce this please file a bug");
                     return false;
                 }
-                rRect = bMove ? pClipFrame->GetUpper()->FrameRA()
-                              : pClipFrame->FrameRA();
+                rRect = bMove ? pClipFrame->GetUpper()->getSwFrame()
+                              : pClipFrame->getSwFrame();
                 // #i26945# - consider that a table, during
                 // its format, can exceed its upper printing area bottom.
                 // Thus, enlarge the clip rectangle, if such a case occurred
@@ -996,8 +996,8 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                 {
                     const SwTabFrame* pTabFrame = const_cast<SwFlyFrame*>(pFly)
                                 ->GetAnchorFrameContainingAnchPos()->FindTabFrame();
-                    SwRect aTmp( pTabFrame->PrintRA() );
-                    aTmp += pTabFrame->FrameRA().Pos();
+                    SwRect aTmp( pTabFrame->getSwPrint() );
+                    aTmp += pTabFrame->getSwFrame().Pos();
                     rRect.Union( aTmp );
                     // #i43913# - consider also the cell frame
                     const SwFrame* pCellFrame = const_cast<SwFlyFrame*>(pFly)
@@ -1008,8 +1008,8 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                     }
                     if ( pCellFrame )
                     {
-                        aTmp = pCellFrame->PrintRA();
-                        aTmp += pCellFrame->FrameRA().Pos();
+                        aTmp = pCellFrame->getSwPrint();
+                        aTmp += pCellFrame->getSwFrame().Pos();
                         rRect.Union( aTmp );
                     }
                 }
@@ -1024,7 +1024,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                     aEnvOfObj.GetVertEnvironmentLayoutFrame( *pVertPosOrientFrame );
                 if ( rV.GetRelationOrient() == text::RelOrientation::PAGE_FRAME )
                 {
-                    rRect = rVertClipFrame.FrameRA();
+                    rRect = rVertClipFrame.getSwFrame();
                 }
                 else if ( rV.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA )
                 {
@@ -1034,14 +1034,14 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                     }
                     else
                     {
-                        rRect = rVertClipFrame.FrameRA();
+                        rRect = rVertClipFrame.getSwFrame();
                     }
                 }
                 const SwLayoutFrame* pHoriClipFrame =
                         pFly->GetAnchorFrame()->FindPageFrame()->GetUpper();
                 SwRectFnSet aRectFnSet(pFly->GetAnchorFrame());
-                aRectFnSet.SetLeft( rRect, aRectFnSet.GetLeft(pHoriClipFrame->FrameRA()) );
-                aRectFnSet.SetRight(rRect, aRectFnSet.GetRight(pHoriClipFrame->FrameRA()));
+                aRectFnSet.SetLeft( rRect, aRectFnSet.GetLeft(pHoriClipFrame->getSwFrame()) );
+                aRectFnSet.SetRight(rRect, aRectFnSet.GetRight(pHoriClipFrame->getSwFrame()));
             }
             else
             {
@@ -1067,8 +1067,8 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                 {
                     if ( pUp->IsRootFrame() )
                     {
-                        rRect  = pUp->PrintRA();
-                        rRect += pUp->FrameRA().Pos();
+                        rRect  = pUp->getSwPrint();
+                        rRect += pUp->getSwFrame().Pos();
                         pUp = nullptr;
                     }
                 }
@@ -1081,7 +1081,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                             pUp = pPg->FindBodyCont();
                         if (pUp)
                         {
-                            rRect = pUp->GetUpper()->FrameRA();
+                            rRect = pUp->GetUpper()->getSwFrame();
                             aRectFnSet.SetTop( rRect, aRectFnSet.GetPrtTop(*pUp) );
                             aRectFnSet.SetBottom(rRect, aRectFnSet.GetPrtBottom(*pUp));
                         }
@@ -1089,7 +1089,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                     else
                     {
                         if( ( pUp->GetType() & (SwFrameType::Fly | SwFrameType::Ftn ) ) &&
-                            !pUp->FrameRA().IsInside( pFly->FrameRA().Pos() ) )
+                            !pUp->getSwFrame().IsInside( pFly->getSwFrame().Pos() ) )
                         {
                             if( pUp->IsFlyFrame() )
                             {
@@ -1097,7 +1097,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                                 while( pTmpFly->GetNextLink() )
                                 {
                                     pTmpFly = pTmpFly->GetNextLink();
-                                    if( pTmpFly->FrameRA().IsInside( pFly->FrameRA().Pos() ) )
+                                    if( pTmpFly->getSwFrame().IsInside( pFly->getSwFrame().Pos() ) )
                                         break;
                                 }
                                 pUp = pTmpFly;
@@ -1108,26 +1108,26 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                                 while( pTmp->GetFollow() )
                                 {
                                     pTmp = pTmp->GetFollow();
-                                    if( pTmp->FrameRA().IsInside( pFly->FrameRA().Pos() ) )
+                                    if( pTmp->getSwFrame().IsInside( pFly->getSwFrame().Pos() ) )
                                         break;
                                 }
                                 pUp = pTmp;
                             }
                         }
-                        rRect = pUp->PrintRA();
-                        rRect.Pos() += pUp->FrameRA().Pos();
+                        rRect = pUp->getSwPrint();
+                        rRect.Pos() += pUp->getSwFrame().Pos();
                         if ( pUp->GetType() & (SwFrameType::Header | SwFrameType::Footer) )
                         {
-                            rRect.Left ( pUp->GetUpper()->FrameRA().Left() );
-                            rRect.Width( pUp->GetUpper()->FrameRA().Width());
+                            rRect.Left ( pUp->GetUpper()->getSwFrame().Left() );
+                            rRect.Width( pUp->GetUpper()->getSwFrame().Width());
                         }
                         else if ( pUp->IsCellFrame() )                //MA_FLY_HEIGHT
                         {
                             const SwFrame *pTab = pUp->FindTabFrame();
                             aRectFnSet.SetBottom( rRect, aRectFnSet.GetPrtBottom(*pTab->GetUpper()) );
                             // expand to left and right cell border
-                            rRect.Left ( pUp->FrameRA().Left() );
-                            rRect.Width( pUp->FrameRA().Width() );
+                            rRect.Left ( pUp->getSwFrame().Left() );
+                            rRect.Width( pUp->getSwFrame().Width() );
                         }
                     }
                 }
@@ -1135,8 +1135,8 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                 {
                     // CellFrames might also sit in unallowed areas. In this case,
                     // the Fly is allowed to do so as well
-                    SwRect aTmp( pCell->PrintRA() );
-                    aTmp += pCell->FrameRA().Pos();
+                    SwRect aTmp( pCell->getSwPrint() );
+                    aTmp += pCell->getSwFrame().Pos();
                     rRect.Union( aTmp );
                 }
             }
@@ -1147,11 +1147,11 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
             SwRectFnSet aRectFnSet(pFly->GetAnchorFrame());
             while( pUp->IsColumnFrame() || pUp->IsSctFrame() || pUp->IsColBodyFrame())
                 pUp = pUp->GetUpper();
-            rRect = pUp->FrameRA();
+            rRect = pUp->getSwFrame();
             if( !pUp->IsBodyFrame() )
             {
-                rRect += pUp->PrintRA().Pos();
-                rRect.SSize( pUp->PrintRA().SSize() );
+                rRect += pUp->getSwPrint().Pos();
+                rRect.SSize( pUp->getSwPrint().SSize() );
                 if ( pUp->IsCellFrame() )
                 {
                     const SwFrame *pTab = pUp->FindTabFrame();
@@ -1162,7 +1162,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
             {
                 // Objects anchored as character may exceed right margin
                 // of body frame:
-                aRectFnSet.SetRight( rRect, aRectFnSet.GetRight(pUp->GetUpper()->FrameRA()) );
+                aRectFnSet.SetRight( rRect, aRectFnSet.GetRight(pUp->GetUpper()->getSwFrame()) );
             }
             long nHeight = (9*aRectFnSet.GetHeight(rRect))/10;
             long nTop;
@@ -1173,7 +1173,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                 nTop = aRectFnSet.IsVert() ? static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().X() :
                                static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().Y();
                 nTop = aRectFnSet.YInc( nTop, -nHeight );
-                long nWidth = aRectFnSet.GetWidth(pFly->FrameRA());
+                long nWidth = aRectFnSet.GetWidth(pFly->getSwFrame());
                 aRectFnSet.SetLeftAndWidth( rRect, aRectFnSet.IsVert() ?
                             static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().Y() :
                             static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().X(), nWidth );
@@ -1181,9 +1181,9 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
             }
             else
             {
-                nTop = aRectFnSet.YInc( aRectFnSet.GetBottom(pFly->FrameRA()),
+                nTop = aRectFnSet.YInc( aRectFnSet.GetBottom(pFly->getSwFrame()),
                                            rUL.GetLower() - nHeight );
-                nHeight = 2*nHeight - aRectFnSet.GetHeight(pFly->FrameRA())
+                nHeight = 2*nHeight - aRectFnSet.GetHeight(pFly->getSwFrame())
                           - rUL.GetLower() - rUL.GetUpper();
             }
             aRectFnSet.SetTopAndHeight( rRect, nTop, nHeight );
@@ -1204,8 +1204,8 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                 pAnchorFrame = pC->GetAnchorFrame();
             }
             const SwFrame* pUp = pAnchorFrame->GetUpper();
-            rRect = pUp->PrintRA();
-            rRect += pUp->FrameRA().Pos();
+            rRect = pUp->getSwPrint();
+            rRect += pUp->getSwFrame().Pos();
             SwRectFnSet aRectFnSet(pAnchorFrame);
             long nHeight = (9*aRectFnSet.GetHeight(rRect))/10;
             long nTop;
@@ -1243,7 +1243,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
             {
                 // clip frame is the page frame the header/footer is on.
                 const SwFrame* pClipFrame = pAnchorFrame->FindPageFrame();
-                rRect = pClipFrame->FrameRA();
+                rRect = pClipFrame->getSwFrame();
             }
             else
             {

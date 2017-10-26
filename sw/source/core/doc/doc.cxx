@@ -668,7 +668,7 @@ void SwDoc::CalculatePagesForPrinting(
         const bool bPrintThisPage =
             ( (bPrintRightPages && pStPage->OnRightPage()) ||
               (bPrintLeftPages && !pStPage->OnRightPage()) ) &&
-            ( bPrintEmptyPages || pStPage->FrameRA().Height() );
+            ( bPrintEmptyPages || pStPage->getSwFrame().Height() );
 
         if (bPrintThisPage)
         {

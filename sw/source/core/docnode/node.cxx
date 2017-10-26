@@ -391,7 +391,7 @@ bool SwNode::IsInVisibleArea( SwViewShell const * pSh ) const
                 {   pFrame = pFrame->FindPrev();
                 } while ( pFrame && !pFrame->IsValid() );
 
-            if( !pFrame || pSh->VisArea().IsOver( pFrame->FrameRA() ) )
+            if( !pFrame || pSh->VisArea().IsOver( pFrame->getSwFrame() ) )
                 bRet = true;
         }
     }
@@ -785,7 +785,7 @@ const SwTextNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
                        * pMyFrame = pCNd ? pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false ) : nullptr;
             const SwPageFrame* pPgFrame = pFrame ? pFrame->FindPageFrame() : nullptr;
             if( pPgFrame && pMyFrame &&
-                pPgFrame->FrameRA().Top() > pMyFrame->FrameRA().Top() )
+                pPgFrame->getSwFrame().Top() > pMyFrame->getSwFrame().Top() )
             {
                 // The one asking precedes the Page, thus its invalid
                 pRet = nullptr;
@@ -1122,7 +1122,7 @@ SwRect SwContentNode::FindLayoutRect( const bool bPrtArea, const Point* pPoint )
     SwContentFrame* pFrame = static_cast<SwContentFrame*>( ::GetFrameOfModify( nullptr, *this,
                                             FRM_CNTNT, pPoint ) );
     if( pFrame )
-        aRet = bPrtArea ? pFrame->PrintRA() : pFrame->FrameRA();
+        aRet = bPrtArea ? pFrame->getSwPrint() : pFrame->getSwFrame();
     return aRet;
 }
 
@@ -1131,7 +1131,7 @@ SwRect SwContentNode::FindPageFrameRect() const
     SwRect aRet;
     SwFrame* pFrame = ::GetFrameOfModify( nullptr, *this, FRM_CNTNT );
     if( pFrame && nullptr != ( pFrame = pFrame->FindPageFrame() ))
-        aRet = pFrame->FrameRA();
+        aRet = pFrame->getSwFrame();
     return aRet;
 }
 

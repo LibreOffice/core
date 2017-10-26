@@ -78,9 +78,9 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
         const bool bTabsRelativeToIndent =
             m_pFrame->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TABS_RELATIVE_TO_INDENT);
         const SwTwips nTabLeft = bRTL
-                                 ? m_pFrame->FrameRA().Right() -
+                                 ? m_pFrame->getSwFrame().Right() -
                                    ( bTabsRelativeToIndent ? GetTabLeft() : 0 )
-                                 : m_pFrame->FrameRA().Left() +
+                                 : m_pFrame->getSwFrame().Left() +
                                    ( bTabsRelativeToIndent ? GetTabLeft() : 0 );
 
         // The absolute position, where we started the line formatting
@@ -112,7 +112,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
 
         if ( m_pFrame->IsVertical() )
         {
-            Point aRightTop( nMyRight, m_pFrame->FrameRA().Top() );
+            Point aRightTop( nMyRight, m_pFrame->getSwFrame().Top() );
             m_pFrame->SwitchHorizontalToVertical( aRightTop );
             nMyRight = aRightTop.Y();
         }
@@ -195,11 +195,11 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
                     {
                         Point aPoint( Left(), 0 );
                         m_pFrame->SwitchLTRtoRTL( aPoint );
-                        nLeftMarginTabPos = m_pFrame->FrameRA().Right() - aPoint.X();
+                        nLeftMarginTabPos = m_pFrame->getSwFrame().Right() - aPoint.X();
                     }
                     else
                     {
-                        nLeftMarginTabPos = Left() - m_pFrame->FrameRA().Left();
+                        nLeftMarginTabPos = Left() - m_pFrame->getSwFrame().Left();
                     }
                 }
                 if( m_pCurr->HasForcedLeftMargin() )
@@ -393,7 +393,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
                 bool bAtParaEnd = rInf.GetIdx() + GetLen() == rInf.GetText().getLength();
                 if ( bFull && bTabCompat &&
                      ( ( bTabOverflow && ( rInf.IsTabOverflow() || !bAutoTabStop ) ) || bAtParaEnd ) &&
-                     GetTabPos() >= rInf.GetTextFrame()->FrameRA().Width() )
+                     GetTabPos() >= rInf.GetTextFrame()->getSwFrame().Width() )
                 {
                     bFull = false;
                     if ( bTabOverflow && !bAutoTabStop )

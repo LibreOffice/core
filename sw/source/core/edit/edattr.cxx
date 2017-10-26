@@ -503,8 +503,8 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
                     if ( pFrame )
                     {
                         const sal_uInt16 nFrameWidth = static_cast<sal_uInt16>( pFrame->IsVertical() ?
-                                                 pFrame->FrameRA().Height() :
-                                                 pFrame->FrameRA().Width() );
+                                                 pFrame->getSwFrame().Height() :
+                                                 pFrame->getSwFrame().Width() );
                         bRet = nFrameWidth > ( nNext + MM50 );
                     }
                     else

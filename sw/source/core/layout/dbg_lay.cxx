@@ -176,7 +176,7 @@ class SwSizeEnterLeave : public SwImplEnterLeave
     long nFrameHeight;
 public:
     SwSizeEnterLeave( const SwFrame* pF, PROT nFunct, DbgAction nAct, void* pPar )
-        : SwImplEnterLeave( pF, nFunct, nAct, pPar ), nFrameHeight( pF->FrameRA().Height() ) {}
+        : SwImplEnterLeave( pF, nFunct, nAct, pPar ), nFrameHeight( pF->getSwFrame().Height() ) {}
 
     virtual void Leave() override;           // resize message
 };
@@ -197,7 +197,7 @@ class SwFrameChangesLeave : public SwImplEnterLeave
     SwRect aFrame;
 public:
     SwFrameChangesLeave( const SwFrame* pF, PROT nFunct, DbgAction nAct, void* pPar )
-        : SwImplEnterLeave( pF, nFunct, nAct, pPar ), aFrame( pF->FrameRA() ) {}
+        : SwImplEnterLeave( pF, nFunct, nAct, pPar ), aFrame( pF->getSwFrame() ) {}
 
     virtual void Enter() override;           // no message
     virtual void Leave() override;           // message when resizing the Frame area
@@ -588,7 +588,7 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
         case PROT::Size:     aOut.append("PROT::Size");
                             lcl_Start( aOut, aLayer, nAct );
                             aOut.append(' ');
-                            aOut.append(static_cast<sal_Int64>(pFrame->FrameRA().Height()));
+                            aOut.append(static_cast<sal_Int64>(pFrame->getSwFrame().Height()));
                             break;
         case PROT::Leaf:     aOut.append("SwFrame::GetPrev/NextSctLeaf");
                             lcl_Start( aOut, aLayer, nAct );
@@ -624,32 +624,32 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
         case PROT::FrmChanges:
                             {
                                 SwRect& rFrame = *static_cast<SwRect*>(pParam);
-                                if( pFrame->FrameRA().Pos() != rFrame.Pos() )
+                                if( pFrame->getSwFrame().Pos() != rFrame.Pos() )
                                 {
                                     aOut.append("PosChg: (");
                                     aOut.append(static_cast<sal_Int64>(rFrame.Left()));
                                     aOut.append(", ");
                                     aOut.append(static_cast<sal_Int64>(rFrame.Top()));
                                     aOut.append(") -> (");
-                                    aOut.append(static_cast<sal_Int64>(pFrame->FrameRA().Left()));
+                                    aOut.append(static_cast<sal_Int64>(pFrame->getSwFrame().Left()));
                                     aOut.append(", ");
-                                    aOut.append(static_cast<sal_Int64>(pFrame->FrameRA().Top()));
+                                    aOut.append(static_cast<sal_Int64>(pFrame->getSwFrame().Top()));
                                     aOut.append(") ");
                                 }
-                                if( pFrame->FrameRA().Height() != rFrame.Height() )
+                                if( pFrame->getSwFrame().Height() != rFrame.Height() )
                                 {
                                     aOut.append("Height: ");
                                     aOut.append(static_cast<sal_Int64>(rFrame.Height()));
                                     aOut.append(" -> ");
-                                    aOut.append(static_cast<sal_Int64>(pFrame->FrameRA().Height()));
+                                    aOut.append(static_cast<sal_Int64>(pFrame->getSwFrame().Height()));
                                     aOut.append(" ");
                                 }
-                                if( pFrame->FrameRA().Width() != rFrame.Width() )
+                                if( pFrame->getSwFrame().Width() != rFrame.Width() )
                                 {
                                     aOut.append("Width: ");
                                     aOut.append(static_cast<sal_Int64>(rFrame.Width()));
                                     aOut.append(" -> ");
-                                    aOut.append(static_cast<sal_Int64>(pFrame->FrameRA().Width()));
+                                    aOut.append(static_cast<sal_Int64>(pFrame->getSwFrame().Width()));
                                     aOut.append(' ');
                                 }
                                 break;
@@ -768,7 +768,7 @@ void SwImplEnterLeave::Leave()
 
 void SwSizeEnterLeave::Leave()
 {
-    nFrameHeight = pFrame->FrameRA().Height() - nFrameHeight;
+    nFrameHeight = pFrame->getSwFrame().Height() - nFrameHeight;
     SwProtocol::Record( pFrame, nFunction, DbgAction::End, &nFrameHeight );
 }
 
@@ -790,7 +790,7 @@ void SwFrameChangesLeave::Enter()
 
 void SwFrameChangesLeave::Leave()
 {
-    if( pFrame->FrameRA() != aFrame )
+    if( pFrame->getSwFrame() != aFrame )
         SwProtocol::Record( pFrame, PROT::FrmChanges, DbgAction::NONE, &aFrame );
 }
 
