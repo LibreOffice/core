@@ -180,7 +180,7 @@ namespace std {
 
 template<typename T>
 struct hash<o3tl::array_view<T>> {
-    std::size_t operator()(o3tl::array_view<T> s)
+    std::size_t operator()(o3tl::array_view<T> s) const
     { return hash<T[]>()(s.data(), s.size()); }
 };
 
