@@ -146,7 +146,7 @@ void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OS
 
 void SfxLokHelper::notifyDialog(const OUString& rDialogID, const OUString& rAction)
 {
-    if (SfxLokHelper::getViewsCount() <= 0)
+    if (SfxLokHelper::getViewsCount() <= 0 || rDialogID.isEmpty())
         return;
 
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
@@ -163,7 +163,7 @@ void SfxLokHelper::notifyDialog(const OUString& rDialogID, const OUString& rActi
 
 void SfxLokHelper::notifyDialogChild(const OUString& rDialogID, const OUString& rAction, const Point& rPos)
 {
-    if (SfxLokHelper::getViewsCount() <= 0)
+    if (SfxLokHelper::getViewsCount() <= 0 || rDialogID.isEmpty())
         return;
 
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();

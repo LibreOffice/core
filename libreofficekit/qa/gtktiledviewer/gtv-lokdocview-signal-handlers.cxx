@@ -288,24 +288,27 @@ void LOKDocViewSigHandlers::dialog(LOKDocView* pDocView, gchar* pPayload, gpoint
     std::stringstream aStream(pPayload);
     boost::property_tree::ptree aRoot;
     boost::property_tree::read_json(aStream, aRoot);
-    //std::string aDialogId = aRoot.get<std::string>("dialogId");
+    std::string aDialogId = aRoot.get<std::string>("dialogId");
     std::string aAction = aRoot.get<std::string>("action");
 
     // we only understand 'invalidate' and 'close' as of now
     if (aAction != "invalidate" && aAction != "close")
         return;
 
-    // temporary hack to invalidate all open dialogs
     GList* pChildWins = gtv_application_window_get_all_child_windows(window);
     GList* pIt = nullptr;
     for (pIt = pChildWins; pIt != nullptr; pIt = pIt->next)
     {
-        if (aAction == "close")
+        gchar* pChildDialogId = nullptr;
+        g_object_get(pIt->data, "dialogid", &pChildDialogId, nullptr);
+        if (g_strcmp0(pChildDialogId, aDialogId.c_str()) == 0)
         {
-            gtk_widget_destroy(GTK_WIDGET(pIt->data));
+            if (aAction == "close")
+                gtk_widget_destroy(GTK_WIDGET(pIt->data));
+            else if (aAction == "invalidate")
+                gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pIt->data));
         }
-        else if (aAction == "invalidate")
-            gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pIt->data));
+        g_free(pChildDialogId);
     }
 }
 
@@ -316,7 +319,7 @@ void LOKDocViewSigHandlers::dialogChild(LOKDocView* pDocView, gchar* pPayload, g
     std::stringstream aStream(pPayload);
     boost::property_tree::ptree aRoot;
     boost::property_tree::read_json(aStream, aRoot);
-    //std::string aDialogId = aRoot.get<std::string>("dialogId");
+    std::string aDialogId = aRoot.get<std::string>("dialogId");
     std::string aAction = aRoot.get<std::string>("action");
     std::string aPos = aRoot.get<std::string>("position");
     gchar** ppCoordinates = g_strsplit(aPos.c_str(), ", ", 2);
@@ -332,15 +335,20 @@ void LOKDocViewSigHandlers::dialogChild(LOKDocView* pDocView, gchar* pPayload, g
 
     g_strfreev(ppCoordinates);
 
-    // temporary hack to invalidate/close floating window of all opened dialogs
     GList* pChildWins = gtv_application_window_get_all_child_windows(window);
     GList* pIt = nullptr;
     for (pIt = pChildWins; pIt != nullptr; pIt = pIt->next)
     {
-        if (aAction == "invalidate")
-            gtv_lok_dialog_child_invalidate(GTV_LOK_DIALOG(pIt->data), nX, nY);
-        else if (aAction == "close")
-            gtv_lok_dialog_child_close(GTV_LOK_DIALOG(pIt->data));
+        gchar* pChildDialogId = nullptr;
+        g_object_get(pIt->data, "dialogid", &pChildDialogId, nullptr);
+        if (g_strcmp0(pChildDialogId, aDialogId.c_str()) == 0)
+        {
+            if (aAction == "invalidate")
+                gtv_lok_dialog_child_invalidate(GTV_LOK_DIALOG(pIt->data), nX, nY);
+            else if (aAction == "close")
+                gtv_lok_dialog_child_close(GTV_LOK_DIALOG(pIt->data));
+        }
+        g_free(pChildDialogId);
     }
 }
 

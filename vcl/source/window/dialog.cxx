@@ -525,7 +525,6 @@ Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXML
     : SystemWindow(WindowType::DIALOG)
     , mbForceBorderWindow(false)
     , mnInitFlag(InitFlag::Default)
-    , maID(rID)
 {
     ImplInitDialogData();
     loadUI(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription);
@@ -535,7 +534,6 @@ Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXML
     : SystemWindow(nType)
     , mbForceBorderWindow(bBorder)
     , mnInitFlag(eFlag)
-    , maID(rID)
 {
     ImplInitDialogData();
     loadUI(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription);
@@ -876,11 +874,12 @@ bool Dialog::selectPageByUIXMLDescription(const OString& /*rUIXMLDescription*/)
     return true;
 }
 
-void Dialog::registerDialogRenderable(vcl::IDialogRenderable* pDialogRenderable)
+void Dialog::registerDialogRenderable(vcl::IDialogRenderable* pDialogRenderable, const OUString& aDialogId)
 {
     if (pDialogRenderable && !mpDialogRenderable)
     {
         mpDialogRenderable = pDialogRenderable;
+        maID = aDialogId;
     }
 }
 
