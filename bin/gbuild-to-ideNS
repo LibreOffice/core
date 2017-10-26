@@ -106,10 +106,15 @@ class GbuildParser:
         defs = {}
         alldefs = [defswitch.strip() for defswitch in defsline.strip().lstrip('-D').split(' -D') if len(defswitch) > 2]
         for d in alldefs:
-            defparts = d.split('=')
+            dparts = d.split(' -U')
+            """after dparts.pop(0), dparts will contain only undefs"""
+            defparts = dparts.pop(0).strip().split('=')
             if len(defparts) == 1:
                 defparts.append(None)
             defs[defparts[0]] = defparts[1]
+            """Drop undefed items (if any) from previous defs"""
+            for u in dparts:
+                defs.pop(u.strip(), '')
         defs["LIBO_INTERNAL_ONLY"] = None
         return defs
 
