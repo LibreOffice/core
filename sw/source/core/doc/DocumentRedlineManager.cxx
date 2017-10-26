@@ -2696,8 +2696,6 @@ void DocumentRedlineManager::checkRedlining(RedlineFlags& _rReadlineMode)
 
 DocumentRedlineManager::~DocumentRedlineManager()
 {
-    delete mpRedlineTable; mpRedlineTable = nullptr;
-    delete mpExtraRedlineTable; mpExtraRedlineTable = nullptr;
 }
 
 }
