@@ -284,6 +284,8 @@ public:
 
     bool VisitImplicitCastExpr(ImplicitCastExpr const * expr);
 
+    bool VisitMaterializeTemporaryExpr(MaterializeTemporaryExpr const * expr);
+
 private:
     bool isExternCFunctionCall(
         CallExpr const * expr, FunctionProtoType const ** functionType);
@@ -898,6 +900,30 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
                 "implicit conversion (%0) of call argument from %1 to %2",
                 expr->getLocStart())
                 << expr->getCastKindName() << expr->getSubExpr()->getType()
+                << expr->getType() << expr->getSourceRange();
+            return true;
+        }
+    }
+    return true;
+}
+
+bool ImplicitBoolConversion::VisitMaterializeTemporaryExpr(
+    MaterializeTemporaryExpr const * expr)
+{
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    if (auto const sub = dyn_cast<ExplicitCastExpr>(expr->GetTemporaryExpr())) {
+        auto const subsub = compat::getSubExprAsWritten(sub);
+        if (subsub->getType().IgnoreParens() == expr->getType().IgnoreParens()
+            && isBool(subsub))
+        {
+            report(
+                DiagnosticsEngine::Warning,
+                ("explicit conversion (%0) from %1 to %2 implicitly converted"
+                 " back to %3"),
+                expr->getLocStart())
+                << sub->getCastKindName() << subsub->getType() << sub->getType()
                 << expr->getType() << expr->getSourceRange();
             return true;
         }
