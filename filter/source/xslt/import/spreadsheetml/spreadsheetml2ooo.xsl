@@ -4327,7 +4327,7 @@
                 </xsl:choose>
             </xsl:if>
             <!-- fix means the horizontal alignment is dependent on ss:Horizontal,
-                 but set on paragaraph properties not cell paragraphs -->
+                 but set on paragraph properties not cell paragraphs -->
             <xsl:if test="ss:Alignment/@ss:Horizontal">
                 <xsl:attribute name="style:text-align-source">fix</xsl:attribute>
             </xsl:if>

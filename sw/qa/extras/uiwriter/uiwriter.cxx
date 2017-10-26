@@ -5360,7 +5360,7 @@ void SwUiWriterTest::testTdf113445()
     // Make sure that page 2 is on the right hand side of page 1, not below it.
     CPPUNIT_ASSERT_GREATER(nPage1Left, nPage2Left);
 
-    // Insert a new paragaph at the start of the document.
+    // Insert a new paragraph at the start of the document.
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->SttDoc();
     pWrtShell->SplitNode();
