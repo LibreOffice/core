@@ -37,8 +37,8 @@ typename std::enable_if<std::is_signed<T>::value, T>::type saturating_add(
             return std::numeric_limits<T>::max();
         }
     } else {
-        if (a >= std::numeric_limits<T>::min() + b) {
-            return a - b;
+        if (a >= std::numeric_limits<T>::min() - b) {
+            return a + b;
         } else {
             return std::numeric_limits<T>::min();
         }
