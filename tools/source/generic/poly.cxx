@@ -1687,11 +1687,14 @@ void impCorrectContinuity(basegfx::B2DPolygon& roPolygon, sal_uInt32 nIndex, Pol
 
             // calculate common direction vector, normalize
             const basegfx::B2DVector aDirection(aNext + aPrev);
+            const double fDirectionLen = aDirection.getLength();
+            if (fDirectionLen == 0.0)
+                return;
 
-            if(PolyFlags::Smooth == nCFlag)
+            if (PolyFlags::Smooth == nCFlag)
             {
                 // C1: apply common direction vector, preserve individual lengths
-                const double fInvDirectionLen(1.0 / aDirection.getLength());
+                const double fInvDirectionLen(1.0 / fDirectionLen);
                 roPolygon.setNextControlPoint(nIndex, basegfx::B2DPoint(aPoint + (aDirection * (aNext.getLength() * fInvDirectionLen))));
                 roPolygon.setPrevControlPoint(nIndex, basegfx::B2DPoint(aPoint - (aDirection * (aPrev.getLength() * fInvDirectionLen))));
             }
@@ -1699,7 +1702,7 @@ void impCorrectContinuity(basegfx::B2DPolygon& roPolygon, sal_uInt32 nIndex, Pol
             {
                 // C2: get mediated length. Taking half of the unnormalized direction would be
                 // an approximation, but not correct.
-                const double fMedLength((aNext.getLength() + aPrev.getLength()) * (0.5 / aDirection.getLength()));
+                const double fMedLength((aNext.getLength() + aPrev.getLength()) * (0.5 / fDirectionLen));
                 const basegfx::B2DVector aScaledDirection(aDirection * fMedLength);
 
                 // Bring Direction to correct length and apply
