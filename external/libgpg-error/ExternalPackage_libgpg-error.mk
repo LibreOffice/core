@@ -17,10 +17,9 @@ ifeq ($(OS),LINUX)
 
 $(eval $(call gb_ExternalPackage_add_file,libgpg-error,$(LIBO_LIB_FOLDER)/libgpg-error.so.0,src/.libs/libgpg-error.so.0.22.0))
 
-else
+else ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_ExternalPackage_add_file,libgpg-error,$(LIBO_LIB_FOLDER)/libgpg-error.0.dylib,src/.libs/libgpg-error.0.dylib))
-
 
 endif
 
