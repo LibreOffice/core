@@ -21,6 +21,7 @@
 
 #include <swtypes.hxx>
 #include <unordered_map>
+#include <memory>
 
 class SwEndnoter;
 class SwDoc;
@@ -41,15 +42,15 @@ class SwLayoutFrame;
 
 class SwLayouter
 {
-    SwEndnoter* mpEndnoter;
-    SwLooping* mpLooping;
+    std::unique_ptr<SwEndnoter> mpEndnoter;
+    std::unique_ptr<SwLooping> mpLooping;
     void CollectEndnotes_( SwSectionFrame* pSect );
     bool StartLooping( SwPageFrame const * pPage );
 
     // --> #i28701#
-    SwMovedFwdFramesByObjPos* mpMovedFwdFrames;
+    std::unique_ptr<SwMovedFwdFramesByObjPos> mpMovedFwdFrames;
     // --> #i35911#
-    SwObjsMarkedAsTmpConsiderWrapInfluence* mpObjsTmpConsiderWrapInfl;
+    std::unique_ptr<SwObjsMarkedAsTmpConsiderWrapInfluence> mpObjsTmpConsiderWrapInfl;
 
 public:
     // --> #i65250#

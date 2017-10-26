@@ -212,20 +212,12 @@ SwLayouter::SwLayouter()
 
 SwLayouter::~SwLayouter()
 {
-    delete mpEndnoter;
-    delete mpLooping;
-    // #i28701#
-    delete mpMovedFwdFrames;
-    mpMovedFwdFrames = nullptr;
-    // #i35911#
-    delete mpObjsTmpConsiderWrapInfl;
-    mpObjsTmpConsiderWrapInfl = nullptr;
 }
 
 void SwLayouter::CollectEndnotes_( SwSectionFrame* pSect )
 {
     if( !mpEndnoter )
-        mpEndnoter = new SwEndnoter( this );
+        mpEndnoter.reset(new SwEndnoter( this ));
     mpEndnoter->CollectEndnotes( pSect );
 }
 
@@ -267,14 +259,13 @@ bool SwLayouter::StartLooping( SwPageFrame const * pPage )
 {
     if( mpLooping )
         return false;
-    mpLooping = new SwLooping( pPage );
+    mpLooping.reset(new SwLooping( pPage ));
     return true;
 }
 
 void SwLayouter::EndLoopControl()
 {
-    delete mpLooping;
-    mpLooping = nullptr;
+    mpLooping.reset();
 }
 
 void SwLayouter::CollectEndnotes( SwDoc* pDoc, SwSectionFrame* pSect )
@@ -333,8 +324,8 @@ void SwLayouter::InsertMovedFwdFrame( const SwDoc& _rDoc,
 
     if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrames )
     {
-        const_cast<SwDoc&>(_rDoc).getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrames =
-                                                new SwMovedFwdFramesByObjPos();
+        const_cast<SwDoc&>(_rDoc).getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrames.reset(
+                                                new SwMovedFwdFramesByObjPos());
     }
 
     _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpMovedFwdFrames->Insert( _rMovedFwdFrameByObjPos,
@@ -412,8 +403,8 @@ void SwLayouter::InsertObjForTmpConsiderWrapInfluence(
 
     if ( !_rDoc.getIDocumentLayoutAccess().GetLayouter()->mpObjsTmpConsiderWrapInfl )
     {
-        const_cast<SwDoc&>(_rDoc).getIDocumentLayoutAccess().GetLayouter()->mpObjsTmpConsiderWrapInfl =
-                                new SwObjsMarkedAsTmpConsiderWrapInfluence();
+        const_cast<SwDoc&>(_rDoc).getIDocumentLayoutAccess().GetLayouter()->mpObjsTmpConsiderWrapInfl.reset(
+                                new SwObjsMarkedAsTmpConsiderWrapInfluence());
     }
 
     _rDoc.getIDocumentLayoutAccess().GetLayouter()->mpObjsTmpConsiderWrapInfl->Insert( _rAnchoredObj );
