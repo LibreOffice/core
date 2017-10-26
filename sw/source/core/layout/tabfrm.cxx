@@ -353,7 +353,10 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrame& rRow )
                     if (bAllRowsCollapsed)
                     {
                         // All rows of this table have 0 height -> set height of the table itself as well.
-                        aRectFnSet.SetHeight(pTmp->FrameWA(), 0);
+                        SwRect aFrm(pTmp->FrameRA());
+                        aRectFnSet.SetHeight(aFrm, 0);
+                        pTmp->setFrame(aFrm);
+
                         aRectFnSet.SetTop(pTmp->PrintWA(), 0);
                         aRectFnSet.SetHeight(pTmp->PrintWA(), 0);
                     }
@@ -382,7 +385,10 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrame& rRow )
         if (bAllLowersCollapsed)
         {
             // All lower frame of this cell have 0 height -> set height of the cell itself as well.
-            aRectFnSet.SetHeight(pCurrMasterCell->FrameWA(), 0);
+            SwRect aFrm(pCurrMasterCell->FrameRA());
+            aRectFnSet.SetHeight(aFrm, 0);
+            pCurrMasterCell->setFrame(aFrm);
+
             aRectFnSet.SetTop(pCurrMasterCell->PrintWA(), 0);
             aRectFnSet.SetHeight(pCurrMasterCell->PrintWA(), 0);
         }
@@ -395,7 +401,10 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrame& rRow )
     if (bAllCellsCollapsed)
     {
         // All cells have 0 height -> set height of row as well.
-        aRectFnSet.SetHeight(rRow.FrameWA(), 0);
+        SwRect aFrm(rRow.FrameRA());
+        aRectFnSet.SetHeight(aFrm, 0);
+        rRow.setFrame(aFrm);
+
         aRectFnSet.SetTop(rRow.PrintWA(), 0);
         aRectFnSet.SetHeight(rRow.PrintWA(), 0);
     }
@@ -782,8 +791,13 @@ static void lcl_AdjustRowSpanCells( SwRowFrame* pRow )
             // calculate height of cell:
             const long nNewCellHeight = lcl_GetHeightOfRows( pRow, nLayoutRowSpan );
             const long nDiff = nNewCellHeight - aRectFnSet.GetHeight(pCellFrame->FrameRA());
+
             if ( nDiff )
-                aRectFnSet.AddBottom(pCellFrame->FrameWA(), nDiff);
+            {
+                SwRect aFrm(pCellFrame->FrameRA());
+                aRectFnSet.AddBottom(aFrm, nDiff);
+                pCellFrame->setFrame(aFrm);
+            }
         }
 
         pCellFrame = static_cast<SwCellFrame*>(pCellFrame->GetNext());
@@ -1139,9 +1153,12 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         pFoll = new SwTabFrame( *this );
 
         // We give the follow table an initial width.
-        aRectFnSet.AddWidth(pFoll->FrameWA(), aRectFnSet.GetWidth(FrameRA()));
+        SwRect aFrm(pFoll->FrameRA());
+        aRectFnSet.AddWidth(aFrm, aRectFnSet.GetWidth(FrameRA()));
+        aRectFnSet.SetLeft(aFrm, aRectFnSet.GetLeft(FrameRA()));
+        pFoll->setFrame(aFrm);
+
         aRectFnSet.AddWidth(pFoll->PrintWA(), aRectFnSet.GetWidth(PrintRA()));
-        aRectFnSet.SetLeft(pFoll->FrameWA(), aRectFnSet.GetLeft(FrameRA()));
 
         // Insert the new follow table
         pFoll->InsertBehind( GetUpper(), this );
@@ -2731,7 +2748,11 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         long nDiff = aRectFnSet.GetWidth(GetUpper()->PrintRA()) -
                      aRectFnSet.GetWidth(FrameRA());
         if( nDiff )
-            aRectFnSet.AddRight( FrameWA(), nDiff );
+        {
+            SwRect aFrm(FrameRA());
+            aRectFnSet.AddRight( aFrm, nDiff );
+            setFrame(aFrm);
+        }
     }
 
     //VarSize is always the height.
@@ -3016,7 +3037,9 @@ SwTwips SwTabFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
 
         if ( !bTst )
         {
-            aRectFnSet.AddBottom( FrameWA(), nDist );
+            SwRect aFrm(FrameRA());
+            aRectFnSet.AddBottom( aFrm, nDist );
+            setFrame(aFrm);
 
             SwRootFrame *pRootFrame = getRootFrame();
             if( pRootFrame && pRootFrame->IsAnyShellAccessible() &&
@@ -4242,7 +4265,10 @@ void SwRowFrame::AdjustCells( const SwTwips nHeight, const bool bHeight )
                 const long nDiff = nHeight - aRectFnSet.GetHeight(pCellFrame->FrameRA());
                 if ( nDiff )
                 {
-                    aRectFnSet.AddBottom( pCellFrame->FrameWA(), nDiff );
+                    SwRect aFrm(pCellFrame->FrameRA());
+                    aRectFnSet.AddBottom( aFrm, nDiff );
+                    pCellFrame->setFrame(aFrm);
+
                     pCellFrame->InvalidatePrt_();
                 }
             }
@@ -4286,7 +4312,11 @@ void SwRowFrame::AdjustCells( const SwTwips nHeight, const bool bHeight )
             if ( nDiff )
             {
                 aOldFrame = pToAdjust->FrameRA();
-                aRectFnSet.AddBottom( pToAdjust->FrameWA(), nDiff );
+
+                SwRect aFrm(pToAdjust->FrameRA());
+                aRectFnSet.AddBottom( aFrm, nDiff );
+                pToAdjust->setFrame(aFrm);
+
                 pNotify = pToAdjust;
             }
 
@@ -4352,7 +4382,11 @@ SwTwips SwRowFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
             nReal = std::min( nAdditionalSpace, nDist );
             nDist -= nReal;
             if ( !bTst )
-                aRectFnSet.AddBottom( FrameWA(), nReal );
+            {
+                SwRect aFrm(FrameRA());
+                aRectFnSet.AddBottom( aFrm, nReal );
+                setFrame(aFrm);
+            }
         }
     }
 
@@ -4433,10 +4467,15 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         if ( !bTst )
         {
             SwTwips nHeight = aRectFnSet.GetHeight(FrameRA());
-            aRectFnSet.SetHeight( FrameWA(), nHeight - nReal );
+            SwRect aFrm(FrameRA());
+            aRectFnSet.SetHeight( aFrm, nHeight - nReal );
 
             if( IsVertical() && !IsVertLR() && !aRectFnSet.IsRev() )
-                FrameWA().Pos().X() += nReal;
+            {
+                aFrm.Pos().X() += nReal;
+            }
+
+            setFrame(aFrm);
         }
 
         SwLayoutFrame* pFrame = GetUpper();
@@ -4449,10 +4488,15 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
             {
                 nReal -= nTmp;
                 SwTwips nHeight = aRectFnSet.GetHeight(FrameRA());
-                aRectFnSet.SetHeight( FrameWA(), nHeight + nReal );
+                SwRect aFrm(FrameRA());
+                aRectFnSet.SetHeight( aFrm, nHeight + nReal );
 
                 if( IsVertical() && !IsVertLR() && !aRectFnSet.IsRev() )
-                    FrameWA().Pos().X() -= nReal;
+                {
+                    aFrm.Pos().X() -= nReal;
+                }
+
+                setFrame(aFrm);
             }
             nReal = nTmp;
         }
@@ -4584,9 +4628,12 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, long lYStart, bool bInva )
             bRet = true;
             const long lDiff = aRectFnSet.YDiff( lYStart, nFrameTop );
             const long lDiffX = lYStart - nFrameTop;
-            aRectFnSet.SubTop( pFrame->FrameWA(), -lDiff );
-            aRectFnSet.AddBottom( pFrame->FrameWA(), lDiff );
+            SwRect aFrm(pFrame->FrameRA());
+            aRectFnSet.SubTop( aFrm, -lDiff );
+            aRectFnSet.AddBottom( aFrm, lDiff );
+            pFrame->setFrame(aFrm);
             pFrame->SetCompletePaint();
+
             if ( !pFrame->GetNext() )
                 pFrame->SetRetouche();
             if( bInva )
@@ -4640,8 +4687,11 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, long lYStart, bool bInva )
                                 !pFly->ConsiderObjWrapInfluenceOnObjPos();
                         if ( bDirectMove )
                         {
-                            aRectFnSet.SubTop( pFly->FrameWA(), -lDiff );
-                            aRectFnSet.AddBottom( pFly->FrameWA(), lDiff );
+                            SwRect aFrm(pFly->FrameRA());
+                            aRectFnSet.SubTop( aFrm, -lDiff );
+                            aRectFnSet.AddBottom( aFrm, lDiff );
+                            pFly->setFrame(aFrm);
+
                             pFly->GetVirtDrawObj()->SetRectsDirty();
                             // --> OD 2004-08-17 - also notify view of <SdrObject>
                             // instance, which represents the Writer fly frame in
@@ -4912,10 +4962,18 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             }
         }
         const long nDiff = nWidth - aRectFnSet.GetWidth(FrameRA());
+        SwRect aFrm(FrameRA());
+
         if( IsNeighbourFrame() && IsRightToLeft() )
-            aRectFnSet.SubLeft( FrameWA(), nDiff );
+        {
+            aRectFnSet.SubLeft( aFrm, nDiff );
+        }
         else
-            aRectFnSet.AddRight( FrameWA(), nDiff );
+        {
+            aRectFnSet.AddRight( aFrm, nDiff );
+        }
+
+        setFrame(aFrm);
         aRectFnSet.AddRight( PrintWA(), nDiff );
 
         //Adjust the height, it's defined through the content and the border.

@@ -297,25 +297,40 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
             if ( !pHeader || !pHeader->IsHeaderFrame() )
             {
                 const long nOld = FrameRA().Top();
-                FrameWA().Pos().Y() = std::max( aClip.Top(), nClipBot - FrameRA().Height() );
+                SwRect aFrm(FrameRA());
+                aFrm.Pos().Y() = std::max( aClip.Top(), nClipBot - aFrm.Height() );
+                setFrame(aFrm);
+
                 if ( FrameRA().Top() != nOld )
+                {
                     bAgain = true;
+                }
+
                 m_bHeightClipped = true;
             }
         }
         if ( bRig )
         {
             const long nOld = FrameRA().Left();
-            FrameWA().Pos().X() = std::max( aClip.Left(), nClipRig - FrameRA().Width() );
+            SwRect aFrm(FrameRA());
+            aFrm.Pos().X() = std::max( aClip.Left(), nClipRig - aFrm.Width() );
+            setFrame(aFrm);
+
             if ( FrameRA().Left() != nOld )
             {
                 const SwFormatHoriOrient &rH = GetFormat()->GetHoriOrient();
                 // Left-aligned ones may not be moved to the left when they
                 // are avoiding another one.
                 if( rH.GetHoriOrient() == text::HoriOrientation::LEFT )
-                    FrameWA().Pos().X() = nOld;
+                {
+                    SwRect aFrm(FrameRA());
+                    aFrm.Pos().X() = nOld;
+                    setFrame(aFrm);
+                }
                 else
+                {
                     bAgain = true;
+                }
             }
             m_bWidthClipped = true;
         }
@@ -420,8 +435,12 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
             const long nPrtHeightDiff = FrameRA().Height() - PrintRA().Height();
             const long nPrtWidthDiff  = FrameRA().Width()  - PrintRA().Width();
             maUnclippedFrame = FrameRA();
-            FrameWA().Height( aFrameRect.Height() );
-            FrameWA().Width ( std::max( long(MINLAY), aFrameRect.Width() ) );
+
+            SwRect aFrm(FrameRA());
+            aFrm.Height( aFrameRect.Height() );
+            aFrm.Width ( std::max( long(MINLAY), aFrameRect.Width() ) );
+            setFrame(aFrm);
+
             if ( Lower() && Lower()->IsColumnFrame() )
             {
                 ColLock();  //lock grow/shrink

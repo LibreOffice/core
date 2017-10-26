@@ -129,8 +129,10 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
             mbRightToLeft = false;
     }
 
-    FrameWA().Width( rFrameSize.GetWidth() );
-    FrameWA().Height( rFrameSize.GetHeightSizeType() == ATT_VAR_SIZE ? MINFLY : rFrameSize.GetHeight() );
+    SwRect aFrm(FrameRA());
+    aFrm.Width( rFrameSize.GetWidth() );
+    aFrm.Height( rFrameSize.GetHeightSizeType() == ATT_VAR_SIZE ? MINFLY : rFrameSize.GetHeight() );
+    setFrame(aFrm);
 
     // Fixed or variable Height?
     if ( rFrameSize.GetHeightSizeType() == ATT_MIN_SIZE )
@@ -151,8 +153,9 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
     InsertCnt();
 
     // Put it somewhere outside so that out document is not formatted unnecessarily often
-    FrameWA().Pos().setX(FAR_AWAY);
-    FrameWA().Pos().setY(FAR_AWAY);
+    aFrm.Pos().setX(FAR_AWAY);
+    aFrm.Pos().setY(FAR_AWAY);
+    setFrame(aFrm);
 }
 
 void SwFlyFrame::Chain( SwFrame* _pAnch )
@@ -551,8 +554,11 @@ bool SwFlyFrame::FrameSizeChg( const SwFormatFrameSize &rFrameSize )
             const SwRect aOld( GetObjRectWithSpaces() );
             const Size   aOldSz( PrintRA().SSize() );
             const SwTwips nDiffWidth = FrameRA().Width() - rFrameSize.GetWidth();
-            FrameWA().Height( FrameRA().Height() - nDiffHeight );
-            FrameWA().Width ( FrameRA().Width()  - nDiffWidth  );
+            SwRect aFrm(FrameRA());
+            aFrm.Height( aFrm.Height() - nDiffHeight );
+            aFrm.Width ( aFrm.Width()  - nDiffWidth  );
+            setFrame(aFrm);
+
             // #i68520#
             InvalidateObjRectWithSpaces();
             PrintWA().Height( PrintRA().Height() - nDiffHeight );
@@ -1153,8 +1159,11 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         if ( FrameRA().Top() == FAR_AWAY && FrameRA().Left() == FAR_AWAY )
         {
             // Remove safety switch (see SwFrame::CTor)
-            FrameWA().Pos().setX(0);
-            FrameWA().Pos().setY(0);
+            SwRect aFrm(FrameRA());
+            aFrm.Pos().setX(0);
+            aFrm.Pos().setY(0);
+            setFrame(aFrm);
+
             // #i68520#
             InvalidateObjRectWithSpaces();
         }
@@ -1195,7 +1204,11 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
 
             aRectFnSet.SetHeight( PrintWA(), nRemaining );
             nRemaining -= aRectFnSet.GetHeight(FrameRA());
-            aRectFnSet.AddBottom( FrameWA(), nRemaining + nUL );
+
+            SwRect aFrm(FrameRA());
+            aRectFnSet.AddBottom( aFrm, nRemaining + nUL );
+            setFrame(aFrm);
+
             // #i68520#
             if ( nRemaining + nUL != 0 )
             {
@@ -1227,7 +1240,11 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                 nNewSize = MINFLY;
             aRectFnSet.SetHeight( PrintWA(), nNewSize );
             nNewSize += nUL - aRectFnSet.GetHeight(FrameRA());
-            aRectFnSet.AddBottom( FrameWA(), nNewSize );
+
+            SwRect aFrm(FrameRA());
+            aRectFnSet.AddBottom( aFrm, nNewSize );
+            setFrame(aFrm);
+
             // #i68520#
             if ( nNewSize != 0 )
             {
@@ -1259,7 +1276,11 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                 nNewSize = MINFLY;
             aRectFnSet.SetWidth( PrintWA(), nNewSize );
             nNewSize += nLR - aRectFnSet.GetWidth(FrameRA());
-            aRectFnSet.AddRight( FrameWA(), nNewSize );
+
+            SwRect aFrm(FrameRA());
+            aRectFnSet.AddRight( aFrm, nNewSize );
+            setFrame(aFrm);
+
             // #i68520#
             if ( nNewSize != 0 )
             {
@@ -1605,8 +1626,11 @@ void SwFlyFrame::MakeObjPos()
         SetCurrRelPos( aObjPositioning.GetRelPos() );
 
         SwRectFnSet aRectFnSet(GetAnchorFrame());
-        FrameWA().Pos( aObjPositioning.GetRelPos() );
-        FrameWA().Pos() += aRectFnSet.GetPos(GetAnchorFrame()->FrameRA());
+        SwRect aFrm(FrameRA());
+        aFrm.Pos( aObjPositioning.GetRelPos() );
+        aFrm.Pos() += aRectFnSet.GetPos(GetAnchorFrame()->FrameRA());
+        setFrame(aFrm);
+
         // #i69335#
         InvalidateObjRectWithSpaces();
     }
@@ -1798,7 +1822,11 @@ SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
             if ( !bTst )
             {
                 SwRect aOld( GetObjRectWithSpaces() );
-                aRectFnSet.SetHeight( FrameWA(), nHeight - nVal );
+
+                SwRect aFrm(FrameRA());
+                aRectFnSet.SetHeight( aFrm, nHeight - nVal );
+                setFrame(aFrm);
+
                 // #i68520#
                 if ( nHeight - nVal != 0 )
                 {
@@ -2504,16 +2532,20 @@ const SwRect SwFlyFrame::GetObjBoundRect() const
 bool SwFlyFrame::SetObjTop_( const SwTwips _nTop )
 {
     const bool bChanged( FrameRA().Pos().getY() != _nTop );
+    SwRect aFrm(FrameRA());
 
-    FrameWA().Pos().setY(_nTop);
+    aFrm.Pos().setY(_nTop);
+    setFrame(aFrm);
 
     return bChanged;
 }
 bool SwFlyFrame::SetObjLeft_( const SwTwips _nLeft )
 {
     const bool bChanged( FrameRA().Pos().getX() != _nLeft );
+    SwRect aFrm(FrameRA());
 
-    FrameWA().Pos().setX(_nLeft);
+    aFrm.Pos().setX(_nLeft);
+    setFrame(aFrm);
 
     return bChanged;
 }

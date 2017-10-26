@@ -232,9 +232,14 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
                 if( nDiff > 0 )
                 {
                     if( nDiff > aRectFnSet.GetHeight(FrameRA()) )
+                    {
                         nDiff = aRectFnSet.GetHeight(FrameRA());
-                    aRectFnSet.AddBottom( FrameWA(), -nDiff );
-                    aRectFnSet.AddHeight( PrintWA(), -nDiff );
+                    }
+
+                    SwRect aFrm(FrameRA());
+                    aRectFnSet.AddBottom( aFrm, -nDiff );
+                    aRectFnSet.AddHeight( aFrm, -nDiff );
+                    setFrame(aFrm);
                 }
             }
             nDiff = aRectFnSet.GetHeight(FrameRA()) - nRemaining;
@@ -326,10 +331,15 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
 
     if ( !bTst )
     {
-        aRectFnSet.SetHeight( FrameWA(), aRectFnSet.GetHeight(FrameRA()) + nDist );
+        SwRect aFrm(FrameRA());
+        aRectFnSet.SetHeight( aFrm, aRectFnSet.GetHeight(aFrm) + nDist );
 
         if( IsVertical() && !IsVertLR() && !IsReverse() )
-            FrameWA().Pos().X() -= nDist;
+        {
+            aFrm.Pos().X() -= nDist;
+        }
+
+        setFrame(aFrm);
     }
     long nGrow = nDist - nAvail,
          nReal = 0;
@@ -368,11 +378,17 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
         if ( nReal != nDist )
         {
             nDist -= nReal;
+
             // We can only respect the boundless wish so much
-            FrameWA().SSize().Height() -= nDist;
+            SwRect aFrm(FrameRA());
+            aFrm.SSize().Height() -= nDist;
 
             if( IsVertical() && !IsVertLR() && !IsReverse() )
-                FrameWA().Pos().X() += nDist;
+            {
+                aFrm.Pos().X() += nDist;
+            }
+
+            setFrame(aFrm);
         }
 
         // growing happens upwards, so successors to not need to be invalidated
@@ -1900,19 +1916,34 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
                     while( pTmp && static_cast<SwLayoutFrame*>(pCnt)->IsAnLower( pTmp ) )
                     {
                         pTmp->Prepare( PREP_MOVEFTN );
-                        aRectFnSet.SetHeight(pTmp->FrameWA(), 0);
+
+                        SwRect aFrm(pTmp->FrameRA());
+                        aRectFnSet.SetHeight(aFrm, 0);
+                        pTmp->setFrame(aFrm);
+
                         aRectFnSet.SetHeight(pTmp->PrintWA(), 0);
                         pTmp = pTmp->FindNext();
                     }
                 }
                 else
+                {
                     pCnt->Prepare( PREP_MOVEFTN );
-                aRectFnSet.SetHeight(pCnt->FrameWA(), 0);
+                }
+
+                SwRect aFrm(pCnt->FrameRA());
+                aRectFnSet.SetHeight(aFrm, 0);
+                pCnt->setFrame(aFrm);
+
                 aRectFnSet.SetHeight(pCnt->PrintWA(), 0);
                 pCnt = pCnt->GetNext();
             }
-            aRectFnSet.SetHeight(pFootnote->FrameWA(), 0);
+
+            SwRect aFrm(pFootnote->FrameRA());
+            aRectFnSet.SetHeight(aFrm, 0);
+            pFootnote->setFrame(aFrm);
+
             aRectFnSet.SetHeight(pFootnote->PrintWA(), 0);
+
             pFootnote->Calc(getRootFrame()->GetCurrShell()->GetOut());
             pFootnote->GetUpper()->Calc(getRootFrame()->GetCurrShell()->GetOut());
 
@@ -2700,8 +2731,11 @@ bool SwContentFrame::MoveFootnoteCntFwd( bool bMakePage, SwFootnoteBossFrame *pO
                     pNewUp = new SwSectionFrame( *pSect, false );
                     pNewUp->InsertBefore( pTmpFootnote, pTmpFootnote->Lower() );
                     static_cast<SwSectionFrame*>(pNewUp)->Init();
-                    pNewUp->FrameWA().Pos() = pTmpFootnote->FrameRA().Pos();
-                    pNewUp->FrameWA().Pos().Y() += 1; // for notifications
+
+                    SwRect aFrm(pNewUp->FrameRA());
+                    aFrm.Pos() = pTmpFootnote->FrameRA().Pos();
+                    aFrm.Pos().Y() += 1; // for notifications
+                    pNewUp->setFrame(aFrm);
 
                     // If the section frame has a successor then the latter needs
                     // to be moved behind the new Follow of the section frame.
