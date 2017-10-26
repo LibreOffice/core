@@ -285,9 +285,17 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
             pTextNd->ChgFormatColl( pLastNdColl );
     }
 
-    for (size_t n = m_FlyUndos.size(); 0 < n; --n)
+    // tdf#108124 (10/25/2017)
+    // During UNDO we call SwUndoInsLayFormat::UndoImpl in reverse order,
+    //  firstly for m_FlyUndos[ m_FlyUndos.size()-1 ], etc.
+    // As absolute node index of fly stored in SwUndoFlyBase::nNdPgPos we
+    //  should recover from Undo in direct order (last should be recovered first)
+    // During REDO we should recover Flys (Images) in direct order,
+    //  firstly m_FlyUndos[0], then with m_FlyUndos[1] index, etc.
+
+    for (size_t n = 0; m_FlyUndos.size() > n; ++n)
     {
-        m_FlyUndos[ n-1 ]->RedoImpl(rContext);
+        m_FlyUndos[n]->RedoImpl(rContext);
     }
 
     pHistory->Rollback( pDoc, nSetPos );
