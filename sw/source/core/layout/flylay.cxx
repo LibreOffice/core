@@ -297,9 +297,11 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
             if ( !pHeader || !pHeader->IsHeaderFrame() )
             {
                 const long nOld = getSwFrame().Top();
-                SwRect aFrm(getSwFrame());
-                aFrm.Pos().Y() = std::max( aClip.Top(), nClipBot - aFrm.Height() );
-                setSwFrame(aFrm);
+
+                {
+                    SwFrameRect::FrameWriteAccess aFrm(*this);
+                    aFrm.Pos().Y() = std::max( aClip.Top(), nClipBot - aFrm.Height() );
+                }
 
                 if ( getSwFrame().Top() != nOld )
                 {
@@ -312,9 +314,11 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
         if ( bRig )
         {
             const long nOld = getSwFrame().Left();
-            SwRect aFrm(getSwFrame());
-            aFrm.Pos().X() = std::max( aClip.Left(), nClipRig - aFrm.Width() );
-            setSwFrame(aFrm);
+
+            {
+                SwFrameRect::FrameWriteAccess aFrm(*this);
+                aFrm.Pos().X() = std::max( aClip.Left(), nClipRig - aFrm.Width() );
+            }
 
             if ( getSwFrame().Left() != nOld )
             {
@@ -323,9 +327,8 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
                 // are avoiding another one.
                 if( rH.GetHoriOrient() == text::HoriOrientation::LEFT )
                 {
-                    SwRect aFrm(getSwFrame());
+                    SwFrameRect::FrameWriteAccess aFrm(*this);
                     aFrm.Pos().X() = nOld;
-                    setSwFrame(aFrm);
                 }
                 else
                 {
@@ -436,19 +439,23 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
             const long nPrtWidthDiff  = getSwFrame().Width()  - getSwPrint().Width();
             maUnclippedFrame = getSwFrame();
 
-            SwRect aFrm(getSwFrame());
-            aFrm.Height( aFrameRect.Height() );
-            aFrm.Width ( std::max( long(MINLAY), aFrameRect.Width() ) );
-            setSwFrame(aFrm);
-
-            SwRect aPrt(getSwPrint());
+            {
+                SwFrameRect::FrameWriteAccess aFrm(*this);
+                aFrm.Height( aFrameRect.Height() );
+                aFrm.Width ( std::max( long(MINLAY), aFrameRect.Width() ) );
+            }
 
             if ( Lower() && Lower()->IsColumnFrame() )
             {
                 ColLock();  //lock grow/shrink
-                const Size aTmpOldSize( aPrt.SSize() );
-                aPrt.Height( getSwFrame().Height() - nPrtHeightDiff );
-                aPrt.Width ( getSwFrame().Width()  - nPrtWidthDiff );
+                const Size aTmpOldSize( getSwPrint().SSize() );
+
+                {
+                    SwFrameRect::PrintWriteAccess aPrt(*this);
+                    aPrt.Height( getSwFrame().Height() - nPrtHeightDiff );
+                    aPrt.Width ( getSwFrame().Width()  - nPrtWidthDiff );
+                }
+
                 ChgLowersProp( aTmpOldSize );
                 SwFrame *pLow = Lower();
                 do
@@ -465,11 +472,10 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
             }
             else
             {
+                SwFrameRect::PrintWriteAccess aPrt(*this);
                 aPrt.Height( getSwFrame().Height() - nPrtHeightDiff );
                 aPrt.Width ( getSwFrame().Width()  - nPrtWidthDiff );
             }
-
-            setSwPrint(aPrt);
         }
     }
 

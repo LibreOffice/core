@@ -191,7 +191,7 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
     if ( !mbValidPrtArea )
     {
         mbValidPrtArea = true;
-        SwRect aPrt(getSwPrint());
+        SwFrameRect::PrintWriteAccess aPrt(*this);
 
         aRectFnSet.SetTop( aPrt, nBorder );
         aRectFnSet.SetWidth( aPrt, aRectFnSet.GetWidth(getSwFrame()) );
@@ -201,8 +201,6 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
         {
             mbValidSize = false;
         }
-
-        setSwPrint(aPrt);
     }
 
     if ( !mbValidSize )
@@ -243,10 +241,9 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
                         nDiff = aRectFnSet.GetHeight(getSwFrame());
                     }
 
-                    SwRect aFrm(getSwFrame());
+                    SwFrameRect::FrameWriteAccess aFrm(*this);
                     aRectFnSet.AddBottom( aFrm, -nDiff );
                     aRectFnSet.AddHeight( aFrm, -nDiff );
-                    setSwFrame(aFrm);
                 }
             }
             nDiff = aRectFnSet.GetHeight(getSwFrame()) - nRemaining;
@@ -262,10 +259,8 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
                 if( nPrtHeight < 0 )
                 {
                     const SwTwips nTmpDiff = std::max( aRectFnSet.GetTop(getSwPrint()), -nPrtHeight );
-
-                    SwRect aPrt(getSwPrint());
+                    SwFrameRect::PrintWriteAccess aPrt(*this);
                     aRectFnSet.SubTop( aPrt, nTmpDiff );
-                    setSwPrint(aPrt);
                 }
             }
         }
@@ -340,15 +335,13 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
 
     if ( !bTst )
     {
-        SwRect aFrm(getSwFrame());
+        SwFrameRect::FrameWriteAccess aFrm(*this);
         aRectFnSet.SetHeight( aFrm, aRectFnSet.GetHeight(aFrm) + nDist );
 
         if( IsVertical() && !IsVertLR() && !IsReverse() )
         {
             aFrm.Pos().X() -= nDist;
         }
-
-        setSwFrame(aFrm);
     }
     long nGrow = nDist - nAvail,
          nReal = 0;
@@ -389,15 +382,13 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
             nDist -= nReal;
 
             // We can only respect the boundless wish so much
-            SwRect aFrm(getSwFrame());
+            SwFrameRect::FrameWriteAccess aFrm(*this);
             aFrm.SSize().Height() -= nDist;
 
             if( IsVertical() && !IsVertLR() && !IsReverse() )
             {
                 aFrm.Pos().X() += nDist;
             }
-
-            setSwFrame(aFrm);
         }
 
         // growing happens upwards, so successors to not need to be invalidated
@@ -1926,13 +1917,11 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
                     {
                         pTmp->Prepare( PREP_MOVEFTN );
 
-                        SwRect aFrm(pTmp->getSwFrame());
+                        SwFrameRect::FrameWriteAccess aFrm(*pTmp);
                         aRectFnSet.SetHeight(aFrm, 0);
-                        pTmp->setSwFrame(aFrm);
 
-                        SwRect aPrt(pTmp->getSwPrint());
+                        SwFrameRect::PrintWriteAccess aPrt(*pTmp);
                         aRectFnSet.SetHeight(aPrt, 0);
-                        pTmp->setSwPrint(aPrt);
 
                         pTmp = pTmp->FindNext();
                     }
@@ -1942,24 +1931,24 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
                     pCnt->Prepare( PREP_MOVEFTN );
                 }
 
-                SwRect aFrm(pCnt->getSwFrame());
+                SwFrameRect::FrameWriteAccess aFrm(*pCnt);
                 aRectFnSet.SetHeight(aFrm, 0);
-                pCnt->setSwFrame(aFrm);
 
-                SwRect aPrt(pCnt->getSwPrint());
+                SwFrameRect::PrintWriteAccess aPrt(*pCnt);
                 aRectFnSet.SetHeight(aPrt, 0);
-                pCnt->setSwPrint(aPrt);
 
                 pCnt = pCnt->GetNext();
             }
 
-            SwRect aFrm(pFootnote->getSwFrame());
-            aRectFnSet.SetHeight(aFrm, 0);
-            pFootnote->setSwFrame(aFrm);
+            {
+                SwFrameRect::FrameWriteAccess aFrm(*pFootnote);
+                aRectFnSet.SetHeight(aFrm, 0);
+            }
 
-            SwRect aPrt(pFootnote->getSwPrint());
-            aRectFnSet.SetHeight(aPrt, 0);
-            pFootnote->setSwPrint(aPrt);
+            {
+                SwFrameRect::PrintWriteAccess aPrt(*pFootnote);
+                aRectFnSet.SetHeight(aPrt, 0);
+            }
 
             pFootnote->Calc(getRootFrame()->GetCurrShell()->GetOut());
             pFootnote->GetUpper()->Calc(getRootFrame()->GetCurrShell()->GetOut());
@@ -2749,10 +2738,11 @@ bool SwContentFrame::MoveFootnoteCntFwd( bool bMakePage, SwFootnoteBossFrame *pO
                     pNewUp->InsertBefore( pTmpFootnote, pTmpFootnote->Lower() );
                     static_cast<SwSectionFrame*>(pNewUp)->Init();
 
-                    SwRect aFrm(pNewUp->getSwFrame());
-                    aFrm.Pos() = pTmpFootnote->getSwFrame().Pos();
-                    aFrm.Pos().Y() += 1; // for notifications
-                    pNewUp->setSwFrame(aFrm);
+                    {
+                        SwFrameRect::FrameWriteAccess aFrm(*pNewUp);
+                        aFrm.Pos() = pTmpFootnote->getSwFrame().Pos();
+                        aFrm.Pos().Y() += 1; // for notifications
+                    }
 
                     // If the section frame has a successor then the latter needs
                     // to be moved behind the new Follow of the section frame.

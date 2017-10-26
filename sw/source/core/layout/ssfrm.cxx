@@ -55,13 +55,11 @@ bool SwFrame::SetMinLeft( long nDeadline )
     SwTwips nDiff = nDeadline - getSwFrame().Left();
     if( nDiff > 0 )
     {
-        SwRect aFrm(getSwFrame());
+        SwFrameRect::FrameWriteAccess aFrm(*this);
         aFrm.Left( nDeadline );
-        setSwFrame(aFrm);
 
-        SwRect aPrt(getSwPrint());
+        SwFrameRect::PrintWriteAccess aPrt(*this);
         aPrt.Width( aPrt.Width() - nDiff );
-        setSwPrint(aPrt);
 
         return true;
     }
@@ -73,13 +71,11 @@ bool SwFrame::SetMaxBottom( long nDeadline )
     SwTwips nDiff = getSwFrame().Top() + getSwFrame().Height() - nDeadline;
     if( nDiff > 0 )
     {
-        SwRect aFrm(getSwFrame());
+        SwFrameRect::FrameWriteAccess aFrm(*this);
         aFrm.Height( aFrm.Height() - nDiff );
-        setSwFrame(aFrm);
 
-        SwRect aPrt(getSwPrint());
+        SwFrameRect::PrintWriteAccess aPrt(*this);
         aPrt.Height( aPrt.Height() - nDiff );
-        setSwPrint(aPrt);
 
         return true;
     }
@@ -91,13 +87,11 @@ bool SwFrame::SetMinTop( long nDeadline )
     SwTwips nDiff = nDeadline - getSwFrame().Top();
     if( nDiff > 0 )
     {
-        SwRect aFrm(getSwFrame());
+        SwFrameRect::FrameWriteAccess aFrm(*this);
         aFrm.Top( nDeadline );
-        setSwFrame(aFrm);
 
-        SwRect aPrt(getSwPrint());
+        SwFrameRect::PrintWriteAccess aPrt(*this);
         aPrt.Height( aPrt.Height() - nDiff );
-        setSwPrint(aPrt);
 
         return true;
     }
@@ -109,13 +103,11 @@ bool SwFrame::SetMaxRight( long nDeadline )
     SwTwips nDiff = getSwFrame().Left() + getSwFrame().Width() - nDeadline;
     if( nDiff > 0 )
     {
-        SwRect aFrm(getSwFrame());
+        SwFrameRect::FrameWriteAccess aFrm(*this);
         aFrm.Width( aFrm.Width() - nDiff );
-        setSwFrame(aFrm);
 
-        SwRect aPrt(getSwPrint());
+        SwFrameRect::PrintWriteAccess aPrt(*this);
         aPrt.Width( aPrt.Width() - nDiff );
-        setSwPrint(aPrt);
 
         return true;
     }
@@ -124,7 +116,7 @@ bool SwFrame::SetMaxRight( long nDeadline )
 
 void SwFrame::MakeBelowPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify )
 {
-    SwRect aFrm(getSwFrame());
+    SwFrameRect::FrameWriteAccess aFrm(*this);
 
     if( pPrv )
     {
@@ -141,13 +133,11 @@ void SwFrame::MakeBelowPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
     {
         aFrm.Pos().Y() += 1;
     }
-
-    setSwFrame(aFrm);
 }
 
 void SwFrame::MakeUpperPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify )
 {
-    SwRect aFrm(getSwFrame());
+    SwFrameRect::FrameWriteAccess aFrm(*this);
 
     if( pPrv )
     {
@@ -165,13 +155,11 @@ void SwFrame::MakeUpperPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
     {
         aFrm.Pos().Y() -= 1;
     }
-
-    setSwFrame(aFrm);
 }
 
 void SwFrame::MakeLeftPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify )
 {
-    SwRect aFrm(getSwFrame());
+    SwFrameRect::FrameWriteAccess aFrm(*this);
 
     if( pPrv )
     {
@@ -189,13 +177,11 @@ void SwFrame::MakeLeftPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify
     {
         aFrm.Pos().X() -= 1;
     }
-
-    setSwFrame(aFrm);
 }
 
 void SwFrame::MakeRightPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify )
 {
-    SwRect aFrm(getSwFrame());
+    SwFrameRect::FrameWriteAccess aFrm(*this);
 
     if( pPrv )
     {
@@ -212,40 +198,34 @@ void SwFrame::MakeRightPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
     {
         aFrm.Pos().X() += 1;
     }
-
-    setSwFrame(aFrm);
 }
 
 void SwFrame::SetTopBottomMargins( long nTop, long nBot )
 {
-    SwRect aPrt(getSwPrint());
+    SwFrameRect::PrintWriteAccess aPrt(*this);
     aPrt.Top( nTop );
     aPrt.Height( getSwFrame().Height() - nTop - nBot );
-    setSwPrint(aPrt);
 }
 
 void SwFrame::SetBottomTopMargins( long nBot, long nTop )
 {
-    SwRect aPrt(getSwPrint());
+    SwFrameRect::PrintWriteAccess aPrt(*this);
     aPrt.Top( nTop );
     aPrt.Height( getSwFrame().Height() - nTop - nBot );
-    setSwPrint(aPrt);
 }
 
 void SwFrame::SetLeftRightMargins( long nLeft, long nRight)
 {
-    SwRect aPrt(getSwPrint());
+    SwFrameRect::PrintWriteAccess aPrt(*this);
     aPrt.Left( nLeft );
     aPrt.Width( getSwFrame().Width() - nLeft - nRight );
-    setSwPrint(aPrt);
 }
 
 void SwFrame::SetRightLeftMargins( long nRight, long nLeft)
 {
-    SwRect aPrt(getSwPrint());
+    SwFrameRect::PrintWriteAccess aPrt(*this);
     aPrt.Left( nLeft );
     aPrt.Width( getSwFrame().Width() - nLeft - nRight );
-    setSwPrint(aPrt);
 }
 
 /// checks the layout direction and invalidates the lower frames recursively, if necessary.

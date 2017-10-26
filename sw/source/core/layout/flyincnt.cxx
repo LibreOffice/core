@@ -74,9 +74,10 @@ void SwFlyInContentFrame::SetRefPoint( const Point& rPoint,
     SetCurrRelPos( rRelAttr );
     SwRectFnSet aRectFnSet(GetAnchorFrame());
 
-    SwRect aFrm(getSwFrame());
-    aRectFnSet.SetPos( aFrm, rPoint + rRelPos );
-    setSwFrame(aFrm);
+    {
+        SwFrameRect::FrameWriteAccess aFrm(*this);
+        aRectFnSet.SetPos( aFrm, rPoint + rRelPos );
+    }
 
     // #i68520#
     InvalidateObjRectWithSpaces();
@@ -262,10 +263,8 @@ void SwFlyInContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             if ( getSwFrame().Left() == (pFrame->getSwFrame().Left()+pFrame->getSwPrint().Left()) &&
                  getSwFrame().Width() > pFrame->getSwPrint().Width() )
             {
-                SwRect aFrm(getSwFrame());
+                SwFrameRect::FrameWriteAccess aFrm(*this);
                 aFrm.Width( pFrame->getSwPrint().Width() );
-                setSwFrame(aFrm);
-
                 mbValidPrtArea = false;
                 m_bWidthClipped = true;
             }
