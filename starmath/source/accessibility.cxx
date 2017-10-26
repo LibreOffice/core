@@ -825,7 +825,7 @@ tools::Rectangle SmViewForwarder::GetVisArea() const
             MapMode aMapMode(pOutDev->GetMapMode());
             aVisArea = OutputDevice::LogicToLogic( aVisArea,
                                                    pEditEngine->GetRefMapMode(),
-                                                   aMapMode.GetMapUnit() );
+                                                   MapMode(aMapMode.GetMapUnit()));
             aMapMode.SetOrigin(Point());
             return pOutDev->LogicToPixel( aVisArea, aMapMode );
         }
@@ -843,7 +843,7 @@ Point SmViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMod
     {
         MapMode aMapMode(pOutDev->GetMapMode());
         Point aPoint( OutputDevice::LogicToLogic( rPoint, rMapMode,
-                                                  aMapMode.GetMapUnit() ) );
+                                                  MapMode(aMapMode.GetMapUnit())) );
         aMapMode.SetOrigin(Point());
         return pOutDev->LogicToPixel( aPoint, aMapMode );
     }
@@ -862,7 +862,7 @@ Point SmViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMod
         aMapMode.SetOrigin(Point());
         Point aPoint( pOutDev->PixelToLogic( rPoint, aMapMode ) );
         return OutputDevice::LogicToLogic( aPoint,
-                                           aMapMode.GetMapUnit(),
+                                           MapMode(aMapMode.GetMapUnit()),
                                            rMapMode );
     }
 
@@ -1431,7 +1431,7 @@ tools::Rectangle SmEditViewForwarder::GetVisArea() const
             MapMode aMapMode(pOutDev->GetMapMode());
             aVisArea = OutputDevice::LogicToLogic( aVisArea,
                                                    pEditEngine->GetRefMapMode(),
-                                                   aMapMode.GetMapUnit() );
+                                                   MapMode(aMapMode.GetMapUnit()));
             aMapMode.SetOrigin(Point());
             aRect = pOutDev->LogicToPixel( aVisArea, aMapMode );
         }
@@ -1449,7 +1449,7 @@ Point SmEditViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMa
     {
         MapMode aMapMode(pOutDev->GetMapMode());
         Point aPoint( OutputDevice::LogicToLogic( rPoint, rMapMode,
-                                                  aMapMode.GetMapUnit() ) );
+                                                  MapMode(aMapMode.GetMapUnit())));
         aMapMode.SetOrigin(Point());
         return pOutDev->LogicToPixel( aPoint, aMapMode );
     }
@@ -1468,7 +1468,7 @@ Point SmEditViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMa
         aMapMode.SetOrigin(Point());
         Point aPoint( pOutDev->PixelToLogic( rPoint, aMapMode ) );
         return OutputDevice::LogicToLogic( aPoint,
-                                           aMapMode.GetMapUnit(),
+                                           MapMode(aMapMode.GetMapUnit()),
                                            rMapMode );
     }
 

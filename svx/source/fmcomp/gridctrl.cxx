@@ -427,7 +427,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     tools::Rectangle   aRect(static_cast<DbGridControl*>(GetParent())->GetControlArea());
     long nH = aRect.GetSize().Height();
     long nW = GetParent()->GetOutputSizePixel().Width();
-    Size aBorder = LogicToPixel(Size(2, 2),MapUnit::MapAppFont);
+    Size aBorder = LogicToPixel(Size(2, 2), MapMode(MapUnit::MapAppFont));
     aBorder = Size(CalcZoom(aBorder.Width()), CalcZoom(aBorder.Height()));
     sal_uInt16      nX = 1;
     sal_uInt16      nY = 0;

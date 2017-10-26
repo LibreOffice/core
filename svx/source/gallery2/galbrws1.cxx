@@ -181,7 +181,7 @@ sal_uIntPtr GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEnt
 void GalleryBrowser1::ImplAdjustControls()
 {
     const Size  aOutSize( GetOutputSizePixel() );
-    const long  nNewThemeHeight = LogicToPixel( Size( 0, 14 ), MapUnit::MapAppFont ).Height();
+    const long  nNewThemeHeight = LogicToPixel(Size(0, 14), MapMode(MapUnit::MapAppFont)).Height();
     const long  nStartY = nNewThemeHeight + 4;
 
     maNewTheme->SetPosSizePixel( Point(),

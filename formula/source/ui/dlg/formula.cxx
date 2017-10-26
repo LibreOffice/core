@@ -268,7 +268,7 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     m_pFtFuncName->SetText("");
 
     pParent->get(m_pMEFormula, "ed_formula");
-    Size aSize(pParent->LogicToPixel(Size(203, 43), MapUnit::MapAppFont));
+    Size aSize(pParent->LogicToPixel(Size(203, 43), MapMode(MapUnit::MapAppFont)));
     m_pMEFormula->set_height_request(aSize.Height());
     m_pMEFormula->set_width_request(aSize.Width());
     pParent->get(m_pBtnMatrix, "array");

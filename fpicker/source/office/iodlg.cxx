@@ -603,7 +603,7 @@ void SvtFileDialog::Init_Impl
         pImpl->_bMultiSelection = true;
 
     _pContainer.reset(VclPtr<CustomContainer>::Create(get<vcl::Window>("container")));
-    Size aSize(LogicToPixel(Size(270, 85), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(270, 85), MapMode(MapUnit::MapAppFont)));
     _pContainer->set_height_request(aSize.Height());
     _pContainer->set_width_request(aSize.Width());
     _pContainer->set_hexpand(true);
@@ -2534,7 +2534,7 @@ void SvtFileDialog::AddControls_Impl( )
 
     pImpl->_pPlaces = VclPtr<PlacesListBox>::Create(_pContainer, this, FpsResId(STR_PLACES_TITLE), WB_BORDER);
     pImpl->_pPlaces->SetHelpId("SVT_HID_FILESAVE_PLACES_LISTBOX");
-    Size aSize(LogicToPixel(Size(50, 85), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(50, 85), MapMode(MapUnit::MapAppFont)));
     pImpl->_pPlaces->set_height_request(aSize.Height());
     pImpl->_pPlaces->set_width_request(aSize.Width());
     pImpl->_pPlaces->SetSizePixel(aSize);

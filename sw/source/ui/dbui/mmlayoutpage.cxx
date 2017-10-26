@@ -91,7 +91,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     get(m_pUpPB, "up");
     get(m_pDownPB, "down");
     get(m_pExampleContainerWIN, "example");
-    Size aSize(LogicToPixel(Size(124, 159), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(124, 159), MapMode(MapUnit::MapAppFont)));
     m_pExampleContainerWIN->set_width_request(aSize.Width());
     m_pExampleContainerWIN->set_height_request(aSize.Height());
     get(m_pZoomLB, "zoom");

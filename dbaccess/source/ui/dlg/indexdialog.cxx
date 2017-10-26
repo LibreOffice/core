@@ -190,7 +190,7 @@ namespace dbaui
         maLcResetCmdImg = get<FixedImage>("image5")->GetImage();
 
         get(m_pIndexList, "INDEX_LIST");
-        Size aSize(LogicToPixel(Size(70, 97), MapUnit::MapAppFont));
+        Size aSize(LogicToPixel(Size(70, 97), MapMode(MapUnit::MapAppFont)));
         m_pIndexList->set_width_request(aSize.Width());
         m_pIndexList->set_height_request(aSize.Height());
         get(m_pIndexDetails, "INDEX_DETAILS");
@@ -199,7 +199,7 @@ namespace dbaui
         get(m_pUnique, "UNIQUE");
         get(m_pFieldsLabel, "FIELDS_LABEL");
         get(m_pFields, "FIELDS");
-        aSize = LogicToPixel(Size(128, 61), MapUnit::MapAppFont);
+        aSize = LogicToPixel(Size(128, 61), MapMode(MapUnit::MapAppFont));
         m_pFields->set_width_request(aSize.Width());
         m_pFields->set_height_request(aSize.Height());
         get(m_pClose, "close");

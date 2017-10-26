@@ -136,7 +136,7 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
         pSet->Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aMisc.IsNotFoundWarning() ) );
 
         mpPrinter = VclPtr<SfxPrinter>::Create( std::move(pSet) );
-        mpPrinter->SetMapMode( MapUnit::Map100thMM );
+        mpPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
         UpdateDrawPrinter();
         mpPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
     }
@@ -590,9 +590,9 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
                 {
                     pDev = GetPrinter();
                     aScope.setOldMapMode(pDev->GetMapMode());
-                    pDev->SetMapMode( MapUnit::MapPixel );  // Important for GetNeededSize
+                    pDev->SetMapMode(MapMode(MapUnit::MapPixel)); // Important for GetNeededSize
 
-                    Point aPix1000 = pDev->LogicToPixel( Point(1000,1000), MapUnit::MapTwip );
+                    Point aPix1000 = pDev->LogicToPixel(Point(1000,1000), MapMode(MapUnit::MapTwip));
                     nPPTX = aPix1000.X() / 1000.0;
                     nPPTY = aPix1000.Y() / 1000.0;
                 }

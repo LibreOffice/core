@@ -497,7 +497,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         //  use a virtual device with 1/100th mm as text formatting reference
 
         xFmtVirtDev.disposeAndReset( VclPtr<VirtualDevice>::Create() );
-        xFmtVirtDev->SetMapMode( MapUnit::Map100thMM );
+        xFmtVirtDev->SetMapMode(MapMode(MapUnit::Map100thMM));
         aOutputData.SetFmtDevice( xFmtVirtDev.get() );
 
         bLogicText = true; // use logic MapMode
@@ -661,7 +661,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     {
         // save MapMode and set to pixel
         MapMode aCurrentMapMode(pContentDev->GetMapMode());
-        pContentDev->SetMapMode(MapUnit::MapPixel);
+        pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
         tools::Rectangle aPixRect = tools::Rectangle( Point(), GetOutputSizePixel() );
         pContentDev->SetFillColor( rColorCfg.GetColorValue(svtools::APPBACKGROUND).nColor );
@@ -702,7 +702,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     if ( rDoc.HasBackgroundDraw( nTab, aDrawingRectLogic ) )
     {
-        pContentDev->SetMapMode(MapUnit::MapPixel);
+        pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
         aOutputData.DrawClear();
 
             // drawing background
@@ -723,7 +723,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     if ( !bGridFirst && ( bGrid || bPage ) )
         aOutputData.DrawGrid(*pContentDev, bGrid, bPage);
 
-    pContentDev->SetMapMode(MapUnit::MapPixel);
+    pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
     if ( bPageMode )
     {
@@ -765,13 +765,13 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         pContentDev->SetMapMode(aMap);
     }
     else
-        pContentDev->SetMapMode(MapUnit::MapPixel);
+        pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
         // Autofilter- and Pivot-Buttons
 
     DrawButtons(nX1, nX2, rTableInfo, pContentDev);          // Pixel
 
-    pContentDev->SetMapMode(MapUnit::MapPixel);
+    pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
     aOutputData.DrawClipMarks();
 
@@ -822,7 +822,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         pContentDev->SetMapMode(aOrig);
     }
 
-    pContentDev->SetMapMode(MapUnit::MapPixel);
+    pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
     if ( pViewData->IsRefMode() && nTab >= pViewData->GetRefStartZ() && nTab <= pViewData->GetRefEndZ() )
     {
@@ -956,7 +956,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
                             tools::Rectangle aEditRect(Point(nScreenX, nScreenY), Size(nScreenW, nScreenH));
                             pOtherEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
-                            rDevice.SetMapMode(MapUnit::MapPixel);
+                            rDevice.SetMapMode(MapMode(MapUnit::MapPixel));
                         }
                     }
                 }
@@ -1030,7 +1030,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         // paint the editeng text
         tools::Rectangle aEditRect(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
         pEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
-        rDevice.SetMapMode(MapUnit::MapPixel);
+        rDevice.SetMapMode(MapMode(MapUnit::MapPixel));
 
         // restore the cursor it was originally visible
         if (bVisCursor)
@@ -1218,7 +1218,7 @@ void ScGridWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
         if (IsMapModeEnabled())
         {
             if (GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                aRectangle = OutputDevice::LogicToLogic(aRectangle, MapUnit::Map100thMM, MapUnit::MapTwip);
+                aRectangle = OutputDevice::LogicToLogic(aRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
         }
         else
             aRectangle = PixelToLogic(aRectangle, MapMode(MapUnit::MapTwip));

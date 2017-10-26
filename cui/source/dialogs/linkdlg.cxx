@@ -99,7 +99,7 @@ SvBaseLinksDlg::SvBaseLinksDlg( vcl::Window * pParent, LinkManager* pMgr, bool b
     aUpdateIdle("cui SvBaseLinksDlg UpdateIdle")
 {
     get(m_pTbLinks, "TB_LINKS");
-    Size aSize(LogicToPixel(Size(257, 87), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(257, 87), MapMode(MapUnit::MapAppFont)));
     m_pTbLinks->set_width_request(aSize.Width());
     m_pTbLinks->set_height_request(aSize.Height());
     get(m_pFtFullFileName, "FULL_FILE_NAME");
@@ -115,11 +115,11 @@ SvBaseLinksDlg::SvBaseLinksDlg( vcl::Window * pParent, LinkManager* pMgr, bool b
     m_pTbLinks->SetSelectionMode( SelectionMode::Multiple );
     m_pTbLinks->SetTabs( &nTabs[0] );
     FixedText *pFtFiles = get<FixedText>("FILES");
-    pFtFiles->set_width_request(LogicToPixel(Size(nTabs[2] - nTabs[1] - 2, 0), MapUnit::MapAppFont).Width());
+    pFtFiles->set_width_request(LogicToPixel(Size(nTabs[2] - nTabs[1] - 2, 0), MapMode(MapUnit::MapAppFont)).Width());
     FixedText *pFtLinks = get<FixedText>("LINKS");
-    pFtLinks->set_width_request(LogicToPixel(Size(nTabs[3] - nTabs[2] - 2, 0), MapUnit::MapAppFont).Width());
+    pFtLinks->set_width_request(LogicToPixel(Size(nTabs[3] - nTabs[2] - 2, 0), MapMode(MapUnit::MapAppFont)).Width());
     FixedText *pFtTypes = get<FixedText>("TYPE");
-    pFtTypes->set_width_request(LogicToPixel(Size(nTabs[4] - nTabs[3] - 2, 0), MapUnit::MapAppFont).Width());
+    pFtTypes->set_width_request(LogicToPixel(Size(nTabs[4] - nTabs[3] - 2, 0), MapMode(MapUnit::MapAppFont)).Width());
     m_pTbLinks->Resize();  // OS: hack for correct selection
 
     // UpdateTimer for DDE-/Grf-links, which are waited for

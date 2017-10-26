@@ -158,8 +158,8 @@ bool DlgEdObj::TransformSdrToControlCoordinates(
     }
 
     // convert pixel to logic units
-    aPos = pDevice->PixelToLogic( aPos, MapUnit::MapAppFont );
-    aSize = pDevice->PixelToLogic( aSize, MapUnit::MapAppFont );
+    aPos = pDevice->PixelToLogic(aPos, MapMode(MapUnit::MapAppFont));
+    aSize = pDevice->PixelToLogic(aSize, MapMode(MapUnit::MapAppFont));
 
     // set out parameters
     nXOut = aPos.Width();
@@ -205,8 +205,8 @@ bool DlgEdObj::TransformSdrToFormCoordinates(
         aSize.Height() -= aDeviceInfo.TopInset + aDeviceInfo.BottomInset;
     }
     // convert pixel to logic units
-    aPos = pDevice->PixelToLogic( aPos, MapUnit::MapAppFont );
-    aSize = pDevice->PixelToLogic( aSize, MapUnit::MapAppFont );
+    aPos = pDevice->PixelToLogic(aPos, MapMode(MapUnit::MapAppFont));
+    aSize = pDevice->PixelToLogic(aSize, MapMode(MapUnit::MapAppFont));
 
     // set out parameters
     nXOut = aPos.Width();
@@ -246,9 +246,9 @@ bool DlgEdObj::TransformControlToSdrCoordinates(
     DBG_ASSERT( pDevice, "DlgEdObj::TransformControlToSdrCoordinates: missing default device!" );
     if ( !pDevice )
         return false;
-    aPos = pDevice->LogicToPixel( aPos, MapUnit::MapAppFont );
-    aSize = pDevice->LogicToPixel( aSize, MapUnit::MapAppFont );
-    aFormPos = pDevice->LogicToPixel( aFormPos, MapUnit::MapAppFont );
+    aPos = pDevice->LogicToPixel(aPos, MapMode(MapUnit::MapAppFont));
+    aSize = pDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
+    aFormPos = pDevice->LogicToPixel(aFormPos, MapMode(MapUnit::MapAppFont));
 
     // add form position
     aPos.Width() += aFormPos.Width();
@@ -296,8 +296,8 @@ bool DlgEdObj::TransformFormToSdrCoordinates(
     if ( !lcl_getDlgEdForm( this, pForm ) )
         return false;
 
-    aPos = pDevice->LogicToPixel( aPos, MapUnit::MapAppFont );
-    aSize = pDevice->LogicToPixel( aSize, MapUnit::MapAppFont );
+    aPos = pDevice->LogicToPixel(aPos, MapMode(MapUnit::MapAppFont));
+    aSize = pDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
 
     // take window borders into account
     Reference< beans::XPropertySet > xPSetForm( pForm->GetUnoControlModel(), UNO_QUERY );

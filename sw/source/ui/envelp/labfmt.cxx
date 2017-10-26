@@ -109,7 +109,7 @@ SwLabPreview::SwLabPreview(vcl::Window* pParent)
     , m_aColsStr(SwResId(STR_COLS))
     , m_aRowsStr(SwResId(STR_ROWS))
 {
-    SetMapMode(MapUnit::MapPixel);
+    SetMapMode(MapMode(MapUnit::MapPixel));
 
     // FIXME RenderContext
 

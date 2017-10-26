@@ -112,7 +112,7 @@ void OAppBorderWindow::Resize()
     long nOutputHeight  = aOutputSize.Height();
     long nX = 0;
 
-    Size aFLSize = LogicToPixel( Size( 3, 8 ), MapUnit::MapAppFont );
+    Size aFLSize = LogicToPixel(Size(3, 8), MapMode(MapUnit::MapAppFont));
     if ( m_pPanel )
     {
         OApplicationSwapWindow* pSwap = getPanel();
@@ -237,7 +237,7 @@ void OApplicationView::resizeDocumentView(tools::Rectangle& _rPlayground)
 {
     if ( m_pWin && !_rPlayground.IsEmpty() )
     {
-        Size aFLSize = LogicToPixel( Size( 3, 3 ), MapUnit::MapAppFont );
+        Size aFLSize = LogicToPixel(Size(3, 3), MapMode(MapUnit::MapAppFont));
         _rPlayground.Move( aFLSize.Width(),aFLSize.Height() );
         Size aOldSize = _rPlayground.GetSize();
         _rPlayground.SetSize( Size(aOldSize.Width() - 2*aFLSize.Width(), aOldSize.Height() - 2*aFLSize.Height()) );

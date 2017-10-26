@@ -161,7 +161,7 @@ RehearseTimingsActivity::RehearseTimingsActivity( const SlideShowContext& rConte
     ScopedVclPtrInstance< VirtualDevice > blackHole;
     blackHole->EnableOutput(false);
     blackHole->SetFont( maFont );
-    blackHole->SetMapMode( MapUnit::MapPixel );
+    blackHole->SetMapMode(MapMode(MapUnit::MapPixel));
     tools::Rectangle rect;
     const FontMetric metric( blackHole->GetFontMetric() );
     blackHole->GetTextBoundRect( rect, "XX:XX:XX" );
@@ -437,7 +437,7 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
     metaFile.Record( blackHole );
     metaFile.SetPrefSize( Size( 1, 1 ) );
     blackHole->EnableOutput(false);
-    blackHole->SetMapMode( MapUnit::MapPixel );
+    blackHole->SetMapMode(MapMode(MapUnit::MapPixel));
     blackHole->SetFont( maFont );
     tools::Rectangle rect = tools::Rectangle( 0,0,
                                 maSpriteSizePixel.getX(),

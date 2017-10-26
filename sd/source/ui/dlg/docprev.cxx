@@ -77,7 +77,7 @@ void SdDocPreviewWin::dispose()
 
 Size SdDocPreviewWin::GetOptimalSize() const
 {
-    return LogicToPixel(Size(122, 96), MapUnit::MapAppFont);
+    return LogicToPixel(Size(122, 96), MapMode(MapUnit::MapAppFont));
 }
 
 void SdDocPreviewWin::Resize()

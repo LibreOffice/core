@@ -897,7 +897,7 @@ void SwContentTree::dispose()
 
 Size SwContentTree::GetOptimalSize() const
 {
-    return LogicToPixel(Size(110, 112), MapUnit::MapAppFont);
+    return LogicToPixel(Size(110, 112), MapMode(MapUnit::MapAppFont));
 }
 
 OUString SwContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const

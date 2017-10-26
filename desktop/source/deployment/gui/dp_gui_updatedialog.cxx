@@ -497,7 +497,7 @@ UpdateDialog::UpdateDialog(
     get(m_pUpdate, "UPDATE_LABEL");
     get(m_pContainer, "UPDATES_CONTAINER");
     m_pUpdates = VclPtr<UpdateDialog::CheckListBox>::Create(m_pContainer, *this);
-    Size aSize(LogicToPixel(Size(240, 51), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(240, 51), MapMode(MapUnit::MapAppFont)));
     m_pUpdates->set_width_request(aSize.Width());
     m_pUpdates->set_height_request(aSize.Height());
     m_pUpdates->Show();
@@ -508,7 +508,7 @@ UpdateDialog::UpdateDialog(
     get(m_pReleaseNotesLabel, "RELEASE_NOTES_LABEL");
     get(m_pReleaseNotesLink, "RELEASE_NOTES_LINK");
     get(m_pDescriptions, "DESCRIPTIONS");
-    aSize = LogicToPixel(Size(240, 59), MapUnit::MapAppFont);
+    aSize = LogicToPixel(Size(240, 59), MapMode(MapUnit::MapAppFont));
     m_pDescriptions->set_width_request(aSize.Width());
     m_pDescriptions->set_height_request(aSize.Height());
     get(m_pOk, "INSTALL");

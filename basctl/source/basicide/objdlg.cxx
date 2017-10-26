@@ -112,15 +112,15 @@ void ObjectCatalog::ArrangeWindows()
         aTitle->Hide();
     else
     {
-        Size aTitleSize = LogicToPixel(Size(3, 10), MapUnit::MapAppFont);
+        Size aTitleSize = LogicToPixel(Size(3, 10), MapMode(MapUnit::MapAppFont));
         aTitleSize.Width() = aSize.Width() - 2*aTitleSize.Width();
-        aTitle->SetPosPixel(LogicToPixel(Point(3, 3), MapUnit::MapAppFont));
+        aTitle->SetPosPixel(LogicToPixel(Point(3, 3), MapMode(MapUnit::MapAppFont)));
         aTitle->SetSizePixel(aTitleSize);
         aTitle->Show();
     }
 
     // tree
-    Point const aTreePos = LogicToPixel(Point(3, bFloating ? 3 : 16), MapUnit::MapAppFont);
+    Point const aTreePos = LogicToPixel(Point(3, bFloating ? 3 : 16), MapMode(MapUnit::MapAppFont));
     long const nMargin = aTreePos.X();
     Size const aTreeSize(
         aSize.Width() - 2*nMargin,

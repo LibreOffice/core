@@ -451,8 +451,8 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
     const MapMode&  rMap = GetMapMode();
     const Point     aOutOrg( PixelToLogic( Point() ) );
     const Size      aOutSize( GetOutputSize() );
-    const Size      aTextSize( LogicToLogic( Size( 0, 14 ), MapUnit::MapPoint, rMap ) );
-    const Size      aOffset( LogicToLogic( Size( 1000, 1000 ), MapUnit::Map100thMM, rMap ) );
+    const Size      aTextSize(LogicToLogic(Size(0, 14), MapMode(MapUnit::MapPoint), rMap));
+    const Size      aOffset(LogicToLogic(Size(1000, 1000), MapMode(MapUnit::Map100thMM), rMap));
     OUString        aText( SdResId( STR_PRES_PAUSE ) );
     bool            bDrawn = false;
 
@@ -468,7 +468,7 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
     {
         Size aGrfSize;
 
-        if( maLogo.GetPrefMapMode() == MapUnit::MapPixel )
+        if (maLogo.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
             aGrfSize = PixelToLogic( maLogo.GetPrefSize() );
         else
             aGrfSize = LogicToLogic( maLogo.GetPrefSize(), maLogo.GetPrefMapMode(), rMap );
@@ -525,7 +525,7 @@ void ShowWindow::DrawEndScene()
     vcl::Font       aFont( GetSettings().GetStyleSettings().GetMenuFont() );
 
     const Point     aOutOrg( PixelToLogic( Point() ) );
-    const Size      aTextSize( LogicToLogic( Size( 0, 14 ), MapUnit::MapPoint, GetMapMode() ) );
+    const Size      aTextSize(LogicToLogic(Size(0, 14), MapMode(MapUnit::MapPoint), GetMapMode()));
     const OUString  aText( SdResId( STR_PRES_SOFTEND ) );
 
     aFont.SetFontSize( aTextSize );

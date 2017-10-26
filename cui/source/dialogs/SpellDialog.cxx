@@ -183,7 +183,7 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     get(m_pExplainLink, "explainlink");
     get(m_pNotInDictFT, "notindictft");
     get(m_pSentenceED, "sentence");
-    Size aEdSize(LogicToPixel(Size(197, 48), MapUnit::MapAppFont));
+    Size aEdSize(LogicToPixel(Size(197, 48), MapMode(MapUnit::MapAppFont)));
     m_pSentenceED->set_width_request(aEdSize.Width());
     m_pSentenceED->set_height_request(aEdSize.Height());
     get(m_pSuggestionFT, "suggestionsft");

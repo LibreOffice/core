@@ -643,7 +643,7 @@ namespace drawinglayer
                 if(GraphicType::Bitmap == aGraphic.GetType())
                 {
                     aGraphic.SetPrefSize(aGraphic.GetBitmapEx().GetSizePixel());
-                    aGraphic.SetPrefMapMode(MapUnit::MapPixel);
+                    aGraphic.SetPrefMapMode(MapMode(MapUnit::MapPixel));
                 }
             }
 
@@ -658,7 +658,7 @@ namespace drawinglayer
             const MapUnit aDestinationMapUnit(rSet.GetPool()->GetMetric(0));
             basegfx::B2DVector aGraphicLogicSize(aGraphic.GetPrefSize().Width(), aGraphic.GetPrefSize().Height());
 
-            if(aGraphic.GetPrefMapMode() != aDestinationMapUnit)
+            if (aGraphic.GetPrefMapMode().GetMapUnit() != aDestinationMapUnit)
             {
                 // #i100360# for MapUnit::MapPixel, LogicToLogic will not work properly,
                 // so fallback to Application::GetDefaultDevice()
@@ -668,14 +668,14 @@ namespace drawinglayer
                 {
                     aNewSize = Application::GetDefaultDevice()->PixelToLogic(
                         aGraphic.GetPrefSize(),
-                        aDestinationMapUnit);
+                        MapMode(aDestinationMapUnit));
                 }
                 else
                 {
                     aNewSize = OutputDevice::LogicToLogic(
                         aGraphic.GetPrefSize(),
                         aGraphic.GetPrefMapMode(),
-                        aDestinationMapUnit);
+                        MapMode(aDestinationMapUnit));
                 }
 
                 // #i124002# do not set new size using SetPrefSize at the graphic, this will lead to problems.

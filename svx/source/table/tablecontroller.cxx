@@ -2130,9 +2130,9 @@ void SvxTableController::updateSelectionOverlay()
 
                 if (pOutDev->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
                 {
-                    aSelectionStart = OutputDevice::LogicToLogic(aSelectionStart, MapUnit::Map100thMM, MapUnit::MapTwip);
-                    aSelectionEnd = OutputDevice::LogicToLogic(aSelectionEnd, MapUnit::Map100thMM, MapUnit::MapTwip);
-                    aSelection = OutputDevice::LogicToLogic(aSelection, MapUnit::Map100thMM, MapUnit::MapTwip);
+                    aSelectionStart = OutputDevice::LogicToLogic(aSelectionStart, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                    aSelectionEnd = OutputDevice::LogicToLogic(aSelectionEnd, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                    aSelection = OutputDevice::LogicToLogic(aSelection, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
                 }
 
                 if(SfxViewShell* pViewShell = SfxViewShell::Current())

@@ -59,7 +59,7 @@ Svx3DPreviewControl::Svx3DPreviewControl(vcl::Window* pParent, WinBits nStyle)
 
 Size Svx3DPreviewControl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(80, 100), MapUnit::MapAppFont);
+    return LogicToPixel(Size(80, 100), MapMode(MapUnit::MapAppFont));
 }
 
 VCL_BUILDER_FACTORY(Svx3DPreviewControl)
@@ -81,7 +81,7 @@ void Svx3DPreviewControl::Construct()
     // Do never mirror the preview window.  This explicitly includes right
     // to left writing environments.
     EnableRTL (false);
-    SetMapMode( MapUnit::Map100thMM );
+    SetMapMode(MapMode(MapUnit::Map100thMM));
 
     // Model
     mpModel = new FmFormModel();
@@ -947,7 +947,7 @@ SvxLightCtl3D::SvxLightCtl3D( vcl::Window* pParent)
 
 Size SvxLightCtl3D::GetOptimalSize() const
 {
-    return LogicToPixel(Size(80, 100), MapUnit::MapAppFont);
+    return LogicToPixel(Size(80, 100), MapMode(MapUnit::MapAppFont));
 }
 
 VCL_BUILDER_FACTORY(SvxLightCtl3D)

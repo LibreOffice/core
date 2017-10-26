@@ -742,20 +742,20 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( vcl::Window* pParent, const 
     get(m_pSaveButton, "save");
     get(m_pResetButton, "reset");
     get(m_pEntriesBox, "shortcuts");
-    Size aSize(LogicToPixel(Size(174, 100), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(174, 100), MapMode(MapUnit::MapAppFont)));
     m_pEntriesBox->set_width_request(aSize.Width());
     m_pEntriesBox->set_height_request(aSize.Height());
     m_pEntriesBox->SetAccelConfigPage(this);
     get(m_pGroupLBox, "category");
-    aSize = LogicToPixel(Size(78 , 91), MapUnit::MapAppFont);
+    aSize = LogicToPixel(Size(78 , 91), MapMode(MapUnit::MapAppFont));
     m_pGroupLBox->set_width_request(aSize.Width());
     m_pGroupLBox->set_height_request(aSize.Height());
     get(m_pFunctionBox, "function");
-    aSize = LogicToPixel(Size(88, 91), MapUnit::MapAppFont);
+    aSize = LogicToPixel(Size(88, 91), MapMode(MapUnit::MapAppFont));
     m_pFunctionBox->set_width_request(aSize.Width());
     m_pFunctionBox->set_height_request(aSize.Height());
     get(m_pKeyBox, "keys");
-    aSize = LogicToPixel(Size(80, 91), MapUnit::MapAppFont);
+    aSize = LogicToPixel(Size(80, 91), MapMode(MapUnit::MapAppFont));
     m_pKeyBox->set_width_request(aSize.Width());
     m_pKeyBox->set_height_request(aSize.Height());
     get(m_pSearchEdit, "searchEntry");
@@ -795,7 +795,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( vcl::Window* pParent, const 
             nMaxWidth = nTmp;
     }
     // recalc second tab
-    long nNewTab = PixelToLogic( Size( nMaxWidth, 0 ), MapUnit::MapAppFont ).Width();
+    long nNewTab = PixelToLogic(Size(nMaxWidth, 0), MapMode(MapUnit::MapAppFont)).Width();
     nNewTab = nNewTab + 5; // additional space
     m_pEntriesBox->SetTab( 1, nNewTab );
 

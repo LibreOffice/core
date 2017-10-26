@@ -57,7 +57,7 @@ SdDisplay::SdDisplay(vcl::Window* pWin)
     : Control(pWin, 0)
     , aScale(1, 1)
 {
-    SetMapMode( MapUnit::MapPixel );
+    SetMapMode(MapMode(MapUnit::MapPixel));
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     SetBackground( Wallpaper( Color( rStyles.GetFieldColor() ) ) );
 }
@@ -103,7 +103,7 @@ void SdDisplay::SetScale( const Fraction& rFrac )
 
 Size SdDisplay::GetOptimalSize() const
 {
-    return LogicToPixel(Size(147, 87), MapUnit::MapAppFont);
+    return LogicToPixel(Size(147, 87), MapMode(MapUnit::MapAppFont));
 }
 
 void SdDisplay::DataChanged( const DataChangedEvent& rDCEvt )

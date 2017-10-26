@@ -495,11 +495,11 @@ void ImplCalculateCropRect( ::Graphic const & rGraphic, const text::GraphicCrop&
                 Size aSize100thMM( 0, 0 );
                 if( rGraphic.GetPrefMapMode().GetMapUnit() != MapUnit::MapPixel )
                 {
-                    aSize100thMM = OutputDevice::LogicToLogic( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode(), MapUnit::Map100thMM );
+                    aSize100thMM = OutputDevice::LogicToLogic(rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM));
                 }
                 else
                 {
-                    aSize100thMM = Application::GetDefaultDevice()->PixelToLogic( rGraphic.GetPrefSize(), MapUnit::Map100thMM );
+                    aSize100thMM = Application::GetDefaultDevice()->PixelToLogic(rGraphic.GetPrefSize(), MapMode(MapUnit::Map100thMM));
                 }
                 if ( aSize100thMM.Width() && aSize100thMM.Height() )
                 {
@@ -619,7 +619,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
     {
         ScopedVclPtrInstance< VirtualDevice > aDummyVDev;
         GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
-        Size aMtfSize( OutputDevice::LogicToLogic( aMtf.GetPrefSize(), aMtf.GetPrefMapMode(), MapUnit::Map100thMM ) );
+        Size aMtfSize( OutputDevice::LogicToLogic(aMtf.GetPrefSize(), aMtf.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)) );
         if ( aMtfSize.Width() && aMtfSize.Height() )
         {
             MapMode aNewMapMode( MapUnit::Map100thMM );
@@ -672,7 +672,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
                         }
                         ::Graphic aGraphic( aBmpEx );
                         const Size aSize100thmm( aDummyVDev->LogicToPixel( aSize ) );
-                        Size aSize100thmm2( aDummyVDev->PixelToLogic( aSize100thmm, MapUnit::Map100thMM ) );
+                        Size aSize100thmm2( aDummyVDev->PixelToLogic(aSize100thmm, MapMode(MapUnit::Map100thMM)) );
 
                         ImplApplyBitmapResolution( aGraphic, nImageResolution,
                             aGraphic.GetSizePixel(), awt::Size( aSize100thmm2.Width(), aSize100thmm2.Height() ) );

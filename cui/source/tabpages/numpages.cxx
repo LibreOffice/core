@@ -963,7 +963,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
                 {
                     Size aSize = SvxNumberFormat::GetGraphicSizeMM100(&aGraphic);
                     sal_Int16 eOrient = text::VertOrientation::LINE_CENTER;
-                    aSize = OutputDevice::LogicToLogic(aSize, MapUnit::Map100thMM, eCoreUnit);
+                    aSize = OutputDevice::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(eCoreUnit));
                     SvxBrushItem aBrush(aGraphic, GPOS_AREA, SID_ATTR_BRUSH );
                     aFmt.SetGraphicBrush( &aBrush, &aSize, &eOrient );
                 }
@@ -1980,7 +1980,7 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton, void )
     }
     if(bSucc)
     {
-        aSize = OutputDevice::LogicToLogic(aSize, MapUnit::Map100thMM, eCoreUnit);
+        aSize = OutputDevice::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(eCoreUnit));
 
         sal_uInt16 nMask = 1;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)

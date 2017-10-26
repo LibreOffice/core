@@ -81,7 +81,7 @@ void OTitleWindow::Resize()
     long nOutputWidth   = aOutputSize.Width();
     long nOutputHeight  = aOutputSize.Height();
 
-    Size aTextSize = LogicToPixel( Size( 6, 3 ), MapUnit::MapAppFont );
+    Size aTextSize = LogicToPixel(Size(6, 3), MapMode(MapUnit::MapAppFont));
     sal_Int32 nXOffset = aTextSize.Width();
     sal_Int32 nYOffset = aTextSize.Height();
     sal_Int32 nHeight = GetTextHeight() + 2*nYOffset;
@@ -116,7 +116,7 @@ void OTitleWindow::GetFocus()
 
 long OTitleWindow::GetWidthPixel() const
 {
-    Size aTextSize = LogicToPixel( Size( 12, 0 ), MapUnit::MapAppFont );
+    Size aTextSize = LogicToPixel(Size(12, 0), MapMode(MapUnit::MapAppFont));
     sal_Int32 nWidth = GetTextWidth(m_aTitle->GetText()) + 2*aTextSize.Width();
 
     return nWidth;

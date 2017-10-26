@@ -192,11 +192,11 @@ void Impl_OlePres::Write( SvStream & rStm )
         {
             Size aPrefS( pMtf->GetPrefSize() );
             Size aS( aPrefS );
-            aS = OutputDevice::LogicToLogic( aS, nMU, MapUnit::Map100thMM );
+            aS = OutputDevice::LogicToLogic(aS, MapMode(nMU), MapMode(MapUnit::Map100thMM));
 
             pMtf->Scale( Fraction( aS.Width(), aPrefS.Width() ),
                          Fraction( aS.Height(), aPrefS.Height() ) );
-            pMtf->SetPrefMapMode( MapUnit::Map100thMM );
+            pMtf->SetPrefMapMode(MapMode(MapUnit::Map100thMM));
             pMtf->SetPrefSize( aS );
         }
         WriteWindowMetafileBits( rStm, *pMtf );
@@ -3695,7 +3695,7 @@ static Size lcl_GetPrefSize(const Graphic& rGraf, const MapMode& aWanted)
     if (aPrefMapMode == aWanted)
         return rGraf.GetPrefSize();
     Size aRetSize;
-    if (aPrefMapMode == MapUnit::MapPixel)
+    if (aPrefMapMode.GetMapUnit() == MapUnit::MapPixel)
     {
         aRetSize = Application::GetDefaultDevice()->PixelToLogic(
             rGraf.GetPrefSize(), aWanted);
@@ -3725,7 +3725,7 @@ static void lcl_ApplyCropping( const DffPropSet& rPropSet, SfxItemSet* pSet, Gra
         sal_uInt32  nTop( 0 ),  nBottom( 0 ), nLeft( 0 ), nRight( 0 );
 
         if ( pSet ) // use crop attributes ?
-            aCropSize = lcl_GetPrefSize( rGraf, MapUnit::Map100thMM );
+            aCropSize = lcl_GetPrefSize(rGraf, MapMode(MapUnit::Map100thMM));
         else
         {
             aCropBitmap = rGraf.GetBitmapEx();
@@ -4455,7 +4455,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             rOutliner.SetUpdateMode( false );
                             rOutliner.SetText( *pParaObj );
                             ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::BITMASK);
-                            pVirDev->SetMapMode( MapUnit::Map100thMM );
+                            pVirDev->SetMapMode(MapMode(MapUnit::Map100thMM));
                             sal_Int32 i, nParagraphs = rOutliner.GetParagraphCount();
                             if ( nParagraphs )
                             {
@@ -6507,7 +6507,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
                         aMtf.Scale( (double) aMtfSize100.Width() / aOldSize.Width(),
                                     (double) aMtfSize100.Height() / aOldSize.Height() );
                         aMtf.SetPrefSize( aMtfSize100 );
-                        aMtf.SetPrefMapMode( MapUnit::Map100thMM );
+                        aMtf.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
                         rData = aMtf;
                     }
                 }

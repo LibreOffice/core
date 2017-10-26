@@ -702,7 +702,7 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
     {
         Graphic aGraph(aMtf);
         aGraph.SetPrefSize(aSize);
-        aGraph.SetPrefMapMode(MapUnit::Map100thMM);
+        aGraph.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
 
         Reference< awt::XBitmap > xBmp( aGraph.GetXGraphic(), UNO_QUERY );
         aAny <<= xBmp;

@@ -265,7 +265,7 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
         mpText->set_width_request(400);
         mpText->set_height_request( mpText->GetTextHeight() * 10 );
         OUString aHelpId = OStringToOUString( mrParentDialog.GetHelpId(), RTL_TEXTENCODING_UTF8 );
-        Size aSizeCm = mrParentDialog.PixelToLogic( maParentDialogSize, MapUnit::MapCM );
+        Size aSizeCm = mrParentDialog.PixelToLogic(maParentDialogSize, MapMode(MapUnit::MapCM));
         maMainMarkupText = lcl_ParagraphWithImage( aHelpId, aSizeCm );
         mpText->SetText( maMainMarkupText );
         mpText->SetReadOnly();

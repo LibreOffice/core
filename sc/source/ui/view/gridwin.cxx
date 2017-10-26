@@ -919,7 +919,7 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
         vcl::Font aOldFont = GetFont();
         SetFont(mpFilterBox->GetFont());
         MapMode aOldMode = GetMapMode();
-        SetMapMode( MapUnit::MapPixel );
+        SetMapMode(MapMode(MapUnit::MapPixel));
 
         nHeight  = GetTextHeight();
         nHeight *= SC_FILTERLISTBOX_LINES;
@@ -1044,7 +1044,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
         vcl::Font aOldFont = GetFont();
         SetFont(mpFilterBox->GetFont());
         MapMode aOldMode = GetMapMode();
-        SetMapMode(MapUnit::MapPixel);
+        SetMapMode(MapMode(MapUnit::MapPixel));
 
         nHeight  = GetTextHeight();
         nHeight *= SC_FILTERLISTBOX_LINES;
@@ -1384,7 +1384,7 @@ bool ScGridWindow::IsCellCoveredByText(SCCOL nPosX, SCROW nPosY, SCTAB nTab, SCC
             &aZoomX, &aZoomY);
 
     MapMode aCurrentMapMode(GetMapMode());
-    SetMapMode(MapUnit::MapPixel);
+    SetMapMode(MapMode(MapUnit::MapPixel));
 
     // obtain the bounding box of the text in first non-empty cell
     // to the left
@@ -4433,7 +4433,7 @@ void ScGridWindow::ScrollPixel( long nDifX, long nDifY )
     ClickExtern();
     HideNoteMarker();
 
-    SetMapMode(MapUnit::MapPixel);
+    SetMapMode(MapMode(MapUnit::MapPixel));
     Scroll( nDifX, nDifY, ScrollFlags::Children );
     SetMapMode( GetDrawMapMode() );             // generated shifted MapMode
 
@@ -5010,7 +5010,7 @@ std::shared_ptr<ScFieldEditEngine> createEditEngine( ScDocShell* pDocSh, const S
     std::shared_ptr<ScFieldEditEngine> pEngine(new ScFieldEditEngine(&rDoc, rDoc.GetEditPool()));
     ScSizeDeviceProvider aProv(pDocSh);
     pEngine->SetRefDevice(aProv.GetDevice());
-    pEngine->SetRefMapMode(MapUnit::Map100thMM);
+    pEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
     SfxItemSet aDefault = pEngine->GetEmptyItemSet();
     rPat.FillEditItemSet(&aDefault);
     aDefault.Put( SvxAdjustItem(toSvxAdjust(rPat), EE_PARA_JUST) );

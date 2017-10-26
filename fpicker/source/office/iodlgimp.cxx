@@ -170,7 +170,7 @@ void SvtUpButton_Impl::Click()
 
 Size SvtUpButton_Impl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(12, 12), MapUnit::MapAppFont);
+    return LogicToPixel(Size(12, 12), MapMode(MapUnit::MapAppFont));
 }
 
 // SvtExpFileDlg_Impl

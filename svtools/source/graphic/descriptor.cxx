@@ -348,7 +348,10 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                 {
                     if( mpGraphic->GetPrefMapMode().GetMapUnit() != MapUnit::MapPixel )
                     {
-                        const Size aSizeLog( OutputDevice::LogicToLogic( mpGraphic->GetPrefSize(), mpGraphic->GetPrefMapMode(), MapUnit::Map100thMM ) );
+                        const Size aSizeLog( OutputDevice::LogicToLogic(
+                            mpGraphic->GetPrefSize(),
+                            mpGraphic->GetPrefMapMode(),
+                            MapMode(MapUnit::Map100thMM)) );
                         aAWTSize = awt::Size( aSizeLog.Width(), aSizeLog.Height() );
                     }
                 }

@@ -377,7 +377,7 @@ sal_Int32 DialControl::GetRotation() const
 
 Size DialControl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(42 , 43), MapUnit::MapAppFont);
+    return LogicToPixel(Size(42, 43), MapMode(MapUnit::MapAppFont));
 }
 
 void DialControl::SetRotation( sal_Int32 nAngle )

@@ -177,7 +177,7 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
     Graphic aGraph(aMeta);
     Size aSize = pObj->GetSnapRect().GetSize();
     aGraph.SetPrefSize(aSize);
-    aGraph.SetPrefMapMode(MapUnit::Map100thMM);
+    aGraph.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
 
     pView->UnmarkAll();
     pObj=pPage->RemoveObject(0);

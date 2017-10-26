@@ -41,7 +41,7 @@ SdPresLayoutDlg::SdPresLayoutDlg(::sd::DrawDocShell* pDocShell,
     , maStrNone(SdResId(STR_NULL))
 {
     get(m_pVS, "select");
-    Size aPref(LogicToPixel(Size(144 , 141), MapUnit::MapAppFont));
+    Size aPref(LogicToPixel(Size(144 , 141), MapMode(MapUnit::MapAppFont)));
     m_pVS->set_width_request(aPref.Width());
     m_pVS->set_height_request(aPref.Height());
     get(m_pCbxMasterPage, "masterpage");

@@ -480,7 +480,7 @@ Size EmbeddedObjectRef::GetSize( MapMode const * pTargetMapMode ) const
 
             try
             {
-                aSourceMapMode = VCLUnoHelper::UnoEmbed2VCLMapUnit(mpImpl->mxObj->getMapUnit(mpImpl->nViewAspect));
+                aSourceMapMode = MapMode(VCLUnoHelper::UnoEmbed2VCLMapUnit(mpImpl->mxObj->getMapUnit(mpImpl->nViewAspect)));
             }
             catch (const uno::Exception& e)
             {

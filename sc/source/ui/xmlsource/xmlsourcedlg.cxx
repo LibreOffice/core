@@ -79,7 +79,7 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     get(mpFtSourceFile, "sourcefile");
     get(mpMapGrid, "mapgrid");
     get(mpLbTree, "tree");
-    Size aTreeSize(mpLbTree->LogicToPixel(Size(130, 120), MapUnit::MapAppFont));
+    Size aTreeSize(mpLbTree->LogicToPixel(Size(130, 120), MapMode(MapUnit::MapAppFont)));
     mpLbTree->set_width_request(aTreeSize.Width());
     mpLbTree->set_height_request(aTreeSize.Height());
     get(mpRefEdit, "edit");

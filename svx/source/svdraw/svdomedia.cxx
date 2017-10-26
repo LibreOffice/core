@@ -186,7 +186,7 @@ void SdrMediaObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrin
 {
     Size aSize( Application::GetDefaultDevice()->PixelToLogic(
                     static_cast< sdr::contact::ViewContactOfSdrMediaObj& >( GetViewContact() ).getPreferredSize(),
-                    MapUnit::Map100thMM ) );
+                    MapMode(MapUnit::Map100thMM)) );
     Size aMaxSize( rMaxRect.GetSize() );
 
     if( aSize.Height() != 0 && aSize.Width() != 0 )

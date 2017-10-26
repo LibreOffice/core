@@ -176,9 +176,9 @@ void SwView::ExecDraw(SfxRequest& rReq)
                 if( aPrefSize.Width() && aPrefSize.Height() )
                 {
                     if( pWin )
-                        aSize = pWin->PixelToLogic( aPrefSize, MapUnit::MapTwip );
+                        aSize = pWin->PixelToLogic(aPrefSize, MapMode(MapUnit::MapTwip));
                     else
-                        aSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MapUnit::MapTwip );
+                        aSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapMode(MapUnit::MapTwip));
                 }
                 else
                     aSize = Size( 2835, 2835 );

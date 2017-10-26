@@ -3388,7 +3388,7 @@ void ChartView::createShapes3D()
     if( pWindow->GetSizePixel().Width() == 0 || pWindow->GetSizePixel().Height() == 0 )
     {
         awt::Size aPageSize = mrChartModel.getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
-        Size aSize = pWindow->LogicToPixel( Size(aPageSize.Width,aPageSize.Height), MapUnit::Map100thMM );
+        Size aSize = pWindow->LogicToPixel(Size(aPageSize.Width, aPageSize.Height), MapMode(MapUnit::Map100thMM));
         pWindow->SetSizePixel(aSize);
     }
     pWindow->Show();

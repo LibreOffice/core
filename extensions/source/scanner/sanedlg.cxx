@@ -195,7 +195,7 @@ public:
     }
     virtual Size GetOptimalSize() const override
     {
-        Size aSize(LogicToPixel(Size(PREVIEW_WIDTH, PREVIEW_HEIGHT), MapUnit::MapAppFont));
+        Size aSize(LogicToPixel(Size(PREVIEW_WIDTH, PREVIEW_HEIGHT), MapMode(MapUnit::MapAppFont)));
         aSize.setWidth(aSize.getWidth()+1);
         aSize.setHeight(aSize.getHeight()+1);
         return aSize;
@@ -222,7 +222,7 @@ SaneDlg::SaneDlg( vcl::Window* pParent, Sane& rSane, bool bScanEnabled ) :
     get(mpScanButton, "scanButton");
     get(mpButtonOption, "optionsButton");
     get(mpOptionTitle, "optionTitleLabel");
-    Size aSize(LogicToPixel(Size(130, 102), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(130, 102), MapMode(MapUnit::MapAppFont)));
     mpOptionTitle->set_width_request(aSize.Width());
     mpOptionTitle->set_height_request(aSize.Height() / 2);
     get(mpOptionDescTxt, "optionsDescLabel");
@@ -944,7 +944,7 @@ void ScanPreview::UpdatePreviewBounds()
 void ScanPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     Window::Paint(rRenderContext, rRect);
-    rRenderContext.SetMapMode(MapUnit::MapAppFont);
+    rRenderContext.SetMapMode(MapMode(MapUnit::MapAppFont));
     rRenderContext.SetFillColor(Color(COL_WHITE));
     rRenderContext.SetLineColor(Color(COL_WHITE));
     rRenderContext.DrawRect(tools::Rectangle(Point(0, 0),
@@ -1247,7 +1247,7 @@ void ScanPreview::DrawDrag(vcl::RenderContext& rRenderContext)
 
     mbDragDrawn = true;
     rRenderContext.SetRasterOp(eROP);
-    rRenderContext.SetMapMode(MapUnit::MapAppFont);
+    rRenderContext.SetMapMode(MapMode(MapUnit::MapAppFont));
 }
 
 Point ScanPreview::GetPixelPos( const Point& rIn) const
@@ -1260,12 +1260,12 @@ Point ScanPreview::GetPixelPos( const Point& rIn) const
           / ( maMaxBottomRight.Y() - maMinTopLeft.Y() ) )
         );
 
-    return LogicToPixel(aConvert, MapUnit::MapAppFont);
+    return LogicToPixel(aConvert, MapMode(MapUnit::MapAppFont));
 }
 
 Point ScanPreview::GetLogicPos(const Point& rIn) const
 {
-    Point aConvert = PixelToLogic(rIn, MapUnit::MapAppFont);
+    Point aConvert = PixelToLogic(rIn, MapMode(MapUnit::MapAppFont));
     if( aConvert.X() < 0 )
         aConvert.X() = 0;
     if( aConvert.X() >= PREVIEW_WIDTH )

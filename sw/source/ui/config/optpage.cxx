@@ -1573,7 +1573,7 @@ SwMarkPreview::SwMarkPreview( vcl::Window *pParent, WinBits nWinBits ) :
 {
     m_aInitialSize = getPreviewOptionsSize(this);
     InitColors();
-    SetMapMode(MapUnit::MapPixel);
+    SetMapMode(MapMode(MapUnit::MapPixel));
 }
 
 VCL_BUILDER_FACTORY_ARGS(SwMarkPreview, 0)

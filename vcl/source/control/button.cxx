@@ -2807,7 +2807,7 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags 
 void RadioButton::ImplSetMinimumNWFSize()
 {
     Push( PushFlags::MAPMODE );
-    SetMapMode( MapUnit::MapPixel );
+    SetMapMode(MapMode(MapUnit::MapPixel));
 
     ImplControlValue aControlValue;
     Size aCurSize( GetSizePixel() );
@@ -3643,7 +3643,7 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFl
 void CheckBox::ImplSetMinimumNWFSize()
 {
     Push( PushFlags::MAPMODE );
-    SetMapMode( MapUnit::MapPixel );
+    SetMapMode(MapMode(MapUnit::MapPixel));
 
     ImplControlValue aControlValue;
     Size aCurSize( GetSizePixel() );

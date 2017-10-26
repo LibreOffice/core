@@ -1113,10 +1113,10 @@ void EscherPropertyContainer::CreateLineProperties(
 static Size lcl_SizeToEmu(Size aPrefSize, const MapMode& aPrefMapMode)
 {
     Size aRetSize;
-    if (aPrefMapMode == MapUnit::MapPixel)
-        aRetSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MapUnit::Map100thMM );
+    if (aPrefMapMode.GetMapUnit() == MapUnit::MapPixel)
+        aRetSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
     else
-        aRetSize = OutputDevice::LogicToLogic( aPrefSize, aPrefMapMode, MapUnit::Map100thMM );
+        aRetSize = OutputDevice::LogicToLogic(aPrefSize, aPrefMapMode, MapMode(MapUnit::Map100thMM));
     return aRetSize;
 }
 

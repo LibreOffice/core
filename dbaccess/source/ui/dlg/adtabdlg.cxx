@@ -324,7 +324,7 @@ OAddTableDlg::OAddTableDlg( vcl::Window* pParent, IAddTableDialogContext& _rCont
 
     get(m_pTableList, "tablelist");
     get(m_pQueryList, "querylist");
-    Size aSize(LogicToPixel(Size(106 , 122), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(106 , 122), MapMode(MapUnit::MapAppFont)));
     m_pTableList->set_height_request(aSize.Height());
     m_pTableList->set_width_request(aSize.Width());
     get(m_pQueryList, "querylist");

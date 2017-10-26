@@ -54,7 +54,7 @@ VCL_BUILDER_FACTORY_CONSTRUCTOR(GalleryPreview, WB_TABSTOP)
 
 Size GalleryPreview::GetOptimalSize() const
 {
-    return LogicToPixel(Size(70, 88), MapUnit::MapAppFont);
+    return LogicToPixel(Size(70, 88), MapMode(MapUnit::MapAppFont));
 }
 
 bool GalleryPreview::SetGraphic( const INetURLObject& _aURL )

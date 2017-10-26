@@ -209,7 +209,7 @@ namespace pcr
 
             if ( m_bIndentTitle )
             {
-                Size aIndent( m_pTheParent->LogicToPixel( Size( 8, 0 ), MapUnit::MapAppFont ) );
+                Size aIndent( m_pTheParent->LogicToPixel(Size(8, 0), MapMode(MapUnit::MapAppFont)) );
                 aTitlePos.X() += aIndent.Width();
                 aTitleSize.Width() -= aIndent.Width();
             }

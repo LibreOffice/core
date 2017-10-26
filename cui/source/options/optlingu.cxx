@@ -1758,7 +1758,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(vcl::Window* pParent, SvxLinguData_Impl& rD
     get(m_pPrioDownPB, "down");
     get(m_pPrioUpPB, "up");
     get(m_pModulesCLB, "lingudicts");
-    Size aListSize(m_pModulesCLB->LogicToPixel(Size(166, 120), MapUnit::MapAppFont));
+    Size aListSize(m_pModulesCLB->LogicToPixel(Size(166, 120), MapMode(MapUnit::MapAppFont)));
     m_pModulesCLB->set_height_request(aListSize.Height());
     m_pModulesCLB->set_width_request(aListSize.Width());
     get(m_pLanguageLB, "language");

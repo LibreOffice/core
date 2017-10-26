@@ -1168,7 +1168,7 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     get(m_pDescriptionField, "desc");
     m_pDescriptionField->set_height_request(m_pDescriptionField->GetTextHeight()*2.9);
     get(m_pEntries, "entries");
-    Size aSize(LogicToPixel(Size(108, 115), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(108, 115), MapMode(MapUnit::MapAppFont)));
     m_pEntries->set_height_request(aSize.Height());
     m_pEntries->set_width_request(aSize.Width());
     m_pFunctions->set_height_request(aSize.Height());

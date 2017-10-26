@@ -456,7 +456,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLong( 0 );
     ImplWriteLong( 0 );
     Size aSizePoint = OutputDevice::LogicToLogic( pMTF->GetPrefSize(),
-                        pMTF->GetPrefMapMode(), MapUnit::MapPoint );
+                        pMTF->GetPrefMapMode(), MapMode(MapUnit::MapPoint));
     ImplWriteLong( aSizePoint.Width() );
     ImplWriteLong( aSizePoint.Height() ,PS_RET );
     ImplWriteLine( "%%Pages: 0" );

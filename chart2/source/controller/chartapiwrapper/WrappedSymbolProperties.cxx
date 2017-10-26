@@ -388,7 +388,7 @@ void lcl_correctSymbolSizeForBitmaps( chart2::Symbol& rSymbol )
                 if( xProp->getPropertyValue( "SizePixel" ) >>= aAWTPixelSize )
                 {
                     Size aPixelSize(aAWTPixelSize.Width,aAWTPixelSize.Height);
-                    Size aNewSize = ( OutputDevice::LogicToLogic( aPixelSize, MapUnit::MapPixel, MapUnit::Map100thMM ));
+                    Size aNewSize = OutputDevice::LogicToLogic(aPixelSize, MapMode(MapUnit::MapPixel), MapMode(MapUnit::Map100thMM));
                     aSize = awt::Size( aNewSize.Width(), aNewSize.Height() );
 
                     if( aSize.Width == 0 && aSize.Height == 0 )

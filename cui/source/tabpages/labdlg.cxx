@@ -86,7 +86,7 @@ SvxCaptionTabPage::SvxCaptionTabPage(vcl::Window* pParent, const SfxItemSet& rIn
 {
     get(m_pCT_CAPTTYPE, "valueset");
 
-    Size aSize(m_pCT_CAPTTYPE->LogicToPixel(Size(187, 38), MapUnit::MapAppFont));
+    Size aSize(m_pCT_CAPTTYPE->LogicToPixel(Size(187, 38), MapMode(MapUnit::MapAppFont)));
     m_pCT_CAPTTYPE->set_width_request(aSize.Width());
     m_pCT_CAPTTYPE->set_height_request(aSize.Height());
 

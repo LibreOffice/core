@@ -29,7 +29,7 @@ CertPathDialog::CertPathDialog(vcl::Window* pParent)
     get(m_pOKBtn, "ok");
     get(m_pAddBtn, "add");
     get(m_pCertPathListContainer, "paths");
-    Size aSize(LogicToPixel(Size(210, 60), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(210, 60), MapMode(MapUnit::MapAppFont)));
     m_pCertPathListContainer->set_width_request(aSize.Width());
     m_pCertPathListContainer->set_height_request(aSize.Height());
     m_pCertPathList =

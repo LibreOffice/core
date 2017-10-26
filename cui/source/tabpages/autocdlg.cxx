@@ -437,7 +437,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( vcl::Window* pParent,
 
     SvSimpleTableContainer* pCheckLBContainer(get<SvSimpleTableContainer>("list"));
     Size aControlSize(248 , 149);
-    aControlSize = LogicToPixel(aControlSize, MapUnit::MapAppFont);
+    aControlSize = LogicToPixel(aControlSize, MapMode(MapUnit::MapAppFont));
     pCheckLBContainer->set_width_request(aControlSize.Width());
     pCheckLBContainer->set_height_request(aControlSize.Height());
     m_pCheckLB = VclPtr<OfaACorrCheckListBox>::Create(*pCheckLBContainer);
@@ -1819,7 +1819,7 @@ OfaQuoteTabPage::OfaQuoteTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     SvSimpleTableContainer *pListContainer = get<SvSimpleTableContainer>("list");
     Size aControlSize(252 , 85);
-    aControlSize = LogicToPixel(aControlSize, MapUnit::MapAppFont);
+    aControlSize = LogicToPixel(aControlSize, MapMode(MapUnit::MapAppFont));
     pListContainer->set_width_request(aControlSize.Width());
     pListContainer->set_height_request(aControlSize.Height());
     m_pSwCheckLB = VclPtr<OfaACorrCheckListBox>::Create(*pListContainer);
@@ -2186,7 +2186,7 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage(vcl::Window* pParent,
     get(m_pNFMaxEntries, "maxentries");
     get(m_pLBEntries, "entries");
     m_pLBEntries->SetPage(this);
-    aSize = LogicToPixel(Size(121, 158), MapUnit::MapAppFont);
+    aSize = LogicToPixel(Size(121, 158), MapMode(MapUnit::MapAppFont));
     m_pLBEntries->set_width_request(aSize.Width());
     m_pLBEntries->set_height_request(aSize.Height());
     get(m_pPBEntries, "delete");
@@ -2464,7 +2464,7 @@ OfaSmartTagOptionsTabPage::OfaSmartTagOptionsTabPage( vcl::Window* pParent,
     // some options for the list box:
     m_pSmartTagTypesLB->SetStyle( m_pSmartTagTypesLB->GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
     m_pSmartTagTypesLB->SetHighlightRange();
-    Size aControlSize(LogicToPixel(Size(172, 154), MapUnit::MapAppFont));
+    Size aControlSize(LogicToPixel(Size(172, 154), MapMode(MapUnit::MapAppFont)));
     m_pSmartTagTypesLB->set_width_request(aControlSize.Width());
     m_pSmartTagTypesLB->set_height_request(aControlSize.Height());
 

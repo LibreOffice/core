@@ -132,7 +132,7 @@ ComboboxToolbarController::ComboboxToolbarController(
 
     // default dropdown size
     ::Size aLogicalSize( 8, 160 );
-    ::Size aPixelSize = m_pComboBox->LogicToPixel( aLogicalSize, MapUnit::MapAppFont );
+    ::Size aPixelSize = m_pComboBox->LogicToPixel(aLogicalSize, MapMode(MapUnit::MapAppFont));
 
     m_pComboBox->SetSizePixel( ::Size( nWidth, aPixelSize.Height() ));
     m_pToolbar->SetItemWindow( m_nID, m_pComboBox );

@@ -108,7 +108,7 @@ VCL_BUILDER_FACTORY_CONSTRUCTOR(ClientBox, WB_TABSTOP)
 
 Size ClientBox::GetOptimalSize() const
 {
-    return LogicToPixel(Size(200, 140), MapUnit::MapAppFont);
+    return LogicToPixel(Size(200, 140), MapMode(MapUnit::MapAppFont));
 }
 
 ClientBox::~ClientBox()

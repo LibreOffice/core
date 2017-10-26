@@ -74,7 +74,7 @@ SdNavigatorWin::SdNavigatorWin(vcl::Window* pParent, SfxBindings* pInBindings)
 {
     get(maToolbox, "toolbox");
     get(maTlbObjects, "tree");
-    Size aSize(maTlbObjects->LogicToPixel(Size(97, 67), MapUnit::MapAppFont));
+    Size aSize(maTlbObjects->LogicToPixel(Size(97, 67), MapMode(MapUnit::MapAppFont)));
     maTlbObjects->set_height_request(aSize.Width());
     maTlbObjects->set_width_request(aSize.Height());
     get(maLbDocs, "documents");

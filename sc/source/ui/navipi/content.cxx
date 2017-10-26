@@ -146,7 +146,7 @@ ScContentTree::ScContentTree(vcl::Window* pParent, ScNavigatorDlg* pNavigatorDlg
 
 Size ScContentTree::GetOptimalSize() const
 {
-    return LogicToPixel(Size(110, 100), MapUnit::MapAppFont);
+    return LogicToPixel(Size(110, 100), MapMode(MapUnit::MapAppFont));
 }
 
 ScContentTree::~ScContentTree()

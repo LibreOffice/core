@@ -184,7 +184,7 @@ namespace svt { namespace uno
         {
             // fallback for ill-behaved clients: empty page
             pPage = VclPtr<TabPage>::Create( this, 0 );
-            pPage->SetSizePixel( LogicToPixel( Size( 280, 185 ), MapUnit::MapAppFont ) );
+            pPage->SetSizePixel(LogicToPixel(Size(280, 185), MapMode(MapUnit::MapAppFont)));
         }
 
         m_aPageControllers[ pPage ] = pController;

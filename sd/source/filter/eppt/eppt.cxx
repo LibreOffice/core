@@ -1078,7 +1078,7 @@ void ImplExportComments( const uno::Reference< drawing::XDrawPage >& xPage, SvMe
                 geometry::RealPoint2D aRealPoint2D( xAnnotation->getPosition() );
                 MapMode aMapDest( MapUnit::MapInch, Point(), Fraction( 1, 576 ), Fraction( 1, 576 ) );
                 Point aPoint( OutputDevice::LogicToLogic( Point( static_cast< sal_Int32 >( aRealPoint2D.X * 100.0 ),
-                    static_cast< sal_Int32 >( aRealPoint2D.Y * 100.0 ) ), MapUnit::Map100thMM, aMapDest ) );
+                    static_cast<sal_Int32>(aRealPoint2D.Y * 100.0)), MapMode(MapUnit::Map100thMM), aMapDest));
 
                 OUString sAuthor( xAnnotation->getAuthor() );
                 uno::Reference< text::XText > xText( xAnnotation->getTextRange() );

@@ -252,7 +252,7 @@ void ContourWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
 Size ContourWindow::GetOptimalSize() const
 {
-    return LogicToPixel(Size(270, 170), MapUnit::MapAppFont);
+    return LogicToPixel(Size(270, 170), MapMode(MapUnit::MapAppFont));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -70,7 +70,7 @@ Point SwGetChartDialogPos( const vcl::Window *pParentWin, const Size& rDialogSiz
                            pParentWin->OutputToAbsoluteScreenPixel( aObjPixel.BottomRight() ) );
 
         tools::Rectangle aDesktop = pParentWin->GetDesktopRectPixel();
-        Size aSpace = pParentWin->LogicToPixel( Size( 8, 12 ), MapUnit::MapAppFont );
+        Size aSpace = pParentWin->LogicToPixel(Size(8, 12), MapMode(MapUnit::MapAppFont));
 
         bool bLayoutRTL = ::GetActiveView()->GetWrtShell().IsTableRightToLeft();
         bool bCenterHor = false;

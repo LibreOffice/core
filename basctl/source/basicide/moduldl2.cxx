@@ -474,7 +474,7 @@ LibPage::LibPage(vcl::Window * pParent)
 {
     get(m_pBasicsBox, "location");
     get(m_pLibBox, "library");
-    Size aSize(m_pLibBox->LogicToPixel(Size(130, 87), MapUnit::MapAppFont));
+    Size aSize(m_pLibBox->LogicToPixel(Size(130, 87), MapMode(MapUnit::MapAppFont)));
     m_pLibBox->set_height_request(aSize.Height());
     m_pLibBox->set_width_request(aSize.Width());
     get(m_pEditButton, "edit");

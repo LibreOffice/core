@@ -81,8 +81,8 @@ namespace pcr
 
     long InspectorHelpWindow::impl_getSpaceAboveTextWindow()
     {
-        Size aSeparatorSize( LogicToPixel( Size( 0, 8 ), MapUnit::MapAppFont ) );
-        Size a3AppFontSize( LogicToPixel( Size( 3, 3 ), MapUnit::MapAppFont ) );
+        Size aSeparatorSize(LogicToPixel(Size(0, 8), MapMode(MapUnit::MapAppFont)));
+        Size a3AppFontSize(LogicToPixel(Size(3, 3), MapMode(MapUnit::MapAppFont)));
         return aSeparatorSize.Height() + a3AppFontSize.Height();
     }
 
@@ -125,12 +125,12 @@ namespace pcr
 
     void InspectorHelpWindow::Resize()
     {
-        Size a3AppFont( LogicToPixel( Size( 3, 3 ), MapUnit::MapAppFont ) );
+        Size a3AppFont(LogicToPixel(Size(3, 3), MapMode(MapUnit::MapAppFont)));
 
         tools::Rectangle aPlayground( Point( 0, 0 ), GetOutputSizePixel() );
 
         tools::Rectangle aSeparatorArea( aPlayground );
-        aSeparatorArea.Bottom() = aSeparatorArea.Top() + LogicToPixel( Size( 0, 8 ), MapUnit::MapAppFont ).Height();
+        aSeparatorArea.Bottom() = aSeparatorArea.Top() + LogicToPixel(Size(0, 8), MapMode(MapUnit::MapAppFont)).Height();
         m_aSeparator->SetPosSizePixel( aSeparatorArea.TopLeft(), aSeparatorArea.GetSize() );
 
         tools::Rectangle aTextArea( aPlayground );

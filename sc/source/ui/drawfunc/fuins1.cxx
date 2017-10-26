@@ -188,9 +188,9 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
     if( rPrefSize.Width() && rPrefSize.Height() )
     {
         if( pWindow )
-            aSize = pWindow->PixelToLogic( rPrefSize, MapUnit::Map100thMM );
+            aSize = pWindow->PixelToLogic(rPrefSize, MapMode(MapUnit::Map100thMM));
         else
-            aSize = Application::GetDefaultDevice()->PixelToLogic( rPrefSize, MapUnit::Map100thMM );
+            aSize = Application::GetDefaultDevice()->PixelToLogic(rPrefSize, MapMode(MapUnit::Map100thMM));
     }
     else
         aSize = Size( 5000, 5000 );

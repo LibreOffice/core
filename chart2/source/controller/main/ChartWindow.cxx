@@ -332,7 +332,7 @@ void ChartWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
         if (IsMapModeEnabled())
         {
             if (GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                aRectangle = OutputDevice::LogicToLogic(aRectangle, MapUnit::Map100thMM, MapUnit::MapTwip);
+                aRectangle = OutputDevice::LogicToLogic(aRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
         }
         else
         {

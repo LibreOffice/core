@@ -186,7 +186,7 @@ void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
 
     //  unified MapMode for all calls (e.g. Repaint!!!)
     //  else, EditEngine outputs different text heights
-    pDev->SetMapMode(MapUnit::MapPixel);
+    pDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
     pBorderItem = nullptr;
     pBackgroundItem = nullptr;
@@ -243,7 +243,7 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTa
         pPageData           ( pData )
 {
     pDev = pPrinter.get();
-    aSrcOffset = pPrinter->PixelToLogic( pPrinter->GetPageOffsetPixel(), MapUnit::Map100thMM );
+    aSrcOffset = pPrinter->PixelToLogic(pPrinter->GetPageOffsetPixel(), MapMode(MapUnit::Map100thMM));
     Construct( pOptions );
 }
 
@@ -541,7 +541,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     if ( bMetaFile && pDev->GetOutDevType() == OUTDEV_VIRDEV )
         aOutputData.SetSnapPixel();
 
-    Point aLogStart = pDev->PixelToLogic( Point(nScrX,nScrY), MapUnit::Map100thMM );
+    Point aLogStart = pDev->PixelToLogic(Point(nScrX, nScrY), MapMode(MapUnit::Map100thMM));
     long nLogStX = aLogStart.X();
     long nLogStY = aLogStart.Y();
 
@@ -707,7 +707,7 @@ bool ScPrintFunc::AdjustPrintArea( bool bNew )
     if ( bChangeCol )
     {
         OutputDevice* pRefDev = pDoc->GetPrinter();     // use the printer also for Preview
-        pRefDev->SetMapMode( MapUnit::MapPixel );               // important for GetNeededSize
+        pRefDev->SetMapMode(MapMode(MapUnit::MapPixel)); // important for GetNeededSize
 
         pDoc->ExtendPrintArea( pRefDev,
                             nPrintTab, nStartCol, nStartRow, nEndCol, nEndRow );

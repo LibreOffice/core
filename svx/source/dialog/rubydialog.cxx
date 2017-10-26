@@ -776,7 +776,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 {
     rRenderContext.Push(PushFlags::MAPMODE);
 
-    rRenderContext.SetMapMode(MapUnit::MapTwip);
+    rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
 
     Size aWinSize = rRenderContext.GetOutputSize();
 

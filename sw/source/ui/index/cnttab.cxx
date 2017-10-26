@@ -650,7 +650,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(vcl::Window* pParent,
     get(m_pRightPB, "right");
     OUString sHBFirst = get<FixedText>("notapplied")->GetText();
     SvSimpleTableContainer *pHeaderTreeContainer = get<SvSimpleTableContainer>("styles");
-    Size aSize = pHeaderTreeContainer->LogicToPixel(Size(273, 164), MapUnit::MapAppFont);
+    Size aSize = pHeaderTreeContainer->LogicToPixel(Size(273, 164), MapMode(MapUnit::MapAppFont));
     pHeaderTreeContainer->set_width_request(aSize.Width());
     pHeaderTreeContainer->set_height_request(aSize.Height());
     m_pHeaderTree = VclPtr<SwIndexTreeLB>::Create(*pHeaderTreeContainer);

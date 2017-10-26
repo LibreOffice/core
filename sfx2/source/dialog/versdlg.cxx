@@ -207,7 +207,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, bool bIsSaveVersion
 
     SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("versions");
     Size aControlSize(260, 114);
-    aControlSize = pContainer->LogicToPixel(aControlSize, MapUnit::MapAppFont);
+    aControlSize = pContainer->LogicToPixel(aControlSize, MapMode(MapUnit::MapAppFont));
     pContainer->set_width_request(aControlSize.Width());
     pContainer->set_height_request(aControlSize.Height());
 
@@ -538,7 +538,7 @@ SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame )
 
     SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("versions");
     Size aControlSize(260, 114);
-    aControlSize = pContainer->LogicToPixel(aControlSize, MapUnit::MapAppFont);
+    aControlSize = pContainer->LogicToPixel(aControlSize, MapMode(MapUnit::MapAppFont));
     pContainer->set_width_request(aControlSize.Width());
     pContainer->set_height_request(aControlSize.Height());
 

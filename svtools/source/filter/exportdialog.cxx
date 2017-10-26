@@ -664,7 +664,7 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
 
     mnFormat = GetFilterFormat( maExt );
 
-    Size aResolution( Application::GetDefaultDevice()->LogicToPixel( Size( 100, 100 ), MapUnit::MapCM ) );
+    Size aResolution( Application::GetDefaultDevice()->LogicToPixel(Size(100, 100), MapMode(MapUnit::MapCM)) );
     maResolution.Width = aResolution.Width();
     maResolution.Height= aResolution.Height();
 
@@ -915,7 +915,8 @@ void ExportDialog::updateControls()
     if ( !mbIsPixelFormat )
     {
         awt::Size aSize100thmm( maSize );
-        Size aSize( LogicToLogic( Size( aSize100thmm.Width * 100, aSize100thmm.Height * 100 ), MapUnit::Map100thMM,
+        Size aSize( LogicToLogic( Size(aSize100thmm.Width * 100, aSize100thmm.Height * 100),
+            MapMode(MapUnit::Map100thMM),
             MapMode( GetMapUnit( mpLbSizeX->GetSelectedEntryPos() ) ) ) );
         mpMfSizeX->SetValue( aSize.Width() );
         mpMfSizeY->SetValue( aSize.Height() );
@@ -1092,7 +1093,7 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeX, Edit&, void)
         sal_Int32 nHeight= static_cast< sal_Int32 >( nWidth * fRatio );
         const Size aSource( nWidth, nHeight );
         MapMode aSourceMapMode( GetMapUnit( mpLbSizeX->GetSelectedEntryPos() ),Point(), aFract, aFract );
-        Size aDest( LogicToLogic( aSource, aSourceMapMode, MapUnit::Map100thMM ) );
+        Size aDest( LogicToLogic(aSource, aSourceMapMode, MapMode(MapUnit::Map100thMM)) );
 
         maSize.Width = aDest.Width();
         maSize.Height = aDest.Height();
@@ -1124,7 +1125,7 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeY, Edit&, void)
         sal_Int32 nWidth = static_cast< sal_Int32 >( nHeight * fRatio );
         const Size aSource( nWidth, nHeight );
         MapMode aSourceMapMode( GetMapUnit( mpLbSizeX->GetSelectedEntryPos() ),Point(), aFract, aFract );
-        Size aDest( LogicToLogic( aSource, aSourceMapMode, MapUnit::Map100thMM ) );
+        Size aDest( LogicToLogic(aSource, aSourceMapMode, MapMode(MapUnit::Map100thMM)) );
 
         maSize.Height = aDest.Height();
         maSize.Width = aDest.Width();

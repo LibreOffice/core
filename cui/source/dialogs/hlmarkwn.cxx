@@ -89,7 +89,7 @@ VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxHlmarkTreeLBox, WB_TABSTOP)
 
 Size SvxHlmarkTreeLBox::GetOptimalSize() const
 {
-    return LogicToPixel(Size(103, 162), MapUnit::MapAppFont);
+    return LogicToPixel(Size(103, 162), MapMode(MapUnit::MapAppFont));
 }
 
 void SvxHlmarkTreeLBox::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)

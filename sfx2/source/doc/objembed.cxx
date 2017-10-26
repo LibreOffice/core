@@ -99,7 +99,7 @@ tools::Rectangle SfxObjectShell::GetVisArea( sal_uInt16 nAspect ) const
     {
         tools::Rectangle aRect;
         aRect.SetSize( OutputDevice::LogicToLogic( Size( 5000, 5000 ),
-                                         MapUnit::Map100thMM, GetMapUnit() ) );
+                         MapMode(MapUnit::Map100thMM), MapMode(GetMapUnit())));
         return aRect;
     }
     return tools::Rectangle();
@@ -154,7 +154,7 @@ void SfxObjectShell::FillTransferableObjectDescriptor( TransferableObjectDescrip
     FillClass( &rDesc.maClassName, &nClipFormat, &aAppName, &rDesc.maTypeName, &aShortName, SOFFICE_FILEFORMAT_CURRENT );
 
     rDesc.mnViewAspect = ASPECT_CONTENT;
-    rDesc.maSize = OutputDevice::LogicToLogic( GetVisArea().GetSize(), GetMapUnit(), MapUnit::Map100thMM );
+    rDesc.maSize = OutputDevice::LogicToLogic(GetVisArea().GetSize(), MapMode(GetMapUnit()), MapMode(MapUnit::Map100thMM));
     rDesc.maDragStartPos = Point();
     rDesc.maDisplayName.clear();
 }

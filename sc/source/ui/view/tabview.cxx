@@ -1848,7 +1848,7 @@ Point ScTabView::GetChartDialogPos( const Size& rDialogSize, const tools::Rectan
                            pWin->OutputToAbsoluteScreenPixel( aObjPixel.BottomRight() ) );
 
         tools::Rectangle aDesktop = pWin->GetDesktopRectPixel();
-        Size aSpace = pWin->LogicToPixel( Size( 8, 12 ), MapUnit::MapAppFont );
+        Size aSpace = pWin->LogicToPixel( Size(8, 12), MapMode(MapUnit::MapAppFont));
 
         ScDocument* pDoc = aViewData.GetDocument();
         SCTAB nTab = aViewData.GetTabNo();

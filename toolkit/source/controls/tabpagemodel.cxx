@@ -227,7 +227,7 @@ void UnoControlTabPage::createPeer( const Reference< XToolkit > & rxToolkit, con
 
 static ::Size ImplMapPixelToAppFont( OutputDevice const * pOutDev, const ::Size& aSize )
 {
-    ::Size aTmp = pOutDev->PixelToLogic( aSize, MapUnit::MapAppFont );
+    ::Size aTmp = pOutDev->PixelToLogic(aSize, MapMode(MapUnit::MapAppFont));
     return aTmp;
 }
 // css::awt::XWindowListener

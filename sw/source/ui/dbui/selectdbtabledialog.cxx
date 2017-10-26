@@ -102,7 +102,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
     get(m_pPreviewPB, "preview");
 
     SvSimpleTableContainer *pHeaderTreeContainer = get<SvSimpleTableContainer>("table");
-    Size aSize = pHeaderTreeContainer->LogicToPixel(Size(238 , 50), MapUnit::MapAppFont);
+    Size aSize = pHeaderTreeContainer->LogicToPixel(Size(238 , 50), MapMode(MapUnit::MapAppFont));
     pHeaderTreeContainer->set_width_request(aSize.Width());
     pHeaderTreeContainer->set_height_request(aSize.Height());
     m_pTable = VclPtr<SwAddressTable>::Create(*pHeaderTreeContainer);

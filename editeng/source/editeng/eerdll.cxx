@@ -216,7 +216,7 @@ std::locale& EditDLL::GetResLocale()
 editeng::SharedVclResources::SharedVclResources()
     : m_pVirDev(VclPtr<VirtualDevice>::Create())
 {
-    m_pVirDev->SetMapMode(MapUnit::MapTwip);
+    m_pVirDev->SetMapMode(MapMode(MapUnit::MapTwip));
 }
 
 editeng::SharedVclResources::~SharedVclResources()

@@ -229,7 +229,7 @@ void SdrMarkView::ModelHasChanged()
                 if (OutputDevice* pOutputDevice = mpMarkedPV->GetView().GetFirstOutputDevice())
                 {
                     if (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                        aSelection = OutputDevice::LogicToLogic(aSelection, MapUnit::Map100thMM, MapUnit::MapTwip);
+                        aSelection = OutputDevice::LogicToLogic(aSelection, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
                 }
             }
 
@@ -790,7 +790,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                     if (OutputDevice* pOutputDevice = mpMarkedPV->GetView().GetFirstOutputDevice())
                     {
                         if (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                            aSelection = OutputDevice::LogicToLogic(aSelection, MapUnit::Map100thMM, MapUnit::MapTwip);
+                            aSelection = OutputDevice::LogicToLogic(aSelection, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
                     }
                 }
 

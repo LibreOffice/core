@@ -131,7 +131,7 @@ void GalleryControl::Resize()
     }
     mbIsInitialResize = false;
 
-    const long nFrameLen = LogicToPixel( Size( 3, 0 ), MapUnit::MapAppFont ).Width();
+    const long nFrameLen = LogicToPixel(Size(3, 0), MapMode(MapUnit::MapAppFont)).Width();
     const long nFrameLen2 = nFrameLen << 1;
 
     if(bNewLayoutHorizontal)

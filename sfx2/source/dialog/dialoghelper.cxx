@@ -55,12 +55,12 @@ void setPreviewsToSamePlace(vcl::Window const *pParent, VclBuilderContainer *pPa
 
 Size getParagraphPreviewOptimalSize(const vcl::Window *pReference)
 {
-    return pReference->LogicToPixel(Size(68 , 112), MapUnit::MapAppFont);
+    return pReference->LogicToPixel(Size(68 , 112), MapMode(MapUnit::MapAppFont));
 }
 
 Size getDrawPreviewOptimalSize(const vcl::Window *pReference)
 {
-    return pReference->LogicToPixel(Size(88, 42), MapUnit::MapAppFont);
+    return pReference->LogicToPixel(Size(88, 42), MapMode(MapUnit::MapAppFont));
 }
 
 Size getPreviewStripSize(const vcl::Window *pReference)

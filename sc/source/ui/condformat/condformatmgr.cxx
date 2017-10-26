@@ -109,7 +109,7 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(vcl::Window* pParent, ScDocument*
     mbModified(false)
 {
     SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("CONTAINER");
-    Size aSize(LogicToPixel(Size(290, 220), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(290, 220), MapMode(MapUnit::MapAppFont)));
     pContainer->set_width_request(aSize.Width());
     pContainer->set_height_request(aSize.Height());
     m_pCtrlManager = VclPtr<ScCondFormatManagerWindow>::Create(*pContainer, mpDoc, mpFormatList);

@@ -367,7 +367,7 @@ SdPublishingDlg::SdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType)
 
     m_bImpress = eDocType == DocumentType::Impress;
 
-    Size aSize(LogicToPixel(Size(60, 50), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(60, 50), MapMode(MapUnit::MapAppFont)));
     get(pPage2_Standard_FB, "standardFBImage");
     pPage2_Standard_FB->set_width_request(aSize.Width());
     pPage2_Standard_FB->set_height_request(aSize.Height());

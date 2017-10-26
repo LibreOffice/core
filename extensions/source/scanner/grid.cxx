@@ -200,7 +200,7 @@ void GridWindow::onResize()
 
 Size GridWindow::GetOptimalSize() const
 {
-    return LogicToPixel(Size(240, 200), MapUnit::MapAppFont);
+    return LogicToPixel(Size(240, 200), MapMode(MapUnit::MapAppFont));
 }
 
 GridDialog::GridDialog(double* pXValues, double* pYValues, int nValues, vcl::Window* pParent )

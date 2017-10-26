@@ -926,7 +926,7 @@ void OAppDetailPageHelper::Resize()
     vcl::Window* pWindow = getCurrentView();
     if ( pWindow )
     {
-        Size aFLSize = LogicToPixel( Size( 2, 6 ), MapUnit::MapAppFont );
+        Size aFLSize = LogicToPixel(Size(2, 6), MapMode(MapUnit::MapAppFont));
         sal_Int32 n6PPT = aFLSize.Height();
         long nHalfOutputWidth = static_cast<long>(nOutputWidth * 0.5);
 

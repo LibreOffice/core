@@ -73,7 +73,7 @@ void SwShadowCursor::DrawCursor( const Point& rPt, long nHeight, sal_uInt16 nMod
 
     pWin->Push();
 
-    pWin->SetMapMode( MapUnit::MapPixel );
+    pWin->SetMapMode(MapMode(MapUnit::MapPixel));
     pWin->SetRasterOp( RasterOp::Xor );
 
     pWin->SetLineColor( Color( aCol.GetColor() ^ COL_WHITE ) );

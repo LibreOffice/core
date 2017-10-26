@@ -550,7 +550,7 @@ ObjectPage::ObjectPage(vcl::Window *pParent, const OString &rName, BrowseMode nM
         ".ui")
 {
     get(m_pBasicBox, "library");
-    Size aSize(m_pBasicBox->LogicToPixel(Size(130, 117), MapUnit::MapAppFont));
+    Size aSize(m_pBasicBox->LogicToPixel(Size(130, 117), MapMode(MapUnit::MapAppFont)));
     m_pBasicBox->set_height_request(aSize.Height());
     m_pBasicBox->set_width_request(aSize.Width());
     get(m_pEditButton, "edit");

@@ -88,7 +88,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     // set its resolution to 600 DPI.  This leads to a visually better
     // formatting of text in small sizes (6 point and below.)
     mpVirtualRefDevice.reset(VclPtr<VirtualDevice>::Create());
-    mpVirtualRefDevice->SetMapMode( MapUnit::Map100thMM );
+    mpVirtualRefDevice->SetMapMode(MapMode(MapUnit::Map100thMM));
     mpVirtualRefDevice->SetReferenceDevice ( VirtualDevice::RefDevMode::Dpi600 );
 }
 

@@ -159,7 +159,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlayObje
 Size ScOverlayHint::GetSizePixel() const
 {
     basegfx::B2DRange aRange;
-    createOverlaySequence(0, 0, MapUnit::MapPixel, aRange);
+    createOverlaySequence(0, 0, MapMode(MapUnit::MapPixel), aRange);
     return Size(aRange.getWidth(), aRange.getHeight());
 }
 

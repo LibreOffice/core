@@ -1387,8 +1387,8 @@ void CustomPropertiesYesNoButton::Resize()
 {
     Size aParentSize(GetSizePixel());
     const long nWidth = aParentSize.Width();
-    const long n1Width = LogicToPixel(Size(1, 1), MapUnit::MapAppFont).Width();
-    const long n3Width = LogicToPixel(Size(3, 3), MapUnit::MapAppFont).Width();
+    const long n1Width = LogicToPixel(Size(1, 1), MapMode(MapUnit::MapAppFont)).Width();
+    const long n3Width = LogicToPixel(Size(3, 3), MapMode(MapUnit::MapAppFont)).Width();
     const long nNewWidth = (nWidth / 2) - n3Width - 2;
     Size aSize(nNewWidth, m_aYesButton->get_preferred_size().Height());
     Point aPos(n1Width, (aParentSize.Height() - aSize.Height()) / 2);
@@ -1517,7 +1517,7 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
     m_nTypeBoxWidth = aSize.Width();
     m_nWidgetHeight = aSize.Height();
 
-    Point aPos(LogicToPixel(Point(0, 2), MapUnit::MapAppFont));
+    Point aPos(LogicToPixel(Point(0, 2), MapMode(MapUnit::MapAppFont)));
 
     m_aEditLoseFocusIdle.SetPriority( TaskPriority::LOWEST );
     m_aEditLoseFocusIdle.SetInvokeHandler( LINK( this, CustomPropertiesWindow, EditTimeoutHdl ) );
@@ -1962,7 +1962,7 @@ CustomPropertiesControl::CustomPropertiesControl(vcl::Window* pParent)
     , m_pVertScroll(nullptr)
     , m_nThumbPos(0)
 {
-    Size aRequest(LogicToPixel(Size(320, 141), MapUnit::MapAppFont));
+    Size aRequest(LogicToPixel(Size(320, 141), MapMode(MapUnit::MapAppFont)));
     set_width_request(aRequest.Width());
 }
 

@@ -63,7 +63,7 @@ SvxEventConfigPage::SvxEventConfigPage(vcl::Window *pParent, const SfxItemSet& r
     mpImpl->sStrEvent = get<FixedText>("eventft")->GetText();
     mpImpl->sAssignedMacro = get<FixedText>("actionft")->GetText();
     get(mpImpl->pEventLB, "events");
-    Size aSize(LogicToPixel(Size(205, 229), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(205, 229), MapMode(MapUnit::MapAppFont)));
     mpImpl->pEventLB->set_width_request(aSize.Width());
     mpImpl->pEventLB->set_height_request(aSize.Height());
     get(mpImpl->pAssignPB, "macro");

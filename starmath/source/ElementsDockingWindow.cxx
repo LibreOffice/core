@@ -529,7 +529,7 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
     pNode->SetSize(Fraction(10,8));
     pNode->Arrange(*this, maFormat);
 
-    Size aSizePixel = LogicToPixel(Size(pNode->GetWidth(), pNode->GetHeight()), MapUnit::Map100thMM);
+    Size aSizePixel = LogicToPixel(Size(pNode->GetWidth(), pNode->GetHeight()), MapMode(MapUnit::Map100thMM));
     if (aSizePixel.Width() > maMaxElementDimensions.Width()) {
         maMaxElementDimensions.Width() = aSizePixel.Width();
     }

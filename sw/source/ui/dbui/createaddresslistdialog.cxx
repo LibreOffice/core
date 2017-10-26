@@ -152,8 +152,8 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
 
     std::vector< OUString >::iterator    aHeaderIter;
 
-    long nFTXPos = m_pWindow->LogicToPixel(Point(RSC_SP_CTRL_X, RSC_SP_CTRL_X), MapUnit::MapAppFont).X();
-    long nFTHeight = m_pWindow->LogicToPixel(Size(RSC_BS_CHARHEIGHT, RSC_BS_CHARHEIGHT), MapUnit::MapAppFont).Height();
+    long nFTXPos = m_pWindow->LogicToPixel(Point(RSC_SP_CTRL_X, RSC_SP_CTRL_X), MapMode(MapUnit::MapAppFont)).X();
+    long nFTHeight = m_pWindow->LogicToPixel(Size(RSC_BS_CHARHEIGHT, RSC_BS_CHARHEIGHT), MapMode(MapUnit::MapAppFont)).Height();
     long nFTWidth = 0;
 
     //determine the width of the FixedTexts
@@ -168,12 +168,12 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
     //add some pixels
     nFTWidth += 2;
     long nEDXPos = nFTWidth + nFTXPos +
-            m_pWindow->LogicToPixel(Size(RSC_SP_CTRL_DESC_X, RSC_SP_CTRL_DESC_X), MapUnit::MapAppFont).Width();
-    long nEDHeight = m_pWindow->LogicToPixel(Size(RSC_CD_TEXTBOX_HEIGHT, RSC_CD_TEXTBOX_HEIGHT), MapUnit::MapAppFont).Height();
+            m_pWindow->LogicToPixel(Size(RSC_SP_CTRL_DESC_X, RSC_SP_CTRL_DESC_X), MapMode(MapUnit::MapAppFont)).Width();
+    long nEDHeight = m_pWindow->LogicToPixel(Size(RSC_CD_TEXTBOX_HEIGHT, RSC_CD_TEXTBOX_HEIGHT), MapMode(MapUnit::MapAppFont)).Height();
     long nEDWidth = m_aWinOutputSize.Width() - nEDXPos - nFTXPos;
-    m_nLineHeight = nEDHeight + m_pWindow->LogicToPixel(Size(RSC_SP_CTRL_GROUP_Y, RSC_SP_CTRL_GROUP_Y), MapUnit::MapAppFont).Height();
+    m_nLineHeight = nEDHeight + m_pWindow->LogicToPixel(Size(RSC_SP_CTRL_GROUP_Y, RSC_SP_CTRL_GROUP_Y), MapMode(MapUnit::MapAppFont)).Height();
 
-    long nEDYPos = m_pWindow->LogicToPixel(Size(RSC_SP_CTRL_DESC_Y, RSC_SP_CTRL_DESC_Y), MapUnit::MapAppFont).Height();
+    long nEDYPos = m_pWindow->LogicToPixel(Size(RSC_SP_CTRL_DESC_Y, RSC_SP_CTRL_DESC_Y), MapMode(MapUnit::MapAppFont)).Height();
     long nFTYPos = nEDYPos + nEDHeight - nFTHeight;
 
     Link<Control&,void> aFocusLink = LINK(this, SwAddressControl_Impl, GotFocusHdl_Impl);
@@ -210,7 +210,7 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
     {
         //the m_aWindow has to be at least as high as the ScrollBar and it must include the last Edit
         sal_Int32 nContentHeight = pLastEdit->GetPosPixel().Y() + nEDHeight +
-                m_pWindow->LogicToPixel(Size(RSC_SP_CTRL_GROUP_Y, RSC_SP_CTRL_GROUP_Y), MapUnit::MapAppFont).Height();
+                m_pWindow->LogicToPixel(Size(RSC_SP_CTRL_GROUP_Y, RSC_SP_CTRL_GROUP_Y), MapMode(MapUnit::MapAppFont)).Height();
         if(nContentHeight < m_pScrollBar->GetSizePixel().Height())
         {
             nContentHeight = m_pScrollBar->GetSizePixel().Height();
@@ -362,7 +362,7 @@ bool SwAddressControl_Impl::PreNotify( NotifyEvent& rNEvt )
 
 Size SwAddressControl_Impl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(250, 160), MapUnit::MapAppFont);
+    return LogicToPixel(Size(250, 160), MapMode(MapUnit::MapAppFont));
 }
 
 void SwAddressControl_Impl::Resize()

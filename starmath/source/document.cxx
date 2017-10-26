@@ -342,7 +342,7 @@ EditEngine& SmDocShell::GetEditEngine()
                 EEControlBits(~EEControlBits::PASTESPECIAL) );
 
         mpEditEngine->SetWordDelimiters(" .=+-*/(){}[];\"");
-        mpEditEngine->SetRefMapMode( MapUnit::MapPixel );
+        mpEditEngine->SetRefMapMode(MapMode(MapUnit::MapPixel));
 
         mpEditEngine->SetPaperSize( Size( 800, 0 ) );
 

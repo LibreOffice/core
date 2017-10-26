@@ -96,7 +96,7 @@ DocumentToGraphicRenderer::~DocumentToGraphicRenderer()
 Size DocumentToGraphicRenderer::getDocumentSizeInPixels(sal_Int32 nCurrentPage)
 {
     Size aSize100mm = getDocumentSizeIn100mm(nCurrentPage);
-    return Application::GetDefaultDevice()->LogicToPixel( aSize100mm, MapUnit::Map100thMM );
+    return Application::GetDefaultDevice()->LogicToPixel(aSize100mm, MapMode(MapUnit::Map100thMM));
 }
 
 bool DocumentToGraphicRenderer::hasSelection() const

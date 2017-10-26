@@ -472,7 +472,7 @@ tools::Rectangle SvxSwFrameExample::DrawInnerFrame_Impl(vcl::RenderContext& rRen
 
 void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.SetMapMode(MapUnit::MapPixel);
+    rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
 
     InitAllRects_Impl(rRenderContext);
 

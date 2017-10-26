@@ -41,7 +41,7 @@ VCL_BUILDER_FACTORY_CONSTRUCTOR(GraphicPreviewWindow, WB_TABSTOP)
 
 Size GraphicPreviewWindow::GetOptimalSize() const
 {
-    return LogicToPixel(Size(81, 73), MapUnit::MapAppFont);
+    return LogicToPixel(Size(81, 73), MapMode(MapUnit::MapAppFont));
 }
 
 
@@ -525,7 +525,7 @@ void EmbossControl::MouseButtonDown( const MouseEvent& rEvt )
 
 Size EmbossControl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(77, 60), MapUnit::MapAppFont);
+    return LogicToPixel(Size(77, 60), MapMode(MapUnit::MapAppFont));
 }
 
 

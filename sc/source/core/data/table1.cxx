@@ -1800,7 +1800,7 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
         return;
     }
 
-    Point aPix1000 = pDev->LogicToPixel( Point(1000,1000), MapUnit::MapTwip );
+    Point aPix1000 = pDev->LogicToPixel(Point(1000,1000), MapMode(MapUnit::MapTwip));
     double nPPTX = aPix1000.X() / 1000.0;
     double nPPTY = aPix1000.Y() / 1000.0;
 

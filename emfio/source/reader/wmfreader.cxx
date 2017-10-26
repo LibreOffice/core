@@ -1297,7 +1297,7 @@ namespace emfio
         {
             const Fraction  aFrac( 1, mnUnitsPerInch);
             MapMode         aWMFMap( MapUnit::MapInch, Point(), aFrac, aFrac );
-            Size            aSize100( OutputDevice::LogicToLogic( aWMFSize, aWMFMap, MapUnit::Map100thMM ) );
+            Size            aSize100(OutputDevice::LogicToLogic(aWMFSize, aWMFMap, MapMode(MapUnit::Map100thMM)));
             aDevExt = Size( labs( aSize100.Width() ), labs( aSize100.Height() ) );
         }
         SetDevExt( aDevExt );

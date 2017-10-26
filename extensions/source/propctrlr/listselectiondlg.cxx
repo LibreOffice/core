@@ -39,7 +39,7 @@ namespace pcr
         OSL_PRECOND( m_xListBox.is(), "ListSelectionDialog::ListSelectionDialog: invalid list box!" );
 
         get(m_pEntries, "treeview");
-        Size aSize(LogicToPixel(Size(85, 97), MapUnit::MapAppFont));
+        Size aSize(LogicToPixel(Size(85, 97), MapMode(MapUnit::MapAppFont)));
         m_pEntries->set_width_request(aSize.Width());
         m_pEntries->set_height_request(aSize.Height());
 

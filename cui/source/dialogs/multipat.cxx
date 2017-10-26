@@ -179,7 +179,7 @@ SvxMultiPathDialog::SvxMultiPathDialog(vcl::Window* pParent)
     get(m_pDelBtn, "delete");
 
     SvSimpleTableContainer* pRadioLBContainer = get<SvSimpleTableContainer>("paths");
-    Size aSize(LogicToPixel(Size(195, 77), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(195, 77), MapMode(MapUnit::MapAppFont)));
     pRadioLBContainer->set_width_request(aSize.Width());
     pRadioLBContainer->set_height_request(aSize.Height());
     m_pRadioLB = VclPtr<svx::SvxRadioButtonListBox>::Create(*pRadioLBContainer, 0);
@@ -207,7 +207,7 @@ SvxPathSelectDialog::SvxPathSelectDialog(vcl::Window* pParent)
     get(m_pAddBtn, "add");
     get(m_pDelBtn, "delete");
     get(m_pPathLB, "paths");
-    Size aSize(LogicToPixel(Size(189, 80), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(189, 80), MapMode(MapUnit::MapAppFont)));
     m_pPathLB->set_width_request(aSize.Width());
     m_pPathLB->set_height_request(aSize.Height());
 

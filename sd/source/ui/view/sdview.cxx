@@ -703,7 +703,7 @@ bool View::SdrBeginTextEdit(
             {
                 ::tools::Rectangle aRectangle = pView->GetOutputArea();
                 if (pWin && pWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                    aRectangle = OutputDevice::LogicToLogic(aRectangle, MapUnit::Map100thMM, MapUnit::MapTwip);
+                    aRectangle = OutputDevice::LogicToLogic(aRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
                 OString sRectangle = aRectangle.toString();
                 SfxLokHelper::notifyOtherViews(&mpViewSh->GetViewShellBase(), LOK_CALLBACK_VIEW_LOCK, "rectangle", sRectangle);
             }
@@ -879,7 +879,7 @@ void View::SetMarkedOriginalSize()
                         try
                         {
                             awt::Size aSz = xObj->getVisualAreaSize( nAspect );
-                            aOleSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aUnit, MapUnit::Map100thMM );
+                            aOleSize = OutputDevice::LogicToLogic(Size(aSz.Width, aSz.Height), MapMode(aUnit), MapMode(MapUnit::Map100thMM));
                             bOK = true;
                         }
                         catch( embed::NoVisualAreaSizeException& )

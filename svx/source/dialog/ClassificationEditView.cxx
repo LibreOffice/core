@@ -48,7 +48,7 @@ ClassificationEditView::ClassificationEditView(vcl::Window* pParent, WinBits nBi
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
 
-    SetMapMode(MapUnit::MapTwip);
+    SetMapMode(MapMode(MapUnit::MapTwip));
     SetPointer(PointerStyle::Text);
     SetBackground(aBgColor);
 

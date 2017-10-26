@@ -62,7 +62,7 @@ void OApplicationSwapWindow::dispose()
 
 void OApplicationSwapWindow::Resize()
 {
-    Size aFLSize = LogicToPixel( Size( 8, 0 ), MapUnit::MapAppFont );
+    Size aFLSize = LogicToPixel(Size(8, 0), MapMode(MapUnit::MapAppFont));
     long nX = 0;
     if ( m_aIconControl->GetEntryCount() != 0 )
         nX = m_aIconControl->GetBoundingBox( m_aIconControl->GetEntry(0) ).GetWidth() + aFLSize.Width();

@@ -127,11 +127,11 @@ namespace offapp
     {
         EditBrowseBox::Init();
 
-        Size aColWidth = LogicToPixel(Size(160, 0), MapUnit::MapAppFont);
+        Size aColWidth = LogicToPixel(Size(160, 0), MapMode(MapUnit::MapAppFont));
         InsertDataColumn(1, CuiResId(RID_SVXSTR_DRIVER_NAME), aColWidth.Width());
-        aColWidth = LogicToPixel(Size(30, 0), MapUnit::MapAppFont);
+        aColWidth = LogicToPixel(Size(30, 0), MapMode(MapUnit::MapAppFont));
         InsertDataColumn(2, CuiResId(RID_SVXSTR_POOLED_FLAG), aColWidth.Width());
-        aColWidth = LogicToPixel(Size(60, 0), MapUnit::MapAppFont);
+        aColWidth = LogicToPixel(Size(60, 0), MapMode(MapUnit::MapAppFont));
         InsertDataColumn(3, CuiResId(RID_SVXSTR_POOL_TIMEOUT), aColWidth.Width());
             // Attention: the resource of the string is local to the resource of the enclosing dialog!
     }
@@ -303,7 +303,7 @@ namespace offapp
         get(m_pTimeout, "timeout");
 
         Size aControlSize(248, 100);
-        aControlSize = LogicToPixel(aControlSize, MapUnit::MapAppFont);
+        aControlSize = LogicToPixel(aControlSize, MapMode(MapUnit::MapAppFont));
         m_pDriverList->set_width_request(aControlSize.Width());
         m_pDriverList->set_height_request(aControlSize.Height());
         m_pDriverList->Init();

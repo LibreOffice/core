@@ -45,7 +45,7 @@ SdVectorizeDlg::SdVectorizeDlg(vcl::Window* pParent, const Bitmap& rBmp, ::sd::D
     get(m_pBmpWin, "source");
     get(m_pMtfWin, "vectorized");
 
-    Size aSize(LogicToPixel(Size(92, 100), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(92, 100), MapMode(MapUnit::MapAppFont)));
     m_pBmpWin->set_width_request(aSize.Width());
     m_pMtfWin->set_width_request(aSize.Width());
     m_pBmpWin->set_height_request(aSize.Height());

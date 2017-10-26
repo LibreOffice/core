@@ -57,7 +57,7 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( vcl::Window* pParent,
 
     SvSimpleTableContainer *pCheckLBContainer = get<SvSimpleTableContainer>("checklb");
     Size aControlSize(248, 75);
-    aControlSize = LogicToPixel(aControlSize, MapUnit::MapAppFont);
+    aControlSize = LogicToPixel(aControlSize, MapMode(MapUnit::MapAppFont));
     pCheckLBContainer->set_width_request(aControlSize.Width());
     pCheckLBContainer->set_height_request(aControlSize.Height());
 
@@ -418,7 +418,7 @@ void SvxFontSubstCheckListBox::setColSizes()
     long nW1 = rBar.GetTextWidth(rBar.GetItemText(3));
     long nW2 = rBar.GetTextWidth(rBar.GetItemText(4));
     long nMax = std::max( nW1, nW2 ) + 6; // width of the longest header + a little offset
-    long nMin = rBar.LogicToPixel(Size(10, 0), MapUnit::MapAppFont).Width();
+    long nMin = rBar.LogicToPixel(Size(10, 0), MapMode(MapUnit::MapAppFont)).Width();
     nMax = std::max( nMax, nMin );
     const long nDoubleMax = 2*nMax;
     const long nRest = GetSizePixel().Width() - nDoubleMax;

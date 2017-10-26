@@ -717,11 +717,11 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                     if(MapUnit::MapPixel == rBitmapEx.GetPrefMapMode().GetMapUnit())
                     {
-                        aLogicalSize = Application::GetDefaultDevice()->PixelToLogic(aLogicalSize, aMapModes.back().GetMapUnit());
+                        aLogicalSize = Application::GetDefaultDevice()->PixelToLogic(aLogicalSize, aMapModes.back());
                     }
                     else
                     {
-                        aLogicalSize = OutputDevice::LogicToLogic(aLogicalSize, rBitmapEx.GetPrefMapMode(), aMapModes.back().GetMapUnit());
+                        aLogicalSize = OutputDevice::LogicToLogic(aLogicalSize, rBitmapEx.GetPrefMapMode(), aMapModes.back());
                     }
 
                     bDone = handleBitmapContent(
@@ -744,11 +744,11 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                     if(MapUnit::MapPixel == rBitmap.GetPrefMapMode().GetMapUnit())
                     {
-                        aLogicalSize = Application::GetDefaultDevice()->PixelToLogic(aLogicalSize, aMapModes.back().GetMapUnit());
+                        aLogicalSize = Application::GetDefaultDevice()->PixelToLogic(aLogicalSize, aMapModes.back());
                     }
                     else
                     {
-                        aLogicalSize = OutputDevice::LogicToLogic(aLogicalSize, rBitmap.GetPrefMapMode(), aMapModes.back().GetMapUnit());
+                        aLogicalSize = OutputDevice::LogicToLogic(aLogicalSize, rBitmap.GetPrefMapMode(), aMapModes.back());
                     }
 
                     bDone = handleBitmapContent(

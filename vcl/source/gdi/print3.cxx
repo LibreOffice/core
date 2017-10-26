@@ -1282,7 +1282,7 @@ void PrinterController::printFilteredPage( int i_nPage )
     }
 
     // in N-Up printing set the correct page size
-    mpImplData->mxPrinter->SetMapMode( MapUnit::Map100thMM );
+    mpImplData->mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
     // aPageSize was filtered through mpImplData->getRealPaperSize already by getFilteredPageFile()
     mpImplData->mxPrinter->SetPaperSizeUser( aPageSize.aSize, ! mpImplData->isFixedPageSize() );
     if( mpImplData->mnFixedPaperBin != -1 &&

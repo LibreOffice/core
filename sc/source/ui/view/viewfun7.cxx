@@ -311,7 +311,7 @@ bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
             if ( pDescSize && pDescSize->Width() && pDescSize->Height() )
             {
                 // use size from object descriptor if given
-                aSize = OutputDevice::LogicToLogic( *pDescSize, aMap100, aMapObj );
+                aSize = OutputDevice::LogicToLogic(*pDescSize, MapMode(aMap100), MapMode(aMapObj));
                 awt::Size aSz;
                 aSz.Width = aSize.Width();
                 aSz.Height = aSize.Height();
@@ -329,14 +329,14 @@ bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
             }
 
             aSize = Size( aSz.Width, aSz.Height );
-            aSize = OutputDevice::LogicToLogic( aSize, aMapObj, aMap100 );  // for SdrOle2Obj
+            aSize = OutputDevice::LogicToLogic(aSize, MapMode(aMapObj), MapMode(aMap100)); // for SdrOle2Obj
 
             if( aSize.Height() == 0 || aSize.Width() == 0 )
             {
                 OSL_FAIL("SvObjectDescriptor::GetSize == 0");
                 aSize.Width() = 5000;
                 aSize.Height() = 5000;
-                aSize = OutputDevice::LogicToLogic( aSize, aMap100, aMapObj );
+                aSize = OutputDevice::LogicToLogic(aSize, MapMode(aMap100), MapMode(aMapObj));
                 aSz.Width = aSize.Width();
                 aSz.Height = aSize.Height();
                 xObj->setVisualAreaSize( nAspect, aSz );

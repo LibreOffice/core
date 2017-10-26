@@ -92,7 +92,7 @@ NumberingPopup::NumberingPopup( NumberingToolBoxControl& rController,
         }
     }
 
-    Size aItemSize( LogicToPixel( Size( 30, 42 ), MapUnit::MapAppFont ) );
+    Size aItemSize(LogicToPixel(Size(30, 42), MapMode(MapUnit::MapAppFont)));
     mpValueSet->SetExtraSpacing( 2 );
     mpValueSet->SetOutputSizePixel( mpValueSet->CalcWindowSizePixel( aItemSize ) );
     mpValueSet->SetColor( GetSettings().GetStyleSettings().GetFieldColor() );

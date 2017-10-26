@@ -228,7 +228,7 @@ void ImpEditEngine::SetRefMapMode( const MapMode& rMapMode )
     mpOwnDev.disposeAndClear();
     mpOwnDev = VclPtr<VirtualDevice>::Create();
     pRefDev = mpOwnDev;
-    pRefDev->SetMapMode( MapUnit::MapTwip );
+    pRefDev->SetMapMode(MapMode(MapUnit::MapTwip));
     SetRefDevice( pRefDev );
 
     pRefDev->SetMapMode( rMapMode );

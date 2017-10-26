@@ -74,11 +74,11 @@ namespace drawinglayer
 
                     if(MapUnit::MapPixel == aGraphic.GetPrefMapMode().GetMapUnit())
                     {
-                        aPrefSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapUnit::Map100thMM);
+                        aPrefSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
                     }
                     else
                     {
-                        aPrefSize = OutputDevice::LogicToLogic(aPrefSize, aGraphic.GetPrefMapMode(), MapUnit::Map100thMM);
+                        aPrefSize = OutputDevice::LogicToLogic(aPrefSize, aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM));
                     }
 
                     const double fOffsetX((aScale.getX() - aPrefSize.getWidth()) / 2.0);

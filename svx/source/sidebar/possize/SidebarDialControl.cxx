@@ -34,7 +34,7 @@ VCL_BUILDER_FACTORY_ARGS(SidebarDialControl, WB_TABSTOP)
 
 Size SidebarDialControl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(10, 10), MapUnit::MapAppFont);
+    return LogicToPixel(Size(10, 10), MapMode(MapUnit::MapAppFont));
 }
 
 void SidebarDialControl::MouseButtonDown( const MouseEvent& rMEvt )

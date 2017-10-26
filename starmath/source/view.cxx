@@ -886,7 +886,7 @@ void SmViewShell::InnerResizePixel(const Point &rOfs, const Size &rSize, bool)
     Size aObjSize = GetObjectShell()->GetVisArea().GetSize();
     if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
     {
-        Size aProvidedSize = GetWindow()->PixelToLogic( rSize, MapUnit::Map100thMM );
+        Size aProvidedSize = GetWindow()->PixelToLogic(rSize, MapMode(MapUnit::Map100thMM));
         SfxViewShell::SetZoomFactor( Fraction( aProvidedSize.Width(), aObjSize.Width() ),
                         Fraction( aProvidedSize.Height(), aObjSize.Height() ) );
     }

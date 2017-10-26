@@ -1446,7 +1446,7 @@ ShowLicenseDialog::ShowLicenseDialog( vcl::Window * pParent,
     : ModalDialog(pParent, "ShowLicenseDialog", "desktop/ui/showlicensedialog.ui")
 {
     get(m_pLicenseText, "textview");
-    Size aSize(m_pLicenseText->LogicToPixel(Size(290, 170), MapUnit::MapAppFont));
+    Size aSize(m_pLicenseText->LogicToPixel(Size(290, 170), MapMode(MapUnit::MapAppFont)));
     m_pLicenseText->set_width_request(aSize.Width());
     m_pLicenseText->set_height_request(aSize.Height());
     m_pLicenseText->SetText(xPackage->getLicenseText());

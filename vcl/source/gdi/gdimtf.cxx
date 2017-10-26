@@ -420,7 +420,7 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
                 BitmapEx aBitmapEx;
                 if( aBitmapEx.Create( xBitmapCanvas, aSize ) )
                 {
-                    if ( pOut->GetMapMode() == MapUnit::MapPixel )
+                    if (pOut->GetMapMode().GetMapUnit() == MapUnit::MapPixel)
                         pOut->DrawBitmapEx( rPos, aBitmapEx );
                     else
                         pOut->DrawBitmapEx( rPos, rLogicDestSize, aBitmapEx );

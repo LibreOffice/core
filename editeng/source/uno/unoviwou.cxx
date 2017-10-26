@@ -70,7 +70,7 @@ tools::Rectangle SvxDrawOutlinerViewForwarder::GetVisArea() const
             MapMode aMapMode(pOutDev->GetMapMode());
             aVisArea = OutputDevice::LogicToLogic( aVisArea,
                                                    pOutliner->GetRefMapMode(),
-                                                   aMapMode.GetMapUnit() );
+                                                   MapMode(aMapMode.GetMapUnit()));
             aMapMode.SetOrigin(Point());
             return pOutDev->LogicToPixel( aVisArea, aMapMode );
         }
@@ -93,7 +93,7 @@ Point SvxDrawOutlinerViewForwarder::LogicToPixel( const Point& rPoint, const Map
 
         MapMode aMapMode(pOutDev->GetMapMode());
         Point aPoint2( OutputDevice::LogicToLogic( aPoint1, rMapMode,
-                                                   aMapMode.GetMapUnit() ) );
+                                               MapMode(aMapMode.GetMapUnit())));
         aMapMode.SetOrigin(Point());
         return pOutDev->LogicToPixel( aPoint2, aMapMode );
     }
@@ -111,7 +111,7 @@ Point SvxDrawOutlinerViewForwarder::PixelToLogic( const Point& rPoint, const Map
         aMapMode.SetOrigin(Point());
         Point aPoint1( pOutDev->PixelToLogic( rPoint, aMapMode ) );
         Point aPoint2( OutputDevice::LogicToLogic( aPoint1,
-                                                   aMapMode.GetMapUnit(),
+                                               MapMode(aMapMode.GetMapUnit()),
                                                    rMapMode ) );
         Point aTextOffset( GetTextOffset() );
 

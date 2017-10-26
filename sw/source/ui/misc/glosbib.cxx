@@ -56,7 +56,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(vcl::Window * pParent,
     get(m_pGroupTLB, "group");
 
     const int nAppFontUnits = 130;
-    long nWidth = LogicToPixel(Size(nAppFontUnits, 0), MapUnit::MapAppFont).Width();
+    long nWidth = LogicToPixel(Size(nAppFontUnits, 0), MapMode(MapUnit::MapAppFont)).Width();
     m_pPathLB->set_width_request(nWidth);
     //just has to be something small, real size will be available space
     m_pGroupTLB->set_width_request(nWidth);

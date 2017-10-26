@@ -45,7 +45,7 @@ OTableRowView::OTableRowView(vcl::Window* pParent)
     , m_nCurUndoActId(0)
 {
     SetHelpId(HID_TABDESIGN_BACKGROUND);
-    SetSizePixel(LogicToPixel(Size(40, 12), MapUnit::MapAppFont));
+    SetSizePixel(LogicToPixel(Size(40, 12), MapMode(MapUnit::MapAppFont)));
 }
 
 void OTableRowView::Init()

@@ -54,7 +54,7 @@ SwEnvPreview::SwEnvPreview(vcl::Window* pParent, WinBits nStyle)
 
 Size SwEnvPreview::GetOptimalSize() const
 {
-    return LogicToPixel(Size(84 , 63), MapUnit::MapAppFont);
+    return LogicToPixel(Size(84 , 63), MapMode(MapUnit::MapAppFont));
 }
 
 VCL_BUILDER_FACTORY_ARGS(SwEnvPreview, 0)

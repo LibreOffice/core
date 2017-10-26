@@ -771,7 +771,7 @@ SvxCropExample::SvxCropExample( vcl::Window* pPar, WinBits nStyle )
 
 Size SvxCropExample::GetOptimalSize() const
 {
-    return LogicToPixel(Size(78, 78), MapUnit::MapAppFont);
+    return LogicToPixel(Size(78, 78), MapMode(MapUnit::MapAppFont));
 }
 
 VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxCropExample, 0)

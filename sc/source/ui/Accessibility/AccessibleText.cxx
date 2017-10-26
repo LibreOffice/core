@@ -299,7 +299,7 @@ Point ScPreviewViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& 
             aMapMode.SetOrigin(Point());
             Point aPoint1( pWindow->PixelToLogic( rPoint ) );
             Point aPoint2( OutputDevice::LogicToLogic( aPoint1,
-                                                       aMapMode.GetMapUnit(),
+                                                       MapMode(aMapMode.GetMapUnit()),
                                                        rMapMode ) );
             return aPoint2;
         }
@@ -1054,7 +1054,7 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
                 mpEditEngine = new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true);
                 mbEditEngineCreated = true;
                 mpEditEngine->EnableUndo( false );
-                mpEditEngine->SetRefMapMode( MapUnit::Map100thMM );
+                mpEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
                 mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);
 
                 mpEditEngine->SetText(pTxtWnd->GetTextString());
@@ -1264,7 +1264,7 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
         if (pDocShell)
             pEditEngine->SetRefDevice(pDocShell->GetRefDevice());
         else
-            pEditEngine->SetRefMapMode( MapUnit::Map100thMM );
+            pEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
         pForwarder = new SvxEditEngineForwarder(*pEditEngine);
     }
 
@@ -1367,7 +1367,7 @@ SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
         ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool );
 
         pHdrEngine->EnableUndo( false );
-        pHdrEngine->SetRefMapMode( MapUnit::MapTwip );
+        pHdrEngine->SetRefMapMode(MapMode(MapUnit::MapTwip));
 
         //  default font must be set, independently of document
         //  -> use global pool from module
@@ -1490,7 +1490,7 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
         if (mpDocSh)
             mpEditEngine->SetRefDevice(mpDocSh->GetRefDevice());
         else
-            mpEditEngine->SetRefMapMode( MapUnit::Map100thMM );
+            mpEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
         mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);
     }
 

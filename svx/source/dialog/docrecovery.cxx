@@ -855,7 +855,7 @@ RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
 
     constexpr int RECOV_CONTROLWIDTH = 278;
     SvSimpleTableContainer* pFileListLBContainer = get<SvSimpleTableContainer>("filelist");
-    Size aSize(LogicToPixel(Size(RECOV_CONTROLWIDTH, 68), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(RECOV_CONTROLWIDTH, 68), MapMode(MapUnit::MapAppFont)));
     pFileListLBContainer->set_height_request(aSize.Height());
     m_pFileListLB = VclPtr<RecovDocList>::Create(*pFileListLBContainer);
 

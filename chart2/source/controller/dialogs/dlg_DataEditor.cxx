@@ -52,7 +52,7 @@ DataEditor::DataEditor(vcl::Window* pParent,
     m_xBrwData->set_hexpand(true);
     m_xBrwData->set_vexpand(true);
     m_xBrwData->set_expand(true);
-    Size aSize(m_xBrwData->LogicToPixel(Size(232, 121), MapUnit::MapAppFont));
+    Size aSize(m_xBrwData->LogicToPixel(Size(232, 121), MapMode(MapUnit::MapAppFont)));
     m_xBrwData->set_width_request(aSize.Width());
     m_xBrwData->set_height_request(aSize.Height());
     m_xBrwData->Show();

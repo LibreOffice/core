@@ -1478,7 +1478,7 @@ bool FmGridControl::isColumnMarked(sal_uInt16 nId) const
 long FmGridControl::QueryMinimumRowHeight()
 {
     long const nMinimalLogicHeight = 20; // 0.2 cm
-    long nMinimalPixelHeight = LogicToPixel( Point( 0, nMinimalLogicHeight ), MapUnit::Map10thMM ).Y();
+    long nMinimalPixelHeight = LogicToPixel(Point(0, nMinimalLogicHeight), MapMode(MapUnit::Map10thMM)).Y();
     return CalcZoom( nMinimalPixelHeight );
 }
 
@@ -1493,7 +1493,7 @@ void FmGridControl::RowHeightChanged()
         try
         {
             sal_Int32 nUnzoomedPixelHeight = CalcReverseZoom( GetDataRowHeight() );
-            Any aProperty = makeAny( (sal_Int32)PixelToLogic( Point( 0, nUnzoomedPixelHeight ), MapUnit::Map10thMM ).Y() );
+            Any aProperty = makeAny( static_cast<sal_Int32>(PixelToLogic( Point(0, nUnzoomedPixelHeight), MapMode(MapUnit::Map10thMM)).Y()) );
             xModel->setPropertyValue( FM_PROP_ROWHEIGHT, aProperty );
         }
         catch( const Exception& )
@@ -1516,7 +1516,7 @@ void FmGridControl::ColumnResized(sal_uInt16 nId)
         sal_Int32 nColumnWidth = GetColumnWidth(nId);
         nColumnWidth = CalcReverseZoom(nColumnWidth);
         // convert to 10THMM
-        aWidth <<= (sal_Int32)PixelToLogic(Point(nColumnWidth,0),MapUnit::Map10thMM).X();
+        aWidth <<= (sal_Int32)PixelToLogic(Point(nColumnWidth, 0), MapMode(MapUnit::Map10thMM)).X();
         xColModel->setPropertyValue(FM_PROP_WIDTH, aWidth);
     }
 }
@@ -1609,7 +1609,7 @@ void FmGridControl::InitColumnsByModels(const Reference< css::container::XIndexC
         aWidth = xCol->getPropertyValue(FM_PROP_WIDTH);
         sal_Int32 nWidth = 0;
         if (aWidth >>= nWidth)
-            nWidth = LogicToPixel(Point(nWidth,0),MapUnit::Map10thMM).X();
+            nWidth = LogicToPixel(Point(nWidth, 0), MapMode(MapUnit::Map10thMM)).X();
 
         AppendColumn(aName, (sal_uInt16)nWidth);
         DbGridColumn* pCol = DbGridControl::GetColumns().at( i );

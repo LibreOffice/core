@@ -485,7 +485,7 @@ void SvxLineTabPage::SymbolSelected(MenuButton const * pButton)
     if(pGraphic)
     {
         Size aSize = SvxNumberFormat::GetGraphicSizeMM100(pGraphic);
-        aSize = OutputDevice::LogicToLogic(aSize, MapUnit::Map100thMM, m_ePoolUnit);
+        aSize = OutputDevice::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(m_ePoolUnit));
         m_aSymbolGraphic=*pGraphic;
         if( bResetSize )
         {
@@ -1158,7 +1158,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
                     m_aSymbolGraphic=Graphic(aMeta);
                     m_aSymbolSize=pObj->GetSnapRect().GetSize();
                     m_aSymbolGraphic.SetPrefSize(pInvisibleSquare->GetSnapRect().GetSize());
-                    m_aSymbolGraphic.SetPrefMapMode(MapUnit::Map100thMM);
+                    m_aSymbolGraphic.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
                     bPrevSym=true;
                     bEnable=true;
                     bIgnoreGraphic=true;
@@ -1186,7 +1186,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
             {
                 m_aSymbolSize=OutputDevice::LogicToLogic( pGraphic->GetPrefSize(),
                                                         pGraphic->GetPrefMapMode(),
-                                                        MapUnit::Map100thMM );
+                                                        MapMode(MapUnit::Map100thMM));
             }
             bPrevSym=true;
         }

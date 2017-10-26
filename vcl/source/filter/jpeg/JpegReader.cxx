@@ -225,7 +225,7 @@ bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam& rParam)
             Fraction    aFractX( 1, rParam.X_density );
             Fraction    aFractY( 1, rParam.Y_density );
             MapMode     aMapMode( nUnit == 1 ? MapUnit::MapInch : MapUnit::MapCM, aEmptyPoint, aFractX, aFractY );
-            Size        aPrefSize = OutputDevice::LogicToLogic( aSize, aMapMode, MapUnit::Map100thMM );
+            Size        aPrefSize = OutputDevice::LogicToLogic(aSize, aMapMode, MapMode(MapUnit::Map100thMM));
 
             mpBitmap->SetPrefSize(aPrefSize);
             mpBitmap->SetPrefMapMode(MapMode(MapUnit::Map100thMM));

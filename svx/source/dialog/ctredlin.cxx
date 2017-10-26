@@ -380,7 +380,7 @@ SvxTPView::SvxTPView(vcl::Window *pParent, VclBuilderContainer *pTopLevel)
 
     SvSimpleTableContainer* pTable = get<SvSimpleTableContainer>("changes");
     Size aControlSize(80, 65);
-    aControlSize = LogicToPixel(aControlSize, MapUnit::MapAppFont);
+    aControlSize = LogicToPixel(aControlSize, MapMode(MapUnit::MapAppFont));
     pTable->set_width_request(aControlSize.Width());
     pTable->set_height_request(aControlSize.Height());
     m_pViewData = VclPtr<SvxRedlinTable>::Create(*pTable, 0);

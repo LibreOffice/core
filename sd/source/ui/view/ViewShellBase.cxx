@@ -464,7 +464,7 @@ void ViewShellBase::InnerResizePixel (const Point& rOrigin, const Size &rSize, b
         Size aSize( rSize );
         aSize.Width() -= (aBorder.Left() + aBorder.Right());
         aSize.Height() -= (aBorder.Top() + aBorder.Bottom());
-        Size aObjSizePixel = mpImpl->mpViewWindow->LogicToPixel( aObjSize, MapUnit::Map100thMM );
+        Size aObjSizePixel = mpImpl->mpViewWindow->LogicToPixel(aObjSize, MapMode(MapUnit::Map100thMM));
         SfxViewShell::SetZoomFactor(
             Fraction( aSize.Width(), std::max( aObjSizePixel.Width(), (long int)1 ) ),
             Fraction( aSize.Height(), std::max( aObjSizePixel.Height(), (long int)1) ) );
@@ -1004,7 +1004,7 @@ void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
             ::tools::Rectangle aRectangle = pOutlinerView->GetOutputArea();
             vcl::Window* pWin = pThisShell->GetActiveWindow();
             if (pWin && pWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                aRectangle = OutputDevice::LogicToLogic(aRectangle, MapUnit::Map100thMM, MapUnit::MapTwip);
+                aRectangle = OutputDevice::LogicToLogic(aRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
             OString sRectangle = aRectangle.toString();
             SfxLokHelper::notifyOtherView(&pDrawViewShell->GetViewShellBase(), pOtherShell, LOK_CALLBACK_VIEW_LOCK, "rectangle", sRectangle);
         }

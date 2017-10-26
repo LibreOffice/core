@@ -263,7 +263,7 @@ SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& 
     m_nSendCount(0),
     m_nErrorCount(0)
 {
-    Size aSize = m_pContainer->LogicToPixel(Size(226, 80), MapUnit::MapAppFont);
+    Size aSize = m_pContainer->LogicToPixel(Size(226, 80), MapMode(MapUnit::MapAppFont));
     m_pContainer->set_width_request(aSize.Width());
     m_pContainer->set_height_request(aSize.Height());
     m_pStatus = VclPtr<SvSimpleTable>::Create(*m_pContainer);

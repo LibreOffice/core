@@ -173,7 +173,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
 Size LineWidthValueSet::GetOptimalSize() const
 {
-    return LogicToPixel(Size(80, 12 * 9), MapUnit::MapAppFont);
+    return LogicToPixel(Size(80, 12 * 9), MapMode(MapUnit::MapAppFont));
 }
 
 } } // end of namespace svx::sidebar

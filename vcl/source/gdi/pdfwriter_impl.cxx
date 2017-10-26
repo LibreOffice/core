@@ -2201,7 +2201,7 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
             pVDev->SetReferenceDevice( m_aContext.DPIx, m_aContext.DPIy );
 
         pVDev->SetOutputSizePixel( Size( 640, 480 ) );
-        pVDev->SetMapMode( MapUnit::MapMM );
+        pVDev->SetMapMode(MapMode(MapUnit::MapMM));
 
         m_pReferenceDevice->mpPDFWriter = this;
         m_pReferenceDevice->ImplUpdateFontData();

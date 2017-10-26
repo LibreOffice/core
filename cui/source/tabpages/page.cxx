@@ -264,7 +264,7 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
     }
 
     MapMode aOldMode = mpDefPrinter->GetMapMode();
-    mpDefPrinter->SetMapMode( MapUnit::MapTwip );
+    mpDefPrinter->SetMapMode(MapMode(MapUnit::MapTwip));
 
     // set first- and last-values for the margins
     Size aPaperSize = mpDefPrinter->GetPaperSize();
@@ -509,7 +509,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     m_pBspWin->SetSize( Size( ConvertLong_Impl( aPaperSize.Width(), eUnit ),
                            ConvertLong_Impl( aPaperSize.Height(), eUnit ) ) );
 
-    aPaperSize = OutputDevice::LogicToLogic(aPaperSize, eUnit, MapUnit::Map100thMM);
+    aPaperSize = OutputDevice::LogicToLogic(aPaperSize, MapMode(eUnit), MapMode(MapUnit::Map100thMM));
     if ( bLandscape )
         Swap( aPaperSize );
 
@@ -1039,7 +1039,7 @@ void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
         eOri = Orientation::Landscape;
     Orientation eOldOri = mpDefPrinter->GetOrientation();
     mpDefPrinter->SetOrientation( eOri );
-    mpDefPrinter->SetMapMode( MapUnit::MapTwip );
+    mpDefPrinter->SetMapMode(MapMode(MapUnit::MapTwip));
 
     // set first- and last-values for margins
     Size aPaperSize = mpDefPrinter->GetPaperSize();

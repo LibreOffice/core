@@ -281,7 +281,7 @@ void ClassificationControl::SetOptimalSize()
 {
     // Same as SvxColorDockingWindow.
     const Size aLogicalAttrSize(150, 0);
-    Size aSize(LogicToPixel(aLogicalAttrSize,MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(aLogicalAttrSize, MapMode(MapUnit::MapAppFont)));
 
     Point aPosition = m_pCategory->GetPosPixel();
 

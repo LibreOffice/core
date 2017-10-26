@@ -338,7 +338,7 @@ ScTPValidationValue::ScTPValidationValue( vcl::Window* pParent, const SfxItemSet
     get(m_pEdMin, "min");
     m_pEdMin->SetReferences(nullptr, m_pFtMin);
     get(m_pEdList, "minlist");
-    Size aSize(LogicToPixel(Size(174, 105), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(174, 105), MapMode(MapUnit::MapAppFont)));
     m_pEdList->set_width_request(aSize.Width());
     m_pEdList->set_height_request(aSize.Height());
     get(m_pFtMax, "maxft");

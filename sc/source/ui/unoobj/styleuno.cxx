@@ -716,7 +716,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
             {
                 // like ScViewFunc::RemoveStyleSheetInUse
                 ScopedVclPtrInstance< VirtualDevice > pVDev;
-                Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MapUnit::MapTwip );
+                Point aLogic = pVDev->LogicToPixel(Point(1000,1000), MapMode(MapUnit::MapTwip));
                 double nPPTX = aLogic.X() / 1000.0;
                 double nPPTY = aLogic.Y() / 1000.0;
                 Fraction aZoom(1,1);
@@ -1048,7 +1048,7 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
                 // update line height
 
                 ScopedVclPtrInstance< VirtualDevice > pVDev;
-                Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MapUnit::MapTwip );
+                Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MapMode(MapUnit::MapTwip));
                 double nPPTX = aLogic.X() / 1000.0;
                 double nPPTY = aLogic.Y() / 1000.0;
                 Fraction aZoom(1,1);
@@ -1411,7 +1411,7 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
             //  row heights
 
             ScopedVclPtrInstance< VirtualDevice > pVDev;
-            Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MapUnit::MapTwip );
+            Point aLogic = pVDev->LogicToPixel(Point(1000,1000), MapMode(MapUnit::MapTwip));
             double nPPTX = aLogic.X() / 1000.0;
             double nPPTY = aLogic.Y() / 1000.0;
             Fraction aZoom(1,1);
@@ -1758,7 +1758,7 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
         {
             // update line height
             ScopedVclPtrInstance< VirtualDevice > pVDev;
-            Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MapUnit::MapTwip );
+            Point aLogic = pVDev->LogicToPixel(Point(1000,1000), MapMode(MapUnit::MapTwip));
             double nPPTX = aLogic.X() / 1000.0;
             double nPPTY = aLogic.Y() / 1000.0;
             Fraction aZoom(1,1);

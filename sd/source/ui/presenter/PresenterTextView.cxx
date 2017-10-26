@@ -240,7 +240,7 @@ PresenterTextView::Implementation::Implementation()
       mnTop(0),
       mnTotalHeight(-1)
 {
-    mpOutputDevice->SetMapMode(MapUnit::MapPixel);
+    mpOutputDevice->SetMapMode(MapMode(MapUnit::MapPixel));
 
     mpEditEngine = CreateEditEngine ();
 }
@@ -312,7 +312,7 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine()
                 EEControlBits(~EEControlBits::PASTESPECIAL) );
 
         pEditEngine->SetWordDelimiters (" .=+-*/(){}[];\"");
-        pEditEngine->SetRefMapMode (MapUnit::MapPixel);
+        pEditEngine->SetRefMapMode(MapMode(MapUnit::MapPixel));
         pEditEngine->SetPaperSize (Size(800, 0));
         pEditEngine->EraseVirtualDevice();
         pEditEngine->ClearModifyFlag();
@@ -436,7 +436,7 @@ Reference<rendering::XBitmap> const & PresenterTextView::Implementation::GetBitm
         mpOutputDevice.disposeAndClear();
         mpOutputDevice = VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(),
                                                        DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
-        mpOutputDevice->SetMapMode(MapUnit::MapPixel);
+        mpOutputDevice->SetMapMode(MapMode(MapUnit::MapPixel));
         mpOutputDevice->SetOutputSizePixel(maSize);
         mpOutputDevice->SetLineColor();
         mpOutputDevice->SetFillColor();

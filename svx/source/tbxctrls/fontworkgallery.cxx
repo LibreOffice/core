@@ -77,7 +77,7 @@ FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, vcl::Window* pP
 {
     get(mpOKButton, "ok");
     get(mpCtlFavorites, "ctlFavorites");
-    Size aSize(LogicToPixel(Size(200, 200), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(200, 200), MapMode(MapUnit::MapAppFont)));
     mpCtlFavorites->set_width_request(aSize.Width());
     mpCtlFavorites->set_height_request(aSize.Height());
 

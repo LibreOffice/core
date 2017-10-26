@@ -167,7 +167,7 @@ void CalculateHorizontalScalingFactor( const SdrObject* pCustomShape,
     // initializing virtual device
 
     ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::BITMASK);
-    pVirDev->SetMapMode( MapUnit::Map100thMM );
+    pVirDev->SetMapMode(MapMode(MapUnit::Map100thMM));
     pVirDev->SetFont( aFont );
 
     if ( nOutlinesCount2d & 1 )
@@ -261,7 +261,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
 
             // initializing virtual device
             ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::BITMASK);
-            pVirDev->SetMapMode( MapUnit::Map100thMM );
+            pVirDev->SetMapMode(MapMode(MapUnit::Map100thMM));
             pVirDev->SetFont( aFont );
             pVirDev->EnableRTL();
             if ( aParagraphIter->nFrameDirection == SvxFrameDirection::Horizontal_RL_TB )

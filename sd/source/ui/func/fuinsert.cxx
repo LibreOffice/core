@@ -370,14 +370,14 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     // rectangle with balanced edge ratio
                     aSize.Width()  = 14100;
                     aSize.Height() = 10000;
-                    Size aTmp = OutputDevice::LogicToLogic( aSize, MapUnit::Map100thMM, aUnit );
+                    Size aTmp = OutputDevice::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(aUnit));
                     aSz.Width = aTmp.Width();
                     aSz.Height = aTmp.Height();
                     xObj->setVisualAreaSize( nAspect, aSz );
                 }
                 else
                 {
-                    aSize = OutputDevice::LogicToLogic(aSize, aUnit, MapUnit::Map100thMM);
+                    aSize = OutputDevice::LogicToLogic(aSize, MapMode(aUnit), MapMode(MapUnit::Map100thMM));
                 }
 
                 Point aPos;
@@ -433,7 +433,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 }
 
                 pOleObj->SetLogicRect(aRect);
-                Size aTmp( OutputDevice::LogicToLogic( aRect.GetSize(), MapUnit::Map100thMM, aUnit ) );
+                Size aTmp( OutputDevice::LogicToLogic(aRect.GetSize(), MapMode(MapUnit::Map100thMM), MapMode(aUnit)) );
                 awt::Size aVisualSize;
                 aVisualSize.Width = aTmp.Width();
                 aVisualSize.Height = aTmp.Height();
@@ -546,14 +546,14 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                         // rectangle with balanced edge ratio
                         aSize.Width()  = 14100;
                         aSize.Height() = 10000;
-                        Size aTmp = OutputDevice::LogicToLogic( aSize, MapUnit::Map100thMM, aMapUnit );
+                        Size aTmp = OutputDevice::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(aMapUnit));
                         aSz.Width = aTmp.Width();
                         aSz.Height = aTmp.Height();
                         xObj->setVisualAreaSize( nAspect, aSz );
                     }
                     else
                     {
-                        aSize = OutputDevice::LogicToLogic(aSize, aMapUnit, MapUnit::Map100thMM);
+                        aSize = OutputDevice::LogicToLogic(aSize, MapMode(aMapUnit), MapMode(MapUnit::Map100thMM));
                     }
                 }
 
@@ -589,7 +589,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                                 }
                                 else
                                 {
-                                    Size aTmp = OutputDevice::LogicToLogic( aRect.GetSize(), MapUnit::Map100thMM, aMapUnit );
+                                    Size aTmp = OutputDevice::LogicToLogic(aRect.GetSize(), MapMode(MapUnit::Map100thMM), MapMode(aMapUnit));
                                     awt::Size aSz( aTmp.Width(), aTmp.Height() );
                                     xObj->setVisualAreaSize( nAspect, aSz );
                                 }
@@ -649,7 +649,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                             if ( nAspect != embed::Aspects::MSOLE_ICON )
                             {
-                                Size aTmp = OutputDevice::LogicToLogic( aRect.GetSize(), MapUnit::Map100thMM, aMapUnit );
+                                Size aTmp = OutputDevice::LogicToLogic(aRect.GetSize(), MapMode(MapUnit::Map100thMM), MapMode(aMapUnit));
                                 awt::Size aSz( aTmp.Width(), aTmp.Height() );
                                 xObj->setVisualAreaSize( nAspect, aSz );
                             }
@@ -737,9 +737,9 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
             if( aPrefSize.Width() && aPrefSize.Height() )
             {
                 if( mpWindow )
-                    aSize = mpWindow->PixelToLogic( aPrefSize, MapUnit::Map100thMM );
+                    aSize = mpWindow->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
                 else
-                    aSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MapUnit::Map100thMM );
+                    aSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
             }
             else
                 aSize = Size( 5000, 5000 );
@@ -823,9 +823,9 @@ void FuInsert3DModel::DoExecute( SfxRequest& )
 
         Size aSize(480,360);
         if( mpWindow )
-            aSize = mpWindow->PixelToLogic( aSize, MapUnit::Map100thMM );
+            aSize = mpWindow->PixelToLogic(aSize, MapMode(MapUnit::Map100thMM));
         else
-            aSize = Application::GetDefaultDevice()->PixelToLogic( aSize, MapUnit::Map100thMM );
+            aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, MapMode(MapUnit::Map100thMM));
 
         if( mpWindow )
         {

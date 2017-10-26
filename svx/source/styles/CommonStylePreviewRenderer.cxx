@@ -148,7 +148,7 @@ bool CommonStylePreviewRenderer::recalculate()
     {
         const SvxFontHeightItem* pFontHeightItem = static_cast<const SvxFontHeightItem*>(pItem);
         Size aFontSize(0, pFontHeightItem->GetHeight());
-        maPixelSize = mrOutputDev.LogicToPixel(aFontSize, mrShell.GetMapUnit());
+        maPixelSize = mrOutputDev.LogicToPixel(aFontSize, MapMode(mrShell.GetMapUnit()));
         pFont->SetFontSize(maPixelSize);
 
         vcl::Font aOldFont(mrOutputDev.GetFont());

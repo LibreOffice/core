@@ -190,7 +190,7 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
                 aFont.SetFontSize( Size( 0, nFontEM ) );
                 aFont.SetAlignment( ALIGN_BASELINE );
 
-                pVDev->SetMapMode( MapUnit::Map100thMM );
+                pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
                 pVDev->SetFont( aFont );
 
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", aCurIdStr += OUString::number( ++mnCurFontId ) );

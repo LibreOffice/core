@@ -34,7 +34,7 @@ ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
         bOwner = false;
 
         aOldMapMode = pDevice->GetMapMode();
-        pDevice->SetMapMode( MapUnit::MapPixel );       // GetNeededSize needs pixel MapMode
+        pDevice->SetMapMode(MapMode(MapUnit::MapPixel)); // GetNeededSize needs pixel MapMode
         // printer has right DigitLanguage already
     }
     else
@@ -44,7 +44,7 @@ ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
         bOwner = true;
     }
 
-    Point aLogic = pDevice->LogicToPixel( Point(1000,1000), MapUnit::MapTwip );
+    Point aLogic = pDevice->LogicToPixel(Point(1000,1000), MapMode(MapUnit::MapTwip));
     nPPTX = aLogic.X() / 1000.0;
     nPPTY = aLogic.Y() / 1000.0;
 

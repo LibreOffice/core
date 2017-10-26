@@ -62,7 +62,7 @@ namespace abp
         ,m_aNewDataSource(_rxORB)
         ,m_eNewDataSourceType( AST_INVALID )
     {
-        SetPageSizePixel(LogicToPixel(Size(WINDOW_SIZE_X, WINDOW_SIZE_Y), MapUnit::MapAppFont));
+        SetPageSizePixel(LogicToPixel(Size(WINDOW_SIZE_X, WINDOW_SIZE_Y), MapMode(MapUnit::MapAppFont)));
 
         declarePath( PATH_COMPLETE,
             {STATE_SELECT_ABTYPE,

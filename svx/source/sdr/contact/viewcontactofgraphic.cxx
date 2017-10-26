@@ -109,11 +109,11 @@ namespace sdr
 
             if(MapUnit::MapPixel == GetGrafObject().GetGrafPrefMapMode().GetMapUnit())
             {
-                aPrefSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapUnit::Map100thMM);
+                aPrefSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
             }
             else
             {
-                aPrefSize = OutputDevice::LogicToLogic(aPrefSize, GetGrafObject().GetGrafPrefMapMode(), MapUnit::Map100thMM);
+                aPrefSize = OutputDevice::LogicToLogic(aPrefSize, GetGrafObject().GetGrafPrefMapMode(), MapMode(MapUnit::Map100thMM));
             }
 
             // decompose object matrix to get single values
@@ -201,11 +201,11 @@ namespace sdr
 
                 if(MapUnit::MapPixel == aDraftBitmap.GetPrefMapMode().GetMapUnit())
                 {
-                    aPrefSize = Application::GetDefaultDevice()->PixelToLogic(aDraftBitmap.GetSizePixel(), MapUnit::Map100thMM);
+                    aPrefSize = Application::GetDefaultDevice()->PixelToLogic(aDraftBitmap.GetSizePixel(), MapMode(MapUnit::Map100thMM));
                 }
                 else
                 {
-                    aPrefSize = OutputDevice::LogicToLogic(aPrefSize, aDraftBitmap.GetPrefMapMode(), MapUnit::Map100thMM);
+                    aPrefSize = OutputDevice::LogicToLogic(aPrefSize, aDraftBitmap.GetPrefMapMode(), MapMode(MapUnit::Map100thMM));
                 }
 
                 const double fBitmapScaling(2.0);

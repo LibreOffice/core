@@ -385,7 +385,7 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP( vcl::Window* _pParent,
     maCertImage = get<FixedImage>("imgok")->GetImage();
     maCertNotValidatedImage = get<FixedImage>("imgnotok")->GetImage();
 
-    Size aControlSize(LogicToPixel(Size(251, 45), MapUnit::MapAppFont));
+    Size aControlSize(LogicToPixel(Size(251, 45), MapMode(MapUnit::MapAppFont)));
     mpCertPathLB->set_width_request(aControlSize.Width());
     mpCertPathLB->set_height_request(aControlSize.Height());
     mpCertStatusML->set_width_request(aControlSize.Width());

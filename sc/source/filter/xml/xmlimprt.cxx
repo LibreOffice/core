@@ -2024,7 +2024,7 @@ ScEditEngineDefaulter* ScXMLImport::GetEditEngine()
     if (!mpEditEngine)
     {
         mpEditEngine.reset(new ScEditEngineDefaulter(pDoc->GetEnginePool()));
-        mpEditEngine->SetRefMapMode(MapUnit::Map100thMM);
+        mpEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
         mpEditEngine->SetEditTextObjectPool(pDoc->GetEditPool());
         mpEditEngine->SetUpdateMode(false);
         mpEditEngine->EnableUndo(false);

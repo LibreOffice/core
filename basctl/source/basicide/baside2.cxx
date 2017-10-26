@@ -799,7 +799,7 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     aFont.SetTransparent( true );
     aFont.SetFontSize( Size( 0, 360 ) );
     pPrinter->SetFont( aFont );
-    pPrinter->SetMapMode( MapUnit::Map100thMM );
+    pPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
 
     OUString aTitle( CreateQualifiedName() );
 

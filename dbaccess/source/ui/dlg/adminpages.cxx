@@ -279,7 +279,7 @@ namespace dbaui
         aReference.Y() += _rReference.GetSizePixel().Height();
 
         const vcl::Window* pConverter = _rControl.GetParent();
-        Size aOffset = pConverter->LogicToPixel( Size( _nIndentAppFont, ( _eRelation == RelatedControls ? 3 : 6 ) ), MapUnit::MapAppFont );
+        Size aOffset = pConverter->LogicToPixel(Size(_nIndentAppFont, (_eRelation == RelatedControls ? 3 : 6)), MapMode(MapUnit::MapAppFont));
 
         Point aControlPos( aReference.X() + aOffset.Width(), aReference.Y() + aOffset.Height() );
         _rControl.SetPosPixel( aControlPos );

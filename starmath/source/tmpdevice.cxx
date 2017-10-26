@@ -38,7 +38,7 @@ SmTmpDevice::SmTmpDevice(OutputDevice &rTheDev, bool bUseMap100th_mm) :
     if (bUseMap100th_mm  &&  MapUnit::Map100thMM != rOutDev.GetMapMode().GetMapUnit())
     {
         SAL_WARN("starmath", "incorrect MapMode?");
-        rOutDev.SetMapMode( MapUnit::Map100thMM );     //format for 100% always
+        rOutDev.SetMapMode(MapMode(MapUnit::Map100thMM)); // format for 100% always
     }
 }
 

@@ -442,7 +442,7 @@ void OTasksWindow::Resize()
     long nOutputWidth   = aOutputSize.Width();
     long nOutputHeight  = aOutputSize.Height();
 
-    Size aFLSize = LogicToPixel( Size( 2, 6 ), MapUnit::MapAppFont );
+    Size aFLSize = LogicToPixel(Size(2, 6), MapMode(MapUnit::MapAppFont));
     sal_Int32 n6PPT = aFLSize.Height();
     long nHalfOutputWidth = static_cast<long>(nOutputWidth * 0.5);
 
@@ -540,7 +540,7 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,Previe
 
     m_aContainer->Show();
 
-    const long  nFrameWidth = LogicToPixel( Size( 3, 0 ), MapUnit::MapAppFont ).Width();
+    const long  nFrameWidth = LogicToPixel(Size(3, 0), MapMode(MapUnit::MapAppFont)).Width();
     m_aHorzSplitter->SetPosSizePixel( Point(0,50), Size(0,nFrameWidth) );
     // now set the components at the base class
     set(m_aContainer.get(),m_aTasks.get());

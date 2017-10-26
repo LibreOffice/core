@@ -865,7 +865,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
         if ( ( aArgs.get( "WinExtent" ) >>= aWinExtent )&& ( aWinExtent.getLength() == 4 ) )
         {
             tools::Rectangle aVisArea( aWinExtent[0], aWinExtent[1], aWinExtent[2], aWinExtent[3] );
-            aVisArea = OutputDevice::LogicToLogic( aVisArea, MapUnit::Map100thMM, pObjectShell->GetMapUnit() );
+            aVisArea = OutputDevice::LogicToLogic(aVisArea, MapMode(MapUnit::Map100thMM), MapMode(pObjectShell->GetMapUnit()));
             pObjectShell->SetVisArea( aVisArea );
         }
 
@@ -956,7 +956,7 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs()
         // We can store it now to overwrite an old value
         // since it is not from ItemSet
         tools::Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
-        aTmpRect = OutputDevice::LogicToLogic( aTmpRect, m_pData->m_pObjectShell->GetMapUnit(), MapUnit::Map100thMM );
+        aTmpRect = OutputDevice::LogicToLogic(aTmpRect, MapMode(m_pData->m_pObjectShell->GetMapUnit()), MapMode(MapUnit::Map100thMM));
 
         Sequence< sal_Int32 > aRectSeq(4);
         aRectSeq[0] = aTmpRect.Left();
@@ -1892,7 +1892,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
             Size aSize = m_pData->m_pObjectShell->GetVisArea().GetSize();
 
             MapUnit aMapUnit = m_pData->m_pObjectShell->GetMapUnit();
-            aDesc.maSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MapUnit::Map100thMM );
+            aDesc.maSize = OutputDevice::LogicToLogic(aSize, MapMode(aMapUnit), MapMode(MapUnit::Map100thMM));
             aDesc.maDragStartPos = Point();
             aDesc.maDisplayName.clear();
 

@@ -212,7 +212,7 @@ SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
         ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool );
 
         pHdrEngine->EnableUndo( false );
-        pHdrEngine->SetRefMapMode( MapUnit::MapTwip );
+        pHdrEngine->SetRefMapMode(MapMode(MapUnit::MapTwip));
 
         //  default font must be set, independently of document
         //  -> use global pool from module
@@ -936,7 +936,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         if (pDocShell)
             pEditEngine->SetRefDevice(pDocShell->GetRefDevice());
         else
-            pEditEngine->SetRefMapMode( MapUnit::Map100thMM );
+            pEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
         pForwarder = new SvxEditEngineForwarder(*pEditEngine);
     }
 

@@ -432,7 +432,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
     {
         // Bug 56929 - MapMode of 100mm which recalculated when
         // the device is set. Additionally only set if they were really changed.
-        aSetPaperSize = pPrinter->LogicToPixel( aSetPaperSize, MapUnit::Map100thMM );
+        aSetPaperSize = pPrinter->LogicToPixel(aSetPaperSize, MapMode(MapUnit::Map100thMM));
         if( aSetPaperSize != pPrinter->GetPaperSizePixel() )
         {
             pPrinter->SetPaperSizeUser( pPrinter->PixelToLogic( aSetPaperSize ) );

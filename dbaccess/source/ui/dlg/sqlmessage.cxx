@@ -305,11 +305,11 @@ OExceptionChainDialog::OExceptionChainDialog(vcl::Window* pParent, const Excepti
     , m_aExceptions(_rExceptions)
 {
     get(m_pExceptionList, "list");
-    Size aListSize(LogicToPixel(Size(85, 93), MapUnit::MapAppFont));
+    Size aListSize(LogicToPixel(Size(85, 93), MapMode(MapUnit::MapAppFont)));
     m_pExceptionList->set_width_request(aListSize.Width());
     m_pExceptionList->set_height_request(aListSize.Height());
     get(m_pExceptionText, "description");
-    Size aTextSize(LogicToPixel(Size(125 , 93), MapUnit::MapAppFont));
+    Size aTextSize(LogicToPixel(Size(125, 93), MapMode(MapUnit::MapAppFont)));
     m_pExceptionText->set_width_request(aTextSize.Width());
     m_pExceptionText->set_height_request(aTextSize.Height());
 
@@ -400,8 +400,8 @@ namespace
 {
     void lcl_positionInAppFont( const vcl::Window& _rParent, vcl::Window& _rChild, long _nX, long _nY, long Width, long Height )
     {
-        Point aPos = _rParent.LogicToPixel( Point( _nX, _nY ), MapUnit::MapAppFont );
-        Size aSize = _rParent.LogicToPixel( Size( Width, Height ), MapUnit::MapAppFont );
+        Point aPos = _rParent.LogicToPixel(Point(_nX, _nY), MapMode(MapUnit::MapAppFont));
+        Size aSize = _rParent.LogicToPixel(Size(Width, Height), MapMode(MapUnit::MapAppFont));
         _rChild.SetPosSizePixel( aPos, aSize );
     }
 
@@ -514,8 +514,8 @@ void OSQLMessageBox::impl_positionControls()
 
     // adjust dialog size accordingly
     const tools::Rectangle& rBottomTextRect( bHaveSecondaryText ? aSecondaryRect : aPrimaryRect );
-    Size aBorderSize = LogicToPixel( Size( OUTER_MARGIN, OUTER_MARGIN ), MapUnit::MapAppFont );
-    Size aDialogSize( LogicToPixel( Size( DIALOG_WIDTH, 30 ), MapUnit::MapAppFont ) );
+    Size aBorderSize = LogicToPixel(Size(OUTER_MARGIN, OUTER_MARGIN), MapMode(MapUnit::MapAppFont));
+    Size aDialogSize( LogicToPixel(Size(DIALOG_WIDTH, 30), MapMode(MapUnit::MapAppFont)));
     aDialogSize.Height() = rBottomTextRect.Bottom() + aBorderSize.Height();
     aDialogSize.Width() = aPrimaryRect.Right() + aBorderSize.Width();
 

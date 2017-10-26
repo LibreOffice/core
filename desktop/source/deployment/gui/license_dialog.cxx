@@ -202,7 +202,7 @@ LicenseDialogImpl::LicenseDialogImpl(
     m_pArrow2->Show(false);
     get(m_pLicense, "textview");
 
-    Size aSize(m_pLicense->LogicToPixel(Size(290, 170), MapUnit::MapAppFont));
+    Size aSize(m_pLicense->LogicToPixel(Size(290, 170), MapMode(MapUnit::MapAppFont)));
     m_pLicense->set_width_request(aSize.Width());
     m_pLicense->set_height_request(aSize.Height());
 

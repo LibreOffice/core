@@ -890,7 +890,7 @@ void FillControl::Resize()
 void FillControl::SetOptimalSize()
 {
     const Size aLogicalAttrSize(50,0);
-    Size aSize(LogicToPixel(aLogicalAttrSize,MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(aLogicalAttrSize, MapMode(MapUnit::MapAppFont)));
 
     Point aAttrPnt = mpLbFillAttr->GetPosPixel();
 

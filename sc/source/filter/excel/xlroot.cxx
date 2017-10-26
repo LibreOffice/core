@@ -358,7 +358,7 @@ ScEditEngineDefaulter& XclRoot::GetEditEngine() const
     {
         mrData.mxEditEngine.reset( new ScEditEngineDefaulter( GetDoc().GetEnginePool() ) );
         ScEditEngineDefaulter& rEE = *mrData.mxEditEngine;
-        rEE.SetRefMapMode( MapUnit::Map100thMM );
+        rEE.SetRefMapMode(MapMode(MapUnit::Map100thMM));
         rEE.SetEditTextObjectPool( GetDoc().GetEditPool() );
         rEE.SetUpdateMode( false );
         rEE.EnableUndo( false );
@@ -373,7 +373,7 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
     {
         mrData.mxHFEditEngine.reset( new ScHeaderEditEngine( EditEngine::CreatePool() ) );
         ScHeaderEditEngine& rEE = *mrData.mxHFEditEngine;
-        rEE.SetRefMapMode( MapUnit::MapTwip );  // headers/footers use twips as default metric
+        rEE.SetRefMapMode(MapMode(MapUnit::MapTwip)); // headers/footers use twips as default metric
         rEE.SetUpdateMode( false );
         rEE.EnableUndo( false );
         rEE.SetControlWord( rEE.GetControlWord() & ~EEControlBits::ALLOWBIGOBJS );
@@ -400,7 +400,7 @@ EditEngine& XclRoot::GetDrawEditEngine() const
     {
         mrData.mxDrawEditEng.reset( new EditEngine( &GetDoc().GetDrawLayer()->GetItemPool() ) );
         EditEngine& rEE = *mrData.mxDrawEditEng;
-        rEE.SetRefMapMode( MapUnit::Map100thMM );
+        rEE.SetRefMapMode(MapMode(MapUnit::Map100thMM));
         rEE.SetUpdateMode( false );
         rEE.EnableUndo( false );
         rEE.SetControlWord( rEE.GetControlWord() & ~EEControlBits::ALLOWBIGOBJS );

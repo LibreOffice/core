@@ -1554,7 +1554,7 @@ WatchWindow::WatchWindow (Layout* pParent)
 {
     aXEdit->SetAccessibleName(IDEResId(RID_STR_WATCHNAME));
     aXEdit->SetHelpId(HID_BASICIDE_WATCHWINDOW_EDIT);
-    aXEdit->SetSizePixel(aXEdit->LogicToPixel(Size(80, 12), MapUnit::MapAppFont));
+    aXEdit->SetSizePixel(aXEdit->LogicToPixel(Size(80, 12), MapMode(MapUnit::MapAppFont)));
     aTreeListBox->SetAccessibleName(IDEResId(RID_STR_WATCHNAME));
 
     long nTextLen = GetTextWidth( aWatchStr ) + DWBORDER + 3;

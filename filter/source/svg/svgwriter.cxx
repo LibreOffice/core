@@ -1731,7 +1731,7 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
 {
     mpVDev = VclPtr<VirtualDevice>::Create();
     mpVDev->EnableOutput( false );
-    maTargetMapMode = MapUnit::Map100thMM;
+    maTargetMapMode = MapMode(MapUnit::Map100thMM);
     maTextWriter.setVirtualDevice( mpVDev, maTargetMapMode );
 }
 
@@ -3741,11 +3741,11 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
 
     mpVDev->Push();
 
-    Size aSize( OutputDevice::LogicToLogic( rSize100thmm, MapUnit::Map100thMM, aMapMode ) );
+    Size aSize( OutputDevice::LogicToLogic(rSize100thmm, MapMode(MapUnit::Map100thMM), aMapMode) );
     aMapMode.SetScaleX( aFractionX *= Fraction( aSize.Width(), aPrefSize.Width() ) );
     aMapMode.SetScaleY( aFractionY *= Fraction( aSize.Height(), aPrefSize.Height() ) );
 
-    Point aOffset( OutputDevice::LogicToLogic( rPos100thmm, MapUnit::Map100thMM, aMapMode ) );
+    Point aOffset( OutputDevice::LogicToLogic(rPos100thmm, MapMode(MapUnit::Map100thMM), aMapMode ) );
     aMapMode.SetOrigin( aOffset += aMapMode.GetOrigin() );
 
     mpVDev->SetMapMode( aMapMode );

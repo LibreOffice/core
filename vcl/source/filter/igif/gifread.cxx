@@ -888,7 +888,7 @@ ReadState GIFReader::ReadGIF( Graphic& rGraphic )
         if( nLogWidth100 && nLogHeight100 )
         {
             rGraphic.SetPrefSize( Size( nLogWidth100, nLogHeight100 ) );
-            rGraphic.SetPrefMapMode( MapUnit::Map100thMM );
+            rGraphic.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
         }
     }
     else

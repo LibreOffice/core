@@ -1918,13 +1918,13 @@ void FmFilterNavigatorWin::Resize()
 {
     SfxDockingWindow::Resize();
 
-    Size aLogOutputSize = PixelToLogic( GetOutputSizePixel(), MapUnit::MapAppFont );
+    Size aLogOutputSize = PixelToLogic(GetOutputSizePixel(), MapMode(MapUnit::MapAppFont));
     Size aLogExplSize = aLogOutputSize;
     aLogExplSize.Width() -= 6;
     aLogExplSize.Height() -= 6;
 
-    Point aExplPos = LogicToPixel( Point(3,3), MapUnit::MapAppFont );
-    Size aExplSize = LogicToPixel( aLogExplSize, MapUnit::MapAppFont );
+    Point aExplPos = LogicToPixel(Point(3,3), MapMode(MapUnit::MapAppFont));
+    Size aExplSize = LogicToPixel(aLogExplSize, MapMode(MapUnit::MapAppFont));
 
     m_pNavigator->SetPosSizePixel( aExplPos, aExplSize );
 }

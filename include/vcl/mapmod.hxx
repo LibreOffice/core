@@ -41,7 +41,7 @@ public:
 
     MapMode();
     MapMode( const MapMode& rMapMode );
-    MapMode( MapUnit eUnit );
+    explicit MapMode( MapUnit eUnit );
     MapMode( MapUnit eUnit, const Point& rLogicOrg,
         const Fraction& rScaleX, const Fraction& rScaleY );
     ~MapMode();

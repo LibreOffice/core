@@ -156,7 +156,7 @@ VCL_BUILDER_FACTORY_CONSTRUCTOR(ScCondFormatList, 0)
 
 Size ScCondFormatList::GetOptimalSize() const
 {
-    return LogicToPixel(Size(300, 185), MapUnit::MapAppFont);
+    return LogicToPixel(Size(300, 185), MapMode(MapUnit::MapAppFont));
 }
 
 void ScCondFormatList::Resize()

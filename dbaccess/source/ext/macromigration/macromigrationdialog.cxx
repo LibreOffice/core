@@ -140,7 +140,7 @@ namespace dbmm
 
         declarePath( PATH_DEFAULT, {STATE_CLOSE_SUB_DOCS, STATE_BACKUP_DBDOC, STATE_MIGRATE, STATE_SUMMARY} );
 
-        SetPageSizePixel( LogicToPixel( ::Size( TAB_PAGE_WIDTH, TAB_PAGE_HEIGHT ), MapUnit::MapAppFont ) );
+        SetPageSizePixel(LogicToPixel(::Size(TAB_PAGE_WIDTH, TAB_PAGE_HEIGHT), MapMode(MapUnit::MapAppFont)));
         SetRoadmapInteractive( true );
         enableAutomaticNextButtonState();
         defaultButton( WizardButtonFlags::NEXT );

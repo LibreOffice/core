@@ -244,29 +244,29 @@ void SeriesHeader::SetPos( const Point & rPos )
 
     // chart type symbol
     Size aSize( nSymbolHeight, nSymbolHeight );
-    aSize = m_pDevice->LogicToPixel( aSize, MapUnit::MapAppFont );
+    aSize = m_pDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
     m_spSymbol->set_width_request(aSize.Width());
     m_spSymbol->set_height_request(aSize.Height());
 
     // series name edit field
     aSize.setWidth(nSymbolDistance);
-    aSize = m_pDevice->LogicToPixel( aSize, MapUnit::MapAppFont );
+    aSize = m_pDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
     m_spSeriesName->set_margin_left(aSize.Width() + 2);
     aSize.setWidth( m_nWidth - nSymbolHeight - nSymbolDistance );
     sal_Int32 nHeight = 12;
     aSize.setHeight( nHeight );
-    aSize = m_pDevice->LogicToPixel( aSize, MapUnit::MapAppFont );
+    aSize = m_pDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
     m_spSeriesName->set_width_request(aSize.Width());
     m_spSeriesName->set_height_request(aSize.Height());
 
     // color bar
     aSize.setWidth(1);
-    aSize = m_pDevice->LogicToPixel( aSize, MapUnit::MapAppFont );
+    aSize = m_pDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
     m_spColorBar->set_margin_left(aSize.Width() + 2);
     nHeight = 3;
     aSize.setWidth( m_nWidth - 1 );
     aSize.setHeight( nHeight );
-    aSize = m_pDevice->LogicToPixel( aSize, MapUnit::MapAppFont );
+    aSize = m_pDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
     m_spColorBar->set_width_request(aSize.Width());
     m_spColorBar->set_height_request(aSize.Height());
 }
@@ -279,7 +279,7 @@ void SeriesHeader::SetWidth( sal_Int32 nWidth )
 
 void SeriesHeader::SetPixelWidth( sal_Int32 nWidth )
 {
-    SetWidth( m_pDevice->PixelToLogic( Size( nWidth, 0 ), MapUnit::MapAppFont ).getWidth());
+    SetWidth( m_pDevice->PixelToLogic(Size(nWidth, 0), MapMode(MapUnit::MapAppFont)).getWidth());
 }
 
 void SeriesHeader::SetChartType(
@@ -578,7 +578,7 @@ void DataBrowser::RenewTable()
     OUString aDefaultSeriesName(SchResId(STR_COLUMN_LABEL));
     replaceParamterInString( aDefaultSeriesName, "%COLUMNNUMBER", OUString::number( 24 ) );
     sal_Int32 nColumnWidth = GetDataWindow().GetTextWidth( aDefaultSeriesName )
-        + GetDataWindow().LogicToPixel( Point( 4 + impl::SeriesHeader::GetRelativeAppFontXPosForNameField(), 0 ), MapUnit::MapAppFont ).X();
+        + GetDataWindow().LogicToPixel(Point(4 + impl::SeriesHeader::GetRelativeAppFontXPosForNameField(), 0), MapMode(MapUnit::MapAppFont)).X();
     sal_Int32 nColumnCount = m_apDataBrowserModel->getColumnCount();
     // nRowCount is a member of a base class
     sal_Int32 nRowCountLocal = m_apDataBrowserModel->getMaxRowCount();

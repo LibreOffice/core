@@ -620,7 +620,7 @@ bool SvxStyleBox_Impl::AdjustFontForItemHeight(OutputDevice* pDevice, tools::Rec
 
 void SvxStyleBox_Impl::SetOptimalSize()
 {
-    Size aSize(LogicToPixel(aLogicalSize, MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(aLogicalSize, MapMode(MapUnit::MapAppFont)));
     set_width_request(aSize.Width());
     set_height_request(aSize.Height());
     SetSizePixel(aSize);
@@ -683,7 +683,7 @@ void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Windo
             if ( pFontItem && pFontHeightItem )
             {
                 Size aFontSize( 0, pFontHeightItem->GetHeight() );
-                Size aPixelSize(rRenderContext.LogicToPixel(aFontSize, pShell->GetMapUnit()));
+                Size aPixelSize(rRenderContext.LogicToPixel(aFontSize, MapMode(pShell->GetMapUnit())));
 
                 // setup the font properties
                 SvxFont aFont;
@@ -1098,7 +1098,7 @@ bool SvxFontNameBox_Impl::EventNotify( NotifyEvent& rNEvt )
 
 void SvxFontNameBox_Impl::SetOptimalSize()
 {
-    Size aSize(LogicToPixel(aLogicalSize, MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(aLogicalSize, MapMode(MapUnit::MapAppFont)));
     set_width_request(aSize.Width());
     set_height_request(aSize.Height());
     SetSizePixel(aSize);

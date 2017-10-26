@@ -919,7 +919,7 @@ namespace emfio
     MtfTools::~MtfTools()
     {
         mpGDIMetaFile->AddAction( new MetaPopAction() );
-        mpGDIMetaFile->SetPrefMapMode( MapUnit::Map100thMM );
+        mpGDIMetaFile->SetPrefMapMode(MapMode(MapUnit::Map100thMM));
         if ( mrclFrame.IsEmpty() )
             mpGDIMetaFile->SetPrefSize( Size( mnDevWidth, mnDevHeight ) );
         else
@@ -1607,7 +1607,7 @@ namespace emfio
                     SolarMutexGuard aGuard;
                     ScopedVclPtrInstance< VirtualDevice > pVDev;
                     pDX = new long[ rText.getLength() ];
-                    pVDev->SetMapMode( MapUnit::Map100thMM );
+                    pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
                     pVDev->SetFont( maLatestFont );
                     pVDev->GetTextArray( rText, pDX, 0, rText.getLength());
                 }

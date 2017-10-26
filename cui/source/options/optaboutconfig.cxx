@@ -137,7 +137,7 @@ void CuiCustomMultilineEdit::KeyInput( const KeyEvent& rKeyEvent )
 
 Size CuiCustomMultilineEdit::GetOptimalSize() const
 {
-    return LogicToPixel(Size(150, GetTextHeight()), MapUnit::MapAppFont);
+    return LogicToPixel(Size(150, GetTextHeight()), MapMode(MapUnit::MapAppFont));
 }
 
 CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxItemSet& rItemSet*/ ) :
@@ -150,7 +150,7 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxI
     m_vectorOfModified(),
     m_pPrefBox( VclPtr<SvSimpleTable>::Create(*m_pPrefCtrl, WB_SCROLL | WB_HSCROLL | WB_VSCROLL ) )
 {
-    Size aControlSize(LogicToPixel(Size(385, 230), MapUnit::MapAppFont));
+    Size aControlSize(LogicToPixel(Size(385, 230), MapMode(MapUnit::MapAppFont)));
     m_pPrefCtrl->set_width_request(aControlSize.Width());
     m_pPrefCtrl->set_height_request(aControlSize.Height());
 

@@ -473,7 +473,8 @@ void ScDrawView::SetMarkedOriginalSize()
                         aSz = xObj->getVisualAreaSize( static_cast<SdrOle2Obj*>(pObj)->GetAspect() );
                         aOriginalSize = OutputDevice::LogicToLogic(
                                             Size( aSz.Width, aSz.Height ),
-                                            aUnit, MapUnit::Map100thMM );
+                                            MapMode(aUnit),
+                                            MapMode(MapUnit::Map100thMM));
                         bDo = true;
                     } catch( embed::NoVisualAreaSizeException& )
                     {

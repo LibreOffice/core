@@ -245,7 +245,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
             }
 
             aVisArea.SetSize( Size( aSz.Width, aSz.Height ) );
-            aVisArea = OutputDevice::LogicToLogic( aVisArea, aObjMapUnit, aContainerMapUnit );
+            aVisArea = OutputDevice::LogicToLogic(aVisArea, MapMode(aObjMapUnit), MapMode(aContainerMapUnit));
             Size aScaledSize( static_cast< long >( m_aScaleWidth * Fraction( aVisArea.GetWidth() ) ),
                                 static_cast< long >( m_aScaleHeight * Fraction( aVisArea.GetHeight() ) ) );
             tools::Rectangle aLogicRect( mpObj->GetLogicRect() );
@@ -255,7 +255,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
                 Application::GetDefaultDevice()->LogicToPixel(
                     Size( aLogicRect.GetWidth() - aScaledSize.Width(),
                           aLogicRect.GetHeight() - aScaledSize.Height() ),
-                    aContainerMapUnit );
+                    MapMode(aContainerMapUnit));
             if( aPixelDiff.Width() || aPixelDiff.Height() )
             {
                 mpObj->SetLogicRect( tools::Rectangle( aLogicRect.TopLeft(), aScaledSize ) );
@@ -437,7 +437,7 @@ awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getPlacement()
     if ( xParentVis.is() )
         aContainerMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xParentVis->getMapUnit( mpObj->GetAspect() ) );
 
-    aLogicRect = Application::GetDefaultDevice()->LogicToPixel(aLogicRect,aContainerMapUnit);
+    aLogicRect = Application::GetDefaultDevice()->LogicToPixel(aLogicRect, MapMode(aContainerMapUnit));
     return AWTRectangle( aLogicRect );
 }
 
@@ -476,7 +476,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
     if ( xParentVis.is() )
         aContainerMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xParentVis->getMapUnit( mpObj->GetAspect() ) );
 
-    tools::Rectangle aNewLogicRect = Application::GetDefaultDevice()->PixelToLogic(aNewPixelRect,aContainerMapUnit);
+    tools::Rectangle aNewLogicRect = Application::GetDefaultDevice()->PixelToLogic(aNewPixelRect, MapMode(aContainerMapUnit));
     tools::Rectangle aLogicRect = impl_getScaledRect_nothrow();
 
     if ( aNewLogicRect != aLogicRect )
@@ -496,7 +496,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
             Application::GetDefaultDevice()->LogicToPixel(
                 Size( aLogicRect.GetWidth() - aNewObjSize.Width(),
                       aLogicRect.GetHeight() - aNewObjSize.Height() ),
-                aContainerMapUnit );
+                MapMode(aContainerMapUnit));
         if( aPixelDiff.Width() || aPixelDiff.Height() )
         {
             mpObj->SetLogicRect( tools::Rectangle( aLogicRect.TopLeft(), aNewObjSize ) );
@@ -1531,7 +1531,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                 Size aVisSize( (long)( Fraction( maRect.GetWidth() ) / aScaleWidth ),
                                 (long)( Fraction( maRect.GetHeight() ) / aScaleHeight ) );
 
-                aVisSize = OutputDevice::LogicToLogic( aVisSize, pModel->GetScaleUnit(), aMapUnit);
+                aVisSize = OutputDevice::LogicToLogic(aVisSize, MapMode(pModel->GetScaleUnit()), MapMode(aMapUnit));
                 awt::Size aSz;
                 aSz.Width = aVisSize.Width();
                 aSz.Height = aVisSize.Height();
@@ -1552,7 +1552,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                     // server changed VisArea to its liking and the VisArea is different than the suggested one
                     // store the new value as given by the object
                     MapUnit aNewMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpImpl->mxObjRef->getMapUnit( GetAspect() ) );
-                    maRect.SetSize(OutputDevice::LogicToLogic( aAcceptedVisArea.GetSize(), aNewMapUnit, pModel->GetScaleUnit()));
+                    maRect.SetSize(OutputDevice::LogicToLogic(aAcceptedVisArea.GetSize(), MapMode(aNewMapUnit), MapMode(pModel->GetScaleUnit())));
                 }
 
                 // make the new object area known to the client
@@ -1601,8 +1601,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                 MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpImpl->mxObjRef->getMapUnit( GetAspect() ) );
                 Point aTL( maRect.TopLeft() );
                 Point aBR( maRect.BottomRight() );
-                Point aTL2( OutputDevice::LogicToLogic( aTL, pModel->GetScaleUnit(), aMapUnit) );
-                Point aBR2( OutputDevice::LogicToLogic( aBR, pModel->GetScaleUnit(), aMapUnit) );
+                Point aTL2(OutputDevice::LogicToLogic(aTL, MapMode(pModel->GetScaleUnit()), MapMode(aMapUnit)));
+                Point aBR2(OutputDevice::LogicToLogic(aBR, MapMode(pModel->GetScaleUnit()), MapMode(aMapUnit)));
                 tools::Rectangle aNewRect( aTL2, aBR2 );
                 xVisualObject->setVisualAreaSize( GetAspect(), awt::Size( aNewRect.GetWidth(), aNewRect.GetHeight() ) );
             }

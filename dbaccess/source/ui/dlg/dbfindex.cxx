@@ -50,7 +50,7 @@ ODbaseIndexDialog::ODbaseIndexDialog(vcl::Window * pParent, const OUString& aDat
     get(m_pIndexes, "frame");
     get(m_pLB_TableIndexes, "tableindex");
     get(m_pLB_FreeIndexes, "freeindex");
-    Size aSize(LogicToPixel(Size(76, 98), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(76, 98), MapMode(MapUnit::MapAppFont)));
     m_pLB_TableIndexes->set_height_request(aSize.Height());
     m_pLB_TableIndexes->set_width_request(aSize.Width());
     m_pLB_FreeIndexes->set_height_request(aSize.Height());

@@ -429,7 +429,7 @@ SwMailBodyDialog::SwMailBodyDialog(vcl::Window* pParent) :
     get(m_pBodyFT, "bodyft");
     get(m_pBodyMLE, "bodymle");
     m_pBodyMLE->SetStyle(m_pBodyMLE->GetStyle() | WB_HSCROLL | WB_VSCROLL | WB_IGNORETAB);
-    Size aSize(LogicToPixel(Size(180, 50), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(180, 50), MapMode(MapUnit::MapAppFont)));
     m_pBodyMLE->set_width_request(aSize.Width());
     m_pBodyMLE->set_height_request(aSize.Height());
     get(m_pOK, "ok");

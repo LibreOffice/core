@@ -104,7 +104,7 @@ void SvRTLInputBox::PositionDialog(long nXTwips, long nYTwips, const Size& rDlgS
     if( nXTwips != -1 && nYTwips != -1 )
     {
         Point aDlgPosApp( nXTwips, nYTwips );
-        SetPosPixel( LogicToPixel( aDlgPosApp, MapUnit::MapTwip ) );
+        SetPosPixel(LogicToPixel(aDlgPosApp, MapMode(MapUnit::MapTwip)));
     }
 }
 

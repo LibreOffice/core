@@ -279,7 +279,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
 
     maPageVDev->Erase();
     maPageVDev->Push();
-    maPageVDev->SetMapMode( MapUnit::Map100thMM );
+    maPageVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
     DrawModeFlags nOldDrawMode = maPageVDev->GetDrawMode();
     if( mbGreyscale )
         maPageVDev->SetDrawMode( maPageVDev->GetDrawMode() |
@@ -296,8 +296,8 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
 
     maPageVDev->Pop();
 
-    SetMapMode( MapUnit::MapPixel );
-    maPageVDev->SetMapMode( MapUnit::MapPixel );
+    SetMapMode(MapMode(MapUnit::MapPixel));
+    maPageVDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
     maPreviewBitmap = maPageVDev->GetBitmap(Point(0, 0), aVDevSize);
 
@@ -322,7 +322,7 @@ void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, 
 {
     Window::Paint(rRenderContext, i_rRect);
 
-    rRenderContext.SetMapMode(MapUnit::MapPixel);
+    rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
     rRenderContext.SetTextColor(rRenderContext.GetSettings().GetStyleSettings().GetFieldTextColor());
 
     int nPages = mnRows * mnColumns;

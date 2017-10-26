@@ -81,7 +81,7 @@ SvxPopupWindowListBox::SvxPopupWindowListBox(sal_uInt16 nSlotId, const OUString&
     WinBits nBits(m_pListBox->GetStyle());
     nBits &= ~WB_SIMPLEMODE;
     m_pListBox->SetStyle(nBits);
-    Size aSize(LogicToPixel(Size(100, 85), MapUnit::MapAppFont));
+    Size aSize(LogicToPixel(Size(100, 85), MapMode(MapUnit::MapAppFont)));
     m_pListBox->set_width_request(aSize.Width());
     m_pListBox->set_height_request(aSize.Height());
     m_pListBox->EnableMultiSelection( true, true );

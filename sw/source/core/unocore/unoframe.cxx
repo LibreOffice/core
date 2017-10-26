@@ -2948,11 +2948,11 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     if ( !aSz.Width() || !aSz.Height() )
                     {
                         aSz.Width() = aSz.Height() = 5000;
-                        aSz = OutputDevice::LogicToLogic
-                                                ( aSz, MapMode( MapUnit::Map100thMM ), aRefMap );
+                        aSz = OutputDevice::LogicToLogic(aSz,
+                                MapMode(MapUnit::Map100thMM), MapMode(aRefMap));
                     }
                     MapMode aMyMap( MapUnit::MapTwip );
-                    aSz = OutputDevice::LogicToLogic( aSz, aRefMap, aMyMap );
+                    aSz = OutputDevice::LogicToLogic(aSz, MapMode(aRefMap), aMyMap);
                     SwFormatFrameSize aFrameSz;
                     aFrameSz.SetSize(aSz);
                     aFrameSet.Put(aFrameSz);

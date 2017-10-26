@@ -130,7 +130,7 @@ ScHFEditPage::ScHFEditPage( vcl::Window*             pParent,
     m_pWndRight->SetFont( aPatAttr );
 
     // Set size request for all 3 widgets
-    Size aSize = LogicToPixel(Size(80, 120), MapUnit::MapAppFont);
+    Size aSize = LogicToPixel(Size(80, 120), MapMode(MapUnit::MapAppFont));
     VclPtr<ScEditWindow> aEditWindows[] = {m_pWndLeft, m_pWndCenter, m_pWndRight};
 
     for (auto &pEditWindow : aEditWindows)

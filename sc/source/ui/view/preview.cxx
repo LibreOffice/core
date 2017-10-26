@@ -815,7 +815,7 @@ sal_uInt16 ScPreview::GetOptimalZoom(bool bWidthOnly)
     //  desired margin is 0.25cm in default MapMode (like Writer),
     //  but some additional margin is introduced by integer scale values
     //  -> add only 0.10cm, so there is some margin in all cases.
-    Size aMarginSize( LogicToPixel( Size( 100, 100 ), MapUnit::Map100thMM ) );
+    Size aMarginSize( LogicToPixel(Size(100, 100), MapMode(MapUnit::Map100thMM)) );
     aWinSize.Width()  -= 2 * aMarginSize.Width();
     aWinSize.Height() -= 2 * aMarginSize.Height();
 
@@ -851,7 +851,8 @@ void ScPreview::SetXOffset( long nX )
         aOffset.X() = nX;
         if (nDif && !bInSetZoom)
         {
-            MapMode aOldMode = GetMapMode(); SetMapMode(MapUnit::MapPixel);
+            MapMode aOldMode = GetMapMode();
+            SetMapMode(MapMode(MapUnit::MapPixel));
             Scroll( nDif, 0 );
             SetMapMode(aOldMode);
         }
@@ -877,7 +878,8 @@ void ScPreview::SetYOffset( long nY )
         aOffset.Y() = nY;
         if (nDif && !bInSetZoom)
         {
-            MapMode aOldMode = GetMapMode(); SetMapMode(MapUnit::MapPixel);
+            MapMode aOldMode = GetMapMode();
+            SetMapMode(MapMode(MapUnit::MapPixel));
             Scroll( 0, nDif );
             SetMapMode(aOldMode);
         }

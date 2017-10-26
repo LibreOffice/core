@@ -42,7 +42,7 @@ SvxXConnectionPreview::SvxXConnectionPreview( vcl::Window* pParent, WinBits nSty
     , pObjList(nullptr)
     , pView(nullptr)
 {
-    SetMapMode( MapUnit::Map100thMM );
+    SetMapMode(MapMode(MapUnit::Map100thMM));
     SetStyles();
 }
 
@@ -78,7 +78,7 @@ void SvxXConnectionPreview::AdaptSize()
     // Adapt size
     if( pObjList )
     {
-        SetMapMode( MapUnit::Map100thMM );
+        SetMapMode(MapMode(MapUnit::Map100thMM));
 
         OutputDevice* pOD = pView->GetFirstOutputDevice(); // GetWin( 0 );
         tools::Rectangle aRect = pObjList->GetAllObjBoundRect();

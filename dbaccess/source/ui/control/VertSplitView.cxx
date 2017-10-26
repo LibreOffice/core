@@ -155,7 +155,7 @@ void OSplitterView::setSplitter(Splitter* _pSplitter)
     m_pSplitter = _pSplitter;
     if ( m_pSplitter )
     {
-        m_pSplitter->SetSplitPosPixel( LogicToPixel( Size( SPLITTER_WIDTH, 0 ), MapUnit::MapAppFont ).Width() );
+        m_pSplitter->SetSplitPosPixel(LogicToPixel(Size(SPLITTER_WIDTH, 0), MapMode(MapUnit::MapAppFont)).Width());
         m_pSplitter->SetSplitHdl( LINK(this, OSplitterView, SplitHdl) );
         m_pSplitter->Show();
         LINK( this, OSplitterView, SplitHdl ).Call(m_pSplitter);

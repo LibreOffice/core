@@ -1438,7 +1438,9 @@ Size Outliner::ImplGetBulletSize( sal_Int32 nPara )
         }
         else
         {
-            pPara->aBulSize = OutputDevice::LogicToLogic( pFmt->GetGraphicSize(), MapUnit::Map100thMM, pEditEngine->GetRefDevice()->GetMapMode() );
+            pPara->aBulSize = OutputDevice::LogicToLogic(pFmt->GetGraphicSize(),
+                    MapMode(MapUnit::Map100thMM),
+                    pEditEngine->GetRefDevice()->GetMapMode());
         }
     }
 

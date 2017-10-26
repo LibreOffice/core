@@ -795,7 +795,7 @@ IMPL_LINK_NOARG( OFieldExpressionControl, DelayedDelete, void*, void )
 
 Size OFieldExpressionControl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(106, 75), MapUnit::MapAppFont);
+    return LogicToPixel(Size(106, 75), MapMode(MapUnit::MapAppFont));
 }
 
 // class OGroupsSortingDialog

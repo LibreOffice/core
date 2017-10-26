@@ -999,7 +999,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSvtFileView(VclPtr<vcl::Window
 
 Size SvtFileView::GetOptimalSize() const
 {
-    return LogicToPixel(Size(208, 50), MapUnit::MapAppFont);
+    return LogicToPixel(Size(208, 50), MapMode(MapUnit::MapAppFont));
 }
 
 void SvtFileView::SetViewMode( FileViewMode eMode )

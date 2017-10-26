@@ -60,7 +60,7 @@ SvxLineBox::SvxLineBox( vcl::Window* pParent, const Reference< XFrame >& rFrame 
     mpSh        ( nullptr ),
     mxFrame     ( rFrame )
 {
-    SetSizePixel( LogicToPixel( aLogicalSize, MapUnit::MapAppFont ));
+    SetSizePixel(LogicToPixel(aLogicalSize, MapMode(MapUnit::MapAppFont)));
     Show();
 
     aDelayTimer.SetTimeout( DELAY_TIMEOUT );
@@ -221,7 +221,7 @@ void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        SetSizePixel(LogicToPixel(aLogicalSize, MapUnit::MapAppFont));
+        SetSizePixel(LogicToPixel(aLogicalSize, MapMode(MapUnit::MapAppFont)));
     }
 
     LineLB::DataChanged( rDCEvt );
@@ -250,7 +250,7 @@ SvxMetricField::SvxMetricField(
 {
     Size aSize( CalcMinimumSize() );
     SetSizePixel( aSize );
-    aLogicalSize = PixelToLogic(aSize, MapUnit::MapAppFont);
+    aLogicalSize = PixelToLogic(aSize, MapMode(MapUnit::MapAppFont));
     SetUnit( FUNIT_MM );
     SetDecimalDigits( 2 );
     SetMax( 5000 );
@@ -374,7 +374,7 @@ void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        SetSizePixel(LogicToPixel(aLogicalSize, MapUnit::MapAppFont));
+        SetSizePixel(LogicToPixel(aLogicalSize, MapMode(MapUnit::MapAppFont)));
     }
 
     MetricField::DataChanged( rDCEvt );
@@ -385,7 +385,7 @@ SvxFillTypeBox::SvxFillTypeBox( vcl::Window* pParent ) :
     nCurPos ( 0 ),
     bSelect ( false )
 {
-    SetSizePixel( LogicToPixel( Size(40, 40 ),MapUnit::MapAppFont ));
+    SetSizePixel(LogicToPixel(Size(40, 40), MapMode(MapUnit::MapAppFont)));
     Fill();
     SelectEntryPos( (sal_Int32)drawing::FillStyle_SOLID );
     Show();
@@ -464,7 +464,7 @@ SvxFillAttrBox::SvxFillAttrBox( vcl::Window* pParent ) :
     nCurPos( 0 )
 {
     SetPosPixel( Point( 90, 0 ) );
-    SetSizePixel( LogicToPixel( Size(50, 80 ), MapUnit::MapAppFont ));
+    SetSizePixel(LogicToPixel(Size(50, 80), MapMode(MapUnit::MapAppFont)));
     Show();
 }
 

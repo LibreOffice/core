@@ -163,7 +163,7 @@ namespace emfio
 
                     if (aMtf.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
                     {
-                        aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, MapUnit::Map100thMM);
+                        aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, MapMode(MapUnit::Map100thMM));
                     }
                     else
                     {

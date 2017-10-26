@@ -436,7 +436,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
 
         if ( mbpHYs && maPhysSize.Width() && maPhysSize.Height() )
         {
-            aRet.SetPrefMapMode( MapUnit::Map100thMM );
+            aRet.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
             aRet.SetPrefSize( maPhysSize );
         }
     }

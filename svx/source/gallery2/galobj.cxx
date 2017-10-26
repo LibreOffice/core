@@ -105,7 +105,7 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
                 aBmpEx.GetPrefSize().Width() > 0 &&
                 aBmpEx.GetPrefSize().Height() > 0 )
             {
-                Size aLogSize( OutputDevice::LogicToLogic( aBmpEx.GetPrefSize(), aBmpEx.GetPrefMapMode(), MapUnit::Map100thMM ) );
+                Size aLogSize( OutputDevice::LogicToLogic(aBmpEx.GetPrefSize(), aBmpEx.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)) );
 
                 if( aLogSize.Width() > 0 && aLogSize.Height() > 0 )
                 {

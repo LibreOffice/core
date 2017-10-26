@@ -703,7 +703,7 @@ VCL_BUILDER_FACTORY(PresLayoutPreview)
 
 Size PresLayoutPreview::GetOptimalSize() const
 {
-    return LogicToPixel(Size(80, 80), MapUnit::MapAppFont);
+    return LogicToPixel(Size(80, 80), MapMode(MapUnit::MapAppFont));
 }
 
 void PresLayoutPreview::init( SdPage *pMaster )

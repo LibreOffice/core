@@ -344,7 +344,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
     // Borders (are put together by Shift-Offset and alignment)
         Size aPaperSize = pPrt->PixelToLogic( pPrt->GetPaperSizePixel(),
-                                              MapUnit::MapTwip);
+                                              MapMode(MapUnit::MapTwip));
         if ( !aPaperSize.Width() && !aPaperSize.Height() )
                     aPaperSize = SvxPaperInfo::GetPaperSize(PAPER_A4);
         if ( aPaperSize.Width() > aPaperSize.Height() )

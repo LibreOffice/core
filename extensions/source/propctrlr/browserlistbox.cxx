@@ -418,7 +418,7 @@ namespace pcr
     void OBrowserListBox::Resize()
     {
         tools::Rectangle aPlayground( Point( 0, 0 ), GetOutputSizePixel() );
-        Size aHelpWindowDistance( LogicToPixel( Size( 0, LAYOUT_HELP_WINDOW_DISTANCE_APPFONT ), MapUnit::MapAppFont ) );
+        Size aHelpWindowDistance( LogicToPixel(Size(0, LAYOUT_HELP_WINDOW_DISTANCE_APPFONT), MapMode(MapUnit::MapAppFont)) );
 
         long nHelpWindowHeight = m_nCurrentPreferredHelpHeight = impl_getPrefererredHelpHeight();
         bool bPositionHelpWindow = ( nHelpWindowHeight != 0 );
@@ -746,7 +746,7 @@ namespace pcr
 
         if ( HasHelpSection() )
         {
-            Size aHelpWindowDistance( LogicToPixel( Size( 0, LAYOUT_HELP_WINDOW_DISTANCE_APPFONT ), MapUnit::MapAppFont ) );
+            Size aHelpWindowDistance( LogicToPixel(Size(0, LAYOUT_HELP_WINDOW_DISTANCE_APPFONT), MapMode(MapUnit::MapAppFont)) );
             nMinHeight += aHelpWindowDistance.Height();
 
             nMinHeight += m_pHelpWindow->GetMinimalHeightPixel();

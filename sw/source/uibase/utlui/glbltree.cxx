@@ -216,7 +216,7 @@ void SwGlobalTree::dispose()
 
 Size SwGlobalTree::GetOptimalSize() const
 {
-    return LogicToPixel(Size(110, 112), MapUnit::MapAppFont);
+    return LogicToPixel(Size(110, 112), MapMode(MapUnit::MapAppFont));
 }
 
 sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )

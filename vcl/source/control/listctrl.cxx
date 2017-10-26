@@ -95,7 +95,7 @@ void ListControl::RecalcAll()
 
 Size ListControl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(300, 185), MapUnit::MapAppFont);
+    return LogicToPixel(Size(300, 185), MapMode(MapUnit::MapAppFont));
 }
 
 void ListControl::Resize()
