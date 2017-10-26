@@ -109,10 +109,11 @@ void SwSectionFrame::Init()
 
     // #109700# LRSpace for sections
     const SvxLRSpaceItem& rLRSpace = GetFormat()->GetLRSpace();
-    aRectFnSet.SetLeft( PrintWA(), rLRSpace.GetLeft() );
-    aRectFnSet.SetWidth( PrintWA(), nWidth - rLRSpace.GetLeft() -
-                                 rLRSpace.GetRight() );
-    aRectFnSet.SetHeight( PrintWA(), 0 );
+    SwRect aPrt(PrintRA());
+    aRectFnSet.SetLeft( aPrt, rLRSpace.GetLeft() );
+    aRectFnSet.SetWidth( aPrt, nWidth - rLRSpace.GetLeft() - rLRSpace.GetRight() );
+    aRectFnSet.SetHeight( aPrt, 0 );
+    setPrint(aPrt);
 
     const SwFormatCol &rCol = GetFormat()->GetCol();
     if( ( rCol.GetNumCols() > 1 || IsAnyNoteAtEnd() ) && !IsInFootnote() )
@@ -296,8 +297,11 @@ void SwSectionFrame::Cut_( bool bRemove )
                 aRectFnSet.SetHeight( aFrm, 0 );
                 setFrame(aFrm);
 
-                aRectFnSet.SetHeight( PrintWA(), 0 );
+                SwRect aPrt(PrintRA());
+                aRectFnSet.SetHeight( aPrt, 0 );
+                setPrint(aPrt);
             }
+
             pUp->Shrink( nFrameHeight );
         }
     }
@@ -1338,14 +1342,15 @@ void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderA
         if( GetUpper() )
         {
             long nWidth = aRectFnSet.GetWidth(GetUpper()->PrintRA());
-
             SwRect aFrm(FrameRA());
             aRectFnSet.SetWidth( aFrm, nWidth );
             setFrame(aFrm);
 
             // #109700# LRSpace for sections
             const SvxLRSpaceItem& rLRSpace = GetFormat()->GetLRSpace();
-            aRectFnSet.SetWidth( PrintWA(), nWidth - rLRSpace.GetLeft() - rLRSpace.GetRight() );
+            SwRect aPrt(PrintRA());
+            aRectFnSet.SetWidth( aPrt, nWidth - rLRSpace.GetLeft() - rLRSpace.GetRight() );
+            setPrint(aPrt);
 
             // OD 15.10.2002 #103517# - allow grow in online layout
             // Thus, set <..IsBrowseMode()> as parameter <bGrow> on calling
@@ -2053,7 +2058,9 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
                 setFrame(aFrm);
 
                 long nPrtHeight = aRectFnSet.GetHeight(PrintRA()) + nGrow;
-                aRectFnSet.SetHeight( PrintWA(), nPrtHeight );
+                SwRect aPrt(PrintRA());
+                aRectFnSet.SetHeight( aPrt, nPrtHeight );
+                setPrint(aPrt);
 
                 if( Lower() && Lower()->IsColumnFrame() && Lower()->GetNext() )
                 {
@@ -2140,7 +2147,9 @@ SwTwips SwSectionFrame::Shrink_( SwTwips nDist, bool bTst )
                 setFrame(aFrm);
 
                 long nPrtHeight = aRectFnSet.GetHeight(PrintRA()) - nDist;
-                aRectFnSet.SetHeight( PrintWA(), nPrtHeight );
+                SwRect aPrt(PrintRA());
+                aRectFnSet.SetHeight( aPrt, nPrtHeight );
+                setPrint(aPrt);
 
                 // We do not allow a section frame to shrink the its upper
                 // footer frame. This is because in the calculation of a

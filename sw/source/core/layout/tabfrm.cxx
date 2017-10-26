@@ -357,8 +357,10 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrame& rRow )
                         aRectFnSet.SetHeight(aFrm, 0);
                         pTmp->setFrame(aFrm);
 
-                        aRectFnSet.SetTop(pTmp->PrintWA(), 0);
-                        aRectFnSet.SetHeight(pTmp->PrintWA(), 0);
+                        SwRect aPrt(pTmp->PrintRA());
+                        aRectFnSet.SetTop(aPrt, 0);
+                        aRectFnSet.SetHeight(aPrt, 0);
+                        pTmp->setPrint(aPrt);
                     }
                     else
                         bAllLowersCollapsed = false;
@@ -366,11 +368,16 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrame& rRow )
                 else
                 {
                     pTmp->Shrink(aRectFnSet.GetHeight(pTmp->FrameRA()));
-                    aRectFnSet.SetTop(pTmp->PrintWA(), 0);
-                    aRectFnSet.SetHeight(pTmp->PrintWA(), 0);
+                    SwRect aPrt(pTmp->PrintRA());
+                    aRectFnSet.SetTop(aPrt, 0);
+                    aRectFnSet.SetHeight(aPrt, 0);
 
                     if (aRectFnSet.GetHeight(pTmp->FrameRA()) > 0)
+                    {
                         bAllLowersCollapsed = false;
+                    }
+
+                    pTmp->setPrint(aPrt);
                 }
 
                 pTmp = pTmp->GetPrev();
@@ -389,8 +396,10 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrame& rRow )
             aRectFnSet.SetHeight(aFrm, 0);
             pCurrMasterCell->setFrame(aFrm);
 
-            aRectFnSet.SetTop(pCurrMasterCell->PrintWA(), 0);
-            aRectFnSet.SetHeight(pCurrMasterCell->PrintWA(), 0);
+            SwRect aPrt(pCurrMasterCell->PrintRA());
+            aRectFnSet.SetTop(aPrt, 0);
+            aRectFnSet.SetHeight(aPrt, 0);
+            pCurrMasterCell->setPrint(aPrt);
         }
         else
             bAllCellsCollapsed = false;
@@ -405,8 +414,10 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrame& rRow )
         aRectFnSet.SetHeight(aFrm, 0);
         rRow.setFrame(aFrm);
 
-        aRectFnSet.SetTop(rRow.PrintWA(), 0);
-        aRectFnSet.SetHeight(rRow.PrintWA(), 0);
+        SwRect aPrt(rRow.PrintRA());
+        aRectFnSet.SetTop(aPrt, 0);
+        aRectFnSet.SetHeight(aPrt, 0);
+        rRow.setPrint(aPrt);
     }
 }
 
@@ -1158,7 +1169,9 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         aRectFnSet.SetLeft(aFrm, aRectFnSet.GetLeft(FrameRA()));
         pFoll->setFrame(aFrm);
 
-        aRectFnSet.AddWidth(pFoll->PrintWA(), aRectFnSet.GetWidth(PrintRA()));
+        SwRect aPrt(pFoll->PrintRA());
+        aRectFnSet.AddWidth(aPrt, aRectFnSet.GetWidth(PrintRA()));
+        pFoll->setPrint(aPrt);
 
         // Insert the new follow table
         pFoll->InsertBehind( GetUpper(), this );
@@ -2970,7 +2983,10 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
             long nWidth = pSh->GetBrowseWidth();
             nWidth -= PrintRA().Left();
             nWidth -= pAttrs->CalcRightLine();
-            PrintWA().Width( std::min( nWidth, PrintRA().Width() ) );
+
+            SwRect aPrt(PrintRA());
+            aPrt.Width( std::min( nWidth, aPrt.Width() ) );
+            setPrint(aPrt);
         }
 
         if ( nOldHeight != aRectFnSet.GetHeight(PrintRA()) )
@@ -4085,10 +4101,12 @@ void SwRowFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         //RowFrames don't have borders and so on therefore the PrtArea always
         //matches the Frame.
         mbValidPrtArea = true;
-        PrintWA().Left( 0 );
-        PrintWA().Top( 0 );
-        PrintWA().Width ( FrameRA().Width() );
-        PrintWA().Height( FrameRA().Height() );
+        SwRect aPrt(PrintRA());
+        aPrt.Left( 0 );
+        aPrt.Top( 0 );
+        aPrt.Width ( FrameRA().Width() );
+        aPrt.Height( FrameRA().Height() );
+        setPrint(aPrt);
 
         // #i29550#
         // Here we calculate the top-printing area for the lower cell frames
@@ -4974,7 +4992,10 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
         }
 
         setFrame(aFrm);
-        aRectFnSet.AddRight( PrintWA(), nDiff );
+
+        SwRect aPrt(PrintRA());
+        aRectFnSet.AddRight( aPrt, nDiff );
+        setPrint(aPrt);
 
         //Adjust the height, it's defined through the content and the border.
         const long nDiffHeight = nRemaining - aRectFnSet.GetHeight(FrameRA());

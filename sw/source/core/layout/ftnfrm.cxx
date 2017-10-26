@@ -191,11 +191,18 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
     if ( !mbValidPrtArea )
     {
         mbValidPrtArea = true;
-        aRectFnSet.SetTop( PrintWA(), nBorder );
-        aRectFnSet.SetWidth( PrintWA(), aRectFnSet.GetWidth(FrameRA()) );
-        aRectFnSet.SetHeight(PrintWA(), aRectFnSet.GetHeight(FrameRA()) - nBorder );
-        if( aRectFnSet.GetHeight(PrintRA()) < 0 && !pPage->IsFootnotePage() )
+        SwRect aPrt(PrintRA());
+
+        aRectFnSet.SetTop( aPrt, nBorder );
+        aRectFnSet.SetWidth( aPrt, aRectFnSet.GetWidth(FrameRA()) );
+        aRectFnSet.SetHeight(aPrt, aRectFnSet.GetHeight(FrameRA()) - nBorder );
+
+        if( aRectFnSet.GetHeight(aPrt) < 0 && !pPage->IsFootnotePage() )
+        {
             mbValidSize = false;
+        }
+
+        setPrint(aPrt);
     }
 
     if ( !mbValidSize )
@@ -254,9 +261,11 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
                 SwTwips nPrtHeight = aRectFnSet.GetHeight(PrintRA());
                 if( nPrtHeight < 0 )
                 {
-                    const SwTwips nTmpDiff = std::max( aRectFnSet.GetTop(PrintRA()),
-                                                -nPrtHeight );
-                    aRectFnSet.SubTop( PrintWA(), nTmpDiff );
+                    const SwTwips nTmpDiff = std::max( aRectFnSet.GetTop(PrintRA()), -nPrtHeight );
+
+                    SwRect aPrt(PrintRA());
+                    aRectFnSet.SubTop( aPrt, nTmpDiff );
+                    setPrint(aPrt);
                 }
             }
         }
@@ -1921,7 +1930,10 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
                         aRectFnSet.SetHeight(aFrm, 0);
                         pTmp->setFrame(aFrm);
 
-                        aRectFnSet.SetHeight(pTmp->PrintWA(), 0);
+                        SwRect aPrt(pTmp->PrintRA());
+                        aRectFnSet.SetHeight(aPrt, 0);
+                        pTmp->setPrint(aPrt);
+
                         pTmp = pTmp->FindNext();
                     }
                 }
@@ -1934,7 +1946,10 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
                 aRectFnSet.SetHeight(aFrm, 0);
                 pCnt->setFrame(aFrm);
 
-                aRectFnSet.SetHeight(pCnt->PrintWA(), 0);
+                SwRect aPrt(pCnt->PrintRA());
+                aRectFnSet.SetHeight(aPrt, 0);
+                pCnt->setPrint(aPrt);
+
                 pCnt = pCnt->GetNext();
             }
 
@@ -1942,7 +1957,9 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
             aRectFnSet.SetHeight(aFrm, 0);
             pFootnote->setFrame(aFrm);
 
-            aRectFnSet.SetHeight(pFootnote->PrintWA(), 0);
+            SwRect aPrt(pFootnote->PrintRA());
+            aRectFnSet.SetHeight(aPrt, 0);
+            pFootnote->setPrint(aPrt);
 
             pFootnote->Calc(getRootFrame()->GetCurrShell()->GetOut());
             pFootnote->GetUpper()->Calc(getRootFrame()->GetCurrShell()->GetOut());

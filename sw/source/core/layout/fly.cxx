@@ -227,8 +227,11 @@ void SwFlyFrame::InsertColumns()
     {
         // Start off PrtArea to be as large as Frame, so that we can put in the columns
         // properly. It'll adjust later on.
-        PrintWA().Width( FrameRA().Width() );
-        PrintWA().Height( FrameRA().Height() );
+        SwRect aPrt(PrintRA());
+        aPrt.Width( FrameRA().Width() );
+        aPrt.Height( FrameRA().Height() );
+        setPrint(aPrt);
+
         const SwFormatCol aOld; // ChgColumns() also needs an old value passed
         ChgColumns( aOld, rCol );
     }
@@ -561,8 +564,12 @@ bool SwFlyFrame::FrameSizeChg( const SwFormatFrameSize &rFrameSize )
 
             // #i68520#
             InvalidateObjRectWithSpaces();
-            PrintWA().Height( PrintRA().Height() - nDiffHeight );
-            PrintWA().Width ( PrintRA().Width()  - nDiffWidth  );
+
+            SwRect aPrt(PrintRA());
+            aPrt.Height( aPrt.Height() - nDiffHeight );
+            aPrt.Width ( aPrt.Width()  - nDiffWidth  );
+            setPrint(aPrt);
+
             ChgLowersProp( aOldSz );
             ::Notify( this, FindPageFrame(), aOld );
             mbValidPos = false;
@@ -1202,7 +1209,10 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
             if ( nRemaining < MINFLY )
                 nRemaining = MINFLY;
 
-            aRectFnSet.SetHeight( PrintWA(), nRemaining );
+            SwRect aPrt(PrintRA());
+            aRectFnSet.SetHeight( aPrt, nRemaining );
+            setPrint(aPrt);
+
             nRemaining -= aRectFnSet.GetHeight(FrameRA());
 
             SwRect aFrm(FrameRA());
@@ -1238,7 +1248,11 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
             nNewSize -= nUL;
             if( nNewSize < MINFLY )
                 nNewSize = MINFLY;
-            aRectFnSet.SetHeight( PrintWA(), nNewSize );
+
+            SwRect aPrt(PrintRA());
+            aRectFnSet.SetHeight( aPrt, nNewSize );
+            setPrint(aPrt);
+
             nNewSize += nUL - aRectFnSet.GetHeight(FrameRA());
 
             SwRect aFrm(FrameRA());
@@ -1274,7 +1288,11 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
 
             if( nNewSize < MINFLY )
                 nNewSize = MINFLY;
-            aRectFnSet.SetWidth( PrintWA(), nNewSize );
+
+            SwRect aPrt(PrintRA());
+            aRectFnSet.SetWidth( aPrt, nNewSize );
+            setPrint(aPrt);
+
             nNewSize += nLR - aRectFnSet.GetWidth(FrameRA());
 
             SwRect aFrm(FrameRA());
@@ -1832,8 +1850,13 @@ SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
                 {
                     InvalidateObjRectWithSpaces();
                 }
+
                 nHeight = aRectFnSet.GetHeight(PrintRA());
-                aRectFnSet.SetHeight( PrintWA(), nHeight - nVal );
+
+                SwRect aPrt(PrintRA());
+                aRectFnSet.SetHeight( aPrt, nHeight - nVal );
+                setPrint(aPrt);
+
                 InvalidatePos_();
                 InvalidateSize();
                 ::Notify( this, FindPageFrame(), aOld );
