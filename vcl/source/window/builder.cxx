@@ -1263,6 +1263,11 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         VclPtr<RadioButton> xButton = VclPtr<RadioButton>::Create(pParent, nBits);
         xButton->SetImageAlign(ImageAlign::Left); //default to left
         xWindow = xButton;
+
+        if (::extractStock(rMap))
+        {
+            xWindow->SetText(getStockText(extractLabel(rMap)));
+        }
     }
     else if (name == "GtkCheckButton")
     {
@@ -1280,7 +1285,13 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         if (bIsTriState)
             xCheckBox->SetState(TRISTATE_INDET);
         xCheckBox->SetImageAlign(ImageAlign::Left); //default to left
+
         xWindow = xCheckBox;
+
+        if (::extractStock(rMap))
+        {
+            xWindow->SetText(getStockText(extractLabel(rMap)));
+        }
     }
     else if (name == "GtkSpinButton")
     {
