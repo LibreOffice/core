@@ -859,29 +859,30 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
         }
         return true;
     }
-    ExplicitCastExpr const * sub = dyn_cast<ExplicitCastExpr>(
-        expr->getSubExpr()->IgnoreParenImpCasts());
-    if (sub != nullptr
-        && (sub->getSubExpr()->IgnoreParenImpCasts()->getType().IgnoreParens()
-            == expr->getType().IgnoreParens())
-        && isBool(sub->getSubExpr()->IgnoreParenImpCasts()))
+    if (auto const sub = dyn_cast<ExplicitCastExpr>(
+            compat::getSubExprAsWritten(expr)))
     {
-        // Ignore "normalizing cast" bool(b) from sal_Bool b to bool, then
-        // implicitly cast back again to sal_Bool:
-        if (dyn_cast<CXXFunctionalCastExpr>(sub) != nullptr
-            && sub->getType()->isBooleanType() && isSalBool(expr->getType())
-            && isSalBool(sub->getSubExpr()->IgnoreParenImpCasts()->getType()))
+        auto const subsub = compat::getSubExprAsWritten(sub);
+        if (subsub->getType().IgnoreParens() == expr->getType().IgnoreParens()
+            && isBool(subsub))
         {
+            // Ignore "normalizing cast" bool(b) from sal_Bool b to bool, then
+            // implicitly cast back again to sal_Bool:
+            if (dyn_cast<CXXFunctionalCastExpr>(sub) != nullptr
+                && sub->getType()->isBooleanType() && isSalBool(expr->getType())
+                && isSalBool(subsub->getType()))
+            {
+                return true;
+            }
+            report(
+                DiagnosticsEngine::Warning,
+                ("explicit conversion (%0) from %1 to %2 implicitly cast back"
+                 " to %3"),
+                expr->getLocStart())
+                << sub->getCastKindName() << subsub->getType() << sub->getType()
+                << expr->getType() << expr->getSourceRange();
             return true;
         }
-        report(
-            DiagnosticsEngine::Warning,
-            "explicit conversion (%0) from %1 to %2 implicitly cast back to %3",
-            expr->getLocStart())
-            << sub->getCastKindName()
-            << sub->getSubExpr()->IgnoreParenImpCasts()->getType()
-            << sub->getType() << expr->getType() << expr->getSourceRange();
-        return true;
     }
     if (expr->getType()->isBooleanType() && !isBoolExpr(expr->getSubExpr())
         && !calls.empty())
