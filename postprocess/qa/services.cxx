@@ -209,13 +209,6 @@ void Test::test() {
                     k = impls.insert(
                             std::make_pair(name, Implementation(j, servs)))
                         .first;
-                } else {
-                    CPPUNIT_ASSERT_MESSAGE(
-                        (OString(
-                            "multiple implementations named \"" + msg(name)
-                            + "\"")
-                         .getStr()),
-                        bool(j == k->second.factory));
                 }
                 CPPUNIT_ASSERT_MESSAGE(
                     (OString(
