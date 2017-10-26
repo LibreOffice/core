@@ -128,8 +128,9 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                 nSize -= nBorder;
                 nBorder /= 2;
             }
-            aRectFnSet.SetPosX( PrintWA(), nBorder );
-            aRectFnSet.SetWidth( PrintWA(), nSize );
+            SwRect aPrt(PrintRA());
+            aRectFnSet.SetPosX( aPrt, nBorder );
+            aRectFnSet.SetWidth( aPrt, nSize );
 
             // Height of body frame:
             nBorder = aRectFnSet.GetHeight(FrameRA());
@@ -148,17 +149,22 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             const bool bAdjust = static_cast<SwPageFrame*>(GetUpper())->GetFormat()->GetDoc()->
                                         GetFootnoteIdxs().empty();
 
-            aRectFnSet.SetPosY( PrintWA(), bAdjust ? nBorder : 0 );
-            aRectFnSet.SetHeight( PrintWA(), nSize );
+            aRectFnSet.SetPosY( aPrt, bAdjust ? nBorder : 0 );
+            aRectFnSet.SetHeight( aPrt, nSize );
+            setPrint(aPrt);
         }
     }
+
     if( bNoGrid )
     {
-        PrintWA().Pos().setX(0);
-        PrintWA().Pos().setY(0);
-        PrintWA().Height( FrameRA().Height() );
-        PrintWA().Width( FrameRA().Width() );
+        SwRect aPrt(PrintRA());
+        aPrt.Pos().setX(0);
+        aPrt.Pos().setY(0);
+        aPrt.Height( FrameRA().Height() );
+        aPrt.Width( FrameRA().Width() );
+        setPrint(aPrt);
     }
+
     mbValidSize = mbValidPrtArea = true;
 }
 
@@ -1605,10 +1611,14 @@ void SwRootFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     }
 
     if ( !mbValidPrtArea )
-    {   mbValidPrtArea = true;
-        PrintWA().Pos().setX(0);
-        PrintWA().Pos().setY(0);
-        PrintWA().SSize( FrameRA().SSize() );
+    {
+        mbValidPrtArea = true;
+
+        SwRect aPrt(PrintRA());
+        aPrt.Pos().setX(0);
+        aPrt.Pos().setY(0);
+        aPrt.SSize( FrameRA().SSize() );
+        setPrint(aPrt);
     }
 
     if ( !mbValidSize )

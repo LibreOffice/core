@@ -59,7 +59,10 @@ bool SwFrame::SetMinLeft( long nDeadline )
         aFrm.Left( nDeadline );
         setFrame(aFrm);
 
-        PrintWA().Width( PrintRA().Width() - nDiff );
+        SwRect aPrt(PrintRA());
+        aPrt.Width( aPrt.Width() - nDiff );
+        setPrint(aPrt);
+
         return true;
     }
     return false;
@@ -74,7 +77,10 @@ bool SwFrame::SetMaxBottom( long nDeadline )
         aFrm.Height( aFrm.Height() - nDiff );
         setFrame(aFrm);
 
-        PrintWA().Height( PrintRA().Height() - nDiff );
+        SwRect aPrt(PrintRA());
+        aPrt.Height( aPrt.Height() - nDiff );
+        setPrint(aPrt);
+
         return true;
     }
     return false;
@@ -89,7 +95,10 @@ bool SwFrame::SetMinTop( long nDeadline )
         aFrm.Top( nDeadline );
         setFrame(aFrm);
 
-        PrintWA().Height( PrintRA().Height() - nDiff );
+        SwRect aPrt(PrintRA());
+        aPrt.Height( aPrt.Height() - nDiff );
+        setPrint(aPrt);
+
         return true;
     }
     return false;
@@ -104,7 +113,10 @@ bool SwFrame::SetMaxRight( long nDeadline )
         aFrm.Width( aFrm.Width() - nDiff );
         setFrame(aFrm);
 
-        PrintWA().Width( PrintRA().Width() - nDiff );
+        SwRect aPrt(PrintRA());
+        aPrt.Width( aPrt.Width() - nDiff );
+        setPrint(aPrt);
+
         return true;
     }
     return false;
@@ -206,26 +218,34 @@ void SwFrame::MakeRightPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
 
 void SwFrame::SetTopBottomMargins( long nTop, long nBot )
 {
-    PrintWA().Top( nTop );
-    PrintWA().Height( FrameRA().Height() - nTop - nBot );
+    SwRect aPrt(PrintRA());
+    aPrt.Top( nTop );
+    aPrt.Height( FrameRA().Height() - nTop - nBot );
+    setPrint(aPrt);
 }
 
 void SwFrame::SetBottomTopMargins( long nBot, long nTop )
 {
-    PrintWA().Top( nTop );
-    PrintWA().Height( FrameRA().Height() - nTop - nBot );
+    SwRect aPrt(PrintRA());
+    aPrt.Top( nTop );
+    aPrt.Height( FrameRA().Height() - nTop - nBot );
+    setPrint(aPrt);
 }
 
 void SwFrame::SetLeftRightMargins( long nLeft, long nRight)
 {
-    PrintWA().Left( nLeft );
-    PrintWA().Width( FrameRA().Width() - nLeft - nRight );
+    SwRect aPrt(PrintRA());
+    aPrt.Left( nLeft );
+    aPrt.Width( FrameRA().Width() - nLeft - nRight );
+    setPrint(aPrt);
 }
 
 void SwFrame::SetRightLeftMargins( long nRight, long nLeft)
 {
-    PrintWA().Left( nLeft );
-    PrintWA().Width( FrameRA().Width() - nLeft - nRight );
+    SwRect aPrt(PrintRA());
+    aPrt.Left( nLeft );
+    aPrt.Width( FrameRA().Width() - nLeft - nRight );
+    setPrint(aPrt);
 }
 
 /// checks the layout direction and invalidates the lower frames recursively, if necessary.

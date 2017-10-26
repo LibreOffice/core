@@ -378,14 +378,18 @@ void SwTextFrame::AdjustFrame( const SwTwips nChgHght, bool bHasToFit )
                         aRectFnSet.AddBottom( aFrm, nChgHght );
                         setFrame(aFrm);
 
+                        SwRect aPrt(PrintRA());
+
                         if( aRectFnSet.IsVert() )
                         {
-                            PrintWA().SSize().Width() += nChgHght;
+                            aPrt.SSize().Width() += nChgHght;
                         }
                         else
                         {
-                            PrintWA().SSize().Height() += nChgHght;
+                            aPrt.SSize().Height() += nChgHght;
                         }
+
+                        setPrint(aPrt);
 
                         return;
                     }
@@ -806,7 +810,10 @@ bool SwTextFrame::CalcPreps()
                     aFrm.Left( 0 );
                     setFrame(aFrm);
 
-                    PrintWA().Width( PrintRA().Width() + FrameRA().Left() );
+                    SwRect aPrt(PrintRA());
+                    aPrt.Width( aPrt.Width() + FrameRA().Left() );
+                    setPrint(aPrt);
+
                     SetWidow( true );
                 }
                 else
@@ -818,7 +825,10 @@ bool SwTextFrame::CalcPreps()
                     aFrm.Height( nTmp );
                     setFrame(aFrm);
 
-                    PrintWA().Height( PrintRA().Height() + nDiff );
+                    SwRect aPrt(PrintRA());
+                    aPrt.Height( aPrt.Height() + nDiff );
+                    setPrint(aPrt);
+
                     SetWidow( true );
                 }
             }
@@ -927,15 +937,27 @@ bool SwTextFrame::CalcPreps()
                 if( aRectFnSet.IsVert() && nIs < nMust )
                 {
                     Shrink( nMust - nIs );
+
                     if( PrintRA().Width() < 0 )
-                        PrintWA().Width( 0 );
+                    {
+                        SwRect aPrt(PrintRA());
+                        aPrt.Width( 0 );
+                        setPrint(aPrt);
+                    }
+
                     SetUndersized( true );
                 }
                 else if ( ! aRectFnSet.IsVert() && nIs > nMust )
                 {
                     Shrink( nIs - nMust );
+
                     if( PrintRA().Height() < 0 )
-                        PrintWA().Height( 0 );
+                    {
+                        SwRect aPrt(PrintRA());
+                        aPrt.Height( 0 );
+                        setPrint(aPrt);
+                    }
+
                     SetUndersized( true );
                 }
             }
@@ -1720,6 +1742,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
         // Else we just take a standard size of 12 Pt. (240 twip).
         SwTextLineAccess aAccess( this );
         long nFrameHeight = aRectFnSet.GetHeight(FrameRA());
+
         if( aAccess.GetPara()->IsPrepMustFit() )
         {
             const SwTwips nLimit = aRectFnSet.GetPrtBottom(*GetUpper());
@@ -1728,16 +1751,28 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
                 Shrink( nDiff );
         }
         else if( 240 < nFrameHeight )
+        {
             Shrink( nFrameHeight - 240 );
+        }
         else if( 240 > nFrameHeight )
+        {
             Grow( 240 - nFrameHeight );
-        nFrameHeight = aRectFnSet.GetHeight(FrameRA());
+        }
 
-        long nTop = aRectFnSet.GetTopMargin(*this);
+        nFrameHeight = aRectFnSet.GetHeight(FrameRA());
+        const long nTop = aRectFnSet.GetTopMargin(*this);
+
         if( nTop > nFrameHeight )
+        {
             aRectFnSet.SetYMargins( *this, nFrameHeight, 0 );
+        }
         else if( aRectFnSet.GetHeight(PrintRA()) < 0 )
-            aRectFnSet.SetHeight( PrintWA(), 0 );
+        {
+            SwRect aPrt(PrintRA());
+            aRectFnSet.SetHeight( aPrt, 0 );
+            setPrint(aPrt);
+        }
+
         return;
     }
 
