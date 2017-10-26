@@ -40,7 +40,7 @@ class ScInputHandler;
 class ScDocShell;
 class ScFormulaCell;
 
-class ScFormulaDlg : public formula::FormulaDlg,
+class ScFormulaDlg final : public formula::FormulaDlg,
                      public IAnyRefDialog
 {
     ScFormulaReferenceHelper m_aHelper;
@@ -100,8 +100,8 @@ public:
     virtual void AddRefEntry() override;
     virtual void SetActive() override;
     virtual void ViewShellChanged() override;
-protected:
 
+private:
     virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) override;
     static void  SaveLRUEntry(const ScFuncDesc* pFuncDesc);
 

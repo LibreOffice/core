@@ -31,7 +31,7 @@ class ScViewData;
 class ScDrawObjData;
 class SdrUndoManager;
 
-class ScDrawView: public FmFormView
+class ScDrawView final : public FmFormView
 {
     ScViewData*             pViewData;
     VclPtr<OutputDevice>    pDev;                   //! needed ?
@@ -45,7 +45,6 @@ class ScDrawView: public FmFormView
 
     void            Construct();
 
-protected:
     virtual void    ModelHasChanged() override;
 
     // add custom handles (used by other apps, e.g. AnchorPos)

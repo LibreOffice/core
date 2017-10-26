@@ -54,7 +54,7 @@ public:
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Csc"; }
 };
-class OpSumIfs: public CheckVariables
+class OpSumIfs final : public CheckVariables
 {
 public:
     OpSumIfs(): CheckVariables(), mNeedReductionKernel(false) {}
@@ -62,7 +62,7 @@ public:
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "SumIfs"; }
     bool NeedReductionKernel() const { return mNeedReductionKernel; }
-protected:
+private:
     bool mNeedReductionKernel;
 };
 class OpCosh: public Normal

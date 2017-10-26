@@ -124,7 +124,7 @@ public:
     virtual void notify() = 0;
 };
 
-class SC_DLLPUBLIC ScChartListenerCollection
+class SC_DLLPUBLIC ScChartListenerCollection final
 {
 public:
     typedef std::map<OUString, std::unique_ptr<ScChartListener>> ListenersType;
@@ -149,7 +149,6 @@ private:
 
     ScChartListenerCollection& operator=( const ScChartListenerCollection& ) = delete;
 
-protected:
     void Init();
 
 public:
