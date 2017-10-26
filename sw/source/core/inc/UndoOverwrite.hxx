@@ -69,7 +69,7 @@ public:
 struct UndoTransliterate_Data;
 class SwUndoTransliterate : public SwUndo, public SwUndRng
 {
-    std::vector< UndoTransliterate_Data * >    aChanges;
+    std::vector< std::unique_ptr<UndoTransliterate_Data> >    aChanges;
     TransliterationFlags nType;
 
     void DoTransliterate(SwDoc & rDoc, SwPaM const & rPam);
