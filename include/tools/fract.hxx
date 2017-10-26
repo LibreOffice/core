@@ -22,6 +22,7 @@
 #include <sal/types.h>
 #include <tools/toolsdllapi.h>
 #include <memory>
+#include <ostream>
 #include <type_traits>
 
 class SvStream;
@@ -105,6 +106,14 @@ inline Fraction operator+( const Fraction& rVal1, double v2 ) { return rVal1 + F
 inline Fraction operator-( const Fraction& rVal1, double v2 ) { return rVal1 - Fraction(v2); }
 inline Fraction operator*( const Fraction& rVal1, double v2 ) { return rVal1 * Fraction(v2); }
 inline Fraction operator/( const Fraction& rVal1, double v2 ) { return rVal1 / Fraction(v2); }
+
+template<typename charT, typename traits>
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & rStream, const Fraction& rFraction)
+{
+    rStream << "(" << rFraction.GetNumerator() << "/" << rFraction.GetDenominator() << ")";
+    return rStream;
+}
 
 #endif
 
