@@ -128,17 +128,14 @@ private:
 public:
     SwFrameRect();
 
-    // read accesses
+    // read accesses - only const access allowed. Do *not* const_cast results,
+    // it is necessary to track changes. use The 'set' methods instead
     const SwRect& FrameRA() const { return maFrameRect; }
     const SwRect& PrintRA() const { return maPrintRect; }
 
-    // set methods
+    // set methods - only way allowed to change these, see above
     void setFrame(const SwRect& rNew) { maFrameRect = rNew; }
     void setPrint(const SwRect& rNew) { maPrintRect = rNew; }
-
-    // write accesses
-//    SwRect& FrameWA() { return maFrameRect; }
-    SwRect& PrintWA() { return maPrintRect; }
 };
 
 /**

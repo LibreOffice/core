@@ -785,10 +785,13 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 aFrm.Width( 0 );
                 setFrame(aFrm);
 
-                PrintWA().Height( 0 );
-                PrintWA().Height( 0 );
-                PrintWA().Left( 0 );
-                PrintWA().Top( 0 );
+                SwRect aPrt(PrintRA());
+                aPrt.Height( 0 );
+                aPrt.Height( 0 );
+                aPrt.Left( 0 );
+                aPrt.Top( 0 );
+                setPrint(aPrt);
+
                 mbValidSize = mbValidPrtArea = true;
             }
             else
@@ -843,10 +846,12 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     }
                     setFrame(aFrm);
 
-                    PrintWA().Left ( pAttrs->CalcLeftLine() + aBorder.Width() );
-                    PrintWA().Top  ( nTop );
-                    PrintWA().Width( FrameRA().Width() - ( PrintRA().Left() + pAttrs->CalcRightLine() + aBorder.Width() ) );
-                    PrintWA().Height( FrameRA().Height() - (nTop + nBottom) );
+                    SwRect aPrt(PrintRA());
+                    aPrt.Left ( pAttrs->CalcLeftLine() + aBorder.Width() );
+                    aPrt.Top  ( nTop );
+                    aPrt.Width( FrameRA().Width() - ( aPrt.Left() + pAttrs->CalcRightLine() + aBorder.Width() ) );
+                    aPrt.Height( FrameRA().Height() - (nTop + nBottom) );
+                    setPrint(aPrt);
 
                     mbValidSize = mbValidPrtArea = true;
                     continue;
@@ -869,8 +874,11 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     if (height > 0)
                     {
                         ChgSize(Size(FrameRA().Width(), height));
-                        PrintWA().Top(0);
-                        PrintWA().Height(height);
+
+                        SwRect aPrt(PrintRA());
+                        aPrt.Top(0);
+                        aPrt.Height(height);
+                        setPrint(aPrt);
 
                         mbValidSize = mbValidPrtArea = true;
                         continue;
@@ -1033,11 +1041,17 @@ bool SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
                 static_cast<SwTextFrame*>(this)->JoinFrame();
 
             if( aRectFnSet.GetHeight(PrintRA()) )
+            {
                 static_cast<SwTextFrame*>(this)->HideHidden();
-            PrintWA().Pos().setX(0);
-            PrintWA().Pos().setY(0);
-            aRectFnSet.SetWidth( PrintWA(), aRectFnSet.GetWidth(FrameRA()) );
-            aRectFnSet.SetHeight( PrintWA(), 0 );
+            }
+
+            SwRect aPrt(PrintRA());
+            aPrt.Pos().setX(0);
+            aPrt.Pos().setY(0);
+            aRectFnSet.SetWidth( aPrt, aRectFnSet.GetWidth(FrameRA()) );
+            aRectFnSet.SetHeight( aPrt, 0 );
+            setPrint(aPrt);
+
             nUpper = -( aRectFnSet.GetHeight(FrameRA()) );
         }
         else
@@ -1087,18 +1101,26 @@ bool SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
                 nWidth -= aRectFnSet.GetLeft(PrintRA());
                 nWidth -= rAttrs.CalcRightLine();
                 nWidth = std::max( nMinWidth, nWidth );
-                aRectFnSet.SetWidth( PrintWA(), std::min( nWidth, aRectFnSet.GetWidth(PrintRA()) ) );
+
+                SwRect aPrt(PrintRA());
+                aRectFnSet.SetWidth( aPrt, std::min( nWidth, aRectFnSet.GetWidth(aPrt) ) );
+                setPrint(aPrt);
             }
 
             if ( aRectFnSet.GetWidth(PrintRA()) <= MINLAY )
             {
                 // The PrtArea should already be at least MINLAY wide, matching the
                 // minimal values of the UI
-                aRectFnSet.SetWidth( PrintWA(), std::min( long(MINLAY), aRectFnSet.GetWidth(FrameRA()) ) );
-                SwTwips nTmp = aRectFnSet.GetWidth(FrameRA()) -
-                               aRectFnSet.GetWidth(PrintRA());
-                if( aRectFnSet.GetLeft(PrintRA()) > nTmp )
-                    aRectFnSet.SetLeft( PrintWA(), nTmp );
+                SwRect aPrt(PrintRA());
+                aRectFnSet.SetWidth( aPrt, std::min( long(MINLAY), aRectFnSet.GetWidth(FrameRA()) ) );
+                SwTwips nTmp = aRectFnSet.GetWidth(FrameRA()) - aRectFnSet.GetWidth(aPrt);
+
+                if( aRectFnSet.GetLeft(aPrt) > nTmp )
+                {
+                    aRectFnSet.SetLeft( aPrt, nTmp );
+                }
+
+                setPrint(aPrt);
             }
 
             // The following rules apply for VarSize:
@@ -1121,10 +1143,12 @@ bool SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
                 nLower=0;
             }
 
-            aRectFnSet.SetPosY( PrintWA(), (!aRectFnSet.IsVert() || mbReverse) ? nUpper : nLower);
+            SwRect aPrt(PrintRA());
+            aRectFnSet.SetPosY( aPrt, (!aRectFnSet.IsVert() || mbReverse) ? nUpper : nLower);
+            setPrint(aPrt);
+
             nUpper += nLower;
-            nUpper -= aRectFnSet.GetHeight(FrameRA()) -
-                      aRectFnSet.GetHeight(PrintRA());
+            nUpper -= aRectFnSet.GetHeight(FrameRA()) - aRectFnSet.GetHeight(PrintRA());
         }
         // If there's a difference between old and new size, call Grow() or
         // Shrink() respectively.
