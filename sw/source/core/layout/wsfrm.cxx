@@ -467,14 +467,17 @@ Size SwFrame::ChgSize( const Size& aNewSize )
     if ( aNewSize == aOldSize )
         return aOldSize;
 
-    SwRect aFrm(getSwFrame());
-
     if ( GetUpper() )
     {
         bool bNeighb = IsNeighbourFrame();
         SwRectFn fnRect = IsVertical() == bNeighb ? fnRectHori : ( IsVertLR() ? fnRectVertL2R : fnRectVert );
         SwRect aNew( Point(0,0), aNewSize );
-        (aFrm.*fnRect->fnSetWidth)( (aNew.*fnRect->fnGetWidth)() );
+
+        {
+            SwFrameRect::FrameWriteAccess aFrm(*this);
+            (aFrm.*fnRect->fnSetWidth)( (aNew.*fnRect->fnGetWidth)() );
+        }
+
         long nNew = (aNew.*fnRect->fnGetHeight)();
         long nDiff = nNew - (getSwFrame().*fnRect->fnGetHeight)();
 
@@ -484,11 +487,16 @@ Size SwFrame::ChgSize( const Size& aNewSize )
                  SwNeighbourAdjust::GrowShrink !=
                  static_cast<SwFootnoteBossFrame*>(GetUpper())->NeighbourhoodAdjustment() )
             {
-                (aFrm.*fnRect->fnSetHeight)( nNew );
+                {
+                    SwFrameRect::FrameWriteAccess aFrm(*this);
+                    (aFrm.*fnRect->fnSetHeight)( nNew );
+                }
+
                 SwTwips nReal = static_cast<SwLayoutFrame*>(this)->AdjustNeighbourhood(nDiff);
 
                 if ( nReal != nDiff )
                 {
+                    SwFrameRect::FrameWriteAccess aFrm(*this);
                     (aFrm.*fnRect->fnSetHeight)( nNew - nDiff + nReal );
                 }
             }
@@ -503,7 +511,7 @@ Size SwFrame::ChgSize( const Size& aNewSize )
                     else
                         Shrink( -nDiff );
 
-                    if ( GetUpper() && (aFrm.*fnRect->fnGetHeight)() != nNew )
+                    if ( GetUpper() && (getSwFrame().*fnRect->fnGetHeight)() != nNew )
                     {
                         GetUpper()->InvalidateSize_();
                     }
@@ -512,16 +520,16 @@ Size SwFrame::ChgSize( const Size& aNewSize )
                 // Even if grow/shrink did not yet set the desired width, for
                 // example when called by ChgColumns to set the column width, we
                 // set the right width now.
+                SwFrameRect::FrameWriteAccess aFrm(*this);
                 (aFrm.*fnRect->fnSetHeight)( nNew );
             }
         }
     }
     else
     {
+        SwFrameRect::FrameWriteAccess aFrm(*this);
         aFrm.SSize( aNewSize );
     }
-
-    setSwFrame(aFrm);
 
     if ( getSwFrame().SSize() != aOldSize )
     {
@@ -1156,17 +1164,20 @@ void SwLayoutFrame::Cut()
                 if( nReal < nShrink )
                 {
                     const SwTwips nOldHeight = aRectFnSet.GetHeight(getSwFrame());
-                    SwRect aFrm(getSwFrame());
 
                     // seems as if this needs to be frowarded to the SwFrame already here,
                     // changing to zero seems temporary anyways
-                    aRectFnSet.SetHeight( aFrm, 0 );
-                    setSwFrame(aFrm);
+                    {
+                        SwFrameRect::FrameWriteAccess aFrm(*this);
+                        aRectFnSet.SetHeight( aFrm, 0 );
+                    }
 
                     nReal += pUp->Shrink( nShrink - nReal );
 
-                    aRectFnSet.SetHeight( aFrm, nOldHeight );
-                    setSwFrame(aFrm);
+                    {
+                        SwFrameRect::FrameWriteAccess aFrm(*this);
+                        aRectFnSet.SetHeight( aFrm, nOldHeight );
+                    }
                 }
 
                 if( SwNeighbourAdjust::GrowAdjust == nAdjust && nReal < nShrink )
@@ -1226,9 +1237,8 @@ SwTwips SwFrame::Grow( SwTwips nDist, bool bTst, bool bInfo )
             {
                 nPrtHeight = aRectFnSet.GetHeight(getSwPrint());
 
-                SwRect aPrt(getSwPrint());
+                SwFrameRect::PrintWriteAccess aPrt(*this);
                 aRectFnSet.SetHeight( aPrt, nPrtHeight + ( IsContentFrame() ? nDist : nReal ) );
-                setSwPrint(aPrt);
             }
             return nReal;
         }
@@ -1268,9 +1278,8 @@ SwTwips SwFrame::Shrink( SwTwips nDist, bool bTst, bool bInfo )
             if( !bTst )
             {
                 const SwTwips nPrtHeight = aRectFnSet.GetHeight(getSwPrint());
-                SwRect aPrt(getSwPrint());
+                SwFrameRect::PrintWriteAccess aPrt(*this);
                 aRectFnSet.SetHeight( aPrt, nPrtHeight - ( IsContentFrame() ? nDist : nReal ) );
-                setSwPrint(aPrt);
             }
             return nReal;
         }
@@ -1345,9 +1354,10 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                     const long nTmp = nChg - pBody->getSwPrint().Height();
                     if ( !bTst )
                     {
-                        SwRect aFrm(pBody->getSwFrame());
-                        aFrm.Height(std::max( 0L, aFrm.Height() - nChg ));
-                        pBody->setSwFrame(aFrm);
+                        {
+                            SwFrameRect::FrameWriteAccess aFrm(*pBody);
+                            aFrm.Height(std::max( 0L, aFrm.Height() - nChg ));
+                        }
 
                         pBody->InvalidatePrt_();
                         pBody->InvalidateSize_();
@@ -1402,15 +1412,13 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
         if ( !bTst && nChg )
         {
             {
-                SwRect aFrm(pUp->getSwFrame());
+                SwFrameRect::FrameWriteAccess aFrm(*pUp);
                 aFrm.SSize().Height() += nChg;
-                pUp->setSwFrame(aFrm);
             }
 
             {
-                SwRect aPrt(pUp->getSwPrint());
+                SwFrameRect::PrintWriteAccess aPrt(*pUp);
                 aPrt.SSize().Height() += nChg;
-                pUp->setSwPrint(aPrt);
             }
 
             if ( pViewShell )
@@ -1440,9 +1448,8 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
 
                 if ( IsBodyFrame() )
                 {
-                    SwRect aPrt(getSwPrint());
+                    SwFrameRect::PrintWriteAccess aPrt(*this);
                     aPrt.SSize().Height() = nOldFrameHeight;
-                    setSwPrint(aPrt);
                 }
 
                 if ( pUp->GetUpper() )
@@ -1450,13 +1457,11 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                     static_cast<SwRootFrame*>(pUp->GetUpper())->CheckViewLayout( nullptr, nullptr );
                 }
 
-                SwRect aFrm(getSwFrame());
+                SwFrameRect::FrameWriteAccess aFrm(*this);
                 aFrm.SSize().Height() = nOldFrameHeight;
-                setSwFrame(aFrm);
 
-                SwRect aPrt(getSwPrint());
+                SwFrameRect::PrintWriteAccess aPrt(*this);
                 aPrt.SSize().Height() = nOldPrtHeight;
-                setSwPrint(aPrt);
 
                 mbCompletePaint = bOldComplete;
             }
@@ -1552,15 +1557,16 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                     nAdd = nAddMax;
                 if ( !bTst )
                 {
-                    SwRect aFrm(pFrame->GetNext()->getSwFrame());
-                    aRectFnSet.SetHeight(aFrm, nAddMax-nAdd);
-
-                    if( aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() && !aRectFnSet.IsRev() )
                     {
-                        aFrm.Pos().X() += nAdd;
+                        SwFrameRect::FrameWriteAccess aFrm(*pFrame->GetNext());
+                        aRectFnSet.SetHeight(aFrm, nAddMax-nAdd);
+
+                        if( aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() && !aRectFnSet.IsRev() )
+                        {
+                            aFrm.Pos().X() += nAdd;
+                        }
                     }
 
-                    pFrame->GetNext()->setSwFrame(aFrm);
                     pFrame->GetNext()->InvalidatePrt();
 
                     if ( pFrame->GetNext()->GetNext() )
@@ -1576,15 +1582,16 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
     {
         SwTwips nTmp = aRectFnSet.GetHeight(pFrame->getSwFrame());
 
-        SwRect aFrm(pFrame->getSwFrame());
-        aRectFnSet.SetHeight( aFrm, nTmp - nReal );
-
-        if( aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() && !aRectFnSet.IsRev() )
         {
-            aFrm.Pos().X() += nReal;
+            SwFrameRect::FrameWriteAccess aFrm(*pFrame);
+            aRectFnSet.SetHeight( aFrm, nTmp - nReal );
+
+            if( aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() && !aRectFnSet.IsRev() )
+            {
+                aFrm.Pos().X() += nReal;
+            }
         }
 
-        pFrame->setSwFrame(aFrm);
         pFrame->InvalidatePrt();
 
         if ( pFrame->GetNext() )
@@ -1807,15 +1814,15 @@ SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
     {
         if ( !bTst )
         {
-            SwRect aFrm(getSwFrame());
-            aRectFnSet.SetHeight( aFrm, nFrameHeight + nDist );
-
-            if( IsVertical() && !IsVertLR() && !IsReverse() )
             {
-                aFrm.Pos().X() -= nDist;
-            }
+                SwFrameRect::FrameWriteAccess aFrm(*this);
+                aRectFnSet.SetHeight( aFrm, nFrameHeight + nDist );
 
-            setSwFrame(aFrm);
+                if( IsVertical() && !IsVertLR() && !IsReverse() )
+                {
+                    aFrm.Pos().X() -= nDist;
+                }
+            }
 
             if ( GetNext() )
             {
@@ -1845,16 +1852,17 @@ SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
     {
         //Contents are always resized to the wished value.
         long nOld = aRectFnSet.GetHeight(getSwFrame());
-        SwRect aFrm(getSwFrame());
 
-        aRectFnSet.SetHeight( aFrm, nOld + nDist );
-
-        if( IsVertical()&& !IsVertLR() && !IsReverse() )
         {
-            aFrm.Pos().X() -= nDist;
-        }
+            SwFrameRect::FrameWriteAccess aFrm(*this);
 
-        setSwFrame(aFrm);
+            aRectFnSet.SetHeight( aFrm, nOld + nDist );
+
+            if( IsVertical()&& !IsVertLR() && !IsReverse() )
+            {
+                aFrm.Pos().X() -= nDist;
+            }
+        }
 
         SwTabFrame *pTab = (nOld && IsInTab()) ? FindTabFrame() : nullptr;
         if (pTab)
@@ -1942,15 +1950,16 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
             nRstHeight = nDist;
         }
 
-        SwRect aFrm(getSwFrame());
-        aRectFnSet.SetHeight( aFrm, aRectFnSet.GetHeight(aFrm) - nDist );
-
-        if( IsVertical() && !IsVertLR() )
         {
-            aFrm.Pos().X() += nDist;
+            SwFrameRect::FrameWriteAccess aFrm(*this);
+            aRectFnSet.SetHeight( aFrm, aRectFnSet.GetHeight(aFrm) - nDist );
+
+            if( IsVertical() && !IsVertLR() )
+            {
+                aFrm.Pos().X() += nDist;
+            }
         }
 
-        setSwFrame(aFrm);
         nDist = nRstHeight;
         SwTabFrame *pTab = IsInTab() ? FindTabFrame() : nullptr;
         if (pTab)
@@ -2338,7 +2347,7 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
     bool bChgPos = IsVertical() && !IsReverse();
     if ( !bTst )
     {
-        SwRect aFrm(getSwFrame());
+        SwFrameRect::FrameWriteAccess aFrm(*this);
         aRectFnSet.SetHeight( aFrm, nFrameHeight + nDist );
 
         if( bChgPos && !IsVertLR() )
@@ -2346,7 +2355,6 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
             aFrm.Pos().X() -= nDist;
         }
 
-        setSwFrame(aFrm);
         bMoveAccFrame = true;
     }
 
@@ -2425,7 +2433,7 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
             // NEW TABLES
             ( !IsCellFrame() || static_cast<SwCellFrame*>(this)->GetLayoutRowSpan() > 1 ) )
         {
-            SwRect aFrm(getSwFrame());
+            SwFrameRect::FrameWriteAccess aFrm(*this);
             aRectFnSet.SetHeight( aFrm, nFrameHeight + nReal );
 
             if( bChgPos && !IsVertLR() )
@@ -2433,7 +2441,6 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
                 aFrm.Pos().X() = nFramePos - nReal;
             }
 
-            setSwFrame(aFrm);
             bMoveAccFrame = true;
         }
 
@@ -2533,7 +2540,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
     SwTwips nRealDist = nReal;
     if ( !bTst )
     {
-        SwRect aFrm(getSwFrame());
+        SwFrameRect::FrameWriteAccess aFrm(*this);
         aRectFnSet.SetHeight( aFrm, nFrameHeight - nReal );
 
         if( bChgPos && !IsVertLR() )
@@ -2541,7 +2548,6 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
             aFrm.Pos().X() += nReal;
         }
 
-        setSwFrame(aFrm);
         bMoveAccFrame = true;
     }
 
@@ -2559,7 +2565,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
             nReal *= -1;
             if ( !bTst && IsBodyFrame() && nReal < nRealDist )
             {
-                SwRect aFrm(getSwFrame());
+                SwFrameRect::FrameWriteAccess aFrm(*this);
                 aRectFnSet.SetHeight( aFrm, aRectFnSet.GetHeight(aFrm) + nRealDist - nReal );
 
                 if( bChgPos && !IsVertLR() )
@@ -2567,7 +2573,6 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
                     aFrm.Pos().X() += nRealDist - nReal;
                 }
 
-                setSwFrame(aFrm);
                 OSL_ENSURE( !IsAccessibleFrame(), "bMoveAccFrame has to be set!" );
             }
         }
@@ -2577,7 +2582,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         SwTwips nTmp = GetUpper()->Shrink( nReal, bTst, bInfo );
         if ( nTmp != nReal )
         {
-            SwRect aFrm(getSwFrame());
+            SwFrameRect::FrameWriteAccess aFrm(*this);
             aRectFnSet.SetHeight( aFrm, aRectFnSet.GetHeight(aFrm) + nReal - nTmp );
 
             if( bChgPos && !IsVertLR() )
@@ -2585,7 +2590,6 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
                 aFrm.Pos().X() += nTmp - nReal;
             }
 
-            setSwFrame(aFrm);
             OSL_ENSURE( !IsAccessibleFrame(), "bMoveAccFrame has to be set!" );
             nReal = nTmp;
         }
@@ -2892,9 +2896,8 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
                         // In horizontal layout set width of header, footer,
                         // foot note container, foot note, body and no-text
                         // frames to its upper width.
-                        SwRect aFrm(pLowerFrame->getSwFrame());
+                        SwFrameRect::FrameWriteAccess aFrm(*pLowerFrame);
                         aFrm.Width( getSwPrint().Width() );
-                        pLowerFrame->setSwFrame(aFrm);
                     }
                     else if( rOldSize.Width() && !pLowerFrame->IsFootnoteFrame() )
                     {
@@ -2924,9 +2927,8 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
                                 (pLowerFrame->getSwFrame().Width() * getSwPrint().Width()) / rOldSize.Width();
                         }
 
-                        SwRect aFrm(pLowerFrame->getSwFrame());
+                        SwFrameRect::FrameWriteAccess aFrm(*pLowerFrame);
                         aFrm.Width( nNewWidth );
-                        pLowerFrame->setSwFrame(aFrm);
                     }
                 }
                 if ( bHeightChgd )
@@ -2938,9 +2940,8 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
                         // no-text frames to its upper height.
                         // In horizontal layout set height of column frames
                         // to its upper height.
-                        SwRect aFrm(pLowerFrame->getSwFrame());
+                        SwFrameRect::FrameWriteAccess aFrm(*pLowerFrame);
                         aFrm.Height( getSwPrint().Height() );
-                        pLowerFrame->setSwFrame(aFrm);
                     }
                     // OD 01.10.2002 #102211#
                     // add conditions <!pLowerFrame->IsHeaderFrame()> and
@@ -2997,9 +2998,8 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
                                         nNewHeight = 0;
                                     }
 
-                                    SwRect aFrm(pLowerFrame->getSwFrame());
+                                    SwFrameRect::FrameWriteAccess aFrm(*pLowerFrame);
                                     aFrm.Height( nNewHeight );
-                                    pLowerFrame->setSwFrame(aFrm);
                                 }
                             }
                         }
@@ -3038,9 +3038,8 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
                                     nNewHeight = nSum;
                             }
 
-                            SwRect aFrm(pLowerFrame->getSwFrame());
+                            SwFrameRect::FrameWriteAccess aFrm(*pLowerFrame);
                             aFrm.Height( nNewHeight );
-                            pLowerFrame->setSwFrame(aFrm);
                         }
                     }
                 }
@@ -3428,9 +3427,10 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 long nTop = aRectFnSet.GetTopMargin(*this);
                 // #i23129# - correction
                 // to the calculated maximum height.
-                SwRect aFrm(getSwFrame());
-                aRectFnSet.AddBottom( aFrm, nMaximum - aRectFnSet.GetHeight(getSwFrame()) );
-                setSwFrame(aFrm);
+                {
+                    SwFrameRect::FrameWriteAccess aFrm(*this);
+                    aRectFnSet.AddBottom( aFrm, nMaximum - aRectFnSet.GetHeight(getSwFrame()) );
+                }
 
                 if( nTop > nMaximum )
                     nTop = nMaximum;
@@ -3636,9 +3636,10 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     long nTop = aRectFnSet.GetTopMargin(*this);
                     nDiff = aRectFnSet.GetHeight(getSwPrint()) + nDiff + nBorder - aRectFnSet.GetHeight(getSwFrame());
 
-                    SwRect aFrm(getSwFrame());
-                    aRectFnSet.AddBottom( aFrm, nDiff );
-                    setSwFrame(aFrm);
+                    {
+                        SwFrameRect::FrameWriteAccess aFrm(*this);
+                        aRectFnSet.AddBottom( aFrm, nDiff );
+                    }
 
                     // #i68520#
                     SwFlyFrame *pFlyFrame = dynamic_cast<SwFlyFrame*>(this);

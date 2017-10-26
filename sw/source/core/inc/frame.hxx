@@ -133,9 +133,39 @@ public:
     const SwRect& getSwFrame() const { return maFrameRect; }
     const SwRect& getSwPrint() const { return maPrintRect; }
 
-    // set methods - only way allowed to change these, see above
-    void setSwFrame(const SwRect& rNew) { maFrameRect = rNew; }
-    void setSwPrint(const SwRect& rNew) { maPrintRect = rNew; }
+    // helper class(es) for FrameRect/PrintRect manipulation. These
+    // have to be used to apply changes. They hold a copy of the SwRect
+    // for manipulation, it gets written back at destruction. Thus this
+    // mechanism depends on scope usage, take care. It prevents errors using
+    // different instances of SwFrame in get/set methods which is more safe
+    class FrameWriteAccess : public SwRect
+    {
+    private:
+        SwFrameRect&        mrTarget;
+
+        FrameWriteAccess(const FrameWriteAccess&) = delete;
+        FrameWriteAccess& operator=(const FrameWriteAccess&) = delete;
+
+    public:
+        FrameWriteAccess(SwFrameRect& rTarget) : SwRect(rTarget.getSwFrame()), mrTarget(rTarget) {}
+        ~FrameWriteAccess() { mrTarget.maFrameRect = *this; }
+        void setSwRect(const SwRect& rNew) { *(reinterpret_cast< SwRect* >(this)) = rNew; }
+    };
+
+    // same for print
+    class PrintWriteAccess : public SwRect
+    {
+    private:
+        SwFrameRect&        mrTarget;
+
+        PrintWriteAccess(const PrintWriteAccess&) = delete;
+        PrintWriteAccess& operator=(const PrintWriteAccess&) = delete;
+
+    public:
+        PrintWriteAccess(SwFrameRect& rTarget) : SwRect(rTarget.getSwPrint()), mrTarget(rTarget) {}
+        ~PrintWriteAccess() { mrTarget.maPrintRect = *this; }
+        void setSwRect(const SwRect& rNew) { *(reinterpret_cast< SwRect* >(this)) = rNew; }
+    };
 };
 
 /**
