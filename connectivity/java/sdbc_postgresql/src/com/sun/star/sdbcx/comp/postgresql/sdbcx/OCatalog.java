@@ -34,6 +34,9 @@ import com.sun.star.sdbcx.XViewsSupplier;
 import com.sun.star.sdbcx.comp.postgresql.util.ComposeRule;
 import com.sun.star.sdbcx.comp.postgresql.util.DbTools;
 
+/** Base expects the containers returned by X(Tables/Views/Groups/Users)Supplier
+ * to be the same throughout the lifetime of the catalog!!
+ */
 public abstract class OCatalog extends ComponentBase
         implements XTablesSupplier, XViewsSupplier, XUsersSupplier, XGroupsSupplier, XServiceInfo {
 
@@ -96,7 +99,7 @@ public abstract class OCatalog extends ComponentBase
     public synchronized XNameAccess getTables() {
         checkDisposed();
         if (tables == null) {
-            tables = refreshTables();
+            refreshTables();
         }
         return tables;
     }
@@ -105,7 +108,7 @@ public abstract class OCatalog extends ComponentBase
     public synchronized XNameAccess getViews() {
         checkDisposed();
         if (views == null) {
-            views = refreshViews();
+            refreshViews();
         }
         return views;
     }
@@ -114,7 +117,7 @@ public abstract class OCatalog extends ComponentBase
     public synchronized XNameAccess getGroups() {
         checkDisposed();
         if (groups == null) {
-            groups = refreshGroups();
+            refreshGroups();
         }
         return groups;
     }
@@ -123,29 +126,17 @@ public abstract class OCatalog extends ComponentBase
     public synchronized XNameAccess getUsers() {
         checkDisposed();
         if (users == null) {
-            users = refreshUsers();
+            refreshUsers();
         }
         return users;
     }
 
     public synchronized void refreshObjects() {
         checkDisposed();
-        if (tables != null) {
-            tables.dispose();
-            tables = null;
-        }
-        if (views != null) {
-            views.dispose();
-            views = null;
-        }
-        if (groups != null) {
-            groups.dispose();
-            groups = null;
-        }
-        if (users != null) {
-            users.dispose();
-            users = null;
-        }
+        refreshTables();
+        refreshViews();
+        refreshGroups();
+        refreshUsers();
     }
 
     /**
@@ -169,8 +160,8 @@ public abstract class OCatalog extends ComponentBase
         return DbTools.composeTableName(metadata, catalog, schema, table, false, ComposeRule.InDataManipulation);
     }
 
-    public abstract OContainer refreshTables();
-    public abstract OContainer refreshViews();
-    public abstract OContainer refreshGroups();
-    public abstract OContainer refreshUsers();
+    public abstract void refreshTables();
+    public abstract void refreshViews();
+    public abstract void refreshGroups();
+    public abstract void refreshUsers();
 }

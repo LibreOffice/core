@@ -109,6 +109,16 @@ public abstract class OContainer extends WeakBase implements
         }
     }
 
+    public void refill(List<String> names) {
+        // We only add new elements, as per the C++ implementation.
+        for (String name : names) {
+            if (!entriesByName.containsKey(name)) {
+                entriesByName.put(name, null);
+                namesByIndex.add(name);
+            }
+        }
+    }
+
     // Would be from XComponent ;)
 
     public void dispose() {
