@@ -1151,6 +1151,7 @@ namespace {
 //coverity[result_independent_of_operands]
 template<typename T> bool exceedsMaxOffT(T n) { return n > MAX_OFF_T; }
 
+//coverity[result_independent_of_operands]
 template<typename T> bool exceedsMinOffT(T n)
 { return n < std::numeric_limits<off_t>::min(); }
 
