@@ -58,7 +58,7 @@ class AsyncAccelExec : public cppu::WeakImplHelper<css::lang::XEventListener>
             This instance can be forced to execute it's internal set request
             asynchronous. After that it deletes itself !
          */
-        static AsyncAccelExec* createOnShotInstance(const css::uno::Reference<css::lang::XComponent>& xFrame,
+        static AsyncAccelExec* createOneShotInstance(const css::uno::Reference<css::lang::XComponent>& xFrame,
                                                     const css::uno::Reference<css::frame::XDispatch>& xDispatch,
                                                     const css::util::URL& rURL);
 
@@ -203,7 +203,7 @@ bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
     {
         // Note: Such instance can be used one times only and destroy itself afterwards .-)
         css::uno::Reference<css::lang::XComponent> xFrame(xProvider, css::uno::UNO_QUERY);
-        AsyncAccelExec* pExec = AsyncAccelExec::createOnShotInstance(xFrame, xDispatch, aURL);
+        AsyncAccelExec* pExec = AsyncAccelExec::createOneShotInstance(xFrame, xDispatch, aURL);
         pExec->execAsync();
     }
 
@@ -440,7 +440,7 @@ AsyncAccelExec::AsyncAccelExec(const css::uno::Reference<css::lang::XComponent>&
 {
 }
 
-AsyncAccelExec* AsyncAccelExec::createOnShotInstance(const css::uno::Reference<css::lang::XComponent> &xFrame,
+AsyncAccelExec* AsyncAccelExec::createOneShotInstance(const css::uno::Reference<css::lang::XComponent> &xFrame,
                                                      const css::uno::Reference< css::frame::XDispatch >& xDispatch,
                                                      const css::util::URL& rURL)
 {
