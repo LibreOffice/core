@@ -23,7 +23,7 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/i18n/XLocaleData4.hpp>
+#include <com/sun/star/i18n/XLocaleData5.hpp>
 
 
 #include <cppuhelper/implbase.hxx>
@@ -35,7 +35,7 @@
 #include <com/sun/star/i18n/FormatElement.hpp>
 #include <com/sun/star/i18n/Currency.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/i18n/LocaleDataItem.hpp>
+#include <com/sun/star/i18n/LocaleDataItem2.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -61,7 +61,7 @@ namespace i18npool {
 
 class LocaleDataImpl : public cppu::WeakImplHelper
 <
-    css::i18n::XLocaleData4,
+    css::i18n::XLocaleData5,
     css::lang::XServiceInfo
 >
 {
@@ -107,6 +107,9 @@ public:
 
     // XLocaleData4
     virtual css::uno::Sequence< OUString > SAL_CALL getDateAcceptancePatterns( const css::lang::Locale& rLocale ) override;
+
+    // XLocaleData5
+    virtual css::i18n::LocaleDataItem2 SAL_CALL getLocaleItem2( const css::lang::Locale& rLocale ) override;
 
     // following methods are used by indexentry service
     /// @throws css::uno::RuntimeException
