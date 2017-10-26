@@ -108,6 +108,7 @@ static const TokenTable pTokenTableArray[] =
     { "MirroredY",                          EAS_MirroredY },
     { "ViewBox",                            EAS_ViewBox },
     { "TextRotateAngle",                    EAS_TextRotateAngle },
+    { "TextPreRotateAngle",                 EAS_TextPreRotateAngle },
     { "ExtrusionAllowed",                   EAS_ExtrusionAllowed },
     { "TextPathAllowed",                    EAS_TextPathAllowed },
     { "ConcentricGradientFillAllowed",      EAS_ConcentricGradientFillAllowed },
