@@ -192,11 +192,6 @@ bool INetMIMEMessage::ParseDateField (
               (rDateTime.GetHour() > 23)    ));
 }
 
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning( disable : 4592)
-#endif
-
 static const std::map<InetMessageMime, const char*> ImplINetMIMEMessageHeaderData =
 {
     { InetMessageMime::VERSION, "MIME-Version"},
@@ -204,10 +199,6 @@ static const std::map<InetMessageMime, const char*> ImplINetMIMEMessageHeaderDat
     { InetMessageMime::CONTENT_TYPE, "Content-Type"},
     { InetMessageMime::CONTENT_TRANSFER_ENCODING, "Content-Transfer-Encoding"}
 };
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 INetMIMEMessage::INetMIMEMessage()
     : pParent(nullptr)

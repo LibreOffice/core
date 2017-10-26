@@ -57,10 +57,6 @@
 
 #include <string.h>
 
-#if defined( _MSC_VER )
-#pragma warning(once: 4068)
-#endif
-
 #include "levdis.hxx"
 
 #ifdef __sun

@@ -204,13 +204,7 @@ typedef pthread_mutex_t rtl_memory_lock_type;
 #elif defined(SAL_W32)
 
 #define WIN32_LEAN_AND_MEAN
-#ifdef _MSC_VER
-#pragma warning(push,1) /* disable warnings within system headers */
-#endif
 #include <windows.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 typedef CRITICAL_SECTION rtl_memory_lock_type;
 

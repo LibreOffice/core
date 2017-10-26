@@ -29,15 +29,8 @@
 #include <osl/mutex.hxx>
 
 #include <utility>
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#pragma warning(disable: 4917)
-#endif
 #include <objidl.h>
 #include <shlobj.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 #include "../misc/WinImplHelper.hxx"
 
 // the Mta-Ole clipboard class is for internal use only!

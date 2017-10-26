@@ -19,14 +19,7 @@
 
 #include "quickstarter.hxx"
 
-#ifdef _MSC_VER
-#pragma warning(push, 1) /* disable warnings within system headers */
-#pragma warning(disable: 4917)
-#endif
 #include <shlobj.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 extern "C" UINT __stdcall RemoveQuickstarterLink( MSIHANDLE hMSI )
 {

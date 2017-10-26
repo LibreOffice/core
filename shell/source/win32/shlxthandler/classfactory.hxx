@@ -20,13 +20,7 @@
 #ifndef INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_CLASSFACTORY_HXX
 #define INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_CLASSFACTORY_HXX
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
 #include <objidl.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 class CClassFactory : public IClassFactory
 {

@@ -19,13 +19,8 @@
 
 #include "system.h"
 #include <string.h>
-#ifdef _MSC_VER
-#pragma warning(push,1) /* disable warnings within system headers */
-#endif
+
 #include <shellapi.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 #include <cassert>
 #include <memory>
@@ -320,10 +315,6 @@ static struct CommandArgs_Impl g_command_args =
     nullptr
 };
 
-#ifdef _MSC_VER
-#pragma warning( push )
-#pragma warning( disable: 4100 )
-#endif
 static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
 {
     rtl_uString ** ppArgs =
@@ -369,9 +360,6 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
     return ppArgs;
 
 }
-#ifdef _MSC_VER
-#pragma warning( pop )
-#endif
 
 oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString **ppustrFile )
 {

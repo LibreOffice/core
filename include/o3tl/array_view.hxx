@@ -36,8 +36,8 @@
 namespace o3tl {
 
 #if defined _MSC_VER
-#pragma warning(push, 1)
-#pragma warning(disable: 4814) // in C++14 'constexpr' will not imply 'const'
+#pragma warning(push)
+#pragma warning(disable: 4522) // multiple assignment operators specified
 #endif
 
 /** A barebones approximation of C++17(?) <array_view>.

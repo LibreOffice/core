@@ -28,7 +28,8 @@
 # pragma GCC diagnostic ignored "-Wundef"
 # pragma GCC diagnostic ignored "-Wunused-parameter"
 #elif defined _MSC_VER
-#pragma warning(push, 1)
+#pragma warning(push)
+#pragma warning(disable : 4100) // unreferenced formal parameter
 #endif
 
 #include <GfxState.h>

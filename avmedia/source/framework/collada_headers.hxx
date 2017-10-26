@@ -15,7 +15,9 @@
 #if defined __GNUC__ || defined __clang__
 #pragma GCC system_header
 #elif defined _MSC_VER
-#pragma warning(push, 1)
+#pragma warning(push)
+#pragma warning(disable : 4100) // unreferenced formal parameter
+#pragma warning(disable : 4245) // conversion from 'int' to 'COLLADAFW::*', signed/unsigned mismatch
 #endif
 
 #include <COLLADA2GLTFWriter.h>

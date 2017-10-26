@@ -252,7 +252,6 @@ static void parseLineAndFile(sal_Char* pBuf)
 #pragma GCC diagnostic ignored "-Wunused-function"
 #pragma GCC diagnostic ignored "-Wunused-label"
 #elif defined _MSC_VER
-#pragma warning(push, 1)
 /**/
 #ifdef yywrap
 #undef  yywrap

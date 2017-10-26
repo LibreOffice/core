@@ -19,9 +19,6 @@
 
 // SOActiveX.cpp : Implementation of CSOActiveX
 
-#pragma warning (push,1)
-#pragma warning (disable:4265)
-
 #include "StdAfx2.h"
 #include "SOActiveX.h"
 #include "SOComWindowPeer.h"
@@ -36,8 +33,6 @@
 #if defined __clang__
 #pragma clang diagnostic pop
 #endif
-
-#pragma warning (pop)
 
 #define STAROFFICE_WINDOWCLASS L"SOParentWindow"
 

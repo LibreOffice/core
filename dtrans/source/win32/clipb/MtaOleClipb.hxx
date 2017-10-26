@@ -23,13 +23,7 @@
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 
-#if defined _MSC_VER
-#pragma warning(push,1)
-#endif
 #include <objidl.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 // the Mta-Ole clipboard class is for internal use only!
 // only one instance of this class should be created, the

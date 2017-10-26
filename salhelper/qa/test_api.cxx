@@ -121,9 +121,8 @@ void Test::testCondition() {
 }
 
 #ifdef _MSC_VER
-// MSVC 2012 warns about the "p" being unused
-#pragma warning (push, 1)
-#pragma warning (disable: 4189)
+#pragma warning (push)
+#pragma warning (disable: 4189) // 'p': local variable is initialized but not referenced
 #endif
 
 

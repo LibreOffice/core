@@ -90,14 +90,7 @@ public:
 protected:
     /** This dummy default c'tor will never call the c'tor of the virtual base
         class BinaryStreamBase as this class cannot be instantiated directly. */
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning( disable : 4702)
-#endif
     BinaryOutputStream() : BinaryStreamBase( false ) {}
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 private:
     BinaryOutputStream( BinaryOutputStream const& ) = delete;

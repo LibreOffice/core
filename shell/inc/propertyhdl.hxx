@@ -20,14 +20,7 @@
 #ifndef INCLUDED_SHELL_INC_INTERNAL_PROPERTYHDL_HXX
 #define INCLUDED_SHELL_INC_INTERNAL_PROPERTYHDL_HXX
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#pragma warning(disable:4917)
-#endif
 #include <shlobj.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 // {AE424E85-F6DF-4910-A6A9-438797986431}
 const CLSID CLSID_PROPERTY_HANDLER =

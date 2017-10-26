@@ -41,14 +41,7 @@
 #include <sal/macros.h>
 
 #ifdef _WIN32
-#ifdef _MSC_VER
-#pragma warning(push,1) // disable warnings within system headers
-//#pragma warning(disable: 4917)
-#endif
 #include <objbase.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 #endif
 
 #include "onlinecheck.hxx"

@@ -21,14 +21,8 @@
 #define INCLUDED_SHELL_SOURCE_WIN32_SIMPLEMAIL_SIMPLEMAPI_HXX
 
 #define WIN32_LEAN_AND_MEAN
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
 #include <windows.h>
 #include <mapi.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 class CSimpleMapi
 {

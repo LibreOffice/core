@@ -197,13 +197,7 @@ osl_getAsciiFunctionSymbol( oslModule Module, const sal_Char *pSymbol )
 /* Implementation for Windows NT, 2K and XP (2K and XP could use the above method too) */
 /***************************************************************************************/
 
-#ifdef _MSC_VER
-#pragma warning(push,1) /* disable warnings within system headers */
-#endif
 #include <imagehlp.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 typedef BOOL (WINAPI *SymInitialize_PROC)(
     HANDLE   hProcess,

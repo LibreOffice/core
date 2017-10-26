@@ -29,15 +29,6 @@
 
 // This class is used only as a target for casting, it seems,
 // and no objects of this type are created as such, I think.
-// So avoid MSVC warnings:
-// warning C4510: 'ScVbaFormatConditions' : default constructor could not be generated
-// warning C4610: class 'ScVbaFormatConditions' can never be instantiated - user defined constructor required
-
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 4510)
-#pragma warning(disable: 4610)
-#endif
 
 class ScVbaFormatConditions: public CollTestImplHelper< ov::excel::XFormatConditions >
 {
@@ -67,11 +58,9 @@ public:
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
-};
 
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+    ScVbaFormatConditions() = delete;
+};
 
 #endif // INCLUDED_SC_SOURCE_UI_VBA_VBAFORMATCONDITIONS_HXX
 

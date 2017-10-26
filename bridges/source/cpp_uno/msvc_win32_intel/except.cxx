@@ -18,7 +18,6 @@
  */
 
 
-#pragma warning( disable : 4237 )
 #include <sal/config.h>
 #include <malloc.h>
 #include <typeinfo.h>

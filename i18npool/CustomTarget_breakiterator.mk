@@ -74,7 +74,7 @@ $(i18npool_BIDIR)/OpenOffice_dat.c : $(SRCDIR)/i18npool/CustomTarget_breakiterat
 		$(call gb_ExternalExecutable_get_command,gencmn) -n OpenOffice -t tmp -S -d $(i18npool_BIDIR)/ 0 $${RESPONSEFILE} && \
 		rm -f $${RESPONSEFILE} && \
 		echo '#ifdef _MSC_VER' > $@ && \
-		echo '#pragma warning( disable : 4229 4668 )' >> $@ && \
+		echo '#pragma warning( disable : 4229 )' >> $@ && \
 		echo '#endif' >> $@ && \
 		cat $(subst _dat,_tmp,$@) >> $@)
 

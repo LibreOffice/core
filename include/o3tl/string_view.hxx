@@ -152,11 +152,6 @@ template<std::size_t N> struct ConstWcharArrayDetector<wchar_t const[N]> {
 
 }
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#pragma warning(disable: 4814) // in C++14 'constexpr' will not imply 'const'
-#endif
-
 template<typename charT, typename traits = std::char_traits<charT>>
 class basic_string_view {
 public:
@@ -824,10 +819,6 @@ operator <<(
     }
     return os;
 }
-
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 using string_view = basic_string_view<char>;
 using u16string_view = basic_string_view<char16_t>;

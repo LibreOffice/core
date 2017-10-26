@@ -97,7 +97,7 @@ static inline void emit_ldarg( Emit::ILGenerator ^ code, ::System::Int32 index )
     {
     case 0:
 #pragma warning (push)
-#pragma warning (disable: 4538)
+#pragma warning (disable: 4538) // const/volatile qualifiers on this type are not supported
         code->Emit( Emit::OpCodes::Ldarg_0 );
 #pragma warning (pop)
         break;

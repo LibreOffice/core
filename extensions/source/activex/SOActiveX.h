@@ -24,9 +24,6 @@
 
 #include "resource.h"
 
-#pragma warning (push,1)
-#pragma warning (disable:4265)
-
 #include <ExDispID.h>
 #include <ExDisp.h>
 #include <shlguid.h>
@@ -41,8 +38,6 @@
 #if defined __clang__
 #pragma clang diagnostic pop
 #endif
-
-#pragma warning (pop)
 
 class SODispatchInterceptor;
 

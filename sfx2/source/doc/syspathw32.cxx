@@ -22,9 +22,6 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #ifdef _WIN32
-#ifdef _MSC_VER
-#pragma warning(disable:4917)
-#endif
 
 #undef WB_LEFT
 #undef WB_RIGHT

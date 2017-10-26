@@ -20,14 +20,7 @@
 #ifndef INCLUDED_SHELL_INC_INTERNAL_COLUMNINFO_HXX
 #define INCLUDED_SHELL_INC_INTERNAL_COLUMNINFO_HXX
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#pragma warning(disable:4917)
-#endif
 #include <shlobj.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 
 class CColumnInfo : public IColumnProvider

@@ -19,8 +19,4 @@
 
 #undef ADO_REDUCED_WARN_LEVEL
 
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

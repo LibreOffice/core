@@ -31,15 +31,9 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #define WIN32_LEAN_AND_MEAN
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
 #include <windows.h>
 #include <shellapi.h>
 #include <objbase.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::RuntimeException;

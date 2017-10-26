@@ -10,11 +10,6 @@
 #ifndef INCLUDED_HELPCOMPILER_SOURCE_LUCENEHELPER_HXX
 #define INCLUDED_HELPCOMPILER_SOURCE_LUCENEHELPER_HXX
 
-#if defined _MSC_VER
-#pragma warning(push)
-#pragma warning(disable : 4068 4263 4264 4266)
-#endif
-
 #if defined(__GNUC__)
 #  pragma GCC visibility push (default)
 #endif
@@ -24,10 +19,6 @@
 
 #if defined(__GNUC__)
 #  pragma GCC visibility pop
-#endif
-
-#if defined _MSC_VER
-#pragma warning(pop)
 #endif
 
 #include <rtl/ustring.hxx>

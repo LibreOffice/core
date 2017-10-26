@@ -22,18 +22,12 @@
 
 #include "wininetbackend.hxx"
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
 #include <wininet.h>
 #include <sal/alloca.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 #define WININET_DLL_NAME L"wininet.dll"
 #define EQUAL_SIGN '='

@@ -24,10 +24,6 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_ACTIVEX_STDAFX2_H
 #define INCLUDED_EXTENSIONS_SOURCE_ACTIVEX_STDAFX2_H
 
-#ifdef _MSC_VER
-#pragma once
-#endif
-
 #define STRICT
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0502
@@ -35,11 +31,9 @@
 #define _ATL_APARTMENT_THREADED
 #define _ATL_STATIC_REGISTRY
 
-#pragma warning (push,1)
-#pragma warning (disable:4548)
-    //  expression before comma has no effect; expected expression with side-effect
-#pragma warning (disable:4555)
-    //  expression has no effect; expected expression with side-effect
+#pragma warning (push)
+#pragma warning (disable:4189)
+    //  local variable is initialized but not referenced - in atlctl.h
 #if defined __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wall"
@@ -75,6 +69,6 @@ extern CComModule _Module;
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
-#endif // !defined(AFX_STDAFX_H__C1799EA0_62CC_44DE_A2DD_C9F0410FF7F1__INCLUDED)
+#endif // !defined(INCLUDED_EXTENSIONS_SOURCE_ACTIVEX_STDAFX2_H)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

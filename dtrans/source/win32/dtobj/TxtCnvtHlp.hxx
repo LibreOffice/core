@@ -24,14 +24,8 @@
 
 #include "DTransHelper.hxx"
 
-#if defined _MSC_VER
-#pragma warning(push,1)
-#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 int MultiByteToWideCharEx( UINT cp_src,
                            LPCSTR lpMultiByteString,
