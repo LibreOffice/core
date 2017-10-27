@@ -871,7 +871,7 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const * i_pFont, HFONT& o_
     return hNewFont;
 }
 
-void WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel )
+void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel )
 {
     // return early if there is no new font
     if( !pFont )

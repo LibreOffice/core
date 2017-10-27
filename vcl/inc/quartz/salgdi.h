@@ -63,7 +63,7 @@ public:
     virtual                         ~CoreTextFontFace() override;
 
     PhysicalFontFace*               Clone() const override;
-    LogicalFontInstance*            CreateFontInstance( FontSelectPattern& ) const override;
+    LogicalFontInstance*            CreateFontInstance( const FontSelectPattern& ) const override;
     sal_IntPtr                      GetFontId() const override;
 
     int                             GetFontTable( const char pTagName[5], unsigned char* ) const;
@@ -330,7 +330,7 @@ public:
     // set the text color to a specific color
     virtual void            SetTextColor( SalColor nSalColor ) override;
     // set the font
-    virtual void            SetFont( FontSelectPattern*, int nFallbackLevel ) override;
+    virtual void            SetFont( const FontSelectPattern*, int nFallbackLevel ) override;
     // get the current font's metrics
     virtual void            GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
     // get the repertoire of the current font

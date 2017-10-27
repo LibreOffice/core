@@ -65,7 +65,7 @@ public:
     virtual                 ~WinFontFace() override;
 
     virtual PhysicalFontFace* Clone() const override;
-    virtual LogicalFontInstance* CreateFontInstance( FontSelectPattern& ) const override;
+    virtual LogicalFontInstance* CreateFontInstance( const FontSelectPattern& ) const override;
     virtual sal_IntPtr      GetFontId() const override;
     void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
     void                    UpdateFromHDC( HDC ) const;
@@ -332,7 +332,7 @@ public:
     // set the text color to a specific color
     virtual void            SetTextColor( SalColor nSalColor ) override;
     // set the font
-    virtual void            SetFont( FontSelectPattern*, int nFallbackLevel ) override;
+    virtual void            SetFont( const FontSelectPattern*, int nFallbackLevel ) override;
     // get the current font's metrics
     virtual void            GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
     // get the repertoire of the current font
