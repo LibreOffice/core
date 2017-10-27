@@ -467,12 +467,10 @@ double ScSolverValueDialog::GetValue() const
 {
     OUString aInput = m_pEdValue->GetText();
 
-    const LocaleDataWrapper* pLocaleData = ScGlobal::GetpLocaleData();
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
-    double fValue = rtl::math::stringToDouble( aInput,
-                            pLocaleData->getNumDecimalSep()[0],
-                            pLocaleData->getNumThousandSep()[0],
-                            &eStatus );
+    sal_Int32 nParseEnd = 0;
+    double fValue = ScGlobal::GetpLocaleData()->stringToDouble( aInput, true, &eStatus, &nParseEnd);
+    /* TODO: shouldn't there be some error checking? */
     return fValue;
 }
 
