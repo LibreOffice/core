@@ -26,7 +26,7 @@
 #include <QtX11Extras/QX11Info>
 
 
-#include "config_kde5.h"
+#include "config_qt5.h"
 
 #include "KDE5XLib.hxx"
 #include "VCLKDE5Application.hxx"
@@ -45,7 +45,7 @@
 
 #undef Bool
 
-#if KF5_HAVE_GLIB
+#if QT5_HAVE_GLIB
 //#include "KDE4FilePicker.hxx"
 #include "tst_exclude_socket_notifiers.moc"
 #include "tst_exclude_posted_events.moc"
@@ -177,7 +177,7 @@ void KDE5XLib::Init()
 
     //KApplication::setQuitOnLastWindowClosed(false);
 
-#if KF5_HAVE_GLIB
+#if QT5_HAVE_GLIB
     m_isGlibEventLoopType = QAbstractEventDispatcher::instance()->inherits( "QEventDispatcherGlib" );
     // Using KDE dialogs (and their nested event loops) works only with a proper event loop integration
     // that will release SolarMutex when waiting for more events.
@@ -201,7 +201,7 @@ void KDE5XLib::Init()
 // needs to be unlocked shortly before entering the main sleep (e.g. select()) and locked
 // immediately after. So we need to know which event loop implementation is used and
 // hook accordingly.
-#if KF5_HAVE_GLIB
+#if QT5_HAVE_GLIB
 #include <glib.h>
 
 static GPollFunc old_gpoll = nullptr;
@@ -238,7 +238,7 @@ void KDE5XLib::setupEventLoop()
     QAbstractEventDispatcher *qDispatcher = QAbstractEventDispatcher::instance();
 
     //qDispatcher->installNativeEventFilter( this );
-#if KF5_HAVE_GLIB
+#if QT5_HAVE_GLIB
     if( m_isGlibEventLoopType )
     {
         old_gpoll = g_main_context_get_poll_func( nullptr );
@@ -392,7 +392,7 @@ using namespace com::sun::star;
 uno::Reference< ui::dialogs::XFilePicker2 > KDE5XLib::createFilePicker(
         const uno::Reference< uno::XComponentContext >& xMSF )
 {
-#if KF5_HAVE_GLIB
+#if QT5_HAVE_GLIB
     if( qApp->thread() != QThread::currentThread()) {
         SalYieldMutexReleaser aReleaser;
         return Q_EMIT createFilePickerSignal( xMSF );
