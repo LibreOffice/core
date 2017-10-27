@@ -63,12 +63,13 @@ Kf5Instance::~Kf5Instance()
 
 SalFrame* Kf5Instance::CreateChildFrame( SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle )
 {
-    return new Kf5Frame( this, nullptr, nStyle );
+    return new Kf5Frame( nullptr, nStyle );
 }
 
 SalFrame* Kf5Instance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
 {
-    return new Kf5Frame( this, pParent, nStyle );
+    assert( !pParent || dynamic_cast<Kf5Frame*>( pParent ) );
+    return new Kf5Frame( static_cast<Kf5Frame*>( pParent ), nStyle );
 }
 
 void Kf5Instance::DestroyFrame( SalFrame* pFrame )
