@@ -24,7 +24,7 @@
 #include <windows.h>
 #pragma warning(pop)
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 
 class type_info;
