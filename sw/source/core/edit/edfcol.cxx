@@ -36,6 +36,9 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/XParagraphAppend.hpp>
+#include <com/sun/star/text/XParagraphCursor.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
@@ -525,14 +528,76 @@ bool addOrInsertDocumentProperty(uno::Reference<beans::XPropertyContainer> const
     return true;
 }
 
-void insertFieldToDocument(uno::Reference<lang::XMultiServiceFactory> const & rxMultiServiceFactory, uno::Reference<text::XText> const & rxText, OUString const & rsKey)
+void insertFieldToDocument(uno::Reference<lang::XMultiServiceFactory> const & rxMultiServiceFactory,
+                           uno::Reference<text::XText> const & rxText, uno::Reference<text::XParagraphCursor> const & rxParagraphCursor,
+                           OUString const & rsKey)
 {
-    if (!lcl_hasField(rxText, DocInfoServiceName, rsKey))
+    uno::Reference<beans::XPropertySet> xField(rxMultiServiceFactory->createInstance(DocInfoServiceName), uno::UNO_QUERY);
+    xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(rsKey));
+    uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
+
+    rxText->insertTextContent(rxParagraphCursor, xTextContent, false);
+}
+
+void removeAllClassificationFields(OUString const & rPolicy, uno::Reference<text::XText> const & rxText)
+{
+    uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(rxText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphEnumerationAccess->createEnumeration();
+    while (xParagraphs->hasMoreElements())
     {
-        uno::Reference<beans::XPropertySet> xField(rxMultiServiceFactory->createInstance(DocInfoServiceName), uno::UNO_QUERY);
-        xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(rsKey));
-        uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
-        rxText->insertTextContent(rxText->getEnd(), xTextContent, false);
+        uno::Reference<container::XEnumerationAccess> xTextPortionEnumerationAccess(xParagraphs->nextElement(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
+        while (xTextPortions->hasMoreElements())
+        {
+            uno::Reference<beans::XPropertySet> xTextPortion(xTextPortions->nextElement(), uno::UNO_QUERY);
+            OUString aTextPortionType;
+            xTextPortion->getPropertyValue(UNO_NAME_TEXT_PORTION_TYPE) >>= aTextPortionType;
+            if (aTextPortionType != UNO_NAME_TEXT_FIELD)
+                continue;
+
+            uno::Reference<lang::XServiceInfo> xTextField;
+            xTextPortion->getPropertyValue(UNO_NAME_TEXT_FIELD) >>= xTextField;
+            if (!xTextField->supportsService(DocInfoServiceName))
+                continue;
+
+            OUString aName;
+            uno::Reference<beans::XPropertySet> xPropertySet(xTextField, uno::UNO_QUERY);
+            xPropertySet->getPropertyValue(UNO_NAME_NAME) >>= aName;
+            if (aName.startsWith(rPolicy))
+            {
+                uno::Reference<text::XTextField> xField(xTextField, uno::UNO_QUERY);
+                rxText->removeTextContent(xField);
+            }
+        }
+    }
+}
+
+sal_Int32 getNumberOfParagraphs(uno::Reference<text::XText> const & xText)
+{
+    uno::Reference<container::XEnumerationAccess> xParagraphEnumAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphEnum = xParagraphEnumAccess->createEnumeration();
+    sal_Int32 nResult = 0;
+    while (xParagraphEnum->hasMoreElements())
+    {
+        xParagraphEnum->nextElement();
+        nResult++;
+    }
+    return nResult;
+}
+
+void equaliseNumberOfParagraph(std::vector<svx::ClassificationResult> const & rResults, uno::Reference<text::XText> const & xText)
+{
+    sal_Int32 nNumberOfParagraphs = 0;
+    for (svx::ClassificationResult const & rResult : rResults)
+    {
+        if (rResult.meType == svx::ClassificationType::PARAGRAPH)
+            nNumberOfParagraphs++;
+    }
+
+    while (getNumberOfParagraphs(xText) < nNumberOfParagraphs)
+    {
+        uno::Reference<text::XParagraphAppend> xParagraphAppend(xText, uno::UNO_QUERY);
+        xParagraphAppend->finishParagraph(uno::Sequence<beans::PropertyValue>());
     }
 }
 
@@ -551,8 +616,6 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
 
     uno::Reference<document::XDocumentProperties> xDocumentProperties = SfxObjectShell::Current()->getDocProperties();
 
-    // First, we need to remove the old ones.
-    //TODO: we should get this as a param, since we pass it to the dialog.
     const OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
     const std::vector<OUString> aUsedPageStyles = lcl_getUsedPageStyles(this);
     for (const OUString& rPageStyleName : aUsedPageStyles)
@@ -565,6 +628,10 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
         uno::Reference<text::XText> xHeaderText;
         if (bHeaderIsOn)
             xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
+        if (xHeaderText.is())
+            removeAllClassificationFields(sPolicy, xHeaderText);
+
+        equaliseNumberOfParagraph(rResults, xHeaderText);
 
         // FOOTER
         bool bFooterIsOn = false;
@@ -572,55 +639,10 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
         uno::Reference<text::XText> xFooterText;
         if (bFooterIsOn)
             xPageStyle->getPropertyValue(UNO_NAME_FOOTER_TEXT) >>= xFooterText;
+        if (xFooterText.is())
+            removeAllClassificationFields(sPolicy, xFooterText);
 
-        sal_Int32 nTextNumber = 1;
-        OUString sKey;
-        for (svx::ClassificationResult const & rResult : CollectAdvancedClassification())
-        {
-            sKey = "";
-            switch(rResult.meType)
-            {
-                case svx::ClassificationType::TEXT:
-                {
-                    sKey = sPolicy + "Marking:Text:" + OUString::number(nTextNumber++);
-                }
-                break;
-
-                case svx::ClassificationType::CATEGORY:
-                {
-                    sKey = sPolicy + "BusinessAuthorizationCategory:Name";
-                }
-                break;
-
-                case svx::ClassificationType::MARKING:
-                {
-                    sKey = sPolicy + "Extension:Marking";
-                }
-                break;
-
-                case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
-                {
-                    sKey = sPolicy + "Extension:IntellectualPropertyPart";
-                }
-                break;
-
-                default:
-                break;
-            }
-
-            if (!sKey.isEmpty())
-            {
-                uno::Reference<css::text::XTextField> xField = lcl_findClassificationField(xHeaderText, DocInfoServiceName, sKey);
-                if (xField.is())
-                {
-                    if (xHeaderText.is())
-                        xHeaderText->removeTextContent(xField);
-
-                    if (xFooterText.is())
-                        xFooterText->removeTextContent(xField);
-                }
-            }
-        }
+        equaliseNumberOfParagraph(rResults, xFooterText);
     }
 
     // Clear properties
@@ -660,6 +682,11 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
 
         sal_Int32 nTextNumber = 1;
 
+        uno::Reference<text::XParagraphCursor> xHeaderParagraphCursor(xHeaderText->createTextCursor(), uno::UNO_QUERY);
+        uno::Reference<text::XParagraphCursor> xFooterParagraphCursor(xFooterText->createTextCursor(), uno::UNO_QUERY);
+
+        sal_Int32 nParagraph = -1;
+
         for (svx::ClassificationResult const & rResult : rResults)
         {
             switch(rResult.meType)
@@ -670,16 +697,16 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
                     nTextNumber++;
 
                     addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
-                    insertFieldToDocument(xMultiServiceFactory, xHeaderText, sKey);
-                    insertFieldToDocument(xMultiServiceFactory, xFooterText, sKey);
+                    insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
+                    insertFieldToDocument(xMultiServiceFactory, xFooterText, xFooterParagraphCursor, sKey);
                 }
                 break;
 
                 case svx::ClassificationType::CATEGORY:
                 {
                     OUString sKey = sPolicy + "BusinessAuthorizationCategory:Name";
-                    insertFieldToDocument(xMultiServiceFactory, xHeaderText, sKey);
-                    insertFieldToDocument(xMultiServiceFactory, xFooterText, sKey);
+                    insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
+                    insertFieldToDocument(xMultiServiceFactory, xFooterText, xFooterParagraphCursor, sKey);
                 }
                 break;
 
@@ -687,8 +714,8 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
                 {
                     OUString sKey = sPolicy + "Extension:Marking";
                     addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
-                    insertFieldToDocument(xMultiServiceFactory, xHeaderText, sKey);
-                    insertFieldToDocument(xMultiServiceFactory, xFooterText, sKey);
+                    insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
+                    insertFieldToDocument(xMultiServiceFactory, xFooterText, xFooterParagraphCursor, sKey);
                 }
                 break;
 
@@ -696,8 +723,36 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
                 {
                     OUString sKey = sPolicy + "Extension:IntellectualPropertyPart";
                     addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
-                    insertFieldToDocument(xMultiServiceFactory, xHeaderText, sKey);
-                    insertFieldToDocument(xMultiServiceFactory, xFooterText, sKey);
+                    insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
+                    insertFieldToDocument(xMultiServiceFactory, xFooterText, xFooterParagraphCursor, sKey);
+                }
+                break;
+
+                case svx::ClassificationType::PARAGRAPH:
+                {
+                    nParagraph++;
+
+                    if (nParagraph != 0) // only jump to next paragraph, if we aren't at the first paragraph
+                    {
+                        xHeaderParagraphCursor->gotoNextParagraph(false);
+                        xFooterParagraphCursor->gotoNextParagraph(false);
+                    }
+
+                    xHeaderParagraphCursor->gotoStartOfParagraph(false);
+                    xFooterParagraphCursor->gotoStartOfParagraph(false);
+
+                    uno::Reference<beans::XPropertySet> xHeaderPropertySet(xHeaderParagraphCursor, uno::UNO_QUERY_THROW);
+                    uno::Reference<beans::XPropertySet> xFooterPropertySet(xFooterParagraphCursor, uno::UNO_QUERY_THROW);
+                    if (rResult.msString == "BOLD")
+                    {
+                        xHeaderPropertySet->setPropertyValue("CharWeight", uno::makeAny(awt::FontWeight::BOLD));
+                        xFooterPropertySet->setPropertyValue("CharWeight", uno::makeAny(awt::FontWeight::BOLD));
+                    }
+                    else
+                    {
+                        xHeaderPropertySet->setPropertyValue("CharWeight", uno::makeAny(awt::FontWeight::NORMAL));
+                        xFooterPropertySet->setPropertyValue("CharWeight", uno::makeAny(awt::FontWeight::NORMAL));
+                    }
                 }
                 break;
 
@@ -740,12 +795,23 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
     uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
 
     OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
-    sal_Int32 nParagraph = 1;
+
+    const OUString sBlank("");
 
     while (xParagraphs->hasMoreElements())
     {
         uno::Reference<container::XEnumerationAccess> xTextPortionEnumerationAccess(xParagraphs->nextElement(), uno::UNO_QUERY);
         uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
+
+        // Check font weitght
+        uno::Reference<beans::XPropertySet> xParagraphPropertySet(xTextPortionEnumerationAccess, uno::UNO_QUERY_THROW);
+        uno::Any aAny = xParagraphPropertySet->getPropertyValue("CharWeight");
+
+        OUString sWeight = (aAny.get<float>() >= awt::FontWeight::BOLD) ? OUString("BOLD") : OUString("NORMAL");
+
+        aResult.push_back({ svx::ClassificationType::PARAGRAPH, sWeight, sBlank });
+
+        // Process portions..
         while (xTextPortions->hasMoreElements())
         {
             uno::Reference<beans::XPropertySet> xTextPortion(xTextPortions->nextElement(), uno::UNO_QUERY);
@@ -762,33 +828,32 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
             OUString aName;
             uno::Reference<beans::XPropertySet> xPropertySet(xTextField, uno::UNO_QUERY);
             xPropertySet->getPropertyValue(UNO_NAME_NAME) >>= aName;
-            const OUString sBlank("");
+
             if (aName.startsWith(sPolicy + "Marking:Text:"))
             {
                 const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
-                    aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, nParagraph });
+                    aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank });
             }
             else if (aName.startsWith(sPolicy + "BusinessAuthorizationCategory:Name"))
             {
                 const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
-                    aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, nParagraph });
+                    aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank });
             }
             else if (aName.startsWith(sPolicy + "Extension:Marking"))
             {
                 const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
-                    aResult.push_back({ svx::ClassificationType::MARKING, aValue, sBlank, nParagraph });
+                    aResult.push_back({ svx::ClassificationType::MARKING, aValue, sBlank });
             }
             else if (aName.startsWith(sPolicy + "Extension:IntellectualPropertyPart"))
             {
                 const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
-                    aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, sBlank, nParagraph });
+                    aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, sBlank });
             }
         }
-        ++nParagraph;
     }
 
     return aResult;
@@ -917,6 +982,11 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
     for (size_t nIndex = 0; nIndex < aResults.size(); ++nIndex)
     {
         const svx::ClassificationResult& rResult = aResults[nIndex];
+
+        // Ignore "PARAGRAPH" types
+        if (rResult.meType == svx::ClassificationType::PARAGRAPH)
+            continue;
+
         const bool isLast = nIndex == 0;
         const bool isFirst = nIndex == aResults.size() - 1;
         OUString sKey;
@@ -981,7 +1051,6 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectParagraphClassificati
     uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
 
     const OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
-    const sal_Int32 nParagraph = 1;
 
     while (xTextPortions->hasMoreElements())
     {
@@ -1006,19 +1075,19 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectParagraphClassificati
         const OUString sBlank("");
         if (aName.startsWith(sPolicy + "Marking:Text:"))
         {
-            aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, nParagraph });
+            aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank });
         }
         else if (aName.startsWith(sPolicy + "BusinessAuthorizationCategory:Name"))
         {
-            aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, nParagraph });
+            aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank });
         }
         else if (aName.startsWith(sPolicy + "Extension:Marking"))
         {
-            aResult.push_back({ svx::ClassificationType::MARKING, aValue, sBlank, nParagraph });
+            aResult.push_back({ svx::ClassificationType::MARKING, aValue, sBlank });
         }
         else if (aName.startsWith(sPolicy + "Extension:IntellectualPropertyPart"))
         {
-            aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, xTextRange->getString(), sBlank, nParagraph });
+            aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, xTextRange->getString(), sBlank });
         }
     }
 

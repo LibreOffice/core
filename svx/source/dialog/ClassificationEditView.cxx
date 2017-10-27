@@ -91,18 +91,24 @@ void ClassificationEditView::InsertField(const SvxFieldItem& rFieldItem)
 
 void ClassificationEditView::InvertSelectionWeight()
 {
-    std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(pEdEngine->GetAttribs(pEdView->GetSelection())));
-    FontWeight eFontWeight = WEIGHT_BOLD;
-    if (const SfxPoolItem* pItem = pSet->GetItem(EE_CHAR_WEIGHT, true))
+    ESelection aSelection = pEdView->GetSelection();
+
+    for (sal_Int32 nParagraph = aSelection.nStartPara; nParagraph <= aSelection.nEndPara; ++nParagraph)
     {
-        const SvxWeightItem* pWeightItem = dynamic_cast<const SvxWeightItem*>(pItem);
-        if (pWeightItem && pWeightItem->GetWeight() == WEIGHT_BOLD)
-            eFontWeight = WEIGHT_NORMAL;
+        FontWeight eFontWeight = WEIGHT_BOLD;
+
+        std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(pEdEngine->GetParaAttribs(nParagraph)));
+        if (const SfxPoolItem* pItem = pSet->GetItem(EE_CHAR_WEIGHT, false))
+        {
+            const SvxWeightItem* pWeightItem = dynamic_cast<const SvxWeightItem*>(pItem);
+            if (pWeightItem && pWeightItem->GetWeight() == WEIGHT_BOLD)
+                eFontWeight = WEIGHT_NORMAL;
+        }
+        SvxWeightItem aWeight(eFontWeight, EE_CHAR_WEIGHT);
+        pSet->Put(aWeight);
+        pEdEngine->SetParaAttribs(nParagraph, *pSet);
     }
 
-    SvxWeightItem aWeight(eFontWeight, EE_CHAR_WEIGHT);
-    pSet->Put(aWeight);
-    pEdEngine->QuickSetAttribs(*pSet, pEdView->GetSelection());
     pEdView->Invalidate();
 }
 
