@@ -1587,18 +1587,7 @@ namespace emfio
                             {
                                 if ( ( nLen * sizeof(sal_Unicode) ) <= ( mnEndPos - mpInputStream->Tell() ) )
                                 {
-                                    std::unique_ptr<sal_Unicode[]> pBuf(new sal_Unicode[ nLen ]);
-                                    mpInputStream->ReadBytes(pBuf.get(), nLen << 1);
-    #ifdef OSL_BIGENDIAN
-                                    sal_Char nTmp, *pTmp = (sal_Char*)( pBuf.get() + nLen );
-                                    while ( pTmp-- != (sal_Char*)pBuf.get() )
-                                    {
-                                        nTmp = *pTmp--;
-                                        pTmp[ 1 ] = *pTmp;
-                                        *pTmp = nTmp;
-                                    }
-    #endif
-                                    aText = OUString(pBuf.get(), nLen);
+                                    aText = read_uInt16s_ToOUString(*mpInputStream, nLen);
                                 }
                             }
 
