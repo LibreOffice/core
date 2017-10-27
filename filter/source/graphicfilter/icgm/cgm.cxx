@@ -404,6 +404,12 @@ void CGM::ImplSetMapMode()
     else
         mbAngReverse = false;
 
+    if (mnVDCdy == 0.0 || mnOutdy == 0.0)
+    {
+        mbStatus = false;
+        return;
+    }
+
     double fQuo1 = mnVDCdx / mnVDCdy;
     double fQuo2 = mnOutdx / mnOutdy;
     if ( fQuo2 < fQuo1 )
