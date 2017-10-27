@@ -88,8 +88,6 @@ private:
     template< typename T > static Plugin* createHelper( const InstantiationData& data );
     enum { isRewriter = false };
     const char* name;
-    static std::unordered_map< const Stmt*, const Stmt* > parents;
-    static void buildParents( CompilerInstance& compiler );
 };
 
 /**

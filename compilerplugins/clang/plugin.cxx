@@ -116,23 +116,20 @@ void Plugin::registerPlugin( Plugin* (*create)( const InstantiationData& ), cons
     PluginHandler::registerPlugin( create, optionName, isPPCallback, byDefault );
 }
 
-std::unordered_map< const Stmt*, const Stmt* > Plugin::parents;
-
 const Stmt* Plugin::getParentStmt( const Stmt* stmt )
 {
-    if( parents.empty())
-        buildParents( compiler );
-    //if(parents.count(stmt)!=1)stmt->dump();
-    //assert( parents.count( stmt ) == 1 );
-    return parents[ stmt ];
+    auto parentsRange = compiler.getASTContext().getParents(*stmt);
+    if ( parentsRange.begin() == parentsRange.end())
+        return nullptr;
+    return parentsRange.begin()->get<Stmt>();
 }
 
 Stmt* Plugin::getParentStmt( Stmt* stmt )
 {
-    if( parents.empty())
-        buildParents( compiler );
-    //assert( parents.count( stmt ) == 1 );
-    return const_cast< Stmt* >( parents[ stmt ] );
+    auto parentsRange = compiler.getASTContext().getParents(*stmt);
+    if ( parentsRange.begin() == parentsRange.end())
+        return nullptr;
+    return const_cast<Stmt*>(parentsRange.begin()->get<Stmt>());
 }
 
 static const Decl* getDeclContext(ASTContext& context, const Stmt* stmt)
@@ -255,14 +252,6 @@ void ParentBuilder::walk( const Stmt* stmt )
 }
 
 } // namespace
-
-void Plugin::buildParents( CompilerInstance& compiler )
-{
-    assert( parents.empty());
-    ParentBuilder builder;
-    builder.parents = &parents;
-    builder.TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
-}
 
 SourceLocation Plugin::locationAfterToken( SourceLocation location )
 {
