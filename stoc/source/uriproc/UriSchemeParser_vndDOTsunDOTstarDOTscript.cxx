@@ -265,7 +265,7 @@ public:
 private:
     virtual ~UrlReference() override {}
 
-    sal_Int32 findParameter(OUString const & key);
+    sal_Int32 findParameter(OUString const & key) const;
 
     stoc::uriproc::UriReference m_base;
 };
@@ -335,7 +335,7 @@ void UrlReference::setParameter(OUString const & key, OUString const & value)
     m_base.m_path = newPath.makeStringAndClear();
 }
 
-sal_Int32 UrlReference::findParameter(OUString const & key) {
+sal_Int32 UrlReference::findParameter(OUString const & key) const {
     sal_Int32 i = 0;
     parsePart(m_base.m_path, true, &i); // skip name
     for (;;) {

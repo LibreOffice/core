@@ -64,7 +64,7 @@ class IdlAttributeFieldImpl
     , public XIdlField2
 {
 public:
-    typelib_InterfaceAttributeTypeDescription * getAttributeTypeDescr()
+    typelib_InterfaceAttributeTypeDescription * getAttributeTypeDescr() const
         { return reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>(getTypeDescr()); }
 
     IdlAttributeFieldImpl( IdlReflectionServiceImpl * pReflection, const OUString & rName,
@@ -94,7 +94,7 @@ public:
 
 private:
     void checkException(
-        uno_Any * exception, Reference< XInterface > const & context);
+        uno_Any * exception, Reference< XInterface > const & context) const;
 };
 
 // XInterface
@@ -301,7 +301,7 @@ void IdlAttributeFieldImpl::set( const Any & rObj, const Any & rValue )
 }
 
 void IdlAttributeFieldImpl::checkException(
-    uno_Any * exception, Reference< XInterface > const & context)
+    uno_Any * exception, Reference< XInterface > const & context) const
 {
     if (exception != nullptr) {
         Any e;
@@ -332,7 +332,7 @@ class IdlInterfaceMethodImpl
     Sequence< ParamInfo > *              _pParamInfos;
 
 public:
-    typelib_InterfaceMethodTypeDescription * getMethodTypeDescr()
+    typelib_InterfaceMethodTypeDescription * getMethodTypeDescr() const
         { return reinterpret_cast<typelib_InterfaceMethodTypeDescription *>(getTypeDescr()); }
 
     IdlInterfaceMethodImpl( IdlReflectionServiceImpl * pReflection, const OUString & rName,

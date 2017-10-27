@@ -452,7 +452,7 @@ public:
     sal_uInt16          GetOutStyle() const { return mnOutStyle; }
 
     void                EnableCustomize( bool bEnable = true );
-    bool                IsCustomize() { return mbCustomize; }
+    bool                IsCustomize() const { return mbCustomize; }
 
     using DockingWindow::SetHelpText;
     using DockingWindow::GetHelpText;

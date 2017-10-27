@@ -334,7 +334,7 @@ public:
         aSelectHdl = rLink;
     }
 
-    sal_uInt16 GetTitleHeight()
+    sal_uInt16 GetTitleHeight() const
     {
         return nTitleHeight;
     }

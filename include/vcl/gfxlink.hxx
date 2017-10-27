@@ -95,11 +95,11 @@ public:
 
     const Size&         GetPrefSize() const { return maPrefSize;}
     void                SetPrefSize( const Size& rPrefSize );
-    bool                IsPrefSizeValid() { return mbPrefSizeValid;}
+    bool                IsPrefSizeValid() const { return mbPrefSizeValid;}
 
     const MapMode&      GetPrefMapMode() const { return maPrefMapMode;}
     void                SetPrefMapMode( const MapMode& rPrefMapMode );
-    bool                IsPrefMapModeValid() { return mbPrefMapModeValid;}
+    bool                IsPrefMapModeValid() const { return mbPrefMapModeValid;}
 
     bool                IsNative() const;
 

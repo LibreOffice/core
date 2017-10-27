@@ -894,7 +894,7 @@ void Dialog::paintDialog(VirtualDevice& rDevice)
     PaintToDevice(&rDevice, Point(0, 0), Size());
 }
 
-Size Dialog::PaintActiveFloatingWindow(VirtualDevice& rDevice)
+Size Dialog::PaintActiveFloatingWindow(VirtualDevice& rDevice) const
 {
     Size aRet;
     ImplSVData* pSVData = ImplGetSVData();

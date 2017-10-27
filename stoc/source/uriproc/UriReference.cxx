@@ -67,7 +67,7 @@ OUString UriReference::getUriReference()
     return buf.makeStringAndClear();
 }
 
-bool UriReference::isAbsolute() {
+bool UriReference::isAbsolute() const {
     return !m_scheme.isEmpty();
 }
 

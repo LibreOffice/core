@@ -110,14 +110,14 @@ private:
 
                     DECL_LINK( PopupModeEnd, FloatingWindow*, void );
     void            ImplEnableStartDocking()  { mbStartDockingEnabled = true; }
-    bool            ImplStartDockingEnabled() { return mbStartDockingEnabled; }
+    bool            ImplStartDockingEnabled() const { return mbStartDockingEnabled; }
     void            ImplPreparePopupMode( FloatWinPopupFlags nFlags );
 
 public:
     ImplDockingWindowWrapper( const vcl::Window *pWindow );
     ~ImplDockingWindowWrapper();
 
-    vcl::Window*         GetWindow()     { return mpDockingWindow; }
+    vcl::Window*    GetWindow()     { return mpDockingWindow; }
     bool            ImplStartDocking( const Point& rPos );
 
     // those methods actually call the corresponding handlers
