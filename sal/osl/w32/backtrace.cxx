@@ -26,13 +26,19 @@
 
 #include "backtraceasstring.hxx"
 
+namespace {
+
+template<typename T> T clampToULONG(T n) {
+    auto const maxUlong = std::numeric_limits<ULONG>::max();
+    return n > maxUlong ? static_cast<T>(maxUlong) : n;
+}
+
+}
+
 OUString osl::detail::backtraceAsString(sal_uInt32 maxDepth)
 {
     assert(maxDepth != 0);
-    auto const maxUlong = std::numeric_limits<ULONG>::max();
-    if (maxDepth > maxUlong) {
-        maxDepth = static_cast<sal_uInt32>(maxUlong);
-    }
+    maxDepth = clampToULONG(maxDepth);
 
     OUStringBuffer aBuf;
 
@@ -71,10 +77,7 @@ OUString osl::detail::backtraceAsString(sal_uInt32 maxDepth)
 std::unique_ptr<sal::BacktraceState> sal::backtrace_get(sal_uInt32 maxDepth)
 {
     assert(maxDepth != 0);
-    auto const maxUlong = std::numeric_limits<ULONG>::max();
-    if (maxDepth > maxUlong) {
-        maxDepth = static_cast<sal_uInt32>(maxUlong);
-    }
+    maxDepth = clampToULONG(maxDepth);
 
     HANDLE hProcess = GetCurrentProcess();
     SymInitialize( hProcess, nullptr, true );

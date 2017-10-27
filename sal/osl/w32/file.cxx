@@ -774,6 +774,14 @@ oslFileError SAL_CALL osl_closeFile(oslFileHandle Handle)
     return result;
 }
 
+namespace {
+
+//coverity[result_independent_of_operands]
+template<typename T> bool exceedsMaxSIZE_T(T n)
+{ return n > std::numeric_limits< SIZE_T >::max(); }
+
+}
+
 oslFileError SAL_CALL osl_mapFile(
     oslFileHandle Handle,
     void**        ppAddr,
@@ -800,8 +808,7 @@ oslFileError SAL_CALL osl_mapFile(
         return osl_File_E_INVAL;
     *ppAddr = nullptr;
 
-    static SIZE_T const nLimit = std::numeric_limits< SIZE_T >::max();
-    if (uLength > nLimit)
+    if (exceedsMaxSIZE_T(uLength))
         return osl_File_E_OVERFLOW;
     SIZE_T const nLength = sal::static_int_cast< SIZE_T >(uLength);
 
@@ -919,6 +926,19 @@ oslFileError SAL_CALL osl_writeFile(
     return result;
 }
 
+LONGLONG const g_limit_longlong = std::numeric_limits< LONGLONG >::max();
+
+namespace {
+
+//coverity[result_independent_of_operands]
+template<typename T> bool exceedsMaxLONGLONG(T n)
+{ return n > g_limit_longlong; }
+
+template<typename T> bool exceedsMinLONGLONG(T n)
+{ return n < std::numeric_limits<LONGLONG>::min(); }
+
+}
+
 oslFileError SAL_CALL osl_readFileAt(
     oslFileHandle Handle,
     sal_uInt64    uOffset,
@@ -933,8 +953,7 @@ oslFileError SAL_CALL osl_readFileAt(
     if ((pImpl->m_state & FileHandle_Impl::STATE_SEEKABLE) == 0)
         return osl_File_E_SPIPE;
 
-    static sal_uInt64 const g_limit_longlong = std::numeric_limits< LONGLONG >::max();
-    if (g_limit_longlong < uOffset)
+    if (exceedsMaxLONGLONG(uOffset))
         return osl_File_E_OVERFLOW;
     LONGLONG const nOffset = sal::static_int_cast< LONGLONG >(uOffset);
 
@@ -957,8 +976,7 @@ oslFileError SAL_CALL osl_writeFileAt(
     if ((pImpl->m_state & FileHandle_Impl::STATE_SEEKABLE) == 0)
         return osl_File_E_SPIPE;
 
-    static sal_uInt64 const g_limit_longlong = std::numeric_limits< LONGLONG >::max();
-    if (g_limit_longlong < uOffset)
+    if (exceedsMaxLONGLONG(uOffset))
         return osl_File_E_OVERFLOW;
     LONGLONG const nOffset = sal::static_int_cast< LONGLONG >(uOffset);
 
@@ -996,8 +1014,7 @@ oslFileError SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_
     if ((!pImpl) || !IsValidHandle(pImpl->m_hFile))
         return osl_File_E_INVAL;
 
-    static sal_Int64 const g_limit_longlong = std::numeric_limits< LONGLONG >::max();
-    if (g_limit_longlong < uOffset)
+    if (exceedsMaxLONGLONG(uOffset) || exceedsMinLONGLONG(uOffset))
         return osl_File_E_OVERFLOW;
     LONGLONG nPos = 0, nOffset = sal::static_int_cast< LONGLONG >(uOffset);
 
@@ -1013,7 +1030,8 @@ oslFileError SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_
             nPos = sal::static_int_cast< LONGLONG >(pImpl->getPos());
             if ((nOffset < 0) && (nPos < -1*nOffset))
                 return osl_File_E_INVAL;
-            if (g_limit_longlong < nPos + nOffset)
+            assert(nPos >= 0);
+            if (nOffset > g_limit_longlong - nPos)
                 return osl_File_E_OVERFLOW;
             break;
 
@@ -1021,7 +1039,8 @@ oslFileError SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_
             nPos = sal::static_int_cast< LONGLONG >(pImpl->getSize());
             if ((nOffset < 0) && (nPos < -1*nOffset))
                 return osl_File_E_INVAL;
-            if (g_limit_longlong < nPos + nOffset)
+            assert(nPos >= 0);
+            if (nOffset > g_limit_longlong - nPos)
                 return osl_File_E_OVERFLOW;
             break;
 
@@ -1053,8 +1072,7 @@ oslFileError SAL_CALL osl_setFileSize(oslFileHandle Handle, sal_uInt64 uSize)
     if ((pImpl->m_state & FileHandle_Impl::STATE_WRITEABLE) == 0)
         return osl_File_E_BADF;
 
-    static sal_uInt64 const g_limit_longlong = std::numeric_limits< LONGLONG >::max();
-    if (g_limit_longlong < uSize)
+    if (exceedsMaxLONGLONG(uSize))
         return osl_File_E_OVERFLOW;
 
     FileHandle_Impl::Guard lock(&(pImpl->m_mutex));
