@@ -21,7 +21,7 @@
 
 #include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
-#include <com/sun/star/i18n/XLocaleData4.hpp>
+#include <com/sun/star/i18n/XLocaleData5.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -126,7 +126,7 @@ private:
 
     /// used for parser only
     css::lang::Locale    aParserLocale;
-    css::uno::Reference < css::i18n::XLocaleData4 > mxLocaleData;
+    css::uno::Reference < css::i18n::XLocaleData5 > mxLocaleData;
     css::uno::Reference < css::i18n::XNativeNumberSupplier > xNatNumSup;
     OUString             aStartChars;
     OUString             aContChars;

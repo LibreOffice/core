@@ -25,7 +25,7 @@
 #include <com/sun/star/i18n/KParseTokens.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
-#include <com/sun/star/i18n/LocaleData.hpp>
+#include <com/sun/star/i18n/LocaleData2.hpp>
 #include <com/sun/star/i18n/NativeNumberMode.hpp>
 #include <com/sun/star/i18n/NativeNumberSupplier.hpp>
 #include <comphelper/processfactory.hxx>
@@ -381,7 +381,7 @@ bool cclass_Unicode::setupInternational( const Locale& rLocale )
     }
     if ( !mxLocaleData.is() )
     {
-        mxLocaleData.set( LocaleData::create(m_xContext) );
+        mxLocaleData.set( LocaleData2::create(m_xContext) );
     }
     return bChanged;
 }

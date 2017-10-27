@@ -21,7 +21,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/i18n/XLocaleData4.hpp>
+#include <com/sun/star/i18n/XLocaleData5.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <cppuhelper/weak.hxx>
@@ -94,7 +94,7 @@ private:
     // Service Factory
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
     // lang::Locale Data
-    css::uno::Reference < css::i18n::XLocaleData4 >     mxLocaleData;
+    css::uno::Reference < css::i18n::XLocaleData5 >     mxLocaleData;
 
     /// @throws css::uno::RuntimeException
     bool SAL_CALL createCollator(const css::lang::Locale& rLocale, const OUString& serviceName,

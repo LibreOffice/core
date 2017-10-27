@@ -20,13 +20,13 @@
 #include <numberformatcode.hxx>
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
-#include <com/sun/star/i18n/LocaleData.hpp>
+#include <com/sun/star/i18n/LocaleData2.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 NumberFormatCodeMapper::NumberFormatCodeMapper(
             const css::uno::Reference < css::uno::XComponentContext >& rxContext )
 {
-        m_xLocaleData.set( css::i18n::LocaleData::create( rxContext ) );
+        m_xLocaleData.set( css::i18n::LocaleData2::create( rxContext ) );
 }
 
 

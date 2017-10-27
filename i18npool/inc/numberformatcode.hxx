@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/i18n/XNumberFormatCode.hpp>
-#include <com/sun/star/i18n/XLocaleData4.hpp>
+#include <com/sun/star/i18n/XLocaleData5.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -55,7 +55,7 @@ public:
 
 private:
     osl::Mutex maMutex;
-    css::uno::Reference < css::i18n::XLocaleData4 > m_xLocaleData;
+    css::uno::Reference < css::i18n::XLocaleData5 > m_xLocaleData;
     typedef std::pair< css::lang::Locale, css::uno::Sequence< css::i18n::FormatElement > > FormatElementCacheItem;
     std::deque < FormatElementCacheItem > m_aFormatElementCache;
 

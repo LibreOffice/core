@@ -19,7 +19,7 @@
 #ifndef INCLUDED_I18NPOOL_INC_TRANSLITERATIONIMPL_HXX
 #define INCLUDED_I18NPOOL_INC_TRANSLITERATIONIMPL_HXX
 
-#include <com/sun/star/i18n/XLocaleData4.hpp>
+#include <com/sun/star/i18n/XLocaleData5.hpp>
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -87,7 +87,7 @@ private:
     sal_Int16 numCascade;
     bool caseignoreOnly;
     css::uno::Reference< css::uno::XComponentContext > mxContext;
-    css::uno::Reference< css::i18n::XLocaleData4 > mxLocaledata;
+    css::uno::Reference< css::i18n::XLocaleData5 > mxLocaledata;
     css::uno::Reference< css::i18n::XExtendedTransliteration > caseignore;
 
     /// @throws css::uno::RuntimeException
