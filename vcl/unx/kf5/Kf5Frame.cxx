@@ -19,14 +19,61 @@
 
 #include "Kf5Frame.hxx"
 
-Kf5Frame::Kf5Frame::Kf5Frame( Kf5Instance* pInstance,
-                 SalFrame* pParent,
-                 SalFrameStyleFlags nSalFrameStyle )
+#include "Kf5Instance.hxx"
+#include "Kf5Widget.hxx"
+
+#include <QtGui/QWindow>
+
+Kf5Frame::Kf5Frame( Kf5Frame* pParent, SalFrameStyleFlags nStyle )
 {
+    Kf5Instance *pInst = static_cast<Kf5Instance*>( GetSalData()->m_pInstance );
+    pInst->insertFrame( this );
+
+    if( nStyle & SalFrameStyleFlags::DEFAULT ) // ensure default style
+    {
+        nStyle |= SalFrameStyleFlags::MOVEABLE | SalFrameStyleFlags::SIZEABLE | SalFrameStyleFlags::CLOSEABLE;
+        nStyle &= ~SalFrameStyleFlags::FLOAT;
+    }
+
+    m_nStyle = nStyle;
+    m_pParent = pParent;
+
+    Qt::WindowFlags aWinFlags;
+    if ( !(nStyle & SalFrameStyleFlags::SYSTEMCHILD) )
+    {
+        if( nStyle & SalFrameStyleFlags::INTRO )
+            aWinFlags |= Qt::SplashScreen;
+        else if( nStyle & (SalFrameStyleFlags::FLOAT |
+                           SalFrameStyleFlags::TOOLTIP) )
+            aWinFlags |= Qt::ToolTip;
+        else if( (nStyle & SalFrameStyleFlags::FLOAT) &&
+                ! (nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) )
+            aWinFlags |= Qt::Popup;
+        else if( nStyle & SalFrameStyleFlags::DIALOG && pParent )
+            aWinFlags |= Qt::Dialog;
+        else if( nStyle & SalFrameStyleFlags::TOOLWINDOW )
+            aWinFlags |= Qt::Tool;
+        else if( (nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) )
+            aWinFlags |= Qt::Window | Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus;
+        else
+            aWinFlags |= Qt::Window;
+    }
+
+    m_pQWidget.reset( new Kf5Widget( *this, pParent ? pParent->GetQWidget() : nullptr, aWinFlags ) );
+
+    if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
+    {
+        QWindow *pParentWindow = pParent->GetQWidget()->window()->windowHandle();
+        QWindow *pChildWindow = m_pQWidget->window()->windowHandle();
+        if ( pParentWindow != pChildWindow )
+            pChildWindow->setTransientParent( pParentWindow );
+    }
 }
 
 Kf5Frame::~Kf5Frame()
 {
+    Kf5Instance *pInst = static_cast<Kf5Instance*>( GetSalData()->m_pInstance );
+    pInst->eraseFrame( this );
 }
 
 SalGraphics* Kf5Frame::AcquireGraphics()
@@ -37,7 +84,6 @@ SalGraphics* Kf5Frame::AcquireGraphics()
 void Kf5Frame::ReleaseGraphics( SalGraphics* pGraphics )
 {
 }
-
 
 bool Kf5Frame::PostEvent(ImplSVEvent* pData)
 {
