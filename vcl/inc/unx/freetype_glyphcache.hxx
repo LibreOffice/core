@@ -113,7 +113,7 @@ private:
 public:
                             FreetypeFontFace( FreetypeFontInfo*, const FontAttributes& );
 
-    virtual LogicalFontInstance* CreateFontInstance( FontSelectPattern& ) const override;
+    virtual LogicalFontInstance* CreateFontInstance( const FontSelectPattern& ) const override;
     virtual PhysicalFontFace* Clone() const override   { return new FreetypeFontFace( *this ); }
     virtual sal_IntPtr      GetFontId() const override { return mpFreetypeFontInfo->GetFontId(); }
 };

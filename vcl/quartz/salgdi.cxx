@@ -477,7 +477,7 @@ void AquaSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
     CGContextRestoreGState(mrContext);
 }
 
-void AquaSalGraphics::SetFont(FontSelectPattern* pReqFont, int nFallbackLevel)
+void AquaSalGraphics::SetFont(const FontSelectPattern* pReqFont, int nFallbackLevel)
 {
     // release the text style
     for (int i = nFallbackLevel; i < MAX_FALLBACK; ++i)

@@ -63,7 +63,7 @@ public:
     virtual                         ~CoreTextFontFace() override;
 
     PhysicalFontFace*               Clone() const override;
-    LogicalFontInstance*            CreateFontInstance( FontSelectPattern& ) const override;
+    LogicalFontInstance*            CreateFontInstance( const FontSelectPattern& ) const override;
     sal_IntPtr                      GetFontId() const override;
 
     int                             GetFontTable( const char pTagName[5], unsigned char* ) const;
@@ -228,7 +228,7 @@ public:
     virtual void            drawPixel( long nX, long nY, SalColor nSalColor ) override;
     virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 ) override;
     virtual void            drawRect( long nX, long nY, long nWidth, long nHeight ) override;
-    virtual void            drawPolyLine( sal_uInt32 nPoints, SalPoint* pPtAry ) override;
+    virtual void            drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void            drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void            drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) override;
     virtual bool            drawPolyPolygon( const basegfx::B2DPolyPolygon&, double fTransparency ) override;
@@ -330,7 +330,7 @@ public:
     // set the text color to a specific color
     virtual void            SetTextColor( SalColor nSalColor ) override;
     // set the font
-    virtual void            SetFont( FontSelectPattern*, int nFallbackLevel ) override;
+    virtual void            SetFont( const FontSelectPattern*, int nFallbackLevel ) override;
     // get the current font's metrics
     virtual void            GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
     // get the repertoire of the current font

@@ -70,7 +70,7 @@ bool X11SalGraphics::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCapa
 
 // SalGraphics
 
-void X11SalGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
+void X11SalGraphics::SetFont( const FontSelectPattern *pEntry, int nFallbackLevel )
 {
     mxTextRenderImpl->SetFont(pEntry, nFallbackLevel);
 }
