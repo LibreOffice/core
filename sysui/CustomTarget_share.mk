@@ -14,6 +14,8 @@ ifeq ($(ENABLE_GIO),TRUE)
 	brand_URIPARAM := --urls
 else ifeq ($(ENABLE_KDE4),TRUE)
 	brand_URIPARAM := --urls
+else ifeq ($(ENABLE_KF5),TRUE)
+	brand_URIPARAM := --urls
 else
 	brand_URIPARAM :=
 endif
