@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <svx/XPropertyTable.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/pathoptions.hxx>
 
 #include <svx/strings.hrc>
@@ -34,7 +35,9 @@ XColorListRef XColorList::CreateStdColorList()
 {
     return XPropertyList::AsColorList(
         XPropertyList::CreatePropertyList(
-            XPropertyListType::Color, SvtPathOptions().GetPalettePath(), ""));
+            XPropertyListType::Color, !utl::ConfigManager::IsAvoidConfig() ?
+                                          SvtPathOptions().GetPalettePath() :
+                                          "", ""));
 }
 
 XColorListRef XColorList::GetStdColorList()
