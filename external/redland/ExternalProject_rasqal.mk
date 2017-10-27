@@ -46,7 +46,7 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
-			$(gb_Package_SOURCEDIR_rasqal)/src/.libs/librasqal-lo.$(RASQAL_MAJOR).dylib) \
+			$(EXTERNAL_WORKDIR)/src/.libs/librasqal-lo.$(RASQAL_MAJOR).dylib) \
 	)
 
 # vim: set noet sw=4 ts=4:
