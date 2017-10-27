@@ -102,12 +102,26 @@ ErrCode SwReader::Read( const Reader& rOptions )
         // if the Reader was not called by a Shell, create a PaM ourselves
         SwNodeIndex nNode( mxDoc->GetNodes().GetEndOfContent(), -1 );
         pPam = new SwPaM( nNode );
+
         // For Web documents the default template was set already by InitNew,
         // unless the filter is not HTML,
         // or a SetTemplateName was called in ConvertFrom.
         if( !mxDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) || ReadHTML != po || !po->mxTemplate.is()  )
             po->SetTemplate( *mxDoc );
     }
+
+    const SwPosition* pPos = pPam->GetPoint();
+
+    // Split once and remember the node that has been splitted.
+    mxDoc->getIDocumentContentOperations().SplitNode(*pPos, false);
+
+    // Split again.
+    mxDoc->getIDocumentContentOperations().SplitNode(*pPos, false);
+
+    // Insert all content into the new node
+    pPam->Move(fnMoveBackward);
+    mxDoc->SetTextFormatColl
+    (*pPam, mxDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false));
 
     // Pams are connected like rings; stop when we return to the 1st element
     SwPaM *pEnd = pPam;
