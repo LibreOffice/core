@@ -88,13 +88,19 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
 
     sal_Unicode cDecSep  = rDecSep[0];
     sal_Unicode cListSep = rListSep[0];
+    sal_Unicode cDecSepAlt = rLocaleData.getNumDecimalSepAlt().toChar();    // usually 0 (empty)
 
     // Excel by default uses system's list separator as the parameter
     // separator, which in English locales is a comma.  However, OOo's list
     // separator value is set to ';' for all English locales.  Because of this
     // discrepancy, we will hardcode the separator value here, for now.
-    if (cDecSep == '.')
+    // Similar for decimal separator alternative.
+    // However, if the decimal separator alternative is '.' and the decimal
+    // separator is ',' this makes no sense, fall back to ';' in that case.
+    if (cDecSep == '.' || (cDecSepAlt == '.' && cDecSep != ','))
         cListSep = ',';
+    else if (cDecSep == ',' && cDecSepAlt == '.')
+        cListSep = ';';
 
     // Special case for de_CH locale.
     if (rLocale.Language == "de" && rLocale.Country == "CH")
