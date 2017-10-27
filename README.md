@@ -98,6 +98,26 @@ canvas/   | new (UNO) canvas rendering model with various backends
 cppcanvas/ | C++ helper classes for using the UNO canvas
 drawinglayer/ | View code to render drawable objects and break them down into primitives we can render more easily.
 
+## Rules for #include directives (C/C++)
+
+The #include directives that refer to headers listed in include directories
+of the module/library/etc (see gb_*_set_include in the corresponding .mk),
+must use angular brackets <> syntax. Usually those are system headers, and
+also headers in include/*/ and */inc/.
+E.g.:
+#include <memory>
+#include <com/sun/star/awt/Rectangle.hpp>
+#include <svsys.h>
+
+The #includes that refer to headers placed relative to the source file's
+directory, must use double quotes "".
+E.g.:
+#include "vlcplayer.hxx"
+#include "helper/qahelper.hxx"
+
+The UNO API include files should consistently use double quotes, for the
+benefit of external users of this API.
+
 
 ## Finding out more
 
