@@ -20,8 +20,8 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ATABLES_HXX
 
 #include <connectivity/sdbcx/VCollection.hxx>
-#include "ado/Awrapadox.hxx"
-#include "ado/ACatalog.hxx"
+#include <ado/Awrapadox.hxx>
+#include <ado/ACatalog.hxx>
 
 namespace connectivity
 {

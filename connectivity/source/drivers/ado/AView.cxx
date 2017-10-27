@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/AView.hxx"
+#include <ado/AView.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include "ado/adoimp.hxx"
+#include <ado/adoimp.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include "ado/Awrapado.hxx"
+#include <ado/Awrapado.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 
 
 using namespace comphelper;

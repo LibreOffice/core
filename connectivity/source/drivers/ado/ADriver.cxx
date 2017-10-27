@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/ADriver.hxx"
-#include "ado/AConnection.hxx"
-#include "ado/Awrapadox.hxx"
-#include "ado/ACatalog.hxx"
-#include "ado/Awrapado.hxx"
-#include "ado/adoimp.hxx"
+#include <ado/ADriver.hxx>
+#include <ado/AConnection.hxx>
+#include <ado/Awrapadox.hxx>
+#include <ado/ACatalog.hxx>
+#include <ado/Awrapado.hxx>
+#include <ado/adoimp.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 #include <objbase.h>
 
-#include "resource/sharedresources.hxx"
+#include <resource/sharedresources.hxx>
 
 #include <memory>
 

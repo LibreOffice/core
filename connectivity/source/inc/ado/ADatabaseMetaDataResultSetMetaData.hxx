@@ -23,9 +23,9 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <vector>
-#include "ado/Awrapado.hxx"
-#include "ado/ADatabaseMetaDataResultSet.hxx"
-#include "OColumn.hxx"
+#include <ado/Awrapado.hxx>
+#include <ado/ADatabaseMetaDataResultSet.hxx>
+#include <OColumn.hxx>
 
 namespace connectivity
 {

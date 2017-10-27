@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/AConnection.hxx"
-#include "ado/ADatabaseMetaData.hxx"
-#include "ado/ADriver.hxx"
-#include "ado/AStatement.hxx"
-#include "ado/ACallableStatement.hxx"
-#include "ado/APreparedStatement.hxx"
-#include "ado/ACatalog.hxx"
+#include <ado/AConnection.hxx>
+#include <ado/ADatabaseMetaData.hxx>
+#include <ado/ADriver.hxx>
+#include <ado/AStatement.hxx>
+#include <ado/ACallableStatement.hxx>
+#include <ado/APreparedStatement.hxx>
+#include <ado/ACatalog.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -31,7 +31,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
 #include <osl/file.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace dbtools;
 using namespace connectivity::ado;

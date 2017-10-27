@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/AResultSet.hxx"
-#include "ado/AResultSetMetaData.hxx"
+#include <ado/AResultSet.hxx>
+#include <ado/AResultSetMetaData.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbc/IndexType.hpp>

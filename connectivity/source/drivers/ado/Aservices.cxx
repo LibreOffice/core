@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/ADriver.hxx"
+#include <ado/ADriver.hxx>
 #include <cppuhelper/factory.hxx>
 
 using namespace connectivity::ado;

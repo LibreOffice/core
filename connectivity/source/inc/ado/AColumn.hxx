@@ -21,7 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACOLUMN_HXX
 
 #include <connectivity/sdbcx/VColumn.hxx>
-#include "ado/Awrapadox.hxx"
+#include <ado/Awrapadox.hxx>
 
 namespace connectivity
 {

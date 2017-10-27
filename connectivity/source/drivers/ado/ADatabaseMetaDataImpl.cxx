@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/ADatabaseMetaData.hxx"
-#include "ado/ADatabaseMetaDataResultSetMetaData.hxx"
-#include "ado/Awrapado.hxx"
-#include "ado/AGroup.hxx"
-#include "ado/adoimp.hxx"
-#include "ado/AIndex.hxx"
-#include "ado/AKey.hxx"
-#include "ado/ATable.hxx"
+#include <ado/ADatabaseMetaData.hxx>
+#include <ado/ADatabaseMetaDataResultSetMetaData.hxx>
+#include <ado/Awrapado.hxx>
+#include <ado/AGroup.hxx>
+#include <ado/adoimp.hxx>
+#include <ado/AIndex.hxx>
+#include <ado/AKey.hxx>
+#include <ado/ATable.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ProcedureResult.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>

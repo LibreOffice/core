@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/AKeys.hxx"
-#include "ado/AKey.hxx"
+#include <ado/AKeys.hxx>
+#include <ado/AKey.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
-#include "ado/AConnection.hxx"
+#include <ado/AConnection.hxx>
 #include <comphelper/types.hxx>
-#include "ado/Awrapado.hxx"
+#include <ado/Awrapado.hxx>
 #include <comphelper/property.hxx>
 #include <connectivity/dbexception.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace ::comphelper;
 using namespace connectivity;

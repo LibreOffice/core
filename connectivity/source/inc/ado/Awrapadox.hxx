@@ -53,21 +53,21 @@ typedef struct _ADOTable Table;
 #endif
 
 
-#include "ado_pre_sys_include.h"
+#include <ado_pre_sys_include.h>
 #include <adoint.h>
 #include <adoctint.h>
-#include "ado_post_sys_include.h"
+#include <ado_post_sys_include.h>
 
 
-#include "ado/Aolewrap.hxx"
-#include "ado/Aolevariant.hxx"
-#include "ado/adoimp.hxx"
-#include "ado/Awrapado.hxx"
-#include "ado/WrapColumn.hxx"
-#include "ado/WrapIndex.hxx"
-#include "ado/WrapKey.hxx"
-#include "ado/WrapTable.hxx"
-#include "ado/WrapCatalog.hxx"
+#include <ado/Aolewrap.hxx>
+#include <ado/Aolevariant.hxx>
+#include <ado/adoimp.hxx>
+#include <ado/Awrapado.hxx>
+#include <ado/WrapColumn.hxx>
+#include <ado/WrapIndex.hxx>
+#include <ado/WrapKey.hxx>
+#include <ado/WrapTable.hxx>
+#include <ado/WrapCatalog.hxx>
 
 namespace connectivity
 {

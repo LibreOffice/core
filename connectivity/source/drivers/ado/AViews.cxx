@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/AViews.hxx"
-#include "ado/AView.hxx"
-#include "ado/ATables.hxx"
-#include "ado/ACatalog.hxx"
-#include "ado/AConnection.hxx"
-#include "ado/Awrapado.hxx"
-#include "TConnection.hxx"
+#include <ado/AViews.hxx>
+#include <ado/AView.hxx>
+#include <ado/ATables.hxx>
+#include <ado/ACatalog.hxx>
+#include <ado/AConnection.hxx>
+#include <ado/Awrapado.hxx>
+#include <TConnection.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace ::comphelper;
 

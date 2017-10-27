@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPTABLE_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPTABLE_HXX
 
-#include "ado/WrapTypeDefs.hxx"
+#include <ado/WrapTypeDefs.hxx>
 
 namespace connectivity
 {

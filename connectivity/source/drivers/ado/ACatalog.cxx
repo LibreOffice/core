@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/ACatalog.hxx"
-#include "ado/AConnection.hxx"
-#include "ado/AGroups.hxx"
-#include "ado/AUsers.hxx"
-#include "ado/ATables.hxx"
-#include "ado/AViews.hxx"
+#include <ado/ACatalog.hxx>
+#include <ado/AConnection.hxx>
+#include <ado/AGroups.hxx>
+#include <ado/AUsers.hxx>
+#include <ado/ATables.hxx>
+#include <ado/AViews.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 

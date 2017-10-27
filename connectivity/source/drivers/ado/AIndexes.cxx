@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/AIndexes.hxx"
-#include "ado/AIndex.hxx"
-#include "ado/AConnection.hxx"
+#include <ado/AIndexes.hxx>
+#include <ado/AIndex.hxx>
+#include <ado/AConnection.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/IndexType.hpp>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace ::comphelper;
 

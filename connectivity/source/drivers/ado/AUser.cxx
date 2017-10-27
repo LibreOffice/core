@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/AUser.hxx"
-#include "ado/ACatalog.hxx"
-#include "ado/AGroups.hxx"
+#include <ado/AUser.hxx>
+#include <ado/ACatalog.hxx>
+#include <ado/AGroups.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include "ado/AConnection.hxx"
-#include "ado/Awrapado.hxx"
+#include <ado/AConnection.hxx>
+#include <ado/Awrapado.hxx>
 
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;

@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/ADatabaseMetaData.hxx"
-#include "ado/ADatabaseMetaDataResultSet.hxx"
+#include <ado/ADatabaseMetaData.hxx>
+#include <ado/ADatabaseMetaDataResultSet.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
-#include "ado/AConnection.hxx"
-#include "ado/adoimp.hxx"
-#include "FDatabaseMetaDataResultSet.hxx"
+#include <ado/AConnection.hxx>
+#include <ado/adoimp.hxx>
+#include <FDatabaseMetaDataResultSet.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 

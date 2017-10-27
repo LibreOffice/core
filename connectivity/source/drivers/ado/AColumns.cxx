@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/AColumns.hxx"
-#include "ado/AColumn.hxx"
-#include "ado/AConnection.hxx"
-#include "ado/Awrapado.hxx"
+#include <ado/AColumns.hxx>
+#include <ado/AColumn.hxx>
+#include <ado/AConnection.hxx>
+#include <ado/Awrapado.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -29,7 +29,7 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <algorithm>
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace connectivity::ado;
 using namespace connectivity;

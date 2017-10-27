@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/AStatement.hxx"
-#include "ado/AConnection.hxx"
-#include "ado/AResultSet.hxx"
+#include <ado/AStatement.hxx>
+#include <ado/AConnection.hxx>
+#include <ado/AResultSet.hxx>
 #include <comphelper/property.hxx>
 #include <osl/thread.h>
 #include <cppuhelper/typeprovider.hxx>

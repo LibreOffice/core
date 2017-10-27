@@ -23,7 +23,7 @@
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <connectivity/sdbcx/IRefreshable.hxx>
-#include "ado/Awrapadox.hxx"
+#include <ado/Awrapadox.hxx>
 
 namespace connectivity
 {

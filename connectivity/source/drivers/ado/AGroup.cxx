@@ -18,14 +18,14 @@
  */
 
 
-#include "ado/AGroup.hxx"
-#include "ado/AUsers.hxx"
+#include <ado/AGroup.hxx>
+#include <ado/AUsers.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include "ado/AConnection.hxx"
-#include "TConnection.hxx"
+#include <ado/AConnection.hxx>
+#include <TConnection.hxx>
 
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;

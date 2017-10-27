@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ADATABASEMETADATA_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ADATABASEMETADATA_HXX
 
-#include "TDatabaseMetaDataBase.hxx"
+#include <TDatabaseMetaDataBase.hxx>
 #include <map>
 
 namespace connectivity

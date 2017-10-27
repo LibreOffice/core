@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/AResultSetMetaData.hxx"
+#include <ado/AResultSetMetaData.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#include "ado/Awrapado.hxx"
+#include <ado/Awrapado.hxx>
 #include <connectivity/dbexception.hxx>
 
 using namespace connectivity;

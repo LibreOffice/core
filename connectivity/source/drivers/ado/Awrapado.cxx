@@ -18,8 +18,8 @@
  */
 
 #include <sal/macros.h>
-#include "ado/Awrapado.hxx"
-#include "ado/Awrapadox.hxx"
+#include <ado/Awrapado.hxx>
+#include <ado/Awrapadox.hxx>
 #include <comphelper/types.hxx>
 #include <rtl/ustrbuf.hxx>
 
