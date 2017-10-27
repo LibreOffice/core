@@ -13,7 +13,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentPickerDelega
 {
     var currentDocumentName : String?
     var currentCloudUrl : URL?
-    var currentStorageLocal : Bool = false
+    var currentStorageLocal : Bool = true
 
 
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL)
@@ -75,8 +75,10 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentPickerDelega
 
     @IBAction func doSelectStorage(_ sender: UIBarButtonItem)
     {
-        currentStorageLocal = !currentStorageLocal
-        sender.image = currentStorageLocal ? #imageLiteral(resourceName: "iCloudDrive") : #imageLiteral(resourceName: "iPhone")
+        if isCloudEnabled {
+          currentStorageLocal = !currentStorageLocal
+          sender.image = currentStorageLocal ? #imageLiteral(resourceName: "iCloudDrive") : #imageLiteral(resourceName: "iPhone")
+        }
         self.presentedViewController?.dismiss(animated: true, completion: nil)
     }
 
@@ -92,7 +94,6 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentPickerDelega
             vc.isDocActive = true
         }
     }
-
 
 
 

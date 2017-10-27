@@ -41,7 +41,7 @@
                                     <action selector="doMenu:" destination="vXZ-lx-hvc" id="mHw-Uf-vh2"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem image="iCloudDrive" id="BNN-MQ-25d" userLabel="Button Select Storage">
+                            <barButtonItem image="iPhone" id="BNN-MQ-25d" userLabel="Button Select Storage">
                                 <connections>
                                     <action selector="doSelectStorage:" destination="vXZ-lx-hvc" id="77L-yW-vcR"/>
                                 </connections>
@@ -583,7 +583,7 @@
     </scenes>
     <resources>
         <image name="document" width="20" height="20"/>
-        <image name="iCloudDrive" width="22" height="22"/>
+        <image name="iPhone" width="18" height="37"/>
         <image name="menu" width="22" height="22"/>
     </resources>
 </document>
