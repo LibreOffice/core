@@ -27,6 +27,7 @@
 #include <tools/vcompat.hxx>
 #include <tools/gen.hxx>
 #include <poly.h>
+#include <o3tl/safeint.hxx>
 #include <tools/line.hxx>
 #include <tools/poly.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -628,12 +629,22 @@ Polygon::Polygon( const Point& rCenter, long nRadX, long nRadY )
 {
     if( nRadX && nRadY )
     {
-        sal_uInt16 nPoints = 0;
+        sal_uInt16 nPoints;
+
         // Compute default (depends on size)
-        nPoints = (sal_uInt16) MinMax(
-            ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
-                       sqrt( (double) labs( nRadX * nRadY ) ) ) ),
-            32, 256 );
+        long nRadXY;
+        const bool bOverflow = o3tl::checked_multiply(nRadX, nRadY, nRadXY);
+        if (!bOverflow)
+        {
+            nPoints = (sal_uInt16) MinMax(
+                ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
+                           sqrt( (double) labs(nRadXY) ) ) ),
+                32, 256 );
+        }
+        else
+        {
+            nPoints = 256;
+        }
 
         if( ( nRadX > 32 ) && ( nRadY > 32 ) && ( nRadX + nRadY ) < 8192 )
             nPoints >>= 1;
@@ -683,10 +694,19 @@ Polygon::Polygon( const tools::Rectangle& rBound, const Point& rStart, const Poi
         const long  nRadY = aCenter.Y() - rBound.Top();
         sal_uInt16  nPoints;
 
-        nPoints = (sal_uInt16) MinMax(
-            ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
-                       sqrt( (double) labs( nRadX * nRadY ) ) ) ),
-            32, 256 );
+        long nRadXY;
+        const bool bOverflow = o3tl::checked_multiply(nRadX, nRadY, nRadXY);
+        if (!bOverflow)
+        {
+            nPoints = (sal_uInt16) MinMax(
+                ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
+                           sqrt( (double) labs(nRadXY) ) ) ),
+                32, 256 );
+        }
+        else
+        {
+            nPoints = 256;
+        }
 
         if( ( nRadX > 32 ) && ( nRadY > 32 ) && ( nRadX + nRadY ) < 8192 )
             nPoints >>= 1;
