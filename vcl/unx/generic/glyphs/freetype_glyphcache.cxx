@@ -354,7 +354,7 @@ FreetypeFontFace::FreetypeFontFace( FreetypeFontInfo* pFI, const FontAttributes&
 {
 }
 
-LogicalFontInstance* FreetypeFontFace::CreateFontInstance( FontSelectPattern& rFSD ) const
+LogicalFontInstance* FreetypeFontFace::CreateFontInstance( const FontSelectPattern& rFSD ) const
 {
     FreetypeFontInstance* pEntry = new FreetypeFontInstance( rFSD );
     return pEntry;

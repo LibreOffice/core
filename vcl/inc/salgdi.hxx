@@ -124,7 +124,7 @@ public:
     virtual void                SetTextColor( SalColor nSalColor ) = 0;
 
     // set the font
-    virtual void                SetFont( FontSelectPattern*, int nFallbackLevel ) = 0;
+    virtual void                SetFont( const FontSelectPattern*, int nFallbackLevel ) = 0;
 
     // release the fonts
     void                        ReleaseFonts() { SetFont( nullptr, 0 ); }
@@ -447,7 +447,7 @@ protected:
 
     virtual void                drawRect( long nX, long nY, long nWidth, long nHeight ) = 0;
 
-    virtual void                drawPolyLine( sal_uInt32 nPoints, SalPoint* pPtAry ) = 0;
+    virtual void                drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) = 0;
 
     virtual void                drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) = 0;
 

@@ -337,7 +337,7 @@ bool CairoTextRender::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCap
 
 // SalGraphics
 
-void CairoTextRender::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
+void CairoTextRender::SetFont( const FontSelectPattern *pEntry, int nFallbackLevel )
 {
     setFont(pEntry, nFallbackLevel);
 }

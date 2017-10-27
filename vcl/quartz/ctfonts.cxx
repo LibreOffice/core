@@ -268,7 +268,7 @@ PhysicalFontFace* CoreTextFontFace::Clone() const
     return new CoreTextFontFace( *this);
 }
 
-LogicalFontInstance* CoreTextFontFace::CreateFontInstance( /*const*/ FontSelectPattern& rFSD ) const
+LogicalFontInstance* CoreTextFontFace::CreateFontInstance( const FontSelectPattern& rFSD ) const
 {
     return new LogicalFontInstance( rFSD);
 }
