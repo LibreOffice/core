@@ -944,7 +944,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
 }
 
 // checks if this window has dialog control
-bool Window::ImplHasDlgCtrl()
+bool Window::ImplHasDlgCtrl() const
 {
     vcl::Window* pDlgCtrlParent;
 

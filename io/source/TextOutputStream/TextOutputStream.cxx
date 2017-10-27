@@ -62,7 +62,7 @@ class OTextOutputStream : public WeakImplHelper< XTextOutputStream2, XServiceInf
 
     Sequence<sal_Int8> implConvert( const OUString& rSource );
     /// @throws IOException
-    void checkOutputStream();
+    void checkOutputStream() const;
 
 public:
     OTextOutputStream();
@@ -202,7 +202,7 @@ void OTextOutputStream::closeOutput(  )
 }
 
 
-void OTextOutputStream::checkOutputStream()
+void OTextOutputStream::checkOutputStream() const
 {
     if (! mxStream.is() )
         throw IOException("output stream is not initialized, you have to use setOutputStream first");

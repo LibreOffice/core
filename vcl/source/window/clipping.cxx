@@ -190,7 +190,7 @@ void Window::ImplClipBoundaries( vcl::Region& rRegion, bool bThis, bool bOverlap
         ImplGetParent()->ImplIntersectWindowClipRegion( rRegion );
 }
 
-bool Window::ImplClipChildren( vcl::Region& rRegion )
+bool Window::ImplClipChildren( vcl::Region& rRegion ) const
 {
     bool    bOtherClip = false;
     vcl::Window* pWindow = mpWindowImpl->mpFirstChild;
@@ -213,7 +213,7 @@ bool Window::ImplClipChildren( vcl::Region& rRegion )
     return bOtherClip;
 }
 
-void Window::ImplClipAllChildren( vcl::Region& rRegion )
+void Window::ImplClipAllChildren( vcl::Region& rRegion ) const
 {
     vcl::Window* pWindow = mpWindowImpl->mpFirstChild;
     while ( pWindow )
@@ -224,7 +224,7 @@ void Window::ImplClipAllChildren( vcl::Region& rRegion )
     }
 }
 
-void Window::ImplClipSiblings( vcl::Region& rRegion )
+void Window::ImplClipSiblings( vcl::Region& rRegion ) const
 {
     vcl::Window* pWindow = ImplGetParent()->mpWindowImpl->mpFirstChild;
     while ( pWindow )
@@ -528,7 +528,7 @@ void Window::ImplExcludeWindowRegion( vcl::Region& rRegion )
     }
 }
 
-void Window::ImplExcludeOverlapWindows( vcl::Region& rRegion )
+void Window::ImplExcludeOverlapWindows( vcl::Region& rRegion ) const
 {
     vcl::Window* pWindow = mpWindowImpl->mpFirstOverlap;
     while ( pWindow )
@@ -551,7 +551,7 @@ void Window::ImplExcludeOverlapWindows2( vcl::Region& rRegion )
     ImplExcludeOverlapWindows( rRegion );
 }
 
-void Window::ImplIntersectAndUnionOverlapWindows( const vcl::Region& rInterRegion, vcl::Region& rRegion )
+void Window::ImplIntersectAndUnionOverlapWindows( const vcl::Region& rInterRegion, vcl::Region& rRegion ) const
 {
     vcl::Window* pWindow = mpWindowImpl->mpFirstOverlap;
     while ( pWindow )
@@ -580,10 +580,10 @@ void Window::ImplIntersectAndUnionOverlapWindows2( const vcl::Region& rInterRegi
     ImplIntersectAndUnionOverlapWindows( rInterRegion, rRegion );
 }
 
-void Window::ImplCalcOverlapRegionOverlaps( const vcl::Region& rInterRegion, vcl::Region& rRegion )
+void Window::ImplCalcOverlapRegionOverlaps( const vcl::Region& rInterRegion, vcl::Region& rRegion ) const
 {
     // Clip Overlap Siblings
-    vcl::Window* pStartOverlapWindow;
+    vcl::Window const * pStartOverlapWindow;
     if ( !ImplIsOverlapWindow() )
         pStartOverlapWindow = mpWindowImpl->mpOverlapWindow;
     else
@@ -674,7 +674,7 @@ void Window::ImplCalcOverlapRegion( const tools::Rectangle& rSourceRect, vcl::Re
 }
 
 void Window::SaveBackground( const Point& rPos, const Size& rSize,
-                             VirtualDevice& rSaveDevice )
+                             VirtualDevice& rSaveDevice ) const
 {
     if ( mpWindowImpl->mpPaintRegion )
     {

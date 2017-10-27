@@ -464,7 +464,7 @@ class OServiceManagerWrapper : public OServiceManagerMutex, public t_OServiceMan
 {
     Reference< XComponentContext > m_xContext;
     Reference< XMultiComponentFactory > m_root;
-    Reference< XMultiComponentFactory > const & getRoot()
+    Reference< XMultiComponentFactory > const & getRoot() const
     {
         if (! m_root.is())
         {
@@ -1221,7 +1221,7 @@ private:
     Reference<XRegistryKey >        getRootKey();
     Reference<XInterface > loadWithImplementationName(
         const OUString & rImplName, Reference< XComponentContext > const & xContext );
-    Sequence<OUString>          getFromServiceName(const OUString& serviceName);
+    Sequence<OUString>          getFromServiceName(const OUString& serviceName) const;
     Reference<XInterface > loadWithServiceName(
         const OUString & rImplName, Reference< XComponentContext > const & xContext );
     void                        fillAllNamesFromRegistry( HashSet_OWString & );
@@ -1333,7 +1333,7 @@ Reference<XInterface > ORegistryServiceManager::loadWithImplementationName(
  * Return all implementation out of the registry.
  */
 Sequence<OUString> ORegistryServiceManager::getFromServiceName(
-    const OUString& serviceName )
+    const OUString& serviceName ) const
 {
     OUStringBuffer buf;
     buf.append( "/SERVICES/" );

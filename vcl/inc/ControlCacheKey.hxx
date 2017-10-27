@@ -47,7 +47,7 @@ public:
             && maSize.Height() == aOther.maSize.Height();
     }
 
-    bool canCacheControl()
+    bool canCacheControl() const
     {
         switch(mnType)
         {
