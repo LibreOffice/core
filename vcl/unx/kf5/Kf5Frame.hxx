@@ -21,15 +21,23 @@
 
 #include <salframe.hxx>
 
-class Kf5Instance;
+#include <memory>
 
-class VCL_DLLPUBLIC Kf5Frame : public SalFrame
+class Kf5Instance;
+class Kf5Widget;
+
+class Kf5Frame
+    : public SalFrame
 {
+    std::unique_ptr< Kf5Widget >    m_pQWidget;
+    SalFrameStyleFlags              m_nStyle;
+    Kf5Frame                       *m_pParent;
+
 public:
-    Kf5Frame( Kf5Instance* pInstance,
-              SalFrame* pParent,
-              SalFrameStyleFlags nSalFrameStyle );
+    Kf5Frame( Kf5Frame* pParent, SalFrameStyleFlags nSalFrameStyle );
     virtual ~Kf5Frame() override;
+
+    Kf5Widget* GetQWidget() const { return m_pQWidget.get(); }
 
     virtual SalGraphics*        AcquireGraphics() override;
     virtual void                ReleaseGraphics( SalGraphics* pGraphics ) override;

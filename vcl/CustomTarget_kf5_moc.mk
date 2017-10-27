@@ -11,6 +11,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,vcl/unx/kf5))
 
 $(call gb_CustomTarget_get_target,vcl/unx/kf5) : \
 	$(call gb_CustomTarget_get_workdir,vcl/unx/kf5)/Kf5Timer.moc \
+	$(call gb_CustomTarget_get_workdir,vcl/unx/kf5)/Kf5Widget.moc \
 
 $(call gb_CustomTarget_get_workdir,vcl/unx/kf5)/%.moc : \
 		$(SRCDIR)/vcl/unx/kf5/%.hxx \

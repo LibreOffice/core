@@ -87,6 +87,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_kf5,\
     vcl/unx/kf5/Kf5Printer \
     vcl/unx/kf5/Kf5Timer \
     vcl/unx/kf5/Kf5VirtualDevice \
+    vcl/unx/kf5/Kf5Widget \
 ))
 
 ifeq ($(OS),LINUX)
