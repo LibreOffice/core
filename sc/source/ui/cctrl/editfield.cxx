@@ -34,11 +34,6 @@ sal_Unicode lclGetDecSep()
     return ScGlobal::GetpLocaleData()->getNumDecimalSep()[0];
 }
 
-sal_Unicode lclGetGroupSep()
-{
-    return ScGlobal::GetpLocaleData()->getNumThousandSep()[0];
-}
-
 } // namespace
 
 ScDoubleField::ScDoubleField( vcl::Window* pParent, WinBits nStyle ) :
@@ -60,7 +55,7 @@ bool ScDoubleField::GetValue( double& rfValue ) const
     {
         rtl_math_ConversionStatus eStatus;
         sal_Int32 nEnd;
-        rfValue = rtl::math::stringToDouble( aStr, lclGetDecSep(), lclGetGroupSep(), &eStatus, &nEnd );
+        rfValue = ScGlobal::GetpLocaleData()->stringToDouble( aStr, true, &eStatus, &nEnd );
         bOk = (eStatus == rtl_math_ConversionStatus_Ok) && (nEnd == aStr.getLength() );
     }
     return bOk;
