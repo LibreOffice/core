@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <clipboardmanager.hxx>
+#include "clipboardmanager.hxx"
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

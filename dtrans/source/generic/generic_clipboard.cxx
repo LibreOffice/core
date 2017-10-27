@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <generic_clipboard.hxx>
+#include "generic_clipboard.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/datatransfer/clipboard/RenderingCapabilities.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

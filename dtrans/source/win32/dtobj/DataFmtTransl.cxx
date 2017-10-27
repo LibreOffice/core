@@ -22,7 +22,7 @@
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 #include "../misc/ImplHelper.hxx"
-#include "WinClip.hxx"
+#include <WinClip.hxx>
 #include "MimeAttrib.hxx"
 #include "DTransHelper.hxx"
 #include <rtl/string.h>
