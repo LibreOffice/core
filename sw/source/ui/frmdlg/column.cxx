@@ -583,6 +583,9 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
     m_aEd3.SetMetric(aMetric);
     m_aDistEd1.SetMetric(aMetric);
     m_aDistEd2.SetMetric(aMetric);
+    //default spacing between cols = 0.5cm
+    m_aDistEd1.SetPrcntValue(50, FUNIT_CM);
+    m_aDistEd2.SetPrcntValue(50, FUNIT_CM);
 
     delete m_pColMgr;
     m_pColMgr = new SwColMgr(*rSet);
@@ -1315,7 +1318,7 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS, void )
     {
         m_pCLNrEdt->SetValue( nItem );
         m_pAutoWidthBox->Check();
-        m_aDistEd1.SetPrcntValue(0);
+        m_aDistEd1.SetPrcntValue(50, FUNIT_CM);
         ColModify(nullptr);
     }
     else
@@ -1323,7 +1326,7 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS, void )
         m_bLockUpdate = true;
         m_pCLNrEdt->SetValue( 2 );
         m_pAutoWidthBox->Check(false);
-        m_aDistEd1.SetPrcntValue(0);
+        m_aDistEd1.SetPrcntValue(50, FUNIT_CM);
         ColModify(nullptr);
         // now set the width ratio to 2 : 1 or 1 : 2 respectively
         const long nSmall = static_cast< long >(m_pColMgr->GetActualSize() / 3);
