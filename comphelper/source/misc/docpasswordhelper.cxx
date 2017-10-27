@@ -336,6 +336,8 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 
         // Erase KeyData array and leave.
         rtl_secureZeroMemory (pKeyData, sizeof(pKeyData));
+
+        rtl_digest_destroy(hDigest);
     }
 
     return aResultKey;
