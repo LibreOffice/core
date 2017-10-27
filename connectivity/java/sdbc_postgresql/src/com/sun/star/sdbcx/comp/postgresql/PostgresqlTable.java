@@ -24,22 +24,23 @@ package com.sun.star.sdbcx.comp.postgresql;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.openoffice.comp.sdbc.dbtools.comphelper.CompHelper;
+import org.apache.openoffice.comp.sdbc.dbtools.sdbcx.OColumnContainer;
+import org.apache.openoffice.comp.sdbc.dbtools.sdbcx.OContainer;
+import org.apache.openoffice.comp.sdbc.dbtools.sdbcx.OIndexContainer;
+import org.apache.openoffice.comp.sdbc.dbtools.sdbcx.OKey;
+import org.apache.openoffice.comp.sdbc.dbtools.sdbcx.OKeyContainer;
+import org.apache.openoffice.comp.sdbc.dbtools.sdbcx.OTable;
+import org.apache.openoffice.comp.sdbc.dbtools.sdbcx.SqlTableHelper;
+import org.apache.openoffice.comp.sdbc.dbtools.sdbcx.SqlTableHelper.ColumnDescription;
+import org.apache.openoffice.comp.sdbc.dbtools.sdbcx.descriptors.SdbcxTableDescriptor;
+
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.ElementExistException;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XConnection;
-import com.sun.star.sdbcx.comp.postgresql.comphelper.CompHelper;
-import com.sun.star.sdbcx.comp.postgresql.sdbcx.OColumnContainer;
-import com.sun.star.sdbcx.comp.postgresql.sdbcx.OContainer;
-import com.sun.star.sdbcx.comp.postgresql.sdbcx.OIndexContainer;
-import com.sun.star.sdbcx.comp.postgresql.sdbcx.OKey;
-import com.sun.star.sdbcx.comp.postgresql.sdbcx.OKeyContainer;
-import com.sun.star.sdbcx.comp.postgresql.sdbcx.OTable;
-import com.sun.star.sdbcx.comp.postgresql.sdbcx.SqlTableHelper;
-import com.sun.star.sdbcx.comp.postgresql.sdbcx.SqlTableHelper.ColumnDescription;
-import com.sun.star.sdbcx.comp.postgresql.sdbcx.descriptors.SdbcxTableDescriptor;
 
 public class PostgresqlTable extends OTable {
     public PostgresqlTable(XConnection connection, OContainer tables, String name,

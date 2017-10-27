@@ -23,6 +23,10 @@ package com.sun.star.sdbcx.comp.postgresql;
 
 import java.util.ArrayList;
 
+import org.apache.openoffice.comp.sdbc.dbtools.util.Resources;
+import org.apache.openoffice.comp.sdbc.dbtools.util.SharedResources;
+import org.apache.openoffice.comp.sdbc.dbtools.util.StandardSQLState;
+
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleComponentFactory;
@@ -35,9 +39,6 @@ import com.sun.star.sdbc.XDriver;
 import com.sun.star.sdbc.XDriverManager;
 import com.sun.star.sdbcx.XDataDefinitionSupplier;
 import com.sun.star.sdbcx.XTablesSupplier;
-import com.sun.star.sdbcx.comp.postgresql.util.Resources;
-import com.sun.star.sdbcx.comp.postgresql.util.SharedResources;
-import com.sun.star.sdbcx.comp.postgresql.util.StandardSQLState;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;

@@ -24,13 +24,14 @@ package com.sun.star.sdbcx.comp.postgresql;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.openoffice.comp.sdbc.dbtools.comphelper.CompHelper;
+import org.apache.openoffice.comp.sdbc.dbtools.sdbcx.OCatalog;
+import org.apache.openoffice.comp.sdbc.dbtools.sdbcx.OContainer;
+
 import com.sun.star.container.ElementExistException;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRow;
-import com.sun.star.sdbcx.comp.postgresql.comphelper.CompHelper;
-import com.sun.star.sdbcx.comp.postgresql.sdbcx.OCatalog;
-import com.sun.star.sdbcx.comp.postgresql.sdbcx.OContainer;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 

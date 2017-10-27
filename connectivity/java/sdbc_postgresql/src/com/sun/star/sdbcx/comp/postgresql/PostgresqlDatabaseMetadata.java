@@ -23,6 +23,8 @@ package com.sun.star.sdbcx.comp.postgresql;
 
 import java.util.ArrayList;
 
+import org.apache.openoffice.comp.sdbc.dbtools.util.ORowSetValue;
+
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.sdbc.SQLException;
@@ -30,8 +32,6 @@ import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XDatabaseMetaData;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRow;
-import com.sun.star.sdbcx.comp.postgresql.util.DatabaseMetaDataResultSet;
-import com.sun.star.sdbcx.comp.postgresql.util.ORowSetValue;
 import com.sun.star.uno.UnoRuntime;
 
 public class PostgresqlDatabaseMetadata extends WeakBase implements XDatabaseMetaData {

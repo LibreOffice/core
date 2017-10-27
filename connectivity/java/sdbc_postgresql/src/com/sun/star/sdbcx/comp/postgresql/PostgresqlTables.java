@@ -23,6 +23,15 @@ package com.sun.star.sdbcx.comp.postgresql;
 
 import java.util.List;
 
+import org.apache.openoffice.comp.sdbc.dbtools.comphelper.CompHelper;
+import org.apache.openoffice.comp.sdbc.dbtools.sdbcx.OContainer;
+import org.apache.openoffice.comp.sdbc.dbtools.sdbcx.descriptors.SdbcxTableDescriptor;
+import org.apache.openoffice.comp.sdbc.dbtools.util.ComposeRule;
+import org.apache.openoffice.comp.sdbc.dbtools.util.DbTools;
+import org.apache.openoffice.comp.sdbc.dbtools.util.DbTools.NameComponents;
+import org.apache.openoffice.comp.sdbc.dbtools.util.PropertyIds;
+import org.apache.openoffice.comp.sdbc.dbtools.util.StandardSQLState;
+
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.ElementExistException;
@@ -35,14 +44,6 @@ import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRow;
 import com.sun.star.sdbc.XStatement;
 import com.sun.star.sdbcx.XDrop;
-import com.sun.star.sdbcx.comp.postgresql.comphelper.CompHelper;
-import com.sun.star.sdbcx.comp.postgresql.sdbcx.OContainer;
-import com.sun.star.sdbcx.comp.postgresql.sdbcx.descriptors.SdbcxTableDescriptor;
-import com.sun.star.sdbcx.comp.postgresql.util.ComposeRule;
-import com.sun.star.sdbcx.comp.postgresql.util.DbTools;
-import com.sun.star.sdbcx.comp.postgresql.util.DbTools.NameComponents;
-import com.sun.star.sdbcx.comp.postgresql.util.PropertyIds;
-import com.sun.star.sdbcx.comp.postgresql.util.StandardSQLState;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;

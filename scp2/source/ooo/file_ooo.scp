@@ -432,6 +432,7 @@ STD_JAR_FILE( gid_File_Jar_Hsqldb_Sdbc, sdbc_hsqldb )
 #ifndef SYSTEM_APACHE_COMMONS
 STD_JAR_FILE( gid_File_Jar_Apache_Commons_Lang, commons-lang3-3.3 )
 #endif
+STD_JAR_FILE( gid_File_Jar_DbTools_Sdbc, dbtools )
 STD_JAR_FILE( gid_File_Jar_PostgreSQL_Sdbc, sdbc_postgresql )
 #endif
 

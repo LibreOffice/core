@@ -87,6 +87,7 @@ Module gid_Module_Root_Files_3
 	gid_File_Jar_Hsqldb,
 	gid_File_Jar_Hsqldb_Sdbc,
 	gid_File_Jar_Apache_Commons_Lang,
+	gid_File_Jar_DbTools_Sdbc,
 	gid_File_Jar_PostgreSQL_Sdbc,
 	gid_File_Jar_Accessbridge,
 	gid_File_Jar_Js,

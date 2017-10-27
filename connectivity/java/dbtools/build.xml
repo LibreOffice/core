@@ -21,7 +21,7 @@
  ***********************************************************-->
 
 
-<project name="sdbc_postgresql" default="main" basedir=".">
+<project name="dbtools" default="main" basedir=".">
 
     <!-- ================================================================= -->
     <!-- settings                                                          -->
@@ -33,10 +33,10 @@
     <property file="../../../solenv/inc/minor.mk"/>
 
     <!-- name of this sub target used in recursive builds -->
-    <property name="target" value="sdbc_postgresql"/>
+    <property name="target" value="dbtools"/>
 
     <!-- name of jar file created, without .jar extension -->
-    <property name="jarname" value="sdbc_postgresql"/>
+    <property name="jarname" value="dbtools"/>
 
     <!-- relative path to project directory -->
     <property name="prj" value="../.."/>
@@ -63,16 +63,23 @@
     <property name="build.sysclasspath" value="ignore"/>
 
     <!-- classpath settings for compile and javadoc tasks -->
+    <condition property="jar-class-path" value="${COMMONS_LANG_JAR}" else="commons-lang3-3.3.jar">
+        <equals arg1="${SYSTEM_APACHE_COMMONS}" arg2="YES"/>
+    </condition>
+    <condition property="commons-lang-jar" value="${COMMONS_LANG_JAR}" else="${OUTDIR}/bin/commons-lang3-3.3.jar">
+        <equals arg1="${SYSTEM_APACHE_COMMONS}" arg2="YES"/>
+    </condition>
     <path id="classpath">
         <pathelement location="${OUTDIR}/bin/juh.jar"/>
         <pathelement location="${OUTDIR}/bin/jurt.jar"/>
         <pathelement location="${OUTDIR}/bin/ridl.jar"/>
         <pathelement location="${OUTDIR}/bin/unoil.jar"/>
-        <pathelement location="${out}/class/dbtools/dbtools.jar"/>
+        <!-- 3rd party libs -->
+        <pathelement location="${commons-lang-jar}"/>
     </path>
 
     <!-- name to display in documentation -->
-    <property name="docname" value="sdbc_postgresql"/>
+    <property name="docname" value="dbtools"/>
 
     <!-- set "modern" java compiler -->
     <property name="build.compiler" value="modern"/>
@@ -212,7 +219,7 @@
         <jar jarfile="${build.class}/${jarname}.jar"
              basedir="${build.class}">
             <manifest>
-                <attribute name="Class-Path" value="${jar-class-path} juh.jar jurt.jar ridl.jar unoil.jar dbtools.jar"/>
+                <attribute name="Class-Path" value="${jar-class-path} juh.jar jurt.jar ridl.jar unoil.jar"/>
                 <attribute name="Solar-Version" value="${RSCREVISION}"/>
                 <attribute name="RegistrationClassName" value="com.sun.star.sdbcx.comp.postgresql.PostgresqlDriver"/>
                 <attribute name="Sealed" value="true"/>
