@@ -433,18 +433,21 @@ void cclass_Unicode::initParserTable( const Locale& rLocale, sal_Int32 startChar
     // specials
     if( mxLocaleData.is() )
     {
-        LocaleDataItem aItem =
-            mxLocaleData->getLocaleItem( aParserLocale );
+        LocaleDataItem2 aItem =
+            mxLocaleData->getLocaleItem2( aParserLocale );
 //!TODO: theoretically separators may be a string, adjustment would have to be
 //! done here and in parsing and in ::rtl::math::stringToDouble()
         cGroupSep = aItem.thousandSeparator[0];
         cDecimalSep = aItem.decimalSeparator[0];
+        cDecimalSepAlt = aItem.decimalSeparatorAlternative.toChar();
     }
 
     if ( cGroupSep < nDefCnt )
         pTable[cGroupSep] |= ParserFlags::VALUE;
     if ( cDecimalSep < nDefCnt )
         pTable[cDecimalSep] |= ParserFlags::CHAR_VALUE | ParserFlags::VALUE;
+    if ( cDecimalSepAlt && cDecimalSepAlt < nDefCnt )
+        pTable[cDecimalSepAlt] |= ParserFlags::CHAR_VALUE | ParserFlags::VALUE;
 
     // Modify characters according to KParseTokens definitions.
     {
@@ -593,6 +596,8 @@ ParserFlags cclass_Unicode::getFlagsExtended(sal_uInt32 const c)
         return ParserFlags::VALUE;
     else if ( c == cDecimalSep )
         return ParserFlags::CHAR_VALUE | ParserFlags::VALUE;
+    else if ( cDecimalSepAlt && c == cDecimalSepAlt )
+        return ParserFlags::CHAR_VALUE | ParserFlags::VALUE;
     bool bStart = (eState == ssGetChar || eState == ssGetWordFirstChar ||
             eState == ssRewindFromValue || eState == ssIgnoreLeadingInRewind);
     sal_Int32 nTypes = (bStart ? nStartTypes : nContTypes);
@@ -704,6 +709,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     bool bQuote = false;
     bool bMightBeWord = true;
     bool bMightBeWordLast = true;
+    bool bDecSepAltUsed = false;
     //! All the variables above (plus ParseResult) have to be resetted on ssRewindFromValue!
     sal_Int32 nextCharIndex(nPos); // == index of nextChar
 
@@ -743,7 +749,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                         else
                             r.TokenType = KParseType::ASC_NUMBER;
                     }
-                    else if (current == cDecimalSep)
+                    else if (current == cDecimalSep || (bDecSepAltUsed = (cDecimalSepAlt && current == cDecimalSep)))
                     {
                         if (nextChar)
                             ++nDecSeps;
@@ -812,7 +818,8 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 }
                 if ( nMask & ParserFlags::VALUE )
                 {
-                    if (current == cDecimalSep && ++nDecSeps > 1)
+                    if ((current == cDecimalSep || (bDecSepAltUsed = (cDecimalSepAlt && current == cDecimalSepAlt))) &&
+                            ++nDecSeps > 1)
                     {
                         if (nCodePoints == 2)
                             eState = ssRewindFromValue;
@@ -954,6 +961,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             bQuote = false;
             bMightBeWord = true;
             bMightBeWordLast = true;
+            bDecSepAltUsed = false;
         }
         else
         {
@@ -1001,7 +1009,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     if ( r.TokenType & KParseType::ASC_NUMBER )
     {
         r.Value = rtl_math_uStringToDouble(rText.getStr() + nPos + r.LeadingWhiteSpace,
-            rText.getStr() + r.EndPos, cDecimalSep, cGroupSep, nullptr, nullptr);
+            rText.getStr() + r.EndPos, (bDecSepAltUsed ? cDecimalSepAlt : cDecimalSep), cGroupSep, nullptr, nullptr);
         if ( bMightBeWord )
             r.TokenType |= KParseType::IDENTNAME;
     }

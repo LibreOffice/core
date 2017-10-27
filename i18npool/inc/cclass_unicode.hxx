@@ -138,6 +138,7 @@ private:
     ScanState            eState;
     sal_Unicode          cGroupSep;
     sal_Unicode          cDecimalSep;
+    sal_Unicode          cDecimalSepAlt;
 
     /// Get corresponding KParseTokens flag for a character
     static sal_Int32 getParseTokensType(sal_uInt32 c, bool isFirst);
