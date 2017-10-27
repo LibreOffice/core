@@ -572,6 +572,7 @@ linux-gnu*|k*bsd*-gnu*)
     build_gstreamer_0_10=yes
     test_kde4=yes
     test_kf5=yes
+    test_qt5=yes
     if test "$enable_fuzzers" != yes; then
         test_freetype=yes
         test_fontconfig=yes
@@ -666,6 +667,7 @@ freebsd*)
     build_gstreamer_0_10=yes
     test_kde4=yes
     test_kf5=yes
+    test_qt5=yes
     test_freetype=yes
     AC_MSG_CHECKING([the FreeBSD operating system release])
     if test -n "$with_os_version"; then
@@ -695,6 +697,7 @@ freebsd*)
     build_gstreamer_0_10=yes
     test_kde4=yes
     test_kf5=yes
+    test_qt5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread -lpthread"
     _os=NetBSD
@@ -721,6 +724,7 @@ dragonfly*)
     build_gstreamer_0_10=yes
     test_kde4=yes
     test_kf5=yes
+    test_qt5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread"
     _os=DragonFly
@@ -745,6 +749,7 @@ linux-android*)
     test_gtk=no
     test_kde4=no
     test_kf5=no
+    test_qt5=no
     test_randr=no
     test_xrender=no
     _os=Android
@@ -1184,7 +1189,7 @@ AC_ARG_ENABLE(kde4,
 
 AC_ARG_ENABLE(kf5,
     AS_HELP_STRING([--enable-kf5],
-        [Determines whether to use Kf5 vclplug on platforms where Qt5 and
+        [Determines whether to use KF5 vclplug on platforms where Qt5 and
          KF5 are available.]),
 ,)
 
@@ -4512,6 +4517,7 @@ if test "$USING_X11" != TRUE; then
     build_gstreamer_0_10=no
     test_kde4=no
     test_kf5=no
+    test_qt5=no
     enable_cairo_canvas=no
 fi
 
@@ -9766,7 +9772,6 @@ if test "x$enable_kf5" = "xyes"; then
 fi
 AC_SUBST(ENABLE_KF5)
 
-
 build_vcl_plugins="$R"
 if test -z "$build_vcl_plugins"; then
     build_vcl_plugins="none"
@@ -10539,13 +10544,13 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE"; then
     fi
 
     dnl Check for qmake
-    AC_PATH_PROG( QMAKEQT4, qmake-qt4, no, [`dirname $qt4_header_dir`/bin:$QT4DIR/bin:$PATH] )
-    QMAKE4="$QMAKEQT4"
+    AC_PATH_PROGS( QMAKE4, [qmake-qt4 qmake], no, [`dirname $qt4_header_dir`/bin:$QT4DIR/bin:$PATH] )
     if test "$QMAKE4" = "no"; then
-        AC_PATH_PROG( QMAKE4, qmake, no, [`dirname $qt4_header_dir`/bin:$QT4DIR/bin:$PATH] )
-        if test "$QMAKE4" = "no"; then
-            AC_MSG_ERROR([Qmake not found.  Please specify
-the root of your Qt installation by exporting QT4DIR before running "configure".])
+        AC_MSG_ERROR([Qmake not found.  Please specify the root of your Qt4 installation by exporting QT4DIR before running "configure".])
+    else
+        qmake4_test_ver="`$QMAKE4 -v 2>&1 | sed -n -e '/^Using Qt version 4\./p'`"
+        if test -z "$qmake4_test_ver"; then
+            AC_MSG_ERROR([Wrong qmake for Qt4 found. Please specify the root of your Qt installation by exporting QT5DIR before running "configure".])
         fi
     fi
 
@@ -10745,42 +10750,43 @@ AC_SUBST(KDE4_GLIB_LIBS)
 AC_SUBST(KDE4_HAVE_GLIB)
 
 dnl ===================================================================
-dnl KDE5 Integration
+dnl QT5 Integration
 dnl ===================================================================
 
-KF5_CFLAGS=""
-KF5_LIBS=""
+QT5_CFLAGS=""
+QT5_LIBS=""
 QMAKE5="qmake"
-KF5_CONFIG="kf5-config"
 MOC5="moc"
-KF5_GLIB_CFLAGS=""
-KF5_GLIB_LIBS=""
-KF5_HAVE_GLIB=""
-if test \( "$test_kde5" = "yes" -a "$ENABLE_KDE5" = "TRUE" \) \
-    -o \( "$test_kf5" = "yes" -a "$ENABLE_KF5" = "TRUE" \)
+QT5_GLIB_CFLAGS=""
+QT5_GLIB_LIBS=""
+QT5_HAVE_GLIB=""
+if test \( "$test_kde5" = "yes" -a "$ENABLE_KDE5" = "TRUE" \) -o \
+        \( "$test_kf5" = "yes" -a "$ENABLE_KF5" = "TRUE" \) -o \
+        \( "$test_qt5" = "yes" -a "$ENABLE_QT5" = "TRUE" \)
 then
     qt5_incdirs="$QT5INC /usr/include/qt5 /usr/include $x_includes"
     qt5_libdirs="$QT5LIB /usr/lib/qt5 /usr/lib $x_libraries"
 
-    kf5_incdirs="$KF5INC /usr/include /usr/include/KF5 $x_includes"
-    kf5_libdirs="$KF5LIB /usr/lib /usr/lib/kf5 /usr/lib/kf5/devel $x_libraries"
-
     if test -n "$supports_multilib"; then
         qt5_libdirs="$qt5_libdirs /usr/lib64/qt5 /usr/lib64/qt /usr/lib64"
-        kf5_libdirs="$kf5_libdirs /usr/lib64 /usr/lib64/kf5 /usr/lib64/kf5/devel"
     fi
 
     qt5_test_include="QtWidgets/qapplication.h"
     qt5_test_library="libQt5Widgets.so"
-    kf5_test_include="kcoreaddons_version.h"
-    kf5_test_library="libKF5CoreAddons.so"
 
-    dnl Check for qmake
+    dnl Check for qmake5
     AC_PATH_PROGS( QMAKE5, [qmake-qt5 qmake], no, [$QT5DIR/bin:$PATH] )
-    if test "$QMAKE5" != "no"; then
-        qt5_incdirs="`$QMAKE5 -query QT_INSTALL_HEADERS` $qt5_incdirs"
-        qt5_libdirs="`$QMAKE5 -query QT_INSTALL_LIBS` $qt5_libdirs"
+    if test "$QMAKE5" = "no"; then
+        AC_MSG_ERROR([Qmake not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
+    else
+        qmake5_test_ver="`$QMAKE5 -v 2>&1 | sed -n -e '/^Using Qt version 5\./p'`"
+        if test -z "$qmake5_test_ver"; then
+            AC_MSG_ERROR([Wrong qmake for Qt5 found. Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
+        fi
     fi
+
+    qt5_incdirs="`$QMAKE5 -query QT_INSTALL_HEADERS` $qt5_incdirs"
+    qt5_libdirs="`$QMAKE5 -query QT_INSTALL_LIBS` $qt5_libdirs"
 
     AC_MSG_CHECKING([for Qt5 headers])
     qt5_incdir="no"
@@ -10807,7 +10813,9 @@ then
     if test "x$qt5_libdir" = "xno"; then
         AC_MSG_ERROR([Qt5 libraries not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
     fi
-    kf5_libdirs="$qt5_libdir $kf5_libdirs"
+
+    QT5_CFLAGS="-I$qt5_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
+    QT5_LIBS="-L$qt5_libdir -lQt5Core -lQt5Gui -lQt5Widgets -lQt5Network"
 
     dnl Check for Meta Object Compiler
 
@@ -10816,6 +10824,134 @@ then
         AC_MSG_ERROR([Qt Meta Object Compiler not found.  Please specify
 the root of your Qt installation by exporting QT5DIR before running "configure".])
     fi
+
+    # Glib is needed for properly handling Qt event loop with Qt's Glib integration enabled.
+    # Sets also QT5_GLIB_CFLAGS/QT5_GLIB_LIBS if successful.
+    PKG_CHECK_MODULES(QT5_GLIB,[glib-2.0 >= 2.4],
+        [
+            QT5_HAVE_GLIB=1
+            AC_DEFINE(QT5_HAVE_GLIB,1)
+            QT5_GLIB_CFLAGS=$(printf '%s' "$QT5_GLIB_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+            FilterLibs "${QT5_GLIB_LIBS}"
+            QT5_GLIB_LIBS="${filteredlibs}"
+
+            qt5_fix_warning=
+
+            AC_LANG_PUSH([C++])
+            # tst_exclude_socket_notifiers.moc:70:28: runtime error: member access within address 0x60d00000bb20 which does not point to an object of type 'QO
+            # 0x60d00000bb20: note: object is of type 'QObjectPrivate'
+            #  02 00 80 3a  90 8a 4e d2 3a 00 00 00  f0 b4 b9 a7 ff 7f 00 00  00 00 00 00 00 00 00 00  20 d8 4e d2
+            #               ^~~~~~~~~~~~~~~~~~~~~~~
+            #               vptr for 'QObjectPrivate'
+            save_CXX=$CXX
+            CXX=$(printf %s "$CXX" \
+                | sed -e 's/-fno-sanitize-recover\(=[[0-9A-Za-z,_-]]*\)*//')
+            save_CXXFLAGS=$CXXFLAGS
+            CXXFLAGS="$CXXFLAGS $QT5_CFLAGS"
+            save_LIBS=$LIBS
+            LIBS="$LIBS $QT5_LIBS"
+            AC_MSG_CHECKING([whether Qt has fixed ExcludeSocketNotifiers])
+            # Prepare meta object data
+            TSTBASE="tst_exclude_socket_notifiers"
+            TSTMOC="${SRC_ROOT}/vcl/unx/kde5/${TSTBASE}"
+            ln -fs "${TSTMOC}.hxx"
+            $MOC5 "${TSTBASE}.hxx" -o "${TSTBASE}.moc"
+
+            AC_RUN_IFELSE([AC_LANG_SOURCE([[
+#include <cstdlib>
+#include "tst_exclude_socket_notifiers.moc"
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication app(argc, argv);
+    exit(tst_processEventsExcludeSocket());
+    return 0;
+}
+            ]])],[
+                AC_MSG_RESULT([yes])
+            ],[
+                AC_MSG_RESULT([no])
+                AC_MSG_WARN([native Qt5 file pickers will be disabled at runtime])
+                if test -z "$qt5_fix_warning"; then
+                    add_warning "native QT5 file pickers will be disabled at runtime, Qt5 fixes needed"
+                fi
+                qt5_fix_warning=1
+                add_warning "  https://bugreports.qt-project.org/browse/QTBUG-37380 (needed)"
+            ])
+
+            # Remove meta object data
+            rm -f "${TSTBASE}."*
+
+            AC_MSG_CHECKING([whether Qt avoids QClipboard recursion caused by posted events])
+            # Prepare meta object data
+            TSTBASE="tst_exclude_posted_events"
+            TSTMOC="${SRC_ROOT}/vcl/unx/kde5/${TSTBASE}"
+            ln -fs "${TSTMOC}.hxx"
+            $MOC5 "${TSTBASE}.hxx" -o "${TSTBASE}.moc"
+
+            AC_RUN_IFELSE([AC_LANG_SOURCE([[
+#include <cstdlib>
+#include "tst_exclude_posted_events.moc"
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication app(argc, argv);
+    exit(tst_excludePostedEvents());
+    return 0;
+}
+            ]])],[
+                AC_MSG_RESULT([yes])
+            ],[
+                AC_MSG_RESULT([no])
+                AC_MSG_WARN([native QT5 file pickers will be disabled at runtime])
+                if test -z "$qt5_fix_warning"; then
+                    add_warning "native QT5 file pickers will be disabled at runtime, Qt5 fixes needed"
+                fi
+                qt5_fix_warning=1
+                add_warning "  https://bugreports.qt-project.org/browse/QTBUG-34614 (needed)"
+            ])
+
+            # Remove meta object data
+            rm -f "${TSTBASE}."*
+
+            if test -n "$qt5_fix_warning"; then
+                add_warning "  https://bugreports.qt-project.org/browse/QTBUG-38585 (recommended)"
+            fi
+
+            LIBS=$save_LIBS
+            CXXFLAGS=$save_CXXFLAGS
+            CXX=$save_CXX
+            AC_LANG_POP([C++])
+        ],
+        AC_MSG_WARN([[No Glib found, Qt5 support will not use native file pickers!]]))
+
+fi
+AC_SUBST(QT5_CFLAGS)
+AC_SUBST(QT5_LIBS)
+AC_SUBST(MOC5)
+AC_SUBST(QT5_GLIB_CFLAGS)
+AC_SUBST(QT5_GLIB_LIBS)
+AC_SUBST(QT5_HAVE_GLIB)
+
+dnl ===================================================================
+dnl KDE5 Integration
+dnl ===================================================================
+
+KF5_CFLAGS=""
+KF5_LIBS=""
+KF5_CONFIG="kf5-config"
+if test \( "$test_kde5" = "yes" -a "$ENABLE_KDE5" = "TRUE" \) -o \
+        \( "$test_kf5" = "yes" -a "$ENABLE_KF5" = "TRUE" \)
+then
+    kf5_incdirs="$KF5INC /usr/include /usr/include/KF5 $x_includes"
+    kf5_libdirs="$KF5LIB /usr/lib /usr/lib/kf5 /usr/lib/kf5/devel $x_libraries"
+    if test -n "$supports_multilib"; then
+        kf5_libdirs="$kf5_libdirs /usr/lib64 /usr/lib64/kf5 /usr/lib64/kf5/devel"
+    fi
+
+    kf5_test_include="kcoreaddons_version.h"
+    kf5_test_library="libKF5CoreAddons.so"
+    kf5_libdirs="$qt5_libdir $kf5_libdirs"
 
     dnl kf5 KDE4 support compatibility installed
     AC_PATH_PROG( KF5_CONFIG, $KF5_CONFIG, no, )
@@ -10870,28 +11006,12 @@ int main(int argc, char **argv) {
        if (KCOREADDONS_VERSION_MAJOR == 5 && KCOREADDONS_VERSION_MINOR >= 0) return 0;
        else return 1;
 }
-]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([KDE5 version too old])],[])
+       ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([KDE version too old])],[])
     CXXFLAGS=$save_CXXFLAGS
     AC_LANG_POP([C++])
-
-    # Glib is needed for properly handling Qt event loop with Qt's Glib integration enabled.
-    # Sets also KF5_GLIB_CFLAGS/KF5_GLIB_LIBS if successful.
-    PKG_CHECK_MODULES(KF5_GLIB,[glib-2.0 >= 2.4],
-        [
-            KF5_HAVE_GLIB=TRUE
-            AC_DEFINE(KF5_HAVE_GLIB,1)
-            KF5_GLIB_CFLAGS=$(printf '%s' "$KF5_GLIB_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-            FilterLibs "${KF5_GLIB_LIBS}"
-            KF5_GLIB_LIBS="${filteredlibs}"
-        ],
-        AC_MSG_WARN([[No Glib found, KDE5 support will not use native file pickers!]]))
 fi
 AC_SUBST(KF5_CFLAGS)
 AC_SUBST(KF5_LIBS)
-AC_SUBST(MOC5)
-AC_SUBST(KF5_GLIB_CFLAGS)
-AC_SUBST(KF5_GLIB_LIBS)
-AC_SUBST(KF5_HAVE_GLIB)
 
 dnl ===================================================================
 dnl Test whether to include Evolution 2 support
@@ -12437,6 +12557,7 @@ AC_CONFIG_HEADERS([config_host/config_liblangtag.h])
 AC_CONFIG_HEADERS([config_host/config_locales.h])
 AC_CONFIG_HEADERS([config_host/config_mpl.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])
+AC_CONFIG_HEADERS([config_host/config_qt5.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
 AC_CONFIG_HEADERS([config_host/config_options.h])
 AC_CONFIG_HEADERS([config_host/config_options_calc.h])
