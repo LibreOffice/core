@@ -52,7 +52,16 @@ private:
             auto const file = StringRef(
                 compiler.getSourceManager().getPresumedLoc(HashLoc)
                 .getFilename());
-            auto const dir = compat::take_front(file, file.rfind('/'));
+            auto pos = file.rfind('/');
+#if defined _WIN32
+            auto const pos2 = file.rfind('\\');
+            if (pos2 != StringRef::npos
+                && (pos == StringRef::npos || pos2 > pos))
+            {
+                pos = pos2;
+            }
+#endif
+            auto const dir = compat::take_front(file, pos);
             shouldUseAngles = !loplugin::isSamePathname(SearchPath, dir);
         }
         if (shouldUseAngles == IsAngled) {

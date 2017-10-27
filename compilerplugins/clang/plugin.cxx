@@ -442,15 +442,28 @@ template<typename Fn> bool checkPathname(
     for (std::size_t n = 0;;)
     {
         std::size_t n1 = pathname.find('\\', n);
-        if (n1 >= against.size()) {
-            return check(pathname.substr(n), against.substr(n));
+        std::size_t n2 = against.find('\\', n);
+        if (n1 <= n2) {
+            if (n1 >= against.size()) {
+                return check(pathname.substr(n), against.substr(n));
+            }
+            if ((against[n1] != '/' && against[n1] != '\\')
+                || pathname.substr(n, n1 - n) != against.substr(n, n1 - n))
+            {
+                break;
+            }
+            n = n1 + 1;
+        } else {
+            if (n2 >= pathname.size()) {
+                return check(pathname.substr(n), against.substr(n));
+            }
+            if (pathname[n2] != '/'
+                || pathname.substr(n, n2 - n) != against.substr(n, n2 - n))
+            {
+                break;
+            }
+            n = n2 + 1;
         }
-        if (against[n1] != '/'
-            || pathname.substr(n, n1 - n) != against.substr(n, n1 - n))
-        {
-            break;
-        }
-        n = n1 + 1;
     }
 #endif
     return false;
