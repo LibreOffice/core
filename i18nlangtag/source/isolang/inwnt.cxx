@@ -31,7 +31,7 @@
 #endif
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
-#include "i18nlangtag/mslangid.hxx"
+#include <i18nlangtag/mslangid.hxx>
 
 static LanguageType nImplSystemLanguage = LANGUAGE_DONTKNOW;
 static LanguageType nImplSystemUILanguage = LANGUAGE_DONTKNOW;
