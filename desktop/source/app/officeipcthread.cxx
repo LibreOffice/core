@@ -570,19 +570,6 @@ void DbusIpcThread::execute()
         if (dbus_message_is_method_call(
                 msg.message, "org.libreoffice.LibreOfficeIpcIfc0", "Close"))
         {
-            DbusMessageHolder repl(dbus_message_new_method_return(msg.message));
-            if (repl.message == nullptr) {
-                SAL_WARN(
-                    "desktop.app", "dbus_message_new_method_return failed");
-            } else {
-                dbus_uint32_t serial = 0;
-                if (!dbus_connection_send(
-                        connection_.connection, repl.message, &serial)) {
-                    SAL_WARN("desktop.app", "dbus_connection_send failed");
-                } else {
-                    dbus_connection_flush(connection_.connection);
-                }
-            }
             break;
         }
         if (!dbus_message_is_method_call(
@@ -681,17 +668,11 @@ void DbusIpcThread::close() {
             SAL_WARN("desktop.app", "dbus_message_new_method_call failed");
             std::abort();
         }
-        DbusMessageHolder repl(
-            dbus_connection_send_with_reply_and_block(
-                con.connection, msg.message, 0x7FFFFFFF, &e));
-        assert((repl.message == nullptr) == bool(dbus_error_is_set(&e)));
-        if (repl.message == nullptr) {
-            SAL_INFO(
-                "desktop.app",
-                "dbus_connection_send_with_reply_and_block failed with: "
-                    << e.name << ": " << e.message);
-            dbus_error_free(&e);
+        if (!dbus_connection_send(con.connection, msg.message, nullptr)) {
+            SAL_WARN("desktop.app", "dbus_connection_send failed");
+            std::abort();
         }
+        dbus_connection_flush(con.connection);
     }
     closeDone_.set();
 }
