@@ -177,7 +177,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( 
     {
         OUString sPathName( rResourceURL.copy( nIndex ) );
         BitmapEx aBitmap;
-        if ( vcl::ImageRepository::loadImage( sPathName, aBitmap, false ) )
+        if ( vcl::ImageRepository::loadImage( sPathName, aBitmap ) )
         {
             xRet = Graphic(aBitmap).GetXGraphic();
         }

@@ -2443,18 +2443,15 @@ IMPL_LINK_NOARG(ToolBox, ImplUpdateHdl, Timer *, void)
         ImplFormat();
 }
 
-static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, bool bSetColor, bool bRotate )
+static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, bool bRotate )
 {
     rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
     rRenderContext.SetLineColor();
 
-    if (bSetColor)
-    {
-        if (rRenderContext.GetSettings().GetStyleSettings().GetFaceColor().IsDark())
-            rRenderContext.SetFillColor(Color(COL_WHITE));
-        else
-            rRenderContext.SetFillColor(Color(COL_BLACK));
-    }
+    if (rRenderContext.GetSettings().GetStyleSettings().GetFaceColor().IsDark())
+        rRenderContext.SetFillColor(Color(COL_WHITE));
+    else
+        rRenderContext.SetFillColor(Color(COL_BLACK));
     float fScaleFactor = rRenderContext.GetDPIScaleFactor();
 
     int linewidth = 1 * fScaleFactor;
@@ -2593,7 +2590,7 @@ void ToolBox::ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighl
             ImplDrawButton(rRenderContext, mpData->maMenubuttonItem.maRect, 2, false, true, false );
 
         if (ImplHasClippedItems())
-            ImplDrawMoreIndicator(rRenderContext, mpData->maMenubuttonItem.maRect, true, !mbHorz);
+            ImplDrawMoreIndicator(rRenderContext, mpData->maMenubuttonItem.maRect, !mbHorz);
 
         // store highlight state
         mpData->mbMenubuttonSelected = bHighlight;

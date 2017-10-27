@@ -344,7 +344,7 @@ void ImplSkipActions(SvStream& rIStm, sal_uLong nSkipCount)
     }
 }
 
-bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const tools::PolyPolygon& rPolyPolygon, bool bOnlyWhenCurve)
+bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const tools::PolyPolygon& rPolyPolygon)
 {
     const sal_uInt16 nPolygonCount(rPolyPolygon.Count());
 
@@ -372,7 +372,7 @@ bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const tools::PolyPolygo
             }
         }
 
-        if((bOnlyWhenCurve && nAllFlagCount) || (!bOnlyWhenCurve && nAllPointCount))
+        if(nAllFlagCount)
         {
             rOStm.WriteInt16( GDI_EXTENDEDPOLYGON_ACTION );
 
@@ -1770,7 +1770,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & r
                 nCount++;
 
                 const tools::PolyPolygon aPolyPolygon(pAct->GetPolygon());
-                if(ImplWriteExtendedPolyPolygonAction(rOStm, aPolyPolygon, true))
+                if(ImplWriteExtendedPolyPolygonAction(rOStm, aPolyPolygon))
                 {
                     nCount++;
                 }
@@ -1818,7 +1818,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & r
                 nCount++;
 
                 const tools::PolyPolygon aPolyPolygon(pAct->GetPolygon());
-                if(ImplWriteExtendedPolyPolygonAction(rOStm, aPolyPolygon, true))
+                if(ImplWriteExtendedPolyPolygonAction(rOStm, aPolyPolygon))
                 {
                     nCount++;
                 }
@@ -1831,7 +1831,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & r
                 ImplWritePolyPolyAction( rOStm, pAct->GetPolyPolygon() );
                 nCount++;
 
-                if(ImplWriteExtendedPolyPolygonAction(rOStm, pAct->GetPolyPolygon(), true))
+                if(ImplWriteExtendedPolyPolygonAction(rOStm, pAct->GetPolyPolygon()))
                 {
                     nCount++;
                 }

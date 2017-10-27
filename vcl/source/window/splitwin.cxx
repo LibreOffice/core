@@ -175,46 +175,36 @@ namespace {
     }
 }
 
-static void ImplCalcBorder( WindowAlign eAlign, bool bNoAlign,
+static void ImplCalcBorder( WindowAlign eAlign,
                             long& rLeft, long& rTop,
                             long& rRight, long& rBottom )
 {
-    if ( bNoAlign )
+    switch ( eAlign )
     {
+    case WindowAlign::Top:
         rLeft   = 2;
         rTop    = 2;
         rRight  = 2;
+        rBottom = 0;
+        break;
+    case WindowAlign::Left:
+        rLeft   = 0;
+        rTop    = 2;
+        rRight  = 2;
         rBottom = 2;
-    }
-    else
-    {
-        switch ( eAlign )
-        {
-        case WindowAlign::Top:
-            rLeft   = 2;
-            rTop    = 2;
-            rRight  = 2;
-            rBottom = 0;
-            break;
-        case WindowAlign::Left:
-            rLeft   = 0;
-            rTop    = 2;
-            rRight  = 2;
-            rBottom = 2;
-            break;
-        case WindowAlign::Bottom:
-            rLeft   = 2;
-            rTop    = 0;
-            rRight  = 2;
-            rBottom = 2;
-            break;
-        default:
-            rLeft   = 0;
-            rTop    = 2;
-            rRight  = 2;
-            rBottom = 2;
-            break;
-        }
+        break;
+    case WindowAlign::Bottom:
+        rLeft   = 2;
+        rTop    = 0;
+        rRight  = 2;
+        rBottom = 2;
+        break;
+    default:
+        rLeft   = 0;
+        rTop    = 2;
+        rRight  = 2;
+        rBottom = 2;
+        break;
     }
 }
 
@@ -1296,7 +1286,7 @@ void SplitWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     if ( nStyle & WB_BORDER )
     {
-        ImplCalcBorder( meAlign, false/*bNoAlign*/, mnLeftBorder, mnTopBorder,
+        ImplCalcBorder( meAlign, mnLeftBorder, mnTopBorder,
                         mnRightBorder, mnBottomBorder );
     }
     else
@@ -2905,7 +2895,7 @@ void SplitWindow::ImplNewAlign()
 
     if ( mnWinStyle & WB_BORDER )
     {
-        ImplCalcBorder( meAlign, false/*bNoAlign*/, mnLeftBorder, mnTopBorder,
+        ImplCalcBorder( meAlign, mnLeftBorder, mnTopBorder,
                         mnRightBorder, mnBottomBorder );
     }
 

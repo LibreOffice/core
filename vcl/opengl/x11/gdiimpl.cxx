@@ -116,7 +116,7 @@ namespace
         return 0;
     }
 
-    GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubleBufferedRendering, bool bWithSameVisualID)
+    GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubleBufferedRendering)
     {
         OpenGLZone aZone;
 
@@ -167,7 +167,7 @@ namespace
         for(int i = 0; i < fbCount; ++i)
         {
             XVisualInfo* pVi = glXGetVisualFromFBConfig( dpy, pFBC[i] );
-            if(pVi && (!bWithSameVisualID || (xattr.visual && pVi->visualid == xattr.visual->visualid)) )
+            if(pVi && (xattr.visual && pVi->visualid == xattr.visual->visualid) )
             {
                 // pick the one with the most samples per pixel
                 int nSampleBuf = 0;
@@ -259,7 +259,7 @@ SystemWindowData X11OpenGLContext::generateWinData(vcl::Window* pParent, bool /*
         return aWinData;
 
     int best_fbc = -1;
-    GLXFBConfig* pFBC = getFBConfig(dpy, win, best_fbc, true, false);
+    GLXFBConfig* pFBC = getFBConfig(dpy, win, best_fbc, true);
 
     if (!pFBC)
         return aWinData;
@@ -299,7 +299,7 @@ bool X11OpenGLContext::ImplInit()
     if (glXCreateContextAttribsARB && !mbRequestLegacyContext)
     {
         int best_fbc = -1;
-        GLXFBConfig* pFBC = getFBConfig(m_aGLWin.dpy, m_aGLWin.win, best_fbc, mbUseDoubleBufferedRendering, false);
+        GLXFBConfig* pFBC = getFBConfig(m_aGLWin.dpy, m_aGLWin.win, best_fbc, mbUseDoubleBufferedRendering);
 
         if (pFBC && best_fbc != -1)
         {

@@ -92,28 +92,6 @@ OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt 
     return aTemplate.makeStringAndClear();
 }
 
-bool ImplNumericProcessKeyInput( const KeyEvent& rKEvt,
-                                 bool bStrictFormat, bool bThousandSep,
-                                 const LocaleDataWrapper& rLocaleDataWrapper )
-{
-    if ( !bStrictFormat )
-        return false;
-    else
-    {
-        sal_Unicode cChar = rKEvt.GetCharCode();
-        sal_uInt16      nGroup = rKEvt.GetKeyCode().GetGroup();
-
-        return !((nGroup == KEYGROUP_FKEYS) ||
-                 (nGroup == KEYGROUP_CURSOR) ||
-                 (nGroup == KEYGROUP_MISC) ||
-                 ((cChar >= '0') && (cChar <= '9')) ||
-                 (bThousandSep && string::equals(rLocaleDataWrapper.getNumThousandSep(), cChar)) ||
-                 (string::equals(rLocaleDataWrapper.getNumDecimalSep(), cChar) ) ||
-                 (string::equals(rLocaleDataWrapper.getNumDecimalSepAlt(), cChar) ) ||
-                 (cChar == '-'));
-    }
-}
-
 bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
                                  sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,
                                  bool bCurrency )
@@ -238,13 +216,6 @@ bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
     rValue = nValue;
 
     return true;
-}
-
-bool ImplLongCurrencyProcessKeyInput( const KeyEvent& rKEvt,
-                                      bool bUseThousandSep, const LocaleDataWrapper& rLocaleDataWrapper )
-{
-    // There's no StrictFormat that makes sense here, thus allow all chars
-    return ImplNumericProcessKeyInput( rKEvt, false, bUseThousandSep, rLocaleDataWrapper  );
 }
 
 } // namespace
@@ -447,16 +418,6 @@ LongCurrencyField::LongCurrencyField( vcl::Window* pParent, WinBits nWinStyle ) 
     Reformat();
 }
 
-bool LongCurrencyField::PreNotify( NotifyEvent& rNEvt )
-{
-    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        if ( ImplLongCurrencyProcessKeyInput( *rNEvt.GetKeyEvent(), IsUseThousandSep(), GetLocaleDataWrapper() ) )
-            return true;
-    }
-    return SpinField::PreNotify( rNEvt );
-}
-
 bool LongCurrencyField::EventNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
@@ -519,16 +480,6 @@ LongCurrencyBox::LongCurrencyBox( vcl::Window* pParent, WinBits nWinStyle ) :
 {
     SetField( this );
     Reformat();
-}
-
-bool LongCurrencyBox::PreNotify( NotifyEvent& rNEvt )
-{
-    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        if ( ImplLongCurrencyProcessKeyInput( *rNEvt.GetKeyEvent(), IsUseThousandSep(), GetLocaleDataWrapper() ) )
-            return true;
-    }
-    return ComboBox::PreNotify( rNEvt );
 }
 
 bool LongCurrencyBox::EventNotify( NotifyEvent& rNEvt )
