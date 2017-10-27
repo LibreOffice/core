@@ -43,20 +43,6 @@
 namespace emfplushelper
 {
 
-#ifdef OSL_BIGENDIAN
-    // little endian <-> big endian switch
-    static float GetSwapFloat(SvStream& rStream)
-    {
-        float fTmp;
-        sal_Int8* pPtr = (sal_Int8*)&fTmp;
-        rStream.ReadSChar(pPtr[3]);
-        rStream.ReadSChar(pPtr[2]);
-        rStream.ReadSChar(pPtr[1]);
-        rStream.ReadSChar(pPtr[0]);
-        return fTmp;
-    }
-#endif
-
     const char* emfTypeToName(sal_uInt16 type)
     {
         switch (type)
@@ -265,16 +251,7 @@ namespace emfplushelper
             float eM22(0.0);
             float eDx(0.0);
             float eDy(0.0);
-#ifdef OSL_BIGENDIAN
-            eM11 = GetSwapFloat(rIn);
-            eM12 = GetSwapFloat(rIn);
-            eM21 = GetSwapFloat(rIn);
-            eM22 = GetSwapFloat(rIn);
-            eDx = GetSwapFloat(rIn);
-            eDy = GetSwapFloat(rIn);
-#else
             rIn.ReadFloat(eM11).ReadFloat(eM12).ReadFloat(eM21).ReadFloat(eM22).ReadFloat(eDx).ReadFloat(eDy);
-#endif
             rTarget = basegfx::B2DHomMatrix(
                 eM11, eM21, eDx,
                 eM12, eM22, eDy);

@@ -133,20 +133,6 @@ namespace cppcanvas
                 eDy  = eDx*f.eM12  + eDy*f.eM22 + f.eDy;
             }
 
-#ifdef OSL_BIGENDIAN
-// little endian <-> big endian switch
-static float GetSwapFloat( SvStream& rSt )
-{
-        float   fTmp;
-        sal_Int8* pPtr = (sal_Int8*)&fTmp;
-        rSt.ReadSChar( pPtr[3] );
-        rSt.ReadSChar( pPtr[2] );
-        rSt.ReadSChar( pPtr[1] );
-        rSt.ReadSChar( pPtr[0] );
-        return fTmp;
-}
-#endif
-
             friend SvStream& ReadXForm( SvStream& rIn, XForm& rXForm )
             {
                 if ( sizeof( float ) != 4 )
@@ -156,17 +142,8 @@ static float GetSwapFloat( SvStream& rSt )
                 }
                 else
                 {
-#ifdef OSL_BIGENDIAN
-                    rXForm.eM11 = GetSwapFloat( rIn );
-                    rXForm.eM12 = GetSwapFloat( rIn );
-                    rXForm.eM21 = GetSwapFloat( rIn );
-                    rXForm.eM22 = GetSwapFloat( rIn );
-                    rXForm.eDx = GetSwapFloat( rIn );
-                    rXForm.eDy = GetSwapFloat( rIn );
-#else
                     rIn.ReadFloat( rXForm.eM11 ).ReadFloat( rXForm.eM12 ).ReadFloat( rXForm.eM21 ).ReadFloat( rXForm.eM22 )
                        .ReadFloat( rXForm.eDx ).ReadFloat( rXForm.eDy );
-#endif
                 }
                 return rIn;
             }

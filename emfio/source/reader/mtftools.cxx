@@ -56,21 +56,12 @@ namespace emfio
         }
         else
         {
-#ifdef OSL_BIGENDIAN
-            rXForm.eM11 = GetSwapFloat(rInStream);
-            rXForm.eM12 = GetSwapFloat(rInStream);
-            rXForm.eM21 = GetSwapFloat(rInStream);
-            rXForm.eM22 = GetSwapFloat(rInStream);
-            rXForm.eDx = GetSwapFloat(rInStream);
-            rXForm.eDy = GetSwapFloat(rInStream);
-#else
             rInStream.ReadFloat(rXForm.eM11);
             rInStream.ReadFloat(rXForm.eM12);
             rInStream.ReadFloat(rXForm.eM21);
             rInStream.ReadFloat(rXForm.eM22);
             rInStream.ReadFloat(rXForm.eDx);
             rInStream.ReadFloat(rXForm.eDy);
-#endif
         }
         return rInStream;
     }
