@@ -23,7 +23,7 @@
 #include "global.hxx"
 
 #include <string>
-#include <filepath.hxx>
+#include "filepath.hxx"
 
 // A simple table with information about the currently used OO file extensions
 // for instance ".sxw" and information about windows registry keys which are

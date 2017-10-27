@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "config.hxx"
-#include "global.hxx"
-#include "shlxthdl.hxx"
+#include <config.hxx>
+#include <global.hxx>
+#include <shlxthdl.hxx>
 #include "classfactory.hxx"
-#include "registry.hxx"
-#include "fileextensions.hxx"
-#include "utilities.hxx"
+#include <registry.hxx>
+#include <fileextensions.hxx>
+#include <utilities.hxx>
 
 #include <string>
 #include <shlobj.h>

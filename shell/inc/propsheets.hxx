@@ -31,7 +31,7 @@
 #endif
 #include <string>
 #include <memory>
-#include <filepath.hxx>
+#include "filepath.hxx"
 
 class CPropertySheet : public IShellExtInit, public IShellPropSheetExt
 {

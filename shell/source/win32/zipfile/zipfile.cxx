@@ -18,10 +18,10 @@
  */
 
 #include "zipexcptn.hxx"
-#include "zipfile.hxx"
-#include "global.hxx"
-#include "types.hxx"
-#include "stream_helper.hxx"
+#include <zipfile.hxx>
+#include <global.hxx>
+#include <types.hxx>
+#include <stream_helper.hxx>
 
 #include <malloc.h>
 #include <algorithm>

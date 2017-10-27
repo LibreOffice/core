@@ -22,7 +22,7 @@
 
 #include "basereader.hxx"
 #include <stack>
-#include <filepath.hxx>
+#include "filepath.hxx"
 
 class ITag;
 class StreamInterface;

@@ -22,12 +22,12 @@
 #pragma warning (disable : 4786 4503)
 #endif
 #include "document_statistic.hxx"
-#include "utilities.hxx"
-#include "metainforeader.hxx"
-#include "resource.h"
-#include "fileextensions.hxx"
-#include "config.hxx"
-#include "iso8601_converter.hxx"
+#include <utilities.hxx>
+#include <metainforeader.hxx>
+#include <resource.h>
+#include <fileextensions.hxx>
+#include <config.hxx>
+#include <iso8601_converter.hxx>
 
 const bool READONLY  = false;
 

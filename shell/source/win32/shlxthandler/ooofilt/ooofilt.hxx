@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_OOOFILT_OOOFILT_HXX
 #define INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_OOOFILT_OOOFILT_HXX
 
-#include "types.hxx"
+#include <types.hxx>
 
 //+-------------------------------------------------------------------------
 //  Contents:   LibreOffice filter declarations

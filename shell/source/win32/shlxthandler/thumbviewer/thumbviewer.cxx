@@ -20,17 +20,17 @@
 #ifndef DONT_HAVE_GDIPLUS
 
 
-#include "global.hxx"
+#include <global.hxx>
 
-#include "thumbviewer.hxx"
-#include "shlxthdl.hxx"
-#include "registry.hxx"
-#include "fileextensions.hxx"
-#include "config.hxx"
-#include "zipfile.hxx"
-#include "utilities.hxx"
+#include <thumbviewer.hxx>
+#include <shlxthdl.hxx>
+#include <registry.hxx>
+#include <fileextensions.hxx>
+#include <config.hxx>
+#include <zipfile.hxx>
+#include <utilities.hxx>
 
-#include "resource.h"
+#include <resource.h>
 
 #include <stdio.h>
 #include <utility>

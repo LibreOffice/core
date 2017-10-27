@@ -10,8 +10,8 @@
 #ifndef INCLUDED_SHELL_INC_SPSUPP_COMREFCOUNTED_HPP
 #define INCLUDED_SHELL_INC_SPSUPP_COMREFCOUNTED_HPP
 
-#include "objbase.h"
-#include "assert.h"
+#include <objbase.h>
+#include <assert.h>
 
 template <class Interface>
 class COMRefCounted : public Interface

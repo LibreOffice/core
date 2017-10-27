@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "algorithm"
-#include "fileextensions.hxx"
+#include <algorithm>
+#include <fileextensions.hxx>
 #include <rtl/character.hxx>
 #include <sal/macros.h>
 

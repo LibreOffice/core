@@ -12,9 +12,9 @@
 #include <cstring>
 #include <vector>
 
-#include "COMOpenDocuments.hpp"
-#include "spsuppServ.hpp"
-#include "stdio.h"
+#include <COMOpenDocuments.hpp>
+#include <spsuppServ.hpp>
+#include <stdio.h>
 
 // Display confirmation dialog, return false on negative answer
 bool SecurityWarning(const wchar_t* sProgram, const wchar_t* sDocument)

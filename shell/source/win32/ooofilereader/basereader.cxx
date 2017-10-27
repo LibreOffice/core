@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "basereader.hxx"
+#include <basereader.hxx>
 
-#include "xml_parser.hxx"
+#include <xml_parser.hxx>
 
-#include "assert.h"
+#include <assert.h>
 #include <memory>
 
 /**  constructor of CBaseReader.

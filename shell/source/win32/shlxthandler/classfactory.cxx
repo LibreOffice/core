@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "global.hxx"
+#include <global.hxx>
 #include "classfactory.hxx"
-#include "infotips.hxx"
-#include "propsheets.hxx"
-#include "columninfo.hxx"
-#include "thumbviewer.hxx"
-#include "shlxthdl.hxx"
+#include <infotips.hxx>
+#include <propsheets.hxx>
+#include <columninfo.hxx>
+#include <thumbviewer.hxx>
+#include <shlxthdl.hxx>
 
 
 long CClassFactory::s_ServerLocks = 0;

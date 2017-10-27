@@ -21,7 +21,7 @@
 #define INCLUDED_SHELL_INC_INTERNAL_STREAM_HELPER_HXX
 
 #include "types.hxx"
-#include <filepath.hxx>
+#include "filepath.hxx"
 
 struct IStream;
 

@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "contentreader.hxx"
+#include <contentreader.hxx>
 #include "dummytag.hxx"
 #include "simpletag.hxx"
 #include "autostyletag.hxx"
 
-#include "assert.h"
+#include <assert.h>
 
 /** constructor.
 */

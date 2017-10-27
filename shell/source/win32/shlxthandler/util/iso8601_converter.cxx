@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <stdlib.h>
 
-#include "iso8601_converter.hxx"
-#include "utilities.hxx"
+#include <iso8601_converter.hxx>
+#include <utilities.hxx>
 
 #include <sstream>
 #include <iomanip>
