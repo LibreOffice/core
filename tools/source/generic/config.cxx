@@ -24,7 +24,7 @@
 #include <string.h>
 
 #ifdef _WIN32
-#include "stdlib.h"
+#include <stdlib.h>
 #endif
 
 #include <osl/file.hxx>
