@@ -26,7 +26,7 @@
 // LO/windows.h conflict
 #undef WB_LEFT
 #undef WB_RIGHT
-#include "msdasc.h"
+#include <msdasc.h>
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif

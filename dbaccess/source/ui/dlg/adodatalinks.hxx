@@ -21,7 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_DLG_ADODATALINKS_HXX
 
 #include <osl/module.h>
-#include "commontypes.hxx"
+#include <commontypes.hxx>
 
 OUString getAdoDatalink(long hWnd,OUString const & oldLink);
 #endif
