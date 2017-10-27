@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_bb0d3392",
+        "filename": "sal/osl/unx/socket.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-27T07:47:02Z",
+      "side": 1,
+      "message": "no need to mimic the old C style here of defining local variables upfront at the start of the block; better define them where they are actually first used (which makes the code more readable)",
+      "revId": "eac0316a4204128d8ff2c2979f15da41120f0e4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
