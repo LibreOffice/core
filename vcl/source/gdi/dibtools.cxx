@@ -1652,7 +1652,6 @@ bool ImplReadDIB(
 
 bool ImplWriteDIB(
     const Bitmap& rSource,
-    const Bitmap* pSourceAlpha,
     SvStream& rOStm,
     bool bCompressed,
     bool bFileHeader)
@@ -1667,27 +1666,13 @@ bool ImplWriteDIB(
         const SvStreamEndian nOldFormat(rOStm.GetEndian());
         const sal_uLong nOldPos(rOStm.Tell());
 
-        if(pSourceAlpha)
-        {
-            const Size aSizePixAlpha(pSourceAlpha->GetSizePixel());
-
-            if(aSizePixAlpha == aSizePix)
-            {
-                pAccAlpha = Bitmap::ScopedReadAccess(const_cast< Bitmap& >(*pSourceAlpha));
-            }
-            else
-            {
-                OSL_ENSURE(false, "WriteDIB got an alpha channel, but it's pixel size differs from the base bitmap (!)");
-            }
-        }
-
         rOStm.SetEndian(SvStreamEndian::LITTLE);
 
         if (pAcc)
         {
             if(bFileHeader)
             {
-                if(ImplWriteDIBFileHeader(rOStm, *pAcc, nullptr != pSourceAlpha))
+                if(ImplWriteDIBFileHeader(rOStm, *pAcc, false))
                 {
                     bRet = ImplWriteDIBBody(rSource, rOStm, *pAcc, pAccAlpha.get(), bCompressed);
                 }
@@ -1825,14 +1810,14 @@ bool WriteDIB(
     bool bCompressed,
     bool bFileHeader)
 {
-    return ImplWriteDIB(rSource, nullptr, rOStm, bCompressed, bFileHeader);
+    return ImplWriteDIB(rSource, rOStm, bCompressed, bFileHeader);
 }
 
 bool WriteDIBBitmapEx(
     const BitmapEx& rSource,
     SvStream& rOStm)
 {
-    if(ImplWriteDIB(rSource.GetBitmap(), nullptr, rOStm, true, true))
+    if(ImplWriteDIB(rSource.GetBitmap(), rOStm, true, true))
     {
         rOStm.WriteUInt32( 0x25091962 );
         rOStm.WriteUInt32( 0xACB20201 );
@@ -1840,7 +1825,7 @@ bool WriteDIBBitmapEx(
 
         if(TransparentType::Bitmap == rSource.eTransparent)
         {
-            return ImplWriteDIB(rSource.aMask, nullptr, rOStm, true, true);
+            return ImplWriteDIB(rSource.aMask, rOStm, true, true);
         }
         else if(TransparentType::Color == rSource.eTransparent)
         {

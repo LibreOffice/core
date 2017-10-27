@@ -545,7 +545,7 @@ sal_uInt16 PeriodicSpline(sal_uInt16 n, const double* x, double* y,
 sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
                   double Marg01, double Marg02,
                   double MargN1, double MargN2,
-                  bool CondT, double* T,
+                  double* T,
                   double* bx, double* cx, double* dx,
                   double* by, double* cy, double* dy)
 {
@@ -556,15 +556,13 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
 
     if (n<2) return 1;
     if ((MargCond & ~3) && (MargCond != 4)) return 2; // invalid boundary condition
-    if (!CondT) {
-        T[0]=0.0;
-        for (i=0;i<n;i++) {
-            double deltX,deltY,delt;
-            deltX=x[i+1]-x[i]; deltY=y[i+1]-y[i];
-            delt =deltX*deltX+deltY*deltY;
-            if (delt<=0.0) return 3;            // two identical adjacent points!
-            T[i+1]=T[i]+sqrt(delt);
-        }
+    T[0]=0.0;
+    for (i=0;i<n;i++) {
+        double deltX,deltY,delt;
+        deltX=x[i+1]-x[i]; deltY=y[i+1]-y[i];
+        delt =deltX*deltX+deltY*deltY;
+        if (delt<=0.0) return 3;            // two identical adjacent points!
+        T[i+1]=T[i]+sqrt(delt);
     }
     switch (MargCond) {
         case 0: break;
@@ -658,7 +656,7 @@ bool CalcSpline(tools::Polygon const & rPoly, bool Periodic, sal_uInt16& n,
     bool bRet = false;
     if ( ( Marg == 3 && n >= 3 ) || ( Marg == 2 && n >= 2 ) )
     {
-        bRet = ParaSpline(n,ax,ay,Marg,Marg01,Marg01,MargN1,MargN2,false,T,bx,cx,dx,by,cy,dy) == 0;
+        bRet = ParaSpline(n,ax,ay,Marg,Marg01,Marg01,MargN1,MargN2,T,bx,cx,dx,by,cy,dy) == 0;
     }
     if ( !bRet )
     {

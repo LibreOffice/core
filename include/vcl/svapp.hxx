@@ -715,7 +715,7 @@ public:
 
      @see ImplCallEventListeners(VclSimpleEvent* pEvent)
     */
-    static void                 ImplCallEventListeners( VclEventId nEvent, vcl::Window* pWin, void* pData );
+    static void                 ImplCallEventListeners( VclEventId nEvent, void* pData );
 
     /** Send event to all VCL application event listeners
 

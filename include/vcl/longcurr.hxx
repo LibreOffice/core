@@ -83,7 +83,6 @@ private:
 public:
                     LongCurrencyField( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
     void            Modify() override;
@@ -106,7 +105,6 @@ class VCL_DLLPUBLIC LongCurrencyBox : public ComboBox, public LongCurrencyFormat
 public:
                     LongCurrencyBox( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
     void            Modify() override;

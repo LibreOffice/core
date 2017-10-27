@@ -383,11 +383,11 @@ UCHAR GetTextChar(UCHAR* TBuf, sal_uInt16& Index,
 
 UCHAR GetTextCharConv(UCHAR* TBuf, sal_uInt16& Index,
                       ObjTextType& Atr0, ObjTextType& AktAtr,
-                      sal_uInt16 Rest, bool ScanEsc)
+                      sal_uInt16 Rest)
 {
     UCHAR c;
 
-    c=GetTextChar(TBuf,Index,Atr0,AktAtr,Rest,ScanEsc);
+    c=GetTextChar(TBuf,Index,Atr0,AktAtr,Rest,false/*ScanEsc*/);
     if (c<32) {
         switch (c) {
             case HardSpace   : c=' '; break;
@@ -955,7 +955,7 @@ void TextType::Draw(OutputDevice& rOut, UCHAR* pBuffer)
                 T2=T1; Index2=Index1;
                 i=1;
                 while (i<=l) {
-                    c=GetTextCharConv(Buf,Index2,T,T2,l-i,false);
+                    c=GetTextCharConv(Buf,Index2,T,T2,l-i);
                     long xp1,yp1;       // due to overflow danger
                     PointType Pos;
                     xp1=long(Pos1.x)+xPos+long(xLine[i]);
