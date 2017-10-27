@@ -52,6 +52,7 @@
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
+#include <o3tl/safeint.hxx>
 #include <svx/UnoNamespaceMap.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdsob.hxx>
@@ -1246,7 +1247,11 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
                 if( !(aValue >>= aVisArea) || (aVisArea.Width < 0) || (aVisArea.Height < 0) )
                     throw lang::IllegalArgumentException();
 
-                pEmbeddedObj->SetVisArea( ::tools::Rectangle( aVisArea.X, aVisArea.Y, aVisArea.X + aVisArea.Width, aVisArea.Y + aVisArea.Height ) );
+                sal_Int32 nRight, nTop;
+                if (o3tl::checked_add(aVisArea.X, aVisArea.Width, nRight) || o3tl::checked_add(aVisArea.Y, aVisArea.Height, nTop))
+                    throw lang::IllegalArgumentException();
+
+                pEmbeddedObj->SetVisArea(::tools::Rectangle(aVisArea.X, aVisArea.Y, nRight, nTop));
             }
             break;
         case WID_MODEL_CONTFOCUS:
