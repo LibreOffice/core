@@ -2729,8 +2729,7 @@ OUString HtmlExport::CreateLink( const OUString& aLink,
 }
 
 // creates a image tag
-OUString HtmlExport::CreateImage( const OUString& aImage, const OUString& aAltText,
-                                sal_Int16 nWidth )
+OUString HtmlExport::CreateImage( const OUString& aImage, const OUString& aAltText )
 {
     OUStringBuffer aStr( "<img src=\"");
     aStr.append(aImage);
@@ -2746,11 +2745,6 @@ OUString HtmlExport::CreateImage( const OUString& aImage, const OUString& aAltTe
     {
         // Agerskov: HTML 4.01 has to have an alt attribute even if it is an empty string
         aStr.append(" alt=\"\"");
-     }
-
-    if(nWidth > -1)
-    {
-        aStr.append(" width=" + OUString::number(nWidth));
     }
 
     aStr.append('>');

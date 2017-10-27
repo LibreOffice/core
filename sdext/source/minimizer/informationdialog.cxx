@@ -119,8 +119,9 @@ OUString InsertImage(
 
 OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUString& rControlName,
     const Reference< XItemListener >& rItemListener, const OUString& rLabel,
-        sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex )
+    sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int16 nTabIndex )
 {
+    sal_Int32 nHeight = 8;
     OUString pNames[] = {
         OUString("Enabled"),
         OUString("Height"),
@@ -153,8 +154,9 @@ OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUString& 
 }
 
 OUString InsertButton( InformationDialog& rInformationDialog, const OUString& rControlName, Reference< XActionListener > const & xActionListener,
-    sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex, PPPOptimizerTokenEnum nResID )
+    sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int16 nTabIndex, PPPOptimizerTokenEnum nResID )
 {
+    sal_Int32 nHeight = 14;
     OUString pNames[] = {
         OUString("Enabled"),
         OUString("Height"),
@@ -295,8 +297,8 @@ void InformationDialog::InitDialog()
                  5, 5, 25, 25, false );
     InsertFixedText( *this, "fixedtext", aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, true, 0 );
     if ( !maSaveAsURL.isEmpty() )
-        InsertCheckBox(  *this, "OpenNewDocument", xItemListener, getString( STR_AUTOMATICALLY_OPEN ), PAGE_POS_X, 42, PAGE_WIDTH, 8, 1 );
-    InsertButton( *this, "button", mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 14, 2, STR_OK );
+        InsertCheckBox(  *this, "OpenNewDocument", xItemListener, getString( STR_AUTOMATICALLY_OPEN ), PAGE_POS_X, 42, PAGE_WIDTH, 1 );
+    InsertButton( *this, "button", mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 2, STR_OK );
 
     bool bOpenNewDocument = mrbOpenNewDocument;
     setControlProperty( "OpenNewDocument", "State", Any( (sal_Int16)bOpenNewDocument ) );
