@@ -41,7 +41,7 @@ $(call gb_ExternalProject_get_state_target,libxslt,build):
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
-				$(gb_Package_SOURCEDIR_libxslt)/libxslt/.libs/libxslt.1.dylib \
+				$(EXTERNAL_WORKDIR)/libxslt/.libs/libxslt.1.dylib \
 		) \
 	)
 endif

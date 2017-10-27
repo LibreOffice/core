@@ -41,7 +41,7 @@ $(call gb_ExternalProject_get_state_target,libwpg,build) :
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
-				$(gb_Package_SOURCEDIR_libwpg)/src/lib/.libs/libwpg-0.3.3.dylib \
+				$(EXTERNAL_WORKDIR)/src/lib/.libs/libwpg-0.3.3.dylib \
 		) \
 	)
 

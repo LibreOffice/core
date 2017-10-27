@@ -48,7 +48,7 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
-			$(gb_Package_SOURCEDIR_redland)/src/.libs/librdf-lo.$(REDLAND_MAJOR).dylib) \
+			$(EXTERNAL_WORKDIR)/src/.libs/librdf-lo.$(REDLAND_MAJOR).dylib) \
 	)
 
 # vim: set noet sw=4 ts=4:
