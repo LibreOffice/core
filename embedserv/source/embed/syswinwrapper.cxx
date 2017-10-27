@@ -20,8 +20,8 @@
 #pragma warning(disable : 4917 4555)
 #endif
 
-#include "docholder.hxx"
-#include "syswinwrapper.hxx"
+#include <docholder.hxx>
+#include <syswinwrapper.hxx>
 
 /*
  * CWindow::CWindow

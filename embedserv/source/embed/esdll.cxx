@@ -22,7 +22,7 @@
 #pragma warning(disable : 4917 4555)
 #endif
 
-#include "stdafx.h"
+#include <stdafx.h>
 
 #include <atlbase.h>
 #ifdef _MSC_VER
@@ -48,8 +48,8 @@ END_OBJECT_MAP()
 // DLL Entry Point
 
 
-#include "syswinwrapper.hxx"
-#include "docholder.hxx"
+#include <syswinwrapper.hxx>
+#include <docholder.hxx>
 
 
 HINSTANCE DocumentHolder::m_hInstance;

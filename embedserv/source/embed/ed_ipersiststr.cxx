@@ -20,7 +20,7 @@
 #pragma warning(disable : 4917 4555)
 #endif
 
-#include "embeddoc.hxx"
+#include <embeddoc.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -42,7 +42,7 @@
 #include <osl/diagnose.h>
 #include <sal/types.h>
 
-#include <guid.hxx>
+#include "guid.hxx"
 
 #include <string.h>
 

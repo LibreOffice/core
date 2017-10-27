@@ -25,7 +25,7 @@
 #pragma warning(disable : 4668)
 #endif
 
-#include <advisesink.hxx>
+#include "advisesink.hxx"
 
 namespace inprocserv
 {

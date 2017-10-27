@@ -20,7 +20,7 @@
 #pragma warning(disable : 4917 4555)
 #endif
 
-#include "servprov.hxx"
+#include <servprov.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
