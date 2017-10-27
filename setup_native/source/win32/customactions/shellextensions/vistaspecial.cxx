@@ -22,7 +22,7 @@
 #include <strsafe.h>
 
 #include <systools/win32/uwinapi.h>
-#include <../tools/seterror.hxx>
+#include "../tools/seterror.hxx"
 
 static BOOL RemoveCompleteDirectoryW(const std::wstring& rPath)
 {

@@ -26,7 +26,7 @@
 #include <stdio.h>
 
 #include <systools/win32/uwinapi.h>
-#include <../tools/seterror.hxx>
+#include "../tools/seterror.hxx"
 
 extern "C" UINT __stdcall CheckInstallDirectory(MSIHANDLE handle)
 {
