@@ -33,9 +33,9 @@
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
 
-#include <graphconvert.hxx>
+#include "graphconvert.hxx"
 #include "mtnotification.hxx"
-#include "oleembobj.hxx"
+#include <oleembobj.hxx>
 
 
 using namespace ::com::sun::star;

@@ -18,8 +18,8 @@
  */
 
 #include <osl/diagnose.h>
-#include <advisesink.hxx>
-#include <olecomponent.hxx>
+#include "advisesink.hxx"
+#include "olecomponent.hxx"
 
 #include <rtl/ref.hxx>
 
