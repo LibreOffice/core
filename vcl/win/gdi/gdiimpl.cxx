@@ -1563,18 +1563,23 @@ void WinSalGraphicsImpl::SetROPFillColor( SalROPColor nROPColor )
     SetFillColor( ImplGetROPSalColor( nROPColor ) );
 }
 
-void WinSalGraphicsImpl::drawPixel( long nX, long nY )
+void WinSalGraphicsImpl::drawPixelImpl( long nX, long nY, COLORREF crColor )
 {
     if ( mbXORMode )
     {
-        HBRUSH  hBrush = CreateSolidBrush( mnPenColor );
-        HBRUSH  hOldBrush = SelectBrush( mrParent.getHDC(), hBrush );
+        HBRUSH hBrush = CreateSolidBrush( crColor );
+        HBRUSH hOldBrush = SelectBrush( mrParent.getHDC(), hBrush );
         PatBlt( mrParent.getHDC(), (int)nX, (int)nY, (int)1, (int)1, PATINVERT );
         SelectBrush( mrParent.getHDC(), hOldBrush );
         DeleteBrush( hBrush );
     }
     else
-        SetPixel( mrParent.getHDC(), (int)nX, (int)nY, mnPenColor );
+        SetPixel( mrParent.getHDC(), (int)nX, (int)nY, crColor );
+}
+
+void WinSalGraphicsImpl::drawPixel( long nX, long nY )
+{
+    drawPixelImpl( nX, nY, mnPenColor );
 }
 
 void WinSalGraphicsImpl::drawPixel( long nX, long nY, SalColor nSalColor )
@@ -1588,56 +1593,18 @@ void WinSalGraphicsImpl::drawPixel( long nX, long nY, SalColor nSalColor )
          ImplIsSysColorEntry( nSalColor ) )
         nCol = PALRGB_TO_RGB( nCol );
 
-    if ( mbXORMode )
-    {
-        HBRUSH  hBrush = CreateSolidBrush( nCol );
-        HBRUSH  hOldBrush = SelectBrush( mrParent.getHDC(), hBrush );
-        PatBlt( mrParent.getHDC(), (int)nX, (int)nY, (int)1, (int)1, PATINVERT );
-        SelectBrush( mrParent.getHDC(), hOldBrush );
-        DeleteBrush( hBrush );
-    }
-    else
-        ::SetPixel( mrParent.getHDC(), (int)nX, (int)nY, nCol );
+    drawPixelImpl( nX, nY, nCol );
 }
 
 void WinSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
     MoveToEx( mrParent.getHDC(), (int)nX1, (int)nY1, nullptr );
 
-    // we must paint the endpoint
-    int bPaintEnd = TRUE;
-    if ( nX1 == nX2 )
-    {
-        bPaintEnd = FALSE;
-        if ( nY1 <= nY2 )
-            nY2++;
-        else
-            nY2--;
-    }
-    if ( nY1 == nY2 )
-    {
-        bPaintEnd = FALSE;
-        if ( nX1 <= nX2 )
-            nX2++;
-        else
-            nX2--;
-    }
-
     LineTo( mrParent.getHDC(), (int)nX2, (int)nY2 );
 
-    if ( bPaintEnd && !mrParent.isPrinter() )
-    {
-        if ( mbXORMode )
-        {
-            HBRUSH  hBrush = CreateSolidBrush( mnPenColor );
-            HBRUSH  hOldBrush = SelectBrush( mrParent.getHDC(), hBrush );
-            PatBlt( mrParent.getHDC(), (int)nX2, (int)nY2, (int)1, (int)1, PATINVERT );
-            SelectBrush( mrParent.getHDC(), hOldBrush );
-            DeleteBrush( hBrush );
-        }
-        else
-            SetPixel( mrParent.getHDC(), (int)nX2, (int)nY2, mnPenColor );
-    }
+    // LineTo doesn't draw the last pixel
+    if ( !mrParent.isPrinter() )
+        drawPixelImpl( nX2, nY2, mnPenColor );
 }
 
 void WinSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
@@ -1663,50 +1630,20 @@ void WinSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
         Rectangle( mrParent.getHDC(), (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
 }
 
-void WinSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, SalPoint* pPtAry )
+void WinSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     // for NT, we can handover the array directly
     static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
 
-    POINT* pWinPtAry = reinterpret_cast<POINT*>(pPtAry);
-
-    // we assume there are at least 2 points (Polyline requires at least 2 point, see MSDN)
-    // we must paint the endpoint for last line
-    BOOL bPaintEnd = TRUE;
-    if ( pWinPtAry[nPoints-2].x == pWinPtAry[nPoints-1].x )
-    {
-        bPaintEnd = FALSE;
-        if ( pWinPtAry[nPoints-2].y <=  pWinPtAry[nPoints-1].y )
-            pWinPtAry[nPoints-1].y++;
-        else
-            pWinPtAry[nPoints-1].y--;
-    }
-    if ( pWinPtAry[nPoints-2].y == pWinPtAry[nPoints-1].y )
-    {
-        bPaintEnd = FALSE;
-        if ( pWinPtAry[nPoints-2].x <= pWinPtAry[nPoints-1].x )
-            pWinPtAry[nPoints-1].x++;
-        else
-            pWinPtAry[nPoints-1].x--;
-    }
+    POINT const * pWinPtAry = reinterpret_cast<POINT const *>(pPtAry);
 
     // for Windows 95 and its maximum number of points
     if ( !Polyline( mrParent.getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
         Polyline( mrParent.getHDC(), pWinPtAry, MAX_64KSALPOINTS );
 
-    if ( bPaintEnd && !mrParent.isPrinter() )
-    {
-        if ( mbXORMode )
-        {
-            HBRUSH     hBrush = CreateSolidBrush( mnPenColor );
-            HBRUSH     hOldBrush = SelectBrush( mrParent.getHDC(), hBrush );
-            PatBlt( mrParent.getHDC(), (int)(pWinPtAry[nPoints-1].x), (int)(pWinPtAry[nPoints-1].y), (int)1, (int)1, PATINVERT );
-            SelectBrush( mrParent.getHDC(), hOldBrush );
-            DeleteBrush( hBrush );
-        }
-        else
-            SetPixel( mrParent.getHDC(), (int)(pWinPtAry[nPoints-1].x), (int)(pWinPtAry[nPoints-1].y), mnPenColor );
-    }
+    // Polyline seems to uses LineTo, which doesn't paint the last pixel (see 87eb8f8ee)
+    if ( !mrParent.isPrinter() )
+        drawPixelImpl( pWinPtAry[nPoints-1].x, pWinPtAry[nPoints-1].y, mnPenColor );
 }
 
 void WinSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )

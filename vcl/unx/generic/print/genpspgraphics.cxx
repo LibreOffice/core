@@ -396,15 +396,15 @@ void GenPspGraphics::drawRect( long nX, long nY, long nDX, long nDY )
     m_pPrinterGfx->DrawRect (tools::Rectangle(Point(nX, nY), Size(nDX, nDY)));
 }
 
-void GenPspGraphics::drawPolyLine( sal_uInt32 nPoints, SalPoint *pPtAry )
+void GenPspGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
 {
-    m_pPrinterGfx->DrawPolyLine (nPoints, reinterpret_cast<Point *>(pPtAry));
+    m_pPrinterGfx->DrawPolyLine (nPoints, reinterpret_cast<const Point *>(pPtAry));
 }
 
 void GenPspGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     // Point must be equal to SalPoint! see include/vcl/salgtype.hxx
-    m_pPrinterGfx->DrawPolygon (nPoints, reinterpret_cast<Point const *>(pPtAry));
+    m_pPrinterGfx->DrawPolygon (nPoints, reinterpret_cast<const Point *>(pPtAry));
 }
 
 void GenPspGraphics::drawPolyPolygon( sal_uInt32           nPoly,
@@ -532,7 +532,7 @@ public:
     explicit ImplPspFontData( const psp::FastPrintFontInfo& );
     virtual sal_IntPtr      GetFontId() const override { return mnFontId; }
     virtual PhysicalFontFace*   Clone() const override { return new ImplPspFontData( *this ); }
-    virtual LogicalFontInstance*  CreateFontInstance( FontSelectPattern& ) const override;
+    virtual LogicalFontInstance*  CreateFontInstance( const FontSelectPattern& ) const override;
 };
 
 ImplPspFontData::ImplPspFontData( const psp::FastPrintFontInfo& rInfo )
@@ -540,7 +540,7 @@ ImplPspFontData::ImplPspFontData( const psp::FastPrintFontInfo& rInfo )
     mnFontId( rInfo.m_nID )
 {}
 
-LogicalFontInstance* ImplPspFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
+LogicalFontInstance* ImplPspFontData::CreateFontInstance( const FontSelectPattern& rFSD ) const
 {
     FreetypeFontInstance* pEntry = new FreetypeFontInstance( rFSD );
     return pEntry;
@@ -610,7 +610,7 @@ bool GenPspGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilitie
     return m_pFreetypeFont[0]->GetFontCapabilities(rFontCapabilities);
 }
 
-void GenPspGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
+void GenPspGraphics::SetFont( const FontSelectPattern *pEntry, int nFallbackLevel )
 {
     // release all fonts that are to be overridden
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
