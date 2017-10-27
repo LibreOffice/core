@@ -299,7 +299,6 @@ public:
 
         const sal_uInt16 nCount = m_rDrawViewShell.GetDoc()->GetMasterSdPageCount(PageKind::Standard);
 
-        sal_Int32 nParagraph = 1;
         bool bFound = false;
 
         for (sal_uInt16 nPageIndex = 0; nPageIndex < nCount; ++nPageIndex)
@@ -322,32 +321,59 @@ public:
                         {
                             bFound = true;
                             m_pRectObject = pRectObject;
+                            sal_Int32 nCurrentParagraph = -1;
+
                             for (editeng::Section const & rSection : aSections)
                             {
+                                // Insert new paragraph if needed
+                                while (nCurrentParagraph < rSection.mnParagraph)
+                                {
+                                    nCurrentParagraph++;
+
+                                    // Get Weight of current paragraph
+                                    FontWeight eFontWeight = WEIGHT_NORMAL;
+                                    SfxItemSet aItemSet(rEditText.GetParaAttribs(nCurrentParagraph));
+                                    if (const SfxPoolItem* pItem = aItemSet.GetItem(EE_CHAR_WEIGHT, false))
+                                    {
+                                        const SvxWeightItem* pWeightItem = dynamic_cast<const SvxWeightItem*>(pItem);
+                                        if (pWeightItem && pWeightItem->GetWeight() == WEIGHT_BOLD)
+                                            eFontWeight = WEIGHT_BOLD;
+                                    }
+
+                                    // Font weight to string
+                                    OUString sWeightProperty = "NORMAL";
+                                    if (eFontWeight == WEIGHT_BOLD)
+                                        sWeightProperty = "BOLD";
+
+                                    // Insert into collection
+                                    m_aResults.push_back({ svx::ClassificationType::PARAGRAPH, sWeightProperty });
+                                }
+
                                 const SvxFieldItem* pFieldItem = findField(rSection);
                                 if (pFieldItem)
                                 {
+
                                     const auto* pCustomPropertyField = dynamic_cast<const editeng::CustomPropertyField*>(pFieldItem->GetField());
                                     OUString aKey = pCustomPropertyField->GetKey();
                                     if (aKey.startsWith(sPolicy + "Marking:Text:"))
                                     {
                                         OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                                        m_aResults.push_back({ svx::ClassificationType::TEXT, aValue, nParagraph });
+                                        m_aResults.push_back({ svx::ClassificationType::TEXT, aValue });
                                     }
                                     else if (aKey.startsWith(sPolicy + "BusinessAuthorizationCategory:Name"))
                                     {
                                         OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                                        m_aResults.push_back({ svx::ClassificationType::CATEGORY, aValue, nParagraph });
+                                        m_aResults.push_back({ svx::ClassificationType::CATEGORY, aValue });
                                     }
                                     else if (aKey.startsWith(sPolicy + "Extension:Marking"))
                                     {
                                         OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                                        m_aResults.push_back({ svx::ClassificationType::MARKING, aValue, nParagraph });
+                                        m_aResults.push_back({ svx::ClassificationType::MARKING, aValue });
                                     }
                                     else if (aKey.startsWith(sPolicy + "Extension:IntellectualPropertyPart"))
                                     {
                                         OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                                        m_aResults.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, nParagraph });
+                                        m_aResults.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue });
                                     }
                                 }
                             }
@@ -414,9 +440,11 @@ public:
             pOutliner = pView->GetTextEditOutliner();
         }
 
+        sal_Int32 nParagraph = -1;
         for (svx::ClassificationResult const & rResult : rResults)
         {
-            ESelection aPosition(EE_PARA_MAX_COUNT, EE_TEXTPOS_MAX_COUNT, EE_PARA_MAX_COUNT, EE_TEXTPOS_MAX_COUNT);
+
+            ESelection aPosition(nParagraph, EE_TEXTPOS_MAX_COUNT, nParagraph, EE_TEXTPOS_MAX_COUNT);
 
             switch(rResult.meType)
             {
@@ -449,6 +477,22 @@ public:
                     OUString sKey = sPolicy + "Extension:IntellectualPropertyPart";
                     addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey), EE_FEATURE_FIELD), aPosition);
+                }
+                break;
+
+                case svx::ClassificationType::PARAGRAPH:
+                {
+                    nParagraph++;
+                    pOutliner->Insert("");
+
+                    SfxItemSet aItemSet(m_rDrawViewShell.GetDoc()->GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{});
+
+                    if (rResult.msString == "BOLD")
+                        aItemSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
+                    else
+                        aItemSet.Put(SvxWeightItem(WEIGHT_NORMAL, EE_CHAR_WEIGHT));
+
+                    pOutliner->SetParaAttribs(nParagraph, aItemSet);
                 }
                 break;
 

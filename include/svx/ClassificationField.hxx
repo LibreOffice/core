@@ -22,7 +22,8 @@ enum class ClassificationType
     CATEGORY,
     MARKING,
     TEXT,
-    INTELLECTUAL_PROPERTY_PART
+    INTELLECTUAL_PROPERTY_PART,
+    PARAGRAPH,
 };
 
 class SVX_DLLPUBLIC ClassificationField : public SvxFieldData
@@ -57,7 +58,6 @@ struct SVX_DLLPUBLIC ClassificationResult
 {
     ClassificationType meType;
     OUString msString;
-    sal_Int32 mnParagraph;
 };
 
 } // end svx namespace
