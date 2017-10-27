@@ -227,7 +227,7 @@ OUString LocaleNode::writeParameterCheckLen( const OFileWriter &of,
     OUString aVal;
     if (pNode)
         aVal = pNode->getValue();
-    else
+    else if (nMinLen >= 0)  // -1: optional => empty, 0: must be present, empty
     {
         ++nError;
         fprintf( stderr, "Error: node NULL pointer for parameter %s.\n",
@@ -246,12 +246,15 @@ OUString LocaleNode::writeParameterCheckLen( const OFileWriter &of,
                 OSTR( aVal));
     }
     else if (nLen > nMaxLen && nMaxLen >= 0)
+    {
+        ++nError;
         fprintf( stderr,
-                "Warning: more than %ld character%s (%ld) in %s %s not supported by application.\n",
+                "Error: more than %ld character%s (%ld) in %s '%s' not supported by application.\n",
                 sal::static_int_cast< long >(nMaxLen), (nMaxLen > 1 ? "s" : ""),
                 sal::static_int_cast< long >(nLen),
                 (pNode ? OSTR( pNode->getName()) : ""),
                 OSTR( aVal));
+    }
     return aVal;
 }
 
@@ -262,7 +265,7 @@ OUString LocaleNode::writeParameterCheckLen( const OFileWriter &of,
 {
     OUString aVal;
     const LocaleNode * pNode = findNode( pNodeName);
-    if (pNode)
+    if (pNode || nMinLen < 0)
         aVal = writeParameterCheckLen( of, pParameterName, pNode, nMinLen, nMaxLen);
     else
     {
@@ -377,6 +380,8 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
         writeParameterCheckLen( of, "ThousandSeparator", "thousandSeparator", 1, 1);
     aDecSep =
         writeParameterCheckLen( of, "DecimalSeparator", "decimalSeparator", 1, 1);
+    OUString aDecSepAlt =
+        writeParameterCheckLen( of, "DecimalSeparatorAlternative", "decimalSeparatorAlternative", -1, 1);
     OUString aTimeSep =
         writeParameterCheckLen( of, "TimeSeparator", "timeSeparator", 1, 1);
     OUString aTime100Sep =
@@ -414,13 +419,16 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
         fprintf( stderr, "Warning: %s\n",
                 "LongDateYearSeparator is empty. Usually this is not the case and may lead to concatenated display names like \"Wednesday, 2007May 9\".");
 
-
     int nSavErr = nError;
     int nWarn = 0;
     if (aDateSep == aTimeSep)
         incError( "DateSeparator equals TimeSeparator.");
     if (aDecSep == aThoSep)
         incError( "DecimalSeparator equals ThousandSeparator.");
+    if (aDecSepAlt == aThoSep)
+        incError( "DecimalSeparatorAlternative equals ThousandSeparator.");
+    if (aDecSepAlt == aDecSep)
+        incError( "DecimalSeparatorAlternative equals DecimalSeparator, it must not be specified then.");
     if ( aThoSep == " " )
         incError( "ThousandSeparator is an ' ' ordinary space, this should be a non-breaking space U+00A0 instead.");
     if (aListSep == aDecSep)
@@ -572,7 +580,8 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     of.writeAsciiString("\tLongDateDayOfWeekSeparator,\n");
     of.writeAsciiString("\tLongDateDaySeparator,\n");
     of.writeAsciiString("\tLongDateMonthSeparator,\n");
-    of.writeAsciiString("\tLongDateYearSeparator\n");
+    of.writeAsciiString("\tLongDateYearSeparator,\n");
+    of.writeAsciiString("\tdecimalSeparatorAlternative\n");
     of.writeAsciiString("};\n\n");
     of.writeFunction("getLocaleItem_", "SAL_N_ELEMENTS(LCType)", "LCType");
 }
