@@ -1798,7 +1798,10 @@ Dim i As Integer, vEvents As Variant, sEvent As String, vEvent As Variant
 			sEvent = &quot;&quot;
 			vEvents = Document.getEvents().ElementNames			&apos;	Returns an array
 			For i = 0 To UBound(vEvents)
-				If UCase(vEvents(i)) = UCase(psProperty) Then sEvent = vEvents(i)
+				If UCase(vEvents(i)) = UCase(psProperty) Then
+					sEvent = vEvents(i)
+					Exit For
+				End If
 			Next i
 			If sEvent = &quot;&quot; Then
 				_PropertyGet = &quot;&quot;
