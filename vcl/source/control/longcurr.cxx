@@ -109,6 +109,7 @@ bool ImplNumericProcessKeyInput( const KeyEvent& rKEvt,
                  ((cChar >= '0') && (cChar <= '9')) ||
                  (bThousandSep && string::equals(rLocaleDataWrapper.getNumThousandSep(), cChar)) ||
                  (string::equals(rLocaleDataWrapper.getNumDecimalSep(), cChar) ) ||
+                 (string::equals(rLocaleDataWrapper.getNumDecimalSepAlt(), cChar) ) ||
                  (cChar == '-'));
     }
 }
@@ -132,6 +133,8 @@ bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
 
     // Find decimal sign's position
     nDecPos = aStr.indexOf( rLocaleDataWrapper.getNumDecimalSep() );
+    if (nDecPos < 0 && !rLocaleDataWrapper.getNumDecimalSepAlt().isEmpty())
+        nDecPos = aStr.indexOf( rLocaleDataWrapper.getNumDecimalSepAlt() );
 
     if ( nDecPos != -1 )
     {
