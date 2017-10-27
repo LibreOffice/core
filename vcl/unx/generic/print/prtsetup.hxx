@@ -78,6 +78,8 @@ class RTSPaperPage : public TabPage
 {
     VclPtr<RTSDialog>          m_pParent;
 
+    VclPtr<CheckBox>           m_pCbFromSetup;
+
     VclPtr<FixedText>          m_pPaperText;
     VclPtr<ListBox>            m_pPaperBox;
 
@@ -90,6 +92,7 @@ class RTSPaperPage : public TabPage
     VclPtr<ListBox>            m_pSlotBox;
 
     DECL_LINK( SelectHdl, ListBox&, void );
+    DECL_LINK( CheckBoxHdl, CheckBox&, void );
 public:
     explicit RTSPaperPage( RTSDialog* );
     virtual ~RTSPaperPage() override;
