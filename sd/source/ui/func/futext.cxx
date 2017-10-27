@@ -299,13 +299,26 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
             }
             else
             {
+                // Don't remark table when clicking in it, mark change triggers a lot of updating
+                bool bMarkChanges = true;
+                rtl::Reference< sdr::SelectionController > xSelectionController(mpView->getSelectionController());
+                if (eHit == SdrHitKind::TextEditObj && xSelectionController.is())
+                {
+                    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+                    if (rMarkList.GetMarkCount() == 1 && rMarkList.GetMark(0)->GetMarkedSdrObj() == aVEvt.pRootObj)
+                        bMarkChanges = false;
+                }
+
                 if (eHit != SdrHitKind::Handle)
                 {
                     // deselect selection
                     if (!rMEvt.IsShift() && eHit == SdrHitKind::TextEditObj)
                     {
-                        mpView->UnmarkAll();
-                        mpView->SetDragMode(SdrDragMode::Move);
+                        if(bMarkChanges)
+                        {
+                            mpView->UnmarkAll();
+                            mpView->SetDragMode(SdrDragMode::Move);
+                        }
                     }
                 }
 
@@ -321,7 +334,8 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         /* hit text of unmarked object:
                            select object and set to EditMode */
-                        mpView->MarkObj(aVEvt.pRootObj, pPV);
+                        if (bMarkChanges)
+                            mpView->MarkObj(aVEvt.pRootObj, pPV);
 
                         if (aVEvt.pObj && dynamic_cast< const SdrTextObj *>( aVEvt.pObj ) !=  nullptr)
                         {
