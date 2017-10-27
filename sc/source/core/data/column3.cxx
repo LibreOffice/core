@@ -49,7 +49,7 @@
 #include <listenercontext.hxx>
 #include <filterentries.hxx>
 
-#include <com/sun/star/i18n/LocaleDataItem.hpp>
+#include <com/sun/star/i18n/LocaleDataItem2.hpp>
 
 #include <memory>
 
@@ -64,7 +64,7 @@
 
 #include <cstdio>
 
-using ::com::sun::star::i18n::LocaleDataItem;
+using ::com::sun::star::i18n::LocaleDataItem2;
 
 using namespace formula;
 
@@ -1803,7 +1803,7 @@ bool ScColumn::ParseString(
                 if (!pLocale)
                     break;
 
-                const LocaleDataItem& aLocaleItem = pLocale->getLocaleItem();
+                const LocaleDataItem2& aLocaleItem = pLocale->getLocaleItem();
                 const OUString& rDecSep = aLocaleItem.decimalSeparator;
                 const OUString& rGroupSep = aLocaleItem.thousandSeparator;
                 if (rDecSep.getLength() != 1 || rGroupSep.getLength() != 1)

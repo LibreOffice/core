@@ -173,7 +173,7 @@ css::i18n::LanguageCountryInfo LocaleDataWrapper::getLanguageCountryInfo() const
     return css::i18n::LanguageCountryInfo();
 }
 
-const css::i18n::LocaleDataItem& LocaleDataWrapper::getLocaleItem() const
+const css::i18n::LocaleDataItem2& LocaleDataWrapper::getLocaleItem() const
 {
     {
         ::utl::ReadWriteGuard aGuard( aMutex );
@@ -188,7 +188,7 @@ const css::i18n::LocaleDataItem& LocaleDataWrapper::getLocaleItem() const
         ::utl::ReadWriteGuard aGuard( aMutex );
 
         const css::lang::Locale& rLocal = getMyLocale();
-        css::i18n::LocaleDataItem aItem = xLD->getLocaleItem( rLocal );
+        css::i18n::LocaleDataItem2 aItem = xLD->getLocaleItem2( rLocal );
         auto aRet = maDataItemCache.insert(std::make_pair(rLocal, aItem));
         assert(aRet.second);
         return aRet.first->second;
@@ -197,7 +197,7 @@ const css::i18n::LocaleDataItem& LocaleDataWrapper::getLocaleItem() const
     {
         SAL_WARN( "unotools.i18n", "getLocaleItem: Exception caught " << e );
     }
-    static css::i18n::LocaleDataItem aEmptyItem;
+    static css::i18n::LocaleDataItem2 aEmptyItem;
     return aEmptyItem;
 }
 

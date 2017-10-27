@@ -99,7 +99,7 @@ using namespace ::com::sun::star::i18n;
 bool SplitString( const OUString &sWhole,
     OUString &sPrefix, OUString &sSuffix, double &fNum )
 {
-    i18n::LocaleDataItem aLocaleItem = ScGlobal::pLocaleData->getLocaleItem();
+    i18n::LocaleDataItem2 aLocaleItem = ScGlobal::pLocaleData->getLocaleItem();
 
     // Get prefix element
     OUString sUser = "-";

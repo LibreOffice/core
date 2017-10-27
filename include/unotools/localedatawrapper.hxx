@@ -60,7 +60,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     LanguageTag                                        maLanguageTag;
     std::shared_ptr< css::i18n::Calendar2 >            xDefaultCalendar;
     std::shared_ptr< css::i18n::Calendar2 >            xSecondaryCalendar;
-    css::i18n::LocaleDataItem                          aLocaleDataItem;
+    css::i18n::LocaleDataItem2                         aLocaleDataItem;
     css::uno::Sequence< OUString >                     aReservedWordSeq;
     css::uno::Sequence< OUString >                     aDateAcceptancePatterns;
     css::uno::Sequence< sal_Int32 >                    aGrouping;
@@ -82,7 +82,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     {
         bool operator()(const css::lang::Locale& rLocale1, const css::lang::Locale& rLocale2) const;
     };
-    mutable std::map<css::lang::Locale, css::i18n::LocaleDataItem, Locale_Compare> maDataItemCache;
+    mutable std::map<css::lang::Locale, css::i18n::LocaleDataItem2, Locale_Compare> maDataItemCache;
 
                                 // whenever Locale changes
     void                invalidateData();
@@ -144,7 +144,8 @@ public:
     // Wrapper implementations of service LocaleData
 
     css::i18n::LanguageCountryInfo getLanguageCountryInfo() const;
-    const css::i18n::LocaleDataItem& getLocaleItem() const;
+    /// NOTE: this wraps XLocaleData5::getLocaleItem2() in fact.
+    const css::i18n::LocaleDataItem2& getLocaleItem() const;
     /// NOTE: this wraps XLocaleData3::getAllCalendars2() in fact.
     css::uno::Sequence< css::i18n::Calendar2 > getAllCalendars() const;
     /// NOTE: this wraps XLocaleData2::getAllCurrencies2() in fact.
