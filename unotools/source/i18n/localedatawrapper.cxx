@@ -355,7 +355,7 @@ std::vector< LanguageType > LocaleDataWrapper::getInstalledLanguageTypes()
 const OUString& LocaleDataWrapper::getOneLocaleItem( sal_Int16 nItem ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
-    if ( nItem >= LocaleItem::COUNT )
+    if ( nItem >= LocaleItem::COUNT2 )
     {
         SAL_WARN( "unotools.i18n", "getOneLocaleItem: bounds" );
         return aLocaleItem[0];
@@ -427,6 +427,9 @@ void LocaleDataWrapper::getOneLocaleItemImpl( sal_Int16 nItem )
         break;
         case LocaleItem::LONG_DATE_YEAR_SEPARATOR :
             aLocaleItem[nItem] = aLocaleDataItem.LongDateYearSeparator;
+        break;
+        case LocaleItem::DECIMAL_SEPARATOR_ALTERNATIVE :
+            aLocaleItem[nItem] = aLocaleDataItem.decimalSeparatorAlternative;
         break;
         default:
             SAL_WARN( "unotools.i18n", "getOneLocaleItemImpl: which one?" );

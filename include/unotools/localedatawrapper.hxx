@@ -65,7 +65,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     css::uno::Sequence< OUString >                     aDateAcceptancePatterns;
     css::uno::Sequence< sal_Int32 >                    aGrouping;
     // cached items
-    OUString                aLocaleItem[css::i18n::LocaleItem::COUNT];
+    OUString                aLocaleItem[css::i18n::LocaleItem::COUNT2];
     OUString                aReservedWord[css::i18n::reservedWords::COUNT];
     OUString                aCurrSymbol;
     OUString                aCurrBankSymbol;
@@ -209,6 +209,8 @@ public:
                                     { return getOneLocaleItem( css::i18n::LocaleItem::THOUSAND_SEPARATOR ); }
     const OUString&       getNumDecimalSep() const
                                     { return getOneLocaleItem( css::i18n::LocaleItem::DECIMAL_SEPARATOR ); }
+    const OUString&       getNumDecimalSepAlt() const
+                                    { return getOneLocaleItem( css::i18n::LocaleItem::DECIMAL_SEPARATOR_ALTERNATIVE ); }
     const OUString&       getTimeSep() const
                                     { return getOneLocaleItem( css::i18n::LocaleItem::TIME_SEPARATOR ); }
     const OUString&       getTime100SecSep() const
