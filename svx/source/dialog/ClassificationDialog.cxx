@@ -13,6 +13,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/section.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/wghtitem.hxx>
 #include <svl/itemset.hxx>
 
 namespace svx {
@@ -21,7 +22,7 @@ namespace {
 
 const SvxFieldItem* findField(editeng::Section const & rSection)
 {
-    for (SfxPoolItem const * pPool: rSection.maAttributes)
+    for (SfxPoolItem const * pPool : rSection.maAttributes)
     {
         if (pPool->Which() == EE_FEATURE_FIELD)
             return static_cast<const SvxFieldItem*>(pPool);
@@ -110,6 +111,7 @@ void ClassificationDialog::insertField(ClassificationType eType, OUString const 
 
 void ClassificationDialog::setupValues(std::vector<ClassificationResult> const & rInput)
 {
+    sal_Int32 nParagraph = -1;
     for (ClassificationResult const & rClassificationResult : rInput)
     {
         OUString msAbbreviatedString = rClassificationResult.msAbbreviatedString;
@@ -145,6 +147,21 @@ void ClassificationDialog::setupValues(std::vector<ClassificationResult> const &
             }
             break;
 
+            case svx::ClassificationType::PARAGRAPH:
+            {
+                nParagraph++;
+
+                if (nParagraph != 0)
+                    m_pEditWindow->pEdView->InsertParaBreak();
+
+                // Set paragraph font weight
+                FontWeight eWeight = (rClassificationResult.msString == "BOLD") ? WEIGHT_BOLD : WEIGHT_NORMAL;
+                std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(m_pEditWindow->pEdEngine->GetParaAttribs(nParagraph)));
+                pSet->Put(SvxWeightItem(eWeight, EE_CHAR_WEIGHT));
+                m_pEditWindow->pEdEngine->SetParaAttribs(nParagraph, *pSet);
+            }
+            break;
+
             default:
             break;
         }
@@ -157,11 +174,34 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
 
     std::unique_ptr<EditTextObject> pEditText(m_pEditWindow->pEdEngine->CreateTextObject());
 
+    sal_Int32 nCurrentParagraph = -1;
+
     std::vector<editeng::Section> aSections;
     pEditText->GetAllSections(aSections);
-
     for (editeng::Section const & rSection : aSections)
     {
+        while (nCurrentParagraph < rSection.mnParagraph)
+        {
+            nCurrentParagraph++;
+
+            // Get Weight of current paragraph
+            FontWeight eFontWeight = WEIGHT_NORMAL;
+            SfxItemSet aItemSet(m_pEditWindow->pEdEngine->GetParaAttribs(nCurrentParagraph));
+            if (const SfxPoolItem* pItem = aItemSet.GetItem(EE_CHAR_WEIGHT, false))
+            {
+                const SvxWeightItem* pWeightItem = dynamic_cast<const SvxWeightItem*>(pItem);
+                if (pWeightItem && pWeightItem->GetWeight() == WEIGHT_BOLD)
+                    eFontWeight = WEIGHT_BOLD;
+            }
+            // Font weight to string
+            OUString sWeightProperty = "NORMAL";
+            if (eFontWeight == WEIGHT_BOLD)
+                sWeightProperty = "BOLD";
+            // Insert into collection
+            OUString sBlank;
+            aClassificationResults.push_back({ ClassificationType::PARAGRAPH, sWeightProperty, sBlank });
+        }
+
         const SvxFieldItem* pFieldItem = findField(rSection);
 
         ESelection aSelection(rSection.mnParagraph, rSection.mnStart, rSection.mnParagraph, rSection.mnEnd);
@@ -172,11 +212,11 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
 
             if (pClassificationField)
             {
-                aClassificationResults.push_back({ pClassificationField->meType, pClassificationField->msFullClassName, sDisplayString, rSection.mnParagraph });
+                aClassificationResults.push_back({ pClassificationField->meType, pClassificationField->msFullClassName, sDisplayString });
             }
             else
             {
-                aClassificationResults.push_back({ ClassificationType::TEXT, sDisplayString, sDisplayString, rSection.mnParagraph });
+                aClassificationResults.push_back({ ClassificationType::TEXT, sDisplayString, sDisplayString });
             }
         }
     }
