@@ -23,7 +23,7 @@
 
 #include <cstddef>
 
-#include "stdio.h"
+#include <stdio.h>
 #include "StdAfx2.h"
 #include "SOActiveX.h"
 #include "SODispatchInterceptor.h"
@@ -34,7 +34,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #endif
-#include "so_activex.h"
+#include <so_activex.h>
 #if defined __clang__
 #pragma clang diagnostic pop
 #endif

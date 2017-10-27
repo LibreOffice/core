@@ -19,7 +19,7 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_UNOTYPEWRAPPER_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_OLE_UNOTYPEWRAPPER_HXX
 
-#include <wincrap.hxx>
+#include "wincrap.hxx"
 
 #include "comifaces.hxx"
 

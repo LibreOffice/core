@@ -20,7 +20,7 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_JSCRIPTCLASSES_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_OLE_JSCRIPTCLASSES_HXX
 
-#include <wincrap.hxx>
+#include "wincrap.hxx"
 
 #include "comifaces.hxx"
 

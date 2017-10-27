@@ -25,7 +25,7 @@
 #pragma once
 #endif
 
-#include <wincrap.hxx>
+#include "wincrap.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>

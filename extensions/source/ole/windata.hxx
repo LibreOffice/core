@@ -23,7 +23,7 @@
 #pragma warning (disable:4668)
 #pragma warning (disable:4548)
 
-#include "oleidl.h"
+#include <oleidl.h>
 
 #if defined __clang__
 #pragma clang diagnostic push
@@ -45,7 +45,7 @@
 
 #pragma warning (pop)
 
-#include "osl/diagnose.h"
+#include <osl/diagnose.h>
 
 namespace ole_adapter
 {
