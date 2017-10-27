@@ -15,6 +15,7 @@
 #include "plugin.hxx"
 #include "compat.hxx"
 #include "check.hxx"
+#include "functionaddress.hxx"
 
 /*
   Find params on methods where the param is only ever passed as a single constant value.
@@ -53,10 +54,10 @@ bool operator < (const MyCallSiteInfo &lhs, const MyCallSiteInfo &rhs)
 static std::set<MyCallSiteInfo> callSet;
 
 class ConstantParam:
-    public RecursiveASTVisitor<ConstantParam>, public loplugin::Plugin
+    public loplugin::FunctionAddress<ConstantParam>
 {
 public:
-    explicit ConstantParam(InstantiationData const & data): Plugin(data) {}
+    explicit ConstantParam(InstantiationData const & data): loplugin::FunctionAddress<ConstantParam>(data) {}
 
     virtual void run() override
     {
@@ -69,6 +70,13 @@ public:
              return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+
+        // this catches places that take the address of a method
+        for (auto functionDecl : getFunctionsWithAddressTaken())
+        {
+            for (unsigned i = 0; i < functionDecl->getNumParams(); ++i)
+                addToCallSet(functionDecl, i, functionDecl->getParamDecl(i)->getName(), "unknown3");
+        }
 
         // dump all our output in one write call - this is to try and limit IO "crosstalk" between multiple processes
         // writing to the same logfile
@@ -87,7 +95,6 @@ public:
     bool shouldVisitImplicitCode () const { return true; }
 
     bool VisitCallExpr( const CallExpr* );
-    bool VisitDeclRefExpr( const DeclRefExpr* );
     bool VisitCXXConstructExpr( const CXXConstructExpr* );
 private:
     void addToCallSet(const FunctionDecl* functionDecl, int paramIndex, llvm::StringRef paramName, const std::string& callValue);
@@ -273,21 +280,6 @@ bool ConstantParam::VisitCallExpr(const CallExpr * callExpr) {
                                 ? functionDecl->getParamDecl(i)->getName()
                                 : llvm::StringRef("###" + std::to_string(i));
         addToCallSet(functionDecl, i, paramName, callValue);
-    }
-    return true;
-}
-
-// this catches places that take the address of a method
-bool ConstantParam::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
-{
-    const Decl* decl = declRefExpr->getDecl();
-    const FunctionDecl* functionDecl = dyn_cast<FunctionDecl>(decl);
-    if (!functionDecl)
-        return true;
-    functionDecl = functionDecl->getCanonicalDecl();
-    for (unsigned i = 0; i < functionDecl->getNumParams(); ++i)
-    {
-        addToCallSet(functionDecl, i, functionDecl->getParamDecl(i)->getName(), "unknown3");
     }
     return true;
 }

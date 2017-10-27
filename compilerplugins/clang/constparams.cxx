@@ -16,6 +16,7 @@
 #include "plugin.hxx"
 #include "compat.hxx"
 #include "check.hxx"
+#include "functionaddress.hxx"
 
 /**
    Find pointer and reference params that can be declared const.
@@ -31,10 +32,10 @@ static bool startswith(const std::string& rStr, const char* pSubStr) {
 }
 
 class ConstParams:
-    public RecursiveASTVisitor<ConstParams>, public loplugin::Plugin
+    public loplugin::FunctionAddress<ConstParams>
 {
 public:
-    explicit ConstParams(InstantiationData const & data): Plugin(data) {}
+    explicit ConstParams(InstantiationData const & data): loplugin::FunctionAddress<ConstParams>(data) {}
 
     virtual void run() override {
         std::string fn( compiler.getSourceManager().getFileEntryForID(
@@ -63,8 +64,8 @@ public:
             if (paramCannotBeConstSet.find(pParmVarDecl) == paramCannotBeConstSet.end()) {
                 auto functionDecl = parmToFunction[pParmVarDecl];
                 auto canonicalDecl = functionDecl->getCanonicalDecl();
-                if (ignoredFunctions_.find(canonicalDecl)
-                    != ignoredFunctions_.end())
+                if (getFunctionsWithAddressTaken().find(canonicalDecl)
+                    != getFunctionsWithAddressTaken().end())
                 {
                     continue;
                 }
@@ -86,86 +87,6 @@ public:
         }
     }
 
-    bool TraverseCallExpr(CallExpr * expr) {
-        auto const saved = callee_;
-        callee_ = expr->getCallee();
-        auto const ret = RecursiveASTVisitor::TraverseCallExpr(expr);
-        callee_ = saved;
-        return ret;
-    }
-
-    bool TraverseCXXOperatorCallExpr(CXXOperatorCallExpr * expr) {
-        auto const saved = callee_;
-        callee_ = expr->getCallee();
-        auto const ret = RecursiveASTVisitor::TraverseCXXOperatorCallExpr(expr);
-        callee_ = saved;
-        return ret;
-    }
-
-    bool TraverseCXXMemberCallExpr(CXXMemberCallExpr * expr) {
-        auto const saved = callee_;
-        callee_ = expr->getCallee();
-        auto const ret = RecursiveASTVisitor::TraverseCXXMemberCallExpr(expr);
-        callee_ = saved;
-        return ret;
-    }
-
-    bool TraverseCUDAKernelCallExpr(CUDAKernelCallExpr * expr) {
-        auto const saved = callee_;
-        callee_ = expr->getCallee();
-        auto const ret = RecursiveASTVisitor::TraverseCUDAKernelCallExpr(expr);
-        callee_ = saved;
-        return ret;
-    }
-
-    bool TraverseUserDefinedLiteral(UserDefinedLiteral * expr) {
-        auto const saved = callee_;
-        callee_ = expr->getCallee();
-        auto const ret = RecursiveASTVisitor::TraverseUserDefinedLiteral(expr);
-        callee_ = saved;
-        return ret;
-    }
-
-    bool VisitImplicitCastExpr(ImplicitCastExpr const * expr) {
-        if (expr == callee_) {
-            return true;
-        }
-        if (ignoreLocation(expr)) {
-            return true;
-        }
-        if (expr->getCastKind() != CK_FunctionToPointerDecay) {
-            return true;
-        }
-        auto const dre = dyn_cast<DeclRefExpr>(
-            expr->getSubExpr()->IgnoreParens());
-        if (dre == nullptr) {
-            return true;
-        }
-        auto const fd = dyn_cast<FunctionDecl>(dre->getDecl());
-        if (fd == nullptr) {
-            return true;
-        }
-        ignoredFunctions_.insert(fd->getCanonicalDecl());
-        return true;
-    }
-
-    bool VisitUnaryAddrOf(UnaryOperator const * expr) {
-        if (ignoreLocation(expr)) {
-            return true;
-        }
-        auto const dre = dyn_cast<DeclRefExpr>(
-            expr->getSubExpr()->IgnoreParenImpCasts());
-        if (dre == nullptr) {
-            return true;
-        }
-        auto const fd = dyn_cast<FunctionDecl>(dre->getDecl());
-        if (fd == nullptr) {
-            return true;
-        }
-        ignoredFunctions_.insert(fd->getCanonicalDecl());
-        return true;
-    }
-
     bool VisitFunctionDecl(const FunctionDecl *);
     bool VisitDeclRefExpr(const DeclRefExpr *);
 
@@ -176,8 +97,6 @@ private:
     std::unordered_set<const ParmVarDecl*> interestingParamSet;
     std::unordered_map<const ParmVarDecl*, const FunctionDecl*> parmToFunction;
     std::unordered_set<const ParmVarDecl*> paramCannotBeConstSet;
-    std::unordered_set<FunctionDecl const *> ignoredFunctions_;
-    Expr const * callee_ = nullptr;
 };
 
 bool ConstParams::VisitFunctionDecl(const FunctionDecl * functionDecl)
