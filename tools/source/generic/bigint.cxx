@@ -334,7 +334,7 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
             nQ = (sal_uInt16)(((sal_uInt32)nTmp) / aTmpB.nNum[nLenB1]);
 
         if ( ((sal_uInt32)aTmpB.nNum[nLenB1 - 1] * nQ) >
-            ((((sal_uInt32)nTmp) - aTmpB.nNum[nLenB1] * nQ) << 16) + aTmpA.nNum[j - 2])
+            ((((sal_uInt32)nTmp) - (sal_uInt32)aTmpB.nNum[nLenB1] * nQ) << 16) + aTmpA.nNum[j - 2])
             nQ--;
         // Start division
         nK = 0;
