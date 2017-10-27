@@ -26,6 +26,7 @@
 
 #include <QtCore/QObject>
 
+class QApplication;
 class SalYieldMutex;
 class SalFrame;
 
@@ -38,6 +39,12 @@ class Kf5Instance
 
     osl::Condition m_aWaitingYieldCond;
     int m_postUserEventId;
+
+public:
+    std::unique_ptr< QApplication > m_pQApplication;
+    std::unique_ptr< char*[] >      m_pFakeArgvFreeable;
+    std::unique_ptr< char*[] >      m_pFakeArgv;
+    std::unique_ptr< int >          m_pFakeArgc;
 
 private Q_SLOTS:
     bool ImplYield( bool bWait, bool bHandleAllCurrentEvents );

@@ -20,20 +20,25 @@
 #include "Kf5Instance.hxx"
 #include <Kf5Instance.moc>
 
-#include <QtCore/QThread>
-#include <QtWidgets/QApplication>
-#include <QtCore/QAbstractEventDispatcher>
-
 #include "Kf5Frame.hxx"
 #include "Kf5Data.hxx"
 #include "Kf5Timer.hxx"
 #include "Kf5VirtualDevice.hxx"
 
+#include <QtCore/QThread>
+#include <QtWidgets/QApplication>
+#include <QtCore/QAbstractEventDispatcher>
+
 #include <vclpluginapi.h>
 #include <sal/log.hxx>
+#include <osl/process.h>
 
 #include <headless/svpdummies.hxx>
 #include <headless/svpbmp.hxx>
+
+#include <KAboutData>
+#include <KLocalizedString>
+#include <KStartupInfo>
 
 Kf5Instance::Kf5Instance( SalYieldMutex* pMutex )
     : SalGenericInstance( pMutex )
@@ -49,6 +54,11 @@ Kf5Instance::Kf5Instance( SalYieldMutex* pMutex )
 
 Kf5Instance::~Kf5Instance()
 {
+    // force freeing the QApplication before freeing the arguments,
+    // as it uses references to the provided arguments!
+    m_pQApplication.reset();
+    for( int i = 0; i < *m_pFakeArgc; i++ )
+        free( m_pFakeArgvFreeable[i] );
 }
 
 SalFrame* Kf5Instance::CreateChildFrame( SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle )
@@ -190,10 +200,92 @@ extern "C" {
         OString aVersion( qVersion() );
         SAL_INFO( "vcl.kf5", "qt version string is " << aVersion );
 
+        QApplication *pQApplication;
+        char **pFakeArgvFreeable = nullptr;
+
+        int nFakeArgc = 2;
+        const sal_uInt32 nParams = osl_getCommandArgCount();
+        OString aDisplay;
+        OUString aParam, aBin;
+
+        for ( sal_uInt32 nIdx = 0; nIdx < nParams; ++nIdx )
+        {
+            osl_getCommandArg( nIdx, &aParam.pData );
+            if ( aParam != "-display" )
+                continue;
+            if ( !pFakeArgvFreeable )
+            {
+                pFakeArgvFreeable = new char*[ nFakeArgc + 2 ];
+                pFakeArgvFreeable[ nFakeArgc++ ] = strdup( "-display" );
+            }
+            else
+                free( pFakeArgvFreeable[ nFakeArgc ] );
+
+            ++nIdx;
+            osl_getCommandArg( nIdx, &aParam.pData );
+            aDisplay = OUStringToOString( aParam, osl_getThreadTextEncoding() );
+            pFakeArgvFreeable[ nFakeArgc ] = strdup( aDisplay.getStr() );
+        }
+        if ( !pFakeArgvFreeable )
+            pFakeArgvFreeable = new char*[ nFakeArgc ];
+        else
+            nFakeArgc++;
+
+        osl_getExecutableFile( &aParam.pData );
+        osl_getSystemPathFromFileURL( aParam.pData, &aBin.pData );
+        OString aExec = OUStringToOString( aBin, osl_getThreadTextEncoding() );
+        pFakeArgvFreeable[ 0 ] = strdup( aExec.getStr() );
+        pFakeArgvFreeable[ 1 ] = strdup( "--nocrashhandler" );
+
+        char **pFakeArgv = new char*[ nFakeArgc ];
+        for( int i = 0; i < nFakeArgc; i++ )
+            pFakeArgv[ i ] = pFakeArgvFreeable[ i ];
+
+        char* session_manager = nullptr;
+        if( getenv( "SESSION_MANAGER" ) != nullptr )
+        {
+            session_manager = strdup( getenv( "SESSION_MANAGER" ));
+            unsetenv( "SESSION_MANAGER" );
+        }
+
+        int * pFakeArgc = new int;
+        *pFakeArgc = nFakeArgc;
+        pQApplication = new QApplication( *pFakeArgc, pFakeArgv );
+
+        if( session_manager != nullptr )
+        {
+            // coverity[tainted_string] - trusted source for setenv
+            setenv( "SESSION_MANAGER", session_manager, 1 );
+            free( session_manager );
+        }
+
+        KAboutData *kAboutData = new KAboutData( I18N_NOOP("LibreOffice"),
+            i18n( "LibreOffice" ),
+            "6.0.0",
+            i18n( "LibreOffice with KF5 Native Widget Support." ),
+            KAboutLicense::File,
+            i18n("Copyright (c) 2017 LibreOffice contributors" ),
+            i18n( "LibreOffice is an office suite." ),
+            "http://libreoffice.org",
+            QLatin1String("libreoffice@lists.freedesktop.org") );
+
+        kAboutData->addAuthor( i18n( "Jan-Marek Glogowski" ),
+            i18n( "Original author and maintainer of the KF5 NWF." ),
+            "glogow@fbihome.de" );
+
+        KAboutData::setApplicationData( *kAboutData );
+
+        QApplication::setQuitOnLastWindowClosed(false);
+
         Kf5Instance* pInstance = new Kf5Instance( new SalYieldMutex() );
 
         // initialize SalData
         new Kf5Data( pInstance );
+
+        pInstance->m_pQApplication.reset( pQApplication );
+        pInstance->m_pFakeArgvFreeable.reset( pFakeArgvFreeable );
+        pInstance->m_pFakeArgv.reset( pFakeArgv );
+        pInstance->m_pFakeArgc.reset( pFakeArgc );
 
         return pInstance;
     }
