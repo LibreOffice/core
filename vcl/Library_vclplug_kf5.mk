@@ -59,15 +59,21 @@ $(eval $(call gb_Library_use_externals,vclplug_kf5,\
 	epoxy \
 ))
 
-ifneq ($(KF5_HAVE_GLIB),)
+ifneq ($(QT5_HAVE_GLIB),)
 $(eval $(call gb_Library_add_defs,vclplug_kf5,\
-    $(KF5_GLIB_CFLAGS) \
+    $(QT5_GLIB_CFLAGS) \
 ))
-
 $(eval $(call gb_Library_add_libs,vclplug_kf5,\
-    $(KF5_GLIB_LIBS) \
+    $(QT5_GLIB_LIBS) \
 ))
 endif
+
+$(eval $(call gb_Library_add_defs,vclplug_kf5,\
+    $(KF5_CFLAGS) \
+))
+$(eval $(call gb_Library_add_libs,vclplug_kf5,\
+    $(KF5_LIBS) \
+))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_kf5,\
     vcl/unx/kf5/Kf5Data \
