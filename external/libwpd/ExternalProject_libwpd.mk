@@ -44,7 +44,7 @@ $(call gb_ExternalProject_get_state_target,libwpd,build) :
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
-				$(gb_Package_SOURCEDIR_libwpd)/src/lib/.libs/libwpd-0.10.10.dylib \
+				$(EXTERNAL_WORKDIR)/src/lib/.libs/libwpd-0.10.10.dylib \
 		) \
 	)
 

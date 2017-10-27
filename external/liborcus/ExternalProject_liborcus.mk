@@ -114,8 +114,8 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 		   $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
-				$(gb_Package_SOURCEDIR_liborcus)/src/liborcus/.libs/liborcus-0.12.0.dylib \
-				$(gb_Package_SOURCEDIR_liborcus)/src/parser/.libs/liborcus-parser-0.12.0.dylib \
+				$(EXTERNAL_WORKDIR)/src/liborcus/.libs/liborcus-0.12.0.dylib \
+				$(EXTERNAL_WORKDIR)/src/parser/.libs/liborcus-parser-0.12.0.dylib \
 		) \
 	)
 
