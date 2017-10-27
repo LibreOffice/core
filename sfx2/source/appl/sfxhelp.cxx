@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 #include <sfx2/sfxhelp.hxx>
 
 #include <set>
@@ -46,6 +47,7 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/pathoptions.hxx>
 #include <rtl/ustring.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
@@ -93,7 +95,51 @@ void NoHelpErrorBox::RequestHelp( const HelpEvent& )
     // do nothing, because no help available
 }
 
-static bool impl_hasHelpInstalled( const OUString &rLang );
+namespace {
+
+/// Root path of the help.
+OUString getHelpRootURL()
+{
+    static OUString s_instURL;
+    if (!s_instURL.isEmpty())
+        return s_instURL;
+
+    s_instURL = officecfg::Office::Common::Path::Current::Help::get(comphelper::getProcessComponentContext());
+    if (s_instURL.isEmpty())
+    {
+        // try to determine path from default
+        s_instURL = "$(instpath)/" LIBO_SHARE_HELP_FOLDER;
+    }
+
+    // replace anything like $(instpath);
+    SvtPathOptions aOptions;
+    s_instURL = aOptions.SubstituteVariable(s_instURL);
+
+    OUString url;
+    if (osl::FileBase::getFileURLFromSystemPath(s_instURL, url) == osl::FileBase::E_None)
+        s_instURL = url;
+
+    return s_instURL;
+}
+
+/// Check for built-in help
+bool impl_hasHelpInstalled(const OUString &rLang = OUString("en-US"))
+{
+    OUString helpRootURL = getHelpRootURL() + "/" + rLang;
+
+    osl::DirectoryItem directoryItem;
+    osl::FileStatus fileStatus(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL | osl_FileStatus_Mask_FileName);
+    if (osl::DirectoryItem::get(helpRootURL, directoryItem) == osl::FileBase::E_None &&
+            directoryItem.getFileStatus(fileStatus) == osl::FileBase::E_None &&
+            fileStatus.isDirectory())
+    {
+        return true;
+    }
+
+    return false;
+}
+
+}
 
 /// Return the locale we prefer for displaying help
 static OUString const & HelpLocaleString()
@@ -101,7 +147,7 @@ static OUString const & HelpLocaleString()
     static OUString aLocaleStr;
     if (aLocaleStr.isEmpty())
     {
-        const OUString aEnglish( "en"  );
+        const OUString aEnglish("en-US");
         // detect installed locale
         aLocaleStr = utl::ConfigManager::getLocale();
         bool bOk = !aLocaleStr.isEmpty();
@@ -109,11 +155,7 @@ static OUString const & HelpLocaleString()
             aLocaleStr = aEnglish;
         else
         {
-            OUString aBaseInstallPath;
-            utl::Bootstrap::locateBaseInstallation(aBaseInstallPath);
-            static const char szHelpPath[] = "/help/";
-
-            OUString sHelpPath = aBaseInstallPath + szHelpPath + aLocaleStr;
+            OUString sHelpPath = getHelpRootURL() + "/" + aLocaleStr;
             osl::DirectoryItem aDirItem;
 
             if (osl::DirectoryItem::get(sHelpPath, aDirItem) != osl::FileBase::E_None)
@@ -125,7 +167,7 @@ static OUString const & HelpLocaleString()
                 {
                     bOk = true;
                     sLang = sLang.copy( 0, nSepPos );
-                    sHelpPath = aBaseInstallPath + szHelpPath + sLang;
+                    sHelpPath = getHelpRootURL() + "/" + sLang;
                     if (osl::DirectoryItem::get(sHelpPath, aDirItem) != osl::FileBase::E_None)
                         bOk = false;
                 }
@@ -500,16 +542,6 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* p
     }
 
     return sHelpText;
-}
-
-/// Check for built-in help
-static bool impl_hasHelpInstalled( const OUString &rLang = OUString() )
-{
-    OUStringBuffer aHelpRootURL("vnd.sun.star.help://");
-    AppendConfigToken(aHelpRootURL, true, rLang);
-    std::vector< OUString > aFactories = SfxContentHelper::GetResultSet(aHelpRootURL.makeStringAndClear());
-
-    return !aFactories.empty();
 }
 
 bool SfxHelp::SearchKeyword( const OUString& rKeyword )
