@@ -27,9 +27,9 @@
 #pragma warning(disable : 4917 4555)
 #endif
 
-#include "stdafx.h"
+#include <stdafx.h>
 #include <stddef.h>
-#include "syswinwrapper.hxx"
+#include <syswinwrapper.hxx>
 
 
 static HCURSOR afxCursors[10] = { nullptr, };

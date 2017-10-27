@@ -31,7 +31,7 @@
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
-#include "jawt_md.h"
+#include <jawt_md.h>
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif

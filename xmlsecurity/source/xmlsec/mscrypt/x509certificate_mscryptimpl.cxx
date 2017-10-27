@@ -23,7 +23,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/windowserrorstring.hxx>
 #include "x509certificate_mscryptimpl.hxx"
-#include "certificateextension_xmlsecimpl.hxx"
+#include <certificateextension_xmlsecimpl.hxx>
 #include "sanextension_mscryptimpl.hxx"
 
 #include "oid.hxx"

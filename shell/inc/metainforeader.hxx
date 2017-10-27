@@ -23,7 +23,7 @@
 #include "basereader.hxx"
 #include "types.hxx"
 #include <stack>
-#include <filepath.hxx>
+#include "filepath.hxx"
 
 class ITag;
 class CKeywordsTag;

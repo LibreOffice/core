@@ -18,7 +18,7 @@
  */
 
 #include "unotypewrapper.hxx"
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 

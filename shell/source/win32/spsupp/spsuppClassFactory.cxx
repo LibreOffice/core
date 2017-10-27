@@ -7,8 +7,8 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#include "spsuppClassFactory.hpp"
-#include "COMOpenDocuments.hpp"
+#include <spsuppClassFactory.hpp>
+#include <COMOpenDocuments.hpp>
 
 long ClassFactory::m_nObjCount = 0;
 long ClassFactory::m_nLockCount = 0;

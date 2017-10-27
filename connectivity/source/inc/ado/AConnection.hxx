@@ -25,9 +25,9 @@
 #include <connectivity/OSubComponent.hxx>
 #include <map>
 #include <connectivity/CommonTools.hxx>
-#include "OTypeInfo.hxx"
-#include "TConnection.hxx"
-#include "ado/Awrapado.hxx"
+#include <OTypeInfo.hxx>
+#include <TConnection.hxx>
+#include <ado/Awrapado.hxx>
 
 namespace connectivity
 {

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/ADatabaseMetaDataResultSetMetaData.hxx"
-#include "ado/Awrapado.hxx"
+#include <ado/ADatabaseMetaDataResultSetMetaData.hxx>
+#include <ado/Awrapado.hxx>
 #include <connectivity/dbexception.hxx>
 
 

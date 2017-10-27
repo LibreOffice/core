@@ -24,7 +24,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/backtrace.hxx>
 
-#include "backtraceasstring.hxx"
+#include <backtraceasstring.hxx>
 
 namespace {
 

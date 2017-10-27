@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACALLABLESTATEMENT_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACALLABLESTATEMENT_HXX
 
-#include "ado/APreparedStatement.hxx"
+#include <ado/APreparedStatement.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XOutParameters.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

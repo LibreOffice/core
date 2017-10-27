@@ -21,7 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AVIEW_HXX
 
 #include <connectivity/sdbcx/VView.hxx>
-#include "ado/Awrapadox.hxx"
+#include <ado/Awrapadox.hxx>
 
 namespace connectivity
 {

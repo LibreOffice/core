@@ -13,18 +13,18 @@
 #pragma clang diagnostic ignored "-Wextra-tokens"
     // "#endif !_MIDL_USE_GUIDDEF_" in midl-generated code
 #endif
-#include "spsupp_i.c"
+#include <spsupp_i.c>
 #if defined __clang__
 #pragma clang diagnostic pop
 #endif
 
 #include <memory>
-#include "olectl.h"
-#include "wchar.h"
-#include "spsuppServ.hpp"
-#include "spsuppClassFactory.hpp"
-#include "COMOpenDocuments.hpp"
-#include "registrar.hpp"
+#include <olectl.h>
+#include <wchar.h>
+#include <spsuppServ.hpp>
+#include <spsuppClassFactory.hpp>
+#include <COMOpenDocuments.hpp>
+#include <registrar.hpp>
 
 namespace {
 

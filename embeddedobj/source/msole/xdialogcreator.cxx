@@ -36,7 +36,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <xdialogcreator.hxx>
+#include "xdialogcreator.hxx"
 #include <oleembobj.hxx>
 
 

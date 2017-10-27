@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/Aolevariant.hxx"
+#include <ado/Aolevariant.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/char16_t2wchar_t.hxx>
@@ -25,8 +25,8 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include "resource/sharedresources.hxx"
-#include "strings.hrc"
+#include <resource/sharedresources.hxx>
+#include <strings.hrc>
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
 #include <com/sun/star/bridge/oleautomation/Currency.hpp>
 #include <com/sun/star/bridge/oleautomation/SCode.hpp>

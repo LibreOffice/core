@@ -18,8 +18,8 @@
  */
 
 
-#include "osl/getglobalmutex.hxx"
-#include "rtl/instance.hxx"
+#include <osl/getglobalmutex.hxx>
+#include <rtl/instance.hxx>
 #include "ole2uno.hxx"
 
 using namespace osl;

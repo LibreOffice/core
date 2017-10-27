@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #include <stdio.h>
-#include <inprocembobj.h>
+#include "inprocembobj.h"
 #include <embservconst.h>
 
 static const GUID* guidList[ SUPPORTED_FACTORIES_NUM ] = {

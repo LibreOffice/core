@@ -32,7 +32,7 @@
 #pragma warning(pop)
 #endif
 #include <string>
-#include <filepath.hxx>
+#include "filepath.hxx"
 
 /** Sets a value of the specified registry key, an empty ValueName sets the default
     value

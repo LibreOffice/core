@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/AColumn.hxx"
-#include "ado/AConnection.hxx"
-#include "ado/Awrapado.hxx"
+#include <ado/AColumn.hxx>
+#include <ado/AConnection.hxx>
+#include <ado/Awrapado.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
-#include "ado/ACatalog.hxx"
+#include <ado/ACatalog.hxx>
 
 using namespace ::comphelper;
 

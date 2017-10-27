@@ -44,15 +44,15 @@
 #include <vcl/fontcharmap.hxx>
 #include <vcl/opengl/OpenGLWrapper.hxx>
 
-#include "fontsubset.hxx"
-#include "outdev.h"
-#include "PhysicalFontCollection.hxx"
-#include "PhysicalFontFace.hxx"
-#include "sft.hxx"
-#include "win/saldata.hxx"
-#include "win/salgdi.h"
-#include "impfontcharmap.hxx"
-#include "impfontmetricdata.hxx"
+#include <fontsubset.hxx>
+#include <outdev.h>
+#include <PhysicalFontCollection.hxx>
+#include <PhysicalFontFace.hxx>
+#include <sft.hxx>
+#include <win/saldata.hxx>
+#include <win/salgdi.h>
+#include <impfontcharmap.hxx>
+#include <impfontmetricdata.hxx>
 
 using namespace vcl;
 

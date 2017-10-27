@@ -24,11 +24,11 @@
 
 #include "listviewbuilder.hxx"
 #include "document_statistic.hxx"
-#include "utilities.hxx"
-#include "config.hxx"
+#include <utilities.hxx>
+#include <config.hxx>
 
 #include <commctrl.h>
-#include "resource.h"
+#include <resource.h>
 
 // Unicode-only defines to break dependence on UNICODE define
 #if !defined ListView_InsertColumnW

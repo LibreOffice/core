@@ -26,7 +26,7 @@
 
 #include "DataFmtTransl.hxx"
 #include "../misc/ImplHelper.hxx"
-#include "WinClip.hxx"
+#include <WinClip.hxx>
 
 #include <algorithm>
 

@@ -33,7 +33,7 @@
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include "ado/AStatement.hxx"
+#include <ado/AStatement.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 

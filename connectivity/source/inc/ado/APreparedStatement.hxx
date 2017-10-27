@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_APREPAREDSTATEMENT_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_APREPAREDSTATEMENT_HXX
 
-#include "ado/AStatement.hxx"
+#include <ado/AStatement.hxx>
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>

@@ -22,7 +22,7 @@
 #include <i_xml_parser_event_handler.hxx>
 
 #ifdef _WIN32
-#include "utilities.hxx"
+#include <utilities.hxx>
 #else
 #define UTF8ToWString(s) s
 #endif

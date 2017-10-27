@@ -44,7 +44,7 @@
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
 #include <opengl/x11/X11DeviceInfo.hxx>
 #elif defined (_WIN32)
-#include "opengl/win/WinDeviceInfo.hxx"
+#include <opengl/win/WinDeviceInfo.hxx>
 #endif
 
 static bool volatile gbInShaderCompile = false;

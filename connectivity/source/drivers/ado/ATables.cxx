@@ -17,21 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/ATables.hxx"
-#include "ado/ATable.hxx"
+#include <ado/ATables.hxx>
+#include <ado/ATable.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
-#include "ado/ACatalog.hxx"
-#include "ado/AConnection.hxx"
-#include "ado/Awrapado.hxx"
-#include "TConnection.hxx"
+#include <ado/ACatalog.hxx>
+#include <ado/AConnection.hxx>
+#include <ado/Awrapado.hxx>
+#include <TConnection.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <connectivity/dbexception.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace ::cppu;
 using namespace connectivity;

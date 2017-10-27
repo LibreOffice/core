@@ -24,7 +24,7 @@
 #ifdef _WIN32
 #include <prewin.h>
 #include <postwin.h>
-#include "comphelper/windowserrorstring.hxx"
+#include <comphelper/windowserrorstring.hxx>
 #endif
 
 extern "C"

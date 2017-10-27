@@ -21,8 +21,8 @@
 
 #include <memory>
 
-#include "config.hxx"
-#include "utilities.hxx"
+#include <config.hxx>
+#include <utilities.hxx>
 
 // constants
 

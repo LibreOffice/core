@@ -31,7 +31,7 @@
 
 #include <stdio.h>
 #include <objidl.h>
-#include "stream_helper.hxx"
+#include <stream_helper.hxx>
 
 BufferStream::BufferStream(IStream *str) :
     stream(str)

@@ -18,7 +18,7 @@
  */
 
 
-#include <wininetbackend.hxx>
+#include "wininetbackend.hxx"
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include <cppuhelper/implementationentry.hxx>

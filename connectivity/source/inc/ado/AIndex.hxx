@@ -22,7 +22,7 @@
 
 #include <connectivity/sdbcx/VIndex.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include "ado/Awrapadox.hxx"
+#include <ado/Awrapadox.hxx>
 
 namespace connectivity
 {

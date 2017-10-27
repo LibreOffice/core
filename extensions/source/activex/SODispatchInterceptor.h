@@ -33,7 +33,7 @@
 
 #include <atlctl.h>
 
-#include "so_activex.h"
+#include <so_activex.h>
 
 class CSOActiveX;
 

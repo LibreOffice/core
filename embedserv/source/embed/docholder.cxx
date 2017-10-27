@@ -20,12 +20,12 @@
 #pragma warning(disable : 4917 4555)
 #endif
 
-#include "docholder.hxx"
-#include "embeddoc.hxx"
-#include "intercept.hxx"
-#include "syswinwrapper.hxx"
-#include "iipaobj.hxx"
-#include "common.h"
+#include <docholder.hxx>
+#include <embeddoc.hxx>
+#include <intercept.hxx>
+#include <syswinwrapper.hxx>
+#include <iipaobj.hxx>
+#include <common.h>
 
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN

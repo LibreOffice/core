@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/ATable.hxx"
-#include "ado/AIndexes.hxx"
-#include "ado/AColumns.hxx"
-#include "ado/AColumn.hxx"
-#include "ado/AKeys.hxx"
-#include "ado/AConnection.hxx"
+#include <ado/ATable.hxx>
+#include <ado/AIndexes.hxx>
+#include <ado/AColumns.hxx>
+#include <ado/AColumn.hxx>
+#include <ado/AKeys.hxx>
+#include <ado/AConnection.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
@@ -30,9 +30,9 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#include "ado/Awrapado.hxx"
+#include <ado/Awrapado.hxx>
 #include <comphelper/sequence.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <comphelper/types.hxx>
 
 using namespace ::comphelper;

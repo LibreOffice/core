@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "salgdiimpl.hxx"
-#include "win/salgdi.h"
+#include <salgdiimpl.hxx>
+#include <win/salgdi.h>
 
 #include <vcl/gradient.hxx>
 
-#include "svsys.h"
-#include "ControlCacheKey.hxx"
+#include <svsys.h>
+#include <ControlCacheKey.hxx>
 
 class WinSalGraphics;
 

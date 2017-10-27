@@ -33,9 +33,9 @@
 
 #include "file_url.hxx"
 #include "gmutex.hxx"
-#include "rtllifecycle.h"
+#include <rtllifecycle.h>
 
-#include <thread.hxx>
+#include "thread.hxx"
 
 /*
 This is needed because DllMain is called after static constructors. A DLL's

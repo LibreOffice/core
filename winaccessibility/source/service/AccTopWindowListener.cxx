@@ -26,8 +26,8 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
 
-#include "AccTopWindowListener.hxx"
-#include "unomsaaevent.hxx"
+#include <AccTopWindowListener.hxx>
+#include <unomsaaevent.hxx>
 
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 #include <com/sun/star/uno/XInterface.hpp>

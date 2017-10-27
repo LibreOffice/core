@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "opengl/win/WinDeviceInfo.hxx"
+#include <opengl/win/WinDeviceInfo.hxx>
 
-#include "opengl/win/blocklist_parser.hxx"
+#include <opengl/win/blocklist_parser.hxx>
 #include <config_folders.h>
 
 #if !defined WIN32_LEAN_AND_MEAN

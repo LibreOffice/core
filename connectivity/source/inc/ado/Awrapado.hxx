@@ -22,14 +22,14 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 // Includes for ADO
-#include "ado_pre_sys_include.h"
+#include <ado_pre_sys_include.h>
 #include <oledb.h>
 #include <ocidl.h>
 #include <adoint.h>
-#include "ado_post_sys_include.h"
-#include "ado/adoimp.hxx"
-#include "ado/Aolewrap.hxx"
-#include "ado/Aolevariant.hxx"
+#include <ado_post_sys_include.h>
+#include <ado/adoimp.hxx>
+#include <ado/Aolewrap.hxx>
+#include <ado/Aolevariant.hxx>
 
 namespace connectivity
 {

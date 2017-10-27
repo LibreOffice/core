@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "systools/win32/uwinapi.h"
+#include <systools/win32/uwinapi.h>
 
-#include "osl/file.h"
+#include <osl/file.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 
-#include <file-impl.hxx>
+#include "file-impl.hxx"
 #include "file_error.hxx"
 #include "file_url.hxx"
 #include "path_helper.hxx"

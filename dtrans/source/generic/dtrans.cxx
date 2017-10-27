@@ -18,8 +18,8 @@
  */
 
 #include <cppuhelper/factory.hxx>
-#include <clipboardmanager.hxx>
-#include <generic_clipboard.hxx>
+#include "clipboardmanager.hxx"
+#include "generic_clipboard.hxx"
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;

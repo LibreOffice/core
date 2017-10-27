@@ -24,7 +24,7 @@
 #include <sal/types.h>
 #include <sal/macros.h>
 
-#include <onlinecheck.hxx>
+#include "onlinecheck.hxx"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

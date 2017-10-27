@@ -18,7 +18,7 @@
  */
 
 #include <cppuhelper/supportsservice.hxx>
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
 #include "wininetbackend.hxx"
 

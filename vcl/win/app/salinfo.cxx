@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svsys.h"
-#include "rtl/ustrbuf.hxx"
+#include <svsys.h>
+#include <rtl/ustrbuf.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #include <vcl/window.hxx>
 
-#include "win/salsys.h"
-#include "win/salframe.h"
-#include "win/salinst.h"
-#include "win/saldata.hxx"
+#include <win/salsys.h>
+#include <win/salframe.h>
+#include <win/salinst.h>
+#include <win/saldata.hxx>
 
-#include "svdata.hxx"
+#include <svdata.hxx>
 
 #include <unordered_map>
 

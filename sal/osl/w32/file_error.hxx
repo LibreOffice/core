@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SAL_OSL_W32_FILE_ERROR_HXX
 #define INCLUDED_SAL_OSL_W32_FILE_ERROR_HXX
 
-#include "osl/file.h"
+#include <osl/file.h>
 
 oslFileError oslTranslateFileError (/*DWORD*/ unsigned long dwError);
 

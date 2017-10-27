@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ado/AGroups.hxx"
-#include "ado/AGroup.hxx"
-#include "ado/ATable.hxx"
-#include "ado/AConnection.hxx"
+#include <ado/AGroups.hxx>
+#include <ado/AGroup.hxx>
+#include <ado/ATable.hxx>
+#include <ado/AConnection.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <connectivity/sdbcx/IRefreshable.hxx>
-#include "TConnection.hxx"
+#include <TConnection.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace comphelper;
 using namespace connectivity;

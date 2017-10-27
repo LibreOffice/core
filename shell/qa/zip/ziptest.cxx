@@ -30,12 +30,12 @@
 #include <ole2.h>
 #include <stdio.h>
 
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 #include <string>
-#include "stream_helper.hxx"
+#include <stream_helper.hxx>
 #include "testzipimpl.hxx"
 using namespace std;
 

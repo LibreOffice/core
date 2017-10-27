@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_INC_WIN_SALDATA_HXX
 
 #include <memory>
-#include "osl/module.h"
+#include <osl/module.h>
 
 #include <svdata.hxx>
 #include <salwtype.hxx>

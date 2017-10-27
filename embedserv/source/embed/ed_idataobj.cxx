@@ -20,7 +20,7 @@
 #pragma warning(disable : 4917 4555)
 #endif
 
-#include "embeddoc.hxx"
+#include <embeddoc.hxx>
 
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Exception.hpp>

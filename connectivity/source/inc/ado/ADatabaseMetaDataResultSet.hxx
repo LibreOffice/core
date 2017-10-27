@@ -32,7 +32,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include "ado/AStatement.hxx"
+#include <ado/AStatement.hxx>
 #include <connectivity/StdTypeDefs.hxx>
 
 namespace connectivity

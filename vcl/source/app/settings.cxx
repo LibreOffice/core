@@ -22,7 +22,7 @@
 #include <officecfg/Office/Common.hxx>
 
 #ifdef _WIN32
-#include "win/svsys.h"
+#include <win/svsys.h>
 #endif
 
 #include <comphelper/processfactory.hxx>

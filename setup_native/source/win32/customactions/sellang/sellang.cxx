@@ -35,7 +35,7 @@
 #include <systools/win32/uwinapi.h>
 #include <algorithm>
 
-#include "spellchecker_selection.hxx"
+#include <spellchecker_selection.hxx>
 
 BOOL GetMsiPropA( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
 {

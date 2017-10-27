@@ -34,7 +34,7 @@
 #undef WB_RIGHT
 
 #include "shutdownicon.hxx"
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 #include <shlobj.h>
 #include <objidl.h>
 #include <osl/thread.h>

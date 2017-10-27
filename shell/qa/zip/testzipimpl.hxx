@@ -20,11 +20,11 @@
 #ifndef INCLUDED_SHELL_QA_ZIP_TESTZIPIMPL_HXX
 #define INCLUDED_SHELL_QA_ZIP_TESTZIPIMPL_HXX
 
-#include "zipfile.hxx"
+#include <zipfile.hxx>
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "sal/types.h"
+#include <sal/types.h>
 
 using namespace std;
 

@@ -20,9 +20,9 @@
 #pragma warning(disable : 4917 4555)
 #endif
 
-#include "stdafx.h"
-#include "servprov.hxx"
-#include "embeddoc.hxx"
+#include <stdafx.h>
+#include <servprov.hxx>
+#include <embeddoc.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>

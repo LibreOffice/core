@@ -18,11 +18,11 @@
  */
 
 #include <connectivity/sqlparse.hxx>
-#include "ado/APreparedStatement.hxx"
+#include <ado/APreparedStatement.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include "ado/AResultSetMetaData.hxx"
-#include "ado/AResultSet.hxx"
-#include "ado/ADriver.hxx"
+#include <ado/AResultSetMetaData.hxx>
+#include <ado/AResultSet.hxx>
+#include <ado/ADriver.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -30,7 +30,7 @@
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <limits>
 

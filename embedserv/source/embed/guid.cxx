@@ -20,11 +20,11 @@
 #pragma warning(disable : 4917 4555)
 #endif
 
-#include "common.h"
+#include <common.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include <guid.hxx>
+#include "guid.hxx"
 
 wchar_t const * getStorageTypeFromGUID_Impl( GUID const * guid )
 {

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "iipaobj.hxx"
-#include "embeddoc.hxx"
+#include <iipaobj.hxx>
+#include <embeddoc.hxx>
 
 
 CIIAObj::CIIAObj(DocumentHolder* pDocHolder)

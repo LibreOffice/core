@@ -19,11 +19,11 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPCOLUMN_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPCOLUMN_HXX
 
-#include "ado/Aolewrap.hxx"
+#include <ado/Aolewrap.hxx>
 
-#include "ado_pre_sys_include.h"
+#include <ado_pre_sys_include.h>
 #include <adoint.h>
-#include "ado_post_sys_include.h"
+#include <ado_post_sys_include.h>
 
 namespace connectivity
 {

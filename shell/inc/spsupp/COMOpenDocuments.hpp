@@ -14,13 +14,13 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #endif
-#include "spsupp_h.h"
+#include <spsupp_h.h>
 #if defined __clang__
 #pragma clang diagnostic pop
 #endif
 #include "COMRefCounted.hpp"
-#include "Objsafe.h"
-#include "assert.h"
+#include <Objsafe.h>
+#include <assert.h>
 
 class COMOpenDocuments : public COMRefCounted<IOWSNewDocument3>
 {

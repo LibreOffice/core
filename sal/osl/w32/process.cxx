@@ -33,8 +33,8 @@
 #include <osl/nlsupport.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 
-#include <filetime.hxx>
-#include <nlsupport.hxx>
+#include "filetime.hxx"
+#include "nlsupport.hxx"
 #include "procimpl.hxx"
 #include "file_url.hxx"
 #include "path_helper.hxx"

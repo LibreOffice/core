@@ -28,10 +28,10 @@
 
 //  Platform:   Windows 2000, Windows XP
 
-#include "contentreader.hxx"
-#include "metainforeader.hxx"
-#include "registry.hxx"
-#include "fileextensions.hxx"
+#include <contentreader.hxx>
+#include <metainforeader.hxx>
+#include <registry.hxx>
+#include <fileextensions.hxx>
 
 
 //  Include file    Purpose
@@ -59,13 +59,13 @@
 #include <filter.h>
 #include <filterr.h>
 #include <ntquery.h>
-#include "assert.h"
+#include <assert.h>
 #include "ooofilt.hxx"
 #include <objidl.h>
 #include <stdio.h>
 #include "propspec.hxx"
 
-#include "stream_helper.hxx"
+#include <stream_helper.hxx>
 
 //C-------------------------------------------------------------------------
 //  Class:      COooFilter

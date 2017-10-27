@@ -31,26 +31,26 @@
 // Drawing in non-client area (general DWM-related info):
 //   http://msdn.microsoft.com/en-us/library/windows/desktop/bb688195%28v=vs.85%29.aspx
 
-#include "rtl/ustring.h"
+#include <rtl/ustring.h>
 
-#include "osl/module.h"
+#include <osl/module.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #include <opengl/win/gdiimpl.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include "win/svsys.h"
-#include "win/salgdi.h"
-#include "win/saldata.hxx"
+#include <win/svsys.h>
+#include <win/salgdi.h>
+#include <win/saldata.hxx>
 
-#include "uxtheme.h"
-#include "vssym32.h"
+#include <uxtheme.h>
+#include <vssym32.h>
 
 #include <map>
 #include <string>
 #include <boost/optional.hpp>
-#include "ControlCacheKey.hxx"
+#include <ControlCacheKey.hxx>
 using namespace std;
 
 typedef map< wstring, HTHEME > ThemeMap;

@@ -33,8 +33,8 @@
 #pragma warning(pop)
 #endif
 
-#include "cppuhelper/findsofficepath.h"
-#include "sal/types.h"
+#include <cppuhelper/findsofficepath.h>
+#include <sal/types.h>
 
 #define MY_SIZE(s) (sizeof (s) / sizeof *(s))
 #define MY_LENGTH(s) (MY_SIZE(s) - 1)

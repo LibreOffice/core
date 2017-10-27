@@ -30,7 +30,7 @@
 #pragma warning(pop)
 #endif
 #include <string>
-#include <filepath.hxx>
+#include "filepath.hxx"
 
 class CInfoTip : public IQueryInfo, public IPersistFile
 {

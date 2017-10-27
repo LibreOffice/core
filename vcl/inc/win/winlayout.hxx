@@ -26,7 +26,7 @@
 #include <svsys.h>
 #include <win/salgdi.h>
 
-#include "opengl/PackedTextureAtlas.hxx"
+#include <opengl/PackedTextureAtlas.hxx>
 
 class WinFontInstance;
 

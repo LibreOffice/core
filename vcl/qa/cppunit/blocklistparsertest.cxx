@@ -16,7 +16,7 @@
 
 #include <unotest/bootstrapfixturebase.hxx>
 
-#include "opengl/win/blocklist_parser.hxx"
+#include <opengl/win/blocklist_parser.hxx>
 
 namespace
 {

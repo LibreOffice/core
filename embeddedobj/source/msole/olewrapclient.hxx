@@ -22,7 +22,7 @@
 
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
-#include <platform.h>
+#include "platform.h"
 
 class OleComponent;
 class OleWrapperClientSite : public IOleClientSite

@@ -23,7 +23,7 @@
 //      To build a separate proxy/stub DLL,
 //      run nmake -f so_activexps.mk in the project directory.
 
-#include "stdio.h"
+#include <stdio.h>
 #include "StdAfx2.h"
 #include "resource.h"
 #include <initguid.h>
@@ -32,7 +32,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #endif
-#include "so_activex.h"
+#include <so_activex.h>
 #if defined __clang__
 #pragma clang diagnostic pop
 #endif
@@ -42,7 +42,7 @@
 #pragma clang diagnostic ignored "-Wextra-tokens"
     // "#endif !_MIDL_USE_GUIDDEF_" in midl-generated code
 #endif
-#include "so_activex_i.c"
+#include <so_activex_i.c>
 #if defined __clang__
 #pragma clang diagnostic pop
 #endif

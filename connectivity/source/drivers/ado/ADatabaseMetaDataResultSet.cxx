@@ -18,8 +18,8 @@
  */
 
 #include <comphelper/sequence.hxx>
-#include "ado/ADatabaseMetaDataResultSet.hxx"
-#include "ado/ADatabaseMetaDataResultSetMetaData.hxx"
+#include <ado/ADatabaseMetaDataResultSet.hxx>
+#include <ado/ADatabaseMetaDataResultSetMetaData.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
