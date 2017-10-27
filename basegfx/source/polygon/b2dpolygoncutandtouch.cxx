@@ -117,7 +117,7 @@ namespace basegfx
                             double fLeftStart(0.0);
 
                             // now add all points targeted to be at this index
-                            while(nNewInd < nTempPointCount && rTempPoints[nNewInd].getIndex() == a)
+                            while (nNewInd < nTempPointCount && rTempPoints[nNewInd].getIndex() == a && fLeftStart < 1.0)
                             {
                                 const temporaryPoint& rTempPoint = rTempPoints[nNewInd++];
 
