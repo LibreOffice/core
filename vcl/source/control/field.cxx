@@ -72,6 +72,7 @@ bool ImplNumericProcessKeyInput( const KeyEvent& rKEvt,
                  ((cChar >= '0') && (cChar <= '9')) ||
                  string::equals(rLocaleDataWrappper.getNumDecimalSep(), cChar) ||
                  (bThousandSep && string::equals(rLocaleDataWrappper.getNumThousandSep(), cChar)) ||
+                 string::equals(rLocaleDataWrappper.getNumDecimalSepAlt(), cChar) ||
                  (cChar == '-'));
     }
 }
@@ -97,6 +98,8 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
 
     // find position of decimal point
     nDecPos = aStr.indexOf( rLocaleDataWrappper.getNumDecimalSep() );
+    if (nDecPos < 0 && !rLocaleDataWrappper.getNumDecimalSepAlt().isEmpty())
+        nDecPos = aStr.indexOf( rLocaleDataWrappper.getNumDecimalSepAlt() );
     // find position of fraction
     nFracDivPos = aStr.indexOf( '/' );
 
