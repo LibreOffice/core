@@ -405,11 +405,6 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
 
 SwRect SwTextFrame::Paint()
 {
-#if OSL_DEBUG_LEVEL > 1
-    const SwTwips nDbgY = Frame().Top();
-    (void)nDbgY;
-#endif
-
     // finger layout
     OSL_ENSURE( GetValidPosFlag(), "+SwTextFrame::Paint: no Calc()" );
 
@@ -588,11 +583,6 @@ void SwTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
 
     if( !IsEmpty() || !PaintEmpty( rRect, true ) )
     {
-#if OSL_DEBUG_LEVEL > 1
-        const SwTwips nDbgY = Frame().Top();
-        (void)nDbgY;
-#endif
-
         if( IsLocked() || IsHiddenNow() || ! Prt().HasArea() )
             return;
 
