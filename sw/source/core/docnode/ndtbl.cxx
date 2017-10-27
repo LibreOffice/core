@@ -2499,42 +2499,14 @@ void SwTableNode::RemoveRedlines()
     }
 }
 
-void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCursor,
-                        const SwCellFrame* pBoxFrame )
+void SwDoc::GetTabCols( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
 {
-    const SwTableBox* pBox = nullptr;
-    SwTabFrame *pTab = nullptr;
+    OSL_ENSURE( pBoxFrame, "pBoxFrame needs to be specified!" );
+    if( !pBoxFrame )
+        return;
 
-    if( pBoxFrame )
-    {
-        pTab = const_cast<SwFrame*>(static_cast<SwFrame const *>(pBoxFrame))->ImplFindTabFrame();
-        pBox = pBoxFrame->GetTabBox();
-    }
-    else if( pCursor )
-    {
-        const SwContentNode* pCNd = pCursor->GetContentNode();
-        if( !pCNd )
-            return ;
-
-        Point aPt;
-        const SwShellCursor *pShCursor = dynamic_cast<const SwShellCursor*>(pCursor);
-        if( pShCursor )
-            aPt = pShCursor->GetPtPos();
-
-        const SwFrame* pTmpFrame = pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
-        do {
-            pTmpFrame = pTmpFrame->GetUpper();
-        } while ( !pTmpFrame->IsCellFrame() );
-
-        pBoxFrame = static_cast<const SwCellFrame*>(pTmpFrame);
-        pTab = const_cast<SwFrame*>(static_cast<SwFrame const *>(pBoxFrame))->ImplFindTabFrame();
-        pBox = pBoxFrame->GetTabBox();
-    }
-    else if( !pCursor && !pBoxFrame )
-    {
-        OSL_ENSURE( false, "One of them needs to be specified!" );
-        return ;
-    }
+    SwTabFrame *pTab = const_cast<SwFrame*>(static_cast<SwFrame const *>(pBoxFrame))->ImplFindTabFrame();
+    const SwTableBox* pBox = pBoxFrame->GetTabBox();
 
     // Set fixed points, LeftMin in Document coordinates, all others relative
     SwRectFnSet aRectFnSet(pTab);

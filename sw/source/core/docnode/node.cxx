@@ -118,12 +118,12 @@ void SetParent( std::shared_ptr<const SfxItemSet>& rpAttrSet,
 
         if ( pParentFormat )
         {
-            SwStyleNameMapper::FillProgName( pParentFormat->GetName(), sVal, SwGetPoolIdFromName::TxtColl, true );
+            SwStyleNameMapper::FillProgName( pParentFormat->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
             const SfxStringItem aAnyFormatColl( RES_FRMATR_STYLE_NAME, sVal );
             aNewSet.Put( aAnyFormatColl );
 
             if ( pConditionalFormat != pParentFormat )
-                SwStyleNameMapper::FillProgName( pConditionalFormat->GetName(), sVal, SwGetPoolIdFromName::TxtColl, true );
+                SwStyleNameMapper::FillProgName( pConditionalFormat->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
 
             const SfxStringItem aFormatColl( RES_FRMATR_CONDITIONAL_STYLE_NAME, sVal );
             aNewSet.Put( aFormatColl );

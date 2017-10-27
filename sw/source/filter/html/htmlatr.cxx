@@ -1837,7 +1837,7 @@ void HTMLEndPosLst::Insert( const SwDrawFrameFormat& rFormat, sal_Int32 nPos,
         const SfxItemSet& rFormatItemSet = rFormat.GetAttrSet();
         SfxItemSet aItemSet( *rFormatItemSet.GetPool(), svl::Items<RES_CHRATR_BEGIN,
                                                      RES_CHRATR_END>{} );
-        SwHTMLWriter::GetEEAttrsFromDrwObj( aItemSet, pTextObj, true );
+        SwHTMLWriter::GetEEAttrsFromDrwObj( aItemSet, pTextObj );
         bool bOutStylesOld = bOutStyles;
         bOutStyles = false;
         Insert( aItemSet, nPos, nPos+1, rFormatInfos, false );

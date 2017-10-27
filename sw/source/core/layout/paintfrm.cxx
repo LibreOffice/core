@@ -1695,7 +1695,7 @@ static inline void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
  */
 static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext *pOut,
                       SwViewShell &rSh, const SwRect &rGrf, const SwRect &rOut,
-                      bool bClip, bool bGrfNum,
+                      bool bGrfNum,
                       SwPaintProperties const & properties,
                       bool bBackgrdAlreadyDrawn )
                       // add parameter <bBackgrdAlreadyDrawn> to indicate
@@ -1707,7 +1707,7 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext *pOu
     ::SwAlignRect( aAlignedGrfRect, &rSh, pOut );
 
     // Change type from <bool> to <bool>.
-    const bool bNotInside = bClip && !rOut.IsInside( aAlignedGrfRect );
+    const bool bNotInside = !rOut.IsInside( aAlignedGrfRect );
     if ( bNotInside )
     {
         pOut->Push( PushFlags::CLIPREGION );
@@ -2158,7 +2158,7 @@ void DrawGraphic(
     if( bDraw && aGrf.IsOver( rOut ) )
         // OD 02.09.2002 #99657#
         // add parameter <bGrfBackgrdAlreadyDrawn>
-        lcl_DrawGraphic( *pBrush, pOutDev, rSh, aGrf, rOut, true, bGrfNum, gProp,
+        lcl_DrawGraphic( *pBrush, pOutDev, rSh, aGrf, rOut, bGrfNum, gProp,
                          bGrfBackgrdAlreadyDrawn );
 
     if( bReplaceGrfNum )

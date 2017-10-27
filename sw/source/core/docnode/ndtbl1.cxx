@@ -1475,7 +1475,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, bool bBalance )
         return; // Robust
 
     SwTabCols aTabCols;
-    GetTabCols( aTabCols, nullptr, static_cast<SwCellFrame*>(pBoxFrame) );
+    GetTabCols( aTabCols, static_cast<SwCellFrame*>(pBoxFrame) );
 
     if ( ! aTabCols.Count() )
         return;

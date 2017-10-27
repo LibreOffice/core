@@ -153,7 +153,6 @@ namespace SwUnoCursorHelper
             const css::uno::Sequence< css::beans::PropertyValue >& rDescriptor,
             SwSortOptions & rSortOpt);
 
-    /// @param bTableMode: attributes should be applied to a table selection
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException
@@ -163,9 +162,7 @@ namespace SwUnoCursorHelper
             SwPaM& rPaM,
             const SfxItemPropertySet & rPropSet,
             const OUString & rPropertyName,
-            const css::uno::Any & rValue,
-            const SetAttrMode nAttrMode = SetAttrMode::DEFAULT);
-    /// @param bTableMode: attributes should be applied to a table selection
+            const css::uno::Any & rValue);
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException
@@ -176,8 +173,7 @@ namespace SwUnoCursorHelper
             const SfxItemPropertySet & rPropSet,
             const css::uno::Sequence< css::beans::PropertyValue > &
             rPropertyValues,
-            const SetAttrMode nAttrMode = SetAttrMode::DEFAULT,
-            const bool bTableMode = false);
+            const SetAttrMode nAttrMode = SetAttrMode::DEFAULT);
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException

@@ -757,7 +757,7 @@ SwXDocumentIndex::setPropertyValue(
         {
             OUString aString;
             SwStyleNameMapper::FillUIName(lcl_AnyToString(rValue),
-                aString, SwGetPoolIdFromName::ChrFmt, true);
+                aString, SwGetPoolIdFromName::ChrFmt);
             rTOXBase.SetMainEntryCharStyle( aString );
         }
         break;
@@ -793,7 +793,7 @@ SwXDocumentIndex::setPropertyValue(
         {
             OUString aString;
             SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
-                aString, SwGetPoolIdFromName::TxtColl, true);
+                aString, SwGetPoolIdFromName::TxtColl);
             bForm = true;
             // Header is on Pos 0
             aForm.SetTemplate( 0, aString );
@@ -808,7 +808,7 @@ SwXDocumentIndex::setPropertyValue(
             OUString aString;
             bForm = true;
             SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
-                aString, SwGetPoolIdFromName::TxtColl, true);
+                aString, SwGetPoolIdFromName::TxtColl);
             aForm.SetTemplate( 1, aString );
         }
         break;
@@ -832,7 +832,7 @@ SwXDocumentIndex::setPropertyValue(
             const sal_uInt16 nLPos = rTOXBase.GetType() == TOX_INDEX ? 2 : 1;
             OUString aString;
             SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
-                aString, SwGetPoolIdFromName::TxtColl, true);
+                aString, SwGetPoolIdFromName::TxtColl);
             aForm.SetTemplate(nLPos + pEntry->nWID - WID_PARA_LEV1, aString );
         }
         break;
@@ -1087,8 +1087,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 SwStyleNameMapper::FillProgName(
                         pTOXBase->GetMainEntryCharStyle(),
                         aString,
-                        SwGetPoolIdFromName::ChrFmt,
-                        true);
+                        SwGetPoolIdFromName::ChrFmt);
                 aRet <<= aString;
             }
             break;
@@ -1128,7 +1127,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 //Header steht an Pos 0
                 OUString aString;
                 SwStyleNameMapper::FillProgName(rForm.GetTemplate( 0 ), aString,
-                        SwGetPoolIdFromName::TxtColl, true );
+                        SwGetPoolIdFromName::TxtColl );
                 aRet <<= aString;
             }
             break;
@@ -1138,8 +1137,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 SwStyleNameMapper::FillProgName(
                         rForm.GetTemplate( 1 ),
                         aString,
-                        SwGetPoolIdFromName::TxtColl,
-                        true);
+                        SwGetPoolIdFromName::TxtColl);
                 aRet <<= aString;
             }
             break;
@@ -1160,8 +1158,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 SwStyleNameMapper::FillProgName(
                         rForm.GetTemplate(nLPos + pEntry->nWID - WID_PARA_LEV1),
                         aString,
-                        SwGetPoolIdFromName::TxtColl,
-                        true);
+                        SwGetPoolIdFromName::TxtColl);
                 aRet <<= aString;
             }
             break;
@@ -2625,7 +2622,7 @@ SwXDocumentIndex::StyleAccess_Impl::replaceByIndex(
             sSetStyles += OUStringLiteral1(TOX_STYLE_DELIMITER);
         }
         SwStyleNameMapper::FillUIName(pStyles[i], aString,
-                SwGetPoolIdFromName::TxtColl, true);
+                SwGetPoolIdFromName::TxtColl);
         sSetStyles +=  aString;
     }
     rTOXBase.SetStyleNames(sSetStyles, static_cast<sal_uInt16>(nIndex));
@@ -2661,8 +2658,7 @@ SwXDocumentIndex::StyleAccess_Impl::getByIndex(sal_Int32 nIndex)
         SwStyleNameMapper::FillProgName(
             rStyles.getToken(0, TOX_STYLE_DELIMITER, nPos),
             aString,
-            SwGetPoolIdFromName::TxtColl,
-            true);
+            SwGetPoolIdFromName::TxtColl);
         pStyles[i] = aString;
     }
     uno::Any aRet(&aStyles, cppu::UnoType<uno::Sequence<OUString>>::get());
@@ -2785,8 +2781,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
                 SwStyleNameMapper::FillUIName(
                         lcl_AnyToString(pProperties[j].Value),
                         sCharStyleName,
-                        SwGetPoolIdFromName::ChrFmt,
-                        true);
+                        SwGetPoolIdFromName::ChrFmt);
                 aToken.sCharStyleName = sCharStyleName;
                 aToken.nPoolId = SwStyleNameMapper::GetPoolIdFromUIName (
                     sCharStyleName, SwGetPoolIdFromName::ChrFmt );
@@ -2956,8 +2951,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
         SwStyleNameMapper::FillProgName(
                         aToken.sCharStyleName,
                         aProgCharStyle,
-                        SwGetPoolIdFromName::ChrFmt,
-                        true );
+                        SwGetPoolIdFromName::ChrFmt);
         switch(aToken.eTokenType)
         {
             case TOKEN_ENTRY_NO:

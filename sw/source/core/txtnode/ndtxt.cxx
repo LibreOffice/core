@@ -825,10 +825,10 @@ void SwTextNode::NewAttrSet( SwAttrPool& rPool )
     const SwFormatColl* pAnyFormatColl = &GetAnyFormatColl();
     const SwFormatColl* pFormatColl = GetFormatColl();
     OUString sVal;
-    SwStyleNameMapper::FillProgName( pAnyFormatColl->GetName(), sVal, SwGetPoolIdFromName::TxtColl, true );
+    SwStyleNameMapper::FillProgName( pAnyFormatColl->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
     SfxStringItem aAnyFormatColl( RES_FRMATR_STYLE_NAME, sVal );
     if ( pFormatColl != pAnyFormatColl )
-        SwStyleNameMapper::FillProgName( pFormatColl->GetName(), sVal, SwGetPoolIdFromName::TxtColl, true );
+        SwStyleNameMapper::FillProgName( pFormatColl->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
     SfxStringItem aFormatColl( RES_FRMATR_CONDITIONAL_STYLE_NAME, sVal );
     aNewAttrSet.Put( aAnyFormatColl );
     aNewAttrSet.Put( aFormatColl );
@@ -2944,8 +2944,7 @@ static void Replace0xFF(
     SwTextNode const& rNode,
     OUStringBuffer & rText,
     sal_Int32 & rTextStt,
-    sal_Int32 nEndPos,
-    bool const bExpandFields )
+    sal_Int32 nEndPos )
 {
     if (rNode.GetpSwpHints())
     {
@@ -2964,37 +2963,11 @@ static void Replace0xFF(
                     case RES_TXTATR_FIELD:
                     case RES_TXTATR_ANNOTATION:
                         rText.remove(nPos, 1);
-                        if( bExpandFields )
-                        {
-                            const OUString aExpand(
-                                static_txtattr_cast<SwTextField const*>(pAttr)->GetFormatField().GetField()->ExpandField(true));
-                            rText.insert(nPos, aExpand);
-                            nPos = nPos + aExpand.getLength();
-                            nEndPos = nEndPos + aExpand.getLength();
-                            rTextStt = rTextStt - aExpand.getLength();
-                        }
                         ++rTextStt;
                         break;
 
                     case RES_TXTATR_FTN:
                         rText.remove(nPos, 1);
-                        if( bExpandFields )
-                        {
-                            const SwFormatFootnote& rFootnote = pAttr->GetFootnote();
-                            OUString sExpand;
-                            if( !rFootnote.GetNumStr().isEmpty() )
-                                sExpand = rFootnote.GetNumStr();
-                            else if( rFootnote.IsEndNote() )
-                                sExpand = rNode.GetDoc()->GetEndNoteInfo().aFormat.
-                                                GetNumStr( rFootnote.GetNumber() );
-                            else
-                                sExpand = rNode.GetDoc()->GetFootnoteInfo().aFormat.
-                                                GetNumStr( rFootnote.GetNumber() );
-                            rText.insert(nPos, sExpand);
-                            nPos = nPos + sExpand.getLength();
-                            nEndPos = nEndPos + sExpand.getLength();
-                            rTextStt = rTextStt - sExpand.getLength();
-                        }
                         ++rTextStt;
                         break;
 
@@ -3299,13 +3272,13 @@ OUString SwTextNode::GetRedlineText() const
             if( nIdxEnd < nEnd ) nEnd = nIdxEnd;
             const sal_Int32 nDelCnt = nEnd - nStt;
             aText.remove(nStt - nTextStt, nDelCnt);
-            Replace0xFF(*this, aText, nTextStt, nStt - nTextStt, false/*bExpandFields*/);
+            Replace0xFF(*this, aText, nTextStt, nStt - nTextStt);
             nTextStt += nDelCnt;
         }
         else if( nStt >= nIdxEnd )
             break;
     }
-    Replace0xFF(*this, aText, nTextStt, aText.getLength(), false/*bExpandFields*/);
+    Replace0xFF(*this, aText, nTextStt, aText.getLength());
 
     return aText.makeStringAndClear();
 }

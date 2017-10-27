@@ -1593,10 +1593,9 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
     return pResult;
 }
 
-bool SwDoc::GotoPrevNum( SwPosition& rPos, bool bOverUpper,
-                            sal_uInt8* pUpper, sal_uInt8* pLower  )
+bool SwDoc::GotoPrevNum( SwPosition& rPos, bool bOverUpper  )
 {
-    return ::lcl_GotoNextPrevNum( rPos, false, bOverUpper, pUpper, pLower );
+    return ::lcl_GotoNextPrevNum( rPos, false, bOverUpper, nullptr, nullptr );
 }
 
 bool SwDoc::NumUpDown( const SwPaM& rPam, bool bDown )

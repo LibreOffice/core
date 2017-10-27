@@ -546,10 +546,10 @@ const OUString& SwStyleNameMapper::GetProgName(
 // Get the programmatic name from the UI name in rName and put it into rFillName
 void SwStyleNameMapper::FillProgName(
         const OUString& rName, OUString& rFillName,
-        SwGetPoolIdFromName const eFlags, bool const bDisambiguate)
+        SwGetPoolIdFromName const eFlags)
 {
     sal_uInt16 nId = GetPoolIdFromUIName ( rName, eFlags );
-    if ( bDisambiguate && nId == USHRT_MAX )
+    if ( nId == USHRT_MAX )
     {
         // rName isn't in our UI name table...check if it's in the programmatic one
         nId = GetPoolIdFromProgName ( rName, eFlags );
@@ -578,10 +578,10 @@ void SwStyleNameMapper::FillProgName(
 // Get the UI name from the programmatic name in rName and put it into rFillName
 void SwStyleNameMapper::FillUIName(
         const OUString& rName, OUString& rFillName,
-        SwGetPoolIdFromName const eFlags, bool const bDisambiguate)
+        SwGetPoolIdFromName const eFlags)
 {
     sal_uInt16 nId = GetPoolIdFromProgName ( rName, eFlags );
-    if ( bDisambiguate && nId == USHRT_MAX )
+    if ( nId == USHRT_MAX )
     {
         rFillName = rName;
         // rName isn't in our Prog name table...check if it has a " (user)" suffix, if so remove it

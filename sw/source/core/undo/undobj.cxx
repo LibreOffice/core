@@ -705,7 +705,7 @@ SwUndoSaveContent::~SwUndoSaveContent()
 // If pEndNdIdx is given, Undo/Redo calls -Ins/DelFly. In that case the whole
 // section should be moved.
 void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
-                    sal_uLong* pEndNdIdx, sal_Int32* pEndCntIdx )
+                    sal_uLong* pEndNdIdx )
 {
     SwDoc& rDoc = *rPaM.GetDoc();
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
@@ -734,8 +734,6 @@ void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
     }
     if( pEndNdIdx )
         *pEndNdIdx = aPos.nNode.GetIndex();
-    if( pEndCntIdx )
-        *pEndCntIdx = aPos.nContent.GetIndex();
 
     // old position
     aPos.nNode = nTmpMvNode;
@@ -745,7 +743,7 @@ void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
 
 void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
                             SwPosition& rInsPos,
-                            const sal_uLong* pEndNdIdx, const sal_Int32* pEndCntIdx )
+                            const sal_uLong* pEndNdIdx )
 {
     // here comes the recovery
     SwNodes & rNds = rDoc.GetUndoManager().GetUndoNodes();
@@ -766,9 +764,6 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
     SwTextNode* pTextNd = aPaM.GetNode().GetTextNode();
     if (!pEndNdIdx && pTextNd)
     {
-        if( pEndCntIdx )
-            aPaM.GetPoint()->nContent.Assign( pTextNd, *pEndCntIdx );
-
         aPaM.SetMark();
         aPaM.GetPoint()->nNode = nNodeIdx;
         aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 0);

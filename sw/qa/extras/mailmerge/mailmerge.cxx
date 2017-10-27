@@ -104,7 +104,7 @@ public:
         DBuriMap::const_iterator pos = aDBuriMap.find( aURI );
         if (pos == aDBuriMap.end())
         {
-            aDBName = SwDBManager::LoadAndRegisterDataSource( aURI, nullptr, &aWorkDir );
+            aDBName = SwDBManager::LoadAndRegisterDataSource( aURI, &aWorkDir );
             aDBuriMap.insert( std::pair< OUString, OUString >( aURI, aDBName ) );
             std::cout << "New datasource name: '" << aDBName << "'" << std::endl;
         }

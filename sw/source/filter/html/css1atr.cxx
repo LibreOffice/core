@@ -147,8 +147,7 @@ static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
                                         const SvxULSpaceItem *pULSpace,
                                         const SvxLRSpaceItem *pLRSpace );
 static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
-                                        const SfxItemSet& rItemSet,
-                                        bool bDeep );
+                                        const SfxItemSet& rItemSet );
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
                                  Css1Background nMode,
                                  const OUString *pGraphicName );
@@ -1702,7 +1701,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
                                        true );
     }
 
-    OutCSS1_SvxULSpace_SvxLRSpace( rWrt, aItemSet, false );
+    OutCSS1_SvxULSpace_SvxLRSpace( rWrt, aItemSet );
 
     // If for a Pseudo-Selector no Property had been set, we still
     // have to export something, so that the corresponding template is
@@ -2988,16 +2987,15 @@ static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
 }
 
 static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
-                                        const SfxItemSet& rItemSet,
-                                        bool bDeep )
+                                        const SfxItemSet& rItemSet )
 {
     const SvxULSpaceItem *pULSpace = nullptr;
     const SvxLRSpaceItem *pLRSpace = nullptr;
     const SfxPoolItem *pItem;
-    if( SfxItemState::SET == rItemSet.GetItemState( RES_LR_SPACE, bDeep, &pItem ) )
+    if( SfxItemState::SET == rItemSet.GetItemState( RES_LR_SPACE, false/*bDeep*/, &pItem ) )
         pLRSpace = static_cast<const SvxLRSpaceItem *>(pItem);
 
-    if( SfxItemState::SET == rItemSet.GetItemState( RES_UL_SPACE, bDeep, &pItem ) )
+    if( SfxItemState::SET == rItemSet.GetItemState( RES_UL_SPACE, false/*bDeep*/, &pItem ) )
         pULSpace = static_cast<const SvxULSpaceItem *>(pItem);
 
     if( pLRSpace || pULSpace )

@@ -380,7 +380,7 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 if( pAny )
                 {
                     OUString sVal;
-                    SwStyleNameMapper::FillProgName(pFormat->GetName(), sVal, SwGetPoolIdFromName::TxtColl, true );
+                    SwStyleNameMapper::FillProgName(pFormat->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
                     *pAny <<= sVal;
                 }
             }
@@ -917,7 +917,7 @@ void GetCurPageStyle(SwPaM const & rPaM, OUString &rString)
         if(pPage)
         {
             SwStyleNameMapper::FillProgName(pPage->GetPageDesc()->GetName(),
-                rString, SwGetPoolIdFromName::PageDesc, true);
+                rString, SwGetPoolIdFromName::PageDesc);
         }
     }
 }
