@@ -51,12 +51,13 @@
 #include <o3tl/make_unique.hxx>
 
 
-void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep )
+void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep, sal_Unicode& rcDecimalSepAlt )
 {
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rData = aSysLocale.GetLocaleData();
     rcDecimalSep = rData.getNumDecimalSep()[0];
     rcThousandSep = rData.getNumThousandSep()[0];
+    rcDecimalSepAlt = rData.getNumDecimalSepAlt().toChar();
 }
 
 
@@ -84,18 +85,22 @@ bool ImpStrChr( const sal_Unicode* p, sal_Unicode c )
 ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
                   sal_uInt16* pLen, bool bAllowIntntl, bool bOnlyIntntl )
 {
-    sal_Unicode cIntntlDecSep, cIntntlGrpSep;
+    sal_Unicode cIntntlDecSep, cIntntlGrpSep, cIntntlDecSepAlt;
     sal_Unicode cNonIntntlDecSep = '.';
     if( bAllowIntntl || bOnlyIntntl )
     {
-        ImpGetIntntlSep( cIntntlDecSep, cIntntlGrpSep );
+        ImpGetIntntlSep( cIntntlDecSep, cIntntlGrpSep, cIntntlDecSepAlt );
         if( bOnlyIntntl )
             cNonIntntlDecSep = cIntntlDecSep;
+        // Ensure that the decimal separator alternative is really one.
+        if (cIntntlDecSepAlt && cIntntlDecSepAlt == cNonIntntlDecSep)
+            cIntntlDecSepAlt = 0;
     }
     else
     {
         cIntntlDecSep = cNonIntntlDecSep;
         cIntntlGrpSep = 0;  // no group separator accepted in non-i18n
+        cIntntlDecSepAlt = 0;
     }
 
     const sal_Unicode* const pStart = rWSrc.getStr();
@@ -113,7 +118,8 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
         bMinus = true;
     }
     if( rtl::isAsciiDigit( *p ) || ((*p == cNonIntntlDecSep || *p == cIntntlDecSep ||
-                    (cIntntlDecSep && *p == cIntntlGrpSep)) && rtl::isAsciiDigit( *(p+1) )))
+                    (cIntntlDecSep && *p == cIntntlGrpSep) || (cIntntlDecSepAlt && *p == cIntntlDecSepAlt)) &&
+                rtl::isAsciiDigit( *(p+1) )))
     {
         short exp = 0;
         short decsep = 0;
@@ -123,6 +129,8 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
         aSearchStr.append(cNonIntntlDecSep);
         if( cIntntlDecSep != cNonIntntlDecSep )
             aSearchStr.append(cIntntlDecSep);
+        if( cIntntlDecSepAlt && cIntntlDecSepAlt != cNonIntntlDecSep )
+            aSearchStr.append(cIntntlDecSepAlt);
         if( bOnlyIntntl )
             aSearchStr.append(cIntntlGrpSep);
         const sal_Unicode* const pSearchStr = aSearchStr.getStr();
@@ -135,7 +143,7 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
                 p++;
                 continue;
             }
-            if( *p == cNonIntntlDecSep || *p == cIntntlDecSep )
+            if( *p == cNonIntntlDecSep || *p == cIntntlDecSep || (cIntntlDecSepAlt && *p == cIntntlDecSepAlt) )
             {
                 // Use the separator that is passed to stringToDouble()
                 aBuf[ p - pStart ] = cIntntlDecSep;
@@ -318,8 +326,8 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
     short nDec;                         // number of positions before decimal point
     int i;
 
-    sal_Unicode cDecimalSep, cThousandSep;
-    ImpGetIntntlSep( cDecimalSep, cThousandSep );
+    sal_Unicode cDecimalSep, cThousandSep, cDecimalSepAlt;
+    ImpGetIntntlSep( cDecimalSep, cThousandSep, cDecimalSepAlt );
     if( cForceThousandSep )
         cThousandSep = cForceThousandSep;
 
@@ -429,8 +437,8 @@ void ImpCvtNum( double nNum, short nPrec, OUString& rRes, bool bCoreString )
     char *q;
     char cBuf[ 40 ], *p = cBuf;
 
-    sal_Unicode cDecimalSep, cThousandSep;
-    ImpGetIntntlSep( cDecimalSep, cThousandSep );
+    sal_Unicode cDecimalSep, cThousandSep, cDecimalSepAlt;
+    ImpGetIntntlSep( cDecimalSep, cThousandSep, cDecimalSepAlt );
     if( bCoreString )
         cDecimalSep = '.';
 
@@ -468,13 +476,15 @@ bool ImpConvStringExt( OUString& rSrc, SbxDataType eTargetType )
         case SbxDOUBLE:
         case SbxCURRENCY:
         {
-            sal_Unicode cDecimalSep, cThousandSep;
-            ImpGetIntntlSep( cDecimalSep, cThousandSep );
+            sal_Unicode cDecimalSep, cThousandSep, cDecimalSepAlt;
+            ImpGetIntntlSep( cDecimalSep, cThousandSep, cDecimalSepAlt );
             aNewString = rSrc;
 
-            if( cDecimalSep != '.' )
+            if( cDecimalSep != '.' || (cDecimalSepAlt && cDecimalSepAlt != '.') )
             {
                 sal_Int32 nPos = aNewString.indexOf( cDecimalSep );
+                if( nPos == -1 && cDecimalSepAlt )
+                    nPos = aNewString.indexOf( cDecimalSepAlt );
                 if( nPos != -1 )
                 {
                     sal_Unicode* pStr = const_cast<sal_Unicode*>(aNewString.getStr());
