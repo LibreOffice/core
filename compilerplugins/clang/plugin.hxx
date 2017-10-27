@@ -56,12 +56,11 @@ public:
     enum { isPPCallback = false };
     // Returns location right after the end of the token that starts at the given location.
     SourceLocation locationAfterToken( SourceLocation location );
+protected:
+    DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation()) const;
     bool ignoreLocation( SourceLocation loc );
     bool ignoreLocation( const Decl* decl );
     bool ignoreLocation( const Stmt* stmt );
-
-protected:
-    DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation()) const;
     CompilerInstance& compiler;
     PluginHandler& handler;
     /**
