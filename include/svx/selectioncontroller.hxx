@@ -33,6 +33,7 @@ class SfxStyleSheet;
 class SdrPage;
 class SdrModel;
 class Point;
+class FontList;
 
 namespace sdr
 {
@@ -78,6 +79,8 @@ public:
     virtual bool setCursorLogicPosition(const Point& rPosition, bool bPoint);
     /// Get the position of the first and the last selected cell.
     virtual void getSelectedCells(table::CellPos& rFirstPos, table::CellPos& rLastPos);
+    /// Changes the font (grow/shrink) according to the input parameters.
+    virtual bool ChangeFontSize(bool bGrow, const FontList* pFontList);
 };
 
 }
