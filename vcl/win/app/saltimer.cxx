@@ -133,7 +133,7 @@ void CALLBACK SalTimerProc(PVOID data, BOOLEAN)
 {
     __try
     {
-        WinSalTimer *pTimer = reinterpret_cast<WinSalTimer*>( data );
+        WinSalTimer *pTimer = static_cast<WinSalTimer*>( data );
         BOOL const ret = PostMessageW(
             GetSalData()->mpInstance->mhComWnd, SAL_MSG_TIMER_CALLBACK,
             static_cast<WPARAM>(pTimer->GetNextEventVersion()), 0 );
