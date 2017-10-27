@@ -30,7 +30,7 @@
 
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
-#include <com/sun/star/i18n/LocaleData.hpp>
+#include <com/sun/star/i18n/LocaleData2.hpp>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
@@ -85,7 +85,7 @@ LocaleDataWrapper::LocaleDataWrapper(
             )
         :
         m_xContext( rxContext ),
-        xLD( LocaleData::create(rxContext) ),
+        xLD( LocaleData2::create(rxContext) ),
         maLanguageTag( rLanguageTag ),
         bLocaleDataItemValid( false ),
         bReservedWordValid( false ),
@@ -99,7 +99,7 @@ LocaleDataWrapper::LocaleDataWrapper(
             )
         :
         m_xContext( comphelper::getProcessComponentContext() ),
-        xLD( LocaleData::create(m_xContext) ),
+        xLD( LocaleData2::create(m_xContext) ),
         maLanguageTag( rLanguageTag ),
         bLocaleDataItemValid( false ),
         bReservedWordValid( false ),
