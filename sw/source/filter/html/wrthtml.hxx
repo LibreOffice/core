@@ -541,8 +541,7 @@ public:
                                                bool bCheckDropCap );
 
     static void GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
-                                      const SdrObject *pObj,
-                                      bool bSetDefaults );
+                                      const SdrObject *pObj );
 
     static sal_uInt16 GetDefListLvl( const OUString& rNm, sal_uInt16 nPoolId );
 

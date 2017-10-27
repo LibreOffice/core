@@ -199,8 +199,7 @@ bool SwObjectFormatter::FormatObjsAtFrame( SwFrame& _rAnchorFrame,
 */
 bool SwObjectFormatter::FormatObj( SwAnchoredObject& _rAnchoredObj,
                                    SwFrame* _pAnchorFrame,
-                                   const SwPageFrame* _pPageFrame,
-                                   SwLayAction* _pLayAction )
+                                   const SwPageFrame* _pPageFrame )
 {
     bool bSuccess( true );
 
@@ -214,7 +213,7 @@ bool SwObjectFormatter::FormatObj( SwAnchoredObject& _rAnchoredObj,
 
     // create corresponding object formatter
     SwObjectFormatter* pObjFormatter =
-        SwObjectFormatter::CreateObjFormatter( rAnchorFrame, rPageFrame, _pLayAction );
+        SwObjectFormatter::CreateObjFormatter( rAnchorFrame, rPageFrame, nullptr/*_pLayAction*/ );
 
     if ( pObjFormatter )
     {

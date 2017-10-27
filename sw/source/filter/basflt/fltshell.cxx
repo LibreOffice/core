@@ -484,11 +484,10 @@ static bool MakePoint(const SwFltStackEntry& rEntry, SwDoc* pDoc,
 // it adheres to certain restrictions on bookmarks in tables (cannot
 // span more than one cell)
 static bool MakeBookRegionOrPoint(const SwFltStackEntry& rEntry, SwDoc* pDoc,
-                    SwPaM& rRegion, bool bCheck )
+                    SwPaM& rRegion )
 {
-    if (rEntry.MakeRegion(pDoc, rRegion, bCheck ))
+    if (rEntry.MakeRegion(pDoc, rRegion, true/*bCheck*/ ))
     {
-        // sal_Bool b1 = rNds[rRegion.GetPoint()->nNode]->FindTableNode() != 0;
         if (rRegion.GetPoint()->nNode.GetNode().FindTableBoxStartNode()
               != rRegion.GetMark()->nNode.GetNode().FindTableBoxStartNode())
         {
@@ -633,7 +632,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             if ( ( !IsFlagSet(HYPO) || IsFlagSet(BOOK_AND_REF) ) &&
                  !rEntry.bConsumedByField )
             {
-                MakeBookRegionOrPoint(rEntry, pDoc, aRegion, true);
+                MakeBookRegionOrPoint(rEntry, pDoc, aRegion);
                 // #i120879# - create a cross reference heading bookmark if appropriate.
                 const IDocumentMarkAccess::MarkType eBookmarkType =
                     ( pB->IsTOCBookmark() &&
@@ -646,7 +645,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         break;
     case RES_FLTR_ANNOTATIONMARK:
         {
-            if (MakeBookRegionOrPoint(rEntry, pDoc, aRegion, true))
+            if (MakeBookRegionOrPoint(rEntry, pDoc, aRegion))
             {
                 SwTextNode const*const pTextNode(
                         aRegion.End()->nNode.GetNode().GetTextNode());
@@ -678,7 +677,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         break;
     case RES_FLTR_RDFMARK:
         {
-            if (MakeBookRegionOrPoint(rEntry, pDoc, aRegion, true))
+            if (MakeBookRegionOrPoint(rEntry, pDoc, aRegion))
             {
                 SwFltRDFMark* pMark = static_cast<SwFltRDFMark*>(rEntry.pAttr.get());
                 if (aRegion.GetNode().IsTextNode())

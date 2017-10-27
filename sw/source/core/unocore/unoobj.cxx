@@ -221,7 +221,7 @@ lcl_setCharStyle(SwDoc *const pDoc, const uno::Any & rValue, SfxItemSet & rSet)
         }
         OUString sStyle;
         SwStyleNameMapper::FillUIName(uStyle, sStyle,
-                SwGetPoolIdFromName::ChrFmt, true);
+                SwGetPoolIdFromName::ChrFmt);
         SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
             pDocSh->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char));
         if (!pStyle)
@@ -269,7 +269,7 @@ SwUnoCursorHelper::SetTextFormatColl(const uno::Any & rAny, SwPaM & rPaM)
     rAny >>= uStyle;
     OUString sStyle;
     SwStyleNameMapper::FillUIName(uStyle, sStyle,
-            SwGetPoolIdFromName::TxtColl, true );
+            SwGetPoolIdFromName::TxtColl );
     SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
             pDocSh->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Para));
     if (!pStyle)
@@ -310,7 +310,7 @@ SwUnoCursorHelper::SetPageDesc(
     }
     OUString sDescName;
     SwStyleNameMapper::FillUIName(uDescName, sDescName,
-            SwGetPoolIdFromName::PageDesc, true);
+            SwGetPoolIdFromName::PageDesc);
     if (!pNewDesc->GetPageDesc() ||
         (pNewDesc->GetPageDesc()->GetName() != sDescName))
     {
@@ -406,7 +406,7 @@ lcl_setDropcapCharStyle(SwPaM const & rPam, SfxItemSet & rItemSet,
     }
     OUString sStyle;
     SwStyleNameMapper::FillUIName(uStyle, sStyle,
-            SwGetPoolIdFromName::ChrFmt, true);
+            SwGetPoolIdFromName::ChrFmt);
     SwDoc *const pDoc = rPam.GetDoc();
     //default character style must not be set as default format
     SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
@@ -454,7 +454,7 @@ lcl_setRubyCharstyle(SfxItemSet & rItemSet, uno::Any const& rValue)
     }
     OUString sStyle;
     SwStyleNameMapper::FillUIName(sTmp, sStyle,
-            SwGetPoolIdFromName::ChrFmt, true );
+            SwGetPoolIdFromName::ChrFmt);
     pRuby->SetCharFormatName(sStyle);
     pRuby->SetCharFormatId(0);
     if (!sStyle.isEmpty())
@@ -1749,13 +1749,12 @@ uno::Any SwUnoCursorHelper::GetPropertyValue(
 void SwUnoCursorHelper::SetPropertyValue(
     SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
     const OUString& rPropertyName,
-    const uno::Any& rValue,
-    const SetAttrMode nAttrMode)
+    const uno::Any& rValue)
 {
     uno::Sequence< beans::PropertyValue > aValues(1);
     aValues[0].Name = rPropertyName;
     aValues[0].Value = rValue;
-    SetPropertyValues(rPaM, rPropSet, aValues, nAttrMode);
+    SetPropertyValues(rPaM, rPropSet, aValues, SetAttrMode::DEFAULT);
 }
 
 // FN_UNO_PARA_STYLE is known to set attributes for nodes, inside
@@ -1773,7 +1772,7 @@ inline bool propertyCausesSideEffectsInNodes(sal_uInt16 nWID)
 void SwUnoCursorHelper::SetPropertyValues(
     SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
     const uno::Sequence< beans::PropertyValue > &rPropertyValues,
-    const SetAttrMode nAttrMode, const bool bTableMode)
+    const SetAttrMode nAttrMode)
 {
     if (!rPropertyValues.getLength())
         return;
@@ -1834,7 +1833,7 @@ void SwUnoCursorHelper::SetPropertyValues(
                 rPropSet.setPropertyValue(*pEntry, rValue, aItemSet);
 
             if (i + 1 == aEntries.size() || bPropertyCausesSideEffectsInNodes)
-                SwUnoCursorHelper::SetCursorAttr(rPaM, aItemSet, nAttrMode, bTableMode);
+                SwUnoCursorHelper::SetCursorAttr(rPaM, aItemSet, nAttrMode, false/*bTableMode*/);
 
             bPreviousPropertyCausesSideEffectsInNodes = bPropertyCausesSideEffectsInNodes;
         }

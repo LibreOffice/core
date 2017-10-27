@@ -347,7 +347,7 @@ static const SwBoxAutoFormat* lcl_FindCellStyle(SwDoc& rDoc, const OUString& rNa
                     const sal_uInt32 nBoxIndex = aTableTemplateMap[nBoxFormat];
                     const SwBoxAutoFormat& rBoxFormat = rTableStyle.GetBoxFormat(nBoxIndex);
                     OUString sBoxFormatName;
-                    SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatName, SwGetPoolIdFromName::CellStyle, true);
+                    SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatName, SwGetPoolIdFromName::CellStyle);
                     sBoxFormatName += rTableStyle.GetTableTemplateCellSubName(rBoxFormat);
                     if (rName == sBoxFormatName)
                         pFormat = &rBoxFormat;
@@ -3063,7 +3063,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 const sal_uInt32 nBoxIndex = aTableTemplateMap[nBoxFormat];
                 const SwBoxAutoFormat& rBoxFormat = rTableStyle.GetBoxFormat(nBoxIndex);
                 OUString sBoxFormatName;
-                SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatName, SwGetPoolIdFromName::CellStyle, true);
+                SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatName, SwGetPoolIdFromName::CellStyle);
                 sBoxFormatName += rTableStyle.GetTableTemplateCellSubName(rBoxFormat);
                 aLst.Append( cCELLSTYLE, sBoxFormatName );
             }

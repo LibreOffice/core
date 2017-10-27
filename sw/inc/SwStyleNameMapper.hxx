@@ -137,13 +137,13 @@ public:
     // This gets the UI Name from the programmatic name
     static const OUString& GetUIName(const OUString& rName, SwGetPoolIdFromName);
     static         void FillUIName(const OUString& rName, OUString& rFillName,
-                            SwGetPoolIdFromName, bool bDisambiguate);
+                            SwGetPoolIdFromName);
 
     // Get the programmatic Name from the UI name
     static const OUString& GetProgName(const OUString& rName,
                                        SwGetPoolIdFromName);
     static         void FillProgName(const OUString& rName, OUString& rFillName,
-                            SwGetPoolIdFromName, bool bDisambiguate);
+                            SwGetPoolIdFromName);
 
     // This gets the UI Name from the Pool ID
     SW_DLLPUBLIC static void FillUIName(sal_uInt16 nId, OUString& rFillName);

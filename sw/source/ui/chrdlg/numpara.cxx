@@ -345,22 +345,18 @@ IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleHdl_Impl, Button*, void)
 
 // Internal: Perform functions through the Dispatcher
 bool SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(
-    sal_uInt16 nId, const OUString &rStr, const OUString& rRefStr, SfxStyleFamily nFamily,
-    sal_uInt16 nMask)
+    sal_uInt16 nId, const OUString &rStr, const OUString& rRefStr, SfxStyleFamily nFamily)
 {
 
     SfxDispatcher &rDispatcher = *SfxViewShell::Current()->GetDispatcher();
     SfxStringItem aItem(nId, rStr);
     SfxUInt16Item aFamily(SID_STYLE_FAMILY, (sal_uInt16)nFamily);
-    SfxUInt16Item aMask( SID_STYLE_MASK, nMask );
     SfxStringItem aRefName( SID_STYLE_REFERENCE, rRefStr );
     const SfxPoolItem* pItems[ 6 ];
     sal_uInt16 nCount = 0;
     if( !rStr.isEmpty() )
         pItems[ nCount++ ] = &aItem;
     pItems[ nCount++ ] = &aFamily;
-    if( nMask )
-        pItems[ nCount++ ] = &aMask;
     if( !rRefStr.isEmpty() )
         pItems[ nCount++ ] = &aRefName;
 

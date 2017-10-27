@@ -924,21 +924,15 @@ static bool lcl_SaveDoc(
 
 static void lcl_PreparePrinterOptions(
     const uno::Sequence< beans::PropertyValue >& rInPrintOptions,
-    const bool bVisibleMonitor,
     uno::Sequence< beans::PropertyValue >& rOutPrintOptions)
 {
     // printing should be done synchronously otherwise the document
     // might already become invalid during the process
 
-    const sal_Int32 nOffset = !bVisibleMonitor ? 2 : 1;
+    const sal_Int32 nOffset = 1;
     rOutPrintOptions.realloc( nOffset );
     rOutPrintOptions[ 0 ].Name = "Wait";
     rOutPrintOptions[ 0 ].Value <<= true;
-    if( !bVisibleMonitor )
-    {
-        rOutPrintOptions[ 1 ].Name = "MonitorVisible";
-        rOutPrintOptions[ 1 ].Value <<= false;
-    }
 
     // copy print options
     const beans::PropertyValue* pOptions = rInPrintOptions.getConstArray();
@@ -1613,7 +1607,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         {
             // print the target document
             uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
-            lcl_PreparePrinterOptions( rMergeDescriptor.aPrintOptions, true, aOptions );
+            lcl_PreparePrinterOptions( rMergeDescriptor.aPrintOptions, aOptions );
             pTargetView->ExecPrint( aOptions, bIsMergeSilent, false/*bPrintAsync*/ );
         }
     }
@@ -2836,12 +2830,11 @@ void SwDBManager::StoreEmbeddedDataSource(const uno::Reference<frame::XStorable>
     xStorable->storeAsURL(sTmpName, aSequence);
 }
 
-OUString SwDBManager::LoadAndRegisterDataSource(const OUString &rURI, const OUString *pPrefix, const OUString *pDestDir,
-                                                const uno::Reference< beans::XPropertySet > *pSettings)
+OUString SwDBManager::LoadAndRegisterDataSource(const OUString &rURI, const OUString *pDestDir)
 {
     uno::Any aURLAny;
     DBConnURITypes type = GetDBunoURI( rURI, aURLAny );
-    return LoadAndRegisterDataSource( type, aURLAny, pSettings, rURI, pPrefix, pDestDir );
+    return LoadAndRegisterDataSource( type, aURLAny, nullptr, rURI, nullptr, pDestDir );
 }
 
 void SwDBManager::RevokeDataSource(const OUString& rName)

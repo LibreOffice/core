@@ -575,7 +575,7 @@ void SwFEShell::GetTabCols_( SwTabCols &rToFill, const SwFrame *pBox )
     }
     if ( !pLastCols )
     {
-        SwDoc::GetTabCols( rToFill, nullptr, static_cast<const SwCellFrame*>(pBox) );
+        SwDoc::GetTabCols( rToFill, static_cast<const SwCellFrame*>(pBox) );
 
         pLastCols   = new SwTabCols( rToFill );
         g_pColumnCacheLastTable  = pTab->GetTable();

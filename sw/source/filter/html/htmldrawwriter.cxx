@@ -70,8 +70,7 @@ const SdrObject *SwHTMLWriter::GetMarqueeTextObj( const SwDrawFrameFormat& rForm
 }
 
 void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
-                                         const SdrObject *pObj,
-                                         bool bSetDefaults )
+                                         const SdrObject *pObj )
 {
     // get the edit script::Engine attributes from object
     SfxItemSet rObjItemSet = pObj->GetMergedItemSet();
@@ -86,42 +85,39 @@ void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
         bool bSet = SfxItemState::SET == rObjItemSet.GetItemState( nEEWhich, false,
                                                               &pEEItem );
 
-        if( bSet || bSetDefaults )
+        sal_uInt16 nSwWhich = 0;
+        switch( nEEWhich )
         {
-            sal_uInt16 nSwWhich = 0;
-            switch( nEEWhich )
-            {
-            case EE_CHAR_COLOR:         nSwWhich = RES_CHRATR_COLOR;        break;
-            case EE_CHAR_STRIKEOUT:     nSwWhich = RES_CHRATR_CROSSEDOUT;   break;
-            case EE_CHAR_ESCAPEMENT:    nSwWhich = RES_CHRATR_ESCAPEMENT;   break;
-            case EE_CHAR_FONTINFO:      nSwWhich = RES_CHRATR_FONT;         break;
-            case EE_CHAR_FONTINFO_CJK:  nSwWhich = RES_CHRATR_CJK_FONT;     break;
-            case EE_CHAR_FONTINFO_CTL:  nSwWhich = RES_CHRATR_CTL_FONT;     break;
-            case EE_CHAR_FONTHEIGHT:    nSwWhich = RES_CHRATR_FONTSIZE;     break;
-            case EE_CHAR_FONTHEIGHT_CJK:nSwWhich = RES_CHRATR_CJK_FONTSIZE; break;
-            case EE_CHAR_FONTHEIGHT_CTL:nSwWhich = RES_CHRATR_CTL_FONTSIZE; break;
-            case EE_CHAR_KERNING:       nSwWhich = RES_CHRATR_KERNING;      break;
-            case EE_CHAR_ITALIC:        nSwWhich = RES_CHRATR_POSTURE;      break;
-            case EE_CHAR_ITALIC_CJK:    nSwWhich = RES_CHRATR_CJK_POSTURE;  break;
-            case EE_CHAR_ITALIC_CTL:    nSwWhich = RES_CHRATR_CTL_POSTURE;  break;
-            case EE_CHAR_UNDERLINE:     nSwWhich = RES_CHRATR_UNDERLINE;    break;
-            case EE_CHAR_WEIGHT:        nSwWhich = RES_CHRATR_WEIGHT;       break;
-            case EE_CHAR_WEIGHT_CJK:    nSwWhich = RES_CHRATR_CJK_WEIGHT;   break;
-            case EE_CHAR_WEIGHT_CTL:    nSwWhich = RES_CHRATR_CTL_WEIGHT;   break;
-            }
+        case EE_CHAR_COLOR:         nSwWhich = RES_CHRATR_COLOR;        break;
+        case EE_CHAR_STRIKEOUT:     nSwWhich = RES_CHRATR_CROSSEDOUT;   break;
+        case EE_CHAR_ESCAPEMENT:    nSwWhich = RES_CHRATR_ESCAPEMENT;   break;
+        case EE_CHAR_FONTINFO:      nSwWhich = RES_CHRATR_FONT;         break;
+        case EE_CHAR_FONTINFO_CJK:  nSwWhich = RES_CHRATR_CJK_FONT;     break;
+        case EE_CHAR_FONTINFO_CTL:  nSwWhich = RES_CHRATR_CTL_FONT;     break;
+        case EE_CHAR_FONTHEIGHT:    nSwWhich = RES_CHRATR_FONTSIZE;     break;
+        case EE_CHAR_FONTHEIGHT_CJK:nSwWhich = RES_CHRATR_CJK_FONTSIZE; break;
+        case EE_CHAR_FONTHEIGHT_CTL:nSwWhich = RES_CHRATR_CTL_FONTSIZE; break;
+        case EE_CHAR_KERNING:       nSwWhich = RES_CHRATR_KERNING;      break;
+        case EE_CHAR_ITALIC:        nSwWhich = RES_CHRATR_POSTURE;      break;
+        case EE_CHAR_ITALIC_CJK:    nSwWhich = RES_CHRATR_CJK_POSTURE;  break;
+        case EE_CHAR_ITALIC_CTL:    nSwWhich = RES_CHRATR_CTL_POSTURE;  break;
+        case EE_CHAR_UNDERLINE:     nSwWhich = RES_CHRATR_UNDERLINE;    break;
+        case EE_CHAR_WEIGHT:        nSwWhich = RES_CHRATR_WEIGHT;       break;
+        case EE_CHAR_WEIGHT_CJK:    nSwWhich = RES_CHRATR_CJK_WEIGHT;   break;
+        case EE_CHAR_WEIGHT_CTL:    nSwWhich = RES_CHRATR_CTL_WEIGHT;   break;
+        }
 
-            if( nSwWhich )
-            {
-                // if the item isn't set we maybe take the default item
-                if( !bSet )
-                    pEEItem = &rObjItemSet.GetPool()->GetDefaultItem(nEEWhich);
+        if( nSwWhich )
+        {
+            // if the item isn't set we maybe take the default item
+            if( !bSet )
+                pEEItem = &rObjItemSet.GetPool()->GetDefaultItem(nEEWhich);
 
-                // now we clone the item with the which id of the writer
-                SfxPoolItem *pSwItem = pEEItem->Clone();
-                pSwItem->SetWhich( nSwWhich );
-                rItemSet.Put( *pSwItem );
-                delete pSwItem;
-            }
+            // now we clone the item with the which id of the writer
+            SfxPoolItem *pSwItem = pEEItem->Clone();
+            pSwItem->SetWhich( nSwWhich );
+            rItemSet.Put( *pSwItem );
+            delete pSwItem;
         }
 
         nEEWhich = aIter.NextWhich();

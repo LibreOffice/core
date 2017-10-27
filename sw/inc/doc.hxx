@@ -1103,8 +1103,7 @@ public:
     // Goto next/previous on same level.
     static bool GotoNextNum( SwPosition&, bool bOverUpper = true,
                         sal_uInt8* pUpper = nullptr, sal_uInt8* pLower = nullptr );
-    static bool GotoPrevNum( SwPosition&, bool bOverUpper = true,
-                        sal_uInt8* pUpper = nullptr, sal_uInt8* pLower = nullptr );
+    static bool GotoPrevNum( SwPosition&, bool bOverUpper = true );
 
     /** Searches for a text node with a numbering rule.
 
@@ -1215,8 +1214,7 @@ public:
     bool IsInsTableAlignNum() const;
 
     // From FEShell (for Undo and BModified).
-    static void GetTabCols( SwTabCols &rFill, const SwCursor* pCursor,
-                    const SwCellFrame* pBoxFrame );
+    static void GetTabCols( SwTabCols &rFill, const SwCellFrame* pBoxFrame );
     void SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
                     const SwCellFrame* pBoxFrame );
     static void GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame );

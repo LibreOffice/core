@@ -593,8 +593,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
                                              sMasterPageName );
     SwStyleNameMapper::FillUIName( sName,
                                    sName,
-                                   SwGetPoolIdFromName::PageDesc,
-                                   true);
+                                   SwGetPoolIdFromName::PageDesc);
     SwPageDesc *pPageDesc = pDoc->FindPageDesc(sName);
     if( !pPageDesc )
     {

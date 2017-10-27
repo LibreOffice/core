@@ -160,10 +160,10 @@ protected:
     // MoveFrom:    moves from the UndoNodesArray into the NodesArray.
     static void MoveToUndoNds( SwPaM& rPam,
                         SwNodeIndex* pNodeIdx,
-                        sal_uLong* pEndNdIdx = nullptr, sal_Int32 * pEndCntIdx = nullptr );
+                        sal_uLong* pEndNdIdx = nullptr );
     static void MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
                           SwPosition& rInsPos,
-                          const sal_uLong* pEndNdIdx = nullptr, const sal_Int32 * pEndCntIdx = nullptr );
+                          const sal_uLong* pEndNdIdx = nullptr );
 
     // These two methods move the SPoint back/forth from PaM. With it
     // a range can be spanned for Undo/Redo. (In this case the SPoint

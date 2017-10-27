@@ -149,7 +149,7 @@ using namespace nsHdFtFlags;
 #include <comphelper/storagehelper.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
 
-SwMacroInfo* GetMacroInfo( SdrObject* pObj, bool bCreate )             // static
+static SwMacroInfo* GetMacroInfo( SdrObject* pObj )
 {
     if ( pObj )
     {
@@ -163,12 +163,9 @@ SwMacroInfo* GetMacroInfo( SdrObject* pObj, bool bCreate )             // static
                 return dynamic_cast<SwMacroInfo*>(pData);
             }
         }
-        if ( bCreate )
-        {
-            SwMacroInfo* pData = new SwMacroInfo;
-            pObj->AppendUserData(pData);
-            return pData;
-        }
+        SwMacroInfo* pData = new SwMacroInfo;
+        pObj->AppendUserData(pData);
+        return pData;
     }
 
     return nullptr;
@@ -1098,7 +1095,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
         if (pObj && !hlStr.hLinkAddr.isEmpty())
         {
-            SwMacroInfo* pInfo = GetMacroInfo( pObj, true );
+            SwMacroInfo* pInfo = GetMacroInfo( pObj );
             if( pInfo )
             {
                 pInfo->SetShapeId( rObjData.nShapeId );
