@@ -24,6 +24,7 @@
 #include <com/sun/star/i18n/LocaleItem.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <rtl/ustring.hxx>
+#include <rtl/math.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/readwritemutexguard.hxx>
 #include <unotools/unotoolsdllapi.h>
@@ -239,6 +240,64 @@ public:
                             { return getOneLocaleItem( css::i18n::LocaleItem::LONG_DATE_MONTH_SEPARATOR ); }
     const OUString&       getLongDateYearSep() const
                             { return getOneLocaleItem( css::i18n::LocaleItem::LONG_DATE_YEAR_SEPARATOR ); }
+
+    /** A wrapper around rtl::math::stringToDouble() using the locale dependent
+        decimal separator, group separator, and if needed decimal separator
+        alternative.
+
+        The decimal separator is tried first, if the conversion does not match
+        the entire string then the decimal separator alternative is tried if it
+        occurs in the string and was the reason to stop.
+
+        Leading blanks are skipped, trailing blanks are not skipped. The number
+        is parsed up to the first non-floating point number character, same as
+        rtl::math::stringToDouble() does. The caller is responsible for proper
+        error checking and end comparison.
+
+        @param  rString
+                The string to parse as floating point number.
+        @param  bUseGroupSep
+                Whether group separator is used/accepted during parsing.
+        @param  pStatus
+                Pointer to receive the conversion status as in
+                rtl::math::stringToDouble().
+        @param  pParseEnd
+                Pointer to receive the parse end (exclusive) as in
+                rtl::math::stringToDouble().
+        @return The floating point number as parsed.
+     */
+    double              stringToDouble( const OUString& rString, bool bUseGroupSep,
+                                        rtl_math_ConversionStatus* pStatus, sal_Int32* pParseEnd ) const;
+
+    /** A wrapper around rtl_math_uStringToDouble() using the locale dependent
+        decimal separator, group separator, and if needed decimal separator
+        alternative.
+
+        The decimal separator is tried first, if the conversion does not match
+        the entire string then the decimal separator alternative is tried if it
+        occurs in the string and was the reason to stop.
+
+        Leading blanks are skipped, trailing blanks are not skipped. The number
+        is parsed up to the first non-floating point number character, same as
+        rtl_math_uStringToDouble() does. The caller is responsible for proper
+        error checking and end comparison.
+
+        @param  pBegin
+                The string position to start parsing a floating point number.
+        @param  pEnd
+                The string position to stop parsing, exclusive.
+        @param  bUseGroupSep
+                Whether group separator is used/accepted during parsing.
+        @param  pStatus
+                Pointer to receive the conversion status as in
+                rtl_math_uStringToDouble().
+        @param  pParseEnd
+                Pointer to receive the parse end (exclusive) as in
+                rtl_math_uStringToDouble().
+        @return The floating point number as parsed.
+     */
+    double              stringToDouble( const sal_Unicode* pBegin, const sal_Unicode* pEnd, bool bUseGroupSep,
+                                        rtl_math_ConversionStatus* pStatus, const sal_Unicode** ppParseEnd ) const;
 
     // currency
     const OUString&    getCurrSymbol() const;

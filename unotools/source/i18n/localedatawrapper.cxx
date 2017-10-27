@@ -41,6 +41,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <sal/macros.h>
+#include <rtl/math.hxx>
 
 static const sal_uInt16 nCurrFormatInvalid = 0xffff;
 static const sal_uInt16 nCurrFormatDefault = 0;
@@ -1745,6 +1746,46 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         delete [] pNumBuffer;
 
     return aNumber;
+}
+
+// --- number parsing -------------------------------------------------
+
+double LocaleDataWrapper::stringToDouble( const OUString& rString, bool bUseGroupSep,
+        rtl_math_ConversionStatus* pStatus, sal_Int32* pParseEnd ) const
+{
+    const sal_Unicode cGroupSep = (bUseGroupSep ? getNumThousandSep()[0] : 0);
+    rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
+    sal_Int32 nParseEnd = 0;
+    double fValue = rtl::math::stringToDouble( rString, getNumDecimalSep()[0], cGroupSep, &eStatus, &nParseEnd);
+    bool bTryAlt = (nParseEnd < rString.getLength() && !getNumDecimalSepAlt().isEmpty() &&
+            rString[nParseEnd] == getNumDecimalSepAlt().toChar());
+    // Try re-parsing with alternative if that was the reason to stop.
+    if (bTryAlt)
+        fValue = rtl::math::stringToDouble( rString, getNumDecimalSepAlt().toChar(), cGroupSep, &eStatus, &nParseEnd);
+    if (pStatus)
+        *pStatus = eStatus;
+    if (pParseEnd)
+        *pParseEnd = nParseEnd;
+    return fValue;
+}
+
+double LocaleDataWrapper::stringToDouble( const sal_Unicode* pBegin, const sal_Unicode* pEnd, bool bUseGroupSep,
+        rtl_math_ConversionStatus* pStatus, const sal_Unicode** ppParseEnd ) const
+{
+    const sal_Unicode cGroupSep = (bUseGroupSep ? getNumThousandSep()[0] : 0);
+    rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
+    const sal_Unicode* pParseEnd = nullptr;
+    double fValue = rtl_math_uStringToDouble( pBegin, pEnd, getNumDecimalSep()[0], cGroupSep, &eStatus, &pParseEnd);
+    bool bTryAlt = (pParseEnd < pEnd && !getNumDecimalSepAlt().isEmpty() &&
+            *pParseEnd == getNumDecimalSepAlt().toChar());
+    // Try re-parsing with alternative if that was the reason to stop.
+    if (bTryAlt)
+        fValue = rtl_math_uStringToDouble( pBegin, pEnd, getNumDecimalSepAlt().toChar(), cGroupSep, &eStatus, &pParseEnd);
+    if (pStatus)
+        *pStatus = eStatus;
+    if (ppParseEnd)
+        *ppParseEnd = pParseEnd;
+    return fValue;
 }
 
 // --- mixed ----------------------------------------------------------
