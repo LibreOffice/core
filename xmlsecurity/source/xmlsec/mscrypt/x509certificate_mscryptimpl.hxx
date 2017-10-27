@@ -26,8 +26,8 @@
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
-#include "Windows.h"
-#include "WinCrypt.h"
+#include <Windows.h>
+#include <WinCrypt.h>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif

@@ -22,8 +22,8 @@
 
 #include "securityenvironment_mscryptimpl.hxx"
 
-#include "xmlsec-wrapper.h"
-#include "xmlsec/mscrypto/app.h"
+#include <xmlsec-wrapper.h>
+#include <xmlsec/mscrypto/app.h>
 #include <com/sun/star/xml/crypto/SecurityEnvironment.hpp>
 #include <com/sun/star/xml/crypto/XMLSecurityContext.hpp>
 #include <comphelper/processfactory.hxx>
