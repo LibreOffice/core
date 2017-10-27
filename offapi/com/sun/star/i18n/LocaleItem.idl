@@ -74,11 +74,17 @@ published constants LocaleItem
     /// @see com::sun::star::i18n::LocaleDataItem::LongDateYearSeparator
     const short LONG_DATE_YEAR_SEPARATOR    = 16;
 
-    //! New values may be inserted here if locale data provides them.
-    //! Do not forget to adjust the COUNT value.
-
     /// count of items available
     const short COUNT                   = 17;
+
+    /// @see com::sun::star::i18n::LocaleDataItem2::decimalSeparatorAlternative
+    const short DECIMAL_SEPARATOR_ALTERNATIVE = 17;
+
+    /// count of items available
+    const short COUNT2                  = 18;
+
+    //! New values may be appended here if locale data provides them.
+    //! Do not forget to introduce a new COUNTx value.
 };
 
 
