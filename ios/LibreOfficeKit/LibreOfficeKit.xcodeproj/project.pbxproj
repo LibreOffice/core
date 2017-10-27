@@ -198,14 +198,14 @@
 					"$(LO_WORKDIR)/UnpackedTarball/icu/source/common",
 					"$(LO_SRCDIR)/ios/generated",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_GENERATE_MAP_FILE = YES;
 				LD_MAP_FILE_PATH = ./iosKit.map;
 				LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER = NO;
 				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRELINK_FLAGS = "-Wl -ios_version_min 10.3 -lz -liconv";
+				PRELINK_FLAGS = "-Wl -ios_version_min 11.0 -lz -liconv";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "x86_64 arm64";
 			};
@@ -265,14 +265,14 @@
 					"$(LO_WORKDIR)/UnpackedTarball/icu/source/common",
 					"$(LO_SRCDIR)/ios/generated",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_GENERATE_MAP_FILE = YES;
 				LD_MAP_FILE_PATH = ./iosKit.map;
 				LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER = NO;
 				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
-				PRELINK_FLAGS = "-Wl -ios_version_min 10.3 -lz -liconv";
+				PRELINK_FLAGS = "-Wl -ios_version_min 11.0 -lz -liconv";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "x86_64 arm64";
@@ -285,7 +285,7 @@
 			buildSettings = {
 				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "";
-				PRELINK_FLAGS = "-ios_version_min 10.3";
+				PRELINK_FLAGS = "-ios_version_min 11.0";
 				PRELINK_LIBS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -298,7 +298,7 @@
 			buildSettings = {
 				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "";
-				PRELINK_FLAGS = "-ios_version_min 10.3";
+				PRELINK_FLAGS = "-ios_version_min 11.0";
 				PRELINK_LIBS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
