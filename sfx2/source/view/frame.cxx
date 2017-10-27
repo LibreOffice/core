@@ -38,7 +38,6 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/msgbox.hxx>
 
-// due to pTopFrames
 #include <appdata.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/event.hxx>
@@ -62,6 +61,7 @@
 #include <objshimp.hxx>
 #include <sfx2/ipclient.hxx>
 #include <childwinimpl.hxx>
+#include <vector>
 
 #ifdef DBG_UTIL
 #include <sfx2/frmhtmlw.hxx>
@@ -69,7 +69,7 @@
 
 using namespace com::sun::star;
 
-static SfxFrameArr_Impl* pFramesArr_Impl=nullptr;
+static std::vector<SfxFrame*>* pFramesArr_Impl=nullptr;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -86,7 +86,7 @@ void SfxFrame::Construct_Impl()
 {
     pImpl.reset(new SfxFrame_Impl);
     if ( !pFramesArr_Impl )
-        pFramesArr_Impl = new SfxFrameArr_Impl;
+        pFramesArr_Impl = new std::vector<SfxFrame*>;
     pFramesArr_Impl->push_back( this );
 }
 
@@ -96,7 +96,7 @@ SfxFrame::~SfxFrame()
     RemoveTopFrame_Impl( this );
     pWindow.disposeAndClear();
 
-    SfxFrameArr_Impl::iterator it = std::find( pFramesArr_Impl->begin(), pFramesArr_Impl->end(), this );
+    auto it = std::find( pFramesArr_Impl->begin(), pFramesArr_Impl->end(), this );
     if ( it != pFramesArr_Impl->end() )
         pFramesArr_Impl->erase( it );
 
@@ -383,14 +383,14 @@ void SfxFrame::GetDefaultTargetList(TargetList& rList)
 
 void SfxFrame::InsertTopFrame_Impl( SfxFrame* pFrame )
 {
-    SfxFrameArr_Impl& rArr = *SfxGetpApp()->Get_Impl()->pTopFrames;
+    auto& rArr = SfxGetpApp()->Get_Impl()->vTopFrames;
     rArr.push_back( pFrame );
 }
 
 void SfxFrame::RemoveTopFrame_Impl( SfxFrame* pFrame )
 {
-    SfxFrameArr_Impl& rArr = *SfxGetpApp()->Get_Impl()->pTopFrames;
-    SfxFrameArr_Impl::iterator it = std::find( rArr.begin(), rArr.end(), pFrame );
+    auto& rArr = SfxGetpApp()->Get_Impl()->vTopFrames;
+    auto it = std::find( rArr.begin(), rArr.end(), pFrame );
     if ( it != rArr.end() )
         rArr.erase( it );
 }
@@ -738,7 +738,7 @@ SfxFrame* SfxFrame::GetFirst()
 
 SfxFrame* SfxFrame::GetNext( SfxFrame& rFrame )
 {
-    SfxFrameArr_Impl::iterator it = std::find( pFramesArr_Impl->begin(), pFramesArr_Impl->end(), &rFrame );
+    auto it = std::find( pFramesArr_Impl->begin(), pFramesArr_Impl->end(), &rFrame );
     if ( it != pFramesArr_Impl->end() && (++it) != pFramesArr_Impl->end() )
         return *it;
     else

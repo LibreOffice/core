@@ -45,7 +45,6 @@ class SfxStatusDispatcher;
 class SfxDdeTriggerTopic_Impl;
 class SfxDocumentTemplates;
 class SfxFrame;
-class SfxFrameArr_Impl;
 class SvtSaveOptions;
 class SvtHelpOptions;
 class SfxViewFrame;
@@ -78,7 +77,7 @@ public:
 
     // single instance classes
     SfxChildWinFactArr_Impl*            pFactArr;
-    SfxFrameArr_Impl*                   pTopFrames;
+    std::vector<SfxFrame*>              vTopFrames;
 
     // application members
     SfxFilterMatcher*                   pMatcher;

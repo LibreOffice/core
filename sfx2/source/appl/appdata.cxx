@@ -87,7 +87,6 @@ SfxAppData_Impl::SfxAppData_Impl()
     , pTriggerTopic(nullptr)
     , pDdeService2(nullptr)
     , pFactArr(nullptr)
-    , pTopFrames( new SfxFrameArr_Impl )
     , pMatcher( nullptr )
     , m_pToolsErrorHdl(nullptr)
     , m_pSoErrorHdl(nullptr)
@@ -123,7 +122,6 @@ SfxAppData_Impl::SfxAppData_Impl()
 SfxAppData_Impl::~SfxAppData_Impl()
 {
     DeInitDDE();
-    delete pTopFrames;
     delete pBasicManager;
 
 #if HAVE_FEATURE_SCRIPTING
