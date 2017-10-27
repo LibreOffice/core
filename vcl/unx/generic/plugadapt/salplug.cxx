@@ -100,7 +100,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
                  * #i109007# KDE3 seems to have the same problem.
                  * And same applies for KDE4.
                  */
-                if( rModuleBase == "gtk" || rModuleBase == "gtk3" || rModuleBase == "tde" || rModuleBase == "kde" || rModuleBase == "kde4" )
+                if( rModuleBase == "gtk" || rModuleBase == "gtk3" || rModuleBase == "kde4" )
                 {
                     pCloseModule = nullptr;
                 }
@@ -165,15 +165,6 @@ static DesktopType get_desktop_environment()
 
 static SalInstance* autodetect_plugin()
 {
-    static const char* const pTDEFallbackList[] =
-    {
-        "tde",
-#if ENABLE_KDE4
-        "kde4",
-#endif
-        "gtk3", "gtk", "gen", nullptr
-    };
-
     static const char* const pKDEFallbackList[] =
     {
 #if ENABLE_KDE4
@@ -203,10 +194,9 @@ static SalInstance* autodetect_plugin()
               desktop == DESKTOP_UNITY ||
               desktop == DESKTOP_XFCE  ||
               desktop == DESKTOP_KDE3 ||
+              desktop == DESKTOP_TDE ||
               desktop == DESKTOP_MATE )
         pList = pStandardFallbackList;
-    else if( desktop == DESKTOP_TDE )
-        pList = pTDEFallbackList;
     else if( desktop == DESKTOP_KDE4 || desktop == DESKTOP_KDE5 )
         pList = pKDEFallbackList;
 
