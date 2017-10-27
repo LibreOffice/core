@@ -1324,10 +1324,9 @@ namespace
         const sal_Unicode nCurrCmdPos = rCommandPos;
         rtl_math_ConversionStatus eStatus;
         const sal_Unicode* pEnd;
-        rVal = rtl_math_uStringToDouble( rCommand.getStr() + rCommandPos,
+        rVal = pLclData->stringToDouble( rCommand.getStr() + rCommandPos,
                                          rCommand.getStr() + rCommand.getLength(),
-                                         pLclData->getNumDecimalSep()[0],
-                                         pLclData->getNumThousandSep()[0],
+                                         true,
                                          &eStatus,
                                          &pEnd );
         rCommandPos = static_cast<sal_Int32>(pEnd - rCommand.getStr());
