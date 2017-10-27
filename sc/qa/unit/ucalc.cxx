@@ -1641,6 +1641,7 @@ void Test::testCSV()
         bool bResult = ScStringUtil::parseSimpleNumber
                 (aStr, aTests[i].eSep == English ? '.' : ',',
                  aTests[i].eSep == English ? ',' : '.',
+                 0,
                  nValue);
         CPPUNIT_ASSERT_EQUAL_MESSAGE ("CSV numeric detection failure", aTests[i].bResult, bResult);
         CPPUNIT_ASSERT_EQUAL_MESSAGE ("CSV numeric value failure", aTests[i].nValue, nValue);

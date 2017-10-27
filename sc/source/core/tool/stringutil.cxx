@@ -49,7 +49,7 @@ void ScSetStringParam::setNumericInput()
 }
 
 bool ScStringUtil::parseSimpleNumber(
-    const OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, double& rVal)
+    const OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, sal_Unicode dsepa, double& rVal)
 {
     // Actually almost the entire pre-check is unnecessary and we could call
     // rtl::math::stringToDouble() just after having exchanged ascii space with
@@ -110,7 +110,7 @@ bool ScStringUtil::parseSimpleNumber(
             haveSeenDigit = true;
             ++nDigitCount;
         }
-        else if (c == dsep)
+        else if (c == dsep || (dsepa && c == dsepa))
         {
             // this is a decimal separator.
 
@@ -125,7 +125,7 @@ bool ScStringUtil::parseSimpleNumber(
 
             nPosDSep = i;
             nPosGSep = -1;
-            aBuf.append(c);
+            aBuf.append(dsep);  // append the separator that is parsed in stringToDouble() below
             nDigitCount = 0;
         }
         else if (c == gsep)

@@ -1806,13 +1806,15 @@ bool ScColumn::ParseString(
                 const LocaleDataItem2& aLocaleItem = pLocale->getLocaleItem();
                 const OUString& rDecSep = aLocaleItem.decimalSeparator;
                 const OUString& rGroupSep = aLocaleItem.thousandSeparator;
-                if (rDecSep.getLength() != 1 || rGroupSep.getLength() != 1)
+                const OUString& rDecSepAlt = aLocaleItem.decimalSeparatorAlternative;
+                if (rDecSep.getLength() != 1 || rGroupSep.getLength() != 1 || rDecSepAlt.getLength() > 1)
                     break;
 
                 sal_Unicode dsep = rDecSep[0];
                 sal_Unicode gsep = rGroupSep[0];
+                sal_Unicode dsepa = rDecSepAlt.toChar();
 
-                if (!ScStringUtil::parseSimpleNumber(rString, dsep, gsep, nVal))
+                if (!ScStringUtil::parseSimpleNumber(rString, dsep, gsep, dsepa, nVal))
                     break;
 
                 rCell.set(nVal);

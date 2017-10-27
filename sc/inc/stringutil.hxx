@@ -122,12 +122,13 @@ public:
      * @param rStr string to parse
      * @param dsep decimal separator
      * @param gsep group separator (aka thousands separator)
+     * @param dsepa decimal separator alternative, usually 0
      * @param rVal value of successfully parsed number
      *
      * @return true if the string is a valid number, false otherwise.
      */
     static bool parseSimpleNumber(
-        const OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, double& rVal);
+        const OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, sal_Unicode dsepa, double& rVal);
 
     static bool parseSimpleNumber(
         const char* p, size_t n, char dsep, char gsep, double& rVal);
