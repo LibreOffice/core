@@ -203,7 +203,8 @@ bool SbxDecimal::setString( OUString* pOUString )
     // Convert delimiter
     sal_Unicode cDecimalSep;
     sal_Unicode cThousandSep;
-    ImpGetIntntlSep( cDecimalSep, cThousandSep );
+    sal_Unicode cDecimalSepAlt;
+    ImpGetIntntlSep( cDecimalSep, cThousandSep, cDecimalSepAlt );
 
     bool bRet = false;
     HRESULT hResult;

@@ -33,7 +33,7 @@ extern ErrCode ImpScan
 // with advanced evaluation (International, "TRUE"/"FALSE")
 extern bool ImpConvStringExt( OUString& rSrc, SbxDataType eTargetType );
 
-void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep );
+void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep, sal_Unicode& rcDecimalSepAlt );
 
 // SBXINT.CXX
 
