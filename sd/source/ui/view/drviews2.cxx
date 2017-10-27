@@ -299,7 +299,6 @@ public:
 
         const sal_uInt16 nCount = m_rDrawViewShell.GetDoc()->GetMasterSdPageCount(PageKind::Standard);
 
-        sal_Int32 nParagraph = 1;
         bool bFound = false;
 
         for (sal_uInt16 nPageIndex = 0; nPageIndex < nCount; ++nPageIndex)
@@ -323,8 +322,34 @@ public:
                             bFound = true;
                             m_pRectObject = pRectObject;
                             const OUString sBlank("");
+                            sal_Int32 nCurrentParagraph = -1;
+
                             for (editeng::Section const & rSection : aSections)
                             {
+                                // Insert new paragraph if needed
+                                while (nCurrentParagraph < rSection.mnParagraph)
+                                {
+                                    nCurrentParagraph++;
+
+                                    // Get Weight of current paragraph
+                                    FontWeight eFontWeight = WEIGHT_NORMAL;
+                                    SfxItemSet aItemSet(rEditText.GetParaAttribs(nCurrentParagraph));
+                                    if (const SfxPoolItem* pItem = aItemSet.GetItem(EE_CHAR_WEIGHT, false))
+                                    {
+                                        const SvxWeightItem* pWeightItem = dynamic_cast<const SvxWeightItem*>(pItem);
+                                        if (pWeightItem && pWeightItem->GetWeight() == WEIGHT_BOLD)
+                                            eFontWeight = WEIGHT_BOLD;
+                                    }
+
+                                    // Font weight to string
+                                    OUString sWeightProperty = "NORMAL";
+                                    if (eFontWeight == WEIGHT_BOLD)
+                                        sWeightProperty = "BOLD";
+
+                                    // Insert into collection
+                                    m_aResults.push_back({ svx::ClassificationType::PARAGRAPH, sWeightProperty, sBlank });
+                                }
+
                                 const SvxFieldItem* pFieldItem = findField(rSection);
                                 const editeng::CustomPropertyField* pCustomPropertyField = pFieldItem ? dynamic_cast<const editeng::CustomPropertyField*>(pFieldItem->GetField()) : nullptr;
                                 if (pCustomPropertyField)
@@ -333,22 +358,22 @@ public:
                                     if (aKey.startsWith(sPolicy + "Marking:Text:"))
                                     {
                                         OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                                        m_aResults.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, nParagraph });
+                                        m_aResults.push_back({ svx::ClassificationType::TEXT, aValue, sBlank });
                                     }
                                     else if (aKey.startsWith(sPolicy + "BusinessAuthorizationCategory:Name"))
                                     {
                                         OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                                        m_aResults.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, nParagraph });
+                                        m_aResults.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank });
                                     }
                                     else if (aKey.startsWith(sPolicy + "Extension:Marking"))
                                     {
                                         OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                                        m_aResults.push_back({ svx::ClassificationType::MARKING, aValue, sBlank, nParagraph });
+                                        m_aResults.push_back({ svx::ClassificationType::MARKING, aValue, sBlank });
                                     }
                                     else if (aKey.startsWith(sPolicy + "Extension:IntellectualPropertyPart"))
                                     {
                                         OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                                        m_aResults.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, sBlank, nParagraph });
+                                        m_aResults.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, sBlank });
                                     }
                                 }
                             }
@@ -415,9 +440,11 @@ public:
             pOutliner = pView->GetTextEditOutliner();
         }
 
+        sal_Int32 nParagraph = -1;
         for (svx::ClassificationResult const & rResult : rResults)
         {
-            ESelection aPosition(EE_PARA_MAX_COUNT, EE_TEXTPOS_MAX_COUNT, EE_PARA_MAX_COUNT, EE_TEXTPOS_MAX_COUNT);
+
+            ESelection aPosition(nParagraph, EE_TEXTPOS_MAX_COUNT, nParagraph, EE_TEXTPOS_MAX_COUNT);
 
             switch(rResult.meType)
             {
@@ -450,6 +477,22 @@ public:
                     OUString sKey = sPolicy + "Extension:IntellectualPropertyPart";
                     addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey), EE_FEATURE_FIELD), aPosition);
+                }
+                break;
+
+                case svx::ClassificationType::PARAGRAPH:
+                {
+                    nParagraph++;
+                    pOutliner->Insert("");
+
+                    SfxItemSet aItemSet(m_rDrawViewShell.GetDoc()->GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{});
+
+                    if (rResult.msString == "BOLD")
+                        aItemSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
+                    else
+                        aItemSet.Put(SvxWeightItem(WEIGHT_NORMAL, EE_CHAR_WEIGHT));
+
+                    pOutliner->SetParaAttribs(nParagraph, aItemSet);
                 }
                 break;
 
