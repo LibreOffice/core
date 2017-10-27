@@ -38,7 +38,9 @@
 #include <osl/file.h>
 
 #if defined LINUX || defined __sun
+#ifndef ANDROID_PORTS
 #include <crypt.h>
+#endif
 #endif
 
 #include "secimpl.hxx"

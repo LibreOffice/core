@@ -282,7 +282,7 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
     }
 }
 
-#elif !defined LINUX
+#elif !defined LINUX || defined ANDROID_PORTS
 
 int backtrace( void **buffer, int max_frames )
 {

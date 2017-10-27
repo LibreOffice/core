@@ -63,7 +63,9 @@
 #   define __USE_GNU
 #   endif
 
+#ifndef ANDROID_PORTS
 #   include <shadow.h>
+#endif
 #   include <pthread.h>
 #   include <sys/file.h>
 #   include <sys/ioctl.h>

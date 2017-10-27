@@ -36,9 +36,11 @@
 #endif /* MACOSX */
 
 #ifdef LINUX
+#ifndef ANDROID_PORTS
 #include <execinfo.h>
 #include <link.h>
 #define INCLUDE_BACKTRACE
+#endif
 #endif
 
 #ifdef __sun

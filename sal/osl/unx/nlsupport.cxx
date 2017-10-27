@@ -224,7 +224,7 @@ static rtl_Locale * parse_locale( const char * locale )
     return ret;
 }
 
-#if defined(LINUX) || defined(__sun) || defined(NETBSD) || \
+#if (defined(LINUX) && !defined(ANDROID_PORTS)) || defined(__sun) || defined(NETBSD) || \
     defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY)
 
 /*
@@ -861,7 +861,7 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
         locale = getenv( "LANG" );
 
     if( NULL == locale )
-        locale = "C";
+        locale = (char*) "C";
 
 #endif
     *ppLocale = parse_locale( locale );

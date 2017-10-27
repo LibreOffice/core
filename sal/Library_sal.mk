@@ -63,8 +63,10 @@ $(eval $(call gb_Library_add_libs,sal,\
 		) \
 	) \
 	$(if $(filter $(OS),LINUX), \
+		$(if $(filter $(ANDROID_PORTS),1),, \
 		-ldl \
 		-lrt \
+		) \
 	) \
 	$(if $(filter $(OS),SOLARIS), \
 		-lnsl \
