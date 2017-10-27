@@ -150,6 +150,17 @@ public:
 
             enum Status { STATUS_NEW, STATUS_WRAPPER, STATUS_LOADED };
 
+            // Logically, exactly one of constructor, factory1, factory2 should
+            // be set.  However, there are two exceptions:  For one, when
+            // constructor is set, ServiceManager::createContentEnumeration will
+            // store the necessary ImplementationWrapper in factory1 (so that
+            // multiple calls to createContentEnumeration will return the same
+            // wrapper).  For another, when factory1 should be set but status is
+            // STATUS_NEW, factory1 is not yet set (and when status is
+            // STATUS_WRAPPER, factory1 is merely set to an
+            // ImplementationWrapper---also due to a
+            // ServiceManager::createContentEnumeration call---and will be
+            // loaded later).
             std::shared_ptr< ImplementationInfo > info;
             WrapperConstructorFn constructor;
             css::uno::Reference< css::lang::XSingleComponentFactory > factory1;

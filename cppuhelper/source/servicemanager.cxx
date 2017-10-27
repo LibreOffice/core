@@ -1172,15 +1172,15 @@ cppuhelper::ServiceManager::createContentEnumeration(
                 impl->factory1 = new ImplementationWrapper(this, *i);
                 impl->status = Data::Implementation::STATUS_WRAPPER;
             }
+            if (impl->constructor != nullptr && !impl->factory1.is()) {
+                impl->factory1 = new ImplementationWrapper(this, *i);
+            }
         }
         if (impl->factory1.is()) {
             factories.push_back(css::uno::Any(impl->factory1));
-        } else if (impl->factory2.is()) {
-            factories.push_back(css::uno::Any(impl->factory2));
         } else {
-            css::uno::Reference< css::lang::XSingleComponentFactory > factory(
-                    new ImplementationWrapper(this, *i));
-            factories.push_back(css::uno::Any(factory));
+            assert(impl->factory2.is());
+            factories.push_back(css::uno::Any(impl->factory2));
         }
     }
     return new ContentEnumeration(factories);
