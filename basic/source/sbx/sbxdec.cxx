@@ -354,7 +354,8 @@ void SbxDecimal::getString( OUString& rString )
         // Convert delimiter
         sal_Unicode cDecimalSep;
         sal_Unicode cThousandSep;
-        ImpGetIntntlSep( cDecimalSep, cThousandSep );
+        sal_Unicode cDecimalSepAlt;
+        ImpGetIntntlSep( cDecimalSep, cThousandSep, cDecimalSepAlt );
 
         if( cDecimalSep != '.' || cThousandSep != ',' )
         {
