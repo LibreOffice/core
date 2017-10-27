@@ -794,6 +794,12 @@ inline bool ImpSvNumberInputScan::GetDecSep( const OUString& rString, sal_Int32&
             nPos = nPos + rSep.getLength();
             return true;
         }
+        const OUString& rSepAlt = pFormatter->GetNumDecimalSepAlt();
+        if ( !rSepAlt.isEmpty() && rString.match( rSepAlt, nPos) )
+        {
+            nPos = nPos + rSepAlt.getLength();
+            return true;
+        }
     }
     return false;
 }
@@ -3121,7 +3127,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
             if (eSetType == css::util::NumberFormat::FRACTION)  // Fraction 1 = 1/1
             {
                 if (i >= nStringsCnt || // no end string nor decimal separator
-                    sStrArray[i] == pFormatter->GetNumDecimalSep())
+                    pFormatter->IsDecimalSep( sStrArray[i]))
                 {
                     eScannedType = css::util::NumberFormat::FRACTION;
                     nMatchedAllStrings &= ~nMatchedVirgin;
@@ -3144,7 +3150,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
                 eScannedType == css::util::NumberFormat::UNDEFINED &&   // not date or currency
                 nDecPos == 0 &&             // no previous decimal separator
                 (i >= nStringsCnt ||        // no end string nor decimal separator
-                 sStrArray[i] == pFormatter->GetNumDecimalSep())
+                 pFormatter->IsDecimalSep( sStrArray[i]))
                 )
             {
                 eScannedType = css::util::NumberFormat::FRACTION;
@@ -3490,6 +3496,11 @@ void ImpSvNumberInputScan::ChangeIntl()
     sal_Unicode cDecSep = pFormatter->GetNumDecimalSep()[0];
     bDecSepInDateSeps = ( cDecSep == '-' ||
                           cDecSep == pFormatter->GetDateSep()[0] );
+    if (!bDecSepInDateSeps)
+    {
+        sal_Unicode cDecSepAlt = pFormatter->GetNumDecimalSepAlt().toChar();
+        bDecSepInDateSeps = cDecSepAlt && (cDecSepAlt == '-' || cDecSepAlt == pFormatter->GetDateSep()[0]);
+    }
     bTextInitialized = false;
     aUpperCurrSymbol.clear();
     InvalidateDateAcceptancePatterns();

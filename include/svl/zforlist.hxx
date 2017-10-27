@@ -821,6 +821,7 @@ private:
 
     // cached locale data items needed almost any time
     OUString aDecimalSep;
+    OUString aDecimalSepAlt;
     OUString aThousandSep;
     OUString aDateSep;
 
@@ -958,11 +959,17 @@ public:
     // return the corresponding decimal separator
     const OUString& GetNumDecimalSep() const;
 
+    // return the corresponding decimal separator alternative
+    const OUString& GetNumDecimalSepAlt() const;
+
     // return the corresponding group (AKA thousand) separator
     const OUString& GetNumThousandSep() const;
 
     // return the corresponding date separator
     const OUString& GetDateSep() const;
+
+    // checks for decimal separator and optional alternative
+    bool IsDecimalSep( const OUString& rStr ) const;
 };
 
 #endif // INCLUDED_SVL_ZFORLIST_HXX

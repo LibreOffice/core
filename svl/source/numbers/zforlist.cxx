@@ -307,6 +307,7 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     // cached locale data items
     const LocaleDataWrapper* pLoc = GetLocaleData();
     aDecimalSep = pLoc->getNumDecimalSep();
+    aDecimalSepAlt = pLoc->getNumDecimalSepAlt();
     aThousandSep = pLoc->getNumThousandSep();
     aDateSep = pLoc->getDateSep();
 
@@ -338,6 +339,7 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
         // cached locale data items, initialize BEFORE calling ChangeIntl below
         const LocaleDataWrapper* pLoc = GetLocaleData();
         aDecimalSep = pLoc->getNumDecimalSep();
+        aDecimalSepAlt = pLoc->getNumDecimalSepAlt();
         aThousandSep = pLoc->getNumThousandSep();
         aDateSep = pLoc->getDateSep();
 
@@ -537,9 +539,20 @@ const NativeNumberWrapper* SvNumberFormatter::GetNatNum() const { return xNatNum
 
 const OUString& SvNumberFormatter::GetNumDecimalSep() const { return aDecimalSep; }
 
+const OUString& SvNumberFormatter::GetNumDecimalSepAlt() const { return aDecimalSepAlt; }
+
 const OUString& SvNumberFormatter::GetNumThousandSep() const { return aThousandSep; }
 
 const OUString& SvNumberFormatter::GetDateSep() const { return aDateSep; }
+
+bool SvNumberFormatter::IsDecimalSep( const OUString& rStr ) const
+{
+    if (rStr == GetNumDecimalSep())
+        return true;
+    if (GetNumDecimalSepAlt().isEmpty())
+        return false;
+    return rStr == GetNumDecimalSepAlt();
+}
 
 bool SvNumberFormatter::IsTextFormat(sal_uInt32 F_Index) const
 {
