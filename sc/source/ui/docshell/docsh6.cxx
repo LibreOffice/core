@@ -476,6 +476,7 @@ void ScDocShell::CheckConfigOptions()
         return;
 
     OUString aDecSep = ScGlobal::GetpLocaleData()->getNumDecimalSep();
+    OUString aDecSepAlt = ScGlobal::GetpLocaleData()->getNumDecimalSepAlt();
 
     ScModule* pScMod = SC_MOD();
     const ScFormulaOptions& rOpt=pScMod->GetFormulaOptions();
@@ -483,7 +484,8 @@ void ScDocShell::CheckConfigOptions()
     const OUString& aSepArrRow = rOpt.GetFormulaSepArrayRow();
     const OUString& aSepArrCol = rOpt.GetFormulaSepArrayCol();
 
-    if (aDecSep == aSepArg || aDecSep == aSepArrRow || aDecSep == aSepArrCol)
+    if (aDecSep == aSepArg || aDecSep == aSepArrRow || aDecSep == aSepArrCol ||
+            aDecSepAlt == aSepArg || aDecSepAlt == aSepArrRow || aDecSepAlt == aSepArrCol)
     {
         // One of arg separators conflicts with the current decimal
         // separator.  Reset them to default.
