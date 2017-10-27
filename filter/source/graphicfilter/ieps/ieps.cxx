@@ -766,7 +766,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                     bFail = o3tl::checked_sub(nNumb[2], nNumb[0], nWidth) || o3tl::checked_add(nWidth, 1L, nWidth);
                 if (!bFail)
                     bFail = o3tl::checked_sub(nNumb[3], nNumb[1], nHeight) || o3tl::checked_add(nWidth, 1L, nHeight);
-                if (!bFail)
+                if (!bFail && nWidth > 0 && nHeight > 0)
                 {
                     GDIMetaFile aMtf;
 
