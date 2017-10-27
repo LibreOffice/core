@@ -538,7 +538,7 @@ $(WORKDIR)/Clean/LinkTarget/% :
 		$(call gb_LinkTarget_get_objects_list,$(LINKTARGET)) \
 		$(ILIBTARGET) \
 		$(AUXTARGETS)) && \
-		cat $${RESPONSEFILE} /dev/null | xargs -n 200 rm -fr && \
+		cat $${RESPONSEFILE} /dev/null | $(if $(filter WNT,$(OS)),env -i PATH="$$PATH") xargs -n 200 rm -fr && \
 		rm -f $${RESPONSEFILE}
 
 
