@@ -430,7 +430,6 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, AngleModifiedHdl, Edit&, void )
         return;
 
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
-    const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
 
     // Do not check that the entire string was parsed up to its end, there may
     // be a degree symbol following the number. Note that this also means that
@@ -438,7 +437,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, AngleModifiedHdl, Edit&, void )
     /* TODO: we could check for the degree symbol stop if there are no other
      * cases with different symbol characters in any language? */
     rtl_math_ConversionStatus eStatus;
-    double fTmp = rtl::math::stringToDouble( sTmp, cSep, 0, &eStatus);
+    double fTmp = rLocaleWrapper.stringToDouble( sTmp, false, &eStatus, nullptr);
     if (eStatus != rtl_math_ConversionStatus_Ok)
         return;
 
