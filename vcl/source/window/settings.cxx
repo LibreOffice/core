@@ -145,7 +145,7 @@ void Window::UpdateSettings( const AllSettings& rSettings, bool bChild )
     }
 }
 
-void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
+void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl ) const
 {
     StyleSettings aTmpSt( rSettings.GetStyleSettings() );
     aTmpSt.SetHighContrastMode( false );

@@ -51,7 +51,7 @@ public:
 private:
     /// @throws css::io::BufferSizeExceededException
     void resizeBuffer(sal_Int32 nMinSize);
-    void checkInvariants() {
+    void checkInvariants() const {
         assert( m_nBufferLen >= 0 );
         assert( m_nOccupiedBuffer >= 0 );
         assert( m_nOccupiedBuffer <= m_nBufferLen );

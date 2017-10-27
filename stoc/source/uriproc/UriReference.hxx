@@ -41,10 +41,10 @@ public:
     OUString getUriReference();
 
     /// @throws css::uno::RuntimeException
-    bool isAbsolute();
+    bool isAbsolute() const;
 
     /// @throws css::uno::RuntimeException
-    const OUString& getScheme() { return m_scheme;}
+    const OUString& getScheme() const { return m_scheme;}
 
     /// @throws css::uno::RuntimeException
     OUString getSchemeSpecificPart();

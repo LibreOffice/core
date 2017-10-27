@@ -1243,7 +1243,7 @@ private: // helper methods
     static void doRevoke( const Reference < XSimpleRegistry >& xDest,
                           const OUString& locationUrl );
         // throw( InvalidRegistryException, RuntimeException )
-    Reference< XSimpleRegistry > getRegistryFromServiceManager();
+    Reference< XSimpleRegistry > getRegistryFromServiceManager() const;
 
     static Reference< XSimpleRegistry > createTemporarySimpleRegistry(
         const Reference< XMultiComponentFactory > &rSMgr,
@@ -1281,7 +1281,7 @@ Sequence< OUString > ImplementationRegistration::getSupportedServiceNames()
     return seqNames;
 }
 
-Reference< XSimpleRegistry > ImplementationRegistration::getRegistryFromServiceManager()
+Reference< XSimpleRegistry > ImplementationRegistration::getRegistryFromServiceManager() const
 {
     Reference < XPropertySet > xPropSet( m_xSMgr, UNO_QUERY );
     Reference < XSimpleRegistry > xRegistry;

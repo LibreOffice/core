@@ -2364,7 +2364,7 @@ void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, vcl::Window *pWin
     }
 }
 
-std::vector<OUString> VclBuilder::handleItems(xmlreader::XmlReader &reader)
+std::vector<OUString> VclBuilder::handleItems(xmlreader::XmlReader &reader) const
 {
     int nLevel = 1;
 
@@ -3120,7 +3120,7 @@ OString VclBuilder::getStyleClass(xmlreader::XmlReader &reader)
     return aRet;
 }
 
-void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap)
+void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap) const
 {
     xmlreader::Span name;
     int nsId;

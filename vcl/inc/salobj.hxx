@@ -59,12 +59,12 @@ public:
 
     void                            SetMouseTransparent( bool bMouseTransparent )
                                         { m_bMouseTransparent = bMouseTransparent; }
-    bool                            IsMouseTransparent()
+    bool                            IsMouseTransparent() const
                                         { return m_bMouseTransparent; }
 
     void                            EnableEraseBackground( bool bEnable )
                                         { m_bEraseBackground = bEnable; }
-    bool                            IsEraseBackgroundEnabled()
+    bool                            IsEraseBackgroundEnabled() const
                                         { return m_bEraseBackground; }
 };
 

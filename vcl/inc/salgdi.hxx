@@ -198,7 +198,7 @@ public:
     virtual bool                supportsOperation( OutDevSupportType ) const = 0;
 
     // mirroring specifics
-    SalLayoutFlags              GetLayout() { return m_nLayout; }
+    SalLayoutFlags              GetLayout() const { return m_nLayout; }
     void                        SetLayout( SalLayoutFlags aLayout ) { m_nLayout = aLayout;}
 
     void                        mirror( long& nX, const OutputDevice *pOutDev ) const;

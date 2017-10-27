@@ -38,55 +38,55 @@ public:
     explicit        ImplFontMetricData( const FontSelectPattern& );
 
     // font instance attributes from the font request
-    long            GetWidth()                                                      { return mnWidth; }
-    short           GetOrientation()                                                { return mnOrientation; }
+    long            GetWidth() const                                                { return mnWidth; }
+    short           GetOrientation() const                                          { return mnOrientation; }
 
     void            SetWidth(long nWidth)                                           { mnWidth=nWidth; }
     void            SetOrientation(short nOrientation)                              { mnOrientation=nOrientation; }
 
     // font metrics measured for the font instance
-    long            GetAscent()                                                     { return mnAscent; }
-    long            GetDescent()                                                    { return mnDescent; }
-    long            GetInternalLeading()                                            { return mnIntLeading; }
-    long            GetExternalLeading()                                            { return mnExtLeading; }
-    int             GetSlant()                                                      { return mnSlant; }
-    long            GetMinKashida()                                                 { return mnMinKashida; }
+    long            GetAscent() const                                               { return mnAscent; }
+    long            GetDescent() const                                              { return mnDescent; }
+    long            GetInternalLeading() const                                      { return mnIntLeading; }
+    long            GetExternalLeading() const                                      { return mnExtLeading; }
+    int             GetSlant() const                                                { return mnSlant; }
+    long            GetMinKashida() const                                           { return mnMinKashida; }
 
     void            SetSlant(int nSlant)                                            { mnSlant=nSlant; }
     void            SetMinKashida( long nMinKashida )                               { mnMinKashida=nMinKashida; }
 
     // font attributes queried from the font instance
-    bool            IsFullstopCentered()                                            { return mbFullstopCentered; }
-    long            GetBulletOffset()                                               { return mnBulletOffset; }
+    bool            IsFullstopCentered() const                                      { return mbFullstopCentered; }
+    long            GetBulletOffset() const                                         { return mnBulletOffset; }
 
     void            SetFullstopCenteredFlag(bool bFullstopCentered)                 { mbFullstopCentered = bFullstopCentered; }
 
     // font metrics that are usually derived from the measurements
-    long            GetUnderlineSize()                                              { return mnUnderlineSize; }
-    long            GetUnderlineOffset()                                            { return mnUnderlineOffset; }
-    long            GetBoldUnderlineSize()                                          { return mnBUnderlineSize; }
-    long            GetBoldUnderlineOffset()                                        { return mnBUnderlineOffset; }
-    long            GetDoubleUnderlineSize()                                        { return mnDUnderlineSize; }
-    long            GetDoubleUnderlineOffset1()                                     { return mnDUnderlineOffset1; }
-    long            GetDoubleUnderlineOffset2()                                     { return mnDUnderlineOffset2; }
-    long            GetWavelineUnderlineSize()                                      { return mnWUnderlineSize; }
-    long            GetWavelineUnderlineOffset()                                    { return mnWUnderlineOffset; }
-    long            GetAboveUnderlineSize()                                         { return mnAboveUnderlineSize; }
-    long            GetAboveUnderlineOffset()                                       { return mnAboveUnderlineOffset; }
-    long            GetAboveBoldUnderlineSize()                                     { return mnAboveBUnderlineSize; }
-    long            GetAboveBoldUnderlineOffset()                                   { return mnAboveBUnderlineOffset; }
-    long            GetAboveDoubleUnderlineSize()                                   { return mnAboveDUnderlineSize; }
-    long            GetAboveDoubleUnderlineOffset1()                                { return mnAboveDUnderlineOffset1; }
-    long            GetAboveDoubleUnderlineOffset2()                                { return mnAboveDUnderlineOffset2; }
-    long            GetAboveWavelineUnderlineSize()                                 { return mnAboveWUnderlineSize; }
-    long            GetAboveWavelineUnderlineOffset()                               { return mnAboveWUnderlineOffset; }
-    long            GetStrikeoutSize()                                              { return mnStrikeoutSize; }
-    long            GetStrikeoutOffset()                                            { return mnStrikeoutOffset; }
-    long            GetBoldStrikeoutSize()                                          { return mnBStrikeoutSize; }
-    long            GetBoldStrikeoutOffset()                                        { return mnBStrikeoutOffset; }
-    long            GetDoubleStrikeoutSize()                                        { return mnDStrikeoutSize; }
-    long            GetDoubleStrikeoutOffset1()                                     { return mnDStrikeoutOffset1; }
-    long            GetDoubleStrikeoutOffset2()                                     { return mnDStrikeoutOffset2; }
+    long            GetUnderlineSize() const                                        { return mnUnderlineSize; }
+    long            GetUnderlineOffset() const                                      { return mnUnderlineOffset; }
+    long            GetBoldUnderlineSize() const                                    { return mnBUnderlineSize; }
+    long            GetBoldUnderlineOffset() const                                  { return mnBUnderlineOffset; }
+    long            GetDoubleUnderlineSize() const                                  { return mnDUnderlineSize; }
+    long            GetDoubleUnderlineOffset1() const                               { return mnDUnderlineOffset1; }
+    long            GetDoubleUnderlineOffset2() const                               { return mnDUnderlineOffset2; }
+    long            GetWavelineUnderlineSize() const                                { return mnWUnderlineSize; }
+    long            GetWavelineUnderlineOffset() const                              { return mnWUnderlineOffset; }
+    long            GetAboveUnderlineSize() const                                   { return mnAboveUnderlineSize; }
+    long            GetAboveUnderlineOffset() const                                 { return mnAboveUnderlineOffset; }
+    long            GetAboveBoldUnderlineSize() const                               { return mnAboveBUnderlineSize; }
+    long            GetAboveBoldUnderlineOffset() const                             { return mnAboveBUnderlineOffset; }
+    long            GetAboveDoubleUnderlineSize() const                             { return mnAboveDUnderlineSize; }
+    long            GetAboveDoubleUnderlineOffset1() const                          { return mnAboveDUnderlineOffset1; }
+    long            GetAboveDoubleUnderlineOffset2() const                          { return mnAboveDUnderlineOffset2; }
+    long            GetAboveWavelineUnderlineSize() const                           { return mnAboveWUnderlineSize; }
+    long            GetAboveWavelineUnderlineOffset() const                         { return mnAboveWUnderlineOffset; }
+    long            GetStrikeoutSize() const                                        { return mnStrikeoutSize; }
+    long            GetStrikeoutOffset() const                                      { return mnStrikeoutOffset; }
+    long            GetBoldStrikeoutSize() const                                    { return mnBStrikeoutSize; }
+    long            GetBoldStrikeoutOffset() const                                  { return mnBStrikeoutOffset; }
+    long            GetDoubleStrikeoutSize() const                                  { return mnDStrikeoutSize; }
+    long            GetDoubleStrikeoutOffset1() const                               { return mnDStrikeoutOffset1; }
+    long            GetDoubleStrikeoutOffset2() const                               { return mnDStrikeoutOffset2; }
 
     void            ImplInitTextLineSize( const OutputDevice* pDev );
     void            ImplInitAboveTextLineSize();

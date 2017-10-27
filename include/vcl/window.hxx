@@ -664,21 +664,21 @@ private:
     SAL_DLLPRIVATE void                 ImplIntersectWindowClipRegion( vcl::Region& rRegion );
     SAL_DLLPRIVATE void                 ImplIntersectWindowRegion( vcl::Region& rRegion );
     SAL_DLLPRIVATE void                 ImplExcludeWindowRegion( vcl::Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplExcludeOverlapWindows( vcl::Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplExcludeOverlapWindows( vcl::Region& rRegion ) const;
     SAL_DLLPRIVATE void                 ImplExcludeOverlapWindows2( vcl::Region& rRegion );
 
     SAL_DLLPRIVATE void                 ImplClipBoundaries( vcl::Region& rRegion, bool bThis, bool bOverlaps );
-    SAL_DLLPRIVATE bool                 ImplClipChildren( vcl::Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplClipAllChildren( vcl::Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplClipSiblings( vcl::Region& rRegion );
+    SAL_DLLPRIVATE bool                 ImplClipChildren( vcl::Region& rRegion ) const;
+    SAL_DLLPRIVATE void                 ImplClipAllChildren( vcl::Region& rRegion ) const;
+    SAL_DLLPRIVATE void                 ImplClipSiblings( vcl::Region& rRegion ) const;
 
     SAL_DLLPRIVATE void                 ImplInitWinClipRegion();
     SAL_DLLPRIVATE void                 ImplInitWinChildClipRegion();
     SAL_DLLPRIVATE vcl::Region*         ImplGetWinChildClipRegion();
 
-    SAL_DLLPRIVATE void                 ImplIntersectAndUnionOverlapWindows( const vcl::Region& rInterRegion, vcl::Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplIntersectAndUnionOverlapWindows( const vcl::Region& rInterRegion, vcl::Region& rRegion ) const;
     SAL_DLLPRIVATE void                 ImplIntersectAndUnionOverlapWindows2( const vcl::Region& rInterRegion, vcl::Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplCalcOverlapRegionOverlaps( const vcl::Region& rInterRegion, vcl::Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplCalcOverlapRegionOverlaps( const vcl::Region& rInterRegion, vcl::Region& rRegion ) const;
     SAL_DLLPRIVATE void                 ImplCalcOverlapRegion( const tools::Rectangle& rSourceRect, vcl::Region& rRegion,
                                                                bool bChildren, bool bSiblings );
 
@@ -699,7 +699,7 @@ private:
     SAL_DLLPRIVATE bool                 ImplUpdatePos();
     SAL_DLLPRIVATE void                 ImplUpdateSysObjPos();
 
-    SAL_DLLPRIVATE void                 ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl = true );
+    SAL_DLLPRIVATE void                 ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl = true ) const;
 
     SAL_DLLPRIVATE void                 ImplToBottomChild();
 
@@ -712,7 +712,7 @@ private:
     SAL_DLLPRIVATE void                 ImplHideAllOverlaps();
 
     SAL_DLLPRIVATE bool                 ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput );
-    SAL_DLLPRIVATE bool                 ImplHasDlgCtrl();
+    SAL_DLLPRIVATE bool                 ImplHasDlgCtrl() const;
     SAL_DLLPRIVATE void                 ImplDlgCtrlNextWindow();
     SAL_DLLPRIVATE void                 ImplDlgCtrlFocusChanged( vcl::Window* pWindow, bool bGetFocus );
     SAL_DLLPRIVATE vcl::Window*         ImplFindDlgCtrlWindow( vcl::Window* pWindow );
@@ -1192,7 +1192,7 @@ public:
                                                              ScrollBar* pVScrl );
 
     void                                SaveBackground( const Point& rPos, const Size& rSize,
-                                                        VirtualDevice& rSaveDevice );
+                                                        VirtualDevice& rSaveDevice ) const;
 
     virtual const SystemEnvData*        GetSystemData() const;
     css::uno::Any                       GetSystemDataAny() const;

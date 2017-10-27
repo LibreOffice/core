@@ -85,7 +85,7 @@ public:
     virtual        void    LogicInvalidate(const tools::Rectangle* pRectangle) override;
                    void    InvalidateFloatingWindow(const Point& rPos);
                    void    CloseFloatingWindow();
-                   Size    PaintActiveFloatingWindow(VirtualDevice& rDevice);
+                   Size    PaintActiveFloatingWindow(VirtualDevice& rDevice) const;
 
     /// Necessary to register dialog renderable instance to emit LOK callbacks
     void registerDialogRenderable(vcl::IDialogRenderable* pDialogRenderable, const OUString& aDialogId);
