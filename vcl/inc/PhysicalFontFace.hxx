@@ -72,7 +72,7 @@ public:
     // by using an PhysicalFontFace object as a factory for its corresponding
     // LogicalFontInstance can be extended to cache device and font instance
     // specific data
-    virtual LogicalFontInstance*  CreateFontInstance( FontSelectPattern& ) const = 0;
+    virtual LogicalFontInstance*  CreateFontInstance( const FontSelectPattern& ) const = 0;
     virtual PhysicalFontFace* Clone() const = 0;
 
     int                     GetHeight() const           { return mnHeight; }

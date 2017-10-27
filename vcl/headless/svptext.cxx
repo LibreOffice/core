@@ -25,7 +25,7 @@
 #include <impfontmetricdata.hxx>
 #include <CommonSalLayout.hxx>
 
-void SvpSalGraphics::SetFont( FontSelectPattern* pIFSD, int nFallbackLevel )
+void SvpSalGraphics::SetFont( const FontSelectPattern* pIFSD, int nFallbackLevel )
 {
     m_aTextRenderImpl.SetFont(pIFSD, nFallbackLevel);
 }
