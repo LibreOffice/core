@@ -144,7 +144,7 @@ bool UnusedEnumConstants::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
 
     const Stmt * parent = declRefExpr;
 try_again:
-    parent = parentStmt(parent);
+    parent = getParentStmt(parent);
     bool bWrite = false;
     bool bRead = false;
     bool bDump = false;

@@ -230,13 +230,13 @@ bool UnusedMethods::VisitCallExpr(CallExpr* expr)
 gotfunc:
     logCallToRootMethods(calleeFunctionDecl, callSet);
 
-    const Stmt* parent = parentStmt(expr);
+    const Stmt* parent = getParentStmt(expr);
 
     // Now do the checks necessary for the "can be private" analysis
     CXXMethodDecl* calleeMethodDecl = dyn_cast<CXXMethodDecl>(calleeFunctionDecl);
     if (calleeMethodDecl && calleeMethodDecl->getAccess() != AS_private)
     {
-        const FunctionDecl* parentFunctionOfCallSite = parentFunctionDecl(expr);
+        const FunctionDecl* parentFunctionOfCallSite = getParentFunctionDecl(expr);
         if (parentFunctionOfCallSite != calleeFunctionDecl) {
             if (!parentFunctionOfCallSite || !ignoreLocation(parentFunctionOfCallSite)) {
                 calledFromOutsideSet.insert(niceName(calleeFunctionDecl));
@@ -333,7 +333,7 @@ bool UnusedMethods::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     const CXXMethodDecl* methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
     if (methodDecl && methodDecl->getAccess() != AS_private)
     {
-        const FunctionDecl* parentFunctionOfCallSite = parentFunctionDecl(declRefExpr);
+        const FunctionDecl* parentFunctionOfCallSite = getParentFunctionDecl(declRefExpr);
         if (parentFunctionOfCallSite != functionDecl) {
             if (!parentFunctionOfCallSite || !ignoreLocation(parentFunctionOfCallSite)) {
                 calledFromOutsideSet.insert(niceName(functionDecl));

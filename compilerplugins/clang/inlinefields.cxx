@@ -184,7 +184,7 @@ bool InlineFields::VisitBinAssign(const BinaryOperator * binaryOp)
     if (!fieldDecl || !fieldDecl->getType()->isPointerType()) {
         return true;
     }
-    const FunctionDecl* parentFunction = parentFunctionDecl(binaryOp);
+    const FunctionDecl* parentFunction = getParentFunctionDecl(binaryOp);
     if (!parentFunction) {
         return true;
     }
@@ -227,7 +227,7 @@ bool InlineFields::VisitCXXDeleteExpr(const CXXDeleteExpr * deleteExpr)
     }
     // TODO for some reason, this part is not working properly, it doesn't find the parent
     // function for delete statements properly
-    const FunctionDecl* parentFunction = parentFunctionDecl(deleteExpr);
+    const FunctionDecl* parentFunction = getParentFunctionDecl(deleteExpr);
     if (!parentFunction) {
         return true;
     }

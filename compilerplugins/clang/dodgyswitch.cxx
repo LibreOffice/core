@@ -62,13 +62,13 @@ bool DodgySwitch::VisitCaseStmt(CaseStmt const * caseStmt)
 
 bool DodgySwitch::IsParentSwitch(Stmt const * stmt)
 {
-    auto parent = parentStmt(stmt);
+    auto parent = getParentStmt(stmt);
     if (isa<CaseStmt>(parent) || isa<DefaultStmt>(parent)) // daisy chain
         return true;
     auto compoundStmt = dyn_cast<CompoundStmt>(parent);
     if (!compoundStmt)
         return false;
-    return isa<SwitchStmt>(parentStmt(compoundStmt));
+    return isa<SwitchStmt>(getParentStmt(compoundStmt));
 }
 
 loplugin::Plugin::Registration< DodgySwitch > X("dodgyswitch", false);

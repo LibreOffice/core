@@ -118,7 +118,7 @@ void Plugin::registerPlugin( Plugin* (*create)( const InstantiationData& ), cons
 
 std::unordered_map< const Stmt*, const Stmt* > Plugin::parents;
 
-const Stmt* Plugin::parentStmt( const Stmt* stmt )
+const Stmt* Plugin::getParentStmt( const Stmt* stmt )
 {
     if( parents.empty())
         buildParents( compiler );
@@ -127,7 +127,7 @@ const Stmt* Plugin::parentStmt( const Stmt* stmt )
     return parents[ stmt ];
 }
 
-Stmt* Plugin::parentStmt( Stmt* stmt )
+Stmt* Plugin::getParentStmt( Stmt* stmt )
 {
     if( parents.empty())
         buildParents( compiler );
@@ -153,7 +153,7 @@ static const Decl* getDeclContext(ASTContext& context, const Stmt* stmt)
     return nullptr;
 }
 
-const FunctionDecl* Plugin::parentFunctionDecl( const Stmt* stmt )
+const FunctionDecl* Plugin::getParentFunctionDecl( const Stmt* stmt )
 {
     const Decl *decl = getDeclContext(compiler.getASTContext(), stmt);
     if (decl)

@@ -132,7 +132,7 @@ void CheckUnusedParams::checkForFunctionDecl(Expr const * expr, bool bCheckOnly)
     if (!functionDecl)
         return;
     if (bCheckOnly)
-        parentStmt(expr)->dump();
+        getParentStmt(expr)->dump();
     else
         m_addressOfSet.insert(functionDecl->getCanonicalDecl());
 }

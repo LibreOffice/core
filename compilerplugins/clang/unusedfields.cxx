@@ -930,7 +930,7 @@ bool UnusedFields::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
 }
 
 void UnusedFields::checkTouchedFromOutside(const FieldDecl* fieldDecl, const Expr* memberExpr) {
-    const FunctionDecl* memberExprParentFunction = parentFunctionDecl(memberExpr);
+    const FunctionDecl* memberExprParentFunction = getParentFunctionDecl(memberExpr);
     const CXXMethodDecl* methodDecl = dyn_cast_or_null<CXXMethodDecl>(memberExprParentFunction);
 
     MyFieldInfo fieldInfo = niceName(fieldDecl);

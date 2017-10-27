@@ -145,7 +145,7 @@ bool MemoryVar::VisitCXXNewExpr(const CXXNewExpr *newExpr)
     if (ignoreLocation(newExpr)) {
         return true;
     }
-    const Stmt* stmt = parentStmt(newExpr);
+    const Stmt* stmt = getParentStmt(newExpr);
 
     const DeclStmt* declStmt = dyn_cast<DeclStmt>(stmt);
     if (declStmt) {

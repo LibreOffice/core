@@ -289,7 +289,7 @@ bool ConstParams::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
 // related ParamVarDecl can be const.
 bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVarDecl)
 {
-    const Stmt* parent = parentStmt( stmt );
+    const Stmt* parent = getParentStmt( stmt );
     if (!parent)
     {
         // check if we're inside a CXXCtorInitializer

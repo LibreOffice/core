@@ -245,21 +245,21 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
     if (ignoreLocation(memberExpr) || !isInterestingType(fieldDecl->getType()))
         return true;
 
-    const FunctionDecl* parentFunction = parentFunctionDecl(memberExpr);
+    const FunctionDecl* parentFunction = getParentFunctionDecl(memberExpr);
     const CXXMethodDecl* methodDecl = dyn_cast_or_null<CXXMethodDecl>(parentFunction);
     if (methodDecl && (methodDecl->isCopyAssignmentOperator() || methodDecl->isMoveAssignmentOperator()))
        return true;
 
     // walk up the tree until we find something interesting
     const Stmt* child = memberExpr;
-    const Stmt* parent = parentStmt(memberExpr);
+    const Stmt* parent = getParentStmt(memberExpr);
     bool bPotentiallyAssignedTo = false;
     bool bDump = false;
     std::string assignValue;
 
     // check for field being returned by non-const ref eg. Foo& getFoo() { return f; }
     if (parentFunction && parent && isa<ReturnStmt>(parent)) {
-        const Stmt* parent2 = parentStmt(parent);
+        const Stmt* parent2 = getParentStmt(parent);
         if (parent2 && isa<CompoundStmt>(parent2)) {
             QualType qt = compat::getReturnType(*parentFunction).getDesugaredType(compiler.getASTContext());
             if (!qt.isConstQualified() && qt->isReferenceType()) {
@@ -292,7 +292,7 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
              || isa<ExprWithCleanups>(parent))
         {
             child = parent;
-            parent = parentStmt(parent);
+            parent = getParentStmt(parent);
         }
         else if (isa<UnaryOperator>(parent))
         {
@@ -304,7 +304,7 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
                 break;
             }
             child = parent;
-            parent = parentStmt(parent);
+            parent = getParentStmt(parent);
         }
         else if (isa<CXXOperatorCallExpr>(parent))
         {

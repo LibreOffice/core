@@ -67,9 +67,9 @@ protected:
      Returns the parent of the given AST node. Clang's internal AST representation doesn't provide this information,
      it can only provide children, but getting the parent is often useful for inspecting a part of the AST.
     */
-    const Stmt* parentStmt( const Stmt* stmt );
-    Stmt* parentStmt( Stmt* stmt );
-    const FunctionDecl* parentFunctionDecl( const Stmt* stmt );
+    const Stmt* getParentStmt( const Stmt* stmt );
+    Stmt* getParentStmt( Stmt* stmt );
+    const FunctionDecl* getParentFunctionDecl( const Stmt* stmt );
     /**
      Checks if the location is inside an UNO file, more specifically, if it forms part of the URE stable interface,
      which is not allowed to be changed.
