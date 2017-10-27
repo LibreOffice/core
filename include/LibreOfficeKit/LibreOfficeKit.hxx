@@ -161,16 +161,19 @@ public:
      *
      * @param pDialogId Unique dialog id to be painted
      * @param pBuffer Buffer with enough memory allocated to render any dialog
+     * @param pDialogTitle output parameter pointing to a dialog title
+     * string. Should be freed by the caller.
      * @param nWidth output parameter returning the width of the rendered dialog.
      * @param nHeight output parameter returning the height of the rendered dialog
      */
     void paintDialog(const char* pDialogId,
                      unsigned char* pBuffer,
+                     char** pDialogTitle,
                      int& nWidth,
                      int& nHeight)
     {
         return mpDoc->pClass->paintDialog(mpDoc, pDialogId, pBuffer,
-                                          &nWidth, &nHeight);
+                                          pDialogTitle, &nWidth, &nHeight);
     }
 
     /**

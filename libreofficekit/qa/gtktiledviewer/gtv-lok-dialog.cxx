@@ -87,14 +87,20 @@ gtv_lok_dialog_draw(GtkWidget* pDialogDrawingArea, cairo_t* pCairo, gpointer)
     GtvLokDialog* pDialog = GTV_LOK_DIALOG(gtk_widget_get_toplevel(pDialogDrawingArea));
     GtvLokDialogPrivate* priv = getPrivate(pDialog);
 
-
     g_info("panting dialog");
     int nWidth = 1024;
     int nHeight = 768;
     cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
     unsigned char* pBuffer = cairo_image_surface_get_data(pSurface);
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(priv->lokdocview));
-    pDocument->pClass->paintDialog(pDocument, priv->dialogid, pBuffer, &nWidth, &nHeight);
+    char* pDialogTitle = nullptr;
+    pDocument->pClass->paintDialog(pDocument, priv->dialogid, pBuffer, &pDialogTitle, &nWidth, &nHeight);
+    if (pDialogTitle)
+    {
+        gtk_window_set_title(GTK_WINDOW(pDialog), pDialogTitle);
+        free(pDialogTitle);
+    }
+
     gtk_widget_set_size_request(GTK_WIDGET(pDialogDrawingArea), nWidth, nHeight);
 
     cairo_surface_flush(pSurface);
@@ -472,7 +478,6 @@ gtv_lok_dialog_invalidate(GtvLokDialog* dialog)
 {
     GtvLokDialogPrivate* priv = getPrivate(dialog);
 
-    // trigger a draw on the dialog drawing area
     gtk_widget_queue_draw(priv->pDialogDrawingArea);
 }
 
@@ -597,7 +602,7 @@ void gtv_lok_dialog_child_invalidate(GtvLokDialog* dialog, int nX, int nY)
     g_info("Dialog's floating window invalidate");
 
     GtvLokDialogPrivate* priv = getPrivate(dialog);
-    // remove any existing floating windows, for now
+    // create new if doesn't exist
     if (!priv->pFloatingWin)
     {
         priv->pFloatingWin = gtk_window_new(GTK_WINDOW_POPUP);

@@ -631,7 +631,7 @@ static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                           int* pFontHeight);
 static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart);
 
-static void doc_paintDialog(LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight);
+static void doc_paintDialog(LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, char** pDialogTitle, int* nWidth, int* nHeight);
 
 static void doc_paintActiveFloatingWindow(LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight);
 
@@ -3112,7 +3112,7 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
     return nullptr;
 }
 
-static void doc_paintDialog(LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight)
+static void doc_paintDialog(LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, char** pDialogTitle, int* nWidth, int* nHeight)
 {
     SolarMutexGuard aGuard;
 
@@ -3126,7 +3126,16 @@ static void doc_paintDialog(LibreOfficeKitDocument* pThis, const char* pDialogId
     vcl::DialogID aDialogID = OUString::createFromAscii(pDialogId);
 
     comphelper::LibreOfficeKit::setDialogPainting(true);
-    pDialogRenderable->paintDialog(aDialogID, *pDevice.get(), *nWidth, *nHeight);
+
+    // copy the title of the dialog to outparam
+    OUString aDialogTitle;
+    pDialogRenderable->paintDialog(aDialogID, *pDevice.get(), aDialogTitle, *nWidth, *nHeight);
+    if (!aDialogTitle.isEmpty())
+    {
+        OString aTitleString = OUStringToOString(aDialogTitle, RTL_TEXTENCODING_UTF8);
+        *pDialogTitle = static_cast<char*>(malloc(aTitleString.getLength() + 1));
+        strcpy(*pDialogTitle, aTitleString.getStr());
+    }
     comphelper::LibreOfficeKit::setDialogPainting(false);
 }
 

@@ -452,7 +452,7 @@ public:
     /// @see vcl::ITiledRenderable::getPostIts().
     OUString getPostIts() override;
 
-    void paintDialog(const vcl::DialogID& rDialogID, VirtualDevice& rDevice, int& nWidth, int& nHeight) override;
+    void paintDialog(const vcl::DialogID& rDialogID, VirtualDevice& rDevice, OUString& rDialogTitle, int& nWidth, int& nHeight) override;
     void paintActiveFloatingWindow(const vcl::DialogID& rDialogID, VirtualDevice& rDevice, int& nWidth, int& nHeight) override;
     void postDialogKeyEvent(const vcl::DialogID& rDialogID, int nType,
                             int nCharCode, int nKeyCode) override;

@@ -3711,7 +3711,7 @@ void SAL_CALL SwXTextDocument::paintTile( const ::css::uno::Any& Parent, ::sal_I
     #endif
 }
 
-void SwXTextDocument::paintDialog(const vcl::DialogID& rDialogID, VirtualDevice& rDevice, int& nWidth, int& nHeight)
+void SwXTextDocument::paintDialog(const vcl::DialogID& rDialogID, VirtualDevice& rDevice, OUString& rDialogTitle, int& nWidth, int& nHeight)
 {
     SfxViewFrame* pViewFrame = pDocShell->GetView()->GetViewFrame();
     SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
@@ -3737,6 +3737,9 @@ void SwXTextDocument::paintDialog(const vcl::DialogID& rDialogID, VirtualDevice&
     // register the instance so that vcl::Dialog can emit LOK callbacks
     pDlg->registerDialogRenderable(this, rDialogID);
     pDlg->paintDialog(rDevice);
+
+    // set outparams
+    rDialogTitle = pDlg->GetText();
     const Size aSize = pDlg->GetOptimalSize();
     nWidth = aSize.getWidth();
     nHeight = aSize.getHeight();

@@ -31,7 +31,7 @@ public:
     virtual ~IDialogRenderable();
 
     virtual void paintDialog(const DialogID& rDialogID, VirtualDevice &rDevice,
-                             int& nOutputWidth, int& nOutputHeight) = 0;
+                             OUString& rDialogTitle, int& nOutputWidth, int& nOutputHeight) = 0;
 
     virtual void paintActiveFloatingWindow(const DialogID& rDialogID, VirtualDevice &rDevice,
                                            int& nOutputWidth, int& nOutputHeight) = 0;
