@@ -837,7 +837,7 @@ bool WinSalInstance::AnyInput( VclInputFlags nType )
                 ~VclInputFlags(VclInputFlags::KEYBOARD | VclInputFlags::TIMER);
 
             std::vector<MsgRange> aMsgRangeList( GetOtherRanges( nOtherType ) );
-            for ( MsgRange aRange : aMsgRangeList )
+            for ( MsgRange const & aRange : aMsgRangeList )
                 if ( PeekMessageW( &aMsg, nullptr, aRange.nStart,
                                    aRange.nEnd, PM_NOREMOVE | PM_NOYIELD ) )
                     return true;
