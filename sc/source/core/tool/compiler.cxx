@@ -2018,8 +2018,8 @@ sal_Int32 ScCompiler::NextSymbol(bool bInArray)
     sal_Unicode cSep = mxSymbols->getSymbolChar( ocSep);
     sal_Unicode cArrayColSep = mxSymbols->getSymbolChar( ocArrayColSep);
     sal_Unicode cArrayRowSep = mxSymbols->getSymbolChar( ocArrayRowSep);
-    sal_Unicode cDecSep = (mxSymbols->isEnglish() ? '.' :
-            ScGlobal::pLocaleData->getNumDecimalSep()[0]);
+    sal_Unicode cDecSep = (mxSymbols->isEnglish() ? '.' : ScGlobal::pLocaleData->getNumDecimalSep()[0]);
+    sal_Unicode cDecSepAlt = (mxSymbols->isEnglish() ? 0 : ScGlobal::pLocaleData->getNumDecimalSepAlt().toChar());
 
     // special symbols specific to address convention used
     sal_Unicode cSheetPrefix = pConv->getSpecialSymbol(ScCompiler::Convention::ABS_SHEET_PREFIX);
@@ -2262,7 +2262,7 @@ Label_MaskStateMachine:
                     SetError(FormulaError::StringOverflow);
                     eState = ssStop;
                 }
-                else if (c == cDecSep)
+                else if (c == cDecSep || (cDecSepAlt && c == cDecSepAlt))
                 {
                     if (++nDecSeps > 1)
                     {
@@ -3202,10 +3202,17 @@ bool ScCompiler::IsReference( const OUString& rName, const OUString* pErrRef )
 {
     // Has to be called before IsValue
     sal_Unicode ch1 = rName[0];
-    sal_Unicode cDecSep = ( mxSymbols->isEnglish() ? '.' :
-        ScGlobal::pLocaleData->getNumDecimalSep()[0] );
+    sal_Unicode cDecSep = ( mxSymbols->isEnglish() ? '.' : ScGlobal::pLocaleData->getNumDecimalSep()[0] );
     if ( ch1 == cDecSep )
         return false;
+    // Code further down checks only if cDecSep=='.' so simply obtaining the
+    // alternative decimal separator if it's not is sufficient.
+    if (cDecSep != '.')
+    {
+        cDecSep = ScGlobal::pLocaleData->getNumDecimalSepAlt().toChar();
+        if ( ch1 == cDecSep )
+            return false;
+    }
     // Who was that imbecile introducing '.' as the sheet name separator!?!
     if ( rtl::isAsciiDigit( ch1 ) && pConv->getSpecialSymbol( Convention::SHEET_SEPARATOR) == '.' )
     {
