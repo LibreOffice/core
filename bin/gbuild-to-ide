@@ -925,6 +925,17 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             f.write('\tEndGlobalSection\n')
             f.write('EndGlobal\n')
 
+    @staticmethod
+    def defs_list(defs):
+        defines_list = []
+        # List defines
+        for key, value in defs.items():
+            define = key
+            if value is not None:
+                define += '=' + value
+            defines_list.append(define)
+        return defines_list
+
     def write_project(self, project_path, target):
         # See info at http://blogs.msdn.com/b/visualstudio/archive/2010/05/14/a-guide-to-vcxproj-and-props-file-structure.aspx
         folder = os.path.dirname(project_path)
@@ -993,7 +1004,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             nmake_output_node = ET.SubElement(conf_node, '{%s}NMakeOutput' % ns)
             nmake_output_node.text = os.path.join('../..', 'program', 'soffice.exe')
             nmake_defs_node = ET.SubElement(conf_node, '{%s}NMakePreprocessorDefinitions' % ns)
-            nmake_defs_node.text = ';'.join(list(target['DEFS']) + ['$(NMakePreprocessorDefinitions)'])
+            nmake_defs_node.text = ';'.join(self.defs_list(target['DEFS']) + ['$(NMakePreprocessorDefinitions)'])
             include_path_node = ET.SubElement(conf_node, '{%s}IncludePath' % ns)
             includes = [os.path.join('../..', elem) if elem[1] != ':'  else elem for elem in target['include']]
             include_path_node.text = ';'.join(includes + ['$(IncludePath)'])

@@ -831,6 +831,17 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             f.write('EndGlobal\n')
         print('')
 
+    @staticmethod
+    def defs_list(defs):
+        defines_list = []
+        # List defines
+        for key, value in defs.items():
+            define = key
+            if value is not None:
+                define += '=' + value
+            defines_list.append(define)
+        return defines_list
+
     def write_project(self, project_path, target):
         # See info at http://blogs.msdn.com/b/visualstudio/archive/2010/05/14/a-guide-to-vcxproj-and-props-file-structure.aspx
         folder = os.path.dirname(project_path)
@@ -899,7 +910,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             nmake_output_node = ET.SubElement(conf_node, '{%s}NMakeOutput' % ns)
             nmake_output_node.text = os.path.join(self.gbuildparser.instdir, 'program', 'soffice.exe')
             nmake_defs_node = ET.SubElement(conf_node, '{%s}NMakePreprocessorDefinitions' % ns)
-            nmake_defs_node.text = ';'.join(list(target.defs) + ['$(NMakePreprocessorDefinitions)'])
+            nmake_defs_node.text = ';'.join(self.defs_list(target.defs) + ['$(NMakePreprocessorDefinitions)'])
             include_path_node = ET.SubElement(conf_node, '{%s}IncludePath' % ns)
             include_path_node.text = ';'.join(target.include + ['$(IncludePath)'])
 
