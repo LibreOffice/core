@@ -152,6 +152,7 @@ RTSPaperPage::RTSPaperPage(RTSDialog* pParent)
     : TabPage(pParent->m_pTabControl, "PrinterPaperPage", "vcl/ui/printerpaperpage.ui")
     , m_pParent( pParent )
 {
+    get(m_pCbFromSetup, "papersizefromsetup");
     get(m_pPaperText, "paperft");
     get(m_pPaperBox, "paperlb");
     get(m_pOrientBox, "orientlb");
@@ -164,6 +165,8 @@ RTSPaperPage::RTSPaperPage(RTSDialog* pParent)
     m_pOrientBox->SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
     m_pDuplexBox->SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
     m_pSlotBox->SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
+    m_pCbFromSetup->SetToggleHdl( LINK( this, RTSPaperPage, CheckBoxHdl ) );
+
 
     sal_Int32 nPos = 0;
 
@@ -189,6 +192,7 @@ void RTSPaperPage::dispose()
 {
     m_pParent.clear();
     m_pPaperText.clear();
+    m_pCbFromSetup.clear();
     m_pPaperBox.clear();
     m_pOrientBox.clear();
     m_pDuplexText.clear();
@@ -242,9 +246,11 @@ void RTSPaperPage::update()
         m_pSlotBox->Enable( false );
     }
 
+    if ( m_pParent->m_aJobData.m_bPapersizeFromSetup )
+        m_pCbFromSetup->Check( m_pParent->m_aJobData.m_bPapersizeFromSetup );
     // disable those, unless user wants to use papersize from printer prefs
     // as they have no influence on what's going to be printed anyway
-    if (!m_pParent->m_aJobData.m_bPapersizeFromSetup)
+    else
     {
         m_pPaperBox->Enable( false );
         m_pOrientBox->Enable( false );
@@ -283,6 +289,14 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox&, rBox, void )
     m_pParent->SetDataModified( true );
 }
 
+IMPL_LINK( RTSPaperPage, CheckBoxHdl, CheckBox&, /*cBox*/, void )
+{
+    bool bFromSetup = m_pCbFromSetup->IsChecked();
+    m_pParent->m_aJobData.m_bPapersizeFromSetup = bFromSetup;
+    m_pPaperBox->Enable( bFromSetup );
+    m_pOrientBox->Enable( bFromSetup );
+    m_pParent->SetDataModified( true );
+}
 /*
  * RTSDevicePage
  */
