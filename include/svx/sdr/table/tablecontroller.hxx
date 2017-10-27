@@ -100,6 +100,9 @@ public:
     /// @see sdr::SelectionController::getSelectedCells().
     void getSelectedCells( CellPos& rFirstPos, CellPos& rLastPos ) override;
     void setSelectedCells( const CellPos& rFirstPos, const CellPos& rLastPos );
+
+    virtual bool ChangeFontSize(bool bGrow, const FontList* pFontList) override;
+
     void clearSelection();
     void selectAll();
 
