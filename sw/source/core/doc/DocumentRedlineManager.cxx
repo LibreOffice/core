@@ -759,8 +759,6 @@ Behaviour of Delete-Redline:
 IDocumentRedlineAccess::AppendResult
 DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCallDelete)
 {
-    fprintf(stderr, "AppendRedline %p\n", pNewRedl);
-
     bool bMerged = false;
     CHECK_REDLINE( *this )
 
@@ -1250,10 +1248,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                             delete pNewRedl;
                             pNewRedl = nullptr;
                             if (eCmpPos == SwComparePosition::Inside)
-                            {
-                                fprintf(stderr, "pRedl is %p\n", pRedl);
                                 pRedl->MaybeNotifyModification();
-                            }
                             break;
 
                         case SwComparePosition::Outside:
