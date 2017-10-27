@@ -53,10 +53,9 @@ sal_uInt32 ParseText(OUString const & sTmp)
         return 0;
 
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
-    const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
 
     rtl_math_ConversionStatus eStatus;
-    double fTmp = rtl::math::stringToDouble( sTmp, cSep, 0, &eStatus);
+    double fTmp = rLocaleWrapper.stringToDouble( sTmp, false, &eStatus, nullptr);
     if (eStatus != rtl_math_ConversionStatus_Ok)
         return 0;
 
