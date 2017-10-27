@@ -112,10 +112,7 @@ double SwSortElement::StrToDouble( const OUString& rStr )
 
     rtl_math_ConversionStatus eStatus;
     sal_Int32 nEnd;
-    double nRet = ::rtl::math::stringToDouble( rStr,
-                                    pLclData->getNumDecimalSep()[0],
-                                    pLclData->getNumThousandSep()[0],
-                                    &eStatus, &nEnd );
+    double nRet = pLclData->stringToDouble( rStr, true, &eStatus, &nEnd );
 
     if( rtl_math_ConversionStatus_Ok != eStatus || nEnd == 0 )
         nRet = 0.0;
