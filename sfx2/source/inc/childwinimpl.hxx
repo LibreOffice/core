@@ -57,27 +57,6 @@ public:
     iterator begin();
 };
 
-class SfxFrameArr_Impl
-{
-    typedef std::vector<SfxFrame*> DataType;
-    DataType maData;
-
-public:
-    typedef DataType::iterator iterator;
-
-    iterator begin();
-    iterator end();
-
-    SfxFrame* front();
-
-    void erase( const iterator& it );
-
-    SfxFrame* operator[] ( size_t i );
-
-    void push_back( SfxFrame* p );
-    bool empty() const;
-};
-
 #endif
 
 

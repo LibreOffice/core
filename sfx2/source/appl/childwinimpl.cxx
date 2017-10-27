@@ -70,39 +70,4 @@ SfxChildWinFactArr_Impl::iterator SfxChildWinFactArr_Impl::begin()
     return maData.begin();
 }
 
-SfxFrameArr_Impl::iterator SfxFrameArr_Impl::begin()
-{
-    return maData.begin();
-}
-
-SfxFrameArr_Impl::iterator SfxFrameArr_Impl::end()
-{
-    return maData.end();
-}
-
-SfxFrame* SfxFrameArr_Impl::front()
-{
-    return maData.front();
-}
-
-void SfxFrameArr_Impl::erase( const iterator& it )
-{
-    maData.erase(it);
-}
-
-SfxFrame* SfxFrameArr_Impl::operator[] ( size_t i )
-{
-    return maData[i];
-}
-
-void SfxFrameArr_Impl::push_back( SfxFrame* p )
-{
-    maData.push_back(p);
-}
-
-bool SfxFrameArr_Impl::empty() const
-{
-    return maData.empty();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
