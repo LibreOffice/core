@@ -33,6 +33,7 @@
       <DateSeparator>/</DateSeparator>
       <ThousandSeparator>٬</ThousandSeparator>
       <DecimalSeparator>٫</DecimalSeparator>
+      <DecimalSeparatorAlternative>.</DecimalSeparatorAlternative>
       <TimeSeparator>:</TimeSeparator>
       <Time100SecSeparator>٫</Time100SecSeparator>
       <ListSeparator>;</ListSeparator>
