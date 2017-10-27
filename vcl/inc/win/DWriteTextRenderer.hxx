@@ -24,7 +24,7 @@
 #include <d2d1.h>
 #include <dwrite.h>
 
-#include "win/winlayout.hxx"
+#include <win/winlayout.hxx>
 
 enum class D2DTextAntiAliasMode
 {

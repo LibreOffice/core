@@ -21,11 +21,11 @@
 #include <win/saldata.hxx>
 #include <outdev.h>
 
-#include "win/DWriteTextRenderer.hxx"
+#include <win/DWriteTextRenderer.hxx>
 
-#include "sft.hxx"
-#include "sallayout.hxx"
-#include "CommonSalLayout.hxx"
+#include <sft.hxx>
+#include <sallayout.hxx>
+#include <CommonSalLayout.hxx>
 
 #include <shlwapi.h>
 #include <winver.h>

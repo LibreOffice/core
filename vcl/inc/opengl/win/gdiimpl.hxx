@@ -13,12 +13,12 @@
 #include <memory>
 #include <vcl/dllapi.h>
 
-#include "openglgdiimpl.hxx"
-#include "svdata.hxx"
-#include "win/salgdi.h"
+#include <openglgdiimpl.hxx>
+#include <svdata.hxx>
+#include <win/salgdi.h>
 #include <o3tl/lru_map.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
-#include "ControlCacheKey.hxx"
+#include <ControlCacheKey.hxx>
 
 class WinOpenGLSalGraphicsImpl : public OpenGLSalGraphicsImpl
 {

@@ -33,9 +33,9 @@
 
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmapaccess.hxx>
-#include "outdata.hxx"
-#include "salgdiimpl.hxx"
-#include "opengl/win/gdiimpl.hxx"
+#include <outdata.hxx>
+#include <salgdiimpl.hxx>
+#include <opengl/win/gdiimpl.hxx>
 
 
 bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const

@@ -28,7 +28,7 @@
 #include <win/salinst.h>
 #include <win/salgdi.h>
 #include <win/salvd.h>
-#include "opengl/win/gdiimpl.hxx"
+#include <opengl/win/gdiimpl.hxx>
 
 HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY, sal_uInt16 nBitCount, void **ppData)
 {

@@ -32,20 +32,20 @@
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/timer.hxx>
 
-#include "opengl/salbmp.hxx"
-#include "opengl/win/gdiimpl.hxx"
-#include "win/wincomp.hxx"
-#include "win/salids.hrc"
-#include "win/saldata.hxx"
-#include "win/salinst.h"
-#include "win/salframe.h"
-#include "win/salobj.h"
-#include "win/saltimer.h"
-#include "win/salbmp.h"
-#include "win/winlayout.hxx"
+#include <opengl/salbmp.hxx>
+#include <opengl/win/gdiimpl.hxx>
+#include <win/wincomp.hxx>
+#include <win/salids.hrc>
+#include <win/saldata.hxx>
+#include <win/salinst.h>
+#include <win/salframe.h>
+#include <win/salobj.h>
+#include <win/saltimer.h>
+#include <win/salbmp.h>
+#include <win/winlayout.hxx>
 
-#include "salimestatus.hxx"
-#include "salsys.hxx"
+#include <salimestatus.hxx>
+#include <salsys.hxx>
 
 #include <desktop/crashreport.hxx>
 
@@ -63,12 +63,12 @@
 #pragma warning( disable: 4917 )
 #endif
 
-#include "prewin.h"
+#include <prewin.h>
 
 #include <gdiplus.h>
 #include <shlobj.h>
 
-#include "postwin.h"
+#include <postwin.h>
 
 #if defined _MSC_VER
 #pragma warning(pop)

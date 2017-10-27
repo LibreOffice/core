@@ -31,9 +31,9 @@
 #include <win/salvd.h>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-#include "salgdiimpl.hxx"
+#include <salgdiimpl.hxx>
 #include "gdiimpl.hxx"
-#include "opengl/win/gdiimpl.hxx"
+#include <opengl/win/gdiimpl.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 

@@ -38,9 +38,9 @@
 #endif
 #endif
 
-#include "prewin.h"
+#include <prewin.h>
 #include <gdiplus.h>
-#include "postwin.h"
+#include <postwin.h>
 
 #if defined _MSC_VER
 #undef min

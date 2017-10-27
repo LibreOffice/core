@@ -10,7 +10,7 @@
 #include <vcl/dllapi.h>
 #include <xmlreader/xmlreader.hxx>
 #include <vector>
-#include "opengl/win/WinDeviceInfo.hxx"
+#include <opengl/win/WinDeviceInfo.hxx>
 
 class InvalidFileException
 {

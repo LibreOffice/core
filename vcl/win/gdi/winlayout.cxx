@@ -18,8 +18,8 @@
  */
 
 #include <memory>
-#include "osl/module.h"
-#include "osl/file.h"
+#include <osl/module.h>
+#include <osl/file.h>
 
 #include <comphelper/windowserrorstring.hxx>
 
@@ -31,12 +31,12 @@
 #include <win/saldata.hxx>
 #include <outdev.h>
 
-#include "win/DWriteTextRenderer.hxx"
+#include <win/DWriteTextRenderer.hxx>
 
-#include "sft.hxx"
-#include "sallayout.hxx"
-#include "CommonSalLayout.hxx"
-#include "win/ScopedHDC.hxx"
+#include <sft.hxx>
+#include <sallayout.hxx>
+#include <CommonSalLayout.hxx>
+#include <win/ScopedHDC.hxx>
 
 #include <cstdio>
 #include <cstdlib>

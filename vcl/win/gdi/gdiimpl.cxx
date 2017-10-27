@@ -30,14 +30,14 @@
 #include <win/wincomp.hxx>
 #include <win/saldata.hxx>
 #include <win/salgdi.h>
-#include "win/salbmp.h"
+#include <win/salbmp.h>
 #include <vcl/salbtype.hxx>
 #include <win/salframe.h>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-#include "outdata.hxx"
-#include "win/salids.hrc"
-#include "ControlCacheKey.hxx"
+#include <outdata.hxx>
+#include <win/salids.hrc>
+#include <ControlCacheKey.hxx>
 
 #if defined _MSC_VER
 #ifndef min
@@ -48,13 +48,13 @@
 #endif
 #endif
 
-#include "prewin.h"
+#include <prewin.h>
 
 #include <gdiplus.h>
 #include <gdiplusenums.h>
 #include <gdipluscolor.h>
 
-#include "postwin.h"
+#include <postwin.h>
 
 #define SAL_POLYPOLYCOUNT_STACKBUF          8
 #define SAL_POLYPOLYPOINTS_STACKBUF         64

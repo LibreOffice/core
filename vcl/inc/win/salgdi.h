@@ -20,13 +20,13 @@
 #ifndef INCLUDED_VCL_INC_WIN_SALGDI_H
 #define INCLUDED_VCL_INC_WIN_SALGDI_H
 
-#include "sallayout.hxx"
-#include "salgeom.hxx"
-#include "salgdi.hxx"
-#include "fontinstance.hxx"
-#include "fontattributes.hxx"
-#include "PhysicalFontFace.hxx"
-#include "impfont.hxx"
+#include <sallayout.hxx>
+#include <salgeom.hxx>
+#include <salgdi.hxx>
+#include <fontinstance.hxx>
+#include <fontattributes.hxx>
+#include <PhysicalFontFace.hxx>
+#include <impfont.hxx>
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/fontcharmap.hxx>
 
@@ -35,8 +35,8 @@
 
 #ifndef INCLUDED_PRE_POST_WIN_H
 #define INCLUDED_PRE_POST_WIN_H
-#  include "prewin.h"
-#  include "postwin.h"
+#  include <prewin.h>
+#  include <postwin.h>
 #endif
 
 #include <hb-ot.h>

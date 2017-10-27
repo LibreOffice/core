@@ -12,7 +12,7 @@
 
 #include <vcl/dllapi.h>
 
-#include "opengl/DeviceInfo.hxx"
+#include <opengl/DeviceInfo.hxx>
 
 #include <rtl/ustring.hxx>
 #include <vector>
