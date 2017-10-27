@@ -278,7 +278,7 @@ cross-toolset: bootstrap fetch
 ifneq ($(OS),IOS)
 	$(MAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(BUILDDIR)/Makefile fetch
 endif
-	$(MAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build-tools
+	$(MAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) CFLAGS="" CXXFLAGS="" LDFLAGS="" LIBS="" -f $(SRCDIR)/Makefile.gbuild build-tools
 
 install-gdb-printers:
 ifneq ($(filter-out WNT MACOSX IOS,$(OS)),)

@@ -1358,15 +1358,27 @@ gb_LinkTarget__use_icu_headers:=
 gb_ExternalProject__use_icu:=
 
 define gb_LinkTarget__use_icudata
-$(call gb_LinkTarget_add_libs,$(1),-licudata)
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(ICU_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(ICU_LIBS))
 
 endef
 define gb_LinkTarget__use_icui18n
-$(call gb_LinkTarget_add_libs,$(1),-licui18n)
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(ICU_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(ICU_LIBS))
 
 endef
 define gb_LinkTarget__use_icuuc
-$(call gb_LinkTarget_add_libs,$(1),-licuuc)
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(ICU_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(ICU_LIBS))
 
 endef
 
