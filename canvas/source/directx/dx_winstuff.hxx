@@ -27,7 +27,7 @@
 
 
 #define WIN32_LEAN_AND_MEAN
-#include "prewin.h"
+#include <prewin.h>
 
 // Enabling Direct3D Debug Information Further more, with registry key
 // \\HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Direct3D\D3D9Debugging\\EnableCreationStack
@@ -154,7 +154,7 @@ namespace dxcanvas
 }
 
 
-#include "postwin.h"
+#include <postwin.h>
 
 #endif // INCLUDED_CANVAS_SOURCE_DIRECTX_DX_WINSTUFF_HXX
 
