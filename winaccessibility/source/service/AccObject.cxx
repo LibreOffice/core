@@ -32,15 +32,15 @@
 #include <algorithm>
 #include <assert.h>
 
-#include "AccObject.hxx"
-#include "AccEventListener.hxx"
+#include <AccObject.hxx>
+#include <AccEventListener.hxx>
 
 #if defined __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wextra-tokens"
     // "#endif !_MIDL_USE_GUIDDEF_" in midl-generated code
 #endif
-#include "UAccCOM_i.c"
+#include <UAccCOM_i.c>
 #if defined __clang__
 #pragma clang diagnostic pop
 #endif

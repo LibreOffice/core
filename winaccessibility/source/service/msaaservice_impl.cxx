@@ -40,7 +40,7 @@ using namespace ::com::sun::star::accessibility;
 
 using namespace ::com::sun::star::awt;
 
-#include "AccTopWindowListener.hxx"
+#include <AccTopWindowListener.hxx>
 
 namespace my_sc_impl
 {

@@ -26,22 +26,22 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 #include <oleacc.h>
-#include "AccObjectWinManager.hxx"
-#include "AccEventListener.hxx"
-#include "AccComponentEventListener.hxx"
-#include "AccContainerEventListener.hxx"
-#include "AccDialogEventListener.hxx"
-#include "AccWindowEventListener.hxx"
-#include "AccFrameEventListener.hxx"
-#include "AccMenuEventListener.hxx"
-#include "AccObjectContainerEventListener.hxx"
-#include "AccParagraphEventListener.hxx"
-#include "AccTextComponentEventListener.hxx"
-#include "AccListEventListener.hxx"
-#include "AccTreeEventListener.hxx"
-#include "AccTableEventListener.hxx"
-#include "AccObject.hxx"
-#include "unomsaaevent.hxx"
+#include <AccObjectWinManager.hxx>
+#include <AccEventListener.hxx>
+#include <AccComponentEventListener.hxx>
+#include <AccContainerEventListener.hxx>
+#include <AccDialogEventListener.hxx>
+#include <AccWindowEventListener.hxx>
+#include <AccFrameEventListener.hxx>
+#include <AccMenuEventListener.hxx>
+#include <AccObjectContainerEventListener.hxx>
+#include <AccParagraphEventListener.hxx>
+#include <AccTextComponentEventListener.hxx>
+#include <AccListEventListener.hxx>
+#include <AccTreeEventListener.hxx>
+#include <AccTableEventListener.hxx>
+#include <AccObject.hxx>
+#include <unomsaaevent.hxx>
 
 
 using namespace std;
