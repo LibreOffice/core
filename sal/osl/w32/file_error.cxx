@@ -18,7 +18,7 @@
  */
 
 #include "file_error.hxx"
-#include "winerror.h"
+#include <winerror.h>
 
 /* OS error to oslFileError values mapping table */
 struct osl_file_error_entry

@@ -29,7 +29,7 @@
 # undef WIN32_LEAN_AND_MEAN
 #endif
 
-#include <file-impl.hxx>
+#include "file-impl.hxx"
 #include "procimpl.hxx"
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>

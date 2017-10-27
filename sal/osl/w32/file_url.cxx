@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "systools/win32/uwinapi.h"
+#include <systools/win32/uwinapi.h>
 
 #include "file_url.hxx"
 #include "file_error.hxx"
