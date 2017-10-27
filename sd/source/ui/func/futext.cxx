@@ -1396,31 +1396,12 @@ void FuText::ChangeFontSize( bool bGrow, OutlinerView* pOLV, const FontList* pFo
             if( pTextObj )
             {
                 rtl::Reference<sdr::SelectionController> xSelectionController(pView->getSelectionController());
-                sdr::table::CellPos aFirstCell;
-                sdr::table::CellPos aLastCell;
-                sdr::table::SdrTableObj* pTableObject = nullptr;
-                if (xSelectionController.is() && xSelectionController->hasSelectedCells())
+                if (xSelectionController.is() && xSelectionController->ChangeFontSize(bGrow, pFontList))
                 {
-                    // This is a table object, and one or more of its cells are
-                    // selected.
-                    xSelectionController->getSelectedCells(aFirstCell, aLastCell);
-                    pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pTextObj);
+                    continue;
                 }
                 for( sal_Int32 nText = 0; nText < pTextObj->getTextCount(); nText++ )
                 {
-                    if (pTableObject)
-                    {
-                        sal_Int32 nColCount = pTableObject->getColumnCount();
-                        if (nColCount > 0)
-                        {
-                            sdr::table::CellPos aPos(nText % nColCount, nText / nColCount);
-                            if (!IsInSelection(aFirstCell, aLastCell, aPos))
-                                // There is a selection, but this cell is not
-                                // part of it: don't change font size.
-                                continue;
-                        }
-                    }
-
                     pTextObj->setActiveText( nText );
 
                     // Put text object into edit mode.

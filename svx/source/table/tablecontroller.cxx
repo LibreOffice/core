@@ -72,6 +72,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
+#include <editeng/editview.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace sdr::table;
@@ -2026,6 +2027,51 @@ void SvxTableController::setSelectedCells( const CellPos& rStart, const CellPos&
     mbCellSelectionMode = true;
     maCursorFirstPos = rStart;
     UpdateSelection( rEnd );
+}
+
+
+bool SvxTableController::ChangeFontSize(bool bGrow, const FontList* pFontList)
+{
+    if (mxTable.is())
+    {
+        if (mpView->IsTextEdit())
+            return true;
+
+        CellPos aStart, aEnd;
+        if(hasSelectedCells())
+        {
+            getSelectedCells(aStart, aEnd);
+        }
+        else
+        {
+            aStart.mnRow = 0;
+            aStart.mnCol = 0;
+            aEnd.mnRow = mxTable->getRowCount() - 1;
+            aEnd.mnCol = mxTable->getColumnCount() - 1;
+        }
+
+        for (sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++)
+        {
+            for (sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++)
+            {
+                CellRef xCell(dynamic_cast< Cell* >(mxTable->getCellByPosition(nCol, nRow).get()));
+                if (xCell.is())
+                {
+                    if (mpModel && mpModel->IsUndoEnabled())
+                        xCell->AddUndo();
+
+                    SfxItemSet aCellSet(xCell->GetItemSet());
+                    if (EditView::ChangeFontSize(bGrow, aCellSet, pFontList))
+                    {
+                        xCell->SetMergedItemSetAndBroadcast(aCellSet, false);
+                    }
+                }
+            }
+        }
+        UpdateTableShape();
+        return true;
+    }
+    return false;
 }
 
 
