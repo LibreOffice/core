@@ -236,9 +236,8 @@ bool ConstantParam::VisitCallExpr(const CallExpr * callExpr) {
     else {
         functionDecl = callExpr->getDirectCallee();
     }
-    if (functionDecl == nullptr) {
+    if (!functionDecl)
         return true;
-    }
     functionDecl = functionDecl->getCanonicalDecl();
     // method overrides don't always specify the same default params (although they probably should)
     // so we need to work our way up to the root method
@@ -282,10 +281,10 @@ bool ConstantParam::VisitCallExpr(const CallExpr * callExpr) {
 bool ConstantParam::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
 {
     const Decl* decl = declRefExpr->getDecl();
-    if (!isa<FunctionDecl>(decl)) {
-        return true;
-    }
     const FunctionDecl* functionDecl = dyn_cast<FunctionDecl>(decl);
+    if (!functionDecl)
+        return true;
+    functionDecl = functionDecl->getCanonicalDecl();
     for (unsigned i = 0; i < functionDecl->getNumParams(); ++i)
     {
         addToCallSet(functionDecl, i, functionDecl->getParamDecl(i)->getName(), "unknown3");
