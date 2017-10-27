@@ -577,7 +577,7 @@ void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
     m_aLineColor = aOrigLineColor;
 }
 
-void SvpSalGraphics::drawPolyLine(sal_uInt32 nPoints, SalPoint* pPtAry)
+void SvpSalGraphics::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
 {
     basegfx::B2DPolygon aPoly;
     aPoly.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
