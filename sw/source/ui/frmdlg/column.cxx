@@ -583,6 +583,9 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
     m_aEd3.SetMetric(aMetric);
     m_aDistEd1.SetMetric(aMetric);
     m_aDistEd2.SetMetric(aMetric);
+    //default spacing between cols = 0.5cm
+    m_aDistEd1.SetPrcntValue(50, FUNIT_CM);
+    m_aDistEd2.SetPrcntValue(50, FUNIT_CM);
 
     delete m_pColMgr;
     m_pColMgr = new SwColMgr(*rSet);
