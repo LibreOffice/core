@@ -98,6 +98,16 @@ canvas/   | new (UNO) canvas rendering model with various backends
 cppcanvas/ | C++ helper classes for using the UNO canvas
 drawinglayer/ | View code to render drawable objects and break them down into primitives we can render more easily.
 
+## Rules for #include directives (C/C++)
+
+Use the `"..."` form if and only if the included file is found next to the
+including file. Otherwise, use the `<...>` form. (For further details, see the
+mail [Re: C[++]: Normalizing include syntax ("" vs
+<>)](https://lists.freedesktop.org/archives/libreoffice/2017-November/078778.html).)
+
+The UNO API include files should consistently use double quotes, for the
+benefit of external users of this API.
+
 
 ## Finding out more
 
