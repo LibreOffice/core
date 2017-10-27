@@ -130,9 +130,12 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
                     aStr = "?";
                 }
 
-                sal_Unicode cDec(SvtSysLocale().GetLocaleData().getNumDecimalSep()[0]);
+                SvtSysLocale aSysLocale;
+                const LocaleDataWrapper& rLocaleDataWrapper = aSysLocale.GetLocaleData();
+                sal_Unicode cDec(rLocaleDataWrapper.getNumDecimalSep()[0]);
+                sal_Unicode cDecAlt(rLocaleDataWrapper.getNumDecimalSepAlt().toChar());
 
-                if(aStr.indexOf(cDec) != -1)
+                if(aStr.indexOf(cDec) != -1 || (cDecAlt && aStr.indexOf(cDecAlt) != -1))
                 {
                     sal_Int32 nLen2(aStr.getLength() - 1);
 
@@ -142,7 +145,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
                         nLen2--;
                     }
 
-                    if(aStr[nLen2] == cDec)
+                    if(aStr[nLen2] == cDec || (cDecAlt && aStr[nLen2] == cDecAlt))
                     {
                         aStr = aStr.copy(0, nLen2);
                         nLen2--;
