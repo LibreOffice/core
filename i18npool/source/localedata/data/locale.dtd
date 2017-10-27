@@ -436,10 +436,11 @@
 <!ATTLIST LC_CTYPE  %RefLocale;>
 <!ATTLIST LC_CTYPE  %UNOModule;>
 
-<!ELEMENT Separators (DateSeparator, ThousandSeparator, DecimalSeparator, TimeSeparator, Time100SecSeparator, ListSeparator, LongDateDayOfWeekSeparator, LongDateDaySeparator, LongDateMonthSeparator, LongDateYearSeparator)>
+<!ELEMENT Separators (DateSeparator, ThousandSeparator, DecimalSeparator, DecimalSeparatorAlternative?, TimeSeparator, Time100SecSeparator, ListSeparator, LongDateDayOfWeekSeparator, LongDateDaySeparator, LongDateMonthSeparator, LongDateYearSeparator)>
 <!ELEMENT DateSeparator (#PCDATA)>
 <!ELEMENT ThousandSeparator (#PCDATA)>
 <!ELEMENT DecimalSeparator (#PCDATA)>
+<!ELEMENT DecimalSeparatorAlternative (#PCDATA)>
 <!ELEMENT TimeSeparator (#PCDATA)>
 <!ELEMENT Time100SecSeparator (#PCDATA)>
 <!ELEMENT ListSeparator (#PCDATA)>
