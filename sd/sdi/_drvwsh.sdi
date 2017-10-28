@@ -2747,11 +2747,6 @@ interface DrawView
     [
         ExecMethod = FuTemporary ;
     ]
-    SID_INSERT_3DMODEL
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
     SID_GO_TO_NEXT_PAGE
     [
         ExecMethod = ExecGoToNextPage ;

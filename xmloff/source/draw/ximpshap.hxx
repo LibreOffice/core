@@ -510,9 +510,7 @@ public:
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue ) override;
 
-#if !HAVE_FEATURE_GLTF
     const OUString& getMimeType() const { return maMimeType; }
-#endif
 };
 
 // draw:floating-frame
