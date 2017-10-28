@@ -145,16 +145,6 @@
 #define HAVE_BFFVALIDATOR 0
 
 /*
- * Whether we have glTF support.
- */
-#define HAVE_FEATURE_GLTF 0
-
-/*
- * Whether we have COLLADA support.
- */
-#define HAVE_FEATURE_COLLADA 0
-
-/*
  * Whether we support breakpad as crash reporting lib.
  */
 #define HAVE_FEATURE_BREAKPAD 0

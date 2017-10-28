@@ -1447,16 +1447,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             rReq.Ignore ();
         }
         break;
-#if HAVE_FEATURE_GLTF
-        case SID_INSERT_3DMODEL:
-        {
-            SetCurrentFunction( FuInsert3DModel::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
-
-            Cancel();
-            rReq.Ignore ();
-        }
-        break;
-#endif
         case SID_CLASSIFICATION_APPLY:
         {
             const SfxItemSet* pArgs = rReq.GetArgs();

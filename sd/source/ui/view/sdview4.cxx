@@ -38,7 +38,6 @@
 #include <sot/storage.hxx>
 #include <sfx2/app.hxx>
 #include <avmedia/mediawindow.hxx>
-#include <avmedia/modeltools.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/embedhlp.hxx>
@@ -295,28 +294,6 @@ void View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
 
     InsertMediaObj( realURL, "application/vnd.sun.star.media", rAction, rPos, rSize );
 }
-#if HAVE_FEATURE_OPENGL
-#if HAVE_FEATURE_GLTF
-void View::Insert3DModelURL(
-    const OUString& rModelURL, sal_Int8& rAction,
-    const Point& rPos, const Size& rSize )
-{
-    OUString sRealURL;
-    uno::Reference<frame::XModel> const xModel(
-                GetDoc().GetObjectShell()->GetModel());
-#if HAVE_FEATURE_AVMEDIA
-    bool const bRet = ::avmedia::Embed3DModel(xModel, rModelURL, sRealURL);
-    if (!bRet)
-#endif
-        return;
-
-    SdrMediaObj* pRetObject = InsertMediaObj( sRealURL, "model/vnd.gltf+json", rAction, rPos, rSize );
-    avmedia::MediaItem aItem = pRetObject->getMediaProperties();
-    aItem.setLoop(true);
-    pRetObject->setMediaProperties(aItem);
-}
-#endif
-#endif
 
 SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rMimeType, sal_Int8& rAction,
                                    const Point& rPos, const Size& rSize )

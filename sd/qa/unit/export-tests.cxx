@@ -211,24 +211,7 @@ void SdExportTest::testMediaEmbedding()
 
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/media_embedding.odp"), ODP);
 
-#if HAVE_FEATURE_GLTF
-    xDocShRef = saveAndReload( xDocShRef.get(), ODP );
-#endif
-
     const SdrPage *pPage = GetPage( 1, xDocShRef );
-
-#if HAVE_FEATURE_GLTF
-    // First object is a glTF model
-    SdrMediaObj *pModelObj = dynamic_cast<SdrMediaObj*>( pPage->GetObj( 2 ));
-    CPPUNIT_ASSERT_MESSAGE( "missing model", pModelObj != nullptr);
-    CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Models/duck/duck.json" ), pModelObj->getMediaProperties().getURL());
-    CPPUNIT_ASSERT_EQUAL( OUString( "model/vnd.gltf+json" ), pModelObj->getMediaProperties().getMimeType());
-#else
-    // If glTF is not supported, then the fallback image is imported
-    SdrGrafObj *pGrafic = dynamic_cast<SdrGrafObj*>( pPage->GetObj( 2 ));
-    CPPUNIT_ASSERT_MESSAGE( "Could not load glTF fallback image", pGrafic != nullptr);
-    CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Models/Fallbacks/duck.png" ), pGrafic->GetGrafStreamURL());
-#endif
 
     // Second object is a sound
     SdrMediaObj *pMediaObj = dynamic_cast<SdrMediaObj*>( pPage->GetObj( 3 ));
