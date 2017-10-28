@@ -46,6 +46,26 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92524_autoColor, "tdf92524_autoColor.doc")
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<sal_uInt32>(getParagraph(1), "ParaBackColor"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf82065_Ind_start_strict, "tdf82065_Ind_start_strict.docx")
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+    bool bFoundIndentAt = false;
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+
+        if (rProp.Name == "IndentAt")
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("IndentAt", sal_uInt32(6001), rProp.Value.get<sal_uInt32>() );
+            bFoundIndentAt = true;
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("IndentAt defined", true, bFoundIndentAt);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
