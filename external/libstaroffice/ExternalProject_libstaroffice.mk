@@ -42,8 +42,7 @@ $(call gb_ExternalProject_get_state_target,libstaroffice,build) :
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN')) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
-		&& (cd $(EXTERNAL_WORKDIR)/src/lib && \
-			$(MAKE)) \
+		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
 				$(EXTERNAL_WORKDIR)/src/lib/.libs/libstaroffice-0.0.0.dylib \
