@@ -21,6 +21,7 @@
 
 #define CMD_SID_HANDOUT_MASTER_MODE                 ".uno:HandoutMode"
 #define CMD_SID_NOTES_MODE                          ".uno:NotesMode"
+#define CMD_SID_CUSTOM_SCALE_DIALOG                 ".uno:CustomScaleDialog"
 
 #endif
 
