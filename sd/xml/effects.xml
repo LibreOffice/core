@@ -1113,7 +1113,7 @@
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par pres:preset-property="Scale;Accelerate;Decelerate;AutoReverse" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="ooo-emphasis-grow-and-shrink">
-        <anim:animateTransform smil:dur="2" smil:fill="hold" smil:by="1.5,1.5" svg:type="scale"/>
+        <anim:animateTransform smil:dur="2" smil:fill="hold" smil:to="1.5,1.5" svg:type="scale"/>
     </anim:par>
     </anim:par>
     </anim:par>

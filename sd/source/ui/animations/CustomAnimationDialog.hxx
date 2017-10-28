@@ -161,6 +161,12 @@ private:
     VclPtr<CustomAnimationTextAnimTabPage> mpTextAnimTabPage;
 };
 
+enum AnimationScaleType {
+    SCALE_HORIZONTAL = 1,
+    SCALE_VERTICAL = 2,
+    SCALE_UNIFORM = 3,
+    SCALE_CUSTOM = 4
+};
 }
 
 #endif // INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONDIALOG_HXX
