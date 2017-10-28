@@ -22,22 +22,10 @@
                     "type": "shell"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/4b87018f7fff1d054939d19920b751a0-collada2gltf-master-cb1d97788a.tar.bz2",
-                    "sha256": "b0adb8e71aef80751b999c9c055e419a625c4a05184e407aef2aee28752ad8cb",
-                    "type": "file",
-                    "dest-filename": "external/tarballs/4b87018f7fff1d054939d19920b751a0-collada2gltf-master-cb1d97788a.tar.bz2"
-                },
-                {
                     "url": "https://dev-www.libreoffice.org/src/pdfium-3235.tar.bz2",
                     "sha256": "7dc0d33fc24b1612865f5e173d48800ba3f2db891c57e3f92b9d2ce56ffeb72f",
                     "type": "file",
                     "dest-filename": "external/tarballs/pdfium-3235.tar.bz2"
-                },
-                {
-                    "url": "https://dev-www.libreoffice.org/src/OpenCOLLADA-master-6509aa13af.tar.bz2",
-                    "sha256": "8f25d429237cde289a448c82a0a830791354ccce5ee40d77535642e46367d6c4",
-                    "type": "file",
-                    "dest-filename": "external/tarballs/OpenCOLLADA-master-6509aa13af.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz",
@@ -218,12 +206,6 @@
                     "sha256": "0e422d1564a6dbf22a9af598535425271e583514c0f7ba7d9091676420de34ac",
                     "type": "file",
                     "dest-filename": "external/tarballs/libfreehand-0.1.2.tar.xz"
-                },
-                {
-                    "url": "https://dev-www.libreoffice.org/src/libgltf/libgltf-0.1.0.tar.gz",
-                    "sha256": "119e730fbf002dd0eaafa4930167267d7d910aa17f29979ca9ca8b66625fd2da",
-                    "type": "file",
-                    "dest-filename": "external/tarballs/libgltf-0.1.0.tar.gz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/language-subtag-registry-2017-08-15.tar.bz2",

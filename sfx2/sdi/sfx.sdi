@@ -5457,23 +5457,6 @@ SvxZoomItem Zoom SID_ATTR_ZOOM
     GroupId = SfxGroupId::View;
 ]
 
-SfxVoidItem Insert3DModel SID_INSERT_3DMODEL
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Application;
-]
-
 SfxVoidItem SafeMode SID_SAFE_MODE
 ()
 [

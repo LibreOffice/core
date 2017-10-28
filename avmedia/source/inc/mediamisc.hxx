@@ -41,10 +41,6 @@
 // Mime types
 #define AVMEDIA_MIMETYPE_COMMON           "application/vnd.sun.star.media"
 
-#if HAVE_FEATURE_GLTF
-#define AVMEDIA_MIMETYPE_JSON             "model/vnd.gltf+json"
-#endif
-
 namespace avmedia
 {
     const std::locale& GetResLocale();
