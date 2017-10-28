@@ -1205,17 +1205,10 @@ WW8_FC WW8PLCFx_PCD::AktPieceStartCp2Fc( WW8_CP nCp )
     if( !bVer67 )
         nFC = WW8PLCFx_PCD::TransformPieceAddress( nFC, bIsUnicode );
 
-    WW8_CP nDistance;
-    bool bFail = o3tl::checked_sub(nCp, nCpStart, nDistance);
-    if (bFail)
-    {
-        SAL_WARN("sw.ww8", "broken offset, ignoring");
-        return WW8_FC_MAX;
-    }
-
+    WW8_CP nDistance = nCp - nCpStart;
     if (bIsUnicode)
     {
-        bFail = o3tl::checked_multiply<WW8_CP>(nDistance, 2, nDistance);
+        const bool bFail = o3tl::checked_multiply<WW8_CP>(nDistance, 2, nDistance);
         if (bFail)
         {
             SAL_WARN("sw.ww8", "broken offset, ignoring");
@@ -1224,7 +1217,7 @@ WW8_FC WW8PLCFx_PCD::AktPieceStartCp2Fc( WW8_CP nCp )
     }
 
     WW8_FC nRet;
-    bFail = o3tl::checked_add(nFC, nDistance, nRet);
+    const bool bFail = o3tl::checked_add(nFC, nDistance, nRet);
     if (bFail)
     {
         SAL_WARN("sw.ww8", "broken offset, ignoring");
@@ -1893,7 +1886,7 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
     {
         rPLCF.advance();
 
-        if( !rPLCF.Get( rF.nLRes, pData ) )
+        if (!rPLCF.Get(rF.nLRes, pData) || rF.nLRes < 0)
             goto Err;
 
         while((static_cast<sal_uInt8*>(pData)[0] & 0x1f ) == 0x13 )
@@ -1901,7 +1894,7 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
             // still new (nested) beginnings ?
             WW8SkipField( rPLCF );              // nested Field in results
             rF.bResNest = true;
-            if( !rPLCF.Get( rF.nLRes, pData ) )
+            if (!rPLCF.Get(rF.nLRes, pData) || rF.nLRes < 0)
                 goto Err;
         }
         rF.nLen = rF.nLRes - rF.nSCode + 2;         // nLRes is still the final position
