@@ -92,6 +92,7 @@ namespace
 static const OUString MetaFilename("bails.rdf");
 static const OUString MetaNS("urn:bails");
 static const OUString ParagraphSignatureRDFName = "loext:paragraph:signature";
+static const OUString ParagraphSignatureDateRDFName = "loext:paragraph:signature:date";
 static const OUString ParagraphSignatureUsageRDFName = "loext:paragraph:signature:usage";
 static const OUString ParagraphClassificationNameRDFName = "loext:paragraph:classification:name";
 static const OUString ParagraphClassificationValueRDFName = "loext:paragraph:classification:value";
@@ -268,6 +269,7 @@ lcl_MakeParagraphSignatureFieldText(const uno::Reference<frame::XModel>& xModel,
 
     const css::uno::Reference<css::rdf::XResource> xSubject(xField, uno::UNO_QUERY);
     std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, MetaNS, xSubject);
+
     const auto it = aStatements.find(ParagraphSignatureRDFName);
     if (it != aStatements.end())
     {
@@ -282,13 +284,15 @@ lcl_MakeParagraphSignatureFieldText(const uno::Reference<frame::XModel>& xModel,
             valid = svl::crypto::Signing::Verify(data, false, sig, aInfo);
             valid = valid && aInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
 
-            const auto it2 = aStatements.find(ParagraphSignatureUsageRDFName);
-            msg = (it2 != aStatements.end() ? (it2->second + ", ") : OUString());
-            msg += SwResId(STR_SIGNED_BY) + ": " + aInfo.ouSubject + ", " + aInfo.ouDateTime + ": ";
-            if (valid)
-                msg += SwResId(STR_VALID);
-            else
-                msg += SwResId(STR_INVALID);
+            msg = SwResId(STR_SIGNED_BY) + ": " + aInfo.ouSubject + ", ";
+
+            const auto itDate = aStatements.find(ParagraphSignatureDateRDFName);
+            msg += (itDate != aStatements.end() ? itDate->second : OUString());
+
+            const auto itUsage = aStatements.find(ParagraphSignatureUsageRDFName);
+            msg += (itUsage != aStatements.end() ? (" (" + itUsage->second + "): ") : OUString(": "));
+
+            msg += (valid ? SwResId(STR_VALID) : SwResId(STR_INVALID));
         }
     }
 
@@ -310,6 +314,24 @@ uno::Reference<text::XTextField> lcl_InsertParagraphSignature(const uno::Referen
     const css::uno::Reference<css::rdf::XResource> xSubject(xField, uno::UNO_QUERY);
     SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xSubject, ParagraphSignatureRDFName, signature);
     SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xSubject, ParagraphSignatureUsageRDFName, usage);
+
+    // First convert the UTC UNIX timestamp to a tools::DateTime.
+    DateTime aDateTime = DateTime::CreateFromUnixTime(time(nullptr));
+
+    // Then convert to a local UNO DateTime.
+    aDateTime.ConvertToLocalTime();
+    OUStringBuffer rBuffer;
+    rBuffer.append((sal_Int32)aDateTime.GetYear());
+    rBuffer.append('-');
+    if (aDateTime.GetMonth() < 10)
+        rBuffer.append('0');
+    rBuffer.append((sal_Int32)aDateTime.GetMonth());
+    rBuffer.append('-');
+    if (aDateTime.GetDay() < 10)
+        rBuffer.append('0');
+    rBuffer.append((sal_Int32)aDateTime.GetDay());
+
+    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xSubject, ParagraphSignatureDateRDFName, rBuffer.makeStringAndClear());
 
     return xField;
 }
