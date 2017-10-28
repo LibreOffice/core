@@ -69,13 +69,6 @@ MediaChildWindow::MediaChildWindow(vcl::Window* pParent)
 {
 }
 
-#if HAVE_FEATURE_GLTF
-MediaChildWindow::MediaChildWindow(vcl::Window* pParent, SystemWindowData* pData)
-    : SystemChildWindow(pParent, WB_CLIPCHILDREN, pData)
-{
-}
-#endif
-
 void MediaChildWindow::MouseMove( const MouseEvent& rMEvt )
 {
     const MouseEvent aTransformedEvent( GetParent()->ScreenToOutputPixel( OutputToScreenPixel( rMEvt.GetPosPixel() ) ),
@@ -223,14 +216,6 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
             xPlayer = createPlayer(rURL, aServiceName, xContext);
         }
     }
-#if HAVE_FEATURE_GLTF
-#if HAVE_FEATURE_OPENGL
-    else if ( *pMimeType == AVMEDIA_MIMETYPE_JSON )
-    {
-        xPlayer = createPlayer(rURL, AVMEDIA_OPENGL_MANAGER_SERVICE_NAME, xContext);
-    }
-#endif
-#endif
 
     return xPlayer;
 }
@@ -442,15 +427,6 @@ void MediaWindowImpl::onURLChanged()
         mpChildWindow.disposeAndClear();
         mpChildWindow.reset(VclPtr<MediaChildWindow>::Create(this));
     }
-#if HAVE_FEATURE_GLTF
-    else if (m_sMimeType == AVMEDIA_MIMETYPE_JSON)
-    {
-        SystemWindowData aWinData = OpenGLContext::Create()->generateWinData(this, false);
-        mpChildWindow.disposeAndClear();
-        mpChildWindow.reset(VclPtr<MediaChildWindow>::Create(this,&aWinData));
-        mbEventTransparent = false;
-    }
-#endif
     if (!mpChildWindow)
         return;
     mpChildWindow->SetHelpId(HID_AVMEDIA_PLAYERWINDOW);

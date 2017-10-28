@@ -229,9 +229,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 		wizards/com/sun/star/wizards/report/report \
 		wizards/com/sun/star/wizards/table/table \
 	) \
-    $(if $(ENABLE_GLTF), \
-		$(call gb_Helper_optional,AVMEDIA,avmedia/source/opengl/avmediaogl) \
-	) \
 ))
 
 ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))

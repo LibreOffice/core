@@ -634,12 +634,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	) \
 ))
 
-ifeq ($(ENABLE_GLTF),TRUE)
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
-    avmediaogl \
-))
-endif
-
 ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activexbinarytable, \
 	regactivex \
