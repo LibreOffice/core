@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_2193d6a4",
+        "filename": "svx/source/svdraw/svdomedia.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-10-28T05:51:52Z",
+      "side": 0,
+      "message": "This m_TempDirURL becomes unused now as I see (it is set to empty string and not read later), so would be good to remove it.",
+      "range": {
+        "startLine": 56,
+        "startChar": 19,
+        "endLine": 56,
+        "endChar": 31
+      },
+      "revId": "df9edbcd2883cec2d0596133131cfbc220dee91f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
