@@ -243,6 +243,7 @@ public:
     void testTdf97598XLSX();
     void testTdf111974XLSM();
     void testTdf112501();
+    void testPivotTableNoColumnsLayout();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -363,6 +364,7 @@ public:
     CPPUNIT_TEST(testTdf97598XLSX);
     CPPUNIT_TEST(testTdf111974XLSM);
     CPPUNIT_TEST(testTdf112501);
+    CPPUNIT_TEST(testPivotTableNoColumnsLayout);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3956,6 +3958,34 @@ void ScFiltersTest::testTdf112501()
             const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
             CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
         }
+    }
+}
+
+void ScFiltersTest::testPivotTableNoColumnsLayout()
+{
+    // tdf#113268 - Pivot table: Missing popup button after opening a pivot table from ODS
+    ScDocShellRef xDocSh = loadDoc("pivottable_no_columns_layout.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // There should be exactly 2 pivot tables
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pDPs->GetCount());
+
+    // Check first pivot table's popup button (headerlayout flag)
+    {
+        const ScPatternAttr* pPattern = rDoc.GetPattern(0, 1, 1);
+        const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
+        const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+        CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
+    }
+
+    // Check second pivot table's popup button
+    {
+        const ScPatternAttr* pPattern = rDoc.GetPattern(3, 0, 1);
+        const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
+        const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+        CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
     }
 }
 
