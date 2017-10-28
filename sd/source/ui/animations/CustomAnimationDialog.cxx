@@ -77,6 +77,8 @@
 #include <filedlg.hxx>
 #include <strings.hrc>
 #include <helpids.h>
+#include <sdabstdlg.hxx>
+#include <CustomScaleDialog.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
@@ -720,7 +722,9 @@ private:
     VclPtr<DropdownMenuBox>   mpControl;
     VclPtr<PopupMenu>         mpMenu;
     VclPtr<MetricField>       mpMetric;
+    VclPtr<MetricField>       mpMetric2; // This would come handy in Custom Settings
     Link<LinkParamNone*,void> maModifyHdl;
+    VclPtr<vcl::Window>       mpParentWindow;
     int                       mnDirection;
 };
 
@@ -728,11 +732,17 @@ ScalePropertyBox::ScalePropertyBox(sal_Int32 nControlType, vcl::Window* pParent,
     : PropertySubControl( nControlType )
     , maBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/simpress/ui/scalemenu.ui", "")
     , maModifyHdl( rModifyHdl )
+    , mpParentWindow(pParent)
 {
     mpMetric.set( VclPtr<MetricField>::Create( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FUNIT_PERCENT );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 10000 );
+
+    mpMetric2.set( VclPtr<MetricField>::Create( pParent, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER));
+    mpMetric2->SetUnit( FUNIT_PERCENT );
+    mpMetric2->SetMin( 0 );
+    mpMetric2->SetMax( 10000 );
 
     mpMenu = maBuilder.get_menu("menu");
     mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpMetric, mpMenu );
@@ -760,9 +770,10 @@ void ScalePropertyBox::updateMenu()
     mpMenu->CheckItem(mpMenu->GetItemId("150"), nValue == 150);
     mpMenu->CheckItem(mpMenu->GetItemId("400"), nValue == 400);
 
-    mpMenu->CheckItem(mpMenu->GetItemId("hori"), mnDirection == 1);
-    mpMenu->CheckItem(mpMenu->GetItemId("vert"), mnDirection == 2);
-    mpMenu->CheckItem(mpMenu->GetItemId("both"), mnDirection == 3);
+    mpMenu->CheckItem(mpMenu->GetItemId("hori"),   mnDirection == SCALE_HORIZONTAL);
+    mpMenu->CheckItem(mpMenu->GetItemId("vert"),   mnDirection == SCALE_VERTICAL);
+    mpMenu->CheckItem(mpMenu->GetItemId("both"),   mnDirection == SCALE_UNIFORM);
+    mpMenu->CheckItem(mpMenu->GetItemId("Custom"), mnDirection == SCALE_CUSTOM);
 }
 
 IMPL_LINK_NOARG(ScalePropertyBox, implModifyHdl, Edit&, void)
@@ -778,33 +789,67 @@ IMPL_LINK( ScalePropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
     int nDirection = mnDirection;
 
     OString sIdent(pPb->GetCurItemIdent());
-    if (sIdent == "hori")
-        nDirection = 1;
-    else if (sIdent == "veri")
-        nDirection = 2;
-    else if (sIdent == "both")
-        nDirection = 3;
-    else
-        nValue = sIdent.toInt32();
 
-    bool bModified = false;
+    if (sIdent == "Custom") {
+        // Passing values of currently set horizontal and veritical factor values and also scale direction
+        ScopedVclPtrInstance<SdCustomScaleDialog> pDlg(mpParentWindow, mpMetric->GetValue(), mpMetric2->GetValue(), mnDirection == SCALE_UNIFORM);
+        OSL_ENSURE(pDlg, "Dialog Creation failed!");
+        sal_uInt16 nResult = RET_CANCEL;
 
-    if( nDirection != mnDirection )
-    {
-        mnDirection = nDirection;
-        bModified = true;
+        if(pDlg) {
+            nResult = pDlg->Execute();
+            bool bModified = false;
+            if( nResult == RET_OK ) {
+                bModified = true;
+                nDirection = SCALE_CUSTOM; // Custom Scaling
+                if( pDlg->IsScaledUniformly() ) {
+                    mpMetric->SetValue( pDlg->getHorizontalScale() );
+                    mpMetric2->SetValue( pDlg->getHorizontalScale() );
+                }
+                else {
+                    mpMetric->SetValue( pDlg->getHorizontalScale() );
+                    mpMetric2->SetValue( pDlg->getVerticalScale() );
+                }
+            }
+
+            if( bModified )
+            {
+                mnDirection = nDirection;
+                mpMetric->Modify();
+                mpMetric2->Modify();
+                updateMenu();
+            }
+        }
     }
+    else {
+        if (sIdent == "hori")
+            nDirection = SCALE_HORIZONTAL;
+        else if (sIdent == "veri")
+            nDirection = SCALE_VERTICAL;
+        else if (sIdent == "both")
+            nDirection = SCALE_UNIFORM;
+        else
+            nValue = sIdent.toInt32();
 
-    if( nValue != mpMetric->GetValue() )
-    {
-        mpMetric->SetValue( nValue );
-        bModified = true;
-    }
+        bool bModified = false;
 
-    if( bModified )
-    {
-        mpMetric->Modify();
-        updateMenu();
+        if( nDirection != mnDirection )
+        {
+            mnDirection = nDirection;
+            bModified = true;
+        }
+
+        if( nValue != mpMetric->GetValue() )
+        {
+            mpMetric->SetValue( nValue );
+            bModified = true;
+        }
+
+        if( bModified )
+        {
+            mpMetric->Modify();
+            updateMenu();
+        }
     }
 }
 
@@ -822,11 +867,13 @@ void ScalePropertyBox::setValue( const Any& rValue, const OUString& )
         aValues.Second >>= fValue2;
 
         if( fValue2 == 0.0 )
-            mnDirection = 1;
+            mnDirection = SCALE_HORIZONTAL;
         else if( fValue1 == 0.0 )
-            mnDirection = 2;
+            mnDirection = SCALE_VERTICAL;
+        else if((long)fValue1 == (long)fValue2)
+            mnDirection = SCALE_UNIFORM;
         else
-            mnDirection = 3;
+            mnDirection = SCALE_CUSTOM;
 
         long nValue;
         if( fValue1 )
@@ -841,11 +888,11 @@ void ScalePropertyBox::setValue( const Any& rValue, const OUString& )
 Any ScalePropertyBox::getValue()
 {
     double fValue1 = (double)mpMetric->GetValue() / 100.0;
-    double fValue2 = fValue1;
+    double fValue2 = (mnDirection < SCALE_UNIFORM ? fValue1 : ((double)mpMetric2->GetValue() / 100.0));
 
-    if( mnDirection == 1 )
+    if( mnDirection == SCALE_HORIZONTAL )
         fValue2 = 0.0;
-    else if( mnDirection == 2 )
+    else if( mnDirection == SCALE_VERTICAL )
         fValue1 = 0.0;
 
     ValuePair aValues;
