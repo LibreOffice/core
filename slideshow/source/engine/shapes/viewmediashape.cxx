@@ -44,7 +44,6 @@
 #include <cppcanvas/vclfactory.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 #include <avmedia/mediawindow.hxx>
-#include <avmedia/modeltools.hxx>
 
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLContext.hxx>
@@ -410,7 +409,7 @@ namespace slideshow
 
         void ViewMediaShape::implInitializePlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
                                                                  const uno::Sequence< uno::Any >& rVCLDeviceParams,
-                                                                 const OUString& rMimeType )
+                                                                 const OUString& )
         {
             SAL_INFO("slideshow", "ViewMediaShape::implInitializePlayerWindow" );
             if( !mpMediaWindow.get() && !rBounds.isEmpty() )
@@ -439,25 +438,6 @@ namespace slideshow
                                                                   rRangePix.getMinY(),
                                                                     rRangePix.getMaxX() - rRangePix.getMinX(),
                                                                     rRangePix.getMaxY() - rRangePix.getMinY() );
-#if !HAVE_FEATURE_GLTF || !HAVE_FEATURE_OPENGL
-                            (void)rMimeType;
-#else
-                            if( avmedia::IsModel(rMimeType) )
-                            {
-                                mpMediaWindow.disposeAndClear();
-                                mpEventHandlerParent.disposeAndClear();
-                                mpEventHandlerParent = VclPtr<vcl::Window>::Create(pWindow, WB_NOBORDER|WB_NODIALOGCONTROL);
-                                mpEventHandlerParent->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),
-                                                           Size( aAWTRect.Width, aAWTRect.Height ) );
-                                mpEventHandlerParent->EnablePaint(false);
-                                mpEventHandlerParent->Show();
-                                SystemWindowData aWinData = OpenGLContext::Create()->generateWinData(mpEventHandlerParent.get(), false);
-                                mpMediaWindow = VclPtr<SystemChildWindow>::Create(mpEventHandlerParent.get(), 0, &aWinData);
-                                mpMediaWindow->SetPosSizePixel( Point( 0, 0 ),
-                                                           Size( aAWTRect.Width, aAWTRect.Height ) );
-                            }
-                            else
-#endif
                             {
                                 mpMediaWindow.disposeAndClear();
                                 mpMediaWindow = VclPtr<SystemChildWindow>::Create( pWindow, WB_CLIPCHILDREN );

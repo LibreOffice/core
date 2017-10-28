@@ -39,11 +39,6 @@
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <avmedia/mediawindow.hxx>
 
-// For handling of glTF models
-#include <unotools/tempfile.hxx>
-#include <unotools/localfilehelper.hxx>
-#include <tools/urlobj.hxx>
-
 using namespace ::com::sun::star;
 
 
@@ -53,17 +48,12 @@ using namespace ::com::sun::star;
 struct MediaTempFile
 {
     OUString const m_TempFileURL;
-    OUString const m_TempDirURL; // yet another hack, for the glTF models
-    MediaTempFile(OUString const& rURL, OUString const& rDirURL)
-        : m_TempFileURL(rURL), m_TempDirURL(rDirURL)
+    MediaTempFile(OUString const& rURL)
+        : m_TempFileURL(rURL)
     {}
     ~MediaTempFile()
     {
         ::osl::File::remove(m_TempFileURL);
-        if (!m_TempDirURL.isEmpty())
-        {
-            ::utl::removeTree(m_TempDirURL);
-        }
     }
 };
 
@@ -277,68 +267,6 @@ uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream()
     return tempFile.openStream();
 }
 
-#if HAVE_FEATURE_GLTF
-static bool lcl_HandleJsonPackageURL(
-    const OUString& rURL,
-    SdrModel* const pModel,
-    OUString& o_rTempFileURL,
-    OUString& o_rTempDirURL)
-{
-    // Create a temporary folder which will contain all files of glTF model
-    o_rTempDirURL = ::utl::TempFile(nullptr, true).GetURL();
-
-    const sal_uInt16 nPackageLength = OString("vnd.sun.star.Package:").getLength();
-    const OUString sUrlPath = rURL.copy(nPackageLength,rURL.lastIndexOf("/")-nPackageLength);
-    try
-    {
-        // Base storage:
-        uno::Reference<document::XStorageBasedDocument> const xSBD(
-            pModel->getUnoModel(), uno::UNO_QUERY_THROW);
-        const uno::Reference<embed::XStorage> xStorage(
-            xSBD->getDocumentStorage(), uno::UNO_QUERY_THROW);
-
-        // Model source
-        ::comphelper::LifecycleProxy proxy;
-        const uno::Reference<embed::XStorage> xModelStorage(
-            ::comphelper::OStorageHelper::GetStorageAtPath(xStorage, sUrlPath,
-                embed::ElementModes::READ, proxy));
-
-        // Copy all files of glTF model from storage to the temp folder
-        uno::Reference< container::XNameAccess > xNameAccess( xModelStorage, uno::UNO_QUERY );
-        const uno::Sequence< OUString > aFilenames = xNameAccess->getElementNames();
-        for( sal_Int32 nFileIndex = 0; nFileIndex < aFilenames.getLength(); ++nFileIndex )
-        {
-            // Generate temp file path
-            const OUString& rFilename = aFilenames[nFileIndex];
-            INetURLObject aUrlObj(o_rTempDirURL);
-            aUrlObj.insertName(rFilename);
-            const OUString sFilepath = aUrlObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-
-            // Media URL will point at json file
-            if( rFilename.endsWith(".json") )
-                o_rTempFileURL = sFilepath;
-
-            // Create temp file and fill it from storage
-            ::ucbhelper::Content aTargetContent(sFilepath,
-                uno::Reference<ucb::XCommandEnvironment>(), comphelper::getProcessComponentContext());
-
-            uno::Reference<io::XStream> const xStream(
-                xModelStorage->openStreamElement(rFilename,embed::ElementModes::READ), uno::UNO_SET_THROW);
-            uno::Reference<io::XInputStream> const xInputStream(
-                xStream->getInputStream(), uno::UNO_SET_THROW);
-
-            aTargetContent.writeStream(xInputStream,true);
-        }
-
-    }
-    catch (uno::Exception const& e)
-    {
-        SAL_INFO("svx", "exception while copying glTF related files to temp directory '" << e << "'");
-    }
-    return true;
-}
-#endif
-
 static bool lcl_CopyToTempFile(
         uno::Reference<io::XInputStream> const& xInStream,
         OUString & o_rTempFileURL)
@@ -379,7 +307,7 @@ void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream
     bool const bSuccess = lcl_CopyToTempFile(xStream, tempFileURL);
     if (bSuccess)
     {
-        m_xImpl->m_pTempFile.reset(new MediaTempFile(tempFileURL, ""));
+        m_xImpl->m_pTempFile.reset(new MediaTempFile(tempFileURL));
         m_xImpl->m_MediaProperties.setURL(
             m_xImpl->m_LastFailedPkgURL, tempFileURL, "");
     }
@@ -444,19 +372,12 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
                                 rNewProperties.getTempURL()))
             {
                 OUString tempFileURL;
-                OUString tempDirURL;
                 bool bSuccess;
-                tempDirURL = "";
-#if HAVE_FEATURE_GLTF
-                if( url.endsWith(".json") )
-                    bSuccess = lcl_HandleJsonPackageURL(url, GetModel(), tempFileURL, tempDirURL);
-                else
-#endif
                     bSuccess = lcl_HandlePackageURL(url, GetModel(), tempFileURL);
                 if (bSuccess)
                 {
                     m_xImpl->m_pTempFile.reset(
-                            new MediaTempFile(tempFileURL, tempDirURL));
+                            new MediaTempFile(tempFileURL));
                     m_xImpl->m_MediaProperties.setURL(url, tempFileURL, "");
                 }
                 else // this case is for Clone via operator=
