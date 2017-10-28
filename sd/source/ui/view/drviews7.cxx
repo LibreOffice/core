@@ -1577,14 +1577,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-#if !HAVE_FEATURE_GLTF
-    if (SfxItemState::DEFAULT == rSet.GetItemState(SID_INSERT_3DMODEL))
-    {
-        rSet.DisableItem(SID_INSERT_3DMODEL);
-        rSet.Put(SfxVisibilityItem(SID_INSERT_3DMODEL, false));
-    }
-#endif
-
     if (rSet.GetItemState(SID_SAVE_BACKGROUND) == SfxItemState::DEFAULT)
     {
         bool bDisableSaveBackground = true;

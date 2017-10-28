@@ -1390,14 +1390,6 @@ AC_ARG_ENABLE(library-bin-tar,
         for the next time.]),
 )
 
-libo_FUZZ_ARG_ENABLE(gltf,
-    AS_HELP_STRING([--disable-gltf],
-        [Determines whether to build libraries related to glTF 3D model rendering.]))
-
-libo_FUZZ_ARG_ENABLE(collada,
-    AS_HELP_STRING([--disable-collada],
-        [Disable collada support (Rendering 3D models stored in *.dae and *.kmz format).]))
-
 AC_ARG_ENABLE(dconf,
     AS_HELP_STRING([--disable-dconf],
         [Disable the dconf configuration backend (enabled by default where
@@ -1580,11 +1572,6 @@ AC_ARG_WITH(system-jpeg,
         [Use jpeg already on system.]),,
     [with_system_jpeg="$with_system_libs"])
 
-AC_ARG_WITH(system-libgltf,
-    AS_HELP_STRING([--with-system-libgltf],
-        [Use libgltf already on system.]),,
-    [with_system_libgltf="$with_system_libs"])
-
 AC_ARG_WITH(system-clucene,
     AS_HELP_STRING([--with-system-clucene],
         [Use clucene already on system.]),,
@@ -1609,16 +1596,6 @@ AC_ARG_WITH(system-ucpp,
     AS_HELP_STRING([--with-system-ucpp],
         [Use ucpp already on system.]),,
     [])
-
-AC_ARG_WITH(system-opencollada,
-    AS_HELP_STRING([--with-system-opencollada],
-        [Use openCOLLADA already on system.]),,
-    [with_system_opencollada=no])
-
-AC_ARG_WITH(system-collada2gltf,
-    AS_HELP_STRING([--with-system-collada2gltf],
-        [Use collada2gltf already on system.]),,
-    [with_system_collada2gltf=no])
 
 AC_ARG_WITH(system-openldap,
     AS_HELP_STRING([--with-system-openldap],
@@ -3745,11 +3722,6 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
         AC_MSG_ERROR([--with-system-libcmis conflicts with --enable-dbgutil])
     else
         with_system_libcmis=no
-    fi
-    if test "$with_system_libgltf" = "yes"; then
-        AC_MSG_ERROR([--with-system-libgltf conflicts with --enable-dbgutil])
-    else
-        with_system_libgltf=no
     fi
     if test "$with_system_hunspell" = "yes"; then
         AC_MSG_ERROR([--with-system-hunspell conflicts with --enable-dbgutil])
@@ -10043,112 +10015,9 @@ if test $_os != iOS -a $_os != Android; then
     AC_DEFINE(HAVE_FEATURE_OPENCL)
 fi
 
-dnl ===================================================================
-dnl Check whether to enable glTF support
-dnl ===================================================================
-AC_MSG_CHECKING([whether to enable glTF support])
-ENABLE_GLTF=
-if test "x$enable_gltf" != "xno" -a $_os != iOS -a $_os != Android -a "$ENABLE_HEADLESS" = ""; then
-    ENABLE_GLTF=TRUE
-    AC_MSG_RESULT([yes])
-    AC_DEFINE(HAVE_FEATURE_GLTF,1)
-    if test "$with_system_libgltf" = "yes"; then
-        SYSTEM_LIBGLTF=TRUE
-        PKG_CHECK_MODULES( LIBGLTF, [libgltf-0.1 >= 0.1.0] )
-        FilterLibs "${LIBGLTF_LIBS}"
-        LIBGLTF_LIBS="${filteredlibs}"
-    else
-        BUILD_TYPE="$BUILD_TYPE LIBGLTF"
-    fi
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_GLTF)
-AC_SUBST(SYSTEM_LIBGLTF)
-AC_SUBST(LIBGLTF_CFLAGS)
-AC_SUBST(LIBGLTF_LIBS)
-
-dnl ===================================================================
-dnl Check whether to enable COLLADA support
-dnl ===================================================================
-AC_MSG_CHECKING([whether to enable COLLADA support])
-ENABLE_COLLADA=
-if test "$enable_collada" != "no" -a "$ENABLE_GLTF" = "TRUE"; then
-    AC_MSG_RESULT([yes])
-    ENABLE_COLLADA=TRUE
-    AC_DEFINE(HAVE_FEATURE_COLLADA,1)
-
-    AC_MSG_CHECKING([which OPENCOLLADA to use])
-    if test "$with_system_opencollada" = "yes"; then
-        AC_MSG_RESULT([external])
-        SYSTEM_OPENCOLLADA=TRUE
-        AS_IF([test -n "$OPENCOLLADA_CFLAGS"],[],[AC_MSG_ERROR([export OPENCOLLADA_CFLAGS])])
-        AS_IF([test -n "$OPENCOLLADA_LIBS"],[],[AC_MSG_ERROR([export OPENCOLLADA_LIBS])])
-        AC_LANG_PUSH([C++])
-        save_CXXFLAGS=$CXXFLAGS
-        save_CPPFLAGS=$CPPFLAGS
-        CXXFLAGS="$CXXFLAGS $OPENCOLLADA_CFLAGS"
-        CPPFLAGS="$CPPFLAGS $OPENCOLLADA_CFLAGS"
-        AC_CHECK_HEADERS(
-                COLLADABU.h \
-                COLLADAFW.h \
-                COLLADASaxFWLLoader.h \
-                GeneratedSaxParser.h,
-            [],
-            [AC_MSG_ERROR([openCOLLADA headers not found. Install openCOLLADA])],
-            [])
-        CXXFLAGS=$save_CXXFLAGS
-        CPPFLAGS=$save_CPPFLAGS
-        AC_LANG_POP([C++])
-        OPENCOLLADA_CFLAGS=$(printf '%s' "$OPENCOLLADA_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-        FilterLibs "${OPENCOLLADA_LIBS}"
-        OPENCOLLADA_LIBS="${filteredlibs}"
-    else
-        AC_MSG_RESULT([internal])
-        BUILD_TYPE="$BUILD_TYPE OPENCOLLADA"
-    fi
-
-    AC_MSG_CHECKING([which collada2gltf to use])
-    if test "$with_system_collada2gltf" = "yes"; then
-        if test "$with_system_opencollada" = "no"; then
-            AC_MSG_ERROR([the combination of system collada2gltf and internal openCOLLADA is not allowed])
-        fi
-        AC_MSG_RESULT([external])
-        SYSTEM_COLLADA2GLTF=TRUE
-        AS_IF([test -n "$COLLADA2GLTF_CFLAGS"],[],[AC_MSG_ERROR([export COLLADA2GLTF_CFLAGS])])
-        AS_IF([test -n "$COLLADA2GLTF_LIBS"],[],[AC_MSG_ERROR([export COLLADA2GLTF_LIBS])])
-        AC_LANG_PUSH([C++])
-        save_CXXFLAGS=$CXXFLAGS
-        save_CPPFLAGS=$CPPFLAGS
-        CXXFLAGS="$CXXFLAGS $COLLADA2GLTF_CFLAGS $OPENCOLLADA_CFLAGS $CXXFLAGS_CXX11"
-        CPPFLAGS="$CPPFLAGS $COLLADA2GLTF_CFLAGS $OPENCOLLADA_CFLAGS $CXXFLAGS_CXX11"
-        AC_CHECK_HEADERS(
-                GLTF.h \
-                encodingHelpers.h,
-            [],
-            [AC_MSG_ERROR([collada2gltf headers not found. Install collada2gltf])],
-            [])
-        CXXFLAGS=$save_CXXFLAGS
-        CPPFLAGS=$save_CPPFLAGS
-        AC_LANG_POP([C++])
-        COLLADA2GLTF_CFLAGS=$(printf '%s' "$COLLADA2GLTF_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-        FilterLibs "${COLLADA2GLTF_LIBS}"
-        COLLADA2GLTF_LIBS="${filteredlibs}"
-    else
-        AC_MSG_RESULT([internal])
-        BUILD_TYPE="$BUILD_TYPE COLLADA2GLTF"
-    fi
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_COLLADA)
-AC_SUBST([OPENCOLLADA_CFLAGS])
-AC_SUBST([OPENCOLLADA_LIBS])
-AC_SUBST([SYSTEM_OPENCOLLADA])
-
-AC_SUBST([COLLADA2GLTF_CFLAGS])
-AC_SUBST([COLLADA2GLTF_LIBS])
-AC_SUBST([SYSTEM_COLLADA2GLTF])
+dnl =================================================
+dnl Check whether to build with dconf support.
+dnl =================================================
 
 if test "$enable_dconf" != no; then
     PKG_CHECK_MODULES([DCONF], [dconf >= 0.15.2], [], [

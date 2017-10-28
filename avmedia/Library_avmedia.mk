@@ -60,24 +60,8 @@ $(eval $(call gb_Library_use_libraries,avmedia,\
 	vcl \
 ))
 
-ifeq ($(ENABLE_GLTF),TRUE)
-$(eval $(call gb_Library_add_exception_objects,avmedia,\
-	avmedia/source/framework/modeltools \
-))
-endif
-
-ifeq ($(ENABLE_COLLADA),TRUE)
-
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_libs,avmedia,\
-	-lrt \
-))
-endif
-
 $(eval $(call gb_Library_use_externals,avmedia,\
-	collada2gltf \
 	libxml2 \
-	opencollada_parser \
 	libpng \
 ))
 
