@@ -1921,9 +1921,9 @@ namespace emfio
 
     tools::Rectangle EmfReader::ReadRectangle( sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 )
     {
-        Point aTL ( Point( x1, y1 ) );
-        Point aBR( Point( --x2, --y2 ) );
-        return tools::Rectangle( aTL, aBR );
+        Point aTL(x1, y1);
+        Point aBR(o3tl::saturating_add<sal_Int32>(x2, -1), o3tl::saturating_add<sal_Int32>(y2, -1));
+        return tools::Rectangle(aTL, aBR);
     }
 }
 
