@@ -265,21 +265,15 @@ class ClassificationCollector
 private:
     sd::DrawViewShell& m_rDrawViewShell;
     std::vector<svx::ClassificationResult> m_aResults;
-    SdrRectObj* m_pRectObject;
+
 public:
     ClassificationCollector(sd::DrawViewShell & rDrawViewShell)
         : m_rDrawViewShell(rDrawViewShell)
-        , m_pRectObject(nullptr)
     {}
 
     std::vector<svx::ClassificationResult> getResults()
     {
         return m_aResults;
-    }
-
-    SdrRectObj* getObject()
-    {
-        return m_pRectObject;
     }
 
     bool collect()
@@ -320,7 +314,6 @@ public:
                         if (hasCustomPropertyField(aSections, sKey))
                         {
                             bFound = true;
-                            m_pRectObject = pRectObject;
                             const OUString sBlank("");
                             sal_Int32 nCurrentParagraph = -1;
 
@@ -392,18 +385,58 @@ public:
 
 class ClassificationInserter
 {
+private:
     sd::DrawViewShell& m_rDrawViewShell;
+
+    /// Delete the previous existing classification object(s) - if they exists
+    void deleteExistingObjects()
+    {
+        OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
+        OUString sKey = sPolicy + "BusinessAuthorizationCategory:Name";
+
+        const sal_uInt16 nCount = m_rDrawViewShell.GetDoc()->GetMasterSdPageCount(PageKind::Standard);
+
+        for (sal_uInt16 nPageIndex = 0; nPageIndex < nCount; ++nPageIndex)
+        {
+            SdPage* pMasterPage = m_rDrawViewShell.GetDoc()->GetMasterSdPage(nPageIndex, PageKind::Standard);
+            for (size_t nObject = 0; nObject < pMasterPage->GetObjCount(); ++nObject)
+            {
+                SdrObject* pObject = pMasterPage->GetObj(nObject);
+                SdrRectObj* pRectObject = dynamic_cast<SdrRectObj*>(pObject);
+                if (pRectObject && pRectObject->GetTextKind() == OBJ_TEXT)
+                {
+                    OutlinerParaObject* pOutlinerParagraphObject = pRectObject->GetOutlinerParaObject();
+                    if (pOutlinerParagraphObject)
+                    {
+                        const EditTextObject& rEditText = pOutlinerParagraphObject->GetTextObject();
+                        std::vector<editeng::Section> aSections;
+                        rEditText.GetAllSections(aSections);
+
+                        if (hasCustomPropertyField(aSections, sKey))
+                        {
+                            pMasterPage->RemoveObject(pRectObject->GetOrdNum());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 public:
     ClassificationInserter(sd::DrawViewShell & rDrawViewShell)
         : m_rDrawViewShell(rDrawViewShell)
     {}
 
-    bool insert(std::vector<svx::ClassificationResult> const & rResults, SdrRectObj* pRectObj)
+
+    bool insert(std::vector<svx::ClassificationResult> const & rResults)
     {
         // Set to MASTER mode
         EditMode eOldMode = m_rDrawViewShell.GetEditMode();
         if (eOldMode != EditMode::MasterPage)
             m_rDrawViewShell.ChangeEditMode(EditMode::MasterPage, false);
+
+        // Delete the previous existing object - if exists
+        deleteExistingObjects();
 
         uno::Reference<document::XDocumentProperties> xDocumentProperties = SfxObjectShell::Current()->getDocProperties();
 
@@ -424,21 +457,10 @@ public:
         OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
         sal_Int32 nTextNumber = 1;
 
-        Outliner* pOutliner;
-        OutlinerMode eOutlinerMode = OutlinerMode::DontKnow;
-        if (pRectObj == nullptr)
-        {
-            pOutliner = m_rDrawViewShell.GetDoc()->GetInternalOutliner();
-            eOutlinerMode = pOutliner->GetMode();
-            pOutliner->Init(OutlinerMode::TextObject);
-            pOutliner->SetStyleSheet(0, nullptr);
-        }
-        else
-        {
-            SdrView* pView = m_rDrawViewShell.GetView();
-            pView->SdrBeginTextEdit(pRectObj);
-            pOutliner = pView->GetTextEditOutliner();
-        }
+        Outliner* pOutliner = m_rDrawViewShell.GetDoc()->GetInternalOutliner();
+        OutlinerMode eOutlinerMode = pOutliner->GetMode();
+        pOutliner->Init(OutlinerMode::TextObject);
+        pOutliner->SetStyleSheet(0, nullptr);
 
         sal_Int32 nParagraph = -1;
         for (svx::ClassificationResult const & rResult : rResults)
@@ -501,35 +523,27 @@ public:
             }
         }
 
-        if (pRectObj == nullptr)
-        {
-            pRectObj = new SdrRectObj(OBJ_TEXT);
-            pRectObj->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
+        SdrRectObj* pRectObj = new SdrRectObj(OBJ_TEXT);
+        pRectObj->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
 
-            pOutliner->UpdateFields();
-            pOutliner->SetUpdateMode(true);
-            Size aSize(pOutliner->CalcTextSize());
-            pOutliner->SetUpdateMode(false);
+        pOutliner->UpdateFields();
+        pOutliner->SetUpdateMode(true);
+        Size aSize(pOutliner->CalcTextSize());
+        pOutliner->SetUpdateMode(false);
 
-            // Calculate position
-            Point aPosition;
-            ::tools::Rectangle aRect(aPosition, m_rDrawViewShell.GetActiveWindow()->GetOutputSizePixel());
-            aPosition = Point(aRect.Center().X(), aRect.GetHeight());
-            aPosition = m_rDrawViewShell.GetActiveWindow()->PixelToLogic(aPosition);
-            aPosition.X() -= aSize.Width() / 2;
-            aPosition.Y() -= aSize.Height() * 4;
+        // Calculate position
+        Point aPosition;
+        ::tools::Rectangle aRect(aPosition, m_rDrawViewShell.GetActiveWindow()->GetOutputSizePixel());
+        aPosition = Point(aRect.Center().X(), aRect.GetHeight());
+        aPosition = m_rDrawViewShell.GetActiveWindow()->PixelToLogic(aPosition);
+        aPosition.X() -= aSize.Width() / 2;
+        aPosition.Y() -= aSize.Height() * 4;
 
-            pRectObj->SetLogicRect(::tools::Rectangle(aPosition, aSize));
-            pRectObj->SetOutlinerParaObject(pOutliner->CreateParaObject());
+        pRectObj->SetLogicRect(::tools::Rectangle(aPosition, aSize));
+        pRectObj->SetOutlinerParaObject(pOutliner->CreateParaObject());
 
-            m_rDrawViewShell.GetDrawView()->InsertObjectAtView(pRectObj, *m_rDrawViewShell.GetDrawView()->GetSdrPageView());
-            pOutliner->Init(eOutlinerMode);
-        }
-        else
-        {
-            SdrView* pView = m_rDrawViewShell.GetView();
-            pView->SdrEndTextEdit();
-        }
+        m_rDrawViewShell.GetDrawView()->InsertObjectAtView(pRectObj, *m_rDrawViewShell.GetDrawView()->GetSdrPageView());
+        pOutliner->Init(eOutlinerMode);
 
         // Revert edit mode
         m_rDrawViewShell.ChangeEditMode(eOldMode, false);
@@ -1531,7 +1545,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if (RET_OK == pDialog->Execute())
             {
                 ClassificationInserter aInserter(*this);
-                aInserter.insert(pDialog->getResult(), aCollector.getObject());
+                aInserter.insert(pDialog->getResult());
             }
             pDialog.disposeAndClear();
 
