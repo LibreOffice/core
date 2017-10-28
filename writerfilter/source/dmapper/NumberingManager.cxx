@@ -753,6 +753,7 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
             m_pCurrentDefinition->SetId( nVal );
         }
         break;
+        case NS_ooxml::LN_CT_Ind_start:
         case NS_ooxml::LN_CT_Ind_left:
             if ( pCurrentLvl.get( ) )
                 pCurrentLvl->Insert(
