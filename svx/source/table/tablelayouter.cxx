@@ -571,7 +571,7 @@ void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
             if( maColumns[nCol].mnSize < nMinWidth )
                 maColumns[nCol].mnSize = nMinWidth;
 
-            nCurrentWidth += maColumns[nCol].mnSize;
+            nCurrentWidth = o3tl::saturating_add(nCurrentWidth, maColumns[nCol].mnSize);
         }
     }
 
