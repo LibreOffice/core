@@ -26,7 +26,6 @@ $(eval $(call gb_ExternalProject_use_externals,libfreehand,\
 $(call gb_ExternalProject_get_state_target,libfreehand,build) :
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
-		&& export CXXFLAGS="$(CXXFLAGS) $(ICU_UCHAR_TYPE)" \
 		&& MAKE=$(MAKE) ./configure \
 			--with-pic \
 			--enable-static \
@@ -38,7 +37,8 @@ $(call gb_ExternalProject_get_state_target,libfreehand,build) :
 			--disable-werror \
 			--disable-weffc \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
+			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
+			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS) $(ICU_UCHAR_TYPE)" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
 	)
