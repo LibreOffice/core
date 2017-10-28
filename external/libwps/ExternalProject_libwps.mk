@@ -35,7 +35,7 @@ $(call gb_ExternalProject_get_state_target,libwps,build) :
 			--disable-debug \
 			--disable-werror \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-			CXXFLAGS="$(CXXFLAGS) $(CXXFLAGS_CXX11) $(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX)" \
+			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
 			$(if $(filter LINUX,$(OS)),$(if $(SYSTEM_REVENGE),, \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN')) \
