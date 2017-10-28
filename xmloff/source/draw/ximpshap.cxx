@@ -2980,10 +2980,6 @@ void SdXMLPluginShapeContext::StartElement( const css::uno::Reference< css::xml:
         {
             if( xAttrList->getValueByIndex( n ) == "application/vnd.sun.star.media" )
                 mbMedia = true;
-#if HAVE_FEATURE_GLTF
-            if( xAttrList->getValueByIndex( n ) == "model/vnd.gltf+json" )
-                mbMedia = true;
-#endif
             // leave this loop
             n = nAttrCount - 1;
         }
@@ -3417,7 +3413,6 @@ SvXMLImportContextRef SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPr
         if ( !msHyperlink.isEmpty() )
             pShapeContext->setHyperlink( msHyperlink );
 
-#if !HAVE_FEATURE_GLTF
         // Ignore gltf model if necessary and so the fallback image will be imported
         if( IsXMLToken(rLocalName, XML_PLUGIN ) )
         {
@@ -3428,7 +3423,6 @@ SvXMLImportContextRef SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPr
                 return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
             }
         }
-#endif
 
         mxImplContext = xContext;
         mbSupportsReplacement = IsXMLToken(rLocalName, XML_OBJECT ) || IsXMLToken(rLocalName, XML_OBJECT_OLE);

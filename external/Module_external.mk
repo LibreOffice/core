@@ -28,7 +28,6 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,CLUCENE,clucene) \
 	$(call gb_Helper_optional,LIBCMIS,libcmis) \
 	$(call gb_Helper_optional,COINMP,coinmp) \
-	$(call gb_Helper_optional,COLLADA2GLTF,collada2gltf) \
 	$(call gb_Helper_optional,CPPUNIT,cppunit) \
 	$(call gb_Helper_optional,CT2N,ct2n) \
 	$(call gb_Helper_optional,CURL,curl) \
@@ -58,7 +57,6 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,LIBATOMIC_OPS,libatomic_ops) \
 	$(call gb_Helper_optional,LIBEOT,libeot) \
 	$(call gb_Helper_optional,LIBEXTTEXTCAT,libexttextcat) \
-	$(call gb_Helper_optional,LIBGLTF,libgltf) \
 	$(call gb_Helper_optional,LIBGPGERROR,libgpg-error) \
 	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
 	$(call gb_Helper_optional,LIBPNG,libpng) \
@@ -78,7 +76,6 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,NEON,neon) \
 	$(call gb_Helper_optional,NSS,nss) \
 	$(call gb_Helper_optional,ODFGEN,libodfgen) \
-	$(call gb_Helper_optional,OPENCOLLADA,opencollada) \
 	$(call gb_Helper_optional,OPENLDAP,openldap) \
 	$(call gb_Helper_optional,OPENSSL,openssl) \
 	$(call gb_Helper_optional,ORCUS,liborcus) \
