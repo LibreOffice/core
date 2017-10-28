@@ -9,8 +9,6 @@ import UIKit
 import Foundation
 
 
-var isCloudEnabled : Bool = false
-
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate
@@ -74,16 +72,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 
     func applicationWillEnterForeground(_ application: UIApplication)
     {
-        // test if iCloud is still enabled
-        isCloudEnabled = (FileManager.default.ubiquityIdentityToken != nil)
     }
 
 
 
     func applicationDidBecomeActive(_ application: UIApplication)
     {
-        // test if iCloud is still enabled
-        isCloudEnabled = (FileManager.default.ubiquityIdentityToken != nil)
     }
 
 

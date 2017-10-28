@@ -7,29 +7,13 @@
 //
 import UIKit
 
-
-
-class DocumentController: UIViewController, MenuDelegate, UIDocumentPickerDelegate
+class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewControllerDelegate
 {
     var currentDocumentName : String?
     var currentCloudUrl : URL?
     var currentStorageLocal : Bool = true
 
 
-    public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL)
-    {
-        currentCloudUrl = url
-        currentDocumentName = url.lastPathComponent
-    }
-
-    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController)
-    {
-        currentCloudUrl = nil
-        currentDocumentName = nil
-    }
-
-
-    @IBOutlet weak var janTest: UILabel!
 
 
     // Show sidemenu (part of documentcontroller)
@@ -60,7 +44,6 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentPickerDelega
         addChildViewController(sidebar)
         sidebar.view.layoutIfNeeded()
 
-
         sidebar.view.frame=CGRect(x: 0 - UIScreen.main.bounds.size.width, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height);
 
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
@@ -70,18 +53,33 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentPickerDelega
     }
 
 
-    @IBOutlet weak var buttonSelectStorage: UIBarButtonItem!
-
-
-    @IBAction func doSelectStorage(_ sender: UIBarButtonItem)
+    internal func documentBrowser(_ controller: UIDocumentBrowserViewController,
+                                  didRequestDocumentCreationWithHandler importHandler: @escaping (URL?, UIDocumentBrowserViewController.ImportMode) -> Void)
     {
-        if isCloudEnabled {
-          currentStorageLocal = !currentStorageLocal
-          sender.image = currentStorageLocal ? #imageLiteral(resourceName: "iCloudDrive") : #imageLiteral(resourceName: "iPhone")
-        }
-        self.presentedViewController?.dismiss(animated: true, completion: nil)
+        // Asks the delegate to create a new document.
     }
 
+    internal func documentBrowser(_ controller: UIDocumentBrowserViewController,
+                                  didImportDocumentAt sourceURL: URL,
+                                  toDestinationURL destinationURL: URL)
+    {
+        // Tells the delegate that a document has been successfully imported.
+    }
+
+    internal func documentBrowser(_ controller: UIDocumentBrowserViewController,
+                                  failedToImportDocumentAt documentURL: URL,
+                                  error: Error?)
+    {
+        // Tells the delegate that the document browser failed to import the specified document.
+    }
+
+    internal func documentBrowser(_ controller: UIDocumentBrowserViewController,
+                                  didPickDocumentURLs documentURLs: [URL])
+    {
+        // Tells the delegate that the user has selected one or more documents.
+    }
+
+    @IBOutlet weak var janTest: UILabel!
 
     // Last stop before displaying popover
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
@@ -108,19 +106,20 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentPickerDelega
     {
         switch tag
         {
-            case 1: // New
-                print("menu New to be done")
-
-            case 2: // Open...
-                let openMenu = UIDocumentPickerViewController(documentTypes: ["public.content"], in: .open)
+            case 1: // Open...
+                // let openMenu = UIDocumentPickerViewController(documentTypes: ["public.data"], in: .open)
+                let openMenu = UIDocumentBrowserViewController()
+                //penMenu.allowsDocumentCreation = true
+                // UIDocumentBrowserViewController.ImportMode = UIDocumentBrowserViewController.ImportMode.none // copy, move
+                //openMenu.InterfaceStyle = UIDocumentPickerViewController.dark
                 openMenu.delegate = self
                 self.present(openMenu, animated: true, completion: nil)
                 print("menu Open... to be done")
 
-            case 3: // Save
+            case 2: // Save
                 print("menu Save to be done")
 
-            case 4: // Save as...
+            case 3: // Save as...
                 let vc = storyboard?.instantiateViewController(withIdentifier: "setNameAction") as! setNameAction
                 vc.modalPresentationStyle = .popover
                 vc.delegate = self
@@ -132,20 +131,11 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentPickerDelega
                 present(vc, animated: true, completion: nil)
                 print("menu Save as... to be done")
 
-            case 5: // Save as PDF...
+            case 4: // Save as PDF...
                 print("menu Save as PDF... to be done")
 
-            case 6: // Print...
+            case 5: // Print...
                 print("menu Print... to be done")
-
-            case 7: // Copy...
-                print("menu Copy... to be done")
-
-            case 8: // Move...
-                print("menu Move... to be done")
-
-            case 9: // Delete...
-                print("menu Delete... to be done")
 
             default: // should not happen
                 print("unknown menu" + String(tag))

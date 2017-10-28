@@ -4,10 +4,8 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
-        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -35,18 +33,11 @@
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Document" id="5c6-32-T4J">
-                        <leftBarButtonItems>
-                            <barButtonItem image="menu" id="fdq-Uw-536" userLabel="Button Side Menu">
-                                <connections>
-                                    <action selector="doMenu:" destination="vXZ-lx-hvc" id="mHw-Uf-vh2"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem image="iPhone" id="BNN-MQ-25d" userLabel="Button Select Storage">
-                                <connections>
-                                    <action selector="doSelectStorage:" destination="vXZ-lx-hvc" id="77L-yW-vcR"/>
-                                </connections>
-                            </barButtonItem>
-                        </leftBarButtonItems>
+                        <barButtonItem key="leftBarButtonItem" image="menu" id="fdq-Uw-536" userLabel="Button Side Menu">
+                            <connections>
+                                <action selector="doMenu:" destination="vXZ-lx-hvc" id="mHw-Uf-vh2"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="action" id="BNq-ol-ZVK">
                             <connections>
                                 <segue destination="IER-X5-Ax8" kind="popoverPresentation" identifier="showActions" popoverAnchorBarButtonItem="BNq-ol-ZVK" id="xmZ-1A-ZrW">
@@ -57,69 +48,12 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="buttonSelectStorage" destination="BNN-MQ-25d" id="c5F-NA-mbv"/>
                         <outlet property="janTest" destination="D1P-q2-3PT" id="ERV-pa-Fs9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1231" y="304"/>
-        </scene>
-        <!--Create document name-->
-        <scene sceneID="M2W-AJ-QxD">
-            <objects>
-                <viewController storyboardIdentifier="setNameAction" autoresizesArchivedViewToFullSize="NO" title="Create document name" automaticallyAdjustsScrollViewInsets="NO" id="99b-cf-b84" customClass="setNameAction" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="SMN-Rx-xIG"/>
-                        <viewControllerLayoutGuide type="bottom" id="oj2-7U-Jur"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="eHg-qn-AKi">
-                        <rect key="frame" x="0.0" y="0.0" width="180" height="100"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="type name" borderStyle="roundedRect" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="P46-5S-7HA">
-                                <rect key="frame" x="16" y="8" width="152" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <action selector="actionStartEdit:" destination="99b-cf-b84" eventType="editingDidBegin" id="JIn-Jc-Lru"/>
-                                </connections>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FBJ-A5-eSe" userLabel="Button Cancel">
-                                <rect key="frame" x="16" y="50" width="78" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Cancel"/>
-                                <connections>
-                                    <action selector="actionCancel:" destination="99b-cf-b84" eventType="touchUpInside" id="CIT-41-DsP"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5gp-5e-vgs" userLabel="Button Ok">
-                                <rect key="frame" x="118" y="50" width="50" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="OK"/>
-                                <connections>
-                                    <action selector="actionOK:" destination="99b-cf-b84" eventType="touchUpInside" id="qsc-rv-dcu"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <extendedEdge key="edgesForExtendedLayout"/>
-                    <value key="contentSizeForViewInPopover" type="size" width="240" height="80"/>
-                    <nil key="simulatedStatusBarMetrics"/>
-                    <nil key="simulatedTopBarMetrics"/>
-                    <nil key="simulatedBottomBarMetrics"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="180" height="100"/>
-                    <connections>
-                        <outlet property="editText" destination="P46-5S-7HA" id="Qit-pG-Yi1"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="p1z-28-W1j" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2020" y="305"/>
         </scene>
         <!--Print Manager-->
         <scene sceneID="viJ-XJ-htc">
@@ -195,88 +129,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K3a-CQ-sBC">
-                                <rect key="frame" x="20" y="359" width="72" height="45"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="Rg4-bW-MQk"/>
-                                </constraints>
-                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="Style6" image="document">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <connections>
-                                    <action selector="doStyle6:" destination="E9y-3m-fEc" eventType="touchUpInside" id="t58-52-FY4"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hk4-yl-lM9">
-                                <rect key="frame" x="20" y="304" width="72" height="45"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="hty-y5-gVo"/>
-                                </constraints>
-                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="Style5" image="document">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <connections>
-                                    <action selector="doStyle5:" destination="E9y-3m-fEc" eventType="touchUpInside" id="o3m-zn-dyf"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CBj-V3-BKJ">
-                                <rect key="frame" x="20" y="249" width="72" height="45"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="wOH-9b-B8P"/>
-                                </constraints>
-                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="Style4" image="document">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <connections>
-                                    <action selector="doStyle4:" destination="E9y-3m-fEc" eventType="touchUpInside" id="x4U-Gg-ylt"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eZV-Rh-hCf">
-                                <rect key="frame" x="20" y="194" width="72" height="45"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="N7I-YK-5uo"/>
-                                </constraints>
-                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="Style3" image="document">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <connections>
-                                    <action selector="doStyle3:" destination="E9y-3m-fEc" eventType="touchUpInside" id="t2Q-iq-Exh"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YTV-Y5-L8R">
-                                <rect key="frame" x="20" y="139" width="71" height="45"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="4H0-0k-rm5"/>
-                                </constraints>
-                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="Style2" image="document">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <connections>
-                                    <action selector="doStyle2:" destination="E9y-3m-fEc" eventType="touchUpInside" id="u7L-s5-vmD"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Mv-7b-xjF">
-                                <rect key="frame" x="20" y="414" width="70" height="45"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="Fyt-Iq-YWv"/>
-                                </constraints>
-                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="Style7" image="document">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <connections>
-                                    <action selector="doStyle7:" destination="E9y-3m-fEc" eventType="touchUpInside" id="cNb-al-UOa"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g5y-SJ-jU1">
                                 <rect key="frame" x="20" y="84" width="69" height="45"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="v75-o1-ii6"/>
+                                    <constraint firstAttribute="height" constant="45" id="GiU-Zv-tSK"/>
                                 </constraints>
                                 <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" title="Style1" image="document">
@@ -286,23 +142,99 @@
                                     <action selector="doStyle1:" destination="E9y-3m-fEc" eventType="touchUpInside" id="Tvz-2x-oik"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YTV-Y5-L8R">
+                                <rect key="frame" x="20" y="139" width="71" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="6Nn-8E-Eun"/>
+                                </constraints>
+                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Style2" image="document">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="doStyle2:" destination="E9y-3m-fEc" eventType="touchUpInside" id="u7L-s5-vmD"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eZV-Rh-hCf">
+                                <rect key="frame" x="20" y="194" width="72" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="aVx-Vb-bZq"/>
+                                </constraints>
+                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Style3" image="document">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="doStyle3:" destination="E9y-3m-fEc" eventType="touchUpInside" id="t2Q-iq-Exh"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CBj-V3-BKJ">
+                                <rect key="frame" x="20" y="249" width="72" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="RLA-17-w0s"/>
+                                </constraints>
+                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Style4" image="document">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="doStyle4:" destination="E9y-3m-fEc" eventType="touchUpInside" id="x4U-Gg-ylt"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hk4-yl-lM9">
+                                <rect key="frame" x="20" y="304" width="72" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="AEu-v6-MfG"/>
+                                </constraints>
+                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Style5" image="document">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="doStyle5:" destination="E9y-3m-fEc" eventType="touchUpInside" id="o3m-zn-dyf"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K3a-CQ-sBC">
+                                <rect key="frame" x="20" y="359" width="72" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="fyO-4v-nFF"/>
+                                </constraints>
+                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Style6" image="document">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="doStyle6:" destination="E9y-3m-fEc" eventType="touchUpInside" id="t58-52-FY4"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Mv-7b-xjF">
+                                <rect key="frame" x="20" y="414" width="70" height="45"/>
+                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Style7" image="document">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="doStyle7:" destination="E9y-3m-fEc" eventType="touchUpInside" id="cNb-al-UOa"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Hk4-yl-lM9" firstAttribute="top" secondItem="CBj-V3-BKJ" secondAttribute="bottom" constant="10" id="3aD-it-Msw"/>
-                            <constraint firstItem="Hk4-yl-lM9" firstAttribute="leading" secondItem="e1u-sT-aSe" secondAttribute="leadingMargin" id="4zN-qk-gCk"/>
-                            <constraint firstItem="g5y-SJ-jU1" firstAttribute="leading" secondItem="e1u-sT-aSe" secondAttribute="leadingMargin" id="JxJ-kA-qwz"/>
-                            <constraint firstItem="eZV-Rh-hCf" firstAttribute="top" secondItem="YTV-Y5-L8R" secondAttribute="bottom" constant="10" id="PLr-1M-6Jv"/>
-                            <constraint firstItem="YTV-Y5-L8R" firstAttribute="top" secondItem="g5y-SJ-jU1" secondAttribute="bottom" constant="10" id="Ws8-TE-V6O"/>
-                            <constraint firstItem="CBj-V3-BKJ" firstAttribute="leading" secondItem="e1u-sT-aSe" secondAttribute="leadingMargin" id="XWf-mb-RwF"/>
-                            <constraint firstItem="eZV-Rh-hCf" firstAttribute="leading" secondItem="e1u-sT-aSe" secondAttribute="leadingMargin" id="akz-vF-hHv"/>
-                            <constraint firstItem="K3a-CQ-sBC" firstAttribute="top" secondItem="Hk4-yl-lM9" secondAttribute="bottom" constant="10" id="bIw-3k-voG"/>
-                            <constraint firstItem="YTV-Y5-L8R" firstAttribute="leading" secondItem="e1u-sT-aSe" secondAttribute="leadingMargin" id="dto-y0-1aX"/>
-                            <constraint firstItem="CBj-V3-BKJ" firstAttribute="top" secondItem="eZV-Rh-hCf" secondAttribute="bottom" constant="10" id="hEC-J7-NxJ"/>
-                            <constraint firstItem="5Mv-7b-xjF" firstAttribute="leading" secondItem="e1u-sT-aSe" secondAttribute="leadingMargin" id="k0M-cK-qBw"/>
-                            <constraint firstItem="g5y-SJ-jU1" firstAttribute="top" secondItem="qJv-1E-iEi" secondAttribute="bottom" constant="64" id="nSZ-rC-b7a"/>
-                            <constraint firstItem="K3a-CQ-sBC" firstAttribute="leading" secondItem="e1u-sT-aSe" secondAttribute="leadingMargin" id="njx-0E-3hs"/>
-                            <constraint firstItem="5Mv-7b-xjF" firstAttribute="top" secondItem="K3a-CQ-sBC" secondAttribute="bottom" constant="10" id="sPb-nU-SoB"/>
+                            <constraint firstItem="eZV-Rh-hCf" firstAttribute="top" secondItem="YTV-Y5-L8R" secondAttribute="bottom" constant="10" id="8MW-wy-3mP"/>
+                            <constraint firstItem="YTV-Y5-L8R" firstAttribute="leading" secondItem="g5y-SJ-jU1" secondAttribute="leading" id="GdK-zW-XUW"/>
+                            <constraint firstItem="syI-80-ufe" firstAttribute="top" secondItem="5Mv-7b-xjF" secondAttribute="bottom" constant="565" id="H6C-1e-7UE"/>
+                            <constraint firstItem="5Mv-7b-xjF" firstAttribute="leading" secondItem="e1u-sT-aSe" secondAttribute="leadingMargin" id="NnF-fS-TRc"/>
+                            <constraint firstItem="CBj-V3-BKJ" firstAttribute="leading" secondItem="eZV-Rh-hCf" secondAttribute="leading" id="Nts-Pq-gbT"/>
+                            <constraint firstItem="Hk4-yl-lM9" firstAttribute="top" secondItem="CBj-V3-BKJ" secondAttribute="bottom" constant="10" id="Qjz-bp-Zdz"/>
+                            <constraint firstItem="CBj-V3-BKJ" firstAttribute="top" secondItem="eZV-Rh-hCf" secondAttribute="bottom" constant="10" id="TqY-lf-jld"/>
+                            <constraint firstItem="Hk4-yl-lM9" firstAttribute="leading" secondItem="CBj-V3-BKJ" secondAttribute="leading" id="X9n-Bn-V0R"/>
+                            <constraint firstItem="eZV-Rh-hCf" firstAttribute="leading" secondItem="YTV-Y5-L8R" secondAttribute="leading" id="XFl-0W-rjg"/>
+                            <constraint firstItem="K3a-CQ-sBC" firstAttribute="top" secondItem="Hk4-yl-lM9" secondAttribute="bottom" constant="10" id="guC-5D-obv"/>
+                            <constraint firstItem="K3a-CQ-sBC" firstAttribute="leading" secondItem="Hk4-yl-lM9" secondAttribute="leading" id="jpn-3d-FRp"/>
+                            <constraint firstItem="5Mv-7b-xjF" firstAttribute="top" secondItem="K3a-CQ-sBC" secondAttribute="bottom" constant="10" id="ozy-Rl-tAb"/>
+                            <constraint firstItem="5Mv-7b-xjF" firstAttribute="leading" secondItem="K3a-CQ-sBC" secondAttribute="leading" id="sHO-T6-sUz"/>
+                            <constraint firstItem="YTV-Y5-L8R" firstAttribute="top" secondItem="g5y-SJ-jU1" secondAttribute="bottom" constant="10" id="v9r-Th-jAf"/>
+                            <constraint firstItem="g5y-SJ-jU1" firstAttribute="top" secondItem="qJv-1E-iEi" secondAttribute="bottom" constant="64" id="wPY-qL-9aw"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -354,41 +286,20 @@
             <objects>
                 <tableViewController autoresizesArchivedViewToFullSize="NO" title="Document Actions" automaticallyAdjustsScrollViewInsets="NO" modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" clearsSelectionOnViewWillAppear="NO" id="IER-X5-Ax8" customClass="DocumentActions" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="30" sectionHeaderHeight="28" sectionFooterHeight="28" id="RqF-IL-YJc">
-                        <rect key="frame" x="0.0" y="0.0" width="134" height="270"/>
+                        <rect key="frame" x="0.0" y="0.0" width="134" height="150"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
                             <tableViewSection id="iZc-fF-wRk">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KLS-lN-QYa">
-                                        <rect key="frame" x="0.0" y="0.0" width="134" height="30"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KLS-lN-QYa" id="dA0-Ji-bxj">
-                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mCx-kB-iUI">
-                                                    <rect key="frame" x="8" y="0.0" width="118" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <accessibility key="accessibilityConfiguration">
-                                                        <bool key="isElement" value="NO"/>
-                                                    </accessibility>
-                                                    <state key="normal" title="New"/>
-                                                    <connections>
-                                                        <action selector="actionMenuSelect:" destination="IER-X5-Ax8" eventType="touchUpInside" id="0gI-or-ji1"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="VNE-JL-Lw0">
-                                        <rect key="frame" x="0.0" y="30" width="134" height="30"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="134" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VNE-JL-Lw0" id="EB2-HA-y79">
                                             <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="myk-zs-md7">
+                                                <button opaque="NO" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="myk-zs-md7">
                                                     <rect key="frame" x="8" y="0.0" width="118" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <accessibility key="accessibilityConfiguration">
@@ -403,13 +314,13 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="XW7-H5-0ob">
-                                        <rect key="frame" x="0.0" y="60" width="134" height="30"/>
+                                        <rect key="frame" x="0.0" y="30" width="134" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XW7-H5-0ob" id="lJN-OL-mO8">
                                             <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" tag="3" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b90-ja-Wm0">
+                                                <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b90-ja-Wm0">
                                                     <rect key="frame" x="8" y="0.0" width="118" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="actionSave">
@@ -424,13 +335,13 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="AN7-6j-wO7">
-                                        <rect key="frame" x="0.0" y="90" width="134" height="30"/>
+                                        <rect key="frame" x="0.0" y="60" width="134" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AN7-6j-wO7" id="kl1-nQ-aIu">
                                             <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" tag="4" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6vH-aM-aYe">
+                                                <button opaque="NO" tag="3" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6vH-aM-aYe">
                                                     <rect key="frame" x="8" y="0.0" width="118" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <accessibility key="accessibilityConfiguration">
@@ -445,13 +356,13 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="GmK-gj-GYu">
-                                        <rect key="frame" x="0.0" y="120" width="134" height="30"/>
+                                        <rect key="frame" x="0.0" y="90" width="134" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="GmK-gj-GYu" id="3OK-Zz-mqN">
                                             <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" tag="5" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="apE-3B-lUt" userLabel="Button Save As PDF">
+                                                <button opaque="NO" tag="4" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="apE-3B-lUt" userLabel="Button Save As PDF">
                                                     <rect key="frame" x="8" y="0.0" width="118" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="actionSaveAsPDF">
@@ -466,13 +377,13 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="diN-3v-tgm">
-                                        <rect key="frame" x="0.0" y="150" width="134" height="30"/>
+                                        <rect key="frame" x="0.0" y="120" width="134" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="diN-3v-tgm" id="24s-fs-4cw">
                                             <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" tag="6" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tvH-WR-c61" userLabel="Button Print">
+                                                <button opaque="NO" tag="5" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tvH-WR-c61" userLabel="Button Print">
                                                     <rect key="frame" x="8" y="0.0" width="118" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <accessibility key="accessibilityConfiguration">
@@ -481,69 +392,6 @@
                                                     <state key="normal" title="Print..."/>
                                                     <connections>
                                                         <action selector="actionMenuSelect:" destination="IER-X5-Ax8" eventType="touchUpInside" id="saH-6n-BkX"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="0Cu-Xh-XUR">
-                                        <rect key="frame" x="0.0" y="180" width="134" height="30"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0Cu-Xh-XUR" id="MHs-m1-fPx">
-                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" tag="7" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aLF-gf-Qy7" userLabel="Button Copy">
-                                                    <rect key="frame" x="8" y="0.0" width="118" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <accessibility key="accessibilityConfiguration" identifier="actionCopy">
-                                                        <bool key="isElement" value="NO"/>
-                                                    </accessibility>
-                                                    <state key="normal" title="Copy..."/>
-                                                    <connections>
-                                                        <action selector="actionMenuSelect:" destination="IER-X5-Ax8" eventType="touchUpInside" id="ga5-sF-FC6"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Tos-KD-TOY">
-                                        <rect key="frame" x="0.0" y="210" width="134" height="30"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Tos-KD-TOY" id="wXd-3T-jNF">
-                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" tag="8" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DaU-7Y-QN0" userLabel="Button Move">
-                                                    <rect key="frame" x="8" y="0.0" width="118" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <accessibility key="accessibilityConfiguration">
-                                                        <bool key="isElement" value="NO"/>
-                                                    </accessibility>
-                                                    <state key="normal" title="Move..."/>
-                                                    <connections>
-                                                        <action selector="actionMenuSelect:" destination="IER-X5-Ax8" eventType="touchUpInside" id="fdk-gZ-5BR"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="1ly-sz-g0x">
-                                        <rect key="frame" x="0.0" y="240" width="134" height="30"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1ly-sz-g0x" id="wVi-tX-eKD">
-                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" tag="9" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="516-b0-K4N" userLabel="Button Delete">
-                                                    <rect key="frame" x="8" y="0.0" width="118" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <accessibility key="accessibilityConfiguration" identifier="actionDelete">
-                                                        <bool key="isElement" value="NO"/>
-                                                    </accessibility>
-                                                    <state key="normal" title="Delete..."/>
-                                                    <connections>
-                                                        <action selector="actionMenuSelect:" destination="IER-X5-Ax8" eventType="touchUpInside" id="YLz-aP-Poo"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -558,17 +406,13 @@
                         </connections>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <value key="contentSizeForViewInPopover" type="size" width="134" height="300"/>
+                    <value key="contentSizeForViewInPopover" type="size" width="134" height="150"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="134" height="270"/>
+                    <size key="freeformSize" width="134" height="150"/>
                     <connections>
-                        <outlet property="buttonCopy" destination="aLF-gf-Qy7" id="czl-bI-0Qu"/>
-                        <outlet property="buttonDelete" destination="516-b0-K4N" id="Zvb-8p-qrj"/>
-                        <outlet property="buttonMove" destination="DaU-7Y-QN0" id="QRd-c8-teO"/>
-                        <outlet property="buttonNew" destination="mCx-kB-iUI" id="E2p-ip-Slc"/>
                         <outlet property="buttonOpen" destination="myk-zs-md7" id="xQK-I1-pDl"/>
                         <outlet property="buttonPrint" destination="tvH-WR-c61" id="4YU-p2-Fim"/>
                         <outlet property="buttonSave" destination="b90-ja-Wm0" id="Sdz-lq-s3S"/>
@@ -583,7 +427,6 @@
     </scenes>
     <resources>
         <image name="document" width="20" height="20"/>
-        <image name="iPhone" width="18" height="37"/>
         <image name="menu" width="22" height="22"/>
     </resources>
 </document>
