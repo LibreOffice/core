@@ -2297,7 +2297,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
         std::unique_ptr<BYTE[]> pSignedAttributesBuf(new BYTE[nSignedAttributes]);
         if (!CryptMsgGetParam(hMsg, CMSG_SIGNER_AUTH_ATTR_PARAM, 0, pSignedAttributesBuf.get(), &nSignedAttributes))
         {
-            SAL_WARN("svl.crypto", "ValidateSignature: CryptMsgGetParam() failed");
+            SAL_WARN("svl.crypto", "ValidateSignature: CryptMsgGetParam() authenticated failed");
             return false;
         }
         auto pSignedAttributes = reinterpret_cast<PCRYPT_ATTRIBUTES>(pSignedAttributesBuf.get());
@@ -2312,6 +2312,54 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
             if (OString("1.2.840.113549.1.9.16.2.47") == rAttr.pszObjId)
             {
                 rInformation.bHasSigningCertificate = true;
+                break;
+            }
+        }
+    }
+
+    // Get the unauthorized attributes.
+    nSignedAttributes = 0;
+    if (CryptMsgGetParam(hMsg, CMSG_SIGNER_UNAUTH_ATTR_PARAM, 0, nullptr, &nSignedAttributes))
+    {
+        std::unique_ptr<BYTE[]> pSignedAttributesBuf(new BYTE[nSignedAttributes]);
+        if (!CryptMsgGetParam(hMsg, CMSG_SIGNER_UNAUTH_ATTR_PARAM, 0, pSignedAttributesBuf.get(), &nSignedAttributes))
+        {
+            SAL_WARN("svl.crypto", "ValidateSignature: CryptMsgGetParam() unauthenticated failed");
+            return false;
+        }
+        auto pSignedAttributes = reinterpret_cast<PCRYPT_ATTRIBUTES>(pSignedAttributesBuf.get());
+        for (size_t nAttr = 0; nAttr < pSignedAttributes->cAttr; ++nAttr)
+        {
+            CRYPT_ATTRIBUTE& rAttr = pSignedAttributes->rgAttr[nAttr];
+            // Timestamp blob
+            if (OString("1.2.840.113549.1.9.16.2.14") == rAttr.pszObjId)
+            {
+                PCRYPT_TIMESTAMP_CONTEXT pTsContext;
+                if (!CryptVerifyTimeStampSignature(rAttr.rgValue->pbData, rAttr.rgValue->cbData, nullptr, 0, nullptr, &pTsContext, nullptr, nullptr))
+                {
+                    SAL_WARN("svl.crypto", "CryptMsgUpdate failed: " << WindowsErrorString(GetLastError()));
+                    break;
+                }
+
+                DateTime aDateTime = DateTime::CreateFromWin32FileDateTime(pTsContext->pTimeStamp->ftTime.dwLowDateTime, pTsContext->pTimeStamp->ftTime.dwHighDateTime);
+
+                // Then convert to a local UNO DateTime.
+                aDateTime.ConvertToLocalTime();
+                rInformation.stDateTime = aDateTime.GetUNODateTime();
+                if (rInformation.ouDateTime.isEmpty())
+                {
+                    OUStringBuffer rBuffer;
+                    rBuffer.append((sal_Int32)aDateTime.GetYear());
+                    rBuffer.append('-');
+                    if (aDateTime.GetMonth() < 10)
+                        rBuffer.append('0');
+                    rBuffer.append((sal_Int32)aDateTime.GetMonth());
+                    rBuffer.append('-');
+                    if (aDateTime.GetDay() < 10)
+                        rBuffer.append('0');
+                    rBuffer.append((sal_Int32)aDateTime.GetDay());
+                    rInformation.ouDateTime = rBuffer.makeStringAndClear();
+                }
                 break;
             }
         }
