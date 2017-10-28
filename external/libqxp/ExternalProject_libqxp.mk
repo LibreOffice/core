@@ -34,7 +34,7 @@ $(call gb_ExternalProject_get_state_target,libqxp,build) :
 			--disable-werror \
 			--disable-weffc \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-			CXXFLAGS="$(CXXFLAGS) $(CXXFLAGS_CXX11) $(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost))" \
+			CXXFLAGS="$(CXXFLAGS) $(CXXFLAGS_CXX11) $(BOOST_CPPFLAGS)" \
 			REVENGE_GENERATORS_CFLAGS=' ' REVENGE_GENERATORS_LIBS=' ' REVENGE_STREAM_CFLAGS=' ' REVENGE_STREAM_LIBS=' ' \
 			ax_cv_cxx_compile_cxx11=yes \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
