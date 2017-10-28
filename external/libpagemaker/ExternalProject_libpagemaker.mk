@@ -33,7 +33,8 @@ $(call gb_ExternalProject_get_state_target,libpagemaker,build) :
 			--disable-werror \
 			--disable-weffc \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-			CXXFLAGS="$(CXXFLAGS) $(BOOST_CPPFLAGS) \
+			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
+			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS) \
 				-DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
