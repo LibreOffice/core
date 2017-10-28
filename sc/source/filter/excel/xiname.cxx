@@ -253,6 +253,11 @@ void XclImpName::InsertName(const ScTokenArray* pArray)
             if (!pLocalNames->insert(pData))
                 pData = nullptr;
         }
+        else
+        {
+            delete pData;
+            pData = nullptr;
+        }
 
         if (GetBiff() == EXC_BIFF8 && pData)
         {
