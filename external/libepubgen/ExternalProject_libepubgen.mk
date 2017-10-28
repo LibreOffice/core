@@ -31,7 +31,8 @@ $(call gb_ExternalProject_get_state_target,libepubgen,build) :
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-			CXXFLAGS="$(CXXFLAGS) $(BOOST_CPPFLAGS)" \
+			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
+			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
 	)
