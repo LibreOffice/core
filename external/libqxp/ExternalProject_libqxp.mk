@@ -19,7 +19,6 @@ $(eval $(call gb_ExternalProject_use_externals,libqxp,\
 	boost_headers \
 	icu \
 	revenge \
-	zlib \
 ))
 
 $(call gb_ExternalProject_get_state_target,libqxp,build) :
