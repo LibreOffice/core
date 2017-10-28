@@ -119,6 +119,12 @@ bool SelectionController::setCursorLogicPosition(const Point& /*rPosition*/, boo
     return false;
 }
 
+
+bool SelectionController::ChangeFontSize(bool /*bGrow*/, const FontList* /*pFontList*/)
+{
+    return false;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
