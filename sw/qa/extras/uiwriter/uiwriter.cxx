@@ -240,6 +240,7 @@ public:
     void testTableStyleUndo();
     void testRedlineParam();
     void testRedlineViewAuthor();
+    void testTdf91292();
     void testTdf78727();
     void testRedlineTimestamp();
     void testCursorWindows();
@@ -411,6 +412,7 @@ public:
     CPPUNIT_TEST(testTableStyleUndo);
     CPPUNIT_TEST(testRedlineParam);
     CPPUNIT_TEST(testRedlineViewAuthor);
+    CPPUNIT_TEST(testTdf91292);
     CPPUNIT_TEST(testTdf78727);
     CPPUNIT_TEST(testRedlineTimestamp);
     CPPUNIT_TEST(testCursorWindows);
@@ -4787,6 +4789,23 @@ void SwUiWriterTest::testRedlineViewAuthor()
     uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
     // This was 'Unknown Author' instead of 'A U. Thor'.
     CPPUNIT_ASSERT_EQUAL(aAuthor, xField->getPropertyValue("Author").get<OUString>());
+}
+
+void SwUiWriterTest::testTdf91292()
+{
+    createDoc("tdf91292_paraBackground.docx");
+    uno::Reference<beans::XPropertySet> xPropertySet(getParagraph(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Solid background color", drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xPropertySet, "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Background Color", static_cast<sal_Int32>(0x5C2D91), getProperty<sal_Int32>(xPropertySet, "FillColor"));
+
+    // remove background color
+    xPropertySet->setPropertyValue("FillStyle", uno::makeAny( drawing::FillStyle_NONE));
+
+    // Save it and load it back.
+    reload("Office Open XML Text", "tdf91292_paraBackground.docx");
+
+    xPropertySet.set( getParagraph(1), uno::UNO_QUERY );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("No background color", drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xPropertySet, "FillStyle"));
 }
 
 void SwUiWriterTest::testTdf78727()
