@@ -29,8 +29,6 @@
 "ScCellRangeObj";"com::sun::star::util::XSearchable";"findNext()"
 "ScCellRangeObj";"com::sun::star::table::XColumnRowRange";"getColumns()"
 "ScCellRangeObj";"com::sun::star::table::XColumnRowRange";"getRows()"
-"ScCellRangeObj";"com::sun::star::sheet::XSheetFilterable";"createFilterDescriptor()"
-"ScCellRangeObj";"com::sun::star::sheet::XSheetFilterable";"filter()"
 "ScCellRangeObj";"com::sun::star::style::CharacterPropertiesAsian";"CharHeightAsian"
 "ScCellRangeObj";"com::sun::star::style::CharacterPropertiesAsian";"CharWeightAsian"
 "ScCellRangeObj";"com::sun::star::style::CharacterPropertiesAsian";"CharFontNameAsian"

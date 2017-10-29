@@ -12,6 +12,7 @@
 #include <test/sheet/xcellrangedata.hxx>
 #include <test/sheet/xcellrangesquery.hxx>
 #include <test/sheet/xcellseries.hxx>
+#include <test/sheet/xsheetfilterable.hxx>
 #include <test/sheet/xsheetoperation.hxx>
 #include <test/sheet/xsubtotalcalculatable.hxx>
 #include <test/sheet/xuniquecellformatrangessupplier.hxx>
@@ -25,12 +26,22 @@
 #include <com/sun/star/util/SortField.hpp>
 #include <comphelper/propertysequence.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sheet/FilterOperator.hpp>
+#include <com/sun/star/sheet/TableFilterField.hpp>
+#include <com/sun/star/sheet/XSheetFilterable.hpp>
+#include <com/sun/star/sheet/XSheetFilterDescriptor.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/table/XColumnRowRange.hpp>
+#include <com/sun/star/table/XTableRows.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 using namespace css;
 using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 22
+#define NUMBER_OF_TESTS 24
 
 class ScCellRangeObj : public CalcUnoApiTest, public apitest::CellProperties,
                                               public apitest::XCellRangeData,
@@ -38,6 +49,7 @@ class ScCellRangeObj : public CalcUnoApiTest, public apitest::CellProperties,
                                               public apitest::XCellSeries,
                                               public apitest::XReplaceable,
                                               public apitest::XSearchable,
+                                              public apitest::XSheetFilterable,
                                               public apitest::XSheetOperation,
                                               public apitest::XSubTotalCalculatable,
                                               public apitest::XUniqueCellFormatRangesSupplier
@@ -97,6 +109,10 @@ public:
     CPPUNIT_TEST(testCreateSubTotalDescriptor);
     CPPUNIT_TEST(testApplyRemoveSubTotals);
 
+    // XSheetFilterable (has to be last tests; otherwise it'll crash)
+    CPPUNIT_TEST(testCreateFilterDescriptor);
+    CPPUNIT_TEST(testFilter);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -121,9 +137,11 @@ uno::Reference< uno::XInterface > ScCellRangeObj::init()
     const OUString aFileBase("xcellrangesquery.ods");
     createFileURL(aFileBase, aFileURL);
     std::cout << OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    if( !mxComponent.is())
+    if (!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     uno::Reference< sheet::XSpreadsheetDocument> xDoc (mxComponent, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("no calc document!", xDoc.is());
+
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
 
@@ -141,11 +159,13 @@ uno::Reference< uno::XInterface > ScCellRangeObj::getXSpreadsheet()
     const OUString aFileBase("xcellrangesquery.ods");
     createFileURL(aFileBase, aFileURL);
     std::cout << OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    if( !mxComponent.is())
+    if (!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     uno::Reference< sheet::XSpreadsheetDocument> xDoc (mxComponent, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("no calc document!", xDoc.is());
+
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(0), UNO_QUERY_THROW);
 
     return xSheet;
 }
@@ -156,9 +176,11 @@ uno::Reference< uno::XInterface > ScCellRangeObj::getXCellRangeData()
     const OUString aFileBase("xcellrangesquery.ods");
     createFileURL(aFileBase, aFileURL);
     std::cout << OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    if( !mxComponent.is())
+    if (!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     uno::Reference< sheet::XSpreadsheetDocument> xDoc (mxComponent, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("no calc document!", xDoc.is());
+
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(1), UNO_QUERY_THROW);
 

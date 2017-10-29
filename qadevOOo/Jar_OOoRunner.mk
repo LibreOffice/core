@@ -624,7 +624,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XSheetCondition \
     qadevOOo/tests/java/ifc/sheet/_XSheetConditionalEntries \
     qadevOOo/tests/java/ifc/sheet/_XSheetConditionalEntry \
-    qadevOOo/tests/java/ifc/sheet/_XSheetFilterable \
     qadevOOo/tests/java/ifc/sheet/_XSheetFilterableEx \
     qadevOOo/tests/java/ifc/sheet/_XSpreadsheetView \
     qadevOOo/tests/java/ifc/style/_CharacterProperties \
