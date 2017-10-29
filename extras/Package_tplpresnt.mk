@@ -13,6 +13,7 @@ $(eval $(call gb_Package_add_files,extras_tplpresnt,$(LIBO_SHARE_FOLDER)/templat
 	BrightBlue.otp \
 	DNA.otp \
 	Inspiration.otp \
+	LushGreen.otp \
 	Metropolis.otp \
 	Sunset.otp \
 	Vintage.otp \
@@ -21,9 +22,17 @@ $(eval $(call gb_Package_add_files,extras_tplpresnt,$(LIBO_SHARE_FOLDER)/templat
 	Impress.otp \
 	Midnightblue.otp \
 	Vivid.otp \
+	Pencil.otp \
 	Blueprint_Plans.otp \
 	Portfolio.otp \
 	Progress.otp \
+	Beehive.otp \
+	Blue_Curve.otp \
+	Classy_Red.otp \
+	Forestbird.otp \
+	Lights.otp \
+	Nature_Illustration.otp \
+	Piano.otp \
 ))
 
 # vim: set noet sw=4 ts=4:
