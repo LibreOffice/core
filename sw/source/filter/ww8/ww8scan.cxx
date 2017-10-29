@@ -3346,8 +3346,33 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                         bIsUnicode);
                 }
 
-                nLimitFC = nBeginLimitFC +
-                    (nCpEnd - nCpStart) * (bIsUnicode ? 2 : 1);
+                WW8_CP nCpLen;
+                bool bFail = o3tl::checked_sub(nCpEnd, nCpStart, nCpLen);
+                if (bFail)
+                {
+                    SAL_WARN("sw.ww8", "broken offset, ignoring");
+                    pPieceIter->SetIdx(nOldPos);
+                    return;
+                }
+
+                if (bIsUnicode)
+                {
+                    bFail = o3tl::checked_multiply<WW8_CP>(nCpLen, 2, nCpLen);
+                    if (bFail)
+                    {
+                        SAL_WARN("sw.ww8", "broken offset, ignoring");
+                        pPieceIter->SetIdx(nOldPos);
+                        return;
+                    }
+                }
+
+                bFail = o3tl::checked_add(nBeginLimitFC, nCpLen, nLimitFC);
+                if (bFail)
+                {
+                    SAL_WARN("sw.ww8", "broken offset, ignoring");
+                    pPieceIter->SetIdx(nOldPos);
+                    return;
+                }
 
                 if (nOldEndPos <= nLimitFC)
                 {
@@ -3398,8 +3423,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                                     nFcStart,bIsUnicode );
                             }
 
-                            WW8_CP nCpLen;
-                            bool bFail = o3tl::checked_sub(nCpEnd, nCpStart, nCpLen);
+                            bFail = o3tl::checked_sub(nCpEnd, nCpStart, nCpLen);
                             if (bFail)
                             {
                                 SAL_WARN("sw.ww8", "broken offset, ignoring");
