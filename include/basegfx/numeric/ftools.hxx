@@ -59,11 +59,11 @@ namespace basegfx
     */
     inline sal_Int32 fround( double fVal )
     {
-        if (fVal >= std::numeric_limits<sal_Int32>::max())
+        if (fVal >= std::numeric_limits<sal_Int32>::max() - .5)
             return std::numeric_limits<sal_Int32>::max();
-        else if (fVal <= std::numeric_limits<sal_Int32>::min())
+        else if (fVal <= std::numeric_limits<sal_Int32>::min() + .5)
             return std::numeric_limits<sal_Int32>::min();
-        return fVal > 0.0 ? static_cast<sal_Int32>( fVal + .5 ) : -static_cast<sal_Int32>( -fVal + .5 );
+        return fVal > 0.0 ? static_cast<sal_Int32>( fVal + .5 ) : static_cast<sal_Int32>( fVal - .5 );
     }
 
     /** Round double to nearest integer
