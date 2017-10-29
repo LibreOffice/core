@@ -780,7 +780,6 @@ void PrintFontManager::initialize()
 void PrintFontManager::getFontList( ::std::vector< fontID >& rFontIDs )
 {
     rFontIDs.clear();
-    std::unordered_map< fontID, PrintFont* >::const_iterator it;
 
     for (auto const& font : m_aFonts)
         rFontIDs.push_back(font.first);
