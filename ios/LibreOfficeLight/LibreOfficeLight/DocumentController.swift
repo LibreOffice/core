@@ -15,14 +15,24 @@ import UIKit
 // It is a delegate class to recieve Menu events as well as file handling events
 class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewControllerDelegate
 {
-    // Show sidemenu (part of documentcontroller)
+    // handling of PropertiesController
+    // The PropertiesController is a left sidebar, that will scroll in when activated
+    // The Controller handles manipulation of properties in the document
+
+    // Activate/Deactivate PropertiesController (from navigationController, see storyboard)
     @IBAction func doProperties(_ sender: UIBarButtonItem)
     {
+        // Check if deactivation
         if (sender.tag == 99) {
+            // Deactivate
+
+            // Mark it as deactivated (it stays loaded)
             sender.tag = 0;
 
+            // get handle of PropertiesController
             let viewMenuBack : UIView = view.subviews.last!
 
+            // Blend out sidebar
             UIView.animate(withDuration: 0.3, animations: { () -> Void in
                 var frameMenu : CGRect = viewMenuBack.frame
                 frameMenu.origin.x = -1 * UIScreen.main.bounds.size.width
@@ -32,27 +42,39 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
                 }, completion: { (finished) -> Void in
                     viewMenuBack.removeFromSuperview()
                 })
-            return
         }
+        else {
+            // Activate
 
-        sender.isEnabled = false
-        sender.tag = 99
+            // Mark as activated
+            sender.isEnabled = false
+            sender.tag = 99
 
-        let properties : PropertiesController = self.storyboard!.instantiateViewController(withIdentifier: "PropertiesController") as! PropertiesController
-        view.addSubview(properties.view)
-        addChildViewController(properties)
-        properties.view.layoutIfNeeded()
+            // make instance of PropertiesController
+            let prop : PropertiesController = self.storyboard!.instantiateViewController(
+                withIdentifier: "PropertiesController") as! PropertiesController
+            view.addSubview(prop.view)
+            addChildViewController(prop)
+            prop.view.layoutIfNeeded()
+            prop.view.frame=CGRect(x: 0 - UIScreen.main.bounds.size.width,
+                                   y: 0,
+                                   width: UIScreen.main.bounds.size.width,
+                                   height: UIScreen.main.bounds.size.height);
 
-        properties.view.frame=CGRect(x: 0 - UIScreen.main.bounds.size.width, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height);
-
-        UIView.animate(withDuration: 0.3, animations: { () -> Void in
-            properties.view.frame=CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height);
-            sender.isEnabled = true
-            }, completion:nil)
+            // Blend in sidebar
+            UIView.animate(withDuration: 0.3, animations: { () -> Void in
+                prop.view.frame=CGRect(x: 0,
+                                       y: 0,
+                                       width: UIScreen.main.bounds.size.width,
+                                       height: UIScreen.main.bounds.size.height);
+                sender.isEnabled = true
+                }, completion:nil)
+        }
     }
 
 
 
+    // Handling of Background (hipernate)
     public func Hipernate() -> Void
     {
     }

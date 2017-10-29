@@ -117,10 +117,10 @@
             </objects>
             <point key="canvasLocation" x="259.19999999999999" y="305.84707646176912"/>
         </scene>
-        <!--Sidebar Controller-->
+        <!--Properties Controller-->
         <scene sceneID="moB-At-Om8">
             <objects>
-                <viewController storyboardIdentifier="SidebarController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="E9y-3m-fEc" customClass="SidebarController" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PropertiesController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="E9y-3m-fEc" userLabel="Properties Controller" customClass="PropertiesController" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="qJv-1E-iEi"/>
                         <viewControllerLayoutGuide type="bottom" id="syI-80-ufe"/>
