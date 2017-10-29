@@ -270,7 +270,6 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
         {
             ScDBCollection* pUndoColl = nullptr;
 
-            OUString aNewName;
             if (eMode==SC_DB_IMPORT)
             {
                 aDocument.PreprocessDBDataUpdate();
@@ -280,11 +279,11 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                 long nCount = 0;
                 const ScDBData* pDummy = nullptr;
                 ScDBCollection::NamedDBs& rDBs = pColl->getNamedDBs();
+                OUString aNewName;
                 do
                 {
                     ++nCount;
-                    aNewName = aImport;
-                    aNewName += OUString::number( nCount );
+                    aNewName = aImport + OUString::number( nCount );
                     pDummy = rDBs.findByUpperName(ScGlobal::pCharClass->uppercase(aNewName));
                 }
                 while (pDummy);
@@ -296,8 +295,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
             }
             else
             {
-                aNewName = STR_DB_LOCAL_NONAME;
-                pNoNameData = new ScDBData(aNewName , nTab,
+                pNoNameData = new ScDBData(STR_DB_LOCAL_NONAME, nTab,
                                 nStartCol,nStartRow, nEndCol,nEndRow,
                                 true, bHasHeader );
                 aDocument.SetAnonymousDBData(nTab, pNoNameData);
@@ -474,19 +472,13 @@ void ScDocShell::RefreshPivotTables( const ScRange& rSource )
 
 static OUString lcl_GetAreaName( ScDocument* pDoc, ScArea* pArea )
 {
-    OUString aName;
-    bool bOk = false;
     ScDBData* pData = pDoc->GetDBAtArea( pArea->nTab, pArea->nColStart, pArea->nRowStart,
                                                         pArea->nColEnd, pArea->nRowEnd );
     if (pData)
-    {
-        aName = pData->GetName();
-        bOk = true;
-    }
+        return pData->GetName();
 
-    if (!bOk)
-        pDoc->GetName( pArea->nTab, aName );
-
+    OUString aName;
+    pDoc->GetName( pArea->nTab, aName );
     return aName;
 }
 
