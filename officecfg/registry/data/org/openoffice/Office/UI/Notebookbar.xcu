@@ -151,16 +151,9 @@
           </prop>
           <prop oor:name="HasMenubar">
             <value>true</value>
-        <node oor:name="Groups" oor:op="replace">
-          <prop oor:name="Label">
-            <value xml:lang="en-US">Groupedbar Full</value>
           </prop>
-          <prop oor:name="File">
-            <value>notebookbar_groupedbar_full.ui</value>
-          </prop>
-          <prop oor:name="HasMenubar">
-            <value>true</value>
-        <node oor:name="Groups" oor:op="replace">
+        </node>
+        <node oor:name="GroupedbarCompact" oor:op="replace">
           <prop oor:name="Label">
             <value xml:lang="en-US">Groupedbar Compact</value>
           </prop>
@@ -168,7 +161,18 @@
             <value>notebookbar_groupedbar_compact.ui</value>
           </prop>
           <prop oor:name="HasMenubar">
-            <value>true</value>
+            <value>false</value>
+          </prop>
+        </node>
+        <node oor:name="GroupedbarFull" oor:op="replace">
+          <prop oor:name="Label">
+            <value xml:lang="en-US">Groupedbar Full</value>
+          </prop>
+          <prop oor:name="File">
+            <value>notebookbar_groupedbar_full.ui</value>
+          </prop>
+          <prop oor:name="HasMenubar">
+            <value>false</value>
           </prop>
         </node>
       </node>
