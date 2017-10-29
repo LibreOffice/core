@@ -9,45 +9,65 @@ import UIKit
 
 
 
-// Protocol for action popover callback
-protocol MenuDelegate
-{
-    func actionMenuSelected(_ tag : Int)
-}
-
-
-
+// DocumentActions is the main menu popover started from DocumentController
+// it allows the user to invoke global actions and delegates the processing
+// back to the DocumentController
 class DocumentActions: UITableViewController
 {
-    // Pointer to callback class
+    // Pointer to callback class (in reality instance of DocumentController)
     var delegate  : MenuDelegate?
+
+    // set by DocumentController before invoking the menu
+    // the variable is used to control which menu entries are active
     var isDocActive : Bool = false
 
-    // Calling class might enable/disable each button
-    @IBAction func actionMenuSelect(_ sender: UIButton)
-    {
-        dismiss(animated: false)
-        delegate?.actionMenuSelected(sender.tag)
-    }
 
-    @IBOutlet weak var buttonClose: UIButton!
-    @IBOutlet weak var buttonProperties: UIButton!
-    @IBOutlet weak var buttonNew: UIButton!
+
+    // Reference to instances of the buttons
     @IBOutlet weak var buttonOpen: UIButton!
+    @IBOutlet weak var buttonProperties: UIButton!
     @IBOutlet weak var buttonSave: UIButton!
+    @IBOutlet weak var buttonClose: UIButton!
     @IBOutlet weak var buttonSaveAs: UIButton!
     @IBOutlet weak var buttonSaveAsPDF: UIButton!
     @IBOutlet weak var buttonPrint: UIButton!
-    @IBOutlet weak var buttonCopy: UIButton!
-    @IBOutlet weak var buttonMove: UIButton!
-    @IBOutlet weak var buttonDelete: UIButton!
 
+
+
+    // called once controller is loaded
     override func viewDidLoad()
     {
         super.viewDidLoad()
+
+        // Some menu entries are only active when a document is loaded
         buttonSave.isEnabled = isDocActive
+        buttonProperties.isEnabled = isDocActive
+        buttonClose.isEnabled = isDocActive
         buttonSaveAs.isEnabled = isDocActive
         buttonSaveAsPDF.isEnabled = isDocActive
         buttonPrint.isEnabled = isDocActive
     }
+
+
+
+    // Called when user click on a menu entry (all entries goes here)
+    // see storyboard Document actions scene for details
+    @IBAction func actionMenuSelect(_ sender: UIButton)
+    {
+        // make popover go away, when this function returns
+        dismiss(animated: false)
+
+        // inform DocumentController about the selected entry
+        delegate?.actionMenuSelected(sender.tag)
+    }
 }
+
+
+
+// Protocol for action popover callback
+protocol MenuDelegate
+{
+    // inform delegate about selected menu entry
+    func actionMenuSelected(_ tag : Int)
+}
+
