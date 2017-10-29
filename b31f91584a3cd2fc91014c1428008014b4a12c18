@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_105701cf",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1326,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-10-29T23:58:49Z",
+      "side": 1,
+      "message": "Ah nice cleanup",
+      "revId": "b31f91584a3cd2fc91014c1428008014b4a12c18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_30523dde",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-10-29T23:58:49Z",
+      "side": 1,
+      "message": "and this one (and the other few of that kind)",
+      "revId": "b31f91584a3cd2fc91014c1428008014b4a12c18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_90593101",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1406,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-10-29T23:58:49Z",
+      "side": 1,
+      "message": "good catch here, too",
+      "revId": "b31f91584a3cd2fc91014c1428008014b4a12c18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

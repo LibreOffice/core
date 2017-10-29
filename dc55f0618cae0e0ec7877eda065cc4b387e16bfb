@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_505fc9e4",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-10-29T23:58:49Z",
+      "side": 0,
+      "message": "this check is lost, this modification is *not* equivalent (at least not obviously so)",
+      "revId": "dc55f0618cae0e0ec7877eda065cc4b387e16bfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_706205af",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1423,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-10-29T23:58:49Z",
+      "side": 0,
+      "message": "likewise - why drop this check?",
+      "revId": "dc55f0618cae0e0ec7877eda065cc4b387e16bfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
