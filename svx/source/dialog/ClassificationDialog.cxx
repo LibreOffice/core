@@ -166,17 +166,21 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
 
         ESelection aSelection(rSection.mnParagraph, rSection.mnStart, rSection.mnParagraph, rSection.mnEnd);
         const OUString sDisplayString = m_pEditWindow->pEdEngine->GetText(aSelection);
-        const ClassificationField* pClassificationField = pFieldItem ? dynamic_cast<const ClassificationField*>(pFieldItem->GetField()) : nullptr;
+        if (!sDisplayString.isEmpty())
+        {
+            const ClassificationField* pClassificationField = pFieldItem ? dynamic_cast<const ClassificationField*>(pFieldItem->GetField()) : nullptr;
 
-        if (pClassificationField)
-        {
-            aClassificationResults.push_back({ pClassificationField->meType, pClassificationField->msFullClassName, sDisplayString, rSection.mnParagraph });
-        }
-        else
-        {
-            aClassificationResults.push_back({ ClassificationType::TEXT, pClassificationField->msFullClassName, sDisplayString, rSection.mnParagraph });
+            if (pClassificationField)
+            {
+                aClassificationResults.push_back({ pClassificationField->meType, pClassificationField->msFullClassName, sDisplayString, rSection.mnParagraph });
+            }
+            else
+            {
+                aClassificationResults.push_back({ ClassificationType::TEXT, sDisplayString, sDisplayString, rSection.mnParagraph });
+            }
         }
     }
+
     return aClassificationResults;
 }
 
