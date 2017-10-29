@@ -680,12 +680,12 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
         uno::Reference<text::XText> xFooterText;
         xPageStyle->getPropertyValue(UNO_NAME_FOOTER_TEXT) >>= xFooterText;
 
-        sal_Int32 nTextNumber = 1;
-
         uno::Reference<text::XParagraphCursor> xHeaderParagraphCursor(xHeaderText->createTextCursor(), uno::UNO_QUERY);
         uno::Reference<text::XParagraphCursor> xFooterParagraphCursor(xFooterText->createTextCursor(), uno::UNO_QUERY);
 
         sal_Int32 nParagraph = -1;
+
+        sfx::ClassificationKeyCreator aCreator(SfxClassificationHelper::getPolicyType());
 
         for (svx::ClassificationResult const & rResult : rResults)
         {
@@ -693,8 +693,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
             {
                 case svx::ClassificationType::TEXT:
                 {
-                    OUString sKey = sPolicy + "Marking:Text:" + OUString::number(nTextNumber);
-                    nTextNumber++;
+                    OUString sKey = aCreator.makeNumberedMarkingTextKey();
 
                     addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
                     insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
@@ -704,7 +703,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
 
                 case svx::ClassificationType::CATEGORY:
                 {
-                    OUString sKey = sPolicy + "BusinessAuthorizationCategory:Name";
+                    OUString sKey = aCreator.makeCategoryKey();
                     insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
                     insertFieldToDocument(xMultiServiceFactory, xFooterText, xFooterParagraphCursor, sKey);
                 }
@@ -712,7 +711,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
 
                 case svx::ClassificationType::MARKING:
                 {
-                    OUString sKey = sPolicy + "Extension:Marking";
+                    OUString sKey = aCreator.makeMarkingKey();
                     addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
                     insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
                     insertFieldToDocument(xMultiServiceFactory, xFooterText, xFooterParagraphCursor, sKey);
@@ -721,7 +720,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
 
                 case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
                 {
-                    OUString sKey = sPolicy + "Extension:IntellectualPropertyPart";
+                    OUString sKey = aCreator.makeIntellectualPropertyPartKey();
                     addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
                     insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
                     insertFieldToDocument(xMultiServiceFactory, xFooterText, xFooterParagraphCursor, sKey);
@@ -794,7 +793,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
     uno::Reference<document::XDocumentProperties> xDocumentProperties = SfxObjectShell::Current()->getDocProperties();
     uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
 
-    OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
+    sfx::ClassificationKeyCreator aCreator(SfxClassificationHelper::getPolicyType());
 
     while (xParagraphs->hasMoreElements())
     {
@@ -826,26 +825,27 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
             OUString aName;
             uno::Reference<beans::XPropertySet> xPropertySet(xTextField, uno::UNO_QUERY);
             xPropertySet->getPropertyValue(UNO_NAME_NAME) >>= aName;
+
             const OUString sBlank("");
-            if (aName.startsWith(sPolicy + "Marking:Text:"))
+            if (aCreator.isMarkingTextKey(aName))
             {
                 const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
                     aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank });
             }
-            else if (aName.startsWith(sPolicy + "BusinessAuthorizationCategory:Name"))
+            else if (aCreator.isCategoryKey(aName))
             {
                 const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
                     aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank });
             }
-            else if (aName.startsWith(sPolicy + "Extension:Marking"))
+            else if (aCreator.isMarkingKey(aName))
             {
                 const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
                     aResult.push_back({ svx::ClassificationType::MARKING, aValue, sBlank });
             }
-            else if (aName.startsWith(sPolicy + "Extension:IntellectualPropertyPart"))
+            else if (aCreator.isIntellectualPropertyPartKey(aName))
             {
                 const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
@@ -956,7 +956,7 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
 
-    const OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
+    sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
 
     // Prevent recursive validation since this is triggered on node updates, which we do below.
     const bool bOldValidationFlag = SetParagraphSignatureValidation(false);
@@ -976,7 +976,7 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
     // Since we always insert at the start of the paragraph,
     // need to insert in reverse order.
     std::reverse(aResults.begin(), aResults.end());
-    sal_Int32 nTextNumber = 1;
+
     for (size_t nIndex = 0; nIndex < aResults.size(); ++nIndex)
     {
         const svx::ClassificationResult& rResult = aResults[nIndex];
@@ -992,25 +992,25 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
         {
             case svx::ClassificationType::TEXT:
             {
-                sKey = sPolicy + "Marking:Text:" + OUString::number(nTextNumber++);
+                sKey = aKeyCreator.makeNumberedMarkingTextKey();
             }
             break;
 
             case svx::ClassificationType::CATEGORY:
             {
-                sKey = sPolicy + "BusinessAuthorizationCategory:Name";
+                sKey = aKeyCreator.makeCategoryKey();
             }
             break;
 
             case svx::ClassificationType::MARKING:
             {
-                sKey = sPolicy + "Extension:Marking";
+                sKey = aKeyCreator.makeMarkingKey();
             }
             break;
 
             case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
             {
-                sKey = sPolicy + "Extension:IntellectualPropertyPart";
+                sKey = aKeyCreator.makeIntellectualPropertyPartKey();
             }
             break;
 
@@ -1048,7 +1048,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectParagraphClassificati
 
     uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
 
-    const OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
+    const sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
 
     while (xTextPortions->hasMoreElements())
     {
@@ -1071,19 +1071,19 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectParagraphClassificati
         const OUString aName = rdfNamePair.second;
         const OUString aValue = rdfValuePair.second;
         const OUString sBlank("");
-        if (aName.startsWith(sPolicy + "Marking:Text:"))
+        if (aKeyCreator.isMarkingTextKey(aName))
         {
             aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank });
         }
-        else if (aName.startsWith(sPolicy + "BusinessAuthorizationCategory:Name"))
+        else if (aKeyCreator.isCategoryKey(aName))
         {
             aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank });
         }
-        else if (aName.startsWith(sPolicy + "Extension:Marking"))
+        else if (aKeyCreator.isMarkingKey(aName))
         {
             aResult.push_back({ svx::ClassificationType::MARKING, aValue, sBlank });
         }
-        else if (aName.startsWith(sPolicy + "Extension:IntellectualPropertyPart"))
+        else if (aKeyCreator.isIntellectualPropertyPartKey(aName))
         {
             aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, xTextRange->getString(), sBlank });
         }

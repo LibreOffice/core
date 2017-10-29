@@ -106,6 +106,74 @@ public:
     static SfxClassificationPolicyType getPolicyType();
 };
 
+namespace sfx
+{
+class ClassificationKeyCreator
+{
+private:
+    SfxClassificationPolicyType m_ePolicyType;
+    sal_Int32 m_nTextNumber;
+
+    OUString getPolicyKey() const
+    {
+        return SfxClassificationHelper::policyTypeToString(m_ePolicyType);
+    }
+public:
+    ClassificationKeyCreator(SfxClassificationPolicyType ePolicyType)
+        : m_ePolicyType(ePolicyType)
+        , m_nTextNumber(1)
+    {}
+
+    OUString makeMarkingTextKey() const
+    {
+        return getPolicyKey() + "Marking:Text";
+    }
+
+    OUString makeNumberedMarkingTextKey()
+    {
+        OUString sKey = makeMarkingTextKey() + ":" + OUString::number(m_nTextNumber);
+        m_nTextNumber++;
+        return sKey;
+    }
+
+    bool isMarkingTextKey(OUString const & aKey) const
+    {
+        return aKey.startsWith(makeMarkingTextKey());
+    }
+
+    OUString makeCategoryKey() const
+    {
+        return getPolicyKey() + "BusinessAuthorizationCategory:Name";
+    }
+
+    bool isCategoryKey(OUString const & aKey) const
+    {
+        return aKey.startsWith(makeCategoryKey());
+    }
+
+    OUString makeMarkingKey() const
+    {
+        return getPolicyKey() + "Extension:Marking";
+    }
+
+    bool isMarkingKey(OUString const & aKey) const
+    {
+        return aKey.startsWith(makeMarkingKey());
+    }
+
+    OUString makeIntellectualPropertyPartKey() const
+    {
+        return getPolicyKey() + "Extension:IntellectualPropertyPart";
+    }
+
+    bool isIntellectualPropertyPartKey(OUString const & aKey) const
+    {
+        return aKey.startsWith(makeIntellectualPropertyPartKey());
+    }
+};
+
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
