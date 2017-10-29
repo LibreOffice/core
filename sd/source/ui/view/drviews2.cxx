@@ -292,7 +292,7 @@ private:
 
     void iterateSectionsAndCollect(std::vector<editeng::Section> const & rSections, EditTextObject const & rEditText)
     {
-        OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
+        sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
         uno::Reference<document::XDocumentProperties> xDocumentProperties = SfxObjectShell::Current()->getDocProperties();
         uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
 
@@ -315,22 +315,22 @@ private:
             {
                 const auto* pCustomPropertyField = dynamic_cast<const editeng::CustomPropertyField*>(pFieldItem->GetField());
                 OUString aKey = pCustomPropertyField->GetKey();
-                if (aKey.startsWith(sPolicy + "Marking:Text:"))
+                if (aKeyCreator.isMarkingTextKey(aKey))
                 {
                     OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
                     m_aResults.push_back({ svx::ClassificationType::TEXT, aValue, "" });
                 }
-                else if (aKey.startsWith(sPolicy + "BusinessAuthorizationCategory:Name"))
+                else if (aKeyCreator.isCategoryKey(aKey))
                 {
                     OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
                     m_aResults.push_back({ svx::ClassificationType::CATEGORY, aValue, "" });
                 }
-                else if (aKey.startsWith(sPolicy + "Extension:Marking"))
+                else if (aKeyCreator.isMarkingKey(aKey))
                 {
                     OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
                     m_aResults.push_back({ svx::ClassificationType::MARKING, aValue, "" });
                 }
-                else if (aKey.startsWith(sPolicy + "Extension:IntellectualPropertyPart"))
+                else if (aKeyCreator.isIntellectualPropertyPartKey(aKey))
                 {
                     OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
                     m_aResults.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, "" });
@@ -402,8 +402,8 @@ private:
     /// Delete the previous existing classification object(s) - if they exists
     void deleteExistingObjects()
     {
-        OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
-        OUString sKey = sPolicy + "BusinessAuthorizationCategory:Name";
+        sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
+        OUString sKey = aKeyCreator.makeCategoryKey();
 
         const sal_uInt16 nCount = m_rDrawViewShell.GetDoc()->GetMasterSdPageCount(PageKind::Standard);
 
@@ -470,8 +470,7 @@ public:
                 aHelper.SetBACName(rResult.msString, SfxClassificationHelper::getPolicyType());
         }
 
-        OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
-        sal_Int32 nTextNumber = 1;
+        sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
 
         Outliner* pOutliner = m_rDrawViewShell.GetDoc()->GetInternalOutliner();
         OutlinerMode eOutlinerMode = pOutliner->GetMode();
@@ -488,8 +487,7 @@ public:
             {
                 case svx::ClassificationType::TEXT:
                 {
-                    OUString sKey = sPolicy + "Marking:Text:" + OUString::number(nTextNumber);
-                    nTextNumber++;
+                    OUString sKey = aKeyCreator.makeNumberedMarkingTextKey();
                     addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey), EE_FEATURE_FIELD), aPosition);
                 }
@@ -497,14 +495,14 @@ public:
 
                 case svx::ClassificationType::CATEGORY:
                 {
-                    OUString sKey = sPolicy + "BusinessAuthorizationCategory:Name";
+                    OUString sKey = aKeyCreator.makeCategoryKey();
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
 
                 case svx::ClassificationType::MARKING:
                 {
-                    OUString sKey = sPolicy + "Extension:Marking";
+                    OUString sKey = aKeyCreator.makeMarkingKey();
                     addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey), EE_FEATURE_FIELD), aPosition);
                 }
@@ -512,7 +510,7 @@ public:
 
                 case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
                 {
-                    OUString sKey = sPolicy + "Extension:IntellectualPropertyPart";
+                    OUString sKey = aKeyCreator.makeIntellectualPropertyPartKey();
                     addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey), EE_FEATURE_FIELD), aPosition);
                 }
