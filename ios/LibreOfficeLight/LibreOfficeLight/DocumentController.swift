@@ -19,15 +19,11 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     // this is normal functions every controller must implement
 
 
+
     // called once controller is loaded
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        //FIXME
-        // we should load the document types, so we can use them for the open call
-        // let path = Bundle.main.path(forResource: "Info", ofType: "plist")
-        // let dict = NSDictionary(contentsOfFile: path!)
-        // let tableData = dict!.object(forKey: "CFBundleDocumentTypes")
     }
 
 
@@ -192,12 +188,11 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     // Load document into LibreOfficeKit and present it
     internal func startOpenDocument()
     {
-        //FIXME
-
-        // let openMenu = UIDocumentPickerViewController(documentTypes: ["public.data"], in: .open)
         let openMenu = UIDocumentBrowserViewController()
-        //penMenu.allowsDocumentCreation = true
-        // UIDocumentBrowserViewController.ImportMode = UIDocumentBrowserViewController.ImportMode.none // copy, move
+        openMenu.allowsDocumentCreation = true
+
+        //FIXME
+        //UIDocumentBrowserViewController.ImportMode = UIDocumentBrowserViewController.ImportMode.none // copy, move
         //openMenu.InterfaceStyle = UIDocumentPickerViewController.dark
         openMenu.delegate = self
         self.present(openMenu, animated: true, completion: nil)

@@ -31,7 +31,6 @@
 		39B08BD91E5F0BB600682A59 /* services.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 39B085241E5F0BB400682A59 /* services.rdb */; };
 		39B091CD1E5F0BB800682A59 /* udkapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 39B08B9B1E5F0BB600682A59 /* udkapi.rdb */; };
 		39B091CE1E5F0BB800682A59 /* unorc in Resources */ = {isa = PBXBuildFile; fileRef = 39B08B9C1E5F0BB600682A59 /* unorc */; };
-		39EE81541FA644E800B73AB8 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 39EE81531FA644E800B73AB8 /* Info.plist */; };
 		39EF4E2F1FA500C9001914AC /* PropertiesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EF4E2E1FA500C9001914AC /* PropertiesController.swift */; };
 /* End PBXBuildFile section */
 
@@ -86,7 +85,6 @@
 		3911D89F1E5993600050D6BC /* Support files */ = {
 			isa = PBXGroup;
 			children = (
-				39EE81531FA644E800B73AB8 /* Info.plist */,
 				39ACF4181F8A317600DA7334 /* loApp.xcconfig */,
 				39B092501E5F3DEA00682A59 /* LibreOfficeLight-Prefix.pch */,
 				397275391E77D9F1006ACDCC /* LibreOfficeLight.entitlements */,
@@ -129,6 +127,7 @@
 		397E08FC1E597BD8001374E0 /* LibreOfficeLight */ = {
 			isa = PBXGroup;
 			children = (
+				39EE81531FA644E800B73AB8 /* Info.plist */,
 				39503A6F1F94C4AC00F19C78 /* lokit-Bridging-Header.h */,
 				39284DB01FA5E150006F43E4 /* dummyLOkit.c */,
 				397E08FD1E597BD8001374E0 /* AppDelegate.swift */,
@@ -232,7 +231,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39EE81541FA644E800B73AB8 /* Info.plist in Resources */,
 				397E09081E597BD8001374E0 /* Assets.xcassets in Resources */,
 				39B08BD71E5F0BB600682A59 /* rc in Resources */,
 				39B08B9E1E5F0BB600682A59 /* offapi.rdb in Resources */,

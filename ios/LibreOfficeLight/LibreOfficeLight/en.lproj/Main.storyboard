@@ -357,6 +357,9 @@
                                                         <bool key="isElement" value="NO"/>
                                                     </accessibility>
                                                     <state key="normal" title="Close"/>
+                                                    <connections>
+                                                        <action selector="actionMenuSelect:" destination="IER-X5-Ax8" eventType="touchUpInside" id="lIq-w7-Yr5"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -440,11 +443,11 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="134" height="210"/>
                     <connections>
-                        <outlet property="buttonClose" destination="6vH-aM-aYe" id="zNg-Rc-hcL"/>
+                        <outlet property="buttonClose" destination="95N-Hk-rcU" id="hJo-Qc-Wgv"/>
                         <outlet property="buttonOpen" destination="myk-zs-md7" id="xQK-I1-pDl"/>
                         <outlet property="buttonPrint" destination="tvH-WR-c61" id="4YU-p2-Fim"/>
                         <outlet property="buttonProperties" destination="b90-ja-Wm0" id="scY-Fn-fss"/>
-                        <outlet property="buttonSave" destination="b90-ja-Wm0" id="Sdz-lq-s3S"/>
+                        <outlet property="buttonSave" destination="m45-MR-Gca" id="UZw-LX-Bco"/>
                         <outlet property="buttonSaveAs" destination="6vH-aM-aYe" id="4KY-Zi-iH4"/>
                         <outlet property="buttonSaveAsPDF" destination="apE-3B-lUt" id="AZL-ON-v2Y"/>
                     </connections>

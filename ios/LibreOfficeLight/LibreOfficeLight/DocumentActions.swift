@@ -17,6 +17,8 @@ class DocumentActions: UITableViewController
     // Pointer to callback class (in reality instance of DocumentController)
     var delegate  : MenuDelegate?
 
+
+
     // set by DocumentController before invoking the menu
     // the variable is used to control which menu entries are active
     var isDocActive : Bool = false
