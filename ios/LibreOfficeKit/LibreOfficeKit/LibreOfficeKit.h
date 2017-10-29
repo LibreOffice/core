@@ -14,5 +14,5 @@
 int BridgeLOkit_Init(const char *path);
 int BridgeLOkit_open(const char *path);
 int BridgeLOkit_ClientCommand(const char *input);
-int BridgeLOkit_Hipernate();
-int BridgeLOkit_LeaveHipernate();
+int BridgeLOkit_Hipernate(void);
+int BridgeLOkit_LeaveHipernate(void);

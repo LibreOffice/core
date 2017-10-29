@@ -15,7 +15,7 @@ import UIKit
 // It is a delegate class to recieve Menu events as well as file handling events
 class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewControllerDelegate
 {
-    // Handling of DocumentController
+    // *** Handling of DocumentController
     // this is normal functions every controller must implement
 
 
@@ -41,7 +41,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
 
 
 
-    // Handling of Background (hipernate)
+    // *** Handling of Background (hipernate)
     // iOS is not true multitasking, only 1 app can be active (foreground) at any time,
     // therefore apps frequently are moved to the background.
     // background really means hipernate by terminating all threads and solely keep the
@@ -63,7 +63,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
 
 
 
-    // handling of PropertiesController
+    // *** handling of PropertiesController
     // The PropertiesController is a left sidebar, that will scroll in when activated
     // The Controller handles manipulation of properties in the document
 
@@ -122,134 +122,183 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
 
 
 
+    // *** Handling of menu popover
+    // the menu contain all globbal functions and use seque/delegate
 
 
-    // var currentDocumentName : String?
+
+    var currentDocumentName : String? = nil
 
 
-    internal func documentBrowser(_ controller: UIDocumentBrowserViewController,
-                                  didRequestDocumentCreationWithHandler importHandler: @escaping (URL?, UIDocumentBrowserViewController.ImportMode) -> Void)
-    {
-        // Asks the delegate to create a new document.
-    }
-
-    internal func documentBrowser(_ controller: UIDocumentBrowserViewController,
-                                  didImportDocumentAt sourceURL: URL,
-                                  toDestinationURL destinationURL: URL)
-    {
-        // Tells the delegate that a document has been successfully imported.
-        //FIX BridgeLOkit_open("jan");
-        //FIX BridgeLOkit_ClientCommand("jan");
-
-    }
-
-    internal func documentBrowser(_ controller: UIDocumentBrowserViewController,
-                                  failedToImportDocumentAt documentURL: URL,
-                                  error: Error?)
-    {
-        // Tells the delegate that the document browser failed to import the specified document.
-    }
-
-    internal func documentBrowser(_ controller: UIDocumentBrowserViewController,
-                                  didPickDocumentURLs documentURLs: [URL])
-    {
-        // Tells the delegate that the user has selected one or more documents.
-        //FIX BridgeLOkit_open("jan");
-        //FIX BridgeLOkit_ClientCommand("jan");
-    }
-
-    @IBOutlet weak var janTest: UILabel!
 
     // Last stop before displaying popover
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
+        // "showActions" is the name of the popover menu, see storyboard
         if segue.identifier == "showActions" {
             let vc = segue.destination as! DocumentActions
             vc.delegate = self
-
-            // JIX, TO BE CHANGED
-            vc.isDocActive = true
+            vc.isDocActive = (currentDocumentName != nil)
         }
     }
 
 
 
+    // Delegate call from menu (see protocol MenuDelegate)
     func actionMenuSelected(_ tag : Int)
     {
+        // a tag can sadly enough only be a number and not a string,
+        // whenever adding a menu entry, it (of course) needs to be added
+        // to the Document actions scene in storyboard and assigned a tag number
+        // the tag number must be repeated in the following switch
+        // BE CAREFULL to keep the tags synchronized (manually)
         switch tag
         {
-            case 1: // Open...
-                // let openMenu = UIDocumentPickerViewController(documentTypes: ["public.data"], in: .open)
-                let openMenu = UIDocumentBrowserViewController()
-                //penMenu.allowsDocumentCreation = true
-                // UIDocumentBrowserViewController.ImportMode = UIDocumentBrowserViewController.ImportMode.none // copy, move
-                //openMenu.InterfaceStyle = UIDocumentPickerViewController.dark
-                openMenu.delegate = self
-                self.present(openMenu, animated: true, completion: nil)
-                print("menu Open... to be done")
+        case 1: // Open...
+                doOpenDocument()
 
-            case 2: // Properties
-                print("menu Properties to be done")
+        case 2: // Properties
+                doProperties()
 
-            case 3: // Save
-                print("menu Save to be done")
+        case 3: // Save
+                doSave()
 
-            case 4: // Save as...
-                print("menu Save as... to be done")
+        case 4: // Close...
+                doClose()
 
-            case 5: // Save as PDF...
-                print("menu Save as PDF... to be done")
+        case 4: // Save as...
+                doSaveAs()
 
-            case 6: // Print...
-                print("menu Print... to be done")
+        case 5: // Save as PDF...
+                doSaveAsPDF()
 
-            default: // should not happen
-                print("unknown menu" + String(tag))
+        case 6: // Print...
+                doPrint()
+
+        default: // should not happen
+                 print("unknown menu" + String(tag))
         }
     }
-}
 
 
 
-// Protocol for action popover callback
-protocol MenuDelegate
-{
-    func actionMenuSelected(_ tag : Int)
-}
+    // *** handling of menu actions
+    // This is the real base of the application
 
 
 
-class DocumentActions: UITableViewController
-{
-    // Pointer to callback class
-    var delegate  : MenuDelegate?
-    var isDocActive : Bool = false
-
-    // Calling class might enable/disable each button
-    @IBAction func actionMenuSelect(_ sender: UIButton)
+    // Load document into LibreOfficeKit and present it
+    internal func doOpenDocument()
     {
-        dismiss(animated: false)
-        delegate?.actionMenuSelected(sender.tag)
+        //FIXME
+
+        // let openMenu = UIDocumentPickerViewController(documentTypes: ["public.data"], in: .open)
+        let openMenu = UIDocumentBrowserViewController()
+        //penMenu.allowsDocumentCreation = true
+        // UIDocumentBrowserViewController.ImportMode = UIDocumentBrowserViewController.ImportMode.none // copy, move
+        //openMenu.InterfaceStyle = UIDocumentPickerViewController.dark
+        openMenu.delegate = self
+        self.present(openMenu, animated: true, completion: nil)
+        print("menu Open... to be done")
     }
 
-    @IBOutlet weak var buttonProperties: UIButton!
-    @IBOutlet weak var buttonNew: UIButton!
-    @IBOutlet weak var buttonOpen: UIButton!
-    @IBOutlet weak var buttonSave: UIButton!
-    @IBOutlet weak var buttonSaveAs: UIButton!
-    @IBOutlet weak var buttonSaveAsPDF: UIButton!
-    @IBOutlet weak var buttonPrint: UIButton!
-    @IBOutlet weak var buttonCopy: UIButton!
-    @IBOutlet weak var buttonMove: UIButton!
-    @IBOutlet weak var buttonDelete: UIButton!
 
-    override func viewDidLoad()
+
+    // Show document properties (new overloaded page)
+    internal func doProperties()
     {
-        super.viewDidLoad()
-        buttonSave.isEnabled = isDocActive
-        buttonSaveAs.isEnabled = isDocActive
-        buttonSaveAsPDF.isEnabled = isDocActive
-        buttonPrint.isEnabled = isDocActive
+        //FIXME
+        print("menu Properties to be done")
+    }
+
+
+
+    // Save current document
+    internal func doSave()
+    {
+        //FIXME
+        print("menu Save to be done")
+    }
+
+
+
+    // Close current document (without saving)
+    internal func doClose()
+    {
+        //FIXME
+        print("menu Close to be done")
+    }
+
+
+
+    // make a copy of current document, and save
+    internal func doSaveAs()
+    {
+        //FIXME
+        print("menu Save as... to be done")
+    }
+
+
+
+    // save current document as PDF
+    internal func doSaveAsPDF()
+    {
+        //FIXME
+        print("menu Save as PDF... to be done")
+    }
+
+
+
+    // print current document
+    internal func doPrint()
+    {
+        //FIXME
+        print("menu Print... to be done")
+    }
+
+
+
+    // *** Handling of DocumentViewController delegate functions
+    // this handles open/create/copy/delete document
+
+
+
+    // Create an empty document, and present it
+    internal func documentBrowser(_ controller: UIDocumentBrowserViewController,
+                                  didRequestDocumentCreationWithHandler importHandler: @escaping (URL?,
+                                  UIDocumentBrowserViewController.ImportMode) -> Void)
+    {
+        //FIXME
+    }
+
+
+
+    // import (copy from iCloud to iPad) document, open it and present it
+    internal func documentBrowser(_ controller: UIDocumentBrowserViewController,
+                                  didImportDocumentAt sourceURL: URL,
+                                  toDestinationURL destinationURL: URL)
+    {
+        //FIXME
+    }
+
+
+
+    // Import failed, inform user
+    internal func documentBrowser(_ controller: UIDocumentBrowserViewController,
+                                  failedToImportDocumentAt documentURL: URL,
+                                  error: Error?)
+    {
+        //FIXME
+    }
+
+
+
+    // open document and present it
+    internal func documentBrowser(_ controller: UIDocumentBrowserViewController,
+                                  didPickDocumentURLs documentURLs: [URL])
+    {
+        //FIXME
+        //BridgeLOkit_open(documentURLs);
     }
 }
 
