@@ -91,7 +91,7 @@ class GtkDropTarget : public cppu::WeakComponentImplHelper<css::datatransfer::dn
     GtkSalFrame* m_pFrame;
     bool m_bActive;
     sal_Int8 m_nDefaultActions;
-    std::list<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
+    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
 public:
     GtkDropTarget();
     virtual ~GtkDropTarget() override;
