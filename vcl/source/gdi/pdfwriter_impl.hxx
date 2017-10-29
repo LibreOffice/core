@@ -359,7 +359,7 @@ public:
     typedef std::map< sal_GlyphId, Glyph > FontMapping;
     struct FontSubset
     {
-        std::list< FontEmit >        m_aSubsets;
+        std::vector< FontEmit >        m_aSubsets;
         FontMapping         m_aMapping;
     };
     typedef std::map< const PhysicalFontFace*, FontSubset > FontSubsetData;
