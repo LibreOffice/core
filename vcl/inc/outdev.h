@@ -99,7 +99,6 @@ private:
 public:
     void    AddFontSubstitute( const OUString& rFontName, const OUString& rSubstName, AddFontSubstituteFlags nFlags );
     void    RemoveFontsSubstitute();
-    int     GetFontSubstituteCount() const { return maFontSubstList.size(); };
 
     bool    FindFontSubstitute( OUString& rSubstName, const OUString& rFontName ) const;
 };
