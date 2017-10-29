@@ -31,7 +31,7 @@
 #include <com/sun/star/deployment/XPackageRegistry.hpp>
 #include <com/sun/star/deployment/XPackageManager.hpp>
 #include <osl/mutex.hxx>
-#include <list>
+#include <vector>
 #include <unordered_map>
 
 namespace dp_manager {
@@ -148,7 +148,7 @@ private:
        priority. That is, the first element is "user" followed by "shared" and
        then "bundled"
      */
-    std::list< OUString > m_repositoryNames;
+    std::vector< OUString > m_repositoryNames;
 
     css::uno::Reference<css::deployment::XPackageManager> getUserRepository();
     css::uno::Reference<css::deployment::XPackageManager> getSharedRepository();
@@ -175,7 +175,7 @@ private:
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
 
-    std::list<css::uno::Reference<css::deployment::XPackage> >
+    std::vector<css::uno::Reference<css::deployment::XPackage> >
     getExtensionsWithSameId(OUString  const & identifier,
                             OUString const & fileName);
 

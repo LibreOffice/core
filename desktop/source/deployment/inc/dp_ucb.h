@@ -20,7 +20,6 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_UCB_H
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_UCB_H
 
-#include <list>
 #include <vector>
 #include <rtl/byteseq.hxx>
 #include <rtl/instance.hxx>
@@ -89,7 +88,7 @@ bool readLine( OUString * res, OUString const & startingWith,
                ::ucbhelper::Content & ucb_content, rtl_TextEncoding textenc );
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-bool readProperties( std::list< std::pair< OUString, OUString> > & out_result,
+bool readProperties( std::vector< std::pair< OUString, OUString> > & out_result,
                 ::ucbhelper::Content & ucb_content);
 
 

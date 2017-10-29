@@ -253,7 +253,7 @@ bool readLine( OUString * res, OUString const & startingWith,
     return false;
 }
 
-bool readProperties( std::list< std::pair< OUString, OUString> > & out_result,
+bool readProperties( std::vector< std::pair< OUString, OUString> > & out_result,
                      ::ucbhelper::Content & ucb_content )
 {
     // read whole file:
