@@ -260,7 +260,7 @@ class VclGtkClipboard :
     gulong                                                   m_nOwnerChangedSignalId;
     Reference<css::datatransfer::XTransferable>              m_aContents;
     Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
-    std::list< Reference<css::datatransfer::clipboard::XClipboardListener> > m_aListeners;
+    std::vector< Reference<css::datatransfer::clipboard::XClipboardListener> > m_aListeners;
     std::vector<GtkTargetEntry> m_aGtkTargets;
     VclToGtkHelper m_aConversionHelper;
 
@@ -604,7 +604,7 @@ void VclGtkClipboard::setContents(
     m_aContents = xTrans;
     m_aOwner = xClipboardOwner;
 
-    std::list< Reference< datatransfer::clipboard::XClipboardListener > > aListeners( m_aListeners );
+    std::vector< Reference< datatransfer::clipboard::XClipboardListener > > aListeners( m_aListeners );
     datatransfer::clipboard::ClipboardEvent aEv;
 
     GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
@@ -641,10 +641,9 @@ void VclGtkClipboard::setContents(
 
     if (xOldOwner.is() && xOldOwner != xClipboardOwner)
         xOldOwner->lostOwnership( this, xOldContents );
-    for( std::list< Reference< datatransfer::clipboard::XClipboardListener > >::iterator it =
-         aListeners.begin(); it != aListeners.end() ; ++it )
+    for (auto const& listener : aListeners)
     {
-        (*it)->changedContents( aEv );
+        listener->changedContents( aEv );
     }
 }
 
@@ -669,7 +668,7 @@ void VclGtkClipboard::removeClipboardListener( const Reference< datatransfer::cl
 {
     osl::ClearableMutexGuard aGuard( m_aMutex );
 
-    m_aListeners.remove( listener );
+    m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener), m_aListeners.end());
 }
 
 Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& arguments)
@@ -764,54 +763,54 @@ void GtkDropTarget::removeDropTargetListener( const Reference< css::datatransfer
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
-    m_aListeners.remove( xListener );
+    m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), xListener), m_aListeners.end());
 }
 
 void GtkDropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
 {
     osl::ClearableGuard<osl::Mutex> aGuard( m_aMutex );
-    std::list<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
+    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
     aGuard.clear();
 
-    for (auto it = aListeners.begin(); it != aListeners.end(); ++it)
+    for (auto const& listener : aListeners)
     {
-        (*it)->drop( dtde );
+        listener->drop( dtde );
     }
 }
 
 void GtkDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde)
 {
     osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
-    std::list<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
+    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
     aGuard.clear();
 
-    for (auto it = aListeners.begin(); it != aListeners.end(); ++it)
+    for (auto const& listener : aListeners)
     {
-        (*it)->dragEnter( dtde );
+        listener->dragEnter( dtde );
     }
 }
 
 void GtkDropTarget::fire_dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde)
 {
     osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
-    std::list<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
+    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
     aGuard.clear();
 
-    for (auto it = aListeners.begin(); it != aListeners.end(); ++it)
+    for (auto const& listener : aListeners)
     {
-        (*it)->dragOver( dtde );
+        listener->dragOver( dtde );
     }
 }
 
 void GtkDropTarget::fire_dragExit(const css::datatransfer::dnd::DropTargetEvent& dte)
 {
     osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
-    std::list<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
+    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
     aGuard.clear();
 
-    for (auto it = aListeners.begin(); it != aListeners.end(); ++it)
+    for (auto const& listener : aListeners)
     {
-        (*it)->dragExit( dte );
+        listener->dragExit( dte );
     }
 }
 
