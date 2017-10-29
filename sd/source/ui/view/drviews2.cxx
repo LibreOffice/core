@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
@@ -258,17 +259,90 @@ bool hasCustomPropertyField(std::vector<editeng::Section> const & aSections, OUS
     return false;
 }
 
+OUString getWeightString(SfxItemSet const & rItemSet)
+{
+    OUString sWeightString = "NORMAL";
+
+    if (const SfxPoolItem* pItem = rItemSet.GetItem(EE_CHAR_WEIGHT, false))
+    {
+        const SvxWeightItem* pWeightItem = dynamic_cast<const SvxWeightItem*>(pItem);
+        if (pWeightItem && pWeightItem->GetWeight() == WEIGHT_BOLD)
+            sWeightString = "BOLD";
+    }
+    return sWeightString;
+}
+
 } // end anonymous namespace
 
-class ClassificationCollector
+class ClassificationCommon
+{
+protected:
+    sd::DrawViewShell& m_rDrawViewShell;
+
+public:
+    ClassificationCommon(sd::DrawViewShell & rDrawViewShell)
+        : m_rDrawViewShell(rDrawViewShell)
+    {}
+};
+
+class ClassificationCollector : public ClassificationCommon
 {
 private:
-    sd::DrawViewShell& m_rDrawViewShell;
     std::vector<svx::ClassificationResult> m_aResults;
+
+    void iterateSectionsAndCollect(std::vector<editeng::Section> const & rSections, EditTextObject const & rEditText)
+    {
+        OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
+        uno::Reference<document::XDocumentProperties> xDocumentProperties = SfxObjectShell::Current()->getDocProperties();
+        uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
+
+        sal_Int32 nCurrentParagraph = -1;
+        OUString sBlank;
+
+        for (editeng::Section const & rSection : rSections)
+        {
+            // Insert new paragraph if needed
+            while (nCurrentParagraph < rSection.mnParagraph)
+            {
+                nCurrentParagraph++;
+                // Get Weight of current paragraph
+                OUString sWeightProperty = getWeightString(rEditText.GetParaAttribs(nCurrentParagraph));
+                // Insert new paragraph into collection
+                m_aResults.push_back({ svx::ClassificationType::PARAGRAPH, sWeightProperty, sBlank });
+            }
+
+            const SvxFieldItem* pFieldItem = findField(rSection);
+            if (pFieldItem)
+            {
+                const auto* pCustomPropertyField = dynamic_cast<const editeng::CustomPropertyField*>(pFieldItem->GetField());
+                OUString aKey = pCustomPropertyField->GetKey();
+                if (aKey.startsWith(sPolicy + "Marking:Text:"))
+                {
+                    OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
+                    m_aResults.push_back({ svx::ClassificationType::TEXT, aValue, sBlank });
+                }
+                else if (aKey.startsWith(sPolicy + "BusinessAuthorizationCategory:Name"))
+                {
+                    OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
+                    m_aResults.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank });
+                }
+                else if (aKey.startsWith(sPolicy + "Extension:Marking"))
+                {
+                    OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
+                    m_aResults.push_back({ svx::ClassificationType::MARKING, aValue, sBlank });
+                }
+                else if (aKey.startsWith(sPolicy + "Extension:IntellectualPropertyPart"))
+                {
+                    OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
+                    m_aResults.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, sBlank });
+                }
+            }
+        }
+    }
 
 public:
     ClassificationCollector(sd::DrawViewShell & rDrawViewShell)
-        : m_rDrawViewShell(rDrawViewShell)
+        : ClassificationCommon(rDrawViewShell)
     {}
 
     std::vector<svx::ClassificationResult> getResults()
@@ -280,11 +354,6 @@ public:
     {
         OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
         OUString sKey = sPolicy + "BusinessAuthorizationCategory:Name";
-
-        uno::Reference<document::XDocumentProperties> xDocumentProperties = SfxObjectShell::Current()->getDocProperties();
-
-        // Properties
-        uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
 
         // Set to MASTER mode
         EditMode eOldMode = m_rDrawViewShell.GetEditMode();
@@ -314,62 +383,7 @@ public:
                         if (hasCustomPropertyField(aSections, sKey))
                         {
                             bFound = true;
-                            const OUString sBlank("");
-                            sal_Int32 nCurrentParagraph = -1;
-
-                            for (editeng::Section const & rSection : aSections)
-                            {
-                                // Insert new paragraph if needed
-                                while (nCurrentParagraph < rSection.mnParagraph)
-                                {
-                                    nCurrentParagraph++;
-
-                                    // Get Weight of current paragraph
-                                    FontWeight eFontWeight = WEIGHT_NORMAL;
-                                    SfxItemSet aItemSet(rEditText.GetParaAttribs(nCurrentParagraph));
-                                    if (const SfxPoolItem* pItem = aItemSet.GetItem(EE_CHAR_WEIGHT, false))
-                                    {
-                                        const SvxWeightItem* pWeightItem = dynamic_cast<const SvxWeightItem*>(pItem);
-                                        if (pWeightItem && pWeightItem->GetWeight() == WEIGHT_BOLD)
-                                            eFontWeight = WEIGHT_BOLD;
-                                    }
-
-                                    // Font weight to string
-                                    OUString sWeightProperty = "NORMAL";
-                                    if (eFontWeight == WEIGHT_BOLD)
-                                        sWeightProperty = "BOLD";
-
-                                    // Insert into collection
-                                    m_aResults.push_back({ svx::ClassificationType::PARAGRAPH, sWeightProperty, sBlank });
-                                }
-
-                                const SvxFieldItem* pFieldItem = findField(rSection);
-                                const editeng::CustomPropertyField* pCustomPropertyField = pFieldItem ? dynamic_cast<const editeng::CustomPropertyField*>(pFieldItem->GetField()) : nullptr;
-                                if (pCustomPropertyField)
-                                {
-                                    OUString aKey = pCustomPropertyField->GetKey();
-                                    if (aKey.startsWith(sPolicy + "Marking:Text:"))
-                                    {
-                                        OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                                        m_aResults.push_back({ svx::ClassificationType::TEXT, aValue, sBlank });
-                                    }
-                                    else if (aKey.startsWith(sPolicy + "BusinessAuthorizationCategory:Name"))
-                                    {
-                                        OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                                        m_aResults.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank });
-                                    }
-                                    else if (aKey.startsWith(sPolicy + "Extension:Marking"))
-                                    {
-                                        OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                                        m_aResults.push_back({ svx::ClassificationType::MARKING, aValue, sBlank });
-                                    }
-                                    else if (aKey.startsWith(sPolicy + "Extension:IntellectualPropertyPart"))
-                                    {
-                                        OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                                        m_aResults.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, sBlank });
-                                    }
-                                }
-                            }
+                            iterateSectionsAndCollect(aSections, rEditText);
                         }
                     }
                 }
@@ -383,11 +397,9 @@ public:
     }
 };
 
-class ClassificationInserter
+class ClassificationInserter : public ClassificationCommon
 {
 private:
-    sd::DrawViewShell& m_rDrawViewShell;
-
     /// Delete the previous existing classification object(s) - if they exists
     void deleteExistingObjects()
     {
@@ -424,7 +436,7 @@ private:
 
 public:
     ClassificationInserter(sd::DrawViewShell & rDrawViewShell)
-        : m_rDrawViewShell(rDrawViewShell)
+        : ClassificationCommon(rDrawViewShell)
     {}
 
 
@@ -435,14 +447,19 @@ public:
         if (eOldMode != EditMode::MasterPage)
             m_rDrawViewShell.ChangeEditMode(EditMode::MasterPage, false);
 
+        // Scoped guard to revert the mode
+        comphelper::ScopeGuard const aGuard([this, eOldMode] () {
+            m_rDrawViewShell.ChangeEditMode(eOldMode, false);
+        });
+
         // Delete the previous existing object - if exists
         deleteExistingObjects();
 
+        // Document properties
         uno::Reference<document::XDocumentProperties> xDocumentProperties = SfxObjectShell::Current()->getDocProperties();
-
-        // Clear properties
         uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
 
+        // Clear properties
         lcl_removeAllProperties(xPropertyContainer);
 
         SfxClassificationHelper aHelper(xDocumentProperties);
@@ -544,9 +561,6 @@ public:
 
         m_rDrawViewShell.GetDrawView()->InsertObjectAtView(pRectObj, *m_rDrawViewShell.GetDrawView()->GetSdrPageView());
         pOutliner->Init(eOutlinerMode);
-
-        // Revert edit mode
-        m_rDrawViewShell.ChangeEditMode(eOldMode, false);
 
         return true;
     }
