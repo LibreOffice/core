@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xcellseries.hxx>
+#include <test/sheet/xsheetfilterable.hxx>
 #include <test/sheet/xsheetoperation.hxx>
 #include <test/sheet/xsubtotalcalculatable.hxx>
 #include <test/sheet/xusedareacursor.hxx>
@@ -23,9 +24,10 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 9
+#define NUMBER_OF_TESTS 11
 
 class ScCellCursorObj : public CalcUnoApiTest, public apitest::XCellSeries,
+                                               public apitest::XSheetFilterable,
                                                public apitest::XSheetOperation,
                                                public apitest::XSubTotalCalculatable,
                                                public apitest::XUsedAreaCursor,
@@ -48,6 +50,10 @@ public:
     // XCellSeries
     CPPUNIT_TEST(testFillAuto);
     CPPUNIT_TEST(testFillSeries);
+
+    // XSheetFilterable
+    CPPUNIT_TEST(testCreateFilterDescriptor);
+    CPPUNIT_TEST(testFilter);
 
     // XSheetOperation
     CPPUNIT_TEST(testComputeFunction);
