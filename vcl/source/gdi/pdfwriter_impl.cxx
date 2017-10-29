@@ -3242,9 +3242,9 @@ bool PDFWriterImpl::emitFonts()
 
     OUString aTmpName;
     osl_createTempFile( nullptr, nullptr, &aTmpName.pData );
-    for( FontSubsetData::iterator it = m_aSubsets.begin(); it != m_aSubsets.end(); ++it )
+    for (auto & subset : m_aSubsets)
     {
-        for( std::list< FontEmit >::iterator lit = it->second.m_aSubsets.begin(); lit != it->second.m_aSubsets.end(); ++lit )
+        for (auto & s_subset :subset.second.m_aSubsets)
         {
             sal_GlyphId aGlyphIds[ 256 ];
             sal_Int32 pWidths[ 256 ];
@@ -3261,12 +3261,12 @@ bool PDFWriterImpl::emitFonts()
             memset( pEncoding, 0, sizeof( pEncoding ) );
             memset( pCodeUnitsPerGlyph, 0, sizeof( pCodeUnitsPerGlyph ) );
             memset( pEncToUnicodeIndex, 0, sizeof( pEncToUnicodeIndex ) );
-            for( FontEmitMapping::iterator fit = lit->m_aMapping.begin(); fit != lit->m_aMapping.end();++fit )
+            for( FontEmitMapping::iterator fit = s_subset.m_aMapping.begin(); fit != s_subset.m_aMapping.end();++fit )
             {
                 sal_uInt8 nEnc = fit->second.getGlyphId();
 
                 SAL_WARN_IF( aGlyphIds[nEnc] != 0 || pEncoding[nEnc] != 0, "vcl.pdfwriter", "duplicate glyph" );
-                SAL_WARN_IF( nEnc > lit->m_aMapping.size(), "vcl.pdfwriter", "invalid glyph encoding" );
+                SAL_WARN_IF( nEnc > s_subset.m_aMapping.size(), "vcl.pdfwriter", "invalid glyph encoding" );
 
                 aGlyphIds[ nEnc ] = fit->first;
                 pEncoding[ nEnc ] = nEnc;
@@ -3284,7 +3284,7 @@ bool PDFWriterImpl::emitFonts()
                 }
             }
             FontSubsetInfo aSubsetInfo;
-            if( pGraphics->CreateFontSubset( aTmpName, it->first, aGlyphIds, pEncoding, pWidths, nGlyphs, aSubsetInfo ) )
+            if( pGraphics->CreateFontSubset( aTmpName, subset.first, aGlyphIds, pEncoding, pWidths, nGlyphs, aSubsetInfo ) )
             {
                 // create font stream
                 osl::File aFontFile(aTmpName);
@@ -3402,7 +3402,7 @@ bool PDFWriterImpl::emitFonts()
                 if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return false;
 
                 // write font descriptor
-                sal_Int32 nFontDescriptor = emitFontDescriptor( it->first, aSubsetInfo, lit->m_nFontID, nFontStream );
+                sal_Int32 nFontDescriptor = emitFontDescriptor( subset.first, aSubsetInfo, s_subset.m_nFontID, nFontStream );
 
                 if( nToUnicodeStream )
                     nToUnicodeStream = createToUnicodeCMap( pEncoding, &aCodeUnits[0], pCodeUnitsPerGlyph, pEncToUnicodeIndex, nGlyphs );
@@ -3416,7 +3416,7 @@ bool PDFWriterImpl::emitFonts()
                 aLine.append( (aSubsetInfo.m_nFontType & FontType::ANY_TYPE1) ?
                              "<</Type/Font/Subtype/Type1/BaseFont/" :
                              "<</Type/Font/Subtype/TrueType/BaseFont/" );
-                appendSubsetName( lit->m_nFontID, aSubsetInfo.m_aPSName, aLine );
+                appendSubsetName( s_subset.m_nFontID, aSubsetInfo.m_aPSName, aLine );
                 aLine.append( "\n"
                              "/FirstChar 0\n"
                              "/LastChar " );
@@ -3442,11 +3442,11 @@ bool PDFWriterImpl::emitFonts()
                              "endobj\n\n" );
                 if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return false;
 
-                aFontIDToObject[ lit->m_nFontID ] = nFontObject;
+                aFontIDToObject[ s_subset.m_nFontID ] = nFontObject;
             }
             else
             {
-                const PhysicalFontFace* pFont = it->first;
+                const PhysicalFontFace* pFont = subset.first;
                 OStringBuffer aErrorComment( 256 );
                 aErrorComment.append( "CreateFontSubset failed for font \"" );
                 aErrorComment.append( OUStringToOString( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ) );
