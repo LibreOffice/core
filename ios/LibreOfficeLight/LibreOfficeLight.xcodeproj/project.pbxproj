@@ -22,7 +22,6 @@
 		397E09031E597BD8001374E0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 397E09011E597BD8001374E0 /* Main.storyboard */; };
 		397E09081E597BD8001374E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 397E09071E597BD8001374E0 /* Assets.xcassets */; };
 		3992D85A1E5B762A00BEA987 /* DocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D8591E5B762A00BEA987 /* DocumentController.swift */; };
-		3992D85D1E5B764A00BEA987 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D85B1E5B764A00BEA987 /* SideMenu.swift */; };
 		399648471E5B87DC00E73E83 /* ViewProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399648461E5B87DC00E73E83 /* ViewProperties.swift */; };
 		39B08B9D1E5F0BB600682A59 /* fundamentalrc in Resources */ = {isa = PBXBuildFile; fileRef = 39B084E51E5F0BB400682A59 /* fundamentalrc */; };
 		39B08B9E1E5F0BB600682A59 /* offapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 39B084E61E5F0BB400682A59 /* offapi.rdb */; };
@@ -31,6 +30,7 @@
 		39B08BD91E5F0BB600682A59 /* services.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 39B085241E5F0BB400682A59 /* services.rdb */; };
 		39B091CD1E5F0BB800682A59 /* udkapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 39B08B9B1E5F0BB600682A59 /* udkapi.rdb */; };
 		39B091CE1E5F0BB800682A59 /* unorc in Resources */ = {isa = PBXBuildFile; fileRef = 39B08B9C1E5F0BB600682A59 /* unorc */; };
+		39EF4E2F1FA500C9001914AC /* PropertiesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EF4E2E1FA500C9001914AC /* PropertiesController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,7 +52,6 @@
 		397E09021E597BD8001374E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
 		397E09071E597BD8001374E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = LibreOfficeLight/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		3992D8591E5B762A00BEA987 /* DocumentController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DocumentController.swift; path = LibreOfficeLight/DocumentController.swift; sourceTree = SOURCE_ROOT; };
-		3992D85B1E5B764A00BEA987 /* SideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideMenu.swift; path = LibreOfficeLight/SideMenu.swift; sourceTree = SOURCE_ROOT; };
 		399648461E5B87DC00E73E83 /* ViewProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewProperties.swift; path = LibreOfficeLight/ViewProperties.swift; sourceTree = SOURCE_ROOT; };
 		39ACF4181F8A317600DA7334 /* loApp.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = loApp.xcconfig; path = ../../../../../../../Users/jani/lo_ios/workdir/ios/loApp.xcconfig; sourceTree = "<group>"; };
 		39B084E51E5F0BB400682A59 /* fundamentalrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fundamentalrc; path = ../generated/resources/fundamentalrc; sourceTree = SOURCE_ROOT; };
@@ -63,6 +62,7 @@
 		39B08B9B1E5F0BB600682A59 /* udkapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = udkapi.rdb; path = ../generated/resources/udkapi.rdb; sourceTree = SOURCE_ROOT; };
 		39B08B9C1E5F0BB600682A59 /* unorc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = unorc; path = ../generated/resources/unorc; sourceTree = SOURCE_ROOT; };
 		39B092501E5F3DEA00682A59 /* LibreOfficeLight-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LibreOfficeLight-Prefix.pch"; sourceTree = "<group>"; };
+		39EF4E2E1FA500C9001914AC /* PropertiesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertiesController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,8 +127,8 @@
 			children = (
 				39503A6F1F94C4AC00F19C78 /* lokit-Bridging-Header.h */,
 				397E08FD1E597BD8001374E0 /* AppDelegate.swift */,
-				3992D85B1E5B764A00BEA987 /* SideMenu.swift */,
 				3992D8591E5B762A00BEA987 /* DocumentController.swift */,
+				39EF4E2E1FA500C9001914AC /* PropertiesController.swift */,
 				392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */,
 				399648461E5B87DC00E73E83 /* ViewProperties.swift */,
 				397E09011E597BD8001374E0 /* Main.storyboard */,
@@ -253,10 +253,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				392ED9B31E5E4B03005C8435 /* ViewPrintManager.swift in Sources */,
-				3992D85D1E5B764A00BEA987 /* SideMenu.swift in Sources */,
 				399648471E5B87DC00E73E83 /* ViewProperties.swift in Sources */,
 				3992D85A1E5B762A00BEA987 /* DocumentController.swift in Sources */,
 				397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */,
+				39EF4E2F1FA500C9001914AC /* PropertiesController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,7 +8,7 @@
 import UIKit
 
 
-class SidebarController: UIViewController
+class PropertiesController: UIViewController
 {
     // Temp. functions
     @IBAction func doStyle1(_ sender: UIButton)

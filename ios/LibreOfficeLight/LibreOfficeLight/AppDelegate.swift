@@ -10,6 +10,8 @@ import Foundation
 
 
 
+// AppDelegate is a Delegate class that receives calls from the iOS
+// kernel, and theirby allows stop/start/sleep of the application
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate
 {
@@ -17,15 +19,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 
 
 
-    // MARK: - AppDelegate functions
-
+    // sent when clicking on a OO document in another app
+    // allowing this app to handle the document.
+    // remark if the app is not started it will be started first
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool
     {
         // called when started from another Application.
+        // Jan to be done
         return true
     }
 
 
+
+    // this function is called when the app is first started (loaded from EEProm)
+    // it initializes the LO system and prepares for a normal run
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     {
         // Get version info
@@ -40,53 +47,60 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         //FIX BridgeLOkit_Init(Bundle.main.bundlePath)
         //FIX BridgeLOkit_open("jan");
         //FIX BridgeLOkit_ClientCommand("jan");
-
-        // Override point for customization after application launch.
         return true
     }
 
 
 
+    // Sent when the application is about to move from active to inactive state.
+    // This can occur for certain types of temporary interruptions
+    // (such as an incoming phone call or SMS message)
+    // or when the user quits the application and it begins the transition to the background state.
+    // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks.
     func applicationWillResignActive(_ application: UIApplication)
     {
-        // Sent when the application is about to move from active to inactive state.
-        // This can occur for certain types of temporary interruptions
-        // (such as an incoming phone call or SMS message)
-        // or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks.
-        // Games should use this method to pause the game.
+        // NOT used in this App
     }
 
 
 
+    // Sent when the application enters background (hipernating)
+    // Use this method to release shared resources, save user data, invalidate timers,
+    // and store enough application state information to restore your application to its current state
+    // in case it is terminated later.
+    // If your application supports background execution,
+    // this method is called instead of applicationWillTerminate: when the user quits.
     func applicationDidEnterBackground(_ application: UIApplication)
     {
-        // Use this method to release shared resources, save user data, invalidate timers,
-        // and store enough application state information to restore your application to its current state
-        // in case it is terminated later.
-        // If your application supports background execution,
-        // this method is called instead of applicationWillTerminate: when the user quits.
+        // Jan to do done (scale down LO)
     }
 
 
 
+    // Sent before the application reenters foreground (hipernating -> active)
+    // Restart timers, tasks as well as graphic rendering
     func applicationWillEnterForeground(_ application: UIApplication)
     {
+        // Jan to be done (reactivate LO)
     }
 
 
 
+    // Sent after the application reenters foreground (hipernating -> active)
+    // Restart timers, tasks as well as graphic rendering
     func applicationDidBecomeActive(_ application: UIApplication)
     {
+        // NOT used in this App
     }
 
 
 
+    // Sent when the application is about to terminate. Save data if appropriate.
+    // See also applicationDidEnterBackground:.
+    // Saves changes in the application's managed object context before the application terminates.
     func applicationWillTerminate(_ application: UIApplication)
     {
-        // Called when the application is about to terminate. Save data if appropriate.
-        // See also applicationDidEnterBackground:.
-        // Saves changes in the application's managed object context before the application terminates.
+        // Jan to be done (terminate LO)
     }
 }
 

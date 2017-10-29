@@ -6,4 +6,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
+
+
+// LibreOfficeKit is a prelink of all used LO libraries, generated
+// as its own xCode project.
 #import "../LibreOfficeKit/LibreOfficeKit/LibreOfficeKit.h"

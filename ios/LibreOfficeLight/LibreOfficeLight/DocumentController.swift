@@ -7,17 +7,16 @@
 //
 import UIKit
 
+
+
+// DocumentController is the main viewer in the app, it displayes the selected
+// documents and holds a top entry to view the properties as well as a normal
+// menu to handle global actions
+// It is a delegate class to recieve Menu events as well as file handling events
 class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewControllerDelegate
 {
-    var currentDocumentName : String?
-    var currentCloudUrl : URL?
-    var currentStorageLocal : Bool = true
-
-
-
-
     // Show sidemenu (part of documentcontroller)
-    @IBAction func doMenu(_ sender: UIBarButtonItem)
+    @IBAction func doProperties(_ sender: UIBarButtonItem)
     {
         if (sender.tag == 99) {
             sender.tag = 0;
@@ -39,18 +38,22 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
         sender.isEnabled = false
         sender.tag = 99
 
-        let sidebar : SidebarController = self.storyboard!.instantiateViewController(withIdentifier: "SidebarController") as! SidebarController
-        view.addSubview(sidebar.view)
-        addChildViewController(sidebar)
-        sidebar.view.layoutIfNeeded()
+        let properties : PropertiesController = self.storyboard!.instantiateViewController(withIdentifier: "PropertiesController") as! PropertiesController
+        view.addSubview(properties.view)
+        addChildViewController(properties)
+        properties.view.layoutIfNeeded()
 
-        sidebar.view.frame=CGRect(x: 0 - UIScreen.main.bounds.size.width, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height);
+        properties.view.frame=CGRect(x: 0 - UIScreen.main.bounds.size.width, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height);
 
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
-            sidebar.view.frame=CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height);
+            properties.view.frame=CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height);
             sender.isEnabled = true
             }, completion:nil)
     }
+
+
+
+    // var currentDocumentName : String?
 
 
     internal func documentBrowser(_ controller: UIDocumentBrowserViewController,
@@ -95,13 +98,6 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
 
 
 
-    func actionName(_ name : String)
-    {
-        currentDocumentName = name
-    }
-
-
-
     func actionMenuSelected(_ tag : Int)
     {
         switch tag
@@ -120,15 +116,6 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
                 print("menu Save to be done")
 
             case 3: // Save as...
-                let vc = storyboard?.instantiateViewController(withIdentifier: "setNameAction") as! setNameAction
-                vc.modalPresentationStyle = .popover
-                vc.delegate = self
-                let popover = vc.popoverPresentationController!
-                popover.delegate = self as? UIPopoverPresentationControllerDelegate
-                popover.permittedArrowDirections = .up
-                popover.sourceView = janTest
-                popover.sourceRect = janTest.bounds
-                present(vc, animated: true, completion: nil)
                 print("menu Save as... to be done")
 
             case 4: // Save as PDF...
@@ -168,7 +155,6 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
 protocol MenuDelegate
 {
     func actionMenuSelected(_ tag : Int)
-    func actionName(_ name : String)
 }
 
 
@@ -206,45 +192,4 @@ class DocumentActions: UITableViewController
     }
 }
 
-
-
-class setNameAction: UIViewController
-{
-    // Pointer to callback class
-    var delegate  : MenuDelegate?
-    var didEdit : Bool = false
-
-    // reference to new name
-    @IBOutlet weak var editText: UITextField!
-
-
-    // continue "save as..." with new name
-    @IBAction func actionOK(_ sender: UIButton)
-    {
-        dismiss(animated: false)
-        if didEdit && editText.text != "" {
-            delegate?.actionName(editText.text!)
-        }
-    }
-
-
-    @IBAction func actionStartEdit(_ sender: UITextField)
-    {
-        if !didEdit {
-            sender.text = ""
-            didEdit = true
-        }
-    }
-
-    @IBAction func actionCancel(_ sender: UIButton)
-    {
-        dismiss(animated: false)
-    }
-
-
-    override func viewDidLoad()
-    {
-        super.viewDidLoad()
-    }
-}
 

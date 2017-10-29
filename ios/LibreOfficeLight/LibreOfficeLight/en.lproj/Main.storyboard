@@ -33,9 +33,9 @@
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Document" id="5c6-32-T4J">
-                        <barButtonItem key="leftBarButtonItem" image="menu" id="fdq-Uw-536" userLabel="Button Side Menu">
+                        <barButtonItem key="leftBarButtonItem" image="menu" id="fdq-Uw-536" userLabel="Button Properties">
                             <connections>
-                                <action selector="doMenu:" destination="vXZ-lx-hvc" id="mHw-Uf-vh2"/>
+                                <action selector="doProperties:" destination="vXZ-lx-hvc" id="mHw-Uf-vh2"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="action" id="BNq-ol-ZVK">
@@ -81,7 +81,7 @@
                     <navigationItem key="navigationItem" title="Print Manager" id="2Z5-ad-smF">
                         <barButtonItem key="leftBarButtonItem" image="menu" id="KpY-Uq-nOk">
                             <connections>
-                                <action selector="doMenu:" destination="ay1-ce-WHs" id="abP-LB-4yO"/>
+                                <action selector="doProperties:" destination="ay1-ce-WHs" id="abP-LB-4yO"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -267,7 +267,7 @@
                     <navigationItem key="navigationItem" title="Properties" id="9nH-at-6AF">
                         <barButtonItem key="leftBarButtonItem" image="menu" id="wYo-zq-cqh">
                             <connections>
-                                <action selector="doMenu:" destination="h7c-B7-pKT" id="Yls-8o-msb"/>
+                                <action selector="doProporties:" destination="h7c-B7-pKT" id="Yls-8o-msb"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="trash" id="25I-J4-o11">
@@ -347,7 +347,7 @@
                                                     <accessibility key="accessibilityConfiguration">
                                                         <bool key="isElement" value="NO"/>
                                                     </accessibility>
-                                                    <state key="normal" title="Save as..."/>
+                                                    <state key="normal" title="Save copy..."/>
                                                     <connections>
                                                         <action selector="actionMenuSelect:" destination="IER-X5-Ax8" eventType="touchUpInside" id="0gI-or-ji4"/>
                                                     </connections>
