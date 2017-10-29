@@ -23,6 +23,7 @@
 
 
 #include <com/sun/star/table/ShadowFormat.hpp>
+#include <o3tl/safeint.hxx>
 #include <tools/color.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -98,8 +99,10 @@ bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
                 if( nX < 0 ) nX *= -1;
                 if( nY < 0 ) nY *= -1;
 
-                aShadow.ShadowWidth = sal::static_int_cast< sal_Int16 >(
-                    (nX + nY) >> 1);
+                sal_Int32 nWidth;
+                bRet = !o3tl::checked_add(nX, nY, nWidth);
+                if (bRet)
+                    aShadow.ShadowWidth = sal::static_int_cast<sal_Int16>(nWidth >> 1);
             }
         }
     }
