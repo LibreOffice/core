@@ -77,7 +77,7 @@
             <child>
               <object class="svxlo-ClassificationEditView" id="classificationEditWindow">
                 <property name="width_request">400</property>
-                <property name="height_request">400</property>
+                <property name="height_request">250</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
