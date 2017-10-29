@@ -327,7 +327,7 @@ class OS2METReader {
 
 private:
 
-    long ErrorCode;
+    int ErrorCode;
 
     SvStream      * pOS2MET;             // the OS2MET file to be read
     VclPtr<VirtualDevice> pVirDev;       // here the drawing methods are being called
