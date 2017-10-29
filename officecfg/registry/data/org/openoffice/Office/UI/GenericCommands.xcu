@@ -5128,7 +5128,7 @@
       </node>
       <node oor:name=".uno:Label" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Label Field</value>
+          <value xml:lang="en-US">Label</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
@@ -5619,7 +5619,13 @@
       </node>
       <node oor:name=".uno:UseWizards" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Wizards On/Off</value>
+          <value xml:lang="en-US">Form Control Wizards</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Control Wizards</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Toggle Form Control Wizards</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
