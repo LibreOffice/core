@@ -24,8 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     // remark if the app is not started it will be started first
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool
     {
-        // called when started from another Application.
-        //FIXME
+        let document = window?.rootViewController?.childViewControllers[0] as! DocumentController
+        document.doOpen(url)
         return true
     }
 
@@ -102,7 +102,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     // Saves changes in the application's managed object context before the application terminates.
     func applicationWillTerminate(_ application: UIApplication)
     {
-        // Jan to be done (terminate LO)
+        let document = window?.rootViewController?.childViewControllers[0] as! DocumentController
+        document.Hipernate()
     }
 }
 

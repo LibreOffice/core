@@ -67,6 +67,8 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     // The PropertiesController is a left sidebar, that will scroll in when activated
     // The Controller handles manipulation of properties in the document
 
+
+
     // Activate/Deactivate PropertiesController (from navigationController, see storyboard)
     @IBAction func doProperties(_ sender: UIBarButtonItem)
     {
@@ -155,10 +157,10 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
         switch tag
         {
         case 1: // Open...
-                doOpenDocument()
+                startOpenDocument()
 
         case 2: // Properties
-                doProperties()
+                showProperties()
 
         case 3: // Save
                 doSave()
@@ -173,7 +175,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
                 doSaveAsPDF()
 
         case 6: // Print...
-                doPrint()
+                startPrint()
 
         default: // should not happen
                  print("unknown menu" + String(tag))
@@ -188,7 +190,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
 
 
     // Load document into LibreOfficeKit and present it
-    internal func doOpenDocument()
+    internal func startOpenDocument()
     {
         //FIXME
 
@@ -205,7 +207,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
 
 
     // Show document properties (new overloaded page)
-    internal func doProperties()
+    internal func showProperties()
     {
         //FIXME
         print("menu Properties to be done")
@@ -250,7 +252,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
 
 
     // print current document
-    internal func doPrint()
+    internal func startPrint()
     {
         //FIXME
         print("menu Print... to be done")
@@ -296,6 +298,18 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     // open document and present it
     internal func documentBrowser(_ controller: UIDocumentBrowserViewController,
                                   didPickDocumentURLs documentURLs: [URL])
+    {
+        doOpen(documentURLs[0])
+    }
+
+
+
+    // *** Handling of document (open/print)
+
+
+
+    // Real open and presentation of document
+    public func doOpen(_ docURL : URL)
     {
         //FIXME
         //BridgeLOkit_open(documentURLs);
