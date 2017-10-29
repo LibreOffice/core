@@ -58,7 +58,7 @@
 #include "dp_commandenvironments.hxx"
 #include "dp_properties.hxx"
 
-#include <list>
+#include <vector>
 #include <algorithm>
 #include <set>
 
@@ -239,13 +239,12 @@ void ExtensionManager::addExtensionsToMap(
 {
     //Determine the index in the vector where these extensions are to be
     //added.
-    std::list<OUString>::const_iterator citNames =
-        m_repositoryNames.begin();
     int index = 0;
-    for (;citNames != m_repositoryNames.end(); ++citNames, ++index)
+    for (auto const& repositoryName : m_repositoryNames)
     {
-        if (*citNames == repository)
+        if (repositoryName == repository)
             break;
+        ++index;
     }
 
     for (int i = 0; i < seqExt.getLength(); ++i)
@@ -278,12 +277,12 @@ void ExtensionManager::addExtensionsToMap(
    The number of elements is always three, unless the number of repository
    changes.
  */
-std::list<Reference<css::deployment::XPackage> >
+std::vector<Reference<css::deployment::XPackage> >
     ExtensionManager::getExtensionsWithSameId(
         OUString const & identifier, OUString const & fileName)
 
 {
-    std::list<Reference<css::deployment::XPackage> > extensionList;
+    std::vector<Reference<css::deployment::XPackage> > extensionList;
     Reference<css::deployment::XPackageManager> lRepos[] = {
           getUserRepository(), getSharedRepository(), getBundledRepository() };
     for (int i(0); i != SAL_N_ELEMENTS(lRepos); ++i)
@@ -312,14 +311,13 @@ ExtensionManager::getExtensionsWithSameIdentifier(
 {
     try
     {
-        std::list<Reference<css::deployment::XPackage> > listExtensions =
+        std::vector<Reference<css::deployment::XPackage> > listExtensions =
             getExtensionsWithSameId(identifier, fileName);
         bool bHasExtension = false;
 
         //throw an IllegalArgumentException if there is no extension at all.
-        typedef  std::list<Reference<css::deployment::XPackage> >::const_iterator CIT;
-        for (CIT i = listExtensions.begin(); i != listExtensions.end(); ++i)
-            bHasExtension |= i->is();
+        for (auto const& extension : listExtensions)
+            bHasExtension |= extension.is();
         if (!bHasExtension)
             throw lang::IllegalArgumentException(
                 "Could not find extension: " + identifier + ", " + fileName,
@@ -351,7 +349,7 @@ ExtensionManager::getExtensionsWithSameIdentifier(
 bool ExtensionManager::isUserDisabled(
     OUString const & identifier, OUString const & fileName)
 {
-    std::list<Reference<css::deployment::XPackage> > listExtensions;
+    std::vector<Reference<css::deployment::XPackage> > listExtensions;
 
     try {
         listExtensions = getExtensionsWithSameId(identifier, fileName);
@@ -404,7 +402,7 @@ void ExtensionManager::activateExtension(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
-    std::list<Reference<css::deployment::XPackage> > listExtensions;
+    std::vector<Reference<css::deployment::XPackage> > listExtensions;
     try {
         listExtensions = getExtensionsWithSameId(identifier, fileName);
     } catch (const lang::IllegalArgumentException &) {
