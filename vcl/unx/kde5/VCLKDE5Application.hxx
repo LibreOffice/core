@@ -32,7 +32,7 @@
 class VCLKDE5Application : public QApplication, public QAbstractNativeEventFilter
 {
     public:
-        VCLKDE5Application( int argv, char** argc);
+        VCLKDE5Application( int argc, char** argv);
         static void preDialogSetup();
         static void postDialogCleanup();
 };
