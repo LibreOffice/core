@@ -1231,36 +1231,36 @@ double GetOddlyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
 }
 
 
-double GetRmz( double fInterest, double fNper, double fPv, double fFv, sal_Int32 nPayType )
+double GetRmz( double fRate, double fNper, double fPv, double fFv, sal_Int32 nPayType )
 {
     double      fPmt;
-    if( fInterest == 0.0 )
+    if( fRate == 0.0 )
         fPmt = ( fPv + fFv ) / fNper;
     else
     {
-        double  fTerm = pow( 1.0 + fInterest, fNper );
+        double  fTerm = pow( 1.0 + fRate, fNper );
         if( nPayType > 0 )
-            fPmt = ( fFv * fInterest / ( fTerm - 1.0 ) + fPv * fInterest / ( 1.0 - 1.0 / fTerm ) ) / ( 1.0 + fInterest );
+            fPmt = ( fFv * fRate / ( fTerm - 1.0 ) + fPv * fRate / ( 1.0 - 1.0 / fTerm ) ) / ( 1.0 + fRate );
         else
-            fPmt = fFv * fInterest / ( fTerm - 1.0 ) + fPv * fInterest / ( 1.0 - 1.0 / fTerm );
+            fPmt = fFv * fRate / ( fTerm - 1.0 ) + fPv * fRate / ( 1.0 - 1.0 / fTerm );
     }
 
     return -fPmt;
 }
 
 
-double GetZw( double fInterest, double fNper, double fPmt, double fPv, sal_Int32 nPayType )
+double GetZw( double fRate, double fNper, double fPmt, double fPv, sal_Int32 nPayType )
 {
     double      fFv;
-    if( fInterest == 0.0 )
+    if( fRate == 0.0 )
         fFv = fPv + fPmt * fNper;
     else
     {
-        double  fTerm = pow( 1.0 + fInterest, fNper );
+        double  fTerm = pow( 1.0 + fRate, fNper );
         if( nPayType > 0 )
-            fFv = fPv * fTerm + fPmt * ( 1.0 + fInterest ) * ( fTerm - 1.0 ) / fInterest;
+            fFv = fPv * fTerm + fPmt * ( 1.0 + fRate ) * ( fTerm - 1.0 ) / fRate;
         else
-            fFv = fPv * fTerm + fPmt * ( fTerm - 1.0 ) / fInterest;
+            fFv = fPv * fTerm + fPmt * ( fTerm - 1.0 ) / fRate;
     }
 
     return -fFv;
