@@ -53,6 +53,14 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
 
 
 
+    public func Hipernate() -> Void
+    {
+    }
+
+    public func LeaveHipernate() -> Void
+    {
+    }
+
     // var currentDocumentName : String?
 
 
@@ -67,6 +75,9 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
                                   toDestinationURL destinationURL: URL)
     {
         // Tells the delegate that a document has been successfully imported.
+        //FIX BridgeLOkit_open("jan");
+        //FIX BridgeLOkit_ClientCommand("jan");
+
     }
 
     internal func documentBrowser(_ controller: UIDocumentBrowserViewController,
@@ -80,6 +91,8 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
                                   didPickDocumentURLs documentURLs: [URL])
     {
         // Tells the delegate that the user has selected one or more documents.
+        //FIX BridgeLOkit_open("jan");
+        //FIX BridgeLOkit_ClientCommand("jan");
     }
 
     @IBOutlet weak var janTest: UILabel!
@@ -112,16 +125,19 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
                 self.present(openMenu, animated: true, completion: nil)
                 print("menu Open... to be done")
 
-            case 2: // Save
+            case 2: // Properties
+                print("menu Properties to be done")
+
+            case 3: // Save
                 print("menu Save to be done")
 
-            case 3: // Save as...
+            case 4: // Save as...
                 print("menu Save as... to be done")
 
-            case 4: // Save as PDF...
+            case 5: // Save as PDF...
                 print("menu Save as PDF... to be done")
 
-            case 5: // Print...
+            case 6: // Print...
                 print("menu Print... to be done")
 
             default: // should not happen
@@ -172,6 +188,7 @@ class DocumentActions: UITableViewController
         delegate?.actionMenuSelected(sender.tag)
     }
 
+    @IBOutlet weak var buttonProperties: UIButton!
     @IBOutlet weak var buttonNew: UIButton!
     @IBOutlet weak var buttonOpen: UIButton!
     @IBOutlet weak var buttonSave: UIButton!

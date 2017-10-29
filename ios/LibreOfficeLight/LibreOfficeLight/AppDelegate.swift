@@ -39,14 +39,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         let appInfo = Bundle.main.infoDictionary! as Dictionary<String,AnyObject>
         let applicationVersion = (appInfo["CFBundleShortVersionString"] as! String) + "." +
                                  (appInfo["CFBundleVersion"] as! String)
+
+        // Add version string to setting
         let defaults = UserDefaults.standard
         defaults.set(applicationVersion, forKey: "application_version")
         defaults.synchronize()
 
         // start LibreOfficeKit
         //FIX BridgeLOkit_Init(Bundle.main.bundlePath)
-        //FIX BridgeLOkit_open("jan");
-        //FIX BridgeLOkit_ClientCommand("jan");
         return true
     }
 
@@ -72,7 +72,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     // this method is called instead of applicationWillTerminate: when the user quits.
     func applicationDidEnterBackground(_ application: UIApplication)
     {
-        // Jan to do done (scale down LO)
+        let document = window?.rootViewController?.childViewControllers[0] as! DocumentController
+        document.Hipernate()
     }
 
 
@@ -81,7 +82,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     // Restart timers, tasks as well as graphic rendering
     func applicationWillEnterForeground(_ application: UIApplication)
     {
-        // Jan to be done (reactivate LO)
+        let document = window?.rootViewController?.childViewControllers[0] as! DocumentController
+        document.LeaveHipernate()
     }
 
 
