@@ -1205,10 +1205,17 @@ WW8_FC WW8PLCFx_PCD::AktPieceStartCp2Fc( WW8_CP nCp )
     if( !bVer67 )
         nFC = WW8PLCFx_PCD::TransformPieceAddress( nFC, bIsUnicode );
 
-    WW8_CP nDistance = nCp - nCpStart;
+    WW8_CP nDistance;
+    bool bFail = o3tl::checked_sub(nCp, nCpStart, nDistance);
+    if (bFail)
+    {
+        SAL_WARN("sw.ww8", "broken offset, ignoring");
+        return WW8_FC_MAX;
+    }
+
     if (bIsUnicode)
     {
-        const bool bFail = o3tl::checked_multiply<WW8_CP>(nDistance, 2, nDistance);
+        bFail = o3tl::checked_multiply<WW8_CP>(nDistance, 2, nDistance);
         if (bFail)
         {
             SAL_WARN("sw.ww8", "broken offset, ignoring");
@@ -1217,7 +1224,7 @@ WW8_FC WW8PLCFx_PCD::AktPieceStartCp2Fc( WW8_CP nCp )
     }
 
     WW8_FC nRet;
-    const bool bFail = o3tl::checked_add(nFC, nDistance, nRet);
+    bFail = o3tl::checked_add(nFC, nDistance, nRet);
     if (bFail)
     {
         SAL_WARN("sw.ww8", "broken offset, ignoring");
