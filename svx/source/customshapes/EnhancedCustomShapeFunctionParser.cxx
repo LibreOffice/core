@@ -462,6 +462,10 @@ public:
         mpSecondArg( rSecondArg )
     {
     }
+#if defined(__clang__) || (defined (__GNUC__) && __GNUC__ >= 8)
+    //GetEquationValueAsDouble calls isFinite on the result
+    __attribute__((no_sanitize("float-divide-by-zero")))
+#endif
     static double getValue( const ExpressionFunct eFunct, const std::shared_ptr<ExpressionNode>& rFirstArg, const std::shared_ptr<ExpressionNode>& rSecondArg )
     {
         double fRet = 0;
