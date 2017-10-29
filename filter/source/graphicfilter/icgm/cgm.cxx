@@ -404,7 +404,7 @@ void CGM::ImplSetMapMode()
     else
         mbAngReverse = false;
 
-    if (mnVDCdy == 0.0 || mnOutdy == 0.0)
+    if (mnVDCdy == 0.0 || mnVDCdx == 0.0 || mnOutdy == 0.0)
     {
         mbStatus = false;
         return;
