@@ -57,5 +57,26 @@ int BridgeLOkit_open(const char *path)
 
 int BridgeLOkit_ClientCommand(const char *input)
 {
-  return 0;
+    return 0;
 }
+
+
+
+int BridgeLOkit_Hipernate()
+{
+    //FIXME
+    // check if document needs to be saved, to avoid data loss
+    // terminate all threads (basically terminate LOkit)
+    return 0;
+}
+
+
+
+int BridgeLOkit_LeaveHipernate()
+{
+    //FIXME
+    // restart LOkit
+    // reload document (it may have been changed by other programs, especially if iCloud
+    return 0;
+}
+

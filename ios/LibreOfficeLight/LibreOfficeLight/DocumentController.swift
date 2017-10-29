@@ -15,6 +15,28 @@ import UIKit
 // It is a delegate class to recieve Menu events as well as file handling events
 class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewControllerDelegate
 {
+    // Handling of Background (hipernate)
+    // iOS is not true multitasking, only 1 app can be active (foreground) at any time,
+    // therefore apps frequently are moved to the background.
+    // background really means hipernate by terminating all threads and solely keep the
+    // data
+
+    // Moving to hipernate
+    public func Hipernate() -> Void
+    {
+        BridgeLOkit_Hipernate()
+    }
+
+
+
+    // Moving back to foreground
+    public func LeaveHipernate() -> Void
+    {
+        BridgeLOkit_LeaveHipernate()
+    }
+
+
+
     // handling of PropertiesController
     // The PropertiesController is a left sidebar, that will scroll in when activated
     // The Controller handles manipulation of properties in the document
@@ -70,17 +92,6 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
                 sender.isEnabled = true
                 }, completion:nil)
         }
-    }
-
-
-
-    // Handling of Background (hipernate)
-    public func Hipernate() -> Void
-    {
-    }
-
-    public func LeaveHipernate() -> Void
-    {
     }
 
     // var currentDocumentName : String?
