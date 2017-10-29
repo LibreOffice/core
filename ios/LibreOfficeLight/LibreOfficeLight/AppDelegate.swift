@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool
     {
         // called when started from another Application.
-        // Jan to be done
+        //FIXME
         return true
     }
 
@@ -46,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         defaults.synchronize()
 
         // start LibreOfficeKit
-        //FIX BridgeLOkit_Init(Bundle.main.bundlePath)
+        BridgeLOkit_Init(Bundle.main.bundlePath)
         return true
     }
 

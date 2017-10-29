@@ -15,6 +15,32 @@ import UIKit
 // It is a delegate class to recieve Menu events as well as file handling events
 class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewControllerDelegate
 {
+    // Handling of DocumentController
+    // this is normal functions every controller must implement
+
+
+    // called once controller is loaded
+    override func viewDidLoad()
+    {
+        super.viewDidLoad()
+        //FIXME
+        // we should load the document types, so we can use them for the open call
+        // let path = Bundle.main.path(forResource: "Info", ofType: "plist")
+        // let dict = NSDictionary(contentsOfFile: path!)
+        // let tableData = dict!.object(forKey: "CFBundleDocumentTypes")
+    }
+
+
+
+    // called when there is a memory constraint
+    override func didReceiveMemoryWarning()
+    {
+        super.didReceiveMemoryWarning()
+        // not used in this App
+    }
+
+
+
     // Handling of Background (hipernate)
     // iOS is not true multitasking, only 1 app can be active (foreground) at any time,
     // therefore apps frequently are moved to the background.
@@ -93,6 +119,10 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
                 }, completion:nil)
         }
     }
+
+
+
+
 
     // var currentDocumentName : String?
 
@@ -176,25 +206,6 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
             default: // should not happen
                 print("unknown menu" + String(tag))
         }
-    }
-
-
-    override func viewDidLoad()
-    {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-
-        // let path = Bundle.main.path(forResource: "Info", ofType: "plist")
-        // let dict = NSDictionary(contentsOfFile: path!)
-        // let tableData = dict!.object(forKey: "CFBundleDocumentTypes")
-    }
-
-
-
-    override func didReceiveMemoryWarning()
-    {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 }
 
