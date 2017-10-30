@@ -151,7 +151,7 @@ ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
         if (aIter != rAttrList->end())
         {
             util::DateTime aDateTime;
-            ::sax::Converter::parseDateTime(aDateTime, nullptr, aIter.toString());
+            ::sax::Converter::parseDateTime(aDateTime, aIter.toString());
             util::Date aDate;
             aDate.Day = aDateTime.Day;
             aDate.Month = aDateTime.Month;

@@ -67,7 +67,7 @@ namespace xmloff
     {
         DateTime aDateTime;
         Date aDate;
-        if (::sax::Converter::parseDateTime( aDateTime, nullptr, i_attributeValue ))
+        if (::sax::Converter::parseDateTime( aDateTime, i_attributeValue ))
         {
             aDate.Day = aDateTime.Day;
             aDate.Month = aDateTime.Month;

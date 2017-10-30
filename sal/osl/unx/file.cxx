@@ -299,7 +299,7 @@ oslFileError FileHandle_Impl::setSize(sal_uInt64 uSize)
     if (ftruncate_with_name(m_fd, nSize, m_strFilePath) == -1)
     {
         /* Failure. Save original result. Try fallback algorithm */
-        oslFileError result = oslTranslateFileError(OSL_FET_ERROR, errno);
+        oslFileError result = oslTranslateFileError(errno);
 
         /* Check against current size. Fail upon 'shrink' */
         if (uSize <= getSize())
@@ -379,7 +379,7 @@ oslFileError FileHandle_Impl::readAt(
     }
 
     if (nBytes == -1)
-        return oslTranslateFileError(OSL_FET_ERROR, errno);
+        return oslTranslateFileError(errno);
 
     *pBytesRead = nBytes;
 
@@ -402,7 +402,7 @@ oslFileError FileHandle_Impl::writeAt(
 
     ssize_t nBytes = ::pwrite(m_fd, pBuffer, nBytesToWrite, nOffset);
     if (nBytes == -1)
-        return oslTranslateFileError(OSL_FET_ERROR, errno);
+        return oslTranslateFileError(errno);
 
     m_size = std::max(m_size, sal::static_int_cast< sal_uInt64 >(nOffset + nBytes));
 
@@ -422,7 +422,7 @@ oslFileError FileHandle_Impl::readFileAt(
         // not seekable (pipe)
         ssize_t nBytes = ::read(m_fd, pBuffer, nBytesRequested);
         if (nBytes == -1)
-            return oslTranslateFileError(OSL_FET_ERROR, errno);
+            return oslTranslateFileError(errno);
 
         *pBytesRead = nBytes;
 
@@ -503,7 +503,7 @@ oslFileError FileHandle_Impl::writeFileAt(
         // not seekable (pipe)
         ssize_t nBytes = ::write(m_fd, pBuffer, nBytesToWrite);
         if (nBytes == -1)
-            return oslTranslateFileError(OSL_FET_ERROR, errno);
+            return oslTranslateFileError(errno);
 
         *pBytesWritten = nBytes;
 
@@ -958,7 +958,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
     {
         int saved_errno = errno;
         SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << ") failed: " << strerror(saved_errno));
-        return oslTranslateFileError(OSL_FET_ERROR, saved_errno);
+        return oslTranslateFileError(saved_errno);
     }
 
 #if !HAVE_FEATURE_MACOSX_SANDBOX
@@ -970,7 +970,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
         {
             int saved_errno = errno;
             SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << "): fcntl(" << fd << ", F_GETFL) failed: " << strerror(saved_errno));
-            eRet = oslTranslateFileError(OSL_FET_ERROR, saved_errno);
+            eRet = oslTranslateFileError(saved_errno);
             (void) close(fd);
             return eRet;
         }
@@ -979,7 +979,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
         {
             int saved_errno = errno;
             SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << "): fcntl(" << fd << ", F_SETFL) failed: " << strerror(saved_errno));
-            eRet = oslTranslateFileError(OSL_FET_ERROR, saved_errno);
+            eRet = oslTranslateFileError(saved_errno);
             (void) close(fd);
             return eRet;
         }
@@ -992,7 +992,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
     {
         int saved_errno = errno;
         SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << "): fstat(" << fd << ") failed: " << strerror(saved_errno));
-        eRet = oslTranslateFileError(OSL_FET_ERROR, saved_errno);
+        eRet = oslTranslateFileError(saved_errno);
         (void) close(fd);
         return eRet;
     }
@@ -1013,7 +1013,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
             /* Mac OSX returns ENOTSUP for webdav drives. We should try read lock */
             if ((errno != ENOTSUP) || ((flock(fd, LOCK_SH | LOCK_NB) == 1) && (errno != ENOTSUP)))
             {
-                eRet = oslTranslateFileError(OSL_FET_ERROR, errno);
+                eRet = oslTranslateFileError(errno);
                 (void) close(fd);
                 return eRet;
             }
@@ -1030,7 +1030,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
         {
             int saved_errno = errno;
             SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << "): fcntl(" << fd << ", F_SETLK) failed: " << strerror(saved_errno));
-            eRet = oslTranslateFileError(OSL_FET_ERROR, saved_errno);
+            eRet = oslTranslateFileError(saved_errno);
             (void) close(fd);
             return eRet;
         }
@@ -1071,7 +1071,7 @@ oslFileError SAL_CALL openFile(rtl_uString* ustrFileURL, oslFileHandle* pHandle,
 
 #ifdef MACOSX
     if (macxp_resolveAlias(buffer, sizeof(buffer)) != 0)
-        return oslTranslateFileError(OSL_FET_ERROR, errno);
+        return oslTranslateFileError(errno);
 #endif /* MACOSX */
 
     return openFilePath(buffer, pHandle, uFlags, mode);
@@ -1111,7 +1111,7 @@ oslFileError SAL_CALL osl_closeFile(oslFileHandle Handle)
     else if (close(pImpl->m_fd) == -1)
     {
         /* translate error code */
-        result = oslTranslateFileError(OSL_FET_ERROR, errno);
+        result = oslTranslateFileError(errno);
     }
 
     (void) pthread_mutex_unlock(&(pImpl->m_mutex));
@@ -1139,7 +1139,7 @@ oslFileError SAL_CALL osl_syncFile(oslFileHandle Handle)
         return result;
 
     if (fsync(pImpl->m_fd) == -1)
-        return oslTranslateFileError(OSL_FET_ERROR, errno);
+        return oslTranslateFileError(errno);
 
     return osl_File_E_None;
 }
@@ -1191,7 +1191,7 @@ oslFileError SAL_CALL osl_mapFile(
     void* p = mmap(nullptr, nLength, PROT_READ, MAP_SHARED, pImpl->m_fd, nOffset);
 
     if (p == MAP_FAILED)
-        return oslTranslateFileError(OSL_FET_ERROR, errno);
+        return oslTranslateFileError(errno);
 
     *ppAddr = p;
 
@@ -1255,7 +1255,7 @@ static oslFileError unmapFile(void* pAddr, sal_uInt64 uLength)
     size_t const nLength = sal::static_int_cast< size_t >(uLength);
 
     if (munmap(pAddr, nLength) == -1)
-        return oslTranslateFileError(OSL_FET_ERROR, errno);
+        return oslTranslateFileError(errno);
 
     return osl_File_E_None;
 }

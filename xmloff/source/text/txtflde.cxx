@@ -2639,7 +2639,7 @@ void XMLTextFieldExport::ProcessTimeOrDateTime(enum XMLTokenEnum eName,
     OUStringBuffer aBuffer;
 
     // date/time value
-    ::sax::Converter::convertTimeOrDateTime(aBuffer, rTime, nullptr);
+    ::sax::Converter::convertTimeOrDateTime(aBuffer, rTime);
 
     // output attribute
     ProcessString(eName, aBuffer.makeStringAndClear(), true);

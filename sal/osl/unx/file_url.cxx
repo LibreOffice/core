@@ -429,20 +429,20 @@ namespace
         {
             char unresolved_path[PATH_MAX];
             if (!UnicodeToText(unresolved_path, sizeof(unresolved_path), path, rtl_ustr_getLength(path)))
-                return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
+                return oslTranslateFileError(ENAMETOOLONG);
 
             char resolved_path[PATH_MAX];
             if (realpath(unresolved_path, resolved_path))
             {
                 if (!TextToUnicode(resolved_path, strlen(resolved_path), path, PATH_MAX))
-                    return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
+                    return oslTranslateFileError(ENAMETOOLONG);
             }
             else
             {
                 if (EACCES == errno || ENOTDIR == errno || ENOENT == errno)
                     *failed = true;
                 else
-                    ferr = oslTranslateFileError(OSL_FET_ERROR, errno);
+                    ferr = oslTranslateFileError(errno);
             }
         }
 
@@ -458,7 +458,7 @@ namespace
     {
         /* the given unresolved path must not exceed PATH_MAX */
         if (unresolved_path.getLength() >= (PATH_MAX - 2))
-            return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
+            return oslTranslateFileError(ENAMETOOLONG);
 
         sal_Unicode        path_resolved_so_far[PATH_MAX];
         const sal_Unicode* punresolved = unresolved_path.getStr();
@@ -507,7 +507,7 @@ namespace
 
                 /* a file or directory name may start with '.' */
                 if ((presolvedsf = ustrtoend(path_resolved_so_far)) > sentinel)
-                    return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
+                    return oslTranslateFileError(ENAMETOOLONG);
 
                 ustrchrcat(*punresolved++, path_resolved_so_far);
 
@@ -524,7 +524,7 @@ namespace
             else if (*punresolved == '/')
             {
                 if ((presolvedsf = ustrtoend(path_resolved_so_far)) > sentinel)
-                    return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
+                    return oslTranslateFileError(ENAMETOOLONG);
 
                 ustrchrcat(*punresolved++, path_resolved_so_far);
 
@@ -540,7 +540,7 @@ namespace
                     if (!_islastchr(path_resolved_so_far, '/'))
                     {
                         if ((presolvedsf = ustrtoend(path_resolved_so_far)) > sentinel)
-                            return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
+                            return oslTranslateFileError(ENAMETOOLONG);
 
                         ustrchrcat('/', path_resolved_so_far);
                     }
@@ -549,7 +549,7 @@ namespace
             else // any other character
             {
                 if ((presolvedsf = ustrtoend(path_resolved_so_far)) > sentinel)
-                    return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
+                    return oslTranslateFileError(ENAMETOOLONG);
 
                 ustrchrcat(*punresolved++, path_resolved_so_far);
 
@@ -713,7 +713,7 @@ oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileUR
 
     /* convert unicode path to text */
     if(!UnicodeToText( buffer, bufLen, ustrSystemPath->buffer, ustrSystemPath->length))
-        osl_error = oslTranslateFileError(OSL_FET_ERROR, errno);
+        osl_error = oslTranslateFileError(errno);
 
     rtl_uString_release(ustrSystemPath);
 

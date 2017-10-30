@@ -107,7 +107,7 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
 
 #ifdef MACOSX
     if ( macxp_resolveAlias( path, PATH_MAX ) != 0 )
-      return oslTranslateFileError( OSL_FET_ERROR, errno );
+      return oslTranslateFileError( errno );
 #endif/* MACOSX */
 
     return osl_psz_getVolumeInformation( path, pInfo, uFieldMask);
@@ -218,7 +218,7 @@ static oslFileError osl_psz_getVolumeInformation (
         OSL_detail_STATFS_INIT(sfs);
         if ((OSL_detail_STATFS(pszDirectory, &sfs)) < (0))
         {
-            oslFileError result = oslTranslateFileError(OSL_FET_ERROR, errno);
+            oslFileError result = oslTranslateFileError(errno);
             return result;
         }
 
