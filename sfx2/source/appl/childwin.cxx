@@ -286,12 +286,12 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
 {
     sal_uInt16 nID = GetType();
 
-    OUString rInfoVisible = rInfo.bVisible ? OUString("V") : OUString("H");
+    OUString aInfoVisible = rInfo.bVisible ? OUString("V") : OUString("H");
 
     OUString aWinData = "V"
                       + OUString::number(static_cast<sal_Int32>(nVersion))
                       + ","
-                      + rInfoVisible
+                      + aInfoVisible
                       + ","
                       + OUString::number(static_cast<sal_Int32>(rInfo.nFlags));
 
