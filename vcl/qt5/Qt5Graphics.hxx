@@ -23,6 +23,7 @@
 
 #include <memory>
 
+#include <QtGui/QPainter>
 #include <QtGui/QRegion>
 
 class Qt5Font;
@@ -30,7 +31,10 @@ class Qt5FontFace;
 class Qt5Frame;
 class PhysicalFontCollection;
 class QImage;
-class QPainter;
+
+#define PREPARE_PAINTER \
+    QPainter aPainter; \
+    PreparePainter( aPainter );
 
 class Qt5Graphics : public SalGraphics
 {
@@ -39,14 +43,16 @@ class Qt5Graphics : public SalGraphics
     Qt5Frame                     *m_pFrame;
     QImage                       *m_pQImage;
     QRegion                       m_aClipRegion;
-    std::unique_ptr< QPainter >   m_pPainter;
+    SalColor                      m_aLineColor;
+    SalColor                      m_aFillColor;
+    QPainter::CompositionMode     m_eCompositionMode;
 
     PhysicalFontCollection       *m_pFontCollection;
     const Qt5FontFace            *m_pFontData[ MAX_FALLBACK ];
     Qt5Font                      *m_pTextStyle[ MAX_FALLBACK ];
     SalColor                      m_aTextColor;
 
-    void PreparePainter();
+    void PreparePainter( QPainter &rPainter, sal_uInt8 nTransparency = 0xff );
 
 public:
     Qt5Graphics( Qt5Frame *pFrame );
