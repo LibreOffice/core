@@ -24,6 +24,7 @@
 #include <memory>
 
 #include <QtGui/QPainter>
+#include <QtGui/QPainterPath>
 #include <QtGui/QRegion>
 
 class Qt5Font;
@@ -43,6 +44,7 @@ class Qt5Graphics : public SalGraphics
     Qt5Frame                     *m_pFrame;
     QImage                       *m_pQImage;
     QRegion                       m_aClipRegion;
+    QPainterPath                  m_aClipPath;
     SalColor                      m_aLineColor;
     SalColor                      m_aFillColor;
     QPainter::CompositionMode     m_eCompositionMode;
