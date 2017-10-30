@@ -9,7 +9,7 @@ import UIKit
 
 
 
-// DocumentController is the main viewer in the app, it displayes the selected
+// DocumentController is the main viewer in the app, it displays the selected
 // documents and holds a top entry to view the properties as well as a normal
 // menu to handle global actions
 // It is a delegate class to receive Menu events as well as file handling events
