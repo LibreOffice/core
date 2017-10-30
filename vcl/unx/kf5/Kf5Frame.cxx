@@ -19,11 +19,18 @@
 
 #include "Kf5Frame.hxx"
 
+#include "Kf5Tools.hxx"
 #include "Kf5Instance.hxx"
 #include "Kf5Graphics.hxx"
 #include "Kf5Widget.hxx"
 
+#include <QtCore/QPoint>
+#include <QtCore/QSize>
+#include <QtGui/QIcon>
 #include <QtGui/QWindow>
+
+#include <saldatabasic.hxx>
+#include <vcl/syswin.hxx>
 
 Kf5Frame::Kf5Frame( Kf5Frame* pParent, SalFrameStyleFlags nStyle )
     : m_bGraphicsInUse( false )
@@ -83,7 +90,6 @@ void Kf5Frame::TriggerPaintEvent()
     QSize aSize( m_pQWidget->size() );
     SalPaintEvent aPaintEvt(0, 0, aSize.width(), aSize.height(), true);
     CallCallback(SalEvent::Paint, &aPaintEvt);
-    m_pQWidget->update();
 }
 
 SalGraphics* Kf5Frame::AcquireGraphics()
@@ -119,10 +125,38 @@ bool Kf5Frame::PostEvent( ImplSVEvent* pData )
 
 void Kf5Frame::SetTitle( const OUString& rTitle )
 {
+    m_pQWidget->window()->setWindowTitle( toQString( rTitle ) );
 }
 
 void Kf5Frame::SetIcon( sal_uInt16 nIcon )
 {
+    if( m_nStyle & (SalFrameStyleFlags::PLUG |
+                    SalFrameStyleFlags::SYSTEMCHILD |
+                    SalFrameStyleFlags::FLOAT |
+                    SalFrameStyleFlags::INTRO |
+                    SalFrameStyleFlags::OWNERDRAWDECORATION)
+            || !m_pQWidget->isWindow() )
+        return;
+
+    const char * appicon;
+
+    if (nIcon == SV_ICON_ID_TEXT)
+        appicon = "libreoffice-writer";
+    else if (nIcon == SV_ICON_ID_SPREADSHEET)
+        appicon = "libreoffice-calc";
+    else if (nIcon == SV_ICON_ID_DRAWING)
+        appicon = "libreoffice-draw";
+    else if (nIcon == SV_ICON_ID_PRESENTATION)
+        appicon = "libreoffice-impress";
+    else if (nIcon == SV_ICON_ID_DATABASE)
+        appicon = "libreoffice-base";
+    else if (nIcon == SV_ICON_ID_FORMULA)
+        appicon = "libreoffice-math";
+    else
+        appicon = "libreoffice-startcenter";
+
+    QIcon aIcon = QIcon::fromTheme( appicon );
+    m_pQWidget->window()->setWindowIcon( aIcon );
 }
 
 void Kf5Frame::SetMenu( SalMenu* pMenu )
@@ -176,11 +210,67 @@ SalFrame* Kf5Frame::GetParent() const
 
 void Kf5Frame::SetWindowState( const SalFrameState* pState )
 {
+    if( !m_pQWidget->isWindow() || !pState || isChild( true, false ) )
+        return;
+
+    const WindowStateMask nMaxGeometryMask =
+        WindowStateMask::X | WindowStateMask::Y |
+        WindowStateMask::Width | WindowStateMask::Height |
+        WindowStateMask::MaximizedX | WindowStateMask::MaximizedY |
+        WindowStateMask::MaximizedWidth | WindowStateMask::MaximizedHeight;
+
+    if( (pState->mnMask & WindowStateMask::State) &&
+            (pState->mnState & WindowStateState::Maximized) &&
+            (pState->mnMask & nMaxGeometryMask) == nMaxGeometryMask )
+        m_pQWidget->showMaximized();
+    else if( pState->mnMask & (WindowStateMask::X | WindowStateMask::Y |
+                               WindowStateMask::Width | WindowStateMask::Height ) )
+    {
+        QRect rect = m_pQWidget->geometry();
+        if ( pState->mnMask & WindowStateMask::X )
+            rect.setX( pState->mnX );
+        if ( pState->mnMask & WindowStateMask::Y )
+            rect.setY( pState->mnY );
+        if ( pState->mnMask & WindowStateMask::Width )
+            rect.setWidth( pState->mnWidth );
+        if ( pState->mnMask & WindowStateMask::Height )
+            rect.setHeight( pState->mnHeight );
+        m_pQWidget->setGeometry( rect );
+    }
+    else if( pState->mnMask & WindowStateMask::State && ! isChild() )
+    {
+        if( (pState->mnState & WindowStateState::Minimized) && m_pQWidget->isWindow() )
+            m_pQWidget->showMinimized();
+        else
+            m_pQWidget->showNormal();
+    }
 }
 
 bool Kf5Frame::GetWindowState( SalFrameState* pState )
 {
-    return false;
+    pState->mnState = WindowStateState::Normal;
+    pState->mnMask  = WindowStateMask::State;
+    if( m_pQWidget->isMinimized() || !m_pQWidget->windowHandle() )
+        pState->mnState |= WindowStateState::Minimized;
+    else if( m_pQWidget->isMaximized() )
+    {
+        pState->mnState |= WindowStateState::Maximized;
+    }
+    else
+    {
+        QRect rect = m_pQWidget->geometry();
+        pState->mnX = rect.x();
+        pState->mnY = rect.y();
+        pState->mnWidth = rect.width();
+        pState->mnHeight = rect.height();
+        pState->mnMask  |= WindowStateMask::X            |
+                           WindowStateMask::Y            |
+                           WindowStateMask::Width        |
+                           WindowStateMask::Height;
+    }
+
+    TriggerPaintEvent();
+    return true;
 }
 
 void Kf5Frame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
@@ -271,6 +361,7 @@ void Kf5Frame::SimulateKeyPress( sal_uInt16 nKeyCode )
 
 void Kf5Frame::SetParent( SalFrame* pNewParent )
 {
+    m_pParent = static_cast< Kf5Frame* >( pNewParent );
 }
 
 bool Kf5Frame::SetPluginParent( SystemParentData* pNewParent )

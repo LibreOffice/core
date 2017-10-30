@@ -20,6 +20,10 @@
 #include "Kf5Graphics.hxx"
 #include "Kf5Frame.hxx"
 
+#include <QtWidgets/QWidget>
+
+#include <QtGui/QPainter>
+
 #include <QtGui/QImage>
 
 Kf5Graphics::Kf5Graphics( Kf5Frame *pFrame )
@@ -40,8 +44,24 @@ Kf5Graphics::~Kf5Graphics()
 {
 }
 
+void Kf5Graphics::PreparePainter()
+{
+    if ( m_pPainter.get() )
+        return;
+    if ( m_pQImage )
+        m_pPainter.reset( new QPainter( m_pQImage ) );
+    else
+    {
+        assert( dynamic_cast< QPaintDevice* >( m_pFrame->GetQWidget() ) );
+        m_pPainter.reset( new QPainter( m_pFrame->GetQWidget() ) );
+    }
+    if (!m_aClipRegion.isEmpty())
+        m_pPainter->setClipRegion( m_aClipRegion );
+}
+
 void Kf5Graphics::ChangeQImage( QImage *pQImage )
 {
+    m_pPainter.reset();
     m_pQImage = pQImage;
 }
 
