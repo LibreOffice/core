@@ -229,7 +229,10 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
     if ( eMode == SCDOCMODE_DOCUMENT )
     {
         if ( pDocShell )
-            pLinkManager = new sfx2::LinkManager( pDocShell );
+        {
+            pLinkManager = new sfx2::LinkManager(pDocShell);
+            pLinkManager->SetAutoAskUpdateAllLinks();
+        }
 
         xPoolHelper = new ScPoolHelper( this );
 
@@ -269,6 +272,7 @@ sfx2::LinkManager*  ScDocument::GetLinkManager()  const
     if ( bAutoCalc && !pLinkManager && pShell)
     {
         pLinkManager = new sfx2::LinkManager( pShell );
+        pLinkManager->SetAutoAskUpdateAllLinks();
     }
     return pLinkManager;
 }

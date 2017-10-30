@@ -65,10 +65,11 @@ public:
 SV_IMPL_PTRARR( SvBaseLinks, SvBaseLinkRefPtr )
 
 LinkManager::LinkManager(SfxObjectShell* p)
-    : pPersist( p )
+    : pPersist(p),
+    mUpdateAsked(sal_False),
+    mAutoAskUpdateAllLinks(sal_False)
 {
 }
-
 
 LinkManager::~LinkManager()
 {
@@ -143,6 +144,7 @@ void LinkManager::Remove( sal_uInt16 nPos, sal_uInt16 nCnt )
 
 sal_Bool LinkManager::Insert( SvBaseLink* pLink )
 {
+
     // do not insert links double
     for( sal_uInt16 n = 0; n < aLinkTbl.Count(); ++n )
     {
@@ -157,6 +159,12 @@ sal_Bool LinkManager::Insert( SvBaseLink* pLink )
     SvBaseLinkRef* pTmp = new SvBaseLinkRef( pLink );
     pLink->SetLinkManager( this );
     aLinkTbl.Insert( pTmp, aLinkTbl.Count() );
+    Window *parent = GetPersist()->GetDialogParent();
+    if (mAutoAskUpdateAllLinks)
+    {
+        SetUserAllowsLinkUpdate(pLink, GetUserAllowsLinkUpdate(parent));
+    }
+
     return sal_True;
 }
 
@@ -268,6 +276,35 @@ sal_Bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
     return bRet;
 }
 
+void LinkManager::SetAutoAskUpdateAllLinks()
+{
+    mAutoAskUpdateAllLinks = sal_True;
+}
+
+sal_Bool LinkManager::GetUserAllowsLinkUpdate(Window *pParentWin)
+{
+    if (!mUpdateAsked)
+    {
+        if (QueryBox(pParentWin, WB_YES_NO | WB_DEF_NO, SfxResId(STR_QUERY_UPDATE_LINKS)).Execute() == RET_YES)
+            mAllowUpdate = sal_True;
+        else
+            mAllowUpdate = sal_False;
+        mUpdateAsked = sal_True;
+    }
+    return mAllowUpdate;
+}
+
+void LinkManager::SetUserAllowsLinkUpdate(SvBaseLink *pLink, sal_Bool allows)
+{
+    SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();
+
+    if (pShell)
+    {
+        comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = pShell->getEmbeddedObjectContainer();
+        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(allows);
+    }
+}
+
 
 void LinkManager::UpdateAllLinks(
     sal_Bool bAskUpdate,
@@ -313,25 +350,18 @@ void LinkManager::UpdateAllLinks(
             ( !bUpdateGrfLinks && OBJECT_CLIENT_GRF == pLink->GetObjType() ))
             continue;
 
-        if( bAskUpdate )
+        sal_Bool allows = sal_True;
+
+        if (bAskUpdate)
         {
-            int nRet = QueryBox( pParentWin, WB_YES_NO | WB_DEF_NO, SfxResId( STR_QUERY_UPDATE_LINKS ) ).Execute();
-            SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();
-
-            if(pShell)
-            {
-                comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = pShell->getEmbeddedObjectContainer();
-                rEmbeddedObjectContainer.setUserAllowsLinkUpdate(RET_YES == nRet);
-            }
-
-            if (RET_YES != nRet)
-            {
-                return;     // nothing should be updated
-            }
-            bAskUpdate = sal_False;     // one time is OK
+            allows = GetUserAllowsLinkUpdate(pParentWin);
         }
 
-        pLink->Update();
+        SetUserAllowsLinkUpdate(pLink, allows);
+        bAskUpdate = sal_False;     // one time is OK
+
+        if (allows)
+            pLink->Update();
     }
 }
 
