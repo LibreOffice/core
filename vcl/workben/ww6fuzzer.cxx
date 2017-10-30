@@ -33,6 +33,7 @@ void * IndexedPropertyValuesContainer_get_implementation( void *, void * );
 void * com_sun_star_comp_uui_UUIInteractionHandler_get_implementation( void *, void * );
 void * com_sun_star_comp_comphelper_OPropertyBag( void *, void * );
 void * com_sun_star_i18n_Transliteration_get_implementation( void *, void * );
+void * com_sun_star_text_DefaultNumberingProvider_get_implementation( void *, void * );
 }
 
 const lib_to_factory_mapping *
@@ -66,6 +67,7 @@ lo_get_constructor_map(void)
         { "com_sun_star_comp_uui_UUIInteractionHandler_get_implementation", com_sun_star_comp_uui_UUIInteractionHandler_get_implementation },
         { "com_sun_star_comp_comphelper_OPropertyBag", com_sun_star_comp_comphelper_OPropertyBag },
         { "com_sun_star_i18n_Transliteration_get_implementation", com_sun_star_i18n_Transliteration_get_implementation },
+        { "com_sun_star_text_DefaultNumberingProvider_get_implementation", com_sun_star_text_DefaultNumberingProvider_get_implementation },
         { 0, 0 }
     };
 
