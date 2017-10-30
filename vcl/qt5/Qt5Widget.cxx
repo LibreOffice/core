@@ -55,7 +55,6 @@ void Qt5Widget::paintEvent( QPaintEvent *pEvent )
 
         QImage aImage( cairo_image_surface_get_data( pSurface ),
             size().width(), size().height(), Qt5_DefaultFormat32 );
-        p.drawImage( QPoint( 0, 0 ), aImage );
         p.drawImage( pEvent->rect().topLeft(), aImage, pEvent->rect() );
     }
     else

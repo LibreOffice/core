@@ -30,16 +30,14 @@
 class Qt5Font;
 class Qt5FontFace;
 class Qt5Frame;
+class Qt5Painter;
 class PhysicalFontCollection;
 class QImage;
-
-#define PREPARE_PAINTER \
-    QPainter aPainter; \
-    PreparePainter( aPainter );
 
 class Qt5Graphics : public SalGraphics
 {
     friend class Qt5Bitmap;
+    friend class Qt5Painter;
 
     Qt5Frame                     *m_pFrame;
     QImage                       *m_pQImage;
@@ -55,7 +53,6 @@ class Qt5Graphics : public SalGraphics
     SalColor                      m_aTextColor;
 
     Qt5Graphics( Qt5Frame *pFrame, QImage *pQImage );
-    void PreparePainter( QPainter &rPainter, sal_uInt8 nTransparency = 0xff );
 
 public:
     Qt5Graphics( Qt5Frame *pFrame )
