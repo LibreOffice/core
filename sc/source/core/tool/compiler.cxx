@@ -1131,7 +1131,7 @@ struct ConventionXL
         return lcl_makeExternalNameStr( rFile, rName, '!', false);
     }
 
-    static void makeExternalDocStr( OUStringBuffer& rBuffer, const OUString& rFullName, bool bEncodeUrl )
+    static void makeExternalDocStr( OUStringBuffer& rBuffer, const OUString& rFullName )
     {
         // Format that is easier to deal with inside OOo, because we use file
         // URL, and all characters are allowed.  Check if it makes sense to do
@@ -1142,11 +1142,7 @@ struct ConventionXL
 
         rBuffer.append('[');
         rBuffer.append('\'');
-        OUString aFullName;
-        if (bEncodeUrl)
-            aFullName = rFullName;
-        else
-            aFullName = INetURLObject::decode(rFullName, INetURLObject::DecodeMechanism::Unambiguous);
+        OUString aFullName = INetURLObject::decode(rFullName, INetURLObject::DecodeMechanism::Unambiguous);
 
         const sal_Unicode* pBuf = aFullName.getStr();
         sal_Int32 nLen = aFullName.getLength();
@@ -1360,7 +1356,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         // whole file path with [] because the file name can contain any
         // characters.
 
-        ConventionXL::makeExternalDocStr(rBuffer, rFileName, false);
+        ConventionXL::makeExternalDocStr(rBuffer, rFileName);
         ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
         rBuffer.append('!');
 
@@ -1374,7 +1370,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
     {
         ScRange aAbsRef = rRef.toAbs(rPos);
 
-        ConventionXL::makeExternalDocStr(rBuffer, rFileName, false);
+        ConventionXL::makeExternalDocStr(rBuffer, rFileName);
         ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, rTabNames, aAbsRef);
         rBuffer.append('!');
 
@@ -1672,7 +1668,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         // characters.
 
         ScAddress aAbsRef = rRef.toAbs(rPos);
-        ConventionXL::makeExternalDocStr(rBuffer, rFileName, false);
+        ConventionXL::makeExternalDocStr(rBuffer, rFileName);
         ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
         rBuffer.append('!');
 
@@ -1687,7 +1683,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
     {
         ScRange aAbsRef = rRef.toAbs(rPos);
 
-        ConventionXL::makeExternalDocStr(rBuffer, rFileName, false);
+        ConventionXL::makeExternalDocStr(rBuffer, rFileName);
         ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, rTabNames, aAbsRef);
         rBuffer.append('!');
 

@@ -48,7 +48,7 @@ template<typename Key, typename Val, typename Span>
 void buildSpanWithValue(
     std::vector<Span>& rSpans,
     typename mdds::flat_segment_tree<Key,Val>::const_iterator it,
-    typename mdds::flat_segment_tree<Key,Val>::const_iterator itEnd, const Key* pStart )
+    typename mdds::flat_segment_tree<Key,Val>::const_iterator itEnd )
 {
     Key nLastPos = it->first;
     Val nLastVal = it->second;
@@ -61,11 +61,7 @@ void buildSpanWithValue(
         {
             Key nIndex1 = nLastPos;
             Key nIndex2 = nThisPos-1;
-
-            if (!pStart || *pStart < nIndex1)
-                rSpans.push_back(Span(nIndex1, nIndex2, nLastVal));
-            else if (*pStart <= nIndex2)
-                rSpans.push_back(Span(*pStart, nIndex2, nLastVal));
+            rSpans.push_back(Span(nIndex1, nIndex2, nLastVal));
         }
 
         nLastPos = nThisPos;
@@ -105,7 +101,7 @@ std::vector<Span> toSpanArrayWithValue( const mdds::flat_segment_tree<Key,Val>& 
     std::vector<Span> aSpans;
 
     typename FstType::const_iterator it = rTree.begin(), itEnd = rTree.end();
-    buildSpanWithValue<Key,Val,Span>(aSpans, it, itEnd, nullptr);
+    buildSpanWithValue<Key,Val,Span>(aSpans, it, itEnd);
     return aSpans;
 }
 

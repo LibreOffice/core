@@ -73,17 +73,17 @@ public:
     static SfxItemSet* GetDataSet( ScCellRangesBase* pRangeObj );
 };
 
-// Extracts a implementation object ( via XUnoTunnel ) from an uno object
-// by default will throw if unsuccessful.
+// Extracts a implementation object ( via XUnoTunnel ) from an uno object.
+// Will throw if unsuccessful.
 /// @throws css::uno::RuntimeException
 template < typename ImplObject >
-    ImplObject* getImplFromDocModuleWrapper( const css::uno::Reference< css::uno::XInterface >& rxWrapperIf, bool bThrow = true )
+    ImplObject* getImplFromDocModuleWrapper( const css::uno::Reference< css::uno::XInterface >& rxWrapperIf )
     {
         ImplObject* pObj = nullptr;
         css::uno::Reference< css::lang::XUnoTunnel >  xTunnel( rxWrapperIf, css::uno::UNO_QUERY );
         if ( xTunnel.is() )
             pObj = reinterpret_cast<ImplObject*>( xTunnel->getSomething(ImplObject::getUnoTunnelId()));
-        if ( bThrow && !pObj )
+        if ( !pObj )
             throw css::uno::RuntimeException("Internal error, can't extract implementation object", rxWrapperIf );
         return pObj;
     }

@@ -304,7 +304,7 @@ public:
      */
     static ScPostIt*    CreateNoteFromCaption(
                             ScDocument& rDoc, const ScAddress& rPos,
-                            SdrCaptionObj* pCaption, bool bShown );
+                            SdrCaptionObj* pCaption );
 
     /** Creates a cell note based on the passed caption object data.
 
@@ -341,7 +341,7 @@ public:
                             ScDocument& rDoc, const ScAddress& rPos,
                             SfxItemSet* pItemSet, OutlinerParaObject* pOutlinerObj,
                             const tools::Rectangle& rCaptionRect, bool bShown,
-                            bool bAlwaysCreateCaption, sal_uInt32 nPostItId = 0 );
+                            bool bAlwaysCreateCaption );
 
     /** Creates a cell note based on the passed string and inserts it into the
         document.
