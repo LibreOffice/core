@@ -163,11 +163,10 @@ bool GalleryExplorer::GetGraphicObj( const OUString& rThemeName, sal_uInt32 nPos
 }
 
 bool GalleryExplorer::GetGraphicObj( sal_uInt32 nThemeId, sal_uInt32 nPos,
-                                     Graphic* pGraphic, BitmapEx* pThumb,
-                                     bool bProgress )
+                                     Graphic* pGraphic )
 {
     Gallery* pGal = ::Gallery::GetGalleryInstance();
-    return pGal && GetGraphicObj( pGal->GetThemeName( nThemeId ), nPos, pGraphic, pThumb, bProgress );
+    return pGal && GetGraphicObj( pGal->GetThemeName( nThemeId ), nPos, pGraphic, nullptr/*pThumb*/, false/*bProgress*/ );
 }
 
 sal_uInt32 GalleryExplorer::GetSdrObjCount( const OUString& rThemeName )

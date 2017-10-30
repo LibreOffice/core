@@ -204,7 +204,7 @@ void SdrPaintWindow::impCreateOverlayManager()
                 // whether that refresh itself will use a 2nd vdev to avoid flickering.
                 // Also hand over the old OverlayManager if existent; this means to take over
                 // the registered OverlayObjects from it
-                mxOverlayManager = sdr::overlay::OverlayManagerBuffered::create(GetOutputDevice(), true);
+                mxOverlayManager = sdr::overlay::OverlayManagerBuffered::create(GetOutputDevice());
             }
             else
             {

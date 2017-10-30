@@ -121,8 +121,7 @@ public:
                                                Graphic* pGraphic, BitmapEx* pThumb = nullptr,
                                                bool bProgress = false );
     static bool                 GetGraphicObj( sal_uInt32 nThemeId, sal_uInt32 nPos,
-                                               Graphic* pGraphic, BitmapEx* pThumb = nullptr,
-                                               bool bProgress = false );
+                                               Graphic* pGraphic );
 
     static sal_uInt32           GetSdrObjCount( const OUString& rThemeName );
     static sal_uInt32           GetSdrObjCount( sal_uInt32 nThemeId );

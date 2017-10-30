@@ -380,9 +380,9 @@ namespace sdr { namespace table {
 // Cell
 
 
-rtl::Reference< Cell > Cell::create( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject )
+rtl::Reference< Cell > Cell::create( SdrTableObj& rTableObj )
 {
-    rtl::Reference< Cell > xCell( new Cell( rTableObj, pOutlinerParaObject ) );
+    rtl::Reference< Cell > xCell( new Cell( rTableObj, nullptr ) );
     if( xCell->mxTable.is() )
     {
         Reference< XEventListener > xListener( xCell.get() );

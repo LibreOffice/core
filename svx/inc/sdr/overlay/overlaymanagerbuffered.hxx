@@ -65,8 +65,7 @@ namespace sdr
             virtual ~OverlayManagerBuffered() override;
 
         public:
-            static rtl::Reference<OverlayManager> create(OutputDevice& rOutputDevice,
-                bool bRefreshWithPreRendering);
+            static rtl::Reference<OverlayManager> create(OutputDevice& rOutputDevice);
 
             // complete redraw
             virtual void completeRedraw(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice = nullptr) const override;

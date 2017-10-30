@@ -49,8 +49,7 @@ namespace drawinglayer
                         getSdrSTAttribute().getText(),
                         attribute::SdrLineAttribute(),
                         false,
-                        getWordWrap(),
-                        false/*ForceTextClipToTextRange*/));
+                        getWordWrap()));
             }
 
             // add shadow

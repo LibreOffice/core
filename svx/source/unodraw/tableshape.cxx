@@ -124,7 +124,7 @@ bool SvxTableShape::getPropertyValueImpl(
     {
         if( mpObj.is() )
         {
-            Graphic aGraphic( SvxGetGraphicForShape( *mpObj.get(), true ) );
+            Graphic aGraphic( SvxGetGraphicForShape( *mpObj.get() ) );
             rValue <<= aGraphic.GetXGraphic();
         }
         return true;

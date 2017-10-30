@@ -2129,53 +2129,47 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     }
 }
 
-static void lcl_SetItem(SfxItemSet& rAttr, bool bMerge, const SfxPoolItem& rItem)
-{
-    if (bMerge) rAttr.MergeValue(rItem,true);
-    else rAttr.Put(rItem);
-}
-
 void SdrObject::TakeNotPersistAttr(SfxItemSet& rAttr) const
 {
     const tools::Rectangle& rSnap=GetSnapRect();
     const tools::Rectangle& rLogic=GetLogicRect();
-    lcl_SetItem(rAttr,false,SdrYesNoItem(SDRATTR_OBJMOVEPROTECT, IsMoveProtect()));
-    lcl_SetItem(rAttr,false,SdrYesNoItem(SDRATTR_OBJSIZEPROTECT, IsResizeProtect()));
-    lcl_SetItem(rAttr,false,SdrObjPrintableItem(IsPrintable()));
-    lcl_SetItem(rAttr,false,SdrObjVisibleItem(IsVisible()));
-    lcl_SetItem(rAttr,false,SdrAngleItem(SDRATTR_ROTATEANGLE, GetRotateAngle()));
-    lcl_SetItem(rAttr,false,SdrShearAngleItem(GetShearAngle()));
-    lcl_SetItem(rAttr,false,SdrOneSizeWidthItem(rSnap.GetWidth()-1));
-    lcl_SetItem(rAttr,false,SdrOneSizeHeightItem(rSnap.GetHeight()-1));
-    lcl_SetItem(rAttr,false,SdrOnePositionXItem(rSnap.Left()));
-    lcl_SetItem(rAttr,false,SdrOnePositionYItem(rSnap.Top()));
+    rAttr.Put(SdrYesNoItem(SDRATTR_OBJMOVEPROTECT, IsMoveProtect()));
+    rAttr.Put(SdrYesNoItem(SDRATTR_OBJSIZEPROTECT, IsResizeProtect()));
+    rAttr.Put(SdrObjPrintableItem(IsPrintable()));
+    rAttr.Put(SdrObjVisibleItem(IsVisible()));
+    rAttr.Put(SdrAngleItem(SDRATTR_ROTATEANGLE, GetRotateAngle()));
+    rAttr.Put(SdrShearAngleItem(GetShearAngle()));
+    rAttr.Put(SdrOneSizeWidthItem(rSnap.GetWidth()-1));
+    rAttr.Put(SdrOneSizeHeightItem(rSnap.GetHeight()-1));
+    rAttr.Put(SdrOnePositionXItem(rSnap.Left()));
+    rAttr.Put(SdrOnePositionYItem(rSnap.Top()));
     if (rLogic.GetWidth()!=rSnap.GetWidth()) {
-        lcl_SetItem(rAttr,false,SdrLogicSizeWidthItem(rLogic.GetWidth()-1));
+        rAttr.Put(SdrLogicSizeWidthItem(rLogic.GetWidth()-1));
     }
     if (rLogic.GetHeight()!=rSnap.GetHeight()) {
-        lcl_SetItem(rAttr,false,SdrLogicSizeHeightItem(rLogic.GetHeight()-1));
+        rAttr.Put(SdrLogicSizeHeightItem(rLogic.GetHeight()-1));
     }
     OUString aName(GetName());
 
     if (!aName.isEmpty())
     {
-        lcl_SetItem(rAttr, false, SfxStringItem(SDRATTR_OBJECTNAME, aName));
+        rAttr.Put(SfxStringItem(SDRATTR_OBJECTNAME, aName));
     }
 
-    lcl_SetItem(rAttr,false,SdrLayerIdItem(GetLayer()));
+    rAttr.Put(SdrLayerIdItem(GetLayer()));
     const SdrLayerAdmin* pLayAd=pPage!=nullptr ? &pPage->GetLayerAdmin() : pModel!=nullptr ? &pModel->GetLayerAdmin() : nullptr;
     if (pLayAd!=nullptr) {
         const SdrLayer* pLayer=pLayAd->GetLayerPerID(GetLayer());
         if (pLayer!=nullptr) {
-            lcl_SetItem(rAttr,false,SdrLayerNameItem(pLayer->GetName()));
+            rAttr.Put(SdrLayerNameItem(pLayer->GetName()));
         }
     }
     Point aRef1(rSnap.Center());
     Point aRef2(aRef1); aRef2.Y()++;
-    lcl_SetItem(rAttr,false,SdrTransformRef1XItem(aRef1.X()));
-    lcl_SetItem(rAttr,false,SdrTransformRef1YItem(aRef1.Y()));
-    lcl_SetItem(rAttr,false,SdrTransformRef2XItem(aRef2.X()));
-    lcl_SetItem(rAttr,false,SdrTransformRef2YItem(aRef2.Y()));
+    rAttr.Put(SdrTransformRef1XItem(aRef1.X()));
+    rAttr.Put(SdrTransformRef1YItem(aRef1.Y()));
+    rAttr.Put(SdrTransformRef2XItem(aRef2.X()));
+    rAttr.Put(SdrTransformRef2YItem(aRef2.Y()));
 }
 
 SfxStyleSheet* SdrObject::GetStyleSheet() const

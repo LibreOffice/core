@@ -67,8 +67,7 @@ namespace drawinglayer
             const attribute::SdrTextAttribute& rText,
             const attribute::SdrLineAttribute& rStroke,
             bool bCellText,
-            bool bWordWrap,
-            bool bClipOnBounds);
+            bool bWordWrap);
 
         Primitive2DContainer SVX_DLLPUBLIC createEmbeddedShadowPrimitive(
             const Primitive2DContainer& rContent,

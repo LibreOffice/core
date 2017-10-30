@@ -87,14 +87,13 @@ const sal_uInt16 SvxHFPage::pRanges[] =
 
 namespace svx {
 
-    bool ShowBorderBackgroundDlg( vcl::Window* pParent, SfxItemSet* pBBSet,
-            bool bEnableBackgroundSelector )
+    bool ShowBorderBackgroundDlg( vcl::Window* pParent, SfxItemSet* pBBSet )
     {
         bool bRes = false;
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg( pParent, *pBBSet, bEnableBackgroundSelector ));
+            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg( pParent, *pBBSet, true/*bEnableBackgroundSelector*/ ));
             DBG_ASSERT(pDlg, "Dialog creation failed!");
             if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
             {

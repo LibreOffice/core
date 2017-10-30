@@ -55,7 +55,7 @@ class SVX_DLLPUBLIC Cell :  public SdrText,
     friend class CellUndo;
 
 public:
-    SVX_DLLPRIVATE static rtl::Reference< Cell > create( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject );
+    SVX_DLLPRIVATE static rtl::Reference< Cell > create( SdrTableObj& rTableObj );
 
     // private
     SVX_DLLPRIVATE void dispose();

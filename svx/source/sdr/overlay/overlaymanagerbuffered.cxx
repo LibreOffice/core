@@ -389,11 +389,10 @@ namespace sdr
         }
 
         rtl::Reference<OverlayManager> OverlayManagerBuffered::create(
-            OutputDevice& rOutputDevice,
-            bool bRefreshWithPreRendering)
+            OutputDevice& rOutputDevice)
         {
             return rtl::Reference<OverlayManager>(new OverlayManagerBuffered(rOutputDevice,
-                bRefreshWithPreRendering));
+                true/*bRefreshWithPreRendering*/));
         }
 
         OverlayManagerBuffered::~OverlayManagerBuffered()

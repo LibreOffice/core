@@ -1238,7 +1238,7 @@ Sequence< OUString > SAL_CALL GraphicExporter::getSupportedMimeTypeNames(  )
 
 }
 
-Graphic SvxGetGraphicForShape( SdrObject& rShape, bool bVector )
+Graphic SvxGetGraphicForShape( SdrObject& rShape )
 {
     Graphic aGraphic;
     try
@@ -1247,7 +1247,7 @@ Graphic SvxGetGraphicForShape( SdrObject& rShape, bool bVector )
         Reference< XComponent > xComp( rShape.getUnoShape(), UNO_QUERY_THROW );
         xExporter->setSourceDocument( xComp );
         ExportSettings aSettings( rShape.GetModel() );
-        xExporter->GetGraphic( aSettings, aGraphic, bVector );
+        xExporter->GetGraphic( aSettings, aGraphic, true/*bVector*/ );
     }
     catch( Exception& )
     {

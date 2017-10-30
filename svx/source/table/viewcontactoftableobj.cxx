@@ -119,7 +119,6 @@ namespace drawinglayer
                         getSdrFTAttribute().getText(),
                         attribute::SdrLineAttribute(),
                         true,
-                        false,
                         false));
             }
         }
