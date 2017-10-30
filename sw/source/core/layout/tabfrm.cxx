@@ -2075,7 +2075,13 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     SwTwips nDeadLine = (pTmp->*fnRect->fnGetPrtBottom)();
                     if ( bBrowseMode )
                         nDeadLine += pTmp->Grow( LONG_MAX, true );
-                    if( (Frame().*fnRect->fnBottomDist)( nDeadLine ) > 0 )
+                    bool bFits = (Frame().*fnRect->fnBottomDist)( nDeadLine ) > 0;
+                    if (!bFits && (GetFollow()->Frame().*fnRect->fnGetHeight)() == 0)
+                        // The follow should move backwards, so allow the case
+                        // when the upper has no space, but the follow is
+                        // empty.
+                        bFits = (Frame().*fnRect->fnBottomDist)( nDeadLine ) >= 0;
+                    if (bFits)
                     {
                         // First, we remove an existing follow flow line.
                         if ( HasFollowFlowLine() )
@@ -3370,7 +3376,12 @@ bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool &rReformat
             rReformat = true;
             return true;
         }
-        if (!m_bLockBackMove && nSpace > 0)
+        bool bFits = nSpace > 0;
+        if (!bFits && (Frame().*fnRect->fnGetHeight)() == 0)
+            // This frame fits into pNewUpper in case it has no space, but this
+            // frame is empty.
+            bFits = nSpace >= 0;
+        if (!m_bLockBackMove && bFits)
         {
             // #i26945# - check, if follow flow line
             // contains frame, which are moved forward due to its object
