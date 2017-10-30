@@ -229,7 +229,7 @@ public:
     static XclExpStringRef CreateString(
                             const XclExpRoot& rRoot,
                             const OUString& rString,
-                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            XclStrFlags nFlags = XclStrFlags::NONE,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
     /** Creates a new unformatted string from the passed character.
@@ -242,7 +242,7 @@ public:
     static XclExpStringRef CreateString(
                             const XclExpRoot& rRoot,
                             sal_Unicode cChar,
-                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            XclStrFlags nFlags = XclStrFlags::NONE,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
     /** Appends an unformatted string to an Excel string object.
@@ -279,7 +279,7 @@ public:
                             const XclExpRoot& rRoot,
                             const OUString& rString,
                             const ScPatternAttr* pCellAttr,
-                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            XclStrFlags nFlags = XclStrFlags::NONE,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
     /** Creates a new formatted string from a Calc edit cell.
@@ -296,7 +296,7 @@ public:
                             const EditTextObject& rEditText,
                             const ScPatternAttr* pCellAttr,
                             XclExpHyperlinkHelper& rLinkHelper,
-                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            XclStrFlags nFlags = XclStrFlags::NONE,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
     /** Creates a new formatted string from a drawing text box.
@@ -308,7 +308,7 @@ public:
     static XclExpStringRef CreateString(
                             const XclExpRoot& rRoot,
                             const SdrTextObj& rTextObj,
-                            XclStrFlags nFlags = EXC_STR_DEFAULT );
+                            XclStrFlags nFlags = XclStrFlags::NONE );
 
     /** Creates a new formatted string from a edit text string.
         @param rEditObj  The edittext object.
@@ -317,7 +317,7 @@ public:
     static XclExpStringRef CreateString(
                             const XclExpRoot& rRoot,
                             const EditTextObject& rEditObj,
-                            XclStrFlags nFlags = EXC_STR_DEFAULT );
+                            XclStrFlags nFlags = XclStrFlags::NONE );
 
     /** Returns the script type first text portion different to WEAK, or the system
         default script type, if there is only weak script in the passed string. */

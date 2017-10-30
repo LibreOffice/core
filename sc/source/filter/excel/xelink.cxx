@@ -900,7 +900,7 @@ XclExpExtNameBase::XclExpExtNameBase(
     XclExpRecord( EXC_ID_EXTERNNAME ),
     XclExpRoot( rRoot ),
     maName( rName ),
-    mxName( XclExpStringHelper::CreateString( rRoot, rName, EXC_STR_8BITLENGTH ) ),
+    mxName( XclExpStringHelper::CreateString( rRoot, rName, XclStrFlags::EightBitLength ) ),
     mnFlags( nFlags )
 {
     OSL_ENSURE( maName.getLength() <= 255, "XclExpExtNameBase::XclExpExtNameBase - string too long" );
@@ -1473,7 +1473,7 @@ void XclExpExternSheet::Save( XclExpStream& rStrm )
 void XclExpExternSheet::Init( const OUString& rEncUrl )
 {
     OSL_ENSURE_BIFF( GetBiff() <= EXC_BIFF5 );
-    maTabName.AssignByte( rEncUrl, GetTextEncoding(), EXC_STR_8BITLENGTH );
+    maTabName.AssignByte( rEncUrl, GetTextEncoding(), XclStrFlags::EightBitLength );
     SetRecSize( maTabName.GetSize() );
 }
 

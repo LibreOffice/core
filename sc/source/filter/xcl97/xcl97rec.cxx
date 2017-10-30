@@ -1317,7 +1317,7 @@ std::size_t XclCodename::GetLen() const
 ExcEScenarioCell::ExcEScenarioCell( sal_uInt16 nC, sal_uInt16 nR, const OUString& rTxt ) :
         nCol( nC ),
         nRow( nR ),
-        sText( rTxt, EXC_STR_DEFAULT, 255 )
+        sText( rTxt, XclStrFlags::NONE, 255 )
 {
 }
 
@@ -1353,17 +1353,17 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
     ScDocument& rDoc = rRoot.GetDoc();
     rDoc.GetName(nTab, aTmp);
     sTmpName = aTmp;
-    sName.Assign( sTmpName, EXC_STR_8BITLENGTH );
+    sName.Assign( sTmpName, XclStrFlags::EightBitLength );
     nRecLen = 8 + sName.GetBufferSize();
 
     rDoc.GetScenarioData( nTab, aTmp, aDummyCol, nFlags );
     sTmpComm = aTmp;
-    sComment.Assign( sTmpComm, EXC_STR_DEFAULT, 255 );
+    sComment.Assign( sTmpComm, XclStrFlags::NONE, 255 );
     if( sComment.Len() )
         nRecLen += sComment.GetSize();
     bProtected = (nFlags & ScScenarioFlags::Protected) != ScScenarioFlags::NONE;
 
-    sUserName.Assign( rRoot.GetUserName(), EXC_STR_DEFAULT, 255 );
+    sUserName.Assign( rRoot.GetUserName(), XclStrFlags::NONE, 255 );
     nRecLen += sUserName.GetSize();
 
     const ScRangeList* pRList = rDoc.GetScenarioRanges( nTab );
@@ -1819,7 +1819,7 @@ XclExpFileSharing::XclExpFileSharing( const XclExpRoot& rRoot, sal_uInt16 nPassw
     mbRecommendReadOnly( bRecommendReadOnly )
 {
     if( rRoot.GetBiff() <= EXC_BIFF5 )
-        maUserName.AssignByte( rRoot.GetUserName(), rRoot.GetTextEncoding(), EXC_STR_8BITLENGTH );
+        maUserName.AssignByte( rRoot.GetUserName(), rRoot.GetTextEncoding(), XclStrFlags::EightBitLength );
     else
         maUserName.Assign( rRoot.GetUserName() );
 }

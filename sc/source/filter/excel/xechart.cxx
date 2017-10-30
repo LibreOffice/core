@@ -954,7 +954,7 @@ sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > c
 
 void XclExpChSourceLink::ConvertString( const OUString& aString )
 {
-    mxString = XclExpStringHelper::CreateString( GetRoot(), aString, EXC_STR_FORCEUNICODE | EXC_STR_8BITLENGTH | EXC_STR_SEPARATEFORMATS );
+    mxString = XclExpStringHelper::CreateString( GetRoot(), aString, XclStrFlags::ForceUnicode | XclStrFlags::EightBitLength | XclStrFlags::SeparateFormats );
 }
 
 sal_uInt16 XclExpChSourceLink::ConvertStringSequence( const Sequence< Reference< XFormattedString > >& rStringSeq )
@@ -963,7 +963,7 @@ sal_uInt16 XclExpChSourceLink::ConvertStringSequence( const Sequence< Reference<
     sal_uInt16 nFontIdx = EXC_FONT_APP;
     if( rStringSeq.hasElements() )
     {
-        mxString = XclExpStringHelper::CreateString( GetRoot(), OUString(), EXC_STR_FORCEUNICODE | EXC_STR_8BITLENGTH | EXC_STR_SEPARATEFORMATS );
+        mxString = XclExpStringHelper::CreateString( GetRoot(), OUString(), XclStrFlags::ForceUnicode | XclStrFlags::EightBitLength | XclStrFlags::SeparateFormats );
         Reference< XBreakIterator > xBreakIt = GetDoc().GetBreakIterator();
         namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 
@@ -1128,7 +1128,7 @@ void XclExpChFrLabelProps::Convert( const ScfPropertySet& rPropSet,
 
 void XclExpChFrLabelProps::WriteBody( XclExpStream& rStrm )
 {
-    XclExpString aXclSep( maData.maSeparator, EXC_STR_FORCEUNICODE | EXC_STR_SMARTFLAGS );
+    XclExpString aXclSep( maData.maSeparator, XclStrFlags::ForceUnicode | XclStrFlags::SmartFlags );
     rStrm << maData.mnFlags << aXclSep;
 }
 

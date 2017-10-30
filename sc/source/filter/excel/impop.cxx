@@ -348,7 +348,7 @@ void ImportExcel::ReadLabel()
             0x0204      8       2 byte      16-bit length, unicode string */
         bool bBiff2 = maStrm.GetRecId() == EXC_ID2_LABEL;
         sal_uInt16 nXFIdx = ReadXFIndex( aScPos, bBiff2 );
-        XclStrFlags nFlags = (bBiff2 && (GetBiff() <= EXC_BIFF5)) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT;
+        XclStrFlags nFlags = (bBiff2 && (GetBiff() <= EXC_BIFF5)) ? XclStrFlags::EightBitLength : XclStrFlags::NONE;
         XclImpString aString;
 
         // #i63105# use text encoding from FONT record

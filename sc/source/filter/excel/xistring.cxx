@@ -25,7 +25,7 @@
 // Byte/Unicode strings =======================================================
 
 /** All allowed flags for import. */
-const XclStrFlags nAllowedFlags = EXC_STR_8BITLENGTH | EXC_STR_SMARTFLAGS | EXC_STR_SEPARATEFORMATS;
+const XclStrFlags nAllowedFlags = XclStrFlags::EightBitLength | XclStrFlags::SmartFlags | XclStrFlags::SeparateFormats;
 
 XclImpString::XclImpString()
 {
@@ -42,13 +42,13 @@ XclImpString::~XclImpString()
 
 void XclImpString::Read( XclImpStream& rStrm, XclStrFlags nFlags )
 {
-    if( !::get_flag( nFlags, EXC_STR_SEPARATEFORMATS ) )
+    if( !( nFlags & XclStrFlags::SeparateFormats ) )
         maFormats.clear();
 
     SAL_WARN_IF(
-        (nFlags & ~nAllowedFlags) != 0, "sc.filter",
+        nFlags & ~nAllowedFlags, "sc.filter",
         "XclImpString::Read - unknown flag");
-    bool b16BitLen = !::get_flag( nFlags, EXC_STR_8BITLENGTH );
+    bool b16BitLen = !( nFlags & XclStrFlags::EightBitLength );
 
     switch( rStrm.GetRoot().GetBiff() )
     {
@@ -65,7 +65,7 @@ void XclImpString::Read( XclImpStream& rStrm, XclStrFlags nFlags )
             // --- string header ---
             sal_uInt16 nChars = b16BitLen ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
             sal_uInt8 nFlagField = 0;
-            if( nChars || !::get_flag( nFlags, EXC_STR_SMARTFLAGS ) )
+            if( nChars || !( nFlags & XclStrFlags::SmartFlags ) )
                 nFlagField = rStrm.ReaduInt8();
 
             bool b16Bit, bRich, bFarEast;

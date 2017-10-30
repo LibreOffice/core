@@ -68,9 +68,9 @@ void XclExpHeaderFooter::WriteBody( XclExpStream& rStrm )
     {
         XclExpString aExString;
         if( rStrm.GetRoot().GetBiff() <= EXC_BIFF5 )
-            aExString.AssignByte( maHdrString, rStrm.GetRoot().GetTextEncoding(), EXC_STR_8BITLENGTH );
+            aExString.AssignByte( maHdrString, rStrm.GetRoot().GetTextEncoding(), XclStrFlags::EightBitLength );
         else
-            aExString.Assign( maHdrString, EXC_STR_DEFAULT, 255 );  // 16-bit length, but max 255 chars
+            aExString.Assign( maHdrString, XclStrFlags::NONE, 255 );  // 16-bit length, but max 255 chars
         rStrm << aExString;
     }
 }

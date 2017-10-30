@@ -190,7 +190,7 @@ XclExpName::XclExpName( const XclExpRoot& rRoot, const OUString& rName ) :
     XclExpRecord( EXC_ID_NAME ),
     XclExpRoot( rRoot ),
     maOrigName( rName ),
-    mxName( XclExpStringHelper::CreateString( rRoot, rName, EXC_STR_8BITLENGTH ) ),
+    mxName( XclExpStringHelper::CreateString( rRoot, rName, XclStrFlags::EightBitLength ) ),
     mcBuiltIn( EXC_BUILTIN_UNKNOWN ),
     mnScTab( SCTAB_GLOBAL ),
     mnFlags( EXC_NAME_DEFAULT ),
@@ -216,13 +216,13 @@ XclExpName::XclExpName( const XclExpRoot& rRoot, sal_Unicode cBuiltIn ) :
     if( (GetBiff() <= EXC_BIFF5) && (cBuiltIn == EXC_BUILTIN_FILTERDATABASE) )
     {
         OUString aName( XclTools::GetXclBuiltInDefName( EXC_BUILTIN_FILTERDATABASE ) );
-        mxName = XclExpStringHelper::CreateString( rRoot, aName, EXC_STR_8BITLENGTH );
+        mxName = XclExpStringHelper::CreateString( rRoot, aName, XclStrFlags::EightBitLength );
         maOrigName = XclTools::GetXclBuiltInDefName( cBuiltIn );
     }
     else
     {
         maOrigName =  XclTools::GetBuiltInDefNameXml( cBuiltIn ) ;
-        mxName = XclExpStringHelper::CreateString( rRoot, cBuiltIn, EXC_STR_8BITLENGTH );
+        mxName = XclExpStringHelper::CreateString( rRoot, cBuiltIn, XclStrFlags::EightBitLength );
         ::set_flag( mnFlags, EXC_NAME_BUILTIN );
     }
 }

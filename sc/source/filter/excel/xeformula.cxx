@@ -2255,7 +2255,7 @@ void XclExpFmlaCompImpl::Append( double fData )
 
 void XclExpFmlaCompImpl::Append( const OUString& rString )
 {
-    lclAppend( mxData->maTokVec, GetRoot(), rString, EXC_STR_8BITLENGTH );
+    lclAppend( mxData->maTokVec, GetRoot(), rString, XclStrFlags::EightBitLength );
 }
 
 void XclExpFmlaCompImpl::AppendAddress( const XclAddress& rXclPos )
@@ -2542,7 +2542,7 @@ void XclExpFmlaCompImpl::AppendExt( double fData )
 
 void XclExpFmlaCompImpl::AppendExt( const OUString& rString )
 {
-    lclAppend( mxData->maExtDataVec, GetRoot(), rString, (meBiff == EXC_BIFF8) ? EXC_STR_DEFAULT : EXC_STR_8BITLENGTH );
+    lclAppend( mxData->maExtDataVec, GetRoot(), rString, (meBiff == EXC_BIFF8) ? XclStrFlags::NONE : XclStrFlags::EightBitLength );
 }
 
 namespace {

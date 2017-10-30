@@ -759,7 +759,7 @@ void XclImpChSourceLink::ReadChSourceLink( XclImpStream& rStrm )
     {
         mxString.reset( new XclImpString );
         rStrm.Ignore( 2 );
-        mxString->Read( rStrm, EXC_STR_8BITLENGTH | EXC_STR_SEPARATEFORMATS );
+        mxString->Read( rStrm, XclStrFlags::EightBitLength | XclStrFlags::SeparateFormats );
     }
 }
 
