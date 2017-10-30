@@ -658,7 +658,7 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
     return ( m_rExport.AttrOutput().IsFlyProcessingPostponed() ? FLY_POSTPONED : FLY_PROCESSED ) ;
 }
 
-bool SwWW8AttrIter::IsTextAttr( sal_Int32 nSwPos )
+bool SwWW8AttrIter::IsTextAttr( sal_Int32 nSwPos ) const
 {
     // search for attrs with dummy character or content
     if (const SwpHints* pTextAttrs = rNd.GetpSwpHints())
@@ -681,6 +681,32 @@ bool SwWW8AttrIter::IsTextAttr( sal_Int32 nSwPos )
     }
 
     return false;
+}
+
+bool SwWW8AttrIter::IsExportableAttr(sal_Int32 nSwPos) const
+{
+    if (const SwpHints* pTextAttrs = rNd.GetpSwpHints())
+    {
+        for (size_t i = 0; i < pTextAttrs->Count(); ++i)
+        {
+            const SwTextAttr* pHt = pTextAttrs->GetSortedByEnd(i);
+            const sal_Int32 nStart = pHt->GetStart();
+            const sal_Int32 nEnd = pHt->End() ? *pHt->End() : INT_MAX;
+            if (nSwPos >= nStart && nSwPos < nEnd)
+            {
+                switch (pHt->GetAttr().Which())
+                {
+                    // Metadata fields should be dynamically generated, not dumped as text.
+                case RES_TXTATR_METAFIELD:
+                    return false;
+                }
+            }
+            else if (nSwPos > nEnd)
+                break;
+        }
+    }
+
+    return true;
 }
 
 bool SwWW8AttrIter::IsDropCap( int nSwPos )
@@ -2151,12 +2177,23 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
     }
 
     do {
+
         const SwRedlineData* pRedlineData = aAttrIter.GetRunLevelRedline( nAktPos );
         FlyProcessingState nStateOfFlyFrame = FLY_PROCESSED;
         bool bPostponeWritingText    = false ;
         OUString aSavedSnippet ;
 
         sal_Int32 nNextAttr = GetNextPos( &aAttrIter, rNode, nAktPos );
+
+        // Skip un-exportable attributes.
+        if (!aAttrIter.IsExportableAttr(nAktPos))
+        {
+            nAktPos = nNextAttr;
+            UpdatePosition(&aAttrIter, nAktPos);
+            eChrSet = aAttrIter.GetCharSet();
+            continue;
+        }
+
         // Is this the only run in this paragraph and it's empty?
         bool bSingleEmptyRun = nAktPos == 0 && nNextAttr == 0;
         AttrOutput().StartRun( pRedlineData, bSingleEmptyRun );
