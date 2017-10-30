@@ -92,7 +92,8 @@ class SfxClassificationCategory
 public:
     /// PROP_BACNAME() is stored separately for easier lookup.
     OUString m_aName;
-    OUString m_aAbbreviatedName;
+    OUString m_aAbbreviatedName; //< An abbreviation to display instead of m_aName.
+    OUString m_aIdentifier; //< The Identifier of this entry.
     size_t m_nConfidentiality; //< 0 is the lowest (least-sensitive).
     std::map<OUString, OUString> m_aLabels;
 };
@@ -173,7 +174,6 @@ void SAL_CALL SfxClassificationParser::startElement(const OUString& rName, const
     else if (rName == "baf:BusinessAuthorizationCategory")
     {
         const OUString aName = xAttribs->getValueByName("Name");
-        const OUString aAbbreviatedName = xAttribs->getValueByName("loextAbbreviatedName");
         if (!m_pCategory && !aName.isEmpty())
         {
             OUString aIdentifier = xAttribs->getValueByName("Identifier");
@@ -181,9 +181,13 @@ void SAL_CALL SfxClassificationParser::startElement(const OUString& rName, const
             // Create a new category and initialize it with the data that's true for all categories.
             m_aCategories.emplace_back(SfxClassificationCategory());
             SfxClassificationCategory& rCategory = m_aCategories.back();
+
             rCategory.m_aName = aName;
             // Set the abbreviated name, if any, otherwise fallback on the full name.
+            const OUString aAbbreviatedName = xAttribs->getValueByName("loextAbbreviatedName");
             rCategory.m_aAbbreviatedName = !aAbbreviatedName.isEmpty() ? aAbbreviatedName : aName;
+            rCategory.m_aIdentifier = aIdentifier;
+
             rCategory.m_aLabels["PolicyAuthority:Name"] = m_aPolicyAuthorityName;
             rCategory.m_aLabels["Policy:Name"] = m_aPolicyName;
             rCategory.m_aLabels["BusinessAuthorization:Identifier"] = m_aProgramID;
@@ -785,6 +789,19 @@ std::vector<OUString> SfxClassificationHelper::GetBACNames()
     std::transform(m_pImpl->m_aCategories.begin(), m_pImpl->m_aCategories.end(), std::back_inserter(aRet), [](const SfxClassificationCategory& rCategory)
     {
         return rCategory.m_aName;
+    });
+    return aRet;
+}
+
+std::vector<OUString> SfxClassificationHelper::GetBACIdentifiers()
+{
+    if (m_pImpl->m_aCategories.empty())
+        m_pImpl->parsePolicy();
+
+    std::vector<OUString> aRet;
+    std::transform(m_pImpl->m_aCategories.begin(), m_pImpl->m_aCategories.end(), std::back_inserter(aRet), [](const SfxClassificationCategory& rCategory)
+    {
+        return rCategory.m_aIdentifier;
     });
     return aRet;
 }
