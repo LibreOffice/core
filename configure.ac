@@ -6474,6 +6474,13 @@ fi
 AC_SUBST([JITC_PROCESSOR_TYPE])
 
 # Misc Windows Stuff
+AC_ARG_WITH(ucrt-dir,
+    AS_HELP_STRING([--with-ucrt-dir],
+        [path to the directory with the arch-specific subdirectories of the Windows Universtal CRT redistributables
+        from the Windows 10 SDK for packaging into the installsets (without those the target system needs to install
+        the Visual C++ Runtimes manually)]),
+,)
+UCRT_REDISTDIR="$with_ucrt_dir"
 if test $_os = "WINNT"; then
     find_msvc_x64_dlls
     find_msms
@@ -6481,8 +6488,29 @@ if test $_os = "WINNT"; then
     MSVC_DLLS="$msvcdlls"
     MSM_PATH="$msmdir"
     SCPDEFS="$SCPDEFS -DWITH_VC${VCVER}_REDIST"
+    if test "$UCRT_REDISTDIR" = "no"; then
+        dnl explicitly disabled
+        UCRT_REDISTDIR=""
+    else
+        UCRT_REDISTDIR="$UCRT_REDISTDIR/$WINDOWS_SDK_ARCH"
+        # https://blogs.msdn.microsoft.com/vcblog/2015/03/03/introducing-the-universal-crt/
+        # "note that the set of DLLs are necessary is different on different
+        #  versions of Windows, so you must include all of the DLLs in order for
+        #  your program to run on all supported versions of Windows"
+        if test -f "$UCRT_REDISTDIR/ucrtbase.dll"; then
+            cd "$UCRT_REDISTDIR";
+            UCRT_DLLS=$(ls *.dll | paste -d " " -s)
+            cd -
+        else
+            UCRT_REDISTDIR=""
+            AC_MSG_WARN([No --with-ucrt-dir not specified or dlls not found - installer will have runtime dependency])
+            add_warning "No --with-ucrt-dir not specified or dlls not found - installer will have runtime dependency"
+        fi
+    fi
 fi
 
+AC_SUBST(UCRT_REDISTDIR)
+AC_SUBST(UCRT_DLLS)
 AC_SUBST(MSVC_DLL_PATH)
 AC_SUBST(MSVC_DLLS)
 AC_SUBST(MSM_PATH)
