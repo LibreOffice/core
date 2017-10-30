@@ -772,6 +772,7 @@ class HelpIds:
     "",
     "",
     "",
+    "",
     "HID:WIZARDS_HID_IS_BTN_OK", # HID:41003
     "HID:WIZARDS_HID_IS_BTN_CANCEL", # HID:41004
     "HID:WIZARDS_HID_IS_BTN_IMG1", # HID:41005
