@@ -30,6 +30,8 @@ class QImage;
 
 class Kf5Graphics : public SalGraphics
 {
+    friend class Kf5Bitmap;
+
     Kf5Frame                     *m_pFrame;
     QImage                       *m_pQImage;
     PhysicalFontCollection       *m_pFontCollection;

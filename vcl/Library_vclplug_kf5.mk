@@ -76,6 +76,7 @@ $(eval $(call gb_Library_add_libs,vclplug_kf5,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_kf5,\
+    vcl/unx/kf5/Kf5Bitmap \
     vcl/unx/kf5/Kf5Data \
     vcl/unx/kf5/Kf5Frame \
     vcl/unx/kf5/Kf5FontFace \

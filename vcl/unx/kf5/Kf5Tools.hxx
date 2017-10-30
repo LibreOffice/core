@@ -20,8 +20,12 @@
 #pragma once
 
 #include <QtCore/QString>
+#include <QtCore/QRect>
+#include <QtCore/QSize>
+#include <QtGui/QImage>
 
 #include <rtl/string.hxx>
+#include <tools/gen.hxx>
 
 inline OUString toOUString(const QString& s)
 {
@@ -33,6 +37,53 @@ inline QString toQString(const OUString& s)
 {
     return QString::fromUtf16(
         reinterpret_cast<ushort const *>(s.getStr()), s.getLength());
+}
+
+inline QRect toQRect( const tools::Rectangle& rRect )
+{
+    return QRect( rRect.Left(), rRect.Top(),
+                  rRect.GetWidth(), rRect.GetHeight() );
+}
+
+inline QSize toQSize( const Size& rSize )
+{
+    return QSize( rSize.Width(), rSize.Height() );
+}
+
+inline Size toSize( const QSize& rSize )
+{
+    return Size( rSize.width(), rSize.height() );
+}
+
+inline QImage::Format getBitFormat( sal_uInt16 nBitCount )
+{
+    switch ( nBitCount )
+    {
+    case 1  : return QImage::Format_Mono;
+    case 8  : return QImage::Format_Indexed8;
+    case 16 : return QImage::Format_RGB16;
+    case 24 : return QImage::Format_RGB888;
+    case 32 : return QImage::Format_ARGB32;
+    default :
+        std::abort();
+        break;
+    }
+    return QImage::Format_Invalid;
+}
+
+inline sal_uInt16 getFormatBits( QImage::Format eFormat )
+{
+    switch ( eFormat )
+    {
+        case QImage::Format_Mono : return 1;
+        case QImage::Format_Indexed8 : return 8;
+        case QImage::Format_RGB16 : return 16;
+        case QImage::Format_RGB888 : return 24;
+        case QImage::Format_ARGB32 : return 32;
+        default :
+            std::abort();
+            return 0;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

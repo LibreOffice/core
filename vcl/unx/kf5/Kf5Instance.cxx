@@ -25,6 +25,7 @@
 #include "Kf5Timer.hxx"
 #include "Kf5VirtualDevice.hxx"
 #include "Kf5Object.hxx"
+#include "Kf5Bitmap.hxx"
 
 #include <QtCore/QThread>
 #include <QtWidgets/QApplication>
@@ -111,7 +112,7 @@ SalSystem* Kf5Instance::CreateSalSystem()
 
 SalBitmap* Kf5Instance::CreateSalBitmap()
 {
-    return new SvpSalBitmap();
+    return new Kf5Bitmap();
 }
 
 bool Kf5Instance::ImplYield( bool bWait, bool bHandleAllCurrentEvents )
