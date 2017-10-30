@@ -17,23 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#include "Qt5Printer.hxx"
 
-#include <unx/genprn.h>
-
-class SalFrame;
-class ImplJobSetup;
-
-class Kf5InfoPrinter : public PspSalInfoPrinter
+bool Qt5InfoPrinter::Setup( SalFrame*, ImplJobSetup* )
 {
-public:
-    virtual bool Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) override;
-};
+    return false;
+}
 
-class Kf5Printer : public PspSalPrinter
+Qt5Printer::Qt5Printer( SalInfoPrinter* pInfoPrinter )
+    : PspSalPrinter( pInfoPrinter )
 {
-public:
-    Kf5Printer( SalInfoPrinter* pInfoPrinter );
-};
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

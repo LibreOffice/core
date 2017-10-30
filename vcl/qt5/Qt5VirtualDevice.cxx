@@ -17,40 +17,42 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Kf5VirtualDevice.hxx"
+#include "Qt5VirtualDevice.hxx"
 
-#include "Kf5Graphics.hxx"
+#include "Qt5Graphics.hxx"
 
 #include <QtGui/QImage>
 
-Kf5VirtualDevice::Kf5VirtualDevice( DeviceFormat eFormat, double fScale )
+Qt5VirtualDevice::Qt5VirtualDevice( DeviceFormat eFormat, double fScale )
+    : m_eFormat( eFormat )
+    , m_fScale( fScale )
 {
 }
 
-Kf5VirtualDevice::~Kf5VirtualDevice()
+Qt5VirtualDevice::~Qt5VirtualDevice()
 {
 }
 
-SalGraphics* Kf5VirtualDevice::AcquireGraphics()
+SalGraphics* Qt5VirtualDevice::AcquireGraphics()
 {
     assert( m_pImage );
-    Kf5Graphics* pGraphics = new Kf5Graphics( m_pImage.get() );
+    Qt5Graphics* pGraphics = new Qt5Graphics( m_pImage.get() );
     m_aGraphics.push_back( pGraphics );
     return pGraphics;
 }
 
-void Kf5VirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
+void Qt5VirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
 {
-    m_aGraphics.remove( dynamic_cast<Kf5Graphics*>( pGraphics ) );
+    m_aGraphics.remove( dynamic_cast<Qt5Graphics*>( pGraphics ) );
     delete pGraphics;
 }
 
-bool Kf5VirtualDevice::SetSize( long nNewDX, long nNewDY )
+bool Qt5VirtualDevice::SetSize( long nNewDX, long nNewDY )
 {
     return SetSizeUsingBuffer( nNewDX, nNewDY, nullptr );
 }
 
-bool Kf5VirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
+bool Qt5VirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
                                            sal_uInt8 * pBuffer )
 {
     if( nNewDX == 0 )
@@ -82,18 +84,18 @@ bool Kf5VirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
     m_pImage->setDevicePixelRatio( m_fScale );
 
     // update device in existing graphics
-    for( auto pKf5Graph : m_aGraphics )
-        pKf5Graph->ChangeQImage( m_pImage.get() );
+    for( auto pQt5Graph : m_aGraphics )
+        pQt5Graph->ChangeQImage( m_pImage.get() );
 
     return true;
 }
 
-long Kf5VirtualDevice::GetWidth() const
+long Qt5VirtualDevice::GetWidth() const
 {
     return m_pImage ? m_aFrameSize.getX() : 0;
 }
 
-long Kf5VirtualDevice::GetHeight() const
+long Qt5VirtualDevice::GetHeight() const
 {
     return m_pImage ? m_aFrameSize.getY() : 0;
 }
