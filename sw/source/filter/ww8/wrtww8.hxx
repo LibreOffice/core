@@ -1482,7 +1482,8 @@ private:
 public:
     SwWW8AttrIter( MSWordExportBase& rWr, const SwTextNode& rNd );
 
-    bool IsTextAttr( sal_Int32 nSwPos );
+    bool IsTextAttr( sal_Int32 nSwPos ) const;
+    bool IsExportableAttr(sal_Int32 nSwPos) const;
     bool IncludeEndOfParaCRInRedlineProperties(sal_Int32 nPos) const;
     bool IsDropCap( int nSwPos );
     bool RequiresImplicitBookmark();
