@@ -255,7 +255,7 @@
                     <navigationItem key="navigationItem" title="Properties" id="9nH-at-6AF">
                         <barButtonItem key="leftBarButtonItem" image="menu" id="wYo-zq-cqh">
                             <connections>
-                                <action selector="doProporties:" destination="h7c-B7-pKT" id="Yls-8o-msb"/>
+                                <action selector="doProperties:" destination="h7c-B7-pKT" id="Yls-8o-msb"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="trash" id="25I-J4-o11">
