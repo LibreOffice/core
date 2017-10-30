@@ -21,14 +21,23 @@
 
 #include <unx/gendata.hxx>
 
+#include <o3tl/enumarray.hxx>
+#include <vcl/ptrstyle.hxx>
+
+class QCursor;
+
 class Qt5Data : public GenericUnixSalData
 {
+    o3tl::enumarray<PointerStyle, QCursor*> m_aCursors;
+
 public:
     explicit Qt5Data( SalInstance *pInstance );
     virtual ~Qt5Data() override;
 
     virtual void ErrorTrapPush() override;
     virtual bool ErrorTrapPop( bool bIgnoreError = true ) override;
+
+    QCursor& getCursor( PointerStyle ePointerStyle );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

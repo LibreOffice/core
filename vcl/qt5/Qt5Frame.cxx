@@ -23,6 +23,7 @@
 #include "Qt5Instance.hxx"
 #include "Qt5Graphics.hxx"
 #include "Qt5Widget.hxx"
+#include "Qt5Data.hxx"
 
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
@@ -46,6 +47,7 @@ static void SvpDamageHandler( void *handle,
 Qt5Frame::Qt5Frame( Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo )
     : m_bUseCairo( bUseCairo )
     , m_bGraphicsInUse( false )
+    , m_ePointerStyle( PointerStyle::Arrow )
 {
     Qt5Instance *pInst = static_cast<Qt5Instance*>( GetSalData()->m_pInstance );
     pInst->insertFrame( this );
@@ -339,6 +341,14 @@ void Qt5Frame::ToTop( SalFrameToTop nFlags )
 
 void Qt5Frame::SetPointer( PointerStyle ePointerStyle )
 {
+    QWindow *pWindow = m_pQWidget->window()->windowHandle();
+    if( !pWindow )
+        return;
+    if( ePointerStyle == m_ePointerStyle )
+        return;
+    m_ePointerStyle = ePointerStyle;
+
+    pWindow->setCursor( static_cast<Qt5Data*>( GetSalData() )->getCursor( ePointerStyle ) );
 }
 
 void Qt5Frame::CaptureMouse( bool bMouse )
