@@ -472,7 +472,7 @@ SvXMLImportContextRef ScXMLChangeInfoContext::CreateChildContext( sal_uInt16 nPr
 void SAL_CALL ScXMLChangeInfoContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     aInfo.sUser = sAuthorBuffer.makeStringAndClear();
-    ::sax::Converter::parseDateTime(aInfo.aDateTime, nullptr,
+    ::sax::Converter::parseDateTime(aInfo.aDateTime,
             sDateTimeBuffer.makeStringAndClear());
     aInfo.sComment = sCommentBuffer.makeStringAndClear();
     pChangeTrackingImportHelper->SetActionInfo(aInfo);

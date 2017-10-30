@@ -989,8 +989,7 @@ void XMLTimeFieldImportContext::ProcessAttribute(
     {
         case XML_TOK_TEXTFIELD_TIME_VALUE:
         {
-            if (::sax::Converter::parseTimeOrDateTime(aDateTimeValue, nullptr,
-                        sAttrValue))
+            if (::sax::Converter::parseTimeOrDateTime(aDateTimeValue, sAttrValue))
             {
                 bTimeOK = true;
             }
@@ -1108,7 +1107,7 @@ void XMLDateFieldImportContext::ProcessAttribute(
     {
         case XML_TOK_TEXTFIELD_DATE_VALUE:
         {
-            if (::sax::Converter::parseDateTime(aDateTimeValue, nullptr, sAttrValue))
+            if (::sax::Converter::parseDateTime(aDateTimeValue, sAttrValue))
             {
                 bTimeOK = true;
             }
@@ -3460,7 +3459,7 @@ void XMLAnnotationImportContext::PrepareField(
     xPropertySet->setPropertyValue("Initials", makeAny(sInitials));
 
     util::DateTime aDateTime;
-    if (::sax::Converter::parseDateTime(aDateTime, nullptr,
+    if (::sax::Converter::parseDateTime(aDateTime,
                                             aDateBuffer.makeStringAndClear()))
     {
         /*

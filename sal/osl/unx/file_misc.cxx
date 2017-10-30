@@ -222,7 +222,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
 
     rtl_uString_release( ustrSystemPath );
 
-    return oslTranslateFileError(OSL_FET_ERROR, errno);
+    return oslTranslateFileError(errno);
 }
 
 oslFileError SAL_CALL osl_closeDirectory(oslDirectory pDirectory)
@@ -244,7 +244,7 @@ oslFileError SAL_CALL osl_closeDirectory(oslDirectory pDirectory)
 #endif
     {
         if (closedir( pDirImpl->pDirStruct))
-            err = oslTranslateFileError(OSL_FET_ERROR, errno);
+            err = oslTranslateFileError(errno);
     }
 
     /* cleanup members */
@@ -262,14 +262,13 @@ oslFileError SAL_CALL osl_closeDirectory(oslDirectory pDirectory)
  * on request
  *********************************************/
 
-static struct dirent* osl_readdir_impl_(DIR* pdir, bool bFilterLocalAndParentDir)
+static struct dirent* osl_readdir_impl_(DIR* pdir)
 {
     struct dirent* pdirent;
 
     while ((pdirent = readdir(pdir)) != nullptr)
     {
-        if (bFilterLocalAndParentDir &&
-            ((strcmp(pdirent->d_name, ".") == 0) || (strcmp(pdirent->d_name, "..") == 0)))
+        if ((strcmp(pdirent->d_name, ".") == 0) || (strcmp(pdirent->d_name, "..") == 0))
             continue;
         break;
     }
@@ -299,7 +298,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
     else
 #endif
     {
-        pEntry = osl_readdir_impl_(pDirImpl->pDirStruct, true);
+        pEntry = osl_readdir_impl_(pDirImpl->pDirStruct);
     }
 
     if (!pEntry)
@@ -361,7 +360,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString* ustrFileURL, oslDirector
 
     if (access_u(ustrSystemPath, F_OK) == -1)
     {
-        osl_error = oslTranslateFileError(OSL_FET_ERROR, errno);
+        osl_error = oslTranslateFileError(errno);
     }
     else
     {
@@ -414,7 +413,7 @@ oslFileError osl_createDirectoryWithFlags(
 
 #ifdef MACOSX
     if ( macxp_resolveAlias( path, PATH_MAX ) != 0 )
-      return oslTranslateFileError( OSL_FET_ERROR, errno );
+      return oslTranslateFileError( errno );
 #endif/* MACOSX */
 
     return osl_psz_createDirectory( path, flags );
@@ -435,7 +434,7 @@ oslFileError SAL_CALL osl_removeDirectory( rtl_uString* ustrDirectoryURL )
 
 #ifdef MACOSX
     if ( macxp_resolveAlias( path, PATH_MAX ) != 0 )
-      return oslTranslateFileError( OSL_FET_ERROR, errno );
+      return oslTranslateFileError( errno );
 #endif/* MACOSX */
 
     return osl_psz_removeDirectory( path );
@@ -461,7 +460,7 @@ oslFileError osl_psz_createDirectory(char const * pszPath, sal_uInt32 flags)
     if ( nRet < 0 )
     {
         nRet=errno;
-        return oslTranslateFileError(OSL_FET_ERROR, nRet);
+        return oslTranslateFileError(nRet);
     }
 
     return osl_File_E_None;
@@ -476,7 +475,7 @@ static oslFileError osl_psz_removeDirectory( const sal_Char* pszPath )
     if ( nRet < 0 )
     {
         nRet=errno;
-        return oslTranslateFileError(OSL_FET_ERROR, nRet);
+        return oslTranslateFileError(nRet);
     }
 
     return osl_File_E_None;
@@ -527,7 +526,7 @@ static oslFileError create_dir_recursively_(
         return osl_File_E_None;
 
     if (native_err != ENOENT)
-        return oslTranslateFileError(OSL_FET_ERROR, native_err);
+        return oslTranslateFileError(native_err);
 
     // we step back until '/a_dir' at maximum because
     // we should get an error unequal ENOENT when
@@ -598,7 +597,7 @@ oslFileError SAL_CALL osl_moveFile( rtl_uString* ustrFileURL, rtl_uString* ustrD
 
 #ifdef MACOSX
     if ( macxp_resolveAlias( srcPath, PATH_MAX ) != 0 || macxp_resolveAlias( destPath, PATH_MAX ) != 0 )
-      return oslTranslateFileError( OSL_FET_ERROR, errno );
+      return oslTranslateFileError( errno );
 #endif/* MACOSX */
 
     return oslDoMoveFile( srcPath, destPath );
@@ -625,7 +624,7 @@ oslFileError SAL_CALL osl_copyFile( rtl_uString* ustrFileURL, rtl_uString* ustrD
 
 #ifdef MACOSX
     if ( macxp_resolveAlias( srcPath, PATH_MAX ) != 0 || macxp_resolveAlias( destPath, PATH_MAX ) != 0 )
-      return oslTranslateFileError( OSL_FET_ERROR, errno );
+      return oslTranslateFileError( errno );
 #endif/* MACOSX */
 
     return osl_psz_copyFile( srcPath, destPath, false );
@@ -645,7 +644,7 @@ oslFileError SAL_CALL osl_removeFile( rtl_uString* ustrFileURL )
 
 #ifdef MACOSX
     if ( macxp_resolveAlias( path, PATH_MAX ) != 0 )
-      return oslTranslateFileError( OSL_FET_ERROR, errno );
+      return oslTranslateFileError( errno );
 #endif/* MACOSX */
 
     return osl_psz_removeFile( path );
@@ -686,7 +685,7 @@ static oslFileError osl_psz_removeFile( const sal_Char* pszPath )
     if ( nRet < 0 )
     {
         nRet=errno;
-        return oslTranslateFileError(OSL_FET_ERROR, nRet);
+        return oslTranslateFileError(nRet);
     }
 
     if ( S_ISDIR(aStat.st_mode) )
@@ -698,7 +697,7 @@ static oslFileError osl_psz_removeFile( const sal_Char* pszPath )
     if ( nRet < 0 )
     {
         nRet=errno;
-        return oslTranslateFileError(OSL_FET_ERROR, nRet);
+        return oslTranslateFileError(nRet);
     }
 
     return osl_File_E_None;
@@ -713,7 +712,7 @@ static oslFileError osl_psz_moveFile(const sal_Char* pszPath, const sal_Char* ps
     if ( nRet < 0 )
     {
         nRet=errno;
-        return oslTranslateFileError(OSL_FET_ERROR, nRet);
+        return oslTranslateFileError(nRet);
     }
 
     return osl_File_E_None;
@@ -738,7 +737,7 @@ static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* p
     if ( nRet < 0 )
     {
         nRet=errno;
-        return oslTranslateFileError(OSL_FET_ERROR, nRet);
+        return oslTranslateFileError(nRet);
     }
 
     /* mfe: we do only copy files here! */
@@ -848,7 +847,7 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
 
     if ( nRet > 0 )
     {
-        return oslTranslateFileError(OSL_FET_ERROR, nRet);
+        return oslTranslateFileError(nRet);
     }
 
     if ( DestFileExists == 1 )

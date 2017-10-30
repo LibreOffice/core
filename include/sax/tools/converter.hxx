@@ -170,17 +170,14 @@ public:
 
     /** convert util::DateTime to XMLSchema-2 "time" or "dateTime" string */
     static void convertTimeOrDateTime(OUStringBuffer& rBuffer,
-                            const css::util::DateTime& rDateTime,
-                            sal_Int16 const* pTimeZoneOffset);
+                            const css::util::DateTime& rDateTime);
 
     /** convert XMLSchema-2 "date" or "dateTime" string to util::DateTime */
     static bool parseDateTime( css::util::DateTime& rDateTime,
-                                 boost::optional<sal_Int16> * pTimeZoneOffset,
                                  const OUString& rString );
 
     /** convert XMLSchema-2 "time" or "dateTime" string to util::DateTime */
     static bool parseTimeOrDateTime(css::util::DateTime& rDateTime,
-                                 boost::optional<sal_Int16> * pTimeZoneOffset,
                                  const OUString& rString);
 
     /** convert XMLSchema-2 "date" or "dateTime" string to util::DateTime or

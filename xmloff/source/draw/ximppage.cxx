@@ -197,7 +197,7 @@ void DrawAnnotationContext::EndElement()
         mxAnnotation->setInitials( maInitialsBuffer.makeStringAndClear() );
 
         util::DateTime aDateTime;
-        if (::sax::Converter::parseDateTime(aDateTime, nullptr,
+        if (::sax::Converter::parseDateTime(aDateTime,
                 maDateBuffer.makeStringAndClear()))
         {
             mxAnnotation->setDateTime(aDateTime);

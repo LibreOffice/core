@@ -289,7 +289,7 @@ void RevisionHeadersFragment::importHeader( const AttributeList& rAttribs )
     if (!aDateTimeStr.isEmpty())
     {
         util::DateTime aDateTime;
-        sax::Converter::parseDateTime(aDateTime, nullptr, aDateTimeStr);
+        sax::Converter::parseDateTime(aDateTime, aDateTimeStr);
         Date aDate(aDateTime);
         tools::Time aTime(aDateTime);
         aMetadata.maDateTime.SetDate(aDate.GetDate());

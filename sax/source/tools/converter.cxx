@@ -1334,19 +1334,18 @@ static void convertTimeZone(
 /** convert util::DateTime to ISO "time" or "dateTime" string */
 void Converter::convertTimeOrDateTime(
         OUStringBuffer& i_rBuffer,
-        const css::util::DateTime& i_rDateTime,
-        sal_Int16 const* pTimeZoneOffset)
+        const css::util::DateTime& i_rDateTime)
 {
     if (i_rDateTime.Year == 0 ||
         i_rDateTime.Month < 1 || i_rDateTime.Month > 12 ||
         i_rDateTime.Day < 1 || i_rDateTime.Day > 31)
     {
         convertTime(i_rBuffer, i_rDateTime);
-        convertTimeZone(i_rBuffer, i_rDateTime, pTimeZoneOffset);
+        convertTimeZone(i_rBuffer, i_rDateTime, nullptr);
     }
     else
     {
-        convertDateTime(i_rBuffer, i_rDateTime, pTimeZoneOffset, true);
+        convertDateTime(i_rBuffer, i_rDateTime, nullptr, true);
     }
 }
 
@@ -1397,11 +1396,10 @@ void Converter::convertDateTime(
 
 /** convert ISO "date" or "dateTime" string to util::DateTime */
 bool Converter::parseDateTime(   util::DateTime& rDateTime,
-                             boost::optional<sal_Int16> *const pTimeZoneOffset,
                                  const OUString& rString )
 {
     bool isDateTime;
-    return parseDateOrDateTime(nullptr, rDateTime, isDateTime, pTimeZoneOffset,
+    return parseDateOrDateTime(nullptr, rDateTime, isDateTime, nullptr,
             rString);
 }
 
@@ -1851,12 +1849,11 @@ static bool lcl_parseDateTime(
 /** convert ISO "time" or "dateTime" string to util::DateTime */
 bool Converter::parseTimeOrDateTime(
                 util::DateTime & rDateTime,
-                boost::optional<sal_Int16> * pTimeZoneOffset,
                 const OUString & rString)
 {
     bool dummy;
     return lcl_parseDateTime(
-                nullptr, rDateTime, dummy, pTimeZoneOffset, rString, true);
+                nullptr, rDateTime, dummy, nullptr, rString, true);
 }
 
 /** convert ISO "date" or "dateTime" string to util::DateTime or util::Date */

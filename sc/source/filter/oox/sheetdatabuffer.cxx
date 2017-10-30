@@ -208,7 +208,7 @@ void SheetDataBuffer::setErrorCell( const CellModel& rModel, sal_uInt8 nErrorCod
 void SheetDataBuffer::setDateCell( const CellModel& rModel, const OUString& rDateString )
 {
     css::util::DateTime aDateTime;
-    if (!sax::Converter::parseDateTime( aDateTime, nullptr, rDateString))
+    if (!sax::Converter::parseDateTime( aDateTime, rDateString))
     {
         SAL_WARN("sc.filter", "SheetDataBuffer::setDateCell - could not parse: " << rDateString);
         // At least don't lose data.

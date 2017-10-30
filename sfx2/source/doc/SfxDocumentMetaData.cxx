@@ -464,7 +464,7 @@ textToDateOrDateTime(css::util::Date & io_rd, css::util::DateTime & io_rdt,
 bool SAL_CALL
 textToDateTime(css::util::DateTime & io_rdt, const OUString& i_text) throw ()
 {
-    if (::sax::Converter::parseDateTime(io_rdt, nullptr, i_text)) {
+    if (::sax::Converter::parseDateTime(io_rdt, i_text)) {
         return true;
     } else {
         SAL_WARN_IF(!i_text.isEmpty(), "sfx.doc", "Invalid date: " << i_text);

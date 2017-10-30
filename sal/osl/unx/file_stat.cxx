@@ -172,7 +172,7 @@ namespace
     {
         rtl::OUString link_target;
         if (!osl::realpath(file_path, link_target))
-            return oslTranslateFileError(OSL_FET_ERROR, errno);
+            return oslTranslateFileError(errno);
 
         oslFileError osl_error = osl_getFileURLFromSystemPath(link_target.pData, &pStat->ustrLinkTargetURL);
         if (osl_error != osl_File_E_None)
@@ -212,7 +212,7 @@ oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pS
 
     bool bStatNeeded = is_stat_call_necessary(uFieldMask, pImpl->getFileType());
     if (bStatNeeded && (osl::lstat(file_path, file_stat) != 0))
-        return oslTranslateFileError(OSL_FET_ERROR, errno);
+        return oslTranslateFileError(errno);
 
     if (bStatNeeded)
     {
@@ -290,7 +290,7 @@ static oslFileError osl_psz_setFileAttributes( const sal_Char* pszFilePath, sal_
         nNewMode|=S_IXOTH;
 
     if (chmod(pszFilePath, nNewMode) < 0)
-        osl_error = oslTranslateFileError(OSL_FET_ERROR, errno);
+        osl_error = oslTranslateFileError(errno);
 
     return osl_error;
 }
@@ -309,7 +309,7 @@ oslFileError SAL_CALL osl_setFileAttributes( rtl_uString* ustrFileURL, sal_uInt6
 
 #ifdef MACOSX
     if ( macxp_resolveAlias( path, PATH_MAX ) != 0 )
-      return oslTranslateFileError( OSL_FET_ERROR, errno );
+      return oslTranslateFileError( errno );
 #endif/* MACOSX */
 
     return osl_psz_setFileAttributes( path, uAttributes );
@@ -332,7 +332,7 @@ static oslFileError osl_psz_setFileTime (
     if ( nRet < 0 )
     {
         nRet=errno;
-        return oslTranslateFileError(OSL_FET_ERROR, nRet);
+        return oslTranslateFileError(nRet);
     }
 
 #ifdef DEBUG_OSL_FILE
@@ -389,7 +389,7 @@ static oslFileError osl_psz_setFileTime (
     if ( nRet < 0 )
     {
         nRet=errno;
-        return oslTranslateFileError(OSL_FET_ERROR, nRet);
+        return oslTranslateFileError(nRet);
     }
 
     return osl_File_E_None;
@@ -413,7 +413,7 @@ oslFileError SAL_CALL osl_setFileTime (
 
 #ifdef MACOSX
     if ( macxp_resolveAlias( path, PATH_MAX ) != 0 )
-      return oslTranslateFileError( OSL_FET_ERROR, errno );
+      return oslTranslateFileError( errno );
 #endif/* MACOSX */
 
     return osl_psz_setFileTime( path, pLastAccessTime, pLastWriteTime );
