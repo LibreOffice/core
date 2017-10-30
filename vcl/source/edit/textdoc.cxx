@@ -328,8 +328,7 @@ TextNode* TextNode::Split( sal_Int32 nPos )
             SAL_WARN_IF( rAttrib.GetStart() < nPos, "vcl", "Start < nPos!" );
             SAL_WARN_IF( rAttrib.GetEnd() < nPos, "vcl", "End < nPos!" );
             // move all into the new node (this)
-            maCharAttribs.RemoveAttrib( nAttr );
-            pNew->maCharAttribs.InsertAttrib( &rAttrib );
+            pNew->maCharAttribs.InsertAttrib(maCharAttribs.RemoveAttrib(nAttr).release());
             rAttrib.GetStart() = rAttrib.GetStart() - nPos;
             rAttrib.GetEnd() = rAttrib.GetEnd() - nPos;
             nAttr--;
