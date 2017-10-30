@@ -80,7 +80,7 @@ void XSheetFilterable::testFilter()
     bool bIsVisible = true;
     CPPUNIT_ASSERT(xRowProps->getPropertyValue("IsVisible") >>= bIsVisible);
 
-    CPPUNIT_ASSERT_MESSAGE("Row 1 should be invisible", bIsVisible == false);
+    CPPUNIT_ASSERT_MESSAGE("Row 1 should be invisible", !bIsVisible);
 }
 
 }
