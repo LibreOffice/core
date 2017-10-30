@@ -926,6 +926,12 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
         return static_cast<cppu::OWeakObject *>(new SvxUnoTextField( text::textfield::Type::PAGE_NAME ));
     }
 
+    if (aServiceSpecifier == "com.sun.star.text.TextField.DocInfo.Custom" ||
+        aServiceSpecifier == "com.sun.star.text.textfield.DocInfo.Custom")
+    {
+        return static_cast<cppu::OWeakObject *>(new SvxUnoTextField(text::textfield::Type::DOCINFO_CUSTOM));
+    }
+
     if( aServiceSpecifier == "com.sun.star.xml.NamespaceMap" )
     {
         static sal_uInt16 aWhichIds[] = { SDRATTR_XMLATTRIBUTES, EE_CHAR_XMLATTRIBS, EE_PARA_XMLATTRIBS, 0 };

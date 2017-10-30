@@ -24,6 +24,7 @@
 #include <tools/urlobj.hxx>
 
 #include <editeng/flditem.hxx>
+#include <editeng/CustomPropertyField.hxx>
 #include <editeng/measfld.hxx>
 #include <editeng/unonames.hxx>
 
@@ -216,6 +217,16 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                 return new SvxFooterField();
             case text::textfield::Type::PRESENTATION_DATE_TIME:
                 return new SvxDateTimeField();
+            case text::textfield::Type::DOCINFO_CUSTOM:
+                {
+                    OUString sName;
+                    xPropSet->getPropertyValue(UNO_TC_PROP_NAME) >>= sName;
+
+                    OUString sCurrentPresentation;
+                    xPropSet->getPropertyValue(UNO_TC_PROP_CURRENT_PRESENTATION) >>= sCurrentPresentation;
+
+                    return new editeng::CustomPropertyField(sName, sCurrentPresentation);
+                }
             default:
                 ;
         };

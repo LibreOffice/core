@@ -25,6 +25,7 @@
 
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/CustomPropertyField.hxx>
 #include <editeng/measfld.hxx>
 #include <editeng/unofield.hxx>
 #include <editeng/unotext.hxx>
@@ -128,6 +129,17 @@ const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
     };
     static const SfxItemPropertySet aMeasureFieldPropertySet_Impl(aMeasureFieldPropertyMap_Impl);
 
+    static const SfxItemPropertyMapEntry aDocInfoCustomFieldPropertyMap_Impl[] =
+    {
+        { OUString(UNO_TC_PROP_NAME),                 WID_STRING1, cppu::UnoType<OUString>::get(),   0, 0 },
+        { OUString(UNO_TC_PROP_CURRENT_PRESENTATION), WID_STRING2, cppu::UnoType<OUString>::get(),   0, 0 },
+        { OUString(UNO_TC_PROP_IS_FIXED),             WID_BOOL1,   cppu::UnoType<bool>::get(),       0, 0 },
+        { OUString(UNO_TC_PROP_NUMFORMAT),            WID_INT32,   cppu::UnoType<sal_Int32>::get(),  0, 0 },
+        { OUString(UNO_TC_PROP_IS_FIXED_LANGUAGE),    WID_BOOL2,   cppu::UnoType<bool>::get(),       0, 0 },
+        { OUString(), 0, css::uno::Type(), 0, 0 }
+    };
+    static const SfxItemPropertySet aDocInfoCustomFieldPropertySet_Impl(aDocInfoCustomFieldPropertyMap_Impl);
+
     switch( mnId )
     {
     case text::textfield::Type::EXTENDED_TIME:
@@ -143,6 +155,8 @@ const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
         return &aAuthorFieldPropertySet_Impl;
     case text::textfield::Type::MEASURE:
         return &aMeasureFieldPropertySet_Impl;
+    case text::textfield::Type::DOCINFO_CUSTOM:
+        return &aDocInfoCustomFieldPropertySet_Impl;
     default:
         return &aEmptyPropertySet_Impl;
     }
@@ -281,6 +295,12 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
         mpImpl->mnInt16 = static_cast<sal_uInt16>(SdrMeasureFieldKind::Value);
         break;
 
+    case text::textfield::Type::DOCINFO_CUSTOM:
+        mpImpl->mbBoolean1 = true;
+        mpImpl->mbBoolean2 = true;
+        mpImpl->mnInt32 = 0;
+        break;
+
     default:
         mpImpl->mbBoolean1 = false;
         mpImpl->mbBoolean2 = false;
@@ -362,6 +382,14 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAn
 
             case text::textfield::Type::MEASURE:
                 mpImpl->mnInt16     = sal::static_int_cast< sal_Int16 >(static_cast<const SdrMeasureField*>(pData)->GetMeasureFieldKind());
+                break;
+
+            case text::textfield::Type::DOCINFO_CUSTOM:
+                mpImpl->msString1 = static_cast<const editeng::CustomPropertyField*>(pData)->GetName();
+                mpImpl->msString2 = static_cast<const editeng::CustomPropertyField*>(pData)->GetCurrentPresentation();
+                mpImpl->mbBoolean1 = false;
+                mpImpl->mbBoolean2 = false;
+                mpImpl->mnInt32 = 0;
                 break;
 
             default:
@@ -512,6 +540,9 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
     case text::textfield::Type::PAGE_NAME:
         pData = new SvxPageTitleField();
         break;
+    case text::textfield::Type::DOCINFO_CUSTOM:
+        pData = new editeng::CustomPropertyField(mpImpl->msString1, mpImpl->msString2);
+        break;
     };
 
     return pData;
@@ -611,6 +642,8 @@ OUString SAL_CALL SvxUnoTextField::getPresentation( sal_Bool bShowCommand )
                 return OUString("DateTime");
             case text::textfield::Type::PAGE_NAME:
                 return OUString("PageName");
+            case text::textfield::Type::DOCINFO_CUSTOM:
+                return OUString("Custom");
             default:
                 return OUString("Unknown");
         }
@@ -853,6 +886,10 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
             pServices[2] = "com.sun.star.text.TextField.PageName";
             pServices[3] = "com.sun.star.text.textfield.PageName";
         break;
+        case text::textfield::Type::DOCINFO_CUSTOM:
+            pServices[2] = "com.sun.star.text.TextField.DocInfo.Custom";
+            pServices[3] = "com.sun.star.text.textfield.DocInfo.Custom";
+        break;
         default:
             aSeq.realloc(0);
     }
@@ -917,6 +954,10 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const OUSt
         else if ( aFieldType == "Measure" )
         {
             nId = text::textfield::Type::MEASURE;
+        }
+        else if (aFieldType == "DocInfo.Custom")
+        {
+            nId = text::textfield::Type::DOCINFO_CUSTOM;
         }
 
         if (nId != text::textfield::Type::UNSPECIFIED)
