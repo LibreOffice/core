@@ -29,16 +29,16 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 9
 
-class ScAreaLink : public CalcUnoApiTest, public apitest::CellAreaLink, public apitest::XAreaLink
+class ScAreaLinkObj : public CalcUnoApiTest, public apitest::CellAreaLink, public apitest::XAreaLink
 {
 public:
-    ScAreaLink();
+    ScAreaLinkObj();
 
     virtual uno::Reference< uno::XInterface > init() override;
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    CPPUNIT_TEST_SUITE(ScAreaLink);
+    CPPUNIT_TEST_SUITE(ScAreaLinkObj);
 
     // CellAreaLink
     CPPUNIT_TEST(testUrl);
@@ -61,15 +61,15 @@ private:
 
 };
 
-sal_Int32 ScAreaLink::nTest = 0;
-uno::Reference< lang::XComponent > ScAreaLink::mxComponent;
+sal_Int32 ScAreaLinkObj::nTest = 0;
+uno::Reference< lang::XComponent > ScAreaLinkObj::mxComponent;
 
-ScAreaLink::ScAreaLink()
+ScAreaLinkObj::ScAreaLinkObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
-uno::Reference< uno::XInterface > ScAreaLink::init()
+uno::Reference< uno::XInterface > ScAreaLinkObj::init()
 {
     // create a calc document
     if (!mxComponent.is())
@@ -88,13 +88,13 @@ uno::Reference< uno::XInterface > ScAreaLink::init()
     return xLink;
 }
 
-void ScAreaLink::setUp()
+void ScAreaLinkObj::setUp()
 {
     nTest++;
     CalcUnoApiTest::setUp();
 }
 
-void ScAreaLink::tearDown()
+void ScAreaLinkObj::tearDown()
 {
     if (nTest == NUMBER_OF_TESTS)
     {
@@ -105,7 +105,7 @@ void ScAreaLink::tearDown()
     CalcUnoApiTest::tearDown();
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ScAreaLink);
+CPPUNIT_TEST_SUITE_REGISTRATION(ScAreaLinkObj);
 
 } // end namespace
 
