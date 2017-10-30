@@ -31,19 +31,6 @@ namespace comphelper
     }
 
 
-    SharedMutex::SharedMutex( const SharedMutex& _rhs )
-        :m_pMutexImpl()
-    {
-        *this = _rhs;
-    }
-
-
-    SharedMutex& SharedMutex::operator=( const SharedMutex& _rhs )
-    {
-        m_pMutexImpl = _rhs.m_pMutexImpl;
-        return *this;
-    }
-
     RefCountedMutex::~RefCountedMutex()
     {
     }
