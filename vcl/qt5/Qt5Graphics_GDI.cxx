@@ -28,10 +28,101 @@
 #include <QtGui/QWindow>
 #include <QtWidgets/QWidget>
 
+static const basegfx::B2DPoint aHalfPointOfs ( 0.5, 0.5 );
+
+static void AddPolygonToPath( QPainterPath& rPath,
+                              const basegfx::B2DPolygon& rPolygon,
+                              bool bClosePath, bool bPixelSnap, bool bLineDraw )
+{
+    // short circuit if there is nothing to do
+    const int nPointCount = rPolygon.count();
+    if( nPointCount <= 0 )
+        return;
+
+    const bool bHasCurves = rPolygon.areControlPointsUsed();
+    for( int nPointIdx = 0, nPrevIdx = 0;; nPrevIdx = nPointIdx++ )
+    {
+        int nClosedIdx = nPointIdx;
+        if( nPointIdx >= nPointCount )
+        {
+            // prepare to close last curve segment if needed
+            if( bClosePath && (nPointIdx == nPointCount) )
+                nClosedIdx = 0;
+            else
+                break;
+        }
+
+        basegfx::B2DPoint aPoint = rPolygon.getB2DPoint( nClosedIdx );
+
+        if( bPixelSnap )
+        {
+            // snap device coordinates to full pixels
+            aPoint.setX( basegfx::fround( aPoint.getX() ) );
+            aPoint.setY( basegfx::fround( aPoint.getY() ) );
+        }
+
+        if( bLineDraw )
+            aPoint += aHalfPointOfs;
+        if( !nPointIdx )
+        {
+            // first point => just move there
+            rPath.moveTo( aPoint.getX(), aPoint.getY() );
+            continue;
+        }
+
+        bool bPendingCurve = false;
+        if( bHasCurves )
+        {
+            bPendingCurve = rPolygon.isNextControlPointUsed( nPrevIdx );
+            bPendingCurve |= rPolygon.isPrevControlPointUsed( nClosedIdx );
+        }
+
+        if( !bPendingCurve )    // line segment
+            rPath.lineTo( aPoint.getX(), aPoint.getY() );
+        else                    // cubic bezier segment
+        {
+            basegfx::B2DPoint aCP1 = rPolygon.getNextControlPoint( nPrevIdx );
+            basegfx::B2DPoint aCP2 = rPolygon.getPrevControlPoint( nClosedIdx );
+            if( bLineDraw )
+            {
+                aCP1 += aHalfPointOfs;
+                aCP2 += aHalfPointOfs;
+            }
+            rPath.cubicTo( aCP1.getX(), aCP1.getY(),
+                           aCP2.getX(), aCP2.getY(), aPoint.getX(), aPoint.getY() );
+        }
+    }
+
+    if( bClosePath )
+        rPath.closeSubpath();
+}
+
+static bool AddPolyPolygonToPath( QPainterPath& rPath,
+                                  const basegfx::B2DPolyPolygon& rPolyPoly,
+                                  bool bPixelSnap, bool bLineDraw )
+{
+    const int nPolyCount = rPolyPoly.count();
+    if( nPolyCount <= 0 )
+        return false;
+    for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
+    {
+        const basegfx::B2DPolygon rPolygon = rPolyPoly.getB2DPolygon( nPolyIdx );
+        AddPolygonToPath( rPath, rPolygon, true, bPixelSnap, bLineDraw );
+    }
+    return true;
+}
+
 bool Qt5Graphics::setClipRegion( const vcl::Region& rRegion )
 {
     if ( rRegion.IsRectangle() )
+    {
         m_aClipRegion = toQRect( rRegion.GetBoundRect() );
+        if ( !m_aClipPath.isEmpty() )
+        {
+            QPainterPath aPath;
+            m_aClipPath.swap( aPath );
+        }
+    }
     else if( !rRegion.HasPolyPolygonOrB2DPolyPolygon() )
     {
         QRegion aQRegion;
@@ -40,10 +131,23 @@ bool Qt5Graphics::setClipRegion( const vcl::Region& rRegion )
         for ( auto & rRect : aRectangles )
             aQRegion += toQRect( rRect );
         m_aClipRegion = aQRegion;
+        if ( !m_aClipPath.isEmpty() )
+        {
+            QPainterPath aPath;
+            m_aClipPath.swap( aPath );
+        }
     }
     else
     {
-        QPolygon aPolygon;
+        QPainterPath aPath;
+        const basegfx::B2DPolyPolygon aPolyClip( rRegion.GetAsB2DPolyPolygon() );
+        AddPolyPolygonToPath( aPath, aPolyClip, !getAntiAliasB2DDraw(), false );
+        m_aClipPath.swap( aPath );
+        if ( !m_aClipRegion.isEmpty() )
+        {
+            QRegion aRegion;
+            m_aClipRegion.swap( aRegion );
+        }
     }
     return true;
 }
@@ -51,6 +155,11 @@ bool Qt5Graphics::setClipRegion( const vcl::Region& rRegion )
 void Qt5Graphics::ResetClipRegion()
 {
     m_aClipRegion = QRegion( m_pQImage->rect() );
+    if ( !m_aClipPath.isEmpty() )
+    {
+        QPainterPath aPath;
+        m_aClipPath.swap( aPath );
+    }
 }
 
 void Qt5Graphics::drawPixel( long nX, long nY )
@@ -101,13 +210,32 @@ void Qt5Graphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 
 void Qt5Graphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry )
 {
-    if( 0 == nPoly )
-        return;
 }
 
-bool Qt5Graphics::drawPolyPolygon( const basegfx::B2DPolyPolygon&, double fTransparency )
+bool Qt5Graphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly,
+                                   double fTransparency )
 {
-    return false;
+    // ignore invisible polygons
+    if (SALCOLOR_NONE == m_aFillColor && SALCOLOR_NONE == m_aLineColor )
+        return true;
+    if( (fTransparency >= 1.0) || (fTransparency < 0) )
+        return true;
+
+    QPainterPath aPath;
+    // ignore empty polygons
+    if( !AddPolyPolygonToPath( aPath, rPolyPoly, !getAntiAliasB2DDraw(),
+                               m_aLineColor != SALCOLOR_NONE ) )
+        return true;
+
+    PREPARE_PAINTER;
+
+    QBrush aBrush = aPainter.brush();
+    aBrush.setStyle( SALCOLOR_NONE == m_aFillColor ? Qt::NoBrush : Qt::SolidPattern );
+    aPainter.setBrush( aBrush );
+
+    aPainter.drawPath( aPath );
+
+    return true;
 }
 
 bool Qt5Graphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
@@ -126,14 +254,58 @@ bool Qt5Graphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPo
     return false;
 }
 
-bool Qt5Graphics::drawPolyLine( const basegfx::B2DPolygon&,
+bool Qt5Graphics::drawPolyLine( const basegfx::B2DPolygon& rPolyLine,
                                 double fTransparency,
                                 const basegfx::B2DVector& rLineWidths,
-                                basegfx::B2DLineJoin,
+                                basegfx::B2DLineJoin eLineJoin,
                                 css::drawing::LineCap eLineCap,
                                 double fMiterMinimumAngle )
 {
-    return false;
+    if (SALCOLOR_NONE == m_aFillColor && SALCOLOR_NONE == m_aLineColor )
+        return true;
+
+    if( basegfx::B2DLineJoin::NONE == eLineJoin )
+        return false;
+
+    // short circuit if there is nothing to do
+    const int nPointCount = rPolyLine.count();
+    if( nPointCount <= 0 )
+        return true;
+
+    // setup poly-polygon path
+    QPainterPath aPath;
+    AddPolygonToPath( aPath, rPolyLine, rPolyLine.isClosed(),
+                      !getAntiAliasB2DDraw(), true );
+
+    QPainter aPainter;
+    PreparePainter( aPainter, 255 * fTransparency );
+
+    // setup line attributes
+    QPen aPen = aPainter.pen();
+    aPen.setWidth( rLineWidths.getX() );
+
+    switch( eLineJoin )
+    {
+    case basegfx::B2DLineJoin::NONE: std::abort(); return false;
+    case basegfx::B2DLineJoin::Bevel: aPen.setJoinStyle( Qt::BevelJoin ); break;
+    case basegfx::B2DLineJoin::Round: aPen.setJoinStyle( Qt::RoundJoin ); break;
+    case basegfx::B2DLineJoin::Miter:
+        aPen.setMiterLimit( 1.0 / sin(fMiterMinimumAngle / 2.0) );
+        aPen.setJoinStyle( Qt::MiterJoin );
+        break;
+    }
+
+    switch(eLineCap)
+    {
+    default: // css::drawing::LineCap_BUTT:
+        aPen.setCapStyle( Qt::FlatCap ); break;
+    case css::drawing::LineCap_ROUND: aPen.setCapStyle( Qt::RoundCap ); break;
+    case css::drawing::LineCap_SQUARE: aPen.setCapStyle( Qt::SquareCap ); break;
+    }
+
+    aPainter.setPen( aPen );
+    aPainter.drawPath( aPath );
+    return true;
 }
 
 bool Qt5Graphics::drawGradient( const tools::PolyPolygon&, const Gradient& )
