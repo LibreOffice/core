@@ -254,10 +254,9 @@ public:
     void ParseScriptOptions( OUString& rLangString, const OUString&, HTMLScriptLanguage& rLang,
                              OUString& rSrc, OUString& rLibrary, OUString& rModule );
 
-    // remove a comment around the content of <SCRIPT> or <STYLE>
-    // In case of 'bFull', the whole line behind a "<!--" might
-    // be deleted (for JavaScript)
-    static void RemoveSGMLComment( OUString &rString, bool bFull );
+    // Remove a comment around the content of <SCRIPT> or <STYLE>.
+    // The whole line behind a "<!--" might be deleted (for JavaScript).
+    static void RemoveSGMLComment( OUString &rString );
 
     static bool InternalImgToPrivateURL( OUString& rURL );
     static rtl_TextEncoding GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPHeader );

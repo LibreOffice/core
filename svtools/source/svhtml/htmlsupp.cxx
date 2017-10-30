@@ -78,7 +78,7 @@ void HTMLParser::ParseScriptOptions( OUString& rLangString, const OUString& rBas
     }
 }
 
-void HTMLParser::RemoveSGMLComment( OUString &rString, bool bFull )
+void HTMLParser::RemoveSGMLComment( OUString &rString )
 {
     sal_Unicode c = 0;
     while( !rString.isEmpty() &&
@@ -94,20 +94,16 @@ void HTMLParser::RemoveSGMLComment( OUString &rString, bool bFull )
     // remove SGML comments
     if( rString.startsWith( "<!--" ) )
     {
-        sal_Int32 nPos = 3;
-        if( bFull )
-        {
-            // the whole line
-            nPos = 4;
-            while( nPos < rString.getLength() &&
-                ( ( c = rString[nPos] ) != '\r' && c != '\n' ) )
-                ++nPos;
-            if( c == '\r' && nPos+1 < rString.getLength() &&
-                '\n' == rString[nPos+1] )
-                ++nPos;
-            else if( c != '\n' )
-                nPos = 3;
-        }
+        // the whole line
+        sal_Int32 nPos = 4;
+        while( nPos < rString.getLength() &&
+            ( ( c = rString[nPos] ) != '\r' && c != '\n' ) )
+            ++nPos;
+        if( c == '\r' && nPos+1 < rString.getLength() &&
+            '\n' == rString[nPos+1] )
+            ++nPos;
+        else if( c != '\n' )
+            nPos = 3;
         ++nPos;
         rString = rString.copy( nPos );
     }
@@ -115,33 +111,30 @@ void HTMLParser::RemoveSGMLComment( OUString &rString, bool bFull )
     if( rString.endsWith("-->") )
     {
         rString = rString.copy( 0, rString.getLength()-3 );
-        if( bFull )
+        // "//" or "'", maybe preceding CR/LF
+        rString = comphelper::string::stripEnd(rString, ' ');
+        sal_Int32 nDel = 0, nLen = rString.getLength();
+        if( nLen >= 2 &&
+            rString.endsWith("//") )
         {
-            // "//" or "'", maybe preceding CR/LF
-            rString = comphelper::string::stripEnd(rString, ' ');
-            sal_Int32 nDel = 0, nLen = rString.getLength();
-            if( nLen >= 2 &&
-                rString.endsWith("//") )
-            {
-                nDel = 2;
-            }
-            else if( nLen && '\'' == rString[nLen-1] )
-            {
-                nDel = 1;
-            }
-            if( nDel && nLen >= nDel+1 )
-            {
-                c = rString[nLen-(nDel+1)];
-                if( '\r'==c || '\n'==c )
-                {
-                    nDel++;
-                    if( '\n'==c && nLen >= nDel+1 &&
-                        '\r'==rString[nLen-(nDel+1)] )
-                        nDel++;
-                }
-            }
-            rString = rString.copy( 0, nLen-nDel );
+            nDel = 2;
         }
+        else if( nLen && '\'' == rString[nLen-1] )
+        {
+            nDel = 1;
+        }
+        if( nDel && nLen >= nDel+1 )
+        {
+            c = rString[nLen-(nDel+1)];
+            if( '\r'==c || '\n'==c )
+            {
+                nDel++;
+                if( '\n'==c && nLen >= nDel+1 &&
+                    '\r'==rString[nLen-(nDel+1)] )
+                    nDel++;
+            }
+        }
+        rString = rString.copy( 0, nLen-nDel );
     }
 }
 

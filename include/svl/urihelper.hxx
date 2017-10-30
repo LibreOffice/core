@@ -57,7 +57,6 @@ SVL_DLLPUBLIC OUString SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                                     INetURLObject::EncodeMechanism eEncodeMechanism = INetURLObject::EncodeMechanism::WasEncoded,
                                     INetURLObject::DecodeMechanism eDecodeMechanism = INetURLObject::DecodeMechanism::ToIUri,
                                     rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
-                                    bool bRelativeNonURIs = false,
                                     FSysStyle eStyle = FSysStyle::Detect);
 
 SVL_DLLPUBLIC void SetMaybeFileHdl(Link<OUString *, bool> const & rTheMaybeFileHdl);

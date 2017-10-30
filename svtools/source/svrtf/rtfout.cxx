@@ -182,11 +182,11 @@ SvStream& Out_Char(SvStream& rStream, sal_Unicode c,
 }
 
 SvStream& RTFOutFuncs::Out_String( SvStream& rStream, const OUString& rStr,
-    rtl_TextEncoding eDestEnc, bool bWriteHelpFile)
+    rtl_TextEncoding eDestEnc)
 {
     int nUCMode = 1;
     for (sal_Int32 n = 0; n < rStr.getLength(); ++n)
-        Out_Char(rStream, rStr[n], &nUCMode, eDestEnc, bWriteHelpFile);
+        Out_Char(rStream, rStr[n], &nUCMode, eDestEnc, false/*bWriteHelpFile*/);
     if (nUCMode != 1)
       rStream.WriteCharPtr( "\\uc1" ).WriteCharPtr( " " ); // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
     return rStream;

@@ -239,16 +239,12 @@ void BrowserDataWin::LeaveUpdateLock()
     }
 }
 
-void InitSettings_Impl(vcl::Window* pWin, bool bFont, bool bForeground)
+void InitSettings_Impl(vcl::Window* pWin)
 {
     const StyleSettings& rStyleSettings = pWin->GetSettings().GetStyleSettings();
 
-    if (bFont)
-        pWin->ApplyControlFont(*pWin, rStyleSettings.GetFieldFont());
-
-    if (bFont || bForeground)
-        pWin->ApplyControlForeground(*pWin, rStyleSettings.GetWindowTextColor());
-
+    pWin->ApplyControlFont(*pWin, rStyleSettings.GetFieldFont());
+    pWin->ApplyControlForeground(*pWin, rStyleSettings.GetWindowTextColor());
     pWin->ApplyControlBackground(*pWin, rStyleSettings.GetWindowColor());
 }
 

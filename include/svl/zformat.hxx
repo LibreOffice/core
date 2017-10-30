@@ -356,9 +356,7 @@ public:
     bool HasNewCurrency() const;
 
     // strip [$-yyy] from all [$xxx-yyy] leaving only xxx's,
-    // if bQuoteSymbol==true the xxx will become "xxx"
-    static OUString StripNewCurrencyDelimiters( const OUString& rStr,
-                                                bool bQuoteSymbol );
+    static OUString StripNewCurrencyDelimiters( const OUString& rStr );
 
     // If a new SYMBOLTYPE_CURRENCY is contained if the format is of type
     // css::util::NumberFormat::CURRENCY, and if so the symbol xxx and the extension nnn
