@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Kf5Instance.hxx"
-#include <Kf5Instance.moc>
+#include "Qt5Instance.hxx"
+#include <Qt5Instance.moc>
 
-#include "Kf5Frame.hxx"
-#include "Kf5Data.hxx"
-#include "Kf5Timer.hxx"
-#include "Kf5VirtualDevice.hxx"
-#include "Kf5Object.hxx"
-#include "Kf5Bitmap.hxx"
+#include "Qt5Frame.hxx"
+#include "Qt5Data.hxx"
+#include "Qt5Timer.hxx"
+#include "Qt5VirtualDevice.hxx"
+#include "Qt5Object.hxx"
+#include "Qt5Bitmap.hxx"
 
 #include <QtCore/QThread>
 #include <QtWidgets/QApplication>
@@ -38,11 +38,7 @@
 #include <headless/svpdummies.hxx>
 #include <headless/svpbmp.hxx>
 
-#include <KAboutData>
-#include <KLocalizedString>
-#include <KStartupInfo>
-
-Kf5Instance::Kf5Instance( SalYieldMutex* pMutex )
+Qt5Instance::Qt5Instance( SalYieldMutex* pMutex )
     : SalGenericInstance( pMutex )
     , m_postUserEventId( -1 )
 {
@@ -54,7 +50,7 @@ Kf5Instance::Kf5Instance( SalYieldMutex* pMutex )
              this, SLOT( ImplYield( bool, bool )), Qt::BlockingQueuedConnection );
 }
 
-Kf5Instance::~Kf5Instance()
+Qt5Instance::~Qt5Instance()
 {
     // force freeing the QApplication before freeing the arguments,
     // as it uses references to the provided arguments!
@@ -63,59 +59,59 @@ Kf5Instance::~Kf5Instance()
         free( m_pFakeArgvFreeable[i] );
 }
 
-SalFrame* Kf5Instance::CreateChildFrame( SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle )
+SalFrame* Qt5Instance::CreateChildFrame( SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle )
 {
-    return new Kf5Frame( nullptr, nStyle );
+    return new Qt5Frame( nullptr, nStyle );
 }
 
-SalFrame* Kf5Instance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
+SalFrame* Qt5Instance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
 {
-    assert( !pParent || dynamic_cast<Kf5Frame*>( pParent ) );
-    return new Kf5Frame( static_cast<Kf5Frame*>( pParent ), nStyle );
+    assert( !pParent || dynamic_cast<Qt5Frame*>( pParent ) );
+    return new Qt5Frame( static_cast<Qt5Frame*>( pParent ), nStyle );
 }
 
-void Kf5Instance::DestroyFrame( SalFrame* pFrame )
+void Qt5Instance::DestroyFrame( SalFrame* pFrame )
 {
     delete pFrame;
 }
 
-SalObject* Kf5Instance::CreateObject( SalFrame* pParent, SystemWindowData*, bool bShow )
+SalObject* Qt5Instance::CreateObject( SalFrame* pParent, SystemWindowData*, bool bShow )
 {
-    assert( !pParent || dynamic_cast<Kf5Frame*>( pParent ) );
-    return new Kf5Object( static_cast<Kf5Frame*>( pParent ), bShow );
+    assert( !pParent || dynamic_cast<Qt5Frame*>( pParent ) );
+    return new Qt5Object( static_cast<Qt5Frame*>( pParent ), bShow );
 }
 
-void Kf5Instance::DestroyObject( SalObject* pObject )
+void Qt5Instance::DestroyObject( SalObject* pObject )
 {
     delete pObject;
 }
 
-SalVirtualDevice* Kf5Instance::CreateVirtualDevice( SalGraphics* /* pGraphics */,
+SalVirtualDevice* Qt5Instance::CreateVirtualDevice( SalGraphics* /* pGraphics */,
                                                     long &nDX, long &nDY,
                                                     DeviceFormat eFormat,
                                                     const SystemGraphicsData* /* pData */ )
 {
-    Kf5VirtualDevice* pVD = new Kf5VirtualDevice( eFormat, 1 );
+    Qt5VirtualDevice* pVD = new Qt5VirtualDevice( eFormat, 1 );
     pVD->SetSize( nDX, nDY );
     return pVD;
 }
 
-SalTimer* Kf5Instance::CreateSalTimer()
+SalTimer* Qt5Instance::CreateSalTimer()
 {
-    return new Kf5Timer();
+    return new Qt5Timer();
 }
 
-SalSystem* Kf5Instance::CreateSalSystem()
+SalSystem* Qt5Instance::CreateSalSystem()
 {
     return new SvpSalSystem();
 }
 
-SalBitmap* Kf5Instance::CreateSalBitmap()
+SalBitmap* Qt5Instance::CreateSalBitmap()
 {
-    return new Kf5Bitmap();
+    return new Qt5Bitmap();
 }
 
-bool Kf5Instance::ImplYield( bool bWait, bool bHandleAllCurrentEvents )
+bool Qt5Instance::ImplYield( bool bWait, bool bHandleAllCurrentEvents )
 {
     bool wasEvent = DispatchUserEvents( bHandleAllCurrentEvents );
     if ( !bHandleAllCurrentEvents && wasEvent )
@@ -133,7 +129,7 @@ bool Kf5Instance::ImplYield( bool bWait, bool bHandleAllCurrentEvents )
     return wasEvent;
 }
 
-bool Kf5Instance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
+bool Qt5Instance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 {
     bool bWasEvent = false;
     if( qApp->thread() == QThread::currentThread() )
@@ -159,47 +155,47 @@ bool Kf5Instance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     return bWasEvent;
 }
 
-bool Kf5Instance::AnyInput( VclInputFlags nType )
+bool Qt5Instance::AnyInput( VclInputFlags nType )
 {
     return false;
 }
 
-SalSession* Kf5Instance::CreateSalSession()
+SalSession* Qt5Instance::CreateSalSession()
 {
     return nullptr;
 }
 
-OUString Kf5Instance::GetConnectionIdentifier()
+OUString Qt5Instance::GetConnectionIdentifier()
 {
     return OUString();
 }
 
-void Kf5Instance::AddToRecentDocumentList(const OUString&, const OUString&, const OUString&)
+void Qt5Instance::AddToRecentDocumentList(const OUString&, const OUString&, const OUString&)
 {
 }
 
-OpenGLContext* Kf5Instance::CreateOpenGLContext()
+OpenGLContext* Qt5Instance::CreateOpenGLContext()
 {
     return nullptr;
 }
 
-bool Kf5Instance::IsMainThread() const
+bool Qt5Instance::IsMainThread() const
 {
     return qApp->thread() != QThread::currentThread();
 }
 
-void Kf5Instance::TriggerUserEventProcessing()
+void Qt5Instance::TriggerUserEventProcessing()
 {
     QApplication::postEvent(this, new QEvent(QEvent::Type( m_postUserEventId )));
 }
 
-void Kf5Instance::ProcessEvent( SalUserEvent aEvent )
+void Qt5Instance::ProcessEvent( SalUserEvent aEvent )
 {
     aEvent.m_pFrame->CallCallback( aEvent.m_nEvent, aEvent.m_pData );
 }
 
 extern "C" {
-    VCLPLUG_KF5_PUBLIC SalInstance* create_SalInstance()
+    VCLPLUG_QT5_PUBLIC SalInstance* create_SalInstance()
     {
         OString aVersion( qVersion() );
         SAL_INFO( "vcl.kf5", "qt version string is " << aVersion );
@@ -263,28 +259,12 @@ extern "C" {
             free( session_manager );
         }
 
-        KAboutData *kAboutData = new KAboutData( I18N_NOOP("LibreOffice"),
-            i18n( "LibreOffice" ),
-            "6.0.0",
-            i18n( "LibreOffice with KF5 Native Widget Support." ),
-            KAboutLicense::File,
-            i18n("Copyright (c) 2017 LibreOffice contributors" ),
-            i18n( "LibreOffice is an office suite." ),
-            "http://libreoffice.org",
-            QLatin1String("libreoffice@lists.freedesktop.org") );
-
-        kAboutData->addAuthor( i18n( "Jan-Marek Glogowski" ),
-            i18n( "Original author and maintainer of the KF5 NWF." ),
-            "glogow@fbihome.de" );
-
-        KAboutData::setApplicationData( *kAboutData );
-
         QApplication::setQuitOnLastWindowClosed(false);
 
-        Kf5Instance* pInstance = new Kf5Instance( new SalYieldMutex() );
+        Qt5Instance* pInstance = new Qt5Instance( new SalYieldMutex() );
 
         // initialize SalData
-        new Kf5Data( pInstance );
+        new Qt5Data( pInstance );
 
         pInstance->m_pQApplication.reset( pQApplication );
         pInstance->m_pFakeArgvFreeable.reset( pFakeArgvFreeable );
