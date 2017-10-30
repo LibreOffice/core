@@ -19,11 +19,23 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     // this is normal functions every controller must implement
 
 
+    // holds known document types
+    var KnownDocumentTypes : [String] = []
+
 
     // called once controller is loaded
     override func viewDidLoad()
     {
         super.viewDidLoad()
+
+        // loading known document types, so we can use them for the open call
+        let path = Bundle.main.path(forResource: "Info", ofType: "plist")
+        let plist = NSDictionary(contentsOfFile: path!)
+        for dict in (plist!.object(forKey: "UTExportedTypeDeclarations") as! [NSDictionary]) +
+                    (plist!.object(forKey: "UTImportedTypeDeclarations") as! [NSDictionary]) {
+            let x = ((dict["UTTypeTagSpecification"]  as! NSDictionary)["public.filename-extension"] as! NSArray)
+            KnownDocumentTypes.append( x[0] as! String )
+        }
     }
 
 
