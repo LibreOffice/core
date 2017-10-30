@@ -161,7 +161,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
         // whenever adding a menu entry, it (of course) needs to be added
         // to the Document actions scene in storyboard and assigned a tag number
         // the tag number must be repeated in the following switch
-        // BE CAREFULL to keep the tags synchronized (manually)
+        // BE CAREFUL to keep the tags synchronized (manually)
         switch tag
         {
         case 1: // Open...
