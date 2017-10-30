@@ -24,6 +24,7 @@
 #include "Kf5Data.hxx"
 #include "Kf5Timer.hxx"
 #include "Kf5VirtualDevice.hxx"
+#include "Kf5Object.hxx"
 
 #include <QtCore/QThread>
 #include <QtWidgets/QApplication>
@@ -77,9 +78,10 @@ void Kf5Instance::DestroyFrame( SalFrame* pFrame )
     delete pFrame;
 }
 
-SalObject* Kf5Instance::CreateObject( SalFrame*, SystemWindowData*, bool )
+SalObject* Kf5Instance::CreateObject( SalFrame* pParent, SystemWindowData*, bool bShow )
 {
-    return new SvpSalObject();
+    assert( !pParent || dynamic_cast<Kf5Frame*>( pParent ) );
+    return new Kf5Object( static_cast<Kf5Frame*>( pParent ), bShow );
 }
 
 void Kf5Instance::DestroyObject( SalObject* pObject )

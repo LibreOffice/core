@@ -85,6 +85,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_kf5,\
     vcl/unx/kf5/Kf5Graphics_Text \
     vcl/unx/kf5/Kf5Instance \
     vcl/unx/kf5/Kf5Instance_Print \
+    vcl/unx/kf5/Kf5Object \
     vcl/unx/kf5/Kf5Printer \
     vcl/unx/kf5/Kf5Timer \
     vcl/unx/kf5/Kf5VirtualDevice \
