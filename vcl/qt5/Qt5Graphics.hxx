@@ -52,11 +52,14 @@ class Qt5Graphics : public SalGraphics
     Qt5Font                      *m_pTextStyle[ MAX_FALLBACK ];
     SalColor                      m_aTextColor;
 
+    Qt5Graphics( Qt5Frame *pFrame, QImage *pQImage );
     void PreparePainter( QPainter &rPainter, sal_uInt8 nTransparency = 0xff );
 
 public:
-    Qt5Graphics( Qt5Frame *pFrame );
-    Qt5Graphics( QImage *pImage );
+    Qt5Graphics( Qt5Frame *pFrame )
+        : Qt5Graphics( pFrame, nullptr ) {}
+    Qt5Graphics( QImage *pQImage )
+        : Qt5Graphics( nullptr, pQImage ) {}
     virtual ~Qt5Graphics() override;
 
     void ChangeQImage( QImage *pImage );
