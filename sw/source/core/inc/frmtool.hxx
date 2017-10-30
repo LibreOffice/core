@@ -187,7 +187,7 @@ public:
     SwFrameNotify( SwFrame *pFrame );
     ~SwFrameNotify() COVERITY_NOEXCEPT_FALSE;
 
-    const SwRect &getSwFrame() const { return maFrame; }
+    const SwRect &geFrameArea() const { return maFrame; }
     void SetInvaKeep() { mbInvaKeep = true; }
 };
 

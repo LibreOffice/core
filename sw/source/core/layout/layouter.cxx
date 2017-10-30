@@ -437,10 +437,10 @@ bool SwLayouter::MoveBwdSuppressed( const SwDoc& p_rDoc,
     // create hash map key
     tMoveBwdLayoutInfoKey aMoveBwdLayoutInfo;
     aMoveBwdLayoutInfo.mnFrameId = p_rFlowFrame.GetFrame().GetFrameId();
-    aMoveBwdLayoutInfo.mnNewUpperPosX = p_rNewUpperFrame.getSwFrame().Pos().X();
-    aMoveBwdLayoutInfo.mnNewUpperPosY = p_rNewUpperFrame.getSwFrame().Pos().Y();
-    aMoveBwdLayoutInfo.mnNewUpperWidth = p_rNewUpperFrame.getSwFrame().Width();
-    aMoveBwdLayoutInfo.mnNewUpperHeight =  p_rNewUpperFrame.getSwFrame().Height();
+    aMoveBwdLayoutInfo.mnNewUpperPosX = p_rNewUpperFrame.geFrameArea().Pos().X();
+    aMoveBwdLayoutInfo.mnNewUpperPosY = p_rNewUpperFrame.geFrameArea().Pos().Y();
+    aMoveBwdLayoutInfo.mnNewUpperWidth = p_rNewUpperFrame.geFrameArea().Width();
+    aMoveBwdLayoutInfo.mnNewUpperHeight =  p_rNewUpperFrame.geFrameArea().Height();
     SwRectFnSet aRectFnSet(&p_rNewUpperFrame);
     const SwFrame* pLastLower( p_rNewUpperFrame.Lower() );
     while ( pLastLower && pLastLower->GetNext() )
@@ -449,8 +449,8 @@ bool SwLayouter::MoveBwdSuppressed( const SwDoc& p_rDoc,
     }
     aMoveBwdLayoutInfo.mnFreeSpaceInNewUpper =
             pLastLower
-            ? aRectFnSet.BottomDist( pLastLower->getSwFrame(), aRectFnSet.GetPrtBottom(p_rNewUpperFrame) )
-            : aRectFnSet.GetHeight(p_rNewUpperFrame.getSwFrame());
+            ? aRectFnSet.BottomDist( pLastLower->geFrameArea(), aRectFnSet.GetPrtBottom(p_rNewUpperFrame) )
+            : aRectFnSet.GetHeight(p_rNewUpperFrame.geFrameArea());
 
     // check for moving backward suppress threshold
     const sal_uInt16 cMoveBwdCountSuppressThreshold = 20;
