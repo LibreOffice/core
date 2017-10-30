@@ -1181,7 +1181,7 @@ void SwLayoutFrame::Cut()
                 {
                     const SwTwips nOldHeight = aRectFnSet.GetHeight(getSwFrame());
 
-                    // seems as if this needs to be frowarded to the SwFrame already here,
+                    // seems as if this needs to be forwarded to the SwFrame already here,
                     // changing to zero seems temporary anyways
                     {
                         SwFrameRect::FrameWriteAccess aFrm(*this);

@@ -474,7 +474,7 @@ class HTMLTable
     // Create a table with the content (lines/boxes)
     void MakeTable_( SwTableBox *pUpper );
 
-    // Gernerate a new SwTableBox, which contains a SwStartNode
+    // Generate a new SwTableBox, which contains a SwStartNode
     SwTableBox *NewTableBox( const SwStartNode *pStNd,
                              SwTableLine *pUpper ) const;
 
