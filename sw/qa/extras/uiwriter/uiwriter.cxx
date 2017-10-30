@@ -271,6 +271,7 @@ public:
     void testSectionInTableInTable();
     void testSectionInTableInTable2();
     void testSectionInTableInTable3();
+    void testSectionInTableInTable4();
     void testTdf112160();
     void testLinesMoveBackwardsInSectionInTable();
     void testTdf112741();
@@ -436,6 +437,7 @@ public:
     CPPUNIT_TEST(testSectionInTableInTable);
     CPPUNIT_TEST(testSectionInTableInTable2);
     CPPUNIT_TEST(testSectionInTableInTable3);
+    CPPUNIT_TEST(testSectionInTableInTable4);
     CPPUNIT_TEST(testTdf112160);
     CPPUNIT_TEST(testLinesMoveBackwardsInSectionInTable);
     CPPUNIT_TEST(testTdf112741);
@@ -5440,6 +5442,41 @@ void SwUiWriterTest::testSectionInTableInTable3()
     CPPUNIT_ASSERT_EQUAL(nTable1, nTable2Precede);
     CPPUNIT_ASSERT_EQUAL(nTable3, nTable2Follow);
     CPPUNIT_ASSERT_EQUAL(nTable2, nTable3Precede);
+}
+
+void SwUiWriterTest::testSectionInTableInTable4()
+{
+    SwDoc* pDoc = createDoc("tdf113520.fodt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page", 3);
+    sal_uInt32 nPage1LastNode = getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/tab/row/cell[1]/section/txt[last()]", "txtNodeIndex").toUInt32();
+    CPPUNIT_ASSERT_EQUAL(OUString("Section1:P10"), pDoc->GetNodes()[nPage1LastNode]->GetTextNode()->GetText());
+    sal_uInt32 nPage3FirstNode = getXPath(pXmlDoc, "/root/page[3]/body/tab/row/cell[1]/tab/row/cell[1]/section/txt[1]", "txtNodeIndex").toUInt32();
+    CPPUNIT_ASSERT_EQUAL(OUString("Section1:P23"), pDoc->GetNodes()[nPage3FirstNode]->GetTextNode()->GetText());
+
+    // Remove page 2.
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    while (pWrtShell->GetCursor()->Start()->nNode.GetIndex() < nPage1LastNode)
+        pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->EndPara();
+    while (pWrtShell->GetCursor()->End()->nNode.GetIndex() < nPage3FirstNode)
+        pWrtShell->Down(/*bSelect=*/true);
+    pWrtShell->EndPara(/*bSelect=*/true);
+    pWrtShell->DelLeft();
+
+    // Assert that the page is removed.
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // This was 3, page 2 was emptied, but it wasn't removed.
+    assertXPath(pXmlDoc, "/root/page", 2);
+
+    // Make sure the outer table frames are linked together properly.
+    sal_uInt32 nTable1 = getXPath(pXmlDoc, "//page[1]//body/tab", "id").toUInt32();
+    sal_uInt32 nTable1Follow = getXPath(pXmlDoc, "//page[1]//body/tab", "follow").toUInt32();
+    sal_uInt32 nTable2 = getXPath(pXmlDoc, "//page[2]//body/tab", "id").toUInt32();
+    sal_uInt32 nTable2Precede = getXPath(pXmlDoc, "//page[2]//body/tab", "precede").toUInt32();
+    CPPUNIT_ASSERT_EQUAL(nTable2, nTable1Follow);
+    CPPUNIT_ASSERT_EQUAL(nTable1, nTable2Precede);
 }
 
 void SwUiWriterTest::testTdf112160()
