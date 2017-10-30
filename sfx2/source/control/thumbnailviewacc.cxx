@@ -433,7 +433,6 @@ sal_Bool SAL_CALL ThumbnailViewAcc::isAccessibleChildSelected( sal_Int32 nChildI
 void SAL_CALL ThumbnailViewAcc::clearAccessibleSelection()
 {
     ThrowIfDisposed();
-    const SolarMutexGuard aSolarGuard;
 }
 
 void SAL_CALL ThumbnailViewAcc::selectAllAccessibleChildren()
