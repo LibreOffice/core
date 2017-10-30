@@ -1613,7 +1613,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
         if ( pFrame->GetNext() )
             pFrame->GetNext()->InvalidatePos_();
 
-            if( nReal < 0 && pFrame->IsInSct() )
+        if( nReal < 0 && pFrame->IsInSct() )
         {
             SwLayoutFrame* pUp = pFrame->GetUpper();
             if( pUp && nullptr != ( pUp = pUp->GetUpper() ) && pUp->IsSctFrame() &&
