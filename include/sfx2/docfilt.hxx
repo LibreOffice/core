@@ -114,8 +114,7 @@ public:
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
     static OUString GetTypeFromStorage(
-        const css::uno::Reference<css::embed::XStorage>& xStorage,
-        bool bTemplate = false );
+        const css::uno::Reference<css::embed::XStorage>& xStorage );
 };
 
 #endif

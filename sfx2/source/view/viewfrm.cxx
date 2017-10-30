@@ -2280,7 +2280,7 @@ void SfxViewFrame::Resize( bool bForce )
 
 #define LINE_SEP 0x0A
 
-void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEraseTrailingEmptyLines )
+void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines )
 {
     sal_Int32 nStartPos = 0;
     sal_Int32 nLine = 0;
@@ -2308,7 +2308,8 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEra
 
         rStr = rStr.copy( 0, nStartPos ) + rStr.copy( nEndPos );
     }
-    if ( bEraseTrailingEmptyLines && nStartPos != -1 )
+    // erase trailing lines
+    if ( nStartPos != -1 )
     {
         sal_Int32 n = nStartPos;
         sal_Int32 nLen = rStr.getLength();
@@ -2393,7 +2394,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
                     pMethod->GetLineRange( nStart, nEnd );
                     sal_uIntPtr nlStart = nStart;
                     sal_uIntPtr nlEnd = nEnd;
-                    CutLines( aOUSource, nlStart-1, nlEnd-nlStart+1, true );
+                    CutLines( aOUSource, nlStart-1, nlEnd-nlStart+1 );
                 }
             }
         }
