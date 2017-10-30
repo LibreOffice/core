@@ -25,8 +25,10 @@
 #include "Qt5Tools.hxx"
 
 #include <QtGui/QImage>
+#include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
+#include <QtGui/QWheelEvent>
 
 #include <cairo.h>
 #include <headless/svpgdi.hxx>
@@ -36,6 +38,7 @@ Qt5Widget::Qt5Widget( Qt5Frame &rFrame, QWidget *parent, Qt::WindowFlags f )
     , m_pFrame( &rFrame )
 {
     create();
+    setMouseTracking( true );
 }
 
 Qt5Widget::~Qt5Widget()
@@ -81,5 +84,89 @@ void Qt5Widget::resizeEvent( QResizeEvent* )
 
     m_pFrame->CallCallback( SalEvent::Resize, nullptr );
 }
+
+void Qt5Widget::mouseButtonEvent( QMouseEvent *pEvent, bool bReleased )
+{
+    SalMouseEvent aEvent;
+    switch( pEvent->button() )
+    {
+    case Qt::LeftButton: aEvent.mnButton = MOUSE_LEFT; break;
+    case Qt::MidButton: aEvent.mnButton = MOUSE_MIDDLE; break;
+    case Qt::RightButton: aEvent.mnButton = MOUSE_RIGHT; break;
+    default: return;
+    }
+
+    aEvent.mnTime   = pEvent->timestamp();
+    aEvent.mnX      = (long) pEvent->pos().x();
+    aEvent.mnY      = (long) pEvent->pos().y();
+    aEvent.mnCode   = GetKeyModCode( pEvent->modifiers() ) |
+                      GetMouseModCode( pEvent->buttons() );
+
+    SalEvent nEventType;
+    if ( bReleased )
+        nEventType = SalEvent::MouseButtonUp;
+    else
+        nEventType = SalEvent::MouseButtonDown;
+    m_pFrame->CallCallback( nEventType, &aEvent );
+}
+
+void Qt5Widget::mousePressEvent( QMouseEvent *pEvent )
+{
+    mouseButtonEvent( pEvent, false );
+}
+
+void Qt5Widget::mouseReleaseEvent( QMouseEvent *pEvent )
+{
+    mouseButtonEvent( pEvent, true );
+}
+
+void Qt5Widget::mouseMoveEvent( QMouseEvent *pEvent )
+{
+    SalMouseEvent aEvent;
+    aEvent.mnTime = pEvent->timestamp();
+    aEvent.mnX    = pEvent->pos().x();
+    aEvent.mnY    = pEvent->pos().y();
+    aEvent.mnCode = GetKeyModCode( pEvent->modifiers() ) |
+                    GetMouseModCode( pEvent->buttons() );
+    aEvent.mnButton = 0;
+
+    m_pFrame->CallCallback( SalEvent::MouseMove, &aEvent );
+    pEvent->accept();
+}
+
+void Qt5Widget::wheelEvent( QWheelEvent *pEvent )
+{
+    SalWheelMouseEvent aEvent;
+
+    aEvent.mnTime = pEvent->timestamp();
+    aEvent.mnX    = pEvent->pos().x();
+    aEvent.mnY    = pEvent->pos().y();
+    aEvent.mnCode = GetKeyModCode( pEvent->modifiers() ) |
+                    GetMouseModCode( pEvent->buttons() );
+
+    int nDelta = pEvent->angleDelta().x();
+    aEvent.mbHorz = true;
+    if ( !nDelta )
+    {
+        nDelta = pEvent->angleDelta().y();
+        aEvent.mbHorz = false;
+    }
+    if ( !nDelta )
+        return;
+    nDelta /= 8;
+
+    aEvent.mnDelta = nDelta;
+    aEvent.mnNotchDelta = nDelta > 0 ? 1 : -1;
+    aEvent.mnScrollLines = 3;
+
+    m_pFrame->CallCallback( SalEvent::WheelMouse, &aEvent );
+    pEvent->accept();
+}
+
+void Qt5Widget::moveEvent( QMoveEvent* )
+{
+    m_pFrame->CallCallback( SalEvent::Move, nullptr );
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
