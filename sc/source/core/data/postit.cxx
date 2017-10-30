@@ -1220,9 +1220,9 @@ ScCaptionPtr ScNoteUtil::CreateTempCaption(
 }
 
 ScPostIt* ScNoteUtil::CreateNoteFromCaption(
-        ScDocument& rDoc, const ScAddress& rPos, SdrCaptionObj* pCaption, bool bShown )
+        ScDocument& rDoc, const ScAddress& rPos, SdrCaptionObj* pCaption )
 {
-    ScNoteData aNoteData( bShown );
+    ScNoteData aNoteData( true/*bShown*/ );
     aNoteData.mxCaption.reset( pCaption );
     ScPostIt* pNote = new ScPostIt( rDoc, rPos, aNoteData, false );
     pNote->AutoStamp();
@@ -1230,7 +1230,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
     rDoc.SetNote(rPos, pNote);
 
     // ScNoteCaptionCreator c'tor updates the caption object to be part of a note
-    ScNoteCaptionCreator aCreator( rDoc, rPos, aNoteData.mxCaption, bShown );
+    ScNoteCaptionCreator aCreator( rDoc, rPos, aNoteData.mxCaption, true/*bShown*/ );
 
     return pNote;
 }
@@ -1238,7 +1238,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
 ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
         ScDocument& rDoc, const ScAddress& rPos, SfxItemSet* pItemSet,
         OutlinerParaObject* pOutlinerObj, const tools::Rectangle& rCaptionRect,
-        bool bShown, bool bAlwaysCreateCaption, sal_uInt32 nPostItId )
+        bool bShown, bool bAlwaysCreateCaption )
 {
     OSL_ENSURE( pItemSet && pOutlinerObj, "ScNoteUtil::CreateNoteFromObjectData - item set and outliner object expected" );
     ScNoteData aNoteData( bShown );
@@ -1260,7 +1260,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
 
     /*  Create the note and insert it into the document. If the note is
         visible, the caption object will be created automatically. */
-    ScPostIt* pNote = new ScPostIt( rDoc, rPos, aNoteData, bAlwaysCreateCaption, nPostItId );
+    ScPostIt* pNote = new ScPostIt( rDoc, rPos, aNoteData, bAlwaysCreateCaption, 0/*nPostItId*/ );
     pNote->AutoStamp();
 
     rDoc.SetNote(rPos, pNote);

@@ -63,8 +63,7 @@ private:
     void        InitDocShell(bool bLimitToPageSize);
     static void StripRefs( ScDocument* pDoc, SCCOL nStartX, SCROW nStartY,
                             SCCOL nEndX, SCROW nEndY,
-                            ScDocument* pDestDoc,
-                            SCCOL nSubX=0, SCROW nSubY=0 );
+                            ScDocument* pDestDoc );
     static void PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPrintFactor,
                             const ScRange& rBlock );
     static void GetAreaSize( const ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol );

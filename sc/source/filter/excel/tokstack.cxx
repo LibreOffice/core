@@ -74,17 +74,17 @@ TokenPool::~TokenPool()
 }
 
 /** Returns the new number of elements, or 0 if overflow. */
-static sal_uInt16 lcl_canGrow( sal_uInt16 nOld, sal_uInt16 nByMin = 1 )
+static sal_uInt16 lcl_canGrow( sal_uInt16 nOld )
 {
     if (!nOld)
-        return nByMin ? nByMin : 1;
+        return 1;
     if (nOld == SAL_MAX_UINT16)
         return 0;
     sal_uInt32 nNew = ::std::max( static_cast<sal_uInt32>(nOld) * 2,
-            static_cast<sal_uInt32>(nOld) + nByMin);
+            static_cast<sal_uInt32>(nOld) + 1);
     if (nNew > SAL_MAX_UINT16)
         nNew = SAL_MAX_UINT16;
-    if (nNew - nByMin < nOld)
+    if (nNew - 1 < nOld)
         nNew = 0;
     return static_cast<sal_uInt16>(nNew);
 }

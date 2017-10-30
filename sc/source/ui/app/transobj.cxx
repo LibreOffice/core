@@ -789,12 +789,11 @@ SfxObjectShell* ScTransferObj::SetDrawClipDoc( bool bAnyOle )
 
 void ScTransferObj::StripRefs( ScDocument* pDoc,
                     SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY,
-                    ScDocument* pDestDoc, SCCOL nSubX, SCROW nSubY )
+                    ScDocument* pDestDoc )
 {
     if (!pDestDoc)
     {
         pDestDoc = pDoc;
-        OSL_ENSURE(nSubX==0&&nSubY==0, "can't move within the document");
     }
 
     //  In a clipboard doc the data don't have to be on the first sheet
@@ -832,8 +831,8 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
         }
         if (bOut)
         {
-            SCCOL nCol = aIter.GetPos().Col() - nSubX;
-            SCROW nRow = aIter.GetPos().Row() - nSubY;
+            SCCOL nCol = aIter.GetPos().Col();
+            SCROW nRow = aIter.GetPos().Row();
 
             FormulaError nErrCode = pFCell->GetErrCode();
             ScAddress aPos(nCol, nRow, nDestTab);

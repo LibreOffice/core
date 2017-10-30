@@ -518,13 +518,13 @@ public:
     static bool         GetStringList( OUString& rStringList, const ScTokenArray& rScTokArr, sal_Unicode cSep );
 
     /** Tries to convert a formula that consists of a single string token to a list of strings.
+        Removes leading spaces from each token.
         @descr  Example: The formula ="abc\ndef\nghi" will be converted to the formula
         ="abc";"def";"ghi", if the LF character is specified as separator.
         @param rScTokArr  (in/out-parameter) The token array to modify.
-        @param cStringSep  The separator in the source string.
-        @param bTrimLeadingSpaces  true = remove leading spaces from each token. */
+        @param cStringSep  The separator in the source string. */
     static void ConvertStringToList(
-        ScTokenArray& rScTokArr, svl::SharedStringPool& rSPool, sal_Unicode cStringSep, bool bTrimLeadingSpaces );
+        ScTokenArray& rScTokArr, svl::SharedStringPool& rSPool, sal_Unicode cStringSep );
 
     // multiple operations ----------------------------------------------------
 

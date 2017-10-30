@@ -90,7 +90,7 @@ union DecodedDouble
 
 // BIFF12 import --------------------------------------------------------------
 
-/*static*/ OUString BiffHelper::readString( SequenceInputStream& rStrm, bool b32BitLen, bool bAllowNulChars )
+/*static*/ OUString BiffHelper::readString( SequenceInputStream& rStrm, bool b32BitLen )
 {
     OUString aString;
     if( !rStrm.isEof() )
@@ -102,7 +102,7 @@ union DecodedDouble
         {
             // SequenceInputStream always supports getRemaining()
             nCharCount = ::std::min( nCharCount, static_cast< sal_Int32 >( rStrm.getRemaining() / 2 ) );
-            aString = rStrm.readUnicodeArray( nCharCount, bAllowNulChars );
+            aString = rStrm.readUnicodeArray( nCharCount, false/*bAllowNulChars*/ );
         }
     }
     return aString;

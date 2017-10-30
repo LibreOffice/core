@@ -120,10 +120,10 @@ static bool lcl_MoveItCut( R& rRef, S nDelta, U nMask )
     return bCut;
 }
 
-template< typename R, typename S, typename U >
-static void lcl_MoveItWrap( R& rRef, S nDelta, U nMask )
+template< typename R, typename U >
+static void lcl_MoveItWrap( R& rRef, U nMask )
 {
-    rRef = sal::static_int_cast<R>( rRef + nDelta );
+    rRef = sal::static_int_cast<R>( rRef );
     if ( rRef < 0 )
         rRef += nMask+1;
     else if ( rRef > nMask )
@@ -467,38 +467,38 @@ void ScRefUpdate::MoveRelWrap( const ScDocument* pDoc, const ScAddress& rPos,
     if( rRef.Ref1.IsColRel() )
     {
         SCCOL nCol = aAbsRange.aStart.Col();
-        lcl_MoveItWrap(nCol, static_cast<SCCOL>(0), nMaxCol);
+        lcl_MoveItWrap(nCol, nMaxCol);
         aAbsRange.aStart.SetCol(nCol);
     }
     if( rRef.Ref2.IsColRel() )
     {
         SCCOL nCol = aAbsRange.aEnd.Col();
-        lcl_MoveItWrap(nCol, static_cast<SCCOL>(0), nMaxCol);
+        lcl_MoveItWrap(nCol, nMaxCol);
         aAbsRange.aEnd.SetCol(nCol);
     }
     if( rRef.Ref1.IsRowRel() )
     {
         SCROW nRow = aAbsRange.aStart.Row();
-        lcl_MoveItWrap(nRow, static_cast<SCROW>(0), nMaxRow);
+        lcl_MoveItWrap(nRow, nMaxRow);
         aAbsRange.aStart.SetRow(nRow);
     }
     if( rRef.Ref2.IsRowRel() )
     {
         SCROW nRow = aAbsRange.aEnd.Row();
-        lcl_MoveItWrap(nRow, static_cast<SCROW>(0), nMaxRow);
+        lcl_MoveItWrap(nRow, nMaxRow);
         aAbsRange.aEnd.SetRow(nRow);
     }
     SCTAB nMaxTab = pDoc->GetTableCount() - 1;
     if( rRef.Ref1.IsTabRel() )
     {
         SCTAB nTab = aAbsRange.aStart.Tab();
-        lcl_MoveItWrap(nTab, static_cast<SCTAB>(0), nMaxTab);
+        lcl_MoveItWrap(nTab, nMaxTab);
         aAbsRange.aStart.SetTab(nTab);
     }
     if( rRef.Ref2.IsTabRel() )
     {
         SCTAB nTab = aAbsRange.aEnd.Tab();
-        lcl_MoveItWrap(nTab, static_cast<SCTAB>(0), nMaxTab);
+        lcl_MoveItWrap(nTab, nMaxTab);
         aAbsRange.aEnd.SetTab(nTab);
     }
 

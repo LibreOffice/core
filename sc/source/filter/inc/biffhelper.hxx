@@ -603,7 +603,7 @@ public:
     // BIFF12 import ----------------------------------------------------------
 
     /** Reads a BIFF12 string with leading 16-bit or 32-bit length field. */
-    static OUString readString( SequenceInputStream& rStrm, bool b32BitLen = true, bool bAllowNulChars = false );
+    static OUString readString( SequenceInputStream& rStrm, bool b32BitLen = true );
 
 private:
                         BiffHelper() = delete;

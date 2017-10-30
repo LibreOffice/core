@@ -897,7 +897,7 @@ bool XclTokenArrayHelper::GetStringList( OUString& rStringList, const ScTokenArr
 }
 
 void XclTokenArrayHelper::ConvertStringToList(
-    ScTokenArray& rScTokArr, svl::SharedStringPool& rSPool, sal_Unicode cStringSep, bool bTrimLeadingSpaces )
+    ScTokenArray& rScTokArr, svl::SharedStringPool& rSPool, sal_Unicode cStringSep )
 {
     OUString aString;
     if( GetString( aString, rScTokArr ) )
@@ -908,8 +908,7 @@ void XclTokenArrayHelper::ConvertStringToList(
         for( sal_Int32 nToken = 0; nToken < nTokenCnt; ++nToken )
         {
             OUString aToken( aString.getToken( 0, cStringSep, nStringIx ) );
-            if( bTrimLeadingSpaces )
-                aToken = comphelper::string::stripStart(aToken, ' ');
+            aToken = comphelper::string::stripStart(aToken, ' '); // trim leading spaces
             if( nToken > 0 )
                 rScTokArr.AddOpCode( ocSep );
             rScTokArr.AddString(rSPool.intern(aToken));

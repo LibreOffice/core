@@ -3492,7 +3492,7 @@ bool ScDocFunc::SetTabBgColor(
 //! - Optimal height of text cells is different for a printer and a screen
 //! - Optimal width needs a selection in order to take only selected cells into account
 
-static sal_uInt16 lcl_GetOptimalColWidth( ScDocShell& rDocShell, SCCOL nCol, SCTAB nTab, bool bFormula )
+static sal_uInt16 lcl_GetOptimalColWidth( ScDocShell& rDocShell, SCCOL nCol, SCTAB nTab )
 {
     ScSizeDeviceProvider aProv(&rDocShell);
     OutputDevice* pDev = aProv.GetDevice();         // has pixel MapMode
@@ -3502,7 +3502,7 @@ static sal_uInt16 lcl_GetOptimalColWidth( ScDocShell& rDocShell, SCCOL nCol, SCT
     ScDocument& rDoc = rDocShell.GetDocument();
     Fraction aOne(1,1);
     sal_uInt16 nTwips = rDoc.GetOptimalColWidth( nCol, nTab, pDev, nPPTX, nPPTY, aOne, aOne,
-                                                    bFormula );
+                                                false/*bFormula*/ );
 
     return nTwips;
 }
@@ -3627,7 +3627,7 @@ bool ScDocFunc::SetWidthOrHeight(
 
                     if ( eMode==SC_SIZE_OPTIMAL || eMode==SC_SIZE_VISOPT )
                         nThisSize = nSizeTwips +
-                                    lcl_GetOptimalColWidth( rDocShell, nCol, nTab, false/*bFormula*/ );
+                                    lcl_GetOptimalColWidth( rDocShell, nCol, nTab );
                     if ( nThisSize )
                         rDoc.SetColWidth( nCol, nTab, nThisSize );
 
