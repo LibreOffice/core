@@ -26,6 +26,38 @@ enum class ClassificationType
     PARAGRAPH,
 };
 
+class SVX_DLLPUBLIC ClassificationResult
+{
+public:
+    ClassificationType meType;
+    OUString msName;            //< Display text or 'Name' field (from example.xml).
+    OUString msAbbreviatedName; //< Abbreviated name, displayed instead of Name.
+    OUString msIdentifier;      //< The identifier of this entry (from example.xml).
+
+    ClassificationResult(ClassificationType eType, const OUString& sName,
+                         const OUString& sAbbreviatedName = "", const OUString& sIdentifier = "")
+        : meType(eType)
+        , msName(sName)
+        , msAbbreviatedName(sAbbreviatedName)
+        , msIdentifier(sIdentifier)
+    {
+    }
+
+    /// Returns the text to display, which is the Abbreviated Name, if provided, otherwise Name.
+    OUString getDisplayText() const
+    {
+        return !msAbbreviatedName.isEmpty() ? msAbbreviatedName : msName;
+    }
+
+    bool operator==(const ClassificationResult& rOther) const
+    {
+        return (meType == rOther.meType &&
+                msName == rOther.msName &&
+                msAbbreviatedName == rOther.msAbbreviatedName &&
+                msIdentifier == rOther.msIdentifier);
+    }
+};
+
 class SVX_DLLPUBLIC ClassificationField : public SvxFieldData
 {
 public:
@@ -58,14 +90,6 @@ public:
                 msFullClassName == rOtherField.msFullClassName &&
                 msIdentifier == rOtherField.msIdentifier);
     }
-};
-
-struct SVX_DLLPUBLIC ClassificationResult
-{
-    ClassificationType meType;
-    OUString msString;  //< Display text or 'Name' field (from example.xml).
-    OUString msAbbreviatedString; //< Abbreviated name, displayed instead of msString.
-    OUString msIdentifier; //< The identifier of this entry (from example.xml).
 };
 
 } // end svx namespace
