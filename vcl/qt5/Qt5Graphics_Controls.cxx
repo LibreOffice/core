@@ -17,21 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Kf5Graphics.hxx"
+#include "Qt5Graphics.hxx"
 
-bool Kf5Graphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
+bool Qt5Graphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     return false;
 }
 
-bool Kf5Graphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
+bool Qt5Graphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
                                         const tools::Rectangle& rControlRegion,
                                         const Point& aPos, bool& rIsInside )
 {
     return false;
 }
 
-bool Kf5Graphics::drawNativeControl( ControlType nType, ControlPart nPart,
+bool Qt5Graphics::drawNativeControl( ControlType nType, ControlPart nPart,
                                      const tools::Rectangle& rControlRegion,
                                      ControlState nState, const ImplControlValue& aValue,
                                      const OUString& aCaption )
@@ -39,7 +39,7 @@ bool Kf5Graphics::drawNativeControl( ControlType nType, ControlPart nPart,
     return false;
 }
 
-bool Kf5Graphics::getNativeControlRegion( ControlType nType, ControlPart nPart,
+bool Qt5Graphics::getNativeControlRegion( ControlType nType, ControlPart nPart,
                                           const tools::Rectangle& rControlRegion, ControlState nState,
                                           const ImplControlValue& aValue, const OUString& aCaption,
                                           tools::Rectangle &rNativeBoundingRegion,

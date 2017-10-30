@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Kf5Instance.hxx"
-#include "Kf5Printer.hxx"
+#include "Qt5Instance.hxx"
+#include "Qt5Printer.hxx"
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
@@ -155,11 +155,11 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     }
 }
 
-SalInfoPrinter* Kf5Instance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
+SalInfoPrinter* Qt5Instance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                 ImplJobSetup*        pJobSetup )
 {
     // create and initialize SalInfoPrinter
-    Kf5InfoPrinter* pPrinter = new Kf5InfoPrinter;
+    Qt5InfoPrinter* pPrinter = new Qt5InfoPrinter;
 
     if( pJobSetup )
     {
@@ -181,26 +181,26 @@ SalInfoPrinter* Kf5Instance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
     return pPrinter;
 }
 
-void Kf5Instance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
+void Qt5Instance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 {
     delete pPrinter;
 }
 
-SalPrinter* Kf5Instance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
+SalPrinter* Qt5Instance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
     // create and initialize SalPrinter
-    Kf5Printer* pPrinter = new Kf5Printer( pInfoPrinter );
-    pPrinter->m_aJobData = static_cast<Kf5InfoPrinter*>(pInfoPrinter)->m_aJobData;
+    Qt5Printer* pPrinter = new Qt5Printer( pInfoPrinter );
+    pPrinter->m_aJobData = static_cast<Qt5InfoPrinter*>(pInfoPrinter)->m_aJobData;
 
     return pPrinter;
 }
 
-void Kf5Instance::DestroyPrinter( SalPrinter* pPrinter )
+void Qt5Instance::DestroyPrinter( SalPrinter* pPrinter )
 {
     delete pPrinter;
 }
 
-void Kf5Instance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
+void Qt5Instance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 {
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
     static const char* pNoSyncDetection = getenv( "SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION" );
@@ -238,26 +238,26 @@ void Kf5Instance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     }
 }
 
-void Kf5Instance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
+void Qt5Instance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 {
     delete pInfo;
 }
 
-void Kf5Instance::GetPrinterQueueState( SalPrinterQueueInfo* )
+void Qt5Instance::GetPrinterQueueState( SalPrinterQueueInfo* )
 {
 }
 
-OUString Kf5Instance::GetDefaultPrinter()
+OUString Qt5Instance::GetDefaultPrinter()
 {
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
     return rManager.getDefaultPrinter();
 }
 
-void Kf5Instance::PostPrintersChanged()
+void Qt5Instance::PostPrintersChanged()
 {
 }
 
-GenPspGraphics *Kf5Instance::CreatePrintGraphics()
+GenPspGraphics *Qt5Instance::CreatePrintGraphics()
 {
     return new GenPspGraphics();
 }

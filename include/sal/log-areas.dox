@@ -463,7 +463,6 @@ certain functionality.
 @li @c vcl.icontest
 @li @c vcl.kde4 - KDE4
 @li @c vcl.kde5 - KDE5
-@li @c vcl.kf5 - KF5
 @li @c vcl.layout - Widget layout
 @li @c vcl.lazydelete
 @li @c vcl.opengl
@@ -471,6 +470,7 @@ certain functionality.
 @li @c vcl.osx.print
 @li @c vcl.pdfwriter
 @li @c vcl.plugadapt - the Unix/X11 backend plugin mechanism
+@li @c vcl.qt5 - QT5
 @li @c vcl.quartz
 @li @c vcl.schedule - scheduler / main-loop information
 @li @c vcl.schedule.deinit
