@@ -30,6 +30,8 @@
 #include <QtGui/QIcon>
 #include <QtGui/QWindow>
 #include <QtGui/QScreen>
+#include <QtGui/QWindow>
+#include <QtWidgets/QApplication>
 
 #include <saldatabasic.hxx>
 #include <vcl/layout.hxx>
@@ -490,7 +492,12 @@ const SystemEnvData* Qt5Frame::GetSystemData() const
 
 SalFrame::SalPointerState Qt5Frame::GetPointerState()
 {
-    return SalPointerState();
+    SalPointerState aState;
+    QPoint pos = QCursor::pos();
+    aState.maPos = Point( pos.x(), pos.y() );
+    aState.mnState = GetMouseModCode( qApp->mouseButtons() ) |
+                     GetKeyModCode( qApp->keyboardModifiers() );
+    return aState;
 }
 
 KeyIndicatorState Qt5Frame::GetIndicatorState()
