@@ -928,15 +928,16 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
         }
 
         MSO_LineDashing eLineDashing = (MSO_LineDashing)GetPropertyValue( DFF_Prop_lineDashing, mso_lineSolid );
-        if ( eLineDashing == mso_lineSolid )
+        if (eLineDashing == mso_lineSolid || nLineWidth < 0)
             rSet.Put(XLineStyleItem( drawing::LineStyle_SOLID ) );
         else
         {
             sal_uInt16  nDots = 1;
             sal_uInt32  nDotLen = nLineWidth / 360;
             sal_uInt16  nDashes = 0;
-            sal_uInt32  nDashLen = ( 8 * nLineWidth ) / 360;
-            sal_uInt32  nDistance = ( 3 * nLineWidth ) / 360;
+            const bool bHugeWidth = static_cast<sal_uInt32>(nLineWidth) >= SAL_MAX_UINT32/8U; //then rougher approx is fine
+            sal_uInt32  nDashLen = bHugeWidth ? (nDotLen * 8U) : ((8U * nLineWidth) / 360);
+            sal_uInt32  nDistance = bHugeWidth ? (nDotLen * 3U) : ((3U * nLineWidth) / 360);
 
             switch ( eLineDashing )
             {
@@ -953,7 +954,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
                 {
                     nDots = 0;
                     nDashes = 1;
-                    nDashLen = ( 4 * nLineWidth ) / 360;
+                    nDashLen = bHugeWidth ? (nDotLen * 4U) : ((4U * nLineWidth) / 360);
                 }
                 break;
 
@@ -961,7 +962,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
                 {
                     nDots = 1;
                     nDashes = 1;
-                    nDashLen = ( 4 * nLineWidth ) / 360;
+                    nDashLen = bHugeWidth ? (nDotLen * 4U) : ((4U * nLineWidth) / 360);
                 }
                 break;
 
