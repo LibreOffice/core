@@ -50,6 +50,7 @@ class Qt5Frame
     bool                            m_bGraphicsInUse;
     SalFrameStyleFlags              m_nStyle;
     Qt5Frame                       *m_pParent;
+    PointerStyle                    m_ePointerStyle;
 
     bool isChild( bool bPlug = true, bool bSysChild = true )
     {
