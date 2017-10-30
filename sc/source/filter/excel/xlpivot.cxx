@@ -409,7 +409,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTCachedName& rCachedNam
     if( rCachedName.mbUseCache )
         rStrm << EXC_PT_NOSTRING;
     else
-        rStrm << XclExpString( rCachedName.maName, EXC_STR_DEFAULT, EXC_PT_MAXSTRLEN );
+        rStrm << XclExpString( rCachedName.maName, XclStrFlags::NONE, EXC_PT_MAXSTRLEN );
     return rStrm;
 }
 
@@ -657,7 +657,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTFieldExtInfo& rInfo )
         sal_uInt8 nNameLen = static_cast<sal_uInt8>(aFinalName.getLength());
         rStrm << nNameLen;
         rStrm.WriteZeroBytes(10);
-        rStrm << XclExpString(aFinalName, EXC_STR_NOHEADER);
+        rStrm << XclExpString(aFinalName, XclStrFlags::NoHeader);
     }
     else
     {
@@ -1016,7 +1016,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTViewEx9Info& rInfo )
         << EXC_PT_AUTOFMT_FLAGS
         << rInfo.mnAutoFormat
         << rInfo.mnGridLayout
-        << XclExpString(rInfo.maGrandTotalName, EXC_STR_DEFAULT, EXC_PT_MAXSTRLEN);
+        << XclExpString(rInfo.maGrandTotalName, XclStrFlags::NONE, EXC_PT_MAXSTRLEN);
 }
 
 XclPTAddl::XclPTAddl() :

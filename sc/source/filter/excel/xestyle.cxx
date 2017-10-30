@@ -1006,9 +1006,9 @@ void XclExpFont::WriteBody( XclExpStream& rStrm )
     OSL_ENSURE( maData.maName.getLength() < 256, "XclExpFont::WriteBody - font name too long" );
     XclExpString aFontName;
     if( GetBiff() <= EXC_BIFF5 )
-        aFontName.AssignByte( maData.maName, GetTextEncoding(), EXC_STR_8BITLENGTH );
+        aFontName.AssignByte( maData.maName, GetTextEncoding(), XclStrFlags::EightBitLength );
     else
-        aFontName.Assign( maData.maName, EXC_STR_FORCEUNICODE | EXC_STR_8BITLENGTH );
+        aFontName.Assign( maData.maName, XclStrFlags::ForceUnicode | XclStrFlags::EightBitLength );
 
     rStrm   << maData.mnHeight
             << nAttr
@@ -1418,7 +1418,7 @@ void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, sal_uInt16 nXcl
 {
     XclExpString aExpStr;
     if( GetBiff() <= EXC_BIFF5 )
-        aExpStr.AssignByte( rFormatStr, GetTextEncoding(), EXC_STR_8BITLENGTH );
+        aExpStr.AssignByte( rFormatStr, GetTextEncoding(), XclStrFlags::EightBitLength );
     else
         aExpStr.Assign( rFormatStr );
 
@@ -2312,7 +2312,7 @@ void XclExpStyle::WriteBody( XclExpStream& rStrm )
         if( rStrm.GetRoot().GetBiff() == EXC_BIFF8 )
             aNameEx.Assign( maName );
         else
-            aNameEx.AssignByte( maName, rStrm.GetRoot().GetTextEncoding(), EXC_STR_8BITLENGTH );
+            aNameEx.AssignByte( maName, rStrm.GetRoot().GetTextEncoding(), XclStrFlags::EightBitLength );
         rStrm << aNameEx;
     }
 }

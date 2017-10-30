@@ -581,7 +581,7 @@ void ExcFilterCondition::SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, 
     nType = nTp;
     nOper = nOp;
     fVal = fV;
-    pText.reset( pT ? new XclExpString( *pT, EXC_STR_8BITLENGTH ) : nullptr);
+    pText.reset( pT ? new XclExpString( *pT, XclStrFlags::EightBitLength ) : nullptr);
 }
 
 void ExcFilterCondition::Save( XclExpStream& rStrm )

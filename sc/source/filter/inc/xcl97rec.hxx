@@ -304,7 +304,7 @@ class ExcBundlesheet8 : public ExcBundlesheetBase
 {
 private:
     OUString                    sUnicodeName;
-    XclExpString                GetName() const { return XclExpString( sUnicodeName, EXC_STR_8BITLENGTH );}
+    XclExpString                GetName() const { return XclExpString( sUnicodeName, XclStrFlags::EightBitLength );}
 
     virtual void                SaveCont( XclExpStream& rStrm ) override;
 

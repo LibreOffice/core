@@ -337,7 +337,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     // description
     if( bWithRepr )
     {
-        XclExpString aDescr( rRepr, EXC_STR_FORCEUNICODE, 255 );
+        XclExpString aDescr( rRepr, XclStrFlags::ForceUnicode, 255 );
         aXclStrm << sal_uInt32( aDescr.Len() + 1 );     // string length + 1 trailing zero word
         aDescr.WriteBuffer( aXclStrm );                 // NO flags
         aXclStrm << sal_uInt16( 0 );
@@ -369,7 +369,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
 
         OString aAsciiLink(OUStringToOString(aFileName,
             rRoot.GetTextEncoding()));
-        XclExpString aLink( aFileName, EXC_STR_FORCEUNICODE, 255 );
+        XclExpString aLink( aFileName, XclStrFlags::ForceUnicode, 255 );
         aXclStrm    << XclTools::maGuidFileMoniker
                     << nLevel
                     << sal_uInt32( aAsciiLink.getLength() + 1 );      // string length + 1 trailing zero byte
@@ -401,7 +401,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     }
     else if( eProtocol != INetProtocol::NotValid )
     {
-        XclExpString aUrl( aUrlObj.GetURLNoMark(), EXC_STR_FORCEUNICODE, 255 );
+        XclExpString aUrl( aUrlObj.GetURLNoMark(), XclStrFlags::ForceUnicode, 255 );
         aXclStrm    << XclTools::maGuidUrlMoniker
                     << sal_uInt32( aUrl.GetBufferSize() + 2 );  // byte count + 1 trailing zero word
         aUrl.WriteBuffer( aXclStrm );                           // NO flags
@@ -433,12 +433,12 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
             }
         }
 
-        mxTextMark.reset( new XclExpString( aTextMark, EXC_STR_FORCEUNICODE, 255 ) );
+        mxTextMark.reset( new XclExpString( aTextMark, XclStrFlags::ForceUnicode, 255 ) );
     }
 
     // text mark
     if( !mxTextMark.get() && aUrlObj.HasMark() )
-        mxTextMark.reset( new XclExpString( aUrlObj.GetMark(), EXC_STR_FORCEUNICODE, 255 ) );
+        mxTextMark.reset( new XclExpString( aUrlObj.GetMark(), XclStrFlags::ForceUnicode, 255 ) );
 
     if( mxTextMark.get() )
     {
@@ -1665,7 +1665,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                     /*  Formula is a list of string tokens -> build the Excel string.
                         Data validity is BIFF8 only (important for the XclExpString object).
                         Excel uses the NUL character as string list separator. */
-                    mxString1.reset( new XclExpString( EXC_STR_8BITLENGTH ) );
+                    mxString1.reset( new XclExpString( XclStrFlags::EightBitLength ) );
                     sal_Int32 nTokenCnt = comphelper::string::getTokenCount(aString, '\n');
                     sal_Int32 nStringIx = 0;
                     for( sal_Int32 nToken = 0; nToken < nTokenCnt; ++nToken )

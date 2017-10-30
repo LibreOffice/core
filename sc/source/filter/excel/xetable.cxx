@@ -691,7 +691,7 @@ XclExpLabelCell::XclExpLabelCell(
 {
     sal_uInt16 nMaxLen = (rRoot.GetBiff() == EXC_BIFF8) ? EXC_STR_MAXLEN : EXC_LABEL_MAXLEN;
     XclExpStringRef xText = XclExpStringHelper::CreateCellString(
-        rRoot, rStr, pPattern, EXC_STR_DEFAULT, nMaxLen);
+        rRoot, rStr, pPattern, XclStrFlags::NONE, nMaxLen);
     Init( rRoot, pPattern, xText );
 }
 
@@ -706,10 +706,10 @@ XclExpLabelCell::XclExpLabelCell(
     XclExpStringRef xText;
     if (pEditText)
         xText = XclExpStringHelper::CreateCellString(
-            rRoot, *pEditText, pPattern, rLinkHelper, EXC_STR_DEFAULT, nMaxLen);
+            rRoot, *pEditText, pPattern, rLinkHelper, XclStrFlags::NONE, nMaxLen);
     else
         xText = XclExpStringHelper::CreateCellString(
-            rRoot, EMPTY_OUSTRING, pPattern, EXC_STR_DEFAULT, nMaxLen);
+            rRoot, EMPTY_OUSTRING, pPattern, XclStrFlags::NONE, nMaxLen);
 
     Init( rRoot, pPattern, xText );
 }

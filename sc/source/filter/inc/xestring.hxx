@@ -49,7 +49,7 @@ public:
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
     explicit            XclExpString(
-                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            XclStrFlags nFlags = XclStrFlags::NONE,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
     /** Constructs an unformatted BIFF8 Unicode string.
@@ -57,7 +57,7 @@ public:
         @param nMaxLen  The maximum number of characters to store in this string. */
     explicit            XclExpString(
                             const OUString& rString,
-                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            XclStrFlags nFlags = XclStrFlags::NONE,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
     // assign -----------------------------------------------------------------
@@ -67,7 +67,7 @@ public:
         @param nMaxLen  The maximum number of characters to store in this string. */
     void                Assign(
                             const OUString& rString,
-                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            XclStrFlags nFlags = XclStrFlags::NONE,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
     /** Assigns a Unicode character, converts this object to a BIFF8 Unicode string. */
@@ -79,7 +79,7 @@ public:
     void                AssignByte(
                             const OUString& rString,
                             rtl_TextEncoding eTextEnc,
-                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            XclStrFlags nFlags = XclStrFlags::NONE,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
     // append -----------------------------------------------------------------

@@ -115,7 +115,7 @@ void XclExpString::Assign( const OUString& rString, XclStrFlags nFlags, sal_uInt
 
 void XclExpString::Assign( sal_Unicode cChar )
 {
-    Build( &cChar, 1, EXC_STR_DEFAULT, EXC_STR_MAXLEN );
+    Build( &cChar, 1, XclStrFlags::NONE, EXC_STR_MAXLEN );
 }
 
 void XclExpString::AssignByte(
@@ -496,12 +496,12 @@ void XclExpString::CharsToBuffer( const sal_Char* pcSource, sal_Int32 nBegin, sa
 void XclExpString::Init( sal_Int32 nCurrLen, XclStrFlags nFlags, sal_uInt16 nMaxLen, bool bBiff8 )
 {
     mbIsBiff8 = bBiff8;
-    mbIsUnicode = bBiff8 && ::get_flag( nFlags, EXC_STR_FORCEUNICODE );
-    mb8BitLen = ::get_flag( nFlags, EXC_STR_8BITLENGTH );
-    mbSmartFlags = bBiff8 && ::get_flag( nFlags, EXC_STR_SMARTFLAGS );
-    mbSkipFormats = ::get_flag( nFlags, EXC_STR_SEPARATEFORMATS );
+    mbIsUnicode = bBiff8 && ( nFlags & XclStrFlags::ForceUnicode );
+    mb8BitLen = bool( nFlags & XclStrFlags::EightBitLength );
+    mbSmartFlags = bBiff8 && ( nFlags & XclStrFlags::SmartFlags );
+    mbSkipFormats = bool( nFlags & XclStrFlags::SeparateFormats );
     mbWrapped = false;
-    mbSkipHeader = ::get_flag( nFlags, EXC_STR_NOHEADER );
+    mbSkipHeader = bool( nFlags & XclStrFlags::NoHeader );
     mnMaxLen = nMaxLen;
     SetStrLen( nCurrLen );
 

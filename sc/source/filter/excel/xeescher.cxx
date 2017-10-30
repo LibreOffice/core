@@ -1220,7 +1220,7 @@ XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
                 if( pScNote->GetAuthor().isEmpty() )
                     maAuthor = XclExpString( " " );
                 else
-                    maAuthor = XclExpString( pScNote->GetAuthor(), EXC_STR_DEFAULT, 54 );
+                    maAuthor = XclExpString( pScNote->GetAuthor(), XclStrFlags::NONE, 54 );
             }
 
             SetRecSize( 9 + maAuthor.GetSize() );

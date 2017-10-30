@@ -38,7 +38,7 @@ public:
                         ~XclImpString();
 
     /** Reads a complete string from the passed stream. */
-    void                Read( XclImpStream& rStrm, XclStrFlags nFlags = EXC_STR_DEFAULT );
+    void                Read( XclImpStream& rStrm, XclStrFlags nFlags = XclStrFlags::NONE );
 
     /** Sets the passed string data. */
     void         SetText( const OUString& rText ) { maString = rText; }
