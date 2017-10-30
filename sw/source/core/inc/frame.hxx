@@ -116,7 +116,7 @@ namespace drawinglayer { namespace attribute {
     typedef std::shared_ptr< SdrAllFillAttributesHelper > SdrAllFillAttributesHelperPtr;
 }}
 
-/// Helper class to isolate gerometry-defining members of SwFrame
+/// Helper class to isolate geometry-defining members of SwFrame
 /// and to control their accesses. Moved to own class to have no
 /// hidden accesses to 'private' members anymore
 class SW_DLLPUBLIC SwFrameRect
