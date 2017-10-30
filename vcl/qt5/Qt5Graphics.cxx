@@ -18,7 +18,11 @@
  */
 
 #include "Qt5Graphics.hxx"
+
 #include "Qt5Frame.hxx"
+#include "Qt5Painter.hxx"
+
+#include <qt5/Qt5Font.hxx>
 
 #include <QtWidgets/QWidget>
 
@@ -44,30 +48,6 @@ Qt5Graphics::~Qt5Graphics()
     // release the text styles
     for (int i = 0; i < MAX_FALLBACK; ++i)
         delete m_pTextStyle[ i ];
-}
-
-void Qt5Graphics::PreparePainter( QPainter& rPainter, sal_uInt8 nTransparency )
-{
-    if ( m_pQImage )
-        rPainter.begin( m_pQImage );
-    else
-    {
-        assert( dynamic_cast< QPaintDevice* >( m_pFrame->GetQWidget() ) );
-        rPainter.begin( m_pFrame->GetQWidget() );
-    }
-    if ( !m_aClipPath.isEmpty() )
-        rPainter.setClipPath( m_aClipPath );
-    else
-        rPainter.setClipRegion( m_aClipRegion );
-    if ( SALCOLOR_NONE != m_aLineColor )
-    {
-        QColor aColor = QColor::fromRgb( QRgb( m_aLineColor ) );
-        aColor.setAlpha( nTransparency );
-        rPainter.setPen( aColor );
-    }
-    else
-        rPainter.setPen( Qt::NoPen );
-    rPainter.setCompositionMode( m_eCompositionMode );
 }
 
 void Qt5Graphics::ChangeQImage( QImage *pQImage )
