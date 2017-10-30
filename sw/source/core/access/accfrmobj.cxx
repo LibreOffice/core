@@ -243,16 +243,16 @@ SwRect SwAccessibleChild::GetBox( const SwAccessibleMap& rAccMap ) const
         if ( mpFrame->IsPageFrame() &&
              static_cast< const SwPageFrame * >( mpFrame )->IsEmptyPage() )
         {
-            aBox = SwRect( mpFrame->getSwFrame().Left(), mpFrame->getSwFrame().Top()-1, 1, 1 );
+            aBox = SwRect( mpFrame->getFrameArea().Left(), mpFrame->getFrameArea().Top()-1, 1, 1 );
         }
         else if ( mpFrame->IsTabFrame() )
         {
-            aBox = SwRect( mpFrame->getSwFrame() );
-            aBox.Intersection( mpFrame->GetUpper()->getSwFrame() );
+            aBox = SwRect( mpFrame->getFrameArea() );
+            aBox.Intersection( mpFrame->GetUpper()->getFrameArea() );
         }
         else
         {
-            aBox = mpFrame->getSwFrame();
+            aBox = mpFrame->getFrameArea();
         }
     }
     else if( mpDrawObj )
@@ -268,7 +268,7 @@ SwRect SwAccessibleChild::GetBox( const SwAccessibleMap& rAccMap ) const
         {
             aBox = SwRect( mpDrawObj->GetCurrentBoundRect() );
             // tdf#91260 drawing object may be partially off-page
-            aBox.Intersection(pPage->getSwFrame());
+            aBox.Intersection(pPage->getFrameArea());
         }
     }
     else if ( mpWindow )
@@ -294,7 +294,7 @@ SwRect SwAccessibleChild::GetBounds( const SwAccessibleMap& rAccMap ) const
         if( mpFrame->IsPageFrame() &&
             static_cast< const SwPageFrame * >( mpFrame )->IsEmptyPage() )
         {
-            aBound = SwRect( mpFrame->getSwFrame().Left(), mpFrame->getSwFrame().Top()-1, 0, 0 );
+            aBound = SwRect( mpFrame->getFrameArea().Left(), mpFrame->getFrameArea().Top()-1, 0, 0 );
         }
         else
             aBound = mpFrame->PaintArea();

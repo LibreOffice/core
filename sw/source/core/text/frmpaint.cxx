@@ -108,7 +108,7 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
 {
     if( pFrame->IsUndersized() )
     {
-        SwTwips nBottom = pFrame->getSwFrame().Bottom();
+        SwTwips nBottom = pFrame->getFrameArea().Bottom();
         if( aRect.Bottom() > nBottom )
             aRect.Bottom( nBottom );
     }
@@ -125,7 +125,7 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
             outside of the paint rect
         */
         nDivider = !rLineInf.GetDivider().isEmpty() ? rLineInf.GetDividerCountBy() : 0;
-        nX = pFrame->getSwFrame().Left();
+        nX = pFrame->getFrameArea().Left();
         SwCharFormat* pFormat = rLineInf.GetCharFormat( const_cast<IDocumentStylePoolAccess&>(pFrame->GetNode()->getIDocumentStylePoolAccess()) );
         OSL_ENSURE( pFormat, "PaintExtraData without CharFormat" );
         pFnt.reset( new SwFont( &pFormat->GetAttrSet(), pFrame->GetTextNode()->getIDocumentSettingAccess() ) );
@@ -159,7 +159,7 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         else
         {
             bGoLeft = false;
-            nX += pFrame->getSwFrame().Width() + rLineInf.GetPosFromLeft();
+            nX += pFrame->getFrameArea().Width() + rLineInf.GetPosFromLeft();
             if( nX > aRect.Right() )
                 bLineNum = false;
         }
@@ -178,8 +178,8 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         const SwFrame* pTmpFrame = pFrame->FindTabFrame();
         if( !pTmpFrame )
             pTmpFrame = pFrame;
-        nRedX = text::HoriOrientation::LEFT == eHor ? pTmpFrame->getSwFrame().Left() - REDLINE_DISTANCE :
-            pTmpFrame->getSwFrame().Right() + REDLINE_DISTANCE;
+        nRedX = text::HoriOrientation::LEFT == eHor ? pTmpFrame->getFrameArea().Left() - REDLINE_DISTANCE :
+            pTmpFrame->getFrameArea().Right() + REDLINE_DISTANCE;
     }
 }
 
@@ -283,7 +283,7 @@ void SwExtraPainter::PaintRedline( SwTwips nY, long nMax )
 
 void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
 {
-    if( getSwFrame().Top() > rRect.Bottom() || getSwFrame().Bottom() < rRect.Top() )
+    if( getFrameArea().Top() > rRect.Bottom() || getFrameArea().Bottom() < rRect.Top() )
         return;
 
     const SwTextNode& rTextNode = *GetTextNode();
@@ -298,7 +298,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
     bool bRedLine = eHor != text::HoriOrientation::NONE;
     if ( bLineNum || bRedLine )
     {
-        if( IsLocked() || IsHiddenNow() || !getSwPrint().Height() )
+        if( IsLocked() || IsHiddenNow() || !getFramePrintArea().Height() )
             return;
         SwViewShell *pSh = getRootFrame()->GetCurrShell();
 
@@ -392,11 +392,11 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
             if( bLineNum && rLineInf.IsCountBlankLines() &&
                 ( aExtra.HasNumber() || aExtra.HasDivider() ) )
             {
-                aExtra.PaintExtra( getSwFrame().Top()+getSwPrint().Top(), aExtra.GetFont()
-                    ->GetAscent( pSh, *pSh->GetOut() ), getSwPrint().Height(), bRedLine );
+                aExtra.PaintExtra( getFrameArea().Top()+getFramePrintArea().Top(), aExtra.GetFont()
+                    ->GetAscent( pSh, *pSh->GetOut() ), getFramePrintArea().Height(), bRedLine );
             }
             else if( bRedLine )
-                aExtra.PaintRedline( getSwFrame().Top()+getSwPrint().Top(), getSwPrint().Height() );
+                aExtra.PaintRedline( getFrameArea().Top()+getFramePrintArea().Top(), getFramePrintArea().Height() );
         }
 
         const_cast<SwRect&>(rRect) = rOldRect;
@@ -406,11 +406,11 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
 SwRect SwTextFrame::Paint()
 {
     // finger layout
-    OSL_ENSURE( GetValidPosFlag(), "+SwTextFrame::Paint: no Calc()" );
+    OSL_ENSURE( isFrameAreaPositionValid(), "+SwTextFrame::Paint: no Calc()" );
 
-    SwRect aRet( getSwPrint() );
+    SwRect aRet( getFramePrintArea() );
     if ( IsEmpty() || !HasPara() )
-        aRet += getSwFrame().Pos();
+        aRet += getFrameArea().Pos();
     else
     {
         // We return the right paint rect. Use the calculated PaintOfst as the
@@ -419,7 +419,7 @@ SwRect SwTextFrame::Paint()
         long l;
 
         if ( IsVertLR() ) // mba: the following line was added, but we don't need it for the existing directions; kept for IsVertLR(), but should be checked
-            rRepaint.Chg( ( GetUpper()->getSwFrame() ).Pos() + ( GetUpper()->getSwPrint() ).Pos(), ( GetUpper()->getSwPrint() ).SSize() );
+            rRepaint.Chg( ( GetUpper()->getFrameArea() ).Pos() + ( GetUpper()->getFramePrintArea() ).Pos(), ( GetUpper()->getFramePrintArea() ).SSize() );
 
         if( rRepaint.GetOfst() )
             rRepaint.Left( rRepaint.GetOfst() );
@@ -434,9 +434,9 @@ SwRect SwTextFrame::Paint()
         // then extend the rectangle to include the page margin as well,
         // otherwise some font will be clipped.
         SwLayoutFrame* pBodyFrame = GetUpper();
-        if (pBodyFrame->IsBodyFrame() && aRet.Left() == (pBodyFrame->getSwFrame().Left() + pBodyFrame->getSwPrint().Left()))
+        if (pBodyFrame->IsBodyFrame() && aRet.Left() == (pBodyFrame->getFrameArea().Left() + pBodyFrame->getFramePrintArea().Left()))
             if (SwLayoutFrame* pPageFrame = pBodyFrame->GetUpper())
-                aRet.Left(pPageFrame->getSwFrame().Left());
+                aRet.Left(pPageFrame->getFrameArea().Left());
 
         if ( IsRightToLeft() )
             SwitchLTRtoRTL( aRet );
@@ -488,7 +488,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 }
             }
 
-            if( pSh->GetViewOptions()->IsParagraph() && getSwPrint().Height() )
+            if( pSh->GetViewOptions()->IsParagraph() && getFramePrintArea().Height() )
             {
                 if( RTL_TEXTENCODING_SYMBOL == pFnt->GetCharSet( SwFontScript::Latin ) &&
                     pFnt->GetName( SwFontScript::Latin ) != numfunc::GetDefBulletFontname() )
@@ -505,7 +505,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
 
                 pFnt->Invalidate();
                 pFnt->ChgPhysFnt( pSh, *pSh->GetOut() );
-                Point aPos = getSwFrame().Pos() + getSwPrint().Pos();
+                Point aPos = getFrameArea().Pos() + getFramePrintArea().Pos();
 
                 const SvxLRSpaceItem &rSpace =
                     GetTextNode()->GetSwAttrSet().GetLRSpace();
@@ -583,13 +583,13 @@ void SwTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
 
     if( !IsEmpty() || !PaintEmpty( rRect, true ) )
     {
-        if( IsLocked() || IsHiddenNow() || ! getSwPrint().HasArea() )
+        if( IsLocked() || IsHiddenNow() || ! getFramePrintArea().HasArea() )
             return;
 
         // It can happen that the IdleCollector withdrew my cached information
         if( !HasPara() )
         {
-            OSL_ENSURE( GetValidPosFlag(), "+SwTextFrame::Paint: no Calc()" );
+            OSL_ENSURE( isFrameAreaPositionValid(), "+SwTextFrame::Paint: no Calc()" );
 
             // #i29062# pass info that we are currently
             // painting.

@@ -248,16 +248,21 @@ SwTextFrame* SwAutoFormat::GetFrame( const SwTextNode& rTextNd ) const
     // get the Frame
     const SwContentFrame *pFrame = rTextNd.getLayoutFrame( m_pEditShell->GetLayout() );
     OSL_ENSURE( pFrame, "For Autoformat a Layout is needed" );
-    if( m_aFlags.bAFormatByInput && !pFrame->IsValid() )
+
+    if( m_aFlags.bAFormatByInput && !pFrame->isFrameAreaDefinitionValid() )
     {
         DisableCallbackAction a(const_cast<SwRootFrame&>(*pFrame->getRootFrame()));
-        SwRect aTmpFrame( pFrame->getSwFrame() );
-        SwRect aTmpPrt( pFrame->getSwPrint() );
+        SwRect aTmpFrame( pFrame->getFrameArea() );
+        SwRect aTmpPrt( pFrame->getFramePrintArea() );
         pFrame->Calc(pFrame->getRootFrame()->GetCurrShell()->GetOut());
-        if( pFrame->getSwFrame() != aTmpFrame || pFrame->getSwPrint() != aTmpPrt ||
+
+        if( pFrame->getFrameArea() != aTmpFrame || pFrame->getFramePrintArea() != aTmpPrt ||
             ( pFrame->IsTextFrame() && !const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pFrame))->Paint().IsEmpty() ) )
+        {
             pFrame->SetCompletePaint();
+        }
     }
+
     return const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pFrame))->GetFormatted();
 }
 
@@ -652,7 +657,7 @@ bool SwAutoFormat::DoTable()
             {
                 eHori = text::HoriOrientation::NONE;
                 // then - as last - we need to add the current frame width into the array
-                aPosArr.push_back( static_cast<sal_uInt16>(m_pCurTextFrame->getSwFrame().Width()) );
+                aPosArr.push_back( static_cast<sal_uInt16>(m_pCurTextFrame->getFrameArea().Width()) );
             }
             else
                 eHori = text::HoriOrientation::LEFT;
@@ -1374,7 +1379,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
     bool bBreak = true;
 
     // first, determine current indentation and frame width
-    SwTwips nFrameWidth = m_pCurTextFrame->getSwPrint().Width();
+    SwTwips nFrameWidth = m_pCurTextFrame->getFramePrintArea().Width();
     SwTwips nLeftTextPos;
     {
         sal_Int32 nPos(0);

@@ -142,7 +142,7 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
             rSdrView.setHideDraw( !pPrintData->IsPrintDraw() );
         }
         basegfx::B2IRectangle const pageFrame(
-            vcl::unotools::b2IRectangleFromRectangle(rPageFrame.getSwFrame().SVRect()));
+            vcl::unotools::b2IRectangleFromRectangle(rPageFrame.getFrameArea().SVRect()));
         GetPageView()->DrawLayer(_nLayerID, pOutDev, pRedirector, aPaintRect.SVRect(), &pageFrame);
         pOutDev->Pop();
 
@@ -180,7 +180,7 @@ bool SwViewShellImp::IsDragPossible( const Point &rPoint )
         aRect.Union( aTmp );
     }
     else
-        aRect = GetShell()->GetLayout()->getSwFrame();
+        aRect = GetShell()->GetLayout()->getFrameArea();
 
     aRect.Top(    aRect.Top()    - FUZZY_EDGE );
     aRect.Bottom( aRect.Bottom() + FUZZY_EDGE );
@@ -227,7 +227,7 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
                 continue;
 
             const SwFrame *pAnchor = static_cast<const SwDrawContact*>(pCont)->GetAnchorFrame();
-            if ( !pAnchor || pAnchor->IsInFly() || !pAnchor->IsValid() ||
+            if ( !pAnchor || pAnchor->IsInFly() || !pAnchor->isFrameAreaDefinitionValid() ||
                  !pAnchor->GetUpper() || !pAnchor->FindPageFrame() ||
                  (RndStdIds::FLY_AS_CHAR == pCont->GetFormat()->GetAnchor().GetAnchorId()) )
             {

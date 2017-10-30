@@ -660,13 +660,13 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
         if ( bWidth )
         {
-            nVal = aRectFnSet.GetWidth(pFrame->getSwFrame());
+            nVal = aRectFnSet.GetWidth(pFrame->getFrameArea());
             mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::Width, nVal );
         }
 
         if ( bHeight )
         {
-            nVal = aRectFnSet.GetHeight(pFrame->getSwFrame());
+            nVal = aRectFnSet.GetHeight(pFrame->getFrameArea());
             mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::Height, nVal );
         }
 
@@ -678,7 +678,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                    !static_cast<const SwTabFrame*>(pFrame)->IsFollow() &&
                    !static_cast<const SwTabFrame*>(pFrame)->HasFollow() ) )
             {
-                mpPDFExtOutDevData->SetStructureBoundingBox(pFrame->getSwFrame().SVRect());
+                mpPDFExtOutDevData->SetStructureBoundingBox(pFrame->getFrameArea().SVRect());
             }
         }
 
@@ -699,8 +699,8 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
                 const TableColumnsMapEntry& rCols = SwEnhancedPDFExportHelper::GetTableColumnsMap()[ pTable ];
 
-                const long nLeft  = fnRectX.GetLeft(pThisCell->getSwFrame());
-                const long nRight = fnRectX.GetRight(pThisCell->getSwFrame());
+                const long nLeft  = fnRectX.GetLeft(pThisCell->getFrameArea());
+                const long nRight = fnRectX.GetRight(pThisCell->getFrameArea());
                 const TableColumnsMapEntry::const_iterator aLeftIter =  rCols.find( nLeft );
                 const TableColumnsMapEntry::const_iterator aRightIter = rCols.find( nRight );
 
@@ -1190,12 +1190,12 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                         {
                             const SwFrame* pCellFrame = pRowFrame->GetLower();
 
-                            const long nLeft  = aRectFnSet.GetLeft(pCellFrame->getSwFrame());
+                            const long nLeft  = aRectFnSet.GetLeft(pCellFrame->getFrameArea());
                             rCols.insert( nLeft );
 
                             while ( pCellFrame )
                             {
-                                const long nRight = aRectFnSet.GetRight(pCellFrame->getSwFrame());
+                                const long nRight = aRectFnSet.GetRight(pCellFrame->getFrameArea());
                                 rCols.insert( nRight );
                                 pCellFrame = pCellFrame->GetNext();
                             }
@@ -1518,7 +1518,7 @@ tools::Rectangle SwEnhancedPDFExportHelper::SwRectToPDFRect(const SwPageFrame* p
     double fScale = 0.75;
     aRectSize.Width() = (aRectSize.Width() * fScale);
     aRectSize.Height() = (aRectSize.Height() * fScale);
-    long nOrigHeight = pCurrPage->getSwFrame().Height();
+    long nOrigHeight = pCurrPage->getFrameArea().Height();
     long nNewHeight = nOrigHeight*fScale;
     long nShiftY = (nOrigHeight-nNewHeight)/2;
     aRect.Left() = (aRect.Left() * fScale);
@@ -2258,7 +2258,7 @@ void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rP
             // Add offset to current page:
             const SwPageFrame* pPageFrame = pTmpFrame->FindPageFrame();
             SwRect aHFLinkRect( rLinkRect );
-            aHFLinkRect.Pos() = pPageFrame->getSwFrame().Pos() + aOffset;
+            aHFLinkRect.Pos() = pPageFrame->getFrameArea().Pos() + aOffset;
 
             // #i97135# the gcc_x64 optimizer gets aHFLinkRect != rLinkRect wrong
             // fool it by comparing the position only (the width and height are the

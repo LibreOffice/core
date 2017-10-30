@@ -75,7 +75,7 @@ void SwFlyInContentFrame::SetRefPoint( const Point& rPoint,
     SwRectFnSet aRectFnSet(GetAnchorFrame());
 
     {
-        SwFrameRect::FrameWriteAccess aFrm(*this);
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aRectFnSet.SetPos( aFrm, rPoint + rRelPos );
     }
 
@@ -84,7 +84,7 @@ void SwFlyInContentFrame::SetRefPoint( const Point& rPoint,
     if( pNotify )
     {
         InvalidatePage();
-        mbValidPos = false;
+        setFrameAreaPositionValid(false);
         m_bInvalid  = true;
         Calc(getRootFrame()->GetCurrShell()->GetOut());
         delete pNotify;
@@ -135,7 +135,7 @@ void SwFlyInContentFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pN
 /// Here the content gets formatted initially.
 void SwFlyInContentFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs )
 {
-    if ( !getSwFrame().Height() )
+    if ( !getFrameArea().Height() )
     {
         Lock(); //don't format the anchor on the crook.
         SwContentFrame *pContent = ContainsContent();
@@ -155,9 +155,9 @@ void SwFlyInContentFrame::Format( vcl::RenderContext* pRenderContext, const SwBo
  **/
 void SwFlyInContentFrame::MakeObjPos()
 {
-    if ( !mbValidPos )
+    if ( !isFrameAreaPositionValid() )
     {
-        mbValidPos = true;
+        setFrameAreaPositionValid(true);
         SwFlyFrameFormat *pFormat = GetFormat();
         const SwFormatVertOrient &rVert = pFormat->GetVertOrient();
         //Update the current values in the format if needed, during this we of
@@ -227,26 +227,31 @@ void SwFlyInContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     const SwBorderAttrs &rAttrs = *aAccess.Get();
 
     if ( IsClipped() )
-        mbValidSize = m_bHeightClipped = m_bWidthClipped = false;
+    {
+        setFrameAreaSizeValid(false);
+        m_bHeightClipped = m_bWidthClipped = false;
+    }
 
-    while ( !mbValidPos || !mbValidSize || !mbValidPrtArea || !m_bValidContentPos )
+    while ( !isFrameAreaPositionValid() || !isFrameAreaSizeValid() || !isFramePrintAreaValid() || !m_bValidContentPos )
     {
         //Only stop, if the flag is set!!
-        if ( !mbValidSize )
+        if ( !isFrameAreaSizeValid() )
         {
-            mbValidPrtArea = false;
+            setFramePrintAreaValid(false);
         }
 
-        if ( !mbValidPrtArea )
+        if ( !isFramePrintAreaValid() )
         {
             MakePrtArea( rAttrs );
             m_bValidContentPos = false;
         }
 
-        if ( !mbValidSize )
+        if ( !isFrameAreaSizeValid() )
+        {
             Format( getRootFrame()->GetCurrShell()->GetOut(), &rAttrs );
+        }
 
-        if ( !mbValidPos )
+        if ( !isFrameAreaPositionValid() )
         {
             MakeObjPos();
         }
@@ -256,16 +261,17 @@ void SwFlyInContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
         // re-activate clipping of as-character anchored Writer fly frames
         // depending on compatibility option <ClipAsCharacterAnchoredWriterFlyFrames>
-        if ( mbValidPos && mbValidSize &&
-             GetFormat()->getIDocumentSettingAccess().get( DocumentSettingId::CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME ) )
+        if ( isFrameAreaPositionValid() &&
+            isFrameAreaSizeValid() &&
+            GetFormat()->getIDocumentSettingAccess().get( DocumentSettingId::CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME ) )
         {
             SwFrame* pFrame = AnchorFrame();
-            if ( getSwFrame().Left() == (pFrame->getSwFrame().Left()+pFrame->getSwPrint().Left()) &&
-                 getSwFrame().Width() > pFrame->getSwPrint().Width() )
+            if ( getFrameArea().Left() == (pFrame->getFrameArea().Left()+pFrame->getFramePrintArea().Left()) &&
+                 getFrameArea().Width() > pFrame->getFramePrintArea().Width() )
             {
-                SwFrameRect::FrameWriteAccess aFrm(*this);
-                aFrm.Width( pFrame->getSwPrint().Width() );
-                mbValidPrtArea = false;
+                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+                aFrm.Width( pFrame->getFramePrintArea().Width() );
+                setFramePrintAreaValid(false);
                 m_bWidthClipped = true;
             }
         }

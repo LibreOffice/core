@@ -74,19 +74,19 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
     // PrtArea of the Upper minus any neighbors (for robustness).
     // The PrtArea has always the size of the frame.
 
-    if ( !mbValidSize )
+    if ( !isFrameAreaSizeValid() )
     {
-        SwTwips nHeight = GetUpper()->getSwPrint().Height();
-        SwTwips nWidth = GetUpper()->getSwPrint().Width();
+        SwTwips nHeight = GetUpper()->getFramePrintArea().Height();
+        SwTwips nWidth = GetUpper()->getFramePrintArea().Width();
         const SwFrame *pFrame = GetUpper()->Lower();
         do
         {
             if ( pFrame != this )
             {
                 if( pFrame->IsVertical() )
-                    nWidth -= pFrame->getSwFrame().Width();
+                    nWidth -= pFrame->getFrameArea().Width();
                 else
-                    nHeight -= pFrame->getSwFrame().Height();
+                    nHeight -= pFrame->getFrameArea().Height();
             }
             pFrame = pFrame->GetNext();
         } while ( pFrame );
@@ -96,7 +96,7 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             nHeight = 0;
         }
 
-        SwFrameRect::FrameWriteAccess aFrm(*this);
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aFrm.Height( nHeight );
 
         if( IsVertical() && !IsVertLR() && !IsReverse() && nWidth != aFrm.Width() )
@@ -117,7 +117,7 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             bNoGrid = false;
             long nSum = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
             SwRectFnSet aRectFnSet(this);
-            long nSize = aRectFnSet.GetWidth(getSwFrame());
+            long nSize = aRectFnSet.GetWidth(getFrameArea());
             long nBorder = 0;
             if( GRID_LINES_CHARS == pGrid->GetGridType() )
             {
@@ -128,12 +128,12 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                 nBorder /= 2;
             }
 
-            SwFrameRect::PrintWriteAccess aPrt(*this);
+            SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
             aRectFnSet.SetPosX( aPrt, nBorder );
             aRectFnSet.SetWidth( aPrt, nSize );
 
             // Height of body frame:
-            nBorder = aRectFnSet.GetHeight(getSwFrame());
+            nBorder = aRectFnSet.GetHeight(getFrameArea());
 
             // Number of possible lines in area of body frame:
             long nNumberOfLines = nBorder / nSum;
@@ -156,14 +156,15 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
 
     if( bNoGrid )
     {
-        SwFrameRect::PrintWriteAccess aPrt(*this);
+        SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
         aPrt.Pos().setX(0);
         aPrt.Pos().setY(0);
-        aPrt.Height( getSwFrame().Height() );
-        aPrt.Width( getSwFrame().Width() );
+        aPrt.Height( getFrameArea().Height() );
+        aPrt.Width( getFrameArea().Width() );
     }
 
-    mbValidSize = mbValidPrtArea = true;
+    setFrameAreaSizeValid(true);
+    setFramePrintAreaValid(true);
 }
 
 SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPgDsc ) :
@@ -194,7 +195,7 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
     vcl::RenderContext* pRenderContext = pSh ? pSh->GetOut() : nullptr;
 
     {
-        SwFrameRect::FrameWriteAccess aFrm(*this);
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
 
         if ( bBrowseMode )
         {
@@ -222,7 +223,7 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
         m_bEmptyPage = false;
         Calc(pRenderContext); // so that the PrtArea is correct
         SwBodyFrame *pBodyFrame = new SwBodyFrame( pDoc->GetDfltFrameFormat(), this );
-        pBodyFrame->ChgSize( getSwPrint().SSize() );
+        pBodyFrame->ChgSize( getFramePrintArea().SSize() );
         pBodyFrame->Paste( this );
         pBodyFrame->Calc(pRenderContext); // so that the columns can be inserted correctly
         pBodyFrame->InvalidatePos();
@@ -285,7 +286,7 @@ void SwPageFrame::DestroyImpl()
                 // including border and shadow area.
                 const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SidebarPosition::RIGHT);
                 SwRect aRetoucheRect;
-                SwPageFrame::GetBorderAndShadowBoundRect( getSwFrame(), pSh, pSh->GetOut(), aRetoucheRect, IsLeftShadowNeeded(), IsRightShadowNeeded(), bRightSidebar );
+                SwPageFrame::GetBorderAndShadowBoundRect( getFrameArea(), pSh, pSh->GetOut(), aRetoucheRect, IsLeftShadowNeeded(), IsRightShadowNeeded(), bRightSidebar );
                 pSh->AddPaintRect( aRetoucheRect );
             }
         }
@@ -602,11 +603,11 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         }
         case RES_FRM_SIZE:
         {
-            const SwRect aOldPageFrameRect( getSwFrame() );
+            const SwRect aOldPageFrameRect( getFrameArea() );
             SwViewShell *pSh = getRootFrame()->GetCurrShell();
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
             {
-                mbValidSize = false;
+                setFrameAreaSizeValid(false);
                 // OD 28.10.2002 #97265# - Don't call <SwPageFrame::MakeAll()>
                 // Calculation of the page is not necessary, because its size is
                 // invalidated here and further invalidation is done in the
@@ -625,7 +626,7 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                         static_cast<const SwFormatFrameSize&>(*pNew);
 
                 {
-                    SwFrameRect::FrameWriteAccess aFrm(*this);
+                    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                     aFrm.Height( std::max( rSz.GetHeight(), long(MINLAY) ) );
                     aFrm.Width ( std::max( rSz.GetWidth(),  long(MINLAY) ) );
                 }
@@ -647,7 +648,7 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 pSh->InvalidateWindows( aOldRectWithBorderAndShadow );
             }
             rInvFlags |= 0x03;
-            if ( aOldPageFrameRect.Height() != getSwFrame().Height() )
+            if ( aOldPageFrameRect.Height() != getFrameArea().Height() )
                 rInvFlags |= 0x04;
         }
         break;
@@ -800,7 +801,7 @@ void AdjustSizeChgNotify( SwRootFrame *pRoot )
             {
                 rSh.SizeChgNotify();
                 if ( rSh.Imp() )
-                    rSh.Imp()->NotifySizeChg( pRoot->getSwFrame().SSize() );
+                    rSh.Imp()->NotifySizeChg( pRoot->getFrameArea().SSize() );
             }
         }
     }
@@ -848,7 +849,7 @@ void SwPageFrame::Cut()
         }
         // cleanup Window
         if ( pSh && pSh->GetWin() )
-            pSh->InvalidateWindows( getSwFrame() );
+            pSh->InvalidateWindows( getFrameArea() );
     }
 
     // decrease the root's page number
@@ -906,7 +907,7 @@ void SwPageFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
     else
         ::SetLastPage( this );
 
-    if( getSwFrame().Width() != pParent->getSwPrint().Width() )
+    if( getFrameArea().Width() != pParent->getFramePrintArea().Width() )
         InvalidateSize_();
 
     InvalidatePos();
@@ -1031,7 +1032,7 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
 
             // invalidate the field, starting from here
             if ( nDocPos == LONG_MAX )
-                nDocPos = pPrevPage ? pPrevPage->getSwFrame().Top() : pPage->getSwFrame().Top();
+                nDocPos = pPrevPage ? pPrevPage->getFrameArea().Top() : pPage->getFrameArea().Top();
 
             // Cases:
             //  1. Empty page should be "normal" page -> remove empty page and take next one
@@ -1327,7 +1328,7 @@ SwPageFrame *SwFrame::InsertPage( SwPageFrame *pPrevPage, bool bFootnote )
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
     if ( !pSh || !pSh->Imp()->IsUpdateExpFields() )
     {
-        SwDocPosUpdate aMsgHint( pPrevPage->getSwFrame().Top() );
+        SwDocPosUpdate aMsgHint( pPrevPage->getFrameArea().Top() );
         pDoc->getIDocumentFieldsAccess().UpdatePageFields( &aMsgHint );
     }
     return pPage;
@@ -1356,7 +1357,7 @@ SwTwips SwRootFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
 {
     if ( !bTst )
     {
-        SwFrameRect::FrameWriteAccess aFrm(*this);
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aFrm.SSize().Height() += nDist;
     }
 
@@ -1366,11 +1367,11 @@ SwTwips SwRootFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
 SwTwips SwRootFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool )
 {
     OSL_ENSURE( nDist >= 0, "nDist < 0." );
-    OSL_ENSURE( nDist <= getSwFrame().Height(), "nDist greater than current size." );
+    OSL_ENSURE( nDist <= getFrameArea().Height(), "nDist greater than current size." );
 
     if ( !bTst )
     {
-        SwFrameRect::FrameWriteAccess aFrm(*this);
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aFrm.SSize().Height() -= nDist;
     }
 
@@ -1461,7 +1462,7 @@ void SwRootFrame::RemoveSuperfluous()
         {
             SAL_INFO( "sw.pageframe", "RemoveSuperfluous - DestroyFrm p: " << pPage );
             RemovePage( &pPage, SwRemoveResult::Prev );
-            nDocPos = pPage ? pPage->getSwFrame().Top() : 0;
+            nDocPos = pPage ? pPage->getFrameArea().Top() : 0;
         }
     } while ( pPage );
 
@@ -1588,39 +1589,38 @@ void SwRootFrame::AssertPageFlys( SwPageFrame *pPage )
 Size SwRootFrame::ChgSize( const Size& aNewSize )
 {
     {
-        SwFrameRect::FrameWriteAccess aFrm(*this);
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aFrm.SSize() = aNewSize;
     }
 
     InvalidatePrt_();
     mbFixSize = false;
-    return getSwFrame().SSize();
+    return getFrameArea().SSize();
 }
 
 void SwRootFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 {
-    if ( !mbValidPos )
+    if ( !isFrameAreaPositionValid() )
     {
-        mbValidPos = true;
-
-        SwFrameRect::FrameWriteAccess aFrm(*this);
+        setFrameAreaPositionValid(true);
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aFrm.Pos().setX(DOCUMENTBORDER);
         aFrm.Pos().setY(DOCUMENTBORDER);
     }
 
-    if ( !mbValidPrtArea )
+    if ( !isFramePrintAreaValid() )
     {
-        mbValidPrtArea = true;
-        SwFrameRect::PrintWriteAccess aPrt(*this);
+        setFramePrintAreaValid(true);
+        SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
         aPrt.Pos().setX(0);
         aPrt.Pos().setY(0);
-        aPrt.SSize( getSwFrame().SSize() );
+        aPrt.SSize( getFrameArea().SSize() );
     }
 
-    if ( !mbValidSize )
+    if ( !isFrameAreaSizeValid() )
     {
         // SSize is set by the pages (Cut/Paste).
-        mbValidSize = true;
+        setFrameAreaSizeValid(true);
     }
 }
 
@@ -1732,7 +1732,7 @@ void SwRootFrame::ImplCalcBrowseWidth()
                                     case text::HoriOrientation::INSIDE:
                                     case text::HoriOrientation::LEFT:
                                         if ( text::RelOrientation::PRINT_AREA == rHori.GetRelationOrient() )
-                                            nWidth += pFrame->getSwPrint().Left();
+                                            nWidth += pFrame->getFramePrintArea().Left();
                                         break;
                                     default:
                                         break;
@@ -1924,11 +1924,11 @@ static void lcl_MoveAllLowerObjs( SwFrame* pFrame, const Point& rOffset )
 
 static void lcl_MoveAllLowers( SwFrame* pFrame, const Point& rOffset )
 {
-    const SwRect aFrame( pFrame->getSwFrame() );
+    const SwRect aFrame( pFrame->getFrameArea() );
 
     // first move the current frame
     {
-        SwFrameRect::FrameWriteAccess aFrm(*pFrame);
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pFrame);
 
         if (aFrm.Pos().X() != FAR_AWAY)
         {
@@ -2017,7 +2017,7 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
 
     maPageRects.clear();
 
-    const long nBorder = getSwFrame().Pos().getX();
+    const long nBorder = getFrameArea().Pos().getX();
     const long nVisWidth = mnViewWidth - 2 * nBorder;
     const long nGapBetweenPages = pViewOpt ? pViewOpt->GetGapBetweenPages()
                                            : (pSh ? pSh->GetViewOptions()->GetGapBetweenPages()
@@ -2066,15 +2066,15 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
         {
             const SwFrame& rFormatPage = pPageFrame->GetFormatPage();
 
-            nPageWidth  = rFormatPage.getSwFrame().Width()  + nSidebarWidth + ((bStartOfRow || 1 == (pPageFrame->GetPhyPageNum()%2)) ? 0 : nGapBetweenPages);
-            nPageHeight = rFormatPage.getSwFrame().Height() + nGapBetweenPages;
+            nPageWidth  = rFormatPage.getFrameArea().Width()  + nSidebarWidth + ((bStartOfRow || 1 == (pPageFrame->GetPhyPageNum()%2)) ? 0 : nGapBetweenPages);
+            nPageHeight = rFormatPage.getFrameArea().Height() + nGapBetweenPages;
         }
         else
         {
             if ( !pPageFrame->IsEmptyPage() )
             {
-                nPageWidth  = pPageFrame->getSwFrame().Width() + nSidebarWidth + (bStartOfRow ? 0 : nGapBetweenPages);
-                nPageHeight = pPageFrame->getSwFrame().Height() + nGapBetweenPages;
+                nPageWidth  = pPageFrame->getFrameArea().Width() + nSidebarWidth + (bStartOfRow ? 0 : nGapBetweenPages);
+                nPageHeight = pPageFrame->getFrameArea().Height() + nGapBetweenPages;
             }
         }
 
@@ -2123,7 +2123,7 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
                 const sal_uInt16 nMaxNumberOfVirtualPages = mnColumns > 0 ? mnColumns - nNumberOfPagesInRow : USHRT_MAX;
                 SwTwips nRemain = nWidthRemain;
                 SwTwips nVirtualPagesWidth = 0;
-                SwTwips nLastPageWidth = pLastPageInCurrentRow->getSwFrame().Width() + nSidebarWidth;
+                SwTwips nLastPageWidth = pLastPageInCurrentRow->getFrameArea().Width() + nSidebarWidth;
 
                 while ( ( mnColumns > 0 || nRemain > 0 ) && nNumberOfVirtualPages < nMaxNumberOfVirtualPages )
                 {
@@ -2147,7 +2147,7 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
             {
                 // #i88036#
                 nCurrentRowWidth +=
-                    pStartOfRow->GetFormatPage().getSwFrame().Width() + nSidebarWidth;
+                    pStartOfRow->GetFormatPage().getFrameArea().Width() + nSidebarWidth;
             }
 
             // center page if possible
@@ -2164,7 +2164,7 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
             if ( bFirstRow && mbBookMode )
             {
                 // #i88036#
-                nX += pStartOfRow->GetFormatPage().getSwFrame().Width() + nSidebarWidth;
+                nX += pStartOfRow->GetFormatPage().getFrameArea().Width() + nSidebarWidth;
             }
 
             SwPageFrame* pEndOfRow = pPageFrame;
@@ -2176,8 +2176,8 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
                 if ( mbBookMode )
                     pFormatPage = &pPageToAdjust->GetFormatPage();
 
-                const SwTwips nCurrentPageWidth = pFormatPage->getSwFrame().Width() + (pFormatPage->IsEmptyPage() ? 0 : nSidebarWidth);
-                const Point aOldPagePos = pPageToAdjust->getSwFrame().Pos();
+                const SwTwips nCurrentPageWidth = pFormatPage->getFrameArea().Width() + (pFormatPage->IsEmptyPage() ? 0 : nSidebarWidth);
+                const Point aOldPagePos = pPageToAdjust->getFrameArea().Pos();
                 const bool bLeftSidebar = pPageToAdjust->SidebarPosition() == sw::sidebarwindows::SidebarPosition::LEFT;
                 const SwTwips nLeftPageAddOffset = bLeftSidebar ?
                                                    nSidebarWidth :
@@ -2214,7 +2214,7 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
                 // border of nGapBetweenPages around the current page:
                 SwRect aPageRectWithBorders( aNewPagePos.getX() - nGapBetweenPages,
                                              aNewPagePos.getY(),
-                                             pPageToAdjust->getSwFrame().SSize().Width() + nGapBetweenPages + nSidebarWidth,
+                                             pPageToAdjust->getFrameArea().SSize().Width() + nGapBetweenPages + nSidebarWidth,
                                              nCurrentRowHeight );
 
                 static const long nOuterClickDiff = 1000000;
@@ -2272,7 +2272,7 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
     } // end while
 
     // set size of root frame:
-    const Size aOldSize( getSwFrame().SSize() );
+    const Size aOldSize( getFrameArea().SSize() );
     const Size aNewSize( nMaxPageRight - nBorder, nSumRowHeight - nGapBetweenPages );
 
     if ( bPageChanged || aNewSize != aOldSize )
@@ -2292,7 +2292,7 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
         }
     }
 
-    maPagesArea.Pos( getSwFrame().Pos() );
+    maPagesArea.Pos( getFrameArea().Pos() );
     maPagesArea.SSize( aNewSize );
     if ( TWIPS_MAX != nMinPageLeft )
         maPagesArea.Left_( nMinPageLeft );
@@ -2349,17 +2349,17 @@ bool SwPageFrame::IsOverHeaderFooterArea( const Point& rPt, FrameControlType &rC
     {
         if ( pFrame->IsBodyFrame() )
         {
-            nUpperLimit = pFrame->getSwFrame().Top();
-            nLowerLimit = pFrame->getSwFrame().Bottom();
+            nUpperLimit = pFrame->getFrameArea().Top();
+            nLowerLimit = pFrame->getFrameArea().Bottom();
         }
         else if ( pFrame->IsFootnoteContFrame() )
-            nLowerLimit = pFrame->getSwFrame().Bottom();
+            nLowerLimit = pFrame->getFrameArea().Bottom();
 
         pFrame = pFrame->GetNext();
     }
 
-    SwRect aHeaderArea( getSwFrame().TopLeft(),
-           Size( getSwFrame().Width(), nUpperLimit - getSwFrame().Top() ) );
+    SwRect aHeaderArea( getFrameArea().TopLeft(),
+           Size( getFrameArea().Width(), nUpperLimit - getFrameArea().Top() ) );
 
     SwViewShell* pViewShell = getRootFrame()->GetCurrShell();
     const bool bHideWhitespaceMode = pViewShell->GetViewOptions()->IsHideWhitespaceMode();
@@ -2373,8 +2373,8 @@ bool SwPageFrame::IsOverHeaderFooterArea( const Point& rPt, FrameControlType &rC
     }
     else
     {
-        SwRect aFooterArea( Point( getSwFrame().Left(), nLowerLimit ),
-                Size( getSwFrame().Width(), getSwFrame().Bottom() - nLowerLimit ) );
+        SwRect aFooterArea( Point( getFrameArea().Left(), nLowerLimit ),
+                Size( getFrameArea().Width(), getFrameArea().Bottom() - nLowerLimit ) );
 
         if ( aFooterArea.IsInside( rPt ) &&
              (!bHideWhitespaceMode || static_cast<const SwFrameFormat*>(GetRegisteredIn())->GetFooter().IsActive()) )
@@ -2404,7 +2404,7 @@ bool SwPageFrame::CheckPageHeightValidForHideWhitespace(SwTwips nDiff)
             // Content frame doesn't fit the actual size, check if it fits the nominal one.
             const SwFrameFormat* pPageFormat = static_cast<const SwFrameFormat*>(GetRegisteredIn());
             const Size& rPageSize = pPageFormat->GetFrameSize().GetSize();
-            long nWhitespace = rPageSize.getHeight() - getSwFrame().Height();
+            long nWhitespace = rPageSize.getHeight() - getFrameArea().Height();
             if (nWhitespace > -nDiff)
             {
                 // It does: don't move it and invalidate our page frame so

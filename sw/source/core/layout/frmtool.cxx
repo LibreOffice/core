@@ -80,10 +80,10 @@ bool StackHack::bLocked = false;
 
 SwFrameNotify::SwFrameNotify( SwFrame *pF ) :
     mpFrame( pF ),
-    maFrame( pF->getSwFrame() ),
-    maPrt( pF->getSwPrint() ),
+    maFrame( pF->getFrameArea() ),
+    maPrt( pF->getFramePrintArea() ),
     mbInvaKeep( false ),
-    mbValidSize( pF->GetValidSizeFlag() )
+    mbValidSize( pF->isFrameAreaSizeValid() )
 {
     if ( pF->IsTextFrame() )
     {
@@ -102,11 +102,11 @@ SwFrameNotify::SwFrameNotify( SwFrame *pF ) :
 SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
 {
     SwRectFnSet aRectFnSet(mpFrame);
-    const bool bAbsP = aRectFnSet.PosDiff(maFrame, mpFrame->getSwFrame());
+    const bool bAbsP = aRectFnSet.PosDiff(maFrame, mpFrame->getFrameArea());
     const bool bChgWidth =
-            aRectFnSet.GetWidth(maFrame) != aRectFnSet.GetWidth(mpFrame->getSwFrame());
+            aRectFnSet.GetWidth(maFrame) != aRectFnSet.GetWidth(mpFrame->getFrameArea());
     const bool bChgHeight =
-            aRectFnSet.GetHeight(maFrame)!=aRectFnSet.GetHeight(mpFrame->getSwFrame());
+            aRectFnSet.GetHeight(maFrame)!=aRectFnSet.GetHeight(mpFrame->getFrameArea());
     const bool bChgFlyBasePos = mpFrame->IsTextFrame() &&
        ( ( mnFlyAnchorOfst != static_cast<SwTextFrame*>(mpFrame)->GetBaseOfstForFly( true ) ) ||
          ( mnFlyAnchorOfstNoWrap != static_cast<SwTextFrame*>(mpFrame)->GetBaseOfstForFly( false ) ) );
@@ -147,7 +147,7 @@ SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
             else if ( !pFlow->HasFollow() )
             {
                 long nOldHeight = aRectFnSet.GetHeight(maFrame);
-                long nNewHeight = aRectFnSet.GetHeight(mpFrame->getSwFrame());
+                long nNewHeight = aRectFnSet.GetHeight(mpFrame->getFrameArea());
                 if( (nOldHeight > nNewHeight) || (!nOldHeight && nNewHeight) )
                     pFlow->CheckKeep();
             }
@@ -173,7 +173,7 @@ SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
             // #104100# - correct condition for setting retouche
             // flag for vertical layout.
             if( mpFrame->IsRetoucheFrame() &&
-                aRectFnSet.TopDist( maFrame, aRectFnSet.GetTop(mpFrame->getSwFrame()) ) > 0 )
+                aRectFnSet.TopDist( maFrame, aRectFnSet.GetTop(mpFrame->getFrameArea()) ) > 0 )
             {
                 mpFrame->SetRetouche();
             }
@@ -190,9 +190,9 @@ SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
 
     //For each resize of the background graphics is a repaint necessary.
     const bool bPrtWidth =
-            aRectFnSet.GetWidth(maPrt) != aRectFnSet.GetWidth(mpFrame->getSwPrint());
+            aRectFnSet.GetWidth(maPrt) != aRectFnSet.GetWidth(mpFrame->getFramePrintArea());
     const bool bPrtHeight =
-            aRectFnSet.GetHeight(maPrt)!=aRectFnSet.GetHeight(mpFrame->getSwPrint());
+            aRectFnSet.GetHeight(maPrt)!=aRectFnSet.GetHeight(mpFrame->getFramePrintArea());
     if ( bPrtWidth || bPrtHeight )
     {
         bool bUseNewFillProperties(false);
@@ -227,7 +227,7 @@ SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
         }
     }
 
-    const bool bPrtP = aRectFnSet.PosDiff( maPrt, mpFrame->getSwPrint() );
+    const bool bPrtP = aRectFnSet.PosDiff( maPrt, mpFrame->getFramePrintArea() );
     if ( bAbsP || bPrtP || bChgWidth || bChgHeight ||
          bPrtWidth || bPrtHeight || bChgFlyBasePos )
     {
@@ -360,7 +360,7 @@ SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
             }
         }
     }
-    else if( mpFrame->IsTextFrame() && mbValidSize != mpFrame->GetValidSizeFlag() )
+    else if( mpFrame->IsTextFrame() && mbValidSize != mpFrame->isFrameAreaSizeValid() )
     {
         SwRootFrame *pRootFrame = mpFrame->getRootFrame();
         if( pRootFrame && pRootFrame->IsAnyShellAccessible() &&
@@ -445,7 +445,7 @@ SwLayNotify::~SwLayNotify()
     SwLayoutFrame *pLay = static_cast<SwLayoutFrame*>(mpFrame);
     SwRectFnSet aRectFnSet(pLay);
     bool bNotify = false;
-    if ( pLay->getSwPrint().SSize() != maPrt.SSize() )
+    if ( pLay->getFramePrintArea().SSize() != maPrt.SSize() )
     {
         if ( !IsLowersComplete() )
         {
@@ -454,10 +454,10 @@ SwLayNotify::~SwLayNotify()
             if ( pLay->IsRowFrame() )
             {
                 bInvaPercent = true;
-                long nNew = aRectFnSet.GetHeight(pLay->getSwPrint());
+                long nNew = aRectFnSet.GetHeight(pLay->getFramePrintArea());
                 if( nNew != aRectFnSet.GetHeight(maPrt) )
                      static_cast<SwRowFrame*>(pLay)->AdjustCells( nNew, true);
-                if( aRectFnSet.GetWidth(pLay->getSwPrint())
+                if( aRectFnSet.GetWidth(pLay->getFramePrintArea())
                     != aRectFnSet.GetWidth(maPrt) )
                      static_cast<SwRowFrame*>(pLay)->AdjustCells( 0, false );
             }
@@ -476,8 +476,8 @@ SwLayNotify::~SwLayNotify()
                     if ( pLay->Lower() )
                     {
                         bLow = !pLay->Lower()->IsColumnFrame() ||
-                            aRectFnSet.GetHeight(pLay->Lower()->getSwFrame())
-                             != aRectFnSet.GetHeight(pLay->getSwPrint());
+                            aRectFnSet.GetHeight(pLay->Lower()->getFrameArea())
+                             != aRectFnSet.GetHeight(pLay->getFramePrintArea());
                     }
                     else
                         bLow = false;
@@ -487,15 +487,15 @@ SwLayNotify::~SwLayNotify()
                     if ( pLay->Lower() )
                     {
                         if( pLay->Lower()->IsColumnFrame() && pLay->Lower()->GetNext() )
-                            bLow = pLay->Lower()->getSwFrame().Height() != pLay->getSwPrint().Height();
+                            bLow = pLay->Lower()->getFrameArea().Height() != pLay->getFramePrintArea().Height();
                         else
-                            bLow = pLay->getSwPrint().Width() != maPrt.Width();
+                            bLow = pLay->getFramePrintArea().Width() != maPrt.Width();
                     }
                     else
                         bLow = false;
                 }
                 else if( pLay->IsFooterFrame() && !pLay->HasFixSize() )
-                    bLow = pLay->getSwPrint().Width() != maPrt.Width();
+                    bLow = pLay->getFramePrintArea().Width() != maPrt.Width();
                 else
                     bLow = true;
                 bInvaPercent = bLow;
@@ -507,8 +507,8 @@ SwLayNotify::~SwLayNotify()
                 // can take another frame. As a result, the "possible right one" needs to be
                 // invalidated. This only pays off if this or its Uppers are moveable sections.
                 // A PrtArea has been extended if width or height are larger than before.
-                if ( (pLay->getSwPrint().Height() > maPrt.Height() ||
-                      pLay->getSwPrint().Width()  > maPrt.Width()) &&
+                if ( (pLay->getFramePrintArea().Height() > maPrt.Height() ||
+                      pLay->getFramePrintArea().Width()  > maPrt.Width()) &&
                      (pLay->IsMoveable() || pLay->IsFlyFrame()) )
                 {
                     SwFrame *pTmpFrame = pLay->Lower();
@@ -523,7 +523,7 @@ SwLayNotify::~SwLayNotify()
             bNotify = true;
             //EXPENSIVE!! But how we do it more elegant?
             if( bInvaPercent )
-                pLay->InvaPercentLowers( pLay->getSwPrint().Height() - maPrt.Height() );
+                pLay->InvaPercentLowers( pLay->getFramePrintArea().Height() - maPrt.Height() );
         }
         if ( pLay->IsTabFrame() )
             //So that _only_ the shadow is drawn while resizing.
@@ -540,9 +540,9 @@ SwLayNotify::~SwLayNotify()
         }
     }
     //Notify Lower if the position has changed.
-    const bool bPrtPos = aRectFnSet.PosDiff( maPrt, pLay->getSwPrint() );
-    const bool bPos = bPrtPos || aRectFnSet.PosDiff( maFrame, pLay->getSwFrame() );
-    const bool bSize = pLay->getSwFrame().SSize() != maFrame.SSize();
+    const bool bPrtPos = aRectFnSet.PosDiff( maPrt, pLay->getFramePrintArea() );
+    const bool bPos = bPrtPos || aRectFnSet.PosDiff( maFrame, pLay->getFrameArea() );
+    const bool bSize = pLay->getFrameArea().SSize() != maFrame.SSize();
 
     if ( bPos && pLay->Lower() && !IsLowersComplete() )
         pLay->Lower()->InvalidatePos();
@@ -645,9 +645,9 @@ SwFlyNotify::~SwFlyNotify()
     //Have the size or the position changed,
     //so should the view know this.
     SwRectFnSet aRectFnSet(pFly);
-    const bool bPosChgd = aRectFnSet.PosDiff( maFrame, pFly->getSwFrame() );
-    const bool bFrameChgd = pFly->getSwFrame().SSize() != maFrame.SSize();
-    const bool bPrtChgd = maPrt != pFly->getSwPrint();
+    const bool bPosChgd = aRectFnSet.PosDiff( maFrame, pFly->getFrameArea() );
+    const bool bFrameChgd = pFly->getFrameArea().SSize() != maFrame.SSize();
+    const bool bPrtChgd = maPrt != pFly->getFramePrintArea();
     if ( bPosChgd || bFrameChgd || bPrtChgd )
     {
         pFly->NotifyDrawObj();
@@ -748,8 +748,8 @@ SwContentNotify::~SwContentNotify()
         pCnt->SetCompletePaint();
 
     SwRectFnSet aRectFnSet(pCnt);
-    if ( pCnt->IsInTab() && ( aRectFnSet.PosDiff( pCnt->getSwFrame(), maFrame ) ||
-                             pCnt->getSwFrame().SSize() != maFrame.SSize()))
+    if ( pCnt->IsInTab() && ( aRectFnSet.PosDiff( pCnt->getFrameArea(), maFrame ) ||
+                             pCnt->getFrameArea().SSize() != maFrame.SSize()))
     {
         SwLayoutFrame* pCell = pCnt->GetUpper();
         while( !pCell->IsCellFrame() && pCell->GetUpper() )
@@ -823,7 +823,7 @@ SwContentNotify::~SwContentNotify()
                 const bool bNoTextFramePrtAreaChanged =
                         ( maPrt.SSize().Width() != 0 &&
                           maPrt.SSize().Height() != 0 ) &&
-                        maPrt.SSize() != pCnt->getSwPrint().SSize();
+                        maPrt.SSize() != pCnt->getFramePrintArea().SSize();
                 OSL_ENSURE( pCnt->IsInFly(), "OLE not in FlyFrame" );
                 SwFlyFrame *pFly = pCnt->FindFlyFrame();
                 svt::EmbeddedObjectRef& xObj = pNd->GetOLEObj().GetObject();
@@ -850,7 +850,7 @@ SwContentNotify::~SwContentNotify()
                         if ( !pNd->IsOLESizeInvalid() &&
                              !pSh->GetDoc()->getIDocumentState().IsUpdateExpField() )
                             pFESh->CalcAndSetScale( xObj,
-                                                    &pFly->getSwPrint(), &pFly->getSwFrame(),
+                                                    &pFly->getFramePrintArea(), &pFly->getFrameArea(),
                                                     bNoTextFramePrtAreaChanged );
                     }
                 }
@@ -862,10 +862,10 @@ SwContentNotify::~SwContentNotify()
                 }
             }
             //dito animated graphics
-            if ( getSwFrame().HasArea() && static_cast<SwNoTextFrame*>(pCnt)->HasAnimation() )
+            if ( getFrameArea().HasArea() && static_cast<SwNoTextFrame*>(pCnt)->HasAnimation() )
             {
                 static_cast<SwNoTextFrame*>(pCnt)->StopAnimation();
-                pSh->InvalidateWindows( getSwFrame() );
+                pSh->InvalidateWindows( getFrameArea() );
             }
         }
     }
@@ -936,7 +936,7 @@ SwContentNotify::~SwContentNotify()
     }
 
     // #i44049#
-    if ( pCnt->IsTextFrame() && aRectFnSet.PosDiff( maFrame, pCnt->getSwFrame() ) )
+    if ( pCnt->IsTextFrame() && aRectFnSet.PosDiff( maFrame, pCnt->getFrameArea() ) )
     {
         pCnt->InvalidateObjs();
     }
@@ -1120,8 +1120,8 @@ static void lcl_SetPos( SwFrame&             _rNewFrame,
                  const SwLayoutFrame& _rLayFrame )
 {
     SwRectFnSet aRectFnSet(&_rLayFrame);
-    SwFrameRect::FrameWriteAccess aFrm(_rNewFrame);
-    aRectFnSet.SetPos( aFrm, aRectFnSet.GetPos(_rLayFrame.getSwFrame()) );
+    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(_rNewFrame);
+    aRectFnSet.SetPos( aFrm, aRectFnSet.GetPos(_rLayFrame.getFrameArea()) );
 
     // move position by one SwTwip in text flow direction in order to get
     // notifications for a new calculated position after its formatting.
@@ -2516,7 +2516,7 @@ void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling )
     SwFrame* pLast;
     do
     {   pSav->mpUpper = pParent;
-        nGrowVal += aRectFnSet.GetHeight(pSav->getSwFrame());
+        nGrowVal += aRectFnSet.GetHeight(pSav->getFrameArea());
         pSav->InvalidateAll_();
 
         // register Flys, if TextFrames than also invalidate appropriately
@@ -2740,7 +2740,7 @@ void Notify( SwFlyFrame *pFly, SwPageFrame *pOld, const SwRect &rOld,
             pFly->NotifyBackground( pOld, aTmp, PREP_FLY_CHGD );
         }
     }
-    else if ( pOldPrt && *pOldPrt != pFly->getSwPrint() &&
+    else if ( pOldPrt && *pOldPrt != pFly->getFramePrintArea() &&
               pFly->GetFormat()->GetSurround().IsContour() )
     {
         // #i24097#
@@ -2755,10 +2755,10 @@ static void lcl_CheckFlowBack( SwFrame* pFrame, const SwRect &rRect )
     {
         if( pFrame->IsLayoutFrame() )
         {
-            if( rRect.IsOver( pFrame->getSwFrame() ) )
+            if( rRect.IsOver( pFrame->getFrameArea() ) )
                 lcl_CheckFlowBack( static_cast<SwLayoutFrame*>(pFrame)->Lower(), rRect );
         }
-        else if( !pFrame->GetNext() && nBottom > pFrame->getSwFrame().Bottom() )
+        else if( !pFrame->GetNext() && nBottom > pFrame->getFrameArea().Bottom() )
         {
             if( pFrame->IsContentFrame() && static_cast<SwContentFrame*>(pFrame)->HasFollow() )
                 pFrame->InvalidateSize();
@@ -2774,8 +2774,8 @@ static void lcl_NotifyContent( const SdrObject *pThis, SwContentFrame *pCnt,
 {
     if ( pCnt->IsTextFrame() )
     {
-        SwRect aCntPrt( pCnt->getSwPrint() );
-        aCntPrt.Pos() += pCnt->getSwFrame().Pos();
+        SwRect aCntPrt( pCnt->getFramePrintArea() );
+        aCntPrt.Pos() += pCnt->getFrameArea().Pos();
         if ( eHint == PREP_FLY_ATTR_CHG )
         {
             // #i35640# - use given rectangle <rRect> instead
@@ -2896,8 +2896,8 @@ void Notify_Background( const SdrObject* pObj,
                 // instead of <GetCurrentBoundRect()>, because a recalculation
                 // of the bounding rectangle isn't intended here.
                 if (!isValidTableBeforeAnchor
-                    && (pTab->getSwFrame().IsOver(pObj->GetLastBoundRect()) ||
-                        pTab->getSwFrame().IsOver(rRect)))
+                    && (pTab->getFrameArea().IsOver(pObj->GetLastBoundRect()) ||
+                        pTab->getFrameArea().IsOver(rRect)))
                 {
                     if ( !pFlyFrame || !pFlyFrame->IsLowerOf( pTab ) )
                         pTab->InvalidatePrt();
@@ -2908,8 +2908,8 @@ void Notify_Background( const SdrObject* pObj,
             // instead of <GetCurrentBoundRect()>, because a recalculation
             // of the bounding rectangle isn't intended here.
             if (!isValidTableBeforeAnchor && pCell->IsCellFrame() &&
-                 ( pCell->getSwFrame().IsOver( pObj->GetLastBoundRect() ) ||
-                   pCell->getSwFrame().IsOver( rRect ) ) )
+                 ( pCell->getFrameArea().IsOver( pObj->GetLastBoundRect() ) ||
+                   pCell->getFrameArea().IsOver( rRect ) ) )
             {
                 const SwFormatVertOrient &rOri = pCell->GetFormat()->GetVertOrient();
                 if ( text::VertOrientation::NONE != rOri.GetVertOrient() )
@@ -2930,7 +2930,7 @@ void Notify_Background( const SdrObject* pObj,
                 if( pAnchoredObj->GetDrawObj() == pObj )
                     continue;
                 SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
-                if ( pFly->getSwFrame().Top() == FAR_AWAY )
+                if ( pFly->getFrameArea().Top() == FAR_AWAY )
                     continue;
 
                 if ( !pFlyFrame ||
@@ -2947,10 +2947,10 @@ void Notify_Background( const SdrObject* pObj,
                 if( pFly->IsFlyLayFrame() )
                 {
                     if( pFly->Lower() && pFly->Lower()->IsColumnFrame() &&
-                        pFly->getSwFrame().Bottom() >= rRect.Top() &&
-                        pFly->getSwFrame().Top() <= rRect.Bottom() &&
-                        pFly->getSwFrame().Right() >= rRect.Left() &&
-                        pFly->getSwFrame().Left() <= rRect.Right() )
+                        pFly->getFrameArea().Bottom() >= rRect.Top() &&
+                        pFly->getFrameArea().Top() <= rRect.Bottom() &&
+                        pFly->getFrameArea().Right() >= rRect.Left() &&
+                        pFly->getFrameArea().Left() <= rRect.Right() )
                      {
                         pFly->InvalidateSize();
                      }
@@ -2967,8 +2967,8 @@ void Notify_Background( const SdrObject* pObj,
                     if ( text::HoriOrientation::NONE != rH.GetHoriOrient()  &&
                             text::HoriOrientation::CENTER != rH.GetHoriOrient()  &&
                             ( !pFly->IsAutoPos() || text::RelOrientation::CHAR != rH.GetRelationOrient() ) &&
-                            (pFly->getSwFrame().Bottom() >= rRect.Top() &&
-                            pFly->getSwFrame().Top() <= rRect.Bottom()) )
+                            (pFly->getFrameArea().Bottom() >= rRect.Top() &&
+                            pFly->getFrameArea().Top() <= rRect.Bottom()) )
                         pFly->InvalidatePos();
                 }
             }
@@ -2993,14 +2993,14 @@ const SwFrame* GetVirtualUpper( const SwFrame* pFrame, const Point& rPos )
     if( pFrame->IsTextFrame() )
     {
         pFrame = pFrame->GetUpper();
-        if( !pFrame->getSwFrame().IsInside( rPos ) )
+        if( !pFrame->getFrameArea().IsInside( rPos ) )
         {
             if( pFrame->IsFootnoteFrame() )
             {
                 const SwFootnoteFrame* pTmp = static_cast<const SwFootnoteFrame*>(pFrame)->GetFollow();
                 while( pTmp )
                 {
-                    if( pTmp->getSwFrame().IsInside( rPos ) )
+                    if( pTmp->getFrameArea().IsInside( rPos ) )
                         return pTmp;
                     pTmp = pTmp->GetFollow();
                 }
@@ -3010,7 +3010,7 @@ const SwFrame* GetVirtualUpper( const SwFrame* pFrame, const Point& rPos )
                 SwFlyFrame* pTmp = const_cast<SwFlyFrame*>(pFrame->FindFlyFrame());
                 while( pTmp )
                 {
-                    if( pTmp->getSwFrame().IsInside( rPos ) )
+                    if( pTmp->getFrameArea().IsInside( rPos ) )
                         return pTmp;
                     pTmp = pTmp->GetNextLink();
                 }
@@ -3028,7 +3028,7 @@ bool Is_Lower_Of(const SwFrame *pCurrFrame, const SdrObject* pObj)
     {
         const SwFlyFrame* pFly = pFlyDrawObj->GetFlyFrame();
         pFrame = pFly->GetAnchorFrame();
-        aPos = pFly->getSwFrame().Pos();
+        aPos = pFly->getFrameArea().Pos();
     }
     else
     {
@@ -3042,7 +3042,7 @@ bool Is_Lower_Of(const SwFrame *pCurrFrame, const SdrObject* pObj)
             return true;
         if( pFrame->IsFlyFrame() )
         {
-            aPos = pFrame->getSwFrame().Pos();
+            aPos = pFrame->getFrameArea().Pos();
             pFrame = GetVirtualUpper( static_cast<const SwFlyFrame*>(pFrame)->GetAnchorFrame(), aPos );
         }
         else
@@ -3083,7 +3083,7 @@ bool IsFrameInSameContext( const SwFrame *pInnerFrame, const SwFrame *pFrame )
         }
         if( pFrame->IsFlyFrame() )
         {
-            Point aPos( pFrame->getSwFrame().Pos() );
+            Point aPos( pFrame->getFrameArea().Pos() );
             pFrame = GetVirtualUpper( static_cast<const SwFlyFrame*>(pFrame)->GetAnchorFrame(), aPos );
         }
         else
@@ -3101,9 +3101,9 @@ static SwTwips lcl_CalcCellRstHeight( SwLayoutFrame *pCell )
         long nHeight = 0, nFlyAdd = 0;
         do
         {
-            long nLow = pLow->getSwFrame().Height();
+            long nLow = pLow->getFrameArea().Height();
             if( pLow->IsTextFrame() && static_cast<SwTextFrame*>(pLow)->IsUndersized() )
-                nLow += static_cast<SwTextFrame*>(pLow)->GetParHeight()-pLow->getSwPrint().Height();
+                nLow += static_cast<SwTextFrame*>(pLow)->GetParHeight()-pLow->getFramePrintArea().Height();
             else if( pLow->IsSctFrame() && static_cast<SwSectionFrame*>(pLow)->IsUndersized() )
                 nLow += static_cast<SwSectionFrame*>(pLow)->Undersize();
             nFlyAdd = std::max( 0L, nFlyAdd - nLow );
@@ -3119,7 +3119,7 @@ static SwTwips lcl_CalcCellRstHeight( SwLayoutFrame *pCell )
         const SwBorderAttrs &rAttrs = *aAccess.Get();
         nHeight += rAttrs.CalcTop() + rAttrs.CalcBottom();
 
-        return pCell->getSwFrame().Height() - nHeight;
+        return pCell->getFrameArea().Height() - nHeight;
     }
     else
     {
@@ -3148,7 +3148,7 @@ SwTwips CalcRowRstHeight( SwLayoutFrame *pRow )
 
 const SwFrame* FindPage( const SwRect &rRect, const SwFrame *pPage )
 {
-    if ( !rRect.IsOver( pPage->getSwFrame() ) )
+    if ( !rRect.IsOver( pPage->getFrameArea() ) )
     {
         const SwRootFrame* pRootFrame = static_cast<const SwRootFrame*>(pPage->GetUpper());
         const SwFrame* pTmpPage = pRootFrame ? pRootFrame->GetPageAtPos( rRect.TopLeft(), &rRect.SSize(), true ) : nullptr;
@@ -3239,8 +3239,8 @@ SwFrame* GetFrameOfModify( const SwRootFrame* pLayout, SwModify const& rMod, SwF
                         // Note: The Writer fly frame could be the frame itself.
                         SwFlyFrame* pFlyFrame( pTmpFrame->FindFlyFrame() );
                         if ( pFlyFrame &&
-                             pFlyFrame->getSwFrame().Pos().X() == FAR_AWAY &&
-                             pFlyFrame->getSwFrame().Pos().Y() == FAR_AWAY )
+                             pFlyFrame->getFrameArea().Pos().X() == FAR_AWAY &&
+                             pFlyFrame->getFrameArea().Pos().Y() == FAR_AWAY )
                         {
                             SwObjectFormatter::FormatObj( *pFlyFrame );
                         }
@@ -3260,11 +3260,11 @@ SwFrame* GetFrameOfModify( const SwRootFrame* pLayout, SwModify const& rMod, SwF
                     // for Flys go via the parent if the Fly is not yet "formatted"
                     if( !bCalcFrame && pTmpFrame->GetType() & SwFrameType::Fly &&
                         static_cast<SwFlyFrame*>(pTmpFrame)->GetAnchorFrame() &&
-                        FAR_AWAY == pTmpFrame->getSwFrame().Pos().getX() &&
-                        FAR_AWAY == pTmpFrame->getSwFrame().Pos().getY() )
-                        aCalcRect = static_cast<SwFlyFrame*>(pTmpFrame)->GetAnchorFrame()->getSwFrame();
+                        FAR_AWAY == pTmpFrame->getFrameArea().Pos().getX() &&
+                        FAR_AWAY == pTmpFrame->getFrameArea().Pos().getY() )
+                        aCalcRect = static_cast<SwFlyFrame*>(pTmpFrame)->GetAnchorFrame()->getFrameArea();
                     else
-                        aCalcRect = pTmpFrame->getSwFrame();
+                        aCalcRect = pTmpFrame->getFrameArea();
 
                     if ( aCalcRect.IsInside( *pPoint ) )
                     {
@@ -3310,8 +3310,8 @@ bool IsExtraData( const SwDoc *pDoc )
 // OD 22.09.2003 #110978#
 const SwRect SwPageFrame::PrtWithoutHeaderAndFooter() const
 {
-    SwRect aPrtWithoutHeaderFooter( getSwPrint() );
-    aPrtWithoutHeaderFooter.Pos() += getSwFrame().Pos();
+    SwRect aPrtWithoutHeaderFooter( getFramePrintArea() );
+    aPrtWithoutHeaderFooter.Pos() += getFrameArea().Pos();
 
     const SwFrame* pLowerFrame = Lower();
     while ( pLowerFrame )
@@ -3321,12 +3321,12 @@ const SwRect SwPageFrame::PrtWithoutHeaderAndFooter() const
         if ( pLowerFrame->IsHeaderFrame() )
         {
             aPrtWithoutHeaderFooter.Top( aPrtWithoutHeaderFooter.Top() +
-                                         pLowerFrame->getSwFrame().Height() );
+                                         pLowerFrame->getFrameArea().Height() );
         }
         if ( pLowerFrame->IsFooterFrame() )
         {
             aPrtWithoutHeaderFooter.Bottom( aPrtWithoutHeaderFooter.Bottom() -
-                                            pLowerFrame->getSwFrame().Height() );
+                                            pLowerFrame->getFrameArea().Height() );
         }
 
         pLowerFrame = pLowerFrame->GetNext();

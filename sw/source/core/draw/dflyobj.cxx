@@ -318,7 +318,7 @@ basegfx::B2DRange SwVirtFlyDrawObj::getOuterBound() const
 
         if(pFlyFrame)
         {
-            const tools::Rectangle aOuterRectangle(pFlyFrame->getSwFrame().Pos(), pFlyFrame->getSwFrame().SSize());
+            const tools::Rectangle aOuterRectangle(pFlyFrame->getFrameArea().Pos(), pFlyFrame->getFrameArea().SSize());
 
             if(!aOuterRectangle.IsEmpty())
             {
@@ -342,7 +342,7 @@ basegfx::B2DRange SwVirtFlyDrawObj::getInnerBound() const
 
         if(pFlyFrame)
         {
-            const tools::Rectangle aInnerRectangle(pFlyFrame->getSwFrame().Pos() + pFlyFrame->getSwPrint().Pos(), pFlyFrame->getSwPrint().SSize());
+            const tools::Rectangle aInnerRectangle(pFlyFrame->getFrameArea().Pos() + pFlyFrame->getFramePrintArea().Pos(), pFlyFrame->getFramePrintArea().SSize());
 
             if(!aInnerRectangle.IsEmpty())
             {
@@ -525,7 +525,7 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject(
                 RestoreMapMode aRestoreMapModeIfNeeded( pShell );
 
                 // paint the FlyFrame (use standard VCL-Paint)
-                m_pFlyFrame->Paint( *pShell->GetOut(), GetFlyFrame()->getSwFrame() );
+                m_pFlyFrame->Paint( *pShell->GetOut(), GetFlyFrame()->getFrameArea() );
             }
         }
     }
@@ -549,8 +549,8 @@ void SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 
 void SwVirtFlyDrawObj::SetRect() const
 {
-    if ( GetFlyFrame()->getSwFrame().HasArea() )
-        const_cast<SwVirtFlyDrawObj*>(this)->aOutRect = GetFlyFrame()->getSwFrame().SVRect();
+    if ( GetFlyFrame()->getFrameArea().HasArea() )
+        const_cast<SwVirtFlyDrawObj*>(this)->aOutRect = GetFlyFrame()->getFrameArea().SVRect();
     else
         const_cast<SwVirtFlyDrawObj*>(this)->aOutRect = tools::Rectangle();
 }
@@ -620,7 +620,7 @@ void SwVirtFlyDrawObj::NbcSetLogicRect(const tools::Rectangle& )
 
 ::basegfx::B2DPolyPolygon SwVirtFlyDrawObj::TakeXorPoly() const
 {
-    const tools::Rectangle aSourceRectangle(GetFlyFrame()->getSwFrame().SVRect());
+    const tools::Rectangle aSourceRectangle(GetFlyFrame()->getFrameArea().SVRect());
     const ::basegfx::B2DRange aSourceRange(aSourceRectangle.Left(), aSourceRectangle.Top(), aSourceRectangle.Right(), aSourceRectangle.Bottom());
     ::basegfx::B2DPolyPolygon aRetval;
 
@@ -634,7 +634,7 @@ void SwVirtFlyDrawObj::NbcSetLogicRect(const tools::Rectangle& )
 void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 {
     MoveRect( aOutRect, rSiz );
-    const Point aOldPos( GetFlyFrame()->getSwFrame().Pos() );
+    const Point aOldPos( GetFlyFrame()->getFrameArea().Pos() );
     const Point aNewPos( aOutRect.TopLeft() );
     const SwRect aFlyRect( aOutRect );
 
@@ -689,7 +689,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 
         if( GetFlyFrame()->GetAnchorFrame()->IsRightToLeft() &&
             text::HoriOrientation::NONE != eHori )
-            lXDiff = GetFlyFrame()->GetAnchorFrame()->getSwFrame().Width() -
+            lXDiff = GetFlyFrame()->GetAnchorFrame()->getFrameArea().Width() -
                      aFlyRect.Width() - lXDiff;
 
         const Point aTmp( lXDiff, lYDiff );
@@ -722,9 +722,9 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
                 bNextLine = true;
                 //Horizontal Align:
                 const bool bLeftFrame =
-                    aFlyRect.Left() < pAnch->getSwFrame().Left() + pAnch->getSwPrint().Left(),
+                    aFlyRect.Left() < pAnch->getFrameArea().Left() + pAnch->getFramePrintArea().Left(),
                     bLeftPrt = aFlyRect.Left() + aFlyRect.Width() <
-                               pAnch->getSwFrame().Left() + pAnch->getSwPrint().Width()/2;
+                               pAnch->getFrameArea().Left() + pAnch->getFramePrintArea().Width()/2;
                 if ( bLeftFrame || bLeftPrt )
                 {
                     aHori.SetHoriOrient( text::HoriOrientation::LEFT );
@@ -733,7 +733,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
                 else
                 {
                     const bool bRightFrame = aFlyRect.Left() >
-                                       pAnch->getSwFrame().Left() + pAnch->getSwPrint().Width();
+                                       pAnch->getFrameArea().Left() + pAnch->getFramePrintArea().Width();
                     aHori.SetHoriOrient( text::HoriOrientation::RIGHT );
                     aHori.SetRelationOrient( bRightFrame ? text::RelOrientation::FRAME : text::RelOrientation::PRINT_AREA );
                 }
@@ -879,7 +879,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
 
     Size aSz( aOutRect.Right() - aOutRect.Left() + 1,
               aOutRect.Bottom()- aOutRect.Top()  + 1 );
-    if( aSz != GetFlyFrame()->getSwFrame().SSize() )
+    if( aSz != GetFlyFrame()->getFrameArea().SSize() )
     {
         //The width of the columns should not be too narrow
         if ( GetFlyFrame()->Lower() && GetFlyFrame()->Lower()->IsColumnFrame() )
@@ -921,8 +921,8 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
             }
             else
             {
-                nRelWidth  = pRel->getSwPrint().Width();
-                nRelHeight = pRel->getSwPrint().Height();
+                nRelWidth  = pRel->getFramePrintArea().Width();
+                nRelHeight = pRel->getFramePrintArea().Height();
             }
             if ( aFrameSz.GetWidthPercent() && aFrameSz.GetWidthPercent() != SwFormatFrameSize::SYNCED &&
                  aOldFrameSz.GetWidth() != aFrameSz.GetWidth() )
@@ -936,8 +936,8 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
 
     //Position can also be changed!
     const Point aOldPos( ( bVertX && !bVertL2RX ) || bRTL ?
-                         GetFlyFrame()->getSwFrame().TopRight() :
-                         GetFlyFrame()->getSwFrame().Pos() );
+                         GetFlyFrame()->getFrameArea().TopRight() :
+                         GetFlyFrame()->getFrameArea().Pos() );
     if ( aNewPos != aOldPos )
     {
         //May have been altered by the ChgSize!
@@ -1034,9 +1034,9 @@ SdrObject* SwVirtFlyDrawObj::getFullDragClone() const
 void SwVirtFlyDrawObj::addCropHandles(SdrHdlList& rTarget) const
 {
     // RotGrfFlyFrame: Adapt to possible rotated Graphic contained in FlyFrame
-    if(GetFlyFrame()->getSwFrame().HasArea())
+    if(GetFlyFrame()->getFrameArea().HasArea())
     {
-        // Use InnerBound, OuterBound (same as GetFlyFrame()->getSwFrame().SVRect())
+        // Use InnerBound, OuterBound (same as GetFlyFrame()->getFrameArea().SVRect())
         // may have a distance to InnerBound which needs to be taken into account.
         // The Graphic is mapped to InnerBound, as is the rotated Graphic.
         const basegfx::B2DRange aTargetRange(getInnerBound());
@@ -1095,11 +1095,11 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
         SwRect aRect;
         if ( m_pFlyFrame->Lower() && m_pFlyFrame->Lower()->IsNoTextFrame() )
         {
-            aRect = m_pFlyFrame->getSwPrint();
-            aRect += m_pFlyFrame->getSwFrame().Pos();
+            aRect = m_pFlyFrame->getFramePrintArea();
+            aRect += m_pFlyFrame->getFrameArea().Pos();
         }
         else
-            aRect = m_pFlyFrame->getSwFrame();
+            aRect = m_pFlyFrame->getFrameArea();
 
         if( aRect.IsInside( rRec.aPos ) )
         {

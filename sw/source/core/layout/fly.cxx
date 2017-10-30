@@ -130,7 +130,7 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
     }
 
     {
-        SwFrameRect::FrameWriteAccess aFrm(*this);
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aFrm.Width( rFrameSize.GetWidth() );
         aFrm.Height( rFrameSize.GetHeightSizeType() == ATT_VAR_SIZE ? MINFLY : rFrameSize.GetHeight() );
     }
@@ -154,7 +154,7 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
     InsertCnt();
 
     // Put it somewhere outside so that out document is not formatted unnecessarily often
-    SwFrameRect::FrameWriteAccess aFrm(*this);
+    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
     aFrm.Pos().setX(FAR_AWAY);
     aFrm.Pos().setY(FAR_AWAY);
 }
@@ -229,9 +229,9 @@ void SwFlyFrame::InsertColumns()
         // Start off PrtArea to be as large as Frame, so that we can put in the columns
         // properly. It'll adjust later on.
         {
-            SwFrameRect::PrintWriteAccess aPrt(*this);
-            aPrt.Width( getSwFrame().Width() );
-            aPrt.Height( getSwFrame().Height() );
+            SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+            aPrt.Width( getFrameArea().Width() );
+            aPrt.Height( getFrameArea().Height() );
         }
 
         const SwFormatCol aOld; // ChgColumns() also needs an old value passed
@@ -394,7 +394,7 @@ void SwFlyFrame::ChainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
         const long nBottom = aRectFnSet.GetPrtBottom(*pMaster);
         while ( pInva )
         {
-            if( aRectFnSet.BottomDist( pInva->getSwFrame(), nBottom ) <= 0 )
+            if( aRectFnSet.BottomDist( pInva->getFrameArea(), nBottom ) <= 0 )
             {
                 pInva->InvalidateSize();
                 pInva->Prepare();
@@ -533,7 +533,7 @@ SwFrame *SwFlyFrame::FindLastLower()
 bool SwFlyFrame::FrameSizeChg( const SwFormatFrameSize &rFrameSize )
 {
     bool bRet = false;
-    SwTwips nDiffHeight = getSwFrame().Height();
+    SwTwips nDiffHeight = getFrameArea().Height();
     if ( rFrameSize.GetHeightSizeType() == ATT_VAR_SIZE )
         mbFixSize = m_bMinHeight = false;
     else
@@ -557,11 +557,11 @@ bool SwFlyFrame::FrameSizeChg( const SwFormatFrameSize &rFrameSize )
         if ( Lower()->IsColumnFrame() )
         {
             const SwRect aOld( GetObjRectWithSpaces() );
-            const Size   aOldSz( getSwPrint().SSize() );
-            const SwTwips nDiffWidth = getSwFrame().Width() - rFrameSize.GetWidth();
+            const Size   aOldSz( getFramePrintArea().SSize() );
+            const SwTwips nDiffWidth = getFrameArea().Width() - rFrameSize.GetWidth();
 
             {
-                SwFrameRect::FrameWriteAccess aFrm(*this);
+                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                 aFrm.Height( aFrm.Height() - nDiffHeight );
                 aFrm.Width ( aFrm.Width()  - nDiffWidth  );
             }
@@ -570,14 +570,14 @@ bool SwFlyFrame::FrameSizeChg( const SwFormatFrameSize &rFrameSize )
             InvalidateObjRectWithSpaces();
 
             {
-                SwFrameRect::PrintWriteAccess aPrt(*this);
+                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
                 aPrt.Height( aPrt.Height() - nDiffHeight );
                 aPrt.Width ( aPrt.Width()  - nDiffWidth  );
             }
 
             ChgLowersProp( aOldSz );
             ::Notify( this, FindPageFrame(), aOld );
-            mbValidPos = false;
+            setFrameAreaPositionValid(false);
             bRet = true;
         }
         else if ( Lower()->IsNoTextFrame() )
@@ -758,7 +758,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             if ( RES_FMT_CHG == nWhich )
             {
                 SwRect aNew( GetObjRectWithSpaces() );
-                SwRect aOld( getSwFrame() );
+                SwRect aOld( getFrameArea() );
                 const SvxULSpaceItem &rUL = static_cast<const SwFormatChg*>(pOld)->pChangedFormat->GetULSpace();
                 aOld.Top( std::max( aOld.Top() - long(rUL.GetUpper()), 0L ) );
                 aOld.SSize().Height()+= rUL.GetLower();
@@ -818,7 +818,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             GetVirtDrawObj()->SetResizeProtect( rP.IsSizeProtected() );
 
             if ( pSh )
-                pSh->InvalidateWindows( getSwFrame() );
+                pSh->InvalidateWindows( getFrameArea() );
             const IDocumentDrawModelAccess& rIDDMA = GetFormat()->getIDocumentDrawModelAccess();
             const SdrLayerID nId = GetFormat()->GetOpaque().GetValue() ?
                              rIDDMA.GetHeavenId() :
@@ -856,7 +856,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
                 getRootFrame()->InvalidateBrowseWidth();
             SwRect aNew( GetObjRectWithSpaces() );
-            SwRect aOld( getSwFrame() );
+            SwRect aOld( getFrameArea() );
             if (pNew)
             {
                 if ( RES_UL_SPACE == nWhich )
@@ -898,7 +898,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         case RES_OPAQUE:
             {
                 if ( pSh )
-                    pSh->InvalidateWindows( getSwFrame() );
+                    pSh->InvalidateWindows( getFrameArea() );
 
                 const IDocumentDrawModelAccess& rIDDMA = GetFormat()->getIDocumentDrawModelAccess();
                 const SdrLayerID nId = static_cast<const SvxOpaqueItem*>(pNew)->GetValue() ?
@@ -927,12 +927,12 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                  static_cast<const SwFormatURL*>(pNew)->GetMap() && static_cast<const SwFormatURL*>(pOld)->GetMap() )
             {
                 const SwFormatFrameSize &rSz = GetFormat()->GetFrameSize();
-                if ( rSz.GetHeight() != getSwFrame().Height() ||
-                     rSz.GetWidth()  != getSwFrame().Width() )
+                if ( rSz.GetHeight() != getFrameArea().Height() ||
+                     rSz.GetWidth()  != getFrameArea().Width() )
                 {
                     SwFormatURL aURL( GetFormat()->GetURL() );
-                    Fraction aScaleX( getSwFrame().Width(),  rSz.GetWidth() );
-                    Fraction aScaleY( getSwFrame().Height(), rSz.GetHeight() );
+                    Fraction aScaleX( getFrameArea().Width(),  rSz.GetWidth() );
+                    Fraction aScaleY( getFrameArea().Height(), rSz.GetHeight() );
                     aURL.GetMap()->Scale( aScaleX, aScaleY );
                     SwFrameFormat *pFormat = GetFormat();
                     pFormat->LockModify();
@@ -1086,7 +1086,7 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
                     {
                         if( pAutoFrame == GetAnchorFrame() )
                             nTmpY += pAutoFrame->GetRelPos().Y();
-                        nTmpY -= pAutoFrame->GetUpper()->getSwPrint().Height();
+                        nTmpY -= pAutoFrame->GetUpper()->getFramePrintArea().Height();
                         pAutoFrame = pAutoFrame->GetFollow();
                     }
                     nTmpY = static_cast<SwFlyAtContentFrame*>(this)->GetRelCharY(pAutoFrame)-nTmpY;
@@ -1166,13 +1166,13 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
 
     ColLock();
 
-    if ( !mbValidSize )
+    if ( !isFrameAreaSizeValid() )
     {
-        if ( getSwFrame().Top() == FAR_AWAY && getSwFrame().Left() == FAR_AWAY )
+        if ( getFrameArea().Top() == FAR_AWAY && getFrameArea().Left() == FAR_AWAY )
         {
             // Remove safety switch (see SwFrame::CTor)
             {
-                SwFrameRect::FrameWriteAccess aFrm(*this);
+                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                 aFrm.Pos().setX(0);
                 aFrm.Pos().setY(0);
             }
@@ -1185,7 +1185,7 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         if ( Lower() && Lower()->IsColumnFrame() )
             AdjustColumns( nullptr, false );
 
-        mbValidSize = true;
+        setFrameAreaSizeValid(true);
 
         const SwTwips nUL = pAttrs->CalcTopLine()  + pAttrs->CalcBottomLine();
         const SwTwips nLR = pAttrs->CalcLeftLine() + pAttrs->CalcRightLine();
@@ -1216,14 +1216,14 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                 nRemaining = MINFLY;
 
             {
-                SwFrameRect::PrintWriteAccess aPrt(*this);
+                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
                 aRectFnSet.SetHeight( aPrt, nRemaining );
             }
 
-            nRemaining -= aRectFnSet.GetHeight(getSwFrame());
+            nRemaining -= aRectFnSet.GetHeight(getFrameArea());
 
             {
-                SwFrameRect::FrameWriteAccess aFrm(*this);
+                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                 aRectFnSet.AddBottom( aFrm, nRemaining + nUL );
             }
 
@@ -1232,7 +1232,8 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
             {
                 InvalidateObjRectWithSpaces();
             }
-            mbValidSize = true;
+
+            setFrameAreaSizeValid(true);
 
             if (SwFrameFormat* pShapeFormat = SwTextBoxHelper::getOtherTextBoxFormat(GetFormat(), RES_FLYFRMFMT))
             {
@@ -1241,7 +1242,7 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                 if (SdrObjCustomShape* pCustomShape = dynamic_cast<SdrObjCustomShape*>( pShape) )
                 {
                     // The shape is a customshape: then inform it about the calculated fly size.
-                    Size aSize(aRectFnSet.GetWidth(getSwFrame()), aRectFnSet.GetHeight(getSwFrame()));
+                    Size aSize(aRectFnSet.GetWidth(getFrameArea()), aRectFnSet.GetHeight(getFrameArea()));
                     pCustomShape->SuggestTextFrameSize(aSize);
                     // Do the calculations normally done after touching editeng text of the shape.
                     pCustomShape->NbcSetOutlinerParaObjectForText(nullptr, nullptr);
@@ -1250,7 +1251,9 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         }
         else
         {
-            mbValidSize = true;  // Fixed Frames do not Format itself
+            // Fixed Frames do not Format itself
+            setFrameAreaSizeValid(true);
+
             // Flys set their size using the attr
             SwTwips nNewSize = aRectFnSet.IsVert() ? aRelSize.Width() : aRelSize.Height();
             nNewSize -= nUL;
@@ -1258,14 +1261,14 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                 nNewSize = MINFLY;
 
             {
-                SwFrameRect::PrintWriteAccess aPrt(*this);
+                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
                 aRectFnSet.SetHeight( aPrt, nNewSize );
             }
 
-            nNewSize += nUL - aRectFnSet.GetHeight(getSwFrame());
+            nNewSize += nUL - aRectFnSet.GetHeight(getFrameArea());
 
             {
-                SwFrameRect::FrameWriteAccess aFrm(*this);
+                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                 aRectFnSet.AddBottom( aFrm, nNewSize );
             }
 
@@ -1300,14 +1303,14 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                 nNewSize = MINFLY;
 
             {
-                SwFrameRect::PrintWriteAccess aPrt(*this);
+                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
                 aRectFnSet.SetWidth( aPrt, nNewSize );
             }
 
-            nNewSize += nLR - aRectFnSet.GetWidth(getSwFrame());
+            nNewSize += nLR - aRectFnSet.GetWidth(getFrameArea());
 
             {
-                SwFrameRect::FrameWriteAccess aFrm(*this);
+                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                 aRectFnSet.AddRight( aFrm, nNewSize );
             }
 
@@ -1393,8 +1396,8 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
         {
             pLast = pFrame;
             if( pFrame->IsVertical() ?
-                ( pFrame->GetUpper()->getSwPrint().Height() != pFrame->getSwFrame().Height() )
-                : ( pFrame->GetUpper()->getSwPrint().Width() != pFrame->getSwFrame().Width() ) )
+                ( pFrame->GetUpper()->getFramePrintArea().Height() != pFrame->getFrameArea().Height() )
+                : ( pFrame->GetUpper()->getFramePrintArea().Width() != pFrame->getFrameArea().Width() ) )
             {
                 pFrame->Prepare( PREP_FIXSIZE_CHG );
                 pFrame->InvalidateSize_();
@@ -1440,7 +1443,7 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                                !pTmpFlowFrame->IsFollow() &&
                                !StackHack::IsLocked() && // #i76382#
                                !pTmpFlowFrame->IsJoinLocked() &&
-                               !pTmpPrev->GetValidPosFlag() &&
+                               !pTmpPrev->isFrameAreaPositionValid() &&
                                 pLay->IsAnLower( pTmpPrev ) &&
                                 pTmpPrevFlowFrame->IsKeep( *pTmpPrev->GetAttrSet() ) &&
                                 pTmpPrevFlowFrame->IsKeepFwdMoveAllowed();
@@ -1640,10 +1643,10 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
 // OD 2004-03-23 #i26791#
 void SwFlyFrame::MakeObjPos()
 {
-    if ( !mbValidPos )
+    if ( !isFrameAreaPositionValid() )
     {
         vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
-        mbValidPos = true;
+        setFrameAreaPositionValid(true);
 
         // OD 29.10.2003 #113049# - use new class to position object
         GetAnchorFrame()->Calc(pRenderContext);
@@ -1657,9 +1660,9 @@ void SwFlyFrame::MakeObjPos()
 
         {
             SwRectFnSet aRectFnSet(GetAnchorFrame());
-            SwFrameRect::FrameWriteAccess aFrm(*this);
+            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
             aFrm.Pos( aObjPositioning.GetRelPos() );
-            aFrm.Pos() += aRectFnSet.GetPos(GetAnchorFrame()->getSwFrame());
+            aFrm.Pos() += aRectFnSet.GetPos(GetAnchorFrame()->getFrameArea());
         }
 
         // #i69335#
@@ -1669,9 +1672,9 @@ void SwFlyFrame::MakeObjPos()
 
 void SwFlyFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
 {
-    if ( !mbValidPrtArea )
+    if ( !isFramePrintAreaValid() )
     {
-        mbValidPrtArea = true;
+        setFramePrintAreaValid(true);
 
         // OD 31.07.2003 #110978# - consider vertical layout
         SwRectFnSet aRectFnSet(this);
@@ -1697,7 +1700,7 @@ void SwFlyFrame::MakeContentPos( const SwBorderAttrs &rAttrs )
             nMinHeight = aRectFnSet.IsVert() ? aRelSize.Width() : aRelSize.Height();
 
         Point aNewContentPos;
-        aNewContentPos = getSwPrint().Pos();
+        aNewContentPos = getFramePrintArea().Pos();
         const SdrTextVertAdjust nAdjust = GetFormat()->GetTextVertAdjust().GetValue();
 
         if( nAdjust != SDRTEXTVERTADJUST_TOP )
@@ -1706,7 +1709,7 @@ void SwFlyFrame::MakeContentPos( const SwBorderAttrs &rAttrs )
             SwTwips nDiff = 0;
 
             if( nContentHeight != 0)
-                nDiff = aRectFnSet.GetHeight(getSwPrint()) - nContentHeight;
+                nDiff = aRectFnSet.GetHeight(getFramePrintArea()) - nContentHeight;
 
             if( nDiff > 0 )
             {
@@ -1752,7 +1755,7 @@ SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
     SwRectFnSet aRectFnSet(this);
     if ( Lower() && !IsColLocked() && !HasFixSize() )
     {
-        SwTwips nSize = aRectFnSet.GetHeight(getSwFrame());
+        SwTwips nSize = aRectFnSet.GetHeight(getFrameArea());
         if( nSize > 0 && nDist > ( LONG_MAX - nSize ) )
             nDist = LONG_MAX - nSize;
 
@@ -1786,7 +1789,8 @@ SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
                 // Writer fly frames - inner Writer fly frames format its
                 // anchor, which grows/shrinks the outer Writer fly frame.
                 // Note: position will be invalidated below.
-                mbValidPos = true;
+                setFrameAreaPositionValid(true);
+
                 // #i55416#
                 // Suppress format of width for autowidth frame, because the
                 // format of the width would call <SwTextFrame::CalcFitToContent()>
@@ -1831,7 +1835,7 @@ SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
     if( Lower() && !IsColLocked() && !HasFixSize() )
     {
         SwRectFnSet aRectFnSet(this);
-        SwTwips nHeight = aRectFnSet.GetHeight(getSwFrame());
+        SwTwips nHeight = aRectFnSet.GetHeight(getFrameArea());
         if ( nDist > nHeight )
             nDist = nHeight;
 
@@ -1855,7 +1859,7 @@ SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
                 SwRect aOld( GetObjRectWithSpaces() );
 
                 {
-                    SwFrameRect::FrameWriteAccess aFrm(*this);
+                    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                     aRectFnSet.SetHeight( aFrm, nHeight - nVal );
                 }
 
@@ -1865,10 +1869,10 @@ SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
                     InvalidateObjRectWithSpaces();
                 }
 
-                nHeight = aRectFnSet.GetHeight(getSwPrint());
+                nHeight = aRectFnSet.GetHeight(getFramePrintArea());
 
                 {
-                    SwFrameRect::PrintWriteAccess aPrt(*this);
+                    SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
                     aRectFnSet.SetHeight( aPrt, nHeight - nVal );
                 }
 
@@ -1896,7 +1900,8 @@ SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
                 // Writer fly frames - inner Writer fly frames format its
                 // anchor, which grows/shrinks the outer Writer fly frame.
                 // Note: position will be invalidated below.
-                mbValidPos = true;
+                setFrameAreaPositionValid(true);
+
                 // #i55416#
                 // Suppress format of width for autowidth frame, because the
                 // format of the width would call <SwTextFrame::CalcFitToContent()>
@@ -1961,7 +1966,7 @@ Size SwFlyFrame::ChgSize( const Size& aNewSize )
             }
         }
     }
-    if ( aAdjustedNewSize != getSwFrame().SSize() )
+    if ( aAdjustedNewSize != getFrameArea().SSize() )
     {
         SwFrameFormat *pFormat = GetFormat();
         SwFormatFrameSize aSz( pFormat->GetFrameSize() );
@@ -1972,7 +1977,7 @@ Size SwFlyFrame::ChgSize( const Size& aNewSize )
         return aSz.GetSize();
     }
     else
-        return getSwFrame().SSize();
+        return getFrameArea().SSize();
 }
 
 bool SwFlyFrame::IsLowerOf( const SwLayoutFrame* pUpperFrame ) const
@@ -2240,7 +2245,7 @@ void SwLayoutFrame::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
             {
                 SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pObj);
 
-                if ( pFly->getSwFrame().Left() == FAR_AWAY )
+                if ( pFly->getFrameArea().Left() == FAR_AWAY )
                     continue;
 
                 if ( pFly->IsAnLower( this ) )
@@ -2315,11 +2320,11 @@ Size SwFlyFrame::CalcRel( const SwFormatFrameSize &rSz ) const
             nRelWidth  = pSh->GetBrowseWidth();
             nRelHeight = pSh->VisArea().Height();
             Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
-            long nDiff = nRelWidth - pRel->getSwPrint().Width();
+            long nDiff = nRelWidth - pRel->getFramePrintArea().Width();
             if ( nDiff > 0 )
                 nRelWidth -= nDiff;
             nRelHeight -= 2*aBorder.Height();
-            nDiff = nRelHeight - pRel->getSwPrint().Height();
+            nDiff = nRelHeight - pRel->getFramePrintArea().Height();
             if ( nDiff > 0 )
                 nRelHeight -= nDiff;
         }
@@ -2327,9 +2332,9 @@ Size SwFlyFrame::CalcRel( const SwFormatFrameSize &rSz ) const
         // At the moment only the "== PAGE_FRAME" and "!= PAGE_FRAME" cases are handled.
         // When size is a relative to page size, ignore size of SwBodyFrame.
         if (rSz.GetWidthPercentRelation() != text::RelOrientation::PAGE_FRAME)
-            nRelWidth  = std::min( nRelWidth,  pRel->getSwPrint().Width() );
+            nRelWidth  = std::min( nRelWidth,  pRel->getFramePrintArea().Width() );
         if (rSz.GetHeightPercentRelation() != text::RelOrientation::PAGE_FRAME)
-            nRelHeight = std::min( nRelHeight, pRel->getSwPrint().Height() );
+            nRelHeight = std::min( nRelHeight, pRel->getFramePrintArea().Height() );
         if( !pRel->IsPageFrame() )
         {
             const SwPageFrame* pPage = FindPageFrame();
@@ -2337,14 +2342,14 @@ Size SwFlyFrame::CalcRel( const SwFormatFrameSize &rSz ) const
             {
                 if (rSz.GetWidthPercentRelation() == text::RelOrientation::PAGE_FRAME)
                     // Ignore margins of pPage.
-                    nRelWidth  = std::min( nRelWidth,  pPage->getSwFrame().Width() );
+                    nRelWidth  = std::min( nRelWidth,  pPage->getFrameArea().Width() );
                 else
-                    nRelWidth  = std::min( nRelWidth,  pPage->getSwPrint().Width() );
+                    nRelWidth  = std::min( nRelWidth,  pPage->getFramePrintArea().Width() );
                 if (rSz.GetHeightPercentRelation() == text::RelOrientation::PAGE_FRAME)
                     // Ignore margins of pPage.
-                    nRelHeight = std::min( nRelHeight, pPage->getSwFrame().Height() );
+                    nRelHeight = std::min( nRelHeight, pPage->getFrameArea().Height() );
                 else
-                    nRelHeight = std::min( nRelHeight, pPage->getSwPrint().Height() );
+                    nRelHeight = std::min( nRelHeight, pPage->getFramePrintArea().Height() );
             }
         }
 
@@ -2400,8 +2405,8 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
                 const SwPageFrame* pPage = rFrame.FindPageFrame();
                 // auto width table
                 nMin = pFrame->GetUpper()->IsVertical() ?
-                    pPage->getSwPrint().Height() :
-                    pPage->getSwPrint().Width();
+                    pPage->getFramePrintArea().Height() :
+                    pPage->getFramePrintArea().Width();
             }
             else
             {
@@ -2556,7 +2561,7 @@ const SwFrameFormat& SwFlyFrame::GetFrameFormat() const
 
 const SwRect SwFlyFrame::GetObjRect() const
 {
-    return getSwFrame();
+    return getFrameArea();
 }
 
 // #i70122#
@@ -2569,16 +2574,16 @@ const SwRect SwFlyFrame::GetObjBoundRect() const
 // #i68520#
 bool SwFlyFrame::SetObjTop_( const SwTwips _nTop )
 {
-    const bool bChanged( getSwFrame().Pos().getY() != _nTop );
-    SwFrameRect::FrameWriteAccess aFrm(*this);
+    const bool bChanged( getFrameArea().Pos().getY() != _nTop );
+    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
     aFrm.Pos().setY(_nTop);
 
     return bChanged;
 }
 bool SwFlyFrame::SetObjLeft_( const SwTwips _nLeft )
 {
-    const bool bChanged( getSwFrame().Pos().getX() != _nLeft );
-    SwFrameRect::FrameWriteAccess aFrm(*this);
+    const bool bChanged( getFrameArea().Pos().getX() != _nLeft );
+    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
     aFrm.Pos().setX(_nLeft);
 
     return bChanged;
@@ -2638,18 +2643,18 @@ SwTwips SwFlyFrame::CalcContentHeight(const SwBorderAttrs *pAttrs, const SwTwips
         if ( Lower()->IsColumnFrame() )
         {
             FormatWidthCols( *pAttrs, nUL, nMinHeight );
-            nHeight = aRectFnSet.GetHeight(Lower()->getSwFrame());
+            nHeight = aRectFnSet.GetHeight(Lower()->getFrameArea());
         }
         else
         {
             SwFrame *pFrame = Lower();
             while ( pFrame )
             {
-                nHeight += aRectFnSet.GetHeight(pFrame->getSwFrame());
+                nHeight += aRectFnSet.GetHeight(pFrame->getFrameArea());
                 if( pFrame->IsTextFrame() && static_cast<SwTextFrame*>(pFrame)->IsUndersized() )
                 // This TextFrame would like to be a bit larger
                     nHeight += static_cast<SwTextFrame*>(pFrame)->GetParHeight()
-                            - aRectFnSet.GetHeight(pFrame->getSwPrint());
+                            - aRectFnSet.GetHeight(pFrame->getFramePrintArea());
                 else if( pFrame->IsSctFrame() && static_cast<SwSectionFrame*>(pFrame)->IsUndersized() )
                     nHeight += static_cast<SwSectionFrame*>(pFrame)->Undersize();
                 pFrame = pFrame->GetNext();
@@ -2658,9 +2663,9 @@ SwTwips SwFlyFrame::CalcContentHeight(const SwBorderAttrs *pAttrs, const SwTwips
         if ( GetDrawObjs() )
         {
             const size_t nCnt = GetDrawObjs()->size();
-            SwTwips nTop = aRectFnSet.GetTop(getSwFrame());
-            SwTwips nBorder = aRectFnSet.GetHeight(getSwFrame()) -
-            aRectFnSet.GetHeight(getSwPrint());
+            SwTwips nTop = aRectFnSet.GetTop(getFrameArea());
+            SwTwips nBorder = aRectFnSet.GetHeight(getFrameArea()) -
+            aRectFnSet.GetHeight(getFramePrintArea());
             for ( size_t i = 0; i < nCnt; ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[i];
@@ -2670,10 +2675,10 @@ SwTwips SwFlyFrame::CalcContentHeight(const SwBorderAttrs *pAttrs, const SwTwips
                     // OD 06.11.2003 #i22305# - consider
                     // only Writer fly frames, which follow the text flow.
                     if ( pFly->IsFlyLayFrame() &&
-                        pFly->getSwFrame().Top() != FAR_AWAY &&
+                        pFly->getFrameArea().Top() != FAR_AWAY &&
                         pFly->GetFormat()->GetFollowTextFlow().GetValue() )
                     {
-                        SwTwips nDist = -aRectFnSet.BottomDist( pFly->getSwFrame(), nTop );
+                        SwTwips nDist = -aRectFnSet.BottomDist( pFly->getFrameArea(), nTop );
                         if( nDist > nBorder + nHeight )
                             nHeight = nDist - nBorder;
                     }

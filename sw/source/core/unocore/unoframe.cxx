@@ -2241,8 +2241,8 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             SwFrame* pTmpFrame = SwIterator<SwFrame,SwFormat>( *pFormat ).First();
             if ( pTmpFrame )
             {
-                OSL_ENSURE( pTmpFrame->IsValid(), "frame not valid" );
-                const SwRect &rRect = pTmpFrame->getSwFrame();
+                OSL_ENSURE( pTmpFrame->isFrameAreaDefinitionValid(), "frame not valid" );
+                const SwRect &rRect = pTmpFrame->getFrameArea();
                 Size aMM100Size = OutputDevice::LogicToLogic(
                         Size( rRect.Width(), rRect.Height() ),
                         MapMode( MapUnit::MapTwip ), MapMode( MapUnit::Map100thMM ));

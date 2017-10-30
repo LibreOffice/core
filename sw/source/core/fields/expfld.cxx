@@ -149,7 +149,7 @@ SwTextNode* GetFirstTextNode( const SwDoc& rDoc, SwPosition& rPos,
         OSL_ENSURE( pTextNode, "Where is the 1. TextNode?" );
         rPos.nContent.Assign( pTextNode, 0 );
     }
-    else if ( !pCFrame->IsValid() )
+    else if ( !pCFrame->isFrameAreaDefinitionValid() )
     {
         pTextNode = const_cast<SwTextNode*>(static_cast<const SwTextNode*>(pCFrame->GetNode()));
         rPos.nNode = *pTextNode;
@@ -206,7 +206,7 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
             else
             {
                 pLayout->FindPageFrame()->GetContentPosition(
-                                                pLayout->getSwFrame().Pos(), rPos );
+                                                pLayout->getFrameArea().Pos(), rPos );
                 pTextNode = rPos.nNode.GetNode().GetTextNode();
             }
         }
@@ -246,7 +246,7 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
             }
             else
             {
-                Point aPt( pLayout->getSwFrame().Pos() );
+                Point aPt( pLayout->getFrameArea().Pos() );
                 aPt.Y()++;      // get out of the header
                 pContentFrame = pPgFrame->GetContentPos( aPt, false, true );
                 pTextNode = GetFirstTextNode( rDoc, rPos, pContentFrame, aPt );

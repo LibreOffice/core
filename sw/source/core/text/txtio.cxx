@@ -316,9 +316,9 @@ SvStream &SwFlyCntPortion::operator<<( SvStream &rOs ) const //$ ostream
         CONSTCHAR( pText2, " {FRM:" );
         rOs.WriteCharPtr(pText2);
         rOs.WriteCharPtr(" {FRM:");
-        WriteSwRect(rOs, GetFlyFrame()->getSwFrame()).WriteCharPtr(pClose);
+        WriteSwRect(rOs, GetFlyFrame()->getFrameArea()).WriteCharPtr(pClose);
         rOs.WriteCharPtr(" {PRT:");
-        WriteSwRect(rOs, GetFlyFrame()->getSwPrint()).WriteCharPtr(pClose);
+        WriteSwRect(rOs, GetFlyFrame()->getFramePrintArea()).WriteCharPtr(pClose);
         rOs.WriteCharPtr(pClose);
     }
     rOs.WriteCharPtr(pClose);

@@ -890,7 +890,7 @@ const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
             SwFrame *pFrame = m_pOLENode->getLayoutFrame(nullptr);
             if ( pFrame )
             {
-                Size aSz( pFrame->getSwFrame().SSize() );
+                Size aSz( pFrame->getFrameArea().SSize() );
                 const MapMode aSrc ( MapUnit::MapTwip );
                 const MapMode aDest( MapUnit::Map100thMM );
                 aSz = OutputDevice::LogicToLogic( aSz, aSrc, aDest );

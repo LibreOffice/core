@@ -141,9 +141,9 @@ sal_uInt16 SwTextFormatter::GetFrameRstHeight() const
     // GetFrameRstHeight() is being called with Footnote.
     // Wrong: const SwFrame *pUpper = pFrame->GetUpper();
     const SwFrame *pPage = static_cast<const SwFrame*>(m_pFrame->FindPageFrame());
-    const SwTwips nHeight = pPage->getSwFrame().Top()
-                          + pPage->getSwPrint().Top()
-                          + pPage->getSwPrint().Height() - Y();
+    const SwTwips nHeight = pPage->getFrameArea().Top()
+                          + pPage->getFramePrintArea().Top()
+                          + pPage->getFramePrintArea().Height() - Y();
     if( 0 > nHeight )
         return m_pCurr->Height();
     else
@@ -1864,8 +1864,8 @@ void SwTextFormatter::FeedInf( SwTextFormatInfo &rInf ) const
          nTmpFirst > USHRT_MAX )
     {
         SwRectFnSet aRectFnSet(rInf.GetTextFrame());
-        nTmpLeft = aRectFnSet.GetLeft(rInf.GetTextFrame()->getSwFrame());
-        nTmpRight = aRectFnSet.GetRight(rInf.GetTextFrame()->getSwFrame());
+        nTmpLeft = aRectFnSet.GetLeft(rInf.GetTextFrame()->getFrameArea());
+        nTmpRight = aRectFnSet.GetRight(rInf.GetTextFrame()->getFrameArea());
         nTmpFirst = nTmpLeft;
     }
 
@@ -1915,8 +1915,8 @@ SwTwips SwTextFormatter::CalcBottomLine() const
     SwTwips nMin = GetInfo().GetTextFly().GetMinBottom();
     if( nMin && ++nMin > nRet )
     {
-        SwTwips nDist = m_pFrame->getSwFrame().Height() - m_pFrame->getSwPrint().Height()
-                        - m_pFrame->getSwPrint().Top();
+        SwTwips nDist = m_pFrame->getFrameArea().Height() - m_pFrame->getFramePrintArea().Height()
+                        - m_pFrame->getFramePrintArea().Top();
         if( nRet + nDist < nMin )
         {
             const bool bRepaint = HasTruncLines() &&
@@ -2329,16 +2329,16 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         bool bForced = false;
         if( aInter.Left() <= nLeftMin )
         {
-            SwTwips nFrameLeft = GetTextFrame()->getSwFrame().Left();
-            if( GetTextFrame()->getSwPrint().Left() < 0 )
-                nFrameLeft += GetTextFrame()->getSwPrint().Left();
+            SwTwips nFrameLeft = GetTextFrame()->getFrameArea().Left();
+            if( GetTextFrame()->getFramePrintArea().Left() < 0 )
+                nFrameLeft += GetTextFrame()->getFramePrintArea().Left();
             if( aInter.Left() < nFrameLeft )
                 aInter.Left( nFrameLeft );
 
             long nAddMar = 0;
             if ( m_pFrame->IsRightToLeft() )
             {
-                nAddMar = m_pFrame->getSwFrame().Right() - Right();
+                nAddMar = m_pFrame->getFrameArea().Right() - Right();
                 if ( nAddMar < 0 )
                     nAddMar = 0;
             }
@@ -2500,7 +2500,7 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
 
     const bool bTextFrameVertical = GetInfo().GetTextFrame()->IsVertical();
 
-    const bool bUseFlyAscent = pFly && pFly->GetValidPosFlag() &&
+    const bool bUseFlyAscent = pFly && pFly->isFrameAreaPositionValid() &&
                                0 != ( bTextFrameVertical ?
                                       pFly->GetRefPoint().X() :
                                       pFly->GetRefPoint().Y() );

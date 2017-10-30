@@ -239,7 +239,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
 static const Point &lcl_FindBasePos( const SwFrame *pFrame, const Point &rPt )
 {
     const SwFrame *pF = pFrame;
-    while ( pF && !pF->getSwFrame().IsInside( rPt ) )
+    while ( pF && !pF->getFrameArea().IsInside( rPt ) )
     {
         if ( pF->IsContentFrame() )
             pF = static_cast<const SwContentFrame*>(pF)->GetFollow();
@@ -247,9 +247,9 @@ static const Point &lcl_FindBasePos( const SwFrame *pFrame, const Point &rPt )
             pF = nullptr;
     }
     if ( pF )
-        return pF->getSwFrame().Pos();
+        return pF->getFrameArea().Pos();
     else
-        return pFrame->getSwFrame().Pos();
+        return pFrame->getFrameArea().Pos();
 }
 
 static bool lcl_SetAnchor( const SwPosition& rPos, const SwNode& rNd, SwFlyFrame const * pFly,
@@ -271,14 +271,14 @@ static bool lcl_SetAnchor( const SwPosition& rPos, const SwNode& rNd, SwFlyFrame
             const SwNodeIndex& rIdx = *pTmpFly->GetFormat()->GetContent().GetContentIdx();
             SwPosition aPos( rIdx );
             rAnchor.SetAnchor( &aPos );
-            rNewPos = pTmpFly->getSwFrame().Pos();
+            rNewPos = pTmpFly->getFrameArea().Pos();
         }
         else
         {
             rAnchor.SetType( RndStdIds::FLY_AT_PAGE );
             rAnchor.SetPageNum( rDestShell.GetPageNumber( rInsPt ) );
             const SwFrame *pPg = pTmpFrame->FindPageFrame();
-            rNewPos = pPg->getSwFrame().Pos();
+            rNewPos = pPg->getFrameArea().Pos();
         }
     }
     else
@@ -377,7 +377,7 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                 const SwRootFrame* pTmpRoot = pDestShell->GetLayout();
                 const SwFrame* pPg = pTmpRoot->GetPageAtPos( rInsPt, nullptr, true );
                 if ( pPg )
-                    aNewAnch = pPg->getSwFrame().Pos();
+                    aNewAnch = pPg->getFrameArea().Pos();
             }
 
             if( bRet )
@@ -496,7 +496,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 // from the passed DocumentPosition
                 SwPosition aPos( *GetCursor()->GetPoint() );
                 Point aPt( rInsPt );
-                aPt -= rSttPt - pFly->getSwFrame().Pos();
+                aPt -= rSttPt - pFly->getFrameArea().Pos();
                 SwCursorMoveState aState( MV_SETONLYTEXT );
                 GetLayout()->GetCursorOfst( &aPos, aPt, &aState );
                 const SwNode *pNd;
@@ -533,7 +533,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             const SwRootFrame* pTmpRoot = pDestShell->GetLayout();
             const SwFrame* pPg = pTmpRoot->GetPageAtPos( rInsPt, nullptr, true );
             if ( pPg )
-                aNewAnch = pPg->getSwFrame().Pos();
+                aNewAnch = pPg->getFrameArea().Pos();
         }
         else {
             OSL_ENSURE( false, "what anchor is it?" );
@@ -548,7 +548,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             {
                 Point aPos( rInsPt );
                 aPos -= aNewAnch;
-                aPos -= rSttPt - pFly->getSwFrame().Pos();
+                aPos -= rSttPt - pFly->getFrameArea().Pos();
                 pFlyFormat->SetFormatAttr( SwFormatHoriOrient( aPos.getX(),text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
                 pFlyFormat->SetFormatAttr( SwFormatVertOrient( aPos.getY(),text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
             }
@@ -1244,7 +1244,7 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf )
                         // Not the original size, but the current one.
                         // Otherwise it could happen that for vector graphics
                         // many MB's of memory are allocated.
-                        const Size aSz( GetSelectedFlyFrame()->getSwPrint().SSize() );
+                        const Size aSz( GetSelectedFlyFrame()->getFramePrintArea().SSize() );
                         ScopedVclPtrInstance< VirtualDevice > pVirtDev(*GetWin());
 
                         MapMode aTmp( MapUnit::MapTwip );

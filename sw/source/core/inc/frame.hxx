@@ -118,52 +118,80 @@ namespace drawinglayer { namespace attribute {
 
 /// Helper class to isolate geometry-defining members of SwFrame
 /// and to control their accesses. Moved to own class to have no
-/// hidden accesses to 'private' members anymore
-class SW_DLLPUBLIC SwFrameRect
+/// hidden accesses to 'private' members anymore.
+///
+/// Added most important flags about the state of this geometric
+/// information and if it is valid or not
+class SW_DLLPUBLIC SwFrameAreaDefinition
 {
 private:
-    SwRect  maFrameRect;   // absolute position in document and size of the Frame
-    SwRect  maPrintRect;   // position relatively to Frame and size of PrtArea
+    // The absolute position and size of the SwFrame in the document.
+    // This values are set by the layouter implementations
+    SwRect  maFrameArea;
+
+    // The 'inner' Frame Area defined by a SwRect relative to FrameArea:
+    // When identical to FrameArea, Pos() will be (0, 0) and Size identical.
+    SwRect  maFramePrintArea;
+
+    // bitfield
+    bool mbFrameAreaPositionValid   : 1;
+    bool mbFrameAreaSizeValid       : 1;
+    bool mbFramePrintAreaValid      : 1;
+
+protected:
+    // write access to mb*Valid flags
+    void setFrameAreaPositionValid(bool bNew);
+    void setFrameAreaSizeValid(bool bNew);
+    void setFramePrintAreaValid(bool bNew);
 
 public:
-    SwFrameRect();
+    SwFrameAreaDefinition();
 
-    // read accesses - only const access allowed. Do *not* const_cast results,
-    // it is necessary to track changes. use The 'set' methods instead
-    const SwRect& getSwFrame() const { return maFrameRect; }
-    const SwRect& getSwPrint() const { return maPrintRect; }
+    // read access to mb*Valid flags
+    bool isFrameAreaPositionValid() const { return mbFrameAreaPositionValid; }
+    bool isFrameAreaSizeValid() const { return mbFrameAreaSizeValid; }
+    bool isFramePrintAreaValid() const { return mbFramePrintAreaValid; }
 
-    // helper class(es) for FrameRect/PrintRect manipulation. These
-    // have to be used to apply changes. They hold a copy of the SwRect
-    // for manipulation, it gets written back at destruction. Thus this
+    // syntactic sugar: test whole FrameAreaDefinition
+    bool isFrameAreaDefinitionValid() const { return isFrameAreaPositionValid() && isFrameAreaSizeValid() && isFramePrintAreaValid(); }
+
+    // read accesses to FrameArea definitions - only const access allowed.
+    // Do *not* const_cast results, it is necessary to track changes. use
+    // the below offered WriteAccess helper classes instead
+    const SwRect& getFrameArea() const { return maFrameArea; }
+    const SwRect& getFramePrintArea() const { return maFramePrintArea; }
+
+    // helper class(es) for FrameArea manipulation. These
+    // have to be used to apply changes to FrameAreas. They hold a copy of the
+    // SwRect for manipulation. It gets written back at destruction. Thus, this
     // mechanism depends on scope usage, take care. It prevents errors using
     // different instances of SwFrame in get/set methods which is more safe
-    class FrameWriteAccess : public SwRect
+    class FrameAreaWriteAccess : public SwRect
     {
     private:
-        SwFrameRect&        mrTarget;
+        SwFrameAreaDefinition&        mrTarget;
 
-        FrameWriteAccess(const FrameWriteAccess&) = delete;
-        FrameWriteAccess& operator=(const FrameWriteAccess&) = delete;
+        FrameAreaWriteAccess(const FrameAreaWriteAccess&) = delete;
+        FrameAreaWriteAccess& operator=(const FrameAreaWriteAccess&) = delete;
 
     public:
-        FrameWriteAccess(SwFrameRect& rTarget) : SwRect(rTarget.getSwFrame()), mrTarget(rTarget) {}
-        ~FrameWriteAccess();
+        FrameAreaWriteAccess(SwFrameAreaDefinition& rTarget) : SwRect(rTarget.getFrameArea()), mrTarget(rTarget) {}
+        ~FrameAreaWriteAccess();
         void setSwRect(const SwRect& rNew) { *reinterpret_cast< SwRect* >(this) = rNew; }
     };
 
-    // same for print
-    class PrintWriteAccess : public SwRect
+    // same helper for FramePrintArea
+    class FramePrintAreaWriteAccess : public SwRect
     {
     private:
-        SwFrameRect&        mrTarget;
+        SwFrameAreaDefinition&        mrTarget;
 
-        PrintWriteAccess(const PrintWriteAccess&) = delete;
-        PrintWriteAccess& operator=(const PrintWriteAccess&) = delete;
+        FramePrintAreaWriteAccess(const FramePrintAreaWriteAccess&) = delete;
+        FramePrintAreaWriteAccess& operator=(const FramePrintAreaWriteAccess&) = delete;
 
     public:
-        PrintWriteAccess(SwFrameRect& rTarget) : SwRect(rTarget.getSwPrint()), mrTarget(rTarget) {}
-        ~PrintWriteAccess();
+        FramePrintAreaWriteAccess(SwFrameAreaDefinition& rTarget) : SwRect(rTarget.getFramePrintArea()), mrTarget(rTarget) {}
+        ~FramePrintAreaWriteAccess();
         void setSwRect(const SwRect& rNew) { *reinterpret_cast< SwRect* >(this) = rNew; }
     };
 };
@@ -175,7 +203,7 @@ public:
  * level: pages, headers, footers, etc. (Inside a paragraph SwLinePortion
  * instances are used.)
  */
-class SW_DLLPUBLIC SwFrame : public SwFrameRect, public SwClient, public SfxBroadcaster
+class SW_DLLPUBLIC SwFrame : public SwFrameAreaDefinition, public SwClient, public SfxBroadcaster
 {
     // the hidden Frame
     friend class SwFlowFrame;
@@ -289,15 +317,14 @@ protected:
 
     bool mbVertLR      : 1;
 
-    bool mbValidPos      : 1;
-    bool mbValidPrtArea  : 1;
-    bool mbValidSize     : 1;
     bool mbValidLineNum  : 1;
     bool mbFixSize       : 1;
+
     // if true, frame will be painted completely even content was changed
     // only partially. For ContentFrames a border (from Action) will exclusively
     // painted if <mbCompletePaint> is true.
     bool mbCompletePaint : 1;
+
     bool mbRetouche      : 1; // frame is responsible for retouching
 
     bool mbInfInvalid    : 1;  // InfoFlags are invalid
@@ -611,11 +638,7 @@ public:
 
     void ValidateLineNum() { mbValidLineNum = true; }
 
-    bool GetValidPosFlag()    const { return mbValidPos; }
-    bool GetValidPrtAreaFlag()const { return mbValidPrtArea; }
-    bool GetValidSizeFlag()   const { return mbValidSize; }
     bool GetValidLineNumFlag()const { return mbValidLineNum; }
-    bool IsValid() const { return mbValidPos && mbValidSize && mbValidPrtArea; }
 
     // Only invalidate Frame
     // #i28701# - add call to method <ActionOnInvalidation(..)>
@@ -626,25 +649,25 @@ public:
     //            invalidate.
     void InvalidateSize_()
     {
-        if ( mbValidSize && InvalidationAllowed( INVALID_SIZE ) )
+        if ( isFrameAreaSizeValid() && InvalidationAllowed( INVALID_SIZE ) )
         {
-            mbValidSize = false;
+            setFrameAreaSizeValid(false);
             ActionOnInvalidation( INVALID_SIZE );
         }
     }
     void InvalidatePrt_()
     {
-        if ( mbValidPrtArea && InvalidationAllowed( INVALID_PRTAREA ) )
+        if ( isFramePrintAreaValid() && InvalidationAllowed( INVALID_PRTAREA ) )
         {
-            mbValidPrtArea = false;
+            setFramePrintAreaValid(false);
             ActionOnInvalidation( INVALID_PRTAREA );
         }
     }
     void InvalidatePos_()
     {
-        if ( mbValidPos && InvalidationAllowed( INVALID_POS ) )
+        if ( isFrameAreaPositionValid() && InvalidationAllowed( INVALID_POS ) )
         {
-            mbValidPos = false;
+            setFrameAreaPositionValid(false);
             ActionOnInvalidation( INVALID_POS );
         }
     }
@@ -658,10 +681,11 @@ public:
     }
     void InvalidateAll_()
     {
-        if ( ( mbValidSize || mbValidPrtArea || mbValidPos ) &&
-             InvalidationAllowed( INVALID_ALL ) )
+        if ( ( isFrameAreaSizeValid() || isFramePrintAreaValid() || isFrameAreaPositionValid() ) && InvalidationAllowed( INVALID_ALL ) )
         {
-            mbValidSize = mbValidPrtArea = mbValidPos = false;
+            setFrameAreaSizeValid(false);
+            setFrameAreaPositionValid(false);
+            setFramePrintAreaValid(false);
             ActionOnInvalidation( INVALID_ALL );
         }
     }
@@ -882,18 +906,24 @@ inline const SwLayoutFrame *SwFrame::GetPrevLayoutLeaf() const
 
 inline void SwFrame::InvalidateSize()
 {
-    if ( mbValidSize )
+    if ( isFrameAreaSizeValid() )
+    {
         ImplInvalidateSize();
+    }
 }
 inline void SwFrame::InvalidatePrt()
 {
-    if ( mbValidPrtArea )
+    if ( isFramePrintAreaValid() )
+    {
         ImplInvalidatePrt();
+    }
 }
 inline void SwFrame::InvalidatePos()
 {
-    if ( mbValidPos )
+    if ( isFrameAreaPositionValid() )
+    {
         ImplInvalidatePos();
+    }
 }
 inline void SwFrame::InvalidateLineNum()
 {
@@ -904,9 +934,14 @@ inline void SwFrame::InvalidateAll()
 {
     if ( InvalidationAllowed( INVALID_ALL ) )
     {
-        if ( mbValidPrtArea && mbValidSize && mbValidPos  )
+        if ( isFrameAreaDefinitionValid()  )
+        {
             ImplInvalidatePos();
-        mbValidPrtArea = mbValidSize = mbValidPos = false;
+        }
+
+        setFrameAreaSizeValid(false);
+        setFrameAreaPositionValid(false);
+        setFramePrintAreaValid(false);
 
         // #i28701#
         ActionOnInvalidation( INVALID_ALL );
@@ -922,8 +957,10 @@ inline void SwFrame::InvalidateNextPos( bool bNoFootnote )
 
 inline void SwFrame::OptCalc() const
 {
-    if ( !mbValidPos || !mbValidPrtArea || !mbValidSize )
+    if ( !isFrameAreaPositionValid() || !isFramePrintAreaValid() || !isFrameAreaSizeValid() )
+    {
         const_cast<SwFrame*>(this)->OptPrepareMake();
+    }
 }
 inline const SwPageFrame *SwFrame::FindPageFrame() const
 {

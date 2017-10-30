@@ -104,7 +104,7 @@ public:
         if ( maUnclippedFrame.HasArea( ) )
             return maUnclippedFrame;
         else
-            return getSwFrame();
+            return getFrameArea();
     }
 
     /** method to determine, if a format on the Writer fly frame is possible

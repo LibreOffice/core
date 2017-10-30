@@ -501,7 +501,7 @@ void SwRootFrame::Init( SwFrameFormat* pFormat )
         // Disable "multiple layout"
         mpDrawPage = pMd->GetPage(0);
 
-        mpDrawPage->SetSize( getSwFrame().SSize() );
+        mpDrawPage->SetSize( getFrameArea().SSize() );
     }
 
     // Initialize the layout: create pages, link content with Content etc.
@@ -565,7 +565,7 @@ void SwRootFrame::Init( SwFrameFormat* pFormat )
     //b6433357: Update page fields after loading
     if ( !mpCurrShell || !mpCurrShell->Imp()->IsUpdateExpFields() )
     {
-        SwDocPosUpdate aMsgHint( pPage->getSwFrame().Top() );
+        SwDocPosUpdate aMsgHint( pPage->getFrameArea().Top() );
         rFieldsAccess.UpdatePageFields( &aMsgHint );
     }
 
@@ -654,7 +654,7 @@ void SwRootFrame::AllInvalidateAutoCompleteWords() const
 
 void SwRootFrame::AllAddPaintRect() const
 {
-    GetCurrShell()->AddPaintRect( getSwFrame() );
+    GetCurrShell()->AddPaintRect( getFrameArea() );
 }
 
 void SwRootFrame::AllRemoveFootnotes()

@@ -162,7 +162,7 @@ static long lcl_Undersize( const SwFrame* pFrame )
         {
             // Does this TextFrame would like to be a little bit bigger?
             nRet = static_cast<const SwTextFrame*>(pFrame)->GetParHeight() -
-                    aRectFnSet.GetHeight(pFrame->getSwPrint());
+                    aRectFnSet.GetHeight(pFrame->getFramePrintArea());
             if( nRet < 0 )
                 nRet = 0;
         }
@@ -188,22 +188,23 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
     const SwTwips nBorder = rInf.GetTopDist() + rInf.GetBottomDist() +
                             rInf.GetLineWidth();
     SwRectFnSet aRectFnSet(this);
-    if ( !mbValidPrtArea )
+
+    if ( !isFramePrintAreaValid() )
     {
-        mbValidPrtArea = true;
-        SwFrameRect::PrintWriteAccess aPrt(*this);
+        setFramePrintAreaValid(true);
+        SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
 
         aRectFnSet.SetTop( aPrt, nBorder );
-        aRectFnSet.SetWidth( aPrt, aRectFnSet.GetWidth(getSwFrame()) );
-        aRectFnSet.SetHeight(aPrt, aRectFnSet.GetHeight(getSwFrame()) - nBorder );
+        aRectFnSet.SetWidth( aPrt, aRectFnSet.GetWidth(getFrameArea()) );
+        aRectFnSet.SetHeight(aPrt, aRectFnSet.GetHeight(getFrameArea()) - nBorder );
 
         if( aRectFnSet.GetHeight(aPrt) < 0 && !pPage->IsFootnotePage() )
         {
-            mbValidSize = false;
+            setFrameAreaSizeValid(false);
         }
     }
 
-    if ( !mbValidSize )
+    if ( !isFrameAreaSizeValid() )
     {
         bool bGrow = pPage->IsFootnotePage();
         if( bGrow )
@@ -224,7 +225,7 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
                 // would like to be bigger. They are created especially in
                 // columnized borders, if these do not have their maximum
                 // size yet.
-                nRemaining += aRectFnSet.GetHeight(pFrame->getSwFrame()) + lcl_Undersize( pFrame );
+                nRemaining += aRectFnSet.GetHeight(pFrame->getFrameArea()) + lcl_Undersize( pFrame );
                 pFrame = pFrame->GetNext();
             }
             // add the own border
@@ -233,20 +234,20 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
             SwTwips nDiff;
             if( IsInSct() )
             {
-                nDiff = -aRectFnSet.BottomDist( getSwFrame(), aRectFnSet.GetPrtBottom(*GetUpper()) );
+                nDiff = -aRectFnSet.BottomDist( getFrameArea(), aRectFnSet.GetPrtBottom(*GetUpper()) );
                 if( nDiff > 0 )
                 {
-                    if( nDiff > aRectFnSet.GetHeight(getSwFrame()) )
+                    if( nDiff > aRectFnSet.GetHeight(getFrameArea()) )
                     {
-                        nDiff = aRectFnSet.GetHeight(getSwFrame());
+                        nDiff = aRectFnSet.GetHeight(getFrameArea());
                     }
 
-                    SwFrameRect::FrameWriteAccess aFrm(*this);
+                    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                     aRectFnSet.AddBottom( aFrm, -nDiff );
                     aRectFnSet.AddHeight( aFrm, -nDiff );
                 }
             }
-            nDiff = aRectFnSet.GetHeight(getSwFrame()) - nRemaining;
+            nDiff = aRectFnSet.GetHeight(getFrameArea()) - nRemaining;
             if ( nDiff > 0 )
                 Shrink( nDiff );
             else if ( nDiff < 0 )
@@ -255,16 +256,17 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
                 // It may happen that there is less space available,
                 // than what the border needs - the size of the PrtArea
                 // will then be negative.
-                SwTwips nPrtHeight = aRectFnSet.GetHeight(getSwPrint());
+                SwTwips nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
                 if( nPrtHeight < 0 )
                 {
-                    const SwTwips nTmpDiff = std::max( aRectFnSet.GetTop(getSwPrint()), -nPrtHeight );
-                    SwFrameRect::PrintWriteAccess aPrt(*this);
+                    const SwTwips nTmpDiff = std::max( aRectFnSet.GetTop(getFramePrintArea()), -nPrtHeight );
+                    SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
                     aRectFnSet.SubTop( aPrt, nTmpDiff );
                 }
             }
         }
-        mbValidSize = true;
+
+        setFrameAreaSizeValid(true);
     }
 }
 
@@ -276,9 +278,9 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
     assert(GetUpper() && GetUpper()->IsFootnoteBossFrame());
 
     SwRectFnSet aRectFnSet(this);
-    if( aRectFnSet.GetHeight(getSwFrame()) > 0 &&
-         nDist > ( LONG_MAX - aRectFnSet.GetHeight(getSwFrame()) ) )
-        nDist = LONG_MAX - aRectFnSet.GetHeight(getSwFrame());
+    if( aRectFnSet.GetHeight(getFrameArea()) > 0 &&
+         nDist > ( LONG_MAX - aRectFnSet.GetHeight(getFrameArea()) ) )
+        nDist = LONG_MAX - aRectFnSet.GetHeight(getFrameArea());
 
     SwFootnoteBossFrame *pBoss = static_cast<SwFootnoteBossFrame*>(GetUpper());
     if( IsInSct() )
@@ -302,7 +304,7 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
         if ( pBoss->GetMaxFootnoteHeight() != LONG_MAX )
         {
             nDist = std::min( nDist, pBoss->GetMaxFootnoteHeight()
-                         - aRectFnSet.GetHeight(getSwFrame()) );
+                         - aRectFnSet.GetHeight(getFrameArea()) );
             if ( nDist <= 0 )
                 return 0L;
         }
@@ -316,17 +318,17 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
                 return 0L;
         }
     }
-    else if( nDist > aRectFnSet.GetHeight(GetPrev()->getSwFrame()) )
+    else if( nDist > aRectFnSet.GetHeight(GetPrev()->getFrameArea()) )
         // do not use more space than the body has
-        nDist = aRectFnSet.GetHeight(GetPrev()->getSwFrame());
+        nDist = aRectFnSet.GetHeight(GetPrev()->getFrameArea());
 
     long nAvail = 0;
     if ( bBrowseMode )
     {
-        nAvail = GetUpper()->getSwPrint().Height();
+        nAvail = GetUpper()->getFramePrintArea().Height();
         const SwFrame *pAvail = GetUpper()->Lower();
         do
-        {   nAvail -= pAvail->getSwFrame().Height();
+        {   nAvail -= pAvail->getFrameArea().Height();
             pAvail = pAvail->GetNext();
         } while ( pAvail );
         if ( nAvail > nDist )
@@ -335,7 +337,7 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
 
     if ( !bTst )
     {
-        SwFrameRect::FrameWriteAccess aFrm(*this);
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aRectFnSet.SetHeight( aFrm, aRectFnSet.GetHeight(aFrm) + nDist );
 
         if( IsVertical() && !IsVertLR() && !IsReverse() )
@@ -382,7 +384,7 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
             nDist -= nReal;
 
             // We can only respect the boundless wish so much
-            SwFrameRect::FrameWriteAccess aFrm(*this);
+            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
             aFrm.SSize().Height() -= nDist;
 
             if( IsVertical() && !IsVertLR() && !IsReverse() )
@@ -512,8 +514,8 @@ void SwFootnoteFrame::Cut()
                 pSect->InvalidateSize_();
         }
         else
-        {   if ( getSwFrame().Height() )
-                pUp->Shrink( getSwFrame().Height() );
+        {   if ( getFrameArea().Height() )
+                pUp->Shrink( getFrameArea().Height() );
             pUp->SetCompletePaint();
             pUp->InvalidatePage();
         }
@@ -533,15 +535,15 @@ void SwFootnoteFrame::Paste(  SwFrame* pParent, SwFrame* pSibling )
     InsertBefore( static_cast<SwLayoutFrame*>(pParent), pSibling );
 
     SwRectFnSet aRectFnSet(this);
-    if( aRectFnSet.GetWidth(getSwFrame())!=aRectFnSet.GetWidth(pParent->getSwPrint()) )
+    if( aRectFnSet.GetWidth(getFrameArea())!=aRectFnSet.GetWidth(pParent->getFramePrintArea()) )
         InvalidateSize_();
     InvalidatePos_();
     SwPageFrame *pPage = FindPageFrame();
     InvalidatePage( pPage );
     if ( GetNext() )
         GetNext()->InvalidatePos_();
-    if( aRectFnSet.GetHeight(getSwFrame()) )
-        pParent->Grow( aRectFnSet.GetHeight(getSwFrame()) );
+    if( aRectFnSet.GetHeight(getFrameArea()) )
+        pParent->Grow( aRectFnSet.GetHeight(getFrameArea()) );
 
     // If the predecessor is the master and/or the successor is the Follow,
     // then take their content and destroy them.
@@ -1562,7 +1564,7 @@ void SwFootnoteBossFrame::AppendFootnote( SwContentFrame *pRef, SwTextFootnote *
             {
                 pCnt->Calc(getRootFrame()->GetCurrShell()->GetOut());
                 // #i49383# - format anchored objects
-                if ( pCnt->IsTextFrame() && pCnt->IsValid() )
+                if ( pCnt->IsTextFrame() && pCnt->isFrameAreaDefinitionValid() )
                 {
                     if ( !SwObjectFormatter::FormatObjsAtFrame( *pCnt,
                                                               *(pCnt->FindPageFrame()) ) )
@@ -1917,10 +1919,10 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
                     {
                         pTmp->Prepare( PREP_MOVEFTN );
 
-                        SwFrameRect::FrameWriteAccess aFrm(*pTmp);
+                        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pTmp);
                         aRectFnSet.SetHeight(aFrm, 0);
 
-                        SwFrameRect::PrintWriteAccess aPrt(*pTmp);
+                        SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*pTmp);
                         aRectFnSet.SetHeight(aPrt, 0);
 
                         pTmp = pTmp->FindNext();
@@ -1931,22 +1933,22 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
                     pCnt->Prepare( PREP_MOVEFTN );
                 }
 
-                SwFrameRect::FrameWriteAccess aFrm(*pCnt);
+                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pCnt);
                 aRectFnSet.SetHeight(aFrm, 0);
 
-                SwFrameRect::PrintWriteAccess aPrt(*pCnt);
+                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*pCnt);
                 aRectFnSet.SetHeight(aPrt, 0);
 
                 pCnt = pCnt->GetNext();
             }
 
             {
-                SwFrameRect::FrameWriteAccess aFrm(*pFootnote);
+                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pFootnote);
                 aRectFnSet.SetHeight(aFrm, 0);
             }
 
             {
-                SwFrameRect::PrintWriteAccess aPrt(*pFootnote);
+                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*pFootnote);
                 aRectFnSet.SetHeight(aPrt, 0);
             }
 
@@ -1970,7 +1972,7 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
                     pCnt->InvalidatePos_();
                     pCnt->Calc(getRootFrame()->GetCurrShell()->GetOut());
                     // #i49383# - format anchored objects
-                    if ( pCnt->IsTextFrame() && pCnt->IsValid() )
+                    if ( pCnt->IsTextFrame() && pCnt->isFrameAreaDefinitionValid() )
                     {
                         if ( !SwObjectFormatter::FormatObjsAtFrame( *pCnt,
                                                                   *(pCnt->FindPageFrame()) ) )
@@ -2050,7 +2052,7 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
                 pCnt->InvalidatePos_();
                 pCnt->Calc(getRootFrame()->GetCurrShell()->GetOut());
                 // #i49383# - format anchored objects
-                if ( pCnt->IsTextFrame() && pCnt->IsValid() )
+                if ( pCnt->IsTextFrame() && pCnt->isFrameAreaDefinitionValid() )
                 {
                     if ( !SwObjectFormatter::FormatObjsAtFrame( *pCnt,
                                                               *(pCnt->FindPageFrame()) ) )
@@ -2141,7 +2143,7 @@ void SwFootnoteBossFrame::RearrangeFootnotes( const SwTwips nDeadLine, const boo
             pFirst->Calc(getRootFrame()->GetCurrShell()->GetOut());
             pContent->Calc(getRootFrame()->GetCurrShell()->GetOut());
             // #i49383# - format anchored objects
-            if ( pContent->IsTextFrame() && pContent->IsValid() )
+            if ( pContent->IsTextFrame() && pContent->isFrameAreaDefinitionValid() )
             {
                 SwObjectFormatter::FormatObjsAtFrame( *pContent,
                                                     *(pContent->FindPageFrame()) );
@@ -2212,7 +2214,7 @@ void SwFootnoteBossFrame::RearrangeFootnotes( const SwTwips nDeadLine, const boo
                 {
                     SwRectFnSet aRectFnSet(this);
                     SwFrame* pFootnoteContFrame = pFootnoteFrame->GetUpper();
-                    if ( aRectFnSet.TopDist(pFootnoteFrame->getSwFrame(), aRectFnSet.GetPrtBottom(*pFootnoteContFrame)) > 0 )
+                    if ( aRectFnSet.TopDist(pFootnoteFrame->getFrameArea(), aRectFnSet.GetPrtBottom(*pFootnoteContFrame)) > 0 )
                     {
                         pFootnoteFrame->InvalidatePos_();
                     }
@@ -2224,7 +2226,7 @@ void SwFootnoteBossFrame::RearrangeFootnotes( const SwTwips nDeadLine, const boo
                     pFootnoteFrame->Calc(getRootFrame()->GetCurrShell()->GetOut());
                     pCnt->Calc(getRootFrame()->GetCurrShell()->GetOut());
                     // #i49383# - format anchored objects
-                    if ( pCnt->IsTextFrame() && pCnt->IsValid() )
+                    if ( pCnt->IsTextFrame() && pCnt->isFrameAreaDefinitionValid() )
                     {
                         if ( !SwObjectFormatter::FormatObjsAtFrame( *pCnt,
                                                                   *(pCnt->FindPageFrame()) ) )
@@ -2254,7 +2256,7 @@ void SwFootnoteBossFrame::RearrangeFootnotes( const SwTwips nDeadLine, const boo
                     pFootnoteFrame->Calc(getRootFrame()->GetCurrShell()->GetOut());
                     pCnt->Calc(getRootFrame()->GetCurrShell()->GetOut());
                     // #i49383# - format anchored objects
-                    if ( pCnt->IsTextFrame() && pCnt->IsValid() )
+                    if ( pCnt->IsTextFrame() && pCnt->isFrameAreaDefinitionValid() )
                     {
                         if ( !SwObjectFormatter::FormatObjsAtFrame( *pCnt,
                                                                   *(pCnt->FindPageFrame()) ) )
@@ -2403,10 +2405,10 @@ void SwFootnoteBossFrame::SetFootnoteDeadLine( const SwTwips nDeadLine )
     if ( pCont )
     {
         pCont->Calc(getRootFrame()->GetCurrShell()->GetOut());
-        m_nMaxFootnoteHeight = -aRectFnSet.BottomDist( pCont->getSwFrame(), nDeadLine );
+        m_nMaxFootnoteHeight = -aRectFnSet.BottomDist( pCont->getFrameArea(), nDeadLine );
     }
     else
-        m_nMaxFootnoteHeight = -aRectFnSet.BottomDist( pBody->getSwFrame(), nDeadLine );
+        m_nMaxFootnoteHeight = -aRectFnSet.BottomDist( pBody->getFrameArea(), nDeadLine );
 
     const SwViewShell *pSh = getRootFrame() ? getRootFrame()->GetCurrShell() : nullptr;
     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
@@ -2437,7 +2439,7 @@ SwTwips SwFootnoteBossFrame::GetVarSpace() const
         {
             nRet = 0;
             SwTwips nTmp = aRectFnSet.YDiff( aRectFnSet.GetPrtTop(*pBody),
-                                               aRectFnSet.GetTop(getSwFrame()) );
+                                               aRectFnSet.GetTop(getFrameArea()) );
             const SwSectionFrame* pSect = FindSctFrame();
             //  Endnotes in a ftncontainer causes a deadline:
             // the bottom of the last contentfrm
@@ -2460,8 +2462,8 @@ SwTwips SwFootnoteBossFrame::GetVarSpace() const
                                 while( pFrame->GetNext() )
                                     pFrame = pFrame->GetNext(); // last cntntfrm
                                 nTmp += aRectFnSet.YDiff(
-                                         aRectFnSet.GetTop(getSwFrame()),
-                                         aRectFnSet.GetBottom(pFrame->getSwFrame()) );
+                                         aRectFnSet.GetTop(getFrameArea()),
+                                         aRectFnSet.GetBottom(pFrame->getFrameArea()) );
                             }
                             break;
                         }
@@ -2473,8 +2475,8 @@ SwTwips SwFootnoteBossFrame::GetVarSpace() const
                 nRet = nTmp;
         }
         else
-            nRet = - aRectFnSet.GetHeight(pPg->getSwPrint())/5;
-        nRet += aRectFnSet.GetHeight(pBody->getSwFrame());
+            nRet = - aRectFnSet.GetHeight(pPg->getFramePrintArea())/5;
+        nRet += aRectFnSet.GetHeight(pBody->getFrameArea());
         if( nRet < 0 )
             nRet = 0;
     }
@@ -2484,7 +2486,7 @@ SwTwips SwFootnoteBossFrame::GetVarSpace() const
     {
         const SwViewShell *pSh = getRootFrame() ? getRootFrame()->GetCurrShell() : nullptr;
         if( pSh && pSh->GetViewOptions()->getBrowseMode() )
-        nRet += BROWSE_HEIGHT - getSwFrame().Height();
+        nRet += BROWSE_HEIGHT - getFrameArea().Height();
     }
     return nRet;
 }
@@ -2739,8 +2741,8 @@ bool SwContentFrame::MoveFootnoteCntFwd( bool bMakePage, SwFootnoteBossFrame *pO
                     static_cast<SwSectionFrame*>(pNewUp)->Init();
 
                     {
-                        SwFrameRect::FrameWriteAccess aFrm(*pNewUp);
-                        aFrm.Pos() = pTmpFootnote->getSwFrame().Pos();
+                        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pNewUp);
+                        aFrm.Pos() = pTmpFootnote->getFrameArea().Pos();
                         aFrm.Pos().Y() += 1; // for notifications
                     }
 

@@ -386,12 +386,16 @@ bool SwNode::IsInVisibleArea( SwViewShell const * pSh ) const
             if ( pFrame->IsInTab() )
                 pFrame = pFrame->FindTabFrame();
 
-            if( !pFrame->IsValid() )
+            if( !pFrame->isFrameAreaDefinitionValid() )
+            {
                 do
-                {   pFrame = pFrame->FindPrev();
-                } while ( pFrame && !pFrame->IsValid() );
+                {
+                    pFrame = pFrame->FindPrev();
+                }
+                while ( pFrame && !pFrame->isFrameAreaDefinitionValid() );
+            }
 
-            if( !pFrame || pSh->VisArea().IsOver( pFrame->getSwFrame() ) )
+            if( !pFrame || pSh->VisArea().IsOver( pFrame->getFrameArea() ) )
                 bRet = true;
         }
     }
@@ -785,7 +789,7 @@ const SwTextNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
                        * pMyFrame = pCNd ? pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false ) : nullptr;
             const SwPageFrame* pPgFrame = pFrame ? pFrame->FindPageFrame() : nullptr;
             if( pPgFrame && pMyFrame &&
-                pPgFrame->getSwFrame().Top() > pMyFrame->getSwFrame().Top() )
+                pPgFrame->getFrameArea().Top() > pMyFrame->getFrameArea().Top() )
             {
                 // The one asking precedes the Page, thus its invalid
                 pRet = nullptr;
@@ -1122,7 +1126,7 @@ SwRect SwContentNode::FindLayoutRect( const bool bPrtArea, const Point* pPoint )
     SwContentFrame* pFrame = static_cast<SwContentFrame*>( ::GetFrameOfModify( nullptr, *this,
                                             FRM_CNTNT, pPoint ) );
     if( pFrame )
-        aRet = bPrtArea ? pFrame->getSwPrint() : pFrame->getSwFrame();
+        aRet = bPrtArea ? pFrame->getFramePrintArea() : pFrame->getFrameArea();
     return aRet;
 }
 
@@ -1131,7 +1135,7 @@ SwRect SwContentNode::FindPageFrameRect() const
     SwRect aRet;
     SwFrame* pFrame = ::GetFrameOfModify( nullptr, *this, FRM_CNTNT );
     if( pFrame && nullptr != ( pFrame = pFrame->FindPageFrame() ))
-        aRet = pFrame->getSwFrame();
+        aRet = pFrame->getFrameArea();
     return aRet;
 }
 

@@ -554,11 +554,11 @@ const SwPageFrame* SwRootFrame::GetPageAtPos( const Point& rPt, const Size* pSiz
 
     if ( !bExtend )
     {
-        if( !getSwFrame().IsInside( rPt ) )
+        if( !getFrameArea().IsInside( rPt ) )
             return nullptr;
 
         // skip pages above point:
-        while( pPage && rPt.Y() > pPage->getSwFrame().Bottom() )
+        while( pPage && rPt.Y() > pPage->getFrameArea().Bottom() )
             pPage = pPage->GetNext();
     }
 
@@ -567,7 +567,7 @@ const SwPageFrame* SwRootFrame::GetPageAtPos( const Point& rPt, const Size* pSiz
 
     while ( pPage && !pRet )
     {
-        const SwRect& rBoundRect = bExtend ? maPageRects[ nPageIdx++ ] : pPage->getSwFrame();
+        const SwRect& rBoundRect = bExtend ? maPageRects[ nPageIdx++ ] : pPage->getFrameArea();
 
         if ( (!pSize && rBoundRect.IsInside(rPt)) ||
               (pSize && rBoundRect.IsOver(aRect)) )
@@ -583,7 +583,7 @@ const SwPageFrame* SwRootFrame::GetPageAtPos( const Point& rPt, const Size* pSiz
 
 bool SwRootFrame::IsBetweenPages(const Point& rPt) const
 {
-    if (!getSwFrame().IsInside(rPt))
+    if (!getFrameArea().IsInside(rPt))
         return false;
 
     // top visible page
@@ -592,15 +592,15 @@ bool SwRootFrame::IsBetweenPages(const Point& rPt) const
         return false;
 
     // skip pages above point:
-    while (pPage && rPt.Y() > pPage->getSwFrame().Bottom())
+    while (pPage && rPt.Y() > pPage->getFrameArea().Bottom())
         pPage = pPage->GetNext();
 
     if (pPage &&
-        rPt.X() >= pPage->getSwFrame().Left() &&
-        rPt.X() <= pPage->getSwFrame().Right())
+        rPt.X() >= pPage->getFrameArea().Left() &&
+        rPt.X() <= pPage->getFrameArea().Right())
     {
         // Trivial case when we're right in between.
-        if (!pPage->getSwFrame().IsInside(rPt))
+        if (!pPage->getFrameArea().IsInside(rPt))
             return true;
 
         // In normal mode the gap is large enough and
@@ -612,8 +612,8 @@ bool SwRootFrame::IsBetweenPages(const Point& rPt) const
         if (pSh && pSh->GetViewOptions()->IsWhitespaceHidden())
         {
             // If we are really close to the bottom or top of a page.
-            const auto toEdge = std::min(std::abs(pPage->getSwFrame().Top() - rPt.Y()),
-                                         std::abs(pPage->getSwFrame().Bottom() - rPt.Y()));
+            const auto toEdge = std::min(std::abs(pPage->getFrameArea().Top() - rPt.Y()),
+                                         std::abs(pPage->getFrameArea().Bottom() - rPt.Y()));
             return toEdge <= MmToTwips(2.0);
         }
     }

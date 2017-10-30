@@ -81,11 +81,11 @@ bool SwCursorShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
 
                 pCnt->Calc(GetOut());
 
-                Point aPt( pCnt->getSwFrame().Pos() + pCnt->getSwPrint().Pos() );
+                Point aPt( pCnt->getFrameArea().Pos() + pCnt->getFramePrintArea().Pos() );
                 if( fnPosCol == GetColumnEnd )
                 {
-                    aPt.setX(aPt.getX() + pCnt->getSwPrint().Width());
-                    aPt.setY(aPt.getY() + pCnt->getSwPrint().Height());
+                    aPt.setX(aPt.getX() + pCnt->getFramePrintArea().Width());
+                    aPt.setY(aPt.getY() + pCnt->getFramePrintArea().Height());
                 }
 
                 pCnt->GetCursorOfst( m_pCurrentCursor->GetPoint(), aPt );

@@ -2686,10 +2686,10 @@ SwRect SwFrameFormat::FindLayoutRect( const bool bPrtArea, const Point* pPoint )
                 // PROBLEM: what happens if SectionFrames overlaps multiple
                 //          pages?
                 if( bPrtArea )
-                    aRet = pFrame->getSwPrint();
+                    aRet = pFrame->getFramePrintArea();
                 else
                 {
-                    aRet = pFrame->getSwFrame();
+                    aRet = pFrame->getFrameArea();
                     --aRet.Pos().Y();
                 }
                 pFrame = nullptr;       // the rect is finished by now
@@ -2705,9 +2705,9 @@ SwRect SwFrameFormat::FindLayoutRect( const bool bPrtArea, const Point* pPoint )
     if( pFrame )
     {
         if( bPrtArea )
-            aRet = pFrame->getSwPrint();
+            aRet = pFrame->getFramePrintArea();
         else
-            aRet = pFrame->getSwFrame();
+            aRet = pFrame->getFrameArea();
     }
     return aRet;
 }
@@ -3414,13 +3414,13 @@ IMapObject* SwFrameFormat::GetIMapObject( const Point& rPoint,
     if( aOrigSz.Width() != 0 && aOrigSz.Height() != 0 )
     {
         Point aPos( rPoint );
-        Size aActSz ( pRef == pFly ? pFly->getSwFrame().SSize() : pRef->getSwPrint().SSize() );
+        Size aActSz ( pRef == pFly ? pFly->getFrameArea().SSize() : pRef->getFramePrintArea().SSize() );
         const MapMode aSrc ( MapUnit::MapTwip );
         const MapMode aDest( MapUnit::Map100thMM );
         aOrigSz = OutputDevice::LogicToLogic( aOrigSz, aSrc, aDest );
         aActSz  = OutputDevice::LogicToLogic( aActSz,  aSrc, aDest );
-        aPos -= pRef->getSwFrame().Pos();
-        aPos -= pRef->getSwPrint().Pos();
+        aPos -= pRef->getFrameArea().Pos();
+        aPos -= pRef->getFramePrintArea().Pos();
         aPos    = OutputDevice::LogicToLogic( aPos, aSrc, aDest );
         sal_uInt32 nFlags = 0;
         if ( pFly != pRef && pNd->IsGrfNode() )

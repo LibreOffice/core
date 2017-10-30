@@ -211,7 +211,7 @@ static void lcl_ClearArea( const SwFrame &rFrame,
 
 void SwNoTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
-    if ( getSwFrame().IsEmpty() )
+    if ( getFrameArea().IsEmpty() )
         return;
 
     const SwViewShell* pSh = getRootFrame()->GetCurrShell();
@@ -227,7 +227,7 @@ void SwNoTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRec
                 GetRealURL( *static_cast<const SwGrfNode*>(pNd), aText );
             if( aText.isEmpty() )
                 aText = FindFlyFrame()->GetFormat()->GetName();
-            lcl_PaintReplacement( getSwFrame(), aText, *pSh, this, false );
+            lcl_PaintReplacement( getFrameArea(), aText, *pSh, this, false );
         }
         return;
     }
@@ -263,10 +263,10 @@ void SwNoTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRec
     SwRect aOrigPaint( rRect );
     if ( HasAnimation() && pSh->GetWin() )
     {
-        aOrigPaint = getSwFrame(); aOrigPaint += getSwPrint().Pos();
+        aOrigPaint = getFrameArea(); aOrigPaint += getFramePrintArea().Pos();
     }
 
-    SwRect aGrfArea( getSwFrame() );
+    SwRect aGrfArea( getFrameArea() );
     SwRect aPaintArea( aGrfArea );
 
     // In case the picture fly frm was clipped, render it with the origin
@@ -286,13 +286,13 @@ void SwNoTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRec
             }
 
             if( bGetUnclippedFrame )
-                aGrfArea = SwRect( getSwFrame().Pos( ), pFly->GetUnclippedFrame( ).SSize( ) );
+                aGrfArea = SwRect( getFrameArea().Pos( ), pFly->GetUnclippedFrame( ).SSize( ) );
         }
     }
 
     aPaintArea.Intersection_( aOrigPaint );
 
-    SwRect aNormal( getSwFrame().Pos() + getSwPrint().Pos(), getSwPrint().SSize() );
+    SwRect aNormal( getFrameArea().Pos() + getFramePrintArea().Pos(), getFramePrintArea().SSize() );
     aNormal.Justify(); // Normalized rectangle for the comparisons
 
     if( aPaintArea.IsOver( aNormal ) )
@@ -374,7 +374,7 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
     Size aOrigSz( static_cast<const SwNoTextNode*>(GetNode())->GetTwipSize() );
     if ( !aOrigSz.Width() )
     {
-        aOrigSz.Width() = getSwPrint().Width();
+        aOrigSz.Width() = getFramePrintArea().Width();
         nLeftCrop  = -rCrop.GetLeft();
         nRightCrop = -rCrop.GetRight();
     }
@@ -382,7 +382,7 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
     {
         nLeftCrop = std::max( aOrigSz.Width() -
                             (rCrop.GetRight() + rCrop.GetLeft()), long(1) );
-        const double nScale = double(getSwPrint().Width())  / double(nLeftCrop);
+        const double nScale = double(getFramePrintArea().Width())  / double(nLeftCrop);
         nLeftCrop  = long(nScale * -rCrop.GetLeft() );
         nRightCrop = long(nScale * -rCrop.GetRight() );
     }
@@ -397,14 +397,14 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
 
     if( !aOrigSz.Height() )
     {
-        aOrigSz.Height() = getSwPrint().Height();
+        aOrigSz.Height() = getFramePrintArea().Height();
         nTopCrop   = -rCrop.GetTop();
         nBottomCrop= -rCrop.GetBottom();
     }
     else
     {
         nTopCrop = std::max( aOrigSz.Height() - (rCrop.GetTop() + rCrop.GetBottom()), long(1) );
-        const double nScale = double(getSwPrint().Height()) / double(nTopCrop);
+        const double nScale = double(getFramePrintArea().Height()) / double(nTopCrop);
         nTopCrop   = long(nScale * -rCrop.GetTop() );
         nBottomCrop= long(nScale * -rCrop.GetBottom() );
     }
@@ -417,9 +417,9 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
         nBottomCrop= nTmpCrop;
     }
 
-    Size  aVisSz( getSwPrint().SSize() );
+    Size  aVisSz( getFramePrintArea().SSize() );
     Size  aGrfSz( aVisSz );
-    Point aVisPt( getSwFrame().Pos() + getSwPrint().Pos() );
+    Point aVisPt( getFrameArea().Pos() + getFramePrintArea().Pos() );
     Point aGrfPt( aVisPt );
 
     // Set the "visible" rectangle first
@@ -465,7 +465,7 @@ const Size& SwNoTextFrame::GetSize() const
     const SwFrame *pFly = FindFlyFrame();
     if( !pFly )
         pFly = this;
-    return pFly->getSwPrint().SSize();
+    return pFly->getFramePrintArea().SSize();
 }
 
 void SwNoTextFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
@@ -474,20 +474,21 @@ void SwNoTextFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     SwBorderAttrAccess aAccess( SwFrame::GetCache(), this );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
 
-    while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
+    while ( !isFrameAreaPositionValid() || !isFrameAreaSizeValid() || !isFramePrintAreaValid() )
     {
         MakePos();
 
-        if ( !mbValidSize )
+        if ( !isFrameAreaSizeValid() )
         {
-            SwFrameRect::FrameWriteAccess aFrm(*this);
-            aFrm.Width( GetUpper()->getSwPrint().Width() );
+            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+            aFrm.Width( GetUpper()->getFramePrintArea().Width() );
         }
 
         MakePrtArea( rAttrs );
 
-        if ( !mbValidSize )
-        {   mbValidSize = true;
+        if ( !isFrameAreaSizeValid() )
+        {
+            setFrameAreaSizeValid(true);
             Format(getRootFrame()->GetCurrShell()->GetOut());
         }
     }
@@ -500,12 +501,12 @@ void SwNoTextFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBord
 
     // Did the height change?
     SwTwips nChgHght = IsVertical() ?
-        (SwTwips)(aNewSize.Width() - getSwPrint().Width()) :
-        (SwTwips)(aNewSize.Height() - getSwPrint().Height());
+        (SwTwips)(aNewSize.Width() - getFramePrintArea().Width()) :
+        (SwTwips)(aNewSize.Height() - getFramePrintArea().Height());
     if( nChgHght > 0)
         Grow( nChgHght );
     else if( nChgHght < 0)
-        Shrink( std::min(getSwPrint().Height(), -nChgHght) );
+        Shrink( std::min(getFramePrintArea().Height(), -nChgHght) );
 }
 
 bool SwNoTextFrame::GetCharRect( SwRect &rRect, const SwPosition& rPos,
@@ -515,10 +516,10 @@ bool SwNoTextFrame::GetCharRect( SwRect &rRect, const SwPosition& rPos,
         return false;
 
     Calc(getRootFrame()->GetCurrShell()->GetOut());
-    SwRect aFrameRect( getSwFrame() );
+    SwRect aFrameRect( getFrameArea() );
     rRect = aFrameRect;
-    rRect.Pos( getSwFrame().Pos() + getSwPrint().Pos() );
-    rRect.SSize( getSwPrint().SSize() );
+    rRect.Pos( getFrameArea().Pos() + getFramePrintArea().Pos() );
+    rRect.SSize( getFramePrintArea().SSize() );
 
     rRect.Justify();
 
@@ -558,7 +559,7 @@ bool SwNoTextFrame::GetCursorOfst(SwPosition* pPos, Point& ,
     if( pFly && pFly->GetFormat()->GetSurround().IsContour() )\
     {\
         ClrContourCache( pFly->GetVirtDrawObj() );\
-        pFly->NotifyBackground( FindPageFrame(), getSwPrint(), PREP_FLY_ATTR_CHG );\
+        pFly->NotifyBackground( FindPageFrame(), getFramePrintArea(), PREP_FLY_ATTR_CHG );\
     }\
 }
 
@@ -594,7 +595,7 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             {
                 GraphicAttr aAttr;
                 if( pNd->GetGrfObj().IsCached( pVSh->GetOut(),
-                            getSwPrint().SSize(), &pNd->GetGraphicAttr( aAttr, this ) ))
+                            getFramePrintArea().SSize(), &pNd->GetGraphicAttr( aAttr, this ) ))
                 {
                     for(SwViewShell& rShell : pVSh->GetRingContainer())
                     {
@@ -602,9 +603,9 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                         if( rShell.GetWin() )
                         {
                             if( rShell.IsPreview() )
-                                ::RepaintPagePreview( &rShell, getSwFrame().SVRect() );
+                                ::RepaintPagePreview( &rShell, getFrameArea().SVRect() );
                             else
-                                rShell.GetWin()->Invalidate( getSwFrame().SVRect() );
+                                rShell.GetWin()->Invalidate( getFrameArea().SVRect() );
                         }
                     }
                 }
@@ -668,7 +669,7 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
             CLEARCACHE
 
-            SwRect aRect( getSwFrame() );
+            SwRect aRect( getFrameArea() );
 
             SwViewShell *pVSh = pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
             if( !pVSh )
@@ -1100,7 +1101,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
             {
                 const SwFlyFrame *pFly = FindFlyFrame();
                 assert( pFly != nullptr );
-                static_cast<SwFEShell*>(pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->getSwPrint(), pFly->getSwFrame());
+                static_cast<SwFEShell*>(pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->getFramePrintArea(), pFly->getFrameArea());
             }
         }
 

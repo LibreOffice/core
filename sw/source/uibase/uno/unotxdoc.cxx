@@ -230,7 +230,7 @@ static SwPrintUIOptions * lcl_GetPrintUIOptions(
         const SwPageFrame *pPage = dynamic_cast<const SwPageFrame*>(pFrame->Lower());
         while (pPage && nMax-- > 0)
         {
-            if (pPage->getSwFrame().Height() == 0)
+            if (pPage->getFrameArea().Height() == 0)
                 nCurrentPage--;
             pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
         }

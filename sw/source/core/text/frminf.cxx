@@ -76,7 +76,7 @@ bool SwTextFrameInfo::IsFilled( const sal_uInt8 nPercent ) const
     if( !pLay )
         return false;
 
-    long nWidth = pFrame->getSwPrint().Width();
+    long nWidth = pFrame->getFramePrintArea().Width();
     nWidth *= nPercent;
     nWidth /= 100;
     return sal_uInt16(nWidth) <= pLay->Width();
@@ -101,7 +101,7 @@ SwTwips SwTextFrameInfo::GetLineStart() const
 {
     SwTextSizeInfo aInf( const_cast<SwTextFrame*>(pFrame) );
     SwTextCursor aLine( const_cast<SwTextFrame*>(pFrame), &aInf );
-    return GetLineStart( aLine ) - pFrame->getSwFrame().Left() - pFrame->getSwPrint().Left();
+    return GetLineStart( aLine ) - pFrame->getFrameArea().Left() - pFrame->getFramePrintArea().Left();
 }
 
 // Calculates the character's position and returns the middle position
@@ -126,7 +126,7 @@ SwTwips SwTextFrameInfo::GetCharPos( sal_Int32 nChar, bool bCenter ) const
         nStt = aLine.GetLineStart();
 
     if( !bCenter )
-        return nStt - aRectFnSet.GetLeft(pFrame->getSwFrame());
+        return nStt - aRectFnSet.GetLeft(pFrame->getFrameArea());
 
     if( aLine.GetCharRect( &aRect, nChar+1 ) )
     {
@@ -138,7 +138,7 @@ SwTwips SwTextFrameInfo::GetCharPos( sal_Int32 nChar, bool bCenter ) const
     else
         nNext = aLine.GetLineStart();
 
-    return (( nNext + nStt ) / 2 ) - aRectFnSet.GetLeft(pFrame->getSwFrame());
+    return (( nNext + nStt ) / 2 ) - aRectFnSet.GetLeft(pFrame->getFrameArea());
 }
 
 SwPaM *AddPam( SwPaM *pPam, const SwTextFrame* pTextFrame,
@@ -302,7 +302,7 @@ sal_Int32 SwTextFrameInfo::GetBigIndent( sal_Int32& rFndPos,
 
     SwRect aRect;
     return aLine.GetCharRect( &aRect, rFndPos )
-            ? static_cast<sal_Int32>(aRect.Left() - pFrame->getSwFrame().Left() - pFrame->getSwPrint().Left())
+            ? static_cast<sal_Int32>(aRect.Left() - pFrame->getFrameArea().Left() - pFrame->getFramePrintArea().Left())
             : 0;
 }
 

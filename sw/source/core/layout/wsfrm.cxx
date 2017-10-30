@@ -53,30 +53,57 @@
 
 using namespace ::com::sun::star;
 
-SwFrameRect::SwFrameRect()
-:   maFrameRect(),
-    maPrintRect()
+SwFrameAreaDefinition::SwFrameAreaDefinition()
+:   maFrameArea(),
+    maFramePrintArea(),
+    mbFrameAreaPositionValid(false),
+    mbFrameAreaSizeValid(false),
+    mbFramePrintAreaValid(false)
 {
 }
 
-SwFrameRect::FrameWriteAccess::~FrameWriteAccess()
+void SwFrameAreaDefinition::setFrameAreaPositionValid(bool bNew)
 {
-    if(mrTarget.maFrameRect != *this)
+    if(mbFrameAreaPositionValid != bNew)
     {
-        mrTarget.maFrameRect = *this;
+        mbFrameAreaPositionValid = bNew;
     }
 }
 
-SwFrameRect::PrintWriteAccess::~PrintWriteAccess()
+void SwFrameAreaDefinition::setFrameAreaSizeValid(bool bNew)
 {
-    if(mrTarget.maPrintRect != *this)
+    if(mbFrameAreaSizeValid != bNew)
     {
-        mrTarget.maPrintRect = *this;
+        mbFrameAreaSizeValid = bNew;
+    }
+}
+
+void SwFrameAreaDefinition::setFramePrintAreaValid(bool bNew)
+{
+    if(static_cast< bool >(mbFramePrintAreaValid) != bNew)
+    {
+        mbFramePrintAreaValid = bNew;
+    }
+}
+
+SwFrameAreaDefinition::FrameAreaWriteAccess::~FrameAreaWriteAccess()
+{
+    if(mrTarget.maFrameArea != *this)
+    {
+        mrTarget.maFrameArea = *this;
+    }
+}
+
+SwFrameAreaDefinition::FramePrintAreaWriteAccess::~FramePrintAreaWriteAccess()
+{
+    if(mrTarget.maFramePrintArea != *this)
+    {
+        mrTarget.maFramePrintArea = *this;
     }
 }
 
 SwFrame::SwFrame( SwModify *pMod, SwFrame* pSib )
-:   SwFrameRect(),
+:   SwFrameAreaDefinition(),
     SwClient( pMod ),
     SfxBroadcaster(),
     mnFrameId( SwFrame::mnLastFrameId++ ),
@@ -95,9 +122,6 @@ SwFrame::SwFrame( SwModify *pMod, SwFrame* pSib )
     mbDerivedVert(false),
     mbVertical(false),
     mbVertLR(false),
-    mbValidPos(false),
-    mbValidPrtArea(false),
-    mbValidSize(false),
     mbValidLineNum(false),
     mbFixSize(false),
     mbCompletePaint(true),
@@ -479,7 +503,7 @@ void SwFrame::InvalidatePage( const SwPageFrame *pPage ) const
 Size SwFrame::ChgSize( const Size& aNewSize )
 {
     mbFixSize = true;
-    const Size aOldSize( getSwFrame().SSize() );
+    const Size aOldSize( getFrameArea().SSize() );
     if ( aNewSize == aOldSize )
         return aOldSize;
 
@@ -490,12 +514,12 @@ Size SwFrame::ChgSize( const Size& aNewSize )
         SwRect aNew( Point(0,0), aNewSize );
 
         {
-            SwFrameRect::FrameWriteAccess aFrm(*this);
+            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
             (aFrm.*fnRect->fnSetWidth)( (aNew.*fnRect->fnGetWidth)() );
         }
 
         long nNew = (aNew.*fnRect->fnGetHeight)();
-        long nDiff = nNew - (getSwFrame().*fnRect->fnGetHeight)();
+        long nDiff = nNew - (getFrameArea().*fnRect->fnGetHeight)();
 
         if( nDiff )
         {
@@ -504,7 +528,7 @@ Size SwFrame::ChgSize( const Size& aNewSize )
                  static_cast<SwFootnoteBossFrame*>(GetUpper())->NeighbourhoodAdjustment() )
             {
                 {
-                    SwFrameRect::FrameWriteAccess aFrm(*this);
+                    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                     (aFrm.*fnRect->fnSetHeight)( nNew );
                 }
 
@@ -512,7 +536,7 @@ Size SwFrame::ChgSize( const Size& aNewSize )
 
                 if ( nReal != nDiff )
                 {
-                    SwFrameRect::FrameWriteAccess aFrm(*this);
+                    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                     (aFrm.*fnRect->fnSetHeight)( nNew - nDiff + nReal );
                 }
             }
@@ -527,7 +551,7 @@ Size SwFrame::ChgSize( const Size& aNewSize )
                     else
                         Shrink( -nDiff );
 
-                    if ( GetUpper() && (getSwFrame().*fnRect->fnGetHeight)() != nNew )
+                    if ( GetUpper() && (getFrameArea().*fnRect->fnGetHeight)() != nNew )
                     {
                         GetUpper()->InvalidateSize_();
                     }
@@ -536,18 +560,18 @@ Size SwFrame::ChgSize( const Size& aNewSize )
                 // Even if grow/shrink did not yet set the desired width, for
                 // example when called by ChgColumns to set the column width, we
                 // set the right width now.
-                SwFrameRect::FrameWriteAccess aFrm(*this);
+                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                 (aFrm.*fnRect->fnSetHeight)( nNew );
             }
         }
     }
     else
     {
-        SwFrameRect::FrameWriteAccess aFrm(*this);
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aFrm.SSize( aNewSize );
     }
 
-    if ( getSwFrame().SSize() != aOldSize )
+    if ( getFrameArea().SSize() != aOldSize )
     {
         SwPageFrame *pPage = FindPageFrame();
         if ( GetNext() )
@@ -567,7 +591,7 @@ Size SwFrame::ChgSize( const Size& aNewSize )
         InvalidatePage( pPage );
     }
 
-    return getSwFrame().SSize();
+    return getFrameArea().SSize();
 }
 
 /** Insert SwFrame into existing structure.
@@ -807,10 +831,10 @@ void SwContentFrame::Paste( SwFrame* pParent, SwFrame* pSibling)
             pNxt->Prepare( PREP_FTN, nullptr, false );
     }
 
-    if ( getSwFrame().Height() )
-        pParent->Grow( getSwFrame().Height() );
+    if ( getFrameArea().Height() )
+        pParent->Grow( getFrameArea().Height() );
 
-    if ( getSwFrame().Width() != pParent->getSwPrint().Width() )
+    if ( getFrameArea().Width() != pParent->getFramePrintArea().Width() )
         Prepare( PREP_FIXSIZE_CHG );
 
     if ( GetPrev() )
@@ -820,8 +844,8 @@ void SwContentFrame::Paste( SwFrame* pParent, SwFrame* pSibling)
             static_cast<SwContentFrame*>(GetPrev())->Prepare( PREP_FOLLOW_FOLLOWS );
         else
         {
-            if ( GetPrev()->getSwFrame().Height() !=
-                 GetPrev()->getSwPrint().Height() + GetPrev()->getSwPrint().Top() )
+            if ( GetPrev()->getFrameArea().Height() !=
+                 GetPrev()->getFramePrintArea().Height() + GetPrev()->getFramePrintArea().Top() )
             {
                 // Take the border into account?
                 GetPrev()->InvalidatePrt_();
@@ -1044,7 +1068,7 @@ void SwContentFrame::Cut()
         else
         {
             SwRectFnSet aRectFnSet(this);
-            long nFrameHeight = aRectFnSet.GetHeight(getSwFrame());
+            long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
             if( nFrameHeight )
                 pUp->Shrink( nFrameHeight );
         }
@@ -1097,7 +1121,7 @@ void SwLayoutFrame::Paste( SwFrame* pParent, SwFrame* pSibling)
     else
         fnRect = GetUpper()->IsVertical() ? ( GetUpper()->IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
 
-    if( (getSwFrame().*fnRect->fnGetWidth)() != (pParent->getSwPrint().*fnRect->fnGetWidth)())
+    if( (getFrameArea().*fnRect->fnGetWidth)() != (pParent->getFramePrintArea().*fnRect->fnGetWidth)())
         InvalidateSize_();
     InvalidatePos_();
     const SwPageFrame *pPage = FindPageFrame();
@@ -1125,14 +1149,14 @@ void SwLayoutFrame::Paste( SwFrame* pParent, SwFrame* pSibling)
         }
     }
 
-    if( (getSwFrame().*fnRect->fnGetHeight)() )
+    if( (getFrameArea().*fnRect->fnGetHeight)() )
     {
         // AdjustNeighbourhood is now also called in columns which are not
         // placed inside a frame
         SwNeighbourAdjust nAdjust = GetUpper()->IsFootnoteBossFrame() ?
                 static_cast<SwFootnoteBossFrame*>(GetUpper())->NeighbourhoodAdjustment()
                 : SwNeighbourAdjust::GrowShrink;
-        SwTwips nGrow = (getSwFrame().*fnRect->fnGetHeight)();
+        SwTwips nGrow = (getFrameArea().*fnRect->fnGetHeight)();
         if( SwNeighbourAdjust::OnlyAdjust == nAdjust )
             AdjustNeighbourhood( nGrow );
         else
@@ -1154,7 +1178,7 @@ void SwLayoutFrame::Cut()
         GetNext()->InvalidatePos_();
 
     SwRectFnSet aRectFnSet(this);
-    SwTwips nShrink = aRectFnSet.GetHeight(getSwFrame());
+    SwTwips nShrink = aRectFnSet.GetHeight(getFrameArea());
 
     // Remove first, then shrink upper.
     SwLayoutFrame *pUp = GetUpper();
@@ -1179,19 +1203,19 @@ void SwLayoutFrame::Cut()
                     nReal = -AdjustNeighbourhood( -nShrink );
                 if( nReal < nShrink )
                 {
-                    const SwTwips nOldHeight = aRectFnSet.GetHeight(getSwFrame());
+                    const SwTwips nOldHeight = aRectFnSet.GetHeight(getFrameArea());
 
                     // seems as if this needs to be forwarded to the SwFrame already here,
                     // changing to zero seems temporary anyways
                     {
-                        SwFrameRect::FrameWriteAccess aFrm(*this);
+                        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                         aRectFnSet.SetHeight( aFrm, 0 );
                     }
 
                     nReal += pUp->Shrink( nShrink - nReal );
 
                     {
-                        SwFrameRect::FrameWriteAccess aFrm(*this);
+                        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                         aRectFnSet.SetHeight( aFrm, nOldHeight );
                     }
                 }
@@ -1227,7 +1251,7 @@ SwTwips SwFrame::Grow( SwTwips nDist, bool bTst, bool bInfo )
     {
         SwRectFnSet aRectFnSet(this);
 
-        SwTwips nPrtHeight = aRectFnSet.GetHeight(getSwPrint());
+        SwTwips nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
         if( nPrtHeight > 0 && nDist > (LONG_MAX - nPrtHeight) )
             nDist = LONG_MAX - nPrtHeight;
 
@@ -1251,9 +1275,9 @@ SwTwips SwFrame::Grow( SwTwips nDist, bool bTst, bool bInfo )
             const SwTwips nReal = GrowFrame( nDist, bTst, bInfo );
             if( !bTst )
             {
-                nPrtHeight = aRectFnSet.GetHeight(getSwPrint());
+                nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
 
-                SwFrameRect::PrintWriteAccess aPrt(*this);
+                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
                 aRectFnSet.SetHeight( aPrt, nPrtHeight + ( IsContentFrame() ? nDist : nReal ) );
             }
             return nReal;
@@ -1288,13 +1312,13 @@ SwTwips SwFrame::Shrink( SwTwips nDist, bool bTst, bool bInfo )
             }
 
             SwRectFnSet aRectFnSet(this);
-            SwTwips nReal = aRectFnSet.GetHeight(getSwFrame());
+            SwTwips nReal = aRectFnSet.GetHeight(getFrameArea());
             ShrinkFrame( nDist, bTst, bInfo );
-            nReal -= aRectFnSet.GetHeight(getSwFrame());
+            nReal -= aRectFnSet.GetHeight(getFrameArea());
             if( !bTst )
             {
-                const SwTwips nPrtHeight = aRectFnSet.GetHeight(getSwPrint());
-                SwFrameRect::PrintWriteAccess aPrt(*this);
+                const SwTwips nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
+                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
                 aRectFnSet.SetHeight( aPrt, nPrtHeight - ( IsContentFrame() ? nDist : nReal ) );
             }
             return nReal;
@@ -1347,9 +1371,9 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
         SwViewShell *pViewShell = getRootFrame()->GetCurrShell();
         SwLayoutFrame *pUp = GetUpper();
         long nChg;
-        const long nUpPrtBottom = pUp->getSwFrame().Height() -
-                                  pUp->getSwPrint().Height() - pUp->getSwPrint().Top();
-        SwRect aInva( pUp->getSwFrame() );
+        const long nUpPrtBottom = pUp->getFrameArea().Height() -
+                                  pUp->getFramePrintArea().Height() - pUp->getFramePrintArea().Top();
+        SwRect aInva( pUp->getFrameArea() );
         if ( pViewShell )
         {
             aInva.Pos().X() = pViewShell->VisArea().Left();
@@ -1357,21 +1381,21 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
         }
         if ( nDiff > 0 )
         {
-            nChg = BROWSE_HEIGHT - pUp->getSwFrame().Height();
+            nChg = BROWSE_HEIGHT - pUp->getFrameArea().Height();
             nChg = std::min( nDiff, nChg );
 
             if ( !IsBodyFrame() )
             {
                 SetCompletePaint();
-                if ( !pViewShell || pViewShell->VisArea().Height() >= pUp->getSwFrame().Height() )
+                if ( !pViewShell || pViewShell->VisArea().Height() >= pUp->getFrameArea().Height() )
                 {
                     //First minimize Body, it will grow again later.
                     SwFrame *pBody = static_cast<SwFootnoteBossFrame*>(pUp)->FindBodyCont();
-                    const long nTmp = nChg - pBody->getSwPrint().Height();
+                    const long nTmp = nChg - pBody->getFramePrintArea().Height();
                     if ( !bTst )
                     {
                         {
-                            SwFrameRect::FrameWriteAccess aFrm(*pBody);
+                            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pBody);
                             aFrm.Height(std::max( 0L, aFrm.Height() - nChg ));
                         }
 
@@ -1397,10 +1421,10 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
             nChg = nDiff;
             long nInvaAdd = 0;
             if ( pViewShell && !pUp->GetPrev() &&
-                 pUp->getSwFrame().Height() + nDiff < pViewShell->VisArea().Height() )
+                 pUp->getFrameArea().Height() + nDiff < pViewShell->VisArea().Height() )
             {
                 // This means that we have to invalidate adequately.
-                nChg = pViewShell->VisArea().Height() - pUp->getSwFrame().Height();
+                nChg = pViewShell->VisArea().Height() - pUp->getFrameArea().Height();
                 nInvaAdd = -(nDiff - nChg);
             }
 
@@ -1428,12 +1452,12 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
         if ( !bTst && nChg )
         {
             {
-                SwFrameRect::FrameWriteAccess aFrm(*pUp);
+                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pUp);
                 aFrm.SSize().Height() += nChg;
             }
 
             {
-                SwFrameRect::PrintWriteAccess aPrt(*pUp);
+                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*pUp);
                 aPrt.SSize().Height() += nChg;
             }
 
@@ -1447,7 +1471,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
             SvxBrushItem aBack(pUp->GetFormat()->makeBackgroundBrushItem());
             const SvxGraphicPosition ePos = aBack.GetGraphicPos();
             if ( ePos != GPOS_NONE && ePos != GPOS_TILED )
-                pViewShell->InvalidateWindows( pUp->getSwFrame() );
+                pViewShell->InvalidateWindows( pUp->getFrameArea() );
 
             if ( pUp->GetUpper() )
             {
@@ -1458,13 +1482,13 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                 //its Lower may be called. The values should not be changed
                 //because the caller takes care of the adjustment of Frame and
                 //Prt.
-                const long nOldFrameHeight = getSwFrame().Height();
-                const long nOldPrtHeight = getSwPrint().Height();
+                const long nOldFrameHeight = getFrameArea().Height();
+                const long nOldPrtHeight = getFramePrintArea().Height();
                 const bool bOldComplete = IsCompletePaint();
 
                 if ( IsBodyFrame() )
                 {
-                    SwFrameRect::PrintWriteAccess aPrt(*this);
+                    SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
                     aPrt.SSize().Height() = nOldFrameHeight;
                 }
 
@@ -1473,10 +1497,10 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                     static_cast<SwRootFrame*>(pUp->GetUpper())->CheckViewLayout( nullptr, nullptr );
                 }
 
-                SwFrameRect::FrameWriteAccess aFrm(*this);
+                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                 aFrm.SSize().Height() = nOldFrameHeight;
 
-                SwFrameRect::PrintWriteAccess aPrt(*this);
+                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
                 aPrt.SSize().Height() = nOldPrtHeight;
 
                 mbCompletePaint = bOldComplete;
@@ -1515,14 +1539,14 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                 {
                     if( !pFootnote->GetAttr()->GetFootnote().IsEndNote() )
                     {
-                        nMinH += aRectFnSet.GetHeight(pFootnote->getSwFrame());
+                        nMinH += aRectFnSet.GetHeight(pFootnote->getFrameArea());
                         bFootnote = true;
                     }
                     pFootnote = static_cast<SwFootnoteFrame*>(pFootnote->GetNext());
                 }
                 if( bFootnote )
-                    nMinH += aRectFnSet.GetTop(pCont->getSwPrint());
-                nReal = aRectFnSet.GetHeight(pCont->getSwFrame()) - nMinH;
+                    nMinH += aRectFnSet.GetTop(pCont->getFramePrintArea());
+                nReal = aRectFnSet.GetHeight(pCont->getFrameArea()) - nMinH;
                 if( nReal > nDiff )
                     nReal = nDiff;
                 if( nReal > 0 )
@@ -1548,7 +1572,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
             return 0;
 
         //If not one is found, everything else is solved.
-        nReal = aRectFnSet.GetHeight(pFrame->getSwFrame());
+        nReal = aRectFnSet.GetHeight(pFrame->getFrameArea());
         if( nReal > nDiff )
             nReal = nDiff;
         if( !bFootnotePage )
@@ -1567,14 +1591,14 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
             {
                 //If the Body doesn't return enough, we look for a footnote, if
                 //there is one, we steal there accordingly.
-                const SwTwips nAddMax = aRectFnSet.GetHeight(pFrame->GetNext()->getSwFrame());
+                const SwTwips nAddMax = aRectFnSet.GetHeight(pFrame->GetNext()->getFrameArea());
                 nAdd = nDiff - nReal;
                 if ( nAdd > nAddMax )
                     nAdd = nAddMax;
                 if ( !bTst )
                 {
                     {
-                        SwFrameRect::FrameWriteAccess aFrm(*pFrame->GetNext());
+                        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pFrame->GetNext());
                         aRectFnSet.SetHeight(aFrm, nAddMax-nAdd);
 
                         if( aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() && !aRectFnSet.IsRev() )
@@ -1596,10 +1620,10 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
 
     if ( !bTst && nReal )
     {
-        SwTwips nTmp = aRectFnSet.GetHeight(pFrame->getSwFrame());
+        SwTwips nTmp = aRectFnSet.GetHeight(pFrame->getFrameArea());
 
         {
-            SwFrameRect::FrameWriteAccess aFrm(*pFrame);
+            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pFrame);
             aRectFnSet.SetHeight( aFrm, nTmp - nReal );
 
             if( aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() && !aRectFnSet.IsRev() )
@@ -1671,7 +1695,8 @@ void SwFrame::ImplInvalidateSize()
 {
     if ( InvalidationAllowed( INVALID_SIZE ) )
     {
-        mbValidSize = false;
+        setFrameAreaSizeValid(false);
+
         if ( IsFlyFrame() )
             static_cast<SwFlyFrame*>(this)->Invalidate_();
         else
@@ -1686,7 +1711,8 @@ void SwFrame::ImplInvalidatePrt()
 {
     if ( InvalidationAllowed( INVALID_PRTAREA ) )
     {
-        mbValidPrtArea = false;
+        setFramePrintAreaValid(false);
+
         if ( IsFlyFrame() )
             static_cast<SwFlyFrame*>(this)->Invalidate_();
         else
@@ -1701,7 +1727,8 @@ void SwFrame::ImplInvalidatePos()
 {
     if ( InvalidationAllowed( INVALID_POS ) )
     {
-        mbValidPos = false;
+        setFrameAreaPositionValid(false);
+
         if ( IsFlyFrame() )
         {
             static_cast<SwFlyFrame*>(this)->Invalidate_();
@@ -1762,9 +1789,9 @@ void SwFrame::ReinitializeFrameSizeAttrFlags()
     else if ( rFormatSize.GetHeightSizeType() == ATT_FIX_SIZE )
     {
         if( IsVertical() )
-            ChgSize( Size( rFormatSize.GetWidth(), getSwFrame().Height()));
+            ChgSize( Size( rFormatSize.GetWidth(), getFrameArea().Height()));
         else
-            ChgSize( Size( getSwFrame().Width(), rFormatSize.GetHeight()));
+            ChgSize( Size( getFrameArea().Width(), rFormatSize.GetHeight()));
     }
 }
 
@@ -1779,9 +1806,9 @@ void SwFrame::ValidateThisAndAllLowers( const sal_uInt16 nStage )
 
     if ( !bOnlyObject || dynamic_cast< const SwFlyFrame *>( this ) !=  nullptr )
     {
-        mbValidSize = true;
-        mbValidPrtArea = true;
-        mbValidPos = true;
+        setFrameAreaSizeValid(true);
+        setFramePrintAreaValid(true);
+        setFrameAreaPositionValid(true);
     }
 
     if ( bIncludeObjects )
@@ -1816,7 +1843,7 @@ SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
 {
     SwRectFnSet aRectFnSet(this);
 
-    SwTwips nFrameHeight = aRectFnSet.GetHeight(getSwFrame());
+    SwTwips nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
     if( nFrameHeight > 0 &&
          nDist > (LONG_MAX - nFrameHeight ) )
         nDist = LONG_MAX - nFrameHeight;
@@ -1831,7 +1858,7 @@ SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
         if ( !bTst )
         {
             {
-                SwFrameRect::FrameWriteAccess aFrm(*this);
+                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                 aRectFnSet.SetHeight( aFrm, nFrameHeight + nDist );
 
                 if( IsVertical() && !IsVertLR() && !IsReverse() )
@@ -1857,20 +1884,20 @@ SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
         return 0;
     }
 
-    SwTwips nReal = aRectFnSet.GetHeight(GetUpper()->getSwPrint());
+    SwTwips nReal = aRectFnSet.GetHeight(GetUpper()->getFramePrintArea());
     SwFrame *pFrame = GetUpper()->Lower();
     while( pFrame && nReal > 0 )
-    {   nReal -= aRectFnSet.GetHeight(pFrame->getSwFrame());
+    {   nReal -= aRectFnSet.GetHeight(pFrame->getFrameArea());
         pFrame = pFrame->GetNext();
     }
 
     if ( !bTst )
     {
         //Contents are always resized to the wished value.
-        long nOld = aRectFnSet.GetHeight(getSwFrame());
+        long nOld = aRectFnSet.GetHeight(getFrameArea());
 
         {
-            SwFrameRect::FrameWriteAccess aFrm(*this);
+            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
 
             aRectFnSet.SetHeight( aFrm, nOld + nDist );
 
@@ -1937,14 +1964,14 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 {
     SwRectFnSet aRectFnSet(this);
     OSL_ENSURE( nDist >= 0, "nDist < 0" );
-    OSL_ENSURE( nDist <= aRectFnSet.GetHeight(getSwFrame()),
+    OSL_ENSURE( nDist <= aRectFnSet.GetHeight(getFrameArea()),
             "nDist > than current size." );
 
     if ( !bTst )
     {
         SwTwips nRstHeight;
         if( GetUpper() )
-            nRstHeight = aRectFnSet.BottomDist( getSwFrame(), aRectFnSet.GetPrtBottom(*GetUpper()) );
+            nRstHeight = aRectFnSet.BottomDist( getFrameArea(), aRectFnSet.GetPrtBottom(*GetUpper()) );
         else
             nRstHeight = 0;
         if( nRstHeight < 0 )
@@ -1955,7 +1982,7 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
                 SwFrame *pNxt = GetNext();
                 while( pNxt )
                 {
-                    nNextHeight += aRectFnSet.GetHeight(pNxt->getSwFrame());
+                    nNextHeight += aRectFnSet.GetHeight(pNxt->getFrameArea());
                     pNxt = pNxt->GetNext();
                 }
             }
@@ -1967,7 +1994,7 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         }
 
         {
-            SwFrameRect::FrameWriteAccess aFrm(*this);
+            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
             aRectFnSet.SetHeight( aFrm, aRectFnSet.GetHeight(aFrm) - nDist );
 
             if( IsVertical() && !IsVertLR() )
@@ -2007,7 +2034,7 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
             // #109722# : The fix for #108745# was too strict.
 
             bool bInvalidate = true;
-            const SwRect aRect( getSwFrame() );
+            const SwRect aRect( getFrameArea() );
             const SwPageFrame* pPage = FindPageFrame();
             const SwSortedObjs* pSorted = pPage ? pPage->GetSortedObjs() : nullptr;
             if( pSorted )
@@ -2148,7 +2175,7 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
                     CheckPageDescs( pPage );
                 if ( GetAttrSet()->GetPageDesc().GetNumOffset() )
                     static_cast<SwRootFrame*>(pPage->GetUpper())->SetVirtPageNum( true );
-                SwDocPosUpdate aMsgHint( pPage->getSwFrame().Top() );
+                SwDocPosUpdate aMsgHint( pPage->getFrameArea().Top() );
                 pPage->GetFormat()->GetDoc()->getIDocumentFieldsAccess().UpdatePageFields( &aMsgHint );
             }
             break;
@@ -2301,9 +2328,9 @@ SwTwips SwLayoutFrame::InnerHeight() const
         do
         {
             SwTwips nTmp = static_cast<const SwLayoutFrame*>(pCnt)->InnerHeight();
-            if( pCnt->GetValidPrtAreaFlag() )
-                nTmp += aRectFnSet.GetHeight(pCnt->getSwFrame()) -
-                        aRectFnSet.GetHeight(pCnt->getSwPrint());
+            if( pCnt->isFramePrintAreaValid() )
+                nTmp += aRectFnSet.GetHeight(pCnt->getFrameArea()) -
+                        aRectFnSet.GetHeight(pCnt->getFramePrintArea());
             if( nRet < nTmp )
                 nRet = nTmp;
             pCnt = pCnt->GetNext();
@@ -2313,13 +2340,13 @@ SwTwips SwLayoutFrame::InnerHeight() const
     {
         do
         {
-            nRet += aRectFnSet.GetHeight(pCnt->getSwFrame());
+            nRet += aRectFnSet.GetHeight(pCnt->getFrameArea());
             if( pCnt->IsContentFrame() && static_cast<const SwTextFrame*>(pCnt)->IsUndersized() )
                 nRet += static_cast<const SwTextFrame*>(pCnt)->GetParHeight() -
-                        aRectFnSet.GetHeight(pCnt->getSwPrint());
+                        aRectFnSet.GetHeight(pCnt->getFramePrintArea());
             if( pCnt->IsLayoutFrame() && !pCnt->IsTabFrame() )
                 nRet += static_cast<const SwLayoutFrame*>(pCnt)->InnerHeight() -
-                        aRectFnSet.GetHeight(pCnt->getSwPrint());
+                        aRectFnSet.GetHeight(pCnt->getFramePrintArea());
             pCnt = pCnt->GetNext();
         } while( pCnt );
 
@@ -2338,8 +2365,8 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
         return 0;
 
     SwRectFnSet aRectFnSet(this);
-    const SwTwips nFrameHeight = aRectFnSet.GetHeight(getSwFrame());
-    const SwTwips nFramePos = getSwFrame().Pos().X();
+    const SwTwips nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
+    const SwTwips nFramePos = getFrameArea().Pos().X();
 
     if ( nFrameHeight > 0 && nDist > (LONG_MAX - nFrameHeight) )
         nDist = LONG_MAX - nFrameHeight;
@@ -2349,21 +2376,21 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
     {
         SwFrame *pFrame = GetUpper()->Lower();
         while( pFrame )
-        {   nMin += aRectFnSet.GetHeight(pFrame->getSwFrame());
+        {   nMin += aRectFnSet.GetHeight(pFrame->getFrameArea());
             pFrame = pFrame->GetNext();
         }
-        nMin = aRectFnSet.GetHeight(GetUpper()->getSwPrint()) - nMin;
+        nMin = aRectFnSet.GetHeight(GetUpper()->getFramePrintArea()) - nMin;
         if ( nMin < 0 )
             nMin = 0;
     }
 
-    SwRect aOldFrame( getSwFrame() );
+    SwRect aOldFrame( getFrameArea() );
     bool bMoveAccFrame = false;
 
     bool bChgPos = IsVertical() && !IsReverse();
     if ( !bTst )
     {
-        SwFrameRect::FrameWriteAccess aFrm(*this);
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aRectFnSet.SetHeight( aFrm, nFrameHeight + nDist );
 
         if( bChgPos && !IsVertLR() )
@@ -2419,10 +2446,10 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
                     SwTwips nSpace = bTst ? 0 : -nDist;
                     const SwFrame *pFrame = GetUpper()->Lower();
                     do
-                    {   nSpace += aRectFnSet.GetHeight(pFrame->getSwFrame());
+                    {   nSpace += aRectFnSet.GetHeight(pFrame->getFrameArea());
                         pFrame = pFrame->GetNext();
                     } while ( pFrame != GetNext() );
-                    nSpace = aRectFnSet.GetHeight(GetUpper()->getSwPrint()) -nSpace;
+                    nSpace = aRectFnSet.GetHeight(GetUpper()->getFramePrintArea()) -nSpace;
                     if ( nSpace < 0 )
                         nSpace = 0;
                     nSpace += nGrow;
@@ -2449,7 +2476,7 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
             // NEW TABLES
             ( !IsCellFrame() || static_cast<SwCellFrame*>(this)->GetLayoutRowSpan() > 1 ) )
         {
-            SwFrameRect::FrameWriteAccess aFrm(*this);
+            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
             aRectFnSet.SetHeight( aFrm, nFrameHeight + nReal );
 
             if( bChgPos && !IsVertLR() )
@@ -2526,7 +2553,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 
     OSL_ENSURE( nDist >= 0, "nDist < 0" );
     SwRectFnSet aRectFnSet(this);
-    SwTwips nFrameHeight = aRectFnSet.GetHeight(getSwFrame());
+    SwTwips nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
     if ( nDist > nFrameHeight )
         nDist = nFrameHeight;
 
@@ -2536,27 +2563,27 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
     {
         if( !Lower()->IsNeighbourFrame() )
         {   const SwFrame *pFrame = Lower();
-            const long nTmp = aRectFnSet.GetHeight(getSwPrint());
+            const long nTmp = aRectFnSet.GetHeight(getFramePrintArea());
             while( pFrame && nMin < nTmp )
-            {   nMin += aRectFnSet.GetHeight(pFrame->getSwFrame());
+            {   nMin += aRectFnSet.GetHeight(pFrame->getFrameArea());
                 pFrame = pFrame->GetNext();
             }
         }
     }
     SwTwips nReal = nDist;
-    SwTwips nMinDiff = aRectFnSet.GetHeight(getSwPrint()) - nMin;
+    SwTwips nMinDiff = aRectFnSet.GetHeight(getFramePrintArea()) - nMin;
     if( nReal > nMinDiff )
         nReal = nMinDiff;
     if( nReal <= 0 )
         return nDist;
 
-    SwRect aOldFrame( getSwFrame() );
+    SwRect aOldFrame( getFrameArea() );
     bool bMoveAccFrame = false;
 
     SwTwips nRealDist = nReal;
     if ( !bTst )
     {
-        SwFrameRect::FrameWriteAccess aFrm(*this);
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aRectFnSet.SetHeight( aFrm, nFrameHeight - nReal );
 
         if( bChgPos && !IsVertLR() )
@@ -2581,7 +2608,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
             nReal *= -1;
             if ( !bTst && IsBodyFrame() && nReal < nRealDist )
             {
-                SwFrameRect::FrameWriteAccess aFrm(*this);
+                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                 aRectFnSet.SetHeight( aFrm, aRectFnSet.GetHeight(aFrm) + nRealDist - nReal );
 
                 if( bChgPos && !IsVertLR() )
@@ -2598,7 +2625,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         SwTwips nTmp = GetUpper()->Shrink( nReal, bTst, bInfo );
         if ( nTmp != nReal )
         {
-            SwFrameRect::FrameWriteAccess aFrm(*this);
+            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
             aRectFnSet.SetHeight( aFrm, aRectFnSet.GetHeight(aFrm) + nReal - nTmp );
 
             if( bChgPos && !IsVertLR() )
@@ -2719,8 +2746,8 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
     SwFrame *pLowerFrame = Lower();
 
     // declare and init const booleans <bHeightChgd> and <bWidthChg>
-    const bool bHeightChgd = rOldSize.Height() != getSwPrint().Height();
-    const bool bWidthChgd  = rOldSize.Width()  != getSwPrint().Width();
+    const bool bHeightChgd = rOldSize.Height() != getFramePrintArea().Height();
+    const bool bWidthChgd  = rOldSize.Width()  != getFramePrintArea().Width();
 
     SwRectFnSet aRectFnSet(this);
 
@@ -2787,7 +2814,7 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
             // Check, if variable size of body frame resp. section frame has grown
             // OD 28.10.2002 #97265# - correct check, if variable size has grown.
             SwTwips nOldHeight = aRectFnSet.IsVert() ? rOldSize.Width() : rOldSize.Height();
-            if( nOldHeight < aRectFnSet.GetHeight(getSwPrint()) )
+            if( nOldHeight < aRectFnSet.GetHeight(getFramePrintArea()) )
             {
                 // If variable size of body|section frame has grown, only found
                 // last lower and the position of the its next have to be invalidated.
@@ -2806,8 +2833,8 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
                 // and the dedicated new last lower.
                 if( aRectFnSet.IsVert() )
                 {
-                    SwTwips nBot = getSwFrame().Left() + getSwPrint().Left();
-                    while ( pLowerFrame && pLowerFrame->GetPrev() && pLowerFrame->getSwFrame().Left() < nBot )
+                    SwTwips nBot = getFrameArea().Left() + getFramePrintArea().Left();
+                    while ( pLowerFrame && pLowerFrame->GetPrev() && pLowerFrame->getFrameArea().Left() < nBot )
                     {
                         pLowerFrame->InvalidateAll_();
                         pLowerFrame->InvalidatePage( pPage );
@@ -2816,8 +2843,8 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
                 }
                 else
                 {
-                    SwTwips nBot = getSwFrame().Top() + getSwPrint().Bottom();
-                    while ( pLowerFrame && pLowerFrame->GetPrev() && pLowerFrame->getSwFrame().Top() > nBot )
+                    SwTwips nBot = getFrameArea().Top() + getFramePrintArea().Bottom();
+                    while ( pLowerFrame && pLowerFrame->GetPrev() && pLowerFrame->getFrameArea().Top() > nBot )
                     {
                         pLowerFrame->InvalidateAll_();
                         pLowerFrame->InvalidatePage( pPage );
@@ -2912,8 +2939,8 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
                         // In horizontal layout set width of header, footer,
                         // foot note container, foot note, body and no-text
                         // frames to its upper width.
-                        SwFrameRect::FrameWriteAccess aFrm(*pLowerFrame);
-                        aFrm.Width( getSwPrint().Width() );
+                        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pLowerFrame);
+                        aFrm.Width( getFramePrintArea().Width() );
                     }
                     else if( rOldSize.Width() && !pLowerFrame->IsFootnoteFrame() )
                     {
@@ -2928,22 +2955,22 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
                         // Perform <double> calculation of new width, if
                         // one of the coefficients is greater than 50000
                         SwTwips nNewWidth;
-                        if ( (pLowerFrame->getSwFrame().Width() > 50000) ||
-                             (getSwPrint().Width() > 50000) )
+                        if ( (pLowerFrame->getFrameArea().Width() > 50000) ||
+                             (getFramePrintArea().Width() > 50000) )
                         {
                             double nNewWidthTmp =
-                                ( double(pLowerFrame->getSwFrame().Width())
-                                  * double(getSwPrint().Width()) )
+                                ( double(pLowerFrame->getFrameArea().Width())
+                                  * double(getFramePrintArea().Width()) )
                                 / double(rOldSize.Width());
                             nNewWidth = SwTwips(nNewWidthTmp);
                         }
                         else
                         {
                             nNewWidth =
-                                (pLowerFrame->getSwFrame().Width() * getSwPrint().Width()) / rOldSize.Width();
+                                (pLowerFrame->getFrameArea().Width() * getFramePrintArea().Width()) / rOldSize.Width();
                         }
 
-                        SwFrameRect::FrameWriteAccess aFrm(*pLowerFrame);
+                        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pLowerFrame);
                         aFrm.Width( nNewWidth );
                     }
                 }
@@ -2956,8 +2983,8 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
                         // no-text frames to its upper height.
                         // In horizontal layout set height of column frames
                         // to its upper height.
-                        SwFrameRect::FrameWriteAccess aFrm(*pLowerFrame);
-                        aFrm.Height( getSwPrint().Height() );
+                        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pLowerFrame);
+                        aFrm.Height( getFramePrintArea().Height() );
                     }
                     // OD 01.10.2002 #102211#
                     // add conditions <!pLowerFrame->IsHeaderFrame()> and
@@ -3002,19 +3029,19 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
                                 if ( IsVertical() || pLowerFrame->IsBodyFrame() )
                                 {
                                     SwTwips nNewHeight =
-                                            pLowerFrame->getSwFrame().Height() +
-                                            ( getSwPrint().Height() - rOldSize.Height() );
+                                            pLowerFrame->getFrameArea().Height() +
+                                            ( getFramePrintArea().Height() - rOldSize.Height() );
                                     if ( nNewHeight < 0)
                                     {
                                         // OD 01.04.2003 #108446# - adjust assertion condition and text
                                         OSL_ENSURE( !( IsPageFrame() &&
-                                                   (pLowerFrame->getSwFrame().Height()>0) &&
-                                                   (pLowerFrame->IsValid()) ),
+                                                   (pLowerFrame->getFrameArea().Height()>0) &&
+                                                   (pLowerFrame->isFrameAreaDefinitionValid()) ),
                                                     "ChgLowersProg - negative height for lower.");
                                         nNewHeight = 0;
                                     }
 
-                                    SwFrameRect::FrameWriteAccess aFrm(*pLowerFrame);
+                                    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pLowerFrame);
                                     aFrm.Height( nNewHeight );
                                 }
                             }
@@ -3025,36 +3052,36 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
                             // OD 24.10.2002 #97265# - <double> calculation
                             // Perform <double> calculation of new height, if
                             // one of the coefficients is greater than 50000
-                            if ( (pLowerFrame->getSwFrame().Height() > 50000) ||
-                                 (getSwPrint().Height() > 50000) )
+                            if ( (pLowerFrame->getFrameArea().Height() > 50000) ||
+                                 (getFramePrintArea().Height() > 50000) )
                             {
                                 double nNewHeightTmp =
-                                    ( double(pLowerFrame->getSwFrame().Height())
-                                      * double(getSwPrint().Height()) )
+                                    ( double(pLowerFrame->getFrameArea().Height())
+                                      * double(getFramePrintArea().Height()) )
                                     / double(rOldSize.Height());
                                 nNewHeight = SwTwips(nNewHeightTmp);
                             }
                             else
                             {
-                                nNewHeight = ( pLowerFrame->getSwFrame().Height()
-                                             * getSwPrint().Height() ) / rOldSize.Height();
+                                nNewHeight = ( pLowerFrame->getFrameArea().Height()
+                                             * getFramePrintArea().Height() ) / rOldSize.Height();
                             }
                             if( !pLowerFrame->GetNext() )
                             {
-                                SwTwips nSum = getSwPrint().Height();
+                                SwTwips nSum = getFramePrintArea().Height();
                                 SwFrame* pTmp = Lower();
                                 while( pTmp->GetNext() )
                                 {
                                     if( !pTmp->IsFootnoteContFrame() || !pTmp->IsVertical() )
-                                        nSum -= pTmp->getSwFrame().Height();
+                                        nSum -= pTmp->getFrameArea().Height();
                                     pTmp = pTmp->GetNext();
                                 }
                                 if( nSum - nNewHeight == 1 &&
-                                    nSum == pLowerFrame->getSwFrame().Height() )
+                                    nSum == pLowerFrame->getFrameArea().Height() )
                                     nNewHeight = nSum;
                             }
 
-                            SwFrameRect::FrameWriteAccess aFrm(*pLowerFrame);
+                            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pLowerFrame);
                             aFrm.Height( nNewHeight );
                         }
                     }
@@ -3073,8 +3100,8 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
         {
             //If a growth took place and the subordinate elements can retouch
             //itself (currently Tabs, Sections and Content) we trigger it.
-            if ( rOldSize.Height() < getSwPrint().SSize().Height() ||
-                 rOldSize.Width() < getSwPrint().SSize().Width() )
+            if ( rOldSize.Height() < getFramePrintArea().SSize().Height() ||
+                 rOldSize.Width() < getFramePrintArea().SSize().Width() )
                 pLowerFrame->SetRetouche();
         }
         pLowerFrame = pLowerFrame->GetNext();
@@ -3112,7 +3139,7 @@ void SwLayoutFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBord
 {
     OSL_ENSURE( pAttrs, "LayoutFrame::Format, pAttrs is 0." );
 
-    if ( mbValidPrtArea && mbValidSize )
+    if ( isFramePrintAreaValid() && isFrameAreaSizeValid() )
         return;
 
     bool bHideWhitespace = false;
@@ -3137,14 +3164,14 @@ void SwLayoutFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBord
 
     const bool bVert = IsVertical() && !IsPageFrame();
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
-    if ( !mbValidPrtArea )
+    if ( !isFramePrintAreaValid() )
     {
-        mbValidPrtArea = true;
+        setFramePrintAreaValid(true);
         (this->*fnRect->fnSetXMargins)( nLeft, nRight );
         (this->*fnRect->fnSetYMargins)( nUpper, nLower );
     }
 
-    if ( !mbValidSize )
+    if ( !isFrameAreaSizeValid() )
     {
         if ( !HasFixSize() )
         {
@@ -3152,27 +3179,28 @@ void SwLayoutFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBord
             const SwFormatFrameSize &rSz = GetFormat()->GetFrameSize();
             SwTwips nMinHeight = rSz.GetHeightSizeType() == ATT_MIN_SIZE ? rSz.GetHeight() : 0;
             do
-            {   mbValidSize = true;
+            {
+                setFrameAreaSizeValid(true);
 
                 //The size in VarSize is calculated using the content plus the
                 // borders.
                 SwTwips nRemaining = 0;
                 SwFrame *pFrame = Lower();
                 while ( pFrame )
-                {   nRemaining += (pFrame->getSwFrame().*fnRect->fnGetHeight)();
+                {   nRemaining += (pFrame->getFrameArea().*fnRect->fnGetHeight)();
                     if( pFrame->IsTextFrame() && static_cast<SwTextFrame*>(pFrame)->IsUndersized() )
                     // This TextFrame would like to be a bit bigger
                         nRemaining += static_cast<SwTextFrame*>(pFrame)->GetParHeight()
-                                      - (pFrame->getSwPrint().*fnRect->fnGetHeight)();
+                                      - (pFrame->getFramePrintArea().*fnRect->fnGetHeight)();
                     else if( pFrame->IsSctFrame() && static_cast<SwSectionFrame*>(pFrame)->IsUndersized() )
                         nRemaining += static_cast<SwSectionFrame*>(pFrame)->Undersize();
                     pFrame = pFrame->GetNext();
                 }
                 nRemaining += nBorder;
                 nRemaining = std::max( nRemaining, nMinHeight );
-                const SwTwips nDiff = nRemaining-(getSwFrame().*fnRect->fnGetHeight)();
-                const long nOldLeft = (getSwFrame().*fnRect->fnGetLeft)();
-                const long nOldTop = (getSwFrame().*fnRect->fnGetTop)();
+                const SwTwips nDiff = nRemaining-(getFrameArea().*fnRect->fnGetHeight)();
+                const long nOldLeft = (getFrameArea().*fnRect->fnGetLeft)();
+                const long nOldTop = (getFrameArea().*fnRect->fnGetTop)();
                 if ( nDiff )
                 {
                     if ( nDiff > 0 )
@@ -3183,32 +3211,40 @@ void SwLayoutFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBord
                     MakePos();
                 }
                 //Don't exceed the bottom edge of the Upper.
-                if ( GetUpper() && (getSwFrame().*fnRect->fnGetHeight)() )
+                if ( GetUpper() && (getFrameArea().*fnRect->fnGetHeight)() )
                 {
                     const SwTwips nLimit = (GetUpper()->*fnRect->fnGetPrtBottom)();
                     if( (this->*fnRect->fnSetLimit)( nLimit ) &&
-                        nOldLeft == (getSwFrame().*fnRect->fnGetLeft)() &&
-                        nOldTop  == (getSwFrame().*fnRect->fnGetTop)() )
-                        mbValidSize = mbValidPrtArea = true;
+                        nOldLeft == (getFrameArea().*fnRect->fnGetLeft)() &&
+                        nOldTop  == (getFrameArea().*fnRect->fnGetTop)() )
+                    {
+                        setFrameAreaSizeValid(true);
+                        setFramePrintAreaValid(true);
+                    }
                 }
-            } while ( !mbValidSize );
+            } while ( !isFrameAreaSizeValid() );
         }
         else if (GetType() & FRM_HEADFOOT)
         {
             do
-            {   if ( getSwFrame().Height() != pAttrs->GetSize().Height() )
-                    ChgSize( Size( getSwFrame().Width(), pAttrs->GetSize().Height()));
-                mbValidSize = true;
+            {   if ( getFrameArea().Height() != pAttrs->GetSize().Height() )
+                {
+                    ChgSize( Size( getFrameArea().Width(), pAttrs->GetSize().Height()));
+                }
+
+                setFrameAreaSizeValid(true);
                 MakePos();
-            } while ( !mbValidSize );
+            } while ( !isFrameAreaSizeValid() );
         }
         else
-            mbValidSize = true;
+        {
+            setFrameAreaSizeValid(true);
+        }
 
         // While updating the size, PrtArea might be invalidated.
-        if (!mbValidPrtArea)
+        if (!isFramePrintAreaValid())
         {
-            mbValidPrtArea = true;
+            setFramePrintAreaValid(true);
             (this->*fnRect->fnSetXMargins)(nLeft, nRight);
             (this->*fnRect->fnSetYMargins)(nUpper, nLower);
         }
@@ -3237,8 +3273,8 @@ static void InvaPercentFlys( SwFrame *pFrame, SwTwips nDiff )
                     // not allow the text to go through...
                     // then a notifycation could cause an endless loop, e.g.
                     // 100% height and no text wrap inside a cell of a table.
-                    if( pFly->getSwFrame().Height()*10 >
-                        ( nDiff + pRel->getSwPrint().Height() )*9 &&
+                    if( pFly->getFrameArea().Height()*10 >
+                        ( nDiff + pRel->getFramePrintArea().Height() )*9 &&
                         pFly->GetFormat()->GetSurround().GetSurround() !=
                         css::text::WrapTextMode_THROUGH )
                        bNotify = false;
@@ -3293,11 +3329,11 @@ long SwLayoutFrame::CalcRel( const SwFormatFrameSize &rSz ) const
         if( pRel->IsPageBodyFrame() && pSh && bBrowseMode && pSh->VisArea().Width() )
         {
             nRel = pSh->GetBrowseWidth();
-            long nDiff = nRel - pRel->getSwPrint().Width();
+            long nDiff = nRel - pRel->getFramePrintArea().Width();
             if ( nDiff > 0 )
                 nRel -= nDiff;
         }
-        nRel = std::min( nRel, pRel->getSwPrint().Width() );
+        nRel = std::min( nRel, pRel->getFramePrintArea().Width() );
         nRet = nRel * nPercent / 100;
     }
     return nRet;
@@ -3421,8 +3457,8 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
         SwRectFnSet aRectFnSet(this);
         if( IsSctFrame() )
         {
-            nMaximum = aRectFnSet.GetHeight(getSwFrame()) - nBorder +
-                       aRectFnSet.BottomDist(getSwFrame(), aRectFnSet.GetPrtBottom(*GetUpper()));
+            nMaximum = aRectFnSet.GetHeight(getFrameArea()) - nBorder +
+                       aRectFnSet.BottomDist(getFrameArea(), aRectFnSet.GetPrtBottom(*GetUpper()));
             nMaximum += GetUpper()->Grow( LONG_MAX, true );
             if( nMaximum < nMinimum )
             {
@@ -3438,14 +3474,14 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                          GetBalancedColumns().GetValue();
             SwFrame* pAny = ContainsAny();
             if( bNoBalance ||
-                ( !aRectFnSet.GetHeight(getSwFrame()) && pAny ) )
+                ( !aRectFnSet.GetHeight(getFrameArea()) && pAny ) )
             {
                 long nTop = aRectFnSet.GetTopMargin(*this);
                 // #i23129# - correction
                 // to the calculated maximum height.
                 {
-                    SwFrameRect::FrameWriteAccess aFrm(*this);
-                    aRectFnSet.AddBottom( aFrm, nMaximum - aRectFnSet.GetHeight(getSwFrame()) );
+                    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+                    aRectFnSet.AddBottom( aFrm, nMaximum - aRectFnSet.GetHeight(getFrameArea()) );
                 }
 
                 if( nTop > nMaximum )
@@ -3458,7 +3494,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 if( pFootnoteCont )
                 {
                     SwFrame* pFootnoteAny = pFootnoteCont->ContainsAny();
-                    if( pFootnoteAny && pFootnoteAny->IsValid() )
+                    if( pFootnoteAny && pFootnoteAny->isFrameAreaDefinitionValid() )
                     {
                         bBackLock = true;
                         static_cast<SwSectionFrame*>(this)->SetFootnoteLock( true );
@@ -3489,7 +3525,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
             if ( pImp )
                 pImp->CheckWaitCursor();
 
-            mbValidSize = true;
+            setFrameAreaSizeValid(true);
             //First format the column as this will relieve the stack a bit.
             //Also set width and height of the column (if they are wrong)
             //while we are at it.
@@ -3532,8 +3568,8 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
             while( pCol )
             {
                 SwLayoutFrame* pLay = static_cast<SwLayoutFrame*>(pCol->Lower());
-                SwTwips nInnerHeight = aRectFnSet.GetHeight(pLay->getSwFrame()) -
-                                       aRectFnSet.GetHeight(pLay->getSwPrint());
+                SwTwips nInnerHeight = aRectFnSet.GetHeight(pLay->getFrameArea()) -
+                                       aRectFnSet.GetHeight(pLay->getFramePrintArea());
                 if( pLay->Lower() )
                 {
                     bFoundLower = true;
@@ -3548,10 +3584,10 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     pLay = static_cast<SwLayoutFrame*>(pLay->GetNext());
                     OSL_ENSURE( pLay->IsFootnoteContFrame(),"FootnoteContainer expected" );
                     nInnerHeight += pLay->InnerHeight();
-                    nInnerHeight += aRectFnSet.GetHeight(pLay->getSwFrame()) -
-                                    aRectFnSet.GetHeight(pLay->getSwPrint());
+                    nInnerHeight += aRectFnSet.GetHeight(pLay->getFrameArea()) -
+                                    aRectFnSet.GetHeight(pLay->getFramePrintArea());
                 }
-                nInnerHeight -= aRectFnSet.GetHeight(pCol->getSwPrint());
+                nInnerHeight -= aRectFnSet.GetHeight(pCol->getFramePrintArea());
                 if( nInnerHeight > nDiff )
                 {
                     nDiff = nInnerHeight;
@@ -3577,7 +3613,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 if ( nDiff || ::lcl_IsFlyHeightClipped( this ) ||
                      ( IsSctFrame() && static_cast<SwSectionFrame*>(this)->CalcMinDiff( nMinDiff ) ) )
                 {
-                    long nPrtHeight = aRectFnSet.GetHeight(getSwPrint());
+                    long nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
                     // The minimum must not be smaller than our PrtHeight as
                     // long as something juts over.
                     if( nMinimum < nPrtHeight )
@@ -3599,7 +3635,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                         // minimal FrameHeight and PrtHeight is smaller than
                         // nMindiff we grow in a way that PrtHeight is exactly
                         // nMinDiff afterwards.
-                        long nFrameHeight = aRectFnSet.GetHeight(getSwFrame());
+                        long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
                         if ( nFrameHeight > nMinHeight || nPrtHeight >= nMinDiff )
                             nDiff = std::max( nDiff, nMinDiff );
                         else if( nDiff < nMinDiff )
@@ -3613,7 +3649,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 }
                 else if( nMaximum > nMinimum ) // We fit, do we still have some margin?
                 {
-                    long nPrtHeight = aRectFnSet.GetHeight(getSwPrint());
+                    long nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
                     if ( nMaximum < nPrtHeight )
                         nDiff = nMaximum - nPrtHeight; // We grew over a working
                         // height and shrink back to it, but will this ever
@@ -3648,12 +3684,12 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 }
                 if( nDiff ) // now we shrink or grow...
                 {
-                    Size aOldSz( getSwPrint().SSize() );
+                    Size aOldSz( getFramePrintArea().SSize() );
                     long nTop = aRectFnSet.GetTopMargin(*this);
-                    nDiff = aRectFnSet.GetHeight(getSwPrint()) + nDiff + nBorder - aRectFnSet.GetHeight(getSwFrame());
+                    nDiff = aRectFnSet.GetHeight(getFramePrintArea()) + nDiff + nBorder - aRectFnSet.GetHeight(getFrameArea());
 
                     {
-                        SwFrameRect::FrameWriteAccess aFrm(*this);
+                        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                         aRectFnSet.AddBottom( aFrm, nDiff );
                     }
 
@@ -3708,7 +3744,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
             else
                 bEnd = true;
 
-        } while ( !bEnd || !mbValidSize );
+        } while ( !bEnd || !isFrameAreaSizeValid() );
     }
     // OD 01.04.2003 #108446# - Don't collect endnotes for sections. Thus, set
     // 2nd parameter to <true>.
@@ -3880,7 +3916,7 @@ void SwRootFrame::InvalidateAllContent( SwInvalidateFlags nInv )
     {
         SwViewShell *pSh  = getRootFrame()->GetCurrShell();
         if( pSh )
-            pSh->InvalidateWindows( getSwFrame() );
+            pSh->InvalidateWindows( getFrameArea() );
     }
 }
 

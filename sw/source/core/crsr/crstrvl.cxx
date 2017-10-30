@@ -90,12 +90,12 @@ void SwCursorShell::MoveCursorToNum()
     if( pFrame->IsVertical() )
     {
         aPt.setX(m_aCharRect.Center().getX());
-        aPt.setY(pFrame->getSwFrame().Top() + GetUpDownX());
+        aPt.setY(pFrame->getFrameArea().Top() + GetUpDownX());
     }
     else
     {
         aPt.setY(m_aCharRect.Center().getY());
-        aPt.setX(pFrame->getSwFrame().Left() + GetUpDownX());
+        aPt.setX(pFrame->getFrameArea().Left() + GetUpDownX());
     }
     pFrame->GetCursorOfst( m_pCurrentCursor->GetPoint(), aPt );
     if ( !m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::Toggle |
@@ -142,7 +142,7 @@ bool SwCursorShell::GotoHeaderText()
         SwCursor *pTmpCursor = getShellCursor( true );
         SwCursorSaveState aSaveState( *pTmpCursor );
         pFrame->Calc(GetOut());
-        Point aPt( pFrame->getSwFrame().Pos() + pFrame->getSwPrint().Pos() );
+        Point aPt( pFrame->getFrameArea().Pos() + pFrame->getFramePrintArea().Pos() );
         pFrame->GetCursorOfst( pTmpCursor->GetPoint(), aPt );
         if( !pTmpCursor->IsSelOvr() )
             UpdateCursor();
@@ -174,7 +174,7 @@ bool SwCursorShell::GotoFooterText()
             SwCallLink aLk( *this ); // watch Cursor-Moves
             SwCursorSaveState aSaveState( *pTmpCursor );
             pLower->Calc(GetOut());
-            Point aPt( pLower->getSwFrame().Pos() + pLower->getSwPrint().Pos() );
+            Point aPt( pLower->getFrameArea().Pos() + pLower->getFramePrintArea().Pos() );
             pLower->GetCursorOfst( pTmpCursor->GetPoint(), aPt );
             if( !pTmpCursor->IsSelOvr() )
                 UpdateCursor();
@@ -1443,8 +1443,8 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                                 pFrame->GetCharRect(aEnd, aEndPos, &aTmpState);
                                 if (aStart.Top() != aEnd.Top() || aStart.Bottom() != aEnd.Bottom())
                                 {
-                                    aStart.Left(pFrame->getSwFrame().Left());
-                                    aEnd.Right(pFrame->getSwFrame().Right());
+                                    aStart.Left(pFrame->getFrameArea().Left());
+                                    aEnd.Right(pFrame->getFrameArea().Right());
                                 }
                                 *pFieldRect = aStart.Union(aEnd);
                             }
@@ -1471,8 +1471,8 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             pFrame->GetCharRect(aEnd, *pRedl->End(), &aTmpState);
                             if (aStart.Top() != aEnd.Top() || aStart.Bottom() != aEnd.Bottom())
                             {
-                                aStart.Left(pFrame->getSwFrame().Left());
-                                aEnd.Right(pFrame->getSwFrame().Right());
+                                aStart.Left(pFrame->getFrameArea().Left());
+                                aEnd.Right(pFrame->getFrameArea().Right());
                             }
                             *pFieldRect = aStart.Union(aEnd);
                         }
@@ -1516,7 +1516,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
                     if( aTmpState.m_bPosCorr )
                     {
-                        if( pF && !pF->getSwFrame().IsInside( aPt ))
+                        if( pF && !pF->getFrameArea().IsInside( aPt ))
                             pF = nullptr;
                     }
                     else if( !pF )
@@ -1551,8 +1551,8 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                         {
                             if( pFieldRect )
                             {
-                                *pFieldRect = pF->getSwPrint();
-                                *pFieldRect += pF->getSwFrame().Pos();
+                                *pFieldRect = pF->getFramePrintArea();
+                                *pFieldRect += pF->getFrameArea().Pos();
                             }
                             rContentAtPos.pFndTextAttr = nullptr;
                             rContentAtPos.aFnd.pAttr = pItem;

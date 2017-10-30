@@ -53,8 +53,8 @@ void SwViewShellImp::Init( const SwViewOption *pNewOpt )
         if ( !pRoot->GetDrawPage() )
             pRoot->SetDrawPage( rIDDMA.GetDrawModel()->GetPage( 0 ) );
 
-        if ( pRoot->GetDrawPage()->GetSize() != pRoot->getSwFrame().SSize() )
-            pRoot->GetDrawPage()->SetSize( pRoot->getSwFrame().SSize() );
+        if ( pRoot->GetDrawPage()->GetSize() != pRoot->getFrameArea().SSize() )
+            pRoot->GetDrawPage()->SetSize( pRoot->getFrameArea().SSize() );
 
         m_pSdrPageView = m_pDrawView->ShowSdrPage( pRoot->GetDrawPage());
         // Notify drawing page view about invisible layers
@@ -73,8 +73,8 @@ void SwViewShellImp::Init( const SwViewOption *pNewOpt )
     Fraction aSnGrWdtY(rSz.Height(), pNewOpt->GetDivisionY() + 1);
     m_pDrawView->SetSnapGridWidth( aSnGrWdtX, aSnGrWdtY );
 
-    if ( pRoot->getSwFrame().HasArea() )
-        m_pDrawView->SetWorkArea( pRoot->getSwFrame().SVRect() );
+    if ( pRoot->getFrameArea().HasArea() )
+        m_pDrawView->SetWorkArea( pRoot->getFrameArea().SVRect() );
 
     if ( GetShell()->IsPreview() )
         m_pDrawView->SetAnimationEnabled( false );
@@ -136,7 +136,7 @@ bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
         {
             // In case of normal rendering, this makes sure only visible rectangles are painted.
             // Otherwise get the rectangle of the full document, so all paint rectangles are invalidated.
-            const SwRect& rArea = comphelper::LibreOfficeKit::isActive() ? m_pShell->GetLayout()->getSwFrame() : m_pShell->VisArea();
+            const SwRect& rArea = comphelper::LibreOfficeKit::isActive() ? m_pShell->GetLayout()->getFrameArea() : m_pShell->VisArea();
             m_pRegion = new SwRegionRects( rArea );
         }
         (*m_pRegion) -= rRect;
@@ -168,7 +168,7 @@ bool SwViewShellImp::IsUpdateExpFields()
 
 void SwViewShellImp::SetFirstVisPage(OutputDevice const * pRenderContext)
 {
-    if ( m_pShell->mbDocSizeChgd && m_pShell->VisArea().Top() > m_pShell->GetLayout()->getSwFrame().Height() )
+    if ( m_pShell->mbDocSizeChgd && m_pShell->VisArea().Top() > m_pShell->GetLayout()->getFrameArea().Height() )
     {
         //We are in an action and because of erase actions the VisArea is
         //after the first visible page.

@@ -448,7 +448,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         {
             const bool bNextUndersized =
                 ( GetTextFrame()->GetNext() &&
-                  0 == GetTextFrame()->GetNext()->getSwPrint().Height() &&
+                  0 == GetTextFrame()->GetNext()->getFramePrintArea().Height() &&
                   GetTextFrame()->GetNext()->IsTextFrame() &&
                   static_cast<SwTextFrame*>(GetTextFrame()->GetNext())->IsUndersized() ) ;
 
@@ -461,7 +461,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                     GetInfo().DrawRedArrow( *pArrow );
 
                 // GetInfo().Y() must be current baseline
-                SwTwips nDiff = GetInfo().Y() + nTmpHeight - nTmpAscent - GetTextFrame()->getSwFrame().Bottom();
+                SwTwips nDiff = GetInfo().Y() + nTmpHeight - nTmpAscent - GetTextFrame()->getFrameArea().Bottom();
                 if( ( nDiff > 0 &&
                       ( GetEnd() < GetInfo().GetText().getLength() ||
                         ( nDiff > nTmpHeight/2 && GetPrevLine() ) ) ) ||

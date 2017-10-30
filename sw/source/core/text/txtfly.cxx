@@ -227,7 +227,7 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
             tools::PolyPolygon aPoly;
             if( !static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrame()->GetContour( aPoly ) )
                 aPoly = tools::PolyPolygon( static_cast<const SwVirtFlyDrawObj*>(pObj)->
-                                     GetFlyFrame()->getSwFrame().SVRect() );
+                                     GetFlyFrame()->getFrameArea().SVRect() );
             aPolyPolygon.clear();
             aPolyPolygon.append(aPoly.getB2DPolyPolygon());
         }
@@ -403,8 +403,8 @@ bool SwTextFly::IsAnyFrame() const
     SwSwapIfSwapped swap(const_cast<SwTextFrame *>(pCurrFrame));
 
     OSL_ENSURE( bOn, "IsAnyFrame: Why?" );
-    SwRect aRect( pCurrFrame->getSwFrame().Pos() + pCurrFrame->getSwPrint().Pos(),
-        pCurrFrame->getSwPrint().SSize() );
+    SwRect aRect( pCurrFrame->getFrameArea().Pos() + pCurrFrame->getFramePrintArea().Pos(),
+        pCurrFrame->getFramePrintArea().SSize() );
 
     return ForEach( aRect, nullptr, false );
 }
@@ -415,8 +415,8 @@ bool SwTextFly::IsAnyObj( const SwRect &rRect ) const
 
     SwRect aRect( rRect );
     if ( aRect.IsEmpty() )
-        aRect = SwRect( pCurrFrame->getSwFrame().Pos() + pCurrFrame->getSwPrint().Pos(),
-                        pCurrFrame->getSwPrint().SSize() );
+        aRect = SwRect( pCurrFrame->getFrameArea().Pos() + pCurrFrame->getFramePrintArea().Pos(),
+                        pCurrFrame->getFramePrintArea().SSize() );
 
     const SwSortedObjs *pSorted = pPage->GetSortedObjs();
     if( pSorted ) // bOn actually makes sure that we have objects on the side,
@@ -501,7 +501,7 @@ bool SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
             {
                 // #i68520#
                 const SwFlyFrame& rFly = dynamic_cast<const SwFlyFrame&>(*pTmpAnchoredObj);
-                if( aRegion.GetOrigin().IsOver( rFly.getSwFrame() ) )
+                if( aRegion.GetOrigin().IsOver( rFly.getFrameArea() ) )
                 {
                     const SwFrameFormat *pFormat = rFly.GetFormat();
                     const SwFormatSurround &rSur = pFormat->GetSurround();
@@ -530,7 +530,7 @@ bool SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                              (!pNoText->IsTransparent() && !rSur.IsContour()) )
                         {
                             bOpaque = true;
-                            aRegion -= rFly.getSwFrame();
+                            aRegion -= rFly.getFrameArea();
                         }
                     }
                 }
@@ -858,12 +858,12 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
         SwRect aRect;
         if ( pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) )
         {
-            aRect = pCurrFrame->getSwPrint();
-            aRect += pCurrFrame->getSwFrame().Pos();
+            aRect = pCurrFrame->getFramePrintArea();
+            aRect += pCurrFrame->getFrameArea().Pos();
         }
         else
         {
-            aRect = pCurrFrame->getSwFrame();
+            aRect = pCurrFrame->getFrameArea();
         }
         // Make ourselves a little smaller than we are,
         // so that 1-Twip-overlappings are ignored (#49532)
@@ -901,7 +901,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
                                      aRectFnSet.GetBottom(aBound) ) > 0 ||
                  nLeft > aRectFnSet.GetRight(aBound) ||
                  aRectFnSet.GetHeight(aBound) >
-                                    2 * aRectFnSet.GetHeight(pPage->getSwFrame()) )
+                                    2 * aRectFnSet.GetHeight(pPage->getFrameArea()) )
             {
                 continue;
             }
@@ -969,7 +969,7 @@ SwTwips SwTextFly::CalcMinBottom() const
     const size_t nCount = pDrawObj ? pDrawObj->size() : 0;
     if( nCount )
     {
-        SwTwips nEndOfFrame = pCurrFrame->getSwFrame().Bottom();
+        SwTwips nEndOfFrame = pCurrFrame->getFrameArea().Bottom();
         for( size_t i = 0; i < nCount; ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pDrawObj)[ i ];
@@ -986,8 +986,8 @@ SwTwips SwTextFly::CalcMinBottom() const
                 }
             }
         }
-        SwTwips nMax = pCurrFrame->GetUpper()->getSwFrame().Top() +
-                       pCurrFrame->GetUpper()->getSwPrint().Bottom();
+        SwTwips nMax = pCurrFrame->GetUpper()->getFrameArea().Top() +
+                       pCurrFrame->GetUpper()->getFramePrintArea().Bottom();
         if( nRet > nMax )
             nRet = nMax;
     }
@@ -1107,7 +1107,7 @@ void SwTextFly::CalcRightMargin( SwRect &rFly,
     // and protrudes into the same line.
     // Flys with run-through are invisible for those below, i.e., they
     // are ignored for computing the margins of other Flys.
-    // 3301: pNext->getSwFrame().IsOver( rLine ) is necessary
+    // 3301: pNext->getFrameArea().IsOver( rLine ) is necessary
     // #i68520#
     css::text::WrapTextMode eSurroundForTextWrap;
 
@@ -1198,7 +1198,7 @@ void SwTextFly::CalcLeftMargin( SwRect &rFly,
     // and protrudes into the same line.
     // Flys with run-through are invisible for those below, i.e., they
     // are ignored for computing the margins of other Flys.
-    // 3301: pNext->getSwFrame().IsOver( rLine ) is necessary
+    // 3301: pNext->getFrameArea().IsOver( rLine ) is necessary
 
     // #i68520#
     SwAnchoredObjList::size_type nMyPos = nFlyPos;

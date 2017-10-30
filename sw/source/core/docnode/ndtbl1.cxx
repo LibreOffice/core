@@ -441,7 +441,7 @@ bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly )
                     SwFrame* pFrame = aIter.First();
                     while ( pFrame )
                     {
-                        nHeight = std::max( nHeight, pFrame->getSwFrame().Height() );
+                        nHeight = std::max( nHeight, pFrame->getFrameArea().Height() );
                         pFrame = aIter.Next();
                     }
                 }
@@ -536,7 +536,7 @@ static void lcl_CollectCells( std::vector<SwCellFrame*> &rArr, const SwRect &rUn
         while ( !pCell->IsCellFrame() )
             pCell = pCell->GetUpper();
         OSL_ENSURE( pCell, "Frame is not a Cell" );
-        if ( rUnion.IsOver( pCell->getSwFrame() ) )
+        if ( rUnion.IsOver( pCell->getFrameArea() ) )
             ::InsertCell( rArr, static_cast<SwCellFrame*>(pCell) );
 
         // Make sure the Cell is left (Areas)
@@ -643,17 +643,17 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                 bool bTopOver, bLeftOver, bRightOver, bBottomOver;
                 if ( bVert )
                 {
-                    bTopOver = pCell->getSwFrame().Right() >= rUnion.Right();
-                    bLeftOver = pCell->getSwFrame().Top() <= rUnion.Top();
-                    bRightOver = pCell->getSwFrame().Bottom() >= rUnion.Bottom();
-                    bBottomOver = pCell->getSwFrame().Left() <= rUnion.Left();
+                    bTopOver = pCell->getFrameArea().Right() >= rUnion.Right();
+                    bLeftOver = pCell->getFrameArea().Top() <= rUnion.Top();
+                    bRightOver = pCell->getFrameArea().Bottom() >= rUnion.Bottom();
+                    bBottomOver = pCell->getFrameArea().Left() <= rUnion.Left();
                 }
                 else
                 {
-                    bTopOver = pCell->getSwFrame().Top() <= rUnion.Top();
-                    bLeftOver = pCell->getSwFrame().Left() <= rUnion.Left();
-                    bRightOver = pCell->getSwFrame().Right() >= rUnion.Right();
-                    bBottomOver = pCell->getSwFrame().Bottom() >= rUnion.Bottom();
+                    bTopOver = pCell->getFrameArea().Top() <= rUnion.Top();
+                    bLeftOver = pCell->getFrameArea().Left() <= rUnion.Left();
+                    bRightOver = pCell->getFrameArea().Right() >= rUnion.Right();
+                    bBottomOver = pCell->getFrameArea().Bottom() >= rUnion.Bottom();
                 }
 
                 if ( bRTL )
@@ -954,17 +954,17 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet )
                 bool bTopOver, bLeftOver, bRightOver, bBottomOver;
                 if ( bVert )
                 {
-                    bTopOver = pCell->getSwFrame().Right() >= rUnion.Right();
-                    bLeftOver = pCell->getSwFrame().Top() <= rUnion.Top();
-                    bRightOver = pCell->getSwFrame().Bottom() >= rUnion.Bottom();
-                    bBottomOver = pCell->getSwFrame().Left() <= rUnion.Left();
+                    bTopOver = pCell->getFrameArea().Right() >= rUnion.Right();
+                    bLeftOver = pCell->getFrameArea().Top() <= rUnion.Top();
+                    bRightOver = pCell->getFrameArea().Bottom() >= rUnion.Bottom();
+                    bBottomOver = pCell->getFrameArea().Left() <= rUnion.Left();
                 }
                 else
                 {
-                    bTopOver = pCell->getSwFrame().Top() <= rUnion.Top();
-                    bLeftOver = pCell->getSwFrame().Left() <= rUnion.Left();
-                    bRightOver = pCell->getSwFrame().Right() >= rUnion.Right();
-                    bBottomOver = pCell->getSwFrame().Bottom() >= rUnion.Bottom();
+                    bTopOver = pCell->getFrameArea().Top() <= rUnion.Top();
+                    bLeftOver = pCell->getFrameArea().Left() <= rUnion.Left();
+                    bRightOver = pCell->getFrameArea().Right() >= rUnion.Right();
+                    bBottomOver = pCell->getFrameArea().Bottom() >= rUnion.Bottom();
                 }
 
                 if ( bRTL )
@@ -1275,20 +1275,20 @@ static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrame *pCell )
     SwRectFnSet aRectFnSet(pCell);
     while ( pFrame )
     {
-        const SwTwips nAdd = aRectFnSet.GetWidth(pFrame->getSwFrame()) -
-                             aRectFnSet.GetWidth(pFrame->getSwPrint());
+        const SwTwips nAdd = aRectFnSet.GetWidth(pFrame->getFrameArea()) -
+                             aRectFnSet.GetWidth(pFrame->getFramePrintArea());
 
         // pFrame does not necessarily have to be a SwTextFrame!
         const SwTwips nCalcFitToContent = pFrame->IsTextFrame() ?
                                           const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pFrame))->CalcFitToContent() :
-                                          aRectFnSet.GetWidth(pFrame->getSwPrint());
+                                          aRectFnSet.GetWidth(pFrame->getFramePrintArea());
 
         nRet = std::max( nRet, nCalcFitToContent + nAdd );
         pFrame = pFrame->GetNext();
     }
     // Surrounding border as well as left and Right Border also need to be respected
-    nRet += aRectFnSet.GetWidth(pCell->getSwFrame()) -
-            aRectFnSet.GetWidth(pCell->getSwPrint());
+    nRet += aRectFnSet.GetWidth(pCell->getFrameArea()) -
+            aRectFnSet.GetWidth(pCell->getFramePrintArea());
 
     // To compensate for the accuracy of calculation later on in SwTable::SetTabCols
     // we keep adding up a little.
@@ -1315,7 +1315,7 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
 {
     const sal_uInt16 nWish = bWishValues ?
                     ::lcl_CalcCellFit( pCell ) :
-                    MINLAY + sal_uInt16(pCell->getSwFrame().Width() - pCell->getSwPrint().Width());
+                    MINLAY + sal_uInt16(pCell->getFrameArea().Width() - pCell->getFramePrintArea().Width());
 
     SwRectFnSet aRectFnSet(pTab);
 
@@ -1327,14 +1327,14 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
         nColRight += rCols.GetLeftMin();
 
         // Adapt values to the proportions of the Table (Follows)
-        if ( rCols.GetLeftMin() != aRectFnSet.GetLeft(pTab->getSwFrame()) )
+        if ( rCols.GetLeftMin() != aRectFnSet.GetLeft(pTab->getFrameArea()) )
         {
-            const long nDiff = aRectFnSet.GetLeft(pTab->getSwFrame()) - rCols.GetLeftMin();
+            const long nDiff = aRectFnSet.GetLeft(pTab->getFrameArea()) - rCols.GetLeftMin();
             nColLeft  += nDiff;
             nColRight += nDiff;
         }
-        const long nCellLeft  = aRectFnSet.GetLeft(pCell->getSwFrame());
-        const long nCellRight = aRectFnSet.GetRight(pCell->getSwFrame());
+        const long nCellLeft  = aRectFnSet.GetLeft(pCell->getFrameArea());
+        const long nCellRight = aRectFnSet.GetRight(pCell->getFrameArea());
 
         // Calculate overlapping value
         long nWidth = 0;
@@ -1344,9 +1344,9 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
             nWidth = nCellRight - nColLeft;
         else if ( nColLeft >= nCellLeft && nColRight <= nCellRight )
             nWidth = nColRight - nColLeft;
-        if ( nWidth && pCell->getSwFrame().Width() )
+        if ( nWidth && pCell->getFrameArea().Width() )
         {
-            long nTmp = nWidth * nWish / pCell->getSwFrame().Width();
+            long nTmp = nWidth * nWish / pCell->getFrameArea().Width();
             if ( sal_uInt16(nTmp) > rToFill[i] )
                 rToFill[i] = sal_uInt16(nTmp);
         }
@@ -1394,8 +1394,8 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
         {
             if ( pCell->IsCellFrame() && pCell->FindTabFrame() == pTab && ::IsFrameInTableSel( rUnion, pCell ) )
             {
-                const long nCLeft  = aRectFnSet.GetLeft(pCell->getSwFrame());
-                const long nCRight = aRectFnSet.GetRight(pCell->getSwFrame());
+                const long nCLeft  = aRectFnSet.GetLeft(pCell->getFrameArea());
+                const long nCRight = aRectFnSet.GetRight(pCell->getFrameArea());
 
                 bool bNotInCols = true;
 
@@ -1418,9 +1418,9 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
                     // Adapt values to the proportions of the Table (Follows)
                     long nLeftA  = nColLeft;
                     long nRightA = nColRight;
-                    if ( rCols.GetLeftMin() !=  sal_uInt16(aRectFnSet.GetLeft(pTab->getSwFrame())) )
+                    if ( rCols.GetLeftMin() !=  sal_uInt16(aRectFnSet.GetLeft(pTab->getFrameArea())) )
                     {
-                        const long nDiff = aRectFnSet.GetLeft(pTab->getSwFrame()) - rCols.GetLeftMin();
+                        const long nDiff = aRectFnSet.GetLeft(pTab->getFrameArea()) - rCols.GetLeftMin();
                         nLeftA  += nDiff;
                         nRightA += nDiff;
                     }
@@ -1436,8 +1436,8 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
                                 nFit = nWish;
                         }
                         else
-                        {   const sal_uInt16 nMin = MINLAY + sal_uInt16(pCell->getSwFrame().Width() -
-                                                                pCell->getSwPrint().Width());
+                        {   const sal_uInt16 nMin = MINLAY + sal_uInt16(pCell->getFrameArea().Width() -
+                                                                pCell->getFramePrintArea().Width());
                             if ( !nFit || nMin < nFit )
                                 nFit = nMin;
                         }
@@ -1450,7 +1450,7 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
             }
             do {
                 pCell = pCell->GetNextLayoutLeaf();
-            } while( pCell && pCell->getSwFrame().Width() == 0 );
+            } while( pCell && pCell->getFrameArea().Width() == 0 );
         } while ( pCell && pTab->IsAnLower( pCell ) );
     }
 }

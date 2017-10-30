@@ -123,13 +123,13 @@ void SwViewShell::PrintProspect(
         if ( pStPage->IsEmptyPage() )
         {
             if ( pStPage->GetPhyPageNum() % 2 == 0 )
-                aSttPageSize = pStPage->GetPrev()->getSwFrame().SSize();
+                aSttPageSize = pStPage->GetPrev()->getFrameArea().SSize();
             else
-                aSttPageSize = pStPage->GetNext()->getSwFrame().SSize();
+                aSttPageSize = pStPage->GetNext()->getFrameArea().SSize();
         }
         else
         {
-            aSttPageSize = pStPage->getSwFrame().SSize();
+            aSttPageSize = pStPage->getFrameArea().SSize();
         }
     }
     Size aNxtPageSize;
@@ -138,13 +138,13 @@ void SwViewShell::PrintProspect(
         if ( pNxtPage->IsEmptyPage() )
         {
             if ( pNxtPage->GetPhyPageNum() % 2 == 0 )
-                aNxtPageSize = pNxtPage->GetPrev()->getSwFrame().SSize();
+                aNxtPageSize = pNxtPage->GetPrev()->getFrameArea().SSize();
             else
-                aNxtPageSize = pNxtPage->GetNext()->getSwFrame().SSize();
+                aNxtPageSize = pNxtPage->GetNext()->getFrameArea().SSize();
         }
         else
         {
-            aNxtPageSize = pNxtPage->getSwFrame().SSize();
+            aNxtPageSize = pNxtPage->getFrameArea().SSize();
         }
     }
 
@@ -197,13 +197,13 @@ void SwViewShell::PrintProspect(
         if( pStPage )
         {
             aShell.Imp()->SetFirstVisPageInvalid();
-            aShell.maVisArea = pStPage->getSwFrame();
+            aShell.maVisArea = pStPage->getFrameArea();
 
             Point aPos( aSttPt );
             aPos -= aShell.maVisArea.Pos();
             aMapMode.SetOrigin( aPos );
             pPrinter->SetMapMode( aMapMode );
-            pStPage->GetUpper()->Paint( *pOutDev, pStPage->getSwFrame() );
+            pStPage->GetUpper()->Paint( *pOutDev, pStPage->getFrameArea() );
         }
 
         pStPage = pNxtPage;

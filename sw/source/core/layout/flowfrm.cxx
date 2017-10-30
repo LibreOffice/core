@@ -523,7 +523,7 @@ bool SwFlowFrame::PasteTree( SwFrame *pStart, SwLayoutFrame *pParent, SwFrame *p
         else
             bRet = true;
 
-        nGrowVal += aRectFnSet.GetHeight(pFloat->getSwFrame());
+        nGrowVal += aRectFnSet.GetHeight(pFloat->getFrameArea());
         if ( pFloat->GetNext() )
             pFloat = pFloat->GetNext();
         else
@@ -1555,7 +1555,7 @@ SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPageGrid_(
                 SwRectFnSet aRectFnSet(&m_rThis);
                 const SwTwips nBodyPrtTop = aRectFnSet.GetPrtTop(*pBodyFrame);
                 const SwTwips nProposedPrtTop =
-                        aRectFnSet.YInc( aRectFnSet.GetTop(m_rThis.getSwFrame()),
+                        aRectFnSet.YInc( aRectFnSet.GetTop(m_rThis.getFrameArea()),
                                            _nUpperSpaceWithoutGrid );
 
                 const SwTwips nSpaceAbovePrtTop =
@@ -1571,7 +1571,7 @@ SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPageGrid_(
 
                 const SwTwips nNewUpperSpace =
                         aRectFnSet.YDiff( nNewPrtTop,
-                                            aRectFnSet.GetTop(m_rThis.getSwFrame()) );
+                                            aRectFnSet.GetTop(m_rThis.getFrameArea()) );
 
                 nUpperSpaceAmountConsideredForPageGrid =
                         nNewUpperSpace - _nUpperSpaceWithoutGrid;
@@ -1743,11 +1743,11 @@ bool SwFlowFrame::CheckMoveFwd( bool& rbMakePage, bool bKeep, bool bIgnoreMyOwnK
             if( pTmp )
                 pNxt = pTmp; // the content of the next notempty sectionfrm
         }
-        if( pNxt && pNxt->GetValidPosFlag() )
+        if( pNxt && pNxt->isFrameAreaPositionValid() )
         {
             bool bMove = false;
             const SwSectionFrame *pSct = m_rThis.FindSctFrame();
-            if( pSct && !pSct->GetValidSizeFlag() )
+            if( pSct && !pSct->isFrameAreaSizeValid() )
             {
                 const SwSectionFrame* pNxtSct = pNxt->FindSctFrame();
                 if( pNxtSct && pSct->IsAnFollow( pNxtSct ) )
@@ -1915,7 +1915,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
             // silly things...
             SwRectFnSet aRectFnSet(pOldBoss);
             SwSaveFootnoteHeight aHeight( pOldBoss,
-                aRectFnSet.GetBottom(pOldBoss->getSwFrame()) );
+                aRectFnSet.GetBottom(pOldBoss->getFrameArea()) );
             SwContentFrame* pStart = m_rThis.IsContentFrame() ?
                 static_cast<SwContentFrame*>(&m_rThis) : static_cast<SwLayoutFrame&>(m_rThis).ContainsContent();
             OSL_ENSURE( pStart || ( m_rThis.IsTabFrame() && !static_cast<SwTabFrame&>(m_rThis).Lower() ),
@@ -2356,7 +2356,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
                 {
                     pSectFrame->DelEmpty( true );
                     SwFrame::DestroyFrame(pSectFrame);
-                    m_rThis.mbValidPos = true;
+                    m_rThis.setFrameAreaPositionValid(true);
                 }
             }
         }

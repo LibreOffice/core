@@ -532,18 +532,18 @@ void SwFEShell::GetTabCols_( SwTabCols &rToFill, const SwFrame *pBox )
             SwRectFnSet aRectFnSet(pTab);
 
             const SwPageFrame* pPage = pTab->FindPageFrame();
-            const sal_uLong nLeftMin = aRectFnSet.GetLeft(pTab->getSwFrame()) -
-                                   aRectFnSet.GetLeft(pPage->getSwFrame());
-            const sal_uLong nRightMax = aRectFnSet.GetRight(pTab->getSwFrame()) -
-                                    aRectFnSet.GetLeft(pPage->getSwFrame());
+            const sal_uLong nLeftMin = aRectFnSet.GetLeft(pTab->getFrameArea()) -
+                                   aRectFnSet.GetLeft(pPage->getFrameArea());
+            const sal_uLong nRightMax = aRectFnSet.GetRight(pTab->getFrameArea()) -
+                                    aRectFnSet.GetLeft(pPage->getFrameArea());
 
             if (g_pColumnCacheLastTabFrame != pTab)
             {
                 // if TabFrame was changed, we only shift a little bit
                 // as the width is the same
                 SwRectFnSet fnRectX(g_pColumnCacheLastTabFrame);
-                if (fnRectX.GetWidth(g_pColumnCacheLastTabFrame->getSwFrame()) ==
-                    aRectFnSet.GetWidth(pTab->getSwFrame()) )
+                if (fnRectX.GetWidth(g_pColumnCacheLastTabFrame->getFrameArea()) ==
+                    aRectFnSet.GetWidth(pTab->getFrameArea()) )
                 {
                     pLastCols->SetLeftMin( nLeftMin );
 
@@ -555,8 +555,8 @@ void SwFEShell::GetTabCols_( SwTabCols &rToFill, const SwFrame *pBox )
 
             if ( !bDel &&
                  pLastCols->GetLeftMin () == (sal_uInt16)nLeftMin &&
-                 pLastCols->GetLeft    () == (sal_uInt16)aRectFnSet.GetLeft(pTab->getSwPrint()) &&
-                 pLastCols->GetRight   () == (sal_uInt16)aRectFnSet.GetRight(pTab->getSwPrint())&&
+                 pLastCols->GetLeft    () == (sal_uInt16)aRectFnSet.GetLeft(pTab->getFramePrintArea()) &&
+                 pLastCols->GetRight   () == (sal_uInt16)aRectFnSet.GetRight(pTab->getFramePrintArea())&&
                  pLastCols->GetRightMax() == (sal_uInt16)nRightMax - pLastCols->GetLeftMin() )
             {
                 if (g_pColumnCacheLastCellFrame != pBox)
@@ -596,10 +596,10 @@ void SwFEShell::GetTabRows_( SwTabCols &rToFill, const SwFrame *pBox )
             SwRectFnSet aRectFnSet(pTab);
             const SwPageFrame* pPage = pTab->FindPageFrame();
             const long nLeftMin  = ( aRectFnSet.IsVert() ?
-                                     pTab->GetPrtLeft() - pPage->getSwFrame().Left() :
-                                     pTab->GetPrtTop() - pPage->getSwFrame().Top() );
+                                     pTab->GetPrtLeft() - pPage->getFrameArea().Left() :
+                                     pTab->GetPrtTop() - pPage->getFrameArea().Top() );
             const long nLeft     = aRectFnSet.IsVert() ? LONG_MAX : 0;
-            const long nRight    = aRectFnSet.GetHeight(pTab->getSwPrint());
+            const long nRight    = aRectFnSet.GetHeight(pTab->getFramePrintArea());
             const long nRightMax = aRectFnSet.IsVert() ? nRight : LONG_MAX;
 
             if (g_pRowCacheLastTabFrame != pTab || g_pRowCacheLastCellFrame != pBox)
@@ -1361,7 +1361,7 @@ size_t SwFEShell::GetCurTabColNum() const
 
     if( pFrame->FindTabFrame()->IsRightToLeft() )
     {
-        long nX = aRectFnSet.GetRight(pFrame->getSwFrame()) - aRectFnSet.GetLeft(pPage->getSwFrame());
+        long nX = aRectFnSet.GetRight(pFrame->getFrameArea()) - aRectFnSet.GetLeft(pPage->getFrameArea());
 
         const long nRight = aTabCols.GetLeftMin() + aTabCols.GetRight();
 
@@ -1378,8 +1378,8 @@ size_t SwFEShell::GetCurTabColNum() const
     }
     else
     {
-        const long nX = aRectFnSet.GetLeft(pFrame->getSwFrame()) -
-                        aRectFnSet.GetLeft(pPage->getSwFrame());
+        const long nX = aRectFnSet.GetLeft(pFrame->getFrameArea()) -
+                        aRectFnSet.GetLeft(pPage->getFrameArea());
 
         const long nLeft = aTabCols.GetLeftMin();
 
@@ -1402,7 +1402,7 @@ static const SwFrame *lcl_FindFrameInTab( const SwLayoutFrame *pLay, const Point
 
     while( pFrame && pLay->IsAnLower( pFrame ) )
     {
-        if ( pFrame->getSwFrame().IsNear( rPt, nFuzzy ) )
+        if ( pFrame->getFrameArea().IsNear( rPt, nFuzzy ) )
         {
             if ( pFrame->IsLayoutFrame() )
             {
@@ -1463,8 +1463,8 @@ static const SwCellFrame *lcl_FindFrame( const SwLayoutFrame *pLay, const Point 
                     SwRectFnSet aRectFnSet(pFrame);
                     const bool bRTL = pFrame->IsRightToLeft();
 
-                    SwRect aTabRect = pFrame->getSwPrint();
-                    aTabRect.Pos() += pFrame->getSwFrame().Pos();
+                    SwRect aTabRect = pFrame->getFramePrintArea();
+                    aTabRect.Pos() += pFrame->getFrameArea().Pos();
 
                     const SwTwips nLeft = bRTL ?
                                           aRectFnSet.GetRight(aTabRect) :
@@ -1485,8 +1485,8 @@ static const SwCellFrame *lcl_FindFrame( const SwLayoutFrame *pLay, const Point 
                         const SwFrame* pPrev = pFrame->GetPrev();
                         if ( pPrev )
                         {
-                            SwRect aPrevRect = pPrev->getSwPrint();
-                            aPrevRect.Pos() += pPrev->getSwFrame().Pos();
+                            SwRect aPrevRect = pPrev->getFramePrintArea();
+                            aPrevRect.Pos() += pPrev->getFrameArea().Pos();
 
                             if( aPrevRect.IsInside( rPt ) )
                             {
@@ -1571,8 +1571,8 @@ static const SwCellFrame *lcl_FindFrame( const SwLayoutFrame *pLay, const Point 
                 {
                     // used for mouse move of columns/rows
                     const SwTabFrame* pTabFrame = pFrame->FindTabFrame();
-                    SwRect aTabRect = pTabFrame->getSwPrint();
-                    aTabRect.Pos() += pTabFrame->getSwFrame().Pos();
+                    SwRect aTabRect = pTabFrame->getFramePrintArea();
+                    aTabRect.Pos() += pTabFrame->getFrameArea().Pos();
 
                     SwRectFnSet aRectFnSet(pTabFrame);
 
@@ -1582,15 +1582,15 @@ static const SwCellFrame *lcl_FindFrame( const SwLayoutFrame *pLay, const Point 
                     // Do not allow to drag upper table border:
                     if ( !::IsSame( nTabTop, nMouseTop ) )
                     {
-                        if ( ::IsSame( pFrame->getSwFrame().Left(), rPt.X() ) ||
-                             ::IsSame( pFrame->getSwFrame().Right(),rPt.X() ) )
+                        if ( ::IsSame( pFrame->getFrameArea().Left(), rPt.X() ) ||
+                             ::IsSame( pFrame->getFrameArea().Right(),rPt.X() ) )
                         {
                             if ( pbRow ) *pbRow = false;
                             pRet = pFrame;
                             break;
                         }
-                        if ( ::IsSame( pFrame->getSwFrame().Top(), rPt.Y() ) ||
-                             ::IsSame( pFrame->getSwFrame().Bottom(),rPt.Y() ) )
+                        if ( ::IsSame( pFrame->getFrameArea().Top(), rPt.Y() ) ||
+                             ::IsSame( pFrame->getFrameArea().Bottom(),rPt.Y() ) )
                         {
                             if ( pbRow ) *pbRow = true;
                             pRet = pFrame;
@@ -1628,7 +1628,7 @@ const SwFrame* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) c
         nFuzzy = aTmp.Width();
     }
 
-    while ( pPage && !pPage->getSwFrame().IsNear( rPt, nFuzzy ) )
+    while ( pPage && !pPage->getFrameArea().IsNear( rPt, nFuzzy ) )
         pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
 
     const SwCellFrame *pFrame = nullptr;
@@ -1732,8 +1732,8 @@ static Point lcl_ProjectOntoClosestTableFrame( const SwTabFrame& rTab, const Poi
 
     while ( pCurrentTab )
     {
-        SwRect aTabRect( pCurrentTab->getSwPrint() );
-        aTabRect += pCurrentTab->getSwFrame().Pos();
+        SwRect aTabRect( pCurrentTab->getFramePrintArea() );
+        aTabRect += pCurrentTab->getFrameArea().Pos();
 
         if ( bLeft )
         {
@@ -1826,7 +1826,7 @@ bool SwFEShell::SelTableRowCol( const Point& rPt, const Point* pEnd, bool bRowDr
 
                 // paPt[i] will not be used any longer, now we use it to store
                 // a position inside the content frame
-                paPt[i] = pContent->getSwFrame().Center();
+                paPt[i] = pContent->getFrameArea().Center();
             }
         }
 
@@ -2076,7 +2076,7 @@ size_t SwFEShell::GetCurMouseTabColNum( const Point &rPt ) const
     OSL_ENSURE( pFrame, "Table not found" );
     if( pFrame )
     {
-        const long nX = pFrame->getSwFrame().Left();
+        const long nX = pFrame->getFrameArea().Left();
 
         // get TabCols, only via these we get the position
         SwTabCols aTabCols;
@@ -2179,21 +2179,21 @@ bool SwFEShell::SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 
     // then it should be recalculated to absolute values now
     const SwFormatFrameSize& rTableFrameSz = pTab->GetFormat()->GetFrameSize();
     SwRectFnSet aRectFnSet(pTab);
-    long nPrtWidth = aRectFnSet.GetWidth(pTab->getSwPrint());
+    long nPrtWidth = aRectFnSet.GetWidth(pTab->getFramePrintArea());
     if( TableChgMode::VarWidthChangeAbs == pTab->GetTable()->GetTableChgMode() &&
         ( eType & TableChgWidthHeightType::ColLeft || eType & TableChgWidthHeightType::ColRight ) &&
         text::HoriOrientation::NONE == pTab->GetFormat()->GetHoriOrient().GetHoriOrient() &&
         nPrtWidth != rTableFrameSz.GetWidth() )
     {
         SwFormatFrameSize aSz( rTableFrameSz );
-        aSz.SetWidth( pTab->getSwPrint().Width() );
+        aSz.SetWidth( pTab->getFramePrintArea().Width() );
         pTab->GetFormat()->SetFormatAttr( aSz );
     }
 
     if( extractPosition(eType) == TableChgWidthHeightType::ColLeft &&
         (eType & (TableChgWidthHeightType::BiggerMode | TableChgWidthHeightType::InsertDeleteMode)) )
     {
-        nDiff = sal_uInt16(aRectFnSet.GetWidth(pFrame->getSwFrame()));
+        nDiff = sal_uInt16(aRectFnSet.GetWidth(pFrame->getFrameArea()));
 
         // we must move the cursor outside the current cell before
         // deleting the cells.
