@@ -44,8 +44,8 @@ public:
 
     int                      GetFontTable( const char pTagName[5], unsigned char* ) const;
 
-    const FontCharMapRef     GetFontCharMap();
-    bool                     GetFontCapabilities( vcl::FontCapabilities &rFontCapabilities );
+    const FontCharMapRef     GetFontCharMap() const;
+    bool                     GetFontCapabilities( vcl::FontCapabilities &rFontCapabilities ) const;
     bool                     HasChar( sal_uInt32 cChar ) const;
 
 protected:
@@ -53,10 +53,10 @@ protected:
                              Qt5FontFace( const FontAttributes& rFA, const QString &rFontID );
 
 private:
-    const QString            m_aFontId;
-    FontCharMapRef           m_xCharMap;
-    vcl::FontCapabilities    m_aFontCapabilities;
-    bool                     m_bFontCapabilitiesRead;
+    const QString                    m_aFontId;
+    mutable FontCharMapRef           m_xCharMap;
+    mutable vcl::FontCapabilities    m_aFontCapabilities;
+    mutable bool                     m_bFontCapabilitiesRead;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

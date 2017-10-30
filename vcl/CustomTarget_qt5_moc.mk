@@ -9,12 +9,12 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,vcl/qt5))
 
-$(call gb_CustomTarget_get_target,vcl/unx/qt5) : \
+$(call gb_CustomTarget_get_target,vcl/qt5) : \
 	$(call gb_CustomTarget_get_workdir,vcl/qt5)/Qt5Instance.moc \
 	$(call gb_CustomTarget_get_workdir,vcl/qt5)/Qt5Timer.moc \
 	$(call gb_CustomTarget_get_workdir,vcl/qt5)/Qt5Widget.moc \
 
-$(call gb_CustomTarget_get_workdir,vcl/unx/qt5)/%.moc : \
+$(call gb_CustomTarget_get_workdir,vcl/qt5)/%.moc : \
 		$(SRCDIR)/vcl/qt5/%.hxx \
 		| $(call gb_CustomTarget_get_workdir,vcl/qt5)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MOC,1)
