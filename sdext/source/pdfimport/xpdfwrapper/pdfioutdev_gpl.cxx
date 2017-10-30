@@ -356,8 +356,7 @@ void writePng_( OutputBuffer& o_rOutputBuf,
                 Stream* str,
                 int width, int height, GfxImageColorMap* colorMap,
                 Stream* maskStr,
-                int maskWidth, int maskHeight, GfxImageColorMap* maskColorMap,
-                bool bWithLinefeed )
+                int maskWidth, int maskHeight, GfxImageColorMap* maskColorMap )
 {
     o_rOutputBuf.clear();
 
@@ -365,16 +364,14 @@ void writePng_( OutputBuffer& o_rOutputBuf,
     PngHelper::createPng( o_rOutputBuf, str, width, height, colorMap, maskStr, maskWidth, maskHeight, maskColorMap );
 
     printf( " PNG %d", (int)o_rOutputBuf.size() );
-    if( bWithLinefeed )
-        printf("\n");
+    printf("\n");
 }
 
 void writePng_( OutputBuffer& o_rOutputBuf,
                 Stream* str,
                 int width, int height, GfxImageColorMap* colorMap,
                 Stream* maskStr,
-                int maskWidth, int maskHeight, bool maskInvert,
-                bool bWithLinefeed )
+                int maskWidth, int maskHeight, bool maskInvert )
 {
     o_rOutputBuf.clear();
 
@@ -382,32 +379,30 @@ void writePng_( OutputBuffer& o_rOutputBuf,
     PngHelper::createPng( o_rOutputBuf, str, width, height, colorMap, maskStr, maskWidth, maskHeight, maskInvert );
 
     printf( " PNG %d", (int)o_rOutputBuf.size() );
-    if( bWithLinefeed )
-        printf("\n");
+    printf("\n");
 }
 
 // stolen from ImageOutputDev.cc
-void writeMask_( OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, bool bWithLinefeed, bool bInvert )
+void writeMask_( OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, bool bInvert )
 {
     if( str->getKind() == strDCT )
-        writeJpeg_(o_rOutputBuf, str, bWithLinefeed);
+        writeJpeg_(o_rOutputBuf, str, true/*bWithLinefeed*/);
     else
-        writePbm_(o_rOutputBuf, str, width, height, bWithLinefeed, bInvert );
+        writePbm_(o_rOutputBuf, str, width, height, true/*bWithLinefeed*/, bInvert );
 }
 
 void writeImage_( OutputBuffer&     o_rOutputBuf,
                   Stream*           str,
                   int               width,
                   int               height,
-                  GfxImageColorMap* colorMap,
-                  bool              bWithLinefeed )
+                  GfxImageColorMap* colorMap )
 {
     // dump JPEG file
     if( str->getKind() == strDCT &&
         (colorMap->getNumPixelComps() == 1 ||
          colorMap->getNumPixelComps() == 3) )
     {
-        writeJpeg_(o_rOutputBuf, str, bWithLinefeed);
+        writeJpeg_(o_rOutputBuf, str, true/*bWithLinefeed*/);
     }
     else if (colorMap->getNumPixelComps() == 1 &&
              colorMap->getBits() == 1)
@@ -423,10 +418,10 @@ void writeImage_( OutputBuffer&     o_rOutputBuf,
             nIndex = 1;
             colorMap->getRGB( &nIndex, &oneColor );
         }
-        writePng_( o_rOutputBuf, str, width, height, zeroColor, oneColor, false, bWithLinefeed );
+        writePng_( o_rOutputBuf, str, width, height, zeroColor, oneColor, false, true/*bWithLinefeed*/ );
     }
     else
-        writePpm_( o_rOutputBuf, str, width, height, colorMap, bWithLinefeed );
+        writePpm_( o_rOutputBuf, str, width, height, colorMap, true/*bWithLinefeed*/ );
 }
 
 // forwarders
@@ -436,12 +431,12 @@ inline void writeImageLF( OutputBuffer&     o_rOutputBuf,
                           Stream*           str,
                           int               width,
                           int               height,
-                          GfxImageColorMap* colorMap ) { writeImage_(o_rOutputBuf,str,width,height,colorMap,true); }
+                          GfxImageColorMap* colorMap ) { writeImage_(o_rOutputBuf,str,width,height,colorMap); }
 inline void writeMaskLF( OutputBuffer&     o_rOutputBuf,
                          Stream*           str,
                          int               width,
                          int               height,
-                         bool              bInvert ) { writeMask_(o_rOutputBuf,str,width,height,true,bInvert); }
+                         bool              bInvert ) { writeMask_(o_rOutputBuf,str,width,height,bInvert); }
 
 
 int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, GfxState* state ) const
@@ -1040,7 +1035,7 @@ void PDFOutDev::drawMaskedImage(GfxState*, Object*, Stream* str,
         return;
     OutputBuffer aBuf;     initBuf(aBuf);
     printf( "drawImage %d %d 0", width, height );
-    writePng_( aBuf, str, width, height, colorMap, maskStr, maskWidth, maskHeight, maskInvert, true );
+    writePng_( aBuf, str, width, height, colorMap, maskStr, maskWidth, maskHeight, maskInvert );
     writeBinaryBuffer( aBuf );
 }
 
@@ -1062,7 +1057,7 @@ void PDFOutDev::drawSoftMaskedImage(GfxState*, Object*, Stream* str,
         return;
     OutputBuffer aBuf;     initBuf(aBuf);
     printf( "drawImage %d %d 0", width, height );
-    writePng_( aBuf, str, width, height, colorMap, maskStr, maskWidth, maskHeight, maskColorMap, true );
+    writePng_( aBuf, str, width, height, colorMap, maskStr, maskWidth, maskHeight, maskColorMap );
     writeBinaryBuffer( aBuf );
 }
 
