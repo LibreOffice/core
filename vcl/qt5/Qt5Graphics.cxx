@@ -30,6 +30,9 @@ Qt5Graphics::Qt5Graphics( Qt5Frame *pFrame )
     : m_pFrame( pFrame )
     , m_pQImage( nullptr )
     , m_pFontCollection( nullptr )
+    , m_pFontData{ nullptr, }
+    , m_pTextStyle{ nullptr, }
+    , m_aTextColor( MAKE_SALCOLOR(0x00, 0x00, 0x00) )
 {
 }
 
@@ -37,11 +40,17 @@ Qt5Graphics::Qt5Graphics( QImage *pQImage )
     : m_pFrame( nullptr )
     , m_pQImage( pQImage )
     , m_pFontCollection( nullptr )
+    , m_pFontData{ nullptr, }
+    , m_pTextStyle{ nullptr, }
+    , m_aTextColor( MAKE_SALCOLOR(0x00, 0x00, 0x00) )
 {
 }
 
 Qt5Graphics::~Qt5Graphics()
 {
+    // release the text styles
+    for (int i = 0; i < MAX_FALLBACK; ++i)
+        delete m_pTextStyle[ i ];
 }
 
 void Qt5Graphics::PreparePainter()

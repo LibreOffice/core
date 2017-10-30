@@ -65,7 +65,7 @@ sal_IntPtr Qt5FontFace::GetFontId() const
     return reinterpret_cast<sal_IntPtr>( &m_aFontId );
 }
 
-const FontCharMapRef Qt5FontFace::GetFontCharMap()
+const FontCharMapRef Qt5FontFace::GetFontCharMap() const
 {
     if( m_xCharMap.is() )
         return m_xCharMap;
@@ -88,7 +88,7 @@ const FontCharMapRef Qt5FontFace::GetFontCharMap()
     return m_xCharMap;
 }
 
-bool Qt5FontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities)
+bool Qt5FontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     // read this only once per font
     if( m_bFontCapabilitiesRead )

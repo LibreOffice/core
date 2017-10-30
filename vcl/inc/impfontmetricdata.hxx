@@ -32,7 +32,7 @@ typedef tools::SvRef<ImplFontMetricData> ImplFontMetricDataRef;
 class OutputDevice;
 class FontSelectPattern;
 
-class ImplFontMetricData : public FontAttributes, public SvRefBase
+class VCL_DLLPUBLIC ImplFontMetricData : public FontAttributes, public SvRefBase
 {
 public:
     explicit        ImplFontMetricData( const FontSelectPattern& );

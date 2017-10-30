@@ -29,7 +29,14 @@
 #include <unicode/uchar.h>
 #include <android/compatibility.hxx>
 
-static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
+#if ENABLE_QT5
+#include <qt5/Qt5Font.hxx>
+#include <QtGui/QRawFont>
+#else
+class Qt5Font;
+#endif
+
+hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
 {
     char pTagName[5];
     pTagName[0] = (char)(nTableTag >> 24);
@@ -62,9 +69,23 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
         pFont->GetFontTable(pTagName, pBuffer);
     }
 #else
-    const unsigned char* pBuffer = nullptr;
-    FreetypeFont* pFont = static_cast<FreetypeFont*>(pUserData);
-    pBuffer = pFont->GetTable(pTagName, &nLength);
+    const char* pBuffer = nullptr;
+    CommonSalLayout *pLayout = static_cast<CommonSalLayout*>( pUserData );
+#if ENABLE_QT5
+    QByteArray aTable;
+    if ( pLayout->mbUseQt5 )
+    {
+        QRawFont aRawFont( QRawFont::fromFont( *pLayout->mpQFont ) );
+        aTable = aRawFont.fontTable( pTagName );
+        pBuffer = reinterpret_cast<const char*>( aTable.data() );
+        nLength = aTable.size();
+    }
+    else
+#endif
+    {
+        pBuffer = reinterpret_cast<const char*>(
+            pLayout->mpFreetypeFont->GetTable(pTagName, &nLength) );
+    }
 #endif
 
     hb_blob_t* pBlob = nullptr;
@@ -73,7 +94,7 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
         pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY,
                                pBuffer, [](void* data){ delete[] static_cast<unsigned char*>(data); });
 #else
-        pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY, nullptr, nullptr);
+        pBlob = hb_blob_create(pBuffer, nLength, HB_MEMORY_MODE_READONLY, nullptr, nullptr);
 #endif
 
     return pBlob;
@@ -234,20 +255,51 @@ CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
 }
 
 #else
-CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont)
-:   mrFontSelData(rFreetypeFont.GetFontSelData())
-,   mrFreetypeFont(rFreetypeFont)
-,   mpVertGlyphs(nullptr)
+
+CommonSalLayout::CommonSalLayout(const FontSelectPattern &rFSP,
+                                 FreetypeFont *pFreetypeFont,
+                                 Qt5Font *pQt5Font, bool bUseQt5)
+    : mrFontSelData(rFSP)
+    , mpFreetypeFont(pFreetypeFont)
+#if ENABLE_QT5
+    , mbUseQt5(bUseQt5)
+    , mpQFont(pQt5Font)
+#endif
+    , mpVertGlyphs(nullptr)
 {
-    mpHbFont = rFreetypeFont.GetHbFont();
+#if ENABLE_QT5
+    if (mbUseQt5)
+        mpHbFont = mpQFont->GetHbFont();
+    else
+#endif
+        mpHbFont = mpFreetypeFont->GetHbFont();
     if (!mpHbFont)
     {
-        hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, &rFreetypeFont, nullptr);
+        hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, this, nullptr);
 
         mpHbFont = createHbFont(pHbFace);
-        mrFreetypeFont.SetHbFont(mpHbFont);
+#if ENABLE_QT5
+        if (mbUseQt5)
+            mpQFont->SetHbFont(mpHbFont);
+        else
+#endif
+            mpFreetypeFont->SetHbFont(mpHbFont);
     }
 }
+
+CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont)
+    : CommonSalLayout(rFreetypeFont.GetFontSelData(),
+                      &rFreetypeFont, nullptr, false)
+{
+}
+
+#if ENABLE_QT5
+CommonSalLayout::CommonSalLayout(Qt5Font& rQFont)
+    : CommonSalLayout(rQFont.GetFontSelData(),
+                      nullptr, &rQFont, true)
+{
+}
+#endif
 #endif
 
 void CommonSalLayout::InitFont() const
