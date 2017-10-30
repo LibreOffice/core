@@ -52,6 +52,13 @@ class Qt5Frame
     Qt5Frame                       *m_pParent;
     PointerStyle                    m_ePointerStyle;
 
+    bool                            m_bDefaultSize;
+    bool                            m_bDefaultPos;
+
+    void                        Center();
+    Size                        CalcDefaultSize();
+    void                        SetDefaultSize();
+
     bool isChild( bool bPlug = true, bool bSysChild = true )
     {
         SalFrameStyleFlags nMask = SalFrameStyleFlags::NONE;

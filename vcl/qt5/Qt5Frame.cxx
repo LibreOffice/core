@@ -29,8 +29,10 @@
 #include <QtCore/QSize>
 #include <QtGui/QIcon>
 #include <QtGui/QWindow>
+#include <QtGui/QScreen>
 
 #include <saldatabasic.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/syswin.hxx>
 
 #include <cairo.h>
@@ -48,6 +50,8 @@ Qt5Frame::Qt5Frame( Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo
     : m_bUseCairo( bUseCairo )
     , m_bGraphicsInUse( false )
     , m_ePointerStyle( PointerStyle::Arrow )
+    , m_bDefaultSize( true )
+    , m_bDefaultPos( true )
 {
     Qt5Instance *pInst = static_cast<Qt5Instance*>( GetSalData()->m_pInstance );
     pInst->insertFrame( this );
@@ -240,8 +244,70 @@ void Qt5Frame::SetMaxClientSize( long nWidth, long nHeight )
         m_pQWidget->setMaximumSize( nWidth, nHeight );
 }
 
+void Qt5Frame::Center()
+{
+    if ( m_pParent )
+    {
+        QWidget *pWindow = m_pParent->GetQWidget()->window();
+        m_pQWidget->move(
+            pWindow->frameGeometry().topLeft() +
+            pWindow->rect().center() - m_pQWidget->rect().center() );
+    }
+}
+
+Size Qt5Frame::CalcDefaultSize()
+{
+    assert( m_pQWidget->isWindow() );
+    QScreen *pScreen = m_pQWidget->windowHandle()->screen();
+    if( !pScreen )
+        return Size();
+    return bestmaxFrameSizeForScreenSize( toSize( pScreen->size() ) );
+}
+
+void Qt5Frame::SetDefaultSize()
+{
+    Size aDefSize = CalcDefaultSize();
+    SetPosSize( 0, 0, aDefSize.Width(), aDefSize.Height(),
+                SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
+}
+
 void Qt5Frame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
 {
+    if( !m_pQWidget->isWindow() || isChild( true, false ) )
+        return;
+
+
+    if( (nFlags & ( SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT )) &&
+        (nWidth > 0 && nHeight > 0 ) // sometimes stupid things happen
+            )
+    {
+        m_bDefaultSize = false;
+        if( isChild( false ) || !m_pQWidget->isMaximized() )
+        {
+            m_pQWidget->resize( nWidth, nHeight );
+        }
+    }
+    else if( m_bDefaultSize )
+        SetDefaultSize();
+
+    m_bDefaultSize = false;
+
+    if( nFlags & ( SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y ) )
+    {
+        if( m_pParent )
+        {
+            QRect aRect = m_pParent->GetQWidget()->geometry();
+            nX += aRect.x();
+            nY += aRect.y();
+        }
+
+        m_bDefaultPos = false;
+        m_pQWidget->move( nX, nY );
+    }
+    else if( m_bDefaultPos )
+        Center();
+
+    m_bDefaultPos = false;
 }
 
 void Qt5Frame::GetClientSize( long& rWidth, long& rHeight )
@@ -252,6 +318,14 @@ void Qt5Frame::GetClientSize( long& rWidth, long& rHeight )
 
 void Qt5Frame::GetWorkArea( tools::Rectangle& rRect )
 {
+    if( !m_pQWidget->isWindow() )
+        return;
+    QScreen *pScreen = m_pQWidget->windowHandle()->screen();
+    if( !pScreen )
+        return;
+
+    QSize aSize = pScreen->availableVirtualSize();
+    rRect = tools::Rectangle( 0, 0, aSize.width(), aSize.height() );
 }
 
 SalFrame* Qt5Frame::GetParent() const
@@ -277,16 +351,26 @@ void Qt5Frame::SetWindowState( const SalFrameState* pState )
     else if( pState->mnMask & (WindowStateMask::X | WindowStateMask::Y |
                                WindowStateMask::Width | WindowStateMask::Height ) )
     {
-        QRect rect = m_pQWidget->geometry();
-        if ( pState->mnMask & WindowStateMask::X )
-            rect.setX( pState->mnX );
-        if ( pState->mnMask & WindowStateMask::Y )
-            rect.setY( pState->mnY );
-        if ( pState->mnMask & WindowStateMask::Width )
-            rect.setWidth( pState->mnWidth );
-        if ( pState->mnMask & WindowStateMask::Height )
-            rect.setHeight( pState->mnHeight );
-        m_pQWidget->setGeometry( rect );
+        sal_uInt16 nPosSizeFlags = 0;
+        QPoint aPos = m_pQWidget->pos();
+        QPoint aParentPos;
+        if( m_pParent )
+            aParentPos = m_pParent->GetQWidget()->window()->pos();
+        long nX = pState->mnX - aParentPos.x();
+        long nY = pState->mnY - aParentPos.y();
+        if( pState->mnMask & WindowStateMask::X )
+            nPosSizeFlags |= SAL_FRAME_POSSIZE_X;
+        else
+            nX = aPos.x() - aParentPos.x();
+        if( pState->mnMask & WindowStateMask::Y )
+            nPosSizeFlags |= SAL_FRAME_POSSIZE_Y;
+        else
+            nY = aPos.y() - aParentPos.y();
+        if( pState->mnMask & WindowStateMask::Width )
+            nPosSizeFlags |= SAL_FRAME_POSSIZE_WIDTH;
+        if( pState->mnMask & WindowStateMask::Height )
+            nPosSizeFlags |= SAL_FRAME_POSSIZE_HEIGHT;
+        SetPosSize( nX, nY, pState->mnWidth, pState->mnHeight, nPosSizeFlags );
     }
     else if( pState->mnMask & WindowStateMask::State && ! isChild() )
     {
@@ -319,6 +403,7 @@ bool Qt5Frame::GetWindowState( SalFrameState* pState )
                            WindowStateMask::Width        |
                            WindowStateMask::Height;
     }
+
 
     return true;
 }
