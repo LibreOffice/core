@@ -30,7 +30,6 @@
 
 bool Qt5Graphics::setClipRegion( const vcl::Region& rRegion )
 {
-    PreparePainter();
     if ( rRegion.IsRectangle() )
         m_aClipRegion = toQRect( rRegion.GetBoundRect() );
     else if( !rRegion.HasPolyPolygonOrB2DPolyPolygon() )
@@ -46,58 +45,57 @@ bool Qt5Graphics::setClipRegion( const vcl::Region& rRegion )
     {
         QPolygon aPolygon;
     }
-    m_pPainter->setClipRegion( m_aClipRegion );
     return true;
 }
 
 void Qt5Graphics::ResetClipRegion()
 {
     m_aClipRegion = QRegion( m_pQImage->rect() );
-    PreparePainter();
 }
 
 void Qt5Graphics::drawPixel( long nX, long nY )
 {
-    PreparePainter();
-    m_pPainter->drawPoint( nX, nY );
+    PREPARE_PAINTER;
+    aPainter.drawPoint( nX, nY );
 }
 
 void Qt5Graphics::drawPixel( long nX, long nY, SalColor nSalColor )
 {
-    PreparePainter();
-    m_pPainter->setPen( QColor( QRgb( nSalColor )  ) );
-    m_pPainter->drawPoint( nX, nY );
+    PREPARE_PAINTER;
+    aPainter.setPen( QColor( QRgb( nSalColor )  ) );
+    aPainter.setPen( Qt::SolidLine );
+    aPainter.drawPoint( nX, nY );
 }
 
 void Qt5Graphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
-    PreparePainter();
-    m_pPainter->drawLine( nX1, nY1, nX2, nY2 );
+    PREPARE_PAINTER;
+    aPainter.drawLine( nX1, nY1, nX2, nY2 );
 }
 
 void Qt5Graphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
-    PreparePainter();
-    m_pPainter->drawRect( nX, nY, nWidth, nHeight );
+    PREPARE_PAINTER;
+    aPainter.drawRect( nX, nY, nWidth, nHeight );
 }
 
 void Qt5Graphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
-    PreparePainter();
+    PREPARE_PAINTER;
     QPoint *pPoints = new QPoint[ nPoints ];
     for ( sal_uInt32 i = 0; i < nPoints; ++i, ++pPtAry )
         pPoints[ i ] = QPoint( pPtAry->mnX, pPtAry->mnY );
-    m_pPainter->drawPolyline( pPoints, nPoints );
+    aPainter.drawPolyline( pPoints, nPoints );
     delete [] pPoints;
 }
 
 void Qt5Graphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
-    PreparePainter();
+    PREPARE_PAINTER;
     QPoint *pPoints = new QPoint[ nPoints ];
     for ( sal_uInt32 i = 0; i < nPoints; ++i, ++pPtAry )
         pPoints[ i ] = QPoint( pPtAry->mnX, pPtAry->mnY );
-    m_pPainter->drawPolygon( pPoints, nPoints );
+    aPainter.drawPolygon( pPoints, nPoints );
     delete [] pPoints;
 }
 
@@ -163,8 +161,7 @@ void Qt5Graphics::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics
     assert( rPosAry.mnSrcWidth == rPosAry.mnDestWidth );
     assert( rPosAry.mnSrcHeight == rPosAry.mnDestHeight );
 
-    QImage *pImage;
-    QImage aImage;
+    QImage aImage, *pImage = &aImage;
     if ( !pSrcGraphics || this == pSrcGraphics )
     {
         if ( rPosAry.mnDestX == rPosAry.mnSrcX
@@ -172,13 +169,13 @@ void Qt5Graphics::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics
             return;
         aImage = pImage->copy( rPosAry.mnSrcX, rPosAry.mnSrcY,
                                rPosAry.mnSrcWidth, rPosAry.mnSrcHeight );
-        pImage = &aImage;
     }
     else
         pImage = static_cast< Qt5Graphics* >( pSrcGraphics )->m_pQImage;
 
-    PreparePainter();
-    m_pPainter->drawImage( QPoint( rPosAry.mnDestX, rPosAry.mnDestY ),
+    PREPARE_PAINTER;
+
+    aPainter.drawImage( QPoint( rPosAry.mnDestX, rPosAry.mnDestY ),
         *pImage, QRect( rPosAry.mnSrcX, rPosAry.mnSrcY,
                         rPosAry.mnSrcWidth, rPosAry.mnSrcHeight) );
 }
@@ -192,11 +189,12 @@ void Qt5Graphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBi
     assert( rPosAry.mnSrcWidth == rPosAry.mnDestWidth );
     assert( rPosAry.mnSrcHeight == rPosAry.mnDestHeight );
 
-    PreparePainter();
+    PREPARE_PAINTER;
+
     const QImage *pImage = static_cast< const Qt5Bitmap* >( &rSalBitmap )->GetQImage();
     assert( pImage );
 
-    m_pPainter->drawImage( QPoint( rPosAry.mnDestX, rPosAry.mnDestY ),
+    aPainter.drawImage( QPoint( rPosAry.mnDestX, rPosAry.mnDestY ),
         *pImage, QRect( rPosAry.mnSrcX, rPosAry.mnSrcY,
                         rPosAry.mnSrcWidth, rPosAry.mnSrcHeight) );
 
@@ -319,22 +317,30 @@ long Qt5Graphics::GetGraphicsWidth() const
 
 void Qt5Graphics::SetLineColor()
 {
+    m_aLineColor = SALCOLOR_NONE;
 }
 
 void Qt5Graphics::SetLineColor( SalColor nSalColor )
 {
+    m_aLineColor = nSalColor;
 }
 
 void Qt5Graphics::SetFillColor()
 {
+    m_aFillColor = SALCOLOR_NONE;
 }
 
 void Qt5Graphics::SetFillColor( SalColor nSalColor )
 {
+    m_aFillColor = nSalColor;
 }
 
 void Qt5Graphics::SetXORMode( bool bSet )
 {
+    if ( bSet )
+        m_eCompositionMode = QPainter::CompositionMode_Xor;
+    else
+        m_eCompositionMode = QPainter::CompositionMode_SourceOver;
 }
 
 void Qt5Graphics::SetROPLineColor( SalROPColor nROPColor )
