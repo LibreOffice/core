@@ -30,7 +30,7 @@ class QApplication;
 class SalYieldMutex;
 class SalFrame;
 
-class Kf5Instance
+class Qt5Instance
     : public QObject
     , public SalGenericInstance
     , public SalUserEventList
@@ -53,8 +53,8 @@ Q_SIGNALS:
     bool ImplYieldSignal( bool bWait, bool bHandleAllCurrentEvents );
 
 public:
-    explicit Kf5Instance( SalYieldMutex* pMutex );
-    virtual ~Kf5Instance() override;
+    explicit Qt5Instance( SalYieldMutex* pMutex );
+    virtual ~Qt5Instance() override;
 
     virtual SalFrame*          CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
     virtual SalFrame*          CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;

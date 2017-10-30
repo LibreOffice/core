@@ -17,39 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Kf5Widget.hxx"
-#include <Kf5Widget.moc>
+#pragma once
 
-#include "Kf5Frame.hxx"
-#include "Kf5Graphics.hxx"
+#include <saltimer.hxx>
+#include <QtCore/QTimer>
 
-#include <QtGui/QImage>
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-
-Kf5Widget::Kf5Widget( Kf5Frame &rFrame, QWidget *parent, Qt::WindowFlags f )
-    : QWidget( parent, f )
-    , m_pFrame( &rFrame )
+class Qt5Timer final : public QObject, public SalTimer
 {
-    create();
-}
+    Q_OBJECT
 
-Kf5Widget::~Kf5Widget()
-{
-}
+    QTimer    m_aTimer;
 
-void Kf5Widget::paintEvent( QPaintEvent *pEvent )
-{
-    QPainter p( this );
-    p.drawImage( pEvent->rect().topLeft(), *m_pFrame->m_pQImage, pEvent->rect() );
-}
+private Q_SLOTS:
+    void timeoutActivated();
+    void startTimer();
 
-void Kf5Widget::resizeEvent( QResizeEvent* )
-{
-    QImage *pImage = new QImage( m_pFrame->m_pQWidget->size(), QImage::Format_ARGB32 );
-    m_pFrame->m_pGraphics->ChangeQImage( pImage );
-    m_pFrame->m_pQImage.reset( pImage );
-    m_pFrame->CallCallback( SalEvent::Resize, nullptr );
-}
+Q_SIGNALS:
+    void startTimerSignal();
+
+public:
+    Qt5Timer();
+    virtual ~Qt5Timer() override;
+
+    virtual void Start( sal_uIntPtr nMS ) override;
+    virtual void Stop() override;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

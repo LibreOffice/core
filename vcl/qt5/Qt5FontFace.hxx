@@ -31,12 +31,12 @@ class FontAttributes;
 class FontSelectPattern;
 class QFont;
 
-class Kf5FontFace : public PhysicalFontFace
+class Qt5FontFace : public PhysicalFontFace
 {
 public:
-    virtual                  ~Kf5FontFace() override;
+    virtual                  ~Qt5FontFace() override;
 
-    static Kf5FontFace*      fromQFont( const QFont &rFont );
+    static Qt5FontFace*      fromQFont( const QFont &rFont );
 
     PhysicalFontFace*        Clone() const override;
     LogicalFontInstance*     CreateFontInstance( const FontSelectPattern& ) const override;
@@ -49,8 +49,8 @@ public:
     bool                     HasChar( sal_uInt32 cChar ) const;
 
 protected:
-                             Kf5FontFace( const Kf5FontFace& );
-                             Kf5FontFace( const FontAttributes& rFA, const QString &rFontID );
+                             Qt5FontFace( const Qt5FontFace& );
+                             Qt5FontFace( const FontAttributes& rFA, const QString &rFontID );
 
 private:
     const QString            m_aFontId;

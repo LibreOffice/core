@@ -25,7 +25,7 @@
 
 class QImage;
 
-class VCL_DLLPUBLIC Kf5Bitmap : public SalBitmap
+class VCL_DLLPUBLIC Qt5Bitmap : public SalBitmap
 {
     std::unique_ptr< QImage >     m_pImage;
     BitmapPalette                 m_aPalette;
@@ -36,9 +36,9 @@ class VCL_DLLPUBLIC Kf5Bitmap : public SalBitmap
     sal_uInt32                    m_nScanline;
 
 public:
-    Kf5Bitmap();
-    Kf5Bitmap( const QImage& rQImage );
-    virtual ~Kf5Bitmap() override;
+    Qt5Bitmap();
+    Qt5Bitmap( const QImage& rQImage );
+    virtual ~Qt5Bitmap() override;
 
     const QImage*           GetQImage() const { return m_pImage.get(); }
 

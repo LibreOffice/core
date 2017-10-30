@@ -290,7 +290,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,kde, \
 	$(if $(ENABLE_KDE4),kde4be1) \
 	$(if $(USING_X11), \
 		$(if $(ENABLE_KDE4),vclplug_kde4) \
-		$(if $(ENABLE_KF5),vclplug_kf5) \
+        $(if $(ENABLE_QT5),vclplug_qt5) \
 	) \
 ))
 

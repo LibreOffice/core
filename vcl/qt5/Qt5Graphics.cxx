@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Kf5Graphics.hxx"
-#include "Kf5Frame.hxx"
+#include "Qt5Graphics.hxx"
+#include "Qt5Frame.hxx"
 
 #include <QtWidgets/QWidget>
 
@@ -26,25 +26,25 @@
 
 #include <QtGui/QImage>
 
-Kf5Graphics::Kf5Graphics( Kf5Frame *pFrame )
+Qt5Graphics::Qt5Graphics( Qt5Frame *pFrame )
     : m_pFrame( pFrame )
     , m_pQImage( nullptr )
     , m_pFontCollection( nullptr )
 {
 }
 
-Kf5Graphics::Kf5Graphics( QImage *pQImage )
+Qt5Graphics::Qt5Graphics( QImage *pQImage )
     : m_pFrame( nullptr )
     , m_pQImage( pQImage )
     , m_pFontCollection( nullptr )
 {
 }
 
-Kf5Graphics::~Kf5Graphics()
+Qt5Graphics::~Qt5Graphics()
 {
 }
 
-void Kf5Graphics::PreparePainter()
+void Qt5Graphics::PreparePainter()
 {
     if ( m_pPainter.get() )
         return;
@@ -59,55 +59,55 @@ void Kf5Graphics::PreparePainter()
         m_pPainter->setClipRegion( m_aClipRegion );
 }
 
-void Kf5Graphics::ChangeQImage( QImage *pQImage )
+void Qt5Graphics::ChangeQImage( QImage *pQImage )
 {
     m_pPainter.reset();
     m_pQImage = pQImage;
 }
 
-SalGraphicsImpl* Kf5Graphics::GetImpl() const
+SalGraphicsImpl* Qt5Graphics::GetImpl() const
 {
     return nullptr;
 }
 
-SystemGraphicsData Kf5Graphics::GetGraphicsData() const
+SystemGraphicsData Qt5Graphics::GetGraphicsData() const
 {
     return SystemGraphicsData();
 }
 
-bool Kf5Graphics::supportsOperation( OutDevSupportType ) const
+bool Qt5Graphics::supportsOperation( OutDevSupportType ) const
 {
     return false;
 }
 
 #if ENABLE_CAIRO_CANVAS
 
-bool Kf5Graphics::SupportsCairo() const
+bool Qt5Graphics::SupportsCairo() const
 {
     return false;
 }
 
-cairo::SurfaceSharedPtr Kf5Graphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
+cairo::SurfaceSharedPtr Qt5Graphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
 {
     return nullptr;
 }
 
-cairo::SurfaceSharedPtr Kf5Graphics::CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const
+cairo::SurfaceSharedPtr Qt5Graphics::CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const
 {
     return nullptr;
 }
 
-cairo::SurfaceSharedPtr Kf5Graphics::CreateBitmapSurface(const OutputDevice& rRefDevice, const BitmapSystemData& rData, const Size& rSize) const
+cairo::SurfaceSharedPtr Qt5Graphics::CreateBitmapSurface(const OutputDevice& rRefDevice, const BitmapSystemData& rData, const Size& rSize) const
 {
     return nullptr;
 }
 
-css::uno::Any Kf5Graphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const
+css::uno::Any Qt5Graphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const
 {
     return css::uno::Any();
 }
 
-SystemFontData Kf5Graphics::GetSysFontData( int nFallbacklevel ) const
+SystemFontData Qt5Graphics::GetSysFontData( int nFallbacklevel ) const
 {
     return SystemFontData();
 }

@@ -19,27 +19,21 @@
 
 #pragma once
 
-#include <QtWidgets/QWidget>
+#include <unx/genprn.h>
 
-class Kf5Frame;
-class QPaintEvent;
-class QResizeEvent;
+class SalFrame;
+class ImplJobSetup;
 
-class Kf5Widget
-    : public QWidget
+class Qt5InfoPrinter : public PspSalInfoPrinter
 {
-    Q_OBJECT
-
-    Kf5Frame  *m_pFrame;
-
-    void paintEvent( QPaintEvent* ) override;
-    void resizeEvent( QResizeEvent* ) override;
-
 public:
-    Kf5Widget( Kf5Frame &rFrame,
-               QWidget *parent = Q_NULLPTR,
-               Qt::WindowFlags f = Qt::WindowFlags() );
-    virtual ~Kf5Widget() override;
+    virtual bool Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) override;
+};
+
+class Qt5Printer : public PspSalPrinter
+{
+public:
+    Qt5Printer( SalInfoPrinter* pInfoPrinter );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
