@@ -342,7 +342,6 @@ public:
     static OUString
     GetAbsURL(OUString const & rTheBaseURIRef,
               OUString const & rTheRelURIRef,
-              bool bIgnoreFragment = false,
               EncodeMechanism eEncodeMechanism = EncodeMechanism::WasEncoded,
               DecodeMechanism eDecodeMechanism = DecodeMechanism::ToIUri,
               rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
@@ -1024,12 +1023,12 @@ private:
     // External URLs:
 
     static bool convertIntToExt(
-        OUString const & rTheIntURIRef, bool bOctets,
+        OUString const & rTheIntURIRef,
         OUString & rTheExtURIRef, DecodeMechanism eDecodeMechanism,
         rtl_TextEncoding eCharset);
 
     static bool convertExtToInt(
-        OUString const & rTheExtURIRef, bool bOctets,
+        OUString const & rTheExtURIRef,
         OUString & rTheIntURIRef, DecodeMechanism eDecodeMechanism,
         rtl_TextEncoding eCharset);
 
@@ -1070,7 +1069,7 @@ private:
         OUString & rCanonic);
 
     TOOLS_DLLPRIVATE static bool parseHostOrNetBiosName(
-        sal_Unicode const * pBegin, sal_Unicode const * pEnd, bool bOctets,
+        sal_Unicode const * pBegin, sal_Unicode const * pEnd,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset,
         bool bNetBiosName, OUStringBuffer* pCanonic);
 
@@ -1082,7 +1081,7 @@ private:
 
     TOOLS_DLLPRIVATE static bool parsePath(
         INetProtocol eScheme, sal_Unicode const ** pBegin,
-        sal_Unicode const * pEnd, bool bOctets, EncodeMechanism eMechanism,
+        sal_Unicode const * pEnd, EncodeMechanism eMechanism,
         rtl_TextEncoding eCharset, bool bSkippedInitialSlash,
         sal_uInt32 nSegmentDelimiter, sal_uInt32 nAltSegmentDelimiter,
         sal_uInt32 nQueryDelimiter, sal_uInt32 nFragmentDelimiter,
@@ -1264,7 +1263,7 @@ inline bool INetURLObject::translateToExternal(OUString const &
                                                    eDecodeMechanism,
                                                rtl_TextEncoding eCharset)
 {
-    return convertIntToExt(rTheIntURIRef, false, rTheExtURIRef,
+    return convertIntToExt(rTheIntURIRef, rTheExtURIRef,
                            eDecodeMechanism, eCharset);
 }
 
@@ -1276,7 +1275,7 @@ inline bool INetURLObject::translateToInternal(OUString const &
                                                    eDecodeMechanism,
                                                rtl_TextEncoding eCharset)
 {
-    return convertExtToInt(rTheExtURIRef, false, rTheIntURIRef,
+    return convertExtToInt(rTheExtURIRef, rTheIntURIRef,
                            eDecodeMechanism, eCharset);
 }
 
