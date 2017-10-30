@@ -18,6 +18,7 @@
  */
 
 #include <osl/thread.h>
+#include <o3tl/safeint.hxx>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
 #include <vcl/graph.hxx>
@@ -1149,7 +1150,6 @@ void OS2METReader::ReadPartialArc(bool bGivenPos, sal_uInt16 nOrderSize)
     Point aP0, aCenter,aPStart,aPEnd;
     sal_Int32 nP,nQ,nStart, nSweep;
     tools::Rectangle aRect;
-    sal_uInt32 nMul; sal_uInt16 nMulS;
     double fStart, fEnd;
 
     if (bGivenPos) {
@@ -1160,8 +1160,11 @@ void OS2METReader::ReadPartialArc(bool bGivenPos, sal_uInt16 nOrderSize)
     aCenter=ReadPoint();
 
     nP=aAttr.nArcP; nQ=aAttr.nArcQ;
-    if (nP<0) nP=-nP;
-    if (nQ<0) nQ=-nQ;
+    if (nP < 0)
+        nP = o3tl::saturating_toggle_sign(nP);
+    if (nQ < 0)
+        nQ = o3tl::saturating_toggle_sign(nQ);
+    sal_uInt32 nMul(0); sal_uInt16 nMulS(0);
     if (nOrderSize>=12) pOS2MET->ReadUInt32( nMul );
     else { pOS2MET->ReadUInt16( nMulS ); nMul=((sal_uInt32)nMulS)<<8; }
     if (nMul!=0x00010000) {
