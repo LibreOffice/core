@@ -23,10 +23,13 @@
 
 #include <memory>
 
+#include <QtGui/QRegion>
+
 class Kf5Frame;
 class PhysicalFontCollection;
 class PhysicalFontFace;
 class QImage;
+class QPainter;
 
 class Kf5Graphics : public SalGraphics
 {
@@ -34,8 +37,12 @@ class Kf5Graphics : public SalGraphics
 
     Kf5Frame                     *m_pFrame;
     QImage                       *m_pQImage;
+    QRegion                       m_aClipRegion;
+    std::unique_ptr< QPainter >   m_pPainter;
     PhysicalFontCollection       *m_pFontCollection;
     PhysicalFontFace             *m_pFont;
+
+    void PreparePainter();
 
 public:
     Kf5Graphics( Kf5Frame *pFrame );
