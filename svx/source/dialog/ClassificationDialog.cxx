@@ -371,36 +371,36 @@ void ClassificationDialog::readIn(std::vector<ClassificationResult> const & rInp
     sal_Int32 nParagraph = -1;
     for (ClassificationResult const & rClassificationResult : rInput)
     {
-        OUString msAbbreviatedString = rClassificationResult.msAbbreviatedString;
-        if (msAbbreviatedString.isEmpty())
-            msAbbreviatedString = maHelper.GetAbbreviatedBACName(rClassificationResult.msString);
+        OUString msAbbreviatedName = rClassificationResult.msAbbreviatedName;
+        if (msAbbreviatedName.isEmpty())
+            msAbbreviatedName = maHelper.GetAbbreviatedBACName(rClassificationResult.msName);
 
         switch (rClassificationResult.meType)
         {
             case svx::ClassificationType::TEXT:
             {
-                m_pEditWindow->pEdView->InsertText(rClassificationResult.msString);
+                m_pEditWindow->pEdView->InsertText(rClassificationResult.msName);
             }
             break;
 
             case svx::ClassificationType::CATEGORY:
             {
-                m_pClassificationListBox->SelectEntry(rClassificationResult.msString);
+                m_pClassificationListBox->SelectEntry(rClassificationResult.msName);
                 m_pInternationalClassificationListBox->SelectEntryPos(m_pClassificationListBox->GetSelectedEntryPos());
-                insertField(rClassificationResult.meType, msAbbreviatedString, rClassificationResult.msString, rClassificationResult.msIdentifier);
+                insertField(rClassificationResult.meType, msAbbreviatedName, rClassificationResult.msName, rClassificationResult.msIdentifier);
             }
             break;
 
             case svx::ClassificationType::MARKING:
             {
-                m_pMarkingListBox->SelectEntry(rClassificationResult.msString);
-                insertField(rClassificationResult.meType, msAbbreviatedString, rClassificationResult.msString, rClassificationResult.msIdentifier);
+                m_pMarkingListBox->SelectEntry(rClassificationResult.msName);
+                insertField(rClassificationResult.meType, msAbbreviatedName, rClassificationResult.msName, rClassificationResult.msIdentifier);
             }
             break;
 
             case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
             {
-                insertField(rClassificationResult.meType, msAbbreviatedString, rClassificationResult.msString, rClassificationResult.msIdentifier);
+                insertField(rClassificationResult.meType, msAbbreviatedName, rClassificationResult.msName, rClassificationResult.msIdentifier);
             }
             break;
 
@@ -412,7 +412,7 @@ void ClassificationDialog::readIn(std::vector<ClassificationResult> const & rInp
                     m_pEditWindow->pEdView->InsertParaBreak();
 
                 // Set paragraph font weight
-                FontWeight eWeight = (rClassificationResult.msString == "BOLD") ? WEIGHT_BOLD : WEIGHT_NORMAL;
+                FontWeight eWeight = (rClassificationResult.msName == "BOLD") ? WEIGHT_BOLD : WEIGHT_NORMAL;
                 std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(m_pEditWindow->pEdEngine->GetParaAttribs(nParagraph)));
                 pSet->Put(SvxWeightItem(eWeight, EE_CHAR_WEIGHT));
                 m_pEditWindow->pEdEngine->SetParaAttribs(nParagraph, *pSet);

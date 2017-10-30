@@ -470,7 +470,7 @@ public:
         for (svx::ClassificationResult const & rResult : rResults)
         {
             if (rResult.meType == svx::ClassificationType::CATEGORY)
-                aHelper.SetBACName(rResult.msString, SfxClassificationHelper::getPolicyType());
+                aHelper.SetBACName(rResult.msName, SfxClassificationHelper::getPolicyType());
         }
 
         sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
@@ -491,31 +491,31 @@ public:
                 case svx::ClassificationType::TEXT:
                 {
                     OUString sKey = aKeyCreator.makeNumberedMarkingTextKey();
-                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
-                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msString), EE_FEATURE_FIELD), aPosition);
+                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
+                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msName), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
 
                 case svx::ClassificationType::CATEGORY:
                 {
                     OUString sKey = aKeyCreator.makeCategoryKey();
-                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msString), EE_FEATURE_FIELD), aPosition);
+                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msName), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
 
                 case svx::ClassificationType::MARKING:
                 {
                     OUString sKey = aKeyCreator.makeMarkingKey();
-                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
-                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msString), EE_FEATURE_FIELD), aPosition);
+                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
+                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msName), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
 
                 case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
                 {
                     OUString sKey = aKeyCreator.makeIntellectualPropertyPartKey();
-                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
-                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msString), EE_FEATURE_FIELD), aPosition);
+                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
+                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msName), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
 
@@ -526,7 +526,7 @@ public:
 
                     SfxItemSet aItemSet(m_rDrawViewShell.GetDoc()->GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{});
 
-                    if (rResult.msString == "BOLD")
+                    if (rResult.msName == "BOLD")
                         aItemSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
                     else
                         aItemSet.Put(SvxWeightItem(WEIGHT_NORMAL, EE_CHAR_WEIGHT));
