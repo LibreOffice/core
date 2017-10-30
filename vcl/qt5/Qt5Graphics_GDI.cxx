@@ -436,27 +436,109 @@ bool Qt5Graphics::blendAlphaBitmap( const SalTwoRect&,
     return false;
 }
 
-bool Qt5Graphics::drawAlphaBitmap( const SalTwoRect&,
-                                             const SalBitmap& rSourceBitmap,
-                                             const SalBitmap& rAlphaBitmap )
+static bool getAlphaImage( const SalBitmap& rSourceBitmap,
+                           const SalBitmap& rAlphaBitmap,
+                           QImage &rAlphaImage )
 {
-    return false;
+    if (rAlphaBitmap.GetBitCount() != 8 && rAlphaBitmap.GetBitCount() != 1)
+    {
+        SAL_WARN( "vcl.gdi", "unsupported alpha depth case: "
+                  << rAlphaBitmap.GetBitCount() );
+        return false;
+    }
+
+    const QImage *pBitmap = static_cast< const Qt5Bitmap* >( &rSourceBitmap )->GetQImage();
+    const QImage *pAlpha = static_cast< const Qt5Bitmap* >( &rAlphaBitmap )->GetQImage();
+    rAlphaImage = pBitmap->convertToFormat( Qt5_DefaultFormat32 );
+
+    if ( rAlphaBitmap.GetBitCount() == 8 )
+    {
+        for (int y = 0; y < rAlphaImage.height(); ++y )
+        {
+            uchar* image_line = rAlphaImage.scanLine( y );
+            const uchar* alpha_line = pAlpha->scanLine( y );
+            for (int x = 0; x < rAlphaImage.width(); ++x, image_line += 4 )
+                image_line[ 3 ] = 255 - alpha_line[ x ];
+        }
+    }
+    else
+    {
+        for (int y = 0; y < rAlphaImage.height(); ++y )
+        {
+            uchar* image_line = rAlphaImage.scanLine( y );
+            const uchar* alpha_line = pAlpha->scanLine( y );
+            for (int x = 0; x < rAlphaImage.width(); ++x, image_line += 4 )
+            {
+                if ( x && !(x % 8) )
+                    ++alpha_line;
+                if ( 0 == (*alpha_line & (1 << (x % 8))) )
+                    image_line[0] = 0;
+            }
+        }
+    }
+
+    return true;
 }
 
-bool Qt5Graphics::drawTransformedBitmap(
-                                            const basegfx::B2DPoint& rNull,
-                                            const basegfx::B2DPoint& rX,
-                                            const basegfx::B2DPoint& rY,
-                                            const SalBitmap& rSourceBitmap,
-                                            const SalBitmap* pAlphaBitmap)
+bool Qt5Graphics::drawAlphaBitmap( const SalTwoRect& rPosAry,
+                                   const SalBitmap& rSourceBitmap,
+                                   const SalBitmap& rAlphaBitmap )
 {
-    return false;
+    QImage aImage;
+    if ( !getAlphaImage( rSourceBitmap, rAlphaBitmap, aImage ) )
+        return false;
+    PREPARE_PAINTER;
+
+    aPainter.drawImage( QPoint( rPosAry.mnDestX, rPosAry.mnDestY ),
+        aImage, QRect( rPosAry.mnSrcX, rPosAry.mnSrcY,
+                       rPosAry.mnSrcWidth, rPosAry.mnSrcHeight) );
+    return true;
+}
+
+bool Qt5Graphics::drawTransformedBitmap( const basegfx::B2DPoint& rNull,
+                                         const basegfx::B2DPoint& rX,
+                                         const basegfx::B2DPoint& rY,
+                                         const SalBitmap& rSourceBitmap,
+                                         const SalBitmap* pAlphaBitmap )
+{
+    QImage aImage;
+    if ( pAlphaBitmap && !getAlphaImage( rSourceBitmap, *pAlphaBitmap, aImage ) )
+        return false;
+    else
+    {
+        const QImage *pBitmap = static_cast< const Qt5Bitmap* >( &rSourceBitmap )->GetQImage();
+        aImage = pBitmap->convertToFormat( Qt5_DefaultFormat32 );
+    }
+
+    PREPARE_PAINTER;
+
+    const basegfx::B2DVector aXRel = rX - rNull;
+    const basegfx::B2DVector aYRel = rY - rNull;
+    aPainter.setTransform( QTransform(
+        aXRel.getX() / aImage.width(),  aXRel.getY() / aImage.width(),
+        aYRel.getX() / aImage.height(), aYRel.getY() / aImage.height(),
+        rNull.getX(), rNull.getY() ));
+    aPainter.drawImage( QPoint(0, 0), aImage );
+    return true;
 }
 
 bool Qt5Graphics::drawAlphaRect( long nX, long nY, long nWidth,
-                                           long nHeight, sal_uInt8 nTransparency )
+                                 long nHeight, sal_uInt8 nTransparency )
 {
-    return false;
+    if (SALCOLOR_NONE == m_aFillColor && SALCOLOR_NONE == m_aLineColor )
+        return true;
+
+    QPainter aPainter;
+    PreparePainter( aPainter, 255 - nTransparency );
+    if ( SALCOLOR_NONE != m_aFillColor )
+    {
+        QColor aFillColor = QColor::fromRgb( QRgb( m_aFillColor ) );
+        aFillColor.setAlpha( nTransparency );
+        aPainter.fillRect( nX, nY, nWidth, nHeight, aFillColor );
+    }
+    else
+        aPainter.drawRect( nX, nY, nWidth, nHeight );
+    return true;
 }
 
 void Qt5Graphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
