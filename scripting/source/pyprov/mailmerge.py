@@ -91,7 +91,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		self.connectioncontext = xConnectionContext
 		if dbg:
 			print("PyMailSMTPService connect", file=dbgout)
-		server = xConnectionContext.getValueByName("ServerName")
+		server = xConnectionContext.getValueByName("ServerName").strip()
 		if dbg:
 			print("ServerName: " + server, file=dbgout)
 		port = int(xConnectionContext.getValueByName("Port"))
@@ -405,7 +405,7 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 				print("Timeout: " + str(tout), file=dbgout)
 			self.server = poplib.POP3(server, port, timeout=tout)
 		print("AFTER", file=dbgout)
-			
+
 		user = xAuthenticator.getUserName()
 		password = xAuthenticator.getPassword()
 		if sys.version < '3': # fdo#59249 i#105669 Python 2 needs "ascii"
