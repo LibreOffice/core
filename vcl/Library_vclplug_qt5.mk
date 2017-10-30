@@ -53,11 +53,14 @@ $(eval $(call gb_Library_use_libraries,vclplug_qt5,\
 ))
 
 $(eval $(call gb_Library_use_externals,vclplug_qt5,\
-	boost_headers \
-	cairo \
-	icuuc \
-	qt5 \
-	epoxy \
+    boost_headers \
+    cairo \
+    epoxy \
+    graphite \
+    harfbuzz \
+    icu_headers \
+    icuuc \
+    qt5 \
 ))
 
 $(eval $(call gb_Library_add_defs,vclplug_qt5,\
