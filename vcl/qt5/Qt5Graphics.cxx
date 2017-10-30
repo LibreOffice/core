@@ -55,7 +55,10 @@ void Qt5Graphics::PreparePainter( QPainter& rPainter, sal_uInt8 nTransparency )
         assert( dynamic_cast< QPaintDevice* >( m_pFrame->GetQWidget() ) );
         rPainter.begin( m_pFrame->GetQWidget() );
     }
-    rPainter.setClipRegion( m_aClipRegion );
+    if ( !m_aClipPath.isEmpty() )
+        rPainter.setClipPath( m_aClipPath );
+    else
+        rPainter.setClipRegion( m_aClipRegion );
     if ( SALCOLOR_NONE != m_aLineColor )
     {
         QColor aColor = QColor::fromRgb( QRgb( m_aLineColor ) );
@@ -83,9 +86,15 @@ SystemGraphicsData Qt5Graphics::GetGraphicsData() const
     return SystemGraphicsData();
 }
 
-bool Qt5Graphics::supportsOperation( OutDevSupportType ) const
+bool Qt5Graphics::supportsOperation( OutDevSupportType eType ) const
 {
-    return false;
+    switch( eType )
+    {
+    case OutDevSupportType::B2DDraw:
+        return true;
+    default:
+        return false;
+    }
 }
 
 #if ENABLE_CAIRO_CANVAS
