@@ -75,7 +75,7 @@ class SVX_DLLPUBLIC SdrDragStat final
     SdrDragMethod* pDragMethod;
     std::unique_ptr<SdrDragStatUserData>  mpUserData;     // Userdata
 
-    void Clear(bool bLeaveOne);
+    void Clear();
     Point&       Pnt(sal_uIntPtr nNum)               { return mvPnts[nNum]; }
 
 public:

@@ -26,7 +26,7 @@
 
 class SdrObject;
 
-Graphic SvxGetGraphicForShape( SdrObject& rShape, bool bVector );
+Graphic SvxGetGraphicForShape( SdrObject& rShape );
 
 #endif
 

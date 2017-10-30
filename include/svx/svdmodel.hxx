@@ -354,7 +354,7 @@ public:
 
     static void      TakeUnitStr(FieldUnit eUnit, OUString& rStr);
     void             TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
-    static void      TakeAngleStr(long nAngle, OUString& rStr, bool bNoDegChar = false);
+    static void      TakeAngleStr(long nAngle, OUString& rStr);
     static void      TakePercentStr(const Fraction& rVal, OUString& rStr);
 
     // RecalcPageNums is ordinarily only called by the Page.

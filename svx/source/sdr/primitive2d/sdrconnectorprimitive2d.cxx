@@ -64,7 +64,6 @@ namespace drawinglayer
                         getSdrLSTAttribute().getText(),
                         getSdrLSTAttribute().getLine(),
                         false,
-                        false,
                         false));
             }
 

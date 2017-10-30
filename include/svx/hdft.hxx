@@ -31,8 +31,7 @@
 
 namespace svx
 {
-    SVX_DLLPUBLIC bool ShowBorderBackgroundDlg( vcl::Window* pParent, SfxItemSet* pBBSet,
-            bool bEnableBackgroundSelector );
+    SVX_DLLPUBLIC bool ShowBorderBackgroundDlg( vcl::Window* pParent, SfxItemSet* pBBSet );
 }
 
 // class  SvxHFPage ------------------------------------------------------

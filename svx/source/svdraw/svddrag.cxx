@@ -26,12 +26,11 @@ SdrDragStat::~SdrDragStat()
 {
 }
 
-void SdrDragStat::Clear(bool bLeaveOne)
+void SdrDragStat::Clear()
 {
     mpUserData.reset();
     mvPnts.clear();
-    if (bLeaveOne)
-        mvPnts.emplace_back();
+    mvPnts.emplace_back();
 }
 
 void SdrDragStat::Reset()
@@ -52,7 +51,7 @@ void SdrDragStat::Reset()
     bEndDragChangesGeoAndAttributes=false;
     mbEndDragChangesLayout=false;
     bMouseIsUp=false;
-    Clear(true);
+    Clear();
     aActionRect=tools::Rectangle();
 }
 

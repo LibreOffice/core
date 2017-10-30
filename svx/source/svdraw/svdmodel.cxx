@@ -1285,7 +1285,7 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
     rStr = aBuf.makeStringAndClear();
 }
 
-void SdrModel::TakeAngleStr(long nAngle, OUString& rStr, bool bNoDegChar)
+void SdrModel::TakeAngleStr(long nAngle, OUString& rStr)
 {
     bool bNeg = nAngle < 0;
 
@@ -1310,8 +1310,7 @@ void SdrModel::TakeAngleStr(long nAngle, OUString& rStr, bool bNoDegChar)
     if(bNeg)
         aBuf.insert(0, '-');
 
-    if(!bNoDegChar)
-        aBuf.append(DEGREE_CHAR);
+    aBuf.append(DEGREE_CHAR);
 
     rStr = aBuf.makeStringAndClear();
 }

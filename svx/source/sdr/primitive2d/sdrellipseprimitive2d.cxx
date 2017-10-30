@@ -97,7 +97,6 @@ namespace drawinglayer
                         getSdrLFSTAttribute().getText(),
                         getSdrLFSTAttribute().getLine(),
                         false,
-                        false,
                         false));
             }
 
@@ -215,7 +214,6 @@ namespace drawinglayer
                         getTransform(),
                         getSdrLFSTAttribute().getText(),
                         getSdrLFSTAttribute().getLine(),
-                        false,
                         false,
                         false));
             }
