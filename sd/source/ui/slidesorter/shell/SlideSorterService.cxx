@@ -96,7 +96,6 @@ void SAL_CALL SlideSorterService::initialize (const Sequence<Any>& rArguments)
     if (pBase != nullptr && pParentWindow)
         mpSlideSorter = SlideSorter::CreateSlideSorter(
             *pBase,
-            nullptr,
             *pParentWindow);
 
     Resize();

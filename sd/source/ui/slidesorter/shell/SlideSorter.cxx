@@ -89,13 +89,12 @@ std::shared_ptr<SlideSorter> SlideSorter::CreateSlideSorter(
 
 std::shared_ptr<SlideSorter> SlideSorter::CreateSlideSorter (
     ViewShellBase& rBase,
-    ViewShell* pViewShell,
     vcl::Window& rParentWindow)
 {
     std::shared_ptr<SlideSorter> pSlideSorter(
         new SlideSorter(
             rBase,
-            pViewShell,
+            nullptr,
             rParentWindow));
     pSlideSorter->Init();
     return pSlideSorter;
