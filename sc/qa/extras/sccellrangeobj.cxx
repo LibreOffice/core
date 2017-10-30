@@ -31,7 +31,6 @@
 #include <com/sun/star/sheet/TableFilterField.hpp>
 #include <com/sun/star/sheet/XSheetFilterable.hpp>
 #include <com/sun/star/sheet/XSheetFilterDescriptor.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/uno/Reference.hxx>
