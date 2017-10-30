@@ -80,7 +80,7 @@ class RegistryKey;
 
     The class is implemented inline and use a C-Api.
 */
-class Registry
+class Registry final
 {
 public:
     /** Default constructor.
@@ -180,8 +180,8 @@ public:
 
     /// returns the used registry Api.
     const Registry_Api* getApi() const { return m_pApi; }
-protected:
 
+private:
     /// stores the used and initialized registry Api.
     const Registry_Api*                          m_pApi;
     /// stores the handle of the underlying registry file on which most of the functions work.
@@ -270,7 +270,7 @@ protected:
     RegistryValueList is a helper class to work with a list value.
 */
 template<class ValueType>
-class RegistryValueList
+class RegistryValueList final
 {
 public:
     /// Default constructor
@@ -308,7 +308,8 @@ public:
     }
 
     friend class RegistryKey;
-protected:
+
+private:
     /** sets the data of the value list.
 
         @param registry specifies the registry files where the appropriate key is located.
