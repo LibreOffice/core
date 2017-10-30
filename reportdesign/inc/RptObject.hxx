@@ -122,29 +122,15 @@ public:
 
 // OCustomShape
 
-class REPORTDESIGN_DLLPUBLIC OCustomShape: public SdrObjCustomShape , public OObjectBase
+class REPORTDESIGN_DLLPUBLIC OCustomShape final : public SdrObjCustomShape , public OObjectBase
 {
     friend class OReportPage;
     friend class DlgEdFactory;
-
 public:
     static OCustomShape* Create( const css::uno::Reference< css::report::XReportComponent>& _xComponent )
     {
         return new OCustomShape( _xComponent );
     }
-
-protected:
-    OCustomShape(const css::uno::Reference< css::report::XReportComponent>& _xComponent);
-    OCustomShape(const OUString& _sComponentName);
-
-    virtual void NbcMove( const Size& rSize ) override;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
-    virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
-    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
-
-    virtual SdrPage* GetImplPage() const override;
-
-public:
 
     virtual ~OCustomShape() override;
 
@@ -156,30 +142,9 @@ public:
 
 private:
     virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& rxUnoShape ) override;
-};
 
-
-// OOle2Obj
-
-class REPORTDESIGN_DLLPUBLIC OOle2Obj: public SdrOle2Obj , public OObjectBase
-{
-    friend class OReportPage;
-    friend class DlgEdFactory;
-
-    sal_uInt16 m_nType;
-    bool    m_bOnlyOnce;
-    void impl_createDataProvider_nothrow( const css::uno::Reference< css::frame::XModel>& _xModel);
-    virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& rxUnoShape ) override;
-
-public:
-    static OOle2Obj* Create( const css::uno::Reference< css::report::XReportComponent>& _xComponent,sal_uInt16 _nType )
-    {
-        return new OOle2Obj( _xComponent,_nType );
-    }
-protected:
-    OOle2Obj(const css::uno::Reference< css::report::XReportComponent>& _xComponent,sal_uInt16 _nType);
-    OOle2Obj(const OUString& _sComponentName,sal_uInt16 _nType);
-
+    OCustomShape(const css::uno::Reference< css::report::XReportComponent>& _xComponent);
+    OCustomShape(const OUString& _sComponentName);
 
     virtual void NbcMove( const Size& rSize ) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
@@ -187,8 +152,20 @@ protected:
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
 
     virtual SdrPage* GetImplPage() const override;
+};
 
+
+// OOle2Obj
+
+class REPORTDESIGN_DLLPUBLIC OOle2Obj final : public SdrOle2Obj , public OObjectBase
+{
+    friend class OReportPage;
+    friend class DlgEdFactory;
 public:
+    static OOle2Obj* Create( const css::uno::Reference< css::report::XReportComponent>& _xComponent,sal_uInt16 _nType )
+    {
+        return new OOle2Obj( _xComponent,_nType );
+    }
 
     virtual ~OOle2Obj() override;
 
@@ -204,6 +181,24 @@ public:
     OOle2Obj& operator=(const OOle2Obj& rObj);
 
     void initializeChart( const css::uno::Reference< css::frame::XModel>& _xModel);
+
+private:
+    OOle2Obj(const css::uno::Reference< css::report::XReportComponent>& _xComponent,sal_uInt16 _nType);
+    OOle2Obj(const OUString& _sComponentName,sal_uInt16 _nType);
+
+
+    virtual void NbcMove( const Size& rSize ) override;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
+
+    virtual SdrPage* GetImplPage() const override;
+
+    void impl_createDataProvider_nothrow( const css::uno::Reference< css::frame::XModel>& _xModel);
+    virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& rxUnoShape ) override;
+
+    sal_uInt16 m_nType;
+    bool    m_bOnlyOnce;
 };
 
 

@@ -40,9 +40,8 @@ class OObjectBase;
 // PropBrw
 
 
-class PropBrw : public DockingWindow , public SfxListener, public SfxBroadcaster
+class PropBrw final : public DockingWindow , public SfxListener, public SfxBroadcaster
 {
-private:
     css::uno::Reference< css::uno::XComponentContext >
                         m_xInspectorContext;
     css::uno::Reference< css::uno::XComponentContext >
@@ -62,7 +61,6 @@ private:
 
     PropBrw(PropBrw&) = delete;
     void operator =(PropBrw&) = delete;
-protected:
 
     virtual void Resize() override;
     virtual bool Close() override;

@@ -24,9 +24,8 @@ namespace rptui
 
     //= ColorChanger
 
-    class ColorChanger
+    class ColorChanger final
     {
-    protected:
         VclPtr<OutputDevice> m_pDev;
 
     public:
