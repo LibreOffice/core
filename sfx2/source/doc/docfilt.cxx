@@ -175,7 +175,7 @@ OUString SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
 }
 
 OUString SfxFilter::GetTypeFromStorage(
-    const uno::Reference<embed::XStorage>& xStorage, bool bTemplate )
+    const uno::Reference<embed::XStorage>& xStorage )
 {
     SfxFilterMatcher aMatcher;
 
@@ -191,13 +191,9 @@ OUString SfxFilter::GetTypeFromStorage(
             SotClipboardFormatId nClipId = SotExchange::GetFormat( aDataFlavor );
             if ( nClipId != SotClipboardFormatId::NONE )
             {
-                SfxFilterFlags nMust = SfxFilterFlags::IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
-                if ( bTemplate )
-                    // template filter was preselected, try to verify
-                    nMust |= SfxFilterFlags::TEMPLATEPATH;
-                else
-                    // template filters shouldn't be detected if not explicitly asked for
-                    nDont |= SfxFilterFlags::TEMPLATEPATH;
+                SfxFilterFlags nMust = SfxFilterFlags::IMPORT;
+                // template filters shouldn't be detected if not explicitly asked for
+                SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED | SfxFilterFlags::TEMPLATEPATH;
 
                 // get filter from storage MediaType
                 std::shared_ptr<const SfxFilter> pFilter = aMatcher.GetFilter4ClipBoardId( nClipId, nMust, nDont );

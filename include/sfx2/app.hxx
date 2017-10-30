@@ -163,8 +163,8 @@ public:
     static OUString             ChooseScript();
     static void                 MacroOrganizer( sal_Int16 nTabId );
     static ErrCode              CallBasic( const OUString&, BasicManager*, SbxArray *pArgs, SbxValue *pRet );
-    static ErrCode              CallAppBasic( const OUString& i_macroName, SbxArray* i_args = nullptr )
-                                { return CallBasic( i_macroName, SfxApplication::GetBasicManager(), i_args, nullptr ); }
+    static ErrCode              CallAppBasic( const OUString& i_macroName )
+                                { return CallBasic( i_macroName, SfxApplication::GetBasicManager(), nullptr, nullptr ); }
     static BasicManager*        GetBasicManager();
     css::script::XLibraryContainer * GetDialogContainer();
     css::script::XLibraryContainer * GetBasicContainer();
