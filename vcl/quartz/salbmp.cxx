@@ -451,11 +451,13 @@ class ImplPixelFormat8 : public ImplPixelFormat
 private:
     sal_uInt8* pData;
     const BitmapPalette& mrPalette;
+    const sal_uInt8 mnPaletteCount;
 
 public:
     explicit ImplPixelFormat8( const BitmapPalette& rPalette )
         : pData(nullptr)
         , mrPalette(rPalette)
+        , mnPaletteCount(static_cast< sal_uInt8 >(rPalette.GetEntryCount()))
         {
         }
     virtual void StartLine( sal_uInt8* pLine ) override { pData = pLine; }
@@ -465,7 +467,13 @@ public:
         }
     virtual ColorData ReadPixel() override
         {
-            return mrPalette[ *pData++ ].operator Color().GetColor();
+            const sal_uInt8 nIndex(*pData++);
+
+            // Caution(!) rPalette.GetEntryCount() may be != (depth^^2)-1 (!)
+            if(nIndex < mnPaletteCount)
+                return mrPalette[nIndex].operator Color().GetColor();
+            else
+                return Color(COL_BLACK).GetColor();
         }
     virtual void WritePixel( ColorData nColor ) override
         {
@@ -481,6 +489,7 @@ class ImplPixelFormat4 : public ImplPixelFormat
 private:
     sal_uInt8* pData;
     const BitmapPalette& mrPalette;
+    const sal_uInt8 mnPaletteCount;
     sal_uInt32 mnX;
     sal_uInt32 mnShift;
 
@@ -488,6 +497,7 @@ public:
     explicit ImplPixelFormat4( const BitmapPalette& rPalette )
         : pData(nullptr)
         , mrPalette(rPalette)
+        , mnPaletteCount(static_cast< sal_uInt8 >(rPalette.GetEntryCount()))
         , mnX(0)
         , mnShift(0)
         {
@@ -508,10 +518,15 @@ public:
         }
     virtual ColorData ReadPixel() override
         {
-            const BitmapColor& rColor = mrPalette[( pData[mnX >> 1] >> mnShift) & 0x0f];
+            // Caution(!) rPalette.GetEntryCount() may be != (depth^^2)-1 (!)
+            const sal_uInt8 nIndex(( pData[mnX >> 1] >> mnShift) & 0x0f);
             mnX++;
             mnShift ^= 4;
-            return rColor.operator Color().GetColor();
+
+            if(nIndex < mnPaletteCount)
+                return mrPalette[nIndex].operator Color().GetColor();
+            else
+                return Color(COL_BLACK).GetColor();
         }
     virtual void WritePixel( ColorData nColor ) override
         {
@@ -530,12 +545,14 @@ class ImplPixelFormat1 : public ImplPixelFormat
 private:
     sal_uInt8* pData;
     const BitmapPalette& mrPalette;
+    const sal_uInt8 mnPaletteCount;
     sal_uInt32 mnX;
 
 public:
     explicit ImplPixelFormat1( const BitmapPalette& rPalette )
         : pData(nullptr)
         , mrPalette(rPalette)
+        , mnPaletteCount(static_cast< sal_uInt8 >(rPalette.GetEntryCount()))
         , mnX(0)
         {
         }
@@ -550,9 +567,14 @@ public:
         }
     virtual ColorData ReadPixel() override
         {
-            const BitmapColor& rColor = mrPalette[ (pData[mnX >> 3 ] >> ( 7 - ( mnX & 7 ) )) & 1];
+            // Caution(!) rPalette.GetEntryCount() may be != (depth^^2)-1 (!)
+            const sal_uInt8 nIndex( (pData[mnX >> 3 ] >> ( 7 - ( mnX & 7 ) )) & 1);
             mnX++;
-            return rColor.operator Color().GetColor();
+
+            if(nIndex < mnPaletteCount)
+                return mrPalette[nIndex].operator Color().GetColor();
+            else
+                return Color(COL_BLACK).GetColor();
         }
     virtual void WritePixel( ColorData nColor ) override
         {
