@@ -26,12 +26,10 @@ namespace sd { namespace slidesorter { namespace controller {
 
 SdTransferable* TransferableData::CreateTransferable (
     SdDrawDocument* pSrcDoc,
-    ::sd::View* pWorkView,
-    bool bInitOnGetData,
     SlideSorterViewShell* pViewShell,
     const ::std::vector<Representative>& rRepresentatives)
 {
-    SdTransferable* pTransferable = new SdTransferable (pSrcDoc, pWorkView, bInitOnGetData);
+    SdTransferable* pTransferable = new SdTransferable (pSrcDoc, nullptr, false/*bInitOnGetData*/);
     std::shared_ptr<TransferableData> pData (new TransferableData(pViewShell, rRepresentatives));
     pTransferable->AddUserData(pData);
     return pTransferable;

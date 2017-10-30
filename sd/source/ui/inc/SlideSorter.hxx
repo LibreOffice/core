@@ -115,7 +115,6 @@ public:
     */
     static std::shared_ptr<SlideSorter> CreateSlideSorter (
         ViewShellBase& rBase,
-        ViewShell* pViewShell,
         vcl::Window& rParentWindow);
 
     /** Return the control of the vertical scroll bar.

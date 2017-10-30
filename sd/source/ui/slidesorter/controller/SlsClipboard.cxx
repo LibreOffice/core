@@ -436,8 +436,6 @@ void Clipboard::CreateSlideTransferable (
         mrSlideSorter.GetView().BrkAction();
         SdTransferable* pTransferable = TransferableData::CreateTransferable (
             pDocument,
-            nullptr,
-            false,
             dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell()),
             aRepresentatives);
 
