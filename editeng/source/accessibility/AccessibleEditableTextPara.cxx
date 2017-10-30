@@ -901,6 +901,9 @@ namespace
             case text::textfield::Type::DOCINFO_TITLE:
                 strFldType = "file name";
                 break;
+            case text::textfield::Type::DOCINFO_CUSTOM:
+                strFldType = "custom document property";
+                break;
             default:
                 break;
         }

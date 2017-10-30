@@ -349,7 +349,21 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     }
     else if ((pCustomPropertyField = dynamic_cast<const editeng::CustomPropertyField*>(pField)) != nullptr)
     {
-        pInfo->SetRepresentation(pCustomPropertyField->GetFormatted(SfxObjectShell::Current()->getDocProperties()));
+        try
+        {
+            if (SfxObjectShell::Current() && SfxObjectShell::Current()->IsLoadingFinished())
+            {
+                auto pNonConstCustomPropertyField = const_cast<editeng::CustomPropertyField*>(pCustomPropertyField);
+                OUString sCurrent = pNonConstCustomPropertyField->GetFormatted(SfxObjectShell::Current()->getDocProperties());
+                pInfo->SetRepresentation(sCurrent);
+            }
+            else
+                pInfo->SetRepresentation(pCustomPropertyField->GetCurrentPresentation());
+        }
+        catch (...)
+        {
+            pInfo->SetRepresentation(pCustomPropertyField->GetCurrentPresentation());
+        }
     }
     else
     {

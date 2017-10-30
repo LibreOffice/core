@@ -15,11 +15,15 @@
 #define UNO_TC_PROP_TEXTFIELD_TYPE       "TextFieldType"
 #define UNO_TC_PROP_IS_FIXED             "IsFixed"
 #define UNO_TC_PROP_CURRENT_PRESENTATION "CurrentPresentation"
+#define UNO_TC_PROP_NAME                 "Name"
+#define UNO_TC_PROP_IS_FIXED_LANGUAGE    "IsFixedLanguage"
+#define UNO_TC_PROP_NUMFORMAT            "NumberFormat"
+#define UNO_TC_PROP_USED                 "IsFieldUsed"
+#define UNO_TC_PROP_DISPLAYED            "IsFieldDisplayed"
 
 // Date & Time
 #define UNO_TC_PROP_IS_DATE   "IsDate"
 #define UNO_TC_PROP_DATE_TIME "DateTime"
-#define UNO_TC_PROP_NUMFORMAT "NumberFormat"
 
 // URL
 #define UNO_TC_PROP_URL_FORMAT         "Format"
