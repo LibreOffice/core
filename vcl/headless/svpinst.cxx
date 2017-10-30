@@ -312,7 +312,7 @@ void SvpSalInstance::DoReleaseYield( int nTimeoutMS )
     aPoll.revents = 0;
 
     // release yield mutex
-    sal_uInt32 nAcquireCount = ReleaseYieldMutex( true );
+    sal_uInt32 nAcquireCount = ReleaseYieldMutexAll();
 
     (void)poll( &aPoll, 1, nTimeoutMS );
 

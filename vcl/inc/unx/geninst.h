@@ -53,7 +53,7 @@ public:
 
     // Yield mutex
     virtual comphelper::SolarMutex* GetYieldMutex() override;
-    virtual sal_uInt32         ReleaseYieldMutex( bool bUnlockAll = false ) override;
+    virtual sal_uInt32         ReleaseYieldMutexAll() override;
     virtual void               AcquireYieldMutex( sal_uInt32 nCount = 1 ) override;
 
     // Printing

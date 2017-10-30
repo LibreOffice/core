@@ -410,9 +410,9 @@ comphelper::SolarMutex* AquaSalInstance::GetYieldMutex()
     return mpSalYieldMutex;
 }
 
-sal_uInt32 AquaSalInstance::ReleaseYieldMutex( bool bUnlockAll )
+sal_uInt32 AquaSalInstance::ReleaseYieldMutexAll()
 {
-    return mpSalYieldMutex->release( bUnlockAll );
+    return mpSalYieldMutex->release( true/*bUnlockAll*/ );
 }
 
 void AquaSalInstance::AcquireYieldMutex( sal_uInt32 nCount )

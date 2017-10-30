@@ -53,9 +53,9 @@ comphelper::SolarMutex* SalGenericInstance::GetYieldMutex()
     return mpSalYieldMutex.get();
 }
 
-sal_uInt32 SalGenericInstance::ReleaseYieldMutex( bool bUnlockAll )
+sal_uInt32 SalGenericInstance::ReleaseYieldMutexAll()
 {
-    return mpSalYieldMutex.get()->release( bUnlockAll );
+    return mpSalYieldMutex.get()->release( true/*bUnlockAll*/ );
 }
 
 void SalGenericInstance::AcquireYieldMutex( sal_uInt32 nCount )

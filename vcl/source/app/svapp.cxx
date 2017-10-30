@@ -558,7 +558,7 @@ oslThreadIdentifier Application::GetMainThreadIdentifier()
 sal_uInt32 Application::ReleaseSolarMutex()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    return pSVData->mpDefInst->ReleaseYieldMutex( true );
+    return pSVData->mpDefInst->ReleaseYieldMutexAll();
 }
 
 void Application::AcquireSolarMutex( sal_uInt32 nCount )

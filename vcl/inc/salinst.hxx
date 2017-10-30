@@ -122,7 +122,7 @@ public:
     // YieldMutex
     virtual comphelper::SolarMutex*
                             GetYieldMutex() = 0;
-    virtual sal_uInt32      ReleaseYieldMutex( bool bUnlockAll = false ) = 0;
+    virtual sal_uInt32      ReleaseYieldMutexAll() = 0;
     virtual void            AcquireYieldMutex( sal_uInt32 nCount = 1 ) = 0;
     // return true, if yield mutex is owned by this thread, else false
     virtual bool            IsMainThread() const = 0;

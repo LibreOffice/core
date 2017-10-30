@@ -66,7 +66,7 @@ public:
     virtual SalSystem*          CreateSalSystem() override;
     virtual SalBitmap*          CreateSalBitmap() override;
     virtual comphelper::SolarMutex* GetYieldMutex() override;
-    virtual sal_uInt32          ReleaseYieldMutex( bool bUnlockAll = false ) override;
+    virtual sal_uInt32          ReleaseYieldMutexAll() override;
     virtual void                AcquireYieldMutex( sal_uInt32 nCount = 1 ) override;
     virtual bool                IsMainThread() const override;
 
