@@ -17,49 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Kf5Timer.hxx"
-#include <Kf5Timer.moc>
+#pragma once
 
-#include <QtWidgets/QApplication>
-#include <QtCore/QThread>
+#include <QtWidgets/QWidget>
 
-Kf5Timer::Kf5Timer()
+class Qt5Frame;
+class Qt5Object;
+class QPaintEvent;
+class QResizeEvent;
+
+class Qt5Widget
+    : public QWidget
 {
-    m_aTimer.setSingleShot( true );
-    // run the timer itself in the main / creator thread
-    connect( &m_aTimer, SIGNAL( timeout() ),
-             this, SLOT( timeoutActivated() ), Qt::QueuedConnection );
-    // QTimer::start() can be called only in its creator thread
-    connect( this, SIGNAL( startTimerSignal() ),
-             this, SLOT( startTimer() ), Qt::QueuedConnection );
-}
+    Q_OBJECT
 
-Kf5Timer::~Kf5Timer()
-{
-}
+    Qt5Frame  *m_pFrame;
 
-void Kf5Timer::timeoutActivated()
-{
-    CallCallback();
-}
+    void paintEvent( QPaintEvent* ) override;
+    void resizeEvent( QResizeEvent* ) override;
 
-void Kf5Timer::startTimer()
-{
-    m_aTimer.start();
-}
-
-void Kf5Timer::Start( sal_uIntPtr nMS )
-{
-    m_aTimer.setInterval( nMS );
-    if( qApp->thread() == QThread::currentThread() )
-        startTimer();
-    else
-        Q_EMIT startTimerSignal();
-}
-
-void Kf5Timer::Stop()
-{
-    m_aTimer.stop();
-}
+public:
+    Qt5Widget( Qt5Frame &rFrame,
+               QWidget *parent = Q_NULLPTR,
+               Qt::WindowFlags f = Qt::WindowFlags() );
+    virtual ~Qt5Widget() override;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

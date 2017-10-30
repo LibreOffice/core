@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Kf5FontFace.hxx"
-#include "Kf5Tools.hxx"
+#include "Qt5FontFace.hxx"
+#include "Qt5Tools.hxx"
 
 #include <sft.hxx>
 #include <impfontcharmap.hxx>
@@ -31,7 +31,7 @@
 
 using namespace vcl;
 
-Kf5FontFace::Kf5FontFace( const Kf5FontFace& rSrc )
+Qt5FontFace::Qt5FontFace( const Qt5FontFace& rSrc )
   : PhysicalFontFace( rSrc )
   , m_aFontId( rSrc.m_aFontId )
 {
@@ -39,33 +39,33 @@ Kf5FontFace::Kf5FontFace( const Kf5FontFace& rSrc )
         m_xCharMap = rSrc.m_xCharMap;
 }
 
-Kf5FontFace* Kf5FontFace::fromQFont( const QFont &rFont )
+Qt5FontFace* Qt5FontFace::fromQFont( const QFont &rFont )
 {
     FontAttributes aFA;
     aFA.SetFamilyName( toOUString( rFont.family() ) );
     aFA.SetStyleName( toOUString( rFont.styleName() ) );
     aFA.SetItalic( rFont.italic() ? ITALIC_NORMAL : ITALIC_NONE );
 
-    return new Kf5FontFace( aFA, rFont.toString() ) ;
+    return new Qt5FontFace( aFA, rFont.toString() ) ;
 }
 
-Kf5FontFace::Kf5FontFace( const FontAttributes& rFA, const QString &rFontID )
+Qt5FontFace::Qt5FontFace( const FontAttributes& rFA, const QString &rFontID )
     : PhysicalFontFace( rFA )
     , m_aFontId( rFontID )
     , m_bFontCapabilitiesRead( false )
 {
 }
 
-Kf5FontFace::~Kf5FontFace()
+Qt5FontFace::~Qt5FontFace()
 {
 }
 
-sal_IntPtr Kf5FontFace::GetFontId() const
+sal_IntPtr Qt5FontFace::GetFontId() const
 {
     return reinterpret_cast<sal_IntPtr>( &m_aFontId );
 }
 
-const FontCharMapRef Kf5FontFace::GetFontCharMap()
+const FontCharMapRef Qt5FontFace::GetFontCharMap()
 {
     if( m_xCharMap.is() )
         return m_xCharMap;
@@ -88,7 +88,7 @@ const FontCharMapRef Kf5FontFace::GetFontCharMap()
     return m_xCharMap;
 }
 
-bool Kf5FontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities)
+bool Qt5FontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities)
 {
     // read this only once per font
     if( m_bFontCapabilitiesRead )
@@ -114,12 +114,12 @@ bool Kf5FontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities)
     return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
 }
 
-PhysicalFontFace* Kf5FontFace::Clone() const
+PhysicalFontFace* Qt5FontFace::Clone() const
 {
-    return new Kf5FontFace( *this );
+    return new Qt5FontFace( *this );
 }
 
-LogicalFontInstance* Kf5FontFace::CreateFontInstance( const FontSelectPattern& rFSD ) const
+LogicalFontInstance* Qt5FontFace::CreateFontInstance( const FontSelectPattern& rFSD ) const
 {
     return new LogicalFontInstance( rFSD );
 }

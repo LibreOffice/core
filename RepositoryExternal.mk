@@ -3066,20 +3066,20 @@ endef
 
 endif # ENABLE_KDE4
 
-ifeq ($(ENABLE_KF5),TRUE)
+ifeq ($(ENABLE_QT5),TRUE)
 
-define gb_LinkTarget__use_kf5
+define gb_LinkTarget__use_qt5
 $(call gb_LinkTarget_set_include,$(1),\
-       $(subst -isystem/,-isystem /,$(filter -I% -isystem%,$(subst -isystem /,-isystem/,$(KF5_CFLAGS)))) \
-       $$(INCLUDE) \
+	$(subst -isystem/,-isystem /,$(filter -I% -isystem%,$(subst -isystem /,-isystem/,$(QT5_CFLAGS)))) \
+	$$(INCLUDE) \
 )
 
 $(call gb_LinkTarget_add_defs,$(1),\
-       $(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(KF5_CFLAGS))) \
+	$(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(QT5_CFLAGS))) \
 )
 
 $(call gb_LinkTarget_add_libs,$(1),\
-       $(KF5_LIBS) \
+	$(QT5_LIBS) \
 )
 
 ifeq ($(COM),GCC)
@@ -3090,13 +3090,13 @@ endif
 
 endef
 
-else # !ENABLE_KF5
+else # !ENABLE_QT5
 
-define gb_LinkTarget__use_kf5
+define gb_LinkTarget__use_qt5
 
 endef
 
-endif # ENABLE_KF5
+endif # ENABLE_QT5
 
 # PYTHON
 # extra python_headers external because pyuno wrapper must not link python

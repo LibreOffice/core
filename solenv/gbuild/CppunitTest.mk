@@ -227,7 +227,7 @@ $(call gb_CppunitTest_get_target,$(1)) : $(if $(filter $(2),$(true)),, \
         $(if $(ENABLE_GTK),$(call gb_Library_get_target,vclplug_gtk)) \
         $(if $(ENABLE_GTK3),$(call gb_Library_get_target,vclplug_gtk3)) \
         $(if $(ENABLE_KDE4),$(call gb_Library_get_target,vclplug_kde4)) \
-        $(if $(ENABLE_KF5),$(call gb_Library_get_target,vclplug_kf5)) \
+        $(if $(ENABLE_QT5),$(call gb_Library_get_target,vclplug_qt5)) \
 	 )
 endif
 

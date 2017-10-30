@@ -27,18 +27,18 @@
 #include <QtGui/QRegion>
 
 class QWidget;
-class Kf5Frame;
+class Qt5Frame;
 
-class Kf5Object : public SalObject
+class Qt5Object : public SalObject
 {
     SystemEnvData               m_aSystemData;
     std::unique_ptr< QWidget >  m_pQWidget;
-    Kf5Frame*                   m_pParent;
+    Qt5Frame*                   m_pParent;
     QRegion                     m_pRegion;
 
 public:
-    Kf5Object( Kf5Frame* pParent, bool bShow );
-    virtual ~Kf5Object() override;
+    Qt5Object( Qt5Frame* pParent, bool bShow );
+    virtual ~Qt5Object() override;
 
     virtual void                  ResetClipRegion() override;
     virtual void                  BeginSetClipRegion( sal_uLong nRects ) override;

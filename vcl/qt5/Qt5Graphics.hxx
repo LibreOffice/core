@@ -25,17 +25,17 @@
 
 #include <QtGui/QRegion>
 
-class Kf5Frame;
+class Qt5Frame;
 class PhysicalFontCollection;
 class PhysicalFontFace;
 class QImage;
 class QPainter;
 
-class Kf5Graphics : public SalGraphics
+class Qt5Graphics : public SalGraphics
 {
-    friend class Kf5Bitmap;
+    friend class Qt5Bitmap;
 
-    Kf5Frame                     *m_pFrame;
+    Qt5Frame                     *m_pFrame;
     QImage                       *m_pQImage;
     QRegion                       m_aClipRegion;
     std::unique_ptr< QPainter >   m_pPainter;
@@ -45,9 +45,9 @@ class Kf5Graphics : public SalGraphics
     void PreparePainter();
 
 public:
-    Kf5Graphics( Kf5Frame *pFrame );
-    Kf5Graphics( QImage *pImage );
-    virtual ~Kf5Graphics() override;
+    Qt5Graphics( Qt5Frame *pFrame );
+    Qt5Graphics( QImage *pImage );
+    virtual ~Qt5Graphics() override;
 
     void ChangeQImage( QImage *pImage );
 

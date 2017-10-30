@@ -17,28 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Kf5Bitmap.hxx"
-#include "Kf5Tools.hxx"
-#include "Kf5Graphics.hxx"
+#include "Qt5Bitmap.hxx"
+#include "Qt5Tools.hxx"
+#include "Qt5Graphics.hxx"
 
 #include <QtGui/QImage>
 #include <QtCore/QVector>
 #include <QtGui/QColor>
 
-Kf5Bitmap::Kf5Bitmap()
+Qt5Bitmap::Qt5Bitmap()
 {
 }
 
-Kf5Bitmap::Kf5Bitmap( const QImage &rImage )
+Qt5Bitmap::Qt5Bitmap( const QImage &rImage )
 {
     m_pImage.reset( new QImage( rImage ) );
 }
 
-Kf5Bitmap::~Kf5Bitmap()
+Qt5Bitmap::~Qt5Bitmap()
 {
 }
 
-bool Kf5Bitmap::Create( const Size& rSize, sal_uInt16 nBitCount,
+bool Qt5Bitmap::Create( const Size& rSize, sal_uInt16 nBitCount,
                         const BitmapPalette& rPal )
 {
     assert(
@@ -83,9 +83,9 @@ bool Kf5Bitmap::Create( const Size& rSize, sal_uInt16 nBitCount,
     return true;
 }
 
-bool Kf5Bitmap::Create( const SalBitmap& rSalBmp )
+bool Qt5Bitmap::Create( const SalBitmap& rSalBmp )
 {
-    const Kf5Bitmap *pBitmap = static_cast< const Kf5Bitmap*>( &rSalBmp );
+    const Qt5Bitmap *pBitmap = static_cast< const Qt5Bitmap*>( &rSalBmp );
     if ( pBitmap->m_pImage.get() )
     {
         m_pImage.reset( new QImage( *pBitmap->m_pImage.get() ) );
@@ -103,18 +103,18 @@ bool Kf5Bitmap::Create( const SalBitmap& rSalBmp )
     return true;
 }
 
-bool Kf5Bitmap::Create( const SalBitmap& rSalBmp,
+bool Qt5Bitmap::Create( const SalBitmap& rSalBmp,
                         SalGraphics* pSalGraphics )
 {
-    const Kf5Bitmap *pBitmap = static_cast< const Kf5Bitmap *>( &rSalBmp );
-    Kf5Graphics *pGraphics = static_cast< Kf5Graphics* >( pSalGraphics );
+    const Qt5Bitmap *pBitmap = static_cast< const Qt5Bitmap *>( &rSalBmp );
+    Qt5Graphics *pGraphics = static_cast< Qt5Graphics* >( pSalGraphics );
     QImage *pImage = pGraphics->m_pQImage;
     m_pImage.reset( new QImage( pBitmap->m_pImage->convertToFormat( pImage->format() ) ) );
     m_pBuffer.reset();
     return true;
 }
 
-bool Kf5Bitmap::Create( const SalBitmap& rSalBmp,
+bool Qt5Bitmap::Create( const SalBitmap& rSalBmp,
                         sal_uInt16 nNewBitCount )
 {
     assert(
@@ -126,7 +126,7 @@ bool Kf5Bitmap::Create( const SalBitmap& rSalBmp,
         || nNewBitCount == 32)
         && "Unsupported BitCount!");
 
-    const Kf5Bitmap *pBitmap = static_cast< const Kf5Bitmap *>( &rSalBmp );
+    const Qt5Bitmap *pBitmap = static_cast< const Qt5Bitmap *>( &rSalBmp );
     if ( pBitmap->m_pBuffer.get() )
         return false;
 
@@ -134,19 +134,19 @@ bool Kf5Bitmap::Create( const SalBitmap& rSalBmp,
     return true;
 }
 
-bool Kf5Bitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
+bool Qt5Bitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
                         Size& rSize, bool bMask )
 {
     return false;
 }
 
-void Kf5Bitmap::Destroy()
+void Qt5Bitmap::Destroy()
 {
     m_pImage.reset();
     m_pBuffer.reset();
 }
 
-Size Kf5Bitmap::GetSize() const
+Size Qt5Bitmap::GetSize() const
 {
     if ( m_pBuffer.get() )
         return m_aSize;
@@ -155,7 +155,7 @@ Size Kf5Bitmap::GetSize() const
     return Size();
 }
 
-sal_uInt16 Kf5Bitmap::GetBitCount() const
+sal_uInt16 Qt5Bitmap::GetBitCount() const
 {
     if ( m_pBuffer.get() )
         return 4;
@@ -164,7 +164,7 @@ sal_uInt16 Kf5Bitmap::GetBitCount() const
     return 0;
 }
 
-BitmapBuffer* Kf5Bitmap::AcquireBuffer( BitmapAccessMode nMode )
+BitmapBuffer* Qt5Bitmap::AcquireBuffer( BitmapAccessMode nMode )
 {
     static const BitmapPalette aEmptyPalette;
 
@@ -236,28 +236,28 @@ BitmapBuffer* Kf5Bitmap::AcquireBuffer( BitmapAccessMode nMode )
     return pBuffer;
 }
 
-void Kf5Bitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode )
+void Qt5Bitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode )
 {
     m_aPalette = pBuffer->maPalette;
     delete pBuffer;
 }
 
-bool Kf5Bitmap::GetSystemData( BitmapSystemData& rData )
+bool Qt5Bitmap::GetSystemData( BitmapSystemData& rData )
 {
     return false;
 }
 
-bool Kf5Bitmap::ScalingSupported() const
+bool Qt5Bitmap::ScalingSupported() const
 {
     return false;
 }
 
-bool Kf5Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
+bool Qt5Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
 {
     return false;
 }
 
-bool Kf5Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
+bool Qt5Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
 {
     return false;
 }

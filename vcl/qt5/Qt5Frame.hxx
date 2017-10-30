@@ -23,24 +23,24 @@
 
 #include <memory>
 
-class Kf5Graphics;
-class Kf5Instance;
-class Kf5Widget;
+class Qt5Graphics;
+class Qt5Instance;
+class Qt5Widget;
 class QWidget;
 class QPaintDevice;
 class QImage;
 
-class Kf5Frame
+class Qt5Frame
     : public SalFrame
 {
-    friend class Kf5Widget;
+    friend class Qt5Widget;
 
     std::unique_ptr< QWidget >      m_pQWidget;
     std::unique_ptr< QImage >       m_pQImage;
-    std::unique_ptr< Kf5Graphics >  m_pGraphics;
+    std::unique_ptr< Qt5Graphics >  m_pGraphics;
     bool                            m_bGraphicsInUse;
     SalFrameStyleFlags              m_nStyle;
-    Kf5Frame                       *m_pParent;
+    Qt5Frame                       *m_pParent;
 
     bool isChild( bool bPlug = true, bool bSysChild = true )
     {
@@ -55,9 +55,9 @@ class Kf5Frame
     void TriggerPaintEvent();
 
 public:
-    Kf5Frame( Kf5Frame* pParent,
+    Qt5Frame( Qt5Frame* pParent,
               SalFrameStyleFlags nSalFrameStyle );
-    virtual ~Kf5Frame() override;
+    virtual ~Qt5Frame() override;
 
     QWidget* GetQWidget() const { return m_pQWidget.get(); }
 

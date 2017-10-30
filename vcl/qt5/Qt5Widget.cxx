@@ -17,33 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <QtWidgets/QStyle>
-#include <QtWidgets/QApplication>
+#include "Qt5Widget.hxx"
+#include <Qt5Widget.moc>
 
-#include "Kf5Data.hxx"
+#include "Qt5Frame.hxx"
+#include "Qt5Graphics.hxx"
 
-Kf5Data::Kf5Data( SalInstance *pInstance )
-    : GenericUnixSalData( SAL_DATA_KF5, pInstance )
+#include <QtGui/QImage>
+#include <QtGui/QPainter>
+#include <QtGui/QPaintEvent>
+
+Qt5Widget::Qt5Widget( Qt5Frame &rFrame, QWidget *parent, Qt::WindowFlags f )
+    : QWidget( parent, f )
+    , m_pFrame( &rFrame )
 {
-    ImplSVData *pSVData = ImplGetSVData();
-
-    // draw toolbars on separate lines
-    pSVData->maNWFData.mbDockingAreaSeparateTB = true;
-    // no borders for menu, theming does that
-    pSVData->maNWFData.mbFlatMenu = true;
+    create();
 }
 
-Kf5Data::~Kf5Data()
-{
-}
-
-void Kf5Data::ErrorTrapPush()
+Qt5Widget::~Qt5Widget()
 {
 }
 
-bool Kf5Data::ErrorTrapPop( bool bIgnoreError )
+void Qt5Widget::paintEvent( QPaintEvent *pEvent )
 {
-    return false;
+    QPainter p( this );
+    p.drawImage( pEvent->rect().topLeft(), *m_pFrame->m_pQImage, pEvent->rect() );
+}
+
+void Qt5Widget::resizeEvent( QResizeEvent* )
+{
+    QImage *pImage = new QImage( m_pFrame->m_pQWidget->size(), QImage::Format_ARGB32 );
+    m_pFrame->m_pGraphics->ChangeQImage( pImage );
+    m_pFrame->m_pQImage.reset( pImage );
+    m_pFrame->CallCallback( SalEvent::Resize, nullptr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

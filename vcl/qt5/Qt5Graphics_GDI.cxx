@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Kf5Graphics.hxx"
+#include "Qt5Graphics.hxx"
 
-#include "Kf5Bitmap.hxx"
-#include "Kf5Frame.hxx"
-#include "Kf5Tools.hxx"
+#include "Qt5Bitmap.hxx"
+#include "Qt5Frame.hxx"
+#include "Qt5Tools.hxx"
 
 #include <QtGui/QPainter>
 #include <QtGui/QScreen>
 #include <QtGui/QWindow>
 #include <QtWidgets/QWidget>
 
-bool Kf5Graphics::setClipRegion( const vcl::Region& rRegion )
+bool Qt5Graphics::setClipRegion( const vcl::Region& rRegion )
 {
     PreparePainter();
     if ( rRegion.IsRectangle() )
@@ -50,38 +50,38 @@ bool Kf5Graphics::setClipRegion( const vcl::Region& rRegion )
     return true;
 }
 
-void Kf5Graphics::ResetClipRegion()
+void Qt5Graphics::ResetClipRegion()
 {
     m_aClipRegion = QRegion( m_pQImage->rect() );
     PreparePainter();
 }
 
-void Kf5Graphics::drawPixel( long nX, long nY )
+void Qt5Graphics::drawPixel( long nX, long nY )
 {
     PreparePainter();
     m_pPainter->drawPoint( nX, nY );
 }
 
-void Kf5Graphics::drawPixel( long nX, long nY, SalColor nSalColor )
+void Qt5Graphics::drawPixel( long nX, long nY, SalColor nSalColor )
 {
     PreparePainter();
     m_pPainter->setPen( QColor( QRgb( nSalColor )  ) );
     m_pPainter->drawPoint( nX, nY );
 }
 
-void Kf5Graphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
+void Qt5Graphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
     PreparePainter();
     m_pPainter->drawLine( nX1, nY1, nX2, nY2 );
 }
 
-void Kf5Graphics::drawRect( long nX, long nY, long nWidth, long nHeight )
+void Qt5Graphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
     PreparePainter();
     m_pPainter->drawRect( nX, nY, nWidth, nHeight );
 }
 
-void Kf5Graphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void Qt5Graphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     PreparePainter();
     QPoint *pPoints = new QPoint[ nPoints ];
@@ -91,7 +91,7 @@ void Kf5Graphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
     delete [] pPoints;
 }
 
-void Kf5Graphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void Qt5Graphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     PreparePainter();
     QPoint *pPoints = new QPoint[ nPoints ];
@@ -101,34 +101,34 @@ void Kf5Graphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
     delete [] pPoints;
 }
 
-void Kf5Graphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry )
+void Qt5Graphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry )
 {
     if( 0 == nPoly )
         return;
 }
 
-bool Kf5Graphics::drawPolyPolygon( const basegfx::B2DPolyPolygon&, double fTransparency )
+bool Qt5Graphics::drawPolyPolygon( const basegfx::B2DPolyPolygon&, double fTransparency )
 {
     return false;
 }
 
-bool Kf5Graphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
+bool Qt5Graphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
 {
     return false;
 }
 
-bool Kf5Graphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
+bool Qt5Graphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
 {
     return false;
 }
 
-bool Kf5Graphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
+bool Qt5Graphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
                                          const SalPoint* const* pPtAry, const PolyFlags* const* pFlgAry )
 {
     return false;
 }
 
-bool Kf5Graphics::drawPolyLine( const basegfx::B2DPolygon&,
+bool Qt5Graphics::drawPolyLine( const basegfx::B2DPolygon&,
                                 double fTransparency,
                                 const basegfx::B2DVector& rLineWidths,
                                 basegfx::B2DLineJoin,
@@ -138,12 +138,12 @@ bool Kf5Graphics::drawPolyLine( const basegfx::B2DPolygon&,
     return false;
 }
 
-bool Kf5Graphics::drawGradient( const tools::PolyPolygon&, const Gradient& )
+bool Qt5Graphics::drawGradient( const tools::PolyPolygon&, const Gradient& )
 {
     return false;
 }
 
-void Kf5Graphics::copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
+void Qt5Graphics::copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
                             long nSrcHeight, bool bWindowInvalidate )
 {
     if ( nDestX == nSrcX && nDestY == nSrcY )
@@ -154,7 +154,7 @@ void Kf5Graphics::copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, lo
     copyBits( aTR, this );
 }
 
-void Kf5Graphics::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
+void Qt5Graphics::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
 {
     if( rPosAry.mnSrcWidth <= 0 || rPosAry.mnSrcHeight <= 0
             || rPosAry.mnDestWidth <= 0 || rPosAry.mnDestHeight <= 0 )
@@ -175,7 +175,7 @@ void Kf5Graphics::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics
         pImage = &aImage;
     }
     else
-        pImage = static_cast< Kf5Graphics*>( pSrcGraphics )->m_pQImage;
+        pImage = static_cast< Qt5Graphics* >( pSrcGraphics )->m_pQImage;
 
     PreparePainter();
     m_pPainter->drawImage( QPoint( rPosAry.mnDestX, rPosAry.mnDestY ),
@@ -183,7 +183,7 @@ void Kf5Graphics::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics
                         rPosAry.mnSrcWidth, rPosAry.mnSrcHeight) );
 }
 
-void Kf5Graphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
+void Qt5Graphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
 {
     if( rPosAry.mnSrcWidth <= 0 || rPosAry.mnSrcHeight <= 0
             || rPosAry.mnDestWidth <= 0 || rPosAry.mnDestHeight <= 0 )
@@ -193,7 +193,7 @@ void Kf5Graphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBi
     assert( rPosAry.mnSrcHeight == rPosAry.mnDestHeight );
 
     PreparePainter();
-    const QImage *pImage = static_cast< const Kf5Bitmap* >( &rSalBitmap )->GetQImage();
+    const QImage *pImage = static_cast< const Qt5Bitmap* >( &rSalBitmap )->GetQImage();
 
     m_pPainter->drawImage( QPoint( rPosAry.mnDestX, rPosAry.mnDestY ),
         *pImage, QRect( rPosAry.mnSrcX, rPosAry.mnSrcY,
@@ -204,48 +204,48 @@ void Kf5Graphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBi
         m_pFrame->GetQWidget()->update();
 }
 
-void Kf5Graphics::drawBitmap( const SalTwoRect& rPosAry,
+void Qt5Graphics::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSalBitmap,
                               const SalBitmap& rTransparentBitmap )
 {
 }
 
-void Kf5Graphics::drawMask( const SalTwoRect& rPosAry,
+void Qt5Graphics::drawMask( const SalTwoRect& rPosAry,
                                       const SalBitmap& rSalBitmap,
                                       SalColor nMaskColor )
 {
 }
 
-SalBitmap* Kf5Graphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
+SalBitmap* Qt5Graphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
 {
-    return new Kf5Bitmap( m_pQImage->copy( nX, nY, nWidth, nHeight ) );
+    return new Qt5Bitmap( m_pQImage->copy( nX, nY, nWidth, nHeight ) );
 }
 
-SalColor Kf5Graphics::getPixel( long nX, long nY )
+SalColor Qt5Graphics::getPixel( long nX, long nY )
 {
     return m_pQImage->pixel( nX, nY );
 }
 
-void Kf5Graphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags)
+void Qt5Graphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags)
 {
 }
 
-void Kf5Graphics::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags )
+void Qt5Graphics::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags )
 {
 }
 
-bool Kf5Graphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize )
+bool Qt5Graphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize )
 {
     return false;
 }
 
-bool Kf5Graphics::blendBitmap( const SalTwoRect&,
+bool Qt5Graphics::blendBitmap( const SalTwoRect&,
                                          const SalBitmap& rBitmap )
 {
     return false;
 }
 
-bool Kf5Graphics::blendAlphaBitmap( const SalTwoRect&,
+bool Qt5Graphics::blendAlphaBitmap( const SalTwoRect&,
                                               const SalBitmap& rSrcBitmap,
                                               const SalBitmap& rMaskBitmap,
                                               const SalBitmap& rAlphaBitmap )
@@ -253,14 +253,14 @@ bool Kf5Graphics::blendAlphaBitmap( const SalTwoRect&,
     return false;
 }
 
-bool Kf5Graphics::drawAlphaBitmap( const SalTwoRect&,
+bool Qt5Graphics::drawAlphaBitmap( const SalTwoRect&,
                                              const SalBitmap& rSourceBitmap,
                                              const SalBitmap& rAlphaBitmap )
 {
     return false;
 }
 
-bool Kf5Graphics::drawTransformedBitmap(
+bool Qt5Graphics::drawTransformedBitmap(
                                             const basegfx::B2DPoint& rNull,
                                             const basegfx::B2DPoint& rX,
                                             const basegfx::B2DPoint& rY,
@@ -270,13 +270,13 @@ bool Kf5Graphics::drawTransformedBitmap(
     return false;
 }
 
-bool Kf5Graphics::drawAlphaRect( long nX, long nY, long nWidth,
+bool Qt5Graphics::drawAlphaRect( long nX, long nY, long nWidth,
                                            long nHeight, sal_uInt8 nTransparency )
 {
     return false;
 }
 
-void Kf5Graphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
+void Qt5Graphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 {
     char* pForceDpi;
     if ((pForceDpi = getenv("SAL_FORCEDPI")))
@@ -294,41 +294,41 @@ void Kf5Graphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
     rDPIY = pScreen->physicalDotsPerInchY();
 }
 
-sal_uInt16 Kf5Graphics::GetBitCount() const
+sal_uInt16 Qt5Graphics::GetBitCount() const
 {
     return getFormatBits( m_pQImage->format() );
 }
 
-long Kf5Graphics::GetGraphicsWidth() const
+long Qt5Graphics::GetGraphicsWidth() const
 {
     return m_pQImage->width();
 }
 
-void Kf5Graphics::SetLineColor()
+void Qt5Graphics::SetLineColor()
 {
 }
 
-void Kf5Graphics::SetLineColor( SalColor nSalColor )
+void Qt5Graphics::SetLineColor( SalColor nSalColor )
 {
 }
 
-void Kf5Graphics::SetFillColor()
+void Qt5Graphics::SetFillColor()
 {
 }
 
-void Kf5Graphics::SetFillColor( SalColor nSalColor )
+void Qt5Graphics::SetFillColor( SalColor nSalColor )
 {
 }
 
-void Kf5Graphics::SetXORMode( bool bSet )
+void Qt5Graphics::SetXORMode( bool bSet )
 {
 }
 
-void Kf5Graphics::SetROPLineColor( SalROPColor nROPColor )
+void Qt5Graphics::SetROPLineColor( SalROPColor nROPColor )
 {
 }
 
-void Kf5Graphics::SetROPFillColor( SalROPColor nROPColor )
+void Qt5Graphics::SetROPFillColor( SalROPColor nROPColor )
 {
 }
 

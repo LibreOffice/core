@@ -25,21 +25,21 @@
 #include <memory>
 #include <list>
 
-class Kf5Graphics;
+class Qt5Graphics;
 class QImage;
 enum class DeviceFormat;
 
-class Kf5VirtualDevice : public SalVirtualDevice
+class Qt5VirtualDevice : public SalVirtualDevice
 {
-    std::list< Kf5Graphics* >     m_aGraphics;
+    std::list< Qt5Graphics* >     m_aGraphics;
     std::unique_ptr< QImage >     m_pImage;
     DeviceFormat                  m_eFormat;
     basegfx::B2IVector            m_aFrameSize;
     double                        m_fScale;
 
 public:
-    Kf5VirtualDevice( DeviceFormat eFormat, double fScale );
-    virtual ~Kf5VirtualDevice() override;
+    Qt5VirtualDevice( DeviceFormat eFormat, double fScale );
+    virtual ~Qt5VirtualDevice() override;
 
     // SalVirtualDevice
     virtual SalGraphics*    AcquireGraphics() override;
