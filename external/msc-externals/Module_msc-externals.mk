@@ -17,4 +17,15 @@ $(eval $(call gb_Module_add_targets,msc-externals,\
 
 endif
 
+# TODO: hackaround to install the universal crts locally (tdf#108580)
+# ideally we can create a chained installer or similar that installs them
+# systemwide using windows update
+ifneq ($(UCRT_REDISTDIR),)
+
+$(eval $(call gb_Module_add_targets,msc-externals,\
+	Package_ucrt \
+))
+
+endif
+
 # vim: set noet sw=4 ts=4:
