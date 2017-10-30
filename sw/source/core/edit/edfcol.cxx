@@ -93,7 +93,7 @@
 
 namespace
 {
-static const OUString MetaFilename("bails.rdf");
+static const OUString MetaFilename("tscp/bails.rdf");
 static const OUString MetaNS("urn:bails");
 static const OUString ParagraphSignatureRDFName = "loext:paragraph:signature";
 static const OUString ParagraphSignatureDateRDFName = "loext:paragraph:signature:date";
@@ -241,6 +241,22 @@ OString lcl_getParagraphBodyText(const uno::Reference<text::XTextContent>& xText
     comphelper::string::remove(strBuf, CH_TXTATR_BREAKWORD);
 
     return strBuf.makeStringAndClear().trim().toUtf8();
+}
+
+/// Returns RDF (key, value) pair associated with the field, if any.
+std::pair<OUString, OUString> lcl_getFieldRDFByPrefix(const uno::Reference<frame::XModel>& xModel,
+                                                      const uno::Reference<css::text::XTextField>& xField,
+                                                      const OUString& rsPrefix)
+{
+    const css::uno::Reference<css::rdf::XResource> xSubject(xField, uno::UNO_QUERY);
+    std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, MetaNS, xSubject);
+    for (const auto& pair : aStatements)
+    {
+        if (pair.first.startsWith(rsPrefix))
+            return pair;
+    }
+
+    return std::make_pair(OUString(), OUString());
 }
 
 /// Returns RDF (key, value) pair associated with the field, if any.
@@ -434,7 +450,7 @@ uno::Reference<text::XTextField> lcl_InsertParagraphClassification(const uno::Re
 /// Updates the paragraph classification field text if changed and returns true only iff updated.
 bool lcl_UpdateParagraphClassificationField(SwDoc* pDoc,
                                             const uno::Reference<frame::XModel>& xModel,
-                                            const uno::Reference<css::text::XTextField>& xField,
+                                            const uno::Reference<css::text::XTextContent>& xTextNode,
                                             const OUString& sKey,
                                             const OUString& sValue,
                                             const OUString& sDisplayText)
@@ -446,9 +462,13 @@ bool lcl_UpdateParagraphClassificationField(SwDoc* pDoc,
             pDoc->GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
         });
 
-    const css::uno::Reference<css::rdf::XResource> xSubject(xField, uno::UNO_QUERY);
-    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xSubject, ParagraphClassificationNameRDFName, sKey);
-    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xSubject, ParagraphClassificationValueRDFName, sValue);
+    uno::Reference<text::XTextField> xField = lcl_InsertParagraphClassification(xModel, xTextNode);
+    css::uno::Reference<css::rdf::XResource> xFieldSubject(xField, uno::UNO_QUERY);
+    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xFieldSubject, sKey, sValue);
+    css::uno::Reference<css::rdf::XResource> xNodeSubject(xTextNode, uno::UNO_QUERY);
+    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xNodeSubject, sKey, sValue);
+    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xFieldSubject, ParagraphClassificationNameRDFName, sKey);
+    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xFieldSubject, ParagraphClassificationValueRDFName, sValue);
 
     uno::Reference<css::text::XTextRange> xText(xField, uno::UNO_QUERY);
     const OUString curDisplayText = xText->getString();
@@ -811,7 +831,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
 
         OUString sWeight = (aAny.get<float>() >= awt::FontWeight::BOLD) ? OUString("BOLD") : OUString("NORMAL");
 
-        aResult.push_back({ svx::ClassificationType::PARAGRAPH, sWeight, sBlank });
+        aResult.push_back({ svx::ClassificationType::PARAGRAPH, sWeight, sBlank, sBlank });
 
         // Process portions
         while (xTextPortions->hasMoreElements())
@@ -835,25 +855,25 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
             {
                 const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
-                    aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank });
+                    aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, sBlank });
             }
             else if (aCreator.isCategoryKey(aName))
             {
                 const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
-                    aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank });
+                    aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
             }
             else if (aCreator.isMarkingKey(aName))
             {
                 const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
-                    aResult.push_back({ svx::ClassificationType::MARKING, aValue, sBlank });
+                    aResult.push_back({ svx::ClassificationType::MARKING, aValue, sBlank, sBlank });
             }
             else if (aCreator.isIntellectualPropertyPartKey(aName))
             {
                 const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
-                    aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, sBlank });
+                    aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, sBlank, sBlank });
             }
         }
     }
@@ -1022,11 +1042,10 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
             break;
         }
 
-        uno::Reference<text::XTextField> xTextField = lcl_InsertParagraphClassification(xModel, xParent);
         OUString sDisplayText = (isFirst ? ("(" + rResult.msAbbreviatedString) : rResult.msAbbreviatedString);
         if (isLast)
             sDisplayText += ")";
-        lcl_UpdateParagraphClassificationField(GetDoc(), xModel, xTextField, sKey, rResult.msString, sDisplayText);
+        lcl_UpdateParagraphClassificationField(GetDoc(), xModel, xParent, sKey, rResult.msString, sDisplayText);
     }
 }
 
@@ -1068,28 +1087,28 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectParagraphClassificati
             continue;
 
         uno::Reference<text::XTextField> xTextField(xField, uno::UNO_QUERY);
-        const std::pair<OUString, OUString> rdfNamePair = lcl_getFieldRDF(xModel, xTextField, ParagraphClassificationNameRDFName);
-        const std::pair<OUString, OUString> rdfValuePair = lcl_getFieldRDF(xModel, xTextField, ParagraphClassificationValueRDFName);
+        const OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
+        const std::pair<OUString, OUString> rdfNamePair = lcl_getFieldRDFByPrefix(xModel, xTextField, sPolicy);
 
         uno::Reference<text::XTextRange> xTextRange(xField, uno::UNO_QUERY);
-        const OUString aName = rdfNamePair.second;
-        const OUString aValue = rdfValuePair.second;
+        const OUString aName = rdfNamePair.first;
+        const OUString aValue = rdfNamePair.second;
         const OUString sBlank("");
         if (aKeyCreator.isMarkingTextKey(aName))
         {
-            aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank });
+            aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, sBlank });
         }
         else if (aKeyCreator.isCategoryKey(aName))
         {
-            aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank });
+            aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
         }
         else if (aKeyCreator.isMarkingKey(aName))
         {
-            aResult.push_back({ svx::ClassificationType::MARKING, aValue, sBlank });
+            aResult.push_back({ svx::ClassificationType::MARKING, aValue, sBlank, sBlank });
         }
         else if (aKeyCreator.isIntellectualPropertyPartKey(aName))
         {
-            aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, xTextRange->getString(), sBlank });
+            aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, xTextRange->getString(), sBlank, sBlank });
         }
     }
 
@@ -1673,6 +1692,9 @@ OUString lcl_GetParagraphClassification(const uno::Reference<frame::XModel>& xMo
 {
     const OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
     uno::Reference<text::XTextField> xTextField = lcl_FindParagraphClassificationField(xModel, xParagraph, sPolicy + "BusinessAuthorizationCategory:Name");
+    if (!xTextField.is())
+        xTextField = lcl_FindParagraphClassificationField(xModel, xParagraph, sPolicy + "BusinessAuthorizationCategory:Identifier");
+
     if (xTextField.is())
     {
         const std::pair<OUString, OUString> rdfValuePair = lcl_getFieldRDF(xModel, xTextField, ParagraphClassificationValueRDFName);

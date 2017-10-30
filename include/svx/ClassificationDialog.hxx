@@ -55,7 +55,7 @@ private:
     DECL_LINK(SelectRecentlyUsedHdl, ListBox&, void);
     DECL_LINK(SelectIPPartHdl, ListBox&, void);
 
-    void insertField(ClassificationType eType, OUString const & rString, OUString const & rFullString);
+    void insertField(ClassificationType eType, OUString const & rString, OUString const & rFullString, OUString const & rIdentifier = OUString());
 
     std::vector<std::vector<ClassificationResult>> m_aRecentlyUsedValuesCollection;
     std::vector<ClassificationResult> m_aInitialValues;

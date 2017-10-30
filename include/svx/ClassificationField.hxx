@@ -32,17 +32,19 @@ public:
     ClassificationType meType;
     OUString msDescription;
     OUString msFullClassName;
+    OUString msIdentifier;
 
-    ClassificationField(ClassificationType eType, OUString const & sDescription, OUString const & sFullClassName)
+    ClassificationField(ClassificationType eType, OUString const & sDescription, OUString const & sFullClassName, OUString const & sIdentifier = "")
         : SvxFieldData()
         , meType(eType)
         , msDescription(sDescription)
         , msFullClassName(sFullClassName)
+        , msIdentifier(sIdentifier)
     {}
 
     ClassificationField* Clone() const override
     {
-        return new ClassificationField(meType, msDescription, msFullClassName);
+        return new ClassificationField(meType, msDescription, msFullClassName, msIdentifier);
     }
 
     bool operator==(const SvxFieldData& rOther) const override
@@ -53,15 +55,17 @@ public:
         const ClassificationField& rOtherField = static_cast<const ClassificationField&>(rOther);
         return (meType == rOtherField.meType &&
                 msDescription == rOtherField.msDescription &&
-                msFullClassName == rOtherField.msFullClassName);
+                msFullClassName == rOtherField.msFullClassName &&
+                msIdentifier == rOtherField.msIdentifier);
     }
 };
 
 struct SVX_DLLPUBLIC ClassificationResult
 {
     ClassificationType meType;
-    OUString msString;
-    OUString msAbbreviatedString;
+    OUString msString;  //< Display text or 'Name' field (from example.xml).
+    OUString msAbbreviatedString; //< Abbreviated name, displayed instead of msString.
+    OUString msIdentifier; //< The identifier of this entry (from example.xml).
 };
 
 } // end svx namespace

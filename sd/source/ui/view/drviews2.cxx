@@ -308,7 +308,7 @@ private:
                 // Get Weight of current paragraph
                 OUString sWeightProperty = getWeightString(rEditText.GetParaAttribs(nCurrentParagraph));
                 // Insert new paragraph into collection
-                m_aResults.push_back({ svx::ClassificationType::PARAGRAPH, sWeightProperty, sBlank });
+                m_aResults.push_back({ svx::ClassificationType::PARAGRAPH, sWeightProperty, sBlank, sBlank });
             }
 
             const SvxFieldItem* pFieldItem = findField(rSection);
@@ -321,22 +321,22 @@ private:
                 if (aKeyCreator.isMarkingTextKey(aKey))
                 {
                     OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                    m_aResults.push_back({ svx::ClassificationType::TEXT, aValue, sBlank });
+                    m_aResults.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, sBlank });
                 }
                 else if (aKeyCreator.isCategoryKey(aKey))
                 {
                     OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                    m_aResults.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank });
+                    m_aResults.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
                 }
                 else if (aKeyCreator.isMarkingKey(aKey))
                 {
                     OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                    m_aResults.push_back({ svx::ClassificationType::MARKING, aValue, sBlank });
+                    m_aResults.push_back({ svx::ClassificationType::MARKING, aValue, sBlank, sBlank });
                 }
                 else if (aKeyCreator.isIntellectualPropertyPartKey(aKey))
                 {
                     OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
-                    m_aResults.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, sBlank });
+                    m_aResults.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, sBlank, sBlank });
                 }
             }
         }
