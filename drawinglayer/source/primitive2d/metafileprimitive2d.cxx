@@ -20,43 +20,10 @@
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <wmfemfhelper.hxx>
 
-//#include <basegfx/utils/canvastools.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-//#include <basegfx/color/bcolor.hxx>
-//#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
-//#include <vcl/lineinfo.hxx>
-//#include <drawinglayer/attribute/lineattribute.hxx>
-//#include <drawinglayer/attribute/strokeattribute.hxx>
-//#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-//#include <vcl/metaact.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
-//#include <basegfx/matrix/b2dhommatrixtools.hxx>
-//#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-//#include <basegfx/polygon/b2dpolygontools.hxx>
-//#include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
-//#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-//#include <vcl/salbtype.hxx>
-//#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
-//#include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
-//#include <vcl/svapp.hxx>
-//#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
-//#include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
-//#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
-//#include <basegfx/polygon/b2dpolygonclipper.hxx>
-//#include <drawinglayer/primitive2d/invertprimitive2d.hxx>
-//#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
-//#include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
-//#include <drawinglayer/primitive2d/wallpaperprimitive2d.hxx>
-//#include <drawinglayer/primitive2d/textprimitive2d.hxx>
-//#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
-//#include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
-//#include <i18nlangtag/languagetag.hxx>
-//#include <drawinglayer/primitive2d/textlineprimitive2d.hxx>
-//#include <drawinglayer/primitive2d/textstrikeoutprimitive2d.hxx>
-//#include <drawinglayer/primitive2d/epsprimitive2d.hxx>
-//#include <tools/fract.hxx>
-//#include <numeric>
-//#include <emfplushelper.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 
 using namespace com::sun::star;
 
@@ -74,6 +41,29 @@ namespace drawinglayer
             {
                 // get target size
                 const ::tools::Rectangle aMtfTarget(getMetaFile().GetPrefMapMode().GetOrigin(), getMetaFile().GetPrefSize());
+                const basegfx::B2DRange aMtfRange(aMtfTarget.Left(), aMtfTarget.Top(), aMtfTarget.Right(), aMtfTarget.Bottom());
+
+                // tdf#113197 get content range and check if we have an overlap with
+                // defined target range (aMtfRange)
+                if (!aMtfRange.isEmpty())
+                {
+                    const basegfx::B2DRange aContentRange(xRetval.getB2DRange(rViewInformation));
+
+                    // also test equal since isInside gives also true for equal
+                    if (!aMtfRange.equal(aContentRange) && !aMtfRange.isInside(aContentRange))
+                    {
+                        // contentRange is partly larger than aMtfRange (stuff sticks
+                        // outside), clipping is needed
+                        const drawinglayer::primitive2d::Primitive2DReference xMask(
+                            new drawinglayer::primitive2d::MaskPrimitive2D(
+                                basegfx::B2DPolyPolygon(
+                                    basegfx::utils::createPolygonFromRect(
+                                        aMtfRange)),
+                                xRetval));
+
+                        xRetval = drawinglayer::primitive2d::Primitive2DContainer{ xMask };
+                    }
+                }
 
                 // create transformation
                 basegfx::B2DHomMatrix aAdaptedTransform;
