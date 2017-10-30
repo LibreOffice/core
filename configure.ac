@@ -571,7 +571,6 @@ linux-gnu*|k*bsd*-gnu*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_kde4=yes
-    test_kf5=yes
     test_qt5=yes
     if test "$enable_fuzzers" != yes; then
         test_freetype=yes
@@ -666,7 +665,6 @@ freebsd*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_kde4=yes
-    test_kf5=yes
     test_qt5=yes
     test_freetype=yes
     AC_MSG_CHECKING([the FreeBSD operating system release])
@@ -696,7 +694,6 @@ freebsd*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_kde4=yes
-    test_kf5=yes
     test_qt5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread -lpthread"
@@ -723,7 +720,6 @@ dragonfly*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_kde4=yes
-    test_kf5=yes
     test_qt5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread"
@@ -748,7 +744,6 @@ linux-android*)
     test_freetype=no
     test_gtk=no
     test_kde4=no
-    test_kf5=no
     test_qt5=no
     test_randr=no
     test_xrender=no
@@ -1187,10 +1182,10 @@ AC_ARG_ENABLE(kde4,
          KDE4 are available.]),
 ,)
 
-AC_ARG_ENABLE(kf5,
-    AS_HELP_STRING([--enable-kf5],
-        [Determines whether to use KF5 vclplug on platforms where Qt5 and
-         KF5 are available.]),
+AC_ARG_ENABLE(qt5,
+    AS_HELP_STRING([--enable-qt5],
+        [Determines whether to use Qt5 vclplug on platforms where Qt5 is
+         available.]),
 ,)
 
 libo_FUZZ_ARG_ENABLE(gui,
@@ -4516,7 +4511,6 @@ if test "$USING_X11" != TRUE; then
     build_gstreamer_1_0=no
     build_gstreamer_0_10=no
     test_kde4=no
-    test_kf5=no
     test_qt5=no
     enable_cairo_canvas=no
 fi
@@ -9764,13 +9758,13 @@ if test "x$enable_kde4" = "xyes"; then
 fi
 AC_SUBST(ENABLE_KDE4)
 
-ENABLE_KF5=""
-if test "x$enable_kf5" = "xyes"; then
-    ENABLE_KF5="TRUE"
-    AC_DEFINE(ENABLE_KF5)
-    R="$R kf5"
+ENABLE_QT5=""
+if test "x$enable_qt5" = "xyes"; then
+    ENABLE_QT5="TRUE"
+    AC_DEFINE(ENABLE_QT5)
+    R="$R qt5"
 fi
-AC_SUBST(ENABLE_KF5)
+AC_SUBST(ENABLE_QT5)
 
 build_vcl_plugins="$R"
 if test -z "$build_vcl_plugins"; then
@@ -10550,7 +10544,7 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE"; then
     else
         qmake4_test_ver="`$QMAKE4 -v 2>&1 | sed -n -e '/^Using Qt version 4\./p'`"
         if test -z "$qmake4_test_ver"; then
-            AC_MSG_ERROR([Wrong qmake for Qt4 found. Please specify the root of your Qt installation by exporting QT5DIR before running "configure".])
+            AC_MSG_ERROR([Wrong qmake for Qt4 found. Please specify the root of your Qt installation by exporting QT4DIR before running "configure".])
         fi
     fi
 
@@ -10761,7 +10755,6 @@ QT5_GLIB_CFLAGS=""
 QT5_GLIB_LIBS=""
 QT5_HAVE_GLIB=""
 if test \( "$test_kde5" = "yes" -a "$ENABLE_KDE5" = "TRUE" \) -o \
-        \( "$test_kf5" = "yes" -a "$ENABLE_KF5" = "TRUE" \) -o \
         \( "$test_qt5" = "yes" -a "$ENABLE_QT5" = "TRUE" \)
 then
     qt5_incdirs="$QT5INC /usr/include/qt5 /usr/include $x_includes"
@@ -10853,7 +10846,7 @@ the root of your Qt installation by exporting QT5DIR before running "configure".
             AC_MSG_CHECKING([whether Qt has fixed ExcludeSocketNotifiers])
             # Prepare meta object data
             TSTBASE="tst_exclude_socket_notifiers"
-            TSTMOC="${SRC_ROOT}/vcl/unx/kde5/${TSTBASE}"
+            TSTMOC="${SRC_ROOT}/vcl/unx/qt5/${TSTBASE}"
             ln -fs "${TSTMOC}.hxx"
             $MOC5 "${TSTBASE}.hxx" -o "${TSTBASE}.moc"
 
@@ -10885,7 +10878,7 @@ int main(int argc, char *argv[])
             AC_MSG_CHECKING([whether Qt avoids QClipboard recursion caused by posted events])
             # Prepare meta object data
             TSTBASE="tst_exclude_posted_events"
-            TSTMOC="${SRC_ROOT}/vcl/unx/kde5/${TSTBASE}"
+            TSTMOC="${SRC_ROOT}/vcl/unx/qt5/${TSTBASE}"
             ln -fs "${TSTMOC}.hxx"
             $MOC5 "${TSTBASE}.hxx" -o "${TSTBASE}.moc"
 
@@ -10923,8 +10916,8 @@ int main(int argc, char *argv[])
             CXX=$save_CXX
             AC_LANG_POP([C++])
         ],
-        AC_MSG_WARN([[No Glib found, Qt5 support will not use native file pickers!]]))
-
+        AC_MSG_WARN([[No Glib found, Qt5 support will not use native file pickers!]])
+    )
 fi
 AC_SUBST(QT5_CFLAGS)
 AC_SUBST(QT5_LIBS)

@@ -19,28 +19,16 @@
 
 #pragma once
 
-#include <saltimer.hxx>
-#include <QtCore/QTimer>
+#include <unx/gendata.hxx>
 
-class Kf5Timer final : public QObject, public SalTimer
+class Qt5Data : public GenericUnixSalData
 {
-    Q_OBJECT
-
-    QTimer    m_aTimer;
-
-private Q_SLOTS:
-    void timeoutActivated();
-    void startTimer();
-
-Q_SIGNALS:
-    void startTimerSignal();
-
 public:
-    Kf5Timer();
-    virtual ~Kf5Timer() override;
+    explicit Qt5Data( SalInstance *pInstance );
+    virtual ~Qt5Data() override;
 
-    virtual void Start( sal_uIntPtr nMS ) override;
-    virtual void Stop() override;
+    virtual void ErrorTrapPush() override;
+    virtual bool ErrorTrapPop( bool bIgnoreError = true ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

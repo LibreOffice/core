@@ -17,16 +17,33 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Kf5Printer.hxx"
+#include <QtWidgets/QStyle>
+#include <QtWidgets/QApplication>
 
-bool Kf5InfoPrinter::Setup( SalFrame*, ImplJobSetup* )
+#include "Qt5Data.hxx"
+
+Qt5Data::Qt5Data( SalInstance *pInstance )
+    : GenericUnixSalData( SAL_DATA_QT5, pInstance )
 {
-    return false;
+    ImplSVData *pSVData = ImplGetSVData();
+
+    // draw toolbars on separate lines
+    pSVData->maNWFData.mbDockingAreaSeparateTB = true;
+    // no borders for menu, theming does that
+    pSVData->maNWFData.mbFlatMenu = true;
 }
 
-Kf5Printer::Kf5Printer( SalInfoPrinter* pInfoPrinter )
-    : PspSalPrinter( pInfoPrinter )
+Qt5Data::~Qt5Data()
 {
+}
+
+void Qt5Data::ErrorTrapPush()
+{
+}
+
+bool Qt5Data::ErrorTrapPop( bool bIgnoreError )
+{
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -87,10 +87,10 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_kde5 \
 ))
 endif
-ifneq ($(ENABLE_KF5),)
+ifneq ($(ENABLE_QT5),)
 $(eval $(call gb_Module_add_targets,vcl,\
-    CustomTarget_kf5_moc \
-    Library_vclplug_kf5 \
+    CustomTarget_qt5_moc \
+    Library_vclplug_qt5 \
 ))
 endif
 endif

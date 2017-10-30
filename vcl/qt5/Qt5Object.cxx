@@ -17,14 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Kf5Object.hxx"
+#include "Qt5Object.hxx"
 
-#include "Kf5Frame.hxx"
-#include "Kf5Widget.hxx"
+#include "Qt5Frame.hxx"
 
 #include <QtWidgets/QWidget>
 
-Kf5Object::Kf5Object( Kf5Frame* pParent, bool bShow )
+Qt5Object::Qt5Object( Qt5Frame* pParent, bool bShow )
     : m_pParent( pParent )
 {
     if ( !m_pParent || !pParent->GetQWidget() )
@@ -34,11 +33,11 @@ Kf5Object::Kf5Object( Kf5Frame* pParent, bool bShow )
         m_pQWidget->show();
 }
 
-Kf5Object::~Kf5Object()
+Qt5Object::~Qt5Object()
 {
 }
 
-void Kf5Object::ResetClipRegion()
+void Qt5Object::ResetClipRegion()
 {
     if ( m_pQWidget.get() )
         m_pRegion = QRegion( m_pQWidget->geometry() );
@@ -46,38 +45,38 @@ void Kf5Object::ResetClipRegion()
         m_pRegion = QRegion();
 }
 
-void Kf5Object::BeginSetClipRegion( sal_uLong )
+void Qt5Object::BeginSetClipRegion( sal_uLong )
 {
     m_pRegion = QRegion();
 }
 
-void Kf5Object::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+void Qt5Object::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
     m_pRegion += QRect( nX, nY, nWidth, nHeight );
 }
 
-void Kf5Object::EndSetClipRegion()
+void Qt5Object::EndSetClipRegion()
 {
     if ( m_pQWidget.get() )
         m_pRegion = m_pRegion.intersected( m_pQWidget->geometry() );
 }
 
-void Kf5Object::SetPosSize( long nX, long nY, long nWidth, long nHeight )
+void Qt5Object::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 {
 
 }
 
-void Kf5Object::Show( bool bVisible )
+void Qt5Object::Show( bool bVisible )
 {
     if( m_pQWidget )
         m_pQWidget->setVisible( bVisible );
 }
 
-void Kf5Object::SetForwardKey( bool bEnable )
+void Qt5Object::SetForwardKey( bool bEnable )
 {
 }
 
-const SystemEnvData* Kf5Object::GetSystemData() const
+const SystemEnvData* Qt5Object::GetSystemData() const
 {
     return nullptr;
 }
