@@ -193,23 +193,23 @@ BitmapBuffer* Qt5Bitmap::AcquireBuffer( BitmapAccessMode nMode )
     switch( pBuffer->mnBitCount )
     {
         case 1:
-            pBuffer->mnFormat = ScanlineFormat::N1BitLsbPal;
+            pBuffer->mnFormat = ScanlineFormat::N1BitLsbPal | ScanlineFormat::TopDown;
             pBuffer->maPalette = m_aPalette;
             break;
         case 4:
-            pBuffer->mnFormat = ScanlineFormat::N4BitMsnPal;
+            pBuffer->mnFormat = ScanlineFormat::N4BitMsnPal | ScanlineFormat::TopDown;
             pBuffer->maPalette = m_aPalette;
             break;
         case 8:
-            pBuffer->mnFormat = ScanlineFormat::N8BitPal;
+            pBuffer->mnFormat = ScanlineFormat::N8BitPal | ScanlineFormat::TopDown;
             pBuffer->maPalette = m_aPalette;
             break;
         case 16:
         {
 #ifdef OSL_BIGENDIAN
-            pBuffer->mnFormat= ScanlineFormat::N16BitTcMsbMask;
+            pBuffer->mnFormat= ScanlineFormat::N16BitTcMsbMask | ScanlineFormat::TopDown;
 #else
-            pBuffer->mnFormat= ScanlineFormat::N16BitTcLsbMask;
+            pBuffer->mnFormat= ScanlineFormat::N16BitTcLsbMask | ScanlineFormat::TopDown;
 #endif
             ColorMaskElement aRedMask(0xf800); // 5
             aRedMask.CalcMaskShift();
@@ -222,12 +222,12 @@ BitmapBuffer* Qt5Bitmap::AcquireBuffer( BitmapAccessMode nMode )
             break;
         }
         case 24:
-            pBuffer->mnFormat = ScanlineFormat::N24BitTcRgb;
+            pBuffer->mnFormat = ScanlineFormat::N24BitTcRgb | ScanlineFormat::TopDown;
             pBuffer->maPalette = aEmptyPalette;
             break;
         case 32:
         {
-            pBuffer->mnFormat = ScanlineFormat::N32BitTcArgb;
+            pBuffer->mnFormat = ScanlineFormat::N32BitTcArgb | ScanlineFormat::TopDown;
             pBuffer->maPalette = aEmptyPalette;
             break;
         }
@@ -239,6 +239,15 @@ BitmapBuffer* Qt5Bitmap::AcquireBuffer( BitmapAccessMode nMode )
 void Qt5Bitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode )
 {
     m_aPalette = pBuffer->maPalette;
+    auto count = m_aPalette.GetEntryCount();
+    if( pBuffer->mnBitCount != 4 && count )
+    {
+        QVector<QRgb> aColorTable( count );
+        for ( unsigned i = 0; i < count; ++i )
+            aColorTable[ i ] = qRgb( m_aPalette[ i ].GetRed(),
+                m_aPalette[ i ].GetGreen(), m_aPalette[ i ].GetBlue() );
+        m_pImage->setColorTable( aColorTable );
+    }
     delete pBuffer;
 }
 
