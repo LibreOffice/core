@@ -654,7 +654,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
     {
         if (rResult.meType == svx::ClassificationType::CATEGORY)
         {
-            aHelper.SetBACName(rResult.msString, SfxClassificationHelper::getPolicyType());
+            aHelper.SetBACName(rResult.msName, SfxClassificationHelper::getPolicyType());
         }
     }
 
@@ -689,7 +689,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
                     OUString sKey = sPolicy + "Marking:Text:" + OUString::number(nTextNumber);
                     nTextNumber++;
 
-                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
+                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
                     insertFieldToDocument(xMultiServiceFactory, xHeaderText, sKey);
                     insertFieldToDocument(xMultiServiceFactory, xFooterText, sKey);
                 }
@@ -706,7 +706,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
                 case svx::ClassificationType::MARKING:
                 {
                     OUString sKey = sPolicy + "Extension:Marking";
-                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
+                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
                     insertFieldToDocument(xMultiServiceFactory, xHeaderText, sKey);
                     insertFieldToDocument(xMultiServiceFactory, xFooterText, sKey);
                 }
@@ -715,7 +715,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
                 case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
                 {
                     OUString sKey = sPolicy + "Extension:IntellectualPropertyPart";
-                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
+                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
                     insertFieldToDocument(xMultiServiceFactory, xHeaderText, sKey);
                     insertFieldToDocument(xMultiServiceFactory, xFooterText, sKey);
                 }
@@ -974,10 +974,10 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
             break;
         }
 
-        OUString sDisplayText = (isFirst ? ("(" + rResult.msAbbreviatedString) : rResult.msAbbreviatedString);
+        OUString sDisplayText = (isFirst ? ("(" + rResult.msAbbreviatedName) : rResult.msAbbreviatedName);
         if (isLast)
             sDisplayText += ")";
-        lcl_UpdateParagraphClassificationField(GetDoc(), xModel, xParent, sKey, rResult.msString, sDisplayText);
+        lcl_UpdateParagraphClassificationField(GetDoc(), xModel, xParent, sKey, rResult.msName, sDisplayText);
     }
 }
 
@@ -1683,7 +1683,7 @@ void SwEditShell::ClassifyDocPerHighestParagraphClass()
         {
         case svx::ClassificationType::CATEGORY:
         {
-            const OUString sHighestClass = aHelper.GetHigherClass(sHighestParaClass, rResult.msString);
+            const OUString sHighestClass = aHelper.GetHigherClass(sHighestParaClass, rResult.msName);
             const auto eType = SfxClassificationHelper::stringToPolicyType(sHighestClass);
             SetClassification(sHighestClass, eType);
         }

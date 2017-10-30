@@ -393,7 +393,7 @@ public:
         for (svx::ClassificationResult const & rResult : rResults)
         {
             if (rResult.meType == svx::ClassificationType::CATEGORY)
-                aHelper.SetBACName(rResult.msString, SfxClassificationHelper::getPolicyType());
+                aHelper.SetBACName(rResult.msName, SfxClassificationHelper::getPolicyType());
         }
 
         OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
@@ -425,7 +425,7 @@ public:
                 {
                     OUString sKey = sPolicy + "Marking:Text:" + OUString::number(nTextNumber);
                     nTextNumber++;
-                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
+                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
@@ -440,7 +440,7 @@ public:
                 case svx::ClassificationType::MARKING:
                 {
                     OUString sKey = sPolicy + "Extension:Marking";
-                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
+                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
@@ -448,7 +448,7 @@ public:
                 case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
                 {
                     OUString sKey = sPolicy + "Extension:IntellectualPropertyPart";
-                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
+                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
