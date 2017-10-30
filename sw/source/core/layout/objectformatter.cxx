@@ -364,7 +364,7 @@ void SwObjectFormatter::FormatObj_( SwAnchoredObject& _rAnchoredObj )
 
         // --> #i57917#
         // stop formatting of anchored object, if restart of layout process is requested.
-        } while ( !rFlyFrame.IsValid() &&
+        } while ( !rFlyFrame.isFrameAreaDefinitionValid() &&
                   !_rAnchoredObj.RestartLayoutProcess() &&
                   rFlyFrame.GetAnchorFrame() == &GetAnchorFrame() );
     }

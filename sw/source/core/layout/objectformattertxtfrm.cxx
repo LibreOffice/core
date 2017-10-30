@@ -286,7 +286,7 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
 
 bool SwObjectFormatterTextFrame::DoFormatObjs()
 {
-    if ( !mrAnchorTextFrame.IsValid() )
+    if ( !mrAnchorTextFrame.isFrameAreaDefinitionValid() )
     {
         if ( GetLayAction() &&
              mrAnchorTextFrame.FindPageFrame() != &GetPageFrame() )

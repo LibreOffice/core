@@ -616,7 +616,7 @@ static bool lcl_FormatTable(SwFrameFormat const * pTableFormat)
             continue;
         DisableCallbackAction a(*pFrame->getRootFrame());
         SwTabFrame* pTabFrame = static_cast<SwTabFrame*>(pFrame);
-        if(pTabFrame->IsValid())
+        if(pTabFrame->isFrameAreaDefinitionValid())
             pTabFrame->InvalidatePos();
         pTabFrame->SetONECalcLowers();
         pTabFrame->Calc(pRenderContext);
