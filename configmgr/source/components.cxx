@@ -878,7 +878,7 @@ void Components::parseModificationLayer(int layer, OUString const & url) {
     }
 }
 
-int Components::getExtensionLayer(bool shared) {
+int Components::getExtensionLayer(bool shared) const {
     int layer = shared ? sharedExtensionLayer_ : userExtensionLayer_;
     if (layer == -1) {
         throw css::uno::RuntimeException(

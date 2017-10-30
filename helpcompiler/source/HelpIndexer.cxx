@@ -110,7 +110,7 @@ bool HelpIndexer::scanForFiles(OUString const & path) {
     return true;
 }
 
-void HelpIndexer::helpDocument(OUString const & fileName, Document *doc) {
+void HelpIndexer::helpDocument(OUString const & fileName, Document *doc) const {
     // Add the help path as an indexed, untokenized field.
 
     OUString path = "#HLP#" + d_module + "/" + fileName;

@@ -139,7 +139,7 @@ private:
 
     void parseModificationLayer(int layer, OUString const & url);
 
-    int getExtensionLayer(bool shared);
+    int getExtensionLayer(bool shared) const;
 
     typedef std::set< RootAccess * > WeakRootSet;
 

@@ -120,7 +120,7 @@ public:
     virtual void        Insert( SvSlotElementList& ) override;
     void                WriteSlotStubs( const OString& rShellName,
                                     ByteStringList & rList,
-                                    SvStream & rOutStm );
+                                    SvStream & rOutStm ) const;
     sal_uInt16          WriteSlotMap( const OString& rShellName,
                                     sal_uInt16 nCount,
                                     SvSlotElementList&,
@@ -128,7 +128,7 @@ public:
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm );
     sal_uInt16          WriteSlotParamArray( SvIdlDataBase & rBase,
-                                            SvStream & rOutStm );
+                                            SvStream & rOutStm ) const;
 };
 
 #endif // INCLUDED_IDL_INC_SLOT_HXX

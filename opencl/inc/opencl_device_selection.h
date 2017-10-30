@@ -395,7 +395,7 @@ public:
         mpCurrent = mpCurrent->next;
     }
 
-    bool isValid()
+    bool isValid() const
     {
         return mpCurrent != nullptr;
     }

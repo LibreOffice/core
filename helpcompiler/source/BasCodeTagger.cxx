@@ -43,7 +43,7 @@ void LibXmlTreeWalker::ignoreCurrNodesChildren()
           m_Queue.pop_back();
 }
 
-bool LibXmlTreeWalker::end()
+bool LibXmlTreeWalker::end() const
 {
     return m_pCurrentNode->next == nullptr && m_Queue.empty();
 }

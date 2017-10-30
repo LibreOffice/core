@@ -56,7 +56,7 @@ class L10N_DLLPUBLIC LibXmlTreeWalker
     LibXmlTreeWalker( xmlDocPtr doc );
     void nextNode();
     xmlNodePtr currentNode() { return m_pCurrentNode;}
-    bool end();
+    bool end() const;
     void ignoreCurrNodesChildren();
 };
 

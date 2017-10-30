@@ -366,7 +366,8 @@ SvMetaClass * SvIdlDataBase::FindKnownClass( const OString& aName )
     }
     return nullptr;
 }
-void SvIdlDataBase::Write(const OString& rText)
+
+void SvIdlDataBase::Write(const OString& rText) const
 {
     if( nVerbosity != 0 )
         fprintf( stdout, "%s", rText.getStr() );

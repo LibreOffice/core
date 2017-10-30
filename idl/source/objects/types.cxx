@@ -96,7 +96,7 @@ bool SvMetaAttribute::ReadSvIdl( SvIdlDataBase & rBase,
     return bOk;
 }
 
-sal_uLong SvMetaAttribute::MakeSfx( OStringBuffer& rAttrArray )
+sal_uLong SvMetaAttribute::MakeSfx( OStringBuffer& rAttrArray ) const
 {
     SvMetaType * pType = GetType();
     DBG_ASSERT( pType, "no type for attribute" );

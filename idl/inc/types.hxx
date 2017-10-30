@@ -43,7 +43,7 @@ public:
 
     virtual bool        Test( SvTokenStream & rInStm ) override;
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
-    sal_uLong           MakeSfx( OStringBuffer& rAtrrArray );
+    sal_uLong           MakeSfx( OStringBuffer& rAtrrArray ) const;
     virtual void        Insert( SvSlotElementList& );
 };
 
