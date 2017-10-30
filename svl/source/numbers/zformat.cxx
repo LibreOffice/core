@@ -1899,8 +1899,7 @@ bool SvNumberformat::GetNewCurrencySymbol( OUString& rSymbol,
 }
 
 // static
-OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr,
-                                                     bool bQuoteSymbol )
+OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr )
 {
     OUString aTmp;
     sal_Int32 nStartPos, nPos, nLen;
@@ -1947,16 +1946,7 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr,
             {
                 nPos = nDash;
             }
-            if ( !bQuoteSymbol || rStr[ nStartPos ] == '"' )
-            {
-                aTmp += rStr.copy( nStartPos, nPos - nStartPos );
-            }
-            else
-            {
-                aTmp += "\"";
-                aTmp += rStr.copy( nStartPos, nPos - nStartPos );
-                aTmp += "\"";
-            }
+            aTmp += rStr.copy( nStartPos, nPos - nStartPos );
             nStartPos = nClose + 1;
         }
     }

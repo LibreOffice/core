@@ -596,12 +596,12 @@ namespace svt { namespace table
         }
 
 
-        void lcl_setButtonRepeat( vcl::Window& _rWindow, sal_uLong _nDelay )
+        void lcl_setButtonRepeat( vcl::Window& _rWindow )
         {
             AllSettings aSettings = _rWindow.GetSettings();
             MouseSettings aMouseSettings = aSettings.GetMouseSettings();
 
-            aMouseSettings.SetButtonRepeat( _nDelay );
+            aMouseSettings.SetButtonRepeat( 0 );
             aSettings.SetMouseSettings( aMouseSettings );
 
             _rWindow.SetSettings( aSettings, true );
@@ -610,7 +610,7 @@ namespace svt { namespace table
 
         bool lcl_updateScrollbar( vcl::Window& _rParent, VclPtr<ScrollBar>& _rpBar,
             bool const i_needBar, long _nVisibleUnits,
-            long _nPosition, long _nLineSize, long _nRange,
+            long _nPosition, long _nRange,
             bool _bHorizontal, const Link<ScrollBar*,void>& _rScrollHandler )
         {
             // do we currently have the scrollbar?
@@ -632,7 +632,7 @@ namespace svt { namespace table
                 );
                 _rpBar->SetScrollHdl( _rScrollHandler );
                 // get some speed into the scrolling ....
-                lcl_setButtonRepeat( *_rpBar, 0 );
+                lcl_setButtonRepeat( *_rpBar );
             }
 
             if ( _rpBar )
@@ -640,7 +640,7 @@ namespace svt { namespace table
                 _rpBar->SetRange( Range( 0, _nRange ) );
                 _rpBar->SetVisibleSize( _nVisibleUnits );
                 _rpBar->SetPageSize( _nVisibleUnits );
-                _rpBar->SetLineSize( _nLineSize );
+                _rpBar->SetLineSize( 1 );
                 _rpBar->SetThumbPos( _nPosition );
                 _rpBar->Show();
             }
@@ -1086,7 +1086,6 @@ namespace svt { namespace table
             lcl_getRowsFittingInto( i_dataCellPlayground.GetHeight(), m_nRowHeightPixel, false ),
                                                                     // visible units
             m_nTopRow,                                              // current position
-            1,                                                      // line size
             m_nRowCount,                                            // range
             false,                                                  // vertical
             LINK( this, TableControl_Impl, OnScroll )               // scroll handler
@@ -1111,7 +1110,6 @@ namespace svt { namespace table
             lcl_getColumnsVisibleWithin( i_dataCellPlayground, m_nLeftColumn, *this, false ),
                                                                     // visible units
             m_nLeftColumn,                                          // current position
-            1,                                                      // line size
             m_nColumnCount,                                         // range
             true,                                                   // horizontal
             LINK( this, TableControl_Impl, OnScroll )               // scroll handler

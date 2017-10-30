@@ -1852,7 +1852,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const css::i18n::NumberForma
             rCode.Index != NF_CURRENCY_1000DEC2_CCC )
     {   // strip surrounding [$...] on automatic currency
         if ( aCodeStr.indexOf( "[$" ) >= 0)
-            aCodeStr = SvNumberformat::StripNewCurrencyDelimiters( aCodeStr, false );
+            aCodeStr = SvNumberformat::StripNewCurrencyDelimiters( aCodeStr );
         else
         {
             if (LocaleDataWrapper::areChecksEnabled() &&

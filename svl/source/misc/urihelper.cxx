@@ -60,7 +60,6 @@ OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                                  INetURLObject::EncodeMechanism eEncodeMechanism,
                                  INetURLObject::DecodeMechanism eDecodeMechanism,
                                  rtl_TextEncoding eCharset,
-                                 bool bRelativeNonURIs,
                                  FSysStyle eStyle)
 {
     // Backwards compatibility:
@@ -78,7 +77,7 @@ OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                                                  bIgnoreFragment,
                                                  eEncodeMechanism,
                                                  eCharset,
-                                                 bRelativeNonURIs,
+                                                 false/*bRelativeNonURIs*/,
                                                  eStyle);
         if (bCheckFileExists
             && !bWasAbsolute

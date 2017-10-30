@@ -190,8 +190,7 @@ public:
 };
 
 
-void InitSettings_Impl( vcl::Window *pWin,
-         bool bFont = true, bool bForeground = true );
+void InitSettings_Impl( vcl::Window *pWin );
 
 
 #endif
