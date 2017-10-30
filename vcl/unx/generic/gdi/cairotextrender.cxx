@@ -157,7 +157,7 @@ namespace
 
 void CairoTextRender::DrawTextLayout(const CommonSalLayout& rLayout)
 {
-    const FreetypeFont& rFont = rLayout.getFontData();
+    const FreetypeFont& rFont = *rLayout.getFreetypeFont();
 
     std::vector<cairo_glyph_t> cairo_glyphs;
     std::vector<int> glyph_extrarotation;

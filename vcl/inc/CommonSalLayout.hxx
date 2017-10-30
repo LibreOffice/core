@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_COMMONSALLAYOUT_HXX
 #define INCLUDED_VCL_INC_COMMONSALLAYOUT_HXX
 
+#include <config_qt5.h>
+
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 
 #ifdef _WIN32
@@ -37,8 +39,19 @@
 #include <hb-icu.h>
 #include <hb-ot.h>
 
-class CommonSalLayout : public GenericSalLayout
+#if ENABLE_QT5
+class Qt5Font;
+#endif
+
+class VCL_DLLPUBLIC CommonSalLayout : public GenericSalLayout
 {
+#if ENABLE_QT5
+    friend hb_blob_t*       getFontTable(hb_face_t*, hb_tag_t, void*);
+    explicit                CommonSalLayout(const FontSelectPattern &rFSP,
+                                            FreetypeFont *pFreetypeFont,
+                                            Qt5Font *pFont, bool bUseQt5);
+#endif
+
     hb_font_t*              mpHbFont;
     const FontSelectPattern& mrFontSelData;
     css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
@@ -50,7 +63,11 @@ class CommonSalLayout : public GenericSalLayout
 #elif defined(MACOSX) || defined(IOS)
     const CoreTextStyle&    mrCoreTextStyle;
 #else
-    FreetypeFont&           mrFreetypeFont;
+    FreetypeFont*           mpFreetypeFont;
+#if ENABLE_QT5
+    const bool              mbUseQt5;
+    Qt5Font*                mpQFont;
+#endif
 #endif
 
     void                    ParseFeatures(const OUString& name);
@@ -76,7 +93,11 @@ public:
     const CoreTextStyle&    getFontData() const { return mrCoreTextStyle; };
 #else
     explicit                CommonSalLayout(FreetypeFont&);
-    const FreetypeFont&     getFontData() const { return mrFreetypeFont; };
+    const FreetypeFont*     getFreetypeFont() const { return mpFreetypeFont; };
+#if ENABLE_QT5
+    explicit                CommonSalLayout(Qt5Font&);
+    const Qt5Font*          getQt5Font() const { return mpQFont; };
+#endif
 #endif
 
     virtual void            InitFont() const override;
