@@ -355,7 +355,7 @@ static OString MakeSlotName( SvStringHashEntry const * pEntry )
 
 void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
                                 ByteStringList & rList,
-                                SvStream & rOutStm )
+                                SvStream & rOutStm ) const
 {
     if ( !GetExport() && !GetHidden() )
         return;
@@ -595,7 +595,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
     rOutStm.WriteCharPtr( " )," ) << endl;
 }
 
-sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rOutStm )
+sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rOutStm ) const
 {
     if ( !GetExport() && !GetHidden() )
         return 0;

@@ -131,7 +131,7 @@ public:
     sal_Int32 XMLNS_DIALOGS_UID, XMLNS_SCRIPT_UID;
 
     bool isEventElement(
-        sal_Int32 nUid, OUString const & rLocalName )
+        sal_Int32 nUid, OUString const & rLocalName ) const
     {
         return ((XMLNS_SCRIPT_UID == nUid && (rLocalName == "event" || rLocalName == "listener-event" )) ||
                 (XMLNS_DIALOGS_UID == nUid && rLocalName == "event" ));
@@ -144,7 +144,7 @@ public:
         OUString const & rStyleId ) const;
 
     css::uno::Reference< css::uno::XComponentContext >
-    const & getComponentContext()  { return _xContext; }
+    const & getComponentContext() const { return _xContext; }
     css::uno::Reference< css::util::XNumberFormatsSupplier >
     const & getNumberFormatsSupplier();
 
@@ -179,7 +179,7 @@ public:
 
     virtual ~DialogImport() override;
 
-    const css::uno::Reference< css::frame::XModel >& getDocOwner() { return _xDoc; }
+    const css::uno::Reference< css::frame::XModel >& getDocOwner() const { return _xDoc; }
 
     // XRoot
     virtual void SAL_CALL startDocument(
@@ -269,7 +269,7 @@ class StyleElement
     short _inited, _hasValue;
 
     void setFontProperties(
-        css::uno::Reference< css::beans::XPropertySet > const & xProps );
+        css::uno::Reference< css::beans::XPropertySet > const & xProps ) const;
 
 public:
     virtual css::uno::Reference< css::xml::input::XElement >

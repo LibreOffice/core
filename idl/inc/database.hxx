@@ -112,7 +112,7 @@ public:
     void                    SetPath(const OUString &s) { aPath = s; }
     SvRefMemberList<SvMetaObject *>& GetStack() { return aContextStack; }
 
-    void                    Write(const OString& rText);
+    void                    Write(const OString& rText) const;
     void                    WriteError( SvTokenStream & rInStm );
     void                    SetError( const OString& rError, SvToken const & rTok );
     void                    SetAndWriteError( SvTokenStream & rInStm, const OString& rError );

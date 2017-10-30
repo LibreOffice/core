@@ -59,7 +59,7 @@ class L10N_DLLPUBLIC HelpIndexer {
     /**
      * Get the error string (empty if no error occurred).
      */
-        OUString const & getErrorMessage() { return d_error;}
+    OUString const & getErrorMessage() const { return d_error;}
 
     private:
 
@@ -71,17 +71,17 @@ class L10N_DLLPUBLIC HelpIndexer {
     /**
      * Scan for files in the given directory.
      */
-        bool scanForFiles(OUString const &path);
+    bool scanForFiles(OUString const &path);
 
     /**
      * Fill the Document with information on the given help file.
      */
-        void helpDocument(OUString const & fileName, lucene::document::Document *doc);
+    void helpDocument(OUString const & fileName, lucene::document::Document *doc) const;
 
     /**
      * Create a reader for the given file, and create an "empty" reader in case the file doesn't exist.
      */
-        static lucene::util::Reader *helpFileReader(OUString const & path);
+    static lucene::util::Reader *helpFileReader(OUString const & path);
 };
 
 #endif

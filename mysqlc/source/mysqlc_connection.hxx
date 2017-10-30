@@ -119,7 +119,7 @@ namespace connectivity
             OConnection(MysqlCDriver& _rDriver, sql::Driver * cppDriver);
             virtual ~OConnection();
 
-            rtl_TextEncoding getConnectionEncoding() { return m_settings.encoding; }
+            rtl_TextEncoding getConnectionEncoding() const { return m_settings.encoding; }
 
 
             // OComponentHelper

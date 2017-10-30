@@ -274,7 +274,7 @@ void StyleElement::importVisualEffectStyle(
 }
 
 void StyleElement::setFontProperties(
-    Reference< beans::XPropertySet > const & xProps )
+    Reference< beans::XPropertySet > const & xProps ) const
 {
     xProps->setPropertyValue("FontDescriptor", makeAny( _descr ) );
     xProps->setPropertyValue("FontEmphasisMark", makeAny( _fontEmphasisMark ) );
