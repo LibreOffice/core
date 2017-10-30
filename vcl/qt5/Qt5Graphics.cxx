@@ -53,25 +53,31 @@ Qt5Graphics::~Qt5Graphics()
         delete m_pTextStyle[ i ];
 }
 
-void Qt5Graphics::PreparePainter()
+void Qt5Graphics::PreparePainter( QPainter& rPainter, sal_uInt8 nTransparency )
 {
-    if ( m_pPainter.get() )
-        return;
     if ( m_pQImage )
-        m_pPainter.reset( new QPainter( m_pQImage ) );
+        rPainter.begin( m_pQImage );
     else
     {
         assert( dynamic_cast< QPaintDevice* >( m_pFrame->GetQWidget() ) );
-        m_pPainter.reset( new QPainter( m_pFrame->GetQWidget() ) );
+        rPainter.begin( m_pFrame->GetQWidget() );
     }
-    if (!m_aClipRegion.isEmpty())
-        m_pPainter->setClipRegion( m_aClipRegion );
+    rPainter.setClipRegion( m_aClipRegion );
+    if ( SALCOLOR_NONE != m_aLineColor )
+    {
+        QColor aColor = QColor::fromRgb( QRgb( m_aLineColor ) );
+        aColor.setAlpha( nTransparency );
+        rPainter.setPen( aColor );
+    }
+    else
+        rPainter.setPen( Qt::NoPen );
+    rPainter.setCompositionMode( m_eCompositionMode );
 }
 
 void Qt5Graphics::ChangeQImage( QImage *pQImage )
 {
-    m_pPainter.reset();
     m_pQImage = pQImage;
+    ResetClipRegion();
 }
 
 SalGraphicsImpl* Qt5Graphics::GetImpl() const
