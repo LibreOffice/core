@@ -449,9 +449,9 @@ comphelper::SolarMutex* WinSalInstance::GetYieldMutex()
     return mpSalYieldMutex;
 }
 
-sal_uInt32 WinSalInstance::ReleaseYieldMutex( bool bUnlockAll )
+sal_uInt32 WinSalInstance::ReleaseYieldMutexAll()
 {
-    return mpSalYieldMutex->release( bUnlockAll );
+    return mpSalYieldMutex->release( true/*bUnlockAll*/ );
 }
 
 void WinSalInstance::AcquireYieldMutex( sal_uInt32 nCount )

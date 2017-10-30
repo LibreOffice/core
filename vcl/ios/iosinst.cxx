@@ -178,7 +178,7 @@ SalInstance *CreateSalInstance()
 
 void DestroySalInstance( SalInstance *pInst )
 {
-    pInst->ReleaseYieldMutex( true );
+    pInst->ReleaseYieldMutexAll();
     delete pInst;
 }
 
