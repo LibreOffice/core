@@ -151,6 +151,14 @@ EOM
 open( FILES, "git diff --cached --name-only --diff-filter=A -z $against |" ) ||  die "Cannot run git diff-index.";
 while (<FILES>)
 {
+    if (/\.ui$/) # .ui files can get large
+    {
+        continue;
+    }
+    if (/\.xsl$/) # XSLT
+    {
+        continue;
+    }
     my $size = `git cat-file -s :$_`;
     # For now let's say large is 500KB
     my $limit = 500;
