@@ -22,9 +22,10 @@ CustomPropertyField::CustomPropertyField()
     : SvxFieldData()
 {}
 
-CustomPropertyField::CustomPropertyField(OUString const & rKey)
+CustomPropertyField::CustomPropertyField(OUString const & rName, OUString const & rCurrentPresentation)
     : SvxFieldData()
-    , msKey(rKey)
+    , msName(rName)
+    , msCurrentPresentation(rCurrentPresentation)
 {}
 
 CustomPropertyField::~CustomPropertyField()
@@ -34,7 +35,7 @@ SV_IMPL_PERSIST1(CustomPropertyField);
 
 SvxFieldData* CustomPropertyField::Clone() const
 {
-    return new CustomPropertyField(msKey);
+    return new CustomPropertyField(msName, msCurrentPresentation);
 }
 
 bool CustomPropertyField::operator==(const SvxFieldData& rOther) const
@@ -43,7 +44,8 @@ bool CustomPropertyField::operator==(const SvxFieldData& rOther) const
         return false;
 
     const CustomPropertyField& rOtherField = static_cast<const CustomPropertyField&>(rOther);
-    return (msKey == rOtherField.msKey);
+    return (msName               == rOtherField.msName &&
+            msCurrentPresentation == rOtherField.msCurrentPresentation);
 }
 
 MetaAction* CustomPropertyField::createBeginComment() const
@@ -51,8 +53,10 @@ MetaAction* CustomPropertyField::createBeginComment() const
     return new MetaCommentAction("FIELD_SEQ_BEGIN");
 }
 
-OUString CustomPropertyField::GetFormatted(uno::Reference<document::XDocumentProperties> const & xDocumentProperties) const
+OUString CustomPropertyField::GetFormatted(uno::Reference<document::XDocumentProperties> const & xDocumentProperties)
 {
+    if (msName.isEmpty())
+        return OUString();
     if (!xDocumentProperties.is())
         return OUString();
     uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
@@ -61,10 +65,11 @@ OUString CustomPropertyField::GetFormatted(uno::Reference<document::XDocumentPro
     uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
     if (!xPropertySet.is())
         return OUString();
-    uno::Any aAny = xPropertySet->getPropertyValue(msKey);
+    uno::Any aAny = xPropertySet->getPropertyValue(msName);
     if (!aAny.has<OUString>())
         return OUString();
-    return aAny.get<OUString>();
+    msCurrentPresentation = aAny.get<OUString>();
+    return msCurrentPresentation;
 }
 
 } // end editeng namespace

@@ -244,7 +244,7 @@ const SvxFieldItem* findField(editeng::Section const & rSection)
     return nullptr;
 }
 
-bool hasCustomPropertyField(std::vector<editeng::Section> const & aSections, OUString const & rKey)
+bool hasCustomPropertyField(std::vector<editeng::Section> const & aSections, OUString const & rName)
 {
     for (editeng::Section const & rSection : aSections)
     {
@@ -252,7 +252,7 @@ bool hasCustomPropertyField(std::vector<editeng::Section> const & aSections, OUS
         if (pFieldItem)
         {
             const editeng::CustomPropertyField* pCustomPropertyField = dynamic_cast<const editeng::CustomPropertyField*>(pFieldItem->GetField());
-            if (pCustomPropertyField && pCustomPropertyField->GetKey() == rKey)
+            if (pCustomPropertyField && pCustomPropertyField->GetName() == rName)
                 return true;
         }
     }
@@ -315,7 +315,7 @@ private:
             if (pFieldItem)
             {
                 const auto* pCustomPropertyField = dynamic_cast<const editeng::CustomPropertyField*>(pFieldItem->GetField());
-                OUString aKey = pCustomPropertyField->GetKey();
+                OUString aKey = pCustomPropertyField->GetName();
                 if (aKeyCreator.isMarkingTextKey(aKey))
                 {
                     OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
@@ -490,14 +490,14 @@ public:
                 {
                     OUString sKey = aKeyCreator.makeNumberedMarkingTextKey();
                     addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
-                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey), EE_FEATURE_FIELD), aPosition);
+                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msString), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
 
                 case svx::ClassificationType::CATEGORY:
                 {
                     OUString sKey = aKeyCreator.makeCategoryKey();
-                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey), EE_FEATURE_FIELD), aPosition);
+                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msString), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
 
@@ -505,7 +505,7 @@ public:
                 {
                     OUString sKey = aKeyCreator.makeMarkingKey();
                     addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
-                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey), EE_FEATURE_FIELD), aPosition);
+                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msString), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
 
@@ -513,7 +513,7 @@ public:
                 {
                     OUString sKey = aKeyCreator.makeIntellectualPropertyPartKey();
                     addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
-                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey), EE_FEATURE_FIELD), aPosition);
+                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msString), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
 
