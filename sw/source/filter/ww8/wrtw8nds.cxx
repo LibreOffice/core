@@ -475,6 +475,15 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
             aExportItems[aI->first] = aI->second;
     }
 
+    OSL_ENSURE( pFont, "must be *some* font associated with this txtnode" );
+    if ( pFont )
+    {
+        SvxFontItem aFont( *pFont );
+
+        if ( rParentFont != aFont )
+            m_rExport.AttrOutput().OutputItem( aFont );
+    }
+
     if ( !aExportItems.empty() )
     {
         const SwModify* pOldMod = m_rExport.m_pOutFormatNode;
@@ -490,15 +499,6 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
 
     if( rNd.GetpSwpHints() == nullptr )
         m_rExport.SetCurItemSet(nullptr);
-
-    OSL_ENSURE( pFont, "must be *some* font associated with this txtnode" );
-    if ( pFont )
-    {
-        SvxFontItem aFont( *pFont );
-
-        if ( rParentFont != aFont )
-            m_rExport.AttrOutput().OutputItem( aFont );
-    }
 
     // Output grab bag attributes
     if (pGrabBag)
