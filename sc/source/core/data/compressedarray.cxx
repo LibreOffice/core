@@ -215,6 +215,7 @@ template< typename A, typename D >
 void ScCompressedArray<A,D>::CopyFrom( const ScCompressedArray<A,D>& rArray, A nDestStart,
         A nDestEnd, A nSrcStart )
 {
+    assert( this != &rArray && "cannot copy self->self" );
     size_t nIndex = 0;
     A nRegionEnd;
     for (A j=nDestStart; j<=nDestEnd; ++j)
@@ -222,6 +223,7 @@ void ScCompressedArray<A,D>::CopyFrom( const ScCompressedArray<A,D>& rArray, A n
         const D& rValue = (j==nDestStart ?
                 rArray.GetValue( j - nDestStart + nSrcStart, nIndex, nRegionEnd) :
                 rArray.GetNextValue( nIndex, nRegionEnd));
+        nRegionEnd = nRegionEnd - nSrcStart + nDestStart;
         if (nRegionEnd > nDestEnd)
             nRegionEnd = nDestEnd;
         this->SetValue( j, nRegionEnd, rValue);
