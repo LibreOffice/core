@@ -6699,11 +6699,24 @@ void DocxAttributeOutput::CharFont( const SvxFontItem& rFont)
 {
     GetExport().GetId( rFont ); // ensure font info is written to fontTable.xml
     const OUString& sFontName(rFont.GetFamilyName());
-    OString sFontNameUtf8 = OUStringToOString(sFontName, RTL_TEXTENCODING_UTF8);
+    const OString sFontNameUtf8 = OUStringToOString(sFontName, RTL_TEXTENCODING_UTF8);
     if (!sFontNameUtf8.isEmpty())
+    {
+        if (m_pFontsAttrList &&
+            (   m_pFontsAttrList->hasAttribute(FSNS( XML_w, XML_ascii )) ||
+                m_pFontsAttrList->hasAttribute(FSNS( XML_w, XML_hAnsi ))    )
+            )
+        {
+            // tdf#38778: do to fields output into DOC the font could be added before and after field declaration
+            // that all sub runs of the field will have correct font inside.
+            // For DOCX we should do not add the same font information twice in the same node
+            return;
+        }
+
         AddToAttrList( m_pFontsAttrList, 2,
             FSNS( XML_w, XML_ascii ), sFontNameUtf8.getStr(),
             FSNS( XML_w, XML_hAnsi ), sFontNameUtf8.getStr() );
+    }
 }
 
 void DocxAttributeOutput::CharFontSize( const SvxFontHeightItem& rFontSize)
