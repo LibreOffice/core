@@ -6476,7 +6476,7 @@ AC_SUBST([JITC_PROCESSOR_TYPE])
 # Misc Windows Stuff
 AC_ARG_WITH(ucrt-dir,
     AS_HELP_STRING([--with-ucrt-dir],
-        [path to the directory with the arch-specific subdirectories of the Windows Universtal CRT redistributables
+        [path to the directory with the arch-specific subdirectories of the Windows Universal CRT redistributables
         from the Windows 10 SDK for packaging into the installsets (without those the target system needs to install
         the Visual C++ Runtimes manually)]),
 ,)
