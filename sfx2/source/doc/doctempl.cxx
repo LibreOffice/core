@@ -1294,7 +1294,6 @@ RegionData_Impl::~RegionData_Impl()
 
 size_t RegionData_Impl::GetEntryPos( const OUString& rTitle, bool& rFound ) const
 {
-#if 1   // Don't use binary search today
     const size_t nCount = maEntries.size();
 
     for ( size_t i=0; i<nCount; ++i )
@@ -1310,45 +1309,6 @@ size_t RegionData_Impl::GetEntryPos( const OUString& rTitle, bool& rFound ) cons
 
     rFound = false;
     return nCount;
-
-#else
-    // use binary search to find the correct position
-    // in the maEntries list
-
-    int     nCompVal = 1;
-    size_t  nStart = 0;
-    size_t  nEnd = maEntries.size() - 1;
-    size_t  nMid;
-
-    DocTempl_EntryData_Impl* pMid;
-
-    rFound = sal_False;
-
-    while ( nCompVal && ( nStart <= nEnd ) )
-    {
-        nMid = ( nEnd - nStart ) / 2 + nStart;
-        pMid = maEntries[ nMid ];
-
-        nCompVal = pMid->Compare( rTitle );
-
-        if ( nCompVal < 0 )     // pMid < pData
-            nStart = nMid + 1;
-        else
-            nEnd = nMid - 1;
-    }
-
-    if ( nCompVal == 0 )
-    {
-        rFound = sal_True;
-    }
-    else
-    {
-        if ( nCompVal < 0 )     // pMid < pData
-            nMid++;
-    }
-
-    return nMid;
-#endif
 }
 
 
