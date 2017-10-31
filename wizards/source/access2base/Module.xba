@@ -496,7 +496,7 @@ Dim bEndStatement As Boolean, bQuote As Boolean
 					plStart = lStart + 1
 					sMatch = Right(sMatch, Len(sMatch) - 1)
 				End If
-			Case UCase(Left(sMatch, 3)) = &quot;REM&quot;
+			Case UCase(Left(sMatch, 4)) = &quot;REM &quot; Or UCase(Left(sMatch, 4)) = &quot;REM&quot; &amp; vbTab Or UCase(Left(sMatch, 4)) = &quot;REM&quot; &amp; vbNewLine
 				bEndStatement = True
 			Case UCase(Left(sMatch, 4)) = &quot;THEN&quot; Or UCase(Left(sMatch, 4)) = &quot;ELSE&quot;
 				If psPattern = &quot;%$&quot; Then
@@ -610,7 +610,7 @@ Const cstName = &quot;\w*&quot;	&apos;&quot;[A-Za-z_][A-Za-z_0-9]*&quot;
 			ReDim Preserve _ProcDecPositions(0 To iProc)
 			ReDim Preserve _ProcEndPositions(0 To iProc)
 			ReDim Preserve _ProcTypes(0 To iProc)
-			_ProcDecpositions(iProc) = lPosition
+			_ProcDecPositions(iProc) = lPosition
 			lPosition = lPosition + Len(sDecProc)
 			&apos;	Identify procedure type
 			Select Case True
