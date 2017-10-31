@@ -38,11 +38,11 @@ namespace connectivity
 
         typedef ::cppu::WeakImplHelper1< css::sdbc::XResultSetMetaData> OResultSetMetaData_BASE;
 
-        class OResultSetMetaData : public OResultSetMetaData_BASE
+        class OResultSetMetaData final : public OResultSetMetaData_BASE
         {
             sql::ResultSetMetaData * meta;
             rtl_TextEncoding        m_encoding;
-        protected:
+
             virtual ~OResultSetMetaData();
         public:
             OResultSetMetaData( sql::ResultSetMetaData * _meta, rtl_TextEncoding _encoding )

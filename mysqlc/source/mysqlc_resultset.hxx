@@ -63,12 +63,11 @@ namespace connectivity
                                                     css::sdbc::XColumnLocate,
                                                     css::lang::XServiceInfo> OResultSet_BASE;
 
-        class OResultSet :  public  OBase_Mutex,
+        class OResultSet final : public  OBase_Mutex,
                             public  OResultSet_BASE,
                             public  ::cppu::OPropertySetHelper,
                             public  OPropertyArrayUsageHelper<OResultSet>
         {
-        protected:
             css::uno::WeakReferenceHelper  m_aStatement;
             css::uno::Reference< css::sdbc::XResultSetMetaData> m_xMetaData;
             sql::ResultSet      *m_result;
