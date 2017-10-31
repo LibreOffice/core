@@ -80,7 +80,7 @@ void SwFrameAreaDefinition::setFrameAreaSizeValid(bool bNew)
 
 void SwFrameAreaDefinition::setFramePrintAreaValid(bool bNew)
 {
-    if(static_cast< bool >(mbFramePrintAreaValid) != bNew)
+    if(mbFramePrintAreaValid != bNew)
     {
         mbFramePrintAreaValid = bNew;
     }
