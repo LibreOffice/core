@@ -67,7 +67,7 @@
 #include "lwpcontent.hxx"
 
 class LwpPageLayout;
-class LwpStory: public LwpContent
+class LwpStory final : public LwpContent
 {
 public:
     LwpStory(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
@@ -93,7 +93,6 @@ private:
 
     rtl::Reference<XFContentContainer> m_xXFContainer;
 
-protected:
     void Read() override;
     void XFConvertFrameInCell(XFContentContainer* pCont);
     void XFConvertFrameInFrame(XFContentContainer* pCont);

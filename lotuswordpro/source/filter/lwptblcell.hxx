@@ -99,7 +99,7 @@ protected:
  * @brief
  * VO_ROWLIST object
  */
-class LwpRowList : public LwpDLVList
+class LwpRowList final : public LwpDLVList
 {
 public:
     LwpRowList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
@@ -108,38 +108,37 @@ public:
     LwpObjectID GetChildHeadID(){return cChild.GetHead();}
     LwpObjectID GetNextID(){return GetNext();}
     sal_uInt16 GetRowID(){return cRowID;}
-protected:
+private:
+    void Read() override;
+    virtual ~LwpRowList() override;
+
     LwpDLVListHeadTail cChild;
     LwpObjectID cParent;
     sal_uInt16 cRowID;
-    void Read() override;
-private:
-    virtual ~LwpRowList() override;
 };
 /**
  * @brief
  * VO_NUMERICVALUE object
  */
-class LwpNumericValue : public LwpObject
+class LwpNumericValue final : public LwpObject
 {
 public:
     LwpNumericValue(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 
     double GetValue(){return cNumber;}
     void Parse(IXFStream* pOutputStream) override;
-protected:
-    double cNumber;
-    //LwpContent m_TheContent;
-    void Read() override;
 private:
+    void Read() override;
     virtual ~LwpNumericValue() override;
+
+    double cNumber;
 };
 
 /**
  * @brief
  * VO_TABLERANGE object
  */
-class LwpTableRange: public LwpDLVList
+class LwpTableRange final : public LwpDLVList
 {
 public:
     LwpTableRange(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
@@ -148,61 +147,63 @@ public:
     const LwpObjectID& GetCellRangeID(){return cpCellRange;}
     const LwpObjectID& GetTableID(){ return cqTable;}
     LwpTableRange* GetNext() { return dynamic_cast<LwpTableRange*>(LwpDLVList::GetNext().obj().get());}
-protected:
+private:
+    void Read() override;
+    virtual ~LwpTableRange() override;
+
     LwpObjectID cqTable;
     LwpObjectID cpCellRange;
-    void Read() override;
-private:
-    virtual ~LwpTableRange() override;
 };
 /**
  * @brief
  * VO_CELLRANGE object
  */
-class LwpCellRange: public LwpObject
+class LwpCellRange final : public LwpObject
 {
 public:
     LwpCellRange(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 
     void Parse(IXFStream* pOutputStream) override;
     const LwpObjectID& GetFolderID(){return cpFolder;}
-protected:
-    LwpObjectID cpFolder;
-    void Read() override;
 private:
+    void Read() override;
     virtual ~LwpCellRange() override;
+
+    LwpObjectID cpFolder;
 };
 /**
  * @brief
  * VO_FOLDER object
  */
-class LwpFolder: public LwpDLVList
+class LwpFolder final : public LwpDLVList
 {
 public:
     LwpFolder(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 
     void Parse(IXFStream* pOutputStream) override;
     LwpObjectID GetChildHeadID(){ return cChild.GetHead();}
-protected:
+private:
+    void Read() override;
+    virtual ~LwpFolder() override;
+
     LwpDLVListHeadTail cChild;
     LwpObjectID cParent;
     LwpObjectID cqTable;
-    void Read() override;
-private:
-    virtual ~LwpFolder() override;
 };
 /**
  * @brief
  * VO_DEPENDENT object
  */
-class LwpDependent: public LwpDLVList
+class LwpDependent final : public LwpDLVList
 {
 public:
     LwpDependent(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 
     void Parse(IXFStream* pOutputStream) override;
-protected:
+private:
     void Read() override;
+    virtual ~LwpDependent() override;
+
     LwpObjectID cFormulaInfo;
     sal_uInt16 cReferenceOffset;    // Used to fix dependent formula when we're
                                 //  dropped, sorted.
@@ -215,8 +216,6 @@ protected:
     };
     sal_uInt8 cFlags;                // Used to fix dependent formula when we're
                                 //  dropped, sorted.
-private:
-    virtual ~LwpDependent() override;
 };
 
 /**

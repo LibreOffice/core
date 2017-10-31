@@ -103,7 +103,7 @@ protected:
     sal_uInt16  m_nApply;
 };
 
-class LwpTextLanguageOverride : public LwpOverride
+class LwpTextLanguageOverride final : public LwpOverride
 {
 public:
     LwpTextLanguageOverride() : m_nLanguage(0) {}
@@ -112,17 +112,14 @@ public:
 
     void Read(LwpObjectStream* pStrm) override;
 
-protected:
-    LwpTextLanguageOverride(LwpTextLanguageOverride const& rOther);
-
 private:
+    LwpTextLanguageOverride(LwpTextLanguageOverride const& rOther);
     LwpTextLanguageOverride& operator=(LwpTextLanguageOverride const& rOther) = delete;
 
-private:
     sal_uInt16  m_nLanguage;
 };
 
-class LwpTextAttributeOverride : public LwpOverride
+class LwpTextAttributeOverride final : public LwpOverride
 {
 public:
     LwpTextAttributeOverride() : m_nHideLevels(0), m_nBaseLineOffset(0) {}
@@ -135,13 +132,10 @@ public:
 
     bool IsHighlight();
 
-protected:
-    LwpTextAttributeOverride(LwpTextAttributeOverride const& rOther);
-
 private:
+    LwpTextAttributeOverride(LwpTextAttributeOverride const& rOther);
     LwpTextAttributeOverride& operator=(LwpTextAttributeOverride const& rOther) = delete;
 
-private:
     enum{
     TAO_HIGHLIGHT = 0x08,
     };
@@ -154,7 +148,7 @@ inline sal_uInt16 LwpTextAttributeOverride::GetHideLevels() const
     return m_nHideLevels;
 }
 
-class LwpKinsokuOptsOverride : public LwpOverride
+class LwpKinsokuOptsOverride final : public LwpOverride
 {
 public:
     LwpKinsokuOptsOverride() : m_nLevels(0) {}
@@ -163,17 +157,14 @@ public:
 
     void Read(LwpObjectStream* pStrm) override;
 
-protected:
-    LwpKinsokuOptsOverride(LwpKinsokuOptsOverride const& rOther);
-
 private:
+    LwpKinsokuOptsOverride(LwpKinsokuOptsOverride const& rOther);
     LwpKinsokuOptsOverride& operator=(LwpKinsokuOptsOverride const& rOther) = delete;
 
-private:
     sal_uInt16  m_nLevels;
 };
 
-class LwpBulletOverride : public LwpOverride
+class LwpBulletOverride final : public LwpOverride
 {
 public:
     LwpBulletOverride() {m_bIsNull = true;}
@@ -203,13 +194,10 @@ public:
 
     bool IsInValid(){return m_bIsNull;}
 
-protected:
-    LwpBulletOverride(LwpBulletOverride const& rOther);
-
 private:
+    LwpBulletOverride(LwpBulletOverride const& rOther);
     LwpBulletOverride& operator=(LwpBulletOverride const& rOther) = delete;
 
-private:
     enum
     {
         BO_SILVERBULLET = 0x01,
@@ -273,7 +261,7 @@ inline void LwpBulletOverride::RevertRightAligned()
     LwpOverride::Override(BO_RIGHTALIGN, STATE_STYLE);
 }
 
-class LwpAlignmentOverride : public LwpOverride
+class LwpAlignmentOverride final : public LwpOverride
 {
 public:
     LwpAlignmentOverride() : m_nAlignType(ALIGN_LEFT), m_nPosition(0), m_nAlignChar(0){}
@@ -298,13 +286,10 @@ public:
     void Override(LwpAlignmentOverride* other);
     void OverrideAlignment(AlignType val);
 
-protected:
-    LwpAlignmentOverride(LwpAlignmentOverride const& rOther);
-
 private:
+    LwpAlignmentOverride(LwpAlignmentOverride const& rOther);
     LwpAlignmentOverride& operator=(LwpAlignmentOverride const& rOther) = delete;
 
-private:
     enum
     {
         AO_TYPE     = 0x01,
@@ -317,7 +302,7 @@ private:
     sal_uInt16  m_nAlignChar;
 };
 
-class LwpSpacingCommonOverride : public LwpOverride
+class LwpSpacingCommonOverride final : public LwpOverride
 {
 public:
     LwpSpacingCommonOverride() : m_nSpacingType(SPACING_NONE), m_nAmount(0), m_nMultiple(65536){}
@@ -343,13 +328,10 @@ public:
     void OverrideAmount(sal_Int32 val);
     void OverrideMultiple(sal_Int32 val);
 
-protected:
-    LwpSpacingCommonOverride(LwpSpacingCommonOverride const& rOther);
-
 private:
+    LwpSpacingCommonOverride(LwpSpacingCommonOverride const& rOther);
     LwpSpacingCommonOverride& operator=(LwpSpacingCommonOverride const& rOther) = delete;
 
-protected:
     enum
     {
         SPO_TYPE    = 0x01,
@@ -361,7 +343,7 @@ protected:
     sal_Int32   m_nMultiple;
 };
 
-class LwpSpacingOverride : public LwpOverride
+class LwpSpacingOverride final : public LwpOverride
 {
 public:
     LwpSpacingOverride();
@@ -378,20 +360,17 @@ public:
     LwpSpacingCommonOverride* GetAboveSpacing(){return m_pParaSpacingAbove;}
     LwpSpacingCommonOverride* GetBelowSpacing(){return m_pParaSpacingBelow;}
 
-protected:
-    LwpSpacingOverride(LwpSpacingOverride const& rOther);
-
 private:
+    LwpSpacingOverride(LwpSpacingOverride const& rOther);
     LwpSpacingOverride& operator=(LwpSpacingOverride const& rOther) = delete;
 
-private:
     LwpSpacingCommonOverride*   m_pSpacing;
     LwpSpacingCommonOverride*   m_pAboveLineSpacing;
     LwpSpacingCommonOverride*   m_pParaSpacingAbove;
     LwpSpacingCommonOverride*   m_pParaSpacingBelow;
 };
 
-class LwpIndentOverride : public LwpOverride
+class LwpIndentOverride final : public LwpOverride
 {
 public:
     LwpIndentOverride() : m_nAll(0), m_nFirst(0), m_nRest(0), m_nRight(0) {}
@@ -427,13 +406,10 @@ public:
     void SetMRest(sal_Int32 val){m_nRest=val;}
     void SetMRight(sal_Int32 val){m_nRight=val;}
 
-protected:
-    LwpIndentOverride(LwpIndentOverride const& rOther);
-
 private:
+    LwpIndentOverride(LwpIndentOverride const& rOther);
     LwpIndentOverride& operator=(LwpIndentOverride const& rOther) = delete;
 
-private:
     enum
     {
         IO_ALL          = 0x0001,
@@ -470,7 +446,7 @@ inline double LwpIndentOverride::GetRight() const
 }
 
 class LwpBackgroundStuff;
-class LwpAmikakeOverride : public LwpOverride
+class LwpAmikakeOverride final : public LwpOverride
 {
 public:
     LwpAmikakeOverride();
@@ -487,16 +463,12 @@ public:
         AMIKAKE_CHARACTER   = 2
     };
 
-protected:
-    LwpAmikakeOverride(LwpAmikakeOverride const& rOther);
-
 private:
+    LwpAmikakeOverride(LwpAmikakeOverride const& rOther);
     LwpAmikakeOverride& operator=(LwpAmikakeOverride const& rOther) = delete;
 
-private:
     std::unique_ptr<LwpBackgroundStuff> m_pBackgroundStuff;
     sal_uInt16      m_nType;
-
 };
 
 #endif

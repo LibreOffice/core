@@ -140,7 +140,7 @@ protected:
  * @brief
  * VO_HIDDENCELLLAYOUT object
  */
-class LwpHiddenCellLayout : public LwpCellLayout
+class LwpHiddenCellLayout final : public LwpCellLayout
 {
 public:
     LwpHiddenCellLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
@@ -150,7 +150,7 @@ public:
     virtual rtl::Reference<XFCell> ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uInt16 nCol) override;
     void RegisterStyle() override {}
     virtual void SetCellMap() override;
-protected:
+private:
     void Read() override;
     LwpObjectID cconnectedlayout;
 };

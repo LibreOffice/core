@@ -64,7 +64,7 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPVPOINTER_HXX
 
 #include <lwpobj.hxx>
-class LwpVersionedPointer : public LwpObject
+class LwpVersionedPointer final : public LwpObject
 {
 public:
     LwpVersionedPointer(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
@@ -72,9 +72,8 @@ public:
     void RegisterStyle() override;
     void Parse(IXFStream* pOutputStream) override;
     LwpObjectID& GetPointer(){return m_PointerID;}
-protected:
-    LwpObjectID m_PointerID;
 private:
+    LwpObjectID m_PointerID;
     virtual ~LwpVersionedPointer() override {}
 };
 #endif

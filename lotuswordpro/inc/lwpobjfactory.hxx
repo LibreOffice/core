@@ -77,11 +77,10 @@
 /**
  * @brief   object factory used for lwp object creation and maintenance
 */
-class LwpObjectFactory
+class LwpObjectFactory final
 {
 public:
     explicit LwpObjectFactory(LwpSvStream* pSvStream);
-public:
     ~LwpObjectFactory();
 
 //For object Factory and object manager
@@ -106,7 +105,6 @@ private:
     LwpIdToObjMap m_IdToObjList;
     LwpIndexManager m_IndexMgr;
 
-protected:
     rtl::Reference<LwpObject> FindObject(const LwpObjectID &objID);
 public:
     rtl::Reference<LwpObject> CreateObject(sal_uInt32 type, LwpObjectHeader &objHdr);

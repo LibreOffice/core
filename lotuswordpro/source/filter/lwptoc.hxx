@@ -67,7 +67,7 @@ class XFIndex;
  * @brief
  * VO_TOCSUPERTABLELAYOUT object
  */
-class LwpTocSuperLayout : public LwpSuperTableLayout
+class LwpTocSuperLayout final : public LwpSuperTableLayout
 {
 public:
     LwpTocSuperLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
@@ -76,7 +76,7 @@ public:
     virtual void XFConvert(XFContentContainer* pCont) override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_TOC_SUPERTABLE_LAYOUT;}
     virtual void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, bool bAll = false) override;
-protected:
+private:
     void Read() override;
     bool GetRightAlignPageNumber(sal_uInt16 index);
     bool GetUsePageNumber(sal_uInt16 index);
@@ -84,7 +84,7 @@ protected:
     LwpTocLevelData * GetSearchLevelPtr(sal_uInt16 index);
     static LwpTocLevelData * GetNextSearchLevelPtr(sal_uInt16 index, LwpTocLevelData * pCurData);
     void AddSourceStyle(XFIndex* pToc, LwpTocLevelData * pLevel,  LwpFoundry * pFoundry);
-private:
+
     enum {MAX_LEVELS = 9};
     enum
     {

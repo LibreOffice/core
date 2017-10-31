@@ -32,7 +32,7 @@
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
-class LotusWordProImportFilter : public cppu::WeakImplHelper
+class LotusWordProImportFilter final : public cppu::WeakImplHelper
 <
     css::document::XFilter,
     css::document::XImporter,
@@ -41,9 +41,6 @@ class LotusWordProImportFilter : public cppu::WeakImplHelper
     css::lang::XServiceInfo
 >
 {
-private:
-
-protected:
     // oo.org declares
     css::uno::Reference< css::uno::XComponentContext > mxContext;
     css::uno::Reference< css::lang::XComponent > mxDoc;

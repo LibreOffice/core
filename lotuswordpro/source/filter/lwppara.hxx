@@ -86,25 +86,25 @@ class LwpParaProperty;
 class LwpPara;
 class LwpBreaksOverride;
 class LwpBulletStyleMgr;
-class LwpNotifyListPersistent
+
+class LwpNotifyListPersistent final
 {
 public:
     LwpNotifyListPersistent(){}
     void Read(LwpObjectStream* pObjStrm);
-protected:
+private:
     LwpObjectID m_Head;
 };
 
-class LwpForked3NotifyList
+class LwpForked3NotifyList final
 {
 public:
     LwpForked3NotifyList(){}
-protected:
-    LwpNotifyListPersistent m_ExtraList;
-    LwpNotifyListPersistent m_PersistentList;
-public:
     LwpNotifyListPersistent& GetExtraList() { return m_ExtraList; }
     void Read(LwpObjectStream* pObjStrm);
+private:
+    LwpNotifyListPersistent m_ExtraList;
+    LwpNotifyListPersistent m_PersistentList;
 };
 
 class LwpParaStyle;

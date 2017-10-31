@@ -65,7 +65,7 @@
 
 class LwpBorderStuff;
 class LwpMargins;
-class LwpCharacterBorderOverride : public LwpOverride
+class LwpCharacterBorderOverride final : public LwpOverride
 {
 public:
     LwpCharacterBorderOverride();
@@ -76,13 +76,10 @@ public:
 
     void Read(LwpObjectStream* pStrm) override;
 
-protected:
-    LwpCharacterBorderOverride(LwpCharacterBorderOverride const& rOther);
-
 private:
+    LwpCharacterBorderOverride(LwpCharacterBorderOverride const& rOther);
     LwpCharacterBorderOverride& operator=(LwpCharacterBorderOverride const& rOther) = delete;
 
-private:
     LwpBorderStuff* m_pBorderStuff;
     LwpMargins*     m_pMargins;
     sal_Int32       m_nAboveWidth;

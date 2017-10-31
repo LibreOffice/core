@@ -65,7 +65,7 @@
 /**
  * @brief   Reader framework class for Lotus Word Pro 9 file
 */
-class Lwp9Reader
+class Lwp9Reader final
 {
 public:
     Lwp9Reader(LwpSvStream* InputStream, IXFStream* pStream);
@@ -74,7 +74,6 @@ private:
     IXFStream*        m_pStream;
     LwpObjectFactory* m_pObjMgr;
     LwpFileHeader     m_LwpFileHdr;             //LWP7 object
-protected:
     void ReadFileHeader();
     void ReadIndex();
     void ParseDocument();

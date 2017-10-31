@@ -280,14 +280,14 @@ public:
     LwpVirtualLayout* FindChildByType(LWP_LAYOUT_TYPE eType);
 };
 
-class LwpAssociatedLayouts
+class LwpAssociatedLayouts final
 {
 public:
     LwpAssociatedLayouts(){}
     void Read(LwpObjectStream* pStrm);
     LwpObjectID& GetOnlyLayout() { return m_OnlyLayout;}
     rtl::Reference<LwpVirtualLayout> GetLayout(LwpVirtualLayout const * pStartLayout);
-protected:
+private:
     LwpObjectID m_OnlyLayout; //LwpVirtualLayout
     LwpDLVListHeadTail m_Layouts;
 };

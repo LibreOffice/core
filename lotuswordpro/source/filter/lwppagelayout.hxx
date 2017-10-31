@@ -64,7 +64,7 @@
 class LwpHeaderLayout;
 class LwpFooterLayout;
 
-class LwpPageLayout: public LwpLayout
+class LwpPageLayout final : public LwpLayout
 {
 public:
     LwpPageLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
@@ -73,7 +73,8 @@ public:
     OUString RegisterEndnoteStyle();
     virtual void Parse(IXFStream* pOutputStream) override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_PAGE_LAYOUT;}
-protected:
+
+private:
     void Read() override;
     LwpHeaderLayout* GetHeaderLayout();
     LwpFooterLayout* GetFooterLayout();
@@ -91,7 +92,6 @@ protected:
     void GetWidthAndHeight(double& fWidth, double& fHeight);
     double GetWidth() override;
     double GetHeight() override;
-protected:
     LwpAtomHolder   m_PrinterBinName;
     sal_uInt16      m_nPrinterBin;
     sal_Int32       m_nBdroffset;
