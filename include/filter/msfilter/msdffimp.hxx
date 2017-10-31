@@ -711,8 +711,7 @@ public:
     static bool SetPropValue(
         const css::uno::Any& rAny,
         const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
-        const OUString& rPropertyName,
-        bool bTestPropertyAvailability
+        const OUString& rPropertyName
     );
 
     void insertShapeId( sal_Int32 nShapeId, SdrObject* pShape );

@@ -5315,15 +5315,12 @@ sal_uInt32 EscherEx::GetColor( const sal_uInt32 nSOColor )
     return nColor;
 }
 
-sal_uInt32 EscherEx::GetColor( const Color& rSOColor, bool bSwap )
+sal_uInt32 EscherEx::GetColor( const Color& rSOColor )
 {
     sal_uInt32 nColor = ( rSOColor.GetRed() << 16 );
     nColor |= ( rSOColor.GetGreen() << 8 );
     nColor |= rSOColor.GetBlue();
-
-    if ( !bSwap )
-        nColor = GetColor( nColor );
-
+    nColor = GetColor( nColor );
     return nColor;
 }
 

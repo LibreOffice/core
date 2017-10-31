@@ -232,12 +232,12 @@ void HWPFile::ParaListRead()
     ReadParaList(plist);
 }
 
-bool HWPFile::ReadParaList(std::vector < HWPPara* > &aplist, unsigned char flag)
+bool HWPFile::ReadParaList(std::vector < HWPPara* > &aplist)
 {
     std::unique_ptr<HWPPara> spNode( new HWPPara );
     unsigned char tmp_etcflag;
     unsigned char prev_etcflag = 0;
-    while (spNode->Read(*this, flag))
+    while (spNode->Read(*this, 0))
     {
          if( !(spNode->etcflag & 0x04) ){
           tmp_etcflag = spNode->etcflag;
