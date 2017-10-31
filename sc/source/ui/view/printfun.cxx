@@ -2589,7 +2589,7 @@ void ScPrintFunc::ApplyPrintSettings()
                 aEnumSize.Width() = aEnumSize.Height();
                 aEnumSize.Height() = nTemp;
         }
-        Paper ePaper = SvxPaperInfo::GetSvxPaper( aEnumSize, MapUnit::MapTwip, true );
+        Paper ePaper = SvxPaperInfo::GetSvxPaper( aEnumSize, MapUnit::MapTwip );
         sal_uInt16 nPaperBin = static_cast<const SvxPaperBinItem&>(pParamSet->Get(ATTR_PAGE_PAPERBIN)).GetValue();
 
         pPrinter->SetPaper( ePaper );

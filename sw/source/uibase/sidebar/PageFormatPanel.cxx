@@ -157,7 +157,7 @@ void PageFormatPanel::NotifyItemUpdate(
                 if(mpPaperOrientation->GetSelectedEntryPos() == 1)
                    Swap(aPaperSize);
 
-                Paper ePaper = SvxPaperInfo::GetSvxPaper(aPaperSize, meUnit,true);
+                Paper ePaper = SvxPaperInfo::GetSvxPaper(aPaperSize, meUnit);
                 mpPaperSizeBox->SetSelection( ePaper );
             }
         }

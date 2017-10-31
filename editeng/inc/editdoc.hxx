@@ -792,7 +792,7 @@ public:
     sal_uLong       GetTextLen() const;
 
     OUString       GetParaAsString( sal_Int32 nNode ) const;
-    static OUString  GetParaAsString(const ContentNode* pNode, sal_Int32 nStartPos = 0, sal_Int32 nEndPos = -1, bool bResolveFields = true);
+    static OUString  GetParaAsString(const ContentNode* pNode, sal_Int32 nStartPos = 0, sal_Int32 nEndPos = -1);
 
     EditPaM GetStartPaM() const;
     EditPaM GetEndPaM() const;
@@ -829,7 +829,7 @@ inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, sal_Int3
     return (nAttr < (sal_Int32)rAttribs.size()) ? rAttribs[nAttr].get() : nullptr;
 }
 
-void CheckOrderedList(const CharAttribList::AttribsType& rAttribs, bool bStart);
+void CheckOrderedList(const CharAttribList::AttribsType& rAttribs);
 
 class EditEngineItemPool : public SfxItemPool
 {

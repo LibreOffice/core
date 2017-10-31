@@ -85,18 +85,6 @@
 using namespace ::com::sun::star;
 using namespace editeng;
 
-// Some helper functions
-// char
-inline const SvxEscapementItem& GetEscapement(const SfxItemSet& rSet,sal_uInt16 nId,bool bInP)
-    { return static_cast<const SvxEscapementItem&>(rSet.Get( nId,bInP)); }
-inline const SvxLineSpacingItem& GetLineSpacing(const SfxItemSet& rSet,sal_uInt16 nId,bool bInP)
-    { return static_cast<const SvxLineSpacingItem&>(rSet.Get( nId,bInP)); }
-// frm
-inline const SvxLRSpaceItem& GetLRSpace(const SfxItemSet& rSet,sal_uInt16 nId)
-    { return static_cast<const SvxLRSpaceItem&>(rSet.Get( nId)); }
-inline const SvxULSpaceItem& GetULSpace(const SfxItemSet& rSet,sal_uInt16 nId)
-    { return static_cast<const SvxULSpaceItem&>(rSet.Get( nId)); }
-
 void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
                                     SfxPoolItem& rItem )
 {
@@ -340,7 +328,8 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_FI:
                 if( aPardMap.nLRSpace )
                 {
-                    SvxLRSpaceItem aLR( GetLRSpace(*pSet, aPardMap.nLRSpace ));
+                    SvxLRSpaceItem aLR(
+                        static_cast<const SvxLRSpaceItem&>(pSet->Get(aPardMap.nLRSpace)));
                     sal_uInt16 nSz = 0;
                     if( -1 != nTokenValue )
                     {
@@ -357,7 +346,8 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_LIN:
                 if( aPardMap.nLRSpace )
                 {
-                    SvxLRSpaceItem aLR( GetLRSpace(*pSet, aPardMap.nLRSpace ));
+                    SvxLRSpaceItem aLR(
+                        static_cast<const SvxLRSpaceItem&>(pSet->Get(aPardMap.nLRSpace)));
                     sal_uInt16 nSz = 0;
                     if( 0 < nTokenValue )
                     {
@@ -374,7 +364,8 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_RIN:
                 if( aPardMap.nLRSpace )
                 {
-                    SvxLRSpaceItem aLR( GetLRSpace(*pSet, aPardMap.nLRSpace ));
+                    SvxLRSpaceItem aLR(
+                        static_cast<const SvxLRSpaceItem&>(pSet->Get(aPardMap.nLRSpace)));
                     sal_uInt16 nSz = 0;
                     if( 0 < nTokenValue )
                     {
@@ -390,7 +381,8 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_SB:
                 if( aPardMap.nULSpace )
                 {
-                    SvxULSpaceItem aUL( GetULSpace(*pSet, aPardMap.nULSpace ));
+                    SvxULSpaceItem aUL(
+                        static_cast<const SvxULSpaceItem&>(pSet->Get(aPardMap.nULSpace)));
                     sal_uInt16 nSz = 0;
                     if( 0 < nTokenValue )
                     {
@@ -406,7 +398,8 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_SA:
                 if( aPardMap.nULSpace )
                 {
-                    SvxULSpaceItem aUL( GetULSpace(*pSet, aPardMap.nULSpace ));
+                    SvxULSpaceItem aUL(
+                        static_cast<const SvxULSpaceItem&>(pSet->Get(aPardMap.nULSpace)));
                     sal_uInt16 nSz = 0;
                     if( 0 < nTokenValue )
                     {
@@ -423,8 +416,8 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 if( aPardMap.nLinespacing && 1 == nTokenValue )
                 {
                     // then switches to multi-line!
-                    SvxLineSpacingItem aLSpace( GetLineSpacing( *pSet,
-                                                aPardMap.nLinespacing, false ));
+                    SvxLineSpacingItem aLSpace(
+                            static_cast<const SvxLineSpacingItem&>(pSet->Get( aPardMap.nLinespacing,false)));
 
                     // how much do you get from the line height value?
 
@@ -565,7 +558,8 @@ SET_FONTALIGNMENT:
                         nTokenValue = 6;
                     if( IsCalcValue() )
                         CalcValue();
-                    const SvxEscapementItem& rOld = GetEscapement( *pSet, nEsc, false );
+                    const SvxEscapementItem& rOld =
+                        static_cast<const SvxEscapementItem&>(pSet->Get( nEsc,false));
                     short nEs;
                     sal_uInt8 nProp;
                     if( DFLT_ESC_AUTO_SUPER == rOld.GetEsc() )
@@ -912,7 +906,8 @@ ATTR_SETOVERLINE:
                         nTokenValue = 6;
                     if( IsCalcValue() )
                         CalcValue();
-                    const SvxEscapementItem& rOld = GetEscapement( *pSet, nEsc, false );
+                    const SvxEscapementItem& rOld =
+                        static_cast<const SvxEscapementItem&>(pSet->Get( nEsc,false));
                     short nEs;
                     sal_uInt8 nProp;
                     if( DFLT_ESC_AUTO_SUB == rOld.GetEsc() )

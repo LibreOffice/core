@@ -498,12 +498,12 @@ bool ParaPortion::DbgCheckTextPortions(ParaPortion const& rPara)
     return nXLen == rPara.pNode->Len();
 }
 
-void CheckOrderedList(const CharAttribList::AttribsType& rAttribs, bool bStart)
+void CheckOrderedList(const CharAttribList::AttribsType& rAttribs)
 {
     sal_Int32 nPrev = 0;
     for (const std::unique_ptr<EditCharAttrib>& rAttr : rAttribs)
     {
-        sal_Int32 const nCur = bStart ? rAttr->GetStart() : rAttr->GetEnd();
+        sal_Int32 const nCur = rAttr->GetStart();
         assert(nCur >= nPrev);
         nPrev = nCur;
     }
