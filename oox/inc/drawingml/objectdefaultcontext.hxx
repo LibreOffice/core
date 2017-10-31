@@ -26,13 +26,13 @@ namespace oox { namespace drawingml {
 
 class Theme;
 
-class objectDefaultContext : public oox::core::ContextHandler2
+class objectDefaultContext final : public oox::core::ContextHandler2
 {
 public:
     objectDefaultContext( ::oox::core::ContextHandler2Helper const & rParent, Theme& rTheme );
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
-protected:
+private:
     Theme& mrTheme;
 };
 

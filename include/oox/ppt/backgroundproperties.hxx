@@ -30,13 +30,13 @@ namespace oox { namespace drawingml { struct FillProperties; } }
 namespace oox { namespace ppt {
 
 
-class BackgroundPropertiesContext : public ::oox::core::FragmentHandler2
+class BackgroundPropertiesContext final : public ::oox::core::FragmentHandler2
 {
 public:
     BackgroundPropertiesContext( ::oox::core::FragmentHandler2 const & rParent, ::oox::drawingml::FillProperties& rFillProperties );
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
-protected:
+private:
     ::oox::drawingml::FillProperties& mrFillProperties;
 };
 

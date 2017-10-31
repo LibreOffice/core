@@ -46,9 +46,8 @@ namespace dump {
 namespace xlsb {
 
 
-class RecordObjectBase : public SequenceRecordObjectBase
+class RecordObjectBase final : public SequenceRecordObjectBase
 {
-protected:
     explicit            RecordObjectBase();
     virtual             ~RecordObjectBase() override;
 

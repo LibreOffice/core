@@ -28,18 +28,18 @@
 
 namespace oox { namespace drawingml {
 
-    class TextTabStopListContext : public ::oox::core::ContextHandler2
-    {
-    public:
-        TextTabStopListContext( ::oox::core::ContextHandler2Helper const & rParent,
-                ::std::vector< css::style::TabStop >  & aTabList );
-        virtual ~TextTabStopListContext() override;
+class TextTabStopListContext final : public ::oox::core::ContextHandler2
+{
+public:
+    TextTabStopListContext( ::oox::core::ContextHandler2Helper const & rParent,
+            ::std::vector< css::style::TabStop >  & aTabList );
+    virtual ~TextTabStopListContext() override;
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
-protected:
-        ::std::vector< css::style::TabStop >  & maTabList;
-    };
+private:
+    ::std::vector< css::style::TabStop >  & maTabList;
+};
 
 } }
 

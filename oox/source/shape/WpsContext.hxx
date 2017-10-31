@@ -19,7 +19,7 @@ namespace shape
 {
 
 /// Wps is the drawingML equivalent of v:shape.
-class WpsContext : public oox::core::ContextHandler2
+class WpsContext final : public oox::core::ContextHandler2
 {
 public:
     WpsContext(oox::core::ContextHandler2Helper const& rParent, css::uno::Reference<css::drawing::XShape> xShape);
@@ -32,7 +32,7 @@ public:
         return mpShape;
     }
 
-protected:
+private:
     oox::drawingml::ShapePtr mpShape;
     css::uno::Reference<css::drawing::XShape> mxShape;
 };

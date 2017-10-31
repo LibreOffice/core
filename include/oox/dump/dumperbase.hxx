@@ -1543,7 +1543,7 @@ void InputObjectBase::dumpHexPair( const String& rName, sal_Unicode cSep )
 }
 
 
-class BinaryStreamObject : public InputObjectBase
+class BinaryStreamObject final : public InputObjectBase
 {
 public:
     explicit            BinaryStreamObject(
@@ -1551,7 +1551,7 @@ public:
                             const BinaryInputStreamRef& rxStrm,
                             const OUString& rSysFileName );
 
-protected:
+private:
     void                dumpBinaryStream( bool bShowOffset = true );
 
     virtual void        implDump() override;
@@ -1587,7 +1587,7 @@ protected:
 };
 
 
-class TextLineStreamObject : public TextStreamObjectBase
+class TextLineStreamObject final : public TextStreamObjectBase
 {
 public:
     explicit            TextLineStreamObject(
@@ -1601,7 +1601,7 @@ public:
                             const BinaryInputStreamRef& rxStrm,
                             rtl_TextEncoding eTextEnc );
 
-protected:
+private:
     virtual void        implDumpText( TextInputStream& rTextStrm ) override;
     void        implDumpLine( const OUString& rLine, sal_uInt32 nLine );
 };
