@@ -330,7 +330,7 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
         PROPERTY_ROW_HEIGHT, PROPERTY_TEXTCOLOR, PROPERTY_TEXTLINECOLOR,
         PROPERTY_TEXTEMPHASIS, PROPERTY_TEXTRELIEF};
     if ( bModified || !lcl_isPropertySetDefaulted(aNames,xTableDefinition) )
-        ::dbaccess::notifyDataSourceModified(m_xTableDefinitions,true);
+        ::dbaccess::notifyDataSourceModified(m_xTableDefinitions);
 
     return createObject( _rForName );
 }

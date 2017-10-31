@@ -114,7 +114,7 @@ Sequence< OUString > OTableColumnDescriptor::getSupportedServiceNames(  )
 void OTableColumnDescriptor::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
 {
     OColumn::setFastPropertyValue_NoBroadcast( nHandle, rValue );
-    ::dbaccess::notifyDataSourceModified( m_xParent, true );
+    ::dbaccess::notifyDataSourceModified( m_xParent );
 }
 
 Reference< XInterface > SAL_CALL OTableColumnDescriptor::getParent(  )

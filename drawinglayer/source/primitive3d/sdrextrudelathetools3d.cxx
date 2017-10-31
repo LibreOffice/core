@@ -575,7 +575,6 @@ namespace drawinglayer
             std::vector< basegfx::B3DPolyPolygon >& rFill,
             const Slice3DVector& rSliceVector,
             bool bCreateNormals,
-            bool bSmoothHorizontalNormals,
             bool bSmoothNormals,
             bool bSmoothLids,
             bool bClosed,
@@ -647,7 +646,7 @@ namespace drawinglayer
                         {
                             if(bCreateNormals)
                             {
-                                impCreateInBetweenNormals(aPolB, aPolA, bSmoothHorizontalNormals);
+                                impCreateInBetweenNormals(aPolB, aPolA, true/*bSmoothHorizontalNormals*/);
                             }
 
                             {
@@ -679,7 +678,7 @@ namespace drawinglayer
 
                                         if(bHasSlant)
                                         {
-                                            impCreateInBetweenNormals(aPolAA, aPrev, bSmoothHorizontalNormals);
+                                            impCreateInBetweenNormals(aPolAA, aPrev, true/*bSmoothHorizontalNormals*/);
 
                                             if(bSmoothNormals)
                                             {
@@ -742,7 +741,7 @@ namespace drawinglayer
                                 {
                                     if(bCreateNormals && bSmoothNormals && (nIndPrev != a + 1))
                                     {
-                                        impCreateInBetweenNormals(aPolAA, aPrev, bSmoothHorizontalNormals);
+                                        impCreateInBetweenNormals(aPolAA, aPrev, true/*bSmoothHorizontalNormals*/);
                                         impMixNormals(aPolA, aPolAA, 0.5);
                                     }
                                 }
@@ -771,7 +770,7 @@ namespace drawinglayer
 
                                         if(bHasSlant)
                                         {
-                                            impCreateInBetweenNormals(aNext, aPolBB, bSmoothHorizontalNormals);
+                                            impCreateInBetweenNormals(aNext, aPolBB, true/*bSmoothHorizontalNormals*/);
 
                                             if(bSmoothNormals)
                                             {
@@ -833,7 +832,7 @@ namespace drawinglayer
                                 {
                                     if(bCreateNormals && bSmoothNormals && (nIndNext != a))
                                     {
-                                        impCreateInBetweenNormals(aNext, aPolBB, bSmoothHorizontalNormals);
+                                        impCreateInBetweenNormals(aNext, aPolBB, true/*bSmoothHorizontalNormals*/);
                                         impMixNormals(aPolB, aPolBB, 0.5);
                                     }
                                 }

@@ -102,7 +102,6 @@ namespace drawinglayer
             ::std::vector< basegfx::B3DPolyPolygon >& rFill,
             const Slice3DVector& rSliceVector,
             bool bCreateNormals,
-            bool bSmoothHorizontalNormals,
             bool bSmoothNormals,
             bool bSmoothLids,
             bool bClosed,

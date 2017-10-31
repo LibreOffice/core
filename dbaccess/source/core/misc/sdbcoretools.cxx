@@ -49,7 +49,7 @@ namespace dbaccess
     using namespace ::com::sun::star::embed;
     using namespace ::com::sun::star::container;
 
-    void notifyDataSourceModified(const css::uno::Reference< css::uno::XInterface >& _rxObject,bool _bModified)
+    void notifyDataSourceModified(const css::uno::Reference< css::uno::XInterface >& _rxObject)
     {
         Reference< XInterface > xDs = getDataSource( _rxObject );
         Reference<XDocumentDataSource> xDocumentDataSource(xDs,UNO_QUERY);
@@ -57,7 +57,7 @@ namespace dbaccess
             xDs = xDocumentDataSource->getDatabaseDocument();
         Reference< XModifiable > xModi( xDs, UNO_QUERY );
         if ( xModi.is() )
-            xModi->setModified(_bModified);
+            xModi->setModified(true);
     }
 
     Reference< XInterface > getDataSource( const Reference< XInterface >& _rxDependentObject )
