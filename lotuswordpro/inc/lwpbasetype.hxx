@@ -101,7 +101,7 @@ private:
 /**
  * @brief   point class
 */
-class LwpPoint
+class LwpPoint final
 {
 public:
     LwpPoint();
@@ -111,7 +111,7 @@ public:
     sal_Int32 GetY() const {return m_nY;}
     inline void SetX(sal_Int32 nX);
     inline void SetY(sal_Int32 nY);
-protected:
+private:
     sal_Int32 m_nX;
     sal_Int32 m_nY;
 };

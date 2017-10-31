@@ -77,11 +77,11 @@ struct LwpKey
 /**
  * @brief   LwpIndexManager, to read all index records and maintain the index information
 */
-class LwpIndexManager
+class LwpIndexManager final
 {
 public:
     LwpIndexManager();
-protected:
+private:
     static const sal_uInt8 MAXOBJECTIDS;
     std::vector<LwpKey> m_ObjectKeys;      //the <id, offset> ordered vector
     std::vector<LwpKey> m_RootObjs;        //For those object ids in RootObjIndex
@@ -93,7 +93,7 @@ protected:
 
     sal_uInt32 m_ChildIndex[256];   //Offset of leaf index
     sal_uInt16 m_nLeafCount;
-protected:
+
     void ReadRootData(LwpObjectStream *pObjStrm );  //Read root index data
 
     //Add new method to handle ObjIndex

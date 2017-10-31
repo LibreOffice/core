@@ -63,7 +63,7 @@
 #include <lwpoverride.hxx>
 #include <lwpobjid.hxx>
 
-class   LwpTabOverride : public LwpOverride
+class LwpTabOverride final : public LwpOverride
 {
 public:
     LwpTabOverride()
@@ -86,13 +86,10 @@ public:
     inline LwpObjectID& GetTabRackID();
     inline void Override(LwpTabOverride* pOther);
 
-protected:
-    LwpTabOverride(LwpTabOverride const& rOther);
-
 private:
+    LwpTabOverride(LwpTabOverride const& rOther);
     LwpTabOverride& operator=(LwpTabOverride const& rOther) = delete;
 
-private:
     LwpObjectID m_aTabRackID;
     enum
     {

@@ -83,7 +83,7 @@ private:
  * @brief       VO_NOTELAYOUT object
  *
  */
-class LwpNoteLayout: public LwpFrameLayout
+class LwpNoteLayout final : public LwpFrameLayout
 {
 public:
     LwpNoteLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
@@ -94,11 +94,10 @@ public:
     sal_uInt32 GetTime(){ return m_nTime;}
     OUString GetAuthor();
 
-protected:
+private:
     void Read() override;
     LwpVirtualLayout* GetTextLayout();
 
-private:
     sal_uInt32 m_nTime;
     LwpAtomHolder m_UserName;
 };

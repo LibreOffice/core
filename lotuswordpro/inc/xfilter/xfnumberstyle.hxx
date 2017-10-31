@@ -65,12 +65,11 @@
 #include <xfilter/xfcolor.hxx>
 #include <rtl/ustring.hxx>
 
-class XFNumberStyle : public XFStyle
+class XFNumberStyle final : public XFStyle
 {
 public:
     XFNumberStyle();
 
-public:
     void    SetDecimalDigits(sal_Int32 decimal);
 
     void    SetGroup();
@@ -92,31 +91,25 @@ public:
 
     virtual void ToXml(IXFStream *pStrm) override;
 
-protected:
+private:
     void    ToXml_StartElement(IXFStream *pStrm);
-
     void    ToXml_EndElement(IXFStream *pStrm);
-
     void    ToXml_Normal(IXFStream *pStrm);
-
     void    ToXml_Negative(IXFStream *pStrm);
-
     void    ToXml_Content(IXFStream *pStrm, bool nagetive);
 
-protected:
     enumXFNumberType    m_eType;
-    sal_Int32   m_nDecimalDigits;
-    sal_Int32   m_nMinInteger;
-    sal_Int32   m_nMinExponent;
-    bool    m_bGroup;
-    XFColor     m_aColor;
-    bool    m_bCurrencySymbolPost;
+    sal_Int32  m_nDecimalDigits;
+    sal_Int32  m_nMinInteger;
+    sal_Int32  m_nMinExponent;
+    bool       m_bGroup;
+    XFColor    m_aColor;
+    bool       m_bCurrencySymbolPost;
     OUString   m_strCurrencySymbol;
     OUString   m_strPrefix;
     OUString   m_strSuffix;
-
-    bool    m_bRedIfNegative;
-    XFColor     m_aNegativeColor;
+    bool       m_bRedIfNegative;
+    XFColor    m_aNegativeColor;
     OUString   m_strNegativePrefix;
     OUString   m_strNegativeSuffix;
 };

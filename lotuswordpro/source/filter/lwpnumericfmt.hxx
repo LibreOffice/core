@@ -71,7 +71,7 @@
 
 class LwpObjectStream;
 
-class LwpNumericFormatSubset
+class LwpNumericFormatSubset final
 {
 public:
     LwpNumericFormatSubset();
@@ -83,7 +83,7 @@ public:
     bool IsDefaultSuffix(){ return !(cSubFlags&SF_OVER_SUFFIX); }
     LwpColor GetColor();
 
-protected:
+private:
     LwpColor cColor;
     LwpAtomHolder cPrefix;
     LwpAtomHolder cSuffix;
@@ -292,7 +292,7 @@ LwpNumericFormat::IsNegativeOverridden()
     return (cFlags & NF_OVER_NEGATIVE) != 0;
 }
 
-class LwpLayoutNumerics : public LwpVirtualPiece
+class LwpLayoutNumerics final : public LwpVirtualPiece
 {
 public:
     LwpLayoutNumerics(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
@@ -300,11 +300,10 @@ public:
     XFStyle* Convert();
     virtual void Read() override;
 
-protected:
-    LwpNumericFormat cNumerics;
-
 private:
     virtual ~LwpLayoutNumerics() override {}
+
+    LwpNumericFormat cNumerics;
 };
 
 #endif

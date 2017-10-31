@@ -82,17 +82,17 @@ private:
  * @brief   VO_HEADTAILHOLDER, LwpDLVListHeadTailHolder,
  *      contains a LwpDLVListHeadTail (Head and tail id)
 */
-class LwpDLVListHeadTailHolder : public LwpObject
+class LwpDLVListHeadTailHolder final : public LwpObject
 {
 public:
     LwpDLVListHeadTailHolder(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     void Read() override;
     LwpObjectID& GetHead(){ return m_HeadTail.GetHead();}
     LwpObjectID& GetTail(){ return m_HeadTail.GetTail();}
-protected:
-    LwpDLVListHeadTail m_HeadTail;
 private:
     virtual ~LwpDLVListHeadTailHolder() override {}
+
+    LwpDLVListHeadTail m_HeadTail;
 };
 /**
  * @brief   LwpObjectHolder, which is LwpDLVList, contains an id to an object
@@ -114,16 +114,16 @@ protected:
  * @brief       VO_LISTLIST object in .lwp file
  *
  */
-class LwpListList : public LwpObjectHolder
+class LwpListList final : public LwpObjectHolder
 {
 public:
     LwpListList(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     void Read() override;
     LwpObjectID& GetHead(){ return m_HeadTail.GetHead();}
-protected:
-    LwpDLVListHeadTail m_HeadTail;
 private:
     virtual ~LwpListList() override {}
+
+    LwpDLVListHeadTail m_HeadTail;
 };
 
 #endif

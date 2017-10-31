@@ -65,7 +65,7 @@
 
 class LwpObjectStream;
 class LwpAtomHolder;
-class LwpBreaksOverride : public LwpOverride
+class LwpBreaksOverride final : public LwpOverride
 {
 
 public:
@@ -127,13 +127,10 @@ public:
     void OverrideKeepWithPrevious(bool bVal);
     void OverrideUseNextStyle(bool bVal);
 
-protected:
-    LwpBreaksOverride(LwpBreaksOverride const& rOther);
-
 private:
+    LwpBreaksOverride(LwpBreaksOverride const& rOther);
     LwpBreaksOverride& operator=(const LwpBreaksOverride& rOther) = delete;
 
-private:
     std::unique_ptr<LwpAtomHolder>  m_pNextStyle;
 };
 

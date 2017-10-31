@@ -90,7 +90,7 @@ protected:
  * @brief
  * for VO_TABLE object reading
  */
-class LwpForkedNotifyList
+class LwpForkedNotifyList final
 {
 public:
     LwpForkedNotifyList(){}
@@ -99,7 +99,7 @@ public:
         m_PersistentList.Read(pObjStrm);
     };
 
-protected:
+private:
     LwpNotifyListPersistent m_PersistentList;
 };
 /**
@@ -174,12 +174,12 @@ protected:
 #define MAX_NUM_ROWS 8192
 #define MAX_NUM_COLS 255
 
-class LwpGlossary : public LwpParallelColumns
+class LwpGlossary final : public LwpParallelColumns
 {
 public:
     LwpGlossary(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpGlossary() override;
-protected:
+private:
     void Read() override;
     sal_uInt16 GetNumIndexRows();
 };

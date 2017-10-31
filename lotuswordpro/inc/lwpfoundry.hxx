@@ -177,17 +177,16 @@ public:
 
 class LwpOrderedObject;
 class LwpListList;
-class LwpOrderedObjectManager
+class LwpOrderedObjectManager final
 {
 public:
     LwpOrderedObjectManager(){}
-protected:
-    LwpObjectID m_Head;
-public:
     void Read(LwpObjectStream *pStrm);
     LwpOrderedObject* Enumerate(LwpOrderedObject* pLast);
-protected:
+private:
     LwpListList* GetNextActiveListList(LwpListList* pLast);
+
+    LwpObjectID m_Head;
 };
 
 class LwpStyleManager;

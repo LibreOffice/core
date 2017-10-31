@@ -231,16 +231,15 @@ public:
 /**
  * @brief   VO_FOOTNOTEOPTS object
 */
-class LwpFootnoteOptions : public LwpObject
+class LwpFootnoteOptions final : public LwpObject
 {
 public:
     LwpFootnoteOptions(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     void RegisterStyle() override;
-protected:
+private:
     void Read() override;
     void RegisterFootnoteStyle();
     void RegisterEndnoteStyle();
-private:
     virtual ~LwpFootnoteOptions() override;
 
     sal_uInt16 m_nFlag;
