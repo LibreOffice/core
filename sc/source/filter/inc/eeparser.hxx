@@ -30,7 +30,6 @@
 
 const sal_Char nHorizontal = 1;
 const sal_Char nVertical = 2;
-const sal_Char nHoriVerti = nHorizontal | nVertical;
 
 struct ScHTMLImage
 {
