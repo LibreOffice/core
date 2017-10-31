@@ -20,6 +20,13 @@
 #include "Kf5Widget.hxx"
 #include <Kf5Widget.moc>
 
+#include "Kf5Frame.hxx"
+#include "Kf5Graphics.hxx"
+
+#include <QtGui/QImage>
+#include <QtGui/QPainter>
+#include <QtGui/QPaintEvent>
+
 Kf5Widget::Kf5Widget( Kf5Frame &rFrame, QWidget *parent, Qt::WindowFlags f )
     : QWidget( parent, f )
     , m_pFrame( &rFrame )
@@ -29,6 +36,20 @@ Kf5Widget::Kf5Widget( Kf5Frame &rFrame, QWidget *parent, Qt::WindowFlags f )
 
 Kf5Widget::~Kf5Widget()
 {
+}
+
+void Kf5Widget::paintEvent( QPaintEvent *pEvent )
+{
+    QPainter p( this );
+    p.drawImage( pEvent->rect().topLeft(), *m_pFrame->m_pQImage, pEvent->rect() );
+}
+
+void Kf5Widget::resizeEvent( QResizeEvent* )
+{
+    QImage *pImage = new QImage( m_pFrame->m_pQWidget->size(), QImage::Format_ARGB32 );
+    m_pFrame->m_pGraphics->ChangeQImage( pImage );
+    m_pFrame->m_pQImage.reset( pImage );
+    m_pFrame->CallCallback( SalEvent::Resize, nullptr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
