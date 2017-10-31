@@ -25,12 +25,14 @@
 Kf5Graphics::Kf5Graphics( Kf5Frame *pFrame )
     : m_pFrame( pFrame )
     , m_pQImage( nullptr )
+    , m_pFontCollection( nullptr )
 {
 }
 
 Kf5Graphics::Kf5Graphics( QImage *pQImage )
     : m_pFrame( nullptr )
     , m_pQImage( pQImage )
+    , m_pFontCollection( nullptr )
 {
 }
 
