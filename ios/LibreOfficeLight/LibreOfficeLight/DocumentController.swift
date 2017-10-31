@@ -55,6 +55,8 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     // background really means hipernate by terminating all threads and solely keep the
     // data
 
+
+
     // Moving to hipernate
     public func Hipernate() -> Void
     {
@@ -195,19 +197,16 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     // *** handling of menu actions
     // This is the real base of the application
 
-
+    var openMenu : UIDocumentBrowserViewController? = nil
 
     // Load document into LibreOfficeKit and present it
     internal func startOpenDocument()
     {
-        let openMenu = UIDocumentBrowserViewController()
-        openMenu.allowsDocumentCreation = true
-
-        //FIXME
-        //UIDocumentBrowserViewController.ImportMode = UIDocumentBrowserViewController.ImportMode.none // copy, move
-        //openMenu.InterfaceStyle = UIDocumentPickerViewController.dark
-        openMenu.delegate = self
-        self.present(openMenu, animated: true, completion: nil)
+        openMenu = UIDocumentBrowserViewController()
+        openMenu?.allowsDocumentCreation = true
+        openMenu?.browserUserInterfaceStyle = UIDocumentBrowserViewController.BrowserUserInterfaceStyle.dark
+        openMenu?.delegate = self
+        self.present(openMenu!, animated: true, completion: nil)
         print("menu Open... to be done")
     }
 
@@ -306,6 +305,8 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     internal func documentBrowser(_ controller: UIDocumentBrowserViewController,
                                   didPickDocumentURLs documentURLs: [URL])
     {
+        openMenu?.dismiss(animated: true, completion: nil)
+        openMenu = nil
         doOpen(documentURLs[0])
     }
 
@@ -319,7 +320,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     public func doOpen(_ docURL : URL)
     {
         //FIXME
-        //BridgeLOkit_open(documentURLs);
+        BridgeLOkit_open(docURL.absoluteString);
     }
 }
 

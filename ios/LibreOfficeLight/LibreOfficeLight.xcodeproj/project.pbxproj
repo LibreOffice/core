@@ -11,7 +11,6 @@
 		39022C1D1EDC2A2C00100066 /* services in Resources */ = {isa = PBXBuildFile; fileRef = 39022C1C1EDC2A2C00100066 /* services */; };
 		39022C1F1EDC2AB000100066 /* share in Resources */ = {isa = PBXBuildFile; fileRef = 39022C1E1EDC2AB000100066 /* share */; };
 		39022C211EDC2D0800100066 /* icudt59l.dat in Resources */ = {isa = PBXBuildFile; fileRef = 39022C201EDC2D0800100066 /* icudt59l.dat */; };
-		39284DB11FA5E150006F43E4 /* dummyLOkit.c in Sources */ = {isa = PBXBuildFile; fileRef = 39284DB01FA5E150006F43E4 /* dummyLOkit.c */; };
 		39284DB31FA5F207006F43E4 /* DocumentActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39284DB21FA5F207006F43E4 /* DocumentActions.swift */; };
 		392ED9B31E5E4B03005C8435 /* ViewPrintManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */; };
 		393975781F8BECB0002DC80B /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 393975771F8BECB0002DC80B /* libiconv.tbd */; };
@@ -259,7 +258,6 @@
 				392ED9B31E5E4B03005C8435 /* ViewPrintManager.swift in Sources */,
 				399648471E5B87DC00E73E83 /* ViewProperties.swift in Sources */,
 				39284DB31FA5F207006F43E4 /* DocumentActions.swift in Sources */,
-				39284DB11FA5E150006F43E4 /* dummyLOkit.c in Sources */,
 				3992D85A1E5B762A00BEA987 /* DocumentController.swift in Sources */,
 				397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */,
 				39EF4E2F1FA500C9001914AC /* PropertiesController.swift in Sources */,

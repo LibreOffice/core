@@ -252,18 +252,6 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Properties" id="9nH-at-6AF">
-                        <barButtonItem key="leftBarButtonItem" image="menu" id="wYo-zq-cqh">
-                            <connections>
-                                <action selector="doProporties:" destination="h7c-B7-pKT" id="Yls-8o-msb"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="25I-J4-o11">
-                            <connections>
-                                <action selector="doDelete:" destination="h7c-B7-pKT" id="c6k-Q0-vtQ"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vaO-NX-hiP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
