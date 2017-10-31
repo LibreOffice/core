@@ -48,9 +48,8 @@ struct ManifestScopeEntry
 
 typedef ::std::vector< ManifestScopeEntry > ManifestStack;
 
-class ManifestImport : public cppu::WeakImplHelper < css::xml::sax::XDocumentHandler >
+class ManifestImport final : public cppu::WeakImplHelper < css::xml::sax::XDocumentHandler >
 {
-protected:
     std::vector< css::beans::PropertyValue > aSequence;
     ManifestStack aStack;
     bool bIgnoreEncryptData;
@@ -125,6 +124,7 @@ public:
     virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) override;
     virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) override;
     virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
+
 private:
     /// @throws css::uno::RuntimeException
     void doFileEntry(StringHashMap &rConvertedAttribs);

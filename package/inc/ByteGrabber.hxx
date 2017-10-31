@@ -32,9 +32,8 @@
 namespace com { namespace sun { namespace star {
     namespace io { class XSeekable; class XInputStream; }
 } } }
-class ByteGrabber
+class ByteGrabber final
 {
-protected:
     ::osl::Mutex m_aMutex;
 
     css::uno::Reference < css::io::XInputStream > xStream;

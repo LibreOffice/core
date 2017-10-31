@@ -25,9 +25,8 @@
 namespace com { namespace sun { namespace star {
     namespace io { class XInputStream; }
 } } }
-class CRC32
+class CRC32 final
 {
-protected:
     sal_uInt32 nCRC;
 public:
     CRC32();

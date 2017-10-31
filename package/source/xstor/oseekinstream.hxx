@@ -24,10 +24,9 @@
 
 #include "ocompinstream.hxx"
 
-class OInputSeekStream : public OInputCompStream
+class OInputSeekStream final : public OInputCompStream
                         , public css::io::XSeekable
 {
-protected:
     css::uno::Reference < css::io::XSeekable > m_xSeekable;
 
 public:

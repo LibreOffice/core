@@ -22,9 +22,8 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <cppuhelper/implbase.hxx>
 
-class ZipPackageSink : public ::cppu::WeakImplHelper< css::io::XActiveDataSink >
+class ZipPackageSink final : public ::cppu::WeakImplHelper< css::io::XActiveDataSink >
 {
-protected:
     css::uno::Reference < css::io::XInputStream > xStream;
 public:
     ZipPackageSink();

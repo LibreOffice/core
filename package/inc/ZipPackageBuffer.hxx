@@ -24,14 +24,13 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase.hxx>
 
-class ZipPackageBuffer : public ::cppu::WeakImplHelper
+class ZipPackageBuffer final : public ::cppu::WeakImplHelper
 <
     css::io::XInputStream,
     css::io::XOutputStream,
     css::io::XSeekable
 >
 {
-protected:
     css::uno::Sequence < sal_Int8 > m_aBuffer;
     sal_Int64 m_nBufferSize, m_nEnd, m_nCurrent;
     bool m_bMustInitBuffer;

@@ -30,9 +30,8 @@
 namespace com { namespace sun { namespace star {
     namespace io { class XSeekable; class XOutputStream; }
 } } }
-class ByteChucker
+class ByteChucker final
 {
-protected:
     css::uno::Reference < css::io::XOutputStream > xStream;
     css::uno::Reference < css::io::XSeekable > xSeek;
     css::uno::Sequence < sal_Int8 > a1Sequence, a2Sequence, a4Sequence;

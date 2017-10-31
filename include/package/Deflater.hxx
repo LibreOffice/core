@@ -27,11 +27,10 @@ struct z_stream_s;
 
 namespace ZipUtils {
 
-class DLLPUBLIC_PACKAGE Deflater
+class DLLPUBLIC_PACKAGE Deflater final
 {
     typedef struct z_stream_s z_stream;
 
-protected:
     css::uno::Sequence< sal_Int8 > sInBuffer;
     bool                    bFinish;
     bool                    bFinished;

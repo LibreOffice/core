@@ -57,7 +57,7 @@ enum InitialisationMode
     e_IMode_XStream
 };
 
-class ZipPackage : public cppu::WeakImplHelper
+class ZipPackage final : public cppu::WeakImplHelper
                     <
                        css::lang::XInitialization,
                        css::lang::XSingleServiceFactory,
@@ -68,7 +68,6 @@ class ZipPackage : public cppu::WeakImplHelper
                        css::beans::XPropertySet
                     >
 {
-protected:
     rtl::Reference<comphelper::RefCountedMutex> m_aMutexHolder;
 
     css::uno::Sequence< css::beans::NamedValue > m_aStorageEncryptionKeys;
