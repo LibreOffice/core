@@ -107,6 +107,8 @@
 #include <svx/unobrushitemhelper.hxx>
 #include <comphelper/scopeguard.hxx>
 
+#include "shellres.hxx"
+
 FlyMode SwBaseShell::eFrameMode = FLY_DRAG_END;
 
 // These variables keep the state of Gallery (slot SID_GALLERY_BG_BRUSH)
@@ -2682,7 +2684,13 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             {
                 // record before shell change
                 _rRequest.AppendItem( SfxStringItem( FN_INSERT_TABLE, aTableName ) );
-                if ( !aAutoName.isEmpty() )
+                if ( !pTAFormat )
+                {
+                    aAutoName = "Default Style";
+                    pTAFormat = new SwTableAutoFormat( *SwTableAutoFormatTable().FindAutoFormat( aAutoName ) );
+                }
+
+                if ( aAutoName != SwViewShell::GetShellRes()->aStrNone )
                     _rRequest.AppendItem( SfxStringItem( FN_PARAM_2, aAutoName ) );
                 _rRequest.AppendItem( SfxUInt16Item( SID_ATTR_TABLE_COLUMN, nCols ) );
                 _rRequest.AppendItem( SfxUInt16Item( SID_ATTR_TABLE_ROW, nRows ) );
