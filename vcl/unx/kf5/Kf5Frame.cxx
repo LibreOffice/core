@@ -20,11 +20,13 @@
 #include "Kf5Frame.hxx"
 
 #include "Kf5Instance.hxx"
+#include "Kf5Graphics.hxx"
 #include "Kf5Widget.hxx"
 
 #include <QtGui/QWindow>
 
 Kf5Frame::Kf5Frame( Kf5Frame* pParent, SalFrameStyleFlags nStyle )
+    : m_bGraphicsInUse( false )
 {
     Kf5Instance *pInst = static_cast<Kf5Instance*>( GetSalData()->m_pInstance );
     pInst->insertFrame( this );
@@ -76,18 +78,43 @@ Kf5Frame::~Kf5Frame()
     pInst->eraseFrame( this );
 }
 
+void Kf5Frame::TriggerPaintEvent()
+{
+    QSize aSize( m_pQWidget->size() );
+    SalPaintEvent aPaintEvt(0, 0, aSize.width(), aSize.height(), true);
+    CallCallback(SalEvent::Paint, &aPaintEvt);
+    m_pQWidget->update();
+}
+
 SalGraphics* Kf5Frame::AcquireGraphics()
 {
-    return nullptr;
+    if( m_bGraphicsInUse )
+        return nullptr;
+
+    if( !m_pGraphics.get() )
+    {
+        m_pGraphics.reset( new Kf5Graphics( this ) );
+        m_pQImage.reset( new QImage( m_pQWidget->size(), QImage::Format_ARGB32 ) );
+        m_pGraphics->ChangeQImage( m_pQImage.get() );
+        TriggerPaintEvent();
+    }
+    m_bGraphicsInUse = true;
+
+    return m_pGraphics.get();
 }
 
-void Kf5Frame::ReleaseGraphics( SalGraphics* pGraphics )
+void Kf5Frame::ReleaseGraphics( SalGraphics* pSalGraph )
 {
+    (void) pSalGraph;
+    assert( pSalGraph == m_pGraphics.get() );
+    m_bGraphicsInUse = false;
 }
 
-bool Kf5Frame::PostEvent(ImplSVEvent* pData)
+bool Kf5Frame::PostEvent( ImplSVEvent* pData )
 {
-    return false;
+    Kf5Instance *pInst = static_cast<Kf5Instance*>( GetSalData()->m_pInstance );
+    pInst->PostEvent( this, pData, SalEvent::UserEvent );
+    return true;
 }
 
 void Kf5Frame::SetTitle( const OUString& rTitle )
@@ -112,14 +139,20 @@ void Kf5Frame::SetExtendedFrameStyle( SalExtStyle nExtStyle )
 
 void Kf5Frame::Show( bool bVisible, bool bNoActivate )
 {
+    assert( m_pQWidget.get() );
+    m_pQWidget->setVisible( bVisible );
 }
 
 void Kf5Frame::SetMinClientSize( long nWidth, long nHeight )
 {
+    if( ! isChild() )
+        m_pQWidget->setMinimumSize( nWidth, nHeight );
 }
 
 void Kf5Frame::SetMaxClientSize( long nWidth, long nHeight )
 {
+    if( ! isChild() )
+        m_pQWidget->setMaximumSize( nWidth, nHeight );
 }
 
 void Kf5Frame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
@@ -128,6 +161,8 @@ void Kf5Frame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt
 
 void Kf5Frame::GetClientSize( long& rWidth, long& rHeight )
 {
+    rWidth = m_pQWidget->width();
+    rHeight = m_pQWidget->height();
 }
 
 void Kf5Frame::GetWorkArea( tools::Rectangle& rRect )
@@ -136,7 +171,7 @@ void Kf5Frame::GetWorkArea( tools::Rectangle& rRect )
 
 SalFrame* Kf5Frame::GetParent() const
 {
-    return nullptr;
+    return m_pParent;
 }
 
 void Kf5Frame::SetWindowState( const SalFrameState* pState )

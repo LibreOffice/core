@@ -22,6 +22,8 @@
 #include <QtWidgets/QWidget>
 
 class Kf5Frame;
+class QPaintEvent;
+class QResizeEvent;
 
 class Kf5Widget
     : public QWidget
@@ -29,6 +31,9 @@ class Kf5Widget
     Q_OBJECT
 
     Kf5Frame  *m_pFrame;
+
+    void paintEvent( QPaintEvent* ) override;
+    void resizeEvent( QResizeEvent* ) override;
 
 public:
     Kf5Widget( Kf5Frame &rFrame,
