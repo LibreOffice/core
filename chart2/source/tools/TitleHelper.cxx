@@ -174,8 +174,7 @@ uno::Reference< XTitle > TitleHelper::createOrShowTitle(
       TitleHelper::eTitleType eTitleType
     , const OUString& rTitleText
     , const uno::Reference< frame::XModel >& xModel
-    , const uno::Reference< uno::XComponentContext > & xContext
-    , ReferenceSizeProvider * pRefSizeProvider )
+    , const uno::Reference< uno::XComponentContext > & xContext )
 {
     uno::Reference< chart2::XTitle > xTitled( TitleHelper::getTitle( eTitleType, xModel ) );
     if( xTitled.is())
@@ -186,7 +185,7 @@ uno::Reference< XTitle > TitleHelper::createOrShowTitle(
     }
     else
     {
-        return createTitle(eTitleType, rTitleText, xModel, xContext, pRefSizeProvider);
+        return createTitle(eTitleType, rTitleText, xModel, xContext, nullptr/*pRefSizeProvider*/);
     }
 }
 

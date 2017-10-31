@@ -589,7 +589,7 @@ void ChartElementsPanel::setTitleVisible(TitleHelper::eTitleType eTitle, bool bV
     if (bVisible)
     {
         OUString aText = eTitle == TitleHelper::SUB_TITLE ? maTextSubTitle : maTextTitle;
-        TitleHelper::createOrShowTitle(eTitle, aText, mxModel, comphelper::getProcessComponentContext(), nullptr);
+        TitleHelper::createOrShowTitle(eTitle, aText, mxModel, comphelper::getProcessComponentContext());
     }
     else
     {

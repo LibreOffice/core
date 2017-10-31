@@ -52,7 +52,7 @@ static void initContext()
     glShadeModel(GL_FLAT);
 }
 
-static void initTransformation(const ::Size& rSize, bool bMirror)
+static void initTransformation(const ::Size& rSize)
 {
     // use whole window
     glViewport( 0,0,
@@ -62,9 +62,9 @@ static void initTransformation(const ::Size& rSize, bool bMirror)
     // model coordinate system is already in device pixel
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslated(-1.0, (bMirror ? -1.0 : 1.0), 0.0);
+    glTranslated(-1.0, 1.0, 0.0);
     glScaled( 2.0  / rSize.Width(),
-              (bMirror ? 2.0 : -2.0) / rSize.Height(),
+              -2.0 / rSize.Height(),
               1.0 );
 
     // clear to black
@@ -281,7 +281,7 @@ namespace oglcanvas
 
         SystemChildWindow* pChildWindow = mxContext->getChildWindow();
         const ::Size& rOutputSize = pChildWindow->GetSizePixel();
-        initTransformation(rOutputSize, false);
+        initTransformation(rOutputSize);
 
         // render the actual spritecanvas content
         mpSpriteCanvas->renderRecordedActions();

@@ -67,7 +67,7 @@ struct lcl_ChartTypeToSeriesCnt
     }
 };
 
-OUString lcl_ConvertRole( const OUString & rRoleString, bool bFromInternalToUI )
+OUString lcl_ConvertRole( const OUString & rRoleString )
 {
     OUString aResult( rRoleString );
 
@@ -95,27 +95,11 @@ OUString lcl_ConvertRole( const OUString & rRoleString, bool bFromInternalToUI )
         aTranslationMap[ "BorderColor" ] =  ::chart::SchResId( STR_PROPERTY_ROLE_BORDERCOLOR );
     }
 
-    if( bFromInternalToUI )
+    tTranslationMap::const_iterator aIt( aTranslationMap.find( rRoleString ));
+    if( aIt != aTranslationMap.end())
     {
-        tTranslationMap::const_iterator aIt( aTranslationMap.find( rRoleString ));
-        if( aIt != aTranslationMap.end())
-        {
-            aResult = (*aIt).second;
-        }
+        aResult = (*aIt).second;
     }
-    else
-    {
-        tTranslationMap::const_iterator aIt(
-            std::find_if( aTranslationMap.begin(), aTranslationMap.end(),
-                [&rRoleString]
-                ( const tTranslationMap::value_type& cp )
-                { return rRoleString == cp.second; } )
-            );
-
-        if( aIt != aTranslationMap.end())
-            aResult = (*aIt).first;
-    }
-
     return aResult;
 }
 
@@ -750,7 +734,7 @@ void DialogModel::setTimeBasedRange( bool bTimeBased, sal_Int32 nStart, sal_Int3
 
 OUString DialogModel::ConvertRoleFromInternalToUI( const OUString & rRoleString )
 {
-    return lcl_ConvertRole( rRoleString, true );
+    return lcl_ConvertRole( rRoleString );
 }
 
 OUString DialogModel::GetRoleDataLabel()

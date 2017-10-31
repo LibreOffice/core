@@ -488,9 +488,8 @@ namespace vclcanvas
                              const ::canvas::ParametricPolyPolygon::Values& rValues,
                              const std::vector< ::Color >&                  rColors,
                              const ::basegfx::B2DHomMatrix&                 rTextureTransform,
-                             const ::tools::Rectangle&                             rBounds,
-                             unsigned int                                   nStepCount,
-                             bool                                           bFillNonOverlapping )
+                             const ::tools::Rectangle&                      rBounds,
+                             unsigned int                                   nStepCount )
         {
             switch( rValues.meType )
             {
@@ -510,7 +509,7 @@ namespace vclcanvas
                                            rTextureTransform,
                                            rBounds,
                                            nStepCount,
-                                           bFillNonOverlapping,
+                                           false/*bFillNonOverlapping*/,
                                            rValues,
                                            rColors );
                     break;
@@ -585,8 +584,7 @@ namespace vclcanvas
                                 rColors,
                                 aTotalTransform,
                                 aPolygonDeviceRectOrig,
-                                nStepCount,
-                                false );
+                                nStepCount );
                 rOutDev.Pop();
 
                 if( p2ndOutDev && nTransparency < 253 )
@@ -611,8 +609,7 @@ namespace vclcanvas
                                 rColors,
                                 aTotalTransform,
                                 aPolygonDeviceRectOrig,
-                                nStepCount,
-                                false );
+                                nStepCount );
                 rOutDev.Pop();
 
                 if( p2ndOutDev && nTransparency < 253 )
