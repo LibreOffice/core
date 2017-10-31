@@ -59,7 +59,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82065_Ind_start_strict, "tdf82065_Ind_start_stri
 
         if (rProp.Name == "IndentAt")
         {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("IndentAt", sal_uInt32(6001), rProp.Value.get<sal_uInt32>() );
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("IndentAt", double(6001), rProp.Value.get<double>(), 10 );
             bFoundIndentAt = true;
         }
     }
