@@ -121,14 +121,13 @@ namespace basegfx
          */
         BASEGFX_DLLPUBLIC B3DPolyPolygon applyDefaultTextureCoordinatesSphere( const B3DPolyPolygon& rCandidate, const B3DPoint& rCenter, bool bChangeX = true, bool bChangeY = true);
 
-        // isInside test for B3DPoint. On border is not inside as long as not true is given
-        // in bWithBorder flag. It is assumed that the orientations of the given polygon are correct.
-        BASEGFX_DLLPUBLIC bool isInside(const B3DPolyPolygon& rCandidate, const B3DPoint& rPoint, bool bWithBorder = false);
+        // isInside test for B3DPoint. On border is not inside.
+        // It is assumed that the orientations of the given polygon are correct.
+        BASEGFX_DLLPUBLIC bool isInside(const B3DPolyPolygon& rCandidate, const B3DPoint& rPoint);
 
         /// converters for css::drawing::PolyPolygonShape3D
         BASEGFX_DLLPUBLIC B3DPolyPolygon UnoPolyPolygonShape3DToB3DPolyPolygon(
-            const css::drawing::PolyPolygonShape3D& rPolyPolygonShape3DSource,
-            bool bCheckClosed = true);
+            const css::drawing::PolyPolygonShape3D& rPolyPolygonShape3DSource);
         BASEGFX_DLLPUBLIC void B3DPolyPolygonToUnoPolyPolygonShape3D(
             const B3DPolyPolygon& rPolyPolygonSource,
             css::drawing::PolyPolygonShape3D& rPolyPolygonShape3DRetval);

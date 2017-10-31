@@ -113,8 +113,7 @@ namespace basegfx
             const B2DPoint& rfEB,           // edge on B
             const B2DPoint& rfPB,           // end point
             B2DPolygon& rTarget,            // target polygon
-            const double& rfAngleBound,     // angle bound in [0.0 .. 2PI]
-            bool bAllowUnsharpen)           // #i37443# allow the criteria to get unsharp in recursions
+            const double& rfAngleBound)     // angle bound in [0.0 .. 2PI]
         {
             sal_uInt16 nMaxRecursionDepth(8);
             const B2DVector aLeft(rfEA - rfPA);
@@ -231,7 +230,7 @@ namespace basegfx
                     }
                     else
                     {
-                        ImpSubDivAngle(rfPA, aS1L, aS2L, aS3C, rTarget, rfAngleBound, bAllowUnsharpen, nMaxRecursionDepth);
+                        ImpSubDivAngle(rfPA, aS1L, aS2L, aS3C, rTarget, rfAngleBound, true/*bAllowUnsharpen*/, nMaxRecursionDepth);
                     }
 
                     // right
@@ -241,7 +240,7 @@ namespace basegfx
                     }
                     else
                     {
-                        ImpSubDivAngle(aS3C, aS2R, aS1R, rfPB, rTarget, rfAngleBound, bAllowUnsharpen, nMaxRecursionDepth);
+                        ImpSubDivAngle(aS3C, aS2R, aS1R, rfPB, rTarget, rfAngleBound, true/*bAllowUnsharpen*/, nMaxRecursionDepth);
                     }
                 }
             }
@@ -551,7 +550,7 @@ namespace basegfx
         if(isBezier())
         {
             // use support method #i37443# and allow unsharpen the criteria
-            ImpSubDivAngleStart(maStartPoint, maControlPointA, maControlPointB, maEndPoint, rTarget, fAngleBound * F_PI180, true/*bAllowUnsharpen*/);
+            ImpSubDivAngleStart(maStartPoint, maControlPointA, maControlPointB, maEndPoint, rTarget, fAngleBound * F_PI180);
         }
         else
         {

@@ -455,13 +455,13 @@ namespace basegfx
             return aRetval;
         }
 
-        bool isInside(const B3DPolyPolygon& rCandidate, const B3DPoint& rPoint, bool bWithBorder)
+        bool isInside(const B3DPolyPolygon& rCandidate, const B3DPoint& rPoint)
         {
             const sal_uInt32 nPolygonCount(rCandidate.count());
 
             if(nPolygonCount == 1)
             {
-                return isInside(rCandidate.getB3DPolygon(0), rPoint, bWithBorder);
+                return isInside(rCandidate.getB3DPolygon(0), rPoint, false/*bWithBorder*/);
             }
             else
             {
@@ -470,7 +470,7 @@ namespace basegfx
                 for(sal_uInt32 a(0); a < nPolygonCount; a++)
                 {
                     const B3DPolygon aPolygon(rCandidate.getB3DPolygon(a));
-                    const bool bInside(isInside(aPolygon, rPoint, bWithBorder));
+                    const bool bInside(isInside(aPolygon, rPoint, false/*bWithBorder*/));
 
                     if(bInside)
                     {
@@ -484,8 +484,7 @@ namespace basegfx
 
 /// converters for css::drawing::PolyPolygonShape3D
         B3DPolyPolygon UnoPolyPolygonShape3DToB3DPolyPolygon(
-            const css::drawing::PolyPolygonShape3D& rPolyPolygonShape3DSource,
-            bool bCheckClosed)
+            const css::drawing::PolyPolygonShape3D& rPolyPolygonShape3DSource)
         {
             B3DPolyPolygon aRetval;
             const sal_Int32 nOuterSequenceCount(rPolyPolygonShape3DSource.SequenceX.getLength());
@@ -523,10 +522,7 @@ namespace basegfx
 
                     // #i101520# correction is needed for imported polygons of old format,
                     // see callers
-                    if(bCheckClosed)
-                    {
-                        basegfx::utils::checkClosed(aNewPolygon);
-                    }
+                    basegfx::utils::checkClosed(aNewPolygon);
 
                     aRetval.append(aNewPolygon);
                 }

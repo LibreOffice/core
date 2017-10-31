@@ -85,7 +85,7 @@ namespace drawinglayer
                 else
                 {
                     // apply LineStyle
-                    basegfx::utils::applyLineDashing(getB3DPolygon(), getStrokeAttribute().getDotDashArray(), &aHairLinePolyPolygon, nullptr, getStrokeAttribute().getFullDotDashLen());
+                    basegfx::utils::applyLineDashing(getB3DPolygon(), getStrokeAttribute().getDotDashArray(), &aHairLinePolyPolygon, getStrokeAttribute().getFullDotDashLen());
                 }
 
                 // prepare result
