@@ -41,12 +41,11 @@ namespace com { namespace sun { namespace star { namespace uno {
 #define UNBUFF_STREAM_WRAPPEDRAW    2
 
 class EncryptionData;
-class XUnbufferedStream : public cppu::WeakImplHelper
+class XUnbufferedStream final : public cppu::WeakImplHelper
 <
     css::io::XInputStream
 >
 {
-protected:
     rtl::Reference<comphelper::RefCountedMutex> maMutexHolder;
 
     css::uno::Reference < css::io::XInputStream > mxZipStream;

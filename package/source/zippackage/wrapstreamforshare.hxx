@@ -26,10 +26,9 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
-class WrapStreamForShare : public cppu::WeakImplHelper < css::io::XInputStream
+class WrapStreamForShare final : public cppu::WeakImplHelper < css::io::XInputStream
                                                         , css::io::XSeekable >
 {
-protected:
     rtl::Reference< comphelper::RefCountedMutex > m_xMutex;
     css::uno::Reference < css::io::XInputStream > m_xInStream;
     css::uno::Reference < css::io::XSeekable > m_xSeekable;

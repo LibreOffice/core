@@ -23,9 +23,8 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <string.h>
 
-class MemoryByteGrabber
+class MemoryByteGrabber final
 {
-protected:
     const css::uno::Sequence < sal_Int8 > maBuffer;
     const sal_Int8 *mpBuffer;
     sal_Int32 mnCurrent, mnEnd;

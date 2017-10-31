@@ -24,13 +24,12 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <HashMaps.hxx>
 
-class ZipPackageFolderEnumeration : public cppu::WeakImplHelper
+class ZipPackageFolderEnumeration final : public cppu::WeakImplHelper
 <
     css::container::XEnumeration,
     css::lang::XServiceInfo
 >
 {
-protected:
     ContentHash& rContents;
     ContentHash::const_iterator aIterator;
 public:

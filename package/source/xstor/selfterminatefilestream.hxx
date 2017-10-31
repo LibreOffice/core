@@ -27,10 +27,9 @@
 
 struct OWriteStream_Impl;
 
-class OSelfTerminateFileStream : public cppu::WeakImplHelper< css::io::XInputStream,
+class OSelfTerminateFileStream final : public cppu::WeakImplHelper< css::io::XInputStream,
                                                                css::io::XSeekable >
 {
-protected:
     css::uno::Reference< css::ucb::XSimpleFileAccess3 > m_xFileAccess;
 
     OUString m_aURL;

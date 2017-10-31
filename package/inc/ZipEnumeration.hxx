@@ -21,9 +21,8 @@
 
 #include "HashMaps.hxx"
 
-class ZipEnumeration
+class ZipEnumeration final
 {
-protected:
     EntryHash       &rEntryHash;
     EntryHash::const_iterator aIterator;
 public:
