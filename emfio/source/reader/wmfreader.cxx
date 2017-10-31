@@ -1332,7 +1332,6 @@ namespace emfio
     void WmfReader::ReadWMF()
     {
         sal_uInt16  nFunction;
-        sal_uLong   nPos;
 
         mnSkipActions = 0;
         mnCurrentAction = 0;
@@ -1352,7 +1351,7 @@ namespace emfio
 
         if ( ReadHeader( ) )
         {
-            nPos = mpInputStream->Tell();
+            auto nPos = mpInputStream->Tell();
 
             if( mnEndPos - mnStartPos )
             {
@@ -1452,10 +1451,8 @@ namespace emfio
         aBound.Bottom() = RECT_MIN;
         bool bBoundsDetermined = false;
 
-        sal_uInt32 nPos = pStm->Tell();
-        sal_uInt32 nEnd = pStm->Seek( STREAM_SEEK_TO_END );
-
-        pStm->Seek( nPos );
+        auto nPos = pStm->Tell();
+        auto nEnd = nPos + pStm->remainingSize();
 
         Point aWinOrg(0,0);
         boost::optional<Size>  aWinExt;
@@ -1463,7 +1460,7 @@ namespace emfio
         Point aViewportOrg(0,0);
         boost::optional<Size>  aViewportExt;
 
-        if( nEnd - nPos )
+        if (nEnd - nPos)
         {
             sal_Int16 nMapMode = MM_ANISOTROPIC;
             sal_uInt16 nFunction;
@@ -1763,12 +1760,12 @@ namespace emfio
                     break;
                 }
 
-                const sal_uInt32 nAvailableBytes = nEnd - nPos;
-                const sal_uInt32 nMaxPossibleRecordSize = nAvailableBytes/2;
+                const auto nAvailableBytes = nEnd - nPos;
+                const auto nMaxPossibleRecordSize = nAvailableBytes/2;
                 if (nRSize <= nMaxPossibleRecordSize)
                 {
                     nPos += nRSize * 2;
-                    pStm->Seek( nPos );
+                    pStm->Seek(nPos);
                 }
                 else
                 {
