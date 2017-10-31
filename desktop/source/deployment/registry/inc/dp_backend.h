@@ -32,7 +32,6 @@
 #include <com/sun/star/deployment/XPackageRegistry.hpp>
 #include <com/sun/star/deployment/XPackageManager.hpp>
 #include <com/sun/star/deployment/InvalidRemovedParameterException.hpp>
-#include <list>
 #include <unordered_map>
 #include <strings.hrc>
 
@@ -251,7 +250,7 @@ protected:
        not used are deleted.
      */
     void deleteUnusedFolders(
-        std::list< OUString> const & usedFolders);
+        std::vector< OUString> const & usedFolders);
     /* deletes one folder with a "temporary" name and the corresponding
        tmp file, which was used to derive the folder name.
     */

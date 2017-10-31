@@ -565,12 +565,12 @@ std::list< OUString> BackendDb::readList(
     }
 }
 
-std::list<OUString> BackendDb::getOneChildFromAllEntries(
+std::vector<OUString> BackendDb::getOneChildFromAllEntries(
     OUString const & name)
 {
     try
     {
-        std::list<OUString> listRet;
+        std::vector<OUString> listRet;
         Reference<css::xml::dom::XDocument> doc = getDocument();
         Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 

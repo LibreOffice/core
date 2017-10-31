@@ -248,7 +248,7 @@ void PackageRegistryBackend::deleteTempFolder(
 //then created a Folder with a same name and a trailing '_'
 //If the folderURL has no '_' then there is no corresponding tmp file.
 void PackageRegistryBackend::deleteUnusedFolders(
-    std::list< OUString> const & usedFolders)
+    std::vector< OUString> const & usedFolders)
 {
     try
     {

@@ -109,7 +109,7 @@ protected:
 
     /* returns the values of one particularly child element of all key elements.
      */
-    std::list< OUString> getOneChildFromAllEntries(
+    std::vector< OUString> getOneChildFromAllEntries(
         OUString const & sElementName);
 
 
