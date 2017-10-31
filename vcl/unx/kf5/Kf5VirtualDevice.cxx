@@ -19,6 +19,10 @@
 
 #include "Kf5VirtualDevice.hxx"
 
+#include "Kf5Graphics.hxx"
+
+#include <QtGui/QImage>
+
 Kf5VirtualDevice::Kf5VirtualDevice( DeviceFormat eFormat, double fScale )
 {
 }
@@ -29,32 +33,69 @@ Kf5VirtualDevice::~Kf5VirtualDevice()
 
 SalGraphics* Kf5VirtualDevice::AcquireGraphics()
 {
-    return nullptr;
+    assert( m_pImage );
+    Kf5Graphics* pGraphics = new Kf5Graphics( m_pImage.get() );
+    m_aGraphics.push_back( pGraphics );
+    return pGraphics;
 }
 
 void Kf5VirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
 {
+    m_aGraphics.remove( dynamic_cast<Kf5Graphics*>( pGraphics ) );
+    delete pGraphics;
 }
 
 bool Kf5VirtualDevice::SetSize( long nNewDX, long nNewDY )
 {
-    return false;
+    return SetSizeUsingBuffer( nNewDX, nNewDY, nullptr );
 }
 
 bool Kf5VirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
                                            sal_uInt8 * pBuffer )
 {
-    return false;
+    if( nNewDX == 0 )
+        nNewDX = 1;
+    if( nNewDY == 0 )
+        nNewDY = 1;
+
+    if( m_pImage && m_aFrameSize.getX() != nNewDX
+                  && m_aFrameSize.getY() != nNewDY )
+        return true;
+
+    m_aFrameSize = basegfx::B2IVector( nNewDX, nNewDY );
+
+    nNewDX *= m_fScale;
+    nNewDY *= m_fScale;
+
+    if (m_eFormat == DeviceFormat::BITMASK)
+    {
+        m_pImage.reset( new QImage( nNewDX, nNewDY, QImage::Format_Mono ) );
+    }
+    else
+    {
+        if ( pBuffer )
+            m_pImage.reset( new QImage( pBuffer, nNewDX, nNewDY, QImage::Format_ARGB32 ) );
+        else
+            m_pImage.reset( new QImage( nNewDX, nNewDY, QImage::Format_ARGB32 ) );
+    }
+
+    m_pImage->setDevicePixelRatio( m_fScale );
+
+    // update device in existing graphics
+    for( auto pKf5Graph : m_aGraphics )
+        pKf5Graph->ChangeQImage( m_pImage.get() );
+
+    return true;
 }
 
 long Kf5VirtualDevice::GetWidth() const
 {
-    return 0;
+    return m_pImage ? m_aFrameSize.getX() : 0;
 }
 
 long Kf5VirtualDevice::GetHeight() const
 {
-    return 0;
+    return m_pImage ? m_aFrameSize.getY() : 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

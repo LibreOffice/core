@@ -19,7 +19,7 @@
 
 #include "Kf5Graphics.hxx"
 
-bool Kf5Graphics::setClipRegion( const vcl::Region& )
+bool Kf5Graphics::setClipRegion( const vcl::Region& rRegion )
 {
     return false;
 }
@@ -77,13 +77,12 @@ bool Kf5Graphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPo
     return false;
 }
 
-bool Kf5Graphics::drawPolyLine(
-                                const basegfx::B2DPolygon&,
+bool Kf5Graphics::drawPolyLine( const basegfx::B2DPolygon&,
                                 double fTransparency,
                                 const basegfx::B2DVector& rLineWidths,
                                 basegfx::B2DLineJoin,
                                 css::drawing::LineCap eLineCap,
-                                double fMiterMinimumAngle)
+                                double fMiterMinimumAngle )
 {
     return false;
 }
@@ -125,7 +124,7 @@ SalBitmap* Kf5Graphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
 
 SalColor Kf5Graphics::getPixel( long nX, long nY )
 {
-    return SalColor();
+    return 0;
 }
 
 void Kf5Graphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags)

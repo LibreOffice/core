@@ -247,7 +247,7 @@ namespace vcl
     int VCL_DLLPUBLIC OpenTTFontFile(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf);
 #endif
 
-    bool getTTCoverage(
+    bool VCL_DLLPUBLIC getTTCoverage(
         boost::optional<std::bitset<UnicodeCoverage::MAX_UC_ENUM>> & rUnicodeCoverage,
         boost::optional<std::bitset<CodePageCoverage::MAX_CP_ENUM>> & rCodePageCoverage,
         const unsigned char* pTable, size_t nLength);

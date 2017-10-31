@@ -21,13 +21,19 @@
 
 #include <salgdi.hxx>
 
+#include <memory>
+
 class Kf5Frame;
+class PhysicalFontCollection;
+class PhysicalFontFace;
 class QImage;
 
 class Kf5Graphics : public SalGraphics
 {
-    Kf5Frame               *m_pFrame;
-    QImage                 *m_pQImage;
+    Kf5Frame                     *m_pFrame;
+    QImage                       *m_pQImage;
+    PhysicalFontCollection       *m_pFontCollection;
+    PhysicalFontFace             *m_pFont;
 
 public:
     Kf5Graphics( Kf5Frame *pFrame );
