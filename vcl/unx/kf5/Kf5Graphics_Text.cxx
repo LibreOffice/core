@@ -18,8 +18,14 @@
  */
 
 #include "Kf5Graphics.hxx"
+#include "Kf5FontFace.hxx"
 
 #include <vcl/fontcharmap.hxx>
+
+#include <PhysicalFontCollection.hxx>
+
+#include <QtGui/QFontDatabase>
+#include <QtCore/QStringList>
 
 void Kf5Graphics::SetTextColor( SalColor nSalColor )
 {
@@ -29,7 +35,7 @@ void Kf5Graphics::SetFont( const FontSelectPattern*, int nFallbackLevel )
 {
 }
 
-void Kf5Graphics::GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel )
+void Kf5Graphics::GetFontMetric( ImplFontMetricDataRef &rFMD, int nFallbackLevel )
 {
 }
 
@@ -43,8 +49,20 @@ bool Kf5Graphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) 
     return false;
 }
 
-void Kf5Graphics::GetDevFontList( PhysicalFontCollection* )
+void Kf5Graphics::GetDevFontList( PhysicalFontCollection* pPFC )
 {
+    m_pFontCollection = pPFC;
+    if ( pPFC->Count() )
+        return;
+
+    QFontDatabase aFDB;
+    for ( auto& family : aFDB.families() )
+        for ( auto& style : aFDB.styles( family ) )
+        {
+            // Just get any size - we don't care
+            QList<int> sizes = aFDB.smoothSizes(family, style);
+            pPFC->Add( Kf5FontFace::fromQFont( aFDB.font( family, style, *sizes.begin() ) ) );
+        }
 }
 
 void Kf5Graphics::ClearDevFontCache()
