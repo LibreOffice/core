@@ -1538,8 +1538,10 @@ namespace emfio
                             // const basegfx::B2DVector aTransVec(aWT * basegfx::B2DVector(aLogFont.lfWidth, aLogFont.lfHeight));
                             // aLogFont.lfWidth = aTransVec.getX();
                             // aLogFont.lfHeight = aTransVec.getY();
-                            if (mpInputStream->good())
+                            if (mpInputStream->good() && aLogFont.lfHeight != SAL_MIN_INT32 && aLogFont.lfWidth != SAL_MIN_INT32)
+                            {
                                 CreateObjectIndexed(nIndex, o3tl::make_unique<WinMtfFontStyle>( aLogFont ));
+                            }
                         }
                     }
                     break;
