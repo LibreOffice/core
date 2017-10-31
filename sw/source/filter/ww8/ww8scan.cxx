@@ -1885,7 +1885,7 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
         // still new (nested) beginnings ?
         WW8SkipField( rPLCF );              // nested Field in description
         rF.bCodeNest = true;
-        if( !rPLCF.Get( rF.nSRes, pData ) )
+        if (!rPLCF.Get(rF.nSRes, pData) || rF.nSRes < 0)
             goto Err;
     }
 
