@@ -274,7 +274,13 @@ void SwAutoFormatDlg::FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const
     else
     {
         delete rToFill;
-        rToFill = nullptr;
+        rToFill = new SwTableAutoFormat( SwViewShell::GetShellRes()->aStrNone );
+        rToFill->SetFont( false );
+        rToFill->SetJustify( false );
+        rToFill->SetFrame( false );
+        rToFill->SetBackground( false );
+        rToFill->SetValueFormat( false );
+        rToFill->SetWidthHeight( false );
     }
 }
 
