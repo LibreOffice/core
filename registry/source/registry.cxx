@@ -357,13 +357,12 @@ RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
 //  reg_openRegistry
 
 RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryName,
-                                            RegHandle* phRegistry,
-                                            RegAccessMode accessMode)
+                                            RegHandle* phRegistry)
 {
     RegError _ret;
 
     ORegistry* pReg = new ORegistry();
-    if ((_ret = pReg->initRegistry(registryName, accessMode)) != RegError::NO_ERROR)
+    if ((_ret = pReg->initRegistry(registryName, RegAccessMode::READONLY)) != RegError::NO_ERROR)
     {
         delete pReg;
         *phRegistry = nullptr;

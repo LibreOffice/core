@@ -1237,10 +1237,10 @@ bool TYPEREG_CALLTYPE typereg_reader_create(
     }
 }
 
-static TypeReaderImpl TYPEREG_CALLTYPE createEntry(const sal_uInt8* buffer, sal_uInt32 len, bool copyBuffer)
+static TypeReaderImpl TYPEREG_CALLTYPE createEntry(const sal_uInt8* buffer, sal_uInt32 len)
 {
     void * handle;
-    typereg_reader_create(buffer, len, copyBuffer, TYPEREG_VERSION_1, &handle);
+    typereg_reader_create(buffer, len, false/*copyBuffer*/, TYPEREG_VERSION_1, &handle);
     return handle;
 }
 
@@ -1718,7 +1718,7 @@ RegistryTypeReader::RegistryTypeReader(const sal_uInt8* buffer,
                                               sal_uInt32 bufferLen)
     : m_hImpl(nullptr)
 {
-    m_hImpl = createEntry(buffer, bufferLen, false/*copyData*/);
+    m_hImpl = createEntry(buffer, bufferLen);
 }
 
 RegistryTypeReader::~RegistryTypeReader()

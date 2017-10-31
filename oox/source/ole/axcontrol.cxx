@@ -743,7 +743,7 @@ bool ComCtlModelBase::importComplexPart( BinaryInputStream& rInStrm )
         sal_uInt32 nContFlags = rInStrm.readuInt32();
         bool bReadOk =
             (!getFlag( nContFlags, COMCTL_COMPLEX_FONT ) || OleHelper::importStdFont( maFontData, rInStrm, true )) &&
-            (!getFlag( nContFlags, COMCTL_COMPLEX_MOUSEICON ) || OleHelper::importStdPic( maMouseIcon, rInStrm, true ));
+            (!getFlag( nContFlags, COMCTL_COMPLEX_MOUSEICON ) || OleHelper::importStdPic( maMouseIcon, rInStrm ));
         return bReadOk && !rInStrm.isEof();
     }
     return false;
@@ -978,7 +978,7 @@ void AxCommandButtonModel::importPictureData( sal_Int32 nPropId, BinaryInputStre
 {
     switch( nPropId )
     {
-        case XML_Picture:   OleHelper::importStdPic( maPictureData, rInStrm, true );    break;
+        case XML_Picture:   OleHelper::importStdPic( maPictureData, rInStrm );    break;
         default:            AxFontDataModel::importPictureData( nPropId, rInStrm );
     }
 }
@@ -1242,7 +1242,7 @@ void AxImageModel::importPictureData( sal_Int32 nPropId, BinaryInputStream& rInS
 {
     switch( nPropId )
     {
-        case XML_Picture:   OleHelper::importStdPic( maPictureData, rInStrm, true );    break;
+        case XML_Picture:   OleHelper::importStdPic( maPictureData, rInStrm );    break;
         default:            AxControlModelBase::importPictureData( nPropId, rInStrm );
     }
 }
@@ -1426,7 +1426,7 @@ void AxMorphDataModelBase::importPictureData( sal_Int32 nPropId, BinaryInputStre
 {
     switch( nPropId )
     {
-        case XML_Picture:   OleHelper::importStdPic( maPictureData, rInStrm, true );    break;
+        case XML_Picture:   OleHelper::importStdPic( maPictureData, rInStrm );    break;
         default:            AxFontDataModel::importPictureData( nPropId, rInStrm );
     }
 }

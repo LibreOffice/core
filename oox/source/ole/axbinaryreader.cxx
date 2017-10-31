@@ -168,7 +168,7 @@ bool AxBinaryPropertyReader::FontProperty::readProperty( AxAlignedInputStream& r
 
 bool AxBinaryPropertyReader::PictureProperty::readProperty( AxAlignedInputStream& rInStrm )
 {
-    return OleHelper::importStdPic( mrPicData, rInStrm, true );
+    return OleHelper::importStdPic( mrPicData, rInStrm );
 }
 
 AxBinaryPropertyReader::AxBinaryPropertyReader( BinaryInputStream& rInStrm, bool b64BitPropFlags ) :
