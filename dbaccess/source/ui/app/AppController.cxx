@@ -1590,7 +1590,7 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
                 {
                     ensureConnection();
                     if ( xProp.is() && m_xMetaData.is() )
-                        sNewName = ::dbaui::composeTableName( m_xMetaData, xProp, ::dbtools::EComposeRule::InDataManipulation, false, false, false );
+                        sNewName = ::dbaui::composeTableName( m_xMetaData, xProp, ::dbtools::EComposeRule::InDataManipulation, false );
                 }
                 break;
                 case E_FORM:
@@ -2122,7 +2122,7 @@ void OApplicationController::renameEntry()
                             if ( eType == E_TABLE )
                             {
                                 Reference<XPropertySet> xProp(xRename,UNO_QUERY);
-                                sNewName = ::dbaui::composeTableName( m_xMetaData, xProp, ::dbtools::EComposeRule::InDataManipulation, false, false, false );
+                                sNewName = ::dbaui::composeTableName( m_xMetaData, xProp, ::dbtools::EComposeRule::InDataManipulation, false );
                             }
                             getContainer()->elementReplaced( eType , sOldName, sNewName );
 

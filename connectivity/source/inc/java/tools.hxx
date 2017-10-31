@@ -48,14 +48,11 @@ namespace connectivity
     jobject convertTypeMapToJavaMap(const css::uno::Reference< css::container::XNameAccess > & _rMap);
 
     /** return if a exception occurred
+        the exception will be cleared.
         @param  pEnv
             The native java env
-        @param  _bClear
-            <TRUE/> if the exception should be cleared
-        @return
-            <TRUE/> if an exception is occurred
     */
-    bool isExceptionOccurred(JNIEnv *pEnv,bool _bClear);
+    bool isExceptionOccurred(JNIEnv *pEnv);
 
     jobject createByteInputStream(const css::uno::Reference< css::io::XInputStream >& x,sal_Int32 length);
     jobject createCharArrayReader(const css::uno::Reference< css::io::XInputStream >& x,sal_Int32 length);

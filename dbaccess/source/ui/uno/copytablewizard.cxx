@@ -1444,7 +1444,7 @@ OUString CopyTableWizard::impl_getServerSideCopyStatement_throw(const Reference<
             sColumns.append(sQuote + aDestColumnNames[aPosIter->second - 1] + sQuote);
         }
     }
-    const OUString sComposedTableName = ::dbtools::composeTableName( xDestMetaData, _xTable, ::dbtools::EComposeRule::InDataManipulation, false, false, true );
+    const OUString sComposedTableName = ::dbtools::composeTableName( xDestMetaData, _xTable, ::dbtools::EComposeRule::InDataManipulation, true );
     OUString sSql("INSERT INTO " + sComposedTableName + " ( " + sColumns.makeStringAndClear() + " ) ( " + m_pSourceObject->getSelectStatement() + " )");
 
     return sSql;

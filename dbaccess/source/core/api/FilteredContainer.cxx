@@ -403,7 +403,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::vector<
     OUString OFilteredContainer::getNameForObject(const ObjectType& _xObject)
     {
         OSL_ENSURE( _xObject.is(), "OFilteredContainer::getNameForObject: Object is NULL!" );
-        return ::dbtools::composeTableName( m_xMetaData, _xObject, ::dbtools::EComposeRule::InDataManipulation, false, false, false );
+        return ::dbtools::composeTableName( m_xMetaData, _xObject, ::dbtools::EComposeRule::InDataManipulation, false );
     }
 
     // multiple to obtain all tables from XDatabaseMetaData::getTables, via passing a particular

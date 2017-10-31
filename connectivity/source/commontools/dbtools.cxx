@@ -450,17 +450,15 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
     return xConnection;
 }
 
-Reference< XConnection> connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext,
-    bool _bSetAsActiveConnection )
+Reference< XConnection> connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext )
 {
-    SharedConnection xConnection = lcl_connectRowSet( _rxRowSet, _rxContext, _bSetAsActiveConnection, true );
+    SharedConnection xConnection = lcl_connectRowSet( _rxRowSet, _rxContext, true/*bSetAsActiveConnection*/, true );
     return xConnection.getTyped();
 }
 
-SharedConnection ensureRowSetConnection(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext>& _rxContext,
-    bool _bUseAutoConnectionDisposer )
+SharedConnection ensureRowSetConnection(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext>& _rxContext )
 {
-    return lcl_connectRowSet( _rxRowSet, _rxContext, true, _bUseAutoConnectionDisposer );
+    return lcl_connectRowSet( _rxRowSet, _rxContext, true, false/*bUseAutoConnectionDisposer*/ );
 }
 
 Reference< XNameAccess> getTableFields(const Reference< XConnection>& _rxConn,const OUString& _rName)
@@ -1210,7 +1208,7 @@ Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Refere
     Reference< XSingleSelectQueryComposer > xComposer;
     try
     {
-        Reference< XConnection> xConn = connectRowset( Reference< XRowSet >( _rxRowSet, UNO_QUERY ), _rxContext, true );
+        Reference< XConnection> xConn = connectRowset( Reference< XRowSet >( _rxRowSet, UNO_QUERY ), _rxContext );
         if ( xConn.is() )       // implies _rxRowSet.is()
         {
             // build the statement the row set is based on (can't use the ActiveCommand property of the set
@@ -1335,8 +1333,6 @@ OUString composeTableNameForSelect( const Reference< XConnection >& _rxConnectio
 OUString composeTableName(const Reference<XDatabaseMetaData>& _xMetaData,
                                  const Reference<XPropertySet>& _xTable,
                                  EComposeRule _eComposeRule,
-                                 bool _bSuppressCatalog,
-                                 bool _bSuppressSchema,
                                  bool _bQuote )
 {
     OUString sCatalog, sSchema, sName;
@@ -1344,8 +1340,8 @@ OUString composeTableName(const Reference<XDatabaseMetaData>& _xMetaData,
 
     return impl_doComposeTableName(
             _xMetaData,
-            _bSuppressCatalog ? OUString() : sCatalog,
-            _bSuppressSchema ? OUString() : sSchema,
+            sCatalog,
+            sSchema,
             sName,
             _bQuote,
             _eComposeRule

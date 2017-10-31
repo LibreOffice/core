@@ -2788,8 +2788,7 @@ bool ODatabaseForm::implEnsureConnection()
         {
             Reference< XConnection >  xConnection = connectRowset(
                 Reference<XRowSet> (m_xAggregate, UNO_QUERY),
-                m_xContext,
-                true    // set a calculated connection as ActiveConnection
+                m_xContext
             );
             return xConnection.is();
         }

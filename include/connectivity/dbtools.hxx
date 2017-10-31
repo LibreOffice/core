@@ -127,28 +127,27 @@ namespace dbtools
                 retrieved from the driver manager.
         </nl>
 
+        The calculated connection is set as ActiveConnection property on the rowset.
+
+        If the connection was newly created by the method, then
+        the ownership of the connection is delivered to a temporary object, which observes the
+        row set: As soon as a connection-relevant property of the row set changes, or as soon
+        as somebody else sets another ActiveConnection at the row set, the original
+        connection (the one which this function calculated) is disposed and discarded. At this
+        very moment, also the temporary observer object dies. This way, it is ensured that
+        there's no resource leak from an un-owned connection object.
+
         @param _rxRowSet
             the row set
 
         @param _rxFactory
             a service factory, which can be used to create data sources, interaction handler etc (the usual stuff)
 
-        @param _bSetAsActiveConnection
-            If <TRUE/>, the calculated connection is set as ActiveConnection property on the rowset.
-
-            If the connection was newly created by the method, and this parameter is <TRUE/>, then
-            the ownership of the connection is delivered to a temporary object, which observes the
-            row set: As soon as a connection-relevant property of the row set changes, or as soon
-            as somebody else sets another ActiveConnection at the row set, the original
-            connection (the one which this function calculated) is disposed and discarded. At this
-            very moment, also the temporary observer object dies. This way, it is ensured that
-            there's no resource leak from an un-owned connection object.
     */
     OOO_DLLPUBLIC_DBTOOLS
     css::uno::Reference< css::sdbc::XConnection> connectRowset(
         const css::uno::Reference< css::sdbc::XRowSet>& _rxRowSet,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxContext,
-        bool _bSetAsActiveConnection
+        const css::uno::Reference< css::uno::XComponentContext>& _rxContext
     );
 
     /** ensures that a row set has a valid ActiveConnection, if possible
@@ -163,21 +162,15 @@ namespace dbtools
                 <ul><li>If the connection was not newly created, the returned ->SharedConnection
                         instance will not have the ownership, since in this case it's assumed
                         that there already is an instance which has the ownership.</li>
-                    <li>If the connection was newly created, and ->_bUseAutoConnectionDisposer
-                        is <TRUE/>, then the returned SharedConnection instance will <em>not</em>
-                        be the owner of the connection. Instead, the ownership will be delivered
-                        to a temporary object as described for connectRowset.</li>
-                    <li>If the connection was newly created, and ->_bUseAutoConnectionDisposer
-                        is <FALSE/>, then the returned SharedConnection instance will have the
-                        ownership of the XConnection.</li>
+                    <li>If the connection was newly created, then the returned SharedConnection
+                        instance will have the ownership of the XConnection.</li>
                 </ul>
             </li>
         </ul>
     */
     OOO_DLLPUBLIC_DBTOOLS SharedConnection    ensureRowSetConnection(
         const css::uno::Reference< css::sdbc::XRowSet>& _rxRowSet,
-        const css::uno::Reference< css::uno::XComponentContext>& _rxContext,
-        bool _bUseAutoConnectionDisposer
+        const css::uno::Reference< css::uno::XComponentContext>& _rxContext
     );
 
     /** returns the connection the RowSet is currently working with (which is the ActiveConnection property)
@@ -482,8 +475,6 @@ namespace dbtools
         const css::uno::Reference< css::sdbc::XDatabaseMetaData>& _xMetaData,
         const css::uno::Reference< css::beans::XPropertySet>& _xTable,
         EComposeRule _eComposeRule,
-        bool _bSuppressCatalogName,
-        bool _bSuppressSchemaName,
         bool _bQuote);
 
 
@@ -794,13 +785,10 @@ namespace dbtools
             a query composer that knows the field by name
         @param _xField
             the field
-        @param whenNotFound
-            value returned when _sName is not known by _xComposer
     */
     OOO_DLLPUBLIC_DBTOOLS bool isAggregateColumn(
             const css::uno::Reference< css::sdb::XSingleSelectQueryComposer > &_xComposer,
-            const css::uno::Reference< css::beans::XPropertySet > &_xField,
-            bool whenNotFound = false
+            const css::uno::Reference< css::beans::XPropertySet > &_xField
         );
 
     /** is this column an aggregate?

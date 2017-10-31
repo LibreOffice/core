@@ -2359,7 +2359,7 @@ namespace pcr
             if ( xRowSetProps.is() )
             {
                 WaitCursor aWaitCursor( impl_getDefaultDialogParent_nothrow() );
-                m_xRowSetConnection = ::dbtools::ensureRowSetConnection( xRowSet, m_xContext, false );
+                m_xRowSetConnection = ::dbtools::ensureRowSetConnection( xRowSet, m_xContext );
             }
         }
         catch ( const SQLException& ) { aError = SQLExceptionInfo( ::cppu::getCaughtException() ); }

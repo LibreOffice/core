@@ -1973,7 +1973,7 @@ namespace
                         OSL_VERIFY( xTableProps->getPropertyValue( PROPERTY_NAME ) >>= sComposedName );
                     else
                     {
-                        sComposedName = ::dbtools::composeTableName( xMetaData, xTableProps, ::dbtools::EComposeRule::InDataManipulation, false, false, false );
+                        sComposedName = ::dbtools::composeTableName( xMetaData, xTableProps, ::dbtools::EComposeRule::InDataManipulation, false );
 
                         // if the alias is the complete (composed) table, then shorten it
                         if ( aKeyComp( sComposedName, aIter->first ) )

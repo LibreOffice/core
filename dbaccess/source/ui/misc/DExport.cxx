@@ -803,7 +803,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
                                                        ,const Reference<XPropertySet>& _xDestTable
                                                        ,const TPositions& _rvColumns)
 {
-    OUString sComposedTableName = ::dbtools::composeTableName( _xMetaData, _xDestTable, ::dbtools::EComposeRule::InDataManipulation, false, false, true );
+    OUString sComposedTableName = ::dbtools::composeTableName( _xMetaData, _xDestTable, ::dbtools::EComposeRule::InDataManipulation, true );
 
     OUString aSql = "INSERT INTO "
                   + sComposedTableName

@@ -133,7 +133,7 @@ ObjectType OViewContainer::appendObject( const OUString& _rForName, const Refere
     }
     else
     {
-        OUString sComposedName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::EComposeRule::InTableDefinitions, false, false, true );
+        OUString sComposedName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::EComposeRule::InTableDefinitions, true );
         if(sComposedName.isEmpty())
             ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
 

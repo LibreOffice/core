@@ -310,7 +310,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet, const OUStrin
             {
                 connectivity::OSQLTable xSelColSup(xSelectTables->getByName(*pIter),uno::UNO_QUERY);
                 Reference<XPropertySet> xProp(xSelColSup,uno::UNO_QUERY);
-                OUString sSelectTableName = ::dbtools::composeTableName( xMeta, xProp, ::dbtools::EComposeRule::InDataManipulation, false, false, false );
+                OUString sSelectTableName = ::dbtools::composeTableName( xMeta, xProp, ::dbtools::EComposeRule::InDataManipulation, false );
 
                 ::dbaccess::getColumnPositions(xQueryColumns, xSelColSup->getColumns()->getElementNames(), sSelectTableName, (*m_pForeignColumnNames), true);
 

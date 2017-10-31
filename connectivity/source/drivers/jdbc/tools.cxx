@@ -184,7 +184,7 @@ jobject connectivity::convertTypeMapToJavaMap(const Reference< css::container::X
     return nullptr;
 }
 
-bool connectivity::isExceptionOccurred(JNIEnv *pEnv,bool _bClear)
+bool connectivity::isExceptionOccurred(JNIEnv *pEnv)
 {
     if ( !pEnv )
         return false;
@@ -193,8 +193,7 @@ bool connectivity::isExceptionOccurred(JNIEnv *pEnv,bool _bClear)
     bool bRet = pThrowable != nullptr;
     if ( pThrowable )
     {
-        if ( _bClear )
-            pEnv->ExceptionClear();
+        pEnv->ExceptionClear();
         pEnv->DeleteLocalRef(pThrowable);
     }
 
