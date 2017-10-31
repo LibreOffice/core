@@ -804,7 +804,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
         uno::Reference<container::XEnumerationAccess> xTextPortionEnumerationAccess(xParagraphs->nextElement(), uno::UNO_QUERY);
         uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
 
-        // Check font weitght
+        // Check font weight
         uno::Reference<beans::XPropertySet> xParagraphPropertySet(xTextPortionEnumerationAccess, uno::UNO_QUERY_THROW);
         uno::Any aAny = xParagraphPropertySet->getPropertyValue("CharWeight");
 
@@ -812,7 +812,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
 
         aResult.push_back({ svx::ClassificationType::PARAGRAPH, sWeight, sBlank });
 
-        // Process portions..
+        // Process portions
         while (xTextPortions->hasMoreElements())
         {
             uno::Reference<beans::XPropertySet> xTextPortion(xTextPortions->nextElement(), uno::UNO_QUERY);
