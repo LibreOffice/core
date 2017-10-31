@@ -125,7 +125,7 @@ void SeqRemoveNegEntries( std::vector< OUString > &rSeq,
     {
         std::vector< OUString > aNew;
         // merge sequence without duplicates and empty strings in new empty sequence
-        aNew = MergeProposalSeqs( aNew, rSeq, false );
+        aNew = MergeProposalSeqs( aNew, rSeq );
         rSeq = aNew;
     }
 }
@@ -133,38 +133,30 @@ void SeqRemoveNegEntries( std::vector< OUString > &rSeq,
 
 std::vector< OUString > MergeProposalSeqs(
             std::vector< OUString > &rAlt1,
-            std::vector< OUString > &rAlt2,
-            bool bAllowDuplicates )
+            std::vector< OUString > &rAlt2 )
 {
     std::vector< OUString > aMerged;
 
-    if (rAlt1.empty() && bAllowDuplicates)
-        aMerged = rAlt2;
-    else if (rAlt2.empty() && bAllowDuplicates)
-        aMerged = rAlt1;
-    else
+    size_t nAltCount1 = rAlt1.size();
+    size_t nAltCount2 = rAlt2.size();
+
+    sal_Int32 nCountNew = std::min<sal_Int32>( nAltCount1 + nAltCount2, (sal_Int32) MAX_PROPOSALS );
+    aMerged.resize( nCountNew );
+
+    sal_Int32 nIndex = 0;
+    sal_Int32 i = 0;
+    for (int j = 0;  j < 2;  j++)
     {
-        size_t nAltCount1 = rAlt1.size();
-        size_t nAltCount2 = rAlt2.size();
-
-        sal_Int32 nCountNew = std::min<sal_Int32>( nAltCount1 + nAltCount2, (sal_Int32) MAX_PROPOSALS );
-        aMerged.resize( nCountNew );
-
-        sal_Int32 nIndex = 0;
-        sal_Int32 i = 0;
-        for (int j = 0;  j < 2;  j++)
+        sal_Int32        nCount  = j == 0 ? nAltCount1 : nAltCount2;
+        std::vector< OUString >& rAlt   = j == 0 ? rAlt1 : rAlt2;
+        for (i = 0;  i < nCount  &&  nIndex < MAX_PROPOSALS;  i++)
         {
-            sal_Int32        nCount  = j == 0 ? nAltCount1 : nAltCount2;
-            std::vector< OUString >& rAlt   = j == 0 ? rAlt1 : rAlt2;
-            for (i = 0;  i < nCount  &&  nIndex < MAX_PROPOSALS;  i++)
-            {
-                if (!rAlt[i].isEmpty() &&
-                    (bAllowDuplicates || !SeqHasEntry(aMerged, rAlt[i] )))
-                    aMerged[ nIndex++ ] = rAlt[ i ];
-            }
+            if (!rAlt[i].isEmpty() &&
+                !SeqHasEntry(aMerged, rAlt[i] ))
+                aMerged[ nIndex++ ] = rAlt[ i ];
         }
-        aMerged.resize( nIndex );
     }
+    aMerged.resize( nIndex );
 
     return aMerged;
 }

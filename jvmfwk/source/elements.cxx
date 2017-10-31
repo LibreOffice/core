@@ -48,7 +48,7 @@ namespace jfw
 {
 
 OString getElement(OString const & docPath,
-                        xmlChar const * pathExpression, bool bThrowIfEmpty)
+                        xmlChar const * pathExpression)
 {
     //Prepare the xml document and context
     OSL_ASSERT(!docPath.isEmpty());
@@ -70,10 +70,9 @@ OString getElement(OString const & docPath,
     OString sValue;
     if (xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
     {
-        if (bThrowIfEmpty)
-            throw FrameworkException(
-                JFW_E_ERROR,
-                "[Java framework] Error in function getElement (elements.cxx)");
+        throw FrameworkException(
+            JFW_E_ERROR,
+            "[Java framework] Error in function getElement (elements.cxx)");
     }
     else
     {
@@ -85,7 +84,7 @@ OString getElement(OString const & docPath,
 OString getElementUpdated()
 {
     return getElement(jfw::getVendorSettingsPath(),
-                      reinterpret_cast<xmlChar const *>("/jf:javaSelection/jf:updated/text()"), true);
+                      reinterpret_cast<xmlChar const *>("/jf:javaSelection/jf:updated/text()"));
 }
 
 void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)

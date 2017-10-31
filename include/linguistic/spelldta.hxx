@@ -41,8 +41,7 @@ namespace linguistic
 std::vector< OUString >
         MergeProposalSeqs(
                 std::vector< OUString > &rAlt1,
-                std::vector< OUString > &rAlt2,
-                bool bAllowDuplicates );
+                std::vector< OUString > &rAlt2 );
 
 void    SeqRemoveNegEntries(
                 std::vector< OUString > &rSeq,

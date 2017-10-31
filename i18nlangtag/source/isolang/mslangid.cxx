@@ -144,26 +144,20 @@ LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sa
 
 // static
 css::lang::Locale MsLangId::Conversion::convertLanguageToLocale(
-        LanguageType nLang, bool bResolveSystem )
+        LanguageType nLang )
 {
     css::lang::Locale aLocale;
-    if (!bResolveSystem && simplifySystemLanguages( nLang) == LANGUAGE_SYSTEM)
-        ;   // nothing => empty locale
-    else
+    // Still resolve LANGUAGE_DONTKNOW if resolving is not requested,
+    // but not LANGUAGE_SYSTEM or others.
+    LanguageType nOrigLang = nLang;
+    nLang = MsLangId::getRealLanguage(nLang);
+    convertLanguageToLocaleImpl( nLang, aLocale, true );
+    if (aLocale.Language.isEmpty() && simplifySystemLanguages(nOrigLang) == LANGUAGE_SYSTEM)
     {
-        // Still resolve LANGUAGE_DONTKNOW if resolving is not requested,
-        // but not LANGUAGE_SYSTEM or others.
-        LanguageType nOrigLang = nLang;
-        if (bResolveSystem || nLang == LANGUAGE_DONTKNOW)
-            nLang = MsLangId::getRealLanguage( nLang);
-        convertLanguageToLocaleImpl( nLang, aLocale, true);
-        if (bResolveSystem && aLocale.Language.isEmpty() && simplifySystemLanguages( nOrigLang) == LANGUAGE_SYSTEM)
-        {
-            // None found but resolve requested, last resort is "en-US".
-            aLocale.Language = "en";
-            aLocale.Country  = "US";
-            aLocale.Variant.clear();
-        }
+        // None found but resolve requested, last resort is "en-US".
+        aLocale.Language = "en";
+        aLocale.Country  = "US";
+        aLocale.Variant.clear();
     }
     return aLocale;
 }
@@ -187,7 +181,7 @@ css::lang::Locale MsLangId::getFallbackLocale(
 {
     // empty language => LANGUAGE_SYSTEM
     if (rLocale.Language.isEmpty())
-        return Conversion::lookupFallbackLocale( Conversion::convertLanguageToLocale( LANGUAGE_SYSTEM, true));
+        return Conversion::lookupFallbackLocale( Conversion::convertLanguageToLocale( LANGUAGE_SYSTEM ));
     else
         return Conversion::lookupFallbackLocale( rLocale);
 }
