@@ -514,7 +514,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
         Swap( aPaperSize );
 
     // Actual Paper Format
-    Paper ePaper = SvxPaperInfo::GetSvxPaper( aPaperSize, MapUnit::Map100thMM, true );
+    Paper ePaper = SvxPaperInfo::GetSvxPaper( aPaperSize, MapUnit::Map100thMM );
 
     if ( PAPER_USER != ePaper )
         aPaperSize = SvxPaperInfo::GetPaperSize( ePaper, MapUnit::Map100thMM );
@@ -996,7 +996,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeModify_Impl, Edit&, void)
     MapUnit eUnit = GetItemSet().GetPool()->GetMetric( nWhich );
     Size aSize( GetCoreValue( *m_pPaperWidthEdit, eUnit ),
                 GetCoreValue( *m_pPaperHeightEdit, eUnit ) );
-    Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, eUnit, true );
+    Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, eUnit );
 
     m_pPaperSizeBox->SetSelection( ePaper );
     UpdateExample_Impl( true );

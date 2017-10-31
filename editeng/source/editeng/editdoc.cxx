@@ -2182,10 +2182,9 @@ OUString EditDoc::GetParaAsString( sal_Int32 nNode ) const
 }
 
 OUString EditDoc::GetParaAsString(
-    const ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nEndPos,
-    bool bResolveFields)
+    const ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nEndPos)
 {
-    return pNode->GetExpandedText(nStartPos, nEndPos, bResolveFields);
+    return pNode->GetExpandedText(nStartPos, nEndPos, true/*bResolveFields*/);
 }
 
 EditPaM EditDoc::GetStartPaM() const
@@ -3007,8 +3006,7 @@ void CharAttribList::DbgCheckAttribs(CharAttribList const& rAttribs)
             assert(zero_set.insert(std::make_pair(rAttr->GetStart(), rAttr->Which())).second && "duplicate 0-length attribute detected");
         }
     }
-    CheckOrderedList(rAttribs.GetAttribs(), true);
-//    CheckOrderedList(rAttribs.GetAttribs(), false); // this does not work - need 2nd array to sort by ends?
+    CheckOrderedList(rAttribs.GetAttribs());
 }
 #endif
 

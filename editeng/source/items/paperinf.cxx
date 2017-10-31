@@ -85,12 +85,11 @@ Size SvxPaperInfo::GetPaperSize( const Printer* pPrinter )
 }
 
 
-Paper SvxPaperInfo::GetSvxPaper( const Size &rSize, MapUnit eUnit, bool bSloppy )
+Paper SvxPaperInfo::GetSvxPaper( const Size &rSize, MapUnit eUnit )
 {
     Size aSize(eUnit == MapUnit::Map100thMM ? rSize : OutputDevice::LogicToLogic(rSize, MapMode(eUnit), MapMode(MapUnit::Map100thMM)));
     PaperInfo aInfo(aSize.Width(), aSize.Height());
-    if (bSloppy)
-        aInfo.doSloppyFit();
+    aInfo.doSloppyFit();
     return aInfo.getPaper();
 }
 

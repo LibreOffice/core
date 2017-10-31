@@ -234,7 +234,7 @@ IMPL_LINK( SwEnvFormatPage, ModifyHdl, SpinField&, rEdit, void )
         long nRotatedWidth = lHeight;
         long nRotatedHeight = lWidth;
         Paper ePaper = SvxPaperInfo::GetSvxPaper(
-            Size(nRotatedWidth, nRotatedHeight), MapUnit::MapTwip, true);
+            Size(nRotatedWidth, nRotatedHeight), MapUnit::MapTwip);
         for (size_t i = 0; i < aIDs.size(); ++i)
             if (aIDs[i] == (sal_uInt16)ePaper)
                 m_pSizeFormatBox->SelectEntryPos(static_cast<sal_Int32>(i));
@@ -516,7 +516,7 @@ void SwEnvFormatPage::Reset(const SfxItemSet* rSet)
 
     Paper ePaper = SvxPaperInfo::GetSvxPaper(
         Size( std::min(rItem.lWidth, rItem.lHeight),
-        std::max(rItem.lWidth, rItem.lHeight)), MapUnit::MapTwip, true);
+        std::max(rItem.lWidth, rItem.lHeight)), MapUnit::MapTwip);
     for (size_t i = 0; i < aIDs.size(); ++i)
         if (aIDs[i] == (sal_uInt16)ePaper)
             m_pSizeFormatBox->SelectEntryPos(static_cast<sal_Int32>(i));
