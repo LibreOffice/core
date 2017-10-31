@@ -23,21 +23,43 @@
 
 #include <memory>
 
+class Kf5Graphics;
 class Kf5Instance;
 class Kf5Widget;
+class QWidget;
+class QPaintDevice;
+class QImage;
 
 class Kf5Frame
     : public SalFrame
 {
-    std::unique_ptr< Kf5Widget >    m_pQWidget;
+    friend class Kf5Widget;
+
+    std::unique_ptr< QWidget >      m_pQWidget;
+    std::unique_ptr< QImage >       m_pQImage;
+    std::unique_ptr< Kf5Graphics >  m_pGraphics;
+    bool                            m_bGraphicsInUse;
     SalFrameStyleFlags              m_nStyle;
     Kf5Frame                       *m_pParent;
 
+    bool isChild( bool bPlug = true, bool bSysChild = true )
+    {
+        SalFrameStyleFlags nMask = SalFrameStyleFlags::NONE;
+        if( bPlug )
+            nMask |= SalFrameStyleFlags::PLUG;
+        if( bSysChild )
+            nMask |= SalFrameStyleFlags::SYSTEMCHILD;
+        return bool(m_nStyle & nMask);
+    }
+
+    void TriggerPaintEvent();
+
 public:
-    Kf5Frame( Kf5Frame* pParent, SalFrameStyleFlags nSalFrameStyle );
+    Kf5Frame( Kf5Frame* pParent,
+              SalFrameStyleFlags nSalFrameStyle );
     virtual ~Kf5Frame() override;
 
-    Kf5Widget* GetQWidget() const { return m_pQWidget.get(); }
+    QWidget* GetQWidget() const { return m_pQWidget.get(); }
 
     virtual SalGraphics*        AcquireGraphics() override;
     virtual void                ReleaseGraphics( SalGraphics* pGraphics ) override;
