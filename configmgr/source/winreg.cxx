@@ -77,7 +77,7 @@ namespace {
 // "Type"="xs:boolean"
 // becomes the following in configuration:
 // <item oor:path="/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments">
-//     <prop oor:name="AutoCheckEnabled" oor:type="xs::boolean" oor:finalized="true">
+//     <prop oor:name="AutoCheckEnabled" oor:type="xs:boolean" oor:finalized="true">
 //         <value>false</value>
 //     </prop>
 // </item>
