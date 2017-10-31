@@ -286,7 +286,7 @@ private:
     Map m_aMap;
 };
 
-void            CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEraseTrailingEmptyLines );
+void            CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines );
 OUString CreateMgrAndLibStr( const OUString& rMgrName, const OUString& rLibName );
 sal_uLong           CalcLineCount( SvStream& rStream );
 

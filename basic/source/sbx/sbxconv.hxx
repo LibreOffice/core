@@ -28,7 +28,7 @@ class SbxArray;
 extern void ImpCvtNum( double nNum, short nPrec, OUString& rRes, bool bCoreString=false );
 extern ErrCode ImpScan
     ( const OUString& rSrc, double& nVal, SbxDataType& rType, sal_uInt16* pLen,
-      bool bAllowIntntl=false, bool bOnlyIntntl=false );
+      bool bOnlyIntntl );
 
 // with advanced evaluation (International, "TRUE"/"FALSE")
 extern bool ImpConvStringExt( OUString& rSrc, SbxDataType eTargetType );

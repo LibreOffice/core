@@ -1451,11 +1451,9 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property const * pUn
     return aRetVal;
 }
 
-void processAutomationParams( SbxArray* pParams, Sequence< Any >& args, bool bOLEAutomation, sal_uInt32 nParamCount )
+void processAutomationParams( SbxArray* pParams, Sequence< Any >& args, sal_uInt32 nParamCount )
 {
-    AutomationNamedArgsSbxArray* pArgNamesArray = nullptr;
-    if( bOLEAutomation )
-        pArgNamesArray = dynamic_cast<AutomationNamedArgsSbxArray*>( pParams );
+    AutomationNamedArgsSbxArray* pArgNamesArray = dynamic_cast<AutomationNamedArgsSbxArray*>( pParams );
 
     args.realloc( nParamCount );
     Any* pAnyArgs = args.getArray();
@@ -2074,7 +2072,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             // Automation properties have methods, so.. we need to invoke this through
                             // XInvocation
                             Sequence<Any> args;
-                            processAutomationParams( pParams, args, true, nParamCount );
+                            processAutomationParams( pParams, args, nParamCount );
                             aRetAny = invokeAutomationMethod( pProp->GetName(), args, pParams, nParamCount, mxInvocation, INVOKETYPE::GetProp );
                         }
                         else
@@ -2219,7 +2217,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
                 else if( bInvocation && pParams && mxInvocation.is() )
                 {
-                    processAutomationParams( pParams, args, true/*bOLEAutomation*/, nParamCount );
+                    processAutomationParams( pParams, args, nParamCount );
                 }
 
                 // call the method

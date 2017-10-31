@@ -1836,7 +1836,7 @@ void SbxDateFromUNODateTime( SbxValue *pVal, const css::util::DateTime& aUnoDT)
     double dDate(0.0);
     if( implDateTimeSerial( aUnoDT.Year, aUnoDT.Month, aUnoDT.Day,
                             aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds,
-                            false, false, dDate ) )
+                            dDate ) )
     {
         pVal->PutDate( dDate );
     }
@@ -4687,10 +4687,10 @@ double implTimeSerial( sal_Int16 nHours, sal_Int16 nMinutes, sal_Int16 nSeconds 
 
 bool implDateTimeSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
                          sal_Int16 nHour, sal_Int16 nMinute, sal_Int16 nSecond,
-                         bool bUseTwoDigitYear, bool bRollOver, double& rdRet )
+                         double& rdRet )
 {
     double dDate;
-    if(!implDateSerial(nYear, nMonth, nDay, bUseTwoDigitYear, bRollOver, dDate))
+    if(!implDateSerial(nYear, nMonth, nDay, false/*bUseTwoDigitYear*/, false/*bRollOver*/, dDate))
         return false;
     rdRet += dDate + implTimeSerial(nHour, nMinute, nSecond);
     return true;
