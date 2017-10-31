@@ -353,7 +353,7 @@ namespace
     void RelationLoader::loadTableData(const Any& _aTable)
     {
         Reference<XPropertySet> xTableProp(_aTable,UNO_QUERY);
-        const OUString sSourceName = ::dbtools::composeTableName( m_xMetaData, xTableProp, ::dbtools::EComposeRule::InTableDefinitions, false, false, false );
+        const OUString sSourceName = ::dbtools::composeTableName( m_xMetaData, xTableProp, ::dbtools::EComposeRule::InTableDefinitions, false );
         TTableDataHelper::const_iterator aFind = m_aTableData.find(sSourceName);
         if ( aFind == m_aTableData.end() )
         {

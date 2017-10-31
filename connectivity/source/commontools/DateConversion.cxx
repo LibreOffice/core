@@ -44,7 +44,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 
-OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool bQuote,
+OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal,
                                               const Reference< XTypeConverter >&  _rxTypeConverter)
 {
     OUStringBuffer aRet;
@@ -76,8 +76,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                 case DataType::CHAR:
                 case DataType::VARCHAR:
                 case DataType::LONGVARCHAR:
-                    if (bQuote)
-                        aRet.append("'");
+                    aRet.append("'");
                     {
                         OUString aTemp;
                         _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aTemp;
@@ -93,8 +92,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
 
                         aRet.append(aTemp);
                     }
-                    if (bQuote)
-                        aRet.append("'");
+                    aRet.append("'");
                     break;
                 case DataType::REAL:
                 case DataType::DOUBLE:
@@ -133,11 +131,9 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                     // check if this is really a timestamp or only a date
                     if ( bOk )
                     {
-                        if (bQuote)
-                            aRet.append("{ts '");
+                        aRet.append("{ts '");
                         aRet.append(DBTypeConversion::toDateTimeString(aDateTime));
-                        if (bQuote)
-                            aRet.append("'}");
+                        aRet.append("'}");
                         break;
                     }
                     break;
@@ -163,11 +159,9 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                     else
                         bOk = _rVal >>= aDate;
                     OSL_ENSURE( bOk, "DBTypeConversion::toSQLString: _rVal is not date!");
-                    if (bQuote)
-                        aRet.append("{d '");
+                    aRet.append("{d '");
                     aRet.append(DBTypeConversion::toDateString(aDate));
-                    if (bQuote)
-                        aRet.append("'}");
+                    aRet.append("'}");
                 }   break;
                 case DataType::TIME:
                 {
@@ -190,11 +184,9 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                     else
                         bOk = _rVal >>= aTime;
                     OSL_ENSURE( bOk,"DBTypeConversion::toSQLString: _rVal is not time!");
-                    if (bQuote)
-                        aRet.append("{t '");
+                    aRet.append("{t '");
                     aRet.append(DBTypeConversion::toTimeString(aTime));
-                    if (bQuote)
-                        aRet.append("'}");
+                    aRet.append("'}");
                 } break;
             }
         }

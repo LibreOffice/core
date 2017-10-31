@@ -111,7 +111,7 @@ void HViews::dropObject(sal_Int32 _nPos,const OUString& /*_sElementName*/)
         OUString aSql(  "DROP VIEW" );
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
-        aSql += ::dbtools::composeTableName( m_xMetaData, xProp, ::dbtools::EComposeRule::InTableDefinitions, false, false, true );
+        aSql += ::dbtools::composeTableName( m_xMetaData, xProp, ::dbtools::EComposeRule::InTableDefinitions, true );
 
         Reference<XConnection> xConnection = static_cast<OHCatalog&>(m_rParent).getConnection();
         Reference< XStatement > xStmt = xConnection->createStatement(  );
@@ -135,7 +135,7 @@ void HViews::createView( const Reference< XPropertySet >& descriptor )
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND)) >>= sCommand;
 
     OUString aSql = "CREATE VIEW " +
-        ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::EComposeRule::InTableDefinitions, false, false, true ) +
+        ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::EComposeRule::InTableDefinitions, true ) +
         " AS " + sCommand;
 
     Reference< XStatement > xStmt = xConnection->createStatement(  );
@@ -149,7 +149,7 @@ void HViews::createView( const Reference< XPropertySet >& descriptor )
     OTables* pTables = static_cast<OTables*>(static_cast<OHCatalog&>(m_rParent).getPrivateTables());
     if ( pTables )
     {
-        OUString sName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::EComposeRule::InDataManipulation, false, false, false );
+        OUString sName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::EComposeRule::InDataManipulation, false );
         pTables->appendNew(sName);
     }
 }

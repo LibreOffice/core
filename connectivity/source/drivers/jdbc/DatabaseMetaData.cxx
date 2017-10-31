@@ -117,7 +117,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         // execute Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
-        OSL_VERIFY( !isExceptionOccurred(t.pEnv, true) );
+        OSL_VERIFY( !isExceptionOccurred(t.pEnv) );
         jvalue args[4];
 
         args[3].l = nullptr;
@@ -125,7 +125,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         if ( typeFilterCount )
         {
             jobjectArray pObjArray = t.pEnv->NewObjectArray( (jsize)typeFilterCount, java_lang_String::st_getMyClass(), nullptr );
-            OSL_VERIFY( !isExceptionOccurred( t.pEnv, true ) );
+            OSL_VERIFY( !isExceptionOccurred( t.pEnv ) );
             const OUString* typeFilter = _types.getConstArray();
             bool bIncludeAllTypes = false;
             for ( sal_Int32 i=0; i<typeFilterCount; ++i, ++typeFilter )
@@ -137,7 +137,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
                 }
                 jstring aT = convertwchar_tToJavaString( t.pEnv, *typeFilter );
                 t.pEnv->SetObjectArrayElement( pObjArray, (jsize)i, aT );
-                OSL_VERIFY( !isExceptionOccurred( t.pEnv, true ) );
+                OSL_VERIFY( !isExceptionOccurred( t.pEnv ) );
             }
 
             if ( bIncludeAllTypes )
@@ -145,7 +145,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
                 // the SDBC API allows to pass "%" as table type filter, but in JDBC, "all table types"
                 // is represented by the table type being <null/>
                 t.pEnv->DeleteLocalRef( pObjArray );
-                OSL_VERIFY( !isExceptionOccurred( t.pEnv, true ) );
+                OSL_VERIFY( !isExceptionOccurred( t.pEnv ) );
             }
             else
             {
@@ -173,23 +173,23 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         if ( aCatalogFilter.hasValue() )
         {
             t.pEnv->DeleteLocalRef(static_cast<jstring>(args[0].l));
-            OSL_VERIFY( !isExceptionOccurred( t.pEnv, true ) );
+            OSL_VERIFY( !isExceptionOccurred( t.pEnv ) );
         }
         if(args[1].l)
         {
             t.pEnv->DeleteLocalRef(static_cast<jstring>(args[1].l));
-            OSL_VERIFY( !isExceptionOccurred( t.pEnv, true ) );
+            OSL_VERIFY( !isExceptionOccurred( t.pEnv ) );
         }
         if(!tableNamePattern.isEmpty())
         {
             t.pEnv->DeleteLocalRef(static_cast<jstring>(args[2].l));
-            OSL_VERIFY( !isExceptionOccurred( t.pEnv, true ) );
+            OSL_VERIFY( !isExceptionOccurred( t.pEnv ) );
         }
         //for(INT16 i=0;i<len;i++)
         if ( args[3].l )
         {
             t.pEnv->DeleteLocalRef( static_cast<jobjectArray>(args[3].l) );
-            OSL_VERIFY( !isExceptionOccurred( t.pEnv, true ) );
+            OSL_VERIFY( !isExceptionOccurred( t.pEnv ) );
         }
 
         if ( jThrow )

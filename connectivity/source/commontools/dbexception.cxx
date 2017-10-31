@@ -446,14 +446,14 @@ void throwInvalidColumnException( const OUString& _rColumnName, const Reference<
 }
 
 void throwSQLException( const OUString& _rMessage, const OUString& _rSQLState,
-        const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode, const Any* _pNextException )
+        const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode )
 {
     throw SQLException(
         _rMessage,
         _rxContext,
         _rSQLState,
         _nErrorCode,
-        _pNextException ? *_pNextException : Any()
+        Any()
     );
 }
 

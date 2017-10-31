@@ -987,7 +987,7 @@ OUString getDefaultReportEngineServiceName(const Reference< XComponentContext >&
     return OUString();
 }
 
-bool isAggregateColumn(const Reference< XSingleSelectQueryComposer > &_xParser, const Reference< XPropertySet > &_xField, bool whenNotFound)
+bool isAggregateColumn(const Reference< XSingleSelectQueryComposer > &_xParser, const Reference< XPropertySet > &_xField)
 {
     OUString sName;
     _xField->getPropertyValue("Name") >>= sName;
@@ -996,7 +996,7 @@ bool isAggregateColumn(const Reference< XSingleSelectQueryComposer > &_xParser, 
     if (xColumnsSupplier.is())
         xCols = xColumnsSupplier->getColumns();
 
-    return isAggregateColumn(xCols, sName, whenNotFound);
+    return isAggregateColumn(xCols, sName, false/*whenNotFound*/);
 }
 
 bool isAggregateColumn(const Reference< XNameAccess > &_xColumns, const OUString &_sName, bool whenNotFound)

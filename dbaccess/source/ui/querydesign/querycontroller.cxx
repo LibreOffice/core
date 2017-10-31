@@ -1489,7 +1489,7 @@ bool OQueryController::doSaveAsDoc(bool _bSaveAs)
                     xViewProps.set( xElements->getByName( m_sName ), UNO_QUERY );
 
                 if ( !xViewProps.is() ) // correct name and try again
-                    m_sName = ::dbtools::composeTableName( getMetaData(), xQuery, ::dbtools::EComposeRule::InDataManipulation, false, false, false );
+                    m_sName = ::dbtools::composeTableName( getMetaData(), xQuery, ::dbtools::EComposeRule::InDataManipulation, false );
 
                 OSL_ENSURE( xElements->hasByName( m_sName ), "OQueryController::doSaveAsDoc: newly created view does not exist!" );
 

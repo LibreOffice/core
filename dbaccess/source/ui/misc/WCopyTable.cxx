@@ -114,7 +114,7 @@ OUString ObjectCopySource::getQualifiedObjectName() const
     OUString sName;
 
     if ( !m_xObjectPSI->hasPropertyByName( PROPERTY_COMMAND ) )
-        sName = ::dbtools::composeTableName( m_xMetaData, m_xObject, ::dbtools::EComposeRule::InDataManipulation, false, false, false );
+        sName = ::dbtools::composeTableName( m_xMetaData, m_xObject, ::dbtools::EComposeRule::InDataManipulation, false );
     else
         m_xObject->getPropertyValue( PROPERTY_NAME ) >>= sName;
     return sName;
@@ -1239,7 +1239,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
         else
         {
             OUString sComposedName(
-                ::dbtools::composeTableName( m_xDestConnection->getMetaData(), xTable, ::dbtools::EComposeRule::InDataManipulation, false, false, false ) );
+                ::dbtools::composeTableName( m_xDestConnection->getMetaData(), xTable, ::dbtools::EComposeRule::InDataManipulation, false ) );
             if(xTables->hasByName(sComposedName))
             {
                 xTables->getByName(sComposedName) >>= xTable;
