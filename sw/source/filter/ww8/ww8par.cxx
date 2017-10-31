@@ -2057,6 +2057,9 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
 void SwWW8ImplReader::Read_HdFtFootnoteText( const SwNodeIndex* pSttIdx,
     WW8_CP nStartCp, WW8_CP nLen, ManTypes nType )
 {
+    if (nStartCp < 0 || nLen < 0)
+        return;
+
     // Saves Flags (amongst other things) and resets them
     WW8ReaderSave aSave( this );
 
