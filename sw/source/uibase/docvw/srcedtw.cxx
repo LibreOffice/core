@@ -793,7 +793,8 @@ void SwSrcEditWindow::HandleWheelCommand( const CommandEvent& rCEvt )
 
 void SwSrcEditWindow::GetFocus()
 {
-    m_pOutWin->GrabFocus();
+    if (m_pOutWin)
+        m_pOutWin->GrabFocus();
 }
 
 static bool lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLanguages[])
