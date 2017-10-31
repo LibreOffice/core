@@ -19,7 +19,7 @@ namespace shape
 {
 
 /// Wpg is the drawingML equivalent of v:group.
-class WpgContext : public oox::core::ContextHandler2
+class WpgContext final : public oox::core::ContextHandler2
 {
 public:
     explicit WpgContext(oox::core::ContextHandler2Helper const& rParent);
@@ -32,7 +32,7 @@ public:
         return mpShape;
     }
 
-protected:
+private:
     oox::drawingml::ShapePtr mpShape;
 };
 

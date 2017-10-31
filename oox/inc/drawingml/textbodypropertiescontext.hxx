@@ -26,7 +26,7 @@ namespace oox { namespace drawingml {
 
 struct TextBodyProperties;
 
-class TextBodyPropertiesContext : public ::oox::core::ContextHandler2
+class TextBodyPropertiesContext final : public ::oox::core::ContextHandler2
 {
 public:
     TextBodyPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent,
@@ -35,7 +35,7 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
-protected:
+private:
     TextBodyProperties& mrTextBodyProp;
 };
 

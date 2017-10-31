@@ -20,7 +20,7 @@
 
 namespace oox { namespace drawingml {
 
-class TextEffectsContext : public oox::core::ContextHandler2
+class TextEffectsContext final : public oox::core::ContextHandler2
 {
 public:
     TextEffectsContext(oox::core::ContextHandler2Helper const & rParent,
@@ -33,14 +33,13 @@ public:
 
     virtual oox::core::ContextHandlerRef onCreateContext(sal_Int32 Element, const oox::AttributeList& rAttribs) override;
 
-protected:
-    std::vector<css::beans::PropertyValue>& mrTextEffectsProperties;
-    std::unique_ptr<oox::GrabBagStack> mpGrabBagStack;
-    sal_Int32 mnCurrentElement;
-
 private:
     void processAttributes(const AttributeList& rAttribs);
     void pushAttributeToGrabBag (sal_Int32 aAttributeId, const OUString& rElementName, const AttributeList& rAttribs);
+
+    std::vector<css::beans::PropertyValue>& mrTextEffectsProperties;
+    std::unique_ptr<oox::GrabBagStack> mpGrabBagStack;
+    sal_Int32 mnCurrentElement;
 };
 
 } }

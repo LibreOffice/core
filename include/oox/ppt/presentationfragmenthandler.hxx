@@ -38,7 +38,7 @@ namespace oox { namespace core { class XmlFilterBase; } }
 
 namespace oox { namespace ppt {
 
-class PresentationFragmentHandler : public ::oox::core::FragmentHandler2
+class PresentationFragmentHandler final : public ::oox::core::FragmentHandler2
 {
 public:
     PresentationFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath ) throw();
@@ -46,12 +46,9 @@ public:
     virtual void finalizeImport() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
-protected:
+private:
     void importSlide( const ::oox::core::FragmentHandlerRef& rSlideFragmentHandler,
                         const oox::ppt::SlidePersistPtr& rPersist );
-
-private:
-
     void importSlide(sal_uInt32 nSlide, bool bFirstSlide, bool bImportNotes);
     void saveThemeToGrabBag(oox::drawingml::ThemePtr pThemePtr, const OUString& sTheme);
 

@@ -19,7 +19,7 @@ namespace shape
 {
 
 /// Locked canvas is kind of a container for drawingml shapes: it can even contain group shapes.
-class LockedCanvasContext : public oox::core::ContextHandler2
+class LockedCanvasContext final : public oox::core::ContextHandler2
 {
 public:
     explicit LockedCanvasContext(oox::core::ContextHandler2Helper const& rParent);
@@ -32,8 +32,7 @@ public:
         return mpShape;
     }
 
-protected:
-
+private:
     oox::drawingml::ShapePtr mpShape;
 };
 

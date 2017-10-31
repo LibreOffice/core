@@ -44,12 +44,13 @@ namespace oox {
 
 namespace oox { namespace ppt {
 
-class PPTShape : public oox::drawingml::Shape
+class PPTShape final : public oox::drawingml::Shape
 {
     OUString                    msModelId;              // fallback dgs smartart shape reference
     ShapeLocation               meShapeLocation;        // placeholdershapes (mnSubType != 0) on Master are never displayed
     bool                        mbReferenced;           // placeholdershapes on Layout are displayed only, if they are not referenced
                                                         // placeholdershapes on Slide are displayed always
+    oox::drawingml::ShapePtr mpPlaceholder;
 
 public:
 
@@ -79,10 +80,6 @@ public:
             std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly = false );
 
     static oox::drawingml::TextListStylePtr getSubTypeTextListStyle( const SlidePersist& rSlidePersist, sal_Int32 nSubType );
-
-protected:
-
-    oox::drawingml::ShapePtr mpPlaceholder;
 };
 
 } }

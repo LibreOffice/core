@@ -28,7 +28,7 @@ namespace oox { class PropertyMap; }
 namespace oox {
 namespace drawingml {
 
-class HyperLinkContext : public ::oox::core::ContextHandler2
+class HyperLinkContext final : public ::oox::core::ContextHandler2
 {
 public:
                         HyperLinkContext(
@@ -39,7 +39,7 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
-protected:
+private:
     PropertyMap&        maProperties;
 };
 

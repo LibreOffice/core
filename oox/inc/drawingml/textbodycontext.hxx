@@ -28,19 +28,19 @@
 
 namespace oox { namespace drawingml {
 
-class TextBodyContext : public ::oox::core::ContextHandler2
+class TextBodyContext final : public ::oox::core::ContextHandler2
 {
 public:
     TextBodyContext( ::oox::core::ContextHandler2Helper const & rParent, TextBody& rTextBody );
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
-protected:
+private:
     TextBody&           mrTextBody;
 };
 
 // CT_RegularTextRun
-class RegularTextRunContext : public ::oox::core::ContextHandler2
+class RegularTextRunContext final : public ::oox::core::ContextHandler2
 {
 public:
     RegularTextRunContext( ::oox::core::ContextHandler2Helper const & rParent, TextRunPtr const & pRunPtr );
@@ -49,7 +49,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
     virtual void onCharacters( const OUString& aChars ) override;
 
-protected:
+private:
     TextRunPtr          mpRunPtr;
     bool                mbIsInText;
 };

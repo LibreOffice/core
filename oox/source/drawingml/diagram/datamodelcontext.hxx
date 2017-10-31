@@ -28,7 +28,7 @@
 namespace oox { namespace drawingml {
 
 // CT_DataModel
-class DataModelContext : public ::oox::core::ContextHandler2
+class DataModelContext final : public ::oox::core::ContextHandler2
 {
 public:
     DataModelContext( ::oox::core::ContextHandler2Helper const & rParent, const DiagramDataPtr & pDataModelPtr );
@@ -36,7 +36,7 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
-protected:
+private:
     DiagramDataPtr mpDataModel;
 };
 

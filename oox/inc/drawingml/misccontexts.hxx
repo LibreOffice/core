@@ -226,7 +226,7 @@ protected:
     struct. The imported fill properties are converted automatically to the
     best fitting solid color.
  */
-class SimpleFillPropertiesContext : private FillProperties, public FillPropertiesContext
+class SimpleFillPropertiesContext final : private FillProperties, public FillPropertiesContext
 {
 public:
     explicit            SimpleFillPropertiesContext(
@@ -234,7 +234,7 @@ public:
                             Color& rColor );
     virtual             ~SimpleFillPropertiesContext() override;
 
-protected:
+private:
     Color&              mrColor;
 };
 

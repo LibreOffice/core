@@ -29,14 +29,14 @@ namespace oox { class AttributeList; }
 
 namespace oox { namespace ppt {
 
-class SlideMasterTextStylesContext : public oox::core::FragmentHandler2
+class SlideMasterTextStylesContext final : public oox::core::FragmentHandler2
 {
 public:
     SlideMasterTextStylesContext( ::oox::core::FragmentHandler2 const & rParent, SlidePersistPtr const & pSlidePersistPtr );
     virtual ~SlideMasterTextStylesContext() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
-protected:
+private:
     SlidePersistPtr     mpSlidePersistPtr;
 };
 
