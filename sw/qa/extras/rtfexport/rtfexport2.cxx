@@ -111,8 +111,6 @@ protected:
     AllSettings m_aSavedSettings;
 };
 
-#if !defined(_WIN32)
-
 DECLARE_RTFEXPORT_TEST(testFdo45553, "fdo45553.rtf")
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -604,6 +602,8 @@ DECLARE_RTFEXPORT_TEST(testCopyPastePageStyle, "copypaste-pagestyle.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(21001), getProperty<sal_Int32>(xPropertySet, "Width")); // Was letter, i.e. 21590
 }
 
+#if !defined(_WIN32)
+
 DECLARE_RTFEXPORT_TEST(testCopyPasteFootnote, "copypaste-footnote.rtf")
 {
     // The RTF import did not handle the case when the position wasn't the main document XText, but something different, e.g. a footnote.
@@ -614,6 +614,33 @@ DECLARE_RTFEXPORT_TEST(testCopyPasteFootnote, "copypaste-footnote.rtf")
 
     CPPUNIT_ASSERT_EQUAL(OUString("bbb"), xTextRange->getString());
 }
+
+DECLARE_RTFEXPORT_TEST(testFdo63428, "hello.rtf")
+{
+    // Pasting content that contained an annotation caused a crash.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
+    paste("fdo63428.rtf", xEnd);
+
+    // Additionally, commented range was imported as a normal comment.
+    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"), getProperty<OUString>(getRun(getParagraph(1), 2), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"), getProperty<OUString>(getRun(getParagraph(1), 4), "TextPortionType"));
+}
+
+DECLARE_RTFEXPORT_TEST(testFdo69384, "hello.rtf")
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
+    paste("fdo69384-paste.rtf", xEnd);
+
+    // Import got interrupted in the middle of style sheet table import,
+    // resulting in missing styles and text.
+    getStyles("ParagraphStyles")->getByName("Text body justified");
+}
+
+#endif
 
 DECLARE_RTFEXPORT_TEST(testFdo61193, "hello.rtf")
 {
@@ -1087,19 +1114,6 @@ DECLARE_RTFEXPORT_TEST(testFdo67498, "fdo67498.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(5954)), getProperty<sal_Int32>(getStyles("PageStyles")->getByName("Standard"), "LeftMargin"));
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo63428, "hello.rtf")
-{
-    // Pasting content that contained an annotation caused a crash.
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste("fdo63428.rtf", xEnd);
-
-    // Additionally, commented range was imported as a normal comment.
-    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"), getProperty<OUString>(getRun(getParagraph(1), 2), "TextPortionType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"), getProperty<OUString>(getRun(getParagraph(1), 4), "TextPortionType"));
-}
-
 DECLARE_RTFEXPORT_TEST(testFdo44715, "fdo44715.rtf")
 {
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
@@ -1113,18 +1127,6 @@ DECLARE_RTFEXPORT_TEST(testFdo68076, "fdo68076.rtf")
     // Encoding of the last char was wrong (more 'o' than 'y').
     OUString aExpected(u"\u041E\u0431\u044A\u0435\u043A\u0442 \u2013 \u0443");
     getParagraph(1, aExpected);
-}
-
-DECLARE_RTFEXPORT_TEST(testFdo69384, "hello.rtf")
-{
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste("fdo69384-paste.rtf", xEnd);
-
-    // Import got interrupted in the middle of style sheet table import,
-    // resulting in missing styles and text.
-    getStyles("ParagraphStyles")->getByName("Text body justified");
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo70221, "fdo70221.rtf")
@@ -1142,10 +1144,8 @@ DECLARE_RTFEXPORT_TEST(testCp1000018, "cp1000018.rtf")
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
-    OUString const aExpected("Footnote first line.\n");
-    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
+    CPPUNIT_ASSERT(xTextRange->getString().startsWithIgnoreAsciiCase("Footnote first line"));
 }
-#endif
 
 DECLARE_RTFEXPORT_TEST(testFdo94835, "fdo94835.rtf")
 {
