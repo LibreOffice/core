@@ -70,6 +70,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/streamwrap.hxx>
+#include <tools/helpers.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <vcl/svapp.hxx>
@@ -970,25 +971,6 @@ SvXMLImportContext *SwXMLImport::CreateFontDeclsContext(
                                       osl_getThreadTextEncoding() );
     SetFontDecls( pFSContext );
     return pFSContext;
-}
-
-namespace
-{
-    // return (n >= 0)? (n*72+63)/127: (n*72-63)/127;
-    sal_Int64 sanitiseMm100ToTwip(sal_Int64 n)
-    {
-        if (n >= 0)
-        {
-            if (o3tl::checked_multiply<sal_Int64>(n, 72, n) || o3tl::checked_add<sal_Int64>(n, 63, n))
-                n = SAL_MAX_INT64;
-        }
-        else
-        {
-            if (o3tl::checked_multiply<sal_Int64>(n, 72, n) || o3tl::checked_sub<sal_Int64>(n, 63, n))
-                n = SAL_MIN_INT64;
-        }
-        return n / 127;
-    }
 }
 
 void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)

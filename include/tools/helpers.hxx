@@ -11,7 +11,7 @@
 
 #include <sal/config.h>
 #include <sal/types.h>
-
+#include <o3tl/safeint.hxx>
 #include <cassert>
 #include <type_traits>
 
@@ -53,6 +53,22 @@ inline sal_uInt32 AlignedWidth4Bytes(sal_uInt32 nWidthBits)
 inline long FRound( double fVal )
 {
     return fVal > 0.0 ? static_cast<long>( fVal + 0.5 ) : -static_cast<long>( -fVal + 0.5 );
+}
+
+// return (n >= 0)? (n*72+63)/127: (n*72-63)/127;
+inline sal_Int64 sanitiseMm100ToTwip(sal_Int64 n)
+{
+    if (n >= 0)
+    {
+        if (o3tl::checked_multiply<sal_Int64>(n, 72, n) || o3tl::checked_add<sal_Int64>(n, 63, n))
+            n = SAL_MAX_INT64;
+    }
+    else
+    {
+        if (o3tl::checked_multiply<sal_Int64>(n, 72, n) || o3tl::checked_sub<sal_Int64>(n, 63, n))
+            n = SAL_MIN_INT64;
+    }
+    return n / 127;
 }
 
 #endif
