@@ -213,7 +213,7 @@ BackendImpl::BackendImpl(
         //are still registers. Only after revoking and restarting OOo the folders
         //can be removed. This works now, because the extension manager is a singleton
         //and the backends are only create once per process.
-        std::list<OUString> folders = m_backendDb->getAllDataUrls();
+        std::vector<OUString> folders = m_backendDb->getAllDataUrls();
         deleteUnusedFolders(folders);
 
         configmgrini_verify_init( xCmdEnv );

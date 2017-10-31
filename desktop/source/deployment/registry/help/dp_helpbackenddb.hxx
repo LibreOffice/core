@@ -21,7 +21,6 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_HELP_DP_HELPBACKENDDB_HXX
 
 #include <rtl/ustring.hxx>
-#include <list>
 #include <boost/optional.hpp>
 #include <dp_backenddb.hxx>
 
@@ -68,7 +67,7 @@ public:
     ::boost::optional<Data> getEntry(OUString const & url);
     //must also return the data urls for entries with @activ="false". That is,
     //those are currently revoked.
-    std::list< OUString> getAllDataUrls();
+    std::vector< OUString> getAllDataUrls();
 
 };
 
