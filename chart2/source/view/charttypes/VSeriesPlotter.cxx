@@ -844,13 +844,12 @@ void lcl_AddErrorBottomLine( const drawing::Position3D& rPosition, ::basegfx::B2
 }
 
 drawing::Position3D lcl_transformMixedToScene( PlottingPositionHelper const * pPosHelper
-    , double fX /*scaled*/, double fY /*unscaled*/, double fZ /*unscaled*/, bool bClip )
+    , double fX /*scaled*/, double fY /*unscaled*/, double fZ /*unscaled*/ )
 {
     if(!pPosHelper)
         return drawing::Position3D(0,0,0);
     pPosHelper->doLogicScaling( nullptr,&fY,&fZ );
-    if(bClip)
-        pPosHelper->clipScaledLogicValues( &fX,&fY,&fZ );
+    pPosHelper->clipScaledLogicValues( &fX,&fY,&fZ );
     return pPosHelper->transformScaledLogicToScene( fX, fY, fZ, false );
 }
 
@@ -912,7 +911,7 @@ void VSeriesPlotter::createErrorBar(
         else
             m_pPosHelper->doLogicScaling( &fScaledX, nullptr, nullptr );
 
-        aMiddle = lcl_transformMixedToScene( m_pPosHelper, fScaledX, fY, fZ, true );
+        aMiddle = lcl_transformMixedToScene( m_pPosHelper, fScaledX, fY, fZ );
 
         drawing::Position3D aNegative(aMiddle);
         drawing::Position3D aPositive(aMiddle);
@@ -929,7 +928,7 @@ void VSeriesPlotter::createErrorBar(
                 if( bYError )
                 {
                     fLocalY+=fLength;
-                    aPositive = lcl_transformMixedToScene( m_pPosHelper, fScaledX, fLocalY, fZ, true );
+                    aPositive = lcl_transformMixedToScene( m_pPosHelper, fScaledX, fLocalY, fZ );
                 }
                 else
                 {
@@ -952,7 +951,7 @@ void VSeriesPlotter::createErrorBar(
                 if( bYError )
                 {
                     fLocalY-=fLength;
-                    aNegative = lcl_transformMixedToScene( m_pPosHelper, fScaledX, fLocalY, fZ, true );
+                    aNegative = lcl_transformMixedToScene( m_pPosHelper, fScaledX, fLocalY, fZ );
                 }
                 else
                 {

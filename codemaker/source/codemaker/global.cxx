@@ -62,15 +62,9 @@ OString getTempDir(const OString& sFileName)
 
 OString createFileNameFromType( const OString& destination,
                                 const OString& typeName,
-                                const OString& postfix,
-                                bool bLowerCase )
+                                const OString& postfix )
 {
     OString type(typeName.replace('.', '/'));
-
-    if (bLowerCase)
-    {
-        type = typeName.toAsciiLowerCase();
-    }
 
     sal_uInt32 length = destination.getLength();
 

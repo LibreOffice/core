@@ -71,8 +71,7 @@ public:
           createOrShowTitle(  eTitleType nTitleIndex
                     , const OUString& rTitleText
                     , const css::uno::Reference< css::frame::XModel >& xModel
-                    , const css::uno::Reference< css::uno::XComponentContext > & xContext
-                    , ReferenceSizeProvider * pRefSizeProvider );
+                    , const css::uno::Reference< css::uno::XComponentContext > & xContex );
 
     static void removeTitle( eTitleType nTitleIndex
                     , const css::uno::Reference< css::frame::XModel >& xModel );

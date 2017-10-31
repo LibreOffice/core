@@ -39,8 +39,7 @@ using namespace ::com::sun::star;
 namespace
 {
 
-double lcl_getVariance( const Sequence< double > & rData, sal_Int32 & rOutValidCount,
-        bool bUnbiasedEstimator )
+double lcl_getVariance( const Sequence< double > & rData, sal_Int32 & rOutValidCount )
 {
     const sal_Int32 nCount = rData.getLength();
     rOutValidCount = nCount;
@@ -66,10 +65,7 @@ double lcl_getVariance( const Sequence< double > & rData, sal_Int32 & rOutValidC
     else
     {
         const double fN = static_cast< double >( rOutValidCount );
-        if( bUnbiasedEstimator )
-            fResult = (fQuadSum - fSum*fSum/fN) / (fN - 1);
-        else
-            fResult = (fQuadSum - fSum*fSum/fN) / fN;
+        fResult = (fQuadSum - fSum*fSum/fN) / fN;
     }
 
     return fResult;
@@ -170,7 +166,7 @@ double StatisticsHelper::getVariance(
     const Sequence< double > & rData )
 {
     sal_Int32 nValCount;
-    return lcl_getVariance( rData, nValCount, false/*bUnbiasedEstimator*/ );
+    return lcl_getVariance( rData, nValCount );
 }
 
 double StatisticsHelper::getStandardDeviation( const Sequence< double > & rData )
@@ -185,7 +181,7 @@ double StatisticsHelper::getStandardDeviation( const Sequence< double > & rData 
 double StatisticsHelper::getStandardError( const Sequence< double > & rData )
 {
     sal_Int32 nValCount;
-    double fVar = lcl_getVariance( rData, nValCount, false );
+    double fVar = lcl_getVariance( rData, nValCount );
     double fResult;
 
     if( nValCount == 0 ||
