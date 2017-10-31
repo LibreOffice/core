@@ -34,16 +34,16 @@ class GIFWriter
     Bitmap              aAccBmp;
     SvStream& m_rGIF;
     BitmapReadAccess*   m_pAcc;
-    sal_uLong           nMinPercent;
-    sal_uLong           nMaxPercent;
-    sal_uLong           nLastPercent;
+    sal_uInt32          nMinPercent;
+    sal_uInt32          nMaxPercent;
+    sal_uInt32          nLastPercent;
     long                nActX;
     long                nActY;
     sal_Int32           nInterlaced;
     bool                bStatus;
     bool                bTransparent;
 
-    void                MayCallback( sal_uLong nPercent );
+    void                MayCallback(sal_uInt32 nPercent);
     void                WriteSignature( bool bGIF89a );
     void                WriteGlobalHeader( const Size& rSize );
     void                WriteLoopExtension( const Animation& rAnimation );
@@ -211,7 +211,7 @@ void GIFWriter::WriteAnimation( const Animation& rAnimation )
         const double fStep = 100. / nCount;
 
         nMinPercent = 0;
-        nMaxPercent = (sal_uLong) fStep;
+        nMaxPercent = (sal_uInt32)fStep;
 
         for( sal_uInt16 i = 0; i < nCount; i++ )
         {
@@ -220,13 +220,13 @@ void GIFWriter::WriteAnimation( const Animation& rAnimation )
             WriteBitmapEx( rAnimBmp.aBmpEx, rAnimBmp.aPosPix, true,
                            rAnimBmp.nWait, rAnimBmp.eDisposal );
             nMinPercent = nMaxPercent;
-            nMaxPercent = (sal_uLong) ( nMaxPercent + fStep );
+            nMaxPercent = (sal_uInt32)(nMaxPercent + fStep);
         }
     }
 }
 
 
-void GIFWriter::MayCallback( sal_uLong nPercent )
+void GIFWriter::MayCallback(sal_uInt32 nPercent)
 {
     if ( xStatusIndicator.is() )
     {
