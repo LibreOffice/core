@@ -262,6 +262,16 @@ void SwAutoFormatDlg::UpdateChecks( const SwTableAutoFormat& rFormat, bool bEnab
     m_pBtnAlignment->Check( rFormat.IsJustify() );
 }
 
+static void lcl_SetProperties( SwTableAutoFormat* pTableAutoFormat, bool bVal )
+{
+    pTableAutoFormat->SetFont( bVal );
+    pTableAutoFormat->SetJustify( bVal );
+    pTableAutoFormat->SetFrame( bVal );
+    pTableAutoFormat->SetBackground( bVal );
+    pTableAutoFormat->SetValueFormat( bVal );
+    pTableAutoFormat->SetWidthHeight( bVal );
+}
+
 void SwAutoFormatDlg::FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const
 {
     if( 255 != nIndex )
@@ -274,7 +284,8 @@ void SwAutoFormatDlg::FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const
     else
     {
         delete rToFill;
-        rToFill = nullptr;
+        rToFill = new SwTableAutoFormat( SwViewShell::GetShellRes()->aStrNone );
+        lcl_SetProperties( rToFill, false );
     }
 }
 
@@ -482,12 +493,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl, ListBox&, void)
         nIndex = 255;
 
         SwTableAutoFormat aTmp( SwViewShell::GetShellRes()->aStrNone );
-        aTmp.SetFont( false );
-        aTmp.SetJustify( false );
-        aTmp.SetFrame( false );
-        aTmp.SetBackground( false );
-        aTmp.SetValueFormat( false );
-        aTmp.SetWidthHeight( false );
+        lcl_SetProperties( &aTmp, false );
 
         if( nOldIdx != nIndex )
             m_pWndPreview->NotifyChange( aTmp );
