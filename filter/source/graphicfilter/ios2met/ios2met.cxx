@@ -1980,8 +1980,8 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             {
                 pOS2MET->SeekRel( 1 );
                 sal_Int32 nWd = ReadCoord( bCoord32 );
-                if ( nWd < 0 )
-                    nWd = -nWd;
+                if (nWd < 0)
+                    nWd = o3tl::saturating_toggle_sign(nWd);
                 aAttr.nStrLinWidth = (sal_uInt16)nWd;
             }
             break;
