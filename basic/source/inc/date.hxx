@@ -28,7 +28,7 @@ bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, bool bUs
 double implTimeSerial( sal_Int16 nHour, sal_Int16 nMinute, sal_Int16 nSecond);
 bool implDateTimeSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
                          sal_Int16 nHour, sal_Int16 nMinute, sal_Int16 nSecond,
-                         bool bUseTwoDigitYear, bool bRollOver, double& rdRet );
+                         double& rdRet );
 
 sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam = false, sal_Int16 nFirstDay = 0 );
 

@@ -83,11 +83,11 @@ bool ImpStrChr( const sal_Unicode* p, sal_Unicode c )
 // conversion error if data type is fixed and it doesn't fit
 
 ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
-                  sal_uInt16* pLen, bool bAllowIntntl, bool bOnlyIntntl )
+                  sal_uInt16* pLen, bool bOnlyIntntl )
 {
     sal_Unicode cIntntlDecSep, cIntntlGrpSep, cIntntlDecSepAlt;
     sal_Unicode cNonIntntlDecSep = '.';
-    if( bAllowIntntl || bOnlyIntntl )
+    if( bOnlyIntntl )
     {
         ImpGetIntntlSep( cIntntlDecSep, cIntntlGrpSep, cIntntlDecSepAlt );
         if( bOnlyIntntl )
@@ -284,7 +284,7 @@ ErrCode SbxValue::ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle
     SbxDataType t;
     sal_uInt16 nLen = 0;
     ErrCode nRetError = ImpScan( rSrc, nVal, t, &nLen,
-        /*bAllowIntntl*/false, /*bOnlyIntntl*/true );
+        /*bOnlyIntntl*/true );
     // read completely?
     if( nRetError == ERRCODE_NONE && nLen != rSrc.getLength() )
     {
@@ -318,7 +318,7 @@ static const double roundArray[] = {
  */
 
 static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
-                    bool bPt, bool bFix, sal_Unicode cForceThousandSep )
+                    sal_Unicode cForceThousandSep )
 {
 
     short nExp = 0;
@@ -346,9 +346,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
             nExp++;
         }
     }
-    if( !bFix && !nExpWidth )
-        nDig = nDig + nExp;
-    else if( bFix && !nPrec )
+    if( !nPrec )
         nDig = nExp + 1;
 
     // round number
@@ -397,8 +395,6 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
                 nDec--;
                 if( !nDec )
                     *pBuf++ = (char)cDecimalSep;
-                else if( !(nDec % 3 ) && bPt )
-                    *pBuf++ = (char)cThousandSep;
             }
         }
     }
@@ -448,7 +444,7 @@ void ImpCvtNum( double nNum, short nPrec, OUString& rRes, bool bCoreString )
     }
     double dMaxNumWithoutExp = (nPrec == 6) ? 1E6 : 1E14;
     myftoa( nNum, p, nPrec,( nNum &&( nNum < 1E-1 || nNum >= dMaxNumWithoutExp ) ) ? 4:0,
-        false, true, cDecimalSep );
+        cDecimalSep );
     // remove trailing zeros
     for( p = cBuf; *p &&( *p != 'E' ); p++ ) {}
     q = p; p--;
@@ -568,7 +564,7 @@ bool SbxValue::Scan( const OUString& rSrc, sal_uInt16* pLen )
     {
         double n;
         SbxDataType t;
-        eRes = ImpScan( rSrc, n, t, pLen );
+        eRes = ImpScan( rSrc, n, t, pLen, false );
         if( eRes == ERRCODE_NONE )
         {
             if( !IsFixed() )

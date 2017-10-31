@@ -338,7 +338,7 @@ void ModulWindow::BasicExecute()
             if ( !pMethod )
             {
                 // If not in a method then prompt the user
-                ChooseMacro( uno::Reference< frame::XModel >(), false );
+                ChooseMacro( uno::Reference< frame::XModel >() );
                 return;
             }
             if ( pMethod )

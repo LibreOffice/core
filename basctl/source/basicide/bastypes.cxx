@@ -564,7 +564,7 @@ void TabBar::Sort()
     }
 }
 
-void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEraseTrailingEmptyLines )
+void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines )
 {
     sal_Int32 nStartPos = 0;
     sal_Int32 nLine = 0;
@@ -596,7 +596,7 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEra
     rStr = rStr.copy( 0, nStartPos );
     rStr += aEndStr;
 
-    if ( bEraseTrailingEmptyLines )
+    // erase trailing empty lines
     {
         sal_Int32 n = nStartPos;
         sal_Int32 nLen = rStr.getLength();
