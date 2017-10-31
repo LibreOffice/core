@@ -164,15 +164,14 @@ namespace
         return sSQL;
     }
 
-    /** resets an SQL iterator, including deletion of the parse tree, and disposal if desired
+    /** resets an SQL iterator, including deletion of the parse tree, and dispose
     */
-    void resetIterator( OSQLParseTreeIterator& _rIterator, bool _bDispose )
+    void resetIterator( OSQLParseTreeIterator& _rIterator )
     {
         const OSQLParseNode* pSqlParseNode = _rIterator.getParseTree();
         _rIterator.setParseTree(nullptr);
         delete pSqlParseNode;
-        if ( _bDispose )
-            _rIterator.dispose();
+        _rIterator.dispose();
     }
     void lcl_addFilterCriteria_throw(sal_Int32 i_nFilterOperator,const OUString& i_sValue,OUStringBuffer& o_sRet)
     {
@@ -283,8 +282,8 @@ void SAL_CALL OSingleSelectQueryComposer::disposing()
 
     MutexGuard aGuard(m_aMutex);
 
-    resetIterator( m_aSqlIterator, true );
-    resetIterator( m_aAdditiveIterator, true );
+    resetIterator( m_aSqlIterator );
+    resetIterator( m_aAdditiveIterator );
 
     m_xConnectionTables = nullptr;
     m_xConnection       = nullptr;

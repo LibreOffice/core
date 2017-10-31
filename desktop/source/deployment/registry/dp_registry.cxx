@@ -530,11 +530,11 @@ PackageRegistryImpl::getSupportedPackageTypes()
 
 Reference<deployment::XPackageRegistry> SAL_CALL create(
     OUString const & context,
-    OUString const & cachePath, bool readOnly,
+    OUString const & cachePath,
     Reference<XComponentContext> const & xComponentContext )
 {
     return PackageRegistryImpl::create(
-        context, cachePath, readOnly, xComponentContext );
+        context, cachePath, false/*readOnly*/, xComponentContext );
 }
 
 } // namespace dp_registry

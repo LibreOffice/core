@@ -22,14 +22,14 @@
 
 namespace dbaui
 {
-    bool isCharOk(sal_Unicode _cChar,bool _bFirstChar,bool _bUpperCase,const OUString& _sAllowedChars)
+    bool isCharOk(sal_Unicode _cChar,bool _bFirstChar, const OUString& _sAllowedChars)
     {
         return  (
                  (_cChar >= 'A' && _cChar <= 'Z') ||
                  _cChar == '_' ||
                  _sAllowedChars.indexOf(_cChar) != -1 ||
                  (!_bFirstChar && (_cChar >= '0' && _cChar <= '9')) ||
-                 (!_bUpperCase && (_cChar >= 'a' && _cChar <= 'z'))
+                 (_cChar >= 'a' && _cChar <= 'z')
                 );
     }
     bool OSQLNameChecker::checkString(const OUString& _sToCheck,
@@ -41,7 +41,7 @@ namespace dbaui
             sal_Int32 nMatch = 0;
             for (sal_Int32 i = nMatch; i < _sToCheck.getLength(); ++i)
             {
-                if ( !isCharOk( _sToCheck[i], i == 0, false/*bOnlyUpperCase*/, m_sAllowedChars ) )
+                if ( !isCharOk( _sToCheck[i], i == 0, m_sAllowedChars ) )
                 {
                     _rsCorrected += _sToCheck.copy(nMatch, i - nMatch);
                     bCorrected = true;

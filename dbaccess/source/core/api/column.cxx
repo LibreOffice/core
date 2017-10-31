@@ -379,7 +379,7 @@ sdbcx::ObjectType OColumns::appendObject( const OUString& _rForName, const Refer
     if ( m_pColFactoryImpl )
         m_pColFactoryImpl->columnAppended( descriptor );
 
-    ::dbaccess::notifyDataSourceModified(m_xParent,true);
+    ::dbaccess::notifyDataSourceModified(m_xParent);
 
     return xReturn;
 }
@@ -409,7 +409,7 @@ void OColumns::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
     if ( m_pColFactoryImpl )
         m_pColFactoryImpl->columnDropped(_sElementName);
 
-    ::dbaccess::notifyDataSourceModified(m_xParent,true);
+    ::dbaccess::notifyDataSourceModified(m_xParent);
 }
 
 Reference< XInterface > SAL_CALL OColumns::getParent(  )

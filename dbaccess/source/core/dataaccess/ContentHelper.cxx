@@ -620,7 +620,7 @@ void SAL_CALL OContentHelper::rename( const OUString& newName )
 
 void OContentHelper::notifyDataSourceModified()
 {
-    ::dbaccess::notifyDataSourceModified(m_xParentContainer,true);
+    ::dbaccess::notifyDataSourceModified(m_xParentContainer);
 }
 
 }   // namespace dbaccess

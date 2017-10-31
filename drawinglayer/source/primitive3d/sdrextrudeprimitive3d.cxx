@@ -78,7 +78,7 @@ namespace drawinglayer
                 // create geometry
                 std::vector< basegfx::B3DPolyPolygon > aFill;
                 extractPlanesFromSlice(aFill, rSliceVector,
-                    bCreateNormals, true/*smoothHorizontalNormals*/, getSmoothNormals(), getSmoothLids(), false,
+                    bCreateNormals, getSmoothNormals(), getSmoothLids(), false,
                     0.5, 0.6, bCreateTextureCoordinatesX || bCreateTextureCoordinatesY, aTexTransform);
 
                 // get full range

@@ -214,12 +214,6 @@ namespace dbaui
         DECL_LINK(OnTestConnectionClickHdl, Button*, void);
     };
 
-    // ControlRelation
-    enum ControlRelation
-    {
-        RelatedControls, UnrelatedControls
-    };
-
     // LayoutHelper
     class LayoutHelper
     {
@@ -227,7 +221,6 @@ namespace dbaui
         static void     positionBelow(
                             const Control& _rReference,
                             Control& _rControl,
-                            const ControlRelation _eRelation,
                             const long _nIndentAppFont
                         );
         /** fits the button size to be large enough to contain the buttons text
