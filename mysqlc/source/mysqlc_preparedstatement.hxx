@@ -47,16 +47,14 @@ namespace connectivity
                                         css::sdbc::XResultSetMetaDataSupplier,
                                         css::lang::XServiceInfo> OPreparedStatement_BASE;
 
-        class OPreparedStatement :  public OCommonStatement,
+        class OPreparedStatement final : public OCommonStatement,
                                     public OPreparedStatement_BASE
         {
-        protected:
             unsigned int        m_paramCount;   // number of placeholders
             Reference< XResultSetMetaData > m_xMetaData;
 
             void checkParameterIndex(sal_Int32 parameter);
 
-        protected:
             void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) SAL_OVERRIDE;
             virtual ~OPreparedStatement();
         public:

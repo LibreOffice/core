@@ -150,12 +150,11 @@ namespace connectivity
         };
 
 
-        class OStatement :  public OCommonStatement,
+        class OStatement final : public OCommonStatement,
                             public css::sdbc::XBatchExecution,
                             public css::lang::XServiceInfo
 
         {
-        protected:
             virtual ~OStatement(){}
 
         public:

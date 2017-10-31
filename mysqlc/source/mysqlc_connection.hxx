@@ -82,20 +82,15 @@ namespace connectivity
 
         typedef std::vector< css::uno::WeakReferenceHelper > OWeakRefArray;
 
-        class OConnection : public OBase_Mutex,
+        class OConnection final : public OBase_Mutex,
                             public OConnection_BASE,
                             public connectivity::mysqlc::OSubComponent<OConnection, OConnection_BASE>
         {
             friend class connectivity::mysqlc::OSubComponent<OConnection, OConnection_BASE>;
 
-        private:
             ConnectionSettings  m_settings;
-
-        private:
             css::uno::Reference< css::container::XNameAccess > m_typeMap;
             css::uno::Reference< css::util::XStringSubstitution > m_xParameterSubstitution;
-        protected:
-
 
             // Data attributes
 

@@ -39,15 +39,13 @@ namespace connectivity
 
         typedef ::cppu::WeakImplHelper1< css::sdbc::XDatabaseMetaData> ODatabaseMetaData_BASE;
 
-        class ODatabaseMetaData : public ODatabaseMetaData_BASE
+        class ODatabaseMetaData final : public ODatabaseMetaData_BASE
         {
             OConnection&    m_rConnection;
-        protected:
             sql::DatabaseMetaData * meta;
             rtl::OUString           identifier_quote_string;
             bool                    identifier_quote_string_set;
 
-        private:
             rtl::OUString impl_getStringMetaData( const sal_Char* _methodName, const sql::SQLString& (sql::DatabaseMetaData::*Method)() );
             rtl::OUString impl_getStringMetaData( const sal_Char* _methodName, sql::SQLString (sql::DatabaseMetaData::*Method)() );
             sal_Int32 impl_getInt32MetaData( const sal_Char* _methodName, unsigned int (sql::DatabaseMetaData::*Method)() );
