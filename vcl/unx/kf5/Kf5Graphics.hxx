@@ -22,19 +22,37 @@
 #include <salgdi.hxx>
 
 class Kf5Frame;
+class QImage;
 
 class Kf5Graphics : public SalGraphics
 {
-    Kf5Frame*               mpFrame;
+    Kf5Frame               *m_pFrame;
+    QImage                 *m_pQImage;
 
 public:
-                            Kf5Graphics();
-    virtual                 ~Kf5Graphics() override;
+    Kf5Graphics( Kf5Frame *pFrame );
+    Kf5Graphics( QImage *pImage );
+    virtual ~Kf5Graphics() override;
+
+    void ChangeQImage( QImage *pImage );
 
     virtual SalGraphicsImpl* GetImpl() const override;
-    virtual SystemGraphicsData
-                            GetGraphicsData() const override;
-    virtual bool            supportsOperation( OutDevSupportType ) const override;
+    virtual SystemGraphicsData GetGraphicsData() const override;
+    virtual bool supportsOperation( OutDevSupportType ) const override;
+
+#if ENABLE_CAIRO_CANVAS
+    virtual bool                     SupportsCairo() const override;
+    virtual cairo::SurfaceSharedPtr  CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
+    virtual cairo::SurfaceSharedPtr  CreateSurface(const OutputDevice& rRefDevice,
+                                                   int x, int y, int width, int height) const override;
+    virtual cairo::SurfaceSharedPtr  CreateBitmapSurface(const OutputDevice& rRefDevice,
+                                                         const BitmapSystemData& rData, const Size& rSize) const override;
+    virtual css::uno::Any            GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface,
+                                                            const basegfx::B2ISize& rSize) const override;
+    virtual SystemFontData           GetSysFontData( int nFallbacklevel ) const override;
+#endif // ENABLE_CAIRO_CANVAS
+
+    // GDI
 
     virtual bool            setClipRegion( const vcl::Region& ) override;
     virtual void            ResetClipRegion() override;

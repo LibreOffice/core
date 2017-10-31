@@ -18,13 +18,29 @@
  */
 
 #include "Kf5Graphics.hxx"
+#include "Kf5Frame.hxx"
 
-Kf5Graphics::Kf5Graphics()
+#include <QtGui/QImage>
+
+Kf5Graphics::Kf5Graphics( Kf5Frame *pFrame )
+    : m_pFrame( pFrame )
+    , m_pQImage( nullptr )
+{
+}
+
+Kf5Graphics::Kf5Graphics( QImage *pQImage )
+    : m_pFrame( nullptr )
+    , m_pQImage( pQImage )
 {
 }
 
 Kf5Graphics::~Kf5Graphics()
 {
+}
+
+void Kf5Graphics::ChangeQImage( QImage *pQImage )
+{
+    m_pQImage = pQImage;
 }
 
 SalGraphicsImpl* Kf5Graphics::GetImpl() const
@@ -41,5 +57,39 @@ bool Kf5Graphics::supportsOperation( OutDevSupportType ) const
 {
     return false;
 }
+
+#if ENABLE_CAIRO_CANVAS
+
+bool Kf5Graphics::SupportsCairo() const
+{
+    return false;
+}
+
+cairo::SurfaceSharedPtr Kf5Graphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
+{
+    return nullptr;
+}
+
+cairo::SurfaceSharedPtr Kf5Graphics::CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const
+{
+    return nullptr;
+}
+
+cairo::SurfaceSharedPtr Kf5Graphics::CreateBitmapSurface(const OutputDevice& rRefDevice, const BitmapSystemData& rData, const Size& rSize) const
+{
+    return nullptr;
+}
+
+css::uno::Any Kf5Graphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const
+{
+    return css::uno::Any();
+}
+
+SystemFontData Kf5Graphics::GetSysFontData( int nFallbacklevel ) const
+{
+    return SystemFontData();
+}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
