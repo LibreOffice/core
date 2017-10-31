@@ -267,15 +267,9 @@ public:
                 const Bcp47CountryEntry * pEntry );
 
 
-        /** Convert a LanguageType to a Locale.
-
-            @param bResolveSystem
-                   If bResolveSystem==true, a LANGUAGE_SYSTEM is resolved.
-                   If bResolveSystem==false, a LANGUAGE_SYSTEM results in an
-                   empty Locale.
-          */
+        /** Convert a LanguageType to a Locale. */
         I18NLANGTAG_DLLPRIVATE static css::lang::Locale convertLanguageToLocale(
-                LanguageType nLang, bool bResolveSystem );
+                LanguageType nLang );
 
         /** Used by convertLanguageToLocale(LanguageType,bool) and
             getLocale(IsoLanguageCountryEntry*) and
