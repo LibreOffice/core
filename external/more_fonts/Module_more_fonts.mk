@@ -21,6 +21,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_ptserif \
 	ExternalPackage_sourcecode \
 	ExternalPackage_sourcesans \
+	ExternalPackage_noto \
 	ExternalPackage_EmojiOne_Color \
 	UnpackedTarball_caladea \
 	UnpackedTarball_carlito \
@@ -33,6 +34,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	UnpackedTarball_ptserif \
 	UnpackedTarball_sourcecode \
 	UnpackedTarball_sourcesans \
+	UnpackedTarball_noto \
 	UnpackedTarball_EmojiOne_Color \
 ))
 
