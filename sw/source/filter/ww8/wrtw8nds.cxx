@@ -481,7 +481,10 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
         m_rExport.m_pOutFormatNode = &rNd;
         m_rExport.m_aCurrentCharPropStarts.push( nSwPos );
 
-        m_rExport.ExportPoolItemsToCHP( aExportItems, GetScript() );
+        // tdf#38778 Fix output of the font in DOC run for fields
+        const SvxFontItem * pFontToOutput = ( rParentFont != *pFont )? pFont : nullptr;
+
+        m_rExport.ExportPoolItemsToCHP( aExportItems, GetScript(), pFontToOutput );
 
         // HasTextItem only allowed in the above range
         m_rExport.m_aCurrentCharPropStarts.pop();
