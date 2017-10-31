@@ -30,7 +30,7 @@
      To customize values in this file, replace the data within <value>...
      </value> elements flagged as "CUSTOMIZE" with the values for your
      organization.  If a certain setting is not necessary for your installation,
-     you can remove the compelete corresponding <value>...</value> element.
+     you can remove the complete corresponding <value>...</value> element.
 -->
 
 <oor:data xmlns:oor="http://openoffice.org/2001/registry">
