@@ -638,9 +638,6 @@ void SvtFileDialog::Init_Impl
         pImpl->_pCbPassword->SetText( FpsResId( STR_SVT_FILEPICKER_PASSWORD ) );
         pImpl->_pCbPassword->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         pImpl->_pCbPassword->Show();
-    }
-    if ( nStyle & PickerFlags::Password )
-    {
         pImpl->_pCbGPGEncrypt->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         pImpl->_pCbGPGEncrypt->Show();
     }
