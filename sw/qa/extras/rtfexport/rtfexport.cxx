@@ -743,6 +743,12 @@ DECLARE_RTFEXPORT_TEST(testPictureWrapPolygon, "picture-wrap-polygon.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(-67)), getProperty<sal_Int32>(getShape(1), "VertOrientPosition"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf113408, "tdf113408.rtf")
+{
+    // This was 0, left margin was not inherited from style properly.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+}
+
 DECLARE_RTFEXPORT_TEST(testAbi10039, "abi10039.odt")
 {
     // Make sure we don't just crash on export, and additionally the shape should not be inline (as it's at-page anchored originally).

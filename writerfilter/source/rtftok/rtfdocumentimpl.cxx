@@ -439,7 +439,7 @@ static void lcl_copyFlatten(RTFReferenceProperties& rProps, RTFSprms& rStyleAttr
         rStyleAttributes.set(rAttribute.first, rAttribute.second);
 }
 
-writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RTFSprms& rAttributes, RTFSprms& rSprms)
+writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RTFSprms& rAttributes, RTFSprms& rSprms, Id nStyleType)
 {
     int nStyle = 0;
     if (!m_aStates.empty())
@@ -461,13 +461,15 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RT
         RTFSprms aStyleSprms;
         RTFSprms aStyleAttributes;
         // Ensure the paragraph style is a flat list.
-        lcl_copyFlatten(rProps, aStyleAttributes, aStyleSprms);
+        if (!nStyleType || nStyleType == NS_ooxml::LN_Value_ST_StyleType_paragraph)
+            lcl_copyFlatten(rProps, aStyleAttributes, aStyleSprms);
 
         if (itChar != m_aStyleTableEntries.end())
         {
             // Found active character style, then update aStyleSprms/Attributes.
             RTFReferenceProperties& rCharProps = *static_cast<RTFReferenceProperties*>(itChar->second.get());
-            lcl_copyFlatten(rCharProps, aStyleAttributes, aStyleSprms);
+            if (!nStyleType || nStyleType == NS_ooxml::LN_Value_ST_StyleType_character)
+                lcl_copyFlatten(rCharProps, aStyleAttributes, aStyleSprms);
         }
 
         // Get rid of direct formatting what is already in the style.
@@ -491,7 +493,7 @@ void RTFDocumentImpl::checkNeedPap()
         if (!m_aStates.top().pCurrentBuffer)
         {
             writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
-                getProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
+                getProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms, NS_ooxml::LN_Value_ST_StyleType_paragraph)
             );
 
             // Writer will ignore a page break before a text frame, so guard it with empty paragraphs
@@ -526,7 +528,7 @@ void RTFDocumentImpl::runProps()
 {
     if (!m_aStates.top().pCurrentBuffer)
     {
-        writerfilter::Reference<Properties>::Pointer_t const pProperties = getProperties(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms);
+        Reference<Properties>::Pointer_t const pProperties = getProperties(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms, NS_ooxml::LN_Value_ST_StyleType_character);
         Mapper().props(pProperties);
     }
     else
@@ -1421,7 +1423,7 @@ void RTFDocumentImpl::prepareProperties(
     writerfilter::Reference<Properties>::Pointer_t& o_rpTableRowProperties,
     int const nCells, int const nCurrentCellX)
 {
-    o_rpParagraphProperties = getProperties(rState.aParagraphAttributes, rState.aParagraphSprms);
+    o_rpParagraphProperties = getProperties(rState.aParagraphAttributes, rState.aParagraphSprms, NS_ooxml::LN_Value_ST_StyleType_paragraph);
 
     if (rState.aFrame.hasProperties())
     {
@@ -1505,7 +1507,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer,
         {
             // Construct properties via getProperties() and not directly, to take care of deduplication.
             writerfilter::Reference<Properties>::Pointer_t const pProp(
-                getProperties(std::get<1>(aTuple)->getAttributes(), std::get<1>(aTuple)->getSprms())
+                getProperties(std::get<1>(aTuple)->getAttributes(), std::get<1>(aTuple)->getSprms(), 0)
             );
             Mapper().props(pProp);
         }
