@@ -20,18 +20,22 @@
 #pragma once
 
 #include <salvd.hxx>
-
 #include <basegfx/vector/b2ivector.hxx>
 
+#include <memory>
 #include <list>
 
 class Kf5Graphics;
+class QImage;
 enum class DeviceFormat;
 
 class Kf5VirtualDevice : public SalVirtualDevice
 {
-    basegfx::B2IVector            m_aFrameSize;
     std::list< Kf5Graphics* >     m_aGraphics;
+    std::unique_ptr< QImage >     m_pImage;
+    DeviceFormat                  m_eFormat;
+    basegfx::B2IVector            m_aFrameSize;
+    double                        m_fScale;
 
 public:
     Kf5VirtualDevice( DeviceFormat eFormat, double fScale );
