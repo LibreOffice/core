@@ -34,7 +34,7 @@ private:
     std::array<sal_uInt8, 255>
                     pBlockBuf;
     sal_uInt8       nBlockBufSize;
-    sal_uLong       nBitsBuf;
+    sal_uInt32      nBitsBuf;
     sal_uInt16      nBitsBufSize;
 
 public:
@@ -65,7 +65,7 @@ inline void GIFImageDataOutputStream::WriteBits( sal_uInt16 nCode, sal_uInt16 nC
     if( nBitsBufSize+nCodeLen>32 )
         FlushBitsBufsFullBytes();
 
-    nBitsBuf |= (sal_uLong) nCode << nBitsBufSize;
+    nBitsBuf |= (sal_uInt32)nCode << nBitsBufSize;
     nBitsBufSize = nBitsBufSize + nCodeLen;
 }
 
@@ -153,8 +153,7 @@ void GIFLZWCompressor::StartCompression( SvStream& rGIF, sal_uInt16 nPixelSize )
     }
 }
 
-
-void GIFLZWCompressor::Compress( sal_uInt8* pSrc, sal_uLong nSize )
+void GIFLZWCompressor::Compress(sal_uInt8* pSrc, sal_uInt32 nSize)
 {
     if( pIDOS )
     {
@@ -211,7 +210,6 @@ void GIFLZWCompressor::Compress( sal_uInt8* pSrc, sal_uLong nSize )
         }
     }
 }
-
 
 void GIFLZWCompressor::EndCompression()
 {
