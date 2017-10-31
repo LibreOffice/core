@@ -94,7 +94,7 @@ namespace basegfx
             return fRetval;
         }
 
-        void applyLineDashing(const B3DPolygon& rCandidate, const std::vector<double>& rDotDashArray, B3DPolyPolygon* pLineTarget, B3DPolyPolygon* pGapTarget, double fDotDashLength)
+        void applyLineDashing(const B3DPolygon& rCandidate, const std::vector<double>& rDotDashArray, B3DPolyPolygon* pLineTarget, double fDotDashLength)
         {
             const sal_uInt32 nPointCount(rCandidate.count());
             const sal_uInt32 nDotDashCount(rDotDashArray.size());
@@ -104,17 +104,12 @@ namespace basegfx
                 fDotDashLength = std::accumulate(rDotDashArray.begin(), rDotDashArray.end(), 0.0);
             }
 
-            if(fTools::more(fDotDashLength, 0.0) && (pLineTarget || pGapTarget) && nPointCount)
+            if(fTools::more(fDotDashLength, 0.0) && pLineTarget && nPointCount)
             {
                 // clear targets
                 if(pLineTarget)
                 {
                     pLineTarget->clear();
-                }
-
-                if(pGapTarget)
-                {
-                    pGapTarget->clear();
                 }
 
                 // prepare current edge's start
@@ -142,9 +137,8 @@ namespace basegfx
                         {
                             // new split is inside edge, create and append snippet [fLastDotDashMovingLength, fDotDashMovingLength]
                             const bool bHandleLine(bIsLine && pLineTarget);
-                            const bool bHandleGap(!bIsLine && pGapTarget);
 
-                            if(bHandleLine || bHandleGap)
+                            if(bHandleLine)
                             {
                                 if(!aSnippet.count())
                                 {
@@ -156,10 +150,6 @@ namespace basegfx
                                 if(bHandleLine)
                                 {
                                     pLineTarget->append(aSnippet);
-                                }
-                                else
-                                {
-                                    pGapTarget->append(aSnippet);
                                 }
 
                                 aSnippet.clear();
@@ -173,9 +163,8 @@ namespace basegfx
 
                         // append snippet [fLastDotDashMovingLength, fEdgeLength]
                         const bool bHandleLine(bIsLine && pLineTarget);
-                        const bool bHandleGap(!bIsLine && pGapTarget);
 
-                        if(bHandleLine || bHandleGap)
+                        if(bHandleLine)
                         {
                             if(!aSnippet.count())
                             {
@@ -199,10 +188,6 @@ namespace basegfx
                     if(bIsLine && pLineTarget)
                     {
                         pLineTarget->append(aSnippet);
-                    }
-                    else if(!bIsLine && pGapTarget)
-                    {
-                        pGapTarget->append(aSnippet);
                     }
                 }
 
@@ -228,28 +213,6 @@ namespace basegfx
                         }
                     }
                 }
-
-                if(pGapTarget)
-                {
-                    const sal_uInt32 nCount(pGapTarget->count());
-
-                    if(nCount > 1)
-                    {
-                        // these polygons were created above, there exists none with less than two points,
-                        // thus dircet point access below is allowed
-                        const B3DPolygon aFirst(pGapTarget->getB3DPolygon(0));
-                        B3DPolygon aLast(pGapTarget->getB3DPolygon(nCount - 1));
-
-                        if(aFirst.getB3DPoint(0).equal(aLast.getB3DPoint(aLast.count() - 1)))
-                        {
-                            // start of first and end of last are the same -> merge them
-                            aLast.append(aFirst);
-                            aLast.removeDoublePoints();
-                            pGapTarget->setB3DPolygon(0, aLast);
-                            pGapTarget->remove(nCount - 1);
-                        }
-                    }
-                }
             }
             else
             {
@@ -257,11 +220,6 @@ namespace basegfx
                 if(pLineTarget)
                 {
                     pLineTarget->append(rCandidate);
-                }
-
-                if(pGapTarget)
-                {
-                    pGapTarget->append(rCandidate);
                 }
             }
         }
@@ -676,7 +634,7 @@ namespace basegfx
             }
         }
 
-        bool isPointOnPolygon(const B3DPolygon& rCandidate, const B3DPoint& rPoint, bool bWithPoints)
+        bool isPointOnPolygon(const B3DPolygon& rCandidate, const B3DPoint& rPoint)
         {
             const sal_uInt32 nPointCount(rCandidate.count());
 
@@ -689,7 +647,7 @@ namespace basegfx
                 {
                     const B3DPoint aNextPoint(rCandidate.getB3DPoint((a + 1) % nPointCount));
 
-                    if(isPointOnLine(aCurrentPoint, aNextPoint, rPoint, bWithPoints))
+                    if(isPointOnLine(aCurrentPoint, aNextPoint, rPoint, true/*bWithPoints*/))
                     {
                         return true;
                     }
@@ -697,7 +655,7 @@ namespace basegfx
                     aCurrentPoint = aNextPoint;
                 }
             }
-            else if(nPointCount && bWithPoints)
+            else if(nPointCount)
             {
                 return rPoint.equal(rCandidate.getB3DPoint(0));
             }

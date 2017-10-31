@@ -89,7 +89,6 @@ namespace basegfx
             const B2DPolyPolygon& rCandidate,
             const ::std::vector<double>& rDotDashArray,
             B2DPolyPolygon* pLineTarget,
-            B2DPolyPolygon* pGapTarget = nullptr,
             double fFullDashDotLen = 0.0);
 
         // test if point is inside epsilon-range around the given PolyPolygon. Can be used
@@ -277,16 +276,14 @@ namespace basegfx
 
         /// converters for css::drawing::PointSequence
         BASEGFX_DLLPUBLIC B2DPolyPolygon UnoPointSequenceSequenceToB2DPolyPolygon(
-            const css::drawing::PointSequenceSequence& rPointSequenceSequenceSource,
-            bool bCheckClosed = true);
+            const css::drawing::PointSequenceSequence& rPointSequenceSequenceSource);
         BASEGFX_DLLPUBLIC void B2DPolyPolygonToUnoPointSequenceSequence(
             const B2DPolyPolygon& rPolyPolygon,
             css::drawing::PointSequenceSequence& rPointSequenceSequenceRetval);
 
         /// converters for css::drawing::PolyPolygonBezierCoords (curved polygons)
         BASEGFX_DLLPUBLIC B2DPolyPolygon UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
-            const css::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsSource,
-            bool bCheckClosed = true);
+            const css::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsSource);
         BASEGFX_DLLPUBLIC void B2DPolyPolygonToUnoPolyPolygonBezierCoords(
             const B2DPolyPolygon& rPolyPolygon,
             css::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsRetval);

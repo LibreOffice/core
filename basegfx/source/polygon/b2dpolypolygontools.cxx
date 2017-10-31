@@ -231,7 +231,7 @@ namespace basegfx
             return fabs(getSignedArea(rCandidate));
         }
 
-        void applyLineDashing(const B2DPolyPolygon& rCandidate, const std::vector<double>& rDotDashArray, B2DPolyPolygon* pLineTarget, B2DPolyPolygon* pGapTarget, double fFullDashDotLen)
+        void applyLineDashing(const B2DPolyPolygon& rCandidate, const std::vector<double>& rDotDashArray, B2DPolyPolygon* pLineTarget, double fFullDashDotLen)
         {
             if(fFullDashDotLen == 0.0 && rDotDashArray.size())
             {
@@ -241,7 +241,7 @@ namespace basegfx
 
             if(rCandidate.count() && fFullDashDotLen > 0.0)
             {
-                B2DPolyPolygon aLineTarget, aGapTarget;
+                B2DPolyPolygon aLineTarget;
 
                 for(sal_uInt32 a(0); a < rCandidate.count(); a++)
                 {
@@ -251,17 +251,12 @@ namespace basegfx
                         aCandidate,
                         rDotDashArray,
                         pLineTarget ? &aLineTarget : nullptr,
-                        pGapTarget ? &aGapTarget : nullptr,
+                        nullptr,
                         fFullDashDotLen);
 
                     if(pLineTarget)
                     {
                         pLineTarget->append(aLineTarget);
-                    }
-
-                    if(pGapTarget)
-                    {
-                        pGapTarget->append(aGapTarget);
                     }
                 }
             }
@@ -596,8 +591,7 @@ namespace basegfx
         // converters for css::drawing::PointSequence
 
         B2DPolyPolygon UnoPointSequenceSequenceToB2DPolyPolygon(
-            const css::drawing::PointSequenceSequence& rPointSequenceSequenceSource,
-            bool bCheckClosed)
+            const css::drawing::PointSequenceSequence& rPointSequenceSequenceSource)
         {
             B2DPolyPolygon aRetval;
             const css::drawing::PointSequence* pPointSequence = rPointSequenceSequenceSource.getConstArray();
@@ -605,7 +599,7 @@ namespace basegfx
 
             for(;pPointSequence != pPointSeqEnd; pPointSequence++)
             {
-                const B2DPolygon aNewPolygon = UnoPointSequenceToB2DPolygon(*pPointSequence, bCheckClosed);
+                const B2DPolygon aNewPolygon = UnoPointSequenceToB2DPolygon(*pPointSequence, true/*bCheckClosed*/);
                 aRetval.append(aNewPolygon);
             }
 
@@ -640,8 +634,7 @@ namespace basegfx
         // converters for css::drawing::PolyPolygonBezierCoords (curved polygons)
 
         B2DPolyPolygon UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
-            const css::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsSource,
-            bool bCheckClosed)
+            const css::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsSource)
         {
             B2DPolyPolygon aRetval;
             const sal_uInt32 nSequenceCount((sal_uInt32)rPolyPolygonBezierCoordsSource.Coordinates.getLength());
@@ -658,7 +651,7 @@ namespace basegfx
                     const B2DPolygon aNewPolygon(UnoPolygonBezierCoordsToB2DPolygon(
                         *pPointSequence,
                         *pFlagSequence,
-                        bCheckClosed));
+                        true/*bCheckClosed*/));
 
                     pPointSequence++;
                     pFlagSequence++;

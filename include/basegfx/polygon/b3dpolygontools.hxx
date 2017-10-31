@@ -65,7 +65,6 @@ namespace basegfx
             const B3DPolygon& rCandidate,
             const ::std::vector<double>& rDotDashArray,
             B3DPolyPolygon* pLineTarget,
-            B3DPolyPolygon* pGapTarget,
             double fFullDashDotLen = 0.0);
 
         /** Create/replace normals for given 3d geometry with default normals from given center to outside.
@@ -100,7 +99,7 @@ namespace basegfx
 
         // calculates if given point is on given polygon, taking care of the numerical epsilon. Uses
         // isPointOnLine internally
-        BASEGFX_DLLPUBLIC bool isPointOnPolygon(const B3DPolygon& rCandidate, const B3DPoint& rPoint, bool bWithPoints = true);
+        BASEGFX_DLLPUBLIC bool isPointOnPolygon(const B3DPolygon& rCandidate, const B3DPoint& rPoint);
 
         // helper to get a fCut position between a plane (given with normal and a point)
         // and a line given by start and end point
