@@ -204,7 +204,7 @@ bool WW8Export::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich 
 }
 
 
-void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 nScript )
+void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 nScript, const SvxFontItem *pFont )
 {
     ww8::cPoolItemIter aEnd = rItems.end();
     for ( ww8::cPoolItemIter aI = rItems.begin(); aI != aEnd; ++aI )
@@ -220,7 +220,15 @@ void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 
              //add the second judgement for #i24291# definition.
              if ( nWhich == RES_TXTATR_INETFMT && ( rItems.begin()->second->Which() == RES_TXTATR_CHARFMT ) )
                  continue;
-            AttrOutput().OutputItem( *pItem );
+
+             // tdf#38778 Fix output of the font in DOC run for fields
+             if (pFont &&
+                 nWhich == RES_TXTATR_FIELD)
+             {
+                 AttrOutput().OutputItem( *pFont );
+             }
+
+             AttrOutput().OutputItem( *pItem );
         }
     }
 }
@@ -269,7 +277,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
         ww8::PoolItems aItems;
         GetPoolItems( rSet, aItems, bExportParentItemSet );
         if ( bChpFormat )
-            ExportPoolItemsToCHP(aItems, nScript);
+            ExportPoolItemsToCHP(aItems, nScript, nullptr);
         if ( bPapFormat )
         {
             ww8::cPoolItemIter aEnd = aItems.end();
