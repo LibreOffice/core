@@ -19,9 +19,8 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svl/eitem.hxx>
-
 #include <svl/itemprop.hxx>
-
+#include <tools/helpers.hxx>
 #include <editeng/unoipset.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/editeng.hxx>
@@ -272,9 +271,6 @@ uno::Reference< beans::XPropertySetInfo > const &  SvxItemPropertySet::getProper
 #ifndef TWIPS_TO_MM
 #define TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
 #endif
-#ifndef MM_TO_TWIPS
-#define MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
-#endif
 
 /** converts the given any with a metric to 100th/mm if needed */
 void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, uno::Any & rMetric ) throw()
@@ -324,19 +320,19 @@ void SvxUnoConvertFromMM( const MapUnit eDestinationMapUnit, uno::Any & rMetric 
             switch( rMetric.getValueTypeClass() )
             {
                 case uno::TypeClass_BYTE:
-                    rMetric <<= (sal_Int8)(MM_TO_TWIPS(*o3tl::forceAccess<sal_Int8>(rMetric)));
+                    rMetric <<= (sal_Int8)(sanitiseMm100ToTwip(*o3tl::forceAccess<sal_Int8>(rMetric)));
                     break;
                 case uno::TypeClass_SHORT:
-                    rMetric <<= (sal_Int16)(MM_TO_TWIPS(*o3tl::forceAccess<sal_Int16>(rMetric)));
+                    rMetric <<= (sal_Int16)(sanitiseMm100ToTwip(*o3tl::forceAccess<sal_Int16>(rMetric)));
                     break;
                 case uno::TypeClass_UNSIGNED_SHORT:
-                    rMetric <<= (sal_uInt16)(MM_TO_TWIPS(*o3tl::forceAccess<sal_uInt16>(rMetric)));
+                    rMetric <<= (sal_uInt16)(sanitiseMm100ToTwip(*o3tl::forceAccess<sal_uInt16>(rMetric)));
                     break;
                 case uno::TypeClass_LONG:
-                    rMetric <<= (sal_Int32)(MM_TO_TWIPS(*o3tl::forceAccess<sal_Int32>(rMetric)));
+                    rMetric <<= (sal_Int32)(sanitiseMm100ToTwip(*o3tl::forceAccess<sal_Int32>(rMetric)));
                     break;
                 case uno::TypeClass_UNSIGNED_LONG:
-                    rMetric <<= (sal_uInt32)(MM_TO_TWIPS(*o3tl::forceAccess<sal_uInt32>(rMetric)));
+                    rMetric <<= (sal_uInt32)(sanitiseMm100ToTwip(*o3tl::forceAccess<sal_uInt32>(rMetric)));
                     break;
                 default:
                     OSL_FAIL("AW: Missing unit translation to 100th mm!");
