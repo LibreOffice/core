@@ -281,7 +281,7 @@ void PackageManagerImpl::initRegistryBackends()
         create_folder( nullptr, m_registryCache,
                        Reference<XCommandEnvironment>(), false);
     m_xRegistry.set( ::dp_registry::create(
-                         m_context, m_registryCache, false,
+                         m_context, m_registryCache,
                          m_xComponentContext ) );
 }
 

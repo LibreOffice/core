@@ -31,7 +31,7 @@
 namespace dbaccess
 {
 
-    void notifyDataSourceModified(const css::uno::Reference< css::uno::XInterface >& _rxObject,bool _bModified);
+    void notifyDataSourceModified(const css::uno::Reference< css::uno::XInterface >& _rxObject);
 
     css::uno::Reference< css::uno::XInterface >
         getDataSource( const css::uno::Reference< css::uno::XInterface >& _rxDependentObject );

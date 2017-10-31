@@ -578,7 +578,7 @@ namespace dbaui
 
         SetText( OUString() );
 
-        LayoutHelper::positionBelow( *m_pRB_ConnectDatabase, *m_pDatasourceType, RelatedControls, INDENT_BELOW_RADIO );
+        LayoutHelper::positionBelow( *m_pRB_ConnectDatabase, *m_pDatasourceType, INDENT_BELOW_RADIO );
 
         if ( !bValid || bReadonly )
         {
