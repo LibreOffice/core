@@ -1282,14 +1282,14 @@ sal_Bool TYPEREG_CALLTYPE typereg_writer_setSuperTypeName(
 
 static TypeWriterImpl TYPEREG_CALLTYPE createEntry(
     RTTypeClass typeClass, rtl_uString const * typeName, rtl_uString const * superTypeName,
-    sal_uInt16 fieldCount, sal_uInt16 methodCount, sal_uInt16 referenceCount)
+    sal_uInt16 fieldCount)
 {
     OUString empty;
     sal_uInt16 superTypeCount = rtl_uString_getLength(superTypeName) == 0
         ? 0 : 1;
     TypeWriterImpl t = typereg_writer_create(
         TYPEREG_VERSION_0, empty.pData, empty.pData, typeClass, false, typeName,
-        superTypeCount, fieldCount, methodCount, referenceCount);
+        superTypeCount, fieldCount, 0/*methodCount*/, 0/*referenceCount*/);
     if (superTypeCount > 0) {
         typereg_writer_setSuperTypeName(t, 0, superTypeName);
     }
@@ -1307,9 +1307,7 @@ RegistryTypeWriter::RegistryTypeWriter(RTTypeClass               RTTypeClass,
     m_hImpl = createEntry(RTTypeClass,
                                   typeName.pData,
                                   superTypeName.pData,
-                                  fieldCount,
-                                  0,
-                                  0);
+                                  fieldCount);
 }
 
 RegistryTypeWriter::~RegistryTypeWriter()

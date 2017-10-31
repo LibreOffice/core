@@ -130,8 +130,7 @@ namespace OleHelper
      */
     OOX_DLLPUBLIC bool         importStdPic(
                             StreamDataSequence& orGraphicData,
-                            BinaryInputStream& rInStrm,
-                            bool bWithGuid );
+                            BinaryInputStream& rInStrm );
 }
 
 class OOX_DLLPUBLIC OleFormCtrlExportHelper final

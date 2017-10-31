@@ -300,15 +300,12 @@ bool OleHelper::importStdFont( StdFontInfo& orFontInfo, BinaryInputStream& rInSt
     return !rInStrm.isEof() && (nVersion <= 1);
 }
 
-bool OleHelper::importStdPic( StreamDataSequence& orGraphicData, BinaryInputStream& rInStrm, bool bWithGuid )
+bool OleHelper::importStdPic( StreamDataSequence& orGraphicData, BinaryInputStream& rInStrm )
 {
-    if( bWithGuid )
-    {
-        bool bIsStdPic = importGuid( rInStrm ) == OLE_GUID_STDPIC;
-        OSL_ENSURE( bIsStdPic, "OleHelper::importStdPic - unexpected header GUID, expected StdPic" );
-        if( !bIsStdPic )
-            return false;
-    }
+    bool bIsStdPic = importGuid( rInStrm ) == OLE_GUID_STDPIC;
+    OSL_ENSURE( bIsStdPic, "OleHelper::importStdPic - unexpected header GUID, expected StdPic" );
+    if( !bIsStdPic )
+        return false;
 
     sal_uInt32 nStdPicId;
     sal_Int32 nBytes;

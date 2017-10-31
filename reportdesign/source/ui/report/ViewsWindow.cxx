@@ -54,7 +54,7 @@ namespace rptui
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-bool lcl_getNewRectSize(const tools::Rectangle& _aObjRect,long& _nXMov, long& _nYMov,SdrObject const * _pObj,SdrView const * _pView, ControlModification _nControlModification, bool _bBoundRects)
+bool lcl_getNewRectSize(const tools::Rectangle& _aObjRect,long& _nXMov, long& _nYMov,SdrObject const * _pObj,SdrView const * _pView, ControlModification _nControlModification)
 {
     bool bMoveAllowed = _nXMov != 0 || _nYMov != 0;
     if ( bMoveAllowed )
@@ -80,7 +80,7 @@ bool lcl_getNewRectSize(const tools::Rectangle& _aObjRect,long& _nXMov, long& _n
                 pOverlappedObj = isOver(aNewRect,*_pObj->GetPage(),*_pView,true,_pObj);
                 if ( pOverlappedObj && _pObj != pOverlappedObj )
                 {
-                    tools::Rectangle aOverlappingRect = (_bBoundRects ? pOverlappedObj->GetCurrentBoundRect() : pOverlappedObj->GetSnapRect());
+                    tools::Rectangle aOverlappingRect = pOverlappedObj->GetSnapRect();
                     sal_Int32 nXTemp = _nXMov;
                     sal_Int32 nYTemp = _nYMov;
                     switch(_nControlModification)
@@ -842,7 +842,7 @@ void OViewsWindow::alignMarkedObjects(ControlModification _nControlModification,
                     *pValue = aGetFun(&aBound) - aGetFun(&aObjRect);
             }
 
-            if ( lcl_getNewRectSize(aObjRect,nXMov,nYMov,pObj,pView,_nControlModification,false) )
+            if ( lcl_getNewRectSize(aObjRect,nXMov,nYMov,pObj,pView,_nControlModification) )
             {
                 const Size aSize(nXMov,nYMov);
                 pView->AddUndo(pView->GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*pObj,aSize));
@@ -863,7 +863,7 @@ void OViewsWindow::alignMarkedObjects(ControlModification _nControlModification,
                             nXMov = aObjRect.getWidth();
                         else if ( _nControlModification == ControlModification::WIDTH_GREATEST )
                             nYMov = aObjRect.getHeight();
-                        lcl_getNewRectSize(aObjRect,nXMov,nYMov,pObj,pView,_nControlModification,false);
+                        lcl_getNewRectSize(aObjRect,nXMov,nYMov,pObj,pView,_nControlModification);
                         SAL_FALLTHROUGH;
                     case ControlModification::WIDTH_SMALLEST:
                     case ControlModification::HEIGHT_SMALLEST:

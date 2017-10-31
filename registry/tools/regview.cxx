@@ -46,7 +46,7 @@ int __cdecl main( int argc, char * argv[] )
         }
 
         OUString regName( convertToFileUrl(argv[1], strlen(argv[1])) );
-        if (reg_openRegistry(regName.pData, &hReg, RegAccessMode::READONLY) != RegError::NO_ERROR)
+        if (reg_openRegistry(regName.pData, &hReg) != RegError::NO_ERROR)
         {
             fprintf(stderr, "open registry \"%s\" failed\n", argv[1]);
             exit(1);

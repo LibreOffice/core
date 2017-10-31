@@ -59,16 +59,14 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
                                              RegKeyHandle* phRootKey);
 
 
-/** This function opens a registry with the specified name.
+/** This function opens a registry with the specified name. in readonly mode.
 
     @param  registryName points to a null terminated string specifying the name of the registry.
     @param  phRegistry points to a handle of the opened registry if the function succeeds otherwise NULL.
-    @param  accessMode specifies the accessmode of the registry, RegAccessMode::READONLY or RegAccessMode::READWRITE.
     @return REG_NO_ERROR if succeeds else an error code.
 */
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryName,
-                                               RegHandle* phRegistry,
-                                               RegAccessMode accessMode);
+                                               RegHandle* phRegistry);
 
 
 /** This function closes a registry.
