@@ -476,7 +476,7 @@ private:
     void runBreak();
     void parBreak();
     void tableBreak();
-    writerfilter::Reference<Properties>::Pointer_t getProperties(RTFSprms& rAttributes, RTFSprms& rSprms);
+    writerfilter::Reference<Properties>::Pointer_t getProperties(RTFSprms& rAttributes, RTFSprms& rSprms, Id nStyleType);
     void checkNeedPap();
     void sectBreak(bool bFinal = false);
     void prepareProperties(
