@@ -749,16 +749,16 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                 if ( nN )
                                 {
                                     OUString aPropName( "EndShape" );
-                                    SetPropValue( Any(aXShape), xPropSet, aPropName, true );
+                                    SetPropValue( Any(aXShape), xPropSet, aPropName );
                                     aPropName = "EndGluePointIndex";
-                                    SetPropValue( Any(nId), xPropSet, aPropName, true );
+                                    SetPropValue( Any(nId), xPropSet, aPropName );
                                 }
                                 else
                                 {
                                     OUString aPropName( "StartShape" );
-                                    SetPropValue( Any(aXShape), xPropSet, aPropName, true );
+                                    SetPropValue( Any(aXShape), xPropSet, aPropName );
                                     aPropName = "StartGluePointIndex";
-                                    SetPropValue( Any(nId), xPropSet, aPropName, true );
+                                    SetPropValue( Any(nId), xPropSet, aPropName );
                                 }
 
                                 // Not sure what this is good for, repaint or broadcast of object change.
@@ -7266,23 +7266,19 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
 }
 
 bool SvxMSDffManager::SetPropValue( const uno::Any& rAny, const uno::Reference< css::beans::XPropertySet > & rXPropSet,
-            const OUString& rPropName, bool bTestPropertyAvailability )
+            const OUString& rPropName )
 {
-    bool bRetValue = true;
-    if ( bTestPropertyAvailability )
+    bool bRetValue = false;
+    try
+    {
+        uno::Reference< beans::XPropertySetInfo >
+            aXPropSetInfo( rXPropSet->getPropertySetInfo() );
+        if ( aXPropSetInfo.is() )
+            bRetValue = aXPropSetInfo->hasPropertyByName( rPropName );
+    }
+    catch( const uno::Exception& )
     {
         bRetValue = false;
-        try
-        {
-            uno::Reference< beans::XPropertySetInfo >
-                aXPropSetInfo( rXPropSet->getPropertySetInfo() );
-            if ( aXPropSetInfo.is() )
-                bRetValue = aXPropSetInfo->hasPropertyByName( rPropName );
-        }
-        catch( const uno::Exception& )
-        {
-            bRetValue = false;
-        }
     }
     if ( bRetValue )
     {

@@ -1152,7 +1152,7 @@ public:
     virtual void Commit( EscherPropertyContainer& rProps, const tools::Rectangle& rRect);
 
     static sal_uInt32  GetColor( const sal_uInt32 nColor );
-    static sal_uInt32  GetColor( const Color& rColor, bool bSwap );
+    static sal_uInt32  GetColor( const Color& rColor );
 
                 // ...Sdr... implemented in eschesdo.cxx
 

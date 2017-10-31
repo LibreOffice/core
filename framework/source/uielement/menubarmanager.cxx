@@ -95,14 +95,6 @@ namespace framework
 #define aCmdHelpMenu ".uno:HelpMenu"
 #define aSpecialWindowCommand ".uno:WindowList"
 
-static sal_Int16 getImageTypeFromBools( bool bBig )
-{
-    sal_Int16 n( 0 );
-    if ( bBig )
-        n |= css::ui::ImageType::SIZE_LARGE;
-    return n;
-}
-
 MenuBarManager::MenuBarManager(
     const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& rFrame,
@@ -260,7 +252,7 @@ void SAL_CALL MenuBarManager::elementInserted( const css::ui::ConfigurationEvent
         return;
 
     sal_Int16 nImageType = sal_Int16();
-    sal_Int16 nCurrentImageType = getImageTypeFromBools( false );
+    sal_Int16 nCurrentImageType = css::ui::ImageType::SIZE_LARGE;
     if (( Event.aInfo >>= nImageType ) &&
         ( nImageType == nCurrentImageType ))
         RequestImages();

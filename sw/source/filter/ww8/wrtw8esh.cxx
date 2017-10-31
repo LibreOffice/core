@@ -1892,7 +1892,7 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
     }
     else
     {
-        sal_uInt32 nFillColor = GetColor(rBrush.GetColor(), false);
+        sal_uInt32 nFillColor = GetColor(rBrush.GetColor());
         rPropOpt.AddOpt( ESCHER_Prop_fillColor, nFillColor );
         rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, nFillColor ^ 0xffffff );
         rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
@@ -1929,7 +1929,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
             {
                 if( bFirstLine )
                 {
-                    sal_uInt32 nLineColor = GetColor(pLine->GetColor(), false);
+                    sal_uInt32 nLineColor = GetColor(pLine->GetColor());
                     rPropOpt.AddOpt( ESCHER_Prop_lineColor, nLineColor );
                     rPropOpt.AddOpt( ESCHER_Prop_lineBackColor,
                         nLineColor ^ 0xffffff );

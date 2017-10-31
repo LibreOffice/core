@@ -465,7 +465,7 @@ bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< c
         size_t i = 0;
         for (i=0; i<c; ++i)
         {
-            if (!fpf::closeIt(aCheck.m_lModelFrames[i], false))
+            if (!fpf::closeIt(aCheck.m_lModelFrames[i]))
                 return false;
         }
     }
@@ -502,7 +502,7 @@ bool CloseDispatcher::implts_closeFrame()
     // don't deliver ownership; our "UI user" will try it again if it failed.
     // OK - he will get an empty frame then. But normally an empty frame
     // should be closeable always :-)
-    if (!fpf::closeIt(xFrame, false))
+    if (!fpf::closeIt(xFrame))
         return false;
 
     {
