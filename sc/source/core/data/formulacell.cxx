@@ -4345,7 +4345,9 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return false;
     }
 
-    if (!bThreadingProhibited && !ScCalcConfig::isOpenCLEnabled() && pCode->GetVectorState() != FormulaVectorDisabledNotInSubSet && officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get())
+    if (!bThreadingProhibited && !ScCalcConfig::isOpenCLEnabled() &&
+        pCode->GetVectorState() == FormulaVectorEnabledForThreading &&
+        officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get())
     {
         // iterate over code in the formula ...
         // ensure all input is pre-calculated -
@@ -4437,32 +4439,39 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return true;
     }
 
+    bool bCanVectorize = false;
     switch (pCode->GetVectorState())
     {
         case FormulaVectorEnabled:
         case FormulaVectorCheckReference:
-            // Good.
+            bCanVectorize = true; // Good.
         break;
 
         // Not good.
         case FormulaVectorDisabledByOpCode:
             aScope.addMessage("group calc disabled due to vector state (non-vector-supporting opcode)");
-            return false;
+            break;
         case FormulaVectorDisabledNotInSoftwareSubset:
             aScope.addMessage("group calc disabled due to vector state (opcode not in software subset)");
-            return false;
+            break;
         case FormulaVectorDisabledByStackVariable:
             aScope.addMessage("group calc disabled due to vector state (non-vector-supporting stack variable)");
-            return false;
+            break;
         case FormulaVectorDisabledNotInSubSet:
             aScope.addMessage("group calc disabled due to vector state (opcode not in subset)");
-            return false;
+            break;
+        case FormulaVectorEnabledForThreading:
+            aScope.addMessage("group calc disabled due to vector state (wanted to try threading but couldn't)");
+            break;
         case FormulaVectorDisabled:
         case FormulaVectorUnknown:
         default:
             aScope.addMessage("group calc disabled due to vector state (unknown)");
             return false;
     }
+
+    if (!bCanVectorize)
+        return false;
 
     if (!ScCalcConfig::isOpenCLEnabled() && !ScCalcConfig::isSwInterpreterEnabled())
     {

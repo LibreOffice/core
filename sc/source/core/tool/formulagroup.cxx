@@ -18,9 +18,11 @@
 #include <interpre.hxx>
 #include <scmatrix.hxx>
 #include <globalnames.hxx>
+#include <comphelper/threadpool.hxx>
 
 #include <formula/vectortoken.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Calc.hxx>
 #if HAVE_FEATURE_OPENCL
 #include <opencl/platforminfo.hxx>
 #endif
@@ -145,116 +147,207 @@ ScMatrixRef FormulaGroupInterpreterSoftware::inverseMatrix(const ScMatrix& /*rMa
     return ScMatrixRef();
 }
 
+class SoftwareInterpreterFunc
+{
+public:
+    SoftwareInterpreterFunc(ScTokenArray& rCode,
+                            ScAddress aBatchTopPos,
+                            const ScAddress& rTopPos,
+                            ScDocument& rDoc,
+                            std::vector<formula::FormulaConstTokenRef>& rRes,
+                            SCROW nIndex,
+                            SCROW nLastIndex) :
+        mrCode(rCode),
+        maBatchTopPos(aBatchTopPos),
+        mrTopPos(rTopPos),
+        mrDoc(rDoc),
+        mrResults(rRes),
+        mnIdx(nIndex),
+        mnLastIdx(nLastIndex)
+    {
+    }
+
+    void operator() ()
+    {
+        double fNan;
+        rtl::math::setNan(&fNan);
+        for (SCROW i = mnIdx; i <= mnLastIdx; ++i, maBatchTopPos.IncRow())
+        {
+            ScTokenArray aCode2;
+            formula::FormulaTokenArrayPlainIterator aIter(mrCode);
+            for (const formula::FormulaToken* p = aIter.First(); p; p = aIter.Next())
+            {
+                switch (p->GetType())
+                {
+                    case formula::svSingleVectorRef:
+                    {
+                        const formula::SingleVectorRefToken* p2 = static_cast<const formula::SingleVectorRefToken*>(p);
+                        const formula::VectorRefArray& rArray = p2->GetArray();
+
+                        rtl_uString* pStr = nullptr;
+                        double fVal = fNan;
+                        if (static_cast<size_t>(i) < p2->GetArrayLength())
+                        {
+                            if (rArray.mpStringArray)
+                                // See if the cell is of string type.
+                                pStr = rArray.mpStringArray[i];
+
+                            if (!pStr && rArray.mpNumericArray)
+                                fVal = rArray.mpNumericArray[i];
+                        }
+
+                        if (pStr)
+                        {
+                            // This is a string cell.
+                            svl::SharedStringPool& rPool = mrDoc.GetSharedStringPool();
+                            aCode2.AddString(rPool.intern(OUString(pStr)));
+                        }
+                        else if (rtl::math::isNan(fVal))
+                            // Value of NaN represents an empty cell.
+                            aCode2.AddToken(ScEmptyCellToken(false, false));
+                        else
+                            // Numeric cell.
+                            aCode2.AddDouble(fVal);
+                    }
+                    break;
+                    case formula::svDoubleVectorRef:
+                    {
+                        const formula::DoubleVectorRefToken* p2 = static_cast<const formula::DoubleVectorRefToken*>(p);
+                        size_t nRowStart = p2->IsStartFixed() ? 0 : i;
+                        size_t nRowEnd = p2->GetRefRowSize() - 1;
+                        if (!p2->IsEndFixed())
+                            nRowEnd += i;
+
+                        assert(nRowStart <= nRowEnd);
+                        ScMatrixRef pMat(new ScVectorRefMatrix(p2, nRowStart, nRowEnd - nRowStart + 1));
+
+                        if (p2->IsStartFixed() && p2->IsEndFixed())
+                        {
+                            // Cached the converted token for absolute range reference.
+                            ScComplexRefData aRef;
+                            ScRange aRefRange = mrTopPos;
+                            aRefRange.aEnd.SetRow(mrTopPos.Row() + nRowEnd);
+                            aRef.InitRange(aRefRange);
+                            formula::FormulaTokenRef xTok(new ScMatrixRangeToken(pMat, aRef));
+                            aCode2.AddToken(*xTok);
+                        }
+                        else
+                        {
+                            ScMatrixToken aTok(pMat);
+                            aCode2.AddToken(aTok);
+                        }
+                    }
+                    break;
+                    default:
+                        aCode2.AddToken(*p);
+                } // end of switch statement
+            } // end of formula token for loop
+
+            ScFormulaCell* pDest = mrDoc.GetFormulaCell(maBatchTopPos);
+            if (!pDest)
+                return;
+
+            ScCompiler aComp(&mrDoc, maBatchTopPos, aCode2);
+            aComp.CompileTokenArray();
+            ScInterpreter aInterpreter(pDest, &mrDoc, mrDoc.GetNonThreadedContext(), maBatchTopPos, aCode2);
+            aInterpreter.Interpret();
+            mrResults[i] = aInterpreter.GetResultToken();
+        } // Row iteration for loop end
+    } // operator () end
+
+private:
+    ScTokenArray& mrCode;
+    ScAddress maBatchTopPos;
+    const ScAddress& mrTopPos;
+    ScDocument& mrDoc;
+    std::vector<formula::FormulaConstTokenRef>& mrResults;
+    SCROW mnIdx;
+    SCROW mnLastIdx;
+};
+
 bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddress& rTopPos,
                                                 ScFormulaCellGroupRef& xGroup,
                                                 ScTokenArray& rCode)
 {
-    typedef std::unordered_map<const formula::FormulaToken*, formula::FormulaTokenRef> CachedTokensType;
-
     // Decompose the group into individual cells and calculate them individually.
 
     // The caller must ensure that the top position is the start position of
     // the group.
 
     ScAddress aTmpPos = rTopPos;
-    std::vector<formula::FormulaConstTokenRef> aResults;
-    aResults.reserve(xGroup->mnLength);
-    CachedTokensType aCachedTokens;
+    std::vector<formula::FormulaConstTokenRef> aResults(xGroup->mnLength);
 
-    double fNan;
-    rtl::math::setNan(&fNan);
-
-    for (SCROW i = 0; i < xGroup->mnLength; ++i, aTmpPos.IncRow())
+    class Executor : public comphelper::ThreadTask
     {
-        ScTokenArray aCode2;
-        formula::FormulaTokenArrayPlainIterator aIter(rCode);
-        for (const formula::FormulaToken* p = aIter.First(); p; p = aIter.Next())
+    public:
+        Executor(std::shared_ptr<comphelper::ThreadTaskTag>& rTag,
+                 ScTokenArray& rCode2,
+                 ScAddress aBatchTopPos,
+                 const ScAddress& rTopPos2,
+                 ScDocument& rDoc2,
+                 std::vector<formula::FormulaConstTokenRef>& rRes,
+                 SCROW nIndex,
+                 SCROW nLastIndex) :
+            comphelper::ThreadTask(rTag),
+            maSWIFunc(rCode2, aBatchTopPos, rTopPos2, rDoc2, rRes, nIndex, nLastIndex)
         {
-            CachedTokensType::iterator it = aCachedTokens.find(p);
-            if (it != aCachedTokens.end())
-            {
-                // This token is cached. Use the cached one.
-                aCode2.AddToken(*it->second);
-                continue;
-            }
-
-            switch (p->GetType())
-            {
-                case formula::svSingleVectorRef:
-                {
-                    const formula::SingleVectorRefToken* p2 = static_cast<const formula::SingleVectorRefToken*>(p);
-                    const formula::VectorRefArray& rArray = p2->GetArray();
-
-                    rtl_uString* pStr = nullptr;
-                    double fVal = fNan;
-                    if (static_cast<size_t>(i) < p2->GetArrayLength())
-                    {
-                        if (rArray.mpStringArray)
-                            // See if the cell is of string type.
-                            pStr = rArray.mpStringArray[i];
-
-                        if (!pStr && rArray.mpNumericArray)
-                            fVal = rArray.mpNumericArray[i];
-                    }
-
-                    if (pStr)
-                    {
-                        // This is a string cell.
-                        svl::SharedStringPool& rPool = rDoc.GetSharedStringPool();
-                        aCode2.AddString(rPool.intern(OUString(pStr)));
-                    }
-                    else if (rtl::math::isNan(fVal))
-                        // Value of NaN represents an empty cell.
-                        aCode2.AddToken(ScEmptyCellToken(false, false));
-                    else
-                        // Numeric cell.
-                        aCode2.AddDouble(fVal);
-                }
-                break;
-                case formula::svDoubleVectorRef:
-                {
-                    const formula::DoubleVectorRefToken* p2 = static_cast<const formula::DoubleVectorRefToken*>(p);
-                    size_t nRowStart = p2->IsStartFixed() ? 0 : i;
-                    size_t nRowEnd = p2->GetRefRowSize() - 1;
-                    if (!p2->IsEndFixed())
-                        nRowEnd += i;
-
-                    assert(nRowStart <= nRowEnd);
-                    ScMatrixRef pMat(new ScVectorRefMatrix(p2, nRowStart, nRowEnd - nRowStart + 1));
-
-                    if (p2->IsStartFixed() && p2->IsEndFixed())
-                    {
-                        // Cached the converted token for absolute range reference.
-                        ScComplexRefData aRef;
-                        ScRange aRefRange = rTopPos;
-                        aRefRange.aEnd.SetRow(rTopPos.Row() + nRowEnd);
-                        aRef.InitRange(aRefRange);
-                        formula::FormulaTokenRef xTok(new ScMatrixRangeToken(pMat, aRef));
-                        aCachedTokens.emplace(p, xTok);
-                        aCode2.AddToken(*xTok);
-                    }
-                    else
-                    {
-                        ScMatrixToken aTok(pMat);
-                        aCode2.AddToken(aTok);
-                    }
-                }
-                break;
-                default:
-                    aCode2.AddToken(*p);
-            }
+        }
+        virtual void doWork() override
+        {
+            maSWIFunc();
         }
 
-        ScFormulaCell* pDest = rDoc.GetFormulaCell(aTmpPos);
-        if (!pDest)
-            return false;
+    private:
+        SoftwareInterpreterFunc maSWIFunc;
+    };
 
-        ScCompiler aComp(&rDoc, aTmpPos, aCode2);
-        aComp.CompileTokenArray();
-        ScInterpreter aInterpreter(pDest, &rDoc, rDoc.GetNonThreadedContext(), aTmpPos, aCode2);
-        aInterpreter.Interpret();
-        aResults.push_back(aInterpreter.GetResultToken());
-    } // for loop end (xGroup->mnLength)
+    static const bool bThreadingProhibited = std::getenv("SC_NO_THREADED_CALCULATION");
+
+    bool bUseThreading = !bThreadingProhibited && officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get();
+
+    if (bUseThreading)
+    {
+        comphelper::ThreadPool& rThreadPool(comphelper::ThreadPool::getSharedOptimalPool());
+        sal_Int32 nThreadCount = rThreadPool.getWorkerCount();
+
+        SCROW nLen = xGroup->mnLength;
+        SCROW nBatchSize = nLen / nThreadCount;
+        if (nLen < nThreadCount)
+        {
+            nBatchSize = 1;
+            nThreadCount = nLen;
+        }
+        SCROW nRemaining = nLen - nBatchSize * nThreadCount;
+
+        SAL_INFO("sc.swipret.threaded", "Running " << nThreadCount << " threads");
+
+        SCROW nLeft = nLen;
+        SCROW nStart = 0;
+        std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();
+        while (nLeft > 0)
+        {
+            SCROW nCount = std::min(nLeft, nBatchSize) + (nRemaining ? 1 : 0);
+            if ( nRemaining )
+                --nRemaining;
+            SCROW nLast = nStart + nCount - 1;
+            rThreadPool.pushTask(new Executor(aTag, rCode, aTmpPos, rTopPos, rDoc, aResults, nStart, nLast));
+            aTmpPos.IncRow(nCount);
+            nLeft -= nCount;
+            nStart = nLast + 1;
+        }
+        SAL_INFO("sc.swipret.threaded", "Joining threads");
+        rThreadPool.waitUntilDone(aTag);
+        SAL_INFO("sc.swipret.threaded", "Done");
+    }
+    else
+    {
+        SoftwareInterpreterFunc aSWIFunc(rCode, aTmpPos, rTopPos, rDoc, aResults, 0, xGroup->mnLength - 1);
+        aSWIFunc();
+    }
+
+    for (SCROW i = 0; i < xGroup->mnLength; ++i)
+        if (!aResults[i].get())
+            return false;
 
     if (!aResults.empty())
         rDoc.SetFormulaResults(rTopPos, &aResults[0], aResults.size());
