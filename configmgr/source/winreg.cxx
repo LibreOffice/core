@@ -39,7 +39,8 @@ namespace {
 // This is not a generic registry reader. We assume the following structure:
 // Last element of Key becomes prop, first part is the path and optionally nodes,
 // when the node has oor:op attribute.
-// Values can be the following: Value (string) and Final (dword, optional)
+// Values can be the following: Value (string), Type (string, optional),
+// Final (dword, optional), External (dword, optional)
 //
 // For example the following registry setting:
 // [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice\org.openoffice.UserProfile\Data\o]
@@ -79,6 +80,18 @@ namespace {
 // <item oor:path="/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments">
 //     <prop oor:name="AutoCheckEnabled" oor:type="xs:boolean" oor:finalized="true">
 //         <value>false</value>
+//     </prop>
+// </item>
+//
+// External (component data) example:
+// [HKEY_CURRENT_USER\Software\Policies\LibreOffice\org.openoffice.UserProfile\Data\o]
+// "Value"="com.sun.star.configuration.backend.LdapUserProfileBe company"
+// "Final"=dword:00000001
+// "External"=dword:00000001
+// becomes the following in configuration:
+// <item oor:path="/org.openoffice.UserProfile/Data">
+//     <prop oor:name="o" oor:finalized="true">
+//         <value oor:external="com.sun.star.configuration.backend.LdapUserProfileBe company"/>
 //     </prop>
 // </item>
 
@@ -127,6 +140,7 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                 new wchar_t[nLongestValueLen/sizeof(wchar_t) + 1]);
 
             bool bFinal = false;
+            bool bExternal = false;
             OUString aValue;
             OUString aType;
 
@@ -136,17 +150,25 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                 DWORD nValueLen = nLongestValueLen + 1;
 
                 RegEnumValueW(hCurKey, i, pValueName.get(), &nValueNameLen, nullptr, nullptr, reinterpret_cast<LPBYTE>(pValue.get()), &nValueLen);
-                const wchar_t wsValue[] = L"Value";
-                const wchar_t wsFinal[] = L"Final";
-                const wchar_t wsType[] = L"Type";
 
-                if(!wcscmp(pValueName.get(), wsValue))
+                if (!wcscmp(pValueName.get(), L"Value"))
                     aValue = o3tl::toU(pValue.get());
-                else if (!wcscmp(pValueName.get(), wsType))
+                else if (!wcscmp(pValueName.get(), L"Type"))
                     aType = o3tl::toU(pValue.get());
-                else if(!wcscmp(pValueName.get(), wsFinal) && *reinterpret_cast<DWORD*>(pValue.get()) == 1)
-                    bFinal = true;
+                else if (!wcscmp(pValueName.get(), L"Final"))
+                {
+                    if (*reinterpret_cast<DWORD*>(pValue.get()) == 1)
+                        bFinal = true;
+                }
+                else if (!wcscmp(pValueName.get(), L"External"))
+                {
+                    if (*reinterpret_cast<DWORD*>(pValue.get()) == 1)
+                        bExternal = true;
+                }
             }
+            // type and external are mutually exclusive
+            assert(aType.isEmpty() || !bExternal);
+
             sal_Int32 aLastSeparator = aKeyName.lastIndexOf('\\');
             OUString aPathAndNodes = aKeyName.copy(0, aLastSeparator);
             OUString aProp = aKeyName.copy(aLastSeparator + 1);
@@ -202,9 +224,20 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
             }
             if(bFinal)
                 aFileHandle.writeString(" oor:finalized=\"true\"");
-            aFileHandle.writeString("><value>");
+            aFileHandle.writeString("><value");
+            if (bExternal)
+                aFileHandle.writeString(" oor:external=\"");
+            else
+                aFileHandle.writeString(">");
+
             writeValueContent(aFileHandle, aValue);
-            aFileHandle.writeString("</value></prop>");
+
+            if (bExternal)
+                aFileHandle.writeString("\"/");
+            else
+                aFileHandle.writeString("</value");
+
+            aFileHandle.writeString("></prop>");
             for(; nCloseNode > 0; nCloseNode--)
                 aFileHandle.writeString("</node>");
             aFileHandle.writeString("</item>\n");
