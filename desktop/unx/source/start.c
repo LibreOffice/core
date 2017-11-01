@@ -68,7 +68,7 @@ typedef struct {
 } ChildInfo;
 
 static int
-child_info_get_status_fd(ChildInfo *info)
+child_info_get_status_fd(ChildInfo const *info)
 {
     return info->status_fd;
 }
@@ -365,7 +365,7 @@ static int connect_pipe(rtl_uString *pPipePath)
 }
 
 /* Escape: "," -> "\\,", "\0" -> "\\0", "\\" -> "\\\\" */
-static rtl_uString *escape_path(rtl_uString *pToEscape)
+static rtl_uString *escape_path(rtl_uString const *pToEscape)
 {
     rtl_uString *pBuffer = NULL;
     sal_Int32 nCapacity = 1000;
@@ -405,7 +405,7 @@ static rtl_uString *escape_path(rtl_uString *pToEscape)
 }
 
 /* Send args to the LO instance (using the 'fd' file descriptor) */
-static sal_Bool send_args(int fd, rtl_uString *pCwdPath)
+static sal_Bool send_args(int fd, rtl_uString const *pCwdPath)
 {
     rtl_uString *pBuffer = NULL, *pTmp = NULL;
     sal_Int32 nCapacity = 1000;
@@ -497,7 +497,7 @@ static sal_Bool send_args(int fd, rtl_uString *pCwdPath)
 #define BUFFER_LEN 255
 
 /* Read the percent to show in splash. */
-static ProgressStatus read_percent(ChildInfo *info, int *pPercent)
+static ProgressStatus read_percent(ChildInfo const *info, int *pPercent)
 {
     static char pBuffer[BUFFER_LEN + 1];
     static char *pNext = pBuffer;

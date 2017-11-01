@@ -185,7 +185,7 @@ sal_uInt8 PcxExpand::GetByte(SvStream& rInp)
     return Data;
 }
 
-bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead)
+bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader const & rHead)
 {
     BmpFileHeader  aBmpHead;
     BmpInfoHeader  aBmpInfo;

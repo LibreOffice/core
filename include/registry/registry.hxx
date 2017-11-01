@@ -53,7 +53,7 @@ struct Registry_Api
     RegError    (REGISTRY_CALLTYPE *deleteKey)          (RegKeyHandle, rtl_uString*);
     RegError    (REGISTRY_CALLTYPE *closeKey)           (RegKeyHandle);
     RegError    (REGISTRY_CALLTYPE *setValue)           (RegKeyHandle, rtl_uString*, RegValueType, RegValue, sal_uInt32);
-    RegError    (REGISTRY_CALLTYPE *setLongListValue)   (RegKeyHandle, rtl_uString*, sal_Int32*, sal_uInt32);
+    RegError    (REGISTRY_CALLTYPE *setLongListValue)   (RegKeyHandle, rtl_uString*, sal_Int32 const *, sal_uInt32);
     RegError    (REGISTRY_CALLTYPE *setStringListValue) (RegKeyHandle, rtl_uString*, sal_Char**, sal_uInt32);
     RegError    (REGISTRY_CALLTYPE *setUnicodeListValue)(RegKeyHandle, rtl_uString*, sal_Unicode**, sal_uInt32);
     RegError    (REGISTRY_CALLTYPE *getValueInfo)       (RegKeyHandle, rtl_uString*, RegValueType*, sal_uInt32*);
@@ -448,7 +448,7 @@ public:
         @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError setLongListValue(const rtl::OUString& keyName,
-                                         sal_Int32* pValueList,
+                                         sal_Int32 const * pValueList,
                                          sal_uInt32 len);
 
     /** sets an ascii list value of a key.
@@ -824,7 +824,7 @@ inline RegError RegistryKey::setValue(const rtl::OUString& keyName,
     }
 
 inline RegError RegistryKey::setLongListValue(const rtl::OUString& keyName,
-                                                  sal_Int32* pValueList,
+                                                  sal_Int32 const * pValueList,
                                                   sal_uInt32 len)
     {
         if (m_registry.isValid())

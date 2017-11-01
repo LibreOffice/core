@@ -117,8 +117,8 @@ typedef void* storeDirectoryHandle;
  */
 STORE_DLLPUBLIC storeError SAL_CALL store_openDirectory (
     storeFileHandle       hFile,
-    rtl_uString          *pPath,
-    rtl_uString          *pName,
+    rtl_uString const    *pPath,
+    rtl_uString const    *pName,
     storeAccessMode       eAccessMode,
     storeDirectoryHandle *phDirectory
 ) SAL_THROW_EXTERN_C();
@@ -161,8 +161,8 @@ typedef void* storeStreamHandle;
  */
 STORE_DLLPUBLIC storeError SAL_CALL store_openStream (
     storeFileHandle    hFile,
-    rtl_uString       *pPath,
-    rtl_uString       *pName,
+    rtl_uString const *pPath,
+    rtl_uString const *pName,
     storeAccessMode    eMode,
     storeStreamHandle *phStrm
 ) SAL_THROW_EXTERN_C();
@@ -207,8 +207,8 @@ STORE_DLLPUBLIC storeError SAL_CALL store_writeStream (
  */
 STORE_DLLPUBLIC storeError SAL_CALL store_remove (
     storeFileHandle hFile,
-    rtl_uString    *pPath,
-    rtl_uString    *pName
+    rtl_uString const *pPath,
+    rtl_uString const *pName
 ) SAL_THROW_EXTERN_C();
 
 #ifdef __cplusplus

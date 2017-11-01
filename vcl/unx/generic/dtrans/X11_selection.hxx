@@ -373,7 +373,7 @@ namespace x11 {
         bool handleReceivePropertyNotify( XPropertyEvent& rNotify );
         bool handleSelectionNotify( XSelectionEvent& rNotify );
         bool handleDragEvent( XEvent& rMessage );
-        bool handleDropEvent( XClientMessageEvent& rMessage );
+        bool handleDropEvent( XClientMessageEvent const & rMessage );
 
         // dnd helpers
         void sendDragStatus( Atom nDropAction );

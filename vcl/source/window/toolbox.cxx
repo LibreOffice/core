@@ -4838,7 +4838,7 @@ void ToolBox::ChangeHighlight( ImplToolItems::size_type nPos )
     }
 }
 
-void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus )
+void ToolBox::ImplChangeHighlight( ImplToolItem const * pItem, bool bNoGrabFocus )
 {
     // avoid recursion due to focus change
     if( mbChangingHighlight )

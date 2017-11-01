@@ -117,7 +117,7 @@ static int splash_load_bmp( struct splash* splash, const char *filename )
     return 1;
 }
 
-static void setup_color( int val[3], color_t *col )
+static void setup_color( int const val[3], color_t *col )
 {
     if ( val[0] < 0 || val[1] < 0 || val[2] < 0 )
         return;
@@ -160,7 +160,7 @@ static void get_bootstrap_value( int *array, int size, rtlBootstrapHandle handle
 }
 
 // setup
-static void splash_setup( struct splash* splash, int barc[3], int framec[3], int posx, int posy, int w, int h )
+static void splash_setup( struct splash* splash, int const barc[3], int const framec[3], int posx, int posy, int w, int h )
 {
     if ( splash->width <= 500 )
     {
