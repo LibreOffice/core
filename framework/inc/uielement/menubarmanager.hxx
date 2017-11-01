@@ -65,7 +65,7 @@ struct PopupControllerEntry
 
 typedef std::unordered_map< OUString, PopupControllerEntry > PopupControllerCache;
 
-class MenuBarManager:
+class MenuBarManager final :
     protected cppu::BaseMutex,
     public cppu::WeakComponentImplHelper<
         css::frame::XStatusListener,
@@ -73,7 +73,6 @@ class MenuBarManager:
         css::ui::XUIConfigurationListener,
         css::awt::XSystemDependentMenuPeer>
 {
-    protected:
         MenuBarManager(
             const css::uno::Reference< css::uno::XComponentContext >& xContext,
             const css::uno::Reference< css::frame::XFrame >& rFrame,
@@ -134,7 +133,7 @@ class MenuBarManager:
         void SetItemContainer( const css::uno::Reference< css::container::XIndexAccess >& rItemContainer );
         void GetPopupController( PopupControllerCache& rPopupController );
 
-    protected:
+    private:
         DECL_LINK( Activate, Menu *, bool );
         DECL_LINK( Deactivate, Menu *, bool );
         DECL_LINK( AsyncSettingsHdl, Timer *, void );
@@ -145,8 +144,6 @@ class MenuBarManager:
         void RetrieveImageManagers();
         static bool MustBeHidden( PopupMenu* pPopupMenu, const css::uno::Reference< css::util::XURLTransformer >& rTransformer );
         OUString RetrieveLabelFromCommand(const OUString& rCmdURL);
-
-    private:
 
         void Destroy();
 

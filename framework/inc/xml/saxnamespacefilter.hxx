@@ -32,7 +32,7 @@
 namespace framework
 {
 
-class FWE_DLLPUBLIC SaxNamespaceFilter :
+class FWE_DLLPUBLIC SaxNamespaceFilter final :
                            public ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
 {
     public:
@@ -60,7 +60,7 @@ class FWE_DLLPUBLIC SaxNamespaceFilter :
         virtual void SAL_CALL setDocumentLocator(
             const css::uno::Reference< css::xml::sax::XLocator > &xLocator) override;
 
-    protected:
+    private:
         typedef ::std::stack< XMLNamespaces > NamespaceStack;
 
         OUString getErrorLineString();

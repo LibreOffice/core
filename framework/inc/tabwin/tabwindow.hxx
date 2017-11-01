@@ -47,7 +47,7 @@
 namespace framework
 {
 
-class TabWindow :  public css::lang::XTypeProvider             ,
+class TabWindow final : public css::lang::XTypeProvider             ,
                    public css::lang::XServiceInfo              ,
                    public css::lang::XInitialization           ,
                    public css::lang::XComponent                ,
@@ -107,11 +107,9 @@ class TabWindow :  public css::lang::XTypeProvider             ,
         virtual void SAL_CALL windowShown( const css::lang::EventObject& aEvent ) override;
         virtual void SAL_CALL windowHidden( const css::lang::EventObject& aEvent ) override;
 
-    protected:
+    private:
         DECL_LINK( Activate, TabControl*, void );
         DECL_LINK( Deactivate, TabControl*, bool );
-
-    private:
 
         //  OPropertySetHelper
 
@@ -128,7 +126,6 @@ class TabWindow :  public css::lang::XTypeProvider             ,
 
         static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
-    private:
         enum Notification
         {
             NOTIFY_INSERTED,

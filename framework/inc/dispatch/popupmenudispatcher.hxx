@@ -60,7 +60,7 @@ typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
-class PopupMenuDispatcher :     public  ::cppu::WeakImplHelper<
+class PopupMenuDispatcher final : public  ::cppu::WeakImplHelper<
                                            css::lang::XServiceInfo,
                                            css::frame::XDispatchProvider,
                                            css::frame::XDispatch,
@@ -109,15 +109,11 @@ class PopupMenuDispatcher :     public  ::cppu::WeakImplHelper<
         //   XEventListener
         void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
 
-    //  protected methods
-    protected:
+    private:
         virtual ~PopupMenuDispatcher() override;
 
         void impl_RetrievePopupControllerQuery();
 
-
-    //  variables
-    private:
         css::uno::WeakReference< css::frame::XFrame >           m_xWeakFrame;   /// css::uno::WeakReference to frame (Don't use a hard css::uno::Reference. Owner can't delete us then!)
         css::uno::Reference< css::container::XNameAccess >      m_xPopupCtrlQuery;   /// reference to query for popup controller
         css::uno::Reference< css::uri::XUriReferenceFactory >   m_xUriRefFactory;   /// reference to the uri reference factory

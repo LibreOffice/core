@@ -44,7 +44,7 @@ namespace framework{
     @ATTENTION      Don't use this class as direct member - use it dynamically. Do not derive from this class.
                     We hold a weakreference to our owner not to our superclass.
 */
-class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
+class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
 {
     public:
 
@@ -146,7 +146,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
         */
         virtual sal_Bool SAL_CALL hasElements() override;
 
-    protected:
+    private:
 
         /**
             @short      standard destructor
@@ -168,8 +168,6 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
         */
         void impl_resetObject();
 
-    private:
-
         /**
             @short      append one sequence to another
             @descr      There is no operation to add to sequences! Use this helper-method to do this.
@@ -183,13 +181,11 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
         void impl_appendSequence(           css::uno::Sequence< css::uno::Reference< css::frame::XFrame > >&    seqDestination  ,
                                      const  css::uno::Sequence< css::uno::Reference< css::frame::XFrame > >&    seqSource       );
 
-    private:
         static bool impldbg_checkParameter_queryFrames  (           sal_Int32                                               nSearchFlags    );
 
         css::uno::WeakReference< css::frame::XFrame >               m_xOwner;   /// reference to owner of this instance (Hold no hard reference!)
         FrameContainer*                                             m_pFrameContainer;   /// with owner shared list to hold all direct children of an XFramesSupplier
         bool                                                        m_bRecursiveSearchProtection;   /// flag to protect against recursive searches of frames at parents
-
 };
 
 }
