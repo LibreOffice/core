@@ -54,7 +54,7 @@ public:
 
 typedef const IFunctionDescription* TFunctionDesc;
 
-class FuncPage : public TabPage
+class FuncPage final : public TabPage
 {
 private:
     Link<FuncPage&,void>     aDoubleClickLink;
@@ -72,8 +72,6 @@ private:
                     DECL_LINK( SelHdl, ListBox&, void );
                     DECL_LINK(DblClkHdl, ListBox&, void);
                     DECL_LINK(ModifyHdl, Edit&, void);
-
-protected:
 
     void            UpdateFunctionList(const OUString&);
 

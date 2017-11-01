@@ -60,7 +60,7 @@ public:
 };
 
 
-class StructPage : public TabPage
+class StructPage final : public TabPage
 {
 private:
     Link<StructPage&,void>  aSelLink;
@@ -74,8 +74,6 @@ private:
     DECL_LINK( SelectHdl, SvTreeListBox*, void );
 
     using Window::GetParent;
-
-protected:
 
     const IFormulaToken* GetFunctionEntry(SvTreeListEntry* pEntry);
 

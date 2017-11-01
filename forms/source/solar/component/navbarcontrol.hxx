@@ -72,7 +72,7 @@ namespace frm
         virtual void SAL_CALL releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
     };
 
-    class ONavigationBarPeer
+    class ONavigationBarPeer final
                         :public VCLXWindow
                         ,public OFormNavigationHelper
     {
@@ -85,13 +85,6 @@ namespace frm
             const css::uno::Reference< css::awt::XControlModel >& _rxModel
         );
 
-    protected:
-        explicit ONavigationBarPeer(
-            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
-        );
-        virtual ~ONavigationBarPeer() override;
-
-    public:
         // XInterface
         DECLARE_XINTERFACE( )
 
@@ -101,7 +94,12 @@ namespace frm
         // XWindow2
         using VCLXWindow::isEnabled;
 
-    protected:
+    private:
+        explicit ONavigationBarPeer(
+            const css::uno::Reference< css::uno::XComponentContext >& _rxORB
+        );
+        virtual ~ONavigationBarPeer() override;
+
         // XTypeProvider
         DECLARE_XTYPEPROVIDER( )
 

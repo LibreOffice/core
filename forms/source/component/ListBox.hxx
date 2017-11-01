@@ -97,7 +97,7 @@ namespace frm
 
 typedef ::std::vector< ::connectivity::ORowSetValue >   ValueList;
 
-class OListBoxModel :public OBoundControlModel
+class OListBoxModel final :public OBoundControlModel
                     ,public OEntryListHelper
                     ,public OErrorBroadcaster
 {
@@ -145,7 +145,7 @@ public:
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
                 css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
 
-protected:
+private:
     static const ::connectivity::ORowSetValue s_aEmptyValue;
     static const ::connectivity::ORowSetValue s_aEmptyStringValue;
 
@@ -177,7 +177,6 @@ protected:
     using OBoundControlModel::getFastPropertyValue;
     using OBoundControlModel::setPropertyValues;
 
-protected:
     // OBoundControlModel overridables
     virtual css::uno::Any   translateDbColumnToControlValue( ) override;
     virtual css::uno::Sequence< css::uno::Type >
@@ -201,7 +200,6 @@ protected:
     virtual void    disconnectedExternalListSource( ) override;
     virtual void    refreshInternalEntryList() override;
 
-protected:
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
 
     void init();
@@ -214,8 +212,6 @@ protected:
         const ::connectivity::ORowSetValue &aValue)
         const;
 
-
-private:
     void        loadData( bool _bForce );
 
     /** refreshes the list boxes list data

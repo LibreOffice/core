@@ -42,7 +42,7 @@
 namespace frm
 {
 
-class OComboBoxModel
+class OComboBoxModel final
             :public OBoundControlModel
             ,public OEntryListHelper
             ,public OErrorBroadcaster
@@ -63,8 +63,6 @@ class OComboBoxModel
 
     ::std::unique_ptr< ::dbtools::FormattedColumnValue > m_pValueFormatter;
 
-
-protected:
     virtual css::uno::Sequence< css::uno::Type>   _getTypes() override;
 
 public:
@@ -112,7 +110,7 @@ public:
     // prevent method hiding
     using OBoundControlModel::getFastPropertyValue;
 
-protected:
+private:
     // OBoundControlModel overridables
     virtual css::uno::Any   translateDbColumnToControlValue( ) override;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
@@ -130,7 +128,6 @@ protected:
     virtual void    disconnectedExternalListSource( ) override;
     virtual void    refreshInternalEntryList() override;
 
-protected:
     void loadData( bool _bForce );
 
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;

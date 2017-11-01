@@ -35,7 +35,7 @@ namespace svt
 
     /** a InteractionHandler implementation which extends another handler with some customizability
     */
-    class OFilePickerInteractionHandler : public OFilePickerInteractionHandler_Base
+    class OFilePickerInteractionHandler final : public OFilePickerInteractionHandler_Base
     {
     public:
         /** flags, which indicates special handled interactions
@@ -49,7 +49,7 @@ namespace svt
             // next values [2,4,8,16 ...]!
         };
 
-    protected:
+    private:
         css::uno::Reference< css::task::XInteractionHandler > m_xMaster;    // our master handler
         css::uno::Any                                         m_aException; // the last handled request
         bool                                                  m_bUsed;      // indicates using of this interaction handler instance
@@ -67,11 +67,10 @@ namespace svt
         // functions to analyze last cached request
         bool wasAccessDenied() const;
 
-    protected:
+    private:
         // XInteractionHandler
         virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest >& _rxRequest ) override;
 
-    private:
         virtual ~OFilePickerInteractionHandler() override;
     };
 
