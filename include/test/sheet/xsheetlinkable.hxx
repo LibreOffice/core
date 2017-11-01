@@ -28,9 +28,6 @@ public:
 
 protected:
     ~XSheetLinkable() {}
-
-private:
-    OUString maFileName;
 };
 
 }
