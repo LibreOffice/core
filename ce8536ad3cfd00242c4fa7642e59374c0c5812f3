@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_a46fcfc3",
+        "filename": "configmgr/source/winreg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-11-01T15:22:13Z",
+      "side": 1,
+      "message": "that is an assertion about data provided by the user",
+      "revId": "ce8536ad3cfd00242c4fa7642e59374c0c5812f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
