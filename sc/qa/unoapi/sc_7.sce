@@ -20,7 +20,6 @@
 # # i84656 -o sc.ScTabViewObj
 # -o sc.ScTableColumnObj
 -o sc.ScTableColumnsObj
--o sc.ScTableConditionalEntry
 -o sc.ScTableConditionalFormat
 # -o sc.ScTableRowObj
 -o sc.ScTableRowsObj
