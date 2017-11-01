@@ -53,7 +53,7 @@
 #include <comphelper/streamsection.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <unotools/desktopterminationobserver.hxx>
-#include <list>
+#include <vector>
 #include <algorithm>
 
 
@@ -970,26 +970,26 @@ Any OFormattedModel::translateDbColumnToControlValue()
 
 Sequence< Type > OFormattedModel::getSupportedBindingTypes()
 {
-    ::std::list< Type > aTypes;
-    aTypes.push_back( cppu::UnoType< double >::get() );
+    ::std::vector< Type > aTypes;
     switch ( m_nKeyType & ~NumberFormat::DEFINED )
     {
     case NumberFormat::DATE:
-        aTypes.push_front(cppu::UnoType< css::util::Date >::get() );
+        aTypes.push_back(cppu::UnoType< css::util::Date >::get() );
         break;
     case NumberFormat::TIME:
-        aTypes.push_front(cppu::UnoType< css::util::Time >::get() );
+        aTypes.push_back(cppu::UnoType< css::util::Time >::get() );
         break;
     case NumberFormat::DATETIME:
-        aTypes.push_front(cppu::UnoType< css::util::DateTime >::get() );
+        aTypes.push_back(cppu::UnoType< css::util::DateTime >::get() );
         break;
     case NumberFormat::TEXT:
-        aTypes.push_front(cppu::UnoType< OUString >::get() );
+        aTypes.push_back(cppu::UnoType< OUString >::get() );
         break;
     case NumberFormat::LOGICAL:
-        aTypes.push_front(cppu::UnoType< sal_Bool >::get() );
+        aTypes.push_back(cppu::UnoType< sal_Bool >::get() );
         break;
     }
+    aTypes.push_back( cppu::UnoType< double >::get() );
     return comphelper::containerToSequence(aTypes);
 }
 
