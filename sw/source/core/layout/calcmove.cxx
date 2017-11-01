@@ -777,10 +777,10 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
             {
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                 aFrm.Width( 0 );
-                aFrm.Width( 0 );
+                aFrm.Height( 0 );
 
                 SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-                aPrt.Height( 0 );
+                aPrt.Width( 0 );
                 aPrt.Height( 0 );
                 aPrt.Left( 0 );
                 aPrt.Top( 0 );
