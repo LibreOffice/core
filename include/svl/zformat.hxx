@@ -580,7 +580,7 @@ private:
         inserted at a proper position to rString after all bracketed prefixes.
      */
     SVL_DLLPRIVATE OUString ImpObtainCalendarAndNumerals( OUStringBuffer & rString,
-                                                          sal_Int32 & nPos,
+                                                          sal_Int32 nPos,
                                                           LanguageType & nLang,
                                                           const LocaleType & aTmpLocale );
 

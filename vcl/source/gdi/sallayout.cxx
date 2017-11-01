@@ -50,7 +50,7 @@
 #define GF_DROPPED   0xFFFFFFFF
 
 
-std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs)
+std::ostream &operator <<(std::ostream& s, ImplLayoutArgs const &rArgs)
 {
 #ifndef SAL_LOG_INFO
     (void) rArgs;

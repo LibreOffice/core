@@ -115,7 +115,7 @@ private:
 };
 
 // For nice SAL_INFO logging of ImplLayoutArgs values
-std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs);
+std::ostream &operator <<(std::ostream& s, ImplLayoutArgs const &rArgs);
 
 // all positions/widths are in font units
 // one exception: drawposition is in pixel units

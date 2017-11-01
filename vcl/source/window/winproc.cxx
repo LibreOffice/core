@@ -1955,7 +1955,7 @@ static MouseEventModifiers ImplGetMouseButtonMode( SalMouseEvent const * pEvent 
     return nMode;
 }
 
-inline bool ImplHandleSalMouseLeave( vcl::Window* pWindow, SalMouseEvent* pEvent )
+inline bool ImplHandleSalMouseLeave( vcl::Window* pWindow, SalMouseEvent const * pEvent )
 {
     return ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEMOVE, true,
                                  pEvent->mnX, pEvent->mnY,
@@ -1963,7 +1963,7 @@ inline bool ImplHandleSalMouseLeave( vcl::Window* pWindow, SalMouseEvent* pEvent
                                  ImplGetMouseMoveMode( pEvent ) );
 }
 
-inline bool ImplHandleSalMouseMove( vcl::Window* pWindow, SalMouseEvent* pEvent )
+inline bool ImplHandleSalMouseMove( vcl::Window* pWindow, SalMouseEvent const * pEvent )
 {
     return ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEMOVE, false,
                                  pEvent->mnX, pEvent->mnY,
@@ -1971,7 +1971,7 @@ inline bool ImplHandleSalMouseMove( vcl::Window* pWindow, SalMouseEvent* pEvent 
                                  ImplGetMouseMoveMode( pEvent ) );
 }
 
-inline bool ImplHandleSalMouseButtonDown( vcl::Window* pWindow, SalMouseEvent* pEvent )
+inline bool ImplHandleSalMouseButtonDown( vcl::Window* pWindow, SalMouseEvent const * pEvent )
 {
     return ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEBUTTONDOWN, false,
                                  pEvent->mnX, pEvent->mnY,
@@ -1984,7 +1984,7 @@ inline bool ImplHandleSalMouseButtonDown( vcl::Window* pWindow, SalMouseEvent* p
                                  ImplGetMouseButtonMode( pEvent ) );
 }
 
-inline bool ImplHandleSalMouseButtonUp( vcl::Window* pWindow, SalMouseEvent* pEvent )
+inline bool ImplHandleSalMouseButtonUp( vcl::Window* pWindow, SalMouseEvent const * pEvent )
 {
     return ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEBUTTONUP, false,
                                  pEvent->mnX, pEvent->mnY,
@@ -2038,7 +2038,7 @@ static bool ImplHandleMenuEvent( vcl::Window const * pWindow, SalMenuEvent* pEve
     return bRet;
 }
 
-static void ImplHandleSalKeyMod( vcl::Window* pWindow, SalKeyModEvent* pEvent )
+static void ImplHandleSalKeyMod( vcl::Window* pWindow, SalKeyModEvent const * pEvent )
 {
     ImplSVData* pSVData = ImplGetSVData();
     vcl::Window* pTrackWin = pSVData->maWinData.mpTrackWin;
@@ -2283,7 +2283,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
     switch ( nEvent )
     {
         case SalEvent::MouseMove:
-            bRet = ImplHandleSalMouseMove( pWindow, const_cast<SalMouseEvent *>(static_cast<SalMouseEvent const *>(pEvent)) );
+            bRet = ImplHandleSalMouseMove( pWindow, static_cast<SalMouseEvent const *>(pEvent) );
             break;
         case SalEvent::ExternalMouseMove:
         {
@@ -2300,10 +2300,10 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
         }
         break;
         case SalEvent::MouseLeave:
-            bRet = ImplHandleSalMouseLeave( pWindow, const_cast<SalMouseEvent *>(static_cast<SalMouseEvent const *>(pEvent)) );
+            bRet = ImplHandleSalMouseLeave( pWindow, static_cast<SalMouseEvent const *>(pEvent) );
             break;
         case SalEvent::MouseButtonDown:
-            bRet = ImplHandleSalMouseButtonDown( pWindow, const_cast<SalMouseEvent *>(static_cast<SalMouseEvent const *>(pEvent)) );
+            bRet = ImplHandleSalMouseButtonDown( pWindow, static_cast<SalMouseEvent const *>(pEvent) );
             break;
         case SalEvent::ExternalMouseButtonDown:
         {
@@ -2320,7 +2320,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
         }
         break;
         case SalEvent::MouseButtonUp:
-            bRet = ImplHandleSalMouseButtonUp( pWindow, const_cast<SalMouseEvent *>(static_cast<SalMouseEvent const *>(pEvent)) );
+            bRet = ImplHandleSalMouseButtonUp( pWindow, static_cast<SalMouseEvent const *>(pEvent) );
             break;
         case SalEvent::ExternalMouseButtonUp:
         {
@@ -2368,7 +2368,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
             }
             break;
         case SalEvent::KeyModChange:
-            ImplHandleSalKeyMod( pWindow, const_cast<SalKeyModEvent *>(static_cast<SalKeyModEvent const *>(pEvent)) );
+            ImplHandleSalKeyMod( pWindow, static_cast<SalKeyModEvent const *>(pEvent) );
             break;
 
         case SalEvent::InputLanguageChange:

@@ -1770,7 +1770,7 @@ int GetTTGlyphComponents(TrueTypeFont *ttf, sal_uInt32 glyphID, std::vector< sal
 }
 
 int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname,
-                          sal_uInt16 *glyphArray, sal_uInt8 *encoding, int nGlyphs,
+                          sal_uInt16 const *glyphArray, sal_uInt8 *encoding, int nGlyphs,
                           int wmode)
 {
     ControlPoint *pa;
@@ -1923,8 +1923,8 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname,
 
 int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
                           const char    *fname,
-                          sal_uInt16        *glyphArray,
-                          sal_uInt8          *encoding,
+                          sal_uInt16 const *glyphArray,
+                          sal_uInt8 const *encoding,
                           int            nGlyphs,
                           int            nNameRecs,
                           NameRecord const *nr)
@@ -2178,7 +2178,7 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
 int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
                            FILE          *outf,
                            const char    *psname,
-                           sal_uInt16        *glyphArray,
+                           sal_uInt16 const *glyphArray,
                            sal_uInt8          *encoding,
                            int            nGlyphs)
 {

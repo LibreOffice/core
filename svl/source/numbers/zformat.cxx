@@ -466,7 +466,7 @@ static bool lcl_SvNumberformat_IsBracketedPrefix( short nSymbolType )
 
 /** Import extended LCID from Excel
  */
-OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, sal_Int32& nPos,
+OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, sal_Int32 nPos,
                                                        LanguageType& nLang, const LocaleType& aTmpLocale )
 {
     OUString sCalendar;

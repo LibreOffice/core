@@ -697,7 +697,7 @@ private:
                                          bool bRequiredStyle = false,
                                          RulerIndentStyle nRequiredStyle = RulerIndentStyle::Top ) const;
     SVT_DLLPRIVATE bool     ImplDocHitTest( const Point& rPos, RulerType eDragType, RulerSelection* pHitTest ) const;
-    SVT_DLLPRIVATE bool     ImplStartDrag( RulerSelection* pHitTest, sal_uInt16 nModifier );
+    SVT_DLLPRIVATE bool     ImplStartDrag( RulerSelection const * pHitTest, sal_uInt16 nModifier );
     SVT_DLLPRIVATE void     ImplDrag( const Point& rPos );
     SVT_DLLPRIVATE void     ImplEndDrag();
 
