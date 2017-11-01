@@ -29,7 +29,7 @@ namespace i18npool {
 
 //  class IndexEntrySupplier
 
-class IndexEntrySupplier : public cppu::WeakImplHelper
+class IndexEntrySupplier final : public cppu::WeakImplHelper
 <
     css::i18n::XExtendedIndexEntrySupplier,
     css::lang::XServiceInfo
@@ -82,7 +82,6 @@ private:
     css::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > const & SAL_CALL getLocaleSpecificIndexEntrySupplier(
         const css::lang::Locale& rLocale, const OUString& rSortAlgorithm);
 
-protected:
     css::lang::Locale aLocale;
     OUString          aSortAlgorithm;
 };

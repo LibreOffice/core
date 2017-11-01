@@ -33,7 +33,7 @@ using namespace std;
 /**
 @author Jocelyn Merand
  */
-class Guess{
+class Guess final {
     public:
 
         /**
@@ -51,7 +51,7 @@ class Guess{
         const string& GetLanguage() { return language_str;}
         const string& GetCountry() { return country_str;}
 
-    protected:
+    private:
         string language_str;
         string country_str;
         string encoding_str;

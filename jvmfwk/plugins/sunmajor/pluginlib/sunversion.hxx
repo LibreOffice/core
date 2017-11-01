@@ -49,10 +49,8 @@ namespace jfw_plugin {
    To test if the version is ok, that is this object can be compared to others,
    use the bool conversion operator.
  */
-class SunVersion
+class SunVersion final
 {
-protected:
-
     enum PreRelease
     {
         Rel_NONE,
@@ -103,7 +101,7 @@ public:
      */
     OUString usVersion;
 
-protected:
+private:
     bool init(const char * szVer);
 
     bool m_bValid;
