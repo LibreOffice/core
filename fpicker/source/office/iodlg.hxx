@@ -64,7 +64,7 @@ namespace o3tl {
 }
 
 
-class SvtFileDialog : public SvtFileDialog_Base
+class SvtFileDialog final : public SvtFileDialog_Base
 {
 private:
     VclPtr<CheckBox>            _pCbReadOnly;
@@ -145,7 +145,6 @@ private:
 
     void    implUpdateImages( );
 
-protected:
     virtual bool                EventNotify( NotifyEvent& rNEvt ) override;
 
     OUString                    _aPath;

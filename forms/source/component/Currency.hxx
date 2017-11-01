@@ -26,7 +26,7 @@
 namespace frm
 {
 
-class OCurrencyModel
+class OCurrencyModel final
                 :public OEditBaseModel
 {
     css::uno::Any          m_aSaveValue;
@@ -48,7 +48,7 @@ public:
         css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const override;
 
-protected:
+private:
     // OBoundControlModel overridables
     virtual css::uno::Any   translateDbColumnToControlValue( ) override;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
@@ -57,7 +57,6 @@ protected:
 
     virtual void            resetNoBroadcast() override;
 
-protected:
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
 
     void implConstruct();

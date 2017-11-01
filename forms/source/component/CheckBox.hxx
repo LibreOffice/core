@@ -26,9 +26,8 @@
 namespace frm
 {
 
-class OCheckBoxModel    :public OReferenceValueComponent
+class OCheckBoxModel final : public OReferenceValueComponent
 {
-protected:
     bool        DbUseBool();
 
 public:
@@ -52,7 +51,7 @@ public:
         css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const override;
 
-protected:
+private:
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
 
     // OBoundControlModel overridables

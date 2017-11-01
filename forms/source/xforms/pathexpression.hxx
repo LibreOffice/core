@@ -39,7 +39,7 @@ namespace xforms
 {
 
 /** PathExpression represents an XPath Expression and caches results */
-class PathExpression : public ComputedExpression
+class PathExpression final : public ComputedExpression
 {
 public:
     typedef std::vector<css::uno::Reference<css::xml::dom::XNode> > NodeVector_t;
@@ -48,7 +48,6 @@ private:
     /// the node-list result from the last bind (cached from mxResult)
     NodeVector_t maNodes;
 
-protected:
     /// get expression for evaluation
     const OUString _getExpressionForEvaluation() const;
 

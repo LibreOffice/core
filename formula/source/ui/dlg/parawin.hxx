@@ -40,7 +40,7 @@ namespace formula
 class IFunctionDescription;
 class IControlReferenceHandler;
 
-class ParaWin : public TabPage
+class ParaWin final : public TabPage
 {
 private:
         Link<ParaWin&,void>  aFxLink;
@@ -94,8 +94,6 @@ private:
         DECL_LINK( GetEdFocusHdl, ArgInput&, void );
         DECL_LINK( GetFxFocusHdl, ArgInput&, void );
         DECL_LINK( GetFxHdl, ArgInput&, void );
-
-protected:
 
         void            SliderMoved();
         void            ArgumentModified();
