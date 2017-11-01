@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVL_SOURCE_INC_PASSWORDCONTAINER_HXX
-#define INCLUDED_SVL_SOURCE_INC_PASSWORDCONTAINER_HXX
+#ifndef INCLUDED_SVL_SOURCE_PASSWORDCONTAINER_PASSWORDCONTAINER_HXX
+#define INCLUDED_SVL_SOURCE_PASSWORDCONTAINER_PASSWORDCONTAINER_HXX
 
 #include <vector>
 #include <map>
@@ -39,7 +39,7 @@
 #include <rtl/ref.hxx>
 #include <osl/mutex.hxx>
 
-#include <syscreds.hxx>
+#include "syscreds.hxx"
 
 #define MEMORY_RECORD         0
 #define PERSISTENT_RECORD     1
@@ -366,6 +366,6 @@ public:
 };
 
 
-#endif // INCLUDED_SVL_SOURCE_INC_PASSWORDCONTAINER_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
