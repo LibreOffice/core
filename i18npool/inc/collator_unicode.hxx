@@ -32,7 +32,7 @@
 
 namespace i18npool {
 
-class Collator_Unicode : public cppu::WeakImplHelper < css::i18n::XCollator, css::lang::XServiceInfo >
+class Collator_Unicode final : public cppu::WeakImplHelper < css::i18n::XCollator, css::lang::XServiceInfo >
 {
 public:
     // Constructors
@@ -61,9 +61,8 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-protected:
-    const sal_Char *implementationName;
 private:
+    const sal_Char *implementationName;
     RuleBasedCollator *uca_base, *collator;
 #ifndef DISABLE_DYNLOADING
     oslModule hModule;

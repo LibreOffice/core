@@ -60,7 +60,7 @@ protected:
     size_t                  mnSize;
 };
 
-class I18NUTIL_DLLPUBLIC oneToOneMappingWithFlag : public oneToOneMapping
+class I18NUTIL_DLLPUBLIC oneToOneMappingWithFlag final : public oneToOneMapping
 {
 private:
     oneToOneMappingWithFlag(const oneToOneMappingWithFlag&) = delete;
@@ -77,7 +77,7 @@ public:
 
     // index search
     virtual sal_Unicode find( const sal_Unicode nKey ) const override;
-protected:
+private:
     UnicodePairWithFlag  *mpTableWF;
     UnicodePairFlag       mnFlag;
     UnicodePairWithFlag **mpIndex[256];

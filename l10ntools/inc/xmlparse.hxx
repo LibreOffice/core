@@ -145,7 +145,7 @@ typedef std::unordered_map<OString, sal_Bool> TagMap;
 
 /** Holds information of a XML file, is root node of tree
  */
-class XMLFile : public XMLParentNode
+class XMLFile final : public XMLParentNode
 {
 public:
     XMLFile(
@@ -173,7 +173,7 @@ public:
     void SetName( const OString &rFilename ) { m_sFileName = rFilename; }
     const std::vector<OString>& getOrder() const { return m_vOrder; }
 
-protected:
+private:
 
     void InsertL10NElement( XMLElement* pElement);
 

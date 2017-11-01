@@ -32,9 +32,8 @@ class HWPFile;
  * The HWPFont class has the font list for the document when it's saved.
  * @short Font information
  */
-class DLLEXPORT HWPFont
+class DLLEXPORT HWPFont final
 {
-    protected:
 /**
  * System font count for each language
  * NLanguage is 7 in common case.
