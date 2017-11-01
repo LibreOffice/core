@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_THREADMANAGER_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_THREADMANAGER_HXX
+#ifndef INCLUDED_SW_SOURCE_CORE_DOCNODE_THREADMANAGER_HXX
+#define INCLUDED_SW_SOURCE_CORE_DOCNODE_THREADMANAGER_HXX
 
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
@@ -28,12 +28,12 @@
 #include <deque>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/util/XJobManager.hpp>
-#include "observablethread.hxx"
-#include <cancellablejob.hxx>
-#include "threadlistener.hxx"
+#include <observablethread.hxx>
+#include "cancellablejob.hxx"
+#include <threadlistener.hxx>
 
 #include <memory>
-#include "ifinishedthreadlistener.hxx"
+#include <ifinishedthreadlistener.hxx>
 
 
 /** class to manage threads
