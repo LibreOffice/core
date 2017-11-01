@@ -377,8 +377,11 @@ public:
     /// Sign the paragraph at the cursor.
     void SignParagraph();
 
-    /// Validate paragraph signatures, if any, at the cursor.
-    void ValidateParagraphSignatures(bool updateDontRemove);
+    /// Validate current paragraph signatures, if any, at the cursor start.
+    void ValidateCurrentParagraphSignatures(bool updateDontRemove);
+
+    /// Validate all paragraph signatures.
+    void ValidateAllParagraphSignatures(bool updateDontRemove);
 
     /// Ensure that the classification of the doc is never lower than
     /// the paragraph with the highest classification.
