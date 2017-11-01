@@ -3382,8 +3382,23 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
 
                 if (nOldEndPos <= nLimitFC)
                 {
-                    p->nEndPos = nCpEnd -
-                        (nLimitFC-nOldEndPos) / (bIsUnicode ? 2 : 1);
+                    bFail = o3tl::checked_sub(nLimitFC, nOldEndPos, nCpLen);
+                    if (bFail)
+                    {
+                        SAL_WARN("sw.ww8", "broken offset, ignoring");
+                        pPieceIter->SetIdx(nOldPos);
+                        return;
+                    }
+
+                    nCpLen /= (bIsUnicode ? 2 : 1);
+
+                    bFail = o3tl::checked_sub(nCpEnd, nCpLen, p->nEndPos);
+                    if (bFail)
+                    {
+                        SAL_WARN("sw.ww8", "broken offset, ignoring");
+                        pPieceIter->SetIdx(nOldPos);
+                        return;
+                    }
                 }
                 else
                 {
