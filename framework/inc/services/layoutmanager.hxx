@@ -68,7 +68,7 @@ namespace framework
                                     ,   css::awt::XWindowListener
                                     >   LayoutManager_Base;
     typedef ::comphelper::OPropertyContainer    LayoutManager_PBase;
-    class LayoutManager : public  LayoutManager_Base                    ,
+    class LayoutManager final : public  LayoutManager_Base                    ,
                           private cppu::BaseMutex,
                           public  ::cppu::OBroadcastHelper              ,
                           public  LayoutManager_PBase
@@ -168,12 +168,8 @@ namespace framework
                     GlobalSettings* &rGlobalSettings, bool &bInGlobalSettings,
                     const css::uno::Reference< css::uno::XComponentContext > &rComponentContext );
 
-        protected:
-            DECL_LINK(AsyncLayoutHdl, Timer *, void);
-
         private:
-
-            //  helper
+            DECL_LINK(AsyncLayoutHdl, Timer *, void);
 
             //  menu bar
 

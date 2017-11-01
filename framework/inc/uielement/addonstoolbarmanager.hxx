@@ -36,7 +36,7 @@ class ToolBox;
 namespace framework
 {
 
-class AddonsToolBarManager : public ToolBarManager
+class AddonsToolBarManager final : public ToolBarManager
 {
     public:
         AddonsToolBarManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -52,7 +52,7 @@ class AddonsToolBarManager : public ToolBarManager
         using ToolBarManager::FillToolbar;
         void FillToolbar( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rAddonToolbar );
 
-    protected:
+    private:
         DECL_LINK(Click, ToolBox *, void);
         DECL_LINK(DoubleClick, ToolBox *, void);
         DECL_LINK(Select, ToolBox *, void);

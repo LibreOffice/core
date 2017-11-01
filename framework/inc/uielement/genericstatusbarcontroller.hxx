@@ -28,7 +28,7 @@ namespace framework
 
 struct AddonStatusbarItemData;
 
-class GenericStatusbarController : public svt::StatusbarController
+class GenericStatusbarController final : public svt::StatusbarController
 {
     public:
         GenericStatusbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -46,7 +46,7 @@ class GenericStatusbarController : public svt::StatusbarController
                                      const css::awt::Rectangle& rOutputRectangle,
                                      ::sal_Int32 nStyle ) override;
 
-    protected:
+    private:
         bool                                              m_bEnabled;
         bool                                              m_bOwnerDraw;
         AddonStatusbarItemData*                           m_pItemData;

@@ -31,7 +31,7 @@ class ToolBox;
 namespace framework
 {
 
-class GenericToolbarController : public svt::ToolboxController
+class GenericToolbarController final : public svt::ToolboxController
 {
     public:
         GenericToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -59,7 +59,7 @@ class GenericToolbarController : public svt::ToolboxController
             css::uno::Sequence< css::beans::PropertyValue >  aArgs;
         };
 
-    protected:
+    private:
         VclPtr<ToolBox>     m_pToolbar;
         sal_uInt16          m_nID;
         bool                m_bEnumCommand : 1,

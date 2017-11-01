@@ -46,7 +46,7 @@ typedef ::cppu::WeakImplHelper<
             css::lang::XSingleComponentFactory,
             css::lang::XUnoTunnel > RootItemContainer_BASE;
 
-class RootItemContainer :   private cppu::BaseMutex,
+class RootItemContainer final : private cppu::BaseMutex,
                             public ::cppu::OBroadcastHelper                         ,
                             public ::cppu::OPropertySetHelper                       ,
                             public RootItemContainer_BASE
@@ -98,7 +98,7 @@ class RootItemContainer :   private cppu::BaseMutex,
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext( const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const css::uno::Sequence< css::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
 
-    protected:
+    private:
         //  OPropertySetHelper
         virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        ( css::uno::Any&        aConvertedValue ,
                                                                                                                css::uno::Any&        aOldValue       ,
@@ -114,7 +114,6 @@ class RootItemContainer :   private cppu::BaseMutex,
 
         static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
-    private:
         RootItemContainer& operator=( const RootItemContainer& ) = delete;
         RootItemContainer( const RootItemContainer& ) = delete;
 
