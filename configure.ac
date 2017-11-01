@@ -9066,12 +9066,6 @@ fi
 
 if test "$USING_X11" = TRUE; then
     dnl ===================================================================
-    dnl Check for Composite.h for Mozilla plugin
-    dnl ===================================================================
-    AC_CHECK_HEADERS(X11/Composite.h,[],[AC_MSG_ERROR([Xt headers not found])],
-     [#include <X11/Intrinsic.h>])
-
-    dnl ===================================================================
     dnl Check for extension headers
     dnl ===================================================================
     AC_CHECK_HEADERS(X11/extensions/shape.h,[],[AC_MSG_ERROR([libXext headers not found])],
