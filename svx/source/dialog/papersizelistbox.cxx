@@ -21,7 +21,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/papersizelistbox.hxx>
 #include <vcl/builderfactory.hxx>
-#include <page.hrc>
+#include "page.hrc"
 
 PaperSizeListBox::PaperSizeListBox(vcl::Window* pParent)
     : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
