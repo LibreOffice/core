@@ -95,7 +95,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_writer_destroy(void * handle) SAL_THROW_EXTE
    @since UDK 3.2.0
  */
 REG_DLLPUBLIC sal_Bool SAL_CALL typereg_writer_setSuperTypeName(
-    void * handle, sal_uInt16 index, rtl_uString const * typeName)
+    void const * handle, sal_uInt16 index, rtl_uString const * typeName)
         SAL_THROW_EXTERN_C();
 
 /**
@@ -208,7 +208,7 @@ REG_DLLPUBLIC sal_Bool SAL_CALL typereg_writer_setMethodParameterData(
    @since UDK 3.2.0
  */
 REG_DLLPUBLIC sal_Bool SAL_CALL typereg_writer_setMethodExceptionTypeName(
-    void * handle, sal_uInt16 methodIndex, sal_uInt16 exceptionIndex,
+    void const * handle, sal_uInt16 methodIndex, sal_uInt16 exceptionIndex,
     rtl_uString const * typeName)
     SAL_THROW_EXTERN_C();
 

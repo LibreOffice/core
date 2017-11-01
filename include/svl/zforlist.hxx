@@ -586,7 +586,7 @@ public:
 
     /** Return the corresponding edit format of a format. */
     sal_uInt32 GetEditFormat( double fNumber, sal_uInt32 nFIndex, short eType,
-                              LanguageType eLnge, SvNumberformat* pFormat );
+                              LanguageType eLnge, SvNumberformat const * pFormat );
 
     /// Return the reference date
     const Date& GetNullDate() const;

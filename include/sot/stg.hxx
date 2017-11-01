@@ -129,7 +129,7 @@ protected:
                     OLEStorageBase( StgIo*, StgDirEntry*, StreamMode& );
                     ~OLEStorageBase();
     bool            Validate_Impl( bool ) const;
-    static bool     ValidateMode_Impl( StreamMode, StgDirEntry* p = nullptr );
+    static bool     ValidateMode_Impl( StreamMode, StgDirEntry const * p = nullptr );
 };
 
 class StorageStream : public BaseStorageStream, public OLEStorageBase
@@ -207,7 +207,7 @@ public:
     virtual bool                ValidateFAT() override;
     virtual bool                Validate( bool=false ) const override;
     virtual bool                ValidateMode( StreamMode ) const override;
-    bool                        ValidateMode( StreamMode, StgDirEntry* p ) const;
+    bool                        ValidateMode( StreamMode, StgDirEntry const * p ) const;
     virtual bool                Equals( const BaseStorage& rStream ) const override;
 };
 

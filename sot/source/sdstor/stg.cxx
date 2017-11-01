@@ -123,7 +123,7 @@ bool OLEStorageBase::Validate_Impl( bool bWrite ) const
         &&  ( !bWrite || !pEntry->m_bDirect || ( nStreamMode & StreamMode::WRITE ) );
 }
 
-bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p )
+bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry const * p )
 {
     if( m == INTERNAL_MODE )
         return true;
@@ -927,7 +927,7 @@ bool Storage::ValidateMode( StreamMode nMode ) const
     return bRet;
 }
 
-bool Storage::ValidateMode( StreamMode nMode, StgDirEntry* p ) const
+bool Storage::ValidateMode( StreamMode nMode, StgDirEntry const * p ) const
 {
     bool bRet = ValidateMode_Impl( nMode, p );
     if ( !bRet )

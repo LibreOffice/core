@@ -487,7 +487,7 @@ void ErrorHandler::lookupError(const OString& n)
     idlc()->incErrorCount();
 }
 
-void ErrorHandler::lookupError(ErrorCode e, const OString& n, AstDeclaration* pScope)
+void ErrorHandler::lookupError(ErrorCode e, const OString& n, AstDeclaration const * pScope)
 {
     errorHeader(e);
     fprintf(stderr, "'%s' in '%s'\n", n.getStr(), pScope->getFullName().getStr());

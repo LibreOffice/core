@@ -61,76 +61,124 @@ public:
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 
         for (const ParmVarDecl *pParmVarDecl : interestingParamSet) {
-            if (paramCannotBeConstSet.find(pParmVarDecl) == paramCannotBeConstSet.end()) {
-                auto functionDecl = parmToFunction[pParmVarDecl];
-                auto canonicalDecl = functionDecl->getCanonicalDecl();
-                if (getFunctionsWithAddressTaken().find(canonicalDecl)
-                    != getFunctionsWithAddressTaken().end())
-                {
-                    continue;
-                }
-                report(
-                    DiagnosticsEngine::Warning,
-                    "this parameter can be const",
-                    pParmVarDecl->getLocStart())
-                    << pParmVarDecl->getSourceRange();
-                if (canonicalDecl->getLocation() != functionDecl->getLocation()) {
-                    unsigned idx = pParmVarDecl->getFunctionScopeIndex();
-                    const ParmVarDecl* pOther = canonicalDecl->getParamDecl(idx);
-                    report(
-                        DiagnosticsEngine::Note,
-                        "canonical parameter declaration here",
-                        pOther->getLocStart())
-                        << pOther->getSourceRange();
-                }
+            auto functionDecl = parmToFunction[pParmVarDecl];
+            auto canonicalDecl = functionDecl->getCanonicalDecl();
+            if (getFunctionsWithAddressTaken().find(canonicalDecl)
+                != getFunctionsWithAddressTaken().end())
+            {
+                continue;
             }
+            report(
+                DiagnosticsEngine::Warning,
+                "this parameter can be const",
+                pParmVarDecl->getLocStart())
+                << pParmVarDecl->getSourceRange();
+            if (canonicalDecl->getLocation() != functionDecl->getLocation()) {
+                unsigned idx = pParmVarDecl->getFunctionScopeIndex();
+                const ParmVarDecl* pOther = canonicalDecl->getParamDecl(idx);
+                report(
+                    DiagnosticsEngine::Note,
+                    "canonical parameter declaration here",
+                    pOther->getLocStart())
+                    << pOther->getSourceRange();
+            }
+            //functionDecl->dump();
         }
     }
 
-    bool VisitFunctionDecl(const FunctionDecl *);
+    bool TraverseFunctionDecl(FunctionDecl *);
+    bool TraverseCXXMethodDecl(CXXMethodDecl * f);
+    bool TraverseCXXConstructorDecl(CXXConstructorDecl * f);
     bool VisitDeclRefExpr(const DeclRefExpr *);
 
 private:
+    bool CheckTraverseFunctionDecl(FunctionDecl *);
     bool checkIfCanBeConst(const Stmt*, const ParmVarDecl*);
-    bool isPointerOrReferenceToConst(const QualType& qt);
+    // integral or enumeration or const * or const &
+    bool isOkForParameter(const QualType& qt);
+    bool isPointerOrReferenceToNonConst(const QualType& qt);
 
     std::unordered_set<const ParmVarDecl*> interestingParamSet;
     std::unordered_map<const ParmVarDecl*, const FunctionDecl*> parmToFunction;
-    std::unordered_set<const ParmVarDecl*> paramCannotBeConstSet;
+    FunctionDecl* currentFunctionDecl = nullptr;
 };
 
-bool ConstParams::VisitFunctionDecl(const FunctionDecl * functionDecl)
+bool ConstParams::TraverseFunctionDecl(FunctionDecl * functionDecl)
+{
+    // We cannot short-circuit the traverse here entirely without breaking the
+    // loplugin::FunctionAddress stuff.
+    auto prev = currentFunctionDecl;
+    if (CheckTraverseFunctionDecl(functionDecl))
+        currentFunctionDecl = functionDecl;
+    auto rv = loplugin::FunctionAddress<ConstParams>::TraverseFunctionDecl(functionDecl);
+    currentFunctionDecl = prev;
+    return rv;
+}
+bool ConstParams::TraverseCXXMethodDecl(CXXMethodDecl * f)
+{
+    auto prev = currentFunctionDecl;
+    if (CheckTraverseFunctionDecl(f))
+        currentFunctionDecl = f;
+    auto rv = loplugin::FunctionAddress<ConstParams>::TraverseCXXMethodDecl(f);
+    currentFunctionDecl = prev;
+    return rv;
+}
+bool ConstParams::TraverseCXXConstructorDecl(CXXConstructorDecl * f)
+{
+    auto prev = currentFunctionDecl;
+    if (CheckTraverseFunctionDecl(f))
+        currentFunctionDecl = f;
+    auto rv = loplugin::FunctionAddress<ConstParams>::TraverseCXXConstructorDecl(f);
+    currentFunctionDecl = prev;
+    return rv;
+}
+
+bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
 {
     if (ignoreLocation(functionDecl) || !functionDecl->isThisDeclarationADefinition()) {
-        return true;
+        return false;
     }
     // ignore stuff that forms part of the stable URE interface
     if (isInUnoIncludeFile(functionDecl)) {
-        return true;
+        return false;
     }
     // TODO ignore template stuff for now
     if (functionDecl->getTemplatedKind() != FunctionDecl::TK_NonTemplate) {
-        return true;
+        return false;
     }
     if (functionDecl->isDeleted())
-        return true;
+        return false;
     if (isa<CXXMethodDecl>(functionDecl)
         && dyn_cast<CXXMethodDecl>(functionDecl)->getParent()->getDescribedClassTemplate() != nullptr ) {
-        return true;
+        return false;
     }
     // ignore virtual methods
     if (isa<CXXMethodDecl>(functionDecl)
         && dyn_cast<CXXMethodDecl>(functionDecl)->isVirtual() ) {
-        return true;
+        return false;
     }
     // ignore C main
     if (functionDecl->isMain()) {
-        return true;
+        return false;
     }
-    // ignore macro expansions so we can ignore the IMPL_LINK macros from include/tools/link.hxx
-    // TODO make this more precise
-    if (functionDecl->getLocation().isMacroID())
-        return true;
+
+    // ignore the macros from include/tools/link.hxx
+    auto canonicalDecl = functionDecl->getCanonicalDecl();
+    if (compiler.getSourceManager().isMacroBodyExpansion(canonicalDecl->getLocStart())
+        || compiler.getSourceManager().isMacroArgExpansion(canonicalDecl->getLocStart())) {
+        StringRef name { Lexer::getImmediateMacroName(
+                canonicalDecl->getLocStart(), compiler.getSourceManager(), compiler.getLangOpts()) };
+        if (name.startswith("DECL_LINK") || name.startswith("DECL_STATIC_LINK"))
+            return false;
+        auto loc2 = compiler.getSourceManager().getImmediateExpansionRange(canonicalDecl->getLocStart()).first;
+        if (compiler.getSourceManager().isMacroBodyExpansion(loc2))
+        {
+            StringRef name2 { Lexer::getImmediateMacroName(
+                    loc2, compiler.getSourceManager(), compiler.getLangOpts()) };
+            if (name2.startswith("DECL_DLLPRIVATE_LINK"))
+                return false;
+        }
+    }
 
     if (functionDecl->getIdentifier())
     {
@@ -147,10 +195,11 @@ bool ConstParams::VisitFunctionDecl(const FunctionDecl * functionDecl)
             || name == "etiGraphicExport"
             || name == "epsGraphicExport"
             )
-                return true;
+            return false;
     }
 
     // calculate the ones we want to check
+    bool foundInterestingParam = false;
     for (const ParmVarDecl *pParmVarDecl : compat::parameters(*functionDecl)) {
         // ignore unused params
         if (pParmVarDecl->getName().empty()
@@ -177,30 +226,22 @@ bool ConstParams::VisitFunctionDecl(const FunctionDecl * functionDecl)
             continue;
         interestingParamSet.insert(pParmVarDecl);
         parmToFunction[pParmVarDecl] = functionDecl;
+        foundInterestingParam = true;
     }
-
-    return true;
+    return foundInterestingParam;
 }
 
 bool ConstParams::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
 {
-    if (ignoreLocation(declRefExpr)) {
+    if (!currentFunctionDecl)
         return true;
-    }
-    // ignore stuff that forms part of the stable URE interface
-    if (isInUnoIncludeFile(declRefExpr->getLocStart())) {
-        return true;
-    }
     const ParmVarDecl* parmVarDecl = dyn_cast_or_null<ParmVarDecl>(declRefExpr->getDecl());
-    if (!parmVarDecl) {
+    if (!parmVarDecl)
         return true;
-    }
-    // no need to check again if we have already eliminated this one
-    if (paramCannotBeConstSet.find(parmVarDecl) != paramCannotBeConstSet.end())
+    if (interestingParamSet.find(parmVarDecl) == interestingParamSet.end())
         return true;
     if (!checkIfCanBeConst(declRefExpr, parmVarDecl))
-        paramCannotBeConstSet.insert(parmVarDecl);
-
+        interestingParamSet.erase(parmVarDecl);
     return true;
 }
 
@@ -213,31 +254,36 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
     {
         // check if we're inside a CXXCtorInitializer
         auto parentsRange = compiler.getASTContext().getParents(*stmt);
-        if ( parentsRange.begin() == parentsRange.end())
-            return true;
-        auto cxxConstructorDecl = dyn_cast_or_null<CXXConstructorDecl>(parentsRange.begin()->get<Decl>());
-        if (!cxxConstructorDecl)
-            return true;
-        for ( auto cxxCtorInitializer : cxxConstructorDecl->inits())
+        if ( parentsRange.begin() != parentsRange.end())
         {
-            if (cxxCtorInitializer->isAnyMemberInitializer() && cxxCtorInitializer->getInit() == stmt)
+            if (auto cxxConstructorDecl = dyn_cast_or_null<CXXConstructorDecl>(parentsRange.begin()->get<Decl>()))
             {
-                // if the member is not pointer or ref to-const, we cannot make the param const
-                auto fieldDecl = cxxCtorInitializer->getAnyMember();
-                auto tc = loplugin::TypeCheck(fieldDecl->getType());
-                return tc.Pointer().Const() || tc.LvalueReference().Const();
+                for ( auto cxxCtorInitializer : cxxConstructorDecl->inits())
+                {
+                    if (cxxCtorInitializer->isAnyMemberInitializer() && cxxCtorInitializer->getInit() == stmt)
+                    {
+                        // if the member is not pointer or ref to-const, we cannot make the param const
+                        auto fieldDecl = cxxCtorInitializer->getAnyMember();
+                        auto tc = loplugin::TypeCheck(fieldDecl->getType());
+                        return tc.Pointer().Const() || tc.LvalueReference().Const();
+                    }
+                }
+            }
+            if (auto varDecl = dyn_cast_or_null<VarDecl>(parentsRange.begin()->get<Decl>()))
+            {
+                return isOkForParameter(varDecl->getType());
             }
         }
         parmVarDecl->dump();
         stmt->dump();
-        cxxConstructorDecl->dump();
         report(
              DiagnosticsEngine::Warning,
-             "couldn't find the CXXCtorInitializer?",
+             "no parent?",
               stmt->getLocStart())
               << stmt->getSourceRange();
         return false;
     }
+
     if (auto unaryOperator = dyn_cast<UnaryOperator>(parent)) {
         UnaryOperator::Opcode op = unaryOperator->getOpcode();
         if (op == UO_AddrOf || op == UO_PreInc || op == UO_PostInc
@@ -250,9 +296,8 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
         return true;
     } else if (auto binaryOp = dyn_cast<BinaryOperator>(parent)) {
         BinaryOperator::Opcode op = binaryOp->getOpcode();
-        // TODO could do better, but would require tracking the LHS
         if (binaryOp->getRHS() == stmt && op == BO_Assign) {
-            return false;
+            return isOkForParameter(binaryOp->getLHS()->getType());
         }
         if (binaryOp->getRHS() == stmt) {
             return true;
@@ -272,27 +317,44 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
         const CXXConstructorDecl * constructorDecl = constructExpr->getConstructor();
         for (unsigned i = 0; i < constructExpr->getNumArgs(); ++i) {
             if (constructExpr->getArg(i) == stmt) {
-                return isPointerOrReferenceToConst(constructorDecl->getParamDecl(i)->getType());
+                return isOkForParameter(constructorDecl->getParamDecl(i)->getType());
             }
         }
-        return false; // TODO ??
     } else if (auto operatorCallExpr = dyn_cast<CXXOperatorCallExpr>(parent)) {
         const CXXMethodDecl* calleeMethodDecl = dyn_cast_or_null<CXXMethodDecl>(operatorCallExpr->getDirectCallee());
         if (calleeMethodDecl) {
             // unary operator
-            if (calleeMethodDecl->getNumParams() == 0) {
+            if (calleeMethodDecl->getNumParams() == 0)
                 return calleeMethodDecl->isConst();
+            // Same logic as CXXOperatorCallExpr::isAssignmentOp(), which our supported clang
+            // doesn't have yet.
+            auto Opc = operatorCallExpr->getOperator();
+            if (Opc == OO_Equal || Opc == OO_StarEqual ||
+                Opc == OO_SlashEqual || Opc == OO_PercentEqual ||
+                Opc == OO_PlusEqual || Opc == OO_MinusEqual ||
+                Opc == OO_LessLessEqual || Opc == OO_GreaterGreaterEqual ||
+                Opc == OO_AmpEqual || Opc == OO_CaretEqual ||
+                Opc == OO_PipeEqual)
+            {
+                if (operatorCallExpr->getArg(0) == stmt) // assigning to the param
+                    return false;
+                // not all operator= take a const&
+                return isOkForParameter(calleeMethodDecl->getParamDecl(0)->getType());
             }
+            if (operatorCallExpr->getOperator() == OO_Subscript && operatorCallExpr->getArg(1) == stmt)
+                return true;
+            if (operatorCallExpr->getOperator() == OO_EqualEqual || operatorCallExpr->getOperator() == OO_ExclaimEqual)
+                return true;
             // binary operator
-            if (operatorCallExpr->getArg(0) == stmt) {
+            if (operatorCallExpr->getArg(0) == stmt)
                 return calleeMethodDecl->isConst();
-            }
             unsigned const n = std::min(
                 operatorCallExpr->getNumArgs(),
-                calleeMethodDecl->getNumParams());
+                calleeMethodDecl->getNumParams() + 1);
             for (unsigned i = 1; i < n; ++i)
                 if (operatorCallExpr->getArg(i) == stmt) {
-                    return isPointerOrReferenceToConst(calleeMethodDecl->getParamDecl(i - 1)->getType());
+                    auto qt = calleeMethodDecl->getParamDecl(i - 1)->getType();
+                    return isOkForParameter(qt);
                 }
         } else {
             const Expr* callee = operatorCallExpr->getCallee()->IgnoreParenImpCasts();
@@ -304,12 +366,11 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
             if (calleeFunctionDecl) {
                 for (unsigned i = 0; i < operatorCallExpr->getNumArgs(); ++i) {
                     if (operatorCallExpr->getArg(i) == stmt) {
-                        return isPointerOrReferenceToConst(calleeFunctionDecl->getParamDecl(i)->getType());
+                        return isOkForParameter(calleeFunctionDecl->getParamDecl(i)->getType());
                     }
                 }
             }
         }
-        return false; // TODO ???
     } else if (auto callExpr = dyn_cast<CallExpr>(parent)) {
         QualType functionType = callExpr->getCallee()->getType();
         if (functionType->isFunctionPointerType()) {
@@ -325,7 +386,7 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
             }
             for (unsigned i = 0; i < callExpr->getNumArgs(); ++i) {
                 if (callExpr->getArg(i) == stmt) {
-                    return isPointerOrReferenceToConst(prototype->getParamType(i));
+                    return isOkForParameter(prototype->getParamType(i));
                 }
             }
         }
@@ -351,11 +412,10 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
                 if (i >= calleeFunctionDecl->getNumParams()) // can happen in template code
                     return false;
                 if (callExpr->getArg(i) == stmt) {
-                    return isPointerOrReferenceToConst(calleeFunctionDecl->getParamDecl(i)->getType());
+                    return isOkForParameter(calleeFunctionDecl->getParamDecl(i)->getType());
                 }
             }
         }
-        return false; // TODO ????
     } else if (auto callExpr = dyn_cast<ObjCMessageExpr>(parent)) {
         if (callExpr->getInstanceReceiver() == stmt) {
             return true;
@@ -368,12 +428,11 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
             assert(method->param_size() == callExpr->getNumArgs());
             for (unsigned i = 0; i < callExpr->getNumArgs(); ++i) {
                 if (callExpr->getArg(i) == stmt) {
-                    return isPointerOrReferenceToConst(
+                    return isOkForParameter(
                         method->param_begin()[i]->getType());
                 }
             }
         }
-        return false; // TODO ????
     } else if (isa<CXXReinterpretCastExpr>(parent)) {
         return false;
     } else if (isa<CXXConstCastExpr>(parent)) {
@@ -384,24 +443,25 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
                 if (auto const sub = dyn_cast<DeclRefExpr>(
                         e->getSubExpr()->IgnoreParenImpCasts()))
                 {
-                    if (sub->getDecl() == parmVarDecl) {
+                    if (sub->getDecl() == parmVarDecl)
                         return false;
-                    }
                 }
             }
         }
         return checkIfCanBeConst(parent, parmVarDecl);
     } else if (isa<MemberExpr>(parent)) {
         return checkIfCanBeConst(parent, parmVarDecl);
-    } else if (isa<ArraySubscriptExpr>(parent)) {
+    } else if (auto arraySubscriptExpr = dyn_cast<ArraySubscriptExpr>(parent)) {
+        if (arraySubscriptExpr->getIdx() == stmt)
+            return true;
         return checkIfCanBeConst(parent, parmVarDecl);
     } else if (isa<ParenExpr>(parent)) {
         return checkIfCanBeConst(parent, parmVarDecl);
     } else if (isa<DeclStmt>(parent)) {
         // TODO could do better here, but would require tracking the target(s)
-        return false;
+        //return false;
     } else if (isa<ReturnStmt>(parent)) {
-        return isPointerOrReferenceToConst(dyn_cast<Expr>(stmt)->getType());
+        return !isPointerOrReferenceToNonConst(currentFunctionDecl->getReturnType());
     } else if (isa<InitListExpr>(parent)) {
         return false;
     } else if (isa<IfStmt>(parent)) {
@@ -431,10 +491,10 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
     } else if (isa<UnaryExprOrTypeTraitExpr>(parent)) {
         return false; // ???
     } else if (auto cxxNewExpr = dyn_cast<CXXNewExpr>(parent)) {
-        for (auto pa : cxxNewExpr->placement_arguments())
-            if (pa == stmt)
+        for (unsigned i = 0; i < cxxNewExpr->getNumPlacementArgs(); ++i)
+            if (cxxNewExpr->getPlacementArg(i) == stmt)
                 return false;
-        return true; // because the ParamVarDecl must be a parameter to the expression, probably an array length
+        return true; // ???
     } else if (auto lambdaExpr = dyn_cast<LambdaExpr>(parent)) {
         for (auto it = lambdaExpr->capture_begin(); it != lambdaExpr->capture_end(); ++it)
         {
@@ -473,7 +533,9 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
     return true;
 }
 
-bool ConstParams::isPointerOrReferenceToConst(const QualType& qt) {
+bool ConstParams::isOkForParameter(const QualType& qt) {
+    if (qt->isIntegralOrEnumerationType())
+        return true;
     auto const type = loplugin::TypeCheck(qt);
     if (type.Pointer()) {
         return bool(type.Pointer().Const());
@@ -485,6 +547,16 @@ bool ConstParams::isPointerOrReferenceToConst(const QualType& qt) {
         return false;
     } else if (type.LvalueReference()) {
         return bool(type.LvalueReference().Const());
+    }
+    return false;
+}
+
+bool ConstParams::isPointerOrReferenceToNonConst(const QualType& qt) {
+    auto const type = loplugin::TypeCheck(qt);
+    if (type.Pointer()) {
+        return !bool(type.Pointer().Const());
+    } else if (type.LvalueReference()) {
+        return !bool(type.LvalueReference().Const());
     }
     return false;
 }

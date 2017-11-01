@@ -1401,7 +1401,7 @@ sal_uInt32 SvNumberFormatter::GuessDateTimeFormat( short& rType, double fNumber,
 
 sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
                                              short eType, LanguageType eLang,
-                                             SvNumberformat* pFormat )
+                                             SvNumberformat const * pFormat )
 {
     sal_uInt32 nKey = nFIndex;
     switch ( eType )
