@@ -42,7 +42,7 @@ struct ImplCursorData
     VclPtr<vcl::Window> mpWindow;           // assigned window
 };
 
-static void ImplCursorInvert( ImplCursorData* pData )
+static void ImplCursorInvert( ImplCursorData const * pData )
 {
     vcl::Window* pWindow  = pData->mpWindow;
     std::unique_ptr<PaintBufferGuard> pGuard;

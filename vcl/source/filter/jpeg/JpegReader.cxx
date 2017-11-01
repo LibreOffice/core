@@ -180,7 +180,7 @@ JPEGReader::~JPEGReader()
 {
 }
 
-bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam& rParam)
+bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam const & rParam)
 {
     if (rParam.nWidth > SAL_MAX_INT32 / 8 || rParam.nHeight > SAL_MAX_INT32 / 8)
         return false; // avoid overflows later

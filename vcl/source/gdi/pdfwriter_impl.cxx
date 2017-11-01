@@ -3026,7 +3026,7 @@ static void appendSubsetName( int nSubsetID, const OUString& rPSName, OStringBuf
     appendName( rPSName, rBuffer );
 }
 
-sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
+sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
                                               const sal_Ucs* pCodeUnits,
                                               const sal_Int32* pCodeUnitsPerGlyph,
                                               const sal_Int32* pEncToUnicodeIndex,
@@ -3136,7 +3136,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
     return nStream;
 }
 
-sal_Int32 PDFWriterImpl::emitFontDescriptor( const PhysicalFontFace* pFont, FontSubsetInfo& rInfo, sal_Int32 nSubsetID, sal_Int32 nFontStream )
+sal_Int32 PDFWriterImpl::emitFontDescriptor( const PhysicalFontFace* pFont, FontSubsetInfo const & rInfo, sal_Int32 nSubsetID, sal_Int32 nFontStream )
 {
     OStringBuffer aLine( 1024 );
     // get font flags, see PDF reference 1.4 p. 358
@@ -8647,7 +8647,7 @@ void PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     CHECK_RETURN2( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 }
 
-bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
+bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
 {
     // LO internal gradient -> PDF shading type:
     //  * GradientStyle::Linear: axial shading, using sampled-function with 2 samples

@@ -861,7 +861,7 @@ i12626
     /* writes the Do operation inside the content stream */
     void drawBitmap( const Point& rDestPt, const Size& rDestSize, const BitmapEmit& rBitmap, const Color& rFillColor );
     /* write the function object for a Gradient */
-    bool writeGradientFunction( GradientEmit& rObject );
+    bool writeGradientFunction( GradientEmit const & rObject );
     /* creates a GradientEmit and returns its object number */
     sal_Int32 createGradient(  const Gradient& rGradient, const Size& rSize );
 
@@ -874,9 +874,9 @@ i12626
     /* writes a type1 system font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
     std::map< sal_Int32, sal_Int32 > emitSystemFont( const PhysicalFontFace*, EmbedFont const & );
     /* writes a font descriptor and returns its object id (or 0) */
-    sal_Int32 emitFontDescriptor( const PhysicalFontFace*, FontSubsetInfo&, sal_Int32 nSubsetID, sal_Int32 nStream );
+    sal_Int32 emitFontDescriptor( const PhysicalFontFace*, FontSubsetInfo const &, sal_Int32 nSubsetID, sal_Int32 nStream );
     /* writes a ToUnicode cmap, returns the corresponding stream object */
-    sal_Int32 createToUnicodeCMap( sal_uInt8* pEncoding, const sal_Ucs* pCodeUnits, const sal_Int32* pCodeUnitsPerGlyph,
+    sal_Int32 createToUnicodeCMap( sal_uInt8 const * pEncoding, const sal_Ucs* pCodeUnits, const sal_Int32* pCodeUnitsPerGlyph,
                                    const sal_Int32* pEncToUnicodeIndex, int nGlyphs );
 
     /* get resource dict object number */

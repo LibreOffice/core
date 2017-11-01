@@ -1715,7 +1715,7 @@ namespace
 {
 #ifdef SVL_CRYPTO_NSS
 /// Similar to NSS_CMSAttributeArray_FindAttrByOidTag(), but works directly with a SECOidData.
-NSSCMSAttribute* CMSAttributeArray_FindAttrByOidData(NSSCMSAttribute** attrs, SECOidData* oid, PRBool only)
+NSSCMSAttribute* CMSAttributeArray_FindAttrByOidData(NSSCMSAttribute** attrs, SECOidData const * oid, PRBool only)
 {
     NSSCMSAttribute* attr1, *attr2;
 

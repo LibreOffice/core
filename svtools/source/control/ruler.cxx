@@ -1744,7 +1744,7 @@ bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
     return false;
 }
 
-bool Ruler::ImplStartDrag( RulerSelection* pHitTest, sal_uInt16 nModifier )
+bool Ruler::ImplStartDrag( RulerSelection const * pHitTest, sal_uInt16 nModifier )
 {
     // don't trigger drag if a border that was clicked can not be changed
     if ( (pHitTest->eType == RulerType::Border) &&

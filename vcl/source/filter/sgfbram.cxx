@@ -99,7 +99,7 @@ SvStream& ReadSgfVector(SvStream& rIStream, SgfVector& rVect)
     return rIStream;
 }
 
-SvStream& WriteBmpFileHeader(SvStream& rOStream, BmpFileHeader& rHead)
+SvStream& WriteBmpFileHeader(SvStream& rOStream, BmpFileHeader const & rHead)
 {
 #if !defined NDEBUG
     sal_uInt64 const nOldPos(rOStream.Tell());
@@ -132,7 +132,7 @@ sal_uInt32 BmpFileHeader::GetOfs()
     return sal_uInt32(OfsLo)+0x00010000*sal_uInt32(OfsHi);
 }
 
-SvStream& WriteBmpInfoHeader(SvStream& rOStream, BmpInfoHeader& rInfo)
+SvStream& WriteBmpInfoHeader(SvStream& rOStream, BmpInfoHeader const & rInfo)
 {
 #if !defined NDEBUG
     sal_uInt64 const nOldPos(rOStream.Tell());
@@ -386,7 +386,7 @@ Color Hpgl2SvFarbe( sal_uInt8 nFarb )
     return aColor;
 }
 
-bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, GDIMetaFile& rMtf)
+bool SgfFilterVect(SvStream& rInp, SgfHeader const & rHead, GDIMetaFile& rMtf)
 {
     ScopedVclPtrInstance< VirtualDevice > aOutDev;
     SgfVector aVect;
