@@ -113,16 +113,18 @@ namespace sfx
 class ClassificationKeyCreator
 {
 private:
-    SfxClassificationPolicyType m_ePolicyType;
+    const SfxClassificationPolicyType m_ePolicyType;
+    const OUString m_sPolicy;
     sal_Int32 m_nTextNumber;
 
     OUString getPolicyKey() const
     {
-        return SfxClassificationHelper::policyTypeToString(m_ePolicyType);
+        return m_sPolicy;
     }
 public:
     ClassificationKeyCreator(SfxClassificationPolicyType ePolicyType)
         : m_ePolicyType(ePolicyType)
+        , m_sPolicy(SfxClassificationHelper::policyTypeToString(m_ePolicyType))
         , m_nTextNumber(1)
     {}
 
@@ -133,9 +135,7 @@ public:
 
     OUString makeNumberedMarkingTextKey()
     {
-        OUString sKey = makeMarkingTextKey() + ":" + OUString::number(m_nTextNumber);
-        m_nTextNumber++;
-        return sKey;
+        return makeMarkingTextKey() + ":" + OUString::number(m_nTextNumber++);
     }
 
     bool isMarkingTextKey(OUString const & aKey) const
@@ -143,15 +143,24 @@ public:
         return aKey.startsWith(makeMarkingTextKey());
     }
 
-    OUString makeCategoryKey() const
+    OUString makeCategoryNameKey() const
     {
         return getPolicyKey() + "BusinessAuthorizationCategory:Name";
     }
 
-    bool isCategoryKey(OUString const & aKey) const
+    bool isCategoryNameKey(OUString const & aKey) const
     {
-        return aKey.startsWith(makeCategoryKey()) ||
-               aKey.startsWith(getPolicyKey() + "BusinessAuthorizationCategory:Identifier");
+        return aKey.startsWith(makeCategoryNameKey());
+    }
+
+    OUString makeCategoryIdentifierKey() const
+    {
+        return getPolicyKey() + "BusinessAuthorizationCategory:Identifier";
+    }
+
+    bool isCategoryIdentifierKey(OUString const & aKey) const
+    {
+        return aKey.startsWith(makeCategoryIdentifierKey());
     }
 
     OUString makeMarkingKey() const
