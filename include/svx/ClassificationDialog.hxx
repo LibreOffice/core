@@ -51,10 +51,19 @@ private:
 
     void insertField(ClassificationType eType, OUString const & rString, OUString const & rFullString);
 
+    std::vector<std::vector<ClassificationResult>> m_aRecentlyUsedValuesCollection;
+    std::vector<ClassificationResult> m_aInitialValues;
+
+    void readIn(std::vector<ClassificationResult> const & rInput);
+    void readRecentlyUsed();
+    void writeRecentlyUsed();
+
 public:
     ClassificationDialog(vcl::Window* pParent, bool bPerParagraph, const std::function<void()>& rParagraphSignHandler = [](){});
-    virtual ~ClassificationDialog() override;
-    virtual void dispose() override;
+    ~ClassificationDialog() override;
+
+    void dispose() override;
+    short Execute() override;
 
     std::vector<ClassificationResult> getResult();
     void setupValues(std::vector<ClassificationResult> const & rInput);

@@ -16,6 +16,13 @@
 #include <editeng/wghtitem.hxx>
 #include <svl/itemset.hxx>
 
+#include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
+#include <rtl/uri.hxx>
+#include <config_folders.h>
+#include <tools/XmlWriter.hxx>
+#include <tools/XmlWalker.hxx>
+
 namespace svx {
 
 namespace {
@@ -28,6 +35,13 @@ const SvxFieldItem* findField(editeng::Section const & rSection)
             return static_cast<const SvxFieldItem*>(pPool);
     }
     return nullptr;
+}
+
+bool fileExists(OUString const & sFilename)
+{
+    osl::File aFile(sFilename);
+    osl::FileBase::RC eRC = aFile.open(osl_File_OpenFlag_Read);
+    return osl::FileBase::E_None == eRC;
 }
 
 } // end anonymous namespace
@@ -103,6 +117,19 @@ void ClassificationDialog::dispose()
     ModalDialog::dispose();
 }
 
+short ClassificationDialog::Execute()
+{
+    readRecentlyUsed();
+    readIn(m_aInitialValues);
+
+    short nResult = ModalDialog::Execute();
+    if (nResult == RET_OK)
+    {
+        writeRecentlyUsed();
+    }
+    return nResult;
+}
+
 void ClassificationDialog::insertField(ClassificationType eType, OUString const & rString, OUString const & rFullString)
 {
     ClassificationField aField(eType, rString, rFullString);
@@ -110,6 +137,179 @@ void ClassificationDialog::insertField(ClassificationType eType, OUString const 
 }
 
 void ClassificationDialog::setupValues(std::vector<ClassificationResult> const & rInput)
+{
+    m_aInitialValues = rInput;
+}
+
+void ClassificationDialog::readRecentlyUsed()
+{
+    OUString sPath("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/user/classification/");
+    rtl::Bootstrap::expandMacros(sPath);
+
+    OUString sFilePath(sPath + "recentlyUsed.xml");
+
+    if (!fileExists(sFilePath))
+        return;
+
+    SvFileStream aFileStream(sFilePath, StreamMode::READ);
+    tools::XmlWalker aWalker;
+    if (!aWalker.open(&aFileStream))
+        return;
+
+    if (aWalker.name() == "recentlyUsedClassifications")
+    {
+        svx::ClassificationType eType;
+        OUString sString;
+        OUString sAbbreviatedString;
+
+        aWalker.children();
+        while (aWalker.isValid())
+        {
+            if (aWalker.name() == "elementGroup")
+            {
+                std::vector<ClassificationResult> aResults;
+
+                aWalker.children();
+
+                while (aWalker.isValid())
+                {
+                    if (aWalker.name() == "element")
+                    {
+                        OString sType = aWalker.attribute("type");
+
+                        if (sType == "CATEGORY")
+                            eType = svx::ClassificationType::CATEGORY;
+                        else if (sType == "INTELLECTUAL_PROPERTY_PART")
+                            eType = svx::ClassificationType::INTELLECTUAL_PROPERTY_PART;
+                        else if (sType == "MARKING")
+                            eType = svx::ClassificationType::MARKING;
+                        else if (sType == "PARAGRAPH")
+                            eType = svx::ClassificationType::PARAGRAPH;
+                        else if (sType == "TEXT")
+                            eType = svx::ClassificationType::TEXT;
+
+                        aWalker.children();
+
+                        while (aWalker.isValid())
+                        {
+                            if (aWalker.name() == "string")
+                            {
+                                OString sContent = aWalker.content();
+                                sString = OStringToOUString(sContent, RTL_TEXTENCODING_UTF8);
+                            }
+                            else if (aWalker.name() == "abbreviatedString")
+                            {
+                                OString sContent = aWalker.content();
+                                sAbbreviatedString = OStringToOUString(sContent, RTL_TEXTENCODING_UTF8);
+                            }
+
+                            aWalker.next();
+                        }
+                        aWalker.parent();
+
+                        aResults.push_back({ eType, sString, sAbbreviatedString });
+                    }
+                    aWalker.next();
+                }
+                aWalker.parent();
+                m_aRecentlyUsedValuesCollection.push_back(aResults);
+            }
+            aWalker.next();
+        }
+        aWalker.parent();
+    }
+}
+
+void ClassificationDialog::writeRecentlyUsed()
+{
+    OUString sPath("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/user/classification/");
+    rtl::Bootstrap::expandMacros(sPath);
+    osl::Directory::createPath(sPath);
+
+    OUString sFilePath(sPath + "recentlyUsed.xml");
+
+    std::unique_ptr<SvStream> pStream;
+    pStream.reset(new SvFileStream(sFilePath, StreamMode::STD_READWRITE | StreamMode::TRUNC));
+
+    tools::XmlWriter aXmlWriter(pStream.get());
+
+    if (!aXmlWriter.startDocument())
+        return;
+
+    aXmlWriter.startElement("recentlyUsedClassifications");
+
+    aXmlWriter.startElement("elementGroup");
+
+    for (ClassificationResult const & rResult : getResult())
+    {
+        aXmlWriter.startElement("element");
+        OUString sType;
+        switch(rResult.meType)
+        {
+            case svx::ClassificationType::CATEGORY:
+                sType = "CATEGORY"; break;
+            case svx::ClassificationType::MARKING:
+                sType = "MARKING"; break;
+            case svx::ClassificationType::TEXT:
+                sType = "TEXT"; break;
+            case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
+                sType = "INTELLECTUAL_PROPERTY_PART"; break;
+            case svx::ClassificationType::PARAGRAPH:
+                sType = "PARAGRAPH"; break;
+        }
+        aXmlWriter.attribute("type", sType);
+        aXmlWriter.startElement("string");
+        aXmlWriter.content(rResult.msString);
+        aXmlWriter.endElement();
+        aXmlWriter.startElement("abbreviatedString");
+        aXmlWriter.content(rResult.msAbbreviatedString);
+        aXmlWriter.endElement();
+        aXmlWriter.endElement();
+    }
+    aXmlWriter.endElement();
+
+    if (m_aRecentlyUsedValuesCollection.size() >= 5)
+        m_aRecentlyUsedValuesCollection.pop_back();
+
+    for (std::vector<ClassificationResult> const & rResultCollection : m_aRecentlyUsedValuesCollection)
+    {
+        aXmlWriter.startElement("elementGroup");
+
+        for (ClassificationResult const & rResult : rResultCollection)
+        {
+            aXmlWriter.startElement("element");
+            OUString sType;
+            switch(rResult.meType)
+            {
+                case svx::ClassificationType::CATEGORY:
+                    sType = "CATEGORY"; break;
+                case svx::ClassificationType::MARKING:
+                    sType = "MARKING"; break;
+                case svx::ClassificationType::TEXT:
+                    sType = "TEXT"; break;
+                case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
+                    sType = "INTELLECTUAL_PROPERTY_PART"; break;
+                case svx::ClassificationType::PARAGRAPH:
+                    sType = "PARAGRAPH"; break;
+            }
+            aXmlWriter.attribute("type", sType);
+            aXmlWriter.startElement("string");
+            aXmlWriter.content(rResult.msString);
+            aXmlWriter.endElement();
+            aXmlWriter.startElement("abbreviatedString");
+            aXmlWriter.content(rResult.msAbbreviatedString);
+            aXmlWriter.endElement();
+            aXmlWriter.endElement();
+        }
+        aXmlWriter.endElement();
+    }
+
+    aXmlWriter.endElement();
+
+    aXmlWriter.endDocument();
+}
+
+void ClassificationDialog::readIn(std::vector<ClassificationResult> const & rInput)
 {
     sal_Int32 nParagraph = -1;
     for (ClassificationResult const & rClassificationResult : rInput)
