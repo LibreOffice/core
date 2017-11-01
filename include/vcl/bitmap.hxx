@@ -668,7 +668,7 @@ public:
                                 BitmapReadAccess const * pReadAcc,
                                 int aNumberOfContributions,
                                 const double* pWeights,
-                                int* pPixels,
+                                int const * pPixels,
                                 const int* pCount );
 
     SAL_DLLPRIVATE bool     ImplMakeMono( sal_uInt8 cThreshold );

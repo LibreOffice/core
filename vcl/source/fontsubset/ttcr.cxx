@@ -615,7 +615,7 @@ static sal_uInt8 *PackCmapType0(CmapSubTable const *s, sal_uInt32 *length)
     return ptr;
 }
 
-static sal_uInt8 *PackCmapType6(CmapSubTable *s, sal_uInt32 *length)
+static sal_uInt8 *PackCmapType6(CmapSubTable const *s, sal_uInt32 *length)
 {
     sal_uInt8* ptr = static_cast<sal_uInt8*>(smalloc(s->n*2 + 10));
     sal_uInt8 *p = ptr + 10;
@@ -642,7 +642,7 @@ static sal_uInt8 *PackCmapType6(CmapSubTable *s, sal_uInt32 *length)
 }
 
 /* XXX it only handles Format 0 encoding tables */
-static sal_uInt8 *PackCmap(CmapSubTable *s, sal_uInt32 *length)
+static sal_uInt8 *PackCmap(CmapSubTable const *s, sal_uInt32 *length)
 {
     if( s->xg[s->n-1] > 0xff )
         return PackCmapType6(s, length);

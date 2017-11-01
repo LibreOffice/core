@@ -189,7 +189,7 @@ struct Entity : public ParserData
 
     explicit Entity( const ParserData& rData );
     Entity( const Entity& rEntity );
-    void startElement( Event *pEvent );
+    void startElement( Event const *pEvent );
     void characters( const OUString& sChars );
     void endElement();
     void processingInstruction( const OUString& rTarget, const OUString& rData );
@@ -397,7 +397,7 @@ Entity::Entity(const Entity& e)
 {
 }
 
-void Entity::startElement( Event *pEvent )
+void Entity::startElement( Event const *pEvent )
 {
     const sal_Int32& nElementToken = pEvent->mnElementToken;
     const OUString& aNamespace = pEvent->msNamespace;

@@ -344,7 +344,7 @@ namespace vcl
  * @ingroup sft
  *
  */
-    int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, sal_uInt16 *glyphArray, sal_uInt8 *encoding, int nGlyphs, int wmode);
+    int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, sal_uInt16 const *glyphArray, sal_uInt8 *encoding, int nGlyphs, int wmode);
 
 /**
  * Generates a new TrueType font and dumps it to <b>outf</b> file.
@@ -368,8 +368,8 @@ namespace vcl
  */
     int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
                               const char    *fname,
-                              sal_uInt16    *glyphArray,
-                              sal_uInt8     *encoding,
+                              sal_uInt16 const *glyphArray,
+                              sal_uInt8 const *encoding,
                               int            nGlyphs,
                               int            nNameRecs,
                               NameRecord const *nr);
@@ -397,7 +397,7 @@ namespace vcl
     int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
                                FILE          *outf,
                                const char    *psname,
-                               sal_uInt16        *glyphArray,
+                               sal_uInt16 const *glyphArray,
                                sal_uInt8          *encoding,
                                int            nGlyphs);
 

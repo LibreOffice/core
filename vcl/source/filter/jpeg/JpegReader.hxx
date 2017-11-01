@@ -64,7 +64,7 @@ public:
 
     ReadState Read(Graphic& rGraphic, GraphicFilterImportFlags nImportFlags, Bitmap::ScopedWriteAccess* ppAccess);
 
-    bool CreateBitmap(JPEGCreateBitmapParam& param);
+    bool CreateBitmap(JPEGCreateBitmapParam const & param);
 
     Bitmap& GetBitmap() { return *mpBitmap; }
 };

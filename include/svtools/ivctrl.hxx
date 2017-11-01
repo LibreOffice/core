@@ -256,7 +256,7 @@ public:
 
     sal_Int32               GetEntryCount() const;
     SvxIconChoiceCtrlEntry* GetEntry( sal_Int32 nPos ) const;
-    sal_Int32               GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const;
+    sal_Int32               GetEntryListPos( SvxIconChoiceCtrlEntry const * pEntry ) const;
     using Window::SetCursor;
     void                    SetCursor( SvxIconChoiceCtrlEntry* pEntry );
     SvxIconChoiceCtrlEntry* GetCursor() const;
