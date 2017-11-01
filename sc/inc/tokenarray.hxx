@@ -92,6 +92,7 @@ public:
         svl::SharedStringPool& rSPool,
         formula::ExternalReferenceHelper* _pRef) override;
     virtual void CheckToken( const formula::FormulaToken& r ) override;
+    void CheckForThreading( OpCode eOp );
     virtual formula::FormulaToken* AddOpCode( OpCode eCode ) override;
     /** ScSingleRefToken with ocPush. */
     formula::FormulaToken* AddSingleReference( const ScSingleRefData& rRef );
