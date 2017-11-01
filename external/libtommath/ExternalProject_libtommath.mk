@@ -18,9 +18,7 @@ $(eval $(call gb_ExternalProject_use_nmake,libtommath,build))
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,libtommath,build):
 	$(call gb_ExternalProject_run,build,\
-		export CC="$(shell cygpath -w $(filter-out -%,$(CC))) $(filter -%,$(CC))" \
-		&& export LIB="$(ILIB)" \
-		&& nmake -nologo -f makefile.msvc \
+		nmake -nologo -f makefile.msvc \
 	)
 else
 $(call gb_ExternalProject_get_state_target,libtommath,build) :

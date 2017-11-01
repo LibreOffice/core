@@ -55,14 +55,13 @@ OPENSSL_PLATFORM := \
   )
 
 ifeq ($(COM),MSC)
+$(eval $(call gb_ExternalProject_use_nmake,openssl,build))
+
 $(call gb_ExternalProject_get_state_target,openssl,build):
 	$(call gb_ExternalProject_run,build,\
-		export CC="$(shell cygpath -w $(filter-out -%,$(CC))) $(filter -%,$(CC))" \
-		&& export PERL="$(shell cygpath -w $(PERL))" \
-		&& export LIB="$(ILIB)" \
+		export PERL="$(shell cygpath -w $(PERL))" \
 		&& $(PERL) Configure $(OPENSSL_PLATFORM) no-idea \
 		&& cmd /c "ms\do_ms.bat $(PERL) $(OPENSSL_PLATFORM)" \
-		&& unset MAKEFLAGS \
 		&& nmake -f "ms\ntdll.mak" \
 		&& mv inc32/* include/ \
 	)

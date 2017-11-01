@@ -16,13 +16,14 @@ $(eval $(call gb_ExternalProject_register_targets,libxml2,\
 ifeq ($(OS),WNT)
 $(call gb_ExternalProject_use_external_project,libxml2,icu)
 
+$(eval $(call gb_ExternalProject_use_nmake,libxml2,build))
+
 $(call gb_ExternalProject_get_state_target,libxml2,build):
 	$(call gb_ExternalProject_run,build,\
 		cscript /e:javascript configure.js \
 			iconv=no icu=yes sax1=yes $(if $(MSVC_USE_DEBUG_RUNTIME),run_debug=yes cruntime=/MDd) \
 			$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes) \
-		&& unset MAKEFLAGS \
-		&& LIB="$(ILIB)" nmake \
+		&& nmake \
 	,win32)
 else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,libxml2,build):
