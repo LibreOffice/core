@@ -226,17 +226,17 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                 aFileHandle.writeString(" oor:finalized=\"true\"");
             aFileHandle.writeString("><value");
             if (bExternal)
+            {
                 aFileHandle.writeString(" oor:external=\"");
-            else
-                aFileHandle.writeString(">");
-
-            writeValueContent(aFileHandle, aValue);
-
-            if (bExternal)
+                writeAttributeValue(aFileHandle, aValue);
                 aFileHandle.writeString("\"/");
+            }
             else
+            {
+                aFileHandle.writeString(">");
+                writeValueContent(aFileHandle, aValue);
                 aFileHandle.writeString("</value");
-
+            }
             aFileHandle.writeString("></prop>");
             for(; nCloseNode > 0; nCloseNode--)
                 aFileHandle.writeString("</node>");
