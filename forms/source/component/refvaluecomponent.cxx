@@ -21,7 +21,7 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <list>
+#include <vector>
 
 
 namespace frm
@@ -162,12 +162,12 @@ namespace frm
 
     Sequence< Type > OReferenceValueComponent::getSupportedBindingTypes()
     {
-        ::std::list< Type > aTypes;
-        aTypes.push_back( cppu::UnoType<sal_Bool>::get() );
+        ::std::vector< Type > aTypes;
 
         if ( !m_sReferenceValue.isEmpty() )
-            aTypes.push_front( cppu::UnoType<OUString>::get() );
-            // push_front, because this is the preferred type
+            aTypes.push_back( cppu::UnoType<OUString>::get() );
+
+        aTypes.push_back( cppu::UnoType<sal_Bool>::get() );
 
         return comphelper::containerToSequence(aTypes);
     }
