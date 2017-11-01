@@ -454,7 +454,7 @@ sal_Int32 TableLayouter::distribute( LayoutVector& rLayouts, sal_Int32 nDistribu
         {
             Layout& rLayout = rLayouts[nIndex];
             if( (nDistribute > 0) || (rLayout.mnSize > rLayout.mnMinSize) )
-                nCurrentWidth += rLayout.mnSize;
+                nCurrentWidth = o3tl::saturating_add(nCurrentWidth, rLayout.mnSize);
         }
 
         bConstrainsBroken = false;
