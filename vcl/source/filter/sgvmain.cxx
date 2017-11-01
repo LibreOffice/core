@@ -388,7 +388,7 @@ Color Sgv2SvFarbe(sal_uInt8 nFrb1, sal_uInt8 nFrb2, sal_uInt8 nInts)
     return aColor;
 }
 
-void SetLine(ObjLineType& rLine, OutputDevice& rOut)
+void SetLine(ObjLineType const & rLine, OutputDevice& rOut)
 {
     if( 0 == ( rLine.LMuster & 0x07 ) )
         rOut.SetLineColor();
@@ -396,7 +396,7 @@ void SetLine(ObjLineType& rLine, OutputDevice& rOut)
         rOut.SetLineColor( Sgv2SvFarbe(rLine.LFarbe,rLine.LBFarbe,rLine.LIntens) );
 }
 
-void SetArea(ObjAreaType& rArea, OutputDevice& rOut)
+void SetArea(ObjAreaType const & rArea, OutputDevice& rOut)
 {
     if( 0 == ( rArea.FMuster & 0x00FF ) )
         rOut.SetFillColor();
@@ -424,7 +424,7 @@ void SgfAreaColorIntens(sal_uInt16 Muster, sal_uInt8 Col1, sal_uInt8 Col2, sal_u
     SetArea(F,rOut);
 }
 
-void DrawSlideRect(sal_Int16 x1, sal_Int16 y1, sal_Int16 x2, sal_Int16 y2, ObjAreaType& F, OutputDevice& rOut)
+void DrawSlideRect(sal_Int16 x1, sal_Int16 y1, sal_Int16 x2, sal_Int16 y2, ObjAreaType const & F, OutputDevice& rOut)
 {
     sal_Int16 i,i0,b,b0;
     sal_Int16 Int1,Int2;
@@ -573,7 +573,7 @@ void SplnType::Draw(OutputDevice& rOut, UCHAR *)
     }
 }
 
-void DrawSlideCirc(sal_Int16 cx, sal_Int16 cy, sal_Int16 rx, sal_Int16 ry, ObjAreaType& F, OutputDevice& rOut)
+void DrawSlideCirc(sal_Int16 cx, sal_Int16 cy, sal_Int16 rx, sal_Int16 ry, ObjAreaType const & F, OutputDevice& rOut)
 {
     sal_Int16 x1=cx-rx;
     sal_Int16 y1=cy-ry;

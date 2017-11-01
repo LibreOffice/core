@@ -297,7 +297,7 @@ bool SvtIconChoiceCtrl::DoKeyInput( const KeyEvent& rKEvt )
     bool bHandled = _pImpl->KeyInput( rKEvt );
     return bHandled;
 }
-sal_Int32 SvtIconChoiceCtrl::GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const
+sal_Int32 SvtIconChoiceCtrl::GetEntryListPos( SvxIconChoiceCtrlEntry const * pEntry ) const
 {
     return _pImpl->GetEntryListPos( pEntry );
 }

@@ -104,7 +104,7 @@ public:
     void   SetSize(sal_uInt32 Size);
     void   SetOfs(sal_uInt32 Size);
     sal_uInt32 GetOfs();
-    friend SvStream& WriteBmpFileHeader(SvStream& rOStream, BmpFileHeader& rHead);
+    friend SvStream& WriteBmpFileHeader(SvStream& rOStream, BmpFileHeader const & rHead);
 };
 
 #define BmpInfoHeaderSize 40
@@ -123,7 +123,7 @@ public:
     sal_uInt32 ColUsed;    // number of colours used (0=all
     sal_uInt32 ColMust;    // number of important colours (0=all)
 
-    friend SvStream& WriteBmpInfoHeader(SvStream& rOStream, BmpInfoHeader& rHead);
+    friend SvStream& WriteBmpInfoHeader(SvStream& rOStream, BmpInfoHeader const & rHead);
 };
 
 #define RGBQuadSize 4

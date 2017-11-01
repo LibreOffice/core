@@ -2564,8 +2564,8 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const tools::Rectangle& rRect, bool bAd
 }
 
 void SvxIconChoiceCtrl_Impl::SelectRange(
-                        SvxIconChoiceCtrlEntry* pStart,
-                        SvxIconChoiceCtrlEntry* pEnd,
+                        SvxIconChoiceCtrlEntry const * pStart,
+                        SvxIconChoiceCtrlEntry const * pEnd,
                         bool bAdd )
 {
     sal_uLong nFront = GetEntryListPos( pStart );
@@ -3047,7 +3047,7 @@ void IcnViewEdit_Impl::StopEditing()
     }
 }
 
-sal_Int32 SvxIconChoiceCtrl_Impl::GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const
+sal_Int32 SvxIconChoiceCtrl_Impl::GetEntryListPos( SvxIconChoiceCtrlEntry const * pEntry ) const
 {
     if( !(nFlags & IconChoiceFlags::EntryListPosValid ))
         const_cast<SvxIconChoiceCtrl_Impl*>(this)->SetListPositions();

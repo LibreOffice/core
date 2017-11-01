@@ -2127,7 +2127,7 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
     return bRet;
 }
 
-bool Bitmap::ImplConvolutionPass(Bitmap& aNewBitmap, BitmapReadAccess const * pReadAcc, int aNumberOfContributions, const double* pWeights, int* pPixels, const int* pCount)
+bool Bitmap::ImplConvolutionPass(Bitmap& aNewBitmap, BitmapReadAccess const * pReadAcc, int aNumberOfContributions, const double* pWeights, int const * pPixels, const int* pCount)
 {
     if (!pReadAcc)
         return false;

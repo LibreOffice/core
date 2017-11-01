@@ -249,8 +249,8 @@ class SvxIconChoiceCtrl_Impl
                         );
 
     void                SelectRange(
-                            SvxIconChoiceCtrlEntry* pStart,
-                            SvxIconChoiceCtrlEntry* pEnd,
+                            SvxIconChoiceCtrlEntry const * pStart,
+                            SvxIconChoiceCtrlEntry const * pEnd,
                             bool bAdd
                         );
 
@@ -447,7 +447,7 @@ public:
                             }
     SvxIconChoiceCtrlEntry* GetFirstSelectedEntry() const;
     void                SetSelectionMode( SelectionMode eMode ) { eSelectionMode=eMode; }
-    sal_Int32           GetEntryListPos( SvxIconChoiceCtrlEntry* ) const;
+    sal_Int32           GetEntryListPos( SvxIconChoiceCtrlEntry const * ) const;
     void                InitSettings();
     tools::Rectangle           GetOutputRect() const;
 

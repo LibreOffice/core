@@ -315,8 +315,8 @@ public:
     friend SvStream& ReadGrupType(SvStream& rIStream, GrupType& rGrup);
 };
 
-void SetLine(ObjLineType& rLine, OutputDevice& rOut);
-void SetArea(ObjAreaType& rArea, OutputDevice& rOut);
+void SetLine(ObjLineType const & rLine, OutputDevice& rOut);
+void SetArea(ObjAreaType const & rArea, OutputDevice& rOut);
 Color Sgv2SvFarbe(sal_uInt8 nFrb1, sal_uInt8 nFrb2, sal_uInt8 nInts);
 void RotatePoint(PointType& P, sal_Int16 cx, sal_Int16 cy, double sn, double cs);
 void RotatePoint(Point& P, sal_Int16 cx, sal_Int16 cy, double sn, double cs);
