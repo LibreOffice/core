@@ -473,7 +473,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
             m_pWrtShell->EndAllTableBoxEdit();
 
             // Remove invalid signatures.
-            m_pWrtShell->ValidateParagraphSignatures(false);
+            m_pWrtShell->ValidateAllParagraphSignatures(false);
 
             m_pWrtShell->ClassifyDocPerHighestParagraphClass();
         }

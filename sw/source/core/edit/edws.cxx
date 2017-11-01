@@ -53,7 +53,7 @@ SwEditShell::SwEditShell( SwDoc& rDoc, vcl::Window *pWindow, const SwViewOption 
 
     // Update the paragraph signatures.
     // Since this ctor is called only on creating/loading the doc, we validate once only.
-    ValidateParagraphSignatures(true);
+    ValidateAllParagraphSignatures(true);
 }
 
 SwEditShell::~SwEditShell() // USED
