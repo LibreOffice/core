@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <externvar.hxx>
+#include "externvar.hxx"
 
 int v1;
 int v2; // expected-error {{variable with external linkage not declared in an include file [loplugin:externvar]}} expected-note {{should either have internal linkage or be declared in an include file [loplugin:externvar]}}
