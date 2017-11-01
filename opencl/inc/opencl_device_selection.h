@@ -21,9 +21,9 @@
 #include <string.h>
 
 #include <clew/clew.h>
-#include <libxml/xmlwriter.h>
-#include <libxml/xmlstring.h>
 #include <tools/stream.hxx>
+#include <tools/XmlWriter.hxx>
+#include <tools/XmlWalker.hxx>
 #include <rtl/math.hxx>
 
 #include <opencl/OpenCLZone.hxx>
@@ -235,172 +235,6 @@ inline ds_status initDSProfile(std::unique_ptr<ds_profile>& rProfile, OString co
     return DS_SUCCESS;
 }
 
-/**
- * XmlWriter writes a XML to a SvStream. It uses libxml2 for writing but hides
- * all the internal libxml2 workings and uses types that are native for LO
- * development.
- *
- * The codepage used for XML is always "utf-8" and the output is indented so it
- * is easier to read.
- *
- * TODO: move to common code
- */
-class XmlWriter
-{
-private:
-    SvStream* mpStream;
-    xmlTextWriterPtr mpWriter;
-
-    static int funcWriteCallback(void* pContext, const char* sBuffer, int nLen)
-    {
-        SvStream* pStream = static_cast<SvStream*>(pContext);
-        return static_cast<int>(pStream->WriteBytes(sBuffer, nLen));
-    }
-
-    static int funcCloseCallback(void* pContext)
-    {
-        SvStream* pStream = static_cast<SvStream*>(pContext);
-        pStream->Flush();
-        return 0; // 0 or -1 in case of error
-    }
-
-public:
-
-    XmlWriter(SvStream* pStream)
-        : mpStream(pStream)
-        , mpWriter(nullptr)
-    {
-    }
-
-    ~XmlWriter()
-    {
-        if (mpWriter != nullptr)
-            endDocument();
-    }
-
-    bool startDocument()
-    {
-        xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO(funcWriteCallback, funcCloseCallback, mpStream, nullptr);
-        mpWriter = xmlNewTextWriter(xmlOutBuffer);
-        if (mpWriter == nullptr)
-            return false;
-        xmlTextWriterSetIndent(mpWriter, 1);
-        xmlTextWriterStartDocument(mpWriter, nullptr, "UTF-8", nullptr);
-        return true;
-    }
-
-    void endDocument()
-    {
-        xmlTextWriterEndDocument(mpWriter);
-        xmlFreeTextWriter(mpWriter);
-        mpWriter = nullptr;
-    }
-
-    void startElement(const OString& sName)
-    {
-        xmlChar* xmlName = xmlCharStrdup(sName.getStr());
-        xmlTextWriterStartElement(mpWriter, xmlName);
-        xmlFree(xmlName);
-    }
-
-    void endElement()
-    {
-        xmlTextWriterEndElement(mpWriter);
-    }
-
-    void content(const OString& sValue)
-    {
-        xmlChar* xmlValue = xmlCharStrdup(sValue.getStr());
-        xmlTextWriterWriteString(mpWriter, xmlValue);
-        xmlFree(xmlValue);
-    }
-};
-
-/**
- * XmlWalker main purpose is to make it easier for walking the
- * parsed XML DOM tree.
- *
- * It hides all the libxml2 and C -isms and makes the usage more
- * comfortable from LO developer point of view.
- *
- * TODO: move to common code
- */
-class XmlWalker
-{
-private:
-    xmlDocPtr mpDocPtr;
-    xmlNodePtr mpRoot;
-    xmlNodePtr mpCurrent;
-
-    std::vector<xmlNodePtr> mpStack;
-
-public:
-    XmlWalker()
-        : mpDocPtr(nullptr)
-        , mpRoot(nullptr)
-        , mpCurrent(nullptr)
-    {}
-
-    ~XmlWalker()
-    {
-        xmlFreeDoc(mpDocPtr);
-    }
-
-    bool open(SvStream* pStream)
-    {
-        std::size_t nSize = pStream->remainingSize();
-        std::vector<sal_uInt8> aBuffer(nSize + 1);
-        pStream->ReadBytes(aBuffer.data(), nSize);
-        aBuffer[nSize] = 0;
-        mpDocPtr = xmlParseDoc(reinterpret_cast<xmlChar*>(aBuffer.data()));
-        if (mpDocPtr == nullptr)
-            return false;
-        mpRoot = xmlDocGetRootElement(mpDocPtr);
-        mpCurrent = mpRoot;
-        mpStack.push_back(mpCurrent);
-        return true;
-    }
-
-    OString name()
-    {
-        return OString(reinterpret_cast<const char*>(mpCurrent->name));
-    }
-
-    OString content()
-    {
-        OString aContent;
-        if (mpCurrent->xmlChildrenNode != nullptr)
-        {
-            xmlChar* pContent = xmlNodeListGetString(mpDocPtr, mpCurrent->xmlChildrenNode, 1);
-            aContent = OString(reinterpret_cast<const char*>(pContent));
-            xmlFree(pContent);
-        }
-        return aContent;
-    }
-
-    void children()
-    {
-        mpStack.push_back(mpCurrent);
-        mpCurrent = mpCurrent->xmlChildrenNode;
-    }
-
-    void parent()
-    {
-        mpCurrent = mpStack.back();
-        mpStack.pop_back();
-    }
-
-    void next()
-    {
-        mpCurrent = mpCurrent->next;
-    }
-
-    bool isValid() const
-    {
-        return mpCurrent != nullptr;
-    }
-};
-
 inline ds_status writeProfile(const OUString& rStreamName, std::unique_ptr<ds_profile> const & pProfile)
 {
     if (pProfile == nullptr)
@@ -411,7 +245,7 @@ inline ds_status writeProfile(const OUString& rStreamName, std::unique_ptr<ds_pr
     std::unique_ptr<SvStream> pStream;
     pStream.reset(new SvFileStream(rStreamName, StreamMode::STD_READWRITE | StreamMode::TRUNC));
 
-    XmlWriter aXmlWriter(pStream.get());
+    tools::XmlWriter aXmlWriter(pStream.get());
 
     if (!aXmlWriter.startDocument())
         return DS_FILE_ERROR;
@@ -430,12 +264,12 @@ inline ds_status writeProfile(const OUString& rStreamName, std::unique_ptr<ds_pr
         {
             case DeviceType::NativeCPU:
                 aXmlWriter.startElement("type");
-                aXmlWriter.content("native");
+                aXmlWriter.content(OString("native"));
                 aXmlWriter.endElement();
                 break;
             case DeviceType::OpenCLDevice:
                 aXmlWriter.startElement("type");
-                aXmlWriter.content("opencl");
+                aXmlWriter.content(OString("opencl"));
                 aXmlWriter.endElement();
 
                 aXmlWriter.startElement("name");
@@ -452,13 +286,13 @@ inline ds_status writeProfile(const OUString& rStreamName, std::unique_ptr<ds_pr
 
         aXmlWriter.startElement("time");
         if (rtl::math::approxEqual(rDevice.fTime, DBL_MAX))
-            aXmlWriter.content("max");
+            aXmlWriter.content(OString("max"));
         else
             aXmlWriter.content(OString::number(rDevice.fTime));
         aXmlWriter.endElement();
 
         aXmlWriter.startElement("errors");
-        aXmlWriter.content(rDevice.bErrors ? "true" : "false");
+        aXmlWriter.content(rDevice.bErrors ? OString("true") : OString("false"));
         aXmlWriter.endElement();
 
         aXmlWriter.endElement();
@@ -479,7 +313,7 @@ inline ds_status readProfile(const OUString& rStreamName, std::unique_ptr<ds_pro
 
     std::unique_ptr<SvStream> pStream;
     pStream.reset(new SvFileStream(rStreamName, StreamMode::READ));
-    XmlWalker aWalker;
+    tools::XmlWalker aWalker;
 
     if (!aWalker.open(pStream.get()))
         return DS_FILE_ERROR;
