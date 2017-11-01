@@ -220,7 +220,7 @@ $(if $(findstring YES,$(UNPACKED_IS_BIN_TARBALL)),\
 $(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/$(3) && \
 	unset Platform && \
 	$(if $(WRAPPERS),export $(WRAPPERS) &&) \
-	$(if $(NMAKE),INCLUDE="$(gb_ExternalProject_INCLUDE)" LIB="$(ILIB)" MAKEFLAGS=) \
+	$(if $(NMAKE),export $(NMAKE) &&) \
 	$(2) && touch $@,$(EXTERNAL_WORKDIR)/$(if $(3),$(3)/,)$(if $(4),$(4),$(1).log))
 )
 endef

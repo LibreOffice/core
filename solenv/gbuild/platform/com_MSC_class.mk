@@ -530,11 +530,11 @@ $(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_Executable_ge
 $(call gb_ExternalProject_get_state_target,$(1),$(2)): WRAPPERS := $(gb_AUTOCONF_WRAPPERS)
 endef
 
-# Set INCLUDE and LIB variables and unset MAKEFLAGS when using nmake
+# Set INCLUDE and LIB variables and unset MAKE/MAKEFLAGS when using nmake
 #
 # gb_ExternalProject_use_nmake project state_target
 define gb_ExternalProject_use_nmake
-$(call gb_ExternalProject_get_state_target,$(1),$(2)): NMAKE := $(true)
+$(call gb_ExternalProject_get_state_target,$(1),$(2)): NMAKE := $(gb_NMAKE_VARS)
 endef
 
 # if ccache is enabled, then split it and use lastword as REAL_FOO
@@ -551,6 +551,13 @@ gb_AUTOCONF_WRAPPERS = \
 
 gb_ExternalProject_INCLUDE := \
 	$(subst -I,,$(subst $(WHITESPACE),;,$(subst -I. , ,$(SOLARINC))))
+
+gb_NMAKE_VARS = \
+	CC="$(shell cygpath -w $(filter-out -%,$(CC))) $(filter -%,$(CC))" \
+	INCLUDE="$(gb_ExternalProject_INCLUDE)" \
+	LIB="$(ILIB)" \
+	MAKEFLAGS= \
+	MAKE=
 
 # InstallScript class
 
