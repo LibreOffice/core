@@ -27,6 +27,8 @@ namespace svx {
 
 namespace {
 
+constexpr size_t RECENTLY_USED_LIMIT = 5;
+
 const SvxFieldItem* findField(editeng::Section const & rSection)
 {
     for (SfxPoolItem const * pPool : rSection.maAttributes)
@@ -61,6 +63,59 @@ bool stringToclassificationType(OString const & rsType, svx::ClassificationType 
     return true;
 }
 
+OUString getStringRepresentation(std::vector<ClassificationResult> const & rResults)
+{
+    OUString sRepresentation = "";
+    for (ClassificationResult const & rResult : rResults)
+    {
+        switch (rResult.meType)
+        {
+            case svx::ClassificationType::CATEGORY:
+            case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
+            case svx::ClassificationType::MARKING:
+            case svx::ClassificationType::TEXT:
+                sRepresentation += rResult.msString;
+            break;
+
+            case svx::ClassificationType::PARAGRAPH:
+                sRepresentation += " ";
+            break;
+        }
+    }
+    return sRepresentation;
+}
+
+void writeResultToXml(tools::XmlWriter & rXmlWriter,
+                      std::vector<ClassificationResult> const & rResultCollection)
+{
+    for (ClassificationResult const & rResult : rResultCollection)
+    {
+        rXmlWriter.startElement("element");
+        OUString sType;
+        switch(rResult.meType)
+        {
+            case svx::ClassificationType::CATEGORY:
+                sType = "CATEGORY"; break;
+            case svx::ClassificationType::MARKING:
+                sType = "MARKING"; break;
+            case svx::ClassificationType::TEXT:
+                sType = "TEXT"; break;
+            case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
+                sType = "INTELLECTUAL_PROPERTY_PART"; break;
+            case svx::ClassificationType::PARAGRAPH:
+                sType = "PARAGRAPH"; break;
+        }
+        rXmlWriter.attribute("type", sType);
+        rXmlWriter.startElement("string");
+        rXmlWriter.content(rResult.msString);
+        rXmlWriter.endElement();
+        rXmlWriter.startElement("abbreviatedString");
+        rXmlWriter.content(rResult.msAbbreviatedString);
+        rXmlWriter.endElement();
+        rXmlWriter.endElement();
+    }
+}
+
 } // end anonymous namespace
 
 ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPerParagraph, const std::function<void()>& rParagraphSignHandler)
@@ -73,6 +128,7 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
     get(m_pEditWindow, "classificationEditWindow");
     get(m_pSignButton, "signButton");
     get(m_pBoldButton, "boldButton");
+    get(m_pRecentlyUsedListBox, "recentlyUsedCB");
     get(m_pClassificationListBox, "classificationCB");
     get(m_pInternationalClassificationListBox, "internationalClassificationCB");
     get(m_pMarkingListBox, "markingCB");
@@ -111,6 +167,8 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
     for (const OUString& rName : maHelper.GetIntellectualPropertyParts())
         m_pIntellectualPropertyPartListBox->InsertEntry(rName);
     m_pIntellectualPropertyPartListBox->EnableAutoSize(true);
+
+    m_pRecentlyUsedListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectRecentlyUsedHdl));
 }
 
 ClassificationDialog::~ClassificationDialog()
@@ -123,6 +181,7 @@ void ClassificationDialog::dispose()
     m_pEditWindow.clear();
     m_pSignButton.clear();
     m_pBoldButton.clear();
+    m_pRecentlyUsedListBox.clear();
     m_pClassificationListBox.clear();
     m_pInternationalClassificationListBox.clear();
     m_pMarkingListBox.clear();
@@ -138,6 +197,28 @@ short ClassificationDialog::Execute()
 {
     readRecentlyUsed();
     readIn(m_aInitialValues);
+
+    int nNumber = 1;
+    if (m_aRecentlyUsedValuesCollection.empty())
+    {
+        m_pRecentlyUsedListBox->Disable();
+    }
+    else
+    {
+        for (std::vector<ClassificationResult> const & rResults : m_aRecentlyUsedValuesCollection)
+        {
+            OUString rContentRepresentation = getStringRepresentation(rResults);
+            OUString rDescription = OUString::number(nNumber) + ": ";
+            nNumber++;
+
+            if (rContentRepresentation.getLength() >= 18)
+                rDescription += rContentRepresentation.copy(0, 17) + "...";
+            else
+                rDescription += rContentRepresentation;
+
+            m_pRecentlyUsedListBox->InsertEntry(rDescription);
+        }
+    }
 
     short nResult = ModalDialog::Execute();
     if (nResult == RET_OK)
@@ -246,67 +327,19 @@ void ClassificationDialog::writeRecentlyUsed()
 
     aXmlWriter.startElement("elementGroup");
 
-    for (ClassificationResult const & rResult : getResult())
-    {
-        aXmlWriter.startElement("element");
-        OUString sType;
-        switch(rResult.meType)
-        {
-            case svx::ClassificationType::CATEGORY:
-                sType = "CATEGORY"; break;
-            case svx::ClassificationType::MARKING:
-                sType = "MARKING"; break;
-            case svx::ClassificationType::TEXT:
-                sType = "TEXT"; break;
-            case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
-                sType = "INTELLECTUAL_PROPERTY_PART"; break;
-            case svx::ClassificationType::PARAGRAPH:
-                sType = "PARAGRAPH"; break;
-        }
-        aXmlWriter.attribute("type", sType);
-        aXmlWriter.startElement("string");
-        aXmlWriter.content(rResult.msString);
-        aXmlWriter.endElement();
-        aXmlWriter.startElement("abbreviatedString");
-        aXmlWriter.content(rResult.msAbbreviatedString);
-        aXmlWriter.endElement();
-        aXmlWriter.endElement();
-    }
+    writeResultToXml(aXmlWriter, getResult());
+
     aXmlWriter.endElement();
 
-    if (m_aRecentlyUsedValuesCollection.size() >= 5)
+    if (m_aRecentlyUsedValuesCollection.size() >= RECENTLY_USED_LIMIT)
         m_aRecentlyUsedValuesCollection.pop_back();
 
     for (std::vector<ClassificationResult> const & rResultCollection : m_aRecentlyUsedValuesCollection)
     {
         aXmlWriter.startElement("elementGroup");
 
-        for (ClassificationResult const & rResult : rResultCollection)
-        {
-            aXmlWriter.startElement("element");
-            OUString sType;
-            switch(rResult.meType)
-            {
-                case svx::ClassificationType::CATEGORY:
-                    sType = "CATEGORY"; break;
-                case svx::ClassificationType::MARKING:
-                    sType = "MARKING"; break;
-                case svx::ClassificationType::TEXT:
-                    sType = "TEXT"; break;
-                case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
-                    sType = "INTELLECTUAL_PROPERTY_PART"; break;
-                case svx::ClassificationType::PARAGRAPH:
-                    sType = "PARAGRAPH"; break;
-            }
-            aXmlWriter.attribute("type", sType);
-            aXmlWriter.startElement("string");
-            aXmlWriter.content(rResult.msString);
-            aXmlWriter.endElement();
-            aXmlWriter.startElement("abbreviatedString");
-            aXmlWriter.content(rResult.msAbbreviatedString);
-            aXmlWriter.endElement();
-            aXmlWriter.endElement();
-        }
+        writeResultToXml(aXmlWriter, rResultCollection);
+
         aXmlWriter.endElement();
     }
 
@@ -495,6 +528,16 @@ IMPL_LINK(ClassificationDialog, SelectIPPartNumbersHdl, ListBox&, rBox, void)
     {
         OUString sString = maHelper.GetIntellectualPropertyPartNumbers()[nSelected];
         m_pIntellectualPropertyPartEdit->SetText(m_pIntellectualPropertyPartEdit->GetText() + sString);
+    }
+}
+
+IMPL_LINK(ClassificationDialog, SelectRecentlyUsedHdl, ListBox&, rBox, void)
+{
+    sal_Int32 nSelected = rBox.GetSelectedEntryPos();
+    if (nSelected >= 0)
+    {
+        m_pEditWindow->pEdEngine->Clear();
+        readIn(m_aRecentlyUsedValuesCollection[nSelected]);
     }
 }
 
