@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_24575fcf",
+        "filename": "sc/source/core/opencl/op_financial.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-01T18:47:58Z",
+      "side": 1,
+      "message": "Careful, this entire code is string literals to generate OpenCL code, so isn\u0027t checked at all during build times other than iff a unit test is excuted *if* the build box happens to have a suitable OpenCL driver..\n\nThat being said, I didn\u0027t spot errors on the replacements (or lack thereof).",
+      "revId": "4bef986c93f94fde7e76a72494c3788db525418a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
