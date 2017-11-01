@@ -45,7 +45,7 @@
 #include <rtl/textenc.h>
 #include <sal/log.hxx>
 
-#include <list>
+#include <vector>
 #include <set>
 #include <string.h>
 
@@ -123,15 +123,14 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
         // get list of extension dictionaries-to-use
         // (or better speaking: the list of dictionaries using the
         // new configuration entries).
-        std::list< SvtLinguConfigDictionaryEntry > aDics;
+        std::vector< SvtLinguConfigDictionaryEntry > aDics;
         uno::Sequence< OUString > aFormatList;
         aLinguCfg.GetSupportedDictionaryFormatsFor( "SpellCheckers",
                 "org.openoffice.lingu.MySpellSpellChecker", aFormatList );
-        sal_Int32 nLen = aFormatList.getLength();
-        for (sal_Int32 i = 0;  i < nLen;  ++i)
+        for (auto const& format : aFormatList)
         {
             std::vector< SvtLinguConfigDictionaryEntry > aTmpDic(
-                    aLinguCfg.GetActiveDictionariesByFormat( aFormatList[i] ) );
+                    aLinguCfg.GetActiveDictionariesByFormat(format) );
             aDics.insert( aDics.end(), aTmpDic.begin(), aTmpDic.end() );
         }
 
@@ -153,11 +152,10 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             // get supported locales from the dictionaries-to-use...
             sal_Int32 k = 0;
             std::set<OUString> aLocaleNamesSet;
-            std::list< SvtLinguConfigDictionaryEntry >::const_iterator aDictIt;
-            for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
+            for (auto const& dict : aDics)
             {
-                uno::Sequence< OUString > aLocaleNames( aDictIt->aLocaleNames );
-                uno::Sequence< OUString > aLocations( aDictIt->aLocations );
+                uno::Sequence< OUString > aLocaleNames( dict.aLocaleNames );
+                uno::Sequence< OUString > aLocations( dict.aLocations );
                 SAL_WARN_IF(
                     aLocaleNames.hasElements() && !aLocations.hasElements(),
                     "lingucomponent", "no locations");
@@ -165,10 +163,9 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                 {
                     if (xAccess.is() && xAccess->exists(aLocations[0]))
                     {
-                        sal_Int32 nLen2 = aLocaleNames.getLength();
-                        for (k = 0;  k < nLen2;  ++k)
+                        for (auto const& locale : aLocaleNames)
                         {
-                            aLocaleNamesSet.insert( aLocaleNames[k] );
+                            aLocaleNamesSet.insert(locale);
                         }
                     }
                     else
@@ -181,11 +178,10 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             }
             // ... and add them to the resulting sequence
             m_aSuppLocales.realloc( aLocaleNamesSet.size() );
-            std::set<OUString>::const_iterator aItB;
             k = 0;
-            for (aItB = aLocaleNamesSet.begin();  aItB != aLocaleNamesSet.end();  ++aItB)
+            for (auto const& localeName : aLocaleNamesSet)
             {
-                Locale aTmp( LanguageTag::convertToLocale( *aItB ));
+                Locale aTmp( LanguageTag::convertToLocale(localeName));
                 m_aSuppLocales[k++] = aTmp;
             }
 
@@ -195,8 +191,8 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             //! In the future the implementation should support using several dictionaries
             //! for one locale.
             m_nNumDict = 0;
-            for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
-                m_nNumDict = m_nNumDict + aDictIt->aLocaleNames.getLength();
+            for (auto const& dict : aDics)
+                m_nNumDict = m_nNumDict + dict.aLocaleNames.getLength();
 
             // add dictionary information
             m_aDicts  = new Hunspell* [m_nNumDict];
@@ -204,26 +200,25 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             m_aDLocs  = new Locale [m_nNumDict];
             m_aDNames.reset( new OUString [m_nNumDict] );
             k = 0;
-            for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
+            for (auto const& dict : aDics)
             {
-                if (aDictIt->aLocaleNames.getLength() > 0 &&
-                    aDictIt->aLocations.getLength() > 0)
+                if (dict.aLocaleNames.getLength() > 0 &&
+                    dict.aLocations.getLength() > 0)
                 {
-                    uno::Sequence< OUString > aLocaleNames( aDictIt->aLocaleNames );
-                    sal_Int32 nLocales = aLocaleNames.getLength();
+                    uno::Sequence< OUString > aLocaleNames( dict.aLocaleNames );
 
                     // currently only one language per dictionary is supported in the actual implementation...
                     // Thus here we work-around this by adding the same dictionary several times.
                     // Once for each of its supported locales.
-                    for (sal_Int32 i = 0;  i < nLocales;  ++i)
+                    for (auto const& localeName : aLocaleNames)
                     {
                         m_aDicts[k]  = nullptr;
                         m_aDEncs[k]  = RTL_TEXTENCODING_DONTKNOW;
-                        m_aDLocs[k]  = LanguageTag::convertToLocale( aLocaleNames[i] );
+                        m_aDLocs[k]  = LanguageTag::convertToLocale(localeName);
                         // also both files have to be in the same directory and the
                         // file names must only differ in the extension (.aff/.dic).
                         // Thus we use the first location only and strip the extension part.
-                        OUString aLocation = aDictIt->aLocations[0];
+                        OUString aLocation = dict.aLocations[0];
                         sal_Int32 nPos = aLocation.lastIndexOf( '.' );
                         aLocation = aLocation.copy( 0, nPos );
                         m_aDNames[k] = aLocation;
@@ -259,11 +254,9 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
     if (!m_aSuppLocales.getLength())
         getLocales();
 
-    const Locale *pLocale = m_aSuppLocales.getConstArray();
-    sal_Int32 nLen = m_aSuppLocales.getLength();
-    for (sal_Int32 i = 0;  i < nLen;  ++i)
+    for (auto const& suppLocale : m_aSuppLocales)
     {
-        if (rLocale == pLocale[i])
+        if (rLocale == suppLocale)
         {
             bRes = true;
             break;
