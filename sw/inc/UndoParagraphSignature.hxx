@@ -42,7 +42,7 @@ private:
     const bool m_bRemove;
 
 public:
-    SwUndoParagraphSigning(const SwPosition& rPos,
+    SwUndoParagraphSigning(SwDoc* pDoc,
                            const uno::Reference<text::XTextField>& xField,
                            const uno::Reference<text::XTextContent>& xParent,
                            const bool bRemove);
