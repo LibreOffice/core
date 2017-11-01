@@ -218,17 +218,17 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                 writeData(aFileHandle, " oor:finalized=\"true\"");
             writeData(aFileHandle, "><value");
             if (bExternal)
+            {
                 writeData(aFileHandle, " oor:external=\"");
-            else
-                writeData(aFileHandle, ">");
-
-            writeValueContent(aFileHandle, aValue);
-
-            if (bExternal)
+                writeAttributeValue(aFileHandle, aValue);
                 writeData(aFileHandle, "\"/");
+            }
             else
+            {
+                writeData(aFileHandle, ">");
+                writeValueContent(aFileHandle, aValue);
                 writeData(aFileHandle, "</value");
-
+            }
             writeData(aFileHandle, "></prop>");
             for(; nCloseNode > 0; nCloseNode--)
                 writeData(aFileHandle, "</node>");
