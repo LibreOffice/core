@@ -732,12 +732,9 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
         SfxStyleSheet* pTitleSheet = static_cast<SfxStyleSheet*>(pSPool->GetTitleSheet(aName));
 
-        SdrObject* pObj = nullptr;
-        rPresentationShapes.seekShape(0);
-
         // Now look for title and outline text objects, then make those objects
         // listeners.
-        while( (pObj = rPresentationShapes.getNextShape()) )
+        for (auto const& pObj : rPresentationShapes.getList())
         {
             if (pObj->GetObjInventor() == SdrInventor::Default)
             {
