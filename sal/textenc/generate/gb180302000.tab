@@ -20,7 +20,7 @@
 
 #include <sal/types.h>
 
-#include <convertgb18030.hxx>
+#include "../convertgb18030.hxx"
 
 static sal_Unicode const aImplGb180302000ToUnicodeData[] = {
   0x4E02,0x4E04,0x4E05,0x4E06,0x4E0F,0x4E12,0x4E17,0x4E1F,

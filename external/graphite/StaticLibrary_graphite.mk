@@ -15,6 +15,7 @@ $(eval $(call gb_StaticLibrary_set_warnings_not_errors,graphite))
 
 $(eval $(call gb_StaticLibrary_set_include,graphite,\
 	-I$(call gb_UnpackedTarball_get_dir,graphite/include) \
+	-I$(call gb_UnpackedTarball_get_dir,graphite/src) \
 	$$(INCLUDE) \
 ))
 

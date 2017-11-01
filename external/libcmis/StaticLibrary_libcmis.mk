@@ -23,6 +23,11 @@ $(eval $(call gb_StaticLibrary_add_cxxflags,libcmis,\
 ))
 endif
 
+$(eval $(call gb_StaticLibrary_set_include,libcmis, \
+    -I$(call gb_UnpackedTarball_get_dir,libcmis/src/libcmis) \
+    $$(INCLUDE) \
+))
+
 $(eval $(call gb_StaticLibrary_use_unpacked,libcmis,libcmis))
 
 $(eval $(call gb_StaticLibrary_use_externals,libcmis,\

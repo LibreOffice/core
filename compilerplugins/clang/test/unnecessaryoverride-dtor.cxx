@@ -11,7 +11,7 @@
 
 #include <salhelper/simplereferenceobject.hxx>
 
-#include <unnecessaryoverride-dtor.hxx>
+#include "unnecessaryoverride-dtor.hxx"
 
 struct NonVirtualBase {};
 
