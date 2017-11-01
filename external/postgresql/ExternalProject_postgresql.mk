@@ -20,13 +20,13 @@ $(eval $(call gb_ExternalProject_register_targets,postgresql,\
 
 ifeq ($(OS),WNT)
 
+$(eval $(call gb_ExternalProject_use_nmake,postgresql,build))
+
 $(call gb_ExternalProject_get_state_target,postgresql,build) :
 	$(call gb_ExternalProject_run,build,\
-		unset MAKEFLAGS && \
-		MSBFLAGS=/p:Platform=$(if $(filter X86_64,$(CPUNAME)),x64,Win32) \
-		$(PERL) build.pl $(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) libpq \
+			MSBFLAGS=/p:Platform=$(if $(filter X86_64,$(CPUNAME)),x64,Win32) \
+			$(PERL) build.pl $(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) libpq \
 	,src/tools/msvc)
-
 else
 
 postgresql_CPPFLAGS := $(ZLIB_CFLAGS)

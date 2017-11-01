@@ -57,6 +57,8 @@ OPENSSL_PLATFORM := \
   )
 
 ifeq ($(COM),MSC)
+$(eval $(call gb_ExternalProject_use_nmake,openssl,build))
+
 $(call gb_ExternalProject_get_state_target,openssl,build):
 	$(call gb_ExternalProject_run,build,\
 		CONFIGURE_INSIST=1 $(PERL) Configure $(OPENSSL_PLATFORM) no-tests no-multilib \
