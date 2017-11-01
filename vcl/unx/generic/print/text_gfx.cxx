@@ -155,7 +155,7 @@ PrinterGfx::OnEndJob ()
 }
 
 void
-PrinterGfx::writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts )
+PrinterGfx::writeResources( osl::File* pFile, std::vector< OString >& rSuppliedFonts )
 {
     // write glyphsets and reencodings
     for (auto & PS3Font : maPS3Font)
