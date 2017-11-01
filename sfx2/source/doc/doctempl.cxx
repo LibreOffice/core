@@ -92,7 +92,8 @@ using namespace ::ucbhelper;
 
 #include <comphelper/storagehelper.hxx>
 #include <unotools/ucbhelper.hxx>
-
+#include <o3tl/make_unique.hxx>
+#include <memory>
 #include <vector>
 using ::std::vector;
 using ::std::advance;
@@ -145,7 +146,7 @@ using namespace ::DocTempl;
 class RegionData_Impl
 {
     const SfxDocTemplate_Impl*  mpParent;
-    vector< DocTempl_EntryData_Impl* > maEntries;
+    std::vector<std::unique_ptr<DocTempl_EntryData_Impl>> maEntries;
     OUString                    maTitle;
     OUString                    maOwnURL;
     OUString                    maTargetURL;
@@ -158,7 +159,6 @@ private:
 public:
                         RegionData_Impl( const SfxDocTemplate_Impl* pParent,
                                          const OUString& rTitle );
-                        ~RegionData_Impl();
 
     void                SetTargetURL( const OUString& rURL ) { maTargetURL = rURL; }
     void                SetHierarchyURL( const OUString& rURL) { maOwnURL = rURL; }
@@ -1284,21 +1284,13 @@ RegionData_Impl::RegionData_Impl( const SfxDocTemplate_Impl* pParent,
 }
 
 
-RegionData_Impl::~RegionData_Impl()
-{
-    for (DocTempl_EntryData_Impl* p : maEntries)
-        delete p;
-    maEntries.clear();
-}
-
-
 size_t RegionData_Impl::GetEntryPos( const OUString& rTitle, bool& rFound ) const
 {
     const size_t nCount = maEntries.size();
 
     for ( size_t i=0; i<nCount; ++i )
     {
-        DocTempl_EntryData_Impl *pData = maEntries[ i ];
+        auto &pData = maEntries[ i ];
 
         if ( pData->Compare( rTitle ) == 0 )
         {
@@ -1330,17 +1322,17 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
         if ( pPos )
             nPos = *pPos;
 
-        DocTempl_EntryData_Impl* pEntry = new DocTempl_EntryData_Impl(
+        auto pEntry = o3tl::make_unique<DocTempl_EntryData_Impl>(
             this, rTitle );
         pEntry->SetTargetURL( rTargetURL );
         pEntry->SetHierarchyURL( aLinkURL );
         if ( nPos < maEntries.size() ) {
-            vector< DocTempl_EntryData_Impl* >::iterator it = maEntries.begin();
+            auto it = maEntries.begin();
             advance( it, nPos );
-            maEntries.insert( it, pEntry );
+            maEntries.insert( it, std::move(pEntry) );
         }
         else
-            maEntries.push_back( pEntry );
+            maEntries.push_back( std::move(pEntry) );
     }
 }
 
@@ -1375,7 +1367,7 @@ DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( const OUString& rName ) cons
     long        nPos = GetEntryPos( rName, bFound );
 
     if ( bFound )
-        return maEntries[ nPos ];
+        return maEntries[ nPos ].get();
     return nullptr;
 }
 
@@ -1383,7 +1375,7 @@ DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( const OUString& rName ) cons
 DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( size_t nIndex ) const
 {
     if ( nIndex < maEntries.size() )
-        return maEntries[ nIndex ];
+        return maEntries[ nIndex ].get();
     return nullptr;
 }
 
@@ -1392,8 +1384,7 @@ void RegionData_Impl::DeleteEntry( size_t nIndex )
 {
     if ( nIndex < maEntries.size() )
     {
-        delete maEntries[ nIndex ];
-        vector< DocTempl_EntryData_Impl*>::iterator it = maEntries.begin();
+        auto it = maEntries.begin();
         advance( it, nIndex );
         maEntries.erase( it );
     }
