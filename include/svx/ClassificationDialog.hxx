@@ -30,6 +30,7 @@ private:
     VclPtr<PushButton> m_pSignButton;
     VclPtr<PushButton> m_pBoldButton;
     VclPtr<ListBox> m_pClassificationListBox;
+    VclPtr<ListBox> m_pRecentlyUsedListBox;
     VclPtr<ListBox> m_pInternationalClassificationListBox;
     VclPtr<ListBox> m_pMarkingListBox;
     VclPtr<ListBox> m_pIntellectualPropertyPartListBox;
@@ -47,6 +48,7 @@ private:
     DECL_LINK(SelectClassificationHdl, ListBox&, void);
     DECL_LINK(SelectMarkingHdl, ListBox&, void);
     DECL_LINK(SelectIPPartNumbersHdl, ListBox&, void);
+    DECL_LINK(SelectRecentlyUsedHdl, ListBox&, void);
     DECL_LINK(DoubleClickIPPartHdl, ListBox&, void);
 
     void insertField(ClassificationType eType, OUString const & rString, OUString const & rFullString);
