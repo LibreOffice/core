@@ -179,7 +179,7 @@ namespace
     //See if this font is a duplicate with equal attributes which has already been
     //inserted, or if it an older version of an inserted fonts. Depends on FcFontSet
     //on being sorted with SortFont
-    bool isPreviouslyDuplicateOrObsoleted(FcFontSet *pFSet, int i)
+    bool isPreviouslyDuplicateOrObsoleted(FcFontSet const *pFSet, int i)
     {
         const FcPattern *a = pFSet->fonts[i];
 

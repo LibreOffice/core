@@ -2066,7 +2066,7 @@ bool SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
     return bHandled;
 }
 
-bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
+bool SelectionManager::handleDropEvent( XClientMessageEvent const & rMessage )
 {
     osl::ResettableMutexGuard aGuard(m_aMutex);
 

@@ -1190,12 +1190,12 @@ sal_Bool TYPEREG_CALLTYPE typereg_writer_setMethodParameterData(
 }
 
 sal_Bool TYPEREG_CALLTYPE typereg_writer_setMethodExceptionTypeName(
-    void * handle, sal_uInt16 methodIndex, sal_uInt16 exceptionIndex,
+    void const * handle, sal_uInt16 methodIndex, sal_uInt16 exceptionIndex,
     rtl_uString const * typeName)
     SAL_THROW_EXTERN_C()
 {
     try {
-        static_cast< TypeWriter * >(handle)->m_methods[methodIndex].setExcName(
+        static_cast< TypeWriter const * >(handle)->m_methods[methodIndex].setExcName(
             exceptionIndex, toByteString(typeName));
     } catch (std::bad_alloc &) {
         return false;
@@ -1268,11 +1268,11 @@ void TYPEREG_CALLTYPE typereg_writer_destroy(void * handle) SAL_THROW_EXTERN_C()
 }
 
 sal_Bool TYPEREG_CALLTYPE typereg_writer_setSuperTypeName(
-    void * handle, sal_uInt16 index, rtl_uString const * typeName)
+    void const * handle, sal_uInt16 index, rtl_uString const * typeName)
     SAL_THROW_EXTERN_C()
 {
     try {
-        static_cast< TypeWriter * >(handle)->setSuperType(
+        static_cast< TypeWriter const * >(handle)->setSuperType(
             index, toByteString(typeName));
     } catch (std::bad_alloc &) {
         return false;

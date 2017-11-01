@@ -150,7 +150,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 
     std::vector<std::unique_ptr<PrintFont>> analyzeFontFile(int nDirID, const OString& rFileName, const char *pFormat=nullptr) const;
     static OUString convertSfntName( void* pNameRecord ); // actually a NameRecord* format font subsetting code
-    static void analyzeSfntFamilyName( void* pTTFont, std::vector< OUString >& rnames ); // actually a TrueTypeFont* from font subsetting code
+    static void analyzeSfntFamilyName( void const * pTTFont, std::vector< OUString >& rnames ); // actually a TrueTypeFont* from font subsetting code
     bool analyzeSfntFile(PrintFont* pFont) const;
     // finds the font id for the nFaceIndex face in this font file
     // There may be multiple font ids for font collections

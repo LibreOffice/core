@@ -65,7 +65,7 @@ public:
                          sal_uInt32 vSize);
 
     RegError    setLongListValue(const OUString& valueName,
-                                  sal_Int32* pValueList,
+                                 sal_Int32 const * pValueList,
                                  sal_uInt32 len);
 
     RegError    setStringListValue(const OUString& valueName,

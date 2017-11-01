@@ -195,7 +195,7 @@ struct SuperBlockPage
 
     /** save.
      */
-    storeError save (OStorePageBIOS & rBIOS, sal_uInt32 nSize = theSize)
+    storeError save (OStorePageBIOS const & rBIOS, sal_uInt32 nSize = theSize)
     {
         m_aSuperOne.guard();
         m_aSuperTwo = m_aSuperOne;
@@ -205,20 +205,20 @@ struct SuperBlockPage
     /** Page allocation.
      */
     storeError unusedHead (
-        OStorePageBIOS & rBIOS,
+        OStorePageBIOS const & rBIOS,
         PageData &       rPageHead);
 
     storeError unusedPop (
-        OStorePageBIOS & rBIOS,
+        OStorePageBIOS const & rBIOS,
         PageData const & rPageHead);
 
     storeError unusedPush (
-        OStorePageBIOS & rBIOS,
+        OStorePageBIOS const & rBIOS,
         sal_uInt32       nAddr);
 
     /** verify (with repair).
      */
-    storeError verify (OStorePageBIOS & rBIOS);
+    storeError verify (OStorePageBIOS const & rBIOS);
 };
 
 } // namespace store
@@ -231,7 +231,7 @@ struct SuperBlockPage
 /*
  * unusedHead(): get freelist head (alloc page, step 1).
  */
-storeError SuperBlockPage::unusedHead (OStorePageBIOS & rBIOS, PageData & rPageHead)
+storeError SuperBlockPage::unusedHead (OStorePageBIOS const & rBIOS, PageData & rPageHead)
 {
     storeError eErrCode = verify (rBIOS);
     if (eErrCode != store_E_None)
@@ -274,7 +274,7 @@ storeError SuperBlockPage::unusedHead (OStorePageBIOS & rBIOS, PageData & rPageH
 /*
  * unusedPop(): pop freelist head (alloc page, step 2).
  */
-storeError SuperBlockPage::unusedPop (OStorePageBIOS & rBIOS, PageData const & rPageHead)
+storeError SuperBlockPage::unusedPop (OStorePageBIOS const & rBIOS, PageData const & rPageHead)
 {
     sal_uInt32 const nAddr = rPageHead.m_aUnused.location();
     OSL_PRECOND(nAddr != STORE_PAGE_NULL, "store::SuperBlock::unusedPop(): page not free");
@@ -290,7 +290,7 @@ storeError SuperBlockPage::unusedPop (OStorePageBIOS & rBIOS, PageData const & r
 /*
  * unusedPush(): push new freelist head.
  */
-storeError SuperBlockPage::unusedPush (OStorePageBIOS & rBIOS, sal_uInt32 nAddr)
+storeError SuperBlockPage::unusedPush (OStorePageBIOS const & rBIOS, sal_uInt32 nAddr)
 {
     storeError eErrCode = verify (rBIOS);
     if (eErrCode != store_E_None)
@@ -320,7 +320,7 @@ storeError SuperBlockPage::unusedPush (OStorePageBIOS & rBIOS, sal_uInt32 nAddr)
 /*
  * verify (with repair).
  */
-storeError SuperBlockPage::verify (OStorePageBIOS & rBIOS)
+storeError SuperBlockPage::verify (OStorePageBIOS const & rBIOS)
 {
     // Verify 1st copy.
     storeError eErrCode = m_aSuperOne.verify();

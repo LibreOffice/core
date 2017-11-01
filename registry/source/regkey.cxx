@@ -238,7 +238,7 @@ RegError REGISTRY_CALLTYPE setValue(RegKeyHandle hKey,
 
 RegError REGISTRY_CALLTYPE setLongListValue(RegKeyHandle hKey,
                                                   rtl_uString* keyName,
-                                                  sal_Int32* pValueList,
+                                                  sal_Int32 const * pValueList,
                                                   sal_uInt32 len)
 {
     ORegKey* pKey = static_cast< ORegKey* >(hKey);

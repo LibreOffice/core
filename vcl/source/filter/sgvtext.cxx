@@ -248,7 +248,7 @@ void ChgSchnittBit(sal_uInt16 Bit, sal_uInt16 Radio1, sal_uInt16 Radio2, sal_uIn
     }
 }
 
-UCHAR GetNextChar(UCHAR* TBuf, sal_uInt16 Index)
+UCHAR GetNextChar(UCHAR const * TBuf, sal_uInt16 Index)
 {
     sal_uInt16 Cnt;
     while (TBuf[Index]==Escape) {
@@ -348,7 +348,7 @@ UCHAR ProcessOne(const UCHAR* TBuf, sal_uInt16& Index,
     return c;
 } // end of ProcessOne
 
-UCHAR GetTextChar(UCHAR* TBuf, sal_uInt16& Index,
+UCHAR GetTextChar(UCHAR const * TBuf, sal_uInt16& Index,
                   ObjTextType& Atr0, ObjTextType& AktAtr,
                   sal_uInt16 Rest, bool ScanEsc)
 {
@@ -381,7 +381,7 @@ UCHAR GetTextChar(UCHAR* TBuf, sal_uInt16& Index,
   // is 3x present in TextBuf, e.g.: "schiff-fahrt".   }
   // If not separated then, "-f" is removed.        }
 
-UCHAR GetTextCharConv(UCHAR* TBuf, sal_uInt16& Index,
+UCHAR GetTextCharConv(UCHAR const * TBuf, sal_uInt16& Index,
                       ObjTextType& Atr0, ObjTextType& AktAtr,
                       sal_uInt16 Rest)
 {
@@ -402,7 +402,7 @@ UCHAR GetTextCharConv(UCHAR* TBuf, sal_uInt16& Index,
 //
 // Required line spacing in SGF-Units. ChrVPos is taken into account.
 // ======================================================================
-sal_uInt16 GetLineFeed(UCHAR* TBuf, sal_uInt16 Index, ObjTextType Atr0, ObjTextType AktAtr,
+sal_uInt16 GetLineFeed(UCHAR const * TBuf, sal_uInt16 Index, ObjTextType Atr0, ObjTextType AktAtr,
                    sal_uInt16 nChar, sal_uInt16& LF, sal_uInt16& MaxGrad)
 {
     bool   AbsEnd=false;
@@ -614,7 +614,7 @@ sal_uInt16 GetCharWidth(OutputDevice const & rOut, UCHAR c)
     return ChrWidth;
 }
 
-UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& Atr0,
+UCHAR ProcessChar(OutputDevice& rOut, UCHAR const * TBuf, ProcChrSta& R, ObjTextType& Atr0,
                   sal_uInt16& nChars, sal_uInt16 Rest,
                   short* Line, UCHAR* cLine)
 {
@@ -649,7 +649,7 @@ UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& A
     return c;
 }
 
-void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& AktAtr,
+void FormatLine(UCHAR const * TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& AktAtr,
                 sal_uInt16 UmbWdt, sal_uInt16 AdjWdt,
                 short* Line, sal_uInt16& nChars,
                 UCHAR* cLine, bool TextFit)

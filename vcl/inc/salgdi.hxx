@@ -223,7 +223,7 @@ public:
 
     void                        DrawRect( long nX, long nY, long nWidth, long nHeight, const OutputDevice *pOutDev );
 
-    void                        DrawPolyLine( sal_uInt32 nPoints, SalPoint* pPtAry, const OutputDevice *pOutDev );
+    void                        DrawPolyLine( sal_uInt32 nPoints, SalPoint const * pPtAry, const OutputDevice *pOutDev );
 
     void                        DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev );
 

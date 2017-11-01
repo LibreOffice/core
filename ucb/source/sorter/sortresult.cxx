@@ -871,7 +871,7 @@ void SAL_CALL SortedResultSet::removeVetoableChangeListener(
 sal_IntPtr SortedResultSet::CompareImpl( const Reference < XResultSet >& xResultOne,
                                    const Reference < XResultSet >& xResultTwo,
                                    sal_IntPtr nIndexOne, sal_IntPtr nIndexTwo,
-                                   SortInfo* pSortInfo )
+                                   SortInfo const * pSortInfo )
 {
     Reference < XRow > xRowOne( xResultOne, UNO_QUERY );
     Reference < XRow > xRowTwo( xResultTwo, UNO_QUERY );
@@ -1122,8 +1122,8 @@ sal_IntPtr SortedResultSet::CompareImpl( const Reference < XResultSet >& xResult
 }
 
 
-sal_IntPtr SortedResultSet::Compare( SortListData *pOne,
-                               SortListData *pTwo )
+sal_IntPtr SortedResultSet::Compare( SortListData const *pOne,
+                               SortListData const *pTwo )
 {
     sal_IntPtr nIndexOne;
     sal_IntPtr nIndexTwo;
@@ -1160,7 +1160,7 @@ sal_IntPtr SortedResultSet::Compare( SortListData *pOne,
 }
 
 
-sal_IntPtr SortedResultSet::FindPos( SortListData *pEntry,
+sal_IntPtr SortedResultSet::FindPos( SortListData const *pEntry,
                                sal_IntPtr _nStart, sal_IntPtr _nEnd )
 {
     if ( _nStart > _nEnd )

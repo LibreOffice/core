@@ -267,7 +267,7 @@ static const sal_uInt8* getTable( TrueTypeFont const *ttf, sal_uInt32 ord)
     return ttf->tables[ord];
 }
 
-static sal_uInt32 getTableSize(TrueTypeFont *ttf, sal_uInt32 ord)
+static sal_uInt32 getTableSize(TrueTypeFont const *ttf, sal_uInt32 ord)
 {
     return ttf->tlens[ord];
 }
@@ -367,7 +367,7 @@ static void GetMetrics(TrueTypeFont const *ttf, sal_uInt32 glyphID, TTGlyphMetri
 static int GetTTGlyphOutline(TrueTypeFont *, sal_uInt32 , ControlPoint **, TTGlyphMetrics *, std::vector< sal_uInt32 >* );
 
 /* returns the number of control points, allocates the pointArray */
-static int GetSimpleTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics)
+static int GetSimpleTTOutline(TrueTypeFont const *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics)
 {
     const sal_uInt8* table = getTable(ttf, O_glyf);
     const sal_uInt32 nTableSize = getTableSize(ttf, O_glyf);
@@ -693,7 +693,7 @@ static int GetTTGlyphOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint
 
 /*- returns the number of items in the path -*/
 
-static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **path)
+static int BSplineToPSPath(ControlPoint const *srcA, int srcCount, PSPathElement **path)
 {
     std::vector< PSPathElement > aPathList;
     int nPathCount = 0;
@@ -2314,12 +2314,12 @@ sal_uInt16 MapChar(TrueTypeFont const *ttf, sal_uInt16 ch)
 #endif
 
 
-int GetTTGlyphCount( TrueTypeFont* ttf )
+int GetTTGlyphCount( TrueTypeFont const * ttf )
 {
     return ttf->nglyphs;
 }
 
-bool GetSfntTable( TrueTypeFont* ttf, int nSubtableIndex,
+bool GetSfntTable( TrueTypeFont const * ttf, int nSubtableIndex,
     const sal_uInt8** ppRawBytes, int* pRawLength )
 {
     if( (nSubtableIndex < 0) || (nSubtableIndex >= NUM_TAGS) )
@@ -2330,7 +2330,7 @@ bool GetSfntTable( TrueTypeFont* ttf, int nSubtableIndex,
     return bOk;
 }
 
-TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, const sal_uInt16 *glyphArray, int nGlyphs, bool vertical)
+TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont const *ttf, const sal_uInt16 *glyphArray, int nGlyphs, bool vertical)
 {
     const sal_uInt8* pTable;
     sal_uInt32 n;
@@ -2539,7 +2539,7 @@ GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)
     return d;
 }
 
-int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
+int GetTTNameRecords(TrueTypeFont const *ttf, NameRecord **nr)
 {
     const sal_uInt8* table = getTable(ttf, O_name);
     int nTableSize = getTableSize(ttf, O_name );
