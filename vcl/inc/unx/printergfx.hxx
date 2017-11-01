@@ -252,7 +252,7 @@ public:
     void            PSShowGlyph (const unsigned char nGlyphId);
 
     void            OnEndJob ();
-    void            writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts );
+    void            writeResources( osl::File* pFile, std::vector< OString >& rSuppliedFonts );
     PrintFontManager& GetFontMgr () { return mrFontMgr; }
 
     void            drawGlyph(const Point& rPoint,

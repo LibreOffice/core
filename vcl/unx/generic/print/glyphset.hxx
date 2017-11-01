@@ -26,7 +26,7 @@
 
 #include <rtl/string.hxx>
 
-#include <list>
+#include <vector>
 #include <unordered_map>
 
 class Point;
@@ -45,7 +45,7 @@ private:
     OString             maBaseName;
 
     typedef std::unordered_map< sal_GlyphId, sal_uInt8 > glyph_map_t;
-    typedef std::list< glyph_map_t > glyph_list_t;
+    typedef std::vector< glyph_map_t > glyph_list_t;
 
     glyph_list_t        maGlyphList;
 
@@ -76,7 +76,7 @@ public:
                                const Point& rPoint,
                                const sal_GlyphId nGlyphId,
                                const sal_Int32 nDelta);
-    void        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::list< OString >& rSuppliedFonts );
+    void        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::vector< OString >& rSuppliedFonts );
 };
 
 } /* namespace psp */

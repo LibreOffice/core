@@ -950,12 +950,12 @@ bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )
     WritePS (pFile, "%%BeginSetup\n%\n");
 
     // download fonts
-    std::list< OString > aFonts;
+    std::vector< OString > aFonts;
     m_pGraphics->writeResources( pFile, aFonts );
 
     if( !aFonts.empty() )
     {
-        std::list< OString >::const_iterator it = aFonts.begin();
+        std::vector< OString >::const_iterator it = aFonts.begin();
         OStringBuffer aLine( 256 );
         aLine.append( "%%DocumentSuppliedResources: font " );
         aLine.append( *it );
