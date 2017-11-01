@@ -471,8 +471,8 @@ private:
     void                InsertBuiltinFormats();
 
     XclNumFmtMap        maFmtMap;       /// Map containing all default and user-defined formats.
-    LanguageType        meSysLang;      /// Current system language.
-    sal_uLong               mnStdScNumFmt;  /// Calc format key for standard number format.
+    const LanguageType  meSysLang;      /// Current system language.
+    const sal_uLong     mnStdScNumFmt;  /// Calc format key for standard number format.
 };
 
 // Cell formatting data (XF) ==================================================
