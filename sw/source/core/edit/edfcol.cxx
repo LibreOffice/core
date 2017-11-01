@@ -481,6 +481,60 @@ bool lcl_UpdateParagraphClassificationField(SwDoc* pDoc,
     return false;
 }
 
+void lcl_ValidateParagraphSignatures(SwDoc* pDoc, const uno::Reference<text::XTextContent>& xParagraph, const bool updateDontRemove)
+{
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    if (!pDocShell)
+        return;
+
+    uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
+    uno::Reference<container::XEnumerationAccess> xTextPortionEnumerationAccess(xParagraph, uno::UNO_QUERY);
+    if (!xTextPortionEnumerationAccess.is())
+        return;
+
+    uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
+    if (!xTextPortions.is())
+        return;
+
+    // Get the text (without fields).
+    const OString utf8Text = lcl_getParagraphBodyText(xParagraph);
+    if (utf8Text.isEmpty())
+        return;
+
+    while (xTextPortions->hasMoreElements())
+    {
+        uno::Reference<beans::XPropertySet> xTextPortion(xTextPortions->nextElement(), uno::UNO_QUERY);
+        OUString aTextPortionType;
+        xTextPortion->getPropertyValue(UNO_NAME_TEXT_PORTION_TYPE) >>= aTextPortionType;
+        if (aTextPortionType != UNO_NAME_TEXT_FIELD)
+            continue;
+
+        uno::Reference<lang::XServiceInfo> xTextField;
+        xTextPortion->getPropertyValue(UNO_NAME_TEXT_FIELD) >>= xTextField;
+        if (!xTextField->supportsService(MetadataFieldServiceName))
+            continue;
+
+        uno::Reference<text::XTextField> xField(xTextField, uno::UNO_QUERY);
+        if (!lcl_IsParagraphSignatureField(xModel, xField))
+        {
+            continue;
+        }
+
+        if (updateDontRemove)
+        {
+            lcl_UpdateParagraphSignatureField(pDoc, xModel, xField, utf8Text);
+        }
+        else if (!lcl_MakeParagraphSignatureFieldText(xModel, xField, utf8Text).first)
+        {
+            pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
+            SwUndoParagraphSigning* pUndo = new SwUndoParagraphSigning(pDoc, xField, xParagraph, false);
+            pDoc->GetIDocumentUndoRedo().AppendUndo(pUndo);
+            lcl_RemoveParagraphMetadataField(xField);
+            pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
+        }
+    }
+}
+
 } // anonymous namespace
 
 SwTextFormatColl& SwEditShell::GetDfltTextFormatColl() const
@@ -1417,12 +1471,12 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
     }
 }
 
-SwUndoParagraphSigning::SwUndoParagraphSigning(const SwPosition& rPos,
+SwUndoParagraphSigning::SwUndoParagraphSigning(SwDoc* pDoc,
                                                const uno::Reference<text::XTextField>& xField,
                                                const uno::Reference<text::XTextContent>& xParent,
                                                const bool bRemove)
-  : SwUndo(SwUndoId::PARA_SIGN_ADD, rPos.GetDoc()),
-    m_pDoc(rPos.GetDoc()),
+  : SwUndo(SwUndoId::PARA_SIGN_ADD, pDoc),
+    m_pDoc(pDoc),
     m_xField(xField),
     m_xParent(xParent),
     m_bRemove(bRemove)
@@ -1564,13 +1618,13 @@ void SwEditShell::SignParagraph()
 
     lcl_UpdateParagraphSignatureField(GetDoc(), xModel, xField, utf8Text);
 
-    SwUndoParagraphSigning* pUndo = new SwUndoParagraphSigning(SwPosition(*pNode), xField, xParent, true);
+    SwUndoParagraphSigning* pUndo = new SwUndoParagraphSigning(GetDoc(), xField, xParent, true);
     GetDoc()->GetIDocumentUndoRedo().AppendUndo(pUndo);
 
     GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
 }
 
-void SwEditShell::ValidateParagraphSignatures(bool updateDontRemove)
+void SwEditShell::ValidateCurrentParagraphSignatures(bool updateDontRemove)
 {
     SwDocShell* pDocShell = GetDoc()->GetDocShell();
     if (!pDocShell || !IsParagraphSignatureValidationEnabled())
@@ -1582,14 +1636,20 @@ void SwEditShell::ValidateParagraphSignatures(bool updateDontRemove)
     if (!pNode)
         return;
 
-    // 2. For each signature field, update it.
-    const uno::Reference<text::XTextContent> xParent = SwXParagraph::CreateXParagraph(*pNode->GetDoc(), pNode);
-    uno::Reference<container::XEnumerationAccess> xTextPortionEnumerationAccess(xParent, uno::UNO_QUERY);
-    if (!xTextPortionEnumerationAccess.is())
-        return;
+    // Prevent recursive validation since this is triggered on node updates, which we do below.
+    const bool bOldValidationFlag = SetParagraphSignatureValidation(false);
+    comphelper::ScopeGuard const g([this, bOldValidationFlag] () {
+            SetParagraphSignatureValidation(bOldValidationFlag);
+        });
 
-    uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
-    uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
+    lcl_ValidateParagraphSignatures(GetDoc(), SwXParagraph::CreateXParagraph(*pNode->GetDoc(), pNode), updateDontRemove);
+}
+
+void SwEditShell::ValidateAllParagraphSignatures(bool updateDontRemove)
+{
+    SwDocShell* pDocShell = GetDoc()->GetDocShell();
+    if (!pDocShell || !IsParagraphSignatureValidationEnabled())
+        return;
 
     // Prevent recursive validation since this is triggered on node updates, which we do below.
     const bool bOldValidationFlag = SetParagraphSignatureValidation(false);
@@ -1597,42 +1657,19 @@ void SwEditShell::ValidateParagraphSignatures(bool updateDontRemove)
             SetParagraphSignatureValidation(bOldValidationFlag);
         });
 
-    // 2. Get the text (without fields).
-    const OString utf8Text = lcl_getParagraphBodyText(xParent);
-    if (utf8Text.isEmpty())
+    uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
+    const uno::Reference<text::XTextDocument> xDoc(xModel, uno::UNO_QUERY);
+    uno::Reference<text::XText> xParent = xDoc->getText();
+    uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(xParent, uno::UNO_QUERY);
+    if (!xParagraphEnumerationAccess.is())
         return;
-
-    while (xTextPortions->hasMoreElements())
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphEnumerationAccess->createEnumeration();
+    if (!xParagraphs.is())
+        return;
+    while (xParagraphs->hasMoreElements())
     {
-        uno::Reference<beans::XPropertySet> xTextPortion(xTextPortions->nextElement(), uno::UNO_QUERY);
-        OUString aTextPortionType;
-        xTextPortion->getPropertyValue(UNO_NAME_TEXT_PORTION_TYPE) >>= aTextPortionType;
-        if (aTextPortionType != UNO_NAME_TEXT_FIELD)
-            continue;
-
-        uno::Reference<lang::XServiceInfo> xTextField;
-        xTextPortion->getPropertyValue(UNO_NAME_TEXT_FIELD) >>= xTextField;
-        if (!xTextField->supportsService(MetadataFieldServiceName))
-            continue;
-
-        uno::Reference<text::XTextField> xField(xTextField, uno::UNO_QUERY);
-        if (!lcl_IsParagraphSignatureField(xModel, xField))
-        {
-            continue;
-        }
-
-        if (updateDontRemove)
-        {
-            lcl_UpdateParagraphSignatureField(GetDoc(), xModel, xField, utf8Text);
-        }
-        else if (!lcl_MakeParagraphSignatureFieldText(xModel, xField, utf8Text).first)
-        {
-            GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
-            SwUndoParagraphSigning* pUndo = new SwUndoParagraphSigning(SwPosition(*pNode), xField, xParent, false);
-            GetDoc()->GetIDocumentUndoRedo().AppendUndo(pUndo);
-            lcl_RemoveParagraphMetadataField(xField);
-            GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
-        }
+        uno::Reference<text::XTextContent> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
+        lcl_ValidateParagraphSignatures(GetDoc(), xParagraph, updateDontRemove);
     }
 }
 
