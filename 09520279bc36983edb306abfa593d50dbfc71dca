@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_494ba487",
+        "filename": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1796,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-11-01T12:57:31Z",
+      "side": 1,
+      "message": "it appears that you are changing every usage of pArr0To2[0] by adding 450 - wouldnt it be easier to replace the 624 in the array with 174 ?",
+      "revId": "09520279bc36983edb306abfa593d50dbfc71dca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
