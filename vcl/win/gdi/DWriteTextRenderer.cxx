@@ -341,7 +341,7 @@ bool D2DWriteTextOutRenderer::BindFont(HDC hDC)
 
     // Initially bind to an empty rectangle to get access to the font face,
     //  we'll update it once we've calculated a bounding rect in DrawGlyphs
-    if (!BindDC(mhDC = hDC))
+    if (FAILED(BindDC(mhDC = hDC)))
         return false;
 
     mlfEmHeight = 0;
