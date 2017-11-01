@@ -95,11 +95,11 @@ namespace
 {
 static const OUString MetaFilename("tscp/bails.rdf");
 static const OUString MetaNS("urn:bails");
-static const OUString ParagraphSignatureRDFName = "loext:paragraph:signature";
-static const OUString ParagraphSignatureDateRDFName = "loext:paragraph:signature:date";
-static const OUString ParagraphSignatureUsageRDFName = "loext:paragraph:signature:usage";
-static const OUString ParagraphClassificationNameRDFName = "loext:paragraph:classification:name";
-static const OUString ParagraphClassificationValueRDFName = "loext:paragraph:classification:value";
+static const OUString ParagraphSignatureRDFName = "urn:bails:loext:paragraph:signature";
+static const OUString ParagraphSignatureDateRDFName = "urn:bails:loext:paragraph:signature:date";
+static const OUString ParagraphSignatureUsageRDFName = "urn:bails:loext:paragraph:signature:usage";
+static const OUString ParagraphClassificationNameRDFName = "urn:bails:loext:paragraph:classification:name";
+static const OUString ParagraphClassificationValueRDFName = "urn:bails:loext:paragraph:classification:value";
 static const OUString MetadataFieldServiceName = "com.sun.star.text.textfield.MetadataField";
 static const OUString DocInfoServiceName = "com.sun.star.text.TextField.DocInfo.Custom";
 
@@ -724,7 +724,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
 
                 case svx::ClassificationType::CATEGORY:
                 {
-                    OUString sKey = aCreator.makeCategoryKey();
+                    OUString sKey = aCreator.makeCategoryNameKey();
                     insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
                     insertFieldToDocument(xMultiServiceFactory, xFooterText, xFooterParagraphCursor, sKey);
                 }
@@ -857,7 +857,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
                 if (!aValue.isEmpty())
                     aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, sBlank });
             }
-            else if (aCreator.isCategoryKey(aName))
+            else if (aCreator.isCategoryNameKey(aName) || aCreator.isCategoryIdentifierKey(aName))
             {
                 const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
@@ -1000,14 +1000,17 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
     // Since we always insert at the start of the paragraph,
     // need to insert in reverse order.
     std::reverse(aResults.begin(), aResults.end());
+    // Ignore "PARAGRAPH" types
+    aResults.erase(std::remove_if(aResults.begin(),
+                                  aResults.end(),
+                                  [&](const svx::ClassificationResult& rResult)-> bool
+                                            { return rResult.meType == svx::ClassificationType::PARAGRAPH; }),
+                                  aResults.end());
+
 
     for (size_t nIndex = 0; nIndex < aResults.size(); ++nIndex)
     {
         const svx::ClassificationResult& rResult = aResults[nIndex];
-
-        // Ignore "PARAGRAPH" types
-        if (rResult.meType == svx::ClassificationType::PARAGRAPH)
-            continue;
 
         const bool isLast = nIndex == 0;
         const bool isFirst = nIndex == aResults.size() - 1;
@@ -1022,7 +1025,10 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
 
             case svx::ClassificationType::CATEGORY:
             {
-                sKey = aKeyCreator.makeCategoryKey();
+                if (rResult.msIdentifier.isEmpty())
+                    sKey = aKeyCreator.makeCategoryNameKey();
+                else
+                    sKey = aKeyCreator.makeCategoryIdentifierKey();
             }
             break;
 
@@ -1098,7 +1104,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectParagraphClassificati
         {
             aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, sBlank });
         }
-        else if (aKeyCreator.isCategoryKey(aName))
+        else if (aKeyCreator.isCategoryNameKey(aName) || aKeyCreator.isCategoryIdentifierKey(aName))
         {
             aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
         }

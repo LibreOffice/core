@@ -323,7 +323,7 @@ private:
                     OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
                     m_aResults.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, sBlank });
                 }
-                else if (aKeyCreator.isCategoryKey(aKey))
+                else if (aKeyCreator.isCategoryNameKey(aKey) || aKeyCreator.isCategoryIdentifierKey(aKey))
                 {
                     OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
                     m_aResults.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
@@ -406,7 +406,7 @@ private:
     void deleteExistingObjects()
     {
         sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
-        OUString sKey = aKeyCreator.makeCategoryKey();
+        OUString sKey = aKeyCreator.makeCategoryNameKey();
 
         const sal_uInt16 nCount = m_rDrawViewShell.GetDoc()->GetMasterSdPageCount(PageKind::Standard);
 
@@ -498,7 +498,7 @@ public:
 
                 case svx::ClassificationType::CATEGORY:
                 {
-                    OUString sKey = aKeyCreator.makeCategoryKey();
+                    OUString sKey = aKeyCreator.makeCategoryNameKey();
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msName), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
