@@ -53,7 +53,7 @@ namespace frm
                                 ,   css::lang::XInitialization
                                 >   OFilterControl_BASE;
 
-    class OFilterControl    :public UnoControl
+    class OFilterControl final :public UnoControl
                             ,public OFilterControl_BASE
                             ,public ::svxform::OParseContextClient
     {
@@ -74,7 +74,6 @@ namespace frm
         bool                            m_bMultiLine : 1;
         bool                            m_bFilterListFilled : 1;
 
-    private:
         void implInitFilterList();
         void initControlModel(css::uno::Reference< css::beans::XPropertySet > const & xControlModel);
 
@@ -127,7 +126,7 @@ namespace frm
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-    protected:
+    private:
         virtual void PrepareWindowDescriptor( css::awt::WindowDescriptor& rDesc ) override;
         virtual void ImplSetPeerProperty( const OUString& rPropName, const css::uno::Any& rVal ) override;
 

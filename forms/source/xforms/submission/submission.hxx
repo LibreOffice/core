@@ -50,14 +50,13 @@ class CSubmissionPut;
 class CSubmissionPost;
 class CSubmissionGet;
 
-class CCommandEnvironmentHelper : public cppu::WeakImplHelper< css::ucb::XCommandEnvironment >
+class CCommandEnvironmentHelper final : public cppu::WeakImplHelper< css::ucb::XCommandEnvironment >
 {
     friend class CSubmissionPut;
     friend class CSubmissionPost;
     friend class CSubmissionGet;
     friend class CSubmission;
 
-protected:
     css::uno::Reference< css::task::XInteractionHandler >   m_aInteractionHandler;
     css::uno::Reference< css::ucb::XProgressHandler >       m_aProgressHandler;
 
@@ -72,12 +71,11 @@ public:
     }
 };
 
-class CProgressHandlerHelper : public cppu::WeakImplHelper< css::ucb::XProgressHandler >
+class CProgressHandlerHelper final : public cppu::WeakImplHelper< css::ucb::XProgressHandler >
 {
     friend class CSubmissionPut;
     friend class CSubmissionPost;
     friend class CSubmissionGet;
-protected:
     osl::Condition m_cFinished;
     osl::Mutex m_mLock;
     sal_Int32 m_count;

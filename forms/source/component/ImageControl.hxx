@@ -43,7 +43,7 @@ typedef ::cppu::ImplHelper2 <   css::form::XImageProducerSupplier
                             ,   css::awt::XImageProducer
                             >   OImageControlModel_Base;
 
-class OImageControlModel
+class OImageControlModel final
                 :public OImageControlModel_Base
                 ,public OBoundControlModel
 {
@@ -55,7 +55,6 @@ class OImageControlModel
                                                       m_xGraphicObject;
     OUString                                          m_sDocumentURL;
 
-protected:
     // UNO binding
     virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
 
@@ -104,7 +103,7 @@ public:
     using OBoundControlModel::disposing;
     using OBoundControlModel::getFastPropertyValue;
 
-protected:
+private:
     // OBoundControlModel overridables
     virtual void            onConnectedDbColumn( const css::uno::Reference< css::uno::XInterface >& _rxForm ) override;
     virtual void            onDisconnectedDbColumn() override;
@@ -118,7 +117,6 @@ protected:
 
     virtual void            resetNoBroadcast() override;
 
-protected:
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
 
     void implConstruct();

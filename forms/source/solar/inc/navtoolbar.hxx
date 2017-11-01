@@ -36,7 +36,7 @@ namespace frm
 
     class ImplNavToolBar;
 
-    class NavigationToolBar : public vcl::Window
+    class NavigationToolBar final : public vcl::Window
     {
     public:
         enum ImageSize
@@ -115,7 +115,7 @@ namespace frm
         void                SetTextLineColor( );
         void                SetTextLineColor( const Color& rColor );
 
-    protected:
+    private:
         // Window overridables
         virtual void        Resize() override;
         virtual void        StateChanged( StateChangedType nType ) override;

@@ -51,7 +51,7 @@ typedef ::cppu::ImplHelper7 <   css::awt::XControlModel
                             ,   css::sdb::XRowSetChangeBroadcaster
                             >   OGridControlModel_BASE;
 
-class OGridControlModel :public OControlModel
+class OGridControlModel final :public OControlModel
                         ,public OInterfaceContainer
                         ,public OErrorBroadcaster
                         ,public FontControlModel
@@ -87,7 +87,6 @@ class OGridControlModel :public OControlModel
     bool                    m_bDisplaySynchron  : 1;    // transient
 // [properties]
 
-protected:
     void _reset();
 
 public:
@@ -164,10 +163,9 @@ public:
     using OControlModel::disposing;
     using OControlModel::getFastPropertyValue;
 
-protected:
+private:
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
 
-protected:
     virtual void approveNewElement(
             const css::uno::Reference< css::beans::XPropertySet >& _rxObject,
             ElementDescription* _pElement
@@ -179,7 +177,6 @@ protected:
 
     virtual ElementDescription* createElementMetaData( ) override;
 
-protected:
     virtual void implRemoved(const css::uno::Reference<css::uno::XInterface>& _rxObject) override;
     virtual void implInserted( const ElementDescription* _pElement ) override;
     virtual void impl_replacedElement(

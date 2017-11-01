@@ -75,7 +75,7 @@ namespace frm
 
     typedef ::cppu::ImplHelper1 <   css::frame::XDispatchProvider
                                 >   ORichTextPeer_Base;
-    class ORichTextPeer :public VCLXWindow
+    class ORichTextPeer final :public VCLXWindow
                         ,public ORichTextPeer_Base
                         ,public ITextSelectionListener
     {
@@ -96,7 +96,7 @@ namespace frm
         // XInterface
         DECLARE_XINTERFACE( )
 
-    protected:
+    private:
         ORichTextPeer();
         virtual ~ORichTextPeer() override;
 
