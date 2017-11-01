@@ -18,7 +18,7 @@
  */
 
 
-#include <passwordcontainer.hxx>
+#include "passwordcontainer.hxx"
 
 #include <unotools/pathoptions.hxx>
 #include <cppuhelper/factory.hxx>
