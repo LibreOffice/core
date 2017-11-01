@@ -21,9 +21,11 @@ $(eval $(call gb_ExternalProject_register_targets,postgresql,\
 
 ifeq ($(OS),WNT)
 
+$(eval $(call gb_ExternalProject_use_nmake,postgresql,build))
+
 $(call gb_ExternalProject_get_state_target,postgresql,build) :
 	$(call gb_ExternalProject_run,build,\
-		MAKEFLAGS= && nmake -f win32.mak USE_SSL=1 USE_LDAP=1 \
+		nmake -f win32.mak USE_SSL=1 USE_LDAP=1 \
 	,src)
 
 else
