@@ -43,7 +43,7 @@
 #include <linguistic/lngprops.hxx>
 #include "nthesdta.hxx"
 
-#include <list>
+#include <vector>
 #include <set>
 #include <string.h>
 
@@ -139,7 +139,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
         SvtLinguConfig aLinguCfg;
 
         // get list of dictionaries-to-use
-        std::list< SvtLinguConfigDictionaryEntry > aDics;
+        std::vector< SvtLinguConfigDictionaryEntry > aDics;
         uno::Sequence< OUString > aFormatList;
         aLinguCfg.GetSupportedDictionaryFormatsFor( "Thesauri",
                 "org.openoffice.lingu.new.Thesaurus", aFormatList );
@@ -168,10 +168,9 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
             // get supported locales from the dictionaries-to-use...
             sal_Int32 k = 0;
             std::set<OUString> aLocaleNamesSet;
-            std::list< SvtLinguConfigDictionaryEntry >::const_iterator aDictIt;
-            for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
+            for (auto const& dict : aDics)
             {
-                uno::Sequence< OUString > aLocaleNames( aDictIt->aLocaleNames );
+                uno::Sequence< OUString > aLocaleNames(dict.aLocaleNames);
                 sal_Int32 nLen2 = aLocaleNames.getLength();
                 for (k = 0;  k < nLen2;  ++k)
                 {
@@ -182,9 +181,9 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
             aSuppLocales.realloc( aLocaleNamesSet.size() );
             std::set<OUString>::const_iterator aItB;
             k = 0;
-            for (aItB = aLocaleNamesSet.begin();  aItB != aLocaleNamesSet.end();  ++aItB)
+            for (auto const& localeName : aLocaleNamesSet)
             {
-                Locale aTmp( LanguageTag::convertToLocale( *aItB ));
+                Locale aTmp( LanguageTag::convertToLocale(localeName));
                 aSuppLocales[k++] = aTmp;
             }
 
@@ -194,8 +193,8 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
             //! In the future the implementation should support using several dictionaries
             //! for one locale.
             numthes = 0;
-            for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
-                numthes = numthes + aDictIt->aLocaleNames.getLength();
+            for (auto const& dict : aDics)
+                numthes = numthes + dict.aLocaleNames.getLength();
 
             // add dictionary information
             aThes   = new MyThes* [numthes];
@@ -205,12 +204,12 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
             aCharSetInfo = new CharClass* [numthes];
 
             k = 0;
-            for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
+            for (auto const& dict : aDics)
             {
-                if (aDictIt->aLocaleNames.getLength() > 0 &&
-                    aDictIt->aLocations.getLength() > 0)
+                if (dict.aLocaleNames.getLength() > 0 &&
+                    dict.aLocations.getLength() > 0)
                 {
-                    uno::Sequence< OUString > aLocaleNames( aDictIt->aLocaleNames );
+                    uno::Sequence< OUString > aLocaleNames(dict.aLocaleNames);
                     sal_Int32 nLocales = aLocaleNames.getLength();
 
                     // currently only one language per dictionary is supported in the actual implementation...
@@ -218,7 +217,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
                     // Once for each of its supported locales.
                     for (sal_Int32 i = 0;  i < nLocales;  ++i)
                     {
-                        LanguageTag aLanguageTag( aDictIt->aLocaleNames[i] );
+                        LanguageTag aLanguageTag(dict.aLocaleNames[i]);
                         aThes[k]  = nullptr;
                         aTEncs[k]  = RTL_TEXTENCODING_DONTKNOW;
                         aTLocs[k]  = aLanguageTag.getLocale();
@@ -226,7 +225,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
                         // also both files have to be in the same directory and the
                         // file names must only differ in the extension (.aff/.dic).
                         // Thus we use the first location only and strip the extension part.
-                        OUString aLocation = aDictIt->aLocations[0];
+                        OUString aLocation = dict.aLocations[0];
                         sal_Int32 nPos = aLocation.lastIndexOf( '.' );
                         aLocation = aLocation.copy( 0, nPos );
                         aTNames[k] = aLocation;

@@ -230,15 +230,14 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
 }
 
 void MergeNewStyleDicsAndOldStyleDics(
-    std::list< SvtLinguConfigDictionaryEntry > &rNewStyleDics,
+    std::vector< SvtLinguConfigDictionaryEntry > &rNewStyleDics,
     const std::vector< SvtLinguConfigDictionaryEntry > &rOldStyleDics )
 {
     // get list of languages supported by new style dictionaries
     std::set< OUString > aNewStyleLanguages;
-    std::list< SvtLinguConfigDictionaryEntry >::const_iterator aIt;
-    for (aIt = rNewStyleDics.begin() ;  aIt != rNewStyleDics.end();  ++aIt)
+    for (auto const& newStyleDic : rNewStyleDics)
     {
-        const uno::Sequence< OUString > aLocaleNames( aIt->aLocaleNames );
+        const uno::Sequence< OUString > aLocaleNames(newStyleDic.aLocaleNames);
         sal_Int32 nLocaleNames = aLocaleNames.getLength();
         for (sal_Int32 k = 0;  k < nLocaleNames; ++k)
         {
@@ -248,24 +247,23 @@ void MergeNewStyleDicsAndOldStyleDics(
 
     // now check all old style dictionaries if they will add a not yet
     // added language. If so add them to the resulting vector
-    std::vector< SvtLinguConfigDictionaryEntry >::const_iterator aIt2;
-    for (aIt2 = rOldStyleDics.begin();  aIt2 != rOldStyleDics.end();  ++aIt2)
+    for (auto const& oldStyleDic : rOldStyleDics)
     {
-        sal_Int32 nOldStyleDics = aIt2->aLocaleNames.getLength();
+        sal_Int32 nOldStyleDics = oldStyleDic.aLocaleNames.getLength();
 
         // old style dics should only have one language listed...
         DBG_ASSERT( nOldStyleDics, "old style dictionary with more than one language found!");
         if (nOldStyleDics > 0)
         {
-            if (linguistic::LinguIsUnspecified( aIt2->aLocaleNames[0]))
+            if (linguistic::LinguIsUnspecified( oldStyleDic.aLocaleNames[0]))
             {
                 OSL_FAIL( "old style dictionary with invalid language found!" );
                 continue;
             }
 
             // language not yet added?
-            if (aNewStyleLanguages.find( aIt2->aLocaleNames[0] ) == aNewStyleLanguages.end())
-                rNewStyleDics.push_back( *aIt2 );
+            if (aNewStyleLanguages.find( oldStyleDic.aLocaleNames[0] ) == aNewStyleLanguages.end())
+                rNewStyleDics.push_back(oldStyleDic);
         }
         else
         {
