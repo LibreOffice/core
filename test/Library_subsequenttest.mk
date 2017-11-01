@@ -70,6 +70,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xsheetannotation \
 	test/source/sheet/xsheetannotations \
 	test/source/sheet/xsheetannotationshapesupplier \
+	test/source/sheet/xsheetcondition \
 	test/source/sheet/xsheetfilterable \
 	test/source/sheet/xsheetfilterdescriptor \
 	test/source/sheet/xsheetoutline \
