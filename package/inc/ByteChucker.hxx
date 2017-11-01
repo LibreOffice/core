@@ -34,8 +34,8 @@ class ByteChucker final
 {
     css::uno::Reference < css::io::XOutputStream > xStream;
     css::uno::Reference < css::io::XSeekable > xSeek;
-    css::uno::Sequence < sal_Int8 > a1Sequence, a2Sequence, a4Sequence;
-    sal_Int8 * const p1Sequence, * const p2Sequence, * const p4Sequence;
+    css::uno::Sequence < sal_Int8 > a2Sequence, a4Sequence;
+    sal_Int8 * const p2Sequence, * const p4Sequence;
 
 public:
     ByteChucker (css::uno::Reference<css::io::XOutputStream> const & xOstream);

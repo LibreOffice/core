@@ -25,13 +25,11 @@
 
 class MemoryByteGrabber final
 {
-    const css::uno::Sequence < sal_Int8 > maBuffer;
     const sal_Int8 *mpBuffer;
     sal_Int32 mnCurrent, mnEnd;
 public:
     MemoryByteGrabber ( const css::uno::Sequence < sal_Int8 > & rBuffer )
-    : maBuffer ( rBuffer )
-    , mpBuffer ( rBuffer.getConstArray() )
+    : mpBuffer ( rBuffer.getConstArray() )
     , mnCurrent ( 0 )
     , mnEnd ( rBuffer.getLength() )
     {
