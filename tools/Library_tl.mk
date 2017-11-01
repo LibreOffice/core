@@ -74,7 +74,10 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/stream/vcompat \
     tools/source/string/tenccvt \
     tools/source/zcodec/zcodec \
+    tools/source/xml/XmlWriter \
+    tools/source/xml/XmlWalker \
 ))
+
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,tl, \
     tools/source/stream/strmwnt \
@@ -92,6 +95,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,tl,\
 $(eval $(call gb_Library_use_externals,tl,\
 	boost_headers \
 	zlib \
+	libxml2 \
 ))
 
 ifeq ($(OS),LINUX)
