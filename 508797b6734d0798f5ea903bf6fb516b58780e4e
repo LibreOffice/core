@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_890d8c92",
+        "filename": "sw/qa/extras/rtfexport/rtfexport2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-11-01T08:53:47Z",
+      "side": 1,
+      "message": "Wasn\u0027t the idea of this test to check for the \"empty paragraph\" that previously got lost? I suppose that the `\\n` was crucial?",
+      "range": {
+        "startLine": 1147,
+        "startChar": 4,
+        "endLine": 1147,
+        "endChar": 93
+      },
+      "revId": "508797b6734d0798f5ea903bf6fb516b58780e4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
