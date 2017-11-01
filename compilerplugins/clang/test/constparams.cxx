@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <string>
+
 struct Class1
 {
     int const * m_f1;
@@ -39,11 +41,8 @@ void g() {
 int const * f1(int * p) { // expected-error {{this parameter can be const [loplugin:constparams]}}
     return p;
 }
-int const * f2(int * p) {
-    return p;
-}
-int const * f3(int * p) {
-    return p;
+void f4(std::string * p) {
+    *p = std::string("xxx");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

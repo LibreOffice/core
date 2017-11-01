@@ -189,7 +189,7 @@ private:
     SAL_DLLPRIVATE void            ImplUpdateItem( ImplToolItems::size_type nIndex = ITEM_NOTFOUND );
     SAL_DLLPRIVATE bool            ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat = false );
     SAL_DLLPRIVATE bool            ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel = false );
-    SAL_DLLPRIVATE void            ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus = false );
+    SAL_DLLPRIVATE void            ImplChangeHighlight( ImplToolItem const * pItem, bool bNoGrabFocus = false );
     SAL_DLLPRIVATE bool            ImplChangeHighlightUpDn( bool bUp, bool bNoCycle = false );
     SAL_DLLPRIVATE ImplToolItems::size_type ImplGetItemLine( ImplToolItem const * pCurrentItem );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetFirstValidItem( ImplToolItems::size_type nLine );

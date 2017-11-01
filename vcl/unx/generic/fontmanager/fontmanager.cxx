@@ -497,7 +497,7 @@ namespace
     }
 }
 
-void PrintFontManager::analyzeSfntFamilyName( void* pTTFont, ::std::vector< OUString >& rNames )
+void PrintFontManager::analyzeSfntFamilyName( void const * pTTFont, ::std::vector< OUString >& rNames )
 {
     OUString aFamily;
 
@@ -505,7 +505,7 @@ void PrintFontManager::analyzeSfntFamilyName( void* pTTFont, ::std::vector< OUSt
     ::std::set< OUString > aSet;
 
     NameRecord* pNameRecords = nullptr;
-    int nNameRecords = GetTTNameRecords( static_cast<TrueTypeFont*>(pTTFont), &pNameRecords );
+    int nNameRecords = GetTTNameRecords( static_cast<TrueTypeFont const *>(pTTFont), &pNameRecords );
     if( nNameRecords && pNameRecords )
     {
         LanguageTag aSystem("");

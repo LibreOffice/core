@@ -356,7 +356,7 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
 
 //  setLongListValue
 
-RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32* pValueList, sal_uInt32 len)
+RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32 const * pValueList, sal_uInt32 len)
 {
     OStoreStream    rValue;
     sal_uInt8*      pBuffer;

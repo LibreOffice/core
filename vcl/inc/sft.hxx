@@ -315,7 +315,7 @@ namespace vcl
  * @ingroup sft
  */
 
-    int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr);
+    int GetTTNameRecords(TrueTypeFont const *ttf, NameRecord **nr);
 
 /**
  * Deallocates previously allocated array of NameRecords.
@@ -411,7 +411,7 @@ namespace vcl
  * @ingroup sft
  *
  */
-    TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, const sal_uInt16 *glyphArray, int nGlyphs, bool vertical);
+    TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont const *ttf, const sal_uInt16 *glyphArray, int nGlyphs, bool vertical);
 
 #if defined(_WIN32) || defined(MACOSX) || defined(IOS)
 /**
@@ -454,12 +454,12 @@ namespace vcl
 /**
  * returns the number of glyphs in a font
  */
- int GetTTGlyphCount( TrueTypeFont* ttf );
+ int GetTTGlyphCount( TrueTypeFont const * ttf );
 
 /**
  * provide access to the raw data of a SFNT-container's subtable
  */
- bool GetSfntTable( TrueTypeFont* ttf, int nSubtableIndex,
+ bool GetSfntTable( TrueTypeFont const * ttf, int nSubtableIndex,
      const sal_uInt8** ppRawBytes, int* pRawLength );
 
 /*- private definitions */

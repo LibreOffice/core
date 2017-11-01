@@ -591,7 +591,7 @@ static int GetRawData_glyf(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
 }
 
 /* cmap packers */
-static sal_uInt8 *PackCmapType0(CmapSubTable *s, sal_uInt32 *length)
+static sal_uInt8 *PackCmapType0(CmapSubTable const *s, sal_uInt32 *length)
 {
     sal_uInt8* ptr = static_cast<sal_uInt8*>(smalloc(262));
     sal_uInt8 *p = ptr + 6;

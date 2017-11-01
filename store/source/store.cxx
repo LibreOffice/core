@@ -210,8 +210,8 @@ storeError SAL_CALL store_flushFile (
  */
 storeError SAL_CALL store_openDirectory (
     storeFileHandle       hFile,
-    rtl_uString          *pPath,
-    rtl_uString          *pName,
+    rtl_uString const    *pPath,
+    rtl_uString const    *pName,
     storeAccessMode       eAccessMode,
     storeDirectoryHandle *phDirectory
 ) SAL_THROW_EXTERN_C()
@@ -304,8 +304,8 @@ storeError SAL_CALL store_findNext (
  */
 storeError SAL_CALL store_openStream (
     storeFileHandle    hFile,
-    rtl_uString       *pPath,
-    rtl_uString       *pName,
+    rtl_uString const *pPath,
+    rtl_uString const *pName,
     storeAccessMode    eAccessMode,
     storeStreamHandle *phStream
 ) SAL_THROW_EXTERN_C()
@@ -388,8 +388,8 @@ storeError SAL_CALL store_writeStream (
  */
 storeError SAL_CALL store_remove (
     storeFileHandle Handle,
-    rtl_uString    *pPath,
-    rtl_uString    *pName
+    rtl_uString const *pPath,
+    rtl_uString const *pName
 ) SAL_THROW_EXTERN_C()
 {
     storeError eErrCode = store_E_None;

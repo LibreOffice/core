@@ -94,7 +94,7 @@ public:
     // Report a failed name lookup attempt
     static void lookupError(const OString& n);
     // Report a failed name lookup attempt
-    static void lookupError(ErrorCode e, const OString& n, AstDeclaration* pScope);
+    static void lookupError(ErrorCode e, const OString& n, AstDeclaration const * pScope);
 
 
     // Report a type error
