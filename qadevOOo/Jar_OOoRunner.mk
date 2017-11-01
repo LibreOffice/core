@@ -622,7 +622,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XSheetCellRangeContainer \
     qadevOOo/tests/java/ifc/sheet/_XSheetCellRanges \
     qadevOOo/tests/java/ifc/sheet/_XSheetConditionalEntries \
-    qadevOOo/tests/java/ifc/sheet/_XSheetConditionalEntry \
     qadevOOo/tests/java/ifc/sheet/_XSheetFilterableEx \
     qadevOOo/tests/java/ifc/sheet/_XSpreadsheetView \
     qadevOOo/tests/java/ifc/style/_CharacterProperties \
@@ -1103,7 +1102,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScSubTotalDescriptorBase \
     qadevOOo/tests/java/mod/_sc/ScTableColumnObj \
     qadevOOo/tests/java/mod/_sc/ScTableColumnsObj \
-    qadevOOo/tests/java/mod/_sc/ScTableConditionalEntry \
     qadevOOo/tests/java/mod/_sc/ScTableConditionalFormat \
     qadevOOo/tests/java/mod/_sc/ScTableRowObj \
     qadevOOo/tests/java/mod/_sc/ScTableRowsObj \
