@@ -81,9 +81,7 @@ long EvalGridWidthAdd( const SwTextGridItem *const pGrid, const SwDrawTextInfo &
     SwDocShell* pDocShell = rInf.GetShell()->GetDoc()->GetDocShell();
     SfxStyleSheetBasePool* pBasePool = pDocShell->GetStyleSheetPool();
 
-    OUString sString(SwResId(STR_POOLCOLL_STANDARD));
-
-    SfxStyleSheetBase* pStyle = pBasePool->Find(sString, SfxStyleFamily::Para);
+    SfxStyleSheetBase* pStyle = pBasePool->Find(SwResId(STR_POOLCOLL_STANDARD), SfxStyleFamily::Para);
     SfxItemSet& aTmpSet = pStyle->GetItemSet();
     const SvxFontHeightItem &aDefaultFontItem = static_cast<const SvxFontHeightItem&>(aTmpSet.Get(RES_CHRATR_CJK_FONTSIZE));
 
@@ -625,10 +623,8 @@ static sal_uInt8 lcl_WhichPunctuation( sal_Unicode cChar )
 
 static bool lcl_IsMonoSpaceFont( const vcl::RenderContext& rOut )
 {
-    const OUString aStr1( u'\x3008' );
-    const OUString aStr2( u'\x307C' );
-    const long nWidth1 = rOut.GetTextWidth( aStr1 );
-    const long nWidth2 = rOut.GetTextWidth( aStr2 );
+    const long nWidth1 = rOut.GetTextWidth( OUString( u'\x3008' ) );
+    const long nWidth2 = rOut.GetTextWidth( OUString( u'\x307C' ) );
     return nWidth1 == nWidth2;
 }
 

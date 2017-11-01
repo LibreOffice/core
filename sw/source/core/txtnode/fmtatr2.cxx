@@ -138,8 +138,7 @@ SfxPoolItem* SwFormatAutoFormat::Clone( SfxItemPool* ) const
 
 bool SwFormatAutoFormat::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
-    OUString sCharFormatName = StylePool::nameOf( mpHandle );
-    rVal <<= sCharFormatName;
+    rVal <<= StylePool::nameOf( mpHandle );
     return true;
 }
 
@@ -479,13 +478,9 @@ bool SwFormatRuby::PutValue( const uno::Any& rVal,
     switch( nMemberId )
     {
         case MID_RUBY_TEXT:
-        {
-            OUString sTmp;
-            bRet = rVal >>= sTmp;
-            m_sRubyText = sTmp;
-        }
-        break;
-         case MID_RUBY_ADJUST:
+            bRet = rVal >>= m_sRubyText;
+            break;
+        case MID_RUBY_ADJUST:
         {
             sal_Int16 nSet = 0;
             rVal >>= nSet;

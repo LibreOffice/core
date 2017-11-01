@@ -478,7 +478,6 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 
     // Look if the length of the original text and the ToUpper-converted
     // text is different. If yes, do special handling.
-    OUString aNewText;
     SwCapitalInfo aCapInf(oldText);
     bool bCaseMapLengthDiffers(aText.getLength() != oldText.getLength());
     if ( bCaseMapLengthDiffers )
@@ -576,8 +575,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                 // Build an own 'changed' string for the given part of the
                 // source string and use it. That new string may differ in length
                 // from the source string.
-                const OUString aSnippet(oldText.copy(nOldPos, nPos - nOldPos));
-                aNewText = CalcCaseMap( aSnippet );
+                const OUString aNewText = CalcCaseMap( oldText.copy(nOldPos, nPos-nOldPos) );
                 aCapInf.nIdx = nOldPos;
                 aCapInf.nLen = nPos - nOldPos;
                 rDo.GetInf().SetIdx( 0 );
@@ -643,8 +641,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                             // Build an own 'changed' string for the given part of the
                             // source string and use it. That new string may differ in length
                             // from the source string.
-                            const OUString aSnippet(oldText.copy(nOldPos, nTmp - nOldPos));
-                            aNewText = CalcCaseMap( aSnippet );
+                            const OUString aNewText = CalcCaseMap( oldText.copy(nOldPos, nTmp-nOldPos) );
                             aCapInf.nIdx = nOldPos;
                             aCapInf.nLen = nTmp - nOldPos;
                             rDo.GetInf().SetIdx( 0 );
@@ -684,8 +681,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                         // Build an own 'changed' string for the given part of the
                         // source string and use it. That new string may differ in length
                         // from the source string.
-                        const OUString aSnippet(oldText.copy(nOldPos, nTmp - nOldPos));
-                        aNewText = CalcCaseMap( aSnippet );
+                        const OUString aNewText = CalcCaseMap( oldText.copy(nOldPos, nTmp-nOldPos) );
                         aCapInf.nIdx = nOldPos;
                         aCapInf.nLen = nTmp - nOldPos;
                         rDo.GetInf().SetIdx( 0 );

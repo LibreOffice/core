@@ -1067,7 +1067,7 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
             aTextSize = pLastFont->GetTextSize( rInf );
         else
         {
-            OUString aTmp = CalcCaseMap( rInf.GetText() );
+            const OUString aTmp = CalcCaseMap( rInf.GetText() );
             const OUString oldStr = rInf.GetText();
             bool bCaseMapLengthDiffers(aTmp.getLength() != oldStr.getLength());
 
@@ -1079,7 +1079,7 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
                 sal_Int32 nOldIdx(rInf.GetIdx());
                 sal_Int32 nOldLen(rInf.GetLen());
                 const OUString aSnippet(oldStr.copy(nOldIdx, nOldLen));
-                OUString aNewText(CalcCaseMap(aSnippet));
+                const OUString aNewText(CalcCaseMap(aSnippet));
 
                 rInf.SetText( aNewText );
                 rInf.SetIdx( 0 );
@@ -1115,7 +1115,7 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
     {
         sal_Int32 nOldIdx(rInf.GetIdx());
         sal_Int32 nOldLen(rInf.GetLen());
-        OUString aNewText(CH_TXT_ATR_SUBST_FIELDSTART);
+        const OUString aNewText(CH_TXT_ATR_SUBST_FIELDSTART);
         rInf.SetText( aNewText );
         rInf.SetIdx( 0 );
         rInf.SetLen( aNewText.getLength() );
@@ -1127,7 +1127,7 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
     {
         sal_Int32 nOldIdx(rInf.GetIdx());
         sal_Int32 nOldLen(rInf.GetLen());
-        OUString aNewText(CH_TXT_ATR_SUBST_FIELDEND);
+        const OUString aNewText(CH_TXT_ATR_SUBST_FIELDEND);
         rInf.SetText( aNewText );
         rInf.SetIdx( 0 );
         rInf.SetLen( aNewText.getLength() );
@@ -1182,7 +1182,7 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
         else
         {
             const OUString oldStr = rInf.GetText();
-            OUString aString( CalcCaseMap(oldStr) );
+            const OUString aString( CalcCaseMap(oldStr) );
             bool bCaseMapLengthDiffers(aString.getLength() != oldStr.getLength());
 
             if(bCaseMapLengthDiffers && rInf.GetLen())
@@ -1193,7 +1193,7 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
                 sal_Int32 nOldIdx(rInf.GetIdx());
                 sal_Int32 nOldLen(rInf.GetLen());
                 const OUString aSnippet(oldStr.copy(nOldIdx, nOldLen));
-                OUString aNewText = CalcCaseMap(aSnippet);
+                const OUString aNewText = CalcCaseMap(aSnippet);
 
                 rInf.SetText( aNewText );
                 rInf.SetIdx( 0 );
@@ -1373,8 +1373,7 @@ sal_Int32 SwSubFont::GetCursorOfst_( SwDrawTextInfo& rInf )
             nCursor = pLastFont->GetCursorOfst( rInf );
         else
         {
-            OUString aTmp = CalcCaseMap( rInf.GetText() );
-            rInf.SetText( aTmp );
+            rInf.SetText( CalcCaseMap( rInf.GetText() ) );
             nCursor = pLastFont->GetCursorOfst( rInf );
         }
         rInf.SetKern( nOldKern );
