@@ -1063,16 +1063,13 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             {
                 // set pages for all available handout presentation objects
                 sd::ShapeList& rShapeList = pMaster->GetPresentationShapeList();
-                SdrObject* pObj = nullptr;
-                rShapeList.seekShape(0);
-
-                while( (pObj = rShapeList.getNextShape()) )
+                for (auto const& shape : rShapeList.getList())
                 {
-                    if( pMaster->GetPresObjKind(pObj) == PRESOBJ_HANDOUT )
+                    if( pMaster->GetPresObjKind(shape) == PRESOBJ_HANDOUT )
                     {
                         // #i105146# We want no content to be displayed for PageKind::Handout,
                         // so just never set a page as content
-                        static_cast<SdrPageObj*>(pObj)->SetReferencedPage(nullptr);
+                        static_cast<SdrPageObj*>(shape)->SetReferencedPage(nullptr);
                     }
                 }
             }
