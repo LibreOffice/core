@@ -12055,6 +12055,11 @@ if test "$build_os" = "cygwin"; then
     AC_SUBST(ILIB)
 fi
 
+dnl We should be able to drop the below check when bumping the GCC baseline to
+dnl 4.9, as <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54577>
+dnl "deque<T>::erase() still takes iterator instead of const_iterator" should be
+dnl fixed there with <https://gcc.gnu.org/git/?p=gcc.git;a=commit;
+dnl h=6b0e18ca48bb4b4c01e7b5be2b98849943fdcf91>:
 AC_MSG_CHECKING(
     [whether C++11 use of const_iterator in standard containers is broken])
 save_CXXFLAGS=$CXXFLAGS
