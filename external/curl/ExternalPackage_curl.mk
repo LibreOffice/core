@@ -19,6 +19,8 @@ else ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.4.dylib,lib/.libs/libcurl.4.dylib))
 else ifeq ($(OS),AIX)
 $(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.so,lib/.libs/libcurl.so.4))
+else ifeq ($(ANDROID_PORTS),1)
+$(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.so,lib/.libs/libcurl.so))
 else
 $(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.so.4,lib/.libs/libcurl.so.4.5.0))
 endif
