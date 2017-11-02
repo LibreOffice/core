@@ -2388,7 +2388,7 @@ void OpenGL3DRenderer::DisableHighLightBar(BatchBarInfo &barInfo)
     }
 }
 
-void OpenGL3DRenderer::StartClick(sal_uInt32 &selectID)
+void OpenGL3DRenderer::StartClick(sal_uInt32 selectID)
 {
     m_bHighLighting = true;
     m_uiSelectID = selectID;

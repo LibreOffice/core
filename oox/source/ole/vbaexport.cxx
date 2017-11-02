@@ -88,7 +88,7 @@ OUString createHexStringFromDigit(sal_uInt8 nDigit)
     return aString.toAsciiUpperCase();
 }
 
-OUString createGuidStringFromInt(sal_uInt8 nGuid[16])
+OUString createGuidStringFromInt(sal_uInt8 const nGuid[16])
 {
     OUStringBuffer aBuffer;
     aBuffer.append('{');

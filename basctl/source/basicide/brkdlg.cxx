@@ -121,7 +121,7 @@ void BreakPointDialog::dispose()
     ModalDialog::dispose();
 }
 
-void BreakPointDialog::SetCurrentBreakPoint( BreakPoint* pBrk )
+void BreakPointDialog::SetCurrentBreakPoint( BreakPoint const * pBrk )
 {
     OUString aStr( "# " + OUString::number(pBrk->nLine) );
     m_pComboBox->SetText( aStr );
@@ -233,7 +233,7 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton, void )
 }
 
 
-void BreakPointDialog::UpdateFields( BreakPoint* pBrk )
+void BreakPointDialog::UpdateFields( BreakPoint const * pBrk )
 {
     if ( pBrk )
     {

@@ -141,7 +141,7 @@ public:
     void            SetOptionValue( int, bool );
     void            SetOptionValue( int, const OUString& );
     void            SetOptionValue( int, double, int nElement = 0 );
-    void            SetOptionValue( int, double* );
+    void            SetOptionValue( int, double const * );
 
     bool            ActivateButtonOption( int );
 

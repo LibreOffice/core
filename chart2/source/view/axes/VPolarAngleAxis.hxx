@@ -43,7 +43,7 @@ private: //methods
     bool createTextShapes_ForAngleAxis(
                        const css::uno::Reference< css::drawing::XShapes >& xTarget
                      , EquidistantTickIter& rTickIter
-                     , AxisLabelProperties& rAxisLabelProperties
+                     , AxisLabelProperties const & rAxisLabelProperties
                      , double fLogicRadius, double fLogicZ );
 };
 

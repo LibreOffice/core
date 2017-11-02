@@ -383,7 +383,7 @@ SvNumberFormatter* SbiInstance::GetNumberFormatter()
 // #39629 offer NumberFormatter static too
 SvNumberFormatter* SbiInstance::PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx,
     sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
-    LanguageType const * peFormatterLangType, DateOrder* peFormatterDateOrder )
+    LanguageType const * peFormatterLangType, DateOrder const * peFormatterDateOrder )
 {
     SvNumberFormatter* pNumberFormater = nullptr;
     LanguageType eLangType;

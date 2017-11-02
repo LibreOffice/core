@@ -255,7 +255,7 @@ protected:
                                     const css::uno::Reference< css::embed::XStorage >& xStorage,
                                     const OUString& aIndexFileName );
 
-    void implImportLibDescriptor( SfxLibrary* pLib, ::xmlscript::LibDescriptor& rLib );
+    void implImportLibDescriptor( SfxLibrary* pLib, ::xmlscript::LibDescriptor const & rLib );
 
     // Methods to distinguish between different library types
     virtual SfxLibrary* SAL_CALL implCreateLibrary( const OUString& aName ) = 0;

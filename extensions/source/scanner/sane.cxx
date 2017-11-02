@@ -454,7 +454,7 @@ void Sane::SetOptionValue( int n, double fSet, int nElement )
     }
 }
 
-void Sane::SetOptionValue( int n, double* pSet )
+void Sane::SetOptionValue( int n, double const * pSet )
 {
     if( ! maHandle  ||  ( mppOptions[n]->type != SANE_TYPE_INT &&
                           mppOptions[n]->type != SANE_TYPE_FIXED ) )

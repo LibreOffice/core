@@ -213,7 +213,7 @@ public:
     void ReleaseScreenTextShapes();
     void ReleaseTextTexture();
     void ReleaseScreenTextTexture();
-    void StartClick(sal_uInt32 &selectID);
+    void StartClick(sal_uInt32 selectID);
     void EndClick();
     void SetScroll();
     void SetScrollSpeed(float scrollSpeed);

@@ -65,7 +65,7 @@ public:
     XUnbufferedStream(
                  const css::uno::Reference< css::uno::XComponentContext >& xContext,
                  const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
-                 ZipEntry & rEntry,
+                 ZipEntry const & rEntry,
                  css::uno::Reference < css::io::XInputStream > const & xNewZipStream,
                  const ::rtl::Reference< EncryptionData >& rData,
                  sal_Int8 nStreamMode,

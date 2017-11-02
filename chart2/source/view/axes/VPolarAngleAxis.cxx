@@ -48,7 +48,7 @@ VPolarAngleAxis::~VPolarAngleAxis()
 bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
                        const uno::Reference< drawing::XShapes >& xTarget
                      , EquidistantTickIter& rTickIter
-                     , AxisLabelProperties& rAxisLabelProperties
+                     , AxisLabelProperties const & rAxisLabelProperties
                      , double fLogicRadius
                      , double fLogicZ )
 {

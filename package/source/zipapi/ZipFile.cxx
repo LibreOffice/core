@@ -491,7 +491,7 @@ bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentConte
     return bRet;
 }
 
-bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ::rtl::Reference< EncryptionData >& rData )
+bool ZipFile::hasValidPassword ( ZipEntry const & rEntry, const ::rtl::Reference< EncryptionData >& rData )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -605,7 +605,7 @@ public:
 
 uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
             const rtl::Reference< comphelper::RefCountedMutex >& aMutexHolder,
-            ZipEntry & rEntry,
+            ZipEntry const & rEntry,
             const ::rtl::Reference< EncryptionData > &rData,
             sal_Int8 nStreamMode,
             bool bIsEncrypted,

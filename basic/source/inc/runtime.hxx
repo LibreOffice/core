@@ -193,7 +193,7 @@ public:
     // offer NumberFormatter also static
     static SvNumberFormatter* PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx,
         sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
-        LanguageType const * peFormatterLangType=nullptr, DateOrder* peFormatterDateOrder=nullptr );
+        LanguageType const * peFormatterLangType=nullptr, DateOrder const * peFormatterDateOrder=nullptr );
 };
 
 // There's one instance of this class for every executed sub-program.
