@@ -70,8 +70,6 @@ namespace o3tl
 #define IMP_SVMETAFILE          "SVMETAFILE"
 #define IMP_WMF                 "SVWMF"
 #define IMP_EMF                 "SVEMF"
-#define IMP_SVSGF               "SVSGF"
-#define IMP_SVSGV               "SVSGV"
 #define IMP_GIF                 "SVIGIF"
 #define IMP_PNG                 "SVIPNG"
 #define IMP_JPEG                "SVIJPEG"
