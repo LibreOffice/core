@@ -121,6 +121,8 @@ ErrCode ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument*
     ErrCode eRet = SCERR_IMPORT_UNKNOWN_BIFF;
     if( pBookStrm )
     {
+        pBookStrm->SetBufferSize( 0x8000 );     // still needed?
+
         XclImpRootData aImpData( eBiff, rMedium, xRootStrg, *pDocument, RTL_TEXTENCODING_MS_1252 );
         std::unique_ptr< ImportExcel > xFilter;
         switch( eBiff )
@@ -167,8 +169,9 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
 
     // open the "Book"/"Workbook" stream
     tools::SvRef<SotStorageStream> xStrgStrm = ScfTools::OpenStorageStreamWrite( xRootStrg, aStrmName );
-    if (!xStrgStrm.is() || xStrgStrm->GetError())
-        return SCERR_IMPORT_OPEN;
+    if( !xStrgStrm.is() || xStrgStrm->GetError() ) return SCERR_IMPORT_OPEN;
+
+    xStrgStrm->SetBufferSize( 0x8000 );     // still needed?
 
     ErrCode eRet = SCERR_IMPORT_UNKNOWN_BIFF;
     XclExpRootData aExpData( bBiff8 ? EXC_BIFF8 : EXC_BIFF5, rMedium, xRootStrg, *pDocument, eNach );
