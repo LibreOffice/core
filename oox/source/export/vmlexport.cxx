@@ -19,6 +19,7 @@
 
 #include <config_folders.h>
 #include <rtl/bootstrap.hxx>
+#include <svl/itemset.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/vmlexport.hxx>
 
@@ -382,7 +383,22 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
     if ( m_nShapeType == ESCHER_ShpInst_Line )
         AddLineDimensions( rRect );
     else
-        AddRectangleDimensions( m_ShapeStyle, rRect );
+    {
+        if ( IsWaterMarkShape( m_pSdrObject->GetName() ) )
+        {
+            // Watermark need some padding to be compatible with MSO
+            long nPaddingY = 0;
+            const SfxItemSet& rSet = m_pSdrObject->GetMergedItemSet();
+            if ( const SdrMetricItem* pItem = static_cast<const SdrMetricItem*>( rSet.GetItem( SDRATTR_TEXT_UPPERDIST ) ) )
+                nPaddingY += pItem->GetValue();
+
+            tools::Rectangle aRect( rRect );
+            aRect.setHeight( aRect.getHeight() + nPaddingY );
+            AddRectangleDimensions( m_ShapeStyle, aRect );
+        }
+        else
+            AddRectangleDimensions( m_ShapeStyle, rRect );
+    }
 
     // properties
     bool bAlreadyWritten[ 0xFFF ];
