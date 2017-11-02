@@ -1,0 +1,55 @@
+From 88cf975c295e3ec808efb77bb1a2a031d77f0c89 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?L=C3=A1szl=C3=B3=20N=C3=A9meth?=
+ <laszlo.nemeth@collabora.com>
+Date: Thu, 5 Oct 2017 12:24:02 +0200
+Subject: [PATCH] Allow dotted I in dictionary, and disable bad capitalization
+ of i.
+
+Dictionary words weren't recognized with dotted I, but dictionary
+words with the letter i were recognized with dotted I, too.
+---
+ src/hunspell/hunspell.cxx | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
+
+diff --git a/src/hunspell/hunspell.cxx b/src/hunspell/hunspell.cxx
+index 1ef11df..5c98f8a 100644
+--- a/src/hunspell/hunspell.cxx
++++ b/src/hunspell/hunspell.cxx
+@@ -562,11 +562,15 @@ bool HunspellImpl::spell(const std::string& word, int* info, std::string* root)
+       }
+     }
+     case INITCAP: {
+-
++      // handle special capitalization of dotted I
++      bool Idot = (utf8 && (unsigned char) scw[0] == 0xc4 && (unsigned char) scw[1] == 0xb0);
+       *info += SPELL_ORIGCAP;
+-      mkallsmall2(scw, sunicw);
+-      std::string u8buffer(scw);
+-      mkinitcap2(scw, sunicw);
++      if (captype == ALLCAP) {
++          mkallsmall2(scw, sunicw);
++          mkinitcap2(scw, sunicw);
++          if (Idot)
++             scw.replace(0, 1, "\xc4\xb0");
++      }
+       if (captype == INITCAP)
+         *info += SPELL_INITCAP;
+       rv = checkword(scw, info, root);
+@@ -581,9 +585,13 @@ bool HunspellImpl::spell(const std::string& word, int* info, std::string* root)
+       }
+       if (rv && is_keepcase(rv) && (captype == ALLCAP))
+         rv = NULL;
+-      if (rv)
++      if (rv || (Idot && langnum != LANG_az && langnum != LANG_tr && langnum != LANG_crh))
+         break;
+ 
++      mkallsmall2(scw, sunicw);
++      std::string u8buffer(scw);
++      mkinitcap2(scw, sunicw);
++
+       rv = checkword(u8buffer, info, root);
+       if (abbv && !rv) {
+         u8buffer.push_back('.');
+-- 
+1.9.1
+

@@ -1,0 +1,29 @@
+From 0f691abe68788d0a58e72ab66877a9f670cd2741 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?L=C3=A1szl=C3=B3=20N=C3=A9meth?= <nemeth@numbertext.org>
+Date: Tue, 10 Oct 2017 11:58:43 +0200
+Subject: [PATCH] Remove forbidden words from dash suggestion list
+
+---
+ src/hunspell/hunspell.cxx | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/hunspell/hunspell.cxx b/src/hunspell/hunspell.cxx
+index 3fd0d16..76e61b1 100644
+--- a/src/hunspell/hunspell.cxx
++++ b/src/hunspell/hunspell.cxx
+@@ -1069,7 +1069,11 @@ std::vector<std::string> HunspellImpl::suggest(const std::string& word) {
+             wspace.append("-");
+             wspace.append(scw.substr(dash_pos + 1));
+           }
+-          insert_sug(slst, wspace);
++          int info = 0;
++          if (pAMgr && pAMgr->get_forbiddenword())
++            checkword(wspace, &info, NULL);
++          if (!(info & SPELL_FORBIDDEN))
++            insert_sug(slst, wspace);
+         }
+         nodashsug = 0;
+       }
+-- 
+1.9.1
+

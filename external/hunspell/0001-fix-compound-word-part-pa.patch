@@ -1,0 +1,26 @@
+From de3ae6844af62300e473f7b7b66a56e54153b4b9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?L=C3=A1szl=C3=B3=20N=C3=A9meth?= <nemeth@numbertext.org>
+Date: Mon, 16 Oct 2017 23:00:23 +0200
+Subject: [PATCH] fix compound word part "pa:"
+
+(regression in morphological analysis)
+---
+ src/hunspell/affixmgr.cxx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/hunspell/affixmgr.cxx b/src/hunspell/affixmgr.cxx
+index ea0f0fc..52c7fa5 100644
+--- a/src/hunspell/affixmgr.cxx
++++ b/src/hunspell/affixmgr.cxx
+@@ -2608,7 +2608,7 @@ int AffixMgr::compound_check_morph(const char* word,
+           if (!m.empty()) {
+             result.push_back(MSEP_FLD);
+             result.append(MORPH_PART);
+-            result.append(word + 1);
++            result.append(word + i);
+             line_uniq_app(m, MSEP_REC);
+             result.append(m);
+           }
+-- 
+1.9.1
+

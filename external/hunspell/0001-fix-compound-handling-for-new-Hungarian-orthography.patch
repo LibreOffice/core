@@ -1,0 +1,43 @@
+From 15b2cde4f01706f0a648518a5cfc57394d015448 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?L=C3=A1szl=C3=B3=20N=C3=A9meth?= <nemeth@numbertext.org>
+Date: Thu, 12 Oct 2017 16:47:57 +0200
+Subject: [PATCH] fix compound handling for new Hungarian orthography
+
+Extend partial fix in commit 42807f970ac2d65f0d13a7c57eb454b210e92240.
+---
+ src/hunspell/affixmgr.cxx | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/hunspell/affixmgr.cxx b/src/hunspell/affixmgr.cxx
+index ffce7bb..ea0f0fc 100644
+--- a/src/hunspell/affixmgr.cxx
++++ b/src/hunspell/affixmgr.cxx
+@@ -1990,6 +1990,8 @@ struct hentry* AffixMgr::compound_check(const std::string& word,
+                 std::string tmp(sfxappnd);
+                 reverseword(tmp);
+                 numsyllable -= get_syllable(tmp) + sfxextra;
++              } else {
++                numsyllable -= sfxextra;
+               }
+ 
+               // + 1 word, if syllable number of the prefix > 1 (hungarian
+@@ -2024,7 +2026,6 @@ struct hentry* AffixMgr::compound_check(const std::string& word,
+                 (TESTAFF(rv->astr, compoundroot, rv->alen))) {
+               wordnum++;
+             }
+-
+             // second word is acceptable, as a word with prefix or/and suffix?
+             // hungarian conventions: compounding is acceptable,
+             // when compound forms consist 2 word, otherwise
+@@ -2553,6 +2554,8 @@ int AffixMgr::compound_check_morph(const char* word,
+             std::string tmp(sfxappnd);
+             reverseword(tmp);
+             numsyllable -= get_syllable(tmp) + sfxextra;
++          } else {
++            numsyllable -= sfxextra;
+           }
+ 
+           // + 1 word, if syllable number of the prefix > 1 (hungarian
+-- 
+1.9.1
+
