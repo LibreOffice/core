@@ -336,7 +336,9 @@ void SvRTFParser::ScanText()
                             sal_Char nSlash = '\\';
                             while (!bBreak)
                             {
-                                wchar_t next=GetNextChar();
+                                auto next = GetNextChar();
+                                if (sal_Unicode(EOF) == next)
+                                    break;
                                 if (next>0xFF) // fix for #i43933# and #i35653#
                                 {
                                     if (!aByteString.isEmpty())
