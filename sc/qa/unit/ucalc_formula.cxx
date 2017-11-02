@@ -8394,4 +8394,32 @@ void Test::testIterations()
     m_pDoc->SetDocOptions( aDocOpts );
 }
 
+// tdf#111428 CellStoreEvent and its counter used for quick "has a column
+// formula cells" must point to the correct column.
+void Test::testInsertColCellStoreEventSwap()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetValue(  0,0,0, 1.0 );    // A1
+    m_pDoc->SetString( 1,0,0, "=A1" );  // B1
+    // Insert column left of B
+    m_pDoc->InsertCol( ScRange(1,0,0, 1,MAXROW,0));
+    ScAddress aPos(2,0,0);              // C1, new formula postion
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Should be formula cell having value", 1.0, m_pDoc->GetValue(aPos));
+    // After having swapped in an empty column, editing or adding a formula
+    // cell has to use the correct store context. To test this,
+    // ScDocument::SetString() can't be used as it doesn't expose the behavior
+    // in question, use ScDocFunc::SetFormulaCell() instead which actually is
+    // also called when editing a cell and creating a formula cell.
+    ScFormulaCell* pCell = new ScFormulaCell( m_pDoc, aPos, "=A1+1");
+    ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
+    rDocFunc.SetFormulaCell( aPos, pCell, false);   // C1, change formula
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Initial calculation failed", 2.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue( 0,0,0, 2.0 );     // A1, change value
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Recalculation failed", 3.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -538,6 +538,7 @@ public:
     void testProtectedSheetEditByRow();
     void testProtectedSheetEditByColumn();
     void testFuncRowsHidden();
+    void testInsertColCellStoreEventSwap();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
@@ -816,6 +817,7 @@ public:
     CPPUNIT_TEST(testProtectedSheetEditByRow);
     CPPUNIT_TEST(testProtectedSheetEditByColumn);
     CPPUNIT_TEST(testFuncRowsHidden);
+    CPPUNIT_TEST(testInsertColCellStoreEventSwap);
     CPPUNIT_TEST_SUITE_END();
 
 private:
