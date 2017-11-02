@@ -70,8 +70,6 @@ namespace o3tl
 #define IMP_SVMETAFILE          "SVMETAFILE"
 #define IMP_WMF                 "SVWMF"
 #define IMP_EMF                 "SVEMF"
-#define IMP_SVSGF               "SVSGF"
-#define IMP_SVSGV               "SVSGV"
 #define IMP_GIF                 "SVIGIF"
 #define IMP_PNG                 "SVIPNG"
 #define IMP_JPEG                "SVIJPEG"
@@ -124,10 +122,10 @@ enum class GraphicFileFormat
     DXF = 0x00f1,
     MET = 0x00f2,
     PCT = 0x00f3,
-    SGF = 0x00f4,
+    // retired SGF = 0x00f4,
     SVM = 0x00f5,
     WMF = 0x00f6,
-    SGV = 0x00f7,
+    // retired SGV = 0x00f7,
     EMF = 0x00f8,
     SVG = 0x00f9
 };
@@ -166,10 +164,8 @@ class VCL_DLLPUBLIC GraphicDescriptor final
     bool            ImpDetectDXF( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectMET( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectPCT( SvStream& rStm, bool bExtendedInfo );
-    bool            ImpDetectSGF( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectSVM( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectWMF( SvStream& rStm, bool bExtendedInfo );
-    bool            ImpDetectSGV( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectEMF( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectSVG( SvStream& rStm, bool bExtendedInfo );
     GraphicDescriptor( const GraphicDescriptor& ) = delete;

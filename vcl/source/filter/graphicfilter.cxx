@@ -48,7 +48,6 @@
 #include "jpeg/jpeg.hxx"
 #include "ixbm/xbmread.hxx"
 #include "ixpm/xpmread.hxx"
-#include "sgffilt.hxx"
 #include <osl/module.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/Size.hpp>
@@ -723,27 +722,6 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         // just a simple test for the extension
         if( rFormatExtension.startsWith( "TGA" ) )
             return true;
-    }
-
-    //--------------------------- SGV ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "SGV" ) )
-    {
-        bSomethingTested = true;
-
-        // just a simple test for the extension
-        if( rFormatExtension.startsWith( "SGV" ) )
-            return true;
-    }
-
-    //--------------------------- SGF ------------------------------------
-    if( !bTest || rFormatExtension.startsWith( "SGF" ) )
-    {
-        bSomethingTested=true;
-        if( sFirstBytes[ 0 ] == 'J' && sFirstBytes[ 1 ] == 'J' )
-        {
-            rFormatExtension = "SGF";
-            return true;
-        }
     }
 
     if(!bTest || rFormatExtension.startsWith( "MOV" ))
@@ -1789,68 +1767,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
             else
             {
                 nStatus = ERRCODE_GRFILTER_FILTERERROR;
-            }
-        }
-        else if( aFilterName.equalsIgnoreAsciiCase( IMP_SVSGF )
-                || aFilterName.equalsIgnoreAsciiCase( IMP_SVSGV ) )
-        {
-            sal_uInt16          nVersion;
-            unsigned char   nTyp = CheckSgfTyp( rIStream, nVersion );
-
-            switch( nTyp )
-            {
-                case SGF_BITIMAGE:
-                {
-                    SvMemoryStream aTempStream;
-                    if( aTempStream.GetError() )
-                        return ERRCODE_GRFILTER_OPENERROR;
-
-                    if( !SgfBMapFilter( rIStream, aTempStream ) )
-                        nStatus = ERRCODE_GRFILTER_FILTERERROR;
-                    else
-                    {
-                        aTempStream.Seek( 0 );
-                        ReadGraphic( aTempStream, rGraphic );
-
-                        if( aTempStream.GetError() )
-                            nStatus = ERRCODE_GRFILTER_FILTERERROR;
-                    }
-                }
-                break;
-
-                case SGF_SIMPVECT:
-                {
-                    GDIMetaFile aMtf;
-                    if( !SgfVectFilter( rIStream, aMtf ) )
-                        nStatus = ERRCODE_GRFILTER_FILTERERROR;
-                    else
-                        rGraphic = Graphic( aMtf );
-                }
-                break;
-
-                case SGF_STARDRAW:
-                {
-                    if( nVersion != SGV_VERSION )
-                        nStatus = ERRCODE_GRFILTER_VERSIONERROR;
-                    else
-                    {
-                        GDIMetaFile aMtf;
-                        if( !SgfSDrwFilter( rIStream, aMtf,
-                                INetURLObject(aFilterPath) ) )
-                        {
-                            nStatus = ERRCODE_GRFILTER_FILTERERROR;
-                        }
-                        else
-                            rGraphic = Graphic( aMtf );
-                    }
-                }
-                break;
-
-                default:
-                {
-                    nStatus = ERRCODE_GRFILTER_FORMATERROR;
-                }
-                break;
             }
         }
         else if (aFilterName == IMP_PDF)

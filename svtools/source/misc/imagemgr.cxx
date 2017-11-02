@@ -126,9 +126,7 @@ static SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
     { "sds",   false, STR_DESCRIPTION_SCHART_DOC,            SvImageId::NONE },
     { "sdw",   false, STR_DESCRIPTION_SWRITER_DOC,           SvImageId::Writer },
     { "sga",   false, nullptr,                               SvImageId::NONE },
-    { "sgf",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::SGF },
     { "sgl",   false, STR_DESCRIPTION_GLOBALDOC,             SvImageId::GlobalDoc },
-    { "sgv",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::SGV },
     { "shtml", false, STR_DESCRIPTION_HTMLFILE,              SvImageId::HTML },
     { "sim",   false, STR_DESCRIPTION_SIMAGE_DOC,            SvImageId::SIM },
     { "smf",   false, STR_DESCRIPTION_SMATH_DOC,             SvImageId::Math },
@@ -547,10 +545,6 @@ static Image GetImageFromList_Impl( SvImageId nImageId, bool bBig )
                 return Image(BitmapEx(BMP_MET_LC));
             case SvImageId::PNG:
                 return Image(BitmapEx(BMP_PNG_LC));
-            case SvImageId::SGF:
-                return Image(BitmapEx(BMP_SGF_LC));
-            case SvImageId::SGV:
-                return Image(BitmapEx(BMP_SGV_LC));
             case SvImageId::SVM:
                 return Image(BitmapEx(BMP_SVM_LC));
             case SvImageId::GlobalDoc:
@@ -651,10 +645,6 @@ static Image GetImageFromList_Impl( SvImageId nImageId, bool bBig )
                 return Image(BitmapEx(BMP_MET_SC));
             case SvImageId::PNG:
                 return Image(BitmapEx(BMP_PNG_SC));
-            case SvImageId::SGF:
-                return Image(BitmapEx(BMP_SGF_SC));
-            case SvImageId::SGV:
-                return Image(BitmapEx(BMP_SGV_SC));
             case SvImageId::SVM:
                 return Image(BitmapEx(BMP_SVM_SC));
             case SvImageId::GlobalDoc:

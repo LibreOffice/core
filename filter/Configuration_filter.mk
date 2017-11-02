@@ -692,8 +692,6 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_drawgraphics_typ
 	ppm_Portable_Pixelmap \
 	psd_Adobe_Photoshop \
 	ras_Sun_Rasterfile \
-	sgf_StarOffice_Writer_SGF \
-	sgv_StarDraw_20 \
 	svg_Scalable_Vector_Graphics \
 	svm_StarView_Metafile \
 	tga_Truevision_TARGA \
@@ -720,8 +718,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	PPM___Portable_Pixelmap \
 	PSD___Adobe_Photoshop \
 	RAS___Sun_Rasterfile \
-	SGF___StarOffice_Writer_SGF \
-	SGV___StarDraw_2_0 \
 	SVG___Scalable_Vector_Graphics \
 	SVM___StarView_Metafile \
 	TGA___Truevision_TARGA \
@@ -826,8 +822,6 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_internalgraphics
 	ppm_Portable_Pixelmap \
 	psd_Adobe_Photoshop \
 	ras_Sun_Rasterfile \
-	sgf_StarOffice_Writer_SGF \
-	sgv_StarDraw_20 \
 	svg_Scalable_Vector_Graphics \
 	svm_StarView_Metafile \
 	tga_Truevision_TARGA \
@@ -864,8 +858,6 @@ $(eval $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_inter
 	ppm_Import \
 	psd_Import \
 	ras_Import \
-	sgf_Import \
-	sgv_Import \
 	svg_Export \
 	svg_Import \
 	svm_Export \

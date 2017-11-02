@@ -128,10 +128,8 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
             case GraphicFileFormat::DXF: pMimeType = MIMETYPE_DXF; cType = graphic::GraphicType::VECTOR; break;
             case GraphicFileFormat::MET: pMimeType = MIMETYPE_MET; cType = graphic::GraphicType::VECTOR; break;
             case GraphicFileFormat::PCT: pMimeType = MIMETYPE_PCT; cType = graphic::GraphicType::VECTOR; break;
-            case GraphicFileFormat::SGF: pMimeType = MIMETYPE_SGF; cType = graphic::GraphicType::VECTOR; break;
             case GraphicFileFormat::SVM: pMimeType = MIMETYPE_SVM; cType = graphic::GraphicType::VECTOR; break;
             case GraphicFileFormat::WMF: pMimeType = MIMETYPE_WMF; cType = graphic::GraphicType::VECTOR; break;
-            case GraphicFileFormat::SGV: pMimeType = MIMETYPE_SGV; cType = graphic::GraphicType::VECTOR; break;
             case GraphicFileFormat::EMF: pMimeType = MIMETYPE_EMF; cType = graphic::GraphicType::VECTOR; break;
             case GraphicFileFormat::SVG: pMimeType = MIMETYPE_SVG; cType = graphic::GraphicType::VECTOR; break;
 
