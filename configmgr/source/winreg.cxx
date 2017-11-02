@@ -25,7 +25,6 @@
 #include <sal/log.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>
-#include <assert.h>
 #include "winreg.hxx"
 #include "writemodfile.hxx"
 
@@ -160,7 +159,8 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                 }
             }
             // type and external are mutually exclusive
-            assert(aType.isEmpty() || !bExternal);
+            if (bExternal)
+                aType.clear();
 
             sal_Int32 aLastSeparator = aKeyName.lastIndexOf('\\');
             OUString aPathAndNodes = aKeyName.copy(0, aLastSeparator);
