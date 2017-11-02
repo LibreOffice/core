@@ -33,10 +33,10 @@ namespace emfplushelper
 
         void Read(SvMemoryStream &s);
 
-        bool Bold()     { return fontFlags & 0x1; }
-        bool Italic()   { return fontFlags & 0x2; }
-        bool Underline(){ return fontFlags & 0x4; }
-        bool Strikeout(){ return fontFlags & 0x8; }
+        bool Bold()      const { return fontFlags & 0x1; }
+        bool Italic()    const { return fontFlags & 0x2; }
+        bool Underline() const { return fontFlags & 0x4; }
+        bool Strikeout() const { return fontFlags & 0x8; }
     };
 }
 

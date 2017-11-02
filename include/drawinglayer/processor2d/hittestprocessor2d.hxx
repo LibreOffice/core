@@ -62,10 +62,10 @@ namespace drawinglayer
             void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) override;
             bool checkHairlineHitWithTolerance(
                 const basegfx::B2DPolygon& rPolygon,
-                double fDiscreteHitTolerance);
+                double fDiscreteHitTolerance) const;
             bool checkFillHitWithTolerance(
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
-                double fDiscreteHitTolerance);
+                double fDiscreteHitTolerance) const;
             void check3DHit(const primitive2d::ScenePrimitive2D& rCandidate);
 
         public:

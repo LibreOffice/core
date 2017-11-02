@@ -75,7 +75,7 @@ namespace drawinglayer
 
         bool HitTestProcessor2D::checkHairlineHitWithTolerance(
             const basegfx::B2DPolygon& rPolygon,
-            double fDiscreteHitTolerance)
+            double fDiscreteHitTolerance) const
         {
             basegfx::B2DPolygon aLocalPolygon(rPolygon);
             aLocalPolygon.transform(getViewInformation2D().getObjectToViewTransformation());
@@ -103,7 +103,7 @@ namespace drawinglayer
 
         bool HitTestProcessor2D::checkFillHitWithTolerance(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
-            double fDiscreteHitTolerance)
+            double fDiscreteHitTolerance) const
         {
             bool bRetval(false);
             basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolyPolygon);

@@ -282,7 +282,7 @@ namespace drawinglayer
         void VclMetafileProcessor2D::impConvertFillGradientAttributeToVCLGradient(
             Gradient& o_rVCLGradient,
             const attribute::FillGradientAttribute& rFiGrAtt,
-            bool bIsTransparenceGradient)
+            bool bIsTransparenceGradient) const
         {
             if(bIsTransparenceGradient)
             {
