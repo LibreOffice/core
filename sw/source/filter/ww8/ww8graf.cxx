@@ -779,7 +779,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
 
     // then determine start and end
     void* pT0;
-    if( !pT->Get( rStartCp, pT0 ) )
+    if (!pT->Get(rStartCp, pT0) || rStartCp < 0)
     {
         OSL_ENSURE( false, "+where's the text graphic (2)?" );
         return false;
@@ -800,7 +800,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
         }
     }
     pT->advance();
-    if( !pT->Get( rEndCp, pT0 ) )
+    if (!pT->Get(rEndCp, pT0) || rEndCp < 0)
     {
         OSL_ENSURE( false, "+where's the text graphic (3)?" );
         return false;
