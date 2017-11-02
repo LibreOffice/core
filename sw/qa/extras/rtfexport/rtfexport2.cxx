@@ -1144,7 +1144,11 @@ DECLARE_RTFEXPORT_TEST(testCp1000018, "cp1000018.rtf")
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xTextRange->getString().startsWithIgnoreAsciiCase("Footnote first line"));
+
+    OUString const aExpected = "Footnote first line." SAL_NEWLINE_STRING;
+    OUString const aActual   = xTextRange->getString();
+
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo94835, "fdo94835.rtf")
