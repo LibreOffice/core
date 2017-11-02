@@ -70,8 +70,6 @@ bool GraphicDescriptor::Detect( bool bExtendedInfo )
         else if ( ImpDetectPCX( rStm, bExtendedInfo ) ) bRet = true;
         else if ( ImpDetectDXF( rStm, bExtendedInfo ) ) bRet = true;
         else if ( ImpDetectMET( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectSGF( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectSGV( rStm, bExtendedInfo ) ) bRet = true;
         else if ( ImpDetectSVM( rStm, bExtendedInfo ) ) bRet = true;
         else if ( ImpDetectWMF( rStm, bExtendedInfo ) ) bRet = true;
         else if ( ImpDetectEMF( rStm, bExtendedInfo ) ) bRet = true;
@@ -955,40 +953,6 @@ bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, bool )
     return bRet;
 }
 
-bool GraphicDescriptor::ImpDetectSGF( SvStream& rStm, bool )
-{
-    bool bRet = false;
-    if( aPathExt.startsWith( "sgf" ) )
-        bRet = true;
-    else
-    {
-        sal_Int32 nStmPos = rStm.Tell();
-
-        sal_uInt8 nFirst = 0, nSecond = 0;
-
-        rStm.ReadUChar( nFirst ).ReadUChar( nSecond );
-
-        if( nFirst == 'J' && nSecond == 'J' )
-            bRet = true;
-
-        rStm.Seek( nStmPos );
-    }
-
-    if( bRet )
-        nFormat = GraphicFileFormat::SGF;
-
-    return bRet;
-}
-
-bool GraphicDescriptor::ImpDetectSGV( SvStream&, bool )
-{
-    bool bRet = aPathExt.startsWith( "sgv" );
-    if (bRet)
-        nFormat = GraphicFileFormat::SGV;
-
-    return bRet;
-}
-
 bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
 {
     sal_uInt32  n32 = 0;
@@ -1118,8 +1082,6 @@ OUString GraphicDescriptor::GetImportFormatShortName( GraphicFileFormat nFormat 
         case GraphicFileFormat::DXF :   pKeyName = "dxf";   break;
         case GraphicFileFormat::MET :   pKeyName = "met";   break;
         case GraphicFileFormat::PCT :   pKeyName = "pct";   break;
-        case GraphicFileFormat::SGF :   pKeyName = "sgf";   break;
-        case GraphicFileFormat::SGV :   pKeyName = "sgv";   break;
         case GraphicFileFormat::SVM :   pKeyName = "svm";   break;
         case GraphicFileFormat::WMF :   pKeyName = "wmf";   break;
         case GraphicFileFormat::EMF :   pKeyName = "emf";   break;

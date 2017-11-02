@@ -151,9 +151,6 @@ void VclFiltersTest::testCVEs()
         m_directories.getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/emf/"));
 
     testDir(OUString(),
-        m_directories.getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/sgv/"));
-
-    testDir(OUString(),
         m_directories.getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/png/"));
 
     testDir(OUString(),
