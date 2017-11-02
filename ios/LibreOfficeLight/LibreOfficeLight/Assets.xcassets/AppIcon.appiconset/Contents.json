@@ -17,8 +17,8 @@
       "scale" : "1x"
     },
     {
-      "idiom" : "ipad",
       "size" : "29x29",
+      "idiom" : "ipad",
       "filename" : "LibreOffice-29x29@2x.png",
       "scale" : "2x"
     },
@@ -28,8 +28,8 @@
       "scale" : "1x"
     },
     {
-      "idiom" : "ipad",
       "size" : "40x40",
+      "idiom" : "ipad",
       "filename" : "LibreOffice-40x40@2x.png",
       "scale" : "2x"
     },
@@ -40,17 +40,22 @@
       "scale" : "1x"
     },
     {
-      "idiom" : "ipad",
       "size" : "76x76",
+      "idiom" : "ipad",
       "filename" : "LibreOffice-76x76@2x.png",
       "scale" : "2x"
     },
     {
-      "idiom" : "ipad",
       "size" : "83.5x83.5",
+      "idiom" : "ipad",
       "filename" : "LibreOffice-83.5x83.5@2x.png",
       "scale" : "2x"
     },
+    {
+      "idiom" : "ios-marketing",
+      "size" : "1024x1024",
+      "scale" : "1x"
+    }
   ],
   "info" : {
     "version" : 1,
