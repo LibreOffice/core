@@ -17,40 +17,52 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_NOTEBOOKBAR_DROPDOWNBOX_HXX
-#define INCLUDED_SFX2_NOTEBOOKBAR_DROPDOWNBOX_HXX
-
 #include <vcl/builderfactory.hxx>
-#include <vcl/IPrioritable.hxx>
 #include <vcl/layout.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/floatwin.hxx>
-#include <vcl/toolbox.hxx>
-#include <sfx2/tbxctrl.hxx>
-#include "NotebookbarPopup.hxx"
+#include "OptionalBox.hxx"
 
-class SFX2_DLLPUBLIC DropdownBox : public VclHBox,
-                                   public vcl::IPrioritable
+/*
+ * OptionalBox - shows or hides the content. To use with PriorityHBox
+ * or PriorityMergedHBox
+ */
+
+OptionalBox::OptionalBox(vcl::Window* pParent)
+    : VclHBox(pParent)
+    , IPrioritable()
+    , m_bInFullView(true)
 {
-private:
-    bool m_bInFullView;
-    VclPtr<PushButton> m_pButton;
-    VclPtr<NotebookbarPopup> m_pPopup;
+}
 
-public:
-    explicit DropdownBox(vcl::Window *pParent);
-    virtual ~DropdownBox() override;
-    virtual void dispose() override;
+OptionalBox::~OptionalBox() { disposeOnce(); }
 
-    void HideContent() override;
-    void ShowContent() override;
-    bool IsHidden() override;
+void OptionalBox::HideContent()
+{
+    if (m_bInFullView)
+    {
+        m_bInFullView = false;
 
-private:
-    DECL_LINK(PBClickHdl, Button*, void);
-};
+        for (int i = 0; i < GetChildCount(); i++)
+            GetChild(i)->Hide();
 
-#endif
+        SetOutputSizePixel(Size(10, GetSizePixel().Height()));
+    }
+}
+
+void OptionalBox::ShowContent()
+{
+    if (!m_bInFullView)
+    {
+        m_bInFullView = true;
+
+        for (int i = 0; i < GetChildCount(); i++)
+            GetChild(i)->Show();
+    }
+}
+
+bool OptionalBox::IsHidden() { return !m_bInFullView; }
+
+VCL_BUILDER_FACTORY(OptionalBox)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
