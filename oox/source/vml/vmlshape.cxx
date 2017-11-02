@@ -68,6 +68,7 @@
 #include <svx/svdoashp.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <vcl/svapp.hxx>
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Any;
@@ -1125,10 +1126,59 @@ CustomShape::CustomShape( Drawing& rDrawing ) :
 
 Reference< XShape > CustomShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
+    awt::Rectangle aShapeRect( rShapeRect );
+
+    // Add padding for Watermark like Word does
+    sal_Int32 nPaddingY = 0;
+    if( getShapeName().match( "PowerPlusWaterMarkObject" ) && maTypeModel.maTextpathModel.moString.has() )
+    {
+        OUString sText = maTypeModel.maTextpathModel.moString.get();
+        OUString sFont = "";
+        if( maTypeModel.maTextpathModel.moStyle.has() )
+        {
+            OUString aStyle = maTypeModel.maTextpathModel.moStyle.get( OUString() );
+
+            sal_Int32 nIndex = 0;
+            while( nIndex >= 0 )
+            {
+                OUString aName;
+                if( ConversionHelper::separatePair( aName, sFont, aStyle.getToken( 0, ';', nIndex ), ':' ) )
+                {
+                    if( aName == "font-family" )
+                    {
+                        // remove " (first, and last character)
+                        if( sFont.getLength() > 2 )
+                            sFont = sFont.copy( 1, sFont.getLength() - 2 );
+                    }
+                }
+            }
+        }
+
+        double fRatio = 0;
+        OutputDevice* pOut = Application::GetDefaultDevice();
+        vcl::Font aFont( pOut->GetFont() );
+        aFont.SetFamilyName( sFont );
+
+        tools::Rectangle aBoundingRect;
+        pOut->GetTextBoundRect( aBoundingRect, sText );
+        if( aBoundingRect.GetWidth() )
+        {
+            fRatio = (double)aBoundingRect.GetHeight() / aBoundingRect.GetWidth();
+
+            sal_Int32 nNewHeight = fRatio * aShapeRect.Width;
+            nPaddingY = aShapeRect.Height - nNewHeight;
+            aShapeRect.Height = nNewHeight;
+        }
+    }
+
     // try to create a custom shape
-    Reference< XShape > xShape = SimpleShape::implConvertAndInsert( rxShapes, rShapeRect );
+    Reference< XShape > xShape = SimpleShape::implConvertAndInsert( rxShapes, aShapeRect );
     if( xShape.is() ) try
     {
+        // Remember padding for Watermark
+        if( nPaddingY )
+            PropertySet( xShape ).setAnyProperty( PROP_TextUpperDistance, makeAny( nPaddingY ) );
+
         // create the custom shape geometry
         Reference< XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY_THROW );
         xDefaulter->createCustomShapeDefaults( OUString::number( getShapeType() ) );
