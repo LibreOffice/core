@@ -460,6 +460,11 @@ void ScTabView::CellContentChanged()
     aViewData.GetViewShell()->UpdateInputHandler();
 }
 
+void ScTabView::SetTabProtection( SCTAB nTab, const bool bProtect )
+{
+    pTabControl->SetProtection( nTab, bProtect);
+}
+
 void ScTabView::SelectionChanged()
 {
     SfxViewFrame* pViewFrame = aViewData.GetViewShell()->GetViewFrame();

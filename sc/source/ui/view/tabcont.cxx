@@ -368,6 +368,10 @@ void ScTabControl::UpdateStatus()
                         InsertPage(static_cast<sal_uInt16>(i)+1, aString, TabBarPageBits::Blue);
                     else
                         InsertPage( static_cast<sal_uInt16>(i)+1, aString );
+
+                    if ( pDoc->IsTabProtected(i) )
+                        SetProtection(i, true);
+
                     if ( !pDoc->IsDefaultTabBgColor(i) )
                     {
                         aTabBgColor = pDoc->GetTabBgColor(i);
