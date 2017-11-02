@@ -47,7 +47,7 @@ class SVX_DLLPUBLIC SvxIMapDlgChildWindow : public SfxChildWindow
 {
  public:
 
-    SvxIMapDlgChildWindow( vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
+    SvxIMapDlgChildWindow( vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo const * );
 
     SFX_DECL_CHILDWINDOW_WITHID( SvxIMapDlgChildWindow );
 

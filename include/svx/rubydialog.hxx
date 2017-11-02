@@ -54,7 +54,7 @@ class SVX_DLLPUBLIC SvxRubyChildWindow : public SfxChildWindow
 {
  public:
 
-    SvxRubyChildWindow( vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
+    SvxRubyChildWindow( vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo const * );
 
     SFX_DECL_CHILDWINDOW( SvxRubyChildWindow );
 

@@ -145,7 +145,7 @@ bool GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, Galle
     return bRet;
 }
 
-SgaObject* GalleryTheme::ImplReadSgaObject( GalleryObject* pEntry )
+SgaObject* GalleryTheme::ImplReadSgaObject( GalleryObject const * pEntry )
 {
     SgaObject* pSgaObj = nullptr;
 

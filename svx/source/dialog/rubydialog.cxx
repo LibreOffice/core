@@ -67,7 +67,7 @@ static const sal_Char cRubyCharStyleName[] = "RubyCharStyleName";
 
 } // end anonymous namespace
 
-SvxRubyChildWindow::SvxRubyChildWindow(vcl::Window* _pParent, sal_uInt16 nId,SfxBindings* pBindings, SfxChildWinInfo* pInfo)
+SvxRubyChildWindow::SvxRubyChildWindow(vcl::Window* _pParent, sal_uInt16 nId,SfxBindings* pBindings, SfxChildWinInfo const * pInfo)
     : SfxChildWindow(_pParent, nId)
 {
     VclPtr<SvxRubyDialog> pDlg = VclPtr<SvxRubyDialog>::Create(pBindings, this, _pParent);
