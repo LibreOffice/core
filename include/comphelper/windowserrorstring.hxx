@@ -21,7 +21,7 @@ inline OUString WindowsErrorString(DWORD nErrorCode)
 {
     LPWSTR pMsgBuf;
 
-    if (FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+    if (FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
                        nullptr,
                        nErrorCode,
                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
@@ -33,7 +33,7 @@ inline OUString WindowsErrorString(DWORD nErrorCode)
     OUString result(o3tl::toU(pMsgBuf));
     result.endsWith("\r\n", &result);
 
-    LocalFree(pMsgBuf);
+    HeapFree(GetProcessHeap(), 0, pMsgBuf);
 
     return result;
 }

@@ -254,7 +254,7 @@ WinLaunchChild(const wchar_t *exePath,
                        nullptr);
         wprintf(L"Error restarting: %s\n", lpMsgBuf ? lpMsgBuf : L"(null)");
         if (lpMsgBuf)
-            LocalFree(lpMsgBuf);
+            HeapFree(GetProcessHeap(), 0, lpMsgBuf);
     }
 
     free(cl);

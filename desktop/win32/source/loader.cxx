@@ -27,10 +27,10 @@ void fail()
 {
     LPWSTR buf = nullptr;
     FormatMessageW(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, nullptr,
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr,
         GetLastError(), 0, reinterpret_cast< LPWSTR >(&buf), 0, nullptr);
     MessageBoxW(nullptr, buf, nullptr, MB_OK | MB_ICONERROR);
-    LocalFree(buf);
+    HeapFree(GetProcessHeap(), 0, buf);
     TerminateProcess(GetCurrentProcess(), 255);
 }
 

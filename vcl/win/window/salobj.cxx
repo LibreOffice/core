@@ -29,6 +29,8 @@
 #include <win/salframe.h>
 #include <win/salobj.h>
 
+#include <comphelper/windowserrorstring.hxx>
+
 static bool ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
 {
     if ( hWndParent == hWndChild )
@@ -522,16 +524,8 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
 
         if ( !hWndChild )
         {
-#if OSL_DEBUG_LEVEL > 1
-            wchar_t *msg = NULL;
-            FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER
-                          |FORMAT_MESSAGE_IGNORE_INSERTS
-                          |FORMAT_MESSAGE_FROM_SYSTEM,
-                           NULL, GetLastError(), 0,
-                           (LPWSTR) &msg, 0, NULL);
-            MessageBoxW(NULL, msg, L"CreateWindowExW failed", MB_OK);
-            HeapFree(GetProcessHeap(), msg);
-#endif
+            SAL_WARN("vcl", "CreateWindowExW failed: " << WindowsErrorString(GetLastError()));
+
             delete pObject;
             return nullptr;
         }

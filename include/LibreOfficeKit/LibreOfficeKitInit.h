@@ -100,7 +100,8 @@ extern "C"
     static char *lok_dlerror(void)
     {
         LPSTR buf = NULL;
-        FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, reinterpret_cast<LPSTR>(&buf), 0, NULL);
+        FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+            NULL, GetLastError(), 0, reinterpret_cast<LPSTR>(&buf), 0, NULL);
         return buf;
     }
 

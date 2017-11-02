@@ -51,7 +51,7 @@ HRESULT LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath, bool bDoSecur
     if (CreateProcessW(nullptr, sCommandLine, nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi) == FALSE)
     {
         DWORD dwError = GetLastError();
-        wchar_t* sMsgBuf;
+        wchar_t* sMsgBuf = nullptr;
         FormatMessageW(
             FORMAT_MESSAGE_ALLOCATE_BUFFER |
             FORMAT_MESSAGE_FROM_SYSTEM |
@@ -65,7 +65,7 @@ HRESULT LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath, bool bDoSecur
         size_t nBufSize = wcslen(sMsgBuf) + 100;
         std::vector<wchar_t> sDisplayBuf(nBufSize);
         swprintf(sDisplayBuf.data(), nBufSize, L"Could not start LibreOffice. Error is 0x%08X:\n\n%s", dwError, sMsgBuf);
-        LocalFree(sMsgBuf);
+        HeapFree(GetProcessHeap(), 0, sMsgBuf);
 
         // Report the error to user and return error
         MessageBoxW(nullptr, sDisplayBuf.data(), nullptr, MB_ICONERROR);
