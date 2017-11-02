@@ -1710,6 +1710,13 @@ DECLARE_OOXMLEXPORT_TEST( testObjectCrossReference, "object_cross_reference.odt"
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")
+{
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4043), xShape->getSize().Height);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
