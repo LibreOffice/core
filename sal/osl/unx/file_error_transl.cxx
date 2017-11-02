@@ -23,19 +23,16 @@
 
 oslFileError oslTranslateFileError(int Errno)
 {
-    oslFileError osl_error = osl_File_E_invalidError;
-
     OSL_ENSURE(0 != Errno, "oslTranslateFileError strange input combination!");
 
-    /* Have a look at file_error_transl.hxx for
-       the reason that we do this here */
-    if (Errno == 0)
-        return osl_error;
+    oslFileError osl_error;
 
     switch(Errno)
     {
         case 0:
-            osl_error = osl_File_E_None;
+            /* Have a look at file_error_transl.hxx for
+               the reason that we do this here */
+            osl_error = osl_File_E_invalidError;
             break;
 
         case EPERM:
