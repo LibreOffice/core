@@ -370,9 +370,9 @@ bool Picture::Read(HWPFile & hwpf)
     hwpf.Read2b(reserved, 2);
     hwpf.Read2b(&dummy, 1);
 
-    if (!(hh == dummy && CH_PICTURE == dummy)){
+    if (!(hh == dummy && CH_PICTURE == dummy)) {
         return hwpf.SetState(HWP_InvalidFileFormat);
-     }
+    }
     hwpf.AddBox(this);
 
     hwpf.Read4b(&follow_block_size, 1);
@@ -444,15 +444,14 @@ bool Picture::Read(HWPFile & hwpf)
         //read potentially compressed data in blocks as its more
         //likely large values are simply broken and we'll run out
         //of data before we need to realloc
-        unsigned char buffer[SAL_MAX_UINT16];
-        for (size_t i = 0; i < follow_block_size; i+= SAL_N_ELEMENTS(buffer))
+        for (size_t i = 0; i < follow_block_size; i+= SAL_N_ELEMENTS(hwpf.scratch))
         {
            size_t nOldSize = follow.size();
-           size_t nBlock = std::min(SAL_N_ELEMENTS(buffer), follow_block_size - nOldSize);
-           size_t nReadBlock = hwpf.Read1b(buffer, nBlock);
+           size_t nBlock = std::min(SAL_N_ELEMENTS(hwpf.scratch), follow_block_size - nOldSize);
+           size_t nReadBlock = hwpf.Read1b(hwpf.scratch, nBlock);
            if (nReadBlock)
            {
-               follow.insert(follow.end(), buffer, buffer + nReadBlock);
+               follow.insert(follow.end(), hwpf.scratch, hwpf.scratch + nReadBlock);
            }
            if (nBlock != nReadBlock)
                break;
