@@ -138,12 +138,14 @@ void MessBox::ImplInitButtons()
 }
 
 MessBox::MessBox( vcl::Window* pParent, WinBits nStyle,
-                  const OUString& rTitle, const OUString& rMessage, Dialog::InitFlag eInitFlag) :
+                  const OUString& rTitle, const OUString& rMessage) :
     ButtonDialog( WINDOW_MESSBOX ),
-    maMessText( rMessage )
+    maMessText( rMessage ),
+    mbHelpBtn( false ),
+    mbCheck( false )
 {
     ImplInitMessBoxData();
-    ImplInit( pParent, nStyle | WB_MOVEABLE | WB_HORZ | WB_CENTER, eInitFlag);
+    ImplInit( pParent, nStyle | WB_MOVEABLE | WB_HORZ | WB_CENTER);
     ImplInitButtons();
 
     if ( !rTitle.isEmpty() )

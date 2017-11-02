@@ -378,10 +378,6 @@ void LoadEnv::startLoading()
     if (!bStarted)
         bStarted = impl_loadContent();
 
-    // This may have triggered Dialogs (error cases) that may have
-    // delayed the shutdown, so give delayed shutdown a chance
-    Application::TriggerShutdownDelayed();
-
     // not started => general error
     // We can't say - what was the reason for.
     if (!bStarted)
@@ -1077,7 +1073,7 @@ bool LoadEnv::impl_loadContent()
 
     if (!bHidden && !bMinimized && !bPreview && !xProgress.is())
     {
-        // Note: its an optional interface!
+        // Note: it's an optional interface!
         css::uno::Reference< css::task::XStatusIndicatorFactory > xProgressFactory(xTargetFrame, css::uno::UNO_QUERY);
         if (xProgressFactory.is())
         {
