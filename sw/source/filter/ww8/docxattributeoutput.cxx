@@ -7610,7 +7610,27 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
 
     // <w:tabs> must contain at least one <w:tab>, so don't write it empty
     if( nCount == 0 )
+    {
+        // clear style tabs - otherwise style will override...
+        if( GetExport().m_pStyAttr )
+        {
+            const SvxTabStopItem* pStyleTabs = GetExport().m_pStyAttr->GetItem<SvxTabStopItem>(RES_PARATR_TABSTOP);
+            if( pStyleTabs && pStyleTabs->Count() )
+            {
+                m_pSerializer->startElementNS( XML_w, XML_tabs, FSEND );
+                for( int i = 0; i < pStyleTabs->Count(); ++i )
+                {
+                    m_pSerializer->singleElementNS( XML_w, XML_tab,
+                        FSNS( XML_w, XML_val ), OString("clear"),
+                        FSNS( XML_w, XML_pos ), OString::number(pStyleTabs->At(i).GetTabPos()),
+                        FSEND );
+                }
+                m_pSerializer->endElementNS( XML_w, XML_tabs );
+            }
+        }
+
         return;
+    }
     if( nCount == 1 && rTabStop[ 0 ].GetAdjustment() == SvxTabAdjust::Default )
     {
         GetExport().setDefaultTabStop( rTabStop[ 0 ].GetTabPos());
