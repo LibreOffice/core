@@ -44,6 +44,40 @@ namespace basegfx
             }
         }
     }
+
+    double normalizeToRange(double v, const double fRange)
+    {
+        if(fTools::lessOrEqual(fRange, 0.0))
+        {
+            // with a zero (or less) range, all normalizes to 0.0
+            return 0.0;
+        }
+
+        const bool bNegative(fTools::less(v, 0.0));
+
+        if(bNegative)
+        {
+            if(fTools::moreOrEqual(v, -fRange))
+            {
+                // in range [-fRange, 0.0[, shift one step
+                return v + fRange;
+            }
+
+            // re-calculate
+            return v - (floor(v/fRange)*fRange);
+        }
+        else
+        {
+            if(fTools::less(v, fRange))
+            {
+                // already in range [0.0, fRange[, nothing to do
+                return v;
+            }
+
+            // re-calculate
+            return v - (floor(v/fRange)*fRange);
+        }
+    }
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

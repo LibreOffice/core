@@ -57,6 +57,9 @@ public:
 
     void StopAnimation( OutputDevice* = nullptr ) const;
     bool HasAnimation()  const;
+
+    // RotateFlyFrame3 - Support for inner frame of a SwGrfNode
+    virtual double getRotation() const override;
 };
 
 #endif

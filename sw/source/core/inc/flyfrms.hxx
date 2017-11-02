@@ -116,6 +116,9 @@ public:
         and its anchor frame isn't inside another Writer fly frame.
     */
     virtual bool IsFormatPossible() const override;
+
+    // RotateFlyFrame3 - Support for outer Frame of a SwGrfNode
+    virtual double getRotation() const override;
 };
 
 // Flys that are bound to LayoutFrames and not to Content

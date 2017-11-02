@@ -26,6 +26,7 @@
 #include <frmtool.hxx>
 #include <hints.hxx>
 #include <sectfrm.hxx>
+#include <notxtfrm.hxx>
 
 #include <svx/svdpage.hxx>
 #include <editeng/ulspitem.hxx>
@@ -220,6 +221,40 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         else
             nLoopControlRuns = 0;
     }
+
+    // RotateFlyFrame3 - inner frame
+    const double fRotation(getRotation());
+
+    if(0.0 != fRotation)
+    {
+        SwRect aFrameArea(getFrameArea());
+        SwRect aFramePrintArea(getFramePrintArea());
+        Point aCenter(aFrameArea.Center());
+
+        if(GetUpper())
+        {
+            // get center from outer frame (layout frame)
+            const SwRect aUpperFrameArea(GetUpper()->getFrameArea());
+
+            aCenter = aUpperFrameArea.Center();
+        }
+
+        // apply rotation and re-set the FrameArea definitions
+        rotateFrameAreaDefinitionAroundPoint(aFrameArea, aFramePrintArea, aCenter, fRotation);
+
+        if(aFrameArea != getFrameArea())
+        {
+            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+            aFrm.setSwRect(aFrameArea);
+        }
+
+        if(aFramePrintArea != getFramePrintArea())
+        {
+            SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+            aPrt.setSwRect(aFramePrintArea);
+        }
+    }
+
     Unlock();
 
 #if OSL_DEBUG_LEVEL > 0
@@ -229,6 +264,22 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             "SwFlyFreeFrame::Format(), flipping Fly." );
 
 #endif
+}
+
+// RotateFlyFrame3
+double SwFlyFreeFrame::getRotation() const
+{
+    // SwLayoutFrame::Lower() != SwFrame::GetLower(), but SwFrame::GetLower()
+    // calls SwLayoutFrame::Lower() when it's a SwLayoutFrame - so use GetLower()
+    const SwNoTextFrame* pSwNoTextFrame(dynamic_cast< const SwNoTextFrame* >(GetLower()));
+
+    if(nullptr != pSwNoTextFrame)
+    {
+        return pSwNoTextFrame->getRotation();
+    }
+
+    // call parent
+    return SwFlyFrame::getRotation();
 }
 
 /** determines, if direct environment of fly frame has 'auto' size
