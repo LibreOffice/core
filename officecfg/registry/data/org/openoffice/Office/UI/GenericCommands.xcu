@@ -2215,13 +2215,13 @@
       </node>
       <node oor:name=".uno:OpenRemote" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Open Remote</value>
-        </prop>
-        <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Open Remote ~File...</value>
+          <value xml:lang="en-US">Open ~Remote...</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Open Remote File</value>
+        </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Open ~Remote File...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2229,16 +2229,13 @@
       </node>
       <node oor:name=".uno:SaveAsRemote" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Save Remote</value>
-        </prop>
-        <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Sa~ve Remote File...</value>
+          <value xml:lang="en-US">Sa~ve Remote...</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Save Remote File</value>
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Save Remote File...</value>
+          <value xml:lang="en-US">Save ~Remote File...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
