@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xsheetoperation.hxx>
+#include <test/sheet/xsheetcellranges.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -25,9 +26,11 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 2
+#define NUMBER_OF_TESTS 5
 
-class ScCellRangesObj : public CalcUnoApiTest, public apitest::XSheetOperation
+class ScCellRangesObj : public CalcUnoApiTest,
+                        public apitest::XSheetCellRanges,
+                        public apitest::XSheetOperation
 {
 public:
     ScCellRangesObj();
@@ -38,6 +41,11 @@ public:
     virtual uno::Reference< uno::XInterface > init() override;
 
     CPPUNIT_TEST_SUITE(ScCellRangesObj);
+
+    // XSheetCellRanges
+    CPPUNIT_TEST(testGetCells);
+    CPPUNIT_TEST(testGetRangeAddresses);
+    CPPUNIT_TEST(testGetRangeAddressesAsString);
 
     // XSheetOperation
     CPPUNIT_TEST(testComputeFunction);
@@ -72,9 +80,7 @@ uno::Reference< uno::XInterface > ScCellRangesObj::init()
     uno::Reference< lang::XMultiServiceFactory > xMSF(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference< container::XNameContainer > xRanges(xMSF->createInstance("com.sun.star.sheet.SheetCellRanges"), uno::UNO_QUERY_THROW);
 
-    //uno::Reference< container::XNameContainer > xRanges(xSheet, uno::UNO_QUERY_THROW);
     uno::Any xCellRange;
-
     xCellRange <<= xSheet->getCellRangeByName("C1:D4");
     xRanges->insertByName("Range1", xCellRange);
     xCellRange <<= xSheet->getCellRangeByName("E2:F5");
@@ -84,6 +90,13 @@ uno::Reference< uno::XInterface > ScCellRangesObj::init()
     xCellRange <<= xSheet->getCellRangeByName("I7:J8");
     xRanges->insertByName("Range4", xCellRange);
 
+    for ( int i = 0; i < 10; i++ )
+    {
+        for ( int j = 5; j < 10; j++ )
+        {
+            xSheet->getCellByPosition(i, j)->setValue(i + j);
+        }
+    }
 
     return xRanges;
 }
