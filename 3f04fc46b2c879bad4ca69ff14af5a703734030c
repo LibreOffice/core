@@ -16,6 +16,24 @@
       "revId": "3f04fc46b2c879bad4ca69ff14af5a703734030c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_3f69268c",
+        "filename": "sal/osl/w32/socket.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-11-02T11:26:32Z",
+      "side": 1,
+      "message": "Well, I suppose that in this case, no linking problems will happen (header-only anonymous-namespace inline function) - but maybe there\u0027s a good way to change?",
+      "parentUuid": "1a430d35_ff6ebe94",
+      "revId": "3f04fc46b2c879bad4ca69ff14af5a703734030c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
