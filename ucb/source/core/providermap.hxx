@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UCB_SOURCE_CORE_PROVIDERMAP_HXX
 #define INCLUDED_UCB_SOURCE_CORE_PROVIDERMAP_HXX
 
-#include <list>
+#include <deque>
 #include <com/sun/star/uno/Reference.h>
 #include <regexpmap.hxx>
 
@@ -56,7 +56,7 @@ ProviderListEntry_Impl::getResolvedProvider() const
 }
 
 
-typedef std::list< ProviderListEntry_Impl > ProviderList_Impl;
+typedef std::deque< ProviderListEntry_Impl > ProviderList_Impl;
 
 
 typedef ucb_impl::RegexpMap< ProviderList_Impl > ProviderMap_Impl;

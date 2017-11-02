@@ -40,17 +40,16 @@
 #include "cmis_resultset.hxx"
 #include <memory>
 
-#define OUSTR_TO_STDSTR(s) string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
+#define OUSTR_TO_STDSTR(s) std::string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
 #define STD_TO_OUSTR( str ) OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
 
 using namespace com::sun::star;
-using namespace std;
 
 namespace cmis
 {
     RepoContent::RepoContent( const uno::Reference< uno::XComponentContext >& rxContext,
         ContentProvider *pProvider, const uno::Reference< ucb::XContentIdentifier >& Identifier,
-        vector< libcmis::RepositoryPtr > const & aRepos )
+        std::vector< libcmis::RepositoryPtr > const & aRepos )
         : ContentImplHelper( rxContext, pProvider, Identifier ),
         m_pProvider( pProvider ),
         m_aURL( Identifier->getContentIdentifier( ) ),
@@ -148,7 +147,7 @@ namespace cmis
         OUString sProxy = rProxy.aName;
         if ( rProxy.nPort > 0 )
             sProxy += ":" + OUString::number( rProxy.nPort );
-        libcmis::SessionFactory::setProxySettings( OUSTR_TO_STDSTR( sProxy ), string(), string(), string() );
+        libcmis::SessionFactory::setProxySettings( OUSTR_TO_STDSTR( sProxy ), std::string(), std::string(), std::string() );
 
         if ( m_aRepositories.empty() )
         {
@@ -161,8 +160,8 @@ namespace cmis
             AuthProvider authProvider( xEnv, m_xIdentifier->getContentIdentifier( ), m_aURL.getBindingUrl( ) );
             AuthProvider::setXEnv( xEnv );
 
-            string rUsername = OUSTR_TO_STDSTR( m_aURL.getUsername( ) );
-            string rPassword = OUSTR_TO_STDSTR( m_aURL.getPassword( ) );
+            std::string rUsername = OUSTR_TO_STDSTR( m_aURL.getUsername( ) );
+            std::string rPassword = OUSTR_TO_STDSTR( m_aURL.getPassword( ) );
 
             bool bIsDone = false;
 
@@ -243,7 +242,7 @@ namespace cmis
 
         if ( !m_sRepositoryId.isEmpty() )
         {
-            for ( vector< libcmis::RepositoryPtr >::iterator it = m_aRepositories.begin( );
+            for ( std::vector< libcmis::RepositoryPtr >::iterator it = m_aRepositories.begin( );
                     it != m_aRepositories.end( ) && nullptr == repo.get( ); ++it )
             {
                 if ( STD_TO_OUSTR( ( *it )->getId( ) ) == m_sRepositoryId )
@@ -396,16 +395,16 @@ namespace cmis
         return s_aFolderCollection.getTypes();
     }
 
-    list< uno::Reference< ucb::XContent > > RepoContent::getChildren( )
+    std::vector< uno::Reference< ucb::XContent > > RepoContent::getChildren( )
     {
-        list< uno::Reference< ucb::XContent > > result;
+        std::vector< uno::Reference< ucb::XContent > > result;
 
         // TODO Cache the results somehow
         SAL_INFO( "ucb.ucp.cmis", "RepoContent::getChildren" );
 
         if ( m_sRepositoryId.isEmpty( ) )
         {
-            for ( vector< libcmis::RepositoryPtr >::iterator it = m_aRepositories.begin( );
+            for ( std::vector< libcmis::RepositoryPtr >::iterator it = m_aRepositories.begin( );
                     it != m_aRepositories.end(); ++it )
             {
                 URL aUrl( m_aURL );

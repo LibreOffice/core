@@ -19,7 +19,6 @@
 #include "cmis_provider.hxx"
 
 using namespace com::sun::star;
-using namespace std;
 
 namespace cmis
 {
@@ -36,10 +35,10 @@ namespace cmis
         if ( mbCountFinal )
             return true;
 
-        list< uno::Reference< ucb::XContent > > aChildren = m_pChildrenProvider->getChildren( );
+        std::vector< uno::Reference< ucb::XContent > > aChildren = m_pChildrenProvider->getChildren( );
 
         // Loop over the results and filter them
-        for ( list< uno::Reference< ucb::XContent > >::iterator it = aChildren.begin();
+        for ( std::vector< uno::Reference< ucb::XContent > >::iterator it = aChildren.begin();
                 it != aChildren.end(); ++it )
         {
             OUString sContentType = ( *it )->getContentType( );

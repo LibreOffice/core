@@ -2033,9 +2033,9 @@ namespace cmis
         return uno::Sequence< ucb::ContentInfo >();
     }
 
-    list< uno::Reference< ucb::XContent > > Content::getChildren( )
+    std::vector< uno::Reference< ucb::XContent > > Content::getChildren( )
     {
-        list< uno::Reference< ucb::XContent > > results;
+        std::vector< uno::Reference< ucb::XContent > > results;
         SAL_INFO( "ucb.ucp.cmis", "Content::getChildren() " << m_sURL );
 
         libcmis::FolderPtr pFolder = boost::dynamic_pointer_cast< libcmis::Folder >( getObject( uno::Reference< ucb::XCommandEnvironment >() ) );

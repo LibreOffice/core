@@ -98,7 +98,7 @@ private:
 
 private:
     typedef rtl::Reference< Content > ContentRef;
-    typedef std::list< ContentRef > ContentRefList;
+    typedef std::vector< ContentRef > ContentRefList;
 
     /// @throws css::uno::Exception
     /// @throws libcmis::Exception
@@ -201,7 +201,7 @@ public:
     css::uno::Sequence< css::ucb::ContentInfo >
         queryCreatableContentsInfo( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
-    virtual std::list< css::uno::Reference< css::ucb::XContent > > getChildren( ) override;
+    virtual std::vector< css::uno::Reference< css::ucb::XContent > > getChildren( ) override;
 
     /// @throws css::uno::RuntimeException
     /// @throws css::ucb::CommandFailedException
