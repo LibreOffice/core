@@ -959,35 +959,12 @@ executeMessageBox(
     vcl::Window * pParent,
     OUString const & rTitle,
     OUString const & rMessage,
-    MessBoxStyle nButtonMask,
-    Dialog::InitFlag eInitFlag)
+    MessBoxStyle nButtonMask)
 {
     SolarMutexGuard aGuard;
     WinBits nStyle(0);
 
-    ScopedVclPtrInstance< MessBox > xBox(pParent, nButtonMask, nStyle, rTitle, rMessage, eInitFlag);
-
-    if (Dialog::InitFlag::NoParentCentered == eInitFlag)
-    {
-        vcl::Window* pDefaultParent = Dialog::GetDefaultParent(nStyle);
-
-        if (pDefaultParent)
-        {
-            // need to 'Show' to have the following tasks do something, does
-            // not work without and may even stumble on nullptrs/errors
-            xBox->Show();
-
-            // center on parent window
-            const Point aP(pDefaultParent->GetPosPixel());
-            const Size aS(pDefaultParent->GetSizePixel());
-            const Size aMySize(xBox->GetSizePixel());
-
-            xBox->SetPosPixel(
-                Point(
-                    aP.X() + ((aS.Width() - aMySize.Width()) >> 1),
-                    aP.Y() + ((aS.Height() - aMySize.Height()) >> 1)));
-        }
-    }
+    ScopedVclPtrInstance< MessBox > xBox(pParent, nButtonMask, nStyle, rTitle, rMessage);
 
     sal_uInt16 aMessResult = xBox->Execute();
     DialogMask aResult = DialogMask::NONE;
@@ -1131,8 +1108,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
                 aTitle += " - " ;
             aTitle += aErrTitle;
 
-            executeMessageBox(
-                getParentProperty(), aTitle, aErrorString, MessBoxStyle::Ok, Dialog::InitFlag::NoParentCentered);
+            executeMessageBox(getParentProperty(), aTitle, aErrorString, MessBoxStyle::Ok);
         }
         else
             ErrorHandler::HandleError(nErrorCode);
@@ -1247,8 +1223,7 @@ UUIInteractionHelper::handleBrokenPackageRequest(
         " " +
         utl::ConfigManager::getProductVersion() );
 
-    switch (
-        executeMessageBox( getParentProperty(), title, aMessage, nButtonMask, Dialog::InitFlag::NoParentCentered) )
+    switch (executeMessageBox(getParentProperty(), title, aMessage, nButtonMask))
     {
     case DialogMask::ButtonsOk:
         OSL_ENSURE( xAbort.is(), "unexpected situation" );

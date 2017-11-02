@@ -39,11 +39,8 @@ public:
         /** Use given parent or get a default one using GetDefaultParent(...) */
         Default,
 
-        /** Suppress Parent so that Parent is not blocked (kind of modal mode) */
-        NoParent,
-
-        /** Suppress Parent (no modal, see above) and additionally center on default parent */
-        NoParentCentered
+        /** No Parent */
+        NoParent
     };
 
 private:
@@ -168,7 +165,6 @@ public:
 
     void            EndDialog( long nResult = 0 );
     static void     EndAllDialogs( vcl::Window const * pParent );
-    static bool     AreDialogsOpen();
 
     void            GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                          sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
