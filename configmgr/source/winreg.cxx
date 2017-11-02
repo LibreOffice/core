@@ -167,7 +167,8 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                 }
             }
             // type and external are mutually exclusive
-            assert(aType.isEmpty() || !bExternal);
+            if (bExternal)
+                aType.clear();
 
             sal_Int32 aLastSeparator = aKeyName.lastIndexOf('\\');
             OUString aPathAndNodes = aKeyName.copy(0, aLastSeparator);
