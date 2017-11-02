@@ -15,6 +15,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/ClassificationEditView.hxx>
@@ -32,6 +33,7 @@ private:
     VclPtr<ListBox> m_pClassificationListBox;
     VclPtr<ListBox> m_pRecentlyUsedListBox;
     VclPtr<ListBox> m_pInternationalClassificationListBox;
+    VclPtr<FixedText> m_pMarkingLabel;
     VclPtr<ListBox> m_pMarkingListBox;
     VclPtr<ListBox> m_pIntellectualPropertyPartListBox;
     VclPtr<ListBox> m_pIntellectualPropertyPartNumberListBox;
