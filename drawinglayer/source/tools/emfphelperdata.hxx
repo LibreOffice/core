@@ -241,7 +241,7 @@ namespace emfplushelper
         void EMFPPlusFillPolygon(const ::basegfx::B2DPolyPolygon& polygon, bool isColor, sal_uInt32 brushIndexOrColor);
 
         // helper functions
-        ::basegfx::BColor EMFPGetBrushColorOrARGBColor(sal_uInt16 flags, sal_uInt32 brushIndexOrColor);
+        ::basegfx::BColor EMFPGetBrushColorOrARGBColor(sal_uInt16 flags, sal_uInt32 brushIndexOrColor) const;
 
     public:
         EmfPlusHelperData(
@@ -255,8 +255,8 @@ namespace emfplushelper
             const drawinglayer::geometry::ViewInformation2D& rViewInformation);
 
         // mappers
-        ::basegfx::B2DPoint Map(double ix, double iy);
-        ::basegfx::B2DSize MapSize(double iwidth, double iheight);
+        ::basegfx::B2DPoint Map(double ix, double iy) const;
+        ::basegfx::B2DSize MapSize(double iwidth, double iheight) const;
 
         // readers
         static void ReadRectangle(SvStream& s, float& x, float& y, float &width, float& height, bool bCompressed = false);

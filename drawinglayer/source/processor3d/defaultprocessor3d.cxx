@@ -317,7 +317,7 @@ namespace drawinglayer
             }
         }
 
-        void DefaultProcessor3D::impRenderPolygonHairlinePrimitive3D(const primitive3d::PolygonHairlinePrimitive3D& rPrimitive)
+        void DefaultProcessor3D::impRenderPolygonHairlinePrimitive3D(const primitive3d::PolygonHairlinePrimitive3D& rPrimitive) const
         {
             basegfx::B3DPolygon aHairline(rPrimitive.getB3DPolygon());
 
@@ -342,7 +342,7 @@ namespace drawinglayer
             }
         }
 
-        void DefaultProcessor3D::impRenderPolyPolygonMaterialPrimitive3D(const primitive3d::PolyPolygonMaterialPrimitive3D& rPrimitive)
+        void DefaultProcessor3D::impRenderPolyPolygonMaterialPrimitive3D(const primitive3d::PolyPolygonMaterialPrimitive3D& rPrimitive) const
         {
             basegfx::B3DPolyPolygon aFill(rPrimitive.getB3DPolyPolygon());
             basegfx::BColor aObjectColor(rPrimitive.getMaterial().getColor());

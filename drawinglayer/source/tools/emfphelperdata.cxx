@@ -283,19 +283,19 @@ namespace emfplushelper
         maMapTransform *= basegfx::utils::createScaleB2DHomMatrix(maBaseTransform.get(0, 0), maBaseTransform.get(1, 1));
     }
 
-    ::basegfx::B2DPoint EmfPlusHelperData::Map(double ix, double iy)
+    ::basegfx::B2DPoint EmfPlusHelperData::Map(double ix, double iy) const
     {
         // map in one step using complete MapTransform (see mappingChanged)
         return maMapTransform * ::basegfx::B2DPoint(ix, iy);
     }
 
-    ::basegfx::B2DSize EmfPlusHelperData::MapSize(double iwidth, double iheight)
+    ::basegfx::B2DSize EmfPlusHelperData::MapSize(double iwidth, double iheight) const
     {
         // map in one step using complete MapTransform (see mappingChanged)
         return maMapTransform * ::basegfx::B2DSize(iwidth, iheight);
     }
 
-    ::basegfx::BColor EmfPlusHelperData::EMFPGetBrushColorOrARGBColor(sal_uInt16 flags, sal_uInt32 brushIndexOrColor){
+    ::basegfx::BColor EmfPlusHelperData::EMFPGetBrushColorOrARGBColor(sal_uInt16 flags, sal_uInt32 brushIndexOrColor) const {
         basegfx::BColor color;
         if (flags & 0x8000) // we use a color
         {

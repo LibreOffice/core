@@ -251,14 +251,14 @@ namespace cppcanvas
                 s.ReadFloat( x ).ReadFloat( y );
         }
 
-        void ImplRenderer::MapToDevice (double& x, double& y)
+        void ImplRenderer::MapToDevice (double& x, double& y) const
         {
             // TODO: other units
             x = 100*nMmX*x/nPixX;
             y = 100*nMmY*y/nPixY;
         }
 
-        ::basegfx::B2DPoint ImplRenderer::Map (double ix, double iy)
+        ::basegfx::B2DPoint ImplRenderer::Map (double ix, double iy) const
         {
             double x, y;
 
@@ -276,7 +276,7 @@ namespace cppcanvas
             return ::basegfx::B2DPoint (x, y);
         }
 
-        ::basegfx::B2DSize ImplRenderer::MapSize (double iwidth, double iheight)
+        ::basegfx::B2DSize ImplRenderer::MapSize (double iwidth, double iheight) const
         {
             double w, h;
 

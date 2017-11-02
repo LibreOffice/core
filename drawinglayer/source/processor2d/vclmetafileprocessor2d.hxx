@@ -78,7 +78,7 @@ namespace drawinglayer
             void impConvertFillGradientAttributeToVCLGradient(
                 Gradient& o_rVCLGradient,
                 const attribute::FillGradientAttribute& rFiGrAtt,
-                bool bIsTransparenceGradient);
+                bool bIsTransparenceGradient) const;
             void impStartSvtGraphicFill(SvtGraphicFill const * pSvtGraphicFill);
             void impEndSvtGraphicFill(SvtGraphicFill* pSvtGraphicFill);
             SvtGraphicStroke* impTryToCreateSvtGraphicStroke(

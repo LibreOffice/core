@@ -195,9 +195,9 @@ namespace cppcanvas
             /* EMF+ */
             static void ReadRectangle (SvStream& s, float& x, float& y, float &width, float& height, bool bCompressed = false);
             static void ReadPoint (SvStream& s, float& x, float& y, sal_uInt32 flags);
-            void MapToDevice (double &x, double &y);
-            ::basegfx::B2DPoint Map (double ix, double iy);
-            ::basegfx::B2DSize MapSize (double iwidth, double iheight);
+            void MapToDevice (double &x, double &y) const;
+            ::basegfx::B2DPoint Map (double ix, double iy) const;
+            ::basegfx::B2DSize MapSize (double iwidth, double iheight) const;
             void GraphicStatePush (GraphicStateMap& map, sal_Int32 index, OutDevState const & rState);
             void GraphicStatePop (GraphicStateMap& map, sal_Int32 index, OutDevState& rState);
 
