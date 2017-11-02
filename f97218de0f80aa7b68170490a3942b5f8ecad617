@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1fc0ea7a",
+        "filename": "sfx2/source/doc/doctempl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-02T10:16:14Z",
+      "side": 1,
+      "message": "this line is now unnecessary",
+      "revId": "f97218de0f80aa7b68170490a3942b5f8ecad617",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
