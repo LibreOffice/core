@@ -1,0 +1,21 @@
+diff -r -u liborcus.orig/configure liborcus/configure
+--- liborcus.orig/configure	2017-10-31 13:10:09.000000000 +0900
++++ liborcus/configure	2017-10-31 13:11:04.000000000 +0900
+@@ -12375,7 +12375,7 @@
+ 
+   dynamic_linker='Android linker'
+   # Don't embed -rpath directories since the linker doesn't support them.
+-  hardcode_libdir_flag_spec='-L$libdir'
++  # hardcode_libdir_flag_spec='-L$libdir'
+   ;;
+ 
+ # This must be glibc/ELF.
+@@ -16353,7 +16353,7 @@
+ 
+   dynamic_linker='Android linker'
+   # Don't embed -rpath directories since the linker doesn't support them.
+-  hardcode_libdir_flag_spec_CXX='-L$libdir'
++  # hardcode_libdir_flag_spec_CXX='-L$libdir'
+   ;;
+ 
+ # This must be glibc/ELF.

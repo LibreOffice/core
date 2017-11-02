@@ -34,6 +34,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/android-workaround.patch \
 ))
 endif
+ifeq ($(ANDROID_PORTS),1)
+$(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
+	external/liborcus/android-workaround.patch \
+	external/liborcus/androidports.patch \
+))
+endif
 
 
 # vim: set noet sw=4 ts=4:
