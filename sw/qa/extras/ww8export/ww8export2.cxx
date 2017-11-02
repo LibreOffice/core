@@ -21,6 +21,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 
 #include <pagedesc.hxx>
+#include <editeng/unoprnms.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -112,7 +113,10 @@ DECLARE_WW8EXPORT_TEST(testTdf91687, "tdf91687.doc")
     uno::Reference<drawing::XShape> xWatermark = getShape(1);
     uno::Reference<beans::XPropertySet> xWatermarkProperties(xWatermark, uno::UNO_QUERY);
 
-    CPPUNIT_ASSERT_EQUAL((sal_Int32)5172, xWatermark->getSize().Height);
+    sal_Int32 nHeight = 0;
+    xWatermarkProperties->getPropertyValue(UNO_NAME_TEXT_UPPERDIST) >>= nHeight;
+
+    CPPUNIT_ASSERT_EQUAL((sal_Int32)5172, xWatermark->getSize().Height + nHeight);
     CPPUNIT_ASSERT_EQUAL((sal_Int32)18105, xWatermark->getSize().Width);
 }
 
