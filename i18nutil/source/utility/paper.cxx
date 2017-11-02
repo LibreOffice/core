@@ -35,7 +35,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
-#if defined(LC_PAPER) && defined(_GNU_SOURCE)
+#if defined(LC_PAPER) && defined(_GNU_SOURCE) && defined(_NL_PAPER_WIDTH) && defined(_NL_PAPER_HEIGHT)
 #include <langinfo.h>
 #endif
 #endif
@@ -285,7 +285,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
             }
         }
 
-#if defined(LC_PAPER) && defined(_GNU_SOURCE)
+#if defined(LC_PAPER) && defined(_GNU_SOURCE) && defined(_NL_PAPER_WIDTH) && defined(_NL_PAPER_HEIGHT)
         // try LC_PAPER
         locale_t loc = newlocale(LC_PAPER_MASK, "", static_cast<locale_t>(0));
         if (loc != static_cast<locale_t>(0))
