@@ -2837,11 +2837,9 @@ if test $_os = iOS; then
     if test "$enable_ios_simulator" = "yes"; then
         platform=iPhoneSimulator
         versionmin=-mios-simulator-version-min=10.3
-        BITNESS=-fembed-bitcode
     else
         platform=iPhoneOS
         versionmin=-miphoneos-version-min=10.3
-        BITNESS=-fembed-bitcode
     fi
     xcode_developer=`xcode-select -print-path`
 
@@ -2874,8 +2872,8 @@ if test $_os = iOS; then
 
     stdlib="-stdlib=libc++"
 
-    CC="`xcrun -find clang` -arch $host_cpu -fvisibility=hidden $BITNESS -isysroot $sysroot $lto $versionmin"
-    CXX="`xcrun -find clang++` -arch $host_cpu -fvisibility=hidden $stdlib $BITNESS -isysroot $sysroot $lto $versionmin"
+    CC="`xcrun -find clang` -arch $host_cpu -fvisibility=hidden -isysroot $sysroot $lto $versionmin"
+    CXX="`xcrun -find clang++` -arch $host_cpu -fvisibility=hidden $stdlib -isysroot $sysroot $lto $versionmin"
 
     INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
     AR=`xcrun -find ar`
