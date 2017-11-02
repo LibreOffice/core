@@ -158,7 +158,7 @@ namespace {
         DECL_LINK( CalcFieldValueHdl, EditFieldInfo*, void );
 
         void ParseSettings( const Sequence< PropertyValue >& aDescriptor, ExportSettings& rSettings );
-        bool GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, bool bVectorType );
+        bool GetGraphic( ExportSettings const & rSettings, Graphic& aGraphic, bool bVectorType );
 
     private:
         Reference< XShape >     mxShape;
@@ -596,7 +596,7 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
     }
 }
 
-bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, bool bVectorType )
+bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGraphic, bool bVectorType )
 {
     if( !mpDoc || !mpUnoPage )
         return false;

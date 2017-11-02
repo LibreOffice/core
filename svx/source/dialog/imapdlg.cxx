@@ -92,7 +92,7 @@ void SvxIMapDlgItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
 
 SvxIMapDlgChildWindow::SvxIMapDlgChildWindow( vcl::Window* _pParent, sal_uInt16 nId,
                                               SfxBindings* pBindings,
-                                              SfxChildWinInfo* pInfo ) :
+                                              SfxChildWinInfo const * pInfo ) :
             SfxChildWindow( _pParent, nId )
 {
     SetWindow(VclPtr<SvxIMapDlg>::Create( pBindings, this, _pParent ));

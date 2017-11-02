@@ -90,7 +90,7 @@ private:
     bool                        bAbortActualize;
 
     SAL_DLLPRIVATE void         ImplCreateSvDrawStorage();
-    SgaObject*                  ImplReadSgaObject( GalleryObject* pEntry );
+    SgaObject*                  ImplReadSgaObject( GalleryObject const * pEntry );
     SAL_DLLPRIVATE bool         ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry );
     SAL_DLLPRIVATE void         ImplWrite();
     SAL_DLLPRIVATE const GalleryObject* ImplGetGalleryObject( size_t nPos ) const

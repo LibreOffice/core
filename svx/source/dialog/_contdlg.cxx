@@ -66,7 +66,7 @@ void SvxContourDlgItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/, 
 }
 
 SvxContourDlgChildWindow::SvxContourDlgChildWindow( vcl::Window* _pParent, sal_uInt16 nId,
-                                                    SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
+                                                    SfxBindings* pBindings, SfxChildWinInfo const * pInfo ) :
             SfxChildWindow( _pParent, nId )
 {
     VclPtr<SvxSuperContourDlg> pDlg = VclPtr<SvxSuperContourDlg>::Create(pBindings, this, _pParent);
