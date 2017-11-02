@@ -782,12 +782,12 @@ PPDParser::PPDParser( const OUString& rFile ) :
         char const* pSetupType = "<unknown>";
         switch( pKey->m_eSetupType )
         {
-            case PPDKey::ExitServer:        pSetupType = "ExitServer";break;
-            case PPDKey::Prolog:            pSetupType = "Prolog";break;
-            case PPDKey::DocumentSetup: pSetupType = "DocumentSetup";break;
-            case PPDKey::PageSetup:     pSetupType = "PageSetup";break;
-            case PPDKey::JCLSetup:          pSetupType = "JCLSetup";break;
-            case PPDKey::AnySetup:          pSetupType = "AnySetup";break;
+            case PPDKey::SetupType::ExitServer:        pSetupType = "ExitServer";break;
+            case PPDKey::SetupType::Prolog:            pSetupType = "Prolog";break;
+            case PPDKey::SetupType::DocumentSetup:     pSetupType = "DocumentSetup";break;
+            case PPDKey::SetupType::PageSetup:         pSetupType = "PageSetup";break;
+            case PPDKey::SetupType::JCLSetup:          pSetupType = "JCLSetup";break;
+            case PPDKey::SetupType::AnySetup:          pSetupType = "AnySetup";break;
             default: break;
         };
         SAL_INFO("vcl.unx.print", "\t\"" << pKey->getKey() << "\" ("
