@@ -4418,14 +4418,14 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         OutputDevice* pOut = Application::GetDefaultDevice();
                         vcl::Font aFont( pOut->GetFont() );
                         aFont.SetFamilyName( aFontName );
-                        auto nTextWidth = pOut->GetTextWidth( aObjectText );
+                        tools::Rectangle aBoundingRect;
+                        pOut->GetTextBoundRect( aBoundingRect, aObjectText );
 
                         OUString aObjName = GetPropertyString(DFF_Prop_wzName, rSt);
-                        if ( nTextWidth && aObjData.eShapeType == mso_sptTextPlainText && aObjName.match("PowerPlusWaterMarkObject"))
+                        if ( aBoundingRect.GetWidth() && aObjData.eShapeType == mso_sptTextPlainText && aObjName.match( "PowerPlusWaterMarkObject" ) )
                         {
-                            fRatio = aFont.GetFontSize().Height();
-                            fRatio /= nTextWidth;
-                            sal_Int32 nNewHeight = fRatio * aObjData.aBoundRect.getWidth();
+                            fRatio = (double)aBoundingRect.GetHeight() / aBoundingRect.GetWidth();
+                            sal_Int32 nNewHeight = round( fRatio * aObjData.aBoundRect.getWidth() );
                             sal_Int32 nPaddingY = aObjData.aBoundRect.getHeight() - nNewHeight;
 
                             if ( nPaddingY > 0 )
