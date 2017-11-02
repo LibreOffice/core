@@ -265,7 +265,6 @@ void SfxOleStringHelper::SaveString16( SvStream& rStrm, const OUString& rValue )
 
 OUString SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
 {
-    OUString aValue;
     // read size field (signed 32-bit)
     sal_Int32 nSize(0);
     rStrm.ReadInt32( nSize );
@@ -273,32 +272,33 @@ OUString SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
     DBG_ASSERT( (0 < nSize) && (nSize <= 0xFFFF),
         OStringBuffer("SfxOleStringHelper::ImplLoadString8 - invalid string of len ").
         append(nSize).getStr() );
-    if (nSize > 0 && nSize <= 0xFFFF)
-    {
-        // load character buffer
-        OString sValue(read_uInt8s_ToOString(rStrm, nSize - 1));
+    if (nSize < 0 || nSize > 0xFFFF)
+        return OUString();
+    // load character buffer
+    OString sValue(read_uInt8s_ToOString(rStrm, nSize - 1));
+    if (rStrm.good())
         rStrm.SeekRel(1);  // skip null-byte at end
-        aValue = OStringToOUString(sValue, GetTextEncoding());
-    }
-    return aValue;
+    return OStringToOUString(sValue, GetTextEncoding());
 }
 
 OUString SfxOleStringHelper::ImplLoadString16( SvStream& rStrm )
 {
-    OUString aValue;
     // read size field (signed 32-bit), may be buffer size or character count
     sal_Int32 nSize(0);
     rStrm.ReadInt32( nSize );
     DBG_ASSERT( (0 < nSize) && (nSize <= 0xFFFF), "SfxOleStringHelper::ImplLoadString16 - invalid string" );
     // size field includes trailing NUL character
-    if (nSize > 0 && nSize <= 0xFFFF)
+    if (nSize < 0 || nSize > 0xFFFF)
+        return OUString();
+    // load character buffer
+    OUString aValue = read_uInt16s_ToOUString(rStrm, nSize - 1);
+    if (rStrm.good())
     {
-        // load character buffer
-        aValue = read_uInt16s_ToOUString(rStrm, nSize - 1);
-        rStrm.SeekRel(2);  // skip null-byte at end
+        sal_Int32 nSkip(2); // skip null-byte at end
         // stream is always padded to 32-bit boundary, skip 2 bytes on odd character count
-        if( (nSize & 1) == 1 )
-            rStrm.SeekRel(2);
+        if ((nSize & 1) == 1)
+            nSkip += 2;
+        rStrm.SeekRel(nSkip);
     }
     return aValue;
 }
@@ -678,12 +678,12 @@ void SfxOleDictionaryProperty::ImplLoad( SvStream& rStrm )
     sal_Int32 nNameCount = GetPropType();
     // read property ID/name pairs
     maPropNameMap.clear();
-    for( sal_Int32 nIdx = 0; (nIdx < nNameCount) && (rStrm.GetErrorCode() == ERRCODE_NONE) && !rStrm.IsEof(); ++nIdx )
+    for (sal_Int32 nIdx = 0; nIdx < nNameCount && rStrm.good(); ++nIdx)
     {
         sal_Int32 nPropId(0);
-        rStrm.ReadInt32( nPropId );
+        rStrm.ReadInt32(nPropId);
         // name always stored as byte string
-        maPropNameMap[ nPropId ] = LoadString8( rStrm );
+        maPropNameMap[nPropId] = LoadString8(rStrm);
     }
 }
 
