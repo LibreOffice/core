@@ -18,7 +18,7 @@
  */
 
 #include <xmlsignaturehelper.hxx>
-#include "xmlsignaturehelper2.hxx"
+#include <xmlsignaturehelper2.hxx>
 
 #include <tools/solar.h>
 #include <unotools/streamhelper.hxx>

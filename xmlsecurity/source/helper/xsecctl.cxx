@@ -43,6 +43,7 @@
 #include <comphelper/ofopxmlhelper.hxx>
 #include <sax/tools/converter.hxx>
 #include "ooxmlsecexporter.hxx"
+#include <xmlsignaturehelper2.hxx>
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
@@ -410,9 +411,7 @@ sal_Int32 XSecController::getNewSecurityId(  )
     return nId;
 }
 
-void XSecController::startMission(
-    const cssu::Reference< cssxc::XUriBinding >& xUriBinding,
-    const cssu::Reference< cssxc::XXMLSecurityContext >& xSecurityContext )
+void XSecController::startMission(const rtl::Reference<UriBindingHelper>& xUriBinding, const cssu::Reference< cssxc::XXMLSecurityContext >& xSecurityContext )
 /****** XSecController/startMission *******************************************
  *
  *   NAME

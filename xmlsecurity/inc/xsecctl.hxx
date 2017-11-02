@@ -41,10 +41,11 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
-
 #include <cppuhelper/implbase.hxx>
 
 #include <vector>
+
+#include "xmlsignaturehelper2.hxx"
 
 #define NS_XMLDSIG "http://www.w3.org/2000/09/xmldsig#"
 #define NS_DC      "http://purl.org/dc/elements/1.1/"
@@ -219,7 +220,7 @@ public:
     /*
      * An xUriBinding is provided to map Uris to XInputStream interfaces.
      */
-    css::uno::Reference< css::xml::crypto::XUriBinding > m_xUriBinding;
+    rtl::Reference<UriBindingHelper> m_xUriBinding;
 
 private:
 
@@ -289,10 +290,7 @@ public:
 
     sal_Int32 getNewSecurityId(  );
 
-    void startMission( const css::uno::Reference<
-        css::xml::crypto::XUriBinding >& xUriBinding,
-        const css::uno::Reference<
-            css::xml::crypto::XXMLSecurityContext >& xSecurityContext );
+    void startMission(const rtl::Reference<UriBindingHelper>& xUriBinding, const css::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext);
 
     void setSAXChainConnector(const css::uno::Reference< css::lang::XInitialization >& xInitialization);
 

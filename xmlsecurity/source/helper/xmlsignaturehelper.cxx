@@ -22,7 +22,7 @@
 #include <documentsignaturehelper.hxx>
 #include <xsecctl.hxx>
 
-#include "xmlsignaturehelper2.hxx"
+#include <xmlsignaturehelper2.hxx>
 
 #include <tools/stream.hxx>
 #include <tools/datetime.hxx>
