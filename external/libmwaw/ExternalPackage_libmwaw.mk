@@ -16,7 +16,11 @@ $(eval $(call gb_ExternalPackage_add_file,libmwaw,$(LIBO_LIB_FOLDER)/libmwaw-0.3
 else ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,libmwaw,$(LIBO_LIB_FOLDER)/libmwaw-0.3.dll,src/lib/.libs/libmwaw-0.3.dll))
 else ifeq ($(DISABLE_DYNLOADING),)
+ifeq ($(ANDROID_PORTS),1)
+$(eval $(call gb_ExternalPackage_add_file,libmwaw,$(LIBO_LIB_FOLDER)/libmwaw-0.3-lo.so,src/lib/.libs/libmwaw-0.3-lo.so))
+else
 $(eval $(call gb_ExternalPackage_add_file,libmwaw,$(LIBO_LIB_FOLDER)/libmwaw-0.3-lo.so.3,src/lib/.libs/libmwaw-0.3-lo.so.3.0.$(MWAW_VERSION_MICRO)))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:
