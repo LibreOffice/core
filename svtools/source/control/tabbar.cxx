@@ -126,6 +126,14 @@ public:
             mrRenderContext.DrawCtrlText(aPos, aText, 0, aText.getLength(), (DrawTextFlags::Disable | DrawTextFlags::Mnemonic));
     }
 
+    void drawProtectionSymbol(const OUString &aProtectionSymbol)
+    {
+        tools::Rectangle aRect = maRect;
+        Point aPos = aRect.TopLeft();
+
+        mrRenderContext.DrawText(aPos, aProtectionSymbol);
+    }
+
     void drawOverTopBorder()
     {
         Point aTopLeft  = maRect.TopLeft()  + Point(1, 0);
@@ -205,6 +213,7 @@ struct ImplTabBarItem
     OString maHelpId;
     bool mbShort : 1;
     bool mbSelect : 1;
+    bool mbProtect : 1;
     Color maTabBgColor;
     Color maTabTextColor;
 
@@ -215,6 +224,7 @@ struct ImplTabBarItem
         , mnWidth(0)
         , mbShort(false)
         , mbSelect(false)
+        , mbProtect(false)
         , maTabBgColor(Color(COL_AUTO))
         , maTabTextColor(Color(COL_AUTO))
     {
@@ -779,6 +789,7 @@ void TabBar::ImplInitControls()
         mpImpl->mpAddButton->Show();
     }
 
+
     Link<Button*,void> aLink = LINK( this, TabBar, ImplClickHdl );
 
     if (mnWinStyle & (WB_MINSCROLL | WB_SCROLL))
@@ -1217,6 +1228,14 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
             }
 
             aDrawer.drawText(aText);
+
+            if (pItem->mbProtect)
+            {
+                OUStringBuffer aBufferLock;
+                aBufferLock.appendUtf32(0x0001F512); // lock unicode
+                OUString aLockSymbol(aBufferLock.makeStringAndClear());
+                aDrawer.drawProtectionSymbol(aLockSymbol);
+            }
 
             if (bCurrent)
             {
@@ -2036,6 +2055,12 @@ bool TabBar::IsPageSelected(sal_uInt16 nPageId) const
         return mpImpl->mpItemList[nPos]->mbSelect;
     else
         return false;
+}
+
+void TabBar::SetProtection(sal_uInt16 nPageId, bool bProtection)
+{
+    mpImpl->mpItemList[nPageId]->mbProtect = bProtection;
+    Invalidate(mpImpl->mpItemList[nPageId]->maRect);
 }
 
 bool TabBar::StartEditMode(sal_uInt16 nPageId)
