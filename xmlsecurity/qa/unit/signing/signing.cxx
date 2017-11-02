@@ -98,6 +98,8 @@ public:
     void testXAdES();
     /// Works with an existing good XAdES signature.
     void testXAdESGood();
+    /// Test importing of signature line images
+    void testSignatureLineImages();
 
     CPPUNIT_TEST_SUITE(SigningTest);
     CPPUNIT_TEST(testDescription);
@@ -120,6 +122,7 @@ public:
     CPPUNIT_TEST(test96097Doc);
     CPPUNIT_TEST(testXAdES);
     CPPUNIT_TEST(testXAdESGood);
+    CPPUNIT_TEST(testSignatureLineImages);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -629,6 +632,29 @@ void SigningTest::testXAdESGood()
         (nActual == SignatureState::NOTVALIDATED
          || nActual == SignatureState::OK));
 }
+
+void SigningTest::testSignatureLineImages()
+{
+    // Given: A document (docx) with a signature line and a valid signature
+    Reference< security::XDocumentDigitalSignatures > xSignatures(
+        security::DocumentDigitalSignatures::createWithVersion(
+            comphelper::getProcessComponentContext(), "1.2" ) );
+
+    uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
+        ZIP_STORAGE_FORMAT_STRING, m_directories.getURLFromSrc(DATA_DIRECTORY) + "signatureline.docx",
+         embed::ElementModes::READWRITE);
+    CPPUNIT_ASSERT(xStorage, "No xStorage!");
+
+    uno::Sequence< security::DocumentSignatureInformation > xSignatureInfo =
+        xSignatures->verifyScriptingContentSignatures(xStorage, uno::Reference< io::XInputStream >());
+
+    // The signature should have a valid signature, and signature line with two valid images
+    CPPUNIT_ASSERT(xSignatureInfo[0].SignatureIsValid);
+    CPPUNIT_ASSERT_EQUAL("{DEE0514B-13E8-4674-A831-46E3CDB18BB4}", xSignatureInfo[0].SignatureLineId);
+    CPPUNIT_ASSERT(xSignatureInfo[0].ValidSignatureLineImage.is());
+    CPPUNIT_ASSERT(xSignatureInfo[0].InvalidSignatureLineImage.is());
+}
+
 void SigningTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("odfds"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0"));
