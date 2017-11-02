@@ -14,8 +14,8 @@ $(eval $(call gb_Library_use_unpacked,pdfium,pdfium))
 $(eval $(call gb_Library_set_warnings_not_errors,pdfium))
 
 $(eval $(call gb_Library_set_include,pdfium,\
-    -I$(WORKDIR)/UnpackedTarball/pdfium \
-    -I$(WORKDIR)/UnpackedTarball/pdfium/third_party \
+    -I$(call gb_UnpackedTarball_get_dir,pdfium) \
+    -I$(call gb_UnpackedTarball_get_dir,pdfium)/third_party \
     $$(INCLUDE) \
 ))
 
@@ -554,8 +554,8 @@ $(eval $(call gb_Library_add_defs,pdfium,\
 
 else
 $(eval $(call gb_Library_set_include,pdfium,\
-    -I$(WORKDIR)/UnpackedTarball/pdfium/third_party/freetype/include/ \
-    -I$(WORKDIR)/UnpackedTarball/pdfium/third_party/freetype/src/include/ \
+    -I$(call gb_UnpackedTarball_get_dir,pdfium)/third_party/freetype/include/ \
+    -I$(call gb_UnpackedTarball_get_dir,pdfium)/third_party/freetype/src/include/ \
     $$(INCLUDE) \
 ))
 
