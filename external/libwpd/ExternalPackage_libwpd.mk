@@ -16,7 +16,11 @@ $(eval $(call gb_ExternalPackage_add_file,libwpd,$(LIBO_LIB_FOLDER)/libwpd-0.10.
 else ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,libwpd,$(LIBO_LIB_FOLDER)/libwpd-0.10.dll,src/lib/.libs/libwpd-0.10.dll))
 else ifeq ($(DISABLE_DYNLOADING),)
+ifeq ($(ANDROID_PORTS),1)
+$(eval $(call gb_ExternalPackage_add_file,libwpd,$(LIBO_LIB_FOLDER)/libwpd-0.10-lo.so,src/lib/.libs/libwpd-0.10-lo.so))
+else
 $(eval $(call gb_ExternalPackage_add_file,libwpd,$(LIBO_LIB_FOLDER)/libwpd-0.10-lo.so.10,src/lib/.libs/libwpd-0.10-lo.so.10.0.$(WPD_VERSION_MICRO)))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:

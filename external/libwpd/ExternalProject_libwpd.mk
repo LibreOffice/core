@@ -38,7 +38,7 @@ $(call gb_ExternalProject_get_state_target,libwpd,build) :
 			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
 			$(if $(filter LINUX,$(OS)),$(if $(SYSTEM_REVENGE),, \
-				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
+				'LDFLAGS=$(LDFLAGS) -Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN')) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
