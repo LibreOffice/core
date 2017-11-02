@@ -1891,6 +1891,9 @@ void ScColumn::SwapCol(ScColumn& rCol)
     maCellTextAttrs.swap(rCol.maCellTextAttrs);
     maCellNotes.swap(rCol.maCellNotes);
 
+    // Swap all CellStoreEvent mdds event_func related.
+    std::swap( mnBlkCountFormula, rCol.mnBlkCountFormula);
+
     // notes update caption
     UpdateNoteCaptions(0, MAXROW);
     rCol.UpdateNoteCaptions(0, MAXROW);
