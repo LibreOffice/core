@@ -38,6 +38,29 @@ inline OUString WindowsErrorString(DWORD nErrorCode)
     return result;
 }
 
+inline OUString WindowsErrorStringFromHRESULT(HRESULT hr)
+{
+    // See https://blogs.msdn.microsoft.com/oldnewthing/20061103-07/?p=29133
+    // Also https://social.msdn.microsoft.com/Forums/vstudio/en-US/c33d9a4a-1077-4efd-99e8-0c222743d2f8
+    // (which refers to https://msdn.microsoft.com/en-us/library/aa382475)
+    // explains why can't we just reinterpret_cast HRESULT to DWORD Win32 error:
+    // we might actually have a Win32 error code converted using HRESULT_FROM_WIN32 macro
+
+    DWORD nErrorCode = DWORD(hr);
+    if ((hr & 0xFFFF0000) == MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, 0) || hr == S_OK)
+    {
+        nErrorCode = HRESULT_CODE(hr);
+        // https://msdn.microsoft.com/en-us/library/ms679360 mentions that the codes might have
+        // high word bits set (e.g., bit 29 could be set if error comes from a 3rd-party library).
+        // So try to restore the original error code to avoid wrong error messages
+        DWORD nLastError = GetLastError();
+        if ((nLastError & 0xFFFF) == nErrorCode)
+            nErrorCode = nLastError;
+    }
+
+    return WindowsErrorString(nErrorCode);
+}
+
 } // anonymous namespace
 
 #endif
