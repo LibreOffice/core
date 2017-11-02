@@ -85,14 +85,91 @@
        gradientTransform="matrix(0.498259,0,0,0.46079424,-0.31600094,-1.0905613)" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient4212"
+       xlink:href="#linearGradient4330"
        id="linearGradient4202"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.248787,0,0,0.24394989,12.070961,-0.8907943)"
-       x1="23.30562"
-       y1="24.843527"
-       x2="14.388516"
-       y2="9.5902243" />
+       x1="23.831787"
+       y1="3.6515462"
+       x2="23.831787"
+       y2="81.536392" />
+    <radialGradient
+       gradientTransform="matrix(0.27598143,0,0,-0.29583148,-20.966655,24.033493)"
+       gradientUnits="userSpaceOnUse"
+       xlink:href="#linearGradient8662-8"
+       id="radialGradient3232"
+       fy="36.421127"
+       fx="24.837126"
+       r="15.644737"
+       cy="36.421127"
+       cx="24.837126" />
+    <linearGradient
+       id="linearGradient8662-8">
+      <stop
+         offset="0"
+         style="stop-color:#000000;stop-opacity:1"
+         id="stop8664-1" />
+      <stop
+         offset="1"
+         style="stop-color:#000000;stop-opacity:0"
+         id="stop8666-5" />
+    </linearGradient>
+    <linearGradient
+       gradientTransform="matrix(0.4766877,0,0,0.44382351,-25.585997,2.6557543)"
+       gradientUnits="userSpaceOnUse"
+       xlink:href="#linearGradient4330"
+       id="linearGradient3270-1"
+       y2="40.783871"
+       x2="23.731871"
+       y1="5.3943448"
+       x1="23.731871" />
+    <linearGradient
+       id="linearGradient4330">
+      <stop
+         offset="0"
+         style="stop-color:#f0c1ff;stop-opacity:1"
+         id="stop4332" />
+      <stop
+         offset="0.26238"
+         style="stop-color:#c5a3f2;stop-opacity:1"
+         id="stop4334" />
+      <stop
+         offset="0.704952"
+         style="stop-color:#7a36b1;stop-opacity:1"
+         id="stop4336" />
+      <stop
+         offset="1"
+         style="stop-color:#4c2d81;stop-opacity:1"
+         id="stop4338" />
+    </linearGradient>
+    <linearGradient
+       gradientTransform="matrix(0,-0.5372019,0.57681717,0,-46.640045,27.079903)"
+       gradientUnits="userSpaceOnUse"
+       xlink:href="#linearGradient4297"
+       id="linearGradient3260"
+       y2="46.97065"
+       x2="18.680689"
+       y1="46.97065"
+       x1="40.957993" />
+    <linearGradient
+       id="linearGradient4297">
+      <stop
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:1"
+         id="stop4299" />
+      <stop
+         offset="0.45000002"
+         style="stop-color:#ffffff;stop-opacity:0.23529412"
+         id="stop4301" />
+      <stop
+         offset="0.65000004"
+         style="stop-color:#ffffff;stop-opacity:0.15686275"
+         id="stop4303" />
+      <stop
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:0.39215687"
+         id="stop4305" />
+    </linearGradient>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -102,19 +179,19 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="28"
-     inkscape:cx="15.022989"
-     inkscape:cy="11.144197"
+     inkscape:cx="4.0301278"
+     inkscape:cy="11.138474"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:window-width="1280"
-     inkscape:window-height="885"
-     inkscape:window-x="384"
-     inkscape:window-y="151"
-     inkscape:window-maximized="0">
+     inkscape:window-width="2560"
+     inkscape:window-height="1301"
+     inkscape:window-x="0"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
        id="grid4153" />
@@ -159,6 +236,6 @@
        sodipodi:nodetypes="ccccccccccccc"
        id="path4200"
        d="m 20.573474,7.75 -5.116229,0 -0.645781,1.9 -1.536481,0 3.53763,-9.3 2.464724,0 3.411804,9.3 -1.489117,0 -0.62655,-1.9 M 16.189,6.25 19.799976,6.25 18.048346,1.5 16.189,6.25"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:54.8693924px;line-height:125%;font-family:'Bitstream Vera Sans';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient4202);fill-opacity:1;stroke:#000000;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:54.8693924px;line-height:125%;font-family:'Bitstream Vera Sans';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient4202);fill-opacity:1;stroke:#6326b9;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.49019608" />
   </g>
 </svg>

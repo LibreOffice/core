@@ -20,17 +20,6 @@
   <defs
      id="defs1308">
     <linearGradient
-       id="linearGradient4212">
-      <stop
-         style="stop-color:#1f1f1f;stop-opacity:1"
-         offset="0.0000000"
-         id="stop4214" />
-      <stop
-         style="stop-color:#5c5c5c;stop-opacity:1"
-         offset="1.0000000"
-         id="stop4216" />
-    </linearGradient>
-    <linearGradient
        id="linearGradient3682">
       <stop
          id="stop4206"
@@ -40,17 +29,6 @@
          id="stop4208"
          offset="1.0000000"
          style="stop-color:#d4d4d4;stop-opacity:1" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient4210">
-      <stop
-         style="stop-color:#979797;stop-opacity:1"
-         offset="0.0000000"
-         id="stop3684" />
-      <stop
-         style="stop-color:#d4d4d4;stop-opacity:1"
-         offset="1.0000000"
-         id="stop3686" />
     </linearGradient>
     <linearGradient
        id="linearGradient2834">
@@ -85,14 +63,33 @@
        gradientTransform="matrix(0.498259,0,0,0.46079424,-0.31600094,-1.0905613)" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient4212"
+       xlink:href="#linearGradient2867-449-88-871-390-598-476-591-434-148-57-177-6"
        id="linearGradient4202"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.248787,0,0,0.24394989,12.070961,9.109206)"
-       x1="23.30562"
-       y1="24.843527"
-       x2="14.388516"
-       y2="9.5902243" />
+       x1="23.831787"
+       y1="-33.241276"
+       x2="23.831787"
+       y2="44.64357" />
+    <linearGradient
+       id="linearGradient2867-449-88-871-390-598-476-591-434-148-57-177-6">
+      <stop
+         id="stop3750-1"
+         style="stop-color:#90dbec;stop-opacity:1"
+         offset="0" />
+      <stop
+         id="stop3752-0"
+         style="stop-color:#55c1ec;stop-opacity:1"
+         offset="0.26238" />
+      <stop
+         id="stop3754-0"
+         style="stop-color:#3689e6;stop-opacity:1"
+         offset="0.704952" />
+      <stop
+         id="stop3756-4"
+         style="stop-color:#2b63a0;stop-opacity:1"
+         offset="1" />
+    </linearGradient>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -102,7 +99,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="28"
-     inkscape:cx="14.748172"
+     inkscape:cx="9.5338863"
      inkscape:cy="9.7156251"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -110,11 +107,11 @@
      inkscape:document-units="px"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:window-width="1280"
-     inkscape:window-height="885"
-     inkscape:window-x="384"
-     inkscape:window-y="151"
-     inkscape:window-maximized="0">
+     inkscape:window-width="2560"
+     inkscape:window-height="1301"
+     inkscape:window-x="0"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
        id="grid4153" />
@@ -159,6 +156,6 @@
        sodipodi:nodetypes="ccccccccccccc"
        id="path4200"
        d="m 20.573474,17.75 -5.116229,0 -0.645781,1.9 -1.536481,0 3.53763,-9.3 2.464724,0 3.411804,9.3 -1.489117,0 -0.62655,-1.9 m -4.384474,-1.5 3.610976,0 -1.75163,-4.75 -1.859346,4.75"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:54.8693924px;line-height:125%;font-family:'Bitstream Vera Sans';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient4202);fill-opacity:1;stroke:#000000;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:54.8693924px;line-height:125%;font-family:'Bitstream Vera Sans';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient4202);fill-opacity:1;stroke:#004372;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.58823532" />
   </g>
 </svg>
