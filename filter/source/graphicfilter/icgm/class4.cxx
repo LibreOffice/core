@@ -619,8 +619,10 @@ void CGM::ImplDoClass4()
                 bool bDirection = ImplGetEllipse( aCenter, aRadius, fOrientation );
                 ImplGetVector( &vector[ 0 ] );
 
-                fStartAngle = acos( vector[ 0 ] / sqrt( vector[ 0 ] * vector[ 0 ] + vector[ 1 ] * vector[ 1 ] ) ) * 57.29577951308;
-                fEndAngle = acos( vector[ 2 ] / sqrt( vector[ 2 ] * vector[ 2 ] + vector[ 3 ] * vector[ 3 ] ) ) * 57.29577951308;
+                double fStartSqrt = sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
+                fStartAngle = fStartSqrt ? (acos(vector[0] / fStartSqrt) * 57.29577951308) : 0.0;
+                double fEndSqrt = sqrt(vector[2] * vector[2] + vector[3] * vector[3]);
+                fEndAngle = fEndSqrt ? (acos(vector[2] / fEndSqrt) * 57.29577951308) : 0.0;
 
                 if ( vector[ 1 ] > 0 )
                     fStartAngle = 360 - fStartAngle;
