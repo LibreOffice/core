@@ -97,6 +97,8 @@ public:
 
     void element_block_acquired(const mdds::mtv::base_element_block* block);
     void element_block_released(const mdds::mtv::base_element_block* block);
+
+    void swap(CellStoreEvent& r);
 };
 
 /// Cell note container
