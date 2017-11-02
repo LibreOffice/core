@@ -412,7 +412,7 @@ void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag )
     // Now, all Dialogs are per default system windows !!!
     nStyle |= WB_SYSTEMWINDOW;
 
-    if (InitFlag::NoParent == eFlag || InitFlag::NoParentCentered == eFlag)
+    if (InitFlag::NoParent == eFlag)
     {
         pParent = nullptr;
     }
@@ -1177,14 +1177,6 @@ void Dialog::EndAllDialogs( vcl::Window const * pParent )
         }
         pModDialog = pTempModDialog;
     }
-}
-
-bool Dialog::AreDialogsOpen()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    Dialog* pModDialog = pSVData->maWinData.mpLastExecuteDlg;
-
-    return (nullptr != pModDialog);
 }
 
 void Dialog::SetModalInputMode( bool bModal )
