@@ -954,7 +954,7 @@ IMPL_STATIC_LINK( Application, PostEventHandler, void*, pCallData, void )
 
     // remove this event from list of posted events, watch for destruction of internal data
     auto svdata = ImplGetSVData();
-    ::std::list< ImplPostEventPair >::iterator aIter( svdata->maAppData.maPostedEventList.begin() );
+    ::std::vector< ImplPostEventPair >::iterator aIter( svdata->maAppData.maPostedEventList.begin() );
 
     while( aIter != svdata->maAppData.maPostedEventList.end() )
     {
@@ -974,7 +974,7 @@ void Application::RemoveMouseAndKeyEvents( vcl::Window* pWin )
 
     // remove all events for specific window, watch for destruction of internal data
     auto svdata = ImplGetSVData();
-    ::std::list< ImplPostEventPair >::iterator aIter( svdata->maAppData.maPostedEventList.begin() );
+    ::std::vector< ImplPostEventPair >::iterator aIter( svdata->maAppData.maPostedEventList.begin() );
 
     while( aIter != svdata->maAppData.maPostedEventList.end() )
     {

@@ -59,7 +59,7 @@ class GenericClipboard :
     osl::Mutex                                                              m_aMutex;
     Reference< css::datatransfer::XTransferable >                           m_aContents;
     Reference< css::datatransfer::clipboard::XClipboardOwner >              m_aOwner;
-    std::list< Reference< css::datatransfer::clipboard::XClipboardListener > > m_aListeners;
+    std::vector< Reference< css::datatransfer::clipboard::XClipboardListener > > m_aListeners;
 
 public:
 
@@ -143,7 +143,7 @@ void GenericClipboard::setContents(
     m_aContents = xTrans;
     m_aOwner = xClipboardOwner;
 
-    std::list< Reference< datatransfer::clipboard::XClipboardListener > > aListeners( m_aListeners );
+    std::vector< Reference< datatransfer::clipboard::XClipboardListener > > aListeners( m_aListeners );
     datatransfer::clipboard::ClipboardEvent aEv;
     aEv.Contents = m_aContents;
 
@@ -151,10 +151,9 @@ void GenericClipboard::setContents(
 
     if( xOldOwner.is() && xOldOwner != xClipboardOwner )
         xOldOwner->lostOwnership( this, xOldContents );
-    for( std::list< Reference< datatransfer::clipboard::XClipboardListener > >::iterator it =
-         aListeners.begin(); it != aListeners.end() ; ++it )
+    for (auto const& listener : aListeners)
     {
-        (*it)->changedContents( aEv );
+        listener->changedContents( aEv );
     }
 }
 
@@ -179,7 +178,7 @@ void GenericClipboard::removeClipboardListener( const Reference< datatransfer::c
 {
     osl::ClearableMutexGuard aGuard( m_aMutex );
 
-    m_aListeners.remove( listener );
+    m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener), m_aListeners.end());
 }
 
 class ClipboardFactory : public ::cppu::WeakComponentImplHelper<
