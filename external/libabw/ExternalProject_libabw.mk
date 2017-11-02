@@ -39,6 +39,8 @@ $(call gb_ExternalProject_get_state_target,libabw,build) :
 				-DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
+			CXXFLAGS="$(CXXFLAGS) $(BOOST_CPPFLAGS) \
+				-DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED" \
 	)
 
 # vim: set noet sw=4 ts=4:
