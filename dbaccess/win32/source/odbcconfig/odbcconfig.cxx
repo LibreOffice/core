@@ -44,10 +44,9 @@ int displayLastError()
 {
     DWORD   dwError = GetLastError();
 
-    LPVOID lpMsgBuf;
+    LPVOID lpMsgBuf = nullptr;
     FormatMessageW(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER |
-        FORMAT_MESSAGE_FROM_SYSTEM,
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
         nullptr,
         dwError,
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
@@ -60,7 +59,7 @@ int displayLastError()
     MessageBoxW( nullptr, static_cast<LPCWSTR>(lpMsgBuf), nullptr, MB_OK | MB_ICONERROR );
 
     // Free the buffer.
-    LocalFree( lpMsgBuf );
+    HeapFree( GetProcessHeap(), 0, lpMsgBuf );
 
     return dwError;
 }

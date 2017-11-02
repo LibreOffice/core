@@ -24,6 +24,7 @@
 #include <rtl/alloc.h>
 #include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <comphelper/windowserrorstring.hxx>
 
 #include "sockimpl.hxx"
 
@@ -791,13 +792,7 @@ oslSocket SAL_CALL osl_createSocket(
     if(pSocket->m_Socket == OSL_INVALID_SOCKET)
     {
         int nErrno = WSAGetLastError();
-        wchar_t *sErr = nullptr;
-        FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                       nullptr, nErrno,
-                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                       reinterpret_cast<LPWSTR>(&sErr), 0, nullptr);
-        SAL_WARN("sal.osl", "socket creation failed: (" << nErrno << ") " << sErr);
-        LocalFree(sErr);
+        SAL_WARN("sal.osl", "socket creation failed: (" << nErrno << "): " << WindowsErrorString(nErrno));
 
         destroySocketImpl(pSocket);
         pSocket = nullptr;
