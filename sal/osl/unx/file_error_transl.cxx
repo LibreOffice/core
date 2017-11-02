@@ -17,210 +17,159 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <errno.h>
+#include <sal/config.h>
+
+#include <cassert>
+#include <cerrno>
+
 #include "file_error_transl.hxx"
-#include <osl/diagnose.h>
 
 oslFileError oslTranslateFileError(int Errno)
 {
-    oslFileError osl_error = osl_File_E_invalidError;
-
-    OSL_ENSURE(0 != Errno, "oslTranslateFileError strange input combination!");
-
     switch(Errno)
     {
-        case 0:
-            /* Have a look at file_error_transl.hxx for
-               the reason that we do this here */
-            return osl_error;
-
         case EPERM:
-            osl_error = osl_File_E_PERM;
-            break;
+            return osl_File_E_PERM;
 
         case ENOENT:
-            osl_error = osl_File_E_NOENT;
-            break;
+            return osl_File_E_NOENT;
 
         case ESRCH:
-            osl_error = osl_File_E_SRCH;
-            break;
+            return osl_File_E_SRCH;
 
         case EINTR:
-            osl_error = osl_File_E_INTR;
-            break;
+            return osl_File_E_INTR;
 
         case EIO:
-            osl_error = osl_File_E_IO;
-            break;
+            return osl_File_E_IO;
 
         case ENXIO:
-            osl_error = osl_File_E_IO;
-            break;
+            return osl_File_E_IO;
 
         case E2BIG:
-            osl_error = osl_File_E_2BIG;
-            break;
+            return osl_File_E_2BIG;
 
         case ENOEXEC:
-            osl_error = osl_File_E_NOEXEC;
-            break;
+            return osl_File_E_NOEXEC;
 
         case EBADF:
-            osl_error = osl_File_E_BADF;
-            break;
+            return osl_File_E_BADF;
 
         case ECHILD:
-            osl_error = osl_File_E_CHILD;
-            break;
+            return osl_File_E_CHILD;
 
         case EAGAIN:
-            osl_error = osl_File_E_AGAIN;
-            break;
+            return osl_File_E_AGAIN;
 
         case ENOMEM:
-            osl_error = osl_File_E_NOMEM;
-            break;
+            return osl_File_E_NOMEM;
 
         case EACCES:
-            osl_error = osl_File_E_ACCES;
-            break;
+            return osl_File_E_ACCES;
 
         case EFAULT:
-            osl_error = osl_File_E_FAULT;
-            break;
+            return osl_File_E_FAULT;
 
         case EBUSY:
-            osl_error = osl_File_E_BUSY;
-            break;
+            return osl_File_E_BUSY;
 
         case EEXIST:
-            osl_error = osl_File_E_EXIST;
-            break;
+            return osl_File_E_EXIST;
 
         case EXDEV:
-            osl_error = osl_File_E_XDEV;
-            break;
+            return osl_File_E_XDEV;
 
         case ENODEV:
-            osl_error = osl_File_E_NODEV;
-            break;
+            return osl_File_E_NODEV;
 
         case ENOTDIR:
-            osl_error = osl_File_E_NOTDIR;
-            break;
+            return osl_File_E_NOTDIR;
 
         case EISDIR:
-            osl_error = osl_File_E_ISDIR;
-            break;
+            return osl_File_E_ISDIR;
 
         case EINVAL:
-            osl_error = osl_File_E_INVAL;
-            break;
+            return osl_File_E_INVAL;
 
         case ENFILE:
-            osl_error = osl_File_E_NFILE;
-            break;
+            return osl_File_E_NFILE;
 
         case EMFILE:
-            osl_error = osl_File_E_MFILE;
-            break;
+            return osl_File_E_MFILE;
 
         case ENOTTY:
-            osl_error = osl_File_E_NOTTY;
-            break;
+            return osl_File_E_NOTTY;
 
         case EFBIG:
-            osl_error = osl_File_E_FBIG;
-            break;
+            return osl_File_E_FBIG;
 
         case ENOSPC:
-            osl_error = osl_File_E_NOSPC;
-            break;
+            return osl_File_E_NOSPC;
 
         case ESPIPE:
-            osl_error = osl_File_E_SPIPE;
-            break;
+            return osl_File_E_SPIPE;
 
         case EROFS:
-            osl_error = osl_File_E_ROFS;
-            break;
+            return osl_File_E_ROFS;
 
         case EMLINK:
-            osl_error = osl_File_E_MLINK;
-            break;
+            return osl_File_E_MLINK;
 
         case EPIPE:
-            osl_error = osl_File_E_PIPE;
-            break;
+            return osl_File_E_PIPE;
 
         case EDOM:
-            osl_error = osl_File_E_DOM;
-            break;
+            return osl_File_E_DOM;
 
         case ERANGE:
-            osl_error = osl_File_E_RANGE;
-            break;
+            return osl_File_E_RANGE;
 
         case EDEADLK:
-            osl_error = osl_File_E_DEADLK;
-            break;
+            return osl_File_E_DEADLK;
 
         case ENAMETOOLONG:
-            osl_error = osl_File_E_NAMETOOLONG;
-            break;
+            return osl_File_E_NAMETOOLONG;
 
         case ENOLCK:
-            osl_error = osl_File_E_NOLCK;
-            break;
+            return osl_File_E_NOLCK;
 
         case ENOSYS:
-           osl_error = osl_File_E_NOSYS;
-            break;
+           return osl_File_E_NOSYS;
 
 #if !defined(AIX) || !(defined(_ALL_SOURCE) && !defined(_LINUX_SOURCE_COMPAT))
         case ENOTEMPTY:
-            osl_error = osl_File_E_NOTEMPTY;
-            break;
+            return osl_File_E_NOTEMPTY;
 #endif
 
         case ELOOP:
-            osl_error = osl_File_E_LOOP;
-            break;
+            return osl_File_E_LOOP;
 
 #if !(defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY))
         case EILSEQ:
-            osl_error = osl_File_E_ILSEQ;
-            break;
+            return osl_File_E_ILSEQ;
 
         case ENOLINK:
-            osl_error = osl_File_E_NOLINK;
-            break;
+            return osl_File_E_NOLINK;
 
         case EMULTIHOP:
-            osl_error = osl_File_E_MULTIHOP;
-            break;
+            return osl_File_E_MULTIHOP;
 #endif /* MACOSX */
 
         case EUSERS:
-            osl_error = osl_File_E_USERS;
-            break;
+            return osl_File_E_USERS;
 
         case EOVERFLOW:
-            osl_error = osl_File_E_OVERFLOW;
-            break;
+            return osl_File_E_OVERFLOW;
 
         case ETIMEDOUT:
-            osl_error = osl_File_E_TIMEDOUT;
-            break;
+            return osl_File_E_TIMEDOUT;
 
+        case 0:
+            assert(false);
         default:
             /* FIXME translateFileError: is this alright? Or add a new one: osl_File_E_Unknown? */
-            osl_error = osl_File_E_invalidError;
-            break;
+            return osl_File_E_invalidError;
     }
-
-    return osl_error;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

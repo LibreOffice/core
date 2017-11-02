@@ -25,8 +25,7 @@
 
 /** Translate errno's to osl file errors
 
-   @param [in] nErrno   the errno if errno is 0 and bIsError is true the
-                        function returns osl_File_E_Unknown
+   @param [in] nErrno   the errno; must not be 0
 
    @returns the osl error code appropriate to the errno
 
