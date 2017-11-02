@@ -441,6 +441,7 @@ public:
     void            SelectPage( sal_uInt16 nPageId, bool bSelect );
     sal_uInt16      GetSelectPageCount() const;
     bool            IsPageSelected( sal_uInt16 nPageId ) const;
+    void            SetProtectionSymbol( sal_uInt16 nPageId, bool bProtection );
 
     void            SetMaxPageWidth( long nMaxWidth );
 
