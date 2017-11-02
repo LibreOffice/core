@@ -32,7 +32,9 @@ gb_BUILD_TOOLS = \
 		unoidl-write \
 		xrmex \
 		$(call gb_Helper_optional_for_host,DESKTOP, \
+			$(if $(filter $(gb_Side),build),, \
 			gengal \
+			) \
 			HelpIndexer \
 			HelpLinker \
 		) \
