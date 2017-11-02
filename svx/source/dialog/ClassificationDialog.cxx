@@ -537,7 +537,8 @@ IMPL_LINK(ClassificationDialog, SelectIPPartNumbersHdl, ListBox&, rBox, void)
     if (nSelected >= 0)
     {
         OUString sString = maHelper.GetIntellectualPropertyPartNumbers()[nSelected];
-        m_pIntellectualPropertyPartEdit->SetText(m_pIntellectualPropertyPartEdit->GetText() + sString);
+        m_pIntellectualPropertyPartEdit->ReplaceSelected(sString);
+        m_pIntellectualPropertyPartEdit->GrabFocus();
     }
 }
 
@@ -557,7 +558,8 @@ IMPL_LINK(ClassificationDialog, SelectIPPartHdl, ListBox&, rBox, void)
     if (nSelected >= 0)
     {
         const OUString sString = maHelper.GetIntellectualPropertyParts()[nSelected];
-        m_pIntellectualPropertyPartEdit->SetText(m_pIntellectualPropertyPartEdit->GetText() + sString);
+        m_pIntellectualPropertyPartEdit->ReplaceSelected(sString);
+        m_pIntellectualPropertyPartEdit->GrabFocus();
     }
 }
 
