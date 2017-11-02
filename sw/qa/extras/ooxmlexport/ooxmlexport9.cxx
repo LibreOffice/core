@@ -31,6 +31,7 @@
 #include <ftninfo.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <editeng/unoprnms.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -599,6 +600,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf67207_MERGEFIELD, "mailmerge.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Name"), sValue);
     CPPUNIT_ASSERT(xFiledMaster->getPropertyValue("InstanceName") >>= sValue);
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.text.fieldmaster.DataBase.Name"), sValue);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testWatermarkSize, "watermark.docx")
+{
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+
+    sal_Int32 nTotalHeight = 0;
+    xPropertySet->getPropertyValue(UNO_NAME_TEXT_UPPERDIST) >>= nTotalHeight;
+    nTotalHeight += xShape->getSize().Height;
+
+    // Rounding errors
+    sal_Int32 nDifference = 5198 - nTotalHeight;
+    std::stringstream ss;
+    ss << "Difference: " << nDifference;
+    CPPUNIT_ASSERT_MESSAGE(ss.str(), nDifference <= 4);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
