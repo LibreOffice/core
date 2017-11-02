@@ -37,7 +37,7 @@ $(call gb_ExternalProject_get_state_target,libwpg,build) :
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
 			$(if $(filter LINUX,$(OS)), \
-				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
+				'LDFLAGS=$(LDFLAGS) -Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\
