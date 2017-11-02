@@ -2496,6 +2496,7 @@ void ScViewFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
     if (bUndo)
         pDocSh->GetUndoManager()->LeaveListAction();
 
+    SetTabProtectionSymbol(nTab, true);
     UpdateLayerLocks();         //! broadcast to all views
 }
 
@@ -2559,6 +2560,8 @@ bool ScViewFunc::Unprotect( SCTAB nTab, const OUString& rPassword )
         if (bUndo)
             pDocSh->GetUndoManager()->LeaveListAction();
     }
+
+    SetTabProtectionSymbol(nTab, false);
 
     if (bChanged)
         UpdateLayerLocks();     //! broadcast to all views

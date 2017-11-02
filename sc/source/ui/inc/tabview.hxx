@@ -500,6 +500,7 @@ public:
 
     void            UpdateScrollBars();
     void            SetNewVisArea();
+    void            SetTabProtectionSymbol( SCTAB nTab, const bool bProtect ); // for protection icon of a tab on tabbar
 
     void            InvalidateAttribs();
 

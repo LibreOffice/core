@@ -61,6 +61,10 @@ ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData* pData )
                     InsertPage( static_cast<sal_uInt16>(i)+1, aString, TabBarPageBits::Blue);
                 else
                     InsertPage( static_cast<sal_uInt16>(i)+1, aString );
+
+                if ( pDoc->IsTabProtected(i) )
+                    SetProtectionSymbol(static_cast<sal_uInt16>(i)+1, true);
+
                 if ( !pDoc->IsDefaultTabBgColor(i) )
                 {
                     aTabBgColor = pDoc->GetTabBgColor(i);
@@ -368,6 +372,10 @@ void ScTabControl::UpdateStatus()
                         InsertPage(static_cast<sal_uInt16>(i)+1, aString, TabBarPageBits::Blue);
                     else
                         InsertPage( static_cast<sal_uInt16>(i)+1, aString );
+
+                    if ( pDoc->IsTabProtected(i) )
+                        SetProtectionSymbol(static_cast<sal_uInt16>(i)+1, true);
+
                     if ( !pDoc->IsDefaultTabBgColor(i) )
                     {
                         aTabBgColor = pDoc->GetTabBgColor(i);
