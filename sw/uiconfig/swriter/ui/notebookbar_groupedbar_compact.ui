@@ -4379,10 +4379,10 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="sfxlo-PriorityHBox" id="DefaultContainer">
+                  <object class="sfxlo-PriorityMergedHBox" id="DefaultContainer">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="StylesSection">
+                      <object class="sfxlo-OptionalBox" id="StylesSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -4515,7 +4515,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="FormatSection">
+                      <object class="sfxlo-OptionalBox" id="FormatSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -4725,7 +4725,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ParagraphSection">
+                      <object class="sfxlo-OptionalBox" id="ParagraphSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -4956,7 +4956,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="InsertSection">
+                      <object class="sfxlo-OptionalBox" id="InsertSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -5108,7 +5108,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ReferenceSection">
+                      <object class="sfxlo-OptionalBox" id="ReferenceSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -5222,7 +5222,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ReviewSection">
+                      <object class="sfxlo-OptionalBox" id="ReviewSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -5336,7 +5336,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-DropdownBox" id="ViewSection">
+                      <object class="sfxlo-OptionalBox" id="ViewSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>

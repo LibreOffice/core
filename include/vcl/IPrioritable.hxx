@@ -39,6 +39,7 @@ public:
 
     virtual void HideContent() = 0;
     virtual void ShowContent() = 0;
+    virtual bool IsHidden() = 0;
 
 private:
     int m_nPriority;
