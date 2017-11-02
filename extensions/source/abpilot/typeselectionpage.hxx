@@ -29,9 +29,8 @@
 namespace abp
 {
 
-    class TypeSelectionPage : public AddressBookSourcePage
+    class TypeSelectionPage final : public AddressBookSourcePage
     {
-    protected:
         VclPtr<RadioButton> m_pEvolution;
         VclPtr<RadioButton> m_pEvolutionGroupwise;
         VclPtr<RadioButton> m_pEvolutionLdap;
@@ -65,7 +64,7 @@ namespace abp
         // retrieves the currently selected type
         AddressSourceType   getSelectedType() const;
 
-    protected:
+    private:
         // OWizardPage overridables
         virtual void        initializePage() override;
         virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
@@ -77,7 +76,6 @@ namespace abp
         // OImportPage overridables
         virtual bool        canAdvance() const override;
 
-    private:
         DECL_LINK( OnTypeSelected, Button*, void );
 
         void                selectType( AddressSourceType _eType );

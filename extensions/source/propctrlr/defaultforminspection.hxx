@@ -30,16 +30,14 @@ namespace pcr
 
     class OPropertyInfoService;
 
-    class DefaultFormComponentInspectorModel : public ImplInspectorModel
+    class DefaultFormComponentInspectorModel final : public ImplInspectorModel
     {
-    private:
         bool                                        m_bUseFormComponentHandlers;
         bool                                        m_bConstructed;
 
         /// access to property meta data
         std::unique_ptr< OPropertyInfoService >   m_pInfoService;
 
-    protected:
         virtual ~DefaultFormComponentInspectorModel() override;
 
         // XServiceInfo
@@ -63,10 +61,9 @@ namespace pcr
         static css::uno::Reference< css::uno::XInterface > SAL_CALL
                         Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
-    public:
         explicit DefaultFormComponentInspectorModel( bool _bUseFormFormComponentHandlers = true );
 
-    protected:
+    private:
         // Service constructors
         void    createWithHelpSection( sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines );
     };

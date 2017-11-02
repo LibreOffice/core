@@ -35,7 +35,7 @@ namespace pcr
 
     // OSelectLabelDialog
 
-    class OSelectLabelDialog
+    class OSelectLabelDialog final
             :public ModalDialog
     {
         VclPtr<FixedText>       m_pMainDesc;
@@ -59,7 +59,7 @@ namespace pcr
 
         css::uno::Reference< css::beans::XPropertySet >  GetSelected() const { return m_pNoAssignment->IsChecked() ? css::uno::Reference< css::beans::XPropertySet > () : m_xSelectedControl; }
 
-    protected:
+    private:
         sal_Int32 InsertEntries(const css::uno::Reference< css::uno::XInterface >& _xContainer, SvTreeListEntry* pContainerEntry);
 
         DECL_LINK(OnEntrySelected, SvTreeListBox*, void);

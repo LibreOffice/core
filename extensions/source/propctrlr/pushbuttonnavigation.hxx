@@ -31,9 +31,8 @@ namespace pcr
 
     //= PushButtonNavigation
 
-    class PushButtonNavigation
+    class PushButtonNavigation final
     {
-    protected:
         css::uno::Reference< css::beans::XPropertySet >
                     m_xControlModel;
         bool        m_bIsPushButton;

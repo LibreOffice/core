@@ -39,7 +39,7 @@ namespace pcr
 
     //= OPropertyEditor
 
-    class OPropertyEditor : public Control
+    class OPropertyEditor final : public Control
     {
     private:
         typedef std::map< OUString, sal_uInt16 >   MapStringToPageId;
@@ -51,7 +51,6 @@ namespace pcr
             HiddenPage( sal_uInt16 _nPos, TabPage* _pPage ) : nPos( _nPos ), pPage( _pPage ) { }
         };
 
-    private:
         VclPtr<TabControl>          m_aTabControl;
         IPropertyLineListener*      m_pListener;
         IPropertyControlObserver*   m_pObserver;
@@ -64,7 +63,6 @@ namespace pcr
         MapStringToPageId                       m_aPropertyPageIds;
         std::map< sal_uInt16, HiddenPage >    m_aHiddenPages;
 
-    protected:
         void                        Resize() override;
         void                        GetFocus() override;
 
@@ -112,11 +110,10 @@ namespace pcr
 
         void                        CommitModified();
 
-    protected:
+    private:
         using Window::SetHelpText;
         using Window::Update;
 
-    private:
         OBrowserPage* getPage( sal_uInt16& _rPageId );
         const OBrowserPage* getPage( sal_uInt16& _rPageId ) const;
 
@@ -134,7 +131,6 @@ namespace pcr
         static void setHelpSectionText( OBrowserPage& _rPage, const void* _pPointerToOUString );
         void    setHelpLineLimits( OBrowserPage& _rPage, const void* );
 
-    protected:
         DECL_LINK(OnPageDeactivate, TabControl*, bool);
         DECL_LINK(OnPageActivate, TabControl*, void);
     };

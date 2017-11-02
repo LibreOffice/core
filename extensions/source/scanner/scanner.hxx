@@ -37,12 +37,10 @@ using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::scanner;
 
-class ScannerManager:
+class ScannerManager final :
     public cppu::WeakImplHelper<
         XScannerManager2, css::awt::XBitmap, css::lang::XServiceInfo>
 {
-protected:
-
     osl::Mutex                              maProtector;
     void*                                   mpData;
 

@@ -37,17 +37,12 @@ namespace filter{
     @descr      Such refresh listener will be called in case the
                 type/filter configuration will be changed at runtime.
  */
-class ConfigFlush : public BaseLock
+class ConfigFlush final : public BaseLock
                   , public ::cppu::WeakImplHelper<
                                                     css::util::XRefreshable,
                                                     css::lang::XServiceInfo
                                                   >
 {
-
-    // member
-
-    protected:
-
         /** @short  holds all listener, which are registered at this instance. */
         ::cppu::OMultiTypeInterfaceContainerHelper m_lListener;
 

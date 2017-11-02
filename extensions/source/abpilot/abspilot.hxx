@@ -30,9 +30,8 @@ namespace abp
 {
 
     typedef ::svt::RoadmapWizard OAddressBookSourcePilot_Base;
-    class OAddressBookSourcePilot : public OAddressBookSourcePilot_Base
+    class OAddressBookSourcePilot final : public OAddressBookSourcePilot_Base
     {
-    protected:
         css::uno::Reference< css::uno::XComponentContext >
                                 m_xORB;
         AddressSettings         m_aSettings;
@@ -61,7 +60,7 @@ namespace abp
         /// to be called when the selected type changed
         void                    typeSelectionChanged( AddressSourceType _eType );
 
-    protected:
+    private:
         // OWizardMachine overridables
         virtual VclPtr<TabPage>     createPage( WizardState _nState ) override;
         virtual void                enterState( WizardState _nState ) override;
@@ -73,7 +72,6 @@ namespace abp
 
         virtual bool    Close() override;
 
-    private:
         DECL_LINK( OnCancelClicked, Button*, void );
 
         /** creates a new data source of the type indicated by m_aSettings

@@ -41,7 +41,7 @@ enum FilterType
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
 
-class XmlFilterAdaptor : public cppu::WeakImplHelper
+class XmlFilterAdaptor final : public cppu::WeakImplHelper
 <
     css::document::XFilter,
     css::document::XExporter,
@@ -50,9 +50,6 @@ class XmlFilterAdaptor : public cppu::WeakImplHelper
     css::lang::XServiceInfo
 >
 {
-
-protected:
-
     css::uno::Reference< css::uno::XComponentContext > mxContext;
     css::uno::Reference< css::lang::XComponent > mxDoc;
     OUString msFilterName;

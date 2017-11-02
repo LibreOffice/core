@@ -110,9 +110,8 @@ namespace pcr
     //= OEditControl
 
     typedef CommonBehaviourControl< css::inspection::XPropertyControl, Edit > OEditControl_Base;
-    class OEditControl : public OEditControl_Base
+    class OEditControl final : public OEditControl_Base
     {
-    protected:
         bool m_bIsPassword : 1;
 
     public:
@@ -123,7 +122,7 @@ namespace pcr
         virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
         virtual css::uno::Type SAL_CALL getValueType() override;
 
-    protected:
+    private:
         // CommonBehaviourControlHelper::modified
         virtual void setModified() override;
     };
@@ -175,9 +174,8 @@ namespace pcr
     //= OHyperlinkControl
 
     typedef CommonBehaviourControl< css::inspection::XHyperlinkControl, HyperlinkInput > OHyperlinkControl_Base;
-    class OHyperlinkControl : public OHyperlinkControl_Base
+    class OHyperlinkControl final : public OHyperlinkControl_Base
     {
-    private:
         ::comphelper::OInterfaceContainerHelper2   m_aActionListeners;
 
     public:
@@ -192,11 +190,10 @@ namespace pcr
         virtual void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& listener ) override;
         virtual void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& listener ) override;
 
-    protected:
+    private:
         // XComponent
         virtual void SAL_CALL disposing() override;
 
-    protected:
         DECL_LINK( OnHyperlinkClicked, void*, void );
     };
 
@@ -310,7 +307,7 @@ namespace pcr
     //= OComboboxControl
 
     typedef CommonBehaviourControl< css::inspection::XStringListControl, ComboBox > OComboboxControl_Base;
-    class OComboboxControl : public OComboboxControl_Base
+    class OComboboxControl final : public OComboboxControl_Base
     {
     public:
         OComboboxControl( vcl::Window* pParent, WinBits nWinStyle );
@@ -326,7 +323,7 @@ namespace pcr
         virtual void SAL_CALL appendListEntry( const OUString& NewEntry ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getListEntries(  ) override;
 
-    protected:
+    private:
         DECL_LINK( OnEntrySelected, ComboBox&, void );
     };
 
@@ -344,9 +341,8 @@ namespace pcr
     class OMultilineFloatingEdit;
     /** an Edit field which can be used as ControlWindow, and has a drop-down button
     */
-    class DropDownEditControl : public Edit
+    class DropDownEditControl final : public Edit
     {
-    private:
         VclPtr<OMultilineFloatingEdit>      m_pFloatingEdit;
         VclPtr<MultiLineEdit>               m_pImplEdit;
         VclPtr<PushButton>                  m_pDropdownButton;
@@ -370,15 +366,13 @@ namespace pcr
         StlSyntaxSequence< OUString >
                         GetStringListValue() const;
 
-    protected:
+    private:
         // Window overridables
         virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
         virtual void    Resize() override;
 
-    protected:
         long            FindPos(long nSinglePos);
 
-    private:
         DECL_LINK( ReturnHdl, FloatingWindow*, void );
         DECL_LINK( DropDownHdl, Button*, void );
 

@@ -29,14 +29,13 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
-class FilterDetect : public cppu::WeakImplHelper <
+class FilterDetect final : public cppu::WeakImplHelper <
     css::document::XExtendedFilterDetection,
     css::lang::XInitialization,
     css::lang::XServiceInfo
 >
 {
 
-protected:
     css::uno::Reference< css::uno::XComponentContext > mxCtx;
 
 public:

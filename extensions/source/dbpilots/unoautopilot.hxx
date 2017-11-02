@@ -33,7 +33,7 @@ namespace dbp
 {
     typedef ::svt::OGenericUnoDialog    OUnoAutoPilot_Base;
     template <class TYPE, class SERVICEINFO>
-    class OUnoAutoPilot
+    class OUnoAutoPilot final
             :public OUnoAutoPilot_Base
             ,public ::comphelper::OPropertyArrayUsageHelper< OUnoAutoPilot< TYPE, SERVICEINFO > >
     {
@@ -43,7 +43,6 @@ namespace dbp
         }
 
 
-    protected:
         css::uno::Reference< css::beans::XPropertySet >   m_xObjectModel;
 
     public:
@@ -103,7 +102,7 @@ namespace dbp
             return new ::cppu::OPropertyArrayHelper(aProps);
         }
 
-    protected:
+    private:
     // OGenericUnoDialog overridables
         virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) override
         {

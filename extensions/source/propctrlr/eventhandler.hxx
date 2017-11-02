@@ -73,7 +73,7 @@ namespace pcr
     typedef ::cppu::WeakComponentImplHelper    <   css::inspection::XPropertyHandler
                                                 ,   css::lang::XServiceInfo
                                                 >   EventHandler_Base;
-    class EventHandler : public EventHandler_Base
+    class EventHandler final : public EventHandler_Base
     {
     private:
         mutable ::osl::Mutex    m_aMutex;
@@ -102,14 +102,13 @@ namespace pcr
         static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  );
         static css::uno::Reference< css::uno::XInterface > Create( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
-    protected:
+    private:
         explicit EventHandler(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
        );
 
         virtual ~EventHandler() override;
 
-    protected:
         // XPropertyHandler overridables
         virtual void                                         SAL_CALL inspect( const css::uno::Reference< css::uno::XInterface >& _rxIntrospectee ) override;
         virtual css::uno::Any                                SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
@@ -137,7 +136,6 @@ namespace pcr
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-    private:
         /** returns the script events associated with our introspectee
             @param  _out_rEvents
                 Takes, upon successful return, the events currently associated with the introspectee
@@ -240,7 +238,6 @@ namespace pcr
         */
         bool    impl_filterMethod_nothrow( const EventDescription& _rEvent ) const;
 
-    private:
         EventHandler( const EventHandler& ) = delete;
         EventHandler& operator=( const EventHandler& ) = delete;
     };

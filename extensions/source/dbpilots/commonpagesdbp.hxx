@@ -29,9 +29,8 @@
 namespace dbp
 {
 
-    class OTableSelectionPage : public OControlWizardPage
+    class OTableSelectionPage final : public OControlWizardPage
     {
-    protected:
         VclPtr<FixedText>       m_pDatasourceLabel;
         VclPtr<ListBox>         m_pDatasource;
         VclPtr<PushButton>      m_pSearchDatabase;
@@ -45,7 +44,7 @@ namespace dbp
         virtual ~OTableSelectionPage() override;
         virtual void dispose() override;
 
-    protected:
+    private:
         // TabPage overridables
         void ActivatePage() override;
 
@@ -53,7 +52,6 @@ namespace dbp
         virtual void        initializePage() override;
         virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
 
-    protected:
         DECL_LINK( OnListboxSelection, ListBox&, void );
         DECL_LINK( OnListboxDoubleClicked, ListBox&, void );
         DECL_LINK( OnSearchClicked, Button*, void );
