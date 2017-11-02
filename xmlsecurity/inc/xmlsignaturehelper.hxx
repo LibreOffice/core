@@ -28,10 +28,10 @@
 #include <svl/sigstruct.hxx>
 #include "xsecctl.hxx"
 #include "xmlsecuritydllapi.h"
+#include "xmlsignaturehelper.hxx"
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XWriter.hpp>
-#include <com/sun/star/xml/crypto/XUriBinding.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureCreationResultListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultListener.hpp>
@@ -66,7 +66,7 @@ class XMLSECURITY_DLLPUBLIC XMLSignatureHelper
 {
 private:
     css::uno::Reference< css::uno::XComponentContext > mxCtx;
-    css::uno::Reference< css::xml::crypto::XUriBinding > mxUriBinding;
+    rtl::Reference<UriBindingHelper> mxUriBinding;
 
     rtl::Reference<XSecController> mpXSecController;
     bool                        mbError;

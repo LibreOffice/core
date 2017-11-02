@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_HELPER_XMLSIGNATUREHELPER2_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_HELPER_XMLSIGNATUREHELPER2_HXX
+#ifndef INCLUDED_XMLSECURITY_INC_XMLSIGNATUREHELPER2_HXX
+#define INCLUDED_XMLSECURITY_INC_XMLSIGNATUREHELPER2_HXX
 
 #include <tools/link.hxx>
 #include <rtl/ustring.hxx>
@@ -54,6 +54,6 @@ public:
     static css::uno::Reference < css::io::XInputStream > OpenInputStream( const css::uno::Reference < css::embed::XStorage >& rxStore, const OUString& rURI );
 };
 
-#endif // INCLUDED_XMLSECURITY_SOURCE_HELPER_XMLSIGNATUREHELPER2_HXX
+#endif // INCLUDED_XMLSECURITY_INC_XMLSIGNATUREHELPER2_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
