@@ -1,0 +1,21 @@
+diff -r -u configure configure
+--- configure	2017-11-02 09:50:01.000000000 +0900
++++ configure	2017-11-02 09:51:18.000000000 +0900
+@@ -12805,7 +12805,7 @@
+ 
+   dynamic_linker='Android linker'
+   # Don't embed -rpath directories since the linker doesn't support them.
+-  hardcode_libdir_flag_spec='-L$libdir'
++  # hardcode_libdir_flag_spec='-L$libdir'
+   ;;
+ 
+ # This must be glibc/ELF.
+@@ -16771,7 +16771,7 @@
+ 
+   dynamic_linker='Android linker'
+   # Don't embed -rpath directories since the linker doesn't support them.
+-  hardcode_libdir_flag_spec_CXX='-L$libdir'
++  # hardcode_libdir_flag_spec_CXX='-L$libdir'
+   ;;
+ 
+ # This must be glibc/ELF.
