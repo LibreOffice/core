@@ -70,8 +70,8 @@ hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData
     }
 #else
     const char* pBuffer = nullptr;
-    CommonSalLayout *pLayout = static_cast<CommonSalLayout*>( pUserData );
 #if ENABLE_QT5
+    CommonSalLayout *pLayout = static_cast<CommonSalLayout*>( pUserData );
     QByteArray aTable;
     if ( pLayout->mbUseQt5 )
     {
@@ -83,8 +83,9 @@ hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData
     else
 #endif
     {
+        FreetypeFont* pFont = static_cast<FreetypeFont*>(pUserData);
         pBuffer = reinterpret_cast<const char*>(
-            pLayout->mpFreetypeFont->GetTable(pTagName, &nLength) );
+            pFont->GetTable(pTagName, &nLength) );
     }
 #endif
 
@@ -256,41 +257,44 @@ CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
 
 #else
 
+#if ENABLE_QT5
 CommonSalLayout::CommonSalLayout(const FontSelectPattern &rFSP,
                                  FreetypeFont *pFreetypeFont,
                                  Qt5Font *pQt5Font, bool bUseQt5)
     : mrFontSelData(rFSP)
     , mpFreetypeFont(pFreetypeFont)
-#if ENABLE_QT5
     , mbUseQt5(bUseQt5)
     , mpQFont(pQt5Font)
-#endif
     , mpVertGlyphs(nullptr)
 {
-#if ENABLE_QT5
     if (mbUseQt5)
         mpHbFont = mpQFont->GetHbFont();
     else
-#endif
         mpHbFont = mpFreetypeFont->GetHbFont();
     if (!mpHbFont)
     {
         hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, this, nullptr);
 
         mpHbFont = createHbFont(pHbFace);
-#if ENABLE_QT5
         if (mbUseQt5)
             mpQFont->SetHbFont(mpHbFont);
         else
-#endif
             mpFreetypeFont->SetHbFont(mpHbFont);
     }
 }
+#endif
 
-CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont)
-    : CommonSalLayout(rFreetypeFont.GetFontSelData(),
-                      &rFreetypeFont, nullptr, false)
+CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont) :
+    mrFontSelData(rFreetypeFont.GetFontSelData())
+,   mpFreetypeFont(&rFreetypeFont)
+,   mpVertGlyphs(nullptr)
 {
+    mpHbFont = rFreetypeFont.GetHbFont();
+    if (!mpHbFont)
+    {
+        hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, &rFreetypeFont, nullptr);
+        mpHbFont = createHbFont(pHbFace);
+    }
 }
 
 #if ENABLE_QT5
