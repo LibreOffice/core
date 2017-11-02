@@ -18,7 +18,6 @@
  */
 
 #include <ChartDocumentWrapper.hxx>
-#include <macros.hxx>
 #include <servicenames.hxx>
 #include <PropertyHelper.hxx>
 #include <TitleHelper.hxx>
@@ -472,7 +471,7 @@ void WrappedHasLegendProperty::setPropertyValue( const Any& rOuterValue, const R
     }
     catch (const uno::Exception& ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -490,7 +489,7 @@ Any WrappedHasLegendProperty::getPropertyValue( const Reference< beans::XPropert
     }
     catch (const uno::Exception& ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return aRet;
 }
@@ -539,7 +538,7 @@ void WrappedHasMainTitleProperty::setPropertyValue( const Any& rOuterValue, cons
     }
     catch (const uno::Exception& ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -552,7 +551,7 @@ Any WrappedHasMainTitleProperty::getPropertyValue( const Reference< beans::XProp
     }
     catch (const uno::Exception& ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return aRet;
 }
@@ -601,7 +600,7 @@ void WrappedHasSubTitleProperty::setPropertyValue( const Any& rOuterValue, const
     }
     catch (const uno::Exception& ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -614,7 +613,7 @@ Any WrappedHasSubTitleProperty::getPropertyValue( const Reference< beans::XPrope
     }
     catch (const uno::Exception& ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return aRet;
 }
@@ -700,7 +699,7 @@ Reference< XDiagram > SAL_CALL ChartDocumentWrapper::getDiagram()
         }
         catch (const uno::Exception& ex)
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -734,7 +733,7 @@ void SAL_CALL ChartDocumentWrapper::setDiagram( const Reference< XDiagram >& xDi
         }
         catch (const uno::Exception& ex)
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 }
@@ -887,7 +886,7 @@ void SAL_CALL ChartDocumentWrapper::dispose()
     }
     catch (const uno::Exception &ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -919,11 +918,11 @@ void ChartDocumentWrapper::impl_resetAddIn()
         }
         catch (const uno::RuntimeException& ex)
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
         catch (const uno::Exception& ex)
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 }
@@ -1234,7 +1233,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
             }
             catch (const uno::Exception& ex)
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
 
@@ -1269,7 +1268,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                     }
                     catch (const uno::Exception& ex)
                     {
-                        ASSERT_EXCEPTION( ex );
+                        SAL_WARN("chart2", "Exception caught. " << ex );
                     }
                 }
             }
@@ -1374,7 +1373,7 @@ void SAL_CALL ChartDocumentWrapper::setDelegator(
         }
         catch (const uno::Exception& ex)
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 }

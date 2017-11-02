@@ -23,7 +23,6 @@
 #include <ViewDefines.hxx>
 #include <Stripe.hxx>
 #include <CommonConverters.hxx>
-#include <macros.hxx>
 #include <PropertyMapper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>

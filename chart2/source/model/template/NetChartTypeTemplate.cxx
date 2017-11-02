@@ -18,7 +18,6 @@
  */
 
 #include "NetChartTypeTemplate.hxx"
-#include <macros.hxx>
 #include <PolarCoordinateSystem.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
@@ -75,7 +74,7 @@ void SAL_CALL NetChartTypeTemplate::applyStyle(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -139,7 +138,7 @@ sal_Bool SAL_CALL NetChartTypeTemplate::matchesTemplate(
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
 
@@ -175,7 +174,7 @@ Reference< chart2::XChartType > NetChartTypeTemplate::getChartTypeForIndex( sal_
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xResult;

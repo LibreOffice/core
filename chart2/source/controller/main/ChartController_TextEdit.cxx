@@ -25,7 +25,6 @@
 #include <ChartWindow.hxx>
 #include <TitleHelper.hxx>
 #include <ObjectIdentifier.hxx>
-#include <macros.hxx>
 #include <ControllerLockGuard.hxx>
 #include <AccessibleTextHelper.hxx>
 #include <strings.hrc>

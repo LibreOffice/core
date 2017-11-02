@@ -19,7 +19,6 @@
 
 #include "ChartTypeTemplate.hxx"
 #include <PropertyHelper.hxx>
-#include <macros.hxx>
 #include <DataSeriesHelper.hxx>
 #include "DataInterpreter.hxx"
 #include <CommonConverters.hxx>
@@ -170,7 +169,7 @@ uno::Reference< XDiagram > SAL_CALL ChartTypeTemplate::createDiagramByDataSource
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xDia;
@@ -251,7 +250,7 @@ void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -302,7 +301,7 @@ void SAL_CALL ChartTypeTemplate::changeDiagramData(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -361,7 +360,7 @@ sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return bResult;
@@ -411,7 +410,7 @@ void SAL_CALL ChartTypeTemplate::applyStyle(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 }
@@ -668,7 +667,7 @@ void ChartTypeTemplate::adaptScales(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 }
@@ -782,7 +781,7 @@ void ChartTypeTemplate::FillDiagram(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -852,7 +851,7 @@ void ChartTypeTemplate::createChartTypes(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

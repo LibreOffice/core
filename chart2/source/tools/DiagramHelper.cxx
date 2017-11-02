@@ -20,7 +20,6 @@
 #include <DiagramHelper.hxx>
 #include <LegendHelper.hxx>
 #include <PropertyHelper.hxx>
-#include <macros.hxx>
 #include <DataSeriesHelper.hxx>
 #include <AxisHelper.hxx>
 #include <ContainerHelper.hxx>
@@ -103,7 +102,7 @@ DiagramHelper::tTemplateWithServiceName
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -184,7 +183,7 @@ void DiagramHelper::setVertical(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -307,7 +306,7 @@ void DiagramHelper::setStackMode(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -428,7 +427,7 @@ StackMode DiagramHelper::getStackModeFromChartType(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return eStackMode;
@@ -460,7 +459,7 @@ sal_Int32 DiagramHelper::getDimension( const Reference< XDiagram > & xDiagram )
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return nResult;
@@ -522,7 +521,7 @@ void DiagramHelper::setDimension(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -556,7 +555,7 @@ void DiagramHelper::replaceCoordinateSystem(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 }
@@ -594,7 +593,7 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -696,7 +695,7 @@ std::vector< Reference< XDataSeries > >
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return aResult;
@@ -803,7 +802,7 @@ std::vector< Reference< XAxis > > lcl_getAxisHoldingCategoriesFromDiagram(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     if( aRet.empty() )
@@ -846,7 +845,7 @@ bool DiagramHelper::isCategoryDiagram(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return false;
@@ -914,7 +913,7 @@ Reference< data::XLabeledDataSequence >
                         }
                         catch( const uno::Exception & ex )
                         {
-                            ASSERT_EXCEPTION( ex );
+                            SAL_WARN("chart2", "Exception caught. " << ex );
                         }
                     }
                 }
@@ -923,7 +922,7 @@ Reference< data::XLabeledDataSequence >
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xResult;
@@ -1040,7 +1039,7 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
                 }
                 catch( const uno::Exception & ex )
                 {
-                    ASSERT_EXCEPTION( ex );
+                    SAL_WARN("chart2", "Exception caught. " << ex );
                 }
                 sal_Int32 nType = util::NumberFormat::UNDEFINED;
                 if( xKeyProps.is() )
@@ -1233,7 +1232,7 @@ Sequence< Reference< XChartType > >
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -1531,7 +1530,7 @@ sal_Int32 DiagramHelper::getGeometry3D(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 

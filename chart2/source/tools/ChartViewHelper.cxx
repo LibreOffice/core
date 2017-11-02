@@ -18,7 +18,6 @@
  */
 
 #include <ChartViewHelper.hxx>
-#include <macros.hxx>
 #include <servicenames.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -48,7 +47,7 @@ void ChartViewHelper::setViewToDirtyState( const uno::Reference< frame::XModel >
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 } //namespace chart

@@ -19,7 +19,6 @@
 
 #include <DataPointItemConverter.hxx>
 #include "SchWhichPairs.hxx"
-#include <macros.hxx>
 #include <ItemPropertyMap.hxx>
 
 #include <GraphicPropertyItemConverter.hxx>
@@ -367,7 +366,7 @@ bool DataPointItemConverter::ApplySpecialItem(
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
         }
         break;
@@ -398,7 +397,7 @@ bool DataPointItemConverter::ApplySpecialItem(
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
         }
         break;
@@ -433,7 +432,7 @@ bool DataPointItemConverter::ApplySpecialItem(
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
         }
         break;
@@ -617,7 +616,7 @@ void DataPointItemConverter::FillSpecialItem(
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
         }
         break;
@@ -632,7 +631,7 @@ void DataPointItemConverter::FillSpecialItem(
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
         }
         break;
@@ -649,7 +648,7 @@ void DataPointItemConverter::FillSpecialItem(
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
         }
         break;

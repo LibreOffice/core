@@ -23,7 +23,6 @@
 #include <PlottingPositionHelper.hxx>
 #include <ShapeFactory.hxx>
 #include <ObjectIdentifier.hxx>
-#include <macros.hxx>
 #include <CommonConverters.hxx>
 #include "Tickmarks_Equidistant.hxx"
 #include <com/sun/star/drawing/LineStyle.hpp>

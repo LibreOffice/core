@@ -20,7 +20,6 @@
 #include "tp_3D_SceneAppearance.hxx"
 #include <ChartModelHelper.hxx>
 #include <ThreeDHelper.hxx>
-#include <macros.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -57,7 +56,7 @@ lcl_ModelProperties lcl_getPropertiesFromModel( uno::Reference< frame::XModel > 
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return aProps;
 }
@@ -72,7 +71,7 @@ void lcl_setShadeModeAtModel( uno::Reference< frame::XModel > const & xModel, dr
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

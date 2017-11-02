@@ -19,7 +19,6 @@
 
 #include <CharacterPropertyItemConverter.hxx>
 #include "SchWhichPairs.hxx"
-#include <macros.hxx>
 #include <ItemPropertyMap.hxx>
 #include <RelativeSizeHelper.hxx>
 #include <editeng/memberids.h>
@@ -279,7 +278,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
         break;
@@ -538,7 +537,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
         break;

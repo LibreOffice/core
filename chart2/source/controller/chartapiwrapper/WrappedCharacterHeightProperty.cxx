@@ -18,7 +18,6 @@
  */
 
 #include "WrappedCharacterHeightProperty.hxx"
-#include <macros.hxx>
 #include <RelativeSizeHelper.hxx>
 #include "ReferenceSizePropertyProvider.hxx"
 #include <osl/diagnose.h>

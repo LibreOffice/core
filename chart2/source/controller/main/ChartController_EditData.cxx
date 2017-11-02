@@ -18,7 +18,6 @@
  */
 
 #include <ChartController.hxx>
-#include <macros.hxx>
 
 #include <dlg_DataEditor.hxx>
 #include <DataSourceHelper.hxx>

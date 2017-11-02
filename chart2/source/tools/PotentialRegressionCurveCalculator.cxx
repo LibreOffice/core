@@ -18,7 +18,6 @@
  */
 
 #include <PotentialRegressionCurveCalculator.hxx>
-#include <macros.hxx>
 #include <RegressionCalculationHelper.hxx>
 #include <SpecialCharacters.hxx>
 

@@ -18,7 +18,6 @@
  */
 
 #include "ScatterChartTypeTemplate.hxx"
-#include <macros.hxx>
 #include "XYDataInterpreter.hxx"
 #include <CartesianCoordinateSystem.hxx>
 #include <DiagramHelper.hxx>
@@ -213,7 +212,7 @@ void SAL_CALL ScatterChartTypeTemplate::applyStyle(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -275,7 +274,7 @@ sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
 
@@ -304,7 +303,7 @@ sal_Bool SAL_CALL ScatterChartTypeTemplate::matchesTemplate(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -335,7 +334,7 @@ Reference< chart2::XChartType > ScatterChartTypeTemplate::getChartTypeForIndex( 
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xResult;
@@ -368,7 +367,7 @@ Reference< chart2::XChartType > SAL_CALL ScatterChartTypeTemplate::getChartTypeF
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xResult;

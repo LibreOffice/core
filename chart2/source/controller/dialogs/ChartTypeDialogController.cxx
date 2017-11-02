@@ -22,7 +22,6 @@
 #include <helpids.h>
 #include <strings.hrc>
 #include <bitmaps.hlst>
-#include <macros.hxx>
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <ControllerLockGuard.hxx>
@@ -319,7 +318,7 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
                 }
                 catch( const uno::Exception & ex )
                 {
-                    ASSERT_EXCEPTION( ex );
+                    SAL_WARN("chart2", "Exception caught. " << ex );
                 }
             }
         }
@@ -1209,7 +1208,7 @@ void CombiColumnLineChartDialogController::fillExtraControls( const ChartTypePar
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
     if( nNumLines < 0 )

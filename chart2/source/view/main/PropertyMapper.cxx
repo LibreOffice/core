@@ -18,7 +18,6 @@
  */
 
 #include <PropertyMapper.hxx>
-#include <macros.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -114,7 +113,7 @@ void PropertyMapper::getValueMap(
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
         }
     }
@@ -407,7 +406,7 @@ void PropertyMapper::setMultiProperties(
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e ); //if this occurs more often think of removing the XMultiPropertySet completely for better performance
+        SAL_WARN("chart2", "Exception caught. " << e ); //if this occurs more often think of removing the XMultiPropertySet completely for better performance
     }
 
     if(!bSuccess)
@@ -427,13 +426,13 @@ void PropertyMapper::setMultiProperties(
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
         }
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 

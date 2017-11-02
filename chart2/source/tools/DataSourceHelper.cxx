@@ -18,7 +18,6 @@
  */
 
 #include <DataSourceHelper.hxx>
-#include <macros.hxx>
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <DataSeriesHelper.hxx>
@@ -110,7 +109,7 @@ void lcl_addErrorBarRanges(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -379,7 +378,7 @@ bool DataSourceHelper::detectRangeSegmentation(
     }
     catch( uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return bSomethingDetected;
 }
@@ -424,7 +423,7 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return (bHasCellRangeRepresentation && bHasDataRowSource && bHasFirstCellAsLabel);

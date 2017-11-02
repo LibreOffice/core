@@ -18,7 +18,6 @@
  */
 
 #include "AreaChartTypeTemplate.hxx"
-#include <macros.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DiagramHelper.hxx>
 #include <DataSeriesHelper.hxx>
@@ -159,7 +158,7 @@ sal_Int32 AreaChartTypeTemplate::getDimension() const
     }
     catch( const beans::UnknownPropertyException & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return nDim;
@@ -214,7 +213,7 @@ Reference< chart2::XChartType > AreaChartTypeTemplate::getChartTypeForIndex( sal
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xResult;

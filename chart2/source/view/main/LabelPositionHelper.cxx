@@ -22,7 +22,6 @@
 #include <CommonConverters.hxx>
 #include <PropertyMapper.hxx>
 #include <AbstractShapeFactory.hxx>
-#include <macros.hxx>
 #include <RelativeSizeHelper.hxx>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>

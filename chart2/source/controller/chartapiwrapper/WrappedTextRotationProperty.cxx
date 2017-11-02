@@ -18,7 +18,6 @@
  */
 
 #include "WrappedTextRotationProperty.hxx"
-#include <macros.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>
 
 using namespace ::com::sun::star;

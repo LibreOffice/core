@@ -18,7 +18,6 @@
  */
 
 #include "ElementSelector.hxx"
-#include <macros.hxx>
 #include <ObjectNameProvider.hxx>
 #include <ObjectHierarchy.hxx>
 #include <servicenames.hxx>

@@ -23,7 +23,6 @@
 #include <DataSeriesHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <DiagramHelper.hxx>
-#include <macros.hxx>
 #include <strings.hrc>
 #include <ResId.hxx>
 #include <ContainerHelper.hxx>
@@ -158,7 +157,7 @@ struct lcl_DataSeriesContainerAppend : public
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
         return *this;
     }
@@ -217,7 +216,7 @@ struct lcl_RolesWithRangeAppend : public
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
         return *this;
     }
@@ -427,7 +426,7 @@ std::vector< Reference< XDataSeriesContainer > >
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return aResult;
@@ -518,7 +517,7 @@ DialogModel::tRolesWithRanges DialogModel::getRolesWithRanges(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return aResult;
 }
@@ -575,7 +574,7 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return xNewSeries;
 }
@@ -603,7 +602,7 @@ Reference< data::XLabeledDataSequence > DialogModel::getCategories() const
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return xResult;
 }
@@ -668,7 +667,7 @@ void DialogModel::detectArguments(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -721,7 +720,7 @@ void DialogModel::setData(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -821,7 +820,7 @@ void DialogModel::applyInterpretedData(
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
 

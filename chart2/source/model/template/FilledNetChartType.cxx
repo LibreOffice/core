@@ -19,7 +19,6 @@
 
 #include "FilledNetChartType.hxx"
 #include <PropertyHelper.hxx>
-#include <macros.hxx>
 #include <PolarCoordinateSystem.hxx>
 #include <Scaling.hxx>
 #include <servicenames_charttypes.hxx>

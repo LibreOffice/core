@@ -20,7 +20,6 @@
 #include <RegressionCurveHelper.hxx>
 #include <RegressionCurveItemConverter.hxx>
 #include "SchWhichPairs.hxx"
-#include <macros.hxx>
 #include <ItemPropertyMap.hxx>
 #include <GraphicPropertyItemConverter.hxx>
 

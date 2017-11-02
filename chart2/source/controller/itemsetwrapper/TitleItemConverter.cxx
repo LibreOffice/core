@@ -19,7 +19,6 @@
 
 #include <TitleItemConverter.hxx>
 #include "SchWhichPairs.hxx"
-#include <macros.hxx>
 #include <ItemPropertyMap.hxx>
 #include <GraphicPropertyItemConverter.hxx>
 #include <CharacterPropertyItemConverter.hxx>

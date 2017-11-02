@@ -18,7 +18,6 @@
  */
 
 #include "BubbleChartTypeTemplate.hxx"
-#include <macros.hxx>
 #include "BubbleDataInterpreter.hxx"
 #include <CartesianCoordinateSystem.hxx>
 #include <Scaling.hxx>
@@ -169,7 +168,7 @@ Reference< chart2::XChartType > BubbleChartTypeTemplate::getChartTypeForIndex( s
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xResult;
@@ -191,7 +190,7 @@ Reference< chart2::XChartType > SAL_CALL BubbleChartTypeTemplate::getChartTypeFo
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xResult;

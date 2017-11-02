@@ -19,7 +19,6 @@
 
 #include "PieChartType.hxx"
 #include <PropertyHelper.hxx>
-#include <macros.hxx>
 #include <PolarCoordinateSystem.hxx>
 #include <AxisHelper.hxx>
 #include <servicenames_charttypes.hxx>

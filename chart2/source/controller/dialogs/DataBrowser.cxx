@@ -27,7 +27,6 @@
 #include <DiagramHelper.hxx>
 #include <ChartModelHelper.hxx>
 #include <CommonConverters.hxx>
-#include <macros.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <ResId.hxx>

@@ -19,7 +19,6 @@
 
 #include <res_LegendPosition.hxx>
 #include <ChartModelHelper.hxx>
-#include <macros.hxx>
 #include <LegendHelper.hxx>
 #include <ChartModel.hxx>
 
@@ -117,7 +116,7 @@ void LegendPositionResources::writeToResources( const uno::Reference< frame::XMo
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -161,7 +160,7 @@ void LegendPositionResources::writeToModel( const css::uno::Reference< frame::XM
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

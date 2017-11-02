@@ -18,7 +18,6 @@
  */
 
 #include <ThreeDHelper.hxx>
-#include <macros.hxx>
 #include <DiagramHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <BaseGFXHelper.hxx>
@@ -973,7 +972,7 @@ void ThreeDHelper::switchRightAngledAxes( const Reference< beans::XPropertySet >
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -1028,7 +1027,7 @@ void ThreeDHelper::setRotationAngleToDiagram(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -1105,7 +1104,7 @@ double ThreeDHelper::getCameraDistance(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return fCameraDistance;
 }
@@ -1133,7 +1132,7 @@ void ThreeDHelper::setCameraDistance(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -1183,7 +1182,7 @@ ThreeDLookScheme ThreeDHelper::detectScheme( const uno::Reference< XDiagram >& x
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     if( lcl_isSimpleScheme( aShadeMode, nRoundedEdges, nObjectLines, xDiagram ) )
@@ -1233,7 +1232,7 @@ void ThreeDHelper::setScheme( const uno::Reference< XDiagram >& xDiagram, ThreeD
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
 }
@@ -1290,7 +1289,7 @@ void ThreeDHelper::setDefaultIllumination( const uno::Reference< beans::XPropert
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     ThreeDLookScheme aScheme = (aShadeMode==drawing::ShadeMode_FLAT) ? ThreeDLookScheme_Simple : ThreeDLookScheme_Realistic;
@@ -1337,7 +1336,7 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
                 }
                 catch( const uno::Exception& e )
                 {
-                    ASSERT_EXCEPTION( e );
+                    SAL_WARN("chart2", "Exception caught. " << e );
                     bDifferentRoundedEdges = true;
                 }
                 try
@@ -1350,7 +1349,7 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
                 }
                 catch( const uno::Exception& e )
                 {
-                    ASSERT_EXCEPTION( e );
+                    SAL_WARN("chart2", "Exception caught. " << e );
                     bDifferentObjectLines = true;
                 }
             }
@@ -1392,7 +1391,7 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 

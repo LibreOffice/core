@@ -18,7 +18,6 @@
  */
 
 #include <RelativeSizeHelper.hxx>
-#include <macros.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -79,7 +78,7 @@ void RelativeSizeHelper::adaptFontSizes(
         }
         catch( const Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 }

@@ -19,7 +19,6 @@
 
 #include <dlg_CreationWizard.hxx>
 #include <ResId.hxx>
-#include <macros.hxx>
 #include <strings.hrc>
 #include <helpids.h>
 

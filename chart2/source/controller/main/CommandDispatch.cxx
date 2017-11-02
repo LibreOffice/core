@@ -19,7 +19,6 @@
 
 #include "CommandDispatch.hxx"
 #include <CommonFunctors.hxx>
-#include <macros.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <algorithm>
@@ -161,7 +160,7 @@ void CommandDispatch::fireStatusEventForURL(
                     }
                     catch( const uno::Exception & ex )
                     {
-                        ASSERT_EXCEPTION( ex );
+                        SAL_WARN("chart2", "Exception caught. " << ex );
                     }
                 }
             }

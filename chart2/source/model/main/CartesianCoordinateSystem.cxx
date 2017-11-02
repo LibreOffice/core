@@ -18,7 +18,6 @@
  */
 
 #include <CartesianCoordinateSystem.hxx>
-#include <macros.hxx>
 #include <servicenames_coosystems.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

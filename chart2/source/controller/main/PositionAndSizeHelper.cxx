@@ -18,7 +18,6 @@
  */
 
 #include <PositionAndSizeHelper.hxx>
-#include <macros.hxx>
 #include <ChartModelHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <com/sun/star/chart2/LegendPosition.hpp>

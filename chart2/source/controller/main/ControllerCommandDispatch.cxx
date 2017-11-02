@@ -25,7 +25,6 @@
 #include <TitleHelper.hxx>
 #include <LegendHelper.hxx>
 #include <ObjectIdentifier.hxx>
-#include <macros.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartController.hxx>
 #include <RegressionCurveHelper.hxx>
@@ -297,7 +296,7 @@ void ControllerState::update(
                 }
                 catch(const uno::RuntimeException& e)
                 {
-                    ASSERT_EXCEPTION( e );
+                    SAL_WARN("chart2", "Exception caught. " << e );
                 }
                 bMayAddR2Value = !bHasR2Value;
                 bMayDeleteR2Value = bHasR2Value;
@@ -541,7 +540,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
         }
     }

@@ -18,7 +18,6 @@
  */
 
 #include <UserDefinedProperties.hxx>
-#include <macros.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 

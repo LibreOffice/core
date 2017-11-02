@@ -20,7 +20,6 @@
 #include <StatisticsHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <ErrorBar.hxx>
-#include <macros.hxx>
 #include <unonames.hxx>
 
 #include <rtl/math.hxx>
@@ -153,7 +152,7 @@ void lcl_setXMLRangePropertyAtDataSequence(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

@@ -20,7 +20,6 @@
 #include <SeriesOptionsItemConverter.hxx>
 #include "SchWhichPairs.hxx"
 
-#include <macros.hxx>
 #include <ItemPropertyMap.hxx>
 #include <GraphicPropertyItemConverter.hxx>
 #include <MultipleItemConverter.hxx>
@@ -158,7 +157,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
     }
     catch( const uno::Exception &ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -330,7 +329,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                     }
                     catch( const uno::Exception& e )
                     {
-                        ASSERT_EXCEPTION( e );
+                        SAL_WARN("chart2", "Exception caught. " << e );
                     }
                 }
             }

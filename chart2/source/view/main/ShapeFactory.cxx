@@ -21,7 +21,6 @@
 #include <ViewDefines.hxx>
 #include <Stripe.hxx>
 #include <CommonConverters.hxx>
-#include <macros.hxx>
 #include <RelativeSizeHelper.hxx>
 #include <PropertyMapper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -363,7 +362,7 @@ uno::Reference<drawing::XShape>
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
     uno::Reference<drawing::XShape> xShape = impl_createCube( xTarget, rPosition, rSize, nRotateZAngleHundredthDegree, bRounded );
@@ -427,7 +426,7 @@ uno::Reference<drawing::XShape>
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
     return xShape;
@@ -676,7 +675,7 @@ uno::Reference<drawing::XShape>
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
     return xShape;
@@ -885,7 +884,7 @@ uno::Reference< drawing::XShape >
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
 
@@ -966,7 +965,7 @@ uno::Reference< drawing::XShape >
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
     return xShape;
@@ -1026,7 +1025,7 @@ uno::Reference< drawing::XShape >
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
     return xShape;
@@ -1089,7 +1088,7 @@ uno::Reference< drawing::XShape >
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
     return xShape;
@@ -1129,7 +1128,7 @@ uno::Reference< drawing::XShape >
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
     return xShape;
@@ -1678,7 +1677,7 @@ uno::Reference< drawing::XShape >
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
     return xShape;
@@ -1715,7 +1714,7 @@ uno::Reference< drawing::XShape >
     }
     catch( const uno::Exception & e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
     OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
@@ -1727,7 +1726,7 @@ uno::Reference< drawing::XShape >
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
     return xShape;
@@ -1763,7 +1762,7 @@ uno::Reference< drawing::XShapes >
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
     return nullptr;
 }
@@ -1800,7 +1799,7 @@ uno::Reference< drawing::XShapes >
                 }
                 catch( const uno::Exception& e )
                 {
-                    ASSERT_EXCEPTION( e );
+                    SAL_WARN("chart2", "Exception caught. " << e );
                 }
             }
         }
@@ -1816,7 +1815,7 @@ uno::Reference< drawing::XShapes >
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
     return nullptr;
 }
@@ -1846,7 +1845,7 @@ uno::Reference< drawing::XShape >
     }
     catch( const uno::Exception & e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 
     //set properties
@@ -1860,7 +1859,7 @@ uno::Reference< drawing::XShape >
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
     return xShape;
@@ -1936,7 +1935,7 @@ uno::Reference< drawing::XShape >
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
     return xShape;
@@ -2000,7 +1999,7 @@ uno::Reference< drawing::XShape >
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
     return xShape;
@@ -2042,7 +2041,7 @@ uno::Reference< drawing::XShape > ShapeFactory::createInvisibleRectangle(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return nullptr;
 }
@@ -2127,7 +2126,7 @@ uno::Reference< drawing::XShape >
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
     return xShape;
@@ -2230,7 +2229,7 @@ uno::Reference< drawing::XShape >
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
         }
     }
@@ -2299,7 +2298,7 @@ uno::Reference< drawing::XShape >
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
 
         if(bStackCharacters)
@@ -2382,7 +2381,7 @@ uno::Reference< drawing::XShape >
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
     return xShape;
 }

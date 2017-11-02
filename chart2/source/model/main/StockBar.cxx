@@ -22,7 +22,6 @@
 #include <FillProperties.hxx>
 #include <UserDefinedProperties.hxx>
 #include <PropertyHelper.hxx>
-#include <macros.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -173,7 +172,7 @@ void SAL_CALL StockBar::addModifyListener( const uno::Reference< util::XModifyLi
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -186,7 +185,7 @@ void SAL_CALL StockBar::removeModifyListener( const uno::Reference< util::XModif
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

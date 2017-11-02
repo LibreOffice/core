@@ -18,7 +18,6 @@
  */
 
 #include "TitleWrapper.hxx"
-#include <macros.hxx>
 #include <ControllerLockGuard.hxx>
 
 #include <cppuhelper/supportsservice.hxx>

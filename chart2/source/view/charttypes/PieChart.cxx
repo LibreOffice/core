@@ -21,7 +21,6 @@
 #include <PlottingPositionHelper.hxx>
 #include <AbstractShapeFactory.hxx>
 #include <PolarLabelPositionHelper.hxx>
-#include <macros.hxx>
 #include <CommonConverters.hxx>
 #include <ViewDefines.hxx>
 #include <ObjectIdentifier.hxx>
@@ -188,7 +187,7 @@ PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -644,7 +643,7 @@ void PieChart::createShapes()
                 }
                 catch( const uno::Exception& e )
                 {
-                    ASSERT_EXCEPTION( e );
+                    SAL_WARN("chart2", "Exception caught. " << e );
                 }
 
                 ///see notes for `PolarPlottingPositionHelper` methods
@@ -716,7 +715,7 @@ void PieChart::createShapes()
                 }
                 catch( const uno::Exception& e )
                 {
-                    ASSERT_EXCEPTION( e );
+                    SAL_WARN("chart2", "Exception caught. " << e );
                 }
             }//next series in x slot (next y slot)
         }//next category

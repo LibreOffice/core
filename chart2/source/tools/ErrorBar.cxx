@@ -18,7 +18,6 @@
  */
 
 #include <ErrorBar.hxx>
-#include <macros.hxx>
 #include <ContainerHelper.hxx>
 #include <EventListenerHelper.hxx>
 #include <PropertyHelper.hxx>
@@ -404,7 +403,7 @@ void SAL_CALL ErrorBar::addModifyListener( const uno::Reference< util::XModifyLi
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -417,7 +416,7 @@ void SAL_CALL ErrorBar::removeModifyListener( const uno::Reference< util::XModif
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

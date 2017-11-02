@@ -22,7 +22,6 @@
 #include <chartview/DrawModelWrapper.hxx>
 #include <ObjectIdentifier.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
-#include <macros.hxx>
 #include <dlg_ObjectProperties.hxx>
 #include <dlg_View3D.hxx>
 #include <dlg_InsertErrorBars.hxx>
@@ -826,7 +825,7 @@ void ChartController::executeDispatch_View3D()
     }
     catch(const uno::RuntimeException& e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 

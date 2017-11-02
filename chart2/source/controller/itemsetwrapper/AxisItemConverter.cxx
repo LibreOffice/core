@@ -24,7 +24,6 @@
 #include <chartview/ChartSfxItemIds.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include "SchWhichPairs.hxx"
-#include <macros.hxx>
 #include <ChartModelHelper.hxx>
 #include <AxisHelper.hxx>
 #include <CommonConverters.hxx>

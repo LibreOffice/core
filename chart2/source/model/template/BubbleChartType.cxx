@@ -19,7 +19,6 @@
 
 #include "BubbleChartType.hxx"
 #include <PropertyHelper.hxx>
-#include <macros.hxx>
 #include <servicenames_charttypes.hxx>
 #include <CartesianCoordinateSystem.hxx>
 #include <AxisHelper.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <LinePropertiesHelper.hxx>
-#include <macros.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
@@ -113,7 +112,7 @@ bool LinePropertiesHelper::IsLineVisible( const css::uno::Reference<
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return bRet;
 }
@@ -138,7 +137,7 @@ void LinePropertiesHelper::SetLineVisible( const css::uno::Reference<
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -157,7 +156,7 @@ void LinePropertiesHelper::SetLineInvisible( const css::uno::Reference<
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -173,7 +172,7 @@ void LinePropertiesHelper::SetLineColor( const css::uno::Reference<
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

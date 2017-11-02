@@ -23,7 +23,6 @@
 #include <ObjectIdentifier.hxx>
 #include <LabelPositionHelper.hxx>
 #include "BarPositionHelper.hxx"
-#include <macros.hxx>
 #include <VLegendSymbolFactory.hxx>
 #include <FormattedStringHelper.hxx>
 #include <DataSeriesHelper.hxx>
@@ -129,7 +128,7 @@ void CandleStickChart::createShapes()
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 
     //(@todo maybe different iteration for breaks in axis ?)

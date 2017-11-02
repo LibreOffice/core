@@ -18,7 +18,6 @@
  */
 
 #include <WrappedPropertySet.hxx>
-#include <macros.hxx>
 
 #include <tools/solar.h>
 
@@ -238,7 +237,7 @@ void SAL_CALL WrappedPropertySet::setPropertyValues( const Sequence< OUString >&
         }
         catch( const beans::UnknownPropertyException& ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
             bUnknownProperty = true;
         }
     }
@@ -262,11 +261,11 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyValues( const Sequence< 
             }
             catch( const beans::UnknownPropertyException& ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
             catch( const lang::WrappedTargetException& ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
     }

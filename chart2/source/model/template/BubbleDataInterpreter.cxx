@@ -19,7 +19,6 @@
 
 #include "BubbleDataInterpreter.hxx"
 #include <DataSeries.hxx>
-#include <macros.hxx>
 #include <DataSeriesHelper.hxx>
 #include <CommonConverters.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -112,7 +111,7 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -259,7 +258,7 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::reinterpretDataSeries(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -281,7 +280,7 @@ sal_Bool SAL_CALL BubbleDataInterpreter::isDataCompatible(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 

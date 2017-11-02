@@ -19,7 +19,6 @@
 
 #include "CandleStickChartType.hxx"
 #include <PropertyHelper.hxx>
-#include <macros.hxx>
 #include <StockBar.hxx>
 #include <servicenames_charttypes.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -195,7 +194,7 @@ CandleStickChartType::~CandleStickChartType()
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

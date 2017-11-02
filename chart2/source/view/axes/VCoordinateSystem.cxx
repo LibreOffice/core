@@ -24,7 +24,6 @@
 #include <VSeriesPlotter.hxx>
 #include <AbstractShapeFactory.hxx>
 #include <servicenames_coosystems.hxx>
-#include <macros.hxx>
 #include <AxisIndexDefines.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ExplicitCategoriesProvider.hxx>
@@ -556,7 +555,7 @@ bool VCoordinateSystem::getPropertySwapXAndYAxis() const
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
     return bSwapXAndY;
 }

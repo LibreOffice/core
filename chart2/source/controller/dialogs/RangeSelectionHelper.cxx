@@ -19,7 +19,6 @@
 
 #include <RangeSelectionHelper.hxx>
 #include <RangeSelectionListener.hxx>
-#include <macros.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>
 
 using namespace ::com::sun::star;
@@ -56,7 +55,7 @@ Reference< sheet::XRangeSelection > const & RangeSelectionHelper::getRangeSelect
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
 
             m_xRangeSelection.clear();
         }
@@ -87,7 +86,7 @@ void RangeSelectionHelper::raiseRangeSelectionDocument()
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 }
@@ -134,7 +133,7 @@ bool RangeSelectionHelper::chooseRange(
     catch( const uno::Exception & ex )
     {
         bResult = false;
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return bResult;

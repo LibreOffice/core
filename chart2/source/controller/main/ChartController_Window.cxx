@@ -30,7 +30,6 @@
 #include <ControllerLockGuard.hxx>
 #include <ObjectNameProvider.hxx>
 #include <strings.hrc>
-#include <macros.hxx>
 #include "DragMethod_PieSegment.hxx"
 #include "DragMethod_RotateDiagram.hxx"
 #include <ObjectHierarchy.hxx>
@@ -482,7 +481,7 @@ void ChartController::execute_Paint(vcl::RenderContext& rRenderContext, const to
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     catch( ... )
     {
@@ -861,7 +860,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                 }
                 catch( const uno::Exception & ex )
                 {
-                    ASSERT_EXCEPTION( ex );
+                    SAL_WARN("chart2", "Exception caught. " << ex );
                 }
                 //all wanted model changes will take effect
                 //and all unwanted view modifications are cleaned
@@ -1090,7 +1089,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                         }
                         catch( const uno::Exception & ex )
                         {
-                            ASSERT_EXCEPTION( ex );
+                            SAL_WARN("chart2", "Exception caught. " << ex );
                         }
                     }
 
@@ -1816,7 +1815,7 @@ bool ChartController::impl_DragDataPoint( const OUString & rCID, double fAdditio
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 

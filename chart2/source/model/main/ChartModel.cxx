@@ -20,7 +20,6 @@
 #include <ChartModel.hxx>
 #include <servicenames.hxx>
 #include <MediaDescriptorHelper.hxx>
-#include <macros.hxx>
 #include <DataSourceHelper.hxx>
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
@@ -866,7 +865,7 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
         }
         catch (const uno::Exception& ex)
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
         unlockControllers();
     }
@@ -975,7 +974,7 @@ uno::Any SAL_CALL ChartModel::queryInterface( const uno::Type& aType )
         }
         catch (const uno::Exception& ex)
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -1054,7 +1053,7 @@ embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentatio
     }
     catch (const uno::Exception& ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return aResult;
@@ -1088,7 +1087,7 @@ uno::Any SAL_CALL ChartModel::getTransferData( const datatransfer::DataFlavor& a
     }
     catch (const uno::Exception& ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return aResult;

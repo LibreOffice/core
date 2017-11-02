@@ -21,7 +21,6 @@
 #include <PropertyMapper.hxx>
 #include <ViewDefines.hxx>
 #include <Stripe.hxx>
-#include <macros.hxx>
 #include <ObjectIdentifier.hxx>
 #include <DiagramHelper.hxx>
 #include <BaseGFXHelper.hxx>
@@ -199,7 +198,7 @@ void VDiagram::createShapes_2d()
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
         }
 
@@ -444,7 +443,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
 }
@@ -607,7 +606,7 @@ void VDiagram::createShapes_3d()
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     //add floor plate
@@ -663,7 +662,7 @@ void VDiagram::createShapes_3d()
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
         }
     }

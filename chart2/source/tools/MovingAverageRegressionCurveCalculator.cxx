@@ -21,7 +21,6 @@
 #include <RegressionCalculationHelper.hxx>
 #include <ResId.hxx>
 #include <strings.hrc>
-#include <macros.hxx>
 
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>

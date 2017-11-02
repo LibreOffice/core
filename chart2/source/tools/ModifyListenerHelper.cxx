@@ -19,7 +19,6 @@
 
 #include <ModifyListenerHelper.hxx>
 #include <WeakListenerAdapter.hxx>
-#include <macros.hxx>
 
 #include <cppuhelper/interfacecontainer.hxx>
 
@@ -116,7 +115,7 @@ void ModifyEventForwarder::AddListener( const Reference< util::XModifyListener >
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -139,7 +138,7 @@ void ModifyEventForwarder::RemoveListener( const Reference< util::XModifyListene
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

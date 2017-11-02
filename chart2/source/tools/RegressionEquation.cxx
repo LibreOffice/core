@@ -23,7 +23,6 @@
 #include <UserDefinedProperties.hxx>
 #include <CharacterProperties.hxx>
 #include <PropertyHelper.hxx>
-#include <macros.hxx>
 #include <ContainerHelper.hxx>
 #include <unonames.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -240,7 +239,7 @@ void SAL_CALL RegressionEquation::addModifyListener( const uno::Reference< util:
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -253,7 +252,7 @@ void SAL_CALL RegressionEquation::removeModifyListener( const uno::Reference< ut
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

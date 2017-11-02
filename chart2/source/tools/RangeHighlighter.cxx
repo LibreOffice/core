@@ -21,7 +21,6 @@
 #include <WeakListenerAdapter.hxx>
 #include <ChartModelHelper.hxx>
 #include <DataSourceHelper.hxx>
-#include <macros.hxx>
 #include <ObjectIdentifier.hxx>
 #include <DataSeriesHelper.hxx>
 
@@ -183,7 +182,7 @@ void RangeHighlighter::determineRanges()
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 }
@@ -229,7 +228,7 @@ void RangeHighlighter::fillRangesForErrorBars(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     if( bUsesRangesAsErrorBars )

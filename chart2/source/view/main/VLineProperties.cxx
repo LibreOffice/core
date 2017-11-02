@@ -18,7 +18,6 @@
  */
 
 #include <VLineProperties.hxx>
-#include <macros.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
 namespace chart
@@ -49,7 +48,7 @@ void VLineProperties::initFromPropertySet( const uno::Reference< beans::XPropert
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
     else

@@ -21,7 +21,6 @@
 #include <AxisHelper.hxx>
 #include <TitleHelper.hxx>
 #include "Chart2ModelContact.hxx"
-#include <macros.hxx>
 #include <WrappedDirectStateProperty.hxx>
 #include "GridWrapper.hxx"
 #include "TitleWrapper.hxx"
@@ -587,7 +586,7 @@ Reference< chart2::XAxis > AxisWrapper::getAxis()
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return xAxis;
 }

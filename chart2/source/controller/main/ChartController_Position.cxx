@@ -19,7 +19,6 @@
 
 #include <ChartController.hxx>
 
-#include <macros.hxx>
 #include <ChartWindow.hxx>
 #include <DrawViewWrapper.hxx>
 #include <PositionAndSizeHelper.hxx>
@@ -170,7 +169,7 @@ void ChartController::executeDispatch_PositionAndSize()
     }
     catch(const uno::Exception& e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 

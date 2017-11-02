@@ -19,7 +19,6 @@
 
 #include "WrappedDataCaptionProperties.hxx"
 #include "WrappedSeriesOrDiagramProperty.hxx"
-#include <macros.hxx>
 #include <FastPropertyIdRanges.hxx>
 #include <unonames.hxx>
 

@@ -18,7 +18,6 @@
  */
 
 #include <BaseCoordinateSystem.hxx>
-#include <macros.hxx>
 #include <PropertyHelper.hxx>
 #include <UserDefinedProperties.hxx>
 #include <ContainerHelper.hxx>
@@ -185,7 +184,7 @@ BaseCoordinateSystem::~BaseCoordinateSystem()
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -298,7 +297,7 @@ void SAL_CALL BaseCoordinateSystem::addModifyListener( const Reference< util::XM
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -311,7 +310,7 @@ void SAL_CALL BaseCoordinateSystem::removeModifyListener( const Reference< util:
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

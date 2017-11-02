@@ -25,7 +25,6 @@
 #include <LabeledDataSequence.hxx>
 #include <DataSource.hxx>
 #include <PropertyHelper.hxx>
-#include <macros.hxx>
 #include <XMLRangeHelper.hxx>
 #include <ContainerHelper.hxx>
 #include <CommonConverters.hxx>
@@ -396,7 +395,7 @@ InternalDataProvider::InternalDataProvider(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

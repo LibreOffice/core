@@ -19,7 +19,6 @@
 
 #include "VLegend.hxx"
 #include "VButton.hxx"
-#include <macros.hxx>
 #include <PropertyMapper.hxx>
 #include <CommonConverters.hxx>
 #include <ObjectIdentifier.hxx>
@@ -81,7 +80,7 @@ double lcl_CalcViewFontSize(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -187,7 +186,7 @@ awt::Size lcl_createTextShapes(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -769,7 +768,7 @@ bool lcl_shouldSymbolsBePlacedOnTheLeftSide( const Reference< beans::XPropertySe
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return bSymbolsLeftSide;
 }
@@ -860,7 +859,7 @@ bool VLegend::isVisible( const Reference< XLegend > & xLegend )
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return bShow;
@@ -1005,7 +1004,7 @@ void VLegend::createShapes(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -1057,7 +1056,7 @@ void VLegend::changePosition(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

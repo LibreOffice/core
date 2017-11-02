@@ -18,7 +18,6 @@
  */
 
 #include <ConfigColorScheme.hxx>
-#include <macros.hxx>
 
 #include <unotools/configitem.hxx>
 #include <sal/macros.h>

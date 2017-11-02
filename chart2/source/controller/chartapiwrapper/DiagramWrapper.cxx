@@ -18,7 +18,6 @@
  */
 
 #include "DiagramWrapper.hxx"
-#include <macros.hxx>
 #include <servicenames_charttypes.hxx>
 #include "DataSeriesPointWrapper.hxx"
 #include "AxisWrapper.hxx"
@@ -1470,7 +1469,7 @@ bool WrappedNumberOfLinesProperty::detectInnerValue( uno::Any& rInnerValue ) con
                 }
                 catch( const uno::Exception & ex )
                 {
-                    ASSERT_EXCEPTION( ex );
+                    SAL_WARN("chart2", "Exception caught. " << ex );
                 }
             }
         }
@@ -1513,7 +1512,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
                 }
                 catch( const uno::Exception & ex )
                 {
-                    ASSERT_EXCEPTION( ex );
+                    SAL_WARN("chart2", "Exception caught. " << ex );
                 }
             }
             else
@@ -1540,7 +1539,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
     }
@@ -1763,7 +1762,7 @@ void WrappedAutomaticSizeProperty::setPropertyValue( const Any& rOuterValue, con
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 }

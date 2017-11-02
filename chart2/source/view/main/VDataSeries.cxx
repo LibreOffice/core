@@ -20,7 +20,6 @@
 #include <memory>
 #include <VDataSeries.hxx>
 #include <ObjectIdentifier.hxx>
-#include <macros.hxx>
 #include <CommonConverters.hxx>
 #include <LabelPositionHelper.hxx>
 #include <ChartTypeHelper.hxx>
@@ -236,7 +235,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
         }
     }
@@ -272,7 +271,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
 }
@@ -649,7 +648,7 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
     return nLabelPlacement;
 }
@@ -794,7 +793,7 @@ std::unique_ptr<Symbol> getSymbolPropertiesFromPropertySet( const uno::Reference
     }
     catch(const uno::Exception &e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
     return apSymbolProps;
 }
@@ -884,7 +883,7 @@ bool VDataSeries::hasPointOwnColor( sal_Int32 index ) const
     }
     catch(const uno::Exception& e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
     return false;
 }
@@ -933,7 +932,7 @@ std::unique_ptr<DataPointLabel> getDataPointLabelFromPropertySet( const uno::Ref
     }
     catch(const uno::Exception &e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
     return apLabel;
 }

@@ -20,7 +20,6 @@
 #include <ChartTypeHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <DataSeriesHelper.hxx>
-#include <macros.hxx>
 #include <servicenames_charttypes.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -557,7 +556,7 @@ sal_Int32 ChartTypeHelper::getNumberOfDisplayedSeries(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
     return nNumberOfSeries;

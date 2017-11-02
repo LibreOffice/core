@@ -19,7 +19,6 @@
 
 #include "StockDataInterpreter.hxx"
 #include <DataSeries.hxx>
-#include <macros.hxx>
 #include <DataSeriesHelper.hxx>
 #include <CommonConverters.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -246,7 +245,7 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
     }
@@ -304,7 +303,7 @@ sal_Bool SAL_CALL StockDataInterpreter::isDataCompatible(
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
     }

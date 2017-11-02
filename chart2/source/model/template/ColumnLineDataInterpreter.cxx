@@ -19,7 +19,6 @@
 
 #include "ColumnLineDataInterpreter.hxx"
 #include <DataSeries.hxx>
-#include <macros.hxx>
 #include <DataSeriesHelper.hxx>
 #include <CommonConverters.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

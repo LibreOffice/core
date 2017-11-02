@@ -22,7 +22,6 @@
 #include <ObjectHierarchy.hxx>
 #include <ObjectIdentifier.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
-#include <macros.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -815,7 +814,7 @@ sal_Int32 AccessibleBase::getColor( eColorType eColType )
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 

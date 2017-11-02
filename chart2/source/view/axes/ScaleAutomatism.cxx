@@ -18,7 +18,6 @@
  */
 
 #include <ScaleAutomatism.hxx>
-#include <macros.hxx>
 #include "Tickmarks_Equidistant.hxx"
 #include <DateHelper.hxx>
 #include "DateScaling.hxx"

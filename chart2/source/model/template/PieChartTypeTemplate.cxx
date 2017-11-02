@@ -18,7 +18,6 @@
  */
 
 #include "PieChartTypeTemplate.hxx"
-#include <macros.hxx>
 #include <CommonConverters.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
@@ -197,7 +196,7 @@ sal_Int32 PieChartTypeTemplate::getDimension() const
     }
     catch( const beans::UnknownPropertyException & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return nDim;
@@ -250,7 +249,7 @@ void PieChartTypeTemplate::adaptScales(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 }
@@ -292,7 +291,7 @@ void PieChartTypeTemplate::createChartTypes(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -362,7 +361,7 @@ sal_Bool SAL_CALL PieChartTypeTemplate::matchesTemplate(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
             bResult = false;
         }
     }
@@ -402,7 +401,7 @@ Reference< chart2::XChartType > PieChartTypeTemplate::getChartTypeForIndex( sal_
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xResult;
@@ -430,7 +429,7 @@ Reference< chart2::XChartType > SAL_CALL PieChartTypeTemplate::getChartTypeForNe
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xResult;
@@ -521,7 +520,7 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -558,7 +557,7 @@ void SAL_CALL PieChartTypeTemplate::resetStyles( const Reference< chart2::XDiagr
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
     }

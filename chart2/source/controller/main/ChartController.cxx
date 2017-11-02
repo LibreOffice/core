@@ -41,7 +41,6 @@
 #include "UndoGuard.hxx"
 #include "ChartDropTargetHelper.hxx"
 
-#include <macros.hxx>
 #include <dlg_CreationWizard.hxx>
 #include <dlg_ChartType.hxx>
 #include <AccessibleChartView.hxx>
@@ -489,7 +488,7 @@ void SAL_CALL ChartController::attachFrame(
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
     }
@@ -852,7 +851,7 @@ void SAL_CALL ChartController::dispose()
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
 #endif
             aModelRef->tryTermination();
@@ -867,7 +866,7 @@ void SAL_CALL ChartController::dispose()
     catch( const uno::Exception & ex )
     {
         assert(!m_xChartView.is());
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
  }
 

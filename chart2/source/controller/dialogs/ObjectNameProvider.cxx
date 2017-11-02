@@ -20,7 +20,6 @@
 #include <ObjectNameProvider.hxx>
 #include <ResId.hxx>
 #include <strings.hrc>
-#include <macros.hxx>
 #include <AxisHelper.hxx>
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
@@ -171,7 +170,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
         }
     }
@@ -626,7 +625,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                     }
                     catch( const uno::Exception & ex )
                     {
-                        ASSERT_EXCEPTION( ex );
+                        SAL_WARN("chart2", "Exception caught. " << ex );
                     }
                 }
             }
@@ -695,7 +694,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                     }
                     catch( const uno::Exception & ex )
                     {
-                        ASSERT_EXCEPTION( ex );
+                        SAL_WARN("chart2", "Exception caught. " << ex );
                     }
                 }
             }

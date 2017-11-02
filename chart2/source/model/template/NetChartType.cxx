@@ -19,7 +19,6 @@
 
 #include "NetChartType.hxx"
 #include <PropertyHelper.hxx>
-#include <macros.hxx>
 #include <PolarCoordinateSystem.hxx>
 #include <servicenames_charttypes.hxx>
 #include <AxisIndexDefines.hxx>

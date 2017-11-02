@@ -18,7 +18,6 @@
  */
 
 #include <FormattedStringHelper.hxx>
-#include <macros.hxx>
 #include <PropertyHelper.hxx>
 #include <com/sun/star/chart2/FormattedString.hpp>
 
@@ -52,7 +51,7 @@ Sequence< Reference< chart2::XFormattedString2 > >
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return Sequence< Reference< XFormattedString2 > >( & xFormStr, 1 );

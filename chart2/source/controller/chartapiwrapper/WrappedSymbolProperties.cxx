@@ -19,7 +19,6 @@
 
 #include "WrappedSymbolProperties.hxx"
 #include "WrappedSeriesOrDiagramProperty.hxx"
-#include <macros.hxx>
 #include <FastPropertyIdRanges.hxx>
 #include <ChartTypeHelper.hxx>
 #include <com/sun/star/chart2/Symbol.hpp>
@@ -340,7 +339,7 @@ void WrappedSymbolBitmapURLProperty::setValueToSeries(
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
     }
@@ -379,7 +378,7 @@ void lcl_correctSymbolSizeForBitmaps( chart2::Symbol& rSymbol )
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
 
             if(!bFoundSize)
@@ -400,7 +399,7 @@ void lcl_correctSymbolSizeForBitmaps( chart2::Symbol& rSymbol )
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -458,7 +457,7 @@ beans::PropertyState WrappedSymbolSizeProperty::getPropertyState( const Referenc
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return beans::PropertyState_DEFAULT_VALUE;
 }

@@ -18,7 +18,6 @@
  */
 
 #include "LegendWrapper.hxx"
-#include <macros.hxx>
 #include "Chart2ModelContact.hxx"
 #include <LegendHelper.hxx>
 #include <cppuhelper/supportsservice.hxx>

@@ -20,7 +20,6 @@
 #include "ChartType.hxx"
 #include <PropertyHelper.hxx>
 #include <CommonFunctors.hxx>
-#include <macros.hxx>
 #include <CartesianCoordinateSystem.hxx>
 #include <AxisHelper.hxx>
 #include <CloneHelper.hxx>
@@ -255,7 +254,7 @@ void SAL_CALL ChartType::addModifyListener( const uno::Reference< util::XModifyL
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -268,7 +267,7 @@ void SAL_CALL ChartType::removeModifyListener( const uno::Reference< util::XModi
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

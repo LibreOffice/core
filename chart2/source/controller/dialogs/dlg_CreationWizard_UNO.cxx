@@ -19,7 +19,6 @@
 
 #include <dlg_CreationWizard_UNO.hxx>
 #include <dlg_CreationWizard.hxx>
-#include <macros.hxx>
 #include <servicenames.hxx>
 #include <TimerTriggeredControllerLock.hxx>
 #include <osl/mutex.hxx>
@@ -254,7 +253,7 @@ void SAL_CALL CreationWizardUnoDlg::disposing()
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

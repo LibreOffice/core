@@ -21,7 +21,6 @@
 #include <RelativeSizeHelper.hxx>
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
-#include <macros.hxx>
 #include <AxisHelper.hxx>
 #include <DataSeriesHelper.hxx>
 
@@ -86,7 +85,7 @@ void ReferenceSizeProvider::setValuesAtTitle(
     }
     catch (const uno::Exception& ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -117,7 +116,7 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
             }
             catch (const uno::Exception& ex)
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
 
             //it is important to correct the datapoint properties first as they do reference the series properties
@@ -160,7 +159,7 @@ void ReferenceSizeProvider::setValuesAtPropertySet(
     }
     catch (const uno::Exception& ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -296,7 +295,7 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
             }
             catch (const uno::Exception& ex)
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
     }

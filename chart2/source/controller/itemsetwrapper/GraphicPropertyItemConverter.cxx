@@ -19,7 +19,6 @@
 
 #include <GraphicPropertyItemConverter.hxx>
 #include "SchWhichPairs.hxx"
-#include <macros.hxx>
 #include <ItemPropertyMap.hxx>
 #include <PropertyHelper.hxx>
 #include <CommonConverters.hxx>
@@ -258,7 +257,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
             }
             catch( const beans::UnknownPropertyException &ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         break;
 
@@ -507,7 +506,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
             }
             catch( const beans::UnknownPropertyException &ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         break;
 

@@ -18,7 +18,6 @@
  */
 
 #include "Legend.hxx"
-#include <macros.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <FillProperties.hxx>
 #include <CharacterProperties.hxx>
@@ -209,7 +208,7 @@ void SAL_CALL Legend::addModifyListener( const Reference< util::XModifyListener 
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -222,7 +221,7 @@ void SAL_CALL Legend::removeModifyListener( const Reference< util::XModifyListen
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

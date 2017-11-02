@@ -18,7 +18,6 @@
  */
 
 #include "VAxisProperties.hxx"
-#include <macros.hxx>
 #include <ViewDefines.hxx>
 #include <CommonConverters.hxx>
 #include <AxisHelper.hxx>
@@ -236,7 +235,7 @@ void AxisProperties::initAxisPositioning( const uno::Reference< beans::XProperty
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -326,7 +325,7 @@ void AxisProperties::init( bool bCartesian )
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -377,7 +376,7 @@ void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
 }

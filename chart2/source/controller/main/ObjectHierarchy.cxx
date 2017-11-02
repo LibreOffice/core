@@ -24,7 +24,6 @@
 #include <RegressionCurveHelper.hxx>
 #include <AxisHelper.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
-#include <macros.hxx>
 #include <ChartTypeHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <LegendHelper.hxx>
@@ -500,7 +499,7 @@ void ImplObjectHierarchy::createDataSeriesTree(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -529,7 +528,7 @@ void ImplObjectHierarchy::createAdditionalShapesTree( ObjectHierarchy::tChildCon
     }
     catch ( const uno::Exception& ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

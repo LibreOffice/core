@@ -18,7 +18,6 @@
  */
 
 #include <VLegendSymbolFactory.hxx>
-#include <macros.hxx>
 #include <PropertyMapper.hxx>
 #include <AbstractShapeFactory.hxx>
 #include <ObjectIdentifier.hxx>
@@ -188,7 +187,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xResult;

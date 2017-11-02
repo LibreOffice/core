@@ -24,7 +24,6 @@
 #include <svl/zformat.hxx>
 
 #include <CommonConverters.hxx>
-#include <macros.hxx>
 #include <ViewDefines.hxx>
 #include <ObjectIdentifier.hxx>
 #include <StatisticsHelper.hxx>
@@ -492,7 +491,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
 
         sal_Int32 nLineCountForSymbolsize = 0;
@@ -686,7 +685,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 
     return xTextShape;
@@ -776,7 +775,7 @@ double lcl_getErrorBarLogicLength(
     }
     catch( const uno::Exception & e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 
     return fResult;
@@ -994,7 +993,7 @@ void VSeriesPlotter::createErrorBar(
     }
     catch( const uno::Exception & e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 
 }
@@ -2499,7 +2498,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return aResult;
 }

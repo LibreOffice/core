@@ -18,7 +18,6 @@
  */
 
 #include "LineChartTypeTemplate.hxx"
-#include <macros.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DataSeriesHelper.hxx>
@@ -243,7 +242,7 @@ sal_Bool SAL_CALL LineChartTypeTemplate::matchesTemplate(
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
 
@@ -272,7 +271,7 @@ sal_Bool SAL_CALL LineChartTypeTemplate::matchesTemplate(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -303,7 +302,7 @@ Reference< chart2::XChartType > LineChartTypeTemplate::getChartTypeForIndex( sal
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xResult;
@@ -336,7 +335,7 @@ Reference< chart2::XChartType > SAL_CALL LineChartTypeTemplate::getChartTypeForN
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xResult;
@@ -360,7 +359,7 @@ void SAL_CALL LineChartTypeTemplate::applyStyle(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

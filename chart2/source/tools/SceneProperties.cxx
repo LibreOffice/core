@@ -18,7 +18,6 @@
  */
 
 #include <SceneProperties.hxx>
-#include <macros.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

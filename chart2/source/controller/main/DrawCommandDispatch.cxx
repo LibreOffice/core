@@ -22,7 +22,6 @@
 #include <ChartController.hxx>
 #include <DrawViewWrapper.hxx>
 #include <chartview/DrawModelWrapper.hxx>
-#include <macros.hxx>
 
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <vcl/svapp.hxx>
