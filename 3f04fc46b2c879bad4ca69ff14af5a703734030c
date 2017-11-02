@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_ff6ebe94",
+        "filename": "sal/osl/w32/socket.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-02T11:22:39Z",
+      "side": 1,
+      "message": "I think you might have a linking problem here because the sal module is \"lower\" in the module dependency tree than comphelper",
+      "revId": "3f04fc46b2c879bad4ca69ff14af5a703734030c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
