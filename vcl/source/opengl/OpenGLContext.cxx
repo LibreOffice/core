@@ -509,9 +509,11 @@ rtl::Reference<OpenGLContext> OpenGLContext::getVCLContext(bool bMakeIfNecessary
     vcl::Window* pDefWindow = !pContext && bMakeIfNecessary ? ImplGetDefaultWindow() : nullptr;
     if (pDefWindow)
     {
+#if HAVE_FEATURE_OPENGL
         // create our magic fallback window context.
         xContext = pDefWindow->GetGraphics()->GetOpenGLContext();
         assert(xContext.is());
+#endif
     }
     else
         xContext = pContext;
