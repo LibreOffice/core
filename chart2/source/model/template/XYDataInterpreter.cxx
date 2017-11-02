@@ -19,7 +19,6 @@
 
 #include "XYDataInterpreter.hxx"
 #include <DataSeries.hxx>
-#include <macros.hxx>
 #include <DataSeriesHelper.hxx>
 #include <CommonConverters.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -96,7 +95,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -220,7 +219,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -243,7 +242,7 @@ sal_Bool SAL_CALL XYDataInterpreter::isDataCompatible(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 

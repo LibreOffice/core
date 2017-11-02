@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <macros.hxx>
 #include <PropertyMapper.hxx>
 #include <CommonConverters.hxx>
 
@@ -159,7 +158,7 @@ void AbstractShapeFactory::makeShapeInvisible( const uno::Reference< drawing::XS
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
 }
@@ -182,7 +181,7 @@ void AbstractShapeFactory::setShapeName( const uno::Reference< drawing::XShape >
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
 }
@@ -201,7 +200,7 @@ OUString AbstractShapeFactory::getShapeName( const uno::Reference< drawing::XSha
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
 

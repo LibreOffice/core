@@ -25,7 +25,6 @@
 #include <DataSeriesHelper.hxx>
 #include "UndoGuard.hxx"
 #include <ControllerLockGuard.hxx>
-#include <macros.hxx>
 #include <ResId.hxx>
 #include <strings.hrc>
 #include <ObjectIdentifier.hxx>
@@ -229,7 +228,7 @@ void ChartController::executeDispatch_NewArrangement()
     }
     catch( const uno::RuntimeException & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -482,7 +481,7 @@ void ChartController::impl_PasteStringAsTextShape( const OUString& rString, cons
             }
             catch ( const uno::Exception& ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
     }
@@ -846,7 +845,7 @@ void ChartController::executeDispatch_ToggleLegend()
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
     else

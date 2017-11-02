@@ -18,7 +18,6 @@
  */
 
 #include "BarChartType.hxx"
-#include <macros.hxx>
 #include <servicenames_charttypes.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

@@ -20,7 +20,6 @@
 #include "DataSeriesProperties.hxx"
 #include "DataPointProperties.hxx"
 #include "DataPoint.hxx"
-#include <macros.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>

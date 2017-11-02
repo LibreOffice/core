@@ -18,7 +18,6 @@
  */
 
 #include <LinearRegressionCurveCalculator.hxx>
-#include <macros.hxx>
 #include <RegressionCalculationHelper.hxx>
 
 #include <rtl/math.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include "GridWrapper.hxx"
-#include <macros.hxx>
 #include <AxisHelper.hxx>
 #include "Chart2ModelContact.hxx"
 #include <AxisIndexDefines.hxx>
@@ -147,7 +146,7 @@ Reference< beans::XPropertySet > GridWrapper::getInnerPropertySet()
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return xRet;
 }

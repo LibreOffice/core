@@ -14,7 +14,6 @@
 #include <PropertyHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <unonames.hxx>
-#include <macros.hxx>
 
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -119,7 +118,7 @@ uno::Reference<chart2::XChartType> GL3DBarChartTypeTemplate::getChartTypeForInde
     }
     catch (const uno::Exception & ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xResult;
@@ -161,7 +160,7 @@ GL3DBarChartTypeTemplate::getChartTypeForNewSeries( const uno::Sequence<uno::Ref
     }
     catch (const uno::Exception & ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xResult;

@@ -23,7 +23,6 @@
 #include <ObjectIdentifier.hxx>
 #include <LabelPositionHelper.hxx>
 #include "BarPositionHelper.hxx"
-#include <macros.hxx>
 #include <AxisIndexDefines.hxx>
 #include <Clipping.hxx>
 #include <DateHelper.hxx>
@@ -57,7 +56,7 @@ BarChart::BarChart( const uno::Reference<XChartType>& xChartTypeModel
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -286,7 +285,7 @@ uno::Reference< drawing::XShape > BarChart::createDataPoint3D_Bar(
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 
     uno::Reference< drawing::XShape > xShape(nullptr);
@@ -643,7 +642,7 @@ void BarChart::createShapes()
                     }
                     catch( const uno::Exception& e )
                     {
-                        ASSERT_EXCEPTION( e );
+                        SAL_WARN("chart2", "Exception caught. " << e );
                     }
 
                     //@todo iterate through all subsystems to create partial points

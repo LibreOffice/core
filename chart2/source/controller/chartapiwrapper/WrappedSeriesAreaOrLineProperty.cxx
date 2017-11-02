@@ -19,7 +19,6 @@
 
 #include "WrappedSeriesAreaOrLineProperty.hxx"
 #include "DataSeriesPointWrapper.hxx"
-#include <macros.hxx>
 
 namespace chart
 {

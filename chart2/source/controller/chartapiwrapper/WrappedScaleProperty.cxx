@@ -18,7 +18,6 @@
  */
 
 #include "WrappedScaleProperty.hxx"
-#include <macros.hxx>
 #include <CommonConverters.hxx>
 #include <AxisHelper.hxx>
 #include <com/sun/star/chart2/XAxis.hpp>

@@ -18,7 +18,6 @@
  */
 
 #include "WrappedNumberFormatProperty.hxx"
-#include <macros.hxx>
 #include <unonames.hxx>
 #include <osl/diagnose.h>
 

@@ -18,7 +18,6 @@
  */
 
 #include "DataPointProperties.hxx"
-#include <macros.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <FillProperties.hxx>
 #include <unonames.hxx>

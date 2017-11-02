@@ -20,7 +20,6 @@
 #include "tp_3D_SceneGeometry.hxx"
 
 #include <BaseGFXHelper.hxx>
-#include <macros.hxx>
 #include <DiagramHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>
@@ -223,7 +222,7 @@ void ThreeD_SceneGeometry_TabPage::applyPerspectiveToModel()
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     m_bPerspectiveChangePending = false;

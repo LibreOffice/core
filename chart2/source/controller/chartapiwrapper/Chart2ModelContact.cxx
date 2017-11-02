@@ -21,7 +21,6 @@
 #include <ChartModelHelper.hxx>
 #include <LegendHelper.hxx>
 #include <CommonConverters.hxx>
-#include <macros.hxx>
 #include <servicenames.hxx>
 #include <ObjectIdentifier.hxx>
 #include <chartview/ExplicitValueProvider.hxx>

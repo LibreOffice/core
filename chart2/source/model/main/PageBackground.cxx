@@ -18,7 +18,6 @@
  */
 
 #include "PageBackground.hxx"
-#include <macros.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <FillProperties.hxx>
 #include <UserDefinedProperties.hxx>
@@ -162,7 +161,7 @@ void SAL_CALL PageBackground::addModifyListener( const uno::Reference< util::XMo
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -175,7 +174,7 @@ void SAL_CALL PageBackground::removeModifyListener( const uno::Reference< util::
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

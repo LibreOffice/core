@@ -19,7 +19,6 @@
 
 #include <ErrorBarItemConverter.hxx>
 #include "SchWhichPairs.hxx"
-#include <macros.hxx>
 #include <ItemPropertyMap.hxx>
 #include <ErrorBar.hxx>
 #include <PropertyHelper.hxx>
@@ -61,7 +60,7 @@ void lcl_getErrorValues( const uno::Reference< beans::XPropertySet > & xErrorBar
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -79,7 +78,7 @@ void lcl_getErrorIndicatorValues(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

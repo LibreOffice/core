@@ -18,7 +18,6 @@
  */
 
 #include "WrappedAddInProperty.hxx"
-#include <macros.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;

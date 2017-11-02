@@ -19,7 +19,6 @@
 
 #include <LabeledDataSequence.hxx>
 #include <ModifyListenerHelper.hxx>
-#include <macros.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
@@ -125,7 +124,7 @@ void SAL_CALL LabeledDataSequence::addModifyListener( const Reference< util::XMo
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -138,7 +137,7 @@ void SAL_CALL LabeledDataSequence::removeModifyListener( const Reference< util::
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

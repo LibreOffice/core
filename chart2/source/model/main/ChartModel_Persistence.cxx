@@ -20,7 +20,6 @@
 #include <memory>
 #include <ChartModel.hxx>
 #include <MediaDescriptorHelper.hxx>
-#include <macros.hxx>
 #include <ChartViewHelper.hxx>
 #include <ChartModelHelper.hxx>
 #include <DataSourceHelper.hxx>
@@ -134,11 +133,11 @@ Reference< embed::XStorage > lcl_createStorage(
     }
     catch(const css::ucb::ContentCreationException& rEx)
     {
-        ASSERT_EXCEPTION( rEx );
+        SAL_WARN("chart2", "Exception caught. " << rEx );
     }
     catch(const css::ucb::CommandFailedException& rEx)
     {
-        ASSERT_EXCEPTION( rEx );
+        SAL_WARN("chart2", "Exception caught. " << rEx );
     }
 
     return xStorage;
@@ -187,7 +186,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
         OSL_ENSURE( xFilter.is(), "Filter not found via factory" );
     }
@@ -318,7 +317,7 @@ void SAL_CALL ChartModel::storeToURL(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
     else
@@ -348,7 +347,7 @@ void ChartModel::impl_store(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
     else
@@ -461,14 +460,14 @@ void ChartModel::insertDefaultChart()
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
         ChartModelHelper::setIncludeHiddenCells( false, *this );
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     setModified( false );
     unlockControllers();
@@ -536,7 +535,7 @@ void SAL_CALL ChartModel::load(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     if( xStorage.is())
@@ -731,7 +730,7 @@ void SAL_CALL ChartModel::modified( const lang::EventObject& rEvenObject)
         }
         catch (const uno::Exception & ex)
         {
-            ASSERT_EXCEPTION(ex);
+            SAL_WARN("chart2", "Exception caught. " << ex);
         }
         unlockControllers();
     }

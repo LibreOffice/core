@@ -18,7 +18,6 @@
  */
 
 #include <ExponentialRegressionCurveCalculator.hxx>
-#include <macros.hxx>
 #include <RegressionCalculationHelper.hxx>
 #include <SpecialCharacters.hxx>
 

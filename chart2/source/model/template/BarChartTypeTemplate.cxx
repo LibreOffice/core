@@ -18,7 +18,6 @@
  */
 
 #include "BarChartTypeTemplate.hxx"
-#include <macros.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DataSeriesHelper.hxx>
@@ -206,7 +205,7 @@ Reference< chart2::XChartType > BarChartTypeTemplate::getChartTypeForIndex( sal_
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xResult;
@@ -260,7 +259,7 @@ void SAL_CALL BarChartTypeTemplate::applyStyle(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 }

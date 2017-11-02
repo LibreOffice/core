@@ -29,7 +29,6 @@
 #include "RegressionCurveModel.hxx"
 #include <ChartTypeHelper.hxx>
 #include <ChartModelHelper.hxx>
-#include <macros.hxx>
 #include <PropertyHelper.hxx>
 #include <ResId.hxx>
 #include <strings.hrc>
@@ -200,7 +199,7 @@ void RegressionCurveHelper::initializeCurveCalculator(
         }
         catch( const Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -252,7 +251,7 @@ bool RegressionCurveHelper::hasMeanValueLine(
     }
     catch( const Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return false;
@@ -285,7 +284,7 @@ uno::Reference< chart2::XRegressionCurve >
         }
         catch( const Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -340,7 +339,7 @@ void RegressionCurveHelper::removeMeanValueLine(
     }
     catch( const Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -422,7 +421,7 @@ bool RegressionCurveHelper::removeAllExceptMeanValueLine(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
     return bRemovedSomething;
@@ -458,7 +457,7 @@ void RegressionCurveHelper::removeEquations(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 }
@@ -496,7 +495,7 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getFirstCurveN
     }
     catch( const Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return nullptr;
@@ -520,7 +519,7 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getRegressionC
     }
     catch( const Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return nullptr;
@@ -570,7 +569,7 @@ SvxChartRegress RegressionCurveHelper::getRegressionType(
     }
     catch( const Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return eResult;
@@ -719,7 +718,7 @@ void RegressionCurveHelper::resetEquationPosition(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 }

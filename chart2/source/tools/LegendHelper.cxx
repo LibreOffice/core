@@ -18,7 +18,6 @@
  */
 
 #include <LegendHelper.hxx>
-#include <macros.hxx>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
@@ -100,7 +99,7 @@ uno::Reference< chart2::XLegend > LegendHelper::getLegend(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xResult;

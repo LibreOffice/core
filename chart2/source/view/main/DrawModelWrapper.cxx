@@ -18,7 +18,6 @@
  */
 
 #include <chartview/DrawModelWrapper.hxx>
-#include <macros.hxx>
 #include <AbstractShapeFactory.hxx>
 #include "ChartItemPool.hxx"
 #include <ObjectIdentifier.hxx>

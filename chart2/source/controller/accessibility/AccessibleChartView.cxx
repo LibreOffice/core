@@ -20,7 +20,6 @@
 #include <AccessibleChartView.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include <servicenames.hxx>
-#include <macros.hxx>
 #include <ObjectHierarchy.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ResId.hxx>

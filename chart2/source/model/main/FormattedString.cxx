@@ -21,7 +21,6 @@
 
 #include <CharacterProperties.hxx>
 #include <PropertyHelper.hxx>
-#include <macros.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -144,7 +143,7 @@ void SAL_CALL FormattedString::addModifyListener( const uno::Reference< util::XM
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -157,7 +156,7 @@ void SAL_CALL FormattedString::removeModifyListener( const uno::Reference< util:
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

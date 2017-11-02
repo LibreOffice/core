@@ -20,7 +20,6 @@
 #include <DataSeriesHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <DataSource.hxx>
-#include <macros.hxx>
 #include <ContainerHelper.hxx>
 #include <unonames.hxx>
 
@@ -179,7 +178,7 @@ void lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( const Reference< chart2::
     }
     catch(const uno::Exception &e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -411,7 +410,7 @@ void setStackModeAtSeries(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -460,7 +459,7 @@ sal_Int32 getAttachedAxisIndex( const Reference< chart2::XDataSeries > & xSeries
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return nRet;
 }
@@ -483,7 +482,7 @@ sal_Int32 getNumberFormatKeyFromAxis(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return nResult;
@@ -530,7 +529,7 @@ void deleteSeries(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -728,7 +727,7 @@ bool hasDataLabelsAtSeries( const Reference< chart2::XDataSeries >& xSeries )
     }
     catch(const uno::Exception &e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
     return bRet;
 }
@@ -761,7 +760,7 @@ bool hasDataLabelsAtPoints( const Reference< chart2::XDataSeries >& xSeries )
     }
     catch(const uno::Exception &e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
     return bRet;
 }
@@ -795,7 +794,7 @@ bool hasDataLabelAtPoint( const Reference< chart2::XDataSeries >& xSeries, sal_I
     }
     catch(const uno::Exception &e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
     return bRet;
 }
@@ -824,7 +823,7 @@ void insertDataLabelToPoint( const Reference< beans::XPropertySet >& xPointProp 
     }
     catch(const uno::Exception &e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -844,7 +843,7 @@ void deleteDataLabelsFromPoint( const Reference< beans::XPropertySet >& xPointPr
     }
     catch(const uno::Exception &e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 

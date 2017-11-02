@@ -18,7 +18,6 @@
  */
 
 #include "UpDownBarWrapper.hxx"
-#include <macros.hxx>
 #include "Chart2ModelContact.hxx"
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
@@ -237,7 +236,7 @@ void SAL_CALL UpDownBarWrapper::setPropertyValues( const uno::Sequence< OUString
         }
         catch( const beans::UnknownPropertyException& ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
     //todo: store unknown properties elsewhere

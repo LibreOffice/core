@@ -18,7 +18,6 @@
  */
 
 #include <WrappedProperty.hxx>
-#include <macros.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
 using namespace ::com::sun::star;
@@ -113,7 +112,7 @@ beans::PropertyState WrappedProperty::getPropertyState( const Reference< beans::
         }
         catch( const beans::UnknownPropertyException& ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
     return aState;

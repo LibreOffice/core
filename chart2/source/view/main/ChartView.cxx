@@ -30,7 +30,6 @@
 #include <VCoordinateSystem.hxx>
 #include <VSeriesPlotter.hxx>
 #include <CommonConverters.hxx>
-#include <macros.hxx>
 #include <TitleHelper.hxx>
 #include <LegendHelper.hxx>
 #include "VLegend.hxx"
@@ -483,7 +482,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     //prepare for autoscaling and shape creation
@@ -779,7 +778,7 @@ void SeriesPlotterContainer::setNumberFormatsFromAxes()
                     }
                     catch( const lang::IndexOutOfBoundsException& e )
                     {
-                        ASSERT_EXCEPTION( e );
+                        SAL_WARN("chart2", "Exception caught. " << e );
                     }
                 }
             }
@@ -1544,7 +1543,7 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
         }
         catch( const uno::Exception& ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 }
@@ -2001,7 +2000,7 @@ bool lcl_getPropertySwapXAndYAxis( const uno::Reference< XDiagram >& xDiagram )
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
         }
     }
@@ -2586,7 +2585,7 @@ void formatPage(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -2642,7 +2641,7 @@ void ChartView::impl_refreshAddIn()
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -2820,7 +2819,7 @@ void ChartView::impl_updateView( bool bCheckLockedCtrler )
             m_bViewDirty = m_bViewUpdatePending;
             m_bViewUpdatePending = false;
             m_bInViewUpdate = false;
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
 
         {
@@ -2926,7 +2925,7 @@ void ChartView::impl_notifyModeChangeListener( const OUString& rNewMode )
     }
     catch( const uno::Exception& ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

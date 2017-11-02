@@ -21,7 +21,6 @@
 #include <PlottingPositionHelper.hxx>
 #include <AbstractShapeFactory.hxx>
 #include <CommonConverters.hxx>
-#include <macros.hxx>
 #include <ViewDefines.hxx>
 #include <ObjectIdentifier.hxx>
 #include "Splines.hxx"

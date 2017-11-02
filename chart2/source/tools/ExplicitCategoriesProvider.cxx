@@ -24,7 +24,6 @@
 #include <CommonConverters.hxx>
 #include <DataSourceHelper.hxx>
 #include <ChartModelHelper.hxx>
-#include <macros.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <unonames.hxx>
 
@@ -123,7 +122,7 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2:
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

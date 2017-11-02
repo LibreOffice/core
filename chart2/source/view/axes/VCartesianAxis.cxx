@@ -21,7 +21,6 @@
 #include <PlottingPositionHelper.hxx>
 #include <AbstractShapeFactory.hxx>
 #include <CommonConverters.hxx>
-#include <macros.hxx>
 #include <ViewDefines.hxx>
 #include <PropertyMapper.hxx>
 #include <NumberFormatterWrapper.hxx>
@@ -1702,7 +1701,7 @@ void VCartesianAxis::updatePositions()
                     }
                     catch( const uno::Exception& e )
                     {
-                        ASSERT_EXCEPTION( e );
+                        SAL_WARN("chart2", "Exception caught. " << e );
                     }
                 }
 

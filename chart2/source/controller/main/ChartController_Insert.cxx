@@ -32,7 +32,6 @@
 #include <AxisHelper.hxx>
 #include <TitleHelper.hxx>
 #include <DiagramHelper.hxx>
-#include <macros.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <ViewElementListProvider.hxx>
@@ -118,7 +117,7 @@ void ChartController::executeDispatch_InsertAxes()
     }
     catch(const uno::RuntimeException& e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -152,7 +151,7 @@ void ChartController::executeDispatch_InsertGrid()
     }
     catch(const uno::RuntimeException& e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -183,7 +182,7 @@ void ChartController::executeDispatch_InsertTitles()
     }
     catch(const uno::RuntimeException& e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -235,7 +234,7 @@ void ChartController::executeDispatch_OpenLegendDialog()
     }
     catch(const uno::RuntimeException& e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -297,7 +296,7 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
     }
     catch(const uno::RuntimeException& e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -508,7 +507,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
         }
         catch(const uno::RuntimeException& e)
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
 }
@@ -733,7 +732,7 @@ void ChartController::executeDispatch_InsertAxisTitle()
     }
     catch(const uno::RuntimeException& e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -755,7 +754,7 @@ void ChartController::executeDispatch_InsertAxis()
     }
     catch(const uno::RuntimeException& e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -777,7 +776,7 @@ void ChartController::executeDispatch_DeleteAxis()
     }
     catch(const uno::RuntimeException& e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -799,7 +798,7 @@ void ChartController::executeDispatch_InsertMajorGrid()
     }
     catch(const uno::RuntimeException& e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -821,7 +820,7 @@ void ChartController::executeDispatch_DeleteMajorGrid()
     }
     catch(const uno::RuntimeException& e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -845,7 +844,7 @@ void ChartController::executeDispatch_InsertMinorGrid()
     }
     catch(const uno::RuntimeException& e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -869,7 +868,7 @@ void ChartController::executeDispatch_DeleteMinorGrid()
     }
     catch(const uno::RuntimeException& e)
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 

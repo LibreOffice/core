@@ -25,7 +25,6 @@
 #include <DiagramHelper.hxx>
 #include <ItemPropertyMap.hxx>
 #include "SchWhichPairs.hxx"
-#include <macros.hxx>
 #include <unonames.hxx>
 
 #include <editeng/brushitem.hxx>
@@ -327,7 +326,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
             }
             catch (const uno::Exception& e)
             {
-                ASSERT_EXCEPTION(e);
+                SAL_WARN("chart2", "Exception caught. " << e);
             }
         }
         break;
@@ -357,7 +356,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
         }
         break;
@@ -390,7 +389,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
             }
             catch (const uno::Exception& e)
             {
-                ASSERT_EXCEPTION(e);
+                SAL_WARN("chart2", "Exception caught. " << e);
             }
         }
         break;
@@ -565,7 +564,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
             }
             catch (const uno::Exception& e)
             {
-                ASSERT_EXCEPTION(e);
+                SAL_WARN("chart2", "Exception caught. " << e);
             }
         }
         break;
@@ -579,7 +578,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
         }
         break;
@@ -595,7 +594,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
             }
             catch (const uno::Exception& e)
             {
-                ASSERT_EXCEPTION(e);
+                SAL_WARN("chart2", "Exception caught. " << e);
             }
         }
         break;

@@ -18,7 +18,6 @@
  */
 
 #include <CachedDataSequence.hxx>
-#include <macros.hxx>
 #include <PropertyHelper.hxx>
 #include <CommonFunctors.hxx>
 #include <ModifyListenerHelper.hxx>
@@ -327,7 +326,7 @@ void SAL_CALL CachedDataSequence::addModifyListener( const Reference< util::XMod
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -340,7 +339,7 @@ void SAL_CALL CachedDataSequence::removeModifyListener( const Reference< util::X
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

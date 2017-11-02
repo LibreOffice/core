@@ -18,7 +18,6 @@
  */
 
 #include <ItemConverter.hxx>
-#include <macros.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <osl/diagnose.h>
 #include <svl/itempool.hxx>
@@ -122,7 +121,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                     }
                     catch( const uno::Exception &ex )
                     {
-                        ASSERT_EXCEPTION( ex );
+                        SAL_WARN("chart2", "Exception caught. " << ex );
                     }
                 }
             }
@@ -134,7 +133,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                 }
                 catch( const uno::Exception &ex )
                 {
-                    ASSERT_EXCEPTION( ex );
+                    SAL_WARN("chart2", "Exception caught. " << ex );
                 }
             }
         }

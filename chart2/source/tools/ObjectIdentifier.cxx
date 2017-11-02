@@ -22,7 +22,6 @@
 #include <map>
 
 #include <ObjectIdentifier.hxx>
-#include <macros.hxx>
 #include <TitleHelper.hxx>
 #include <ChartModelHelper.hxx>
 #include <AxisHelper.hxx>
@@ -376,7 +375,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
     }
     catch(const uno::Exception& ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     if( eObjectType != OBJECTTYPE_UNKNOWN )
@@ -458,7 +457,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
     }
     catch(const uno::Exception& ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     if( eObjectType != OBJECTTYPE_UNKNOWN )
@@ -1387,7 +1386,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
     }
     catch(const uno::Exception& ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return xObjectProperties;
 }

@@ -19,7 +19,6 @@
 
 #include <SelectionHelper.hxx>
 #include <ObjectIdentifier.hxx>
-#include <macros.hxx>
 #include <DiagramHelper.hxx>
 #include <ChartModelHelper.hxx>
 

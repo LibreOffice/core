@@ -19,7 +19,6 @@
 
 #include "VTitle.hxx"
 #include <CommonConverters.hxx>
-#include <macros.hxx>
 #include <PropertyMapper.hxx>
 #include <AbstractShapeFactory.hxx>
 #include <com/sun/star/chart2/XFormattedString.hpp>
@@ -100,7 +99,7 @@ void VTitle::changePosition( const awt::Point& rPos )
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 }
 
@@ -128,7 +127,7 @@ void VTitle::createShapes(
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
 
     AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);

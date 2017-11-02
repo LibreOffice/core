@@ -18,7 +18,6 @@
  */
 
 #include "WrappedSplineProperties.hxx"
-#include <macros.hxx>
 #include <FastPropertyIdRanges.hxx>
 #include <DiagramHelper.hxx>
 #include <unonames.hxx>

@@ -20,7 +20,6 @@
 
 #include <CommonConverters.hxx>
 #include <editeng/unoprnms.hxx>
-#include <macros.hxx>
 
 namespace chart
 {

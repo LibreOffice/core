@@ -19,7 +19,6 @@
 
 #include <PropertyHelper.hxx>
 #include <ContainerHelper.hxx>
-#include <macros.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <osl/diagnose.h>
@@ -51,7 +50,7 @@ struct lcl_EqualsElement
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
         return false;
     }
@@ -164,7 +163,7 @@ OUString lcl_addNamedPropertyUniqueNameToTable(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return rPreferredName;

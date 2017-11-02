@@ -19,7 +19,6 @@
 
 #include "WrappedAutomaticPositionProperties.hxx"
 #include <FastPropertyIdRanges.hxx>
-#include <macros.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 
@@ -67,7 +66,7 @@ void WrappedAutomaticPositionProperty::setPropertyValue( const Any& rOuterValue,
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 }

@@ -24,7 +24,6 @@
 #include <DiagramHelper.hxx>
 #include "res_BarGeometry.hxx"
 #include <ControllerLockGuard.hxx>
-#include <macros.hxx>
 #include "GL3DBarChartDialogController.hxx"
 #include <unonames.hxx>
 
@@ -713,7 +712,7 @@ ChartTypeTabPage::ChartTypeTabPage(vcl::Window* pParent
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
 
@@ -835,7 +834,7 @@ void ChartTypeTabPage::stateChanged( ChangingResource* /*pResource*/ )
     }
     catch ( const uno::Exception& ex )
     {
-        ASSERT_EXCEPTION(ex);
+        SAL_WARN("chart2", "Exception caught. " << ex);
     }
     //the controls have to be enabled/disabled accordingly
     fillAllControls( aParameter );
@@ -899,7 +898,7 @@ void ChartTypeTabPage::selectMainType()
         }
         catch ( const uno::Exception& ex )
         {
-            ASSERT_EXCEPTION(ex);
+            SAL_WARN("chart2", "Exception caught. " << ex);
         }
 
         fillAllControls( aParameter );
@@ -984,7 +983,7 @@ void ChartTypeTabPage::initializePage()
             }
             catch (const uno::Exception& ex)
             {
-                ASSERT_EXCEPTION(ex);
+                SAL_WARN("chart2", "Exception caught. " << ex);
             }
 
             fillAllControls( aParameter );

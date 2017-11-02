@@ -18,7 +18,6 @@
  */
 
 #include <ConfigurationAccess.hxx>
-#include <macros.hxx>
 
 #include <unotools/syslocale.hxx>
 #include <unotools/configitem.hxx>

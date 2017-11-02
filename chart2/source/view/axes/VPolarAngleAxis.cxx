@@ -22,7 +22,6 @@
 #include "VPolarAngleAxis.hxx"
 #include "VPolarGrid.hxx"
 #include <AbstractShapeFactory.hxx>
-#include <macros.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <PolarLabelPositionHelper.hxx>
 #include <tools/color.hxx>

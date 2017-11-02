@@ -18,7 +18,6 @@
  */
 
 #include <WrappedDirectStateProperty.hxx>
-#include <macros.hxx>
 
 using namespace ::com::sun::star;
 

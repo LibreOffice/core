@@ -21,7 +21,6 @@
 #include <strings.hrc>
 #include <ResId.hxx>
 #include <chartview/ChartSfxItemIds.hxx>
-#include <macros.hxx>
 #include "ChartTypeTemplateProvider.hxx"
 #include <RangeSelectionHelper.hxx>
 #include <DataSeriesHelper.hxx>
@@ -843,7 +842,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                 catch( const uno::Exception & ex )
                 {
                     // should work as validation should have happened before
-                    ASSERT_EXCEPTION( ex );
+                    SAL_WARN("chart2", "Exception caught. " << ex );
                 }
             }
             else if( xLabeledSeq.is())
@@ -904,7 +903,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                                 catch( const uno::Exception & ex )
                                 {
                                     // should work as validation should have happened before
-                                    ASSERT_EXCEPTION( ex );
+                                    SAL_WARN("chart2", "Exception caught. " << ex );
                                 }
                                 if( xNewSeq.is())
                                 {
@@ -935,7 +934,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                             catch( const uno::Exception & ex )
                             {
                                 // should work as validation should have happened before
-                                ASSERT_EXCEPTION( ex );
+                                SAL_WARN("chart2", "Exception caught. " << ex );
                             }
                             if( xNewSeq.is())
                             {
@@ -967,7 +966,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
             catch( const uno::Exception & ex )
             {
                 bResult = false;
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
     }
@@ -989,7 +988,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 

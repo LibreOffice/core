@@ -19,7 +19,6 @@
 
 #include "UndoCommandDispatch.hxx"
 #include <ResId.hxx>
-#include <macros.hxx>
 
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/document/UndoFailedException.hpp>

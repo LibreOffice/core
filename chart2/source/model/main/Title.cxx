@@ -18,7 +18,6 @@
  */
 
 #include "Title.hxx"
-#include <macros.hxx>
 #include "FormattedString.hxx"
 #include <LinePropertiesHelper.hxx>
 #include <FillProperties.hxx>
@@ -311,7 +310,7 @@ void SAL_CALL Title::addModifyListener( const uno::Reference< util::XModifyListe
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -324,7 +323,7 @@ void SAL_CALL Title::removeModifyListener( const uno::Reference< util::XModifyLi
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

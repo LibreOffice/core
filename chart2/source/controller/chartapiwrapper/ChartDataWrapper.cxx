@@ -18,7 +18,6 @@
  */
 
 #include "ChartDataWrapper.hxx"
-#include <macros.hxx>
 #include <DiagramHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <servicenames_charttypes.hxx>

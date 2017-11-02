@@ -18,7 +18,6 @@
  */
 
 #include "WrappedGapwidthProperty.hxx"
-#include <macros.hxx>
 #include <DiagramHelper.hxx>
 
 using namespace ::com::sun::star;

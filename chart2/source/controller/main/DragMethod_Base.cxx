@@ -21,7 +21,6 @@
 
 #include <strings.hrc>
 #include <ResId.hxx>
-#include <macros.hxx>
 #include <ObjectNameProvider.hxx>
 #include <ObjectIdentifier.hxx>
 

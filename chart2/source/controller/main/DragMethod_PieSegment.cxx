@@ -21,7 +21,6 @@
 
 #include <strings.hrc>
 #include <ResId.hxx>
-#include <macros.hxx>
 #include <ObjectIdentifier.hxx>
 #include <rtl/math.hxx>
 #include <svx/svdpagv.hxx>
@@ -121,7 +120,7 @@ bool DragMethod_PieSegment::EndSdrDrag(bool /*bCopy*/)
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return true;

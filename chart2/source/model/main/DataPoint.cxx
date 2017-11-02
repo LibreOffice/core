@@ -22,7 +22,6 @@
 #include <CharacterProperties.hxx>
 #include <UserDefinedProperties.hxx>
 #include <PropertyHelper.hxx>
-#include <macros.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -144,7 +143,7 @@ DataPoint::~DataPoint()
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -229,7 +228,7 @@ void SAL_CALL DataPoint::addModifyListener( const uno::Reference< util::XModifyL
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -242,7 +241,7 @@ void SAL_CALL DataPoint::removeModifyListener( const uno::Reference< util::XModi
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

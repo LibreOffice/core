@@ -24,7 +24,6 @@
 #include <DataSeriesHelper.hxx>
 #include <PropertyHelper.hxx>
 #include <ControllerLockGuard.hxx>
-#include <macros.hxx>
 #include <StatisticsHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
@@ -72,7 +71,7 @@ OUString lcl_getRole(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
     return aResult;
@@ -120,7 +119,7 @@ bool lcl_SequenceOfSeriesIsShared(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return bResult;
 }
@@ -961,7 +960,7 @@ void DataBrowserModel::addErrorBarRanges(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

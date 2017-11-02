@@ -20,7 +20,6 @@
 #include "ChartFrameloader.hxx"
 #include <servicenames.hxx>
 #include <MediaDescriptorHelper.hxx>
-#include <macros.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/document/XImporter.hpp>
@@ -176,7 +175,7 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
 
     return true;

@@ -21,7 +21,6 @@
 #include <DataSeries.hxx>
 #include <DataSourceHelper.hxx>
 #include <DataSeriesHelper.hxx>
-#include <macros.hxx>
 #include <CommonConverters.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
@@ -98,7 +97,7 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -179,7 +178,7 @@ InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -202,7 +201,7 @@ sal_Bool SAL_CALL DataInterpreter::isDataCompatible(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -296,7 +295,7 @@ Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 
@@ -318,7 +317,7 @@ OUString DataInterpreter::GetRole( const Reference< data::XDataSequence > & xSeq
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return aResult;
 }
@@ -334,7 +333,7 @@ void DataInterpreter::SetRole( const Reference< data::XDataSequence > & xSeq, co
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

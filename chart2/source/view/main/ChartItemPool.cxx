@@ -18,7 +18,6 @@
  */
 
 #include "ChartItemPool.hxx"
-#include <macros.hxx>
 #include <chartview/ChartSfxItemIds.hxx>
 #include <svx/chrtitem.hxx>
 #include <svl/intitem.hxx>

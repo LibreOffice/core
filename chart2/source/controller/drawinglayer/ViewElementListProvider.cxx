@@ -21,7 +21,6 @@
 #include <ViewElementListProvider.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <chartview/DataPointSymbolSupplier.hxx>
-#include <macros.hxx>
 #include <DrawViewWrapper.hxx>
 
 #include <svx/xtable.hxx>
@@ -139,7 +138,7 @@ SdrObjList* ViewElementListProvider::GetSymbolList() const
     }
     catch( const uno::Exception& e )
     {
-        ASSERT_EXCEPTION( e );
+        SAL_WARN("chart2", "Exception caught. " << e );
     }
     return pSymbolList;
 }

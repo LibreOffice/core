@@ -19,7 +19,6 @@
 
 #include <LegendItemConverter.hxx>
 #include "SchWhichPairs.hxx"
-#include <macros.hxx>
 #include <ItemPropertyMap.hxx>
 #include <GraphicPropertyItemConverter.hxx>
 #include <CharacterPropertyItemConverter.hxx>
@@ -153,7 +152,7 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
                 }
                 catch( const uno::Exception & ex )
                 {
-                    ASSERT_EXCEPTION( ex );
+                    SAL_WARN("chart2", "Exception caught. " << ex );
                 }
             }
         }

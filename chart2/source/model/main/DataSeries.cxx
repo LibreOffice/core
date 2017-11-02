@@ -23,7 +23,6 @@
 #include <CharacterProperties.hxx>
 #include <UserDefinedProperties.hxx>
 #include "DataPoint.hxx"
-#include <macros.hxx>
 #include <DataSeriesHelper.hxx>
 #include <ContainerHelper.hxx>
 #include <CloneHelper.hxx>
@@ -215,7 +214,7 @@ DataSeries::~DataSeries()
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -485,7 +484,7 @@ void SAL_CALL DataSeries::addModifyListener( const Reference< util::XModifyListe
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -498,7 +497,7 @@ void SAL_CALL DataSeries::removeModifyListener( const Reference< util::XModifyLi
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

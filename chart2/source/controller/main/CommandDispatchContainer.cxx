@@ -21,7 +21,6 @@
 #include "UndoCommandDispatch.hxx"
 #include "StatusBarCommandDispatch.hxx"
 #include <DisposeHelper.hxx>
-#include <macros.hxx>
 #include <ChartController.hxx>
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"

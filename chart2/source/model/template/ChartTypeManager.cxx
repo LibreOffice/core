@@ -18,7 +18,6 @@
  */
 
 #include <ChartTypeManager.hxx>
-#include <macros.hxx>
 #include <StackMode.hxx>
 
 #include <CartesianCoordinateSystem.hxx>
@@ -254,7 +253,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
             // As XMultiServiceFactory does not specify, what to do in case
             // createInstance is called with an unknown service-name, this
             // function will just return an empty XInterface.
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
             SAL_WARN("chart2", "Couldn't instantiate service: "<< aServiceSpecifier );
             xResult.set( nullptr );
         }

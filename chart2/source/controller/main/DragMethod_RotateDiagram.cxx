@@ -22,7 +22,6 @@
 #include <SelectionHelper.hxx>
 #include <CommonConverters.hxx>
 #include <ChartModelHelper.hxx>
-#include <macros.hxx>
 #include <DiagramHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>

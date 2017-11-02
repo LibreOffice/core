@@ -19,7 +19,6 @@
 
 #include "WrappedScaleTextProperties.hxx"
 #include <FastPropertyIdRanges.hxx>
-#include <macros.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
@@ -77,7 +76,7 @@ void WrappedScaleTextProperty::setPropertyValue( const Any& rOuterValue, const R
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
     }
 }

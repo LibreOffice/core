@@ -18,7 +18,6 @@
  */
 
 #include "ColumnLineChartTypeTemplate.hxx"
-#include <macros.hxx>
 #include <CommonConverters.hxx>
 #include <DiagramHelper.hxx>
 #include <DataSeriesHelper.hxx>
@@ -227,7 +226,7 @@ void ColumnLineChartTypeTemplate::createChartTypes(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -339,7 +338,7 @@ sal_Bool SAL_CALL ColumnLineChartTypeTemplate::matchesTemplate(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return bResult;
@@ -375,7 +374,7 @@ Reference< XChartType > SAL_CALL ColumnLineChartTypeTemplate::getChartTypeForNew
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xResult;

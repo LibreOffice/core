@@ -19,7 +19,6 @@
 
 #include "Axis.hxx"
 #include "GridProperties.hxx"
-#include <macros.hxx>
 #include <CharacterProperties.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <UserDefinedProperties.hxx>
@@ -383,7 +382,7 @@ Axis::~Axis()
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     m_aSubGridProperties.realloc(0);
@@ -534,7 +533,7 @@ void SAL_CALL Axis::addModifyListener( const Reference< util::XModifyListener >&
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -547,7 +546,7 @@ void SAL_CALL Axis::removeModifyListener( const Reference< util::XModifyListener
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

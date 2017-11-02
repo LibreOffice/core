@@ -18,7 +18,6 @@
  */
 
 #include "Wall.hxx"
-#include <macros.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <FillProperties.hxx>
 #include <UserDefinedProperties.hxx>
@@ -166,7 +165,7 @@ void SAL_CALL Wall::addModifyListener( const uno::Reference< util::XModifyListen
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -179,7 +178,7 @@ void SAL_CALL Wall::removeModifyListener( const uno::Reference< util::XModifyLis
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

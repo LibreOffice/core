@@ -22,7 +22,6 @@
 #include <ObjectIdentifier.hxx>
 #include <ObjectNameProvider.hxx>
 #include <servicenames.hxx>
-#include <macros.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
@@ -107,7 +106,7 @@ void AccessibleChartElement::InitTextEdit()
         }
         catch( const uno::Exception & ex )
         {
-            ASSERT_EXCEPTION( ex );
+            SAL_WARN("chart2", "Exception caught. " << ex );
         }
 }
 

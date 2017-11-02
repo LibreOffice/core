@@ -18,7 +18,6 @@
  */
 
 #include "StockChartTypeTemplate.hxx"
-#include <macros.hxx>
 #include <DataSeriesHelper.hxx>
 #include "StockDataInterpreter.hxx"
 #include <CartesianCoordinateSystem.hxx>
@@ -252,7 +251,7 @@ void SAL_CALL StockChartTypeTemplate::applyStyle(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -387,7 +386,7 @@ void StockChartTypeTemplate::createChartTypes(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -467,7 +466,7 @@ sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return bResult;
@@ -488,7 +487,7 @@ Reference< XChartType > SAL_CALL StockChartTypeTemplate::getChartTypeForNewSerie
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xResult;

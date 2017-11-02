@@ -19,7 +19,6 @@
 
 #include "WrappedStatisticProperties.hxx"
 #include "WrappedSeriesOrDiagramProperty.hxx"
-#include <macros.hxx>
 #include <FastPropertyIdRanges.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <DiagramHelper.hxx>

@@ -21,7 +21,6 @@
 
 #include <WrappedProperty.hxx>
 #include "Chart2ModelContact.hxx"
-#include <macros.hxx>
 #include <DiagramHelper.hxx>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 

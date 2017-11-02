@@ -34,7 +34,6 @@
 #include "tp_PolarOptions.hxx"
 #include <ResId.hxx>
 #include <ViewElementListProvider.hxx>
-#include <macros.hxx>
 #include <ChartModelHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ObjectNameProvider.hxx>
@@ -241,7 +240,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
             }
             catch( const Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
         if( !bXValuesFound && bYValuesFound )

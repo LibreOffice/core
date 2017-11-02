@@ -18,7 +18,6 @@
  */
 
 #include <PolynomialRegressionCurveCalculator.hxx>
-#include <macros.hxx>
 #include <RegressionCalculationHelper.hxx>
 
 #include <cmath>

@@ -18,7 +18,6 @@
  */
 
 #include <LifeTime.hxx>
-#include <macros.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -347,7 +346,7 @@ void CloseableLifeTimeManager::impl_doClose()
     }
     catch( const uno::Exception& ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     if(xCloseable.is())

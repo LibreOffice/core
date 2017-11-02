@@ -20,7 +20,6 @@
 #include <AxisHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <ChartTypeHelper.hxx>
-#include <macros.hxx>
 #include <AxisIndexDefines.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <servicenames_coosystems.hxx>
@@ -292,7 +291,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
 
             if( ! aKeyMap.empty())
@@ -398,7 +397,7 @@ Reference< XAxis > AxisHelper::createAxis(
         }
         catch( const uno::Exception& e )
         {
-            ASSERT_EXCEPTION( e );
+            SAL_WARN("chart2", "Exception caught. " << e );
         }
     }
     return xAxis;
@@ -840,7 +839,7 @@ std::vector< Reference< XAxis > > AxisHelper::getAllAxesOfCoordinateSystem(
                     }
                     catch( const uno::Exception & ex )
                     {
-                        ASSERT_EXCEPTION( ex );
+                        SAL_WARN("chart2", "Exception caught. " << ex );
                     }
                 }
             }
@@ -1117,7 +1116,7 @@ void AxisHelper::setRTLAxisLayout( const Reference< XCoordinateSystem >& xCooSys
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
 
             try
@@ -1142,7 +1141,7 @@ void AxisHelper::setRTLAxisLayout( const Reference< XCoordinateSystem >& xCooSys
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
     }

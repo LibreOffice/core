@@ -18,7 +18,6 @@
  */
 
 #include <Diagram.hxx>
-#include <macros.hxx>
 #include <PropertyHelper.hxx>
 #include "Wall.hxx"
 #include <UserDefinedProperties.hxx>
@@ -338,7 +337,7 @@ Diagram::~Diagram()
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -564,7 +563,7 @@ void SAL_CALL Diagram::addModifyListener( const Reference< util::XModifyListener
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -577,7 +576,7 @@ void SAL_CALL Diagram::removeModifyListener( const Reference< util::XModifyListe
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

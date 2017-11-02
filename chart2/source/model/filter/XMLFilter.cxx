@@ -18,7 +18,6 @@
  */
 
 #include <XMLFilter.hxx>
-#include <macros.hxx>
 #include <MediaDescriptorHelper.hxx>
 
 #include <svtools/sfxecode.hxx>
@@ -120,7 +119,7 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
     }
     catch (const uno::Exception& ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return xStorage;
 }
@@ -173,7 +172,7 @@ uno::Reference< embed::XStorage > lcl_getReadStorage(
     }
     catch (const uno::Exception& ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return xStorage;
@@ -393,7 +392,7 @@ ErrCode XMLFilter::impl_Import(
     }
     catch (const uno::Exception& ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
 
         // something went awry
         nWarning = ERRCODE_SFX_GENERAL;
@@ -503,7 +502,7 @@ ErrCode XMLFilter::impl_ImportStream(
         }
         catch (const uno::Exception& rEx)
         {
-            ASSERT_EXCEPTION(rEx);
+            SAL_WARN("chart2", "Exception caught. " << rEx);
         }
     }
 
@@ -647,7 +646,7 @@ ErrCode XMLFilter::impl_Export(
     }
     catch (const uno::Exception& ex)
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
 
         // something went awry
         nWarning = ERRCODE_SFX_GENERAL;
@@ -690,7 +689,7 @@ ErrCode XMLFilter::impl_ExportStream(
         }
         catch (const uno::Exception& rEx)
         {
-            ASSERT_EXCEPTION( rEx );
+            SAL_WARN("chart2", "Exception caught. " << rEx );
         }
 
         xActiveDataSource->setOutputStream(xOutputStream);
@@ -720,7 +719,7 @@ ErrCode XMLFilter::impl_ExportStream(
     }
     catch (const uno::Exception& rEx)
     {
-        ASSERT_EXCEPTION( rEx );
+        SAL_WARN("chart2", "Exception caught. " << rEx );
     }
     return ERRCODE_NONE;
 }

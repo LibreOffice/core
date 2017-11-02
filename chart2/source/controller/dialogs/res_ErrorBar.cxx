@@ -22,7 +22,6 @@
 #include <bitmaps.hlst>
 #include <RangeSelectionHelper.hxx>
 #include <TabPageNotifiable.hxx>
-#include <macros.hxx>
 #include <helpids.h>
 
 #include <rtl/math.hxx>
@@ -185,7 +184,7 @@ void ErrorBarResources::SetChartDocumentForRangeChoosing(
             }
             catch( const uno::Exception& e )
             {
-                ASSERT_EXCEPTION( e );
+                SAL_WARN("chart2", "Exception caught. " << e );
             }
         }
     }

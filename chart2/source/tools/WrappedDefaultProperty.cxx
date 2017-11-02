@@ -18,7 +18,6 @@
  */
 
 #include <WrappedDefaultProperty.hxx>
-#include <macros.hxx>
 
 using namespace ::com::sun::star;
 
@@ -64,7 +63,7 @@ beans::PropertyState WrappedDefaultProperty::getPropertyState(
     }
     catch( const beans::UnknownPropertyException& ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return aState;
 }

@@ -18,7 +18,6 @@
  */
 
 #include "RegressionCurveModel.hxx"
-#include <macros.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <RegressionCalculationHelper.hxx>
@@ -255,7 +254,7 @@ void SAL_CALL RegressionCurveModel::addModifyListener( const uno::Reference< uti
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 
@@ -268,7 +267,7 @@ void SAL_CALL RegressionCurveModel::removeModifyListener( const uno::Reference< 
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 }
 

@@ -18,7 +18,6 @@
  */
 
 #include "WrappedStockProperties.hxx"
-#include <macros.hxx>
 #include <FastPropertyIdRanges.hxx>
 #include <DiagramHelper.hxx>
 #include <ChartModelHelper.hxx>
@@ -94,7 +93,7 @@ void WrappedStockProperty::setPropertyValue( const css::uno::Any& rOuterValue, c
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
     }

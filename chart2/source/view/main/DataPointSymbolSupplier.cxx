@@ -19,7 +19,6 @@
 
 #include <chartview/DataPointSymbolSupplier.hxx>
 #include <AbstractShapeFactory.hxx>
-#include <macros.hxx>
 
 namespace chart
 {

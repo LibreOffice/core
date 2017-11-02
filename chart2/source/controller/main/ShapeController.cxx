@@ -25,7 +25,6 @@
 #include <dlg_ShapeFont.hxx>
 #include <dlg_ShapeParagraph.hxx>
 #include <chartview/DrawModelWrapper.hxx>
-#include <macros.hxx>
 
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -616,7 +615,7 @@ SdrObject* ShapeController::getFirstAdditionalShape()
     }
     catch ( const uno::Exception& ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return pFirstObj;
@@ -656,7 +655,7 @@ SdrObject* ShapeController::getLastAdditionalShape()
     }
     catch ( const uno::Exception& ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return pLastObj;

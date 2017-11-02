@@ -18,7 +18,6 @@
  */
 
 #include <ChartModelHelper.hxx>
-#include <macros.hxx>
 #include <DiagramHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <ControllerLockGuard.hxx>
@@ -99,7 +98,7 @@ uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< 
     }
     catch( const uno::Exception & ex )
     {
-        ASSERT_EXCEPTION( ex );
+        SAL_WARN("chart2", "Exception caught. " << ex );
     }
     return nullptr;
 }
@@ -278,7 +277,7 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, ChartMod
     }
     catch (const uno::Exception& e)
     {
-        ASSERT_EXCEPTION(e);
+        SAL_WARN("chart2", "Exception caught. " << e);
     }
     return bChanged;
 }

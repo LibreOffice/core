@@ -18,7 +18,6 @@
  */
 
 #include "DataSeriesPointWrapper.hxx"
-#include <macros.hxx>
 #include <RegressionCurveHelper.hxx>
 #include "Chart2ModelContact.hxx"
 #include <ChartTypeHelper.hxx>

@@ -19,7 +19,6 @@
 
 #include <TitleHelper.hxx>
 #include <ChartModelHelper.hxx>
-#include <macros.hxx>
 #include <AxisHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <com/sun/star/chart2/FormattedString.hpp>
@@ -288,7 +287,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
                 }
                 catch( const uno::Exception & ex )
                 {
-                    ASSERT_EXCEPTION( ex );
+                    SAL_WARN("chart2", "Exception caught. " << ex );
                 }
             }
         }
@@ -374,7 +373,7 @@ void TitleHelper::setCompleteString( const OUString& rNewText
             }
             catch( const uno::Exception & ex )
             {
-                ASSERT_EXCEPTION( ex );
+                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
     }
