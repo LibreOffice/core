@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
-#include <tools/toolsdllapi.h>
+#include <vcl/dllapi.h>
 #include <ostream>
 
 /*
@@ -144,10 +144,7 @@ private:
     sal_uInt32 m_value;
 };
 
-inline std::ostream& operator<<(std::ostream& os, const ErrCode& err)
-{
-    os << sal_uInt32(err); return os;
-}
+VCL_DLLPUBLIC std::ostream& operator<<(std::ostream& os, const ErrCode& err);
 
 enum class ErrCodeArea {
     Io                  = 0 ,
