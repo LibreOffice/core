@@ -22,6 +22,24 @@
       "revId": "508797b6734d0798f5ea903bf6fb516b58780e4e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_5f00b201",
+        "filename": "sw/qa/extras/rtfexport/rtfexport2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-11-02T08:05:48Z",
+      "side": 1,
+      "message": "Yes, I think you\u0027re right, just see the comment above. Can\u0027t use SAL_NEWLINE_STRING here to have \\r\\n on Windows?",
+      "parentUuid": "1a430d35_890d8c92",
+      "revId": "508797b6734d0798f5ea903bf6fb516b58780e4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
