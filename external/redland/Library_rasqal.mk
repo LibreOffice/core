@@ -29,9 +29,9 @@ $(eval $(call gb_Library_add_defs,rasqal,\
 ))
 
 $(eval $(call gb_Library_set_include,rasqal,\
-	-I$(WORKDIR)/UnpackedTarball/rasqal/libmtwist \
-	-I$(WORKDIR)/UnpackedTarball/rasqal/libsv \
-	-I$(WORKDIR)/UnpackedTarball/rasqal/src \
+	-I$(call gb_UnpackedTarball_get_dir,rasqal)/libmtwist \
+	-I$(call gb_UnpackedTarball_get_dir,rasqal)/libsv \
+	-I$(call gb_UnpackedTarball_get_dir,rasqal)/src \
 	$$(INCLUDE) \
 ))
 

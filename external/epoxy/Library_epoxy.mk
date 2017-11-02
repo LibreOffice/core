@@ -14,8 +14,8 @@ $(eval $(call gb_Library_use_unpacked,epoxy,epoxy))
 $(eval $(call gb_Library_set_warnings_not_errors,epoxy))
 
 $(eval $(call gb_Library_set_include,epoxy,\
-	-I$(WORKDIR)/UnpackedTarball/epoxy/include \
-	-I$(WORKDIR)/UnpackedTarball/epoxy/src \
+	-I$(call gb_UnpackedTarball_get_dir,epoxy)/include \
+	-I$(call gb_UnpackedTarball_get_dir,epoxy)/src \
 	$$(INCLUDE) \
 ))
 
