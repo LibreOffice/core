@@ -164,9 +164,8 @@ oslFileError oslTranslateFileError(int Errno)
         case ETIMEDOUT:
             return osl_File_E_TIMEDOUT;
 
-        case 0:
-            assert(false);
         default:
+            assert(Errno != 0);
             /* FIXME translateFileError: is this alright? Or add a new one: osl_File_E_Unknown? */
             return osl_File_E_invalidError;
     }
