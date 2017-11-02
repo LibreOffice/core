@@ -23,6 +23,8 @@
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <sax/tools/converter.hxx>
@@ -78,6 +80,8 @@ public:
     void testOOXMLRemoveAll();
     void test96097Calc();
     void test96097Doc();
+    /// Test importing of signature line images
+    void testSignatureLineImages();
 
     CPPUNIT_TEST_SUITE(SigningTest);
     CPPUNIT_TEST(testDescription);
@@ -92,6 +96,7 @@ public:
     CPPUNIT_TEST(testOOXMLRemoveAll);
     CPPUNIT_TEST(test96097Calc);
     CPPUNIT_TEST(test96097Doc);
+    CPPUNIT_TEST(testSignatureLineImages);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -473,6 +478,28 @@ void SigningTest::test96097Doc()
     {
         CPPUNIT_FAIL("Fail to save as the document");
     }
+}
+
+void SigningTest::testSignatureLineImages()
+{
+    // Given: A document (docx) with a signature line and a valid signature
+    uno::Reference< security::XDocumentDigitalSignatures > xSignatures(
+        security::DocumentDigitalSignatures::createWithVersion(
+            comphelper::getProcessComponentContext(), "1.2" ) );
+
+    uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
+        ZIP_STORAGE_FORMAT_STRING, m_directories.getURLFromSrc(DATA_DIRECTORY) + "signatureline.docx",
+         embed::ElementModes::READ);
+    CPPUNIT_ASSERT(xStorage.is());
+
+    uno::Sequence< security::DocumentSignatureInformation > xSignatureInfo =
+        xSignatures->verifyScriptingContentSignatures(xStorage, uno::Reference< io::XInputStream >());
+
+    // The signature should have a valid signature, and signature line with two valid images
+    CPPUNIT_ASSERT(xSignatureInfo[0].SignatureIsValid);
+    CPPUNIT_ASSERT_EQUAL(OUString("{DEE0514B-13E8-4674-A831-46E3CDB18BB4}"), xSignatureInfo[0].SignatureLineId);
+    CPPUNIT_ASSERT(xSignatureInfo[0].ValidSignatureLineImage.is());
+    CPPUNIT_ASSERT(xSignatureInfo[0].InvalidSignatureLineImage.is());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SigningTest);
