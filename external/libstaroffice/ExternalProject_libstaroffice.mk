@@ -36,9 +36,9 @@ $(call gb_ExternalProject_get_state_target,libstaroffice,build) :
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			--disable-werror \
-			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
+			CXXFLAGS="$(gb_CXXFLAGS) $(CXXFLAGS_CXX11) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
 			$(if $(filter LINUX,$(OS)),$(if $(SYSTEM_REVENGE),, \
-				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
+				'LDFLAGS=$(LDFLAGS) -Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN')) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
