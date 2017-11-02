@@ -44,10 +44,9 @@
 
 void OutputError_Impl( HWND hw, HRESULT ErrorCode )
 {
-    LPWSTR sMessage;
+    LPWSTR sMessage = nullptr;
     FormatMessageW(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER |
-        FORMAT_MESSAGE_FROM_SYSTEM,
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
         nullptr,
         ErrorCode,
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
@@ -56,7 +55,7 @@ void OutputError_Impl( HWND hw, HRESULT ErrorCode )
         nullptr
     );
     MessageBoxW( hw, sMessage, nullptr, MB_OK | MB_ICONINFORMATION );
-    LocalFree( sMessage );
+    HeapFree( GetProcessHeap(), 0, sMessage );
 }
 
 HRESULT ExecuteFunc( IDispatch* idispUnoObject,
