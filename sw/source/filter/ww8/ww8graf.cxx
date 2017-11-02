@@ -1460,9 +1460,9 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
             SwFrameFormat *pFrame = m_rDoc.getIDocumentContentOperations().InsertDrawObj( *m_pPaM, *pObject, aSet );
             pObject->SetMergedItemSet(aSet);
 
-            if (dynamic_cast< const SwDrawFrameFormat *>( pFrame ) !=  nullptr)
+            if (SwDrawFrameFormat *pDrawFrame = dynamic_cast<SwDrawFrameFormat*>(pFrame))
             {
-                static_cast<SwDrawFrameFormat*>(pFrame)->PosAttrSet();
+                pDrawFrame->PosAttrSet();
             }
 
             AddAutoAnchor(pFrame);
