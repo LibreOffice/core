@@ -4417,7 +4417,7 @@ PPTParaPropSet::PPTParaPropSet()
     mxParaSet->mnHasAnm = 1;
 }
 
-PPTParaPropSet::PPTParaPropSet( PPTParaPropSet& rParaPropSet )
+PPTParaPropSet::PPTParaPropSet( PPTParaPropSet const & rParaPropSet )
 {
     mxParaSet = rParaPropSet.mxParaSet;
     mnOriginalTextPos = rParaPropSet.mnOriginalTextPos;
@@ -6475,7 +6475,7 @@ void PPTFieldEntry::SetDateTime( sal_uInt32 nVal )
     }
 }
 
-PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport, PptSlidePersistEntry& rPersistEntry, DffObjData* pObjData ) :
+PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport, PptSlidePersistEntry& rPersistEntry, DffObjData const * pObjData ) :
     mxImplTextObj   ( new ImplPPTTextObj( rPersistEntry ) )
 {
     mxImplTextObj->mnShapeId = 0;

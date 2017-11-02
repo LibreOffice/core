@@ -78,7 +78,7 @@ class CGMBitmap
     bool                    ImplGetDimensions( CGMBitmapDescriptor& );
     void                    ImplSetCurrentPalette( CGMBitmapDescriptor& );
     void                    ImplGetBitmap( CGMBitmapDescriptor& );
-    void                    ImplInsert( CGMBitmapDescriptor& rSource, CGMBitmapDescriptor& rDest );
+    void                    ImplInsert( CGMBitmapDescriptor const & rSource, CGMBitmapDescriptor& rDest );
 public:
     explicit CGMBitmap( CGM& rCGM );
     ~CGMBitmap();

@@ -706,7 +706,7 @@ void CGMImpressOutAct::DrawPolyPolygon( tools::PolyPolygon const & rPolyPolygon 
     }
 }
 
-void CGMImpressOutAct::DrawText( awt::Point const & rTextPos, awt::Size& rTextSize, char const * pString, FinalFlag eFlag )
+void CGMImpressOutAct::DrawText( awt::Point const & rTextPos, awt::Size const & rTextSize, char const * pString, FinalFlag eFlag )
 {
     if ( ImplCreateShape( "com.sun.star.drawing.TextShape" ) )
     {

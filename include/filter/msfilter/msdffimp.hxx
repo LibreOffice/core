@@ -78,7 +78,7 @@ class MSFILTER_DLLPUBLIC DffPropertyReader : public DffPropSet
     std::unique_ptr<DffPropSet>  pDefaultPropSet;
 
     void ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const;
-    void CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const;
+    void CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItemSet& rSet, DffObjData const & rObjData ) const;
     void ApplyCustomShapeGeometryAttributes( SvStream& rIn,
                                              SfxItemSet& rSet,
                                              const DffObjData& rObjData ) const;
@@ -101,7 +101,7 @@ public:
 
     void SetDefaultPropSet( SvStream& rIn, sal_uInt32 nOffDgg ) const;
     void ApplyAttributes( SvStream& rIn, SfxItemSet& rSet ) const;
-    void ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const;
+    void ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObjData const & rObjData ) const;
     void ImportGradientColor( SfxItemSet& aSet, MSO_FillType eMSO_FillType, double dTrans, double dBackTrans ) const;
 };
 
