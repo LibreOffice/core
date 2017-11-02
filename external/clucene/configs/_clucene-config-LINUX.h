@@ -51,8 +51,16 @@
 
 #define _O_RANDOM 0
 #define _O_BINARY 0
+#ifndef S_IREAD
+#define _S_IREAD S_IRUSR
+#else
 #define _S_IREAD S_IREAD
+#endif
+#ifndef S_IWRITE
+#define _S_IWRITE S_IWUSR
+#else
 #define _S_IWRITE S_IWRITE
+#endif
 #define _timeb timeb
 
 #define _ILONG(x) x ## L

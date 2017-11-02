@@ -52,10 +52,14 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_file,clucene,src/shared/CLucene/_clucene-config.h,external/clucene/configs/_clucene-config-MSVC.h))
 $(eval $(call gb_UnpackedTarball_add_file,clucene,src/shared/CLucene/clucene-config.h,external/clucene/configs/clucene-config-MSVC.h))
 else # ! $(OS),WNT
+ifeq ($(ANDROID_PORTS),1)
+$(eval $(call gb_UnpackedTarball_add_file,clucene,src/shared/CLucene/clucene-config.h,external/clucene/configs/clucene-config-android.h))
+else
 ifeq ($(HAVE_GCC_BUILTIN_ATOMIC),TRUE)
 $(eval $(call gb_UnpackedTarball_add_file,clucene,src/shared/CLucene/clucene-config.h,external/clucene/configs/clucene-config-GCC-atomic.h))
 else
 $(eval $(call gb_UnpackedTarball_add_file,clucene,src/shared/CLucene/clucene-config.h,external/clucene/configs/clucene-config-generic.h))
+endif
 endif
 ifeq ($(OS),LINUX)
 $(eval $(call gb_UnpackedTarball_add_file,clucene,src/shared/CLucene/_clucene-config.h,external/clucene/configs/_clucene-config-LINUX.h))
