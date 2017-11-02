@@ -16,7 +16,11 @@ $(eval $(call gb_ExternalPackage_add_file,librevenge,$(LIBO_LIB_FOLDER)/libreven
 else ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,librevenge,$(LIBO_LIB_FOLDER)/librevenge-0.0.dll,src/lib/.libs/librevenge-0.0.dll))
 else ifeq ($(DISABLE_DYNLOADING),)
+ifeq ($(ANDROID_PORTS),1)
+$(eval $(call gb_ExternalPackage_add_file,librevenge,$(LIBO_LIB_FOLDER)/librevenge-0.0-lo.so,src/lib/.libs/librevenge-0.0-lo.so))
+else
 $(eval $(call gb_ExternalPackage_add_file,librevenge,$(LIBO_LIB_FOLDER)/librevenge-0.0-lo.so.0,src/lib/.libs/librevenge-0.0-lo.so.0.0.$(REVENGE_VERSION_MICRO)))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:
