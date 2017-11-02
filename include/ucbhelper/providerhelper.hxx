@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UCBHELPER_PROVIDERHELPER_HXX
 #define INCLUDED_UCBHELPER_PROVIDERHELPER_HXX
 
-#include <list>
+#include <vector>
 #include <memory>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -45,7 +45,7 @@ namespace ucbhelper {
 
 class ContentImplHelper;
 typedef rtl::Reference< ContentImplHelper > ContentImplHelperRef;
-typedef std::list< ContentImplHelperRef > ContentRefList;
+typedef std::vector< ContentImplHelperRef > ContentRefList;
 
 /**
   * This is an abstract base class for implementations of the service

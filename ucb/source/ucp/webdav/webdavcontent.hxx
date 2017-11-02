@@ -104,7 +104,7 @@ private:
                        const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
     typedef rtl::Reference< Content > ContentRef;
-    typedef std::list< ContentRef > ContentRefList;
+    typedef std::vector< ContentRef > ContentRefList;
     void queryChildren( ContentRefList& rChildren);
 
     bool

@@ -19,7 +19,7 @@
 
 #include <utility>
 #include <vector>
-#include <list>
+#include <deque>
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
@@ -78,7 +78,7 @@ class HostnameCache
 {
     typedef std::pair< OUString, OUString > HostListEntry;
 
-    std::list< HostListEntry >     m_aHostList;
+    std::deque< HostListEntry >    m_aHostList;
     sal_uInt32                     m_nCapacity;
 
 public:
@@ -87,19 +87,13 @@ public:
 
     bool get( const OUString & rKey, OUString & rValue ) const
     {
-        std::list< HostListEntry >::const_iterator it
-            = m_aHostList.begin();
-        const std::list< HostListEntry >::const_iterator end
-            = m_aHostList.end();
-
-        while ( it != end )
+        for (auto const& host : m_aHostList)
         {
-            if ( (*it).first == rKey )
+            if ( host.first == rKey )
             {
-                rValue = (*it).second;
+                rValue = host.second;
                 return true;
             }
-            ++it;
         }
         return false;
     }
@@ -417,24 +411,18 @@ bool InternetProxyDecider_Impl::shouldUseProxy( const OUString & rHost,
     aBuffer.append( OUString::number( nPort ) );
     const OUString aHostAndPort( aBuffer.makeStringAndClear() );
 
-    std::vector< NoProxyListEntry >::const_iterator it
-        = m_aNoProxyList.begin();
-    const std::vector< NoProxyListEntry >::const_iterator end
-        = m_aNoProxyList.end();
-
-    while ( it != end )
+    for (auto const& noProxy : m_aNoProxyList)
     {
         if ( bUseFullyQualified )
         {
-            if ( (*it).second.Matches( aHostAndPort ) )
+            if ( noProxy.second.Matches( aHostAndPort ) )
                 return false;
         }
         else
         {
-            if ( (*it).first.Matches( aHostAndPort ) )
+            if ( noProxy.first.Matches( aHostAndPort ) )
                 return false;
         }
-        ++it;
     }
 
     return true;

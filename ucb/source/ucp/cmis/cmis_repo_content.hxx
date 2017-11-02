@@ -109,7 +109,7 @@ public:
 
     virtual void SAL_CALL abort( sal_Int32 CommandId ) override;
 
-    virtual std::list< css::uno::Reference< css::ucb::XContent > > getChildren( ) override;
+    virtual std::vector< css::uno::Reference< css::ucb::XContent > > getChildren( ) override;
 };
 
 }

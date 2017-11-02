@@ -133,7 +133,7 @@ private:
     makeNewIdentifier( const OUString& rTitle );
 
     typedef rtl::Reference< Content > ContentRef;
-    typedef std::list< ContentRef > ContentRefList;
+    typedef std::vector< ContentRef > ContentRefList;
     void queryChildren( ContentRefList& rChildren );
 
     bool exchangeIdentity(
