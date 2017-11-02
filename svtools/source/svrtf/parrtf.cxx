@@ -447,7 +447,8 @@ void SvRTFParser::ScanText()
                                     nNextCh = GetNextChar();
                                 } while ( RTF_ISDIGIT( nNextCh ) );
                                 nUCharOverread = nNewOverread;
-                                aParserStates.top().nUCharOverread = nNewOverread;
+                                if (!aParserStates.empty())
+                                    aParserStates.top().nUCharOverread = nNewOverread;
                             }
                             bNextCh = 0x20 == nNextCh;
                         }
