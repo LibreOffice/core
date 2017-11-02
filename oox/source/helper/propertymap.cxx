@@ -528,7 +528,7 @@ static const char *lclGetEnhancedParameterType( sal_uInt16 nType )
     return type;
 }
 
-static void printParameterPairData(int level, EnhancedCustomShapeParameterPair &pp)
+static void printParameterPairData(int level, EnhancedCustomShapeParameterPair const &pp)
 {
     // These are always sal_Int32s so lets depend on that for our packing ...
     sal_Int32 nFirstValue, nSecondValue;

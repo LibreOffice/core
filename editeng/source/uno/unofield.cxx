@@ -203,7 +203,7 @@ static util::DateTime getDate( sal_Int32 nDate )
     return aDate;
 }
 
-inline Date setDate( util::DateTime& rDate )
+inline Date setDate( util::DateTime const & rDate )
 {
     return Date( rDate.Day, rDate.Month, rDate.Year );
 }

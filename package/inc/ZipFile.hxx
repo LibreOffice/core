@@ -67,14 +67,14 @@ class ZipFile
     // aMediaType parameter is used only for raw stream header creation
     css::uno::Reference < css::io::XInputStream >  createStreamForZipEntry(
             const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
-            ZipEntry & rEntry,
+            ZipEntry const & rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             sal_Int8 nStreamMode,
             bool bDecrypt,
             const bool bUseBufferedStream = true,
             const OUString& aMediaType = OUString() );
 
-    bool hasValidPassword ( ZipEntry & rEntry, const rtl::Reference < EncryptionData > &rData );
+    bool hasValidPassword ( ZipEntry const & rEntry, const rtl::Reference < EncryptionData > &rData );
 
     bool checkSizeAndCRC( const ZipEntry& aEntry );
 

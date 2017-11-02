@@ -565,7 +565,7 @@ namespace
     }
 
     Sequence< OUString > lcl_GetLastFoundSvcs(
-            SvtLinguConfig &rCfg,
+            SvtLinguConfig const &rCfg,
             const OUString &rLastFoundList ,
             const OUString& rCfgLocaleStr )
     {

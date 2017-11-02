@@ -42,7 +42,7 @@ SvxEditSourceHint::SvxEditSourceHint( SfxHintId _nId, sal_uLong nValue, sal_Int3
 }
 
 
-std::unique_ptr<SfxHint> SvxEditSourceHelper::EENotification2Hint( EENotify* aNotify )
+std::unique_ptr<SfxHint> SvxEditSourceHelper::EENotification2Hint( EENotify const * aNotify )
 {
     if( aNotify )
     {

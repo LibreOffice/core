@@ -1718,7 +1718,7 @@ bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
 }
 
 void SfxLibraryContainer::implImportLibDescriptor( SfxLibrary* pLib,
-                                                   ::xmlscript::LibDescriptor& rLib )
+                                                   ::xmlscript::LibDescriptor const & rLib )
 {
     if( !pLib->mbInitialised )
     {

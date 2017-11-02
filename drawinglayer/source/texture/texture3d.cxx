@@ -110,7 +110,7 @@ namespace drawinglayer
         {
         }
 
-        sal_uInt8 GeoTexSvxBitmapEx::impGetTransparence(sal_Int32& rX, sal_Int32& rY) const
+        sal_uInt8 GeoTexSvxBitmapEx::impGetTransparence(sal_Int32 rX, sal_Int32 rY) const
         {
             switch(maBitmapEx.GetTransparentType())
             {

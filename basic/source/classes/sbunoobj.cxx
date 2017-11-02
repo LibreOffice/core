@@ -362,7 +362,7 @@ OUString implGetExceptionMsg( const EXCEPTION& e )
     return implGetExceptionMsg( e, cppu::UnoType<decltype(e)>::get().getTypeName() );
 }
 
-void implHandleBasicErrorException( BasicErrorException& e )
+void implHandleBasicErrorException( BasicErrorException const & e )
 {
     ErrCode nError = StarBASIC::GetSfxFromVBError( (sal_uInt16)e.ErrorCode );
     StarBASIC::Error( nError, e.ErrorMessageArgument );
@@ -521,7 +521,7 @@ SbxDataType unoToSbxType( const Reference< XIdlClass >& xIdlClass )
     return eRetType;
 }
 
-static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int32 >& indices, Sequence< sal_Int32 >& sizes, const Any& aValue, sal_Int32& dimension, bool bIsZeroIndex, Type const * pType )
+static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int32 >& indices, Sequence< sal_Int32 >& sizes, const Any& aValue, sal_Int32 dimension, bool bIsZeroIndex, Type const * pType )
 {
     const Type& aType = aValue.getValueType();
     TypeClass eTypeClass = aType.getTypeClass();

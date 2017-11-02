@@ -41,7 +41,7 @@ using com::sun::star::packages::zip::ZipIOException;
 XUnbufferedStream::XUnbufferedStream(
                       const uno::Reference< uno::XComponentContext >& xContext,
                       const rtl::Reference< comphelper::RefCountedMutex >& aMutexHolder,
-                      ZipEntry & rEntry,
+                      ZipEntry const & rEntry,
                       Reference < XInputStream > const & xNewZipStream,
                       const ::rtl::Reference< EncryptionData >& rData,
                       sal_Int8 nStreamMode,

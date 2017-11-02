@@ -47,7 +47,7 @@ protected:
     DECL_LINK( ComboBoxHighlightHdl, ComboBox&, void );
     DECL_LINK( EditModifyHdl, Edit&, void );
     DECL_LINK( ButtonHdl, Button*, void );
-    void            UpdateFields( BreakPoint* pBrk );
+    void            UpdateFields( BreakPoint const * pBrk );
     BreakPoint*     GetSelectedBreakPoint();
 
 
@@ -56,7 +56,7 @@ public:
     virtual ~BreakPointDialog() override;
     virtual void dispose() override;
 
-    void    SetCurrentBreakPoint( BreakPoint* pBrk );
+    void    SetCurrentBreakPoint( BreakPoint const * pBrk );
 };
 
 } // namespace basctl

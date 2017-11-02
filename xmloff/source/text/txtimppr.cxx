@@ -277,9 +277,9 @@ isNotDefaultRelSize(const XMLPropertyState* pRelState, const rtl::Reference<XMLP
  * four side, we have to duplicate the compressed attribute during import.
 **/
 void lcl_SeparateBorder(
-    sal_uInt16 nIndex, XMLPropertyState* pAllBorderDistance,
+    sal_uInt16 nIndex, XMLPropertyState const * pAllBorderDistance,
     XMLPropertyState* pBorderDistances[4], XMLPropertyState* pNewBorderDistances[4],
-    XMLPropertyState* pAllBorder, XMLPropertyState* pBorders[4],
+    XMLPropertyState const * pAllBorder, XMLPropertyState* pBorders[4],
     XMLPropertyState* pNewBorders[4], XMLPropertyState* pAllBorderWidth,
     XMLPropertyState* pBorderWidths[4]
 #if OSL_DEBUG_LEVEL > 0
