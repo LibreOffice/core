@@ -1816,20 +1816,4 @@ void Application::setDeInitHook(Link<LinkParamNone*,void> const & hook) {
     pSVData->maAppData.mbInAppMain = true;
 }
 
-void Application::SetShutdownDelayed()
-{
-    ImplSVData * pSVData = ImplGetSVData();
-    pSVData->maAppData.mbShutdownDelayed = true;
-}
-
-void Application::TriggerShutdownDelayed()
-{
-    ImplSVData * pSVData = ImplGetSVData();
-
-    if (pSVData->maAppData.mbShutdownDelayed && !Dialog::AreDialogsOpen())
-    {
-        Application::PostUserEvent(LINK(nullptr, ImplSVAppData, ImplPrepareExitMsg));
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
