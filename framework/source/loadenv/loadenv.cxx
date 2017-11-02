@@ -371,10 +371,6 @@ void LoadEnv::startLoading()
     if (!bStarted)
         bStarted = impl_loadContent();
 
-    // This may have triggered Dialogs (error cases) that may have
-    // delayed the shutdown, so give delayed shutdown a chance
-    Application::TriggerShutdownDelayed();
-
     // not started => general error
     // We can't say - what was the reason for.
     if (!bStarted)
