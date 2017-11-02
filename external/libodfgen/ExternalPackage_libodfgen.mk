@@ -16,7 +16,11 @@ $(eval $(call gb_ExternalPackage_add_file,libodfgen,$(LIBO_LIB_FOLDER)/libodfgen
 else ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,libodfgen,$(LIBO_LIB_FOLDER)/libodfgen-0.1.dll,src/.libs/libodfgen-0.1.dll))
 else ifeq ($(DISABLE_DYNLOADING),)
+ifeq ($(ANDROID_PORTS),1)
+$(eval $(call gb_ExternalPackage_add_file,libodfgen,$(LIBO_LIB_FOLDER)/libodfgen-0.1-lo.so,src/.libs/libodfgen-0.1-lo.so))
+else
 $(eval $(call gb_ExternalPackage_add_file,libodfgen,$(LIBO_LIB_FOLDER)/libodfgen-0.1-lo.so.1,src/.libs/libodfgen-0.1-lo.so.1.0.$(ODFGEN_VERSION_MICRO)))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:
