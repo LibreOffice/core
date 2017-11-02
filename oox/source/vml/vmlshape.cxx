@@ -72,6 +72,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <vcl/svapp.hxx>
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Any;
@@ -1139,12 +1140,77 @@ CustomShape::CustomShape( Drawing& rDrawing ) :
 {
 }
 
+static OUString lcl_getFontFamily( const oox::OptValue<OUString>& rStyle )
+{
+    OUString sFont = "";
+
+    if( rStyle.has() )
+    {
+        OUString aStyle = rStyle.get( OUString() );
+
+        sal_Int32 nIndex = 0;
+        while( nIndex >= 0 )
+        {
+            OUString aName;
+            if( ConversionHelper::separatePair( aName, sFont, aStyle.getToken( 0, ';', nIndex ), ':' ) )
+            {
+                if( aName == "font-family" )
+                {
+                    // remove " (first, and last character)
+                    if( sFont.getLength() > 2 )
+                        sFont = sFont.copy( 1, sFont.getLength() - 2 );
+                }
+            }
+        }
+    }
+
+    return sFont;
+}
+
+/// modifies rShapeRect's height and returns difference
+sal_Int32 lcl_correctWatermarkRect( awt::Rectangle& rShapeRect, const OUString& sFont, const OUString& sText )
+{
+    sal_Int32 nPaddingY = 0;
+    double fRatio = 0;
+    OutputDevice* pOut = Application::GetDefaultDevice();
+    vcl::Font aFont( pOut->GetFont() );
+    aFont.SetFamilyName( sFont );
+
+    tools::Rectangle aBoundingRect;
+    pOut->GetTextBoundRect( aBoundingRect, sText );
+    if( aBoundingRect.GetWidth() )
+    {
+        fRatio = (double)aBoundingRect.GetHeight() / aBoundingRect.GetWidth();
+
+        sal_Int32 nNewHeight = fRatio * rShapeRect.Width;
+        nPaddingY = rShapeRect.Height - nNewHeight;
+        rShapeRect.Height = nNewHeight;
+    }
+
+    return nPaddingY;
+}
+
 Reference< XShape > CustomShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
+    awt::Rectangle aShapeRect( rShapeRect );
+
+    // Add padding for Watermark like Word does
+    sal_Int32 nPaddingY = 0;
+    if( getShapeName().match( "PowerPlusWaterMarkObject" ) && maTypeModel.maTextpathModel.moString.has() )
+    {
+        OUString sText = maTypeModel.maTextpathModel.moString.get();
+        OUString sFont = lcl_getFontFamily( maTypeModel.maTextpathModel.moStyle );
+        nPaddingY = lcl_correctWatermarkRect( aShapeRect, sFont, sText );
+    }
+
     // try to create a custom shape
-    Reference< XShape > xShape = SimpleShape::implConvertAndInsert( rxShapes, rShapeRect );
+    Reference< XShape > xShape = SimpleShape::implConvertAndInsert( rxShapes, aShapeRect );
     if( xShape.is() ) try
     {
+        // Remember padding for Watermark
+        if( nPaddingY )
+            PropertySet( xShape ).setAnyProperty( PROP_TextUpperDistance, makeAny( nPaddingY ) );
+
         // create the custom shape geometry
         Reference< XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY_THROW );
         xDefaulter->createCustomShapeDefaults( OUString::number( getShapeType() ) );
