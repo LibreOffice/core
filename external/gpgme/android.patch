@@ -1,0 +1,27 @@
+diff -r -u gpgme.orig/lang/cpp/src/engineinfo.h gpgme/lang/cpp/src/engineinfo.h
+--- lang/cpp/src/engineinfo.h	2017-11-01 19:04:06.000000000 +0900
++++ lang/cpp/src/engineinfo.h	2017-11-01 19:04:58.000000000 +0900
+@@ -50,7 +50,11 @@
+         Version(const std::string& version)
+         {
+             if (version.empty() ||
++#ifdef __ANDROID__
++                sscanf(version.c_str(), "%d.%d.%d", &major, &minor, &patch) != 3) {
++#else
+                 std::sscanf(version.c_str(), "%d.%d.%d", &major, &minor, &patch) != 3) {
++#endif
+                 major = 0;
+                 minor = 0;
+                 patch = 0;
+@@ -60,7 +64,11 @@
+         Version(const char *version)
+         {
+             if (!version ||
++#ifdef __ANDROID__
++                sscanf(version, "%d.%d.%d", &major, &minor, &patch) != 3) {
++#else
+                 std::sscanf(version, "%d.%d.%d", &major, &minor, &patch) != 3) {
++#endif
+                 major = 0;
+                 minor = 0;
+                 patch = 0;
