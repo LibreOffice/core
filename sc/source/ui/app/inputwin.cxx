@@ -75,7 +75,7 @@
 #define THESIZE             1000000 // Should be more than enough!
 #define TBX_WINDOW_HEIGHT   22 // in pixel - TODO: The same on all systems?
 #define MULTILINE_BUTTON_WIDTH 20 // Width of the button which opens the multiline dropdown
-#define LEFT_OFFSET         5
+#define LEFT_OFFSET         0
 #define INPUTWIN_MULTILINES 6
 const long BUTTON_OFFSET = 2; ///< space between input line and the button to expand / collapse
 const long ADDITIONAL_BORDER = 1; ///< height of the line at the bottom
