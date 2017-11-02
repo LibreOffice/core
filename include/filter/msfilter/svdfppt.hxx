@@ -907,7 +907,7 @@ struct PPTParaPropSet
     rtl::Reference<ImplPPTParaPropSet> mxParaSet;
 
                         PPTParaPropSet();
-                        PPTParaPropSet( PPTParaPropSet& rParaPropSet );
+                        PPTParaPropSet( PPTParaPropSet const & rParaPropSet );
                         ~PPTParaPropSet();
 
     PPTParaPropSet&     operator=( const PPTParaPropSet& rParaPropSet );
@@ -1240,7 +1240,7 @@ public:
                                 SvStream& rSt,
                                 SdrPowerPointImport&,
                                 PptSlidePersistEntry&,
-                                DffObjData*
+                                DffObjData const *
                             );
                             PPTTextObj( PPTTextObj const & rTextObj );
                             ~PPTTextObj();

@@ -2564,7 +2564,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet ) const
     ApplyAttributes( rIn, rSet, aDffObjTemp );
 }
 
-void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const
+void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObjData const & rObjData ) const
 {
     bool bHasShadow = false;
     bool bNonZeroShadowOffset = false;
@@ -2692,7 +2692,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
     }
 }
 
-void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const
+void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItemSet& rSet, DffObjData const & rObjData ) const
 {
     bool bRotateTextWithShape = rObjData.bRotateTextWithShape;
     if ( rObjData.bOpt2 )        // sj: #158494# is the second property set available ? if then we have to check the xml data of

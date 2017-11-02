@@ -335,7 +335,7 @@ bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
 }
 
 
-void CGMBitmap::ImplInsert( CGMBitmapDescriptor& rSource, CGMBitmapDescriptor& rDest )
+void CGMBitmap::ImplInsert( CGMBitmapDescriptor const & rSource, CGMBitmapDescriptor& rDest )
 {
     if ( ( rSource.mnR.Y == rDest.mnQ.Y ) && ( rSource.mnR.X == rDest.mnQ.X ) )
     {   // Insert on Bottom
