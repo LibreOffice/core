@@ -131,6 +131,7 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
     get(m_pRecentlyUsedListBox, "recentlyUsedCB");
     get(m_pClassificationListBox, "classificationCB");
     get(m_pInternationalClassificationListBox, "internationalClassificationCB");
+    get(m_pMarkingLabel, "markingLabel");
     get(m_pMarkingListBox, "markingCB");
     get(m_pIntellectualPropertyPartNumberListBox, "intellectualPropertyPartNumberCB");
     get(m_pIntellectualPropertyPartListBox, "intellectualPropertyPartLB");
@@ -153,10 +154,18 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
         m_pInternationalClassificationListBox->InsertEntry(rName);
     m_pInternationalClassificationListBox->EnableAutoSize(true);
 
-    m_pMarkingListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectMarkingHdl));
-    for (const OUString& rName : maHelper.GetMarkings())
-        m_pMarkingListBox->InsertEntry(rName);
-    m_pMarkingListBox->EnableAutoSize(true);
+    if (!maHelper.GetMarkings().empty())
+    {
+        m_pMarkingListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectMarkingHdl));
+        for (const OUString& rName : maHelper.GetMarkings())
+            m_pMarkingListBox->InsertEntry(rName);
+        m_pMarkingListBox->EnableAutoSize(true);
+    }
+    else
+    {
+        m_pMarkingListBox->Show(false);
+        m_pMarkingLabel->Show(false);
+    }
 
     m_pIntellectualPropertyPartNumberListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectIPPartNumbersHdl));
     for (const OUString& rName : maHelper.GetIntellectualPropertyPartNumbers())
@@ -184,6 +193,7 @@ void ClassificationDialog::dispose()
     m_pRecentlyUsedListBox.clear();
     m_pClassificationListBox.clear();
     m_pInternationalClassificationListBox.clear();
+    m_pMarkingLabel.clear();
     m_pMarkingListBox.clear();
     m_pIntellectualPropertyPartListBox.clear();
     m_pIntellectualPropertyPartNumberListBox.clear();
