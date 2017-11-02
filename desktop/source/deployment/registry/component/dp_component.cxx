@@ -47,7 +47,7 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <algorithm>
-#include <list>
+#include <deque>
 #include <memory>
 #include <unordered_map>
 #include <vector>
@@ -63,7 +63,7 @@ namespace backend {
 namespace component {
 namespace {
 
-typedef std::list<OUString> t_stringlist;
+typedef std::deque<OUString> t_stringlist;
 typedef std::vector< std::pair<OUString, OUString> > t_stringpairvec;
 
 #define IMPLEMENTATION_NAME  "com.sun.star.comp.deployment.component.PackageRegistryBackend"
@@ -942,15 +942,14 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
                 xCmdEnv, m_xComponentContext );
             ucb_content.writeStream( xData, true /* replace existing */ );
         }
-        for (t_stringlist::iterator i(m_components.begin());
-             i != m_components.end(); ++i)
+        for (auto const& component : m_components)
         {
             if (space)
             {
                 buf.append(' ');
             }
             buf.append('?');
-            buf.append(OUStringToOString(*i, RTL_TEXTENCODING_UTF8));
+            buf.append(OUStringToOString(component, RTL_TEXTENCODING_UTF8));
             space = true;
         }
         buf.append(LF);
@@ -992,7 +991,8 @@ void BackendImpl::removeFromUnoRc(
     const OUString rcterm( dp_misc::makeRcTerm(url_) );
     const ::osl::MutexGuard guard( getMutex() );
     unorc_verify_init( xCmdEnv );
-    getRcItemList(kind).remove( rcterm );
+    t_stringlist aRcItemList = getRcItemList(kind);
+    aRcItemList.erase(std::remove(aRcItemList.begin(), aRcItemList.end(), rcterm), aRcItemList.end());
     // write immediately:
     m_unorc_modified = true;
     unorc_flush( xCmdEnv );
@@ -1192,35 +1192,33 @@ void BackendImpl::ComponentPackageImpl::componentLiveInsertion(
         rootContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
     std::vector< css::uno::Reference< css::uno::XInterface > >::const_iterator
         factory(factories.begin());
-    for (t_stringlist::const_iterator i(data.implementationNames.begin());
-         i != data.implementationNames.end(); ++i)
+    for (auto const& implementationName : data.implementationNames)
     {
         try {
             set->insert(css::uno::Any(*factory++));
         } catch (const container::ElementExistException &) {
-            SAL_WARN("desktop.deployment", "implementation already registered " << *i);
+            SAL_WARN("desktop.deployment", "implementation already registered " << implementationName);
         }
     }
     if (!data.singletons.empty()) {
         css::uno::Reference< css::container::XNameContainer > cont(
             rootContext, css::uno::UNO_QUERY_THROW);
-        for (t_stringpairvec::const_iterator i(data.singletons.begin());
-             i != data.singletons.end(); ++i)
+        for (auto const& singleton : data.singletons)
         {
-            OUString name("/singletons/" + i->first);
+            OUString name("/singletons/" + singleton.first);
             //TODO: Update should be atomic:
             try {
                 cont->removeByName( name + "/arguments");
             } catch (const container::NoSuchElementException &) {}
             try {
-                cont->insertByName( name + "/service", css::uno::Any(i->second));
+                cont->insertByName( name + "/service", css::uno::Any(singleton.second));
             } catch (const container::ElementExistException &) {
-                cont->replaceByName( name + "/service", css::uno::Any(i->second));
+                cont->replaceByName( name + "/service", css::uno::Any(singleton.second));
             }
             try {
                 cont->insertByName(name, css::uno::Any());
             } catch (const container::ElementExistException &) {
-                SAL_WARN("desktop.deployment", "singleton already registered " << i->first);
+                SAL_WARN("desktop.deployment", "singleton already registered " << singleton.first);
                 cont->replaceByName(name, css::uno::Any());
             }
         }
@@ -1234,11 +1232,10 @@ void BackendImpl::ComponentPackageImpl::componentLiveRemoval(
         getMyBackend()->getRootContext());
     css::uno::Reference< css::container::XSet > set(
         rootContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
-    for (t_stringlist::const_iterator i(data.implementationNames.begin());
-         i != data.implementationNames.end(); ++i)
+    for (auto const& implementationName : data.implementationNames)
     {
         try {
-            set->remove(css::uno::Any(*i));
+            set->remove(css::uno::Any(implementationName));
         } catch (const css::container::NoSuchElementException &) {
             // ignore if factory has not been live deployed
         }
@@ -1246,10 +1243,9 @@ void BackendImpl::ComponentPackageImpl::componentLiveRemoval(
     if (!data.singletons.empty()) {
         css::uno::Reference< css::container::XNameContainer > cont(
             rootContext, css::uno::UNO_QUERY_THROW);
-        for (t_stringpairvec::const_iterator i(data.singletons.begin());
-             i != data.singletons.end(); ++i)
+        for (auto const& singleton : data.singletons)
         {
-            OUString name("/singletons/" + i->first);
+            OUString name("/singletons/" + singleton.first);
             //TODO: Removal should be atomic:
             try {
                 cont->removeByName(name);

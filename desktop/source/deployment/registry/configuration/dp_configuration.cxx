@@ -45,7 +45,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
-#include <list>
+#include <deque>
 #include <memory>
 #include <utility>
 
@@ -61,7 +61,7 @@ namespace backend {
 namespace configuration {
 namespace {
 
-typedef std::list<OUString> t_stringlist;
+typedef std::deque<OUString> t_stringlist;
 
 
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
@@ -737,8 +737,7 @@ void BackendImpl::PackageImpl::processPackage_(
             // Obsolete package database handling - should be removed for LibreOffice 4.0
             t_string2string_map entries(
                 that->m_registeredPackages->getEntries());
-            for (t_string2string_map::iterator i(entries.begin());
-                 i != entries.end(); ++i)
+            for (auto const& entry : entries)
             {
                 //If the xcu file was installed before the configmgr was changed
                 //to use the configmgr.ini, one needed to rebuild to whole directory
@@ -746,9 +745,9 @@ void BackendImpl::PackageImpl::processPackage_(
                 //we just add all other xcu/xcs files to the configmgr.ini instead of
                 //rebuilding the directory structure.
                 OUString url2(
-                    OStringToOUString(i->first, RTL_TEXTENCODING_UTF8));
+                    OStringToOUString(entry.first, RTL_TEXTENCODING_UTF8));
                 if (url2 != url) {
-                   bool schema = i->second.equalsIgnoreAsciiCase(
+                   bool schema = entry.second.equalsIgnoreAsciiCase(
                        "vnd.sun.star.configuration-schema");
                    OUString url_replaced(url2);
                    ConfigurationBackendDb::Data data;
@@ -767,7 +766,7 @@ void BackendImpl::PackageImpl::processPackage_(
                    data.iniEntry = dp_misc::makeRcTerm(url_replaced);
                    that->addDataToDb(url2, data);
                 }
-                that->m_registeredPackages->erase(i->first);
+                that->m_registeredPackages->erase(entry.first);
             }
             try
             {

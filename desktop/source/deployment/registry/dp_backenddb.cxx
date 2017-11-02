@@ -288,8 +288,7 @@ void BackendDb::writeVectorOfPair(
         xParent->appendChild(
             Reference<css::xml::dom::XNode>(
                 vectorNode, css::uno::UNO_QUERY_THROW));
-        typedef std::vector< std::pair< OUString, OUString > >::const_iterator CIT;
-        for (CIT i = vecPairs.begin(); i != vecPairs.end(); ++i)
+        for (auto const& vecPair : vecPairs)
         {
             const Reference<css::xml::dom::XElement> pairNode(
                 doc->createElementNS(sNameSpace, sPrefix + sPairTagName));
@@ -306,7 +305,7 @@ void BackendDb::writeVectorOfPair(
                     firstNode, css::uno::UNO_QUERY_THROW));
 
             const Reference<css::xml::dom::XText> firstTextNode(
-                doc->createTextNode( i->first));
+                doc->createTextNode( vecPair.first));
 
             firstNode->appendChild(
                 Reference<css::xml::dom::XNode>(
@@ -320,7 +319,7 @@ void BackendDb::writeVectorOfPair(
                     secondNode, css::uno::UNO_QUERY_THROW));
 
             const Reference<css::xml::dom::XText> secondTextNode(
-                doc->createTextNode( i->second));
+                doc->createTextNode( vecPair.second));
 
             secondNode->appendChild(
                 Reference<css::xml::dom::XNode>(
@@ -384,7 +383,7 @@ BackendDb::readVectorOfPair(
 
 //Only writes the data if there is at least one entry
 void BackendDb::writeSimpleList(
-    std::list< OUString> const & list,
+    std::deque< OUString> const & list,
     OUString const & sListTagName,
     OUString const & sMemberTagName,
     Reference<css::xml::dom::XNode> const & xParent)
@@ -404,8 +403,7 @@ void BackendDb::writeSimpleList(
             Reference<css::xml::dom::XNode>(
                 listNode, css::uno::UNO_QUERY_THROW));
 
-        typedef std::list<OUString>::const_iterator ITC_ITEMS;
-        for (ITC_ITEMS i = list.begin(); i != list.end(); ++i)
+        for (auto const& elem : list)
         {
             const Reference<css::xml::dom::XNode> memberNode(
                 doc->createElementNS(sNameSpace, sPrefix + sMemberTagName), css::uno::UNO_QUERY_THROW);
@@ -413,7 +411,7 @@ void BackendDb::writeSimpleList(
             listNode->appendChild(memberNode);
 
             const Reference<css::xml::dom::XNode> textNode(
-                doc->createTextNode( *i), css::uno::UNO_QUERY_THROW);
+                doc->createTextNode(elem), css::uno::UNO_QUERY_THROW);
 
             memberNode->appendChild(textNode);
         }
@@ -532,7 +530,7 @@ OUString BackendDb::readSimpleElement(
 }
 
 
-std::list< OUString> BackendDb::readList(
+std::deque< OUString> BackendDb::readList(
     Reference<css::xml::dom::XNode> const & parent,
     OUString const & sListTagName,
     OUString const & sMemberTagName)
@@ -547,7 +545,7 @@ std::list< OUString> BackendDb::readList(
         const Reference<css::xml::dom::XNodeList> list =
             xpathApi->selectNodeList(parent, sExprList);
 
-        std::list<OUString > retList;
+        std::deque<OUString > retList;
         sal_Int32 length = list->getLength();
         for (sal_Int32 i = 0; i < length; i++)
         {
