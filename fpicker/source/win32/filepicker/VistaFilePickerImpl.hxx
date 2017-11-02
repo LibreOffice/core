@@ -106,6 +106,10 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         /** used for marshalling requests.
          *  Will be used to map requests to the right implementations.
          */
+
+        // Workaround made to get input in Template Listbox
+        css::uno::Sequence< OUString > gItems;
+
         enum ERequest
         {
             E_NO_REQUEST,
@@ -133,7 +137,6 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         };
 
     public:
-
 
         // ctor/dtor - nothing special
 
