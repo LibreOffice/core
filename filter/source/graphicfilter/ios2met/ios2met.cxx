@@ -833,8 +833,13 @@ Point OS2METReader::ReadPoint( const bool bAdjustBoundRect )
     x=x-aBoundingRect.Left();
     y=aBoundingRect.Bottom()-y;
 
-    if ( bAdjustBoundRect )
-        aCalcBndRect.Union(tools::Rectangle(x,y,x+1,y+1));
+    if (bAdjustBoundRect)
+    {
+        if (x == SAL_MAX_INT32 || y == SAL_MAX_INT32)
+            pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
+        else
+            aCalcBndRect.Union(tools::Rectangle(x, y, x + 1, y + 1));
+    }
 
     return Point(x,y);
 }
