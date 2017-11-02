@@ -271,6 +271,8 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
                 nLastWidth = maDefaultList.back()->nTwips;
 
             nColCnt = 0;
+            if (pActDefault != pInsDefault)
+                pActDefault = nullptr;
             maDefaultList.clear();
             pDefMerge = nullptr;
             nRtfLastToken = pInfo->nToken;
