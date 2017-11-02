@@ -172,7 +172,7 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
         m_pIntellectualPropertyPartNumberListBox->InsertEntry(rName);
     m_pIntellectualPropertyPartNumberListBox->EnableAutoSize(true);
 
-    m_pIntellectualPropertyPartListBox->SetDoubleClickHdl(LINK(this, ClassificationDialog, DoubleClickIPPartHdl));
+    m_pIntellectualPropertyPartListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectIPPartHdl));
     for (const OUString& rName : maHelper.GetIntellectualPropertyParts())
         m_pIntellectualPropertyPartListBox->InsertEntry(rName);
     m_pIntellectualPropertyPartListBox->EnableAutoSize(true);
@@ -551,7 +551,7 @@ IMPL_LINK(ClassificationDialog, SelectRecentlyUsedHdl, ListBox&, rBox, void)
     }
 }
 
-IMPL_LINK(ClassificationDialog, DoubleClickIPPartHdl, ListBox&, rBox, void)
+IMPL_LINK(ClassificationDialog, SelectIPPartHdl, ListBox&, rBox, void)
 {
     const sal_Int32 nSelected = rBox.GetSelectedEntryPos();
     if (nSelected >= 0)

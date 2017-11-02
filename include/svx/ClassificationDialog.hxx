@@ -51,7 +51,7 @@ private:
     DECL_LINK(SelectMarkingHdl, ListBox&, void);
     DECL_LINK(SelectIPPartNumbersHdl, ListBox&, void);
     DECL_LINK(SelectRecentlyUsedHdl, ListBox&, void);
-    DECL_LINK(DoubleClickIPPartHdl, ListBox&, void);
+    DECL_LINK(SelectIPPartHdl, ListBox&, void);
 
     void insertField(ClassificationType eType, OUString const & rString, OUString const & rFullString);
 
