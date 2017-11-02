@@ -35,8 +35,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,libwps, \
 endif
 endif
 
+ifeq ($(ANDROID_PORTS),1)
 $(eval $(call gb_UnpackedTarball_add_patches,libwps, \
-    external/libwps/0001-try-to-fix-build-with-older-clang.patch.1 \
+    external/libwps/android.patch \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:
