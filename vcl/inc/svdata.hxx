@@ -35,7 +35,7 @@
 #include "salwtype.hxx"
 #include "displayconnectiondispatch.hxx"
 
-#include <list>
+#include <vector>
 #include <unordered_map>
 #include <boost/functional/hash.hpp>
 #include "ControlCacheKey.hxx"
@@ -130,7 +130,7 @@ struct ImplSVAppData
     LocaleConfigurationListener* mpCfgListener = nullptr;
     VclEventListeners*      mpEventListeners = nullptr;     // listeners for vcl events (eg, extended toolkit)
     SVAppKeyListeners*      mpKeyListeners = nullptr;       // listeners for key events only (eg, extended toolkit)
-    std::list<ImplPostEventPair> maPostedEventList;
+    std::vector<ImplPostEventPair> maPostedEventList;
     ImplAccelManager*       mpAccelMgr = nullptr;           // Accelerator Manager
     OUString*               mpAppName = nullptr;            // Application name
     OUString*               mpAppFileName = nullptr;        // Abs. Application FileName
@@ -362,7 +362,7 @@ struct ImplSVData
 
     css::uno::Reference< css::lang::XComponent > mxAccessBridge;
     vcl::SettingsConfigItem* mpSettingsConfigItem = nullptr;
-    std::list< vcl::DeleteOnDeinitBase* >* mpDeinitDeleteList = nullptr;
+    std::vector< vcl::DeleteOnDeinitBase* >* mpDeinitDeleteList = nullptr;
     std::unordered_map< int, OUString >* mpPaperNames = nullptr;
 
     css::uno::Reference<css::i18n::XCharacterClassification> m_xCharClass;

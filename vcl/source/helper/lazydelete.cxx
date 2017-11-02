@@ -63,7 +63,8 @@ DeleteOnDeinitBase::~DeleteOnDeinitBase()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData && pSVData->mpDeinitDeleteList != nullptr )
-        pSVData->mpDeinitDeleteList->remove( this );
+        pSVData->mpDeinitDeleteList->erase(std::remove(pSVData->mpDeinitDeleteList->begin(), pSVData->mpDeinitDeleteList->end(), this),
+                                pSVData->mpDeinitDeleteList->end());
 }
 
 void DeleteOnDeinitBase::addDeinitContainer( DeleteOnDeinitBase* i_pContainer )
@@ -75,7 +76,7 @@ void DeleteOnDeinitBase::addDeinitContainer( DeleteOnDeinitBase* i_pContainer )
         return;
 
     if( pSVData->mpDeinitDeleteList == nullptr )
-        pSVData->mpDeinitDeleteList = new std::list< DeleteOnDeinitBase* >;
+        pSVData->mpDeinitDeleteList = new std::vector< DeleteOnDeinitBase* >;
     pSVData->mpDeinitDeleteList->push_back( i_pContainer );
 }
 
@@ -84,10 +85,9 @@ void DeleteOnDeinitBase::ImplDeleteOnDeInit()
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->mpDeinitDeleteList )
     {
-        for( std::list< vcl::DeleteOnDeinitBase* >::iterator it = pSVData->mpDeinitDeleteList->begin();
-             it != pSVData->mpDeinitDeleteList->end(); ++it )
+        for (auto const& deinitDelete : *(pSVData->mpDeinitDeleteList))
         {
-            (*it)->doCleanup();
+            deinitDelete->doCleanup();
         }
         delete pSVData->mpDeinitDeleteList;
         pSVData->mpDeinitDeleteList = nullptr;
