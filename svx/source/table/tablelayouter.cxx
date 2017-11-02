@@ -472,11 +472,11 @@ sal_Int32 TableLayouter::distribute( LayoutVector& rLayouts, sal_Int32 nDistribu
                     if (nIndex != (nCount-1))
                     {
                         bConstrainsBroken |= o3tl::checked_multiply(nDistribute, rLayout.mnSize, n);
-                        n  /= nCurrentWidth;
+                        n /= nCurrentWidth;
                     }
 
+                    bConstrainsBroken |= o3tl::checked_add(rLayout.mnSize, n, rLayout.mnSize);
                     nDistributed -= n;
-                    rLayout.mnSize += n;
 
                     if( rLayout.mnSize < rLayout.mnMinSize )
                         bConstrainsBroken = true;
