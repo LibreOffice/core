@@ -152,6 +152,26 @@ namespace basegfx
      */
     BASEGFX_DLLPUBLIC double snapToNearestMultiple(double v, const double fStep);
 
+    /** RotateFlyFrame3: Normalize to range defined by [0.0 ... fRange[, independent
+        if v is positive or negative.
+
+        Examples:
+
+        normalizeToRange(0.5, -1.0) = 0.0
+        normalizeToRange(0.5, 0.0) = 0.0
+        normalizeToRange(0.5, 1.0) = 0.5
+        normalizeToRange(-0.5, 1.0) = 0.5
+        normalizeToRange(-0.3, 1.0) = 0.7
+        normalizeToRange(-0.7, 1.0) = 0.3
+        normalizeToRange(3.5, 1.0) = 0.5
+        normalizeToRange(3.3, 1.0) = 0.3
+        normalizeToRange(3.7, 1.0) = 0.7
+        normalizeToRange(-3.5, 1.0) = 0.5
+        normalizeToRange(-3.3, 1.0) = 0.7
+        normalizeToRange(-3.7, 1.0) = 0.3
+     */
+    BASEGFX_DLLPUBLIC double normalizeToRange(double v, const double fRange);
+
     class BASEGFX_DLLPUBLIC fTools
     {
     public:

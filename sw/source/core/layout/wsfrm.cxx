@@ -51,6 +51,9 @@
 #include <editeng/frmdiritem.hxx>
 #include <sortedobjs.hxx>
 
+// RotateFlyFrame3
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+
 using namespace ::com::sun::star;
 
 SwFrameAreaDefinition::SwFrameAreaDefinition()
@@ -100,6 +103,54 @@ SwFrameAreaDefinition::FramePrintAreaWriteAccess::~FramePrintAreaWriteAccess()
     {
         mrTarget.maFramePrintArea = *this;
     }
+}
+
+void rotateFrameAreaDefinitionAroundPoint(
+    SwRect& rFrameArea,
+    SwRect& rFramePrintArea,
+    const Point& rCenter,
+    double fRotation)
+{
+    if(!basegfx::fTools::equalZero(fRotation) && rFrameArea.HasArea())
+    {
+        basegfx::B2DRange aFrameRange(
+            rFrameArea.Left(),
+            rFrameArea.Top(),
+            rFrameArea.Right(),
+            rFrameArea.Bottom());
+        const basegfx::B2DPoint aOldTopLeft(aFrameRange.getMinimum());
+        const basegfx::B2DHomMatrix aRotateAroundCenter(basegfx::utils::createRotateAroundPoint(rCenter.X(), rCenter.Y(), fRotation));
+
+        aFrameRange.transform(aRotateAroundCenter);
+        rFrameArea = SwRect(
+            basegfx::fround(aFrameRange.getMinX()),
+            basegfx::fround(aFrameRange.getMinY()),
+            basegfx::fround(aFrameRange.getWidth()),
+            basegfx::fround(aFrameRange.getHeight()));
+
+        if(rFramePrintArea.HasArea())
+        {
+            basegfx::B2DRange aFramePrintRange(
+                rFramePrintArea.Left() + aOldTopLeft.getX(),
+                rFramePrintArea.Top() + aOldTopLeft.getY(),
+                rFramePrintArea.Right() + aOldTopLeft.getX(),
+                rFramePrintArea.Bottom() + aOldTopLeft.getY());
+            const basegfx::B2DPoint aNewTopLeft(aFrameRange.getMinimum());
+
+            aFramePrintRange.transform(aRotateAroundCenter);
+            rFramePrintArea = SwRect(
+                basegfx::fround(aFramePrintRange.getMinX() - aNewTopLeft.getX()),
+                basegfx::fround(aFramePrintRange.getMinY() - aNewTopLeft.getY()),
+                basegfx::fround(aFramePrintRange.getWidth()),
+                basegfx::fround(aFramePrintRange.getHeight()));
+        }
+    }
+}
+
+// RotateFlyFrame3 - get a possible rotation from SwFrame, default returns 0.0 (no rotation)
+double SwFrame::getRotation() const
+{
+    return 0.0;
 }
 
 SwFrame::SwFrame( SwModify *pMod, SwFrame* pSib )

@@ -492,6 +492,56 @@ void SwNoTextFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             Format(getRootFrame()->GetCurrShell()->GetOut());
         }
     }
+
+    // RotateFlyFrame3 - inner frame
+    // After the layout is finished, apply possible set rotation to it
+    const double fRotation(getRotation());
+
+    if(0.0 != fRotation)
+    {
+        SwRect aFrameArea(getFrameArea());
+        SwRect aFramePrintArea(getFramePrintArea());
+        const Point aCenter(aFrameArea.Center());
+
+        // apply rotation and re-set the FrameArea definitions
+        rotateFrameAreaDefinitionAroundPoint(aFrameArea, aFramePrintArea, aCenter, fRotation);
+
+        if(aFrameArea != getFrameArea())
+        {
+            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+            aFrm.setSwRect(aFrameArea);
+        }
+
+        if(aFramePrintArea != getFramePrintArea())
+        {
+            SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+            aPrt.setSwRect(aFramePrintArea);
+        }
+    }
+}
+
+// RotateFlyFrame3 - inner frame
+// Check if we contain a SwGrfNode and get possible rotation from it
+double SwNoTextFrame::getRotation() const
+{
+    const SwNoTextNode* pSwNoTextNode(nullptr != GetNode() ? GetNode()->GetNoTextNode() : nullptr);
+
+    if(nullptr != pSwNoTextNode)
+    {
+        const SwGrfNode* pSwGrfNode(pSwNoTextNode->GetGrfNode());
+
+        if(nullptr != pSwGrfNode)
+        {
+            const SwAttrSet& rSwAttrSet(pSwGrfNode->GetSwAttrSet());
+            const SwRotationGrf& rSwRotationGrf(rSwAttrSet.GetRotationGrf());
+            const double fRotate(static_cast< double >(-rSwRotationGrf.GetValue()) * (M_PI/1800.0));
+
+            return basegfx::normalizeToRange(fRotate, F_2PI);
+        }
+    }
+
+    // call parent
+    return SwContentFrame::getRotation();
 }
 
 /** Calculate the Bitmap's site, if needed */
@@ -648,6 +698,15 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                                 {
                                     pDrawView->AdjustMarkHdl(nullptr);
                                 }
+                            }
+
+                            // RotateFlyFrame3 - invalidate needed for ContentFrame (inner, this)
+                            // and LayoutFrame (outer, GetUpper)
+                            InvalidateAll_();
+
+                            if(GetUpper())
+                            {
+                                GetUpper()->InvalidateAll_();
                             }
                         }
                     }
