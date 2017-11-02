@@ -22,7 +22,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,BREAKPAD,breakpad) \
 	$(call gb_Helper_optional,BSH,beanshell) \
 	$(call gb_Helper_optional,BZIP2,bzip2) \
-	$(call gb_Helper_optional,CAIRO,cairo) \
+	$(if $(filter-out $(SYSTEM_CAIRO),TRUE),$(call gb_Helper_optional,CAIRO,cairo)) \
 	$(call gb_Helper_optional,CDR,libcdr) \
 	$(call gb_Helper_optional,OPENCL,clew) \
 	$(call gb_Helper_optional,CLUCENE,clucene) \
@@ -40,7 +40,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,FIREBIRD,firebird) \
 	$(call gb_Helper_optional,FONTCONFIG,fontconfig) \
 	$(call gb_Helper_optional,FREEHAND,libfreehand) \
-	$(call gb_Helper_optional,FREETYPE,freetype) \
+	$(if $(filter-out $(SYSTEM_FREETYPE),TRUE),$(call gb_Helper_optional,FREETYPE,freetype)) \
 	$(call gb_Helper_optional,GLM,glm) \
 	$(call gb_Helper_optional,GPGMEPP,gpgme) \
 	$(call gb_Helper_optional,GRAPHITE,graphite) \
