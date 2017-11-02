@@ -149,8 +149,14 @@ public:
         {
             if(bCreate && !pVOrient)
             {
-                // #i26791#
-                pVOrient = new SwFormatVertOrient( 0, text::VertOrientation::NONE, text::RelOrientation::FRAME );
+                if (!GetAnchor(true) || pAnchor->GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+                {   // for as-char, NONE ("from-top") is not a good default
+                    pVOrient = new SwFormatVertOrient(0, text::VertOrientation::TOP, text::RelOrientation::FRAME);
+                }
+                else
+                {   // #i26791#
+                    pVOrient = new SwFormatVertOrient(0, text::VertOrientation::NONE, text::RelOrientation::FRAME);
+                }
             }
             return pVOrient;
         }

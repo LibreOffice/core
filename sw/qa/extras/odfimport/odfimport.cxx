@@ -20,6 +20,7 @@
 #include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
@@ -789,6 +790,14 @@ DECLARE_ODFIMPORT_TEST(testTdf100033_1, "tdf100033_1.odt")
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+}
+
+DECLARE_ODFIMPORT_TEST(testWordAsCharShape, "Word2010AsCharShape.odt")
+{
+    // As-char shape had VertOrient "from-top"/NONE default from GetVOrient()
+    uno::Reference<drawing::XShape> const xShape(getShape(1));
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, getProperty<text::TextContentAnchorType>(xShape, "AnchorType"));
+    CPPUNIT_ASSERT_EQUAL(text::VertOrientation::TOP, getProperty<sal_Int16>(xShape, "VertOrient"));
 }
 
 DECLARE_ODFIMPORT_TEST(testTdf100033_2, "tdf100033_2.odt")

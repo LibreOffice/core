@@ -23,6 +23,7 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 
@@ -88,6 +89,7 @@ DECLARE_OOXMLEXPORT_TEST(testDmlGroupshapeRelsize, "dml-groupshape-relsize.docx"
 DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
 {
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::VertOrientation::TOP, getProperty<sal_Int16>(xGroup, "VertOrient"));
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
     // This was drawing::FillStyle_NONE.
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xShape, "FillStyle"));
@@ -105,11 +107,11 @@ DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("ooxml-bentConnector3"), aType);
     // Connector was incorrectly shifted towards the top left corner, X was 552, Y was 0.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4018), xShape->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1256), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4487), xShape->getPosition().Y);
 
     xShape.set(xGroup->getByIndex(5), uno::UNO_QUERY);
     // This was incorrectly shifted towards the top of the page, Y was 106.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1016), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4727), xShape->getPosition().Y);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDMLSolidfillAlpha, "dml-solidfill-alpha.docx")

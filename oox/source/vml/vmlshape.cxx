@@ -564,6 +564,39 @@ void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, co
 
 void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, const GraphicHelper& rGraphicHelper)
 {
+    if ( rTypeModel.maPosition == "absolute" )
+    {
+        // Word supports as-character (inline) and at-character only, absolute can't be inline.
+        rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_CHARACTER);
+        // anchor is set after insertion, so reset to NONE
+        rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::NONE));
+
+        if ( rTypeModel.maPositionVerticalRelative == "page" )
+        {
+            rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_FRAME);
+        }
+        else if ( rTypeModel.maPositionVerticalRelative == "margin" )
+        {
+            rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_PRINT_AREA);
+        }
+        else
+        {
+            rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::FRAME);
+        }
+    }
+    else if( rTypeModel.maPosition == "relative" )
+    {   // I'm not very sure this is correct either.
+        rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_PARAGRAPH);
+        // anchor is set after insertion, so reset to NONE
+        rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::NONE));
+    }
+    else // static (is the default) means anchored inline
+    {
+        rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AS_CHARACTER);
+        // Use top orientation, this one seems similar to what MSO uses as inline
+        rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::TOP));
+    }
+
     if ( rTypeModel.maPositionHorizontal == "center" )
         rPropSet.setAnyProperty(PROP_HoriOrient, makeAny(text::HoriOrientation::CENTER));
     else if ( rTypeModel.maPositionHorizontal == "left" )
@@ -599,34 +632,6 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, 
     else if ( rTypeModel.maPositionVertical == "outside" )
         rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::LINE_BOTTOM));
 
-    if ( rTypeModel.maPosition == "absolute" )
-    {
-        // Word supports as-character (inline) and at-character only, absolute can't be inline.
-        rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_CHARACTER);
-
-        if ( rTypeModel.maPositionVerticalRelative == "page" )
-        {
-            rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_FRAME);
-        }
-        else if ( rTypeModel.maPositionVerticalRelative == "margin" )
-        {
-            rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_PRINT_AREA);
-        }
-        else
-        {
-            rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::FRAME);
-        }
-    }
-    else if( rTypeModel.maPosition == "relative" )
-    {   // I'm not very sure this is correct either.
-        rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_PARAGRAPH);
-    }
-    else // static (is the default) means anchored inline
-    {
-        rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AS_CHARACTER);
-        // Use top orientation, this one seems similar to what MSO uses as inline
-        rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::TOP));
-    }
     lcl_setSurround( rPropSet, rTypeModel, rGraphicHelper );
 }
 
