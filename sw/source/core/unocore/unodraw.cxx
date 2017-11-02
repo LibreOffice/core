@@ -72,6 +72,7 @@ using namespace ::com::sun::star;
 
 class SwShapeDescriptor_Impl
 {
+    bool m_isInXMLImport;
     SwFormatHoriOrient*    pHOrient;
     SwFormatVertOrient*    pVOrient;
     SwFormatAnchor*        pAnchor;
@@ -94,7 +95,8 @@ public:
     bool    bInitializedPropertyNotifier;
 
 public:
-    SwShapeDescriptor_Impl() :
+    SwShapeDescriptor_Impl(SwDoc *const pDoc) :
+        m_isInXMLImport(pDoc && pDoc->IsInXMLImport()),
      // #i32349# - no defaults, in order to determine on
      // adding a shape, if positioning attributes are set or not.
      pHOrient( nullptr ),
@@ -148,8 +150,15 @@ public:
         {
             if(bCreate && !pVOrient)
             {
-                // #i26791#
-                pVOrient = new SwFormatVertOrient( 0, text::VertOrientation::NONE, text::RelOrientation::FRAME );
+                if (m_isInXMLImport &&
+                    (!GetAnchor(true) || pAnchor->GetAnchorId() == RndStdIds::FLY_AS_CHAR))
+                {   // for as-char, NONE ("from-top") is not a good default
+                    pVOrient = new SwFormatVertOrient(0, text::VertOrientation::TOP, text::RelOrientation::FRAME);
+                }
+                else
+                {   // #i26791#
+                    pVOrient = new SwFormatVertOrient(0, text::VertOrientation::NONE, text::RelOrientation::FRAME);
+                }
             }
             return pVOrient;
         }
@@ -878,10 +887,10 @@ namespace
     }
 }
 
-SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape) :
+SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape, SwDoc *const pDoc) :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_SHAPE)),
     m_pPropertyMapEntries(aSwMapProvider.GetPropertyMapEntries(PROPERTY_MAP_TEXT_SHAPE)),
-    pImpl(new SwShapeDescriptor_Impl()),
+    pImpl(new SwShapeDescriptor_Impl(pDoc)),
     m_bDescriptor(true)
 {
     if(xShape.is())  // default Ctor
@@ -2698,8 +2707,8 @@ css::drawing::PolyPolygonBezierCoords SwXShape::ConvertPolyPolygonBezierToLayout
     return aConvertedPath;
 }
 
-SwXGroupShape::SwXGroupShape(uno::Reference< XInterface > & xShape) :
-        SwXShape(xShape)
+SwXGroupShape::SwXGroupShape(uno::Reference< XInterface > & xShape, SwDoc *const pDoc) :
+        SwXShape(xShape, pDoc)
 {
 #if OSL_DEBUG_LEVEL > 0
     uno::Reference<XShapes> xShapes(xShapeAgg, uno::UNO_QUERY);
