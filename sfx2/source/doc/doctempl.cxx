@@ -95,8 +95,6 @@ using namespace ::ucbhelper;
 #include <o3tl/make_unique.hxx>
 #include <memory>
 #include <vector>
-using ::std::vector;
-using ::std::advance;
 
 
 #define TITLE                   "Title"
@@ -181,8 +179,6 @@ public:
     int                 Compare( RegionData_Impl const * pCompareWith ) const;
 };
 
-typedef vector< RegionData_Impl* > RegionList_Impl;
-
 
 class SfxDocTemplate_Impl : public SvRefBase
 {
@@ -192,7 +188,7 @@ class SfxDocTemplate_Impl : public SvRefBase
     ::osl::Mutex        maMutex;
     OUString            maRootURL;
     OUString            maStandardGroup;
-    RegionList_Impl     maRegions;
+    std::vector<std::unique_ptr<RegionData_Impl>> maRegions;
     bool            mbConstructed;
 
     uno::Reference< XAnyCompareFactory > m_rCompareFactory;
@@ -1328,7 +1324,7 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
         pEntry->SetHierarchyURL( aLinkURL );
         if ( nPos < maEntries.size() ) {
             auto it = maEntries.begin();
-            advance( it, nPos );
+            std::advance( it, nPos );
             maEntries.insert( it, std::move(pEntry) );
         }
         else
@@ -1385,7 +1381,7 @@ void RegionData_Impl::DeleteEntry( size_t nIndex )
     if ( nIndex < maEntries.size() )
     {
         auto it = maEntries.begin();
-        advance( it, nIndex );
+        std::advance( it, nIndex );
         maEntries.erase( it );
     }
 }
@@ -1406,8 +1402,6 @@ SfxDocTemplate_Impl::SfxDocTemplate_Impl()
 
 SfxDocTemplate_Impl::~SfxDocTemplate_Impl()
 {
-    Clear();
-
     gpTemplateData = nullptr;
 }
 
@@ -1430,7 +1424,7 @@ void SfxDocTemplate_Impl::DecrementLock()
 RegionData_Impl* SfxDocTemplate_Impl::GetRegion( size_t nIndex ) const
 {
     if ( nIndex < maRegions.size() )
-        return maRegions[ nIndex ];
+        return maRegions[ nIndex ].get();
     return nullptr;
 }
 
@@ -1438,10 +1432,10 @@ RegionData_Impl* SfxDocTemplate_Impl::GetRegion( size_t nIndex ) const
 RegionData_Impl* SfxDocTemplate_Impl::GetRegion( const OUString& rName )
     const
 {
-    for (RegionData_Impl* pData : maRegions)
+    for (auto& pData : maRegions)
     {
         if( pData->GetTitle() == rName )
-            return pData;
+            return pData.get();
     }
     return nullptr;
 }
@@ -1451,9 +1445,8 @@ void SfxDocTemplate_Impl::DeleteRegion( size_t nIndex )
 {
     if ( nIndex < maRegions.size() )
     {
-        delete maRegions[ nIndex ];
-        RegionList_Impl::iterator it = maRegions.begin();
-        advance( it, nIndex );
+        auto it = maRegions.begin();
+        std::advance( it, nIndex );
         maRegions.erase( it );
     }
 }
@@ -1593,7 +1586,7 @@ bool SfxDocTemplate_Impl::InsertRegion( RegionData_Impl *pNew, size_t nPos )
     ::osl::MutexGuard   aGuard( maMutex );
 
     // return false (not inserted) if the entry already exists
-    for (const RegionData_Impl* pRegion : maRegions)
+    for (auto const& pRegion : maRegions)
         if ( pRegion->Compare( pNew ) == 0 )
             return false;
 
@@ -1603,12 +1596,12 @@ bool SfxDocTemplate_Impl::InsertRegion( RegionData_Impl *pNew, size_t nPos )
 
     if ( newPos < maRegions.size() )
     {
-        RegionList_Impl::iterator it = maRegions.begin();
-        advance( it, newPos );
-        maRegions.insert( it, pNew );
+        auto it = maRegions.begin();
+        std::advance( it, newPos );
+        maRegions.emplace( it, pNew );
     }
     else
-        maRegions.push_back( pNew );
+        maRegions.emplace_back( pNew );
 
     return true;
 }
@@ -1687,9 +1680,6 @@ void SfxDocTemplate_Impl::Clear()
     ::osl::MutexGuard   aGuard( maMutex );
     if ( mnLockCounter )
         return;
-
-    for (RegionData_Impl* pRegion : maRegions)
-        delete pRegion;
     maRegions.clear();
 }
 
