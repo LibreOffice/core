@@ -6393,6 +6393,12 @@
         </info>
         <value>3</value>
       </prop>
+      <prop oor:name="AdvancedClassificationDialogIntellectualPropertySectionExpanded" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+           <desc>Specifies if the intellectual property section in the advanced classification dialog should be expanded when the dialog is open.</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
   </component>
 </oor:component-schema>

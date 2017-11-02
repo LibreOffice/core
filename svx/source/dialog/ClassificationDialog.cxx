@@ -23,6 +23,8 @@
 #include <tools/XmlWriter.hxx>
 #include <tools/XmlWalker.hxx>
 
+#include <officecfg/Office/Common.hxx>
+
 namespace svx {
 
 namespace {
@@ -138,6 +140,8 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
     get(m_pIntellectualPropertyPartAddButton, "intellectualPropertyPartAddButton");
     get(m_pIntellectualPropertyPartEdit, "intellectualPropertyPartEntry");
 
+    get(m_pIntellectualPropertyExpander, "intellectualPropertyExpander");
+
     m_pSignButton->SetClickHdl(LINK(this, ClassificationDialog, ButtonClicked));
     m_pSignButton->Show(m_bPerParagraph);
 
@@ -178,6 +182,9 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
     m_pIntellectualPropertyPartListBox->EnableAutoSize(true);
 
     m_pRecentlyUsedListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectRecentlyUsedHdl));
+
+    bool bExpand = officecfg::Office::Common::Classification::AdvancedClassificationDialogIntellectualPropertySectionExpanded::get();
+    m_pIntellectualPropertyExpander->set_expanded(bExpand);
 }
 
 ClassificationDialog::~ClassificationDialog()
@@ -199,6 +206,7 @@ void ClassificationDialog::dispose()
     m_pIntellectualPropertyPartNumberListBox.clear();
     m_pIntellectualPropertyPartAddButton.clear();
     m_pIntellectualPropertyPartEdit.clear();
+    m_pIntellectualPropertyExpander.clear();
 
     ModalDialog::dispose();
 }

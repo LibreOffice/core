@@ -261,7 +261,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkExpander">
+              <object class="GtkExpander" id="intellectualPropertyExpander">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <child>
