@@ -69,9 +69,8 @@ protected:
     SAL_DLLPRIVATE void ImplPosControls();
 
 public:
-                        MessBox( vcl::Window* pParent, MessBoxStyle nMessBoxStyle, WinBits n,
-                            const OUString& rTitle, const OUString& rMessage,
-                            Dialog::InitFlag eInitFlag = Dialog::InitFlag::NoParentCentered);
+                        MessBox(vcl::Window* pParent, MessBoxStyle nMessBoxStyle, WinBits n,
+                                const OUString& rTitle, const OUString& rMessage);
     virtual             ~MessBox() override;
     virtual void        dispose() override;
 
