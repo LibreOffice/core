@@ -2701,7 +2701,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
     maEntries.emplace_back(Get_Long(pStart));
 
     //we expect them sorted, but it appears possible for them to arrive unsorted
-    std::sort(maEntries.begin(), maEntries.end());
+    std::stable_sort(maEntries.begin(), maEntries.end());
 
     mnIdx = 0;
 
