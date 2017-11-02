@@ -196,6 +196,15 @@ public:
     };
 };
 
+// RotateFlyFrame3 - Helper method that rotates a FrameAreaDefinition content
+// around a given point. It takes care for FramePrintArea being relative to
+// FrameArea and creates the rotated BoundRects
+void rotateFrameAreaDefinitionAroundPoint(
+    SwRect& rFrameArea,
+    SwRect& rFramePrintArea,
+    const Point& rCenter,
+    double fRotation);
+
 /**
  * Base class of the Writer layout elements.
  *
@@ -820,6 +829,11 @@ public:
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const;
     void dumpChildrenAsXml(xmlTextWriterPtr writer) const;
     bool IsCollapse() const;
+
+    // RotateFlyFrame3 - Support for handing out a rotation, currently
+    // only used for SwGrfNode in inner SwFrame of a SwFlyFrame, but may
+    // be used in the future. Default returns 0.0 (no rotation)
+    virtual double getRotation() const;
 };
 
 inline bool SwFrame::IsInDocBody() const
