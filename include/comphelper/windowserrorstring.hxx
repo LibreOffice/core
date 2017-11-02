@@ -47,7 +47,7 @@ inline OUString WindowsErrorStringFromHRESULT(HRESULT hr)
     // we might actually have a Win32 error code converted using HRESULT_FROM_WIN32 macro
 
     DWORD nErrorCode = DWORD(hr);
-    if ((hr & 0xFFFF0000) == MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, 0) || hr == S_OK)
+    if (HRESULT(hr & 0xFFFF0000) == MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, 0) || hr == S_OK)
     {
         nErrorCode = HRESULT_CODE(hr);
         // https://msdn.microsoft.com/en-us/library/ms679360 mentions that the codes might have
