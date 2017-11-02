@@ -108,6 +108,116 @@ sub check_whitespaces($)
     }
 }
 
+sub check_style($)
+{
+    my ($h) = @_;
+    my $src = "c|cpp|cxx|h|hxx|inl";
+    my @bad_names = ();
+    my %blacklist_names = ();
+
+    # Use clang-format from PATH, unless it's available in our dedicated
+    # directory.
+    my $opt_lo = "/opt/lo/bin";
+    my $clang_format = "$opt_lo/clang-format";
+    if (! -x $clang_format)
+    {
+        foreach my $dir (split /:/, $ENV{PATH})
+        {
+            $clang_format = "$dir/clang-format";
+            if (-x $clang_format)
+            {
+                last;
+            }
+        }
+    }
+
+    # Read the blacklist.
+    if (open(LINES, "solenv/clang-format/blacklist"))
+    {
+        while (my $line = <LINES>)
+        {
+            chomp $line;
+            $blacklist_names{$line} = 1;
+        }
+    }
+
+    # Check if clang-format is installed.
+    if (! -x $clang_format)
+    {
+        # As a first step, don't do any checks in this case.
+        return;
+
+        my $version = "r302580";
+        my $platform = "linux64";
+        my $download = "wget";
+        if ($^O eq "cygwin")
+        {
+            $platform = "win.exe";
+        }
+        elsif ($^O eq "darwin")
+        {
+            $platform = "mac";
+            $download = "curl -O";
+        }
+
+        print("Error: clang-format is not found in $opt_lo or in your PATH.\n");
+        print("To get a clang-format binary for your platform, please do:\n\n");
+        print("mkdir -p $opt_lo\n");
+        print("cd $opt_lo\n");
+        print("$download https://dev-www.libreoffice.org/bin/clang-format-$version-$platform\n");
+        print("cp clang-format-$version-$platform clang-format\n");
+        print("chmod +x clang-format\n");
+        exit(1);
+    }
+
+    if ($^O eq "cygwin")
+    {
+        $clang_format = `cygpath -m $clang_format`;
+        chomp $clang_format;
+    }
+
+    # Get a list of non-deleted changed files.
+    open (FILES, "git diff-index --cached --diff-filter=AM --name-only $h |") ||  die "Cannot run git diff.";
+    while (my $filename = <FILES>)
+    {
+        chomp $filename;
+        if ($filename =~ /\.($src)$/ and !exists($blacklist_names{$filename}))
+        {
+            if (system("$clang_format $filename | git --no-pager diff --no-index --exit-code $filename -") != 0)
+            {
+                push @bad_names, $filename;
+            }
+        }
+    }
+
+    # Enforce style.
+    if (scalar @bad_names)
+    {
+        my $autostyle = `git config libreoffice.autostyle`;
+        chomp $autostyle;
+        if ($autostyle ne "true")
+        {
+            print("\nThe above differences were found between the code to commit \n");
+            print("and the clang-format rules. You can apply these changes with:\n");
+            print("\n$clang_format -i " . join(" ", @bad_names) . "\n\n");
+            print("Aborting commit. Apply changes and commit again or skip checking\n");
+            print("with --no-verify (not recommended).\n");
+            exit(1);
+        }
+        else
+        {
+            # 'git config libreoffice.autostyle true' was invoked to run
+            # clang-format automatically.
+            print("\nThe above differences were found between the code to commit \n");
+            print("and the clang-format rules. Fixing these now automatically.\n");
+            print("Running '$clang_format -i " . join(" ", @bad_names) . "' for you...\n");
+            system("$clang_format -i " . join(" ", @bad_names));
+            system("git add " . join(" ", @bad_names));
+            print("Done.\n");
+        }
+    }
+}
+
 # Do the work :-)
 
 # Initial commit: diff against an empty tree object
@@ -171,6 +281,9 @@ while (<FILES>)
 
 # fix whitespace in code
 check_whitespaces( $against);
+
+# fix style in code
+check_style($against);
 
 # all OK
 exit( 0 );
