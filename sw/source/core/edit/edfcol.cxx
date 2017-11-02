@@ -801,6 +801,8 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
     while (xParagraphs->hasMoreElements())
     {
         uno::Reference<container::XEnumerationAccess> xTextPortionEnumerationAccess(xParagraphs->nextElement(), uno::UNO_QUERY);
+        if (!xTextPortionEnumerationAccess.is())
+            continue;
         uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
 
         // Check font weight
