@@ -47,7 +47,8 @@ cclass_Unicode::cclass_Unicode( const uno::Reference < XComponentContext >& rxCo
         nContTypes( 0 ),
         eState( ssGetChar ),
         cGroupSep( ',' ),
-        cDecimalSep( '.' )
+        cDecimalSep( '.' ),
+        cDecimalSepAlt( 0 )
 {
     trans = new Transliteration_casemapping();
 }
