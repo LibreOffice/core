@@ -39,7 +39,7 @@ namespace pcr
     typedef ::cppu::WeakImplHelper <   css::inspection::XPropertyControlObserver
                                     ,   css::lang::XInitialization
                                     >   DefaultHelpProvider_Base;
-    class DefaultHelpProvider : public DefaultHelpProvider_Base
+    class DefaultHelpProvider final : public DefaultHelpProvider_Base
     {
     private:
         bool                            m_bConstructed;
@@ -57,7 +57,7 @@ namespace pcr
         static css::uno::Reference< css::uno::XInterface > SAL_CALL
                         Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
-    protected:
+    private:
         virtual ~DefaultHelpProvider() override;
 
         // XPropertyControlObserver
@@ -67,11 +67,9 @@ namespace pcr
         // XInitialization
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
-    protected:
         // Service constructors
         void    create( const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxUI );
 
-    private:
         static vcl::Window* impl_getVclControlWindow_nothrow( const css::uno::Reference< css::inspection::XPropertyControl >& _rxControl );
         static OUString impl_getHelpText_nothrow( const css::uno::Reference< css::inspection::XPropertyControl >& _rxControl );
     };

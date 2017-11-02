@@ -72,10 +72,9 @@ namespace pcr
     typedef std::vector< ListBoxLine > ListBoxLines;
 
 
-    class OBrowserListBox   :public Control
+    class OBrowserListBox final : public Control
                             ,public IButtonClickListener
     {
-    protected:
         VclPtr<Window>              m_aLinesPlayground;
         VclPtr<ScrollBar>           m_aVScroll;
         VclPtr<InspectorHelpWindow> m_pHelpWindow;
@@ -94,7 +93,6 @@ namespace pcr
         ::rtl::Reference< PropertyControlContext_Impl >
                                     m_pControlContextImpl;
 
-    protected:
         void    PositionLine( ListBoxLines::size_type _nIndex );
         void    UpdatePosNSize();
         void    UpdatePlayGround();
@@ -152,12 +150,12 @@ namespace pcr
         /// @throws css::uno::RuntimeException
         void SAL_CALL               activateNextControl( const css::uno::Reference< css::inspection::XPropertyControl >& CurrentControl );
 
-    protected:
+    private:
         // IButtonClickListener
         void    buttonClicked( OBrowserLine* _pLine, bool _bPrimary ) override;
 
         using Window::SetHelpText;
-    private:
+
         DECL_LINK( ScrollHdl, ScrollBar*, void );
 
         /** retrieves the index of a given control in our line list
@@ -198,7 +196,6 @@ namespace pcr
         */
         long        impl_getPrefererredHelpHeight();
 
-    private:
         using Window::Activate;
     };
 

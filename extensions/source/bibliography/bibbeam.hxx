@@ -38,12 +38,10 @@ namespace bib
 
 
     class BibGridwin;
-    class BibBeamer
+    class BibBeamer final
             :public BibSplitWindow
             ,public FormControlContainer
     {
-        private:
-
             css::uno::Reference< css::frame::XController >            m_xController;
 
             BibDataManager*         pDatMan;
@@ -51,8 +49,6 @@ namespace bib
             VclPtr<BibGridwin>      pGridWin;
 
             DECL_LINK( RecalcLayout_Impl, void*, void );
-
-        protected:
 
             void                    createToolBar();
             void                    createGridWin();

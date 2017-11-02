@@ -32,9 +32,8 @@
 namespace abp
 {
 
-    class FinalPage : public AddressBookSourcePage
+    class FinalPage final : public AddressBookSourcePage
     {
-    protected:
         VclPtr< ::svt::OFileURLControl>  m_pLocation;
         VclPtr<PushButton>       m_pBrowse;
         VclPtr<CheckBox>         m_pRegisterName;
@@ -54,7 +53,7 @@ namespace abp
         virtual ~FinalPage() override;
         virtual void dispose() override;
 
-    protected:
+    private:
         // OWizardPage overridables
         virtual void        initializePage() override;
         virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
@@ -66,7 +65,6 @@ namespace abp
         // OImportPage overridables
         virtual bool        canAdvance() const override;
 
-    private:
         DECL_LINK( OnNameModified, Edit&, void );
         DECL_LINK(OnRegister, Button*, void);
         DECL_LINK(OnEmbed, Button*, void);

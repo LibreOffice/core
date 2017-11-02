@@ -35,9 +35,8 @@ namespace dbp
         OUString        sDBField;
     };
 
-    class OGroupBoxWizard : public OControlWizard
+    class OGroupBoxWizard final : public OControlWizard
     {
-    protected:
         OOptionGroupSettings        m_aSettings;
 
         bool        m_bVisitedDefault   : 1;
@@ -52,7 +51,7 @@ namespace dbp
 
         OOptionGroupSettings& getSettings() { return m_aSettings; }
 
-    protected:
+    private:
         // OWizardMachine overridables
         virtual VclPtr<TabPage>     createPage( WizardState _nState ) override;
         virtual WizardState         determineNextState( WizardState _nCurrentState ) const override;
@@ -74,9 +73,8 @@ namespace dbp
         OOptionGroupSettings& getSettings() { return static_cast<OGroupBoxWizard*>(getDialog())->getSettings(); }
     };
 
-    class ORadioSelectionPage : public OGBWPage
+    class ORadioSelectionPage final : public OGBWPage
     {
-    protected:
         VclPtr<Edit>            m_pRadioName;
         VclPtr<PushButton>      m_pMoveRight;
         VclPtr<PushButton>      m_pMoveLeft;
@@ -87,7 +85,7 @@ namespace dbp
         virtual ~ORadioSelectionPage() override;
         virtual void dispose() override;
 
-    protected:
+    private:
         // TabPage overridables
         void ActivatePage() override;
 
@@ -103,9 +101,8 @@ namespace dbp
         void implCheckMoveButtons();
     };
 
-    class ODefaultFieldSelectionPage : public OMaybeListSelectionPage
+    class ODefaultFieldSelectionPage final : public OMaybeListSelectionPage
     {
-    protected:
         VclPtr<RadioButton>     m_pDefSelYes;
         VclPtr<RadioButton>     m_pDefSelNo;
         VclPtr<ListBox>         m_pDefSelection;
@@ -115,7 +112,7 @@ namespace dbp
         virtual ~ODefaultFieldSelectionPage() override;
         virtual void dispose() override;
 
-    protected:
+    private:
         // OWizardPage overridables
         virtual void        initializePage() override;
         virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
@@ -123,9 +120,8 @@ namespace dbp
         OOptionGroupSettings& getSettings() { return static_cast<OGroupBoxWizard*>(getDialog())->getSettings(); }
     };
 
-    class OOptionValuesPage : public OGBWPage
+    class OOptionValuesPage final : public OGBWPage
     {
-    protected:
         VclPtr<Edit>            m_pValue;
         VclPtr<ListBox>         m_pOptions;
 
@@ -138,7 +134,7 @@ namespace dbp
         virtual ~OOptionValuesPage() override;
         virtual void dispose() override;
 
-    protected:
+    private:
         // TabPage overridables
         void ActivatePage() override;
 
@@ -161,9 +157,8 @@ namespace dbp
         virtual OUString& getDBFieldSetting() override;
     };
 
-    class OFinalizeGBWPage : public OGBWPage
+    class OFinalizeGBWPage final : public OGBWPage
     {
-    protected:
         VclPtr<Edit>            m_pName;
 
     public:
@@ -171,7 +166,7 @@ namespace dbp
         virtual ~OFinalizeGBWPage() override;
         virtual void dispose() override;
 
-    protected:
+    private:
         // TabPage overridables
         void ActivatePage() override;
 

@@ -25,9 +25,8 @@
 
 namespace abp
 {
-    class AdminDialogInvokationPage : public AddressBookSourcePage
+    class AdminDialogInvokationPage final : public AddressBookSourcePage
     {
-    protected:
         VclPtr<PushButton> m_pInvokeAdminDialog;
         VclPtr<FixedText>  m_pErrorMessage;
 
@@ -35,7 +34,7 @@ namespace abp
         explicit AdminDialogInvokationPage(OAddressBookSourcePilot* _pParent);
         virtual ~AdminDialogInvokationPage() override;
         virtual void dispose() override;
-    protected:
+    private:
         // TabDialog overridables
         virtual void        ActivatePage() override;
         virtual void        initializePage() override;
@@ -43,7 +42,6 @@ namespace abp
         // OImportPage overridables
         virtual bool        canAdvance() const override;
 
-    private:
         DECL_LINK( OnInvokeAdminDialog, Button*, void );
 
         void implTryConnect();

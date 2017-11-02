@@ -58,12 +58,11 @@ struct DataNode
 
 class CGM;
 class CGMImpressOutAct;
-class CGMChart
+class CGMChart final
 {
     friend class CGM;
     friend class CGMImpressOutAct;
 
-    protected:
         sal_Int8                mnCurrentFileType;
         ::std::vector< TextEntry* > maTextEntryList;
         DataNode                mDataNode[ 7 ];

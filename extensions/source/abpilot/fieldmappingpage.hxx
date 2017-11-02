@@ -27,9 +27,8 @@
 namespace abp
 {
 
-    class FieldMappingPage : public AddressBookSourcePage
+    class FieldMappingPage final : public AddressBookSourcePage
     {
-    protected:
         VclPtr<PushButton>     m_pInvokeDialog;
         VclPtr<FixedText>      m_pHint;
 
@@ -37,14 +36,13 @@ namespace abp
         explicit FieldMappingPage(OAddressBookSourcePilot* _pParent);
         virtual ~FieldMappingPage() override;
         virtual void dispose() override;
-    protected:
+    private:
         // OWizardPage overridables
         virtual void        initializePage() override;
 
         // TabDialog overridables
         virtual void        ActivatePage() override;
 
-    private:
         DECL_LINK( OnInvokeDialog, Button*, void );
 
         void implUpdateHint();

@@ -34,10 +34,9 @@ namespace pcr
 
     //= OPropertyInfoService
 
-    class OPropertyInfoService
+    class OPropertyInfoService final
                 :public IPropertyInfoService
     {
-    protected:
         static sal_uInt16               s_nCount;
         static OPropertyInfoImpl*       s_pPropertyInfos;
         // TODO: a real structure which allows quick access by name as well as by id
@@ -53,7 +52,7 @@ namespace pcr
 
         bool                                   isComposeable( const OUString& _rPropertyName ) const;
 
-    protected:
+    private:
         static const OPropertyInfoImpl* getPropertyInfo();
 
         static const OPropertyInfoImpl* getPropertyInfo(const OUString& _rName);

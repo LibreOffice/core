@@ -53,12 +53,10 @@ namespace pcr
     typedef ::cppu::WeakComponentImplHelper    <   css::inspection::XPropertyHandler
                                                 ,  css::lang::XServiceInfo
                                                 >   GenericPropertyHandler_Base;
-    class GenericPropertyHandler : public GenericPropertyHandler_Base
+    class GenericPropertyHandler final : public GenericPropertyHandler_Base
     {
-    private:
         mutable ::osl::Mutex    m_aMutex;
 
-    private:
         /// the service factory for creating services
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         /// need this to keep alive as long as m_xComponent lives
@@ -87,14 +85,13 @@ namespace pcr
         static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  );
         static css::uno::Reference< css::uno::XInterface > Create( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
-    protected:
+    private:
         explicit GenericPropertyHandler(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
         virtual ~GenericPropertyHandler() override;
 
-    protected:
         // XPropertyHandler overridables
         virtual void                                                SAL_CALL inspect( const css::uno::Reference< css::uno::XInterface >& _rxIntrospectee ) override;
         virtual css::uno::Any                                       SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
@@ -125,7 +122,6 @@ namespace pcr
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-    private:
         /** ensures that ->m_aProperties is initialized
             @precond
                 our mutex is locked
@@ -137,7 +133,6 @@ namespace pcr
         ::rtl::Reference< IPropertyEnumRepresentation >
                 impl_getEnumConverter( const css::uno::Type& _rEnumType );
 
-    private:
         GenericPropertyHandler( const GenericPropertyHandler& ) = delete;
         GenericPropertyHandler& operator=( const GenericPropertyHandler& ) = delete;
     };

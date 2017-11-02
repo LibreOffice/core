@@ -31,13 +31,12 @@ namespace pcr
 
     class OPropertyEditor;
 
-    class OPropertyBrowserView : public vcl::Window
+    class OPropertyBrowserView final : public vcl::Window
     {
         VclPtr<OPropertyEditor>     m_pPropBox;
         sal_uInt16                  m_nActivePage;
         Link<LinkParamNone*,void>   m_aPageActivationHandler;
 
-    protected:
         virtual void Resize() override;
         virtual void GetFocus() override;
         virtual bool EventNotify( NotifyEvent& _rNEvt ) override;
@@ -58,7 +57,7 @@ namespace pcr
 
         css::awt::Size getMinimumSize();
 
-    protected:
+    private:
         DECL_LINK(OnPageActivation, LinkParamNone*, void);
     };
 

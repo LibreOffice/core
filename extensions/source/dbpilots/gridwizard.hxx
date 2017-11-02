@@ -31,9 +31,8 @@ namespace dbp
         css::uno::Sequence< OUString >      aSelectedFields;
     };
 
-    class OGridWizard : public OControlWizard
+    class OGridWizard final : public OControlWizard
     {
-    protected:
         OGridSettings   m_aSettings;
         bool        m_bHadDataSelection : 1;
 
@@ -46,7 +45,7 @@ namespace dbp
 
         OGridSettings& getSettings() { return m_aSettings; }
 
-    protected:
+    private:
         // OWizardMachine overridables
         virtual VclPtr<TabPage>     createPage( WizardState _nState ) override;
         virtual WizardState         determineNextState( WizardState _nCurrentState ) const override;
@@ -56,7 +55,6 @@ namespace dbp
 
         virtual bool                approveControl(sal_Int16 _nClassId) override;
 
-    protected:
         void implApplySettings();
     };
 
@@ -69,9 +67,8 @@ namespace dbp
         OGridSettings& getSettings() { return static_cast<OGridWizard*>(getDialog())->getSettings(); }
     };
 
-    class OGridFieldsSelection : public OGridPage
+    class OGridFieldsSelection final : public OGridPage
     {
-    protected:
         VclPtr<ListBox>         m_pExistFields;
         VclPtr<PushButton>      m_pSelectOne;
         VclPtr<PushButton>      m_pSelectAll;
@@ -84,7 +81,7 @@ namespace dbp
         virtual ~OGridFieldsSelection() override;
         virtual void dispose() override;
 
-    protected:
+    private:
         // TabPage overridables
         virtual void ActivatePage() override;
 
@@ -93,7 +90,6 @@ namespace dbp
         virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
         virtual bool        canAdvance() const override;
 
-    protected:
         DECL_LINK(OnMoveOneEntry, Button*, void);
         DECL_LINK(OnMoveAllEntries, Button*, void);
         DECL_LINK(OnEntrySelected, ListBox&, void);

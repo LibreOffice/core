@@ -76,7 +76,7 @@ public:
 typedef cppu::WeakComponentImplHelper  <   css::beans::XPropertyChangeListener
                                         ,   css::form::XLoadable
                                         >   BibDataManager_Base;
-class BibDataManager
+class BibDataManager final
             :public ::comphelper::OMutexAndBroadcastHelper
             ,public BibDataManager_Base
 {
@@ -99,7 +99,6 @@ private:
         VclPtr<BibToolBar>           pToolbar;
 
         OUString                     sIdentifierMapping;
-protected:
 
         void                        InsertFields(const css::uno::Reference< css::form::XFormComponent > & xGrid);
         void                        SetMeAsUidListener();

@@ -64,9 +64,8 @@ class ImpPDFTabLinksPage;
 
 
 /// Class tabbed dialog
-class ImpPDFTabDialog : public SfxTabDialog
+class ImpPDFTabDialog final : public SfxTabDialog
 {
-private:
     FilterConfigItem            maConfigItem;
     FilterConfigItem            maConfigI18N;
 
@@ -81,7 +80,6 @@ private:
     sal_uInt16                  mnViewPageId;
     sal_uInt16                  mnGeneralPageId;
 
-protected:
     // the following data are the configuration used throughout the dialog and pages
     bool                        mbIsPresentation;
     bool                        mbIsSpreadsheet;
@@ -176,7 +174,7 @@ public:
     ImpPDFTabLinksPage*         getLinksPage() const;
     ImpPDFTabGeneralPage*       getGeneralPage() const;
 
-protected:
+private:
     virtual void                PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage ) override;
     virtual short               Ok() override;
 };
