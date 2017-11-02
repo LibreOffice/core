@@ -30,6 +30,8 @@
 #include <shlwapi.h>
 #include <winver.h>
 
+#include <comphelper/windowserrorstring.hxx>
+
 HINSTANCE D2DWriteTextOutRenderer::mmD2d1 = nullptr,
           D2DWriteTextOutRenderer::mmDWrite = nullptr;
 D2DWriteTextOutRenderer::pD2D1CreateFactory_t D2DWriteTextOutRenderer::D2D1CreateFactory = nullptr;
@@ -118,7 +120,7 @@ HRESULT checkResult(HRESULT hr, const char* file, size_t line)
         OUString sLocationString = OUString::createFromAscii(file) + ":" + OUString::number(line) + " ";
         SAL_DETAIL_LOG_STREAM(SAL_DETAIL_ENABLE_LOG_WARN, ::SAL_DETAIL_LOG_LEVEL_WARN,
                               "vcl.gdi", sLocationString.toUtf8().getStr(),
-                              "HRESULT failed with: " << (int(hr)));
+                              "HRESULT failed with: 0x" << OUString::number(hr, 16) << ": " << WindowsErrorStringFromHRESULT(hr));
     }
     return hr;
 }
