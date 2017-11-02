@@ -17,6 +17,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/layout.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/ClassificationEditView.hxx>
 #include <sfx2/classificationhelper.hxx>
@@ -39,6 +40,7 @@ private:
     VclPtr<ListBox> m_pIntellectualPropertyPartNumberListBox;
     VclPtr<PushButton> m_pIntellectualPropertyPartAddButton;
     VclPtr<Edit> m_pIntellectualPropertyPartEdit;
+    VclPtr<VclExpander> m_pIntellectualPropertyExpander;
 
     SfxClassificationHelper maHelper;
     SfxClassificationHelper maInternationalHelper;
