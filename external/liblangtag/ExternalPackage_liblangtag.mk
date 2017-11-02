@@ -13,6 +13,8 @@ $(eval $(call gb_ExternalPackage_use_external_project,liblangtag,liblangtag))
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,liblangtag,$(LIBO_LIB_FOLDER)/liblangtag.1.dylib,liblangtag/.libs/liblangtag.1.dylib))
+else ifeq ($(ANDROID_PORTS),1)
+$(eval $(call gb_ExternalPackage_add_file,liblangtag,$(LIBO_LIB_FOLDER)/liblangtag.so,liblangtag/.libs/liblangtag-lo.so))
 else ifeq ($(DISABLE_DYNLOADING),)
 $(eval $(call gb_ExternalPackage_add_file,liblangtag,$(LIBO_LIB_FOLDER)/liblangtag-lo.so.1,liblangtag/.libs/liblangtag-lo.so.1.4.1))
 endif
