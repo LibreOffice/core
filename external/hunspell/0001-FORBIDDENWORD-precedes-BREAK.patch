@@ -1,0 +1,27 @@
+From 39b785a6b03b35cc8a27f43f6005dcaa432694e1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?L=C3=A1szl=C3=B3=20N=C3=A9meth?= <nemeth@numbertext.org>
+Date: Mon, 9 Oct 2017 13:02:39 +0200
+Subject: [PATCH] FORBIDDENWORD precedes BREAK
+
+Now it's possible to forbid compound forms recognized by
+BREAK word breaking.
+---
+ src/hunspell/hunspell.cxx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/hunspell/hunspell.cxx b/src/hunspell/hunspell.cxx
+index 5c98f8a..3fd0d16 100644
+--- a/src/hunspell/hunspell.cxx
++++ b/src/hunspell/hunspell.cxx
+@@ -633,7 +633,7 @@ bool HunspellImpl::spell(const std::string& word, int* info, std::string* root)
+   }
+ 
+   // recursive breaking at break points
+-  if (!wordbreak.empty()) {
++  if (!wordbreak.empty() && !(*info & SPELL_FORBIDDEN)) {
+ 
+     int nbr = 0;
+     wl = scw.size();
+-- 
+1.9.1
+
