@@ -61,6 +61,7 @@
 #include <unotools/streamwrap.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <svx/svdpage.hxx>
+#include <editeng/unoprnms.hxx>
 
 #include <bordertest.hxx>
 
@@ -1708,6 +1709,20 @@ DECLARE_OOXMLEXPORT_TEST( testObjectCrossReference, "object_cross_reference.odt"
         }
         ++nIndex;
     }
+}
+
+DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")
+{
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+
+    sal_Int32 nTotalHeight = 0;
+    xPropertySet->getPropertyValue(UNO_NAME_TEXT_UPPERDIST) >>= nTotalHeight;
+    nTotalHeight += xShape->getSize().Height;
+
+    // Rounding errors
+    sal_Int32 nDifference = 5198 - nTotalHeight;
+    CPPUNIT_ASSERT(nDifference < 3);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
