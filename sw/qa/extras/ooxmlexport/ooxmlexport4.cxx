@@ -1037,6 +1037,40 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92521, "tdf92521.odt")
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:sectPr", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf102466, "tdf102466.docx")
+{
+    // the problem was: file is truncated: the first page is missing.
+
+    // check how much pages we have
+    CPPUNIT_ASSERT_EQUAL(10, getPages());
+
+    // check content of the first page
+    {
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xIndexAccess(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+
+        // no border
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xFrame, "LineWidth"));
+    }
+
+    // Make sure we have 19 tables created
+    {
+        uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(19), xTables->getCount( ));
+
+        // check the text inside first cell of the first table
+        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+
+        const OUString aMustHaveText = "Requerimientos del  Cliente";
+        const OUString aActualText   = xCell->getString();
+
+        CPPUNIT_ASSERT(aActualText.indexOf(aMustHaveText) > 0);
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf99090_pgbrkAfterTable, "tdf99090_pgbrkAfterTable.docx")
 {
     if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
