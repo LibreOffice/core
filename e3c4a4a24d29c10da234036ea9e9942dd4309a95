@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_15052bbb",
+        "filename": "sc/source/core/data/table6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-03T14:39:59Z",
+      "side": 1,
+      "message": "This is wrong, the string will be something raw unformatted not as displayed, simply use\n\n aCol[nCol].GetString( nRow, aString );\n\ninstead, as below. Then, for a string result do the\n\n bMultiLine \u003d lcl_GetTextWithBreaks(...);\n\nTo check for string result use aCell.hasString()",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 70
+      },
+      "revId": "e3c4a4a24d29c10da234036ea9e9942dd4309a95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
