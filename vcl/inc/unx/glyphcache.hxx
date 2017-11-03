@@ -133,7 +133,7 @@ public:
     const FontSelectPattern& GetFontSelData() const      { return maFontSelData; }
 
     void                    GetFontMetric(ImplFontMetricDataRef const &) const;
-    const unsigned char*    GetTable( const char* pName, sal_uLong* pLength );
+    const unsigned char*    GetTable( const char* pName, sal_uLong* pLength ) const;
     const FontCharMapRef    GetFontCharMap() const;
     bool                    GetFontCapabilities(vcl::FontCapabilities &) const;
 

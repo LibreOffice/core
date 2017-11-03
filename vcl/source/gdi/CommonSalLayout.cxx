@@ -32,11 +32,9 @@
 #if ENABLE_QT5
 #include <qt5/Qt5Font.hxx>
 #include <QtGui/QRawFont>
-#else
-class Qt5Font;
 #endif
 
-hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
+static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
 {
     char pTagName[5];
     pTagName[0] = (char)(nTableTag >> 24);
@@ -70,12 +68,12 @@ hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData
     }
 #else
     const char* pBuffer = nullptr;
-#if ENABLE_QT5
     CommonSalLayout *pLayout = static_cast<CommonSalLayout*>( pUserData );
+#if ENABLE_QT5
     QByteArray aTable;
-    if ( pLayout->mbUseQt5 )
+    if ( pLayout->useQt5() )
     {
-        QRawFont aRawFont( QRawFont::fromFont( *pLayout->mpQFont ) );
+        QRawFont aRawFont( QRawFont::fromFont( *pLayout->getQt5Font() ) );
         aTable = aRawFont.fontTable( pTagName );
         pBuffer = reinterpret_cast<const char*>( aTable.data() );
         nLength = aTable.size();
@@ -83,9 +81,8 @@ hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData
     else
 #endif
     {
-        FreetypeFont* pFont = static_cast<FreetypeFont*>(pUserData);
         pBuffer = reinterpret_cast<const char*>(
-            pFont->GetTable(pTagName, &nLength) );
+            pLayout->getFreetypeFont()->GetTable(pTagName, &nLength) );
     }
 #endif
 
@@ -282,27 +279,35 @@ CommonSalLayout::CommonSalLayout(const FontSelectPattern &rFSP,
             mpFreetypeFont->SetHbFont(mpHbFont);
     }
 }
-#endif
 
-CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont) :
-    mrFontSelData(rFreetypeFont.GetFontSelData())
-,   mpFreetypeFont(&rFreetypeFont)
-,   mpVertGlyphs(nullptr)
+CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont)
+    : CommonSalLayout(rFreetypeFont.GetFontSelData(),
+                      &rFreetypeFont, nullptr, false)
 {
-    mpHbFont = rFreetypeFont.GetHbFont();
-    if (!mpHbFont)
-    {
-        hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, &rFreetypeFont, nullptr);
-        mpHbFont = createHbFont(pHbFace);
-    }
 }
 
-#if ENABLE_QT5
 CommonSalLayout::CommonSalLayout(Qt5Font& rQFont)
     : CommonSalLayout(rQFont.GetFontSelData(),
                       nullptr, &rQFont, true)
 {
 }
+
+#else // ! ENABLE_QT5
+
+CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont)
+    : mrFontSelData(rFreetypeFont.GetFontSelData())
+    , mpFreetypeFont(&rFreetypeFont)
+    , mpVertGlyphs(nullptr)
+{
+    mpHbFont = mpFreetypeFont->GetHbFont();
+    if (!mpHbFont)
+    {
+        hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, this, nullptr);
+        mpHbFont = createHbFont(pHbFace);
+        mpFreetypeFont->SetHbFont(mpHbFont);
+    }
+}
+
 #endif
 #endif
 
