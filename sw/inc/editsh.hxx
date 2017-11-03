@@ -383,6 +383,9 @@ public:
     /// Validate all paragraph signatures.
     void ValidateAllParagraphSignatures(bool updateDontRemove);
 
+    /// Restore the metadata fields, if missing, from the RDF metadata.
+    void RestoreMetadataFields();
+
     /// Ensure that the classification of the doc is never lower than
     /// the paragraph with the highest classification.
     void ClassifyDocPerHighestParagraphClass();
