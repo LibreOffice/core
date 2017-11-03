@@ -904,7 +904,7 @@ private:
     void ScChiDist( bool bODFF);   // for LEGACY.CHIDIST, returns right tail
     void ScChiSqDist(); // returns left tail or density
     void ScChiSqDist_MS();
-    void ScChiSqInv(); //invers to CHISQDIST
+    void ScChiSqInv(); // inverse to CHISQDIST
     void ScWeibull();
     void ScBetaDist();
     void ScBetaDist_MS();
