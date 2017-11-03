@@ -24,6 +24,7 @@ OOXMLSecParser::OOXMLSecParser(XSecController* pXSecController)
     ,m_bInCertDigest(false)
     ,m_bInValidSignatureImage(false)
     ,m_bInInvalidSignatureImage(false)
+    ,m_bInSignatureLineId(false)
     ,m_bReferenceUnresolved(false)
 {
 }
