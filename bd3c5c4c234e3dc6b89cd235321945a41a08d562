@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_b52a972a",
+        "filename": "xmlsecurity/source/helper/ooxmlsecparser.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2017-11-03T14:27:00Z",
+      "side": 1,
+      "message": "Missing initialization of [m_bInSignatureLineId]!!!",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 38
+      },
+      "revId": "bd3c5c4c234e3dc6b89cd235321945a41a08d562",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
