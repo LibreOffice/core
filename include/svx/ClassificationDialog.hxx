@@ -25,6 +25,15 @@
 
 namespace svx {
 
+class IntellectualPropertyPartEdit : public Edit
+{
+public:
+    IntellectualPropertyPartEdit(vcl::Window* pParent);
+
+protected:
+    virtual void KeyInput(const KeyEvent &rKEvt) override;
+};
+
 class SVX_DLLPUBLIC ClassificationDialog : public ModalDialog
 {
 private:
@@ -39,7 +48,7 @@ private:
     VclPtr<ListBox> m_pIntellectualPropertyPartListBox;
     VclPtr<ListBox> m_pIntellectualPropertyPartNumberListBox;
     VclPtr<PushButton> m_pIntellectualPropertyPartAddButton;
-    VclPtr<Edit> m_pIntellectualPropertyPartEdit;
+    VclPtr<IntellectualPropertyPartEdit> m_pIntellectualPropertyPartEdit;
     VclPtr<VclExpander> m_pIntellectualPropertyExpander;
 
     SfxClassificationHelper maHelper;

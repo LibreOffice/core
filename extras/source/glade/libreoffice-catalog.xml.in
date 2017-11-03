@@ -677,8 +677,12 @@
                         generic-name="Text View" parent="GtkTextView"
                         icon-name="widget-gtk-textentry"/>
 
-    <glade-widget-class title="Text View" name="svxlo-ClassificationEditView"
-                        generic-name="Text View" parent="GtkTextView"
+    <glade-widget-class title="Classifcation Text View" name="svxlo-ClassificationEditView"
+                        generic-name="Classifcation Text View" parent="GtkTextView"
+                        icon-name="widget-gtk-textentry"/>
+
+    <glade-widget-class title="IntellectualPropertyPartEdit" name="svxlo-IntellectualPropertyPartEdit"
+                        generic-name="IntellectualPropertyPartEdit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
 
     <glade-widget-class title="Combo Image Button" name="sclo-ScExtIButton"

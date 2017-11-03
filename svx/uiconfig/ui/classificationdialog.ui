@@ -294,7 +294,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="intellectualPropertyPartEntry">
+                      <object class="svxlo-IntellectualPropertyPartEdit" id="intellectualPropertyPartEntry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                       </object>
