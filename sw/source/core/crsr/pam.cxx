@@ -716,7 +716,8 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
     if (!bRet)
     {
         // Paragraph Signatures and Classification fields are read-only.
-        bRet = pDoc->GetEditShell()->IsCursorInParagraphMetadataField();
+        if (pDoc && pDoc->GetEditShell())
+            bRet = pDoc->GetEditShell()->IsCursorInParagraphMetadataField();
     }
 
     return bRet;
