@@ -2779,6 +2779,10 @@ void ExceptionType::dumpHppFile(
     } else {
         out << " ";
     }
+    // smuggle the subtype name into the exception, so we can log it at the catch site
+    out << "\n#if defined LIBO_INTERNAL_ONLY\n";
+    out << "    SetSubtypeName(\"" << name_ << "\");\n";
+    out << "#endif\n";
     out << "}\n\n";
     if (!entity_->getDirectMembers().empty() || getInheritedMemberCount() > 0) {
         out << indent() << "inline " << id_ << "::" << id_ << "(";
@@ -2816,6 +2820,10 @@ void ExceptionType::dumpHppFile(
         } else {
             out << " ";
         }
+        // smuggle the subtype name into the exception, so we can log it at the catch site
+        out << "\n#if defined LIBO_INTERNAL_ONLY\n";
+        out << "    SetSubtypeName(\"" << name_ << "\");\n";
+        out << "#endif\n";
         out << "}\n\n";
     }
     out << "#if !defined LIBO_INTERNAL_ONLY\n" << indent() << id_ << "::" << id_
@@ -2857,8 +2865,7 @@ void ExceptionType::dumpHppFile(
         out << "inline ::std::basic_ostream<charT, traits> & operator<<(\n";
         out << "    ::std::basic_ostream<charT, traits> & os, ::com::sun::star::uno::Exception const & exception)\n";
         out << "{\n";
-        out << "    // the class name is useful because exception throwing code does not always pass in a useful message\n";
-        out << "    os << typeid(exception).name();\n";
+        out << "    os << exception.SubtypeName;\n";
         out << "    if (!exception.Message.isEmpty())\n";
         out << "      os << \" msg: \" << exception.Message;\n";
         out << "    return os;\n";
@@ -3055,7 +3062,14 @@ void ExceptionType::dumpDeclaration(FileStream & out)
         << "inline CPPU_GCC_DLLPRIVATE " << id_ << "(" << id_
         << " const &);\n\n" << indent() << "inline CPPU_GCC_DLLPRIVATE ~"
         << id_ << "();\n\n" << indent() << "inline CPPU_GCC_DLLPRIVATE " << id_
-        << " & operator =(" << id_ << " const &);\n#endif\n\n";
+        << " & operator =(" << id_ << " const &);\n";
+    out << "#else\n";
+    if (name_ == "com.sun.star.uno.Exception")
+    {
+        out << "\n" << indent() << "::rtl::OUString SubtypeName;\n";
+        out << "\n" << indent() << "void SetSubtypeName(::rtl::OUString s) { if (!SubtypeName.isEmpty()) SubtypeName = s; }\n";
+    }
+    out << "#endif\n\n";
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity_->getDirectMembers().begin());
          i != entity_->getDirectMembers().end(); ++i) {
