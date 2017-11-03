@@ -1233,9 +1233,9 @@ namespace {
 
 void lclUpdateText( XclImpChTextRef& rxText, const XclImpChText* xDefText )
 {
-    if( rxText )
+    if (rxText)
         rxText->UpdateText( xDefText );
-    else
+    else if (xDefText)
     {
         XclImpChTextRef xNew(new XclImpChText(*xDefText));
         rxText = xNew;
