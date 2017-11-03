@@ -143,7 +143,9 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
 }
 
 SwNoTextFrame::SwNoTextFrame(SwNoTextNode * const pNode, SwFrame* pSib )
-    : SwContentFrame( pNode, pSib )
+:   SwContentFrame( pNode, pSib ),
+    maFrameAreaTransformation(),
+    maFramePrintAreaTransformation()
 {
     mnFrameType = SwFrameType::NoTxt;
 }
@@ -493,34 +495,63 @@ void SwNoTextFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         }
     }
 
-    // RotateFlyFrame3 - inner frame
-    // After the layout is finished, apply possible set rotation to it
+    // RotateFlyFrame3 - outer frame
+    // After the unrotated layout is finished, apply possible set rotation to it
     const double fRotation(getRotation());
 
-    if(0.0 != fRotation)
+    if(basegfx::fTools::equalZero(fRotation))
     {
-        SwRect aFrameArea(getFrameArea());
-        SwRect aFramePrintArea(getFramePrintArea());
-        const Point aCenter(aFrameArea.Center());
+        // reset transformations to show that they are not used
+        maFrameAreaTransformation.identity();
+        maFramePrintAreaTransformation.identity();
+    }
+    else
+    {
+        // save Transformations to local maFrameAreaTransformation
+        // and maFramePrintAreaTransformation.
+        const Point aCenter(getFrameArea().Center());
+        const basegfx::B2DPoint aB2DCenter(aCenter.X(), aCenter.Y());
 
-        // apply rotation and re-set the FrameArea definitions
-        rotateFrameAreaDefinitionAroundPoint(aFrameArea, aFramePrintArea, aCenter, fRotation);
+        createFrameAreaTransformations(
+            maFrameAreaTransformation,
+            maFramePrintAreaTransformation,
+            fRotation,
+            aB2DCenter);
 
-        if(aFrameArea != getFrameArea())
-        {
-            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-            aFrm.setSwRect(aFrameArea);
-        }
-
-        if(aFramePrintArea != getFramePrintArea())
-        {
-            SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-            aPrt.setSwRect(aFramePrintArea);
-        }
+        // create BoundRects of FrameAreas and re-set the FrameArea definitions
+        // to represent the rotated geometry in the layout object
+        setFrameAreaDefinitionsToBoundRangesOfTransformations(
+            maFrameAreaTransformation,
+            maFramePrintAreaTransformation);
     }
 }
 
-// RotateFlyFrame3 - inner frame
+// RotateFlyFrame3 - Support for Transformations - outer frame
+basegfx::B2DHomMatrix SwNoTextFrame::getFrameAreaTransformation() const
+{
+    if(!maFrameAreaTransformation.isIdentity())
+    {
+        // use pre-created transformation
+        return maFrameAreaTransformation;
+    }
+
+    // call parent
+    return SwContentFrame::getFrameAreaTransformation();
+}
+
+basegfx::B2DHomMatrix SwNoTextFrame::getFramePrintAreaTransformation() const
+{
+    if(!maFramePrintAreaTransformation.isIdentity())
+    {
+        // use pre-created transformation
+        return maFramePrintAreaTransformation;
+    }
+
+    // call parent
+    return SwContentFrame::getFramePrintAreaTransformation();
+}
+
+// RotateFlyFrame3 - outer frame
 // Check if we contain a SwGrfNode and get possible rotation from it
 double SwNoTextFrame::getRotation() const
 {
@@ -701,7 +732,9 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                             }
 
                             // RotateFlyFrame3 - invalidate needed for ContentFrame (inner, this)
-                            // and LayoutFrame (outer, GetUpper)
+                            // and LayoutFrame (outer, GetUpper). It is possible to only invalidate
+                            // the outer frame, but that leads to an in-between state that gets
+                            // potentially painted
                             InvalidateAll_();
 
                             if(GetUpper())

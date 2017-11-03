@@ -30,6 +30,12 @@ class SwNoTextFrame: public SwContentFrame
 {
     friend void FrameFinit();
 
+    // RotateFlyFrame3 - Support for Transformation, hold
+    // FrameAreaTransformation and FramePrintAreaTransformation
+    // here when rotation is used
+    basegfx::B2DHomMatrix   maFrameAreaTransformation;
+    basegfx::B2DHomMatrix   maFramePrintAreaTransformation;
+
     const Size& GetSize() const;
 
     void Format ( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
@@ -60,6 +66,10 @@ public:
 
     // RotateFlyFrame3 - Support for inner frame of a SwGrfNode
     virtual double getRotation() const override;
+
+    // RotateFlyFrame3 - Support for Transformations for inner frame of a SwGrfNode
+    basegfx::B2DHomMatrix getFrameAreaTransformation() const;
+    basegfx::B2DHomMatrix getFramePrintAreaTransformation() const;
 };
 
 #endif

@@ -44,13 +44,16 @@
 
 using namespace ::com::sun::star;
 
-SwFlyFreeFrame::SwFlyFreeFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch ) :
-    SwFlyFrame( pFormat, pSib, pAnch ),
+SwFlyFreeFrame::SwFlyFreeFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch )
+:   SwFlyFrame( pFormat, pSib, pAnch ),
     // #i34753#
     mbNoMakePos( false ),
     // #i37068#
     mbNoMoveOnCheckClip( false ),
-    maUnclippedFrame( )
+    maUnclippedFrame( ),
+    // RotateFlyFrame3
+    maFrameAreaTransformation(),
+    maFramePrintAreaTransformation()
 {
 }
 
@@ -223,36 +226,35 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     }
 
     // RotateFlyFrame3 - inner frame
+    // After the unrotated layout is finished, apply possible set rotation to it
     const double fRotation(getRotation());
 
-    if(0.0 != fRotation)
+    if(basegfx::fTools::equalZero(fRotation))
     {
-        SwRect aFrameArea(getFrameArea());
-        SwRect aFramePrintArea(getFramePrintArea());
-        Point aCenter(aFrameArea.Center());
+        // reset transformations to show that they are not used
+        maFrameAreaTransformation.identity();
+        maFramePrintAreaTransformation.identity();
+    }
+    else
+    {
+        // save Transformations to local maFrameAreaTransformation
+        // and maFramePrintAreaTransformation.
 
-        if(GetUpper())
-        {
-            // get center from outer frame (layout frame)
-            const SwRect aUpperFrameArea(GetUpper()->getFrameArea());
+        // get center from outer frame (layout frame) to be on the safe side
+        const Point aCenter(GetUpper() ? GetUpper()->getFrameArea().Center() : getFrameArea().Center());
+        const basegfx::B2DPoint aB2DCenter(aCenter.X(), aCenter.Y());
 
-            aCenter = aUpperFrameArea.Center();
-        }
+        createFrameAreaTransformations(
+            maFrameAreaTransformation,
+            maFramePrintAreaTransformation,
+            fRotation,
+            aB2DCenter);
 
-        // apply rotation and re-set the FrameArea definitions
-        rotateFrameAreaDefinitionAroundPoint(aFrameArea, aFramePrintArea, aCenter, fRotation);
-
-        if(aFrameArea != getFrameArea())
-        {
-            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-            aFrm.setSwRect(aFrameArea);
-        }
-
-        if(aFramePrintArea != getFramePrintArea())
-        {
-            SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-            aPrt.setSwRect(aFramePrintArea);
-        }
+        // create BoundRects of FrameAreas and re-set the FrameArea definitions
+        // to represent the rotated geometry in the layout object
+        setFrameAreaDefinitionsToBoundRangesOfTransformations(
+            maFrameAreaTransformation,
+            maFramePrintAreaTransformation);
     }
 
     Unlock();
@@ -266,7 +268,32 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 #endif
 }
 
-// RotateFlyFrame3
+// RotateFlyFrame3 - Support for Transformations - outer frame
+basegfx::B2DHomMatrix SwFlyFreeFrame::getFrameAreaTransformation() const
+{
+    if(!maFrameAreaTransformation.isIdentity())
+    {
+        // use pre-created transformation
+        return maFrameAreaTransformation;
+    }
+
+    // call parent
+    return SwFlyFrame::getFrameAreaTransformation();
+}
+
+basegfx::B2DHomMatrix SwFlyFreeFrame::getFramePrintAreaTransformation() const
+{
+    if(!maFramePrintAreaTransformation.isIdentity())
+    {
+        // use pre-created transformation
+        return maFramePrintAreaTransformation;
+    }
+
+    // call parent
+    return SwFlyFrame::getFramePrintAreaTransformation();
+}
+
+// RotateFlyFrame3 - inner frame
 double SwFlyFreeFrame::getRotation() const
 {
     // SwLayoutFrame::Lower() != SwFrame::GetLower(), but SwFrame::GetLower()
