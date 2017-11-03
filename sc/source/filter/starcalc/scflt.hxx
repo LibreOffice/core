@@ -81,7 +81,7 @@
 #define vjCenter            2
 #define vjBottom            3
 
-// Allignment flags
+// Alignment flags
 #define ojWordBreak         0x01
 #define ojBottomTop         0x02
 #define ojTopBottom         0x04
