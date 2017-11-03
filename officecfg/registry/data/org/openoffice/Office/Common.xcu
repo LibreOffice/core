@@ -539,9 +539,9 @@
   <node oor:name="Classification">
       <prop oor:name="Policy" oor:type="xs:short">
       </prop>
-      <prop oor:name="AdvancedClassificationDialogIntellectualPropertySectionExpanded" oor:type="xs:boolean">
+      <prop oor:name="IntellectualPropertySectionExpanded" oor:type="xs:boolean">
       </prop>
-      <prop oor:name="AdvancedClassificationDialogIntellectualPropertyTextInputIsFreeForm" oor:type="xs:boolean">
+      <prop oor:name="IntellectualPropertyTextInputIsFreeForm" oor:type="xs:boolean">
       </prop>
   </node>
 </oor:component-data>

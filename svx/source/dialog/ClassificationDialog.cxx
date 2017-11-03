@@ -41,7 +41,7 @@ VCL_BUILDER_FACTORY(IntellectualPropertyPartEdit)
 
 void IntellectualPropertyPartEdit::KeyInput(const KeyEvent& rKeyEvent)
 {
-    bool bTextIsFreeForm = officecfg::Office::Common::Classification::AdvancedClassificationDialogIntellectualPropertyTextInputIsFreeForm::get();
+    bool bTextIsFreeForm = officecfg::Office::Common::Classification::IntellectualPropertyTextInputIsFreeForm::get();
 
     if (bTextIsFreeForm)
     {
@@ -230,7 +230,7 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
 
     m_pRecentlyUsedListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectRecentlyUsedHdl));
 
-    bool bExpand = officecfg::Office::Common::Classification::AdvancedClassificationDialogIntellectualPropertySectionExpanded::get();
+    bool bExpand = officecfg::Office::Common::Classification::IntellectualPropertySectionExpanded::get();
     m_pIntellectualPropertyExpander->set_expanded(bExpand);
 }
 
