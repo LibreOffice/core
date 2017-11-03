@@ -349,7 +349,7 @@ bool isBoundary2(CharClass const & rCharClass, OUString const & rStr,
 
 bool checkWChar(CharClass const & rCharClass, OUString const & rStr,
                 sal_Int32 * pPos, sal_Int32 * pEnd, bool bBackslash = false,
-                bool bPipe = false)
+                bool bPipe = false, bool bUrlResourceId = false)
 {
     sal_Unicode c = rStr[*pPos];
     if (rtl::isAscii(c))
@@ -359,10 +359,10 @@ bool checkWChar(CharClass const & rCharClass, OUString const & rStr,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 1, 0, 0, 4, 4, 4, 1,   //  !"#$%&'
+                0, 1, 0, 5, 4, 4, 4, 1,   //  !"#$%&'
                 1, 1, 1, 1, 1, 4, 1, 4,   // ()*+,-./
                 4, 4, 4, 4, 4, 4, 4, 4,   // 01234567
-                4, 4, 1, 1, 0, 1, 0, 1,   // 89:;<=>?
+                4, 4, 1, 1, 0, 5, 0, 1,   // 89:;<=>?
                 4, 4, 4, 4, 4, 4, 4, 4,   // @ABCDEFG
                 4, 4, 4, 4, 4, 4, 4, 4,   // HIJKLMNO
                 4, 4, 4, 4, 4, 4, 4, 4,   // PQRSTUVW
@@ -402,6 +402,15 @@ bool checkWChar(CharClass const & rCharClass, OUString const & rStr,
                     // isBoundary1)
                 *pEnd = ++(*pPos);
                 return true;
+
+            case 5: // Chars allow after '/' in the URL's resource ID
+                if (bUrlResourceId)
+                {
+                    *pEnd = ++(*pPos);
+                    return true;
+                }
+                else
+                    return false;
         }
     }
     else if (rCharClass.isLetterNumeric(rStr, *pPos))
@@ -544,8 +553,16 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     while (rText[i++] != ':') ;
                     sal_Int32 nPrefixEnd = i;
                     sal_Int32 nUriEnd = i;
-                    while (i != rEnd
-                           && checkWChar(rCharClass, rText, &i, &nUriEnd)) ;
+                    if (i != rEnd && rText[i] == '/')
+                    {
+                        while (i != rEnd
+                               && checkWChar(rCharClass, rText, &i, &nUriEnd, false, false, true)) ;
+                    }
+                    else
+                    {
+                        while (i != rEnd
+                               && checkWChar(rCharClass, rText, &i, &nUriEnd)) ;
+                    }
                     if (i != nPrefixEnd && i != rEnd && rText[i] == '#')
                     {
                         ++i;
@@ -594,7 +611,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     {
                         nUriEnd = ++i;
                         while (i != rEnd
-                               && checkWChar(rCharClass, rText, &i, &nUriEnd)) ;
+                               && checkWChar(rCharClass, rText, &i, &nUriEnd, false, false, true)) ;
                     }
                     if (i != rEnd && rText[i] == '#')
                     {
