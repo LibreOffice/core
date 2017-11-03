@@ -25,6 +25,7 @@ OOXMLSecParser::OOXMLSecParser(XMLSignatureHelper& rXMLSignatureHelper, XSecCont
     ,m_bInCertDigest(false)
     ,m_bInValidSignatureImage(false)
     ,m_bInInvalidSignatureImage(false)
+    ,m_bInSignatureLineId(false)
     ,m_bReferenceUnresolved(false)
     ,m_rXMLSignatureHelper(rXMLSignatureHelper)
 {
