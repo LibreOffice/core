@@ -40,6 +40,12 @@ class SwFlyFreeFrame : public SwFlyFrame
 
     SwRect maUnclippedFrame;
 
+    // RotateFlyFrame3 - Support for Transformations, hold
+    // FrameAreaTransformation and FramePrintAreaTransformation
+    // here when rotation is used
+    basegfx::B2DHomMatrix   maFrameAreaTransformation;
+    basegfx::B2DHomMatrix   maFramePrintAreaTransformation;
+
     void CheckClip( const SwFormatFrameSize &rSz );  //'Emergency' Clipping.
 
     /** determines, if direct environment of fly frame has 'auto' size
@@ -119,6 +125,10 @@ public:
 
     // RotateFlyFrame3 - Support for outer Frame of a SwGrfNode
     virtual double getRotation() const override;
+
+    // RotateFlyFrame3 - Support for Transformations for outer Frame of a SwGrfNode
+    basegfx::B2DHomMatrix getFrameAreaTransformation() const;
+    basegfx::B2DHomMatrix getFramePrintAreaTransformation() const;
 };
 
 // Flys that are bound to LayoutFrames and not to Content
