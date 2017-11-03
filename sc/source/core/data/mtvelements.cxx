@@ -54,11 +54,6 @@ void CellStoreEvent::element_block_released(const mdds::mtv::base_element_block*
     }
 }
 
-void CellStoreEvent::swap(CellStoreEvent& r)
-{
-    std::swap( mpCol, r.mpCol);
-}
-
 ColumnBlockPositionSet::ColumnBlockPositionSet(ScDocument& rDoc) : mrDoc(rDoc) {}
 
 ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL nCol)
