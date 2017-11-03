@@ -81,10 +81,14 @@ const sal_uInt16 AUTOFORMAT_DATA_ID_300OVRLN = 10032;
 const sal_uInt16 AUTOFORMAT_ID_31005      = 10041;
 const sal_uInt16 AUTOFORMAT_DATA_ID_31005 = 10042;
 
+// --- fixed just the embarrassing 32/64-bit "long" disaster
+const sal_uInt16 AUTOFORMAT_ID_31005_FIX      = 10051;
+const sal_uInt16 AUTOFORMAT_DATA_ID_31005_FIX = 10052;
+
 // current version
-const sal_uInt16 AUTOFORMAT_ID          = AUTOFORMAT_ID_31005;
-const sal_uInt16 AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_31005;
-const sal_uInt16 AUTOFORMAT_FILE_VERSION= SOFFICE_FILEFORMAT_50;
+const sal_uInt16 AUTOFORMAT_ID          = AUTOFORMAT_ID_31005_FIX;
+const sal_uInt16 AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_31005_FIX;
+const sal_uInt16 AUTOFORMAT_FILE_VERSION= SOFFICE_FILEFORMAT_50_AUTOFMTFIX;
 
 SwBoxAutoFormat* SwTableAutoFormat::pDfltBoxAutoFormat = nullptr;
 
@@ -1322,9 +1326,11 @@ bool SwTableAutoFormatTable::Load( SvStream& rStream )
         {
             SwAfVersions aVersions;
 
-            // Default version is 5.0, unless we detect an old format ID.
-            sal_uInt16 nFileVers = SOFFICE_FILEFORMAT_50;
-            if(nVal < AUTOFORMAT_ID_31005)
+            // Default version is 5.0+fix, unless we detect an old format ID.
+            sal_uInt16 nFileVers = SOFFICE_FILEFORMAT_50_AUTOFMTFIX;
+            if (nVal < AUTOFORMAT_ID_31005_FIX)
+                nFileVers = SOFFICE_FILEFORMAT_50;
+            if (nVal < AUTOFORMAT_ID_31005)
                 nFileVers = SOFFICE_FILEFORMAT_40;
 
             if( nVal == AUTOFORMAT_ID_358 ||

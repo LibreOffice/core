@@ -1254,31 +1254,52 @@ void SwFormatSurround::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-SvStream& SwFormatVertOrient::Store(SvStream &rStream, sal_uInt16 /*version*/) const
+sal_uInt16 SwFormatVertOrient::GetVersion(sal_uInt16 nFileFormatVersion) const
 {
+    return (nFileFormatVersion < SOFFICE_FILEFORMAT_50_AUTOFMTFIX) ? 0 : 1;
+}
+
+SvStream& SwFormatVertOrient::Store(SvStream &rStream, sal_uInt16 itemVersion) const
+{
+    if (1 <= itemVersion)
+    {
+        rStream.WriteInt32(m_nYPos);
+    }
+    else
+    {
 #if SAL_TYPES_SIZEOFLONG == 8
-    rStream.WriteInt64(m_nYPos);
+        rStream.WriteInt64(m_nYPos);
 #else
-    rStream.WriteInt32(m_nYPos);
+        rStream.WriteInt32(m_nYPos);
 #endif
+    }
     rStream.WriteInt16( m_eOrient ).WriteInt16( m_eRelation );
     return rStream;
 }
 
-SfxPoolItem* SwFormatVertOrient::Create(SvStream &rStream, sal_uInt16 /*itemVersion*/) const
+SfxPoolItem* SwFormatVertOrient::Create(SvStream &rStream, sal_uInt16 itemVersion) const
 {
     SwTwips yPos(0);
     sal_Int16 orient(0);
     sal_Int16 relation(0);
+    if (1 <= itemVersion)
+    {
+        sal_Int32 n(0);
+        rStream.ReadInt32(n);
+        yPos = n;
+    }
+    else
+    {
     // compatibility hack for Table Auto Format: SwTwips is "long" :(
     // (this means that the file format is platform dependent)
 #if SAL_TYPES_SIZEOFLONG == 8
-    rStream.ReadInt64(yPos);
+        rStream.ReadInt64(yPos);
 #else
-    sal_Int32 n;
-    rStream.ReadInt32(n);
-    yPos = n;
+        sal_Int32 n(0);
+        rStream.ReadInt32(n);
+        yPos = n;
 #endif
+    }
     rStream.ReadInt16( orient ).ReadInt16( relation );
 
     return new SwFormatVertOrient(yPos, orient, relation);

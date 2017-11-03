@@ -28,6 +28,9 @@
 #include "format.hxx"
 #include <svl/poolitem.hxx>
 
+// --- fixed just the embarrassing 32/64-bit "long" disaster
+#define SOFFICE_FILEFORMAT_50_AUTOFMTFIX   (SOFFICE_FILEFORMAT_50 + 1)
+
 class IntlWrapper;
 
 class SW_DLLPUBLIC SwFormatVertOrient: public SfxPoolItem
@@ -53,6 +56,7 @@ public:
 
     SvStream& Store(SvStream &rStream, sal_uInt16 itemVersion) const override;
     SfxPoolItem* Create(SvStream &rStream, sal_uInt16 itemVersion) const override;
+    sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const override;
 
     sal_Int16 GetVertOrient() const { return m_eOrient; }
     sal_Int16 GetRelationOrient() const { return m_eRelation; }
