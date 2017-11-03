@@ -6399,6 +6399,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="AdvancedClassificationDialogIntellectualPropertyTextInputIsFreeForm" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+           <desc>Specifies if the intellectual property text is free-form or limited to ';', '/' and ' ' characters.</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
   </component>
 </oor:component-schema>
