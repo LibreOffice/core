@@ -1,0 +1,79 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+#include <svx/ClassificationCommon.hxx>
+
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+
+using namespace css;
+
+namespace svx {
+namespace classification {
+
+OUString convertClassificationResultToString(std::vector<svx::ClassificationResult> const & rResults)
+{
+    OUString sRepresentation = "";
+
+    for (svx::ClassificationResult const & rResult : rResults)
+    {
+        switch (rResult.meType)
+        {
+            case svx::ClassificationType::CATEGORY:
+            case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
+            case svx::ClassificationType::MARKING:
+            case svx::ClassificationType::TEXT:
+                sRepresentation += rResult.msName;
+            break;
+
+            case svx::ClassificationType::PARAGRAPH:
+                sRepresentation += " ";
+            break;
+        }
+    }
+    return sRepresentation;
+}
+
+bool lcl_containsProperty(const uno::Sequence<beans::Property> & rProperties, const OUString& rName)
+{
+    return std::find_if(rProperties.begin(), rProperties.end(), [&](const beans::Property& rProperty)
+    {
+        return rProperty.Name == rName;
+    }) != rProperties.end();
+}
+
+bool addOrInsertDocumentProperty(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer, OUString const & rsKey, OUString const & rsValue)
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
+
+    try
+    {
+        if (lcl_containsProperty(xPropertySet->getPropertySetInfo()->getProperties(), rsKey))
+            xPropertySet->setPropertyValue(rsKey, uno::makeAny(rsValue));
+        else
+            rxPropertyContainer->addProperty(rsKey, beans::PropertyAttribute::REMOVABLE, uno::makeAny(rsValue));
+    }
+    catch (const uno::Exception& /*rException*/)
+    {
+        return false;
+    }
+    return true;
+}
+
+void insertFullTextualRepresentationAsDocumentProperty(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer,
+                                                       sfx::ClassificationKeyCreator const & rKeyCreator,
+                                                       std::vector<svx::ClassificationResult> const & rResults)
+{
+    OUString sString = svx::classification::convertClassificationResultToString(rResults);
+    addOrInsertDocumentProperty(rxPropertyContainer, rKeyCreator.makeFullTextualRepresentationKey(), sString);
+}
+
+}} // end svx::classification namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

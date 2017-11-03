@@ -54,6 +54,7 @@
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/unoprnms.hxx>
 #include <sfx2/classificationhelper.hxx>
+#include <svx/ClassificationCommon.hxx>
 #include <svl/cryptosign.hxx>
 #include <vcl/svapp.hxx>
 
@@ -85,7 +86,6 @@
 #include <UndoParagraphSignature.hxx>
 #include <txtatr.hxx>
 
-#include <officecfg/Office/Common.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #define WATERMARK_NAME "PowerPlusWaterMarkObject"
@@ -681,6 +681,11 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
         }
     }
 
+    sfx::ClassificationKeyCreator aCreator(SfxClassificationHelper::getPolicyType());
+
+    // Insert full text as document property
+    svx::classification::insertFullTextualRepresentationAsDocumentProperty(xPropertyContainer, aCreator, rResults);
+
     for (const OUString& rPageStyleName : aUsedPageStyles)
     {
         uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
@@ -705,8 +710,6 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
         uno::Reference<text::XParagraphCursor> xFooterParagraphCursor(xFooterText->createTextCursor(), uno::UNO_QUERY);
 
         sal_Int32 nParagraph = -1;
-
-        sfx::ClassificationKeyCreator aCreator(SfxClassificationHelper::getPolicyType());
 
         for (svx::ClassificationResult const & rResult : rResults)
         {
