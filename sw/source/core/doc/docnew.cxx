@@ -283,6 +283,9 @@ SwDoc::SwDoc()
     // it is possible to set this attribute here. It will be not reset when importing.
     mpDfltTextFormatColl->SetFormatAttr(XFillStyleItem(drawing::FillStyle_NONE));
     mpDfltFrameFormat->SetFormatAttr(XFillStyleItem(drawing::FillStyle_NONE));
+    // prevent paragraph default margins being applied to everything
+    mpDfltFrameFormat->SetFormatAttr(SvxULSpaceItem(RES_UL_SPACE));
+    mpDfltFrameFormat->SetFormatAttr(SvxLRSpaceItem(RES_LR_SPACE));
 
     /*
      * DefaultFormats and DefaultFormatCollections (FormatColl)
