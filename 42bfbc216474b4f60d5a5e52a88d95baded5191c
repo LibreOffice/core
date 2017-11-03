@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_3a4bf4b1",
+        "filename": "desktop/source/deployment/registry/component/dp_component.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-11-03T08:25:07Z",
+      "side": 1,
+      "message": "this should rather be\n\n  t_stringlist \u0026 aRcItemList\n\nno?",
+      "revId": "42bfbc216474b4f60d5a5e52a88d95baded5191c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
