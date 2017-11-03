@@ -66,7 +66,7 @@ class SFX2_DLLPUBLIC SfxFrameDescriptor
     ScrollingMode           eScroll;
     bool                    bHasBorder;
     bool                    bHasBorderSet;
-    std::unique_ptr< SfxFrameDescriptor_Impl > pImpl;
+    std::unique_ptr<SfxItemSet> m_pArgs;
 
 public:
                             SfxFrameDescriptor();
