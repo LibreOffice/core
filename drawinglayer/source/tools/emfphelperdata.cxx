@@ -35,6 +35,7 @@
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <o3tl/make_unique.hxx>
 #include <vcl/svapp.hxx>
@@ -1451,7 +1452,7 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+ SetClipRect combine mode: " << combineMode);
 #if OSL_DEBUG_LEVEL > 1
                         if (combineMode > 1) {
-                            SAL_INFO("drawinglayer", "EMF+ TODO combine mode > 1");
+                            SAL_WARN("drawinglayer", "EMF+ \tSetClipRect TODO combine mode > 1");
                         }
 #endif
 
@@ -1470,10 +1471,30 @@ namespace emfplushelper
                                         mappedPoint.getX() + mappedSize.getX(),
                                         mappedPoint.getY() + mappedSize.getY()))));
 
-                        // use existing tooling from wmfemfhelper
-                        HandleNewClipRegion(polyPolygon, mrTargetHolders, mrPropertyHolders);
+                        basegfx::B2DPolyPolygon aClippedPolyPolygon;
+
+                        if (combineMode == EmfPlusCombineModeIntersect)
+                        {
+                            const basegfx::B2DPolyPolygon aOriginalPolyPolygon(
+                                        mrPropertyHolders.Current().getClipPolyPolygon());
+
+                            if(aOriginalPolyPolygon.count())
+                            {
+
+                                aClippedPolyPolygon = basegfx::utils::clipPolyPolygonOnPolyPolygon(
+                                            aOriginalPolyPolygon,
+                                            polyPolygon,
+                                            true,
+                                            false);
+                            }
+                        }
+                        else
+                        {
+                            aClippedPolyPolygon = polyPolygon;
+                        }
                         // polyPolygon.transform(rState.mapModeTransform);
-                        // updateClipping(polyPolygon, rFactoryParms, combineMode == 1);
+                        // use existing tooling from wmfemfhelper
+                        HandleNewClipRegion(aClippedPolyPolygon, mrTargetHolders, mrPropertyHolders);
                         break;
                     }
                     case EmfPlusRecordTypeSetClipPath:
@@ -1489,14 +1510,31 @@ namespace emfplushelper
                         switch (combineMode)
                         {
                             case EmfPlusCombineModeReplace:
-                            case EmfPlusCombineModeIntersect:
-                            case EmfPlusCombineModeUnion: // Is this, EmfPlusCombineModeXOR and EmfPlusCombineModeComplement correct?
+                            case EmfPlusCombineModeUnion:
                             case EmfPlusCombineModeXOR:
                             case EmfPlusCombineModeComplement:
                             {
-                                // use existing tooling from wmfemfhelper
                                 HandleNewClipRegion(clipPoly, mrTargetHolders, mrPropertyHolders);
-                                // updateClipping(clipPoly, rFactoryParms, combineMode == 1);
+                                break;
+                            }
+                            case EmfPlusCombineModeIntersect:
+                            {
+                                const basegfx::B2DPolyPolygon aOriginalPolyPolygon(
+                                            mrPropertyHolders.Current().getClipPolyPolygon());
+
+                                basegfx::B2DPolyPolygon aClippedPolyPolygon;
+                                if (aOriginalPolyPolygon.count())
+                                {
+
+                                    aClippedPolyPolygon = basegfx::utils::clipPolyPolygonOnPolyPolygon(
+                                                aOriginalPolyPolygon,
+                                                clipPoly,
+                                                true,
+                                                false);
+                                }
+
+                                // use existing tooling from wmfemfhelper
+                                HandleNewClipRegion(aClippedPolyPolygon, mrTargetHolders, mrPropertyHolders);
                                 break;
                             }
                             case EmfPlusCombineModeExclude:
@@ -1524,7 +1562,7 @@ namespace emfplushelper
                         }
                         else
                         {
-                            SAL_INFO("drawinglayer", "EMF+\tTODO");
+                            SAL_WARN("drawinglayer", "EMF+\tTODO");
                         }
                         break;
                     }
