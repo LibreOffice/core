@@ -47,13 +47,11 @@ namespace drawinglayer
             all feeded primitives to a VCL Window. It is the currently used renderer
             for all VCL editing output from the DrawingLayer.
          */
-        class VclPixelProcessor2D : public VclProcessor2D
+        class VclPixelProcessor2D final : public VclProcessor2D
         {
-        private:
             struct Impl;
             std::unique_ptr<Impl> m_pImpl;
 
-        protected:
             /*  the local processor for BasePrimitive2D-Implementation based primitives,
                 called from the common process()-implementation
              */

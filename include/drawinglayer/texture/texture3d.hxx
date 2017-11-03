@@ -33,9 +33,8 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxMono : public GeoTexSvx
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxMono final : public GeoTexSvx
         {
-        protected:
             basegfx::BColor                             maSingleColor;
             double                                      mfOpacity;
 
@@ -92,9 +91,8 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxBitmapExTiled : public GeoTexSvxBitmapEx
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxBitmapExTiled final : public GeoTexSvxBitmapEx
         {
-        protected:
             double                                      mfOffsetX;
             double                                      mfOffsetY;
 
@@ -121,9 +119,8 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxMultiHatch : public GeoTexSvx
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxMultiHatch final : public GeoTexSvx
         {
-        protected:
             basegfx::BColor                 maColor;
             double                          mfLogicPixelSize;
             GeoTexSvxHatch*                 mp0;

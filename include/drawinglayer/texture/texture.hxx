@@ -103,9 +103,8 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientLinear : public GeoTexSvxGradient
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientLinear final : public GeoTexSvxGradient
         {
-        protected:
             double                  mfUnitMinX;
             double                  mfUnitWidth;
             double                  mfUnitMaxY;
@@ -134,9 +133,8 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientAxial : public GeoTexSvxGradient
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxGradientAxial final : public GeoTexSvxGradient
         {
-        protected:
             double                  mfUnitMinX;
             double                  mfUnitWidth;
 
@@ -271,9 +269,8 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxHatch : public GeoTexSvx
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxHatch final : public GeoTexSvx
         {
-        protected:
             basegfx::B2DRange                   maOutputRange;
             basegfx::B2DHomMatrix               maTextureTransform;
             basegfx::B2DHomMatrix               maBackTextureTransform;
@@ -315,14 +312,12 @@ namespace drawinglayer
         // given percentage value (offsetX has to be 0.0 <= offsetX <= 1.0).
         // Accordingly to offsetY. If both are given, offsetX is preferred
         // and offsetY is ignored.
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxTiled : public GeoTexSvx
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxTiled final : public GeoTexSvx
         {
-        protected:
             basegfx::B2DRange               maRange;
             double                          mfOffsetX;
             double                          mfOffsetY;
 
-        private:
             sal_Int32 iterateTiles(::std::vector< basegfx::B2DHomMatrix >* pMatrices) const;
 
         public:
