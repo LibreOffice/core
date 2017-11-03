@@ -168,8 +168,8 @@ private:
     LtTm m_nLastRevisionTime;
     LtTm m_nTotalEditTime;
 private:
-    static OUString DateTimeToOUString(LtTm& dt);
-    static OUString TimeToOUString(LtTm& dt);
+    static OUString DateTimeToOUString(LtTm const & dt);
+    static OUString TimeToOUString(LtTm const & dt);
 
 public:
     void Read() override;

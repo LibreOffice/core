@@ -2040,7 +2040,7 @@ void implWriteStringWithEncoding( const OUString& aStr,
     xTextOutputStream->writeString( aWriteStr );
 }
 
-bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocaleItem,
+bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem const * pLocaleItem,
     const Reference< io::XOutputStream >& xOutputStream, const OUString& aComment )
 {
     if( !xOutputStream.is() || pLocaleItem == nullptr )

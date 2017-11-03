@@ -89,7 +89,7 @@ IndexTable::~IndexTable()
     if (table) free(table);
 }
 
-void IndexTable::init(sal_Unicode start_, sal_Unicode end_, IndexKey *keys, sal_Int16 key_count, Index *index)
+void IndexTable::init(sal_Unicode start_, sal_Unicode end_, IndexKey const *keys, sal_Int16 key_count, Index *index)
 {
     start=start_;
     end=end_;

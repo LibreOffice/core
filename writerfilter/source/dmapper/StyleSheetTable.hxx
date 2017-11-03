@@ -133,7 +133,7 @@ public:
     // @param mask      mask describing which properties to return
     PropertyMapPtr GetProperties( sal_Int32 nMask);
 
-    TableStyleSheetEntry( StyleSheetEntry& aEntry );
+    TableStyleSheetEntry( StyleSheetEntry const & aEntry );
     virtual ~TableStyleSheetEntry( ) override;
 
 private:

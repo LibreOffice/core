@@ -296,7 +296,7 @@ private:
 public:
     explicit LwpDrawTextBox(SvStream* pStream);
     virtual ~LwpDrawTextBox() override;
-    static void SetFontStyle(rtl::Reference<XFFont> const & pFont, SdwTextBoxRecord* pRec);
+    static void SetFontStyle(rtl::Reference<XFFont> const & pFont, SdwTextBoxRecord const * pRec);
 
 protected:
     virtual void Read() override;

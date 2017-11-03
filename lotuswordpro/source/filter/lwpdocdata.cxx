@@ -293,14 +293,14 @@ void LwpDocData::Read()
         pGlobal->SetEditorAttrMap(nID, xEditorAttr.release());
     }
 }
-OUString   LwpDocData::DateTimeToOUString(LtTm& dt)
+OUString   LwpDocData::DateTimeToOUString(LtTm const & dt)
 {
     OUString aResult = OUString::number(dt.tm_year) + "-" + OUString::number(dt.tm_mon) + "-" + OUString::number(dt.tm_mday) +
         "T" + OUString::number(dt.tm_hour) + ":" + OUString::number(dt.tm_min) + ":" + OUString::number(dt.tm_sec) + ".0";
 
     return aResult;
 }
-OUString   LwpDocData::TimeToOUString(LtTm& dt)
+OUString   LwpDocData::TimeToOUString(LtTm const & dt)
 {
     //PT3H43M44S
     OUString aResult = "PT" + OUString::number(dt.tm_hour) + "H" + OUString::number(dt.tm_min) + "M" + OUString::number(dt.tm_sec) + "S";

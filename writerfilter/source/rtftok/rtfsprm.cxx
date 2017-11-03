@@ -193,7 +193,7 @@ static bool isSPRMChildrenExpected(Id nId)
 }
 
 /// Does the clone / deduplication of a single sprm.
-static void cloneAndDeduplicateSprm(std::pair<Id, RTFValue::Pointer_t>& rSprm, RTFSprms& ret)
+static void cloneAndDeduplicateSprm(std::pair<Id, RTFValue::Pointer_t> const & rSprm, RTFSprms& ret)
 {
     RTFValue::Pointer_t const pValue(ret.find(rSprm.first));
     if (pValue)

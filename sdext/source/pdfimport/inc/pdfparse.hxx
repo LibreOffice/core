@@ -167,7 +167,7 @@ struct PDFContainer : public PDFEntry
     void cloneSubElements( std::vector<PDFEntry*>& rNewSubElements ) const;
 
     PDFObject* findObject( unsigned int nNumber, unsigned int nGeneration ) const;
-    PDFObject* findObject( PDFObjectRef* pRef ) const
+    PDFObject* findObject( PDFObjectRef const * pRef ) const
     { return findObject( pRef->m_nNumber, pRef->m_nGeneration ); }
 };
 

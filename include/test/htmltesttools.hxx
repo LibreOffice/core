@@ -21,7 +21,7 @@
 class OOO_DLLPUBLIC_TEST HtmlTestTools
 {
 protected:
-    static htmlDocPtr parseHtml(utl::TempFile& aTempFile);
+    static htmlDocPtr parseHtml(utl::TempFile const & aTempFile);
     static htmlDocPtr parseHtmlStream(SvStream* pStream);
 };
 

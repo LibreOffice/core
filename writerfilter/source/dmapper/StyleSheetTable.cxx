@@ -71,7 +71,7 @@ StyleSheetEntry::~StyleSheetEntry()
 {
 }
 
-TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry& rEntry ):
+TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry const & rEntry ):
     StyleSheetEntry( )
 {
 

@@ -1410,7 +1410,7 @@ short SvxSwPosSizeTabPage::GetRelation(ListBox const &rRelationLB)
     return nRel;
 }
 
-short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBox const &rRelationLB)
+short SvxSwPosSizeTabPage::GetAlignment(FrmMap const *pMap, sal_uInt16 nMapPos, ListBox const &rRelationLB)
 {
     short nAlign = 0;
 
@@ -1445,7 +1445,7 @@ short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBo
     return nAlign;
 }
 
-sal_uInt16 SvxSwPosSizeTabPage::GetMapPos(FrmMap *pMap, ListBox const &rAlignLB)
+sal_uInt16 SvxSwPosSizeTabPage::GetMapPos(FrmMap const *pMap, ListBox const &rAlignLB)
 {
     sal_uInt16 nMapPos = 0;
     sal_Int32 nLBSelPos = rAlignLB.GetSelectedEntryPos();
@@ -1659,7 +1659,7 @@ void SvxSwPosSizeTabPage::UpdateExample()
     m_pExampleWN->Invalidate();
 }
 
-void SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_uInt16 nAlign,
+void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_uInt16 nAlign,
         sal_uInt16 nRel, ListBox &rLB, FixedText &rFT)
 {
     OUString sSelEntry;
@@ -1800,7 +1800,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_uInt16
     RelHdl(rLB);
 }
 
-sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap *_pMap,
+sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap const *_pMap,
                                       sal_uInt16 _nAlign,
                                       const sal_uInt16 _nRel,
                                       ListBox &_rLB)
