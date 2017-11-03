@@ -53,10 +53,7 @@ SwEditShell::SwEditShell( SwDoc& rDoc, vcl::Window *pWindow, const SwViewOption 
 
     // Update the paragraph signatures.
     // Since this ctor is called only on creating/loading the doc, we validate once only.
-    //FIXME: This is taking too long for the scheduler's taste.
-    // Need to do a quick check to see if a paragraph is signed or not,
-    // but for that need paragraph RDF, which is in a later patch.
-    // ValidateAllParagraphSignatures(true);
+    ValidateAllParagraphSignatures(true);
 }
 
 SwEditShell::~SwEditShell() // USED
