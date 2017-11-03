@@ -1042,17 +1042,32 @@ bool LoadEnv::impl_loadContent()
     bool bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false);
     bool bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED(), false);
     bool bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW(), false);
-    css::uno::Reference< css::task::XStatusIndicator > xProgress  = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR(), css::uno::Reference< css::task::XStatusIndicator >());
 
-    if (!bHidden && !bMinimized && !bPreview && !xProgress.is())
+    if (!bHidden && !bMinimized && !bPreview)
     {
-        // Note: it's an optional interface!
-        css::uno::Reference< css::task::XStatusIndicatorFactory > xProgressFactory(xTargetFrame, css::uno::UNO_QUERY);
-        if (xProgressFactory.is())
+        css::uno::Reference< css::task::XStatusIndicator > xProgress  = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR(), css::uno::Reference< css::task::XStatusIndicator >());
+        if (!xProgress.is())
         {
-            xProgress = xProgressFactory->createStatusIndicator();
-            if (xProgress.is())
-                m_lMediaDescriptor[utl::MediaDescriptor::PROP_STATUSINDICATOR()] <<= xProgress;
+            // Note: it's an optional interface!
+            css::uno::Reference< css::task::XStatusIndicatorFactory > xProgressFactory(xTargetFrame, css::uno::UNO_QUERY);
+            if (xProgressFactory.is())
+            {
+                xProgress = xProgressFactory->createStatusIndicator();
+                if (xProgress.is())
+                    m_lMediaDescriptor[utl::MediaDescriptor::PROP_STATUSINDICATOR()] <<= xProgress;
+            }
+        }
+        if (!comphelper::LibreOfficeKit::isActive())
+        {
+            //now that we have a window, set things up so that warnings dialogs are relative to that window
+            css::uno::Reference<css::task::XInteractionHandler> xInteractionHandler(
+                task::InteractionHandler::createWithParent(m_xContext, xTargetFrame->getContainerWindow()),
+                css::uno::UNO_QUERY);
+            if (xInteractionHandler.is())
+            {
+                m_lMediaDescriptor[utl::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= xInteractionHandler;
+                m_lMediaDescriptor[utl::MediaDescriptor::PROP_AUTHENTICATIONHANDLER()] <<= xInteractionHandler;
+            }
         }
     }
 
