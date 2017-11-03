@@ -25,10 +25,54 @@
 #include <config_folders.h>
 #include <tools/XmlWriter.hxx>
 #include <tools/XmlWalker.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include <officecfg/Office/Common.hxx>
 
 namespace svx {
+
+
+IntellectualPropertyPartEdit::IntellectualPropertyPartEdit(vcl::Window* pParent)
+    : Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK|WB_TABSTOP)
+{
+}
+
+VCL_BUILDER_FACTORY(IntellectualPropertyPartEdit)
+
+void IntellectualPropertyPartEdit::KeyInput(const KeyEvent& rKeyEvent)
+{
+    bool bTextIsFreeForm = officecfg::Office::Common::Classification::AdvancedClassificationDialogIntellectualPropertyTextInputIsFreeForm::get();
+
+    if (bTextIsFreeForm)
+    {
+        Edit::KeyInput(rKeyEvent);
+    }
+    else
+    {
+        // Ignore key combination with modifier keys
+        if (rKeyEvent.GetKeyCode().IsMod3()
+         || rKeyEvent.GetKeyCode().IsMod2()
+         || rKeyEvent.GetKeyCode().IsMod1())
+        {
+            return;
+        }
+
+        switch (rKeyEvent.GetKeyCode().GetCode())
+        {
+            // Allowed characters
+            case KEY_BACKSPACE:
+            case KEY_DELETE:
+            case KEY_DIVIDE:
+            case KEY_SEMICOLON:
+            case KEY_SPACE:
+                Edit::KeyInput(rKeyEvent);
+                return;
+            // Anything else is ignored
+            default:
+                break;
+        }
+    }
+}
 
 namespace {
 
@@ -51,7 +95,7 @@ bool fileExists(OUString const & sFilename)
     return osl::FileBase::E_None == eRC;
 }
 
-bool stringToclassificationType(OString const & rsType, svx::ClassificationType & reType)
+bool stringToClassificationType(OString const & rsType, svx::ClassificationType & reType)
 {
     if (rsType == "CATEGORY")
         reType = svx::ClassificationType::CATEGORY;
@@ -296,7 +340,7 @@ void ClassificationDialog::readRecentlyUsed()
 
                         // Convert string to classification type, but continue only if
                         // conversion was successful.
-                        if (stringToclassificationType(aWalker.attribute("type"), eType))
+                        if (stringToClassificationType(aWalker.attribute("type"), eType))
                         {
                             aWalker.children();
 
@@ -617,6 +661,6 @@ IMPL_LINK(ClassificationDialog, ButtonClicked, Button*, pButton, void)
     }
 }
 
-} // end sfx2
+} // end svx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
