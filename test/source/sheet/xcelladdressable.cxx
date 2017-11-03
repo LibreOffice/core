@@ -8,6 +8,7 @@
  */
 
 #include <test/sheet/xcelladdressable.hxx>
+#include <test/cppunitasserthelper.hxx>
 
 #include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
@@ -16,25 +17,6 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
-
-CPPUNIT_NS_BEGIN
-
-template<> struct assertion_traits<table::CellAddress>
-{
-    static bool equal(const table::CellAddress& x, const table::CellAddress& y)
-    {
-        return x == y;
-    }
-
-    static std::string toString( const table::CellAddress& x )
-    {
-        OStringStream ost;
-        ost << "Sheet: " << x.Sheet << " Column: " << x.Column << " Row: " << x.Row;
-        return ost.str();
-    }
-};
-
-CPPUNIT_NS_END
 
 namespace apitest {
 
