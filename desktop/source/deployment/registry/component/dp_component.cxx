@@ -991,7 +991,7 @@ void BackendImpl::removeFromUnoRc(
     const OUString rcterm( dp_misc::makeRcTerm(url_) );
     const ::osl::MutexGuard guard( getMutex() );
     unorc_verify_init( xCmdEnv );
-    t_stringlist aRcItemList = getRcItemList(kind);
+    t_stringlist & aRcItemList = getRcItemList(kind);
     aRcItemList.erase(std::remove(aRcItemList.begin(), aRcItemList.end(), rcterm), aRcItemList.end());
     // write immediately:
     m_unorc_modified = true;
