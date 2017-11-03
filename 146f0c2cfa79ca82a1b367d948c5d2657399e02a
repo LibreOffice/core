@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_353147ed",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-11-03T11:13:21Z",
+      "side": 1,
+      "message": "what is a \"URL resource ID\"?",
+      "revId": "146f0c2cfa79ca82a1b367d948c5d2657399e02a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
