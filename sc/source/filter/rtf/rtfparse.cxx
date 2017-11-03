@@ -64,7 +64,7 @@ ErrCode ScRTFParser::Read( SvStream& rStream, const OUString& rBaseURL )
     {
         if ( !maList.empty() )
         {
-            ScEEParseEntry* pE = maList.back();
+            auto& pE = maList.back();
             if (    // Completely empty
                 (  pE->aSel.nStartPara == pE->aSel.nEndPara
                    && pE->aSel.nStartPos  == pE->aSel.nEndPos
@@ -128,10 +128,9 @@ void ScRTFParser::ColAdjust()
     if ( nStartAdjust != (sal_uLong)~0 )
     {
         SCCOL nCol = 0;
-        ScEEParseEntry* pE;
-        for ( size_t i = nStartAdjust, nListSize = maList.size(); i < nListSize; ++ i )
+        for (size_t i = nStartAdjust, nListSize = maList.size(); i < nListSize; ++i)
         {
-            pE = maList[ i ];
+            auto& pE = maList[i];
             if ( pE->nCol == 0 )
                 nCol = 0;
             pE->nCol = nCol;
@@ -333,28 +332,28 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
                 pActDefault = pInsDefault;
             if ( pActDefault->nColOverlap > 0 )
             {   // Not merged with preceding
-                pActEntry->nCol = pActDefault->nCol;
-                pActEntry->nColOverlap = pActDefault->nColOverlap;
-                pActEntry->nTwips = pActDefault->nTwips;
-                pActEntry->nRow = nRowCnt;
-                pActEntry->aItemSet.Set( pActDefault->aItemSet );
-                EntryEnd( pActEntry, pInfo->aSelection );
+                mxActEntry->nCol = pActDefault->nCol;
+                mxActEntry->nColOverlap = pActDefault->nColOverlap;
+                mxActEntry->nTwips = pActDefault->nTwips;
+                mxActEntry->nRow = nRowCnt;
+                mxActEntry->aItemSet.Set(pActDefault->aItemSet);
+                EntryEnd(mxActEntry.get(), pInfo->aSelection);
 
                 if ( nStartAdjust == (sal_uLong)~0 )
                     nStartAdjust = maList.size();
-                maList.push_back( pActEntry );
-                NewActEntry( pActEntry ); // New free-flying pActEntry
+                maList.push_back(mxActEntry);
+                NewActEntry(mxActEntry.get()); // New free-flying mxActEntry
             }
             else
             {   // Assign current Twips to MergeCell
                 if ( !maList.empty() )
                 {
-                    ScEEParseEntry* pE = maList.back();
+                    auto& pE = maList.back();
                     pE->nTwips = pActDefault->nTwips;
                 }
-                // Adjust selection of free-flying pActEntry
+                // Adjust selection of free-flying mxActEntry
                 // Paragraph -1 due to separated text in EditEngine during parsing
-                pActEntry->aSel.nStartPara = pInfo->aSelection.nEndPara - 1;
+                mxActEntry->aSel.nStartPara = pInfo->aSelection.nEndPara - 1;
             }
 
             pActDefault = nullptr;
@@ -375,11 +374,11 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
             if ( !pActDefault )
             {   // text not in table
                 ColAdjust();    // close the processing table
-                pActEntry->nCol = 0;
-                pActEntry->nRow = nRowCnt;
-                EntryEnd( pActEntry, pInfo->aSelection );
-                maList.push_back( pActEntry );
-                NewActEntry( pActEntry );   // new pActEntry
+                mxActEntry->nCol = 0;
+                mxActEntry->nRow = nRowCnt;
+                EntryEnd(mxActEntry.get(), pInfo->aSelection);
+                maList.push_back(mxActEntry);
+                NewActEntry(mxActEntry.get());   // new mxActEntry
                 NextRow();
             }
             nRtfLastToken = pInfo->nToken;

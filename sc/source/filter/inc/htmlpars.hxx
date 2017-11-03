@@ -98,7 +98,7 @@ typedef o3tl::sorted_vector<sal_uLong> ScHTMLColOffset;
 struct ScHTMLTableStackEntry
 {
     ScRangeListRef      xLockedList;
-    ScEEParseEntry*     pCellEntry;
+    std::shared_ptr<ScEEParseEntry> xCellEntry;
     ScHTMLColOffset*    pLocalColOffset;
     sal_uLong           nFirstTableCell;
     SCROW               nRowCnt;
@@ -109,14 +109,14 @@ struct ScHTMLTableStackEntry
     sal_uInt16          nColOffset;
     sal_uInt16          nColOffsetStart;
     bool                bFirstRow;
-                        ScHTMLTableStackEntry( ScEEParseEntry* pE,
+                        ScHTMLTableStackEntry( std::shared_ptr<ScEEParseEntry>& rE,
                                 const ScRangeListRef& rL, ScHTMLColOffset* pTO,
                                 sal_uLong nFTC,
                                 SCROW nRow,
                                 SCCOL nStart, SCCOL nMax, sal_uInt16 nTab,
                                 sal_uInt16 nTW, sal_uInt16 nCO, sal_uInt16 nCOS,
                                 bool bFR )
-                            : xLockedList( rL ), pCellEntry( pE ),
+                            : xLockedList( rL ), xCellEntry(rE),
                             pLocalColOffset( pTO ),
                             nFirstTableCell( nFTC ),
                             nRowCnt( nRow ),
@@ -427,7 +427,7 @@ protected:
     explicit            ScHTMLTable(
                             SfxItemPool& rPool,
                             EditEngine& rEditEngine,
-                            ::std::vector< ScEEParseEntry* >& rEEParseList,
+                            std::vector<std::shared_ptr<ScEEParseEntry>>& rEEParseList,
                             ScHTMLTableId& rnUnusedId, ScHTMLParser* pParser );
 
     /** Fills all empty cells in this and nested tables with dummy parse entries. */
@@ -526,7 +526,7 @@ private:
     ScRangeList         maVMergedCells;     /// List of all vertically merged cells.
     ScRangeList         maUsedCells;        /// List of all used cells.
     EditEngine&         mrEditEngine;       /// Edit engine (from ScEEParser).
-    ::std::vector< ScEEParseEntry* >& mrEEParseList;      /// List that owns the parse entries (from ScEEParser).
+    std::vector<std::shared_ptr<ScEEParseEntry>>& mrEEParseList;      /// List that owns the parse entries (from ScEEParser).
     ScHTMLEntryMap      maEntryMap;         /// List of entries for each cell.
     ScHTMLEntryVector*  mpCurrEntryVector;  /// Current entry vector from map for faster access.
     ScHTMLEntryPtr      mxCurrEntry;        /// Working entry, not yet inserted in a list.
@@ -549,7 +549,7 @@ public:
     explicit            ScHTMLGlobalTable(
                             SfxItemPool& rPool,
                             EditEngine& rEditEngine,
-                            ::std::vector< ScEEParseEntry* >& rEEParseList,
+                            std::vector<std::shared_ptr<ScEEParseEntry>>& rEEParseList,
                             ScHTMLTableId& rnUnusedId, ScHTMLParser* pParser );
 
     virtual             ~ScHTMLGlobalTable() override;

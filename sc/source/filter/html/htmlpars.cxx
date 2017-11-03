@@ -229,18 +229,6 @@ ScHTMLLayoutParser::~ScHTMLLayoutParser()
     {
         ScHTMLTableStackEntry* pS = aTableStack.top();
         aTableStack.pop();
-
-        bool found = false;
-        for (ScEEParseEntry* p : maList)
-        {
-            if ( pS->pCellEntry == p )
-            {
-                found = true;
-                break;
-            }
-        }
-        if ( !found )
-            delete pS->pCellEntry;
         if ( pS->pLocalColOffset != pLocalColOffset )
             delete pS->pLocalColOffset;
         delete pS;
@@ -313,12 +301,12 @@ void ScHTMLLayoutParser::NewActEntry( ScEEParseEntry* pE )
     {
         if ( !pE->aSel.HasRange() )
         {   // Completely empty, following text ends up in the same paragraph!
-            pActEntry->aSel.nStartPara = pE->aSel.nEndPara;
-            pActEntry->aSel.nStartPos = pE->aSel.nEndPos;
+            mxActEntry->aSel.nStartPara = pE->aSel.nEndPara;
+            mxActEntry->aSel.nStartPos = pE->aSel.nEndPos;
         }
     }
-    pActEntry->aSel.nEndPara = pActEntry->aSel.nStartPara;
-    pActEntry->aSel.nEndPos = pActEntry->aSel.nStartPos;
+    mxActEntry->aSel.nEndPara = mxActEntry->aSel.nStartPara;
+    mxActEntry->aSel.nEndPos = mxActEntry->aSel.nStartPos;
 }
 
 void ScHTMLLayoutParser::EntryEnd( ScEEParseEntry* pE, const ESelection& rSel )
@@ -491,7 +479,7 @@ void ScHTMLLayoutParser::Adjust()
     SCROW nCurRow = 0;
     sal_uInt16 nPageWidth = (sal_uInt16) aPageSize.Width();
     InnerMap* pTab = nullptr;
-    for (ScEEParseEntry* pE : maList)
+    for (auto& pE : maList)
     {
         if ( pE->nTab < nTab )
         {   // Table finished
@@ -590,7 +578,7 @@ void ScHTMLLayoutParser::Adjust()
         // Real column
         (void)SeekOffset( &maColOffset, pE->nOffset, &pE->nCol, nOffsetTolerance );
         SCCOL nColBeforeSkip = pE->nCol;
-        SkipLocked( pE, false );
+        SkipLocked(pE.get(), false);
         if ( pE->nCol != nColBeforeSkip )
         {
             SCCOL nCount = (SCCOL)maColOffset.size();
@@ -645,7 +633,6 @@ sal_uInt16 ScHTMLLayoutParser::GetWidth( ScEEParseEntry* pE )
 
 void ScHTMLLayoutParser::SetWidths()
 {
-    ScEEParseEntry* pE;
     SCCOL nCol;
     if ( !nTableWidth )
         nTableWidth = (sal_uInt16) aPageSize.Width();
@@ -664,7 +651,7 @@ void ScHTMLLayoutParser::SetWidths()
         nTableWidth = (sal_uInt16)(pLocalColOffset->back() - pLocalColOffset->front());
         for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
         {
-            pE = maList[ i ];
+            auto& pE = maList[ i ];
             if ( pE->nTab == nTable )
             {
                 pE->nOffset = (sal_uInt16) (*pLocalColOffset)[pE->nCol - nColCntStart];
@@ -684,7 +671,7 @@ void ScHTMLLayoutParser::SetWidths()
             pOffsets[0] = nColOffsetStart;
             for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
             {
-                pE = maList[ i ];
+                auto& pE = maList[ i ];
                 if ( pE->nTab == nTable && pE->nWidth )
                 {
                     nCol = pE->nCol - nColCntStart;
@@ -755,7 +742,7 @@ void ScHTMLLayoutParser::SetWidths()
 
             for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
             {
-                pE = maList[ i ];
+                auto& pE = maList[ i ];
                 if ( pE->nTab == nTable )
                 {
                     nCol = pE->nCol - nColCntStart;
@@ -780,12 +767,12 @@ void ScHTMLLayoutParser::SetWidths()
     }
     for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
     {
-        pE = maList[ i ];
+        auto& pE = maList[ i ];
         if ( pE->nTab == nTable )
         {
             if ( !pE->nWidth )
             {
-                pE->nWidth = GetWidth( pE );
+                pE->nWidth = GetWidth(pE.get());
                 OSL_ENSURE( pE->nWidth, "SetWidths: pE->nWidth == 0" );
             }
             MakeCol( &maColOffset, pE->nOffset, pE->nWidth, nOffsetTolerance, nOffsetTolerance );
@@ -827,30 +814,19 @@ void ScHTMLLayoutParser::CloseEntry( const HtmlImportInfo* pInfo )
     if ( bTabInTabCell )
     {   // From the stack in TableOff
         bTabInTabCell = false;
-        bool found = false;
-        for (ScEEParseEntry* p : maList)
-        {
-            if ( pActEntry == p )
-            {
-                found = true;
-                break;
-            }
-        }
-        if ( !found )
-            delete pActEntry;
-        NewActEntry( maList.back() ); // New free flying pActEntry
+        NewActEntry(maList.back().get()); // New free flying mxActEntry
         return ;
     }
-    if ( pActEntry->nTab == 0 )
-        pActEntry->nWidth = (sal_uInt16) aPageSize.Width();
-    Colonize( pActEntry );
-    nColCnt = pActEntry->nCol + pActEntry->nColOverlap;
+    if (mxActEntry->nTab == 0)
+        mxActEntry->nWidth = (sal_uInt16) aPageSize.Width();
+    Colonize(mxActEntry.get());
+    nColCnt = mxActEntry->nCol + mxActEntry->nColOverlap;
     if ( nMaxCol < nColCnt )
         nMaxCol = nColCnt;      // TableStack MaxCol
     if ( nColMax < nColCnt )
         nColMax = nColCnt;      // Global MaxCol for ScEEParser GetDimensions!
-    EntryEnd( pActEntry, pInfo->aSelection );
-    ESelection& rSel = pActEntry->aSel;
+    EntryEnd(mxActEntry.get(), pInfo->aSelection);
+    ESelection& rSel = mxActEntry->aSel;
     while ( rSel.nStartPara < rSel.nEndPara
             && pEdit->GetTextLen( rSel.nStartPara ) == 0 )
     {   // Strip preceding empty paragraphs
@@ -867,9 +843,9 @@ void ScHTMLLayoutParser::CloseEntry( const HtmlImportInfo* pInfo )
         rSel.nEndPara = rSel.nStartPara;
     }
     if ( rSel.HasRange() )
-        pActEntry->aItemSet.Put( SfxBoolItem( ATTR_LINEBREAK, true ) );
-    maList.push_back( pActEntry );
-    NewActEntry( pActEntry ); // New free flying pActEntry
+        mxActEntry->aItemSet.Put( SfxBoolItem( ATTR_LINEBREAK, true ) );
+    maList.push_back(mxActEntry);
+    NewActEntry(mxActEntry.get()); // New free flying mxActEntry
 }
 
 IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, HtmlImportInfo&, rInfo, void )
@@ -957,12 +933,12 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
         {
             case HtmlOptionId::COLSPAN:
             {
-                pActEntry->nColOverlap = ( SCCOL ) rOption.GetString().toInt32();
+                mxActEntry->nColOverlap = (SCCOL)rOption.GetString().toInt32();
             }
             break;
             case HtmlOptionId::ROWSPAN:
             {
-                pActEntry->nRowOverlap = ( SCROW ) rOption.GetString().toInt32();
+                mxActEntry->nRowOverlap = (SCROW)rOption.GetString().toInt32();
             }
             break;
             case HtmlOptionId::ALIGN:
@@ -979,7 +955,7 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
                 else
                     eVal = SvxCellHorJustify::Standard;
                 if ( eVal != SvxCellHorJustify::Standard )
-                    pActEntry->aItemSet.Put( SvxHorJustifyItem( eVal, ATTR_HOR_JUSTIFY) );
+                    mxActEntry->aItemSet.Put(SvxHorJustifyItem(eVal, ATTR_HOR_JUSTIFY));
             }
             break;
             case HtmlOptionId::VALIGN:
@@ -994,41 +970,41 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
                     eVal = SvxCellVerJustify::Bottom;
                 else
                     eVal = SvxCellVerJustify::Standard;
-                pActEntry->aItemSet.Put( SvxVerJustifyItem( eVal, ATTR_VER_JUSTIFY) );
+                mxActEntry->aItemSet.Put(SvxVerJustifyItem(eVal, ATTR_VER_JUSTIFY));
             }
             break;
             case HtmlOptionId::WIDTH:
             {
-                pActEntry->nWidth = GetWidthPixel( rOption );
+                mxActEntry->nWidth = GetWidthPixel(rOption);
             }
             break;
             case HtmlOptionId::BGCOLOR:
             {
                 Color aColor;
                 rOption.GetColor( aColor );
-                pActEntry->aItemSet.Put(
-                    SvxBrushItem( aColor, ATTR_BACKGROUND ) );
+                mxActEntry->aItemSet.Put(SvxBrushItem(aColor, ATTR_BACKGROUND));
             }
             break;
             case HtmlOptionId::SDVAL:
             {
-                pActEntry->pValStr.reset( new OUString( rOption.GetString() ) );
+                mxActEntry->pValStr.reset(new OUString(rOption.GetString()));
             }
             break;
             case HtmlOptionId::SDNUM:
             {
-                pActEntry->pNumStr.reset( new OUString( rOption.GetString() ) );
+                mxActEntry->pNumStr.reset(new OUString(rOption.GetString()));
             }
             break;
             default: break;
         }
     }
-    pActEntry->nCol = nColCnt;
-    pActEntry->nRow = nRowCnt;
-    pActEntry->nTab = nTable;
+
+    mxActEntry->nCol = nColCnt;
+    mxActEntry->nRow = nRowCnt;
+    mxActEntry->nTab = nTable;
 
     if ( bHorJustifyCenterTH )
-        pActEntry->aItemSet.Put(
+        mxActEntry->aItemSet.Put(
             SvxHorJustifyItem( SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY) );
 }
 
@@ -1057,14 +1033,14 @@ void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
     if ( ++nTableLevel > 1 )
     {   // Table in Table
         sal_uInt16 nTmpColOffset = nColOffset; // Will be changed in Colonize()
-        Colonize( pActEntry );
+        Colonize(mxActEntry.get());
         aTableStack.push( new ScHTMLTableStackEntry(
-            pActEntry, xLockedList, pLocalColOffset, nFirstTableCell,
+            mxActEntry, xLockedList, pLocalColOffset, nFirstTableCell,
             nRowCnt, nColCntStart, nMaxCol, nTable,
             nTableWidth, nColOffset, nColOffsetStart,
             bFirstRow ) );
         sal_uInt16 nLastWidth = nTableWidth;
-        nTableWidth = GetWidth( pActEntry );
+        nTableWidth = GetWidth(mxActEntry.get());
         if ( nTableWidth == nLastWidth && nMaxCol - nColCntStart > 1 )
         {   // There must be more than one, so this one cannot be enough
             nTableWidth = nLastWidth / static_cast<sal_uInt16>((nMaxCol - nColCntStart));
@@ -1106,22 +1082,19 @@ void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
             nColOffsetStart = nColOffset;
         }
 
-        ScEEParseEntry* pE = nullptr;
-        if (maList.size())
-            pE = maList.back();
-        NewActEntry( pE ); // New free flying pActEntry
+        NewActEntry(!maList.empty() ? maList.back().get() : nullptr); // New free flying mxActEntry
         xLockedList = new ScRangeList;
     }
     else
     {   // Simple table at the document level
-        EntryEnd( pActEntry, pInfo->aSelection );
-        if ( pActEntry->aSel.HasRange() )
+        EntryEnd(mxActEntry.get(), pInfo->aSelection);
+        if (mxActEntry->aSel.HasRange())
         {   // Flying text left
             CloseEntry( pInfo );
             NextRow( pInfo );
         }
         aTableStack.push( new ScHTMLTableStackEntry(
-            pActEntry, xLockedList, pLocalColOffset, nFirstTableCell,
+            mxActEntry, xLockedList, pLocalColOffset, nFirstTableCell,
             nRowCnt, nColCntStart, nMaxCol, nTable,
             nTableWidth, nColOffset, nColOffsetStart,
             bFirstRow ) );
@@ -1179,7 +1152,7 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
             ScHTMLTableStackEntry* pS = aTableStack.top();
             aTableStack.pop();
 
-            ScEEParseEntry* pE = pS->pCellEntry;
+            auto& pE = pS->xCellEntry;
             SCROW nRows = nRowCnt - pS->nRowCnt;
             if ( nRows > 1 )
             {   // Insert size of table at this position
@@ -1295,10 +1268,9 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
             xLockedList = pS->xLockedList;
             delete pLocalColOffset;
             pLocalColOffset = pS->pLocalColOffset;
-            delete pActEntry;
-            // pActEntry is kept around if a table is started in the same row
+            // mxActEntry is kept around if a table is started in the same row
             // (anything's possible in HTML); will be deleted by CloseEntry
-            pActEntry = pE;
+            mxActEntry = pE;
             delete pS;
         }
         bTabInTabCell = true;
@@ -1322,8 +1294,8 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
 
 void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
 {
-    pActEntry->maImageList.push_back( o3tl::make_unique<ScHTMLImage>() );
-    ScHTMLImage* pImage = pActEntry->maImageList.back().get();
+    mxActEntry->maImageList.push_back(o3tl::make_unique<ScHTMLImage>());
+    ScHTMLImage* pImage = mxActEntry->maImageList.back().get();
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
     for (const auto & rOption : rOptions)
     {
@@ -1336,12 +1308,12 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
             break;
             case HtmlOptionId::ALT:
             {
-                if ( !pActEntry->bHasGraphic )
+                if (!mxActEntry->bHasGraphic)
                 {   // ALT text only if not any image loaded
-                    if (!pActEntry->aAltText.isEmpty())
-                        pActEntry->aAltText += "; ";
+                    if (!mxActEntry->aAltText.isEmpty())
+                        mxActEntry->aAltText += "; ";
 
-                    pActEntry->aAltText += rOption.GetString();
+                    mxActEntry->aAltText += rOption.GetString();
                 }
             }
             break;
@@ -1383,10 +1355,10 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
         delete pGraphic;
         return ; // Bad luck
     }
-    if ( !pActEntry->bHasGraphic )
+    if (!mxActEntry->bHasGraphic)
     {   // discard any ALT text in this cell if we have any image
-        pActEntry->bHasGraphic = true;
-        (pActEntry->aAltText).clear();
+        mxActEntry->bHasGraphic = true;
+        mxActEntry->aAltText.clear();
     }
     pImage->aFilterName = rFilter.GetImportFormatName( nFormat );
     pImage->pGraphic.reset( pGraphic );
@@ -1396,20 +1368,20 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
         pImage->aSize = pDefaultDev->LogicToPixel( pGraphic->GetPrefSize(),
             pGraphic->GetPrefMapMode() );
     }
-    if ( pActEntry->maImageList.size() > 0 )
+    if (mxActEntry->maImageList.size() > 0)
     {
         long nWidth = 0;
-        for (std::unique_ptr<ScHTMLImage> & pI : pActEntry->maImageList)
+        for (std::unique_ptr<ScHTMLImage> & pI : mxActEntry->maImageList)
         {
             if ( pI->nDir & nHorizontal )
                 nWidth += pI->aSize.Width() + 2 * pI->aSpace.X();
             else
                 nWidth = 0;
         }
-        if ( pActEntry->nWidth
+        if ( mxActEntry->nWidth
           && (nWidth + pImage->aSize.Width() + 2 * pImage->aSpace.X()
-                >= pActEntry->nWidth) )
-            pActEntry->maImageList.back()->nDir = nVertical;
+                >= mxActEntry->nWidth) )
+            mxActEntry->maImageList.back()->nDir = nVertical;
     }
 }
 
@@ -1453,13 +1425,13 @@ void ScHTMLLayoutParser::AnchorOn( HtmlImportInfo* pInfo )
     for (const auto & rOption : rOptions)
     {
         if( rOption.GetToken() == HtmlOptionId::NAME )
-            pActEntry->pName.reset( new OUString(rOption.GetString()) );
+            mxActEntry->pName.reset(new OUString(rOption.GetString()));
     }
 }
 
 bool ScHTMLLayoutParser::IsAtBeginningOfText( const HtmlImportInfo* pInfo )
 {
-    ESelection& rSel = pActEntry->aSel;
+    ESelection& rSel = mxActEntry->aSel;
     return rSel.nStartPara == rSel.nEndPara &&
         rSel.nStartPara <= pInfo->aSelection.nEndPara &&
         pEdit->GetTextLen( rSel.nStartPara ) == 0;
@@ -1490,7 +1462,7 @@ void ScHTMLLayoutParser::FontOn( HtmlImportInfo* pInfo )
                         aFontName += aFName;
                     }
                     if ( !aFontName.isEmpty() )
-                        pActEntry->aItemSet.Put( SvxFontItem( FAMILY_DONTKNOW,
+                        mxActEntry->aItemSet.Put( SvxFontItem( FAMILY_DONTKNOW,
                             aFontName, EMPTY_OUSTRING, PITCH_DONTKNOW,
                             RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
                 }
@@ -1502,7 +1474,7 @@ void ScHTMLLayoutParser::FontOn( HtmlImportInfo* pInfo )
                         nSize = 1;
                     else if ( nSize > SC_HTML_FONTSIZES )
                         nSize = SC_HTML_FONTSIZES;
-                    pActEntry->aItemSet.Put( SvxFontHeightItem(
+                    mxActEntry->aItemSet.Put( SvxFontHeightItem(
                         maFontHeights[nSize-1], 100, ATTR_FONT_HEIGHT ) );
                 }
                 break;
@@ -1510,7 +1482,7 @@ void ScHTMLLayoutParser::FontOn( HtmlImportInfo* pInfo )
                 {
                     Color aColor;
                     rOption.GetColor( aColor );
-                    pActEntry->aItemSet.Put( SvxColorItem( aColor, ATTR_FONT_COLOR ) );
+                    mxActEntry->aItemSet.Put( SvxColorItem( aColor, ATTR_FONT_COLOR ) );
                 }
                 break;
                 default: break;
@@ -1568,7 +1540,7 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
             if ( bInCell )
                 CloseEntry( pInfo );
             // Do not set bInCell to true, TableDataOn does that
-            pActEntry->aItemSet.Put(
+            mxActEntry->aItemSet.Put(
                 SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT) );
             SAL_FALLTHROUGH;
         }
@@ -1605,8 +1577,8 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
         break;
         case HtmlTokenId::PARABREAK_OFF:
         {   // We continue vertically after an image
-            if ( pActEntry->maImageList.size() > 0 )
-                pActEntry->maImageList.back()->nDir = nVertical;
+            if (mxActEntry->maImageList.size() > 0)
+                mxActEntry->maImageList.back()->nDir = nVertical;
         }
         break;
         case HtmlTokenId::ANCHOR_ON:
@@ -1623,7 +1595,7 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
         {
             // TODO: Remember current font size and increase by 1
             if ( IsAtBeginningOfText( pInfo ) )
-                pActEntry->aItemSet.Put( SvxFontHeightItem(
+                mxActEntry->aItemSet.Put( SvxFontHeightItem(
                     maFontHeights[3], 100, ATTR_FONT_HEIGHT ) );
         }
         break;
@@ -1631,7 +1603,7 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
         {
             // TODO: Remember current font size and decrease by 1
             if ( IsAtBeginningOfText( pInfo ) )
-                pActEntry->aItemSet.Put( SvxFontHeightItem(
+                mxActEntry->aItemSet.Put( SvxFontHeightItem(
                     maFontHeights[0], 100, ATTR_FONT_HEIGHT ) );
         }
         break;
@@ -1639,7 +1611,7 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
         case HtmlTokenId::STRONG_ON :
         {
             if ( IsAtBeginningOfText( pInfo ) )
-                pActEntry->aItemSet.Put( SvxWeightItem( WEIGHT_BOLD,
+                mxActEntry->aItemSet.Put( SvxWeightItem( WEIGHT_BOLD,
                     ATTR_FONT_WEIGHT ) );
         }
         break;
@@ -1652,7 +1624,7 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
         case HtmlTokenId::VARIABLE_ON :
         {
             if ( IsAtBeginningOfText( pInfo ) )
-                pActEntry->aItemSet.Put( SvxPostureItem( ITALIC_NORMAL,
+                mxActEntry->aItemSet.Put( SvxPostureItem( ITALIC_NORMAL,
                     ATTR_FONT_POSTURE ) );
         }
         break;
@@ -1660,9 +1632,9 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
         {
             if ( IsAtBeginningOfText( pInfo ) )
             {
-                pActEntry->aItemSet.Put( SvxWeightItem( WEIGHT_BOLD,
+                mxActEntry->aItemSet.Put( SvxWeightItem( WEIGHT_BOLD,
                     ATTR_FONT_WEIGHT ) );
-                pActEntry->aItemSet.Put( SvxPostureItem( ITALIC_NORMAL,
+                mxActEntry->aItemSet.Put( SvxPostureItem( ITALIC_NORMAL,
                     ATTR_FONT_POSTURE ) );
             }
         }
@@ -1670,7 +1642,7 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
         case HtmlTokenId::UNDERLINE_ON :
         {
             if ( IsAtBeginningOfText( pInfo ) )
-                pActEntry->aItemSet.Put( SvxUnderlineItem( LINESTYLE_SINGLE,
+                mxActEntry->aItemSet.Put( SvxUnderlineItem( LINESTYLE_SINGLE,
                     ATTR_FONT_UNDERLINE ) );
         }
         break;
@@ -1906,7 +1878,7 @@ ScHTMLTable::ScHTMLTable( ScHTMLTable& rParentTable, const HtmlImportInfo& rInfo
 ScHTMLTable::ScHTMLTable(
     SfxItemPool& rPool,
     EditEngine& rEditEngine,
-    std::vector< ScEEParseEntry* >& rEEParseList,
+    std::vector<std::shared_ptr<ScEEParseEntry>>& rEEParseList,
     ScHTMLTableId& rnUnusedId, ScHTMLParser* pParser
 ) :
     mpParentTable( nullptr ),
@@ -2347,7 +2319,7 @@ void ScHTMLTable::ImplPushEntryToVector( ScHTMLEntryVector& rEntryVector, ScHTML
     // HTML entry list does not own the entries
     rEntryVector.push_back( rxEntry.get() );
     // mrEEParseList (reference to member of ScEEParser) owns the entries
-    mrEEParseList.push_back( rxEntry.release() );
+    mrEEParseList.push_back(std::shared_ptr<ScEEParseEntry>(rxEntry.release()));
 }
 
 bool ScHTMLTable::PushEntry( ScHTMLEntryPtr& rxEntry )
@@ -2784,7 +2756,7 @@ void ScHTMLTable::RecalcDocPos( const ScHTMLPos& rBasePos )
 ScHTMLGlobalTable::ScHTMLGlobalTable(
     SfxItemPool& rPool,
     EditEngine& rEditEngine,
-    std::vector< ScEEParseEntry* >& rEEParseVector,
+    std::vector<std::shared_ptr<ScEEParseEntry>>& rEEParseVector,
     ScHTMLTableId& rnUnusedId,
     ScHTMLParser* pParser
 ) :
