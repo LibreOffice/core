@@ -52,7 +52,7 @@ typedef struct CGContext *CGContextRef;
 
 struct SystemEnvData
 {
-    unsigned long       nSize;          // size in bytes of this structure
+    sal_uInt32          nSize;          // size in bytes of this structure
 #if defined(_WIN32)
     HWND                hWnd;           // the window hwnd
 #elif defined( MACOSX )
@@ -100,7 +100,7 @@ struct SystemEnvData
 
 struct SystemParentData
 {
-    unsigned long   nSize;            // size in bytes of this structure
+    sal_uInt32      nSize;            // size in bytes of this structure
 #if defined(_WIN32)
     HWND            hWnd;             // the window hwnd
 #elif defined( MACOSX )
@@ -127,7 +127,7 @@ struct SystemMenuData
 
 struct SystemGraphicsData
 {
-    unsigned long   nSize;          // size in bytes of this structure
+    sal_uInt32      nSize;          // size in bytes of this structure
 #if defined(_WIN32)
     HDC             hDC;            // handle to a device context
     HWND            hWnd;           // optional handle to a window
@@ -182,7 +182,7 @@ struct SystemWindowData
 
 struct SystemGlyphData
 {
-    unsigned long        index;
+    sal_uInt32           index;
     double               x;
     double               y;
     int                  fallbacklevel;
