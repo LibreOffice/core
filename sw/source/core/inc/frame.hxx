@@ -144,6 +144,20 @@ protected:
     void setFrameAreaSizeValid(bool bNew);
     void setFramePrintAreaValid(bool bNew);
 
+    // helper method to create FrameAreaTransformations based on the
+    // curent FrameAreaDefinition
+    void createFrameAreaTransformations(
+        basegfx::B2DHomMatrix& rFrameAreaTransformation,
+        basegfx::B2DHomMatrix& rFramePrintAreaTransformation,
+        double fRotation,
+        const basegfx::B2DPoint& rCenter) const;
+
+    // helper method to set FrameAreaDefinitions based on given
+    // transformations
+    void setFrameAreaDefinitionsToBoundRangesOfTransformations(
+        const basegfx::B2DHomMatrix& rFrameAreaTransformation,
+        const basegfx::B2DHomMatrix& rFramePrintAreaTransformation);
+
 public:
     SwFrameAreaDefinition();
 
@@ -195,15 +209,6 @@ public:
         void setSwRect(const SwRect& rNew) { *reinterpret_cast< SwRect* >(this) = rNew; }
     };
 };
-
-// RotateFlyFrame3 - Helper method that rotates a FrameAreaDefinition content
-// around a given point. It takes care for FramePrintArea being relative to
-// FrameArea and creates the rotated BoundRects
-void rotateFrameAreaDefinitionAroundPoint(
-    SwRect& rFrameArea,
-    SwRect& rFramePrintArea,
-    const Point& rCenter,
-    double fRotation);
 
 /**
  * Base class of the Writer layout elements.
@@ -834,6 +839,17 @@ public:
     // only used for SwGrfNode in inner SwFrame of a SwFlyFrame, but may
     // be used in the future. Default returns 0.0 (no rotation)
     virtual double getRotation() const;
+
+    // RotateFlyFrame3 - Support for Transformations
+    // Hand out the Transformations for the current FrameAreaDefinition
+    // for the FrameArea and FramePrintArea.
+    // FramePrintArea is not relative to FrameArea in this
+    // transformation representation (to make it easier to use and understand).
+    // There is no 'set' method since SwFrame is a layout obejct. For
+    // some cases rotation will be included (used for SwGrfNode in inner
+    // SwFrame of a SwFlyFrame)
+    basegfx::B2DHomMatrix getFrameAreaTransformation() const;
+    basegfx::B2DHomMatrix getFramePrintAreaTransformation() const;
 };
 
 inline bool SwFrame::IsInDocBody() const
