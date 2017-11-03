@@ -1231,7 +1231,7 @@ double GetOddlyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
 }
 
 
-double GetRmz( double fRate, double fNper, double fPv, double fFv, sal_Int32 nPayType )
+double GetPmt( double fRate, double fNper, double fPv, double fFv, sal_Int32 nPayType )
 {
     double      fPmt;
     if( fRate == 0.0 )
@@ -1249,7 +1249,7 @@ double GetRmz( double fRate, double fNper, double fPv, double fFv, sal_Int32 nPa
 }
 
 
-double GetZw( double fRate, double fNper, double fPmt, double fPv, sal_Int32 nPayType )
+double GetFv( double fRate, double fNper, double fPmt, double fPv, sal_Int32 nPayType )
 {
     double      fFv;
     if( fRate == 0.0 )
