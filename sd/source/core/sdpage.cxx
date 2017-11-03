@@ -199,9 +199,12 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearc
     // first sort all matching shapes with z-order
     std::vector< SdrObject* > aMatches;
 
-    for (auto const& shape : maPresentationShapeList.getList())
+    SdrObject* pObj = nullptr;
+    maPresentationShapeList.seekShape(0);
+
+    while( (pObj = maPresentationShapeList.getNextShape()) )
     {
-        SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*shape);
+        SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObj);
         if( pInfo )
         {
             bool bFound = false;
@@ -228,7 +231,7 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearc
             }
             if( bFound )
             {
-                aMatches.push_back( shape );
+                aMatches.push_back( pObj );
             }
         }
     }
