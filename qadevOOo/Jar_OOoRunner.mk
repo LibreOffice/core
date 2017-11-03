@@ -618,7 +618,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XSheetAnnotationsSupplier \
     qadevOOo/tests/java/ifc/sheet/_XSheetAuditing \
     qadevOOo/tests/java/ifc/sheet/_XSheetCellCursor \
-    qadevOOo/tests/java/ifc/sheet/_XSheetCellRange \
     qadevOOo/tests/java/ifc/sheet/_XSheetCellRangeContainer \
     qadevOOo/tests/java/ifc/sheet/_XSheetFilterableEx \
     qadevOOo/tests/java/ifc/sheet/_XSpreadsheetView \

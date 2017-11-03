@@ -12,6 +12,7 @@
 #include <test/sheet/xcellrangedata.hxx>
 #include <test/sheet/xcellrangesquery.hxx>
 #include <test/sheet/xcellseries.hxx>
+#include <test/sheet/xsheetcellrange.hxx>
 #include <test/sheet/xsheetfilterable.hxx>
 #include <test/sheet/xsheetoperation.hxx>
 #include <test/sheet/xsubtotalcalculatable.hxx>
@@ -40,7 +41,7 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 24
+#define NUMBER_OF_TESTS 25
 
 class ScCellRangeObj : public CalcUnoApiTest, public apitest::CellProperties,
                                               public apitest::XCellRangeData,
@@ -48,6 +49,7 @@ class ScCellRangeObj : public CalcUnoApiTest, public apitest::CellProperties,
                                               public apitest::XCellSeries,
                                               public apitest::XReplaceable,
                                               public apitest::XSearchable,
+                                              public apitest::XSheetCellRange,
                                               public apitest::XSheetFilterable,
                                               public apitest::XSheetOperation,
                                               public apitest::XSubTotalCalculatable,
@@ -82,6 +84,9 @@ public:
     // XSearchable
     CPPUNIT_TEST(testFindAll);
     CPPUNIT_TEST(testFindFirst);
+
+    // XSheetCellRange
+    CPPUNIT_TEST(testGetSpreadsheet);
 
     // XReplaceable
     CPPUNIT_TEST(testReplaceAll);
