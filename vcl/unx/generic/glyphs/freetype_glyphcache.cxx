@@ -973,7 +973,7 @@ bool FreetypeFont::GetGlyphOutline(const GlyphItem& rGlyph,
     return true;
 }
 
-const unsigned char* FreetypeFont::GetTable(const char* pName, sal_uLong* pLength)
+const unsigned char* FreetypeFont::GetTable(const char* pName, sal_uLong* pLength) const
 {
     return mpFontInfo->GetTable( pName, pLength );
 }

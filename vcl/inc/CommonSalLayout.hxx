@@ -45,13 +45,6 @@ class Qt5Font;
 
 class VCL_DLLPUBLIC CommonSalLayout : public GenericSalLayout
 {
-#if ENABLE_QT5
-    friend hb_blob_t*       getFontTable(hb_face_t*, hb_tag_t, void*);
-    explicit                CommonSalLayout(const FontSelectPattern &rFSP,
-                                            FreetypeFont *pFreetypeFont,
-                                            Qt5Font *pFont, bool bUseQt5);
-#endif
-
     hb_font_t*              mpHbFont;
     const FontSelectPattern& mrFontSelData;
     css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
@@ -84,19 +77,23 @@ class VCL_DLLPUBLIC CommonSalLayout : public GenericSalLayout
 public:
 #if defined(_WIN32)
     explicit                CommonSalLayout(HDC, WinFontInstance&, const WinFontFace&);
-    const FontSelectPattern& getFontSelData() const { return mrFontSelData; };
+    const FontSelectPattern& getFontSelData() const { return mrFontSelData; }
     HFONT                   getHFONT() const { return mhFont; }
     WinFontInstance&        getWinFontInstance() const { return mrWinFontInstance; }
     bool                    hasHScale() const;
 #elif defined(MACOSX) || defined(IOS)
     explicit                CommonSalLayout(const CoreTextStyle&);
-    const CoreTextStyle&    getFontData() const { return mrCoreTextStyle; };
+    const CoreTextStyle&    getFontData() const { return mrCoreTextStyle; }
 #else
     explicit                CommonSalLayout(FreetypeFont&);
-    const FreetypeFont*     getFreetypeFont() const { return mpFreetypeFont; };
+    const FreetypeFont*     getFreetypeFont() const { return mpFreetypeFont; }
 #if ENABLE_QT5
+    explicit                CommonSalLayout(const FontSelectPattern &rFSP,
+                                            FreetypeFont *pFreetypeFont,
+                                            Qt5Font *pFont, bool bUseQt5);
     explicit                CommonSalLayout(Qt5Font&);
-    const Qt5Font*          getQt5Font() const { return mpQFont; };
+    const Qt5Font*          getQt5Font() const { return mpQFont; }
+    bool                    useQt5() const { return mbUseQt5; }
 #endif
 #endif
 
