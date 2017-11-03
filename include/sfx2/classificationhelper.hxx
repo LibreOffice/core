@@ -182,6 +182,11 @@ public:
     {
         return aKey.startsWith(makeIntellectualPropertyPartKey());
     }
+
+    OUString makeFullTextualRepresentationKey() const
+    {
+        return getPolicyKey() + "FullTexturalRepresentation";
+    }
 };
 
 }

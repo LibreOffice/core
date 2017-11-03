@@ -59,6 +59,7 @@
 #include <svx/SpellDialogChildWindow.hxx>
 #include <svx/compressgraphicdialog.hxx>
 #include <svx/ClassificationDialog.hxx>
+#include <svx/ClassificationCommon.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/bmpmask.hxx>
 #include <svx/colrctrl.hxx>
@@ -473,8 +474,13 @@ public:
                 aHelper.SetBACName(rResult.msName, SfxClassificationHelper::getPolicyType());
         }
 
+        // Initialize key creator
         sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
 
+        // Insert full text as document property
+        svx::classification::insertFullTextualRepresentationAsDocumentProperty(xPropertyContainer, aKeyCreator, rResults);
+
+        // Insert Object into master page
         Outliner* pOutliner = m_rDrawViewShell.GetDoc()->GetInternalOutliner();
         OutlinerMode eOutlinerMode = pOutliner->GetMode();
         pOutliner->Init(OutlinerMode::TextObject);
