@@ -23,6 +23,7 @@
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlmetae.hxx>
 #include <editeng/langitem.hxx>
+#include <o3tl/safeint.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <docstat.hxx>
@@ -148,7 +149,7 @@ void SwXMLImport::SetStatistics(
     if( nTokens & XML_TOK_META_STAT_PARA )
         nProgressReference = (sal_Int32)aDocStat.nPara;
     else if ( nTokens & XML_TOK_META_STAT_PAGE )
-        nProgressReference = 10 * (sal_Int32)aDocStat.nPage;
+        o3tl::checked_multiply<sal_Int32>(aDocStat.nPage, 10, nProgressReference);
     ProgressBarHelper* pProgress = GetProgressBarHelper();
     pProgress->SetReference( nProgressReference + 3*PROGRESS_BAR_STEP );
     pProgress->SetValue( 0 );
