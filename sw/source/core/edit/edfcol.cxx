@@ -972,7 +972,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
 void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationResult> aResults)
 {
     SwDocShell* pDocShell = GetDoc()->GetDocShell();
-    if (!pDocShell)
+    if (!pDocShell || !GetCursor() || !GetCursor()->Start())
         return;
 
     SwTextNode* pNode = GetCursor()->Start()->nNode.GetNode().GetTextNode();
@@ -1063,7 +1063,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectParagraphClassificati
     std::vector<svx::ClassificationResult> aResult;
 
     SwDocShell* pDocShell = GetDoc()->GetDocShell();
-    if (!pDocShell)
+    if (!pDocShell || !GetCursor() || !GetCursor()->Start())
         return aResult;
 
     SwTextNode* pNode = GetCursor()->Start()->nNode.GetNode().GetTextNode();
@@ -1505,7 +1505,7 @@ void SwUndoParagraphSigning::Remove()
 void SwEditShell::SignParagraph()
 {
     SwDocShell* pDocShell = GetDoc()->GetDocShell();
-    if (!pDocShell)
+    if (!pDocShell || !GetCursor() || !GetCursor()->Start())
         return;
     const SwPosition* pPosStart = GetCursor()->Start();
     if (!pPosStart)
@@ -1573,7 +1573,7 @@ void SwEditShell::SignParagraph()
 void SwEditShell::ValidateParagraphSignatures(bool updateDontRemove)
 {
     SwDocShell* pDocShell = GetDoc()->GetDocShell();
-    if (!pDocShell || !IsParagraphSignatureValidationEnabled())
+    if (!pDocShell || !GetCursor() || !GetCursor()->Start() || !IsParagraphSignatureValidationEnabled())
         return;
 
     SwPaM* pPaM = GetCursor();
@@ -1665,33 +1665,41 @@ uno::Reference<text::XTextField> lcl_GetParagraphMetadataFieldAtIndex(const SwDo
 
 bool SwEditShell::IsCursorInParagraphMetadataField() const
 {
-    SwTextNode* pNode = GetCursor()->Start()->nNode.GetNode().GetTextNode();
-    const sal_uLong index = GetCursor()->Start()->nContent.GetIndex();
-    uno::Reference<text::XTextField> xField = lcl_GetParagraphMetadataFieldAtIndex(GetDoc()->GetDocShell(), pNode, index);
-    return xField.is();
+    if (GetCursor() && GetCursor()->Start())
+    {
+        SwTextNode* pNode = GetCursor()->Start()->nNode.GetNode().GetTextNode();
+        const sal_uLong index = GetCursor()->Start()->nContent.GetIndex();
+        uno::Reference<text::XTextField> xField = lcl_GetParagraphMetadataFieldAtIndex(GetDoc()->GetDocShell(), pNode, index);
+        return xField.is();
+    }
+
+    return false;
 }
 
 bool SwEditShell::RemoveParagraphMetadataFieldAtCursor(const bool bBackspaceNotDel)
 {
-    SwTextNode* pNode = GetCursor()->Start()->nNode.GetNode().GetTextNode();
-    sal_uLong index = GetCursor()->Start()->nContent.GetIndex();
-    uno::Reference<text::XTextField> xField = lcl_GetParagraphMetadataFieldAtIndex(GetDoc()->GetDocShell(), pNode, index);
-    if (!xField.is())
+    if (GetCursor() && GetCursor()->Start())
     {
-        // Try moving the cursor to see if we're _facing_ a metafield or not,
-        // as opposed to being within one.
-        if (bBackspaceNotDel)
-            index--; // Backspace moves left
-        else
-            index++; // Delete moves right
+        SwTextNode* pNode = GetCursor()->Start()->nNode.GetNode().GetTextNode();
+        sal_uLong index = GetCursor()->Start()->nContent.GetIndex();
+        uno::Reference<text::XTextField> xField = lcl_GetParagraphMetadataFieldAtIndex(GetDoc()->GetDocShell(), pNode, index);
+        if (!xField.is())
+        {
+            // Try moving the cursor to see if we're _facing_ a metafield or not,
+            // as opposed to being within one.
+            if (bBackspaceNotDel)
+                index--; // Backspace moves left
+            else
+                index++; // Delete moves right
 
-        xField = lcl_GetParagraphMetadataFieldAtIndex(GetDoc()->GetDocShell(), pNode, index);
-    }
+            xField = lcl_GetParagraphMetadataFieldAtIndex(GetDoc()->GetDocShell(), pNode, index);
+        }
 
-    if (xField.is())
-    {
-        lcl_RemoveParagraphMetadataField(xField);
-        return true;
+        if (xField.is())
+        {
+            lcl_RemoveParagraphMetadataField(xField);
+            return true;
+        }
     }
 
     return false;
