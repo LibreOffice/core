@@ -238,6 +238,7 @@ void DesktopLOKTest::callbackImpl(int nType, const char* pPayload)
 
 void DesktopLOKTest::testGetStyles()
 {
+    comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     boost::property_tree::ptree aTree;
     char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:StyleApply");
@@ -267,6 +268,7 @@ void DesktopLOKTest::testGetStyles()
             CPPUNIT_FAIL("Unknown style family: " + rPair.first);
         }
     }
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testGetFonts()
@@ -290,6 +292,7 @@ void DesktopLOKTest::testGetFonts()
 
 void DesktopLOKTest::testCreateView()
 {
+    comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViews(pDocument));
 
@@ -304,10 +307,12 @@ void DesktopLOKTest::testCreateView()
 
     pDocument->m_pDocumentClass->destroyView(pDocument, nId);
     CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViews(pDocument));
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testGetPartPageRectangles()
 {
+    comphelper::LibreOfficeKit::setActive();
     // Test that we get as many page rectangles as expected: blank document is
     // one page.
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
@@ -326,10 +331,12 @@ void DesktopLOKTest::testGetPartPageRectangles()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aRectangles.size());
 
     free(pRectangles);
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testGetFilterTypes()
 {
+    comphelper::LibreOfficeKit::setActive();
     LibLibreOffice_Impl aOffice;
     char* pJSON = aOffice.m_pOfficeClass->getFilterTypes(&aOffice);
 
@@ -340,12 +347,14 @@ void DesktopLOKTest::testGetFilterTypes()
     CPPUNIT_ASSERT(aTree.size() > 0);
     CPPUNIT_ASSERT_EQUAL(std::string("application/vnd.oasis.opendocument.text"), aTree.get_child("writer8").get_child("MediaType").get_value<std::string>());
     free(pJSON);
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testSearchCalc()
 {
-    LibLibreOffice_Impl aOffice;
     comphelper::LibreOfficeKit::setActive();
+
+    LibLibreOffice_Impl aOffice;
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
@@ -378,8 +387,9 @@ void DesktopLOKTest::testSearchCalc()
 
 void DesktopLOKTest::testSearchAllNotificationsCalc()
 {
-    LibLibreOffice_Impl aOffice;
     comphelper::LibreOfficeKit::setActive();
+
+    LibLibreOffice_Impl aOffice;
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
@@ -403,6 +413,8 @@ void DesktopLOKTest::testSearchAllNotificationsCalc()
 
 void DesktopLOKTest::testPaintTile()
 {
+    comphelper::LibreOfficeKit::setActive();
+
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     int nCanvasWidth = 100;
     int nCanvasHeight = 300;
@@ -425,27 +437,38 @@ void DesktopLOKTest::testPaintTile()
     nTileHeight = 4000;
     aBuffer.resize(nCanvasWidth * nCanvasHeight * 4);
     pDocument->pClass->paintTile(pDocument, aBuffer.data(), nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testSaveAs()
 {
+    comphelper::LibreOfficeKit::setActive();
+
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testSaveAsCalc()
 {
+    comphelper::LibreOfficeKit::setActive();
+
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "png", nullptr));
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testPasteWriter()
 {
     comphelper::LibreOfficeKit::setActive();
+
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     OString aText("hello");
 
@@ -467,6 +490,7 @@ void DesktopLOKTest::testPasteWriter()
 void DesktopLOKTest::testPasteWriterJPEG()
 {
     comphelper::LibreOfficeKit::setActive();
+
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
 
     OUString aFileURL;
@@ -530,6 +554,8 @@ void DesktopLOKTest::testRowColumnHeaders()
      * "size" defines the bottom/right boundary of a row/column in twips (size between 0 and boundary)
      * "text" has the header label in UTF-8
      */
+    comphelper::LibreOfficeKit::setActive();
+
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
 
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
@@ -574,10 +600,14 @@ void DesktopLOKTest::testRowColumnHeaders()
         }
         nPrevious = nSize;
     }
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testHiddenRowHeaders()
 {
+    comphelper::LibreOfficeKit::setActive();
+
     LibLODocument_Impl* pDocument = loadDoc("hidden-row.ods");
 
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
@@ -607,10 +637,13 @@ void DesktopLOKTest::testHiddenRowHeaders()
 
         nPrevious = nSize;
     }
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testCellCursor()
 {
+    comphelper::LibreOfficeKit::setActive();
+
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
 
     boost::property_tree::ptree aTree;
@@ -624,11 +657,14 @@ void DesktopLOKTest::testCellCursor()
     boost::property_tree::read_json(aStream, aTree);
 
     OString aRectangle(aTree.get<std::string>("commandValues").c_str());
-    CPPUNIT_ASSERT_EQUAL(aRectangle, OString("0, 0, 1278, 254"));
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testCommandResult()
 {
+    comphelper::LibreOfficeKit::setActive();
+
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
 
     // the postUnoCommand() is supposed to be async, let's test it safely
@@ -659,11 +695,14 @@ void DesktopLOKTest::testCommandResult()
 
     CPPUNIT_ASSERT_EQUAL(aTree.get_child("commandName").get_value<std::string>(), std::string(".uno:Bold"));
     CPPUNIT_ASSERT_EQUAL(aTree.get_child("success").get_value<bool>(), true);
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testWriterComments()
 {
     comphelper::LibreOfficeKit::setActive();
+
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
     uno::Reference<awt::XReschedule> xToolkit(com::sun::star::awt::Toolkit::create(comphelper::getProcessComponentContext()), uno::UNO_QUERY);
@@ -704,8 +743,10 @@ void DesktopLOKTest::testWriterComments()
 
 void DesktopLOKTest::testModifiedStatus()
 {
-    LibLibreOffice_Impl aOffice;
     comphelper::LibreOfficeKit::setActive();
+
+    // Load a document and create two views.
+    LibLibreOffice_Impl aOffice;
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
@@ -765,6 +806,7 @@ void DesktopLOKTest::testModifiedStatus()
 void DesktopLOKTest::testSheetOperations()
 {
     comphelper::LibreOfficeKit::setActive();
+
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
 
     // insert the last sheet
@@ -797,6 +839,7 @@ void DesktopLOKTest::testSheetOperations()
 void DesktopLOKTest::testSheetSelections()
 {
     comphelper::LibreOfficeKit::setActive();
+
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods", LOK_DOCTYPE_SPREADSHEET);
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
@@ -977,6 +1020,7 @@ namespace {
 void DesktopLOKTest::testContextMenuCalc()
 {
     comphelper::LibreOfficeKit::setActive();
+
     LibLODocument_Impl* pDocument = loadDoc("sheet_with_image.ods", LOK_DOCTYPE_SPREADSHEET);
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
@@ -1088,6 +1132,7 @@ void DesktopLOKTest::testContextMenuCalc()
 void DesktopLOKTest::testContextMenuWriter()
 {
     comphelper::LibreOfficeKit::setActive();
+
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
@@ -1144,6 +1189,7 @@ void DesktopLOKTest::testContextMenuWriter()
 void DesktopLOKTest::testContextMenuImpress()
 {
     comphelper::LibreOfficeKit::setActive();
+
     LibLODocument_Impl* pDocument = loadDoc("blank_presentation.odp", LOK_DOCTYPE_PRESENTATION);
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
@@ -1275,6 +1321,8 @@ static void callbackCompressionTest(const int type, const char* payload, void* d
 
 void DesktopLOKTest::testNotificationCompression()
 {
+    comphelper::LibreOfficeKit::setActive();
+
     std::vector<std::tuple<int, std::string>> notifs;
     std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(callbackCompressionTest, &notifs));
 
@@ -1351,6 +1399,8 @@ void DesktopLOKTest::testNotificationCompression()
 
     CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_SET_PART, (int)std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string("1"), std::get<1>(notifs[i++]));
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);

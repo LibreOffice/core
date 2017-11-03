@@ -237,14 +237,13 @@ void ErrorHandler::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
     @return ???
 */
 sal_uInt16 ErrorHandler::HandleError_Impl(
-    sal_uIntPtr lId, sal_uInt16 nFlags, bool bJustCreateString, OUString & rError)
+    sal_uIntPtr lId, sal_uInt16 nFlags, bool bJustCreateString, OUString & rError, vcl::Window* pParent)
 {
     OUString aErr;
     OUString aAction;
     if(!lId || lId == ERRCODE_ABORT)
         return 0;
     EDcrData &rData      = TheEDcrData::get();
-    vcl::Window *pParent = nullptr;
     ErrorInfo *pInfo     = ErrorInfo::GetErrorInfo(lId);
     if (!rData.contexts.empty())
     {
@@ -332,10 +331,10 @@ bool ErrorHandler::GetErrorString(sal_uIntPtr lId, OUString& rStr)
 
     @see ErrorHandler::HandleError_Impl
 */
-sal_uInt16 ErrorHandler::HandleError(sal_uIntPtr lId, sal_uInt16 nFlags)
+sal_uInt16 ErrorHandler::HandleError(sal_uIntPtr lId, vcl::Window *pParent, sal_uInt16 nFlags)
 {
     OUString aDummy;
-    return HandleError_Impl( lId, nFlags, false, aDummy );
+    return HandleError_Impl( lId, nFlags, false, aDummy, pParent );
 }
 
 bool ErrorHandler_Impl::CreateString( const ErrorInfo* pInfo, OUString& pStr,

@@ -1158,7 +1158,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
                 getParentProperty(), aTitle, aErrorString, WB_OK);
         }
         else
-            ErrorHandler::HandleError(nErrorCode);
+            ErrorHandler::HandleError(nErrorCode, getParentProperty());
 
         if (xApprove.is() && bWarning)
             xApprove->select();

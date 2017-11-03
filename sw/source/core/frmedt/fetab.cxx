@@ -187,7 +187,7 @@ bool SwFEShell::InsertRow( sal_uInt16 nCnt, bool bBehind )
 
     if( dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
     {
-        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
+        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, GetWin(),
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
         return false;
     }
@@ -228,7 +228,7 @@ bool SwFEShell::InsertCol( sal_uInt16 nCnt, bool bBehind )
 
     if( dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
     {
-        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
+        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, GetWin(),
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
         return false;
     }
@@ -237,7 +237,7 @@ bool SwFEShell::InsertCol( sal_uInt16 nCnt, bool bBehind )
 
     if( !CheckSplitCells( *this, nCnt + 1, nsSwTableSearchType::TBLSEARCH_COL ) )
     {
-        ErrorHandler::HandleError( ERR_TBLINSCOL_ERROR,
+        ErrorHandler::HandleError( ERR_TBLINSCOL_ERROR, GetWin(),
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
         return false;
     }
@@ -283,7 +283,7 @@ bool SwFEShell::DeleteCol()
 
     if( dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
     {
-        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
+        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, GetWin(),
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
         return false;
     }
@@ -334,7 +334,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
 
     if( dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
     {
-        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
+        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, GetWin(),
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
         return false;
     }
@@ -453,7 +453,7 @@ sal_uInt16 SwFEShell::MergeTab()
         const SwTableNode* pTableNd = pTableCursor->GetNode().FindTableNode();
         if( dynamic_cast< const SwDDETable* >(&pTableNd->GetTable()) != nullptr )
         {
-            ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
+            ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, GetWin(),
                             ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
         }
         else
@@ -484,7 +484,7 @@ bool SwFEShell::SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight )
 
     if( dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr  )
     {
-        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
+        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, GetWin(),
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
         return false;
     }
@@ -493,7 +493,7 @@ bool SwFEShell::SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight )
 
     if( bVert && !CheckSplitCells( *this, nCnt + 1 ) )
     {
-        ErrorHandler::HandleError( ERR_TBLSPLIT_ERROR,
+        ErrorHandler::HandleError( ERR_TBLSPLIT_ERROR, GetWin(),
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
         return false;
     }
@@ -1276,7 +1276,7 @@ bool SwFEShell::DeleteTableSel()
 
     if( dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
     {
-        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
+        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, GetWin(),
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
         return false;
     }
@@ -2137,7 +2137,7 @@ bool SwFEShell::SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff )
     if( nsTableChgWidthHeightType::WH_FLAG_INSDEL & eType &&
         dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
     {
-        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
+        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, GetWin(),
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
         return false;
     }

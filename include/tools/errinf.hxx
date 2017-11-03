@@ -131,7 +131,8 @@ private:
     static sal_uInt16   HandleError_Impl( sal_uIntPtr lId,
                               sal_uInt16 nFlags,
                               bool bJustCreateString,
-                              OUString & rError);
+                              OUString & rError,
+                              vcl::Window* pParent = nullptr);
 protected:
     virtual bool        CreateString( const ErrorInfo *,
                               OUString &, sal_uInt16& nMask ) const = 0;
@@ -140,7 +141,7 @@ public:
                         ErrorHandler();
     virtual             ~ErrorHandler();
 
-    static sal_uInt16   HandleError ( sal_uIntPtr lId, sal_uInt16 nMask = USHRT_MAX );
+    static sal_uInt16   HandleError ( sal_uIntPtr lId, vcl::Window* pParent = nullptr, sal_uInt16 nMask = USHRT_MAX );
     static bool         GetErrorString( sal_uIntPtr lId, OUString& rStr );
 
     static void         RegisterDisplay( BasicDisplayErrorFunc* );
