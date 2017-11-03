@@ -22,6 +22,30 @@
       "revId": "e3c4a4a24d29c10da234036ea9e9942dd4309a95",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_95b59bef",
+        "filename": "sc/source/core/data/table6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-03T14:51:58Z",
+      "side": 1,
+      "message": "Actually lcl_GetTextWithBreaks() is nonsense there because it works only with an EditTextObject, not sure adhoc how multiline formula result would have to be handled.",
+      "parentUuid": "1a430d35_15052bbb",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 70
+      },
+      "revId": "e3c4a4a24d29c10da234036ea9e9942dd4309a95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
