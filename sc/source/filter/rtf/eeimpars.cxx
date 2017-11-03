@@ -625,12 +625,8 @@ ScEEParser::ScEEParser( EditEngine* pEditP ) :
 
 ScEEParser::~ScEEParser()
 {
-    delete pActEntry;
-    while ( !maList.empty() )
-    {
-        delete maList.back();
-        maList.pop_back();
-    }
+    mxActEntry.reset();
+    maList.clear();
 
     // Don't delete Pool until the lists have been deleted
     pPool->SetSecondaryPool( nullptr );
@@ -639,10 +635,10 @@ ScEEParser::~ScEEParser()
 }
 
 void ScEEParser::NewActEntry( const ScEEParseEntry* pE )
-{   // New free-flying pActEntry
-    pActEntry = new ScEEParseEntry( pPool );
-    pActEntry->aSel.nStartPara = (pE ? pE->aSel.nEndPara + 1 : 0);
-    pActEntry->aSel.nStartPos = 0;
+{   // New free-flying mxActEntry
+    mxActEntry.reset(new ScEEParseEntry(pPool));
+    mxActEntry->aSel.nStartPara = (pE ? pE->aSel.nEndPara + 1 : 0);
+    mxActEntry->aSel.nStartPos = 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -101,8 +101,8 @@ protected:
     EditEngine*         pEdit;
     SfxItemPool*        pPool;
     SfxItemPool*        pDocPool;
-    ::std::vector< ScEEParseEntry* > maList;
-    ScEEParseEntry*     pActEntry;
+    std::vector<std::shared_ptr<ScEEParseEntry>> maList;
+    std::shared_ptr<ScEEParseEntry> mxActEntry;
     ColWidthsMap        maColWidths;
     int                 nRtfLastToken;
     SCCOL               nColCnt;
@@ -124,8 +124,8 @@ public:
                                 { nCols = nColMax; nRows = nRowMax; }
 
     size_t                  ListSize() const{ return maList.size(); }
-    ScEEParseEntry*         ListEntry( size_t index ) { return maList[ index ]; }
-    const ScEEParseEntry*   ListEntry( size_t index ) const { return maList[ index ]; }
+    ScEEParseEntry*         ListEntry( size_t index ) { return maList[index].get(); }
+    const ScEEParseEntry*   ListEntry( size_t index ) const { return maList[index].get(); }
 };
 
 #endif
