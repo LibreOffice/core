@@ -2482,7 +2482,7 @@ bool GtkSalFrame::ShowTooltip(const OUString& rHelpText, const tools::Rectangle&
 #if GTK_CHECK_VERSION(3,12,0)
 namespace
 {
-    void set_pointing_to(GtkPopover *pPopOver, const tools::Rectangle& rHelpArea)
+    void set_pointing_to(GtkPopover *pPopOver, const tools::Rectangle& rHelpArea, const SalFrameGeometry& rGeometry)
     {
         GdkRectangle aRect;
         aRect.x = rHelpArea.Left();
@@ -2502,6 +2502,9 @@ namespace
                 aRect.height = rHelpArea.GetHeight();
                 break;
         }
+
+        if (AllSettings::GetLayoutRTL())
+            aRect.x = rGeometry.nWidth-aRect.width-1-aRect.x;
 
         gtk_popover_set_pointing_to(pPopOver, &aRect);
     }
@@ -2525,7 +2528,7 @@ sal_uIntPtr GtkSalFrame::ShowPopover(const OUString& rHelpText, const tools::Rec
     else if (nFlags & QuickHelpFlags::Right)
         gtk_popover_set_position(GTK_POPOVER(pWidget), GTK_POS_LEFT);
 
-    set_pointing_to(GTK_POPOVER(pWidget), rHelpArea);
+    set_pointing_to(GTK_POPOVER(pWidget), rHelpArea, maGeometry);
 
     gtk_popover_set_modal(GTK_POPOVER(pWidget), false);
 
@@ -2545,7 +2548,7 @@ bool GtkSalFrame::UpdatePopover(sal_uIntPtr nId, const OUString& rHelpText, cons
 #if GTK_CHECK_VERSION(3,12,0)
     GtkWidget *pWidget = reinterpret_cast<GtkWidget*>(nId);
 
-    set_pointing_to(GTK_POPOVER(pWidget), rHelpArea);
+    set_pointing_to(GTK_POPOVER(pWidget), rHelpArea, maGeometry);
 
     GtkWidget *pLabel = gtk_bin_get_child(GTK_BIN(pWidget));
     OString sUTF = OUStringToOString(rHelpText, RTL_TEXTENCODING_UTF8);
