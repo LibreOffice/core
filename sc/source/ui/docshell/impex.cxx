@@ -1764,7 +1764,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;X invalid nCol=" << nCol);
                                 nCol = std::max<SCCOL>(0, std::min<SCCOL>(nCol, MAXCOL));
-                                bInvalidCol = true;
+                                bInvalidCol = bOverflowCol = true;
                             }
                             break;
                         }
@@ -1776,7 +1776,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;Y invalid nRow=" << nRow);
                                 nRow = std::max<SCROW>(0, std::min<SCROW>(nRow, MAXROW));
-                                bInvalidRow = true;
+                                bInvalidRow = bOverflowRow = true;
                             }
                             break;
                         }
@@ -1788,7 +1788,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;C invalid nRefCol=" << nRefCol);
                                 nRefCol = std::max<SCCOL>(0, std::min<SCCOL>(nRefCol, MAXCOL));
-                                bInvalidRefCol = true;
+                                bInvalidRefCol = bOverflowCol = true;
                             }
                             break;
                         }
@@ -1800,7 +1800,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;R invalid nRefRow=" << nRefRow);
                                 nRefRow = std::max<SCROW>(0, std::min<SCROW>(nRefRow, MAXROW));
-                                bInvalidRefRow = true;
+                                bInvalidRefRow = bOverflowRow = true;
                             }
                             break;
                         }
@@ -1925,7 +1925,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;X invalid nCol=" << nCol);
                                 nCol = std::max<SCCOL>(0, std::min<SCCOL>(nCol, MAXCOL));
-                                bInvalidCol = true;
+                                bInvalidCol = bOverflowCol = true;
                             }
                             break;
                         }
@@ -1937,7 +1937,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;Y invalid nRow=" << nRow);
                                 nRow = std::max<SCROW>(0, std::min<SCROW>(nRow, MAXROW));
-                                bInvalidRow = true;
+                                bInvalidRow = bOverflowRow = true;
                             }
                             break;
                         }

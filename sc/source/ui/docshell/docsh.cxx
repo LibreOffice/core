@@ -1345,6 +1345,8 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         else if (aFltName == pFilterSylk)
         {
             ErrCode eError = SCERR_IMPORT_UNKNOWN;
+            bool bOverflowRow, bOverflowCol, bOverflowCell;
+            bOverflowRow = bOverflowCol = bOverflowCell = false;
             if( !rMedium.IsStorage() )
             {
                 ScImportExport aImpEx( &aDocument );
@@ -1358,6 +1360,10 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     aDocument.StartAllListeners();
                     sc::SetFormulaDirtyContext aCxt;
                     aDocument.SetAllFormulasDirty(aCxt);
+
+                    bOverflowRow = aImpEx.IsOverflowRow();
+                    bOverflowCol = aImpEx.IsOverflowCol();
+                    bOverflowCell = aImpEx.IsOverflowCell();
                 }
                 else
                 {
@@ -1367,6 +1373,14 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
             if ( eError != ERRCODE_NONE && !GetError() )
                 SetError(eError);
+            else if (!GetError() && (bOverflowRow || bOverflowCol || bOverflowCell))
+            {
+                // precedence: row, column, cell
+                ErrCode nWarn = (bOverflowRow ? SCWARN_IMPORT_ROW_OVERFLOW :
+                        (bOverflowCol ? SCWARN_IMPORT_COLUMN_OVERFLOW :
+                         SCWARN_IMPORT_CELL_OVERFLOW));
+                SetError(nWarn);
+            }
             bSetColWidths = true;
             bSetSimpleTextColWidths = true;
             bSetRowHeights = true;
