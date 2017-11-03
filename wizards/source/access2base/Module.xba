@@ -445,7 +445,7 @@ Private Function _FindPattern(ByVal psPattern As Variant, Optional ByRef plStart
 
 &apos;	Common patterns
 Const cstComment = &quot;(&apos;|\bREM\b)[^\n]*$&quot;
-Const cstString = &quot;&quot;&quot;[^&quot;&quot;]*&quot;&quot;&quot;
+Const cstString = &quot;&quot;&quot;[^&quot;&quot;\n]*&quot;&quot;&quot;
 Const cstBeginStatement = &quot;(^|:|\bthen\b|\belse\b|\n)[ \t]*&quot;
 Const cstEndStatement = &quot;[ \t]*($|:|\bthen\b|\belse\b|\n)&quot;
 Const cstContinuation = &quot;[ \t]_\n&quot;
