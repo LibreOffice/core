@@ -8,6 +8,7 @@
  */
 
 #include <test/sheet/xarealink.hxx>
+#include <test/cppunitasserthelper.hxx>
 
 #include <com/sun/star/sheet/XAreaLink.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
@@ -17,26 +18,6 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
-
-CPPUNIT_NS_BEGIN
-
-template<> struct assertion_traits<table::CellRangeAddress>
-{
-    static bool equal(const table::CellRangeAddress& x, const table::CellRangeAddress& y)
-    {
-        return x == y;
-    }
-
-    static std::string toString( const table::CellRangeAddress& x )
-    {
-        OStringStream ost;
-        ost << "Sheet: " << x.Sheet << " StartColumn: " << x.StartColumn << " StartRow: " << x.StartRow
-            << " EndColumn: " << x.EndColumn << " EndRow: " << x.EndRow;
-        return ost.str();
-    }
-};
-
-CPPUNIT_NS_END
 
 namespace apitest {
 
