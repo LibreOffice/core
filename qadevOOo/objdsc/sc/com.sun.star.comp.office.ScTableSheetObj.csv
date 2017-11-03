@@ -133,7 +133,6 @@
 "ScTableSheetObj";"com::sun::star::util::XIndent";"incrementIndent()"
 "ScTableSheetObj";"com::sun::star::sheet::XMultipleOperation";"setTableOperation()"
 "ScTableSheetObj";"com::sun::star::table::XAutoFormattable";"autoFormat()"
-"ScTableSheetObj";"com::sun::star::sheet::XSheetCellRange";"getSpreadsheet()"
 "ScTableSheetObj";"com::sun::star::sheet::Spreadsheet";"IsVisible"
 "ScTableSheetObj";"com::sun::star::sheet::Spreadsheet";"PageStyle"
 "ScTableSheetObj";"com::sun::star::sheet::Spreadsheet";"AutomaticPrintArea#optional"
