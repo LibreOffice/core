@@ -48,6 +48,8 @@ private:
     const bool m_bPerParagraph;
     const std::function<void()> m_aParagraphSignHandler;
 
+    sal_Int32 m_nCurrentSelectedCategory;
+
     DECL_LINK(ButtonClicked, Button*, void);
     DECL_LINK(SelectClassificationHdl, ListBox&, void);
     DECL_LINK(SelectMarkingHdl, ListBox&, void);

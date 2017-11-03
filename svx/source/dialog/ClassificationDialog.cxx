@@ -9,13 +9,16 @@
  */
 
 #include <svx/ClassificationDialog.hxx>
+#include <svx/strings.hrc>
+#include <svx/dialmgr.hxx>
+
 #include <editeng/flditem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/section.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/wghtitem.hxx>
 #include <svl/itemset.hxx>
-
+#include <vcl/msgbox.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/uri.hxx>
@@ -371,9 +374,9 @@ void ClassificationDialog::readIn(std::vector<ClassificationResult> const & rInp
     sal_Int32 nParagraph = -1;
     for (ClassificationResult const & rClassificationResult : rInput)
     {
-        OUString msAbbreviatedName = rClassificationResult.msAbbreviatedName;
-        if (msAbbreviatedName.isEmpty())
-            msAbbreviatedName = maHelper.GetAbbreviatedBACName(rClassificationResult.msName);
+        OUString sAbbreviatedName = rClassificationResult.msAbbreviatedName;
+        if (sAbbreviatedName.isEmpty())
+            sAbbreviatedName = maHelper.GetAbbreviatedBACName(rClassificationResult.msName);
 
         switch (rClassificationResult.meType)
         {
@@ -386,21 +389,23 @@ void ClassificationDialog::readIn(std::vector<ClassificationResult> const & rInp
             case svx::ClassificationType::CATEGORY:
             {
                 m_pClassificationListBox->SelectEntry(rClassificationResult.msName);
+                m_nCurrentSelectedCategory = m_pClassificationListBox->GetSelectedEntryPos();
                 m_pInternationalClassificationListBox->SelectEntryPos(m_pClassificationListBox->GetSelectedEntryPos());
-                insertField(rClassificationResult.meType, msAbbreviatedName, rClassificationResult.msName, rClassificationResult.msIdentifier);
+
+                insertField(rClassificationResult.meType, sAbbreviatedName, rClassificationResult.msName, rClassificationResult.msIdentifier);
             }
             break;
 
             case svx::ClassificationType::MARKING:
             {
                 m_pMarkingListBox->SelectEntry(rClassificationResult.msName);
-                insertField(rClassificationResult.meType, msAbbreviatedName, rClassificationResult.msName, rClassificationResult.msIdentifier);
+                insertField(rClassificationResult.meType, sAbbreviatedName, rClassificationResult.msName, rClassificationResult.msIdentifier);
             }
             break;
 
             case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
             {
-                insertField(rClassificationResult.meType, msAbbreviatedName, rClassificationResult.msName, rClassificationResult.msIdentifier);
+                insertField(rClassificationResult.meType, sAbbreviatedName, rClassificationResult.msName, rClassificationResult.msIdentifier);
             }
             break;
 
@@ -485,11 +490,16 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
 IMPL_LINK(ClassificationDialog, SelectClassificationHdl, ListBox&, rBox, void)
 {
     const sal_Int32 nSelected = rBox.GetSelectedEntryPos();
-    if (nSelected >= 0)
+    if (nSelected >= 0 && m_nCurrentSelectedCategory != nSelected)
     {
         std::unique_ptr<EditTextObject> pEditText(m_pEditWindow->pEdEngine->CreateTextObject());
         std::vector<editeng::Section> aSections;
         pEditText->GetAllSections(aSections);
+
+        // if we are replacing an existing field
+        bool bReplaceExisting = false;
+        // selection of the existing field, which will be replaced
+        ESelection aExistingFieldSelection;
 
         for (editeng::Section const & rSection : aSections)
         {
@@ -499,9 +509,24 @@ IMPL_LINK(ClassificationDialog, SelectClassificationHdl, ListBox&, rBox, void)
                 const ClassificationField* pClassificationField = dynamic_cast<const ClassificationField*>(pFieldItem->GetField());
                 if (pClassificationField && pClassificationField->meType == ClassificationType::CATEGORY)
                 {
-                    m_pEditWindow->pEdView->SetSelection(ESelection(rSection.mnParagraph, rSection.mnStart, rSection.mnParagraph, rSection.mnEnd));
+                    aExistingFieldSelection = ESelection(rSection.mnParagraph, rSection.mnStart,
+                                                         rSection.mnParagraph, rSection.mnEnd);
+                    bReplaceExisting = true;
                 }
             }
+        }
+
+        if (bReplaceExisting)
+        {
+            ScopedVclPtrInstance<QueryBox> aQueryBox(this, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, SvxResId(RID_CLASSIFICATION_CHANGE_CATEGORY));
+            if (aQueryBox->Execute() == RET_NO)
+            {
+                // Revert to previosuly selected
+                m_pInternationalClassificationListBox->SelectEntryPos(m_nCurrentSelectedCategory);
+                m_pClassificationListBox->SelectEntryPos(m_nCurrentSelectedCategory);
+                return;
+            }
+            m_pEditWindow->pEdView->SetSelection(aExistingFieldSelection);
         }
 
         const OUString aFullString = maHelper.GetBACNames()[nSelected];
@@ -509,8 +534,10 @@ IMPL_LINK(ClassificationDialog, SelectClassificationHdl, ListBox&, rBox, void)
         const OUString aIdentifierString = maHelper.GetBACIdentifiers()[nSelected];
         insertField(ClassificationType::CATEGORY, aAbbreviatedString, aFullString, aIdentifierString);
 
+        // Change category to the new selection
         m_pInternationalClassificationListBox->SelectEntryPos(nSelected);
         m_pClassificationListBox->SelectEntryPos(nSelected);
+        m_nCurrentSelectedCategory = nSelected;
     }
 }
 
