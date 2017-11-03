@@ -35,6 +35,7 @@
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <o3tl/make_unique.hxx>
 #include <vcl/svapp.hxx>
@@ -694,6 +695,63 @@ namespace emfplushelper
 
     EmfPlusHelperData::~EmfPlusHelperData()
     {
+    }
+
+    void EmfPlusHelperData::combineClip(int combineMode, ::basegfx::B2DPolyPolygon& polygon)
+    {
+        switch (combineMode)
+        {
+        case EmfPlusCombineModeReplace:
+        case EmfPlusCombineModeUnion:
+        case EmfPlusCombineModeComplement:
+        {
+            HandleNewClipRegion(polygon, mrTargetHolders, mrPropertyHolders);
+            break;
+        }
+        case EmfPlusCombineModeXOR:
+        {
+            basegfx::B2DPolyPolygon aOriginalPolyPolygon(
+                        mrPropertyHolders.Current().getClipPolyPolygon());
+
+            if (!aOriginalPolyPolygon.count())
+            {
+                HandleNewClipRegion(polygon, mrTargetHolders, mrPropertyHolders);
+            }
+            else
+            {
+                aOriginalPolyPolygon.append(polygon);
+                // use existing tooling from wmfemfhelper
+                HandleNewClipRegion(aOriginalPolyPolygon, mrTargetHolders, mrPropertyHolders);
+            }
+
+            break;
+        }
+        case EmfPlusCombineModeIntersect:
+        {
+            const basegfx::B2DPolyPolygon aOriginalPolyPolygon(
+                        mrPropertyHolders.Current().getClipPolyPolygon());
+
+            basegfx::B2DPolyPolygon aClippedPolyPolygon;
+            if (aOriginalPolyPolygon.count())
+            {
+
+                aClippedPolyPolygon = basegfx::utils::clipPolyPolygonOnPolyPolygon(
+                            aOriginalPolyPolygon,
+                            polygon,
+                            true,
+                            false);
+            }
+
+            // use existing tooling from wmfemfhelper
+            HandleNewClipRegion(aClippedPolyPolygon, mrTargetHolders, mrPropertyHolders);
+            break;
+        }
+        case EmfPlusCombineModeExclude:
+        {
+            // Not doing anything is better then including exactly what we wanted to exclude.
+            break;
+        }
+        }
     }
 
     void EmfPlusHelperData::processEmfPlusData(
@@ -1451,7 +1509,7 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+ SetClipRect combine mode: " << combineMode);
 #if OSL_DEBUG_LEVEL > 1
                         if (combineMode > 1) {
-                            SAL_INFO("drawinglayer", "EMF+ TODO combine mode > 1");
+                            SAL_WARN("drawinglayer", "EMF+ \tSetClipRect TODO combine mode > 1");
                         }
 #endif
 
@@ -1470,10 +1528,7 @@ namespace emfplushelper
                                         mappedPoint.getX() + mappedSize.getX(),
                                         mappedPoint.getY() + mappedSize.getY()))));
 
-                        // use existing tooling from wmfemfhelper
-                        HandleNewClipRegion(polyPolygon, mrTargetHolders, mrPropertyHolders);
-                        // polyPolygon.transform(rState.mapModeTransform);
-                        // updateClipping(polyPolygon, rFactoryParms, combineMode == 1);
+                        combineClip(combineMode, polyPolygon);
                         break;
                     }
                     case EmfPlusRecordTypeSetClipPath:
@@ -1486,26 +1541,7 @@ namespace emfplushelper
                         ::basegfx::B2DPolyPolygon& clipPoly(path.GetPolygon(*this));
                         // clipPoly.transform(rState.mapModeTransform);
 
-                        switch (combineMode)
-                        {
-                            case EmfPlusCombineModeReplace:
-                            case EmfPlusCombineModeIntersect:
-                            case EmfPlusCombineModeUnion: // Is this, EmfPlusCombineModeXOR and EmfPlusCombineModeComplement correct?
-                            case EmfPlusCombineModeXOR:
-                            case EmfPlusCombineModeComplement:
-                            {
-                                // use existing tooling from wmfemfhelper
-                                HandleNewClipRegion(clipPoly, mrTargetHolders, mrPropertyHolders);
-                                // updateClipping(clipPoly, rFactoryParms, combineMode == 1);
-                                break;
-                            }
-                            case EmfPlusCombineModeExclude:
-                            {
-                                // Not doing anything is better then including exactly what we wanted to exclude.
-                                break;
-                            }
-                        }
-
+                        combineClip(combineMode, clipPoly);
                         break;
                     }
                     case EmfPlusRecordTypeSetClipRegion:
@@ -1524,7 +1560,7 @@ namespace emfplushelper
                         }
                         else
                         {
-                            SAL_INFO("drawinglayer", "EMF+\tTODO");
+                            SAL_WARN("drawinglayer", "EMF+\tTODO");
                         }
                         break;
                     }
