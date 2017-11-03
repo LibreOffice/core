@@ -76,7 +76,7 @@ OUString getStringRepresentation(std::vector<ClassificationResult> const & rResu
             case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
             case svx::ClassificationType::MARKING:
             case svx::ClassificationType::TEXT:
-                sRepresentation += rResult.msString;
+                sRepresentation += rResult.msName;
             break;
 
             case svx::ClassificationType::PARAGRAPH:
@@ -109,10 +109,10 @@ void writeResultToXml(tools::XmlWriter & rXmlWriter,
         }
         rXmlWriter.attribute("type", sType);
         rXmlWriter.startElement("string");
-        rXmlWriter.content(rResult.msString);
+        rXmlWriter.content(rResult.msName);
         rXmlWriter.endElement();
         rXmlWriter.startElement("abbreviatedString");
-        rXmlWriter.content(rResult.msAbbreviatedString);
+        rXmlWriter.content(rResult.msAbbreviatedName);
         rXmlWriter.endElement();
         rXmlWriter.endElement();
     }
@@ -311,7 +311,7 @@ void ClassificationDialog::readRecentlyUsed()
                             }
                             aWalker.parent();
 
-                            aResults.push_back({ eType, sString, sAbbreviatedString });
+                            aResults.push_back({ eType, sString, sAbbreviatedString, OUString() });
                         }
                     }
                     aWalker.next();
