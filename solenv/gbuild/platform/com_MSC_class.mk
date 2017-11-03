@@ -55,7 +55,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		-Fd$(PDBFILE) \
 		$(PCHFLAGS) \
 		$(if $(COMPILER_TEST),,$(gb_COMPILERDEPFLAGS)) \
-		-I$(dir $(3)) \
 		$(INCLUDE) \
 		$(if $(filter YES,$(CXXOBJECT_X64)), -U_X86_ -D_AMD64_,) \
 		-c $(3) \
@@ -83,7 +82,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(EXTERNAL_CODE),$(if $(COM_IS_CLANG),-Wno-undef),$(gb_DEFS_INTERNAL)) \
 		$(gb_LTOFLAGS) \
 		$(gb_COMPILERDEPFLAGS) \
-		-I$(dir $(3)) \
 		$(6) \
 		-c $(3) \
 		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(call gb_PrecompiledHeader_get_dep_target_tmp,$(2)),$(1),$(3))
