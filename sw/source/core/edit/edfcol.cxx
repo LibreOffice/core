@@ -1810,6 +1810,100 @@ uno::Reference<text::XTextField> lcl_GetParagraphMetadataFieldAtIndex(const SwDo
     return xTextField;
 }
 
+void SwEditShell::RestoreMetadataFields()
+{
+    SwDocShell* pDocShell = GetDoc()->GetDocShell();
+    if (!pDocShell || !IsParagraphSignatureValidationEnabled())
+        return;
+
+    // Prevent recursive validation since this is triggered on node updates, which we do below.
+    const bool bOldValidationFlag = SetParagraphSignatureValidation(false);
+    comphelper::ScopeGuard const g([this, bOldValidationFlag] () {
+            SetParagraphSignatureValidation(bOldValidationFlag);
+        });
+
+    uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
+    const uno::Reference<text::XTextDocument> xDoc(xModel, uno::UNO_QUERY);
+    uno::Reference<text::XText> xParent = xDoc->getText();
+    uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(xParent, uno::UNO_QUERY);
+    if (!xParagraphEnumerationAccess.is())
+        return;
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphEnumerationAccess->createEnumeration();
+    if (!xParagraphs.is())
+        return;
+    while (xParagraphs->hasMoreElements())
+    {
+        uno::Reference<text::XTextContent> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
+        const css::uno::Reference<css::rdf::XResource> xSubject(xParagraph, uno::UNO_QUERY);
+
+        std::map<OUString, SignatureDescr> aSignatures;
+
+        std::vector<svx::ClassificationResult> aResult;
+
+        const sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
+
+        const OUString sBlank("");
+        const std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, MetaNS, xSubject);
+        for (const auto& pair : aStatements)
+        {
+            const OUString aName = pair.first;
+            const OUString aValue = pair.second;
+
+            if (aKeyCreator.isMarkingTextKey(aName))
+            {
+                aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, sBlank });
+            }
+            else if (aKeyCreator.isCategoryNameKey(aName) || aKeyCreator.isCategoryIdentifierKey(aName))
+            {
+                aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
+            }
+            else if (aKeyCreator.isMarkingKey(aName))
+            {
+                aResult.push_back({ svx::ClassificationType::MARKING, aValue, sBlank, sBlank });
+            }
+            else if (aKeyCreator.isIntellectualPropertyPartKey(aName))
+            {
+                // aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, xTextRange->getString(), sBlank, sBlank });
+            }
+            else if (aName.startsWith(ParagraphSignatureRDFNamespace))
+            {
+                OUString sSuffix = aName.copy(ParagraphSignatureRDFNamespace.getLength());
+                sal_Int32 index = sSuffix.indexOf(":");
+                if (index >= 0)
+                {
+                    OUString id = sSuffix.copy(0, index);
+                    OUString type = sSuffix.copy(index);
+                    if (type == ParagraphSignatureDateRDFName)
+                        aSignatures[id].msDate = aValue;
+                    else if (type == ParagraphSignatureUsageRDFName)
+                        aSignatures[id].msUsage = aValue;
+                    else if (type == ParagraphSignatureDigestRDFName)
+                        aSignatures[id].msSignature = aValue;
+                }
+            }
+        }
+
+        for (const auto& pair : aSignatures)
+        {
+            uno::Reference<text::XTextField> xField = lcl_findFieldByRDF(xModel, xParagraph, ParagraphSignatureIdRDFName, pair.first);
+            if (!xField.is())
+            {
+                uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
+                xField = uno::Reference<text::XTextField>(xMultiServiceFactory->createInstance(MetadataFieldServiceName), uno::UNO_QUERY);
+
+                // Add the signature at the end.
+                xField->attach(xParagraph->getAnchor()->getEnd());
+
+                const css::uno::Reference<css::rdf::XResource> xSubject(xField, uno::UNO_QUERY);
+                SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xSubject, ParagraphSignatureIdRDFName, pair.first);
+
+                const OString utf8Text = lcl_getParagraphBodyText(xParagraph);
+                lcl_UpdateParagraphSignatureField(GetDoc(), xModel, xParagraph, xField, utf8Text);
+            }
+        }
+    }
+}
+
 bool SwEditShell::IsCursorInParagraphMetadataField() const
 {
     SwTextNode* pNode = GetCursor()->Start()->nNode.GetNode().GetTextNode();
