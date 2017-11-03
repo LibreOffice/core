@@ -799,6 +799,9 @@ DECLARE_ODFIMPORT_TEST(testWordAsCharShape, "Word2010AsCharShape.odt")
     uno::Reference<drawing::XShape> const xShape(getShape(1));
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, getProperty<text::TextContentAnchorType>(xShape, "AnchorType"));
     CPPUNIT_ASSERT_EQUAL(text::VertOrientation::TOP, getProperty<sal_Int16>(xShape, "VertOrient"));
+    // also, the paragraph default fo:bottom-margin was wrongly applied to
+    // the shape
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xShape, "BottomMargin"));
 }
 
 DECLARE_ODFIMPORT_TEST(testTdf100033_2, "tdf100033_2.odt")
