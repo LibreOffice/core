@@ -1895,11 +1895,10 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
     // here until we need a more generic solution.
     bool bIsWrap = Element == static_cast<sal_Int32>(NMSP_vmlWord | XML_wrap);
     bool bIsSignatureLine = Element == static_cast<sal_Int32>(NMSP_vmlOffice | XML_signatureline);
-    bool bIsShapeSent = static_cast<OOXMLFastContextHandlerShape*>(mpParent)->isShapeSent();
     bool bSkipImages = getDocument()->IsSkipImages() && oox::getNamespace(Element) == static_cast<sal_Int32>(NMSP_dml) &&
         !((oox::getBaseToken(Element) == XML_linkedTxbx) || (oox::getBaseToken(Element) == XML_txbx));
 
-    if ( bInNamespaces && ((!bIsWrap && !bIsSignatureLine) || bIsShapeSent) )
+    if ( bInNamespaces && ((!bIsWrap && !bIsSignatureLine) || static_cast<OOXMLFastContextHandlerShape*>(mpParent)->isShapeSent()) )
         xResult.set(OOXMLFactory::createFastChildContextFromStart(this, Element));
     else if (mxContext.is()  && !bSkipImages)
     {
