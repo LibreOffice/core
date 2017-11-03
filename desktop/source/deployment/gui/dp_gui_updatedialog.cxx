@@ -1064,7 +1064,7 @@ bool UpdateDialog::isIgnoredUpdate( UpdateDialog::Index * index )
 }
 
 
-void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, bool bIgnoreAll )
+void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index const *pIndex, bool bIgnore, bool bIgnoreAll )
 {
     OUString aExtensionID;
     OUString aVersion;

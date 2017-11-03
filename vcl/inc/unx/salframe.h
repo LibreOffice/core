@@ -149,9 +149,9 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandl
     bool            HandleKeyEvent      ( XKeyEvent         *pEvent );
     bool            HandleMouseEvent    ( XEvent            *pEvent );
     bool            HandleFocusEvent    ( XFocusChangeEvent const *pEvent );
-    bool            HandleExposeEvent   ( XEvent            *pEvent );
+    bool            HandleExposeEvent   ( XEvent const      *pEvent );
     bool            HandleSizeEvent     ( XConfigureEvent   *pEvent );
-    bool            HandleStateEvent    ( XPropertyEvent    *pEvent );
+    bool            HandleStateEvent    ( XPropertyEvent const *pEvent );
     bool            HandleReparentEvent ( XReparentEvent    *pEvent );
     bool            HandleClientMessage ( XClientMessageEvent*pEvent );
 
@@ -165,12 +165,12 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandl
 
     void            updateWMClass();
 public:
-    X11SalFrame( SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle, SystemParentData* pSystemParent = nullptr );
+    X11SalFrame( SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle, SystemParentData const * pSystemParent = nullptr );
     virtual ~X11SalFrame() override;
 
     bool            Dispatch( XEvent *pEvent );
     void            Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nScreen,
-                          SystemParentData* pParentData, bool bUseGeometry = false );
+                          SystemParentData const * pParentData, bool bUseGeometry = false );
 
     SalDisplay* GetDisplay() const
     {
@@ -191,7 +191,7 @@ public:
     Cursor                  GetCursor() const { return hCursor_; }
     bool                    IsCaptured() const { return nCaptured_ == 1; }
 #if !defined(__synchronous_extinput__)
-    void                    HandleExtTextEvent (XClientMessageEvent *pEvent);
+    void                    HandleExtTextEvent (XClientMessageEvent const *pEvent);
 #endif
     bool                    IsOverrideRedirect() const;
     bool                    IsChildWindow() const { return bool(nStyle_ & (SalFrameStyleFlags::PLUG|SalFrameStyleFlags::SYSTEMCHILD)); }

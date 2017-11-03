@@ -358,7 +358,7 @@ OUString getAlgorithmDescription(SECAlgorithmID const *aid)
     return OUString::createFromAscii( pDesc ) ;
 }
 
-css::uno::Sequence< sal_Int8 > getThumbprint(CERTCertificate *pCert, SECOidTag id)
+css::uno::Sequence< sal_Int8 > getThumbprint(CERTCertificate const *pCert, SECOidTag id)
 {
     if( pCert != nullptr )
     {

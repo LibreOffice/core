@@ -382,7 +382,7 @@ static bool lcl_SelectAppIconPixmap( SalDisplay const *pDisplay, SalX11Screen nX
     return true;
 }
 
-void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen, SystemParentData* pParentData, bool bUseGeometry )
+void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen, SystemParentData const * pParentData, bool bUseGeometry )
 {
     if( nXScreen.getXScreen() >= GetDisplay()->GetXScreenCount() )
         nXScreen = GetDisplay()->GetDefaultXScreen();
@@ -809,7 +809,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
 }
 
 X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
-                          SystemParentData* pSystemParent ) :
+                          SystemParentData const * pSystemParent ) :
     m_nXScreen( 0 )
 {
     GenericUnixSalData *pData = GetGenericUnixSalData();
@@ -2278,7 +2278,7 @@ void X11SalFrame::SetPointerPos(long nX, long nY)
 // delay handling of extended text input
 #if !defined(__synchronous_extinput__)
 void
-X11SalFrame::HandleExtTextEvent (XClientMessageEvent *pEvent)
+X11SalFrame::HandleExtTextEvent (XClientMessageEvent const *pEvent)
 {
     #if SAL_TYPES_SIZEOFLONG > 4
     void* pExtTextEvent = reinterpret_cast<void*>(  (pEvent->data.l[0] & 0xffffffff)
@@ -3375,7 +3375,7 @@ bool X11SalFrame::HandleFocusEvent( XFocusChangeEvent const *pEvent )
     return false;
 }
 
-bool X11SalFrame::HandleExposeEvent( XEvent *pEvent )
+bool X11SalFrame::HandleExposeEvent( XEvent const *pEvent )
 {
     XRectangle  aRect = { 0, 0, 0, 0 };
     sal_uInt16  nCount = 0;
@@ -3780,7 +3780,7 @@ bool X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     return true;
 }
 
-bool X11SalFrame::HandleStateEvent( XPropertyEvent *pEvent )
+bool X11SalFrame::HandleStateEvent( XPropertyEvent const *pEvent )
 {
     Atom          actual_type;
     int           actual_format;

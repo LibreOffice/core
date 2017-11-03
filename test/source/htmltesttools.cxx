@@ -11,7 +11,7 @@
 
 #include <memory>
 
-htmlDocPtr HtmlTestTools::parseHtml(utl::TempFile& aTempFile)
+htmlDocPtr HtmlTestTools::parseHtml(utl::TempFile const & aTempFile)
 {
     SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
     htmlDocPtr doc = parseHtmlStream(&aFileStream);

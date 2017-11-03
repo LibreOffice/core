@@ -978,7 +978,7 @@ LwpDrawTextBox::~LwpDrawTextBox()
     }
 }
 
-void LwpDrawTextBox::SetFontStyle(rtl::Reference<XFFont> const & pFont, SdwTextBoxRecord* pRec)
+void LwpDrawTextBox::SetFontStyle(rtl::Reference<XFFont> const & pFont, SdwTextBoxRecord const * pRec)
 {
     // color
     XFColor aXFColor(pRec->aTextColor.nR, pRec->aTextColor.nG,

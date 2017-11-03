@@ -81,7 +81,7 @@ public:
     /**
      * @descr   Use base64 stream.
      */
-    void    SetImageData(sal_uInt8 *buf, int len);
+    void    SetImageData(sal_uInt8 const *buf, int len);
 
     /**
      * @descr   Output image.

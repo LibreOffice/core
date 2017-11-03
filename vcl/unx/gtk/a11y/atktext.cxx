@@ -58,7 +58,7 @@ text_type_from_boundary(AtkTextBoundary boundary_type)
 
 static gchar *
 adjust_boundaries( css::uno::Reference<css::accessibility::XAccessibleText> const & pText,
-                   accessibility::TextSegment& rTextSegment,
+                   accessibility::TextSegment const & rTextSegment,
                    AtkTextBoundary  boundary_type,
                    gint * start_offset, gint * end_offset )
 {

@@ -33,7 +33,7 @@ class X11OpenGLSalVirtualDevice : public SalVirtualDevice
 
 public:
     X11OpenGLSalVirtualDevice( SalGraphics const *pGraphics,
-                               long &nDX, long &nDY,
+                               long nDX, long nDY,
                                const SystemGraphicsData *pData,
                                X11SalGraphics* pNewGraphics);
     virtual ~X11OpenGLSalVirtualDevice() override;

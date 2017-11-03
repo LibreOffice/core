@@ -130,22 +130,22 @@ private:
     void makeLine();
     void makeHidden(Hidden *hbox);
     void makeFootnote(Footnote *hbox);
-    void makeAutoNum(AutoNum *hbox);
+    void makeAutoNum(AutoNum const *hbox);
     void makeShowPageNum();
     void makeMailMerge(MailMerge *hbox);
     void makeOutline(Outline const *hbox);
 
     /* --------- Styles Parsing ------------ */
     void makePageStyle();
-    void makeColumns(ColumnDef *);
-    void makeTStyle(CharShape *);
-    void makePStyle(ParaShape *);
+    void makeColumns(ColumnDef const *);
+    void makeTStyle(CharShape const *);
+    void makePStyle(ParaShape const *);
     void makeFStyle(FBoxStyle *);
     void makeCaptionStyle(FBoxStyle *);
     void makeDrawStyle(HWPDrawingObject *,FBoxStyle *);
     void makeTableStyle(Table *);
-    void parseCharShape(CharShape *);
-    void parseParaShape(ParaShape *);
+    void parseCharShape(CharShape const *);
+    void parseParaShape(ParaShape const *);
     static char* getTStyleName(int, char *);
     static char* getPStyleName(int, char *);
 };

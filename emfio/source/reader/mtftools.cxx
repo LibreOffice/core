@@ -180,7 +180,7 @@ namespace emfio
 
     }
 
-    WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
+    WinMtfFontStyle::WinMtfFontStyle( LOGFONTW const & rFont )
     {
         rtl_TextEncoding eCharSet;
         if ((rFont.alfFaceName == "Symbol")

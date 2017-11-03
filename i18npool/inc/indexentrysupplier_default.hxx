@@ -66,7 +66,7 @@ public:
     IndexTable();
     ~IndexTable();
 
-    void init(sal_Unicode start_, sal_Unicode end_, IndexKey* keys, sal_Int16 key_count, Index *index);
+    void init(sal_Unicode start_, sal_Unicode end_, IndexKey const * keys, sal_Int16 key_count, Index *index);
 
     sal_Unicode start;
     sal_Unicode end;

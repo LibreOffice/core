@@ -199,7 +199,7 @@ void lcl_computeCellBorders( const PropertyMapPtr& pTableBorders, const Property
 
 #ifdef DEBUG_WRITERFILTER
 
-void lcl_debug_BorderLine(table::BorderLine & rLine)
+void lcl_debug_BorderLine(table::BorderLine const & rLine)
 {
     TagLogger::getInstance().startElement("BorderLine");
     TagLogger::getInstance().attribute("Color", rLine.Color);
@@ -209,7 +209,7 @@ void lcl_debug_BorderLine(table::BorderLine & rLine)
     TagLogger::getInstance().endElement();
 }
 
-void lcl_debug_TableBorder(table::TableBorder & rBorder)
+void lcl_debug_TableBorder(table::TableBorder const & rBorder)
 {
     TagLogger::getInstance().startElement("TableBorder");
     lcl_debug_BorderLine(rBorder.TopLine);

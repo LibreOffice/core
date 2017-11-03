@@ -69,7 +69,7 @@ XFBGImage::XFBGImage()
     , m_eVertAlign(enumXFAlignCenter)
 {}
 
-void XFBGImage::SetImageData(sal_uInt8 *buf, int len)
+void XFBGImage::SetImageData(sal_uInt8 const *buf, int len)
 {
     m_strData = XFBase64::Encode(buf,len);
     m_bUserFileLink = false;

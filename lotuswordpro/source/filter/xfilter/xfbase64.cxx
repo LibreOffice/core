@@ -93,7 +93,7 @@ inline void Encode_(const sal_uInt8 *src, sal_Char* dest)
 /**
  * @descr   Base64 encode.
  */
-OUString XFBase64::Encode(sal_uInt8 *buf, sal_Int32 len)
+OUString XFBase64::Encode(sal_uInt8 const *buf, sal_Int32 len)
 {
     sal_Char    *buffer;
     sal_Int32   nNeeded;
