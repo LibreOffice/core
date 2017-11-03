@@ -25,19 +25,11 @@
 #include <sfx2/app.hxx>
 #include <memory>
 
-struct SfxFrameDescriptor_Impl
-{
-    std::unique_ptr<SfxItemSet> pArgs;
-
-    SfxFrameDescriptor_Impl() {}
-};
-
 SfxFrameDescriptor::SfxFrameDescriptor() :
     aMargin( -1, -1 ),
     eScroll( ScrollingMode::Auto ),
     bHasBorder( true ),
-    bHasBorderSet( false ),
-    pImpl( new SfxFrameDescriptor_Impl )
+    bHasBorderSet( false )
 {
 }
 
@@ -47,9 +39,9 @@ SfxFrameDescriptor::~SfxFrameDescriptor()
 
 SfxItemSet* SfxFrameDescriptor::GetArgs()
 {
-    if( !pImpl->pArgs )
-        pImpl->pArgs.reset( new SfxAllItemSet( SfxGetpApp()->GetPool() ) );
-    return pImpl->pArgs.get();
+    if( !m_pArgs )
+        m_pArgs.reset( new SfxAllItemSet( SfxGetpApp()->GetPool() ) );
+    return m_pArgs.get();
 }
 
 void SfxFrameDescriptor::SetURL( const OUString& rURL )
@@ -61,8 +53,8 @@ void SfxFrameDescriptor::SetURL( const OUString& rURL )
 void SfxFrameDescriptor::SetActualURL( const OUString& rURL )
 {
     aActualURL = INetURLObject(rURL);
-    if ( pImpl->pArgs )
-        pImpl->pArgs->ClearItem();
+    if ( m_pArgs )
+        m_pArgs->ClearItem();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
