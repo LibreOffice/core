@@ -9,6 +9,11 @@
 
 $(eval $(call gb_Library_Library,rdf))
 
+$(eval $(call gb_Library_set_include,rdf, \
+    -I$(call gb_UnpackedTarball_get_dir,redland)/src \
+    $$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_use_unpacked,rdf,redland))
 
 $(eval $(call gb_Library_set_warnings_not_errors,rdf))

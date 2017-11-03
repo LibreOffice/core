@@ -19,6 +19,7 @@ $(eval $(call gb_Library_set_warnings_not_errors,staroffice))
 
 $(eval $(call gb_Library_set_include,staroffice,\
     -I$(call gb_UnpackedTarball_get_dir,libstaroffice)/inc \
+    -I$(call gb_UnpackedTarball_get_dir,libstaroffice)/src/lib \
     $$(INCLUDE) \
 ))
 
