@@ -637,7 +637,7 @@ void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
     while( coliter.next(nCol ) )
     {
         maColumns[nCol].mnPos = nNewWidth;
-        nNewWidth += maColumns[nCol].mnSize;
+        nNewWidth = o3tl::saturating_add(nNewWidth, maColumns[nCol].mnSize);
         if( bFit )
         {
             Reference< XPropertySet > xColSet( xCols->getByIndex(nCol), UNO_QUERY_THROW );
