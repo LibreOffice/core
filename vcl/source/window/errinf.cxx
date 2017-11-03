@@ -108,13 +108,12 @@ bool ErrorHandler::GetErrorString(ErrCode nErrCodeId, OUString& rErrStr)
     return false;
 }
 
-DialogMask ErrorHandler::HandleError(ErrCode nErrCodeId, DialogMask nFlags)
+DialogMask ErrorHandler::HandleError(ErrCode nErrCodeId, vcl::Window *pParent, DialogMask nFlags)
 {
     if (nErrCodeId == ERRCODE_NONE || nErrCodeId == ERRCODE_ABORT)
         return DialogMask::NONE;
 
     ErrorRegistry &rData = TheErrorRegistry::get();
-    vcl::Window *pParent = nullptr;
     ErrorInfo *pInfo = ErrorInfo::GetErrorInfo(nErrCodeId);
     OUString aAction;
 
@@ -126,7 +125,7 @@ DialogMask ErrorHandler::HandleError(ErrCode nErrCodeId, DialogMask nFlags)
         {
             if(pCtx->GetParent())
             {
-                pParent=pCtx->GetParent();
+                pParent = pCtx->GetParent();
                 break;
             }
         }
