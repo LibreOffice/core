@@ -1740,6 +1740,10 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
             aLine = OStringToOUString(aByteLine, rStrm.GetStreamCharSet());
             if( rStrm.IsEof() )
                 break;
+            bool bInvalidCol = false;
+            bool bInvalidRow = false;
+            bool bInvalidRefCol = false;
+            bool bInvalidRefRow = false;
             const sal_Unicode* p = aLine.getStr();
             sal_Unicode cTag = *p++;
             if( cTag == 'C' )       // Content
@@ -1754,41 +1758,49 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     {
                         case 'X':
                         {
+                            bInvalidCol = false;
                             bool bFail = o3tl::checked_add<SCCOL>(OUString(p).toInt32(), nStartCol - 1, nCol);
                             if (bFail || nCol < 0 || MAXCOL < nCol)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;X invalid nCol=" << nCol);
                                 nCol = std::max<SCCOL>(0, std::min<SCCOL>(nCol, MAXCOL));
+                                bInvalidCol = true;
                             }
                             break;
                         }
                         case 'Y':
                         {
+                            bInvalidRow = false;
                             bool bFail = o3tl::checked_add(OUString(p).toInt32(), nStartRow - 1, nRow);
                             if (bFail || nRow < 0 || MAXROW < nRow)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;Y invalid nRow=" << nRow);
                                 nRow = std::max<SCROW>(0, std::min<SCROW>(nRow, MAXROW));
+                                bInvalidRow = true;
                             }
                             break;
                         }
                         case 'C':
                         {
+                            bInvalidRefCol = false;
                             bool bFail = o3tl::checked_add<SCCOL>(OUString(p).toInt32(), nStartCol - 1, nRefCol);
                             if (bFail || nRefCol < 0 || MAXCOL < nRefCol)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;C invalid nRefCol=" << nRefCol);
                                 nRefCol = std::max<SCCOL>(0, std::min<SCCOL>(nRefCol, MAXCOL));
+                                bInvalidRefCol = true;
                             }
                             break;
                         }
                         case 'R':
                         {
+                            bInvalidRefRow = false;
                             bool bFail = o3tl::checked_add(OUString(p).toInt32(), nStartRow - 1, nRefRow);
                             if (bFail || nRefRow < 0 || MAXROW < nRefRow)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;R invalid nRefRow=" << nRefRow);
                                 nRefRow = std::max<SCROW>(0, std::min<SCROW>(nRefRow, MAXROW));
+                                bInvalidRefRow = true;
                             }
                             break;
                         }
@@ -1797,7 +1809,8 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             if( !bSingle &&
                                     ( nCol < nStartCol || nCol > nEndCol
                                       || nRow < nStartRow || nRow > nEndRow
-                                      || nCol > MAXCOL || nRow > MAXROW ) )
+                                      || nCol > MAXCOL || nRow > MAXROW
+                                      || bInvalidCol || bInvalidRow ) )
                                 break;
                             if( !bData )
                             {
@@ -1819,7 +1832,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             const sal_Unicode* q = p;
                             while( *q && *q != ';' )
                                 q++;
-                            if ( !(*q == ';' && *(q+1) == 'I') )
+                            if ( !(*q == ';' && *(q+1) == 'I') && !bInvalidCol && !bInvalidRow )
                             {   // don't ignore value
                                 if( bText )
                                 {
@@ -1858,6 +1871,10 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                                 break;
                             aText = "=";
                             p = lcl_ScanSylkFormula( p, aText, eVersion);
+
+                            if (bInvalidCol || bInvalidRow || (ch == 'M' && (bInvalidRefCol || bInvalidRefRow)))
+                                break;
+
                             ScAddress aPos( nCol, nRow, aRange.aStart.Tab() );
                             /* FIXME: do we want GRAM_ODFF_A1 instead? At the
                              * end it probably should be GRAM_ODFF_R1C1, since
@@ -1902,21 +1919,25 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     {
                         case 'X':
                         {
+                            bInvalidCol = false;
                             bool bFail = o3tl::checked_add<SCCOL>(OUString(p).toInt32(), nStartCol - 1, nCol);
                             if (bFail || nCol < 0 || MAXCOL < nCol)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;X invalid nCol=" << nCol);
                                 nCol = std::max<SCCOL>(0, std::min<SCCOL>(nCol, MAXCOL));
+                                bInvalidCol = true;
                             }
                             break;
                         }
                         case 'Y':
                         {
+                            bInvalidRow = false;
                             bool bFail = o3tl::checked_add(OUString(p).toInt32(), nStartRow - 1, nRow);
                             if (bFail || nRow < 0 || MAXROW < nRow)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;Y invalid nRow=" << nRow);
                                 nRow = std::max<SCROW>(0, std::min<SCROW>(nRow, MAXROW));
+                                bInvalidRow = true;
                             }
                             break;
                         }
@@ -1946,7 +1967,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     if( nCol > nEndCol )
                         nEndCol = nCol;
                 }
-                if ( 0 <= nFormat && nFormat < (sal_Int32)aFormats.size() )
+                if ( 0 <= nFormat && nFormat < (sal_Int32)aFormats.size() && !bInvalidCol && !bInvalidRow )
                 {
                     sal_uInt32 nKey = aFormats[nFormat];
                     pDoc->ApplyAttr( nCol, nRow, aRange.aStart.Tab(),
