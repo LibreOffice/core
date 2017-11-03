@@ -241,7 +241,8 @@ namespace emfplushelper
         void EMFPPlusFillPolygon(const ::basegfx::B2DPolyPolygon& polygon, bool isColor, sal_uInt32 brushIndexOrColor);
 
         // helper functions
-        ::basegfx::BColor EMFPGetBrushColorOrARGBColor(sal_uInt16 flags, sal_uInt32 brushIndexOrColor);
+        ::basegfx::BColor EMFPGetBrushColorOrARGBColor(sal_uInt16 flags, sal_uInt32 brushIndexOrColor) const;
+        void combineClip(int combineMode, ::basegfx::B2DPolyPolygon& polygon);
 
     public:
         EmfPlusHelperData(
