@@ -1646,6 +1646,9 @@
 #define RID_SUBSETSTR_TANGUT                                NC_("RID_SUBSETMAP", "Tangut")
 #define RID_SUBSETSTR_TANGUT_COMPONENTS                     NC_("RID_SUBSETMAP", "Tangut Components")
 
+// TSCP Classification
+#define RID_CLASSIFICATION_CHANGE_CATEGORY                  NC_("RID_CLASSIFICATION_CHANGE_CATEGORY", "Do you really want to change the classification category?")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
