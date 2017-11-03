@@ -470,7 +470,9 @@ inline BitmapColor& BitmapColor::Invert()
 inline sal_uInt8 BitmapColor::GetLuminance() const
 {
     assert( !mbIndex && "Pixel represents index into colortable" );
-    return (static_cast<unsigned long>(mcBlueOrIndex) * 28UL + static_cast<unsigned long>(mcGreen) * 151UL + static_cast<unsigned long>(mcRed) * 77UL) >> 8;
+    return (static_cast<sal_uInt32>(mcBlueOrIndex) * 28
+            + static_cast<sal_uInt32>(mcGreen) * 151
+            + static_cast<sal_uInt32>(mcRed) * 77) >> 8;
 }
 
 
