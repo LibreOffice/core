@@ -35,6 +35,7 @@
 #include <comphelper/string.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <list>
 #include <vector>
 #include <map>
 #include <algorithm>
@@ -119,8 +120,8 @@ namespace sfx2
 
 
     typedef StringPair                          FilterDescriptor;   // a single filter or a filter class (display name and filter mask)
-    typedef ::std::vector< FilterDescriptor >   FilterGroup;        // a vector of single filter entries
-    typedef ::std::vector< FilterGroup >        GroupedFilterList;  // a vector of all filters, already grouped
+    typedef ::std::list< FilterDescriptor >     FilterGroup;        // a list of single filter entries
+    typedef ::std::list< FilterGroup >          GroupedFilterList;  // a list of all filters, already grouped
 
     /// the logical name of a filter
     typedef OUString                     FilterName;
@@ -137,8 +138,8 @@ namespace sfx2
         Sequence< FilterName >      aSubFilters;        // the (logical) names of the filter which belong to the class
     } FilterClass;
 
-    typedef ::std::vector< FilterClass >                           FilterClassVector;
-    typedef ::std::map< OUString, FilterClassVector::iterator >    FilterClassReferrer;
+    typedef ::std::list< FilterClass >                                  FilterClassList;
+    typedef ::std::map< OUString, FilterClassList::iterator >    FilterClassReferrer;
 
     typedef ::std::vector< OUString >                            StringArray;
 
@@ -161,12 +162,12 @@ namespace sfx2
     struct CreateEmptyClassRememberPos
     {
     protected:
-        FilterClassVector&      m_rClassVector;
+        FilterClassList&        m_rClassList;
         FilterClassReferrer&    m_rClassesReferrer;
 
     public:
-        CreateEmptyClassRememberPos( FilterClassVector& _rClassVector, FilterClassReferrer& _rClassesReferrer )
-            :m_rClassVector       ( _rClassVector )
+        CreateEmptyClassRememberPos( FilterClassList& _rClassList, FilterClassReferrer& _rClassesReferrer )
+            :m_rClassList       ( _rClassList )
             ,m_rClassesReferrer ( _rClassesReferrer )
         {
         }
@@ -175,9 +176,9 @@ namespace sfx2
         void operator() ( const FilterName& _rLogicalFilterName )
         {
             // insert a new (empty) class
-            m_rClassVector.emplace_back( );
+            m_rClassList.emplace_back( );
             // get the position of this new entry
-            FilterClassVector::iterator aInsertPos = m_rClassVector.end();
+            FilterClassList::iterator aInsertPos = m_rClassList.end();
             --aInsertPos;
             // remember this position
             m_rClassesReferrer.emplace( _rLogicalFilterName, aInsertPos );
@@ -218,7 +219,7 @@ namespace sfx2
     };
 
 
-    void lcl_ReadGlobalFilters( const OConfigurationNode& _rFilterClassification, FilterClassVector& _rGlobalClasses, StringArray& _rGlobalClassNames )
+    void lcl_ReadGlobalFilters( const OConfigurationNode& _rFilterClassification, FilterClassList& _rGlobalClasses, StringArray& _rGlobalClassNames )
     {
         _rGlobalClasses.clear();
         _rGlobalClassNames.clear();
@@ -266,10 +267,10 @@ namespace sfx2
     {
     protected:
         OConfigurationNode      m_aClassesNode;
-        FilterClassVector&        m_rClasses;
+        FilterClassList&        m_rClasses;
 
     public:
-        ReadLocalFilter( const OConfigurationNode& _rClassesNode, FilterClassVector& _rClasses )
+        ReadLocalFilter( const OConfigurationNode& _rClassesNode, FilterClassList& _rClasses )
             :m_aClassesNode ( _rClassesNode )
             ,m_rClasses     ( _rClasses )
         {
@@ -288,7 +289,7 @@ namespace sfx2
     };
 
 
-    void lcl_ReadLocalFilters( const OConfigurationNode& _rFilterClassification, FilterClassVector& _rLocalClasses )
+    void lcl_ReadLocalFilters( const OConfigurationNode& _rFilterClassification, FilterClassList& _rLocalClasses )
     {
         _rLocalClasses.clear();
 
@@ -305,7 +306,7 @@ namespace sfx2
     }
 
 
-    void lcl_ReadClassification( FilterClassVector& _rGlobalClasses, StringArray& _rGlobalClassNames, FilterClassVector& _rLocalClasses )
+    void lcl_ReadClassification( FilterClassList& _rGlobalClasses, StringArray& _rGlobalClassNames, FilterClassList& _rLocalClasses )
     {
 
         // open our config node
@@ -495,11 +496,11 @@ namespace sfx2
     }
 
 
-    void lcl_InitGlobalClasses( GroupedFilterList& _rAllFilters, const FilterClassVector& _rGlobalClasses, FilterGroupEntryReferrer& _rGlobalClassesRef )
+    void lcl_InitGlobalClasses( GroupedFilterList& _rAllFilters, const FilterClassList& _rGlobalClasses, FilterGroupEntryReferrer& _rGlobalClassesRef )
     {
         // we need an extra group in our "all filters" container
-        _rAllFilters.push_back( FilterGroup() );
-        FilterGroup& rGlobalFilters = _rAllFilters.back();
+        _rAllFilters.push_front( FilterGroup() );
+        FilterGroup& rGlobalFilters = _rAllFilters.front();
             // it's important to work on the reference: we want to access the members of this filter group
             // by an iterator (FilterGroup::const_iterator)
         // the referrer for the global classes
@@ -561,7 +562,7 @@ namespace sfx2
 
 
         // read the classification of filters
-        FilterClassVector aGlobalClasses, aLocalClasses;
+        FilterClassList aGlobalClasses, aLocalClasses;
         StringArray aGlobalClassNames;
         lcl_ReadClassification( aGlobalClasses, aGlobalClassNames, aLocalClasses );
 
@@ -775,7 +776,7 @@ namespace sfx2
             if ( !_rFilters.empty() )
             {
                 FilterGroup& rGlobalClasses = *_rFilters.begin();
-                rGlobalClasses.insert( rGlobalClasses.begin(), FilterDescriptor( sAllFilterName, FILEDIALOG_FILTER_ALL ) );
+                rGlobalClasses.push_front( FilterDescriptor( sAllFilterName, FILEDIALOG_FILTER_ALL ) );
             }
         }
     }
@@ -1134,7 +1135,7 @@ namespace sfx2
         // append the filters to the manager
         if ( !aAllFilters.empty() )
         {
-            ::std::vector< FilterGroup >::iterator pIter = aAllFilters.begin();
+            ::std::list< FilterGroup >::iterator pIter = aAllFilters.begin();
             ++pIter;
             ::std::for_each(
                 pIter, // first filter group was handled separately, see above
