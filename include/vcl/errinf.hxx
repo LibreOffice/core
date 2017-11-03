@@ -125,11 +125,12 @@ public:
         4. Default ButtonsOk, MessageError
 
         @param nErrCodeId        error id
+        @param pParent           parent window the error dialog will be modal for. nullptr for unrecommended "pick default"
         @param nFlags            error flags.
 
         @return what sort of dialog to use, with what buttons
     */
-    static DialogMask       HandleError(ErrCode nId, DialogMask nMask = DialogMask::MAX);
+    static DialogMask       HandleError(ErrCode nId, vcl::Window* pParent = nullptr, DialogMask nMask = DialogMask::MAX);
     static bool             GetErrorString(ErrCode nId, OUString& rStr);
 
 protected:
