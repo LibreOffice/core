@@ -88,7 +88,20 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
         case SvxSearchCellType::FORMULA:
         {
             if ( eCellType == CELLTYPE_FORMULA )
-                aCell.mpFormula->GetFormula(aString, pDocument->GetGrammar());
+            {
+                if( bSearchFormatted )
+                {
+                    // formula result is a string
+                    if( aCell.getString(pDocument).getLength() != 0 )
+                        aString = aCell.getString(pDocument);
+                    else
+                        aString = OUString::valueOf(aCell.getValue());
+                }
+                else
+                {
+                    aCell.mpFormula->GetFormula(aString, pDocument->GetGrammar());
+                }
+            }
             else if ( eCellType == CELLTYPE_EDIT )
                 bMultiLine = lcl_GetTextWithBreaks(*aCell.mpEditText, pDocument, aString);
             else
