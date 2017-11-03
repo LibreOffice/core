@@ -149,13 +149,13 @@ namespace
     };
 
     /// Checks whether a writer-specific block exists (i.e. size is not zero)
-    bool WriterSpecificBlockExists(SvStream &stream)
+    sal_Int64 WriterSpecificBlockExists(SvStream &stream)
     {
         sal_uInt64 endOfSwBlock = 0;
         stream.ReadUInt64( endOfSwBlock );
 
         // end-of-block pointing to itself indicates a zero-size block.
-        return endOfSwBlock != stream.Tell();
+        return endOfSwBlock - stream.Tell();
     }
 }
 
@@ -452,10 +452,15 @@ bool SwBoxAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, sa
     SetAdjust( *static_cast<SvxAdjustItem*>(pNew) );
     delete pNew;
 
-    if (nVer >= AUTOFORMAT_DATA_ID_31005 && WriterSpecificBlockExists(rStream))
+    if (nVer >= AUTOFORMAT_DATA_ID_31005)
     {
-        READ(m_aTextOrientation, SvxFrameDirectionItem, rVersions.m_nTextOrientationVersion);
-        READ(m_aVerticalAlignment, SwFormatVertOrient, rVersions.m_nVerticalAlignmentVersion);
+        sal_Int64 const nSize(WriterSpecificBlockExists(rStream));
+        if (0 < nSize && nSize < std::numeric_limits<sal_uInt16>::max())
+        {
+            READ(m_aTextOrientation, SvxFrameDirectionItem, rVersions.m_nTextOrientationVersion);
+            // HORRIBLE HACK to read both 32-bit and 64-bit "long": abuse nSize
+            READ(m_aVerticalAlignment, SwFormatVertOrient, /*rVersions.m_nVerticalAlignmentVersion*/ nSize);
+        }
     }
 
     READ( m_aHorJustify,  SvxHorJustifyItem , rVersions.nHorJustifyVersion)
