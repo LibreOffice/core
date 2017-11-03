@@ -113,7 +113,7 @@ public:
     const_iterator end() const;
 };
 
-class EdtAutoCorrDoc : public SvxAutoCorrDoc
+class EdtAutoCorrDoc final : public SvxAutoCorrDoc
 {
     EditEngine* mpEditEngine;
     ContentNode*    pCurNode;
@@ -122,7 +122,6 @@ class EdtAutoCorrDoc : public SvxAutoCorrDoc
     bool            bAllowUndoAction;
     bool            bUndoAction;
 
-protected:
     void            ImplStartUndoAction();
 
 public:
