@@ -187,13 +187,13 @@ namespace pcr
     }
 
 
-    OBrowserPage* OPropertyEditor::getPage( sal_uInt16& _rPageId )
+    OBrowserPage* OPropertyEditor::getPage( sal_uInt16 _rPageId )
     {
         return static_cast< OBrowserPage* >( m_aTabControl->GetTabPage( _rPageId ) );
     }
 
 
-    const OBrowserPage* OPropertyEditor::getPage( sal_uInt16& _rPageId ) const
+    const OBrowserPage* OPropertyEditor::getPage( sal_uInt16 _rPageId ) const
     {
         return const_cast< OPropertyEditor* >( this )->getPage( _rPageId );
     }

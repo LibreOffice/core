@@ -771,7 +771,7 @@ OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
 }
 
 inline KeySym sal_XModifier2Keysym( Display         *pDisplay,
-                                    XModifierKeymap *pXModMap,
+                                    XModifierKeymap const *pXModMap,
                                     int              n )
 {
     return XkbKeycodeToKeysym( pDisplay,

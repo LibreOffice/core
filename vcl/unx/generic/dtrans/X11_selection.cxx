@@ -1760,7 +1760,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
     return true;
 }
 
-bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
+bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent const & rNotify )
 {
     osl::MutexGuard aGuard( m_aMutex );
     // data we requested arrived
@@ -1975,7 +1975,7 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent const & rNotify 
     return bHandled;
 }
 
-bool SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
+bool SelectionManager::handleSelectionNotify( XSelectionEvent const & rNotify )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -2493,7 +2493,7 @@ void SelectionManager::sendDropPosition( bool bForce, Time eventTime )
     }
 }
 
-bool SelectionManager::handleDragEvent( XEvent& rMessage )
+bool SelectionManager::handleDragEvent( XEvent const & rMessage )
 {
     if( ! m_xDragSourceListener.is() )
         return false;

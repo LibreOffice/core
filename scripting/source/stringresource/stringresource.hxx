@@ -228,7 +228,7 @@ protected:
     bool implReadPropertiesFile( LocaleItem* pLocaleItem,
         const css::uno::Reference< css::io::XInputStream >& xInput );
 
-    bool implWritePropertiesFile( LocaleItem* pLocaleItem,
+    bool implWritePropertiesFile( LocaleItem const * pLocaleItem,
               const css::uno::Reference< css::io::XOutputStream >& xOutputStream,
               const OUString& aComment );
 

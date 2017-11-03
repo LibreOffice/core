@@ -512,7 +512,7 @@ SalI18N_InputContext::SupportInputMethodStyle( XIMStyles const *pIMStyles )
 // handle extended and normal key input
 
 void
-SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, std::size_t nLength)
+SalI18N_InputContext::CommitKeyEvent(sal_Unicode const * pText, std::size_t nLength)
 {
     if (nLength == 1 && IsControlCode(pText[0]))
         return;

@@ -114,8 +114,8 @@ namespace pcr
         using Window::SetHelpText;
         using Window::Update;
 
-        OBrowserPage* getPage( sal_uInt16& _rPageId );
-        const OBrowserPage* getPage( sal_uInt16& _rPageId ) const;
+        OBrowserPage* getPage( sal_uInt16 _rPageId );
+        const OBrowserPage* getPage( sal_uInt16 _rPageId ) const;
 
         OBrowserPage* getPage( const OUString& _rPropertyName );
         const OBrowserPage* getPage( const OUString& _rPropertyName ) const;

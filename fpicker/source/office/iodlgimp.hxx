@@ -202,7 +202,7 @@ public:
     // access to the current filter via methods only - need to care for consistency between _pCurFilter and m_sCurrentFilterDisplayName
     inline      const SvtFileDialogFilter_Impl*     GetCurFilter( ) const;
     inline      const OUString&                     GetCurFilterDisplayName() const;
-                void                                SetCurFilter( SvtFileDialogFilter_Impl* _pFilter, const OUString& _rDisplayName );
+                void                                SetCurFilter( SvtFileDialogFilter_Impl const * _pFilter, const OUString& _rDisplayName );
 };
 
 inline void SvtExpFileDlg_Impl::SetFilterListSelectHdl( const Link<ListBox&,void>& _rHandler )

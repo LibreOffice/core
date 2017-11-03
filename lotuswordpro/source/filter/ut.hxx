@@ -66,7 +66,7 @@ inline sal_uInt16 UtGetIntelWord(sal_uInt8 const * pData)
 inline sal_uInt32 UtGetIntelDWord(sal_uInt8 const * pData)
 { return pData[0] | pData[1] << 8 | pData[2] << 16 | pData[3] << 24; }
 
-inline sal_uInt8 UtGetIntelByte(sal_uInt8 * pData)
+inline sal_uInt8 UtGetIntelByte(sal_uInt8 const * pData)
 { return * pData; }
 
 }

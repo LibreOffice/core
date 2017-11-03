@@ -80,7 +80,7 @@ public:
     /**
      * @descr   Use base64 stream as image source.
      */
-    void    SetImageData(sal_uInt8 *buf, int len);
+    void    SetImageData(sal_uInt8 const *buf, int len);
 
     /**
      * @descr   Set the iamge position type.

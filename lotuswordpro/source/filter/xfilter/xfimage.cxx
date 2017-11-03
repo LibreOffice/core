@@ -72,7 +72,7 @@ void XFImage::SetFileURL(const OUString& url)
     m_bUseLink  = true;
 }
 
-void XFImage::SetImageData(sal_uInt8 *buf, int len)
+void XFImage::SetImageData(sal_uInt8 const *buf, int len)
 {
     m_strData = XFBase64::Encode(buf, len);
     m_bUseLink = false;

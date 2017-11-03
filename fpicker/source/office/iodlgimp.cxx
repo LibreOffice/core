@@ -236,7 +236,7 @@ namespace {
     }
 }
 
-void SvtExpFileDlg_Impl::SetCurFilter( SvtFileDialogFilter_Impl* pFilter, const OUString& rDisplayName )
+void SvtExpFileDlg_Impl::SetCurFilter( SvtFileDialogFilter_Impl const * pFilter, const OUString& rDisplayName )
 {
     DBG_ASSERT( pFilter, "SvtExpFileDlg_Impl::SetCurFilter: invalid filter!" );
     DBG_ASSERT( ( rDisplayName == pFilter->GetName() )

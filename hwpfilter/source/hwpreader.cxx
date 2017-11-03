@@ -1331,7 +1331,7 @@ void HwpReader::makeMasterStyles()
  *    style:text-underline,style:text-outline,fo:text-shadow,style:text-position
  *    Support them.
  */
-void HwpReader::parseCharShape(CharShape * cshape)
+void HwpReader::parseCharShape(CharShape const * cshape)
 {
     HWPFont& hwpfont = hwpfile.GetHWPFont();
 
@@ -1405,7 +1405,7 @@ void HwpReader::parseCharShape(CharShape * cshape)
  *    are implemented.
  * TODO: Tab Settings => set values of properties only which doesn't have the default value
  */
-void HwpReader::parseParaShape(ParaShape * pshape)
+void HwpReader::parseParaShape(ParaShape const * pshape)
 {
 
     if (pshape->left_margin != 0)
@@ -1473,7 +1473,7 @@ void HwpReader::parseParaShape(ParaShape * pshape)
 /**
  * Make the style of the Paragraph.
  */
-void HwpReader::makePStyle(ParaShape * pshape)
+void HwpReader::makePStyle(ParaShape const * pshape)
 {
     int nscount = pshape->tabs[MAXTABS -1].type;
     padd("style:name", sXML_CDATA,
@@ -1804,7 +1804,7 @@ void HwpReader::makePageStyle()
      }
 }
 
-void HwpReader::makeColumns(ColumnDef *coldef)
+void HwpReader::makeColumns(ColumnDef const *coldef)
 {
     if( !coldef ) return;
   padd("fo:column-count", sXML_CDATA, ascii(Int2Str(coldef->ncols, "%d", buf)));
@@ -1854,7 +1854,7 @@ void HwpReader::makeColumns(ColumnDef *coldef)
   rendEl("style:columns");
 }
 
-void HwpReader::makeTStyle(CharShape * cshape)
+void HwpReader::makeTStyle(CharShape const * cshape)
 {
     padd("style:name", sXML_CDATA,
         ascii(Int2Str(cshape->index, "T%d", buf)));
@@ -4666,7 +4666,7 @@ void HwpReader::makeFootnote(Footnote * hbox)
 /**
  * page/footnote/endnote/picture/table/formula number
  */
-void HwpReader::makeAutoNum(AutoNum * hbox)
+void HwpReader::makeAutoNum(AutoNum const * hbox)
 {
     switch (hbox->type)
     {

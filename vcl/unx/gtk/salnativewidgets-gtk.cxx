@@ -247,7 +247,7 @@ static tools::Rectangle NWGetToolbarRect( SalX11Screen nScreen,
                                    ControlPart nPart,
                                    tools::Rectangle aAreaRect );
 
-static int getFrameWidth(GtkWidget* widget);
+static int getFrameWidth(GtkWidget const * widget);
 
 static tools::Rectangle NWGetScrollButtonRect(    SalX11Screen nScreen, ControlPart nPart, tools::Rectangle aAreaRect );
 
@@ -3543,7 +3543,7 @@ bool GtkSalGraphics::NWPaintGTKSlider(
     return true;
 }
 
-static int getFrameWidth(GtkWidget* widget)
+static int getFrameWidth(GtkWidget const * widget)
 {
     return widget->style->xthickness;
 }

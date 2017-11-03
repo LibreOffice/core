@@ -136,7 +136,7 @@ private:
     sal_uInt16 insertItem( UpdateDialog::Index *pIndex, SvLBoxButtonKind kind );
     void addAdditional( UpdateDialog::Index *pIndex, SvLBoxButtonKind kind );
     bool isIgnoredUpdate( UpdateDialog::Index *pIndex );
-    void setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, bool bIgnoreAll );
+    void setIgnoredUpdate( UpdateDialog::Index const *pIndex, bool bIgnore, bool bIgnoreAll );
 
     void addEnabledUpdate( OUString const & name, dp_gui::UpdateData const & data );
     void addDisabledUpdate( UpdateDialog::DisabledUpdate const & data );
