@@ -1265,20 +1265,28 @@ SvStream& SwFormatVertOrient::Store(SvStream &rStream, sal_uInt16 /*version*/) c
     return rStream;
 }
 
-SfxPoolItem* SwFormatVertOrient::Create(SvStream &rStream, sal_uInt16 /*itemVersion*/) const
+SfxPoolItem* SwFormatVertOrient::Create(SvStream &rStream, sal_uInt16 nVersionAbusedAsSize) const
 {
     SwTwips yPos(0);
     sal_Int16 orient(0);
     sal_Int16 relation(0);
-    // compatibility hack for Table Auto Format: SwTwips is "long" :(
-    // (this means that the file format is platform dependent)
-#if SAL_TYPES_SIZEOFLONG == 8
-    rStream.ReadInt64(yPos);
-#else
-    sal_Int32 n;
-    rStream.ReadInt32(n);
-    yPos = n;
-#endif
+    switch (nVersionAbusedAsSize)
+    {
+        // compatibility hack for Table Auto Format: SwTwips is "long" :(
+        // (this means that the file format is platform dependent)
+    case 14:
+            rStream.ReadInt64(yPos);
+        break;
+    case 12:
+        {
+            sal_Int32 n;
+            rStream.ReadInt32(n);
+            yPos = n;
+        }
+        break;
+    default:
+        SAL_WARN("sw.core", "SwFormatVertOrient::Create: unknown size");
+    }
     rStream.ReadInt16( orient ).ReadInt16( relation );
 
     return new SwFormatVertOrient(yPos, orient, relation);
