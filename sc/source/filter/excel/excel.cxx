@@ -255,7 +255,15 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportXLS(SvStream& rStream)
     aDocOpt.SetLookUpColRowNames(false);
     aDocument.SetDocOptions(aDocOpt);
     aDocument.MakeTable(0);
-    return ScFormatFilter::Get().ScImportExcel(aMedium, &aDocument, EIF_AUTO) == ERRCODE_NONE;
+    bool bRet(false);
+    try
+    {
+        bRet = ScFormatFilter::Get().ScImportExcel(aMedium, &aDocument, EIF_AUTO) == ERRCODE_NONE;
+    }
+    catch (const css::ucb::ContentCreationException &)
+    {
+    }
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
