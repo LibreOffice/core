@@ -8,8 +8,9 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
-#include <test/sheet/xsheetoperation.hxx>
+#include <test/sheet/xsheetcellrangecontainer.hxx>
 #include <test/sheet/xsheetcellranges.hxx>
+#include <test/sheet/xsheetoperation.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -26,9 +27,10 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 5
+#define NUMBER_OF_TESTS 7
 
 class ScCellRangesObj : public CalcUnoApiTest,
+                        public apitest::XSheetCellRangeContainer,
                         public apitest::XSheetCellRanges,
                         public apitest::XSheetOperation
 {
@@ -41,6 +43,10 @@ public:
     virtual uno::Reference< uno::XInterface > init() override;
 
     CPPUNIT_TEST_SUITE(ScCellRangesObj);
+
+    // XSheetCellRangeContainer
+    CPPUNIT_TEST(testAddRemoveRangeAddress);
+    CPPUNIT_TEST(testAddRemoveRangeAddresses);
 
     // XSheetCellRanges
     CPPUNIT_TEST(testGetCells);

@@ -70,6 +70,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xsheetannotation \
 	test/source/sheet/xsheetannotations \
 	test/source/sheet/xsheetannotationshapesupplier \
+	test/source/sheet/xsheetcellrangecontainer \
 	test/source/sheet/xsheetcellrange \
 	test/source/sheet/xsheetcellranges \
 	test/source/sheet/xsheetconditionalentries \
