@@ -44,9 +44,8 @@ namespace drawinglayer
             3D objects needed for the line tubes and the edge roundings
             in full 3D.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolygonTubePrimitive3D : public PolygonHairlinePrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC PolygonTubePrimitive3D final : public PolygonHairlinePrimitive3D
         {
-        private:
             /// hold the last decomposition since it's expensive
             Primitive3DContainer                         maLast3DDecomposition;
 
@@ -57,7 +56,6 @@ namespace drawinglayer
             basegfx::B2DLineJoin                        maLineJoin;
             css::drawing::LineCap                       maLineCap;
 
-        protected:
             /** access methods to maLast3DDecomposition. The usage of this methods may allow
                 later thread-safe stuff to be added if needed. Only to be used by getDecomposition()
                 implementations for buffering the last decomposition.

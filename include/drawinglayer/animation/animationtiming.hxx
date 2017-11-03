@@ -50,9 +50,8 @@ namespace drawinglayer
         };
 
 
-        class DRAWINGLAYER_DLLPUBLIC AnimationEntryFixed : public AnimationEntry
+        class DRAWINGLAYER_DLLPUBLIC AnimationEntryFixed final : public AnimationEntry
         {
-        protected:
             double                                      mfDuration;
             double                                      mfState;
 
@@ -68,9 +67,8 @@ namespace drawinglayer
         };
 
 
-        class DRAWINGLAYER_DLLPUBLIC AnimationEntryLinear : public AnimationEntry
+        class DRAWINGLAYER_DLLPUBLIC AnimationEntryLinear final : public AnimationEntry
         {
-        protected:
             double                                      mfDuration;
             double                                      mfFrequency;
             double                                      mfStart;
@@ -112,9 +110,8 @@ namespace drawinglayer
         };
 
 
-        class DRAWINGLAYER_DLLPUBLIC AnimationEntryLoop : public AnimationEntryList
+        class DRAWINGLAYER_DLLPUBLIC AnimationEntryLoop final : public AnimationEntryList
         {
-        protected:
             sal_uInt32                                  mnRepeat;
 
         public:
