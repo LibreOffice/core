@@ -43,20 +43,17 @@ class SvxFieldData;
 css::uno::Reference< css::uno::XInterface > EDITENG_DLLPUBLIC SAL_CALL SvxUnoTextCreateTextField(
     const OUString& ServiceSpecifier );
 
-class EDITENG_DLLPUBLIC SvxUnoTextField : public SvxMutexHelper,
+class EDITENG_DLLPUBLIC SvxUnoTextField final : public SvxMutexHelper,
                         public ::cppu::OComponentHelper,
                         public css::text::XTextField,
                         public css::beans::XPropertySet,
                         public css::lang::XServiceInfo,
                         public css::lang::XUnoTunnel
 {
-private:
     css::uno::Reference< css::text::XTextRange > mxAnchor;
     const SfxItemPropertySet*   mpPropSet;
     sal_Int32                   mnServiceId;
     std::unique_ptr<SvxUnoFieldData_Impl>        mpImpl;
-
-protected:
     css::uno::Sequence< css::uno::Type > maTypeSequence;
 
 public:

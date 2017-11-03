@@ -137,9 +137,8 @@ double EDITENG_DLLPUBLIC ConvertBorderWidthToWord(SvxBorderLineStyle, double);
 double EDITENG_DLLPUBLIC ConvertBorderWidthFromWord(SvxBorderLineStyle,
         double, int);
 
-class EDITENG_DLLPUBLIC SvxBorderLine
+class EDITENG_DLLPUBLIC SvxBorderLine final
 {
-protected:
     Color  aColor;
 
     long m_nWidth;
