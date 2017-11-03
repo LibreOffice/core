@@ -771,31 +771,31 @@ private:
     void ScMIRR();
     void ScISPMT();
 
-    static double ScGetPV(double fInterest, double fNper, double fPmt,
+    static double ScGetPV(double fRate, double fNper, double fPmt,
                           double fFv, bool bPayInAdvance);
     void ScPV();
     void ScSYD();
-    static double ScGetDDB(double fValue, double fRest, double fTimeLength,
+    static double ScGetDDB(double fCost, double fSalvage, double fLife,
                            double fPeriod, double fFactor);
     void ScDDB();
     void ScDB();
-    static double ScInterVDB(double fValue, double fRest, double fTimeLength, double fTimeLength1,
+    static double ScInterVDB(double fCost, double fSalvage, double fLife, double fLife1,
                              double fPeriod, double fFactor);
     void ScVDB();
     void ScPDuration();
     void ScSLN();
-    static double ScGetPMT(double fInterest, double fNper, double fPv,
+    static double ScGetPMT(double fRate, double fNper, double fPv,
                            double fFv, bool bPayInAdvance);
     void ScPMT();
     void ScRRI();
-    static double ScGetFV(double fInterest, double fNper, double fPmt,
-                          double fPv, bool bFlag);
+    static double ScGetFV(double fRate, double fNper, double fPmt,
+                          double fPv, bool bPayInAdvance);
     void ScFV();
     void ScNper();
     static bool RateIteration(double fNper, double fPayment, double fPv,
                               double fFv, bool bPayType, double& fGuess);
     void ScRate();
-    double ScGetCompoundInterest(double fInterest, double fPer, double fNper, double fPv,
+    double ScGetIpmt(double fRate, double fPer, double fNper, double fPv,
                                  double fFv, bool bPayInAdvance, double& fPmt);
     void ScIpmt();
     void ScPpmt();
