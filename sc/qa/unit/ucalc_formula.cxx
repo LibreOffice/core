@@ -8405,7 +8405,7 @@ void Test::testInsertColCellStoreEventSwap()
     m_pDoc->SetString( 1,0,0, "=A1" );  // B1
     // Insert column left of B
     m_pDoc->InsertCol( ScRange(1,0,0, 1,MAXROW,0));
-    ScAddress aPos(2,0,0);              // C1, new formula postion
+    ScAddress aPos(2,0,0);              // C1, new formula position
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Should be formula cell having value", 1.0, m_pDoc->GetValue(aPos));
     // After having swapped in an empty column, editing or adding a formula
     // cell has to use the correct store context. To test this,
