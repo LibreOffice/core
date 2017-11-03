@@ -406,6 +406,7 @@ void OpenGLContext::reset()
         }
         mpFirstFramebuffer = nullptr;
         mpLastFramebuffer = nullptr;
+        mnFramebufferCount = 0;
     }
 
     // destroy all programs
