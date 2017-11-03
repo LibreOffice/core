@@ -62,6 +62,7 @@ public:
     void testFdo54361();
     void testFdo54361_1();
     void testTdf86624(); // manually placed legends
+    void testTdf105517();
     void testTdf106217();
     void testAutoBackgroundXLSX();
     void testChartAreaStyleBackgroundXLSX();
@@ -129,6 +130,7 @@ public:
     CPPUNIT_TEST(testFdo54361);
     CPPUNIT_TEST(testFdo54361_1);
     CPPUNIT_TEST(testTdf86624);
+    CPPUNIT_TEST(testTdf105517);
     CPPUNIT_TEST(testTdf106217);
     CPPUNIT_TEST(testAutoBackgroundXLSX);
     CPPUNIT_TEST(testChartAreaStyleBackgroundXLSX);
@@ -745,6 +747,34 @@ void Chart2ImportTest::testTdf86624()
     awt::Point aPos = xLegend->getPosition();
     CPPUNIT_ASSERT(aPos.X > 5000); // real value for me is above 8000 but before bug fix is below 1000
     CPPUNIT_ASSERT(aPos.Y > 4000); // real value for ms is above 7000
+}
+
+void Chart2ImportTest::testTdf105517()
+{
+    load("/chart2/qa/extras/data/pptx/", "tdf105517.pptx");
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XCoordinateSystemContainer> xCoordContainer(xChartDoc->getFirstDiagram(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCoordContainer.is());
+    Reference<chart2::XChartTypeContainer> xChartTypeContainer(xCoordContainer->getCoordinateSystems()[0], uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartTypeContainer.is());
+    Reference<chart2::XDataSeriesContainer> xDSContainer(xChartTypeContainer->getChartTypes()[0], uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDSContainer.is());
+    Reference<beans::XPropertySet> xPropSet1(xDSContainer->getDataSeries()[0], uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPropSet1.is());
+
+    long lineColor;
+    xPropSet1->getPropertyValue("Color") >>= lineColor;
+    // incorrect line color was 0x4a7ebb due to not handling themeOverride
+    CPPUNIT_ASSERT_EQUAL(lineColor, long(0xeaa700));
+
+    Reference<beans::XPropertySet> xPropSet2(xDSContainer->getDataSeries()[1], uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPropSet2.is());
+
+    xPropSet2->getPropertyValue("Color") >>= lineColor;
+    // incorrect line color was 0x98b855
+    CPPUNIT_ASSERT_EQUAL(lineColor, long(0x1e69a8));
 }
 
 void Chart2ImportTest::testTdf106217()
