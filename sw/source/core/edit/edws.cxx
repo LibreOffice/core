@@ -51,6 +51,9 @@ SwEditShell::SwEditShell( SwDoc& rDoc, vcl::Window *pWindow, const SwViewOption 
         GetDoc()->GetIDocumentUndoRedo().DoUndo(true);
     }
 
+    // Restore the tscp metadata fields
+    RestoreMetadataFields();
+
     // Update the paragraph signatures.
     // Since this ctor is called only on creating/loading the doc, we validate once only.
     ValidateAllParagraphSignatures(true);
