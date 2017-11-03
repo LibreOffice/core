@@ -26,7 +26,7 @@
 
 class EditEngine;
 
-class EditRTFParser : public SvxRTFParser
+class EditRTFParser final : public SvxRTFParser
 {
 private:
     EditSelection       aCurSel;
@@ -37,7 +37,6 @@ private:
     sal_uInt16          nDefFont;
     bool                bLastActionInsertParaBreak;
 
-protected:
     virtual void        InsertPara() override;
     virtual void        InsertText() override;
     virtual void        MovePos( bool bForward = true ) override;

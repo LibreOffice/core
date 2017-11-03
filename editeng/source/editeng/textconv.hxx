@@ -28,7 +28,7 @@
 
 class EditView;
 
-class TextConvWrapper : public editeng::HangulHanjaConversion
+class TextConvWrapper final : public editeng::HangulHanjaConversion
 {
     OUString        m_aConvText;      // convertible text part found last time
     LanguageType    m_nConvTextLang;  // language of aConvText
@@ -71,7 +71,6 @@ class TextConvWrapper : public editeng::HangulHanjaConversion
     TextConvWrapper (const TextConvWrapper &) = delete;
     TextConvWrapper & operator= (const TextConvWrapper &) = delete;
 
-protected:
     virtual void    GetNextPortion( OUString& /* [out] */ rNextPortion,
                         LanguageType& /* [out] */ rLangOfPortion,
                         bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText ) override;
