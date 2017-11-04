@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_f9c5f93b",
+        "filename": "animations/source/animcore/animcore.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-04T14:22:16Z",
+      "side": 1,
+      "message": "typedef name is now inaccurate?\n\nI\u0027d be fine with inlining typedef\u0027s like this, if they don\u0027t occur more than once or twice",
+      "revId": "9855aa19485ebbd2037e536ce75dd9c6bb10481d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_39dea111",
+        "filename": "sd/inc/animations.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-04T14:22:16Z",
+      "side": 1,
+      "message": "typedef name?",
+      "revId": "9855aa19485ebbd2037e536ce75dd9c6bb10481d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
