@@ -27,7 +27,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 
-#include <list>
+#include <vector>
 #include <memory>
 #include <rtl/ustring.hxx>
 
@@ -38,8 +38,8 @@
 struct FilterEntry;
 struct ElementEntry_Impl;
 
-typedef ::std::list < FilterEntry >     FilterList;
-typedef ::std::list < ElementEntry_Impl >   ElementList;
+typedef ::std::vector < FilterEntry >     FilterVector;
+typedef ::std::vector < ElementEntry_Impl >   ElementVector;
 
 // class declaration
 
@@ -141,7 +141,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         bool FilterNameExists( const OUString& rTitle );
         bool FilterNameExists( const css::uno::Sequence< css::beans::StringPair >& _rGroupedFilters );
 
-        void ensureFilterList( const OUString& _rInitialCurrentFilter );
+        void ensureFilterVector( const OUString& _rInitialCurrentFilter );
 
         void impl_fileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
         void impl_directoryChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
@@ -151,7 +151,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         css::uno::Reference< css::ui::dialogs::XFilePickerListener >
             m_xListener;
         OUString msPlayLabel;
-        FilterList *m_pFilterList;
+        FilterVector *m_pFilterVector;
         GtkWidget  *m_pParentWidget;
         GtkWidget  *m_pVBox;
         GtkWidget  *m_pFilterExpander;
