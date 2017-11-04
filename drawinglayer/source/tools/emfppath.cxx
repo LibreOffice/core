@@ -60,8 +60,7 @@ namespace emfplushelper
     {
     }
 
-    // TODO: remove rR argument when debug code is no longer needed
-    void EMFPPath::Read (SvStream& s, sal_uInt32 pathFlags, EmfPlusHelperData const & rR)
+    void EMFPPath::Read (SvStream& s, sal_uInt32 pathFlags)
     {
         for (int i = 0; i < nPoints; i ++)
         {
@@ -99,16 +98,7 @@ namespace emfplushelper
             }
         }
 
-        aPolygon.clear ();
-
-#if OSL_DEBUG_LEVEL > 1
-        const ::basegfx::B2DRectangle aBounds (::basegfx::utils::getRange (GetPolygon (rR)));
-
-        SAL_INFO ("drawinglayer",
-                    "EMF+\tpolygon bounding box: " << aBounds.getMinX () << "," << aBounds.getMinY () << aBounds.getWidth () << "x" << aBounds.getHeight () << " (mapped)");
-#else
-        (void) rR; // avoid warnings
-#endif
+        aPolygon.clear();
     }
 
     ::basegfx::B2DPolyPolygon& EMFPPath::GetPolygon (EmfPlusHelperData const & rR, bool bMapIt, bool bAddLineToCloseShape)
