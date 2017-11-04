@@ -129,8 +129,6 @@ namespace
 #define EmfPlusObjectTypeImageAttributes 0x800
 #define EmfPlusObjectTypeCustomLineCap 0x900
 
-#define EmfPlusRegionInitialStateInfinite 0x10000003
-
 enum EmfPlusCombineMode
 {
     EmfPlusCombineModeReplace = 0x00000000,
@@ -748,7 +746,7 @@ namespace cppcanvas
                 EMFPRegion *region;
 
                 aObjects [index] = region = new EMFPRegion ();
-                region->Read (rObjectStream);
+                region->ReadRegion (rObjectStream, *this);
 
                 break;
             }
@@ -1572,11 +1570,9 @@ namespace cppcanvas
                         SAL_INFO("cppcanvas.emf", "EMF+\tregion in slot: " << (flags & 0xff) << " combine mode: " << combineMode);
                         EMFPRegion *region = static_cast<EMFPRegion*>(aObjects [flags & 0xff]);
 
-                        // reset clip
-                        if (region && region->parts == 0 && region->initialState == EmfPlusRegionInitialStateInfinite) {
-                            updateClipping (::basegfx::B2DPolyPolygon (), rFactoryParms, combineMode == 1);
-                        } else {
-                            SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
+                        if (region)
+                        {
+                            updateClipping(region->regionPolyPolygon, rFactoryParms, combineMode == 1);
                         }
                         break;
                     }
