@@ -85,6 +85,8 @@ public:
 
     void AppendBookmark(const OUString& rName) override;
 
+    void AppendBookmark( const OUString& /*rName*/, sal_Int32 /*nWithStartPos*/, sal_Int32 /*nWithEndPos*/ ) override {};
+
     void AppendAnnotationMarks(const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen) override;
 
     //For i120928,add an interface to export graphic of bullet
@@ -123,6 +125,8 @@ public:
     void DoFormText(const SwInputField* pField) override;
 
     sal_uLong ReplaceCr(sal_uInt8 nChar) override;
+
+    ExportFormat GetExportFormat() const override { return ExportFormat::RTF; }
 
 protected:
     /// Format-dependent part of the actual export.
