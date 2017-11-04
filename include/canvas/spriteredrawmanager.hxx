@@ -28,7 +28,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <canvas/base/spritesurface.hxx>
 
-#include <list>
 #include <vector>
 #include <algorithm>
 
@@ -186,7 +185,6 @@ namespace canvas
         };
 
         typedef ::std::vector< SpriteChangeRecord >             VectorOfChangeRecords;
-        typedef ::std::list< Sprite::Reference >                ListOfSprites;
         typedef ::basegfx::B2DConnectedRanges< SpriteInfo >     SpriteConnectedRanges;
         typedef SpriteConnectedRanges::ComponentType            AreaComponent;
         typedef SpriteConnectedRanges::ConnectedComponents      UpdateArea;
@@ -402,7 +400,7 @@ namespace canvas
                                  ::std::size_t          nNumSprites ) const;
 
 
-        ListOfSprites                   maSprites; // list of active
+        VectorOfSprites                 maSprites; // list of active
                                                    // sprite
                                                    // objects. this
                                                    // list is only

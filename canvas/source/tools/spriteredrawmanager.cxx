@@ -460,7 +460,7 @@ namespace canvas
 
     void SpriteRedrawManager::hideSprite( const Sprite::Reference& rSprite )
     {
-        maSprites.remove( rSprite );
+        maSprites.erase(std::remove(maSprites.begin(), maSprites.end(), rSprite), maSprites.end());
     }
 
     void SpriteRedrawManager::moveSprite( const Sprite::Reference&      rSprite,
