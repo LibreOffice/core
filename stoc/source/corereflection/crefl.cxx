@@ -114,11 +114,9 @@ void IdlReflectionServiceImpl::dispose()
     _aElements.clear();
 #ifdef TEST_LIST_CLASSES
     OSL_ENSURE( g_aClassNames.empty(), "### idl classes still alive!" );
-    ClassNameList::const_iterator iPos( g_aClassNames.begin() );
-    while (iPos != g_aClassNames.end())
+    for (auto const& className : g_aClassNames)
     {
-        OUString aName( *iPos );
-        ++iPos;
+        OUString aName(className);
     }
 #endif
 }
