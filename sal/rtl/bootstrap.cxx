@@ -622,7 +622,7 @@ struct bootstrap_map {
 
     static t * get()
     {
-        if (m_map == nullptr)
+        if (!m_map)
             m_map = new t;
 
         return m_map;
@@ -735,7 +735,7 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
     bool found = false;
     if(ppValue && pName)
     {
-        if (handle == nullptr)
+        if (!handle)
             handle = get_static_bootstrap_handle();
 
         found = static_cast< Bootstrap_Impl * >(handle)->getValue(
