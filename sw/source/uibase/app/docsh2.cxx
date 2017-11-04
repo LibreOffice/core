@@ -1241,6 +1241,33 @@ void SwDocShell::Execute(SfxRequest& rReq)
             }
         }
         break;
+        case FN_REDLINE_ACCEPT_ALL:
+        case FN_REDLINE_REJECT_ALL:
+        {
+            IDocumentRedlineAccess& rRedlineAccess = GetDoc()->getIDocumentRedlineAccess();
+            SwWrtShell *pWrtShell = dynamic_cast<SwWrtShell*>(GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell());
+
+            if (rRedlineAccess.GetRedlineTable().empty())
+            {
+                break;
+            }
+
+            if (pWrtShell)
+            {
+                pWrtShell->StartAllAction();
+            }
+
+            rRedlineAccess.AcceptAllRedline(nWhich == FN_REDLINE_ACCEPT_ALL);
+
+            if (pWrtShell)
+            {
+                pWrtShell->EndAllAction();
+            }
+
+            Broadcast(SfxHint(SfxHintId::RedlineChanged));
+            rReq.Done();
+        }
+        break;
 
         default: OSL_FAIL("wrong Dispatcher");
     }
