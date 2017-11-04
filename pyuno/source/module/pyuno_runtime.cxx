@@ -31,7 +31,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 
-#include <list>
 #include <typelib/typedescription.hxx>
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -609,7 +608,7 @@ bool Runtime::pyIterUnpack( PyObject *const pObj, Any &a ) const
         return true;
     }
 
-    ::std::list<Any> items;
+    ::std::vector<Any> items;
     do
     {
         PyRef rItem( pItem, SAL_NO_ACQUIRE );
