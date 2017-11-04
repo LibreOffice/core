@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_b9a451a6",
+        "filename": "ucb/source/inc/regexpmap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-04T14:18:01Z",
+      "side": 1,
+      "message": "the template name is now a bit wrong? maybe just replace the places that use List\u003cT\u003e with std::vector\u003c Entry\u003cT\u003e \u003e ?",
+      "revId": "eade96ccaf631c09eb725e0f69961890c0f78eaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
