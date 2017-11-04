@@ -1094,27 +1094,14 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
     }
 }
 
-void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationResult> aResults)
+void lcl_ApplyParagraphClassification(SwDoc* pDoc,
+                                      const uno::Reference<frame::XModel>& xModel,
+                                      const uno::Reference<text::XTextContent>& xParent,
+                                      std::vector<svx::ClassificationResult> aResults)
 {
-    SwDocShell* pDocShell = GetDoc()->GetDocShell();
-    if (!pDocShell || !GetCursor() || !GetCursor()->Start())
-        return;
-
-    SwTextNode* pNode = GetCursor()->Start()->nNode.GetNode().GetTextNode();
-    if (pNode == nullptr)
-        return;
-
-    uno::Reference<text::XTextContent> xParent = SwXParagraph::CreateXParagraph(*pNode->GetDoc(), pNode);
-    uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
 
     sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
-
-    // Prevent recursive validation since this is triggered on node updates, which we do below.
-    const bool bOldValidationFlag = SetParagraphSignatureValidation(false);
-    comphelper::ScopeGuard const g([this, bOldValidationFlag] () {
-            SetParagraphSignatureValidation(bOldValidationFlag);
-        });
 
     // Remove all paragraph classification fields.
     for (;;)
@@ -1179,8 +1166,29 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
         OUString sDisplayText = (isFirst ? ("(" + rResult.msAbbreviatedName) : rResult.msAbbreviatedName);
         if (isLast)
             sDisplayText += ")";
-        lcl_UpdateParagraphClassificationField(GetDoc(), xModel, xParent, sKey, rResult.msName, sDisplayText);
+        lcl_UpdateParagraphClassificationField(pDoc, xModel, xParent, sKey, rResult.msName, sDisplayText);
     }
+}
+
+void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationResult> aResults)
+{
+    SwDocShell* pDocShell = GetDoc()->GetDocShell();
+    if (!pDocShell || !GetCursor() || !GetCursor()->Start())
+        return;
+
+    SwTextNode* pNode = GetCursor()->Start()->nNode.GetNode().GetTextNode();
+    if (pNode == nullptr)
+        return;
+
+    // Prevent recursive validation since this is triggered on node updates, which we do below.
+    const bool bOldValidationFlag = SetParagraphSignatureValidation(false);
+    comphelper::ScopeGuard const g([this, bOldValidationFlag]() {
+        SetParagraphSignatureValidation(bOldValidationFlag);
+    });
+
+    uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
+    uno::Reference<text::XTextContent> xParent = SwXParagraph::CreateXParagraph(*pNode->GetDoc(), pNode);
+    lcl_ApplyParagraphClassification(GetDoc(), xModel, xParent, aResults);
 }
 
 std::vector<svx::ClassificationResult> lcl_CollectParagraphClassification(const uno::Reference<frame::XModel>& xModel, const uno::Reference<text::XTextContent>& xParagraph)
@@ -1809,50 +1817,59 @@ void SwEditShell::RestoreMetadataFields()
         uno::Reference<text::XTextContent> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
 
         std::map<OUString, SignatureDescr> aSignatures;
-
         std::vector<svx::ClassificationResult> aResult;
 
+        css::uno::Reference<css::document::XDocumentProperties> aDocProperties;
+        SfxClassificationHelper aHelper(aDocProperties);
         const sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
 
         const OUString sBlank("");
         for (const auto& pair : lcl_getRDFStatements(xModel, xParagraph))
         {
-            const OUString aName = pair.first;
-            const OUString aValue = pair.second;
+            const OUString sName = pair.first;
+            const OUString sValue = pair.second;
 
-            if (aKeyCreator.isMarkingTextKey(aName))
+            if (aKeyCreator.isMarkingTextKey(sName))
             {
-                aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, sBlank });
+                aResult.push_back({ svx::ClassificationType::TEXT, sValue, sValue, sBlank });
             }
-            else if (aKeyCreator.isCategoryNameKey(aName) || aKeyCreator.isCategoryIdentifierKey(aName))
+            else if (aKeyCreator.isCategoryNameKey(sName))
             {
-                aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
+                OUString sAbbreviatedName = aHelper.GetAbbreviatedBACName(sValue);
+                aResult.push_back({ svx::ClassificationType::CATEGORY, sValue, sAbbreviatedName, sBlank });
             }
-            else if (aKeyCreator.isMarkingKey(aName))
+            else if (aKeyCreator.isCategoryIdentifierKey(sName))
             {
-                aResult.push_back({ svx::ClassificationType::MARKING, aValue, sBlank, sBlank });
+                OUString sAbbreviatedName = aHelper.GetAbbreviatedBACName(sValue);
+                aResult.push_back({ svx::ClassificationType::CATEGORY, sBlank, sAbbreviatedName, sValue });
             }
-            else if (aKeyCreator.isIntellectualPropertyPartKey(aName))
+            else if (aKeyCreator.isMarkingKey(sName))
             {
-                // aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, xTextRange->getString(), sBlank, sBlank });
+                aResult.push_back({ svx::ClassificationType::MARKING, sValue, sValue, sBlank });
             }
-            else if (aName.startsWith(ParagraphSignatureRDFNamespace))
+            else if (aKeyCreator.isIntellectualPropertyPartKey(sName))
             {
-                OUString sSuffix = aName.copy(ParagraphSignatureRDFNamespace.getLength());
+                aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, sValue, sValue, sBlank });
+            }
+            else if (sName.startsWith(ParagraphSignatureRDFNamespace))
+            {
+                OUString sSuffix = sName.copy(ParagraphSignatureRDFNamespace.getLength());
                 sal_Int32 index = sSuffix.indexOf(":");
                 if (index >= 0)
                 {
                     OUString id = sSuffix.copy(0, index);
                     OUString type = sSuffix.copy(index);
                     if (type == ParagraphSignatureDateRDFName)
-                        aSignatures[id].msDate = aValue;
+                        aSignatures[id].msDate = sValue;
                     else if (type == ParagraphSignatureUsageRDFName)
-                        aSignatures[id].msUsage = aValue;
+                        aSignatures[id].msUsage = sValue;
                     else if (type == ParagraphSignatureDigestRDFName)
-                        aSignatures[id].msSignature = aValue;
+                        aSignatures[id].msSignature = sValue;
                 }
             }
         }
+
+        lcl_ApplyParagraphClassification(GetDoc(), xModel, xParagraph, aResult);
 
         for (const auto& pair : aSignatures)
         {
