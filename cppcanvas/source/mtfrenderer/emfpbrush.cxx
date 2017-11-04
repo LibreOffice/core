@@ -89,7 +89,7 @@ namespace cppcanvas
             }
         }
 
-        void EMFPBrush::Read(SvStream& s, ImplRenderer& rR)
+        void EMFPBrush::Read(SvStream& s, ImplRenderer const & rR)
         {
             sal_uInt32 header;
 

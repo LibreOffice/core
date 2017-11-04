@@ -74,7 +74,7 @@ namespace cppcanvas
             aAttributes.MiterLimit = miterLimit;
         }
 
-        void EMFPCustomLineCap::ReadPath(SvStream& s, ImplRenderer& rR, bool bFill)
+        void EMFPCustomLineCap::ReadPath(SvStream& s, ImplRenderer const & rR, bool bFill)
         {
             sal_Int32 pathLength;
             s.ReadInt32(pathLength);
@@ -101,7 +101,7 @@ namespace cppcanvas
             polygon.transform(aMatrix);
         };
 
-        void EMFPCustomLineCap::Read(SvStream& s, ImplRenderer& rR)
+        void EMFPCustomLineCap::Read(SvStream& s, ImplRenderer const & rR)
         {
             sal_uInt32 header;
 

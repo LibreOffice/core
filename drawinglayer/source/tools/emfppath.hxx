@@ -39,7 +39,7 @@ namespace emfplushelper
         // TODO: remove rR argument when debug code is no longer needed
         void Read(SvStream& s, sal_uInt32 pathFlags, EmfPlusHelperData const & rR);
 
-        ::basegfx::B2DPolyPolygon& GetPolygon(EmfPlusHelperData& rR, bool bMapIt = true, bool bAddLineToCloseShape = false);
+        ::basegfx::B2DPolyPolygon& GetPolygon(EmfPlusHelperData const & rR, bool bMapIt = true, bool bAddLineToCloseShape = false);
     };
 }
 

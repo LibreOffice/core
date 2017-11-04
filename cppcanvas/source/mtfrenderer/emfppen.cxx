@@ -95,7 +95,7 @@ namespace cppcanvas
             delete customEndCap;
         }
 
-        void EMFPPen::SetStrokeWidth(rendering::StrokeAttributes& rStrokeAttributes, ImplRenderer& rR, const OutDevState& rState)
+        void EMFPPen::SetStrokeWidth(rendering::StrokeAttributes& rStrokeAttributes, ImplRenderer const & rR, const OutDevState& rState)
         {
             // If a zero width is specified, a minimum value is used, which is determined by the units.
             //TODO Add support for other units than Pixel
@@ -169,7 +169,7 @@ namespace cppcanvas
             }
         }
 
-        void EMFPPen::Read(SvStream& s, ImplRenderer& rR)
+        void EMFPPen::Read(SvStream& s, ImplRenderer const & rR)
         {
             sal_uInt32 graphicsVersion, penType, penDataFlags, penUnit;
             int i;

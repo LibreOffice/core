@@ -145,7 +145,7 @@ bool lockFile( sal_uInt64 const nStart, sal_uInt64 const nEnd, SvFileStream* pSt
     return true;
 }
 
-void unlockFile( sal_uInt64 const nStart, sal_uInt64 const nEnd, SvFileStream * pStream )
+void unlockFile( sal_uInt64 const nStart, sal_uInt64 const nEnd, SvFileStream const * pStream )
 {
     osl::MutexGuard aGuard( LockMutex::get() );
     std::vector<InternalStreamLock> &rLockList = LockList::get();

@@ -86,7 +86,7 @@ namespace emfplushelper
         delete customEndCap;
     }
 
-    void EMFPPen::SetStrokeWidth(rendering::StrokeAttributes& rStrokeAttributes, EmfPlusHelperData& rR, const ::basegfx::B2DHomMatrix& mapModeTransform)
+    void EMFPPen::SetStrokeWidth(rendering::StrokeAttributes& rStrokeAttributes, EmfPlusHelperData const & rR, const ::basegfx::B2DHomMatrix& mapModeTransform)
     {
         // If a zero width is specified, a minimum value is used, which is determined by the units.
         //TODO Add support for other units than Pixel
@@ -162,7 +162,7 @@ namespace emfplushelper
         }
     }
 
-    void EMFPPen::Read(SvStream& s, EmfPlusHelperData& rR)
+    void EMFPPen::Read(SvStream& s, EmfPlusHelperData const & rR)
     {
         sal_uInt32 graphicsVersion, penType;
         int i;
