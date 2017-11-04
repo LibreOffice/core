@@ -90,6 +90,8 @@ public:
 
     virtual bool RejectRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) override;
 
+    virtual void AcceptAllRedline(/*[in]*/bool bAcceptReject) override;
+
     virtual const SwRangeRedline* SelNextRedline(/*[in]*/SwPaM& rPam) const override;
 
     virtual const SwRangeRedline* SelPrevRedline(/*[in]*/SwPaM& rPam) const override;

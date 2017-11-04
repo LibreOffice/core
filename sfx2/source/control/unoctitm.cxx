@@ -1074,7 +1074,10 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
              aEvent.FeatureURL.Path == "EntireColumn" ||
              aEvent.FeatureURL.Path == "EntireCell" ||
              aEvent.FeatureURL.Path == "SortAscending" ||
-             aEvent.FeatureURL.Path == "SortDescending")
+             aEvent.FeatureURL.Path == "SortDescending" ||
+             aEvent.FeatureURL.Path == "AcceptAllTrackedChanges" ||
+             aEvent.FeatureURL.Path == "RejectAllTrackedChanges")
+
     {
         aBuffer.append(aEvent.IsEnabled ? OUString("enabled") : OUString("disabled"));
     }

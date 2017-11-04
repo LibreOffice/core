@@ -218,6 +218,8 @@ public:
 
     virtual const SwRangeRedline* SelPrevRedline(/*[in]*/SwPaM& rPam) const = 0;
 
+    virtual void AcceptAllRedline(/*[in]*/bool bAcceptReject) = 0;
+
     // Representation has changed, invalidate all Redlines.
     virtual void UpdateRedlineAttr() = 0;
 

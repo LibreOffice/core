@@ -34,6 +34,7 @@ enum class SfxHintId {
     ModeChanged,
     ColorsChanged,
     LanguageChanged,
+    RedlineChanged,
 
 // VCL text hints
     TextParaInserted,
