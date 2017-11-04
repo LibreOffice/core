@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <list>
+#include <vector>
 #include <memory>
 
 #include <rtl/ustring.hxx>
@@ -67,13 +67,10 @@ struct Entry
 };
 
 
-template< typename Val > class List: public std::list< Entry< Val > > {};
-
-
 template< typename Val >
 struct RegexpMapImpl
 {
-    List< Val > m_aList[Regexp::KIND_DOMAIN + 1];
+    std::vector< Entry<Val> > m_aList[Regexp::KIND_DOMAIN + 1];
     std::unique_ptr<Entry< Val >> m_pDefault;
 };
 
@@ -83,7 +80,7 @@ class RegexpMapIterImpl
 {
 public:
     typedef RegexpMapImpl< Val > MapImpl;
-    typedef typename List< Val >::iterator ListIterator;
+    typedef typename std::vector< Entry< Val > >::iterator ListIterator;
 
     // Solaris needs these for the ctor...
 
@@ -104,7 +101,7 @@ public:
 
     int getList() const { return m_nList; }
 
-    typename List< Val >::iterator const & getIndex() const { return m_aIndex; }
+    typename std::vector< Entry< Val > >::iterator const & getIndex() const { return m_aIndex; }
 
     void next();
 
@@ -112,7 +109,7 @@ public:
 
 private:
     mutable RegexpMapEntry< Val > m_aEntry;
-    typename List< Val >::iterator m_aIndex;
+    typename std::vector< Entry< Val > >::iterator m_aIndex;
     RegexpMapImpl< Val > * m_pMap;
     int m_nList;
     mutable bool m_bEntrySet;
@@ -177,7 +174,7 @@ RegexpMapIterImpl< Val > & RegexpMapIterImpl< Val >::operator =(
         m_nList = rOther.m_nList;
         m_bEntrySet = rOther.m_bEntrySet;
         if (m_nList == -1)
-            m_aIndex = typename List< Val >::iterator();
+            m_aIndex = typename std::vector< Entry<Val> >::iterator();
         else
             m_aIndex = rOther.m_aIndex;
     }
@@ -425,12 +422,11 @@ void RegexpMap< Val >::add(rtl::OUString const & rKey, Val const & rValue)
     }
     else
     {
-        List< Val > & rTheList = m_aImpl.m_aList[aRegexp.getKind()];
+        std::vector< Entry<Val> > & rTheList = m_aImpl.m_aList[aRegexp.getKind()];
 
-        typename List< Val >::iterator aEnd(rTheList.end());
-        for (typename List< Val >::iterator aIt(rTheList.begin()); aIt != aEnd; ++aIt)
+        for (auto const& elem : rTheList)
         {
-            if (aIt->m_aRegexp == aRegexp)
+            if (elem.m_aRegexp == aRegexp)
             {
                return;
             }
@@ -453,10 +449,10 @@ typename RegexpMap< Val >::iterator RegexpMap< Val >::find(rtl::OUString const &
     }
     else
     {
-        List< Val > & rTheList = m_aImpl.m_aList[aRegexp.getKind()];
+        std::vector< Entry<Val> > & rTheList = m_aImpl.m_aList[aRegexp.getKind()];
 
-        typename List< Val > ::iterator aEnd(rTheList.end());
-        for (typename List< Val >::iterator aIt(rTheList.begin()); aIt != aEnd; ++aIt)
+        typename std::vector< Entry<Val> >::iterator aEnd(rTheList.end());
+        for (typename std::vector< Entry<Val> >::iterator aIt(rTheList.begin()); aIt != aEnd; ++aIt)
             if (aIt->m_aRegexp == aRegexp)
                 return RegexpMapIter< Val >(new RegexpMapIterImpl< Val >(
                                                     &m_aImpl,
@@ -521,10 +517,10 @@ Val const * RegexpMap< Val >::map(rtl::OUString const & rString) const
 {
     for (int n = Regexp::KIND_DOMAIN; n >= Regexp::KIND_PREFIX; --n)
     {
-        List< Val > const & rTheList = m_aImpl.m_aList[n];
+        std::vector< Entry<Val> > const & rTheList = m_aImpl.m_aList[n];
 
-        typename List< Val >::const_iterator aEnd(rTheList.end());
-        for (typename List< Val >::const_iterator aIt(rTheList.begin()); aIt != aEnd;
+        typename std::vector< Entry<Val> >::const_iterator aEnd(rTheList.end());
+        for (typename std::vector< Entry<Val> >::const_iterator aIt(rTheList.begin()); aIt != aEnd;
              ++aIt)
             if (aIt->m_aRegexp.matches(rString))
                 return &aIt->m_aValue;
