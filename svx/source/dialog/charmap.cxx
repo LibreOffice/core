@@ -976,10 +976,9 @@ const Subset* SubsetMap::GetNextSubset( bool bFirst ) const
 
 const Subset* SubsetMap::GetSubsetByUnicode( sal_UCS4 cChar ) const
 {
-    // TODO: is it worth to avoid a linear search?
-    for( const Subset* s = GetNextSubset( true ); s; s = GetNextSubset( false ) )
-        if( (s->GetRangeMin() <= cChar) && (cChar <= s->GetRangeMax()) )
-            return s;
+    for (auto const& subset : maSubsets)
+        if( (subset.GetRangeMin() <= cChar) && (cChar <= subset.GetRangeMax()) )
+            return &subset;
     return nullptr;
 }
 
