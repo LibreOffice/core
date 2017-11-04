@@ -31,16 +31,20 @@
 #define LINESPACE_15          150
 #define LINESPACE_2           200
 #define LINESPACE_115         115
+#define LINESPACE_25          250
+#define LINESPACE_3           300
 
 // values of the mpLineDist listbox
 #define LLINESPACE_1          0
 #define LLINESPACE_115        1
 #define LLINESPACE_15         2
 #define LLINESPACE_2          3
-#define LLINESPACE_PROP       4
-#define LLINESPACE_MIN        5
-#define LLINESPACE_DURCH      6
-#define LLINESPACE_FIX        7
+#define LLINESPACE_25         4
+#define LLINESPACE_3          5
+#define LLINESPACE_PROP       6
+#define LLINESPACE_MIN        7
+#define LLINESPACE_DURCH      8
+#define LLINESPACE_FIX        9
 
 #define MIN_FIXED_DISTANCE    28
 
@@ -53,6 +57,8 @@ ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId, vcl::Window* pPar
     mpSpacing115Button = get<PushButton>("spacing_115");
     mpSpacing15Button = get<PushButton>("spacing_15");
     mpSpacing2Button = get<PushButton>("spacing_2");
+    mpSpacing25Button = get<PushButton>("spacing_25");
+    mpSpacing3Button = get<PushButton>("spacing_3");
 
     mpLineDist = get<ListBox>("line_dist");
 
@@ -69,6 +75,8 @@ ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId, vcl::Window* pPar
     mpSpacing115Button->SetClickHdl(aLink);
     mpSpacing15Button->SetClickHdl(aLink);
     mpSpacing2Button->SetClickHdl(aLink);
+    mpSpacing25Button->SetClickHdl(aLink);
+    mpSpacing3Button->SetClickHdl(aLink);
 
     Link<ListBox&,void> aLink3 = LINK( this, ParaLineSpacingControl, LineSPDistHdl_Impl );
     mpLineDist->SetSelectHdl(aLink3);
@@ -102,6 +110,8 @@ void ParaLineSpacingControl::dispose()
     mpSpacing115Button.clear();
     mpSpacing15Button.clear();
     mpSpacing2Button.clear();
+    mpSpacing25Button.clear();
+    mpSpacing3Button.clear();
     mpLineDist.clear();
     mpLineDistLabel.clear();
     mpLineDistAtPercentBox.clear();
@@ -152,6 +162,14 @@ void ParaLineSpacingControl::Initialize()
                         else if ( LINESPACE_2 == currSPItem->GetPropLineSpace() )
                         {
                             SelectEntryPos(LLINESPACE_2);
+                        }
+                        else if ( LINESPACE_25 == currSPItem->GetPropLineSpace() )
+                        {
+                            SelectEntryPos(LLINESPACE_25);
+                        }
+                        else if ( LINESPACE_3 == currSPItem->GetPropLineSpace() )
+                        {
+                            SelectEntryPos(LLINESPACE_3);
                         }
                         else
                         {
@@ -249,6 +267,8 @@ void ParaLineSpacingControl::UpdateMetricFields()
         case LLINESPACE_115:
         case LLINESPACE_15:
         case LLINESPACE_2:
+        case LLINESPACE_25:
+        case LLINESPACE_3:
             if (mpActLineDistFld == mpLineDistAtPercentBox)
                 mpLineDistAtMetricBox->Hide();
             else
@@ -348,6 +368,8 @@ void ParaLineSpacingControl::ExecuteLineSpace()
         case LLINESPACE_115:
         case LLINESPACE_15:
         case LLINESPACE_2:
+        case LLINESPACE_25:
+        case LLINESPACE_3:
             SetLineSpace(aSpacing, nPos);
             break;
 
@@ -393,9 +415,19 @@ void ParaLineSpacingControl::SetLineSpace(SvxLineSpacingItem& rLineSpace, sal_In
             rLineSpace.SetPropLineSpace( LINESPACE_2 );
             break;
 
+        case LLINESPACE_25:
+            rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
+            rLineSpace.SetPropLineSpace( LINESPACE_25 );
+            break;
+
+        case LLINESPACE_3:
+            rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
+            rLineSpace.SetPropLineSpace( LINESPACE_3 );
+            break;
+
         case LLINESPACE_PROP:
             rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
-            rLineSpace.SetPropLineSpace( (sal_uInt8)lValue );
+            rLineSpace.SetPropLineSpace( (sal_uInt16)lValue );
             break;
 
         case LLINESPACE_MIN:
@@ -433,6 +465,14 @@ IMPL_LINK(ParaLineSpacingControl, PredefinedValuesHandler, Button*, pControl, vo
     else if (pControl == mpSpacing2Button)
     {
         ExecuteLineSpacing(LLINESPACE_2);
+    }
+    else if (pControl == mpSpacing25Button)
+    {
+        ExecuteLineSpacing(LLINESPACE_25);
+    }
+    else if (pControl == mpSpacing3Button)
+    {
+        ExecuteLineSpacing(LLINESPACE_3);
     }
 }
 

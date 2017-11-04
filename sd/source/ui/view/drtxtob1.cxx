@@ -532,6 +532,13 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         aNewAttr.Put( aItem );
                     }
                     break;
+                    case SID_ATTR_PARA_LINESPACE_115:
+                    {
+                        SvxLineSpacingItem aItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL );
+                        aItem.SetPropLineSpace( 115 );
+                        aNewAttr.Put( aItem );
+                    }
+                    break;
                     case SID_ATTR_PARA_LINESPACE_15:
                     {
                         SvxLineSpacingItem aItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL );
@@ -543,6 +550,20 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     {
                         SvxLineSpacingItem aItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL );
                         aItem.SetPropLineSpace( 200 );
+                        aNewAttr.Put( aItem );
+                    }
+                    break;
+                    case SID_ATTR_PARA_LINESPACE_25:
+                    {
+                        SvxLineSpacingItem aItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL );
+                        aItem.SetPropLineSpace( 250 );
+                        aNewAttr.Put( aItem );
+                    }
+                    break;
+                    case SID_ATTR_PARA_LINESPACE_30:
+                    {
+                        SvxLineSpacingItem aItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL );
+                        aItem.SetPropLineSpace( 300 );
                         aNewAttr.Put( aItem );
                     }
                     break;

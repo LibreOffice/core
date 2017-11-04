@@ -127,8 +127,11 @@ namespace frm
             break;
 
         case SID_ATTR_PARA_LINESPACE_10:
+        case SID_ATTR_PARA_LINESPACE_115:
         case SID_ATTR_PARA_LINESPACE_15:
         case SID_ATTR_PARA_LINESPACE_20:
+        case SID_ATTR_PARA_LINESPACE_25:
+        case SID_ATTR_PARA_LINESPACE_30:
             pReturn = new LineSpacingHandler( _nAttributeId );
             break;
 
@@ -201,9 +204,12 @@ namespace frm
     {
         switch ( getAttribute() )
         {
-            case SID_ATTR_PARA_LINESPACE_10: m_nLineSpace = 100; break;
-            case SID_ATTR_PARA_LINESPACE_15: m_nLineSpace = 150; break;
-            case SID_ATTR_PARA_LINESPACE_20: m_nLineSpace = 200; break;
+            case SID_ATTR_PARA_LINESPACE_10:    m_nLineSpace = 100; break;
+            case SID_ATTR_PARA_LINESPACE_115:   m_nLineSpace = 115; break;
+            case SID_ATTR_PARA_LINESPACE_15:    m_nLineSpace = 150; break;
+            case SID_ATTR_PARA_LINESPACE_20:    m_nLineSpace = 200; break;
+            case SID_ATTR_PARA_LINESPACE_25:    m_nLineSpace = 250; break;
+            case SID_ATTR_PARA_LINESPACE_30:    m_nLineSpace = 300; break;
             default:
                 OSL_FAIL( "LineSpacingHandler::LineSpacingHandler: invalid slot!" );
                 break;

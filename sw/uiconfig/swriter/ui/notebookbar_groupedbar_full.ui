@@ -2448,6 +2448,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="SpacePara115D">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SpacePara115</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="SpacePara15D">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -2459,6 +2466,20 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SpacePara2</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="SpacePara25D">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SpacePara25</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="SpacePara3D">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SpacePara3</property>
       </object>
     </child>
     <child>

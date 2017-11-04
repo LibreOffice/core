@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -50,16 +50,24 @@
         <col id="1">3</col>
       </row>
       <row>
-        <col id="0" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Proportional</col>
+        <col id="0" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">2.5 Lines</col>
         <col id="1">4</col>
       </row>
       <row>
-        <col id="0" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">At least</col>
+        <col id="0" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Triple</col>
         <col id="1">5</col>
       </row>
       <row>
-        <col id="0" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Leading</col>
+        <col id="0" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Proportional</col>
         <col id="1">6</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">At least</col>
+        <col id="1">7</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Leading</col>
+        <col id="1">8</col>
       </row>
     </data>
   </object>

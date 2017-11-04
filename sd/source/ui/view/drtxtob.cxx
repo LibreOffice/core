@@ -435,8 +435,11 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_CENTER );
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_BLOCK );
         rSet.DisableItem( SID_ATTR_PARA_LINESPACE_10 );
+        rSet.DisableItem( SID_ATTR_PARA_LINESPACE_115 );
         rSet.DisableItem( SID_ATTR_PARA_LINESPACE_15 );
         rSet.DisableItem( SID_ATTR_PARA_LINESPACE_20 );
+        rSet.DisableItem( SID_ATTR_PARA_LINESPACE_25 );
+        rSet.DisableItem( SID_ATTR_PARA_LINESPACE_30 );
         rSet.DisableItem( SID_PARASPACE_INCREASE );
         rSet.DisableItem( SID_PARASPACE_DECREASE );
         rSet.DisableItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM );
@@ -572,11 +575,20 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             case 100:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_10, true ) );
             break;
+            case 115:
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_115, true ) );
+            break;
             case 150:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_15, true ) );
             break;
             case 200:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_20, true ) );
+            break;
+            case 250:
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_25, true ) );
+            break;
+            case 300:
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_30, true ) );
             break;
         }
     }

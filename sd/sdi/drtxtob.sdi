@@ -147,6 +147,13 @@ shell TextObjectBar
 //      AutoUpdate;
     ]
 
+    SID_ATTR_PARA_LINESPACE_115  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+//      AutoUpdate;
+    ]
+
     SID_ATTR_PARA_LINESPACE_15  // ole : ?, status : ?
     [
         ExecMethod = Execute;
@@ -155,6 +162,20 @@ shell TextObjectBar
     ]
 
     SID_ATTR_PARA_LINESPACE_20  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+//      AutoUpdate;
+    ]
+
+    SID_ATTR_PARA_LINESPACE_25  // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+//      AutoUpdate;
+    ]
+
+    SID_ATTR_PARA_LINESPACE_30  // ole : ?, status : ?
     [
         ExecMethod = Execute;
         StateMethod = GetAttrState;

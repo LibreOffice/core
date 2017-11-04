@@ -323,6 +323,13 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             aNewAttr.Put(aItem);
         }
         break;
+        case SID_ATTR_PARA_LINESPACE_115:
+        {
+            SvxLineSpacingItem aItem(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
+            aItem.SetPropLineSpace(115);
+            aNewAttr.Put(aItem);
+        }
+        break;
         case SID_ATTR_PARA_LINESPACE_15:
         {
             SvxLineSpacingItem aItem(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
@@ -334,6 +341,20 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         {
             SvxLineSpacingItem aItem(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
             aItem.SetPropLineSpace(200);
+            aNewAttr.Put(aItem);
+        }
+        break;
+        case SID_ATTR_PARA_LINESPACE_25:
+        {
+            SvxLineSpacingItem aItem(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
+            aItem.SetPropLineSpace(250);
+            aNewAttr.Put(aItem);
+        }
+        break;
+        case SID_ATTR_PARA_LINESPACE_30:
+        {
+            SvxLineSpacingItem aItem(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
+            aItem.SetPropLineSpace(300);
             aNewAttr.Put(aItem);
         }
         break;
@@ -780,6 +801,8 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             case SID_ATTR_PARA_LINESPACE_10:
             case SID_ATTR_PARA_LINESPACE_15:
             case SID_ATTR_PARA_LINESPACE_20:
+            case SID_ATTR_PARA_LINESPACE_25:
+            case SID_ATTR_PARA_LINESPACE_30:
                 {
                     int nLSpace = 0;
                     if (nWhich==SID_ATTR_PARA_LINESPACE_10)
@@ -788,6 +811,10 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                         nLSpace = 150;
                     else if (nWhich==SID_ATTR_PARA_LINESPACE_20)
                         nLSpace = 200;
+                    else if (nWhich==SID_ATTR_PARA_LINESPACE_25)
+                        nLSpace = 250;
+                    else if (nWhich==SID_ATTR_PARA_LINESPACE_30)
+                        nLSpace = 300;
 
                     const SfxPoolItem *pLSpace = nullptr;
                     aEditAttr.GetItemState( EE_PARA_SBL, false, &pLSpace );

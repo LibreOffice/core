@@ -43,6 +43,8 @@ private:
     VclPtr<PushButton>             mpSpacing115Button;
     VclPtr<PushButton>             mpSpacing15Button;
     VclPtr<PushButton>             mpSpacing2Button;
+    VclPtr<PushButton>             mpSpacing25Button;
+    VclPtr<PushButton>             mpSpacing3Button;
 
     VclPtr<ListBox>                mpLineDist;
 

@@ -89,10 +89,12 @@ enum LineSpaceList
     LLINESPACE_115  = 1,
     LLINESPACE_15   = 2,
     LLINESPACE_2    = 3,
-    LLINESPACE_PROP = 4,
-    LLINESPACE_MIN  = 5,
-    LLINESPACE_DURCH= 6,
-    LLINESPACE_FIX  = 7
+    LLINESPACE_25   = 4,
+    LLINESPACE_3    = 5,
+    LLINESPACE_PROP = 6,
+    LLINESPACE_MIN  = 7,
+    LLINESPACE_DURCH= 8,
+    LLINESPACE_FIX  = 9
 };
 
 void SetLineSpace_Impl( SvxLineSpacingItem&, int, long lValue = 0 );
@@ -120,6 +122,16 @@ void SetLineSpace_Impl( SvxLineSpacingItem& rLineSpace,
         case LLINESPACE_2:
             rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
             rLineSpace.SetPropLineSpace( 200 );
+            break;
+
+        case LLINESPACE_25:
+            rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
+            rLineSpace.SetPropLineSpace( 250 );
+            break;
+
+        case LLINESPACE_3:
+            rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
+            rLineSpace.SetPropLineSpace( 300 );
             break;
 
         case LLINESPACE_PROP:
@@ -229,6 +241,8 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
             case LLINESPACE_115:
             case LLINESPACE_15:
             case LLINESPACE_2:
+            case LLINESPACE_25:
+            case LLINESPACE_3:
                 SetLineSpace_Impl( aSpacing, nPos );
                 break;
 
@@ -751,6 +765,18 @@ void SvxStdParagraphTabPage::SetLineSpacing_Impl
                         m_pLineDist->SelectEntryPos( LLINESPACE_2 );
                         break;
                     }
+                    // 2.5 line spacing
+                    if ( 250 == rAttr.GetPropLineSpace() )
+                    {
+                        m_pLineDist->SelectEntryPos( LLINESPACE_25 );
+                        break;
+                    }
+                    // triple line spacing
+                    if ( 300 == rAttr.GetPropLineSpace() )
+                    {
+                        m_pLineDist->SelectEntryPos( LLINESPACE_3 );
+                        break;
+                    }
                     // the set per cent value
                     m_pLineDistAtPercentBox->SetValue( m_pLineDistAtPercentBox->Normalize(rAttr.GetPropLineSpace() ) );
                     m_pLineDist->SelectEntryPos( LLINESPACE_PROP );
@@ -786,6 +812,8 @@ IMPL_LINK( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox&, rBox, void )
         case LLINESPACE_115:
         case LLINESPACE_15:
         case LLINESPACE_2:
+        case LLINESPACE_25:
+        case LLINESPACE_3:
             m_pLineDistAtLabel->Enable(false);
             m_pLineDistAtPercentBox->Enable(false);
             m_pLineDistAtPercentBox->SetText( OUString() );
@@ -893,6 +921,8 @@ void SvxStdParagraphTabPage::UpdateExample_Impl()
         case LLINESPACE_115:
         case LLINESPACE_15:
         case LLINESPACE_2:
+        case LLINESPACE_25:
+        case LLINESPACE_3:
         case LLINESPACE_PROP:
         case LLINESPACE_MIN:
         case LLINESPACE_DURCH:

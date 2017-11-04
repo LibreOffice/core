@@ -299,7 +299,20 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             aNewAttr.Put(aItem);
         }
         break;
-
+        case SID_ATTR_PARA_LINESPACE_25:
+        {
+            SvxLineSpacingItem aItem(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
+            aItem.SetPropLineSpace(250);
+            aNewAttr.Put(aItem);
+        }
+        break;
+        case SID_ATTR_PARA_LINESPACE_30:
+        {
+            SvxLineSpacingItem aItem(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
+            aItem.SetPropLineSpace(300);
+            aNewAttr.Put(aItem);
+        }
+        break;
         case FN_SET_SUPER_SCRIPT:
         {
             SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
@@ -727,6 +740,8 @@ ASK_ADJUST:
         case SID_ATTR_PARA_LINESPACE_10:    nLSpace = 100;  goto ASK_LINESPACE;
         case SID_ATTR_PARA_LINESPACE_15:    nLSpace = 150;  goto ASK_LINESPACE;
         case SID_ATTR_PARA_LINESPACE_20:    nLSpace = 200;  goto ASK_LINESPACE;
+        case SID_ATTR_PARA_LINESPACE_25:    nLSpace = 250;  goto ASK_LINESPACE;
+        case SID_ATTR_PARA_LINESPACE_30:    nLSpace = 300;  goto ASK_LINESPACE;
 ASK_LINESPACE:
             {
                 if( !pLSpace )

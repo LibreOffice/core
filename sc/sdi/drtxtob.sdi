@@ -93,8 +93,11 @@ interface TableDrawText
     SID_ATTR_PARA_ULSPACE                   [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
 
     SID_ATTR_PARA_LINESPACE_10  [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_PARA_LINESPACE_115 [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_PARA_LINESPACE_15  [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_PARA_LINESPACE_20  [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_PARA_LINESPACE_25  [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_PARA_LINESPACE_30  [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_PARASPACE_INCREASE      [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_PARASPACE_DECREASE      [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_GROW_FONT_SIZE          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]

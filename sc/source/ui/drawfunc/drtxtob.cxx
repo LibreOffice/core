@@ -701,6 +701,14 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             }
             break;
 
+        case SID_ATTR_PARA_LINESPACE_115:
+            {
+                SvxLineSpacingItem aItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL );
+                aItem.SetPropLineSpace( 115 );
+                aNewAttr.Put( aItem );
+            }
+            break;
+
         case SID_ATTR_PARA_LINESPACE_15:
             {
                 SvxLineSpacingItem aItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL );
@@ -713,6 +721,22 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             {
                 SvxLineSpacingItem aItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL );
                 aItem.SetPropLineSpace( 200 );
+                aNewAttr.Put( aItem );
+            }
+            break;
+
+        case SID_ATTR_PARA_LINESPACE_25:
+            {
+                SvxLineSpacingItem aItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL );
+                aItem.SetPropLineSpace( 250 );
+                aNewAttr.Put( aItem );
+            }
+            break;
+
+        case SID_ATTR_PARA_LINESPACE_30:
+            {
+                SvxLineSpacingItem aItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL );
+                aItem.SetPropLineSpace( 300 );
                 aNewAttr.Put( aItem );
             }
             break;
@@ -1086,11 +1110,20 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
         case 100:
             rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_10, true ) );
             break;
+        case 115:
+            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_115, true ) );
+        break;
         case 150:
             rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_15, true ) );
             break;
         case 200:
             rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_20, true ) );
+            break;
+        case 250:
+            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_25, true ) );
+            break;
+        case 300:
+            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_30, true ) );
             break;
     }
 

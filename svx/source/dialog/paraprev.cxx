@@ -118,11 +118,20 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
             {
                 case SvxPrevLineSpace::N1:
                     break;
+                case SvxPrevLineSpace::N115:
+                    aPnt.Y() += nH * 0.15;
+                break;
                 case SvxPrevLineSpace::N15:
-                    aPnt.Y() += nH / 2;
+                    aPnt.Y() += nH * 0.5;
                     break;
                 case SvxPrevLineSpace::N2:
                     aPnt.Y() += nH;
+                    break;
+                case SvxPrevLineSpace::N25:
+                    aPnt.Y() += nH * 1.5;
+                    break;
+                case SvxPrevLineSpace::N3:
+                    aPnt.Y() += nH * 2.0;
                     break;
                 case SvxPrevLineSpace::Prop:
                 case SvxPrevLineSpace::Min:

@@ -452,12 +452,27 @@ interface FormTextAttributeShell
         ExecMethod = ExecuteTextAttribute;
         StateMethod = GetTextAttributeState;
     ]
+    SID_ATTR_PARA_LINESPACE_115
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
     SID_ATTR_PARA_LINESPACE_15
     [
         ExecMethod = ExecuteTextAttribute;
         StateMethod = GetTextAttributeState;
     ]
     SID_ATTR_PARA_LINESPACE_20
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_LINESPACE_25
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_LINESPACE_30
     [
         ExecMethod = ExecuteTextAttribute;
         StateMethod = GetTextAttributeState;

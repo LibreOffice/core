@@ -41,8 +41,11 @@
  <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara115" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara25" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara3" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering"/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultBullet"/>

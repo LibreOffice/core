@@ -7874,6 +7874,24 @@ SfxBoolItem SpacePara1 SID_ATTR_PARA_LINESPACE_10
 ]
 
 
+SfxBoolItem SpacePara115 SID_ATTR_PARA_LINESPACE_115
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
+
 SfxBoolItem SpacePara15 SID_ATTR_PARA_LINESPACE_15
 
 [
@@ -7893,6 +7911,42 @@ SfxBoolItem SpacePara15 SID_ATTR_PARA_LINESPACE_15
 
 
 SfxBoolItem SpacePara2 SID_ATTR_PARA_LINESPACE_20
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
+
+SfxBoolItem SpacePara25 SID_ATTR_PARA_LINESPACE_25
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
+
+SfxBoolItem SpacePara3 SID_ATTR_PARA_LINESPACE_30
 
 [
     AutoUpdate = TRUE,

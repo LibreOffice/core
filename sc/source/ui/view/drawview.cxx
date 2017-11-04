@@ -187,8 +187,11 @@ void ScDrawView::InvalidateDrawTextAttrs()
     rBindings.Invalidate( SID_ALIGNRIGHT );
     rBindings.Invalidate( SID_ALIGNBLOCK );
     rBindings.Invalidate( SID_ATTR_PARA_LINESPACE_10 );
+    rBindings.Invalidate( SID_ATTR_PARA_LINESPACE_115 );
     rBindings.Invalidate( SID_ATTR_PARA_LINESPACE_15 );
     rBindings.Invalidate( SID_ATTR_PARA_LINESPACE_20 );
+    rBindings.Invalidate( SID_ATTR_PARA_LINESPACE_25 );
+    rBindings.Invalidate( SID_ATTR_PARA_LINESPACE_30 );
     rBindings.Invalidate( SID_SET_SUPER_SCRIPT );
     rBindings.Invalidate( SID_SET_SUB_SCRIPT );
     rBindings.Invalidate( SID_ATTR_CHAR_KERNING );

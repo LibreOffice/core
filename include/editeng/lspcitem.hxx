@@ -80,7 +80,7 @@ public:
 
     // To increase or decrease the row height.
     sal_uInt16 GetPropLineSpace() const { return nPropLineSpace; }
-    void SetPropLineSpace( const sal_uInt8 nProp )
+    void SetPropLineSpace( const sal_uInt16 nProp )
     {
         nPropLineSpace = nProp;
         eInterLineSpaceRule = SvxInterLineSpaceRule::Prop;

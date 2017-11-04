@@ -134,8 +134,11 @@ namespace frm
             case SID_SET_SUPER_SCRIPT:
             case SID_SET_SUB_SCRIPT:
             case SID_ATTR_PARA_LINESPACE_10:
+            case SID_ATTR_PARA_LINESPACE_115:
             case SID_ATTR_PARA_LINESPACE_15:
             case SID_ATTR_PARA_LINESPACE_20:
+            case SID_ATTR_PARA_LINESPACE_25:
+            case SID_ATTR_PARA_LINESPACE_30:
             case SID_ATTR_PARA_LEFT_TO_RIGHT:
             case SID_ATTR_PARA_RIGHT_TO_LEFT:
             case SID_TEXTDIRECTION_TOP_TO_BOTTOM:

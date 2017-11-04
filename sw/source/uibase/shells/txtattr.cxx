@@ -306,7 +306,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
 void SwTextShell::ExecParaAttr(SfxRequest &rReq)
 {
     SvxAdjust eAdjst;
-    sal_uInt8 ePropL;
+    sal_uInt16 ePropL;
     const SfxItemSet* pArgs = rReq.GetArgs();
 
     // Get both attributes immediately isn't more expensive!!
@@ -353,8 +353,11 @@ SET_ADJUST:
             }
         break;
         case SID_ATTR_PARA_LINESPACE_10:    ePropL = 100;   goto SET_LINESPACE;
+        case SID_ATTR_PARA_LINESPACE_115:   ePropL = 115;   goto SET_LINESPACE;
         case SID_ATTR_PARA_LINESPACE_15:    ePropL = 150;   goto SET_LINESPACE;
         case SID_ATTR_PARA_LINESPACE_20:    ePropL = 200;   goto SET_LINESPACE;
+        case SID_ATTR_PARA_LINESPACE_25:    ePropL = 250;   goto SET_LINESPACE;
+        case SID_ATTR_PARA_LINESPACE_30:    ePropL = 300;   goto SET_LINESPACE;
 
 SET_LINESPACE:
         {
@@ -646,11 +649,20 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             case SID_ATTR_PARA_LINESPACE_10:
                 bFlag = nLineSpace == 100;
             break;
+            case SID_ATTR_PARA_LINESPACE_115:
+                bFlag = nLineSpace == 115;
+            break;
             case SID_ATTR_PARA_LINESPACE_15:
                 bFlag = nLineSpace == 150;
             break;
             case SID_ATTR_PARA_LINESPACE_20:
                 bFlag = nLineSpace == 200;
+            break;
+            case SID_ATTR_PARA_LINESPACE_25:
+                bFlag = nLineSpace == 250;
+            break;
+            case SID_ATTR_PARA_LINESPACE_30:
+                bFlag = nLineSpace == 300;
             break;
             case FN_GROW_FONT_SIZE:
             case FN_SHRINK_FONT_SIZE:

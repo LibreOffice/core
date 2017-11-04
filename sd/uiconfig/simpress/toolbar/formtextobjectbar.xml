@@ -37,8 +37,11 @@
  <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SpacePara1"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara115"/>
  <toolbar:toolbaritem xlink:href=".uno:SpacePara15"/>
  <toolbar:toolbaritem xlink:href=".uno:SpacePara2"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara25"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara3"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog"/>

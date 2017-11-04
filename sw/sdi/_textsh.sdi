@@ -1163,6 +1163,13 @@ interface BaseText
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
         Export = FALSE ;
     ]
+    SID_ATTR_PARA_LINESPACE_115
+    [
+        ExecMethod = ExecParaAttr ;
+        StateMethod = GetAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+        Export = FALSE ;
+    ]
     SID_ATTR_PARA_LINESPACE_15
     [
         ExecMethod = ExecParaAttr ;
@@ -1171,6 +1178,20 @@ interface BaseText
         Export = FALSE ;
     ]
     SID_ATTR_PARA_LINESPACE_20
+    [
+        ExecMethod = ExecParaAttr ;
+        StateMethod = GetAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+        Export = FALSE ;
+    ]
+    SID_ATTR_PARA_LINESPACE_25
+    [
+        ExecMethod = ExecParaAttr ;
+        StateMethod = GetAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+        Export = FALSE ;
+    ]
+    SID_ATTR_PARA_LINESPACE_30
     [
         ExecMethod = ExecParaAttr ;
         StateMethod = GetAttrState ;
