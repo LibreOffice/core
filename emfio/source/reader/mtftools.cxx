@@ -2004,9 +2004,10 @@ namespace emfio
         {
             if ( mnMapMode == MM_ISOTROPIC ) //TODO: WHAT ABOUT ANISOTROPIC???
             {
-                Size aSize( (mnWinExtX + mnWinOrgX) >> MS_FIXPOINT_BITCOUNT_28_4,
-                          -((mnWinExtY - mnWinOrgY) >> MS_FIXPOINT_BITCOUNT_28_4));
-
+                sal_Int32 nX, nY;
+                if (o3tl::checked_add(mnWinExtX, mnWinOrgX, nX) || o3tl::checked_sub(mnWinExtY, mnWinOrgY, nY))
+                    return;
+                Size aSize(nX >> MS_FIXPOINT_BITCOUNT_28_4, -(nY >> MS_FIXPOINT_BITCOUNT_28_4));
                 SetDevExt(aSize, false);
             }
         }
