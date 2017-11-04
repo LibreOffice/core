@@ -140,6 +140,8 @@ public:
 
     virtual void AppendBookmark( const OUString& rName ) override;
 
+    void AppendBookmark( const OUString& rName, sal_Int32 nWithStartPos, sal_Int32 nWithEndPos ) override;
+
     virtual void AppendAnnotationMarks( const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen ) override;
 
     virtual void ExportGrfBullet(const SwTextNode&) override;
@@ -185,6 +187,8 @@ public:
     void OutputDML( css::uno::Reference< css::drawing::XShape > const & xShape );
 
     void WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp);
+
+    virtual ExportFormat GetExportFormat() const override { return ExportFormat::DOCX; }
 
 protected:
     /// Format-dependent part of the actual export.
