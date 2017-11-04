@@ -536,7 +536,7 @@ public:
 private:
     OUString maName;
 
-    std::list< rtl::Reference<SvUnoImageMapObject> > maObjectList;
+    std::vector< rtl::Reference<SvUnoImageMapObject> > maObjectList;
 };
 
 UNO3_GETIMPLEMENTATION_IMPL( SvUnoImageMap );
