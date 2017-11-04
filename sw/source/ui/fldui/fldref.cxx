@@ -734,8 +734,8 @@ bool SwFieldRefPage::MatchSubstring( const OUString& rListString, const OUString
 {
     if(rSubstr.isEmpty())
         return true;
-    OUString aListString = rListString.toAsciiLowerCase();
-    OUString aSubstr = rSubstr.toAsciiLowerCase();
+    OUString aListString = GetAppCharClass().lowercase(rListString);
+    OUString aSubstr = GetAppCharClass().lowercase(rSubstr);
     return aListString.indexOf(aSubstr) >= 0;
 }
 
