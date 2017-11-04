@@ -242,7 +242,7 @@ namespace emfplushelper
 
         // helper functions
         ::basegfx::BColor EMFPGetBrushColorOrARGBColor(sal_uInt16 flags, sal_uInt32 brushIndexOrColor) const;
-        void combineClip(int combineMode, ::basegfx::B2DPolyPolygon& polygon);
+        void combineClip(int combineMode, ::basegfx::B2DPolyPolygon const & polygon);
 
     public:
         EmfPlusHelperData(

@@ -102,7 +102,7 @@ namespace cppcanvas
 #endif
         }
 
-        ::basegfx::B2DPolyPolygon& EMFPPath::GetPolygon (ImplRenderer& rR, bool bMapIt, bool bAddLineToCloseShape)
+        ::basegfx::B2DPolyPolygon& EMFPPath::GetPolygon (ImplRenderer const & rR, bool bMapIt, bool bAddLineToCloseShape)
         {
             ::basegfx::B2DPolygon polygon;
 

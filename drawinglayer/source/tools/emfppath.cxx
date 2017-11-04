@@ -111,7 +111,7 @@ namespace emfplushelper
 #endif
     }
 
-    ::basegfx::B2DPolyPolygon& EMFPPath::GetPolygon (EmfPlusHelperData& rR, bool bMapIt, bool bAddLineToCloseShape)
+    ::basegfx::B2DPolyPolygon& EMFPPath::GetPolygon (EmfPlusHelperData const & rR, bool bMapIt, bool bAddLineToCloseShape)
     {
         ::basegfx::B2DPolygon polygon;
         aPolygon.clear ();

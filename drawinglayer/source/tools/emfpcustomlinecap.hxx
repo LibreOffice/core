@@ -35,8 +35,8 @@ namespace emfplushelper
         EMFPCustomLineCap();
 
         void SetAttributes(com::sun::star::rendering::StrokeAttributes& aAttributes);
-        void ReadPath(SvStream& s, EmfPlusHelperData& rR, bool bFill);
-        void Read(SvStream& s, EmfPlusHelperData& rR);
+        void ReadPath(SvStream& s, EmfPlusHelperData const & rR, bool bFill);
+        void Read(SvStream& s, EmfPlusHelperData const & rR);
     };
 }
 

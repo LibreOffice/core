@@ -121,7 +121,7 @@ namespace cppcanvas
             sal_uInt32 GetType() const { return type; }
             const ::Color& GetColor() const { return solidColor; }
 
-            void Read(SvStream& s, ImplRenderer& rR);
+            void Read(SvStream& s, ImplRenderer const & rR);
         };
     }
 }

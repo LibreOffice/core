@@ -95,7 +95,7 @@ namespace emfplushelper
         }
     }
 
-    void EMFPBrush::Read(SvStream& s, EmfPlusHelperData& rR)
+    void EMFPBrush::Read(SvStream& s, EmfPlusHelperData const & rR)
     {
         sal_uInt32 header;
 

@@ -35,8 +35,8 @@ namespace cppcanvas
             EMFPCustomLineCap();
 
             void SetAttributes(com::sun::star::rendering::StrokeAttributes& aAttributes);
-            void ReadPath(SvStream& s, ImplRenderer& rR, bool bFill);
-            void Read(SvStream& s, ImplRenderer& rR);
+            void ReadPath(SvStream& s, ImplRenderer const & rR, bool bFill);
+            void Read(SvStream& s, ImplRenderer const & rR);
         };
     }
 }

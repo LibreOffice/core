@@ -697,7 +697,7 @@ namespace emfplushelper
     {
     }
 
-    void EmfPlusHelperData::combineClip(int combineMode, ::basegfx::B2DPolyPolygon& polygon)
+    void EmfPlusHelperData::combineClip(int combineMode, ::basegfx::B2DPolyPolygon const & polygon)
     {
         switch (combineMode)
         {

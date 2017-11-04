@@ -69,7 +69,7 @@ namespace emfplushelper
         aAttributes.MiterLimit = miterLimit;
     }
 
-    void EMFPCustomLineCap::ReadPath(SvStream& s, EmfPlusHelperData& rR, bool bFill)
+    void EMFPCustomLineCap::ReadPath(SvStream& s, EmfPlusHelperData const & rR, bool bFill)
     {
         sal_Int32 pathLength;
         s.ReadInt32(pathLength);
@@ -92,7 +92,7 @@ namespace emfplushelper
         polygon.transform(aMatrix);
     };
 
-    void EMFPCustomLineCap::Read(SvStream& s, EmfPlusHelperData& rR)
+    void EMFPCustomLineCap::Read(SvStream& s, EmfPlusHelperData const & rR)
     {
         sal_uInt32 header;
         s.ReadUInt32(header).ReadUInt32(type);

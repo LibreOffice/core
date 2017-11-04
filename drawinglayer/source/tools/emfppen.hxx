@@ -68,11 +68,11 @@ namespace emfplushelper
 
         virtual ~EMFPPen() override;
 
-        void SetStrokeWidth(com::sun::star::rendering::StrokeAttributes& rStrokeAttributes, EmfPlusHelperData& rR, const ::basegfx::B2DHomMatrix& mapModeTransform);
+        void SetStrokeWidth(com::sun::star::rendering::StrokeAttributes& rStrokeAttributes, EmfPlusHelperData const & rR, const ::basegfx::B2DHomMatrix& mapModeTransform);
 
         void SetStrokeAttributes(com::sun::star::rendering::StrokeAttributes& rStrokeAttributes);
 
-        void Read(SvStream& s, EmfPlusHelperData& rR);
+        void Read(SvStream& s, EmfPlusHelperData const & rR);
 
         static sal_Int8 lcl_convertStrokeCap(sal_uInt32 nEmfStroke);
         static sal_Int8 lcl_convertLineJoinType(sal_uInt32 nEmfLineJoin);

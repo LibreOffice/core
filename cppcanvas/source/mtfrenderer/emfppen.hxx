@@ -60,11 +60,11 @@ namespace cppcanvas
 
             virtual ~EMFPPen() override;
 
-            void SetStrokeWidth(com::sun::star::rendering::StrokeAttributes& rStrokeAttributes, ImplRenderer& rR, const OutDevState& rState);
+            void SetStrokeWidth(com::sun::star::rendering::StrokeAttributes& rStrokeAttributes, ImplRenderer const & rR, const OutDevState& rState);
 
             void SetStrokeAttributes(com::sun::star::rendering::StrokeAttributes& rStrokeAttributes);
 
-            void Read(SvStream& s, ImplRenderer& rR);
+            void Read(SvStream& s, ImplRenderer const & rR);
 
             static sal_Int8 lcl_convertStrokeCap(sal_uInt32 nEmfStroke);
             static sal_Int8 lcl_convertLineJoinType(sal_uInt32 nEmfLineJoin);
