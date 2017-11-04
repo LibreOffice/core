@@ -1173,6 +1173,25 @@ void SwWW8AttrIter::OutSwFormatRefMark(const SwFormatRefMark& rAttr)
                                             &rAttr.GetRefName(), 0 ));
 }
 
+void SwWW8AttrIter::SplitRun( sal_Int32 nSplitEndPos )
+{
+    for(auto aIter = maCharRuns.begin(); aIter != maCharRuns.end(); ++aIter)
+    {
+        if(aIter->mnEndPos == nSplitEndPos)
+            return;
+        else if (aIter->mnEndPos > nSplitEndPos)
+        {
+            CharRunEntry aNewEntry = *aIter;
+            aIter->mnEndPos = nSplitEndPos;
+            maCharRuns.insert( ++aIter, aNewEntry);
+            maCharRunIter = maCharRuns.begin();
+            IterToCurrent();
+            nAktSwPos = SearchNext(1);
+            break;
+        }
+    }
+}
+
 void WW8AttributeOutput::FieldVanish( const OUString& rText, ww::eField /*eType*/ )
 {
     ww::bytes aItems;
@@ -2162,6 +2181,10 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         // Add a bookmark converted to a Word name.
         AppendBookmark( BookmarkToWord( sBkmkName ) );
     }
+
+    // Call this before write out fields and runs
+    if(GetExportFormat() == ExportFormat::DOCX)
+        AttrOutput().GenerateBookmarksForSequenceField(rNode, aAttrIter);
 
     const OUString& aStr( rNode.GetText() );
 

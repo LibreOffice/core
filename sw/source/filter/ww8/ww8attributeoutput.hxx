@@ -84,6 +84,8 @@ public:
 
     virtual void FieldVanish( const OUString& rText, ww::eField eType ) override;
 
+    virtual void GenerateBookmarksForSequenceField(const SwTextNode& /*rNode*/, SwWW8AttrIter& /*rAttrIter*/) override {};
+
     /// Output redlining.
     virtual void Redline( const SwRedlineData* pRedline ) override;
 

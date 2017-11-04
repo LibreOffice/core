@@ -181,6 +181,11 @@ void DocxExport::AppendBookmark( const OUString& rName )
     m_pAttrOutput->WriteBookmarks_Impl( aStarts, aEnds );
 }
 
+void DocxExport::AppendBookmark( const OUString& rName, sal_Int32 nWithStartPos, sal_Int32 nWithEndPos )
+{
+    m_pAttrOutput->WriteBookmarks_Impl( rName, nWithStartPos, nWithEndPos );
+}
+
 void DocxExport::AppendAnnotationMarks( const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen )
 {
     std::vector< OUString > aStarts;
