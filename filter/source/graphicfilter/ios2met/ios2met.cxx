@@ -1110,7 +1110,6 @@ void OS2METReader::ReadFullArc(bool bGivenPos, sal_uInt16 nOrderSize)
 {
     Point aCenter;
     tools::Rectangle aRect;
-    sal_uInt32 nMul; sal_uInt16 nMulS;
 
     if (bGivenPos) {
         aCenter=ReadPoint();
@@ -1120,8 +1119,11 @@ void OS2METReader::ReadFullArc(bool bGivenPos, sal_uInt16 nOrderSize)
 
     sal_Int32 nP = aAttr.nArcP;
     sal_Int32 nQ = aAttr.nArcQ;
-    if (nP<0) nP=-nP;
-    if (nQ<0) nQ=-nQ;
+    if (nP < 0)
+        nP = o3tl::saturating_toggle_sign(nP);
+    if (nQ < 0)
+        nQ = o3tl::saturating_toggle_sign(nQ);
+    sal_uInt32 nMul(0); sal_uInt16 nMulS(0);
     if (nOrderSize>=4) pOS2MET->ReadUInt32( nMul );
     else { pOS2MET->ReadUInt16( nMulS ); nMul=((sal_uInt32)nMulS)<<8; }
     if (nMul!=0x00010000) {
@@ -1153,9 +1155,7 @@ void OS2METReader::ReadFullArc(bool bGivenPos, sal_uInt16 nOrderSize)
 void OS2METReader::ReadPartialArc(bool bGivenPos, sal_uInt16 nOrderSize)
 {
     Point aP0, aCenter,aPStart,aPEnd;
-    sal_Int32 nP,nQ,nStart, nSweep;
     tools::Rectangle aRect;
-    double fStart, fEnd;
 
     if (bGivenPos) {
         aP0=ReadPoint();
@@ -1164,7 +1164,8 @@ void OS2METReader::ReadPartialArc(bool bGivenPos, sal_uInt16 nOrderSize)
     else aP0=aAttr.aCurPos;
     aCenter=ReadPoint();
 
-    nP=aAttr.nArcP; nQ=aAttr.nArcQ;
+    sal_Int32 nP = aAttr.nArcP;
+    sal_Int32 nQ = aAttr.nArcQ;
     if (nP < 0)
         nP = o3tl::saturating_toggle_sign(nP);
     if (nQ < 0)
@@ -1177,9 +1178,10 @@ void OS2METReader::ReadPartialArc(bool bGivenPos, sal_uInt16 nOrderSize)
         nQ=(nQ*nMul)>>16;
     }
 
+    sal_Int32 nStart(0), nSweep(0);
     pOS2MET->ReadInt32( nStart ).ReadInt32( nSweep );
-    fStart=((double)nStart)/65536.0/180.0*3.14159265359;
-    fEnd=fStart+((double)nSweep)/65536.0/180.0*3.14159265359;
+    double fStart = ((double)nStart)/65536.0/180.0*3.14159265359;
+    double fEnd = fStart+((double)nSweep)/65536.0/180.0*3.14159265359;
     aPStart=Point(aCenter.X()+(sal_Int32)( cos(fStart)*nP),
                   aCenter.Y()+(sal_Int32)(-sin(fStart)*nQ));
     aPEnd=  Point(aCenter.X()+(sal_Int32)( cos(fEnd)*nP),
