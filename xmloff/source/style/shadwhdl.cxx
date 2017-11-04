@@ -96,8 +96,10 @@ bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
                         aShadow.Location = table::ShadowLocation_BOTTOM_RIGHT;
                 }
 
-                if( nX < 0 ) nX *= -1;
-                if( nY < 0 ) nY *= -1;
+                if (nX < 0)
+                    nX = o3tl::saturating_toggle_sign(nX);
+                if (nY < 0)
+                    nY = o3tl::saturating_toggle_sign(nY);
 
                 sal_Int32 nWidth;
                 bRet = !o3tl::checked_add(nX, nY, nWidth);
