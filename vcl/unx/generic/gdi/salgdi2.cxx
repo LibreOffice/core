@@ -131,7 +131,10 @@ void X11SalGraphics::YieldGraphicsExpose()
         {
             const SystemEnvData* pEnvData = pSalFrame->GetSystemData();
             if( Drawable(pEnvData->aWindow) == aWindow )
+            {
                 pFrame = pSalFrame;
+                break;
+            }
         }
         if( ! pFrame )
             return;

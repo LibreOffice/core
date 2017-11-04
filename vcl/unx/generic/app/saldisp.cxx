@@ -1422,9 +1422,8 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
     memset( pPrintable, 0, *pLen );
     *pStatusReturn = 0;
 
-    SalI18N_InputMethod *pInputMethod = nullptr;
-    if ( pXLib_ )
-        pInputMethod = pXLib_->GetInputMethod();
+    SalI18N_InputMethod* const pInputMethod =
+        ( pXLib_ ) ? pXLib_->GetInputMethod() : nullptr;
 
     // first get the printable of the possibly modified KeySym
     if (   (aInputContext == nullptr)
@@ -1927,32 +1926,29 @@ void SalX11Display::Yield()
 
 bool SalX11Display::Dispatch( XEvent *pEvent )
 {
-    SalI18N_InputMethod *pInputMethod = nullptr;
-    if ( pXLib_ )
-        pInputMethod = pXLib_->GetInputMethod();
+    SalI18N_InputMethod* const pInputMethod =
+        ( pXLib_ ) ? pXLib_->GetInputMethod() : nullptr;
 
-    if( pEvent->type == KeyPress || pEvent->type == KeyRelease )
+    if( pInputMethod )
     {
-        ::Window aWindow = pEvent->xkey.window;
-
-        for (auto pSalFrame : m_aFrames )
+        ::Window aFrameWindow = None;
+        if( pEvent->type == KeyPress || pEvent->type == KeyRelease )
         {
-            const X11SalFrame* pFrame = static_cast< const X11SalFrame* >( pSalFrame );
-            if( pFrame->GetWindow() == aWindow || pFrame->GetShellWindow() == aWindow )
+            const ::Window aWindow = pEvent->xkey.window;
+            for( auto pSalFrame : m_aFrames )
             {
-                aWindow = pFrame->GetWindow();
-                break;
+                const X11SalFrame* pFrame = static_cast< const X11SalFrame* >( pSalFrame );
+                const ::Window aCurFrameWindow = pFrame->GetWindow();
+                if( aCurFrameWindow == aWindow || pFrame->GetShellWindow() == aWindow )
+                {
+                    aFrameWindow = aCurFrameWindow;
+                    break;
+                }
             }
         }
-        if( aWindow != pEvent->xkey.window )
-        {
-            if ( pInputMethod && pInputMethod->FilterEvent( pEvent , aWindow ) )
-                return false;
-        }
-    }
-    else
-        if ( pInputMethod && pInputMethod->FilterEvent( pEvent, None ) )
+        if( pInputMethod->FilterEvent( pEvent, aFrameWindow ) )
             return false;
+    }
 
     SalInstance* pInstance = GetSalData()->m_pInstance;
     pInstance->CallEventCallback( pEvent, sizeof( XEvent ) );
