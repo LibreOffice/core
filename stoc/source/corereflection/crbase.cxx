@@ -29,7 +29,7 @@ namespace stoc_corefl
 {
 
 #ifdef TEST_LIST_CLASSES
-ClassNameList g_aClassNames;
+ClassNameVector g_aClassNames;
 #endif
 
 
@@ -65,9 +65,9 @@ IdlClassImpl::IdlClassImpl( IdlReflectionServiceImpl * pReflection,
     }
 
 #ifdef TEST_LIST_CLASSES
-    ClassNameList::const_iterator iFind( std::find( g_aClassNames.begin(), g_aClassNames.end(), _aName ) );
+    ClassNameVector::const_iterator iFind( std::find( g_aClassNames.begin(), g_aClassNames.end(), _aName ) );
     OSL_ENSURE( iFind == g_aClassNames.end(), "### idl class already exists!" );
-    g_aClassNames.push_front( _aName );
+    g_aClassNames.insert(g_aClassNames.begin(), _aName);
 #endif
 }
 
@@ -78,7 +78,7 @@ IdlClassImpl::~IdlClassImpl()
     m_xReflection.clear();
 
 #ifdef TEST_LIST_CLASSES
-    ClassNameList::iterator iFind( std::find( g_aClassNames.begin(), g_aClassNames.end(), _aName ) );
+    ClassNameVector::iterator iFind( std::find( g_aClassNames.begin(), g_aClassNames.end(), _aName ) );
     OSL_ENSURE( iFind != g_aClassNames.end(), "### idl class does not exist!" );
     g_aClassNames.erase( iFind );
 #endif

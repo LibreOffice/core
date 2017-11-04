@@ -39,7 +39,7 @@
 #include "lrucache.hxx"
 
 #ifdef TEST_LIST_CLASSES
-#include <list>
+#include <vector>
 #include <algorithm>
 #endif
 #include <unordered_map>
@@ -59,8 +59,8 @@ namespace stoc_corefl
 {
 
 #ifdef TEST_LIST_CLASSES
-typedef std::list< OUString > ClassNameList;
-extern ClassNameList g_aClassNames;
+typedef std::vector< OUString > ClassNameVector;
+extern ClassNameVector g_aClassNames;
 #endif
 
 
