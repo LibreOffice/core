@@ -137,14 +137,14 @@ namespace emfplushelper
                 SAL_INFO("drawinglayer", "EMF+\theader: 0x" << std::hex << header << " points: " << std::dec << points << " additional flags: 0x" << std::hex << pathFlags << std::dec);
                 EMFPPath *path;
                 maEMFPObjects[index].reset(path = new EMFPPath(points));
-                path->Read(rObjectStream, pathFlags, *this);
+                path->Read(rObjectStream, pathFlags);
                 break;
             }
             case EmfPlusObjectTypeRegion:
             {
                 EMFPRegion *region;
                 maEMFPObjects[index].reset(region = new EMFPRegion());
-                region->Read(rObjectStream);
+                region->ReadRegion(rObjectStream, *this);
                 break;
             }
             case EmfPlusObjectTypeImage:
@@ -1047,7 +1047,7 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+\t: " << ((flags & 0x8000) ? "color" : "brush index") << " 0x" << std::hex << brushIndexOrColor << std::dec);
 
                         EMFPPath path(points, true);
-                        path.Read(rMS, flags, *this);
+                        path.Read(rMS, flags);
 
                         EMFPPlusFillPolygon(path.GetPolygon(*this), flags & 0x8000, brushIndexOrColor);
 
@@ -1059,7 +1059,7 @@ namespace emfplushelper
                         rMS.ReadUInt32(points);
                         SAL_INFO("drawinglayer", "EMF+ DrawLines in slot: " << (flags & 0xff) << " points: " << points);
                         EMFPPath path(points, true);
-                        path.Read(rMS, flags, *this);
+                        path.Read(rMS, flags);
 
                         // 0x2000 bit indicates whether to draw an extra line between the last point
                         // and the first point, to close the shape.
@@ -1570,18 +1570,7 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+ SetClipRegion");
                         SAL_INFO("drawinglayer", "EMF+\tregion in slot: " << (flags & 0xff) << " combine mode: " << combineMode);
                         EMFPRegion *region = static_cast<EMFPRegion*>(maEMFPObjects[flags & 0xff].get());
-
-                        // reset clip
-                        if (region && region->parts == 0 && region->initialState == EmfPlusRegionInitialStateInfinite)
-                        {
-                            // use existing tooling from wmfemfhelper
-                            HandleNewClipRegion(::basegfx::B2DPolyPolygon(), mrTargetHolders, mrPropertyHolders);
-                            // updateClipping(::basegfx::B2DPolyPolygon(), rFactoryParms, combineMode == 1);
-                        }
-                        else
-                        {
-                            SAL_WARN("drawinglayer", "EMF+\tTODO");
-                        }
+                        combineClip(combineMode, region->regionPolyPolygon);
                         break;
                     }
                     case EmfPlusRecordTypeDrawDriverString:
