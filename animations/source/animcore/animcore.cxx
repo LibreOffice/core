@@ -56,7 +56,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <osl/mutex.hxx>
-#include <list>
+#include <vector>
 #include <algorithm>
 #include <string.h>
 
@@ -101,7 +101,7 @@ namespace animcore
 {
 
 
-typedef std::list< Reference< XAnimationNode > > ChildList_t;
+typedef std::vector< Reference< XAnimationNode > > ChildList_t;
 
 
 class AnimationNodeBase :   public XAnimateMotion,
