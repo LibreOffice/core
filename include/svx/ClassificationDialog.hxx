@@ -37,6 +37,7 @@ protected:
 class SVX_DLLPUBLIC ClassificationDialog : public ModalDialog
 {
 private:
+    VclPtr<PushButton> m_pOkButton;
     VclPtr<ClassificationEditView> m_pEditWindow;
     VclPtr<PushButton> m_pSignButton;
     VclPtr<PushButton> m_pBoldButton;
@@ -65,6 +66,8 @@ private:
     DECL_LINK(SelectIPPartNumbersHdl, ListBox&, void);
     DECL_LINK(SelectRecentlyUsedHdl, ListBox&, void);
     DECL_LINK(SelectIPPartHdl, ListBox&, void);
+    DECL_LINK(EditWindowModifiedHdl, LinkParamNone*, void);
+
 
     void insertField(ClassificationType eType, OUString const & rString, OUString const & rFullString, OUString const & rIdentifier = OUString());
 
@@ -74,6 +77,7 @@ private:
     void readIn(std::vector<ClassificationResult> const & rInput);
     void readRecentlyUsed();
     void writeRecentlyUsed();
+    void toggleWidgetsDependingOnCategory();
 
 public:
     ClassificationDialog(vcl::Window* pParent, bool bPerParagraph, const std::function<void()>& rParagraphSignHandler = [](){});

@@ -174,6 +174,7 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
     , m_bPerParagraph(bPerParagraph)
     , m_aParagraphSignHandler(rParagraphSignHandler)
 {
+    get(m_pOkButton, "ok");
     get(m_pEditWindow, "classificationEditWindow");
     get(m_pSignButton, "signButton");
     get(m_pBoldButton, "boldButton");
@@ -232,6 +233,8 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
 
     bool bExpand = officecfg::Office::Common::Classification::IntellectualPropertySectionExpanded::get();
     m_pIntellectualPropertyExpander->set_expanded(bExpand);
+
+    m_pEditWindow->SetModifyHdl(LINK(this, ClassificationDialog, EditWindowModifiedHdl));
 }
 
 ClassificationDialog::~ClassificationDialog()
@@ -241,6 +244,7 @@ ClassificationDialog::~ClassificationDialog()
 
 void ClassificationDialog::dispose()
 {
+    m_pOkButton.clear();
     m_pEditWindow.clear();
     m_pSignButton.clear();
     m_pBoldButton.clear();
@@ -472,6 +476,35 @@ void ClassificationDialog::readIn(std::vector<ClassificationResult> const & rInp
             break;
         }
     }
+    toggleWidgetsDependingOnCategory();
+}
+
+void ClassificationDialog::toggleWidgetsDependingOnCategory()
+{
+    const EditEngine& rEditEngine = m_pEditWindow->getEditEngine();
+
+    for (sal_Int32 nParagraph = 0; nParagraph < rEditEngine.GetParagraphCount(); ++nParagraph)
+    {
+        sal_uInt16 nFieldCount = rEditEngine.GetFieldCount(nParagraph);
+        for (sal_Int16 nField = 0; nField < nFieldCount; ++nField)
+        {
+            EFieldInfo aFieldInfo = rEditEngine.GetFieldInfo(nParagraph, nField);
+            if (aFieldInfo.pFieldItem)
+            {
+                const ClassificationField* pClassificationField = dynamic_cast<const ClassificationField*>(aFieldInfo.pFieldItem->GetField());
+                if (pClassificationField && pClassificationField->meType == ClassificationType::CATEGORY)
+                {
+                    m_pOkButton->Enable();
+                    return;
+                }
+            }
+        }
+    }
+
+    // Category field in the text edit has been deleted, so reset the list boxes
+    m_pOkButton->Disable();
+    m_pClassificationListBox->SetNoSelection();
+    m_pInternationalClassificationListBox->SetNoSelection();
 }
 
 std::vector<ClassificationResult> ClassificationDialog::getResult()
@@ -660,6 +693,12 @@ IMPL_LINK(ClassificationDialog, ButtonClicked, Button*, pButton, void)
         insertField(ClassificationType::INTELLECTUAL_PROPERTY_PART, sString, sString);
     }
 }
+
+IMPL_LINK_NOARG(ClassificationDialog, EditWindowModifiedHdl, LinkParamNone*, void)
+{
+    toggleWidgetsDependingOnCategory();
+}
+
 
 } // end svx
 
