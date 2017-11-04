@@ -25,7 +25,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <list>
+#include <vector>
 
 
 namespace reportdesign
@@ -38,7 +38,7 @@ namespace reportdesign
     class OFunctions : public cppu::BaseMutex,
                     public FunctionsBase
     {
-        typedef ::std::list< css::uno::Reference< css::report::XFunction > >  TFunctions;
+        typedef ::std::vector< css::uno::Reference< css::report::XFunction > >  TFunctions;
         ::comphelper::OInterfaceContainerHelper2                            m_aContainerListeners;
         css::uno::Reference< css::uno::XComponentContext >            m_xContext;
         css::uno::WeakReference< css::report::XFunctionsSupplier >    m_xParent;

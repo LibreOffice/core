@@ -24,7 +24,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <list>
+#include <vector>
 
 
 namespace reportdesign
@@ -37,7 +37,7 @@ namespace reportdesign
     class OGroups : public cppu::BaseMutex,
                     public GroupsBase
     {
-        typedef ::std::list< css::uno::Reference< css::report::XGroup > > TGroups;
+        typedef ::std::vector< css::uno::Reference< css::report::XGroup > > TGroups;
         ::comphelper::OInterfaceContainerHelper2                            m_aContainerListeners;
         css::uno::Reference< css::uno::XComponentContext >            m_xContext;
         css::uno::WeakReference< css::report::XReportDefinition >     m_xParent;
