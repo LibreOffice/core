@@ -22,6 +22,8 @@
 
 #include <algorithm>
 
+#include <svdata.hxx>
+
 SalUserEventList::SalUserEventList()
     : m_bAllUserEventProcessedSignaled( true )
 {
@@ -77,17 +79,21 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
                 m_aProcessingUserEvents.pop_front();
             }
 
-            if ( isFrameAlive( aEvent.m_pFrame ) )
+            if ( !isFrameAlive( aEvent.m_pFrame ) )
             {
-                try
-                {
-                    ProcessEvent( aEvent );
-                }
-                catch (...)
-                {
-                    SAL_WARN( "vcl", "Uncaught exception during ProcessEvent!" );
-                    std::abort();
-                }
+                if ( aEvent.m_nEvent == SalEvent::UserEvent )
+                    delete static_cast< ImplSVEvent* >( aEvent.m_pData );
+                continue;
+            }
+
+            try
+            {
+                ProcessEvent( aEvent );
+            }
+            catch (...)
+            {
+                SAL_WARN( "vcl", "Uncaught exception during ProcessEvent!" );
+                std::abort();
             }
         }
         while( true );
