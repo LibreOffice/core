@@ -492,14 +492,17 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
 
         // check if this is really one of our own frames
         // do not change the input mask in that case
+        bool bIsReallyOurFrame = false;
         for (auto pSalFrame : GetDisplay()->getFrames() )
-        {
             if ( static_cast<const X11SalFrame*>( pSalFrame )->GetWindow() == mhForeignParent )
             {
-                XSelectInput( GetDisplay()->GetDisplay(), mhForeignParent, StructureNotifyMask | FocusChangeMask );
-                XSelectInput( GetDisplay()->GetDisplay(), mhShellWindow, StructureNotifyMask | FocusChangeMask );
+                bIsReallyOurFrame = true;
                 break;
             }
+        if (!bIsReallyOurFrame)
+        {
+            XSelectInput( GetDisplay()->GetDisplay(), mhForeignParent, StructureNotifyMask | FocusChangeMask );
+            XSelectInput( GetDisplay()->GetDisplay(), mhShellWindow, StructureNotifyMask | FocusChangeMask );
         }
     }
     else
@@ -520,6 +523,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
             {
                 // find the last document window (if any)
                 const X11SalFrame* pFrame = nullptr;
+                bool bIsDocumentWindow = false;
                 for (auto pSalFrame : GetDisplay()->getFrames() )
                 {
                     pFrame = static_cast< const X11SalFrame* >( pSalFrame );
@@ -530,10 +534,13 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
                             || ! pFrame->GetUnmirroredGeometry().nHeight
                             )
                         )
+                    {
+                        bIsDocumentWindow = true;
                         break;
+                    }
                 }
 
-                if( pFrame )
+                if( bIsDocumentWindow )
                 {
                     // set a document position and size
                     // the first frame gets positioned by the window manager
