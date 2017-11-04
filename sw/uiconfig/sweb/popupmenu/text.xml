@@ -34,7 +34,9 @@
   <menu:menuitem menu:id=".uno:AuthoritiesEntryDialog"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:AcceptTrackedChange"/>
+  <menu:menuitem menu:id=".uno:AcceptAllTrackedChanges"/>
   <menu:menuitem menu:id=".uno:RejectTrackedChange"/>
+  <menu:menuitem menu:id=".uno:RejectAllTrackedChanges"/>
   <menu:menuitem menu:id=".uno:NextTrackedChange"/>
   <menu:menuitem menu:id=".uno:PreviousTrackedChange"/>
   <menu:menuseparator/>
