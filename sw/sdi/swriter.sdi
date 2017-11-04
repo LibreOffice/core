@@ -7270,8 +7270,44 @@ SfxVoidItem AcceptTrackedChange FN_REDLINE_ACCEPT_DIRECT
     GroupId = GID_EDIT;
 ]
 
+SfxVoidItem AcceptAllTrackedChanges FN_REDLINE_ACCEPT_ALL
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
+
 SfxVoidItem RejectTrackedChange FN_REDLINE_REJECT_DIRECT
 ( SfxUInt32Item RejectTrackedChange FN_REDLINE_REJECT_DIRECT )
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
+
+SfxVoidItem RejectAllTrackedChanges FN_REDLINE_REJECT_ALL
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

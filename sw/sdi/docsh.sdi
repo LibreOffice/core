@@ -61,6 +61,16 @@ interface TextDocument : BaseTextDocument
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
+    FN_REDLINE_ACCEPT_ALL
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    FN_REDLINE_REJECT_ALL
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
 }
 
 shell SwDocShell

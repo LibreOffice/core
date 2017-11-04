@@ -1652,6 +1652,22 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     }
                 }
                 break;
+            case SFX_HINT_REDLINECHANGED:
+                {
+                    sal_uInt16 aSlotRedLine[] = {
+                        FN_REDLINE_NEXT_CHANGE,
+                        FN_REDLINE_PREV_CHANGE,
+                        FN_REDLINE_ACCEPT_DIRECT,
+                        FN_REDLINE_REJECT_DIRECT,
+                        FN_REDLINE_ACCEPT_ALL,
+                        FN_REDLINE_REJECT_ALL,
+                        0
+                    };
+                    GetViewFrame()->GetBindings().Invalidate(aSlotRedLine);
+                }
+                break;
+
+            default: break;
         }
     }
 
