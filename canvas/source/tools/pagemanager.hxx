@@ -57,12 +57,12 @@ namespace canvas
 
         // here we collect all fragments that will be created
         // since we need them for relocation purposes.
-        typedef std::list<FragmentSharedPtr> FragmentContainer_t;
+        typedef std::vector<FragmentSharedPtr> FragmentContainer_t;
         FragmentContainer_t maFragments;
 
         // this is the container holding all created pages,
         // behind the scenes these are real hardware surfaces.
-        typedef std::list<PageSharedPtr> PageContainer_t;
+        typedef std::vector<PageSharedPtr> PageContainer_t;
         PageContainer_t maPages;
 
         bool relocate( const FragmentSharedPtr& pFragment );
