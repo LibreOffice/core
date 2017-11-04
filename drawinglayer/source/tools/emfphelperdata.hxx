@@ -104,8 +104,6 @@ namespace emfplushelper
     #define EmfPlusObjectTypeImageAttributes 0x800
     #define EmfPlusObjectTypeCustomLineCap 0x900
 
-    #define EmfPlusRegionInitialStateInfinite 0x10000003
-
     enum UnitType
     {
         UnitTypeWorld = 0x00,
