@@ -1822,7 +1822,7 @@ void EffectSequenceHelper::implRebuild()
         EffectSequence::iterator aEnd( maEffects.end() );
         if( aIter != aEnd )
         {
-            AfterEffectNodeList aAfterEffects;
+            std::vector< sd::AfterEffectNode > aAfterEffects;
 
             CustomAnimationEffectPtr pEffect = (*aIter++);
 

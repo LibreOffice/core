@@ -56,7 +56,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <osl/mutex.hxx>
-#include <list>
+#include <vector>
 #include <algorithm>
 #include <string.h>
 
@@ -99,10 +99,6 @@ using namespace ::com::sun::star::animations::AnimationNodeType;
 
 namespace animcore
 {
-
-
-typedef std::list< Reference< XAnimationNode > > ChildList_t;
-
 
 class AnimationNodeBase :   public XAnimateMotion,
                             public XAnimateColor,
@@ -344,14 +340,14 @@ private:
     double  mfIterateInterval;
 
     /** sorted list of child nodes for XTimeContainer*/
-    ChildList_t             maChildren;
+    std::vector< Reference< XAnimationNode > > maChildren;
 };
 
 
 class TimeContainerEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 {
 public:
-    explicit TimeContainerEnumeration( const ChildList_t &rChildren );
+    explicit TimeContainerEnumeration( const std::vector< Reference< XAnimationNode > > &rChildren );
 
     // Methods
     virtual sal_Bool SAL_CALL hasMoreElements() override;
@@ -359,16 +355,16 @@ public:
 
 private:
     /** sorted list of child nodes */
-    ChildList_t             maChildren;
+    std::vector< Reference< XAnimationNode > > maChildren;
 
     /** current iteration position */
-    ChildList_t::iterator   maIter;
+    std::vector< Reference< XAnimationNode > >::iterator   maIter;
 
     /** our first, last and only protection from multi-threads! */
     Mutex                   maMutex;
 };
 
-TimeContainerEnumeration::TimeContainerEnumeration( const ChildList_t &rChildren )
+TimeContainerEnumeration::TimeContainerEnumeration( const std::vector< Reference< XAnimationNode > > &rChildren )
 : maChildren( rChildren )
 {
     maIter = maChildren.begin();
@@ -1192,11 +1188,9 @@ Reference< XCloneable > SAL_CALL AnimationNode::createClone()
             Reference< XTimeContainer > xContainer( xNewNode, UNO_QUERY );
             if( xContainer.is() )
             {
-                ChildList_t::iterator aIter( maChildren.begin() );
-                ChildList_t::iterator aEnd( maChildren.end() );
-                while( aIter != aEnd )
+                for (auto const& child : maChildren)
                 {
-                    Reference< XCloneable > xCloneable((*aIter++), UNO_QUERY );
+                    Reference< XCloneable > xCloneable(child, UNO_QUERY );
                     if( xCloneable.is() ) try
                     {
                         Reference< XAnimationNode > xNewChildNode( xCloneable->createClone(), UNO_QUERY );
@@ -1768,12 +1762,12 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertBefore( const Referenc
     if( !newChild.is() || !refChild.is() )
         throw IllegalArgumentException();
 
-    ChildList_t::iterator before = std::find(maChildren.begin(), maChildren.end(), refChild);
-    if( before == maChildren.end() )
-        throw NoSuchElementException();
-
     if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
         throw ElementExistException();
+
+    auto before = std::find(maChildren.begin(), maChildren.end(), refChild);
+    if( before == maChildren.end() )
+        throw NoSuchElementException();
 
     maChildren.insert( before, newChild );
 
@@ -1792,12 +1786,12 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertAfter( const Reference
     if( !newChild.is() || !refChild.is() )
         throw IllegalArgumentException();
 
-    ChildList_t::iterator before = std::find(maChildren.begin(), maChildren.end(), refChild);
-    if( before == maChildren.end() )
-        throw NoSuchElementException();
-
     if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
         throw ElementExistException();
+
+    auto before = std::find(maChildren.begin(), maChildren.end(), refChild);
+    if( before == maChildren.end() )
+        throw NoSuchElementException();
 
     ++before;
     if( before != maChildren.end() )
@@ -1820,12 +1814,12 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::replaceChild( const Referenc
     if( !newChild.is() || !oldChild.is() )
         throw IllegalArgumentException();
 
-    ChildList_t::iterator replace = std::find(maChildren.begin(), maChildren.end(), oldChild);
-    if( replace == maChildren.end() )
-        throw NoSuchElementException();
-
     if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
         throw ElementExistException();
+
+    auto replace = std::find(maChildren.begin(), maChildren.end(), oldChild);
+    if( replace == maChildren.end() )
+        throw NoSuchElementException();
 
     Reference< XInterface > xNull( nullptr );
     oldChild->setParent( xNull );
@@ -1847,7 +1841,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::removeChild( const Reference
     if( !oldChild.is() )
         throw IllegalArgumentException();
 
-    ChildList_t::iterator old = std::find(maChildren.begin(), maChildren.end(), oldChild);
+    auto old = std::find(maChildren.begin(), maChildren.end(), oldChild);
     if( old == maChildren.end() )
         throw NoSuchElementException();
 
