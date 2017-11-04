@@ -66,6 +66,7 @@ namespace emfplushelper
     #define EmfPlusRecordTypeSetRenderingOrigin 0x401D
     #define EmfPlusRecordTypeSetAntiAliasMode 0x401E
     #define EmfPlusRecordTypeSetTextRenderingHint 0x401F
+    //TODO EmfPlusSetTextContrast 0x4020
     #define EmfPlusRecordTypeSetInterpolationMode 0x4021
     #define EmfPlusRecordTypeSetPixelOffsetMode 0x4022
     //TODO EmfPlusRecordTypeSetCompositingMode 0x4023
@@ -103,8 +104,6 @@ namespace emfplushelper
     #define EmfPlusObjectTypeStringFormat 0x700
     #define EmfPlusObjectTypeImageAttributes 0x800
     #define EmfPlusObjectTypeCustomLineCap 0x900
-
-    #define EmfPlusRegionInitialStateInfinite 0x10000003
 
     enum UnitType
     {
@@ -242,7 +241,7 @@ namespace emfplushelper
 
         // helper functions
         ::basegfx::BColor EMFPGetBrushColorOrARGBColor(sal_uInt16 flags, sal_uInt32 brushIndexOrColor) const;
-        void combineClip(int combineMode, ::basegfx::B2DPolyPolygon const & polygon);
+        ::basegfx::B2DPolyPolygon const & combineClip(::basegfx::B2DPolyPolygon const & leftPolygon, int combineMode, ::basegfx::B2DPolyPolygon const & rightPolygon);
 
     public:
         EmfPlusHelperData(
