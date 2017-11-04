@@ -1073,6 +1073,13 @@ void SwDocShell::GetState(SfxItemSet& rSet)
             rSet.Put( SfxBoolItem( SID_NOTEBOOKBAR, bVisible ) );
         }
         break;
+        case FN_REDLINE_ACCEPT_ALL:
+        case FN_REDLINE_REJECT_ALL:
+        {
+            if (GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().size() == 0)
+                rSet.DisableItem(nWhich);
+        }
+        break;
 
         default: OSL_ENSURE(false,"You cannot get here!");
 

@@ -1617,7 +1617,9 @@ static void doc_iniUnoCommands ()
         OUString(".uno:TrackChanges"),
         OUString(".uno:ShowTrackedChanges"),
         OUString(".uno:NextTrackedChange"),
-        OUString(".uno:PreviousTrackedChange")
+        OUString(".uno:PreviousTrackedChange"),
+        OUString(".uno:AcceptAllTrackedChanges"),
+        OUString(".uno:RejectAllTrackedChanges")
     };
 
     util::URL aCommandURL;

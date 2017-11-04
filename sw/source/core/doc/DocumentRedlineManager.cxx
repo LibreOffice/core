@@ -2344,6 +2344,38 @@ bool DocumentRedlineManager::RejectRedline( const SwPaM& rPam, bool bCallDelete 
     // #TODO - add 'SwExtraRedlineTable' also ?
 }
 
+void DocumentRedlineManager::AcceptAllRedline(bool bAccept)
+{
+    OUString sUndoStr;
+    IDocumentUndoRedo& rUndoMgr = m_rDoc.GetIDocumentUndoRedo();
+
+    if (mpRedlineTable->size() > 1)
+    {
+        {
+            SwRewriter aRewriter;
+            aRewriter.AddRule(UndoArg1, OUString::number(mpRedlineTable->size()));
+            sUndoStr = aRewriter.Apply(SwResId(STR_N_REDLINES));
+        }
+
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, sUndoStr);
+        rUndoMgr.StartUndo(bAccept ? SwUndoId::ACCEPT_REDLINE : SwUndoId::REJECT_REDLINE, &aRewriter);
+    }
+
+    while (mpRedlineTable->size() > 0)
+    {
+        if (bAccept)
+            AcceptRedline(mpRedlineTable->size() - 1, true);
+        else
+            RejectRedline(mpRedlineTable->size() - 1, true);
+    }
+
+    if (!sUndoStr.isEmpty())
+    {
+        rUndoMgr.EndUndo(SwUndoId::EMPTY, nullptr);
+    }
+}
+
 const SwRangeRedline* DocumentRedlineManager::SelNextRedline( SwPaM& rPam ) const
 {
     rPam.DeleteMark();
