@@ -71,7 +71,7 @@ namespace connectivity
         public:
             ParamValue( ) : base_type( ) { }
             ParamValue( OUString const& val ) : base_type( val ) { }
-            ParamValue( ParamValue const& rhs ) : base_type( rhs ) { }
+            ParamValue( ParamValue const& rhs ) : base_type( static_cast<base_type const&>( rhs ) ) { }
 
             bool    is() const { return !base_type::operator!(); }
         };
