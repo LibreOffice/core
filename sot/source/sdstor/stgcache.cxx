@@ -319,6 +319,7 @@ void StgCache::Close()
 
 bool StgCache::Read( sal_Int32 nPage, void* pBuf )
 {
+    sal_uInt32 nRead = 0, nBytes = m_nPageSize;
     if( Good() )
     {
         /*  #i73846# real life: a storage may refer to a page one-behind the
@@ -329,28 +330,40 @@ bool StgCache::Read( sal_Int32 nPage, void* pBuf )
             SetError( SVSTREAM_READ_ERROR );
         else if ( nPage < m_nPages )
         {
-            sal_uInt32 nPos = Page2Pos( nPage );
-            sal_Int32 nPg2 = ( ( nPage + 1 ) > m_nPages ) ? m_nPages - nPage : 1;
-            sal_uInt32 nBytes = nPg2 * m_nPageSize;
+            sal_uInt32 nPos;
+            sal_Int32 nPg2;
             // fixed address and size for the header
             if( nPage == -1 )
             {
                 nPos = 0;
-                nBytes = 512;
                 nPg2 = 1;
+                nBytes = 512;
             }
-            if( m_pStrm->Tell() != nPos )
-            {
-                m_pStrm->Seek(nPos);
-            }
-            m_pStrm->ReadBytes( pBuf, nBytes );
-            if ( 1 != nPg2 )
-                SetError( SVSTREAM_READ_ERROR );
             else
-                SetError( m_pStrm->GetError() );
+            {
+                nPos = Page2Pos(nPage);
+                nPg2 = ((nPage + 1) > m_nPages) ? m_nPages - nPage : 1;
+            }
+
+            if (m_pStrm->Tell() != nPos)
+                m_pStrm->Seek(nPos);
+
+            if (nPg2 != 1)
+                SetError(SVSTREAM_READ_ERROR);
+            else
+            {
+                nRead = m_pStrm->ReadBytes(pBuf, nBytes);
+                SetError(m_pStrm->GetError());
+            }
         }
     }
-    return Good();
+
+    if (!Good())
+        return false;
+
+    if (nRead != nBytes)
+        memset(static_cast<sal_uInt8*>(pBuf) + nRead, 0, nBytes - nRead);
+    return true;
 }
 
 bool StgCache::Write( sal_Int32 nPage, void const * pBuf )
