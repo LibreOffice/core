@@ -17,76 +17,121 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/rendering/PathCapType.hpp>
-#include <com/sun/star/rendering/PathJoinType.hpp>
-#include <com/sun/star/rendering/TexturingMode.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
-#include <basegfx/utils/canvastools.hxx>
-#include <basegfx/utils/gradienttools.hxx>
-#include <basegfx/utils/tools.hxx>
-#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dsize.hxx>
-#include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <vcl/canvastools.hxx>
 #include "emfpregion.hxx"
-
-using namespace ::com::sun::star;
-using namespace ::basegfx;
+#include "emfppath.hxx"
 
 namespace emfplushelper
 {
     EMFPRegion::EMFPRegion()
-        : parts(0)
-        , combineMode(nullptr)
-        , initialState(0)
-        , ix(0.0)
-        , iy(0.0)
-        , iw(0.0)
-        , ih(0.0)
     {
     }
 
     EMFPRegion::~EMFPRegion()
     {
-        if (combineMode)
-        {
-            delete[] combineMode;
-            combineMode = nullptr;
-        }
     }
 
-    void EMFPRegion::Read(SvStream& s)
+    ::basegfx::B2DPolyPolygon EMFPRegion::ReadRegionNode(SvStream& s, EmfPlusHelperData& rR)
     {
-        sal_uInt32 header;
-        s.ReadUInt32(header).ReadInt32(parts);
-        SAL_INFO("drawinglayer", "EMF+\tregion");
-        SAL_INFO("drawinglayer", "EMF+\theader: 0x" << std::hex << header << " parts: " << parts << std::dec);
+        // Regions are specified as a binary tree of region nodes, and each node must either be a terminal node
+        // (RegionNodeDataTypeRect, RegionNodeDataTypePath, RegionNodeDataTypeEmpty, RegionNodeDataTypeInfinite)
+        // or specify one or two child nodes
+        // (RegionNodeDataTypeAnd, RegionNodeDataTypeOr, RegionNodeDataTypeXor,
+        // RegionNodeDataTypeExclude, RegionNodeDataTypeComplement).
+        sal_uInt32 dataType;
+        ::basegfx::B2DPolyPolygon polygon;
+        s.ReadUInt32(dataType);
+        SAL_INFO("drawinglayer", "EMF+\t Region node data type 0x" << std::hex << dataType << std::dec);
 
-        if (parts)
+        switch (dataType)
         {
-            if (parts<0 || sal_uInt32(parts)>SAL_MAX_INT32 / sizeof(sal_Int32))
-            {
-                parts = SAL_MAX_INT32 / sizeof(sal_Int32);
-            }
-
-            combineMode = new sal_Int32[parts];
-
-            for (int i = 0; i < parts; i++)
-            {
-                s.ReadInt32(combineMode[i]);
-                SAL_INFO("drawinglayer", "EMF+\tcombine mode [" << i << "]: 0x" << std::hex << combineMode[i] << std::dec);
-            }
+        case RegionNodeDataTypeAnd: // CombineModeIntersect
+        case RegionNodeDataTypeOr: // CombineModeUnion
+        case RegionNodeDataTypeXor: // CombineModeXOR
+        case RegionNodeDataTypeExclude: // CombineModeExclude
+        case RegionNodeDataTypeComplement: // CombineModeComplement
+        {
+            ::basegfx::B2DPolyPolygon leftPolygon = ReadRegionNode(s, rR);
+            ::basegfx::B2DPolyPolygon rightPolygon = ReadRegionNode(s, rR);
+            polygon = rR.combineClip(leftPolygon, dataType, rightPolygon);
+            break;
         }
+        case RegionNodeDataTypeRect:
+        {
+            float dx, dy, dw, dh;
+            s.ReadFloat(dx).ReadFloat(dy).ReadFloat(dw).ReadFloat(dh);
+            SAL_INFO("drawinglayer", "EMF+\t\t RegionNodeDataTypeRect x:" << dx << ", y:" << dy <<
+                     ", width:" << dw << ", height:" << dh);
 
-        s.ReadInt32(initialState);
-        SAL_INFO("drawinglayer", "EMF+\tinitial state: 0x" << std::hex << initialState << std::dec);
+            ::basegfx::B2DPoint mappedPoint(rR.Map(dx, dy));
+            ::basegfx::B2DSize mappedSize(rR.MapSize(dw, dh));
+
+            ::basegfx::B2DPolyPolygon polyPolygon(
+                ::basegfx::B2DPolygon(
+                    ::basegfx::utils::createPolygonFromRect(
+                        ::basegfx::B2DRectangle(
+                            mappedPoint.getX(),
+                            mappedPoint.getY(),
+                            mappedPoint.getX() + mappedSize.getX(),
+                            mappedPoint.getY() + mappedSize.getY()))));
+            polygon = polyPolygon;
+            break;
+        }
+        case RegionNodeDataTypePath:
+        {
+            sal_Int32 pathLength;
+            s.ReadInt32(pathLength);
+            SAL_INFO("drawinglayer", "EMF+\t\t RegionNodeDataTypePath, Path Length: " << pathLength << " bytes");
+
+            sal_uInt32 header, pathFlags;
+            sal_Int32 points;
+
+            s.ReadUInt32(header).ReadInt32(points).ReadUInt32(pathFlags);
+            SAL_INFO("drawinglayer", "EMF+\t\t header: 0x" << std::hex << header <<
+                     " points: " << std::dec << points << " additional flags: 0x" << std::hex << pathFlags << std::dec);
+
+            EMFPPath path(points);
+            path.Read(s, pathFlags);
+            polygon = path.GetPolygon(rR);
+            break;
+        }
+        case RegionNodeDataTypeEmpty:
+        {
+            SAL_INFO("drawinglayer", "EMF+\t\t RegionNodeDataTypeEmpty");
+            SAL_WARN("drawinglayer", "EMF+\t\t TODO we need to set empty polygon here");
+            polygon = ::basegfx::B2DPolyPolygon();
+
+            break;
+        }
+        case RegionNodeDataTypeInfinite:
+        {
+            SAL_INFO("drawinglayer", "EMF+\t\t RegionNodeDataTypeInfinite");
+            polygon = ::basegfx::B2DPolyPolygon();
+            break;
+        }
+        default:
+        {
+            SAL_WARN("drawinglayer", "EMF+\t\t Unhandled region type: 0x" << std::hex << dataType << std::dec);
+            polygon = ::basegfx::B2DPolyPolygon();
+        }
+        }
+        return polygon;
+    }
+
+    void EMFPRegion::ReadRegion(SvStream& s, EmfPlusHelperData& rR)
+    {
+        sal_uInt32 header, count;
+        s.ReadUInt32(header).ReadUInt32(count);
+        // An array should be RegionNodeCount+1 of EmfPlusRegionNode objects.
+        SAL_INFO("drawinglayer", "EMF+\t version: 0x" << std::hex << header << std::dec << ", region node count: " << count);
+
+        regionPolyPolygon = ReadRegionNode(s, rR);
     }
 }
 

@@ -17,28 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/rendering/PathCapType.hpp>
-#include <com/sun/star/rendering/PathJoinType.hpp>
-#include <com/sun/star/rendering/TexturingMode.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
-#include <basegfx/utils/canvastools.hxx>
-#include <basegfx/utils/gradienttools.hxx>
-#include <basegfx/utils/tools.hxx>
-#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/vector/b2dsize.hxx>
-#include <basegfx/range/b2drange.hxx>
-#include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <vcl/canvastools.hxx>
 #include "emfppath.hxx"
-
-using namespace ::com::sun::star;
-using namespace ::basegfx;
 
 namespace emfplushelper
 {
@@ -60,8 +42,7 @@ namespace emfplushelper
     {
     }
 
-    // TODO: remove rR argument when debug code is no longer needed
-    void EMFPPath::Read (SvStream& s, sal_uInt32 pathFlags, EmfPlusHelperData const & rR)
+    void EMFPPath::Read (SvStream& s, sal_uInt32 pathFlags)
     {
         for (int i = 0; i < nPoints; i ++)
         {
@@ -99,16 +80,7 @@ namespace emfplushelper
             }
         }
 
-        aPolygon.clear ();
-
-#if OSL_DEBUG_LEVEL > 1
-        const ::basegfx::B2DRectangle aBounds (::basegfx::utils::getRange (GetPolygon (rR)));
-
-        SAL_INFO ("drawinglayer",
-                    "EMF+\tpolygon bounding box: " << aBounds.getMinX () << "," << aBounds.getMinY () << aBounds.getWidth () << "x" << aBounds.getHeight () << " (mapped)");
-#else
-        (void) rR; // avoid warnings
-#endif
+        aPolygon.clear();
     }
 
     ::basegfx::B2DPolyPolygon& EMFPPath::GetPolygon (EmfPlusHelperData const & rR, bool bMapIt, bool bAddLineToCloseShape)
