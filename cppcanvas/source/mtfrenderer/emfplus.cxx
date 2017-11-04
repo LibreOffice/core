@@ -2166,7 +2166,9 @@ namespace cppcanvas
 
                                 if (bValid) {
                                     BitmapEx aBmp( image.graphic.GetBitmapEx () );
-                                    aBmp.Crop( aSource );
+                                    if (image.type == 1) { // Bitmap
+                                      aBmp.Crop( aSource );
+                                    }
 
                                     Size aSize( aBmp.GetSizePixel() );
                                     SAL_INFO("cppcanvas.emf", "EMF+ bitmap size: " << aSize.Width() << "x" << aSize.Height());
