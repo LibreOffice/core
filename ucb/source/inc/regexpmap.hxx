@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <list>
+#include <vector>
 #include <memory>
 
 #include <rtl/ustring.hxx>
@@ -67,7 +67,7 @@ struct Entry
 };
 
 
-template< typename Val > class List: public std::list< Entry< Val > > {};
+template< typename Val > class List: public std::vector< Entry< Val > > {};
 
 
 template< typename Val >
