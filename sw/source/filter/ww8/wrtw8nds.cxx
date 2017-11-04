@@ -701,8 +701,6 @@ bool SwWW8AttrIter::IsExportableAttr(sal_Int32 nSwPos) const
                     return false;
                 }
             }
-            else if (nSwPos > nEnd)
-                break;
         }
     }
 
