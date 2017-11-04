@@ -10,7 +10,7 @@
 #ifndef SC_OPENCL_OPINLINFUN_finacial
 #define SC_OPENCL_OPINLINFUN_finacial
 
-std::string nKorrValDecl ="double constant nKorrVal[]"
+std::string nKorrValDecl ="double constant nCorrVal[]"
 "= {0, 9e-1, 9e-2, 9e-3, 9e-4, 9e-5, 9e-6, 9e-7, "
 "9e-8,9e-9, 9e-10, 9e-11, 9e-12, 9e-13, 9e-14, 9e-15};\n";
 
@@ -36,88 +36,88 @@ std::string Round =
 "        nIndex = 15;\n"
 "    else if ( nIndex <= 1 )\n"
 "        nIndex = 0;\n"
-"    fValue = floor( fValue + 0.5 + nKorrVal[nIndex] );\n"
+"    fValue = floor( fValue + 0.5 + nCorrVal[nIndex] );\n"
 "    return fValue;\n"
 "}\n";
 
 std::string GetRmzDecl =
-"double GetRmz( double fZins, double fZzr, double fBw, double fZw,int nF );\n";
+"double GetRmz( double fRate, double fNper, double fPv, double fFv, int nPayType );\n";
 
 std::string GetRmz=
-"double GetRmz( double fZins, double fZzr, double fBw, double fZw, int nF )\n"
+"double GetRmz( double fRate, double fNper, double fPv, double fFv, int nPayType )\n"
 "{\n"
-"    double      fRmz;\n"
-"    if( fZins == 0.0 )\n"
-"        fRmz = ( fBw + fZw ) / fZzr;\n"
+"    double      fPmt;\n"
+"    if( fRate == 0.0 )\n"
+"        fPmt = ( fPv + fFv ) / fNper;\n"
 "    else\n"
 "    {\n"
-"        double  fTerm = pow( 1.0 + fZins, fZzr );\n"
-"        if( nF > 0 )\n"
-"            fRmz = ( fZw * fZins / ( fTerm - 1.0 ) + fBw * fZins / ( 1.0 - 1."
-"0 / fTerm ) ) / ( 1.0 + fZins );\n"
+"        double  fTerm = pow( 1.0 + fRate, fNper );\n"
+"        if( nPayType > 0 )\n"
+"            fPmt = ( fFv * fRate / ( fTerm - 1.0 ) + fPv * fRate / ( 1.0 - 1."
+"0 / fTerm ) ) / ( 1.0 + fRate );\n"
 "        else\n"
-"            fRmz = fZw * fZins / ( fTerm - 1.0 ) + fBw * fZins /( 1.0 - 1.0 "
+"            fPmt = fFv * fRate / ( fTerm - 1.0 ) + fPv * fRate /( 1.0 - 1.0 "
 "/ fTerm );\n"
 "    }\n"
-"    return -fRmz;\n"
+"    return -fPmt;\n"
 "}\n";
 
 std::string GetRmz_newDecl =
-"double GetRmz_new( double fZins, double fZzr, double fBw, double fZw,"
-"int nF );\n";
+"double GetRmz_new( double fRate, double fNper, double fPv, double fFv,"
+"int nPayType );\n";
 std::string GetRmz_new=
-"double GetRmz_new( double fZins, double fZzr, double fBw, double fZw,"
-"int nF)\n"
+"double GetRmz_new( double fRate, double fNper, double fPv, double fFv,"
+"int nPayType)\n"
 "{\n"
-"    double fRmz;\n"
-"        double  fTerm = pow( 1.0 + fZins, fZzr );\n"
-"        if( nF > 0 )\n"
-"            fRmz = ( fZw * fZins *pow ( fTerm - 1.0,-1 ) + fBw * fZins *pow( "
-"( 1.0 - pow( fTerm,-1) ),-1) )* pow ( 1.0 + fZins,-1 );\n"
+"    double fPmt;\n"
+"        double  fTerm = pow( 1.0 + fRate, fNper );\n"
+"        if( nPayType > 0 )\n"
+"            fPmt = ( fFv * fRate *pow ( fTerm - 1.0,-1 ) + fPv * fRate *pow( "
+"( 1.0 - pow( fTerm,-1) ),-1) )* pow ( 1.0 + fRate,-1 );\n"
 "        else\n"
-"            fRmz = fZw * fZins *pow ( fTerm - 1.0 ,-1) + fBw * fZins *pow( "
+"            fPmt = fFv * fRate *pow ( fTerm - 1.0 ,-1) + fPv * fRate *pow( "
 "1.0 - pow( fTerm,-1),-1 );\n"
-"    return -fRmz;\n"
+"    return -fPmt;\n"
 "}\n";
 std::string GetZwDecl =
-"double GetZw( double fZins, double fZzr, double fRmz,"
-"double fBw, int nF );\n";
+"double GetZw( double fRate, double fNper, double fPmt,"
+"double fPv, int nPayType );\n";
 
 std::string GetZw =
-"double GetZw( double fZins, double fZzr, double fRmz,"
-"double fBw, int nF )\n"
+"double GetZw( double fRate, double fNper, double fPmt,"
+"double fPv, int nPayType )\n"
 "{\n"
-"    double      fZw;\n"
-"    if( fZins == 0.0 )\n"
-"        fZw = fBw + fRmz * fZzr;\n"
+"    double      fFv;\n"
+"    if( fRate == 0.0 )\n"
+"        fFv = fPv + fPmt * fNper;\n"
 "    else\n"
 "    {\n"
-"        double  fTerm = pow( 1.0 + fZins, fZzr );\n"
-"        if( nF > 0 )\n"
-"                fZw = fBw * fTerm + fRmz * ( 1.0 + fZins ) *( fTerm - 1.0 ) "
-"/ fZins;\n"
+"        double  fTerm = pow( 1.0 + fRate, fNper );\n"
+"        if( nPayType > 0 )\n"
+"                fFv = fPv * fTerm + fPmt * ( 1.0 + fRate ) *( fTerm - 1.0 ) "
+"/ fRate;\n"
 "        else\n"
-"                fZw = fBw * fTerm + fRmz * ( fTerm - 1.0 ) / fZins;\n"
+"                fFv = fPv * fTerm + fPmt * ( fTerm - 1.0 ) / fRate;\n"
 "    }\n"
-"    return -fZw;\n"
+"    return -fFv;\n"
 "}\n";
 
 std::string GetZw_newDecl =
-"double GetZw_new( double fZins, double fZzr, double fRmz,"
-"double fBw, int nF );\n";
+"double GetZw_new( double fRate, double fNper, double fPmt,"
+"double fPv, int nPayType );\n";
 
 std::string GetZw_new =
-"double GetZw_new( double fZins, double fZzr, double fRmz,"
-"double fBw, int nF )\n"
+"double GetZw_new( double fRate, double fNper, double fPmt,"
+"double fPv, int nPayType )\n"
 "{\n"
-"    double fZw;\n"
-"    double  fTerm = pow( 1.0 + fZins, fZzr );\n"
-"    if( nF > 0 )\n"
-"        fZw = fBw * fTerm + fRmz * ( 1.0 + fZins ) *( fTerm - 1.0 ) "
-"*pow( fZins,-1);\n"
+"    double fFv;\n"
+"    double  fTerm = pow( 1.0 + fRate, fNper );\n"
+"    if( nPayType > 0 )\n"
+"        fFv = fPv * fTerm + fPmt * ( 1.0 + fRate ) *( fTerm - 1.0 ) "
+"*pow( fRate,-1);\n"
 "    else\n"
-"        fZw = fBw * fTerm + fRmz * ( fTerm - 1.0 ) *pow( fZins,-1);\n"
-"    return -fZw;\n"
+"        fFv = fPv * fTerm + fPmt * ( fTerm - 1.0 ) *pow( fRate,-1);\n"
+"    return -fFv;\n"
 "}\n";
 
 std::string IsLeapYearDecl =
@@ -1443,34 +1443,34 @@ std::string GetDuration_new=
 "    }\n";
 
 std::string ScGetGDADecl=
-"double ScGetGDA(double fWert, double fRest, double fDauer, double fPeriode,"
-"double fFaktor);\n";
+"double ScGetGDA(double fCost, double fSalvage, double fLife, double fPeriod,"
+"double fFactor);\n";
 
 std::string ScGetGDA=
-"double ScGetGDA(double fWert, double fRest, double fDauer, double fPeriode,"
-"double fFaktor)\n"
+"double ScGetGDA(double fCost, double fSalvage, double fLife, double fPeriod,"
+"double fFactor)\n"
 "{\n"
-"    double fGda, fZins, fAlterWert, fNeuerWert;\n"
-"    fZins = fFaktor / fDauer;\n"
-"    if (fZins >= 1.0)\n"
+"    double fDdb, fRate, fOldValue, fNewValue;\n"
+"    fRate = fFactor / fLife;\n"
+"    if (fRate >= 1.0)\n"
 "    {\n"
-"        fZins = 1.0;\n"
-"        if (fPeriode == 1.0)\n"
-"            fAlterWert = fWert;\n"
+"        fRate = 1.0;\n"
+"        if (fPeriod == 1.0)\n"
+"            fOldValue = fCost;\n"
 "        else\n"
-"            fAlterWert = 0.0;\n"
+"            fOldValue = 0.0;\n"
 "    }\n"
 "    else\n"
-"        fAlterWert = fWert * pow(1.0 - fZins, fPeriode - 1.0);\n"
-"    fNeuerWert = fWert * pow(1.0 - fZins, fPeriode);\n"
+"        fOldValue = fCost * pow(1.0 - fRate, fPeriod - 1.0);\n"
+"    fNewValue = fCost * pow(1.0 - fRate, fPeriod);\n"
 
-"    if (fNeuerWert < fRest)\n"
-"        fGda = fAlterWert - fRest;\n"
+"    if (fNewValue < fSalvage)\n"
+"        fDdb = fOldValue - fSalvage;\n"
 "    else\n"
-"        fGda = fAlterWert - fNeuerWert;\n"
-"    if (fGda < 0.0)\n"
-"        fGda = 0.0;\n"
-"    return fGda;\n"
+"        fDdb = fOldValue - fNewValue;\n"
+"    if (fDdb < 0.0)\n"
+"        fDdb = 0.0;\n"
+"    return fDdb;\n"
 "}\n";
 
 std::string DblMinDecl=
@@ -1483,47 +1483,47 @@ std::string DblMin=
 "}\n";
 
 std::string ScInterVDBDecl=
-"double ScInterVDB(double fWert,double fRest,double fDauer, double fDauer1,"
-"double fPeriode,double fFaktor);\n";
+"double ScInterVDB(double fCost, double fSalvage, double fLife, double fLife1,"
+"double fPeriod, double fFactor);\n";
 
 std::string ScInterVDB=
-"double ScInterVDB(double fWert,double fRest,double fDauer, double fDauer1,"
-"double fPeriode,double fFaktor)\n"
+"double ScInterVDB(double fCost, double fSalvage, double fLife, double fLife1,"
+"double fPeriod, double fFactor)\n"
 "{\n"
 "    double fVdb=0;\n"
-"    double fIntEnd   = ceil(fPeriode);\n"
+"    double fIntEnd   = ceil(fPeriod);\n"
 "    int nLoopEnd   = fIntEnd;\n"
 
-"    double fTerm, fLia;\n"
-"    double fRestwert = fWert - fRest;\n"
-"    int bNowLia = 0;\n"
-"    double fGda;\n"
+"    double fTerm, fSln;\n"
+"    double fSalvageValue = fCost - fSalvage;\n"
+"    int nNowSln = 0;\n"
+"    double fDdb;\n"
 "    int i;\n"
-"    fLia=0;\n"
+"    fSln=0;\n"
 "    for ( i = 1; i <= nLoopEnd; i++)\n"
 "    {\n"
-"        if(!bNowLia)\n"
+"        if(!nNowSln)\n"
 "        {\n"
-"            fGda = ScGetGDA(fWert, fRest, fDauer, (double) i, fFaktor);\n"
-"            fLia = fRestwert/ (fDauer1 - (double) (i-1));\n"
-"            if (fLia > fGda)\n"
+"            fDdb = ScGetGDA(fCost, fSalvage, fLife, (double) i, fFactor);\n"
+"            fSln = fSalvageValue/ (fLife1 - (double) (i-1));\n"
+"            if (fSln > fDdb)\n"
 "            {\n"
-"                fTerm = fLia;\n"
-"                bNowLia = 1;\n"
+"                fTerm = fSln;\n"
+"                nNowSln = 1;\n"
 "            }\n"
 "            else\n"
 "            {\n"
-"                fTerm = fGda;\n"
-"                fRestwert =fRestwert- fGda;\n"
+"                fTerm = fDdb;\n"
+"                fSalvageValue =fSalvageValue- fDdb;\n"
 "            }\n"
 "        }\n"
 "        else\n"
 "        {\n"
-"            fTerm = fLia;\n"
+"            fTerm = fSln;\n"
 "        }\n"
 
 "        if ( i == nLoopEnd)\n"
-"            fTerm *= ( fPeriode + 1.0 - fIntEnd );\n"
+"            fTerm *= ( fPeriod + 1.0 - fIntEnd );\n"
 
 "        fVdb += fTerm;\n"
 "    }\n"
@@ -1531,50 +1531,50 @@ std::string ScInterVDB=
 "}\n";
 
 std::string VDBImplementDecl=
-"double VDBImplement(double fWert,double fRest, double fDauer, double fAnfang"
-", double fEnde, double fFaktor,int bFlag);\n";
+"double VDBImplement(double fCost, double fSalvage, double fLife, double fStart"
+", double fEnd, double fFactor, int nType);\n";
 
 std::string VDBImplement=
-"double VDBImplement(double fWert,double fRest, double fDauer, double fAnfang"
-", double fEnde, double fFaktor,int bFlag)\n"
+"double VDBImplement(double fCost, double fSalvage, double fLife, double fStart"
+", double fEnd, double fFactor, int nType)\n"
 "{\n"
 "    double result=0;\n"
-"    double fIntStart = floor(fAnfang);\n"
-"    double fIntEnd   = ceil(fEnde);\n"
+"    double fIntStart = floor(fStart);\n"
+"    double fIntEnd   = ceil(fEnd);\n"
 "    int nLoopStart = (int) fIntStart;\n"
 "    int nLoopEnd   = (int) fIntEnd;\n"
-"    if (bFlag)\n"
+"    if (nType)\n"
 "    {\n"
 "        for (int i = nLoopStart + 1; i <= nLoopEnd; i++)\n"
 "        {\n"
-"            double fTerm = ScGetGDA(fWert, fRest, fDauer, (double) i, fFaktor"
+"            double fTerm = ScGetGDA(fCost, fSalvage, fLife, (double) i, fFactor"
 ");\n"
 "            if ( i == nLoopStart+1 )\n"
-"                fTerm *= ( DblMin( fEnde, fIntStart + 1.0 ) - fAnfang );\n"
+"                fTerm *= ( DblMin( fEnd, fIntStart + 1.0 ) - fStart );\n"
 "            else if ( i == nLoopEnd )\n"
-"                fTerm *= ( fEnde + 1.0 - fIntEnd );\n"
+"                fTerm *= ( fEnd + 1.0 - fIntEnd );\n"
 "            result += fTerm;\n"
 "        }\n"
 "    }\n"
 "    else\n"
 "    {\n"
-"        double fDauer1=fDauer;\n"
-"        if(!isequal(fAnfang,floor(fAnfang)))\n"
+"        double fLife1=fLife;\n"
+"        if(!isequal(fStart,floor(fStart)))\n"
 "        {\n"
-"            if(fFaktor>1)\n"
+"            if(fFactor>1)\n"
 "            {\n"
-"                if(fAnfang>fDauer/2 || isequal(fAnfang,fDauer/2))\n"
+"                if(fStart>fLife/2 || isequal(fStart,fLife/2))\n"
 "                {\n"
-"                    double fPart=fAnfang-fDauer/2;\n"
-"                    fAnfang=fDauer/2;\n"
-"                    fEnde-=fPart;\n"
-"                    fDauer1+=1;\n"
+"                    double fPart=fStart-fLife/2;\n"
+"                    fStart=fLife/2;\n"
+"                    fEnd-=fPart;\n"
+"                    fLife1+=1;\n"
 "                }\n"
 "            }\n"
 "        }\n"
-"        fWert-=ScInterVDB(fWert,fRest,fDauer,fDauer1,fAnfang,fFaktor);\n"
-"        result=ScInterVDB(fWert,fRest,fDauer,fDauer-fAnfang,fEnde-fAnfang,"
-"fFaktor);\n"
+"        fCost-=ScInterVDB(fCost, fSalvage, fLife, fLife1, fStart, fFactor);\n"
+"        result=ScInterVDB(fCost, fSalvage, fLife, fLife-fStart, fEnd-fStart,"
+"fFactor);\n"
 "    }\n"
 "    return result;\n"
 "}\n";
