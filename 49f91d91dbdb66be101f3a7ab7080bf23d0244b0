@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_59ba8dc1",
+        "filename": "include/canvas/spriteredrawmanager.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-04T14:20:48Z",
+      "side": 1,
+      "message": "typedef name is now inaccurate?",
+      "revId": "49f91d91dbdb66be101f3a7ab7080bf23d0244b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
