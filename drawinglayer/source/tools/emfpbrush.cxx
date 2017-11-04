@@ -181,7 +181,7 @@ namespace emfplushelper
                     SAL_INFO("drawinglayer", "EMF+\theader: 0x" << std::hex << pathHeader << " points: " << std::dec << pathPoints << " additional flags: 0x" << std::hex << pathFlags << std::dec);
 
                     path = new EMFPPath(pathPoints);
-                    path->Read(s, pathFlags, rR);
+                    path->Read(s, pathFlags);
 
                     s.Seek(pos + pathLength);
 
@@ -198,7 +198,7 @@ namespace emfplushelper
                     sal_uInt64 const pos = s.Tell();
                     SAL_INFO("drawinglayer", "EMF+\t use boundary, points: " << boundaryPointCount);
                     path = new EMFPPath(boundaryPointCount);
-                    path->Read(s, 0x0, rR);
+                    path->Read(s, 0x0);
 
                     s.Seek(pos + 8 * boundaryPointCount);
 

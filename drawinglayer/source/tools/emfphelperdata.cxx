@@ -138,14 +138,14 @@ namespace emfplushelper
                 SAL_INFO("drawinglayer", "EMF+\theader: 0x" << std::hex << header << " points: " << std::dec << points << " additional flags: 0x" << std::hex << pathFlags << std::dec);
                 EMFPPath *path;
                 maEMFPObjects[index].reset(path = new EMFPPath(points));
-                path->Read(rObjectStream, pathFlags, *this);
+                path->Read(rObjectStream, pathFlags);
                 break;
             }
             case EmfPlusObjectTypeRegion:
             {
                 EMFPRegion *region;
                 maEMFPObjects[index].reset(region = new EMFPRegion());
-                region->Read(rObjectStream);
+                region->ReadRegion(rObjectStream, *this);
                 break;
             }
             case EmfPlusObjectTypeImage:
@@ -700,13 +700,14 @@ namespace emfplushelper
     {
     }
 
-    void EmfPlusHelperData::combineClip(int combineMode, ::basegfx::B2DPolyPolygon const & polygon)
+    ::basegfx::B2DPolyPolygon const & EmfPlusHelperData::combineClip(int combineMode, ::basegfx::B2DPolyPolygon const & polygon)
     {
+        basegfx::B2DPolyPolygon aClippedPolyPolygon;
         switch (combineMode)
         {
         case EmfPlusCombineModeReplace:
         {
-            HandleNewClipRegion(polygon, mrTargetHolders, mrPropertyHolders);
+            aClippedPolyPolygon = polygon;
             break;
         }
         case EmfPlusCombineModeIntersect:
@@ -714,7 +715,7 @@ namespace emfplushelper
             const basegfx::B2DPolyPolygon aOriginalPolyPolygon(
                         mrPropertyHolders.Current().getClipPolyPolygon());
 
-            basegfx::B2DPolyPolygon aClippedPolyPolygon;
+
             if (aOriginalPolyPolygon.count())
             {
                 aClippedPolyPolygon = basegfx::utils::clipPolyPolygonOnPolyPolygon(
@@ -723,8 +724,6 @@ namespace emfplushelper
                             true,
                             false);
             }
-
-            HandleNewClipRegion(aClippedPolyPolygon, mrTargetHolders, mrPropertyHolders);
             break;
         }
         case EmfPlusCombineModeUnion:
@@ -732,9 +731,7 @@ namespace emfplushelper
             basegfx::B2DPolyPolygon aOriginalPolyPolygon(
                         mrPropertyHolders.Current().getClipPolyPolygon());
 
-            aOriginalPolyPolygon = ::basegfx::utils::solvePolygonOperationOr(aOriginalPolyPolygon, polygon);
-            HandleNewClipRegion(aOriginalPolyPolygon, mrTargetHolders, mrPropertyHolders);
-
+            aClippedPolyPolygon = ::basegfx::utils::solvePolygonOperationOr(aOriginalPolyPolygon, polygon);
             break;
         }
         case EmfPlusCombineModeXOR:
@@ -742,9 +739,7 @@ namespace emfplushelper
             basegfx::B2DPolyPolygon aOriginalPolyPolygon(
                         mrPropertyHolders.Current().getClipPolyPolygon());
 
-            aOriginalPolyPolygon = ::basegfx::utils::solvePolygonOperationXor(aOriginalPolyPolygon, polygon);
-            HandleNewClipRegion(aOriginalPolyPolygon, mrTargetHolders, mrPropertyHolders);
-
+            aClippedPolyPolygon = ::basegfx::utils::solvePolygonOperationXor(aOriginalPolyPolygon, polygon);
             break;
         }
         case EmfPlusCombineModeExclude:
@@ -753,8 +748,7 @@ namespace emfplushelper
             basegfx::B2DPolyPolygon aOriginalPolyPolygon(
                         mrPropertyHolders.Current().getClipPolyPolygon());
 
-            aOriginalPolyPolygon = ::basegfx::utils::solvePolygonOperationDiff(aOriginalPolyPolygon, polygon);
-            HandleNewClipRegion(aOriginalPolyPolygon, mrTargetHolders, mrPropertyHolders);
+            aClippedPolyPolygon = ::basegfx::utils::solvePolygonOperationDiff(aOriginalPolyPolygon, polygon);
             break;
         }
         case EmfPlusCombineModeComplement:
@@ -763,11 +757,11 @@ namespace emfplushelper
             basegfx::B2DPolyPolygon aOriginalPolyPolygon(
                         mrPropertyHolders.Current().getClipPolyPolygon());
 
-            aOriginalPolyPolygon = ::basegfx::utils::solvePolygonOperationDiff(polygon, aOriginalPolyPolygon);
-            HandleNewClipRegion(aOriginalPolyPolygon, mrTargetHolders, mrPropertyHolders);
+            aClippedPolyPolygon = ::basegfx::utils::solvePolygonOperationDiff(polygon, aOriginalPolyPolygon);
             break;
         }
         }
+        return aClippedPolyPolygon;
     }
 
     void EmfPlusHelperData::processEmfPlusData(
@@ -1048,7 +1042,7 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+\t: " << ((flags & 0x8000) ? "color" : "brush index") << " 0x" << std::hex << brushIndexOrColor << std::dec);
 
                         EMFPPath path(points, true);
-                        path.Read(rMS, flags, *this);
+                        path.Read(rMS, flags);
 
                         EMFPPlusFillPolygon(path.GetPolygon(*this), flags & 0x8000, brushIndexOrColor);
 
@@ -1060,7 +1054,7 @@ namespace emfplushelper
                         rMS.ReadUInt32(points);
                         SAL_INFO("drawinglayer", "EMF+ DrawLines in slot: " << (flags & 0xff) << " points: " << points);
                         EMFPPath path(points, true);
-                        path.Read(rMS, flags, *this);
+                        path.Read(rMS, flags);
 
                         // 0x2000 bit indicates whether to draw an extra line between the last point
                         // and the first point, to close the shape.
@@ -1549,7 +1543,7 @@ namespace emfplushelper
                                         mappedPoint.getX() + mappedSize.getX(),
                                         mappedPoint.getY() + mappedSize.getY()))));
 
-                        combineClip(combineMode, polyPolygon);
+                        HandleNewClipRegion(combineClip(combineMode, polyPolygon), mrTargetHolders, mrPropertyHolders);
                         break;
                     }
                     case EmfPlusRecordTypeSetClipPath:
@@ -1562,7 +1556,7 @@ namespace emfplushelper
                         ::basegfx::B2DPolyPolygon& clipPoly(path.GetPolygon(*this));
                         // clipPoly.transform(rState.mapModeTransform);
 
-                        combineClip(combineMode, clipPoly);
+                        HandleNewClipRegion( combineClip(combineMode, clipPoly), mrTargetHolders, mrPropertyHolders);
                         break;
                     }
                     case EmfPlusRecordTypeSetClipRegion:
@@ -1572,17 +1566,7 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+\tregion in slot: " << (flags & 0xff) << " combine mode: " << combineMode);
                         EMFPRegion *region = static_cast<EMFPRegion*>(maEMFPObjects[flags & 0xff].get());
 
-                        // reset clip
-                        if (region && region->parts == 0 && region->initialState == EmfPlusRegionInitialStateInfinite)
-                        {
-                            // use existing tooling from wmfemfhelper
-                            HandleNewClipRegion(::basegfx::B2DPolyPolygon(), mrTargetHolders, mrPropertyHolders);
-                            // updateClipping(::basegfx::B2DPolyPolygon(), rFactoryParms, combineMode == 1);
-                        }
-                        else
-                        {
-                            SAL_WARN("drawinglayer", "EMF+\tTODO");
-                        }
+                        HandleNewClipRegion(combineClip(combineMode, region->regionPolyPolygon), mrTargetHolders, mrPropertyHolders);
                         break;
                     }
                     case EmfPlusRecordTypeOffsetClip:
