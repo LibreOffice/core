@@ -24,16 +24,27 @@
 
 namespace emfplushelper
 {
+    typedef enum
+    {
+        RegionNodeDataTypeAnd = 0x00000001,
+        RegionNodeDataTypeOr = 0x00000002,
+        RegionNodeDataTypeXor = 0x00000003,
+        RegionNodeDataTypeExclude = 0x00000004,
+        RegionNodeDataTypeComplement = 0x00000005,
+        RegionNodeDataTypeRect = 0x10000000,
+        RegionNodeDataTypePath = 0x10000001,
+        RegionNodeDataTypeEmpty = 0x10000002,
+        RegionNodeDataTypeInfinite = 0x10000003
+    } RegionNodeDataType;
+
     struct EMFPRegion : public EMFPObject
     {
-        sal_Int32 parts;
-        sal_Int32 *combineMode;
-        sal_Int32 initialState;
-        float ix, iy, iw, ih;
+        ::basegfx::B2DPolyPolygon regionPolyPolygon;
 
         EMFPRegion();
         virtual ~EMFPRegion() override;
-        void Read(SvStream& s);
+        void ReadRegion(SvStream& s, EmfPlusHelperData& rR);
+        ::basegfx::B2DPolyPolygon ReadRegionNode(SvStream& s, EmfPlusHelperData& rR);
     };
 }
 

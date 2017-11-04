@@ -21,7 +21,6 @@
 #define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPPATH_HXX
 
 #include "emfphelperdata.hxx"
-#include <memory>
 
 namespace emfplushelper
 {
@@ -36,8 +35,7 @@ namespace emfplushelper
 
         virtual ~EMFPPath() override;
 
-        // TODO: remove rR argument when debug code is no longer needed
-        void Read(SvStream& s, sal_uInt32 pathFlags, EmfPlusHelperData const & rR);
+        void Read(SvStream& s, sal_uInt32 pathFlags);
 
         ::basegfx::B2DPolyPolygon& GetPolygon(EmfPlusHelperData const & rR, bool bMapIt = true, bool bAddLineToCloseShape = false);
     };
