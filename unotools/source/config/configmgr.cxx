@@ -177,14 +177,7 @@ utl::ConfigManager::addConfigItem(utl::ConfigItem & item) {
 }
 
 void utl::ConfigManager::removeConfigItem(utl::ConfigItem & item) {
-    for (std::list< ConfigItem * >::iterator i(items_.begin());
-         i != items_.end(); ++i)
-    {
-        if (*i == &item) {
-            items_.erase(i);
-            break;
-        }
-    }
+    items_.erase(std::remove(items_.begin(), items_.end(), &item), items_.end());
 }
 
 void utl::ConfigManager::registerConfigItem(utl::ConfigItem * item) {
@@ -193,12 +186,11 @@ void utl::ConfigManager::registerConfigItem(utl::ConfigItem * item) {
 }
 
 void utl::ConfigManager::doStoreConfigItems() {
-    for (std::list< ConfigItem * >::iterator i(items_.begin());
-         i != items_.end(); ++i)
+    for (auto const& item : items_)
     {
-        if ((*i)->IsModified()) {
-            (*i)->Commit();
-            (*i)->ClearModified();
+        if (item->IsModified()) {
+            item->Commit();
+            item->ClearModified();
         }
     }
 }
