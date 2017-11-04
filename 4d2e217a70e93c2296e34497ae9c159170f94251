@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_f9aed983",
+        "filename": "stoc/source/corereflection/base.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-04T14:20:04Z",
+      "side": 1,
+      "message": "typedef name is now inaccurate?",
+      "revId": "4d2e217a70e93c2296e34497ae9c159170f94251",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_19aac570",
+        "filename": "stoc/source/implementationregistration/implreg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1630,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-04T14:20:04Z",
+      "side": 1,
+      "message": "use a for-range loop?",
+      "revId": "4d2e217a70e93c2296e34497ae9c159170f94251",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
