@@ -124,6 +124,8 @@ public:
 
     sal_uLong ReplaceCr(sal_uInt8 nChar) override;
 
+    ExportFormat GetExportFormat() const override { return ExportFormat::RTF; }
+
 protected:
     /// Format-dependent part of the actual export.
     void ExportDocument_Impl() override;
