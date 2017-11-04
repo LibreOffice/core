@@ -30,6 +30,8 @@
 #include <UndoManager.hxx>
 #include <cmdid.h>
 #include <sfx2/viewsh.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <redline.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -91,6 +93,7 @@ public:
     void testUndoRepairResult();
     void testRedoRepairResult();
     void testDisableUndoRepair();
+    void testAllTrackedChanges();
 
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
@@ -137,6 +140,7 @@ public:
     CPPUNIT_TEST(testUndoRepairResult);
     CPPUNIT_TEST(testRedoRepairResult);
     CPPUNIT_TEST(testDisableUndoRepair);
+    CPPUNIT_TEST(testAllTrackedChanges);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1812,6 +1816,76 @@ void SwTiledRenderingTest::testDisableUndoRepair()
     mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
 }
+
+void SwTiledRenderingTest::testAllTrackedChanges()
+{
+    // Load a document.
+    comphelper::LibreOfficeKit::setActive();
+    createDoc("dummy.fodt");
+
+    uno::Reference<beans::XPropertySet> xPropSet(mxComponent, uno::UNO_QUERY);
+    xPropSet->setPropertyValue("RecordChanges", uno::makeAny(true));
+
+    // view #1
+    SwView* pView1 = dynamic_cast<SwView*>(SfxViewShell::Current());
+    SwWrtShell* pWrtShell1 = pView1->GetWrtShellPtr();
+
+    // view #2
+    SfxLokHelper::createView();
+    SwView* pView2 = dynamic_cast<SwView*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView1 != pView2);
+    SwWrtShell* pWrtShell2 = pView2->GetWrtShellPtr();
+    // Insert text and reject all
+    {
+        pWrtShell1->SttDoc();
+        pWrtShell1->Insert("hxx");
+
+        pWrtShell2->EndDoc();
+        pWrtShell2->Insert("cxx");
+    }
+
+    // Get the redline
+    const SwRedlineTable& rTable = pWrtShell2->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), rTable.size());
+    {
+        SfxVoidItem aItem(FN_REDLINE_REJECT_ALL);
+        pView1->GetViewFrame()->GetDispatcher()->ExecuteList(FN_REDLINE_REJECT_ALL,
+            SfxCallMode::SYNCHRON, { &aItem });
+    }
+
+    // The reject all was performed.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0), rTable.size());
+    {
+        SwShellCursor* pShellCursor = pWrtShell1->getShellCursor(false);
+        CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb."), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    }
+
+    // Insert text and accept all
+    {
+        pWrtShell1->SttDoc();
+        pWrtShell1->Insert("hyy");
+
+        pWrtShell2->EndDoc();
+        pWrtShell2->Insert("cyy");
+    }
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), rTable.size());
+    {
+        SfxVoidItem aItem(FN_REDLINE_ACCEPT_ALL);
+        pView1->GetViewFrame()->GetDispatcher()->ExecuteList(FN_REDLINE_ACCEPT_ALL,
+            SfxCallMode::SYNCHRON, { &aItem });
+    }
+
+    // The accept all was performed
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0), rTable.size());
+    {
+        SwShellCursor* pShellCursor = pWrtShell2->getShellCursor(false);
+        CPPUNIT_ASSERT_EQUAL(OUString("hyyAaa bbb.cyy"), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    }
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
 
