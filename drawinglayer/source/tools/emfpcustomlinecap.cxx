@@ -81,7 +81,7 @@ namespace emfplushelper
         SAL_INFO("drawinglayer", "EMF+\t\theader: 0x" << std::hex << pathHeader << " points: " << std::dec << pathPoints << " additional flags: 0x" << std::hex << pathFlags << std::dec);
 
         EMFPPath path(pathPoints);
-        path.Read(s, pathFlags, rR);
+        path.Read(s, pathFlags);
         polygon = path.GetPolygon(rR, false);
         mbIsFilled = bFill;
 
