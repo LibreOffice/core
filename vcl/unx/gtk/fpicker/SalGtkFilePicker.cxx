@@ -82,7 +82,7 @@ void SalGtkFilePicker::InitialMapping()
 SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext >& xContext ) :
     SalGtkPicker( xContext ),
     SalGtkFilePicker_Base( m_rbHelperMtx ),
-    m_pFilterList( nullptr ),
+    m_pFilterVector( nullptr ),
     m_pParentWidget ( nullptr ),
     m_pVBox ( nullptr ),
     mnHID_FolderChange( 0 ),
@@ -484,11 +484,11 @@ bool SalGtkFilePicker::FilterNameExists( const OUString& rTitle )
 {
     bool bRet = false;
 
-    if( m_pFilterList )
+    if( m_pFilterVector )
         bRet =
             ::std::any_of(
-                m_pFilterList->begin(),
-                m_pFilterList->end(),
+                m_pFilterVector->begin(),
+                m_pFilterVector->end(),
                 FilterTitleMatch( rTitle )
             );
 
@@ -499,14 +499,14 @@ bool SalGtkFilePicker::FilterNameExists( const css::uno::Sequence< css::beans::S
 {
     bool bRet = false;
 
-    if( m_pFilterList )
+    if( m_pFilterVector )
     {
         const css::beans::StringPair* pStart = _rGroupedFilters.getConstArray();
         const css::beans::StringPair* pEnd = pStart + _rGroupedFilters.getLength();
         for( ; pStart != pEnd; ++pStart )
             if( ::std::any_of(
-                        m_pFilterList->begin(),
-                        m_pFilterList->end(),
+                        m_pFilterVector->begin(),
+                        m_pFilterVector->end(),
                         FilterTitleMatch( pStart->First ) ) )
                 break;
 
@@ -516,11 +516,11 @@ bool SalGtkFilePicker::FilterNameExists( const css::uno::Sequence< css::beans::S
     return bRet;
 }
 
-void SalGtkFilePicker::ensureFilterList( const OUString& _rInitialCurrentFilter )
+void SalGtkFilePicker::ensureFilterVector( const OUString& _rInitialCurrentFilter )
 {
-    if( !m_pFilterList )
+    if( !m_pFilterVector )
     {
-        m_pFilterList = new FilterList;
+        m_pFilterVector = new FilterVector;
 
         // set the first filter to the current filter
         if ( m_aCurrentFilter.isEmpty() )
@@ -538,10 +538,10 @@ void SAL_CALL SalGtkFilePicker::appendFilter( const OUString& aTitle, const OUSt
             throw IllegalArgumentException();
 
     // ensure that we have a filter list
-    ensureFilterList( aTitle );
+    ensureFilterVector( aTitle );
 
     // append the filter
-    m_pFilterList->insert( m_pFilterList->end(), FilterEntry( aTitle, aFilter ) );
+    m_pFilterVector->insert( m_pFilterVector->end(), FilterEntry( aTitle, aFilter ) );
 }
 
 void SAL_CALL SalGtkFilePicker::setCurrentFilter( const OUString& aTitle )
@@ -562,14 +562,13 @@ void SAL_CALL SalGtkFilePicker::setCurrentFilter( const OUString& aTitle )
 void SalGtkFilePicker::updateCurrentFilterFromName(const gchar* filtername)
 {
     OUString aFilterName(filtername, strlen(filtername), RTL_TEXTENCODING_UTF8);
-    if (m_pFilterList)
+    if (m_pFilterVector)
     {
-        FilterList::iterator aEnd = m_pFilterList->end();
-        for (FilterList::iterator aIter = m_pFilterList->begin(); aIter != aEnd; ++aIter)
+        for (auto const& filter : *m_pFilterVector)
         {
-            if (aFilterName == shrinkFilterName( aIter->getTitle()))
+            if (aFilterName == shrinkFilterName(filter.getTitle()))
             {
-                m_aCurrentFilter = aIter->getTitle();
+                m_aCurrentFilter = filter.getTitle();
                 break;
             }
         }
@@ -633,13 +632,13 @@ void SAL_CALL SalGtkFilePicker::appendFilterGroup( const OUString& /*sGroupTitle
     if( aFilters.getLength() )
         sInitialCurrentFilter = aFilters[0].First;
 
-    ensureFilterList( sInitialCurrentFilter );
+    ensureFilterVector( sInitialCurrentFilter );
 
     // append the filter
     const StringPair* pSubFilters   = aFilters.getConstArray();
     const StringPair* pSubFiltersEnd = pSubFilters + aFilters.getLength();
     for( ; pSubFilters != pSubFiltersEnd; ++pSubFilters )
-        m_pFilterList->insert( m_pFilterList->end(), FilterEntry( pSubFilters->First, pSubFilters->Second ) );
+        m_pFilterVector->insert( m_pFilterVector->end(), FilterEntry( pSubFilters->First, pSubFilters->Second ) );
 
 }
 
@@ -772,18 +771,15 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
                         OUString aNewFilter;
                         OUString aOldFilter = getCurrentFilter();
                         bool bChangeFilter = true;
-                        if ( m_pFilterList )
-                            for ( FilterList::iterator aListIter = m_pFilterList->begin();
-                                  aListIter != m_pFilterList->end();
-                                  ++aListIter
-                                )
+                        if ( m_pFilterVector)
+                            for (auto const& filter : *m_pFilterVector)
                         {
-                            if( lcl_matchFilter( aListIter->getFilter(), "*." + sExtension ) )
+                            if( lcl_matchFilter( filter.getFilter(), "*." + sExtension ) )
                             {
                                 if( aNewFilter.isEmpty() )
-                                    aNewFilter = aListIter->getTitle();
+                                    aNewFilter = filter.getTitle();
 
-                                if( aOldFilter == aListIter->getTitle() )
+                                if( aOldFilter == filter.getTitle() )
                                     bChangeFilter = false;
 
                                 bExtensionTypedIn = true;
@@ -807,14 +803,14 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
                     sFilterName = m_aInitialFilter;
             }
 
-            if (m_pFilterList)
+            if (m_pFilterVector)
             {
-                FilterList::iterator aListIter = ::std::find_if(
-                    m_pFilterList->begin(), m_pFilterList->end(), FilterTitleMatch(sFilterName) );
+                FilterVector::iterator aVectorIter = ::std::find_if(
+                    m_pFilterVector->begin(), m_pFilterVector->end(), FilterTitleMatch(sFilterName) );
 
                 OUString aFilter;
-                if (aListIter != m_pFilterList->end())
-                    aFilter = aListIter->getFilter();
+                if (aVectorIter != m_pFilterVector->end())
+                    aFilter = aVectorIter->getFilter();
 
                 nTokenIndex = 0;
                 OUString sToken;
@@ -1884,61 +1880,54 @@ void SalGtkFilePicker::SetFilters()
     if( GTK_FILE_CHOOSER_ACTION_SAVE == gtk_file_chooser_get_action( GTK_FILE_CHOOSER( m_pDialog ) ) )
     {
         std::set<OUString> aAllFormats;
-        if( m_pFilterList && !m_pFilterList->empty() )
+        if( m_pFilterVector && !m_pFilterVector->empty() )
         {
-            for (   FilterList::iterator aListIter = m_pFilterList->begin();
-                    aListIter != m_pFilterList->end();
-                    ++aListIter
-                )
+            for (auto & filter : *m_pFilterVector)
             {
-                if( aListIter->hasSubFilters() )
+                if( filter.hasSubFilters() )
                 {   // it's a filter group
                     css::uno::Sequence< css::beans::StringPair > aSubFilters;
-                    aListIter->getSubFilters( aSubFilters );
+                    filter.getSubFilters( aSubFilters );
                     const StringPair* pSubFilters   = aSubFilters.getConstArray();
                     const StringPair* pSubFiltersEnd = pSubFilters + aSubFilters.getLength();
                     for( ; pSubFilters != pSubFiltersEnd; ++pSubFilters )
                         aAllFormats.insert(pSubFilters->Second);
                 }
                 else
-                    aAllFormats.insert(aListIter->getFilter());
+                    aAllFormats.insert(filter.getFilter());
             }
         }
         if (aAllFormats.size() > 1)
         {
             OUString sAllFilter;
-            std::set<OUString>::const_iterator aEnd = aAllFormats.end();
-            for (std::set<OUString>::const_iterator aIter = aAllFormats.begin(); aIter != aEnd; ++aIter)
+            for (auto const& format : aAllFormats)
             {
                 if (!sAllFilter.isEmpty())
                     sAllFilter += ";";
-                sAllFilter += *aIter;
+                sAllFilter += format;
             }
             sPseudoFilter = getResString(FILE_PICKER_ALLFORMATS);
             m_pPseudoFilter = implAddFilter( sPseudoFilter, sAllFilter );
         }
     }
 
-    if( m_pFilterList && !m_pFilterList->empty() )
+    if( m_pFilterVector && !m_pFilterVector->empty() )
     {
-        for (   FilterList::iterator aListIter = m_pFilterList->begin();
-                aListIter != m_pFilterList->end();
-                ++aListIter
-            )
+        for (auto & filter : *m_pFilterVector)
         {
-            if( aListIter->hasSubFilters() )
+            if( filter.hasSubFilters() )
             {   // it's a filter group
 
                 css::uno::Sequence< css::beans::StringPair > aSubFilters;
-                aListIter->getSubFilters( aSubFilters );
+                filter.getSubFilters( aSubFilters );
 
-                implAddFilterGroup( aListIter->getTitle(), aSubFilters );
+                implAddFilterGroup( filter.getTitle(), aSubFilters );
             }
             else
             {
                 // it's a single filter
 
-                implAddFilter( aListIter->getTitle(), aListIter->getFilter() );
+                implAddFilter( filter.getTitle(), filter.getFilter() );
             }
         }
     }
@@ -1972,7 +1961,7 @@ SalGtkFilePicker::~SalGtkFilePicker()
         gtk_widget_destroy( m_pHBoxs[i] );
     }
 
-    delete m_pFilterList;
+    delete m_pFilterVector;
 
     gtk_widget_destroy( m_pVBox );
 }
