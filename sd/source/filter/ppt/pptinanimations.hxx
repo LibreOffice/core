@@ -89,7 +89,7 @@ private:
     ImplSdPPTImport* mpPPTImport;
     SvStream&   mrStCtrl;
 
-    sd::AfterEffectNodeList maAfterEffectNodes;
+    std::vector< sd::AfterEffectNode > maAfterEffectNodes;
 
 #ifdef DBG_ANIM_LOG
     FILE * mpFile;
