@@ -49,6 +49,16 @@ public:
     std::unique_ptr<ClassificationEditEngine> pEdEngine;
     std::unique_ptr<EditView> pEdView;
 
+    const ClassificationEditEngine& getEditEngine()
+    {
+        return *pEdEngine.get();
+    }
+
+    void SetModifyHdl(const Link<LinkParamNone*,void>& rLink)
+    {
+        pEdEngine->SetModifyHdl(rLink);
+    }
+
 protected:
     virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void MouseMove( const MouseEvent& rMEvt ) override;
