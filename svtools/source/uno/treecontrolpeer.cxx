@@ -570,16 +570,16 @@ sal_Int32 SAL_CALL TreeControlPeer::getSelectionCount()
 class TreeSelectionEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 {
 public:
-    explicit TreeSelectionEnumeration( std::list< Any >& rSelection );
+    explicit TreeSelectionEnumeration( std::vector< Any >& rSelection );
     virtual sal_Bool SAL_CALL hasMoreElements() override;
     virtual Any SAL_CALL nextElement() override;
 
-    std::list< Any > maSelection;
-    std::list< Any >::iterator maIter;
+    std::vector< Any > maSelection;
+    std::vector< Any >::iterator maIter;
 };
 
 
-TreeSelectionEnumeration::TreeSelectionEnumeration( std::list< Any >& rSelection )
+TreeSelectionEnumeration::TreeSelectionEnumeration( std::vector< Any >& rSelection )
 {
     maSelection.swap( rSelection );
     maIter = maSelection.begin();
@@ -608,7 +608,7 @@ Reference< XEnumeration > SAL_CALL TreeControlPeer::createSelectionEnumeration()
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
 
     sal_uInt32 nSelectionCount = rTree.GetSelectionCount();
-    std::list< Any > aSelection( nSelectionCount );
+    std::vector< Any > aSelection( nSelectionCount );
 
     UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( rTree.FirstSelected() );
     while( pEntry && nSelectionCount )
@@ -631,17 +631,18 @@ Reference< XEnumeration > SAL_CALL TreeControlPeer::createReverseSelectionEnumer
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
 
     sal_uInt32 nSelectionCount = rTree.GetSelectionCount();
-    std::list< Any > aSelection;
+    std::vector< Any > aSelection;
 
     UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( rTree.FirstSelected() );
     while( pEntry && nSelectionCount )
     {
-        aSelection.push_front( Any( pEntry->mxNode ) );
+        aSelection.emplace_back( pEntry->mxNode );
         pEntry = dynamic_cast< UnoTreeListEntry* >( rTree.NextSelected( pEntry ) );
         --nSelectionCount;
     }
 
     OSL_ASSERT( (pEntry == nullptr) && (nSelectionCount == 0) );
+    std::reverse(aSelection.begin(), aSelection.end());
 
     return Reference< XEnumeration >( new TreeSelectionEnumeration( aSelection ) );
 }

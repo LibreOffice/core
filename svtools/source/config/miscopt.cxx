@@ -33,7 +33,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/toolbox.hxx>
 
-#include <list>
+#include <vector>
 
 using namespace ::utl                   ;
 using namespace ::osl                   ;
@@ -73,7 +73,7 @@ using namespace ::com::sun::star;
 class SvtMiscOptions_Impl : public ConfigItem
 {
 private:
-    ::std::list<Link<LinkParamNone*,void>> aList;
+    ::std::vector<Link<LinkParamNone*,void>> aList;
     bool        m_bUseSystemFileDialog;
     bool        m_bIsUseSystemFileDialogRO;
     bool        m_bPluginsEnabled;
@@ -521,7 +521,7 @@ void SvtMiscOptions_Impl::AddListenerLink( const Link<LinkParamNone*,void>& rLin
 
 void SvtMiscOptions_Impl::RemoveListenerLink( const Link<LinkParamNone*,void>& rLink )
 {
-    for ( ::std::list<Link<LinkParamNone*,void>>::iterator iter = aList.begin(); iter != aList.end(); ++iter )
+    for ( ::std::vector<Link<LinkParamNone*,void>>::iterator iter = aList.begin(); iter != aList.end(); ++iter )
     {
         if ( *iter == rLink )
         {
@@ -533,8 +533,8 @@ void SvtMiscOptions_Impl::RemoveListenerLink( const Link<LinkParamNone*,void>& r
 
 void SvtMiscOptions_Impl::CallListeners()
 {
-    for ( ::std::list<Link<LinkParamNone*,void>>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
-        iter->Call( nullptr );
+    for (auto const& elem : aList)
+        elem.Call( nullptr );
 }
 
 void SvtMiscOptions_Impl::SetToolboxStyle( sal_Int16 nStyle )
