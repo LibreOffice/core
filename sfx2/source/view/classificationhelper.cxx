@@ -548,6 +548,9 @@ bool SfxClassificationHelper::ShowPasteInfo(SfxClassificationCheckPasteResult eR
 SfxClassificationHelper::SfxClassificationHelper(const uno::Reference<document::XDocumentProperties>& xDocumentProperties, bool bUseLocalizedPolicy)
     : m_pImpl(o3tl::make_unique<Impl>(xDocumentProperties, bUseLocalizedPolicy))
 {
+    if (!xDocumentProperties.is())
+        return;
+
     uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
     if (!xPropertyContainer.is())
         return;
