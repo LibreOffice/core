@@ -26,7 +26,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 
-#include <list>
+#include <vector>
 
 namespace utl
 {
@@ -38,7 +38,7 @@ namespace utl
     namespace
     {
 
-        typedef ::std::list< ITerminationListener* > Listeners;
+        typedef ::std::vector< ITerminationListener* > Listeners;
 
         struct ListenerAdminData
         {
@@ -113,12 +113,9 @@ namespace utl
                 aToNotify = getListenerAdminData().aListeners;
             }
 
-            for ( Listeners::const_iterator listener = aToNotify.begin();
-                  listener != aToNotify.end();
-                  ++listener
-                )
+            for (auto const& listener : aToNotify)
             {
-                if ( !(*listener)->queryTermination() )
+                if ( !listener->queryTermination() )
                     throw TerminationVetoException();
             }
         }
@@ -135,12 +132,9 @@ namespace utl
             }
 
             // notify the listeners
-            for ( Listeners::const_iterator listener = aToNotify.begin();
-                  listener != aToNotify.end();
-                  ++listener
-                )
+            for (auto const& listener : aToNotify)
             {
-                (*listener)->notifyTermination();
+                listener->notifyTermination();
             }
 
             // clear the listener container
@@ -185,17 +179,7 @@ namespace utl
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         Listeners& rListeners = getListenerAdminData().aListeners;
-        for ( Listeners::iterator lookup = rListeners.begin();
-              lookup != rListeners.end();
-              ++lookup
-              )
-        {
-            if ( *lookup == _pListener )
-            {
-                rListeners.erase( lookup );
-                break;
-            }
-        }
+        rListeners.erase(std::remove(rListeners.begin(), rListeners.end(), _pListener), rListeners.end());
     }
 
 } // namespace utl
