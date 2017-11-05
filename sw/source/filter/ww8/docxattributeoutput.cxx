@@ -596,7 +596,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     if( !m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen() )
         m_bParagraphOpened = false;
 
-    // Clear gererated bookmarks
+    // Clear generated bookmarks
     m_aBookmarksWithPosStart.clear();
     m_aBookmarksWithPosEnd.clear();
 
@@ -7214,7 +7214,7 @@ void DocxAttributeOutput::GenerateBookmarksForSequenceField(const SwTextNode& rN
                                 // If we have a reference to the current sequence field
                                 if(pRefField->GetSeqNo() == nSeqFieldNumber && pRefField->GetSetRefName() == sObjectName)
                                 {
-                                    // Need to create a seperate run for separator character
+                                    // Need to create a separate run for separator character
                                     SwWW8AttrIter aLocalAttrIter( m_rExport, rNode );
                                     const OUString aText = rNode.GetText();
                                     const sal_Int32 nCategoryStart = aText.indexOf(pRefField->GetSetRefName());

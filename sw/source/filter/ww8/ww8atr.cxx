@@ -2821,7 +2821,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                             case REF_ONLYSEQNO:
                                     sName += "_number_only";
                                     break;
-                            default: // Ingore other types of reference fields
+                            default: // Ignore other types of reference fields
                                     eField = ww::eNONE;
                                     break;
                         }
