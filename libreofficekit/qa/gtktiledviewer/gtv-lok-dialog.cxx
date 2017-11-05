@@ -102,14 +102,16 @@ gtv_lok_dialog_draw(GtkWidget* pDialogDrawingArea, cairo_t* pCairo, gpointer)
     unsigned char* pBuffer = cairo_image_surface_get_data(pSurface);
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(priv->lokdocview));
     char* pDialogTitle = nullptr;
-    pDocument->pClass->paintDialog(pDocument, priv->dialogid, aRect.x, aRect.y, pBuffer, &pDialogTitle, &nWidth, &nHeight);
+    pDocument->pClass->paintDialog(pDocument, priv->dialogid, pBuffer, aRect.x, aRect.y, nWidth, nHeight);
+    int outWidth = 0, outHeight = 0;
+    pDocument->pClass->getDialogInfo(pDocument, priv->dialogid, &pDialogTitle, &outWidth, &outHeight);
     if (pDialogTitle)
     {
         gtk_window_set_title(GTK_WINDOW(pDialog), pDialogTitle);
         free(pDialogTitle);
     }
 
-    gtk_widget_set_size_request(GTK_WIDGET(pDialogDrawingArea), nWidth, nHeight);
+    gtk_widget_set_size_request(GTK_WIDGET(pDialogDrawingArea), outWidth, outHeight);
 
     cairo_surface_flush(pSurface);
     cairo_surface_mark_dirty(pSurface);

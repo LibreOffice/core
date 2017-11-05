@@ -28,8 +28,9 @@ class VCL_DLLPUBLIC IDialogRenderable
 public:
     virtual ~IDialogRenderable();
 
-    virtual void paintDialog(const DialogID& rDialogID, VirtualDevice &rDevice,
-                             OUString& rDialogTitle, int& nOutputWidth, int& nOutputHeight) = 0;
+    virtual void paintDialog(const DialogID& rDialogID, VirtualDevice &rDevice) = 0;
+
+    virtual void getDialogInfo(const DialogID& rDialogID, OUString& rDialogTitle, int& rWidth, int& rHeight) = 0;
 
     virtual void paintActiveFloatingWindow(const DialogID& rDialogID, VirtualDevice &rDevice,
                                            int& nOutputWidth, int& nOutputHeight) = 0;

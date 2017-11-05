@@ -3639,7 +3639,7 @@ void SAL_CALL SwXTextDocument::paintTile( const ::css::uno::Any& Parent, ::sal_I
     #endif
 }
 
-void SwXTextDocument::paintDialog(const vcl::DialogID& rDialogID, VirtualDevice& rDevice, OUString& rDialogTitle, int& nWidth, int& nHeight)
+void SwXTextDocument::paintDialog(const vcl::DialogID& rDialogID, VirtualDevice& rDevice)
 {
     SfxViewFrame* pViewFrame = pDocShell->GetView()->GetViewFrame();
     SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
@@ -3665,12 +3665,27 @@ void SwXTextDocument::paintDialog(const vcl::DialogID& rDialogID, VirtualDevice&
     // register the instance so that vcl::Dialog can emit LOK callbacks
     pDlg->registerDialogRenderable(this, rDialogID);
     pDlg->paintDialog(rDevice);
+}
 
-    // set outparams
+void SwXTextDocument::getDialogInfo(const vcl::DialogID& rDialogID, OUString& rDialogTitle, int& rWidth, int& rHeight)
+{
+    SfxViewFrame* pViewFrame = pDocShell->GetView()->GetViewFrame();
+    SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
+    const SfxSlot* pSlot = pSlotPool->GetUnoSlot(rDialogID);
+    if (!pSlot)
+    {
+        SAL_WARN("lok.dialog", "No slot found for " << rDialogID);
+        return;
+    }
+    SfxChildWindow* pChild = pViewFrame->GetChildWindow(pSlot->GetSlotId());
+    if (!pChild)
+        return;
+
+    Dialog* pDlg = static_cast<Dialog*>(pChild->GetWindow());
     rDialogTitle = pDlg->GetText();
     const Size aSize = pDlg->GetOptimalSize();
-    nWidth = aSize.getWidth();
-    nHeight = aSize.getHeight();
+    rWidth = aSize.getWidth();
+    rHeight = aSize.getHeight();
 }
 
 void SwXTextDocument::postDialogKeyEvent(const vcl::DialogID& rDialogID, int nType, int nCharCode, int nKeyCode)
@@ -3811,7 +3826,6 @@ void SwXTextDocument::paintActiveFloatingWindow(const vcl::DialogID& rDialogID, 
         return;
 
     Dialog* pDlg = static_cast<Dialog*>(pChild->GetWindow());
-    // register the instance so that vcl::Dialog can emit LOK callbacks
     const Size aSize = pDlg->PaintActiveFloatingWindow(rDevice);
     nWidth = aSize.getWidth();
     nHeight = aSize.getHeight();
