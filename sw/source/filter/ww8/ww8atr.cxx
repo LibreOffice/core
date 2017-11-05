@@ -204,7 +204,7 @@ bool WW8Export::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich 
 }
 
 
-void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 nScript, const SvxFontItem *pFont )
+void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 nScript, const SvxFontItem *pFont, bool bWriteCombChars )
 {
     ww8::cPoolItemIter aEnd = rItems.end();
     for ( ww8::cPoolItemIter aI = rItems.begin(); aI != aEnd; ++aI )
@@ -228,7 +228,21 @@ void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 
                  AttrOutput().OutputItem( *pFont );
              }
 
-             AttrOutput().OutputItem( *pItem );
+             // tdf#66401 For Combined Characters in docx, MS Word uses half the normal font-size for the field's
+             // font-size, but only for <w:sz>. Therefore, we check if we are currently writing a field of type
+             // Combined Characters and if so, we half the font size.
+             if (bWriteCombChars &&
+                 nWhich == RES_CHRATR_FONTSIZE)
+             {
+                SvxFontHeightItem fontHeight(item_cast<SvxFontHeightItem>( *pItem ));
+                fontHeight.SetHeight( fontHeight.GetHeight() / 2 );
+
+                AttrOutput().OutputItem( fontHeight );
+             }
+             else
+             {
+                AttrOutput().OutputItem( *pItem );
+             }
         }
     }
 }

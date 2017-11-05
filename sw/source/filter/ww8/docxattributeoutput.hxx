@@ -732,7 +732,7 @@ private:
     void DoWriteCmd( const OUString& rCmd );
     void CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun );
     void EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos& rInfos );
-    void DoWriteFieldRunProperties( const SwTextNode* pNode, sal_Int32 nPos );
+    void DoWriteFieldRunProperties( const SwTextNode* pNode, sal_Int32 nPos, bool bWriteCombChars = false );
     virtual void GenerateBookmarksForSequenceField(const SwTextNode& rNode, SwWW8AttrIter& rAttrIter) override;
 
     static void AddToAttrList( rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue );

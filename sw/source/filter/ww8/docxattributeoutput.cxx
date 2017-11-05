@@ -1747,12 +1747,18 @@ void DocxAttributeOutput::DoWriteCmd( const OUString& rCmd )
 
 void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun )
 {
+    bool bWriteCombChars(false);
+
     // Write the Field instruction
     {
         if ( bWriteRun )
         {
             m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-            DoWriteFieldRunProperties( pNode, nPos );
+
+            if (rInfos.eType == ww::eEQ)
+                bWriteCombChars = true;
+
+            DoWriteFieldRunProperties( pNode, nPos, bWriteCombChars );
         }
 
         sal_Int32 nNbToken = comphelper::string::getTokenCount(rInfos.sCmd, '\t');
@@ -1836,7 +1842,7 @@ void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos
 ///         <w:fldChar w:fldCharType="end" />
 ///     </w:r>
 /// See, tdf#38778
-void DocxAttributeOutput::DoWriteFieldRunProperties( const SwTextNode * pNode, sal_Int32 nPos )
+void DocxAttributeOutput::DoWriteFieldRunProperties( const SwTextNode * pNode, sal_Int32 nPos, bool bWriteCombChars)
 {
     if (! pNode)
     {
@@ -1866,7 +1872,17 @@ void DocxAttributeOutput::DoWriteFieldRunProperties( const SwTextNode * pNode, s
 
         // 3. output all other character properties
         SwWW8AttrIter aAttrIt( m_rExport, *pNode );
-        aAttrIt.OutAttr( nPos, false );
+        aAttrIt.OutAttr( nPos, false, bWriteCombChars );
+
+        // 4. explicitly write the font-properties, to ensure all runs in the field have them
+        // see tdf#66401
+        if ( m_pFontsAttrList.is() )
+        {
+            XFastAttributeListRef xAttrList( m_pFontsAttrList.get() );
+            m_pFontsAttrList.clear();
+
+            m_pSerializer->singleElementNS( XML_w, XML_rFonts, xAttrList );
+        }
 
         m_pSerializer->endElementNS( XML_w, XML_rPr );
 
