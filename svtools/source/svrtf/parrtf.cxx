@@ -305,7 +305,7 @@ sal_Unicode SvRTFParser::GetHexValue()
 
 void SvRTFParser::ScanText()
 {
-     const sal_Unicode cBreak = 0;
+    const sal_Unicode cBreak = 0;
     OUStringBuffer aStrBuffer;
     bool bContinue = true;
     while( bContinue && IsParserWorking() && aStrBuffer.getLength() < MAX_STRING_LEN)
@@ -333,12 +333,16 @@ void SvRTFParser::ScanText()
                             aByteString.append(c);
 
                             bool bBreak = false;
+                            bool bEOF = false;
                             sal_Char nSlash = '\\';
                             while (!bBreak)
                             {
                                 auto next = GetNextChar();
                                 if (sal_Unicode(EOF) == next)
+                                {
+                                    bEOF = true;
                                     break;
+                                }
                                 if (next>0xFF) // fix for #i43933# and #i35653#
                                 {
                                     if (!aByteString.isEmpty())
@@ -362,6 +366,12 @@ void SvRTFParser::ScanText()
                                         aByteString.append(nSlash);
                                         break;
                                 }
+                            }
+
+                            if (bEOF)
+                            {
+                                bContinue = false;        // abort, string together
+                                break;
                             }
 
                             nNextCh = GetNextChar();
