@@ -9,7 +9,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAFILEDIALOGSELECTEDITEMS
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAFILEDIALOGSELECTEDITEMS
 
-#include <ooo/vba//excel/XFileDialogSelectedItems.hpp>
+#include <ooo/vba/excel/XFileDialogSelectedItems.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
