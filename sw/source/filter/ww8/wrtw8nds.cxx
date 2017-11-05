@@ -379,7 +379,7 @@ static bool lcl_isFontsizeItem( const SfxPoolItem& rItem )
             rItem.Which( ) == RES_CHRATR_CTL_FONTSIZE );
 }
 
-void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
+void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby , bool bWriteCombChars)
 {
     m_rExport.AttrOutput().RTLAndCJKState( mbCharIsRTL, GetScript() );
 
@@ -484,7 +484,7 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
         // tdf#38778 Fix output of the font in DOC run for fields
         const SvxFontItem * pFontToOutput = ( rParentFont != *pFont )? pFont : nullptr;
 
-        m_rExport.ExportPoolItemsToCHP( aExportItems, GetScript(), pFontToOutput );
+        m_rExport.ExportPoolItemsToCHP( aExportItems, GetScript(), pFontToOutput, bWriteCombChars );
 
         // HasTextItem only allowed in the above range
         m_rExport.m_aCurrentCharPropStarts.pop();
