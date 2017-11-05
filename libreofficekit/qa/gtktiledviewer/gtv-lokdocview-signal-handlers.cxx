@@ -20,6 +20,8 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/optional.hpp>
 
+#include <iostream>
+
 void LOKDocViewSigHandlers::editChanged(LOKDocView* pDocView, gboolean bWasEdit, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
@@ -288,8 +290,8 @@ void LOKDocViewSigHandlers::dialog(LOKDocView* pDocView, gchar* pPayload, gpoint
     std::stringstream aStream(pPayload);
     boost::property_tree::ptree aRoot;
     boost::property_tree::read_json(aStream, aRoot);
-    std::string aDialogId = aRoot.get<std::string>("dialogId");
-    std::string aAction = aRoot.get<std::string>("action");
+    const std::string aDialogId = aRoot.get<std::string>("dialogId");
+    const std::string aAction = aRoot.get<std::string>("action");
 
     // we only understand 'invalidate' and 'close' as of now
     if (aAction != "invalidate" && aAction != "close")
@@ -306,7 +308,20 @@ void LOKDocViewSigHandlers::dialog(LOKDocView* pDocView, gchar* pPayload, gpoint
             if (aAction == "close")
                 gtk_widget_destroy(GTK_WIDGET(pIt->data));
             else if (aAction == "invalidate")
-                gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pIt->data));
+            {
+                GdkRectangle aGdkRectangle = {0, 0, 0, 0};
+                try
+                {
+                    const std::string aRectangle = aRoot.get<std::string>("rectangle");
+                    std::vector<int> aRectPoints = GtvHelpers::splitIntoIntegers(aRectangle, ", ", 4);
+                    if (aRectPoints.size() == 4)
+                        aGdkRectangle = {aRectPoints[0], aRectPoints[1], aRectPoints[2], aRectPoints[3]};
+                }
+                catch(const std::exception& e)
+                {}
+
+                gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pIt->data), aGdkRectangle);
+            }
         }
         g_free(pChildDialogId);
     }

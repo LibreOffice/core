@@ -87,14 +87,22 @@ gtv_lok_dialog_draw(GtkWidget* pDialogDrawingArea, cairo_t* pCairo, gpointer)
     GtvLokDialog* pDialog = GTV_LOK_DIALOG(gtk_widget_get_toplevel(pDialogDrawingArea));
     GtvLokDialogPrivate* priv = getPrivate(pDialog);
 
-    g_info("painting dialog");
+    GdkRectangle aRect;
+    gdk_cairo_get_clip_rectangle(pCairo, &aRect);
+    g_info("Painting dialog region: %d, %d, %d, %d", aRect.x, aRect.y, aRect.width, aRect.height);
     int nWidth = 1024;
     int nHeight = 768;
+    if (aRect.width != 0 && aRect.height != 0)
+    {
+        nWidth = aRect.width;
+        nHeight = aRect.height;
+    }
+
     cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
     unsigned char* pBuffer = cairo_image_surface_get_data(pSurface);
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(priv->lokdocview));
     char* pDialogTitle = nullptr;
-    pDocument->pClass->paintDialog(pDocument, priv->dialogid, pBuffer, &pDialogTitle, &nWidth, &nHeight);
+    pDocument->pClass->paintDialog(pDocument, priv->dialogid, aRect.x, aRect.y, pBuffer, &pDialogTitle, &nWidth, &nHeight);
     if (pDialogTitle)
     {
         gtk_window_set_title(GTK_WINDOW(pDialog), pDialogTitle);
@@ -106,7 +114,7 @@ gtv_lok_dialog_draw(GtkWidget* pDialogDrawingArea, cairo_t* pCairo, gpointer)
     cairo_surface_flush(pSurface);
     cairo_surface_mark_dirty(pSurface);
 
-    cairo_set_source_surface(pCairo, pSurface, 0, 0);
+    cairo_set_source_surface(pCairo, pSurface, aRect.x, aRect.y);
     cairo_paint(pCairo);
 }
 
@@ -474,11 +482,13 @@ gtv_lok_dialog_floating_win_draw(GtkWidget* pDrawingArea, cairo_t* pCairo, gpoin
 }
 
 void
-gtv_lok_dialog_invalidate(GtvLokDialog* dialog)
+gtv_lok_dialog_invalidate(GtvLokDialog* dialog, const GdkRectangle& aRectangle)
 {
     GtvLokDialogPrivate* priv = getPrivate(dialog);
-
-    gtk_widget_queue_draw(priv->pDialogDrawingArea);
+    if (aRectangle.width != 0 && aRectangle.height != 0)
+        gtk_widget_queue_draw_area(priv->pDialogDrawingArea, aRectangle.x, aRectangle.y, aRectangle.width, aRectangle.height);
+    else
+        gtk_widget_queue_draw(priv->pDialogDrawingArea);
 }
 
 static gboolean

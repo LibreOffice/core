@@ -144,15 +144,18 @@ void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OS
     }
 }
 
-void SfxLokHelper::notifyDialog(const OUString& rDialogID, const OUString& rAction)
+void SfxLokHelper::notifyDialog(const OUString& rDialogID, const OUString& rAction, const tools::Rectangle* rRect)
 {
     if (SfxLokHelper::getViewsCount() <= 0 || rDialogID.isEmpty())
         return;
 
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-    const OString aPayload = OString("{ \"dialogId\": \"") + OUStringToOString(rDialogID, RTL_TEXTENCODING_UTF8).getStr() +
-        OString("\", \"action\": \"") + OUStringToOString(rAction, RTL_TEXTENCODING_UTF8).getStr() +
-        + "\" }";
+    OString aPayload = OString("{ \"dialogId\": \"") + OUStringToOString(rDialogID, RTL_TEXTENCODING_UTF8).getStr() + OString("\"");
+    aPayload += OString(", \"action\": \"") + OUStringToOString(rAction, RTL_TEXTENCODING_UTF8).getStr() + OString("\"");
+    if (!rAction.isEmpty() && rRect && !rRect->IsEmpty())
+        aPayload += OString(", \"rectangle\": \"") + rRect->toString() + OString("\"");
+
+    aPayload += "}";
 
     while (pViewShell)
     {

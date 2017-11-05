@@ -3786,9 +3786,9 @@ void SwXTextDocument::postDialogChildMouseEvent(const vcl::DialogID& rDialogID, 
     }
 }
 
-void SwXTextDocument::notifyDialog(const vcl::DialogID& rDialogID, const OUString& rAction)
+void SwXTextDocument::notifyDialog(const vcl::DialogID& rDialogID, const OUString& rAction, const tools::Rectangle* rRect)
 {
-    SfxLokHelper::notifyDialog(rDialogID, rAction);
+    SfxLokHelper::notifyDialog(rDialogID, rAction, rRect);
 }
 
 void SwXTextDocument::notifyDialogChild(const vcl::DialogID& rDialogID, const OUString& rAction, const Point& rPos)
