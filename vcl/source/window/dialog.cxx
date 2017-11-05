@@ -596,7 +596,7 @@ void Dialog::dispose()
 
     if (comphelper::LibreOfficeKit::isActive() && mpDialogRenderable)
     {
-        mpDialogRenderable->notifyDialog(maID, "close");
+        mpDialogRenderable->notifyDialog(maID, "close", nullptr);
     }
 
     SystemWindow::dispose();
@@ -969,11 +969,11 @@ void Dialog::CloseFloatingWindow()
     }
 }
 
-void Dialog::LogicInvalidate(const tools::Rectangle* /*pRectangle*/)
+void Dialog::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
     if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogRenderable && !maID.isEmpty())
     {
-        mpDialogRenderable->notifyDialog(maID, "invalidate");
+        mpDialogRenderable->notifyDialog(maID, "invalidate", pRectangle);
     }
 }
 

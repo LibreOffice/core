@@ -436,8 +436,10 @@ void Control::LogicInvalidate(const tools::Rectangle* /*pRectangle*/)
 
         // otherwise, for now, just invalidate the whole dialog
         Dialog* pParentDlg = GetParentDialog();
+
+        const tools::Rectangle aRect(Point(GetOutOffXPixel(), GetOutOffYPixel()), Size(GetOutputWidthPixel(), GetOutputHeightPixel()));
         if (pParentDlg)
-            pParentDlg->LogicInvalidate(nullptr);
+            pParentDlg->LogicInvalidate(&aRect);
     }
 }
 

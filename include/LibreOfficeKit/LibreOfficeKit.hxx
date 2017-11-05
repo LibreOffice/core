@@ -161,19 +161,27 @@ public:
      * Client must truncate pBuffer according to the nWidth and nHeight returned after the call.
      *
      * @param pDialogId Unique dialog id to be painted
+     * @param x x-coordinate from where the dialog should start painting
+     * @param y y-coordinate from where the dialog should start painting
      * @param pBuffer Buffer with enough memory allocated to render any dialog
      * @param pDialogTitle output parameter pointing to a dialog title
      * string. Should be freed by the caller.
-     * @param nWidth output parameter returning the width of the rendered dialog.
-     * @param nHeight output parameter returning the height of the rendered dialog
+     * @param nWidth in/out parameter returning the width of the rendered
+     * dialog. The input width value is used to determined the size of the
+     * image to be painted.
+     * @param nHeight in/out parameter returning the height of the rendered
+     * dialog. The input height value is used to determine the size of the
+     * image to be painted.
      */
     void paintDialog(const char* pDialogId,
+                     const int x,
+                     const int y,
                      unsigned char* pBuffer,
                      char** pDialogTitle,
                      int& nWidth,
                      int& nHeight)
     {
-        return mpDoc->pClass->paintDialog(mpDoc, pDialogId, pBuffer,
+        return mpDoc->pClass->paintDialog(mpDoc, pDialogId, x, y, pBuffer,
                                           pDialogTitle, &nWidth, &nHeight);
     }
 
