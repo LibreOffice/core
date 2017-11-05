@@ -161,28 +161,38 @@ public:
      * Client must truncate pBuffer according to the nWidth and nHeight returned after the call.
      *
      * @param pDialogId Unique dialog id to be painted
+     * @param pBuffer Buffer with enough memory allocated to render any dialog
      * @param x x-coordinate from where the dialog should start painting
      * @param y y-coordinate from where the dialog should start painting
-     * @param pBuffer Buffer with enough memory allocated to render any dialog
-     * @param pDialogTitle output parameter pointing to a dialog title
-     * string. Should be freed by the caller.
-     * @param nWidth in/out parameter returning the width of the rendered
-     * dialog. The input width value is used to determined the size of the
-     * image to be painted.
-     * @param nHeight in/out parameter returning the height of the rendered
-     * dialog. The input height value is used to determine the size of the
-     * image to be painted.
+     * @param width The width of the dialog image to be painted
+     * @param height The height of the dialog image to be painted
      */
     void paintDialog(const char* pDialogId,
+                     unsigned char* pBuffer,
                      const int x,
                      const int y,
-                     unsigned char* pBuffer,
-                     char** pDialogTitle,
-                     int& nWidth,
-                     int& nHeight)
+                     const int width,
+                     const int height)
     {
-        return mpDoc->pClass->paintDialog(mpDoc, pDialogId, x, y, pBuffer,
-                                          pDialogTitle, &nWidth, &nHeight);
+        return mpDoc->pClass->paintDialog(mpDoc, pDialogId, pBuffer,
+                                          x, y, width, height);
+    }
+
+    /* Get info about dialog with given dialog id
+     *
+     * @param pDialogId Unique dialog id for which to get info about
+     * @param pDialogTitle Pointer to pointer pointing to string containing the
+     * dialog title. Caller should the pointer to allocated string themselves.
+     * @param pWidth The width of the dialog
+     * @param pHeight The height of the dialog
+     */
+    void getDialogInfo(const char* pDialogId,
+                       char** pDialogTitle,
+                       int& pWidth,
+                       int& pHeight)
+    {
+        return mpDoc->pClass->getDialogInfo(mpDoc, pDialogId, pDialogTitle, &pWidth, &pHeight);
+
     }
 
     /**
