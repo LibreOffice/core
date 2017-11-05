@@ -333,7 +333,7 @@ std::shared_ptr<sc::DataTransformation> ScMergeColumnTransformationControl::getT
 }
 
 ScDataProviderDlg::ScDataProviderDlg(vcl::Window* pParent, std::shared_ptr<ScDocument> pDoc):
-    ModalDialog(pParent, "dataproviderdlg", "modules/scalc/ui/dataproviderdlg2.ui", true),
+    ModalDialog(pParent, "dataproviderdlg", "modules/scalc/ui/dataproviderdlg.ui", true),
     mpDoc(pDoc),
     mpBar(VclPtr<MenuBar>::Create())
 {
