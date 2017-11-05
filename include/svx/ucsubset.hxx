@@ -60,11 +60,10 @@ public:
     SubsetMap( const FontCharMapRef& );
 
     const Subset*   GetSubsetByUnicode( sal_UCS4 ) const;
-    const Subset*   GetNextSubset( bool bFirst ) const;
+    const SubsetList&   GetSubsetMap() const;
 
 private:
     SubsetList      maSubsets;
-    mutable SubsetList::const_iterator maSubsetIterator;
 
     SVX_DLLPRIVATE void            InitList();
     SVX_DLLPRIVATE void            ApplyCharMap( const FontCharMapRef& );

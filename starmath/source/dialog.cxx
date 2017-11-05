@@ -2257,11 +2257,10 @@ void SmSymDefineDialog::SetFont(const OUString &rFontName, const OUString &rStyl
 
     pFontsSubsetLB->Clear();
     bool bFirst = true;
-    const Subset* pSubset;
-    while( nullptr != (pSubset = pSubsetMap->GetNextSubset( bFirst )) )
+    for (auto & subset : pSubsetMap->GetSubsetMap())
     {
-        const sal_Int32 nPos = pFontsSubsetLB->InsertEntry( pSubset->GetName());
-        pFontsSubsetLB->SetEntryData( nPos, const_cast<Subset *>(pSubset) );
+        const sal_Int32 nPos = pFontsSubsetLB->InsertEntry( subset.GetName());
+        pFontsSubsetLB->SetEntryData( nPos, const_cast<Subset *>(&subset) );
         // subset must live at least as long as the selected font !!!
         if( bFirst )
             pFontsSubsetLB->SelectEntryPos( nPos );

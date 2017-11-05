@@ -2525,10 +2525,10 @@ static char* getFontSubset (const OString& aFontName)
             aDevice->GetFontCharMap(xFontCharMap);
             SubsetMap aSubMap(xFontCharMap);
 
-            for(const Subset* pItSub = aSubMap.GetNextSubset(true); pItSub; pItSub = aSubMap.GetNextSubset(false))
+            for (auto const& subset : aSubMap.GetSubsetMap())
             {
                 boost::property_tree::ptree aChild;
-                aChild.put("", static_cast<int>(ublock_getCode(pItSub->GetRangeMin())));
+                aChild.put("", static_cast<int>(ublock_getCode(subset.GetRangeMin())));
                 aValues.push_back(std::make_pair("", aChild));
             }
         }

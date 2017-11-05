@@ -960,18 +960,9 @@ SubsetMap::SubsetMap( const FontCharMapRef& rxFontCharMap )
     ApplyCharMap(rxFontCharMap);
 }
 
-const Subset* SubsetMap::GetNextSubset( bool bFirst ) const
+const SubsetList& SubsetMap::GetSubsetMap() const
 {
-    if( bFirst )
-    {
-        maSubsetIterator = maSubsets.begin();
-    }
-
-    if( maSubsetIterator == maSubsets.end() )
-        return nullptr;
-
-    const Subset* s = &*(maSubsetIterator++);
-    return s;
+    return maSubsets;
 }
 
 const Subset* SubsetMap::GetSubsetByUnicode( sal_UCS4 cChar ) const
