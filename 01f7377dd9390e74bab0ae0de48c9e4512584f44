@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_bc27df10",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-05T16:39:55Z",
+      "side": 1,
+      "message": "Nitpick: a better choice might had been fLifetime instead of fLife.",
+      "revId": "01f7377dd9390e74bab0ae0de48c9e4512584f44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
