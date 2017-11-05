@@ -4864,7 +4864,7 @@ void Test::testFuncVLOOKUP()
     // Clear the sheet and start over.
     clearSheet(m_pDoc, 0);
 
-    // Lookup on sorted data intersparsed with empty cells.
+    // Lookup on sorted data interspersed with empty cells.
 
     // A1:B8 is the search range.
     m_pDoc->SetValue(ScAddress(0,2,0), 1.0);
@@ -8405,7 +8405,7 @@ void Test::testInsertColCellStoreEventSwap()
     m_pDoc->SetString( 1,0,0, "=A1" );  // B1
     // Insert column left of B
     m_pDoc->InsertCol( ScRange(1,0,0, 1,MAXROW,0));
-    ScAddress aPos(2,0,0);              // C1, new formula postion
+    ScAddress aPos(2,0,0);              // C1, new formula position
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Should be formula cell having value", 1.0, m_pDoc->GetValue(aPos));
     // After having swapped in an empty column, editing or adding a formula
     // cell has to use the correct store context. To test this,

@@ -12177,7 +12177,7 @@ if test "$enable_mpl_subset" = "yes"; then
         AC_MSG_ERROR([need to --disable-report-builder - extended database report builder.])
     fi
     if test "x$enable_postgresql_sdbc" != "xno"; then
-        AC_MSG_ERROR([need to --disable-postgresql-sdbc - the postgress database backend.])
+        AC_MSG_ERROR([need to --disable-postgresql-sdbc - the PostgreSQL database backend.])
     fi
     if test "$enable_lotuswordpro" = "yes"; then
         AC_MSG_ERROR([need to --disable-lotuswordpro - a Lotus Word Pro file format import filter.])
