@@ -631,7 +631,7 @@ static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                           int* pFontHeight);
 static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart);
 
-static void doc_paintDialog(LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, char** pDialogTitle, int* nWidth, int* nHeight);
+static void doc_paintDialog(LibreOfficeKitDocument* pThis, const char* pDialogId, const int x, const int y, unsigned char* pBuffer, char** pDialogTitle, int* nWidth, int* nHeight);
 
 static void doc_paintActiveFloatingWindow(LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight);
 
@@ -3112,7 +3112,11 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
     return nullptr;
 }
 
-static void doc_paintDialog(LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, char** pDialogTitle, int* nWidth, int* nHeight)
+static void doc_paintDialog(LibreOfficeKitDocument* pThis, const char* pDialogId,
+                            const int x, const int y,
+                            unsigned char* pBuffer,
+                            char** pDialogTitle,
+                            int* nWidth, int* nHeight)
 {
     SolarMutexGuard aGuard;
 
@@ -3125,8 +3129,11 @@ static void doc_paintDialog(LibreOfficeKitDocument* pThis, const char* pDialogId
 
     vcl::DialogID aDialogID = OUString::createFromAscii(pDialogId);
 
-    comphelper::LibreOfficeKit::setDialogPainting(true);
+    MapMode aMapMode(pDevice->GetMapMode());
+    aMapMode.SetOrigin(Point(-x, -y));
+    pDevice->SetMapMode(aMapMode);
 
+    comphelper::LibreOfficeKit::setDialogPainting(true);
     // copy the title of the dialog to outparam
     OUString aDialogTitle;
     pDialogRenderable->paintDialog(aDialogID, *pDevice.get(), aDialogTitle, *nWidth, *nHeight);
