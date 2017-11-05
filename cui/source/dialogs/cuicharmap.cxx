@@ -609,12 +609,8 @@ void SvxCharacterMap::fillAllSubsets(ListBox &rListBox)
 {
     SubsetMap aAll(nullptr);
     rListBox.Clear();
-    bool bFirst = true;
-    while (const Subset *s = aAll.GetNextSubset(bFirst))
-    {
-        rListBox.InsertEntry( s->GetName() );
-        bFirst = false;
-    }
+    for (auto & subset : aAll.GetSubsetMap())
+        rListBox.InsertEntry( subset.GetName() );
 }
 
 
@@ -675,13 +671,11 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, ListBox&, void)
         pSubsetMap = new SubsetMap( xFontCharMap );
 
         // update subset listbox for new font's unicode subsets
-        // TODO: is it worth to improve the stupid linear search?
         bool bFirst = true;
-        const Subset* s;
-        while( nullptr != (s = pSubsetMap->GetNextSubset( bFirst ))  )
+        for (auto const& subset : pSubsetMap->GetSubsetMap())
         {
-            const sal_Int32 nPos_ = m_pSubsetLB->InsertEntry( s->GetName() );
-            m_pSubsetLB->SetEntryData( nPos_, const_cast<Subset *>(s) );
+            const sal_Int32 nPos_ = m_pSubsetLB->InsertEntry( subset.GetName() );
+            m_pSubsetLB->SetEntryData( nPos_, const_cast<Subset *>(&subset) );
             // NOTE: subset must live at least as long as the selected font
             if( bFirst )
                 m_pSubsetLB->SelectEntryPos( nPos_ );
