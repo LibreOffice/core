@@ -24,11 +24,13 @@
 
 #define RID_SOLVER_COMPONENT        NC_("RID_SOLVER_COMPONENT", "%PRODUCTNAME Linear Solver")
 #define RID_COINMP_SOLVER_COMPONENT NC_("RID_COINMP_SOLVER_COMPONENT", "%PRODUCTNAME CoinMP Linear Solver")
+#define RID_SWARM_SOLVER_COMPONENT  NC_("RID_SWARM_SOLVER_COMPONENT", "%PRODUCTNAME Swarm Non-Linear Solver (experimental)")
 #define RID_PROPERTY_NONNEGATIVE    NC_("RID_PROPERTY_NONNEGATIVE", "Assume variables as non-negative")
 #define RID_PROPERTY_INTEGER        NC_("RID_PROPERTY_INTEGER", "Assume variables as integer")
 #define RID_PROPERTY_TIMEOUT        NC_("RID_PROPERTY_TIMEOUT", "Solving time limit (seconds)")
 #define RID_PROPERTY_EPSILONLEVEL   NC_("RID_PROPERTY_EPSILONLEVEL", "Epsilon level (0-3)")
 #define RID_PROPERTY_LIMITBBDEPTH   NC_("RID_PROPERTY_LIMITBBDEPTH", "Limit branch-and-bound depth")
+#define RID_PROPERTY_ALGORITHM      NC_("RID_PROPERTY_ALGORITHM", "Swarm algorithm (0 - Differential Evolution, 1 - Particle Swarm Optimization)")
 #define RID_ERROR_NONLINEAR         NC_("RID_ERROR_NONLINEAR", "The model is not linear.")
 #define RID_ERROR_EPSILONLEVEL      NC_("RID_ERROR_EPSILONLEVEL", "The epsilon level is invalid.")
 #define RID_ERROR_INFEASIBLE        NC_("RID_ERROR_INFEASIBLE", "The model is infeasible. Check limiting conditions.")
