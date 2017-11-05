@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_5c30bb9e",
+        "filename": "drawinglayer/source/tools/emfpregion.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-05T05:30:28Z",
+      "side": 1,
+      "message": "looks like this can use std::unique_ptr\u003cT[]\u003e ?",
+      "revId": "0d9123e158829849985857247ed45bda6bf02488",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
