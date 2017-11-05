@@ -1481,6 +1481,8 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
     else
         *pIsUnicode = m_pWw8Fib->m_fExtChar;
 
+    WW8_FC nRet;
+
     if( m_pPieceIter )
     {
         // Complex File
@@ -1510,7 +1512,7 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
         if( pNextPieceCp )
             *pNextPieceCp = nCpEnd;
 
-        WW8_FC nRet = SVBT32ToUInt32( static_cast<WW8_PCD*>(pData)->fc );
+        nRet = SVBT32ToUInt32( static_cast<WW8_PCD*>(pData)->fc );
         if (m_pWw8Fib->m_nVersion >= 8)
             nRet = WW8PLCFx_PCD::TransformPieceAddress( nRet, *pIsUnicode );
         else
@@ -1555,7 +1557,13 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
     }
 
     // No complex file
-    return m_pWw8Fib->m_fcMin + nCpPos;
+    const bool bFail = o3tl::checked_add(m_pWw8Fib->m_fcMin, nCpPos, nRet);
+    if (bFail)
+    {
+        SAL_WARN("sw.ww8", "broken offset, ignoring");
+        return WW8_CP_MAX;
+    }
+    return nRet;
 }
 
 //      class WW8ScannerBase
