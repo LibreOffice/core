@@ -690,6 +690,7 @@ bool vcl::Region::Intersect( const tools::Rectangle& rRect )
 
 bool vcl::Region::Exclude( const tools::Rectangle& rRect )
 {
+
     if ( rRect.IsEmpty() )
     {
         // excluding nothing will do no change
@@ -1062,6 +1063,7 @@ bool vcl::Region::Intersect( const vcl::Region& rRegion )
 
 bool vcl::Region::Exclude( const vcl::Region& rRegion )
 {
+    //bako
     if ( rRegion.IsEmpty() )
     {
         // excluding nothing will do no change

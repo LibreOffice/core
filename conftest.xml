@@ -1,0 +1,6 @@
+        <project name="conftest" default="conftest">
+        <target name="conftest">
+            <javac srcdir="." includes="conftest.java">
+            </javac>
+        </target>
+        </project>
