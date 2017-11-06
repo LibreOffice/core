@@ -40,12 +40,37 @@ OUString convertClassificationResultToString(std::vector<svx::ClassificationResu
     return sRepresentation;
 }
 
-bool lcl_containsProperty(const uno::Sequence<beans::Property> & rProperties, const OUString& rName)
+OUString getProperty(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer, OUString const & rName)
+{
+    try
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
+        return xPropertySet->getPropertyValue(rName).get<OUString>();
+    }
+    catch (const css::uno::Exception&)
+    {
+    }
+
+    return OUString();
+}
+
+bool containsProperty(uno::Sequence<beans::Property> const & rProperties, OUString const & rName)
 {
     return std::find_if(rProperties.begin(), rProperties.end(), [&](const beans::Property& rProperty)
     {
         return rProperty.Name == rName;
     }) != rProperties.end();
+}
+
+void removeAllProperties(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer)
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
+    uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
+
+    for (const beans::Property& rProperty : aProperties)
+    {
+        rxPropertyContainer->removeProperty(rProperty.Name);
+    }
 }
 
 bool addOrInsertDocumentProperty(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer, OUString const & rsKey, OUString const & rsValue)
@@ -54,7 +79,7 @@ bool addOrInsertDocumentProperty(uno::Reference<beans::XPropertyContainer> const
 
     try
     {
-        if (lcl_containsProperty(xPropertySet->getPropertySetInfo()->getProperties(), rsKey))
+        if (containsProperty(xPropertySet->getPropertySetInfo()->getProperties(), rsKey))
             xPropertySet->setPropertyValue(rsKey, uno::makeAny(rsValue));
         else
             rxPropertyContainer->addProperty(rsKey, beans::PropertyAttribute::REMOVABLE, uno::makeAny(rsValue));
@@ -70,7 +95,7 @@ void insertFullTextualRepresentationAsDocumentProperty(uno::Reference<beans::XPr
                                                        sfx::ClassificationKeyCreator const & rKeyCreator,
                                                        std::vector<svx::ClassificationResult> const & rResults)
 {
-    OUString sString = svx::classification::convertClassificationResultToString(rResults);
+    OUString sString = convertClassificationResultToString(rResults);
     addOrInsertDocumentProperty(rxPropertyContainer, rKeyCreator.makeFullTextualRepresentationKey(), sString);
 }
 
