@@ -66,6 +66,16 @@
        y2="9.5902243"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.49901426,0,0,0.46153567,1.6660544,-1.1084289)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3682"
+       id="linearGradient3370"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.45134578,0,0,0.30192375,1.2765864,-2.2193659)"
+       x1="23.30562"
+       y1="24.843527"
+       x2="14.388516"
+       y2="9.5902243" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -74,9 +84,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="14"
-     inkscape:cx="-28.274028"
-     inkscape:cy="-3.4255626"
+     inkscape:zoom="39.59798"
+     inkscape:cx="-3.499906"
+     inkscape:cy="8.2660684"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:grid-bbox="true"
@@ -84,9 +94,9 @@
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:window-width="2560"
-     inkscape:window-height="1301"
+     inkscape:window-height="1377"
      inkscape:window-x="0"
-     inkscape:window-y="32"
+     inkscape:window-y="34"
      inkscape:window-maximized="1"
      inkscape:snap-global="false">
     <inkscape:grid
@@ -118,19 +128,16 @@
        rx="10.999999"
        ry="2.1098666" />
     <path
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:54.8693924px;line-height:125%;font-family:'Bitstream Vera Sans';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient3688);fill-opacity:1;stroke:#000000;stroke-width:0.97264612;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;opacity:0.66"
-       d="M 15.679631,14.5 9,14.5 l -1.6637749,4.027515 -2.8499264,0 7.0957393,-17.0273539 2.133259,0 5.843678,16.9810159 -2.622617,0 L 15.5,14.5 M 14.701241,13 12.655725,4.9618636 9.5252579,13"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:54.8693924px;line-height:125%;font-family:'Bitstream Vera Sans';text-align:start;writing-mode:lr-tb;text-anchor:start;opacity:0.66000001;fill:url(#linearGradient3688);fill-opacity:1;stroke:#000000;stroke-width:0.97264612;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 15.528108,14.449492 -6.6796309,0 -1.512252,4.078023 -2.8499264,0 7.0957393,-17.0273539 2.133259,0 5.843678,16.9810159 -2.622617,0 L 15.5,14.5 M 14.701241,13 12.655725,4.9618636 9.5252579,13 Z"
        id="text1314"
        sodipodi:nodetypes="cccccccccccc"
        inkscape:connector-curvature="0" />
-    <rect
-       ry="0.013224833"
-       style="fill:#fcaf3e;fill-opacity:1;stroke:#ce5c00;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect3865"
-       y="-11.55557"
-       x="-20.55559"
-       height="2.0631218"
-       width="17.100994"
-       transform="scale(-1,-1)" />
+    <path
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       id="path3368"
+       d="m 3.374084,10.625919 0,-1.2518359 17.251832,0 0,1.2215239 c -5.750609,0.01037 -11.5012208,0.02033 -17.2518321,0.03031 z"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:54.8693924px;line-height:125%;font-family:'Bitstream Vera Sans';text-align:start;writing-mode:lr-tb;text-anchor:start;opacity:0.66000001;fill:url(#linearGradient3370);fill-opacity:1;stroke:#000000;stroke-width:0.74816787;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   </g>
 </svg>
