@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1fe2a59f",
+        "filename": "sw/qa/extras/rtfimport/rtfimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1190,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-11-06T12:54:33Z",
+      "side": 1,
+      "message": "so this is always failing",
+      "revId": "39c7ca6da536a51c2cd4dc6a32920d34fd34d4df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
