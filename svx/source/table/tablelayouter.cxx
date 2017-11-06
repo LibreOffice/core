@@ -441,13 +441,17 @@ sal_Int32 TableLayouter::distribute( LayoutVector& rLayouts, sal_Int32 nDistribu
 
     do
     {
+        bConstrainsBroken = false;
+
         // first enforce minimum size constrains on all entities
         for( nIndex = 0; nIndex < nCount; ++nIndex )
         {
             Layout& rLayout = rLayouts[nIndex];
             if( rLayout.mnSize < rLayout.mnMinSize )
             {
-                nDistribute -= rLayout.mnMinSize - rLayout.mnSize;
+                sal_Int32 nDiff(0);
+                bConstrainsBroken |= o3tl::checked_sub(rLayout.mnMinSize, rLayout.mnSize, nDiff);
+                nDistribute -= nDiff;
                 rLayout.mnSize = rLayout.mnMinSize;
             }
         }
@@ -462,8 +466,6 @@ sal_Int32 TableLayouter::distribute( LayoutVector& rLayouts, sal_Int32 nDistribu
             if( (nDistribute > 0) || (rLayout.mnSize > rLayout.mnMinSize) )
                 nCurrentWidth = o3tl::saturating_add(nCurrentWidth, rLayout.mnSize);
         }
-
-        bConstrainsBroken = false;
 
         // now distribute over entities
         if( (nCurrentWidth != 0) && (nDistribute != 0) )
