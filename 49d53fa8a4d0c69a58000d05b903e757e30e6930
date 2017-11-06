@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_7f83a904",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Common.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-11-06T09:59:31Z",
+      "side": 1,
+      "message": "this prop without a value is not needed",
+      "revId": "49d53fa8a4d0c69a58000d05b903e757e30e6930",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
