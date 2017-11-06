@@ -2046,6 +2046,24 @@ private:
 
     static ScRecursionHelper*   CreateRecursionHelperInstance();
 
+    /** Adjust a range to available sheets.
+
+        Used to start and stop listening on a sane range. Both o_rRange and
+        o_bEntirelyOutOfBounds are set only if needed and don't have to be
+        initialized by the caller.
+
+        @param  o_bEntirelyOutOfBounds
+                <TRUE/> if both sheets in the range point outside the
+                available sheet range, in which case no adjustment is done and
+                o_rRange is not modified.
+
+        @return <TRUE/> if any adjustment was done or o_bEntirelyOutOfBounds
+                was set <TRUE/>.
+                <FALSE/> if rRange was within the available sheets.
+     */
+    bool                LimitRangeToAvailableSheets( const ScRange& rRange, ScRange& o_rRange,
+                                                     bool& o_bEntirelyOutOfBounds ) const;
+
 public:
     void StartListeningArea( const ScRange& rRange, bool bGroupListening, SvtListener* pListener );
 

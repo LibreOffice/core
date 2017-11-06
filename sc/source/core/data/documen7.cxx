@@ -44,14 +44,81 @@
 void ScDocument::StartListeningArea(
     const ScRange& rRange, bool bGroupListening, SvtListener* pListener )
 {
-    if ( pBASM )
+    if (!pBASM)
+        return;
+
+    // Ensure sane ranges for the slots, specifically don't attempt to listen
+    // to more sheets than the document has. The slot machine handles it but
+    // with memory waste. Binary import filters can set out-of-bounds ranges
+    // in formula expressions' references, so all middle layers would have to
+    // check it, rather have this central point here.
+    ScRange aLimitedRange( ScAddress::UNINITIALIZED );
+    bool bEntirelyOut;
+    if (!LimitRangeToAvailableSheets( rRange, aLimitedRange, bEntirelyOut))
+    {
         pBASM->StartListeningArea(rRange, bGroupListening, pListener);
+        return;
+    }
+
+    // If both sheets are out-of-bounds in the same direction then just bail out.
+    if (bEntirelyOut)
+        return;
+
+    pBASM->StartListeningArea( aLimitedRange, bGroupListening, pListener);
 }
 
 void ScDocument::EndListeningArea( const ScRange& rRange, bool bGroupListening, SvtListener* pListener )
 {
-    if ( pBASM )
+    if (!pBASM)
+        return;
+
+    // End listening has to limit the range exactly the same as in
+    // StartListeningArea(), otherwise the range would not be found.
+    ScRange aLimitedRange( ScAddress::UNINITIALIZED );
+    bool bEntirelyOut;
+    if (!LimitRangeToAvailableSheets( rRange, aLimitedRange, bEntirelyOut))
+    {
         pBASM->EndListeningArea(rRange, bGroupListening, pListener);
+        return;
+    }
+
+    // If both sheets are out-of-bounds in the same direction then just bail out.
+    if (bEntirelyOut)
+        return;
+
+    pBASM->EndListeningArea( aLimitedRange, bGroupListening, pListener);
+}
+
+bool ScDocument::LimitRangeToAvailableSheets( const ScRange& rRange, ScRange& o_rRange,
+        bool& o_bEntirelyOutOfBounds ) const
+{
+    if (rRange == BCA_LISTEN_ALWAYS)
+        return false;
+
+    const SCTAB nMaxTab = GetTableCount() - 1;
+    if (ValidTab( rRange.aStart.Tab(), nMaxTab) && ValidTab( rRange.aEnd.Tab(), nMaxTab))
+        return false;
+
+    SCTAB nTab1 = rRange.aStart.Tab();
+    SCTAB nTab2 = rRange.aEnd.Tab();
+    SAL_WARN("sc.core","ScDocument::LimitRangeToAvailableSheets - bad sheet range: " << nTab1 << ".." << nTab2 <<
+            ", sheets: 0.." << nMaxTab);
+
+    // Both sheets are out-of-bounds in the same direction.
+    if ((nTab1 < 0 && nTab2 < 0) || (nMaxTab < nTab1 && nMaxTab < nTab2))
+    {
+        o_bEntirelyOutOfBounds = true;
+        return true;
+    }
+
+    // Limit the sheet range to bounds.
+    o_bEntirelyOutOfBounds = false;
+    nTab1 = std::max<SCTAB>( 0, std::min( nMaxTab, nTab1));
+    nTab2 = std::max<SCTAB>( 0, std::min( nMaxTab, nTab2));
+    o_rRange = rRange;
+    o_rRange.aStart.SetTab(nTab1);
+    o_rRange.aEnd.SetTab(nTab2);
+    return true;
 }
 
 void ScDocument::Broadcast( const ScHint& rHint )
