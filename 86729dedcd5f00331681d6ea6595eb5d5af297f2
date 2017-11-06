@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_5f4eed96",
+        "filename": "dbaccess/source/core/dataaccess/databasecontext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-11-06T14:22:54Z",
+      "side": 1,
+      "message": "I haven\u0027t tested but couldn\u0027t \"isSchemeEqualTo\" be used here?",
+      "range": {
+        "startLine": 319,
+        "startChar": 36,
+        "endLine": 319,
+        "endChar": 81
+      },
+      "revId": "86729dedcd5f00331681d6ea6595eb5d5af297f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
