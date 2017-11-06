@@ -276,7 +276,7 @@ OUString SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
         return OUString();
     // load character buffer
     OString sValue(read_uInt8s_ToOString(rStrm, nSize - 1));
-    if (rStrm.good())
+    if (rStrm.good() && rStrm.remainingSize())
         rStrm.SeekRel(1);  // skip null-byte at end
     return OStringToOUString(sValue, GetTextEncoding());
 }
@@ -292,14 +292,13 @@ OUString SfxOleStringHelper::ImplLoadString16( SvStream& rStrm )
         return OUString();
     // load character buffer
     OUString aValue = read_uInt16s_ToOUString(rStrm, nSize - 1);
-    if (rStrm.good())
-    {
-        sal_Int32 nSkip(2); // skip null-byte at end
-        // stream is always padded to 32-bit boundary, skip 2 bytes on odd character count
-        if ((nSize & 1) == 1)
-            nSkip += 2;
+    sal_Int32 nSkip(2); // skip null-byte at end
+    // stream is always padded to 32-bit boundary, skip 2 bytes on odd character count
+    if ((nSize & 1) == 1)
+        nSkip += 2;
+    nSkip = std::min<sal_uInt32>(nSkip, rStrm.remainingSize());
+    if (rStrm.good() && nSkip)
         rStrm.SeekRel(nSkip);
-    }
     return aValue;
 }
 
