@@ -449,15 +449,15 @@ protected:
     // objects in different drawing containers.
     void GetDrawingContainerData( SvStream& rSt,
                                   sal_uLong nLenDg,
-                                  const unsigned long nDrawingContainerId );
+                                  sal_uInt16 nDrawingContainerId );
     bool GetShapeGroupContainerData( SvStream& rSt,
                                      sal_uLong nLenShapeGroupCont,
                                      bool bPatriarch,
-                                     const unsigned long nDrawingContainerId );
+                                     sal_uInt16 nDrawingContainerId );
     bool GetShapeContainerData( SvStream& rSt,
                                 sal_uLong nLenShapeCont,
                                 sal_uLong nPosGroup,
-                                const unsigned long nDrawingContainerId );
+                                sal_uInt16 nDrawingContainerId );
 
     SdrObject* ImportGraphic( SvStream&, SfxItemSet&, const DffObjData& );
     // #i32596# - pass <nCalledByGroup> to method

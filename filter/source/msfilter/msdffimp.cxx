@@ -5847,7 +5847,7 @@ void SvxMSDffManager::GetCtrlData(sal_uInt32 nOffsDggL)
         sal_uInt32 nMaxStrPos = rStCtrl.Tell();
 
         nPos += nLength;
-        unsigned long nDrawingContainerId = 1;
+        sal_uInt16 nDrawingContainerId = 1;
         do
         {
             if (!checkSeek(rStCtrl, nPos))
@@ -5965,7 +5965,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
 //                      =================               ======
 
 void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, sal_uLong nLenDg,
-                                               const unsigned long nDrawingContainerId )
+                                               sal_uInt16 nDrawingContainerId )
 {
     sal_uInt8 nVer;sal_uInt16 nInst;sal_uInt16 nFbt;sal_uInt32 nLength;
 
@@ -6003,7 +6003,7 @@ void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, sal_uLong nLenDg,
 bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
                                                   sal_uLong nLenShapeGroupCont,
                                                   bool bPatriarch,
-                                                  const unsigned long nDrawingContainerId )
+                                                  sal_uInt16 nDrawingContainerId )
 {
     sal_uInt8 nVer;sal_uInt16 nInst;sal_uInt16 nFbt;sal_uInt32 nLength;
     long nStartShapeGroupCont = rSt.Tell();
@@ -6043,7 +6043,7 @@ bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
 bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
                                              sal_uLong nLenShapeCont,
                                              sal_uLong nPosGroup,
-                                             const unsigned long nDrawingContainerId )
+                                             sal_uInt16 nDrawingContainerId )
 {
     sal_uInt8 nVer;sal_uInt16 nInst;sal_uInt16 nFbt;sal_uInt32 nLength;
     long  nStartShapeCont = rSt.Tell();
