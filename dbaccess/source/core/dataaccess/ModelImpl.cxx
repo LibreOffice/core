@@ -470,14 +470,14 @@ void ODatabaseModelImpl::impl_construct_nothrow()
     try
     {
         // the set of property value types in the bag is limited:
-        Sequence< Type > aAllowedTypes(6);
-        Type* pAllowedType = aAllowedTypes.getArray();
-        *pAllowedType++ = ::cppu::UnoType<sal_Bool>::get();
-        *pAllowedType++ = ::cppu::UnoType<double>::get();
-        *pAllowedType++ = ::cppu::UnoType<OUString>::get();
-        *pAllowedType++ = ::cppu::UnoType<sal_Int32>::get();
-        *pAllowedType++ = ::cppu::UnoType<sal_Int16>::get();
-        *pAllowedType++ = cppu::UnoType<Sequence< Any >>::get();
+        Sequence< Type > aAllowedTypes({
+             cppu::UnoType<sal_Bool>::get(),
+             cppu::UnoType<double>::get(),
+             cppu::UnoType<OUString>::get(),
+             cppu::UnoType<sal_Int32>::get(),
+             cppu::UnoType<sal_Int16>::get(),
+             cppu::UnoType<Sequence< Any >>::get(),
+        });
 
         m_xSettings = PropertyBag::createWithTypes( m_aContext, aAllowedTypes, false/*AllowEmptyPropertyName*/, true/*AutomaticAddition*/ );
 
