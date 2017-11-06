@@ -35,6 +35,7 @@
 #define DEF_LINE_WIDTH_3        80
 #define DEF_LINE_WIDTH_4        100
 #define DEF_LINE_WIDTH_5        10
+#define DEF_LINE_WIDTH_6        5   // 0.25pt
 
 
 // Abstracts over values from css::table::BorderLineStyle
