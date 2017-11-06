@@ -572,7 +572,7 @@ void ScRowFormatRanges::AddRange(const sal_Int32 nPrevStartCol, const sal_Int32 
     }
 }
 
-void ScRowFormatRanges::AddRange(ScMyRowFormatRange& rFormatRange)
+void ScRowFormatRanges::AddRange(const ScMyRowFormatRange& rFormatRange)
 {
     OSL_ENSURE(pColDefaults, "no column defaults");
     if (!pColDefaults)

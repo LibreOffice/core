@@ -104,7 +104,7 @@ namespace
     }
 
     /// Write an AutoFormatSwBlob to stream.
-    SvStream& WriteAutoFormatSwBlob(SvStream &stream, AutoFormatSwBlob &blob)
+    SvStream& WriteAutoFormatSwBlob(SvStream &stream, const AutoFormatSwBlob &blob)
     {
         const sal_uInt64 endOfBlob = stream.Tell() + sizeof(sal_uInt64) + blob.size;
         stream.WriteUInt64( endOfBlob );

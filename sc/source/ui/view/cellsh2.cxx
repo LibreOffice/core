@@ -130,7 +130,7 @@ static bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange,
     return bRet;
 }
 
-static bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
+static bool lcl_GetSortParam( const ScViewData* pData, const ScSortParam& rSortParam )
 {
     ScTabViewShell* pTabViewShell   = pData->GetViewShell();
     ScDBData*   pDBData             = pTabViewShell->GetDBData();

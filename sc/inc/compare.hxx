@@ -69,7 +69,7 @@ private:
         rComp.mbIgnoreCase.
  */
 double CompareFunc( const Compare& rComp, CompareOptions* pOptions = nullptr );
-double CompareFunc( const Compare::Cell& rCell1, double fCell2, CompareOptions* pOptions );
+double CompareFunc( const Compare::Cell& rCell1, double fCell2, const CompareOptions* pOptions );
 double CompareFunc( double fCell1, double fCell2 );
 
 /**

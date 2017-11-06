@@ -370,12 +370,12 @@ static void lcl_UnLockComment( ScDrawView* pView, const Point& rPos, const ScVie
 }
 
 static bool lcl_GetHyperlinkCell(
-    ScDocument* pDoc, SCCOL& rPosX, SCROW& rPosY, SCTAB nTab, ScRefCellValue& rCell, OUString& rURL )
+    ScDocument* pDoc, SCCOL& rPosX, SCROW nPosY, SCTAB nTab, ScRefCellValue& rCell, OUString& rURL )
 {
     bool bFound = false;
     do
     {
-        ScAddress aPos(rPosX, rPosY, nTab);
+        ScAddress aPos(rPosX, nPosY, nTab);
         rCell.assign(*pDoc, aPos);
         if (rCell.isEmpty())
         {

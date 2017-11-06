@@ -151,7 +151,7 @@ public:
 
     void SetColDefaults(const ScMyDefaultStyleList* pDefaults) { pColDefaults = pDefaults; }
     void Clear();
-    void AddRange(ScMyRowFormatRange& rFormatRange);
+    void AddRange(const ScMyRowFormatRange& rFormatRange);
     bool GetNext(ScMyRowFormatRange& rFormatRange);
     sal_Int32 GetMaxRows() const;
     sal_Int32 GetSize() const { return nSize;}

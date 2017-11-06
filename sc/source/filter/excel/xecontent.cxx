@@ -1183,7 +1183,7 @@ OString createHexStringFromDigit(sal_uInt8 nDigit)
     return aString;
 }
 
-OString createGuidStringFromInt(sal_uInt8 nGuid[16])
+OString createGuidStringFromInt(const sal_uInt8 nGuid[16])
 {
     OStringBuffer aBuffer;
     aBuffer.append('{');

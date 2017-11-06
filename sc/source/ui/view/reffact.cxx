@@ -75,10 +75,10 @@ namespace
 }
 
 #define IMPL_CHILD_CTOR(Class,sid) \
-    Class::Class( vcl::Window*               pParentP,                   \
+    Class::Class( vcl::Window*              pParentP,                   \
                     sal_uInt16              nId,                        \
-                    SfxBindings*        p,                          \
-                    SfxChildWinInfo*    pInfo )                     \
+                    SfxBindings*            p,                          \
+                    const SfxChildWinInfo*  pInfo )                     \
         : SfxChildWindow(pParentP, nId)                             \
     {                                                               \
         /************************************************************************************/\
