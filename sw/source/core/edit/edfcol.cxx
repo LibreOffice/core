@@ -789,7 +789,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
             {
                 case svx::ClassificationType::TEXT:
                 {
-                    OUString sKey = aCreator.makeNumberedMarkingTextKey();
+                    OUString sKey = aCreator.makeNumberedTextKey();
 
                     svx::classification::addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
                     insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
@@ -807,7 +807,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
 
                 case svx::ClassificationType::MARKING:
                 {
-                    OUString sKey = aCreator.makeMarkingKey();
+                    OUString sKey = aCreator.makeNumberedMarkingKey();
                     svx::classification::addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
                     insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
                     insertFieldToDocument(xMultiServiceFactory, xFooterText, xFooterParagraphCursor, sKey);
@@ -816,7 +816,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
 
                 case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
                 {
-                    OUString sKey = aCreator.makeIntellectualPropertyPartKey();
+                    OUString sKey = aCreator.makeNumberedIntellectualPropertyPartKey();
                     svx::classification::addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
                     insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
                     insertFieldToDocument(xMultiServiceFactory, xFooterText, xFooterParagraphCursor, sKey);
@@ -1094,7 +1094,7 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
         {
             case svx::ClassificationType::TEXT:
             {
-                sKey = aKeyCreator.makeNumberedMarkingTextKey();
+                sKey = aKeyCreator.makeNumberedTextKey();
             }
             break;
 
@@ -1109,13 +1109,13 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
 
             case svx::ClassificationType::MARKING:
             {
-                sKey = aKeyCreator.makeMarkingKey();
+                sKey = aKeyCreator.makeNumberedMarkingKey();
             }
             break;
 
             case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
             {
-                sKey = aKeyCreator.makeIntellectualPropertyPartKey();
+                sKey = aKeyCreator.makeNumberedIntellectualPropertyPartKey();
             }
             break;
 

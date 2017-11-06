@@ -405,7 +405,7 @@ private:
             {
                 case svx::ClassificationType::TEXT:
                 {
-                    OUString sKey = m_aKeyCreator.makeNumberedMarkingTextKey();
+                    OUString sKey = m_aKeyCreator.makeNumberedTextKey();
                     svx::classification::addOrInsertDocumentProperty(m_xPropertyContainer, sKey, rResult.msName);
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msName), EE_FEATURE_FIELD), aPosition);
                 }
@@ -420,7 +420,7 @@ private:
 
                 case svx::ClassificationType::MARKING:
                 {
-                    OUString sKey = m_aKeyCreator.makeMarkingKey();
+                    OUString sKey = m_aKeyCreator.makeNumberedMarkingKey();
                     svx::classification::addOrInsertDocumentProperty(m_xPropertyContainer, sKey, rResult.msName);
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msName), EE_FEATURE_FIELD), aPosition);
                 }
@@ -428,7 +428,7 @@ private:
 
                 case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
                 {
-                    OUString sKey = m_aKeyCreator.makeIntellectualPropertyPartKey();
+                    OUString sKey = m_aKeyCreator.makeNumberedIntellectualPropertyPartKey();
                     svx::classification::addOrInsertDocumentProperty(m_xPropertyContainer, sKey, rResult.msName);
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msName), EE_FEATURE_FIELD), aPosition);
                 }
