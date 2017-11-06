@@ -316,7 +316,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
     if ( aURL.GetProtocol() == INetProtocol::NotValid )
         throw NoSuchElementException( _rName, *this );
 
-    bool bEmbeddedDataSource = _sURL.startsWithIgnoreAsciiCase("vnd.sun.star.pkg:");
+    bool bEmbeddedDataSource = aURL.isSchemeEqualTo(INetProtocol::VndSunStarPkg);
     try
     {
         if (!bEmbeddedDataSource)
