@@ -266,4 +266,18 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportXLS(SvStream& rStream)
     return bRet;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportWKS(SvStream& rStream)
+{
+    ScDLL::Init();
+    SfxMedium aMedium;
+    css::uno::Reference<css::io::XInputStream> xStm(new utl::OInputStreamWrapper(rStream));
+    aMedium.GetItemSet()->Put(SfxUsrAnyItem(SID_INPUTSTREAM, css::uno::makeAny(xStm)));
+    ScDocument aDocument;
+    ScDocOptions aDocOpt = aDocument.GetDocOptions();
+    aDocOpt.SetLookUpColRowNames(false);
+    aDocument.SetDocOptions(aDocOpt);
+    aDocument.MakeTable(0);
+    return ScFormatFilter::Get().ScImportLotus123(aMedium, &aDocument, RTL_TEXTENCODING_ASCII_US) == ERRCODE_NONE;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
