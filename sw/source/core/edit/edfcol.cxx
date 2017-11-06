@@ -724,7 +724,6 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
         if (xHeaderText.is())
             removeAllClassificationFields(sPolicy, xHeaderText);
 
-        equaliseNumberOfParagraph(rResults, xHeaderText);
 
         // FOOTER
         bool bFooterIsOn = false;
@@ -734,8 +733,6 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
             xPageStyle->getPropertyValue(UNO_NAME_FOOTER_TEXT) >>= xFooterText;
         if (xFooterText.is())
             removeAllClassificationFields(sPolicy, xFooterText);
-
-        equaliseNumberOfParagraph(rResults, xFooterText);
     }
 
     // Clear properties
@@ -769,6 +766,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
             xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_ON, uno::makeAny(true));
         uno::Reference<text::XText> xHeaderText;
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
+        equaliseNumberOfParagraph(rResults, xHeaderText);
 
         // FOOTER
         bool bFooterIsOn = false;
@@ -777,6 +775,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
             xPageStyle->setPropertyValue(UNO_NAME_FOOTER_IS_ON, uno::makeAny(true));
         uno::Reference<text::XText> xFooterText;
         xPageStyle->getPropertyValue(UNO_NAME_FOOTER_TEXT) >>= xFooterText;
+        equaliseNumberOfParagraph(rResults, xFooterText);
 
         uno::Reference<text::XParagraphCursor> xHeaderParagraphCursor(xHeaderText->createTextCursor(), uno::UNO_QUERY);
         uno::Reference<text::XParagraphCursor> xFooterParagraphCursor(xFooterText->createTextCursor(), uno::UNO_QUERY);
