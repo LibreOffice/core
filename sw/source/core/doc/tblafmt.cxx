@@ -1234,44 +1234,13 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
     std::unique_ptr<SwTableAutoFormat> pNew(new SwTableAutoFormat(
                 SwStyleNameMapper::GetUIName(RES_POOLTABSTYLE_DEFAULT, OUString())));
 
-    SwBoxAutoFormat aNew;
-
     sal_uInt8 i;
 
-    Color aColor( COL_BLUE );
-    SvxBrushItem aBrushItem( aColor, RES_BACKGROUND );
-    aNew.SetBackground( aBrushItem );
-    aNew.SetColor( SvxColorItem(Color( COL_WHITE ), RES_CHRATR_COLOR) );
-
-    for( i = 0; i < 4; ++i )
-        pNew->SetBoxFormat( aNew, i );
-
-    // 70% gray
-    aBrushItem.SetColor( RGB_COLORDATA( 0x4d, 0x4d, 0x4d ) );
-    aNew.SetBackground( aBrushItem );
-    for( i = 4; i <= 12; i += 4 )
-        pNew->SetBoxFormat( aNew, i );
-
-    // 20% gray
-    aBrushItem.SetColor( RGB_COLORDATA( 0xcc, 0xcc, 0xcc ) );
-    aNew.SetBackground( aBrushItem );
-    aColor.SetColor( COL_BLACK );
-    aNew.SetColor( SvxColorItem( aColor, RES_CHRATR_COLOR) );
-    for( i = 7; i <= 15; i += 4 )
-        pNew->SetBoxFormat( aNew, i );
-    for( i = 13; i <= 14; ++i )
-        pNew->SetBoxFormat( aNew, i );
-
-    aBrushItem.SetColor( Color( COL_WHITE ) );
-    aNew.SetBackground( aBrushItem );
-    for( i = 5; i <= 6; ++i )
-        pNew->SetBoxFormat( aNew, i );
-    for( i = 9; i <= 10; ++i )
-        pNew->SetBoxFormat( aNew, i );
-
+    Color aColor( COL_BLACK );
     SvxBoxItem aBox( RES_BOX );
+
     aBox.SetAllDistances(55);
-    SvxBorderLine aLn( &aColor, DEF_LINE_WIDTH_0 );
+    SvxBorderLine aLn( &aColor, DEF_LINE_WIDTH_5 );
     aBox.SetLine( &aLn, SvxBoxItemLine::LEFT );
     aBox.SetLine( &aLn, SvxBoxItemLine::BOTTOM );
 
