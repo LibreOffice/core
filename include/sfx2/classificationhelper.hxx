@@ -116,6 +116,8 @@ private:
     const SfxClassificationPolicyType m_ePolicyType;
     const OUString m_sPolicy;
     sal_Int32 m_nTextNumber;
+    sal_Int32 m_nIPPartNumber;
+    sal_Int32 m_nMarkingNumber;
 
     OUString getPolicyKey() const
     {
@@ -126,21 +128,23 @@ public:
         : m_ePolicyType(ePolicyType)
         , m_sPolicy(SfxClassificationHelper::policyTypeToString(m_ePolicyType))
         , m_nTextNumber(1)
+        , m_nIPPartNumber(1)
+        , m_nMarkingNumber(1)
     {}
 
-    OUString makeMarkingTextKey() const
+    OUString makeTextKey() const
     {
         return getPolicyKey() + "Marking:Text";
     }
 
-    OUString makeNumberedMarkingTextKey()
+    OUString makeNumberedTextKey()
     {
-        return makeMarkingTextKey() + ":" + OUString::number(m_nTextNumber++);
+        return makeTextKey() + ":" + OUString::number(m_nTextNumber++);
     }
 
     bool isMarkingTextKey(OUString const & aKey) const
     {
-        return aKey.startsWith(makeMarkingTextKey());
+        return aKey.startsWith(makeTextKey());
     }
 
     OUString makeCategoryNameKey() const
@@ -168,6 +172,11 @@ public:
         return getPolicyKey() + "Extension:Marking";
     }
 
+    OUString makeNumberedMarkingKey()
+    {
+        return makeMarkingKey() + ":" + OUString::number(m_nMarkingNumber++);
+    }
+
     bool isMarkingKey(OUString const & aKey) const
     {
         return aKey.startsWith(makeMarkingKey());
@@ -176,6 +185,11 @@ public:
     OUString makeIntellectualPropertyPartKey() const
     {
         return getPolicyKey() + "Extension:IntellectualPropertyPart";
+    }
+
+    OUString makeNumberedIntellectualPropertyPartKey()
+    {
+        return makeIntellectualPropertyPartKey() + ":" + OUString::number(m_nIPPartNumber++);
     }
 
     bool isIntellectualPropertyPartKey(OUString const & aKey) const
