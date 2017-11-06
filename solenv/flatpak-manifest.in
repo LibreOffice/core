@@ -298,10 +298,10 @@
                     "dest-filename": "external/tarballs/26b3e95ddf3d9c077c480ea45874b3b8-lp_solve_5.5.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/mdds-1.2.3.tar.bz2",
-                    "sha256": "402fec18256f95b89517d54d85f00bce1faa6e517cb3d7c98a720fddd063354f",
+                    "url": "https://dev-www.libreoffice.org/src/mdds-1.3.0.tar.bz2",
+                    "sha256": "00aa92a28af9f1168a8e5c38e46f311abb65ef5b113ef56078ff104b94211460",
                     "type": "file",
-                    "dest-filename": "external/tarballs/mdds-1.2.3.tar.bz2"
+                    "dest-filename": "external/tarballs/mdds-1.3.0.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/a8c2c5b8f09e7ede322d5c602ff6a4b6-mythes-1.2.4.tar.gz",
