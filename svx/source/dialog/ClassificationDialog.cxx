@@ -9,6 +9,7 @@
  */
 
 #include <svx/ClassificationDialog.hxx>
+#include <svx/ClassificationCommon.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
@@ -78,6 +79,15 @@ namespace {
 
 constexpr size_t RECENTLY_USED_LIMIT = 5;
 
+const OUString constRecentlyUsedFileName("recentlyUsed.xml");
+
+OUString lcl_getClassificationUserPath()
+{
+    OUString sPath("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/user/classification/");
+    rtl::Bootstrap::expandMacros(sPath);
+    return sPath;
+}
+
 const SvxFieldItem* findField(editeng::Section const & rSection)
 {
     for (SfxPoolItem const * pPool : rSection.maAttributes)
@@ -112,26 +122,22 @@ bool stringToClassificationType(OString const & rsType, svx::ClassificationType 
     return true;
 }
 
-OUString getStringRepresentation(std::vector<ClassificationResult> const & rResults)
+OUString classificationTypeToString(svx::ClassificationType const & reType)
 {
-    OUString sRepresentation = "";
-    for (ClassificationResult const & rResult : rResults)
+    switch(reType)
     {
-        switch (rResult.meType)
-        {
-            case svx::ClassificationType::CATEGORY:
-            case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
-            case svx::ClassificationType::MARKING:
-            case svx::ClassificationType::TEXT:
-                sRepresentation += rResult.msName;
-            break;
-
-            case svx::ClassificationType::PARAGRAPH:
-                sRepresentation += " ";
-            break;
-        }
+        case svx::ClassificationType::CATEGORY:
+            return OUString("CATEGORY"); break;
+        case svx::ClassificationType::MARKING:
+            return OUString("MARKING"); break;
+        case svx::ClassificationType::TEXT:
+            return OUString("TEXT"); break;
+        case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
+            return OUString("INTELLECTUAL_PROPERTY_PART"); break;
+        case svx::ClassificationType::PARAGRAPH:
+            return OUString("PARAGRAPH"); break;
     }
-    return sRepresentation;
+    return OUString();
 }
 
 void writeResultToXml(tools::XmlWriter & rXmlWriter,
@@ -140,20 +146,7 @@ void writeResultToXml(tools::XmlWriter & rXmlWriter,
     for (ClassificationResult const & rResult : rResultCollection)
     {
         rXmlWriter.startElement("element");
-        OUString sType;
-        switch(rResult.meType)
-        {
-            case svx::ClassificationType::CATEGORY:
-                sType = "CATEGORY"; break;
-            case svx::ClassificationType::MARKING:
-                sType = "MARKING"; break;
-            case svx::ClassificationType::TEXT:
-                sType = "TEXT"; break;
-            case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
-                sType = "INTELLECTUAL_PROPERTY_PART"; break;
-            case svx::ClassificationType::PARAGRAPH:
-                sType = "PARAGRAPH"; break;
-        }
+        OUString sType = classificationTypeToString(rResult.meType);
         rXmlWriter.attribute("type", sType);
         rXmlWriter.startElement("string");
         rXmlWriter.content(rResult.msName);
@@ -276,7 +269,7 @@ short ClassificationDialog::Execute()
     {
         for (std::vector<ClassificationResult> const & rResults : m_aRecentlyUsedValuesCollection)
         {
-            OUString rContentRepresentation = getStringRepresentation(rResults);
+            OUString rContentRepresentation = svx::classification::convertClassificationResultToString(rResults);
             OUString rDescription = OUString::number(nNumber) + ": ";
             nNumber++;
 
@@ -310,10 +303,8 @@ void ClassificationDialog::setupValues(std::vector<ClassificationResult> const &
 
 void ClassificationDialog::readRecentlyUsed()
 {
-    OUString sPath("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/user/classification/");
-    rtl::Bootstrap::expandMacros(sPath);
-
-    OUString sFilePath(sPath + "recentlyUsed.xml");
+    OUString sPath = lcl_getClassificationUserPath();
+    OUString sFilePath(sPath + constRecentlyUsedFileName);
 
     if (!fileExists(sFilePath))
         return;
@@ -378,11 +369,9 @@ void ClassificationDialog::readRecentlyUsed()
 
 void ClassificationDialog::writeRecentlyUsed()
 {
-    OUString sPath("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/user/classification/");
-    rtl::Bootstrap::expandMacros(sPath);
+    OUString sPath = lcl_getClassificationUserPath();
     osl::Directory::createPath(sPath);
-
-    OUString sFilePath(sPath + "recentlyUsed.xml");
+    OUString sFilePath(sPath + constRecentlyUsedFileName);
 
     std::unique_ptr<SvStream> pStream;
     pStream.reset(new SvFileStream(sFilePath, StreamMode::STD_READWRITE | StreamMode::TRUNC));

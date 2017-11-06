@@ -192,49 +192,6 @@ namespace sd {
 
 namespace {
 
-void lcl_removeAllProperties(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer)
-{
-    uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
-    uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
-
-    for (const beans::Property& rProperty : aProperties)
-    {
-        rxPropertyContainer->removeProperty(rProperty.Name);
-    }
-}
-
-bool lcl_containsProperty(const uno::Sequence<beans::Property> & rProperties, const OUString& rName)
-{
-    return std::find_if(rProperties.begin(), rProperties.end(), [&](const beans::Property& rProperty)
-    {
-        return rProperty.Name == rName;
-    }) != rProperties.end();
-}
-
-OUString lcl_getProperty(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer, const OUString& rName)
-{
-    uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
-    return xPropertySet->getPropertyValue(rName).get<OUString>();
-}
-
-bool addOrInsertDocumentProperty(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer, OUString const & rsKey, OUString const & rsValue)
-{
-    uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
-
-    try
-    {
-        if (lcl_containsProperty(xPropertySet->getPropertySetInfo()->getProperties(), rsKey))
-            xPropertySet->setPropertyValue(rsKey, uno::makeAny(rsValue));
-        else
-            rxPropertyContainer->addProperty(rsKey, beans::PropertyAttribute::REMOVABLE, uno::makeAny(rsValue));
-    }
-    catch (const uno::Exception& /*rException*/)
-    {
-        return false;
-    }
-    return true;
-}
-
 const SvxFieldItem* findField(editeng::Section const & rSection)
 {
     for (SfxPoolItem const * pPool: rSection.maAttributes)
@@ -321,22 +278,22 @@ private:
                 OUString aKey = pCustomPropertyField->GetName();
                 if (aKeyCreator.isMarkingTextKey(aKey))
                 {
-                    OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
+                    OUString aValue = svx::classification::getProperty(xPropertyContainer, aKey);
                     m_aResults.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, sBlank });
                 }
                 else if (aKeyCreator.isCategoryNameKey(aKey) || aKeyCreator.isCategoryIdentifierKey(aKey))
                 {
-                    OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
+                    OUString aValue = svx::classification::getProperty(xPropertyContainer, aKey);
                     m_aResults.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
                 }
                 else if (aKeyCreator.isMarkingKey(aKey))
                 {
-                    OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
+                    OUString aValue = svx::classification::getProperty(xPropertyContainer, aKey);
                     m_aResults.push_back({ svx::ClassificationType::MARKING, aValue, sBlank, sBlank });
                 }
                 else if (aKeyCreator.isIntellectualPropertyPartKey(aKey))
                 {
-                    OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
+                    OUString aValue = svx::classification::getProperty(xPropertyContainer, aKey);
                     m_aResults.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, sBlank, sBlank });
                 }
             }
@@ -463,7 +420,7 @@ public:
         uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
 
         // Clear properties
-        lcl_removeAllProperties(xPropertyContainer);
+        svx::classification::removeAllProperties(xPropertyContainer);
 
         SfxClassificationHelper aHelper(xDocumentProperties);
 
@@ -497,7 +454,7 @@ public:
                 case svx::ClassificationType::TEXT:
                 {
                     OUString sKey = aKeyCreator.makeNumberedMarkingTextKey();
-                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
+                    svx::classification::addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msName), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
@@ -512,7 +469,7 @@ public:
                 case svx::ClassificationType::MARKING:
                 {
                     OUString sKey = aKeyCreator.makeMarkingKey();
-                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
+                    svx::classification::addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msName), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
@@ -520,7 +477,7 @@ public:
                 case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
                 {
                     OUString sKey = aKeyCreator.makeIntellectualPropertyPartKey();
-                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
+                    svx::classification::addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msName), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
