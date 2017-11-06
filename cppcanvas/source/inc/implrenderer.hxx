@@ -205,6 +205,12 @@ namespace cppcanvas
             ImplRenderer(const ImplRenderer&) = delete;
             ImplRenderer& operator=( const ImplRenderer& ) = delete;
 
+            void unionArea( const ::basegfx::B2DPolyPolygon& rClipPoly,
+                            const ActionFactoryParameters&   rParms);
+            void xorArea( const ::basegfx::B2DPolyPolygon& rClipPoly,
+                          const ActionFactoryParameters&   rParms);
+            void excludeArea( const ::basegfx::B2DPolyPolygon& rClipPoly,
+                              const ActionFactoryParameters&   rParms);
             static void updateClipping( const ::basegfx::B2DPolyPolygon&   rClipPoly,
                                  const ActionFactoryParameters&     rParms,
                                  bool                               bIntersect );

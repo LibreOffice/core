@@ -303,14 +303,14 @@ namespace cppcanvas
         {
             ::basegfx::B2DPolyPolygon localPolygon (polygon);
 
-            SAL_INFO("cppcanvas.emf", "EMF+\tfill polygon");
+            SAL_WARN("cppcanvas.emf", "EMF+\tfill polygon");
 
             localPolygon.transform( rState.mapModeTransform );
 
             std::shared_ptr<Action> pPolyAction;
 
             if (isColor) {
-                SAL_INFO("cppcanvas.emf", "EMF+\t\tcolor fill:0x" << std::hex << brushIndexOrColor << std::dec);
+                SAL_WARN("cppcanvas.emf", "EMF+\t\tcolor fill:0x" << std::hex << brushIndexOrColor << std::dec);
                 rState.isFillColorSet = true;
                 rState.isLineColorSet = false;
 
@@ -445,7 +445,7 @@ namespace cppcanvas
                     uno::Sequence< double > aStops (2);
 
                     if (brush->blendPositions) {
-                        SAL_INFO("cppcanvas.emf", "EMF+\t\tuse blend");
+                        SAL_WARN("cppcanvas.emf", "EMF+\t\tuse blend");
                         aColors.realloc (brush->blendPoints);
                         aStops.realloc (brush->blendPoints);
                         int length = aStartColor.getLength ();
@@ -465,7 +465,7 @@ namespace cppcanvas
                             aColors[i] = aColor;
                         }
                     } else if (brush->colorblendPositions) {
-                        SAL_INFO("cppcanvas.emf", "EMF+\t\tuse color blend");
+                        SAL_WARN("cppcanvas.emf", "EMF+\t\tuse color blend");
                         aColors.realloc (brush->colorblendPoints);
                         aStops.realloc (brush->colorblendPoints);
 
@@ -487,7 +487,7 @@ namespace cppcanvas
                         }
                     }
 
-                    SAL_INFO("cppcanvas.emf", "EMF+\t\tset gradient");
+                    SAL_WARN("cppcanvas.emf", "EMF+\t\tset gradient");
                     basegfx::B2DRange aBoundsRectangle (0, 0, 1, 1);
                     if (brush->type == BrushTypeLinearGradient) {
                         aGradientService = "LinearGradient";
@@ -536,7 +536,7 @@ namespace cppcanvas
 
             if( pPolyAction )
             {
-                SAL_INFO("cppcanvas.emf", "EMF+\t\tadd poly action");
+                SAL_WARN("cppcanvas.emf", "EMF+\t\tadd poly action");
 
                 maActions.emplace_back(
                         pPolyAction,
@@ -697,7 +697,7 @@ namespace cppcanvas
         {
             sal_uInt32 index;
 
-            SAL_INFO("cppcanvas.emf", "EMF+ Object slot: " << (flags & 0xff) << " flags: " << (flags & 0xff00));
+            SAL_WARN("cppcanvas.emf", "EMF+ Object slot: " << (flags & 0xff) << " object type: " << std::hex << (flags & 0xff00)  << std::dec);
 
             index = flags & 0xff;
             if (aObjects [index] != nullptr) {
@@ -727,8 +727,8 @@ namespace cppcanvas
 
                 rObjectStream.ReadUInt32( header ).ReadInt32( points ).ReadUInt32( pathFlags );
 
-                SAL_INFO("cppcanvas.emf", "EMF+\tpath");
-                SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " points: " << std::dec << points << " additional flags: 0x" << std::hex << pathFlags << std::dec);
+                SAL_WARN("cppcanvas.emf", "EMF+\tpath");
+                SAL_WARN("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " points: " << std::dec << points << " additional flags: 0x" << std::hex << pathFlags << std::dec);
 
                 std::unique_ptr<EMFPPath> path(new EMFPPath (points));
                 path->Read (rObjectStream, pathFlags, *this);
@@ -775,16 +775,16 @@ namespace cppcanvas
                 }
             case EmfPlusObjectTypeImageAttributes:
                 {
-                    SAL_INFO("cppcanvas.emf", "EMF+\t Object type 'image attributes' not yet implemented");
+                    SAL_WARN("cppcanvas.emf", "EMF+\t Object type 'image attributes' not yet implemented");
                     break;
                 }
             case EmfPlusObjectTypeCustomLineCap:
                 {
-                    SAL_INFO("cppcanvas.emf", "EMF+\t Object type 'custom line cap' not yet implemented");
+                    SAL_WARN("cppcanvas.emf", "EMF+\t Object type 'custom line cap' not yet implemented");
                     break;
                 }
             default:
-                SAL_INFO("cppcanvas.emf", "EMF+\tObject unhandled flags: 0x" << std::hex << (flags & 0xff00) << std::dec);
+                SAL_WARN("cppcanvas.emf", "EMF+\tObject unhandled flags: 0x" << std::hex << (flags & 0xff00) << std::dec);
                 break;
             }
         }
@@ -803,7 +803,14 @@ namespace cppcanvas
             rState.xFont = rParms.mrCanvas->getUNOCanvas()->createFont( aFontRequest,
                                                uno::Sequence< beans::PropertyValue >(),
                                                geometry::Matrix2D() );
-
+            if( font->fontFlags & FontStyleUnderline )
+            {
+                rState.textUnderlineStyle = LINESTYLE_SINGLE;
+            }
+            if( font->fontFlags & FontStyleStrikeout )
+            {
+                rState.textStrikeoutStyle = STRIKEOUT_SINGLE;
+            }
             return cellSize;
         }
 
@@ -816,7 +823,7 @@ namespace cppcanvas
                 EmfPlusGraphicState state = iter->second;
                 map.erase( iter );
 
-                SAL_INFO("cppcanvas.emf", "stack index: " << index << " found and erased");
+                SAL_WARN("cppcanvas.emf", "stack index: " << index << " found and erased");
             }
 
             EmfPlusGraphicState state;
@@ -833,7 +840,7 @@ namespace cppcanvas
 
             if ( iter != map.end() )
             {
-                SAL_INFO("cppcanvas.emf", "stack index: " << index << " found");
+                SAL_WARN("cppcanvas.emf", "stack index: " << index << " found");
 
                 EmfPlusGraphicState state = iter->second;
 
@@ -851,7 +858,7 @@ namespace cppcanvas
             SvMemoryStream rMF (const_cast<sal_uInt8 *>(pAct->GetData ()), length, StreamMode::READ);
 
             if (length < 12) {
-                SAL_INFO("cppcanvas.emf", "length is less than required header size");
+                SAL_WARN("cppcanvas.emf", "length is less than required header size");
             }
 
             // 12 is minimal valid EMF+ record size; remaining bytes are padding
@@ -865,15 +872,15 @@ namespace cppcanvas
                 next = rMF.Tell() + ( size - 12 );
 
                 if (size < 12) {
-                    SAL_INFO("cppcanvas.emf", "Size field is less than 12 bytes");
+                    SAL_WARN("cppcanvas.emf", "Size field is less than 12 bytes");
                 } else if (size > length) {
-                    SAL_INFO("cppcanvas.emf", "Size field is greater than bytes left");
+                    SAL_WARN("cppcanvas.emf", "Size field is greater than bytes left");
                 }
                 if (dataSize > (size-12)) {
-                    SAL_INFO("cppcanvas.emf", "DataSize field is greater than Size-12");
+                    SAL_WARN("cppcanvas.emf", "DataSize field is greater than Size-12");
                 }
 
-                SAL_INFO("cppcanvas.emf", "EMF+ record size: " << size << " type: " << emfTypeToName(type) << " flags: " << flags << " data size: " << dataSize);
+                SAL_WARN("cppcanvas.emf", "EMF+ record size: " << size << " type: " << emfTypeToName(type) << " flags: " << flags << " data size: " << dataSize);
 
                 if (type == EmfPlusRecordTypeObject && ((mbMultipart && (flags & 0x7fff) == (mMFlags & 0x7fff)) || (flags & 0x8000))) {
                     if (!mbMultipart) {
@@ -885,10 +892,10 @@ namespace cppcanvas
                     OSL_ENSURE(dataSize >= 4, "No room for TotalObjectSize in EmfPlusContinuedObjectRecord");
                     // 1st 4 bytes are TotalObjectSize
                     mMStream.WriteBytes(static_cast<const char *>(rMF.GetData()) + rMF.Tell() + 4, dataSize - 4);
-                    SAL_INFO("cppcanvas.emf", "EMF+ read next object part size: " << size << " type: " << type << " flags: " << flags << " data size: " << dataSize);
+                    SAL_WARN("cppcanvas.emf", "EMF+ read next object part size: " << size << " type: " << type << " flags: " << flags << " data size: " << dataSize);
                 } else {
                     if (mbMultipart) {
-                        SAL_INFO("cppcanvas.emf", "EMF+ multipart record flags: " << mMFlags);
+                        SAL_WARN("cppcanvas.emf", "EMF+ multipart record flags: " << mMFlags);
                         mMStream.Seek (0);
                         processObjectRecord (mMStream, mMFlags, 0, true);
                     }
@@ -903,16 +910,16 @@ namespace cppcanvas
 
                         rMF.ReadUInt32( header ).ReadUInt32( version ).ReadInt32( nHDPI ).ReadInt32( nVDPI );
 
-                        SAL_INFO("cppcanvas.emf", "EMF+ Header");
-                        SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " version: " << std::dec << version << " horizontal DPI: " << nHDPI << " vertical DPI: " << nVDPI << " dual: " << (flags & 1));
+                        SAL_WARN("cppcanvas.emf", "EMF+ Header");
+                        SAL_WARN("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " version: " << std::dec << version << " horizontal DPI: " << nHDPI << " vertical DPI: " << nVDPI << " dual: " << (flags & 1));
 
                         break;
                     case EmfPlusRecordTypeEndOfFile:
-                        SAL_INFO("cppcanvas.emf", "EMF+ EndOfFile");
+                        SAL_WARN("cppcanvas.emf", "EMF+ EndOfFile");
                         break;
                     case EmfPlusRecordTypeGetDC:
-                        SAL_INFO("cppcanvas.emf", "EMF+ GetDC");
-                        SAL_INFO("cppcanvas.emf", "EMF+\talready used in svtools wmf/emf filter parser");
+                        SAL_WARN("cppcanvas.emf", "EMF+ GetDC");
+                        SAL_WARN("cppcanvas.emf", "EMF+\talready used in svtools wmf/emf filter parser");
                         break;
                     case EmfPlusRecordTypeObject:
                         processObjectRecord (rMF, flags, dataSize);
@@ -929,15 +936,15 @@ namespace cppcanvas
                             if ( type == EmfPlusRecordTypeFillPie )
                             {
                                 rMF.ReadUInt32( brushIndexOrColor );
-                                SAL_INFO("cppcanvas.emf", "EMF+ FillPie colorOrIndex: " << brushIndexOrColor);
+                                SAL_WARN("cppcanvas.emf", "EMF+ FillPie colorOrIndex: " << brushIndexOrColor);
                             }
                             else if ( type == EmfPlusRecordTypeDrawPie )
                             {
-                                SAL_INFO("cppcanvas.emf", "EMF+ DrawPie");
+                                SAL_WARN("cppcanvas.emf", "EMF+ DrawPie");
                             }
                             else
                             {
-                                SAL_INFO("cppcanvas.emf", "EMF+ DrawArc");
+                                SAL_WARN("cppcanvas.emf", "EMF+ DrawArc");
                             }
                             rMF.ReadFloat( startAngle ).ReadFloat( sweepAngle );
 
@@ -945,7 +952,7 @@ namespace cppcanvas
 
                             ReadRectangle (rMF, dx, dy, dw, dh, bool(flags & 0x4000));
 
-                            SAL_INFO("cppcanvas.emf", "EMF+\t RectData: " << dx << "," << dy << " " << dw << "x" << dh);
+                            SAL_WARN("cppcanvas.emf", "EMF+\t RectData: " << dx << "," << dy << " " << dw << "x" << dh);
 
                             startAngle = 2*M_PI*startAngle/360;
                             sweepAngle = 2*M_PI*sweepAngle/360;
@@ -964,7 +971,7 @@ namespace cppcanvas
                             if (sweepAngle < 0)
                                 std::swap (endAngle, startAngle);
 
-                            SAL_INFO("cppcanvas.emf", "EMF+\t adjusted angles: start " <<
+                            SAL_WARN("cppcanvas.emf", "EMF+\t adjusted angles: start " <<
                                      (360.0*startAngle/M_PI) << ", end: " << (360.0*endAngle/M_PI) <<
                                      " startAngle: " << startAngle << " sweepAngle: " << sweepAngle);
 
@@ -990,8 +997,10 @@ namespace cppcanvas
                             sal_uInt32 brushIndexOrColor;
 
                             rMF.ReadUInt32( brushIndexOrColor );
-
-                            SAL_INFO("cppcanvas.emf", "EMF+ FillPath slot: " << index);
+                            //brushIndexOrColor = brushIndexOrColor + (0x3f0000 * index);
+                            //if ((brushIndexOrColor & 0xff000000) == 0 )
+                            //brushIndexOrColor = brushIndexOrColor | 0xff000000;
+                            SAL_WARN("cppcanvas.emf", "EMF+ FillPath slot: " << index);
 
                             EMFPPlusFillPolygon( static_cast<EMFPPath*>( aObjects [index].get())->GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
                         }
@@ -1007,13 +1016,13 @@ namespace cppcanvas
                             if ( type == EmfPlusRecordTypeFillEllipse )
                                 rMF.ReadUInt32( brushIndexOrColor );
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ " << (type == EmfPlusRecordTypeFillEllipse ? "Fill" : "Draw") << "Ellipse slot: " << (flags & 0xff));
+                            SAL_WARN("cppcanvas.emf", "EMF+ " << (type == EmfPlusRecordTypeFillEllipse ? "Fill" : "Draw") << "Ellipse slot: " << (flags & 0xff));
 
                             float dx, dy, dw, dh;
 
                             ReadRectangle (rMF, dx, dy, dw, dh, bool(flags & 0x4000));
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ RectData: " << dx << "," << dy << " " << dw << "x" << dh);
+                            SAL_WARN("cppcanvas.emf", "EMF+ RectData: " << dx << "," << dy << " " << dw << "x" << dh);
 
                             B2DPoint mappedCenter (Map (dx + dw/2, dy + dh/2));
                             B2DSize mappedSize( MapSize (dw/2, dh/2));
@@ -1039,13 +1048,13 @@ namespace cppcanvas
 
                             if ( type == EmfPlusRecordTypeFillRects )
                             {
-                                SAL_INFO("cppcanvas.emf", "EMF+ FillRects");
+                                SAL_WARN("cppcanvas.emf", "EMF+ FillRects");
                                 rMF.ReadUInt32( brushIndexOrColor );
-                                SAL_INFO("cppcanvas.emf", "EMF+\t" << (isColor ? "color" : "brush index") << ": 0x" << std::hex << brushIndexOrColor << std::dec);
+                                SAL_WARN("cppcanvas.emf", "EMF+\t" << (isColor ? "color" : "brush index") << ": 0x" << std::hex << brushIndexOrColor << std::dec);
                             }
                             else
                             {
-                                SAL_INFO("cppcanvas.emf", "EMF+ DrawRects");
+                                SAL_WARN("cppcanvas.emf", "EMF+ DrawRects");
                             }
 
                             rMF.ReadInt32( rectangles );
@@ -1060,7 +1069,7 @@ namespace cppcanvas
                                 polygon.append (Map (x, y + height));
                                 polygon.append (Map (x, y));
 
-                                SAL_INFO("cppcanvas.emf", "EMF+\trectangle: " << x << ", " << width << "x" << height);
+                                SAL_WARN("cppcanvas.emf", "EMF+\trectangle: " << x << ", " << width << "x" << height);
 
                                 ::basegfx::B2DPolyPolygon polyPolygon (polygon);
                                 if( type == EmfPlusRecordTypeFillRects )
@@ -1081,8 +1090,8 @@ namespace cppcanvas
                             rMF.ReadUInt32( brushIndexOrColor );
                             rMF.ReadInt32( points );
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ FillPolygon in slot: " << +index << " points: " << points);
-                            SAL_INFO("cppcanvas.emf", "EMF+\t: " << ((flags & 0x8000) ? "color" : "brush index") << " 0x" << std::hex << brushIndexOrColor << std::dec);
+                            SAL_WARN("cppcanvas.emf", "EMF+ FillPolygon in slot: " << +index << " points: " << points);
+                            SAL_WARN("cppcanvas.emf", "EMF+\t: " << ((flags & 0x8000) ? "color" : "brush index") << " 0x" << std::hex << brushIndexOrColor << std::dec);
 
                             EMFPPath path (points, true);
                             path.Read (rMF, flags, *this);
@@ -1097,7 +1106,7 @@ namespace cppcanvas
 
                             rMF.ReadUInt32( points );
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ DrawLines in slot: " << (flags & 0xff) << " points: " << points);
+                            SAL_WARN("cppcanvas.emf", "EMF+ DrawLines in slot: " << (flags & 0xff) << " points: " << points);
 
                             EMFPPath path (points, true);
                             path.Read (rMF, flags, *this);
@@ -1114,8 +1123,8 @@ namespace cppcanvas
 
                             rMF.ReadUInt32( penIndex );
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ DrawPath");
-                            SAL_INFO("cppcanvas.emf", "EMF+\tpen: " << penIndex);
+                            SAL_WARN("cppcanvas.emf", "EMF+ DrawPath");
+                            SAL_WARN("cppcanvas.emf", "EMF+\tpen: " << penIndex);
 
                             EMFPPath* path = static_cast<EMFPPath*>( aObjects [flags & 0xff].get() );
                             SAL_WARN_IF( !path, "cppcanvas.emf", "EmfPlusRecordTypeDrawPath missing path" );
@@ -1132,7 +1141,7 @@ namespace cppcanvas
                             ::basegfx::B2DPolygon aPolygon;
                             rMF.ReadUInt32( aCount );
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ DrawBeziers slot: " << (flags & 0xff) << "Number of points: " << aCount);
+                            SAL_WARN("cppcanvas.emf", "EMF+ DrawBeziers slot: " << (flags & 0xff) << "Number of points: " << aCount);
 
                             SAL_WARN_IF( ( aCount - 1 ) % 3 != 0, "cppcanvas.emf", "EMF+\t Bezier Draw not support number of points other than 4, 7, 10, 13, 16...");
 
@@ -1153,7 +1162,7 @@ namespace cppcanvas
                                 ReadPoint (rMF, x3, y3, flags);
                                 ReadPoint (rMF, x4, y4, flags);
 
-                                SAL_INFO("cppcanvas.emf", "EMF+\t Bezier points: " << x1 << "," << y1 << " " << x2 << "," << y2 << " " << x3 << "," << y3 << " " << x4 << "," << y4);
+                                SAL_WARN("cppcanvas.emf", "EMF+\t Bezier points: " << x1 << "," << y1 << " " << x2 << "," << y2 << " " << x3 << "," << y3 << " " << x4 << "," << y4);
 
                                 aStartPoint = Map (x1, y1);
                                 aControlPointA = Map (x2, y2);
@@ -1178,8 +1187,8 @@ namespace cppcanvas
 
                             rMF.ReadUInt32( attrIndex ).ReadInt32( sourceUnit );
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << "attributes index: " << attrIndex << "source unit: " << sourceUnit);
-                            SAL_INFO("cppcanvas.emf", "EMF+\tTODO: use image attributes");
+                            SAL_WARN("cppcanvas.emf", "EMF+ " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << "attributes index: " << attrIndex << "source unit: " << sourceUnit);
+                            SAL_WARN("cppcanvas.emf", "EMF+\tTODO: use image attributes");
 
                             // For DrawImage and DrawImagePoints, source unit of measurement type must be 1 pixel
                             if (sourceUnit == UnitTypePixel && aObjects [flags & 0xff]) {
@@ -1189,7 +1198,7 @@ namespace cppcanvas
                                 ReadRectangle (rMF, sx, sy, sw, sh);
                                 ::tools::Rectangle aSource(Point(sx, sy), Size(sw, sh));
 
-                                SAL_INFO("cppcanvas.emf", "EMF+ " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << " source rectangle: " << sx << "," << sy << " " << sw << "x" << sh);
+                                SAL_WARN("cppcanvas.emf", "EMF+ " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << " source rectangle: " << sx << "," << sy << " " << sw << "x" << sh);
 
                                 ::basegfx::B2DPoint aDstPoint;
                                 ::basegfx::B2DSize aDstSize;
@@ -1206,8 +1215,8 @@ namespace cppcanvas
                                         ReadPoint (rMF, x2, y2, flags);
                                         ReadPoint (rMF, x3, y3, flags);
 
-                                        SAL_INFO("cppcanvas.emf", "EMF+ destination points: " << x1 << "," << y1 << " " << x2 << "," << y2 << " " << x3 << "," << y3);
-                                        SAL_INFO("cppcanvas.emf", "EMF+ destination rectangle: " << x1 << "," << y1 << " " << x2 - x1 << "x" << y3 - y1);
+                                        SAL_WARN("cppcanvas.emf", "EMF+ destination points: " << x1 << "," << y1 << " " << x2 << "," << y2 << " " << x3 << "," << y3);
+                                        SAL_WARN("cppcanvas.emf", "EMF+ destination rectangle: " << x1 << "," << y1 << " " << x2 - x1 << "x" << y3 - y1);
 
                                         aDstPoint = Map (x1, y1);
                                         aDstSize = MapSize(x2 - x1, y3 - y1);
@@ -1220,7 +1229,7 @@ namespace cppcanvas
 
                                     ReadRectangle (rMF, dx, dy, dw, dh, bool(flags & 0x4000));
 
-                                    SAL_INFO("cppcanvas.emf", "EMF+ destination rectangle: " << dx << "," << dy << " " << dw << "x" << dh);
+                                    SAL_WARN("cppcanvas.emf", "EMF+ destination rectangle: " << dx << "," << dy << " " << dw << "x" << dh);
 
                                     aDstPoint = Map (dx, dy);
                                     aDstSize = MapSize(dw, dh);
@@ -1256,21 +1265,21 @@ namespace cppcanvas
                         }
                     case EmfPlusRecordTypeDrawString:
                         {
-                            SAL_INFO("cppcanvas.emf", "EMF+ DrawString");
+                            SAL_WARN("cppcanvas.emf", "EMF+ DrawString");
 
                             sal_uInt32 brushId;
                             sal_uInt32 formatId;
                             sal_uInt32 stringLength;
 
                             rMF.ReadUInt32( brushId ).ReadUInt32( formatId ).ReadUInt32( stringLength );
-                            SAL_INFO("cppcanvas.emf", "EMF+ DrawString brushId: " << brushId << " formatId: " << formatId << " length: " << stringLength);
+                            SAL_WARN("cppcanvas.emf", "EMF+ DrawString brushId: " << brushId << " formatId: " << formatId << " length: " << stringLength);
 
                             if (flags & 0x8000) {
                                 float lx, ly, lw, lh;
 
                                 rMF.ReadFloat( lx ).ReadFloat( ly ).ReadFloat( lw ).ReadFloat( lh );
 
-                                SAL_INFO("cppcanvas.emf", "EMF+ DrawString layoutRect: " << lx << "," << ly << " - " << lw << "x" << lh);
+                                SAL_WARN("cppcanvas.emf", "EMF+ DrawString layoutRect: " << lx << "," << ly << " - " << lw << "x" << lh);
 
                                 OUString text = read_uInt16s_ToOUString(rMF, stringLength);
 
@@ -1280,9 +1289,9 @@ namespace cppcanvas
                                 {
                                     LanguageTag aLanguageTag( static_cast< LanguageType >( stringFormat->language ) );
                                     aFontRequest.Locale = aLanguageTag.getLocale( false );
-                                    SAL_INFO("cppcanvas.emf", "EMF+\t\t Font locale, Country:" << aLanguageTag.getCountry() <<" Language:" << aLanguageTag.getLanguage() );
+                                    SAL_WARN("cppcanvas.emf", "EMF+\t\t Font locale, Country:" << aLanguageTag.getCountry() <<" Language:" << aLanguageTag.getLanguage() );
                                 }
-                                SAL_INFO("cppcanvas.emf", "EMF+\t\t TODO Use all string formatting attributes during drawing");
+                                SAL_WARN("cppcanvas.emf", "EMF+\t\t TODO Use all string formatting attributes during drawing");
 
                                 double cellSize = setFont (aFontRequest, flags & 0xff, rFactoryParms, rState);
                                 rState.textColor = COLOR( brushId );
@@ -1309,7 +1318,7 @@ namespace cppcanvas
                                         false ) );
                                 if( pTextAction )
                                 {
-                                    SAL_INFO("cppcanvas.emf", "EMF+\t\tadd text action");
+                                    SAL_WARN("cppcanvas.emf", "EMF+\t\tadd text action");
 
                                     maActions.emplace_back(
                                                                   pTextAction,
@@ -1327,8 +1336,8 @@ namespace cppcanvas
                         {
                             rMF.ReadFloat( fPageScale );
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ SetPageTransform");
-                            SAL_INFO("cppcanvas.emf", "EMF+\tscale: " << fPageScale << " unit: " << flags);
+                            SAL_WARN("cppcanvas.emf", "EMF+ SetPageTransform");
+                            SAL_WARN("cppcanvas.emf", "EMF+\tscale: " << fPageScale << " unit: " << flags);
 
                             if (flags != UnitTypePixel)
                                 SAL_WARN("cppcanvas.emf", "EMF+\t TODO Only UnitTypePixel is supported. ");
@@ -1341,28 +1350,28 @@ namespace cppcanvas
                         break;
                     case EmfPlusRecordTypeSetRenderingOrigin:
                         rMF.ReadInt32( nOriginX ).ReadInt32( nOriginY );
-                        SAL_INFO("cppcanvas.emf", "EMF+ SetRenderingOrigin");
-                        SAL_INFO("cppcanvas.emf", "EMF+\torigin [x,y]: " << nOriginX << "," << nOriginY);
+                        SAL_WARN("cppcanvas.emf", "EMF+ SetRenderingOrigin");
+                        SAL_WARN("cppcanvas.emf", "EMF+\torigin [x,y]: " << nOriginX << "," << nOriginY);
                         break;
                     case EmfPlusRecordTypeSetTextRenderingHint:
-                        SAL_INFO("cppcanvas.emf", "EMF+ SetTextRenderingHint");
-                        SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
+                        SAL_WARN("cppcanvas.emf", "EMF+ SetTextRenderingHint");
+                        SAL_WARN("cppcanvas.emf", "EMF+\tTODO");
                         break;
                     case EmfPlusRecordTypeSetAntiAliasMode:
-                        SAL_INFO("cppcanvas.emf", "EMF+ SetAntiAliasMode");
-                        SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
+                        SAL_WARN("cppcanvas.emf", "EMF+ SetAntiAliasMode");
+                        SAL_WARN("cppcanvas.emf", "EMF+\tTODO");
                         break;
                     case EmfPlusRecordTypeSetInterpolationMode:
-                        SAL_INFO("cppcanvas.emf", "EMF+ InterpolationMode");
-                        SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
+                        SAL_WARN("cppcanvas.emf", "EMF+ InterpolationMode");
+                        SAL_WARN("cppcanvas.emf", "EMF+\tTODO");
                         break;
                     case EmfPlusRecordTypeSetPixelOffsetMode:
-                        SAL_INFO("cppcanvas.emf", "EMF+ SetPixelOffsetMode");
-                        SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
+                        SAL_WARN("cppcanvas.emf", "EMF+ SetPixelOffsetMode");
+                        SAL_WARN("cppcanvas.emf", "EMF+\tTODO");
                         break;
                     case EmfPlusRecordTypeSetCompositingQuality:
-                        SAL_INFO("cppcanvas.emf", "EMF+ SetCompositingQuality");
-                        SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
+                        SAL_WARN("cppcanvas.emf", "EMF+ SetCompositingQuality");
+                        SAL_WARN("cppcanvas.emf", "EMF+\tTODO");
                         break;
                     case EmfPlusRecordTypeSave:
                     {
@@ -1370,7 +1379,7 @@ namespace cppcanvas
 
                         rMF.ReadUInt32( stackIndex );
 
-                        SAL_INFO("cppcanvas.emf", "EMF+ Save stack index: " << stackIndex);
+                        SAL_WARN("cppcanvas.emf", "EMF+ Save stack index: " << stackIndex);
 
                         GraphicStatePush( mGSStack, stackIndex, rState );
 
@@ -1382,7 +1391,7 @@ namespace cppcanvas
 
                         rMF.ReadUInt32( stackIndex );
 
-                        SAL_INFO("cppcanvas.emf", "EMF+ Restore stack index: " << stackIndex);
+                        SAL_WARN("cppcanvas.emf", "EMF+ Restore stack index: " << stackIndex);
 
                         GraphicStatePop( mGSStack, stackIndex, rState );
 
@@ -1394,7 +1403,7 @@ namespace cppcanvas
 
                         rMF.ReadUInt32( stackIndex );
 
-                        SAL_INFO("cppcanvas.emf", "EMF+ Begin Container No Params stack index: " << stackIndex);
+                        SAL_WARN("cppcanvas.emf", "EMF+ Begin Container No Params stack index: " << stackIndex);
 
                         GraphicStatePush( mGSContainerStack, stackIndex, rState );
                     }
@@ -1405,32 +1414,32 @@ namespace cppcanvas
 
                         rMF.ReadUInt32( stackIndex );
 
-                        SAL_INFO("cppcanvas.emf", "EMF+ End Container stack index: " << stackIndex);
+                        SAL_WARN("cppcanvas.emf", "EMF+ End Container stack index: " << stackIndex);
 
                         GraphicStatePop( mGSContainerStack, stackIndex, rState );
                     }
                     break;
                     case EmfPlusRecordTypeSetWorldTransform: {
-                        SAL_INFO("cppcanvas.emf", "EMF+ SetWorldTransform");
+                        SAL_WARN("cppcanvas.emf", "EMF+ SetWorldTransform");
                         XForm transform;
                         ReadXForm( rMF, transform );
                         aWorldTransform.Set (transform);
-                        SAL_INFO("cppcanvas.emf",
+                        SAL_WARN("cppcanvas.emf",
                                 "EMF+\tm11: " << aWorldTransform.eM11 << "\tm12: " << aWorldTransform.eM12 <<
                                 "\tm21: " << aWorldTransform.eM21 << "\tm22: " << aWorldTransform.eM22 <<
                                 "\tdx: "  << aWorldTransform.eDx  << "\tdy: "  << aWorldTransform.eDy);
                         break;
                     }
                     case EmfPlusRecordTypeResetWorldTransform:
-                        SAL_INFO("cppcanvas.emf", "EMF+ ResetWorldTransform");
+                        SAL_WARN("cppcanvas.emf", "EMF+ ResetWorldTransform");
                         aWorldTransform.SetIdentity ();
                         break;
                     case EmfPlusRecordTypeMultiplyWorldTransform: {
-                        SAL_INFO("cppcanvas.emf", "EMF+ MultiplyWorldTransform");
+                        SAL_WARN("cppcanvas.emf", "EMF+ MultiplyWorldTransform");
                         XForm transform;
                         ReadXForm( rMF, transform );
 
-                        SAL_INFO("cppcanvas.emf",
+                        SAL_WARN("cppcanvas.emf",
                                 "EMF+\tmatrix m11: " << transform.eM11 << "m12: " << transform.eM12 <<
                                 "EMF+\tm21: "        << transform.eM21 << "m22: " << transform.eM22 <<
                                 "EMF+\tdx: "         << transform.eDx  << "dy: "  << transform.eDy);
@@ -1441,7 +1450,7 @@ namespace cppcanvas
                             transform.Multiply (aWorldTransform);
                             aWorldTransform.Set (transform);
                         }
-                        SAL_INFO("cppcanvas.emf",
+                        SAL_WARN("cppcanvas.emf",
                                 "EMF+\tm11: " << aWorldTransform.eM11 << "m12: " << aWorldTransform.eM12 <<
                                 "EMF+\tm21: " << aWorldTransform.eM21 << "m22: " << aWorldTransform.eM22 <<
                                 "EMF+\tdx: "  << aWorldTransform.eDx  << "dy: "  << aWorldTransform.eDy);
@@ -1449,12 +1458,12 @@ namespace cppcanvas
                     }
                     case EmfPlusRecordTypeTranslateWorldTransform:
                         {
-                            SAL_INFO("cppcanvas.emf", "EMF+ TranslateWorldTransform");
+                            SAL_WARN("cppcanvas.emf", "EMF+ TranslateWorldTransform");
 
                             XForm transform = XForm();
                             rMF.ReadFloat( transform.eDx ).ReadFloat( transform.eDy );
 
-                            SAL_INFO("cppcanvas.emf",
+                            SAL_WARN("cppcanvas.emf",
                                      "EMF+\t m11: " << transform.eM11 << ", m12: " << transform.eM12 <<
                                      "EMF+\t m21: " << transform.eM21 << ", m22: " << transform.eM22 <<
                                      "EMF+\t dx: "  << transform.eDx  << ", dy: "  << transform.eDy);
@@ -1465,7 +1474,7 @@ namespace cppcanvas
                                 transform.Multiply (aWorldTransform);
                                 aWorldTransform.Set (transform);
                             }
-                            SAL_INFO("cppcanvas.emf",
+                            SAL_WARN("cppcanvas.emf",
                                      "EMF+\t m11: " << aWorldTransform.eM11 << ", m12: " << aWorldTransform.eM12 <<
                                      "EMF+\t m21: " << aWorldTransform.eM21 << ", m22: " << aWorldTransform.eM22 <<
                                      "EMF+\t dx: "  << aWorldTransform.eDx  << ", dy: "  << aWorldTransform.eDy);
@@ -1475,9 +1484,9 @@ namespace cppcanvas
                         {
                             XForm transform = XForm();
                             rMF.ReadFloat( transform.eM11 ).ReadFloat( transform.eM22 );
-                            SAL_INFO("cppcanvas.emf", "EMF+ ScaleWorldTransform Sx: " << transform.eM11 << " Sy: " << transform.eM22);
+                            SAL_WARN("cppcanvas.emf", "EMF+ ScaleWorldTransform Sx: " << transform.eM11 << " Sy: " << transform.eM22);
 
-                            SAL_INFO("cppcanvas.emf",
+                            SAL_WARN("cppcanvas.emf",
                                      "EMF+\t m11: " << aWorldTransform.eM11 << ", m12: " << aWorldTransform.eM12 <<
                                      "EMF+\t m21: " << aWorldTransform.eM21 << ", m22: " << aWorldTransform.eM22 <<
                                      "EMF+\t dx: "  << aWorldTransform.eDx  << ", dy: "  << aWorldTransform.eDy);
@@ -1488,7 +1497,7 @@ namespace cppcanvas
                                 transform.Multiply (aWorldTransform);
                                 aWorldTransform.Set (transform);
                             }
-                            SAL_INFO("cppcanvas.emf",
+                            SAL_WARN("cppcanvas.emf",
                                      "EMF+\t m11: " << aWorldTransform.eM11 << ", m12: " << aWorldTransform.eM12 <<
                                      "EMF+\t m21: " << aWorldTransform.eM21 << ", m22: " << aWorldTransform.eM22 <<
                                      "EMF+\t dx: "  << aWorldTransform.eDx  << ", dy: "  << aWorldTransform.eDy);
@@ -1498,18 +1507,18 @@ namespace cppcanvas
                         {
                             int combineMode = (flags >> 8) & 0xf;
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ SetClipRect combine mode: " << combineMode);
-#if OSL_DEBUG_LEVEL > 1
+                            SAL_WARN("cppcanvas.emf", "EMF+ SetClipRect combine mode: " << combineMode);
+//#if OSL_DEBUG_LEVEL > 1
                             if (combineMode > 1) {
-                                SAL_INFO ("cppcanvas.emf", "EMF+ TODO combine mode > 1");
+                                SAL_WARN ("cppcanvas.emf", "EMF+ TODO SetClipRect combine mode > 1");
                             }
-#endif
+//#endif
 
                             float dx, dy, dw, dh;
 
                             ReadRectangle (rMF, dx, dy, dw, dh);
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ RectData: " << dx << "," << dy << " " << dw << "x" << dh);
+                            SAL_WARN("cppcanvas.emf", "EMF+ RectData: " << dx << "," << dy << " " << dw << "x" << dh);
 
                             B2DPoint mappedPoint (Map (dx, dy));
                             B2DSize mappedSize( MapSize (dw, dh));
@@ -1518,17 +1527,20 @@ namespace cppcanvas
                                                                                                                                                             mappedPoint.getX() + mappedSize.getX(),
                                                                                                                                                             mappedPoint.getY() + mappedSize.getY() ) ) ) );
                             polyPolygon.transform(rState.mapModeTransform);
-
-                            updateClipping (polyPolygon, rFactoryParms, combineMode == 1);
-
+                            if (combineMode == EmfPlusCombineModeUnion)
+                                unionArea(polyPolygon, rFactoryParms);
+                            else if (combineMode == EmfPlusCombineModeXOR)
+                                xorArea(polyPolygon, rFactoryParms);
+                            else
+                                updateClipping (polyPolygon, rFactoryParms, combineMode == 1);
                             break;
                         }
                     case EmfPlusRecordTypeSetClipPath:
                         {
                             int combineMode = (flags >> 8) & 0xf;
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ SetClipPath combine mode: " << combineMode);
-                            SAL_INFO("cppcanvas.emf", "EMF+\tpath in slot: " << (flags & 0xff));
+                            SAL_WARN("cppcanvas.emf", "EMF+ SetClipPath combine mode: " << combineMode);
+                            SAL_WARN("cppcanvas.emf", "EMF+\tpath in slot: " << (flags & 0xff));
 
                             EMFPPath& path = *static_cast<EMFPPath*>( aObjects [flags & 0xff].get() );
                             ::basegfx::B2DPolyPolygon& clipPoly (path.GetPolygon (*this));
@@ -1538,14 +1550,26 @@ namespace cppcanvas
                             {
                             case EmfPlusCombineModeReplace:
                             case EmfPlusCombineModeIntersect:
-                            case EmfPlusCombineModeUnion: // Is this, EmfPlusCombineModeXOR and EmfPlusCombineModeComplement correct?
+                                updateClipping (clipPoly, rFactoryParms, combineMode == EmfPlusCombineModeIntersect);
+                                break;
+                            case EmfPlusCombineModeUnion:
+                                unionArea(clipPoly, rFactoryParms);
+                                break;
                             case EmfPlusCombineModeXOR:
+                                xorArea(clipPoly, rFactoryParms);
+                                break;
                             case EmfPlusCombineModeComplement:
                                 updateClipping (clipPoly, rFactoryParms, combineMode == 1);
                                 break;
                             case EmfPlusCombineModeExclude:
+                                excludeArea(clipPoly, rFactoryParms);
+
+                                //updateClipping (clipPoly, rFactoryParms, 0);
                                 // Not doing anything is better then including exactly what we wanted to exclude.
                                 break;
+                            }
+                            if (combineMode > 1) {
+                                SAL_WARN ("cppcanvas.emf", "EMF+ TODO SetClipPath combine mode > 1");
                             }
 
                             break;
@@ -1561,12 +1585,12 @@ namespace cppcanvas
                         if (region && region->parts == 0 && region->initialState == EmfPlusRegionInitialStateInfinite) {
                             updateClipping (::basegfx::B2DPolyPolygon (), rFactoryParms, combineMode == 1);
                         } else {
-                            SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
+                            SAL_WARN("cppcanvas.emf", "EMF+\tTODO");
                         }
                         break;
                     }
                     case EmfPlusRecordTypeDrawDriverString: {
-                        SAL_INFO("cppcanvas.emf", "EMF+ DrawDriverString, flags: 0x" << std::hex << flags << std::dec);
+                        SAL_WARN("cppcanvas.emf", "EMF+ DrawDriverString, flags: 0x" << std::hex << flags << std::dec);
                         sal_uInt32 brushIndexOrColor;
                         sal_uInt32 optionFlags;
                         sal_uInt32 hasMatrix;
@@ -1574,26 +1598,27 @@ namespace cppcanvas
 
                         rMF.ReadUInt32( brushIndexOrColor ).ReadUInt32( optionFlags ).ReadUInt32( hasMatrix ).ReadUInt32( glyphsCount );
 
-                        SAL_INFO("cppcanvas.emf", "EMF+\t: " << ((flags & 0x8000) ? "color" : "brush index") << " 0x" << std::hex << brushIndexOrColor << std::dec);
-                        SAL_INFO("cppcanvas.emf", "EMF+\toption flags: 0x" << std::hex << optionFlags << std::dec);
-                        SAL_INFO("cppcanvas.emf", "EMF+\thas matrix: " << hasMatrix);
-                        SAL_INFO("cppcanvas.emf", "EMF+\tglyphs: " << glyphsCount);
+                        SAL_WARN("cppcanvas.emf", "EMF+\t: " << ((flags & 0x8000) ? " text foreground color" : "brush index") << " 0x" << std::hex << brushIndexOrColor << std::dec);
+                        SAL_WARN("cppcanvas.emf", "EMF+\toption flags: 0x" << std::hex << optionFlags << std::dec);
+                        SAL_WARN("cppcanvas.emf", "EMF+\thas matrix: " << hasMatrix);
+                        SAL_WARN("cppcanvas.emf", "EMF+\tglyphs: " << glyphsCount);
 
                         if( ( optionFlags & 1 ) && glyphsCount > 0 ) {
                             std::unique_ptr<float[]> charsPosX( new float[glyphsCount] );
                             std::unique_ptr<float[]> charsPosY( new float[glyphsCount] );
 
                             OUString text = read_uInt16s_ToOUString(rMF, glyphsCount);
+                            SAL_WARN("cppcanvas.emf", "EMF+\t text: " << text);
 
                             for( sal_uInt32 i=0; i<glyphsCount; i++) {
                                 rMF.ReadFloat( charsPosX[i] ).ReadFloat( charsPosY[i] );
-                                SAL_INFO("cppcanvas.emf", "EMF+\tglyphPosition[" << i << "]: " << charsPosX[i] << "," << charsPosY[i]);
+                                SAL_WARN("cppcanvas.emf", "EMF+\tglyphPosition[" << i << "]: " << charsPosX[i] << "," << charsPosY[i]);
                             }
 
                             XForm transform;
                             if( hasMatrix ) {
                                 ReadXForm( rMF, transform );
-                                SAL_INFO("cppcanvas.emf", "EMF+\tmatrix: " << transform.eM11 << ", " << transform.eM12 << ", " << transform.eM21 << ", " << transform.eM22 << ", " << transform.eDx << ", " << transform.eDy);
+                                SAL_WARN("cppcanvas.emf", "EMF+\tmatrix: " << transform.eM11 << ", " << transform.eM12 << ", " << transform.eM21 << ", " << transform.eM22 << ", " << transform.eDx << ", " << transform.eDy);
                             }
 
                             rendering::FontRequest aFontRequest;
@@ -1602,8 +1627,13 @@ namespace cppcanvas
 
                             if( flags & 0x8000 )
                                 rState.textColor = COLOR( brushIndexOrColor );
+                            //double x, y;
 
-                            ::basegfx::B2DPoint point( Map( charsPosX[0], charsPosY[0] ) );
+                            //x = ix*aWorldTransform.eM11 + iy*aWorldTransform.eM21 + aWorldTransform.eDx;
+                            //y = ix*aWorldTransform.eM12 + iy*aWorldTransform.eM22 + aWorldTransform.eDy;
+
+                            //::basegfx::B2DPoint point( Map( charsPosX[0], charsPosY[0] ) );
+                            ::basegfx::B2DPoint point( Map( 0.0, 0.0 ) );
 
                             std::shared_ptr<Action> pTextAction(
                                     TextActionFactory::createTextAction(
@@ -1624,7 +1654,7 @@ namespace cppcanvas
 
                             if( pTextAction )
                             {
-                                SAL_INFO("cppcanvas.emf", "EMF+\t\tadd text action");
+                                SAL_WARN("cppcanvas.emf", "EMF+\t\tadd text action");
 
                                 maActions.emplace_back(
                                             pTextAction,
@@ -1639,7 +1669,12 @@ namespace cppcanvas
                         break;
                     }
                     default:
-                        SAL_WARN("cppcanvas.emf", "EMF+ TODO unhandled record type: 0x" << std::hex << type << std::dec);
+                        char a, b, c, d;
+                        rMF.ReadChar(a).ReadChar(b).ReadChar(c).ReadChar(d);
+                        SAL_WARN("cppcanvas.emf", "EMF+ TODO unhandled record type: 0x" << std::hex << type << std::dec << " string:" << a<<b<<c<<d);
+
+
+
                     }
                 }
 

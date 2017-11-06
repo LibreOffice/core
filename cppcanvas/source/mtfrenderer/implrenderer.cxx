@@ -77,6 +77,7 @@
 #include <memory>
 #include "mtftools.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1031,6 +1032,217 @@ namespace cppcanvas
             }
         }
 
+
+        void ImplRenderer::unionArea( const ::basegfx::B2DPolyPolygon& rClipPoly,
+                                        const ActionFactoryParameters&   rParms)
+        {
+            ::cppcanvas::internal::OutDevState& rState( rParms.mrStates.getState() );
+
+            const bool bEmptyClipRect( rState.clipRect.IsEmpty() );
+            const bool bEmptyClipPoly( rState.clip.count() == 0 );
+
+            ENSURE_OR_THROW( bEmptyClipPoly || bEmptyClipRect,
+                             "ImplRenderer::updateClipping(): Clip rect and polygon are both set!" );
+
+            if( !bEmptyClipRect )
+            {
+                // TODO(P3): Use Liang-Barsky polygon clip here,
+                // after all, one object is just a rectangle!
+
+                // convert rect to polygon beforehand, must revert
+                // to general polygon clipping here.
+                rState.clip = ::basegfx::B2DPolyPolygon(
+                            ::basegfx::utils::createPolygonFromRect(
+                                // #121100# VCL rectangular clips always
+                                // include one more pixel to the right
+                                // and the bottom
+                                ::basegfx::B2DRectangle( rState.clipRect.Left(),
+                                                         rState.clipRect.Top(),
+                                                         rState.clipRect.Right()+1,
+                                                         rState.clipRect.Bottom()+1 ) ) );
+            }
+
+            // AW: Simplified
+            //rState.clip = basegfx::utils::clipPolyPolygonOnPolyPolygon(
+            //    rClipPoly, rState.clip, true, false);
+            rState.clip = basegfx::utils::solvePolygonOperationOr(rState.clip, rClipPoly);
+            ///home/kosiorek/dev/core/libreoffice-test/basegfx/source/tools/b2dclipstate.cxx
+
+
+            // by now, our clip resides in the OutDevState::clip
+            // poly-polygon.
+            rState.clipRect.SetEmpty();
+
+            if( rState.clip.count() == 0 )
+            {
+                if( rState.clipRect.IsEmpty() )
+                {
+                    rState.xClipPoly.clear();
+                }
+                else
+                {
+                    rState.xClipPoly = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                        rParms.mrCanvas->getUNOCanvas()->getDevice(),
+                        ::basegfx::B2DPolyPolygon(
+                            ::basegfx::utils::createPolygonFromRect(
+                                // #121100# VCL rectangular clips
+                                // always include one more pixel to
+                                // the right and the bottom
+                                ::basegfx::B2DRectangle( rState.clipRect.Left(),
+                                                         rState.clipRect.Top(),
+                                                         rState.clipRect.Right()+1,
+                                                         rState.clipRect.Bottom()+1 ) ) ) );
+                }
+            }
+            else
+            {
+                rState.xClipPoly = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                    rParms.mrCanvas->getUNOCanvas()->getDevice(),
+                    rState.clip );
+            }
+        }
+
+
+        void ImplRenderer::xorArea( const ::basegfx::B2DPolyPolygon& rClipPoly,
+                                        const ActionFactoryParameters&   rParms)
+        {
+            ::cppcanvas::internal::OutDevState& rState( rParms.mrStates.getState() );
+
+            const bool bEmptyClipRect( rState.clipRect.IsEmpty() );
+            const bool bEmptyClipPoly( rState.clip.count() == 0 );
+
+            ENSURE_OR_THROW( bEmptyClipPoly || bEmptyClipRect,
+                             "ImplRenderer::updateClipping(): Clip rect and polygon are both set!" );
+
+            if( !bEmptyClipRect )
+            {
+                // TODO(P3): Use Liang-Barsky polygon clip here,
+                // after all, one object is just a rectangle!
+
+                // convert rect to polygon beforehand, must revert
+                // to general polygon clipping here.
+                rState.clip = ::basegfx::B2DPolyPolygon(
+                            ::basegfx::utils::createPolygonFromRect(
+                                // #121100# VCL rectangular clips always
+                                // include one more pixel to the right
+                                // and the bottom
+                                ::basegfx::B2DRectangle( rState.clipRect.Left(),
+                                                         rState.clipRect.Top(),
+                                                         rState.clipRect.Right()+1,
+                                                         rState.clipRect.Bottom()+1 ) ) );
+            }
+
+            // AW: Simplified
+            //rState.clip = basegfx::utils::clipPolyPolygonOnPolyPolygon(
+            //    rClipPoly, rState.clip, true, false);
+            rState.clip = basegfx::utils::solvePolygonOperationXor(rState.clip, rClipPoly);
+            ///home/kosiorek/dev/core/libreoffice-test/basegfx/source/tools/b2dclipstate.cxx
+
+
+            // by now, our clip resides in the OutDevState::clip
+            // poly-polygon.
+            rState.clipRect.SetEmpty();
+
+            if( rState.clip.count() == 0 )
+            {
+                if( rState.clipRect.IsEmpty() )
+                {
+                    rState.xClipPoly.clear();
+                }
+                else
+                {
+                    rState.xClipPoly = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                        rParms.mrCanvas->getUNOCanvas()->getDevice(),
+                        ::basegfx::B2DPolyPolygon(
+                            ::basegfx::utils::createPolygonFromRect(
+                                // #121100# VCL rectangular clips
+                                // always include one more pixel to
+                                // the right and the bottom
+                                ::basegfx::B2DRectangle( rState.clipRect.Left(),
+                                                         rState.clipRect.Top(),
+                                                         rState.clipRect.Right()+1,
+                                                         rState.clipRect.Bottom()+1 ) ) ) );
+                }
+            }
+            else
+            {
+                rState.xClipPoly = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                    rParms.mrCanvas->getUNOCanvas()->getDevice(),
+                    rState.clip );
+            }
+        }
+
+
+
+        void ImplRenderer::excludeArea( const ::basegfx::B2DPolyPolygon& rClipPoly,
+                                        const ActionFactoryParameters&   rParms)
+        {
+            ::cppcanvas::internal::OutDevState& rState( rParms.mrStates.getState() );
+
+            const bool bEmptyClipRect( rState.clipRect.IsEmpty() );
+            const bool bEmptyClipPoly( rState.clip.count() == 0 );
+
+            ENSURE_OR_THROW( bEmptyClipPoly || bEmptyClipRect,
+                              "ImplRenderer::updateClipping(): Clip rect and polygon are both set!" );
+
+            if( !bEmptyClipRect )
+            {
+                // TODO(P3): Use Liang-Barsky polygon clip here,
+                // after all, one object is just a rectangle!
+
+                // convert rect to polygon beforehand, must revert
+                // to general polygon clipping here.
+                rState.clip = ::basegfx::B2DPolyPolygon(
+                            ::basegfx::utils::createPolygonFromRect(
+                                // #121100# VCL rectangular clips always
+                                // include one more pixel to the right
+                                // and the bottom
+                                ::basegfx::B2DRectangle( rState.clipRect.Left(),
+                                                         rState.clipRect.Top(),
+                                                         rState.clipRect.Right()+1,
+                                                         rState.clipRect.Bottom()+1 ) ) );
+            }
+
+            // AW: Simplified
+            //rState.clip = basegfx::utils::clipPolyPolygonOnPolyPolygon(
+            //    rClipPoly, rState.clip, true, false);
+
+
+            // first union all pending ones, subtract en bloc then
+            //rClipPoly = solveCrossovers(rClipPoly);
+            //rClipPoly = stripNeutralPolygons(rClipPoly);
+            //rClipPoly = stripDispensablePolygons(rClipPoly);
+
+            ::basegfx::B2DPolyPolygon aClip( ::basegfx::utils::solveCrossovers( rClipPoly ) );
+            aClip = ::basegfx::utils::stripNeutralPolygons(aClip);
+            aClip = ::basegfx::utils::stripDispensablePolygons(aClip);
+
+            rState.clip = basegfx::utils::solvePolygonOperationDiff(rState.clip, rClipPoly);
+
+            //rState.clip = basegfx::utils::solvePolygonOperationDiff(rState.clip, aClip);
+            //rState.clip = basegfx::utils::solvePolygonOperationDiff(rClipPoly, rState.clip );
+            ///home/kosiorek/dev/core/libreoffice-test/basegfx/source/tools/b2dclipstate.cxx
+
+
+            // by now, our clip resides in the OutDevState::clip
+            // poly-polygon.
+            rState.clipRect.SetEmpty();
+
+            if( rState.clip.count() == 0 )
+            {
+
+                rState.xClipPoly.clear();
+            }
+            else
+            {
+
+                rState.xClipPoly = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                            rParms.mrCanvas->getUNOCanvas()->getDevice(),
+                            rState.clip );
+            }
+        }
+
+
         void ImplRenderer::updateClipping( const ::basegfx::B2DPolyPolygon& rClipPoly,
                                            const ActionFactoryParameters&   rParms,
                                            bool                             bIntersect )
@@ -1041,14 +1253,17 @@ namespace cppcanvas
             const bool bEmptyClipPoly( rState.clip.count() == 0 );
 
             ENSURE_OR_THROW( bEmptyClipPoly || bEmptyClipRect,
-                              "ImplRenderer::updateClipping(): Clip rect and polygon are both set!" );
+                             "ImplRenderer::updateClipping(): Clip rect and polygon are both set!" );
 
             if( !bIntersect ||
-                (bEmptyClipRect && bEmptyClipPoly) )
+                    (bEmptyClipRect && bEmptyClipPoly) )
             {
+                rState.clip.clear();
+
+                rState.clipRect.SetEmpty();
                 rState.clip = rClipPoly;
             }
-            else
+            //else
             {
                 if( !bEmptyClipRect )
                 {
@@ -1101,8 +1316,8 @@ namespace cppcanvas
             else
             {
                 rState.xClipPoly = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
-                    rParms.mrCanvas->getUNOCanvas()->getDevice(),
-                    rState.clip );
+                            rParms.mrCanvas->getUNOCanvas()->getDevice(),
+                            rState.clip );
             }
         }
 
@@ -1562,7 +1777,7 @@ namespace cppcanvas
                         // #i44110# correct null-sized output - there
                         // are metafiles which have zero size in at
                         // least one dimension
-                      
+
                         // Remark the 1L cannot be replaced, that would cause max to compare long/int
                         const Size aMtfSizePix( std::max( aMtfSizePixPre.Width(), 1L ),
                                                 std::max( aMtfSizePixPre.Height(), 1L ) );
