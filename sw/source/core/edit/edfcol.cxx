@@ -621,57 +621,6 @@ SwTextFormatColl& SwEditShell::GetTextFormatColl(sal_uInt16 nFormatColl) const
     return *((*(GetDoc()->GetTextFormatColls()))[nFormatColl]);
 }
 
-OUString lcl_getProperty(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer, const OUString& rName)
-{
-    try
-    {
-        uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
-        return xPropertySet->getPropertyValue(rName).get<OUString>();
-    }
-    catch (const css::uno::Exception&)
-    {
-    }
-
-    return OUString();
-}
-
-static bool lcl_containsProperty(const uno::Sequence<beans::Property> & rProperties, const OUString& rName)
-{
-    return std::find_if(rProperties.begin(), rProperties.end(), [&](const beans::Property& rProperty)
-    {
-        return rProperty.Name == rName;
-    }) != rProperties.end();
-}
-
-static void lcl_removeAllProperties(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer)
-{
-    uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
-    uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
-
-    for (const beans::Property& rProperty : aProperties)
-    {
-        rxPropertyContainer->removeProperty(rProperty.Name);
-    }
-}
-
-bool addOrInsertDocumentProperty(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer, OUString const & rsKey, OUString const & rsValue)
-{
-    uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
-
-    try
-    {
-        if (lcl_containsProperty(xPropertySet->getPropertySetInfo()->getProperties(), rsKey))
-            xPropertySet->setPropertyValue(rsKey, uno::makeAny(rsValue));
-        else
-            rxPropertyContainer->addProperty(rsKey, beans::PropertyAttribute::REMOVABLE, uno::makeAny(rsValue));
-    }
-    catch (const uno::Exception& /*rException*/)
-    {
-        return false;
-    }
-    return true;
-}
-
 void insertFieldToDocument(uno::Reference<lang::XMultiServiceFactory> const & rxMultiServiceFactory,
                            uno::Reference<text::XText> const & rxText, uno::Reference<text::XParagraphCursor> const & rxParagraphCursor,
                            OUString const & rsKey)
@@ -791,7 +740,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
 
     // Clear properties
     uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
-    lcl_removeAllProperties(xPropertyContainer);
+    svx::classification::removeAllProperties(xPropertyContainer);
 
     SfxClassificationHelper aHelper(xDocumentProperties);
 
@@ -842,7 +791,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
                 {
                     OUString sKey = aCreator.makeNumberedMarkingTextKey();
 
-                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
+                    svx::classification::addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
                     insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
                     insertFieldToDocument(xMultiServiceFactory, xFooterText, xFooterParagraphCursor, sKey);
                 }
@@ -859,7 +808,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
                 case svx::ClassificationType::MARKING:
                 {
                     OUString sKey = aCreator.makeMarkingKey();
-                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
+                    svx::classification::addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
                     insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
                     insertFieldToDocument(xMultiServiceFactory, xFooterText, xFooterParagraphCursor, sKey);
                 }
@@ -868,7 +817,7 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
                 case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
                 {
                     OUString sKey = aCreator.makeIntellectualPropertyPartKey();
-                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
+                    svx::classification::addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
                     insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
                     insertFieldToDocument(xMultiServiceFactory, xFooterText, xFooterParagraphCursor, sKey);
                 }
@@ -979,25 +928,25 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
 
             if (aCreator.isMarkingTextKey(aName))
             {
-                const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
+                const OUString aValue = svx::classification::getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
                     aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, sBlank });
             }
             else if (aCreator.isCategoryNameKey(aName) || aCreator.isCategoryIdentifierKey(aName))
             {
-                const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
+                const OUString aValue = svx::classification::getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
                     aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
             }
             else if (aCreator.isMarkingKey(aName))
             {
-                const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
+                const OUString aValue = svx::classification::getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
                     aResult.push_back({ svx::ClassificationType::MARKING, aValue, sBlank, sBlank });
             }
             else if (aCreator.isIntellectualPropertyPartKey(aName))
             {
-                const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
+                const OUString aValue = svx::classification::getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
                     aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, sBlank, sBlank });
             }
