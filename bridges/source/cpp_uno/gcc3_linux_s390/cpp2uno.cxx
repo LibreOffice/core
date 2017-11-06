@@ -592,7 +592,6 @@ unsigned char* codeSnippet( unsigned char * code, sal_Int16 nFunctionIndex, sal_
     *reinterpret_cast< sal_Int16 * >(p) = 0x18d0;
     p += sizeof(sal_Int16);
     *reinterpret_cast< sal_Int16 * >(p) = 0x07f1;
-    p += sizeof(sal_Int16);
 
     return (code + codeSnippetSize);
 }
