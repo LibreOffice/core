@@ -124,7 +124,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         {
             SvFileStream aFileStream(out, StreamMode::READ);
             vcl::PNGReader aReader(aFileStream);
-            ret = !!aReader.Read();
+            ret = (int) !!aReader.Read();
         }
         else if (strcmp(argv[2], "bmp") == 0)
         {
