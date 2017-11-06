@@ -779,6 +779,9 @@ public:
     /// Returns the index of a picture bullet, used in numberings.
     int GetGrfIndex(const SvxBrushItem& rBrush);
 
+    enum ExportFormat { DOC = 0, RTF = 1, DOCX = 2};
+    virtual ExportFormat GetExportFormat() const = 0;
+
 protected:
     /// Format-dependent part of the actual export.
     virtual void ExportDocument_Impl() = 0;
@@ -1140,6 +1143,8 @@ public:
     virtual void WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
             const SwFrameFormat& rFormat, const SwFrameFormat& rLeftFormat, const SwFrameFormat& rFirstPageFormat,
         sal_uInt8 nBreakCode) override;
+
+    virtual ExportFormat GetExportFormat() const override { return ExportFormat::DOC; }
 
 protected:
     /// Output SwGrfNode
@@ -1504,6 +1509,8 @@ public:
 
     bool IsWatermarkFrame();
     bool IsAnchorLinkedToThisNode( sal_uLong nNodePos );
+
+    void SplitRun( sal_Int32 nSplitEndPos );
 };
 
 /// Class to collect and output the styles table.

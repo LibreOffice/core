@@ -902,7 +902,12 @@ OUString MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const OUString* pNa
             }
             break;
         case REF_SEQUENCEFLD:
-            break;      // ???
+        {
+            assert(pName);
+            sRet += "Ref_";
+            sRet += *pName;
+            break;
+        }
         case REF_BOOKMARK:
             if ( pName )
                 sRet = *pName;
@@ -2784,6 +2789,63 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                             break;
                     }
                     break;
+                case REF_SEQUENCEFLD:
+                {
+                    // Have this only for DOCX format by now
+                    if(!(GetExport().GetExportFormat() == MSWordExportBase::ExportFormat::DOCX))
+                        break;
+
+                    switch (pField->GetFormat())
+                    {
+                        case REF_PAGE:
+                        case REF_PAGE_PGDESC:
+                            eField = ww::ePAGEREF;
+                            break;
+                        default:
+                            eField = ww::eREF;
+                            break;
+                    }
+                    // Generate a unique bookmark name
+                    {
+                        OUString sName(rRField.GetSetRefName());
+                        sName += OUString::number(rRField.GetSeqNo());
+                        switch (pField->GetFormat())
+                        {
+                            case REF_PAGE:
+                            case REF_PAGE_PGDESC:
+                            case REF_CONTENT:
+                            case REF_UPDOWN:
+                                    sName += "_full";
+                                    break;
+                            case REF_ONLYNUMBER:
+                                    sName += "_label_and_number";
+                                    break;
+                            case REF_ONLYCAPTION:
+                                    sName += "_caption_only";
+                                    break;
+                            case REF_ONLYSEQNO:
+                                    sName += "_number_only";
+                                    break;
+                            default: // Ingore other types of reference fields
+                                    eField = ww::eNONE;
+                                    break;
+                        }
+                        sStr = FieldString(eField) + MSWordExportBase::GetBookmarkName(nSubType, &sName, 0);
+                    }
+                    switch (pField->GetFormat())
+                    {
+                        case REF_NUMBER:
+                            sStr += " \\r";
+                            break;
+                        case REF_NUMBER_NO_CONTEXT:
+                            sStr += " \\n";
+                            break;
+                        case REF_NUMBER_FULL_CONTEXT:
+                            sStr += " \\w";
+                            break;
+                    }
+                    break;
+                }
                 case REF_FOOTNOTE:
                 case REF_ENDNOTE:
                     switch (pField->GetFormat())
