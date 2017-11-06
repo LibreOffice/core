@@ -21,6 +21,10 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_complextext, \
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_complextext,boost_headers))
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_use_package,vcl_complextext,fonts_dejavu))
+endif
+
 $(eval $(call gb_CppunitTest_use_libraries,vcl_complextext, \
 	comphelper \
 	cppu \
