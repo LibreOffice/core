@@ -294,8 +294,11 @@ void SvxRTFParser::ReadStyleTable()
     bIsInReadStyleTab = true;
     bChkStyleAttr = false;      // Do not check Attribute against the Styles
 
-    while( _nOpenBrakets && IsParserWorking() )
+    bool bLooping = false;
+
+    while (_nOpenBrakets && IsParserWorking() && !bLooping)
     {
+        auto nCurrentTokenIndex = m_nTokenIndex;
         int nToken = GetNextToken();
         switch( nToken )
         {
@@ -378,6 +381,7 @@ void SvxRTFParser::ReadStyleTable()
             }
             break;
         }
+        bLooping = nCurrentTokenIndex == m_nTokenIndex;
     }
     pStyle.reset();         // Delete the Last Style
     SkipToken();        // the closing brace is evaluated "above"

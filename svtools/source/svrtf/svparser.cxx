@@ -76,6 +76,7 @@ SvParser<T>::SvParser( SvStream& rIn, sal_uInt8 nStackSize )
     , nlLineNr( 1 )
     , nlLinePos( 1 )
     , pImplData( nullptr )
+    , m_nTokenIndex(0)
     , nTokenValue( 0 )
     , bTokenHasValue( false )
     , eState( SvParserState::NotStarted )
@@ -476,6 +477,7 @@ T SvParser<T>::GetNextToken()
         bTokenHasValue = pTokenStackPos->bTokenHasValue;
         aToken = pTokenStackPos->sToken;
         nRet = pTokenStackPos->nTokenId;
+        ++m_nTokenIndex;
     }
     // no, now push actual value on stack
     else if( SvParserState::Working == eState )
@@ -484,6 +486,7 @@ T SvParser<T>::GetNextToken()
         pTokenStackPos->nTokenValue = nTokenValue;
         pTokenStackPos->bTokenHasValue = bTokenHasValue;
         pTokenStackPos->nTokenId = nRet;
+        ++m_nTokenIndex;
     }
     else if( SvParserState::Accepted != eState && SvParserState::Pending != eState )
         eState = SvParserState::Error;       // an error occurred
@@ -501,6 +504,8 @@ T SvParser<T>::SkipToken( short nCnt )       // "skip" n Tokens backward
     else if( nTmp > nTokenStackSize )
         nTmp = nTokenStackSize;
     nTokenStackPos = sal_uInt8(nTmp);
+
+    m_nTokenIndex -= nTmp;
 
     // restore values
     aToken = pTokenStackPos->sToken;
