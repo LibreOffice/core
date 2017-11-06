@@ -61,7 +61,7 @@ class ImplSdPPTImport : public SdrPowerPointImport
     void            SetHeaderFooterPageSettings( SdPage* pPage, const PptSlidePersistEntry* pMasterPersist );
     void            ImportPageEffect( SdPage* pPage, const bool bNewAnimationsUsed );
 
-    void            FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, const OUString& aMacroName );
+    void            FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom const * pIAtom, const OUString& aMacroName );
 
     virtual         SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, ::tools::Rectangle& rTextRect, SdrObject* pObj ) override;
     virtual         SdrObject* ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pText, SdPageCapsule pPage,

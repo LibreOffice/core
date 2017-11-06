@@ -956,7 +956,7 @@ IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus&, rEditStat, void)
 // Callback for ExecuteSpellPopup()
 
 // removed link and replaced with Imp method
-void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner const * pOutl)
+void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo const * pInfo, SdrObject* pObj, SdrOutliner const * pOutl)
 {
     mpOnlineSearchItem.reset();
 

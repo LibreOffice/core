@@ -1030,7 +1030,7 @@ SdIMapInfo* SdDrawDocument::GetIMapInfo( SdrObject const * pObject )
     return pIMapInfo;
 }
 
-IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
+IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject const * pObj,
                                               const Point& rWinPoint )
 {
     SdIMapInfo* pIMapInfo = GetIMapInfo( pObj );
@@ -1073,9 +1073,9 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
             delete pGeoData;
             bObjSupported = true;
         }
-        else if ( dynamic_cast<const SdrOle2Obj* >(pObj) !=  nullptr ) // OLE object
+        else if ( auto pOleObj = dynamic_cast<const SdrOle2Obj* >(pObj) ) // OLE object
         {
-            aGraphSize = static_cast<SdrOle2Obj*>( pObj )->GetOrigObjSize();
+            aGraphSize = pOleObj->GetOrigObjSize();
             bObjSupported = true;
         }
 

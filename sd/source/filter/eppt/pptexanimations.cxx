@@ -244,7 +244,7 @@ const sal_Char* AnimationExporter::FindTransitionName( const sal_Int16 nType, co
     return pRet;
 }
 
-SvStream& WriteAnimationNode(SvStream& rOut, AnimationNode& rNode )
+SvStream& WriteAnimationNode(SvStream& rOut, AnimationNode const & rNode )
 {
     rOut.WriteInt32( rNode.mnU1 );
     rOut.WriteInt32( rNode.mnRestart );

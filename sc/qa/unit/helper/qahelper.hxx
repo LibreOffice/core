@@ -242,7 +242,7 @@ public:
 
     static std::shared_ptr<utl::TempFile> exportTo( ScDocShell* pShell, sal_Int32 nFormat );
 
-    void miscRowHeightsTest( TestParam* aTestValues, unsigned int numElems );
+    void miscRowHeightsTest( TestParam const * aTestValues, unsigned int numElems );
 };
 
 #define ASSERT_DOUBLES_EQUAL( expected, result )    \

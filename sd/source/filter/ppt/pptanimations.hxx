@@ -197,7 +197,7 @@ public:
     }
 public:
 
-    friend SvStream& WriteAnimationNode(SvStream& rOut, AnimationNode& rAtom);
+    friend SvStream& WriteAnimationNode(SvStream& rOut, AnimationNode const & rAtom);
 };
 
 } // namespace ppt

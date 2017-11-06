@@ -827,7 +827,7 @@ bool SlideshowImpl::startPreview(
     return bRet;
 }
 
-bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
+bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
 {
     const rtl::Reference<SlideshowImpl> this_(this);
 
