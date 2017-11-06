@@ -705,19 +705,11 @@ STDMETHODIMP EmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
                                         &m_pExtStream );
     if ( FAILED( hr ) || !m_pExtStream ) return E_OUTOFMEMORY;
 
-    bool bModified = false;
-    uno::Reference< util::XModifiable > xMod( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
-    if ( xMod.is() )
-        bModified = xMod->isModified();
-
     for ( AdviseSinkHashMapIterator iAdvise = m_aAdviseHashMap.begin(); iAdvise != m_aAdviseHashMap.end(); iAdvise++ )
     {
         if ( iAdvise->second )
             iAdvise->second->OnSave();
     }
-
-    if ( xMod.is() )
-        bModified = xMod->isModified();
 
     return S_OK;
 }
