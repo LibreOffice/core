@@ -3274,7 +3274,7 @@ static bool lcl_ChgTableSize( SwTable& rTable )
 
 class SplitTable_Para
 {
-    std::map<SwFrameFormat*, SwFrameFormat*> aSrcDestMap;
+    std::map<SwFrameFormat const *, SwFrameFormat*> aSrcDestMap;
     SwTableNode* pNewTableNd;
     SwTable& rOldTable;
 
@@ -3284,11 +3284,11 @@ public:
     {}
     SwFrameFormat* GetDestFormat( SwFrameFormat* pSrcFormat ) const
     {
-        std::map<SwFrameFormat*, SwFrameFormat*>::const_iterator it = aSrcDestMap.find( pSrcFormat );
+        auto it = aSrcDestMap.find( pSrcFormat );
         return it == aSrcDestMap.end() ? nullptr : it->second;
     }
 
-    void InsertSrcDest( SwFrameFormat* pSrcFormat, SwFrameFormat* pDestFormat )
+    void InsertSrcDest( SwFrameFormat const * pSrcFormat, SwFrameFormat* pDestFormat )
             { aSrcDestMap[ pSrcFormat ] = pDestFormat; }
 
     void ChgBox( SwTableBox* pBox )

@@ -120,7 +120,7 @@ const HtmlFrmOpts HTML_FRMOPTS_OLE_CSS1       =
 void SwHTMLParser::SetFixSize( const Size& rPixSize,
                                const Size& rTwipDfltSize,
                                bool bPrcWidth, bool bPrcHeight,
-                               SvxCSS1PropertyInfo& rCSS1PropInfo,
+                               SvxCSS1PropertyInfo const & rCSS1PropInfo,
                                SfxItemSet& rFlyItemSet )
 {
     // convert absolute size values into Twip

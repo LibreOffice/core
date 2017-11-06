@@ -54,7 +54,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <svl/itemiter.hxx>
 
-static bool lcl_IsInBody( SwFrame *pFrame )
+static bool lcl_IsInBody( SwFrame const *pFrame )
 {
     if ( pFrame->IsInDocBody() )
         return true;

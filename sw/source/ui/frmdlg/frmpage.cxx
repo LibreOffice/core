@@ -1639,7 +1639,7 @@ sal_Int16 SwFramePage::GetRelation(ListBox const &rRelationLB)
     return 0;
 }
 
-sal_Int16 SwFramePage::GetAlignment(FrameMap *pMap, sal_Int32 nMapPos,
+sal_Int16 SwFramePage::GetAlignment(FrameMap const *pMap, sal_Int32 nMapPos,
         ListBox const &rRelationLB)
 {
     if (!pMap || nMapPos < 0)

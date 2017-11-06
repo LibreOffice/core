@@ -577,7 +577,7 @@ void wwSectionManager::GetPageULData(const wwSection &rSection,
 }
 
 void wwSectionManager::SetPageULSpaceItems(SwFrameFormat &rFormat,
-    wwSectionManager::wwULSpaceData& rData, const wwSection &rSection)
+    wwSectionManager::wwULSpaceData const & rData, const wwSection &rSection)
 {
     if (rData.bHasHeader)               // ... and set Header-Lower
     {

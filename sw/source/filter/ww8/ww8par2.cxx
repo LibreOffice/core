@@ -3968,7 +3968,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
     return bOldNoImp;
 }
 
-void WW8RStyle::PostStyle(SwWW8StyInf &rSI, bool bOldNoImp)
+void WW8RStyle::PostStyle(SwWW8StyInf const &rSI, bool bOldNoImp)
 {
     // Reset attribute flags, because there are no style-ends.
 

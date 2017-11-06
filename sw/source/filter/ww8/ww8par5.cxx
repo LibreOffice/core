@@ -1166,7 +1166,7 @@ eF_ResT SwWW8ImplReader::Read_F_Input( WW8FieldDesc* pF, OUString& rStr )
 }
 
 // GetFieldResult allocates a string and reads the resulted field
-OUString SwWW8ImplReader::GetFieldResult( WW8FieldDesc* pF )
+OUString SwWW8ImplReader::GetFieldResult( WW8FieldDesc const * pF )
 {
     long nOldPos = m_pStrm->Tell();
 

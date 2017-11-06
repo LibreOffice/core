@@ -2633,7 +2633,7 @@ SvxSwAutoFormatFlags* SwEditShell::GetAutoFormatFlags()
     return s_pAutoFormatFlags;
 }
 
-void SwEditShell::SetAutoFormatFlags(SvxSwAutoFormatFlags * pFlags)
+void SwEditShell::SetAutoFormatFlags(SvxSwAutoFormatFlags const * pFlags)
 {
     SvxSwAutoFormatFlags* pEditFlags = GetAutoFormatFlags();
 
