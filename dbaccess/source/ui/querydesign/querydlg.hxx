@@ -35,10 +35,9 @@ namespace dbaui
 {
     class OTableListBoxControl;
     class OQueryTableView;
-    class DlgQryJoin :  public ModalDialog
+    class DlgQryJoin final :  public ModalDialog
                         ,public IRelationControlInterface
     {
-    protected:
         VclPtr<FixedText>              m_pML_HelpText;
         VclPtr<OKButton>               m_pPB_OK;
         VclPtr<ListBox>                m_pLB_JoinType;

@@ -38,9 +38,8 @@ namespace dbaui
 {
 
 // ODatasourceSelector
-class ODatasourceSelectDialog : public ModalDialog
+class ODatasourceSelectDialog final : public ModalDialog
 {
-protected:
     VclPtr<ListBox>        m_pDatasource;
     VclPtr<OKButton>       m_pOk;
     VclPtr<CancelButton>   m_pCancel;
@@ -63,7 +62,7 @@ public:
 
     virtual bool    Close() override;
 
-protected:
+private:
     DECL_LINK( ListDblClickHdl, ListBox&, void );
 #ifdef HAVE_ODBC_ADMINISTRATION
     DECL_LINK(ManageClickHdl, Button*, void);

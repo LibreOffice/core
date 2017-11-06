@@ -144,12 +144,10 @@ namespace dbaui
     };
 
     // QueryDesigner
-    class QueryDesigner : public DatabaseObjectView
+    class QueryDesigner final : public DatabaseObjectView
     {
-    protected:
         sal_Int32                           m_nCommandType;
 
-    protected:
         virtual void fillDispatchArgs(
                   ::comphelper::NamedValueCollection& i_rDispatchArgs,
             const css::uno::Any& _aDataSource,

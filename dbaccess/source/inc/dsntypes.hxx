@@ -98,9 +98,8 @@ enum DATASOURCE_TYPE
 #define PAGE_DBSETUPWIZARD_MYSQL_NATIVE              18
 
 // ODsnTypeCollection
-class OOO_DLLPUBLIC_DBA ODsnTypeCollection
+class OOO_DLLPUBLIC_DBA ODsnTypeCollection final
 {
-protected:
     typedef std::vector<OUString> StringVector;
 
     StringVector    m_aDsnTypesDisplayNames;    /// user readable names for the datasource types

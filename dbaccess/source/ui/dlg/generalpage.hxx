@@ -111,13 +111,13 @@ namespace dbaui
     };
 
     // OGeneralPageWizard
-    class OGeneralPageWizard : public OGeneralPage
+    class OGeneralPageWizard final : public OGeneralPage
     {
     public:
         OGeneralPageWizard( vcl::Window* pParent, const SfxItemSet& _rItems );
         virtual ~OGeneralPageWizard() override;
         virtual void dispose() override;
-    public:
+
         enum CreationMode
         {
             eCreateNew,
@@ -166,7 +166,7 @@ namespace dbaui
         void                    SetChooseDocumentHandler( const Link<OGeneralPageWizard&,void>& _rHandler) { m_aChooseDocumentHandler = _rHandler; }
         DocumentDescriptor      GetSelectedDocument() const;
 
-    protected:
+    private:
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
 
         virtual void GetFocus() override;
@@ -181,7 +181,6 @@ namespace dbaui
         OUString getEmbeddedDBName( const SfxItemSet& _rSet );
         void initializeEmbeddedDBList();
 
-    protected:
         DECL_LINK( OnEmbeddedDBTypeSelected, ListBox&, void );
         DECL_LINK( OnCreateDatabaseModeSelected, Button*, void );
         DECL_LINK( OnSetupModeSelected, Button*, void );

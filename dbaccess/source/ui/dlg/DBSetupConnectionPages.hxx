@@ -36,7 +36,7 @@ namespace dbaui
 {
 
     // OSpreadSheetConnectionPageSetup
-    class OSpreadSheetConnectionPageSetup : public OConnectionTabPageSetup
+    class OSpreadSheetConnectionPageSetup final : public OConnectionTabPageSetup
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
@@ -45,7 +45,7 @@ namespace dbaui
         virtual ~OSpreadSheetConnectionPageSetup() override;
         virtual void dispose() override;
 
-    protected:
+    private:
         VclPtr<CheckBox> m_pPasswordrequired;
 
         virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) override;
@@ -127,7 +127,7 @@ namespace dbaui
     };
 
     // OGeneralSpecialJDBCConnectionPageSetup
-    class OGeneralSpecialJDBCConnectionPageSetup : public OGenericAdministrationPage
+    class OGeneralSpecialJDBCConnectionPageSetup final : public OGenericAdministrationPage
     {
     public:
         OGeneralSpecialJDBCConnectionPageSetup(   vcl::Window* pParent
@@ -142,7 +142,7 @@ namespace dbaui
     static VclPtr<OGenericAdministrationPage> CreateMySQLJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
     static VclPtr<OGenericAdministrationPage> CreateOracleJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
-    protected:
+    private:
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
         virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) override;
@@ -169,7 +169,7 @@ namespace dbaui
     };
 
     // OJDBCConnectionPageSetup
-    class OJDBCConnectionPageSetup : public OConnectionTabPageSetup
+    class OJDBCConnectionPageSetup final : public OConnectionTabPageSetup
     {
     public:
                 OJDBCConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
@@ -177,7 +177,7 @@ namespace dbaui
         virtual void dispose() override;
         static VclPtr<OGenericAdministrationPage> CreateJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
-    protected:
+    private:
         virtual bool checkTestConnection() override;
 
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
@@ -228,7 +228,7 @@ namespace dbaui
     };
 
     // OAuthentificationPageSetup
-    class OAuthentificationPageSetup : public OGenericAdministrationPage
+    class OAuthentificationPageSetup final : public OGenericAdministrationPage
     {
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
@@ -237,14 +237,13 @@ namespace dbaui
         virtual ~OAuthentificationPageSetup() override;
         virtual void dispose() override;
 
-    protected:
+    private:
         VclPtr<FixedText>  m_pFTHelpText;
         VclPtr<FixedText>  m_pFTUserName;
         VclPtr<Edit>       m_pETUserName;
         VclPtr<CheckBox>   m_pCBPasswordRequired;
         VclPtr<PushButton> m_pPBTestConnection;
 
-    protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
         virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) override;
         virtual void fillWindows(std::vector< ISaveValueWrapper* >& _rControlList) override;

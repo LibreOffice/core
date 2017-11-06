@@ -32,7 +32,7 @@
 namespace dbaui
 {
     class OJoinTableView;
-    class ORelationDialog : public ModalDialog
+    class ORelationDialog final : public ModalDialog
                             ,public IRelationControlInterface
     {
         std::unique_ptr<OTableListBoxControl> m_xTableControl;
@@ -73,10 +73,9 @@ namespace dbaui
             @param  _pConnectionData    the connection which exists between the new tables
         */
         virtual void notifyConnectionChange() override;
-    protected:
+    private:
         void Init(const TTableConnectionData::value_type& _pConnectionData);
 
-    private:
         DECL_LINK( OKClickHdl, Button*, void );
     };
 }

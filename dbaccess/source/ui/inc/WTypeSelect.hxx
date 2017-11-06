@@ -34,9 +34,8 @@ namespace dbaui
 {
     class OTableDesignHelpBar;
     // OWizTypeSelectControl
-    class OWizTypeSelectControl : public OFieldDescControl
+    class OWizTypeSelectControl final : public OFieldDescControl
     {
-    protected:
         VclPtr<vcl::Window> m_pParentTabPage;
         virtual void        ActivateAggregate( EControlType eType ) override;
         virtual void        DeactivateAggregate( EControlType eType ) override;
@@ -61,14 +60,13 @@ namespace dbaui
 
     // Wizard Page: OWizTypeSelectList
     // just defines the css::ucb::Command for the Contextmenu
-    class OWizTypeSelectList : public MultiListBox
+    class OWizTypeSelectList final : public MultiListBox
     {
         bool                    m_bPKey;
         bool                    IsPrimaryKeyAllowed() const;
         void                    setPrimaryKey(  OFieldDescription* _pFieldDescr,
                                                 sal_uInt16 _nPos,
                                                 bool _bSet = false);
-    protected:
         virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
         VclPtr<vcl::Window>     m_pParentTabPage;
     public:

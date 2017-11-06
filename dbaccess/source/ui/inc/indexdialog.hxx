@@ -39,9 +39,8 @@ namespace dbaui
 {
 
     // DbaIndexList
-    class DbaIndexList : public SvTreeListBox
+    class DbaIndexList final : public SvTreeListBox
     {
-    protected:
         css::uno::Reference< css::sdbc::XConnection > m_xConnection;
         Link<DbaIndexList&,void>                      m_aSelectHdl;
         Link<SvTreeListEntry*,bool>                   m_aEndEditHdl;
@@ -66,20 +65,18 @@ namespace dbaui
              m_xConnection = _rxConnection;
         }
 
-    protected:
+    private:
         virtual bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) override;
 
-    private:
         using SvTreeListBox::Select;
     };
 
     // DbaIndexDialog
     class IndexFieldsControl;
     class OIndexCollection;
-    class DbaIndexDialog :  public ModalDialog,
-                            public OToolBoxHelper
+    class DbaIndexDialog final : public ModalDialog,
+                                public OToolBoxHelper
     {
-    protected:
         css::uno::Reference< css::sdbc::XConnection > m_xConnection;
 
         VclPtr<ToolBox>                 m_pActions;
@@ -120,12 +117,11 @@ namespace dbaui
                 <svtools/imgdef.hxx>
         */
         virtual void setImageList(sal_Int16 _eBitmapSet) override;
-    protected:
+    private:
         void fillIndexList();
         void updateToolbox();
         void updateControls(const SvTreeListEntry* _pEntry);
 
-    protected:
         DECL_LINK( OnIndexSelected, DbaIndexList&, void );
         DECL_LINK( OnIndexAction, ToolBox*, void );
         DECL_LINK( OnEntryEdited, SvTreeListEntry*, bool );
@@ -135,7 +131,6 @@ namespace dbaui
 
         DECL_LINK( OnEditIndexAgain, void*, void );
 
-    private:
         sal_uInt16 mnNewCmdId;
         sal_uInt16 mnDropCmdId;
         sal_uInt16 mnRenameCmdId;

@@ -114,7 +114,7 @@ namespace dbaui
                                     ,   css::beans::XPropertyChangeListener
                                     >   SbaXFormAdapter_BASE3;
 
-    class SbaXFormAdapter
+    class SbaXFormAdapter final
         :public SbaXFormAdapter_BASE1
         ,public SbaXFormAdapter_BASE2
         ,public SbaXFormAdapter_BASE3
@@ -423,7 +423,7 @@ namespace dbaui
         // css::beans::XPropertyChangeListener
         virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override;
 
-    protected:
+    private:
         // container handling
         /// @throws css::lang::IllegalArgumentException
         void implInsert(const css::uno::Any& aElement, sal_Int32 nIndex, const OUString* pNewElName = nullptr);

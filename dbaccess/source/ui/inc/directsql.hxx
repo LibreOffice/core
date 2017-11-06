@@ -41,11 +41,10 @@ namespace dbaui
 {
 
     // DirectSQLDialog
-    class DirectSQLDialog
+    class DirectSQLDialog final
             :public ModalDialog
             ,public ::utl::OEventListenerAdapter
     {
-    protected:
         ::osl::Mutex    m_aMutex;
 
         VclPtr<MultiLineEditSyntaxHighlight>    m_pSQL;
@@ -76,21 +75,19 @@ namespace dbaui
         /// number of history entries
         sal_Int32 getHistorySize() const;
 
-    protected:
+    private:
         void executeCurrent();
         void switchToHistory(sal_Int32 _nHistoryPos);
 
         // OEventListenerAdapter
         virtual void _disposing( const css::lang::EventObject& _rSource ) override;
 
-    protected:
         DECL_LINK( OnExecute, Button*, void );
         DECL_LINK( OnClose, void*, void );
         DECL_LINK( OnCloseClick, Button*, void );
         DECL_LINK( OnListEntrySelected, ListBox&, void );
         DECL_LINK( OnStatementModified, Edit&, void );
 
-    private:
         /// adds a statement to the statement history
         void implAddToStatementHistory(const OUString& _rStatement);
 

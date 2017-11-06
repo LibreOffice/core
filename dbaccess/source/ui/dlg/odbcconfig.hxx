@@ -40,7 +40,7 @@ namespace dbaui
 
 // OOdbcEnumeration
 struct OdbcTypesImpl;
-class OOdbcEnumeration
+class OOdbcEnumeration final
 {
     oslModule        m_pOdbcLib;     // the library handle
     OUString         m_sLibPath;     // the path to the library
@@ -70,7 +70,7 @@ public:
 
     void        getDatasourceNames(StringBag& _rNames);
 
-protected:
+private:
     oslGenericFunction  loadSymbol(const sal_Char* _pFunctionName);
 
     /// load the lib

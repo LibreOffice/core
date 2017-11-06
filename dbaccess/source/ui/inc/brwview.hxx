@@ -39,9 +39,8 @@ namespace dbaui
     class DBTreeView;
     class SbaGridControl;
 
-    class UnoDataBrowserView : public ODataView, public ::utl::OEventListenerAdapter
+    class UnoDataBrowserView final : public ODataView, public ::utl::OEventListenerAdapter
     {
-    protected:
         css::uno::Reference< css::awt::XControl >                 m_xGrid;            // our grid's UNO representation
         css::uno::Reference< css::awt::XControlContainer >        m_xMe;              // our own UNO representation
         VclPtr<DBTreeView>             m_pTreeView;
@@ -55,7 +54,6 @@ namespace dbaui
         const css::uno::Reference< css::awt::XControl >&  getGridControl() const  { return m_xGrid; }
         SbaGridControl*         getVclControl() const;
 
-    public:
         UnoDataBrowserView( vcl::Window* pParent,
                             IController& _rController,
                             const css::uno::Reference< css::uno::XComponentContext >& );
@@ -79,19 +77,17 @@ namespace dbaui
 
         const css::uno::Reference< css::awt::XControlContainer >& getContainer() { return m_xMe; }
 
-    protected:
+    private:
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
         virtual void GetFocus() override;
         virtual void resizeDocumentView(tools::Rectangle& rRect) override;
         virtual void _disposing( const css::lang::EventObject& _rSource ) override;
 
-    private:
         using ODataView::Construct;
     };
 
-    class BrowserViewStatusDisplay
+    class BrowserViewStatusDisplay final
     {
-    protected:
         VclPtr<UnoDataBrowserView>     m_pView;
 
     public:

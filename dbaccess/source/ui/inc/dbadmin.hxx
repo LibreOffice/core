@@ -45,7 +45,7 @@ namespace dbaui
 class ODbDataSourceAdministrationHelper;
 /** tab dialog for administrating the office wide registered data sources
 */
-class ODbAdminDialog : public SfxTabDialog , public IItemSetHelper, public IDatabaseSettingsDialog
+class ODbAdminDialog final : public SfxTabDialog , public IItemSetHelper, public IDatabaseSettingsDialog
 {
 private:
     typedef std::stack< sal_Int32 > PageStack;
@@ -95,14 +95,13 @@ public:
     virtual void setTitle(const OUString& _sTitle) override;
     virtual void enableConfirmSettings( bool _bEnable ) override;
 
-protected:
+private:
     // adds a new detail page and remove all the old ones
     void addDetailPage(sal_uInt16 _nPageId, const char* pTextId, CreateTabPage pCreateFunc);
 
     virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage) override;
     virtual short Ok() override;
 
-private:
     /// select a datasource with a given name, adjust the item set accordingly, and everything like that ..
     void impl_selectDataSource(const css::uno::Any& _aDataSourceName);
     /// reset the tag pages according to m_sCurrentDatasource and <arg>_rxDatasource</arg>

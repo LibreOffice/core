@@ -63,7 +63,7 @@ namespace com
 // DlgFilterCrit
 namespace dbaui
 {
-    class DlgFilterCrit :public ModalDialog
+    class DlgFilterCrit final :public ModalDialog
                         ,public ::svxform::OParseContextClient
     {
     private:
@@ -117,7 +117,7 @@ namespace dbaui
 
         void            BuildWherePart();
 
-    protected:
+    private:
         DECL_LINK( PredicateLoseFocus, Control&, void );
     };
 

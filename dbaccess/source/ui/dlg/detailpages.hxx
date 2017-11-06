@@ -164,7 +164,7 @@ namespace dbaui
     };
 
     // OGeneralSpecialJDBCDetailsPage
-    class OGeneralSpecialJDBCDetailsPage : public OCommonBehaviourTabPage
+    class OGeneralSpecialJDBCDetailsPage final : public OCommonBehaviourTabPage
     {
     public:
         OGeneralSpecialJDBCDetailsPage(   vcl::Window* pParent
@@ -175,7 +175,7 @@ namespace dbaui
         virtual ~OGeneralSpecialJDBCDetailsPage() override;
         virtual void dispose() override;
 
-    protected:
+    private:
 
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;

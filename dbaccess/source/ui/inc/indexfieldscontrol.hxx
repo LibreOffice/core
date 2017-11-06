@@ -31,9 +31,8 @@ namespace dbaui
     class DbaMouseDownListBoxController;
 
     // IndexFieldsControl
-    class IndexFieldsControl : public ::svt::EditBrowseBox
+    class IndexFieldsControl final : public ::svt::EditBrowseBox
     {
-    protected:
         IndexFields                 m_aSavedValue;
 
         IndexFields                 m_aFields;          // !! order matters !!
@@ -68,7 +67,7 @@ namespace dbaui
         void SetModifyHdl(const Link<IndexFieldsControl&,void>& _rHdl) { m_aModifyHdl = _rHdl; }
         virtual OUString GetCellText(long _nRow,sal_uInt16 nColId) const override;
 
-    protected:
+    private:
         // EditBrowseBox overridables
         virtual void PaintCell( OutputDevice& _rDev, const tools::Rectangle& _rRect, sal_uInt16 _nColumnId ) const override;
         virtual bool SeekRow(long nRow) override;
@@ -78,7 +77,6 @@ namespace dbaui
         ::svt::CellController*  GetController(long _nRow, sal_uInt16 _nColumnId) override;
         void                InitController(::svt::CellControllerRef&, long _nRow, sal_uInt16 _nColumnId) override;
 
-    protected:
         OUString GetRowCellText(const IndexFields::const_iterator& _rRow,sal_uInt16 nColId) const;
         bool implGetFieldDesc(long _nRow, IndexFields::const_iterator& _rPos);
 
@@ -86,7 +84,6 @@ namespace dbaui
 
         DECL_LINK( OnListEntrySelected, DbaMouseDownListBoxController&, void );
 
-    private:
         using ::svt::EditBrowseBox::Init;
     };
 

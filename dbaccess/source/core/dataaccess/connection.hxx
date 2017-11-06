@@ -70,13 +70,12 @@ typedef cppu::ImplHelper13  <   css::container::XChild
 
 class ODatabaseSource;
 // OConnection
-class OConnection           :public ::cppu::BaseMutex
+class OConnection final     :public ::cppu::BaseMutex
                             ,public OSubComponent
                             ,public ::connectivity::OConnectionWrapper
                             ,public OConnection_Base
                             ,public IRefreshListener
 {
-protected:
     css::uno::Reference< css::sdbcx::XTablesSupplier >
                                           m_xMasterTables; // just to avoid the recreation of the catalog
     connectivity::OWeakRefArray           m_aStatements;
@@ -105,7 +104,6 @@ protected:
     bool                            m_bSupportsUsers;
     bool                            m_bSupportsGroups;
 
-protected:
     virtual ~OConnection() override;
 public:
     OConnection(ODatabaseSource& _rDB
@@ -198,7 +196,7 @@ public:
     // IRefreshListener
     virtual void refresh(const css::uno::Reference< css::container::XNameAccess >& _rToBeRefreshed) override;
 
-protected:
+private:
     /// @throws css::lang::DisposedException
     void checkDisposed()
     {
@@ -208,7 +206,6 @@ protected:
 
     css::uno::Reference< css::sdbcx::XTablesSupplier > const & getMasterTables();
 
-private:
     /** checks whether or not there are naming conflicts between tables and queries
     */
     void    impl_checkTableQueryNames_nothrow();

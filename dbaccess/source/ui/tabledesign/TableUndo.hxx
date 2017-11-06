@@ -55,9 +55,8 @@ namespace dbaui
         virtual ~OTableEditorUndoAct() override;
     };
 
-    class OTableDesignCellUndoAct : public OTableDesignUndoAct
+    class OTableDesignCellUndoAct final : public OTableDesignUndoAct
     {
-    protected:
         sal_uInt16     m_nCol;
         long           m_nRow;
         css::uno::Any  m_sOldText;
@@ -70,9 +69,8 @@ namespace dbaui
         virtual ~OTableDesignCellUndoAct() override;
     };
 
-    class OTableEditorTypeSelUndoAct : public OTableEditorUndoAct
+    class OTableEditorTypeSelUndoAct final : public OTableEditorUndoAct
     {
-    protected:
         sal_uInt16          m_nCol;
         long            m_nRow;
         TOTypeInfoSP    m_pOldType;
@@ -85,9 +83,8 @@ namespace dbaui
         virtual ~OTableEditorTypeSelUndoAct() override;
     };
 
-    class OTableEditorDelUndoAct : public OTableEditorUndoAct
+    class OTableEditorDelUndoAct final : public OTableEditorUndoAct
     {
-    protected:
         std::vector< std::shared_ptr<OTableRow> > m_aDeletedRows;
 
         virtual void    Undo() override;
@@ -97,9 +94,8 @@ namespace dbaui
         virtual ~OTableEditorDelUndoAct() override;
     };
 
-    class OTableEditorInsUndoAct : public OTableEditorUndoAct
+    class OTableEditorInsUndoAct final : public OTableEditorUndoAct
     {
-    protected:
         std::vector< std::shared_ptr<OTableRow> > m_vInsertedRows;
         long                        m_nInsPos;
 
@@ -112,9 +108,8 @@ namespace dbaui
         virtual ~OTableEditorInsUndoAct() override;
     };
 
-    class OTableEditorInsNewUndoAct : public OTableEditorUndoAct
+    class OTableEditorInsNewUndoAct final : public OTableEditorUndoAct
     {
-    protected:
         long m_nInsPos;
         long m_nInsRows;
 
@@ -125,9 +120,8 @@ namespace dbaui
         virtual ~OTableEditorInsNewUndoAct() override;
     };
 
-    class OPrimKeyUndoAct : public OTableEditorUndoAct
+    class OPrimKeyUndoAct final : public OTableEditorUndoAct
     {
-    protected:
         MultiSelection      m_aDelKeys,
                             m_aInsKeys;
         VclPtr<OTableEditorCtrl> m_pEditorCtrl;

@@ -39,7 +39,7 @@ typedef ::cppu::WeakComponentImplHelper<
     css::deployment::XPackageManager > t_pm_helper;
 
 
-class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
+class PackageManagerImpl final : private ::dp_misc::MutexHolder, public t_pm_helper
 {
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
     OUString m_context;
@@ -115,7 +115,6 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
         virtual void SAL_CALL pop() override;
     };
 
-protected:
     inline void check();
     virtual void SAL_CALL disposing() override;
 

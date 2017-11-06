@@ -48,7 +48,7 @@ namespace dbaui
 #define BROW_ROW_CNT            12
 
     class OQueryDesignView;
-    class OSelectionBrowseBox : public ::svt::EditBrowseBox
+    class OSelectionBrowseBox final : public ::svt::EditBrowseBox
     {
         friend class OQueryDesignView;
         std::vector<bool>                 m_bVisibleRow;              // at pos we find the RowId
@@ -179,7 +179,7 @@ namespace dbaui
         @return  The XAccessible interface of the specified cell. */
         virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId ) override;
 
-    protected:
+    private:
         virtual bool                SeekRow( long nRow ) override;
 
         virtual void                PaintStatusCell(OutputDevice& rDev, const tools::Rectangle& rRect) const override;
@@ -208,7 +208,6 @@ namespace dbaui
         void                        stopTimer();
         void                        startTimer();
 
-    private:
         OTableFieldDescRef          FindFirstFreeCol(sal_uInt16& _rColumnPosition);
 
             // rCol contains the Nummer (in pOTableFieldDescList) of the first column, which itself tells it is empty
@@ -314,7 +313,6 @@ namespace dbaui
         */
         void            setFunctionCell(OTableFieldDescRef const & _pEntry);
 
-    private:
         using ::svt::EditBrowseBox::AcceptDrop;
         using ::svt::EditBrowseBox::ExecuteDrop;
         using ::svt::EditBrowseBox::MouseButtonDown;

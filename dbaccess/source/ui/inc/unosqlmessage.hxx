@@ -28,17 +28,15 @@ namespace dbaui
 {
 
 typedef ::svt::OGenericUnoDialog OSQLMessageDialogBase;
-class OSQLMessageDialog
+class OSQLMessageDialog final
         :public OSQLMessageDialogBase
         ,public ::comphelper::OPropertyArrayUsageHelper< OSQLMessageDialog >
 {
-protected:
     // <properties>
     css::uno::Any        m_aException;
     OUString             m_sHelpURL;
     // </properties>
 
-protected:
     OSQLMessageDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
 public:
@@ -64,7 +62,7 @@ public:
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
-protected:
+private:
     virtual void SAL_CALL initialize(css::uno::Sequence< css::uno::Any > const & args) override;
 
 // OPropertySetHelper overridables

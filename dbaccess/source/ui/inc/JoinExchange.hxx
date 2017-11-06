@@ -31,11 +31,10 @@ namespace dbaui
     // OJoinExchObj: Additional data to create Joins in the JoinShell
 
     typedef ::cppu::ImplHelper1< css::lang::XUnoTunnel > OJoinExchObj_Base;
-    class OJoinExchObj : public TransferableHelper, public OJoinExchObj_Base
+    class OJoinExchObj final : public TransferableHelper, public OJoinExchObj_Base
     {
         bool                m_bFirstEntry;
 
-    protected:
         OJoinExchangeData           m_jxdSourceDescription;
         IDragTransferableListener*  m_pDragListener;
 
@@ -58,14 +57,13 @@ namespace dbaui
         static OJoinExchangeData    GetSourceDescription(const css::uno::Reference< css::datatransfer::XTransferable >& _rxObject);
         static bool             isFormatAvailable( const DataFlavorExVector& _rFormats ,SotClipboardFormatId _nSlotID=SotClipboardFormatId::SBA_JOIN);
 
-    protected:
+    private:
         virtual void                AddSupportedFormats() override;
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
         virtual void                DragFinished( sal_Int8 nDropAction ) override;
 
         static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
-    private:
         using TransferableHelper::StartDrag;
     };
 }

@@ -27,11 +27,10 @@ class SvStream;
 
 namespace dbaui
 {
-    class ORTFReader : public SvRTFParser , public ODatabaseExport
+    class ORTFReader final : public SvRTFParser , public ODatabaseExport
     {
         std::vector<sal_Int32>    m_vecColor;
 
-    protected:
         bool                    CreateTable(int nToken);
         virtual void            NextToken( int nToken ) override; // base class
         virtual TypeSelectionPageFactory

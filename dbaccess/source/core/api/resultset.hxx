@@ -58,12 +58,11 @@ namespace dbaccess
 
     //  OResultSet
 
-    class OResultSet :  public cppu::BaseMutex,
+    class OResultSet final : public cppu::BaseMutex,
                         public OResultSetBase,
                         public ::cppu::OPropertySetHelper,
                         public ::comphelper::OPropertyArrayUsageHelper < OResultSet >
     {
-    protected:
         css::uno::Reference< css::uno::XInterface>            m_aStatement;
 
         css::uno::Reference< css::sdbc::XResultSet >          m_xDelegatorResultSet;
@@ -213,11 +212,10 @@ namespace dbaccess
         virtual void SAL_CALL updateObject( sal_Int32 columnIndex, const css::uno::Any& x ) override;
         virtual void SAL_CALL updateNumericObject( sal_Int32 columnIndex, const css::uno::Any& x, sal_Int32 scale ) override;
 
-    protected:
+    private:
         void checkReadOnly() const;
         void checkBookmarkable() const;
 
-    private:
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
     };
 }
