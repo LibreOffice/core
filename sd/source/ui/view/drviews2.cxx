@@ -236,10 +236,15 @@ class ClassificationCommon
 {
 protected:
     sd::DrawViewShell& m_rDrawViewShell;
-
+    uno::Reference<document::XDocumentProperties> m_xDocumentProperties;
+    uno::Reference<beans::XPropertyContainer> m_xPropertyContainer;
+    sfx::ClassificationKeyCreator m_aKeyCreator;
 public:
     ClassificationCommon(sd::DrawViewShell & rDrawViewShell)
         : m_rDrawViewShell(rDrawViewShell)
+        , m_xDocumentProperties(SfxObjectShell::Current()->getDocProperties())
+        , m_xPropertyContainer(m_xDocumentProperties->getUserDefinedProperties())
+        , m_aKeyCreator(SfxClassificationHelper::getPolicyType())
     {}
 };
 
@@ -250,10 +255,6 @@ private:
 
     void iterateSectionsAndCollect(std::vector<editeng::Section> const & rSections, EditTextObject const & rEditText)
     {
-        sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
-        uno::Reference<document::XDocumentProperties> xDocumentProperties = SfxObjectShell::Current()->getDocProperties();
-        uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
-
         sal_Int32 nCurrentParagraph = -1;
         OUString sBlank;
 
@@ -276,24 +277,24 @@ private:
             if (pCustomPropertyField)
             {
                 OUString aKey = pCustomPropertyField->GetName();
-                if (aKeyCreator.isMarkingTextKey(aKey))
+                if (m_aKeyCreator.isMarkingTextKey(aKey))
                 {
-                    OUString aValue = svx::classification::getProperty(xPropertyContainer, aKey);
+                    OUString aValue = svx::classification::getProperty(m_xPropertyContainer, aKey);
                     m_aResults.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, sBlank });
                 }
-                else if (aKeyCreator.isCategoryNameKey(aKey) || aKeyCreator.isCategoryIdentifierKey(aKey))
+                else if (m_aKeyCreator.isCategoryNameKey(aKey) || m_aKeyCreator.isCategoryIdentifierKey(aKey))
                 {
-                    OUString aValue = svx::classification::getProperty(xPropertyContainer, aKey);
+                    OUString aValue = svx::classification::getProperty(m_xPropertyContainer, aKey);
                     m_aResults.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
                 }
-                else if (aKeyCreator.isMarkingKey(aKey))
+                else if (m_aKeyCreator.isMarkingKey(aKey))
                 {
-                    OUString aValue = svx::classification::getProperty(xPropertyContainer, aKey);
+                    OUString aValue = svx::classification::getProperty(m_xPropertyContainer, aKey);
                     m_aResults.push_back({ svx::ClassificationType::MARKING, aValue, sBlank, sBlank });
                 }
-                else if (aKeyCreator.isIntellectualPropertyPartKey(aKey))
+                else if (m_aKeyCreator.isIntellectualPropertyPartKey(aKey))
                 {
-                    OUString aValue = svx::classification::getProperty(xPropertyContainer, aKey);
+                    OUString aValue = svx::classification::getProperty(m_xPropertyContainer, aKey);
                     m_aResults.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, sBlank, sBlank });
                 }
             }
@@ -312,17 +313,17 @@ public:
 
     bool collect()
     {
-        OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
-        OUString sKey = sPolicy + "BusinessAuthorizationCategory:Name";
-
         // Set to MASTER mode
         EditMode eOldMode = m_rDrawViewShell.GetEditMode();
         if (eOldMode != EditMode::MasterPage)
             m_rDrawViewShell.ChangeEditMode(EditMode::MasterPage, false);
 
-        const sal_uInt16 nCount = m_rDrawViewShell.GetDoc()->GetMasterSdPageCount(PageKind::Standard);
+        // Scoped guard to revert to the previous mode
+        comphelper::ScopeGuard const aGuard([this, eOldMode] () {
+            m_rDrawViewShell.ChangeEditMode(eOldMode, false);
+        });
 
-        bool bFound = false;
+        const sal_uInt16 nCount = m_rDrawViewShell.GetDoc()->GetMasterSdPageCount(PageKind::Standard);
 
         for (sal_uInt16 nPageIndex = 0; nPageIndex < nCount; ++nPageIndex)
         {
@@ -340,20 +341,17 @@ public:
                         std::vector<editeng::Section> aSections;
                         rEditText.GetAllSections(aSections);
 
-                        if (hasCustomPropertyField(aSections, sKey))
+                        // Search for a custom property field that has the classification category identifier key
+                        if (hasCustomPropertyField(aSections, m_aKeyCreator.makeCategoryNameKey()))
                         {
-                            bFound = true;
                             iterateSectionsAndCollect(aSections, rEditText);
+                            return true;
                         }
                     }
                 }
             }
         }
-
-        // Revert edit mode
-        m_rDrawViewShell.ChangeEditMode(eOldMode, false);
-
-        return bFound;
+        return false;
     }
 };
 
@@ -363,8 +361,7 @@ private:
     /// Delete the previous existing classification object(s) - if they exists
     void deleteExistingObjects()
     {
-        sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
-        OUString sKey = aKeyCreator.makeCategoryNameKey();
+        OUString sKey = m_aKeyCreator.makeCategoryNameKey();
 
         const sal_uInt16 nCount = m_rDrawViewShell.GetDoc()->GetMasterSdPageCount(PageKind::Standard);
 
@@ -394,53 +391,8 @@ private:
         }
     }
 
-public:
-    ClassificationInserter(sd::DrawViewShell & rDrawViewShell)
-        : ClassificationCommon(rDrawViewShell)
-    {}
-
-
-    bool insert(std::vector<svx::ClassificationResult> const & rResults)
+    void fillTheOutliner(Outliner* pOutliner, std::vector<svx::ClassificationResult> const & rResults)
     {
-        // Set to MASTER mode
-        EditMode eOldMode = m_rDrawViewShell.GetEditMode();
-        if (eOldMode != EditMode::MasterPage)
-            m_rDrawViewShell.ChangeEditMode(EditMode::MasterPage, false);
-
-        // Scoped guard to revert the mode
-        comphelper::ScopeGuard const aGuard([this, eOldMode] () {
-            m_rDrawViewShell.ChangeEditMode(eOldMode, false);
-        });
-
-        // Delete the previous existing object - if exists
-        deleteExistingObjects();
-
-        // Document properties
-        uno::Reference<document::XDocumentProperties> xDocumentProperties = SfxObjectShell::Current()->getDocProperties();
-        uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
-
-        // Clear properties
-        svx::classification::removeAllProperties(xPropertyContainer);
-
-        SfxClassificationHelper aHelper(xDocumentProperties);
-
-        // Apply properties from the BA policy
-        for (svx::ClassificationResult const & rResult : rResults)
-        {
-            if (rResult.meType == svx::ClassificationType::CATEGORY)
-                aHelper.SetBACName(rResult.msName, SfxClassificationHelper::getPolicyType());
-        }
-
-        // Initialize key creator
-        sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
-
-        // Insert full text as document property
-        svx::classification::insertFullTextualRepresentationAsDocumentProperty(xPropertyContainer, aKeyCreator, rResults);
-
-        // Insert Object into master page
-        Outliner* pOutliner = m_rDrawViewShell.GetDoc()->GetInternalOutliner();
-        OutlinerMode eOutlinerMode = pOutliner->GetMode();
-        pOutliner->Init(OutlinerMode::TextObject);
         pOutliner->SetStyleSheet(0, nullptr);
 
         sal_Int32 nParagraph = -1;
@@ -449,35 +401,35 @@ public:
 
             ESelection aPosition(nParagraph, EE_TEXTPOS_MAX_COUNT, nParagraph, EE_TEXTPOS_MAX_COUNT);
 
-            switch(rResult.meType)
+            switch (rResult.meType)
             {
                 case svx::ClassificationType::TEXT:
                 {
-                    OUString sKey = aKeyCreator.makeNumberedMarkingTextKey();
-                    svx::classification::addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
+                    OUString sKey = m_aKeyCreator.makeNumberedMarkingTextKey();
+                    svx::classification::addOrInsertDocumentProperty(m_xPropertyContainer, sKey, rResult.msName);
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msName), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
 
                 case svx::ClassificationType::CATEGORY:
                 {
-                    OUString sKey = aKeyCreator.makeCategoryNameKey();
+                    OUString sKey = m_aKeyCreator.makeCategoryNameKey();
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msName), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
 
                 case svx::ClassificationType::MARKING:
                 {
-                    OUString sKey = aKeyCreator.makeMarkingKey();
-                    svx::classification::addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
+                    OUString sKey = m_aKeyCreator.makeMarkingKey();
+                    svx::classification::addOrInsertDocumentProperty(m_xPropertyContainer, sKey, rResult.msName);
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msName), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
 
                 case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
                 {
-                    OUString sKey = aKeyCreator.makeIntellectualPropertyPartKey();
-                    svx::classification::addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
+                    OUString sKey = m_aKeyCreator.makeIntellectualPropertyPartKey();
+                    svx::classification::addOrInsertDocumentProperty(m_xPropertyContainer, sKey, rResult.msName);
                     pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey, rResult.msName), EE_FEATURE_FIELD), aPosition);
                 }
                 break;
@@ -502,28 +454,86 @@ public:
                 break;
             }
         }
+    }
 
-        SdrRectObj* pRectObj = new SdrRectObj(OBJ_TEXT);
-        pRectObj->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
+public:
+    ClassificationInserter(sd::DrawViewShell & rDrawViewShell)
+        : ClassificationCommon(rDrawViewShell)
+    {
+    }
 
+    bool insert(std::vector<svx::ClassificationResult> const & rResults)
+    {
+        // Set to MASTER mode
+        EditMode eOldMode = m_rDrawViewShell.GetEditMode();
+        if (eOldMode != EditMode::MasterPage)
+            m_rDrawViewShell.ChangeEditMode(EditMode::MasterPage, false);
+
+        // Scoped guard to revert the mode
+        comphelper::ScopeGuard const aGuard([this, eOldMode] () {
+            m_rDrawViewShell.ChangeEditMode(eOldMode, false);
+        });
+
+        // Delete the previous existing object - if exists
+        deleteExistingObjects();
+
+        // Clear properties
+        svx::classification::removeAllProperties(m_xPropertyContainer);
+
+        SfxClassificationHelper aHelper(m_xDocumentProperties);
+
+        // Apply properties from the BA policy
+        for (svx::ClassificationResult const & rResult : rResults)
+        {
+            if (rResult.meType == svx::ClassificationType::CATEGORY)
+                aHelper.SetBACName(rResult.msName, SfxClassificationHelper::getPolicyType());
+        }
+
+        // Insert full text as document property
+        svx::classification::insertFullTextualRepresentationAsDocumentProperty(m_xPropertyContainer, m_aKeyCreator, rResults);
+
+        // Create the outliner from the
+        Outliner* pOutliner = m_rDrawViewShell.GetDoc()->GetInternalOutliner();
+        OutlinerMode eOutlinerMode = pOutliner->GetMode();
+
+        comphelper::ScopeGuard const aOutlinerGuard([pOutliner, eOutlinerMode] () {
+            pOutliner->Init(eOutlinerMode);
+        });
+
+        pOutliner->Init(OutlinerMode::TextObject);
+
+        // Fill the outliner with the text from classification result
+        fillTheOutliner(pOutliner, rResults);
+
+        // Calculate to outliner text size
         pOutliner->UpdateFields();
         pOutliner->SetUpdateMode(true);
-        Size aSize(pOutliner->CalcTextSize());
+        Size aTextSize(pOutliner->CalcTextSize());
         pOutliner->SetUpdateMode(false);
 
-        // Calculate position
-        Point aPosition;
-        ::tools::Rectangle aRect(aPosition, m_rDrawViewShell.GetActiveWindow()->GetOutputSizePixel());
-        aPosition = Point(aRect.Center().X(), aRect.GetHeight());
-        aPosition = m_rDrawViewShell.GetActiveWindow()->PixelToLogic(aPosition);
-        aPosition.X() -= aSize.Width() / 2;
-        aPosition.Y() -= aSize.Height() * 4;
+        // Create objects, apply the outliner and add them (objects) to all master pages
+        const sal_uInt16 nCount = m_rDrawViewShell.GetDoc()->GetMasterSdPageCount(PageKind::Standard);
 
-        pRectObj->SetLogicRect(::tools::Rectangle(aPosition, aSize));
-        pRectObj->SetOutlinerParaObject(pOutliner->CreateParaObject());
+        for (sal_uInt16 nPageIndex = 0; nPageIndex < nCount; ++nPageIndex)
+        {
+            SdPage* pMasterPage = m_rDrawViewShell.GetDoc()->GetMasterSdPage(nPageIndex, PageKind::Standard);
+            if (!pMasterPage)
+                continue;
 
-        m_rDrawViewShell.GetDrawView()->InsertObjectAtView(pRectObj, *m_rDrawViewShell.GetDrawView()->GetSdrPageView());
-        pOutliner->Init(eOutlinerMode);
+            SdrRectObj* pObject = new SdrRectObj(OBJ_TEXT);
+            pObject->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
+            pObject->SetOutlinerParaObject(pOutliner->CreateParaObject());
+            pMasterPage->InsertObject(pObject);
+
+            // Calculate position
+            ::tools::Rectangle aRectangle(Point(), pMasterPage->GetSize());
+            Point aPosition(aRectangle.Center().X(), aRectangle.Bottom());
+
+            aPosition.X() -= aTextSize.Width() / 2;
+            aPosition.Y() -= aTextSize.Height();
+
+            pObject->SetLogicRect(::tools::Rectangle(aPosition, aTextSize));
+        }
 
         return true;
     }
