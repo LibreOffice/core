@@ -98,7 +98,7 @@ SvxNumberType::~SvxNumberType()
         xFormatter = nullptr;
 }
 
-OUString SvxNumberType::GetNumStr( sal_uLong nNo ) const
+OUString SvxNumberType::GetNumStr( sal_Int32 nNo ) const
 {
     LanguageTag aLang = utl::ConfigManager::IsAvoidConfig() ?
         LanguageTag("en-US") :
@@ -106,7 +106,7 @@ OUString SvxNumberType::GetNumStr( sal_uLong nNo ) const
     return GetNumStr( nNo, aLang.getLocale() );
 }
 
-OUString SvxNumberType::GetNumStr( sal_uLong nNo, const css::lang::Locale& rLocale ) const
+OUString SvxNumberType::GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLocale ) const
 {
     lcl_getFormatter(xFormatter);
     if(!xFormatter.is())
@@ -131,7 +131,7 @@ OUString SvxNumberType::GetNumStr( sal_uLong nNo, const css::lang::Locale& rLoca
                         pValues[0].Name = "NumberingType";
                         pValues[0].Value <<= (sal_uInt16)nNumType;
                         pValues[1].Name = "Value";
-                        pValues[1].Value <<= (sal_Int32)nNo;
+                        pValues[1].Value <<= nNo;
 
                         try
                         {

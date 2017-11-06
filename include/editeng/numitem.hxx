@@ -66,8 +66,8 @@ public:
     SvxNumberType(const SvxNumberType& rType);
     ~SvxNumberType();
 
-    OUString        GetNumStr( sal_uLong nNo ) const;
-    OUString        GetNumStr( sal_uLong nNo, const css::lang::Locale& rLocale ) const;
+    OUString        GetNumStr( sal_Int32 nNo ) const;
+    OUString        GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLocale ) const;
 
     void            SetNumberingType(SvxNumType nSet) {nNumType = nSet;}
     SvxNumType      GetNumberingType() const {return nNumType;}
