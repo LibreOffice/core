@@ -88,6 +88,7 @@ public:
     void testTdf62176();
     void testTransparentBackground();
     void testEmbeddedPdf();
+    void testEmbeddedText();
     void testAuthorField();
     void testTdf100926();
     void testPageWithTransparentBackground();
@@ -107,6 +108,7 @@ public:
     CPPUNIT_TEST(testTdf62176);
     CPPUNIT_TEST(testTransparentBackground);
     CPPUNIT_TEST(testEmbeddedPdf);
+    CPPUNIT_TEST(testEmbeddedText);
     CPPUNIT_TEST(testAuthorField);
     CPPUNIT_TEST(testTdf100926);
     CPPUNIT_TEST(testPageWithTransparentBackground);
@@ -637,6 +639,36 @@ void SdExportTest::testEmbeddedPdf()
     CPPUNIT_ASSERT(!aReplacementGraphicURL.isEmpty());
     xShell->DoClose();
 #endif
+}
+
+void SdExportTest::testEmbeddedText()
+{
+    sd::DrawDocShellRef xShell = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/objectwithtext.fodg"), FODG);
+    xShell = saveAndReload( xShell.get(), ODG );
+
+    uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xText.is());
+
+    uno::Reference<container::XEnumerationAccess> xEA(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xEA->hasElements());
+    uno::Reference<container::XEnumeration> xEnum(xEA->createEnumeration());
+    uno::Reference<text::XTextContent> xTC;
+    xEnum->nextElement() >>= xTC;
+    CPPUNIT_ASSERT(xTC.is());
+
+    uno::Reference<container::XEnumerationAccess> xParaEA(xTC, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum(xParaEA->createEnumeration());
+    uno::Reference<beans::XPropertySet> xPortion(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPortion.is());
+    uno::Reference<text::XTextRange> xRange(xPortion, uno::UNO_QUERY);
+    OUString type;
+    xPortion->getPropertyValue("TextPortionType") >>= type;
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"), type);
+    CPPUNIT_ASSERT_EQUAL(OUString("foobar"), xRange->getString()); //tdf#112547
+
+    xShell->DoClose();
 }
 
 void SdExportTest::testAuthorField()
