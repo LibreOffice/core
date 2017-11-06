@@ -1756,7 +1756,7 @@ void SwEditShell::ValidateAllParagraphSignatures(bool updateDontRemove)
     }
 }
 
-uno::Reference<text::XTextField> lcl_GetParagraphMetadataFieldAtIndex(const SwDocShell* pDocSh, SwTextNode* pNode, const sal_uLong index)
+uno::Reference<text::XTextField> lcl_GetParagraphMetadataFieldAtIndex(const SwDocShell* pDocSh, SwTextNode const * pNode, const sal_uLong index)
 {
     uno::Reference<text::XTextField> xTextField;
     if (pNode != nullptr && pDocSh != nullptr)

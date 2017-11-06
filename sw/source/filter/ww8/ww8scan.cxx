@@ -7026,7 +7026,7 @@ namespace
     }
 }
 
-WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
+WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
     : pFontA(nullptr), nMax(0)
 {
     // Attention: MacWord-Documents have their Fontnames
@@ -7306,7 +7306,7 @@ const WW8_FFN* WW8Fonts::GetFont( sal_uInt16 nNum ) const
 //    out of WW8_{FOOTER,HEADER}_{ODD,EVEN,FIRST} (Do not change!)
 //  -> maybe we can get a right result then
 
-WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop const & rDop )
+WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib const & rFib, WW8Dop const & rDop )
     : aPLCF(*pSt, rFib.m_fcPlcfhdd , rFib.m_lcbPlcfhdd , 0)
 {
     nIdxOffset = 0;

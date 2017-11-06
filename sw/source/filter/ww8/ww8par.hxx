@@ -835,7 +835,7 @@ private:
 
     void GetPageULData(const wwSection &rNewSection,
         wwULSpaceData& rData) const;
-    static void SetPageULSpaceItems(SwFrameFormat &rFormat, wwULSpaceData& rData,
+    static void SetPageULSpaceItems(SwFrameFormat &rFormat, wwULSpaceData const & rData,
         const wwSection &rSection);
 
     static void SetPage(SwPageDesc &rPageDesc, SwFrameFormat &rFormat,
@@ -844,7 +844,7 @@ private:
     static void SetNumberingType(const wwSection &rNewSection, SwPageDesc &rPageDesc);
 
     void SetUseOn(wwSection &rSection);
-    void SetHdFt(wwSection &rSection, int nSect, const wwSection *pPrevious);
+    void SetHdFt(wwSection const &rSection, int nSect, const wwSection *pPrevious);
 
     SwSectionFormat *InsertSection(SwPaM const & rMyPaM, wwSection &rSection);
     static bool SetCols(SwFrameFormat &rFormat, const wwSection &rSection,
@@ -1474,7 +1474,7 @@ private:
         SvxLRSpaceItem &rLR);
     static void AdjustULWrapForWordMargins(const SvxMSDffImportRec &rRecord,
         SvxULSpaceItem &rUL);
-    static void MapWrapIntoFlyFormat(SvxMSDffImportRec* pRecord, SwFrameFormat* pFlyFormat);
+    static void MapWrapIntoFlyFormat(SvxMSDffImportRec const * pRecord, SwFrameFormat* pFlyFormat);
 
     void SetAttributesAtGrfNode(SvxMSDffImportRec const* pRecord,
             SwFrameFormat const *pFlyFormat, WW8_FSPA const *pF);
@@ -1585,7 +1585,7 @@ private:
         bool bMakeSdrGrafObj, bool& rbEraseTextObj,
         bool* pbTestTxbxContainsText = nullptr, long* pnStartCp = nullptr,
         long* pnEndCp = nullptr, bool* pbContainsGraphics = nullptr,
-        SvxMSDffImportRec* pRecord = nullptr);
+        SvxMSDffImportRec const * pRecord = nullptr);
     bool TxbxChainContainsRealText( sal_uInt16 nTxBxS,
                                     long&  rStartCp,
                                     long&  rEndCp );
@@ -1604,8 +1604,8 @@ private:
         SdrObject* &rpOurNewObject, SvxMSDffImportRec* pRecord, WW8_FSPA *pF,
         SfxItemSet &rFlySet );
     SwFlyFrameFormat *ConvertDrawTextToFly( SdrObject* &rpObject,
-        SdrObject* &rpOurNewObject, SvxMSDffImportRec* pRecord,
-        RndStdIds eAnchor, WW8_FSPA *pF, SfxItemSet &rFlySet );
+        SdrObject* &rpOurNewObject, SvxMSDffImportRec const * pRecord,
+        RndStdIds eAnchor, WW8_FSPA const *pF, SfxItemSet &rFlySet );
     SwFrameFormat* MungeTextIntoDrawBox(SdrObject* pTrueObject,
         SvxMSDffImportRec *pRecord, long nGrafAnchorCp, SwFrameFormat *pRetFrameFormat);
 
@@ -1613,7 +1613,7 @@ private:
     void GrafikDtor();
 
 // other stuff
-    OUString GetFieldResult( WW8FieldDesc* pF );
+    OUString GetFieldResult( WW8FieldDesc const * pF );
     void MakeTagString( OUString& rStr, const OUString& rOrg );
     void UpdateFields();
     OUString ConvertFFileName(const OUString& rRaw);

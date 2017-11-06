@@ -824,7 +824,7 @@ public:
     void AutoFormat( const SvxSwAutoFormatFlags* pAFlags );
 
     static SvxSwAutoFormatFlags* GetAutoFormatFlags();
-    static void SetAutoFormatFlags(SvxSwAutoFormatFlags *);
+    static void SetAutoFormatFlags(SvxSwAutoFormatFlags const *);
 
     /// Calculates selection.
     OUString Calculate();

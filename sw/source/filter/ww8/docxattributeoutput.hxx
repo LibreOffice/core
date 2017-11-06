@@ -1019,7 +1019,7 @@ public:
     /// Stores the table export state to the passed context and resets own state.
     void pushToTableExportContext(DocxTableExportContext& rContext);
     /// Restores from the remembered state.
-    void popFromTableExportContext(DocxTableExportContext& rContext);
+    void popFromTableExportContext(DocxTableExportContext const & rContext);
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXATTRIBUTEOUTPUT_HXX
