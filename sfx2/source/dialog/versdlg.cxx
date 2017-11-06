@@ -46,12 +46,11 @@
 #include <sfx2/request.hxx>
 
 #include <sfx2/sfxuno.hxx>
+#include <memory>
 #include <vector>
 
 using namespace com::sun::star;
-using ::std::vector;
 
-// **************************************************************************
 struct SfxVersionInfo
 {
     OUString                aName;
@@ -65,35 +64,31 @@ struct SfxVersionInfo
 class SfxVersionTableDtor
 {
 private:
-    std::vector< SfxVersionInfo* >  aTableList;
+    std::vector<std::unique_ptr<SfxVersionInfo>> aTableList;
 public:
     explicit                SfxVersionTableDtor( const uno::Sequence < util::RevisionTag >& rInfo );
     explicit                SfxVersionTableDtor( const uno::Sequence < document::CmisVersion > & rInfo );
-                            ~SfxVersionTableDtor()
-                            { DelDtor(); }
                             SfxVersionTableDtor(const SfxVersionTableDtor&) = delete;
     SfxVersionTableDtor&    operator=(const SfxVersionTableDtor&) = delete;
-
-    void                    DelDtor();
 
     size_t                  size() const
                             { return aTableList.size(); }
 
     SfxVersionInfo*         at( size_t i ) const
-                            { return aTableList[ i ]; }
+                            { return aTableList[ i ].get(); }
 };
 
 SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < util::RevisionTag >& rInfo )
 {
     for ( sal_Int32 n=0; n<rInfo.getLength(); n++ )
     {
-        SfxVersionInfo* pInfo = new SfxVersionInfo;
+        std::unique_ptr<SfxVersionInfo> pInfo(new SfxVersionInfo);
         pInfo->aName = rInfo[n].Identifier;
         pInfo->aComment = rInfo[n].Comment;
         pInfo->aAuthor = rInfo[n].Author;
 
         pInfo->aCreationDate = DateTime( rInfo[n].TimeStamp );
-        aTableList.push_back( pInfo );
+        aTableList.push_back( std::move(pInfo) );
     }
 }
 
@@ -101,21 +96,14 @@ SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < document::CmisVe
 {
     for ( sal_Int32 n=0; n<rInfo.getLength(); n++ )
     {
-        SfxVersionInfo* pInfo = new SfxVersionInfo;
+        std::unique_ptr<SfxVersionInfo> pInfo(new SfxVersionInfo);
         pInfo->aName = rInfo[n].Id;
         pInfo->aComment = rInfo[n].Comment;
         pInfo->aAuthor = rInfo[n].Author;
 
         pInfo->aCreationDate = DateTime( rInfo[n].TimeStamp );
-        aTableList.push_back( pInfo );
+        aTableList.push_back( std::move(pInfo) );
     }
-}
-
-void SfxVersionTableDtor::DelDtor()
-{
-    for (SfxVersionInfo* i : aTableList)
-        delete i;
-    aTableList.clear();
 }
 
 SfxVersionInfo::SfxVersionInfo()
