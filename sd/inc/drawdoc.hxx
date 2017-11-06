@@ -413,7 +413,7 @@ public:
     SAL_DLLPRIVATE void                StopOnlineSpelling();
     SAL_DLLPRIVATE void                StartOnlineSpelling(bool bForceSpelling=true);
 
-    SAL_DLLPRIVATE void                ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner const * pOutl);
+    SAL_DLLPRIVATE void                ImpOnlineSpellCallback(SpellCallbackInfo const * pInfo, SdrObject* pObj, SdrOutliner const * pOutl);
 
     SAL_DLLPRIVATE void                InsertObject(SdrObject* pObj);
     SAL_DLLPRIVATE void                RemoveObject(SdrObject* pObj);
@@ -447,7 +447,7 @@ public:
     static     SdAnimationInfo* GetShapeUserData(SdrObject& rObject, bool bCreate = false );
 
     SAL_DLLPRIVATE static SdIMapInfo*  GetIMapInfo( SdrObject const * pObject );
-    SAL_DLLPRIVATE static IMapObject*  GetHitIMapObject( SdrObject* pObject, const Point& rWinPoint );
+    SAL_DLLPRIVATE static IMapObject*  GetHitIMapObject( SdrObject const * pObject, const Point& rWinPoint );
 
     SAL_DLLPRIVATE CharClass*          GetCharClass() const { return mpCharClass.get(); }
 

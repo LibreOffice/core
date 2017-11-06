@@ -247,7 +247,7 @@ private:
     virtual void SAL_CALL disposing() override;
 
     // internal
-    bool startShow( PresentationSettingsEx* pPresSettings );
+    bool startShow( PresentationSettingsEx const * pPresSettings );
     bool startPreview(
         const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
         const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode,

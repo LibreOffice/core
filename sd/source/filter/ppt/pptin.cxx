@@ -2057,7 +2057,7 @@ OUString ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
 }
 
 // import of objects
-void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, const OUString& aMacroName )
+void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom const * pIAtom, const OUString& aMacroName )
 {
     // set local information into pInfo
     if( pIAtom->nSoundRef )

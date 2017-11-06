@@ -161,7 +161,7 @@ protected:
         return pFormat;
     }
 
-    void exportTo(sd::DrawDocShell* pShell, FileFormat* pFormat, utl::TempFile& rTempFile)
+    void exportTo(sd::DrawDocShell* pShell, FileFormat const * pFormat, utl::TempFile const & rTempFile)
     {
         SfxMedium aStoreMedium(rTempFile.GetURL(), StreamMode::STD_WRITE);
         SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
@@ -180,7 +180,7 @@ protected:
         pShell->DoClose();
     }
 
-    void save(sd::DrawDocShell* pShell, FileFormat* pFormat, utl::TempFile& rTempFile)
+    void save(sd::DrawDocShell* pShell, FileFormat const * pFormat, utl::TempFile const & rTempFile)
     {
         SfxMedium aStoreMedium(rTempFile.GetURL(), StreamMode::STD_WRITE);
         SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
@@ -376,7 +376,7 @@ class SdModelTestBaseXML
 {
 
 public:
-    xmlDocPtr parseExport(utl::TempFile & rTempFile, OUString const& rStreamName)
+    xmlDocPtr parseExport(utl::TempFile const & rTempFile, OUString const& rStreamName)
     {
         OUString const url(rTempFile.GetURL());
         uno::Reference<packages::zip::XZipFileAccess2> const xZipNames(

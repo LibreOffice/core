@@ -1582,7 +1582,7 @@ private:
         current slide then that is added.  Otherwise a new printer page is
         started.
     */
-    void PrepareOutline (PrintInfo& rInfo)
+    void PrepareOutline (PrintInfo const & rInfo)
     {
         MapMode aMap (rInfo.maMap);
         Point aPageOfs (rInfo.mpPrinter->GetPageOffset() );

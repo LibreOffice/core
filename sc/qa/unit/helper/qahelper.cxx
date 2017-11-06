@@ -723,7 +723,7 @@ std::shared_ptr<utl::TempFile> ScBootstrapFixture::exportTo( ScDocShell* pShell,
     return pTempFile;
 }
 
-void ScBootstrapFixture::miscRowHeightsTest( TestParam* aTestValues, unsigned int numElems )
+void ScBootstrapFixture::miscRowHeightsTest( TestParam const * aTestValues, unsigned int numElems )
 {
     for ( unsigned int index=0; index<numElems; ++index )
     {

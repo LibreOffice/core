@@ -55,6 +55,15 @@ public:
             || startswith(fn, SRCDIR "/sfx2/source/doc/syspath.cxx")
             // ignore this for now
             || startswith(fn, SRCDIR "/libreofficekit")
+            // I end up with a
+            //    CXXMemberCallExpr
+            // to a
+            //    BuiltinType '<bound member function type>'
+            // and the AST gives me no further useful information.
+            || startswith(fn, SRCDIR "/sw/source/core/doc/docfly.cxx")
+            || startswith(fn, SRCDIR "/sw/source/core/doc/DocumentContentOperationsManager.cxx")
+            || startswith(fn, SRCDIR "/sw/source/core/fields/cellfml.cxx")
+            || startswith(fn, SRCDIR "/sw/source/filter/ww8/ww8par6.cxx")
             )
             return;
 
@@ -194,6 +203,12 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
             || name == "egiGraphicExport"
             || name == "etiGraphicExport"
             || name == "epsGraphicExport"
+            // callback for some external code?
+            || name == "ScAddInAsyncCallBack"
+            // used as function pointers
+            || name == "Read_Footnote"
+            || name == "Read_Field"
+            || name == "Read_And"
             )
             return false;
     }
@@ -215,6 +230,9 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
         // since we normally can't change typedefs, just ignore them
         if (isa<TypedefType>(pParmVarDecl->getType()))
             continue;
+        // some typedefs turn into these
+        if (isa<DecayedType>(pParmVarDecl->getType()))
+            continue;
         // TODO ignore these for now, has some effects I don't understand
         if (type.Pointer().Pointer())
             continue;
@@ -224,6 +242,8 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
         // ignore things with template params
         if (pParmVarDecl->getType()->isInstantiationDependentType())
             continue;
+        if (functionDecl->getIdentifier() && functionDecl->getName() == "WW8TransCol")
+            pParmVarDecl->getType()->dump();
         interestingParamSet.insert(pParmVarDecl);
         parmToFunction[pParmVarDecl] = functionDecl;
         foundInterestingParam = true;

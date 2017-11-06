@@ -43,7 +43,7 @@ class ScHTMLExportTest : public test::BootstrapFixture, public unotest::MacrosTe
         mxComponent = loadFromDesktop(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.comp.Calc.SpreadsheetDocument");
     }
 
-    void save(const OUString& aFilterName, TempFile& rTempFile)
+    void save(const OUString& aFilterName, TempFile const & rTempFile)
     {
         Reference<XStorable> xStorable(mxComponent, UNO_QUERY);
         MediaDescriptor aMediaDescriptor;

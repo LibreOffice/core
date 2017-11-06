@@ -173,7 +173,7 @@ private:
     bool    Save();
 
     void    GetDesign( SdPublishingDesign* pDesign );
-    void    SetDesign( SdPublishingDesign* pDesign );
+    void    SetDesign( SdPublishingDesign const * pDesign );
 
     void    LoadPreviewButtons();
 
