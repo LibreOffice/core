@@ -30,7 +30,6 @@
 #include <QtGui/QIcon>
 #include <QtGui/QWindow>
 #include <QtGui/QScreen>
-#include <QtGui/QWindow>
 #include <QtWidgets/QApplication>
 
 #include <saldatabasic.hxx>
