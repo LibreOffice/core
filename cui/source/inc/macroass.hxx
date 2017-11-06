@@ -33,7 +33,7 @@ class SvTabListBox;
 class SvTreeListBox;
 class SfxMacroTabPage_Impl;
 
-class SfxMacroTabPage : public SfxTabPage
+class SfxMacroTabPage final : public SfxTabPage
 {
     SvxMacroTableDtor           aTbl;
     DECL_LINK( SelectEvent_Impl, SvTreeListBox*, void );
@@ -45,7 +45,6 @@ class SfxMacroTabPage : public SfxTabPage
     bool                        AssignDeleteHdl(Control const *);
     DECL_LINK( TimeOut_Impl, Timer*, void );
 
-protected:
     std::unique_ptr<SfxMacroTabPage_Impl>       mpImpl;
 
     void                        InitAndSetHandler();

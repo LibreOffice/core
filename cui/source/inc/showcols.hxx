@@ -33,7 +33,7 @@
 //  FmShowColsDialog
 
 
-class FmShowColsDialog : public ModalDialog
+class FmShowColsDialog final : public ModalDialog
 {
     VclPtr<ListBox>        m_pList;
     VclPtr<OKButton>       m_pOK;
@@ -47,7 +47,7 @@ public:
 
     void SetColumns(const css::uno::Reference< css::container::XIndexContainer>& xCols);
 
-protected:
+private:
     DECL_LINK(OnClickedOk, Button*, void);
 };
 

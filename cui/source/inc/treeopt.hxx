@@ -126,7 +126,7 @@ struct Module;
 class ExtensionsTabPage;
 class SvxColorTabPage;
 
-class OfaTreeOptionsDialog : public SfxModalDialog
+class OfaTreeOptionsDialog final: public SfxModalDialog
 {
 private:
     SvTreeListEntry*    pCurrentPageEntry;
@@ -164,7 +164,6 @@ private:
     static VectorOfNodes LoadNodes( Module* pModule, const OUString& rExtensionId );
     void            InsertNodes( const VectorOfNodes& rNodeList );
 
-protected:
     DECL_STATIC_LINK(OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox*, void );
     DECL_LINK(ShowPageHdl_Impl, SvTreeListBox*, void);
     DECL_LINK(BackHdl_Impl, Button*, void);

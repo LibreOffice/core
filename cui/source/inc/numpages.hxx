@@ -82,7 +82,7 @@ struct SvxNumSettings_Impl
 typedef std::vector<std::unique_ptr<SvxNumSettings_Impl> > SvxNumSettingsArr_Impl;
 
 
-class SvxSingleNumPickTabPage : public SfxTabPage
+class SvxSingleNumPickTabPage final : public SfxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
@@ -97,9 +97,8 @@ class SvxSingleNumPickTabPage : public SfxTabPage
 
     sal_uInt16              nNumItemId;
 
-protected:
-        DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
-        DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
+    DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
+    DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
 
 public:
         SvxSingleNumPickTabPage(vcl::Window* pParent,
@@ -117,7 +116,7 @@ public:
 };
 
 
-class SvxBulletPickTabPage : public SfxTabPage
+class SvxBulletPickTabPage final : public SfxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
@@ -131,9 +130,9 @@ class SvxBulletPickTabPage : public SfxTabPage
     sal_uInt16          nNumItemId;
 
     OUString            sBulletCharFormatName;
-protected:
-        DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
-        DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
+
+    DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
+    DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
 public:
         SvxBulletPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
@@ -154,7 +153,7 @@ public:
 #define NUM_VALUSET_COUNT 16
 
 /// TabPage for complete numeration
-class SvxNumPickTabPage : public SfxTabPage
+class SvxNumPickTabPage final : public SfxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
@@ -173,9 +172,8 @@ class SvxNumPickTabPage : public SfxTabPage
     bool                bPreset     : 1;
 
 
-protected:
-        DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
-        DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
+    DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
+    DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
 
 public:
     SvxNumPickTabPage(vcl::Window* pParent,
@@ -198,7 +196,7 @@ public:
 };
 
 
-class SvxBitmapPickTabPage : public SfxTabPage
+class SvxBitmapPickTabPage final : public SfxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
@@ -217,10 +215,9 @@ class SvxBitmapPickTabPage : public SfxTabPage
     bool                bModified   : 1;
     bool                bPreset     : 1;
 
-protected:
-        DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
-        DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
-        DECL_LINK(ClickAddBrowseHdl_Impl, Button*, void );
+    DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
+    DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
+    DECL_LINK(ClickAddBrowseHdl_Impl, Button*, void );
 
 
 public:

@@ -27,14 +27,13 @@
 enum class PageType;
 class SvxColorListBox;
 
-class SvxLineTabDialog : public SfxTabDialog
+class SvxLineTabDialog final : public SfxTabDialog
 {
     sal_uInt16            m_nLineTabPage;
     sal_uInt16            m_nShadowTabPage;
     sal_uInt16            m_nStyleTabPage;
     sal_uInt16            m_nEndTabPage;
 
-private:
     SdrModel*           pDrawModel;
     const SdrObject*    pObj;
 
@@ -58,7 +57,6 @@ private:
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 
-protected:
     virtual short       Ok() override;
     DECL_LINK( CancelHdlImpl, Button*, void );
     void                SavePalettes();

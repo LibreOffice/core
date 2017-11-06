@@ -27,7 +27,7 @@
 |*
 \************************************************************************/
 
-class SvxHyperlinkDocTp : public SvxHyperlinkTabPageBase
+class SvxHyperlinkDocTp final : public SvxHyperlinkTabPageBase
 {
 private:
     VclPtr<SvxHyperURLBox>      m_pCbbPath;
@@ -56,7 +56,6 @@ private:
                      Type_ExistsDir, Type_Dir };
     static EPathType GetPathType ( const OUString& rStrPath );
 
-protected:
     void FillDlgFields(const OUString& rStrURL) override;
     void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
                              OUString& aStrIntName, OUString& aStrFrame,

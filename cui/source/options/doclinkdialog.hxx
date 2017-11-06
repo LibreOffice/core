@@ -33,9 +33,8 @@ namespace svx
 
     /** dialog for editing document links associated with data sources
     */
-    class ODocumentLinkDialog : public ModalDialog
+    class ODocumentLinkDialog final : public ModalDialog
     {
-    protected:
         VclPtr< ::svt::OFileURLControl> m_pURL;
         VclPtr<PushButton>              m_pBrowseFile;
         VclPtr<Edit>                    m_pName;
@@ -58,7 +57,7 @@ namespace svx
         void    setLink( const  OUString& _rName, const   OUString& _rURL );
         void    getLink(        OUString& _rName,         OUString& _rURL ) const;
 
-    protected:
+    private:
         DECL_LINK( OnTextModified, Edit&, void );
         DECL_LINK( OnBrowseFile, Button*, void );
         DECL_LINK( OnOk, Button*, void );

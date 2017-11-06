@@ -43,9 +43,8 @@ namespace offapp
         bool operator != (const DriverPooling& _rR) const { return !operator ==(_rR); }
     };
 
-    class DriverPoolingSettings
+    class DriverPoolingSettings final
     {
-    protected:
         typedef std::vector<DriverPooling> DriverSettings;
         DriverSettings      m_aDrivers;
 
@@ -53,7 +52,6 @@ namespace offapp
         typedef DriverSettings::const_iterator const_iterator;
         typedef DriverSettings::iterator iterator;
 
-    public:
         DriverPoolingSettings();
 
         sal_Int32 size() const { return m_aDrivers.size(); }
@@ -67,9 +65,8 @@ namespace offapp
         void push_back(const DriverPooling& _rElement) { m_aDrivers.push_back(_rElement); }
     };
 
-    class DriverPoolingSettingsItem : public SfxPoolItem
+    class DriverPoolingSettingsItem final : public SfxPoolItem
     {
-    protected:
         DriverPoolingSettings   m_aSettings;
 
     public:

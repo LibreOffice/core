@@ -94,13 +94,12 @@ enum class PageType
     Transparence,
 };
 
-class SvxAreaTabDialog : public SfxTabDialog
+class SvxAreaTabDialog final : public SfxTabDialog
 {
     sal_uInt16            m_nAreaTabPage;
     sal_uInt16            m_nShadowTabPage;
     sal_uInt16            m_nTransparenceTabPage;
 
-private:
     SdrModel*           mpDrawModel;
 
     XColorListRef         mpColorList;
@@ -124,7 +123,6 @@ private:
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 
-protected:
     virtual short       Ok() override;
     DECL_LINK( CancelHdlImpl, Button*, void );
     void                SavePalettes();
