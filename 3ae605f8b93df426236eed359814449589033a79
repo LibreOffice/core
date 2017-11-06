@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_82f47ef2",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar_compact.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 8258,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-06T17:55:01Z",
+      "side": 0,
+      "message": "Careful, this is an ID and thus it has to be checked whether it\u0027s used in source code to identify some dialog part. Which doesn\u0027t seem to be the case in this case though.",
+      "range": {
+        "startLine": 8258,
+        "startChar": 53,
+        "endLine": 8258,
+        "endChar": 61
+      },
+      "revId": "3ae605f8b93df426236eed359814449589033a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
