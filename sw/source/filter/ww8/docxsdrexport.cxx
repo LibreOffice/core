@@ -112,7 +112,7 @@ void lclMovePositionWithRotation(awt::Point& aPos, const Size& rSize, sal_Int64 
 
 }
 
-ExportDataSaveRestore::ExportDataSaveRestore(DocxExport& rExport, sal_uLong nStt, sal_uLong nEnd, ww8::Frame* pParentFrame)
+ExportDataSaveRestore::ExportDataSaveRestore(DocxExport& rExport, sal_uLong nStt, sal_uLong nEnd, ww8::Frame const * pParentFrame)
     : m_rExport(rExport)
 {
     m_rExport.SaveData(nStt, nEnd);
@@ -1291,7 +1291,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
     }
 }
 
-void DocxSdrExport::writeOnlyTextOfFrame(ww8::Frame* pParentFrame)
+void DocxSdrExport::writeOnlyTextOfFrame(ww8::Frame const * pParentFrame)
 {
     const SwFrameFormat& rFrameFormat = pParentFrame->GetFrameFormat();
     const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
@@ -1357,7 +1357,7 @@ void DocxSdrExport::writeBoxItemLine(const SvxBoxItem& rBox)
     pFS->endElementNS(XML_a, XML_ln);
 }
 
-void DocxSdrExport::writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, bool bTextBoxOnly)
+void DocxSdrExport::writeDMLTextFrame(ww8::Frame const * pParentFrame, int nAnchorId, bool bTextBoxOnly)
 {
     bool bDMLAndVMLDrawingOpen = m_pImpl->m_bDMLAndVMLDrawingOpen;
     m_pImpl->m_bDMLAndVMLDrawingOpen = true;
@@ -1634,7 +1634,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, b
     m_pImpl->m_bDMLAndVMLDrawingOpen = bDMLAndVMLDrawingOpen;
 }
 
-void DocxSdrExport::writeVMLTextFrame(ww8::Frame* pParentFrame, bool bTextBoxOnly)
+void DocxSdrExport::writeVMLTextFrame(ww8::Frame const * pParentFrame, bool bTextBoxOnly)
 {
     bool bDMLAndVMLDrawingOpen = m_pImpl->m_bDMLAndVMLDrawingOpen;
     m_pImpl->m_bDMLAndVMLDrawingOpen = true;

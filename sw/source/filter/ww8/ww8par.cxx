@@ -2345,7 +2345,7 @@ bool wwSectionManager::SectionIsProtected(const wwSection &rSection) const
     return (mrReader.m_xWwFib->m_fReadOnlyRecommended && !rSection.IsNotProtected());
 }
 
-void wwSectionManager::SetHdFt(wwSection &rSection, int nSect,
+void wwSectionManager::SetHdFt(wwSection const &rSection, int nSect,
     const wwSection *pPrevious)
 {
     // Header/Footer not present
@@ -5554,7 +5554,7 @@ namespace
         return aPassw;
     }
 
-    uno::Sequence< beans::NamedValue > InitXorWord95Codec( ::msfilter::MSCodec_XorWord95& rCodec, SfxMedium& rMedium, WW8Fib* pWwFib )
+    uno::Sequence< beans::NamedValue > InitXorWord95Codec( ::msfilter::MSCodec_XorWord95& rCodec, SfxMedium& rMedium, WW8Fib const * pWwFib )
     {
         uno::Sequence< beans::NamedValue > aEncryptionData;
         const SfxUnoAnyItem* pEncryptionData = SfxItemSet::GetItem<SfxUnoAnyItem>(rMedium.GetItemSet(), SID_ENCRYPTIONDATA, false);

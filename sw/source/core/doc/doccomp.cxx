@@ -122,8 +122,8 @@ public:
     void ShowDelete( const CompareData& rData, sal_uLong nStt,
                                 sal_uLong nEnd, sal_uLong nInsPos );
     void CheckForChangesInLine( const CompareData& rData,
-                                    sal_uLong& nStt, sal_uLong& nEnd,
-                                    sal_uLong& nThisStt, sal_uLong& nThisEnd );
+                                    sal_uLong nStt, sal_uLong nEnd,
+                                    sal_uLong nThisStt, sal_uLong nThisEnd );
 
     // Set non-ambiguous index for a line. Same lines have the same index, even in the other CompareData!
     void SetIndex( size_t nLine, size_t nIndex );
@@ -1555,11 +1555,11 @@ void CompareData::ShowDelete(
 }
 
 void CompareData::CheckForChangesInLine( const CompareData& rData,
-                                    sal_uLong& rStt, sal_uLong& rEnd,
-                                    sal_uLong& rThisStt, sal_uLong& rThisEnd )
+                                    sal_uLong nStt, sal_uLong nEnd,
+                                    sal_uLong nThisStt, sal_uLong nThisEnd )
 {
-    LineArrayComparator aCmp( *this, rData, rThisStt, rThisEnd,
-                              rStt, rEnd );
+    LineArrayComparator aCmp( *this, rData, nThisStt, nThisEnd,
+                              nStt, nEnd );
 
     int nMinLen = std::min( aCmp.GetLen1(), aCmp.GetLen2() );
     std::unique_ptr<int[]> pLcsDst(new int[ nMinLen ]);
@@ -1580,29 +1580,29 @@ void CompareData::CheckForChangesInLine( const CompareData& rData,
 
         if( i )
         {
-            const SwCompareLine* pDstLn = GetLine( rThisStt + nDstFrom - 1 );
-            const SwCompareLine* pSrcLn = rData.GetLine( rStt + nSrcFrom - 1 );
+            const SwCompareLine* pDstLn = GetLine( nThisStt + nDstFrom - 1 );
+            const SwCompareLine* pSrcLn = rData.GetLine( nStt + nSrcFrom - 1 );
 
             // Show differences in detail for lines that
             // were matched as only slightly different
             if( !pDstLn->ChangesInLine( *pSrcLn, pInsRing, pDelRing ) )
             {
-                ShowInsert( rThisStt + nDstFrom - 1, rThisStt + nDstFrom );
-                ShowDelete( rData, rStt + nSrcFrom - 1, rStt + nSrcFrom,
-                                                    rThisStt + nDstFrom );
+                ShowInsert( nThisStt + nDstFrom - 1, nThisStt + nDstFrom );
+                ShowDelete( rData, nStt + nSrcFrom - 1, nStt + nSrcFrom,
+                                                    nThisStt + nDstFrom );
             }
         }
 
         // Lines missing from source are inserted
         if( nDstFrom != nDstTo )
         {
-            ShowInsert( rThisStt + nDstFrom, rThisStt + nDstTo );
+            ShowInsert( nThisStt + nDstFrom, nThisStt + nDstTo );
         }
 
         // Lines missing from destination are deleted
         if( nSrcFrom != nSrcTo )
         {
-            ShowDelete( rData, rStt + nSrcFrom, rStt + nSrcTo, rThisStt + nDstTo );
+            ShowDelete( rData, nStt + nSrcFrom, nStt + nSrcTo, nThisStt + nDstTo );
         }
     }
 }

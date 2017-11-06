@@ -3532,9 +3532,9 @@ void SwAccessibleParagraph::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
 }
 
 bool SwAccessibleParagraph::GetSelectionAtIndex(
-    sal_Int32& nIndex, sal_Int32& nStart, sal_Int32& nEnd)
+    sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd)
 {
-        if(nIndex < 0) return false;
+    if(nIndex < 0) return false;
 
     bool bRet = false;
     nStart = -1;

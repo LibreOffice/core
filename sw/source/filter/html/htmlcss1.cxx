@@ -2035,7 +2035,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SvxCSS1PropertyInfo &rPropInfo,
     rFrameItemSet.Put( SwFormatSurround( eSurround ) );
 }
 
-void SwHTMLParser::SetVarSize( SvxCSS1PropertyInfo &rPropInfo,
+void SwHTMLParser::SetVarSize( SvxCSS1PropertyInfo const &rPropInfo,
                                SfxItemSet &rFrameItemSet,
                                SwTwips nDfltWidth, sal_uInt8 nDfltPrcWidth )
 {

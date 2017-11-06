@@ -1578,7 +1578,7 @@ private:
     sal_uInt16 nMax;        // Array-Size
 
 public:
-    WW8Fonts( SvStream& rSt, WW8Fib& rFib );
+    WW8Fonts( SvStream& rSt, WW8Fib const & rFib );
     const WW8_FFN* GetFont( sal_uInt16 nNum ) const;
     sal_uInt16 GetMax() const { return nMax; }
 };
@@ -1847,7 +1847,7 @@ private:
     short nIdxOffset;
 
 public:
-    WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop const & rDop );
+    WW8PLCF_HdFt( SvStream* pSt, WW8Fib const & rFib, WW8Dop const & rDop );
     bool GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rStart, WW8_CP& rLen);
     void GetTextPosExact(short nIdx, WW8_CP& rStart, WW8_CP& rLen);
     void UpdateIndex( sal_uInt8 grpfIhdt );

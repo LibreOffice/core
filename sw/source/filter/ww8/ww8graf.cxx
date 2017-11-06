@@ -981,7 +981,7 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     Size const * pObjSiz, sal_uInt16 nTxBxS, sal_uInt16 nSequence, long nPosCp,
     SwFrameFormat const * pOldFlyFormat, bool bMakeSdrGrafObj, bool& rbEraseTextObj,
     bool* pbTestTxbxContainsText, long* pnStartCp, long* pnEndCp,
-    bool* pbContainsGraphics, SvxMSDffImportRec* pRecord)
+    bool* pbContainsGraphics, SvxMSDffImportRec const * pRecord)
 {
     SwFrameFormat* pFlyFormat = nullptr;
     sal_uLong nOld = m_pStrm->Tell();
@@ -1918,7 +1918,7 @@ void SwWW8ImplReader::AdjustULWrapForWordMargins(
         rUL.SetUpper((sal_uInt16)0);
 }
 
-void SwWW8ImplReader::MapWrapIntoFlyFormat(SvxMSDffImportRec* pRecord,
+void SwWW8ImplReader::MapWrapIntoFlyFormat(SvxMSDffImportRec const * pRecord,
     SwFrameFormat* pFlyFormat)
 {
     if (!pRecord || !pFlyFormat)
@@ -2854,8 +2854,8 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
 }
 
 SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
-    SdrObject* &rpOurNewObject, SvxMSDffImportRec* pRecord, RndStdIds eAnchor,
-    WW8_FSPA *pF, SfxItemSet &rFlySet)
+    SdrObject* &rpOurNewObject, SvxMSDffImportRec const * pRecord, RndStdIds eAnchor,
+    WW8_FSPA const *pF, SfxItemSet &rFlySet)
 {
     SwFlyFrameFormat* pRetFrameFormat = nullptr;
     long nStartCp;

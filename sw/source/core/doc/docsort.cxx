@@ -68,7 +68,7 @@ typedef std::multiset<SwSortBoxElement> SwSortBoxElements;
 
 /// Construct a SortElement for the Sort
 void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
-                            FlatFndBox* pFltBx )
+                            FlatFndBox const * pFltBx )
 {
     OSL_ENSURE( !pDoc && !pOptions && !pBox, "Who forgot to call Finit?" );
     pDoc = pD;

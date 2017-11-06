@@ -151,7 +151,7 @@ static void lcl_SaveAnchor( SwFrameFormat* pFormat, sal_uLong& rNodePos )
     }
 }
 
-static void lcl_RestoreAnchor( SwFrameFormat* pFormat, sal_uLong& rNodePos )
+static void lcl_RestoreAnchor( SwFrameFormat* pFormat, sal_uLong nNodePos )
 {
     const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
     if ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
@@ -162,7 +162,7 @@ static void lcl_RestoreAnchor( SwFrameFormat* pFormat, sal_uLong& rNodePos )
         const sal_Int32 nContentPos = rAnchor.GetPageNum();
         SwNodes& rNds = pFormat->GetDoc()->GetNodes();
 
-        SwNodeIndex aIdx( rNds, rNodePos );
+        SwNodeIndex aIdx( rNds, nNodePos );
         SwPosition aPos( aIdx );
 
         SwFormatAnchor aTmp( rAnchor.GetAnchorId() );

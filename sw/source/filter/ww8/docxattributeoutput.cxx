@@ -5551,7 +5551,7 @@ void DocxAttributeOutput::pushToTableExportContext(DocxTableExportContext& rCont
     m_tableReference->m_nTableDepth = 0;
 }
 
-void DocxAttributeOutput::popFromTableExportContext(DocxTableExportContext& rContext)
+void DocxAttributeOutput::popFromTableExportContext(DocxTableExportContext const & rContext)
 {
     m_rExport.m_pTableInfo = rContext.m_pTableInfo;
     m_tableReference->m_bTableCellOpen = rContext.m_bTableCellOpen;

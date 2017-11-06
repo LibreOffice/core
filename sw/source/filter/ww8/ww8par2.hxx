@@ -121,7 +121,7 @@ friend class SwWW8ImplReader;
     void ImportOldFormatStyles();
 
     bool PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisStyle, sal_uInt16 nNextStyle);
-    void PostStyle(SwWW8StyInf &rSI, bool bOldNoImp);
+    void PostStyle(SwWW8StyInf const &rSI, bool bOldNoImp);
 
     WW8RStyle(const WW8RStyle&) = delete;
     WW8RStyle& operator=(const WW8RStyle&) = delete;

@@ -76,7 +76,7 @@ struct SwSortElement
     static OUString*            pLastAlgorithm;
     static LocaleDataWrapper*   pLclData;
 
-    static void Init( SwDoc*, const SwSortOptions& rOpt, FlatFndBox* = nullptr );
+    static void Init( SwDoc*, const SwSortOptions& rOpt, FlatFndBox const * = nullptr );
     static void Finit();
 
     virtual ~SwSortElement();

@@ -410,7 +410,7 @@ style::LineSpacing SwVbaParagraphFormat::getOOoLineSpacingFromRule( sal_Int32 _l
     return aLineSpacing;
 }
 
-float SwVbaParagraphFormat::getMSWordLineSpacing( style::LineSpacing& rLineSpacing )
+float SwVbaParagraphFormat::getMSWordLineSpacing( style::LineSpacing const & rLineSpacing )
 {
     float wdLineSpacing = 0;
     if( rLineSpacing.Mode != style::LineSpacingMode::PROP )

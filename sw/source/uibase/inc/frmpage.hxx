@@ -165,7 +165,7 @@ class SwFramePage: public SfxTabPage
                                ListBox& _rLB,
                                FixedText& _rFT );
     static sal_Int32 GetMapPos(const FrameMap *pMap, ListBox const &rAlignLB);
-    static sal_Int16 GetAlignment(FrameMap *pMap, sal_Int32 nMapPos, ListBox const &rRelationLB);
+    static sal_Int16 GetAlignment(FrameMap const *pMap, sal_Int32 nMapPos, ListBox const &rRelationLB);
     static sal_Int16 GetRelation(ListBox const &rRelationLB);
     RndStdIds       GetAnchor();
 

@@ -155,7 +155,7 @@ class SwHyphIter : public SwLinguIter
     // With that we save a GetFrame() in Hyphenate //TODO: does it actually matter?
     const SwTextNode *m_pLastNode;
     SwTextFrame  *m_pLastFrame;
-    friend SwTextFrame * sw::SwHyphIterCacheLastTextFrame(SwTextNode* pNode, const sw::Creator& rCreator);
+    friend SwTextFrame * sw::SwHyphIterCacheLastTextFrame(SwTextNode const * pNode, const sw::Creator& rCreator);
 
     bool bOldIdle;
     static void DelSoftHyph( SwPaM &rPam );
@@ -568,8 +568,7 @@ void SwHyphIter::InsertSoftHyph( const sal_Int32 nHyphPos )
 namespace sw {
 
 SwTextFrame *
-SwHyphIterCacheLastTextFrame(SwTextNode *const pNode,
-        const sw::Creator& create)
+SwHyphIterCacheLastTextFrame(SwTextNode const * pNode, const sw::Creator& create)
 {
     assert(g_pHyphIter);
     if (pNode != g_pHyphIter->m_pLastNode || !g_pHyphIter->m_pLastFrame)

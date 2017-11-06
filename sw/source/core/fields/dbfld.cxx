@@ -264,7 +264,7 @@ SwFieldType* SwDBField::ChgTyp( SwFieldType* pNewType )
     return pOld;
 }
 
-bool SwDBField::FormatValue( SvNumberFormatter* pDocFormatter, OUString const &aString, sal_uInt32 nFormat,
+bool SwDBField::FormatValue( SvNumberFormatter const * pDocFormatter, OUString const &aString, sal_uInt32 nFormat,
                              double &aNumber, sal_Int32 nColumnType, SwDBField *pField )
 {
     bool bValidValue = false;

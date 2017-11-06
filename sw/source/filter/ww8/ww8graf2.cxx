@@ -237,7 +237,7 @@ void wwZOrderer::InsertObject(SdrObject* pObject, sal_uLong nPos)
     }
 }
 
-extern void WW8PicShadowToReal(  WW8_PIC_SHADOW*  pPicS,  WW8_PIC*  pPic );
+extern void WW8PicShadowToReal(  WW8_PIC_SHADOW const *  pPicS,  WW8_PIC*  pPic );
 
 bool SwWW8ImplReader::GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc)
 {
@@ -738,7 +738,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
     return AddAutoAnchor(pRet);
 }
 
-void WW8PicShadowToReal( WW8_PIC_SHADOW * pPicS, WW8_PIC * pPic )
+void WW8PicShadowToReal( WW8_PIC_SHADOW const * pPicS, WW8_PIC * pPic )
 {
     pPic->lcb = SVBT32ToUInt32( pPicS->lcb );
     pPic->cbHeader = SVBT16ToShort( pPicS->cbHeader );
