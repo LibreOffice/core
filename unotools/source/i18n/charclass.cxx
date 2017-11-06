@@ -115,14 +115,12 @@ bool CharClass::isAlpha( const OUString& rStr, sal_Int32 nPos ) const
         if ( xCC.is() )
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                      nCharClassAlphaType) != 0;
-        else
-            return false;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "isAlpha: Exception caught!" );
-        return false;
     }
+    return false;
 }
 
 bool CharClass::isLetter( const OUString& rStr, sal_Int32 nPos ) const
@@ -136,14 +134,12 @@ bool CharClass::isLetter( const OUString& rStr, sal_Int32 nPos ) const
         if ( xCC.is() )
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                      nCharClassLetterType) != 0;
-        else
-            return false;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "isLetter: Exception caught!" );
-        return false;
     }
+    return false;
 }
 
 bool CharClass::isLetter( const OUString& rStr ) const
@@ -152,14 +148,12 @@ bool CharClass::isLetter( const OUString& rStr ) const
     {
         if ( xCC.is() )
             return isLetterType( xCC->getStringType( rStr, 0, rStr.getLength(), getMyLocale() ) );
-        else
-            return false;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "isLetter: Exception caught!" );
-        return false;
     }
+    return false;
 }
 
 bool CharClass::isDigit( const OUString& rStr, sal_Int32 nPos ) const
@@ -173,14 +167,12 @@ bool CharClass::isDigit( const OUString& rStr, sal_Int32 nPos ) const
         if ( xCC.is() )
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                      KCharacterType::DIGIT) != 0;
-        else
-            return false;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "isDigit: Exception caught!" );
-        return false;
     }
+    return false;
 }
 
 bool CharClass::isNumeric( const OUString& rStr ) const
@@ -189,14 +181,12 @@ bool CharClass::isNumeric( const OUString& rStr ) const
     {
         if ( xCC.is() )
             return isNumericType( xCC->getStringType( rStr, 0, rStr.getLength(), getMyLocale() ) );
-        else
-            return false;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "isNumeric: Exception caught!" );
-        return false;
     }
+    return false;
 }
 
 bool CharClass::isAlphaNumeric( const OUString& rStr, sal_Int32 nPos ) const
@@ -210,14 +200,12 @@ bool CharClass::isAlphaNumeric( const OUString& rStr, sal_Int32 nPos ) const
         if ( xCC.is() )
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                 (nCharClassAlphaType | KCharacterType::DIGIT)) != 0;
-        else
-            return false;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "isAlphaNumeric: Exception caught!" );
-        return false;
     }
+    return false;
 }
 
 bool CharClass::isLetterNumeric( const OUString& rStr, sal_Int32 nPos ) const
@@ -231,14 +219,12 @@ bool CharClass::isLetterNumeric( const OUString& rStr, sal_Int32 nPos ) const
         if ( xCC.is() )
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                      (nCharClassLetterType | KCharacterType::DIGIT)) != 0;
-        else
-            return false;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "isLetterNumeric: Exception caught!" );
-        return false;
     }
+    return false;
 }
 
 bool CharClass::isLetterNumeric( const OUString& rStr ) const
@@ -247,14 +233,12 @@ bool CharClass::isLetterNumeric( const OUString& rStr ) const
     {
         if ( xCC.is() )
             return isLetterNumericType( xCC->getStringType( rStr, 0, rStr.getLength(), getMyLocale() ) );
-        else
-            return false;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "isLetterNumeric: Exception caught!" );
-        return false;
     }
+    return false;
 }
 
 OUString CharClass::titlecase(const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount) const
@@ -263,14 +247,12 @@ OUString CharClass::titlecase(const OUString& rStr, sal_Int32 nPos, sal_Int32 nC
     {
         if ( xCC.is() )
             return xCC->toTitle( rStr, nPos, nCount, getMyLocale() );
-        else
-            return rStr.copy( nPos, nCount );
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "titlecase: Exception caught!" );
-        return rStr.copy( nPos, nCount );
     }
+    return rStr.copy( nPos, nCount );
 }
 
 OUString CharClass::uppercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
@@ -279,14 +261,12 @@ OUString CharClass::uppercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 n
     {
         if ( xCC.is() )
             return xCC->toUpper( rStr, nPos, nCount, getMyLocale() );
-        else
-            return rStr.copy( nPos, nCount );
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "uppercase: Exception caught!" );
-        return rStr.copy( nPos, nCount );
     }
+    return rStr.copy( nPos, nCount );
 }
 
 OUString CharClass::lowercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
@@ -295,14 +275,12 @@ OUString CharClass::lowercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 n
     {
         if ( xCC.is() )
             return xCC->toLower( rStr, nPos, nCount, getMyLocale() );
-        else
-            return rStr.copy( nPos, nCount );
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "lowercase: Exception caught!" );
-        return rStr.copy( nPos, nCount );
     }
+        return rStr.copy( nPos, nCount );
 }
 
 sal_Int16 CharClass::getType( const OUString& rStr, sal_Int32 nPos ) const
@@ -311,14 +289,12 @@ sal_Int16 CharClass::getType( const OUString& rStr, sal_Int32 nPos ) const
     {
         if ( xCC.is() )
             return xCC->getType( rStr, nPos );
-        else
-            return 0;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "getType: Exception caught!" );
-        return 0;
     }
+    return 0;
 }
 
 css::i18n::DirectionProperty CharClass::getCharacterDirection( const OUString& rStr, sal_Int32 nPos ) const
@@ -327,14 +303,12 @@ css::i18n::DirectionProperty CharClass::getCharacterDirection( const OUString& r
     {
         if ( xCC.is() )
             return (css::i18n::DirectionProperty)xCC->getCharacterDirection( rStr, nPos );
-        else
-            return css::i18n::DirectionProperty_LEFT_TO_RIGHT;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "getCharacterDirection: Exception caught!" );
-        return css::i18n::DirectionProperty_LEFT_TO_RIGHT;
     }
+    return css::i18n::DirectionProperty_LEFT_TO_RIGHT;
 }
 
 css::i18n::UnicodeScript CharClass::getScript( const OUString& rStr, sal_Int32 nPos ) const
@@ -343,14 +317,12 @@ css::i18n::UnicodeScript CharClass::getScript( const OUString& rStr, sal_Int32 n
     {
         if ( xCC.is() )
             return (css::i18n::UnicodeScript) xCC->getScript( rStr, nPos );
-        else
-            return UnicodeScript_kBasicLatin;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "getScript: Exception caught!" );
-        return UnicodeScript_kBasicLatin;
     }
+    return UnicodeScript_kBasicLatin;
 }
 
 sal_Int32 CharClass::getCharacterType( const OUString& rStr, sal_Int32 nPos ) const
@@ -359,14 +331,12 @@ sal_Int32 CharClass::getCharacterType( const OUString& rStr, sal_Int32 nPos ) co
     {
         if ( xCC.is() )
             return xCC->getCharacterType( rStr, nPos, getMyLocale() );
-        else
-            return 0;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "getCharacterType: Exception caught!" );
-        return 0;
     }
+    return 0;
 }
 
 sal_Int32 CharClass::getStringType( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
@@ -375,14 +345,12 @@ sal_Int32 CharClass::getStringType( const OUString& rStr, sal_Int32 nPos, sal_In
     {
         if ( xCC.is() )
             return xCC->getStringType( rStr, nPos, nCount, getMyLocale() );
-        else
-            return 0;
     }
     catch ( const Exception& )
     {
         SAL_WARN( "unotools.i18n", "getStringType: Exception caught!" );
-        return 0;
     }
+    return 0;
 }
 
 css::i18n::ParseResult CharClass::parseAnyToken(
@@ -399,14 +367,12 @@ css::i18n::ParseResult CharClass::parseAnyToken(
             return xCC->parseAnyToken( rStr, nPos, getMyLocale(),
                 nStartCharFlags, userDefinedCharactersStart,
                 nContCharFlags, userDefinedCharactersCont );
-        else
-            return ParseResult();
     }
     catch ( const Exception& e )
     {
         SAL_WARN( "unotools.i18n", "parseAnyToken: Exception caught " << e );
-        return ParseResult();
     }
+    return ParseResult();
 }
 
 css::i18n::ParseResult CharClass::parsePredefinedToken(
@@ -424,14 +390,12 @@ css::i18n::ParseResult CharClass::parsePredefinedToken(
             return xCC->parsePredefinedToken( nTokenType, rStr, nPos, getMyLocale(),
                 nStartCharFlags, userDefinedCharactersStart,
                 nContCharFlags, userDefinedCharactersCont );
-        else
-            return ParseResult();
     }
     catch ( const Exception& e )
     {
         SAL_WARN( "unotools.i18n", "parsePredefinedToken: Exception caught " << e );
-        return ParseResult();
     }
+    return ParseResult();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
