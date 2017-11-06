@@ -1175,6 +1175,21 @@ DECLARE_RTFIMPORT_TEST(testImportHeaderFooter, "tdf108055.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("Footer uneven"), aActual);
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf108947, "tdf108947.rtf")
+{
+    //Check page count
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    //Check if Headers/Footers contain what they should in this document
+    uno::Reference<text::XText> xHeaderTextRight = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Default Style"), "HeaderTextRight");
+    OUString aActual = xHeaderTextRight->getString();
+    CPPUNIT_ASSERT_EQUAL(OUString(""), aActual);
+
+    uno::Reference<text::XText> xHeaderTextLeft = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Default Style"), "HeaderTextLeft");
+    aActual = xHeaderTextLeft->getString();
+    CPPUNIT_ASSERT_EQUAL(aActual, OUString("\n\nHeader Page 2 ?"));
+}
+
 DECLARE_RTFIMPORT_TEST(testWatermark, "watermark.rtf")
 {
     Size aExpectedSize(14965, 7482);
