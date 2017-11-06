@@ -209,6 +209,8 @@ public:
 
     virtual void FieldVanish( const OUString& rText, ww::eField eType ) = 0;
 
+    virtual void GenerateBookmarksForSequenceField(const SwTextNode& rNode, SwWW8AttrIter& rAttrIter) = 0;
+
     void StartTOX( const SwSection& rSect );
 
     void EndTOX( const SwSection& rSect,bool bCareEnd=true );

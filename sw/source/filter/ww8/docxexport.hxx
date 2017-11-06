@@ -177,6 +177,8 @@ public:
 
     void WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp);
 
+    virtual ExportFormat GetExportFormat() const override { return ExportFormat::DOCX; }
+
 protected:
     /// Format-dependent part of the actual export.
     virtual void ExportDocument_Impl() override;
