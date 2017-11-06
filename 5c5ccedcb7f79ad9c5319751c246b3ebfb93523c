@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_3f892127",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Common.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-11-06T09:58:03Z",
+      "side": 1,
+      "message": "the whole Classification group node can go",
+      "revId": "5c5ccedcb7f79ad9c5319751c246b3ebfb93523c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
