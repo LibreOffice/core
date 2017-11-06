@@ -371,7 +371,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
     long nMid = ( nMin + nMax ) / 2;
 
     SwBoxSelection* pRet = new SwBoxSelection();
-    std::list< std::pair< SwTableBox*, long > > aNewWidthList;
+    std::vector< std::pair< SwTableBox*, long > > aNewWidthVector;
     size_t nCheckBottom = nBottom;
     long nLeftSpan = 0;
     long nRightSpan = 0;
@@ -543,10 +543,10 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
                         std::pair< SwTableBox*, long > aTmp;
                         aTmp.first = pInnerBox;
                         aTmp.second = -nDiff;
-                        aNewWidthList.push_back( aTmp );
+                        aNewWidthVector.push_back(aTmp);
                         aTmp.first = pOuterBox;
                         aTmp.second = nDiff;
-                        aNewWidthList.push_back( aTmp );
+                        aNewWidthVector.push_back(aTmp);
                     }
                     pOuterBox = pOuterBox == pRightBox ? nullptr : pRightBox;
                     if( nDiff2 )
@@ -565,14 +565,11 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
         bOkay = false;
     if( bOkay )
     {
-        std::list< std::pair< SwTableBox*, long > >::iterator
-            pCurr = aNewWidthList.begin();
-        while( pCurr != aNewWidthList.end() )
+        for (auto const& newWidth : aNewWidthVector)
         {
-            SwFrameFormat* pFormat = pCurr->first->ClaimFrameFormat();
-            long nNewWidth = pFormat->GetFrameSize().GetWidth() + pCurr->second;
+            SwFrameFormat* pFormat = newWidth.first->ClaimFrameFormat();
+            long nNewWidth = pFormat->GetFrameSize().GetWidth() + newWidth.second;
             pFormat->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, nNewWidth, 0 ) );
-            ++pCurr;
         }
     }
     else
