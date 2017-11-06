@@ -14,8 +14,8 @@
    width="16"
    height="16"
    id="svg3150"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="gnome-mime-application-pdf.svg">
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="sc_exportdirecttopdf.svg">
   <metadata
      id="metadata89222">
     <rdf:RDF>
@@ -36,9 +36,17 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="640"
-     inkscape:window-height="480"
-     id="namedview89220" />
+     inkscape:window-width="2560"
+     inkscape:window-height="1377"
+     id="namedview89220"
+     showgrid="false"
+     inkscape:zoom="41.7193"
+     inkscape:cx="9.3765745"
+     inkscape:cy="12.459153"
+     inkscape:window-x="0"
+     inkscape:window-y="34"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
   <defs
      id="defs3152">
     <linearGradient
@@ -176,11 +184,11 @@
     <path
        d="m 1.4976268,0.49762721 c 2.980045,0 4.9376418,0 7.9176887,0 0.522766,0.16184396 4.3536885,2.61362219 5.0870585,3.89029659 0,3.907463 0,7.2069842 0,11.1144502 -4.334914,0 -8.6698338,0 -13.0047472,0 0,-5.001584 0,-10.0031638 0,-15.00474679 z"
        id="rect2594"
-       style="fill:url(#radialGradient3698);fill-opacity:1;stroke:url(#linearGradient4547);stroke-width:0.9952535;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline" />
+       style="fill:url(#radialGradient3698);fill-opacity:1;stroke:url(#linearGradient4547);stroke-width:0.9952535;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline;opacity:0.85" />
     <path
        d="M 9.2377949,1 C 5.1227729,5.106335 2.7819157,5.6758976 2,5.7398119 L 2,7.2100315 C 2.59019,7.1141915 4.0673094,6.780931 5.647244,5.630094 7.6731543,4.1544041 10.088189,1.3510972 10.088189,1.3510972 9.4239389,2.8664032 9.2317314,8.0903935 9.2188974,15 l 3.9496066,0 C 13.561071,14.9072 13.866755,14.573627 14,14.1442 13.252245,12.264759 12.749404,9.6185085 12.374803,7.2539185 12.04518,4.3449509 12.534503,1.8194268 12.71496,1 L 9.2377949,1 z M 2,8.1536045 2,9.7774295 c 1.708368,0 4.3231886,2.3767615 5.5937006,5.2225705 L 8.670866,15 C 8.0738849,12.412882 3.3033466,8.1536045 2,8.1536045 z"
        id="path6711"
-       style="fill:url(#linearGradient2905);fill-opacity:1;fill-rule:evenodd;stroke:none" />
+       style="fill:url(#linearGradient2905);fill-opacity:1;fill-rule:evenodd;stroke:none;opacity:0.9" />
     <rect
        width="11.259398"
        height="12.981215"
@@ -190,9 +198,5 @@
        y="1.4999886"
        id="rect6741"
        style="opacity:0.4;fill:none;stroke:url(#linearGradient3748);stroke-width:0.99999988;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
-    <path
-       d="M 9.5,0.4979205 C 9.5,2.041279 9.5,4.5 9.5,4.5 c 0,0 4.080603,0 5.00208,0 0,-1.9018156 -3.00574,-4.0020795 -5.00208,-4.0020795 z"
-       id="path12038"
-       style="fill:url(#linearGradient4543);fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient4565);stroke-width:0.9952535;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline" />
   </g>
 </svg>

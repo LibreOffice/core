@@ -598,10 +598,6 @@ cmd/sc_styleapply.png cmd/sc_formatarea.png
 cmd/sc_fillstyle.png cmd/sc_formatarea.png
 cmd/sc_fillcolor.png cmd/sc_formatarea.png
 
-# Number Formats
-cmd/lc_numberformatdate.png cmd/lc_datefield.png
-cmd/sc_numberformatdate.png cmd/sc_datefield.png
-
 # Ok
 cmd/lc_yes.png cmd/lc_ok.png
 cmd/lc_apply.png cmd/lc_ok.png
