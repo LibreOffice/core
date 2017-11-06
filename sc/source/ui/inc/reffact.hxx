@@ -31,7 +31,7 @@
     class Class : public SfxChildWindow                                         \
     {                                                                           \
     public:                                                                     \
-        Class( vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );           \
+        Class( vcl::Window*, sal_uInt16, SfxBindings*, const SfxChildWinInfo* ); \
         SFX_DECL_CHILDWINDOW_WITHID(Class);                                     \
     };
 

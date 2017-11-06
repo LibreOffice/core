@@ -109,7 +109,7 @@ struct ScHTMLTableStackEntry
     sal_uInt16          nColOffset;
     sal_uInt16          nColOffsetStart;
     bool                bFirstRow;
-                        ScHTMLTableStackEntry( std::shared_ptr<ScEEParseEntry>& rE,
+                        ScHTMLTableStackEntry( const std::shared_ptr<ScEEParseEntry>& rE,
                                 const ScRangeListRef& rL, ScHTMLColOffset* pTO,
                                 sal_uLong nFTC,
                                 SCROW nRow,
@@ -175,7 +175,7 @@ private:
     bool                bInTitle:1;
 
     DECL_LINK( HTMLImportHdl, HtmlImportInfo&, void );
-    void                NewActEntry( ScEEParseEntry* );
+    void                NewActEntry( const ScEEParseEntry* );
     static void         EntryEnd( ScEEParseEntry*, const ESelection& );
     void                ProcToken( HtmlImportInfo* );
     void                CloseEntry( const HtmlImportInfo* );
@@ -192,7 +192,7 @@ private:
     static void         ModifyOffset( ScHTMLColOffset*, sal_uInt16& nOldOffset,
                                     sal_uInt16& nNewOffset, sal_uInt16 nOffsetTol );
     void                Colonize( ScEEParseEntry* );
-    sal_uInt16          GetWidth( ScEEParseEntry* );
+    sal_uInt16          GetWidth( const ScEEParseEntry* );
     void                SetWidths();
     void                Adjust();
 

@@ -1842,7 +1842,7 @@ bool ScColumn::ParseString(
  */
 bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const OUString& rString,
                           formula::FormulaGrammar::AddressConvention eConv,
-                          ScSetStringParam* pParam )
+                          const ScSetStringParam* pParam )
 {
     if (!ValidRow(nRow))
         return false;

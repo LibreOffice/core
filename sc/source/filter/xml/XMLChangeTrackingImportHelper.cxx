@@ -439,7 +439,7 @@ void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, O
         rUser = aInfo.sUser; // shouldn't happen
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyInsAction* pAction)
+ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(const ScMyInsAction* pAction)
 {
     DateTime aDateTime( Date(0), tools::Time(0) );
     OUString aUser;
@@ -452,7 +452,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyInsActio
     return pNewAction;
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateDeleteAction(ScMyDelAction* pAction)
+ScChangeAction* ScXMLChangeTrackingImportHelper::CreateDeleteAction(const ScMyDelAction* pAction)
 {
     DateTime aDateTime( Date(0), tools::Time(0) );
     OUString aUser;
@@ -465,7 +465,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateDeleteAction(ScMyDelActio
     return pNewAction;
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction* pAction)
+ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(const ScMyMoveAction* pAction)
 {
     OSL_ENSURE(pAction->pMoveRanges, "no move ranges");
     if (pAction->pMoveRanges)
@@ -483,7 +483,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction
     return nullptr;
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateRejectionAction(ScMyRejAction* pAction)
+ScChangeAction* ScXMLChangeTrackingImportHelper::CreateRejectionAction(const ScMyRejAction* pAction)
 {
     DateTime aDateTime( Date(0), tools::Time(0) );
     OUString aUser;
@@ -496,7 +496,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateRejectionAction(ScMyRejAc
     return pNewAction;
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(ScMyContentAction* pAction)
+ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(const ScMyContentAction* pAction)
 {
     ScCellValue aCell;
     OUString sInputString;
@@ -629,7 +629,7 @@ void ScXMLChangeTrackingImportHelper::SetMovementDependencies(ScMyMoveAction* pA
     }
 }
 
-void ScXMLChangeTrackingImportHelper::SetContentDependencies(ScMyContentAction* pAction, ScChangeActionContent* pActContent)
+void ScXMLChangeTrackingImportHelper::SetContentDependencies(const ScMyContentAction* pAction, ScChangeActionContent* pActContent)
 {
     if (!pAction->nPreviousAction)
         return;
@@ -708,7 +708,7 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
     }
 }
 
-void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
+void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pAction)
 {
     ScChangeAction* pChangeAction = pTrack->GetAction(pAction->nActionNumber);
     if (pChangeAction)

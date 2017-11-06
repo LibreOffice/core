@@ -116,7 +116,7 @@ private:
 public:
     ScETSForecastCalculation( SCSIZE nSize, SvNumberFormatter* pFormatter );
 
-    bool PreprocessDataRange( const ScMatrixRef& rMatX, const ScMatrixRef& rMatY, int& rSmplInPrd,
+    bool PreprocessDataRange( const ScMatrixRef& rMatX, const ScMatrixRef& rMatY, int nSmplInPrd,
                               bool bDataCompletion, int nAggregation, const ScMatrixRef& rTMat,
                               ScETSType eETSType );
     FormulaError GetError() { return mnErrorValue; };
@@ -153,11 +153,11 @@ ScETSForecastCalculation::ScETSForecastCalculation( SCSIZE nSize, SvNumberFormat
     maRange.reserve( mnCount );
 }
 
-bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, const ScMatrixRef& rMatY, int& rSmplInPrd,
+bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, const ScMatrixRef& rMatY, int nSmplInPrd,
                                                     bool bDataCompletion, int nAggregation, const ScMatrixRef& rTMat,
                                                     ScETSType eETSType )
 {
-    bEDS = ( rSmplInPrd == 0 );
+    bEDS = ( nSmplInPrd == 0 );
     bAdditive = ( eETSType == etsAdd || eETSType == etsPIAdd || eETSType == etsStatAdd );
 
     // maRange needs to be sorted by X
@@ -366,8 +366,8 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
         }
     }
 
-    if ( rSmplInPrd != 1 )
-        mnSmplInPrd = rSmplInPrd;
+    if ( nSmplInPrd != 1 )
+        mnSmplInPrd = nSmplInPrd;
     else
     {
          mnSmplInPrd = CalcPeriodLen();
