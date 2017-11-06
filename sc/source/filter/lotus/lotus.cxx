@@ -22,6 +22,7 @@
 
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <scerrors.hxx>
 #include <root.hxx>
@@ -30,15 +31,9 @@
 
 ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, rtl_TextEncoding eSrc )
 {
-    ScFilterOptions aFilterOpt;
-    bool bWithWK3 = aFilterOpt.GetWK3Flag();
-
-    SvStream*           pStream = rMedium.GetInStream();
-
-    if( !pStream )
+    SvStream* pStream = rMedium.GetInStream();
+    if (!pStream)
         return SCERR_IMPORT_OPEN;
-
-    ErrCode            eRet;
 
     pStream->Seek( 0 );
 
@@ -48,7 +43,9 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
 
     ImportLotus aLotusImport(aContext, *pStream, pDocument, eSrc);
 
-    if( bWithWK3 )
+    const bool bWithWK3 = utl::ConfigManager::IsAvoidConfig() || ScFilterOptions().GetWK3Flag();
+    ErrCode eRet;
+    if (bWithWK3)
         eRet = aLotusImport.Read();
     else
         eRet = ErrCode(0xFFFFFFFF);  // force WK1 /WKS
@@ -57,13 +54,9 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
     if( eRet == ErrCode(0xFFFFFFFF) )
     {
         pStream->Seek( 0 );
-
         pStream->SetBufferSize( 32768 );
-
         eRet = ScImportLotus123old(aContext, *pStream, pDocument, eSrc);
-
         pStream->SetBufferSize( 0 );
-
         return eRet;
     }
 
