@@ -53,6 +53,7 @@
 
 #if ENABLE_DBUS
 #include <dbus/dbus.h>
+#include <sys/socket.h>
 #endif
 
 using namespace desktop;
@@ -449,7 +450,6 @@ private:
     void close() override;
 
     DbusConnectionHolder connection_;
-    osl::Condition closeDone_;
 };
 
 RequestHandler::Status DbusIpcThread::enable(rtl::Reference<IpcThread> * thread)
@@ -561,120 +561,76 @@ void DbusIpcThread::execute()
                 break;
             }
         }
-        dbus_connection_read_write_dispatch(connection_.connection, -1);
-        DbusMessageHolder msg(
-            dbus_connection_pop_message(connection_.connection));
-        if (msg.message == nullptr) {
-            continue;
-        }
-        if (dbus_message_is_method_call(
-                msg.message, "org.libreoffice.LibreOfficeIpcIfc0", "Close"))
-        {
+        if (!dbus_connection_read_write(connection_.connection, -1)) {
             break;
         }
-        if (!dbus_message_is_method_call(
-                msg.message, "org.libreoffice.LibreOfficeIpcIfc0", "Execute"))
-        {
-            SAL_INFO("desktop.app", "unknown DBus message ignored");
-            continue;
-        }
-        DBusMessageIter it;
-        if (!dbus_message_iter_init(msg.message, &it)) {
-            SAL_WARN("desktop.app", "DBus message without argument ignored");
-            continue;
-        }
-        if (dbus_message_iter_get_arg_type(&it) != DBUS_TYPE_STRING) {
-            SAL_WARN(
-                "desktop.app", "DBus message with non-string argument ignored");
-            continue;
-        }
-        char const * argstr;
-        dbus_message_iter_get_basic(&it, &argstr);
-        bool waitProcessed = false;
-        {
-            osl::MutexGuard g(RequestHandler::GetMutex());
-            if (!process(argstr, &waitProcessed)) {
+        for (;;) {
+            DbusMessageHolder msg(
+                dbus_connection_pop_message(connection_.connection));
+            if (msg.message == nullptr) {
+                break;
+            }
+            if (!dbus_message_is_method_call(
+                    msg.message, "org.libreoffice.LibreOfficeIpcIfc0",
+                    "Execute"))
+            {
+                SAL_INFO("desktop.app", "unknown DBus message ignored");
                 continue;
             }
+            DBusMessageIter it;
+            if (!dbus_message_iter_init(msg.message, &it)) {
+                SAL_WARN(
+                    "desktop.app", "DBus message without argument ignored");
+                continue;
+            }
+            if (dbus_message_iter_get_arg_type(&it) != DBUS_TYPE_STRING) {
+                SAL_WARN(
+                    "desktop.app",
+                    "DBus message with non-string argument ignored");
+                continue;
+            }
+            char const * argstr;
+            dbus_message_iter_get_basic(&it, &argstr);
+            bool waitProcessed = false;
+            {
+                osl::MutexGuard g(RequestHandler::GetMutex());
+                if (!process(argstr, &waitProcessed)) {
+                    continue;
+                }
+            }
+            if (waitProcessed) {
+                m_handler->cProcessed.wait();
+            }
+            DbusMessageHolder repl(dbus_message_new_method_return(msg.message));
+            if (repl.message == nullptr) {
+                SAL_WARN(
+                    "desktop.app", "dbus_message_new_method_return failed");
+                continue;
+            }
+            dbus_uint32_t serial = 0;
+            if (!dbus_connection_send(
+                    connection_.connection, repl.message, &serial)) {
+                SAL_WARN("desktop.app", "dbus_connection_send failed");
+                continue;
+            }
+            dbus_connection_flush(connection_.connection);
         }
-        if (waitProcessed) {
-            m_handler->cProcessed.wait();
-        }
-        DbusMessageHolder repl(dbus_message_new_method_return(msg.message));
-        if (repl.message == nullptr) {
-            SAL_WARN("desktop.app", "dbus_message_new_method_return failed");
-            continue;
-        }
-        dbus_uint32_t serial = 0;
-        if (!dbus_connection_send(
-                connection_.connection, repl.message, &serial)) {
-            SAL_WARN("desktop.app", "dbus_connection_send failed");
-            continue;
-        }
-        dbus_connection_flush(connection_.connection);
-    }
-    closeDone_.wait();
-    DBusError e;
-    dbus_error_init(&e);
-    int n = dbus_bus_release_name(
-        connection_.connection, "org.libreoffice.LibreOfficeIpc0", &e);
-    assert((n == -1) == bool(dbus_error_is_set(&e)));
-    switch (n) {
-    case -1:
-        SAL_WARN(
-            "desktop.app",
-            "dbus_bus_release_name failed with: " << e.name << ": "
-                << e.message);
-        dbus_error_free(&e);
-        break;
-    case DBUS_RELEASE_NAME_REPLY_RELEASED:
-        break;
-    case DBUS_RELEASE_NAME_REPLY_NOT_OWNER:
-    case DBUS_RELEASE_NAME_REPLY_NON_EXISTENT:
-        SAL_WARN(
-            "desktop.app",
-            "dbus_bus_release_name failed with unexpected " << +n);
-        break;
-    default:
-        for (;;) std::abort();
     }
 }
 
 void DbusIpcThread::close() {
-    {
-        assert(connection_.connection != nullptr);
-        DBusError e;
-        dbus_error_init(&e);
-        // Let DbusIpcThread::execute return from dbus_connection_read_write;
-        // for now, just abort on failure (the process would otherwise block,
-        // with DbusIpcThread::execute hanging in dbus_connection_read_write);
-        // this apparently needs a more DBus-y design anyway:
-        DbusConnectionHolder con(dbus_bus_get_private(DBUS_BUS_SESSION, &e));
-        assert((con.connection == nullptr) == bool(dbus_error_is_set(&e)));
-        if (con.connection == nullptr) {
-            SAL_WARN(
-                "desktop.app",
-                "dbus_bus_get_private failed with: " << e.name << ": "
-                    << e.message);
-            dbus_error_free(&e);
-            std::abort();
-        }
-        DbusMessageHolder msg(
-            dbus_message_new_method_call(
-                "org.libreoffice.LibreOfficeIpc0",
-                "/org/libreoffice/LibreOfficeIpc0",
-                "org.libreoffice.LibreOfficeIpcIfc0", "Close"));
-        if (msg.message == nullptr) {
-            SAL_WARN("desktop.app", "dbus_message_new_method_call failed");
-            std::abort();
-        }
-        if (!dbus_connection_send(con.connection, msg.message, nullptr)) {
-            SAL_WARN("desktop.app", "dbus_connection_send failed");
-            std::abort();
-        }
-        dbus_connection_flush(con.connection);
+    assert(connection_.connection != nullptr);
+    // Make dbus_connection_read_write fall out of internal poll call blocking
+    // on POLLIN:
+    int fd;
+    if (!dbus_connection_get_socket(connection_.connection, &fd)) {
+        SAL_WARN("desktop.app", "dbus_connection_get_socket failed");
+        return;
     }
-    closeDone_.set();
+    if (shutdown(fd, SHUT_RD) == -1) {
+        auto const e = errno;
+        SAL_WARN("desktop.app", "shutdown failed with errno " << e);
+    }
 }
 
 #endif
