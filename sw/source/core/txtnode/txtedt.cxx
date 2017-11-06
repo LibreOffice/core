@@ -734,28 +734,28 @@ OUString SwTextNode::GetCurWord( sal_Int32 nPos ) const
 SwScanner::SwScanner( const SwTextNode& rNd, const OUString& rText,
     const LanguageType* pLang, const ModelToViewHelper& rConvMap,
     sal_uInt16 nType, sal_Int32 nStart, sal_Int32 nEnde, bool bClp )
-    : rNode( rNd )
-    , aPreDashReplacementText(rText)
-    , pLanguage( pLang )
+    : m_rNode( rNd )
+    , m_aPreDashReplacementText(rText)
+    , m_pLanguage( pLang )
     , m_ModelToView( rConvMap )
-    , nLen( 0 )
-    , nOverriddenDashCount( 0 )
-    , nWordType( nType )
-    , bClip( bClp )
+    , m_nLength( 0 )
+    , m_nOverriddenDashCount( 0 )
+    , m_nWordType( nType )
+    , m_bClip( bClp )
 {
-    nStartPos = nBegin = nStart;
-    nEndPos = nEnde;
+    m_nStartPos = m_nBegin = nStart;
+    m_nEndPos = nEnde;
 
     //MSWord f.e has special emdash and endash behaviour in that they break
     //words for the purposes of word counting, while a hyphen etc. doesn't.
 
     //The default configuration treats emdash/endash as a word break, but
     //additional ones can be added in under tools->options
-    if (nWordType == i18n::WordType::WORD_COUNT)
+    if (m_nWordType == i18n::WordType::WORD_COUNT)
     {
         OUString sDashes = officecfg::Office::Writer::WordCount::AdditionalSeparators::get();
-        OUStringBuffer aBuf(aPreDashReplacementText);
-        for (sal_Int32 i = nStartPos; i < nEndPos; ++i)
+        OUStringBuffer aBuf(m_aPreDashReplacementText);
+        for (sal_Int32 i = m_nStartPos; i < m_nEndPos; ++i)
         {
             if (i < 0)
                 continue;
@@ -763,25 +763,25 @@ SwScanner::SwScanner( const SwTextNode& rNd, const OUString& rText,
             if (sDashes.indexOf(cChar) != -1)
             {
                 aBuf[i] = ' ';
-                ++nOverriddenDashCount;
+                ++m_nOverriddenDashCount;
             }
         }
-        aText = aBuf.makeStringAndClear();
+        m_aText = aBuf.makeStringAndClear();
     }
     else
-        aText = aPreDashReplacementText;
+        m_aText = m_aPreDashReplacementText;
 
-    assert(aPreDashReplacementText.getLength() == aText.getLength());
+    assert(m_aPreDashReplacementText.getLength() == m_aText.getLength());
 
-    if ( pLanguage )
+    if ( m_pLanguage )
     {
-        aCurrLang = *pLanguage;
+        m_aCurrentLang = *m_pLanguage;
     }
     else
     {
         ModelToViewHelper::ModelPosition aModelBeginPos =
-            m_ModelToView.ConvertToModelPosition( nBegin );
-        aCurrLang = rNd.GetLang( aModelBeginPos.mnPos );
+            m_ModelToView.ConvertToModelPosition( m_nBegin );
+        m_aCurrentLang = rNd.GetLang( aModelBeginPos.mnPos );
     }
 }
 
@@ -825,7 +825,7 @@ namespace
 
 bool SwScanner::NextWord()
 {
-    nBegin = nBegin + nLen;
+    m_nBegin = m_nBegin + m_nLength;
     Boundary aBound;
 
     CharClass& rCC = GetAppCharClass();
@@ -834,52 +834,52 @@ bool SwScanner::NextWord()
     while ( true )
     {
         // skip non-letter characters:
-        while (nBegin < aText.getLength())
+        while (m_nBegin < m_aText.getLength())
         {
-            if (nBegin >= 0 && !u_isspace(aText[nBegin]))
+            if (m_nBegin >= 0 && !u_isspace(m_aText[m_nBegin]))
             {
-                if ( !pLanguage )
+                if ( !m_pLanguage )
                 {
-                    const sal_uInt16 nNextScriptType = g_pBreakIt->GetBreakIter()->getScriptType( aText, nBegin );
+                    const sal_uInt16 nNextScriptType = g_pBreakIt->GetBreakIter()->getScriptType( m_aText, m_nBegin );
                     ModelToViewHelper::ModelPosition aModelBeginPos =
-                        m_ModelToView.ConvertToModelPosition( nBegin );
-                    aCurrLang = rNode.GetLang( aModelBeginPos.mnPos, 1, nNextScriptType );
+                        m_ModelToView.ConvertToModelPosition( m_nBegin );
+                    m_aCurrentLang = m_rNode.GetLang( aModelBeginPos.mnPos, 1, nNextScriptType );
                 }
 
-                if ( nWordType != i18n::WordType::WORD_COUNT )
+                if ( m_nWordType != i18n::WordType::WORD_COUNT )
                 {
-                    rCC.setLanguageTag( LanguageTag( g_pBreakIt->GetLocale( aCurrLang )) );
-                    if ( rCC.isLetterNumeric(OUString(aText[nBegin])) )
+                    rCC.setLanguageTag( LanguageTag( g_pBreakIt->GetLocale( m_aCurrentLang )) );
+                    if ( rCC.isLetterNumeric(OUString(m_aText[m_nBegin])) )
                         break;
                 }
                 else
                     break;
             }
-            ++nBegin;
+            ++m_nBegin;
         }
 
-        if ( nBegin >= aText.getLength() || nBegin >= nEndPos )
+        if ( m_nBegin >= m_aText.getLength() || m_nBegin >= m_nEndPos )
             return false;
 
         // get the word boundaries
-        aBound = g_pBreakIt->GetBreakIter()->getWordBoundary( aText, nBegin,
-                g_pBreakIt->GetLocale( aCurrLang ), nWordType, true );
+        aBound = g_pBreakIt->GetBreakIter()->getWordBoundary( m_aText, m_nBegin,
+                g_pBreakIt->GetLocale( m_aCurrentLang ), m_nWordType, true );
         OSL_ENSURE( aBound.endPos >= aBound.startPos, "broken aBound result" );
 
         // we don't want to include preceding text
         // to count words in text with mixed script punctuation correctly,
         // but we want to include preceding symbols (eg. percent sign, section sign,
         // degree sign defined by dict_word_hu to spell check their affixed forms).
-        if (nWordType == i18n::WordType::WORD_COUNT && aBound.startPos < nBegin)
-            aBound.startPos = nBegin;
+        if (m_nWordType == i18n::WordType::WORD_COUNT && aBound.startPos < m_nBegin)
+            aBound.startPos = m_nBegin;
 
         //no word boundaries could be found
         if(aBound.endPos == aBound.startPos)
             return false;
 
         //if a word before is found it has to be searched for the next
-        if(aBound.endPos == nBegin)
-            ++nBegin;
+        if(aBound.endPos == m_nBegin)
+            ++m_nBegin;
         else
             break;
     } // end while( true )
@@ -887,79 +887,79 @@ bool SwScanner::NextWord()
     rCC.setLanguageTag( aOldLanguageTag );
 
     // #i89042, as discussed with HDU: don't evaluate script changes for word count. Use whole word.
-    if ( nWordType == i18n::WordType::WORD_COUNT )
+    if ( m_nWordType == i18n::WordType::WORD_COUNT )
     {
-        nBegin = std::max(aBound.startPos, nBegin);
-        nLen   = 0;
-        if (aBound.endPos > nBegin)
-            nLen = aBound.endPos - nBegin;
+        m_nBegin = std::max(aBound.startPos, m_nBegin);
+        m_nLength   = 0;
+        if (aBound.endPos > m_nBegin)
+            m_nLength = aBound.endPos - m_nBegin;
     }
     else
     {
         // we have to differenciate between these cases:
-        if ( aBound.startPos <= nBegin )
+        if ( aBound.startPos <= m_nBegin )
         {
-            OSL_ENSURE( aBound.endPos >= nBegin, "Unexpected aBound result" );
+            OSL_ENSURE( aBound.endPos >= m_nBegin, "Unexpected aBound result" );
 
             // restrict boundaries to script boundaries and nEndPos
-            const sal_uInt16 nCurrScript = g_pBreakIt->GetBreakIter()->getScriptType( aText, nBegin );
-            OUString aTmpWord = aText.copy( nBegin, aBound.endPos - nBegin );
-            const sal_Int32 nScriptEnd = nBegin +
+            const sal_uInt16 nCurrScript = g_pBreakIt->GetBreakIter()->getScriptType( m_aText, m_nBegin );
+            OUString aTmpWord = m_aText.copy( m_nBegin, aBound.endPos - m_nBegin );
+            const sal_Int32 nScriptEnd = m_nBegin +
                 g_pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
             const sal_Int32 nEnd = std::min( aBound.endPos, nScriptEnd );
 
             // restrict word start to last script change position
             sal_Int32 nScriptBegin = 0;
-            if ( aBound.startPos < nBegin )
+            if ( aBound.startPos < m_nBegin )
             {
                 // search from nBegin backwards until the next script change
-                aTmpWord = aText.copy( aBound.startPos,
-                                       nBegin - aBound.startPos + 1 );
+                aTmpWord = m_aText.copy( aBound.startPos,
+                                       m_nBegin - aBound.startPos + 1 );
                 nScriptBegin = aBound.startPos +
-                    g_pBreakIt->GetBreakIter()->beginOfScript( aTmpWord, nBegin - aBound.startPos,
+                    g_pBreakIt->GetBreakIter()->beginOfScript( aTmpWord, m_nBegin - aBound.startPos,
                                                     nCurrScript );
             }
 
-            nBegin = std::max( aBound.startPos, nScriptBegin );
-            nLen = nEnd - nBegin;
+            m_nBegin = std::max( aBound.startPos, nScriptBegin );
+            m_nLength = nEnd - m_nBegin;
         }
         else
         {
-            const sal_uInt16 nCurrScript = g_pBreakIt->GetBreakIter()->getScriptType( aText, aBound.startPos );
-            OUString aTmpWord = aText.copy( aBound.startPos,
+            const sal_uInt16 nCurrScript = g_pBreakIt->GetBreakIter()->getScriptType( m_aText, aBound.startPos );
+            OUString aTmpWord = m_aText.copy( aBound.startPos,
                                              aBound.endPos - aBound.startPos );
             const sal_Int32 nScriptEnd = aBound.startPos +
                 g_pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
             const sal_Int32 nEnd = std::min( aBound.endPos, nScriptEnd );
-            nBegin = aBound.startPos;
-            nLen = nEnd - nBegin;
+            m_nBegin = aBound.startPos;
+            m_nLength = nEnd - m_nBegin;
         }
     }
 
     // optionally clip the result of getWordBoundaries:
-    if ( bClip )
+    if ( m_bClip )
     {
-        aBound.startPos = std::max( aBound.startPos, nStartPos );
-        aBound.endPos = std::min( aBound.endPos, nEndPos );
+        aBound.startPos = std::max( aBound.startPos, m_nStartPos );
+        aBound.endPos = std::min( aBound.endPos, m_nEndPos );
         if (aBound.endPos < aBound.startPos)
         {
-            nBegin = nEndPos;
-            nLen = 0; // found word is outside of search interval
+            m_nBegin = m_nEndPos;
+            m_nLength = 0; // found word is outside of search interval
         }
         else
         {
-            nBegin = aBound.startPos;
-            nLen = aBound.endPos - nBegin;
+            m_nBegin = aBound.startPos;
+            m_nLength = aBound.endPos - m_nBegin;
         }
     }
 
-    if( ! nLen )
+    if( ! m_nLength )
         return false;
 
-    if ( nWordType == i18n::WordType::WORD_COUNT )
-        nLen = forceEachAsianCodePointToWord(aText, nBegin, nLen);
+    if ( m_nWordType == i18n::WordType::WORD_COUNT )
+        m_nLength = forceEachAsianCodePointToWord(m_aText, m_nBegin, m_nLength);
 
-    aWord = aPreDashReplacementText.copy( nBegin, nLen );
+    m_aWord = m_aPreDashReplacementText.copy( m_nBegin, m_nLength );
 
     return true;
 }

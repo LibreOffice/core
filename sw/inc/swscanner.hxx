@@ -29,20 +29,20 @@ class SwTextNode;
 // during spell check
 class SwScanner
 {
-    OUString aWord;
-    const SwTextNode& rNode;
-    const OUString aPreDashReplacementText;
-    OUString aText;
-    const LanguageType* pLanguage;
+    OUString m_aWord;
+    const SwTextNode& m_rNode;
+    const OUString m_aPreDashReplacementText;
+    OUString m_aText;
+    const LanguageType* m_pLanguage;
     const ModelToViewHelper m_ModelToView;
-    sal_Int32 nStartPos;
-    sal_Int32 nEndPos;
-    sal_Int32 nBegin;
-    sal_Int32 nLen;
-    sal_Int32 nOverriddenDashCount;
-    LanguageType aCurrLang;
-    sal_uInt16 nWordType;
-    bool bClip;
+    sal_Int32 m_nStartPos;
+    sal_Int32 m_nEndPos;
+    sal_Int32 m_nBegin;
+    sal_Int32 m_nLength;
+    sal_Int32 m_nOverriddenDashCount;
+    LanguageType m_aCurrentLang;
+    sal_uInt16 m_nWordType;
+    bool m_bClip;
 
 public:
     SwScanner( const SwTextNode& rNd, const OUString& rText,
@@ -56,15 +56,15 @@ public:
     // ! bReverse
     bool NextWord();
 
-    const OUString& GetWord() const    { return aWord; }
+    const OUString& GetWord() const    { return m_aWord; }
 
-    sal_Int32 GetBegin() const         { return nBegin; }
-    sal_Int32 GetEnd() const           { return nBegin + nLen; }
-    sal_Int32 GetLen() const           { return nLen; }
+    sal_Int32 GetBegin() const         { return m_nBegin; }
+    sal_Int32 GetEnd() const           { return m_nBegin + m_nLength; }
+    sal_Int32 GetLen() const           { return m_nLength; }
 
-    LanguageType GetCurrentLanguage() const {return aCurrLang;}
+    LanguageType GetCurrentLanguage() const {return m_aCurrentLang;}
 
-    sal_Int32 getOverriddenDashCount() const {return nOverriddenDashCount; }
+    sal_Int32 getOverriddenDashCount() const {return m_nOverriddenDashCount; }
 };
 
 #endif
