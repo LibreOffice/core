@@ -126,7 +126,7 @@ private:
     bool                mbGrayScale : 1;
     bool                mbzCodecInUse : 1;
     bool                mbStatus : 1;
-    bool                mbIDAT : 1;         // true if finished with enough IDAT chunks
+    bool                mbIDATComplete : 1; // true if finished with enough IDAT chunks
     bool                mbpHYs : 1;         // true if physical size of pixel available
     bool                mbIgnoreGammaChunk : 1;
 
@@ -205,7 +205,7 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mbGrayScale( false ),
     mbzCodecInUse   ( false ),
     mbStatus( true ),
-    mbIDAT( false ),
+    mbIDATComplete( false ),
     mbpHYs              ( false ),
     mbIgnoreGammaChunk  ( false ),
 #if OSL_DEBUG_LEVEL > 0
@@ -341,7 +341,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
     }
 
     // parse the remaining chunks
-    while (mbStatus && !mbIDAT && ReadNextChunk())
+    while (mbStatus && !mbIDATComplete && ReadNextChunk())
     {
         switch( mnChunkType )
         {
@@ -353,7 +353,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
 
             case PNGCHUNK_gAMA :                                // the gamma chunk must precede
             {                                                   // the 'IDAT' and also the 'PLTE'(if available )
-                if ( !mbIgnoreGammaChunk && !mbIDAT )
+                if (!mbIgnoreGammaChunk && !mbIDATComplete)
                     ImplGetGamma();
             }
             break;
@@ -367,14 +367,14 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
 
             case PNGCHUNK_tRNS :
             {
-                if ( !mbIDAT )                                  // the tRNS chunk must precede the IDAT
+                if (!mbIDATComplete)                            // the tRNS chunk must precede the IDAT
                     mbStatus = ImplReadTransparent();
             }
             break;
 
             case PNGCHUNK_bKGD :                                // the background chunk must appear
             {
-                if ( !mbIDAT && mbPalette )         // before the 'IDAT' and after the
+                if (!mbIDATComplete && mbPalette)               // before the 'IDAT' and after the
                     ImplGetBackground();                        // PLTE(if available ) chunk.
             }
             break;
@@ -383,14 +383,14 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
             {
                 if ( !mpInflateInBuf )  // taking care that the header has properly been read
                     mbStatus = false;
-                else if ( !mbIDAT )     // the gfx is finished, but there may be left a zlibCRC of about 4Bytes
+                else if (!mbIDATComplete) // the gfx is finished, but there may be left a zlibCRC of about 4Bytes
                     ImplReadIDAT();
             }
             break;
 
             case PNGCHUNK_pHYs :
             {
-                if ( !mbIDAT && mnChunkLen == 9 )
+                if (!mbIDATComplete && mnChunkLen == 9)
                 {
                     sal_uInt32 nXPixelPerMeter = ImplReadsal_uInt32();
                     sal_uInt32 nYPixelPerMeter = ImplReadsal_uInt32();
@@ -409,7 +409,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
             break;
 
             case PNGCHUNK_IEND:
-                mbStatus = mbIDAT;  // there is a problem if the image is not complete yet
+                mbStatus = mbIDATComplete;  // there is a problem if the image is not complete yet
             break;
         }
     }
@@ -423,7 +423,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
     // return the resulting BitmapEx
     BitmapEx aRet;
 
-    if( !mbStatus || !mbIDAT )
+    if (!mbStatus || !mbIDATComplete)
         aRet.Clear();
     else
     {
@@ -479,7 +479,7 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
     }
 
     mbPalette = true;
-    mbIDAT = mbAlphaChannel = mbTransparent = false;
+    mbIDATComplete = mbAlphaChannel = mbTransparent = false;
     mbGrayScale = mbRGBTriple = false;
     mnTargetDepth = mnPngDepth;
     sal_uInt64 nScansize64 = ( ( static_cast< sal_uInt64 >( maOrigSize.Width() ) * mnPngDepth ) + 7 ) >> 3;
@@ -929,13 +929,13 @@ void PNGReaderImpl::ImplReadIDAT()
                 if( (mnPass < 7) && mnInterlaceType )
                     if( ImplPreparePass() )
                         continue;
-                mbIDAT = true;
+                mbIDATComplete = true;
                 break;
             }
         }
     }
 
-    if( mbIDAT )
+    if (mbIDATComplete)
     {
         mpZCodec.EndCompression();
         mbzCodecInUse = false;
