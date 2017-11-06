@@ -38,10 +38,9 @@ namespace com { namespace sun { namespace star {
 namespace dbaui
 {
 
-class OUserAdmin : public OGenericAdministrationPage
+class OUserAdmin final : public OGenericAdministrationPage
 {
     friend class VclPtr<OUserAdmin>;
-protected:
     VclPtr<ListBox>             m_pUSER;
     VclPtr<PushButton>          m_pNEWUSER;
     VclPtr<PushButton>          m_pCHANGEPWD;

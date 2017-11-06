@@ -30,13 +30,12 @@
 namespace dbaui
 {
 
-    class DlgSize : public ModalDialog
+    class DlgSize final : public ModalDialog
     {
     private:
         sal_Int32       m_nPrevValue, m_nStandard;
         void            SetValue( sal_Int32 nVal );
 
-    protected:
         DECL_LINK( CbClickHdl, Button *, void );
 
         VclPtr<MetricField>    m_pMF_VALUE;

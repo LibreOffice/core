@@ -28,12 +28,11 @@ namespace dbaui
 
     // OQueryMoveTabWinUndoAct - Undo class for moving a TabWin
     class OTableWindow;
-    class OJoinMoveTabWinUndoAct : public OQueryDesignUndoAction
+    class OJoinMoveTabWinUndoAct final : public OQueryDesignUndoAction
     {
         Point           m_ptNextPosition;
         VclPtr<OTableWindow>   m_pTabWin;
 
-    protected:
         void TogglePosition();
 
     public:

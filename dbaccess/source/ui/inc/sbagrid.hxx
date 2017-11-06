@@ -96,7 +96,7 @@ namespace dbaui
 
     // SbaXGridPeer
 
-    class SbaXGridPeer
+    class SbaXGridPeer final
                 :public FmXGridPeer
                 ,public css::frame::XDispatch
     {
@@ -129,7 +129,7 @@ namespace dbaui
         // css::lang::XComponent
         virtual void SAL_CALL dispose() override;
 
-    protected:
+    private:
         virtual VclPtr<FmGridControl>  imp_CreateControl(vcl::Window* pParent, WinBits nStyle) override;
 #ifdef _MSC_VER
         typedef css::frame::XStatusListener xstlist_type;
@@ -139,7 +139,6 @@ namespace dbaui
         void NotifyStatusChanged(const css::util::URL& aUrl, const css::uno::Reference< css::frame::XStatusListener > & xControl);
 #endif // # _MSC_VER
 
-    private:
         // for any execution of XDispatch::dispatch
         struct DispatchArgs
         {
@@ -208,13 +207,12 @@ namespace dbaui
     };
 
     // SbaGridControl
-    class SbaGridControl : public FmGridControl
+    class SbaGridControl final : public FmGridControl
     {
         friend class SbaGridHeader;
         friend class SbaXGridPeer;
 
     // Attributes
-    protected:
         svx::ODataAccessDescriptor    m_aDataDescriptor;
         SbaGridListener*              m_pMasterListener;
 
@@ -256,7 +254,7 @@ namespace dbaui
         */
         void CopySelectedRowsToClipboard();
 
-    protected:
+    private:
         // DragSourceHelper overridables
         virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) override;
 
@@ -296,11 +294,9 @@ namespace dbaui
 
         DECL_LINK(AsynchDropEvent, void*, void);
 
-    private:
         bool IsReadOnlyDB() const;
         void implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfClipboardFalseIfDrag );
 
-    private:
         using FmGridControl::AcceptDrop;
         using FmGridControl::ExecuteDrop;
         using FmGridControl::MouseButtonDown;

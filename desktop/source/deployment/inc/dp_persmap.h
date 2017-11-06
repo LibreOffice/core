@@ -32,7 +32,7 @@ typedef std::unordered_map<
 
 // Class to read obsolete registered extensions
 // should be removed for LibreOffice 4.0
-class PersistentMap
+class PersistentMap final
 {
     ::osl::File m_MapFile;
     t_string2string_map m_entries;
@@ -52,7 +52,7 @@ public:
     void put( OString const & key, OString const & value );
     bool erase( OString const & key );
 
-protected:
+private:
     void open();
     void readAll();
     void add( OString const & key, OString const & value );

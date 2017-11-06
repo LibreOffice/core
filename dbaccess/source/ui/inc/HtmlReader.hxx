@@ -29,13 +29,12 @@ class SvStream;
 
 namespace dbaui
 {
-    class OHTMLReader : public HTMLParser, public ODatabaseExport
+    class OHTMLReader final : public HTMLParser, public ODatabaseExport
     {
         OUString            m_sCurrent;
         sal_Int32           m_nTableCount;
         sal_Int16           m_nColumnWidth; ///< maximum column width
 
-    protected:
         virtual void        NextToken( HtmlTokenId nToken ) override; // base class
         bool                CreateTable( HtmlTokenId nToken );
         virtual TypeSelectionPageFactory

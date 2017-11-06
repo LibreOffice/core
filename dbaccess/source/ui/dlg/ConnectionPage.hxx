@@ -32,10 +32,10 @@ namespace dbaui
 
     /** implements the connection page of the data source properties dialog.
     */
-    class OConnectionTabPage : public OConnectionHelper
+    class OConnectionTabPage final : public OConnectionHelper
     {
         friend class VclPtr<OConnectionTabPage>;
-    protected:
+    private:
         // user authentication
         VclPtr<FixedText>          m_pFL2;
         VclPtr<FixedText>          m_pUserNameLabel;
@@ -71,7 +71,6 @@ namespace dbaui
         OConnectionTabPage(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
             // nControlFlags is a combination of the CBTP_xxx-constants
 
-    private:
         /** enables the test connection button, if allowed
         */
         virtual bool checkTestConnection() override;

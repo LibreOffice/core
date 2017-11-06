@@ -63,14 +63,12 @@ namespace dbaui
                                 ,   css::ui::XContextMenuInterception
                                 ,   css::sdb::XDatabaseRegistrationsListener
                                 >   SbaTableQueryBrowser_Base;
-    class SbaTableQueryBrowser
+    class SbaTableQueryBrowser final
                 :public SbaXDataBrowserController
                 ,public SbaTableQueryBrowser_Base
                 ,public IControlActionListener
                 ,public IContextMenuProvider
     {
-    protected:
-
         css::uno::Reference< css::i18n::XCollator >   m_xCollator;
         css::uno::Reference< css::frame::XFrame >     m_xCurrentFrameParent;
         css::uno::Reference< css::awt::XWindow >      m_xMainToolbar;
@@ -204,7 +202,7 @@ namespace dbaui
         virtual void SAL_CALL revokedDatabaseLocation( const css::sdb::DatabaseRegistrationEvent& Event ) override;
         virtual void SAL_CALL changedDatabaseLocation( const css::sdb::DatabaseRegistrationEvent& Event ) override;
 
-    protected:
+    private:
         // SbaXDataBrowserController overridables
         virtual bool     InitializeForm( const css::uno::Reference< css::beans::XPropertySet >& i_formProperties ) override;
         virtual bool     InitializeGridModel(const css::uno::Reference< css::form::XFormComponent > & xGrid) override;
@@ -262,7 +260,6 @@ namespace dbaui
 
         virtual void loadMenu(const css::uno::Reference< css::frame::XFrame >& _xFrame) override;
 
-    private:
         // check the state of the external slot given, update any UI elements if necessary
         void implCheckExternalSlot( sal_uInt16 _nId );
 

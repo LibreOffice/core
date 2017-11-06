@@ -24,13 +24,12 @@
 
 namespace dbaui
 {
-// OTableFilterDialog
-class OTableFilterDialog
+
+class OTableFilterDialog final
         :public ODatabaseAdministrationDialog
         ,public ::comphelper::OPropertyArrayUsageHelper< OTableFilterDialog >
 {
 
-protected:
     explicit OTableFilterDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
 public:
@@ -55,7 +54,7 @@ public:
 
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
-protected:
+private:
 // OGenericUnoDialog overridables
     virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) override;
 };

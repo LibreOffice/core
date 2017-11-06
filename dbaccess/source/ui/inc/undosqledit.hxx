@@ -27,9 +27,8 @@ namespace dbaui
 {
     class OSqlEdit;
     // OSqlEditUndoAct - Undo-class for changing sql text
-    class OSqlEditUndoAct : public OCommentUndoAction
+    class OSqlEditUndoAct final : public OCommentUndoAction
     {
-    protected:
         VclPtr<OSqlEdit>   m_pOwner;
         OUString    m_strNextText;
 

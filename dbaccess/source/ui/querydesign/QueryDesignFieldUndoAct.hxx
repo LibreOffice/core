@@ -50,9 +50,8 @@ namespace dbaui
 
     // OTabFieldCellModifiedUndoAct - undo class to change a line of the column description
 
-    class OTabFieldCellModifiedUndoAct : public OQueryDesignFieldUndoAct
+    class OTabFieldCellModifiedUndoAct final : public OQueryDesignFieldUndoAct
     {
-    protected:
         OUString    m_strNextCellContents;
         sal_Int32   m_nCellIndex;
 
@@ -70,9 +69,8 @@ namespace dbaui
 
     // OTabFieldSizedUndoAct - undo class to change the column width
 
-    class OTabFieldSizedUndoAct : public OQueryDesignFieldUndoAct
+    class OTabFieldSizedUndoAct final : public OQueryDesignFieldUndoAct
     {
-    protected:
         long        m_nNextWidth;
 
     public:

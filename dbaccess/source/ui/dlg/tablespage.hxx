@@ -31,7 +31,7 @@ namespace dbaui
 
     // OTableSubscriptionPage
     class OTableSubscriptionDialog;
-    class OTableSubscriptionPage
+    class OTableSubscriptionPage final
             :public OGenericAdministrationPage
     {
     private:
@@ -59,15 +59,13 @@ namespace dbaui
         virtual ~OTableSubscriptionPage() override;
         virtual void dispose() override;
 
-    protected:
+    private:
         virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) override;
         virtual void fillWindows(std::vector< ISaveValueWrapper* >& _rControlList) override;
 
         DECL_LINK( OnTreeEntryCompare, const SvSortData&, sal_Int32 );
         DECL_LINK( OnTreeEntryChecked, void*, void );
         DECL_LINK( OnTreeEntryButtonChecked, SvTreeListBox*, void );
-
-    private:
 
         /** check the tables in <member>m_aTablesList</member> according to <arg>_rTables</arg>
         */

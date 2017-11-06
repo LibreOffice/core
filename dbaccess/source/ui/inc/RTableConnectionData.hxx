@@ -31,7 +31,7 @@ namespace dbaui
     };
 
     class OConnectionLineData;
-    class ORelationTableConnectionData :    public OTableConnectionData
+    class ORelationTableConnectionData final : public OTableConnectionData
     {
         friend bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableConnectionData& rhs);
 
@@ -46,7 +46,6 @@ namespace dbaui
         bool IsSourcePrimKey()  const { return checkPrimaryKey(getReferencingTable()->getTable(),JTCS_FROM);    }
         bool IsDestPrimKey()    const { return checkPrimaryKey(getReferencedTable()->getTable(),JTCS_TO);       }
 
-    protected:
         virtual OConnectionLineDataRef CreateLineDataObj() override;
 
         ORelationTableConnectionData& operator=( const ORelationTableConnectionData& rConnData );

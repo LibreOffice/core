@@ -37,9 +37,8 @@ namespace dbaui
 
     // SpecialSettingsPage
     // implements the "Special Settings" page of the advanced database settings
-    class SpecialSettingsPage : public OGenericAdministrationPage
+    class SpecialSettingsPage final : public OGenericAdministrationPage
     {
-    protected:
         VclPtr<CheckBox>           m_pIsSQL92Check;
         VclPtr<CheckBox>           m_pAppendTableAlias;
         VclPtr<CheckBox>           m_pAsBeforeCorrelationName;
@@ -76,7 +75,7 @@ namespace dbaui
 
         SpecialSettingsPage(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta );
 
-    protected:
+    private:
         virtual ~SpecialSettingsPage() override;
         virtual void dispose() override;
 
@@ -89,16 +88,13 @@ namespace dbaui
         // <method>OGenericAdministrationPage::fillWindows</method>
         virtual void fillWindows(std::vector< ISaveValueWrapper* >& _rControlList) override;
 
-    private:
         void    impl_initBooleanSettings();
         DECL_LINK(BooleanComparisonSelectHdl, ListBox&, void);
     };
 
     // GeneratedValuesPage
-    class GeneratedValuesPage : public OGenericAdministrationPage
+    class GeneratedValuesPage final : public OGenericAdministrationPage
     {
-    protected:
-
         VclPtr<VclFrame>   m_pAutoFrame;
         VclPtr<CheckBox>   m_pAutoRetrievingEnabled;
         VclPtr<FixedText>  m_pAutoIncrementLabel;
@@ -113,7 +109,7 @@ namespace dbaui
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
 
         GeneratedValuesPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
-    protected:
+    private:
 
         // nControlFlags is a combination of the CBTP_xxx-constants
         virtual ~GeneratedValuesPage() override;

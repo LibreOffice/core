@@ -35,7 +35,7 @@ namespace dbaui
 {
     class OTableRow;
     typedef OSingleDocumentController   OTableController_BASE;
-    class OTableController : public OTableController_BASE
+    class OTableController final : public OTableController_BASE
     {
     private:
         std::vector< std::shared_ptr<OTableRow> > m_vRowList;
@@ -131,7 +131,7 @@ namespace dbaui
         static css::uno::Reference< css::uno::XInterface >
                 SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
-    protected:
+    private:
         void startTableListening();
         void stopTableListening();
         virtual void impl_initialize() override;

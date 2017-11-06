@@ -56,9 +56,8 @@ namespace com
 // DlgOrderCrit
 namespace dbaui
 {
-    class DlgOrderCrit : public ModalDialog
+    class DlgOrderCrit final : public ModalDialog
     {
-    protected:
         VclPtr<ListBox>        m_pLB_ORDERFIELD1;
         VclPtr<ListBox>        m_pLB_ORDERVALUE1;
         VclPtr<ListBox>        m_pLB_ORDERFIELD2;

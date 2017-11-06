@@ -36,9 +36,8 @@ namespace dbaui
 {
 
     // ODatasourceConnector
-    class ODatasourceConnector
+    class ODatasourceConnector final
     {
-    protected:
         VclPtr<vcl::Window>  m_pErrorMessageParent;
         css::uno::Reference< css::uno::XComponentContext >
                              m_xContext;

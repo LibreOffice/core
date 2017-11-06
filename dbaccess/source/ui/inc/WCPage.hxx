@@ -31,9 +31,8 @@ namespace dbaui
 {
     class OWizColumnSelect;
     class OWizNormalExtend;
-    class OCopyTable : public OWizardPage
+    class OCopyTable final : public OWizardPage
     {
-    protected:
         VclPtr<Edit>              m_pEdTableName;
         VclPtr<RadioButton>       m_pRB_DefData;
         VclPtr<RadioButton>       m_pRB_Def;

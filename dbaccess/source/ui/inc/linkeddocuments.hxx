@@ -37,9 +37,8 @@ namespace dbaui
 {
 
     // OLinkedDocumentsAccess
-    class OLinkedDocumentsAccess
+    class OLinkedDocumentsAccess final
     {
-    protected:
         css::uno::Reference< css::uno::XComponentContext >
                     m_xContext;
         css::uno::Reference< css::container::XNameAccess >

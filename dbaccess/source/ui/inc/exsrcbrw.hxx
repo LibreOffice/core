@@ -29,7 +29,7 @@
 namespace dbaui
 {
     class SbaXFormAdapter;
-    class SbaExternalSourceBrowser
+    class SbaExternalSourceBrowser final
                 :public SbaXDataBrowserController
                 ,public css::util::XModifyBroadcaster
     {
@@ -83,7 +83,7 @@ namespace dbaui
         virtual OUString SAL_CALL getImplementationName() override;
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-    protected:
+    private:
         virtual ~SbaExternalSourceBrowser() override;
 
         virtual css::uno::Reference< css::sdbc::XRowSet >  CreateForm() override;

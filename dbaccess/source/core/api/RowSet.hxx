@@ -70,7 +70,7 @@ namespace dbaccess
                                                     >   ORowSet_BASE1;
 
     class OTableContainer;
-    class ORowSet : public cppu::BaseMutex
+    class ORowSet final : public cppu::BaseMutex
                     , public ORowSet_BASE1
                     , public ORowSetBase
                     , public ::comphelper::OPropertyArrayUsageHelper<ORowSet>
@@ -144,7 +144,6 @@ namespace dbaccess
         bool                        m_bOwnConnection;
         bool                        m_bPropChangeNotifyEnabled;
 
-    private:
         /** builds m_aActiveCommand from our settings
 
             @return
@@ -226,7 +225,6 @@ namespace dbaccess
         // restore the old state of the data column read-only state
         void impl_restoreDataColumnsWriteable_throw();
 
-    protected:
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) override;
         virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue,sal_Int32 nHandle) const override;
         virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, css::uno::Any& _rDefault ) const override;
@@ -394,7 +392,6 @@ namespace dbaccess
         virtual css::uno::Any SAL_CALL getWarnings(  ) override;
         virtual void SAL_CALL clearWarnings(  ) override;
 
-    protected:
         /** implement the <method>execute</method>, without calling the approve listeners and without building a new
             connection
             @param      _rClearForNotification      mutex to clear before doing the final notifications
@@ -441,7 +438,6 @@ namespace dbaccess
         */
         void    impl_disposeParametersContainer_nothrow();
 
-    protected:
         using ORowSetBase::getFastPropertyValue;
         using ORowSetBase::firePropertyChange;
         using ORowSetBase::doCancelModification;

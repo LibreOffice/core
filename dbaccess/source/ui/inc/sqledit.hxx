@@ -33,7 +33,7 @@ namespace com { namespace sun { namespace star { namespace beans {
 namespace dbaui
 {
     class OQueryTextView;
-    class OSqlEdit : public MultiLineEditSyntaxHighlight, public utl::ConfigurationListener
+    class OSqlEdit final : public MultiLineEditSyntaxHighlight, public utl::ConfigurationListener
     {
     private:
         class ChangesListener;
@@ -54,10 +54,8 @@ namespace dbaui
         DECL_LINK(OnUndoActionTimer, Timer*, void);
         DECL_LINK(OnInvalidateTimer, Timer*, void);
 
-    private:
         void            ImplSetFont();
 
-    protected:
         virtual void KeyInput( const KeyEvent& rKEvt ) override;
         virtual void GetFocus() override;
 

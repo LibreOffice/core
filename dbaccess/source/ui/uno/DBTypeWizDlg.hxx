@@ -24,13 +24,11 @@
 
 namespace dbaui
 {
-// ODBTypeWizDialog
-class ODBTypeWizDialog
+class ODBTypeWizDialog final
         :public ODatabaseAdministrationDialog
         ,public ::comphelper::OPropertyArrayUsageHelper< ODBTypeWizDialog >
 {
 
-protected:
     explicit ODBTypeWizDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
 public:
@@ -55,7 +53,7 @@ public:
 
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
-protected:
+private:
 // OGenericUnoDialog overridables
     virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) override;
 };

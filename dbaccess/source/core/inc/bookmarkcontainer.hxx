@@ -52,17 +52,15 @@ typedef ::cppu::WeakImplHelper<
                               ,   css::container::XChild
                               >   OBookmarkContainer_Base;
 
-class OBookmarkContainer
+class OBookmarkContainer final
             :public OBookmarkContainer_Base
 {
-protected:
     typedef std::map<OUString, OUString> MapString2String;
     typedef std::vector<MapString2String::iterator> MapIteratorVector;
 
     MapString2String        m_aBookmarks;           // the bookmarks itself
     MapIteratorVector       m_aBookmarksIndexed;    // for index access to the
 
-protected:
     ::cppu::OWeakObject&    m_rParent;      // for the ref counting
     ::comphelper::OInterfaceContainerHelper2
                             m_aContainerListeners;
@@ -123,7 +121,7 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;
     virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
-protected:
+private:
     /** quickly checks if there already is an element with a given name. No access to the configuration occurs, i.e.
         if there is such an object which is not already loaded, it won't be loaded now.
         @param      _rName      the object name to check

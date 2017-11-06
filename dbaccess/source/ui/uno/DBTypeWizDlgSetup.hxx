@@ -24,15 +24,13 @@
 
 namespace dbaui
 {
-// ODBTypeWizDialogSetup
-class ODBTypeWizDialogSetup
+class ODBTypeWizDialogSetup final
         :public ODatabaseAdministrationDialog
         ,public ::comphelper::OPropertyArrayUsageHelper< ODBTypeWizDialogSetup >
 {
     bool        m_bOpenDatabase;
     bool        m_bStartTableWizard;
 
-protected:
     explicit ODBTypeWizDialogSetup(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
 public:
@@ -57,7 +55,7 @@ public:
 
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
-protected:
+private:
 // OGenericUnoDialog overridables
     virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) override;
     virtual void executedDialog(sal_Int16 _nExecutionResult) override;

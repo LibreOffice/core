@@ -181,7 +181,7 @@ namespace dbaui
     // (with support for specialized and unspecialized property listeners)
 
     #define DECLARE_PROPERTY_MULTIPLEXER(classname, listenerclass, methodname, eventtype)   \
-    class classname                                                                         \
+    class classname final                                                                   \
             :public OSbaWeakSubObject                                                           \
             ,public listenerclass                                                           \
     {                                                                                       \
@@ -200,7 +200,6 @@ namespace dbaui
                                                                                             \
         virtual void SAL_CALL methodname(const eventtype& e) override;             \
                                                                                             \
-    public:                                                                                 \
         void addInterface(const OUString& rName, const css::uno::Reference< css::uno::XInterface >& rListener);    \
         void removeInterface(const OUString& rName, const css::uno::Reference< css::uno::XInterface >& rListener); \
                                                                                             \
@@ -211,7 +210,7 @@ namespace dbaui
         ::cppu::OInterfaceContainerHelper* getContainer(const OUString& rName)       \
             { return m_aListeners.getContainer(rName); }                                    \
                                                                                             \
-    protected:                                                                              \
+    private:                                                                                \
         void Notify(::cppu::OInterfaceContainerHelper& rListeners, const eventtype& e);     \
     };                                                                                      \
 

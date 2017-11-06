@@ -50,7 +50,7 @@ namespace dbaui
     };
     class IItemSetHelper;
     // ODbDataSourceAdministrationHelper
-    class ODbDataSourceAdministrationHelper
+    class ODbDataSourceAdministrationHelper final
     {
     public:
         typedef std::map<sal_Int32, OUString> MapInt2String;
@@ -146,7 +146,7 @@ namespace dbaui
                 const css::uno::Reference< css::beans::XPropertySet >& _rxDest);
 
         bool saveChanges(const SfxItemSet& _rSource);
-    protected:
+    private:
         /** fill a data source info array with the settings from a given item set
         */
         void fillDatasourceInfo(const SfxItemSet& _rSource, css::uno::Sequence< css::beans::PropertyValue >& _rInfo);

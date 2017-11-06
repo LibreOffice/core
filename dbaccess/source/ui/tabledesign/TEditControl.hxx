@@ -65,7 +65,7 @@ namespace dbaui
         bool bReadOnly;
 
         // helper class
-        class ClipboardInvalidator
+        class ClipboardInvalidator final
         {
         private:
             AutoTimer m_aInvalidateTimer;
@@ -76,7 +76,7 @@ namespace dbaui
             ~ClipboardInvalidator();
             void Stop();
 
-        protected:
+        private:
             DECL_LINK(OnInvalidate, Timer*, void);
         };
 

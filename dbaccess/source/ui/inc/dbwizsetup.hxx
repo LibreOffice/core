@@ -56,7 +56,7 @@ class ODbDataSourceAdministrationHelper;
 class OMySQLIntroPageSetup;
 class OFinalDBPageSetup;
 
-class ODbTypeWizDialogSetup : public svt::RoadmapWizard , public IItemSetHelper, public IDatabaseSettingsDialog
+class ODbTypeWizDialogSetup final : public svt::RoadmapWizard , public IItemSetHelper, public IDatabaseSettingsDialog
 {
 private:
     std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
@@ -121,7 +121,7 @@ public:
     */
     bool IsTableWizardToBeStarted() const;
 
-protected:
+private:
     /// to override to create new pages
     virtual VclPtr<TabPage> createPage(WizardState _nState) override;
     virtual bool        leaveState(WizardState _nState) override;
@@ -131,7 +131,6 @@ protected:
 
     void resetPages(const css::uno::Reference< css::beans::XPropertySet >& _rxDatasource);
 
-private:
     /** declares a path with or without authentication, as indicated by the database type
 
         @param _sURL

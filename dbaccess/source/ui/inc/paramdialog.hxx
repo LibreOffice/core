@@ -57,11 +57,10 @@ namespace dbaui
 {
 
     // OParameterDialog
-    class OParameterDialog
+    class OParameterDialog final
             :public ModalDialog
             ,public ::svxform::OParseContextClient
     {
-    protected:
         // the controls
         VclPtr<ListBox>        m_pAllParams;
         VclPtr<Edit>           m_pParam;
@@ -100,10 +99,9 @@ namespace dbaui
         const css::uno::Sequence< css::beans::PropertyValue >&
                     getValues() const { return m_aFinalValues; }
 
-    protected:
+    private:
         void Construct();
 
-    private:
         DECL_LINK(OnVisitedTimeout, Timer*, void);
         DECL_LINK(OnValueModified, Edit&, void);
         DECL_LINK(OnEntryListBoxSelected, ListBox&, void);

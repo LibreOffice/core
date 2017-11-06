@@ -40,7 +40,7 @@ namespace dbaui
     #define TC_CHARSET      ((short)0x08)   // not yet implemented
 
     // OTextConnectionPage
-    class OTextConnectionHelper : public TabPage
+    class OTextConnectionHelper final : public TabPage
     {
     public:
         OTextConnectionHelper( vcl::Window* pParent, const short _nAvailableSections );
@@ -75,11 +75,9 @@ namespace dbaui
 
         short       m_nAvailableSections;
 
-    protected:
         DECL_LINK(OnSetExtensionHdl,RadioButton&,void);
         DECL_LINK(OnEditModified, Edit&, void);
 
-    private:
         OUString    GetSeparator( const ComboBox& rBox, const OUString& rList );
         void        SetSeparator( ComboBox& rBox, const OUString& rList, const OUString& rVal );
         void        SetExtension(const OUString& _rVal);

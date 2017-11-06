@@ -25,14 +25,13 @@
 
 namespace dbaui
 {
-    class OQueryTableConnectionData : public OTableConnectionData
+    class OQueryTableConnectionData final : public OTableConnectionData
     {
         sal_Int32       m_nFromEntryIndex;
         sal_Int32       m_nDestEntryIndex;
         EJoinType       m_eJoinType;
         bool            m_bNatural;
 
-    protected:
         // for creation and duplication of lines of own type
         virtual OConnectionLineDataRef CreateLineDataObj() override;
 

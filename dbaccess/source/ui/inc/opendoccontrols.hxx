@@ -34,7 +34,7 @@ namespace dbaui
         The text of the button is the same as for the "Open" command in the application
         UI. Additionally, the icon for this command is also displayed on the button.
     */
-    class OpenDocumentButton : public PushButton
+    class OpenDocumentButton final : public PushButton
     {
     private:
         OUString     m_sModule;
@@ -42,12 +42,12 @@ namespace dbaui
     public:
         OpenDocumentButton( vcl::Window* _pParent, const sal_Char* _pAsciiModuleName );
 
-    protected:
+    private:
         void    impl_init( const sal_Char* _pAsciiModuleName );
     };
 
     // OpenDocumentListBox
-    class OpenDocumentListBox : public ListBox
+    class OpenDocumentListBox final : public ListBox
     {
     private:
         typedef std::pair< OUString, OUString >       StringPair;
@@ -61,12 +61,11 @@ namespace dbaui
         OUString  GetSelectedDocumentURL() const;
         OUString  GetSelectedDocumentFilter() const;
 
-    protected:
+    private:
         virtual void        RequestHelp( const HelpEvent& _rHEvt ) override;
 
         StringPair  impl_getDocumentAtIndex( sal_uInt16 _nListIndex, bool _bSystemNotation = false ) const;
 
-    private:
         void    impl_init( const sal_Char* _pAsciiModuleName );
     };
 

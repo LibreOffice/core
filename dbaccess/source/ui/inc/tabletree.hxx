@@ -35,9 +35,8 @@ namespace dbaui
 {
 
 // OTableTreeListBox
-class OTableTreeListBox : public OMarkableTreeListBox
+class OTableTreeListBox final : public OMarkableTreeListBox
 {
-protected:
     css::uno::Reference< css::sdbc::XConnection >
                     m_xConnection;      // the connection we're working for, set in implOnNewConnection, called by UpdateTableList
     std::unique_ptr< ImageProvider >
@@ -121,7 +120,7 @@ public:
     */
     static bool     isWildcardChecked(SvTreeListEntry* _pEntry);
 
-protected:
+private:
     virtual void InitEntry(SvTreeListEntry* _pEntry, const OUString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap, SvLBoxButtonKind _eButtonKind) override;
 
     virtual void checkedButton_noBroadcast(SvTreeListEntry* _pEntry) override;
