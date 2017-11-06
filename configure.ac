@@ -11150,7 +11150,7 @@ else
             fi
         fi
     else
-        TEST_FONTS_MISSING=0
+        TEST_FONTS_MISSING=1
     fi
 fi
 AC_SUBST(WITH_FONTS)
