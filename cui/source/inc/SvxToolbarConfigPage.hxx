@@ -92,15 +92,13 @@ public:
         bool docConfig ) override;
 };
 
-class SvxToolbarEntriesListBox : public SvxMenuEntriesListBox
+class SvxToolbarEntriesListBox final : public SvxMenuEntriesListBox
 {
     Size            m_aCheckBoxImageSizePixel;
     SvLBoxButtonData*   m_pButtonData;
     VclPtr<SvxConfigPage>  pPage;
 
     void            ChangeVisibility( SvTreeListEntry* pEntry );
-
-protected:
 
     virtual void    CheckButtonHdl() override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;

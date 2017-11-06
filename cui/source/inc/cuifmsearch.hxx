@@ -42,7 +42,7 @@ struct FmSearchProgress;
 class FmSearchEngine;
 
 /// Dialog for searching in Forms/Tables
-class FmSearchDialog : public ModalDialog
+class FmSearchDialog final : public ModalDialog
 {
     friend class FmSearchEngine;
 
@@ -131,7 +131,7 @@ public:
 
     inline void SetActiveField(const OUString& strField);
 
-protected:
+private:
     virtual bool Close() override;
 
     void Init(const OUString& strVisibleFields, const OUString& strInitialText);
@@ -155,7 +155,6 @@ protected:
     void LoadParams();
     void SaveParams() const;
 
-private:
     // Handler for the Controls
     DECL_LINK( OnClickedFieldRadios, Button*, void );
     DECL_LINK(OnClickedSearchAgain, Button *, void);

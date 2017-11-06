@@ -24,12 +24,11 @@
 #include <svtools/svtabbx.hxx>
 
 
-class MacroEventListBox : public Control
+class MacroEventListBox final : public Control
 {
 private:
     VclPtr<HeaderBar>               maHeaderBar;
     VclPtr<SvHeaderTabListBox>      maListBox;
-protected:
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar*, void );
     virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 public:

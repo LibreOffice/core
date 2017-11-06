@@ -33,11 +33,10 @@ namespace offapp
 
     struct DriverPooling;
     class DriverListControl;
-    class ConnectionPoolOptionsPage : public SfxTabPage
+    class ConnectionPoolOptionsPage final : public SfxTabPage
     {
         using TabPage::ActivatePage;
 
-    protected:
         VclPtr<CheckBox>               m_pEnablePooling;
         VclPtr<FixedText>              m_pDriversLabel;
         VclPtr<DriverListControl>      m_pDriverList;
@@ -53,14 +52,13 @@ namespace offapp
         virtual void dispose() override;
         static VclPtr<SfxTabPage>  Create(vcl::Window* _pParent, const SfxItemSet* _rAttrSet);
 
-    protected:
+    private:
         virtual bool        EventNotify( NotifyEvent& _rNEvt ) override;
 
         virtual bool        FillItemSet(SfxItemSet* _rSet) override;
         virtual void        Reset(const SfxItemSet* _rSet) override;
         virtual void        ActivatePage( const SfxItemSet& _rSet) override;
 
-    protected:
         DECL_LINK( OnEnabledDisabled, Button*, void );
         DECL_LINK( OnDriverRowChanged, const DriverPooling*, void );
 
