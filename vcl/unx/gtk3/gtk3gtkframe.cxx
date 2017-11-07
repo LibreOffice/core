@@ -2605,12 +2605,18 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
 
     vcl::DeletionListener aDel( pThis );
 
-    if (pThis->isFloatGrabWindow() && pEvent->window != widget_get_window(pThis->getMouseEventWidget()))
+    if (pThis->isFloatGrabWindow())
     {
-        if (pEvent->type == GDK_BUTTON_PRESS)
-            pThis->closePopup();
-        else if (pEvent->type == GDK_BUTTON_RELEASE)
-            return true;
+        //rhbz#1505379 if the window that got the event isn't our one, or there's none
+        //of our windows under the mouse then close this popup window
+        if (pEvent->window != widget_get_window(pThis->getMouseEventWidget()) ||
+            gdk_device_get_window_at_position(pEvent->device, nullptr, nullptr) == nullptr)
+        {
+            if (pEvent->type == GDK_BUTTON_PRESS)
+                pThis->closePopup();
+            else if (pEvent->type == GDK_BUTTON_RELEASE)
+                return true;
+        }
     }
 
     if (!aDel.isDeleted())
