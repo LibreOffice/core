@@ -5378,9 +5378,16 @@ static SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrame& rSourceLine )
             {
                 nTmpHeight = static_cast<const SwTabFrame*>(pTmp)->CalcHeightOfFirstContentLine();
             }
-            else if ( pTmp->IsTextFrame() )
+            else if (pTmp->IsTextFrame() || (pTmp->IsSctFrame() && pTmp->GetLower() && pTmp->GetLower()->IsTextFrame()))
             {
-                SwTextFrame* pTextFrame = const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pTmp));
+                // Section frames don't influence the size/position of text
+                // frames, so 'text frame' and 'text frame in section frame' is
+                // the same case.
+                SwTextFrame* pTextFrame = nullptr;
+                if (pTmp->IsTextFrame())
+                    pTextFrame = const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pTmp));
+                else
+                    pTextFrame = const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pTmp->GetLower()));
                 pTextFrame->GetFormatted();
                 nTmpHeight = pTextFrame->FirstLineHeight();
             }
