@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_2db73bd9",
+        "filename": "sw/source/core/doc/tblafmt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1238,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2017-11-07T20:28:35Z",
+      "side": 1,
+      "message": "Was DEF_LINE_WIDTH_6 intended to be used here?",
+      "range": {
+        "startLine": 1238,
+        "startChar": 32,
+        "endLine": 1238,
+        "endChar": 48
+      },
+      "revId": "ae3c96e35f3ca4b871f7c02e16779cca73fe4ecf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
