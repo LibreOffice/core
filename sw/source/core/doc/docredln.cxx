@@ -1053,17 +1053,17 @@ SwRangeRedline::~SwRangeRedline()
     delete pRedlineData;
 }
 
-void SwRangeRedline::MaybeNotifyModification()
+void MaybeNotifyRedlineModification(SwRangeRedline* pRedline, SwDoc* pDoc)
 {
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    const SwRedlineTable& rRedTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    const SwRedlineTable& rRedTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     for (SwRedlineTable::size_type i = 0; i < rRedTable.size(); ++i)
     {
-        if (rRedTable[i] == this)
+        if (rRedTable[i] == pRedline)
         {
-            SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, this);
+            SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, pRedline);
             break;
         }
     }
@@ -1074,7 +1074,7 @@ void SwRangeRedline::SetStart( const SwPosition& rPos, SwPosition* pSttPtr )
     if( !pSttPtr ) pSttPtr = Start();
     *pSttPtr = rPos;
 
-    MaybeNotifyModification();
+    MaybeNotifyRedlineModification(this, GetDoc());
 }
 
 void SwRangeRedline::SetEnd( const SwPosition& rPos, SwPosition* pEndPtr )
@@ -1082,7 +1082,7 @@ void SwRangeRedline::SetEnd( const SwPosition& rPos, SwPosition* pEndPtr )
     if( !pEndPtr ) pEndPtr = End();
     *pEndPtr = rPos;
 
-    MaybeNotifyModification();
+    MaybeNotifyRedlineModification(this, GetDoc());
 }
 
 /// Do we have a valid Selection?
