@@ -92,11 +92,13 @@ void ScDocument::EndListeningArea( const ScRange& rRange, bool bGroupListening, 
 bool ScDocument::LimitRangeToAvailableSheets( const ScRange& rRange, ScRange& o_rRange,
         bool& o_bEntirelyOutOfBounds ) const
 {
-    if (rRange == BCA_LISTEN_ALWAYS)
-        return false;
-
     const SCTAB nMaxTab = GetTableCount() - 1;
     if (ValidTab( rRange.aStart.Tab(), nMaxTab) && ValidTab( rRange.aEnd.Tab(), nMaxTab))
+        return false;
+
+    // Originally BCA_LISTEN_ALWAYS uses an implicit tab 0 and should had been
+    // valid already, but in case that would change..
+    if (rRange == BCA_LISTEN_ALWAYS)
         return false;
 
     SCTAB nTab1 = rRange.aStart.Tab();
