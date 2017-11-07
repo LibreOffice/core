@@ -1435,7 +1435,6 @@ CustomPropertyLine::CustomPropertyLine( vcl::Window* pParent ) :
     m_aEditButton   ( VclPtr<CustomPropertiesEditButton>::Create(m_aLine, WB_TABSTOP, this) ),
     m_aYesNoButton  ( VclPtr<CustomPropertiesYesNoButton>::Create(m_aLine) ),
     m_aRemoveButton ( VclPtr<CustomPropertiesRemoveButton>::Create(m_aLine, 0, this) ),
-    m_bIsRemoved    ( false ),
     m_bTypeLostFocus( false )
 {
     m_aLine->set_column_spacing(4);
@@ -1492,10 +1491,15 @@ CustomPropertyLine::CustomPropertyLine( vcl::Window* pParent ) :
     m_aEditButton->SetText(SFX_ST_EDIT);
 }
 
-void CustomPropertyLine::SetRemoved()
+void CustomPropertyLine::Clear()
 {
-    DBG_ASSERT( !m_bIsRemoved, "CustomPropertyLine::SetRemoved(): line already removed" );
-    m_bIsRemoved = true;
+    m_aNameBox->SetNoSelection();
+    m_aValueEdit->SetText(OUString());
+
+}
+
+void CustomPropertyLine::Hide()
+{
     m_aLine->Hide();
 }
 
@@ -1568,25 +1572,19 @@ IMPL_LINK(CustomPropertiesWindow, TypeHdl, ListBox&, rListBox, void)
 
 IMPL_LINK( CustomPropertiesWindow, RemoveHdl, Button*, pBtn, void )
 {
+    StoreCustomProperties();
+
     CustomPropertiesRemoveButton* pButton = static_cast<CustomPropertiesRemoveButton*>(pBtn);
     CustomPropertyLine* pLine = pButton->GetLine();
     std::vector< CustomPropertyLine* >::iterator pFound =
         std::find( m_aCustomPropertiesLines.begin(), m_aCustomPropertiesLines.end(), pLine );
     if ( pFound != m_aCustomPropertiesLines.end() )
     {
-        pLine = *pFound;
-        pLine->SetRemoved();
-        std::vector< CustomPropertyLine* >::iterator pIter = pFound + 1;
-        const long nDelta = GetLineHeight();
-        for ( ; pIter != m_aCustomPropertiesLines.end(); ++pIter )
-        {
-            pLine = *pIter;
-            if (pLine->m_bIsRemoved)
-                continue;
-            Point aPos = pLine->m_aLine->GetPosPixel();
-            aPos.Y() -= nDelta;
-            pLine->m_aLine->SetPosPixel(aPos);
-        }
+        sal_uInt32 nLineNumber = pFound - m_aCustomPropertiesLines.begin();
+        sal_uInt32 nDataModelIndex = GetCurrentDataModelPosition() + nLineNumber;
+        m_aCustomProperties.erase(m_aCustomProperties.begin() + nDataModelIndex);
+
+        ReloadLinesContent();
     }
 
     m_aRemovedHdl.Call(nullptr);
@@ -1706,23 +1704,33 @@ void CustomPropertiesWindow::Resize()
 
     for (CustomPropertyLine* pLine : m_aCustomPropertiesLines)
         SetWidgetWidths(pLine);
+
+    SetVisibleLineCount(GetVisibleLineCount());
+    ReloadLinesContent();
 }
 
 sal_uInt16 CustomPropertiesWindow::GetVisibleLineCount() const
 {
-    sal_uInt16 nCount = 0;
-    std::vector< CustomPropertyLine* >::const_iterator pIter;
-    for ( pIter = m_aCustomPropertiesLines.begin();
-            pIter != m_aCustomPropertiesLines.end(); ++pIter )
-    {
-        CustomPropertyLine* pLine = *pIter;
-        if ( !pLine->m_bIsRemoved )
-            nCount++;
-    }
+    sal_Int32 nScrollOffset = GetLineHeight();
+    sal_uInt16 nCount = ceil((double)GetSizePixel().Height() / nScrollOffset);
     return nCount;
 }
 
-void CustomPropertiesWindow::AddLine( const OUString& sName, Any const & rAny )
+void CustomPropertiesWindow::SetVisibleLineCount(sal_uInt32 nCount)
+{
+    while (GetExistingLineCount() < nCount)
+    {
+        CreateNewLine();
+    }
+}
+
+void CustomPropertiesWindow::AddLine(const OUString& sName, Any const & rAny)
+{
+    m_aCustomProperties.push_back(new CustomProperty(sName, rAny));
+    ReloadLinesContent();
+}
+
+void CustomPropertiesWindow::CreateNewLine()
 {
     CustomPropertyLine* pNewLine = new CustomPropertyLine( this );
     pNewLine->m_aTypeBox->SetSelectHdl( LINK( this, CustomPropertiesWindow, TypeHdl ) );
@@ -1739,89 +1747,12 @@ void CustomPropertiesWindow::AddLine( const OUString& sName, Any const & rAny )
     pNewLine->m_aValueEdit->add_mnemonic_label(m_pHeaderAccValue);
     pNewLine->m_aValueEdit->SetAccessibleName(m_pHeaderAccValue->GetText());
 
-    sal_Int32 nPos = GetVisibleLineCount() * GetLineHeight();
+    sal_Int32 nPos = GetExistingLineCount() * GetLineHeight();
     m_aCustomPropertiesLines.push_back( pNewLine );
 
     SetWidgetWidths(pNewLine);
     pNewLine->m_aLine->SetPosSizePixel(Point(0, nPos + m_nScrollPos), Size(GetSizePixel().Width(), m_nWidgetHeight));
     pNewLine->m_aLine->Show();
-
-    double nTmpValue = 0;
-    bool bTmpValue = false;
-    OUString sTmpValue;
-    util::DateTime aTmpDateTime;
-    util::Date aTmpDate;
-    util::DateTimeWithTimezone aTmpDateTimeTZ;
-    util::DateWithTimezone aTmpDateTZ;
-    util::Duration aTmpDuration;
-    SvtSysLocale aSysLocale;
-    const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
-    pNewLine->m_aNameBox->SetText( sName );
-    sal_IntPtr nType = CUSTOM_TYPE_UNKNOWN;
-    OUString sValue;
-
-    if ( rAny >>= nTmpValue )
-    {
-        sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
-        m_aNumberFormatter.GetInputLineString( nTmpValue, nIndex, sValue );
-        pNewLine->m_aValueEdit->SetText( sValue );
-        nType = CUSTOM_TYPE_NUMBER;
-    }
-    else if ( rAny >>= bTmpValue )
-    {
-        sValue = ( bTmpValue ? rLocaleWrapper.getTrueWord() : rLocaleWrapper.getFalseWord() );
-        nType = CUSTOM_TYPE_BOOLEAN;
-    }
-    else if ( rAny >>= sTmpValue )
-    {
-        pNewLine->m_aValueEdit->SetText( sTmpValue );
-        nType = CUSTOM_TYPE_TEXT;
-    }
-    else if ( rAny >>= aTmpDate )
-    {
-        pNewLine->m_aDateField->SetDate( Date( aTmpDate ) );
-        nType = CUSTOM_TYPE_DATE;
-    }
-    else if ( rAny >>= aTmpDateTime )
-    {
-        pNewLine->m_aDateField->SetDate( Date( aTmpDateTime ) );
-        pNewLine->m_aTimeField->SetTime( tools::Time( aTmpDateTime ) );
-        pNewLine->m_aTimeField->m_isUTC = aTmpDateTime.IsUTC;
-        nType = CUSTOM_TYPE_DATETIME;
-    }
-    else if ( rAny >>= aTmpDateTZ )
-    {
-        pNewLine->m_aDateField->SetDate( Date( aTmpDateTZ.DateInTZ.Day,
-                    aTmpDateTZ.DateInTZ.Month, aTmpDateTZ.DateInTZ.Year ) );
-        pNewLine->m_aDateField->m_TZ = aTmpDateTZ.Timezone;
-        nType = CUSTOM_TYPE_DATE;
-    }
-    else if ( rAny >>= aTmpDateTimeTZ )
-    {
-        util::DateTime const& rDT(aTmpDateTimeTZ.DateTimeInTZ);
-        pNewLine->m_aDateField->SetDate( Date( rDT ) );
-        pNewLine->m_aTimeField->SetTime( tools::Time( rDT ) );
-        pNewLine->m_aTimeField->m_isUTC = rDT.IsUTC;
-        pNewLine->m_aDateField->m_TZ = aTmpDateTimeTZ.Timezone;
-        nType = CUSTOM_TYPE_DATETIME;
-    }
-    else if ( rAny >>= aTmpDuration )
-    {
-        nType = CUSTOM_TYPE_DURATION;
-        pNewLine->m_aDurationField->SetDuration( aTmpDuration );
-    }
-
-    if ( nType != CUSTOM_TYPE_UNKNOWN )
-    {
-        if ( CUSTOM_TYPE_BOOLEAN == nType )
-        {
-            if ( bTmpValue )
-                pNewLine->m_aYesNoButton->CheckYes();
-            else
-                pNewLine->m_aYesNoButton->CheckNo();
-        }
-        pNewLine->m_aTypeBox->SelectEntryPos(pNewLine->m_aTypeBox->GetEntryPos(reinterpret_cast<void*>(nType)));
-    }
 
     TypeHdl(*pNewLine->m_aTypeBox.get());
     pNewLine->m_aNameBox->GrabFocus();
@@ -1852,60 +1783,65 @@ void CustomPropertiesWindow::ClearAllLines()
           pIter != m_aCustomPropertiesLines.end(); ++pIter )
     {
         CustomPropertyLine* pLine = *pIter;
-        pLine->SetRemoved();
         delete pLine;
     }
+    m_aCustomProperties.clear();
     m_aCustomPropertiesLines.clear();
     m_nScrollPos = 0;
 }
 
 void CustomPropertiesWindow::DoScroll( sal_Int32 nNewPos )
 {
+    StoreCustomProperties();
+
     m_nScrollPos += nNewPos;
-    for (CustomPropertyLine* pLine : m_aCustomPropertiesLines)
-    {
-        if (pLine->m_bIsRemoved)
-            continue;
-        Point aPos = pLine->m_aLine->GetPosPixel();
-        aPos.Y() += nNewPos;
-        pLine->m_aLine->SetPosPixel(aPos);
-    }
+    ReloadLinesContent();
 }
 
-Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() const
+Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties()
 {
-    Sequence< beans::PropertyValue > aPropertiesSeq( m_aCustomPropertiesLines.size() );
-    sal_Int32 i = 0;
-    std::vector< CustomPropertyLine* >::const_iterator pIter;
-    for ( pIter = m_aCustomPropertiesLines.begin();
-            pIter != m_aCustomPropertiesLines.end(); ++pIter, ++i )
+    StoreCustomProperties();
+
+    Sequence< beans::PropertyValue > aPropertiesSeq(GetTotalLineCount());
+
+    for (sal_uInt32 i = 0; i < GetTotalLineCount(); ++i)
     {
-        CustomPropertyLine* pLine = *pIter;
-        if ( pLine->m_bIsRemoved )
-            continue;
+        aPropertiesSeq[i].Name = m_aCustomProperties[i]->m_sName;
+        aPropertiesSeq[i].Value = m_aCustomProperties[i]->m_aValue;
+    }
+
+    return aPropertiesSeq;
+}
+
+void CustomPropertiesWindow::StoreCustomProperties()
+{
+    sal_uInt32 nDataModelPos = GetCurrentDataModelPosition();
+
+    for (sal_uInt32 i = 0; nDataModelPos + i < GetTotalLineCount() && i < GetExistingLineCount(); i++)
+    {
+        CustomPropertyLine* pLine = m_aCustomPropertiesLines[i];
 
         OUString sPropertyName = pLine->m_aNameBox->GetText();
-        if ( !sPropertyName.isEmpty() )
+        if (!sPropertyName.isEmpty())
         {
-            aPropertiesSeq[i].Name = sPropertyName;
+            m_aCustomProperties[nDataModelPos + i]->m_sName = sPropertyName;
             long nType = reinterpret_cast<long>(
-                            pLine->m_aTypeBox->GetSelectedEntryData() );
-            if ( CUSTOM_TYPE_NUMBER == nType )
+                pLine->m_aTypeBox->GetSelectedEntryData());
+            if (CUSTOM_TYPE_NUMBER == nType)
             {
                 double nValue = 0;
-                sal_uInt32 nIndex = const_cast< SvNumberFormatter& >(
-                    m_aNumberFormatter ).GetFormatIndex( NF_NUMBER_SYSTEM );
-                bool bIsNum = const_cast< SvNumberFormatter& >( m_aNumberFormatter ).
-                    IsNumberFormat( pLine->m_aValueEdit->GetText(), nIndex, nValue );
-                if ( bIsNum )
-                    aPropertiesSeq[i].Value <<= nValue;
+                sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex(NF_NUMBER_SYSTEM);
+                bool bIsNum = m_aNumberFormatter.
+                    IsNumberFormat(pLine->m_aValueEdit->GetText(), nIndex, nValue);
+                if (bIsNum)
+                    m_aCustomProperties[nDataModelPos + i]->m_aValue <<= nValue;
             }
-            else if ( CUSTOM_TYPE_BOOLEAN == nType )
+            else if (CUSTOM_TYPE_BOOLEAN == nType)
             {
                 bool bValue = pLine->m_aYesNoButton->IsYesChecked();
-                aPropertiesSeq[i].Value <<= bValue;
+                m_aCustomProperties[nDataModelPos + i]->m_aValue <<= bValue;
             }
-            else if ( CUSTOM_TYPE_DATETIME == nType )
+            else if (CUSTOM_TYPE_DATETIME == nType)
             {
                 Date aTmpDate = pLine->m_aDateField->GetDate();
                 tools::Time aTmpTime = pLine->m_aTimeField->GetTime();
@@ -1915,42 +1851,152 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
                     pLine->m_aTimeField->m_isUTC);
                 if (pLine->m_aDateField->m_TZ.is_initialized())
                 {
-                    aPropertiesSeq[i].Value <<= util::DateTimeWithTimezone(
-                            aDateTime, pLine->m_aDateField->m_TZ.get());
+                    m_aCustomProperties[nDataModelPos + i]->m_aValue <<= util::DateTimeWithTimezone(
+                        aDateTime, pLine->m_aDateField->m_TZ.get());
                 }
                 else
                 {
-                    aPropertiesSeq[i].Value <<= aDateTime;
+                    m_aCustomProperties[nDataModelPos + i]->m_aValue <<= aDateTime;
                 }
             }
-            else if ( CUSTOM_TYPE_DATE == nType )
+            else if (CUSTOM_TYPE_DATE == nType)
             {
                 Date aTmpDate = pLine->m_aDateField->GetDate();
                 util::Date const aDate(aTmpDate.GetDay(), aTmpDate.GetMonth(),
-                        aTmpDate.GetYear());
+                    aTmpDate.GetYear());
                 if (pLine->m_aDateField->m_TZ.is_initialized())
                 {
-                    aPropertiesSeq[i].Value <<= util::DateWithTimezone(
-                            aDate, pLine->m_aDateField->m_TZ.get());
+                    m_aCustomProperties[nDataModelPos + i]->m_aValue <<= util::DateWithTimezone(
+                        aDate, pLine->m_aDateField->m_TZ.get());
                 }
                 else
                 {
-                    aPropertiesSeq[i].Value <<= aDate;
+                    m_aCustomProperties[nDataModelPos + i]->m_aValue <<= aDate;
                 }
             }
-            else if ( CUSTOM_TYPE_DURATION == nType )
+            else if (CUSTOM_TYPE_DURATION == nType)
             {
-                aPropertiesSeq[i].Value <<= pLine->m_aDurationField->GetDuration();
+                m_aCustomProperties[nDataModelPos + i]->m_aValue <<= pLine->m_aDurationField->GetDuration();
             }
             else
             {
-                OUString sValue( pLine->m_aValueEdit->GetText() );
-                aPropertiesSeq[i].Value <<= sValue;
+                OUString sValue(pLine->m_aValueEdit->GetText());
+                m_aCustomProperties[nDataModelPos + i]->m_aValue <<= sValue;
             }
         }
     }
+}
 
-    return aPropertiesSeq;
+void CustomPropertiesWindow::SetCustomProperties(const std::vector<CustomProperty*>& rProperties)
+{
+    m_aCustomProperties = rProperties;
+    ReloadLinesContent();
+}
+
+void CustomPropertiesWindow::ReloadLinesContent()
+{
+    double nTmpValue = 0;
+    bool bTmpValue = false;
+    OUString sTmpValue;
+    util::DateTime aTmpDateTime;
+    util::Date aTmpDate;
+    util::DateTimeWithTimezone aTmpDateTimeTZ;
+    util::DateWithTimezone aTmpDateTZ;
+    util::Duration aTmpDuration;
+    SvtSysLocale aSysLocale;
+    const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
+    sal_IntPtr nType = CUSTOM_TYPE_UNKNOWN;
+    OUString sValue;
+
+    sal_uInt32 nDataModelPos = GetCurrentDataModelPosition();
+    sal_uInt32 i = 0;
+
+    for (; nDataModelPos + i < GetTotalLineCount() && i < GetExistingLineCount(); i++)
+    {
+        const OUString& rName = m_aCustomProperties[nDataModelPos + i]->m_sName;
+        const css::uno::Any& rAny = m_aCustomProperties[nDataModelPos + i]->m_aValue;
+
+        CustomPropertyLine* pLine = m_aCustomPropertiesLines[i];
+        pLine->Clear();
+
+        pLine->m_aNameBox->SetText(rName);
+        pLine->m_aLine->Show();
+
+        if (!rAny.hasValue())
+        {
+            pLine->m_aValueEdit->SetText(OUString());
+        }
+        else if (rAny >>= nTmpValue)
+        {
+            sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex(NF_NUMBER_SYSTEM);
+            m_aNumberFormatter.GetInputLineString(nTmpValue, nIndex, sValue);
+            pLine->m_aValueEdit->SetText(sValue);
+            nType = CUSTOM_TYPE_NUMBER;
+        }
+        else if (rAny >>= bTmpValue)
+        {
+            sValue = (bTmpValue ? rLocaleWrapper.getTrueWord() : rLocaleWrapper.getFalseWord());
+            nType = CUSTOM_TYPE_BOOLEAN;
+        }
+        else if (rAny >>= sTmpValue)
+        {
+            pLine->m_aValueEdit->SetText(sTmpValue);
+            nType = CUSTOM_TYPE_TEXT;
+        }
+        else if (rAny >>= aTmpDate)
+        {
+            pLine->m_aDateField->SetDate(Date(aTmpDate));
+            nType = CUSTOM_TYPE_DATE;
+        }
+        else if (rAny >>= aTmpDateTime)
+        {
+            pLine->m_aDateField->SetDate(Date(aTmpDateTime));
+            pLine->m_aTimeField->SetTime(tools::Time(aTmpDateTime));
+            pLine->m_aTimeField->m_isUTC = aTmpDateTime.IsUTC;
+            nType = CUSTOM_TYPE_DATETIME;
+        }
+        else if (rAny >>= aTmpDateTZ)
+        {
+            pLine->m_aDateField->SetDate(Date(aTmpDateTZ.DateInTZ.Day,
+                aTmpDateTZ.DateInTZ.Month, aTmpDateTZ.DateInTZ.Year));
+            pLine->m_aDateField->m_TZ = aTmpDateTZ.Timezone;
+            nType = CUSTOM_TYPE_DATE;
+        }
+        else if (rAny >>= aTmpDateTimeTZ)
+        {
+            util::DateTime const& rDT(aTmpDateTimeTZ.DateTimeInTZ);
+            pLine->m_aDateField->SetDate(Date(rDT));
+            pLine->m_aTimeField->SetTime(tools::Time(rDT));
+            pLine->m_aTimeField->m_isUTC = rDT.IsUTC;
+            pLine->m_aDateField->m_TZ = aTmpDateTimeTZ.Timezone;
+            nType = CUSTOM_TYPE_DATETIME;
+        }
+        else if (rAny >>= aTmpDuration)
+        {
+            nType = CUSTOM_TYPE_DURATION;
+            pLine->m_aDurationField->SetDuration(aTmpDuration);
+        }
+
+        if (nType != CUSTOM_TYPE_UNKNOWN)
+        {
+            if (CUSTOM_TYPE_BOOLEAN == nType)
+            {
+                if (bTmpValue)
+                    pLine->m_aYesNoButton->CheckYes();
+                else
+                    pLine->m_aYesNoButton->CheckNo();
+            }
+            pLine->m_aTypeBox->SelectEntryPos(pLine->m_aTypeBox->GetEntryPos(reinterpret_cast<void*>(nType)));
+        }
+
+        TypeHdl(*pLine->m_aTypeBox.get());
+    }
+    while (nDataModelPos + i >= GetTotalLineCount() && i < GetExistingLineCount())
+    {
+        CustomPropertyLine* pLine = m_aCustomPropertiesLines[i];
+        pLine->Hide();
+        i++;
+    }
 }
 
 CustomPropertiesControl::CustomPropertiesControl(vcl::Window* pParent)
@@ -2035,6 +2081,7 @@ void CustomPropertiesControl::Resize()
         m_pVBox->SetSizePixel(GetSizePixel());
         sal_Int32 nScrollOffset = m_pPropertiesWin->GetLineHeight();
         sal_Int32 nVisibleEntries = m_pPropertiesWin->GetSizePixel().Height() / nScrollOffset;
+        m_pPropertiesWin->SetVisibleLineCount( nVisibleEntries );
         m_pVertScroll->SetPageSize( nVisibleEntries - 1 );
         m_pVertScroll->SetVisibleSize( nVisibleEntries );
     }
@@ -2068,19 +2115,26 @@ IMPL_LINK( CustomPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar, void )
 
 IMPL_LINK_NOARG(CustomPropertiesControl, RemovedHdl, void*, void)
 {
-    long nLineCount = m_pPropertiesWin->GetVisibleLineCount();
+    long nLineCount = m_pPropertiesWin->GetTotalLineCount();
     m_pVertScroll->SetRangeMax(nLineCount + 1);
-    if ( m_pPropertiesWin->GetOutputSizePixel().Height() < nLineCount * m_pPropertiesWin->GetLineHeight() )
+    if ( m_pPropertiesWin->GetTotalLineCount() > m_pPropertiesWin->GetExistingLineCount() )
         m_pVertScroll->DoScrollAction ( ScrollType::LineUp );
 }
 
 void CustomPropertiesControl::AddLine( const OUString& sName, Any const & rAny, bool bInteractive )
 {
     m_pPropertiesWin->AddLine( sName, rAny );
-    long nLineCount = m_pPropertiesWin->GetVisibleLineCount();
+    long nLineCount = m_pPropertiesWin->GetTotalLineCount();
     m_pVertScroll->SetRangeMax(nLineCount + 1);
     if ( bInteractive && m_pPropertiesWin->GetOutputSizePixel().Height() < nLineCount * m_pPropertiesWin->GetLineHeight() )
         m_pVertScroll->DoScroll(nLineCount + 1);
+}
+
+void CustomPropertiesControl::SetCustomProperties(const std::vector<CustomProperty*>& rProperties)
+{
+    m_pPropertiesWin->SetCustomProperties(rProperties);
+    long nLineCount = m_pPropertiesWin->GetTotalLineCount();
+    m_pVertScroll->SetRangeMax(nLineCount + 1);
 }
 
 // class SfxCustomPropertiesPage -----------------------------------------
@@ -2165,10 +2219,7 @@ void SfxCustomPropertiesPage::Reset( const SfxItemSet* rItemSet )
     m_pPropertiesCtrl->ClearAllLines();
     const SfxDocumentInfoItem& rInfoItem = static_cast<const SfxDocumentInfoItem &>(rItemSet->Get(SID_DOCINFO));
     std::vector< CustomProperty* > aCustomProps = rInfoItem.GetCustomProperties();
-    for (CustomProperty* pCustomProp : aCustomProps)
-    {
-        m_pPropertiesCtrl->AddLine( pCustomProp->m_sName, pCustomProp->m_aValue, false );
-    }
+    m_pPropertiesCtrl->SetCustomProperties(aCustomProps);
 }
 
 DeactivateRC SfxCustomPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )

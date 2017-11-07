@@ -379,11 +379,11 @@ struct CustomPropertyLine
     ScopedVclPtr<CustomPropertiesYesNoButton>   m_aYesNoButton;
     ScopedVclPtr<CustomPropertiesRemoveButton>  m_aRemoveButton;
 
-    bool                            m_bIsRemoved;
-    bool                            m_bTypeLostFocus;
+    bool                                        m_bTypeLostFocus;
 
     CustomPropertyLine( vcl::Window* pParent );
-    void SetRemoved();
+    void Clear();
+    void Hide();
 };
 
 // class CustomPropertiesWindow ------------------------------------------
@@ -402,7 +402,8 @@ private:
     sal_Int32                           m_nTypeBoxWidth;
     sal_Int32                           m_nLineHeight;
     sal_Int32                           m_nScrollPos;
-    std::vector< CustomPropertyLine* >  m_aCustomPropertiesLines;
+    std::vector<CustomProperty*>        m_aCustomProperties;
+    std::vector<CustomPropertyLine*>    m_aCustomPropertiesLines;
     CustomPropertyLine*                 m_pCurrentLine;
     SvNumberFormatter                   m_aNumberFormatter;
     Idle                                m_aEditLoseFocusIdle;
@@ -420,6 +421,10 @@ private:
 
     bool        IsLineValid( CustomPropertyLine* pLine ) const;
     void        ValidateLine( CustomPropertyLine* pLine, bool bIsFromTypeBox );
+    void        CreateNewLine();
+    void        ReloadLinesContent();
+    void        StoreCustomProperties();
+    sal_uInt32  GetCurrentDataModelPosition() const { return -1 * m_nScrollPos / m_nLineHeight; }
 
 public:
     CustomPropertiesWindow(vcl::Window* pParent,
@@ -437,16 +442,20 @@ public:
     //non-const contents of the VclPtr, but loplugin:constparams
     //correctly sees that it could all be set to const, so we end
     //up with this unhappy situation
-    void SetWidgetWidths(const CustomPropertyLine* pLine) const;
+    void                SetWidgetWidths(const CustomPropertyLine* pLine) const;
+    sal_uInt16          GetExistingLineCount() const { return m_aCustomPropertiesLines.size(); }
+    sal_uInt16          GetTotalLineCount() const { return m_aCustomProperties.size(); }
     sal_uInt16          GetVisibleLineCount() const;
-    sal_Int32    GetLineHeight() const { return m_nLineHeight; }
+    void                SetVisibleLineCount(sal_uInt32 nCount);
+    sal_Int32           GetLineHeight() const { return m_nLineHeight; }
     void                AddLine( const OUString& sName, css::uno::Any const & rAny );
     bool                AreAllLinesValid() const;
     void                ClearAllLines();
     void                DoScroll( sal_Int32 nNewPos );
 
     css::uno::Sequence< css::beans::PropertyValue >
-                        GetCustomProperties() const;
+                        GetCustomProperties();
+    void                SetCustomProperties(const std::vector<CustomProperty*>& rProperties);
     void                SetRemovedHdl( const Link<void*,void>& rLink ) { m_aRemovedHdl = rLink; }
 };
 
@@ -471,14 +480,17 @@ public:
     virtual ~CustomPropertiesControl() override;
     virtual void dispose() override;
 
-    void            AddLine( const OUString& sName, css::uno::Any const & rAny, bool bInteractive );
+    void         AddLine(const OUString& sName, css::uno::Any const & rAny, bool bInteractive);
 
-    bool     AreAllLinesValid() const { return m_pPropertiesWin->AreAllLinesValid(); }
-    void     ClearAllLines() { m_pPropertiesWin->ClearAllLines(); }
-    css::uno::Sequence< css::beans::PropertyValue >
-                    GetCustomProperties() const
+    bool         AreAllLinesValid() const { return m_pPropertiesWin->AreAllLinesValid(); }
+    void         ClearAllLines() { m_pPropertiesWin->ClearAllLines(); }
+
+    css::uno::Sequence<css::beans::PropertyValue>
+                 GetCustomProperties() const
                         { return m_pPropertiesWin->GetCustomProperties(); }
-    void    Init(VclBuilderContainer& rParent);
+    void         SetCustomProperties(const std::vector<CustomProperty*>& rProperties);
+
+    void         Init(VclBuilderContainer& rParent);
     virtual void Resize() override;
 };
 
