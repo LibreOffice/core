@@ -29,24 +29,14 @@
 
 namespace comphelper {
 
-/** this class provides a basic helper for classes supporting the XServiceInfo Interface.
+/** This class provides a basic helper for classes supporting the XServiceInfo Interface.
  *
- *  you can override the <code>getSupprotedServiceNames</code> to implement a XServiceInfo.
- *  you can use the static helper methods to combine your services with that of parent
+ *  You can use the static helper methods to combine your services with that of parent
  *  or aggregated classes.
  */
-class COMPHELPER_DLLPUBLIC ServiceInfoHelper : public css::lang::XServiceInfo
+namespace ServiceInfoHelper
 {
-public:
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    // helper
-    static void addToSequence( css::uno::Sequence< OUString >& rSeq, std::initializer_list<OUString> services ) throw();
-
-protected:
-    ~ServiceInfoHelper() {}
+    COMPHELPER_DLLPUBLIC void addToSequence( css::uno::Sequence< OUString >& rSeq, std::initializer_list<OUString> services ) throw();
 };
 
 }

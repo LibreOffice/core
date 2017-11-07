@@ -25,19 +25,6 @@
 namespace comphelper
 {
 
-/** returns an empty UString(). most times sufficient */
-OUString SAL_CALL ServiceInfoHelper::getImplementationName()
-{
-    return OUString();
-}
-
-/** the base implementation has no supported services */
-css::uno::Sequence< OUString > ServiceInfoHelper::getSupportedServiceNames()
-{
-    css::uno::Sequence< OUString> aSeq(0);
-    return aSeq;
-}
-
 /** this method adds a variable number of OUString to a given Sequence
  */
 void ServiceInfoHelper::addToSequence( css::uno::Sequence< OUString >& rSeq, std::initializer_list<OUString> services ) throw()

@@ -41,14 +41,11 @@ namespace comphelper
 
     /** a helper class for implementing an accessible keybinding
      */
-    class COMPHELPER_DLLPUBLIC OAccessibleKeyBindingHelper : public OAccessibleKeyBindingHelper_Base
+    class COMPHELPER_DLLPUBLIC OAccessibleKeyBindingHelper final : public OAccessibleKeyBindingHelper_Base
     {
     private:
         typedef ::std::vector< css::uno::Sequence< css::awt::KeyStroke > > KeyBindings;
-
         KeyBindings     m_aKeyBindings;
-
-    protected:
         ::osl::Mutex    m_aMutex;
 
         virtual ~OAccessibleKeyBindingHelper() override;

@@ -66,7 +66,7 @@ namespace comphelper
                                         >   OPropertyBag_Base;
     typedef ::comphelper::OPropertyStateHelper  OPropertyBag_PBase;
 
-    class OPropertyBag  :public ::comphelper::OMutexAndBroadcastHelper  // must be before OPropertyBag_PBase
+    class OPropertyBag final : public ::comphelper::OMutexAndBroadcastHelper  // must be before OPropertyBag_PBase
                         ,public OPropertyBag_PBase
                         ,public OPropertyBag_Base
                         ,public ::cppu::IEventNotificationHook
@@ -94,7 +94,7 @@ namespace comphelper
         OPropertyBag();
         virtual ~OPropertyBag() override;
 
-    protected:
+    private:
         DECLARE_XINTERFACE()
         DECLARE_XTYPEPROVIDER()
 
@@ -177,7 +177,6 @@ namespace comphelper
         void SAL_CALL setModifiedImpl( bool bModified,
             bool bIgnoreRuntimeExceptionsWhileFiring);
 
-    private:
         /** finds a free property handle
             @precond
                 our mutex is locked
@@ -210,7 +209,6 @@ namespace comphelper
         */
         void impl_setPropertyValues_throw( const css::uno::Sequence< css::beans::PropertyValue >& _rProps );
 
-    protected:
         using ::cppu::OPropertySetHelper::getPropertyValues;
         using ::cppu::OPropertySetHelper::setPropertyValues;
         using ::cppu::OPropertySetHelper::getFastPropertyValue;

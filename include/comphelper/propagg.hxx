@@ -86,10 +86,9 @@ protected:
 
 #define DEFAULT_AGGREGATE_PROPERTY_ID   10000
 
-class COMPHELPER_DLLPUBLIC OPropertyArrayAggregationHelper: public ::cppu::IPropertyArrayHelper
+class COMPHELPER_DLLPUBLIC OPropertyArrayAggregationHelper final : public ::cppu::IPropertyArrayHelper
 {
     friend class OPropertySetAggregationHelper;
-protected:
 
     std::vector<css::beans::Property>         m_aProperties;
     internal::PropertyAccessorMap             m_aPropertyAccessors;
@@ -176,7 +175,7 @@ public:
     */
     PropertyOrigin  classifyProperty( const OUString& _rName );
 
-protected:
+private:
     const css::beans::Property* findPropertyByName(const OUString& _rName) const;
 };
 
