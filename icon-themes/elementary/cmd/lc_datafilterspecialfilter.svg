@@ -159,6 +159,17 @@
        x2="23.99999"
        y1="4.999989"
        x1="23.99999" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4167"
+       id="radialGradient3564"
+       cx="22.571428"
+       cy="30.857143"
+       fx="22.571428"
+       fy="30.857143"
+       r="15.571428"
+       gradientTransform="matrix(0.48623843,0,0,0.13549598,0.02490458,14.928848)"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      inkscape:window-y="182"
@@ -170,7 +181,7 @@
      showgrid="true"
      inkscape:current-layer="layer1"
      inkscape:cy="4.6127256"
-     inkscape:cx="18.377011"
+     inkscape:cx="9.8410789"
      inkscape:zoom="17.104166"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
@@ -239,6 +250,13 @@
      inkscape:label="Layer 1"
      id="layer1"
      transform="translate(0,2)">
+    <ellipse
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:url(#radialGradient3564);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;marker-start:none;marker-mid:none;marker-end:none"
+       id="path3556"
+       cx="11"
+       cy="19.109867"
+       rx="7.5714264"
+       ry="2.8901329" />
     <path
        style="fill:url(#linearGradient2405);fill-opacity:1;fill-rule:evenodd;stroke:#888a85;stroke-width:1.00000024px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="M 2.5000001,2.5 19.5,2.5 l 0,2.9840962 -7,6.0160998 0,7.003103 -2.9999999,0 0,-7.003889 -7,-5.9835062 z"

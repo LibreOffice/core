@@ -28,16 +28,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1325"
-     inkscape:window-height="724"
+     inkscape:window-width="2560"
+     inkscape:window-height="1377"
      id="namedview46"
      showgrid="true"
      inkscape:zoom="22.208333"
-     inkscape:cx="19.204503"
-     inkscape:cy="4.6599625"
-     inkscape:window-x="229"
-     inkscape:window-y="241"
-     inkscape:window-maximized="0"
+     inkscape:cx="12.608736"
+     inkscape:cy="14.329433"
+     inkscape:window-x="0"
+     inkscape:window-y="34"
+     inkscape:window-maximized="1"
      inkscape:current-layer="svg3828"
      showguides="false">
     <inkscape:grid
@@ -347,13 +347,22 @@
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient2264"
-       id="linearGradient4255"
-       x1="24"
-       y1="14"
-       x2="24"
-       y2="23"
+       id="linearGradient4204"
+       x1="10"
+       y1="14.35272"
+       x2="10"
+       y2="22.637899"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1,0,0,1.25,-10,-4.6250012)" />
+       gradientTransform="translate(0.5,-0.5)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3985-6-635-120-628-965"
+       id="linearGradient4216"
+       x1="13"
+       y1="12.630893"
+       x2="6.192204"
+       y2="24.181021"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <metadata
      id="metadata3833">
@@ -363,7 +372,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -401,7 +410,7 @@
      inkscape:connector-curvature="0" />
   <g
      id="g4241"
-     transform="translate(0,0.99999999)">
+     transform="translate(-1,0)">
     <path
        inkscape:r_cy="true"
        inkscape:r_cx="true"
@@ -420,12 +429,14 @@
        inkscape:connector-curvature="0" />
   </g>
   <rect
-     style="opacity:1;fill:url(#linearGradient4255);fill-opacity:1;stroke:#548820;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-     id="rect4247"
+     style="opacity:1;fill:url(#linearGradient4204);fill-opacity:1;stroke:#548820;stroke-linejoin:round;stroke-opacity:1"
+     id="rect4196"
      width="2"
      height="10"
-     x="10.5"
-     y="13.5"
-     rx="0.22093"
-     ry="0.37257445" />
+     x="9.5"
+     y="12.5" />
+  <path
+     style="opacity:0.41;fill:url(#linearGradient4216);fill-opacity:1;stroke:none;stroke-linejoin:round;stroke-opacity:1"
+     d="M 10 13 L 10 14 L 11 14 L 11 13 L 10 13 z M 10 21 L 10 22 L 11 22 L 11 21 L 10 21 z "
+     id="rect4208" />
 </svg>
