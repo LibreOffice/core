@@ -270,7 +270,6 @@ public:
         // eFormat == EIF_BIFF5 -> only Biff5 stream leads to success (even in an Excel97 doc)
         // eFormat == EIF_BIFF8 -> only Biff8 stream leads to success (only in Excel97 docs)
         // eFormat == EIF_BIFF_LE4 -> only non-storage files _could_ lead to success
-    virtual ErrCode ScImportStarCalc10( SvStream&, ScDocument* ) override;
     virtual ErrCode ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
                  const rtl_TextEncoding eSrc ) override;
     virtual ErrCode ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) override;

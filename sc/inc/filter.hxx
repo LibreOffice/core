@@ -65,7 +65,6 @@ class SAL_DLLPUBLIC_RTTI ScFormatFilterPlugin {
         // eFormat == EIF_BIFF5 -> only Biff5 stream is read successfully (in an Excel97 doc, too)
         // eFormat == EIF_BIFF8 -> only Biff8 stream is read successfully (only in Excel97 docs)
         // eFormat == EIF_BIFF_LE4 -> only non storage files _might_ be read successfully
-    virtual ErrCode ScImportStarCalc10( SvStream&, ScDocument* ) = 0;
     virtual ErrCode ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
                  const rtl_TextEncoding eSrc ) = 0;
     virtual ErrCode ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) = 0;

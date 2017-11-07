@@ -1089,21 +1089,6 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
         if (aFltName == pFilterXML)
             bRet = LoadXML( &rMedium, nullptr );
-        else if (aFltName == "StarCalc 1.0")
-        {
-            SvStream* pStream = rMedium.GetInStream();
-            if (pStream)
-            {
-                ErrCode eError = ScFormatFilter::Get().ScImportStarCalc10( *pStream, &aDocument );
-                if (eError != ERRCODE_NONE)
-                {
-                    if (!GetError())
-                        SetError(eError);
-                }
-                else
-                    bRet = true;
-            }
-        }
         else if (aFltName == pFilterLotus)
         {
             OUString sItStr;
