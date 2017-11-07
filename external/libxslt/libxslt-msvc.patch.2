@@ -1,7 +1,7 @@
 --- build/libxslt-1.1.26/win32/Makefile.msvc.old	2010-10-20 01:02:55.359375000 +0200
 +++ build/libxslt-1.1.26/win32/Makefile.msvc	2010-10-20 01:03:05.187500000 +0200
 @@ -54,6 +54,7 @@
- CFLAGS = /nologo /D "WIN32" /D "_WINDOWS" /D "_MBCS" /W3 $(CRUNTIME) /D "_REENTRANT"
+ CFLAGS = /nologo /D "_WINDOWS" /D "_MBCS" /W3 /wd4244 /wd4267 $(CRUNTIME) /D "_REENTRANT"
  CFLAGS = $(CFLAGS) /I$(BASEDIR) /I$(XSLT_SRCDIR) /I$(INCPREFIX)
  CFLAGS = $(CFLAGS) /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE
 +CFLAGS = $(CFLAGS) -arch:SSE $(SOLARINC) -I$(WORKDIR)\UnpackedTarball\libxml2\include -I$(WORKDIR)/UnpackedTarball/icu/source/i18n -I$(WORKDIR)/UnpackedTarball/icu/source/common
