@@ -1216,7 +1216,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             delete pNewRedl;
                             pNewRedl = nullptr;
                             if (eCmpPos == POS_INSIDE)
-                                pRedl->MaybeNotifyModification();
+                                MaybeNotifyRedlineModification(pRedl, &m_rDoc);
                             break;
 
                         case POS_OUTSIDE:
