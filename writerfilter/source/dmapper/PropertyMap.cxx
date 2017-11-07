@@ -1170,7 +1170,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     // Continuous sections usually create only a section, and not a new page style
     const bool bTreatAsContinuous = m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_nextPage
         && m_nColumnCount > 0
-        && !HasHeader( m_bTitlePage ) && !HasFooter( m_bTitlePage )
+        && (m_bIsFirstSection || (!HasHeader( m_bTitlePage ) && !HasFooter( m_bTitlePage )) )
         && (m_bIsFirstSection || m_sFollowPageStyleName.isEmpty() || (m_sFirstPageStyleName.isEmpty() && m_bTitlePage));
     if ( m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous) || bTreatAsContinuous )
     {
