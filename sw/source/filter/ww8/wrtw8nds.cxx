@@ -992,6 +992,12 @@ bool WW8AttributeOutput::AnalyzeURL( const OUString& rUrl, const OUString& rTarg
     return bBookMarkOnly;
 }
 
+void WW8AttributeOutput::WriteBookmarkInActParagraph( const OUString& rName, sal_Int32 nFirstRunPos, sal_Int32 nLastRunPos )
+{
+    m_aBookmarksOfParagraphStart.insert(std::pair<sal_Int32, OUString>(nFirstRunPos, rName));
+    m_aBookmarksOfParagraphEnd.insert(std::pair<sal_Int32, OUString>(nLastRunPos, rName));
+}
+
 bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget )
 {
     INetURLObject aURL( rUrl );
@@ -2183,8 +2189,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
     }
 
     // Call this before write out fields and runs
-    if(GetExportFormat() == ExportFormat::DOCX)
-        AttrOutput().GenerateBookmarksForSequenceField(rNode, aAttrIter);
+    AttrOutput().GenerateBookmarksForSequenceField(rNode, aAttrIter);
 
     const OUString& aStr( rNode.GetText() );
 
@@ -2219,19 +2224,19 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
         // Is this the only run in this paragraph and it's empty?
         bool bSingleEmptyRun = nAktPos == 0 && nNextAttr == 0;
-        AttrOutput().StartRun( pRedlineData, bSingleEmptyRun );
+        AttrOutput().StartRun( pRedlineData, nAktPos, bSingleEmptyRun );
+
+        if( nNextAttr > nEnd )
+            nNextAttr = nEnd;
 
         if( m_nTextTyp == TXT_FTN || m_nTextTyp == TXT_EDN )
         {
             if( AttrOutput().FootnoteEndnoteRefTag() )
             {
-                AttrOutput().EndRun( &rNode, nAktPos );
-                AttrOutput().StartRun( pRedlineData, bSingleEmptyRun );
+                AttrOutput().EndRun( &rNode, nAktPos, nNextAttr == nEnd );
+                AttrOutput().StartRun( pRedlineData, nAktPos, bSingleEmptyRun );
             }
         }
-
-        if( nNextAttr > nEnd )
-            nNextAttr = nEnd;
 
         /*
             1) If there is a text node and an overlapping anchor, then write them in two different
@@ -2499,9 +2504,9 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
         if( bPostponeWritingText && FLY_PROCESSED == nStateOfFlyFrame )
         {
-            AttrOutput().EndRun(&rNode, nAktPos);
+            AttrOutput().EndRun(&rNode, nAktPos, nNextAttr == nEnd);
             //write the postponed text run
-            AttrOutput().StartRun( pRedlineData, bSingleEmptyRun );
+            AttrOutput().StartRun( pRedlineData, nAktPos, bSingleEmptyRun );
             AttrOutput().SetAnchorIsLinkedToNode( false );
             AttrOutput().ResetFlyProcessingFlag();
             if (0 != nEnd)
@@ -2511,16 +2516,16 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 AttrOutput().EndRunProperties( pRedlineData );
             }
             AttrOutput().RunText( aSavedSnippet, eChrSet );
-            AttrOutput().EndRun(&rNode, nAktPos);
+            AttrOutput().EndRun(&rNode, nAktPos, nNextAttr == nEnd);
         }
         else if( bPostponeWritingText && !aSavedSnippet.isEmpty() )
         {
             //write the postponed text run
             AttrOutput().RunText( aSavedSnippet, eChrSet );
-            AttrOutput().EndRun(&rNode, nAktPos);
+            AttrOutput().EndRun(&rNode, nAktPos, nNextAttr == nEnd);
         }
         else
-            AttrOutput().EndRun(&rNode, nAktPos);
+            AttrOutput().EndRun(&rNode, nAktPos, nNextAttr == nEnd);
 
         nAktPos = nNextAttr;
         UpdatePosition( &aAttrIter, nAktPos );
