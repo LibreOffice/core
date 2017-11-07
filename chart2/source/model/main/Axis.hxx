@@ -48,7 +48,7 @@ typedef ::cppu::WeakImplHelper<
     Axis_Base;
 }
 
-class Axis :
+class Axis final :
     public MutexContainer,
     public impl::Axis_Base,
     public ::property::OPropertySet
@@ -67,7 +67,7 @@ public:
     /// merge XTypeProvider implementations
      DECLARE_XTYPEPROVIDER()
 
-protected:
+private:
     explicit Axis( const Axis & rOther );
 
     // late initialization to call after copy-constructing
@@ -119,10 +119,7 @@ protected:
 
     void fireModifyEvent();
 
-private: //methods
     void AllocateSubGrids();
-
-private: //member
 
     css::uno::Reference< css::util::XModifyListener >   m_xModifyEventForwarder;
 

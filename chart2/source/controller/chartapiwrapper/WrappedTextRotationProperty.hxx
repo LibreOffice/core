@@ -24,7 +24,7 @@
 namespace chart
 {
 
-class WrappedTextRotationProperty : public WrappedProperty
+class WrappedTextRotationProperty final : public WrappedProperty
 {
 public:
     explicit WrappedTextRotationProperty( bool bDirectState=false );
@@ -32,7 +32,7 @@ public:
 
     virtual css::beans::PropertyState getPropertyState( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
-protected:
+private:
     virtual css::uno::Any convertInnerToOuterValue( const css::uno::Any& rInnerValue ) const override;
     virtual css::uno::Any convertOuterToInnerValue( const css::uno::Any& rOuterValue ) const override;
 

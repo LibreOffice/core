@@ -45,7 +45,7 @@ typedef ::cppu::WeakImplHelper<
     Legend_Base;
 }
 
-class Legend :
+class Legend final :
     public MutexContainer,
     public impl::Legend_Base,
     public ::property::OPropertySet
@@ -64,7 +64,7 @@ public:
     /// merge XTypeProvider implementations
      DECLARE_XTYPEPROVIDER()
 
-protected:
+private:
     explicit Legend( const Legend & rOther );
 
     // ____ OPropertySet ____
@@ -98,7 +98,6 @@ protected:
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 
-private:
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
 };
 

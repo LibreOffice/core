@@ -37,7 +37,7 @@ namespace chart
 class ChartTypeTemplateProvider;
 class DialogModel;
 
-class RangeChooserTabPage : public svt::OWizardPage, public RangeSelectionListenerParent
+class RangeChooserTabPage final : public svt::OWizardPage, public RangeSelectionListenerParent
 {
 public:
 
@@ -55,7 +55,7 @@ public:
 
     void commitPage();
 
-protected: //methods
+private:
 
     //OWizardPage
     virtual void ActivatePage() override;
@@ -74,8 +74,6 @@ protected: //methods
     DECL_LINK( ControlChangedCheckBoxHdl, CheckBox&, void );
     DECL_LINK( ControlChangedRadioHdl, RadioButton&, void );
     DECL_LINK( ControlEditedHdl, Edit&, void );
-
-protected: //member
 
     VclPtr<FixedText>       m_pFT_Caption;
     VclPtr<FixedText>       m_pFT_Range;

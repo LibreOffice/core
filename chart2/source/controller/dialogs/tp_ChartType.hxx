@@ -45,7 +45,7 @@ class ChartTypeParameter;
 class SortByXValuesResourceGroup;
 class GL3DResourceGroup;
 
-class ChartTypeTabPage : public ResourceChangeListener, public svt::OWizardPage, public ChartTypeTemplateProvider
+class ChartTypeTabPage final : public ResourceChangeListener, public svt::OWizardPage, public ChartTypeTemplateProvider
 {
 public:
     ChartTypeTabPage( vcl::Window* pParent
@@ -59,7 +59,7 @@ public:
 
     virtual css::uno::Reference< css::chart2::XChartTypeTemplate > getCurrentTemplate() const override;
 
-protected:
+private:
     ChartTypeDialogController* getSelectedMainType();
     void showAllControls( ChartTypeDialogController& rTypeController );
     void fillAllControls( const ChartTypeParameter& rParameter, bool bAlsoResetSubTypeList=true );
@@ -73,7 +73,6 @@ protected:
     DECL_LINK( SelectMainTypeHdl, ListBox&, void );
     DECL_LINK( SelectSubTypeHdl, ValueSet*, void );
 
-protected:
     VclPtr<FixedText>  m_pFT_ChooseType;
     VclPtr<ListBox>    m_pMainTypeList;
     VclPtr<ValueSet>   m_pSubTypeList;

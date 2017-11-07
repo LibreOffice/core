@@ -44,7 +44,7 @@ typedef ::cppu::WeakImplHelper<
     GridProperties_Base;
 }
 
-class GridProperties :
+class GridProperties final :
         public MutexContainer,
         public impl::GridProperties_Base,
         public ::property::OPropertySet
@@ -63,7 +63,7 @@ public:
     /// merge XTypeProvider implementations
      DECLARE_XTYPEPROVIDER()
 
-protected:
+private:
     explicit GridProperties( const GridProperties & rOther );
 
     // ____ OPropertySet ____
@@ -96,7 +96,6 @@ protected:
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 
-private:
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
 };
 

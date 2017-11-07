@@ -42,7 +42,7 @@ typedef ::cppu::WeakImplHelper<
     PageBackground_Base;
 }
 
-class PageBackground :
+class PageBackground final :
     public MutexContainer,
     public impl::PageBackground_Base,
     public ::property::OPropertySet
@@ -59,7 +59,7 @@ public:
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
 
-protected:
+private:
     explicit PageBackground( const PageBackground & rOther );
 
     // ____ OPropertySet ____
@@ -93,7 +93,6 @@ protected:
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 
-private:
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
 };
 

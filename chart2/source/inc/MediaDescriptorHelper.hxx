@@ -43,16 +43,13 @@
 namespace apphelper
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS MediaDescriptorHelper
+class OOO_DLLPUBLIC_CHARTTOOLS MediaDescriptorHelper final
 {
-private:
-    //MediaDescriptorHelper(){};
 public:
     MediaDescriptorHelper( const css::uno::Sequence< css::beans::PropertyValue > & rMediaDescriptor );
 
     const css::uno::Sequence< css::beans::PropertyValue >& getReducedForModel() { return m_aModelProperties;}
 
-public:
     //all properties given in the constructor are stored in the following three sequences
 
     css::uno::Sequence< css::beans::PropertyValue >
@@ -97,7 +94,7 @@ public:
                         Stream;
     bool                ISSET_Stream;
 
-protected:
+private:
     SAL_DLLPRIVATE void impl_init();
 };
 

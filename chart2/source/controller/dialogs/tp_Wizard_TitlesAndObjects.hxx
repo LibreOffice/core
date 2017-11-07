@@ -36,7 +36,7 @@
 namespace chart
 {
 
-class TitlesAndObjectsTabPage : public svt::OWizardPage
+class TitlesAndObjectsTabPage final : public svt::OWizardPage
 {
 public:
     TitlesAndObjectsTabPage( svt::OWizardMachine* pParent
@@ -49,13 +49,12 @@ public:
     virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason eReason ) override;
     virtual bool        canAdvance() const override;
 
-protected:
+private:
     void commitToModel();
     DECL_LINK( ChangeHdl, LinkParamNone*, void );
     DECL_LINK( ChangeEditHdl, Edit&, void );
     DECL_LINK( ChangeCheckBoxHdl, CheckBox&, void );
 
-protected:
     std::unique_ptr< TitleResources >            m_xTitleResources;
     std::unique_ptr< LegendPositionResources >   m_xLegendPositionResources;
 

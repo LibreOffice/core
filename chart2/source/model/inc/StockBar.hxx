@@ -40,7 +40,7 @@ typedef ::cppu::WeakImplHelper<
     StockBar_Base;
 }
 
-class StockBar :
+class StockBar final :
         public MutexContainer,
         public impl::StockBar_Base,
         public ::property::OPropertySet
@@ -52,7 +52,7 @@ public:
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
 
-protected:
+private:
     explicit StockBar( const StockBar & rOther );
 
     // ____ OPropertySet ____
@@ -85,7 +85,6 @@ protected:
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 
-private:
     const bool m_bRisingCourse;
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
 };

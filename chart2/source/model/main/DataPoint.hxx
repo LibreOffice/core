@@ -44,7 +44,7 @@ typedef ::cppu::WeakImplHelper<
     DataPoint_Base;
 }
 
-class DataPoint :
+class DataPoint final :
         public MutexContainer,
         public impl::DataPoint_Base,
         public ::property::OPropertySet
@@ -60,7 +60,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-protected:
+private:
     explicit DataPoint( const DataPoint & rOther );
 
     // ____ OPropertySet ____
@@ -101,7 +101,6 @@ protected:
     virtual void firePropertyChangeEvent() override;
     using OPropertySet::disposing;
 
-private:
     css::uno::WeakReference< css::beans::XPropertySet >   m_xParentProperties;
 
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;

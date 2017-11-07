@@ -60,7 +60,7 @@ typedef ::cppu::WeakImplHelper<
     DataSeries_Base;
 }
 
-class DataSeries :
+class DataSeries final :
     public MutexContainer,
     public impl::DataSeries_Base,
     public ::property::OPropertySet
@@ -79,7 +79,7 @@ public:
     /// merge XTypeProvider implementations
     DECLARE_XTYPEPROVIDER()
 
-protected:
+private:
     explicit DataSeries( const DataSeries & rOther );
 
     // late initialization to call after copy-constructing
@@ -150,7 +150,6 @@ protected:
 
     void fireModifyEvent();
 
-private:
     typedef std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > tDataSequenceContainer;
     tDataSequenceContainer        m_aDataSequences;
 

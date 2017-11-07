@@ -25,7 +25,7 @@
 namespace chart
 {
 
-class ScatterChartType : public ChartType
+class ScatterChartType final : public ChartType
 {
 public:
     ScatterChartType(
@@ -42,7 +42,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
-protected:
+private:
     explicit ScatterChartType( const ScatterChartType & rOther );
 
     // ____ XChartType ____

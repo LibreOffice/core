@@ -42,7 +42,7 @@ typedef ::cppu::WeakImplHelper<
     Wall_Base;
 }
 
-class Wall :
+class Wall final :
     public MutexContainer,
     public impl::Wall_Base,
     public ::property::OPropertySet
@@ -54,7 +54,7 @@ public:
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
 
-protected:
+private:
     explicit Wall( const Wall & rOther );
 
     // ____ OPropertySet ____

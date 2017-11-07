@@ -24,7 +24,7 @@
 namespace chart
 {
 
-class CandleStickChartType : public ChartType
+class CandleStickChartType final : public ChartType
 {
 public:
     explicit CandleStickChartType(
@@ -38,7 +38,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
-protected:
+private:
     explicit CandleStickChartType( const CandleStickChartType & rOther );
 
     // ____ XChartType ____

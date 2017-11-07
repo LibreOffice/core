@@ -41,7 +41,7 @@ namespace wrapper
 
 class Chart2ModelContact;
 
-class DataSeriesPointWrapper : public ::cppu::ImplInheritanceHelper<
+class DataSeriesPointWrapper final : public ::cppu::ImplInheritanceHelper<
                                           WrappedPropertySet
                                         , css::lang::XServiceInfo
                                         , css::lang::XInitialization
@@ -84,7 +84,7 @@ public:
     virtual css::uno::Any getReferenceSize() override;
     virtual css::awt::Size getCurrentSizeForReference() override;
 
-protected:
+private:
     // ____ XComponent ____
     virtual void SAL_CALL dispose() override;
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
@@ -93,7 +93,6 @@ protected:
     // ____ XEventListener ____
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
-protected:
     // ____ WrappedPropertySet ____
     virtual const css::uno::Sequence< css::beans::Property >& getPropertySequence() override;
     virtual const std::vector< WrappedProperty* > createWrappedProperties() override;
@@ -109,7 +108,6 @@ protected:
     css::uno::Reference< css::chart2::XDataSeries > getDataSeries();
     css::uno::Reference< css::beans::XPropertySet > getDataPointProperties();
 
-private:
     std::shared_ptr< Chart2ModelContact >         m_spChart2ModelContact;
     ::comphelper::OInterfaceContainerHelper2      m_aEventListenerContainer;
 

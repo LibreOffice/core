@@ -27,7 +27,7 @@
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS WrappedIgnoreProperty : public WrappedProperty
+class OOO_DLLPUBLIC_CHARTTOOLS WrappedIgnoreProperty final : public WrappedProperty
 {
 public:
     WrappedIgnoreProperty( const OUString& rOuterName, const css::uno::Any& rDefaultValue );
@@ -43,7 +43,7 @@ SAL_DLLPRIVATE virtual css::uno::Any getPropertyDefault( const css::uno::Referen
 
 SAL_DLLPRIVATE virtual css::beans::PropertyState getPropertyState( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
-protected:
+private:
     css::uno::Any          m_aDefaultValue;
     mutable css::uno::Any  m_aCurrentValue;
 };

@@ -43,7 +43,7 @@ typedef ::cppu::WeakImplHelper<
     Title_Base;
 }
 
-class Title :
+class Title final :
     public MutexContainer,
     public impl::Title_Base,
     public ::property::OPropertySet
@@ -62,7 +62,7 @@ public:
     /// merge XTypeProvider implementations
      DECLARE_XTYPEPROVIDER()
 
-protected:
+private:
     explicit Title( const Title & rOther );
 
     // ____ OPropertySet ____
@@ -102,7 +102,6 @@ protected:
 
     void fireModifyEvent();
 
-private:
     css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > > m_aStrings;
 
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
