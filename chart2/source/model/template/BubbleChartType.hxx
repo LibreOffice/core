@@ -25,7 +25,7 @@
 namespace chart
 {
 
-class BubbleChartType : public ChartType
+class BubbleChartType final : public ChartType
 {
 public:
     explicit BubbleChartType(
@@ -39,7 +39,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
-protected:
+private:
     explicit BubbleChartType( const BubbleChartType & rOther );
 
     // ____ XChartType ____

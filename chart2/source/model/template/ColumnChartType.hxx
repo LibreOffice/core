@@ -24,7 +24,7 @@
 namespace chart
 {
 
-class ColumnChartType : public ChartType
+class ColumnChartType final : public ChartType
 {
 public:
     explicit ColumnChartType( css::uno::Reference< css::uno::XComponentContext > const & xContext );
@@ -37,7 +37,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
-protected:
+private:
     explicit ColumnChartType( const ColumnChartType & rOther );
 
     // ____ XChartType ____

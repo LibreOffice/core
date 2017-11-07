@@ -43,7 +43,7 @@ typedef ::cppu::WeakImplHelper<
     FormattedString_Base;
 }
 
-class FormattedString :
+class FormattedString final :
     public MutexContainer,
     public impl::FormattedString_Base,
     public ::property::OPropertySet
@@ -75,7 +75,7 @@ public:
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
         { ::property::OPropertySet::removeVetoableChangeListener(p1, p2); }
 
-protected:
+private:
     explicit FormattedString( const FormattedString & rOther );
 
     // ____ XFormattedString ____
@@ -115,7 +115,6 @@ protected:
 
     void fireModifyEvent();
 
-private:
     OUString m_aString;
 
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;

@@ -24,7 +24,7 @@
 namespace chart
 {
 
-class AreaChartType : public ChartType
+class AreaChartType final : public ChartType
 {
 public:
     explicit AreaChartType( css::uno::Reference< css::uno::XComponentContext > const & xContext );
@@ -37,7 +37,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
-protected:
+private:
     explicit AreaChartType( const AreaChartType & rOther );
 
     // ____ XChartType ____

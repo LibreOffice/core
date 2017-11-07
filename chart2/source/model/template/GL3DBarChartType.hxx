@@ -18,7 +18,7 @@ namespace chart {
  * Chart type that represents 3 dimensional data content in 3D space using
  * OpenGL.
  */
-class GL3DBarChartType : public ChartType
+class GL3DBarChartType final : public ChartType
 {
 public:
     explicit GL3DBarChartType( const css::uno::Reference<css::uno::XComponentContext>& xContext );
@@ -33,7 +33,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
-protected:
+private:
     GL3DBarChartType( const GL3DBarChartType& rOther );
 
     virtual OUString SAL_CALL getChartType() override;

@@ -24,7 +24,7 @@
 namespace chart
 {
 
-class BarChartType : public ChartType
+class BarChartType final : public ChartType
 {
 public:
     explicit BarChartType( css::uno::Reference< css::uno::XComponentContext > const & xContext );
@@ -37,7 +37,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
-protected:
+private:
     explicit BarChartType( const BarChartType & rOther );
 
     // ____ XChartType ____

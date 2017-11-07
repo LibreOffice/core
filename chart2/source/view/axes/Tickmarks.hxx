@@ -110,7 +110,7 @@ protected: //member
     double    m_fScaledVisibleMax;
 };
 
-class TickFactory2D : public TickFactory
+class TickFactory2D final : public TickFactory
 {
 public:
     TickFactory2D(
@@ -137,10 +137,9 @@ public:
     bool  isHorizontalAxis() const;
     bool  isVerticalAxis() const;
 
-protected: //methods
+private:
     ::basegfx::B2DVector     getTickScreenPosition2D( double fScaledLogicTickValue ) const;
 
-private: //member
     ::basegfx::B2DVector    m_aAxisStartScreenPosition2D;
     ::basegfx::B2DVector    m_aAxisEndScreenPosition2D;
 

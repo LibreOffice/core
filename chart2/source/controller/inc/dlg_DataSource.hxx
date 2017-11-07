@@ -38,7 +38,7 @@ class DataSourceTabPage;
 class ChartTypeTemplateProvider;
 class DialogModel;
 
-class DataSourceDialog :
+class DataSourceDialog final :
         public TabDialog,
         public TabPageNotifiable
 {
@@ -57,11 +57,10 @@ public:
     virtual void setInvalidPage( TabPage * pTabPage ) override;
     virtual void setValidPage( TabPage * pTabPage ) override;
 
-protected:
+private:
     std::unique_ptr< ChartTypeTemplateProvider >  m_apDocTemplateProvider;
     std::unique_ptr< DialogModel >                m_apDialogModel;
 
-private:
     VclPtr<DataSourceTabControl> m_pTabControl;
     VclPtr<OKButton>             m_pBtnOK;
 

@@ -24,7 +24,7 @@
 namespace chart
 {
 
-class FilledNetChartType : public NetChartType_Base
+class FilledNetChartType final : public NetChartType_Base
 {
 public:
     explicit FilledNetChartType( css::uno::Reference< css::uno::XComponentContext > const & xContext );
@@ -37,7 +37,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
-protected:
+private:
     explicit FilledNetChartType( const FilledNetChartType & rOther );
 
     // ____ XChartType ____

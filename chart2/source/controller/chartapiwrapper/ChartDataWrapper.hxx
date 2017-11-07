@@ -39,7 +39,7 @@ namespace wrapper
 class Chart2ModelContact;
 struct lcl_Operator;
 
-class ChartDataWrapper : public MutexContainer, public
+class ChartDataWrapper final : public MutexContainer, public
     ::cppu::WeakImplHelper<
     css::chart2::XAnyDescriptionAccess,
     css::chart::XDateCategories,
@@ -58,7 +58,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-protected:
+private:
     // ____ XDateCategories ____
     virtual css::uno::Sequence< double > SAL_CALL getDateCategories() override;
     virtual void SAL_CALL setDateCategories( const css::uno::Sequence< double >& rDates ) override;
@@ -107,12 +107,10 @@ protected:
 
     void fireChartDataChangeEvent( css::chart::ChartDataChangeEvent& aEvent );
 
-private: //methods
     void switchToInternalDataProvider();
     void initDataAccess();
     void applyData( lcl_Operator& rDataOperator );
 
-private: //member
     css::uno::Reference< css::chart2::XAnyDescriptionAccess > m_xDataAccess;
 
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;

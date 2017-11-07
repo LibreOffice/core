@@ -47,7 +47,7 @@ protected:
         getPropertySetInfo() override;
 };
 
-class NetChartType : public NetChartType_Base
+class NetChartType final : public NetChartType_Base
 {
 public:
     explicit NetChartType( css::uno::Reference< css::uno::XComponentContext > const & xContext );
@@ -60,7 +60,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
-protected:
+private:
     explicit NetChartType( const NetChartType & rOther );
 
     // ____ XChartType ____

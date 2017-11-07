@@ -43,7 +43,7 @@ namespace canvas
     typedef cppu::WeakComponentImplHelper< css::rendering::XParametricPolyPolygon2D,
                                            css::lang::XServiceInfo > ParametricPolyPolygon_Base;
 
-    class CANVASTOOLS_DLLPUBLIC ParametricPolyPolygon : public ::cppu::BaseMutex,
+    class CANVASTOOLS_DLLPUBLIC ParametricPolyPolygon final : public ::cppu::BaseMutex,
                                   public ParametricPolyPolygon_Base
     {
     public:
@@ -113,12 +113,11 @@ namespace canvas
         /// Query all defining values of this object atomically
         Values getValues() const;
 
-    protected:
+    private:
         virtual ~ParametricPolyPolygon() override; // we're a ref-counted UNO class. _We_ destroy ourselves.
         ParametricPolyPolygon(const ParametricPolyPolygon&) = delete;
         ParametricPolyPolygon& operator=( const ParametricPolyPolygon& ) = delete;
 
-    private:
         static ParametricPolyPolygon* createLinearHorizontalGradient( const css::uno::Reference<
                                                                          css::rendering::XGraphicDevice >& rDevice,
                                                                       const css::uno::Sequence< css::uno::Sequence< double > >& colors,

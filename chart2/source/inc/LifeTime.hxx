@@ -72,9 +72,8 @@ protected:
     sal_Int32 volatile      m_nLongLastingCallCount;
 };
 
-class CloseableLifeTimeManager : public LifeTimeManager
+class CloseableLifeTimeManager final : public LifeTimeManager
 {
-protected:
     css::util::XCloseable*         m_pCloseable;
 
     ::osl::Condition    m_aEndTryClosingCondition;
@@ -100,7 +99,7 @@ OOO_DLLPUBLIC_CHARTTOOLS    void    g_close_endTryClose_doClose();
 /// @throws css::uno::RuntimeException
 OOO_DLLPUBLIC_CHARTTOOLS    void    g_addCloseListener( const css::uno::Reference< css::util::XCloseListener > & xListener );
 
-protected:
+private:
     virtual bool    impl_canStartApiCall() override;
     virtual void    impl_apiCallCountReachedNull() override;
 
@@ -206,9 +205,8 @@ private:
 };
 
 template<class T>
-class NegativeGuard
+class NegativeGuard final
 {
-protected:
     T * m_pT;
 public:
 

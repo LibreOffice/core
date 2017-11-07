@@ -58,7 +58,7 @@ typedef ::cppu::WeakComponentImplHelper<
 /**
  * This sequence object does store actual values within, hence "cached".
  */
-class CachedDataSequence :
+class CachedDataSequence final :
         public ::comphelper::OMutexAndBroadcastHelper,
         public ::comphelper::OPropertyContainer,
         public ::comphelper::OPropertyArrayUsageHelper< CachedDataSequence >,
@@ -91,7 +91,7 @@ public:
     /// merge XTypeProvider implementations
     DECLARE_XTYPEPROVIDER()
 
-protected:
+private:
     // ____ XPropertySet ____
     /// @see css::beans::XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
@@ -144,7 +144,6 @@ protected:
      */
     void registerProperties();
 
-private:
     /** is used by interface method getNumericalData().
      */
     css::uno::Sequence< double > Impl_getNumericalData() const;
@@ -155,7 +154,6 @@ private:
      */
     css::uno::Sequence< css::uno::Any > Impl_getMixedData() const;
 
-private:
     enum DataType                                          m_eCurrentDataType;
 
     css::uno::Sequence< double >                           m_aNumericalSequence;

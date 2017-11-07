@@ -30,7 +30,7 @@ namespace chart
 namespace wrapper
 {
 
-class WrappedScaleProperty : public WrappedProperty
+class WrappedScaleProperty final : public WrappedProperty
 {
 public:
     enum tScaleProperty
@@ -53,7 +53,6 @@ public:
         , SCALE_PROP_REVERSEDIRECTION
     };
 
-public:
     WrappedScaleProperty(tScaleProperty eScaleProperty, const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
     virtual ~WrappedScaleProperty() override;
 
@@ -63,7 +62,7 @@ public:
 
     virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-protected: //methods
+private:
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException
@@ -75,7 +74,6 @@ protected: //methods
     /// @throws css::uno::RuntimeException
     css::uno::Any getPropertyValue( tScaleProperty eScaleProperty, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const;
 
-private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     tScaleProperty          m_eScaleProperty;
 

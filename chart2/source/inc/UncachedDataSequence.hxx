@@ -70,7 +70,7 @@ typedef ::cppu::WeakComponentImplHelper<
  * <p>A range representation can be either '0', '1', '2', ..., or 'label 1',
  * 'label 2', ....</p>
  */
-class UncachedDataSequence :
+class UncachedDataSequence final :
         public ::comphelper::OMutexAndBroadcastHelper,
         public ::comphelper::OPropertyContainer,
         public ::comphelper::OPropertyArrayUsageHelper< UncachedDataSequence >,
@@ -100,7 +100,7 @@ public:
     /// merge XTypeProvider implementations
     DECLARE_XTYPEPROVIDER()
 
-protected:
+private:
     // ____ XPropertySet ____
     /// @see css::beans::XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
@@ -165,7 +165,6 @@ protected:
      */
     void registerProperties();
 
-private:
     css::uno::Reference< css::chart2::XInternalDataProvider > m_xDataProvider;
     OUString                 m_aSourceRepresentation;
     css::uno::Reference< css::util::XModifyListener >

@@ -39,7 +39,7 @@ namespace chart
 namespace wrapper
 {
 
-class TitleWrapper : public ::cppu::ImplInheritanceHelper<
+class TitleWrapper final : public ::cppu::ImplInheritanceHelper<
                       WrappedPropertySet
                     , css::drawing::XShape
                     , css::lang::XComponent
@@ -62,7 +62,7 @@ public:
     virtual css::uno::Any getReferenceSize() override;
     virtual css::awt::Size getCurrentSizeForReference() override;
 
-protected:
+private:
     // ____ XShape ____
     virtual css::awt::Point SAL_CALL getPosition() override;
     virtual void SAL_CALL setPosition( const css::awt::Point& aPosition ) override;
@@ -101,10 +101,8 @@ protected:
 
     css::uno::Reference< css::beans::XPropertySet > getFirstCharacterPropertySet();
 
-private:
     css::uno::Reference< css::chart2::XTitle > getTitleObject();
 
-private:
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     ::comphelper::OInterfaceContainerHelper2           m_aEventListenerContainer;
 

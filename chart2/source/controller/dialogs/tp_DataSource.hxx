@@ -47,7 +47,7 @@ namespace chart
 class ChartTypeTemplateProvider;
 class DialogModel;
 
-class DataSourceTabPage :
+class DataSourceTabPage final :
         public ::svt::OWizardPage,
         public RangeSelectionListenerParent
 {
@@ -63,7 +63,7 @@ public:
 
     void commitPage();
 
-protected:
+private:
     // OWizardPage
     virtual void ActivatePage() override;
     virtual bool commitPage( ::svt::WizardTypes::CommitPageReason eReason ) override;
@@ -90,7 +90,6 @@ protected:
 
     void updateControlState();
 
-protected:
     /** updates the internal data according to the content of the given edit
         field.  If pField is 0, all relevant fields are used
 
@@ -115,7 +114,6 @@ protected:
     void fillSeriesListBox();
     void fillRoleListBox();
 
-private:
     VclPtr<FixedText>     m_pFT_CAPTION;
     VclPtr<FixedText>     m_pFT_SERIES;
     VclPtr<SvTreeListBox> m_pLB_SERIES;

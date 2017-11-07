@@ -25,7 +25,7 @@
 namespace chart
 {
 
-class LineChartType : public ChartType
+class LineChartType final : public ChartType
 {
 public:
     explicit LineChartType( css::uno::Reference< css::uno::XComponentContext > const & xContext );
@@ -38,7 +38,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
-protected:
+private:
     explicit LineChartType( const LineChartType & rOther );
 
     // ____ XChartType ____

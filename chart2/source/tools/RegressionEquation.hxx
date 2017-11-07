@@ -47,7 +47,7 @@ typedef ::cppu::WeakImplHelper<
     RegressionEquation_Base;
 }
 
-class RegressionEquation :
+class RegressionEquation final :
         public MutexContainer,
         public impl::RegressionEquation_Base,
         public ::property::OPropertySet
@@ -69,7 +69,7 @@ public:
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
 
-protected:
+private:
     explicit RegressionEquation( const RegressionEquation & rOther );
 
     // ____ OPropertySet ____
@@ -112,7 +112,6 @@ protected:
 
     void fireModifyEvent();
 
-private:
     css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > > m_aStrings;
 
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;

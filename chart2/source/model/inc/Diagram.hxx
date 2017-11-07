@@ -55,7 +55,7 @@ typedef ::cppu::WeakImplHelper<
     Diagram_Base;
 }
 
-class Diagram :
+class Diagram final :
     public MutexContainer,
     public impl::Diagram_Base,
     public ::property::OPropertySet
@@ -74,7 +74,7 @@ public:
     /// merge XTypeProvider implementations
      DECLARE_XTYPEPROVIDER()
 
-protected:
+private:
     explicit Diagram( const Diagram & rOther );
 
     // ____ OPropertySet ____
@@ -152,7 +152,6 @@ protected:
 
     void fireModifyEvent();
 
-private:
      css::uno::Reference< css::uno::XComponentContext >                m_xContext;
 
     typedef
