@@ -91,9 +91,8 @@ public:
 };
 
 
-class ExtTreeListBox : public TreeListBox
+class ExtTreeListBox final : public TreeListBox
 {
-protected:
     virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel  ) override;
     virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) override;
 
@@ -175,9 +174,8 @@ public:
     DECL_LINK( ActivatePageHdl, TabControl*, void );
 };
 
-class ObjectPage: public TabPage
+class ObjectPage final : public TabPage
 {
-protected:
     VclPtr<ExtTreeListBox>     m_pBasicBox;
     VclPtr<PushButton>         m_pEditButton;
     VclPtr<PushButton>         m_pNewModButton;
@@ -208,9 +206,8 @@ public:
 };
 
 
-class LibPage: public TabPage
+class LibPage final : public TabPage
 {
-protected:
     VclPtr<ListBox>            m_pBasicsBox;
     VclPtr<CheckBox>           m_pLibBox;
     VclPtr<PushButton>         m_pEditButton;
