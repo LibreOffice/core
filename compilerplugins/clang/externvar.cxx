@@ -44,7 +44,8 @@ bool hasExternalLinkage(VarDecl const * decl) {
 class ExternVar: public RecursiveASTVisitor<ExternVar>, public loplugin::Plugin
 {
 public:
-    explicit ExternVar(InstantiationData const & data): Plugin(data) {}
+    explicit ExternVar(loplugin::InstantiationData const & data): Plugin(data)
+    {}
 
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

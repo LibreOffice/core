@@ -20,7 +20,8 @@ class CppunitAssertEquals:
     public RecursiveASTVisitor<CppunitAssertEquals>, public loplugin::Plugin
 {
 public:
-    explicit CppunitAssertEquals(InstantiationData const & data): Plugin(data) {}
+    explicit CppunitAssertEquals(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override
     {

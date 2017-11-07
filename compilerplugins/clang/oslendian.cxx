@@ -16,7 +16,7 @@ namespace {
 
 class OslEndian: public loplugin::Plugin, public PPCallbacks {
 public:
-    explicit OslEndian(InstantiationData const & data): Plugin(data) {
+    explicit OslEndian(loplugin::InstantiationData const & data): Plugin(data) {
         compat::addPPCallbacks(compiler.getPreprocessor(), this);
     }
 

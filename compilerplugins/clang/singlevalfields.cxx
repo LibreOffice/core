@@ -71,7 +71,8 @@ class SingleValFields:
     public RecursiveASTVisitor<SingleValFields>, public loplugin::Plugin
 {
 public:
-    explicit SingleValFields(InstantiationData const & data): Plugin(data) {}
+    explicit SingleValFields(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override
     {
@@ -116,7 +117,7 @@ void SingleValFields::niceName(const FieldDecl* fieldDecl, MyFieldInfo& aInfo)
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( fieldDecl->getLocation() );
     StringRef name = compiler.getSourceManager().getFilename(expansionLoc);
     aInfo.sourceLocation = std::string(name.substr(strlen(SRCDIR)+1)) + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
-    normalizeDotDotInFilePath(aInfo.sourceLocation);
+    loplugin::normalizeDotDotInFilePath(aInfo.sourceLocation);
 }
 
 bool SingleValFields::VisitFieldDecl( const FieldDecl* fieldDecl )

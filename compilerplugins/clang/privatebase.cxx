@@ -15,7 +15,8 @@ class PrivateBase:
     public RecursiveASTVisitor<PrivateBase>, public loplugin::Plugin
 {
 public:
-    explicit PrivateBase(InstantiationData const & data): Plugin(data) {}
+    explicit PrivateBase(loplugin::InstantiationData const & data): Plugin(data)
+    {}
 
     void run() override;
 

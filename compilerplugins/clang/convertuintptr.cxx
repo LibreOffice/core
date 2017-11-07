@@ -25,13 +25,14 @@ class ConvertUIntPtr:
     public RecursiveASTVisitor<ConvertUIntPtr>, public loplugin::Plugin
 {
 public:
-    explicit ConvertUIntPtr(InstantiationData const & data): Plugin(data) {}
+    explicit ConvertUIntPtr(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override
     {
         std::string fn( compiler.getSourceManager().getFileEntryForID(
                         compiler.getSourceManager().getMainFileID())->getName() );
-        normalizeDotDotInFilePath(fn);
+        loplugin::normalizeDotDotInFilePath(fn);
         // using sal_uIntPtr as in-between type when converting void* to rtl_TextEncoding
         if (fn == SRCDIR "/sal/osl/unx/thread.cxx")
             return;

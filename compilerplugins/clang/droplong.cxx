@@ -31,13 +31,13 @@ class DropLong:
     public RecursiveASTVisitor<DropLong>, public loplugin::Plugin
 {
 public:
-    explicit DropLong(InstantiationData const & data): Plugin(data) {}
+    explicit DropLong(loplugin::InstantiationData const & data): Plugin(data) {}
 
     virtual void run() override
     {
         std::string fn( compiler.getSourceManager().getFileEntryForID(
                         compiler.getSourceManager().getMainFileID())->getName() );
-        normalizeDotDotInFilePath(fn);
+        loplugin::normalizeDotDotInFilePath(fn);
         if (startswith(fn, SRCDIR "/sal/"))
             return;
         if (startswith(fn, SRCDIR "/desktop/unx/"))

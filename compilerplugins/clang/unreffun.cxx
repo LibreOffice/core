@@ -53,7 +53,7 @@ Decl const * getPreviousNonFriendDecl(Decl const * decl) {
 
 class UnrefFun: public RecursiveASTVisitor<UnrefFun>, public loplugin::Plugin {
 public:
-    explicit UnrefFun(InstantiationData const & data): Plugin(data) {}
+    explicit UnrefFun(loplugin::InstantiationData const & data): Plugin(data) {}
 
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

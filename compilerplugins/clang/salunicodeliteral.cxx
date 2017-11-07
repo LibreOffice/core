@@ -23,7 +23,8 @@ class SalUnicodeLiteral final:
     public RecursiveASTVisitor<SalUnicodeLiteral>, public loplugin::Plugin
 {
 public:
-    explicit SalUnicodeLiteral(InstantiationData const & data): Plugin(data) {}
+    explicit SalUnicodeLiteral(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     bool VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {
         check(expr);

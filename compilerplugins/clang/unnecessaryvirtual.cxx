@@ -53,7 +53,8 @@ class UnnecessaryVirtual:
     public RecursiveASTVisitor<UnnecessaryVirtual>, public loplugin::Plugin
 {
 public:
-    explicit UnnecessaryVirtual(InstantiationData const & data): Plugin(data) {}
+    explicit UnnecessaryVirtual(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override
     {
@@ -158,7 +159,7 @@ std::string UnnecessaryVirtual::toString(SourceLocation loc)
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( loc );
     StringRef name = compiler.getSourceManager().getFilename(expansionLoc);
     std::string sourceLocation = std::string(name.substr(strlen(SRCDIR)+1)) + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
-    normalizeDotDotInFilePath(sourceLocation);
+    loplugin::normalizeDotDotInFilePath(sourceLocation);
     return sourceLocation;
 }
 

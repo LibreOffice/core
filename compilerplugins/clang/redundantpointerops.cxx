@@ -39,7 +39,7 @@ class RedundantPointerOps:
     public RecursiveASTVisitor<RedundantPointerOps>, public loplugin::Plugin
 {
 public:
-    explicit RedundantPointerOps(InstantiationData const & data): Plugin(data) {}
+    explicit RedundantPointerOps(loplugin::InstantiationData const & data): Plugin(data) {}
 
     virtual void run() override
     {

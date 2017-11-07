@@ -59,7 +59,7 @@ class CountUsersOfDefaultParams:
     public RecursiveASTVisitor<CountUsersOfDefaultParams>, public loplugin::Plugin
 {
 public:
-    explicit CountUsersOfDefaultParams(InstantiationData const & data): Plugin(data) {}
+    explicit CountUsersOfDefaultParams(loplugin::InstantiationData const & data): Plugin(data) {}
 
     virtual void run() override
     {
@@ -130,7 +130,7 @@ void CountUsersOfDefaultParams::niceName(const FunctionDecl* functionDecl, MyFun
     }
 
     aInfo.sourceLocation = locationToString(functionDecl->getLocation());
-    normalizeDotDotInFilePath(aInfo.sourceLocation);
+    loplugin::normalizeDotDotInFilePath(aInfo.sourceLocation);
 }
 
 bool CountUsersOfDefaultParams::VisitCallExpr(const CallExpr * callExpr) {

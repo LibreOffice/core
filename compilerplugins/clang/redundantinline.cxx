@@ -17,7 +17,7 @@ class RedundantInline:
     public RecursiveASTVisitor<RedundantInline>, public loplugin::RewritePlugin
 {
 public:
-    explicit RedundantInline(InstantiationData const & data):
+    explicit RedundantInline(loplugin::InstantiationData const & data):
         RewritePlugin(data) {}
 
     void run() override {

@@ -20,7 +20,8 @@ class BadStatics
 {
 
 public:
-    explicit BadStatics(InstantiationData const& rData) : Plugin(rData) {}
+    explicit BadStatics(loplugin::InstantiationData const& rData):
+        Plugin(rData) {}
 
     void run() override {
         if (compiler.getLangOpts().CPlusPlus) { // no non-trivial dtors in C

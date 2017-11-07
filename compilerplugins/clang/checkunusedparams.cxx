@@ -26,7 +26,8 @@ namespace {
 
 class CheckUnusedParams: public RecursiveASTVisitor<CheckUnusedParams>, public loplugin::Plugin {
 public:
-    explicit CheckUnusedParams(InstantiationData const & data): Plugin(data) {}
+    explicit CheckUnusedParams(loplugin::InstantiationData const & data):
+        Plugin(data) {}
     void run() override;
     bool VisitFunctionDecl(FunctionDecl const *);
     bool VisitUnaryAddrOf(UnaryOperator const *);

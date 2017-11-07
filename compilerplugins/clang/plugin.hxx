@@ -226,9 +226,6 @@ bool isSamePathname(StringRef pathname, StringRef other);
 
 } // namespace
 
-using loplugin::InstantiationData; //TODO
-using loplugin::normalizeDotDotInFilePath; //TODO
-
 #endif // COMPILEPLUGIN_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

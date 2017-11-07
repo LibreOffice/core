@@ -44,7 +44,8 @@ class RefCounting:
     public RecursiveASTVisitor<RefCounting>, public loplugin::Plugin
 {
 public:
-    explicit RefCounting(InstantiationData const & data): Plugin(data) {}
+    explicit RefCounting(loplugin::InstantiationData const & data): Plugin(data)
+    {}
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 

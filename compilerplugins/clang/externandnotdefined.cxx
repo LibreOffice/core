@@ -20,7 +20,7 @@ class ExternAndNotDefined:
     public RecursiveASTVisitor<ExternAndNotDefined>, public loplugin::Plugin
 {
 public:
-    explicit ExternAndNotDefined(InstantiationData const & data): Plugin(data) {}
+    explicit ExternAndNotDefined(loplugin::InstantiationData const & data): Plugin(data) {}
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 

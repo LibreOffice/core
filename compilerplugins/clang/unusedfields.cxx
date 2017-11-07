@@ -132,7 +132,8 @@ class UnusedFields:
     public RecursiveASTVisitor<UnusedFields>, public loplugin::Plugin
 {
 public:
-    explicit UnusedFields(InstantiationData const & data): Plugin(data) {}
+    explicit UnusedFields(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override;
 
@@ -237,7 +238,7 @@ MyFieldInfo UnusedFields::niceName(const FieldDecl* fieldDecl)
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( fieldDecl->getLocation() );
     StringRef name = compiler.getSourceManager().getFilename(expansionLoc);
     aInfo.sourceLocation = std::string(name.substr(strlen(SRCDIR)+1)) + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
-    normalizeDotDotInFilePath(aInfo.sourceLocation);
+    loplugin::normalizeDotDotInFilePath(aInfo.sourceLocation);
 
     switch (fieldDecl->getAccess())
     {

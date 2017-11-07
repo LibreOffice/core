@@ -15,7 +15,8 @@ class DllPrivate final:
     public RecursiveASTVisitor<DllPrivate>, public loplugin::Plugin
 {
 public:
-    explicit DllPrivate(InstantiationData const & data): Plugin(data) {}
+    explicit DllPrivate(loplugin::InstantiationData const & data): Plugin(data)
+    {}
 
     bool VisitNamedDecl(NamedDecl const * decl) {
         if (!decl->getLocation().isInvalid()&&ignoreLocation(decl)) {

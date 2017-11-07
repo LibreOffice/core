@@ -47,7 +47,8 @@ class UnnecessaryParen:
     public RecursiveASTVisitor<UnnecessaryParen>, public loplugin::Plugin
 {
 public:
-    explicit UnnecessaryParen(InstantiationData const & data): Plugin(data) {}
+    explicit UnnecessaryParen(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override
     {

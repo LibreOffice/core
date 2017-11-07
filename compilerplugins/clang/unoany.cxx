@@ -15,7 +15,7 @@ class UnoAny:
     public RecursiveASTVisitor<UnoAny>, public loplugin::Plugin
 {
 public:
-    explicit UnoAny(InstantiationData const & data): Plugin(data) {}
+    explicit UnoAny(loplugin::InstantiationData const & data): Plugin(data) {}
 
     void run() override {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());

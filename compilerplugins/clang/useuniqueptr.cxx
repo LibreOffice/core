@@ -27,7 +27,8 @@ class UseUniquePtr:
     public RecursiveASTVisitor<UseUniquePtr>, public loplugin::Plugin
 {
 public:
-    explicit UseUniquePtr(InstantiationData const & data): Plugin(data) {}
+    explicit UseUniquePtr(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override
     {

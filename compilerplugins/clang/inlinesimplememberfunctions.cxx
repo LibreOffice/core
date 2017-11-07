@@ -21,7 +21,7 @@ class InlineSimpleMemberFunctions:
     public RecursiveASTVisitor<InlineSimpleMemberFunctions>, public loplugin::RewritePlugin
 {
 public:
-    explicit InlineSimpleMemberFunctions(InstantiationData const & data): RewritePlugin(data) {}
+    explicit InlineSimpleMemberFunctions(loplugin::InstantiationData const & data): RewritePlugin(data) {}
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 

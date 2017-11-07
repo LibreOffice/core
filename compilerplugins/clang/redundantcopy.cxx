@@ -17,7 +17,8 @@ class RedundantCopy final:
     public RecursiveASTVisitor<RedundantCopy>, public loplugin::Plugin
 {
 public:
-    explicit RedundantCopy(InstantiationData const & data): Plugin(data) {}
+    explicit RedundantCopy(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     bool VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * expr) {
         if (ignoreLocation(expr)) {

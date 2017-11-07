@@ -20,7 +20,8 @@ class DodgySwitch:
     public RecursiveASTVisitor<DodgySwitch>, public loplugin::Plugin
 {
 public:
-    explicit DodgySwitch(InstantiationData const & data): Plugin(data) {}
+    explicit DodgySwitch(loplugin::InstantiationData const & data): Plugin(data)
+    {}
 
     virtual void run() override
     {

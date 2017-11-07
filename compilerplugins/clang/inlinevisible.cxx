@@ -21,7 +21,8 @@ class InlineVisible:
     public RecursiveASTVisitor<InlineVisible>, public loplugin::Plugin
 {
 public:
-    explicit InlineVisible(InstantiationData const & data): Plugin(data) {}
+    explicit InlineVisible(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

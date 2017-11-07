@@ -54,7 +54,8 @@ class SimplifyBool:
     public RecursiveASTVisitor<SimplifyBool>, public loplugin::Plugin
 {
 public:
-    explicit SimplifyBool(InstantiationData const & data): Plugin(data) {}
+    explicit SimplifyBool(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     void run() override;
 

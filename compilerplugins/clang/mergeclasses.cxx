@@ -50,7 +50,8 @@ class MergeClasses:
     public RecursiveASTVisitor<MergeClasses>, public loplugin::Plugin
 {
 public:
-    explicit MergeClasses(InstantiationData const & data): Plugin(data) {}
+    explicit MergeClasses(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override
     {

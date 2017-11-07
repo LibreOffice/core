@@ -24,7 +24,8 @@ class Flatten:
     public RecursiveASTVisitor<Flatten>, public loplugin::RewritePlugin
 {
 public:
-    explicit Flatten(InstantiationData const & data): RewritePlugin(data) {}
+    explicit Flatten(loplugin::InstantiationData const & data):
+        RewritePlugin(data) {}
 
     virtual void run() override
     {

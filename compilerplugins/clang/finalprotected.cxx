@@ -24,7 +24,8 @@ class FinalProtected:
     public RecursiveASTVisitor<FinalProtected>, public loplugin::Plugin
 {
 public:
-    explicit FinalProtected(InstantiationData const & data): Plugin(data) {}
+    explicit FinalProtected(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());

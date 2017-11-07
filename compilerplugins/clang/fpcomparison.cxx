@@ -26,7 +26,8 @@ class FpComparison:
     public RecursiveASTVisitor<FpComparison>, public loplugin::Plugin
 {
 public:
-    explicit FpComparison(InstantiationData const & data): Plugin(data) {}
+    explicit FpComparison(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override
     {

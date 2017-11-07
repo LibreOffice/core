@@ -16,7 +16,8 @@ class CharRightShift:
     public RecursiveASTVisitor<CharRightShift>, public loplugin::Plugin
 {
 public:
-    explicit CharRightShift(InstantiationData const & data): Plugin(data) {}
+    explicit CharRightShift(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

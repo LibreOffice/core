@@ -25,7 +25,8 @@ class FragileDestructor:
     public RecursiveASTVisitor<FragileDestructor>, public loplugin::Plugin
 {
 public:
-    explicit FragileDestructor(InstantiationData const & data): Plugin(data) {}
+    explicit FragileDestructor(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 

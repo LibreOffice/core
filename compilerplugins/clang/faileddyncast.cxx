@@ -93,7 +93,8 @@ class FailedDynCast:
     public RecursiveASTVisitor<FailedDynCast>, public loplugin::Plugin
 {
 public:
-    explicit FailedDynCast(InstantiationData const & data): Plugin(data) {}
+    explicit FailedDynCast(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     bool shouldVisitTemplateInstantiations() const { return true; }
 

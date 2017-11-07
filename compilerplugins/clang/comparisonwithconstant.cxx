@@ -26,7 +26,7 @@ class ComparisonWithConstant :
     public RecursiveASTVisitor<ComparisonWithConstant>, public loplugin::RewritePlugin
 {
 public:
-    explicit ComparisonWithConstant(InstantiationData const & data): RewritePlugin(data) {}
+    explicit ComparisonWithConstant(loplugin::InstantiationData const & data): RewritePlugin(data) {}
 
     virtual void run() override
     {

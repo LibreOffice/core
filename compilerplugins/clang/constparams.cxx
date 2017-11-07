@@ -35,12 +35,12 @@ class ConstParams:
     public loplugin::FunctionAddress<ConstParams>
 {
 public:
-    explicit ConstParams(InstantiationData const & data): loplugin::FunctionAddress<ConstParams>(data) {}
+    explicit ConstParams(loplugin::InstantiationData const & data): loplugin::FunctionAddress<ConstParams>(data) {}
 
     virtual void run() override {
         std::string fn( compiler.getSourceManager().getFileEntryForID(
                         compiler.getSourceManager().getMainFileID())->getName() );
-        normalizeDotDotInFilePath(fn);
+        loplugin::normalizeDotDotInFilePath(fn);
         if (startswith(fn, SRCDIR "/sal/")
             || fn == SRCDIR "/jurt/source/pipe/staticsalhack.cxx"
             || startswith(fn, SRCDIR "/bridges/")

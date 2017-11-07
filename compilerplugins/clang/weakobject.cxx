@@ -24,7 +24,8 @@ class WeakObject
 {
 
 public:
-    explicit WeakObject(InstantiationData const& rData) : Plugin(rData) {}
+    explicit WeakObject(loplugin::InstantiationData const& rData): Plugin(rData)
+    {}
 
     void run() override {
         if (compiler.getLangOpts().CPlusPlus) { // no OWeakObject in C

@@ -25,7 +25,8 @@ class RangedForCopy:
     public RecursiveASTVisitor<RangedForCopy>, public loplugin::Plugin
 {
 public:
-    explicit RangedForCopy(InstantiationData const & data): Plugin(data) {}
+    explicit RangedForCopy(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());

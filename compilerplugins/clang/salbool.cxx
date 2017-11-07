@@ -146,7 +146,8 @@ class SalBool:
     public RecursiveASTVisitor<SalBool>, public loplugin::RewritePlugin
 {
 public:
-    explicit SalBool(InstantiationData const & data): RewritePlugin(data) {}
+    explicit SalBool(loplugin::InstantiationData const & data):
+        RewritePlugin(data) {}
 
     virtual void run() override;
 

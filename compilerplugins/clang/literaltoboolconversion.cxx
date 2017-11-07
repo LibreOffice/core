@@ -21,7 +21,7 @@ class LiteralToBoolConversion:
     public loplugin::RewritePlugin
 {
 public:
-    explicit LiteralToBoolConversion(InstantiationData const & data):
+    explicit LiteralToBoolConversion(loplugin::InstantiationData const & data):
         RewritePlugin(data) {}
 
     virtual void run() override

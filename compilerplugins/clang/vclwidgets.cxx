@@ -30,7 +30,8 @@ class VCLWidgets:
     public RecursiveASTVisitor<VCLWidgets>, public loplugin::Plugin
 {
 public:
-    explicit VCLWidgets(InstantiationData const & data): Plugin(data) {}
+    explicit VCLWidgets(loplugin::InstantiationData const & data): Plugin(data)
+    {}
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 

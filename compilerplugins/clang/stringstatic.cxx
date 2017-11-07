@@ -27,7 +27,8 @@ class StringStatic
 {
 
 public:
-    explicit StringStatic(InstantiationData const& rData) : Plugin(rData) {}
+    explicit StringStatic(loplugin::InstantiationData const& rData):
+        Plugin(rData) {}
 
     void run() override;
     bool VisitVarDecl(VarDecl const*);

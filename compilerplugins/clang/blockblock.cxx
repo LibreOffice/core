@@ -23,7 +23,8 @@ class BlockBlock:
     public RecursiveASTVisitor<BlockBlock>, public loplugin::RewritePlugin
 {
 public:
-    explicit BlockBlock(InstantiationData const & data): RewritePlugin(data) {}
+    explicit BlockBlock(loplugin::InstantiationData const & data):
+        RewritePlugin(data) {}
 
     virtual void run() override
     {

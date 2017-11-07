@@ -26,7 +26,8 @@ class LoopVarTooSmall:
     public RecursiveASTVisitor<LoopVarTooSmall>, public loplugin::Plugin
 {
 public:
-    explicit LoopVarTooSmall(InstantiationData const & data): Plugin(data) {}
+    explicit LoopVarTooSmall(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());

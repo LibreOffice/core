@@ -31,7 +31,8 @@ class CommaOperator:
     public RecursiveASTVisitor<CommaOperator>, public loplugin::Plugin
 {
 public:
-    explicit CommaOperator(InstantiationData const & data): Plugin(data) {}
+    explicit CommaOperator(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override
     {

@@ -86,7 +86,8 @@ class CStyleCast:
     public RecursiveASTVisitor<CStyleCast>, public loplugin::Plugin
 {
 public:
-    explicit CStyleCast(InstantiationData const & data): Plugin(data) {}
+    explicit CStyleCast(loplugin::InstantiationData const & data): Plugin(data)
+    {}
 
     virtual void run() override {
         if (compiler.getLangOpts().CPlusPlus) {

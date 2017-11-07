@@ -26,7 +26,8 @@ class PtrVector:
     public RecursiveASTVisitor<PtrVector>, public loplugin::Plugin
 {
 public:
-    explicit PtrVector(InstantiationData const & data): Plugin(data) {}
+    explicit PtrVector(loplugin::InstantiationData const & data): Plugin(data)
+    {}
 
     virtual void run() override
     {

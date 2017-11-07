@@ -62,7 +62,7 @@ class UnusedEnumConstants:
     public RecursiveASTVisitor<UnusedEnumConstants>, public loplugin::Plugin
 {
 public:
-    explicit UnusedEnumConstants(InstantiationData const & data): Plugin(data) {}
+    explicit UnusedEnumConstants(loplugin::InstantiationData const & data): Plugin(data) {}
 
     virtual void run() override
     {
@@ -107,7 +107,7 @@ MyFieldInfo UnusedEnumConstants::niceName(const EnumConstantDecl* enumConstantDe
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( enumConstantDecl->getLocation() );
     StringRef name = compiler.getSourceManager().getFilename(expansionLoc);
     aInfo.sourceLocation = std::string(name.substr(strlen(SRCDIR)+1)) + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
-    normalizeDotDotInFilePath(aInfo.sourceLocation);
+    loplugin::normalizeDotDotInFilePath(aInfo.sourceLocation);
 
     return aInfo;
 }

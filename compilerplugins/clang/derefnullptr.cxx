@@ -15,7 +15,8 @@ class DerefNullPtr:
     public RecursiveASTVisitor<DerefNullPtr>, public loplugin::Plugin
 {
 public:
-    explicit DerefNullPtr(InstantiationData const & data): Plugin(data) {}
+    explicit DerefNullPtr(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

@@ -27,7 +27,7 @@ class UnnecessaryOverride:
     public RecursiveASTVisitor<UnnecessaryOverride>, public loplugin::Plugin
 {
 public:
-    explicit UnnecessaryOverride(InstantiationData const & data): Plugin(data) {}
+    explicit UnnecessaryOverride(loplugin::InstantiationData const & data): Plugin(data) {}
 
     virtual void run() override
     {

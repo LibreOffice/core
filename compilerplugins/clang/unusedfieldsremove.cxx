@@ -31,7 +31,7 @@ class UnusedFieldsRemove:
     public RecursiveASTVisitor<UnusedFieldsRemove>, public loplugin::RewritePlugin
 {
 public:
-    explicit UnusedFieldsRemove(InstantiationData const & data);
+    explicit UnusedFieldsRemove(loplugin::InstantiationData const & data);
     ~UnusedFieldsRemove();
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
@@ -52,7 +52,7 @@ size_t getFilesize(const char* filename)
     return st.st_size;
 }
 
-UnusedFieldsRemove::UnusedFieldsRemove(InstantiationData const & data): RewritePlugin(data)
+UnusedFieldsRemove::UnusedFieldsRemove(loplugin::InstantiationData const & data): RewritePlugin(data)
 {
     static const char sInputFile[] = SRCDIR "/result.txt";
     mmapFilesize = getFilesize(sInputFile);

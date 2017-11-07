@@ -93,7 +93,8 @@ class RedundantCast:
     public RecursiveASTVisitor<RedundantCast>, public loplugin::RewritePlugin
 {
 public:
-    explicit RedundantCast(InstantiationData const & data): RewritePlugin(data)
+    explicit RedundantCast(loplugin::InstantiationData const & data):
+        RewritePlugin(data)
     {}
 
     virtual void run() override {

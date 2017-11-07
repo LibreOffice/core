@@ -32,7 +32,7 @@ class UnnecessaryCatchThrow:
     public RecursiveASTVisitor<UnnecessaryCatchThrow>, public loplugin::Plugin
 {
 public:
-    explicit UnnecessaryCatchThrow(InstantiationData const & data): Plugin(data) {}
+    explicit UnnecessaryCatchThrow(loplugin::InstantiationData const & data): Plugin(data) {}
 
     virtual void run() override
     {

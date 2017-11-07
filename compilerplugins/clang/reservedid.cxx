@@ -36,7 +36,8 @@ class ReservedId:
     public RecursiveASTVisitor<ReservedId>, public loplugin::Plugin
 {
 public:
-    explicit ReservedId(InstantiationData const & data): Plugin(data) {}
+    explicit ReservedId(loplugin::InstantiationData const & data): Plugin(data)
+    {}
 
     void run() override;
 

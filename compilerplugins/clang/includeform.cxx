@@ -14,7 +14,8 @@ namespace {
 
 class IncludeForm final: public PPCallbacks, public loplugin::RewritePlugin {
 public:
-    explicit IncludeForm(InstantiationData const & data): RewritePlugin(data)
+    explicit IncludeForm(loplugin::InstantiationData const & data):
+        RewritePlugin(data)
     { compat::addPPCallbacks(compiler.getPreprocessor(), this); }
 
 private:

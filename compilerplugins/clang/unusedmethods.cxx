@@ -78,7 +78,8 @@ class UnusedMethods:
     public RecursiveASTVisitor<UnusedMethods>, public loplugin::Plugin
 {
 public:
-    explicit UnusedMethods(InstantiationData const & data): Plugin(data) {}
+    explicit UnusedMethods(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override
     {
@@ -177,7 +178,7 @@ std::string UnusedMethods::toString(SourceLocation loc)
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( loc );
     StringRef name = compiler.getSourceManager().getFilename(expansionLoc);
     std::string sourceLocation = std::string(name.substr(strlen(SRCDIR)+1)) + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
-    normalizeDotDotInFilePath(sourceLocation);
+    loplugin::normalizeDotDotInFilePath(sourceLocation);
     return sourceLocation;
 }
 

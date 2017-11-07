@@ -47,7 +47,8 @@ class CastToVoid final:
     public RecursiveASTVisitor<CastToVoid>, public loplugin::Plugin
 {
 public:
-    explicit CastToVoid(InstantiationData const & data): Plugin(data) {}
+    explicit CastToVoid(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     bool TraverseCStyleCastExpr(CStyleCastExpr * expr) {
         auto const dre = checkCast(expr);

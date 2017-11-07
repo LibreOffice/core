@@ -79,7 +79,7 @@ class GetImplementationName:
     public loplugin::Plugin
 {
 public:
-    explicit GetImplementationName(InstantiationData const & data)
+    explicit GetImplementationName(loplugin::InstantiationData const & data)
         : Plugin(data)
         , m_Outdir(initOutdir())
         , m_OutdirCreated(false)

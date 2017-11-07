@@ -21,7 +21,8 @@ class SubtleZeroInit final:
     public RecursiveASTVisitor<SubtleZeroInit>, public loplugin::Plugin
 {
 public:
-    explicit SubtleZeroInit(InstantiationData const & data): Plugin(data) {}
+    explicit SubtleZeroInit(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     bool VisitCXXNewExpr(CXXNewExpr const * expr) {
         if (ignoreLocation(expr)) {

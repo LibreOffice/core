@@ -31,13 +31,13 @@ class ExpressionAlwaysZero:
     public RecursiveASTVisitor<ExpressionAlwaysZero>, public loplugin::Plugin
 {
 public:
-    explicit ExpressionAlwaysZero(InstantiationData const & data): Plugin(data) {}
+    explicit ExpressionAlwaysZero(loplugin::InstantiationData const & data): Plugin(data) {}
 
     virtual void run() override
     {
         std::string fn( compiler.getSourceManager().getFileEntryForID(
                         compiler.getSourceManager().getMainFileID())->getName() );
-        normalizeDotDotInFilePath(fn);
+        loplugin::normalizeDotDotInFilePath(fn);
         // encoding of constant value for binary file format
         if (startswith(fn, SRCDIR "/package/source/zipapi/ZipFile.cxx"))
             return;

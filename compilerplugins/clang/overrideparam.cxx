@@ -29,7 +29,8 @@ class OverrideParam:
     public RecursiveASTVisitor<OverrideParam>, public loplugin::Plugin
 {
 public:
-    explicit OverrideParam(InstantiationData const & data): Plugin(data) {}
+    explicit OverrideParam(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override;
 

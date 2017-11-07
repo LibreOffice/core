@@ -21,7 +21,8 @@ class UnicodeToChar final:
     public RecursiveASTVisitor<UnicodeToChar>, public loplugin::Plugin
 {
 public:
-    explicit UnicodeToChar(InstantiationData const & data): Plugin(data) {}
+    explicit UnicodeToChar(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     bool TraverseCStyleCastExpr(CStyleCastExpr * expr) {
         subExprs_.push(expr->getSubExpr());

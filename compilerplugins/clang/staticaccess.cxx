@@ -46,7 +46,8 @@ class StaticAccess:
     public RecursiveASTVisitor<StaticAccess>, public loplugin::Plugin
 {
 public:
-    explicit StaticAccess(InstantiationData const & data): Plugin(data) {}
+    explicit StaticAccess(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

@@ -46,7 +46,8 @@ class DynExcSpec:
     public RecursiveASTVisitor<DynExcSpec>, public loplugin::RewritePlugin
 {
 public:
-    explicit DynExcSpec(InstantiationData const & data): RewritePlugin(data) {}
+    explicit DynExcSpec(loplugin::InstantiationData const & data):
+        RewritePlugin(data) {}
 
     void run() override {
         if (compiler.getLangOpts().CPlusPlus) {

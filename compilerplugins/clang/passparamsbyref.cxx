@@ -31,7 +31,7 @@ class PassParamsByRef:
     public RecursiveASTVisitor<PassParamsByRef>, public loplugin::Plugin
 {
 public:
-    explicit PassParamsByRef(InstantiationData const & data): Plugin(data), mbInsideFunctionDecl(false) {}
+    explicit PassParamsByRef(loplugin::InstantiationData const & data): Plugin(data), mbInsideFunctionDecl(false) {}
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 

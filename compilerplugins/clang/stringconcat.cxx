@@ -45,7 +45,8 @@ class StringConcat:
     public RecursiveASTVisitor<StringConcat>, public loplugin::Plugin
 {
 public:
-    explicit StringConcat(InstantiationData const & data): Plugin(data) {}
+    explicit StringConcat(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

@@ -54,7 +54,8 @@ class Nullptr:
     public RecursiveASTVisitor<Nullptr>, public loplugin::RewritePlugin
 {
 public:
-    explicit Nullptr(InstantiationData const & data): RewritePlugin(data) {}
+    explicit Nullptr(loplugin::InstantiationData const & data):
+        RewritePlugin(data) {}
 
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

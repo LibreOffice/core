@@ -57,14 +57,14 @@ class ConstantParam:
     public loplugin::FunctionAddress<ConstantParam>
 {
 public:
-    explicit ConstantParam(InstantiationData const & data): loplugin::FunctionAddress<ConstantParam>(data) {}
+    explicit ConstantParam(loplugin::InstantiationData const & data): loplugin::FunctionAddress<ConstantParam>(data) {}
 
     virtual void run() override
     {
         // ignore some files that make clang crash inside EvaluateAsInt
         std::string fn( compiler.getSourceManager().getFileEntryForID(
                         compiler.getSourceManager().getMainFileID())->getName() );
-        normalizeDotDotInFilePath(fn);
+        loplugin::normalizeDotDotInFilePath(fn);
         if (loplugin::isSamePathname(fn, SRCDIR "/basegfx/source/matrix/b2dhommatrix.cxx")
             || loplugin::isSamePathname(fn, SRCDIR "/basegfx/source/matrix/b3dhommatrix.cxx"))
              return;
@@ -158,7 +158,7 @@ void ConstantParam::addToCallSet(const FunctionDecl* functionDecl, int paramInde
     aInfo.callValue = callValue;
 
     aInfo.sourceLocation = filename.str() + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
-    normalizeDotDotInFilePath(aInfo.sourceLocation);
+    loplugin::normalizeDotDotInFilePath(aInfo.sourceLocation);
 
     callSet.insert(aInfo);
 }

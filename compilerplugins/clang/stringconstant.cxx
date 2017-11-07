@@ -105,8 +105,8 @@ class StringConstant:
     public RecursiveASTVisitor<StringConstant>, public loplugin::RewritePlugin
 {
 public:
-    explicit StringConstant(InstantiationData const & data): RewritePlugin(data)
-    {}
+    explicit StringConstant(loplugin::InstantiationData const & data):
+        RewritePlugin(data) {}
 
     void run() override;
 

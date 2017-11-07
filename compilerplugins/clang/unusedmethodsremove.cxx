@@ -32,7 +32,7 @@ class UnusedMethodsRemove:
     public RecursiveASTVisitor<UnusedMethodsRemove>, public loplugin::RewritePlugin
 {
 public:
-    explicit UnusedMethodsRemove(InstantiationData const & data);
+    explicit UnusedMethodsRemove(loplugin::InstantiationData const & data);
     ~UnusedMethodsRemove();
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
@@ -53,7 +53,7 @@ size_t getFilesize(const char* filename)
     return st.st_size;
 }
 
-UnusedMethodsRemove::UnusedMethodsRemove(InstantiationData const & data): RewritePlugin(data)
+UnusedMethodsRemove::UnusedMethodsRemove(loplugin::InstantiationData const & data): RewritePlugin(data)
 {
     static const char sInputFile[] = SRCDIR "/result.txt";
     mmapFilesize = getFilesize(sInputFile);

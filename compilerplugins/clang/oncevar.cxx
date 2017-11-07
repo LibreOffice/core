@@ -79,13 +79,13 @@ class OnceVar:
     public RecursiveASTVisitor<OnceVar>, public loplugin::Plugin
 {
 public:
-    explicit OnceVar(InstantiationData const & data): Plugin(data) {}
+    explicit OnceVar(loplugin::InstantiationData const & data): Plugin(data) {}
 
     virtual void run() override {
         // ignore some files with problematic macros
         std::string fn( compiler.getSourceManager().getFileEntryForID(
                         compiler.getSourceManager().getMainFileID())->getName() );
-        normalizeDotDotInFilePath(fn);
+        loplugin::normalizeDotDotInFilePath(fn);
         // platform-specific stuff
         if (fn == SRCDIR "/sal/osl/unx/thread.cxx"
             || fn == SRCDIR "/sot/source/base/formats.cxx"

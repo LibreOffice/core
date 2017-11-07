@@ -23,7 +23,8 @@ class Override:
     public RecursiveASTVisitor<Override>, public loplugin::RewritePlugin
 {
 public:
-    explicit Override(InstantiationData const & data): RewritePlugin(data) {}
+    explicit Override(loplugin::InstantiationData const & data):
+        RewritePlugin(data) {}
 
     virtual void run() override;
 

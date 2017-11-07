@@ -234,7 +234,7 @@ class ImplicitBoolConversion:
     public RecursiveASTVisitor<ImplicitBoolConversion>, public loplugin::Plugin
 {
 public:
-    explicit ImplicitBoolConversion(InstantiationData const & data):
+    explicit ImplicitBoolConversion(loplugin::InstantiationData const & data):
         Plugin(data) {}
 
     virtual void run() override

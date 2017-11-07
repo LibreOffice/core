@@ -36,7 +36,8 @@ class FinalClasses:
     public RecursiveASTVisitor<FinalClasses>, public loplugin::Plugin
 {
 public:
-    explicit FinalClasses(InstantiationData const & data): Plugin(data) {}
+    explicit FinalClasses(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override
     {

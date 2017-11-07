@@ -26,7 +26,8 @@ class SfxPoolItem:
     public RecursiveASTVisitor<SfxPoolItem>, public loplugin::Plugin
 {
 public:
-    explicit SfxPoolItem(InstantiationData const & data): Plugin(data) {}
+    explicit SfxPoolItem(loplugin::InstantiationData const & data): Plugin(data)
+    {}
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 

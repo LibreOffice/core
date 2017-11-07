@@ -48,7 +48,8 @@ class ConstStringVar:
     public RecursiveASTVisitor<ConstStringVar>, public loplugin::Plugin
 {
 public:
-    explicit ConstStringVar(InstantiationData const & data): Plugin(data) {}
+    explicit ConstStringVar(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     void run() override {
         if (compiler.getLangOpts().CPlusPlus) {

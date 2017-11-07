@@ -23,7 +23,8 @@ class RenderContext:
     public RecursiveASTVisitor<RenderContext>, public loplugin::Plugin
 {
 public:
-    explicit RenderContext(InstantiationData const & data): Plugin(data) {}
+    explicit RenderContext(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     virtual void run() override {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());

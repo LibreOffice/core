@@ -79,7 +79,8 @@ class DynCastVisibility final:
     public RecursiveASTVisitor<DynCastVisibility>, public loplugin::Plugin
 {
 public:
-    explicit DynCastVisibility(InstantiationData const & data): Plugin(data) {}
+    explicit DynCastVisibility(loplugin::InstantiationData const & data):
+        Plugin(data) {}
 
     bool shouldVisitTemplateInstantiations() const { return true; }
 
