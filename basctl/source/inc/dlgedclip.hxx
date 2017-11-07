@@ -27,14 +27,13 @@ namespace basctl
 {
 
 
-class DlgEdTransferableImpl : public ::cppu::WeakImplHelper< css::datatransfer::XTransferable,
+class DlgEdTransferableImpl final : public ::cppu::WeakImplHelper< css::datatransfer::XTransferable,
                                                              css::datatransfer::clipboard::XClipboardOwner >
 {
 private:
     css::uno::Sequence< css::datatransfer::DataFlavor > m_SeqFlavors;
     css::uno::Sequence< css::uno::Any > m_SeqData;
 
-protected:
     static bool compareDataFlavors( const css::datatransfer::DataFlavor& lFlavor, const css::datatransfer::DataFlavor& rFlavor );
 
 public:

@@ -46,7 +46,7 @@ typedef ::cppu::ImplHelper3<
         css::lang::XServiceInfo,
         css::beans::XPropertyChangeListener > AccessibleDialogControlShape_BASE;
 
-class AccessibleDialogControlShape :    public comphelper::OAccessibleExtendedComponentHelper,
+class AccessibleDialogControlShape final : public comphelper::OAccessibleExtendedComponentHelper,
                                         public AccessibleDialogControlShape_BASE
 {
     friend class AccessibleDialogWindow;
@@ -60,7 +60,6 @@ private:
     css::awt::Rectangle                                            m_aBounds;
     css::uno::Reference< css::beans::XPropertySet >   m_xControlModel;
 
-protected:
     bool                    IsFocused();
     bool                    IsSelected();
 

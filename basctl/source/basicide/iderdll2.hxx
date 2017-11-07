@@ -32,9 +32,8 @@ class SvxSearchItem;
 namespace basctl
 {
 
-class ExtraData
+class ExtraData final
 {
-private:
     std::unique_ptr<SvxSearchItem> pSearchItem;
 
     LibInfo        aLibInfo;
@@ -47,7 +46,6 @@ private:
     bool            bChoosingMacro;
     bool            bShellInCriticalSection;
 
-protected:
     DECL_STATIC_LINK( ExtraData, GlobalBasicBreakHdl, StarBASIC *, BasicDebugFlags );
 
 public:

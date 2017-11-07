@@ -26,13 +26,11 @@
 namespace basctl
 {
 
-class ExtendedEdit : public Edit
+class ExtendedEdit final : public Edit
 {
-private:
     Accelerator               aAcc;
     Link<Accelerator&,void>   aAccHdl;
 
-protected:
     DECL_LINK( EditAccHdl, Accelerator&, void );
     DECL_LINK( ImplGetFocusHdl, Control&, void );
     DECL_LINK( ImplLoseFocusHdl, Control&, void );

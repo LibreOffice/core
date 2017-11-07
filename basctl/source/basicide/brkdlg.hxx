@@ -28,9 +28,8 @@
 namespace basctl
 {
 
-class BreakPointDialog : public ModalDialog
+class BreakPointDialog final : public ModalDialog
 {
-private:
     VclPtr<ComboBox>       m_pComboBox;
     VclPtr<OKButton>       m_pOKButton;
     VclPtr<PushButton>     m_pNewButton;
@@ -41,7 +40,6 @@ private:
     BreakPointList & m_rOriginalBreakPointList;
     BreakPointList m_aModifiedBreakPointList;
 
-protected:
     void            CheckButtons();
     DECL_LINK( CheckBoxHdl, Button*, void );
     DECL_LINK( ComboBoxHighlightHdl, ComboBox&, void );
