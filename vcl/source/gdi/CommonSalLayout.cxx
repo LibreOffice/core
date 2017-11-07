@@ -34,14 +34,19 @@
 #include <QtGui/QRawFont>
 #endif
 
-static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
+static inline void decode_hb_tag( const hb_tag_t nTableTag, char *pTagName )
 {
-    char pTagName[5];
     pTagName[0] = (char)(nTableTag >> 24);
     pTagName[1] = (char)(nTableTag >> 16);
     pTagName[2] = (char)(nTableTag >>  8);
     pTagName[3] = (char)nTableTag;
     pTagName[4] = 0;
+}
+
+static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
+{
+    char pTagName[5];
+    decode_hb_tag( nTableTag, pTagName );
 
     sal_uLong nLength = 0;
 #if defined(_WIN32)
@@ -67,23 +72,9 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
         pFont->GetFontTable(pTagName, pBuffer);
     }
 #else
-    const char* pBuffer = nullptr;
-    CommonSalLayout *pLayout = static_cast<CommonSalLayout*>( pUserData );
-#if ENABLE_QT5
-    QByteArray aTable;
-    if ( pLayout->useQt5() )
-    {
-        QRawFont aRawFont( QRawFont::fromFont( *pLayout->getQt5Font() ) );
-        aTable = aRawFont.fontTable( pTagName );
-        pBuffer = reinterpret_cast<const char*>( aTable.data() );
-        nLength = aTable.size();
-    }
-    else
-#endif
-    {
-        pBuffer = reinterpret_cast<const char*>(
-            pLayout->getFreetypeFont()->GetTable(pTagName, &nLength) );
-    }
+    FreetypeFont* pFont = static_cast<FreetypeFont*>( pUserData );
+    const char* pBuffer = reinterpret_cast<const char*>(
+        pFont->GetTable(pTagName, &nLength) );
 #endif
 
     hb_blob_t* pBlob = nullptr;
@@ -97,6 +88,25 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
 
     return pBlob;
 }
+
+#if ENABLE_QT5
+static hb_blob_t* getFontTable_Qt5Font(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
+{
+    char pTagName[5];
+    decode_hb_tag( nTableTag, pTagName );
+
+    Qt5Font *pFont = static_cast<Qt5Font*>( pUserData );
+    QRawFont aRawFont( QRawFont::fromFont( *pFont ) );
+    QByteArray aTable = aRawFont.fontTable( pTagName );
+    const sal_uLong nLength = aTable.size();
+
+    hb_blob_t* pBlob = nullptr;
+    if (nLength > 0)
+        pBlob = hb_blob_create(reinterpret_cast<const char*>( aTable.data() ),
+                               nLength, HB_MEMORY_MODE_READONLY, nullptr, nullptr);
+    return pBlob;
+}
+#endif
 
 static hb_font_t* createHbFont(hb_face_t* pHbFace)
 {
@@ -254,6 +264,17 @@ CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
 
 #else
 
+void CommonSalLayout::InitFromFreetypeFont()
+{
+    mpHbFont = mpFreetypeFont->GetHbFont();
+    if (!mpHbFont)
+    {
+        hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, mpFreetypeFont, nullptr);
+        mpHbFont = createHbFont(pHbFace);
+        mpFreetypeFont->SetHbFont(mpHbFont);
+    }
+}
+
 #if ENABLE_QT5
 CommonSalLayout::CommonSalLayout(const FontSelectPattern &rFSP,
                                  FreetypeFont *pFreetypeFont,
@@ -265,18 +286,21 @@ CommonSalLayout::CommonSalLayout(const FontSelectPattern &rFSP,
     , mpVertGlyphs(nullptr)
 {
     if (mbUseQt5)
-        mpHbFont = mpQFont->GetHbFont();
-    else
-        mpHbFont = mpFreetypeFont->GetHbFont();
-    if (!mpHbFont)
     {
-        hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, this, nullptr);
-
-        mpHbFont = createHbFont(pHbFace);
-        if (mbUseQt5)
+        assert( pQt5Font && !pFreetypeFont );
+        mpHbFont = mpQFont->GetHbFont();
+        if (!mpHbFont)
+        {
+            hb_face_t* pHbFace = hb_face_create_for_tables(
+                getFontTable_Qt5Font, pQt5Font, nullptr);
+            mpHbFont = createHbFont(pHbFace);
             mpQFont->SetHbFont(mpHbFont);
-        else
-            mpFreetypeFont->SetHbFont(mpHbFont);
+        }
+    }
+    else
+    {
+        assert( !pQt5Font && pFreetypeFont );
+        InitFromFreetypeFont();
     }
 }
 
@@ -299,13 +323,7 @@ CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont)
     , mpFreetypeFont(&rFreetypeFont)
     , mpVertGlyphs(nullptr)
 {
-    mpHbFont = mpFreetypeFont->GetHbFont();
-    if (!mpHbFont)
-    {
-        hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, this, nullptr);
-        mpHbFont = createHbFont(pHbFace);
-        mpFreetypeFont->SetHbFont(mpHbFont);
-    }
+    InitFromFreetypeFont();
 }
 
 #endif

@@ -60,7 +60,12 @@ class VCL_DLLPUBLIC CommonSalLayout : public GenericSalLayout
 #if ENABLE_QT5
     const bool              mbUseQt5;
     Qt5Font*                mpQFont;
+
+    explicit                CommonSalLayout(const FontSelectPattern &rFSP,
+                                            FreetypeFont *pFreetypeFont,
+                                            Qt5Font *pFont, bool bUseQt5);
 #endif
+    void                    InitFromFreetypeFont();
 #endif
 
     void                    ParseFeatures(const OUString& name);
@@ -88,9 +93,6 @@ public:
     explicit                CommonSalLayout(FreetypeFont&);
     const FreetypeFont*     getFreetypeFont() const { return mpFreetypeFont; }
 #if ENABLE_QT5
-    explicit                CommonSalLayout(const FontSelectPattern &rFSP,
-                                            FreetypeFont *pFreetypeFont,
-                                            Qt5Font *pFont, bool bUseQt5);
     explicit                CommonSalLayout(Qt5Font&);
     const Qt5Font*          getQt5Font() const { return mpQFont; }
     bool                    useQt5() const { return mbUseQt5; }
