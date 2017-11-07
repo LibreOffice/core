@@ -51,7 +51,7 @@ typedef ::cppu::ImplHelper3 <
     css::accessibility::XAccessibleSelection,
     css::lang::XServiceInfo > AccessibleDialogWindow_BASE;
 
-class AccessibleDialogWindow :  public comphelper::OAccessibleExtendedComponentHelper,
+class AccessibleDialogWindow final : public comphelper::OAccessibleExtendedComponentHelper,
                                 public AccessibleDialogWindow_BASE,
                                 public SfxListener
 {
@@ -76,7 +76,6 @@ private:
     DlgEditor*                     m_pDlgEditor;
     DlgEdModel*                    m_pDlgEdModel;
 
-protected:
     void                    UpdateFocused();
     void                    UpdateSelected();
     void                    UpdateBounds();

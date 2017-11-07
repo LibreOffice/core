@@ -69,7 +69,7 @@ class CodeCompleteWindow;
 OUString getTextEngineText (ExtTextEngine&);
 void setTextEngineText (ExtTextEngine&, OUString const&);
 
-class EditorWindow : public vcl::Window, public SfxListener
+class EditorWindow final : public vcl::Window, public SfxListener
 {
 friend class CodeCompleteListBox;
 private:
@@ -116,7 +116,6 @@ private:
     void HandleProcedureCompletion();
     TextSelection GetLastHighlightPortionTextSelection();
 
-protected:
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
     virtual void    Resize() override;
     virtual void    KeyInput( const KeyEvent& rKeyEvt ) override;
@@ -161,9 +160,8 @@ public:
 };
 
 
-class BreakPointWindow : public vcl::Window
+class BreakPointWindow final : public vcl::Window
 {
-private:
     ModulWindow&    rModulWindow;
     long            nCurYOffset;
     sal_uInt16      nMarkerPos;
@@ -175,7 +173,6 @@ private:
 
     void setBackgroundColor(Color aColor);
 
-protected:
     virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     BreakPoint*     FindBreakPoint( const Point& rMousePos );
     void ShowMarker(vcl::RenderContext& rRenderContext);
@@ -197,11 +194,10 @@ public:
 };
 
 
-class WatchTreeListBox : public SvHeaderTabListBox
+class WatchTreeListBox final : public SvHeaderTabListBox
 {
     OUString aEditingRes;
 
-protected:
     virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel  ) override;
     virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) override;
 
@@ -221,16 +217,14 @@ public:
 };
 
 
-class WatchWindow : public DockingWindow
+class WatchWindow final : public DockingWindow
 {
-private:
     OUString            aWatchStr;
     VclPtr<ExtendedEdit>        aXEdit;
     VclPtr<ImageButton>         aRemoveWatchButton;
     VclPtr<WatchTreeListBox>    aTreeListBox;
     VclPtr<HeaderBar>           aHeaderBar;
 
-protected:
     virtual void    Resize() override;
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 
@@ -270,7 +264,7 @@ public:
 };
 
 
-class ComplexEditorWindow : public vcl::Window
+class ComplexEditorWindow final : public vcl::Window
 {
 private:
     VclPtr<BreakPointWindow> aBrkWindow;
@@ -280,7 +274,6 @@ private:
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt) override;
 
-protected:
     virtual void        Resize() override;
     DECL_LINK( ScrollHdl, ScrollBar*, void );
 
