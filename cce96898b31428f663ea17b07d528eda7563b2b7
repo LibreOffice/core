@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_2d4e5b6f",
+        "filename": "sw/qa/extras/rtfimport/rtfimport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1191,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-11-07T11:47:06Z",
+      "side": 1,
+      "message": "this is too much #ifdef - please use SAL_NEWLINE_STRING which is defined to \\r\\n or \\n already",
+      "revId": "cce96898b31428f663ea17b07d528eda7563b2b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
