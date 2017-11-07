@@ -201,8 +201,8 @@ public:
     void testTdf84695NormalChar();
     void testTdf78727();
     void testTdf104814();
-    void testParagraphOfTextRange();
     void testTdf108524();
+#if 1 // HAVE_MORE_FONTS
     void testTableInSection();
     void testTableInNestedSection();
     void testTableInSectionInTable();
@@ -215,7 +215,10 @@ public:
     void testTdf112860();
     void testTdf113287();
     void testTdf113445();
+    void testTdf113686();
+#endif
     void testLinesInSectionInTable();
+    void testParagraphOfTextRange();
     void testLinesMoveBackwardsInSectionInTable();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
@@ -320,23 +323,26 @@ public:
     CPPUNIT_TEST(testTdf84695NormalChar);
     CPPUNIT_TEST(testTdf78727);
     CPPUNIT_TEST(testTdf104814);
-    CPPUNIT_TEST(testParagraphOfTextRange);
     CPPUNIT_TEST(testTdf108524);
     CPPUNIT_TEST(testTdf108524);
+#if 1 // HAVE_MORE_FONTS
     CPPUNIT_TEST(testTableInSection);
     CPPUNIT_TEST(testTableInNestedSection);
-    CPPUNIT_TEST(testLinesInSectionInTable);
     CPPUNIT_TEST(testTableInSectionInTable);
     CPPUNIT_TEST(testSectionInTableInTable);
     CPPUNIT_TEST(testSectionInTableInTable2);
     CPPUNIT_TEST(testSectionInTableInTable3);
     CPPUNIT_TEST(testSectionInTableInTable4);
-    CPPUNIT_TEST(testTdf112160);
     CPPUNIT_TEST(testLinesMoveBackwardsInSectionInTable);
     CPPUNIT_TEST(testTdf112741);
+    CPPUNIT_TEST(testTdf112160);
     CPPUNIT_TEST(testTdf112860);
     CPPUNIT_TEST(testTdf113287);
     CPPUNIT_TEST(testTdf113445);
+    CPPUNIT_TEST(testTdf113686);
+#endif
+    CPPUNIT_TEST(testLinesInSectionInTable);
+    CPPUNIT_TEST(testParagraphOfTextRange);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3932,6 +3938,32 @@ void SwUiWriterTest::testTdf113445()
     // Also check if the two cells in the same row have the same top position.
     // This was 4818, expected only 1672.
     CPPUNIT_ASSERT_EQUAL(nCell3Top, nCell4Top);
+}
+
+void SwUiWriterTest::testTdf113686()
+{
+    SwDoc* pDoc = createDoc("tdf113686.fodt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page", 2);
+    sal_uInt32 nPage1LastNode = getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/tab/row/cell[1]/txt[last()]", "txtNodeIndex").toUInt32();
+    CPPUNIT_ASSERT_EQUAL(OUString("Table2:A1-P10"), pDoc->GetNodes()[nPage1LastNode]->GetTextNode()->GetText());
+    sal_uInt32 nPage2FirstNode = getXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell[1]/section/txt[1]", "txtNodeIndex").toUInt32();
+    CPPUNIT_ASSERT_EQUAL(OUString("Table1:A1"), pDoc->GetNodes()[nPage2FirstNode]->GetTextNode()->GetText());
+
+    // Remove page 2.
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    while (pWrtShell->GetCursor()->Start()->nNode.GetIndex() < nPage1LastNode)
+        pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->EndPara();
+    for (int i = 0; i < 3; ++i)
+        pWrtShell->Up(/*bSelect=*/true);
+    pWrtShell->DelLeft();
+
+    // Assert that the second page is removed.
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // This was still 2, content from 2nd page was not moved.
+    assertXPath(pXmlDoc, "/root/page", 1);
 }
 
 void SwUiWriterTest::testTableInSectionInTable()
