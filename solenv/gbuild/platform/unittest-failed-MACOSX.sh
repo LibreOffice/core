@@ -22,6 +22,10 @@ Error: a unit test failed, please do one of:
 make $1Test_$2 CPPUNITTRACE="lldb --"       # for interactive debugging on OS X
 make $1Test_$2 VALGRIND=memcheck            # for memory checking
 
+You can limit the execution to just one particular test by:
+
+make $1Test_$2 CPPUNIT_TEST_NAME="testXYZ" ...above mentioned params...
+
 EOF
 
 exit 1
