@@ -2075,8 +2075,6 @@ connectivity/source/drivers/ado/AViews.cxx
 connectivity/source/drivers/ado/Aolevariant.cxx
 connectivity/source/drivers/ado/Aservices.cxx
 connectivity/source/drivers/ado/Awrapado.cxx
-connectivity/source/drivers/ado/ado_post_sys_include.h
-connectivity/source/drivers/ado/ado_pre_sys_include.h
 connectivity/source/drivers/ado/adoimp.cxx
 connectivity/source/drivers/calc/CCatalog.cxx
 connectivity/source/drivers/calc/CConnection.cxx
@@ -2480,6 +2478,8 @@ connectivity/source/inc/ado/WrapIndex.hxx
 connectivity/source/inc/ado/WrapKey.hxx
 connectivity/source/inc/ado/WrapTable.hxx
 connectivity/source/inc/ado/WrapTypeDefs.hxx
+connectivity/source/inc/ado/ado_post_sys_include.h
+connectivity/source/inc/ado/ado_pre_sys_include.h
 connectivity/source/inc/ado/adoimp.hxx
 connectivity/source/inc/calc/CCatalog.hxx
 connectivity/source/inc/calc/CConnection.hxx
@@ -10706,7 +10706,6 @@ sc/source/filter/inc/rtfimp.hxx
 sc/source/filter/inc/rtfparse.hxx
 sc/source/filter/inc/scenariobuffer.hxx
 sc/source/filter/inc/scenariocontext.hxx
-sc/source/filter/inc/scflt.hxx
 sc/source/filter/inc/scfobj.hxx
 sc/source/filter/inc/scmem.h
 sc/source/filter/inc/sharedformulagroups.hxx
@@ -10869,6 +10868,7 @@ sc/source/filter/rtf/rtfparse.cxx
 sc/source/filter/starcalc/collect.cxx
 sc/source/filter/starcalc/collect.hxx
 sc/source/filter/starcalc/scflt.cxx
+sc/source/filter/starcalc/scflt.hxx
 sc/source/filter/starcalc/scfobj.cxx
 sc/source/filter/xcl97/XclExpChangeTrack.cxx
 sc/source/filter/xcl97/XclImpChangeTrack.cxx
@@ -13876,7 +13876,6 @@ svl/source/fsstor/oinputstreamcontainer.hxx
 svl/source/fsstor/ostreamcontainer.cxx
 svl/source/fsstor/ostreamcontainer.hxx
 svl/source/inc/fsfactory.hxx
-svl/source/inc/passwordcontainer.hxx
 svl/source/inc/poolio.hxx
 svl/source/inc/stringio.hxx
 svl/source/items/IndexedStyleSheets.cxx
@@ -13948,6 +13947,7 @@ svl/source/numbers/zformat.cxx
 svl/source/numbers/zforscan.cxx
 svl/source/numbers/zforscan.hxx
 svl/source/passwordcontainer/passwordcontainer.cxx
+svl/source/passwordcontainer/passwordcontainer.hxx
 svl/source/passwordcontainer/syscreds.cxx
 svl/source/passwordcontainer/syscreds.hxx
 svl/source/svdde/ddecli.cxx
@@ -15466,6 +15466,7 @@ sw/source/core/docnode/swthreadjoiner.cxx
 sw/source/core/docnode/swthreadmanager.cxx
 sw/source/core/docnode/threadlistener.cxx
 sw/source/core/docnode/threadmanager.cxx
+sw/source/core/docnode/threadmanager.hxx
 sw/source/core/draw/dcontact.cxx
 sw/source/core/draw/dflyobj.cxx
 sw/source/core/draw/dobjfac.cxx
@@ -15638,7 +15639,6 @@ sw/source/core/inc/tabfrm.hxx
 sw/source/core/inc/tblrwcl.hxx
 sw/source/core/inc/textapi.hxx
 sw/source/core/inc/threadlistener.hxx
-sw/source/core/inc/threadmanager.hxx
 sw/source/core/inc/tocntntanchoredobjectposition.hxx
 sw/source/core/inc/tolayoutanchoredobjectposition.hxx
 sw/source/core/inc/txmsrt.hxx
@@ -19811,6 +19811,7 @@ xmlsecurity/inc/xmlsec/xmlsec_init.hxx
 xmlsecurity/inc/xmlsec/xmlstreamio.hxx
 xmlsecurity/inc/xmlsecuritydllapi.h
 xmlsecurity/inc/xmlsignaturehelper.hxx
+xmlsecurity/inc/xmlsignaturehelper2.hxx
 xmlsecurity/inc/xsecctl.hxx
 xmlsecurity/inc/xsecfwdllapi.h
 xmlsecurity/inc/xsecgpgdllapi.h
@@ -19865,7 +19866,6 @@ xmlsecurity/source/helper/ooxmlsecparser.hxx
 xmlsecurity/source/helper/pdfsignaturehelper.cxx
 xmlsecurity/source/helper/xmlsignaturehelper.cxx
 xmlsecurity/source/helper/xmlsignaturehelper2.cxx
-xmlsecurity/source/helper/xmlsignaturehelper2.hxx
 xmlsecurity/source/helper/xsecctl.cxx
 xmlsecurity/source/helper/xsecparser.cxx
 xmlsecurity/source/helper/xsecparser.hxx
