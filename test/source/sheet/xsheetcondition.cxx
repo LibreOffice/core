@@ -20,11 +20,12 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-namespace apitest {
+namespace apitest
+{
 
 void XSheetCondition::testGetSetFormula1()
 {
-    uno::Reference< sheet::XSheetCondition > xSheetCondition(init(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetCondition> xSheetCondition(init(), UNO_QUERY_THROW);
     OUString aFormula1;
     CPPUNIT_ASSERT_NO_THROW_MESSAGE("Unable to get Formula1",
                                     aFormula1 = xSheetCondition->getFormula1());
@@ -35,7 +36,7 @@ void XSheetCondition::testGetSetFormula1()
 
 void XSheetCondition::testGetSetFormula2()
 {
-    uno::Reference< sheet::XSheetCondition > xSheetCondition(init(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetCondition> xSheetCondition(init(), UNO_QUERY_THROW);
     OUString aFormula2;
     CPPUNIT_ASSERT_NO_THROW_MESSAGE("Unable to get Formula2",
                                     aFormula2 = xSheetCondition->getFormula2());
@@ -46,19 +47,19 @@ void XSheetCondition::testGetSetFormula2()
 
 void XSheetCondition::testGetSetOperator()
 {
-    uno::Reference< sheet::XSheetCondition > xSheetCondition(init(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetCondition> xSheetCondition(init(), UNO_QUERY_THROW);
     sheet::ConditionOperator aOperator = sheet::ConditionOperator_NONE;
     CPPUNIT_ASSERT_NO_THROW_MESSAGE("Unable to get Operator",
                                     aOperator = xSheetCondition->getOperator());
 
-    xSheetCondition->setOperator( sheet::ConditionOperator_BETWEEN );
+    xSheetCondition->setOperator(sheet::ConditionOperator_BETWEEN);
     sheet::ConditionOperator aOperatorNew = xSheetCondition->getOperator();
     CPPUNIT_ASSERT_MESSAGE("Unable to set Operator", aOperator != aOperatorNew);
 }
 
 void XSheetCondition::testGetSetSourcePosition()
 {
-    uno::Reference< sheet::XSheetCondition > xSheetCondition(init(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetCondition> xSheetCondition(init(), UNO_QUERY_THROW);
     table::CellAddress aSourcePosition(0, 0, 0);
     CPPUNIT_ASSERT_NO_THROW_MESSAGE("Unable to get SourcePosition",
                                     aSourcePosition = xSheetCondition->getSourcePosition());
@@ -68,7 +69,6 @@ void XSheetCondition::testGetSetSourcePosition()
     CPPUNIT_ASSERT_MESSAGE("Unable to set SourcePosition",
                            aSourcePosition.Row != aSourcePositionNew.Row);
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

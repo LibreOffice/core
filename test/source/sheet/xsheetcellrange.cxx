@@ -19,16 +19,16 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-namespace apitest {
+namespace apitest
+{
 
 void XSheetCellRange::testGetSpreadsheet()
 {
-    uno::Reference< sheet::XSheetCellRange > xSheetCellRange(init(), UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet = xSheetCellRange->getSpreadsheet();
+    uno::Reference<sheet::XSheetCellRange> xSheetCellRange(init(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet = xSheetCellRange->getSpreadsheet();
 
     CPPUNIT_ASSERT_MESSAGE("Unable to get spreadsheet", xSheet.is());
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

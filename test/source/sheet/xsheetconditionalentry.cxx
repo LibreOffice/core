@@ -18,20 +18,19 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-namespace apitest {
+namespace apitest
+{
 
 void XSheetConditionalEntry::testGetSetStyleName()
 {
-    uno::Reference< sheet::XSheetConditionalEntry > xSheetConditionalEntry(init(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetConditionalEntry> xSheetConditionalEntry(init(), UNO_QUERY_THROW);
     OUString aStyleName = xSheetConditionalEntry->getStyleName();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get StyleName",
-                                 OUString("Result2"), aStyleName);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get StyleName", OUString("Result2"), aStyleName);
 
     xSheetConditionalEntry->setStyleName("Heading");
     CPPUNIT_ASSERT_MESSAGE("Unable to set StyleName",
                            aStyleName != xSheetConditionalEntry->getStyleName());
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

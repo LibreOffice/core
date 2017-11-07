@@ -18,21 +18,21 @@
 
 #include <test/testdllapi.hxx>
 
-namespace apitest {
+namespace apitest
+{
 
 class OOO_DLLPUBLIC_TEST XSheetCellRangeContainer
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init() =0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
     void testAddRemoveRangeAddress();
     void testAddRemoveRangeAddresses();
 
 protected:
     ~XSheetCellRangeContainer() {}
-    css::uno::Sequence< com::sun::star::table::CellRangeAddress > createCellRangeAddresses();
+    css::uno::Sequence<com::sun::star::table::CellRangeAddress> createCellRangeAddresses();
 };
-
 }
 
 #endif // INCLUDED_TEST_SHEET_XSHEETCELLRANGECONTAINER_HXX

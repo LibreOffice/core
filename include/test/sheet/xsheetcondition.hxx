@@ -10,18 +10,18 @@
 #ifndef INCLUDED_TEST_SHEET_XSHEETCONDITION_HXX
 #define INCLUDED_TEST_SHEET_XSHEETCONDITION_HXX
 
-
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
 
-namespace apitest {
+namespace apitest
+{
 
 class OOO_DLLPUBLIC_TEST XSheetCondition
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init() =0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
     void testGetSetFormula1();
     void testGetSetFormula2();
@@ -31,7 +31,6 @@ public:
 protected:
     ~XSheetCondition() {}
 };
-
 }
 
 #endif // INCLUDED_TEST_SHEET_XSHEETCONDITION_HXX

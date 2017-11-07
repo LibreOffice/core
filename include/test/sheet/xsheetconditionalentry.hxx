@@ -10,25 +10,24 @@
 #ifndef INCLUDED_TEST_SHEET_XSHEETCONDITIONALENTRY_HXX
 #define INCLUDED_TEST_SHEET_XSHEETCONDITIONALENTRY_HXX
 
-
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
 
-namespace apitest {
+namespace apitest
+{
 
 class OOO_DLLPUBLIC_TEST XSheetConditionalEntry
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init() =0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
     void testGetSetStyleName();
 
 protected:
     ~XSheetConditionalEntry() {}
 };
-
 }
 
 #endif // INCLUDED_TEST_SHEET_XSHEETCONDITIONALENTRY_HXX

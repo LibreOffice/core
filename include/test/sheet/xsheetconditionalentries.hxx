@@ -10,7 +10,6 @@
 #ifndef INCLUDED_TEST_SHEET_XSHEETCONDITIONALENTRIES_HXX
 #define INCLUDED_TEST_SHEET_XSHEETCONDITIONALENTRIES_HXX
 
-
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
@@ -19,13 +18,15 @@
 
 #include <test/testdllapi.hxx>
 
-namespace apitest {
+namespace apitest
+{
 
 class OOO_DLLPUBLIC_TEST XSheetConditionalEntries
 {
 public:
-    virtual css::uno::Reference< css::uno::XInterface > init() =0;
-    virtual css::uno::Sequence< com::sun::star::beans::PropertyValue > createCondition(const sal_Int32 nr) =0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
+    virtual css::uno::Sequence<com::sun::star::beans::PropertyValue>
+    createCondition(const sal_Int32 nr) = 0;
 
     void testAddNew();
     void testClear();
@@ -34,7 +35,6 @@ public:
 protected:
     ~XSheetConditionalEntries() {}
 };
-
 }
 
 #endif // INCLUDED_TEST_SHEET_XSHEETCONDITIONALENTRIES_HXX

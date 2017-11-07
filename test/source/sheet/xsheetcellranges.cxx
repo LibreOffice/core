@@ -22,31 +22,31 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-namespace apitest {
+namespace apitest
+{
 
 void XSheetCellRanges::testGetCells()
 {
-    uno::Reference< sheet::XSheetCellRanges > xSheetCellRanges(init(), UNO_QUERY_THROW);
-    uno::Reference< container::XEnumerationAccess > xEA = xSheetCellRanges->getCells();
+    uno::Reference<sheet::XSheetCellRanges> xSheetCellRanges(init(), UNO_QUERY_THROW);
+    uno::Reference<container::XEnumerationAccess> xEA = xSheetCellRanges->getCells();
 
     CPPUNIT_ASSERT_MESSAGE("Unable to get cells", xEA->hasElements());
 }
 
 void XSheetCellRanges::testGetRangeAddresses()
 {
-    uno::Reference< sheet::XSheetCellRanges > xSheetCellRanges(init(), UNO_QUERY_THROW);
-    uno::Sequence< table::CellRangeAddress > aCellRangeAddress = xSheetCellRanges->getRangeAddresses();
-    CPPUNIT_ASSERT_MESSAGE("Unable to get RangeAddresses",
-                           aCellRangeAddress.getLength() > 2);
+    uno::Reference<sheet::XSheetCellRanges> xSheetCellRanges(init(), UNO_QUERY_THROW);
+    uno::Sequence<table::CellRangeAddress> aCellRangeAddress
+        = xSheetCellRanges->getRangeAddresses();
+    CPPUNIT_ASSERT_MESSAGE("Unable to get RangeAddresses", aCellRangeAddress.getLength() > 2);
 }
 
 void XSheetCellRanges::testGetRangeAddressesAsString()
 {
-    uno::Reference< sheet::XSheetCellRanges > xSheetCellRanges(init(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetCellRanges> xSheetCellRanges(init(), UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("Unable to get RangeAddresses (string)",
                            xSheetCellRanges->getRangeAddressesAsString().indexOf("C1:D4") > 0);
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -20,60 +20,60 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-namespace apitest {
+namespace apitest
+{
 
 void XSheetCellRangeContainer::testAddRemoveRangeAddress()
 {
-    uno::Reference< sheet::XSheetCellRangeContainer > xSCRC(init(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetCellRangeContainer> xSCRC(init(), UNO_QUERY_THROW);
     xSCRC->removeRangeAddresses(xSCRC->getRangeAddresses()); // prepare a clean slate
-    uno::Sequence< table::CellRangeAddress > aAddr = createCellRangeAddresses();
+    uno::Sequence<table::CellRangeAddress> aAddr = createCellRangeAddresses();
 
     sal_Int32 cnt = xSCRC->getCount();
     xSCRC->addRangeAddress(aAddr[0], false);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to add CellRangeAddress (count)",
-                                 cnt + 1, xSCRC->getCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to add CellRangeAddress (count)", cnt + 1,
+                                 xSCRC->getCount());
 
-    uno::Sequence< table::CellRangeAddress > aAfterAddAddr = xSCRC->getRangeAddresses();
+    uno::Sequence<table::CellRangeAddress> aAfterAddAddr = xSCRC->getRangeAddresses();
     cnt = xSCRC->getCount();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to add CellRangeAddress (entry)",
-                                 aAddr[0], aAfterAddAddr[cnt - 1]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to add CellRangeAddress (entry)", aAddr[0],
+                                 aAfterAddAddr[cnt - 1]);
 
     xSCRC->removeRangeAddress(aAddr[0]);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to remove CellRangeAddress (count)",
-                                 cnt - 1, xSCRC->getCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to remove CellRangeAddress (count)", cnt - 1,
+                                 xSCRC->getCount());
 
-    uno::Sequence< table::CellRangeAddress > aAfterRemoveAddr = xSCRC->getRangeAddresses();
-    for ( auto const & addr : aAfterRemoveAddr )
+    uno::Sequence<table::CellRangeAddress> aAfterRemoveAddr = xSCRC->getRangeAddresses();
+    for (auto const& addr : aAfterRemoveAddr)
     {
-        CPPUNIT_ASSERT_MESSAGE("Unable to remove CellRangeAddress (entry)",
-                               aAddr[0] != addr);
+        CPPUNIT_ASSERT_MESSAGE("Unable to remove CellRangeAddress (entry)", aAddr[0] != addr);
     }
 }
 
 void XSheetCellRangeContainer::testAddRemoveRangeAddresses()
 {
-    uno::Reference< sheet::XSheetCellRangeContainer > xSCRC(init(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetCellRangeContainer> xSCRC(init(), UNO_QUERY_THROW);
     xSCRC->removeRangeAddresses(xSCRC->getRangeAddresses()); // prepare a clean slate
-    uno::Sequence< table::CellRangeAddress > aAddr = createCellRangeAddresses();
+    uno::Sequence<table::CellRangeAddress> aAddr = createCellRangeAddresses();
 
     sal_Int32 cnt = xSCRC->getCount();
     xSCRC->addRangeAddresses(aAddr, false);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to add CellRangeAddress (count)",
-                                 cnt + 2, xSCRC->getCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to add CellRangeAddress (count)", cnt + 2,
+                                 xSCRC->getCount());
 
-    uno::Sequence< table::CellRangeAddress > aAfterAddAddr = xSCRC->getRangeAddresses();
+    uno::Sequence<table::CellRangeAddress> aAfterAddAddr = xSCRC->getRangeAddresses();
     cnt = xSCRC->getCount();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to add CellRangeAddresses (entry: first)",
-                                 aAddr[0], aAfterAddAddr[cnt - 2]);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to add CellRangeAddresses (entry: second)",
-                                 aAddr[1], aAfterAddAddr[cnt - 1]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to add CellRangeAddresses (entry: first)", aAddr[0],
+                                 aAfterAddAddr[cnt - 2]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to add CellRangeAddresses (entry: second)", aAddr[1],
+                                 aAfterAddAddr[cnt - 1]);
 
     xSCRC->removeRangeAddresses(aAddr);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to remove CellRangeAddresses (count)",
-                                 cnt - 2, xSCRC->getCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to remove CellRangeAddresses (count)", cnt - 2,
+                                 xSCRC->getCount());
 
-    uno::Sequence< table::CellRangeAddress > aAfterRemoveAddr = xSCRC->getRangeAddresses();
-    for ( auto const & addr : aAfterRemoveAddr )
+    uno::Sequence<table::CellRangeAddress> aAfterRemoveAddr = xSCRC->getRangeAddresses();
+    for (auto const& addr : aAfterRemoveAddr)
     {
         CPPUNIT_ASSERT_MESSAGE("Unable to remove CellRangeAddresses (entry: first)",
                                aAddr[0] != addr);
@@ -82,10 +82,10 @@ void XSheetCellRangeContainer::testAddRemoveRangeAddresses()
     }
 }
 
-uno::Sequence< table::CellRangeAddress > XSheetCellRangeContainer::createCellRangeAddresses()
+uno::Sequence<table::CellRangeAddress> XSheetCellRangeContainer::createCellRangeAddresses()
 {
-    uno::Sequence< table::CellRangeAddress > aAddr(2);
-    for ( unsigned int i = 0; i < 2; i++ )
+    uno::Sequence<table::CellRangeAddress> aAddr(2);
+    for (unsigned int i = 0; i < 2; i++)
     {
         aAddr[i].Sheet = i;
         aAddr[i].StartColumn = i;
@@ -96,7 +96,6 @@ uno::Sequence< table::CellRangeAddress > XSheetCellRangeContainer::createCellRan
 
     return aAddr;
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
