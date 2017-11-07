@@ -110,16 +110,21 @@ bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
     if (!ifStmt->getElse())
         return true;
 
+    auto const thenThrowExpr = containsSingleThrowExpr(ifStmt->getThen());
+    auto const elseThrowExpr = containsSingleThrowExpr(ifStmt->getElse());
+    // If neither contains a throw, nothing to do; if both contain throws, no
+    // improvement:
+    if ((thenThrowExpr == nullptr) == (elseThrowExpr == nullptr)) {
+        return true;
+    }
+
     if (containsPreprocessingConditionalInclusion(ifStmt->getSourceRange())) {
         return true;
     }
 
-    auto throwExpr = containsSingleThrowExpr(ifStmt->getElse());
-    if (throwExpr)
+    if (elseThrowExpr)
     {
         // if both the "if" and the "else" contain throws, no improvement
-        if (containsSingleThrowExpr(ifStmt->getThen()))
-            return true;
         // if the "if" statement is not the last statement in its block, and it contains
         // var decls in its then block, we cannot de-indent the then block without
         // extending the lifetime of some variables, which may be problematic
@@ -131,8 +136,8 @@ bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
             report(
                 DiagnosticsEngine::Warning,
                 "unconditional throw in else branch, rather invert the condition, throw early, and flatten the normal case",
-                throwExpr->getLocStart())
-                << throwExpr->getSourceRange();
+                elseThrowExpr->getLocStart())
+                << elseThrowExpr->getSourceRange();
             report(
                 DiagnosticsEngine::Note,
                 "if condition here",
@@ -140,12 +145,8 @@ bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
                 << ifStmt->getSourceRange();
         }
     }
-    throwExpr = containsSingleThrowExpr(ifStmt->getThen());
-    if (throwExpr)
+    if (thenThrowExpr)
     {
-        // if both the "if" and the "else" contain throws, no improvement
-        if (containsSingleThrowExpr(ifStmt->getElse()))
-            return true;
         // if the "if" statement is not the last statement in it's block, and it contains
         // var decls in it's else block, we cannot de-indent the else block without
         // extending the lifetime of some variables, which may be problematic
@@ -157,8 +158,8 @@ bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
             report(
                 DiagnosticsEngine::Warning,
                 "unconditional throw in then branch, just flatten the else",
-                throwExpr->getLocStart())
-                << throwExpr->getSourceRange();
+                thenThrowExpr->getLocStart())
+                << thenThrowExpr->getSourceRange();
         }
     }
     return true;
