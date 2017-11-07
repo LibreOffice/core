@@ -124,7 +124,6 @@ bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
 
     if (elseThrowExpr)
     {
-        // if both the "if" and the "else" contain throws, no improvement
         // if the "if" statement is not the last statement in its block, and it contains
         // var decls in its then block, we cannot de-indent the then block without
         // extending the lifetime of some variables, which may be problematic
