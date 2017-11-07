@@ -85,6 +85,7 @@ namespace emfplushelper
             case EmfPlusRecordTypeTranslateWorldTransform: return "EmfPlusRecordTypeTranslateWorldTransform";
             case EmfPlusRecordTypeScaleWorldTransform: return "EmfPlusRecordTypeScaleWorldTransform";
             case EmfPlusRecordTypeSetPageTransform: return "EmfPlusRecordTypeSetPageTransform";
+            case EmfPlusRecordTypeResetClip: return "EmfPlusRecordTypeResetClip";
             case EmfPlusRecordTypeSetClipRect: return "EmfPlusRecordTypeSetClipRect";
             case EmfPlusRecordTypeSetClipPath: return "EmfPlusRecordTypeSetClipPath";
             case EmfPlusRecordTypeSetClipRegion: return "EmfPlusRecordTypeSetClipRegion";
@@ -1514,6 +1515,16 @@ namespace emfplushelper
 
                         SAL_INFO("drawinglayer",
                                 "EMF+\t " << maWorldTransform);
+                        break;
+                    }
+                    case EmfPlusRecordTypeResetClip:
+                    {
+                        SAL_INFO("drawinglayer", "EMF+ EmfPlusRecordTypeResetClip");
+                        // We don't need to read anything more, as Size needs to be set 0x0000000C
+                        // and DataSize must be set to 0.
+
+                        // Resets the current clipping region for the world space to infinity.
+                        HandleNewClipRegion(::basegfx::B2DPolyPolygon(), mrTargetHolders, mrPropertyHolders);
                         break;
                     }
                     case EmfPlusRecordTypeSetClipRect:

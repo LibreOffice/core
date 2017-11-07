@@ -82,7 +82,7 @@ namespace emfplushelper
     #define EmfPlusRecordTypeScaleWorldTransform 0x402E
     #define EmfPlusRecordTypeRotateWorldTransform 0x402F
     #define EmfPlusRecordTypeSetPageTransform 0x4030
-    //TODO EmfPlusRecordTypeResetClip 0x4031
+    #define EmfPlusRecordTypeResetClip 0x4031
     #define EmfPlusRecordTypeSetClipRect 0x4032
     #define EmfPlusRecordTypeSetClipPath 0x4033
     #define EmfPlusRecordTypeSetClipRegion 0x4034
