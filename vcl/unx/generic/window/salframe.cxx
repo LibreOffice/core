@@ -1274,7 +1274,7 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
 
         Time nUserTime = 0;
         if( ! bNoActivate && !(nStyle_ & SalFrameStyleFlags::OWNERDRAWDECORATION) )
-            nUserTime = pDisplay_->GetLastUserEventTime( true );
+            nUserTime = pDisplay_->GetX11ServerTime();
         GetDisplay()->getWMAdaptor()->setUserTime( this, nUserTime );
         if( ! bNoActivate && (nStyle_ & SalFrameStyleFlags::TOOLWINDOW) )
             m_bSetFocusOnMap = true;
@@ -1435,8 +1435,17 @@ void X11SalFrame::ToTop( SalFrameToTop nFlags )
         && bMapped_ )
     {
         if( m_bXEmbed )
+        {
             askForXEmbedFocus( 0 );
-        else
+            return;
+        }
+
+        if ( nFlags & SalFrameToTop::GrabFocus )
+        {
+            Time nTimestamp = pDisplay_->GetX11ServerTime();
+            GetDisplay()->getWMAdaptor()->activateWindow( this, nTimestamp );
+        }
+        else if ( nFlags & SalFrameToTop::GrabFocusOnly )
             XSetInputFocus( GetXDisplay(), aToTopWindow, RevertToParent, CurrentTime );
     }
 }

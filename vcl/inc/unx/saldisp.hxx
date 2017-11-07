@@ -299,6 +299,7 @@ protected:
 
     void            doDestruct();
     void            addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight );
+    Time            GetEventTimeImpl( bool bAlwaysReget = false ) const;
 public:
     static bool BestOpenGLVisual(Display* pDisplay, int nScreen, XVisualInfo& rVI);
     static bool BestVisual(Display *pDisp, int nScreen, XVisualInfo &rVI);
@@ -355,7 +356,9 @@ public:
     RenderEntryMap&       GetRenderEntries( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aRenderData; }
     const Pair     &GetResolution() const { return aResolution_; }
     sal_uLong       GetMaxRequestSize() const { return nMaxRequestSize_; }
-    Time            GetLastUserEventTime( bool bAlwaysReget = false ) const;
+    Time            GetLastUserEventTime() const { return GetEventTimeImpl(); }
+    // this is an equivalent of gdk_x11_get_server_time()
+    Time            GetX11ServerTime() const { return GetEventTimeImpl( true ); }
 
     bool            XIfEventWithTimeout( XEvent*, XPointer, X_if_predicate ) const;
     SalXLib*        GetXLib() const { return pXLib_; }
