@@ -5294,7 +5294,7 @@ void EscherEx::AddShape( sal_uInt32 nShpInstance, ShapeFlag nFlags, sal_uInt32 n
     if ( !nShapeID )
         nShapeID = GenerateShapeId();
 
-    if (!(nFlags & ShapeFlag::Group))
+    if (nFlags ^ ShapeFlag::Group) // no pure group shape
     {
         if ( mnGroupLevel > 1 )
             nFlags |= ShapeFlag::Child; // this not a topmost shape
