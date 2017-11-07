@@ -518,8 +518,8 @@ ScValidationDlg * ScTPValidationValue::GetValidationDlg()
 {
     if( vcl::Window *pParent = GetParent() )
         do{
-            if ( dynamic_cast<ScValidationDlg*>( pParent ) )
-                return static_cast< ScValidationDlg * >( pParent );
+            if ( auto pValidationDlg = dynamic_cast<ScValidationDlg*>( pParent ) )
+                return pValidationDlg;
         }while ( nullptr != ( pParent = pParent->GetParent() ) );
     return nullptr;
 }

@@ -2616,11 +2616,11 @@ void ScViewFunc::MoveTable(
                     { &aItem, &aTarget });
         if ( pRetItem )
         {
-            if ( dynamic_cast<const SfxObjectItem*>( pRetItem) !=  nullptr )
-                pDestShell = dynamic_cast<ScDocShell*>( static_cast<const SfxObjectItem*>(pRetItem)->GetShell()  );
-            else if ( dynamic_cast<const SfxViewFrameItem*>( pRetItem) !=  nullptr )
+            if ( auto pObjectItem = dynamic_cast<const SfxObjectItem*>(pRetItem) )
+                pDestShell = dynamic_cast<ScDocShell*>( pObjectItem->GetShell()  );
+            else if ( auto pViewFrameItem = dynamic_cast<const SfxViewFrameItem*>( pRetItem) )
             {
-                SfxViewFrame* pFrm = static_cast<const SfxViewFrameItem*>(pRetItem)->GetFrame();
+                SfxViewFrame* pFrm = pViewFrameItem->GetFrame();
                 if (pFrm)
                     pDestShell = dynamic_cast<ScDocShell*>( pFrm->GetObjectShell()  );
             }

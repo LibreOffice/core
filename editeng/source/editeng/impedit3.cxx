@@ -3617,7 +3617,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                                 if( pFieldItem )
                                                 {
                                                     const SvxFieldData* pFieldData = pFieldItem->GetField();
-                                                    if ( dynamic_cast< const SvxURLField* >( pFieldData ) !=  nullptr)
+                                                    if ( auto pUrlField = dynamic_cast< const SvxURLField* >( pFieldData ) )
                                                     {
                                                         Point aTopLeft( aTmpPos );
                                                         aTopLeft.Y() -= pLine->GetMaxAscent();
@@ -3625,7 +3625,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                                         tools::Rectangle aRect( aTopLeft, rTextPortion.GetSize() );
                                                         vcl::PDFExtOutDevBookmarkEntry aBookmark;
                                                         aBookmark.nLinkId = pPDFExtOutDevData->CreateLink( aRect );
-                                                        aBookmark.aBookmark = static_cast<const SvxURLField*>(pFieldData)->GetURL();
+                                                        aBookmark.aBookmark = pUrlField->GetURL();
                                                         std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFExtOutDevData->GetBookmarks();
                                                         rBookmarks.push_back( aBookmark );
                                                     }

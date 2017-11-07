@@ -1426,10 +1426,10 @@ static bool lcl_IsControlGroup( const SdrObject *pObj )
     bool bRet = false;
     if(dynamic_cast<const SdrUnoObj*>( pObj) !=  nullptr)
         bRet = true;
-    else if( dynamic_cast<const SdrObjGroup*>( pObj) !=  nullptr )
+    else if( auto pObjGroup = dynamic_cast<const SdrObjGroup*>( pObj) )
     {
         bRet = true;
-        const SdrObjList *pLst = static_cast<const SdrObjGroup*>(pObj)->GetSubList();
+        const SdrObjList *pLst = pObjGroup->GetSubList();
         for ( size_t i = 0; i < pLst->GetObjCount(); ++i )
             if( !::lcl_IsControlGroup( pLst->GetObj( i ) ) )
                 return false;
@@ -1493,8 +1493,8 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
         if ( rMrkList.GetMarkCount() )
         {
             const SdrObject* pStartObj = rMrkList.GetMark(0)->GetMarkedSdrObj();
-            if( dynamic_cast<const SwVirtFlyDrawObj*>( pStartObj) !=  nullptr )
-                aPos = static_cast<const SwVirtFlyDrawObj*>(pStartObj)->GetFlyFrame()->getFrameArea().Pos();
+            if( auto pVirtFlyDrawObj = dynamic_cast<const SwVirtFlyDrawObj*>( pStartObj) )
+                aPos = pVirtFlyDrawObj->GetFlyFrame()->getFrameArea().Pos();
             else
                 aPos = pStartObj->GetSnapRect().TopLeft();
 
@@ -2378,10 +2378,9 @@ bool SwFEShell::IsGroupAllowed() const
             if ( bIsGroupAllowed )
             {
                 const SwFrame* pAnchorFrame = nullptr;
-                if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
+                if ( auto pVirtFlyDrawObj = dynamic_cast<const SwVirtFlyDrawObj*>( pObj) )
                 {
-                    const SwFlyFrame* pFlyFrame =
-                            static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrame();
+                    const SwFlyFrame* pFlyFrame = pVirtFlyDrawObj->GetFlyFrame();
                     if ( pFlyFrame )
                     {
                         pAnchorFrame = pFlyFrame->GetAnchorFrame();

@@ -1313,9 +1313,8 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rect
 
     if(pObj)
     {
-        if( dynamic_cast< SdrTextObj *>( pObj ) !=  nullptr)
+        if( auto pText = dynamic_cast< SdrTextObj *>( pObj ) )
         {
-            SdrTextObj* pText = static_cast<SdrTextObj*>(pObj);
             pText->SetLogicRect(rRectangle);
 
             bool bVertical = (SID_ATTR_CHAR_VERTICAL == nID || SID_TEXT_FITTOSIZE_VERTICAL == nID);

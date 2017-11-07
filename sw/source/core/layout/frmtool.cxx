@@ -2823,9 +2823,9 @@ void Notify_Background( const SdrObject* pObj,
     SwLayoutFrame* pArea;
     SwFlyFrame *pFlyFrame = nullptr;
     SwFrame* pAnchor;
-    if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
+    if( auto pVirtFlyDrawObj = dynamic_cast<const SwVirtFlyDrawObj*>( pObj) )
     {
-        pFlyFrame = const_cast<SwVirtFlyDrawObj*>(static_cast<const SwVirtFlyDrawObj*>(pObj))->GetFlyFrame();
+        pFlyFrame = const_cast<SwVirtFlyDrawObj*>(pVirtFlyDrawObj)->GetFlyFrame();
         pAnchor = pFlyFrame->AnchorFrame();
     }
     else
