@@ -10,6 +10,7 @@
 #include <validat.hxx>
 #include <tabvwsh.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <vcl/scheduler.hxx>
 #include "helper/qahelper.hxx"
 
 using namespace ::com::sun::star;
@@ -36,6 +37,7 @@ public:
     void testTdf103960();
     void testRhbz1390776();
     void testTdf104310();
+    void testTdf31231();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testTdf64229);
@@ -50,6 +52,7 @@ public:
     CPPUNIT_TEST(testTdf103960);
     CPPUNIT_TEST(testRhbz1390776);
     CPPUNIT_TEST(testTdf104310);
+    CPPUNIT_TEST(testTdf31231);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
@@ -280,6 +283,18 @@ void ScFiltersTest::testTdf104310()
 
         xDocSh->DoClose();
     }
+}
+
+void ScFiltersTest::testTdf31231()
+{
+    // We must open it read-write to allow setting modified flag
+    ScDocShellRef xDocSh = loadDoc("tdf31231.", FORMAT_ODS, true);
+    xDocSh->DoHardRecalc();
+
+    CPPUNIT_ASSERT_MESSAGE("The spreadsheet must be allowed to set modified state", xDocSh->IsEnableSetModified());
+    CPPUNIT_ASSERT_MESSAGE("The spreadsheet must not be modified on open", !xDocSh->IsModified());
+
+    xDocSh->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()
