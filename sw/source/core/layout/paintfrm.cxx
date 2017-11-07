@@ -1723,8 +1723,16 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext *pOu
     // used, these coordinates have to be determined on pixel level.
     ::SwAlignGrfRect( &aAlignedGrfRect, *pOut );
 
-    paintGraphicUsingPrimitivesHelper(*pOut,
-        *pGrf, pGrf->GetAttr(), aAlignedGrfRect);
+    const basegfx::B2DHomMatrix aGraphicTransform(
+        basegfx::utils::createScaleTranslateB2DHomMatrix(
+            aAlignedGrfRect.Width(), aAlignedGrfRect.Height(),
+            aAlignedGrfRect.Left(), aAlignedGrfRect.Top()));
+
+    paintGraphicUsingPrimitivesHelper(
+        *pOut,
+        *pGrf,
+        pGrf->GetAttr(),
+        aGraphicTransform);
 
     if ( bNotInside )
         pOut->Pop();

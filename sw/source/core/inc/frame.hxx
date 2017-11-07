@@ -835,11 +835,6 @@ public:
     void dumpChildrenAsXml(xmlTextWriterPtr writer) const;
     bool IsCollapse() const;
 
-    // RotateFlyFrame3 - Support for handing out a rotation, currently
-    // only used for SwGrfNode in inner SwFrame of a SwFlyFrame, but may
-    // be used in the future. Default returns 0.0 (no rotation)
-    virtual double getRotation() const;
-
     // RotateFlyFrame3 - Support for Transformations
     // Hand out the Transformations for the current FrameAreaDefinition
     // for the FrameArea and FramePrintArea.

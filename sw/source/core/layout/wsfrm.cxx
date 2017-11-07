@@ -166,13 +166,6 @@ void SwFrameAreaDefinition::setFrameAreaDefinitionsToBoundRangesOfTransformation
     }
 }
 
-// RotateFlyFrame3 - get a possible rotation from SwFrame
-double SwFrame::getRotation() const
-{
-    // default returns 0.0 (no rotation)
-    return 0.0;
-}
-
 // RotateFlyFrame3 - Support for Transformations
 basegfx::B2DHomMatrix SwFrame::getFrameAreaTransformation() const
 {

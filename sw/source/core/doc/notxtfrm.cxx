@@ -470,8 +470,15 @@ const Size& SwNoTextFrame::GetSize() const
     return pFly->getFramePrintArea().SSize();
 }
 
-void SwNoTextFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
+void SwNoTextFrame::MakeAll(vcl::RenderContext* pRenderContext)
 {
+    if(GetUpper() && !GetUpper()->isFrameAreaDefinitionValid())
+    {
+        // outer frame *needs* to be layouted first, force this by calling
+        // ::Calc directly
+        GetUpper()->Calc(pRenderContext);
+    }
+
     SwContentNotify aNotify( this );
     SwBorderAttrAccess aAccess( SwFrame::GetCache(), this );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
@@ -495,9 +502,9 @@ void SwNoTextFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         }
     }
 
-    // RotateFlyFrame3 - outer frame
+    // RotateFlyFrame3 - inner frame
     // After the unrotated layout is finished, apply possible set rotation to it
-    const double fRotation(getRotation());
+    const double fRotation(getFrameRotation());
 
     if(basegfx::fTools::equalZero(fRotation))
     {
@@ -507,23 +514,47 @@ void SwNoTextFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     }
     else
     {
-        // save Transformations to local maFrameAreaTransformation
-        // and maFramePrintAreaTransformation.
-        const Point aCenter(getFrameArea().Center());
-        const basegfx::B2DPoint aB2DCenter(aCenter.X(), aCenter.Y());
+        const bool bMeValid(isFrameAreaDefinitionValid());
+        const bool bUpperValid(!GetUpper() || GetUpper()->isFrameAreaDefinitionValid());
 
-        createFrameAreaTransformations(
-            maFrameAreaTransformation,
-            maFramePrintAreaTransformation,
-            fRotation,
-            aB2DCenter);
+        if(bMeValid && bUpperValid)
+        {
+            // get center from outer frame (layout frame) to be on the safe side
+            const Point aCenter(GetUpper() ? GetUpper()->getFrameArea().Center() : getFrameArea().Center());
+            const basegfx::B2DPoint aB2DCenter(aCenter.X(), aCenter.Y());
 
-        // create BoundRects of FrameAreas and re-set the FrameArea definitions
-        // to represent the rotated geometry in the layout object
-        setFrameAreaDefinitionsToBoundRangesOfTransformations(
-            maFrameAreaTransformation,
-            maFramePrintAreaTransformation);
+            updateTransformationsAndAreas(
+                fRotation,
+                aB2DCenter);
+
+            if(GetUpper())
+            {
+                SwFlyFreeFrame *pFly = dynamic_cast< SwFlyFreeFrame* >(GetUpper());
+
+                if(pFly)
+                {
+                    pFly->updateTransformationsAndAreas(
+                        fRotation,
+                        aB2DCenter);
+                }
+            }
+        }
     }
+}
+
+void SwNoTextFrame::updateTransformationsAndAreas(
+    double fRotation,
+    const basegfx::B2DPoint& rCenter)
+{
+    createFrameAreaTransformations(
+        maFrameAreaTransformation,
+        maFramePrintAreaTransformation,
+        fRotation,
+        rCenter);
+
+    setFrameAreaDefinitionsToBoundRangesOfTransformations(
+        maFrameAreaTransformation,
+        maFramePrintAreaTransformation);
 }
 
 // RotateFlyFrame3 - Support for Transformations - outer frame
@@ -551,9 +582,9 @@ basegfx::B2DHomMatrix SwNoTextFrame::getFramePrintAreaTransformation() const
     return SwContentFrame::getFramePrintAreaTransformation();
 }
 
-// RotateFlyFrame3 - outer frame
+// RotateFlyFrame3 - inner frame
 // Check if we contain a SwGrfNode and get possible rotation from it
-double SwNoTextFrame::getRotation() const
+double SwNoTextFrame::getFrameRotation() const
 {
     const SwNoTextNode* pSwNoTextNode(nullptr != GetNode() ? GetNode()->GetNoTextNode() : nullptr);
 
@@ -571,8 +602,8 @@ double SwNoTextFrame::getRotation() const
         }
     }
 
-    // call parent
-    return SwContentFrame::getRotation();
+    // no rotation
+    return 0.0;
 }
 
 /** Calculate the Bitmap's site, if needed */
@@ -735,12 +766,12 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                             // and LayoutFrame (outer, GetUpper). It is possible to only invalidate
                             // the outer frame, but that leads to an in-between state that gets
                             // potentially painted
-                            InvalidateAll_();
-
                             if(GetUpper())
                             {
                                 GetUpper()->InvalidateAll_();
                             }
+
+                            InvalidateAll_();
                         }
                     }
                     break;
@@ -878,20 +909,12 @@ void paintGraphicUsingPrimitivesHelper(
     vcl::RenderContext & rOutputDevice,
     GraphicObject const& rGrfObj,
     GraphicAttr const& rGraphicAttr,
-    SwRect const& rAlignedGrfArea)
+    const basegfx::B2DHomMatrix& rGraphicTransform)
 {
     // RotGrfFlyFrame: unify using GraphicPrimitive2D
     // -> the primitive handles all crop and mirror stuff
     // -> the primitive renderer will create the needed pdf export data
     // -> if bitmap content, it will be cached system-dependent
-    const basegfx::B2DRange aTargetRange(
-        rAlignedGrfArea.Left(), rAlignedGrfArea.Top(),
-        rAlignedGrfArea.Right(), rAlignedGrfArea.Bottom());
-    const double fRotate(static_cast< double >(-rGraphicAttr.GetRotation()) * (M_PI/1800.0));
-    const basegfx::B2DHomMatrix aTargetTransform(
-        basegfx::utils::createRotateAroundCenterKeepAspectRatioStayInsideRange(
-            aTargetRange,
-            fRotate));
     drawinglayer::primitive2d::Primitive2DContainer aContent(1);
     bool bDone(false);
 
@@ -924,7 +947,7 @@ void paintGraphicUsingPrimitivesHelper(
                 if(aTempGraphic.IsLink() && GfxLinkType::NativeJpg == aTempGraphic.GetLink().GetType())
                 {
                     aContent[0] = new drawinglayer::primitive2d::GraphicPrimitive2D(
-                        aTargetTransform,
+                        rGraphicTransform,
                         aTempGraphic,
                         rGraphicAttr);
                     bDone = true;
@@ -936,10 +959,13 @@ void paintGraphicUsingPrimitivesHelper(
     if(!bDone)
     {
         aContent[0] = new drawinglayer::primitive2d::GraphicPrimitive2D(
-            aTargetTransform,
+            rGraphicTransform,
             rGrfObj,
             rGraphicAttr);
     }
+
+    basegfx::B2DRange aTargetRange(0.0, 0.0, 1.0, 1.0);
+    aTargetRange.transform(rGraphicTransform);
 
     paintUsingPrimitivesHelper(
         rOutputDevice,
@@ -1074,8 +1100,13 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                 }
                 else
                 {
-                    paintGraphicUsingPrimitivesHelper(*pOut,
-                            rGrfObj, aGrfAttr, aAlignedGrfArea);
+                    const basegfx::B2DHomMatrix aGraphicTransform(getFrameAreaTransformation());
+
+                    paintGraphicUsingPrimitivesHelper(
+                        *pOut,
+                        rGrfObj,
+                        aGrfAttr,
+                        aGraphicTransform);
                 }
             }
             else
@@ -1154,12 +1185,16 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
             {
                 GraphicObject aTempGraphicObject(*pGraphic);
                 GraphicAttr aGrfAttr;
+                const basegfx::B2DHomMatrix aGraphicTransform(
+                    basegfx::utils::createScaleTranslateB2DHomMatrix(
+                        aAlignedGrfArea.Width(), aAlignedGrfArea.Height(),
+                        aAlignedGrfArea.Left(), aAlignedGrfArea.Top()));
 
                 paintGraphicUsingPrimitivesHelper(
                     *pOut,
                     aTempGraphicObject,
                     aGrfAttr,
-                    aAlignedGrfArea);
+                    aGraphicTransform);
 
                 // shade the representation if the object is activated outplace
                 uno::Reference < embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();

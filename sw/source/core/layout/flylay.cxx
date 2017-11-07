@@ -111,7 +111,8 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
     if ( !GetAnchorFrame() || IsLocked() || IsColLocked() )
         return;
-    // #i28701# - use new method <GetPageFrame()>
+
+        // #i28701# - use new method <GetPageFrame()>
     if( !GetPageFrame() && GetAnchorFrame() && GetAnchorFrame()->IsInFly() )
     {
         SwFlyFrame* pFly = AnchorFrame()->FindFlyFrame();
@@ -119,8 +120,11 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         if( pPageFrame )
             pPageFrame->AppendFlyToPage( this );
     }
+
     if( !GetPageFrame() )
+    {
         return;
+    }
 
     Lock(); // The curtain drops
 
@@ -225,36 +229,16 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             nLoopControlRuns = 0;
     }
 
-    // RotateFlyFrame3 - inner frame
-    // After the unrotated layout is finished, apply possible set rotation to it
-    const double fRotation(getRotation());
+    // RotateFlyFrame3 - outer frame
+    // Do not refresh transforms/Areas self here, this will be done
+    // when inner and outer frame are layouted, in SwNoTextFrame::MakeAll
+    const double fRotation(getFrameRotation());
 
     if(basegfx::fTools::equalZero(fRotation))
     {
         // reset transformations to show that they are not used
         maFrameAreaTransformation.identity();
         maFramePrintAreaTransformation.identity();
-    }
-    else
-    {
-        // save Transformations to local maFrameAreaTransformation
-        // and maFramePrintAreaTransformation.
-
-        // get center from outer frame (layout frame) to be on the safe side
-        const Point aCenter(GetUpper() ? GetUpper()->getFrameArea().Center() : getFrameArea().Center());
-        const basegfx::B2DPoint aB2DCenter(aCenter.X(), aCenter.Y());
-
-        createFrameAreaTransformations(
-            maFrameAreaTransformation,
-            maFramePrintAreaTransformation,
-            fRotation,
-            aB2DCenter);
-
-        // create BoundRects of FrameAreas and re-set the FrameArea definitions
-        // to represent the rotated geometry in the layout object
-        setFrameAreaDefinitionsToBoundRangesOfTransformations(
-            maFrameAreaTransformation,
-            maFramePrintAreaTransformation);
     }
 
     Unlock();
@@ -266,6 +250,21 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             "SwFlyFreeFrame::Format(), flipping Fly." );
 
 #endif
+}
+
+void SwFlyFreeFrame::updateTransformationsAndAreas(
+    double fRotation,
+    const basegfx::B2DPoint& rCenter)
+{
+    createFrameAreaTransformations(
+        maFrameAreaTransformation,
+        maFramePrintAreaTransformation,
+        fRotation,
+        rCenter);
+
+    setFrameAreaDefinitionsToBoundRangesOfTransformations(
+        maFrameAreaTransformation,
+        maFramePrintAreaTransformation);
 }
 
 // RotateFlyFrame3 - Support for Transformations - outer frame
@@ -293,8 +292,8 @@ basegfx::B2DHomMatrix SwFlyFreeFrame::getFramePrintAreaTransformation() const
     return SwFlyFrame::getFramePrintAreaTransformation();
 }
 
-// RotateFlyFrame3 - inner frame
-double SwFlyFreeFrame::getRotation() const
+// RotateFlyFrame3 - outer frame
+double SwFlyFreeFrame::getFrameRotation() const
 {
     // SwLayoutFrame::Lower() != SwFrame::GetLower(), but SwFrame::GetLower()
     // calls SwLayoutFrame::Lower() when it's a SwLayoutFrame - so use GetLower()
@@ -302,11 +301,11 @@ double SwFlyFreeFrame::getRotation() const
 
     if(nullptr != pSwNoTextFrame)
     {
-        return pSwNoTextFrame->getRotation();
+        return pSwNoTextFrame->getFrameRotation();
     }
 
-    // call parent
-    return SwFlyFrame::getRotation();
+    // no rotation
+    return 0.0;
 }
 
 /** determines, if direct environment of fly frame has 'auto' size

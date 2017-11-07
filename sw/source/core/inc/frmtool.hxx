@@ -75,8 +75,9 @@ bool DrawFillAttributes(
 // RotGrfFlyFrame: Adapted to rotation
 void paintGraphicUsingPrimitivesHelper(
     OutputDevice & rOutputDevice,
-    GraphicObject const& rGraphicObj, GraphicAttr const& rGraphicAttr,
-    SwRect const& rAlignedGrfArea);
+    GraphicObject const& rGraphicObj,
+    GraphicAttr const& rGraphicAttr,
+    const basegfx::B2DHomMatrix& rGraphicTransform);
 
 // method to align rectangle.
 // Created declaration here to avoid <extern> declarations
