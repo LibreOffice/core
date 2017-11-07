@@ -1204,6 +1204,16 @@ DECLARE_RTFEXPORT_TEST(testTdf104085, "tdf104085.rtf")
     CPPUNIT_FAIL("no BulletChar property");
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf113550, "tdf113550.rtf")
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xCell->getText());
+    // This was 2501, 0 as direct formatting was ignored on the paragraph (and
+    // the style had this larger value).
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
+}
+
 DECLARE_RTFEXPORT_TEST(testLeveljcCenter, "leveljc-center.rtf")
 {
     // Tests that \leveljc1 is mapped to Adjust=Center for a numbering rule.

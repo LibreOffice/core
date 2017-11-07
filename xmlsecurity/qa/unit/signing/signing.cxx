@@ -640,11 +640,11 @@ void SigningTest::testSignatureLineImages()
     // Given: A document (docx) with a signature line and a valid signature
     uno::Reference< security::XDocumentDigitalSignatures > xSignatures(
         security::DocumentDigitalSignatures::createWithVersion(
-            comphelper::getProcessComponentContext(), "1.2" ) );
+            comphelper::getProcessComponentContext(), "1.2"));
 
     uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
-        ZIP_STORAGE_FORMAT_STRING, m_directories.getURLFromSrc(DATA_DIRECTORY) + "signatureline.docx",
-         embed::ElementModes::READ);
+                ZIP_STORAGE_FORMAT_STRING, m_directories.getURLFromSrc(DATA_DIRECTORY) + "signatureline.docx",
+                embed::ElementModes::READ);
     CPPUNIT_ASSERT(xStorage.is());
 
     uno::Sequence< security::DocumentSignatureInformation > xSignatureInfo =

@@ -142,7 +142,7 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream,
                          sal_uInt64 nPos, sal_uInt64 nSize)
 {
     bool bCompatible = isCompatible(rInStream, nPos, nSize);
-    rInStream.Seek( nPos );
+    rInStream.Seek(nPos);
     if (bCompatible)
         // Not converting.
         rOutStream.WriteStream(rInStream, nSize);
@@ -205,8 +205,8 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream,
 namespace vcl
 {
 
-bool ImportPDF(SvStream& rStream, Bitmap &rBitmap,
-               css::uno::Sequence<sal_Int8> &rPdfData,
+bool ImportPDF(SvStream& rStream, Bitmap& rBitmap,
+               css::uno::Sequence<sal_Int8>& rPdfData,
                sal_uInt64 nPos, sal_uInt64 nSize)
 {
     // Get the preview of the first page.
