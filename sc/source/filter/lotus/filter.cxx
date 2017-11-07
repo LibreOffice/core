@@ -40,8 +40,10 @@ static ErrCode
 generate_Opcodes(LotusContext &rContext, SvStream& aStream,
                   ScfStreamProgressBar& aPrgrsBar)
 {
-    OPCODE_FKT *pOps;
-    int         nOps;
+    OPCODE_FKT *pOps = nullptr;
+    int         nOps = 0;
+
+    ErrCode nErr = ERRCODE_NONE;
 
     switch (rContext.eTyp)
     {
@@ -49,15 +51,27 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
         case eWK_2:
             pOps = LotusContext::pOpFkt;
             nOps = FKT_LIMIT;
-        break;
+            break;
         case eWK123:
             pOps = LotusContext::pOpFkt123;
             nOps = FKT_LIMIT123;
-        break;
-        case eWK3:      return SCERR_IMPORT_NI;
-        case eWK_Error: return SCERR_IMPORT_FORMAT;
-        default:        return SCERR_IMPORT_UNKNOWN_WK;
-     }
+            break;
+        case eWK3:
+            nErr = SCERR_IMPORT_NI;
+            break;
+        case eWK_Error:
+            nErr = SCERR_IMPORT_FORMAT;
+            break;
+        default:
+            nErr = SCERR_IMPORT_UNKNOWN_WK;
+            break;
+    }
+
+    if (nErr != ERRCODE_NONE)
+    {
+        MemDelete(rContext);
+        return nErr;
+    }
 
     // #i76299# seems that SvStream::IsEof() does not work correctly
     aStream.Seek( STREAM_SEEK_TO_END );
@@ -72,7 +86,10 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
         if( nOpcode == LOTUS_EOF )
             rContext.bEOF = true;
         else if( nOpcode == LOTUS_FILEPASSWD )
-            return SCERR_IMPORT_FILEPASSWD;
+        {
+            nErr = SCERR_IMPORT_FILEPASSWD;
+            break;
+        }
         else if( nOpcode < nOps )
             pOps[ nOpcode ] (rContext, aStream, nLength);
         else if (rContext.eTyp == eWK123 && nOpcode == LOTUS_PATTERN)
@@ -101,9 +118,10 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
 
     MemDelete(rContext);
 
-    rContext.pDoc->CalcAfterLoad();
+    if (nErr == ERRCODE_NONE)
+        rContext.pDoc->CalcAfterLoad();
 
-    return ERRCODE_NONE;
+    return nErr;
 }
 
 WKTYP ScanVersion(SvStream& aStream)
