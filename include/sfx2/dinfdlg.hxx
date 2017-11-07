@@ -380,6 +380,7 @@ public:
 
 struct CustomPropertyLine
 {
+    ScopedVclPtr<VclGrid>                       m_aLine;
     ScopedVclPtr<ComboBox>                      m_aNameBox;
     ScopedVclPtr<CustomPropertiesTypeBox>       m_aTypeBox;
     ScopedVclPtr<CustomPropertiesEdit>          m_aValueEdit;
@@ -391,12 +392,12 @@ struct CustomPropertyLine
     ScopedVclPtr<CustomPropertiesYesNoButton>   m_aYesNoButton;
     ScopedVclPtr<CustomPropertiesRemoveButton>  m_aRemoveButton;
 
-    bool                            m_bIsDate;
-    bool                            m_bIsRemoved;
-    bool                            m_bTypeLostFocus;
+    bool                                        m_bIsDate;
+    bool                                        m_bTypeLostFocus;
 
     CustomPropertyLine( vcl::Window* pParent );
-    void SetRemoved();
+    void Clear();
+    void Hide();
 };
 
 // class CustomPropertiesWindow ------------------------------------------
@@ -404,30 +405,26 @@ struct CustomPropertyLine
 class CustomPropertiesWindow : public vcl::Window
 {
 private:
+    VclPtr<HeaderBar>                   m_pHeaderBar;
+    VclPtr<ScrollBar>                   m_pScrollBar;
     VclPtr<FixedText>                   m_pHeaderAccName;
     VclPtr<FixedText>                   m_pHeaderAccType;
     VclPtr<FixedText>                   m_pHeaderAccValue;
 
-    VclPtr<ComboBox>                    m_aNameBox;
-    VclPtr<ListBox>                     m_aTypeBox;
-    VclPtr<Edit>                        m_aValueEdit;
-    VclPtr<DateField>                   m_aDateField;
-    VclPtr<TimeField>                   m_aTimeField;
-    VclPtr<Edit>                        m_aDurationField;
-    VclPtr<PushButton>                  m_aEditButton;
-    VclPtr<CustomPropertiesYesNoButton> m_aYesNoButton;
-    VclPtr<ImageButton>                 m_aRemoveButton;
-
+    sal_Int32                           m_nWidgetHeight;
+    sal_Int32                           m_nRemoveButtonWidth;
+    sal_Int32                           m_nTypeBoxWidth;
     sal_Int32                           m_nLineHeight;
     sal_Int32                           m_nScrollPos;
-    std::vector< CustomPropertyLine* >  m_aCustomPropertiesLines;
+    std::vector<CustomProperty*>        m_aCustomProperties;
+    std::vector<CustomPropertyLine*>    m_aCustomPropertiesLines;
     CustomPropertyLine*                 m_pCurrentLine;
     SvNumberFormatter                   m_aNumberFormatter;
     Idle                                m_aEditLoseFocusIdle;
     Idle                                m_aBoxLoseFocusIdle;
     Link<void*,void>                    m_aRemovedHdl;
 
-    DECL_STATIC_LINK_TYPED( CustomPropertiesWindow, TypeHdl, ListBox&, void );
+    DECL_LINK_TYPED(  TypeHdl, ListBox&, void );
     DECL_LINK_TYPED(  RemoveHdl, Button*, void );
     DECL_LINK_TYPED(  EditLoseFocusHdl, Control&, void );
     DECL_LINK_TYPED(  BoxLoseFocusHdl, Control&, void );
@@ -438,28 +435,36 @@ private:
 
     bool        IsLineValid( CustomPropertyLine* pLine ) const;
     void        ValidateLine( CustomPropertyLine* pLine, bool bIsFromTypeBox );
+    void        CreateNewLine();
+    void        ReloadLinesContent();
+    void        StoreCustomProperties();
+    sal_uInt32  GetCurrentDataModelPosition() const { return -1 * m_nScrollPos / m_nLineHeight; }
 
 public:
     CustomPropertiesWindow(vcl::Window* pParent,
         FixedText *pHeaderAccName,
         FixedText *pHeaderAccType,
         FixedText *pHeaderAccValue);
+    void Init(HeaderBar* pHeaderBar, ScrollBar* pScrollBar);
     virtual ~CustomPropertiesWindow();
     virtual void dispose() override;
 
-    bool                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
+    virtual void        Resize() override;
+    void                SetWidgetWidths(const CustomPropertyLine* pLine) const;
+    sal_uInt16          GetExistingLineCount() const { return m_aCustomPropertiesLines.size(); }
+    sal_uInt16          GetTotalLineCount() const { return m_aCustomProperties.size(); }
     sal_uInt16          GetVisibleLineCount() const;
-    inline sal_Int32    GetLineHeight() const { return m_nLineHeight; }
-    void                AddLine( const OUString& sName, css::uno::Any& rAny );
+    void                SetVisibleLineCount(sal_uInt32 nCount);
+    sal_Int32           GetLineHeight() const { return m_nLineHeight; }
+    void                AddLine( const OUString& sName, css::uno::Any const & rAny );
     bool                AreAllLinesValid() const;
     void                ClearAllLines();
     void                DoScroll( sal_Int32 nNewPos );
 
     css::uno::Sequence< css::beans::PropertyValue >
-                        GetCustomProperties() const;
+                        GetCustomProperties();
+    void                SetCustomProperties(const std::vector<CustomProperty*>& rProperties);
     void                SetRemovedHdl( const Link<void*,void>& rLink ) { m_aRemovedHdl = rLink; }
-
-    void                updateLineWidth();
 };
 
 // class CustomPropertiesControl -----------------------------------------
@@ -483,14 +488,17 @@ public:
     virtual ~CustomPropertiesControl();
     virtual void dispose() override;
 
-    void            AddLine( const OUString& sName, css::uno::Any& rAny, bool bInteractive );
+    void         AddLine(const OUString& sName, css::uno::Any const & rAny, bool bInteractive);
 
-    inline bool     AreAllLinesValid() const { return m_pPropertiesWin->AreAllLinesValid(); }
-    inline void     ClearAllLines() { m_pPropertiesWin->ClearAllLines(); }
-    inline css::uno::Sequence< css::beans::PropertyValue >
-                    GetCustomProperties() const
+    bool         AreAllLinesValid() const { return m_pPropertiesWin->AreAllLinesValid(); }
+    void         ClearAllLines() { m_pPropertiesWin->ClearAllLines(); }
+
+    css::uno::Sequence<css::beans::PropertyValue>
+                 GetCustomProperties() const
                         { return m_pPropertiesWin->GetCustomProperties(); }
-    void    Init(VclBuilderContainer& rParent);
+    void         SetCustomProperties(const std::vector<CustomProperty*>& rProperties);
+
+    void         Init(VclBuilderContainer& rParent);
     virtual void Resize() override;
 };
 
