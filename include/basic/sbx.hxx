@@ -218,9 +218,8 @@ public:
     virtual void Clear() override;
 };
 
-class BASIC_DLLPUBLIC SbxStdCollection : public SbxCollection
+class BASIC_DLLPUBLIC SbxStdCollection final : public SbxCollection
 {
-protected:
     OUString aElemClass;
     bool bAddRemoveOk;
     virtual ~SbxStdCollection() override;
