@@ -35,9 +35,8 @@ public:
 };
 
 // class SbStdPicture
-class BASIC_DLLPUBLIC SbStdPicture : public SbxObject
+class BASIC_DLLPUBLIC SbStdPicture final : public SbxObject
 {
-protected:
     Graphic     aGraphic;
 
     virtual ~SbStdPicture() override;
@@ -56,9 +55,8 @@ public:
 };
 
 // class SbStdFont
-class BASIC_DLLPUBLIC SbStdFont : public SbxObject
+class BASIC_DLLPUBLIC SbStdFont final : public SbxObject
 {
-protected:
     bool    bBold;
     bool    bItalic;
     bool    bStrikeThrough;
@@ -94,10 +92,8 @@ public:
 };
 
 // class SbStdClipboard
-class BASIC_DLLPUBLIC SbStdClipboard : public SbxObject
+class BASIC_DLLPUBLIC SbStdClipboard final : public SbxObject
 {
-protected:
-
     virtual ~SbStdClipboard() override;
     virtual void   Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

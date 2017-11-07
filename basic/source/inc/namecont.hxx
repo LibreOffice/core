@@ -613,13 +613,13 @@ public:
 };
 
 
-class ScriptExtensionIterator
+class ScriptExtensionIterator final
 {
 public:
     ScriptExtensionIterator();
     OUString nextBasicOrDialogLibrary( bool& rbPureDialogLib );
 
-protected:
+private:
     css::uno::Reference< css::deployment::XPackage >
         implGetNextUserScriptPackage( bool& rbPureDialogLib );
     css::uno::Reference< css::deployment::XPackage >
@@ -648,7 +648,7 @@ protected:
 
     int m_iUserPackage;
     int m_iSharedPackage;
-       int m_iBundledPackage;
+    int m_iBundledPackage;
 
     ScriptSubPackageIterator* m_pScriptSubPackageIterator;
 
