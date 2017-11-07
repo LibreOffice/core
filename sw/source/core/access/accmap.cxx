@@ -2507,17 +2507,15 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
     SwAccessibleChild aFrameOrObj( pFrame );
     bool bShapeSelected = false;
     const SwViewShell *pVSh = GetShell();
-    if( dynamic_cast<const SwCursorShell*>( pVSh) !=  nullptr )
+    if( auto pCSh = dynamic_cast<const SwCursorShell*>(pVSh) )
     {
-        const SwCursorShell *pCSh = static_cast< const SwCursorShell * >( pVSh );
         if( pCSh->IsTableMode() )
         {
             while( aFrameOrObj.GetSwFrame() && !aFrameOrObj.GetSwFrame()->IsCellFrame() )
                 aFrameOrObj = aFrameOrObj.GetSwFrame()->GetUpper();
         }
-        else if( dynamic_cast<const SwFEShell*>( pVSh) !=  nullptr )
+        else if( auto pFESh = dynamic_cast<const SwFEShell*>(pVSh) )
         {
-            const SwFEShell *pFESh = static_cast< const SwFEShell * >( pVSh );
             const SwFrame *pFlyFrame = pFESh->GetSelectedFlyFrame();
             if( pFlyFrame )
             {

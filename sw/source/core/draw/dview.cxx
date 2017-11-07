@@ -821,9 +821,9 @@ void SwDrawView::CheckPossibilities()
     {
         const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
         const SwFrame *pFrame = nullptr;
-        if ( dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) !=  nullptr )
+        if ( auto pVirtFlyDrawObj = dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) )
         {
-            const SwFlyFrame *pFly = static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrame();
+            const SwFlyFrame *pFly = pVirtFlyDrawObj->GetFlyFrame();
             if ( pFly  )
             {
                 pFrame = pFly->GetAnchorFrame();

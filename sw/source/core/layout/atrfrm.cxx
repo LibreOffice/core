@@ -632,10 +632,10 @@ void SwFormatPageDesc::SwClientNotify( const SwModify& rModify, const SfxHint& r
         const SwModify* pMod = GetDefinedIn();
         if ( pMod )
         {
-            if( dynamic_cast<const SwContentNode*>( pMod) !=  nullptr )
-                const_cast<SwContentNode*>(static_cast<const SwContentNode*>(pMod))->SetAttr( aDfltDesc );
-            else if( dynamic_cast<const SwFormat*>( pMod) !=  nullptr)
-                const_cast<SwFormat*>(static_cast<const SwFormat*>(pMod))->SetFormatAttr( aDfltDesc );
+            if( auto pContentNode = dynamic_cast<const SwContentNode*>( pMod) )
+                const_cast<SwContentNode*>(pContentNode)->SetAttr( aDfltDesc );
+            else if( auto pFormat = dynamic_cast<const SwFormat*>( pMod) )
+                const_cast<SwFormat*>(pFormat)->SetFormatAttr( aDfltDesc );
             else
             {
                 OSL_FAIL( "What kind of SwModify is this?" );

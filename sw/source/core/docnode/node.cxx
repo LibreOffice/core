@@ -674,10 +674,10 @@ const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
                     static_cast<const SwFormatPageDesc*>(pItem)->GetDefinedIn() )
                 {
                     const SwModify* pMod = static_cast<const SwFormatPageDesc*>(pItem)->GetDefinedIn();
-                    if( dynamic_cast<const SwContentNode*>( pMod) !=  nullptr )
-                        aInfo.CheckNode( *static_cast<const SwContentNode*>(pMod) );
-                    else if( dynamic_cast<const SwFormat*>( pMod) !=  nullptr)
-                        static_cast<const SwFormat*>(pMod)->GetInfo( aInfo );
+                    if( auto pContentNode = dynamic_cast<const SwContentNode*>( pMod) )
+                        aInfo.CheckNode( *pContentNode );
+                    else if( auto pFormat = dynamic_cast<const SwFormat*>( pMod) )
+                        pFormat->GetInfo( aInfo );
                 }
             }
 

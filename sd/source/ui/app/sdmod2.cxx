@@ -91,8 +91,8 @@ static SdPage* GetCurrentPage( sd::ViewShell const * pViewSh, EditFieldInfo cons
 
     // first try to check if we are inside the outline view
     sd::OutlineView* pSdView = nullptr;
-    if( dynamic_cast<const sd::OutlineViewShell* >(pViewSh) !=  nullptr )
-        pSdView = static_cast<sd::OutlineView*> (static_cast<sd::OutlineViewShell const *>(pViewSh)->GetView());
+    if( auto pOutlineViewShell = dynamic_cast<const sd::OutlineViewShell* >(pViewSh) )
+        pSdView = static_cast<sd::OutlineView*>(pOutlineViewShell->GetView());
 
     if (pSdView != nullptr && (pOutliner ==  &pSdView->GetOutliner()))
     {

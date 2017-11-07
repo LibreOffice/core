@@ -619,10 +619,10 @@ void SfxToolBoxControl::StateChanged
         case SfxItemState::DEFAULT:
         if ( pState )
         {
-            if ( dynamic_cast< const SfxBoolItem* >(pState) !=  nullptr )
+            if ( auto pBoolItem = dynamic_cast< const SfxBoolItem* >(pState) )
             {
                 // BoolItem for checking
-                if ( static_cast<const SfxBoolItem*>(pState)->GetValue() )
+                if ( pBoolItem->GetValue() )
                     eTri = TRISTATE_TRUE;
                 nItemBits |= ToolBoxItemBits::CHECKABLE;
             }

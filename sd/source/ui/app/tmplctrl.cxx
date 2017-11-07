@@ -78,9 +78,9 @@ void SdTemplateControl::StateChanged(
 {
     if( eState != SfxItemState::DEFAULT || pState->IsVoidItem() )
         GetStatusBar().SetItemText( GetId(), OUString() );
-    else if ( dynamic_cast< const SfxStringItem *>( pState ) !=  nullptr )
+    else if ( auto pStringItem = dynamic_cast< const SfxStringItem *>( pState ) )
     {
-        msTemplate = static_cast<const SfxStringItem*>(pState)->GetValue();
+        msTemplate = pStringItem->GetValue();
         GetStatusBar().SetItemText( GetId(), msTemplate );
     }
 }
