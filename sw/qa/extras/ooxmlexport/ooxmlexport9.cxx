@@ -323,6 +323,17 @@ DECLARE_OOXMLEXPORT_TEST(testRhbz988516, "rhbz988516.docx")
     CPPUNIT_ASSERT_EQUAL( 2, getPages() );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf112352_nextPageColumns, "tdf112352_nextPageColumns.docx")
+{
+    uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(2), "TextSection");
+    uno::Reference<text::XTextColumns> xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
+
+    xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(3), "TextSection");
+    xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextColumns->getColumnCount());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf103389, "tdf103389.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
