@@ -191,7 +191,8 @@ typedef BKMKCPs::iterator CPItr;
 class WW8_WrtBookmarks
 {
 private:
-    BKMKCPs aSttCps,aEndCps;
+    /// Structure of one item inside this map: (startPos, (endPos, (a bool value?, bookmarkName)))
+    BKMKCPs aSttCps;
     BKMKNames maSwBkmkNms;
 
     WW8_WrtBookmarks(WW8_WrtBookmarks const&) = delete;
@@ -259,6 +260,8 @@ void WW8_WrtBookmarks::Write( WW8Export& rWrt)
     std::vector<OUString> aNames;
     SvMemoryStream aTempStrm1(65535,65535);
     SvMemoryStream aTempStrm2(65535,65535);
+
+    BKMKCPs aEndCps;
     for (aItr = aSttCps.begin();aItr!=aSttCps.end();++aItr)
     {
         if (aItr->second)
