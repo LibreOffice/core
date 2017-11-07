@@ -28,6 +28,7 @@ struct SwCursorMoveState;
 
 class SwNoTextFrame: public SwContentFrame
 {
+private:
     friend void FrameFinit();
 
     // RotateFlyFrame3 - Support for Transformation, hold
@@ -64,12 +65,17 @@ public:
     void StopAnimation( OutputDevice* = nullptr ) const;
     bool HasAnimation()  const;
 
-    // RotateFlyFrame3 - Support for inner frame of a SwGrfNode
-    virtual double getRotation() const override;
-
     // RotateFlyFrame3 - Support for Transformations for inner frame of a SwGrfNode
     basegfx::B2DHomMatrix getFrameAreaTransformation() const;
     basegfx::B2DHomMatrix getFramePrintAreaTransformation() const;
+    void updateTransformationsAndAreas(
+        double fRotation,
+        const basegfx::B2DPoint& rCenter);
+
+    // RotateFlyFrame3 - Support for inner frame of a SwGrfNode.
+    // Only for local data extraction. To uniquely access information
+    // for local transformation, use getFrameArea(Print)Transformation.
+    double getFrameRotation() const;
 };
 
 #endif
