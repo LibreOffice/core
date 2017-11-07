@@ -37,13 +37,11 @@ namespace accessibility
 
     /** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry
     */
-    class AccessibleIconChoiceCtrl  :public AccessibleIconChoiceCtrl_BASE
-                                    ,public VCLXAccessibleComponent
+    class AccessibleIconChoiceCtrl final : public AccessibleIconChoiceCtrl_BASE
+                                          ,public VCLXAccessibleComponent
     {
-    protected:
         css::uno::Reference< css::accessibility::XAccessible > m_xParent;
 
-    protected:
         virtual ~AccessibleIconChoiceCtrl() override;
 
         /** this function is called upon disposing the component */

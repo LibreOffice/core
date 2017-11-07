@@ -52,7 +52,7 @@ typedef ::cppu::WeakAggComponentImplHelper6< css::accessibility::XAccessible
 
 /** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry
 */
-class VCLXAccessibleListItem : public ::cppu::BaseMutex,
+class VCLXAccessibleListItem final : public ::cppu::BaseMutex,
                                public ::comphelper::OCommonAccessibleText,
                                public VCLXAccessibleListItem_BASE
 {
@@ -62,14 +62,12 @@ private:
     bool                            m_bSelected;
     bool                            m_bVisible;
 
-protected:
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32                          m_nClientId;
 
     rtl::Reference< VCLXAccessibleList >                     m_xParent;
     css::uno::Reference< css::accessibility::XAccessibleContext > m_xParentContext;
 
-protected:
     virtual ~VCLXAccessibleListItem() override;
     /** this function is called upon disposing the component
     */

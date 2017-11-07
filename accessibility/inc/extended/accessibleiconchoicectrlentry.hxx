@@ -57,22 +57,19 @@ namespace accessibility
                                                 , css::lang::XEventListener > AccessibleIconChoiceCtrlEntry_BASE;
 
     /** the class AccessibleListBoxEntry represents the class for an accessible object of a listbox entry */
-    class AccessibleIconChoiceCtrlEntry :   public ::cppu::BaseMutex,
-                                       public AccessibleIconChoiceCtrlEntry_BASE,
-                                    public ::comphelper::OCommonAccessibleText
+    class AccessibleIconChoiceCtrlEntry final : public ::cppu::BaseMutex,
+                                                public AccessibleIconChoiceCtrlEntry_BASE,
+                                                public ::comphelper::OCommonAccessibleText
     {
-    private:
         /** The treelistbox control */
         VclPtr<SvtIconChoiceCtrl>           m_pIconCtrl;
         sal_Int32                           m_nIndex;
 
-    protected:
         /// client id in the AccessibleEventNotifier queue
         sal_uInt32                          m_nClientId;
 
         css::uno::Reference< css::accessibility::XAccessible > m_xParent;
 
-    private:
         tools::Rectangle               GetBoundingBox_Impl() const;
         tools::Rectangle               GetBoundingBoxOnScreen_Impl() const;
         bool                IsAlive_Impl() const;
@@ -87,7 +84,6 @@ namespace accessibility
         /// @throws css::lang::DisposedException
         void                    EnsureIsAlive() const;
 
-    protected:
         virtual ~AccessibleIconChoiceCtrlEntry() override;
         /** this function is called upon disposing the component
         */

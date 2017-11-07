@@ -30,7 +30,7 @@ namespace accessibility {
    (row or column header bar). This object supports the
     XAccessibleSelection interface. Selecting a child of this object selects
     complete rows or columns of the data table. */
-class AccessibleGridControlHeader : public AccessibleGridControlTableBase
+class AccessibleGridControlHeader final : public AccessibleGridControlTableBase
 {
 public:
     /**  @param rxParent  accessible parent control
@@ -43,7 +43,7 @@ public:
             ::svt::table::IAccessibleTable& rTable,
             ::svt::table::AccessibleTableControlObjType  eObjType );
 
-protected:
+private:
     virtual ~AccessibleGridControlHeader() override;
 
 public:
@@ -115,7 +115,7 @@ public:
     /** @return  An unique implementation ID. */
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
-protected:
+private:
     /** Returns the specified row or column. Uses one of the parameters,
         depending on object type.
         @attention  This method requires locked mutex's and a living object.
