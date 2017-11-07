@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLESHAPERESIZER_HXX
 
 #include <com/sun/star/drawing/XShape.hpp>
-#include <list>
+#include <vector>
 
 class ScXMLImport;
 class ScChartListenerCollection;
@@ -33,12 +33,10 @@ struct ScMyToFixupOLE
     OUString sRangeList;
 };
 
-typedef std::list<ScMyToFixupOLE> ScMyToFixupOLEs;
-
 class ScMyOLEFixer
 {
     ScXMLImport&                rImport;
-    ScMyToFixupOLEs             aShapes;
+    std::vector<ScMyToFixupOLE>   aShapes;
     ScChartListenerCollection*  pCollection;
 
     void CreateChartListener(ScDocument* pDoc,
