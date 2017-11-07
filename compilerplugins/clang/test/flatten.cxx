@@ -10,7 +10,7 @@
 #include <exception>
 
 extern int foo();
-extern int bar();
+extern int bar(int = 0);
 class Class {};
 
 void top1() {
@@ -102,6 +102,31 @@ void top6() {
     }
     int x = 1;
     (void)x;
+}
+
+void top7() {
+    // no warning expected
+    if (foo() == 1) {
+        throw std::exception();
+    } else if (foo() == 2) {
+        throw std::exception();
+    } else {
+        throw std::exception();
+    }
+}
+
+void top8() {
+    if (foo() == 1) {
+        if (foo() == 2) {
+            throw std::exception(); // expected-error {{unconditional throw in then branch, just flatten the else [loplugin:flatten]}}
+        } else {
+            bar();
+        }
+    } else if (foo() == 2) {
+        bar(1);
+    } else {
+        bar(2);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

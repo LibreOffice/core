@@ -47,6 +47,7 @@ private:
 
     std::stack<bool> mLastStmtInParentStack;
     std::vector<std::pair<char const *, char const *>> mvModifiedRanges;
+    Stmt const * mElseBranch = nullptr;
 };
 
 static Stmt const * containsSingleThrowExpr(Stmt const * stmt)
@@ -84,10 +85,20 @@ bool Flatten::TraverseCXXCatchStmt(CXXCatchStmt* )
 
 bool Flatten::TraverseIfStmt(IfStmt * ifStmt)
 {
-    // ignore if we are part of an if/then/else/if chain
-    if (ifStmt->getElse() && isa<IfStmt>(ifStmt->getElse()))
-        return true;
-    return RecursiveASTVisitor<Flatten>::TraverseIfStmt(ifStmt);
+    if (!WalkUpFromIfStmt(ifStmt)) {
+        return false;
+    }
+    auto const saved = mElseBranch;
+    mElseBranch = ifStmt->getElse();
+    auto ret = true;
+    for (auto const sub: ifStmt->children()) {
+        if (!TraverseStmt(sub)) {
+            ret = false;
+            break;
+        }
+    }
+    mElseBranch = saved;
+    return ret;
 }
 
 bool Flatten::TraverseCompoundStmt(CompoundStmt * compoundStmt)
@@ -108,6 +119,10 @@ bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
         return true;
 
     if (!ifStmt->getElse())
+        return true;
+
+    // ignore if we are part of an if/then/else/if chain
+    if (ifStmt == mElseBranch || isa<IfStmt>(ifStmt->getElse()))
         return true;
 
     auto const thenThrowExpr = containsSingleThrowExpr(ifStmt->getThen());
