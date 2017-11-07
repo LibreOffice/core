@@ -135,13 +135,9 @@ void SAL_CALL SerfInputStream::closeInput()
 
 void SAL_CALL SerfInputStream::seek( sal_Int64 location )
 {
-    if ( location < 0 )
+    if ( location < 0 || location > mLen )
         throw css::lang::IllegalArgumentException();
-
-    if ( location <= mLen )
-        mPos = location;
-    else
-        throw css::lang::IllegalArgumentException();
+    mPos = location;
 }
 
 
