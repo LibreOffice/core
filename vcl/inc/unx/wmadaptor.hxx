@@ -43,6 +43,7 @@ public:
         UTF8_STRING,
 
         // atoms for extended WM hints
+        NET_ACTIVE_WINDOW,
         NET_SUPPORTED,
         NET_SUPPORTING_WM_CHECK,
         NET_WM_NAME,
@@ -286,6 +287,13 @@ public:
      *  if reference frame is NULL the root window is used instead
      */
     void changeReferenceFrame( X11SalFrame* pFrame, X11SalFrame const * pReferenceFrame ) const;
+
+    /*
+     *  Requests the change of active window by sending
+     *  _NET_ACTIVE_WINDOW message to the frame. The frame
+     *  has to be mapped
+     */
+    void activateWindow( X11SalFrame *pFrame, Time nTimestamp );
 };
 
 } // namespace

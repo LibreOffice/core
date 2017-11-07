@@ -1437,7 +1437,12 @@ void X11SalFrame::ToTop( SalFrameToTop nFlags )
         if( m_bXEmbed )
             askForXEmbedFocus( 0 );
         else
-            XSetInputFocus( GetXDisplay(), aToTopWindow, RevertToParent, CurrentTime );
+        {
+            // a misnomer, GetLastUserEventTime( true ) actually gets current X11 server time
+            // this is an equivalent of gdk_x11_get_server_time()
+            Time nTimestamp = pDisplay_->GetLastUserEventTime( true );
+            GetDisplay()->getWMAdaptor()->activateWindow( this, nTimestamp );
+        }
     }
 }
 
