@@ -24,13 +24,21 @@
 
 #include <clang/Rewrite/Core/Rewriter.h>
 
+#include "pluginhandler.hxx"
+
 using namespace clang;
 using namespace llvm;
 
 namespace loplugin
 {
 
-class PluginHandler;
+struct InstantiationData
+{
+    const char* name;
+    PluginHandler& handler;
+    CompilerInstance& compiler;
+    Rewriter* rewriter;
+};
 
 /**
     Base class for plugins.
@@ -41,14 +49,6 @@ class PluginHandler;
 class Plugin
 {
 public:
-    struct InstantiationData
-    {
-        const char* name;
-        PluginHandler& handler;
-        CompilerInstance& compiler;
-        Rewriter* rewriter;
-    };
-
     explicit Plugin( const InstantiationData& data );
     virtual ~Plugin() {}
     virtual void run() = 0;
@@ -58,9 +58,10 @@ public:
     SourceLocation locationAfterToken( SourceLocation location );
 protected:
     DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation()) const;
-    bool ignoreLocation( SourceLocation loc );
-    bool ignoreLocation( const Decl* decl );
-    bool ignoreLocation( const Stmt* stmt );
+    bool ignoreLocation( SourceLocation loc ) const
+    { return handler.ignoreLocation(loc); }
+    bool ignoreLocation( const Decl* decl ) const;
+    bool ignoreLocation( const Stmt* stmt ) const;
     CompilerInstance& compiler;
     PluginHandler& handler;
     /**
@@ -76,8 +77,6 @@ protected:
     */
     bool isInUnoIncludeFile(SourceLocation spellingLocation) const;
     bool isInUnoIncludeFile(const FunctionDecl*) const;
-
-    static void normalizeDotDotInFilePath(std::string&);
 
     static bool isUnitTestMode();
 
@@ -170,17 +169,17 @@ public:
 class RegistrationCreate
 {
 public:
-    template< typename T, bool > static T* create( const Plugin::InstantiationData& data );
+    template< typename T, bool > static T* create( const InstantiationData& data );
 };
 
 inline
-bool Plugin::ignoreLocation( const Decl* decl )
+bool Plugin::ignoreLocation( const Decl* decl ) const
 {
     return ignoreLocation( decl->getLocation());
 }
 
 inline
-bool Plugin::ignoreLocation( const Stmt* stmt )
+bool Plugin::ignoreLocation( const Stmt* stmt ) const
 {
     // Invalid location can happen at least for ImplicitCastExpr of
     // ImplicitParam 'self' in Objective C method declarations:
@@ -215,6 +214,8 @@ RewritePlugin::RewriteOption operator|( RewritePlugin::RewriteOption option1, Re
     return static_cast< RewritePlugin::RewriteOption >( int( option1 ) | int( option2 ));
 }
 
+void normalizeDotDotInFilePath(std::string&);
+
 // Same as pathname.startswith(prefix), except on Windows, where pathname and
 // prefix may also contain backslashes:
 bool hasPathnamePrefix(StringRef pathname, StringRef prefix);
@@ -224,6 +225,9 @@ bool hasPathnamePrefix(StringRef pathname, StringRef prefix);
 bool isSamePathname(StringRef pathname, StringRef other);
 
 } // namespace
+
+using loplugin::InstantiationData; //TODO
+using loplugin::normalizeDotDotInFilePath; //TODO
 
 #endif // COMPILEPLUGIN_H
 

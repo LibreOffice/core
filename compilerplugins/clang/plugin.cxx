@@ -36,48 +36,7 @@ DiagnosticBuilder Plugin::report( DiagnosticsEngine::Level level, StringRef mess
     return handler.report( level, name, message, compiler, loc );
 }
 
-bool Plugin::ignoreLocation( SourceLocation loc )
-{
-    SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( loc );
-    if( compiler.getSourceManager().isInSystemHeader( expansionLoc ))
-        return true;
-    const char* bufferName = compiler.getSourceManager().getPresumedLoc( expansionLoc ).getFilename();
-    if (bufferName == NULL
-        || hasPathnamePrefix(bufferName, SRCDIR "/external/")
-        || isSamePathname(bufferName, SRCDIR "/sdext/source/pdfimport/wrapper/keyword_list") )
-            // workdir/CustomTarget/sdext/pdfimport/hash.cxx is generated from
-            // sdext/source/pdfimport/wrapper/keyword_list by gperf, which
-            // inserts various #line directives denoting the latter into the
-            // former, but fails to add a #line directive returning back to
-            // hash.cxx itself before the gperf generated boilerplate, so
-            // compilers erroneously consider errors in the boilerplate to come
-            // from keyword_list instead of hash.cxx (for Clang on Linux/macOS
-            // this is not an issue due to the '#pragma GCC system_header'
-            // generated into the start of hash.cxx, #if'ed for __GNUC__, but
-            // for clang-cl it is an issue)
-        return true;
-    if( hasPathnamePrefix(bufferName, WORKDIR) )
-    {
-        // workdir/CustomTarget/vcl/unx/kde4/tst_exclude_socket_notifiers.moc
-        // includes
-        // "../../../../../vcl/unx/kde4/tst_exclude_socket_notifiers.hxx",
-        // making the latter file erroneously match here; so strip any ".."
-        // segments:
-        if (strstr(bufferName, "/..") == nullptr) {
-            return true;
-        }
-        std::string s(bufferName);
-        normalizeDotDotInFilePath(s);
-        if (hasPathnamePrefix(s, WORKDIR))
-            return true;
-    }
-    if( hasPathnamePrefix(bufferName, BUILDDIR)
-        || hasPathnamePrefix(bufferName, SRCDIR) )
-        return false; // ok
-    return true;
-}
-
-void Plugin::normalizeDotDotInFilePath( std::string & s )
+void normalizeDotDotInFilePath( std::string & s )
 {
     for (std::string::size_type i = 0;;)
     {

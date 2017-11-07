@@ -12,16 +12,33 @@
 #ifndef PLUGINHANDLER_H
 #define PLUGINHANDLER_H
 
+#include <cstddef>
+#include <functional>
 #include <memory>
-#include "plugin.hxx"
-
 #include <set>
+#include <unordered_map>
 
 #include <clang/AST/ASTConsumer.h>
+#include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendAction.h>
+#include <clang/Rewrite/Core/Rewriter.h>
+
+using namespace clang;
+
+namespace std {
+
+template<> struct hash<::clang::SourceLocation> {
+    size_t operator ()(::clang::SourceLocation loc) const
+    { return loc.getRawEncoding(); }
+};
+
+}
 
 namespace loplugin
 {
+
+class Plugin;
+struct InstantiationData;
 
 /**
  Class that manages all LO modules.
@@ -33,17 +50,20 @@ public:
     PluginHandler( CompilerInstance& compiler, const std::vector< std::string >& args );
     virtual ~PluginHandler();
     virtual void HandleTranslationUnit( ASTContext& context ) override;
-    static void registerPlugin( Plugin* (*create)( const Plugin::InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault );
+    static void registerPlugin( Plugin* (*create)( const InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault );
     DiagnosticBuilder report( DiagnosticsEngine::Level level, const char * plugin, StringRef message,
             CompilerInstance& compiler, SourceLocation loc = SourceLocation());
+    bool ignoreLocation(SourceLocation loc);
     bool addRemoval( SourceLocation loc );
     static bool isUnitTestMode();
 private:
     void handleOption( const std::string& option );
     void createPlugins( std::set< std::string > rewriters );
     DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation());
+    bool checkIgnoreLocation(SourceLocation loc);
     CompilerInstance& compiler;
     StringRef const mainFileName;
+    std::unordered_map<SourceLocation, bool> ignored_;
     Rewriter rewriter;
     std::set< SourceLocation > removals;
     std::string scope;

@@ -11,6 +11,7 @@
 
 #include <memory>
 #include "compat.hxx"
+#include "plugin.hxx"
 #include "pluginhandler.hxx"
 
 #include <clang/Frontend/CompilerInstance.h>
@@ -40,7 +41,7 @@ namespace loplugin
 
 struct PluginData
 {
-    Plugin* (*create)( const Plugin::InstantiationData& );
+    Plugin* (*create)( const InstantiationData& );
     Plugin* object;
     const char* optionName;
     bool isPPCallback;
@@ -126,17 +127,17 @@ void PluginHandler::createPlugins( std::set< std::string > rewriters )
         if (unitTestMode && mainFileName.find(plugins[ i ].optionName) == StringRef::npos)
             continue;
         if( rewriters.erase( name ) != 0 )
-            plugins[ i ].object = plugins[ i ].create( Plugin::InstantiationData { name, *this, compiler, &rewriter } );
+            plugins[ i ].object = plugins[ i ].create( InstantiationData { name, *this, compiler, &rewriter } );
         else if( plugins[ i ].byDefault )
-            plugins[ i ].object = plugins[ i ].create( Plugin::InstantiationData { name, *this, compiler, NULL } );
+            plugins[ i ].object = plugins[ i ].create( InstantiationData { name, *this, compiler, NULL } );
         else if( unitTestMode && strcmp(name, "unusedmethodsremove") != 0 && strcmp(name, "unusedfieldsremove") != 0)
-            plugins[ i ].object = plugins[ i ].create( Plugin::InstantiationData { name, *this, compiler, NULL } );
+            plugins[ i ].object = plugins[ i ].create( InstantiationData { name, *this, compiler, NULL } );
     }
     for( auto r: rewriters )
         report( DiagnosticsEngine::Fatal, "unknown plugin tool %0" ) << r;
 }
 
-void PluginHandler::registerPlugin( Plugin* (*create)( const Plugin::InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault )
+void PluginHandler::registerPlugin( Plugin* (*create)( const InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault )
 {
     assert( !bPluginObjectsCreated );
     assert( pluginCount < MAX_PLUGINS );
@@ -173,6 +174,55 @@ DiagnosticBuilder PluginHandler::report( DiagnosticsEngine::Level level, const c
 DiagnosticBuilder PluginHandler::report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc )
 {
     return report( level, nullptr, message, compiler, loc );
+}
+
+bool PluginHandler::ignoreLocation(SourceLocation loc) {
+    auto i = ignored_.find(loc);
+    if (i == ignored_.end()) {
+        i = ignored_.emplace(loc, checkIgnoreLocation(loc)).first;
+    }
+    return i->second;
+}
+
+bool PluginHandler::checkIgnoreLocation(SourceLocation loc)
+{
+    SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( loc );
+    if( compiler.getSourceManager().isInSystemHeader( expansionLoc ))
+        return true;
+    const char* bufferName = compiler.getSourceManager().getPresumedLoc( expansionLoc ).getFilename();
+    if (bufferName == NULL
+        || hasPathnamePrefix(bufferName, SRCDIR "/external/")
+        || isSamePathname(bufferName, SRCDIR "/sdext/source/pdfimport/wrapper/keyword_list") )
+            // workdir/CustomTarget/sdext/pdfimport/hash.cxx is generated from
+            // sdext/source/pdfimport/wrapper/keyword_list by gperf, which
+            // inserts various #line directives denoting the latter into the
+            // former, but fails to add a #line directive returning back to
+            // hash.cxx itself before the gperf generated boilerplate, so
+            // compilers erroneously consider errors in the boilerplate to come
+            // from keyword_list instead of hash.cxx (for Clang on Linux/macOS
+            // this is not an issue due to the '#pragma GCC system_header'
+            // generated into the start of hash.cxx, #if'ed for __GNUC__, but
+            // for clang-cl it is an issue)
+        return true;
+    if( hasPathnamePrefix(bufferName, WORKDIR) )
+    {
+        // workdir/CustomTarget/vcl/unx/kde4/tst_exclude_socket_notifiers.moc
+        // includes
+        // "../../../../../vcl/unx/kde4/tst_exclude_socket_notifiers.hxx",
+        // making the latter file erroneously match here; so strip any ".."
+        // segments:
+        if (strstr(bufferName, "/..") == nullptr) {
+            return true;
+        }
+        std::string s(bufferName);
+        normalizeDotDotInFilePath(s);
+        if (hasPathnamePrefix(s, WORKDIR))
+            return true;
+    }
+    if( hasPathnamePrefix(bufferName, BUILDDIR)
+        || hasPathnamePrefix(bufferName, SRCDIR) )
+        return false; // ok
+    return true;
 }
 
 bool PluginHandler::addRemoval( SourceLocation loc )
