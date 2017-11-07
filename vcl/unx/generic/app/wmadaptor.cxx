@@ -95,6 +95,7 @@ struct WMAdaptorProtocol
 static const WMAdaptorProtocol aProtocolTab[] =
 {
     { "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE", WMAdaptor::KDE_NET_WM_WINDOW_TYPE_OVERRIDE },
+    { "_NET_ACTIVE_WINDOW", WMAdaptor::NET_ACTIVE_WINDOW },
     { "_NET_CURRENT_DESKTOP", WMAdaptor::NET_CURRENT_DESKTOP },
     { "_NET_NUMBER_OF_DESKTOPS", WMAdaptor::NET_NUMBER_OF_DESKTOPS },
     { "_NET_WM_DESKTOP", WMAdaptor::NET_WM_DESKTOP },
@@ -2271,6 +2272,30 @@ void WMAdaptor::answerPing( X11SalFrame const * i_pFrame, XClientMessageEvent co
                     &aEvent
                     );
         XFlush( m_pDisplay );
+    }
+}
+
+void WMAdaptor::activateWindow( X11SalFrame *pFrame, Time nTimestamp )
+{
+    if (pFrame->bMapped_)
+    {
+        XEvent aEvent;
+
+        aEvent.xclient.type = ClientMessage;
+        aEvent.xclient.window = pFrame->GetShellWindow();
+        aEvent.xclient.message_type = m_aWMAtoms[ NET_ACTIVE_WINDOW ];
+        aEvent.xclient.format = 32;
+        aEvent.xclient.data.l[0] = 1;
+        aEvent.xclient.data.l[1] = nTimestamp;
+        aEvent.xclient.data.l[2] = None;
+        aEvent.xclient.data.l[3] = 0;
+        aEvent.xclient.data.l[4] = 0;
+
+        XSendEvent( m_pDisplay,
+                    m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
+                    False,
+                    SubstructureNotifyMask | SubstructureRedirectMask,
+                    &aEvent );
     }
 }
 
