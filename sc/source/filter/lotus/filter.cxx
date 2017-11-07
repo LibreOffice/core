@@ -43,21 +43,35 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
     OPCODE_FKT *pOps;
     int         nOps;
 
+    ErrCode nErr = eERR_OK;
+
     switch (rContext.eTyp)
     {
         case eWK_1:
         case eWK_2:
             pOps = LotusContext::pOpFkt;
             nOps = FKT_LIMIT;
-        break;
+            break;
         case eWK123:
             pOps = LotusContext::pOpFkt123;
             nOps = FKT_LIMIT123;
-        break;
-        case eWK3:      return eERR_NI;
-        case eWK_Error: return eERR_FORMAT;
-        default:        return eERR_UNKN_WK;
-     }
+            break;
+        case eWK3:
+            nErr = eERR_NI;
+            break;
+        case eWK_Error:
+            nErr = eERR_FORMAT;
+            break;
+        default:
+            nErr = eERR_UNKN_WK;
+            break;
+    }
+
+    if (nErr != eERR_OK)
+    {
+        MemDelete(rContext);
+        return nErr;
+    }
 
     // #i76299# seems that SvStream::IsEof() does not work correctly
     aStream.Seek( STREAM_SEEK_TO_END );
@@ -72,7 +86,10 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
         if( nOpcode == LOTUS_EOF )
             rContext.bEOF = true;
         else if( nOpcode == LOTUS_FILEPASSWD )
-            return eERR_FILEPASSWD;
+        {
+            nErr = eERR_FILEPASSWD;
+            break;
+        }
         else if( nOpcode < nOps )
             pOps[ nOpcode ] (rContext, aStream, nLength);
         else if (rContext.eTyp == eWK123 && nOpcode == LOTUS_PATTERN)
@@ -101,7 +118,8 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
 
     MemDelete(rContext);
 
-    rContext.pDoc->CalcAfterLoad();
+    if (nErr == eERR_OK)
+        rContext.pDoc->CalcAfterLoad();
 
     return eERR_OK;
 }
