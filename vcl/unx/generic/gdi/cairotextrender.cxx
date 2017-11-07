@@ -20,6 +20,7 @@
 #include <unx/cairotextrender.hxx>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
@@ -392,7 +393,8 @@ void CairoTextRender::GetDevFontList( PhysicalFontCollection* pFontCollection )
     rGC.AnnounceFonts( pFontCollection );
 
     // register platform specific font substitutions if available
-    SalGenericInstance::RegisterFontSubstitutors( pFontCollection );
+    if (!utl::ConfigManager::IsAvoidConfig())
+        SalGenericInstance::RegisterFontSubstitutors( pFontCollection );
 }
 
 void FontConfigFontOptions::cairo_font_options_substitute(FcPattern* pPattern)
