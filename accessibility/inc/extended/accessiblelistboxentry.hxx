@@ -68,10 +68,10 @@ namespace accessibility
                                                 , css::lang::XServiceInfo > AccessibleListBoxEntry_BASE;
 
     /** the class AccessibleListBoxEntry represents the class for an accessible object of a listbox entry */
-    class AccessibleListBoxEntry:public ::cppu::BaseMutex
-                                   ,public AccessibleListBoxEntry_BASE
-                                ,public ::comphelper::OCommonAccessibleText
-                                ,public ListBoxAccessibleBase
+    class AccessibleListBoxEntry final : public ::cppu::BaseMutex
+                                        ,public AccessibleListBoxEntry_BASE
+                                        ,public ::comphelper::OCommonAccessibleText
+                                        ,public ListBoxAccessibleBase
     {
     friend class AccessibleListBox;
 
@@ -81,14 +81,12 @@ namespace accessibility
         SvTreeListEntry*                    m_pSvLBoxEntry; // Needed for a11y focused item...
 
 
-    protected:
         /// client id in the AccessibleEventNotifier queue
         sal_uInt32                          m_nClientId;
 
         css::uno::WeakReference< css::accessibility::XAccessible >
                                             m_aParent;
 
-    private:
         tools::Rectangle               GetBoundingBox_Impl() const;
         tools::Rectangle               GetBoundingBoxOnScreen_Impl() const;
         bool                IsAlive_Impl() const;
@@ -105,7 +103,6 @@ namespace accessibility
 
         void                    NotifyAccessibleEvent( sal_Int16 _nEventId, const css::uno::Any& _aOldValue, const css::uno::Any& _aNewValue );
 
-    protected:
         virtual ~AccessibleListBoxEntry() override;
 
         /** this function is called upon disposing the component
@@ -135,7 +132,7 @@ namespace accessibility
         SvTreeListEntry* GetSvLBoxEntry() const { return m_pSvLBoxEntry; }
 
 
-    protected:
+    private:
         // XTypeProvider
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
@@ -211,7 +208,7 @@ namespace accessibility
         virtual sal_Bool SAL_CALL setCurrentValue( const css::uno::Any& aNumber ) override;
         virtual css::uno::Any SAL_CALL getMaximumValue(  ) override;
         virtual css::uno::Any SAL_CALL getMinimumValue(  ) override;
-    private:
+
         css::uno::Reference< css::accessibility::XAccessible > implGetParentAccessible( ) const;
         SvTreeListEntry* GetRealChild(sal_Int32 nIndex);
         sal_Int32 GetRoleType();

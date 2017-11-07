@@ -35,7 +35,7 @@ class TabControl;
 typedef ::cppu::ImplHelper1 <
     css::accessibility::XAccessibleSelection > VCLXAccessibleTabControl_BASE;
 
-class VCLXAccessibleTabControl :    public VCLXAccessibleComponent,
+class VCLXAccessibleTabControl final : public VCLXAccessibleComponent,
                                     public VCLXAccessibleTabControl_BASE
 {
 private:
@@ -44,7 +44,6 @@ private:
     AccessibleChildren      m_aAccessibleChildren;
     VclPtr<TabControl>      m_pTabControl;
 
-protected:
     void                    UpdateFocused();
     void                    UpdateSelected( sal_Int32 i, bool bSelected );
     void                    UpdatePageText( sal_Int32 i );

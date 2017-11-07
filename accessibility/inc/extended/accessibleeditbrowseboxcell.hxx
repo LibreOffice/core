@@ -95,11 +95,10 @@ namespace accessibility
     // = EditBrowseBoxTableCell
 
     // XAccessible providing an EditBrowseBoxTableCell
-    class EditBrowseBoxTableCellAccess:
+    class EditBrowseBoxTableCellAccess final :
         public cppu::BaseMutex,
         public cppu::WeakComponentImplHelper<css::accessibility::XAccessible>
     {
-    protected:
         css::uno::WeakReference< css::accessibility::XAccessibleContext >
                                             m_aContext;
         css::uno::Reference< css::accessibility::XAccessible >
@@ -122,7 +121,7 @@ namespace accessibility
             sal_uInt16 _nColPos
         );
 
-    protected:
+    private:
         virtual ~EditBrowseBoxTableCellAccess() override;
 
         // XAccessible
@@ -131,7 +130,6 @@ namespace accessibility
         // XComponent/OComponentHelper
         virtual void SAL_CALL disposing() override;
 
-    private:
         EditBrowseBoxTableCellAccess( const EditBrowseBoxTableCellAccess& ) = delete;
         EditBrowseBoxTableCellAccess& operator=( const EditBrowseBoxTableCellAccess& ) = delete;
     };

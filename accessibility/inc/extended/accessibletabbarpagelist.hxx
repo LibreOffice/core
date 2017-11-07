@@ -45,7 +45,7 @@ namespace accessibility
         css::accessibility::XAccessibleSelection,
         css::lang::XServiceInfo > AccessibleTabBarPageList_BASE;
 
-    class AccessibleTabBarPageList :    public AccessibleTabBarBase,
+    class AccessibleTabBarPageList final : public AccessibleTabBarBase,
                                         public AccessibleTabBarPageList_BASE
     {
     private:
@@ -54,7 +54,6 @@ namespace accessibility
         AccessibleChildren      m_aAccessibleChildren;
         sal_Int32               m_nIndexInParent;
 
-    protected:
         void                    UpdateShowing( bool bShowing );
         void                    UpdateSelected( sal_Int32 i, bool bSelected );
         void                    UpdatePageText( sal_Int32 i );

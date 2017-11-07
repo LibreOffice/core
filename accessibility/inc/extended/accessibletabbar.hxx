@@ -43,15 +43,13 @@ namespace accessibility
         css::accessibility::XAccessible,
         css::lang::XServiceInfo > AccessibleTabBar_BASE;
 
-    class AccessibleTabBar :    public AccessibleTabBarBase,
+    class AccessibleTabBar final : public AccessibleTabBarBase,
                                 public AccessibleTabBar_BASE
     {
-    private:
         typedef std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
 
         AccessibleChildren      m_aAccessibleChildren;
 
-    protected:
         virtual void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
         void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 

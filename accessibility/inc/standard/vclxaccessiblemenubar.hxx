@@ -31,9 +31,8 @@ namespace vcl { class Window; }
 //  class VCLXAccessibleMenuBar
 
 
-class VCLXAccessibleMenuBar :   public OAccessibleMenuComponent
+class VCLXAccessibleMenuBar final : public OAccessibleMenuComponent
 {
-protected:
     VclPtr<vcl::Window>     m_pWindow;
 
     virtual bool            IsFocused() override;

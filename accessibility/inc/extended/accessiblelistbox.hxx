@@ -39,17 +39,15 @@ namespace accessibility
 
     /** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry
     */
-    class AccessibleListBox:
+    class AccessibleListBox final :
         public cppu::ImplHelper2<
             css::accessibility::XAccessible,
             css::accessibility::XAccessibleSelection>,
         public VCLXAccessibleComponent
     {
-    protected:
 
         css::uno::Reference< css::accessibility::XAccessible > m_xParent;
 
-    protected:
         virtual ~AccessibleListBox() override;
 
         // OComponentHelper overridables
@@ -108,14 +106,14 @@ namespace accessibility
         css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
         void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
 
-private:
+    private:
 
-    typedef std::map< SvTreeListEntry*, css::uno::Reference< css::accessibility::XAccessible > > MAP_ENTRY;
-    MAP_ENTRY m_mapEntry;
+        typedef std::map< SvTreeListEntry*, css::uno::Reference< css::accessibility::XAccessible > > MAP_ENTRY;
+        MAP_ENTRY m_mapEntry;
 
-    css::uno::Reference< css::accessibility::XAccessible > m_xFocusedChild;
+        css::uno::Reference< css::accessibility::XAccessible > m_xFocusedChild;
 
-    accessibility::AccessibleListBoxEntry* GetCurEventEntry( const VclWindowEvent& rVclWindowEvent );
+        accessibility::AccessibleListBoxEntry* GetCurEventEntry( const VclWindowEvent& rVclWindowEvent );
 
     };
 

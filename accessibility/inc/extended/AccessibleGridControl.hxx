@@ -33,11 +33,10 @@ namespace accessibility {
 
 
 /** This class represents the complete accessible Grid Control object. */
-class AccessibleGridControl : public AccessibleGridControlBase
+class AccessibleGridControl final : public AccessibleGridControlBase
 {
     friend class AccessibleGridControlAccess;
 
-protected:
     AccessibleGridControl(
         const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
         const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator,
@@ -50,7 +49,6 @@ protected:
     using AccessibleGridControlBase::disposing;
     virtual void SAL_CALL disposing() override;
 
-protected:
     // XAccessibleContext -----------------------------------------------------
 
     /** @return  The count of visible children. */
@@ -106,7 +104,7 @@ public:
      void commitTableEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
              const css::uno::Any& rOldValue);
 
-protected:
+private:
     // internal virtual methods -----------------------------------------------
 
     /** @attention  This method requires locked mutex's and a living object.
@@ -140,7 +138,6 @@ protected:
         @return  An AccessibleGridControlTable. */
     AccessibleGridControlTable* createAccessibleTable();
 
-private:
     // members ----------------------------------------------------------------
     std::unique_ptr< AccessibleGridControl_Impl > m_xImpl;
 };
