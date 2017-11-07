@@ -573,9 +573,10 @@ Exit_Sub:
 End Sub			&apos;	CloseConnection		V1.2.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function CommandBars(Optional ByVal pvIndex As Variant) As Variant
+Public Function CommandBars(Optional ByVal pvIndex As Variant, Optional ByRef poWindow As Object) As Variant
 &apos;	Return an object of type CommandBar indicated by its index or its name (CASE-INSENSITIVE string)
 &apos;	If no pvIndex argument, return a Collection type
+&apos;	(Unpublished) With poWindow, force the frame in which toolbars are detected
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 Const cstThisSub = &quot;CommandBars&quot;
@@ -596,9 +597,8 @@ Const cstCustom = &quot;CUSTOM&quot;
 			
 	iObjectsCount = 0
 	bFound = False
-	iBuiltin = 1		&apos;	Default = builtin
 
-	Set oWindow = _SelectWindow()
+	If IsMissing(poWindow) Then Set oWindow = _SelectWindow() Else Set oWindow = poWindow
 	If IsNull(oWindow.Frame) Then Goto Trace_WindowError
 
 	&apos;	List of 21 modules
@@ -639,6 +639,7 @@ Const cstCustom = &quot;CUSTOM&quot;
 	Set oModuleUI = CreateUnoService(&quot;com.sun.star.ui.ModuleUIConfigurationManagerSupplier&quot;)
 	For k = 0 To UBound(vModules)
 		For j = 0 To UBound(sSupportedModules)
+			iBuiltin = 1		&apos;	Default = builtin
 			If vModules(k) = sSupportedModules(j) Then	&apos;	Supported modules only
 				Set oToolbar = oModuleUI.getUIConfigurationManager(vModules(k))
 				vUIElements() = oToolbar.getUIElementsInfo(0)
@@ -686,7 +687,7 @@ Const cstCustom = &quot;CUSTOM&quot;
 			Case Else
 				If pvIndex = iObjectsCount - 1 Then bFound = True
 		End Select
-			If bFound Then
+		If bFound Then
 			Set oObject = _NewCommandBar(&quot;&quot;, sToolbarName, sToolbarFullName, iBuiltin)
 			Set oObject._Window = oWindow.Frame
 			Set oObject._Toolbar = oToolbar
