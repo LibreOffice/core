@@ -49,7 +49,7 @@ namespace accessibility
     access to their underlying list implementation.  Look into derived
     classes for selection.
 */
-class VCLXAccessibleList
+class VCLXAccessibleList final
     : public VCLXAccessibleComponent,
       public VCLXAccessibleList_BASE
 {
@@ -128,7 +128,7 @@ public:
 
     static void NotifyListItem(css::uno::Any const & val);
     ::accessibility::IComboListBoxHelper* getListBoxHelper() { return m_pListBoxHelper.get(); }
-protected:
+private:
     BoxType     m_aBoxType;
     std::unique_ptr<::accessibility::IComboListBoxHelper> m_pListBoxHelper;
     ListItems   m_aAccessibleChildren;
@@ -170,19 +170,16 @@ protected:
     // VCLXAccessibleComponent
     virtual css::awt::Rectangle implGetBounds(  ) override;
 
-private:
     /** We need to save the accessible parent to return it in getAccessibleParent(),
         because this method of the base class returns the wrong parent.
     */
     css::uno::Reference< css::accessibility::XAccessible >  m_xParent;
 
     void UpdateEntryRange_Impl();
-protected:
     void UpdateSelection_Impl(sal_Int32 nPos = 0);
     bool checkEntrySelected(sal_Int32 _nPos,
                             css::uno::Any& _rNewValue,
                             css::uno::Reference< css::accessibility::XAccessible >& _rxNewAcc);
-private:
     void notifyVisibleStates(bool _bSetNew );
     void UpdateVisibleLineCount();
 };

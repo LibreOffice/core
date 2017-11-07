@@ -39,7 +39,7 @@ namespace avmedia { namespace gstreamer {
 typedef ::cppu::WeakComponentImplHelper< css::media::XPlayer,
                                          css::lang::XServiceInfo > GstPlayer_BASE;
 
-class Player : public ::cppu::BaseMutex,
+class Player final : public ::cppu::BaseMutex,
                public GstPlayer_BASE
 {
 public:
@@ -77,7 +77,7 @@ public:
     // ::cppu::OComponentHelper
     virtual void SAL_CALL disposing() final override;
 
-protected:
+private:
     OUString                maURL;
 
     // Add elements and pipeline here

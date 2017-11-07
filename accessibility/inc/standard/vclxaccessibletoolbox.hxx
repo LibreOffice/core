@@ -35,7 +35,7 @@ typedef std::map< sal_Int32, css::uno::Reference< css::accessibility::XAccessibl
 class VCLXAccessibleToolBoxItem;
 class ToolBox;
 
-class VCLXAccessibleToolBox : public VCLXAccessibleComponent, public VCLXAccessibleToolBox_BASE
+class VCLXAccessibleToolBox final : public VCLXAccessibleComponent, public VCLXAccessibleToolBox_BASE
 {
 private:
     ToolBoxItemsMap             m_aAccessibleChildren;
@@ -54,7 +54,6 @@ private:
     void                        HandleSubToolBarEvent( const VclWindowEvent& rVclWindowEvent );
     void                        ReleaseSubToolBox( ToolBox* _pSubToolBox );
 
-protected:
     virtual ~VCLXAccessibleToolBox() override;
 
     virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;

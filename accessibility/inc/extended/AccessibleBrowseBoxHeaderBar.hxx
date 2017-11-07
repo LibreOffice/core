@@ -36,7 +36,7 @@ typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleSelection >
     control (row or column header bar). This object supports the
     XAccessibleSelection interface. Selecting a child of this object selects
     complete rows or columns of the data table. */
-class AccessibleBrowseBoxHeaderBar :
+class AccessibleBrowseBoxHeaderBar final :
     public AccessibleBrowseBoxTableBase,
     public AccessibleBrowseBoxHeaderBarImplHelper
 {
@@ -50,7 +50,7 @@ public:
         ::svt::IAccessibleTableProvider& rBrowseBox,
         ::svt::AccessibleBrowseBoxObjType eObjType );
 
-protected:
+private:
     virtual ~AccessibleBrowseBoxHeaderBar() override;
 
 public:
@@ -157,7 +157,7 @@ public:
     /** @return  An unique implementation ID. */
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
-protected:
+private:
     // internal virtual methods
 
     /** @attention  This method requires locked mutex's and a living object.

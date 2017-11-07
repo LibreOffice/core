@@ -43,7 +43,7 @@ typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessible,
     css::lang::XServiceInfo > VCLXAccessibleTabPage_BASE;
 
-class VCLXAccessibleTabPage :   public AccessibleTextHelper_BASE,
+class VCLXAccessibleTabPage final : public AccessibleTextHelper_BASE,
                                 public VCLXAccessibleTabPage_BASE
 {
     friend class VCLXAccessibleTabControl;
@@ -55,7 +55,6 @@ private:
     bool                    m_bSelected;
     OUString                m_sPageText;
 
-protected:
     bool                    IsFocused();
     bool                    IsSelected();
 
