@@ -27,9 +27,8 @@ namespace connectivity
 {
     namespace evoab
     {
-        class OEvoabColumns : public sdbcx::OCollection
+        class OEvoabColumns final : public sdbcx::OCollection
         {
-        protected:
             OEvoabTable*    m_pTable;
 
             virtual sdbcx::ObjectType createObject(const OUString& _rName) override;

@@ -42,13 +42,9 @@ namespace connectivity
                                      css::sdbc::XMultipleResults,
                                      css::lang::XServiceInfo> OPreparedStatement_BASE;
 
-        class OEvoabPreparedStatement   :public OCommonStatement
+        class OEvoabPreparedStatement final:public OCommonStatement
                                         ,public OPreparedStatement_BASE
         {
-        protected:
-            // Data attributes
-
-
             // our SQL statement
             OUString                                              m_sSqlStatement;
             // the EBookQuery we're working with
@@ -56,7 +52,6 @@ namespace connectivity
             // our meta data
             css::uno::Reference< css::sdbc::XResultSetMetaData >  m_xMetaData;
 
-        protected:
             virtual ~OEvoabPreparedStatement() override;
 
         public:
@@ -64,7 +59,7 @@ namespace connectivity
 
             void construct( const OUString& _sql );
 
-        protected:
+        private:
             DECLARE_SERVICE_INFO();
             //XInterface
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;

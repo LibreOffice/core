@@ -26,12 +26,11 @@ namespace connectivity
 {
     namespace mysql
     {
-        class OTables : public sdbcx::OCollection,
+        class OTables final : public sdbcx::OCollection,
             public ::dbtools::ISQLStatementHelper
         {
             css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
 
-        protected:
             virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
             virtual void impl_refresh() override;
             virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;

@@ -57,7 +57,7 @@ namespace drivermanager
                                   ,   css::uno::XNamingService
                                   >   OSDBCDriverManager_Base;
 
-    class OSDBCDriverManager : public OSDBCDriverManager_Base
+    class OSDBCDriverManager final : public OSDBCDriverManager_Base
     {
         friend class ODriverEnumeration;
 
@@ -76,7 +76,6 @@ namespace drivermanager
         ::connectivity::DriversConfig   m_aDriverConfig;
         sal_Int32                       m_nLoginTimeout;
 
-    private:
         explicit OSDBCDriverManager(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
         virtual ~OSDBCDriverManager() override;
@@ -118,7 +117,7 @@ namespace drivermanager
         virtual void SAL_CALL registerObject( const OUString& Name, const css::uno::Reference< css::uno::XInterface >& Object ) override;
         virtual void SAL_CALL revokeObject( const OUString& Name ) override;
 
-    protected:
+    private:
         css::uno::Reference< css::sdbc::XDriver > implGetDriverForURL(const OUString& _rURL);
 
         /** retrieve the driver order preferences from the configuration and

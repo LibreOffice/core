@@ -30,10 +30,9 @@ namespace connectivity
     //************ Class: java.sql.ResultSetMetaData
 
     class java_sql_Connection;
-    class java_sql_ResultSetMetaData :  public ::cppu::WeakImplHelper< css::sdbc::XResultSetMetaData>,
+    class java_sql_ResultSetMetaData final :  public ::cppu::WeakImplHelper< css::sdbc::XResultSetMetaData>,
                                         public java_lang_Object
     {
-    protected:
         java_sql_Connection*        m_pConnection;
         sal_Int32                   m_nColumnCount;
 

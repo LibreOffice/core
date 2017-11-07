@@ -65,7 +65,7 @@ enum MorkErrors
 
 /// Class MorkParser
 
-class LO_DLLPUBLIC_MORK MorkParser
+class LO_DLLPUBLIC_MORK MorkParser final
 {
 public:
 
@@ -99,7 +99,7 @@ public:
     // All lists
     std::vector<OUString> lists_;
 
-protected: // Members
+private: // Members
 
     void initVars();
 
@@ -119,7 +119,7 @@ protected: // Members
     bool parseRow( int TableId, int TableScope );
     bool parseGroup();
 
-protected: // Data
+private: // Data
 
     // Columns in mork means value names
     MorkDict columns_;
@@ -143,7 +143,6 @@ protected: // Data
     // Indicates entity is being parsed
     enum class NP { Columns, Values, Rows } nowParsing_;
 
-private:
     MorkParser(const MorkParser &) = delete;
     MorkParser &operator=(const MorkParser &) = delete;
 

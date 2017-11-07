@@ -42,7 +42,7 @@
 namespace pq_sdbc_driver
 {
 
-class Users : public Container
+class Users final : public Container
 {
 
 public: // instances Tables 'exception safe'
@@ -51,7 +51,7 @@ public: // instances Tables 'exception safe'
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings );
 
-protected:
+private:
     Users(
         const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
@@ -59,21 +59,22 @@ protected:
 
     virtual ~Users() override;
 
-public: // XAppend
+public:
+    // XAppend
     virtual void SAL_CALL appendByDescriptor(
         const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
 
-public: // XDrop
+    // XDrop
     virtual void SAL_CALL dropByName( const OUString& elementName ) override;
     virtual void SAL_CALL dropByIndex( sal_Int32 index ) override;
 
-public: // XRefreshable
+   // XRefreshable
     virtual void SAL_CALL refresh(  ) override;
 
-public: // XDataDescriptorFactory
+    // XDataDescriptorFactory
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) override;
 
-protected:
+private:
     virtual void SAL_CALL disposing() override;
 };
 

@@ -56,7 +56,7 @@ void alterColumnByDescriptor(
 OUString columnMetaData2SDBCX(
     ReflectionBase *pBase, const css::uno::Reference< css::sdbc::XRow > &xRow );
 
-class Columns : public Container
+class Columns final : public Container
 {
     OUString m_schemaName;
     OUString m_tableName;
@@ -70,7 +70,7 @@ public: // instances Columns 'exception safe'
         const OUString &tableName,
         Columns **pColumns);
 
-protected:
+private:
     Columns(
         const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,

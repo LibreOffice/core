@@ -60,7 +60,7 @@ struct UpdateableField
 
 typedef std::vector< UpdateableField > UpdateableFieldVector;
 
-class UpdateableResultSet :
+class UpdateableResultSet final :
         public SequenceResultSet,
         public css::sdbc::XResultSetUpdate,
         public css::sdbc::XRowUpdate
@@ -72,7 +72,7 @@ class UpdateableResultSet :
     UpdateableFieldVector m_updateableField;
     bool  m_insertRow;
 
-protected:
+private:
     UpdateableResultSet(
         const ::rtl::Reference< comphelper::RefCountedMutex > & mutex,
         const css::uno::Reference< css::uno::XInterface > &owner,

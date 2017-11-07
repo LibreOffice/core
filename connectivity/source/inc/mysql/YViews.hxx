@@ -25,12 +25,10 @@ namespace connectivity
 {
     namespace mysql
     {
-        class OViews : public sdbcx::OCollection
+        class OViews final : public sdbcx::OCollection
         {
             css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
             bool m_bInDrop;
-            //  OCatalog*                                           m_pParent;
-        protected:
             virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
             virtual void impl_refresh() override;
             virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;

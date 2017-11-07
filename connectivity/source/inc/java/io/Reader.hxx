@@ -30,10 +30,9 @@ namespace connectivity
 
     //************ Class: java.io.InputStream
 
-    class java_io_Reader : public java_lang_Object,
+    class java_io_Reader final : public java_lang_Object,
                            public ::cppu::WeakImplHelper< css::io::XInputStream>
     {
-    protected:
     // static Data for the Class
         static jclass theClass;
         virtual ~java_io_Reader() override;

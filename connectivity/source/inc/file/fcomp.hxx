@@ -33,7 +33,7 @@ namespace connectivity
         class OSQLAnalyzer;
         typedef std::vector<OCode*> OCodeList;
 
-        class OPredicateCompiler : public ::salhelper::SimpleReferenceObject
+        class OPredicateCompiler final : public ::salhelper::SimpleReferenceObject
         {
             friend class OPredicateInterpreter;
             friend class OSQLAnalyzer;
@@ -66,7 +66,7 @@ namespace connectivity
             bool hasCode() const {return !isClean();}
             void  setOrigColumns(const css::uno::Reference< css::container::XNameAccess>& rCols) { m_orgColumns = rCols; }
             const css::uno::Reference< css::container::XNameAccess>& getOrigColumns() const { return m_orgColumns; }
-        protected:
+        private:
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             void execute_COMPARE(connectivity::OSQLParseNode const * pPredicateNode);

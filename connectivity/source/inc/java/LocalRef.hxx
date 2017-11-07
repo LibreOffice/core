@@ -33,7 +33,7 @@ namespace connectivity { namespace jdbc
         the object from an JNI method).
     */
     template< typename T >
-    class LocalRef
+    class LocalRef final
     {
     public:
         explicit LocalRef( JNIEnv& environment )
@@ -79,7 +79,6 @@ namespace connectivity { namespace jdbc
         LocalRef(LocalRef &) = delete;
         void operator =(LocalRef &) = delete;
 
-    protected:
         JNIEnv& m_environment;
         T       m_object;
     };

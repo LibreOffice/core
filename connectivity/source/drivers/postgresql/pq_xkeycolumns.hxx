@@ -42,7 +42,7 @@
 namespace pq_sdbc_driver
 {
 
-class KeyColumns : public Container
+class KeyColumns final : public Container
 {
     OUString m_schemaName;
     OUString m_tableName;
@@ -59,7 +59,7 @@ public: // instances KeyColumns 'exception safe'
         const css::uno::Sequence< OUString > &keyColumns,
         const css::uno::Sequence< OUString > &foreignColumnNames );
 
-protected:
+private:
     KeyColumns(
         const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,

@@ -41,11 +41,10 @@ namespace connectivity
                                         css::sdbc::XResultSetMetaDataSupplier,
                                         css::lang::XServiceInfo> OPreparedStatement_BASE;
 
-        class OOO_DLLPUBLIC_ODBCBASE OPreparedStatement :
+        class OOO_DLLPUBLIC_ODBCBASE OPreparedStatement final :
                                     public  OStatement_BASE2,
                                     public  OPreparedStatement_BASE
         {
-        protected:
             static const short invalid_scale = -1;
 
             // Data attributes
@@ -87,7 +86,6 @@ namespace connectivity
             */
             virtual OResultSet* createResulSet() override;
 
-        protected:
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
                                                                    const css::uno::Any& rValue) override;
         public:
