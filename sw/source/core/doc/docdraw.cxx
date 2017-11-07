@@ -185,10 +185,8 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
     // to adjust the positioning attributes - see <SwDrawContact::Changed_(..)>.
     {
         const SwAnchoredObject* pAnchoredObj = pContact->GetAnchoredObj( &_rSdrObj );
-        if ( dynamic_cast<const SwAnchoredDrawObject*>( pAnchoredObj) !=  nullptr )
+        if ( auto pAnchoredDrawObj = dynamic_cast<const SwAnchoredDrawObject*>( pAnchoredObj) )
         {
-            const SwAnchoredDrawObject* pAnchoredDrawObj =
-                            static_cast<const SwAnchoredDrawObject*>(pAnchoredObj);
             const SwRect aObjRect = _rSdrObj.GetSnapRect();
             const_cast<SwAnchoredDrawObject*>(pAnchoredDrawObj)
                                         ->SetLastObjRect( aObjRect.SVRect() );

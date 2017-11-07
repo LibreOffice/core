@@ -642,11 +642,11 @@ bool SdrPageView::IsObjMarkable(SdrObject const * pObj) const
         return false;    // only visible are selectable
     if (!pObj->IsInserted())
         return false;    // Obj deleted?
-    if (dynamic_cast<const SdrObjGroup*>(pObj) !=  nullptr)
+    if (auto pObjGroup = dynamic_cast<const SdrObjGroup*>(pObj))
     {
         // If object is a Group object, visibility may depend on
         // multiple layers. If one object is markable, Group is markable.
-        SdrObjList* pObjList = static_cast<SdrObjGroup const *>(pObj)->GetSubList();
+        SdrObjList* pObjList = pObjGroup->GetSubList();
 
         if (pObjList && pObjList->GetObjCount())
         {

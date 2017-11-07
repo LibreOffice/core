@@ -1548,11 +1548,8 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             {
                 // see SwFEShell::SetFrameFormat( SwFrameFormat *pNewFormat, bool bKeepOrient, Point* pDocPos )
                 SwFlyFrame *pFly = nullptr;
-                {
-                    const SwFrameFormat* pFormatXX = pFormat;
-                    if (dynamic_cast<const SwFlyFrameFormat*>( pFormatXX) )
-                        pFly = static_cast<const SwFlyFrameFormat*>(pFormatXX)->GetFrame();
-                }
+                if (auto pFlyFrameFormat = dynamic_cast<const SwFlyFrameFormat*>(pFormat) )
+                    pFly = pFlyFrameFormat->GetFrame();
                 if ( pFly )
                 {
                     const ::SfxPoolItem* pItem;
@@ -1933,8 +1930,8 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 {
                     // see SwFEShell::SetFlyFrameAttr( SfxItemSet& rSet )
                     SwFlyFrame *pFly = nullptr;
-                    if (dynamic_cast<SwFlyFrameFormat*>( pFormat) )
-                        pFly = static_cast<SwFlyFrameFormat*>(pFormat)->GetFrame();
+                    if (auto pFrameFormat = dynamic_cast<SwFlyFrameFormat*>( pFormat) )
+                        pFly = pFrameFormat->GetFrame();
                     if (pFly)
                     {
                         const ::SfxPoolItem* pItem;

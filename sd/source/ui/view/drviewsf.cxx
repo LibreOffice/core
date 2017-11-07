@@ -96,11 +96,11 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                 if ( abs( aSel.nEndPos - aSel.nStartPos ) == 1 )
                 {
                     const SvxFieldData* pField = pFieldItem->GetField();
-                    if( dynamic_cast< const SvxURLField *>( pField ) !=  nullptr)
+                    if( auto pUrlField = dynamic_cast< const SvxURLField *>( pField ) )
                     {
-                        aHLinkItem.SetName(static_cast<const SvxURLField*>(pField)->GetRepresentation());
-                        aHLinkItem.SetURL(static_cast<const SvxURLField*>(pField)->GetURL());
-                        aHLinkItem.SetTargetFrame(static_cast<const SvxURLField*>(pField)->GetTargetFrame());
+                        aHLinkItem.SetName(pUrlField->GetRepresentation());
+                        aHLinkItem.SetURL(pUrlField->GetURL());
+                        aHLinkItem.SetTargetFrame(pUrlField->GetTargetFrame());
                         bField = true;
                     }
                 }
