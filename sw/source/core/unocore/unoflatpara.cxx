@@ -251,6 +251,11 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
 
     SwTextNode *const pOldTextNode = GetTextNode();
 
+    if (nPos < 0 || pOldTextNode->Len() < nPos || nLen < 0 || static_cast<sal_uInt32>(pOldTextNode->Len()) < static_cast<sal_uInt32>(nPos) + nLen)
+    {
+        throw lang::IllegalArgumentException();
+    }
+
     SwPaM aPaM( *GetTextNode(), nPos, *GetTextNode(), nPos+nLen );
 
     UnoActionContext aAction( GetTextNode()->GetDoc() );
@@ -278,6 +283,11 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
 
     if (!GetTextNode())
         return;
+
+    if (nPos < 0 || GetTextNode()->Len() < nPos || nLen < 0 || static_cast<sal_uInt32>(GetTextNode()->Len()) < static_cast<sal_uInt32>(nPos) + nLen)
+    {
+        throw lang::IllegalArgumentException();
+    }
 
     SwPaM aPaM( *GetTextNode(), nPos, *GetTextNode(), nPos+nLen );
 
