@@ -1470,7 +1470,7 @@ AC_ARG_WITH(galleries,
 AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
-         Possible choices: *breeze, *breeze_dark, crystal, *galaxy, *hicontrast, oxygen, *sifr, *sifr_dark, *tango, *tango_testing.]),
+         Possible choices: *breeze, *breeze_dark, crystal, *elementary, *galaxy, *hicontrast, oxygen, *sifr, *sifr_dark, *tango, tango_testing.]),
 ,)
 
 libo_FUZZ_ARG_WITH(helppack-integration,
@@ -11031,8 +11031,8 @@ dnl ===================================================================
 AC_MSG_CHECKING([which themes to include])
 # if none given use default subset of available themes
 if test "x$with_theme" = "x" -o "x$with_theme" = "xyes"; then
-    with_theme="breeze breeze_dark galaxy hicontrast sifr sifr_dark tango"
-    test -z "$ENABLE_RELEASE_BUILD" && with_theme="$with_theme tango_testing"
+    with_theme="breeze breeze_dark elementary galaxy hicontrast sifr sifr_dark tango"
+    # test -z "$ENABLE_RELEASE_BUILD" && with_theme="$with_theme tango_testing"
 fi
 
 WITH_THEMES=""
