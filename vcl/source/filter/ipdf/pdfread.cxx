@@ -180,7 +180,7 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream,
     return rOutStream.good();
 }
 #else
-bool generatePreview(SvStream& rStream, Bitmap& rBitmap
+bool generatePreview(SvStream& rStream, Bitmap& rBitmap,
                      sal_uInt64 nPos, sal_uInt64 nSize)
 {
     (void)rStream;
