@@ -7298,6 +7298,9 @@ else
             if test -z "$DOXYGEN"; then
                 AC_MSG_ERROR([doxygen not found in \$PATH; specify its pathname via --with-doxygen=..., or disable its use via --without-doxygen])
             fi
+            if ! dot -V 2>/dev/null; then
+                AC_MSG_ERROR([dot not found in \$PATH; install graphviz or disable its use via --without-doxygen])
+            fi
         else
             AC_MSG_CHECKING([for doxygen])
             DOXYGEN=$with_doxygen
