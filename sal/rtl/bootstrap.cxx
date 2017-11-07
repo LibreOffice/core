@@ -330,7 +330,7 @@ struct Bootstrap_Impl
     bool getDirectValue(
         rtl::OUString const & key, rtl_uString ** value, LookupMode mode,
         ExpandRequestLink const * requestStack) const;
-    bool getAmbienceValue(
+    bool getOSEnvOrCmdlineEnvValue(
         rtl::OUString const & key, rtl_uString ** value, LookupMode mode,
         ExpandRequestLink const * requestStack) const;
     void expandValue(
@@ -505,7 +505,7 @@ bool Bootstrap_Impl::getValue(
         return true;
     }
 
-    if (getAmbienceValue(key, value, mode, requestStack))
+    if (getOSEnvOrCmdlineEnvValue(key, value, mode, requestStack))
         return true;
 
     if (key == "SYSUSERCONFIG")
@@ -570,7 +570,7 @@ bool Bootstrap_Impl::getDirectValue(
     return false;
 }
 
-bool Bootstrap_Impl::getAmbienceValue(
+bool Bootstrap_Impl::getOSEnvOrCmdlineEnvValue(
     rtl::OUString const & key, rtl_uString ** value, LookupMode mode,
     ExpandRequestLink const * requestStack) const
 {
