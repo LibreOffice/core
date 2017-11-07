@@ -28,6 +28,7 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
+#include <QtGui/QShowEvent>
 #include <QtGui/QWheelEvent>
 
 #include <cairo.h>
@@ -167,5 +168,11 @@ void Qt5Widget::moveEvent( QMoveEvent* )
     m_pFrame->CallCallback( SalEvent::Move, nullptr );
 }
 
+void Qt5Widget::showEvent( QShowEvent* )
+{
+    QSize aSize( m_pFrame->m_pQWidget->size() );
+    SalPaintEvent aPaintEvt( 0, 0, aSize.width(), aSize.height(), true );
+    m_pFrame->CallCallback( SalEvent::Paint, &aPaintEvt );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

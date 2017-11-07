@@ -27,6 +27,7 @@ class QMouseEvent;
 class QMoveEvent;
 class QPaintEvent;
 class QResizeEvent;
+class QShowEvent;
 class QWheelEvent;
 
 class Qt5Widget
@@ -38,13 +39,14 @@ class Qt5Widget
 
     void mouseButtonEvent( QMouseEvent*, bool );
 
-    void paintEvent( QPaintEvent* ) override;
-    void resizeEvent( QResizeEvent* ) override;
-    void moveEvent( QMoveEvent* ) override;
-    void mouseMoveEvent( QMouseEvent*) override;
-    void mousePressEvent( QMouseEvent*) override;
-    void mouseReleaseEvent( QMouseEvent*) override;
-    void wheelEvent( QWheelEvent* ) override;
+    virtual void mouseMoveEvent( QMouseEvent*) override;
+    virtual void mousePressEvent( QMouseEvent*) override;
+    virtual void mouseReleaseEvent( QMouseEvent*) override;
+    virtual void moveEvent( QMoveEvent* ) override;
+    virtual void paintEvent( QPaintEvent* ) override;
+    virtual void resizeEvent( QResizeEvent* ) override;
+    virtual void showEvent( QShowEvent* ) override;
+    virtual void wheelEvent( QWheelEvent* ) override;
 
 public:
     Qt5Widget( Qt5Frame &rFrame,
