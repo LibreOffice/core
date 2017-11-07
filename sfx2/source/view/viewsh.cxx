@@ -207,24 +207,6 @@ void SAL_CALL SfxClipboardChangeListener::changedContents( const datatransfer::c
     Application::PostUserEvent( LINK( nullptr, SfxClipboardChangeListener, AsyncExecuteHdl_Impl ), pInfo );
 }
 
-class SfxInPlaceClientList
-{
-    typedef std::vector<SfxInPlaceClient*> DataType;
-    DataType maData;
-
-public:
-    typedef DataType::iterator iterator;
-
-    SfxInPlaceClient* at( size_t i ) { return maData.at(i); }
-
-    iterator begin() { return maData.begin(); }
-    iterator end() { return maData.end(); }
-
-    void push_back( SfxInPlaceClient* p ) { maData.push_back(p); }
-    void erase( const iterator& it ) { maData.erase(it); }
-    size_t size() const { return maData.size(); }
-};
-
 sal_uInt32 SfxViewShell_Impl::m_nLastViewShellId = 0;
 
 SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags)
