@@ -1243,7 +1243,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             delete pNewRedl;
                             pNewRedl = nullptr;
                             if (eCmpPos == SwComparePosition::Inside)
-                                pRedl->MaybeNotifyModification();
+                                MaybeNotifyRedlineModification(pRedl, &m_rDoc);
                             break;
 
                         case SwComparePosition::Outside:
