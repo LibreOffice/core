@@ -41,7 +41,7 @@
 
 namespace pq_sdbc_driver
 {
-class Keys : public Container
+class Keys final : public Container
 {
     OUString m_schemaName;
     OUString m_tableName;
@@ -54,7 +54,7 @@ public: // instances Columns 'exception safe'
         const OUString &schemaName,
         const OUString &tableName);
 
-protected:
+private:
     Keys(
         const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
@@ -79,7 +79,7 @@ public: // XDataDescriptorFactory
 };
 
 
-class KeyDescriptors : public Container
+class KeyDescriptors final : public Container
 {
 public: // instances Columns 'exception safe'
     static css::uno::Reference< css::container::XIndexAccess > create(
@@ -87,7 +87,7 @@ public: // instances Columns 'exception safe'
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings );
 
-protected:
+private:
     KeyDescriptors(
         const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,

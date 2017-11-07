@@ -76,15 +76,13 @@ namespace connectivity
                                                >   OResultSet_BASE;
 
 
-        class OEvoabResultSet   :public cppu::BaseMutex
+        class OEvoabResultSet final : public cppu::BaseMutex
                                 ,public OResultSet_BASE
                                 ,public ::comphelper::OPropertyContainer
                                 ,public ::comphelper::OPropertyArrayUsageHelper<OEvoabResultSet>
         {
         private:
             std::unique_ptr<OEvoabVersionHelper> m_pVersionHelper;
-
-        protected:
 
             OCommonStatement*                           m_pStatement;
             OEvoabConnection*                           m_pConnection;

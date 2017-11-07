@@ -34,9 +34,8 @@ namespace connectivity
 
     typedef ::cppu::WeakImplHelper< css::sdbc::XDriver >  ODriverWrapper_BASE;
 
-    class ODriverWrapper : public ODriverWrapper_BASE
+    class ODriverWrapper final : public ODriverWrapper_BASE
     {
-    protected:
         css::uno::Reference< css::uno::XAggregation >
                             m_xDriverAggregate;
         css::uno::Reference< css::sdbc::XDriver >
@@ -58,7 +57,7 @@ namespace connectivity
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
 
-    protected:
+    private:
         /// dtor
         virtual ~ODriverWrapper() override;
         // XDriver

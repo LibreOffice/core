@@ -58,7 +58,7 @@ enum OOoBaseErrorCode
 //= SQLExceptionInfo - encapsulating the type info of an SQLException-derived class
 
 
-class OOO_DLLPUBLIC_DBTOOLS SQLExceptionInfo
+class OOO_DLLPUBLIC_DBTOOLS SQLExceptionInfo final
 {
 public:
     enum class TYPE { SQLException, SQLWarning, SQLContext, Undefined };
@@ -138,7 +138,7 @@ public:
         m_eType = TYPE::Undefined;
     }
 
-protected:
+private:
     void implDetermineType();
 };
 
@@ -146,9 +146,8 @@ protected:
 //= SQLExceptionIteratorHelper - iterating through an SQLException chain
 
 
-class OOO_DLLPUBLIC_DBTOOLS SQLExceptionIteratorHelper
+class OOO_DLLPUBLIC_DBTOOLS SQLExceptionIteratorHelper final
 {
-protected:
     const css::sdbc::SQLException* m_pCurrent;
     SQLExceptionInfo::TYPE                      m_eCurrentType;
 

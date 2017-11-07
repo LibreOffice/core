@@ -41,10 +41,8 @@ namespace connectivity
                                                  css::lang::XServiceInfo > ODriver_BASE;
 
 
-        class OEvoabDriver : public ODriver_BASE
+        class OEvoabDriver final : public ODriver_BASE
         {
-
-        protected:
             ::osl::Mutex                                        m_aMutex;
             connectivity::OWeakRefArray                         m_xConnections;
             css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;

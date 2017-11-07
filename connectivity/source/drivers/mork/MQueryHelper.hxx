@@ -64,8 +64,7 @@ namespace connectivity
             bool   isExpr( ) const { return m_eNodeType == node_type::Expr; }
         };
 
-        class MQueryExpressionString : public MQueryExpressionBase {
-        protected:
+        class MQueryExpressionString final : public MQueryExpressionBase {
             OUString     m_aName;         // LHS
             MQueryOp::cond_type m_aBooleanCondition;
             OUString     m_aValue;        // RHS
@@ -96,7 +95,7 @@ namespace connectivity
             const OUString&    getValue() const { return m_aValue; }
         };
 
-        class MQueryExpression : public MQueryExpressionBase
+        class MQueryExpression final : public MQueryExpressionBase
         {
             friend class MQueryHelper;
 
@@ -134,11 +133,10 @@ namespace connectivity
                 }
             }
 
-        protected:
+        private:
             ExprVector          m_aExprVector;
             bool_cond           m_aExprCondType;
 
-        private:
            MQueryExpression(const MQueryExpression&) = delete;
            MQueryExpression& operator=(const MQueryExpression&) = delete;
         };

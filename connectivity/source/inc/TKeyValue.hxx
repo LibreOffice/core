@@ -24,13 +24,11 @@
 
 namespace connectivity
 {
-    class OOO_DLLPUBLIC_DBTOOLS OKeyValue
+    class OOO_DLLPUBLIC_DBTOOLS OKeyValue final
     {
-    private:
         std::vector<ORowSetValueDecoratorRef> m_aKeys;
         sal_Int32 m_nValue;
 
-    protected:
         OKeyValue(sal_Int32 nVal);
     public:
 

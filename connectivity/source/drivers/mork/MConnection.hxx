@@ -28,12 +28,10 @@ namespace connectivity
 
         typedef connectivity::OMetaConnection OConnection_BASE; // implements basics and text encoding
 
-        class OConnection : public OConnection_BASE,
+        class OConnection final : public OConnection_BASE,
                             public connectivity::OSubComponent<OConnection, OConnection_BASE>
         {
             friend class connectivity::OSubComponent<OConnection, OConnection_BASE>;
-
-        protected:
 
             // Data attributes
 

@@ -36,10 +36,9 @@ namespace connectivity
 
         typedef ::cppu::WeakImplHelper<        css::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
 
-        class OOO_DLLPUBLIC_ODBCBASE OResultSetMetaData :
+        class OOO_DLLPUBLIC_ODBCBASE OResultSetMetaData final :
             public  OResultSetMetaData_BASE
         {
-        protected:
             std::vector<sal_Int32> m_vMapping; // when not every column is needed
             std::map<sal_Int32,sal_Int32> m_aColumnTypes;
 

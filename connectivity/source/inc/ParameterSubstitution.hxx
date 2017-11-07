@@ -32,7 +32,7 @@ namespace connectivity
     typedef ::cppu::WeakImplHelper< css::util::XStringSubstitution
                                    ,css::lang::XServiceInfo
                                    ,css::lang::XInitialization > ParameterSubstitution_BASE;
-    class ParameterSubstitution : public ParameterSubstitution_BASE
+    class ParameterSubstitution final : public ParameterSubstitution_BASE
     {
         ::osl::Mutex                                          m_aMutex;
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
@@ -46,7 +46,7 @@ namespace connectivity
         /// @throws css::uno::RuntimeException
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  );
         static css::uno::Reference< css::uno::XInterface > create( const css::uno::Reference< css::uno::XComponentContext >  & xContext);
-    protected:
+    private:
         ParameterSubstitution(const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
         virtual ~ParameterSubstitution() override {}
 

@@ -77,7 +77,7 @@ namespace connectivity
 
     struct OSQLParseTreeIteratorImpl;
 
-    class OOO_DLLPUBLIC_DBTOOLS OSQLParseTreeIterator
+    class OOO_DLLPUBLIC_DBTOOLS OSQLParseTreeIterator final
     {
     private:
         css::sdbc::SQLException                             m_aErrors;          // conatins the error while iterating through the statement
@@ -142,7 +142,6 @@ namespace connectivity
         css::uno::Reference< css::beans::XPropertySet > findSelectColumn(
             const OUString & rColumnName );
 
-      protected:
         void setSelectColumnName(::rtl::Reference<OSQLColumns> const & _rColumns,const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange, bool bFkt=false, sal_Int32 _nType = css::sdbc::DataType::VARCHAR, bool bAggFkt=false);
         void appendColumns(::rtl::Reference<OSQLColumns> const & _rColumns,const OUString& _rTableAlias,const OSQLTable& _rTable);
         // Other member variables that should be available in the "set" functions
@@ -150,8 +149,6 @@ namespace connectivity
         // in its constructor and, after the "traverse" routines have been used,
         // they can be queried using other functions.
 
-
-      private:
         OSQLParseTreeIterator(const OSQLParseTreeIterator & rIter) = delete;
 
       public:
@@ -297,7 +294,6 @@ namespace connectivity
 
         bool traverseSelectionCriteria(const OSQLParseNode* pSelectNode);
 
-    private:
         /** constructs a new iterator, which inherits some of the settings from a parent iterator
         */
         OSQLParseTreeIterator(
@@ -329,7 +325,6 @@ namespace connectivity
         void setOrderByColumnName(const OUString & rColumnName, OUString & rTableRange, bool bAscending);
         void setGroupByColumnName(const OUString & rColumnName, OUString & rTableRange);
 
-    private:
         /** appends an SQLException corresponding to the given error code to our error collection
 
             @param  _eError

@@ -29,9 +29,8 @@ namespace connectivity
 {
     namespace mork
     {
-        class OColumns : public sdbcx::OCollection
+        class OColumns final : public sdbcx::OCollection
         {
-        protected:
             OTable* m_pTable;
 
             virtual sdbcx::ObjectType createObject(const OUString& _rName) override;

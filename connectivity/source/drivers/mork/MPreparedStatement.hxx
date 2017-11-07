@@ -36,10 +36,9 @@ namespace connectivity
                                         css::sdbc::XMultipleResults,
                                         css::lang::XServiceInfo> OPreparedStatement_BASE;
 
-        class OPreparedStatement :  public  OCommonStatement,
+        class OPreparedStatement final : public  OCommonStatement,
                                     public  OPreparedStatement_BASE
         {
-        protected:
             // Data attributes
 
             OUString                                    m_sSqlStatement;
@@ -48,7 +47,6 @@ namespace connectivity
             ::rtl::Reference<connectivity::OSQLColumns> m_xParamColumns;    // the parameter columns
             OValueRow                                   m_aParameterRow;
 
-        protected:
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
                                                                    const css::uno::Any& rValue) override;
             virtual ~OPreparedStatement() override;
@@ -125,7 +123,7 @@ namespace connectivity
             using OCommonStatement::executeQuery;
             using OCommonStatement::executeUpdate;
             using OCommonStatement::execute;
-        protected:
+        private:
             using OPropertySetHelper::getFastPropertyValue;
         };
     }

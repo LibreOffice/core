@@ -32,7 +32,7 @@ namespace connectivity
         //************ Class: ODatabaseMetaData
 
 
-        class OOO_DLLPUBLIC_ODBCBASE ODatabaseMetaData :
+        class OOO_DLLPUBLIC_ODBCBASE ODatabaseMetaData final :
             public ODatabaseMetaDataBase
         {
             SQLHANDLE       m_aConnectionHandle;
@@ -53,7 +53,6 @@ namespace connectivity
             virtual sal_Int32   impl_getMaxStatements_throw(  ) override;
             virtual sal_Int32   impl_getMaxTablesInSelect_throw(  ) override;
             virtual bool        impl_storesMixedCaseQuotedIdentifiers_throw(  ) override;
-        protected:
             OUString getURLImpl();
             virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
             virtual ~ODatabaseMetaData() override;

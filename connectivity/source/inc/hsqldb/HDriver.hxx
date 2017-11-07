@@ -58,7 +58,7 @@ namespace connectivity
         /** delegates all calls to the original driver and extend the existing one with the SDBCX layer.
 
         */
-        class ODriverDelegator : public ::cppu::BaseMutex
+        class ODriverDelegator final : public ::cppu::BaseMutex
                                 ,public ODriverDelegator_BASE
         {
             TWeakPairVector                                           m_aConnections; //  vector containing a list
@@ -118,7 +118,7 @@ namespace connectivity
 
             void shutdownConnections();
             void flushConnections();
-        protected:
+        private:
             /// dtor
             virtual ~ODriverDelegator() override;
             // OComponentHelper

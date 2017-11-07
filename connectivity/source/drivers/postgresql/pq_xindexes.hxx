@@ -41,7 +41,7 @@
 
 namespace pq_sdbc_driver
 {
-class Indexes : public Container
+class Indexes final : public Container
 {
     OUString m_schemaName;
     OUString m_tableName;
@@ -54,7 +54,7 @@ public: // instances Columns 'exception safe'
         const OUString &schemaName,
         const OUString &tableName);
 
-protected:
+private:
     Indexes(
         const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
@@ -79,7 +79,7 @@ public: // XDataDescriptorFactory
 };
 
 
-class IndexDescriptors : public Container
+class IndexDescriptors final : public Container
 {
 public: // instances IndexDescriptors 'exception safe'
     static css::uno::Reference< css::container::XNameAccess > create(
@@ -87,7 +87,7 @@ public: // instances IndexDescriptors 'exception safe'
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings );
 
-protected:
+private:
     IndexDescriptors(
         const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,

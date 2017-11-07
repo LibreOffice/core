@@ -25,11 +25,10 @@ namespace connectivity
 {
     namespace hsqldb
     {
-        class OTables : public sdbcx::OCollection
+        class OTables final : public sdbcx::OCollection
         {
             css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
 
-        protected:
             virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
             virtual void impl_refresh() override;
             virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
