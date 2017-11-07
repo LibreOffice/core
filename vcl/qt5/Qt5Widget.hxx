@@ -23,6 +23,8 @@
 
 class Qt5Frame;
 class Qt5Object;
+class QFocusEvent;
+class QKeyEvent;
 class QMouseEvent;
 class QMoveEvent;
 class QPaintEvent;
@@ -37,8 +39,13 @@ class Qt5Widget
 
     Qt5Frame  *m_pFrame;
 
-    void mouseButtonEvent( QMouseEvent*, bool );
+    bool handleKeyEvent( QKeyEvent*, bool );
+    void handleMouseButtonEvent( QMouseEvent*, bool );
 
+    virtual void focusInEvent( QFocusEvent* ) override;
+    virtual void focusOutEvent( QFocusEvent* ) override;
+    virtual void keyPressEvent( QKeyEvent* ) override;
+    virtual void keyReleaseEvent( QKeyEvent* ) override;
     virtual void mouseMoveEvent( QMouseEvent*) override;
     virtual void mousePressEvent( QMouseEvent*) override;
     virtual void mouseReleaseEvent( QMouseEvent*) override;
