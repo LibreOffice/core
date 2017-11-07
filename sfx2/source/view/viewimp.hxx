@@ -31,13 +31,15 @@
 #include <rtl/ref.hxx>
 #include <vcl/print.hxx>
 #include <queue>
+#include <vector>
 
 class SfxBaseController;
 
 typedef std::vector<SfxShell*> SfxShellArr_Impl;
 
 class SfxClipboardChangeListener;
-class SfxInPlaceClientList;
+
+using SfxInPlaceClientList = std::vector<SfxInPlaceClient*>;
 
 struct SfxViewShell_Impl
 {
