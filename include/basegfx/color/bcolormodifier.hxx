@@ -371,9 +371,8 @@ namespace basegfx
         All references to BColorModifier members use shared pointers, thus instances of
         BColorModifierStack can be copied by the default mechanisms if needed.
     */
-    class BASEGFX_DLLPUBLIC BColorModifierStack
+    class BASEGFX_DLLPUBLIC BColorModifierStack final
     {
-    protected:
         ::std::vector< BColorModifierSharedPtr >        maBColorModifiers;
 
     public:

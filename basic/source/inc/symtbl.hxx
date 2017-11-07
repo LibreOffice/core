@@ -46,10 +46,9 @@ public:
 };
 
 
-class SbiSymPool {
+class SbiSymPool final {
     friend class SbiSymDef;
     friend class SbiProcDef;
-protected:
     SbiStringPool& rStrings;
     std::vector<std::unique_ptr<SbiSymDef>> m_Data;
     SbiSymPool*    pParent;
