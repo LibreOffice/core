@@ -103,9 +103,9 @@
   </Type>
   <Type Name="com::sun::star::uno::Sequence &lt; * &gt;">
     <DisplayString Condition="_pSequence->nElements == 0">empty sequence</DisplayString>
-    <DisplayString>sequence of {_pSequence->nElements} {"$T1",sb}</DisplayString>
+    <DisplayString>sequence of {_pSequence->nElements,d} {"$T1",sb}</DisplayString>
     <Expand>
-      <Item Name="[size]">_pSequence->nElements</Item>
+      <Item Name="[size]">_pSequence->nElements,d</Item>
       <ArrayItems>
         <Size>_pSequence->nElements</Size>
         <ValuePointer>reinterpret_cast &lt; const $T1 * &gt;( _pSequence->elements )</ValuePointer>
@@ -243,6 +243,15 @@
     <DisplayString>{m_rInnerRef}</DisplayString>
     <Expand>
       <ExpandedItem>m_rInnerRef</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="com::sun::star::uno::Type">
+    <DisplayString>{_pType->eTypeClass,en}</DisplayString>
+    <Expand>
+      <Item Name="Type Class">_pType->eTypeClass,en</Item>
+      <Item Name="Type Name">_pType->pTypeName</Item>
+      <Item Condition="_pType->pType != nullptr" Name="Size">_pType->pType->nSize</Item>
+      <Item Condition="_pType->pType != nullptr" Name="Alignment">_pType->pType->nAlignment</Item>
     </Expand>
   </Type>
 </AutoVisualizer>
