@@ -247,18 +247,18 @@ void ScScenarioWindow::NotifyState( const SfxPoolItem* pState )
     {
         aLbScenario->Enable();
 
-        if ( dynamic_cast<const SfxStringItem*>( pState) !=  nullptr )
+        if ( auto pStringItem = dynamic_cast<const SfxStringItem*>( pState) )
         {
-            OUString aNewEntry( static_cast<const SfxStringItem*>(pState)->GetValue() );
+            OUString aNewEntry( pStringItem->GetValue() );
 
             if ( !aNewEntry.isEmpty() )
                 aLbScenario->SelectEntry( aNewEntry );
             else
                 aLbScenario->SetNoSelection();
         }
-        else if ( dynamic_cast<const SfxStringListItem*>( pState) !=  nullptr )
+        else if ( auto pStringListItem = dynamic_cast<const SfxStringListItem*>( pState) )
         {
-            aLbScenario->UpdateEntries( static_cast<const SfxStringListItem*>(pState)->GetList() );
+            aLbScenario->UpdateEntries( pStringListItem->GetList() );
         }
     }
     else

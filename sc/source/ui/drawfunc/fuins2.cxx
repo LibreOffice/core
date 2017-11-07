@@ -530,14 +530,14 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
 
         if( pReqArgs->HasItem( FN_PARAM_4, &pItem ) )
         {
-            if ( dynamic_cast<const SfxUInt16Item*>( pItem) !=  nullptr )
-                nToTable = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-            else if ( dynamic_cast<const SfxBoolItem*>( pItem) !=  nullptr )
+            if ( auto pUInt16Item = dynamic_cast<const SfxUInt16Item*>( pItem) )
+                nToTable = pUInt16Item->GetValue();
+            else if ( auto pBoolItem = dynamic_cast<const SfxBoolItem*>( pItem) )
             {
                 //  In IDL for Basic FN_PARAM_4 means SfxBoolItem
                 //  -> if set new table, else current table
 
-                if ( static_cast<const SfxBoolItem*>(pItem)->GetValue() )
+                if ( pBoolItem->GetValue() )
                     nToTable = static_cast<sal_uInt16>(rScDoc.GetTableCount());
                 else
                     nToTable = static_cast<sal_uInt16>(rData.GetTabNo());

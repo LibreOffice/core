@@ -5081,10 +5081,8 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                     if ( bConsiderWrapOnObjPos || css::text::WrapTextMode_THROUGH != rSur.GetSurround() )
                     {
                         // frames, which the cell is a lower of, aren't relevant
-                        if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+                        if ( auto pFly = dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) )
                         {
-                            const SwFlyFrame *pFly =
-                                    static_cast<const SwFlyFrame*>(pAnchoredObj);
                             if ( pFly->IsAnLower( this ) )
                                 continue;
                         }

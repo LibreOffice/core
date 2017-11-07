@@ -415,9 +415,9 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
                 basegfx::B2DPolyPolygon aPP;
                 const SdrObject* pNext = aIter.Next();
 
-                if ( dynamic_cast<const SdrPathObj*>( pNext) !=  nullptr )
+                if ( auto pPathObj = dynamic_cast<const SdrPathObj*>(pNext) )
                 {
-                    aPP = static_cast<const SdrPathObj*>(pNext)->GetPathPoly();
+                    aPP = pPathObj->GetPathPoly();
                 }
                 else
                 {

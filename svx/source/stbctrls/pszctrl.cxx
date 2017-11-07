@@ -299,24 +299,24 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
             SAL_WARN( "svx.stbcrtls","unknown slot id");
         }
     }
-    else if ( dynamic_cast<const SfxPointItem*>( pState) !=  nullptr )
+    else if ( auto pPointItem = dynamic_cast<const SfxPointItem*>( pState) )
     {
         // show position
-        pImpl->aPos = static_cast<const SfxPointItem*>(pState)->GetValue();
+        pImpl->aPos = pPointItem->GetValue();
         pImpl->bPos = true;
         pImpl->bTable = false;
     }
-    else if ( dynamic_cast<const SvxSizeItem*>( pState) !=  nullptr )
+    else if ( auto pSizeItem = dynamic_cast<const SvxSizeItem*>( pState) )
     {
         // show size
-        pImpl->aSize = static_cast<const SvxSizeItem*>(pState)->GetSize();
+        pImpl->aSize = pSizeItem->GetSize();
         pImpl->bSize = true;
         pImpl->bTable = false;
     }
-    else if ( dynamic_cast<const SfxStringItem*>( pState) !=  nullptr )
+    else if ( auto pStringItem = dynamic_cast<const SfxStringItem*>( pState) )
     {
         // show string (table cel or different)
-        pImpl->aStr = static_cast<const SfxStringItem*>(pState)->GetValue();
+        pImpl->aStr = pStringItem->GetValue();
         pImpl->bTable = true;
         pImpl->bPos = false;
         pImpl->bSize = false;

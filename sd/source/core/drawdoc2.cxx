@@ -1046,9 +1046,8 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject const * pObj,
         bool                bObjSupported = false;
 
         // execute HitTest
-        if ( dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr  ) // simple graphics object
+        if ( auto pGrafObj = dynamic_cast< const SdrGrafObj *>( pObj ) ) // simple graphics object
         {
-            const SdrGrafObj*   pGrafObj = static_cast<const SdrGrafObj*>(pObj);
             const GeoStat&      rGeo = pGrafObj->GetGeoStat();
             SdrGrafObjGeoData*  pGeoData = static_cast<SdrGrafObjGeoData*>( pGrafObj->GetGeoData() );
 

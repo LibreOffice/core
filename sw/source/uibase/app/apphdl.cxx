@@ -974,9 +974,9 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
         const SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
         while( pObjSh )
         {
-            if( dynamic_cast<const SwDocShell*>(pObjSh) !=  nullptr )
+            if( auto pDocShell = dynamic_cast<const SwDocShell*>(pObjSh) )
             {
-                SwDoc* pDoc = const_cast<SwDocShell*>(static_cast<const SwDocShell*>(pObjSh))->GetDoc();
+                SwDoc* pDoc = const_cast<SwDocShell*>(pDocShell)->GetDoc();
                 SwViewShell* pVSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
                 if ( pVSh )
                     pVSh->ChgNumberDigits();

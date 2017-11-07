@@ -819,11 +819,11 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
 
             case SID_DRAW_MEASURELINE:
             {
-                if( dynamic_cast< SdrMeasureObj *>( pObj ) !=  nullptr)
+                if( auto pMeasureObj = dynamic_cast< SdrMeasureObj *>( pObj ) )
                 {
                     sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
-                    static_cast<SdrMeasureObj*>(pObj)->SetPoint(Point(aStart.X(), nYMiddle), 0);
-                    static_cast<SdrMeasureObj*>(pObj)->SetPoint(Point(aEnd.X(), nYMiddle), 1);
+                    pMeasureObj->SetPoint(Point(aStart.X(), nYMiddle), 0);
+                    pMeasureObj->SetPoint(Point(aEnd.X(), nYMiddle), 1);
                 }
                 else
                 {
@@ -862,10 +862,10 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
             case SID_CONNECTOR_LINES_CIRCLE_END:
             case SID_CONNECTOR_LINES_CIRCLES:
             {
-                if( dynamic_cast< SdrEdgeObj *>( pObj ) !=  nullptr)
+                if( auto pEdgeObj = dynamic_cast< SdrEdgeObj *>( pObj ) )
                 {
-                    static_cast<SdrEdgeObj*>(pObj)->SetTailPoint(false, aStart);
-                    static_cast<SdrEdgeObj*>(pObj)->SetTailPoint(true, aEnd);
+                    pEdgeObj->SetTailPoint(false, aStart);
+                    pEdgeObj->SetTailPoint(true, aEnd);
                 }
                 else
                 {
@@ -877,7 +877,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
             case SID_DRAW_CAPTION:
             case SID_DRAW_CAPTION_VERTICAL:
             {
-                if( dynamic_cast< SdrCaptionObj *>( pObj ) !=  nullptr)
+                if( auto pCaptionObj = dynamic_cast< SdrCaptionObj *>( pObj ) )
                 {
                     bool bIsVertical(SID_DRAW_CAPTION_VERTICAL == nID);
 
@@ -893,8 +893,8 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
 
                     // The default text is not inserted anymore.
 
-                    static_cast<SdrCaptionObj*>(pObj)->SetLogicRect(aRect);
-                    static_cast<SdrCaptionObj*>(pObj)->SetTailPos(
+                    pCaptionObj->SetLogicRect(aRect);
+                    pCaptionObj->SetTailPos(
                         aRect.TopLeft() - Point(aRect.GetWidth() / 2, aRect.GetHeight() / 2));
                 }
                 else

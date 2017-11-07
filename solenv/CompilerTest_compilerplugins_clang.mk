@@ -39,6 +39,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/refcounting \
     compilerplugins/clang/test/salbool \
     compilerplugins/clang/test/salunicodeliteral \
+    compilerplugins/clang/test/simplifydynamiccast \
     compilerplugins/clang/test/stringconstant \
     compilerplugins/clang/test/unnecessarycatchthrow \
     compilerplugins/clang/test/unnecessaryoverride \

@@ -7051,9 +7051,8 @@ void SwPageFrame::RefreshExtraData( const SwRect &rRect ) const
         if ( bLineInFly && GetSortedObjs() )
             for (SwAnchoredObject* pAnchoredObj : *GetSortedObjs())
             {
-                if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+                if ( auto pFly = dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) )
                 {
-                    const SwFlyFrame *pFly = static_cast<const SwFlyFrame*>(pAnchoredObj);
                     if ( pFly->getFrameArea().Top() <= aRect.Bottom() &&
                          pFly->getFrameArea().Bottom() >= aRect.Top() )
                         pFly->RefreshExtraData( aRect );
@@ -7085,9 +7084,8 @@ void SwLayoutFrame::RefreshExtraData( const SwRect &rRect ) const
         if ( bLineInFly && pCnt->GetDrawObjs() )
             for (SwAnchoredObject* pAnchoredObj : *pCnt->GetDrawObjs())
             {
-                if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+                if ( auto pFly = dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) )
                 {
-                    const SwFlyFrame *pFly = static_cast<const SwFlyFrame*>(pAnchoredObj);
                     if ( pFly->IsFlyInContentFrame() &&
                          pFly->getFrameArea().Top() <= rRect.Bottom() &&
                          pFly->getFrameArea().Bottom() >= rRect.Top() )

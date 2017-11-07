@@ -893,9 +893,8 @@ static const SwFrame *lcl_FindFirstInvaContent( const SwLayoutFrame *pLay, long 
             const SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
             for (SwAnchoredObject* pObj : rObjs)
             {
-                if ( dynamic_cast< const SwFlyFrame *>( pObj ) !=  nullptr )
+                if ( auto pFly = dynamic_cast< const SwFlyFrame *>( pObj ) )
                 {
-                    const SwFlyFrame* pFly = static_cast<const SwFlyFrame*>(pObj);
                     if ( pFly->IsFlyInContentFrame() )
                     {
                         if ( static_cast<const SwFlyInContentFrame*>(pFly)->IsInvalid() ||
@@ -928,9 +927,8 @@ static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrame* _pPage,
 
     for (SwAnchoredObject* pObj : *_pPage->GetSortedObjs())
     {
-        if ( dynamic_cast< const SwFlyFrame *>( pObj ) !=  nullptr )
+        if ( auto pFly = dynamic_cast< const SwFlyFrame *>( pObj )  )
         {
-            const SwFlyFrame* pFly = static_cast<const SwFlyFrame*>(pObj);
             if ( pFly->getFrameArea().Top() <= _nBottom )
             {
                 if ( pFly->IsInvalid() || pFly->IsCompletePaint() )
@@ -942,9 +940,9 @@ static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrame* _pPage,
                     return pFly;
             }
         }
-        else if ( dynamic_cast< const SwAnchoredDrawObject *>( pObj ) !=  nullptr )
+        else if ( auto pDrawObject = dynamic_cast< const SwAnchoredDrawObject *>( pObj ) )
         {
-            if ( !static_cast<const SwAnchoredDrawObject*>(pObj)->IsValidPos() )
+            if ( !pDrawObject->IsValidPos() )
             {
                 return pObj;
             }
@@ -2018,9 +2016,8 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
                                 i < pPage->GetSortedObjs()->size(); ++i )
             {
                 const SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
-                if ( dynamic_cast< const SwFlyFrame *>( pObj ) !=  nullptr )
+                if ( auto pFly = dynamic_cast< const SwFlyFrame *>( pObj ) )
                 {
-                    const SwFlyFrame *pFly = static_cast<const SwFlyFrame*>(pObj);
                     const SwContentFrame *pC = pFly->ContainsContent();
                     while( pC )
                     {

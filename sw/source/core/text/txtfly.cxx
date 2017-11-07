@@ -220,12 +220,12 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
         ::basegfx::B2DPolyPolygon aPolyPolygon;
         ::basegfx::B2DPolyPolygon* pPolyPolygon = nullptr;
 
-        if ( dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) !=  nullptr )
+        if ( auto pVirtFlyDrawObj = dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) )
         {
             // GetContour() causes the graphic to be loaded, which may cause
             // the graphic to change its size, call ClrObject()
             tools::PolyPolygon aPoly;
-            if( !static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrame()->GetContour( aPoly ) )
+            if( !pVirtFlyDrawObj->GetFlyFrame()->GetContour( aPoly ) )
                 aPoly = tools::PolyPolygon( static_cast<const SwVirtFlyDrawObj*>(pObj)->
                                      GetFlyFrame()->getFrameArea().SVRect() );
             aPolyPolygon.clear();

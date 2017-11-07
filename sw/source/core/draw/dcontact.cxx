@@ -754,9 +754,9 @@ const SwAnchoredObject* SwDrawContact::GetAnchoredObj(const SdrObject* pSdrObj )
 
     const SwAnchoredObject* pRetAnchoredObj = nullptr;
 
-    if (dynamic_cast<const SwDrawVirtObj*>(pSdrObj) != nullptr)
+    if (auto pVirtObj = dynamic_cast<const SwDrawVirtObj*>(pSdrObj))
     {
-        pRetAnchoredObj = &(static_cast<const SwDrawVirtObj*>(pSdrObj)->GetAnchoredObj());
+        pRetAnchoredObj = &(pVirtObj->GetAnchoredObj());
     }
     else
     {

@@ -97,7 +97,6 @@ void DrawViewShell::ScannerEvent()
                     Point aPnt ( ( aPageSize.Width() - aBmpSize.Width() ) >> 1, ( aPageSize.Height() - aBmpSize.Height() ) >> 1 );
                     aPnt += Point( pPage->GetLeftBorder(), pPage->GetUpperBorder() );
                     ::tools::Rectangle   aRect( aPnt, aBmpSize );
-                    SdrGrafObj* pGrafObj = nullptr;
                     bool        bInsertNewObject = true;
 
                     if( GetView()->AreObjectsMarked() )
@@ -109,10 +108,8 @@ void DrawViewShell::ScannerEvent()
                             SdrMark*    pMark = rMarkList.GetMark(0);
                             SdrObject*  pObj = pMark->GetMarkedSdrObj();
 
-                            if( dynamic_cast< SdrGrafObj *>( pObj ) !=  nullptr )
+                            if( auto pGrafObj = dynamic_cast< SdrGrafObj *>( pObj ) )
                             {
-                                pGrafObj = static_cast< SdrGrafObj* >( pObj );
-
                                 if( pGrafObj->IsEmptyPresObj() )
                                 {
                                     bInsertNewObject = false;
@@ -126,7 +123,7 @@ void DrawViewShell::ScannerEvent()
 
                     if( bInsertNewObject )
                     {
-                        pGrafObj = new SdrGrafObj( Graphic( aScanBmp ), aRect );
+                        auto pGrafObj = new SdrGrafObj( Graphic( aScanBmp ), aRect );
                         SdrPageView* pPV = GetView()->GetSdrPageView();
                         GetView()->InsertObjectAtView( pGrafObj, *pPV, SdrInsertFlags::SETDEFLAYER );
                     }

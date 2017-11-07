@@ -50,9 +50,8 @@ bool SwAccessibleFrameBase::IsSelected()
     assert(GetMap());
     const SwViewShell *pVSh = GetMap()->GetShell();
     assert(pVSh);
-    if( dynamic_cast<const SwFEShell*>( pVSh) !=  nullptr )
+    if( auto pFESh = dynamic_cast<const SwFEShell*>(pVSh) )
     {
-        const SwFEShell *pFESh = static_cast< const SwFEShell * >( pVSh );
         const SwFrame *pFlyFrame = pFESh->GetSelectedFlyFrame();
         if( pFlyFrame == GetFrame() )
             bRet = true;

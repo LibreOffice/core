@@ -3496,10 +3496,10 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
         {
             const SvxFieldItem* pField = static_cast<const SvxFieldItem*>(pAttr->GetItem());
             const SvxFieldData* pFld = pField->GetField();
-            if ( dynamic_cast<const SvxURLField* >(pFld) !=  nullptr )
+            if ( auto pUrlField = dynamic_cast<const SvxURLField* >(pFld) )
             {
                 // Office-Bookmark
-                pDataObj->GetURL() = static_cast<const SvxURLField*>(pFld)->GetURL();
+                pDataObj->GetURL() = pUrlField->GetURL();
             }
         }
     }

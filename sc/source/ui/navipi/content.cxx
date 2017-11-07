@@ -1068,10 +1068,10 @@ const ScAreaLink* ScContentTree::GetLink( sal_uLong nIndex )
     for (sal_uInt16 i=0; i<nCount; i++)
     {
         ::sfx2::SvBaseLink* pBase = rLinks[i].get();
-        if (dynamic_cast<const ScAreaLink*>( pBase) !=  nullptr)
+        if (auto pAreaLink = dynamic_cast<const ScAreaLink*>( pBase))
         {
             if (nFound == nIndex)
-                return static_cast<const ScAreaLink*>(pBase);
+                return pAreaLink;
             ++nFound;
         }
     }

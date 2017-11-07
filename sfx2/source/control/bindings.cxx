@@ -1019,10 +1019,10 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                    SfxItemPool::IsWhich(nWhich) &&
                    pOldItem ) )
             {
-                if ( dynamic_cast< const SfxBoolItem *>( pOldItem ) !=  nullptr )
+                if ( auto pOldBoolItem = dynamic_cast< const SfxBoolItem *>( pOldItem ) )
                 {
                     // we can toggle Bools
-                    bool bOldValue = static_cast<const SfxBoolItem *>(pOldItem)->GetValue();
+                    bool bOldValue = pOldBoolItem->GetValue();
                     SfxBoolItem *pNewItem = static_cast<SfxBoolItem*>(pOldItem->Clone());
                     pNewItem->SetValue( !bOldValue );
                     aReq.AppendItem( *pNewItem );

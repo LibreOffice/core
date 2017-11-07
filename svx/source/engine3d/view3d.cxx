@@ -418,9 +418,9 @@ SdrModel* E3dView::GetMarkedObjModel() const
             {
                 const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
 
-                if(dynamic_cast< const E3dScene* >( pSrcOb) !=  nullptr)
+                if(auto p3dscene = dynamic_cast< const E3dScene* >( pSrcOb))
                 {
-                    pScene = const_cast<E3dScene*>(static_cast<const E3dScene*>(pSrcOb));
+                    pScene = const_cast<E3dScene*>(p3dscene);
 
                     // delete all not intentionally cloned 3d objects
                     pScene->removeAllNonSelectedObjects();
@@ -476,9 +476,9 @@ bool E3dView::Paste(
             for(size_t nOb = 0; nOb < nObjCount; ++nOb)
             {
                 const SdrObject* pSrcOb = pSrcPg->GetObj(nOb);
-                if(dynamic_cast< const E3dScene* >(pSrcOb) !=  nullptr)
+                if(auto p3dscene = dynamic_cast< const E3dScene* >(pSrcOb))
                 {
-                    E3dScene* pSrcScene = const_cast<E3dScene*>(static_cast<const E3dScene*>(pSrcOb));
+                    E3dScene* pSrcScene = const_cast<E3dScene*>(p3dscene);
                     ImpCloneAll3DObjectsToDestScene(pSrcScene, pDstScene, aDist);
                 }
             }

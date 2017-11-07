@@ -1147,8 +1147,8 @@ void SwDocShell::LoadingFinished()
     if(pVFrame)
     {
         SfxViewShell* pShell = pVFrame->GetViewShell();
-        if(dynamic_cast<SwSrcView*>( pShell) )
-            static_cast<SwSrcView*>(pShell)->Load(this);
+        if(auto pSrcView = dynamic_cast<SwSrcView*>( pShell) )
+            pSrcView->Load(this);
     }
 
     // #i38810#
