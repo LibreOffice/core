@@ -121,30 +121,28 @@ void ScMyOLEFixer::FixupOLEs()
     if (!aShapes.empty() && rImport.GetModel().is())
     {
         OUString sPersistName ("PersistName");
-        ScMyToFixupOLEs::iterator aItr(aShapes.begin());
-        ScMyToFixupOLEs::iterator aEndItr(aShapes.end());
         ScDocument* pDoc(rImport.GetDocument());
 
         ScXMLImport::MutexGuard aGuard(rImport);
 
-        while (aItr != aEndItr)
+        for (auto const& shape : aShapes)
         {
             // #i78086# also call CreateChartListener for invalid position (anchored to sheet)
-            if (!IsOLE(aItr->xShape))
+            if (!IsOLE(shape.xShape))
                 OSL_FAIL("Only OLEs should be in here now");
 
-            if (IsOLE(aItr->xShape))
+            if (IsOLE(shape.xShape))
             {
-                uno::Reference < beans::XPropertySet > xShapeProps ( aItr->xShape, uno::UNO_QUERY );
+                uno::Reference < beans::XPropertySet > xShapeProps ( shape.xShape, uno::UNO_QUERY );
                 uno::Reference < beans::XPropertySetInfo > xShapeInfo(xShapeProps->getPropertySetInfo());
 
                 OUString sName;
                 if (pDoc && xShapeProps.is() && xShapeInfo.is() && xShapeInfo->hasPropertyByName(sPersistName) &&
                     (xShapeProps->getPropertyValue(sPersistName) >>= sName))
-                    CreateChartListener(pDoc, sName, aItr->sRangeList);
+                    CreateChartListener(pDoc, sName, shape.sRangeList);
             }
-            aItr = aShapes.erase(aItr);
         }
+        aShapes.clear();
     }
 }
 
