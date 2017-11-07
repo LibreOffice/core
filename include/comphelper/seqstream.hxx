@@ -69,11 +69,10 @@ class SAL_DLLPUBLIC_TEMPLATE OSequenceOutputStream_Base
     : public ::cppu::WeakImplHelper< css::io::XOutputStream >
 {};
 
-class COMPHELPER_DLLPUBLIC OSequenceOutputStream : public OSequenceOutputStream_Base
+class COMPHELPER_DLLPUBLIC OSequenceOutputStream final : public OSequenceOutputStream_Base
 {
 private:
     void finalizeOutput();
-protected:
     css::uno::Sequence< sal_Int8 >&                 m_rSequence;
     double                                          m_nResizeFactor;
     sal_Int32                                       m_nMinimumResize;
@@ -86,7 +85,6 @@ protected:
 
     ::osl::Mutex                                    m_aMutex;
 
-protected:
     virtual ~OSequenceOutputStream() override { if (m_bConnected) finalizeOutput(); }
 
 public:
