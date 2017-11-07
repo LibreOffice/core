@@ -30,6 +30,7 @@ class SwFlyAtContentFrame;
 // bound in Content.
 class SwFlyFreeFrame : public SwFlyFrame
 {
+private:
     // #i34753# - flag for at-page anchored Writer fly frames
     // to prevent a positioning - call of method <MakeObjPos()> -, if Writer
     // fly frame is already clipped during its format by the object formatter.
@@ -123,12 +124,17 @@ public:
     */
     virtual bool IsFormatPossible() const override;
 
-    // RotateFlyFrame3 - Support for outer Frame of a SwGrfNode
-    virtual double getRotation() const override;
-
     // RotateFlyFrame3 - Support for Transformations for outer Frame of a SwGrfNode
     basegfx::B2DHomMatrix getFrameAreaTransformation() const;
     basegfx::B2DHomMatrix getFramePrintAreaTransformation() const;
+    void updateTransformationsAndAreas(
+        double fRotation,
+        const basegfx::B2DPoint& rCenter);
+
+    // RotateFlyFrame3 - Support for outer Frame of a SwGrfNode
+    // Only for local data extraction. To uniquely access information
+    // for local transformation, use getFrameArea(Print)Transformation
+    double getFrameRotation() const;
 };
 
 // Flys that are bound to LayoutFrames and not to Content

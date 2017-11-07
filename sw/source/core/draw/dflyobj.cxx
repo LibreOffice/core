@@ -1013,17 +1013,10 @@ SdrObject* SwVirtFlyDrawObj::getFullDragClone() const
     // call parent
     SdrObject* pRetval = SdrVirtObj::getFullDragClone();
 
-    if(pRetval && ContainsSwGrfNode())
+    if(pRetval && GetFlyFrame() && ContainsSwGrfNode())
     {
-        // RotGrfFlyFrame: Add transformation to placeholder object
-        Size aSize;
-        const sal_uInt16 nRotation(SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame(aSize));
-        const double fRotate(static_cast< double >(-nRotation) * (M_PI/1800.0));
-        const basegfx::B2DRange aTargetRange(getInnerBound());
-        const basegfx::B2DHomMatrix aTargetTransform(
-            basegfx::utils::createRotateAroundCenterKeepAspectRatioStayInsideRange(
-                aTargetRange,
-                fRotate));
+        // RotGrfFlyFrame3: get inner bounds/transformation
+        const basegfx::B2DHomMatrix aTargetTransform(GetFlyFrame()->getFramePrintAreaTransformation());
 
         pRetval->TRSetBaseGeometry(aTargetTransform, basegfx::B2DPolyPolygon());
     }
@@ -1043,15 +1036,16 @@ void SwVirtFlyDrawObj::addCropHandles(SdrHdlList& rTarget) const
 
         if(!aTargetRange.isEmpty())
         {
-            Size aSize;
-            const sal_uInt16 nRotation(SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame(aSize));
-            const double fRotate(static_cast< double >(-nRotation) * (M_PI/1800.0));
-            const basegfx::B2DHomMatrix aTargetTransform(
-                basegfx::utils::createRotateAroundCenterKeepAspectRatioStayInsideRange(
-                    aTargetRange,
-                    fRotate));
+            // RotGrfFlyFrame3: get inner bounds/transformation
+            const basegfx::B2DHomMatrix aTargetTransform(GetFlyFrame()->getFramePrintAreaTransformation());
+
+            // break up matrix
+            basegfx::B2DTuple aScale;
+            basegfx::B2DTuple aTranslate;
+            double fRotate(0.0);
+            double fShearX(0.0);
+            aTargetTransform.decompose(aScale, aTranslate, fRotate, fShearX);
             basegfx::B2DPoint aPos;
-            const double fShearX(0.0);
 
             aPos = aTargetTransform * basegfx::B2DPoint(0.0, 0.0);
             rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::UpperLeft, fShearX, fRotate));
