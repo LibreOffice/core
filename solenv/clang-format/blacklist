@@ -17753,6 +17753,7 @@ vcl/inc/outdev.h
 vcl/inc/outdevstatestack.hxx
 vcl/inc/pch/precompiled_vcl.cxx
 vcl/inc/pch/precompiled_vcl.hxx
+vcl/inc/pdfread.hxx
 vcl/inc/print.h
 vcl/inc/printdlg.hxx
 vcl/inc/printerinfomanager.hxx
@@ -18201,7 +18202,6 @@ vcl/source/filter/igif/gifread.cxx
 vcl/source/filter/igif/gifread.hxx
 vcl/source/filter/ipdf/pdfdocument.cxx
 vcl/source/filter/ipdf/pdfread.cxx
-vcl/source/filter/ipdf/pdfread.hxx
 vcl/source/filter/ixbm/xbmread.cxx
 vcl/source/filter/ixbm/xbmread.hxx
 vcl/source/filter/ixpm/rgbtable.hxx
