@@ -22,6 +22,30 @@
       "revId": "ae3c96e35f3ca4b871f7c02e16779cca73fe4ecf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_addc0be5",
+        "filename": "sw/source/core/doc/tblafmt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1238,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2017-11-07T22:49:52Z",
+      "side": 1,
+      "message": "no DEF_LINE_WIDTH_6 is 0.25pt and the default is going to be 0.5pt. I initially intended it to be 0.25pt which is why i added DEF_LINE_WIDTH_6, but it would be good to still leave that reference there incase 0.25pt is needed somewhere else in the future.",
+      "parentUuid": "1a430d35_2db73bd9",
+      "range": {
+        "startLine": 1238,
+        "startChar": 32,
+        "endLine": 1238,
+        "endChar": 48
+      },
+      "revId": "ae3c96e35f3ca4b871f7c02e16779cca73fe4ecf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
