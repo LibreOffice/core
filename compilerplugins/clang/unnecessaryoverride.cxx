@@ -23,6 +23,47 @@ look for methods where all they do is call their superclass method
 
 namespace {
 
+bool hasMultipleBaseInstances_(
+    CXXRecordDecl const * derived, CXXRecordDecl const * canonicBase,
+    bool & hasAsNonVirtualBase, bool & hasAsVirtualBase)
+{
+    for (auto i = derived->bases_begin(); i != derived->bases_end(); ++i) {
+        auto const cls = i->getType()->getAsCXXRecordDecl();
+        if (cls == nullptr) {
+            assert(i->getType()->isDependentType());
+            // Conservatively assume "yes" for dependent bases:
+            return true;
+        }
+        if (cls->getCanonicalDecl() == canonicBase) {
+            if (i->isVirtual()) {
+                if (hasAsNonVirtualBase) {
+                    return true;
+                }
+                hasAsVirtualBase = true;
+            } else {
+                if (hasAsNonVirtualBase || hasAsVirtualBase) {
+                    return true;
+                }
+                hasAsNonVirtualBase = true;
+            }
+        } else if (hasMultipleBaseInstances_(
+                       cls, canonicBase, hasAsNonVirtualBase, hasAsVirtualBase))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool hasMultipleBaseInstances(
+    CXXRecordDecl const * derived, CXXRecordDecl const * base)
+{
+    bool nonVirt = false;
+    bool virt = false;
+    return hasMultipleBaseInstances_(
+        derived, base->getCanonicalDecl(), nonVirt, virt);
+}
+
 class UnnecessaryOverride:
     public RecursiveASTVisitor<UnnecessaryOverride>, public loplugin::Plugin
 {
@@ -202,9 +243,17 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         return true;
     }
 
-    // if we are overriding more than one method, then this is a disambiguating override
+    // If overriding more than one base member function, or one base member
+    // function that is available in multiple (non-virtual) base class
+    // instances, then this is a disambiguating override:
     if (methodDecl->isVirtual()) {
         if (methodDecl->size_overridden_methods() != 1)
+        {
+            return true;
+        }
+        if (hasMultipleBaseInstances(
+                methodDecl->getParent(),
+                (*methodDecl->begin_overridden_methods())->getParent()))
         {
             return true;
         }
@@ -221,10 +270,6 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
     // entertaining template magic
     if (loplugin::isSamePathname(aFileName, SRCDIR "/sc/source/ui/vba/vbaformatcondition.cxx"))
         return true;
-    // not sure what is going on here, but removing the override causes a crash
-     if (methodDecl->getQualifiedNameAsString() == "SwXTextDocument::queryAdapter")
-         return true;
-
 
     const CXXMethodDecl* overriddenMethodDecl = findOverriddenOrSimilarMethodInSuperclasses(methodDecl);
     if (!overriddenMethodDecl) {
@@ -317,7 +362,7 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
 
     report(
             DiagnosticsEngine::Warning, "%0%1 function just calls %2 parent",
-            methodDecl->getSourceRange().getBegin())
+            methodDecl->getLocation())
         << methodDecl->getAccess()
         << (methodDecl->isVirtual() ? " virtual" : "")
         << overriddenMethodDecl->getAccess()
@@ -327,7 +372,7 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         report(
             DiagnosticsEngine::Note,
             "method declaration here",
-            pOther->getLocStart())
+            pOther->getLocation())
           << pOther->getSourceRange();
     }
     return true;

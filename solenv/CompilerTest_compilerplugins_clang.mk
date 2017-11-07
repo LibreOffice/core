@@ -41,6 +41,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/salunicodeliteral \
     compilerplugins/clang/test/stringconstant \
     compilerplugins/clang/test/unnecessarycatchthrow \
+    compilerplugins/clang/test/unnecessaryoverride \
     compilerplugins/clang/test/unnecessaryoverride-dtor \
     compilerplugins/clang/test/unnecessaryparen \
     compilerplugins/clang/test/unoany \
