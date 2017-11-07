@@ -274,8 +274,9 @@ public:
 
     bool operator<( const SwRangeRedline& ) const;
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
-    void MaybeNotifyModification();
 };
+
+SW_DLLPUBLIC void MaybeNotifyRedlineModification(SwRangeRedline* pRedline, SwDoc* pDoc);
 
 /// Base object for 'Redlines' that are not of 'Ranged' type (like table row insert\delete)
 class SW_DLLPUBLIC SwExtraRedline
