@@ -17,9 +17,6 @@
 
 #include <cppunit/TestAssert.h>
 
-using namespace com::sun::star;
-using namespace com::sun::star::uno;
-
 CPPUNIT_NS_BEGIN
 
 /** @brief Trait used by CPPUNIT_ASSERT* macros to compare com::sun::star::table::CellAddress.
@@ -27,11 +24,14 @@ CPPUNIT_NS_BEGIN
  * This specialization from @c struct @c assertion_traits<> helps to compare
  * @see com::sun::star::table::CellAddress.
  */
-template <> struct assertion_traits<table::CellAddress>
+template <> struct assertion_traits<css::table::CellAddress>
 {
-    static bool equal(const table::CellAddress& x, const table::CellAddress& y) { return x == y; }
+    static bool equal(const css::table::CellAddress& x, const css::table::CellAddress& y)
+    {
+        return x == y;
+    }
 
-    static std::string toString(const table::CellAddress& x)
+    static std::string toString(const css::table::CellAddress& x)
     {
         OStringStream ost;
         ost << "Sheet: " << x.Sheet << " Column: " << x.Column << " Row: " << x.Row;
@@ -44,14 +44,14 @@ template <> struct assertion_traits<table::CellAddress>
  * This specialization from @c struct @c assertion_traits<> helps to compare
  * @see com::sun::star::table::CellRangeAddress.
  */
-template <> struct assertion_traits<table::CellRangeAddress>
+template <> struct assertion_traits<css::table::CellRangeAddress>
 {
-    static bool equal(const table::CellRangeAddress& x, const table::CellRangeAddress& y)
+    static bool equal(const css::table::CellRangeAddress& x, const css::table::CellRangeAddress& y)
     {
         return x == y;
     }
 
-    static std::string toString(const table::CellRangeAddress& x)
+    static std::string toString(const css::table::CellRangeAddress& x)
     {
         OStringStream ost;
         ost << "Sheet: " << x.Sheet << " StartColumn: " << x.StartColumn
