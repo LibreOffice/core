@@ -25,7 +25,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <SerfSession.hxx>
+#include "SerfSession.hxx"
 
 namespace http_dav_ucp
 {

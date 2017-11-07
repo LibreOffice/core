@@ -22,7 +22,7 @@
 #define INCLUDED_UCB_SOURCE_UCP_WEBDAV_APRENV_HXX
 
 #include <apr_pools.h>
-#include <SerfLockStore.hxx>
+#include "SerfLockStore.hxx"
 
 namespace apr_environment
 {

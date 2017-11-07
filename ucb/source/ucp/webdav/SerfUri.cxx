@@ -25,7 +25,7 @@
 #include "DAVException.hxx"
 #include "AprEnv.hxx"
 
-#include "urihelper.hxx"
+#include <urihelper.hxx>
 
 using namespace http_dav_ucp;
 
