@@ -37,8 +37,4 @@ $(eval $(call gb_UnpackedTarball_add_patches,libstaroffice, \
 ))
 endif
 
-$(eval $(call gb_UnpackedTarball_add_patches,libstaroffice, \
-	external/libstaroffice/0001-clang-do-not-use-defined-__has_cpp_attribute-and-__h.patch.1 \
-))
-
 # vim: set noet sw=4 ts=4:
