@@ -5904,21 +5904,6 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
 
-    AC_MSG_CHECKING([whether STL uses __attribute__((warn_unused))])
-    AC_LANG_PUSH([C++])
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS -Werror -Wunused"
-    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-            #include <string>
-            void f() { std::string s; }
-        ])], [
-            AC_MSG_RESULT([no])
-        ], [
-            AC_DEFINE([HAVE_GCC_ATTRIBUTE_WARN_UNUSED_STL],[1])
-            AC_MSG_RESULT([yes])])
-    CXXFLAGS=$save_CXXFLAGS
-    AC_LANG_POP([C++])
-
     AC_MSG_CHECKING([whether $CXX supports __attribute__((warn_unused))])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
