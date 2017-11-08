@@ -958,7 +958,7 @@ void SAL_CALL SfxBaseController::dispose()
         SfxViewFrame* pFrame = m_pData->m_pViewShell->GetViewFrame() ;
         if ( pFrame && pFrame->GetViewShell() == m_pData->m_pViewShell )
             pFrame->GetFrame().SetIsClosing_Impl();
-        m_pData->m_pViewShell->DiscardClients_Impl();
+        m_pData->m_pViewShell->DisconnectAllClients();
 
         if ( pFrame )
         {

@@ -1028,9 +1028,6 @@ void SfxViewShell::SetWindow
     // Disconnect existing IP-Clients if possible
     DisconnectAllClients();
 
-    //TODO: should we have a "ReconnectAllClients" method?
-    DiscardClients_Impl();
-
     // Switch View-Port
     bool bHadFocus = pWindow && pWindow->HasChildPathFocus( true );
     pWindow = pViewPort;
@@ -1652,24 +1649,6 @@ void SfxViewShell::CheckIPClient_Impl(
             }
         }
     }
-}
-
-
-void SfxViewShell::DiscardClients_Impl()
-
-/*  [Description]
-
-    The purpose of this Method is to prevent the saving of Objects when closing
-    the Document, if the user has chosen to close without saving.
-*/
-
-{
-    SfxInPlaceClientList *pClients = pImpl->GetIPClientList_Impl(false);
-    if ( !pClients )
-        return;
-
-    for ( size_t n = 0; n < pClients->size(); )
-        delete pClients->at( n );
 }
 
 
