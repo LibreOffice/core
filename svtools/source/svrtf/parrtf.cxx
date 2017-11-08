@@ -159,9 +159,11 @@ int SvRTFParser::GetNextToken_()
                             if( 0 <= nTokenValue )
                             {
                                 nUCharOverread = (sal_uInt8)nTokenValue;
-                                //cmc: other ifdef breaks #i3584
-                                aParserStates.top().
-                                    nUCharOverread = nUCharOverread;
+                                if (!aParserStates.empty())
+                                {
+                                    //cmc: other ifdef breaks #i3584
+                                    aParserStates.top().nUCharOverread = nUCharOverread;
+                                }
                             }
                             aToken.clear(); // #i47831# erase token to prevent the token from being treated as text
                             // read next token
