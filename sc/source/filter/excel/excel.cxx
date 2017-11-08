@@ -280,4 +280,15 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportWKS(SvStream& rStream)
     return ScFormatFilter::Get().ScImportLotus123(aMedium, &aDocument, RTL_TEXTENCODING_ASCII_US) == ERRCODE_NONE;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDIF(SvStream &rStream)
+{
+    ScDLL::Init();
+    ScDocument aDocument;
+    ScDocOptions aDocOpt = aDocument.GetDocOptions();
+    aDocOpt.SetLookUpColRowNames(false);
+    aDocument.SetDocOptions(aDocOpt);
+    aDocument.MakeTable(0);
+    return ScFormatFilter::Get().ScImportDif(rStream, &aDocument, ScAddress(0, 0, 0), RTL_TEXTENCODING_IBM_850) == ERRCODE_NONE;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
