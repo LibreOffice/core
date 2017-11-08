@@ -35,7 +35,7 @@ XColorListRef XColorList::CreateStdColorList()
 {
     return XPropertyList::AsColorList(
         XPropertyList::CreatePropertyList(
-            XPropertyListType::Color, !utl::ConfigManager::IsAvoidConfig() ?
+            XPropertyListType::Color, !utl::ConfigManager::IsFuzzing() ?
                                           SvtPathOptions().GetPalettePath() :
                                           "", ""));
 }

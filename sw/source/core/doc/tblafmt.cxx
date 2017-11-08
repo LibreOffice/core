@@ -1257,7 +1257,7 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
 
 bool SwTableAutoFormatTable::Load()
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return false;
     bool bRet = false;
     OUString sNm(AUTOTABLE_FORMAT_NAME);
@@ -1274,7 +1274,7 @@ bool SwTableAutoFormatTable::Load()
 
 bool SwTableAutoFormatTable::Save() const
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return false;
     SvtPathOptions aPathOpt;
     const OUString sNm( aPathOpt.GetUserConfigPath() + "/" AUTOTABLE_FORMAT_NAME );

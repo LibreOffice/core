@@ -677,7 +677,7 @@ void ImplStyleData::SetStandardStyles()
     vcl::Font aStdFont( FAMILY_SWISS, Size( 0, 8 ) );
     aStdFont.SetCharSet( osl_getThreadTextEncoding() );
     aStdFont.SetWeight( WEIGHT_NORMAL );
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
         aStdFont.SetFamilyName(utl::DefaultFontConfiguration::get().getUserInterfaceFont(LanguageTag("en")));
     else
         aStdFont.SetFamilyName("Liberation Serif");
@@ -2656,7 +2656,7 @@ ImplAllSettingsData::ImplAllSettingsData()
     mpUILocaleDataWrapper       = nullptr;
     mpI18nHelper                = nullptr;
     mpUII18nHelper              = nullptr;
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
         maMiscSettings.SetEnableLocalizedDecimalSep( maSysLocale.GetOptions().IsDecimalSeparatorAsLocale() );
 }
 
@@ -2860,21 +2860,21 @@ namespace
 
 bool AllSettings::GetLayoutRTL()
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return false;
     return GetConfigLayoutRTL(false);
 }
 
 bool AllSettings::GetMathLayoutRTL()
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return false;
     return GetConfigLayoutRTL(true);
 }
 
 const LanguageTag& AllSettings::GetLanguageTag() const
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
     {
         static LanguageTag aRet("en-US");
         return aRet;
@@ -2889,7 +2889,7 @@ const LanguageTag& AllSettings::GetLanguageTag() const
 
 const LanguageTag& AllSettings::GetUILanguageTag() const
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
     {
         static LanguageTag aRet("en-US");
         return aRet;
@@ -3004,7 +3004,7 @@ StyleSettings::DetermineIconTheme() const
     OUString sTheme(mxData->mIconTheme);
     if (sTheme.isEmpty())
     {
-        if (utl::ConfigManager::IsAvoidConfig())
+        if (utl::ConfigManager::IsFuzzing())
             sTheme = "galaxy";
         else
         {

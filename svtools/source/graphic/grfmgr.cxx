@@ -155,7 +155,7 @@ void GraphicObject::ImplEnsureGraphicManager()
         sal_uLong nCacheSize = 20000;
         sal_uLong nMaxObjCacheSize = 20000;
         sal_uLong nTimeoutSeconds = 20000;
-        if (!utl::ConfigManager::IsAvoidConfig())
+        if (!utl::ConfigManager::IsFuzzing())
         {
             try
             {
@@ -378,7 +378,7 @@ void GraphicObject::SetUserData( const OUString& rUserData )
 
 static sal_uInt32 GetCacheTimeInMs()
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return 20000;
 
     const sal_uInt32 nSeconds =

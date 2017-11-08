@@ -652,7 +652,7 @@ void InitCore()
 
     pGlobalOLEExcludeList = new std::vector<SvGlobalName*>;
 
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
     {
         const SvxSwAutoFormatFlags& rAFlags = SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
         SwDoc::mpACmpltWords = new SwAutoCompleteWord( rAFlags.nAutoCmpltListLen,
@@ -762,7 +762,7 @@ void SwCalendarWrapper::LoadDefaultCalendar( LanguageType eLang )
 
 LanguageType GetAppLanguage()
 {
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
         return Application::GetSettings().GetLanguageTag().getLanguageType();
     return LANGUAGE_ENGLISH_US;
 }

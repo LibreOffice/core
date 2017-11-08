@@ -71,11 +71,11 @@ public:
 
     SAL_DLLPRIVATE void registerConfigItem(utl::ConfigItem * item);
 
-    // Avoid using the config layer and rely on defaults
-    // which is only useful for special test tool targets
-    // where start-up speed is of the essence
-    static bool IsAvoidConfig();
-    static void EnableAvoidConfig();
+    // Avoid using the config layer and rely on defaults which is only useful
+    // for special test tool targets (typically fuzzing) where start-up speed
+    // is of the essence
+    static bool IsFuzzing();
+    static void EnableFuzzing();
 
 private:
 

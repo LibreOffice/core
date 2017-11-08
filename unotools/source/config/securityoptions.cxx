@@ -284,7 +284,7 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
         {
             m_seqSecureURLs.realloc( 0 );
             rValue >>= m_seqSecureURLs;
-            if (!utl::ConfigManager::IsAvoidConfig())
+            if (!utl::ConfigManager::IsFuzzing())
             {
                 SvtPathOptions  aOpt;
                 sal_uInt32      nCount = m_seqSecureURLs.getLength();

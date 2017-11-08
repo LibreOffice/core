@@ -87,7 +87,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         if( !xServiceManager.is() )
             Application::Abort( "Failed to bootstrap" );
         comphelper::setProcessServiceFactory( xServiceManager );
-        utl::ConfigManager::EnableAvoidConfig();
+        utl::ConfigManager::EnableFuzzing();
         InitVCL();
 
         if (strcmp(argv[2], "wmf") == 0 || strcmp(argv[2], "emf") == 0)

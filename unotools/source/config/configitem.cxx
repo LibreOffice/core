@@ -157,7 +157,7 @@ ConfigItem::ConfigItem(const OUString &rSubTree, ConfigItemMode nSetMode ) :
     m_bEnableInternalNotification(false),
     m_nInValueChange(0)
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return;
 
     if (nSetMode & ConfigItemMode::ReleaseTree)
@@ -1113,7 +1113,7 @@ void    ConfigItem::ClearModified()
 Reference< XHierarchicalNameAccess> ConfigItem::GetTree()
 {
     Reference< XHierarchicalNameAccess> xRet;
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return xRet;
     if(!m_xHierarchyAccess.is())
         xRet = ConfigManager::acquireTree(*this);

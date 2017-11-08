@@ -482,7 +482,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int>& o
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 
     FcFontSet* pFSet = rWrapper.getFontSet();
-    const bool bMinimalFontset = utl::ConfigManager::IsAvoidConfig();
+    const bool bMinimalFontset = utl::ConfigManager::IsFuzzing();
     if( pFSet )
     {
 #if OSL_DEBUG_LEVEL > 1

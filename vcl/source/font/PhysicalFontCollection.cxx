@@ -424,7 +424,7 @@ void PhysicalFontCollection::ImplInitMatchData() const
         return;
     mbMatchData = true;
 
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return;
 
     // calculate MatchData for all entries
@@ -867,7 +867,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyOfDefaultFont() co
     // try to find one of the default fonts of the
     // UNICODE, SANSSERIF, SERIF or FIXED default font lists
     PhysicalFontFamily* pFoundData = nullptr;
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
     {
         const utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
         LanguageTag aLanguageTag("en");
@@ -1179,7 +1179,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
 
     // use font fallback
     const utl::FontNameAttr* pFontAttr = nullptr;
-    if (!aSearchName.isEmpty() && !utl::ConfigManager::IsAvoidConfig())
+    if (!aSearchName.isEmpty() && !utl::ConfigManager::IsFuzzing())
     {
         // get fallback info using FontSubstConfiguration and
         // the target name, it's shortened name and family name in that order
@@ -1203,7 +1203,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
     if( rFSD.IsSymbolFont() )
     {
         LanguageTag aDefaultLanguageTag("en");
-        if (utl::ConfigManager::IsAvoidConfig())
+        if (utl::ConfigManager::IsFuzzing())
             aSearchName = "OpenSymbol";
         else
             aSearchName = utl::DefaultFontConfiguration::get().getDefaultFont( aDefaultLanguageTag, DefaultFontType::SYMBOL );
@@ -1238,7 +1238,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
         }
 
         const utl::FontNameAttr* pTempFontAttr = nullptr;
-        if (!utl::ConfigManager::IsAvoidConfig())
+        if (!utl::ConfigManager::IsFuzzing())
         {
             // use a font name from font fallback list to determine font attributes
             // get fallback info using FontSubstConfiguration and

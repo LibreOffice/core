@@ -215,7 +215,7 @@ void SfxShell::SetUndoManager( ::svl::IUndoManager *pNewUndoMgr )
     // a supported scenario (/me thinks it is not), then we would need to notify all such clients instances.
 
     pUndoMgr = pNewUndoMgr;
-    if (pUndoMgr && !utl::ConfigManager::IsAvoidConfig())
+    if (pUndoMgr && !utl::ConfigManager::IsFuzzing())
     {
         pUndoMgr->SetMaxUndoActionCount(
             officecfg::Office::Common::Undo::Steps::get());

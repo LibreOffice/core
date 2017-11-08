@@ -564,7 +564,7 @@ bool ImplSdPPTImport::Import()
     // create master pages:
 
     std::unique_ptr<SfxProgress> xStbMgr;
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
     {
         xStbMgr.reset(new SfxProgress(pDocShell,
                         SdResId( STR_POWERPOINT_IMPORT),
@@ -1945,7 +1945,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                         if ( SeekToRec( rStCtrl, PPT_PST_SoundData, nStrLen, &aSoundDataRecHd ) )
                         {
                             OUString aGalleryDir;
-                            if (utl::ConfigManager::IsAvoidConfig())
+                            if (utl::ConfigManager::IsFuzzing())
                                 osl_getTempDirURL(&aGalleryDir.pData);
                             else
                                 aGalleryDir = SvtPathOptions().GetGalleryPath();

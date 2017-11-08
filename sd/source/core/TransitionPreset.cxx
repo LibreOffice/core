@@ -189,7 +189,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
 
 bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return false;
 
     bool bRet = false;

@@ -1334,7 +1334,7 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
 
 void SwDocShell::SetModified( bool bSet )
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return;
     SfxObjectShell::SetModified( bSet );
     if( IsEnableSetModified())

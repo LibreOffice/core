@@ -68,7 +68,7 @@ void InitDrawModelAndDocShell(SwDocShell* pSwDocShell, SwDrawModel* pSwDrawDocum
                     {
                         pSwDocShell->PutItem(SvxColorListItem(xColorList, SID_COLOR_TABLE));
                     }
-                    else if (!utl::ConfigManager::IsAvoidConfig())
+                    else if (!utl::ConfigManager::IsFuzzing())
                     {
                         // there wasn't one, get the standard and set to the
                         // docshell and then to the drawdocument

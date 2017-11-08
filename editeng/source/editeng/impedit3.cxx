@@ -4336,7 +4336,7 @@ const SvxLRSpaceItem& ImpEditEngine::GetLRSpaceItem( ContentNode* pNode )
 // text numeral setting:
 LanguageType ImpEditEngine::ImplCalcDigitLang(LanguageType eCurLang) const
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return LANGUAGE_ENGLISH_US;
 
     // #114278# Also setting up digit language from Svt options

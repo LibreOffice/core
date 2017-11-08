@@ -771,7 +771,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                     GDIMetaFile aMtf;
 
                     // if there is no preview -> try with gs to make one
-                    if (!bHasPreview && !utl::ConfigManager::IsAvoidConfig())
+                    if (!bHasPreview && !utl::ConfigManager::IsFuzzing())
                     {
                         bHasPreview = RenderAsEMF(pBuf.get(), nBytesRead, aGraphic);
                         if (!bHasPreview)
