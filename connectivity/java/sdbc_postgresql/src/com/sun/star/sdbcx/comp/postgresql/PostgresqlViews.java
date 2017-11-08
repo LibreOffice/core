@@ -61,7 +61,7 @@ public class PostgresqlViews extends OContainer {
     protected XPropertySet createObject(String name) throws SQLException {
         NameComponents nameComponents = DbTools.qualifiedNameComponents(metadata, name, ComposeRule.InDataManipulation);
 
-        String sql = "SELECT view_definition,check_option FROM INFORMATION_SCHEMA.views WHERE ";
+        String sql = "SELECT view_definition,check_option FROM information_schema.views WHERE ";
         if (!nameComponents.getCatalog().isEmpty()) {
             sql += "table_catalog=? AND ";
         }

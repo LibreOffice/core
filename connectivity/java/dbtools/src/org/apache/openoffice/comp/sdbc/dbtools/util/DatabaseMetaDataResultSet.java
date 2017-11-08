@@ -19,9 +19,12 @@
  *
  *************************************************************/
 
-package com.sun.star.sdbcx.comp.postgresql.util;
+package org.apache.openoffice.comp.sdbc.dbtools.util;
 
 import java.util.ArrayList;
+
+import org.apache.openoffice.comp.sdbc.dbtools.util.ORowSetValue;
+import org.apache.openoffice.comp.sdbc.dbtools.util.StandardSQLState;
 
 import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.UnknownPropertyException;
@@ -48,7 +51,6 @@ import com.sun.star.sdbc.XRow;
 import com.sun.star.sdbcx.CompareBookmark;
 import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.sdbcx.XRowLocate;
-import com.sun.star.sdbcx.comp.postgresql.PostgresqlResultSetMetaData;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.Date;
@@ -230,7 +232,7 @@ public class DatabaseMetaDataResultSet extends ComponentBase
 
     public synchronized XResultSetMetaData getMetaData() throws SQLException {
         checkDisposed();
-        return new PostgresqlResultSetMetaData(implResultSetMetaDataSupplier.getMetaData());
+        return implResultSetMetaDataSupplier.getMetaData();
     }
 
     // XRow:

@@ -26,6 +26,7 @@ import java.io.UnsupportedEncodingException;
 
 import com.sun.star.io.IOException;
 import com.sun.star.io.XInputStream;
+import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XBlob;
@@ -33,6 +34,7 @@ import com.sun.star.sdbc.XClob;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.Date;
 import com.sun.star.util.DateTime;
@@ -292,9 +294,181 @@ public class ORowSetValue {
         }
     }
 
-    public Any getAny() {
-        Any any = (Any)value;
-        return new Any(any.getType(), any.getObject());
+    public void fill(Object any) {
+        final Type type = AnyConverter.getType(any);
+
+        switch (type.getTypeClass().getValue()) {
+        case TypeClass.VOID_value:
+            setNull();
+            break;
+        case TypeClass.BOOLEAN_value: {
+            boolean value = false;
+            try {
+                value = AnyConverter.toBoolean(any);
+            } catch (IllegalArgumentException illegalArgumentException) {
+            }
+            setBoolean(value);
+            break;
+        }
+        case TypeClass.CHAR_value: {
+            char value = 0;
+            try {
+                value = AnyConverter.toChar(any);
+            } catch (IllegalArgumentException illegalArgumentException) {
+            }
+            setString(Character.toString(value));
+            break;
+        }
+        case TypeClass.STRING_value: {
+            String value = "";
+            try {
+                value = AnyConverter.toString(any);
+            } catch (IllegalArgumentException illegalArgumentException) {
+            }
+            setString(value);
+            break;
+        }
+        case TypeClass.FLOAT_value: {
+            float value = 0.0f;
+            try {
+                value = AnyConverter.toFloat(any);
+            } catch (IllegalArgumentException illegalArgumentException) {
+            }
+            setFloat(value);
+            break;
+        }
+        case TypeClass.DOUBLE_value: {
+            double value = 0.0;
+            try {
+                value = AnyConverter.toDouble(any);
+            } catch (IllegalArgumentException illegalArgumentException) {
+            }
+            setDouble(value);
+            break;
+        }
+        case TypeClass.BYTE_value: {
+            byte value = 0;
+            try {
+                value = AnyConverter.toByte(any);
+            } catch (IllegalArgumentException illegalArgumentException) {
+            }
+            setInt8(value);
+            break;
+        }
+        case TypeClass.SHORT_value: {
+            short value = 0;
+            try {
+                AnyConverter.toShort(any);
+            } catch (IllegalArgumentException illegalArgumentException) {
+            }
+            setInt16(value);
+            break;
+        }
+        case TypeClass.UNSIGNED_SHORT_value: {
+            short value = 0;
+            try {
+                AnyConverter.toUnsignedShort(any);
+            } catch (IllegalArgumentException illegalArgumentException) {
+            }
+            setInt16(value);
+            setSigned(false);
+            break;
+        }
+        case TypeClass.LONG_value: {
+            int value = 0;
+            try {
+                value = AnyConverter.toInt(any);
+            } catch (IllegalArgumentException illegalArgumentException) {
+            }
+            setInt32(value);
+            break;
+        }
+        case TypeClass.UNSIGNED_LONG_value: {
+            int value = 0;
+            try {
+                value = AnyConverter.toUnsignedInt(any);
+            } catch (IllegalArgumentException illegalArgumentException) {
+            }
+            setInt32(value);
+            setSigned(false);
+            break;
+        }
+        case TypeClass.HYPER_value: {
+            long value = 0;
+            try {
+                value = AnyConverter.toLong(any);
+            } catch (IllegalArgumentException illegalArgumentException) {
+            }
+            setLong(value);
+            break;
+        }
+        case TypeClass.UNSIGNED_HYPER_value: {
+            long value = 0;
+            try {
+                value = AnyConverter.toUnsignedLong(any);
+            } catch (IllegalArgumentException illegalArgumentException) {
+            }
+            setLong(value);
+            setSigned(false);
+            break;
+        }
+        case TypeClass.ENUM_value: {
+            // FIXME: is this how an enum is unboxed from Any?
+            int value = 0;
+            try {
+                Object object = AnyConverter.toObject(type, any);
+                if (object instanceof com.sun.star.uno.Enum) {
+                    value = ((com.sun.star.uno.Enum)object).getValue();
+                }
+            } catch (IllegalArgumentException illegalArgumentException) {
+            }
+            setInt32(value);
+            break;
+        }
+        case TypeClass.SEQUENCE_value: {
+            byte[] value = new byte[0];
+            try {
+                Object array = AnyConverter.toArray(value);
+                if (array instanceof byte[]) {
+                    value = (byte[]) array;
+                }
+            } catch (IllegalArgumentException illegalArgumentException) {
+            }
+            setSequence(value);
+            break;
+        }
+        case TypeClass.STRUCT_value:
+        case TypeClass.INTERFACE_value: {
+            try {
+                Object object = AnyConverter.toObject(Object.class, any);
+                if (object instanceof Date) {
+                    setDate((Date)object);
+                } else if (object instanceof Time) {
+                    setTime((Time)object);
+                } else if (object instanceof DateTime) {
+                    setDateTime((DateTime)object);
+                } else {
+                    XClob clob = UnoRuntime.queryInterface(XClob.class, object);
+                    if (clob != null) {
+                        setAny(clob);
+                    } else {
+                        XBlob blob = UnoRuntime.queryInterface(XBlob.class, object);
+                        if (blob != null) {
+                            setAny(blob);
+                        }
+                    }
+                }
+            } catch (IllegalArgumentException illegalArgumentException) {
+            }
+            break;
+        }
+        default:
+            // unknown type
+        }
+    }
+
+    public Object getAny() {
+        return value;
     }
 
     public boolean getBoolean() {
@@ -996,9 +1170,9 @@ public class ORowSetValue {
         return aValue;
     }
 
-    public void setAny(Any value) {
+    public void setAny(Object value) {
         flags &= ~FLAG_NULL;
-        this.value = new Any(value.getType(), value.getObject());
+        this.value = value;
         typeKind = DataType.OBJECT;
     }
 
@@ -1076,7 +1250,7 @@ public class ORowSetValue {
     }
 
     public Object makeAny() {
-        Object rValue = new Any(Type.VOID, null);
+        Object rValue = Any.VOID;
         if(isBound() && !isNull()) {
             switch (getTypeKind()) {
             case DataType.CHAR:

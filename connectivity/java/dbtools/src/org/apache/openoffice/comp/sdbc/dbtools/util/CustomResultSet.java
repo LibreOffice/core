@@ -19,24 +19,16 @@
  *
  *************************************************************/
 
-package com.sun.star.sdbcx.comp.postgresql;
+package org.apache.openoffice.comp.sdbc.dbtools.util;
 
 import java.util.ArrayList;
 
-import org.apache.openoffice.comp.sdbc.dbtools.util.ORowSetValue;
-import org.apache.openoffice.comp.sdbc.dbtools.util.StandardSQLState;
+import org.apache.openoffice.comp.sdbc.dbtools.comphelper.PropertySet;
 
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.beans.XPropertyChangeListener;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.XPropertySetInfo;
-import com.sun.star.beans.XVetoableChangeListener;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.io.XInputStream;
 import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lib.uno.helper.ComponentBase;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XArray;
 import com.sun.star.sdbc.XBlob;
@@ -49,44 +41,30 @@ import com.sun.star.sdbc.XResultSetMetaData;
 import com.sun.star.sdbc.XResultSetMetaDataSupplier;
 import com.sun.star.sdbc.XRow;
 import com.sun.star.sdbcx.CompareBookmark;
-import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.sdbcx.XRowLocate;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.Date;
 import com.sun.star.util.DateTime;
 import com.sun.star.util.Time;
 
-public class DatabaseMetaDataResultSet extends ComponentBase
-        implements XResultSet, XCloseable, XColumnsSupplier, XRowLocate, XPropertySet, XColumnLocate, XRow, XResultSetMetaDataSupplier {
+public class CustomResultSet extends PropertySet
+        implements XResultSet, XCloseable, XRowLocate, XPropertySet, XColumnLocate, XRow, XResultSetMetaDataSupplier {
 
-    private XCloseable implCloseable;
-    private XResultSetMetaDataSupplier implResultSetMetaDataSupplier;
-    private XColumnLocate implColumnLocate;
-    private XPropertySet implPropertySet;
-    private XColumnsSupplier implColumnSupplier;
+    private XResultSetMetaData resultSetMetaData;
     private ArrayList<ORowSetValue[]> rows;
     /// 0-based:
     private int currentRow = -1;
     /// 1-based:
     private int currentColumn;
 
-    public DatabaseMetaDataResultSet(XResultSet impl, ArrayList<ORowSetValue[]> rows) {
-        implCloseable = UnoRuntime.queryInterface(XCloseable.class, impl);
-        implPropertySet = UnoRuntime.queryInterface(XPropertySet.class, impl);
-        implColumnSupplier = UnoRuntime.queryInterface(XColumnsSupplier.class, impl);
-        implColumnLocate = UnoRuntime.queryInterface(XColumnLocate.class, impl);
-        implResultSetMetaDataSupplier = UnoRuntime.queryInterface(XResultSetMetaDataSupplier.class, impl);
+    public CustomResultSet(XResultSetMetaData resultSetMetaData, ArrayList<ORowSetValue[]> rows) {
+        this.resultSetMetaData = resultSetMetaData;
         this.rows = rows;
     }
 
     // XComponent:
     @Override
     protected void postDisposing() {
-        try {
-            implCloseable.close();
-        } catch (SQLException sqlException) {
-        }
     }
 
     // XCloseable:
@@ -232,7 +210,7 @@ public class DatabaseMetaDataResultSet extends ComponentBase
 
     public synchronized XResultSetMetaData getMetaData() throws SQLException {
         checkDisposed();
-        return new PostgresqlResultSetMetaData(implResultSetMetaDataSupplier.getMetaData());
+        return resultSetMetaData;
     }
 
     // XRow:
@@ -353,47 +331,24 @@ public class DatabaseMetaDataResultSet extends ComponentBase
 
     // XColumnLocate:
 
-    public synchronized int findColumn(String arg0) throws SQLException {
+    public synchronized int findColumn(String name) throws SQLException {
         checkDisposed();
-        return implColumnLocate.findColumn(arg0);
-    }
-
-    // XPropertySet:
-
-    public synchronized void addPropertyChangeListener(String arg0, XPropertyChangeListener arg1) throws UnknownPropertyException, WrappedTargetException {
-        checkDisposed();
-        implPropertySet.addPropertyChangeListener(arg0, arg1);
-    }
-
-    public synchronized void addVetoableChangeListener(String arg0, XVetoableChangeListener arg1) throws UnknownPropertyException, WrappedTargetException {
-        checkDisposed();
-        implPropertySet.addVetoableChangeListener(arg0, arg1);
-    }
-
-    public synchronized XPropertySetInfo getPropertySetInfo() {
-        checkDisposed();
-        return implPropertySet.getPropertySetInfo();
-    }
-
-    public synchronized Object getPropertyValue(String arg0) throws UnknownPropertyException, WrappedTargetException {
-        checkDisposed();
-        return implPropertySet.getPropertyValue(arg0);
-    }
-
-    public synchronized void removePropertyChangeListener(String arg0, XPropertyChangeListener arg1) throws UnknownPropertyException, WrappedTargetException {
-        checkDisposed();
-        implPropertySet.removePropertyChangeListener(arg0, arg1);
-    }
-
-    public synchronized void removeVetoableChangeListener(String arg0, XVetoableChangeListener arg1) throws UnknownPropertyException, WrappedTargetException {
-        checkDisposed();
-        implPropertySet.removeVetoableChangeListener(arg0, arg1);
-    }
-
-    public synchronized void setPropertyValue(String arg0, Object arg1)
-            throws UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException {
-        checkDisposed();
-        implPropertySet.setPropertyValue(arg0, arg1);
+        for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
+            boolean isCaseSensitive = resultSetMetaData.isCaseSensitive(i);
+            String columnName = resultSetMetaData.getColumnName(i);
+            boolean matched;
+            if (isCaseSensitive) {
+                matched = columnName.equals(name);
+            } else {
+                matched = columnName.equalsIgnoreCase(name);
+            }
+            if (matched) {
+                return i;
+            }
+        }
+        String error = SharedResources.getInstance().getResourceStringWithSubstitution(
+                Resources.STR_UNKNOWN_COLUMN_NAME, "$columnname$", name);
+        throw new SQLException(error, this, StandardSQLState.SQL_COLUMN_NOT_FOUND.text(), 0, null);
     }
 
     // XRowLocate:
@@ -470,12 +425,5 @@ public class DatabaseMetaDataResultSet extends ComponentBase
             afterLast();
         }
         return moved;
-    }
-
-    // XColumnSupplier:
-
-    public synchronized XNameAccess getColumns() {
-        checkDisposed();
-        return implColumnSupplier.getColumns();
     }
 }

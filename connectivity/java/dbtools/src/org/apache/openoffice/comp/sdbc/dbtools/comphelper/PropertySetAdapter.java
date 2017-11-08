@@ -19,7 +19,7 @@
  *
  *************************************************************/
 
-package com.sun.star.sdbcx.comp.postgresql.comphelper;
+package org.apache.openoffice.comp.sdbc.dbtools.comphelper;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -65,11 +65,11 @@ public class PropertySetAdapter implements XPropertySet, XFastPropertySet, XMult
     private final PropertySetInfo propertySetInfo = new PropertySetInfo();
 
     public static interface PropertyGetter {
-        Object getValue();
+        Object getValue() throws WrappedTargetException;
     }
 
     public static interface PropertySetter {
-        void setValue(Object value);
+        void setValue(Object value) throws PropertyVetoException, IllegalArgumentException, WrappedTargetException;
     }
 
     private static class PropertyData {
@@ -194,7 +194,7 @@ public class PropertySetAdapter implements XPropertySet, XFastPropertySet, XMult
         return propertyData;
     }
 
-    private Object getPropertyValue(PropertyData propertyData) {
+    private Object getPropertyValue(PropertyData propertyData) throws WrappedTargetException {
         Object ret;
         synchronized (lock) {
             ret = propertyData.getter.getValue();

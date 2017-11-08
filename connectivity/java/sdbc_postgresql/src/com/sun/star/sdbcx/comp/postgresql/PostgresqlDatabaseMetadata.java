@@ -140,7 +140,7 @@ public class PostgresqlDatabaseMetadata extends WeakBase implements XDatabaseMet
             rowOut[17] = new ORowSetValue(isNullable);
             table.add(rowOut);
         }
-        return new DatabaseMetaDataResultSet(results, table);
+        return new PostgresqlDatabaseMetaDataResultSet(results, table);
     }
 
     public XConnection getConnection() throws SQLException {
@@ -399,7 +399,7 @@ public class PostgresqlDatabaseMetadata extends WeakBase implements XDatabaseMet
             table.add(rowOut);
             //System.out.println(String.format("type %s, data type %d, SQL type %d, precision %d, createParams %s", typeName, dataType, sqlDataType, precision, createParams));
         }
-        return new DatabaseMetaDataResultSet(results, table);
+        return new PostgresqlDatabaseMetaDataResultSet(results, table);
     }
 
     public XResultSet getUDTs(Object arg0, String arg1, String arg2, int[] arg3) throws SQLException {

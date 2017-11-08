@@ -713,6 +713,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,\
     offapi/com/sun/star/sdb/Forms \
     offapi/com/sun/star/sdb/OfficeDatabaseDocument \
     offapi/com/sun/star/sdb/OrderColumn \
+    offapi/com/sun/star/sdb/ParameterSubstitution \
     offapi/com/sun/star/sdb/PreparedStatement \
     offapi/com/sun/star/sdb/Query \
     offapi/com/sun/star/sdb/QueryDefinition \

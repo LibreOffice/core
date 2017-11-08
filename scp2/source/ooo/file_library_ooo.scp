@@ -796,7 +796,12 @@ End
 
 #ifdef SOLAR_JAVA
 
-STD_LIB_FILE( gid_File_Lib_Jdbc, jdbc)
+#ifndef SYSTEM_APACHE_COMMONS
+STD_JAR_FILE( gid_File_Jar_Apache_Commons_Lang, commons-lang3-3.3 )
+#endif
+STD_JAR_FILE( gid_File_Jar_DbTools_Sdbc, dbtools )
+STD_JAR_FILE( gid_File_Jar_Jdbc_Sdbc, sdbc_jdbc )
+STD_JAR_FILE( gid_File_Jar_PostgreSQL_Sdbc, sdbc_postgresql )
 
 #endif
 

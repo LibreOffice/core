@@ -36,6 +36,8 @@ import com.sun.star.container.ElementExistException;
 import com.sun.star.container.XChild;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.io.IOException;
+import com.sun.star.io.XInputStream;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.WrappedTargetException;
@@ -47,10 +49,12 @@ import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XDataSource;
 import com.sun.star.sdbc.XDatabaseMetaData;
+import com.sun.star.sdbc.XParameters;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XResultSetMetaData;
 import com.sun.star.sdbc.XResultSetMetaDataSupplier;
 import com.sun.star.sdbc.XRow;
+import com.sun.star.sdbc.XRowUpdate;
 import com.sun.star.sdbc.XStatement;
 import com.sun.star.sdbcx.KeyType;
 import com.sun.star.sdbcx.XAppend;
@@ -58,17 +62,17 @@ import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.sdbcx.XKeysSupplier;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.Date;
+import com.sun.star.util.DateTime;
+import com.sun.star.util.Time;
 
 public class DbTools {
     private static class NameComponentSupport {
         boolean useCatalogs;
         boolean useSchemas;
-
-        NameComponentSupport() {
-            useCatalogs = true;
-            useSchemas = true;
-        }
 
         NameComponentSupport(boolean useCatalogs, boolean useSchemas) {
             this.useCatalogs = useCatalogs;
@@ -758,6 +762,176 @@ public class DbTools {
             } catch (WrappedTargetException | IndexOutOfBoundsException | IllegalArgumentException | ElementExistException exception) {
                 throw new SQLException("Error", Any.VOID, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
             }
+        }
+    }
+
+    public static boolean updateObject(XRowUpdate updatedObject, int columnIndex, Object value) throws SQLException {
+        try {
+            boolean successfullyReRouted = true;
+            Type type = AnyConverter.getType(value);
+            switch (type.getTypeClass().getValue()) {
+            case TypeClass.VOID_value:
+                updatedObject.updateNull(columnIndex);
+                break;
+            case TypeClass.STRING_value:
+                updatedObject.updateString(columnIndex, AnyConverter.toString(value));
+                break;
+            case TypeClass.BOOLEAN_value:
+                updatedObject.updateBoolean(columnIndex, AnyConverter.toBoolean(value));
+                break;
+            case TypeClass.BYTE_value:
+                updatedObject.updateByte(columnIndex, AnyConverter.toByte(value));
+                break;
+            case TypeClass.UNSIGNED_SHORT_value:
+                updatedObject.updateShort(columnIndex, AnyConverter.toUnsignedShort(value));
+                break;
+            case TypeClass.SHORT_value:
+                updatedObject.updateShort(columnIndex, AnyConverter.toShort(value));
+                break;
+            case TypeClass.CHAR_value:
+                updatedObject.updateString(columnIndex, Character.toString(AnyConverter.toChar(value)));
+                break;
+            case TypeClass.UNSIGNED_LONG_value:
+                updatedObject.updateInt(columnIndex, AnyConverter.toUnsignedInt(value));
+                break;
+            case TypeClass.LONG_value:
+                updatedObject.updateInt(columnIndex, AnyConverter.toInt(value));
+                break;
+            case TypeClass.UNSIGNED_HYPER_value:
+                updatedObject.updateLong(columnIndex, AnyConverter.toUnsignedLong(value));
+                break;
+            case TypeClass.HYPER_value:
+                updatedObject.updateLong(columnIndex, AnyConverter.toLong(value));
+                break;
+            case TypeClass.FLOAT_value:
+                updatedObject.updateFloat(columnIndex, AnyConverter.toFloat(value));
+                break;
+            case TypeClass.DOUBLE_value:
+                updatedObject.updateDouble(columnIndex, AnyConverter.toDouble(value));
+                break;
+            case TypeClass.SEQUENCE_value:
+                if (AnyConverter.isArray(value)) {
+                    Object array = AnyConverter.toArray(value);
+                    if (array instanceof byte[]) {
+                        updatedObject.updateBytes(columnIndex, (byte[]) array);
+                    } else {
+                        successfullyReRouted = false;
+                    }
+                } else {
+                    successfullyReRouted = false;
+                }
+                break;
+            case TypeClass.STRUCT_value:
+                Object object = AnyConverter.toObject(Object.class, value);
+                if (object instanceof Date) {
+                    updatedObject.updateDate(columnIndex, (Date)object);
+                } else if (object instanceof Time) {
+                    updatedObject.updateTime(columnIndex, (Time)object);
+                } else if (object instanceof DateTime) {
+                    updatedObject.updateTimestamp(columnIndex, (DateTime)object);
+                } else {
+                    successfullyReRouted = false;
+                }
+                break;
+            case TypeClass.INTERFACE_value:
+                XInputStream inputStream = UnoRuntime.queryInterface(XInputStream.class, AnyConverter.toObject(Object.class, value));
+                if (inputStream != null) {
+                    updatedObject.updateBinaryStream(columnIndex, inputStream, inputStream.available());
+                } else {
+                    successfullyReRouted = false;
+                }
+                break;
+            default:
+                successfullyReRouted = false;
+            }
+            return successfullyReRouted;
+        } catch (IllegalArgumentException | IOException exception) {
+            throw new SQLException("Error", Any.VOID, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
+        }
+    }
+
+    public static boolean setObject(XParameters parameters, int index, Object any) throws SQLException {
+        Type type = AnyConverter.getType(any);
+        try {
+            boolean successfullyReRouted = true;
+            switch (type.getTypeClass().getValue()) {
+            case TypeClass.HYPER_value:
+                parameters.setLong(index, AnyConverter.toLong(any));
+                break;
+            case TypeClass.UNSIGNED_HYPER_value:
+                parameters.setLong(index, AnyConverter.toUnsignedLong(any));
+                break;
+            case TypeClass.VOID_value:
+                parameters.setNull(index, DataType.VARCHAR);
+                break;
+            case TypeClass.STRING_value:
+                parameters.setString(index, AnyConverter.toString(any));
+                break;
+            case TypeClass.BOOLEAN_value:
+                parameters.setBoolean(index, AnyConverter.toBoolean(any));
+                break;
+            case TypeClass.BYTE_value:
+                parameters.setByte(index, AnyConverter.toByte(any));
+                break;
+            case TypeClass.SHORT_value:
+                parameters.setShort(index, AnyConverter.toShort(any));
+                break;
+            case TypeClass.UNSIGNED_SHORT_value:
+                parameters.setShort(index, AnyConverter.toUnsignedShort(any));
+                break;
+            case TypeClass.CHAR_value:
+                parameters.setString(index, Character.toString(AnyConverter.toChar(any)));
+                break;
+            case TypeClass.LONG_value:
+                parameters.setInt(index, AnyConverter.toInt(any));
+                break;
+            case TypeClass.UNSIGNED_LONG_value:
+                parameters.setInt(index, AnyConverter.toUnsignedInt(any));
+                break;
+            case TypeClass.FLOAT_value:
+                parameters.setFloat(index, AnyConverter.toFloat(any));
+                break;
+            case TypeClass.DOUBLE_value:
+                parameters.setDouble(index, AnyConverter.toDouble(any));
+                break;
+            case TypeClass.SEQUENCE_value:
+                if (AnyConverter.isArray(any)) {
+                    Object array = AnyConverter.toArray(any);
+                    if (array instanceof byte[]) {
+                        parameters.setBytes(index, (byte[])array);
+                    } else {
+                        successfullyReRouted = false;
+                    }
+                } else {
+                    successfullyReRouted = false;
+                }
+                break;
+            case TypeClass.STRUCT_value:
+                Object object = AnyConverter.toObject(Object.class, any);
+                if (object instanceof Date) {
+                    parameters.setDate(index, (Date)object);
+                } else if (object instanceof Time) {
+                    parameters.setTime(index, (Time)object);
+                } else if (object instanceof DateTime) {
+                    parameters.setTimestamp(index, (DateTime)object);
+                } else {
+                    successfullyReRouted = false;
+                }
+                break;
+            case TypeClass.INTERFACE_value:
+                XInputStream inputStream = UnoRuntime.queryInterface(XInputStream.class, AnyConverter.toObject(Object.class, any));
+                if (inputStream != null) {
+                    parameters.setBinaryStream(index, inputStream, inputStream.available());
+                } else {
+                    successfullyReRouted = false;
+                }
+                break;
+            default:
+                successfullyReRouted = false;
+            }
+            return successfullyReRouted;
+        } catch (IllegalArgumentException | IOException exception) {
+            throw new SQLException("Error", Any.VOID, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
         }
     }
 }

@@ -14,7 +14,6 @@
 ..\source\drivers\file\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\flat\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\dbase\*.xml %_DEST%\xml%_EXT%\*.xml
-..\source\drivers\jdbc\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\odbc\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\evoab2\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\calc\*.xml %_DEST%\xml%_EXT%\*.xml
@@ -22,6 +21,7 @@
 ..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
 ..\%__SRC%\class\dbtools\*.jar %_DEST%\bin%_EXT%\*.jar
 ..\%__SRC%\class\sdbc_hsqldb\*.jar %_DEST%\bin%_EXT%\*.jar
+..\%__SRC%\class\sdbc_jdbc\*.jar %_DEST%\bin%_EXT%\*.jar
 ..\%__SRC%\class\sdbc_postgresql\*.jar %_DEST%\bin%_EXT%\*.jar
 
 mkdir: %_DEST%\inc%_EXT%\connectivity
