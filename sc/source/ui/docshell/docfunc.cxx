@@ -27,6 +27,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
 #include <svl/PasswordHelper.hxx>
+#include <o3tl/make_unique.hxx>
+#include <svx/svdocapt.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
@@ -1224,6 +1226,7 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
     if (rDoc.IsStreamValid(rPos.Tab()))
         rDoc.SetStreamValid(rPos.Tab(), false);
 
+    ScDocShell::GetViewData()->GetScDrawView()->SyncForGrid(pNote->GetCaption());
     rDocShell.SetDocumentModified();
 
     return true;

@@ -27,6 +27,7 @@
 
 class SdrModel;
 class SdrObject;
+class ScDrawView;
 
 class ScNoteMarker
 {
@@ -45,6 +46,7 @@ private:
     bool        bByKeyboard;
 
     Rectangle       aRect;
+    ScDrawView*     aDrawView;
     SdrModel*       pModel;
     SdrObject*      pObject;
     bool            bVisible;
@@ -54,7 +56,7 @@ private:
 public:
                 ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window* pBottom, vcl::Window* pDiagonal,
                                 ScDocument* pD, ScAddress aPos, const OUString& rUser,
-                                const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard );
+                                const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard, ScDrawView * pDrawView );
                 ~ScNoteMarker();
 
     void        Draw();
@@ -62,7 +64,6 @@ public:
 
     const ScAddress& GetDocPos() const       { return aDocPos; }
     bool        IsByKeyboard() const    { return bByKeyboard; }
-    void        SetGridOff( const Point& rOff ) { aGridOff = rOff; }
 };
 
 #endif
