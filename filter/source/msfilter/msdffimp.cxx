@@ -4245,16 +4245,16 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         Scale( r );
         Scale( u );
         aObjData.aChildAnchor = tools::Rectangle( l, o, r, u );
-        if ( !rGlobalChildRect.IsEmpty() && !rClientRect.IsEmpty() && rGlobalChildRect.GetWidth() && rGlobalChildRect.GetHeight() )
+        sal_Int32 nWidth, nHeight;
+        if (!rGlobalChildRect.IsEmpty() && !rClientRect.IsEmpty() && rGlobalChildRect.GetWidth() && rGlobalChildRect.GetHeight() &&
+            !o3tl::checked_sub(r, l, nWidth) && !o3tl::checked_sub(u, o, nHeight))
         {
-            double fWidth = r - l;
-            double fHeight= u - o;
             double fXScale = (double)rClientRect.GetWidth() / (double)rGlobalChildRect.GetWidth();
             double fYScale = (double)rClientRect.GetHeight() / (double)rGlobalChildRect.GetHeight();
             double fl = ( ( l - rGlobalChildRect.Left() ) * fXScale ) + rClientRect.Left();
             double fo = ( ( o - rGlobalChildRect.Top()  ) * fYScale ) + rClientRect.Top();
-            fWidth *= fXScale;
-            fHeight *= fYScale;
+            double fWidth = nWidth * fXScale;
+            double fHeight = nHeight * fYScale;
             aObjData.aChildAnchor = tools::Rectangle( Point( (sal_Int32)fl, (sal_Int32)fo ), Size( (sal_Int32)( fWidth + 1 ), (sal_Int32)( fHeight + 1 ) ) );
         }
     }
