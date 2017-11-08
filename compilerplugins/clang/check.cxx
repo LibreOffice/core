@@ -214,18 +214,6 @@ bool isExtraWarnUnusedType(clang::QualType type) {
     if (rec == nullptr) {
         return false;
     }
-    if (rec->hasAttrs()) {
-        // Clang currently has no support for custom attributes, but the
-        // annotate attribute comes close, so check for
-        // __attribute__((annotate("lo_warn_unused"))):
-        for (auto i = rec->specific_attr_begin<clang::AnnotateAttr>(),
-                 e = rec->specific_attr_end<clang::AnnotateAttr>();
-             i != e; ++i) {
-            if ((*i)->getAnnotation() == "lo_warn_unused") {
-                return true;
-            }
-        }
-    }
     auto const tc = TypeCheck(rec);
     // Check some common non-LO types:
     if (tc.Class("string").Namespace("std").GlobalNamespace()
