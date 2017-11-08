@@ -1215,6 +1215,7 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
 
     ScTabView::OnLOKNoteStateChanged(pNote);
 
+    rDocShell.GetViewData()->GetScDrawView()->SyncForGrid(pNote->GetCaption());
     rDocShell.SetDocumentModified();
 
     return true;
