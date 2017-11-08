@@ -30,6 +30,8 @@
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ucb/XContentProvider.hpp>
+#include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <unotools/configmgr.hxx>
 #include <vcl/dibtools.hxx>
@@ -88,6 +90,16 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             Application::Abort( "Failed to bootstrap" );
         comphelper::setProcessServiceFactory( xServiceManager );
         utl::ConfigManager::EnableAvoidConfig();
+
+        // initialise unconfigured UCB:
+        css::uno::Reference<css::ucb::XUniversalContentBroker> xUcb(comphelper::getProcessServiceFactory()->
+            createInstance("com.sun.star.ucb.UniversalContentBroker"), css::uno::UNO_QUERY_THROW);
+        css::uno::Sequence<css::uno::Any> aArgs(1);
+        aArgs[0] <<= OUString("NoConfig");
+        css::uno::Reference<css::ucb::XContentProvider> xFileProvider(comphelper::getProcessServiceFactory()->
+            createInstanceWithArguments("com.sun.star.ucb.FileContentProvider", aArgs), css::uno::UNO_QUERY_THROW);
+        xUcb->registerContentProvider(xFileProvider, "file", true);
+
         InitVCL();
 
         if (strcmp(argv[2], "wmf") == 0 || strcmp(argv[2], "emf") == 0)
