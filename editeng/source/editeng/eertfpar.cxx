@@ -340,13 +340,17 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     {
         // the correct one
         long nEsc = static_cast<const SvxEscapementItem*>(pItem)->GetEsc();
-
+        long nEscFontHeight = 0;
         if( ( DFLT_ESC_AUTO_SUPER != nEsc ) && ( DFLT_ESC_AUTO_SUB != nEsc ) )
         {
             nEsc *= 10; //HalfPoints => Twips was embezzled in RTFITEM.CXX!
             SvxFont aFont;
             mpEditEngine->SeekCursor(aStartPaM.GetNode(), aStartPaM.GetIndex()+1, aFont);
-            nEsc = nEsc * 100 / aFont.GetFontSize().Height();
+            nEscFontHeight = aFont.GetFontSize().Height();
+        }
+        if (nEscFontHeight)
+        {
+            nEsc = nEsc * 100 / nEscFontHeight;
 
             SvxEscapementItem aEscItem( (short) nEsc, static_cast<const SvxEscapementItem*>(pItem)->GetProportionalHeight(), EE_CHAR_ESCAPEMENT );
             rSet.GetAttrSet().Put( aEscItem );
