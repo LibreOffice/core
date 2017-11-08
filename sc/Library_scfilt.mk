@@ -152,9 +152,6 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/rtf/rtfexp \
 	sc/source/filter/rtf/rtfimp \
 	sc/source/filter/rtf/rtfparse \
-	sc/source/filter/starcalc/collect \
-	sc/source/filter/starcalc/scflt \
-	sc/source/filter/starcalc/scfobj \
 	sc/source/filter/xcl97/XclExpChangeTrack \
 	sc/source/filter/xcl97/XclImpChangeTrack \
 	sc/source/filter/xcl97/xcl97esc \
