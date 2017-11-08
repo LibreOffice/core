@@ -125,8 +125,6 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
-#include <IDocumentFieldsAccess.hxx>
-#include <reffld.hxx>
 
 #include <osl/file.hxx>
 #include <vcl/embeddedfontshelper.hxx>
@@ -596,10 +594,9 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     if( !m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen() )
         m_bParagraphOpened = false;
 
-    // Clear generated bookmarks
-    m_aBookmarksWithPosStart.clear();
-    m_aBookmarksWithPosEnd.clear();
-
+    // Clear bookmarks of the current paragraph
+    m_aBookmarksOfParagraphStart.clear();
+    m_aBookmarksOfParagraphEnd.clear();
 }
 
 void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
@@ -1091,7 +1088,7 @@ bool DocxAttributeOutput::IsFlyProcessingPostponed()
     return m_bPostponedProcessingFly;
 }
 
-void DocxAttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool /*bSingleEmptyRun*/ )
+void DocxAttributeOutput::StartRun( const SwRedlineData* pRedlineData, sal_Int32 /*nPos*/, bool /*bSingleEmptyRun*/ )
 {
     // Don't start redline data here, possibly there is a hyperlink later, and
     // that has to be started first.
@@ -1110,7 +1107,7 @@ void DocxAttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool /*bS
     m_pSerializer->mark(Tag_StartRun_3); // let's call it "postponed text"
 }
 
-void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos)
+void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /*bLastRun*/)
 {
     int nFieldsInPrevHyperlink = m_nFieldsInHyperlink;
     // Reset m_nFieldsInHyperlink if a new hyperlink is about to start
@@ -1414,9 +1411,9 @@ void DocxAttributeOutput::DoWriteBookmarkTagEnd(const OUString & bookmarkName)
     }
 }
 
-void DocxAttributeOutput::DoWriteBookmarkStartIfExist(sal_Int32 nPos)
+void DocxAttributeOutput::DoWriteBookmarkStartIfExist(sal_Int32 nRunPos)
 {
-    auto aRange = m_aBookmarksWithPosStart.equal_range(nPos);
+    auto aRange = m_aBookmarksOfParagraphStart.equal_range(nRunPos);
     for( auto aIter = aRange.first; aIter != aRange.second; ++aIter)
     {
         DoWriteBookmarkTagStart(aIter->second);
@@ -1426,9 +1423,9 @@ void DocxAttributeOutput::DoWriteBookmarkStartIfExist(sal_Int32 nPos)
     }
 }
 
-void DocxAttributeOutput::DoWriteBookmarkEndIfExist(sal_Int32 nPos)
+void DocxAttributeOutput::DoWriteBookmarkEndIfExist(sal_Int32 nRunPos)
 {
-    auto aRange = m_aBookmarksWithPosEnd.equal_range(nPos);
+    auto aRange = m_aBookmarksOfParagraphEnd.equal_range(nRunPos);
     for( auto aIter = aRange.first; aIter != aRange.second; ++aIter)
     {
         // Get the id of the bookmark
@@ -2536,7 +2533,7 @@ void DocxAttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 nPos, co
     m_pSerializer->endElementNS( XML_w, XML_rubyPr );
 
     m_pSerializer->startElementNS( XML_w, XML_rt, FSEND );
-    StartRun( nullptr );
+    StartRun( nullptr, nPos );
     StartRunProperties( );
     SwWW8AttrIter aAttrIt( m_rExport, rNode );
     aAttrIt.OutAttr( nPos, true );
@@ -2552,7 +2549,7 @@ void DocxAttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 nPos, co
     m_pSerializer->endElementNS( XML_w, XML_rt );
 
     m_pSerializer->startElementNS( XML_w, XML_rubyBase, FSEND );
-    StartRun( nullptr );
+    StartRun( nullptr, nPos );
 }
 
 void DocxAttributeOutput::EndRuby(const SwTextNode& rNode, sal_Int32 nPos)
@@ -2561,7 +2558,7 @@ void DocxAttributeOutput::EndRuby(const SwTextNode& rNode, sal_Int32 nPos)
     EndRun( &rNode, nPos );
     m_pSerializer->endElementNS( XML_w, XML_rubyBase );
     m_pSerializer->endElementNS( XML_w, XML_ruby );
-    StartRun(nullptr); // open Run again so OutputTextNode loop can close it
+    StartRun(nullptr, nPos); // open Run again so OutputTextNode loop can close it
 }
 
 bool DocxAttributeOutput::AnalyzeURL( const OUString& rUrl, const OUString& rTarget, OUString* pLinkURL, OUString* pMark )
@@ -2586,6 +2583,12 @@ bool DocxAttributeOutput::AnalyzeURL( const OUString& rUrl, const OUString& rTar
     }
 
     return bBookMarkOnly;
+}
+
+void DocxAttributeOutput::WriteBookmarkInActParagraph( const OUString& rName, sal_Int32 nFirstRunPos, sal_Int32 nLastRunPos )
+{
+    m_aBookmarksOfParagraphStart.insert(std::pair<sal_Int32, OUString>(nFirstRunPos, rName));
+    m_aBookmarksOfParagraphEnd.insert(std::pair<sal_Int32, OUString>(nLastRunPos, rName));
 }
 
 bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarget )
@@ -7205,176 +7208,6 @@ bool DocxAttributeOutput::PlaceholderField( const SwField* pField )
     return false; // do not expand
 }
 
-void DocxAttributeOutput::GenerateBookmarksForSequenceField(const SwTextNode& rNode, SwWW8AttrIter& rAttrIter)
-{
-    if (const SwpHints* pTextAttrs = rNode.GetpSwpHints())
-    {
-        for( size_t i = 0; i < pTextAttrs->Count(); ++i )
-        {
-            const SwTextAttr* pHt = pTextAttrs->Get(i);
-            if (pHt->GetAttr().Which() == RES_TXTATR_FIELD)
-            {
-                const SwFormatField& rField = static_cast<const SwFormatField&>(pHt->GetAttr());
-                const SwField* pField = rField.GetField();
-                // Need to have bookmarks only for sequence fields
-                if (pField && pField->GetTyp()->Which() == SwFieldIds::SetExp && pField->GetSubType() == nsSwGetSetExpType::GSE_SEQ)
-                {
-                    const sal_uInt16 nSeqFieldNumber = static_cast<const SwSetExpField*>(pField)->GetSeqNumber();
-                    const OUString sObjectName = static_cast<const SwSetExpFieldType*>(pField->GetTyp())->GetName();
-                    const SwFieldTypes* pFieldTypes = m_rExport.m_pDoc->getIDocumentFieldsAccess().GetFieldTypes();
-                    bool bHaveFullBkm = false;
-                    bool bHaveLabelAndNumberBkm = false;
-                    bool bHaveCaptionOnlyBkm = false;
-                    bool bHaveNumberOnlyBkm = false;
-                    bool bRunSplittedAtSep = false;
-                    for( auto pFieldType : *pFieldTypes )
-                    {
-                        if( SwFieldIds::GetRef == pFieldType->Which() )
-                        {
-                            SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
-                            for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
-                            {
-                                SwGetRefField* pRefField = static_cast<SwGetRefField*>(pFormatField->GetField());
-                                // If we have a reference to the current sequence field
-                                if(pRefField->GetSeqNo() == nSeqFieldNumber && pRefField->GetSetRefName() == sObjectName)
-                                {
-                                    // Need to create a separate run for separator character
-                                    SwWW8AttrIter aLocalAttrIter( m_rExport, rNode );
-                                    const OUString aText = rNode.GetText();
-                                    const sal_Int32 nCategoryStart = aText.indexOf(pRefField->GetSetRefName());
-                                    const sal_Int32 nPosBeforeSeparator = std::max(nCategoryStart, pHt->GetStart());
-                                    bool bCategoryFirst = nCategoryStart < pHt->GetStart();
-                                    sal_Int32 nSeparatorPos = 0;
-                                    if (bCategoryFirst)
-                                    {
-                                        nSeparatorPos = aLocalAttrIter.WhereNext();
-                                        while (nSeparatorPos <= nPosBeforeSeparator)
-                                        {
-                                            aLocalAttrIter.NextPos();
-                                            nSeparatorPos = aLocalAttrIter.WhereNext();
-                                        }
-                                    }
-                                    else
-                                    {
-                                        nSeparatorPos = nCategoryStart + pRefField->GetSetRefName().getLength();
-                                    }
-                                    sal_Int32 nRefTextPos = 0;
-                                    if(nSeparatorPos < aText.getLength())
-                                    {
-                                        nRefTextPos = SwGetExpField::GetReferenceTextPos(pHt->GetFormatField(), *m_rExport.m_pDoc, nSeparatorPos);
-                                        if(nRefTextPos != nSeparatorPos)
-                                        {
-                                            if(!bRunSplittedAtSep)
-                                            {
-                                                if(!bCategoryFirst)
-                                                    rAttrIter.SplitRun(nSeparatorPos);
-                                                rAttrIter.SplitRun(nRefTextPos);
-                                                bRunSplittedAtSep = true;
-                                            }
-                                            if(!bCategoryFirst)
-                                                aLocalAttrIter.SplitRun(nSeparatorPos);
-                                            aLocalAttrIter.SplitRun(nRefTextPos);
-                                        }
-                                        else if (bCategoryFirst)
-                                        {
-                                            if(!bRunSplittedAtSep)
-                                            {
-                                                rAttrIter.SplitRun(nSeparatorPos);
-                                                bRunSplittedAtSep = true;
-                                            }
-                                            aLocalAttrIter.SplitRun(nSeparatorPos);
-                                        }
-                                    }
-                                    // Generate bookmarks on the right position
-                                    OUString sName("Ref_" + pRefField->GetSetRefName());
-                                    sName += OUString::number(pRefField->GetSeqNo());
-                                    switch (pRefField->GetFormat())
-                                    {
-                                        case REF_PAGE:
-                                        case REF_PAGE_PGDESC:
-                                        case REF_CONTENT:
-                                        case REF_UPDOWN:
-                                            sName += "_full";
-                                            if(!bHaveFullBkm)
-                                            {
-                                                sal_Int32 nLastAttrStart = 0;
-                                                sal_Int32 nActAttr = aLocalAttrIter.WhereNext();
-                                                while (nActAttr < rNode.GetText().getLength())
-                                                {
-                                                    nLastAttrStart = nActAttr;
-                                                    aLocalAttrIter.NextPos();
-                                                    nActAttr = aLocalAttrIter.WhereNext();
-                                                }
-                                                WriteBookmarks_Impl( sName, std::min(nCategoryStart, pHt->GetStart()), nLastAttrStart );
-                                                bHaveFullBkm = true;
-                                            }
-                                            break;
-                                        case REF_ONLYNUMBER:
-                                        {
-                                            sName += "_label_and_number";
-                                            if(!bHaveLabelAndNumberBkm)
-                                            {
-                                                if(bCategoryFirst)
-                                                    WriteBookmarks_Impl( sName, std::min(nCategoryStart, pHt->GetStart()), std::max(nCategoryStart, pHt->GetStart()) );
-                                                else
-                                                {
-                                                    // Find the last run which contains category text
-                                                    SwWW8AttrIter aLocalAttrIter2( m_rExport, rNode );
-                                                    sal_Int32 nCatLastRun = 0;
-                                                    sal_Int32 nNextAttr = aLocalAttrIter2.WhereNext();
-                                                    while (nNextAttr < nSeparatorPos)
-                                                    {
-                                                        nCatLastRun = nNextAttr;
-                                                        aLocalAttrIter2.NextPos();
-                                                        nNextAttr = aLocalAttrIter2.WhereNext();
-                                                    }
-                                                    WriteBookmarks_Impl( sName, pHt->GetStart(), nCatLastRun );
-                                                }
-                                                bHaveLabelAndNumberBkm = true;
-                                            }
-                                            break;
-                                        }
-                                        case REF_ONLYCAPTION:
-                                        {
-                                            sName += "_caption_only";
-                                            if(!bHaveCaptionOnlyBkm)
-                                            {
-                                                // Find last run
-                                                sal_Int32 nLastAttrStart = 0;
-                                                sal_Int32 nActAttr = aLocalAttrIter.WhereNext();
-                                                while (nActAttr < rNode.GetText().getLength())
-                                                {
-                                                    nLastAttrStart = nActAttr;
-                                                    aLocalAttrIter.NextPos();
-                                                    nActAttr = aLocalAttrIter.WhereNext();
-                                                }
-                                                WriteBookmarks_Impl( sName, nRefTextPos, nLastAttrStart );
-                                                bHaveCaptionOnlyBkm = true;
-                                            }
-                                            break;
-                                        }
-                                        case REF_ONLYSEQNO:
-                                        {
-                                            sName += "_number_only";
-                                            if(!bHaveNumberOnlyBkm)
-                                            {
-                                                WriteBookmarks_Impl( sName, pHt->GetStart(), pHt->GetStart() );
-                                                bHaveNumberOnlyBkm = true;
-                                            }
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    return;
-                }
-            }
-        }
-    }
-}
-
 void DocxAttributeOutput::WritePendingPlaceholder()
 {
     if( pendingPlaceholder == nullptr )
@@ -7478,12 +7311,6 @@ void DocxAttributeOutput::WriteBookmarks_Impl( std::vector< OUString >& rStarts,
         }
     }
     rEnds.clear();
-}
-
-void DocxAttributeOutput::WriteBookmarks_Impl( const OUString& rName, sal_Int32 nWithStartPos, sal_Int32 nWithEndPos )
-{
-    m_aBookmarksWithPosStart.insert(std::pair<sal_Int32, OUString>(nWithStartPos, rName));
-    m_aBookmarksWithPosEnd.insert(std::pair<sal_Int32, OUString>(nWithEndPos, rName));
 }
 
 void DocxAttributeOutput::WriteAnnotationMarks_Impl( std::vector< OUString >& rStarts,
