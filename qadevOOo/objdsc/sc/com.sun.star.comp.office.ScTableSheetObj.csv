@@ -124,7 +124,6 @@
 "ScTableSheetObj";"com::sun::star::util::XProtectable";"isProtected()"
 "ScTableSheetObj";"com::sun::star::sheet::XFormulaQuery";"queryDependents()"
 "ScTableSheetObj";"com::sun::star::sheet::XFormulaQuery";"queryPrecedents()"
-"ScTableSheetObj";"com::sun::star::sheet::XSheetFilterableEx";"createFilterDescriptorByObject()"
 "ScTableSheetObj";"com::sun::star::sheet::XArrayFormulaRange";"getArrayFormula()"
 "ScTableSheetObj";"com::sun::star::sheet::XArrayFormulaRange";"setArrayFormula()"
 "ScTableSheetObj";"com::sun::star::sheet::XCellRangeFormula#optional";"getFormulaArray()"

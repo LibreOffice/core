@@ -112,7 +112,6 @@
 "ScCellRangeObj";"com::sun::star::style::CharacterPropertiesComplex";"CharLocaleComplex"
 "ScCellRangeObj";"com::sun::star::sheet::XFormulaQuery";"queryDependents()"
 "ScCellRangeObj";"com::sun::star::sheet::XFormulaQuery";"queryPrecedents()"
-"ScCellRangeObj";"com::sun::star::sheet::XSheetFilterableEx";"createFilterDescriptorByObject()"
 "ScCellRangeObj";"com::sun::star::sheet::XArrayFormulaRange";"getArrayFormula()"
 "ScCellRangeObj";"com::sun::star::sheet::XArrayFormulaRange";"setArrayFormula()"
 "ScCellRangeObj";"com::sun::star::sheet::XCellRangeFormula#optional";"getFormulaArray()"

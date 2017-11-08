@@ -48,7 +48,7 @@ void XSubTotalCalculatable::testApplyRemoveSubTotals()
     xCols.realloc(1);
     xCols[0].Column = 0;
     xCols[0].Function = sheet::GeneralFunction_SUM;
-    xSTD->addNew(xCols, 0);
+    xSTD->addNew(xCols, 1);
 
     xSheet->getCellByPosition(0, 0)->setFormula("first");
     xSheet->getCellByPosition(1, 0)->setFormula("second");
