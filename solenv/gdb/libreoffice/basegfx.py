@@ -86,12 +86,12 @@ class B2DPolygonPrinter(object):
         def __next__(self):
             if self.index >= self.count:
                 raise StopIteration()
-            currPoint = gdb.parse_and_eval(
-                    '((basegfx::B2DPolygon*)%d)->getB2DPoint(%d)' % (
-                      self.value.address, self.index))
-            currPoint = gdb.parse_and_eval(
-                    '((basegfx::B2DPolygon*)%d)->getB2DPoint(%d)' % (
-                      self.value.address, self.index))
+            points = self.value['mpPolygon']['m_pimpl'].dereference()['m_value']['maPoints']['maVector']
+            currPoint = (points['_M_impl']['_M_start'] + self.index).dereference()
+            # doesn't work?
+            #currPoint = gdb.parse_and_eval(
+            #        '((basegfx::B2DPolygon*)%d)->getB2DPoint(%d)' % (
+            #          self.value.address, self.index))
             self.index += 1
             return ('point %d' % (self.index-1),
                     '(%15f, %15f)' % (currPoint['mfX'], currPoint['mfY']))
@@ -108,9 +108,11 @@ class B2DPolygonPrinter(object):
         def __next__(self):
             if self.index >= self.count:
                 raise StopIteration()
-            currPoint = gdb.parse_and_eval(
-                    '((basegfx::B2DPolygon*)%d)->getB2DPoint(%d)' % (
-                      self.value.address, self.index))
+            points = self.value['mpPolygon']['m_pimpl'].dereference()['m_value']['maPoints']['maVector']
+            currPoint = (points['_M_impl']['_M_start'] + self.index).dereference()
+            #currPoint = gdb.parse_and_eval(
+            #        '((basegfx::B2DPolygon*)%d)->getB2DPoint(%d)' % (
+            #          self.value.address, self.index))
             prevControl = gdb.parse_and_eval(
                     '((basegfx::B2DPolygon*)%d)->getPrevControlPoint(%d)' % (
                       self.value.address, self.index))
@@ -149,6 +151,12 @@ class B2DPolyPolygonPrinter(object):
 
     def _isEmpty(self):
         return self._count() == 0
+
+    def children(self):
+        impl = self.value['mpPolyPolygon']['m_pimpl']
+        vector = self.value['mpPolyPolygon']['m_pimpl'].dereference()['m_value']['maPolygons']
+        import libstdcxx.v6.printers as std
+        return std.StdVectorPrinter("std::vector", vector).children()
 
 printer = None
 
