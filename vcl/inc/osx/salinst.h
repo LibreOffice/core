@@ -21,7 +21,11 @@
 #ifndef INCLUDED_VCL_INC_OSX_SALINST_H
 #define INCLUDED_VCL_INC_OSX_SALINST_H
 
+#include <sal/config.h>
+
+#include <condition_variable>
 #include <list>
+#include <mutex>
 
 #include <comphelper/solarmutex.hxx>
 #include <osl/conditn.hxx>

@@ -17,6 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <condition_variable>
+#include <mutex>
+#include <utility>
+
 #include <config_features.h>
 
 #include <stdio.h>
@@ -277,24 +283,31 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
         if ( pInst->mbNoYieldLock )
             return;
         do {
-            m_aInMainCondition.reset();
-            if ( m_aCodeBlock )
+            RuninmainBlock block = nullptr;
+            {
+                std::unique_lock<std::mutex> g(m_runInMainMutex);
+                if (m_aMutex.tryToAcquire()) {
+                    assert(m_aCodeBlock == nullptr);
+                    m_wakeUpMain = false;
+                    break;
+                }
+                // wait for doRelease() or RUNINMAIN_* to set the condition
+                m_aInMainCondition.wait(g, [this]() { return m_wakeUpMain; });
+                m_wakeUpMain = false;
+                std::swap(block, m_aCodeBlock);
+            }
+            if ( block )
             {
                 assert( !pInst->mbNoYieldLock );
                 pInst->mbNoYieldLock = true;
-                m_aCodeBlock();
+                block();
                 pInst->mbNoYieldLock = false;
-                Block_release( m_aCodeBlock );
-                m_aCodeBlock = nullptr;
-                m_aResultCondition.set();
+                Block_release( block );
+                std::unique_lock<std::mutex> g(m_runInMainMutex);
+                assert(!m_resultReady);
+                m_resultReady = true;
+                m_aResultCondition.notify_all();
             }
-            // reset condition *before* acquiring!
-            if (m_aMutex.tryToAcquire())
-                break;
-            // wait for doRelease() or RUNINMAIN_* to set the condition
-            osl::Condition::Result res =  m_aInMainCondition.wait();
-            (void) res;
-            assert(osl::Condition::Result::result_ok == res);
         }
         while ( true );
     }
@@ -311,11 +324,15 @@ sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
     AquaSalInstance *pInst = GetSalData()->mpInstance;
     if ( pInst->mbNoYieldLock && pInst->IsMainThread() )
         return 1;
-    sal_uInt32 nCount = comphelper::GenericSolarMutex::doRelease( bUnlockAll );
-
-    if ( 0 == m_nCount && !pInst->IsMainThread() )
-        m_aInMainCondition.set();
-
+    sal_uInt32 nCount;
+    {
+        std::unique_lock<std::mutex> g(m_runInMainMutex);
+        nCount = comphelper::GenericSolarMutex::doRelease( bUnlockAll );
+        if ( 0 == m_nCount && !pInst->IsMainThread() ) {
+            m_wakeUpMain = true;
+            m_aInMainCondition.notify_all();
+        }
+    }
     return nCount;
 }
 
