@@ -251,6 +251,8 @@ void SlideBackground::HandleContextChange(
             mpFillGrad->Hide();
             mpBackgroundLabel->Hide();
             mpInsertImage->Hide();
+            mpEditMaster->Hide();
+            mpCloseMaster->Hide();
         }
         else if (maContext == maImpressOtherContext )
         {
