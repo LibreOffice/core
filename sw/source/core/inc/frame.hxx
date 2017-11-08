@@ -144,20 +144,6 @@ protected:
     void setFrameAreaSizeValid(bool bNew);
     void setFramePrintAreaValid(bool bNew);
 
-    // helper method to create FrameAreaTransformations based on the
-    // curent FrameAreaDefinition
-    void createFrameAreaTransformations(
-        basegfx::B2DHomMatrix& rFrameAreaTransformation,
-        basegfx::B2DHomMatrix& rFramePrintAreaTransformation,
-        double fRotation,
-        const basegfx::B2DPoint& rCenter) const;
-
-    // helper method to set FrameAreaDefinitions based on given
-    // transformations
-    void setFrameAreaDefinitionsToBoundRangesOfTransformations(
-        const basegfx::B2DHomMatrix& rFrameAreaTransformation,
-        const basegfx::B2DHomMatrix& rFramePrintAreaTransformation);
-
 public:
     SwFrameAreaDefinition();
 
@@ -208,6 +194,102 @@ public:
         ~FramePrintAreaWriteAccess();
         void setSwRect(const SwRect& rNew) { *reinterpret_cast< SwRect* >(this) = rNew; }
     };
+
+    // RotateFlyFrame3 - Support for Transformations
+    // Hand out the Transformations for the current FrameAreaDefinition
+    // for the FrameArea and FramePrintArea.
+    // FramePrintArea is not relative to FrameArea in this
+    // transformation representation (to make it easier to use and understand).
+    // There is no 'set' method since SwFrame is a layout obejct. For
+    // some cases rotation will be included (used for SwGrfNode in inner
+    // SwFrame of a SwFlyFrame)
+    virtual basegfx::B2DHomMatrix getFrameAreaTransformation() const;
+    virtual basegfx::B2DHomMatrix getFramePrintAreaTransformation() const;
+};
+
+/// RotateFlyFrame3: Helper class when you want to make your SwFrame derivate
+/// transformable. It provides some tooling to do so. To use,
+/// derive your SwFrame from it
+class SW_DLLPUBLIC TransformableSwFrame
+{
+private:
+    // FrameAreaTransformation and FramePrintAreaTransformation
+    // here when more than translate/scale is used (e.g. rotation)
+    basegfx::B2DHomMatrix   maFrameAreaTransformation;
+    basegfx::B2DHomMatrix   maFramePrintAreaTransformation;
+
+    // helper method to create FrameAreaTransformations based on the
+    // curent FrameAreaDefinition
+    void createFrameAreaTransformations(
+        const SwFrameAreaDefinition& rSwFrameAreaDefinition,
+        double fRotation,
+        const basegfx::B2DPoint& rCenter);
+
+    // helper method to set FrameAreaDefinitions based on given
+    // transformations
+    void setFrameAreaDefinitionsToBoundRangesOfTransformations(
+        SwFrameAreaDefinition& rSwFrameAreaDefinition);
+
+protected:
+    // Full update of Transformations and BoundAreas:
+    // - Re-create Transformations based on SwRect(s) from the
+    //   given SwFrameAreaDefinition.
+    // - Based on that, create BoundRanges for the Transformations
+    //   and use as new SwRect(s) for the given SwFrameAreaDefinition.
+    void updateTransformationsAndFrameAreaDefinitions(
+        SwFrameAreaDefinition& rSwFrameAreaDefinition,
+        double fRotation,
+        const basegfx::B2DPoint& rCenter);
+
+    void setLocalFrameAreaTransformation(const basegfx::B2DHomMatrix& rNew)
+    {
+        maFrameAreaTransformation = rNew;
+    }
+
+    void setLocalFramePrintAreaTransformation(const basegfx::B2DHomMatrix& rNew)
+    {
+        maFramePrintAreaTransformation = rNew;
+    }
+
+    void resetLocalAreaTransformations()
+    {
+        maFrameAreaTransformation.identity();
+        maFramePrintAreaTransformation.identity();
+    }
+
+public:
+    TransformableSwFrame()
+    :   maFrameAreaTransformation(),
+        maFramePrintAreaTransformation()
+    {
+    }
+
+    // Support for Transformations for inner frame of a SwGrfNode
+    const basegfx::B2DHomMatrix& getLocalFrameAreaTransformation() const
+    {
+        return maFrameAreaTransformation;
+    }
+
+    const basegfx::B2DHomMatrix& getLocalFramePrintAreaTransformation() const
+    {
+        return maFramePrintAreaTransformation;
+    }
+
+    // This method allows to reset the SwRect(s) in the
+    // given SwFrameAreaDefinition which are already apapted to
+    // Transformation and thus have a changed BoundArea back to
+    // the untransformed state. Only the SwRect(s) are changed
+    // back, not the transformations. As expected from using
+    // Transformations, these contain all the necessary
+    // information
+    void resetAreaDefinitionsToUntransformed(
+        SwFrameAreaDefinition& rSwFrameAreaDefinition);
+
+    // Re-Creates the SwRect(s) as BoundAreas based on the current
+    // Transformations, useful to set back the SwRect(s) to Transformed
+    // state when itz was necessary to reset them temporarily (see above)
+    void resetAreaDefinitionsToTransformed(
+        SwFrameAreaDefinition& rSwFrameAreaDefinition);
 };
 
 /**
@@ -834,17 +916,6 @@ public:
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const;
     void dumpChildrenAsXml(xmlTextWriterPtr writer) const;
     bool IsCollapse() const;
-
-    // RotateFlyFrame3 - Support for Transformations
-    // Hand out the Transformations for the current FrameAreaDefinition
-    // for the FrameArea and FramePrintArea.
-    // FramePrintArea is not relative to FrameArea in this
-    // transformation representation (to make it easier to use and understand).
-    // There is no 'set' method since SwFrame is a layout obejct. For
-    // some cases rotation will be included (used for SwGrfNode in inner
-    // SwFrame of a SwFlyFrame)
-    basegfx::B2DHomMatrix getFrameAreaTransformation() const;
-    basegfx::B2DHomMatrix getFramePrintAreaTransformation() const;
 };
 
 inline bool SwFrame::IsInDocBody() const

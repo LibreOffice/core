@@ -26,9 +26,11 @@
 // #i28701#
 class SwFlyAtContentFrame;
 
+double getFrameRotation_from_SwNoTextFrame(const SwNoTextFrame& rNoTextFrame);
+
 // Base class for those Flys that can "move freely" or better that are not
 // bound in Content.
-class SwFlyFreeFrame : public SwFlyFrame
+class SwFlyFreeFrame : public SwFlyFrame, public TransformableSwFrame
 {
 private:
     // #i34753# - flag for at-page anchored Writer fly frames
@@ -40,12 +42,6 @@ private:
     bool mbNoMoveOnCheckClip;
 
     SwRect maUnclippedFrame;
-
-    // RotateFlyFrame3 - Support for Transformations, hold
-    // FrameAreaTransformation and FramePrintAreaTransformation
-    // here when rotation is used
-    basegfx::B2DHomMatrix   maFrameAreaTransformation;
-    basegfx::B2DHomMatrix   maFramePrintAreaTransformation;
 
     void CheckClip( const SwFormatFrameSize &rSz );  //'Emergency' Clipping.
 
@@ -60,6 +56,11 @@ private:
         @return boolean indicating, that direct environment has 'auto' size
     */
     bool HasEnvironmentAutoSize() const;
+
+    // RotateFlyFrame3 - Support for outer Frame of a SwGrfNode
+    // Only for local data extraction. To uniquely access information
+    // for local transformation, use getFrameArea(Print)Transformation
+    double getFrameRotation() const;
 
 protected:
     // #i28701# - new friend class <SwFlyNotify> for access to
@@ -124,17 +125,9 @@ public:
     */
     virtual bool IsFormatPossible() const override;
 
-    // RotateFlyFrame3 - Support for Transformations for outer Frame of a SwGrfNode
-    basegfx::B2DHomMatrix getFrameAreaTransformation() const;
-    basegfx::B2DHomMatrix getFramePrintAreaTransformation() const;
-    void updateTransformationsAndAreas(
-        double fRotation,
-        const basegfx::B2DPoint& rCenter);
-
-    // RotateFlyFrame3 - Support for outer Frame of a SwGrfNode
-    // Only for local data extraction. To uniquely access information
-    // for local transformation, use getFrameArea(Print)Transformation
-    double getFrameRotation() const;
+    // RotateFlyFrame3 - Support for Transformations
+    virtual basegfx::B2DHomMatrix getFrameAreaTransformation() const override;
+    virtual basegfx::B2DHomMatrix getFramePrintAreaTransformation() const override;
 };
 
 // Flys that are bound to LayoutFrames and not to Content
