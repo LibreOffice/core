@@ -1022,6 +1022,139 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                 }
             }
             break;
+
+            case LOK_CALLBACK_DIALOG:
+            {
+                // reading JSON by boost might be slow?
+                boost::property_tree::ptree aTree;
+                std::stringstream aStream(payload);
+                boost::property_tree::read_json(aStream, aTree);
+                const std::string aDialogId = aTree.get<std::string>("dialogId", "");
+                if (aTree.get<std::string>("action", "") == "invalidate")
+                {
+                    std::string aRectStr = aTree.get<std::string>("rectangle", "");
+                    // no 'rectangle' field => invalidate all of the dialog =>
+                    // remove all previous dialog part invalidations
+                    if (aRectStr.empty())
+                    {
+                        removeAll([&aDialogId] (const queue_type::value_type& elem) {
+                                if (elem.first == LOK_CALLBACK_DIALOG)
+                                {
+                                    boost::property_tree::ptree aOldTree;
+                                    std::stringstream aOldStream(elem.second);
+                                    boost::property_tree::read_json(aOldStream, aOldTree);
+                                    const std::string aOldDialogId = aOldTree.get<std::string>("dialogId", "");
+                                    if (aOldTree.get<std::string>("action", "") == "invalidate" &&
+                                        aDialogId == aOldDialogId)
+                                    {
+                                        return true;
+                                    }
+                                }
+                                return false;
+                            });
+                    }
+                    else
+                    {
+                        // if we have to invalidate all of the dialog, ignore
+                        // any part invalidation message
+                        const auto& pos = std::find_if(m_queue.rbegin(), m_queue.rend(),
+                                                       [&aDialogId] (const queue_type::value_type& elem)
+                                                       {
+                                                           if (elem.first != LOK_CALLBACK_DIALOG)
+                                                               return false;
+
+                                                           boost::property_tree::ptree aOldTree;
+                                                           std::stringstream aOldStream(elem.second);
+                                                           boost::property_tree::read_json(aOldStream, aOldTree);
+                                                           const std::string aOldDialogId = aOldTree.get<std::string>("dialogId", "");
+                                                           if (aOldTree.get<std::string>("action", "") == "invalidate" &&
+                                                               aDialogId == aOldDialogId &&
+                                                               aOldTree.get<std::string>("rectangle", "").empty())
+                                                           {
+                                                               return true;
+                                                           }
+                                                           return false;
+                                                       });
+
+                        // we found a invalidate-all dialog callback
+                        if (pos != m_queue.rend())
+                        {
+                            SAL_INFO("lok.dialog", "Skipping queue [" << type << "]: [" << payload << "] since whole dialog needs to be invalidated.");
+                            return;
+                        }
+
+                        std::istringstream aRectStream(aRectStr);
+                        long nLeft, nTop, nWidth, nHeight;
+                        char nComma;
+                        aRectStream >> nLeft >> nComma >> nTop >> nComma >> nWidth >> nComma >> nHeight;
+                        tools::Rectangle aNewRect = tools::Rectangle(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
+                        bool currentIsRedundant = false;
+                        removeAll([&aNewRect, &aDialogId, &currentIsRedundant] (const queue_type::value_type& elem) {
+                                if (elem.first != LOK_CALLBACK_DIALOG)
+                                    return false;
+
+                                boost::property_tree::ptree aOldTree;
+                                std::stringstream aOldStream(elem.second);
+                                boost::property_tree::read_json(aOldStream, aOldTree);
+                                if (aOldTree.get<std::string>("action", "") == "invalidate")
+                                {
+                                    const std::string aOldDialogId = aOldTree.get<std::string>("dialogId", "");
+                                    std::string aOldRectStr = aOldTree.get<std::string>("rectangle", "");
+                                    // not possible that we encounter an empty
+                                    // rectangle here; we already handled this
+                                    // case before
+                                    std::istringstream aOldRectStream(aOldRectStr);
+                                    long nOldLeft, nOldTop, nOldWidth, nOldHeight;
+                                    char nOldComma;
+                                    aOldRectStream >> nOldLeft >> nOldComma >> nOldTop >> nOldComma >> nOldWidth >> nOldComma >> nOldHeight;
+                                    tools::Rectangle aOldRect = tools::Rectangle(nOldLeft, nOldTop, nOldLeft + nOldWidth, nOldTop + nOldHeight);
+
+                                    if (aDialogId == aOldDialogId)
+                                    {
+                                        // new one engulfs the old one?
+                                        if (aNewRect.IsInside(aOldRect))
+                                        {
+                                            SAL_INFO("lok.dialog", "New " << aNewRect.toString() << " engulfs old " << aOldRect.toString() << ".");
+                                            return true;
+                                        }
+                                        // old one engulfs the new one?
+                                        else if (aOldRect.IsInside(aNewRect))
+                                        {
+                                            SAL_INFO("lok.dialog", "Old " << aOldRect.toString() << " engulfs new " << aNewRect.toString() << ".");
+                                            // we have a rectangle in the queue
+                                            // already that makes the current
+                                            // Callback useless
+                                            currentIsRedundant = true;
+                                            return false;
+                                        }
+                                        else
+                                        {
+                                            SAL_INFO("lok.dialog", "Merging " << aNewRect.toString() << " & " << aOldRect.toString());
+                                            aNewRect.Union(aOldRect);
+                                            SAL_INFO("lok.dialog", "Merged: " << aNewRect.toString());
+                                            return true;
+                                        }
+                                    }
+                                }
+
+                                // keep rest
+                                return false;
+                            });
+
+                        if (currentIsRedundant)
+                        {
+                            SAL_INFO("lok.dialog", "Current payload is engulfed by one already in the queue. Skipping redundant payload: " << aNewRect.toString());
+                            return;
+                        }
+
+                        aTree.put("rectangle", aNewRect.toString().getStr());
+                        std::stringstream aJSONStream;
+                        boost::property_tree::write_json(aJSONStream, aTree);
+                        payload = aJSONStream.str();
+                    }
+                }
+            }
+            break;
         }
     }
 
