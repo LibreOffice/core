@@ -19,6 +19,7 @@
 
 #include <i18nlangtag/mslangid.hxx>
 #include <o3tl/any.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/fontcfg.hxx>
 #include <unotools/fontdefs.hxx>
 #include <comphelper/processfactory.hxx>
@@ -98,6 +99,8 @@ DefaultFontConfiguration& DefaultFontConfiguration::get()
 
 DefaultFontConfiguration::DefaultFontConfiguration()
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return;
     // create configuration hierarchical access name
     try
     {
@@ -349,6 +352,8 @@ FontSubstConfiguration& FontSubstConfiguration::get()
 FontSubstConfiguration::FontSubstConfiguration() :
     maSubstHash( 300 )
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return;
     try
     {
         // get service provider
