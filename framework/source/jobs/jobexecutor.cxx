@@ -134,7 +134,7 @@ JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::uno::XComponent
 
 void JobExecutor::initListeners()
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return;
 
     // read the list of all currently registered events inside configuration.

@@ -100,7 +100,7 @@ SvxNumberType::~SvxNumberType()
 
 OUString SvxNumberType::GetNumStr( sal_Int32 nNo ) const
 {
-    LanguageTag aLang = utl::ConfigManager::IsAvoidConfig() ?
+    LanguageTag aLang = utl::ConfigManager::IsFuzzing() ?
         LanguageTag("en-US") :
         Application::GetSettings().GetLanguageTag();
     return GetNumStr( nNo, aLang.getLocale() );

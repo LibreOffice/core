@@ -120,7 +120,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             SwTransferable::InitOle( this );
 
         // set forbidden characters if necessary
-        if (!utl::ConfigManager::IsAvoidConfig())
+        if (!utl::ConfigManager::IsFuzzing())
         {
             SvxAsianConfig aAsian;
             Sequence<lang::Locale> aLocales =  aAsian.GetStartEndCharLocales();
@@ -660,7 +660,7 @@ void SwDocShell::SubInitNew()
     //! get lingu options without loading lingu DLL
     SvtLinguOptions aLinguOpt;
 
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
         SvtLinguConfig().GetOptions(aLinguOpt);
 
     LanguageType nVal = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN),

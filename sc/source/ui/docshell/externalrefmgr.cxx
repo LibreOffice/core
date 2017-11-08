@@ -2109,7 +2109,7 @@ bool ScExternalRefManager::isValidRangeName(sal_uInt16 nFileId, const OUString& 
         // Range name is cached.
         return true;
 
-    pSrcDoc = utl::ConfigManager::IsAvoidConfig() ? nullptr : getSrcDocument(nFileId);
+    pSrcDoc = utl::ConfigManager::IsFuzzing() ? nullptr : getSrcDocument(nFileId);
     if (!pSrcDoc)
         // failed to load document from disk.
         return false;

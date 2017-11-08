@@ -46,7 +46,7 @@ SwEditShell::SwEditShell( SwDoc& rDoc, vcl::Window *pWindow, const SwViewOption 
     , m_bNbspRunNext(false)
     , m_bDoParagraphSignatureValidation(true)
 {
-    if (!utl::ConfigManager::IsAvoidConfig() && 0 < officecfg::Office::Common::Undo::Steps::get())
+    if (!utl::ConfigManager::IsFuzzing() && 0 < officecfg::Office::Common::Undo::Steps::get())
     {
         GetDoc()->GetIDocumentUndoRedo().DoUndo(true);
     }

@@ -156,11 +156,11 @@ SfxApplication* SfxApplication::GetOrCreate()
         ::framework::SetIsDockingWindowVisible( IsDockingWindowVisible );
 #if HAVE_FEATURE_DESKTOP
         Application::SetHelp( pSfxHelp );
-        if (!utl::ConfigManager::IsAvoidConfig() && SvtHelpOptions().IsHelpTips())
+        if (!utl::ConfigManager::IsFuzzing() && SvtHelpOptions().IsHelpTips())
             Help::EnableQuickHelp();
         else
             Help::DisableQuickHelp();
-        if (!utl::ConfigManager::IsAvoidConfig() && SvtHelpOptions().IsHelpTips() && SvtHelpOptions().IsExtendedHelp())
+        if (!utl::ConfigManager::IsFuzzing() && SvtHelpOptions().IsHelpTips() && SvtHelpOptions().IsExtendedHelp())
             Help::EnableBalloonHelp();
         else
             Help::DisableBalloonHelp();
@@ -173,7 +173,7 @@ SfxApplication::SfxApplication()
     : pImpl( new SfxAppData_Impl )
 {
     SetName( "StarOffice" );
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
         SvtViewOptions::AcquireOptions();
 
     pImpl->m_xImeStatusWindow->init();
@@ -222,7 +222,7 @@ SfxApplication::~SfxApplication()
 #endif
 
     // delete global options
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
         SvtViewOptions::ReleaseOptions();
 
     if ( !pImpl->bDowning )

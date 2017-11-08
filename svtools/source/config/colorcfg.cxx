@@ -189,7 +189,7 @@ ColorConfig_Impl::ColorConfig_Impl() :
     uno::Sequence < OUString > aNames(1);
     EnableNotification( aNames );
 
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
         Load(OUString());
 
     ImplUpdateApplicationSettings();
@@ -369,7 +369,7 @@ void ColorConfig_Impl::ImplUpdateApplicationSettings()
 
 ColorConfig::ColorConfig()
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return;
     ::osl::MutexGuard aGuard( ColorMutex_Impl::get() );
     if ( !m_pImpl )
@@ -383,7 +383,7 @@ ColorConfig::ColorConfig()
 
 ColorConfig::~ColorConfig()
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return;
     ::osl::MutexGuard aGuard( ColorMutex_Impl::get() );
     m_pImpl->RemoveListener(this);

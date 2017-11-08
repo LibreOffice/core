@@ -393,7 +393,7 @@ void CairoTextRender::GetDevFontList( PhysicalFontCollection* pFontCollection )
     rGC.AnnounceFonts( pFontCollection );
 
     // register platform specific font substitutions if available
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
         SalGenericInstance::RegisterFontSubstitutors( pFontCollection );
 }
 

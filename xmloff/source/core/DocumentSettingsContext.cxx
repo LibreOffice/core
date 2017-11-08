@@ -381,7 +381,7 @@ void XMLDocumentSettingsContext::EndElement()
     uno::Sequence<beans::PropertyValue> aSeqConfigProps;
     if ( m_pData->aConfigProps >>= aSeqConfigProps )
     {
-        if (!utl::ConfigManager::IsAvoidConfig() && !officecfg::Office::Common::Save::Document::LoadPrinter::get())
+        if (!utl::ConfigManager::IsFuzzing() && !officecfg::Office::Common::Save::Document::LoadPrinter::get())
         {
             sal_Int32 i = aSeqConfigProps.getLength() - 1;
             int nFound = 0;

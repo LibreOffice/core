@@ -296,7 +296,7 @@ FilterConfigCache::FilterConfigCache( bool bConfig ) :
     bUseConfig ( bConfig )
 {
     if (bUseConfig)
-        bUseConfig = !utl::ConfigManager::IsAvoidConfig();
+        bUseConfig = !utl::ConfigManager::IsFuzzing();
     if (bUseConfig)
         ImplInit();
     else

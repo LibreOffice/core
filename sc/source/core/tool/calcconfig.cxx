@@ -35,7 +35,7 @@ static rtl::Reference<ConfigurationListener> const & getMiscListener()
 
 bool ScCalcConfig::isOpenCLEnabled()
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return false;
     static comphelper::ConfigurationListenerProperty<bool> gOpenCLEnabled(getMiscListener(), "UseOpenCL");
     return gOpenCLEnabled.get();
@@ -43,7 +43,7 @@ bool ScCalcConfig::isOpenCLEnabled()
 
 bool ScCalcConfig::isSwInterpreterEnabled()
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return false;
     static comphelper::ConfigurationListenerProperty<bool> gSwInterpreterEnabled(getMiscListener(), "UseSwInterpreter");
     return gSwInterpreterEnabled.get();

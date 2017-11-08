@@ -1391,7 +1391,7 @@ namespace numfunc
 
     SvxNumberFormat::SvxNumPositionAndSpaceMode GetDefaultPositionAndSpaceMode()
     {
-        if (utl::ConfigManager::IsAvoidConfig())
+        if (utl::ConfigManager::IsFuzzing())
             return SvxNumberFormat::LABEL_ALIGNMENT;
 
         SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode;

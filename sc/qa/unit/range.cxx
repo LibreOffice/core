@@ -108,7 +108,7 @@ public:
 
     virtual void setUp() override
     {
-        utl::ConfigManager::EnableAvoidConfig();
+        utl::ConfigManager::EnableFuzzing();
         ScDLL::Init();
         ScGlobal::Init();
     }
