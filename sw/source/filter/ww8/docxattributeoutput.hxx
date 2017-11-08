@@ -163,10 +163,10 @@ public:
     virtual void EndParagraphProperties(const SfxItemSet& rParagraphMarkerProperties, const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted, const SwRedlineData* pRedlineParagraphMarkerInserted) override;
 
     /// Start of the text run.
-    virtual void StartRun( const SwRedlineData* pRedlineData, bool bSingleEmptyRun = false ) override;
+    virtual void StartRun( const SwRedlineData* pRedlineData, sal_Int32 nPos, bool bSingleEmptyRun = false ) override;
 
     /// End of the text run.
-    virtual void EndRun(const SwTextNode* pNode, sal_Int32 nPos) override;
+    virtual void EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool bLastRun = false) override;
 
     /// Called before we start outputting the attributes.
     virtual void StartRunProperties() override;
@@ -370,7 +370,6 @@ public:
     void WriteFormData_Impl( const ::sw::mark::IFieldmark& rFieldmark );
 
     void WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
-    void WriteBookmarks_Impl( const OUString& rName, sal_Int32 nWithStartPos, sal_Int32 nWithEndPos );
     void WriteAnnotationMarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
     void PushRelIdCache();
     void PopRelIdCache();
@@ -685,6 +684,8 @@ protected:
 
     virtual bool AnalyzeURL( const OUString& rURL, const OUString& rTarget, OUString* pLinkURL, OUString* pMark ) override;
 
+    virtual void WriteBookmarkInActParagraph( const OUString& rName, sal_Int32 nFirstRunPos, sal_Int32 nLastRunPos ) override;
+
     /// Reference to the export, where to get the data from
     DocxExport &m_rExport;
 
@@ -700,8 +701,8 @@ private:
     void DoWriteBookmarkTagEnd(const OUString & bookmarkName);
     void DoWriteBookmarksStart();
     void DoWriteBookmarksEnd();
-    void DoWriteBookmarkStartIfExist(sal_Int32 nPos);
-    void DoWriteBookmarkEndIfExist(sal_Int32 nPos);
+    void DoWriteBookmarkStartIfExist(sal_Int32 nRunPos);
+    void DoWriteBookmarkEndIfExist(sal_Int32 nRunPos);
 
     void DoWritePermissionTagStart(const OUString & permission);
     void DoWritePermissionTagEnd(const OUString & permission);
@@ -733,7 +734,6 @@ private:
     void CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun );
     void EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos& rInfos );
     void DoWriteFieldRunProperties( const SwTextNode* pNode, sal_Int32 nPos, bool bWriteCombChars = false );
-    virtual void GenerateBookmarksForSequenceField(const SwTextNode& rNode, SwWW8AttrIter& rAttrIter) override;
 
     static void AddToAttrList( rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue );
     static void AddToAttrList( rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nArgs, ... );
@@ -791,9 +791,9 @@ private:
     std::vector<OUString> m_rBookmarksStart;
     std::vector<OUString> m_rBookmarksEnd;
 
-    /// Bookmarks with position to output
-    std::multimap<sal_Int32, OUString> m_aBookmarksWithPosStart;
-    std::multimap<sal_Int32, OUString> m_aBookmarksWithPosEnd;
+    /// Bookmarks of the current paragraph
+    std::multimap<sal_Int32, OUString> m_aBookmarksOfParagraphStart;
+    std::multimap<sal_Int32, OUString> m_aBookmarksOfParagraphEnd;
 
     /// Permissions to output
     std::vector<OUString> m_rPermissionsStart;

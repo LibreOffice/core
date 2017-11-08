@@ -49,14 +49,14 @@ public:
 
     /// Start of the text run.
     ///
-    virtual void StartRun( const SwRedlineData* pRedlineData, bool bSingleEmptyRun = false ) override;
+    virtual void StartRun( const SwRedlineData* pRedlineData, sal_Int32 nPos, bool bSingleEmptyRun = false ) override;
 
     virtual void OnTOXEnding() override;
 
     /// End of the text run.
     ///
     /// No-op for binary filters.
-    virtual void EndRun(const SwTextNode* , sal_Int32 ) override {}
+    virtual void EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool bLastRun = false) override;
 
     /// Before we start outputting the attributes.
     virtual void StartRunProperties() override;
@@ -83,8 +83,6 @@ public:
     virtual bool EndURL(bool) override;
 
     virtual void FieldVanish( const OUString& rText, ww::eField eType ) override;
-
-    virtual void GenerateBookmarksForSequenceField(const SwTextNode& /*rNode*/, SwWW8AttrIter& /*rAttrIter*/) override {};
 
     /// Output redlining.
     virtual void Redline( const SwRedlineData* pRedline ) override;
@@ -432,6 +430,8 @@ protected:
 
     virtual bool AnalyzeURL( const OUString& rURL, const OUString& rTarget, OUString* pLinkURL, OUString* pMark ) override;
 
+    virtual void WriteBookmarkInActParagraph( const OUString& rName, sal_Int32 nFirstRunPos, sal_Int32 nLastRunPos ) override;
+
     /// Reference to the export, where to get the data from
     WW8Export &m_rWW8Export;
 
@@ -459,6 +459,10 @@ protected:
     sal_uInt16 m_nFieldResults;
 
     bool mbOnTOXEnding;
+
+    /// Bookmarks of the current paragraph
+    std::multimap<sal_Int32, OUString> m_aBookmarksOfParagraphStart;
+    std::multimap<sal_Int32, OUString> m_aBookmarksOfParagraphEnd;
 
 public:
     explicit WW8AttributeOutput( WW8Export &rWW8Export )
