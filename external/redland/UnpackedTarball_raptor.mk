@@ -11,6 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,raptor))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,raptor,$(RAPTOR_TARBALL),,redland))
 
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,raptor,build))
+
 # configure generated files for MSVC
 $(eval $(call gb_UnpackedTarball_add_file,raptor,src/raptor2.h,external/redland/raptor/raptor2.h))
 $(eval $(call gb_UnpackedTarball_add_file,raptor,src/raptor_config.h,external/redland/raptor/raptor_config.h))
@@ -27,7 +29,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,raptor,\
 	external/redland/raptor/xml2-config.patch \
 	external/redland/raptor/0001-Calcualte-max-nspace-declarations-correctly-for-XML-.patch.1 \
 	external/redland/raptor/libtool.patch \
-	external/redland/raptor/iOS.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:

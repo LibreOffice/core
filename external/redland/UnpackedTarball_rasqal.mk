@@ -11,6 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,rasqal))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,rasqal,$(RASQAL_TARBALL),,redland))
 
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,rasqal,build))
+
 # configure generated files for MSVC
 $(eval $(call gb_UnpackedTarball_add_file,rasqal,src/rasqal.h,external/redland/rasqal/rasqal.h))
 
@@ -27,7 +29,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,rasqal,\
 	external/redland/rasqal/rpath.patch \
 	external/redland/rasqal/clang-cl.patch \
 	external/redland/rasqal/libtool.patch \
-	external/redland/rasqal/iOS.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
