@@ -226,7 +226,7 @@ void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
 using SwRubyList = std::vector<std::unique_ptr<SwRubyListEntry>>;
 
 // Represents the model of a Writer document.
-class SW_DLLPUBLIC SwDoc
+class SW_DLLPUBLIC SwDoc final
 {
     friend class ::sw::DocumentContentOperationsManager;
 
@@ -433,7 +433,7 @@ public:
 
     // Life cycle
     SwDoc();
-    virtual ~SwDoc();
+    ~SwDoc();
 
     bool IsInDtor() const { return mbDtor; }
 

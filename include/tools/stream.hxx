@@ -292,7 +292,7 @@ public:
               @endcode
               causing endless loops ...
     */
-    virtual bool    ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead = 0xFFFE );
+    bool            ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead = 0xFFFE );
     bool            WriteLine( const OString& rStr );
 
     /** Read a line of bytes.
@@ -408,7 +408,7 @@ public:
         If we try to read into a variable v and the operation fails, the value
         of v should be unchanged,
     */
-    virtual bool good() const { return !(eof() || bad()); }
+    bool good() const { return !(eof() || bad()); }
 
 private:
     template<typename T>
