@@ -2063,10 +2063,11 @@ static void ImplHandleSalKeyMod( vcl::Window* pWindow, SalKeyModEvent const * pE
     // #105224# send commandevent to allow special treatment of Ctrl-LeftShift/Ctrl-RightShift etc.
     // + auto-accelerator feature, tdf#92630
 
-    // find window
+    // try to find a key input window...
     vcl::Window* pChild = ImplGetKeyInputWindow( pWindow );
-    if ( !pChild )
-        return;
+    //...otherwise fail safe...
+    if (!pChild)
+        pChild = pWindow;
 
     CommandModKeyData data( pEvent->mnModKeyCode, pEvent->mbDown );
     ImplCallCommand( pChild, CommandEventId::ModKeyChange, &data );
