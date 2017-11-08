@@ -756,11 +756,11 @@ void ImplFontSubstitute( OUString& rFontName )
 vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLang,
                                         GetDefaultFontFlags nFlags, const OutputDevice* pOutDev )
 {
-    if (!pOutDev && !utl::ConfigManager::IsAvoidConfig()) // default is NULL
+    if (!pOutDev && !utl::ConfigManager::IsFuzzing()) // default is NULL
         pOutDev = Application::GetDefaultDevice();
 
     OUString aSearch;
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
     {
         LanguageTag aLanguageTag(
                 ( eLang == LANGUAGE_NONE || eLang == LANGUAGE_SYSTEM || eLang == LANGUAGE_DONTKNOW ) ?
@@ -987,7 +987,7 @@ void OutputDevice::InitFont() const
     {
         // decide if antialiasing is appropriate
         bool bNonAntialiased(GetAntialiasing() & AntialiasingFlags::DisableText);
-        if (!utl::ConfigManager::IsAvoidConfig())
+        if (!utl::ConfigManager::IsFuzzing())
         {
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             bNonAntialiased |= bool(rStyleSettings.GetDisplayOptions() & DisplayOptions::AADisable);

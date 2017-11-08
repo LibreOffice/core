@@ -357,7 +357,7 @@ void SvtAccessibilityOptions_Impl::SetVCLSettings()
 
 SvtAccessibilityOptions::SvtAccessibilityOptions()
 {
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
     {
         ::osl::MutexGuard aGuard( SingletonMutex::get() );
         if(!sm_pSingleImplConfig)

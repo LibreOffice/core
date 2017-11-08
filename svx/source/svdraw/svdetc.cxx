@@ -72,7 +72,7 @@ SdrGlobalData::SdrGlobalData()
     : pSysLocale(nullptr)
     , pLocaleData(nullptr)
 {
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
     {
         svx::ExtrusionBar::RegisterInterface();
         svx::FontworkBar::RegisterInterface();
@@ -104,7 +104,7 @@ SdrGlobalData & GetSdrGlobalData() {
 
 OLEObjCache::OLEObjCache()
 {
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
         nSize = officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get();
     else
         nSize = 100;

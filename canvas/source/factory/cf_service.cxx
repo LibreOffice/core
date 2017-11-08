@@ -125,7 +125,7 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
     m_bCacheHasUseAcceleratedEntry(),
     m_bCacheHasUseAAEntry()
 {
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
     {
         try
         {

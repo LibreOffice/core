@@ -363,7 +363,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                 bool bUseSHA1InODF12 = false;
                 bool bUseBlowfishInODF12 = false;
 
-                if (!utl::ConfigManager::IsAvoidConfig())
+                if (!utl::ConfigManager::IsFuzzing())
                 {
                     SvtSaveOptions aSaveOpt;
                     nDefVersion = aSaveOpt.GetODFDefaultVersion();
@@ -531,7 +531,7 @@ bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
             aArgs[nLength].Name = "Title";
             aArgs[nLength].Value <<= GetTitle( SFX_TITLE_DETECT );
             xModel->attachResource( OUString(), aArgs );
-            if (!utl::ConfigManager::IsAvoidConfig())
+            if (!utl::ConfigManager::IsFuzzing())
                 impl_addToModelCollection(xModel);
         }
 
@@ -3020,7 +3020,7 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
 
             SetupStorage( pImpl->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT, false );
             pImpl->m_bCreateTempStor = false;
-            if (!utl::ConfigManager::IsAvoidConfig())
+            if (!utl::ConfigManager::IsFuzzing())
                 SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::StorageChanged, GlobalEventConfig::GetEventName(GlobalEventId::STORAGECHANGED), this ) );
         }
         catch( uno::Exception& )

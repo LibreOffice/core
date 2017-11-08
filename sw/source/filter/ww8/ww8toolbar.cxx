@@ -228,7 +228,7 @@ bool SwCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
         try
         {
             css::uno::Reference<css::ui::XUIConfigurationManager> xCfgMgr;
-            if (!utl::ConfigManager::IsAvoidConfig())
+            if (!utl::ConfigManager::IsFuzzing())
             {
                 uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                 uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xAppCfgSupp( ui::theModuleUIConfigurationManagerSupplier::get(xContext) );

@@ -45,7 +45,7 @@ using namespace com::sun::star;
 
 const OUString GetPalettePath()
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return OUString();
     SvtPathOptions aPathOpt;
     return aPathOpt.GetPalettePath();

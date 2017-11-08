@@ -96,7 +96,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     // Note: Any non-hidden compatibility flag should obtain its default
     // by asking SvtCompatibilityOptions, see below.
 
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
     {
         const SvtCompatibilityOptions aOptions;
         mbParaSpaceMax                      = aOptions.GetDefault( SvtCompatibilityEntry::Index::AddSpacing );

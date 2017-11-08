@@ -396,7 +396,7 @@ Mutex& GlobalEventConfig::GetOwnStaticMutex()
 
 OUString GlobalEventConfig::GetEventName( GlobalEventId nIndex )
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return OUString();
     rtl::Reference<GlobalEventConfig> createImpl(new GlobalEventConfig);
     return GlobalEventConfig::m_pImpl->GetEventName( nIndex );

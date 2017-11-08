@@ -98,7 +98,7 @@ void CommonInitialize(int *argc, char ***argv)
     if( !xServiceManager.is() )
         Application::Abort( "Failed to bootstrap" );
     comphelper::setProcessServiceFactory( xServiceManager );
-    utl::ConfigManager::EnableAvoidConfig();
+    utl::ConfigManager::EnableFuzzing();
     InitVCL();
 
     //we don't have a de-init, so inside this leak disabled region...

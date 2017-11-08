@@ -148,7 +148,7 @@ PresentationSettings::PresentationSettings( const PresentationSettings& r )
 }
 
 SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
-: FmFormModel( !utl::ConfigManager::IsAvoidConfig() ? SvtPathOptions().GetPalettePath() : OUString(), nullptr, pDrDocSh )
+: FmFormModel( !utl::ConfigManager::IsFuzzing() ? SvtPathOptions().GetPalettePath() : OUString(), nullptr, pDrDocSh )
 , mpOutliner(nullptr)
 , mpInternalOutliner(nullptr)
 , mpWorkStartupTimer(nullptr)
@@ -215,7 +215,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     SetCalcFieldValueHdl( &rOutliner );
 
     // set linguistic options
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
     {
         const SvtLinguConfig    aLinguConfig;
         SvtLinguOptions         aOptions;
@@ -996,7 +996,7 @@ sal_uInt16 SdDrawDocument::GetAnnotationAuthorIndex( const OUString& rAuthor )
 
 void SdDrawDocument::InitLayoutVector()
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return;
 
     const Reference<css::uno::XComponentContext> xContext(
@@ -1035,7 +1035,7 @@ void SdDrawDocument::InitLayoutVector()
 
 void SdDrawDocument::InitObjectVector()
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return;
 
     const Reference<css::uno::XComponentContext> xContext(

@@ -109,7 +109,7 @@ void DocumentDrawModelManager::InitDrawModel()
     mpDrawModel->InsertPage( pMasterPage );
     SAL_INFO( "sw.doc", "after create DrawDocument" );
     SdrOutliner& rOutliner = mpDrawModel->GetDrawOutliner();
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
     {
         SAL_INFO( "sw.doc", "before create Spellchecker/Hyphenator" );
         css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpell = ::GetSpellChecker();

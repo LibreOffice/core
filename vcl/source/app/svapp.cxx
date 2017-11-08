@@ -744,7 +744,7 @@ void InitSettings(ImplSVData* pSVData)
     assert(!pSVData->maAppData.mpSettings && "initialization should not happen twice!");
 
     pSVData->maAppData.mpSettings = new AllSettings();
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
     {
         pSVData->maAppData.mpCfgListener = new LocaleConfigurationListener;
         pSVData->maAppData.mpSettings->GetSysLocale().GetOptions().AddListener( pSVData->maAppData.mpCfgListener );

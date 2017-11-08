@@ -698,7 +698,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Desktop::queryDispatch( co
     if ( aURL.Protocol.equalsIgnoreAsciiCase(".uno:") )
         aCommand = aURL.Path;
 
-    if (!m_xCommandOptions && !utl::ConfigManager::IsAvoidConfig())
+    if (!m_xCommandOptions && !utl::ConfigManager::IsFuzzing())
         m_xCommandOptions.reset(new SvtCommandOptions);
 
     // Make std::unordered_map lookup if the current URL is in the disabled list

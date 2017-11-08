@@ -4849,7 +4849,7 @@ void WW8Customizations::Import( SwDocShell* pShell )
 
 void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, const uno::Reference< container::XNameContainer >& xPrjNameCache )
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return;
 
     SvtPathOptions aPathOpt;
@@ -5196,7 +5196,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
             }
 
 #if HAVE_FEATURE_SCRIPTING
-            if (!utl::ConfigManager::IsAvoidConfig())
+            if (!utl::ConfigManager::IsFuzzing())
             {
                 BasicManager *pBasicMan = m_pDocShell->GetBasicManager();
                 if (pBasicMan)

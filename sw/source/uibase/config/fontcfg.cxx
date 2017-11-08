@@ -80,7 +80,7 @@ SwStdFontConfig::SwStdFontConfig() :
 {
     SvtLinguOptions aLinguOpt;
 
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
         SvtLinguConfig().GetOptions( aLinguOpt );
 
     LanguageType eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN),
@@ -160,7 +160,7 @@ bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
     bool bSame = false;
     SvtLinguOptions aLinguOpt;
 
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
         SvtLinguConfig().GetOptions(aLinguOpt);
 
     LanguageType eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN),
@@ -274,7 +274,7 @@ void SwStdFontConfig::ChangeInt( sal_uInt16 nFontType, sal_Int32 nHeight )
     if( nFontType < DEF_FONT_COUNT && nDefaultFontHeight[nFontType] != nHeight)
     {
         SvtLinguOptions aLinguOpt;
-        if (!utl::ConfigManager::IsAvoidConfig())
+        if (!utl::ConfigManager::IsFuzzing())
             SvtLinguConfig().GetOptions( aLinguOpt );
 
         LanguageType eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN),

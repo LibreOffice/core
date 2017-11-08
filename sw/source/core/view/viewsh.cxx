@@ -2438,7 +2438,7 @@ SwAccessibleMap* SwViewShell::GetAccessibleMap()
 
 void SwViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions const & rAccessibilityOptions)
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return;
     if (mpOpt->IsPagePreview() && !rAccessibilityOptions.GetIsForPagePreviews())
     {

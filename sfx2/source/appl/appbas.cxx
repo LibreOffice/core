@@ -96,7 +96,7 @@ BasicManager* SfxApplication::GetBasicManager()
 #if !HAVE_FEATURE_SCRIPTING
     return 0;
 #else
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return nullptr;
     return BasicManagerRepository::getApplicationBasicManager();
 #endif
@@ -107,7 +107,7 @@ XLibraryContainer * SfxApplication::GetDialogContainer()
 #if !HAVE_FEATURE_SCRIPTING
     return NULL;
 #else
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return nullptr;
     if ( !pImpl->pBasicManager->isValid() )
         GetBasicManager();
@@ -121,7 +121,7 @@ XLibraryContainer * SfxApplication::GetBasicContainer()
 #if !HAVE_FEATURE_SCRIPTING
     return NULL;
 #else
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return nullptr;
     if ( !pImpl->pBasicManager->isValid() )
         GetBasicManager();
@@ -134,7 +134,7 @@ StarBASIC* SfxApplication::GetBasic()
 #if !HAVE_FEATURE_SCRIPTING
     return 0;
 #else
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return nullptr;
     return GetBasicManager()->GetLib(0);
 #endif

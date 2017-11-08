@@ -228,7 +228,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl ) c
 
     // auto detect HC mode; if the system already set it to "yes"
     // (see above) then accept that
-    if (!rSettings.GetStyleSettings().GetHighContrastMode() && !utl::ConfigManager::IsAvoidConfig())
+    if (!rSettings.GetStyleSettings().GetHighContrastMode() && !utl::ConfigManager::IsFuzzing())
     {
         bool bAutoHCMode = true;
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(

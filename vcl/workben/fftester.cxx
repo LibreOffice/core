@@ -89,7 +89,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         if( !xServiceManager.is() )
             Application::Abort( "Failed to bootstrap" );
         comphelper::setProcessServiceFactory( xServiceManager );
-        utl::ConfigManager::EnableAvoidConfig();
+        utl::ConfigManager::EnableFuzzing();
 
         // initialise unconfigured UCB:
         css::uno::Reference<css::ucb::XUniversalContentBroker> xUcb(comphelper::getProcessServiceFactory()->

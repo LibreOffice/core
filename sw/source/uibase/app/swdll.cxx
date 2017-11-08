@@ -85,7 +85,7 @@ SwDLL::SwDLL()
         return;
 
     std::unique_ptr<SvtModuleOptions> xOpt;
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
         xOpt.reset(new SvtModuleOptions);
     SfxObjectFactory* pDocFact = nullptr;
     SfxObjectFactory* pGlobDocFact = nullptr;
@@ -137,7 +137,7 @@ SwDLL::SwDLL()
     RegisterControls();
 #endif
 
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
     {
         // replace SvxAutocorrect with SwAutocorrect
         SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
