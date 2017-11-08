@@ -253,6 +253,9 @@ void ScCaptionCreator::FitCaptionToRect( const tools::Rectangle* pVisRect )
     // update caption
     aCaptRect.SetPos( aCaptPos );
     mxCaption->SetLogicRect( aCaptRect );
+
+    // Apply grid sync
+    static_cast<ScDocShell*>(mrDoc.GetDocumentShell())->GetViewData()->GetScDrawView()->SyncForGrid(mxCaption.get());
 }
 
 void ScCaptionCreator::AutoPlaceCaption( const tools::Rectangle* pVisRect )
