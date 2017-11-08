@@ -2281,6 +2281,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if( pDoc->GetNote(aPos) )
                     {
                         pData->GetDocShell()->GetDocFunc().ShowNote( aPos, bShowNote );
+                        pData->GetScDrawView()->SyncForGrid(pDoc->GetNote(aPos)->GetCaption());
                     }
                 }
                 else
