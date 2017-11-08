@@ -16,6 +16,24 @@
       "revId": "4cc31f50ffb84786f9aa888bc57d62cd9642a45c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_287ac9f1",
+        "filename": "dbaccess/source/filter/xml/xmlfilter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-11-08T13:46:29Z",
+      "side": 1,
+      "message": "Well, there\u0027s no VclPtr in constructor; do you think of some specific better implementation? Or just move creation of VclPtr to constructor?",
+      "parentUuid": "1a430d35_282c8901",
+      "revId": "4cc31f50ffb84786f9aa888bc57d62cd9642a45c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
