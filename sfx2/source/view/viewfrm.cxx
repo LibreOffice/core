@@ -2158,7 +2158,9 @@ void SfxViewFrame::StateView_Impl
     assert(pRanges && "Set with no Range");
     while ( *pRanges )
     {
-        for ( sal_uInt16 nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich )
+        sal_uInt16 nStartWhich = *pRanges++;
+        sal_uInt16 nEndWhich = *pRanges++;
+        for ( sal_uInt16 nWhich = nStartWhich; nWhich <= nEndWhich; ++nWhich )
         {
             switch(nWhich)
             {

@@ -1085,7 +1085,9 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         const sal_uInt16 *pRanges = rSet.GetRanges();
         while ( *pRanges )
         {
-            for(sal_uInt16 nId = *pRanges++; nId <= *pRanges; ++nId)
+            sal_uInt16 nStartWhich = *pRanges++;
+            sal_uInt16 nEndWhich = *pRanges++;
+            for(sal_uInt16 nId = nStartWhich; nId <= nEndWhich; ++nId)
             {
                 if ( rSet.GetItemState(nId) < SfxItemState::SET ) //???
                     // not really set
