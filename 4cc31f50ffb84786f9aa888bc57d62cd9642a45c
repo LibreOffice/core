@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_282c8901",
+        "filename": "dbaccess/source/filter/xml/xmlfilter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-08T13:16:38Z",
+      "side": 1,
+      "message": "this code looks like it pre-dates the VclPtr conversion. We can just keep around a VclPtr, no need to keep both the VclPtr and the uno::Reference",
+      "revId": "4cc31f50ffb84786f9aa888bc57d62cd9642a45c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
