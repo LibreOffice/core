@@ -31,13 +31,16 @@ class VCL_DLLPUBLIC Qt5Font : public QFont
     hb_font_t* m_pHbFont;
 
 public:
-    Qt5Font( const FontSelectPattern& rFSP)
-        : m_aFontSelData( rFSP ), m_pHbFont( nullptr ) {}
+    Qt5Font(const FontSelectPattern& rFSP)
+        : m_aFontSelData(rFSP)
+        , m_pHbFont(nullptr)
+    {
+    }
     virtual ~Qt5Font();
 
-    hb_font_t*                GetHbFont() const { return m_pHbFont; }
-    void                      SetHbFont( hb_font_t* pHbFont ) { m_pHbFont = pHbFont; }
-    const FontSelectPattern&  GetFontSelData() const { return m_aFontSelData; }
+    hb_font_t* GetHbFont() const { return m_pHbFont; }
+    void SetHbFont(hb_font_t* pHbFont) { m_pHbFont = pHbFont; }
+    const FontSelectPattern& GetFontSelData() const { return m_aFontSelData; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

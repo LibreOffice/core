@@ -23,33 +23,30 @@
 
 #include <vcl/event.hxx>
 
-void CairoDeleter::operator()(cairo_surface_t *pSurface) const
-{
-    cairo_surface_destroy( pSurface );
-}
+void CairoDeleter::operator()(cairo_surface_t* pSurface) const { cairo_surface_destroy(pSurface); }
 
-sal_uInt16 GetKeyModCode( Qt::KeyboardModifiers eKeyModifiers )
+sal_uInt16 GetKeyModCode(Qt::KeyboardModifiers eKeyModifiers)
 {
     sal_uInt16 nCode = 0;
-    if( eKeyModifiers & Qt::ShiftModifier )
+    if (eKeyModifiers & Qt::ShiftModifier)
         nCode |= KEY_SHIFT;
-    if( eKeyModifiers & Qt::ControlModifier )
+    if (eKeyModifiers & Qt::ControlModifier)
         nCode |= KEY_MOD1;
-    if( eKeyModifiers & Qt::AltModifier )
+    if (eKeyModifiers & Qt::AltModifier)
         nCode |= KEY_MOD2;
-    if( eKeyModifiers & Qt::MetaModifier )
+    if (eKeyModifiers & Qt::MetaModifier)
         nCode |= KEY_MOD3;
     return nCode;
 }
 
-sal_uInt16 GetMouseModCode( Qt::MouseButtons eButtons )
+sal_uInt16 GetMouseModCode(Qt::MouseButtons eButtons)
 {
     sal_uInt16 nCode = 0;
-    if( eButtons & Qt::LeftButton )
+    if (eButtons & Qt::LeftButton)
         nCode |= MOUSE_LEFT;
-    if( eButtons & Qt::MidButton )
+    if (eButtons & Qt::MidButton)
         nCode |= MOUSE_MIDDLE;
-    if( eButtons & Qt::RightButton )
+    if (eButtons & Qt::RightButton)
         nCode |= MOUSE_RIGHT;
     return nCode;
 }

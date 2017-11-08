@@ -22,7 +22,6 @@ using namespace com::sun::star::uno;
 
 namespace apitest
 {
-
 void XSheetCellRangeContainer::testAddRemoveRangeAddress()
 {
     uno::Reference<sheet::XSheetCellRangeContainer> xSCRC(init(), UNO_QUERY_THROW);

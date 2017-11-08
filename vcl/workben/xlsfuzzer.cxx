@@ -13,9 +13,9 @@
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include "commonfuzzer.hxx"
 
-extern "C" bool TestImportXLS(SvStream &rStream);
+extern "C" bool TestImportXLS(SvStream& rStream);
 
-extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
 {
     if (__lsan_disable)
         __lsan_disable();
@@ -23,12 +23,16 @@ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
     CommonInitialize(argc, argv);
 
     // initialise unconfigured UCB:
-    css::uno::Reference<css::ucb::XUniversalContentBroker> xUcb(comphelper::getProcessServiceFactory()->
-        createInstance("com.sun.star.ucb.UniversalContentBroker"), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::ucb::XUniversalContentBroker> xUcb(
+        comphelper::getProcessServiceFactory()->createInstance(
+            "com.sun.star.ucb.UniversalContentBroker"),
+        css::uno::UNO_QUERY_THROW);
     css::uno::Sequence<css::uno::Any> aArgs(1);
     aArgs[0] <<= OUString("NoConfig");
-    css::uno::Reference<css::ucb::XContentProvider> xFileProvider(comphelper::getProcessServiceFactory()->
-        createInstanceWithArguments("com.sun.star.ucb.FileContentProvider", aArgs), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::ucb::XContentProvider> xFileProvider(
+        comphelper::getProcessServiceFactory()->createInstanceWithArguments(
+            "com.sun.star.ucb.FileContentProvider", aArgs),
+        css::uno::UNO_QUERY_THROW);
     xUcb->registerContentProvider(xFileProvider, "file", true);
 
     if (__lsan_enable)

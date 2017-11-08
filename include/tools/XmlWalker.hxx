@@ -14,8 +14,8 @@
 #include <tools/stream.hxx>
 #include <memory>
 
-namespace tools {
-
+namespace tools
+{
 struct XmlWalkerImpl;
 
 /**

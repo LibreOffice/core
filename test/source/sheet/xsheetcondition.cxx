@@ -22,7 +22,6 @@ using namespace com::sun::star::uno;
 
 namespace apitest
 {
-
 void XSheetCondition::testGetSetFormula1()
 {
     uno::Reference<sheet::XSheetCondition> xSheetCondition(init(), UNO_QUERY_THROW);

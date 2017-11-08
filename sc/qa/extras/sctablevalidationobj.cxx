@@ -26,8 +26,8 @@ using namespace css;
 using namespace css::uno;
 using namespace com::sun::star;
 
-namespace sc_apitest {
-
+namespace sc_apitest
+{
 #define NUMBER_OF_TESTS 4
 
 class ScTableValidationObj : public CalcUnoApiTest, public apitest::XSheetCondition
@@ -35,7 +35,7 @@ class ScTableValidationObj : public CalcUnoApiTest, public apitest::XSheetCondit
 public:
     ScTableValidationObj();
 
-    virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference<uno::XInterface> init() override;
     virtual void setUp() override;
     virtual void tearDown() override;
 
@@ -51,36 +51,35 @@ public:
 
 private:
     static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
-
+    static uno::Reference<lang::XComponent> mxComponent;
 };
 
 sal_Int32 ScTableValidationObj::nTest = 0;
-uno::Reference< lang::XComponent > ScTableValidationObj::mxComponent;
+uno::Reference<lang::XComponent> ScTableValidationObj::mxComponent;
 
 ScTableValidationObj::ScTableValidationObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
-uno::Reference< uno::XInterface > ScTableValidationObj::init()
+uno::Reference<uno::XInterface> ScTableValidationObj::init()
 {
     // create a calc document
     if (!mxComponent.is())
         mxComponent = loadFromDesktop("private:factory/scalc");
 
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
-    uno::Reference< container::XIndexAccess > xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
     xSheet->getCellByPosition(5, 5)->setValue(15);
     xSheet->getCellByPosition(1, 4)->setValue(10);
     xSheet->getCellByPosition(2, 0)->setValue(-5.15);
 
-    uno::Reference< beans::XPropertySet > xPropSet(xSheet, uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XSheetCondition > xSheetCondition;
+    uno::Reference<beans::XPropertySet> xPropSet(xSheet, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetCondition> xSheetCondition;
     CPPUNIT_ASSERT(xPropSet->getPropertyValue("Validation") >>= xSheetCondition);
 
     return xSheetCondition;

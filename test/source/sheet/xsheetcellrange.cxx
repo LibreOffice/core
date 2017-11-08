@@ -21,7 +21,6 @@ using namespace com::sun::star::uno;
 
 namespace apitest
 {
-
 void XSheetCellRange::testGetSpreadsheet()
 {
     uno::Reference<sheet::XSheetCellRange> xSheetCellRange(init(), UNO_QUERY_THROW);

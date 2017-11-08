@@ -19,13 +19,10 @@
 
 #include "Qt5Printer.hxx"
 
-bool Qt5InfoPrinter::Setup( SalFrame*, ImplJobSetup* )
-{
-    return false;
-}
+bool Qt5InfoPrinter::Setup(SalFrame*, ImplJobSetup*) { return false; }
 
-Qt5Printer::Qt5Printer( SalInfoPrinter* pInfoPrinter )
-    : PspSalPrinter( pInfoPrinter )
+Qt5Printer::Qt5Printer(SalInfoPrinter* pInfoPrinter)
+    : PspSalPrinter(pInfoPrinter)
 {
 }
 

@@ -33,8 +33,8 @@ using namespace css;
 using namespace css::uno;
 using namespace com::sun::star;
 
-namespace sc_apitest {
-
+namespace sc_apitest
+{
 #define NUMBER_OF_TESTS 5
 
 class ScTableConditionalEntryObj : public CalcUnoApiTest,
@@ -44,7 +44,7 @@ class ScTableConditionalEntryObj : public CalcUnoApiTest,
 public:
     ScTableConditionalEntryObj();
 
-    virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference<uno::XInterface> init() override;
     virtual void setUp() override;
     virtual void tearDown() override;
 
@@ -63,39 +63,39 @@ public:
 
 private:
     static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
-
+    static uno::Reference<lang::XComponent> mxComponent;
 };
 
 sal_Int32 ScTableConditionalEntryObj::nTest = 0;
-uno::Reference< lang::XComponent > ScTableConditionalEntryObj::mxComponent;
+uno::Reference<lang::XComponent> ScTableConditionalEntryObj::mxComponent;
 
 ScTableConditionalEntryObj::ScTableConditionalEntryObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
-uno::Reference< uno::XInterface > ScTableConditionalEntryObj::init()
+uno::Reference<uno::XInterface> ScTableConditionalEntryObj::init()
 {
     // create a calc document
     if (!mxComponent.is())
         mxComponent = loadFromDesktop("private:factory/scalc");
 
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
-    uno::Reference< container::XIndexAccess > xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
     xSheet->getCellByPosition(5, 5)->setValue(15);
     xSheet->getCellByPosition(1, 4)->setValue(10);
     xSheet->getCellByPosition(2, 0)->setValue(-5.15);
 
-    uno::Reference< beans::XPropertySet > xPropSet(xSheet, uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XSheetConditionalEntries > xSheetConditionalEntries;
-    xSheetConditionalEntries.set(xPropSet->getPropertyValue(SC_UNONAME_CONDFMT), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropSet(xSheet, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetConditionalEntries> xSheetConditionalEntries;
+    xSheetConditionalEntries.set(xPropSet->getPropertyValue(SC_UNONAME_CONDFMT),
+                                 uno::UNO_QUERY_THROW);
 
-    uno::Sequence< beans::PropertyValue > aPropValue(5);
+    uno::Sequence<beans::PropertyValue> aPropValue(5);
     aPropValue[0].Name = SC_UNONAME_STYLENAME;
     aPropValue[0].Value <<= OUString("Result2");
     aPropValue[1].Name = SC_UNONAME_FORMULA1;
@@ -108,7 +108,8 @@ uno::Reference< uno::XInterface > ScTableConditionalEntryObj::init()
     aPropValue[4].Value <<= table::CellAddress(0, 1, 5);
     xSheetConditionalEntries->addNew(aPropValue);
 
-    uno::Reference< sheet::XSheetConditionalEntry > xSheetConditionalEntry(xSheetConditionalEntries->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetConditionalEntry> xSheetConditionalEntry(
+        xSheetConditionalEntries->getByIndex(0), uno::UNO_QUERY_THROW);
     return xSheetConditionalEntry;
 }
 

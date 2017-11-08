@@ -20,7 +20,6 @@ using namespace com::sun::star::uno;
 
 namespace apitest
 {
-
 void XSheetConditionalEntry::testGetSetStyleName()
 {
     uno::Reference<sheet::XSheetConditionalEntry> xSheetConditionalEntry(init(), UNO_QUERY_THROW);

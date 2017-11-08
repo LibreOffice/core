@@ -15,17 +15,18 @@
 #include <libxml/xmlstring.h>
 #include <vector>
 
-namespace tools {
-
+namespace tools
+{
 struct XmlWalkerImpl
 {
     XmlWalkerImpl()
         : mpDocPtr(nullptr)
         , mpRoot(nullptr)
         , mpCurrent(nullptr)
-    {}
+    {
+    }
 
-    xmlDocPtr  mpDocPtr;
+    xmlDocPtr mpDocPtr;
     xmlNodePtr mpRoot;
     xmlNodePtr mpCurrent;
 
@@ -34,7 +35,8 @@ struct XmlWalkerImpl
 
 XmlWalker::XmlWalker()
     : mpImpl(o3tl::make_unique<XmlWalkerImpl>())
-{}
+{
+}
 
 XmlWalker::~XmlWalker()
 {
@@ -67,7 +69,8 @@ OString XmlWalker::content()
     OString aContent;
     if (mpImpl->mpCurrent->xmlChildrenNode != nullptr)
     {
-        xmlChar* pContent = xmlNodeListGetString(mpImpl->mpDocPtr, mpImpl->mpCurrent->xmlChildrenNode, 1);
+        xmlChar* pContent
+            = xmlNodeListGetString(mpImpl->mpDocPtr, mpImpl->mpCurrent->xmlChildrenNode, 1);
         aContent = OString(reinterpret_cast<const char*>(pContent));
         xmlFree(pContent);
     }
@@ -97,15 +100,9 @@ OString XmlWalker::attribute(OString sName)
     return aAttributeContent;
 }
 
-void XmlWalker::next()
-{
-    mpImpl->mpCurrent = mpImpl->mpCurrent->next;
-}
+void XmlWalker::next() { mpImpl->mpCurrent = mpImpl->mpCurrent->next; }
 
-bool XmlWalker::isValid() const
-{
-    return mpImpl->mpCurrent != nullptr;
-}
+bool XmlWalker::isValid() const { return mpImpl->mpCurrent != nullptr; }
 
 } // end tools namespace
 

@@ -18,27 +18,33 @@
 #include <sfx2/classificationhelper.hxx>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 
-namespace svx {
-namespace classification {
+namespace svx
+{
+namespace classification
+{
+SVX_DLLPUBLIC OUString
+convertClassificationResultToString(std::vector<svx::ClassificationResult> const& rResults);
 
-SVX_DLLPUBLIC OUString convertClassificationResultToString(std::vector<svx::ClassificationResult> const & rResults);
+SVX_DLLPUBLIC OUString
+getProperty(css::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer,
+            OUString const& rName);
 
-SVX_DLLPUBLIC OUString getProperty(css::uno::Reference<css::beans::XPropertyContainer> const & rxPropertyContainer,
-                                   OUString const & rName);
+SVX_DLLPUBLIC bool containsProperty(css::uno::Sequence<css::beans::Property> const& rProperties,
+                                    OUString const& rName);
 
-SVX_DLLPUBLIC bool containsProperty(css::uno::Sequence<css::beans::Property> const & rProperties,
-                                    OUString const & rName);
+SVX_DLLPUBLIC void
+removeAllProperties(css::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer);
 
-SVX_DLLPUBLIC void removeAllProperties(css::uno::Reference<css::beans::XPropertyContainer> const & rxPropertyContainer);
+SVX_DLLPUBLIC bool addOrInsertDocumentProperty(
+    css::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer,
+    OUString const& rsKey, OUString const& rsValue);
 
-SVX_DLLPUBLIC bool addOrInsertDocumentProperty(css::uno::Reference<css::beans::XPropertyContainer> const & rxPropertyContainer,
-                                               OUString const & rsKey, OUString const & rsValue);
-
-SVX_DLLPUBLIC void insertFullTextualRepresentationAsDocumentProperty(css::uno::Reference<css::beans::XPropertyContainer> const & rxPropertyContainer,
-                                                                     sfx::ClassificationKeyCreator const & rKeyCreator,
-                                                                     std::vector<svx::ClassificationResult> const & rResults);
-
-}} // end svx::classification namespace
+SVX_DLLPUBLIC void insertFullTextualRepresentationAsDocumentProperty(
+    css::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer,
+    sfx::ClassificationKeyCreator const& rKeyCreator,
+    std::vector<svx::ClassificationResult> const& rResults);
+}
+} // end svx::classification namespace
 
 #endif // INCLUDED_SVX_CLASSIFICATIONCOMMON_HXX
 

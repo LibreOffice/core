@@ -21,36 +21,34 @@
 
 #include <QtGui/QColor>
 
-Qt5Painter::Qt5Painter( Qt5Graphics &rGraphics,
-                        bool bPrepareBrush, sal_uInt8 nTransparency )
-    : m_rGraphics( rGraphics )
+Qt5Painter::Qt5Painter(Qt5Graphics& rGraphics, bool bPrepareBrush, sal_uInt8 nTransparency)
+    : m_rGraphics(rGraphics)
 {
-    if ( rGraphics.m_pQImage )
-        begin( rGraphics.m_pQImage );
+    if (rGraphics.m_pQImage)
+        begin(rGraphics.m_pQImage);
     else
     {
-        assert( rGraphics.m_pFrame );
-        begin( rGraphics.m_pFrame->GetQWidget() );
+        assert(rGraphics.m_pFrame);
+        begin(rGraphics.m_pFrame->GetQWidget());
     }
-    if ( !rGraphics.m_aClipPath.isEmpty() )
-        setClipPath( rGraphics.m_aClipPath );
+    if (!rGraphics.m_aClipPath.isEmpty())
+        setClipPath(rGraphics.m_aClipPath);
     else
-        setClipRegion( rGraphics.m_aClipRegion );
-    if ( SALCOLOR_NONE != rGraphics.m_aLineColor )
+        setClipRegion(rGraphics.m_aClipRegion);
+    if (SALCOLOR_NONE != rGraphics.m_aLineColor)
     {
-        QColor aColor = QColor::fromRgb( QRgb( rGraphics.m_aLineColor ) );
-        aColor.setAlpha( nTransparency );
-        setPen( aColor );
+        QColor aColor = QColor::fromRgb(QRgb(rGraphics.m_aLineColor));
+        aColor.setAlpha(nTransparency);
+        setPen(aColor);
     }
     else
-        setPen( Qt::NoPen );
-    if ( bPrepareBrush && SALCOLOR_NONE != rGraphics.m_aFillColor )
+        setPen(Qt::NoPen);
+    if (bPrepareBrush && SALCOLOR_NONE != rGraphics.m_aFillColor)
     {
-        QColor aColor = QColor::fromRgb( QRgb( rGraphics.m_aFillColor ) );
-        aColor.setAlpha( nTransparency );
-        setBrush( Qt::SolidPattern );
-        setBrush( aColor );
+        QColor aColor = QColor::fromRgb(QRgb(rGraphics.m_aFillColor));
+        aColor.setAlpha(nTransparency);
+        setBrush(Qt::SolidPattern);
+        setBrush(aColor);
     }
-    setCompositionMode( rGraphics.m_eCompositionMode );
+    setCompositionMode(rGraphics.m_eCompositionMode);
 }
-

@@ -38,54 +38,56 @@ inline OUString toOUString(const QString& s)
 
 inline QString toQString(const OUString& s)
 {
-    return QString::fromUtf16(
-        reinterpret_cast<ushort const *>(s.getStr()), s.getLength());
+    return QString::fromUtf16(reinterpret_cast<ushort const*>(s.getStr()), s.getLength());
 }
 
-inline QRect toQRect( const tools::Rectangle& rRect )
+inline QRect toQRect(const tools::Rectangle& rRect)
 {
-    return QRect( rRect.Left(), rRect.Top(),
-                  rRect.GetWidth(), rRect.GetHeight() );
+    return QRect(rRect.Left(), rRect.Top(), rRect.GetWidth(), rRect.GetHeight());
 }
 
-inline QSize toQSize( const Size& rSize )
-{
-    return QSize( rSize.Width(), rSize.Height() );
-}
+inline QSize toQSize(const Size& rSize) { return QSize(rSize.Width(), rSize.Height()); }
 
-inline Size toSize( const QSize& rSize )
-{
-    return Size( rSize.width(), rSize.height() );
-}
+inline Size toSize(const QSize& rSize) { return Size(rSize.width(), rSize.height()); }
 
 static constexpr QImage::Format Qt5_DefaultFormat32 = QImage::Format_ARGB32;
 
-inline QImage::Format getBitFormat( sal_uInt16 nBitCount )
+inline QImage::Format getBitFormat(sal_uInt16 nBitCount)
 {
-    switch ( nBitCount )
+    switch (nBitCount)
     {
-    case 1  : return QImage::Format_Mono;
-    case 8  : return QImage::Format_Indexed8;
-    case 16 : return QImage::Format_RGB16;
-    case 24 : return QImage::Format_RGB888;
-    case 32 : return Qt5_DefaultFormat32;
-    default :
-        std::abort();
-        break;
+        case 1:
+            return QImage::Format_Mono;
+        case 8:
+            return QImage::Format_Indexed8;
+        case 16:
+            return QImage::Format_RGB16;
+        case 24:
+            return QImage::Format_RGB888;
+        case 32:
+            return Qt5_DefaultFormat32;
+        default:
+            std::abort();
+            break;
     }
     return QImage::Format_Invalid;
 }
 
-inline sal_uInt16 getFormatBits( QImage::Format eFormat )
+inline sal_uInt16 getFormatBits(QImage::Format eFormat)
 {
-    switch ( eFormat )
+    switch (eFormat)
     {
-        case QImage::Format_Mono : return 1;
-        case QImage::Format_Indexed8 : return 8;
-        case QImage::Format_RGB16 : return 16;
-        case QImage::Format_RGB888 : return 24;
-        case Qt5_DefaultFormat32 : return 32;
-        default :
+        case QImage::Format_Mono:
+            return 1;
+        case QImage::Format_Indexed8:
+            return 8;
+        case QImage::Format_RGB16:
+            return 16;
+        case QImage::Format_RGB888:
+            return 24;
+        case Qt5_DefaultFormat32:
+            return 32;
+        default:
             std::abort();
             return 0;
     }
@@ -94,12 +96,12 @@ inline sal_uInt16 getFormatBits( QImage::Format eFormat )
 typedef struct _cairo_surface cairo_surface_t;
 struct CairoDeleter
 {
-    void operator()(cairo_surface_t *pSurface) const;
+    void operator()(cairo_surface_t* pSurface) const;
 };
 
 typedef std::unique_ptr<cairo_surface_t, CairoDeleter> UniqueCairoSurface;
 
-sal_uInt16 GetKeyModCode( Qt::KeyboardModifiers eKeyModifiers );
-sal_uInt16 GetMouseModCode( Qt::MouseButtons eButtons );
+sal_uInt16 GetKeyModCode(Qt::KeyboardModifiers eKeyModifiers);
+sal_uInt16 GetMouseModCode(Qt::MouseButtons eButtons);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

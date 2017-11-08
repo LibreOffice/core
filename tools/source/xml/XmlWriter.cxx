@@ -12,10 +12,10 @@
 
 #include <libxml/xmlwriter.h>
 
-namespace tools {
-
-namespace {
-
+namespace tools
+{
+namespace
+{
 int funcWriteCallback(void* pContext, const char* sBuffer, int nLen)
 {
     SvStream* pStream = static_cast<SvStream*>(pContext);
@@ -36,7 +36,8 @@ struct XmlWriterImpl
     XmlWriterImpl(SvStream* pStream)
         : mpStream(pStream)
         , mpWriter(nullptr)
-    {}
+    {
+    }
 
     SvStream* mpStream;
     xmlTextWriterPtr mpWriter;
@@ -44,18 +45,19 @@ struct XmlWriterImpl
 
 XmlWriter::XmlWriter(SvStream* pStream)
     : mpImpl(o3tl::make_unique<XmlWriterImpl>(pStream))
-{}
+{
+}
 
 XmlWriter::~XmlWriter()
 {
-
     if (mpImpl && mpImpl->mpWriter != nullptr)
         endDocument();
 }
 
 bool XmlWriter::startDocument()
 {
-    xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO(funcWriteCallback, funcCloseCallback, mpImpl->mpStream, nullptr);
+    xmlOutputBufferPtr xmlOutBuffer
+        = xmlOutputBufferCreateIO(funcWriteCallback, funcCloseCallback, mpImpl->mpStream, nullptr);
     mpImpl->mpWriter = xmlNewTextWriter(xmlOutBuffer);
     if (mpImpl->mpWriter == nullptr)
         return false;
@@ -78,12 +80,9 @@ void XmlWriter::startElement(const OString& sName)
     xmlFree(xmlName);
 }
 
-void XmlWriter::endElement()
-{
-    xmlTextWriterEndElement(mpImpl->mpWriter);
-}
+void XmlWriter::endElement() { xmlTextWriterEndElement(mpImpl->mpWriter); }
 
-void XmlWriter::attribute(const OString& name, const OString & value)
+void XmlWriter::attribute(const OString& name, const OString& value)
 {
     xmlChar* xmlName = xmlCharStrdup(name.getStr());
     xmlChar* xmlValue = xmlCharStrdup(value.getStr());

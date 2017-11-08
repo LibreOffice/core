@@ -24,81 +24,71 @@
 
 #include <QtGui/QImage>
 
-Qt5VirtualDevice::Qt5VirtualDevice( DeviceFormat eFormat, double fScale )
-    : m_eFormat( eFormat )
-    , m_fScale( fScale )
+Qt5VirtualDevice::Qt5VirtualDevice(DeviceFormat eFormat, double fScale)
+    : m_eFormat(eFormat)
+    , m_fScale(fScale)
 {
 }
 
-Qt5VirtualDevice::~Qt5VirtualDevice()
-{
-}
+Qt5VirtualDevice::~Qt5VirtualDevice() {}
 
 SalGraphics* Qt5VirtualDevice::AcquireGraphics()
 {
-    assert( m_pImage );
-    Qt5Graphics* pGraphics = new Qt5Graphics( m_pImage.get() );
-    m_aGraphics.push_back( pGraphics );
+    assert(m_pImage);
+    Qt5Graphics* pGraphics = new Qt5Graphics(m_pImage.get());
+    m_aGraphics.push_back(pGraphics);
     return pGraphics;
 }
 
-void Qt5VirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
+void Qt5VirtualDevice::ReleaseGraphics(SalGraphics* pGraphics)
 {
-    m_aGraphics.remove( dynamic_cast<Qt5Graphics*>( pGraphics ) );
+    m_aGraphics.remove(dynamic_cast<Qt5Graphics*>(pGraphics));
     delete pGraphics;
 }
 
-bool Qt5VirtualDevice::SetSize( long nNewDX, long nNewDY )
+bool Qt5VirtualDevice::SetSize(long nNewDX, long nNewDY)
 {
-    return SetSizeUsingBuffer( nNewDX, nNewDY, nullptr );
+    return SetSizeUsingBuffer(nNewDX, nNewDY, nullptr);
 }
 
-bool Qt5VirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
-                                           sal_uInt8 * pBuffer )
+bool Qt5VirtualDevice::SetSizeUsingBuffer(long nNewDX, long nNewDY, sal_uInt8* pBuffer)
 {
-    if( nNewDX == 0 )
+    if (nNewDX == 0)
         nNewDX = 1;
-    if( nNewDY == 0 )
+    if (nNewDY == 0)
         nNewDY = 1;
 
-    if( m_pImage && m_aFrameSize.getX() != nNewDX
-                  && m_aFrameSize.getY() != nNewDY )
+    if (m_pImage && m_aFrameSize.getX() != nNewDX && m_aFrameSize.getY() != nNewDY)
         return true;
 
-    m_aFrameSize = basegfx::B2IVector( nNewDX, nNewDY );
+    m_aFrameSize = basegfx::B2IVector(nNewDX, nNewDY);
 
     nNewDX *= m_fScale;
     nNewDY *= m_fScale;
 
     if (m_eFormat == DeviceFormat::BITMASK)
     {
-        m_pImage.reset( new QImage( nNewDX, nNewDY, QImage::Format_Mono ) );
+        m_pImage.reset(new QImage(nNewDX, nNewDY, QImage::Format_Mono));
     }
     else
     {
-        if ( pBuffer )
-            m_pImage.reset( new QImage( pBuffer, nNewDX, nNewDY, Qt5_DefaultFormat32 ) );
+        if (pBuffer)
+            m_pImage.reset(new QImage(pBuffer, nNewDX, nNewDY, Qt5_DefaultFormat32));
         else
-            m_pImage.reset( new QImage( nNewDX, nNewDY, Qt5_DefaultFormat32 ) );
+            m_pImage.reset(new QImage(nNewDX, nNewDY, Qt5_DefaultFormat32));
     }
 
-    m_pImage->setDevicePixelRatio( m_fScale );
+    m_pImage->setDevicePixelRatio(m_fScale);
 
     // update device in existing graphics
-    for( auto pQt5Graph : m_aGraphics )
-        pQt5Graph->ChangeQImage( m_pImage.get() );
+    for (auto pQt5Graph : m_aGraphics)
+        pQt5Graph->ChangeQImage(m_pImage.get());
 
     return true;
 }
 
-long Qt5VirtualDevice::GetWidth() const
-{
-    return m_pImage ? m_aFrameSize.getX() : 0;
-}
+long Qt5VirtualDevice::GetWidth() const { return m_pImage ? m_aFrameSize.getX() : 0; }
 
-long Qt5VirtualDevice::GetHeight() const
-{
-    return m_pImage ? m_aFrameSize.getY() : 0;
-}
+long Qt5VirtualDevice::GetHeight() const { return m_pImage ? m_aFrameSize.getY() : 0; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

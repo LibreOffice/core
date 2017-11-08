@@ -19,8 +19,6 @@
 
 #include <qt5/Qt5Font.hxx>
 
-Qt5Font::~Qt5Font()
-{
-}
+Qt5Font::~Qt5Font() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

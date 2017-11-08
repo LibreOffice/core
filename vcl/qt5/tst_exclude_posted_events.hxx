@@ -26,42 +26,41 @@
 
 const QEvent::Type eventType = QEvent::User;
 
-class TestExcludePostedEvents
-    : public QObject
+class TestExcludePostedEvents : public QObject
 {
     Q_OBJECT
-    public:
-        TestExcludePostedEvents();
-        virtual bool event( QEvent* e ) override;
-        bool processed;
+public:
+    TestExcludePostedEvents();
+    virtual bool event(QEvent* e) override;
+    bool processed;
 };
 
 TestExcludePostedEvents::TestExcludePostedEvents()
-    : processed( false )
+    : processed(false)
 {
 }
 
-bool TestExcludePostedEvents::event( QEvent* e )
+bool TestExcludePostedEvents::event(QEvent* e)
 {
-    if( e->type() == eventType )
+    if (e->type() == eventType)
         processed = true;
-    return QObject::event( e );
+    return QObject::event(e);
 }
 
-#define QVERIFY(a) \
-    if (!a) return 1;
+#define QVERIFY(a)                                                                                 \
+    if (!a)                                                                                        \
+        return 1;
 
 static int tst_excludePostedEvents()
 {
     TestExcludePostedEvents test;
-    QCoreApplication::postEvent( &test, new QEvent( eventType ));
+    QCoreApplication::postEvent(&test, new QEvent(eventType));
     QEventLoop loop;
-    loop.processEvents(QEventLoop::ExcludeUserInputEvents
-        | QEventLoop::ExcludeSocketNotifiers
-//        | QEventLoop::WaitForMoreEvents
-        | QEventLoop::X11ExcludeTimers);
-    QVERIFY( !test.processed );
+    loop.processEvents(QEventLoop::ExcludeUserInputEvents | QEventLoop::ExcludeSocketNotifiers
+                       //        | QEventLoop::WaitForMoreEvents
+                       | QEventLoop::X11ExcludeTimers);
+    QVERIFY(!test.processed);
     loop.processEvents();
-    QVERIFY( test.processed );
+    QVERIFY(test.processed);
     return 0;
 }

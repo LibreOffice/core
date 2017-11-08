@@ -27,13 +27,13 @@ class ImplJobSetup;
 class Qt5InfoPrinter : public PspSalInfoPrinter
 {
 public:
-    virtual bool Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) override;
+    virtual bool Setup(SalFrame* pFrame, ImplJobSetup* pSetupData) override;
 };
 
 class Qt5Printer : public PspSalPrinter
 {
 public:
-    Qt5Printer( SalInfoPrinter* pInfoPrinter );
+    Qt5Printer(SalInfoPrinter* pInfoPrinter);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

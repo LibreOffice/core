@@ -23,63 +23,49 @@
 
 #include <QtWidgets/QWidget>
 
-Qt5Object::Qt5Object( Qt5Frame* pParent, bool bShow )
-    : m_pParent( pParent )
+Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
+    : m_pParent(pParent)
 {
-    if ( !m_pParent || !pParent->GetQWidget() )
+    if (!m_pParent || !pParent->GetQWidget())
         return;
-    m_pQWidget.reset( new QWidget( pParent->GetQWidget() ) );
-    if ( bShow )
+    m_pQWidget.reset(new QWidget(pParent->GetQWidget()));
+    if (bShow)
         m_pQWidget->show();
 }
 
-Qt5Object::~Qt5Object()
-{
-}
+Qt5Object::~Qt5Object() {}
 
 void Qt5Object::ResetClipRegion()
 {
-    if ( m_pQWidget.get() )
-        m_pRegion = QRegion( m_pQWidget->geometry() );
+    if (m_pQWidget.get())
+        m_pRegion = QRegion(m_pQWidget->geometry());
     else
         m_pRegion = QRegion();
 }
 
-void Qt5Object::BeginSetClipRegion( sal_uLong )
-{
-    m_pRegion = QRegion();
-}
+void Qt5Object::BeginSetClipRegion(sal_uLong) { m_pRegion = QRegion(); }
 
-void Qt5Object::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+void Qt5Object::UnionClipRegion(long nX, long nY, long nWidth, long nHeight)
 {
-    m_pRegion += QRect( nX, nY, nWidth, nHeight );
+    m_pRegion += QRect(nX, nY, nWidth, nHeight);
 }
 
 void Qt5Object::EndSetClipRegion()
 {
-    if ( m_pQWidget.get() )
-        m_pRegion = m_pRegion.intersected( m_pQWidget->geometry() );
+    if (m_pQWidget.get())
+        m_pRegion = m_pRegion.intersected(m_pQWidget->geometry());
 }
 
-void Qt5Object::SetPosSize( long nX, long nY, long nWidth, long nHeight )
+void Qt5Object::SetPosSize(long nX, long nY, long nWidth, long nHeight) {}
+
+void Qt5Object::Show(bool bVisible)
 {
-
+    if (m_pQWidget)
+        m_pQWidget->setVisible(bVisible);
 }
 
-void Qt5Object::Show( bool bVisible )
-{
-    if( m_pQWidget )
-        m_pQWidget->setVisible( bVisible );
-}
+void Qt5Object::SetForwardKey(bool bEnable) {}
 
-void Qt5Object::SetForwardKey( bool bEnable )
-{
-}
-
-const SystemEnvData* Qt5Object::GetSystemData() const
-{
-    return nullptr;
-}
-
+const SystemEnvData* Qt5Object::GetSystemData() const { return nullptr; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
