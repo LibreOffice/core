@@ -284,10 +284,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_nListPictureId(0),
       m_bIsNewDoc(!rMediaDescriptor.getUnpackedValueOrDefault("InsertMode", false)),
       m_rMediaDescriptor(rMediaDescriptor),
-      m_hasLHeader(false),
       m_hasRHeader(false),
       m_hasFHeader(false),
-      m_hasLFooter(false),
       m_hasRFooter(false),
       m_hasFFooter(false),
       m_bAfterCellBeforeRow(false)

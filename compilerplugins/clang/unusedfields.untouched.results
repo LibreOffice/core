@@ -24,14 +24,6 @@ connectivity/source/drivers/evoab2/EApi.h:126
     (anonymous) ext char *
 connectivity/source/drivers/mork/MDatabaseMetaData.hxx:29
     connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
-connectivity/source/inc/OTypeInfo.hxx:31
-    connectivity::OTypeInfo aTypeName class rtl::OUString
-connectivity/source/inc/OTypeInfo.hxx:32
-    connectivity::OTypeInfo aLocalTypeName class rtl::OUString
-connectivity/source/inc/OTypeInfo.hxx:34
-    connectivity::OTypeInfo nPrecision sal_Int32
-connectivity/source/inc/OTypeInfo.hxx:36
-    connectivity::OTypeInfo nMaximumScale sal_Int16
 cppu/source/threadpool/threadpool.cxx:377
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:61
@@ -40,7 +32,7 @@ dbaccess/source/sdbtools/inc/connectiondependent.hxx:116
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
 emfio/source/emfuno/xemfparser.cxx:59
     emfio::emfreader::XEmfParser context_ uno::Reference<uno::XComponentContext>
-extensions/source/scanner/scanner.hxx:46
+extensions/source/scanner/scanner.hxx:44
     ScannerManager maProtector osl::Mutex
 include/comphelper/MasterPropertySet.hxx:38
     comphelper::SlaveData mxSlave css::uno::Reference<css::beans::XPropertySet>
@@ -84,6 +76,8 @@ include/vcl/uitest/uiobject.hxx:241
     TabPageUIObject mxTabPage VclPtr<class TabPage>
 include/xmloff/formlayerexport.hxx:173
     xmloff::OOfficeFormsExport m_pImpl std::unique_ptr<OFormsRootExport>
+libreofficekit/qa/gtktiledviewer/gtv-application-window.cxx:34
+    GtvApplicationWindowPrivate lokDialog GtkWidget *
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:50
     GtvApplicationWindow parent_instance GtkApplicationWindow
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:54
@@ -102,6 +96,10 @@ libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.hxx:26
     GtvCommentsSidebar parent GtkBox
 libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.hxx:35
     GtvCommentsSidebarClass parentClass GtkBoxClass
+libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.hxx:28
+    GtvLokDialog parent GtkDialog
+libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.hxx:33
+    GtvLokDialogClass parentClass GtkDialogClass
 libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:28
     GtvMainToolbar parent GtkBox
 libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:36
@@ -110,9 +108,9 @@ lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char [2]
 opencl/source/openclwrapper.cxx:306
     openclwrapper::(anonymous namespace)::OpenCLEnv mpOclCmdQueue cl_command_queue [1]
-pyuno/source/module/pyuno_impl.hxx:226
+pyuno/source/module/pyuno_impl.hxx:224
     pyuno::(anonymous) ob_base PyObject
-pyuno/source/module/pyuno_impl.hxx:326
+pyuno/source/module/pyuno_impl.hxx:324
     pyuno::stRuntimeImpl ob_base PyObject
 reportdesign/source/ui/inc/ReportWindow.hxx:54
     rptui::OReportWindow m_pObjFac ::std::unique_ptr<DlgEdFactory>
@@ -134,9 +132,7 @@ sc/qa/unit/ucalc_column.cxx:103
     aInputs aName const char *
 sc/source/filter/inc/sheetdatacontext.hxx:61
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
-sc/source/ui/inc/dataproviderdlg.hxx:50
-    sc::DataProviderDlg mpDataSource std::shared_ptr<ExternalDataSource>
-sc/source/ui/inc/docsh.hxx:438
+sc/source/ui/inc/docsh.hxx:439
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sd/source/ui/remotecontrol/ZeroconfService.hxx:36
     sd::ZeroconfService port uint
@@ -154,24 +150,30 @@ sd/source/ui/view/viewshel.cxx:1260
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
 sd/source/ui/view/ViewShellBase.cxx:194
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
-sfx2/source/doc/doctempl.cxx:116
+sfx2/source/doc/doctempl.cxx:115
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
+sfx2/source/inc/shellimpl.hxx:33
+    SfxObjectShellArr_Impl maData SfxObjectShellArr_Impl::DataType
+sfx2/source/inc/shellimpl.hxx:54
+    SfxViewFrameArr_Impl maData SfxViewFrameArr_Impl::DataType
+sfx2/source/inc/shellimpl.hxx:75
+    SfxViewShellArr_Impl maData SfxViewShellArr_Impl::DataType
 starmath/inc/smmod.hxx:69
     SmModule mpLocSymbolData std::unique_ptr<SmLocalizedSymbolData>
-starmath/inc/view.hxx:224
+starmath/inc/view.hxx:218
     SmViewShell maGraphicController class SmGraphicController
-svl/source/crypto/cryptosign.cxx:120
-    (anonymous namespace)::(anonymous) extnID SECItem
 svl/source/crypto/cryptosign.cxx:121
-    (anonymous namespace)::(anonymous) critical SECItem
+    (anonymous namespace)::(anonymous) extnID SECItem
 svl/source/crypto/cryptosign.cxx:122
+    (anonymous namespace)::(anonymous) critical SECItem
+svl/source/crypto/cryptosign.cxx:123
     (anonymous namespace)::(anonymous) extnValue SECItem
-svl/source/crypto/cryptosign.cxx:280
-    (anonymous namespace)::(anonymous) statusString SECItem
 svl/source/crypto/cryptosign.cxx:281
+    (anonymous namespace)::(anonymous) statusString SECItem
+svl/source/crypto/cryptosign.cxx:282
     (anonymous namespace)::(anonymous) failInfo SECItem
 svtools/source/svhtml/htmlkywd.cxx:558
-    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo3/svtools/source/svhtml/htmlkywd.cxx:558:5)
+    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo/svtools/source/svhtml/htmlkywd.cxx:558:5)
 svtools/source/svhtml/htmlkywd.cxx:560
     HTML_OptionEntry::(anonymous) sToken const sal_Char *
 svtools/source/svhtml/htmlkywd.cxx:561
@@ -194,6 +196,8 @@ unoidl/source/unoidlprovider.cxx:673
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference2_ rtl::Reference<UnoidlModuleEntity>
 vcl/inc/opengl/zone.hxx:46
     OpenGLVCLContextZone aZone class OpenGLZone
+vcl/inc/svdata.hxx:149
+    ImplSVAppData mbShutdownDelayed _Bool
 vcl/inc/unx/cpdmgr.hxx:60
     psp::CPDPrinterOption name class rtl::OUString
 vcl/inc/unx/cpdmgr.hxx:61
@@ -210,3 +214,7 @@ vcl/source/uitest/uno/uitest_uno.cxx:35
     UITestUnoObj mpUITest std::unique_ptr<UITest>
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link AtkHyperlink
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:663
+    writerfilter::rtftok::RTFDocumentImpl m_hasLHeader _Bool
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:666
+    writerfilter::rtftok::RTFDocumentImpl m_hasLFooter _Bool
