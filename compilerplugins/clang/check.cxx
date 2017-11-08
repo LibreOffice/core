@@ -216,14 +216,9 @@ bool isExtraWarnUnusedType(clang::QualType type) {
     }
     auto const tc = TypeCheck(rec);
     // Check some common non-LO types:
-    if (tc.Class("string").Namespace("std").GlobalNamespace()
-        || tc.Class("basic_string").Namespace("std").GlobalNamespace()
-        || tc.Class("list").Namespace("std").GlobalNamespace()
-        || (tc.Class("list").Namespace("__debug").Namespace("std")
-            .GlobalNamespace())
-        || tc.Class("vector").Namespace("std").GlobalNamespace()
-        || (tc.Class("vector" ).Namespace("__debug").Namespace("std")
-            .GlobalNamespace()))
+    if (tc.Class("basic_string").StdNamespace()
+        || tc.Class("list").StdNamespace()
+        || tc.Class("vector").StdNamespace())
     {
         return true;
     }
