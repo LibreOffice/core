@@ -26,17 +26,10 @@ class OutputDevice;
 class SwBorderAttrs;
 struct SwCursorMoveState;
 
-class SwNoTextFrame: public SwContentFrame
+class SwNoTextFrame: public SwContentFrame, public TransformableSwFrame
 {
 private:
     friend void FrameFinit();
-
-    // RotateFlyFrame3 - Support for Transformation, hold
-    // FrameAreaTransformation and FramePrintAreaTransformation
-    // here when rotation is used
-    basegfx::B2DHomMatrix   maFrameAreaTransformation;
-    basegfx::B2DHomMatrix   maFramePrintAreaTransformation;
-
     const Size& GetSize() const;
 
     void Format ( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
@@ -45,9 +38,16 @@ private:
     virtual void DestroyImpl() override;
     virtual ~SwNoTextFrame() override;
 
+    // RotateFlyFrame3 - Support for inner frame of a SwGrfNode.
+    // Only for local data extraction. To uniquely access information
+    // for local transformation, use getFrameArea(Print)Transformation.
+    friend double getFrameRotation_from_SwNoTextFrame(const SwNoTextFrame& rNoTextFrame);
+    double getFrameRotation() const;
+
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+
 public:
     SwNoTextFrame( SwNoTextNode * const, SwFrame* );
 
@@ -65,17 +65,9 @@ public:
     void StopAnimation( OutputDevice* = nullptr ) const;
     bool HasAnimation()  const;
 
-    // RotateFlyFrame3 - Support for Transformations for inner frame of a SwGrfNode
-    basegfx::B2DHomMatrix getFrameAreaTransformation() const;
-    basegfx::B2DHomMatrix getFramePrintAreaTransformation() const;
-    void updateTransformationsAndAreas(
-        double fRotation,
-        const basegfx::B2DPoint& rCenter);
-
-    // RotateFlyFrame3 - Support for inner frame of a SwGrfNode.
-    // Only for local data extraction. To uniquely access information
-    // for local transformation, use getFrameArea(Print)Transformation.
-    double getFrameRotation() const;
+    // RotateFlyFrame3 - Support for Transformations
+    virtual basegfx::B2DHomMatrix getFrameAreaTransformation() const override;
+    virtual basegfx::B2DHomMatrix getFramePrintAreaTransformation() const override;
 };
 
 #endif
