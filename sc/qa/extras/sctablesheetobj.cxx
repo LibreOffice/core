@@ -12,6 +12,7 @@
 #include <test/sheet/xprintareas.hxx>
 #include <test/sheet/xsheetcellrange.hxx>
 #include <test/sheet/xsheetfilterable.hxx>
+#include <test/sheet/xsheetfilterableex.hxx>
 #include <test/sheet/xsheetlinkable.hxx>
 #include <test/sheet/xsheetoperation.hxx>
 #include <test/sheet/xsheetpagebreak.hxx>
@@ -30,7 +31,7 @@ using namespace css::uno;
 namespace sc_apitest
 {
 
-#define NUMBER_OF_TESTS 23
+#define NUMBER_OF_TESTS 24
 
 class ScTableSheetObj : public CalcUnoApiTest, public apitest::XCellSeries,
                                                public apitest::XPrintAreas,
@@ -38,6 +39,7 @@ class ScTableSheetObj : public CalcUnoApiTest, public apitest::XCellSeries,
                                                public apitest::XSearchable,
                                                public apitest::XSheetCellRange,
                                                public apitest::XSheetFilterable,
+                                               public apitest::XSheetFilterableEx,
                                                public apitest::XSheetLinkable,
                                                public apitest::XSheetOperation,
                                                public apitest::XSheetPageBreak,
@@ -81,6 +83,9 @@ public:
     // XSheetFilterable
     CPPUNIT_TEST(testCreateFilterDescriptor);
     CPPUNIT_TEST(testFilter);
+
+    // XSheetFilterableEx
+    CPPUNIT_TEST(testCreateFilterDescriptorByObject);
 
     // XSheetLinkable
     CPPUNIT_TEST(testSheetLinkable);
@@ -126,9 +131,8 @@ ScTableSheetObj::ScTableSheetObj():
 
 uno::Reference< uno::XInterface > ScTableSheetObj::init()
 {
-    //OUString aFileURL;
     createFileURL("ScTableSheetObj.ods", maFileURL);
-    if(!mxComponent.is())
+    if (!mxComponent.is())
         mxComponent = loadFromDesktop(maFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());
 
@@ -141,15 +145,14 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
 
 uno::Reference< uno::XInterface > ScTableSheetObj::getXSpreadsheet()
 {
-    OUString aFileURL;
-    createFileURL("ScTableSheetObj.ods", aFileURL);
-    if(!mxComponent.is())
-        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
+    createFileURL("ScTableSheetObj.ods", maFileURL);
+    if (!mxComponent.is())
+        mxComponent = loadFromDesktop(maFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(1), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
 
     return xSheet;
 }
