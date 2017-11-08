@@ -1,0 +1,11 @@
+# https://ssl.icu-project.org/trac/changeset/40324/trunk/icu4c/source/i18n/zonemeta.cpp
+Index: trunk/icu4c/source/i18n/zonemeta.cpp
+===================================================================
+--- icu.orig/source/i18n/zonemeta.cpp
++++ icu/source/i18n/zonemeta.cpp
+@@ -691,5 +691,4 @@
+                     if (U_FAILURE(status)) {
+                         delete mzMappings;
+-                        deleteOlsonToMetaMappingEntry(entry);
+                         uprv_free(entry);
+                         break;
