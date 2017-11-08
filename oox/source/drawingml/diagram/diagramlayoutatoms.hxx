@@ -106,7 +106,7 @@ public:
     const OUString& getName() const
         { return msName; }
 
-    virtual void addChild( const LayoutAtomPtr & pNode )
+    void addChild( const LayoutAtomPtr & pNode )
         { mpChildNodes.push_back( pNode ); }
     virtual const std::vector<LayoutAtomPtr>& getChildren() const
         { return mpChildNodes; }
