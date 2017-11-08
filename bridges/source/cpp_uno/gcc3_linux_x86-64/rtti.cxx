@@ -66,6 +66,12 @@ RTTI::~RTTI()
     dlclose( m_hApp );
 }
 
+extern "C"
+{
+    __attribute__((weak)) void __lsan_disable();
+    __attribute__((weak)) void __lsan_enable();
+}
+
 std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
 {
     std::type_info * rtti;
@@ -105,6 +111,9 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
             t_rtti_map::const_iterator iFind2( m_generatedRttis.find( unoName ) );
             if (iFind2 == m_generatedRttis.end())
             {
+                if (__lsan_disable)
+                    __lsan_disable();
+
                 // we must generate it !
                 // symbol and rtti-name is nearly identical,
                 // the symbol is prefixed with _ZTI
@@ -192,6 +201,9 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
                         m_generatedRttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
                     SAL_WARN_IF( !insertion.second, "bridges", "key " << unoName << " already in generated rtti map" );
                 }
+
+                if (__lsan_enable)
+                    __lsan_enable();
             }
             else // taking already generated rtti
             {
