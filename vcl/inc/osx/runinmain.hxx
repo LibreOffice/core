@@ -57,8 +57,11 @@ union RuninmainResult
 };
 
 #define OSX_RUNINMAIN_MEMBERS \
-    osl::Condition          m_aInMainCondition; \
-    osl::Condition          m_aResultCondition; \
+    std::mutex              m_runInMainMutex; \
+    std::condition_variable m_aInMainCondition; \
+    std::condition_variable m_aResultCondition; \
+    bool                    m_wakeUpMain = false; \
+    bool                    m_resultReady = false; \
     RuninmainBlock          m_aCodeBlock; \
     RuninmainResult         m_aResult;
 
@@ -67,18 +70,24 @@ union RuninmainResult
     { \
         DBG_TESTSOLARMUTEX(); \
         SalYieldMutex *aMutex = static_cast<SalYieldMutex*>(instance->GetYieldMutex()); \
-        assert( !aMutex->m_aCodeBlock ); \
-        aMutex->m_aCodeBlock = Block_copy(^{ \
-            command; \
-        }); \
-        aMutex->m_aResultCondition.reset(); \
+        { \
+            std::unique_lock<std::mutex> g(aMutex->m_runInMainMutex); \
+            assert( !aMutex->m_aCodeBlock ); \
+            aMutex->m_aCodeBlock = Block_copy(^{ \
+                command; \
+            }); \
+            aMutex->m_wakeUpMain = true; \
+            aMutex->m_aInMainCondition.notify_all(); \
+        } \
         dispatch_async(dispatch_get_main_queue(),^{ \
             ImplNSAppPostEvent( AquaSalInstance::YieldWakeupEvent, NO ); \
             }); \
-        aMutex->m_aInMainCondition.set(); \
-        osl::Condition::Result res =  aMutex->m_aResultCondition.wait(); \
-        (void) res; \
-        assert(osl::Condition::Result::result_ok == res); \
+        { \
+            std::unique_lock<std::mutex> g(aMutex->m_runInMainMutex); \
+            aMutex->m_aResultCondition.wait( \
+                g, [&aMutex]() { return aMutex->m_resultReady; }); \
+            aMutex->m_resultReady = false; \
+        } \
         return; \
     }
 
@@ -87,18 +96,24 @@ union RuninmainResult
     { \
         DBG_TESTSOLARMUTEX(); \
         SalYieldMutex *aMutex = static_cast<SalYieldMutex*>(instance->GetYieldMutex()); \
-        assert( !aMutex->m_aCodeBlock ); \
-        aMutex->m_aCodeBlock = Block_copy(^{ \
-            aMutex->m_aResult.pointer = static_cast<void*>( command ); \
-        }); \
-        aMutex->m_aResultCondition.reset(); \
+        { \
+            std::unique_lock<std::mutex> g(aMutex->m_runInMainMutex); \
+            assert( !aMutex->m_aCodeBlock ); \
+            aMutex->m_aCodeBlock = Block_copy(^{ \
+                aMutex->m_aResult.pointer = static_cast<void*>( command ); \
+            }); \
+            aMutex->m_wakeUpMain = true; \
+            aMutex->m_aInMainCondition.notify_all(); \
+        } \
         dispatch_async(dispatch_get_main_queue(),^{ \
             ImplNSAppPostEvent( AquaSalInstance::YieldWakeupEvent, NO ); \
             }); \
-        aMutex->m_aInMainCondition.set(); \
-        osl::Condition::Result res =  aMutex->m_aResultCondition.wait(); \
-        (void) res; \
-        assert(osl::Condition::Result::result_ok == res); \
+        { \
+            std::unique_lock<std::mutex> g(aMutex->m_runInMainMutex); \
+            aMutex->m_aResultCondition.wait( \
+                g, [&aMutex]() { return aMutex->m_resultReady; }); \
+            aMutex->m_resultReady = false; \
+        } \
         return static_cast<type>( aMutex->m_aResult.pointer ); \
     }
 
@@ -107,18 +122,24 @@ union RuninmainResult
     { \
         DBG_TESTSOLARMUTEX(); \
         SalYieldMutex *aMutex = static_cast<SalYieldMutex*>(instance->GetYieldMutex()); \
-        assert( !aMutex->m_aCodeBlock ); \
-        aMutex->m_aCodeBlock = Block_copy(^{ \
-            aMutex->m_aResult.member = command; \
-        }); \
-        aMutex->m_aResultCondition.reset(); \
+        { \
+            std::unique_lock<std::mutex> g(aMutex->m_runInMainMutex); \
+            assert( !aMutex->m_aCodeBlock ); \
+            aMutex->m_aCodeBlock = Block_copy(^{ \
+                aMutex->m_aResult.member = command; \
+            }); \
+            aMutex->m_wakeUpMain = true; \
+            aMutex->m_aInMainCondition.notify_all(); \
+        } \
         dispatch_async(dispatch_get_main_queue(),^{ \
             ImplNSAppPostEvent( AquaSalInstance::YieldWakeupEvent, NO ); \
             }); \
-        aMutex->m_aInMainCondition.set(); \
-        osl::Condition::Result res =  aMutex->m_aResultCondition.wait(); \
-        (void) res; \
-        assert(osl::Condition::Result::result_ok == res); \
+        { \
+            std::unique_lock<std::mutex> g(aMutex->m_runInMainMutex); \
+            aMutex->m_aResultCondition.wait( \
+                g, [&aMutex]() { return aMutex->m_resultReady; }); \
+            aMutex->m_resultReady = false; \
+        } \
         return std::move( aMutex->m_aResult.member ); \
     }
 
