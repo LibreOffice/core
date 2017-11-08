@@ -34,9 +34,8 @@ namespace comphelper
     class ChainablePropertySet;
     struct SlaveData
     {
-        ChainablePropertySet *                           mpSlave;
-        css::uno::Reference < css::beans::XPropertySet > mxSlave;
-        bool                                             mbInit;
+        rtl::Reference < ChainablePropertySet > mxSlave;
+        bool                                    mbInit;
 
         SlaveData ( ChainablePropertySet *pSlave);
         bool IsInit () const { return mbInit;}
