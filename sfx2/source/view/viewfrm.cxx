@@ -1032,7 +1032,7 @@ bool SfxViewFrame::Close()
     // If no saving have been made up until now, then embedded Objects should
     // not be saved automatically anymore.
     if ( GetViewShell() )
-        GetViewShell()->DiscardClients_Impl();
+        GetViewShell()->DisconnectAllClients();
     Broadcast( SfxHint( SfxHintId::Dying ) );
 
     if (SfxViewFrame::Current() == this)
