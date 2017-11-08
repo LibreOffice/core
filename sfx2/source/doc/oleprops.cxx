@@ -21,6 +21,7 @@
 #include "oleprops.hxx"
 
 #include <comphelper/types.hxx>
+#include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 #include <rtl/tencinfo.h>
@@ -561,19 +562,25 @@ void SfxOleDateProperty::ImplLoad( SvStream& rStrm )
     double fValue(0.0);
     rStrm.ReadDouble( fValue );
     //stored as number of days (not seconds) since December 31, 1899
-    ::Date aDate(31, 12, 1899);
-    long nDays = fValue;
-    aDate.AddDays( nDays );
-    maDate.Day = aDate.GetDay();
-    maDate.Month = aDate.GetMonth();
-    maDate.Year = aDate.GetYear();
+    sal_Int32 nDays = fValue;
+    sal_Int32 nStartDays = ::Date::DateToDays(31, 12, 1899);
+    if (o3tl::checked_add(nStartDays, nDays, nStartDays))
+        SAL_WARN("sfx.doc", "SfxOleDateProperty::ImplLoad bad date, ignored");
+    else
+    {
+        ::Date aDate(31, 12, 1899);
+        aDate.AddDays(nDays);
+        maDate.Day = aDate.GetDay();
+        maDate.Month = aDate.GetMonth();
+        maDate.Year = aDate.GetYear();
+    }
 }
 
 void SfxOleDateProperty::ImplSave( SvStream& rStrm )
 {
-    long nDays = ::Date::DateToDays(maDate.Day, maDate.Month, maDate.Year);
+    sal_Int32 nDays = ::Date::DateToDays(maDate.Day, maDate.Month, maDate.Year);
     //number of days (not seconds) since December 31, 1899
-    long nStartDays = ::Date::DateToDays(31, 12, 1899);
+    sal_Int32 nStartDays = ::Date::DateToDays(31, 12, 1899);
     double fValue = nDays-nStartDays;
     rStrm.WriteDouble( fValue );
 }
