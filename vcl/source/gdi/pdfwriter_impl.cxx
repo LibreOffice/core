@@ -6773,16 +6773,22 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         for( int i = 0; i < nGlyphs; i++ )
         {
+            // tdf#113428: calculate the position of the next glyphs the same
+            // way GetNextGlyphs() would do if we asked for a single glyph at
+            // time.
+            if (i > 0)
+            {
+                Point aPos = pGlyphs[i]->maLinearPos;
+                aPos.X() /= rLayout.GetUnitsPerPixel();
+                aPos.Y() /= rLayout.GetUnitsPerPixel();
+                aGNGlyphPos = rLayout.GetDrawPosition(aPos);
+            }
             aGlyphs.emplace_back( aGNGlyphPos,
                                          pGlyphWidths[i],
                                          pGlyphs[i]->maGlyphId,
                                          pMappedFontObjects[i],
                                          pMappedGlyphs[i],
                                          pGlyphs[i]->IsVertical() );
-            if( bVertical )
-                aGNGlyphPos.Y() += pGlyphs[i]->mnNewWidth/rLayout.GetUnitsPerPixel();
-            else
-                aGNGlyphPos.X() += pGlyphs[i]->mnNewWidth/rLayout.GetUnitsPerPixel();
         }
     }
 
