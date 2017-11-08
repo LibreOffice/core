@@ -6931,6 +6931,14 @@ void DocxAttributeOutput::CharWeightCJK( const SvxWeightItem& rWeight )
 
 void DocxAttributeOutput::CharFontCTL( const SvxFontItem& rFont )
 {
+    if (m_pFontsAttrList && m_pFontsAttrList->hasAttribute(FSNS(XML_w, XML_cs)))
+    {
+        // tdf#38778: do to fields output into DOC the font could be added before and after field declaration
+        // that all sub runs of the field will have correct font inside.
+        // For DOCX we should do not add the same font information twice in the same node
+        return;
+    }
+
     const OUString& sFontName(rFont.GetFamilyName());
     OString sFontNameUtf8 = OUStringToOString(sFontName, RTL_TEXTENCODING_UTF8);
     AddToAttrList( m_pFontsAttrList, FSNS( XML_w, XML_cs ), sFontNameUtf8.getStr() );
