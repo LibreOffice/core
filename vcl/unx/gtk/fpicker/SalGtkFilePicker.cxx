@@ -416,8 +416,11 @@ shrinkFilterName( const OUString &rFilterName, bool bAllowNoStar = false )
 static void
 dialog_remove_buttons(GtkWidget *pActionArea)
 {
-    GList *pChildren =
-        gtk_container_get_children( GTK_CONTAINER( pActionArea ) );
+    GtkContainer *pContainer = GTK_CONTAINER( pActionArea );
+
+    g_return_if_fail( pContainer != nullptr );
+
+    GList *pChildren = gtk_container_get_children( pContainer );
 
     for( GList *p = pChildren; p; p = p->next )
     {
@@ -436,7 +439,11 @@ dialog_remove_buttons( GtkDialog *pDialog )
 
 #if GTK_CHECK_VERSION(3,0,0)
 #if GTK_CHECK_VERSION(3,12,0)
-    dialog_remove_buttons(gtk_dialog_get_header_bar(pDialog));
+    GtkWidget *pHeaderBar = gtk_dialog_get_header_bar(pDialog);
+    if( pHeaderBar != nullptr )
+        dialog_remove_buttons( pHeaderBar );
+    else
+        dialog_remove_buttons(gtk_dialog_get_action_area(pDialog));
 #endif
     dialog_remove_buttons(gtk_dialog_get_action_area(pDialog));
 #else
