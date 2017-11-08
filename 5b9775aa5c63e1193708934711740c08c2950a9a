@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e89441e3",
+        "filename": "compilerplugins/clang/simplifydynamiccast.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-11-08T14:42:50Z",
+      "side": 1,
+      "message": "After b536e10390c171e96b6477c04d66023a1da543c4 this empty line should be removed.",
+      "revId": "5b9775aa5c63e1193708934711740c08c2950a9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
