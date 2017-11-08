@@ -144,8 +144,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
 
 SwNoTextFrame::SwNoTextFrame(SwNoTextNode * const pNode, SwFrame* pSib )
 :   SwContentFrame( pNode, pSib ),
-    maFrameAreaTransformation(),
-    maFramePrintAreaTransformation()
+    TransformableSwFrame()
 {
     mnFrameType = SwFrameType::NoTxt;
 }
@@ -472,11 +471,28 @@ const Size& SwNoTextFrame::GetSize() const
 
 void SwNoTextFrame::MakeAll(vcl::RenderContext* pRenderContext)
 {
-    if(GetUpper() && !GetUpper()->isFrameAreaDefinitionValid())
+    // RotateFlyFrame3 - inner frame. Get rotation and check if used
+    const double fRotation(getFrameRotation());
+    const bool bRotated(!basegfx::fTools::equalZero(fRotation));
+    SwFlyFreeFrame* pUpperFly(dynamic_cast< SwFlyFreeFrame* >(GetUpper()));
+
+    if(bRotated && pUpperFly && !pUpperFly->isFrameAreaDefinitionValid())
     {
-        // outer frame *needs* to be layouted first, force this by calling
-        // ::Calc directly
-        GetUpper()->Calc(pRenderContext);
+        // RotateFlyFrame3: outer frame *needs* to be layouted first, force this by calling
+        // it's ::Calc directly
+        pUpperFly->Calc(pRenderContext);
+    }
+
+    if(bRotated && pUpperFly)
+    {
+        // Reset outer frame to unrotated state. This is necessary to make the
+        // layouting below work as currently implemented in Writer. As expected
+        // using Transformations allows to do this on the fly due to all information
+        // being included there.
+        // The full solution would be to adapt the whole layouting
+        // process of Writer to take care of Transformations, but that
+        // is currently beyond scope
+        pUpperFly->resetAreaDefinitionsToUntransformed(*pUpperFly);
     }
 
     SwContentNotify aNotify( this );
@@ -504,66 +520,46 @@ void SwNoTextFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
     // RotateFlyFrame3 - inner frame
     // After the unrotated layout is finished, apply possible set rotation to it
-    const double fRotation(getFrameRotation());
-
-    if(basegfx::fTools::equalZero(fRotation))
+    if(!bRotated)
     {
         // reset transformations to show that they are not used
-        maFrameAreaTransformation.identity();
-        maFramePrintAreaTransformation.identity();
+        resetLocalAreaTransformations();
     }
     else
     {
         const bool bMeValid(isFrameAreaDefinitionValid());
-        const bool bUpperValid(!GetUpper() || GetUpper()->isFrameAreaDefinitionValid());
 
-        if(bMeValid && bUpperValid)
+        if(pUpperFly)
+        {
+            // restore outer frame back to Transformed state, that means
+            // set the SwFrameAreaDefinition(s) back to BoundAreas of
+            // the transformed SwFrame. All needed information is part
+            // of the already correctly created Transformations of the
+            // upper frame, so it can bre re-created on the fly
+            pUpperFly->resetAreaDefinitionsToTransformed(*pUpperFly);
+        }
+
+        if(bMeValid)
         {
             // get center from outer frame (layout frame) to be on the safe side
             const Point aCenter(GetUpper() ? GetUpper()->getFrameArea().Center() : getFrameArea().Center());
             const basegfx::B2DPoint aB2DCenter(aCenter.X(), aCenter.Y());
 
-            updateTransformationsAndAreas(
+            updateTransformationsAndFrameAreaDefinitions(
+                *this,
                 fRotation,
                 aB2DCenter);
-
-            if(GetUpper())
-            {
-                SwFlyFreeFrame *pFly = dynamic_cast< SwFlyFreeFrame* >(GetUpper());
-
-                if(pFly)
-                {
-                    pFly->updateTransformationsAndAreas(
-                        fRotation,
-                        aB2DCenter);
-                }
-            }
         }
     }
-}
-
-void SwNoTextFrame::updateTransformationsAndAreas(
-    double fRotation,
-    const basegfx::B2DPoint& rCenter)
-{
-    createFrameAreaTransformations(
-        maFrameAreaTransformation,
-        maFramePrintAreaTransformation,
-        fRotation,
-        rCenter);
-
-    setFrameAreaDefinitionsToBoundRangesOfTransformations(
-        maFrameAreaTransformation,
-        maFramePrintAreaTransformation);
 }
 
 // RotateFlyFrame3 - Support for Transformations - outer frame
 basegfx::B2DHomMatrix SwNoTextFrame::getFrameAreaTransformation() const
 {
-    if(!maFrameAreaTransformation.isIdentity())
+    if(!getLocalFrameAreaTransformation().isIdentity())
     {
         // use pre-created transformation
-        return maFrameAreaTransformation;
+        return getLocalFrameAreaTransformation();
     }
 
     // call parent
@@ -572,10 +568,10 @@ basegfx::B2DHomMatrix SwNoTextFrame::getFrameAreaTransformation() const
 
 basegfx::B2DHomMatrix SwNoTextFrame::getFramePrintAreaTransformation() const
 {
-    if(!maFramePrintAreaTransformation.isIdentity())
+    if(!getLocalFramePrintAreaTransformation().isIdentity())
     {
         // use pre-created transformation
-        return maFramePrintAreaTransformation;
+        return getLocalFramePrintAreaTransformation();
     }
 
     // call parent

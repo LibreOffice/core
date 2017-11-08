@@ -105,69 +105,8 @@ SwFrameAreaDefinition::FramePrintAreaWriteAccess::~FramePrintAreaWriteAccess()
     }
 }
 
-void SwFrameAreaDefinition::createFrameAreaTransformations(
-    basegfx::B2DHomMatrix& rFrameAreaTransformation,
-    basegfx::B2DHomMatrix& rFramePrintAreaTransformation,
-    double fRotation,
-    const basegfx::B2DPoint& rCenter) const
-{
-    // save Transformations to rFrameAreaTransformation and
-    // rFramePrintAreaTransformation. Do not forget that PrintArea
-    // is *relative* to FrameArea
-    const basegfx::B2DHomMatrix aRotateAroundCenter(
-        basegfx::utils::createRotateAroundPoint(
-            rCenter.getX(),
-            rCenter.getY(),
-            fRotation));
-    rFrameAreaTransformation = aRotateAroundCenter * basegfx::utils::createScaleTranslateB2DHomMatrix(
-        getFrameArea().Width(), getFrameArea().Height(),
-        getFrameArea().Left(), getFrameArea().Top());
-    rFramePrintAreaTransformation = aRotateAroundCenter * basegfx::utils::createScaleTranslateB2DHomMatrix(
-        getFramePrintArea().Width(), getFramePrintArea().Height(),
-        getFramePrintArea().Left() + getFrameArea().Left(), getFramePrintArea().Top() + getFrameArea().Top());
-}
-
-void SwFrameAreaDefinition::setFrameAreaDefinitionsToBoundRangesOfTransformations(
-    const basegfx::B2DHomMatrix& rFrameAreaTransformation,
-    const basegfx::B2DHomMatrix& rFramePrintAreaTransformation)
-{
-    if(!rFrameAreaTransformation.isIdentity())
-    {
-        basegfx::B2DRange aRangeFrameArea(0.0, 0.0, 1.0, 1.0);
-
-        aRangeFrameArea.transform(rFrameAreaTransformation);
-
-        const SwRect aNewFrm(
-            basegfx::fround(aRangeFrameArea.getMinX()), basegfx::fround(aRangeFrameArea.getMinY()),
-            basegfx::fround(aRangeFrameArea.getWidth()), basegfx::fround(aRangeFrameArea.getHeight()));
-
-        if(aNewFrm != getFrameArea())
-        {
-            maFrameArea = aNewFrm;
-        }
-    }
-
-    if(!rFramePrintAreaTransformation.isIdentity())
-    {
-        basegfx::B2DRange aRangeFramePrintArea(0.0, 0.0, 1.0, 1.0);
-
-        aRangeFramePrintArea.transform(rFramePrintAreaTransformation);
-
-        const SwRect aNewPrt(
-            basegfx::fround(aRangeFramePrintArea.getMinX()) - getFrameArea().Left(),
-            basegfx::fround(aRangeFramePrintArea.getMinY()) - getFrameArea().Top(),
-            basegfx::fround(aRangeFramePrintArea.getWidth()),
-            basegfx::fround(aRangeFramePrintArea.getHeight()));
-
-        if(aNewPrt != getFramePrintArea())
-        {
-            maFramePrintArea = aNewPrt;
-        }
-    }
-}
-
 // RotateFlyFrame3 - Support for Transformations
-basegfx::B2DHomMatrix SwFrame::getFrameAreaTransformation() const
+basegfx::B2DHomMatrix SwFrameAreaDefinition::getFrameAreaTransformation() const
 {
     // default implementation hands out FrameArea (outer frame)
     const SwRect& rFrameArea(getFrameArea());
@@ -177,7 +116,7 @@ basegfx::B2DHomMatrix SwFrame::getFrameAreaTransformation() const
         rFrameArea.Left(), rFrameArea.Top());
 }
 
-basegfx::B2DHomMatrix SwFrame::getFramePrintAreaTransformation() const
+basegfx::B2DHomMatrix SwFrameAreaDefinition::getFramePrintAreaTransformation() const
 {
     // default implementation hands out FramePrintArea (outer frame)
     // Take into account that FramePrintArea is relative to FrameArea
@@ -188,6 +127,132 @@ basegfx::B2DHomMatrix SwFrame::getFramePrintAreaTransformation() const
         rFramePrintArea.Width(), rFramePrintArea.Height(),
         rFramePrintArea.Left() + rFrameArea.Left(),
         rFramePrintArea.Top() + rFrameArea.Top());
+}
+
+void TransformableSwFrame::createFrameAreaTransformations(
+    const SwFrameAreaDefinition& rSwFrameAreaDefinition,
+    double fRotation,
+    const basegfx::B2DPoint& rCenter)
+{
+    // save Transformations to rFrameAreaTransformation and
+    // rFramePrintAreaTransformation. Do not forget that PrintArea
+    // is *relative* to FrameArea
+    const basegfx::B2DHomMatrix aRotateAroundCenter(
+        basegfx::utils::createRotateAroundPoint(
+            rCenter.getX(),
+            rCenter.getY(),
+            fRotation));
+    const SwRect& rFrameArea(rSwFrameAreaDefinition.getFrameArea());
+    const SwRect& rFramePrintArea(rSwFrameAreaDefinition.getFramePrintArea());
+
+    setLocalFrameAreaTransformation(
+        aRotateAroundCenter * basegfx::utils::createScaleTranslateB2DHomMatrix(
+            rFrameArea.Width(), rFrameArea.Height(),
+            rFrameArea.Left(), rFrameArea.Top()));
+    setLocalFramePrintAreaTransformation(
+        aRotateAroundCenter * basegfx::utils::createScaleTranslateB2DHomMatrix(
+            rFramePrintArea.Width(), rFramePrintArea.Height(),
+            rFramePrintArea.Left() + rFrameArea.Left(), rFramePrintArea.Top() + rFrameArea.Top()));
+}
+
+void TransformableSwFrame::setFrameAreaDefinitionsToBoundRangesOfTransformations(
+    SwFrameAreaDefinition& rSwFrameAreaDefinition)
+{
+    if(!getLocalFrameAreaTransformation().isIdentity())
+    {
+        basegfx::B2DRange aRangeFrameArea(0.0, 0.0, 1.0, 1.0);
+        aRangeFrameArea.transform(getLocalFrameAreaTransformation());
+        const SwRect aNewFrm(
+            basegfx::fround(aRangeFrameArea.getMinX()), basegfx::fround(aRangeFrameArea.getMinY()),
+            basegfx::fround(aRangeFrameArea.getWidth()), basegfx::fround(aRangeFrameArea.getHeight()));
+
+        if(aNewFrm != rSwFrameAreaDefinition.getFrameArea())
+        {
+            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(rSwFrameAreaDefinition);
+            aFrm.setSwRect(aNewFrm);
+        }
+    }
+
+    if(!getLocalFramePrintAreaTransformation().isIdentity())
+    {
+        basegfx::B2DRange aRangeFramePrintArea(0.0, 0.0, 1.0, 1.0);
+        aRangeFramePrintArea.transform(getLocalFramePrintAreaTransformation());
+        const SwRect aNewPrt(
+            basegfx::fround(aRangeFramePrintArea.getMinX()) - rSwFrameAreaDefinition.getFrameArea().Left(),
+            basegfx::fround(aRangeFramePrintArea.getMinY()) - rSwFrameAreaDefinition.getFrameArea().Top(),
+            basegfx::fround(aRangeFramePrintArea.getWidth()),
+            basegfx::fround(aRangeFramePrintArea.getHeight()));
+
+        if(aNewPrt != rSwFrameAreaDefinition.getFramePrintArea())
+        {
+            SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(rSwFrameAreaDefinition);
+            aPrt.setSwRect(aNewPrt);
+        }
+    }
+}
+
+void TransformableSwFrame::updateTransformationsAndFrameAreaDefinitions(
+    SwFrameAreaDefinition& rSwFrameAreaDefinition,
+    double fRotation,
+    const basegfx::B2DPoint& rCenter)
+{
+    createFrameAreaTransformations(
+        rSwFrameAreaDefinition,
+        fRotation,
+        rCenter);
+
+    setFrameAreaDefinitionsToBoundRangesOfTransformations(
+        rSwFrameAreaDefinition);
+}
+
+void TransformableSwFrame::resetAreaDefinitionsToUntransformed(
+    SwFrameAreaDefinition& rSwFrameAreaDefinition)
+{
+    // calculate center of object
+    basegfx::B2DPoint aCenter(getLocalFrameAreaTransformation() * basegfx::B2DPoint(0.5, 0.5));
+
+    if(!getLocalFrameAreaTransformation().isIdentity())
+    {
+        basegfx::B2DTuple aScale, aTranslate;
+        double fRotate(0.0), fShearX(0.0);
+        getLocalFrameAreaTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
+        const SwRect aNewFrm(
+            basegfx::fround(aCenter.getX() - (0.5 * aScale.getX())),
+            basegfx::fround(aCenter.getY() - (0.5 * aScale.getY())),
+            basegfx::fround(aScale.getX()),
+            basegfx::fround(aScale.getY()));
+
+        if(aNewFrm != rSwFrameAreaDefinition.getFrameArea())
+        {
+            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(rSwFrameAreaDefinition);
+            aFrm.setSwRect(aNewFrm);
+        }
+    }
+
+    if(!getLocalFramePrintAreaTransformation().isIdentity())
+    {
+        basegfx::B2DTuple aScale, aTranslate;
+        double fRotate(0.0), fShearX(0.0);
+        getLocalFramePrintAreaTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
+        const SwRect aNewPrt(
+            basegfx::fround(aCenter.getX() - (0.5 * aScale.getX())) - rSwFrameAreaDefinition.getFrameArea().Left(),
+            basegfx::fround(aCenter.getY() - (0.5 * aScale.getY())) - rSwFrameAreaDefinition.getFrameArea().Top(),
+            basegfx::fround(aScale.getX()),
+            basegfx::fround(aScale.getY()));
+
+        if(aNewPrt != rSwFrameAreaDefinition.getFramePrintArea())
+        {
+            SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(rSwFrameAreaDefinition);
+            aPrt.setSwRect(aNewPrt);
+        }
+    }
+}
+
+void TransformableSwFrame::resetAreaDefinitionsToTransformed(
+    SwFrameAreaDefinition& rSwFrameAreaDefinition)
+{
+    setFrameAreaDefinitionsToBoundRangesOfTransformations(
+        rSwFrameAreaDefinition);
 }
 
 SwFrame::SwFrame( SwModify *pMod, SwFrame* pSib )

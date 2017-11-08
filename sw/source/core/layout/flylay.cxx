@@ -46,14 +46,12 @@ using namespace ::com::sun::star;
 
 SwFlyFreeFrame::SwFlyFreeFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch )
 :   SwFlyFrame( pFormat, pSib, pAnch ),
+    TransformableSwFrame(),
     // #i34753#
     mbNoMakePos( false ),
     // #i37068#
     mbNoMoveOnCheckClip( false ),
-    maUnclippedFrame( ),
-    // RotateFlyFrame3
-    maFrameAreaTransformation(),
-    maFramePrintAreaTransformation()
+    maUnclippedFrame( )
 {
 }
 
@@ -110,9 +108,11 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     }
 
     if ( !GetAnchorFrame() || IsLocked() || IsColLocked() )
+    {
         return;
+    }
 
-        // #i28701# - use new method <GetPageFrame()>
+    // #i28701# - use new method <GetPageFrame()>
     if( !GetPageFrame() && GetAnchorFrame() && GetAnchorFrame()->IsInFly() )
     {
         SwFlyFrame* pFly = AnchorFrame()->FindFlyFrame();
@@ -233,12 +233,29 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     // Do not refresh transforms/Areas self here, this will be done
     // when inner and outer frame are layouted, in SwNoTextFrame::MakeAll
     const double fRotation(getFrameRotation());
+    const bool bRotated(!basegfx::fTools::equalZero(fRotation));
 
-    if(basegfx::fTools::equalZero(fRotation))
+    if(!bRotated)
     {
         // reset transformations to show that they are not used
-        maFrameAreaTransformation.identity();
-        maFramePrintAreaTransformation.identity();
+        resetLocalAreaTransformations();
+    }
+    else
+    {
+        // RotateFlyFrame3: Safe changes locally
+        const bool bMeValid(isFrameAreaDefinitionValid());
+
+        if(bMeValid)
+        {
+            // get center from outer frame (layout frame) to be on the safe side
+            const Point aCenter(getFrameArea().Center());
+            const basegfx::B2DPoint aB2DCenter(aCenter.X(), aCenter.Y());
+
+            updateTransformationsAndFrameAreaDefinitions(
+                *this,
+                fRotation,
+                aB2DCenter);
+        }
     }
 
     Unlock();
@@ -252,28 +269,13 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 #endif
 }
 
-void SwFlyFreeFrame::updateTransformationsAndAreas(
-    double fRotation,
-    const basegfx::B2DPoint& rCenter)
-{
-    createFrameAreaTransformations(
-        maFrameAreaTransformation,
-        maFramePrintAreaTransformation,
-        fRotation,
-        rCenter);
-
-    setFrameAreaDefinitionsToBoundRangesOfTransformations(
-        maFrameAreaTransformation,
-        maFramePrintAreaTransformation);
-}
-
 // RotateFlyFrame3 - Support for Transformations - outer frame
 basegfx::B2DHomMatrix SwFlyFreeFrame::getFrameAreaTransformation() const
 {
-    if(!maFrameAreaTransformation.isIdentity())
+    if(!getLocalFrameAreaTransformation().isIdentity())
     {
         // use pre-created transformation
-        return maFrameAreaTransformation;
+        return getLocalFrameAreaTransformation();
     }
 
     // call parent
@@ -282,10 +284,10 @@ basegfx::B2DHomMatrix SwFlyFreeFrame::getFrameAreaTransformation() const
 
 basegfx::B2DHomMatrix SwFlyFreeFrame::getFramePrintAreaTransformation() const
 {
-    if(!maFramePrintAreaTransformation.isIdentity())
+    if(!getLocalFramePrintAreaTransformation().isIdentity())
     {
         // use pre-created transformation
-        return maFramePrintAreaTransformation;
+        return getLocalFramePrintAreaTransformation();
     }
 
     // call parent
@@ -293,6 +295,11 @@ basegfx::B2DHomMatrix SwFlyFreeFrame::getFramePrintAreaTransformation() const
 }
 
 // RotateFlyFrame3 - outer frame
+double getFrameRotation_from_SwNoTextFrame(const SwNoTextFrame& rNoTextFrame)
+{
+    return rNoTextFrame.getFrameRotation();
+}
+
 double SwFlyFreeFrame::getFrameRotation() const
 {
     // SwLayoutFrame::Lower() != SwFrame::GetLower(), but SwFrame::GetLower()
@@ -301,7 +308,7 @@ double SwFlyFreeFrame::getFrameRotation() const
 
     if(nullptr != pSwNoTextFrame)
     {
-        return pSwNoTextFrame->getFrameRotation();
+        return getFrameRotation_from_SwNoTextFrame(*pSwNoTextFrame);
     }
 
     // no rotation
