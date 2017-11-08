@@ -38,6 +38,7 @@
 #include <svx/sdsxyitm.hxx>
 #include <tools/gen.hxx>
 
+#include <docsh.hxx>
 #include "table.hxx"
 #include "document.hxx"
 #include "docpool.hxx"
@@ -253,6 +254,13 @@ void ScCaptionCreator::FitCaptionToRect( const tools::Rectangle* pVisRect )
     // update caption
     aCaptRect.SetPos( aCaptPos );
     mxCaption->SetLogicRect( aCaptRect );
+
+    // Apply grid sync
+    //ScDocShell* pDocShell = static_cast<ScDocShell*>(mrDoc.GetDocumentShell());
+    if (ScDocShell::GetViewData())
+    {
+        ScDocShell::GetViewData()->GetScDrawView()->SyncForGrid(mxCaption.get());
+    }
 }
 
 void ScCaptionCreator::AutoPlaceCaption( const tools::Rectangle* pVisRect )

@@ -99,8 +99,10 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl, Timer *, void)
             mxObject = ScNoteUtil::CreateTempCaption( *pDoc, aDocPos, *pPage, aUserText, aVisRect, bLeft );
             if( mxObject )
             {
-                mxObject->SetGridOffset( aGridOff );
                 aRect = mxObject->GetCurrentBoundRect();
+                // Need to include grid offset: GetCurrentBoundRect is removing it
+                // but we need to know actual rect position
+                aRect += mxObject->GetGridOffset();
             }
 
             // Insert page so that the model recognise it and also deleted
