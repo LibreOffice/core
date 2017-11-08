@@ -244,29 +244,37 @@ css::uno::Reference< css::uno::XInterface >
     return static_cast< XServiceInfo* >(new ODBFilter( comphelper::getComponentContext(_rxORB)));
 }
 
+namespace {
+class FocusWindowWaitGuard
+{
+public:
+    FocusWindowWaitGuard()
+    {
+        SolarMutexGuard aGuard;
+        mpWindow.set(Application::GetFocusWindow());
+        if (mpWindow)
+            mpWindow->EnterWait();
+    }
+    ~FocusWindowWaitGuard()
+    {
+        if (mpWindow)
+        {
+            SolarMutexGuard aGuard;
+            mpWindow->LeaveWait();
+        }
+    }
+private:
+    VclPtr<vcl::Window> mpWindow;
+};
+}
 
 sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescriptor )
 {
-    uno::Reference< css::awt::XWindow > xWindow;
-    {
-        SolarMutexGuard aGuard;
-        vcl::Window*     pFocusWindow = Application::GetFocusWindow();
-        xWindow = VCLUnoHelper::GetInterface( pFocusWindow );
-        if( pFocusWindow )
-            pFocusWindow->EnterWait();
-    }
+    FocusWindowWaitGuard aWindowFocusGuard;
     bool    bRet = false;
 
     if ( GetModel().is() )
         bRet = implImport( rDescriptor );
-
-    if ( xWindow.is() )
-    {
-        SolarMutexGuard aGuard;
-        VclPtr<vcl::Window> pFocusWindow = VCLUnoHelper::GetWindow( xWindow );
-        if ( pFocusWindow )
-            pFocusWindow->LeaveWait();
-    }
 
     return bRet;
 }
