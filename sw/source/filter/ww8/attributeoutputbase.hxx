@@ -169,10 +169,10 @@ public:
     virtual void EmptyParagraph() = 0;
 
     /// Start of the text run.
-    virtual void StartRun( const SwRedlineData* pRedlineData, bool bSingleEmptyRun = false ) = 0;
+    virtual void StartRun( const SwRedlineData* pRedlineData, sal_Int32 nPos, bool bSingleEmptyRun = false ) = 0;
 
     /// End of the text run.
-    virtual void EndRun( const SwTextNode* pNode, sal_Int32 nPos ) = 0;
+    virtual void EndRun( const SwTextNode* pNode, sal_Int32 nPos, bool bLastRun = false ) = 0;
 
     /// Called before we start outputting the attributes.
     virtual void StartRunProperties() = 0;
@@ -209,7 +209,8 @@ public:
 
     virtual void FieldVanish( const OUString& rText, ww::eField eType ) = 0;
 
-    virtual void GenerateBookmarksForSequenceField(const SwTextNode& rNode, SwWW8AttrIter& rAttrIter) = 0;
+    /// MSO uses bookmarks to reference sequence fields, so we need to generate these additional bookmarks during export
+    void GenerateBookmarksForSequenceField(const SwTextNode& rNode, SwWW8AttrIter& rAttrIter);
 
     void StartTOX( const SwSection& rSect );
 
@@ -624,6 +625,9 @@ protected:
     virtual bool PlaceholderField( const SwField* pField ) = 0;
 
     virtual bool AnalyzeURL( const OUString& rUrl, const OUString& rTarget, OUString* pLinkURL, OUString* pMark );
+
+    /// Insert a bookmark inside the currently processed parargaph.
+    virtual void WriteBookmarkInActParagraph( const OUString& rName, sal_Int32 nFirstRunPos, sal_Int32 nLastRunPos ) = 0;
 
     ww8::GridColsPtr GetGridCols( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner );
     ww8::WidthsPtr   GetColumnWidths( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner );

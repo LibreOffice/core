@@ -63,10 +63,10 @@ public:
     void EndParagraphProperties(const SfxItemSet& rParagraphMarkerProperties, const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted, const SwRedlineData* pRedlineParagraphMarkerInserted) override;
 
     /// Start of the text run.
-    void StartRun(const SwRedlineData* pRedlineData, bool bSingleEmptyRun = false) override;
+    void StartRun(const SwRedlineData* pRedlineData, sal_Int32 nPos, bool bSingleEmptyRun = false) override;
 
     /// End of the text run.
-    void EndRun(const SwTextNode* pNode, sal_Int32 nPos) override;
+    void EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool bLastRun = false) override;
 
     /// Called before we start outputting the attributes.
     void StartRunProperties() override;
@@ -218,7 +218,7 @@ public:
     void WriteBookmarks_Impl(std::vector< OUString >& rStarts, std::vector< OUString >& rEnds);
     void WriteAnnotationMarks_Impl(std::vector< OUString >& rStarts, std::vector< OUString >& rEnds);
     void WriteHeaderFooter_Impl(const SwFrameFormat& rFormat, bool bHeader, const sal_Char* pStr, bool bTitlepg);
-    void GenerateBookmarksForSequenceField(const SwTextNode& /*rNode*/, SwWW8AttrIter& /*rAttrIter*/) override {};
+    void WriteBookmarkInActParagraph( const OUString& /*rName*/, sal_Int32 /*nFirstRunPos*/, sal_Int32 /*nLastRunPos*/ ) override {};
 
 protected:
     /// Output frames - the implementation.

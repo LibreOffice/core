@@ -1295,6 +1295,8 @@ DECLARE_OOXMLEXPORT_TEST( testTableCrossReference, "table_cross_reference.odt" )
         }
         ++nIndex;
     }
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), nIndex);
 }
 
 DECLARE_OOXMLEXPORT_TEST( testTableCrossReferenceCustomFormat, "table_cross_reference_custom_format.odt" )
@@ -1708,6 +1710,8 @@ DECLARE_OOXMLEXPORT_TEST( testObjectCrossReference, "object_cross_reference.odt"
         }
         ++nIndex;
     }
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(21), nIndex);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

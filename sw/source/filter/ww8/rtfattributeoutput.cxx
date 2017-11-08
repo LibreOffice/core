@@ -380,7 +380,7 @@ void RtfAttributeOutput::EndParagraphProperties(const SfxItemSet& /*rParagraphMa
     m_rExport.Strm().WriteCharPtr(m_aStyles.makeStringAndClear().getStr());
 }
 
-void RtfAttributeOutput::StartRun(const SwRedlineData* pRedlineData, bool bSingleEmptyRun)
+void RtfAttributeOutput::StartRun(const SwRedlineData* pRedlineData, sal_Int32 /*nPos*/, bool bSingleEmptyRun)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", bSingleEmptyRun: " << bSingleEmptyRun);
 
@@ -395,7 +395,7 @@ void RtfAttributeOutput::StartRun(const SwRedlineData* pRedlineData, bool bSingl
     OSL_ENSURE(m_aRunText.getLength() == 0, "m_aRunText is not empty");
 }
 
-void RtfAttributeOutput::EndRun(const SwTextNode* /*pNode*/, sal_Int32 /*nPos*/)
+void RtfAttributeOutput::EndRun(const SwTextNode* /*pNode*/, sal_Int32 /*nPos*/, bool /*bLastRun*/)
 {
     m_aRun->append(SAL_NEWLINE_STRING);
     m_aRun.appendAndClear(m_aRunText);
