@@ -21,10 +21,10 @@
 
 #include <memory>
 
+#include <headless/svpgdi.hxx>
 #include <rtl/string.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
-#include <headless/svpgdi.hxx>
 
 #include <QtGui/QImage>
 
@@ -36,22 +36,22 @@ class KDE5SalFrame;
 class KDE5SalGraphics : public SvpSalGraphics
 {
 public:
-    KDE5SalGraphics( KDE5SalFrame *pFrame, QWidget *pWindow);
-    virtual bool IsNativeControlSupported( ControlType, ControlPart ) override;
+    KDE5SalGraphics(KDE5SalFrame* pFrame, QWidget* pWindow);
+    virtual bool IsNativeControlSupported(ControlType, ControlPart) override;
 
-    virtual bool hitTestNativeControl( ControlType, ControlPart,
-                                       const tools::Rectangle&, const Point&, bool& ) override;
+    virtual bool hitTestNativeControl(ControlType, ControlPart, const tools::Rectangle&,
+                                      const Point&, bool&) override;
 
-    virtual bool drawNativeControl( ControlType, ControlPart, const tools::Rectangle&,
-                                    ControlState, const ImplControlValue&, const OUString& ) override;
+    virtual bool drawNativeControl(ControlType, ControlPart, const tools::Rectangle&, ControlState,
+                                   const ImplControlValue&, const OUString&) override;
 
-    virtual bool getNativeControlRegion( ControlType, ControlPart, const tools::Rectangle&,
-                                         ControlState, const ImplControlValue&,
-                                         const OUString&, tools::Rectangle&, tools::Rectangle& ) override;
+    virtual bool getNativeControlRegion(ControlType, ControlPart, const tools::Rectangle&,
+                                        ControlState, const ImplControlValue&, const OUString&,
+                                        tools::Rectangle&, tools::Rectangle&) override;
 
 private:
-    QWidget *m_pWindow;
-    KDE5SalFrame *m_pFrame;
+    QWidget* m_pWindow;
+    KDE5SalFrame* m_pFrame;
 
     std::unique_ptr<QImage> m_image;
     QRect lastPopupRect;

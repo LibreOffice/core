@@ -25,36 +25,35 @@
 #include <QtWidgets/QFrame>
 #include <QtX11Extras/QX11Info>
 
-
-#include "KDE5SalInstance.hxx"
-#include "KDE5SalFrame.hxx"
-#include "KDE5XLib.hxx"
 #include "KDE5SalDisplay.hxx"
+#include "KDE5SalFrame.hxx"
+#include "KDE5SalInstance.hxx"
+#include "KDE5XLib.hxx"
 
 using namespace com::sun::star;
 
 KDE5SalInstance::KDE5SalInstance(SalYieldMutex* pMutex)
-    :SvpSalInstance( pMutex )
+    : SvpSalInstance(pMutex)
 {
     ImplSVData* pSVData = ImplGetSVData();
     delete pSVData->maAppData.mpToolkitName;
     pSVData->maAppData.mpToolkitName = new OUString("kde5");
 }
 
-SalFrame* KDE5SalInstance::CreateFrame( SalFrame *pParent, SalFrameStyleFlags nState )
+SalFrame* KDE5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nState)
 {
-    return new KDE5SalFrame( pParent, nState );
+    return new KDE5SalFrame(pParent, nState);
 }
 
-uno::Reference< ui::dialogs::XFilePicker2 > KDE5SalInstance::createFilePicker(
-    const uno::Reference< uno::XComponentContext >& xMSF )
+uno::Reference<ui::dialogs::XFilePicker2>
+KDE5SalInstance::createFilePicker(const uno::Reference<uno::XComponentContext>& xMSF)
 {
     /*KDEXLib* kdeXLib = static_cast<KDEXLib*>( mpXLib );
     if (kdeXLib->allowKdeDialogs())
         return uno::Reference< ui::dialogs::XFilePicker2 >(
             kdeXLib->createFilePicker(xMSF) );
     else*/
-        return SalInstance::createFilePicker( xMSF );
+    return SalInstance::createFilePicker(xMSF);
 }
 
 /*SalX11Display* KDE5SalInstance::CreateDisplay() const
@@ -62,9 +61,6 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDE5SalInstance::createFilePicker(
     return new SalKDE5Display( QX11Info::display() );
 }*/
 
-bool KDE5SalInstance::IsMainThread() const
-{
-    return qApp->thread() == QThread::currentThread();
-}
+bool KDE5SalInstance::IsMainThread() const { return qApp->thread() == QThread::currentThread(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

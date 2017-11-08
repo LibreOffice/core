@@ -19,27 +19,28 @@
 
 #pragma once
 
-#include <unx/saldisp.hxx>
 #include <unx/saldata.hxx>
+#include <unx/saldisp.hxx>
 
 class KDE5SalInstance;
 class KDE5XLib;
 
 class KDE5Data //: public X11SalData
 {
-    public:
-        explicit KDE5Data( SalInstance *pInstance ) {}
-                       // : X11SalData( SAL_DATA_KDE5, pInstance ) {}
-        virtual ~KDE5Data();
+public:
+    explicit KDE5Data(SalInstance* pInstance) {}
+    // : X11SalData( SAL_DATA_KDE5, pInstance ) {}
+    virtual ~KDE5Data();
 
-        virtual void Init() ;
-        virtual void initNWF() ;
-        virtual void deInitNWF() ;
+    virtual void Init();
+    virtual void initNWF();
+    virtual void deInitNWF();
 
-        KDE5XLib* GetLib() { return pXLib_; }
-    private:
-        KDE5XLib *pXLib_;
-        QApplication* qMyApp;
+    KDE5XLib* GetLib() { return pXLib_; }
+
+private:
+    KDE5XLib* pXLib_;
+    QApplication* qMyApp;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

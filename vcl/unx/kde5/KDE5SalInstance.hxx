@@ -33,19 +33,18 @@ protected:
 
 public:
     explicit KDE5SalInstance(SalYieldMutex* pMutex);
-    virtual SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
+    virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
 
     virtual bool hasNativeFileSelection() const override { return true; }
 
-    virtual css::uno::Reference< css::ui::dialogs::XFilePicker2 >
-        createFilePicker( const css::uno::Reference<
-                              css::uno::XComponentContext >& ) override;
+    virtual css::uno::Reference<css::ui::dialogs::XFilePicker2>
+    createFilePicker(const css::uno::Reference<css::uno::XComponentContext>&) override;
 
     virtual bool IsMainThread() const override;
-    void SetLib( KDE5XLib *pXLib ) { m_pXLib = pXLib; }
+    void SetLib(KDE5XLib* pXLib) { m_pXLib = pXLib; }
 
 private:
-    KDE5XLib *m_pXLib;
+    KDE5XLib* m_pXLib;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

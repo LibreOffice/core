@@ -34,29 +34,29 @@ class QFont;
 class Qt5FontFace : public PhysicalFontFace
 {
 public:
-    virtual                  ~Qt5FontFace() override;
+    virtual ~Qt5FontFace() override;
 
-    static Qt5FontFace*      fromQFont( const QFont &rFont );
+    static Qt5FontFace* fromQFont(const QFont& rFont);
 
-    PhysicalFontFace*        Clone() const override;
-    LogicalFontInstance*     CreateFontInstance( const FontSelectPattern& ) const override;
-    sal_IntPtr               GetFontId() const override;
+    PhysicalFontFace* Clone() const override;
+    LogicalFontInstance* CreateFontInstance(const FontSelectPattern&) const override;
+    sal_IntPtr GetFontId() const override;
 
-    int                      GetFontTable( const char pTagName[5], unsigned char* ) const;
+    int GetFontTable(const char pTagName[5], unsigned char*) const;
 
-    const FontCharMapRef     GetFontCharMap() const;
-    bool                     GetFontCapabilities( vcl::FontCapabilities &rFontCapabilities ) const;
-    bool                     HasChar( sal_uInt32 cChar ) const;
+    const FontCharMapRef GetFontCharMap() const;
+    bool GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const;
+    bool HasChar(sal_uInt32 cChar) const;
 
 protected:
-                             Qt5FontFace( const Qt5FontFace& );
-                             Qt5FontFace( const FontAttributes& rFA, const QString &rFontID );
+    Qt5FontFace(const Qt5FontFace&);
+    Qt5FontFace(const FontAttributes& rFA, const QString& rFontID);
 
 private:
-    const QString                    m_aFontId;
-    mutable FontCharMapRef           m_xCharMap;
-    mutable vcl::FontCapabilities    m_aFontCapabilities;
-    mutable bool                     m_bFontCapabilitiesRead;
+    const QString m_aFontId;
+    mutable FontCharMapRef m_xCharMap;
+    mutable vcl::FontCapabilities m_aFontCapabilities;
+    mutable bool m_bFontCapabilitiesRead;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,19 +22,18 @@
 
 #pragma once
 
-#include <QtWidgets/QApplication>
-#include <QtCore/QAbstractNativeEventFilter>
 #include <KConfigCore/kconfig.h>
-
+#include <QtCore/QAbstractNativeEventFilter>
+#include <QtWidgets/QApplication>
 
 #undef Region
 
 class VCLKDE5Application : public QApplication, public QAbstractNativeEventFilter
 {
-    public:
-        VCLKDE5Application( int argc, char** argv);
-        static void preDialogSetup();
-        static void postDialogCleanup();
+public:
+    VCLKDE5Application(int argc, char** argv);
+    static void preDialogSetup();
+    static void postDialogCleanup();
 };
 
 #endif

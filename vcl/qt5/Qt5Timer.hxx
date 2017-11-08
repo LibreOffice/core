@@ -19,14 +19,14 @@
 
 #pragma once
 
-#include <saltimer.hxx>
 #include <QtCore/QTimer>
+#include <saltimer.hxx>
 
 class Qt5Timer final : public QObject, public SalTimer
 {
     Q_OBJECT
 
-    QTimer    m_aTimer;
+    QTimer m_aTimer;
 
 private Q_SLOTS:
     void timeoutActivated();
@@ -39,7 +39,7 @@ public:
     Qt5Timer();
     virtual ~Qt5Timer() override;
 
-    virtual void Start( sal_uIntPtr nMS ) override;
+    virtual void Start(sal_uIntPtr nMS) override;
     virtual void Stop() override;
 };
 

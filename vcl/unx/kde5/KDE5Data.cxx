@@ -17,19 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <QtWidgets/QStyle>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QStyle>
 
 #undef Region
 
 #include "KDE5Data.hxx"
 
-#include "KDE5XLib.hxx"
 #include "KDE5SalDisplay.hxx"
+#include "KDE5XLib.hxx"
 
-KDE5Data::~KDE5Data()
-{
-}
+KDE5Data::~KDE5Data() {}
 
 void KDE5Data::Init()
 {
@@ -43,7 +41,7 @@ void KDE5Data::Init()
 
 void KDE5Data::initNWF()
 {
-    ImplSVData *pSVData = ImplGetSVData();
+    ImplSVData* pSVData = ImplGetSVData();
 
     // draw toolbars on separate lines
     pSVData->maNWFData.mbDockingAreaSeparateTB = true;
@@ -56,18 +54,13 @@ void KDE5Data::initNWF()
 
     // Styled menus need additional space
     //QStyle *style = QApplication::style();
-    QStyle *style = qMyApp->style();
-    pSVData->maNWFData.mnMenuFormatBorderX =
-       style->pixelMetric( QStyle::PM_MenuPanelWidth ) +
-       style->pixelMetric( QStyle::PM_MenuHMargin );
-    pSVData->maNWFData.mnMenuFormatBorderY =
-       style->pixelMetric( QStyle::PM_MenuPanelWidth ) +
-       style->pixelMetric( QStyle::PM_MenuVMargin );
+    QStyle* style = qMyApp->style();
+    pSVData->maNWFData.mnMenuFormatBorderX = style->pixelMetric(QStyle::PM_MenuPanelWidth)
+                                             + style->pixelMetric(QStyle::PM_MenuHMargin);
+    pSVData->maNWFData.mnMenuFormatBorderY = style->pixelMetric(QStyle::PM_MenuPanelWidth)
+                                             + style->pixelMetric(QStyle::PM_MenuVMargin);
 }
 
-void KDE5Data::deInitNWF()
-{
-    delete qMyApp;
-}
+void KDE5Data::deInitNWF() { delete qMyApp; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
