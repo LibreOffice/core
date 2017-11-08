@@ -49,6 +49,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <vcl/msgbox.hxx>
 #include <stringutil.hxx>
@@ -2108,7 +2109,7 @@ bool ScExternalRefManager::isValidRangeName(sal_uInt16 nFileId, const OUString& 
         // Range name is cached.
         return true;
 
-    pSrcDoc = getSrcDocument(nFileId);
+    pSrcDoc = utl::ConfigManager::IsAvoidConfig() ? nullptr : getSrcDocument(nFileId);
     if (!pSrcDoc)
         // failed to load document from disk.
         return false;
