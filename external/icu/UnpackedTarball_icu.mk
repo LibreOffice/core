@@ -28,6 +28,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	$(if $(filter EMSCRIPTEN,$(OS)),external/icu/icu4c-emscripten.patch.1) \
 	external/icu/khmerbreakengine.patch \
 	external/icu/icu4c-changeset-39671.patch.1 \
+	external/icu/icu4c-changeset-40324.patch.1 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,icu,source/data/brkitr/khmerdict.dict,external/icu/khmerdict.dict))
