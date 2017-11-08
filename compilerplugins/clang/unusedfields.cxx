@@ -159,11 +159,11 @@ private:
                                         CalleeWrapper calleeFunctionDecl);
     llvm::Optional<CalleeWrapper> getCallee(CallExpr const *);
 
-    RecordDecl *   insideMoveOrCopyDeclParent;
-    RecordDecl *   insideStreamOutputOperator;
+    RecordDecl *   insideMoveOrCopyDeclParent = nullptr;
+    RecordDecl *   insideStreamOutputOperator = nullptr;
     // For reasons I do not understand, parentFunctionDecl() is not reliable, so
     // we store the parent function on the way down the AST.
-    FunctionDecl * insideFunctionDecl;
+    FunctionDecl * insideFunctionDecl = nullptr;
 };
 
 void UnusedFields::run()
@@ -361,18 +361,21 @@ bool startswith(const std::string& rStr, const char* pSubStr)
 
 bool UnusedFields::TraverseCXXConstructorDecl(CXXConstructorDecl* cxxConstructorDecl)
 {
+    auto copy = insideMoveOrCopyDeclParent;
     if (!ignoreLocation(cxxConstructorDecl) && cxxConstructorDecl->isThisDeclarationADefinition())
     {
         if (cxxConstructorDecl->isCopyOrMoveConstructor())
             insideMoveOrCopyDeclParent = cxxConstructorDecl->getParent();
     }
     bool ret = RecursiveASTVisitor::TraverseCXXConstructorDecl(cxxConstructorDecl);
-    insideMoveOrCopyDeclParent = nullptr;
+    insideMoveOrCopyDeclParent = copy;
     return ret;
 }
 
 bool UnusedFields::TraverseCXXMethodDecl(CXXMethodDecl* cxxMethodDecl)
 {
+    auto copy1 = insideMoveOrCopyDeclParent;
+    auto copy2 = insideFunctionDecl;
     if (!ignoreLocation(cxxMethodDecl) && cxxMethodDecl->isThisDeclarationADefinition())
     {
         if (cxxMethodDecl->isCopyAssignmentOperator() || cxxMethodDecl->isMoveAssignmentOperator())
@@ -380,13 +383,15 @@ bool UnusedFields::TraverseCXXMethodDecl(CXXMethodDecl* cxxMethodDecl)
     }
     insideFunctionDecl = cxxMethodDecl;
     bool ret = RecursiveASTVisitor::TraverseCXXMethodDecl(cxxMethodDecl);
-    insideMoveOrCopyDeclParent = nullptr;
-    insideFunctionDecl = nullptr;
+    insideMoveOrCopyDeclParent = copy1;
+    insideFunctionDecl = copy2;
     return ret;
 }
 
 bool UnusedFields::TraverseFunctionDecl(FunctionDecl* functionDecl)
 {
+    auto copy1 = insideStreamOutputOperator;
+    auto copy2 = insideFunctionDecl;
     if (functionDecl->getLocation().isValid() && !ignoreLocation(functionDecl) && functionDecl->isThisDeclarationADefinition())
     {
         if (functionDecl->getOverloadedOperator() == OO_LessLess
@@ -398,8 +403,8 @@ bool UnusedFields::TraverseFunctionDecl(FunctionDecl* functionDecl)
     }
     insideFunctionDecl = functionDecl;
     bool ret = RecursiveASTVisitor::TraverseFunctionDecl(functionDecl);
-    insideStreamOutputOperator = nullptr;
-    insideFunctionDecl = nullptr;
+    insideStreamOutputOperator = copy1;
+    insideFunctionDecl = copy2;
     return ret;
 }
 

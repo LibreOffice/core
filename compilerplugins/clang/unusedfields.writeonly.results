@@ -100,6 +100,10 @@ connectivity/source/inc/dbase/DTable.hxx:62
     connectivity::dbase::ODbaseTable::DBFHeader dateElems sal_uInt8 [3]
 connectivity/source/inc/dbase/DTable.hxx:86
     connectivity::dbase::ODbaseTable::DBFColumn db_adr sal_uInt32
+connectivity/source/inc/OTypeInfo.hxx:34
+    connectivity::OTypeInfo nPrecision sal_Int32
+connectivity/source/inc/OTypeInfo.hxx:36
+    connectivity::OTypeInfo nMaximumScale sal_Int16
 cppcanvas/source/mtfrenderer/emfpbrush.hxx:102
     cppcanvas::internal::EMFPBrush wrapMode sal_Int32
 cppcanvas/source/mtfrenderer/emfppen.hxx:42
@@ -166,7 +170,7 @@ cui/source/inc/cuihyperdlg.hxx:76
     SvxHpLinkDlg maCtrl class SvxHlinkCtrl
 dbaccess/source/core/dataaccess/documentdefinition.cxx:290
     dbaccess::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
-desktop/qa/desktop_lib/test_desktop_lib.cxx:175
+desktop/qa/desktop_lib/test_desktop_lib.cxx:176
     DesktopLOKTest m_bModified _Bool
 desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:119
     dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
@@ -216,15 +220,15 @@ emfio/inc/mtftools.hxx:128
     emfio::LOGFONTW lfClipPrecision sal_uInt8
 emfio/inc/mtftools.hxx:129
     emfio::LOGFONTW lfQuality sal_uInt8
-emfio/source/reader/emfreader.cxx:323
+emfio/source/reader/emfreader.cxx:310
     (anonymous namespace)::BLENDFUNCTION aBlendOperation unsigned char
-emfio/source/reader/emfreader.cxx:324
+emfio/source/reader/emfreader.cxx:311
     (anonymous namespace)::BLENDFUNCTION aBlendFlags unsigned char
-extensions/source/scanner/scanner.hxx:47
+extensions/source/scanner/scanner.hxx:45
     ScannerManager mpData void *
-framework/inc/services/layoutmanager.hxx:262
+framework/inc/services/layoutmanager.hxx:258
     framework::LayoutManager m_bGlobalSettings _Bool
-framework/inc/services/layoutmanager.hxx:276
+framework/inc/services/layoutmanager.hxx:272
     framework::LayoutManager m_pGlobalSettings class framework::GlobalSettings *
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:281
     framework::ToolbarLayoutManager m_pGlobalSettings class framework::GlobalSettings *
@@ -254,8 +258,6 @@ include/opencl/platforminfo.hxx:31
     OpenCLDeviceInfo mnFrequency size_t
 include/svx/bmpmask.hxx:129
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
-include/svx/ClassificationField.hxx:60
-    svx::ClassificationResult mnParagraph sal_Int32
 include/svx/float3d.hxx:177
     Svx3DWin pControllerItem class Svx3DCtrlItem *
 include/svx/imapdlg.hxx:118
@@ -264,8 +266,6 @@ include/svx/srchdlg.hxx:231
     SvxSearchDialog pSearchController class SvxSearchController *
 include/svx/srchdlg.hxx:232
     SvxSearchDialog pOptionsController class SvxSearchController *
-include/vcl/menu.hxx:454
-    MenuBar::MenuBarButtonCallbackArg bHighlight _Bool
 include/vcl/salnativewidgets.hxx:415
     ToolbarValue mbIsTopDockingArea _Bool
 include/vcl/salnativewidgets.hxx:463
@@ -284,14 +284,12 @@ l10ntools/inc/common.hxx:31
     common::HandledArgs m_bUTF8BOM _Bool
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:61
     GtvApplicationWindow statusbar GtkWidget *
-libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.cxx:36
+libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.cxx:37
     GtvMainToolbarPrivateImpl m_pPartModeSelector GtkWidget *
 lingucomponent/source/languageguessing/simpleguesser.cxx:79
     textcat_t maxsize uint4
 lingucomponent/source/languageguessing/simpleguesser.cxx:81
     textcat_t output char [1024]
-package/source/zipapi/MemoryByteGrabber.hxx:29
-    MemoryByteGrabber maBuffer const css::uno::Sequence<sal_Int8>
 registry/source/reflread.cxx:509
     ConstantPool::readDoubleConstant(sal_uInt16)::(anonymous union)::(anonymous) b1 sal_uInt32
 registry/source/reflread.cxx:510
@@ -312,7 +310,7 @@ sal/rtl/alloc_cache.hxx:36
     rtl_cache_stat_type m_mem_alloc sal_Size
 sal/rtl/alloc_cache.hxx:151
     rtl_cache_st m_cpu_stats struct rtl_cache_stat_type
-sal/rtl/math.cxx:948
+sal/rtl/math.cxx:996
      md union sal_math_Double
 sal/textenc/tcvtutf7.cxx:96
     ImplUTF7ToUCContextData mbShifted _Bool
@@ -330,11 +328,11 @@ sal/textenc/tcvtutf7.cxx:396
     ImplUTF7FromUCContextData mnBitBuffer sal_uInt32
 sal/textenc/tcvtutf7.cxx:397
     ImplUTF7FromUCContextData mnBufferBits sal_uInt32
-sc/inc/compiler.hxx:259
+sc/inc/compiler.hxx:258
     ScCompiler::AddInMap pODFF const char *
-sc/inc/compiler.hxx:260
+sc/inc/compiler.hxx:259
     ScCompiler::AddInMap pEnglish const char *
-sc/inc/compiler.hxx:262
+sc/inc/compiler.hxx:261
     ScCompiler::AddInMap pUpper const char *
 sc/inc/pivot.hxx:74
     ScDPLabelData mnFlags sal_Int32
@@ -348,7 +346,7 @@ sc/source/core/data/document.cxx:1257
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1258
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk class ScBulkBroadcast
-sc/source/core/data/formulacell.cxx:1755
+sc/source/core/data/formulacell.cxx:1756
     StackCleaner pInt class ScInterpreter *
 sc/source/filter/excel/xltoolbar.hxx:23
     TBCCmd cmdID sal_uInt16
@@ -400,11 +398,13 @@ sc/source/filter/xml/xmldrani.hxx:75
     ScXMLDatabaseRangeContext bIsSelection _Bool
 sc/source/filter/xml/xmlexternaltabi.hxx:113
     ScXMLExternalRefCellContext mnCellType sal_Int16
+sc/source/ui/inc/datastream.hxx:108
+    sc::DataStream mnSettings sal_uInt32
 sc/source/ui/inc/filtdlg.hxx:198
     ScSpecialFilterDlg pOptionsMgr class ScFilterOptionsMgr *
 sc/source/ui/inc/preview.hxx:47
     ScPreview nTabPage long
-sc/source/ui/inc/tabvwsh.hxx:128
+sc/source/ui/inc/tabvwsh.hxx:129
     ScTabViewShell pPivotSource class ScArea *
 sd/source/filter/eppt/eppt.hxx:176
     PPTWriter mnTxId sal_uInt32
@@ -426,17 +426,17 @@ sd/source/ui/remotecontrol/Receiver.hxx:36
     sd::Receiver pTransmitter class sd::Transmitter *
 sd/source/ui/sidebar/MasterPageContainerProviders.hxx:136
     sd::sidebar::TemplatePreviewProvider msURL class rtl::OUString
-sd/source/ui/sidebar/SlideBackground.hxx:102
+sd/source/ui/sidebar/SlideBackground.hxx:99
     sd::sidebar::SlideBackground m_pContainer VclPtr<class VclVBox>
 sd/source/ui/slidesorter/view/SlsLayouter.cxx:61
     sd::slidesorter::view::Layouter::Implementation mpTheme std::shared_ptr<view::Theme>
-sfx2/source/inc/appdata.hxx:75
+sfx2/source/inc/appdata.hxx:74
     SfxAppData_Impl pDocTopics SfxDdeDocTopics_Impl *
-sfx2/source/inc/appdata.hxx:76
+sfx2/source/inc/appdata.hxx:75
     SfxAppData_Impl pTriggerTopic class SfxDdeTriggerTopic_Impl *
-sfx2/source/inc/appdata.hxx:77
+sfx2/source/inc/appdata.hxx:76
     SfxAppData_Impl pDdeService2 class DdeService *
-sfx2/source/view/classificationcontroller.cxx:61
+sfx2/source/view/classificationcontroller.cxx:59
     sfx2::ClassificationCategoriesController m_aPropertyListener class sfx2::ClassificationPropertyListener
 slideshow/source/engine/opengl/TransitionImpl.hxx:296
     Vertex normal glm::vec3
@@ -444,23 +444,21 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:297
     Vertex texcoord glm::vec2
 slideshow/source/engine/slideshowimpl.cxx:1044
     (anonymous namespace)::SlideShowImpl::PrefetchPropertiesFunc mpSlideShowImpl class (anonymous namespace)::SlideShowImpl *const
-soltools/cpp/cpp.h:143
-    macroValidator pMacro Nlist *
-starmath/inc/view.hxx:163
+starmath/inc/view.hxx:158
     SmCmdBoxWindow aController class SmEditController
 store/source/storbase.hxx:248
     store::PageData m_aMarked store::PageData::L
-svl/source/crypto/cryptosign.cxx:144
+svl/source/crypto/cryptosign.cxx:145
     (anonymous namespace)::(anonymous) version SECItem
-svl/source/crypto/cryptosign.cxx:146
-    (anonymous namespace)::(anonymous) reqPolicy SECItem
 svl/source/crypto/cryptosign.cxx:147
-    (anonymous namespace)::(anonymous) nonce SECItem
+    (anonymous namespace)::(anonymous) reqPolicy SECItem
 svl/source/crypto/cryptosign.cxx:148
-    (anonymous namespace)::(anonymous) certReq SECItem
+    (anonymous namespace)::(anonymous) nonce SECItem
 svl/source/crypto/cryptosign.cxx:149
+    (anonymous namespace)::(anonymous) certReq SECItem
+svl/source/crypto/cryptosign.cxx:150
     (anonymous namespace)::(anonymous) extensions (anonymous namespace)::Extension *
-svl/source/crypto/cryptosign.cxx:193
+svl/source/crypto/cryptosign.cxx:194
     (anonymous namespace)::SigningCertificateV2 certs struct (anonymous namespace)::ESSCertIDv2 **
 svl/source/misc/inethist.cxx:48
     INetURLHistory_Impl::head_entry m_nMagic sal_uInt32
@@ -490,6 +488,8 @@ svx/source/table/tablertfimporter.cxx:53
     sdr::table::RTFCellDefault maItemSet class SfxItemSet
 sw/inc/shellio.hxx:147
     SwReader aFileName class rtl::OUString
+sw/source/core/doc/tblafmt.cxx:183
+    SwAfVersions m_nVerticalAlignmentVersion sal_uInt16
 sw/source/core/inc/swfont.hxx:980
     SvStatistics nGetStretchTextSize sal_uInt16
 sw/source/core/text/xmldump.cxx:33
@@ -507,7 +507,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo3/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo/sw/source/filter/inc/rtf.hxx:27:9)
 ucb/source/ucp/gio/gio_mount.hxx:46
     OOoMountOperationClass parent_class GMountOperationClass
 ucb/source/ucp/gio/gio_mount.hxx:49
@@ -562,7 +562,7 @@ vcl/inc/sft.hxx:486
     vcl::TrueTypeFont mapper sal_uInt32 (*)(const sal_uInt8 *, sal_uInt32, sal_uInt32)
 vcl/opengl/salbmp.cxx:426
     (anonymous namespace)::ScanlineWriter mpCurrentScanline sal_uInt8 *
-vcl/source/filter/graphicfilter.cxx:1034
+vcl/source/filter/graphicfilter.cxx:1010
     ImpFilterLibCache mpLast struct ImpFilterLibCacheEntry *
 vcl/source/filter/jpeg/Exif.hxx:56
     Exif::ExifIFD type sal_uInt16
