@@ -612,6 +612,24 @@ void SvxFontPrevWindow::UseResourceText()
     pImpl->mbUseResText = true;
 }
 
+/*
+ * removes line feeds and carriage returns from string
+ * returns if param is empty
+ */
+bool SvxFontPrevWindow::CleanAndCheckEmpty(OUString& rText)
+{
+    bool bEmpty = true;
+    for (sal_Int32 i = 0; i < rText.getLength(); ++i)
+    {
+        if (0xa == rText[i] || 0xd == rText[i])
+            rText = rText.replaceAt(i, 1, " ");
+        else
+            bEmpty = false;
+    }
+    return bEmpty;
+}
+
+
 void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     ApplySettings(rRenderContext);
@@ -645,7 +663,7 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
             {
                 pImpl->maText = pSh->GetSelectionText();
                 pImpl->mbGetSelection = true;
-                pImpl->mbSelection = !pImpl->maText.isEmpty();
+                pImpl->mbSelection = !CleanAndCheckEmpty(pImpl->maText);
             }
 
             if (!pImpl->mbSelection || pImpl->mbUseFontNameAsText)
@@ -681,16 +699,8 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
                 pImpl->maText = makeRepresentativeTextForFont(LATIN, rFont);
             }
 
-            // remove line feeds and carriage returns from string
-            bool bNotEmpty = false;
-            for (sal_Int32 i = 0; i < pImpl->maText.getLength(); ++i)
-            {
-                if (0xa == pImpl->maText[i] || 0xd == pImpl->maText[i])
-                     pImpl->maText = pImpl->maText.replaceAt(i, 1, " ");
-                else
-                    bNotEmpty = true;
-            }
-            if (!bNotEmpty)
+            bool bEmpty = CleanAndCheckEmpty(pImpl->maText);
+            if (bEmpty)
                 pImpl->maText = GetText();
 
             if (pImpl->maText.getLength() > (TEXT_WIDTH - 1))
