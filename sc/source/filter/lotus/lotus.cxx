@@ -43,7 +43,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
 
     ImportLotus aLotusImport(aContext, *pStream, pDocument, eSrc);
 
-    const bool bWithWK3 = utl::ConfigManager::IsAvoidConfig() || ScFilterOptions().GetWK3Flag();
+    const bool bWithWK3 = utl::ConfigManager::IsFuzzing() || ScFilterOptions().GetWK3Flag();
     ErrCode eRet;
     if (bWithWK3)
         eRet = aLotusImport.Read();

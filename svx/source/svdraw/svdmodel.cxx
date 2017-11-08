@@ -161,7 +161,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
 
     mbDisableTextEditUsesCommonUndoManager = false;
 
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
         mnCharCompressType = (CharCompressType)
             officecfg::Office::Common::AsianLayout::CompressCharacterDistance::
             get();
@@ -699,7 +699,7 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt 
     SvxFontItem aSvxFontItemCJK(EE_CHAR_FONTINFO_CJK);
     SvxFontItem aSvxFontItemCTL(EE_CHAR_FONTINFO_CTL);
     LanguageType nLanguage;
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
         nLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
     else
         nLanguage = LANGUAGE_ENGLISH_US;

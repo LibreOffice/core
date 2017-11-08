@@ -892,7 +892,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
 
     css::uno::Reference< css::uno::XInterface > xCfg;
 
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
     {
         try
         {

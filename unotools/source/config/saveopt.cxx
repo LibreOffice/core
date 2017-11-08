@@ -557,7 +557,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
         }
     }
 
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
     {
         bAutoSave = officecfg::Office::Recovery::AutoSave::Enabled::get();
         nAutoSaveTime = officecfg::Office::Recovery::AutoSave::TimeIntervall::get();

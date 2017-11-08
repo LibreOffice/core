@@ -117,7 +117,7 @@ void DrawDocShell::Construct( bool bClipboard )
     SetBaseModel( new SdXImpressDocument( this, bClipboard ) );
     SetPool( &mpDoc->GetItemPool() );
     mpUndoManager = new sd::UndoManager;
-    if (!utl::ConfigManager::IsAvoidConfig()
+    if (!utl::ConfigManager::IsFuzzing()
         && officecfg::Office::Common::Undo::Steps::get() < 1)
     {
         mpUndoManager->EnableUndo(false); // tdf#108863 disable if 0 steps

@@ -99,7 +99,7 @@ DefaultFontConfiguration& DefaultFontConfiguration::get()
 
 DefaultFontConfiguration::DefaultFontConfiguration()
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return;
     // create configuration hierarchical access name
     try
@@ -352,7 +352,7 @@ FontSubstConfiguration& FontSubstConfiguration::get()
 FontSubstConfiguration::FontSubstConfiguration() :
     maSubstHash( 300 )
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return;
     try
     {

@@ -904,7 +904,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     SAL_WARN_IF(
         officecfg::Office::Common::Undo::Steps::get() <= 0,
         "sw.ui", "/org.openoffice.Office.Common/Undo/Steps <= 0");
-    if (!utl::ConfigManager::IsAvoidConfig() && 0 < officecfg::Office::Common::Undo::Steps::get())
+    if (!utl::ConfigManager::IsFuzzing() && 0 < officecfg::Office::Common::Undo::Steps::get())
     {
         m_pWrtShell->DoUndo();
     }

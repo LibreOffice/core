@@ -441,7 +441,7 @@ OUString SfxMedium::GetBaseURL( bool bForSaving )
     const SfxStringItem* pBaseURLItem = GetItemSet()->GetItem<SfxStringItem>(SID_DOC_BASEURL);
     if ( pBaseURLItem )
         aBaseURL = pBaseURLItem->GetValue();
-    else if (!utl::ConfigManager::IsAvoidConfig() && GetContent().is())
+    else if (!utl::ConfigManager::IsFuzzing() && GetContent().is())
     {
         try
         {

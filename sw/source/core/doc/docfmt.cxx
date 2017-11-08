@@ -1721,7 +1721,7 @@ void SwDoc::CreateNumberFormatter()
 
     mpNumberFormatter = new SvNumberFormatter( comphelper::getProcessComponentContext(), eLang );
     mpNumberFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
         mpNumberFormatter->SetYear2000(static_cast<sal_uInt16>(::utl::MiscCfg().GetYear2000()));
 }
 

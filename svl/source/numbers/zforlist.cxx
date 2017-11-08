@@ -3250,7 +3250,7 @@ sal_uInt16 SvNumberFormatter::ExpandTwoDigitYear( sal_uInt16 nYear ) const
 // static
 sal_uInt16 SvNumberFormatter::GetYear2000Default()
 {
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
         return (sal_uInt16) ::utl::MiscCfg().GetYear2000();
     return 1930;
 }

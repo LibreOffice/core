@@ -4148,7 +4148,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     if ( cSymbol[0] < 128 )
     {
         bMayBeFuncName = rtl::isAsciiAlpha( cSymbol[0] );
-        if (!bMayBeFuncName && (cSymbol[0] == '_' && cSymbol[1] == '_') && !utl::ConfigManager::IsAvoidConfig())
+        if (!bMayBeFuncName && (cSymbol[0] == '_' && cSymbol[1] == '_') && !utl::ConfigManager::IsFuzzing())
         {
             SvtMiscOptions aOpt;
             bMayBeFuncName = aOpt.IsExperimentalMode();

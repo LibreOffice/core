@@ -1086,7 +1086,7 @@ void SwInsertConfig::Load()
         }
         else if (nProp == INS_PROP_CAP_CAPTIONORDERNUMBERINGFIRST)
         {
-            if (!utl::ConfigManager::IsAvoidConfig())
+            if (!utl::ConfigManager::IsFuzzing())
             {
                 //#i61007#  initialize caption order, right now only HUNGARIAN seems to need a different order
                 SvtSysLocaleOptions aSysLocaleOptions;

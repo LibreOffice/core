@@ -26,7 +26,7 @@
 
 bool ScOptionsUtil::IsMetricSystem()
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return true;
 
     //TODO: which language should be used here - system language or installed office language?

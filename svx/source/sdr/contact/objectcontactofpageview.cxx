@@ -403,7 +403,7 @@ namespace sdr
         // check if text animation is allowed.
         bool ObjectContactOfPageView::IsTextAnimationAllowed() const
         {
-            if (utl::ConfigManager::IsAvoidConfig())
+            if (utl::ConfigManager::IsFuzzing())
                 return true;
             SdrView& rView = GetPageWindow().GetPageView().GetView();
             const SvtAccessibilityOptions& rOpt = rView.getAccessibilityOptions();
@@ -413,7 +413,7 @@ namespace sdr
         // check if graphic animation is allowed.
         bool ObjectContactOfPageView::IsGraphicAnimationAllowed() const
         {
-            if (utl::ConfigManager::IsAvoidConfig())
+            if (utl::ConfigManager::IsFuzzing())
                 return true;
             SdrView& rView = GetPageWindow().GetPageView().GetView();
             const SvtAccessibilityOptions& rOpt = rView.getAccessibilityOptions();

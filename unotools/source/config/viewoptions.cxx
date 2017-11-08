@@ -149,7 +149,7 @@ SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const OUString& sList )
         ,   m_nWriteCount( 0     )
         #endif
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return;
 
     try

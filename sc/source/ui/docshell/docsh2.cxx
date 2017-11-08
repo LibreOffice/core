@@ -110,13 +110,13 @@ void ScDocShell::InitItems()
         // Other modifications after creation of the DrawLayer
         pDrawLayer->SetNotifyUndoActionHdl( LINK( pDocFunc, ScDocFunc, NotifyDrawUndo ) );
     }
-    else if (!utl::ConfigManager::IsAvoidConfig())
+    else if (!utl::ConfigManager::IsFuzzing())
     {
         //  always use global color table instead of local copy
         PutItem( SvxColorListItem( XColorList::GetStdColorList(), SID_COLOR_TABLE ) );
     }
 
-    if (!utl::ConfigManager::IsAvoidConfig() &&
+    if (!utl::ConfigManager::IsFuzzing() &&
         (!aDocument.GetForbiddenCharacters() || !aDocument.IsValidAsianCompression() || !aDocument.IsValidAsianKerning()))
     {
         //  get settings from SvxAsianConfig

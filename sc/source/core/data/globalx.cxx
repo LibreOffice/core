@@ -43,7 +43,7 @@ using namespace ::com::sun::star::ucb;
 
 void ScGlobal::InitAddIns()
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return;
 
     // multi paths separated by semicolons

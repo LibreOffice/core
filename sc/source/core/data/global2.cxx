@@ -313,7 +313,7 @@ OUString ScGlobal::GetAbsDocName( const OUString& rFileName,
     if (!pShell || !pShell->HasName())
     {   // maybe relative to document path working directory
         INetURLObject aObj;
-        aObj.SetSmartURL(!utl::ConfigManager::IsAvoidConfig() ? SvtPathOptions().GetWorkPath() : OUString("file:///tmp"));
+        aObj.SetSmartURL(!utl::ConfigManager::IsFuzzing() ? SvtPathOptions().GetWorkPath() : OUString("file:///tmp"));
         aObj.setFinalSlash();       // it IS a path
         bool bWasAbs = true;
         aAbsName = aObj.smartRel2Abs( rFileName, bWasAbs ).GetMainURL(INetURLObject::DecodeMechanism::NONE);

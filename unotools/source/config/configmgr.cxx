@@ -195,16 +195,16 @@ void utl::ConfigManager::doStoreConfigItems() {
     }
 }
 
-static bool bIsAvoidConfig = false;
+static bool bIsFuzzing = false;
 
-bool utl::ConfigManager::IsAvoidConfig()
+bool utl::ConfigManager::IsFuzzing()
 {
-    return bIsAvoidConfig;
+    return bIsFuzzing;
 }
 
-void utl::ConfigManager::EnableAvoidConfig()
+void utl::ConfigManager::EnableFuzzing()
 {
-    bIsAvoidConfig = true;
+    bIsFuzzing = true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

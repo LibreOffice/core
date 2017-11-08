@@ -1133,7 +1133,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
                 mpWindowImpl->meAlwaysInputMode   = pParent->mpWindowImpl->meAlwaysInputMode;
             }
 
-            if (!utl::ConfigManager::IsAvoidConfig())
+            if (!utl::ConfigManager::IsFuzzing())
                 OutputDevice::SetSettings( pParent->GetSettings() );
         }
 
@@ -1144,7 +1144,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     mnDPIX = mpWindowImpl->mpFrameData->mnDPIX;
     mnDPIY = mpWindowImpl->mpFrameData->mnDPIY;
 
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
     {
         const StyleSettings& rStyleSettings = mxSettings->GetStyleSettings();
         maFont = rStyleSettings.GetAppFont();

@@ -60,7 +60,7 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
     m_pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : nullptr),
     m_bApplyCharUnit(false)
 {
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
     {
         m_eHScrollMetric = m_eVScrollMetric = m_eUserMetric = FUNIT_CM;
         return;

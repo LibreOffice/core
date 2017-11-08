@@ -740,7 +740,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
 Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
 {
 #if HAVE_FEATURE_SCRIPTING
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
     {
         try
         {
@@ -1087,7 +1087,7 @@ SfxObjectShell* SfxObjectShell::GetShellFromComponent( const Reference<lang::XCo
 void SfxObjectShell::SetInitialized_Impl( const bool i_fromInitNew )
 {
     pImpl->bInitialized = true;
-    if (utl::ConfigManager::IsAvoidConfig())
+    if (utl::ConfigManager::IsFuzzing())
         return;
     if ( i_fromInitNew )
     {

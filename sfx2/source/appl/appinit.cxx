@@ -216,7 +216,7 @@ void SfxApplication::Initialize_Impl()
         getRID_BASIC_START(), ErrCodeArea::Sbx, ErrCodeArea::Sbx, BasResLocale());
 #endif
 
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (!utl::ConfigManager::IsFuzzing())
     {
         //ensure instantiation of listener that manages the internal recently-used
         //list

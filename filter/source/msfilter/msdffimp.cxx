@@ -6978,7 +6978,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
             xStorage->Commit();
             xStorage.clear();
             OUString aType = SfxFilter::GetTypeFromStorage( rSrcStg );
-            if (aType.getLength() && !utl::ConfigManager::IsAvoidConfig())
+            if (aType.getLength() && !utl::ConfigManager::IsFuzzing())
                 pFilter = aMatch.GetFilter4EA( aType );
         }
 

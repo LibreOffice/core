@@ -272,7 +272,7 @@ Gallery* Gallery::GetGalleryInstance()
     if (!s_pGallery)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (!s_pGallery && !utl::ConfigManager::IsAvoidConfig())
+        if (!s_pGallery && !utl::ConfigManager::IsFuzzing())
         {
             s_pGallery = new Gallery( SvtPathOptions().GetGalleryPath() );
         }

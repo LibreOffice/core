@@ -455,7 +455,7 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
 
     std::shared_ptr<const SfxFilter> pSfxFilter;
     auto pMedium = o3tl::make_unique<SfxMedium>( rFileName, StreamMode::STD_READ );
-    if (pMedium->GetError() == ERRCODE_NONE && !utl::ConfigManager::IsAvoidConfig())
+    if (pMedium->GetError() == ERRCODE_NONE && !utl::ConfigManager::IsFuzzing())
     {
         if ( bWithInteraction )
             pMedium->UseInteractionHandler(true);   // #i73992# no longer called from GuessFilter
