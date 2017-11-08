@@ -31,67 +31,62 @@
 
 using namespace vcl;
 
-Qt5FontFace::Qt5FontFace( const Qt5FontFace& rSrc )
-  : PhysicalFontFace( rSrc )
-  , m_aFontId( rSrc.m_aFontId )
+Qt5FontFace::Qt5FontFace(const Qt5FontFace& rSrc)
+    : PhysicalFontFace(rSrc)
+    , m_aFontId(rSrc.m_aFontId)
 {
-    if( rSrc.m_xCharMap.is() )
+    if (rSrc.m_xCharMap.is())
         m_xCharMap = rSrc.m_xCharMap;
 }
 
-Qt5FontFace* Qt5FontFace::fromQFont( const QFont &rFont )
+Qt5FontFace* Qt5FontFace::fromQFont(const QFont& rFont)
 {
     FontAttributes aFA;
-    aFA.SetFamilyName( toOUString( rFont.family() ) );
-    aFA.SetStyleName( toOUString( rFont.styleName() ) );
-    aFA.SetItalic( rFont.italic() ? ITALIC_NORMAL : ITALIC_NONE );
+    aFA.SetFamilyName(toOUString(rFont.family()));
+    aFA.SetStyleName(toOUString(rFont.styleName()));
+    aFA.SetItalic(rFont.italic() ? ITALIC_NORMAL : ITALIC_NONE);
 
-    return new Qt5FontFace( aFA, rFont.toString() ) ;
+    return new Qt5FontFace(aFA, rFont.toString());
 }
 
-Qt5FontFace::Qt5FontFace( const FontAttributes& rFA, const QString &rFontID )
-    : PhysicalFontFace( rFA )
-    , m_aFontId( rFontID )
-    , m_bFontCapabilitiesRead( false )
+Qt5FontFace::Qt5FontFace(const FontAttributes& rFA, const QString& rFontID)
+    : PhysicalFontFace(rFA)
+    , m_aFontId(rFontID)
+    , m_bFontCapabilitiesRead(false)
 {
 }
 
-Qt5FontFace::~Qt5FontFace()
-{
-}
+Qt5FontFace::~Qt5FontFace() {}
 
-sal_IntPtr Qt5FontFace::GetFontId() const
-{
-    return reinterpret_cast<sal_IntPtr>( &m_aFontId );
-}
+sal_IntPtr Qt5FontFace::GetFontId() const { return reinterpret_cast<sal_IntPtr>(&m_aFontId); }
 
 const FontCharMapRef Qt5FontFace::GetFontCharMap() const
 {
-    if( m_xCharMap.is() )
+    if (m_xCharMap.is())
         return m_xCharMap;
 
     QFont aFont;
-    aFont.fromString( m_aFontId );
-    QRawFont aRawFont( QRawFont::fromFont( aFont ) );
-    QByteArray aCMapTable = aRawFont.fontTable( "cmap" );
-    if ( aCMapTable.isEmpty() )
+    aFont.fromString(m_aFontId);
+    QRawFont aRawFont(QRawFont::fromFont(aFont));
+    QByteArray aCMapTable = aRawFont.fontTable("cmap");
+    if (aCMapTable.isEmpty())
     {
         m_xCharMap = new FontCharMap();
         return m_xCharMap;
     }
 
     CmapResult aCmapResult;
-    if( ParseCMAP( reinterpret_cast<const unsigned char*>( aCMapTable.data() ),
-                   aCMapTable.size(), aCmapResult ) )
-        m_xCharMap = new FontCharMap( aCmapResult );
+    if (ParseCMAP(reinterpret_cast<const unsigned char*>(aCMapTable.data()), aCMapTable.size(),
+                  aCmapResult))
+        m_xCharMap = new FontCharMap(aCmapResult);
 
     return m_xCharMap;
 }
 
-bool Qt5FontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool Qt5FontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const
 {
     // read this only once per font
-    if( m_bFontCapabilitiesRead )
+    if (m_bFontCapabilitiesRead)
     {
         rFontCapabilities = m_aFontCapabilities;
         return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
@@ -99,28 +94,23 @@ bool Qt5FontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) 
     m_bFontCapabilitiesRead = true;
 
     QFont aFont;
-    aFont.fromString( m_aFontId );
-    QRawFont aRawFont( QRawFont::fromFont( aFont ) );
-    QByteArray aOS2Table = aRawFont.fontTable( "OS/2" );
-    if ( !aOS2Table.isEmpty() )
+    aFont.fromString(m_aFontId);
+    QRawFont aRawFont(QRawFont::fromFont(aFont));
+    QByteArray aOS2Table = aRawFont.fontTable("OS/2");
+    if (!aOS2Table.isEmpty())
     {
-        vcl::getTTCoverage( m_aFontCapabilities.oUnicodeRange,
-                            m_aFontCapabilities.oCodePageRange,
-                            reinterpret_cast<const unsigned char*>( aOS2Table.data() ),
-                            aOS2Table.size() );
+        vcl::getTTCoverage(m_aFontCapabilities.oUnicodeRange, m_aFontCapabilities.oCodePageRange,
+                           reinterpret_cast<const unsigned char*>(aOS2Table.data()),
+                           aOS2Table.size());
     }
 
     rFontCapabilities = m_aFontCapabilities;
     return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
 }
 
-PhysicalFontFace* Qt5FontFace::Clone() const
-{
-    return new Qt5FontFace( *this );
-}
+PhysicalFontFace* Qt5FontFace::Clone() const { return new Qt5FontFace(*this); }
 
-LogicalFontInstance* Qt5FontFace::CreateFontInstance( const FontSelectPattern& rFSD ) const
+LogicalFontInstance* Qt5FontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
 {
-    return new LogicalFontInstance( rFSD );
+    return new LogicalFontInstance(rFSD);
 }
-

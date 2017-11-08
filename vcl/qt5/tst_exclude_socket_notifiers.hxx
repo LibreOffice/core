@@ -26,55 +26,53 @@
 #include <QtCore/QSocketNotifier>
 #include <unistd.h>
 
-class TestExcludeSocketNotifiers
-    : public QObject
+class TestExcludeSocketNotifiers : public QObject
 {
     Q_OBJECT
-    public:
-        TestExcludeSocketNotifiers( const int* pipes );
-        virtual ~TestExcludeSocketNotifiers() override;
-        bool received;
-    public slots:
-        void slotReceived();
-    private:
-        const int* pipes;
+public:
+    TestExcludeSocketNotifiers(const int* pipes);
+    virtual ~TestExcludeSocketNotifiers() override;
+    bool received;
+public slots:
+    void slotReceived();
+
+private:
+    const int* pipes;
 };
 
-TestExcludeSocketNotifiers::TestExcludeSocketNotifiers( const int* thePipes )
-    : received( false )
-    , pipes( thePipes )
+TestExcludeSocketNotifiers::TestExcludeSocketNotifiers(const int* thePipes)
+    : received(false)
+    , pipes(thePipes)
 {
 }
 
 TestExcludeSocketNotifiers::~TestExcludeSocketNotifiers()
 {
-    close( pipes[ 0 ] );
-    close( pipes[ 1 ] );
+    close(pipes[0]);
+    close(pipes[1]);
 }
 
-void TestExcludeSocketNotifiers::slotReceived()
-{
-    received = true;
-}
+void TestExcludeSocketNotifiers::slotReceived() { received = true; }
 
-#define QVERIFY(a) \
-    if (!a) return 1;
+#define QVERIFY(a)                                                                                 \
+    if (!a)                                                                                        \
+        return 1;
 
 static int tst_processEventsExcludeSocket()
 {
-    int pipes[ 2 ];
-    if( pipe( pipes ) < 0 )
+    int pipes[2];
+    if (pipe(pipes) < 0)
         return 1;
-    TestExcludeSocketNotifiers test( pipes );
-    QSocketNotifier notifier( pipes[ 0 ], QSocketNotifier::Read );
-    QObject::connect( &notifier, SIGNAL( activated( int )), &test, SLOT( slotReceived()));
+    TestExcludeSocketNotifiers test(pipes);
+    QSocketNotifier notifier(pipes[0], QSocketNotifier::Read);
+    QObject::connect(&notifier, SIGNAL(activated(int)), &test, SLOT(slotReceived()));
     char dummy = 'a';
-    if( 1 != write( pipes[ 1 ], &dummy, 1 ) )
+    if (1 != write(pipes[1], &dummy, 1))
         return 1;
     QEventLoop loop;
-    loop.processEvents( QEventLoop::ExcludeSocketNotifiers );
-    QVERIFY( !test.received );
+    loop.processEvents(QEventLoop::ExcludeSocketNotifiers);
+    QVERIFY(!test.received);
     loop.processEvents();
-    QVERIFY( test.received );
+    QVERIFY(test.received);
     return 0;
 }

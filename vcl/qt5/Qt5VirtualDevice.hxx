@@ -31,24 +31,22 @@ enum class DeviceFormat;
 
 class Qt5VirtualDevice : public SalVirtualDevice
 {
-    std::list< Qt5Graphics* >     m_aGraphics;
-    std::unique_ptr< QImage >     m_pImage;
-    DeviceFormat                  m_eFormat;
-    basegfx::B2IVector            m_aFrameSize;
-    double                        m_fScale;
+    std::list<Qt5Graphics*> m_aGraphics;
+    std::unique_ptr<QImage> m_pImage;
+    DeviceFormat m_eFormat;
+    basegfx::B2IVector m_aFrameSize;
+    double m_fScale;
 
 public:
-    Qt5VirtualDevice( DeviceFormat eFormat, double fScale );
+    Qt5VirtualDevice(DeviceFormat eFormat, double fScale);
     virtual ~Qt5VirtualDevice() override;
 
     // SalVirtualDevice
-    virtual SalGraphics*    AcquireGraphics() override;
-    virtual void            ReleaseGraphics( SalGraphics* pGraphics ) override;
+    virtual SalGraphics* AcquireGraphics() override;
+    virtual void ReleaseGraphics(SalGraphics* pGraphics) override;
 
-    virtual bool        SetSize( long nNewDX, long nNewDY ) override;
-    virtual bool        SetSizeUsingBuffer( long nNewDX, long nNewDY,
-                                            sal_uInt8 * pBuffer
-                                          ) override;
+    virtual bool SetSize(long nNewDX, long nNewDY) override;
+    virtual bool SetSizeUsingBuffer(long nNewDX, long nNewDY, sal_uInt8* pBuffer) override;
 
     // SalGeometryProvider
     virtual long GetWidth() const override;

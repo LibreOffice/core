@@ -20,7 +20,6 @@
 
 namespace apitest
 {
-
 class OOO_DLLPUBLIC_TEST XSheetCellRangeContainer
 {
 public:

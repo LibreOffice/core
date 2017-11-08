@@ -23,7 +23,6 @@ using namespace com::sun::star::uno;
 
 namespace apitest
 {
-
 void XSheetConditionalEntries::testAddNew()
 {
     uno::Reference<sheet::XSheetConditionalEntries> xSheetConditionalEntries(init(),

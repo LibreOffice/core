@@ -31,26 +31,26 @@ class Qt5Frame;
 
 class Qt5Object : public SalObject
 {
-    SystemEnvData               m_aSystemData;
-    std::unique_ptr< QWidget >  m_pQWidget;
-    Qt5Frame*                   m_pParent;
-    QRegion                     m_pRegion;
+    SystemEnvData m_aSystemData;
+    std::unique_ptr<QWidget> m_pQWidget;
+    Qt5Frame* m_pParent;
+    QRegion m_pRegion;
 
 public:
-    Qt5Object( Qt5Frame* pParent, bool bShow );
+    Qt5Object(Qt5Frame* pParent, bool bShow);
     virtual ~Qt5Object() override;
 
-    virtual void                  ResetClipRegion() override;
-    virtual void                  BeginSetClipRegion( sal_uLong nRects ) override;
-    virtual void                  UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) override;
-    virtual void                  EndSetClipRegion() override;
+    virtual void ResetClipRegion() override;
+    virtual void BeginSetClipRegion(sal_uLong nRects) override;
+    virtual void UnionClipRegion(long nX, long nY, long nWidth, long nHeight) override;
+    virtual void EndSetClipRegion() override;
 
-    virtual void                  SetPosSize( long nX, long nY, long nWidth, long nHeight ) override;
-    virtual void                  Show( bool bVisible ) override;
+    virtual void SetPosSize(long nX, long nY, long nWidth, long nHeight) override;
+    virtual void Show(bool bVisible) override;
 
-    virtual void                  SetForwardKey( bool bEnable ) override;
+    virtual void SetForwardKey(bool bEnable) override;
 
-    virtual const SystemEnvData*  GetSystemData() const override;
+    virtual const SystemEnvData* GetSystemData() const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

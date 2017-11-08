@@ -14,14 +14,15 @@
 
 using namespace css;
 
-namespace svx {
-namespace classification {
-
-OUString convertClassificationResultToString(std::vector<svx::ClassificationResult> const & rResults)
+namespace svx
+{
+namespace classification
+{
+OUString convertClassificationResultToString(std::vector<svx::ClassificationResult> const& rResults)
 {
     OUString sRepresentation = "";
 
-    for (svx::ClassificationResult const & rResult : rResults)
+    for (svx::ClassificationResult const& rResult : rResults)
     {
         switch (rResult.meType)
         {
@@ -30,17 +31,18 @@ OUString convertClassificationResultToString(std::vector<svx::ClassificationResu
             case svx::ClassificationType::MARKING:
             case svx::ClassificationType::TEXT:
                 sRepresentation += rResult.msName;
-            break;
+                break;
 
             case svx::ClassificationType::PARAGRAPH:
                 sRepresentation += " ";
-            break;
+                break;
         }
     }
     return sRepresentation;
 }
 
-OUString getProperty(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer, OUString const & rName)
+OUString getProperty(uno::Reference<beans::XPropertyContainer> const& rxPropertyContainer,
+                     OUString const& rName)
 {
     try
     {
@@ -54,18 +56,18 @@ OUString getProperty(uno::Reference<beans::XPropertyContainer> const & rxPropert
     return OUString();
 }
 
-bool containsProperty(uno::Sequence<beans::Property> const & rProperties, OUString const & rName)
+bool containsProperty(uno::Sequence<beans::Property> const& rProperties, OUString const& rName)
 {
-    return std::find_if(rProperties.begin(), rProperties.end(), [&](const beans::Property& rProperty)
-    {
-        return rProperty.Name == rName;
-    }) != rProperties.end();
+    return std::find_if(rProperties.begin(), rProperties.end(),
+                        [&](const beans::Property& rProperty) { return rProperty.Name == rName; })
+           != rProperties.end();
 }
 
-void removeAllProperties(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer)
+void removeAllProperties(uno::Reference<beans::XPropertyContainer> const& rxPropertyContainer)
 {
     uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
-    uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
+    uno::Sequence<beans::Property> aProperties
+        = xPropertySet->getPropertySetInfo()->getProperties();
 
     for (const beans::Property& rProperty : aProperties)
     {
@@ -73,7 +75,9 @@ void removeAllProperties(uno::Reference<beans::XPropertyContainer> const & rxPro
     }
 }
 
-bool addOrInsertDocumentProperty(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer, OUString const & rsKey, OUString const & rsValue)
+bool addOrInsertDocumentProperty(
+    uno::Reference<beans::XPropertyContainer> const& rxPropertyContainer, OUString const& rsKey,
+    OUString const& rsValue)
 {
     uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
 
@@ -82,7 +86,8 @@ bool addOrInsertDocumentProperty(uno::Reference<beans::XPropertyContainer> const
         if (containsProperty(xPropertySet->getPropertySetInfo()->getProperties(), rsKey))
             xPropertySet->setPropertyValue(rsKey, uno::makeAny(rsValue));
         else
-            rxPropertyContainer->addProperty(rsKey, beans::PropertyAttribute::REMOVABLE, uno::makeAny(rsValue));
+            rxPropertyContainer->addProperty(rsKey, beans::PropertyAttribute::REMOVABLE,
+                                             uno::makeAny(rsValue));
     }
     catch (const uno::Exception& /*rException*/)
     {
@@ -91,14 +96,16 @@ bool addOrInsertDocumentProperty(uno::Reference<beans::XPropertyContainer> const
     return true;
 }
 
-void insertFullTextualRepresentationAsDocumentProperty(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer,
-                                                       sfx::ClassificationKeyCreator const & rKeyCreator,
-                                                       std::vector<svx::ClassificationResult> const & rResults)
+void insertFullTextualRepresentationAsDocumentProperty(
+    uno::Reference<beans::XPropertyContainer> const& rxPropertyContainer,
+    sfx::ClassificationKeyCreator const& rKeyCreator,
+    std::vector<svx::ClassificationResult> const& rResults)
 {
     OUString sString = convertClassificationResultToString(rResults);
-    addOrInsertDocumentProperty(rxPropertyContainer, rKeyCreator.makeFullTextualRepresentationKey(), sString);
+    addOrInsertDocumentProperty(rxPropertyContainer, rKeyCreator.makeFullTextualRepresentationKey(),
+                                sString);
 }
-
-}} // end svx::classification namespace
+}
+} // end svx::classification namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

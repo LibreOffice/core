@@ -32,18 +32,17 @@ using namespace css;
 using namespace css::uno;
 using namespace com::sun::star;
 
-namespace sc_apitest {
-
+namespace sc_apitest
+{
 #define NUMBER_OF_TESTS 3
 
-class ScTableConditionalFormatObj : public CalcUnoApiTest,
-                                    public apitest::XSheetConditionalEntries
+class ScTableConditionalFormatObj : public CalcUnoApiTest, public apitest::XSheetConditionalEntries
 {
 public:
     ScTableConditionalFormatObj();
 
-    virtual uno::Reference< uno::XInterface > init() override;
-    virtual uno::Sequence< beans::PropertyValue > createCondition(const sal_Int32 nr) override;
+    virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Sequence<beans::PropertyValue> createCondition(const sal_Int32 nr) override;
     virtual void setUp() override;
     virtual void tearDown() override;
 
@@ -58,37 +57,37 @@ public:
 
 private:
     static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
-
+    static uno::Reference<lang::XComponent> mxComponent;
 };
 
 sal_Int32 ScTableConditionalFormatObj::nTest = 0;
-uno::Reference< lang::XComponent > ScTableConditionalFormatObj::mxComponent;
+uno::Reference<lang::XComponent> ScTableConditionalFormatObj::mxComponent;
 
 ScTableConditionalFormatObj::ScTableConditionalFormatObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
-uno::Reference< uno::XInterface > ScTableConditionalFormatObj::init()
+uno::Reference<uno::XInterface> ScTableConditionalFormatObj::init()
 {
     // create a calc document
     if (!mxComponent.is())
         mxComponent = loadFromDesktop("private:factory/scalc");
 
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
-    uno::Reference< container::XIndexAccess > xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
     xSheet->getCellByPosition(5, 5)->setValue(15);
     xSheet->getCellByPosition(1, 4)->setValue(10);
     xSheet->getCellByPosition(2, 0)->setValue(-5.15);
 
-    uno::Reference< beans::XPropertySet > xPropSet(xSheet, uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XSheetConditionalEntries > xSheetConditionalEntries;
-    xSheetConditionalEntries.set(xPropSet->getPropertyValue(SC_UNONAME_CONDFMT), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropSet(xSheet, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetConditionalEntries> xSheetConditionalEntries;
+    xSheetConditionalEntries.set(xPropSet->getPropertyValue(SC_UNONAME_CONDFMT),
+                                 uno::UNO_QUERY_THROW);
 
     xSheetConditionalEntries->addNew(createCondition(5));
     xSheetConditionalEntries->addNew(createCondition(2));
@@ -96,9 +95,9 @@ uno::Reference< uno::XInterface > ScTableConditionalFormatObj::init()
     return xSheetConditionalEntries;
 }
 
-uno::Sequence< beans::PropertyValue > ScTableConditionalFormatObj::createCondition(const sal_Int32 nr)
+uno::Sequence<beans::PropertyValue> ScTableConditionalFormatObj::createCondition(const sal_Int32 nr)
 {
-    uno::Sequence< beans::PropertyValue > aPropValue(5);
+    uno::Sequence<beans::PropertyValue> aPropValue(5);
     aPropValue[0].Name = SC_UNONAME_STYLENAME;
     aPropValue[0].Value <<= OUString("Result2");
     aPropValue[1].Name = SC_UNONAME_FORMULA1;

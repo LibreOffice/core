@@ -14,8 +14,8 @@
 #include <tools/stream.hxx>
 #include <memory>
 
-namespace tools {
-
+namespace tools
+{
 struct XmlWriterImpl;
 
 /**
@@ -31,8 +31,8 @@ class TOOLS_DLLPUBLIC XmlWriter final
 {
 private:
     std::unique_ptr<XmlWriterImpl> mpImpl;
-public:
 
+public:
     XmlWriter(SvStream* pStream);
 
     ~XmlWriter();

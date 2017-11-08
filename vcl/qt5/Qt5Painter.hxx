@@ -28,38 +28,34 @@
 
 class Qt5Painter final : public QPainter
 {
-    Qt5Graphics &m_rGraphics;
-    QRegion      m_aRegion;
+    Qt5Graphics& m_rGraphics;
+    QRegion m_aRegion;
 
 public:
-    Qt5Painter( Qt5Graphics& rGraphics, bool bPrepareBrush = false,
-                sal_uInt8 nTransparency = 255 );
+    Qt5Painter(Qt5Graphics& rGraphics, bool bPrepareBrush = false, sal_uInt8 nTransparency = 255);
     ~Qt5Painter()
     {
-        if ( m_rGraphics.m_pFrame && !m_aRegion.isEmpty() )
-            m_rGraphics.m_pFrame->GetQWidget()->update( m_aRegion );
+        if (m_rGraphics.m_pFrame && !m_aRegion.isEmpty())
+            m_rGraphics.m_pFrame->GetQWidget()->update(m_aRegion);
     }
 
     void update(int nx, int ny, int nw, int nh)
     {
-        if ( m_rGraphics.m_pFrame )
-            m_aRegion += QRect( nx, ny, nw, nh );
+        if (m_rGraphics.m_pFrame)
+            m_aRegion += QRect(nx, ny, nw, nh);
     }
 
-    void update(const QRect &rRect)
+    void update(const QRect& rRect)
     {
-        if ( m_rGraphics.m_pFrame )
+        if (m_rGraphics.m_pFrame)
             m_aRegion += rRect;
     }
 
-    void update(const QRectF &rRectF)
-    {
-        update( rRectF.toAlignedRect() );
-    }
+    void update(const QRectF& rRectF) { update(rRectF.toAlignedRect()); }
 
     void update()
     {
-        if ( m_rGraphics.m_pFrame )
+        if (m_rGraphics.m_pFrame)
             m_aRegion += m_rGraphics.m_pFrame->GetQWidget()->rect();
     }
 };

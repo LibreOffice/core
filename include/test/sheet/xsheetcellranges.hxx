@@ -17,7 +17,6 @@
 
 namespace apitest
 {
-
 class OOO_DLLPUBLIC_TEST XSheetCellRanges
 {
 public:
