@@ -54,9 +54,12 @@ private:
     VclPtr<NumericField> m_pYearValueField;
     VclPtr<FixedText>    m_pToYearFT;
 
-    OUString      m_aStrDateInfo;
+    OUString             m_aStrDateInfo;
 
     VclPtr<CheckBox>     m_pCollectUsageInfo;
+
+    VclPtr<VclContainer> m_pQuickStarterFrame;
+    VclPtr<CheckBox>     m_pQuickLaunchCB;
 
     DECL_LINK( TwoFigureHdl, Edit&, void );
 protected:
