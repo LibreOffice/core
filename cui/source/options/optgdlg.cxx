@@ -203,57 +203,57 @@ DeactivateRC OfaMiscTabPage::DeactivatePage( SfxItemSet* pSet_ )
 
 namespace
 {
-        OUString impl_SystemFileOpenServiceName()
-        {
-            const OUString &rDesktopEnvironment = Application::GetDesktopEnvironment();
+OUString impl_SystemFileOpenServiceName()
+{
+    const OUString &rDesktopEnvironment = Application::GetDesktopEnvironment();
 
-            if ( rDesktopEnvironment.equalsIgnoreAsciiCase("kde4") )
-            {
-                #if ENABLE_KDE4
-                return OUString("com.sun.star.ui.dialogs.KDE4FilePicker" );
-                #else
-                return OUString();
-                #endif
-            }
-            #if defined(_WIN32)
-            return OUString("com.sun.star.ui.dialogs.SystemFilePicker");
-            #elif defined MACOSX
-            return OUString("com.sun.star.ui.dialogs.AquaFilePicker");
-            #else
-            return OUString();
-            #endif
-        }
+    if ( rDesktopEnvironment.equalsIgnoreAsciiCase("kde4") )
+    {
+        #if ENABLE_KDE4
+        return OUString("com.sun.star.ui.dialogs.KDE4FilePicker" );
+        #else
+        return OUString();
+        #endif
+    }
+    #if defined(_WIN32)
+    return OUString("com.sun.star.ui.dialogs.SystemFilePicker");
+    #elif defined MACOSX
+    return OUString("com.sun.star.ui.dialogs.AquaFilePicker");
+    #else
+    return OUString();
+    #endif
+}
 
-        bool lcl_HasSystemFilePicker()
-        {
-            if( Application::hasNativeFileSelection() )
-                return true;
+bool lcl_HasSystemFilePicker()
+{
+    if( Application::hasNativeFileSelection() )
+        return true;
 
-            // Otherwise fall-back on querying services
-            bool bRet = false;
-            Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+    // Otherwise fall-back on querying services
+    bool bRet = false;
+    Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
 
-            Reference< XContentEnumerationAccess > xEnumAccess( xFactory, UNO_QUERY );
-            Reference< XSet > xSet( xFactory, UNO_QUERY );
+    Reference< XContentEnumerationAccess > xEnumAccess( xFactory, UNO_QUERY );
+    Reference< XSet > xSet( xFactory, UNO_QUERY );
 
-            if ( ! xEnumAccess.is() || ! xSet.is() )
-                return bRet;
+    if ( ! xEnumAccess.is() || ! xSet.is() )
+        return bRet;
 
-            try
-            {
-                OUString aFileService = impl_SystemFileOpenServiceName();
-                Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration( aFileService );
-                if ( xEnum.is() && xEnum->hasMoreElements() )
-                    bRet = true;
-            }
-            catch (const IllegalArgumentException&)
-            {
-            }
-            catch (const ElementExistException&)
-            {
-            }
-            return bRet;
-        }
+    try
+    {
+        OUString aFileService = impl_SystemFileOpenServiceName();
+        Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration( aFileService );
+        if ( xEnum.is() && xEnum->hasMoreElements() )
+            bRet = true;
+    }
+    catch (const IllegalArgumentException&)
+    {
+    }
+    catch (const ElementExistException&)
+    {
+    }
+    return bRet;
+}
 }
 
 OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
@@ -278,12 +278,26 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pYearValueField, "year");
     get(m_pToYearFT, "toyear");
     get(m_pCollectUsageInfo, "collectusageinfo");
+    get(m_pQuickStarterFrame, "quickstarter");
+
+#if defined(UNX)
+    get(m_pQuickLaunchCB, "systray");
+#else
+    get(m_pQuickLaunchCB, "quicklaunch");
+#endif
 
     if (m_pFileDlgCB->IsVisible() && SvtMiscOptions().IsUseSystemFileDialogReadOnly())
     {
         m_pFileDlgROImage->Show();
         m_pFileDlgCB->Disable();
     }
+
+    m_pQuickLaunchCB->Show();
+
+    //Only available in Win or if building the gtk systray
+#if !defined(_WIN32) && ! ENABLE_GTK
+    m_pQuickStarterFrame->Hide();
+#endif
 
     m_aStrDateInfo = m_pToYearFT->GetText();
     m_pYearValueField->SetUseThousandSep(false);
@@ -308,6 +322,8 @@ void OfaMiscTabPage::dispose()
     m_pYearValueField.clear();
     m_pToYearFT.clear();
     m_pCollectUsageInfo.clear();
+    m_pQuickStarterFrame.clear();
+    m_pQuickLaunchCB.clear();
     SfxTabPage::dispose();
 }
 
@@ -362,6 +378,12 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
 
     batch->commit();
 
+    if( m_pQuickLaunchCB->IsValueChangedFromSaved())
+    {
+        rSet->Put(SfxBoolItem(SID_ATTR_QUICKLAUNCHER, m_pQuickLaunchCB->IsChecked()));
+        bModified = true;
+    }
+
     return bModified;
 }
 
@@ -393,6 +415,17 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_pCollectUsageInfo->Check(officecfg::Office::Common::Misc::CollectUsageInformation::get());
     m_pCollectUsageInfo->Enable(!officecfg::Office::Common::Misc::CollectUsageInformation::isReadOnly());
     m_pCollectUsageInfo->SaveValue();
+
+    SfxItemState eState = rSet->GetItemState( SID_ATTR_QUICKLAUNCHER, false, &pItem );
+    if ( SfxItemState::SET == eState )
+        m_pQuickLaunchCB->Check( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+    else if ( SfxItemState::DISABLED == eState )
+    {
+        // quickstart not installed
+        m_pQuickStarterFrame->Hide();
+    }
+
+    m_pQuickLaunchCB->SaveValue();
 }
 
 IMPL_LINK_NOARG( OfaMiscTabPage, TwoFigureHdl, Edit&, void )
