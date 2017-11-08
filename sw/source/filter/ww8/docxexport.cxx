@@ -1490,7 +1490,7 @@ void DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTy
         sal_Int32 nAktPos = 0;
         const sal_Int32 nEnd = aStr.getLength();
         do {
-            AttrOutput().StartRun( nullptr );
+            AttrOutput().StartRun( nullptr, 0 );
             const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);
             rtl_TextEncoding eNextChrSet = aAttrIter.GetNextCharSet();
 
