@@ -128,12 +128,12 @@ int SvRTFParser::GetNextToken_()
                         // possible numeric parameter
                         if( RTF_ISDIGIT( nNextCh ) )
                         {
-                            nTokenValue = 0;
+                            OUStringBuffer aNumber;
                             do {
-                                nTokenValue *= 10;
-                                nTokenValue += nNextCh - '0';
+                                aNumber.append(static_cast<sal_Unicode>(nNextCh));
                                 nNextCh = GetNextChar();
                             } while( RTF_ISDIGIT( nNextCh ) );
+                            nTokenValue = aNumber.toString().toInt32();
                             if( bNegValue )
                                 nTokenValue = -nTokenValue;
                             bTokenHasValue=true;
