@@ -5904,6 +5904,8 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
 
+    dnl Available in GCC 4.9 and at least in Clang 3.4 (which is the baseline
+    dnl for at least --enable-compiler-plugins according to README.md):
     AC_MSG_CHECKING([whether $CXX supports __attribute__((warn_unused))])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
