@@ -1542,7 +1542,7 @@ bool ImpEditView::IsBulletArea( const Point& rPos, sal_Int32* pPara )
 
 void ImpEditView::CutCopy( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard, bool bCut )
 {
-    if ( rxClipboard.is() && GetEditSelection().HasRange() )
+    if ( rxClipboard.is() && HasSelection() )
     {
         uno::Reference<datatransfer::XTransferable> xData = pEditEngine->CreateTransferable( GetEditSelection() );
 
@@ -1848,7 +1848,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
     EditSelection aCopySel( GetEditSelection() );
     aCopySel.Adjust( pEditEngine->GetEditDoc() );
 
-    if ( GetEditSelection().HasRange() && bClickedInSelection )
+    if ( HasSelection() && bClickedInSelection )
     {
         pDragAndDropInfo.reset(new DragAndDropInfo());
     }

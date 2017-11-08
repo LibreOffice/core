@@ -254,7 +254,7 @@ void EditView::SetSelection( const ESelection& rESel )
 {
     // If someone has just left an empty attribute, and then the outliner
     // manipulates the selection:
-    if ( !pImpEditView->GetEditSelection().HasRange() )
+    if ( !HasSelection() )
     {
         const ContentNode* pNode = pImpEditView->GetEditSelection().Max().GetNode();
         pImpEditView->pEditEngine->CursorMoved( pNode );
@@ -781,7 +781,7 @@ void EditView::TransliterateText( TransliterationFlags nTransliterationMode )
 
 void EditView::CompleteAutoCorrect( vcl::Window const * pFrameWin )
 {
-    if ( !pImpEditView->HasSelection() && pImpEditView->pEditEngine->pImpEditEngine->GetStatus().DoAutoCorrect() )
+    if ( !HasSelection() && pImpEditView->pEditEngine->pImpEditEngine->GetStatus().DoAutoCorrect() )
     {
         pImpEditView->DrawSelectionXOR();
         EditSelection aSel = pImpEditView->GetEditSelection();
