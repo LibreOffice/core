@@ -207,26 +207,7 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
 
             mpNoteMarker.reset(new ScNoteMarker(pLeft, pRight, pBottom, pDiagonal,
                                                 pDoc, aCellPos, aTrackText,
-                                                aMapMode, bLeftEdge, bFast, bKeyboard));
-            if ( pViewData->GetScDrawView() )
-            {
-                // get position for aCellPos
-                // get draw position in hmm for aCellPos
-                Point aOldPos( pDoc->GetColOffset( aCellPos.Col(), aCellPos.Tab() ), pDoc->GetRowOffset( aCellPos.Row(), aCellPos.Tab() ) );
-                aOldPos.X() = sc::TwipsToHMM( aOldPos.X() );
-                aOldPos.Y() = sc::TwipsToHMM( aOldPos.Y() );
-                // get screen pos in hmm for aCellPos
-                // and equiv screen pos
-                Point aScreenPos = pViewData->GetScrPos( aCellPos.Col(), aCellPos.Row(), eWhich, true );
-                MapMode aDrawMode = GetDrawMapMode();
-                Point aCurPosHmm = PixelToLogic(aScreenPos, aDrawMode );
-                Point aGridOff = aCurPosHmm -aOldPos;
-                // fdo#63323 fix the X Position for the showing comment when
-                // the mouse over the cell when the sheet are RTL
-                if ( pDoc->IsNegativePage(nTab))
-                    aGridOff.setX(aCurPosHmm.getX() + aOldPos.getX());
-                mpNoteMarker->SetGridOff( aGridOff );
-            }
+                                                aMapMode, bLeftEdge, bFast, bKeyboard, pViewData->GetScDrawView()));
         }
 
         bDone = true;       // something is shown (old or new)

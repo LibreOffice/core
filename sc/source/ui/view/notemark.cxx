@@ -30,13 +30,14 @@
 #include <notemark.hxx>
 #include <document.hxx>
 #include <postit.hxx>
+#include <drawview.hxx>
 
 #define SC_NOTEMARK_TIME    800
 #define SC_NOTEMARK_SHORT   70
 
 ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window* pBottom, vcl::Window* pDiagonal,
                             ScDocument* pD, const ScAddress& aPos, const OUString& rUser,
-                            const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard ) :
+                            const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard, ScDrawView *pDrawView) :
     pWindow( pWin ),
     pRightWin( pRight ),
     pBottomWin( pBottom ),
@@ -47,6 +48,7 @@ ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window*
     aMapMode( rMap ),
     bLeft( bLeftEdge ),
     bByKeyboard( bKeyboard ),
+    aDrawView ( pDrawView ),
     pModel( nullptr ),
     bVisible( false )
 {
@@ -99,8 +101,12 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl, Timer *, void)
             mxObject = ScNoteUtil::CreateTempCaption( *pDoc, aDocPos, *pPage, aUserText, aVisRect, bLeft );
             if( mxObject )
             {
-                mxObject->SetGridOffset( aGridOff );
+                aDrawView->SyncForGrid(mxObject.get());
                 aRect = mxObject->GetCurrentBoundRect();
+
+                // Need to include grid offset: GetCurrentBoundRect is removing it
+                // but we need to know actual rect position
+                aRect += mxObject->GetGridOffset();
             }
 
             // Insert page so that the model recognise it and also deleted

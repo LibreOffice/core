@@ -27,6 +27,7 @@
 #include <postit.hxx>
 
 class SdrModel;
+class ScDrawView;
 
 class ScNoteMarker
 {
@@ -45,16 +46,16 @@ private:
     bool        bByKeyboard;
 
     tools::Rectangle       aRect;
+    ScDrawView*     aDrawView;
     SdrModel*       pModel;
     ScCaptionPtr    mxObject;
     bool            bVisible;
-    Point           aGridOff;
     DECL_LINK( TimeHdl, Timer*, void );
 
 public:
                 ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window* pBottom, vcl::Window* pDiagonal,
                                 ScDocument* pD, const ScAddress& aPos, const OUString& rUser,
-                                const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard );
+                                const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard, ScDrawView * pDrawView);
                 ~ScNoteMarker();
 
     void        Draw();
@@ -62,7 +63,6 @@ public:
 
     const ScAddress& GetDocPos() const       { return aDocPos; }
     bool        IsByKeyboard() const    { return bByKeyboard; }
-    void        SetGridOff( const Point& rOff ) { aGridOff = rOff; }
 };
 
 #endif
