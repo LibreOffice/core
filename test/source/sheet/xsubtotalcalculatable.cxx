@@ -65,7 +65,7 @@ void XSubTotalCalculatable::testApplyRemoveSubTotals()
 
     xSTC->removeSubTotals();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to remove SubTotals",
-                                 OUString(""),
+                                 OUString("another string"),
                                  xSheet->getCellByPosition(0, 3)->getFormula());
 }
 

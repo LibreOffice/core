@@ -77,6 +77,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xsheetconditionalentry \
 	test/source/sheet/xsheetcondition \
 	test/source/sheet/xsheetfilterable \
+	test/source/sheet/xsheetfilterableex \
 	test/source/sheet/xsheetfilterdescriptor \
 	test/source/sheet/xsheetoutline \
 	test/source/sheet/xsheetlinkable \

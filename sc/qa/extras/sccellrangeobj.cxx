@@ -14,6 +14,7 @@
 #include <test/sheet/xcellseries.hxx>
 #include <test/sheet/xsheetcellrange.hxx>
 #include <test/sheet/xsheetfilterable.hxx>
+#include <test/sheet/xsheetfilterableex.hxx>
 #include <test/sheet/xsheetoperation.hxx>
 #include <test/sheet/xsubtotalcalculatable.hxx>
 #include <test/sheet/xuniquecellformatrangessupplier.hxx>
@@ -36,12 +37,13 @@
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+
 using namespace css;
 using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 25
+#define NUMBER_OF_TESTS 26
 
 class ScCellRangeObj : public CalcUnoApiTest, public apitest::CellProperties,
                                               public apitest::XCellRangeData,
@@ -51,6 +53,7 @@ class ScCellRangeObj : public CalcUnoApiTest, public apitest::CellProperties,
                                               public apitest::XSearchable,
                                               public apitest::XSheetCellRange,
                                               public apitest::XSheetFilterable,
+                                              public apitest::XSheetFilterableEx,
                                               public apitest::XSheetOperation,
                                               public apitest::XSubTotalCalculatable,
                                               public apitest::XUniqueCellFormatRangesSupplier
@@ -87,6 +90,9 @@ public:
 
     // XSheetCellRange
     CPPUNIT_TEST(testGetSpreadsheet);
+
+    // XSheetFilterableEx
+    CPPUNIT_TEST(testCreateFilterDescriptorByObject);
 
     // XReplaceable
     CPPUNIT_TEST(testReplaceAll);
