@@ -451,7 +451,7 @@ sal_Int32 TableLayouter::distribute( LayoutVector& rLayouts, sal_Int32 nDistribu
             {
                 sal_Int32 nDiff(0);
                 bConstrainsBroken |= o3tl::checked_sub(rLayout.mnMinSize, rLayout.mnSize, nDiff);
-                nDistribute -= nDiff;
+                bConstrainsBroken |= o3tl::checked_sub(nDistribute, nDiff, nDistribute);
                 rLayout.mnSize = rLayout.mnMinSize;
             }
         }
