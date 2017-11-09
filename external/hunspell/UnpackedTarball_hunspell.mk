@@ -27,6 +27,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,hunspell, \
 	external/hunspell/0001-Remove-forbidden-words-from-dash-suggestion-list.patch \
 	external/hunspell/0001-fix-compound-handling-for-new-Hungarian-orthography.patch \
 	external/hunspell/0001-fix-compound-word-part-pa.patch \
+	external/hunspell/0001-add-SPELLML-support-for-run-time-dictionary-extensio.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
