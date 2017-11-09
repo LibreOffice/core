@@ -109,7 +109,6 @@ void OHCatalog::refreshUsers()
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
-        TString2IntMap aMap;
         while( xResult->next() )
             aVector.push_back(xRow->getString(1));
         ::comphelper::disposeComponent(xResult);

@@ -722,7 +722,6 @@ namespace slideshow
             LayerShapeMap::iterator       aCurrShapeEntry( maAllShapes.begin() );
             LayerShapeMap::iterator       aCurrLayerFirstShapeEntry( maAllShapes.begin() );
             const LayerShapeMap::iterator aEndShapeEntry ( maAllShapes.end() );
-            ShapeUpdateSet                aUpdatedShapes; // shapes that need update
             while( aCurrShapeEntry != aEndShapeEntry )
             {
                 const ShapeSharedPtr pCurrShape( aCurrShapeEntry->first );

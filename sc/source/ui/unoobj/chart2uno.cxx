@@ -1566,7 +1566,6 @@ ScChart2DataProvider::createDataSource(
         aSeqVector.push_back(aSeq);
     }
 
-    ::std::map< sal_Int32, uno::Reference< chart2::data::XLabeledDataSequence > > aSequenceMap;
     for( sal_Int32 nNewIndex = 0; nNewIndex < aSequenceMapping.getLength(); nNewIndex++ )
     {
         // note: assuming that the values in the sequence mapping are always non-negative
