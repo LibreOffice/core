@@ -2565,8 +2565,8 @@ void WW8TabDesc::CreateSwTable()
 
     if (text::HoriOrientation::LEFT_AND_WIDTH == m_eOri)
     {
-        if (!m_pIo->m_nInTable && m_pIo->InLocalApo() && m_pIo->m_xSFlyPara->pFlyFormat &&
-            GetMinLeft())
+        if (!m_pIo->m_nInTable && m_pIo->InLocalApo() && m_pIo->m_xSFlyPara &&
+            m_pIo->m_xSFlyPara->pFlyFormat && GetMinLeft())
         {
             //If we are inside a frame and we have a border, the frames
             //placement does not consider the tables border, which word
