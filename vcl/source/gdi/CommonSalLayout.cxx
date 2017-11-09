@@ -656,8 +656,8 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                     nGlyphFlags |= GlyphItem::IS_VERTICAL;
 
                     nAdvance = -pHbPositions[i].y_advance;
-                    nXOffset =  pHbPositions[i].y_offset;
-                    nYOffset =  pHbPositions[i].x_offset;
+                    nXOffset =  0;
+                    nYOffset =  0;
                 }
                 else
                 {
