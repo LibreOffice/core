@@ -459,7 +459,7 @@ DECLARE_OOXMLEXPORT_TEST( testTableCrossReference, "table_cross_reference.odt" )
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nValue);
                 break;
             }
-            // Above / bellow reference
+            // Above / below reference
             case 6:
             {
                 CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextField.GetReference"));

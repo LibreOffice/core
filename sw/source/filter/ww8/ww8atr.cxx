@@ -2007,7 +2007,7 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                                 // If we have a reference to the current sequence field
                                 if(pRefField->GetSeqNo() == nSeqFieldNumber && pRefField->GetSetRefName() == sObjectName)
                                 {
-                                    // Need to create a seperate run for separator character
+                                    // Need to create a separate run for separator character
                                     SwWW8AttrIter aLocalAttrIter( GetExport(), rNode ); // We need a local iterator having the right number of runs
                                     const OUString aText = rNode.GetText();
                                     const sal_Int32 nCategoryStart = aText.indexOf(pRefField->GetSetRefName());

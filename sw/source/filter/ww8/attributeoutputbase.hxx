@@ -626,7 +626,7 @@ protected:
 
     virtual bool AnalyzeURL( const OUString& rUrl, const OUString& rTarget, OUString* pLinkURL, OUString* pMark );
 
-    /// Insert a bookmark inside the currently processed parargaph.
+    /// Insert a bookmark inside the currently processed paragraph.
     virtual void WriteBookmarkInActParagraph( const OUString& rName, sal_Int32 nFirstRunPos, sal_Int32 nLastRunPos ) = 0;
 
     ww8::GridColsPtr GetGridCols( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner );
