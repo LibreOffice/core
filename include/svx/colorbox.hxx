@@ -39,7 +39,7 @@ private:
     NamedColor m_aSelectedColor;
     sal_uInt16 m_nSlotId;
     bool m_bShowNoneButton;
-    std::unique_ptr<PaletteManager> m_xPaletteManager;
+    std::shared_ptr<PaletteManager> m_xPaletteManager;
     BorderColorStatus m_aBorderColorStatus;
 
     DECL_LINK(MenuActivateHdl, MenuButton *, void);

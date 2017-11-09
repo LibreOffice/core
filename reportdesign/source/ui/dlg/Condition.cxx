@@ -105,6 +105,7 @@ void ConditionColorWrapper::operator()(const OUString& /*rCommand*/, const Named
 
 Condition::Condition( vcl::Window* _pParent, IConditionalFormatAction& _rAction, ::rptui::OReportController& _rController )
     : VclHBox(_pParent)
+    , m_xPaletteManager(new PaletteManager)
     , m_aColorWrapper(this)
     , m_rController(_rController)
     , m_rAction(_rAction)
@@ -231,7 +232,7 @@ IMPL_LINK(Condition, DropdownClick, ToolBox*, pToolBox, void)
     m_aColorWrapper.SetSlotId(nSlotId);
     m_pColorFloat = VclPtr<SvxColorWindow>::Create(
                            OUString() /*m_aCommandURL*/,
-                           m_aPaletteManager,
+                           m_xPaletteManager,
                            m_aBorderColorStatus,
                            nSlotId,
                            nullptr,

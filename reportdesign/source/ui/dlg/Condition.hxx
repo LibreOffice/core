@@ -87,7 +87,7 @@ namespace rptui
         sal_uInt16                  m_nBackgroundColorId;
         sal_uInt16                  m_nFontColorId;
         sal_uInt16                  m_nFontDialogId;
-        PaletteManager              m_aPaletteManager;
+        std::shared_ptr<PaletteManager> m_xPaletteManager;
         BorderColorStatus           m_aBorderColorStatus;
         ConditionColorWrapper       m_aColorWrapper;
 
