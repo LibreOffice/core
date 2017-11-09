@@ -56,6 +56,7 @@ public:
     virtual void SAL_CALL Delete(  ) override;
     virtual void SAL_CALL Modify( ::sal_Int32 Type, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2 ) override;
     virtual ::sal_Int32 SAL_CALL Type(  ) override;
+    using ScVbaFormatCondition_BASE::Operator;
     virtual ::sal_Int32 SAL_CALL Operator(  ) override;
     virtual void setFormula1( const css::uno::Any& _aFormula1) override;
     virtual css::uno::Reference< ::ooo::vba::excel::XInterior > SAL_CALL Interior(  ) override;
