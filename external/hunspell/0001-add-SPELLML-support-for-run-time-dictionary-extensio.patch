@@ -1,0 +1,40 @@
+From 643bd113f5dbfa6e8ffa61aae6ab7ccc4f63bccc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?L=C3=A1szl=C3=B3=20N=C3=A9meth?= <nemeth@numbertext.org>
+Date: Thu, 9 Nov 2017 13:22:55 +0100
+Subject: [PATCH] add SPELLML support for run-time dictionary extension
+
+to use in new "Affixation/Compounding By" feature
+of language-specific LibreOffice user dictionaries.
+---
+ src/hunspell/hunspell.cxx | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/src/hunspell/hunspell.cxx b/src/hunspell/hunspell.cxx
+index b271750..09fd6ee 100644
+--- a/src/hunspell/hunspell.cxx
++++ b/src/hunspell/hunspell.cxx
+@@ -1733,6 +1733,21 @@ std::vector<std::string> HunspellImpl::spellml(const std::string& in_word) {
+         }
+       }
+     }
++  } else if (check_xml_par(q, "type=", "add")) {
++    std::string cw = get_xml_par(strchr(q2, '>'));
++    if (cw.empty())
++      return slst;
++    const char* q3 = strstr(q2 + 1, "<word");
++    if (q3) {
++      std::string cw2 = get_xml_par(strchr(q3, '>'));
++      if (!cw2.empty()) {
++        add_with_affix(cw, cw2);
++      } else {
++        add(cw);
++      }
++    } else {
++        add(cw);
++    }
+   }
+   return slst;
+ }
+-- 
+2.7.4
+
