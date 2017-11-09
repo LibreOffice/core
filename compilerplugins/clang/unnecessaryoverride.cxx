@@ -267,9 +267,6 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
     // some very creative method hiding going on here
     if (loplugin::isSamePathname(aFileName, SRCDIR "/svx/source/dialog/checklbx.cxx"))
         return true;
-    // entertaining template magic
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/sc/source/ui/vba/vbaformatcondition.cxx"))
-        return true;
 
     const CXXMethodDecl* overriddenMethodDecl = findOverriddenOrSimilarMethodInSuperclasses(methodDecl);
     if (!overriddenMethodDecl) {

@@ -128,12 +128,6 @@ ScVbaFormatCondition::Type(  )
     return nReturnType;
 }
 
-::sal_Int32
-ScVbaFormatCondition::Operator( bool bVal )
-{
-    return ScVbaFormatCondition_BASE::Operator( bVal );
-}
-
 ::sal_Int32 SAL_CALL
 ScVbaFormatCondition::Operator(  )
 {
