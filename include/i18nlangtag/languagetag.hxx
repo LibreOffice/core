@@ -107,9 +107,7 @@ public:
      */
     explicit LanguageTag( const rtl_Locale & rLocale );
 
-    LanguageTag( const LanguageTag & rLanguageTag );
     ~LanguageTag();
-    LanguageTag& operator=( const LanguageTag & rLanguageTag );
 
     /** Obtain BCP 47 language tag.
 

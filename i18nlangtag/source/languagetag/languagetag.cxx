@@ -561,38 +561,6 @@ LanguageTag::LanguageTag( const rtl_Locale & rLocale )
 }
 
 
-LanguageTag::LanguageTag( const LanguageTag & rLanguageTag )
-    :
-        maLocale( rLanguageTag.maLocale),
-        maBcp47( rLanguageTag.maBcp47),
-        mnLangID( rLanguageTag.mnLangID),
-        mpImpl( rLanguageTag.mpImpl),
-        mbSystemLocale( rLanguageTag.mbSystemLocale),
-        mbInitializedBcp47( rLanguageTag.mbInitializedBcp47),
-        mbInitializedLocale( rLanguageTag.mbInitializedLocale),
-        mbInitializedLangID( rLanguageTag.mbInitializedLangID),
-        mbIsFallback(rLanguageTag.mbIsFallback)
-{
-}
-
-
-LanguageTag& LanguageTag::operator=( const LanguageTag & rLanguageTag )
-{
-    if (&rLanguageTag == this)
-        return *this;
-
-    maLocale            = rLanguageTag.maLocale;
-    maBcp47             = rLanguageTag.maBcp47;
-    mnLangID            = rLanguageTag.mnLangID;
-    mpImpl              = rLanguageTag.mpImpl;
-    mbSystemLocale      = rLanguageTag.mbSystemLocale;
-    mbInitializedBcp47  = rLanguageTag.mbInitializedBcp47;
-    mbInitializedLocale = rLanguageTag.mbInitializedLocale;
-    mbInitializedLangID = rLanguageTag.mbInitializedLangID;
-    return *this;
-}
-
-
 LanguageTag::~LanguageTag()
 {
 }
