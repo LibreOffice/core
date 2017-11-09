@@ -134,18 +134,6 @@ void ScPositionHelper::removeByIndex(index_type nIndex)
             "ScPositionHelper::remove: after erase: size: " << mData.size());
 }
 
-void ScPositionHelper::removeByPosition(long nPos)
-{
-    SAL_INFO("sc.lok.poshelper", "ScPositionHelper::remove: nPos: " << nPos
-            << ", size: " << mData.size());
-    auto it = mData.find(std::make_pair(null, nPos));
-    if (it == mData.end() || it->first <= 0)
-        return;
-    mData.erase(it);
-    SAL_INFO("sc.lok.poshelper",
-            "ScPositionHelper::remove: after erase: size: " << mData.size());
-}
-
 void ScPositionHelper::invalidateByIndex(index_type nIndex)
 {
     SAL_INFO("sc.lok.poshelper", "ScPositionHelper::invalidate: nIndex: " << nIndex);
@@ -241,13 +229,6 @@ long ScPositionHelper::getPosition(index_type nIndex) const
     auto it = mData.find(std::make_pair(nIndex, 0));
     if (it == mData.end()) return -1;
     return it->second;
-}
-
-ScPositionHelper::index_type ScPositionHelper::getIndex(long nPos) const
-{
-    auto it = mData.find(std::make_pair(null, nPos));
-    if (it == mData.end()) return null;
-    return it->first;
 }
 
 ScViewDataTable::ScViewDataTable() :

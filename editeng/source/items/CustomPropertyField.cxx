@@ -18,10 +18,6 @@ using namespace css;
 namespace editeng
 {
 
-CustomPropertyField::CustomPropertyField()
-    : SvxFieldData()
-{}
-
 CustomPropertyField::CustomPropertyField(OUString const & rName, OUString const & rCurrentPresentation)
     : SvxFieldData()
     , msName(rName)

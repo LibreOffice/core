@@ -721,8 +721,6 @@ public:
     SC_DLLPUBLIC ScDPObject*           GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
     ScDPObject*                        GetDPAtBlock( const ScRange& rBlock ) const;
 
-    SC_DLLPUBLIC ScChartCollection*    GetChartCollection() const { return pChartCollection;}
-
     void                               StopTemporaryChartLock();
 
     void                               EnsureGraphicNames();
@@ -946,7 +944,6 @@ public:
 
     static bool IsChart( const SdrObject* pObject );
 
-    SC_DLLPUBLIC void UpdateAllCharts();
     void              UpdateChartRef( UpdateRefMode eUpdateRefMode,
                                     SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,

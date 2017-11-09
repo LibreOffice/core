@@ -323,11 +323,6 @@ bool ORTFReader::CreateTable(int nToken)
     return bOk;
 }
 
-void ORTFReader::release()
-{
-    ReleaseRef();
-}
-
 TypeSelectionPageFactory ORTFReader::getTypeSelectionPageFactory()
 {
     return &OWizRTFExtend::Create;

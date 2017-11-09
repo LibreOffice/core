@@ -503,11 +503,6 @@ void OHTMLReader::setTextEncoding()
     ParseMetaOptions(nullptr, nullptr);
 }
 
-void OHTMLReader::release()
-{
-    ReleaseRef();
-}
-
 TypeSelectionPageFactory OHTMLReader::getTypeSelectionPageFactory()
 {
     return &OWizHTMLExtend::Create;

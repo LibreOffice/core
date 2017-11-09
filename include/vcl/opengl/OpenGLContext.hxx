@@ -74,7 +74,6 @@ public:
     void dispose();
 
     void requestLegacyContext();
-    void requestSingleBufferedRendering();
 
     bool init(vcl::Window* pParent = nullptr);
     bool init(SystemChildWindow* pChildWindow);
@@ -150,8 +149,6 @@ public:
     /// VCL promiscuously re-uses its own contexts:
     void setVCLOnly() { mbVCLOnly = true; }
     bool isVCLOnly() { return mbVCLOnly; }
-
-    bool supportMultiSampling() const;
 
     virtual SystemWindowData generateWinData(vcl::Window* pParent, bool bRequestLegacyContext);
 

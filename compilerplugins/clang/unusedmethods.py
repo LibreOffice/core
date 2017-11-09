@@ -22,87 +22,6 @@ virtualSet = set() # set of tuple(return_type, name_and_params)
 # for the "unused return types" analysis
 usedReturnSet = set() # set of tuple(return_type, name_and_params)
 
-
-# things we need to exclude for reasons like :
-# - it's a weird template thingy that confuses the plugin
-unusedMethodsExclusionSet = set([
-    # only used by Windows build
-    "_Bool basegfx::B2ITuple::equalZero() const",
-    "const class basegfx::B2DPolyPolygon & basegfx::unotools::UnoPolyPolygon::getPolyPolygonUnsafe() const",
-    "void basegfx::B2IRange::expand(const class basegfx::B2IRange &)",
-    "void OpenGLContext::requestSingleBufferedRendering()",
-	"_Bool TabitemValue::isBothAligned() const",
-	"_Bool TabitemValue::isNotAligned() const",
-	"void TabitemValue::isLast() const",
-	"void StyleSettings::SetSpinSize(long)",
-	"void StyleSettings::SetFloatTitleHeight(long)",
-    "void StyleSettings::SetTitleHeight(long)",
-    "void StyleSettings::SetUseFlatBorders(_Bool)",
-    "void StyleSettings::SetUseFlatMenus(_Bool)",
-    "void StyleSettings::SetCursorSize(long)",
-    "_Bool CommandMediaData::GetPassThroughToOS() const",
-    "void Application::AppEvent(const class ApplicationEvent &)",
-    "int PhysicalFontFace::GetWidth() const",
-    "void PhysicalFontFace::SetBitmapSize(int,int)",
-    "class boost::intrusive_ptr<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)",
-    "_Bool SalObject::IsEraseBackgroundEnabled()",
-    "const class rtl::OUString & connectivity::OColumn::getCatalogName() const",
-    "const class rtl::OUString & connectivity::OColumn::getSchemaName() const",
-    "_Bool connectivity::OColumn::isDefinitelyWritable() const",
-    "_Bool connectivity::OColumn::isReadOnly() const",
-    "_Bool connectivity::OColumn::isWritable() const",
-    "_Bool IDocumentLinksAdministration::GetData(const class rtl::OUString &,const class rtl::OUString &,class com::sun::star::uno::Any &) const",
-    "_Bool IDocumentLinksAdministration::SetData(const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Any &)",
-    "_Bool ScImportExport::ImportData(const class rtl::OUString &,const class com::sun::star::uno::Any &)",
-	"void* ScannerManager::GetData()",
-	"void ScannerManager::SetData(void *)",
-    "class rtl::OUString FilterConfigCache::GetImportFormatMediaType(unsigned short)",
-    # only used by OSX build
-    "void StyleSettings::SetHideDisabledMenuItems(_Bool)",
-    "_Bool TabitemValue::isLast() const",
-    "ApplicationEvent::ApplicationEvent(enum ApplicationEvent::Type,const class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &)",
-    # debugging methods
-    "void oox::drawingml::TextParagraphProperties::dump() const",
-    "void oox::PropertyMap::dumpCode(class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet>)",
-    "void oox::PropertyMap::dumpData(class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet>)",
-    "class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > writerfilter::ooxml::OOXMLPropertySet::toString()",
-    # I need to teach the plugin that for loops with range expressions call begin() and end()
-    "class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwAnchoredObject *const *, class std::__cxx1998::vector<class SwAnchoredObject *, class std::allocator<class SwAnchoredObject *> > >, class std::__debug::vector<class SwAnchoredObject *, class std::allocator<class SwAnchoredObject *> > > SwSortedObjs::begin() const",
-    "class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwAnchoredObject *const *, class std::__cxx1998::vector<class SwAnchoredObject *, class std::allocator<class SwAnchoredObject *> > >, class std::__debug::vector<class SwAnchoredObject *, class std::allocator<class SwAnchoredObject *> > > SwSortedObjs::end() const",
-    # loaded by dlopen()
-    "void * getStandardAccessibleFactory()",
-    "void * getSvtAccessibilityComponentFactory()",
-    "struct _rtl_uString * basicide_choose_macro(void *,void *,unsigned char,struct _rtl_uString *)",
-    "void basicide_macro_organizer(short)",
-    "long basicide_handle_basic_error(void *)",
-    "class com::sun::star::uno::XInterface * org_libreoffice_chart2_Chart2ToolboxController(class com::sun::star::uno::XComponentContext *,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &)",
-    "class com::sun::star::uno::XInterface * org_libreoffice_comp_chart2_sidebar_ChartPanelFactory(class com::sun::star::uno::XComponentContext *,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &)",
-    "class chart::opengl::OpenglShapeFactory * getOpenglShapeFactory()",
-    "class VclAbstractDialogFactory * CreateDialogFactory()",
-    "_Bool GetSpecialCharsForEdit(class vcl::Window *,const class vcl::Font &,class rtl::OUString &)",
-    "const struct ImplTextEncodingData * sal_getFullTextEncodingData(unsigned short)",
-    "class SalInstance * create_SalInstance()",
-    "class SwAbstractDialogFactory * SwCreateDialogFactory()",
-    "class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> WordPerfectImportFilterDialog_createInstance(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)",
-    "class UnoWrapperBase * CreateUnoWrapper()",
-    "class SwAbstractDialogFactory * SwCreateDialogFactory()",
-    "unsigned long GetSaveWarningOfMSVBAStorage_ww8(class SfxObjectShell &)",
-    "unsigned long SaveOrDelMSVBAStorage_ww8(class SfxObjectShell &,class SotStorage &,unsigned char,const class rtl::OUString &)",
-    "void ExportRTF(const class rtl::OUString &,const class rtl::OUString &,class tools::SvRef<class Writer> &)",
-    "void ExportDOC(const class rtl::OUString &,const class rtl::OUString &,class tools::SvRef<class Writer> &)",
-    "class Reader * ImportRTF()",
-    "void ImportXE(class SwDoc &,class SwPaM &,const class rtl::OUString &)",
-    "_Bool TestImportDOC(const class rtl::OUString &,const class rtl::OUString &)",
-    "class vcl::Window * CreateWindow(class VCLXWindow **,const struct com::sun::star::awt::WindowDescriptor *,class vcl::Window *,long)",
-    # only used when the ODBC driver is enabled
-    "_Bool getImplementation(type-parameter-?-? *&,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)",
-    # called from extensions
-    "unsigned short MenuBar::AddMenuBarButton(const class Image &,const class Link<struct MenuBar::MenuBarButtonCallbackArg &, _Bool> &,const class rtl::OUString &)",
-    "void MenuBar::SetMenuBarButtonHighlightHdl(unsigned short,const class Link<struct MenuBar::MenuBarButtonCallbackArg &, _Bool> &)",
-    "class Rectangle MenuBar::GetMenuBarButtonRectPixel(unsigned short)",
-    "void MenuBar::RemoveMenuBarButton(unsigned short)",
-    ])
-
 # clang does not always use exactly the same numbers in the type-parameter vars it generates
 # so I need to substitute them to ensure we can match correctly.
 normalizeTypeParamsRegex = re.compile(r"type-parameter-\d+-\d+")
@@ -197,8 +116,6 @@ tmp1set = set() # set of tuple(method, source_location)
 unusedSet = set() # set of tuple(return_type, name_and_params)
 for d in definitionSet:
     method = d[0] + " " + d[1]
-    if method in unusedMethodsExclusionSet:
-        continue
     if d in callSet:
         continue
     if isOtherConstness(d, callSet):
@@ -251,8 +168,6 @@ for d in definitionSet:
        continue
     if d[0] == "basic_ostream<type-parameter-?-?, type-parameter-?-?> &" and d[1].startswith("operator<<(basic_ostream<type-parameter-?-?"):
        continue
-    if "::operator" in d[1]:
-        continue
 
     location = definitionToSourceLocationMap[d];
     # whacky template stuff
@@ -298,7 +213,7 @@ for d in definitionSet:
     if "_get_implementation" in d[1] or "_getFactory" in d[1]:
         continue
     # the plugin can't see calls to these
-    if "operator new" in d[1]:
+    if "::operator new" in d[1]:
         continue
     # unused return type is not a problem here
     if ("operator=(" in d[1] or "operator&=" in d[1] or "operator|=" in d[1] or "operator^=" in d[1]

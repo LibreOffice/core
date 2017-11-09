@@ -63,8 +63,6 @@ namespace dbaui
                     bool _bAutoIncrementEnabled);
 
         virtual SvParserState CallParser() override;// base class
-        virtual void release() override;
-        ///< @attention recovers only valid data if 1. CTOR has been used
     };
 
     typedef tools::SvRef<OHTMLReader> OHTMLReaderRef;

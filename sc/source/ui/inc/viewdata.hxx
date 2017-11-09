@@ -141,13 +141,11 @@ public:
 
     void insert(index_type nIndex, long nPos);
     void removeByIndex(index_type nIndex);
-    void removeByPosition(long nPos);
     void invalidateByIndex(index_type nIndex);
     void invalidateByPosition(long nPos);
     const value_type& getNearestByIndex(index_type nIndex) const;
     const value_type& getNearestByPosition(long nPos) const;
     long getPosition(index_type nIndex) const;
-    index_type getIndex(long nPos) const;
 };
 
 class ScViewDataTable                           // per-sheet data

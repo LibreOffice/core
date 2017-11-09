@@ -116,11 +116,6 @@ void OpenGLContext::requestLegacyContext()
     mbRequestLegacyContext = true;
 }
 
-void OpenGLContext::requestSingleBufferedRendering()
-{
-    mbUseDoubleBufferedRendering = false;
-}
-
 #ifdef DBG_UTIL
 
 namespace {
@@ -607,11 +602,6 @@ SystemChildWindow* OpenGLContext::getChildWindow()
 const SystemChildWindow* OpenGLContext::getChildWindow() const
 {
     return m_pChildWindow;
-}
-
-bool OpenGLContext::supportMultiSampling() const
-{
-    return getOpenGLWindow().bMultiSampleSupported;
 }
 
 bool OpenGLContext::BindFramebuffer( OpenGLFramebuffer* pFramebuffer )

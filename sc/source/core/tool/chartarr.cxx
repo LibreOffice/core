@@ -55,15 +55,6 @@ ScMemChart::~ScMemChart()
 {
 }
 
-ScChartArray::ScChartArray( ScDocument* pDoc, SCTAB nTab,
-                    SCCOL nStartColP, SCROW nStartRowP, SCCOL nEndColP, SCROW nEndRowP,
-                    const OUString& rChartName ) :
-        aName( rChartName ),
-        pDocument( pDoc ),
-        aPositioner(pDoc, nTab, nStartColP, nStartRowP, nEndColP, nEndRowP)
-{
-}
-
 ScChartArray::ScChartArray(
     ScDocument* pDoc, const ScRangeListRef& rRangeList, const OUString& rChartName ) :
     aName( rChartName ),
@@ -414,11 +405,6 @@ ScChartCollection::ScChartCollection(const ScChartCollection& r)
     {
         m_Data.push_back(o3tl::make_unique<ScChartArray>(*it));
     }
-}
-
-void ScChartCollection::push_back(ScChartArray* p)
-{
-    m_Data.push_back(std::unique_ptr<ScChartArray>(p));
 }
 
 void ScChartCollection::clear()
