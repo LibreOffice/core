@@ -254,33 +254,26 @@ struct StaticDiagramInfo : public rtl::StaticAggregate< uno::Reference< beans::X
 
 /// clones a UNO-sequence of UNO-References
 typedef Reference< chart2::XCoordinateSystem > lcl_tCooSysRef;
-typedef std::map< lcl_tCooSysRef, lcl_tCooSysRef >  lcl_tCooSysMapping;
-typedef std::vector< lcl_tCooSysRef >               lcl_tCooSysVector;
+typedef std::vector< lcl_tCooSysRef >          lcl_tCooSysVector;
 
-lcl_tCooSysMapping lcl_CloneCoordinateSystems(
+void lcl_CloneCoordinateSystems(
         const lcl_tCooSysVector & rSource,
         lcl_tCooSysVector & rDestination )
 {
-    lcl_tCooSysMapping aResult;
-
-    for( lcl_tCooSysVector::const_iterator aIt( rSource.begin());
-         aIt != rSource.end(); ++aIt )
+    for( auto const & i : rSource )
     {
         lcl_tCooSysRef xClone;
-        css::uno::Reference< css::util::XCloneable > xCloneable( *aIt, css::uno::UNO_QUERY );
+        css::uno::Reference< css::util::XCloneable > xCloneable( i, css::uno::UNO_QUERY );
         if( xCloneable.is())
             xClone.set( xCloneable->createClone(), css::uno::UNO_QUERY );
 
         if( xClone.is())
         {
             rDestination.push_back( xClone );
-            aResult.emplace( *aIt, xClone );
         }
         else
-            rDestination.push_back( *aIt );
+            rDestination.push_back( i );
     }
-
-    return aResult;
 }
 
 } // anonymous namespace
@@ -309,8 +302,7 @@ Diagram::Diagram( const Diagram & rOther ) :
     m_xContext( rOther.m_xContext ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
-    lcl_tCooSysMapping aCooSysMapping =
-        lcl_CloneCoordinateSystems( rOther.m_aCoordSystems, m_aCoordSystems );
+    lcl_CloneCoordinateSystems( rOther.m_aCoordSystems, m_aCoordSystems );
     ModifyListenerHelper::addListenerToAllElements( m_aCoordSystems, m_xModifyEventForwarder );
 
     m_xWall.set( CloneHelper::CreateRefClone< beans::XPropertySet >()( rOther.m_xWall ));

@@ -217,7 +217,15 @@ bool isExtraWarnUnusedType(clang::QualType type) {
     auto const tc = TypeCheck(rec);
     // Check some common non-LO types:
     if (tc.Class("basic_string").StdNamespace()
+        || tc.Class("deque").StdNamespace()
         || tc.Class("list").StdNamespace()
+        || tc.Class("map").StdNamespace()
+        || tc.Class("pair").StdNamespace()
+        || tc.Class("queue").StdNamespace()
+        || tc.Class("set").StdNamespace()
+        || tc.Class("stack").StdNamespace()
+        || tc.Class("unordered_map").StdNamespace()
+        || tc.Class("unordered_set").StdNamespace()
         || tc.Class("vector").StdNamespace())
     {
         return true;
