@@ -31,7 +31,7 @@ using namespace css::uno;
 namespace sc_apitest
 {
 
-#define NUMBER_OF_TESTS 24
+#define NUMBER_OF_TESTS 23
 
 class ScTableSheetObj : public CalcUnoApiTest, public apitest::XCellSeries,
                                                public apitest::XPrintAreas,
@@ -85,7 +85,9 @@ public:
     CPPUNIT_TEST(testFilter);
 
     // XSheetFilterableEx
+#if 0 // temporarily disabled, takes too long
     CPPUNIT_TEST(testCreateFilterDescriptorByObject);
+#endif
 
     // XSheetLinkable
     CPPUNIT_TEST(testSheetLinkable);
