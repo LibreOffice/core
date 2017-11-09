@@ -5880,7 +5880,7 @@ SvxOrphansItem Orphan SID_ATTR_PARA_ORPHANS
 
 
 SfxVoidItem OutlineBullet SID_OUTLINE_BULLET
-(SfxStringItem Page FN_PARAM_1,SfxStringItem ParentWindow FN_PARAM_2)
+(SfxStringItem Page FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
