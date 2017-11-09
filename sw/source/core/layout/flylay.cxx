@@ -41,6 +41,7 @@
 #include <viewimp.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace ::com::sun::star;
 
@@ -292,6 +293,25 @@ basegfx::B2DHomMatrix SwFlyFreeFrame::getFramePrintAreaTransformation() const
 
     // call parent
     return SwFlyFrame::getFramePrintAreaTransformation();
+}
+
+// RotateFlyFrame3 - Support for Transformations
+void SwFlyFreeFrame::transform_translate(const Point& rOffset)
+{
+    // call parent - this will do the basic transform for SwRect(s)
+    // in the SwFrameAreaDefinition
+    SwFlyFrame::transform_translate(rOffset);
+
+    // check if the Transformations need to be adapted
+    if(isTransformationUsed())
+    {
+        const basegfx::B2DHomMatrix aTransform(
+            basegfx::utils::createTranslateB2DHomMatrix(
+                rOffset.X(), rOffset.Y()));
+
+        // transform using TransformableSwFrame
+        doTransform(aTransform);
+    }
 }
 
 // RotateFlyFrame3 - outer frame

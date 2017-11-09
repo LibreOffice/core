@@ -1927,19 +1927,9 @@ static void lcl_MoveAllLowers( SwFrame* pFrame, const Point& rOffset )
     const SwRect aFrame( pFrame->getFrameArea() );
 
     // first move the current frame
-    {
-        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pFrame);
-
-        if (aFrm.Pos().X() != FAR_AWAY)
-        {
-            aFrm.Pos().X() += rOffset.X();
-        }
-
-        if (aFrm.Pos().Y() != FAR_AWAY)
-        {
-            aFrm.Pos().Y() += rOffset.Y();
-        }
-    }
+    // RotateFlyFrame3: moved to transform_translate instead of
+    // direct modification to allow the SwFrame evtl. needed own reactions
+    pFrame->transform_translate(rOffset);
 
     // Don't forget accessibility:
     if( pFrame->IsAccessibleFrame() )
