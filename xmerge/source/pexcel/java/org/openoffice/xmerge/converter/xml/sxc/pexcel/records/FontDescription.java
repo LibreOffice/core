@@ -159,7 +159,7 @@ public class FontDescription implements BIFFRecord {
             return false;
 
         if (EndianConverter.readShort(dwHeight) !=
-        EndianConverter.readShort(dwHeight))
+        EndianConverter.readShort(rhs.dwHeight))
             return false;
 
         if (this.getFont() != rhs.getFont())

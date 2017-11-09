@@ -91,7 +91,7 @@ public class ConfigurePanel extends JPanel {
             this.classpath = classpath;
 
         if (descriptor != null) {
-            descriptor = descriptor;
+            this.descriptor = descriptor;
         }
 
         methodPanel.reload(this.basedir, this.classpath,
