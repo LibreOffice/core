@@ -183,13 +183,10 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         pDocSh->PutItem(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(pDocSh)));
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-
-        vcl::Window *pParent = GetView().GetWindow();
-        const SfxStringItem* pParentItem = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
-        if (pParentItem)
-            pParent = reinterpret_cast<vcl::Window*>(pParentItem->GetValue().toUInt64());
-
         assert(pFact && "Dialog creation failed!");
+        vcl::Window *pParent = rReq.GetDialogParent();
+        if (!pParent)
+            pParent = GetView().GetWindow();
         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxNumBulletTabDialog(pParent, &aSet, GetShell()));
         assert(pDlg && "Dialog creation failed!");
         const SfxStringItem* pPageItem = rReq.GetArg<SfxStringItem>(FN_PARAM_1);

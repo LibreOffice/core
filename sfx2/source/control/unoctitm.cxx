@@ -30,6 +30,7 @@
 #include <svtools/javainteractionhandler.hxx>
 #include <svl/itempool.hxx>
 #include <tools/urlobj.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -639,6 +640,8 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         SfxCallMode nCall = SfxCallMode::RECORD;
         sal_Int32   nMarkArg = -1;
 
+        VclPtr<vcl::Window> xDialogParent;
+
         // Filter arguments which shouldn't be part of the sequence property value
         sal_uInt16  nModifier(0);
         std::vector< css::beans::PropertyValue > aAddArgs;
@@ -650,6 +653,12 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                 bool    bTemp;
                 if( rProp.Value >>= bTemp )
                     nCall = bTemp ? SfxCallMode::SYNCHRON : SfxCallMode::ASYNCHRON;
+            }
+            else if( rProp.Name == "DialogParent" )
+            {
+                Reference<css::awt::XWindow> xWindow;
+                if (rProp.Value >>= xWindow)
+                    xDialogParent = VCLUnoHelper::GetWindow(xWindow);
             }
             else if( rProp.Name == "Bookmark" )
             {
@@ -735,7 +744,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                         if (xSet->Count())
                         {
                             // execute with arguments - call directly
-                            pItem = pDispatcher->Execute(GetId(), nCall, xSet.get(), &aInternalSet, nModifier);
+                            pItem = pDispatcher->Execute(GetId(), nCall, xSet.get(), &aInternalSet, nModifier, xDialogParent);
                             if ( pItem != nullptr )
                             {
                                 if (const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>(pItem))
@@ -772,10 +781,10 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                 TransformParameters( GetId(), lNewArgs, aSet );
 
                 if ( aSet.Count() )
-                    pItem = pDispatcher->Execute( GetId(), nCall, &aSet, &aInternalSet, nModifier );
+                    pItem = pDispatcher->Execute(GetId(), nCall, &aSet, &aInternalSet, nModifier, xDialogParent);
                 else
                     // SfxRequests take empty sets as argument sets, GetArgs() returning non-zero!
-                    pItem = pDispatcher->Execute( GetId(), nCall, nullptr, &aInternalSet, nModifier );
+                    pItem = pDispatcher->Execute(GetId(), nCall, nullptr, &aInternalSet, nModifier, xDialogParent);
 
                 // no bindings, no invalidate ( usually done in SfxDispatcher::Call_Impl()! )
                 if (SfxApplication* pApp = SfxApplication::Get())

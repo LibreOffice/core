@@ -67,6 +67,7 @@ struct SfxRequest_Impl: public SfxListener
     bool            bAllowRecording;
     std::unique_ptr<SfxAllItemSet>
                     pInternalArgs;
+    VclPtr<vcl::Window> xDialogParent;
     SfxViewFrame*   pViewFrame;
 
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
@@ -246,7 +247,8 @@ SfxRequest::SfxRequest
 (
     sal_uInt16                  nSlotId,
     SfxCallMode                 nMode,
-    const SfxAllItemSet&        rSfxArgs
+    const SfxAllItemSet&        rSfxArgs,
+    vcl::Window* pDialogParent
 )
 
 // creates a SfxRequest with arguments
@@ -262,6 +264,7 @@ SfxRequest::SfxRequest
     pImpl->pShell = nullptr;
     pImpl->pSlot = nullptr;
     pImpl->nCallMode = nMode;
+    pImpl->xDialogParent = pDialogParent;
 }
 
 
@@ -739,6 +742,11 @@ void SfxRequest::ReleaseArgs()
 {
     DELETEZ( pArgs );
     pImpl->pInternalArgs.reset();
+}
+
+vcl::Window* SfxRequest::GetDialogParent() const
+{
+    return pImpl->xDialogParent;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

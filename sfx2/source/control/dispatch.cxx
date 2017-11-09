@@ -940,7 +940,7 @@ const SfxSlot* SfxDispatcher::GetSlot( const OUString& rCommand )
 }
 
 const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode nCall,
-        SfxItemSet const * pArgs, SfxItemSet const * pInternalArgs, sal_uInt16 nModi)
+        SfxItemSet const * pArgs, SfxItemSet const * pInternalArgs, sal_uInt16 nModi, vcl::Window* pDialogParent)
 {
     if ( IsLocked() )
         return nullptr;
@@ -959,7 +959,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode nCall,
                 pArg = aIter.NextItem() )
                 MappedPut_Impl( aSet, *pArg );
         }
-        SfxRequest aReq( nSlot, nCall, aSet );
+        SfxRequest aReq(nSlot, nCall, aSet, pDialogParent);
         if (pInternalArgs)
             aReq.SetInternalArgs_Impl( *pInternalArgs );
         aReq.SetModifier( nModi );

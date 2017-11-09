@@ -124,11 +124,12 @@ public:
                                  sal_uInt16 nModi = 0,
                                  const SfxPoolItem **pInternalArgs = nullptr);
 
-    const SfxPoolItem*  Execute( sal_uInt16 nSlot,
-                                 SfxCallMode nCall,
-                                 SfxItemSet const * pArgs,
-                                 SfxItemSet const * pInternalArgs,
-                                 sal_uInt16 nModi);
+    const SfxPoolItem*  Execute(sal_uInt16 nSlot,
+                                SfxCallMode nCall,
+                                SfxItemSet const * pArgs,
+                                SfxItemSet const * pInternalArgs,
+                                sal_uInt16 nModi,
+                                vcl::Window* pDialogParent = nullptr);
 
     const SfxPoolItem*  ExecuteList( sal_uInt16 nSlot,
                                  SfxCallMode nCall,
