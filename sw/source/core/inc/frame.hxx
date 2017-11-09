@@ -205,6 +205,13 @@ public:
     // SwFrame of a SwFlyFrame)
     virtual basegfx::B2DHomMatrix getFrameAreaTransformation() const;
     virtual basegfx::B2DHomMatrix getFramePrintAreaTransformation() const;
+
+    // RotateFlyFrame3 - Support for Transformations
+    // Diverse transformations, starting with a concrete translate that has
+    // to be mapped and currently directly changes SwRect(s) at SwFrames. For
+    // now stay on sigle actions (*_translate), bu tmaybe later unified to
+    // a single transform with a single B2DHomMatrix to apply
+    virtual void transform_translate(const Point& rOffset);
 };
 
 /// RotateFlyFrame3: Helper class when you want to make your SwFrame derivate
@@ -290,6 +297,15 @@ public:
     // state when itz was necessary to reset them temporarily (see above)
     void resetAreaDefinitionsToTransformed(
         SwFrameAreaDefinition& rSwFrameAreaDefinition);
+
+    // check if used
+    bool isTransformationUsed() const
+    {
+        return !maFrameAreaTransformation.isIdentity() || !maFramePrintAreaTransformation.isIdentity();
+    }
+
+    // transform by given B2DHomMatrix
+    void doTransform(const basegfx::B2DHomMatrix aTransform);
 };
 
 /**

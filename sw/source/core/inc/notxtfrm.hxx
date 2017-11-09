@@ -68,6 +68,9 @@ public:
     // RotateFlyFrame3 - Support for Transformations
     virtual basegfx::B2DHomMatrix getFrameAreaTransformation() const override;
     virtual basegfx::B2DHomMatrix getFramePrintAreaTransformation() const override;
+
+    // RotateFlyFrame3 - Support for Transformations
+    virtual void transform_translate(const Point& rOffset) override;
 };
 
 #endif

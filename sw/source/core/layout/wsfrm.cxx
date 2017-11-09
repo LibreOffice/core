@@ -129,6 +129,23 @@ basegfx::B2DHomMatrix SwFrameAreaDefinition::getFramePrintAreaTransformation() c
         rFramePrintArea.Top() + rFrameArea.Top());
 }
 
+void SwFrameAreaDefinition::transform_translate(const Point& rOffset)
+{
+    // RotateFlyFrame3: default is to change the FrameArea, FramePrintArea needs no
+    // change since it is relative to FrameArea
+    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+
+    if (aFrm.Pos().X() != FAR_AWAY)
+    {
+        aFrm.Pos().X() += rOffset.X();
+    }
+
+    if (aFrm.Pos().Y() != FAR_AWAY)
+    {
+        aFrm.Pos().Y() += rOffset.Y();
+    }
+}
+
 void TransformableSwFrame::createFrameAreaTransformations(
     const SwFrameAreaDefinition& rSwFrameAreaDefinition,
     double fRotation,
@@ -253,6 +270,23 @@ void TransformableSwFrame::resetAreaDefinitionsToTransformed(
 {
     setFrameAreaDefinitionsToBoundRangesOfTransformations(
         rSwFrameAreaDefinition);
+}
+
+// transform by given B2DHomMatrix
+void TransformableSwFrame::doTransform(const basegfx::B2DHomMatrix aTransform)
+{
+    if(!aTransform.isIdentity())
+    {
+        if(!maFrameAreaTransformation.isIdentity())
+        {
+            maFrameAreaTransformation *= aTransform;
+        }
+
+        if(!maFramePrintAreaTransformation.isIdentity())
+        {
+            maFramePrintAreaTransformation *= aTransform;
+        }
+    }
 }
 
 SwFrame::SwFrame( SwModify *pMod, SwFrame* pSib )
