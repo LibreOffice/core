@@ -46,7 +46,7 @@ namespace connectivity
             std::vector<sal_Int32> m_aPrecisions; // same as aboth
             std::vector<sal_Int32> m_aScales;
             css::uno::Reference< css::sheet::XSpreadsheet >           m_xSheet;
-            OCalcConnection* m_pConnection;
+            OCalcConnection* m_pCalcConnection;
             sal_Int32 m_nStartCol;
             sal_Int32 m_nStartRow;
             sal_Int32 m_nDataCols;
