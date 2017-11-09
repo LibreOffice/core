@@ -734,6 +734,13 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 {
                     nGlyphFlags |= GlyphItem::IS_VERTICAL;
 
+                    // We have glyph offsets that is relative to h origin now,
+                    // add the origin back so it is relative to v origin.
+                    hb_font_add_glyph_origin_for_direction( mpHbFont,
+                            nGlyphIndex,
+                            HB_DIRECTION_TTB,
+                            &pHbPositions[i].x_offset ,
+                            &pHbPositions[i].y_offset );
                     nAdvance = -pHbPositions[i].y_advance;
                     nXOffset =  pHbPositions[i].y_offset;
                     nYOffset =  pHbPositions[i].x_offset;
