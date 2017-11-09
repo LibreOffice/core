@@ -48,8 +48,6 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
 
     // FIXME complex stuff to fix later
 
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/connectivity/source/inc/calc/CTable.hxx"))
-        return true;
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/chart2/source/"))
         return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/cppcanvas/source/mtfrenderer/emfplus.cxx"))
