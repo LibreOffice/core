@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_2ebd7168",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-11-09T17:24:52Z",
+      "side": 1,
+      "message": "Please leave a space instead of a colon after the bug number.\n\nA better commit message would be:\n\ntdf#113736 PDF Export: Don\u0027t export placeholders by default\n\nThis matches the default for printing.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 40
+      },
+      "revId": "99278b58b3102d52770c3ebb1269ee68004b4d92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
