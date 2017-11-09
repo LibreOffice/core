@@ -1906,12 +1906,12 @@ void XclImpChSeries::FinalizeDataFormats()
         }
 
         // copy series formatting to child objects
-        for( XclImpChSerTrendLineList::iterator aLIt = maTrendLines.begin(), aLEnd = maTrendLines.end(); aLIt != aLEnd; ++aLIt )
+        for (auto const& trendLine : maTrendLines)
         {
-            (*aLIt)->SetDataFormat(mxSeriesFmt);
+            trendLine->SetDataFormat(mxSeriesFmt);
             if (mxTitleLink->HasString())
             {
-                (*aLIt)->SetTrendlineName(mxTitleLink->GetString());
+                trendLine->SetTrendlineName(mxTitleLink->GetString());
             }
         }
         for (auto const& it : m_ErrorBars)
@@ -1932,14 +1932,14 @@ void XclImpChSeries::FinalizeDataFormats()
         }
 
         // set text labels to data formats
-        for( XclImpChTextMap::iterator aTIt = maLabels.begin(), aTEnd = maLabels.end(); aTIt != aTEnd; ++aTIt )
+        for (auto const& label : maLabels)
         {
-            sal_uInt16 nPointIdx = aTIt->first;
+            sal_uInt16 nPointIdx = label.first;
             if (nPointIdx == EXC_CHDATAFORMAT_ALLPOINTS)
             {
                 if (!mxSeriesFmt)
                     mxSeriesFmt = CreateDataFormat(nPointIdx, EXC_CHDATAFORMAT_DEFAULT);
-                mxSeriesFmt->SetDataLabel(aTIt->second);
+                mxSeriesFmt->SetDataLabel(label.second);
             }
             else if (nPointIdx < EXC_CHDATAFORMAT_MAXPOINTCOUNT)
             {
@@ -1955,7 +1955,7 @@ void XclImpChSeries::FinalizeDataFormats()
                 }
                 else
                     p = itr->second;
-                p->SetDataLabel(aTIt->second);
+                p->SetDataLabel(label.second);
             }
         }
 
@@ -1964,8 +1964,8 @@ void XclImpChSeries::FinalizeDataFormats()
             mxSeriesFmt->UpdateSeriesFormat( pTypeGroup->GetTypeInfo(), pTypeGroup->GetGroupFormat().get() );
 
         // update data point formats (removes unchanged automatic formatting)
-        for( XclImpChDataFormatMap::iterator aFIt = maPointFmts.begin(), aFEnd = maPointFmts.end(); aFIt != aFEnd; ++aFIt )
-            aFIt->second->UpdatePointFormat( pTypeGroup->GetTypeInfo(), mxSeriesFmt.get() );
+        for (auto const& pointFormat : maPointFmts)
+            pointFormat.second->UpdatePointFormat( pTypeGroup->GetTypeInfo(), mxSeriesFmt.get() );
     }
 }
 
@@ -2070,10 +2070,10 @@ Reference< XDataSeries > XclImpChSeries::CreateDataSeries() const
         }
 
         // data point formatting
-        for( XclImpChDataFormatMap::const_iterator aIt = maPointFmts.begin(), aEnd = maPointFmts.end(); aIt != aEnd; ++aIt )
+        for (auto const& pointFormat : maPointFmts)
         {
-            ScfPropertySet aPointProp = lclGetPointPropSet( xDataSeries, aIt->first );
-            aIt->second->Convert( aPointProp, rTypeInfo, &aSeriesProp );
+            ScfPropertySet aPointProp = lclGetPointPropSet( xDataSeries, pointFormat.first );
+            pointFormat.second->Convert( aPointProp, rTypeInfo, &aSeriesProp );
         }
     }
     return xDataSeries;
@@ -2147,11 +2147,11 @@ void XclImpChSeries::ConvertTrendLines( Reference< XDataSeries > const & xDataSe
     Reference< XRegressionCurveContainer > xRegCurveCont( xDataSeries, UNO_QUERY );
     if( xRegCurveCont.is() )
     {
-        for( XclImpChSerTrendLineList::const_iterator aIt = maTrendLines.begin(), aEnd = maTrendLines.end(); aIt != aEnd; ++aIt )
+        for (auto const& trendLine : maTrendLines)
         {
             try
             {
-                Reference< XRegressionCurve > xRegCurve = (*aIt)->CreateRegressionCurve();
+                Reference< XRegressionCurve > xRegCurve = trendLine->CreateRegressionCurve();
                 if( xRegCurve.is() )
                 {
                     xRegCurveCont->addRegressionCurve( xRegCurve );
@@ -2867,11 +2867,11 @@ void XclImpChTypeGroup::InsertDataSeries( Reference< XChartType > const & xChart
 void XclImpChTypeGroup::CreateDataSeries( Reference< XChartType > const & xChartType, sal_Int32 nApiAxesSetIdx ) const
 {
     bool bSpline = false;
-    for( XclImpChSeriesVec::const_iterator aIt = maSeries.begin(), aEnd = maSeries.end(); aIt != aEnd; ++aIt )
+    for (auto const& elem : maSeries)
     {
-        Reference< XDataSeries > xDataSeries = (*aIt)->CreateDataSeries();
+        Reference< XDataSeries > xDataSeries = elem->CreateDataSeries();
         InsertDataSeries( xChartType, xDataSeries, nApiAxesSetIdx );
-        bSpline |= (*aIt)->HasSpline();
+        bSpline |= elem->HasSpline();
     }
     // spline - TODO: set at single series (#i66858#)
     if( bSpline && !maTypeInfo.IsSeriesFrameFormat() && (maTypeInfo.meTypeCateg != EXC_CHTYPECATEG_RADAR) )
@@ -3524,12 +3524,12 @@ void XclImpChAxesSet::Finalize()
     {
         // finalize chart type groups, erase empty groups without series
         XclImpChTypeGroupMap aValidGroups;
-        for( XclImpChTypeGroupMap::const_iterator aIt = maTypeGroups.begin(), aEnd = maTypeGroups.end(); aIt != aEnd; ++aIt )
+        for (auto const& typeGroup : maTypeGroups)
         {
-            XclImpChTypeGroupRef xTypeGroup = aIt->second;
+            XclImpChTypeGroupRef xTypeGroup = typeGroup.second;
             xTypeGroup->Finalize();
             if( xTypeGroup->IsValidGroup() )
-                aValidGroups.emplace(aIt->first, xTypeGroup);
+                aValidGroups.emplace(typeGroup.first, xTypeGroup);
         }
         maTypeGroups.swap( aValidGroups );
     }

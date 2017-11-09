@@ -1040,20 +1040,20 @@ void XclImpPTField::ConvertHiddenField( ScDPSaveData& rSaveData ) const
 
 bool XclImpPTField::HasDataFieldInfo() const
 {
-    return !maDataInfoList.empty();
+    return !maDataInfoVector.empty();
 }
 
 void XclImpPTField::AddDataFieldInfo( const XclPTDataFieldInfo& rDataInfo )
 {
     OSL_ENSURE( maFieldInfo.mnAxes & EXC_SXVD_AXIS_DATA, "XclImpPTField::AddDataFieldInfo - no data field" );
-    maDataInfoList.push_back( rDataInfo );
+    maDataInfoVector.push_back( rDataInfo );
 }
 
 void XclImpPTField::ConvertDataField( ScDPSaveData& rSaveData ) const
 {
     OSL_ENSURE( maFieldInfo.mnAxes & EXC_SXVD_AXIS_DATA, "XclImpPTField::ConvertDataField - no data field" );
-    OSL_ENSURE( !maDataInfoList.empty(), "XclImpPTField::ConvertDataField - no data field info" );
-    if (maDataInfoList.empty())
+    OSL_ENSURE( !maDataInfoVector.empty(), "XclImpPTField::ConvertDataField - no data field info" );
+    if (maDataInfoVector.empty())
         return;
 
     OUString aFieldName = GetFieldName();
@@ -1067,7 +1067,7 @@ void XclImpPTField::ConvertDataField( ScDPSaveData& rSaveData ) const
         return;
     }
 
-    XclPTDataFieldInfoList::const_iterator aIt = maDataInfoList.begin(), aEnd = maDataInfoList.end();
+    auto aIt = maDataInfoVector.begin(), aEnd = maDataInfoVector.end();
 
     ConvertDataField( *pSaveDim, *aIt );
 

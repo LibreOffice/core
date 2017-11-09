@@ -821,7 +821,6 @@ private:
 private:
     typedef ::std::map<sal_uInt16, XclImpChDataFormatRef> XclImpChDataFormatMap;
     typedef ::std::map<sal_uInt16, XclImpChTextRef>       XclImpChTextMap;
-    typedef ::std::list< XclImpChSerTrendLineRef >        XclImpChSerTrendLineList;
     typedef ::std::map<sal_uInt8, std::unique_ptr<XclImpChSerErrorBar>> XclImpChSerErrorBarMap;
 
     XclChSeries         maData;             /// Contents of the CHSERIES record.
@@ -832,7 +831,7 @@ private:
     XclImpChDataFormatRef mxSeriesFmt;      /// CHDATAFORMAT group for series format.
     XclImpChDataFormatMap maPointFmts;      /// CHDATAFORMAT groups for data point formats.
     XclImpChTextMap     maLabels;           /// Data point labels (CHTEXT groups).
-    XclImpChSerTrendLineList maTrendLines;  /// Trend line settings (CHSERTRENDLINE records).
+    std::vector< XclImpChSerTrendLineRef > maTrendLines;  /// Trend line settings (CHSERTRENDLINE records).
     XclImpChSerErrorBarMap m_ErrorBars;     /// Error bar settings (CHSERERRORBAR records).
     sal_uInt16          mnGroupIdx;         /// Chart type group (CHTYPEGROUP group) this series is assigned to.
     sal_uInt16          mnSeriesIdx;        /// 0-based series index.
