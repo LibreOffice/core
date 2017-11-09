@@ -301,7 +301,7 @@ inline TokenStack &TokenStack::operator <<( const TokenId& rNewId )
     }
     else
     {
-        SAL_WARN("sc.filter", "*TokenStack::<<(): Stack overflow");
+        SAL_WARN("sc.filter", "*TokenStack::<<(): Stack overflow for " << static_cast<sal_uInt16>(rNewId));
     }
 
     return *this;
@@ -332,7 +332,7 @@ inline TokenPool& TokenPool::operator <<( const TokenId& rId )
     // rId -> ( sal_uInt16 ) rId - 1;
     if ((sal_uInt16)rId >= nScTokenOff)
     {
-        SAL_WARN("sc.filter", "-TokenPool::operator <<: TokenId in DefToken-Range!");
+        SAL_WARN("sc.filter", "-TokenPool::operator <<: TokenId in DefToken-Range! " << static_cast<sal_uInt16>(rId));
     }
 
     if( nP_IdAkt >= nP_Id )
@@ -349,7 +349,7 @@ inline TokenPool& TokenPool::operator <<( const DefTokenId eId )
 {
     if ((sal_uInt32)eId + nScTokenOff >= 0xFFFF)
     {
-        SAL_WARN("sc.filter", "-TokenPool::operator<<: enum too large!" );
+        SAL_WARN("sc.filter", "-TokenPool::operator<<: enum too large! " << static_cast<sal_uInt32>(eId));
     }
 
     if( nP_IdAkt >= nP_Id )
