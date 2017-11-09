@@ -42,6 +42,25 @@ inline void SwWrtShell::CloseMark( bool bOkFlag )
     EndAllAction();
 }
 
+namespace {
+
+inline bool isUnicodeVariationSequenceSelector( sal_uInt32 nCode )
+{
+    return ( nCode >= 0xFE00 && nCode <= 0xFE0F )   // Variation Selectors block
+        || ( nCode >= 0xE0100 && nCode <= 0xE01EF );// Variation Selectors Supplement block
+}
+
+// Return if the chracter might be a base character of a CJK ideographic varaiation sequence
+inline bool isCJKIVSCharacters( sal_uInt32 nCode )
+{
+    return ( nCode >= 0x4E00 && nCode <= 0x9FFF )       // CJK Unified Ideographs
+        || ( nCode >= 0x3400 && nCode <= 0x4DBF )       // CJK Unified Ideographs Extension A
+        || ( nCode >= 0x20000 && nCode <= 0x2A6DF );    // CJK Unified Ideographs Extension B
+}
+
+}
+
+
 // #i23725#
 bool SwWrtShell::TryRemoveIndent()
 {
@@ -222,6 +241,29 @@ long SwWrtShell::DelLeft()
 
         OpenMark();
         SwCursorShell::Left(1, CRSR_SKIP_CHARS);
+        if (SvtScriptType::ASIAN == GetScriptType())
+        {
+            sal_uInt32 nCode = GetChar(false);
+            if ( rtl::isSurrogate( nCode ) )
+            {
+                OUString sStr = GetSelText();
+                sal_Int32 nIndex = 0;
+                nCode = sStr.iterateCodePoints( &nIndex );
+            }
+
+            if ( isUnicodeVariationSequenceSelector( nCode ) )
+            {
+                SwCursorShell::Push();
+                SwCursorShell::Left(1, CRSR_SKIP_CHARS);
+                OUString sStr = GetSelText();
+                sal_Int32 nIndex = 0;
+                nCode = sStr.iterateCodePoints( &nIndex );
+                if ( isCJKIVSCharacters( nCode ) )
+                    SwCursorShell::Pop( SwCursorShell::PopMode::DeleteStack );
+                else
+                    SwCursorShell::Pop( SwCursorShell::PopMode::DeleteCurrent ); // For the weak script.
+            }
+        }
     }
     long nRet = Delete();
     if( !nRet && bSwap )
