@@ -350,7 +350,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
 
 
     Size aFontSize = rStyleSettings.GetTabFont().GetFontSize();
-    MapMode aPtMapMode(MapUnit::MapPoint);
+    MapMode aPtMapMode(MapUnit::MAP_POINT);
     aFontSize = pFrameWin->LogicToPixel(aFontSize, aPtMapMode);
     sal_Int32 nTabWidth = aFontSize.Height() + WIDTH_MARGIN;
 
