@@ -1336,6 +1336,17 @@ void Dialog::queue_resize(StateChangedType eReason)
     SystemWindow::queue_resize(eReason);
 }
 
+void Dialog::Resize()
+{
+    SystemWindow::Resize();
+
+    // inform LOK clients
+    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogRenderable && !maID.isEmpty())
+    {
+        mpDialogRenderable->notifyDialog(maID, "invalidate", nullptr);
+    }
+}
+
 bool Dialog::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "border-width")
