@@ -2681,11 +2681,15 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels * TWIPS_PER_PIXEL)).append("\" }");
     }
 
+    long nPrevSizePx = -1;
     for (SCROW nRow = nStartRow + 1; nRow < nEndRow; ++nRow)
     {
         // nSize will be 0 for hidden rows.
         const long nSizePx = lcl_GetRowHeightPx(pDoc, nRow, nTab);
         nTotalPixels += nSizePx;
+        if (nRow < nEndRow - 1 && nSizePx == nPrevSizePx)
+            continue;
+        nPrevSizePx = nSizePx;
 
         OUString aText = pRowBar[SC_SPLIT_BOTTOM]->GetEntryText(nRow);
         aBuffer.append(", ");
@@ -2788,13 +2792,18 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels * TWIPS_PER_PIXEL)).append("\" }");
     }
 
+    nPrevSizePx = -1;
     for (SCCOL nCol = nStartCol + 1; nCol < nEndCol; ++nCol)
     {
         // nSize will be 0 for hidden columns.
         const long nSizePx = lcl_GetColWidthPx(pDoc, nCol, nTab);
         nTotalPixels += nSizePx;
+        if (nCol < nEndCol - 1 && nSizePx == nPrevSizePx)
+            continue;
+        nPrevSizePx = nSizePx;
 
-        OUString aText = pColBar[SC_SPLIT_LEFT]->GetEntryText(nCol);
+
+        OUString aText = OUString::number(nCol + 1);
         aBuffer.append(", ");
         aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
         aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels * TWIPS_PER_PIXEL)).append("\" }");
