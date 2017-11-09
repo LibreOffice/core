@@ -1036,6 +1036,7 @@ public:
 
     virtual void AppendBookmarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) override;
     virtual void AppendBookmark( const OUString& rName ) override;
+    void AppendBookmarkEndWithCorrection( const OUString& rName );
 
     virtual void AppendAnnotationMarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) override;
 
