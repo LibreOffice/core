@@ -4821,7 +4821,7 @@
             <info>
               <desc>Specifies if placeholder fields are exported to PDF.</desc>
             </info>
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="OpenBookmarkLevels" oor:type="xs:int" oor:nillable="false">
             <info>
