@@ -163,6 +163,7 @@ private:
     const OUString GetHatchingSetOrDefault();
     const OUString GetBitmapSetOrDefault();
     const OUString GetPatternSetOrDefault();
+    bool IsDraw();
     bool IsImpress();
     void addListener();
     void removeListener();
