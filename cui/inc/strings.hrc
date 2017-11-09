@@ -268,6 +268,7 @@
 #define RID_SVXSTR_CHG_SMARTART                     NC_("RID_SVXSTR_CHG_SMARTART", "SmartArt to %PRODUCTNAME shapes or reverse")
 
 #define RID_SVXSTR_OPT_DOUBLE_DICTS                 NC_("RID_SVXSTR_OPT_DOUBLE_DICTS", "The specified name already exists.\nPlease enter a new name.")
+#define RID_SVXSTR_OPT_GRAMMAR_BY                   NC_("RID_SVXSTR_OPT_GRAMMAR_BY", "~Grammar By")
 #define STR_MODIFY                                  NC_("STR_MODIFY", "~Replace")
 #define RID_SVXSTR_CONFIRM_SET_LANGUAGE             NC_("RID_SVXSTR_CONFIRM_SET_LANGUAGE", "Do you want to change the '%1' dictionary language?")
 

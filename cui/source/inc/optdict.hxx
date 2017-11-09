@@ -109,6 +109,7 @@ private:
 
     OUString                sModify;
     OUString                sNew;
+    OUString                sReplaceFT_Text;
 
     css::uno::Sequence<
         css::uno::Reference<

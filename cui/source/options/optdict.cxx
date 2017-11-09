@@ -227,6 +227,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
 
     get(pWordED,"word");
     get(pReplaceFT,"replace_label");
+    sReplaceFT_Text = pReplaceFT->GetText();
     get(pReplaceED,"replace");
     get(pWordsLB,"words");
     pWordsLB->set_height_request(pWordsLB->GetTextHeight() * 8);
@@ -484,7 +485,22 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
     pWordED->SetText(aStr);
     pReplaceED->SetText(aStr);
 
-    if(xDic->getDictionaryType() != DictionaryType_POSITIVE)
+    bool bIsNegative = xDic->getDictionaryType() != DictionaryType_POSITIVE;
+    bool bLangNone = LanguageTag(
+            xDic->getLocale() ).getLanguageType() == LANGUAGE_NONE;
+
+    // The label is "Replace By" only in negative dictionaries (forbidden
+    // words), otherwise "Grammar By" in language-specific dictionaries
+    // (where the optional second word is the sample word for
+    // the Hunspell based affixation/compounding of the new dictionary word)
+    if (bIsNegative)
+    {
+        pReplaceFT->SetText(sReplaceFT_Text);
+    } else if (!bLangNone) {
+        pReplaceFT->SetText(CuiResId(RID_SVXSTR_OPT_GRAMMAR_BY));
+    }
+
+    if(bIsNegative || !bLangNone)
     {
         nStaticTabs[0]=2;
 
@@ -525,7 +541,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
     {
         aStr = pEntry[i]->getDictionaryWord();
         sal_uLong nPos = GetLBInsertPos( aStr );
-        if(pEntry[i]->isNegative())
+        if(!pEntry[i]->getReplacementText().isEmpty())
         {
             aStr += "\t" + pEntry[i]->getReplacementText();
         }
@@ -608,11 +624,10 @@ bool SvxEditDictionaryDialog::NewDelHdl(void const * pBtn)
             {
                 // make changes in dic
 
-                //! ...IsVisible should reflect whether the dictionary is a negativ
-                //! or not (hopefully...)
-                bool bIsNegEntry = pReplaceFT->IsVisible();
+                bool bIsNegEntry = xDic->getDictionaryType() == DictionaryType_NEGATIVE;
+
                 OUString aRplcText;
-                if(bIsNegEntry)
+                if(!aReplaceStr.isEmpty())
                     aRplcText = aReplaceStr;
 
                 if (_pEntry) // entry selected in pWordsLB ie action = modify entry
@@ -635,7 +650,7 @@ bool SvxEditDictionaryDialog::NewDelHdl(void const * pBtn)
             pWordsLB->SetUpdateMode(false);
             sal_uLong _nPos = TREELIST_ENTRY_NOTFOUND;
 
-            if(pReplaceFT->IsVisible())
+            if(!aReplaceStr.isEmpty())
             {
                 sEntry += "\t" + aReplaceStr;
             }

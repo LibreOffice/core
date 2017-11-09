@@ -40,6 +40,9 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+
 #include "defs.hxx"
 
 #include <algorithm>
@@ -59,6 +62,9 @@ using namespace linguistic;
 
 #define MAX_HEADER_LENGTH 16
 
+// XML-header to query SPELLML support
+#define SPELLML_SUPPORT "<?xml?>"
+
 static const sal_Char* const pVerStr2    = "WBSWG2";
 static const sal_Char* const pVerStr5    = "WBSWG5";
 static const sal_Char* const pVerStr6    = "WBSWG6";
@@ -69,6 +75,13 @@ static const sal_Int16 DIC_VERSION_2 = 2;
 static const sal_Int16 DIC_VERSION_5 = 5;
 static const sal_Int16 DIC_VERSION_6 = 6;
 static const sal_Int16 DIC_VERSION_7 = 7;
+
+static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
+{
+    uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    uno::Reference< XLinguServiceManager2 > xRes = LinguServiceManager::create( xContext ) ;
+    return xRes;
+}
 
 static bool getTag(const OString &rLine, const sal_Char *pTagName,
     OString &rTagValue)
@@ -359,7 +372,7 @@ static OString formatForSave(const uno::Reference< XDictionaryEntry > &xEntry,
 {
    OStringBuffer aStr(OUStringToOString(xEntry->getDictionaryWord(), eEnc));
 
-   if (xEntry->isNegative())
+   if (xEntry->isNegative() || !xEntry->getReplacementText().isEmpty())
    {
        aStr.append("==");
        aStr.append(OUStringToOString(xEntry->getReplacementText(), eEnc));
@@ -669,6 +682,27 @@ bool DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry >& xDic
 
             if (!bIsLoadEntries)
                 launchEvent( DictionaryEventFlags::ADD_ENTRY, xDicEntry );
+        }
+    }
+
+    // add word to the Hunspell dictionary using a sample word for affixation/compounding
+    if (xDicEntry.is() && !xDicEntry->isNegative() && !xDicEntry->getReplacementText().isEmpty()) {
+        uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
+        uno::Reference< XSpellChecker1 > xSpell;
+        Reference< XSpellAlternatives > xTmpRes;
+        xSpell.set( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
+        Sequence< css::beans::PropertyValue > aEmptySeq;
+        if (xSpell.is() && (xSpell->isValid( SPELLML_SUPPORT, (sal_uInt16)nLanguage, aEmptySeq )))
+        {
+            // "Grammar By" sample word is a Hunspell dictionary word?
+            if (xSpell->isValid( xDicEntry->getReplacementText(), (sal_uInt16)nLanguage, aEmptySeq ))
+            {
+                xTmpRes = xSpell->spell( "<?xml?><query type='add'><word>" +
+                    xDicEntry->getDictionaryWord() + "</word><word>" + xDicEntry->getReplacementText() +
+                    "</word></query>", (sal_uInt16)nLanguage, aEmptySeq );
+                bRes = true;
+            } else
+                bRes = false;
         }
     }
 
