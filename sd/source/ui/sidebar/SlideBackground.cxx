@@ -498,6 +498,8 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
                 }
                 mbEditModeChangePending = false;
             }
+            else if (maContext == maImpressHandoutContext)
+                SetPanelTitle(SdResId(STR_MASTERSLIDE_NAME));
         }
         break;
         case EventMultiplexerEventId::CurrentPageChanged:
