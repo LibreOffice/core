@@ -221,7 +221,9 @@ long SwWrtShell::DelLeft()
         }
 
         OpenMark();
-        SwCursorShell::Left(1, CRSR_SKIP_CHARS);
+        sal_uInt16 nMode = (SvtScriptType::ASIAN == GetScriptType())?
+            CRSR_SKIP_CELLS : CRSR_SKIP_CHARS;
+        SwCursorShell::Left(1, nMode );
     }
     long nRet = Delete();
     if( !nRet && bSwap )
