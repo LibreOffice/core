@@ -252,6 +252,7 @@ void SlideBackground::HandleContextChange(
         }
         else if ( maContext == maImpressHandoutContext )
         {
+            SetPanelTitle(SdResId(STR_MASTERSLIDE_NAME));
             mpFillStyle->Hide();
             mpFillLB->Hide();
             mpFillAttr->Hide();
