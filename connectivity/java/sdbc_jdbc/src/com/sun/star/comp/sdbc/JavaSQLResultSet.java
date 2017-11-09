@@ -196,7 +196,11 @@ public class JavaSQLResultSet extends PropertySet
 
     private String getCursorName() throws WrappedTargetException {
         try {
-            return jdbcResultSet.getCursorName();
+            String cursorName = jdbcResultSet.getCursorName();
+            if (cursorName == null) {
+                cursorName = "";
+            }
+            return cursorName;
         } catch (java.sql.SQLException exception) {
             throw new WrappedTargetException("SQL error", this, Tools.toUnoException(this, exception));
         }

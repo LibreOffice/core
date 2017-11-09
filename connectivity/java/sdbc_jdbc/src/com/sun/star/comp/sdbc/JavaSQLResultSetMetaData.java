@@ -77,7 +77,11 @@ public class JavaSQLResultSetMetaData extends WeakBase implements XResultSetMeta
     @Override
     public String getSchemaName(int column) throws SQLException {
         try {
-            return jdbcResultSetMetaData.getSchemaName(column);
+            String schemaName = jdbcResultSetMetaData.getSchemaName(column);
+            if (schemaName == null) {
+                schemaName = "";
+            }
+            return schemaName;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -86,7 +90,11 @@ public class JavaSQLResultSetMetaData extends WeakBase implements XResultSetMeta
     @Override
     public String getColumnName(int column) throws SQLException {
         try {
-            return jdbcResultSetMetaData.getColumnName(column);
+            String columnName = jdbcResultSetMetaData.getColumnName(column);
+            if (columnName == null) {
+                columnName = "";
+            }
+            return columnName;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -95,7 +103,11 @@ public class JavaSQLResultSetMetaData extends WeakBase implements XResultSetMeta
     @Override
     public String getTableName(int column) throws SQLException {
         try {
-            return jdbcResultSetMetaData.getTableName(column);
+            String tableName = jdbcResultSetMetaData.getTableName(column);
+            if (tableName == null) {
+                tableName = "";
+            }
+            return tableName;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -104,7 +116,11 @@ public class JavaSQLResultSetMetaData extends WeakBase implements XResultSetMeta
     @Override
     public String getCatalogName(int column) throws SQLException {
         try {
-            return jdbcResultSetMetaData.getCatalogName(column);
+            String catalogName = jdbcResultSetMetaData.getCatalogName(column);
+            if (catalogName == null) {
+                catalogName = "";
+            }
+            return catalogName;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -113,7 +129,11 @@ public class JavaSQLResultSetMetaData extends WeakBase implements XResultSetMeta
     @Override
     public String getColumnTypeName(int column) throws SQLException {
         try {
-            return jdbcResultSetMetaData.getColumnTypeName(column);
+            String columnTypeName = jdbcResultSetMetaData.getColumnTypeName(column);
+            if (columnTypeName == null) {
+                columnTypeName = "";
+            }
+            return columnTypeName;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -122,7 +142,11 @@ public class JavaSQLResultSetMetaData extends WeakBase implements XResultSetMeta
     @Override
     public String getColumnLabel(int column) throws SQLException {
         try {
-            return jdbcResultSetMetaData.getColumnLabel(column);
+            String columnLabel = jdbcResultSetMetaData.getColumnLabel(column);
+            if (columnLabel == null) {
+                columnLabel = "";
+            }
+            return columnLabel;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -131,7 +155,11 @@ public class JavaSQLResultSetMetaData extends WeakBase implements XResultSetMeta
     @Override
     public String getColumnServiceName(int column) throws SQLException {
         try {
-            return jdbcResultSetMetaData.getColumnClassName(column);
+            String columnServiceName = jdbcResultSetMetaData.getColumnClassName(column);
+            if (columnServiceName == null) {
+                columnServiceName = "";
+            }
+            return columnServiceName;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }

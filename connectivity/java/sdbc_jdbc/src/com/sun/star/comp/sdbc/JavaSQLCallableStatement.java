@@ -120,7 +120,7 @@ public class JavaSQLCallableStatement extends JavaSQLPreparedStatement implement
             if (jdbcDate != null) {
                 return DBTypeConversion.toDate(jdbcDate.toString());
             } else {
-                return null;
+                return new Date();
             }
         } catch (java.sql.SQLException exception) {
             throw Tools.toUnoException(this, exception);
@@ -270,7 +270,12 @@ public class JavaSQLCallableStatement extends JavaSQLPreparedStatement implement
     public synchronized String getString(int columnIndex) throws SQLException {
         createStatement();
         try {
-            return ((java.sql.CallableStatement)jdbcStatement).getString(columnIndex);
+            String string = ((java.sql.CallableStatement)jdbcStatement).getString(columnIndex);
+            if (string != null) {
+                return string;
+            } else {
+                return "";
+            }
         } catch (java.sql.SQLException exception) {
             throw Tools.toUnoException(this, exception);
         }

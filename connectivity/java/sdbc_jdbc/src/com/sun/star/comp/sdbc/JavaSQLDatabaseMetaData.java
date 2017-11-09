@@ -93,7 +93,11 @@ public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaDa
     @Override
     public String getCatalogSeparator() throws SQLException {
         try {
-            return jdbcDatabaseMetaData.getCatalogSeparator();
+            String catalogSeparator = jdbcDatabaseMetaData.getCatalogSeparator();
+            if (catalogSeparator == null) {
+                catalogSeparator = "";
+            }
+            return catalogSeparator;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -705,7 +709,11 @@ public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaDa
     @Override
     public String getCatalogTerm() throws SQLException {
         try {
-            return jdbcDatabaseMetaData.getCatalogTerm();
+            String catalogTerm = jdbcDatabaseMetaData.getCatalogTerm();
+            if (catalogTerm == null) {
+                catalogTerm = "";
+            }
+            return catalogTerm;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -714,7 +722,11 @@ public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaDa
     @Override
     public String getIdentifierQuoteString() throws SQLException {
         try {
-            return jdbcDatabaseMetaData.getIdentifierQuoteString();
+            String identifierQuoteString = jdbcDatabaseMetaData.getIdentifierQuoteString();
+            if (identifierQuoteString == null) {
+                identifierQuoteString = "";
+            }
+            return identifierQuoteString;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -723,7 +735,11 @@ public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaDa
     @Override
     public String getExtraNameCharacters() throws SQLException {
         try {
-            return jdbcDatabaseMetaData.getExtraNameCharacters();
+            String extraNameCharacters = jdbcDatabaseMetaData.getExtraNameCharacters();
+            if (extraNameCharacters == null) {
+                extraNameCharacters = "";
+            }
+            return extraNameCharacters;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -1340,7 +1356,11 @@ public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaDa
     @Override
     public String getUserName() throws SQLException {
         try {
-            return jdbcDatabaseMetaData.getUserName();
+            String username = jdbcDatabaseMetaData.getUserName();
+            if (username == null) {
+                username = "";
+            }
+            return username;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -1349,7 +1369,11 @@ public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaDa
     @Override
     public String getDriverName() throws SQLException {
         try {
-            return jdbcDatabaseMetaData.getDriverName();
+            String driverName = jdbcDatabaseMetaData.getDriverName();
+            if (driverName == null) {
+                driverName = "";
+            }
+            return driverName;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -1358,7 +1382,11 @@ public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaDa
     @Override
     public String getDriverVersion() throws SQLException {
         try {
-            return jdbcDatabaseMetaData.getDriverVersion();
+            String driverVersion = jdbcDatabaseMetaData.getDriverVersion();
+            if (driverVersion == null) {
+                driverVersion = "";
+            }
+            return driverVersion;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -1367,7 +1395,11 @@ public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaDa
     @Override
     public String getDatabaseProductVersion() throws SQLException {
         try {
-            return jdbcDatabaseMetaData.getDatabaseProductVersion();
+            String databaseProductVersion = jdbcDatabaseMetaData.getDatabaseProductVersion();
+            if (databaseProductVersion == null) {
+                databaseProductVersion = "";
+            }
+            return databaseProductVersion;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -1376,7 +1408,11 @@ public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaDa
     @Override
     public String getDatabaseProductName() throws SQLException {
         try {
-            return jdbcDatabaseMetaData.getDatabaseProductName();
+            String databaseProductName = jdbcDatabaseMetaData.getDatabaseProductName();
+            if (databaseProductName == null) {
+                databaseProductName = "";
+            }
+            return databaseProductName;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -1385,7 +1421,11 @@ public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaDa
     @Override
     public String getProcedureTerm() throws SQLException {
         try {
-            return jdbcDatabaseMetaData.getProcedureTerm();
+            String procedureTerm = jdbcDatabaseMetaData.getProcedureTerm();
+            if (procedureTerm == null) {
+                procedureTerm = "";
+            }
+            return procedureTerm;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -1394,7 +1434,11 @@ public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaDa
     @Override
     public String getSchemaTerm() throws SQLException {
         try {
-            return jdbcDatabaseMetaData.getSchemaTerm();
+            String schemaTerm = jdbcDatabaseMetaData.getSchemaTerm();
+            if (schemaTerm == null) {
+                schemaTerm = "";
+            }
+            return schemaTerm;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -1422,7 +1466,11 @@ public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaDa
     @Override
     public String getSQLKeywords() throws SQLException {
         try {
-            return jdbcDatabaseMetaData.getSQLKeywords();
+            String sqlKeywords = jdbcDatabaseMetaData.getSQLKeywords();
+            if (sqlKeywords == null) {
+                sqlKeywords = "";
+            }
+            return sqlKeywords;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -1431,7 +1479,11 @@ public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaDa
     @Override
     public String getSearchStringEscape() throws SQLException {
         try {
-            return jdbcDatabaseMetaData.getSearchStringEscape();
+            String searchStringEscape = jdbcDatabaseMetaData.getSearchStringEscape();
+            if (searchStringEscape == null) {
+                searchStringEscape = "";
+            }
+            return searchStringEscape;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -1440,7 +1492,11 @@ public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaDa
     @Override
     public String getStringFunctions() throws SQLException {
         try {
-            return jdbcDatabaseMetaData.getStringFunctions();
+            String stringFunctions = jdbcDatabaseMetaData.getStringFunctions();
+            if (stringFunctions == null) {
+                stringFunctions = "";
+            }
+            return stringFunctions;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -1449,7 +1505,11 @@ public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaDa
     @Override
     public String getTimeDateFunctions() throws SQLException {
         try {
-            return jdbcDatabaseMetaData.getTimeDateFunctions();
+            String timeDateFunctions = jdbcDatabaseMetaData.getTimeDateFunctions();
+            if (timeDateFunctions == null) {
+                timeDateFunctions = "";
+            }
+            return timeDateFunctions;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -1458,7 +1518,11 @@ public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaDa
     @Override
     public String getSystemFunctions() throws SQLException {
         try {
-            return jdbcDatabaseMetaData.getSystemFunctions();
+            String systemFunctions = jdbcDatabaseMetaData.getSystemFunctions();
+            if (systemFunctions == null) {
+                systemFunctions = "";
+            }
+            return systemFunctions;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }
@@ -1467,7 +1531,11 @@ public class JavaSQLDatabaseMetaData extends WeakBase implements XDatabaseMetaDa
     @Override
     public String getNumericFunctions() throws SQLException {
         try {
-            return jdbcDatabaseMetaData.getNumericFunctions();
+            String numericFunctions = jdbcDatabaseMetaData.getNumericFunctions();
+            if (numericFunctions == null) {
+                numericFunctions = "";
+            }
+            return numericFunctions;
         } catch (java.sql.SQLException jdbcSQLException) {
             throw Tools.toUnoException(this, jdbcSQLException);
         }

@@ -406,7 +406,9 @@ public class DBTypeConversion {
             if (dot >= 0) {
                 nSecond = (short)safeParseInt(secondAndNano.substring(0, dot));
                 String nano = secondAndNano.substring(dot + 1);
-                nano = nano.substring(0, 2);
+                if (nano.length() > 2) {
+                    nano = nano.substring(0, 2);
+                }
                 nano = nano + "00".substring(0, 2 - nano.length());
                 nHundredthSeconds = (short)safeParseInt(nano);
             } else {

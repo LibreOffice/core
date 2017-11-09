@@ -20,8 +20,11 @@
  *************************************************************/
 package com.sun.star.comp.sdbc;
 
+import java.util.Iterator;
 import java.util.Properties;
+import java.util.Set;
 
+import org.apache.openoffice.comp.sdbc.dbtools.comphelper.CompHelper;
 import org.apache.openoffice.comp.sdbc.dbtools.util.AutoRetrievingBase;
 import org.apache.openoffice.comp.sdbc.dbtools.util.Resources;
 import org.apache.openoffice.comp.sdbc.dbtools.util.SharedResources;
@@ -85,6 +88,11 @@ public class JavaSQLConnection extends ComponentBase
     protected synchronized void postDisposing() {
         logger.log(LogLevel.INFO, Resources.STR_LOG_SHUTDOWN_CONNECTION);
         try {
+            for (Iterator<?> it = statements.keySet().iterator(); it.hasNext();) {
+                JavaSQLStatementBase statement = (JavaSQLStatementBase) it.next();
+                it.remove();
+                CompHelper.disposeComponent(statement);
+            }
             if (connection != null) {
                 connection.close();
             }
@@ -187,7 +195,12 @@ public class JavaSQLConnection extends ComponentBase
     public synchronized String getCatalog() throws SQLException {
         checkDisposed();
         try {
-            return connection.getCatalog();
+            String catalog = connection.getCatalog();
+            if (catalog != null) {
+                return catalog;
+            } else {
+                return "";
+            }
         } catch (java.sql.SQLException sqlException) {
             throw Tools.toUnoException(this, sqlException);
         }
@@ -243,6 +256,10 @@ public class JavaSQLConnection extends ComponentBase
         checkDisposed();
         try {
             String ret = connection.nativeSQL(sql);
+            if (ret == null) {
+                // UNO hates null strings
+                ret = "";
+            }
             logger.log(LogLevel.FINER, Resources.STR_LOG_NATIVE_SQL, sql, ret);
             return ret;
         } catch (java.sql.SQLException sqlException) {
