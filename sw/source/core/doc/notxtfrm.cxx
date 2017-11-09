@@ -578,6 +578,25 @@ basegfx::B2DHomMatrix SwNoTextFrame::getFramePrintAreaTransformation() const
     return SwContentFrame::getFramePrintAreaTransformation();
 }
 
+// RotateFlyFrame3 - Support for Transformations
+void SwNoTextFrame::transform_translate(const Point& rOffset)
+{
+    // call parent - this will do the basic transform for SwRect(s)
+    // in the SwFrameAreaDefinition
+    SwContentFrame::transform_translate(rOffset);
+
+    // check if the Transformations need to be adapted
+    if(isTransformationUsed())
+    {
+        const basegfx::B2DHomMatrix aTransform(
+            basegfx::utils::createTranslateB2DHomMatrix(
+                rOffset.X(), rOffset.Y()));
+
+        // transform using TransformableSwFrame
+        doTransform(aTransform);
+    }
+}
+
 // RotateFlyFrame3 - inner frame
 // Check if we contain a SwGrfNode and get possible rotation from it
 double SwNoTextFrame::getFrameRotation() const
