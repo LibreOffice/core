@@ -504,7 +504,10 @@ void DrawController::BroadcastContextChange() const
             break;
 
         case ViewShell::ST_NOTES:
-            eContext = EnumContext::Context::NotesPage;
+            if (mbMasterPageMode)
+                eContext = EnumContext::Context::MasterNotesPage;
+            else
+                eContext = EnumContext::Context::NotesPage;
             break;
 
         case ViewShell::ST_HANDOUT:

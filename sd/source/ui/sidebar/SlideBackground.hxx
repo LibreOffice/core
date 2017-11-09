@@ -128,6 +128,8 @@ private:
     vcl::EnumContext maImpressOtherContext;
     vcl::EnumContext maImpressMasterContext;
     vcl::EnumContext maImpressHandoutContext;
+    vcl::EnumContext maImpressNotesPageContext;
+    vcl::EnumContext maImpressMasterNotesPageContext;
     bool         mbTitle;
     std::unique_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem;
     std::unique_ptr<SvxLongULSpaceItem> mpPageULMarginItem;

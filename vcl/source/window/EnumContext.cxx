@@ -178,6 +178,7 @@ void EnumContext::ProvideContextContainers()
         AddEntry("Graphic", Context::Graphic);
         AddEntry("Grid", Context::Grid);
         AddEntry("HandoutPage", Context::HandoutPage);
+        AddEntry("MasterNotesPage", Context::MasterNotesPage);
         AddEntry("MasterPage", Context::MasterPage);
         AddEntry("Media", Context::Media);
         AddEntry("MultiObject", Context::MultiObject);

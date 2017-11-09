@@ -117,6 +117,9 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
                 case ViewType::Notes:
                     eContext = EnumContext::Context::NotesPage;
                     break;
+                case ViewType::MasterNotes:
+                    eContext = EnumContext::Context::MasterNotesPage;
+                    break;
             }
             break;
 

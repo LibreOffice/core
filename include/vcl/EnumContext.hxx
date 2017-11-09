@@ -81,6 +81,7 @@ public:
         Graphic,
         Grid,
         HandoutPage,
+        MasterNotesPage,
         MasterPage,
         Media,
         MultiObject,

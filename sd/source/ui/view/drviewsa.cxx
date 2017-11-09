@@ -760,7 +760,10 @@ void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
             eViewType = svx::sidebar::SelectionAnalyzer::ViewType::Handout;
             break;
         case PageKind::Notes:
-            eViewType = svx::sidebar::SelectionAnalyzer::ViewType::Notes;
+            if (meEditMode == EditMode::MasterPage)
+                eViewType = svx::sidebar::SelectionAnalyzer::ViewType::MasterNotes;
+            else
+                eViewType = svx::sidebar::SelectionAnalyzer::ViewType::Notes;
             break;
         case PageKind::Standard:
             if (meEditMode == EditMode::MasterPage)

@@ -748,6 +748,7 @@
             DrawImpress, NotesPage,       visible, .uno:PageSetup  ;
             DrawImpress, SlidesorterPage, visible, .uno:PageSetup  ;
             DrawImpress, MasterPage,      visible, .uno:PageSetup  ;
+            DrawImpress, MasterNotesPage, visible, .uno:PageSetup  ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
