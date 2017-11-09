@@ -285,6 +285,7 @@ public:
     void testTdf99689TableOfContents();
     void testTdf99689TableOfFigures();
     void testTdf99689TableOfTables();
+    void testTdf113481();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -452,6 +453,7 @@ public:
     CPPUNIT_TEST(testTdf99689TableOfContents);
     CPPUNIT_TEST(testTdf99689TableOfFigures);
     CPPUNIT_TEST(testTdf99689TableOfTables);
+    CPPUNIT_TEST(testTdf113481);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5550,6 +5552,19 @@ void SwUiWriterTest::testParagraphOfTextRange()
     // This failed as there were no TextParagraph property.
     auto xParagraph = getProperty< uno::Reference<text::XTextRange> >(xViewCursor->getStart(), "TextParagraph");
     CPPUNIT_ASSERT_EQUAL(OUString("In section"), xParagraph->getString());
+}
+
+void SwUiWriterTest::testTdf113481()
+{
+    SwDoc* pDoc = createDoc("tdf113481-IVS.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Down(false);
+    pWrtShell->EndPara();
+    // Each backspace should remove a complete ideograph varation sequence
+    pWrtShell->DelLeft();
+    pWrtShell->DelLeft();
+    const uno::Reference< text::XTextRange > xPara = getParagraph(2);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xPara->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
