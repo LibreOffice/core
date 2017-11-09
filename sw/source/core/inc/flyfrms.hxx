@@ -30,7 +30,7 @@ double getFrameRotation_from_SwNoTextFrame(const SwNoTextFrame& rNoTextFrame);
 
 // Base class for those Flys that can "move freely" or better that are not
 // bound in Content.
-class SwFlyFreeFrame : public SwFlyFrame, public TransformableSwFrame
+class SwFlyFreeFrame : public SwFlyFrame
 {
 private:
     // #i34753# - flag for at-page anchored Writer fly frames
@@ -42,6 +42,9 @@ private:
     bool mbNoMoveOnCheckClip;
 
     SwRect maUnclippedFrame;
+
+    // RotateFlyFrame3 add TransformableSwFrame
+    std::unique_ptr< TransformableSwFrame >     mpTransformableSwFrame;
 
     void CheckClip( const SwFormatFrameSize &rSz );  //'Emergency' Clipping.
 
@@ -124,6 +127,11 @@ public:
         and its anchor frame isn't inside another Writer fly frame.
     */
     virtual bool IsFormatPossible() const override;
+
+    // RotateFlyFrame3 - Support for Transformations
+    bool isTransformableSwFrame() const { return bool(mpTransformableSwFrame); }
+    TransformableSwFrame* getTransformableSwFrame() { return mpTransformableSwFrame.get(); }
+    const TransformableSwFrame* getTransformableSwFrame() const { return mpTransformableSwFrame.get(); }
 
     // RotateFlyFrame3 - Support for Transformations
     virtual basegfx::B2DHomMatrix getFrameAreaTransformation() const override;
