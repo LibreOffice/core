@@ -311,8 +311,10 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             {
                 // In this case the host contains the real path, and the path is the embedded stream name.
                 INetURLObject aURL(sFileName);
-                sFileName = aURL.GetHost(INetURLObject::DecodeMechanism::WithCharset);
-                sStreamRelPath = aURL.GetURLPath(INetURLObject::DecodeMechanism::WithCharset);
+                sFileName = INetURLObject::encode(aURL.GetHost(INetURLObject::DecodeMechanism::WithCharset),
+                    INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All);
+                sStreamRelPath = INetURLObject::encode(aURL.GetURLPath(INetURLObject::DecodeMechanism::WithCharset),
+                    INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All);
                 if (sStreamRelPath.startsWith("/"))
                     sStreamRelPath = sStreamRelPath.copy(1);
             }
