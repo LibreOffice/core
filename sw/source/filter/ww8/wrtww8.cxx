@@ -1514,6 +1514,12 @@ void WW8Export::AppendBookmark( const OUString& rName )
     m_pBkmks->Append( nSttCP, rName );
 }
 
+void WW8Export::AppendBookmarkEndWithCorrection( const OUString& rName )
+{
+    sal_uLong nEndCP = Fc2Cp( Strm().Tell() );
+    m_pBkmks->Append( nEndCP - 1, rName );
+}
+
 boost::optional<SvxBrushItem> MSWordExportBase::getBackground()
 {
     boost::optional<SvxBrushItem> oRet;
