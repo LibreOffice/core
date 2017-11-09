@@ -22,7 +22,7 @@
 
 #include "xlpivot.hxx"
 #include "xiroot.hxx"
-#include <list>
+#include <vector>
 #include <memory>
 
 class ScDPSaveData;
@@ -279,14 +279,13 @@ private:
     void                ConvertDataFieldInfo( ScDPSaveDimension& rSaveDim, const XclPTDataFieldInfo& rDataInfo ) const;
 
 private:
-    typedef ::std::list< XclPTDataFieldInfo >   XclPTDataFieldInfoList;
     typedef ::std::vector< XclImpPTItemRef >    XclImpPTItemVec;
 
     const XclImpPivotTable& mrPTable;       /// Parent pivot table containing this field.
     XclPTFieldInfo      maFieldInfo;        /// General field info (SXVD record).
     XclPTFieldExtInfo   maFieldExtInfo;     /// Extended field info (SXVDEX record).
     XclPTPageFieldInfo  maPageInfo;         /// Page field info (entry from SXPI record).
-    XclPTDataFieldInfoList maDataInfoList;  /// List of extended data field info (SXDI records).
+    std::vector< XclPTDataFieldInfo > maDataInfoVector;  /// Vector of extended data field info (SXDI records).
     XclImpPTItemVec     maItems;            /// List of all items of this field.
 };
 
