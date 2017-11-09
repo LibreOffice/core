@@ -368,11 +368,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
         if (bEmbeddedDataSource)
         {
             // In this case the host contains the real path, and the path is the embedded stream name.
-            OUString sBaseURI =
-                INetURLObject::encode(aURL.GetHost(INetURLObject::DecodeMechanism::WithCharset),
-                                      INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All)
-                + INetURLObject::encode(aURL.GetURLPath(INetURLObject::DecodeMechanism::WithCharset),
-                                      INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All);
+            OUString sBaseURI = aURL.GetHost(INetURLObject::DecodeMechanism::WithCharset) + aURL.GetURLPath(INetURLObject::DecodeMechanism::WithCharset);
             aArgs.put("BaseURI", sBaseURI);
         }
 

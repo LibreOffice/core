@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
 #include <cstdarg>
 
 #include <unotxdoc.hxx>
@@ -26,6 +29,8 @@
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <com/sun/star/uri/VndSunStarPkgUrlReferenceFactory.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/TextConnectionSettings.hpp>
@@ -2858,9 +2863,17 @@ void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const
 
     // Encode the stream name and the real path into a single URL.
     const INetURLObject& rURLObject = rDocShell.GetMedium()->GetURLObject();
-    OUString aURL = "vnd.sun.star.pkg://";
-    aURL += INetURLObject::encode(rURLObject.GetMainURL(INetURLObject::DecodeMechanism::WithCharset), INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All);
-    aURL += "/" + INetURLObject::encode(m_sEmbeddedName, INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All);
+    auto xContext(comphelper::getProcessComponentContext());
+    auto xUri = css::uri::UriReferenceFactory::create(xContext)
+        ->parse(rURLObject.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+    assert(xUri.is());
+    xUri = css::uri::VndSunStarPkgUrlReferenceFactory::create(xContext)
+        ->createVndSunStarPkgUrlReference(xUri);
+    assert(xUri.is());
+    OUString const aURL = xUri->getUriReference() + "/"
+        + INetURLObject::encode(
+            m_sEmbeddedName, INetURLObject::PART_FPATH,
+            INetURLObject::EncodeMechanism::All);
 
     uno::Reference<uno::XInterface> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
     xDatabaseContext->registerObject( sDataSource, xDataSource );
