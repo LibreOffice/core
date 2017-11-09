@@ -519,11 +519,9 @@ Val const * RegexpMap< Val >::map(rtl::OUString const & rString) const
     {
         std::vector< Entry<Val> > const & rTheList = m_aImpl.m_aList[n];
 
-        typename std::vector< Entry<Val> >::const_iterator aEnd(rTheList.end());
-        for (typename std::vector< Entry<Val> >::const_iterator aIt(rTheList.begin()); aIt != aEnd;
-             ++aIt)
-            if (aIt->m_aRegexp.matches(rString))
-                return &aIt->m_aValue;
+        for (auto const & rItem : rTheList)
+            if (rItem.m_aRegexp.matches(rString))
+                return &rItem.m_aValue;
     }
     if (m_aImpl.m_pDefault
         && m_aImpl.m_pDefault->m_aRegexp.matches(rString))
