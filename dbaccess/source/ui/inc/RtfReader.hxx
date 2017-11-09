@@ -54,9 +54,6 @@ namespace dbaui
                     bool _bAutoIncrementEnabled);
 
         virtual SvParserState   CallParser() override;// base class
-        /// @note Only recovers correct data if 2. CTOR has been used.
-        ///       Otherwise, the SbaColumnList will be returned without changes
-        virtual void            release() override;
     };
 
     typedef tools::SvRef<ORTFReader> ORTFReaderRef;

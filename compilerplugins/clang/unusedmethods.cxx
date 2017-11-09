@@ -221,10 +221,6 @@ bool UnusedMethods::VisitCallExpr(CallExpr* expr)
             if (calleeFunctionDecl)
                 goto gotfunc;
         }
-        /*
-        expr->dump();
-        throw "Can't touch this";
-        */
         return true;
     }
 

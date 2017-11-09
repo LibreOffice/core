@@ -300,8 +300,6 @@ public:
     void                 SetName( const OUString& rStr ) { aLabel = rStr; bStrEdited = true; }
     bool                 HasChangedName() const { return bStrEdited; }
 
-    const OUString&      GetHelpText();
-
     bool    IsPopup() const { return bPopUp; }
 
     void    SetUserDefined( bool bOn = true ) { bIsUserDefined = bOn; }
@@ -322,9 +320,7 @@ public:
     void    SetModified( bool bValue = true ) { bIsModified = bValue; }
     bool    IsModified() { return bIsModified; }
 
-    bool    IsMovable();
     bool    IsDeletable();
-    bool    IsRenamable();
 
     void    SetVisible( bool b ) { bIsVisible = b; }
     bool    IsVisible() const { return bIsVisible; }
@@ -334,8 +330,6 @@ public:
 
     const css::uno::Reference< css::graphic::XGraphic >& GetBackupGraphic()
                 { return xBackupGraphic; }
-
-    bool    IsIconModified() { return xBackupGraphic.is(); }
 
     sal_Int32   GetStyle() { return nStyle; }
     void        SetStyle( sal_Int32 style ) { nStyle = style; }
@@ -566,10 +560,6 @@ public:
     sal_Int32       GetSystemStyle( const OUString& rResourceURL );
 
     void            SetSystemStyle( const OUString& rResourceURL, sal_Int32 nStyle );
-
-    void            SetSystemStyle(
-        const css::uno::Reference< css::frame::XFrame >& xFrame,
-        const OUString& rResourceURL, sal_Int32 nStyle );
 
     SvxEntries*     GetEntries() override;
     void            SetEntries( SvxEntries* ) override;

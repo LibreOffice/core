@@ -103,7 +103,6 @@ public:
     static rtl::Reference<SvXMLEmbeddedObjectHelper>   Create(
                                     ::comphelper::IEmbeddedHelper& rDocPersist,
                                     SvXMLEmbeddedObjectHelperMode eCreateMode );
-    static void                 Destroy( SvXMLEmbeddedObjectHelper* pSvXMLEmbeddedObjectHelper );
 
     // XEmbeddedObjectResolver
     virtual OUString SAL_CALL resolveEmbeddedObjectURL( const OUString& aURL ) override;

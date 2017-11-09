@@ -2092,20 +2092,6 @@ SvxConfigEntry* SvxMainMenuOrganizerDialog::GetSelectedEntry()
     return static_cast<SvxConfigEntry*>(m_pMenuListBox->FirstSelected()->GetUserData());
 }
 
-const OUString&
-SvxConfigEntry::GetHelpText()
-{
-    if ( aHelpText.isEmpty() )
-    {
-        if ( !aCommand.isEmpty() )
-        {
-            aHelpText = Application::GetHelp()->GetHelpText( aCommand, nullptr );
-        }
-    }
-
-    return aHelpText;
-}
-
 SvxConfigEntry::SvxConfigEntry( const OUString& rDisplayName,
                                 const OUString& rCommandURL, bool bPopup, bool bParentData )
     : nId( 1 )
@@ -2141,17 +2127,7 @@ SvxConfigEntry::~SvxConfigEntry()
     }
 }
 
-bool SvxConfigEntry::IsMovable()
-{
-    return !IsPopup() || IsMain();
-}
-
 bool SvxConfigEntry::IsDeletable()
-{
-    return !IsMain() || IsUserDefined();
-}
-
-bool SvxConfigEntry::IsRenamable()
 {
     return !IsMain() || IsUserDefined();
 }
@@ -2177,60 +2153,6 @@ ToolbarSaveInData::ToolbarSaveInData(
 
 ToolbarSaveInData::~ToolbarSaveInData()
 {
-}
-
-void ToolbarSaveInData::SetSystemStyle(
-    const uno::Reference< frame::XFrame >& xFrame,
-    const OUString& rResourceURL,
-    sal_Int32 nStyle )
-{
-    // change the style using the API
-    SetSystemStyle( rResourceURL, nStyle );
-
-    // this code is a temporary hack as the UI is not updating after
-    // changing the toolbar style via the API
-    uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-    vcl::Window *window = nullptr;
-
-    uno::Reference< beans::XPropertySet > xPropSet( xFrame, uno::UNO_QUERY );
-    if ( xPropSet.is() )
-    {
-        uno::Any a = xPropSet->getPropertyValue( "LayoutManager" );
-        a >>= xLayoutManager;
-    }
-
-    if ( xLayoutManager.is() )
-    {
-        uno::Reference< css::ui::XUIElement > xUIElement =
-            xLayoutManager->getElement( rResourceURL );
-
-        // check reference before we call getRealInterface. The layout manager
-        // can only provide references for elements that have been created
-        // before. It's possible that the current element is not available.
-        uno::Reference< css::awt::XWindow > xWindow;
-        if ( xUIElement.is() )
-            xWindow.set( xUIElement->getRealInterface(), uno::UNO_QUERY );
-
-        window = VCLUnoHelper::GetWindow( xWindow ).get();
-    }
-
-    if ( window != nullptr && window->GetType() == WindowType::TOOLBOX )
-    {
-        ToolBox* toolbox = static_cast<ToolBox*>(window);
-
-        if ( nStyle == 0 )
-        {
-            toolbox->SetButtonType();
-        }
-        else if ( nStyle == 1 )
-        {
-            toolbox->SetButtonType( ButtonType::TEXT );
-        }
-        if ( nStyle == 2 )
-        {
-            toolbox->SetButtonType( ButtonType::SYMBOLTEXT );
-        }
-    }
 }
 
 void ToolbarSaveInData::SetSystemStyle(

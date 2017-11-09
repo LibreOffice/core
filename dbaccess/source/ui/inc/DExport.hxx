@@ -156,8 +156,6 @@ namespace dbaui
 
         void SetTableName(const OUString &_sTableName){ m_sDefaultTableName = _sTableName ; }
 
-        virtual void release() = 0;
-
         void enableCheckOnly() { m_bCheckOnly = true; }
         bool isCheckEnabled() const { return m_bCheckOnly; }
 

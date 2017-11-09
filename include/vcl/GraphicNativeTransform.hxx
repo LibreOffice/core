@@ -34,7 +34,6 @@ public:
     GraphicNativeTransform(Graphic& rGraphic);
     ~GraphicNativeTransform();
 
-    bool canBeRotated();
     bool rotate(sal_uInt16 aRotation);
 };
 

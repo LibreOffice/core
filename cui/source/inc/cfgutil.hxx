@@ -173,8 +173,6 @@ public:
                              bool bEventMode);
     void                SetFunctionListBox( SfxConfigFunctionListBox *pBox )
                         { pFunctionListBox = pBox; }
-    void                SetImageProvider( SaveInData* provider )
-                        { m_pImageProvider = provider; }
     void                GroupSelected();
     void                SelectMacro( const SfxMacroInfoItem* );
     void                SelectMacro( const OUString&, const OUString& );

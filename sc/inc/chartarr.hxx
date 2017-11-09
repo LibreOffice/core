@@ -66,10 +66,6 @@ private:
     ScMemChart* CreateMemChartSingle();
     ScMemChart* CreateMemChartMulti();
 public:
-    ScChartArray( ScDocument* pDoc, SCTAB nTab,
-                  SCCOL nStartColP, SCROW nStartRowP,
-                  SCCOL nEndColP, SCROW nEndRowP,
-                  const OUString& rChartName );
     ScChartArray( ScDocument* pDoc, const ScRangeListRef& rRangeList,
                   const OUString& rChartName );
     ScChartArray( const ScChartArray& rArr );
@@ -95,7 +91,6 @@ public:
     ScChartCollection();
     ScChartCollection(const ScChartCollection& rColl);
 
-    SC_DLLPUBLIC void push_back(ScChartArray* p);
     void clear();
     size_t size() const;
     bool empty() const;
