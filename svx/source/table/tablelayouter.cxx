@@ -739,7 +739,7 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
             if( maRows[nRow].mnSize < nMinHeight )
                 maRows[nRow].mnSize = nMinHeight;
 
-            nCurrentHeight += maRows[nRow].mnSize;
+            nCurrentHeight = o3tl::saturating_add(nCurrentHeight, maRows[nRow].mnSize);
         }
     }
 
