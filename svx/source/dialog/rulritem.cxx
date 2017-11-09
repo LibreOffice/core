@@ -568,14 +568,6 @@ bool SvxColumnItem::IsLastAct() const
     return nActColumn == Count() - 1;
 }
 
-SvxColumnDescription::SvxColumnDescription() :
-    nStart   (0),
-    nEnd     (0),
-    bVisible (true),
-    nEndMin  (0),
-    nEndMax  (0)
-{}
-
 SvxColumnDescription::SvxColumnDescription(long start, long end, bool bVis) :
     nStart   (start),
     nEnd     (end),

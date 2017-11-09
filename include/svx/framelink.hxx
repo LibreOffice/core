@@ -174,7 +174,6 @@ public:
     double Dist() const { if(!maImplStyle) return 0.0; return maImplStyle->mfDist; }
     double Secn() const { if(!maImplStyle) return 0.0; return maImplStyle->mfSecn; }
     double PatternScale() const { if(!maImplStyle) return 1.0; return maImplStyle->mfPatternScale;}
-    void SetPatternScale( double fScale );
     SvxBorderLineStyle Type() const { if(!maImplStyle) return SvxBorderLineStyle::SOLID; return maImplStyle->mnType; }
 
     /// Check if this style is used - this depends on it having any width definition.
@@ -273,7 +272,6 @@ public:
     void sort();
 
     bool empty() const { return maEntries.empty(); }
-    size_t size() const { return maEntries.size(); }
     const std::vector< StyleVectorCombination >& getEntries() const{ return maEntries; }
 };
 

@@ -34,8 +34,6 @@ class EDITENG_DLLPUBLIC SvxTextLineItem : public SfxEnumItem<FontLineStyle>
 {
     Color mColor;
 public:
-    static SfxPoolItem* CreateDefault();
-
     SvxTextLineItem( const FontLineStyle eSt,
                      const sal_uInt16 nId );
 

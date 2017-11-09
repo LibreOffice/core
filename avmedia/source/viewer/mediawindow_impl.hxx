@@ -61,7 +61,6 @@ class MediaChildWindow : public SystemChildWindow
 public:
 
     explicit MediaChildWindow( vcl::Window* pParent );
-    MediaChildWindow( vcl::Window* pParent, SystemWindowData* pData );
 
 protected:
 

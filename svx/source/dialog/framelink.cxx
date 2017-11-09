@@ -86,21 +86,6 @@ Style::Style( const editeng::SvxBorderLine* pBorder, double fScale ) :
     }
 }
 
-void Style::SetPatternScale( double fScale )
-{
-    if(!maImplStyle)
-    {
-        if(rtl::math::approxEqual(1.0, fScale))
-        {
-            return;
-        }
-
-        implEnsureImplStyle();
-    }
-
-    maImplStyle->mfPatternScale = fScale;
-}
-
 void Style::Clear()
 {
     if(maImplStyle)

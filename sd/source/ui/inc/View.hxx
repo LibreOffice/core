@@ -148,8 +148,6 @@ public:
     void                    InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
                                             const Point& rPos, const Size& rSize,
                                             bool const bLink );
-    void                    Insert3DModelURL( const OUString& rModelURL, sal_Int8& rAction,
-                                              const Point& rPos, const Size& rSize );
     SdrMediaObj*            InsertMediaObj( const OUString& rURL, const OUString& rMimeType, sal_Int8& rAction,
                                             const Point& rPos, const Size& rSize );
 

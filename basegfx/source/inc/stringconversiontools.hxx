@@ -31,10 +31,6 @@ namespace basegfx
                         const OUString& rStr,
                         const sal_Int32 nLen);
 
-        void skipSpacesAndCommas(sal_Int32&      io_rPos,
-                                 const OUString& rStr,
-                                 const sal_Int32 nLen);
-
         inline bool isOnNumberChar(const sal_Unicode aChar,
                                    bool              bSignAllowed)
         {
@@ -51,10 +47,6 @@ namespace basegfx
         {
             return isOnNumberChar(rStr[nPos], true/*bSignAllowed*/);
         }
-
-        bool getDoubleChar(double&          o_fRetval,
-                           sal_Int32&       io_rPos,
-                           const OUString&  rStr);
 
         bool importDoubleAndSpaces(double&          o_fRetval,
                                    sal_Int32&       io_rPos,

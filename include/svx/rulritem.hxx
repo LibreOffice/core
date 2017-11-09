@@ -126,8 +126,6 @@ struct SVX_DLLPUBLIC SvxColumnDescription
     long nEndMin; //min. possible position of end
     long nEndMax; //max. possible position of end
 
-    SvxColumnDescription();
-
     SvxColumnDescription(long start, long end, bool bVis);
 
     SvxColumnDescription(long start, long end,
