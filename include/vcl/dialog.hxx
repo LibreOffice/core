@@ -173,6 +173,7 @@ public:
     bool            IsModalInputMode() const { return mbModalMode; }
 
     void            GrabFocusToFirstControl();
+    virtual void    Resize() override;
 };
 
 class VCL_DLLPUBLIC ModelessDialog : public Dialog
