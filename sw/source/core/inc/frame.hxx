@@ -220,54 +220,25 @@ public:
 class SW_DLLPUBLIC TransformableSwFrame
 {
 private:
+    // The SwFrameAreaDefinition to work on
+    SwFrameAreaDefinition&  mrSwFrameAreaDefinition;
+
     // FrameAreaTransformation and FramePrintAreaTransformation
     // here when more than translate/scale is used (e.g. rotation)
     basegfx::B2DHomMatrix   maFrameAreaTransformation;
     basegfx::B2DHomMatrix   maFramePrintAreaTransformation;
 
-    // helper method to create FrameAreaTransformations based on the
-    // curent FrameAreaDefinition
-    void createFrameAreaTransformations(
-        const SwFrameAreaDefinition& rSwFrameAreaDefinition,
-        double fRotation,
-        const basegfx::B2DPoint& rCenter);
-
-    // helper method to set FrameAreaDefinitions based on given
-    // transformations
-    void setFrameAreaDefinitionsToBoundRangesOfTransformations(
-        SwFrameAreaDefinition& rSwFrameAreaDefinition);
-
-protected:
-    // Full update of Transformations and BoundAreas:
-    // - Re-create Transformations based on SwRect(s) from the
-    //   given SwFrameAreaDefinition.
-    // - Based on that, create BoundRanges for the Transformations
-    //   and use as new SwRect(s) for the given SwFrameAreaDefinition.
-    void updateTransformationsAndFrameAreaDefinitions(
-        SwFrameAreaDefinition& rSwFrameAreaDefinition,
-        double fRotation,
-        const basegfx::B2DPoint& rCenter);
-
-    void setLocalFrameAreaTransformation(const basegfx::B2DHomMatrix& rNew)
-    {
-        maFrameAreaTransformation = rNew;
-    }
-
-    void setLocalFramePrintAreaTransformation(const basegfx::B2DHomMatrix& rNew)
-    {
-        maFramePrintAreaTransformation = rNew;
-    }
-
-    void resetLocalAreaTransformations()
-    {
-        maFrameAreaTransformation.identity();
-        maFramePrintAreaTransformation.identity();
-    }
+    // last saved versions of SwRect(s) from SwFrameAreaDefinition
+    SwRect                  maSavedFrameArea;
+    SwRect                  maSavedFramePrintArea;
 
 public:
-    TransformableSwFrame()
-    :   maFrameAreaTransformation(),
-        maFramePrintAreaTransformation()
+    TransformableSwFrame(SwFrameAreaDefinition& rSwFrameAreaDefinition)
+    :   mrSwFrameAreaDefinition(rSwFrameAreaDefinition),
+        maFrameAreaTransformation(),
+        maFramePrintAreaTransformation(),
+        maSavedFrameArea(),
+        maSavedFramePrintArea()
     {
     }
 
@@ -282,27 +253,23 @@ public:
         return maFramePrintAreaTransformation;
     }
 
-    // This method allows to reset the SwRect(s) in the
-    // given SwFrameAreaDefinition which are already apapted to
-    // Transformation and thus have a changed BoundArea back to
-    // the untransformed state. Only the SwRect(s) are changed
-    // back, not the transformations. As expected from using
-    // Transformations, these contain all the necessary
-    // information
-    void resetAreaDefinitionsToUntransformed(
-        SwFrameAreaDefinition& rSwFrameAreaDefinition);
+    // Helper method to re-create FrameAreaTransformations based on the
+    // curent FrameAreaDefinition, given rotation and Center
+    void createFrameAreaTransformations(
+        double fRotation,
+        const basegfx::B2DPoint& rCenter);
+
+    // Tooling method to reset the SwRect(s) in the current
+    // SwFrameAreaDefinition which are already apapted to
+    // Transformation back to the untransformed state that was
+    // last saved (see resetAreaDefinitionsToTransformed).
+    // Only the SwRect(s) are changed back, not the transformations.
+    void resetAreaDefinitionsToUntransformed();
 
     // Re-Creates the SwRect(s) as BoundAreas based on the current
-    // Transformations, useful to set back the SwRect(s) to Transformed
-    // state when itz was necessary to reset them temporarily (see above)
-    void resetAreaDefinitionsToTransformed(
-        SwFrameAreaDefinition& rSwFrameAreaDefinition);
-
-    // check if used
-    bool isTransformationUsed() const
-    {
-        return !maFrameAreaTransformation.isIdentity() || !maFramePrintAreaTransformation.isIdentity();
-    }
+    // set Transformations, also saves the last SwRect(s) to the save
+    // values.
+    void resetAreaDefinitionsToTransformed();
 
     // transform by given B2DHomMatrix
     void doTransform(const basegfx::B2DHomMatrix aTransform);

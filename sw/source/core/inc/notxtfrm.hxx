@@ -26,7 +26,7 @@ class OutputDevice;
 class SwBorderAttrs;
 struct SwCursorMoveState;
 
-class SwNoTextFrame: public SwContentFrame, public TransformableSwFrame
+class SwNoTextFrame: public SwContentFrame
 {
 private:
     friend void FrameFinit();
@@ -37,6 +37,9 @@ private:
 
     virtual void DestroyImpl() override;
     virtual ~SwNoTextFrame() override;
+
+    // RotateFlyFrame3 add TransformableSwFrame
+    std::unique_ptr< TransformableSwFrame >     mpTransformableSwFrame;
 
     // RotateFlyFrame3 - Support for inner frame of a SwGrfNode.
     // Only for local data extraction. To uniquely access information
@@ -64,6 +67,11 @@ public:
 
     void StopAnimation( OutputDevice* = nullptr ) const;
     bool HasAnimation()  const;
+
+    // RotateFlyFrame3 - Support for Transformations
+    bool isTransformableSwFrame() const { return bool(mpTransformableSwFrame); }
+    TransformableSwFrame* getTransformableSwFrame() { return mpTransformableSwFrame.get(); }
+    const TransformableSwFrame* getTransformableSwFrame() const { return mpTransformableSwFrame.get(); }
 
     // RotateFlyFrame3 - Support for Transformations
     virtual basegfx::B2DHomMatrix getFrameAreaTransformation() const override;
