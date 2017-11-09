@@ -357,7 +357,7 @@ public:
                                              const OUString& rOldText ) = 0;
     virtual VclPtr<AbstractGalleryIdDialog> CreateGalleryIdDialog( vcl::Window* pParent,
                                             GalleryTheme* pThm ) = 0;
-    virtual VclPtr<VclAbstractDialog2> CreateGalleryThemePropertiesDialog(
+    virtual VclPtr<VclAbstractDialog2> CreateGalleryThemePropertiesDialog(vcl::Window* pParent,
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet ) = 0;
     virtual VclPtr<AbstractURLDlg> CreateURLDialog( vcl::Window* pParent,

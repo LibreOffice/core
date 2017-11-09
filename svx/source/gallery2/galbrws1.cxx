@@ -265,7 +265,7 @@ void GalleryBrowser1::ImplGalleryThemeProperties( const OUString & rThemeName, b
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     assert(pFact && "Got no AbstractDialogFactory!");
-    mpThemePropertiesDialog = pFact->CreateGalleryThemePropertiesDialog( mpExchangeData, mpThemePropsDlgItemSet );
+    mpThemePropertiesDialog = pFact->CreateGalleryThemePropertiesDialog(this, mpExchangeData, mpThemePropsDlgItemSet);
     assert(mpThemePropertiesDialog && "Got no GalleryThemePropertiesDialog!");
 
     if ( bCreateNew )
