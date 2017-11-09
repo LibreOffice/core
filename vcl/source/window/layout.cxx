@@ -27,7 +27,7 @@ VclContainer::VclContainer(vcl::Window *pParent, WinBits nStyle)
     : Window(WindowType::CONTAINER)
     , m_bLayoutDirty(true)
 {
-    ImplInit(pParent, nStyle, nullptr);
+    ImplInitWindow(pParent, nStyle, nullptr);
     EnableChildTransparentMode();
     SetPaintTransparent(true);
     SetBackground();

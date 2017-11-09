@@ -243,8 +243,7 @@ private:
     css::uno::Reference< css::accessibility::XAccessible >
                           mxAccessible;
 
-    using Window::ImplInit;
-    SVT_DLLPRIVATE void             ImplInit( WinBits nWinStyle );
+    SVT_DLLPRIVATE void             ImplInitHeaderBar( WinBits nWinStyle );
     SVT_DLLPRIVATE void             ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SVT_DLLPRIVATE long             ImplGetItemPos( sal_uInt16 nPos ) const;
     SVT_DLLPRIVATE tools::Rectangle ImplGetItemRect( sal_uInt16 nPos ) const;

@@ -51,7 +51,7 @@ tools::Rectangle& FloatingWindow::ImplGetItemEdgeClipRect()
     return mpImplData->maItemEdgeClipRect;
 }
 
-void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void FloatingWindow::ImplInitFloatingWindow( vcl::Window* pParent, WinBits nStyle )
 {
     mpImplData = new ImplData;
 
@@ -71,7 +71,7 @@ void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
     {
         mpWindowImpl->mbOverlapWin = true;
         nStyle |= WB_DIALOGCONTROL;
-        SystemWindow::ImplInit(pParent, nStyle, nullptr);
+        ImplInitWindow(pParent, nStyle, nullptr);
     }
     else
     {
@@ -86,7 +86,7 @@ void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
             // nFloatWinStyle |= WB_CLOSEABLE;
             mpWindowImpl->mbFrame = true;
             mpWindowImpl->mbOverlapWin = true;
-            SystemWindow::ImplInit(pParent, nFloatWinStyle & ~WB_BORDER, nullptr);
+            ImplInitWindow(pParent, nFloatWinStyle & ~WB_BORDER, nullptr);
         }
         else
         {
@@ -104,7 +104,7 @@ void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
                 nStyle |= WB_CLOSEABLE; // make undecorated floaters closeable
             }
             pBorderWin  = VclPtr<ImplBorderWindow>::Create(pParent, nStyle, nBorderStyle);
-            SystemWindow::ImplInit(pBorderWin, nStyle & ~WB_BORDER, nullptr);
+            ImplInitWindow(pBorderWin, nStyle & ~WB_BORDER, nullptr);
             pBorderWin->mpWindowImpl->mpClientWindow = this;
             pBorderWin->GetBorder(mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder,
                                   mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder);
@@ -147,7 +147,7 @@ void FloatingWindow::ImplInitSettings()
 FloatingWindow::FloatingWindow(vcl::Window* pParent, WinBits nStyle) :
     SystemWindow(WindowType::FLOATINGWINDOW)
 {
-    ImplInit(pParent, nStyle);
+    ImplInitFloatingWindow(pParent, nStyle);
 }
 
 FloatingWindow::FloatingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
@@ -175,7 +175,7 @@ void FloatingWindow::doDeferredInit(WinBits nBits)
 {
     vcl::Window *pParent = mpDialogParent;
     mpDialogParent = nullptr;
-    ImplInit(pParent, nBits);
+    ImplInitFloatingWindow(pParent, nBits);
     mbIsDeferredInit = false;
 }
 

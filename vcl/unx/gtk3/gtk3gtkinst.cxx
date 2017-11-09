@@ -1033,7 +1033,7 @@ private:
 #endif
     }
 
-    virtual bool ImplInit() override
+    virtual bool ImplInitOpenGLContext() override
     {
 #if GTK_CHECK_VERSION(3,16,0)
         const SystemEnvData* pEnvData = m_pChildWindow->GetSystemData();

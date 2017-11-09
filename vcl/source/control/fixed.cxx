@@ -70,10 +70,10 @@ static Point ImplCalcPos( WinBits nStyle, const Point& rPos,
     return aPos;
 }
 
-void FixedText::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void FixedText::ImplInitFixedText( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
-    Control::ImplInit( pParent, nStyle, nullptr );
+    ImplInitWindow( pParent, nStyle, nullptr );
     ApplySettings(*this);
 }
 
@@ -100,7 +100,7 @@ FixedText::FixedText( vcl::Window* pParent, WinBits nStyle )
     , m_nMinWidthChars(-1)
     , m_pMnemonicWindow(nullptr)
 {
-    ImplInit( pParent, nStyle );
+    ImplInitFixedText( pParent, nStyle );
 }
 
 DrawTextFlags FixedText::ImplGetTextStyle( WinBits nWinStyle )
@@ -464,10 +464,10 @@ void SelectableFixedText::LoseFocus()
     Invalidate();
 }
 
-void FixedLine::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void FixedLine::ImplInitFixedLine( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
-    Control::ImplInit( pParent, nStyle, nullptr );
+    ImplInitWindow( pParent, nStyle, nullptr );
     ApplySettings(*this);
 }
 
@@ -559,7 +559,7 @@ void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext)
 FixedLine::FixedLine( vcl::Window* pParent, WinBits nStyle ) :
     Control( WindowType::FIXEDLINE )
 {
-    ImplInit( pParent, nStyle );
+    ImplInitFixedLine( pParent, nStyle );
     SetSizePixel( Size( 2, 2 ) );
 }
 
@@ -665,10 +665,10 @@ Size FixedLine::GetOptimalSize() const
     return CalcWindowSize( FixedText::CalcMinimumTextSize ( this ) );
 }
 
-void FixedBitmap::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void FixedBitmap::ImplInitFixedBitmap( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
-    Control::ImplInit( pParent, nStyle, nullptr );
+    ImplInitWindow( pParent, nStyle, nullptr );
     ApplySettings(*this);
 }
 
@@ -682,7 +682,7 @@ WinBits FixedBitmap::ImplInitStyle( WinBits nStyle )
 FixedBitmap::FixedBitmap( vcl::Window* pParent, WinBits nStyle ) :
     Control( WindowType::FIXEDBITMAP )
 {
-    ImplInit( pParent, nStyle );
+    ImplInitFixedBitmap( pParent, nStyle );
 }
 
 void FixedBitmap::ImplDraw( OutputDevice* pDev, const Point& rPos, const Size& rSize )
@@ -801,10 +801,10 @@ void FixedBitmap::SetBitmap( const Bitmap& rBitmap )
     queue_resize();
 }
 
-void FixedImage::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void FixedImage::ImplInitFixedImage( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
-    Control::ImplInit( pParent, nStyle, nullptr );
+    ImplInitWindow( pParent, nStyle, nullptr );
     ApplySettings(*this);
 }
 
@@ -818,7 +818,7 @@ WinBits FixedImage::ImplInitStyle( WinBits nStyle )
 FixedImage::FixedImage( vcl::Window* pParent, WinBits nStyle ) :
     Control( WindowType::FIXEDIMAGE )
 {
-    ImplInit( pParent, nStyle );
+    ImplInitFixedImage( pParent, nStyle );
 }
 
 void FixedImage::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,

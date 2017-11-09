@@ -270,12 +270,11 @@ protected:
 
     friend class ThumbnailViewAcc;
     friend class ThumbnailViewItemAcc;
-    using Window::ImplInit;
 
     void CalculateItemPositions (bool bScrollBarUsed = false);
     void MakeItemVisible( sal_uInt16 nId );
 
-    SFX2_DLLPRIVATE void         ImplInit();
+    SFX2_DLLPRIVATE void         ImplInitThumbnailView();
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 

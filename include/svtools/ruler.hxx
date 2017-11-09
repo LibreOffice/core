@@ -678,8 +678,7 @@ private:
     SVT_DLLPRIVATE void ImplDrawTabs(vcl::RenderContext& rRenderContext,
                                      long nMin, long nMax, long nVirTop, long nVirBottom);
 
-    using Window::ImplInit;
-    SVT_DLLPRIVATE void ImplInit( WinBits nWinBits );
+    SVT_DLLPRIVATE void ImplInitRuler( WinBits nWinBits );
     SVT_DLLPRIVATE void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SVT_DLLPRIVATE void ImplCalc();
     SVT_DLLPRIVATE void ImplFormat(vcl::RenderContext const & rRenderContext);

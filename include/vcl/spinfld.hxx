@@ -66,8 +66,7 @@ protected:
     tools::Rectangle       maLowerRect;
     tools::Rectangle       maDropDownRect; // not yet attached ...
 
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void   ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void   ImplInitSpinField( vcl::Window* pParent, WinBits nStyle );
 
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 

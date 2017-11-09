@@ -48,8 +48,7 @@ private:
                            MenuButton& operator=( const MenuButton & ) = delete;
 
 protected:
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void    ImplInitMenuButton( vcl::Window* pParent, WinBits nStyle );
 
 public:
     explicit        MenuButton( vcl::Window* pParent, WinBits nStyle = 0 );

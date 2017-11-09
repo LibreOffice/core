@@ -304,7 +304,7 @@ private:
     OUString        aFilterPath;
     FilterConfigCache*  pConfig;
 
-    void            ImplInit();
+    void            ImplInitGraphicFilter();
     ErrCode         ImplSetError( ErrCode nError, const SvStream* pStm = nullptr );
     ErrCode         ImpTestOrFindFormat( const OUString& rPath, SvStream& rStream, sal_uInt16& rFormat );
 

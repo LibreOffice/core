@@ -484,7 +484,7 @@ bool NumericFormatter::ImplNumericReformat( const OUString& rStr, sal_Int64& rVa
     }
 }
 
-void NumericFormatter::ImplInit()
+void NumericFormatter::ImplInitNumericFormatter()
 {
     mnFieldValue        = 0;
     mnLastValue         = 0;
@@ -507,7 +507,7 @@ void NumericFormatter::ImplInit()
 
 NumericFormatter::NumericFormatter()
 {
-    ImplInit();
+    ImplInitNumericFormatter();
 }
 
 NumericFormatter::~NumericFormatter()
@@ -1322,7 +1322,7 @@ bool MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rValue, 
     }
 }
 
-inline void MetricFormatter::ImplInit()
+inline void MetricFormatter::ImplInitMetricFormatter()
 {
     mnBaseValue = 0;
     meUnit = MetricField::GetDefaultUnit();
@@ -1330,7 +1330,7 @@ inline void MetricFormatter::ImplInit()
 
 MetricFormatter::MetricFormatter()
 {
-    ImplInit();
+    ImplInitMetricFormatter();
 }
 
 MetricFormatter::~MetricFormatter()

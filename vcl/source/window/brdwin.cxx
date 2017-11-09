@@ -1562,10 +1562,10 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
     }
 }
 
-void ImplBorderWindow::ImplInit( vcl::Window* pParent,
-                                 WinBits nStyle, BorderWindowStyle nTypeStyle,
-                                 SystemParentData* pSystemParentData
-                                 )
+void ImplBorderWindow::ImplInitBorderWindow( vcl::Window* pParent,
+                                             WinBits nStyle, BorderWindowStyle nTypeStyle,
+                                             SystemParentData* pSystemParentData
+                                             )
 {
     // remove all unwanted WindowBits
     WinBits nOrgStyle = nStyle;
@@ -1613,7 +1613,7 @@ void ImplBorderWindow::ImplInit( vcl::Window* pParent,
     else
         mbFloatWindow = false;
 
-    Window::ImplInit( pParent, nStyle, pSystemParentData );
+    ImplInitWindow( pParent, nStyle, pSystemParentData );
     SetBackground();
     SetTextFillColor();
 
@@ -1643,14 +1643,14 @@ ImplBorderWindow::ImplBorderWindow( vcl::Window* pParent,
                                     WinBits nStyle, BorderWindowStyle nTypeStyle
                                     ) : Window( WindowType::BORDERWINDOW )
 {
-    ImplInit( pParent, nStyle, nTypeStyle, pSystemParentData );
+    ImplInitBorderWindow( pParent, nStyle, nTypeStyle, pSystemParentData );
 }
 
 ImplBorderWindow::ImplBorderWindow( vcl::Window* pParent, WinBits nStyle ,
                                     BorderWindowStyle nTypeStyle ) :
     Window( WindowType::BORDERWINDOW )
 {
-    ImplInit( pParent, nStyle, nTypeStyle, nullptr );
+    ImplInitBorderWindow( pParent, nStyle, nTypeStyle, nullptr );
 }
 
 ImplBorderWindow::~ImplBorderWindow()

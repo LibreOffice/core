@@ -149,7 +149,7 @@ Reference< XInterface > openConfig(const char* sPackage)
     return xCfg;
 }
 
-void FilterConfigCache::ImplInit()
+void FilterConfigCache::ImplInitFilterConfigCache()
 {
     OUString const STYPE                ( "Type"                );
     OUString const SUINAME              ( "UIName"              );
@@ -298,7 +298,7 @@ FilterConfigCache::FilterConfigCache( bool bConfig ) :
     if (bUseConfig)
         bUseConfig = !utl::ConfigManager::IsFuzzing();
     if (bUseConfig)
-        ImplInit();
+        ImplInitFilterConfigCache();
     else
         ImplInitSmart();
 }

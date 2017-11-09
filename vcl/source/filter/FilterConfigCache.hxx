@@ -72,7 +72,7 @@ class FilterConfigCache
 
     static const char*  InternalFilterListForSvxLight[];
 
-    void             ImplInit();
+    void             ImplInitFilterConfigCache();
     void             ImplInitSmart();
 
 public:

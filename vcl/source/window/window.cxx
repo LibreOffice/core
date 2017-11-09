@@ -99,7 +99,7 @@ Window::Window( vcl::Window* pParent, WinBits nStyle ) :
     // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
     mbEnableRTL = AllSettings::GetLayoutRTL();
 
-    ImplInit( pParent, nStyle, nullptr );
+    ImplInitWindow( pParent, nStyle, nullptr );
 }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -941,7 +941,7 @@ static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
     return 100;
 }
 
-void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
+void Window::ImplInitWindow( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
     SAL_WARN_IF( !mpWindowImpl->mbFrame && !pParent && GetType() != WindowType::FIXEDIMAGE, "vcl.window",
         "Window::Window(): pParent == NULL" );

@@ -37,8 +37,7 @@ private:
     std::unique_ptr<Impl> m_pImpl;
 
 protected:
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void     ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void     ImplInitComboBox( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void     ImplCalcEditHeight();
     SAL_DLLPRIVATE long     getMaxWidthScrollBarAndDownButton() const;

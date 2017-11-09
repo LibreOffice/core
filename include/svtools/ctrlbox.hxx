@@ -232,8 +232,7 @@ private:
     SVT_DLLPRIVATE void         ImpGetLine( long nLine1, long nLine2, long nDistance,
                                     Color nColor1, Color nColor2, Color nColorDist,
                                     SvxBorderLineStyle nStyle, Bitmap& rBmp );
-    using Window::ImplInit;
-    SVT_DLLPRIVATE void         ImplInit();
+    SVT_DLLPRIVATE void         ImplInitLineListBox();
     void            UpdatePaintLineColor();       // returns sal_True if maPaintCol has changed
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
@@ -359,8 +358,7 @@ class SVT_DLLPUBLIC FontSizeBox : public MetricBox
                     bPtRelative:1,
                     bStdSize:1;
 
-    using Window::ImplInit;
-    SVT_DLLPRIVATE void         ImplInit();
+    SVT_DLLPRIVATE void         ImplInitFontSizeBox();
 
 protected:
     virtual OUString CreateFieldText( sal_Int64 nValue ) const override;

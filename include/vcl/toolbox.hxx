@@ -165,8 +165,6 @@ private:
     /** StatusListener. Notifies about rotated images etc */
     rtl::Reference<VclStatusListener<ToolBox>> mpStatusListener;
 
-public:
-    using Window::ImplInit;
 private:
     SAL_DLLPRIVATE void InvalidateItem(ImplToolItems::size_type nPosition);
     SAL_DLLPRIVATE void InvalidateSpin(bool bInvalidateUpper = true,
@@ -174,7 +172,7 @@ private:
     SAL_DLLPRIVATE void InvalidateMenuButton();
 
     SAL_DLLPRIVATE void            ImplInitToolBoxData();
-    SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void            ImplInitToolBox( vcl::Window* pParent, WinBits nStyle );
     using DockingWindow::ImplInitSettings;
     SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetItem( sal_uInt16 nId ) const;

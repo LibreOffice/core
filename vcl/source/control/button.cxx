@@ -636,10 +636,10 @@ namespace
     }
 }
 
-void PushButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void PushButton::ImplInitPushButton( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle(getPreviousSibling(pParent), nStyle);
-    Button::ImplInit( pParent, nStyle, nullptr );
+    ImplInitWindow( pParent, nStyle, nullptr );
 
     if ( nStyle & WB_NOLIGHTBORDER )
         ImplGetButtonState() |= DrawButtonFlags::NoLightBorder;
@@ -1186,7 +1186,7 @@ PushButton::PushButton( vcl::Window* pParent, WinBits nStyle ) :
     Button( WindowType::PUSHBUTTON )
 {
     ImplInitPushButtonData();
-    ImplInit( pParent, nStyle );
+    ImplInitPushButton( pParent, nStyle );
 }
 
 void PushButton::MouseButtonDown( const MouseEvent& rMEvt )
@@ -1679,10 +1679,10 @@ void PushButton::ShowFocus(const tools::Rectangle& rRect)
     Button::ShowFocus(rRect);
 }
 
-void OKButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void OKButton::ImplInitOKButton( vcl::Window* pParent, WinBits nStyle )
 {
     set_id("ok");
-    PushButton::ImplInit( pParent, nStyle );
+    ImplInitPushButton( pParent, nStyle );
 
     SetText( Button::GetStandardText( StandardButtonType::OK ) );
 }
@@ -1690,7 +1690,7 @@ void OKButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 OKButton::OKButton( vcl::Window* pParent, WinBits nStyle ) :
     PushButton( WindowType::OKBUTTON )
 {
-    ImplInit( pParent, nStyle );
+    ImplInitOKButton( pParent, nStyle );
 }
 
 void OKButton::Click()
@@ -1725,10 +1725,10 @@ void OKButton::Click()
     }
 }
 
-void CancelButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void CancelButton::ImplInitCancelButton( vcl::Window* pParent, WinBits nStyle )
 {
     set_id("cancel");
-    PushButton::ImplInit( pParent, nStyle );
+    ImplInitPushButton( pParent, nStyle );
 
     SetText( Button::GetStandardText( StandardButtonType::Cancel ) );
 }
@@ -1736,7 +1736,7 @@ void CancelButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 CancelButton::CancelButton( vcl::Window* pParent, WinBits nStyle ) :
     PushButton( WindowType::CANCELBUTTON )
 {
-    ImplInit( pParent, nStyle );
+    ImplInitCancelButton( pParent, nStyle );
 }
 
 void CancelButton::Click()
@@ -1777,10 +1777,10 @@ CloseButton::CloseButton( vcl::Window* pParent, WinBits nStyle )
     SetText( Button::GetStandardText( StandardButtonType::Close ) );
 }
 
-void HelpButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void HelpButton::ImplInitHelpButton( vcl::Window* pParent, WinBits nStyle )
 {
     set_id("help");
-    PushButton::ImplInit( pParent, nStyle | WB_NOPOINTERFOCUS );
+    ImplInitPushButton( pParent, nStyle | WB_NOPOINTERFOCUS );
 
     SetText( Button::GetStandardText( StandardButtonType::Help ) );
 }
@@ -1788,7 +1788,7 @@ void HelpButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 HelpButton::HelpButton( vcl::Window* pParent, WinBits nStyle ) :
     PushButton( WindowType::HELPBUTTON )
 {
-    ImplInit( pParent, nStyle );
+    ImplInitHelpButton( pParent, nStyle );
 }
 
 void HelpButton::Click()
@@ -1814,10 +1814,10 @@ void RadioButton::ImplInitRadioButtonData()
     mbStateChanged  = false;
 }
 
-void RadioButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void RadioButton::ImplInitRadioButton( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle(getPreviousSibling(pParent), nStyle);
-    Button::ImplInit( pParent, nStyle, nullptr );
+    ImplInitWindow( pParent, nStyle, nullptr );
 
     ImplInitSettings( true );
 }
@@ -2270,7 +2270,7 @@ RadioButton::RadioButton( vcl::Window* pParent, WinBits nStyle ) :
     Button( WindowType::RADIOBUTTON )
 {
     ImplInitRadioButtonData();
-    ImplInit( pParent, nStyle );
+    ImplInitRadioButton( pParent, nStyle );
 }
 
 RadioButton::~RadioButton()
@@ -2910,10 +2910,10 @@ void CheckBox::ImplInitCheckBoxData()
     mbTriState      = false;
 }
 
-void CheckBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void CheckBox::ImplInitCheckBox( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle(getPreviousSibling(pParent), nStyle);
-    Button::ImplInit( pParent, nStyle, nullptr );
+    ImplInitWindow( pParent, nStyle, nullptr );
 
     ImplInitSettings( true );
 }
@@ -3143,7 +3143,7 @@ CheckBox::CheckBox( vcl::Window* pParent, WinBits nStyle ) :
     Button( WindowType::CHECKBOX ), mbLegacyNoTextAlign( false )
 {
     ImplInitCheckBoxData();
-    ImplInit( pParent, nStyle );
+    ImplInitCheckBox( pParent, nStyle );
 }
 
 void CheckBox::MouseButtonDown( const MouseEvent& rMEvt )

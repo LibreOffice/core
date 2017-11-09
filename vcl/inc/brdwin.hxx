@@ -102,8 +102,7 @@ private:
     bool                    mbMenuBtn;
     bool                    mbDisplayActive;
 
-    using Window::ImplInit;
-    void                    ImplInit( vcl::Window* pParent,
+    void                    ImplInitBorderWindow( vcl::Window* pParent,
                                       WinBits nStyle, BorderWindowStyle nTypeStyle,
                                       SystemParentData* pParentData );
 

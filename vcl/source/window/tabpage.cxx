@@ -29,12 +29,12 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-void TabPage::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void TabPage::ImplInitTabPage( vcl::Window* pParent, WinBits nStyle )
 {
     if ( !(nStyle & WB_NODIALOGCONTROL) )
         nStyle |= WB_DIALOGCONTROL;
 
-    Window::ImplInit( pParent, nStyle, nullptr );
+    ImplInitWindow( pParent, nStyle, nullptr );
 
     ImplInitSettings();
 
@@ -71,14 +71,14 @@ TabPage::TabPage( vcl::Window* pParent, WinBits nStyle ) :
     Window( WindowType::TABPAGE )
     , IContext()
 {
-    ImplInit( pParent, nStyle );
+    ImplInitTabPage( pParent, nStyle );
 }
 
 TabPage::TabPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription)
     : Window(WindowType::TABPAGE)
     , IContext()
 {
-    ImplInit(pParent, 0);
+    ImplInitTabPage(pParent, 0);
     m_pUIBuilder.reset( new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID) );
     set_hexpand(true);
     set_vexpand(true);

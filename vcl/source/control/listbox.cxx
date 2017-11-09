@@ -51,7 +51,7 @@ ListBox::ListBox(WindowType nType)
 ListBox::ListBox( vcl::Window* pParent, WinBits nStyle ) : Control( WindowType::LISTBOX )
 {
     ImplInitListBoxData();
-    ImplInit( pParent, nStyle );
+    ImplInitListBox( pParent, nStyle );
 }
 
 ListBox::~ListBox()
@@ -84,13 +84,13 @@ void ListBox::ImplInitListBoxData()
     mbEdgeBlending  = false;
 }
 
-void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void ListBox::ImplInitListBox( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     if ( !(nStyle & WB_NOBORDER) && ( nStyle & WB_DROPDOWN ) )
         nStyle |= WB_BORDER;
 
-    Control::ImplInit( pParent, nStyle, nullptr );
+    ImplInitWindow( pParent, nStyle, nullptr );
 
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener> xDrop = new DNDEventDispatcher(this);
 
@@ -1456,7 +1456,7 @@ FactoryFunction ListBox::GetUITestFactory() const
 MultiListBox::MultiListBox( vcl::Window* pParent, WinBits nStyle ) :
     ListBox( WindowType::MULTILISTBOX )
 {
-    ImplInit( pParent, nStyle );
+    ImplInitListBox( pParent, nStyle );
     EnableMultiSelection( true );
 }
 

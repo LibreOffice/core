@@ -232,7 +232,7 @@ bool OpenGLContext::init( vcl::Window* pParent )
     //tdf#108069 we may be initted twice, so dispose earlier effort
     m_pChildWindow.disposeAndClear();
     initWindow();
-    return ImplInit();
+    return ImplInitOpenGLContext();
 }
 
 bool OpenGLContext::init(SystemChildWindow* pChildWindow)
@@ -248,10 +248,10 @@ bool OpenGLContext::init(SystemChildWindow* pChildWindow)
     mpWindow = pChildWindow->GetParent();
     m_pChildWindow = pChildWindow;
     initWindow();
-    return ImplInit();
+    return ImplInitOpenGLContext();
 }
 
-bool OpenGLContext::ImplInit()
+bool OpenGLContext::ImplInitOpenGLContext()
 {
     VCL_GL_INFO("OpenGLContext not implemented for this platform");
     return false;

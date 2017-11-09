@@ -24,7 +24,7 @@
 #define PROGRESSBAR_OFFSET          3
 #define PROGRESSBAR_WIN_OFFSET      2
 
-void ProgressBar::ImplInit()
+void ProgressBar::ImplInitProgressBar()
 {
     mnPercent = 0;
     mnPreviousPercent = 0;
@@ -53,7 +53,7 @@ ProgressBar::ProgressBar( vcl::Window* pParent, WinBits nWinStyle ) :
     Window( pParent, clearProgressBarBorder( pParent, nWinStyle ) )
 {
     SetOutputSizePixel( GetOptimalSize() );
-    ImplInit();
+    ImplInitProgressBar();
 }
 
 void ProgressBar::ImplInitSettings( bool bFont,

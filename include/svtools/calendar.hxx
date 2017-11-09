@@ -176,8 +176,7 @@ class SVT_DLLPUBLIC Calendar final : public Control
     sal_uInt16             mnDragScrollHitTest;
 
     using Control::ImplInitSettings;
-    using Window::ImplInit;
-    SVT_DLLPRIVATE void         ImplInit( WinBits nWinStyle );
+    SVT_DLLPRIVATE void         ImplInitCalendar( WinBits nWinStyle );
     SVT_DLLPRIVATE void         ImplInitSettings();
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;

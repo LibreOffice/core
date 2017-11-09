@@ -71,8 +71,7 @@ private:
     DECL_DLLPRIVATE_LINK( ImplAsyncCloseHdl, void*, void );
 
 protected:
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag = InitFlag::Default );
+    SAL_DLLPRIVATE void    ImplInitDialog( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag = InitFlag::Default );
     OUString               maID; // Dialog ID (UNO name) for this dialog (set
                                  // and used by LOK for now)
 

@@ -81,8 +81,7 @@ protected:
     DECL_DLLPRIVATE_LINK( ImplListBoxSelectHdl, ListBox&, void );
     DECL_DLLPRIVATE_LINK( ImplWindowEventListener, VclWindowEvent&, void );
 
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void         ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void         ImplInitTabControl( vcl::Window* pParent, WinBits nStyle );
 
     virtual void                FillLayoutData() const override;
     virtual const vcl::Font&    GetCanonicalFont( const StyleSettings& _rStyle ) const override;

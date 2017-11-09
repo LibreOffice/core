@@ -67,7 +67,7 @@ static void ImplCalendarSelectDate( IntDateSet* pTable, const Date& rDate, bool 
 
 
 
-void Calendar::ImplInit( WinBits nWinStyle )
+void Calendar::ImplInitCalendar( WinBits nWinStyle )
 {
     mpSelectTable           = new IntDateSet;
     mpOldSelectTable        = nullptr;
@@ -95,7 +95,7 @@ void Calendar::ImplInit( WinBits nWinStyle )
             Application::GetAppLocaleDataWrapper().getLanguageTag().getLocale());
     if (maCalendarWrapper.getUniqueID() != aGregorian)
     {
-        SAL_WARN( "svtools.control", "Calendar::ImplInit: No ``gregorian'' calendar available for locale ``"
+        SAL_WARN( "svtools.control", "Calendar::ImplInitCalendar: No ``gregorian'' calendar available for locale ``"
             << Application::GetAppLocaleDataWrapper().getLanguageTag().getBcp47()
             << "'' and other calendars aren't supported. Using en-US fallback." );
 
@@ -154,7 +154,7 @@ Calendar::Calendar( vcl::Window* pParent, WinBits nWinStyle ) :
     maAnchorDate( maCurDate ),
     maDropDate( 0, 0, 1900 )
 {
-    ImplInit( nWinStyle );
+    ImplInitCalendar( nWinStyle );
 }
 
 Calendar::~Calendar()

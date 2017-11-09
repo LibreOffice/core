@@ -300,9 +300,9 @@ void SpinField::ImplInitSpinFieldData()
     mbInDropDown    = false;
 }
 
-void SpinField::ImplInit(vcl::Window* pParent, WinBits nWinStyle)
+void SpinField::ImplInitSpinField(vcl::Window* pParent, WinBits nWinStyle)
 {
-    Edit::ImplInit( pParent, nWinStyle );
+    ImplInitEdit( pParent, nWinStyle );
 
     if (nWinStyle & (WB_SPIN | WB_DROPDOWN))
     {
@@ -339,7 +339,7 @@ SpinField::SpinField(vcl::Window* pParent, WinBits nWinStyle) :
     Edit(WindowType::SPINFIELD)
 {
     ImplInitSpinFieldData();
-    ImplInit(pParent, nWinStyle);
+    ImplInitSpinField(pParent, nWinStyle);
 }
 
 SpinField::~SpinField()

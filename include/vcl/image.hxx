@@ -73,7 +73,7 @@ private:
 
     std::shared_ptr<ImplImage> mpImplData;
 
-    SAL_DLLPRIVATE void    ImplInit( const BitmapEx& rBmpEx );
+    SAL_DLLPRIVATE void    ImplInitImage( const BitmapEx& rBmpEx );
 };
 
 #endif // INCLUDED_VCL_IMAGE_HXX

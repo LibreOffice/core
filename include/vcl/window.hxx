@@ -603,7 +603,8 @@ protected:
     /** This is intended to be used to clear any locally held references to other Window-subclass objects */
     virtual void                        dispose() override;
 
-    SAL_DLLPRIVATE void                 ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
+                   void                 ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData ) = delete;
+    SAL_DLLPRIVATE void                 ImplInitWindow( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
 
     SAL_DLLPRIVATE Point                ImplOutputToFrame( const Point& rPos );
 

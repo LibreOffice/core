@@ -45,7 +45,7 @@ private:
     GLX11Window m_aGLWin;
     virtual const GLWindow& getOpenGLWindow() const override { return m_aGLWin; }
     virtual GLWindow& getModifiableOpenGLWindow() override { return m_aGLWin; }
-    virtual bool ImplInit() override;
+    virtual bool ImplInitOpenGLContext() override;
     void initGLWindow(Visual* pVisual);
     virtual SystemWindowData generateWinData(vcl::Window* pParent, bool bRequestLegacyContext) override;
     virtual void makeCurrent() override;
@@ -279,7 +279,7 @@ SystemWindowData X11OpenGLContext::generateWinData(vcl::Window* pParent, bool /*
     return aWinData;
 }
 
-bool X11OpenGLContext::ImplInit()
+bool X11OpenGLContext::ImplInitOpenGLContext()
 {
     if (!m_aGLWin.dpy)
         return false;
@@ -468,7 +468,7 @@ bool X11OpenGLContext::init(Display* dpy, Window win, int screen)
 
     initGLWindow(pVisual);
 
-    return ImplInit();
+    return ImplInitOpenGLContext();
 }
 
 void X11OpenGLContext::initGLWindow(Visual* pVisual)

@@ -33,8 +33,7 @@ class VCL_DLLPUBLIC TabPage
     , public vcl::IContext
 {
 private:
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void ImplInitTabPage( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void ImplInitSettings();
 
 public:

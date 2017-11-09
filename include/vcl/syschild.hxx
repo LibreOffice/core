@@ -29,7 +29,6 @@ struct SystemWindowData;
 class VCL_DLLPUBLIC SystemChildWindow : public vcl::Window
 {
 private:
-    using Window::ImplInit;
     SAL_DLLPRIVATE void     ImplInitSysChild( vcl::Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow = false );
 
     // Copy assignment is forbidden and not implemented.

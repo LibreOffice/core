@@ -166,7 +166,7 @@ protected:
     static void InitChildWindow(SystemChildWindow *pChildWindow);
     static void BuffersSwapped();
     virtual GLWindow& getModifiableOpenGLWindow() = 0;
-    virtual bool ImplInit();
+    virtual bool ImplInitOpenGLContext();
 
     VclPtr<vcl::Window> m_xWindow;
     VclPtr<vcl::Window> mpWindow; //points to m_pWindow or the parent window, don't delete it

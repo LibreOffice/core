@@ -72,9 +72,9 @@ void Splitter::ImplInitHorVer(bool bNew)
     SetPointer( Pointer( ePointerStyle ) );
 }
 
-void Splitter::ImplInit( vcl::Window* pParent, WinBits nWinStyle )
+void Splitter::ImplInitSplitter( vcl::Window* pParent, WinBits nWinStyle )
 {
-    Window::ImplInit( pParent, nWinStyle, nullptr );
+    ImplInitWindow( pParent, nWinStyle, nullptr );
 
     mpRefWin = pParent;
 
@@ -138,7 +138,7 @@ Splitter::Splitter( vcl::Window* pParent, WinBits nStyle ) :
 {
     ImplGetWindowImpl()->mbSplitter        = true;
 
-    ImplInit( pParent, nStyle );
+    ImplInitSplitter( pParent, nStyle );
 
     SetLineColor();
     SetFillColor();

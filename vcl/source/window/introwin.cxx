@@ -35,7 +35,7 @@ IntroWindow::IntroWindow( ) :
     WorkWindow( WindowType::INTROWINDOW )
 {
     ImplInitIntroWindowData();
-    WorkWindow::ImplInit( nullptr, WB_INTROWIN );
+    ImplInitWorkWindow( nullptr, WB_INTROWIN );
 }
 
 IntroWindow::~IntroWindow()

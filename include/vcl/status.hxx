@@ -81,8 +81,7 @@ private:
     Link<StatusBar*,void>  maClickHdl;
     Link<StatusBar*,void>  maDoubleClickHdl;
 
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void      ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void      ImplInitStatusBar( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void      ImplInitSettings();
     SAL_DLLPRIVATE void      ImplFormat();
     SAL_DLLPRIVATE bool      ImplIsItemUpdate();

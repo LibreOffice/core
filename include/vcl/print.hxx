@@ -205,7 +205,7 @@ private:
     bool                        mbNewJobSetup;
 
     SAL_DLLPRIVATE void         ImplInitData();
-    SAL_DLLPRIVATE void         ImplInit( SalPrinterQueueInfo* pInfo );
+    SAL_DLLPRIVATE void         ImplInitPrinter( SalPrinterQueueInfo* pInfo );
     SAL_DLLPRIVATE void         ImplInitDisplay();
     SAL_DLLPRIVATE static SalPrinterQueueInfo*
                                 ImplGetQueueInfo( const OUString& rPrinterName, const OUString* pDriver );

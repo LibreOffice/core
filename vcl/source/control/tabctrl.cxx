@@ -75,7 +75,7 @@ struct ImplTabCtrlData
 #define TAB_PAGERECT        0xFFFF
 #define HAMBURGER_DIM       28
 
-void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void TabControl::ImplInitTabControl( vcl::Window* pParent, WinBits nStyle )
 {
     mbLayoutDirty = true;
 
@@ -86,7 +86,7 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
     if ( !(nStyle & WB_NODIALOGCONTROL) )
         nStyle |= WB_DIALOGCONTROL;
 
-    Control::ImplInit( pParent, nStyle, nullptr );
+    ImplInitWindow( pParent, nStyle, nullptr );
 
     mnLastWidth                 = 0;
     mnLastHeight                = 0;
@@ -176,7 +176,7 @@ void TabControl::ImplFreeLayoutData()
 TabControl::TabControl( vcl::Window* pParent, WinBits nStyle ) :
     Control( WindowType::TABCONTROL )
 {
-    ImplInit( pParent, nStyle );
+    ImplInitTabControl( pParent, nStyle );
     SAL_INFO( "vcl", "*** TABCONTROL no notabs? " << (( GetStyle() & WB_NOBORDER ) ? "true" : "false") );
 }
 

@@ -50,7 +50,7 @@ ThumbnailView::ThumbnailView (vcl::Window *pParent, WinBits nWinStyle)
     : Control( pParent, nWinStyle )
     , mpItemAttrs(new ThumbnailItemAttributes)
 {
-    ImplInit();
+    ImplInitThumbnailView();
     mbIsTransientChildrenDisabled = false;
 }
 
@@ -119,7 +119,7 @@ void ThumbnailView::AppendItem(ThumbnailViewItem *pItem)
     mItemList.push_back(pItem);
 }
 
-void ThumbnailView::ImplInit()
+void ThumbnailView::ImplInitThumbnailView()
 {
     mpScrBar = nullptr;
     mnItemWidth = 0;

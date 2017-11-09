@@ -156,7 +156,7 @@ Edit::Edit( vcl::Window* pParent, WinBits nStyle )
     : Control( WindowType::EDIT )
 {
     ImplInitEditData();
-    ImplInit( pParent, nStyle );
+    ImplInitEdit( pParent, nStyle );
 }
 
 void Edit::SetWidthInChars(sal_Int32 nWidthInChars)
@@ -311,14 +311,14 @@ bool Edit::ImplUseNativeBorder(vcl::RenderContext const & rRenderContext, WinBit
     return bRet;
 }
 
-void Edit::ImplInit(vcl::Window* pParent, WinBits nStyle)
+void Edit::ImplInitEdit(vcl::Window* pParent, WinBits nStyle)
 {
     nStyle = ImplInitStyle(nStyle);
 
     if (!(nStyle & (WB_CENTER | WB_RIGHT)))
         nStyle |= WB_LEFT;
 
-    Control::ImplInit(pParent, nStyle, nullptr);
+    ImplInitWindow(pParent, nStyle, nullptr);
 
     mbReadOnly = (nStyle & WB_READONLY) != 0;
 

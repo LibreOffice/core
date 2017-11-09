@@ -392,7 +392,7 @@ vcl::Window* Dialog::GetDefaultParent(WinBits nStyle)
 VclPtr<vcl::Window> Dialog::AddBorderWindow(vcl::Window* pParent, WinBits nStyle)
 {
     VclPtrInstance<ImplBorderWindow> pBorderWin( pParent, nStyle, BorderWindowStyle::Frame );
-    SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, nullptr );
+    ImplInitWindow( pBorderWin, nStyle & ~WB_BORDER, nullptr );
     pBorderWin->mpWindowImpl->mpClientWindow = this;
     pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
     mpWindowImpl->mpBorderWindow  = pBorderWin;
@@ -401,7 +401,7 @@ VclPtr<vcl::Window> Dialog::AddBorderWindow(vcl::Window* pParent, WinBits nStyle
     return pBorderWin;
 }
 
-void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag )
+void Dialog::ImplInitDialog( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag )
 {
     SystemWindowFlags nSysWinMode = Application::GetSystemWindowMode();
 
@@ -434,7 +434,7 @@ void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag )
         {
             mpWindowImpl->mbFrame         = true;
             mpWindowImpl->mbOverlapWin    = true;
-            SystemWindow::ImplInit( pParent, (nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_STANDALONE)) | WB_CLOSEABLE, nullptr );
+            ImplInitWindow( pParent, (nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_STANDALONE)) | WB_CLOSEABLE, nullptr );
             // Now set all style bits
             mpWindowImpl->mnStyle = nStyle;
         }
@@ -442,7 +442,7 @@ void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag )
     else
     {
         VclPtrInstance<ImplBorderWindow> pBorderWin( pParent, nStyle, BorderWindowStyle::Overlap | BorderWindowStyle::Border );
-        SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, nullptr );
+        ImplInitWindow( pBorderWin, nStyle & ~WB_BORDER, nullptr );
         pBorderWin->mpWindowImpl->mpClientWindow = this;
         pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
         mpWindowImpl->mpBorderWindow  = pBorderWin;
@@ -517,7 +517,7 @@ void Dialog::doDeferredInit(WinBits nBits)
 {
     VclPtr<vcl::Window> pParent = mpDialogParent;
     mpDialogParent = nullptr;
-    ImplInit(pParent, nBits | WB_BORDER, mnInitFlag);
+    ImplInitDialog(pParent, nBits | WB_BORDER, mnInitFlag);
     mbIsDeferredInit = false;
 }
 
@@ -545,7 +545,7 @@ Dialog::Dialog(vcl::Window* pParent, WinBits nStyle, InitFlag eFlag)
     , mnInitFlag(eFlag)
 {
     ImplInitDialogData();
-    ImplInit( pParent, nStyle, eFlag );
+    ImplInitDialog( pParent, nStyle, eFlag );
 }
 
 void Dialog::set_action_area(VclButtonBox* pBox)
@@ -1366,7 +1366,7 @@ ModelessDialog::ModelessDialog(vcl::Window* pParent, const OUString& rID, const 
 ModalDialog::ModalDialog( vcl::Window* pParent, WinBits nStyle ) :
     Dialog( WindowType::MODALDIALOG )
 {
-    ImplInit( pParent, nStyle );
+    ImplInitDialog( pParent, nStyle );
 }
 
 ModalDialog::ModalDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, bool bBorder ) :

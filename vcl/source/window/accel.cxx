@@ -121,7 +121,7 @@ static void ImplAccelEntryInsert( ImplAccelList* pList, ImplAccelEntry* pEntry )
     }
 }
 
-void Accelerator::ImplInit()
+void Accelerator::ImplInitAccelerator()
 {
     mnCurId             = 0;
     mpDel               = nullptr;
@@ -223,7 +223,7 @@ void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const vcl::KeyCode& rKeyC
 Accelerator::Accelerator()
 {
 
-    ImplInit();
+    ImplInitAccelerator();
     mpData = new ImplAccelData;
 }
 
@@ -231,7 +231,7 @@ Accelerator::Accelerator(const Accelerator& rAccel)
     : maCurKeyCode( rAccel.maCurKeyCode )
 {
 
-    ImplInit();
+    ImplInitAccelerator();
     mpData = new ImplAccelData;
     ImplCopyData(*rAccel.mpData);
 }

@@ -479,7 +479,7 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     }
 }
 
-void LineListBox::ImplInit()
+void LineListBox::ImplInitLineListBox()
 {
     aTxtSize.Width()  = GetTextWidth( " " );
     aTxtSize.Height() = GetTextHeight();
@@ -500,7 +500,7 @@ LineListBox::LineListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     aColor( COL_BLACK ),
     maPaintCol( COL_BLACK )
 {
-    ImplInit();
+    ImplInitLineListBox();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeLineListBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
@@ -1286,7 +1286,7 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
 FontSizeBox::FontSizeBox( vcl::Window* pParent, WinBits nWinSize ) :
     MetricBox( pParent, nWinSize )
 {
-    ImplInit();
+    ImplInitFontSizeBox();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeFontSizeBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
@@ -1301,7 +1301,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeFontSizeBox(VclPtr<vcl::Window
     rRet = pListBox;
 }
 
-void FontSizeBox::ImplInit()
+void FontSizeBox::ImplInitFontSizeBox()
 {
     EnableAutocomplete( false );
 

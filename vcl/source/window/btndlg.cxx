@@ -52,7 +52,7 @@ ButtonDialog::ButtonDialog( vcl::Window* pParent, WinBits nStyle ) :
     Dialog( WindowType::BUTTONDIALOG )
 {
     ImplInitButtonDialogData();
-    ImplInit( pParent, nStyle );
+    ImplInitDialog( pParent, nStyle );
 }
 
 ButtonDialog::~ButtonDialog()

@@ -28,10 +28,10 @@
 
 #define GROUP_VIEW_STYLE        (WB_3DLOOK | WB_NOLABEL)
 
-void GroupBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void GroupBox::ImplInitGroupBox( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
-    Control::ImplInit( pParent, nStyle, nullptr );
+    ImplInitWindow( pParent, nStyle, nullptr );
     SetMouseTransparent( true );
     ImplInitSettings( true );
 }
@@ -86,7 +86,7 @@ void GroupBox::ImplInitSettings( bool bBackground )
 GroupBox::GroupBox( vcl::Window* pParent, WinBits nStyle ) :
     Control( WindowType::GROUPBOX )
 {
-    ImplInit( pParent, nStyle );
+    ImplInitGroupBox( pParent, nStyle );
 }
 
 void GroupBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,

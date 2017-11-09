@@ -69,7 +69,7 @@ struct ImplScrollBarData
     bool            mbHide;
 };
 
-void ScrollBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void ScrollBar::ImplInitScrollBar( vcl::Window* pParent, WinBits nStyle )
 {
     mpData              = nullptr;
     mnThumbPixRange     = 0;
@@ -88,7 +88,7 @@ void ScrollBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbFullDrag          = false;
 
     ImplInitStyle( nStyle );
-    Control::ImplInit( pParent, nStyle, nullptr );
+    ImplInitWindow( pParent, nStyle, nullptr );
 
     long nScrollSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     SetSizePixel( Size( nScrollSize, nScrollSize ) );
@@ -105,7 +105,7 @@ void ScrollBar::ImplInitStyle( WinBits nStyle )
 ScrollBar::ScrollBar( vcl::Window* pParent, WinBits nStyle ) :
     Control( WindowType::SCROLLBAR )
 {
-    ImplInit( pParent, nStyle );
+    ImplInitScrollBar( pParent, nStyle );
 }
 
 ScrollBar::~ScrollBar()
@@ -1422,9 +1422,9 @@ Size ScrollBar::getCurrentCalcSize() const
     return aCtrlRegion.GetSize();
 }
 
-void ScrollBarBox::ImplInit(vcl::Window* pParent, WinBits nStyle)
+void ScrollBarBox::ImplInitScrollBarBox(vcl::Window* pParent, WinBits nStyle)
 {
-    Window::ImplInit( pParent, nStyle, nullptr );
+    ImplInitWindow( pParent, nStyle, nullptr );
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     long nScrollSize = rStyleSettings.GetScrollBarSize();
@@ -1434,7 +1434,7 @@ void ScrollBarBox::ImplInit(vcl::Window* pParent, WinBits nStyle)
 ScrollBarBox::ScrollBarBox( vcl::Window* pParent, WinBits nStyle ) :
     Window( WindowType::SCROLLBARBOX )
 {
-    ImplInit( pParent, nStyle );
+    ImplInitScrollBarBox( pParent, nStyle );
 }
 
 void ScrollBarBox::ApplySettings(vcl::RenderContext& rRenderContext)

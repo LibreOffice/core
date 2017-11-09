@@ -27,12 +27,12 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-void MenuButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void MenuButton::ImplInitMenuButton( vcl::Window* pParent, WinBits nStyle )
 {
     if ( !(nStyle & WB_NOTABSTOP) )
         nStyle |= WB_TABSTOP;
 
-    PushButton::ImplInit( pParent, nStyle );
+    ImplInitPushButton( pParent, nStyle );
     EnableRTL( AllSettings::GetLayoutRTL() );
 }
 
@@ -86,7 +86,7 @@ MenuButton::MenuButton( vcl::Window* pParent, WinBits nWinBits )
     , mbDelayMenu(false)
 {
     mnDDStyle = PushButtonDropdownStyle::MenuButton;
-    ImplInit(pParent, nWinBits);
+    ImplInitMenuButton(pParent, nWinBits);
 }
 
 MenuButton::~MenuButton()

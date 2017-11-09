@@ -256,8 +256,7 @@ private:
 protected:
     SAL_DLLPRIVATE void    SetIdleDebugName( const sal_Char *pDebugName );
 
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void    ImplInitDockingWindow( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings();
 
     SAL_DLLPRIVATE void DoInitialLayout();

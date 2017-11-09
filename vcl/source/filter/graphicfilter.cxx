@@ -1074,7 +1074,7 @@ GraphicFilter::GraphicFilter( bool bConfig )
     : pErrorEx(nullptr)
     , bUseConfig(bConfig)
 {
-    ImplInit();
+    ImplInitGraphicFilter();
 }
 
 GraphicFilter::~GraphicFilter()
@@ -1103,7 +1103,7 @@ GraphicFilter::~GraphicFilter()
     delete pErrorEx;
 }
 
-void GraphicFilter::ImplInit()
+void GraphicFilter::ImplInitGraphicFilter()
 {
     {
         ::osl::MutexGuard aGuard( getListMutex() );

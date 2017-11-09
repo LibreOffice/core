@@ -104,7 +104,7 @@ ComboBox::ComboBox(vcl::Window *const pParent, WinBits const nStyle)
     , m_pImpl(new Impl(*this))
 {
     m_pImpl->ImplInitComboBoxData();
-    ImplInit( pParent, nStyle );
+    ImplInitComboBox( pParent, nStyle );
     SetWidthInChars(-1);
 }
 
@@ -165,7 +165,7 @@ void ComboBox::ImplCalcEditHeight()
     }
 }
 
-void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void ComboBox::ImplInitComboBox( vcl::Window* pParent, WinBits nStyle )
 {
     bool bNoBorder = ( nStyle & WB_NOBORDER ) != 0;
     if ( !(nStyle & WB_DROPDOWN) )
@@ -179,7 +179,7 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
             nStyle |= WB_BORDER;
     }
 
-    Edit::ImplInit( pParent, nStyle );
+    ImplInitEdit( pParent, nStyle );
     SetBackground();
 
     // DropDown ?

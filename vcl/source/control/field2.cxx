@@ -1404,7 +1404,7 @@ void DateField::ImplDateSpinArea( bool bUp )
     }
 }
 
-void DateFormatter::ImplInit()
+void DateFormatter::ImplInitDateFormatter()
 {
     mbLongFormat        = false;
     mbShowDateCentury   = true;
@@ -1419,7 +1419,7 @@ DateFormatter::DateFormatter() :
     maMax( 31, 12, 2200 ),
     mbEnforceValidValue( true )
 {
-    ImplInit();
+    ImplInitDateFormatter();
 }
 
 DateFormatter::~DateFormatter()
@@ -2290,7 +2290,7 @@ void TimeField::ImplTimeSpinArea( bool bUp )
     }
 }
 
-void TimeFormatter::ImplInit()
+void TimeFormatter::ImplInitTimeFormatter()
 {
     meFormat        = TimeFieldFormat::F_NONE;
     mbDuration      = false;
@@ -2304,7 +2304,7 @@ TimeFormatter::TimeFormatter() :
     mbEnforceValidValue( true ),
     maFieldTime( 0, 0 )
 {
-    ImplInit();
+    ImplInitTimeFormatter();
 }
 
 TimeFormatter::~TimeFormatter()

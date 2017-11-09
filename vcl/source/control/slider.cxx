@@ -38,7 +38,7 @@
 
 #define SLIDER_VIEW_STYLE           (WB_3DLOOK | WB_HORZ | WB_VERT)
 
-void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void Slider::ImplInitSlider( vcl::Window* pParent, WinBits nStyle )
 {
     mnThumbPixOffset    = 0;
     mnThumbPixRange     = 0;
@@ -61,7 +61,7 @@ void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     mpLinkedField       = nullptr;
 
-    Control::ImplInit( pParent, nStyle, nullptr );
+    ImplInitWindow( pParent, nStyle, nullptr );
 
     ImplInitSettings();
     SetSizePixel( CalcWindowSizePixel() );
@@ -70,7 +70,7 @@ void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
 Slider::Slider( vcl::Window* pParent, WinBits nStyle ) :
     Control(WindowType::SLIDER)
 {
-    ImplInit( pParent, nStyle );
+    ImplInitSlider( pParent, nStyle );
 }
 
 Slider::~Slider()

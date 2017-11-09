@@ -350,8 +350,7 @@ private:
     Link<const CommandEvent&, void> maScrollAreaContextHdl;
     size_t          maCurrentItemList;
 
-    using Window::ImplInit;
-    SVT_DLLPRIVATE void            ImplInit( WinBits nWinStyle );
+    SVT_DLLPRIVATE void            ImplInitTabBar( WinBits nWinStyle );
     SVT_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bBackground );
     SVT_DLLPRIVATE void            ImplGetColors(const StyleSettings& rStyleSettings,
                                                  Color& rFaceColor, Color& rFaceTextColor,

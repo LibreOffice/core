@@ -43,14 +43,14 @@ void WorkWindow::ImplInitWorkWindowData()
     maLayoutIdle.SetDebugName( "vcl::WorkWindow maLayoutIdle" );
 }
 
-void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
+void WorkWindow::ImplInitWorkWindow( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
     BorderWindowStyle nFrameStyle = BorderWindowStyle::Frame;
     if ( nStyle & WB_APP )
         nFrameStyle |= BorderWindowStyle::App;
 
     VclPtrInstance<ImplBorderWindow> pBorderWin( pParent, pSystemParentData, nStyle, nFrameStyle );
-    Window::ImplInit( pBorderWin, nStyle & (WB_3DLOOK | WB_CLIPCHILDREN | WB_DIALOGCONTROL | WB_SYSTEMFLOATWIN), nullptr );
+    ImplInitWindow( pBorderWin, nStyle & (WB_3DLOOK | WB_CLIPCHILDREN | WB_DIALOGCONTROL | WB_SYSTEMFLOATWIN), nullptr );
     pBorderWin->mpWindowImpl->mpClientWindow = this;
     pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
     mpWindowImpl->mpBorderWindow  = pBorderWin;
@@ -67,7 +67,7 @@ void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentDat
     SetActivateMode( ActivateModeFlags::GrabFocus );
 }
 
-void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, const css::uno::Any& aSystemWorkWindowToken )
+void WorkWindow::ImplInitWorkWindow( vcl::Window* pParent, WinBits nStyle, const css::uno::Any& aSystemWorkWindowToken )
 {
     if( aSystemWorkWindowToken.hasValue() )
     {
@@ -76,10 +76,10 @@ void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, const css::uno:
         SystemParentData* pData = reinterpret_cast<SystemParentData*>(aSeq.getArray());
         SAL_WARN_IF( aSeq.getLength() != sizeof( SystemParentData ) || pData->nSize != sizeof( SystemParentData ), "vcl", "WorkWindow::WorkWindow( vcl::Window*, const Any&, WinBits ) called with invalid Any" );
         // init with style 0 as does WorkWindow::WorkWindow( SystemParentData* );
-        ImplInit( pParent, 0, pData );
+        ImplInitWorkWindow( pParent, 0, pData );
     }
     else
-        ImplInit( pParent, nStyle );
+        ImplInitWorkWindow( pParent, nStyle );
 }
 
 WorkWindow::WorkWindow( WindowType nType ) :
@@ -92,7 +92,7 @@ WorkWindow::WorkWindow( vcl::Window* pParent, WinBits nStyle ) :
     SystemWindow( WindowType::WORKWINDOW )
 {
     ImplInitWorkWindowData();
-    ImplInit( pParent, nStyle );
+    ImplInitWorkWindow( pParent, nStyle );
 }
 
 WorkWindow::WorkWindow( vcl::Window* pParent, const css::uno::Any& aSystemWorkWindowToken, WinBits nStyle ) :
@@ -100,7 +100,7 @@ WorkWindow::WorkWindow( vcl::Window* pParent, const css::uno::Any& aSystemWorkWi
 {
     ImplInitWorkWindowData();
     mbSysChild = true;
-    ImplInit( pParent, nStyle, aSystemWorkWindowToken );
+    ImplInitWorkWindow( pParent, nStyle, aSystemWorkWindowToken );
 }
 
 WorkWindow::WorkWindow( SystemParentData* pParent ) :
@@ -108,7 +108,7 @@ WorkWindow::WorkWindow( SystemParentData* pParent ) :
 {
     ImplInitWorkWindowData();
     mbSysChild = true;
-    ImplInit( nullptr, 0, pParent );
+    ImplInitWorkWindow( nullptr, 0, pParent );
 }
 
 WorkWindow::~WorkWindow()

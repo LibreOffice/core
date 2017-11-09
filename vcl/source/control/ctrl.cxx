@@ -53,7 +53,7 @@ Control::Control( vcl::Window* pParent, WinBits nStyle ) :
     Window( WindowType::CONTROL )
 {
     ImplInitControlData();
-    ImplInit( pParent, nStyle, nullptr );
+    ImplInitWindow( pParent, nStyle, nullptr );
 }
 
 Control::~Control()

@@ -143,7 +143,7 @@ static RulerTabData ruler_tab =
     5  // ruler_tab_textoff
 };
 
-void Ruler::ImplInit( WinBits nWinBits )
+void Ruler::ImplInitRuler( WinBits nWinBits )
 {
     // Set default WinBits
     if ( !(nWinBits & WB_VERT) )
@@ -245,7 +245,7 @@ Ruler::Ruler( vcl::Window* pParent, WinBits nWinStyle ) :
     }
 
 
-    ImplInit( nWinStyle );
+    ImplInitRuler( nWinStyle );
 }
 
 Ruler::~Ruler()

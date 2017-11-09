@@ -1165,13 +1165,13 @@ void ToolBox::ImplInitToolBoxData()
     mpData->maDropdownTimer.SetDebugName( "vcl::ToolBox mpData->maDropdownTimer" );
 }
 
-void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void ToolBox::ImplInitToolBox( vcl::Window* pParent, WinBits nStyle )
 {
     // initialize variables
     mbScroll          = (nStyle & WB_SCROLL) != 0;
     mnWinStyle        = nStyle;
 
-    DockingWindow::ImplInit( pParent, nStyle & ~WB_BORDER );
+    ImplInitDockingWindow( pParent, nStyle & ~WB_BORDER );
 
     // dockingwindow's ImplInit removes some bits, so restore them here to allow keyboard handling for toolbars
     ImplGetWindowImpl()->mnStyle |= WB_TABSTOP|WB_NODIALOGCONTROL; // always set WB_TABSTOP for ToolBars
@@ -1304,7 +1304,7 @@ void ToolBox::doDeferredInit(WinBits nBits)
 {
     VclPtr<vcl::Window> pParent = mpDialogParent;
     mpDialogParent = nullptr;
-    ImplInit(pParent, nBits);
+    ImplInitToolBox(pParent, nBits);
     mbIsDeferredInit = false;
 }
 
@@ -1317,7 +1317,7 @@ ToolBox::ToolBox( vcl::Window* pParent, WinBits nStyle ) :
     DockingWindow( WindowType::TOOLBOX )
 {
     ImplInitToolBoxData();
-    ImplInit( pParent, nStyle );
+    ImplInitToolBox( pParent, nStyle );
 }
 
 ToolBox::ToolBox(vcl::Window* pParent, const OString& rID,

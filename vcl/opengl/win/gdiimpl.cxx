@@ -48,7 +48,7 @@ private:
     GLWinWindow m_aGLWin;
     virtual const GLWindow& getOpenGLWindow() const override { return m_aGLWin; }
     virtual GLWindow& getModifiableOpenGLWindow() override { return m_aGLWin; }
-    virtual bool ImplInit() override;
+    virtual bool ImplInitOpenGLContext() override;
     virtual void makeCurrent() override;
     virtual void destroyCurrentContext() override;
     virtual bool isCurrent() override;
@@ -130,7 +130,7 @@ bool WinOpenGLContext::init(HDC hDC, HWND hWnd)
 
     m_aGLWin.hDC = hDC;
     m_aGLWin.hWnd = hWnd;
-    return ImplInit();
+    return ImplInitOpenGLContext();
 }
 
 bool WinOpenGLContext::initWindow()
@@ -495,7 +495,7 @@ bool compiledShaderBinariesWork()
 
 } // unnamed namespace
 
-bool WinOpenGLContext::ImplInit()
+bool WinOpenGLContext::ImplInitOpenGLContext()
 {
     static bool bFirstCall = true;
 

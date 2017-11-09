@@ -663,7 +663,7 @@ void Printer::ReleaseGraphics( bool bRelease )
     mpNextGraphics  = nullptr;
 }
 
-void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
+void Printer::ImplInitPrinter( SalPrinterQueueInfo* pInfo )
 {
     ImplSVData* pSVData = ImplGetSVData();
     // #i74084# update info for this specific SalPrinterQueueInfo
@@ -895,7 +895,7 @@ Printer::Printer()
     SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( GetDefaultPrinterName(), nullptr );
     if ( pInfo )
     {
-        ImplInit( pInfo );
+        ImplInitPrinter( pInfo );
         if ( !IsDisplayPrinter() )
             mbDefPrinter = true;
     }
@@ -913,7 +913,7 @@ Printer::Printer( const JobSetup& rJobSetup ) :
                                                    &aDriver );
     if ( pInfo )
     {
-        ImplInit( pInfo );
+        ImplInitPrinter( pInfo );
         SetJobSetup( rJobSetup );
     }
     else
@@ -929,7 +929,7 @@ Printer::Printer( const QueueInfo& rQueueInfo )
     SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( rQueueInfo.GetPrinterName(),
                                                    &rQueueInfo.GetDriver() );
     if ( pInfo )
-        ImplInit( pInfo );
+        ImplInitPrinter( pInfo );
     else
         ImplInitDisplay();
 }
@@ -939,7 +939,7 @@ Printer::Printer( const OUString& rPrinterName )
     ImplInitData();
     SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( rPrinterName, nullptr );
     if ( pInfo )
-        ImplInit( pInfo );
+        ImplInitPrinter( pInfo );
     else
         ImplInitDisplay();
 }
@@ -1185,7 +1185,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
         SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( pPrinter->GetName(), &aDriver );
         if ( pInfo )
         {
-            ImplInit( pInfo );
+            ImplInitPrinter( pInfo );
             SetJobSetup( pPrinter->GetJobSetup() );
         }
         else

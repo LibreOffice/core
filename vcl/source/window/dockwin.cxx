@@ -307,7 +307,7 @@ void DockingWindow::ImplInitDockingWindowData()
     maLayoutIdle.SetDebugName( "vcl::DockingWindow maLayoutIdle" );
 }
 
-void DockingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void DockingWindow::ImplInitDockingWindow( vcl::Window* pParent, WinBits nStyle )
 {
     if ( !(nStyle & WB_NODIALOGCONTROL) )
         nStyle |= WB_DIALOGCONTROL;
@@ -317,7 +317,7 @@ void DockingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnFloatBits             = WB_BORDER | (nStyle & DOCKWIN_FLOATSTYLES);
     nStyle                 &= ~(DOCKWIN_FLOATSTYLES | WB_BORDER);
 
-    Window::ImplInit( pParent, nStyle, nullptr );
+    ImplInitWindow( pParent, nStyle, nullptr );
 
     ImplInitSettings();
 }
@@ -351,7 +351,7 @@ DockingWindow::DockingWindow( vcl::Window* pParent, WinBits nStyle ) :
     Window( WindowType::DOCKINGWINDOW )
 {
     ImplInitDockingWindowData();
-    ImplInit( pParent, nStyle );
+    ImplInitDockingWindow( pParent, nStyle );
 }
 
 //Find the real parent stashed in mpDialogParent.
@@ -359,7 +359,7 @@ void DockingWindow::doDeferredInit(WinBits nBits)
 {
     vcl::Window *pParent = mpDialogParent;
     mpDialogParent = nullptr;
-    ImplInit(pParent, nBits);
+    ImplInitDockingWindow(pParent, nBits);
     mbIsDeferredInit = false;
 }
 

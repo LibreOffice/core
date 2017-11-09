@@ -43,13 +43,13 @@ Image::Image()
 
 Image::Image(const BitmapEx& rBitmapEx)
 {
-    ImplInit(rBitmapEx);
+    ImplInitImage(rBitmapEx);
 }
 
 Image::Image(const css::uno::Reference< css::graphic::XGraphic >& rxGraphic)
 {
     const Graphic aGraphic(rxGraphic);
-    ImplInit(aGraphic.GetBitmapEx());
+    ImplInitImage(aGraphic.GetBitmapEx());
 }
 
 Image::Image(const OUString & rFileUrl)
@@ -60,11 +60,11 @@ Image::Image(const OUString & rFileUrl)
     const OUString aFilterName(IMP_PNG);
     if (ERRCODE_NONE == GraphicFilter::LoadGraphic(aPath, aFilterName, aGraphic))
     {
-        ImplInit(aGraphic.GetBitmapEx());
+        ImplInitImage(aGraphic.GetBitmapEx());
     }
 }
 
-void Image::ImplInit(const BitmapEx& rBitmapEx)
+void Image::ImplInitImage(const BitmapEx& rBitmapEx)
 {
     if (!rBitmapEx.IsEmpty())
     {

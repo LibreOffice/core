@@ -499,7 +499,7 @@ struct TabBar_Impl
 TabBar::TabBar( vcl::Window* pParent, WinBits nWinStyle ) :
     Window( pParent, (nWinStyle & WB_3DLOOK) | WB_CLIPCHILDREN )
 {
-    ImplInit( nWinStyle );
+    ImplInitTabBar( nWinStyle );
     maCurrentItemList = 0;
 }
 
@@ -518,7 +518,7 @@ void TabBar::dispose()
 const sal_uInt16 TabBar::APPEND         = ::std::numeric_limits<sal_uInt16>::max();
 const sal_uInt16 TabBar::PAGE_NOT_FOUND = ::std::numeric_limits<sal_uInt16>::max();
 
-void TabBar::ImplInit( WinBits nWinStyle )
+void TabBar::ImplInitTabBar( WinBits nWinStyle )
 {
     mpImpl.reset(new TabBar_Impl);
 

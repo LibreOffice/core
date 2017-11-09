@@ -28,14 +28,14 @@ struct ImplMoreButtonData
     OUString                             maLessText;
 };
 
-void MoreButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void MoreButton::ImplInitMoreButton( vcl::Window* pParent, WinBits nStyle )
 {
     mpMBData     = new ImplMoreButtonData;
     mbState      = false;
 
     mpMBData->mpItemList = nullptr;
 
-    PushButton::ImplInit( pParent, nStyle );
+    ImplInitPushButton( pParent, nStyle );
 
     mpMBData->maMoreText = Button::GetStandardText( StandardButtonType::More );
     mpMBData->maLessText = Button::GetStandardText( StandardButtonType::Less );
@@ -70,7 +70,7 @@ void MoreButton::ShowState()
 MoreButton::MoreButton( vcl::Window* pParent, WinBits nStyle ) :
     PushButton( WindowType::MOREBUTTON )
 {
-    ImplInit( pParent, nStyle );
+    ImplInitMoreButton( pParent, nStyle );
 }
 
 MoreButton::~MoreButton()

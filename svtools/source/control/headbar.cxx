@@ -54,7 +54,7 @@ public:
 #define HEAD_HITTEST_ITEM           ((sal_uInt16)0x0001)
 #define HEAD_HITTEST_DIVIDER        ((sal_uInt16)0x0002)
 
-void HeaderBar::ImplInit( WinBits nWinStyle )
+void HeaderBar::ImplInitHeaderBar( WinBits nWinStyle )
 {
     mpItemList      = new ImplHeadItemList;
     mnBorderOff1    = 0;
@@ -99,7 +99,7 @@ void HeaderBar::ImplInit( WinBits nWinStyle )
 HeaderBar::HeaderBar( vcl::Window* pParent, WinBits nWinStyle ) :
     Window( pParent, nWinStyle & WB_3DLOOK )
 {
-    ImplInit( nWinStyle );
+    ImplInitHeaderBar( nWinStyle );
     SetSizePixel( CalcWindowSizePixel() );
 }
 
@@ -911,7 +911,7 @@ void HeaderBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
             rRenderContext.DrawLine(Point(0, 0), Point(mnDX - 1, 0));
         if (mnBorderOff2)
             rRenderContext.DrawLine(Point(0, mnDY - 1), Point(mnDX - 1, mnDY - 1));
-        // #i40393# draw left and right border, if WB_BORDER was set in ImplInit()
+        // #i40393# draw left and right border, if WB_BORDER was set in ImplInitHeaderBar()
         if (mnBorderOff1 && mnBorderOff2)
         {
             rRenderContext.DrawLine(Point(0, 0), Point(0, mnDY - 1));
@@ -956,7 +956,7 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                 pDev->DrawLine( aRect.TopLeft(), Point( aRect.Right(), aRect.Top() ) );
             if ( mnBorderOff2 )
                 pDev->DrawLine( Point( aRect.Left(), aRect.Bottom() ), Point( aRect.Right(), aRect.Bottom() ) );
-            // #i40393# draw left and right border, if WB_BORDER was set in ImplInit()
+            // #i40393# draw left and right border, if WB_BORDER was set in ImplInitHeaderBar()
             if ( mnBorderOff1 && mnBorderOff2 )
             {
                 pDev->DrawLine( aRect.TopLeft(), Point( aRect.Left(), aRect.Bottom() ) );

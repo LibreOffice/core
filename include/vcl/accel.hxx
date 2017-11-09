@@ -42,7 +42,7 @@ private:
     sal_uInt16              mnCurId;
     bool*                   mpDel;
 
-    SAL_DLLPRIVATE  void    ImplInit();
+    SAL_DLLPRIVATE  void    ImplInitAccelerator();
     SAL_DLLPRIVATE  void    ImplCopyData( ImplAccelData& rAccelData );
     SAL_DLLPRIVATE  void    ImplDeleteData();
     SAL_DLLPRIVATE  void    ImplInsertAccel(

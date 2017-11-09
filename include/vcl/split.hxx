@@ -56,8 +56,7 @@ private:
                              Splitter& operator= (const Splitter &) = delete;
 
 protected:
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void      ImplInit( vcl::Window* pParent, WinBits nWinStyle );
+    SAL_DLLPRIVATE void      ImplInitSplitter( vcl::Window* pParent, WinBits nWinStyle );
 
 public:
     explicit            Splitter( vcl::Window* pParent, WinBits nStyle = WB_VSCROLL );

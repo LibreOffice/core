@@ -185,7 +185,7 @@ protected:
     SAL_DLLPRIVATE void     ImplSetUserValue( sal_Int64 nNewValue, Selection const * pNewSelection = nullptr );
 
 private:
-    SAL_DLLPRIVATE void     ImplInit();
+    SAL_DLLPRIVATE void     ImplInitNumericFormatter();
 
     sal_uInt16              mnDecimalDigits;
     bool                    mbThousandSep;
@@ -241,7 +241,7 @@ protected:
     SAL_DLLPRIVATE bool     ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr );
 
 private:
-    SAL_DLLPRIVATE  void    ImplInit();
+    SAL_DLLPRIVATE  void    ImplInitMetricFormatter();
 
     OUString                maCustomUnitText;
     OUString                maCurUnitText;
@@ -278,7 +278,7 @@ private:
     ExtDateFieldFormat      mnExtDateFormat;
     bool                    mbEnforceValidValue;
 
-    SAL_DLLPRIVATE void     ImplInit();
+    SAL_DLLPRIVATE void     ImplInitDateFormatter();
 
 protected:
                             DateFormatter();
@@ -365,7 +365,7 @@ private:
     bool                    mbDuration;
     bool                    mbEnforceValidValue;
 
-    SAL_DLLPRIVATE void     ImplInit();
+    SAL_DLLPRIVATE void     ImplInitTimeFormatter();
 
 protected:
     tools::Time             maFieldTime;

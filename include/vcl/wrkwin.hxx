@@ -54,7 +54,7 @@ private:
                       mbFullScreenMode:1;
 
     SAL_DLLPRIVATE void ImplInitWorkWindowData();
-    SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle, const css::uno::Any& aSystemWorkWindowToken );
+    SAL_DLLPRIVATE void ImplInitWorkWindow( vcl::Window* pParent, WinBits nStyle, const css::uno::Any& aSystemWorkWindowToken );
 
 private:
     WorkWindow( const WorkWindow& rWin ) = delete;
@@ -62,7 +62,7 @@ private:
 
 protected:
     explicit        WorkWindow( WindowType nType );
-    SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData = nullptr );
+    SAL_DLLPRIVATE void ImplInitWorkWindow( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData = nullptr );
     SAL_DLLPRIVATE void ImplSetFrameState( WindowStateState aFrameState );
 
 public:

@@ -38,8 +38,7 @@ private:
     VclPtr<vcl::Window> m_pMnemonicWindow;
 
     using Control::ImplInitSettings;
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void    ImplInitFixedText( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                               const Point& rPos, const Size& rSize, bool bFillLayout = false ) const;
@@ -92,8 +91,7 @@ class VCL_DLLPUBLIC FixedLine : public Control
 {
 private:
     using Control::ImplInitSettings;
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void    ImplInitFixedLine( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplDraw(vcl::RenderContext& rRenderContext);
 
@@ -124,8 +122,7 @@ private:
     Bitmap          maBitmap;
 
     using Control::ImplInitSettings;
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void    ImplInitFixedBitmap( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, const Point& rPos, const Size& rSize );
 
@@ -152,8 +149,7 @@ private:
 
 private:
     using Control::ImplInitSettings;
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void    ImplInitFixedImage( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
 
 protected:

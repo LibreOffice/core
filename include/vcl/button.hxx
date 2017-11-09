@@ -181,10 +181,9 @@ protected:
                                    PushButton& operator=( const PushButton & )
                                        = delete;
 
-    SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void            ImplInitPushButton( vcl::Window* pParent, WinBits nStyle );
 
     using Control::ImplInitSettings;
-    using Window::ImplInit;
 
     explicit        PushButton( WindowType nType );
 
@@ -212,10 +211,8 @@ inline bool PushButton::IsChecked() const
 
 class VCL_DLLPUBLIC OKButton : public PushButton
 {
-protected:
-    using PushButton::ImplInit;
 private:
-    SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void            ImplInitOKButton( vcl::Window* pParent, WinBits nStyle );
 
                                    OKButton (const OKButton &) = delete;
                                    OKButton & operator= (const OKButton &) = delete;
@@ -228,10 +225,8 @@ public:
 
 class VCL_DLLPUBLIC CancelButton : public PushButton
 {
-protected:
-    using PushButton::ImplInit;
 private:
-    SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void ImplInitCancelButton( vcl::Window* pParent, WinBits nStyle );
 
                         CancelButton (const CancelButton &) = delete;
                         CancelButton & operator= (const CancelButton &) = delete;
@@ -250,10 +245,8 @@ public:
 
 class VCL_DLLPUBLIC HelpButton : public PushButton
 {
-protected:
-    using PushButton::ImplInit;
 private:
-    SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void ImplInitHelpButton( vcl::Window* pParent, WinBits nStyle );
 
                         HelpButton( const HelpButton & ) = delete;
                         HelpButton & operator= ( const HelpButton & ) = delete;
@@ -294,8 +287,7 @@ private:
 
 protected:
     using Control::ImplInitSettings;
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void     ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void     ImplInitRadioButton( vcl::Window* pParent, WinBits nStyle );
 
 public:
     SAL_DLLPRIVATE void     ImplCallClick( bool bGrabFocus = false, GetFocusFlags nFocusFlags = GetFocusFlags::NONE );
@@ -414,8 +406,7 @@ private:
 
 protected:
     using Control::ImplInitSettings;
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void         ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void         ImplInitCheckBox( vcl::Window* pParent, WinBits nStyle );
     virtual void                FillLayoutData() const override;
     virtual const vcl::Font&    GetCanonicalFont( const StyleSettings& _rStyle ) const override;
     virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;

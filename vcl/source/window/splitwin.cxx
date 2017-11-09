@@ -1241,7 +1241,7 @@ void SplitWindow::ImplDrawSplitTracking(const Point& rPos)
     ShowTracking(aRect, ShowTrackFlags::Split);
 }
 
-void SplitWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void SplitWindow::ImplInitSplitWindow( vcl::Window* pParent, WinBits nStyle )
 {
     ImplSplitSet* pNewSet   = new ImplSplitSet();
 
@@ -1297,7 +1297,7 @@ void SplitWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
         mnBottomBorder = 0;
     }
 
-    DockingWindow::ImplInit( pParent, (nStyle | WB_CLIPCHILDREN) & ~(WB_BORDER | WB_SIZEABLE) );
+    ImplInitDockingWindow( pParent, (nStyle | WB_CLIPCHILDREN) & ~(WB_BORDER | WB_SIZEABLE) );
 
     ImplInitSettings();
 }
@@ -1329,7 +1329,7 @@ void SplitWindow::ImplInitSettings()
 SplitWindow::SplitWindow( vcl::Window* pParent, WinBits nStyle ) :
     DockingWindow( WindowType::SPLITWINDOW )
 {
-    ImplInit( pParent, nStyle );
+    ImplInitSplitWindow( pParent, nStyle );
     DockingWindow::SetIdleDebugName( "vcl::SplitWindow maLayoutIdle" );
 }
 

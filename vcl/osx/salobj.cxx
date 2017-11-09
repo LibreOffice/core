@@ -251,7 +251,7 @@ private:
     virtual const GLWindow& getOpenGLWindow() const override { return m_aGLWin; }
     virtual GLWindow& getModifiableOpenGLWindow() override { return m_aGLWin; }
     NSOpenGLView* getOpenGLView();
-    virtual bool ImplInit() override;
+    virtual bool ImplInitOpenGLContext() override;
     virtual SystemWindowData generateWinData(vcl::Window* pParent, bool bRequestLegacyContext) override;
     virtual void makeCurrent() override;
     virtual void destroyCurrentContext() override;
@@ -332,9 +332,9 @@ bool AquaOpenGLContext::initWindow()
     return true;
 }
 
-bool AquaOpenGLContext::ImplInit()
+bool AquaOpenGLContext::ImplInitOpenGLContext()
 {
-    OSX_SALDATA_RUNINMAIN_UNION( ImplInit(), boolean )
+    OSX_SALDATA_RUNINMAIN_UNION( ImplInitOpenGLContext(), boolean )
 
     OpenGLZone aZone;
 

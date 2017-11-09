@@ -107,7 +107,7 @@ bool StatusBar::ImplIsItemUpdate()
     return !mbProgressMode && mbVisibleItems && IsReallyVisible() && IsUpdateMode();
 }
 
-void StatusBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void StatusBar::ImplInitStatusBar( vcl::Window* pParent, WinBits nStyle )
 {
     mpImplData = new ImplData;
 
@@ -115,7 +115,7 @@ void StatusBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
     if ( !(nStyle & (WB_LEFT | WB_RIGHT)) )
         nStyle |= WB_RIGHT;
 
-    Window::ImplInit( pParent, nStyle & ~WB_BORDER, nullptr );
+    ImplInitWindow( pParent, nStyle & ~WB_BORDER, nullptr );
 
     // remember WinBits
     mpImplData->mpVirDev = VclPtr<VirtualDevice>::Create( *this );
@@ -139,7 +139,7 @@ void StatusBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
 StatusBar::StatusBar( vcl::Window* pParent, WinBits nStyle ) :
     Window( WindowType::STATUSBAR )
 {
-    ImplInit( pParent, nStyle );
+    ImplInitStatusBar( pParent, nStyle );
 }
 
 StatusBar::~StatusBar()

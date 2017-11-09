@@ -68,8 +68,7 @@ private:
     Link<ScrollBar*,void>       maEndScrollHdl;
 
     SAL_DLLPRIVATE tools::Rectangle*   ImplFindPartRect( const Point& rPt );
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void         ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void         ImplInitScrollBar( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void         ImplUpdateRects( bool bUpdate = true );
     SAL_DLLPRIVATE long         ImplCalcThumbPos( long nPixPos );
@@ -142,8 +141,7 @@ public:
 class VCL_DLLPUBLIC ScrollBarBox : public vcl::Window
 {
 private:
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void ImplInitScrollBarBox( vcl::Window* pParent, WinBits nStyle );
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 

@@ -104,8 +104,7 @@ private:
     DECL_DLLPRIVATE_LINK( ImplClickBtnHdl, void*, void );
 
 protected:
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE void    ImplInitListBox( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
     bool               IsDropDownBox() const { return mpFloatWin != nullptr; }
 
