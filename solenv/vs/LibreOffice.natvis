@@ -64,8 +64,9 @@
     <DisplayString>{pType->eTypeClass,en}</DisplayString>
     <Expand>
       <ExpandedItem Condition="pType->eTypeClass == 19">(com::sun::star::uno::Exception *)pData</ExpandedItem>
+      <ExpandedItem Condition="pType->eTypeClass == 20">*(uno_Sequence **)pData</ExpandedItem>
       <ExpandedItem Condition="pType->eTypeClass == 22">(com::sun::star::uno::BaseReference *)pData</ExpandedItem>
-      <Item Name="Data" Condition="pType->eTypeClass != 19 &amp;&amp; pType->eTypeClass != 22">pData</Item>
+      <Item Name="Data" Condition="pType->eTypeClass != 19 &amp;&amp; pType->eTypeClass != 20 &amp;&amp; pType->eTypeClass != 22">pData</Item>
     </Expand>
   </Type>
   <Type Name="basegfx::internal::ImplMatLine &lt; 3 &gt;">
@@ -101,9 +102,16 @@
   <Type Name="SwRect">
     <DisplayString>{m_Point}, {m_Size}</DisplayString>
   </Type>
+  <Type Name="_sal_Sequence">
+    <DisplayString Condition="nElements == 0">_sal_Sequence (empty)</DisplayString>
+    <DisplayString>_sal_Sequence of {nElements,d} elements</DisplayString>
+    <Expand>
+      <Item Name="[size]">nElements,d</Item>
+    </Expand>
+  </Type>
   <Type Name="com::sun::star::uno::Sequence &lt; * &gt;">
-    <DisplayString Condition="_pSequence->nElements == 0">empty sequence</DisplayString>
-    <DisplayString>sequence of {_pSequence->nElements,d} {"$T1",sb}</DisplayString>
+    <DisplayString Condition="_pSequence->nElements == 0">Sequence (empty)</DisplayString>
+    <DisplayString>Sequence of {_pSequence->nElements,d} {"$T1",sb}</DisplayString>
     <Expand>
       <Item Name="[size]">_pSequence->nElements,d</Item>
       <ArrayItems>
@@ -252,6 +260,43 @@
       <Item Name="Type Name">_pType->pTypeName</Item>
       <Item Condition="_pType->pType != nullptr" Name="Size">_pType->pType->nSize</Item>
       <Item Condition="_pType->pType != nullptr" Name="Alignment">_pType->pType->nAlignment</Item>
+    </Expand>
+  </Type>
+  <Type Name="SfxBoolItem">
+    <DisplayString>{{which={m_nWhich,x}}} {m_bValue}</DisplayString>
+  </Type>
+  <Type Name="CntUnencodedStringItem">
+    <DisplayString>{{which={m_nWhich,x}}} {m_aValue}</DisplayString>
+  </Type>
+  <Type Name="SfxUsrAnyItem">
+    <DisplayString>{{which={m_nWhich,x}}} {aValue}</DisplayString>
+  </Type>
+  <Type Name="SfxPoolItem">
+    <DisplayString>{{which={m_nWhich,x}}}</DisplayString>
+  </Type>
+  <Type Name="SfxItemSet">
+    <DisplayString>{{size={m_nCount,d}}}</DisplayString>
+    <Expand>
+      <Item Name="[size]">m_nCount,d</Item>
+      <IndexListItems>
+        <Size>m_nCount</Size>
+        <ValueNode>*(m_pItems[$i])</ValueNode>
+      </IndexListItems>
+      <Synthetic Name="Which Ranges">
+        <Expand>
+          <CustomListItems>
+            <Variable Name='pCurRange' InitialValue='m_pWhichRanges'/>
+            <Variable Name='i' InitialValue='0'/>
+            <Loop Condition='*pCurRange'>
+              <Item Name='[{i,d}] begin'>*pCurRange</Item>
+              <Item Name='[{i,d}] end'>*(pCurRange+1)</Item>
+              <Exec>pCurRange+=2</Exec>
+              <Exec>++i</Exec>
+            </Loop>
+          </CustomListItems>
+        </Expand>
+      </Synthetic>
+      <Item Condition="m_pParent != nullptr" Name="Parent">*m_pParent</Item>
     </Expand>
   </Type>
 </AutoVisualizer>
