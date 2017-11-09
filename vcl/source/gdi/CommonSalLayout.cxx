@@ -564,6 +564,16 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
         if (bRightToLeft)
             std::reverse(aSubRuns.begin(), aSubRuns.end());
 
+        unsigned int nHalfUPEM = 0;
+        DeviceCoordinate nHeight = 0;
+        if (rArgs.mnFlags & SalLayoutFlags::Vertical)
+        {
+            hb_font_extents_t extents;
+            hb_font_get_extents_for_direction(mpHbFont,HB_DIRECTION_TTB,&extents);
+            nHeight = extents.ascender - extents.descender + extents.line_gap;
+            nHalfUPEM = hb_face_get_upem(pHbFace) >> 1;
+        }
+
         for (const auto& aSubRun : aSubRuns)
         {
             hb_buffer_clear_contents(pHbBuffer);
@@ -654,10 +664,9 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 if (aSubRun.maDirection == HB_DIRECTION_TTB)
                 {
                     nGlyphFlags |= GlyphItem::IS_VERTICAL;
-
                     nAdvance = -pHbPositions[i].y_advance;
-                    nXOffset =  pHbPositions[i].y_offset;
-                    nYOffset =  pHbPositions[i].x_offset;
+                    nXOffset =  pHbPositions[i].y_offset + nHeight;
+                    nYOffset =  pHbPositions[i].x_offset + nHalfUPEM;
                 }
                 else
                 {
