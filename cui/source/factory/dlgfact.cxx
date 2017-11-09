@@ -1005,11 +1005,11 @@ VclPtr<AbstractGalleryIdDialog> AbstractDialogFactory_Impl::CreateGalleryIdDialo
    return VclPtr<AbstractGalleryIdDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<VclAbstractDialog2> AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDialog(
+VclPtr<VclAbstractDialog2> AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDialog(vcl::Window* pParent,
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet)
 {
-    VclPtrInstance<GalleryThemeProperties> pDlg( nullptr, pData, pItemSet);
+    VclPtrInstance<GalleryThemeProperties> pDlg(pParent, pData, pItemSet);
     return VclPtr<VclAbstractDialog2_Impl>::Create( pDlg );
 }
 

@@ -531,7 +531,7 @@ public:
                                              const OUString& rOldText) override;
     virtual VclPtr<AbstractGalleryIdDialog> CreateGalleryIdDialog( vcl::Window* pParent,
                                             GalleryTheme* pThm) override;
-    virtual VclPtr<VclAbstractDialog2> CreateGalleryThemePropertiesDialog(
+    virtual VclPtr<VclAbstractDialog2> CreateGalleryThemePropertiesDialog(vcl::Window* pParent,
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet) override;
     virtual VclPtr<AbstractURLDlg> CreateURLDialog( vcl::Window* pParent,
