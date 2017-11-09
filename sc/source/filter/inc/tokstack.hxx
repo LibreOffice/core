@@ -276,13 +276,13 @@ class TokenStack
 
 inline const TokenId TokenStack::Get()
 {
-    OSL_ENSURE( nPos > 0,
-        "*TokenStack::Get(): is empty, is empty, ..." );
-
     TokenId nRet;
 
     if( nPos == 0 )
+    {
+        SAL_WARN("sc.filter", "*TokenStack::Get(): is empty, is empty, ...");
         nRet = 0;
+    }
     else
     {
         nPos--;
@@ -294,11 +294,14 @@ inline const TokenId TokenStack::Get()
 
 inline TokenStack &TokenStack::operator <<( const TokenId& rNewId )
 {// Element on Stack
-    OSL_ENSURE( nPos < nSize, "*TokenStack::<<(): Stack overflow" );
     if( nPos < nSize )
     {
         pStack[ nPos ] = rNewId;
         nPos++;
+    }
+    else
+    {
+        SAL_WARN("sc.filter", "*TokenStack::<<(): Stack overflow");
     }
 
     return *this;
@@ -306,12 +309,14 @@ inline TokenStack &TokenStack::operator <<( const TokenId& rNewId )
 
 inline void TokenStack::operator >>( TokenId& rId )
 {// Element of Stack
-    OSL_ENSURE( nPos > 0,
-        "*TokenStack::>>(): is empty, is empty, ..." );
     if( nPos > 0 )
     {
         nPos--;
         rId = pStack[ nPos ];
+    }
+    else
+    {
+        SAL_WARN("sc.filter", "*TokenStack::>>(): is empty, is empty, ...");
     }
 }
 
@@ -325,8 +330,10 @@ inline TokenPool& TokenPool::operator <<( const TokenId& rId )
     // POST: rId's are stored consecutively in Pool under a new Id;
     //       finalize with >> or Store()
     // rId -> ( sal_uInt16 ) rId - 1;
-    OSL_ENSURE( ( sal_uInt16 ) rId < nScTokenOff,
-        "-TokenPool::operator <<: TokenId in DefToken-Range!" );
+    if ((sal_uInt16)rId >= nScTokenOff)
+    {
+        SAL_WARN("sc.filter", "-TokenPool::operator <<: TokenId in DefToken-Range!");
+    }
 
     if( nP_IdAkt >= nP_Id )
         if (!GrowId())
@@ -340,8 +347,10 @@ inline TokenPool& TokenPool::operator <<( const TokenId& rId )
 
 inline TokenPool& TokenPool::operator <<( const DefTokenId eId )
 {
-    OSL_ENSURE( ( sal_uInt32 ) eId + nScTokenOff < 0xFFFF,
-        "-TokenPool::operator<<: enum too large!" );
+    if ((sal_uInt32)eId + nScTokenOff >= 0xFFFF)
+    {
+        SAL_WARN("sc.filter", "-TokenPool::operator<<: enum too large!" );
+    }
 
     if( nP_IdAkt >= nP_Id )
         if (!GrowId())
