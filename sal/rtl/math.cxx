@@ -1264,7 +1264,7 @@ double SAL_CALL rtl_math_log1p(double fValue) SAL_THROW_EXTERN_C()
 
 double SAL_CALL rtl_math_atanh(double fValue) SAL_THROW_EXTERN_C()
 {
-   return 0.5 * rtl_math_log1p(2.0 * fValue / (1.0-fValue));
+    return atanh(fValue);
 }
 
 /** Parent error function (erf) */
@@ -1279,52 +1279,14 @@ double SAL_CALL rtl_math_erfc(double x) SAL_THROW_EXTERN_C()
     return erfc(x);
 }
 
-/** improved accuracy of asinh for |x| large and for x near zero
-    @see #i97605#
- */
 double SAL_CALL rtl_math_asinh(double fX) SAL_THROW_EXTERN_C()
 {
-    if ( fX == 0.0 )
-        return 0.0;
-
-    double fSign = 1.0;
-    if ( fX < 0.0 )
-    {
-        fX = - fX;
-        fSign = -1.0;
-    }
-
-    if ( fX < 0.125 )
-        return fSign * rtl_math_log1p( fX + fX*fX / (1.0 + sqrt( 1.0 + fX*fX)));
-
-    if ( fX < 1.25e7 )
-        return fSign * log( fX + sqrt( 1.0 + fX*fX));
-
-    return fSign * log( 2.0*fX);
+    return asinh(fX);
 }
 
-/** improved accuracy of acosh for x large and for x near 1
-    @see #i97605#
- */
 double SAL_CALL rtl_math_acosh(double fX) SAL_THROW_EXTERN_C()
 {
-    volatile double fZ = fX - 1.0;
-    if (fX < 1.0)
-    {
-        double fResult;
-        ::rtl::math::setNan( &fResult );
-        return fResult;
-    }
-    if ( fX == 1.0 )
-        return 0.0;
-
-    if ( fX < 1.1 )
-        return rtl_math_log1p( fZ + sqrt( fZ*fZ + 2.0*fZ));
-
-    if ( fX < 1.25e7 )
-        return log( fX + sqrt( fX*fX - 1.0));
-
-    return log( 2.0*fX);
+    return acosh(fX);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
