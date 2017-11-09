@@ -172,6 +172,12 @@ SlideBackground::~SlideBackground()
     disposeOnce();
 }
 
+bool SlideBackground::IsDraw()
+{
+    return ( maContext == maDrawMasterContext ||
+             maContext == maDrawOtherContext );
+}
+
 bool SlideBackground::IsImpress()
 {
     return ( maContext == maImpressMasterContext ||
@@ -231,6 +237,7 @@ void SlideBackground::HandleContextChange(
 
     if ( IsImpress() )
     {
+        mpMasterLabel->SetText(SdResId(STR_MASTERSLIDE_NAME));
         mpMarginSelectBox->Hide();
 
         if ( maContext == maImpressMasterContext )
@@ -271,7 +278,10 @@ void SlideBackground::HandleContextChange(
         if(pPanel)
             pPanel->TriggerDeckLayouting();
     }
-    // else Draw or something else, do nothing
+    else if ( IsDraw() )
+    {
+        mpMasterLabel->SetText(SdResId(STR_MASTERPAGE_NAME));
+    }
 }
 
 void SlideBackground::Update()
@@ -515,9 +525,8 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
         {
             if(!mbTitle)
             {
-                if(maContext == maDrawOtherContext || maContext == maDrawMasterContext)
+                if( IsDraw() )
                 {
-                    mpMasterLabel->SetText(SdResId(STR_MASTERPAGE_NAME));
                     mpCloseMaster->Hide();
                     mpEditMaster->Hide();
                     if( maContext == maDrawMasterContext)
@@ -527,7 +536,6 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
                 }
                 else if ( maContext == maImpressOtherContext || maContext == maImpressMasterContext )
                 {
-                    mpMasterLabel->SetText(SdResId(STR_MASTERSLIDE_NAME));
                     if( maContext == maImpressMasterContext )
                         SetPanelTitle(SdResId(STR_MASTERSLIDE_NAME));
                     else
