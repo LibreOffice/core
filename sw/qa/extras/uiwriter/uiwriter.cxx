@@ -292,6 +292,7 @@ public:
     void testTdf113790();
     void testTdf108048();
     void testTdf114306();
+    void testTdf113481();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -464,6 +465,7 @@ public:
     CPPUNIT_TEST(testTdf113790);
     CPPUNIT_TEST(testTdf108048);
     CPPUNIT_TEST(testTdf114306);
+    CPPUNIT_TEST(testTdf113481);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5666,6 +5668,37 @@ void SwUiWriterTest::testTdf108048()
     uno::Reference<text::XTextRange> xPara = getParagraph(2);
     sal_uInt16 nPageNumber = getProperty< sal_uInt16 >(xPara, "PageNumberOffset");
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(6), nPageNumber);
+}
+
+void SwUiWriterTest::testTdf113481()
+{
+    SwDoc* pDoc = createDoc("tdf113481-IVS.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // One backspace should completely remove the CJK ideograph varation sequence
+    pWrtShell->EndPara();
+    // Before: U+8FBA U+E0102. After: empty
+    pWrtShell->DelLeft();
+    const uno::Reference< text::XTextRange > xPara1 = getParagraph(1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xPara1->getString().getLength());
+
+    // In case that weak script is treated as CJK script, remove one character.
+    pWrtShell->Down(false);
+    pWrtShell->EndPara();
+    // Before: U+4E2D U+2205 U+FE00. After: U+4E2D U+2205
+    pWrtShell->DelLeft();
+    const uno::Reference< text::XTextRange > xPara2 = getParagraph(2);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xPara2->getString().getLength());
+    CPPUNIT_ASSERT_EQUAL(u'\x2205', xPara2->getString()[1]);
+
+    // Characters of other scripts, remove one character.
+    pWrtShell->Down(false);
+    pWrtShell->EndPara();
+    // Before: U+1820 U+180B. After: U+1820
+    pWrtShell->DelLeft();
+    const uno::Reference< text::XTextRange > xPara3 = getParagraph(3);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPara3->getString().getLength());
+    CPPUNIT_ASSERT_EQUAL(u'\x1820', xPara3->getString()[0]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
