@@ -266,17 +266,20 @@ sub print_dotnetsdk_dir()
     my $dir = 
           reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/sdkInstallRootv1.1") ||
           reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/sdkInstallRootv2.0");
+    defined $dir || exit 1;
     print cygpath ($dir, 'w', $output_format);
 }
 
 sub print_jdk_dir()
 {
     my $dir =
+	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.8/JavaHome") ||
 	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.7/JavaHome") ||
 	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.6/JavaHome") ||
 	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.5/JavaHome") ||
 	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.4/JavaHome") ||
 	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.3/JavaHome");
+    defined $dir || exit 1;
     print cygpath($dir, 'w', $output_format); 
 }
 
