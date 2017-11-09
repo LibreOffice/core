@@ -64,7 +64,7 @@ private:
     OUString            maCommand;
     Link<const NamedColor&, void> maSelectedLink;
 
-    PaletteManager&     mrPaletteManager;
+    std::shared_ptr<PaletteManager> mxPaletteManager;
     BorderColorStatus&  mrBorderColorStatus;
 
     ColorSelectFunction maColorSelectFunction;
@@ -80,7 +80,7 @@ private:
 
 public:
     SvxColorWindow(const OUString& rCommand,
-                   PaletteManager& rPaletteManager,
+                   std::shared_ptr<PaletteManager>& rPaletteManager,
                    BorderColorStatus& rBorderColorStatus,
                    sal_uInt16 nSlotId,
                    const css::uno::Reference< css::frame::XFrame >& rFrame,
