@@ -517,7 +517,7 @@ OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnectio
                                   Description,
                                   SchemaName,
                                   CatalogName)
-                ,m_pConnection(_pConnection)
+                ,m_pCalcConnection(_pConnection)
                 ,m_nStartCol(0)
                 ,m_nStartRow(0)
                 ,m_nDataCols(0)
@@ -529,7 +529,7 @@ OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnectio
 void OCalcTable::construct()
 {
     //  get sheet object
-    Reference< XSpreadsheetDocument> xDoc = m_pConnection->acquireDoc();
+    Reference< XSpreadsheetDocument> xDoc = m_pCalcConnection->acquireDoc();
     if (xDoc.is())
     {
         Reference<XSpreadsheets> xSheets = xDoc->getSheets();
@@ -613,9 +613,9 @@ void SAL_CALL OCalcTable::disposing()
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aColumns = nullptr;
-    if ( m_pConnection )
-        m_pConnection->releaseDoc();
-    m_pConnection = nullptr;
+    if ( m_pCalcConnection )
+        m_pCalcConnection->releaseDoc();
+    m_pCalcConnection = nullptr;
 
 }
 
