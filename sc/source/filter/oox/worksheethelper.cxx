@@ -327,7 +327,6 @@ private:
     typedef ::std::map< sal_Int32, ColumnModelRange >   ColumnModelRangeMap;
     typedef ::std::pair< RowModel, sal_Int32 >          RowModelRange;
     typedef ::std::map< sal_Int32, RowModelRange >      RowModelRangeMap;
-    typedef ::std::list< HyperlinkModel >               HyperlinkModelList;
     typedef ::std::list< ValidationModel >              ValidationModelList;
 
     /** Inserts all imported hyperlinks into their cell ranges. */
@@ -371,8 +370,8 @@ private:
     ColumnModelRangeMap maColModels;        /// Ranges of columns sorted by first column index.
     RowModel            maDefRowModel;      /// Default row formatting.
     RowModelRangeMap    maRowModels;        /// Ranges of rows sorted by first row index.
-    HyperlinkModelList  maHyperlinks;       /// Cell ranges containing hyperlinks.
-    ValidationModelList maValidations;      /// Cell ranges containing data validation settings.
+    std::vector< HyperlinkModel > maHyperlinks;       /// Cell ranges containing hyperlinks.
+    std::vector< ValidationModel > maValidations;      /// Cell ranges containing data validation settings.
     SheetDataBuffer     maSheetData;        /// Buffer for cell contents and cell formatting.
     CondFormatBuffer    maCondFormats;      /// Buffer for conditional formatting.
     CommentsBuffer      maComments;         /// Buffer for all cell comments in this sheet.
@@ -946,13 +945,13 @@ void WorksheetGlobals::finalizeDrawingImport()
 
 void WorksheetGlobals::finalizeHyperlinkRanges()
 {
-    for( HyperlinkModelList::const_iterator aIt = maHyperlinks.begin(), aEnd = maHyperlinks.end(); aIt != aEnd; ++aIt )
+    for (auto const& link : maHyperlinks)
     {
-        OUString aUrl = getHyperlinkUrl( *aIt );
+        OUString aUrl = getHyperlinkUrl(link);
         // try to insert URL into each cell of the range
         if( !aUrl.isEmpty() )
-            for( ScAddress aAddress( aIt->maRange.aStart.Col(), aIt->maRange.aStart.Row(), getSheetIndex() ); aAddress.Row() <= aIt->maRange.aEnd.Row(); aAddress.IncRow() )
-                for( aAddress.SetCol(aIt->maRange.aStart.Col()); aAddress.Col() <= aIt->maRange.aEnd.Col(); aAddress.IncCol() )
+            for( ScAddress aAddress(link.maRange.aStart.Col(), link.maRange.aStart.Row(), getSheetIndex() ); aAddress.Row() <= link.maRange.aEnd.Row(); aAddress.IncRow() )
+                for( aAddress.SetCol(link.maRange.aStart.Col()); aAddress.Col() <= link.maRange.aEnd.Col(); aAddress.IncCol() )
                     insertHyperlink( aAddress, aUrl );
     }
 }
@@ -1030,9 +1029,9 @@ void WorksheetGlobals::insertHyperlink( const ScAddress& rAddress, const OUStrin
 
 void WorksheetGlobals::finalizeValidationRanges() const
 {
-    for( ValidationModelList::const_iterator aIt = maValidations.begin(), aEnd = maValidations.end(); aIt != aEnd; ++aIt )
+    for (auto const& validation : maValidations)
     {
-        PropertySet aPropSet( getCellRangeList( aIt->maRanges ) );
+        PropertySet aPropSet( getCellRangeList(validation.maRanges) );
 
         Reference< XPropertySet > xValidation( aPropSet.getAnyProperty( PROP_Validation ), UNO_QUERY );
         if( xValidation.is() )
@@ -1042,7 +1041,7 @@ void WorksheetGlobals::finalizeValidationRanges() const
             try
             {
                 sal_Int32 nIndex = 0;
-                OUString aToken = aIt->msRef.getToken( 0, ' ', nIndex );
+                OUString aToken = validation.msRef.getToken( 0, ' ', nIndex );
 
                 Reference<XSpreadsheet> xSheet = getSheetFromDoc( getCurrentSheetIndex() );
                 Reference<XCellRange> xDBCellRange;
@@ -1061,7 +1060,7 @@ void WorksheetGlobals::finalizeValidationRanges() const
 
             // convert validation type to API enum
             ValidationType eType = ValidationType_ANY;
-            switch( aIt->mnType )
+            switch( validation.mnType )
             {
                 case XML_custom:        eType = ValidationType_CUSTOM;      break;
                 case XML_date:          eType = ValidationType_DATE;        break;
@@ -1077,7 +1076,7 @@ void WorksheetGlobals::finalizeValidationRanges() const
 
             // convert error alert style to API enum
             ValidationAlertStyle eAlertStyle = ValidationAlertStyle_STOP;
-            switch( aIt->mnErrorStyle )
+            switch( validation.mnErrorStyle )
             {
                 case XML_information:   eAlertStyle = ValidationAlertStyle_INFO;    break;
                 case XML_stop:          eAlertStyle = ValidationAlertStyle_STOP;    break;
@@ -1087,30 +1086,30 @@ void WorksheetGlobals::finalizeValidationRanges() const
             aValProps.setProperty( PROP_ErrorAlertStyle, eAlertStyle );
 
             // convert dropdown style to API visibility constants
-            sal_Int16 nVisibility = aIt->mbNoDropDown ? TableValidationVisibility::INVISIBLE : TableValidationVisibility::UNSORTED;
+            sal_Int16 nVisibility = validation.mbNoDropDown ? TableValidationVisibility::INVISIBLE : TableValidationVisibility::UNSORTED;
             aValProps.setProperty( PROP_ShowList, nVisibility );
 
             // messages
-            aValProps.setProperty( PROP_ShowInputMessage, aIt->mbShowInputMsg );
-            aValProps.setProperty( PROP_InputTitle, aIt->maInputTitle );
-            aValProps.setProperty( PROP_InputMessage, aIt->maInputMessage );
-            aValProps.setProperty( PROP_ShowErrorMessage, aIt->mbShowErrorMsg );
-            aValProps.setProperty( PROP_ErrorTitle, aIt->maErrorTitle );
-            aValProps.setProperty( PROP_ErrorMessage, aIt->maErrorMessage );
+            aValProps.setProperty( PROP_ShowInputMessage, validation.mbShowInputMsg );
+            aValProps.setProperty( PROP_InputTitle, validation.maInputTitle );
+            aValProps.setProperty( PROP_InputMessage, validation.maInputMessage );
+            aValProps.setProperty( PROP_ShowErrorMessage, validation.mbShowErrorMsg );
+            aValProps.setProperty( PROP_ErrorTitle, validation.maErrorTitle );
+            aValProps.setProperty( PROP_ErrorMessage, validation.maErrorMessage );
 
             // allow blank cells
-            aValProps.setProperty( PROP_IgnoreBlankCells, aIt->mbAllowBlank );
+            aValProps.setProperty( PROP_IgnoreBlankCells, validation.mbAllowBlank );
 
             try
             {
                 // condition operator
                 Reference< XSheetCondition2 > xSheetCond( xValidation, UNO_QUERY_THROW );
-                xSheetCond->setConditionOperator( CondFormatBuffer::convertToApiOperator( aIt->mnOperator ) );
+                xSheetCond->setConditionOperator( CondFormatBuffer::convertToApiOperator( validation.mnOperator ) );
 
                 // condition formulas
                 Reference< XMultiFormulaTokens > xTokens( xValidation, UNO_QUERY_THROW );
-                xTokens->setTokens( 0, aIt->maTokens1 );
-                xTokens->setTokens( 1, aIt->maTokens2 );
+                xTokens->setTokens( 0, validation.maTokens1 );
+                xTokens->setTokens( 1, validation.maTokens2 );
             }
             catch( Exception& )
             {
@@ -1129,15 +1128,15 @@ void WorksheetGlobals::convertColumns()
     // stores first grouped column index for each level
     OutlineLevelVec aColLevels;
 
-    for( ColumnModelRangeMap::iterator aIt = maColModels.begin(), aEnd = maColModels.end(); aIt != aEnd; ++aIt )
+    for (auto const& colModel : maColModels)
     {
         // column indexes are stored 0-based in maColModels
-        ValueRange aColRange( ::std::max( aIt->first, nNextCol ), ::std::min( aIt->second.second, nMaxCol ) );
+        ValueRange aColRange( ::std::max( colModel.first, nNextCol ), ::std::min( colModel.second.second, nMaxCol ) );
         // process gap between two column models, use default column model
         if( nNextCol < aColRange.mnFirst )
             convertColumns( aColLevels, ValueRange( nNextCol, aColRange.mnFirst - 1 ), maDefColModel );
         // process the column model
-        convertColumns( aColLevels, aColRange, aIt->second.first );
+        convertColumns( aColLevels, aColRange, colModel.second.first );
         // cache next column to be processed
         nNextCol = aColRange.mnLast + 1;
     }
@@ -1188,15 +1187,15 @@ void WorksheetGlobals::convertRows()
     // stores first grouped row index for each level
     OutlineLevelVec aRowLevels;
 
-    for( RowModelRangeMap::iterator aIt = maRowModels.begin(), aEnd = maRowModels.end(); aIt != aEnd; ++aIt )
+    for (auto const& rowModel : maRowModels)
     {
         // row indexes are stored 0-based in maRowModels
-        ValueRange aRowRange( ::std::max( aIt->first, nNextRow ), ::std::min( aIt->second.second, nMaxRow ) );
+        ValueRange aRowRange( ::std::max( rowModel.first, nNextRow ), ::std::min( rowModel.second.second, nMaxRow ) );
         // process gap between two row models, use default row model
         if( nNextRow < aRowRange.mnFirst )
             convertRows( aRowLevels, ValueRange( nNextRow, aRowRange.mnFirst - 1 ), maDefRowModel );
         // process the row model
-        convertRows( aRowLevels, aRowRange, aIt->second.first, maDefRowModel.mfHeight );
+        convertRows( aRowLevels, aRowRange, rowModel.second.first, maDefRowModel.mfHeight );
         // cache next row to be processed
         nNextRow = aRowRange.mnLast + 1;
     }

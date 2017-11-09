@@ -19,7 +19,7 @@
 
 #include <excelvbaproject.hxx>
 
-#include <list>
+#include <vector>
 #include <set>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -72,7 +72,7 @@ void ExcelVbaProject::prepareImport()
         ::std::set< OUString > aUsedCodeNames;
 
         // collect sheets without codenames
-        ::std::list< SheetCodeNameInfo >  aCodeNameInfos;
+        ::std::vector< SheetCodeNameInfo >  aCodeNameInfos;
 
         // iterate over all imported sheets
         Reference< XEnumerationAccess > xSheetsEA( mxDocument->getSheets(), UNO_QUERY_THROW );
@@ -98,20 +98,20 @@ void ExcelVbaProject::prepareImport()
         }
 
         // create new codenames if sheets do not have one
-        for( ::std::list< SheetCodeNameInfo >::iterator aIt = aCodeNameInfos.begin(), aEnd = aCodeNameInfos.end(); aIt != aEnd; ++aIt )
+        for (auto & codeName : aCodeNameInfos)
         {
             // search for an unused codename
             sal_Int32 nCounter = 1;
             OUString aCodeName;
             do
             {
-                aCodeName = aIt->maPrefix + OUString::number( nCounter++ );
+                aCodeName = codeName.maPrefix + OUString::number( nCounter++ );
             }
             while( aUsedCodeNames.count( aCodeName ) > 0 );
             aUsedCodeNames.insert( aCodeName );
 
             // set codename at sheet
-            aIt->maSheetProps.setProperty( PROP_CodeName, aCodeName );
+            codeName.maSheetProps.setProperty( PROP_CodeName, aCodeName );
 
             // tell base class to create a dummy module
             addDummyModule( aCodeName, ModuleType::DOCUMENT );

@@ -20,7 +20,7 @@
 #include <memory>
 #include <xecontent.hxx>
 
-#include <list>
+#include <vector>
 #include <algorithm>
 #include <com/sun/star/sheet/XAreaLinks.hpp>
 #include <com/sun/star/sheet/XAreaLink.hpp>
@@ -92,11 +92,10 @@ public:
     void                SaveXml( XclExpXmlStream& rStrm );
 
 private:
-    typedef ::std::list< XclExpStringRef >      XclExpStringList;
     typedef ::std::vector< XclExpHashEntry >    XclExpHashVec;
     typedef ::std::vector< XclExpHashVec >      XclExpHashTab;
 
-    XclExpStringList    maStringList;   /// List of unique strings (in SST ID order).
+    std::vector< XclExpStringRef > maStringVector;   /// List of unique strings (in SST ID order).
     XclExpHashTab       maHashTab;      /// Hashed table that manages string pointers.
     sal_uInt32          mnTotal;        /// Total count of strings (including doubles).
     sal_uInt32          mnSize;         /// Size of the SST (count of unique strings).
@@ -130,7 +129,7 @@ sal_uInt32 XclExpSstImpl::Insert( XclExpStringRef xString )
     if( (aIt == rVec.end()) || (*aIt->mpString != *xString) )
     {
         nSstIndex = mnSize;
-        maStringList.push_back( xString );
+        maStringVector.push_back( xString );
         rVec.insert( aIt, aEntry );
         ++mnSize;
     }
@@ -144,7 +143,7 @@ sal_uInt32 XclExpSstImpl::Insert( XclExpStringRef xString )
 
 void XclExpSstImpl::Save( XclExpStream& rStrm )
 {
-    if( maStringList.empty() )
+    if( maStringVector.empty() )
         return;
 
     SvMemoryStream aExtSst( 8192 );
@@ -161,7 +160,7 @@ void XclExpSstImpl::Save( XclExpStream& rStrm )
     rStrm.StartRecord( EXC_ID_SST, 8 );
 
     rStrm << mnTotal << mnSize;
-    for( XclExpStringList::const_iterator aIt = maStringList.begin(), aEnd = maStringList.end(); aIt != aEnd; ++aIt )
+    for (auto const& elem : maStringVector)
     {
         if( !nBucketIndex )
         {
@@ -173,7 +172,7 @@ void XclExpSstImpl::Save( XclExpStream& rStrm )
                    .WriteUInt16( 0 );     // reserved
         }
 
-        rStrm << **aIt;
+        rStrm << *elem;
 
         if( ++nBucketIndex == nPerBucket )
             nBucketIndex = 0;
@@ -195,7 +194,7 @@ void XclExpSstImpl::Save( XclExpStream& rStrm )
 
 void XclExpSstImpl::SaveXml( XclExpXmlStream& rStrm )
 {
-    if( maStringList.empty() )
+    if( maStringVector.empty() )
         return;
 
     sax_fastparser::FSHelperPtr pSst = rStrm.CreateOutputStream(
@@ -212,10 +211,10 @@ void XclExpSstImpl::SaveXml( XclExpXmlStream& rStrm )
             XML_uniqueCount, OString::number(  mnSize ).getStr(),
             FSEND );
 
-    for( XclExpStringList::const_iterator aIt = maStringList.begin(), aEnd = maStringList.end(); aIt != aEnd; ++aIt )
+    for (auto const& elem : maStringVector)
     {
         pSst->startElement( XML_si, FSEND );
-        (*aIt)->WriteXml( rStrm );
+        elem->WriteXml( rStrm );
         pSst->endElement( XML_si );
     }
 
