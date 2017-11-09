@@ -15,6 +15,7 @@
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/dialogs.hrc>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/numvset.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -183,7 +184,8 @@ void NumberingPopup::VSSelectHdl(void* pControl)
     }
     else if ( getSelectedEntryId() == 1 )
     {
-        auto aArgs( comphelper::InitPropertySequence( { { "Page", css::uno::makeAny( OUString("customize") ) } } ) );
+        auto aArgs( comphelper::InitPropertySequence( { { "Page", css::uno::makeAny( OUString("customize") ) },
+                                                        { "DialogParent", css::uno::makeAny(VCLUnoHelper::GetInterface(GetParent())) } } ) );
         mrController.dispatchCommand( ".uno:OutlineBullet", aArgs );
     }
 }
