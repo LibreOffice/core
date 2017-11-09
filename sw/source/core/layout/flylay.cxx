@@ -47,12 +47,13 @@ using namespace ::com::sun::star;
 
 SwFlyFreeFrame::SwFlyFreeFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch )
 :   SwFlyFrame( pFormat, pSib, pAnch ),
-    TransformableSwFrame(),
     // #i34753#
     mbNoMakePos( false ),
     // #i37068#
     mbNoMoveOnCheckClip( false ),
-    maUnclippedFrame( )
+    maUnclippedFrame(),
+    // RotateFlyFrame3
+    mpTransformableSwFrame()
 {
 }
 
@@ -154,6 +155,21 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     int nLoopControlRuns = 0;
     const int nLoopControlMax = 10;
 
+    // RotateFlyFrame3 - outer frame
+    const double fRotation(getFrameRotation());
+    const bool bRotated(!basegfx::fTools::equalZero(fRotation));
+
+    if(bRotated)
+    {
+        // Re-layout may be partially (see all isFrameAreaDefinitionValid() flags),
+        // so resetting the local SwFrame(s) in the local SwFrameAreaDefinition is
+        // needed. Reset to BoundAreas will be done below automatically
+        if(isTransformableSwFrame())
+        {
+            getTransformableSwFrame()->resetAreaDefinitionsToUntransformed();
+        }
+    }
+
     while ( !isFrameAreaPositionValid() || !isFrameAreaSizeValid() || !isFramePrintAreaValid() || m_bFormatHeightOnly || !m_bValidContentPos )
     {
         SwRectFnSet aRectFnSet(this);
@@ -233,30 +249,27 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     // RotateFlyFrame3 - outer frame
     // Do not refresh transforms/Areas self here, this will be done
     // when inner and outer frame are layouted, in SwNoTextFrame::MakeAll
-    const double fRotation(getFrameRotation());
-    const bool bRotated(!basegfx::fTools::equalZero(fRotation));
-
-    if(!bRotated)
+    if(bRotated)
     {
-        // reset transformations to show that they are not used
-        resetLocalAreaTransformations();
+        // RotateFlyFrame3: Safe changes locally
+        // get center from outer frame (layout frame) to be on the safe side
+        const Point aCenter(getFrameArea().Center());
+        const basegfx::B2DPoint aB2DCenter(aCenter.X(), aCenter.Y());
+
+        if(!mpTransformableSwFrame)
+        {
+            mpTransformableSwFrame.reset(new TransformableSwFrame(*this));
+        }
+
+        getTransformableSwFrame()->createFrameAreaTransformations(
+            fRotation,
+            aB2DCenter);
+        getTransformableSwFrame()->resetAreaDefinitionsToTransformed();
     }
     else
     {
-        // RotateFlyFrame3: Safe changes locally
-        const bool bMeValid(isFrameAreaDefinitionValid());
-
-        if(bMeValid)
-        {
-            // get center from outer frame (layout frame) to be on the safe side
-            const Point aCenter(getFrameArea().Center());
-            const basegfx::B2DPoint aB2DCenter(aCenter.X(), aCenter.Y());
-
-            updateTransformationsAndFrameAreaDefinitions(
-                *this,
-                fRotation,
-                aB2DCenter);
-        }
+        // reset transformations to show that they are not used
+        mpTransformableSwFrame.reset();
     }
 
     Unlock();
@@ -273,10 +286,10 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 // RotateFlyFrame3 - Support for Transformations - outer frame
 basegfx::B2DHomMatrix SwFlyFreeFrame::getFrameAreaTransformation() const
 {
-    if(!getLocalFrameAreaTransformation().isIdentity())
+    if(isTransformableSwFrame())
     {
         // use pre-created transformation
-        return getLocalFrameAreaTransformation();
+        return getTransformableSwFrame()->getLocalFrameAreaTransformation();
     }
 
     // call parent
@@ -285,10 +298,10 @@ basegfx::B2DHomMatrix SwFlyFreeFrame::getFrameAreaTransformation() const
 
 basegfx::B2DHomMatrix SwFlyFreeFrame::getFramePrintAreaTransformation() const
 {
-    if(!getLocalFramePrintAreaTransformation().isIdentity())
+    if(isTransformableSwFrame())
     {
         // use pre-created transformation
-        return getLocalFramePrintAreaTransformation();
+        return getTransformableSwFrame()->getLocalFramePrintAreaTransformation();
     }
 
     // call parent
@@ -303,14 +316,14 @@ void SwFlyFreeFrame::transform_translate(const Point& rOffset)
     SwFlyFrame::transform_translate(rOffset);
 
     // check if the Transformations need to be adapted
-    if(isTransformationUsed())
+    if(isTransformableSwFrame())
     {
         const basegfx::B2DHomMatrix aTransform(
             basegfx::utils::createTranslateB2DHomMatrix(
                 rOffset.X(), rOffset.Y()));
 
         // transform using TransformableSwFrame
-        doTransform(aTransform);
+        getTransformableSwFrame()->doTransform(aTransform);
     }
 }
 
