@@ -55,6 +55,7 @@ public:
     bool IsExpanded() const { return mbIsExpanded;}
     bool HasIdPredicate (const OUString& rsId) const;
     const OUString& GetId() const { return msPanelId;}
+    void TriggerDeckLayouting() { maDeckLayoutTrigger(); }
 
     virtual void Resize() override;
     virtual void DataChanged (const DataChangedEvent& rEvent) override;
