@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_02e2499f",
+        "filename": "sc/source/ui/unoobj/editsrc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-11-10T12:26:14Z",
+      "side": 1,
+      "message": "i don\u0027t think there are page-breaks in Calc? more likely paragraph-breaks or line-breaks?",
+      "revId": "a33067c15345020c1663837224573446fc196900",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
