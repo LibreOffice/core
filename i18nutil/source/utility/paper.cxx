@@ -61,6 +61,9 @@ struct PageDesc
 //http://partners.adobe.com/public/developer/en/ps/5003.PPD_Spec_v4.3.pdf
 //https://web.archive.org/web/20040912070512/http://www.y-adagio.com/public/committees/docsii/doc_00-49/symp_ulaan/china_ppr.pdf (Kai)
 //http://www.sls.psi.ch/controls/help/howto/Howto_Print_a_A0_Poster_at_WSLA_012_2.pdf (Dia)
+
+//!! The order of these entries must correspond to enum Paper in <i18nutil/paper.hxx>
+
 static const PageDesc aDinTab[] =
 {
     { MM2MM100( 841 ),   MM2MM100( 1189 ),   "A0",  nullptr },
