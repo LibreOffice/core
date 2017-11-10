@@ -72,8 +72,8 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
 
-#define SDTRANSFER_OBJECTTYPE_DRAWMODEL         static_cast<SotClipboardFormatId>(0x00000001)
-#define SDTRANSFER_OBJECTTYPE_DRAWOLE           static_cast<SotClipboardFormatId>(0x00000002)
+constexpr sal_uInt32 SDTRANSFER_OBJECTTYPE_DRAWMODEL = 1;
+constexpr sal_uInt32 SDTRANSFER_OBJECTTYPE_DRAWOLE   = 2;
 
 SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, bool bInitOnGetData )
 :   mpPageDocShell( nullptr )
@@ -587,7 +587,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
     return bOK;
 }
 
-bool SdTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pObject, SotClipboardFormatId nObjectType, const DataFlavor& )
+bool SdTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pObject, sal_uInt32 nObjectType, const DataFlavor& )
 {
     bool bRet = false;
 

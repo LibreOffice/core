@@ -32,6 +32,9 @@
 
 namespace dbaui
 {
+    constexpr sal_uInt32 FORMAT_OBJECT_ID_RTF  = 1;
+    constexpr sal_uInt32 FORMAT_OBJECT_ID_HTML = 2;
+
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::sdb;
@@ -134,9 +137,9 @@ namespace dbaui
         osl_atomic_decrement( &m_refCount );
     }
 
-    bool ODataClipboard::WriteObject( ::tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const css::datatransfer::DataFlavor& /*rFlavor*/ )
+    bool ODataClipboard::WriteObject( ::tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const css::datatransfer::DataFlavor& /*rFlavor*/ )
     {
-        if (nUserObjectId == SotClipboardFormatId::RTF || nUserObjectId == SotClipboardFormatId::HTML )
+        if (nUserObjectId == FORMAT_OBJECT_ID_RTF || nUserObjectId == FORMAT_OBJECT_ID_HTML )
         {
             ODatabaseImportExport* pExport = static_cast<ODatabaseImportExport*>(pUserObject);
             if ( pExport && rxOStm.is() )
@@ -167,12 +170,12 @@ namespace dbaui
             case SotClipboardFormatId::RTF:
                 if ( m_pRtf.is() )
                     m_pRtf->initialize(getDescriptor());
-                return m_pRtf.is() && SetObject( m_pRtf.get(), SotClipboardFormatId::RTF, rFlavor );
+                return m_pRtf.is() && SetObject( m_pRtf.get(), FORMAT_OBJECT_ID_RTF, rFlavor );
 
             case SotClipboardFormatId::HTML:
                 if ( m_pHtml.is() )
                     m_pHtml->initialize(getDescriptor());
-                return m_pHtml.is() && SetObject( m_pHtml.get(), SotClipboardFormatId::HTML, rFlavor );
+                return m_pHtml.is() && SetObject( m_pHtml.get(), FORMAT_OBJECT_ID_HTML, rFlavor );
 
             default: break;
         }

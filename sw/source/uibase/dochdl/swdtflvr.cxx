@@ -134,13 +134,13 @@
 
 #define OLESIZE 11905 - 2 * lMinBorder, 6 * MM50
 
-#define SWTRANSFER_OBJECTTYPE_DRAWMODEL         static_cast<SotClipboardFormatId>(0x00000001)
-#define SWTRANSFER_OBJECTTYPE_HTML              static_cast<SotClipboardFormatId>(0x00000002)
-#define SWTRANSFER_OBJECTTYPE_RTF               static_cast<SotClipboardFormatId>(0x00000004)
-#define SWTRANSFER_OBJECTTYPE_STRING            static_cast<SotClipboardFormatId>(0x00000008)
-#define SWTRANSFER_OBJECTTYPE_SWOLE             static_cast<SotClipboardFormatId>(0x00000010)
-#define SWTRANSFER_OBJECTTYPE_DDE               static_cast<SotClipboardFormatId>(0x00000020)
-#define SWTRANSFER_OBJECTTYPE_RICHTEXT          static_cast<SotClipboardFormatId>(0x00000040)
+constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_DRAWMODEL = 0x00000001;
+constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_HTML      = 0x00000002;
+constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_RTF       = 0x00000004;
+constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_STRING    = 0x00000008;
+constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_SWOLE     = 0x00000010;
+constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_DDE       = 0x00000020;
+constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_RICHTEXT  = 0x00000040;
 
 using namespace ::svx;
 using namespace ::com::sun::star;
@@ -609,7 +609,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
 }
 
 bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
-                                    void* pObject, SotClipboardFormatId nObjectType,
+                                    void* pObject, sal_uInt32 nObjectType,
                                     const DataFlavor& /*rFlavor*/ )
 {
     bool bRet = false;

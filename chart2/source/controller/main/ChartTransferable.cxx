@@ -37,6 +37,8 @@
 #include <svx/unomodel.hxx>
 #include <svx/svdview.hxx>
 
+constexpr sal_uInt32 CHARTTRANSFER_OBJECTTYPE_DRAWMODEL = 1;
+
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
@@ -85,7 +87,7 @@ bool ChartTransferable::GetData( const css::datatransfer::DataFlavor& rFlavor, c
     {
         if ( nFormat == SotClipboardFormatId::DRAWING )
         {
-            bResult = SetObject( m_pMarkedObjModel, SotClipboardFormatId::STRING, rFlavor );
+            bResult = SetObject( m_pMarkedObjModel, CHARTTRANSFER_OBJECTTYPE_DRAWMODEL, rFlavor );
         }
         else if ( nFormat == SotClipboardFormatId::GDIMETAFILE )
         {
@@ -102,7 +104,7 @@ bool ChartTransferable::GetData( const css::datatransfer::DataFlavor& rFlavor, c
     return bResult;
 }
 
-bool ChartTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId,
+bool ChartTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
     const datatransfer::DataFlavor& /* rFlavor */ )
 {
     // called from SetObject, put data into stream
@@ -110,7 +112,7 @@ bool ChartTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
     bool bRet = false;
     switch ( nUserObjectId )
     {
-        case SotClipboardFormatId::STRING:
+        case CHARTTRANSFER_OBJECTTYPE_DRAWMODEL:
             {
                 SdrModel* pMarkedObjModel = static_cast< SdrModel* >( pUserObject );
                 if ( pMarkedObjModel )
