@@ -410,8 +410,6 @@ const CXXMethodDecl* UnnecessaryOverride::findOverriddenOrSimilarMethodInSupercl
             {
                 continue;
             }
-            if (methodDecl->param_size() != baseMethod->param_size())
-                continue;
             if (methodDecl->getNumParams() != baseMethod->getNumParams())
                 continue;
             bool bParamsMatch = true;
