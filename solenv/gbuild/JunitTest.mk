@@ -46,7 +46,11 @@ $(call gb_JunitTest_get_target,%) :
 	$(CLEAN_CMD)
 
 define gb_JunitTest_JunitTest
+ifeq ($(HAMCREST_CORE_JAR),)
+$(call gb_JunitTest_get_target,$(1)) : CLASSPATH := $(value XCLASSPATH)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))$(gb_CLASSPATHSEP)$(OOO_JUNIT_JAR)$(gb_CLASSPATHSEP)$(OUTDIR)/lib
+else
 $(call gb_JunitTest_get_target,$(1)) : CLASSPATH := $(value XCLASSPATH)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))$(gb_CLASSPATHSEP)$(OOO_JUNIT_JAR)$(gb_CLASSPATHSEP)$(HAMCREST_CORE_JAR)$(gb_CLASSPATHSEP)$(OUTDIR)/lib
+endif
 $(call gb_JunitTest_get_target,$(1)) : CLASSES :=
 $(call gb_JunitTest_JunitTest_platform,$(1))
 
