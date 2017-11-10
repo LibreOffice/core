@@ -474,6 +474,8 @@ public:
 
     bool isDataFromPivotTable();
 
+    void clearDataProviders();
+
 #if HAVE_FEATURE_OPENGL
     OpenGLWindow* getOpenGLWindow() { return mpOpenGLWindow;}
 #endif

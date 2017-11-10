@@ -12802,6 +12802,10 @@ module com {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::sheet::XSpreadsheets getSheets();
     };
+    published interface XDataProviderCreator {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XInterface createDataProvider();
+    };
     published service SpreadsheetDocument {
      service ::com::sun::star::document::OfficeDocument;
      /** @deprecated */ [optional] service ::com::sun::star::sheet::SpreadsheetDocumentSettings;
