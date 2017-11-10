@@ -95,7 +95,7 @@ static void lcl_InvalidateAttribs( SfxBindings& rBindings )
 static void lcl_UpdateHyphenator( Outliner& rOutliner, const SdrObject* pObj )
 {
     // use hyphenator only if hyphenation attribute is set
-    if ( pObj && static_cast<const SfxBoolItem&>(pObj->GetMergedItem(EE_PARA_HYPHENATE)).GetValue() ) {
+    if ( pObj && pObj->GetMergedItem(EE_PARA_HYPHENATE).GetValue() ) {
             css::uno::Reference<css::linguistic2::XHyphenator> xHyphenator( LinguMgr::GetHyphenator() );
             rOutliner.SetHyphenator( xHyphenator );
     }

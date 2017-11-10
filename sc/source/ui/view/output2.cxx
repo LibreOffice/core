@@ -2442,7 +2442,7 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
         nControl &= ~EEControlBits::ONECHARPERLINE;
     mpEngine->SetControlWord( nControl );
 
-    if ( !mbHyphenatorSet && static_cast<const SfxBoolItem&>(pSet->Get(EE_PARA_HYPHENATE)).GetValue() )
+    if ( !mbHyphenatorSet && pSet->Get(EE_PARA_HYPHENATE).GetValue() )
     {
         //  set hyphenator the first time it is needed
         css::uno::Reference<css::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
@@ -4798,7 +4798,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     nControl &= ~EEControlBits::ONECHARPERLINE;
                                 pEngine->SetControlWord( nControl );
 
-                                if ( !bHyphenatorSet && static_cast<const SfxBoolItem&>(pSet->Get(EE_PARA_HYPHENATE)).GetValue() )
+                                if ( !bHyphenatorSet && pSet->Get(EE_PARA_HYPHENATE).GetValue() )
                                 {
                                     //  set hyphenator the first time it is needed
                                     css::uno::Reference<css::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );

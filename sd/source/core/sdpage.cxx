@@ -2022,8 +2022,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
                                     // of the BulletItems
                                     if (aTempSet.GetItemState(EE_PARA_BULLET) == SfxItemState::DEFAULT)
                                     {
-                                        SvxBulletItem aOldBulItem(static_cast<const SvxBulletItem&>( pOutlineSheet->GetItemSet().Get(EE_PARA_BULLET) ));
-                                        const SvxBulletItem& rNewBulItem = static_cast<const SvxBulletItem&>( aTempSet.Get(EE_PARA_BULLET) );
+                                        SvxBulletItem aOldBulItem( pOutlineSheet->GetItemSet().Get(EE_PARA_BULLET) );
+                                        const SvxBulletItem& rNewBulItem = aTempSet.Get(EE_PARA_BULLET);
                                         aOldBulItem.CopyValidProperties(rNewBulItem);
                                         aTempSet.Put(aOldBulItem);
                                     }
@@ -2149,7 +2149,7 @@ SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, P
             }
 
             // Remove LRSpace item
-            SfxItemSet aSet(pModel->GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
+            SfxItemSet aSet(pModel->GetPool(), svl::Items<EE_PARA_LRSPACE.Which(), EE_PARA_LRSPACE.Which()>{} );
 
             aSet.Put(pNewObj->GetMergedItemSet());
 
@@ -2187,11 +2187,11 @@ SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, P
             pNewObj->SetEmptyPresObj(false);
 
             // reset left indent
-            SfxItemSet aSet(pModel->GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
+            SfxItemSet aSet(pModel->GetPool(), svl::Items<EE_PARA_LRSPACE.Which(), EE_PARA_LRSPACE.Which()>{} );
 
             aSet.Put(pNewObj->GetMergedItemSet());
 
-            const SvxLRSpaceItem& rLRItem = static_cast<const SvxLRSpaceItem&>( aSet.Get(EE_PARA_LRSPACE) );
+            const SvxLRSpaceItem& rLRItem = aSet.Get(EE_PARA_LRSPACE);
             SvxLRSpaceItem aNewLRItem(rLRItem);
             aNewLRItem.SetTextLeft(0);
             aSet.Put(aNewLRItem);

@@ -477,7 +477,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         }
 
         // paragraph justification
-        SvxLRSpaceItem aLR = static_cast<const SvxLRSpaceItem&>( aAttrSet.Get( EE_PARA_LRSPACE ) );
+        SvxLRSpaceItem aLR = aAttrSet.Get( EE_PARA_LRSPACE );
         rSet.Put(aLR);
         SvxAdjust eAdj = static_cast<const SvxAdjustItem&>( aAttrSet.Get( EE_PARA_JUST ) ).GetAdjust();
         switch( eAdj )
@@ -513,7 +513,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         }
         else
         {
-            switch( static_cast<const SvxFrameDirectionItem&>( aAttrSet.Get( EE_PARA_WRITINGDIR ) ).GetValue() )
+            switch( aAttrSet.Get( EE_PARA_WRITINGDIR ).GetValue() )
             {
                 case SvxFrameDirection::Vertical_LR_TB:
                 case SvxFrameDirection::Vertical_RL_TB:
@@ -554,7 +554,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             }
         }
 
-        SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>( aAttrSet.Get( EE_PARA_LRSPACE ) );
+        SvxLRSpaceItem aLRSpace = aAttrSet.Get( EE_PARA_LRSPACE );
         aLRSpace.SetWhich(SID_ATTR_PARA_LRSPACE);
         rSet.Put(aLRSpace);
         Invalidate(SID_ATTR_PARA_LRSPACE);

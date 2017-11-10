@@ -1972,7 +1972,7 @@ bool ImpEditEngine::IsRightToLeft( sal_Int32 nPara ) const
     if ( !IsVertical() )
     {
         bR2L = GetDefaultHorizontalTextDirection() == EE_HTEXTDIR_R2L;
-        pFrameDirItem = &static_cast<const SvxFrameDirectionItem&>(GetParaAttrib( nPara, EE_PARA_WRITINGDIR ));
+        pFrameDirItem = &GetParaAttrib( nPara, EE_PARA_WRITINGDIR );
         if ( pFrameDirItem->GetValue() == SvxFrameDirection::Environment )
         {
             // #103045# if DefaultHorizontalTextDirection is set, use that value, otherwise pool default.
@@ -1983,7 +1983,7 @@ bool ImpEditEngine::IsRightToLeft( sal_Int32 nPara ) const
             else
             {
                 // Use pool default
-                pFrameDirItem = &static_cast<const SvxFrameDirectionItem&>(const_cast<ImpEditEngine*>(this)->GetEmptyItemSet().Get( EE_PARA_WRITINGDIR ));
+                pFrameDirItem = &const_cast<ImpEditEngine*>(this)->GetEmptyItemSet().Get( EE_PARA_WRITINGDIR );
             }
         }
     }
