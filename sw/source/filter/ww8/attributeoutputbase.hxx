@@ -34,6 +34,7 @@
 #include <wrtswtbl.hxx>
 #include <fldbas.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <vector>
 
@@ -146,6 +147,11 @@ enum StyleType
 
 class AttributeOutputBase
 {
+private:
+    SvtSaveOptions m_aSaveOpt;
+
+    OUString ConvertURL( const OUString& rUrl, bool bAbsoluteOut );
+
 public:
     /// Export the state of RTL/CJK.
     virtual void RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript ) = 0;
