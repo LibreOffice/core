@@ -763,21 +763,21 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     rEditSet.Put( SvxPostureItem    ( eCtlItalic,   EE_CHAR_ITALIC_CTL ) );
     rEditSet.Put( SvxContourItem    ( bOutline,     EE_CHAR_OUTLINE ) );
     rEditSet.Put( SvxShadowedItem   ( bShadow,      EE_CHAR_SHADOW ) );
-    rEditSet.Put( SvxForbiddenRuleItem(bForbidden, EE_PARA_FORBIDDENRULES) );
+    rEditSet.Put( SvxForbiddenRuleItem(bForbidden, EE_PARA_FORBIDDENRULES.Which()) );
     rEditSet.Put( SvxEmphasisMarkItem( eEmphasis,   EE_CHAR_EMPHASISMARK ) );
     rEditSet.Put( SvxCharReliefItem( eRelief,       EE_CHAR_RELIEF ) );
     rEditSet.Put( SvxLanguageItem   ( eLang,        EE_CHAR_LANGUAGE ) );
     rEditSet.Put( SvxLanguageItem   ( eCjkLang,     EE_CHAR_LANGUAGE_CJK ) );
     rEditSet.Put( SvxLanguageItem   ( eCtlLang,     EE_CHAR_LANGUAGE_CTL ) );
-    rEditSet.Put( SfxBoolItem       ( EE_PARA_HYPHENATE, bHyphenate ) );
-    rEditSet.Put( SvxFrameDirectionItem( eDirection, EE_PARA_WRITINGDIR ) );
+    rEditSet.Put( SfxBoolItem       ( EE_PARA_HYPHENATE.Which(), bHyphenate ) );
+    rEditSet.Put( SvxFrameDirectionItem( eDirection, EE_PARA_WRITINGDIR.Which() ) );
 
     // Script spacing is always off.
     // The cell attribute isn't used here as long as there is no UI to set it
     // (don't evaluate attributes that can't be changed).
     // If a locale-dependent default is needed, it has to go into the cell
     // style, like the fonts.
-    rEditSet.Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
+    rEditSet.Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING.Which() ) );
 }
 
 void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCondSet ) const

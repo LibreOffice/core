@@ -369,7 +369,7 @@ namespace frm
     }
 
     ParagraphDirectionHandler::ParagraphDirectionHandler( AttributeId _nAttributeId )
-        :AttributeHandler( _nAttributeId, EE_PARA_WRITINGDIR )
+        :AttributeHandler( _nAttributeId, EE_PARA_WRITINGDIR.Which() )
         ,m_eParagraphDirection( SvxFrameDirection::Horizontal_LR_TB )
         ,m_eDefaultAdjustment( SvxAdjust::Right )
         ,m_eOppositeDefaultAdjustment( SvxAdjust::Left )

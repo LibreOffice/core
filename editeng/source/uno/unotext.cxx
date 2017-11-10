@@ -506,7 +506,7 @@ bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemPropertySimpleEnt
         }
         break;
 
-    case EE_PARA_NUMBULLET:
+    case EE_PARA_NUMBULLET.Which():
         {
             uno::Reference< container::XIndexReplace > xRule;
             return !aValue.hasValue() || ((aValue >>= xRule) && !xRule.is());
@@ -557,12 +557,12 @@ bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemPropertySimpleEnt
             }
         }
         break;
-    case EE_PARA_BULLETSTATE:
+    case EE_PARA_BULLETSTATE.Which():
         {
             bool bBullet = true;
             if( aValue >>= bBullet )
             {
-                SfxBoolItem aItem( EE_PARA_BULLETSTATE, bBullet );
+                SfxBoolItem aItem( EE_PARA_BULLETSTATE.Which(), bBullet );
                 rNewSet.Put(aItem);
                 return true;
             }
@@ -678,13 +678,13 @@ bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet const & rSet, cons
         }
         break;
 
-    case EE_PARA_NUMBULLET:
+    case EE_PARA_NUMBULLET.Which():
         {
             SfxItemState eState = rSet.GetItemState( EE_PARA_NUMBULLET );
             if( eState != SfxItemState::SET && eState != SfxItemState::DEFAULT)
                 throw uno::RuntimeException();
 
-            const SvxNumBulletItem* pBulletItem = rSet.GetItem<SvxNumBulletItem>( EE_PARA_NUMBULLET );
+            const SvxNumBulletItem* pBulletItem = rSet.GetItem( EE_PARA_NUMBULLET );
 
             if( pBulletItem == nullptr )
                 throw uno::RuntimeException();
@@ -719,7 +719,7 @@ bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet const & rSet, cons
         }
         break;
 
-    case EE_PARA_BULLETSTATE:
+    case EE_PARA_BULLETSTATE.Which():
         {
             bool bState = false;
             SfxItemState eState = rSet.GetItemState( EE_PARA_BULLETSTATE );

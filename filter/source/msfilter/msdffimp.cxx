@@ -1532,7 +1532,7 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
             break;
         }
     }
-    rSet.Put( SvxFrameDirectionItem( bVerticalText ? SvxFrameDirection::Vertical_RL_TB : SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR ) );
+    rSet.Put( SvxFrameDirectionItem( bVerticalText ? SvxFrameDirection::Vertical_RL_TB : SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR.Which() ) );
 
     rSet.Put( SdrTextVertAdjustItem( eTVA ) );
     rSet.Put( SdrTextHorzAdjustItem( eTHA ) );
@@ -3661,7 +3661,7 @@ void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
 
             SfxItemSet aParagraphAttribs( rOutliner.GetEmptyItemSet() );
             if ( !aSelection.nStartPos )
-                aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, false ) );
+                aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE.Which(), false ) );
             aSelection.nStartPos = 0;
             rOutliner.QuickSetAttribs( aParagraphAttribs, aSelection );
             nParaIndex++;
@@ -4469,7 +4469,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                     if ( bIsRTL )
                                     {
                                         SfxItemSet aSet2( rOutliner.GetParaAttribs( i ) );
-                                        aSet2.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_RL_TB, EE_PARA_WRITINGDIR ) );
+                                        aSet2.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_RL_TB, EE_PARA_WRITINGDIR.Which() ) );
                                         rOutliner.SetParaAttribs( i, aSet2 );
                                         bCreateNewParaObject = true;
                                     }

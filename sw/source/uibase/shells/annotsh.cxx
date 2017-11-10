@@ -575,7 +575,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             SfxItemSet aAttr(
                 *aNewAttr.GetPool(),
                 svl::Items<
-                    EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
+                    EE_PARA_WRITINGDIR.Which(), EE_PARA_WRITINGDIR.Which(),
                     EE_PARA_JUST, EE_PARA_JUST>{});
 
             SvxAdjust nAdjust = SvxAdjust::Left;
@@ -584,13 +584,13 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
 
             if( bLeftToRight )
             {
-                aAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR ) );
+                aAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR.Which() ) );
                 if( nAdjust == SvxAdjust::Right )
                     aAttr.Put( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
             }
             else
             {
-                aAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_RL_TB, EE_PARA_WRITINGDIR ) );
+                aAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_RL_TB, EE_PARA_WRITINGDIR.Which() ) );
                 if( nAdjust == SvxAdjust::Left )
                     aAttr.Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
             }
@@ -646,7 +646,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                 SfxItemState eState = aEditAttr.GetItemState( EE_PARA_LRSPACE );
                 if( eState >= SfxItemState::DEFAULT )
                 {
-                    SvxLRSpaceItem aLR = static_cast<const SvxLRSpaceItem&>( aEditAttr.Get( EE_PARA_LRSPACE ) );
+                    SvxLRSpaceItem aLR = aEditAttr.Get( EE_PARA_LRSPACE );
                     aLR.SetWhich(nSlotId);
                     rSet.Put(aLR);
                 }
@@ -826,7 +826,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     else
                     {
                         bool bFlag = false;
-                        switch( static_cast<const SvxFrameDirectionItem&>( aEditAttr.Get( EE_PARA_WRITINGDIR ) ).GetValue() )
+                        switch( aEditAttr.Get( EE_PARA_WRITINGDIR ).GetValue() )
                         {
                             case SvxFrameDirection::Horizontal_LR_TB:
                             {
