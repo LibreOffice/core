@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_62cb0da6",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2868,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-11-10T04:26:31Z",
+      "side": 1,
+      "message": "Given that this call is done twice, and involves a mutex operations etc, maybe use a var for it?",
+      "range": {
+        "startLine": 2868,
+        "startChar": 12,
+        "endLine": 2868,
+        "endChar": 53
+      },
+      "revId": "f6c59770cf764e81b6cb4fd4333136b683b962f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
