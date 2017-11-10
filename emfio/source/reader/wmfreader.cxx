@@ -526,7 +526,8 @@ namespace emfio
             case W_META_EXTTEXTOUT:
             {
                 mpInputStream->SeekRel(-6);
-                sal_Int32 nRecordPos = mpInputStream->Tell(), nRecordSize = 0;
+                auto nRecordPos = mpInputStream->Tell();
+                sal_Int32 nRecordSize = 0;
                 mpInputStream->ReadInt32( nRecordSize );
                 mpInputStream->SeekRel(2);
                 Point aPosition = ReadYX();
@@ -567,9 +568,9 @@ namespace emfio
                     if ( nNewTextLen )
                     {
                         std::unique_ptr<long[]> pDXAry, pDYAry;
-                        sal_uInt32  nMaxStreamPos = nRecordPos + ( nRecordSize << 1 );
-                        sal_Int32   nDxArySize =  nMaxStreamPos - mpInputStream->Tell();
-                        sal_Int32   nDxAryEntries = nDxArySize >> 1;
+                        auto nMaxStreamPos = nRecordPos + ( nRecordSize << 1 );
+                        auto nDxArySize =  nMaxStreamPos - mpInputStream->Tell();
+                        auto nDxAryEntries = nDxArySize >> 1;
                         bool        bUseDXAry = false;
 
                         if ( ( ( nDxAryEntries % nOriginalTextLen ) == 0 ) && ( nNewTextLen <= nOriginalTextLen ) )
