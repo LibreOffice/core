@@ -251,7 +251,6 @@ private:
 
     /// common properties
     sal_uInt16                  nId;
-    OUString                    aHelpText;
     OUString                    aLabel;
     OUString                    aCommand;
 
