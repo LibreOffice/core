@@ -727,7 +727,7 @@ void CallbackFlushHandler::callback(const int type, const char* payload, void* d
 void CallbackFlushHandler::queue(const int type, const char* data)
 {
     std::string payload(data ? data : "(nil)");
-    //SAL_WARN("lok", "Queue: " << type << " : " << payload);
+    SAL_INFO("lok", "Queue: " << type << " : " << payload);
 
     if (m_bPartTilePainting)
     {
@@ -745,7 +745,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             type != LOK_CALLBACK_VIEW_CURSOR_VISIBLE &&
             type != LOK_CALLBACK_TEXT_SELECTION)
         {
-            SAL_WARN("lok", "Skipping while painting [" << type << "]: [" << payload << "].");
+            SAL_INFO("lok", "Skipping while painting [" << type << "]: [" << payload << "].");
             return;
         }
 
@@ -762,7 +762,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         // issuing it, instead of the absolute one that we expect.
         // This is temporary however, and, once the control is created and initialized
         // correctly, it eventually emits the correct absolute coordinates.
-        SAL_WARN("lok", "Skipping invalid event [" << type << "]: [" << payload << "].");
+        SAL_INFO("lok", "Skipping invalid event [" << type << "]: [" << payload << "].");
         return;
     }
 
@@ -796,7 +796,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
 
             if (pos != m_queue.rend() && pos->second == payload)
             {
-                //SAL_WARN("lok", "Skipping queue duplicate [" << type << + "]: [" << payload << "].");
+                SAL_INFO("lok", "Skipping queue duplicate [" << type << + "]: [" << payload << "].");
                 return;
             }
         }
@@ -827,7 +827,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_GRAPHIC_SELECTION:
             case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
             case LOK_CALLBACK_INVALIDATE_TILES:
-                //SAL_WARN("lok", "Removing dups of [" << type << "]: [" << payload << "].");
+                SAL_INFO("lok", "Removing dups of [" << type << "]: [" << payload << "].");
                 removeAll([type] (const queue_type::value_type& elem) { return (elem.first == type); });
             break;
         }
@@ -886,10 +886,9 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_INVALIDATE_TILES:
             {
                 RectangleAndPart rcNew = RectangleAndPart::Create(payload);
-                //SAL_WARN("lok", "New: " << rcNew.toString());
                 if (rcNew.isEmpty())
                 {
-                    SAL_WARN("lok", "Skipping invalid event [" << type << "]: [" << payload << "].");
+                    SAL_INFO("lok", "Skipping invalid event [" << type << "]: [" << payload << "].");
                     return;
                 }
 
@@ -902,7 +901,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                     RectangleAndPart rcOld = RectangleAndPart::Create(pos->second);
                     if (rcOld.isInfinite() && (rcOld.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart))
                     {
-                        SAL_WARN("lok", "Skipping queue [" << type << "]: [" << payload << "] since all tiles need to be invalidated.");
+                        SAL_INFO("lok", "Skipping queue [" << type << "]: [" << payload << "] since all tiles need to be invalidated.");
                         return;
                     }
 
@@ -911,7 +910,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                         // If fully overlapping.
                         if (rcOld.m_aRectangle.IsInside(rcNew.m_aRectangle))
                         {
-                            SAL_WARN("lok", "Skipping queue [" << type << "]: [" << payload << "] since overlaps existing all-parts.");
+                            SAL_INFO("lok", "Skipping queue [" << type << "]: [" << payload << "] since overlaps existing all-parts.");
                             return;
                         }
                     }
@@ -919,7 +918,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
 
                 if (rcNew.isInfinite())
                 {
-                    SAL_WARN("lok", "Have Empty [" << type << "]: [" << payload << "] so removing all with part " << rcNew.m_nPart << ".");
+                    SAL_INFO("lok", "Have Empty [" << type << "]: [" << payload << "] so removing all with part " << rcNew.m_nPart << ".");
                     removeAll(
                         [&rcNew] (const queue_type::value_type& elem) {
                             if (elem.first == LOK_CALLBACK_INVALIDATE_TILES)
@@ -938,7 +937,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                 {
                     const auto rcOrig = rcNew;
 
-                    SAL_WARN("lok", "Have [" << type << "]: [" << payload << "] so merging overlapping.");
+                    SAL_INFO("lok", "Have [" << type << "]: [" << payload << "] so merging overlapping.");
                     removeAll(
                         [&rcNew] (const queue_type::value_type& elem) {
                             if (elem.first == LOK_CALLBACK_INVALIDATE_TILES)
@@ -946,27 +945,27 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                                 const RectangleAndPart rcOld = RectangleAndPart::Create(elem.second);
                                 if (rcNew.m_nPart != -1 && rcOld.m_nPart != -1 && rcOld.m_nPart != rcNew.m_nPart)
                                 {
-                                    SAL_WARN("lok", "Nothing to merge between new: " << rcNew.toString() << ", and old: " << rcOld.toString());
+                                    SAL_INFO("lok", "Nothing to merge between new: " << rcNew.toString() << ", and old: " << rcOld.toString());
                                     return false;
                                 }
 
                                 if (rcNew.m_nPart == -1)
                                 {
                                     // Don't merge unless fully overlaped.
-                                    SAL_WARN("lok", "New " << rcNew.toString() << " has " << rcOld.toString() << "?");
+                                    SAL_INFO("lok", "New " << rcNew.toString() << " has " << rcOld.toString() << "?");
                                     if (rcNew.m_aRectangle.IsInside(rcOld.m_aRectangle))
                                     {
-                                        SAL_WARN("lok", "New " << rcNew.toString() << " engulfs old " << rcOld.toString() << ".");
+                                        SAL_INFO("lok", "New " << rcNew.toString() << " engulfs old " << rcOld.toString() << ".");
                                         return true;
                                     }
                                 }
                                 else if (rcOld.m_nPart == -1)
                                 {
                                     // Don't merge unless fully overlaped.
-                                    SAL_WARN("lok", "Old " << rcOld.toString() << " has " << rcNew.toString() << "?");
+                                    SAL_INFO("lok", "Old " << rcOld.toString() << " has " << rcNew.toString() << "?");
                                     if (rcOld.m_aRectangle.IsInside(rcNew.m_aRectangle))
                                     {
-                                        SAL_WARN("lok", "New " << rcNew.toString() << " engulfs old " << rcOld.toString() << ".");
+                                        SAL_INFO("lok", "New " << rcNew.toString() << " engulfs old " << rcOld.toString() << ".");
                                         return true;
                                     }
                                 }
@@ -974,12 +973,12 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                                 {
                                     const tools::Rectangle rcOverlap = rcNew.m_aRectangle.GetIntersection(rcOld.m_aRectangle);
                                     const bool bOverlap = !rcOverlap.IsEmpty();
-                                    SAL_WARN("lok", "Merging " << rcNew.toString() << " & " << rcOld.toString() << " => " <<
+                                    SAL_INFO("lok", "Merging " << rcNew.toString() << " & " << rcOld.toString() << " => " <<
                                             rcOverlap.toString() << " Overlap: " << bOverlap);
                                     if (bOverlap)
                                     {
                                         rcNew.m_aRectangle.Union(rcOld.m_aRectangle);
-                                        SAL_WARN("lok", "Merged: " << rcNew.toString());
+                                        SAL_INFO("lok", "Merged: " << rcNew.toString());
                                         return true;
                                     }
                                 }
@@ -992,7 +991,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
 
                     if (rcNew.m_aRectangle != rcOrig.m_aRectangle)
                     {
-                        SAL_WARN("lok", "Replacing: " << rcOrig.toString() << " by " << rcNew.toString());
+                        SAL_INFO("lok", "Replacing: " << rcOrig.toString() << " by " << rcNew.toString());
                         if (rcNew.m_aRectangle.GetWidth() < rcOrig.m_aRectangle.GetWidth() ||
                             rcNew.m_aRectangle.GetHeight() < rcOrig.m_aRectangle.GetHeight())
                         {
@@ -1159,7 +1158,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
     }
 
     m_queue.emplace_back(type, payload);
-    SAL_WARN("lok", "Queued #" << (m_queue.size() - 1) <<
+    SAL_INFO("lok", "Queued #" << (m_queue.size() - 1) <<
              " [" << type << "]: [" << payload << "] to have " << m_queue.size() << " entries.");
 
     lock.unlock();
@@ -1175,7 +1174,7 @@ void CallbackFlushHandler::Invoke()
     {
         std::unique_lock<std::mutex> lock(m_mutex);
 
-        //SAL_WARN("lok", "Flushing " << m_queue.size() << " elements.");
+        SAL_INFO("lok", "Flushing " << m_queue.size() << " elements.");
         for (auto& pair : m_queue)
         {
             const int type = pair.first;
@@ -1190,7 +1189,7 @@ void CallbackFlushHandler::Invoke()
                     // If the state didn't change, it's safe to ignore.
                     if (stateIt->second == payload)
                     {
-                        //SAL_WARN("lok", "Skipping duplicate [" << type << "]: [" << payload << "].");
+                        SAL_INFO("lok", "Skipping duplicate [" << type << "]: [" << payload << "].");
                         continue;
                     }
 
@@ -1209,26 +1208,25 @@ void CallbackFlushHandler::Invoke()
                         // If the state didn't change, it's safe to ignore.
                         if (stateIt->second == payload)
                         {
-                            //SAL_WARN("lok", "Skipping view duplicate [" << type << ',' << viewId << "]: [" << payload << "].");
+                            SAL_INFO("lok", "Skipping view duplicate [" << type << ',' << viewId << "]: [" << payload << "].");
                             continue;
                         }
 
+                        SAL_INFO("lok", "Replacing an element in view states [" << type << ',' << viewId << "]: [" << payload << "].");
                         stateIt->second = payload;
-                        //SAL_WARN("lok", "Replacing an element in view states [" << type << ',' << viewId << "]: [" << payload << "].");
                     }
                     else
                     {
+                        SAL_INFO("lok", "Inserted a new element in view states: [" << type << ',' << viewId << "]: [" << payload << "]");
                         states.emplace(type, payload);
-                        //SAL_WARN("lok", "Inserted a new element in view states: [" << type << ',' << viewId << "]: [" << payload << "]");
+
                     }
                 }
             }
 
-            //SAL_WARN("lok", "Emitting [" << type << "]: [" << payload << "].");
             m_pCallback(type, payload.c_str(), m_pData);
         }
 
-        //SAL_WARN("lok", "Done flushing.");
         m_queue.clear();
     }
 }
