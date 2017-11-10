@@ -164,7 +164,7 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
     if ( pDocShell )
         if ( ScPostIt* pNote = pDocShell->GetDocument().GetNote(aCellPos) )
             if ( const EditTextObject* pEditObj = pNote->GetEditTextObject() )
-                pEditEngine->SetText( *pEditObj );      // incl. Umbrueche
+                pEditEngine->SetText( *pEditObj );      // incl. breaks (line, etc.)
 
     bDataValid = true;
     return pForwarder;
