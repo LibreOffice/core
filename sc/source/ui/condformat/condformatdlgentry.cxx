@@ -786,8 +786,8 @@ void ScColorScale2FrmtEntry::Init()
 {
     maLbEntryTypeMin->SetSelectHdl( LINK( this, ScColorScale2FrmtEntry, EntryTypeHdl ) );
     maLbEntryTypeMax->SetSelectHdl( LINK( this, ScColorScale2FrmtEntry, EntryTypeHdl ) );
-    maLbColMin->SelectEntry(Color(COL_LIGHTRED));
-    maLbColMax->SelectEntry(Color(COL_LIGHTBLUE));
+    maLbColMin->SelectEntry(Color(0xFFF685)); // Light Yellow 2
+    maLbColMax->SelectEntry(Color(0x65C295)); // Light Green 2
 }
 
 ScFormatEntry* ScColorScale2FrmtEntry::createColorscaleEntry() const
