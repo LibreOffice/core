@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_82eb99af",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/UI/Sidebar.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-11-10T09:24:35Z",
+      "side": 1,
+      "message": "And is ignoring ContextList not causing data loss?  Shouldn\u0027t the code that reads ContextList2 merge whatever modifications are present in ContextList into ContextList2 (and then write the updated ContextList2 and a nil\u0027ed ContextList to registrymodifications.xcu)?",
+      "revId": "101e7417848e9268d0415d2c43741728cec784c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
