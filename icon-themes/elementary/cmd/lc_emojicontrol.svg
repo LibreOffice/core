@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   id="svg1306"
+   sodipodi:version="0.32"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="lc_emojicontrol.svg"
+   version="1.1"
+   inkscape:export-filename="/home/ochosi/Nerdstuff/shimmer/libreoffice-style-elementary/src/cmd/lc_underline.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs1308">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3558">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3560" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop3562" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3558"
+       id="radialGradient3947"
+       cx="2.25"
+       cy="16"
+       fx="2.25"
+       fy="16"
+       r="16.875"
+       gradientTransform="matrix(0.39697225,0,0,0.11633788,11.22886,15.899702)"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="17.486161"
+     inkscape:cx="0.58288738"
+     inkscape:cy="8.7995289"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="2560"
+     inkscape:window-height="1377"
+     inkscape:window-x="0"
+     inkscape:window-y="34"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4151" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata1311">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     transform="translate(0,2)">
+    <ellipse
+       style="color:#000000;display:block;overflow:visible;visibility:visible;opacity:0.71111115;fill:url(#radialGradient3947);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;marker-start:none;marker-mid:none;marker-end:none"
+       id="path2193"
+       cx="12.122047"
+       cy="17.76111"
+       rx="6.6989069"
+       ry="1.9632038" />
+    <path
+       style="opacity:1;fill:#d3d7cf;fill-opacity:1;stroke:#000000;stroke-opacity:0.42745098"
+       d="M 12 4 C 7.581722 4 4 7.581722 4 12 C 4 16.418278 7.581722 20 12 20 C 16.418278 20 20 16.418278 20 12 C 20 7.581722 16.418278 4 12 4 z M 9 7.5 A 1.5 1.5 0 0 1 10.5 9 A 1.5 1.5 0 0 1 9 10.5 A 1.5 1.5 0 0 1 7.5 9 A 1.5 1.5 0 0 1 9 7.5 z M 15 7.5 A 1.5 1.5 0 0 1 16.5 9 A 1.5 1.5 0 0 1 15 10.5 A 1.5 1.5 0 0 1 13.5 9 A 1.5 1.5 0 0 1 15 7.5 z M 8.15625 14 L 15.84375 14 C 15.400461 15.72689 13.868958 17 12 17 C 10.131042 17 8.599539 15.72689 8.15625 14 z "
+       transform="translate(0,-2)"
+       id="path4" />
+    <circle
+       style="opacity:0.4;fill:none;fill-opacity:0.42745098;stroke:#ffffff;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path4192"
+       cx="12"
+       cy="10"
+       r="7" />
+  </g>
+</svg>
