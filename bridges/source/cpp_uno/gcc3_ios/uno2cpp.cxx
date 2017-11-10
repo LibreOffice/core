@@ -69,7 +69,7 @@ namespace arm
     }
 }
 
-void MapReturn(sal_uInt64 x0, sal_uInt64 x1, typelib_TypeDescriptionReference *pReturnType, sal_uInt64 *pRegisterReturn)
+void MapReturn(sal_uInt64 x0, sal_uInt64 x1, float fret, double dret, typelib_TypeDescriptionReference *pReturnType, sal_uInt64 *pRegisterReturn)
 {
     switch( pReturnType->eTypeClass )
     {
@@ -88,18 +88,10 @@ void MapReturn(sal_uInt64 x0, sal_uInt64 x1, typelib_TypeDescriptionReference *p
         pRegisterReturn[0] = x0;
         break;
     case typelib_TypeClass_FLOAT:
-        register float fret asm("s0");
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wuninitialized"
         *(float*)pRegisterReturn = fret;
-#pragma GCC diagnostic pop
         break;
     case typelib_TypeClass_DOUBLE:
-        register double dret asm("d0");
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wuninitialized"
         *(double*)pRegisterReturn = dret;
-#pragma GCC diagnostic pop
         break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
@@ -145,6 +137,8 @@ void callVirtualMethod(
     // For value returned in registers
     sal_uInt64 x0;
     sal_uInt64 x1;
+    float s0;
+    double d0;
 
     __asm__ __volatile__
     (
@@ -160,7 +154,9 @@ void callVirtualMethod(
      "  blr %[pmethod]\n"
      "  str x0, %[x0]\n"
      "  str x1, %[x1]\n"
-     : [x0]"=m" (x0), [x1]"=m" (x1)
+     "  str s0, %[s0]\n"
+     "  str d0, %[d0]\n"
+     : [x0]"=m" (x0), [x1]"=m" (x1), [s0]"=m" (s0), [d0]"=m" (d0)
      : [pgpr_0]"m" (pGPR[0]),
        [pgpr_2]"m" (pGPR[2]),
        [pgpr_4]"m" (pGPR[4]),
@@ -174,7 +170,7 @@ void callVirtualMethod(
      : "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "d0", "d1", "d2", "d3", "d4", "d5", "d6", "d7"
      );
 
-  MapReturn(x0, x1, pReturnType, (sal_uInt64 *) pRegisterReturn);
+  MapReturn(x0, x1, s0, d0, pReturnType, (sal_uInt64 *) pRegisterReturn);
 }
 }
 
