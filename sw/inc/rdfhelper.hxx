@@ -55,6 +55,13 @@ public:
                                 const css::uno::Reference<css::rdf::XResource>& xSubject,
                                 const OUString& rKey, const OUString& rValue);
 
+    /// Clone all statements in the graph of type rType, if any exists, from one subject to another.
+    static void cloneStatements(const css::uno::Reference<css::frame::XModel>& xSrcModel,
+                                const css::uno::Reference<css::frame::XModel>& xDstModel,
+                                const OUString& rType,
+                                const css::uno::Reference<css::rdf::XResource>& xSrcSubject,
+                                const css::uno::Reference<css::rdf::XResource>& xDstSubject);
+
     /// Remove all statements in the graph of type rType, if any exists.
     static void clearStatements(const css::uno::Reference<css::frame::XModel>& xModel,
                                 const OUString& rType,
