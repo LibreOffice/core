@@ -86,7 +86,7 @@ namespace emfplushelper
     #define EmfPlusRecordTypeSetClipRect 0x4032
     #define EmfPlusRecordTypeSetClipPath 0x4033
     #define EmfPlusRecordTypeSetClipRegion 0x4034
-    //TODO EmfPlusRecordTypeOffsetClip 0x4035
+    #define EmfPlusRecordTypeOffsetClip 0x4035
     #define EmfPlusRecordTypeDrawDriverString 0x4036
     //TODO EmfPlusRecordTypeStrokeFillPath 0x4037
     //TODO EmfPlusRecordTypeSerializableObject 0x4038

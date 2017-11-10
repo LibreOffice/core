@@ -89,6 +89,7 @@ namespace emfplushelper
             case EmfPlusRecordTypeSetClipRect: return "EmfPlusRecordTypeSetClipRect";
             case EmfPlusRecordTypeSetClipPath: return "EmfPlusRecordTypeSetClipPath";
             case EmfPlusRecordTypeSetClipRegion: return "EmfPlusRecordTypeSetClipRegion";
+            case EmfPlusRecordTypeOffsetClip: return "EmfPlusRecordTypeOffsetClip";
             case EmfPlusRecordTypeDrawDriverString: return "EmfPlusRecordTypeDrawDriverString";
         }
         return "";
@@ -1506,7 +1507,7 @@ namespace emfplushelper
                         float eAngle;
                         rMS.ReadFloat(eAngle);
 
-                        SAL_INFO("drawinglayer", "EMF+ EmfPlusRecordTypeRotateWorldTransform Angle: " << eAngle <<
+                        SAL_INFO("drawinglayer", "EMF+ RotateWorldTransform Angle: " << eAngle <<
                                  ", post multiply: " << (flags & 0x2000));
                         // Skipping flags & 0x2000
                         // For rotation transformation there is no difference between post and pre multiply
@@ -1519,7 +1520,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeResetClip:
                     {
-                        SAL_INFO("drawinglayer", "EMF+ EmfPlusRecordTypeResetClip");
+                        SAL_INFO("drawinglayer", "EMF+ ResetClip");
                         // We don't need to read anything more, as Size needs to be set 0x0000000C
                         // and DataSize must be set to 0.
 
@@ -1582,6 +1583,23 @@ namespace emfplushelper
                         {
                             SAL_WARN("drawinglayer", "EMF+\tTODO");
                         }
+                        break;
+                    }
+                    case EmfPlusRecordTypeOffsetClip:
+                    {
+                        float dx, dy;
+                        rMS.ReadFloat(dx).ReadFloat(dy);
+                        SAL_INFO("drawinglayer", "EMF+ OffsetClip, Offset x:" << dx << ", y:" << dy);
+
+                        basegfx::B2DPolyPolygon aPolyPolygon(
+                                    mrPropertyHolders.Current().getClipPolyPolygon());
+                        basegfx::B2DHomMatrix transformMatrix;
+                        transformMatrix.set(0, 2, dx);
+                        transformMatrix.set(1, 2, dy);
+                        aPolyPolygon.transform(transformMatrix);
+
+                        HandleNewClipRegion(aPolyPolygon, mrTargetHolders, mrPropertyHolders);
+
                         break;
                     }
                     case EmfPlusRecordTypeDrawDriverString:
