@@ -252,11 +252,13 @@ bool EditView::IsReadOnly() const
 
 void EditView::SetSelection( const ESelection& rESel )
 {
-    // If someone has just left an empty attribute, and then the outliner
-    // manipulates the selection:
+    // If someone has just left an empty attribute, and then the outliner manipulates the
+    // selection, call the CursorMoved method so that empty attributes get cleaned up.
     if ( !HasSelection() )
     {
-        const ContentNode* pNode = pImpEditView->GetEditSelection().Max().GetNode();
+        // tdf#113591 Get node from EditDoc, as the selection might have a pointer to an
+        // already deleted node.
+        const ContentNode* pNode = pImpEditView->pEditEngine->GetEditDoc().GetEndPaM().GetNode();
         pImpEditView->pEditEngine->CursorMoved( pNode );
     }
     EditSelection aNewSelection( pImpEditView->pEditEngine->pImpEditEngine->ConvertSelection(
