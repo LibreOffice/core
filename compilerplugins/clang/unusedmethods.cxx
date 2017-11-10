@@ -114,11 +114,13 @@ public:
     bool VisitFunctionDecl( const FunctionDecl* decl );
     bool VisitDeclRefExpr( const DeclRefExpr* );
     bool VisitCXXConstructExpr( const CXXConstructExpr* );
+    bool TraverseCXXRecordDecl( CXXRecordDecl* );
 private:
     void logCallToRootMethods(const FunctionDecl* functionDecl, std::set<MyFuncInfo>& funcSet);
     MyFuncInfo niceName(const FunctionDecl* functionDecl);
     std::string toString(SourceLocation loc);
     void functionTouchedFromExpr( const FunctionDecl* calleeFunctionDecl, const Expr* expr );
+    CXXRecordDecl const * currentCxxRecordDecl = nullptr;
 };
 
 MyFuncInfo UnusedMethods::niceName(const FunctionDecl* functionDecl)
@@ -281,6 +283,10 @@ bool UnusedMethods::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr
 
     logCallToRootMethods(constructorDecl, callSet);
 
+    // Now do the checks necessary for the "can be private" analysis
+    if (constructorDecl->getParent() != currentCxxRecordDecl)
+        calledFromOutsideSet.insert(niceName(constructorDecl));
+
     return true;
 }
 
@@ -339,6 +345,15 @@ bool UnusedMethods::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     }
 
     return true;
+}
+
+bool UnusedMethods::TraverseCXXRecordDecl(CXXRecordDecl* cxxRecordDecl)
+{
+    auto copy = currentCxxRecordDecl;
+    currentCxxRecordDecl = cxxRecordDecl;
+    bool ret = RecursiveASTVisitor::TraverseCXXRecordDecl(cxxRecordDecl);
+    currentCxxRecordDecl = copy;
+    return ret;
 }
 
 loplugin::Plugin::Registration< UnusedMethods > X("unusedmethods", false);

@@ -16,6 +16,7 @@ callSet = set() # set of tuple(return_type, name_and_params)
 
 # for the "method can be private" analysis
 publicDefinitionSet = set() # set of tuple(return_type, name_and_params)
+protectedDefinitionSet = set() # set of tuple(return_type, name_and_params)
 calledFromOutsideSet = set() # set of tuple(return_type, name_and_params)
 virtualSet = set() # set of tuple(return_type, name_and_params)
 
@@ -46,6 +47,8 @@ with io.open("loplugin.unusedmethods.log", "rb", buffering=1024*1024) as txt:
             definitionSet.add(funcInfo)
             if access == "public":
                 publicDefinitionSet.add(funcInfo)
+            elif access == "protected":
+                protectedDefinitionSet.add(funcInfo)
             definitionToSourceLocationMap[funcInfo] = sourceLocation
             if virtual == "virtual":
                 virtualSet.add(funcInfo)
@@ -272,6 +275,36 @@ for d in publicDefinitionSet:
 # print output, sorted by name and line number
 with open("loplugin.unusedmethods.report-can-be-private", "wt") as f:
     for t in sort_set_by_natural_key(tmp3set):
+        f.write(t[1] + "\n")
+        f.write("    " + t[0] + "\n")
+
+
+
+# --------------------------------------------------------------------------------------------
+# "all protected methods in class can be made private" analysis
+# --------------------------------------------------------------------------------------------
+
+potentialClasses = set()
+excludedClasses = set()
+potentialClassesSourceLocationMap = dict()
+matchClassName = re.compile(r"(\w+)::")
+for d in protectedDefinitionSet:
+    m = matchClassName.match(d[1])
+    if not m: continue
+    clazz = m.group(1)
+    if d in calledFromOutsideSet:
+        excludedClasses.add(clazz)
+    else:
+        potentialClasses.add(clazz)
+        potentialClassesSourceLocationMap[clazz] = definitionToSourceLocationMap[d]
+
+tmp4set = set()
+for d in (potentialClasses - excludedClasses):
+    tmp4set.add((d, potentialClassesSourceLocationMap[d]))
+
+# print output, sorted by name and line number
+with open("loplugin.unusedmethods.report-all-protected-can-be-private", "wt") as f:
+    for t in sort_set_by_natural_key(tmp4set):
         f.write(t[1] + "\n")
         f.write("    " + t[0] + "\n")
 
