@@ -60,6 +60,7 @@
 #include <sfx2/objface.hxx>
 #include <svx/dlgutil.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <sfx2/sidebar/Panel.hxx>
 #include <algorithm>
 #include <EventMultiplexer.hxx>
 #include <vcl/salbtype.hxx>
@@ -265,6 +266,10 @@ void SlideBackground::HandleContextChange(
             mpBackgroundLabel->Show();
             mpInsertImage->Show();
         }
+        // Need to do a relayouting, otherwise the panel size is not updated after show / hide controls
+        sfx2::sidebar::Panel* pPanel = dynamic_cast<sfx2::sidebar::Panel*>(GetParent());
+        if(pPanel)
+            pPanel->TriggerDeckLayouting();
     }
     // else Draw or something else, do nothing
 }
