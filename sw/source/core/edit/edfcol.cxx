@@ -1916,12 +1916,12 @@ bool SwEditShell::RemoveParagraphMetadataFieldAtCursor(const bool bBackspaceNotD
     return false;
 }
 
-OUString lcl_GetParagraphClassification(const uno::Reference<frame::XModel>& xModel, const uno::Reference<text::XTextContent>& xParagraph)
+OUString lcl_GetParagraphClassification(sfx::ClassificationKeyCreator const & rKeyCreator, const uno::Reference<frame::XModel>& xModel, const uno::Reference<text::XTextContent>& xParagraph)
 {
-    const OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
-    uno::Reference<text::XTextField> xTextField = lcl_FindParagraphClassificationField(xModel, xParagraph, sPolicy + "BusinessAuthorizationCategory:Name");
+
+    uno::Reference<text::XTextField> xTextField = lcl_FindParagraphClassificationField(xModel, xParagraph, rKeyCreator.makeCategoryNameKey());
     if (!xTextField.is())
-        xTextField = lcl_FindParagraphClassificationField(xModel, xParagraph, sPolicy + "BusinessAuthorizationCategory:Identifier");
+        xTextField = lcl_FindParagraphClassificationField(xModel, xParagraph, rKeyCreator.makeCategoryIdentifierKey());
 
     if (xTextField.is())
     {
@@ -1945,6 +1945,7 @@ OUString lcl_GetHighestClassificationParagraphClass(SwPaM* pCursor)
         return sHighestClass;
 
     SfxClassificationHelper aHelper(pDocShell->getDocProperties());
+    sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
 
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     const uno::Reference< text::XTextDocument > xDoc(xModel, uno::UNO_QUERY);
@@ -1955,7 +1956,7 @@ OUString lcl_GetHighestClassificationParagraphClass(SwPaM* pCursor)
     while (xParagraphs->hasMoreElements())
     {
         uno::Reference<text::XTextContent> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
-        sHighestClass = aHelper.GetHigherClass(sHighestClass, lcl_GetParagraphClassification(xModel, xParagraph));
+        sHighestClass = aHelper.GetHigherClass(sHighestClass, lcl_GetParagraphClassification(aKeyCreator, xModel, xParagraph));
     }
 
     return sHighestClass;
