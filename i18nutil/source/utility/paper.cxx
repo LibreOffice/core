@@ -222,6 +222,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
         if (bInitialized)
             return aInstance;
 
+#ifndef MACOSX
         // try libpaper
         // #i78617# workaround missing paperconf command
         FILE* pPipe = popen( "paperconf 2>/dev/null", "r" );
@@ -284,6 +285,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
                 }
             }
         }
+#endif
 
 #if defined(LC_PAPER) && defined(_GNU_SOURCE)
         // try LC_PAPER
