@@ -1,0 +1,9 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+2: Noel Grandin <noel.grandin@collabora.co.uk>
+Code-Review+2: Caolán McNamara <caolanm@redhat.com>
+Verified+1: Caolán McNamara <caolanm@redhat.com>
+Submitted-by: Caolán McNamara <caolanm@redhat.com>
+Submitted-at: Fri, 10 Nov 2017 11:27:13 +0100
+Reviewed-on: https://gerrit.libreoffice.org/44554
+Project: core
+Branch: refs/heads/master
