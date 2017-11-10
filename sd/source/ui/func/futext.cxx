@@ -864,8 +864,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     // Look in the object defaults if left-to-right is wanted. If
                     // yes, set text anchoring to right to let the box grow to left.
                     const SfxItemSet& rSet = mpView->GetDefaultAttr();
-                    SvxFrameDirection eDirection =
-                            static_cast<const SvxFrameDirectionItem&>(rSet.Get(EE_PARA_WRITINGDIR)).GetValue();
+                    SvxFrameDirection eDirection = rSet.Get(EE_PARA_WRITINGDIR).GetValue();
 
                     if(SvxFrameDirection::Horizontal_RL_TB == eDirection)
                     {

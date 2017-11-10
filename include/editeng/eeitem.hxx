@@ -21,6 +21,9 @@
 #define INCLUDED_EDITENG_EEITEM_HXX
 
 #include <svl/solar.hrc>
+#include <svl/typedwhich.hxx>
+
+class SvxFrameDirectionItem;
 
 /*
  * NOTE: Changes in this file will probably require
@@ -32,7 +35,7 @@
 
 // Paragraph attributes:
 #define EE_PARA_START               (EE_ITEMS_START+0)
-#define EE_PARA_WRITINGDIR          (EE_ITEMS_START+0)
+#define EE_PARA_WRITINGDIR          TypedWhich<SvxFrameDirectionItem>(EE_ITEMS_START+0)
 #define EE_PARA_XMLATTRIBS          (EE_ITEMS_START+1)
 #define EE_PARA_HANGINGPUNCTUATION  (EE_ITEMS_START+2)
 #define EE_PARA_FORBIDDENRULES      (EE_ITEMS_START+3)

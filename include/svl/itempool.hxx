@@ -23,6 +23,7 @@
 #include <rtl/string.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
+#include <svl/typedwhich.hxx>
 #include <tools/solar.h>
 #include <memory>
 #include <vector>
@@ -102,6 +103,11 @@ public:
 
     void                            SetPoolDefaultItem( const SfxPoolItem& );
     const SfxPoolItem*              GetPoolDefaultItem( sal_uInt16 nWhich ) const;
+    template<typename T>
+    const T*                        GetPoolDefaultItem( TypedWhich<T> nWhich ) const
+    {
+        return static_cast<T const &>(GetPoolDefaultItem(nWhich.Which()));
+    }
     void                            ResetPoolDefaultItem( sal_uInt16 nWhich );
 
     void                            SetDefaults(std::vector<SfxPoolItem*>* pDefaults);
@@ -148,10 +154,20 @@ public:
     virtual const SfxPoolItem&      Put( const SfxPoolItem&, sal_uInt16 nWhich = 0 );
     void                            Remove( const SfxPoolItem& );
     const SfxPoolItem&              GetDefaultItem( sal_uInt16 nWhich ) const;
+    template<typename T>
+    const T&                        GetDefaultItem( TypedWhich<T> nWhich ) const
+    {
+        return static_cast<T const &>(GetDefaultItem(nWhich.Which()));
+    }
 
     bool                            CheckItemInPool(const SfxPoolItem *) const;
     const SfxPoolItem *             GetItem2(sal_uInt16 nWhich, sal_uInt32 nSurrogate) const;
     const SfxPoolItem *             GetItem2Default(sal_uInt16 nWhich) const;
+    template<typename T>
+    const T*                        GetItem2Default( TypedWhich<T> nWhich ) const
+    {
+        return static_cast<T const &>(GetItem2Default(nWhich.Which()));
+    }
     sal_uInt32                      GetItemCount2(sal_uInt16 nWhich) const;
 
     sal_uInt16                      GetFirstWhich() const;

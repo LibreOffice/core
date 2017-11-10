@@ -956,7 +956,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
                 if( aEditAttr.GetItemState( EE_PARA_WRITINGDIR ) >= SfxItemState::DEFAULT )
                 {
-                    const SvxFrameDirectionItem& rItem = static_cast<const SvxFrameDirectionItem&>( aEditAttr.Get( EE_PARA_WRITINGDIR ) );
+                    const SvxFrameDirectionItem& rItem = aEditAttr.Get( EE_PARA_WRITINGDIR );
                     rSet.Put(SfxBoolItem(SID_RULER_TEXT_RIGHT_TO_LEFT, rItem.GetValue() == SvxFrameDirection::Horizontal_RL_TB));
                 }
             }

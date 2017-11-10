@@ -826,7 +826,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     else
                     {
                         bool bFlag = false;
-                        switch( static_cast<const SvxFrameDirectionItem&>( aEditAttr.Get( EE_PARA_WRITINGDIR ) ).GetValue() )
+                        switch( aEditAttr.Get( EE_PARA_WRITINGDIR ).GetValue() )
                         {
                             case SvxFrameDirection::Horizontal_LR_TB:
                             {

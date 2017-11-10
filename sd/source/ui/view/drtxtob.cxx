@@ -513,7 +513,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         }
         else
         {
-            switch( static_cast<const SvxFrameDirectionItem&>( aAttrSet.Get( EE_PARA_WRITINGDIR ) ).GetValue() )
+            switch( aAttrSet.Get( EE_PARA_WRITINGDIR ).GetValue() )
             {
                 case SvxFrameDirection::Vertical_LR_TB:
                 case SvxFrameDirection::Vertical_RL_TB:

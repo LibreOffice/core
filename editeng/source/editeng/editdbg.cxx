@@ -64,7 +64,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
     OStringBuffer aDebStr;
     switch ( rItem.Which() )
     {
-        case EE_PARA_WRITINGDIR:
+        case EE_PARA_WRITINGDIR.Which():
             aDebStr.append("WritingDir=");
             aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxFrameDirectionItem&>(rItem).GetValue()));
         break;
