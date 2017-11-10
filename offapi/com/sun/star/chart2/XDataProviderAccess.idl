@@ -1,0 +1,40 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef __com_sun_star_chart2_XDataProviderCreator_idl__
+#define __com_sun_star_chart2_XDataProviderCreator_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/uno/chart/data/XDataProvider.idl>
+
+module com {  module sun {  module star {  module chart2 {
+
+
+/** Provides access to chart2 data providers for a given document
+
+    @since LibreOffice 6.1
+
+ */
+interface XDataProviderAccess : com::sun::star::uno::XInterface
+{
+
+    /** creates a data provider for chart2, if possible
+
+        @see com::sun::star::chart2::data::XDataProvider
+
+     */
+    com::sun::star::chart2::data::XDataProvider createDataProvider();
+
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

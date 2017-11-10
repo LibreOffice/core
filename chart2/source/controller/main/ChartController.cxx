@@ -66,12 +66,14 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/chart2/XDataProviderAccess.hpp>
 
 #include <svx/sidebar/SelectionChangeHandler.hxx>
 #include <vcl/msgbox.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/layout.hxx>
 #include <osl/mutex.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>
@@ -1330,20 +1332,55 @@ void ChartController::executeDispatch_SourceData()
     //convert properties to ItemSet
     uno::Reference< XChartDocument >   xChartDoc( getModel(), uno::UNO_QUERY );
     OSL_ENSURE( xChartDoc.is(), "Invalid XChartDocument" );
-    if( !xChartDoc.is())
+    if( !xChartDoc.is() )
         return;
 
-    UndoLiveUpdateGuard aUndoGuard(
-        SchResId(STR_ACTION_EDIT_DATA_RANGES), m_xUndoManager );
-    if( xChartDoc.is())
+    // If there is a data table we should ask user if we really want to destroy it
+    // and switch to data ranges.
+    ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartDoc.get());
+    if ( rModel.hasInternalDataProvider() )
     {
+        // Check if we will able to create data provider later
+        Reference< lang::XServiceInfo > xParentServiceInfo( rModel.getParent(), uno::UNO_QUERY );
+        if ( !xParentServiceInfo.is() || !xParentServiceInfo->supportsService("com.sun.star.chart2.XDataProviderAccess") )
+            return;
+
         SolarMutexGuard aSolarGuard;
-        ScopedVclPtrInstance< ::chart::DataSourceDialog > aDlg( GetChartWindow(), xChartDoc, m_xCC );
-        if( aDlg->Execute() == RET_OK )
+
+        ScopedVclPtrInstance< MessageDialog > aQueryBox( GetChartWindow(), SchResId( STR_DLG_REMOVE_DATA_TABLE ), VclMessageType::Question, VclButtonsType::YesNo);
+
+        // If "No" then just return
+        if (aQueryBox->Execute() == RET_NO)
+            return;
+
+        // Remove data table
+        rModel.removeDataProviders();
+
+        // Ask parent document to create new data provider
+        css::uno::Reference< com::sun::star::chart2::XDataProviderAccess > xCreatorDoc(
+            rModel.getParent(), uno::UNO_QUERY );
+        OSL_ENSURE( xCreatorDoc.is(), "Invalid XDataProviderAccess" );
+
+        if ( xCreatorDoc.is() )
         {
-            impl_adaptDataSeriesAutoResize();
-            aUndoGuard.commit();
+            uno::Reference< data::XDataProvider > xDataProvider = xCreatorDoc->createDataProvider();
+            OSL_ENSURE( xCreatorDoc.is(), "Data provider was not created" );
+            if ( xDataProvider.is() )
+            {
+                rModel.attachDataProvider(xDataProvider);
+            }
         }
+    }
+
+    UndoLiveUpdateGuard aUndoGuard(
+        SchResId(STR_ACTION_EDIT_DATA_RANGES), m_xUndoManager);
+
+    SolarMutexGuard aSolarGuard;
+    ScopedVclPtrInstance< ::chart::DataSourceDialog > aDlg( GetChartWindow(), xChartDoc, m_xCC );
+    if( aDlg->Execute() == RET_OK )
+    {
+        impl_adaptDataSeriesAutoResize();
+        aUndoGuard.commit();
     }
 }
 
