@@ -21,6 +21,7 @@
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkgdi.hxx>
+#include <unx/gtk/gtksalmenu.hxx>
 #include <vcl/help.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/layout.hxx>
@@ -1415,11 +1416,7 @@ void GtkSalFrame::SetIcon( sal_uInt16 nIcon )
 
 void GtkSalFrame::SetMenu( SalMenu* pSalMenu )
 {
-//    if(m_pSalMenu)
-//    {
-//        static_cast<GtkSalMenu*>(m_pSalMenu)->DisconnectFrame();
-//    }
-    m_pSalMenu = pSalMenu;
+    m_pSalMenu = static_cast<GtkSalMenu*>(pSalMenu);
 }
 
 SalMenu* GtkSalFrame::GetMenu()

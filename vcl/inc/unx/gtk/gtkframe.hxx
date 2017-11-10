@@ -68,6 +68,8 @@ class GtkDnDTransferable;
     typedef void GDBusConnection;
 #endif
 
+class GtkSalMenu;
+
 class GtkSalFrame : public SalFrame
                   , public NativeWindowHandleProvider
 {
@@ -220,7 +222,7 @@ class GtkSalFrame : public SalFrame
     bool                            m_bSetFocusOnMap;
 #endif
 
-    SalMenu*                        m_pSalMenu;
+    GtkSalMenu*                     m_pSalMenu;
 
 #if ENABLE_DBUS && ENABLE_GIO
     private:

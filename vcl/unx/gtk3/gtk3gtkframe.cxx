@@ -1362,11 +1362,7 @@ void GtkSalFrame::SetIcon( sal_uInt16 nIcon )
 
 void GtkSalFrame::SetMenu( SalMenu* pSalMenu )
 {
-//    if(m_pSalMenu)
-//    {
-//        static_cast<GtkSalMenu*>(m_pSalMenu)->DisconnectFrame();
-//    }
-    m_pSalMenu = pSalMenu;
+    m_pSalMenu = static_cast<GtkSalMenu*>(pSalMenu);
 }
 
 SalMenu* GtkSalFrame::GetMenu()
@@ -1902,8 +1898,11 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
     gdk_window_set_fullscreen_mode( widget_get_window(m_pWindow), m_bSpanMonitorsWhenFullscreen
         ? GDK_FULLSCREEN_ON_ALL_MONITORS : GDK_FULLSCREEN_ON_CURRENT_MONITOR );
 #endif
+    GtkWidget* pMenuBarContainerWidget = m_pSalMenu ? m_pSalMenu->GetMenuBarContainerWidget() : nullptr;
     if( eType == SetType::Fullscreen )
     {
+        if (pMenuBarContainerWidget)
+            gtk_widget_hide(pMenuBarContainerWidget);
         if (m_bSpanMonitorsWhenFullscreen)
             gtk_window_fullscreen(GTK_WINDOW(m_pWindow));
         else
@@ -1917,7 +1916,11 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
 
     }
     else if( eType == SetType::UnFullscreen )
+    {
+        if (pMenuBarContainerWidget)
+            gtk_widget_show(pMenuBarContainerWidget);
         gtk_window_unfullscreen( GTK_WINDOW( m_pWindow ) );
+    }
 
     if( eType == SetType::UnFullscreen &&
         !(m_nStyle & SalFrameStyleFlags::SIZEABLE) )
