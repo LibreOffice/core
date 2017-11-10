@@ -120,6 +120,8 @@ SlideBackground::SlideBackground(
     maImpressOtherContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::DrawPage),
     maImpressMasterContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::MasterPage),
     maImpressHandoutContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::HandoutPage),
+    maImpressNotesPageContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::NotesPage),
+    maImpressMasterNotesPageContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::MasterNotesPage),
     mbTitle(false),
     mpPageLRMarginItem( new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ) ),
     mpPageULMarginItem( new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ) ),
@@ -175,7 +177,9 @@ bool SlideBackground::IsImpress()
 {
     return ( maContext == maImpressMasterContext ||
              maContext == maImpressOtherContext ||
-             maContext == maImpressHandoutContext );
+             maContext == maImpressHandoutContext ||
+             maContext == maImpressNotesPageContext ||
+             maContext == maImpressMasterNotesPageContext );
 }
 
 void SlideBackground::Initialize()
@@ -232,7 +236,7 @@ void SlideBackground::HandleContextChange(
     {
         mpMarginSelectBox->Hide();
 
-        if ( maContext == maImpressMasterContext )
+        if ( maContext == maImpressMasterContext ||  maContext == maImpressMasterNotesPageContext)
         {
             mpCloseMaster->Show();
             mpEditMaster->Hide();
@@ -254,7 +258,7 @@ void SlideBackground::HandleContextChange(
             mpEditMaster->Hide();
             mpCloseMaster->Hide();
         }
-        else if (maContext == maImpressOtherContext )
+        else if (maContext == maImpressOtherContext ||  maContext == maImpressNotesPageContext)
         {
             mpCloseMaster->Hide();
             mpEditMaster->Show();
@@ -520,10 +524,11 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
                     else
                         SetPanelTitle(SdResId(STR_PAGE_NAME));
                 }
-                else if ( maContext == maImpressOtherContext || maContext == maImpressMasterContext )
+                else if ( maContext == maImpressOtherContext || maContext == maImpressMasterContext ||
+                          maContext == maImpressNotesPageContext || maContext == maImpressMasterNotesPageContext )
                 {
                     mpMasterLabel->SetText(SdResId(STR_MASTERSLIDE_NAME));
-                    if( maContext == maImpressMasterContext )
+                    if( maContext == maImpressMasterContext ||  maContext == maImpressMasterNotesPageContext )
                         SetPanelTitle(SdResId(STR_MASTERSLIDE_NAME));
                     else
                         SetPanelTitle(SdResId(STR_SLIDE_NAME));

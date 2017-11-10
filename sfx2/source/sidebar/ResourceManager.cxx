@@ -394,7 +394,18 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
             aPanelNode.setNodeValue("OrderIndex", aOrder);
             bChanged = true;
         }
-        if (aContextList != aPanelNode.getNodeValue("ContextList"))
+
+        const Any aContextList2Value = aPanelNode.getNodeValue("ContextList2"); // If "ContextList2" defines any context use this list, otherwise fallback to simple "ContextList"
+        Sequence<OUString> aValues;
+        if ((aContextList2Value >>= aValues) && (aValues.getLength() != 0))
+        {
+            if (aContextList != aContextList2Value)
+            {
+                aPanelNode.setNodeValue("ContextList2", aContextList2Value);
+                bChanged = true;
+            }
+        }
+        else if (aContextList != aPanelNode.getNodeValue("ContextList"))
         {
             aPanelNode.setNodeValue("ContextList", aContextList);
             bChanged = true;
@@ -489,13 +500,20 @@ void ResourceManager::ReadContextList (
                         ContextList& rContextList,
                         const OUString& rsDefaultMenuCommand)
 {
-    const Any aValue = rParentNode.getNodeValue("ContextList");
+    Any aValue = rParentNode.getNodeValue("ContextList2");
+
     Sequence<OUString> aValues;
     sal_Int32 nCount;
-    if (aValue >>= aValues)
+    if ((aValue >>= aValues) && aValues.getLength() != 0)  // First check whether "ContextList2" has any item
         nCount = aValues.getLength();
     else
-        nCount = 0;
+    {
+        aValue = rParentNode.getNodeValue("ContextList");
+        if (aValue >>= aValues)
+            nCount = aValues.getLength();
+        else
+            nCount = 0;
+    }
 
     for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
     {

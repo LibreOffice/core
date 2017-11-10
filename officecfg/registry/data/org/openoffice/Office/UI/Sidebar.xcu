@@ -740,7 +740,7 @@
         <prop oor:name="DeckId" oor:type="xs:string">
           <value>PropertyDeck</value>
         </prop>
-        <prop oor:name="ContextList">
+        <prop oor:name="ContextList2">
           <value oor:separator=";">
             DrawImpress, DrawPage,        visible, .uno:PageSetup  ;
             DrawImpress, default,         visible, .uno:PageSetup  ;
@@ -748,6 +748,7 @@
             DrawImpress, NotesPage,       visible, .uno:PageSetup  ;
             DrawImpress, SlidesorterPage, visible, .uno:PageSetup  ;
             DrawImpress, MasterPage,      visible, .uno:PageSetup  ;
+            DrawImpress, MasterNotesPage, visible, .uno:PageSetup  ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">

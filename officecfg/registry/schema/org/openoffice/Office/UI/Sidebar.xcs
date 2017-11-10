@@ -198,6 +198,11 @@
           <desc>For documentation, please see the Deck/ContextList.</desc>
         </info>
       </prop>
+      <prop oor:name="ContextList2" oor:type="oor:string-list">
+        <info>
+          <desc>Added for compatibility reasons. Same as ContextList. When ContextList2 is specified with at least one item, ContextList property is ignored.</desc>
+        </info>
+      </prop>
       <prop oor:name="ImplementationURL" oor:type="xs:string">
         <info>
           <desc>URL by which the implementation of the panel is known by its factory.</desc>
