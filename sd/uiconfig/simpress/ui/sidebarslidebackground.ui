@@ -210,7 +210,7 @@
             <child>
               <object class="GtkButton" id="masterslidebutton">
                 <property name="label" translatable="yes" context="sidebarslidebackground|masterslidebutton">Master Slide</property>
-                <property name="visible">False</property>
+                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="action_name">.uno:SlideMasterPage</property>
