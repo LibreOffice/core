@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <iomanip>
 #include <ostream>
+#include <utility>
 
 #include "com/sun/star/uno/Any.h"
 #include "uno/data.h"
@@ -76,7 +77,8 @@ inline Any::Any( bool value )
 
 #if defined LIBO_INTERNAL_ONLY
 template<typename T1, typename T2>
-Any::Any(rtl::OUStringConcat<T1, T2> const & value): Any(rtl::OUString(value))
+Any::Any(rtl::OUStringConcat<T1, T2> && value):
+    Any(rtl::OUString(std::move(value)))
 {}
 #endif
 
@@ -239,6 +241,14 @@ template<> Any toAny(Any const & value) { return value; }
 
 #if defined LIBO_INTERNAL_ONLY
 
+template<typename T1, typename T2>
+Any makeAny(rtl::OUStringConcat<T1, T2> && value)
+{ return Any(std::move(value)); }
+
+template<typename T1, typename T2>
+Any toAny(rtl::OUStringConcat<T1, T2> && value)
+{ return makeAny(std::move(value)); }
+
 template<typename T> bool fromAny(Any const & any, T * value) {
     assert(value != nullptr);
     return any >>= *value;
@@ -275,14 +285,16 @@ inline void SAL_CALL operator <<= ( Any & rAny, bool const & value )
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 template< class C1, class C2 >
-inline void SAL_CALL operator <<= ( Any & rAny, const rtl::OUStringConcat< C1, C2 >& value )
+inline void SAL_CALL operator <<= ( Any & rAny, rtl::OUStringConcat< C1, C2 >&& value )
 {
-    const rtl::OUString str( value );
+    const rtl::OUString str( std::move(value) );
     const Type & rType = ::cppu::getTypeFavourUnsigned(&str);
     ::uno_type_any_assign(
         &rAny, const_cast< rtl::OUString * >( &str ), rType.getTypeLibType(),
         cpp_acquire, cpp_release );
 }
+template<typename T1, typename T2>
+void operator <<=(Any &, rtl::OUStringConcat<T1, T2> const &) = delete;
 #endif
 
 #if defined LIBO_INTERNAL_ONLY
