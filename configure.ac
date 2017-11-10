@@ -4369,7 +4369,17 @@ dnl ===================================================================
 m4_pattern_allow([PKG_CONFIG_FOR_BUILD])
 m4_pattern_allow([PKG_CONFIG_PATH_FOR_BUILD])
 m4_pattern_allow([PKG_CONFIG_LIBDIR])
-if test "$cross_compiling" = "yes"; then
+if test "$OS_FOR_BUILD" -a "$CC_FOR_BUILD" -a "$CXX_FOR_BUILD" -a "$INSTDIR_FOR_BUILD" -a "$INSTROOT_FOR_BUILD" -a "$INSTROOT_FOR_BUILD" -a $LIBO_BIN_FOLDER_FOR_BUILD -a "$LIBO_LIB_FOLDER_FOR_BUILD" -a "$LIBO_URE_LIB_FOLDER_FOR_BUILD" -a "$LIBO_URE_MISC_FOLDER_FOR_BUILD" -a "$SDKDIRNAME_FOR_BUILD" -a "$WORKDIR_FOR_BUILD"; then
+    (
+    cd $SRC_ROOT
+    cp $WORKDIR_FOR_BUILD/../config_host.mk config_build.mk
+    cp $WORKDIR_FOR_BUILD/../config_host_lang.mk $WORKDIR_FOR_BUILD/../config_build_lang.mk
+    cp $WORKDIR_FOR_BUILD/../config.log config.Build.log
+    mkdir -p config_build
+    cp $WORKDIR_FOR_BUILD/../config_host/*.h config_build
+    )
+    AC_MSG_RESULT([force BUILD platform configuration... done])
+elif test "$cross_compiling" = "yes"; then
     AC_MSG_CHECKING([for BUILD platform configuration])
     echo
     rm -rf CONF-FOR-BUILD config_build.mk
