@@ -921,6 +921,36 @@ OUString &TruncateBookmark( OUString &rRet )
     return rRet;
 }
 
+OUString AttributeOutputBase::ConvertURL( const OUString& rUrl, bool bAbsoluteOut )
+{
+    OUString sURL = rUrl;
+
+    INetURLObject anAbsoluteParent;
+    OUString sParentPath = GetExport().m_pDoc->GetDocShell()->GetMedium()->GetURLObject().GetPath();
+    anAbsoluteParent.setFSysPath( sParentPath, FSysStyle::Detect );
+    anAbsoluteParent.setFinalSlash();
+    sParentPath = INetURLObject::GetScheme( anAbsoluteParent.GetProtocol() ) + anAbsoluteParent.GetURLPath();
+
+    if ( bAbsoluteOut )
+    {
+        INetURLObject anAbsoluteNew;
+
+        if ( anAbsoluteParent.GetNewAbsURL( rUrl, &anAbsoluteNew ) )
+            sURL = anAbsoluteNew.GetMainURL( INetURLObject::DecodeMechanism::WithCharset );
+        else
+            sURL = rUrl;
+    }
+    else
+    {
+        INetURLObject aRelativeNew;
+        OUString sRelative = anAbsoluteParent.GetRelURL( sParentPath, rUrl, INetURLObject::EncodeMechanism::WasEncoded, INetURLObject::DecodeMechanism::WithCharset );
+        if ( !sRelative.isEmpty() )
+            sURL = sRelative;
+    }
+
+    return sURL;
+}
+
 bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rTarget*/, OUString* pLinkURL, OUString* pMark )
 {
     bool bBookMarkOnly = false;
@@ -957,6 +987,14 @@ bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rT
         INetURLObject aURL( rUrl, INetProtocol::NotValid );
         sURL = aURL.GetURLNoMark( INetURLObject::DecodeMechanism::Unambiguous );
         sMark = aURL.GetMark( INetURLObject::DecodeMechanism::Unambiguous );
+        INetProtocol aProtocol = aURL.GetProtocol();
+
+        if ( aProtocol == INetProtocol::File || aProtocol == INetProtocol::NotValid )
+        {
+            // INetProtocol::NotValid - may be a relative link
+            bool bExportRelative = m_aSaveOpt.IsSaveRelFSys();
+            sURL = ConvertURL( rUrl, !bExportRelative );
+        }
     }
 
     if ( !sMark.isEmpty() && sURL.isEmpty() )
