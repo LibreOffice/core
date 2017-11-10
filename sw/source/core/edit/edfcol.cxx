@@ -778,7 +778,6 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
         if (xHeaderText.is())
             removeAllClassificationFields(sPolicy, xHeaderText);
 
-
         // FOOTER
         bool bFooterIsOn = false;
         xPageStyle->getPropertyValue(UNO_NAME_FOOTER_IS_ON) >>= bFooterIsOn;
@@ -805,6 +804,9 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
     }
 
     sfx::ClassificationKeyCreator aCreator(SfxClassificationHelper::getPolicyType());
+
+    // Insert origin document property
+    svx::classification::insertCreationOrigin(xPropertyContainer, aCreator, sfx::ClassificationCreationOrigin::MANUAL);
 
     // Insert full text as document property
     svx::classification::insertFullTextualRepresentationAsDocumentProperty(xPropertyContainer, aCreator, rResults);
@@ -1021,6 +1023,11 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
 
     // This updates the infobar as well.
     aHelper.SetBACName(rName, eType);
+
+    // Insert origin document property
+    uno::Reference<beans::XPropertyContainer> xPropertyContainer = pDocShell->getDocProperties()->getUserDefinedProperties();
+    sfx::ClassificationKeyCreator aCreator(SfxClassificationHelper::getPolicyType());
+    svx::classification::insertCreationOrigin(xPropertyContainer, aCreator, sfx::ClassificationCreationOrigin::BAF_POLICY);
 
     bool bHeaderIsNeeded = aHelper.HasDocumentHeader();
     bool bFooterIsNeeded = aHelper.HasDocumentFooter();
@@ -2054,8 +2061,19 @@ void SwEditShell::ClassifyDocPerHighestParagraphClass()
     {
         sHighestClass = aHelper.GetHigherClass(sHighestClass, aClassificationCategory);
     }
-    const SfxClassificationPolicyType eType = SfxClassificationHelper::stringToPolicyType(sHighestClass);
-    SetClassification(sHighestClass, eType);
+
+    const SfxClassificationPolicyType eHighestClassType = SfxClassificationHelper::stringToPolicyType(sHighestClass);
+
+    // Check the origin, if "manual" (created via advanced classification dialog),
+    // then we just need to set the category name.
+    if (svx::classification::getCreationOriginProperty(xPropertyContainer, aKeyCreator) == sfx::ClassificationCreationOrigin::MANUAL)
+    {
+        aHelper.SetBACName(sHighestClass, eHighestClassType);
+    }
+    else
+    {
+        SetClassification(sHighestClass, eHighestClassType);
+    }
 }
 
 // #i62675#
