@@ -110,6 +110,15 @@ public:
 
 namespace sfx
 {
+
+/// Specifies the origin: either defined by the BAF policy or manual via. the advanced classification dialog
+enum class ClassificationCreationOrigin
+{
+    NONE,
+    BAF_POLICY,
+    MANUAL
+};
+
 class ClassificationKeyCreator
 {
 private:
@@ -199,7 +208,13 @@ public:
 
     OUString makeFullTextualRepresentationKey() const
     {
-        return getPolicyKey() + "FullTexturalRepresentation";
+        return getPolicyKey() + "Extension:FullTexturalRepresentation";
+    }
+
+    /// Classification creation origin key
+    OUString makeCreationOriginKey() const
+    {
+        return getPolicyKey() + "CreationOrigin";
     }
 };
 
