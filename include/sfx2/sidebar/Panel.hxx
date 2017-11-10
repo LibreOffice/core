@@ -20,6 +20,7 @@
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_PANEL_HXX
 
 #include <sfx2/sidebar/Context.hxx>
+#include <sfx2/dllapi.h>
 
 #include <vcl/window.hxx>
 
@@ -35,7 +36,7 @@ class PanelDescriptor;
 class TitleBar;
 class PanelTitleBar;
 
-class Panel : public vcl::Window
+class SFX2_DLLPUBLIC Panel : public vcl::Window
 {
 public:
     Panel(const PanelDescriptor& rPanelDescriptor, vcl::Window* pParentWindow,
@@ -55,6 +56,7 @@ public:
     bool IsExpanded() const { return mbIsExpanded;}
     bool HasIdPredicate (const OUString& rsId) const;
     const OUString& GetId() const { return msPanelId;}
+    void TriggerDeckLayouting() { maDeckLayoutTrigger(); }
 
     virtual void Resize() override;
     virtual void DataChanged (const DataChangedEvent& rEvent) override;
