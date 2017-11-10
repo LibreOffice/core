@@ -121,6 +121,8 @@ public:
     GtkSalMenu*                 GetTopLevel();
     void                        SetNeedsUpdate();
 
+    GtkWidget*                  GetMenuBarContainerWidget() const { return mpMenuBarContainerWidget; }
+
     void CreateMenuBarWidget();
     void DestroyMenuBarWidget();
     gboolean SignalKey(GdkEventKey* pEvent);
