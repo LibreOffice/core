@@ -603,12 +603,14 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Shrink</value>
+            <value xml:lang="de">.uno:Shrink</value>
           </prop>
         </node>
         <node oor:name="9_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Grow</value>
+            <value xml:lang="de">.uno:Grow</value>
           </prop>
         </node>
         <node oor:name="ADD_MOD1" oor:op="replace">
@@ -1456,12 +1458,14 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Shrink</value>
+            <value xml:lang="de">.uno:Shrink</value>
           </prop>
         </node>
         <node oor:name="9_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Grow</value>
+            <value xml:lang="de">.uno:Grow</value>
           </prop>
         </node>
         <node oor:name="9_SHIFT_MOD1_MOD2" oor:op="replace">
@@ -1924,12 +1928,14 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Shrink</value>
+            <value xml:lang="de">.uno:Shrink</value>
           </prop>
         </node>
         <node oor:name="9_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Grow</value>
+            <value xml:lang="de">.uno:Grow</value>
           </prop>
         </node>
         <node oor:name="ADD_MOD1" oor:op="replace">
@@ -2722,12 +2728,14 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Shrink</value>
+            <value xml:lang="de">.uno:Shrink</value>
           </prop>
         </node>
         <node oor:name="9_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Grow</value>
+            <value xml:lang="de">.uno:Grow</value>
           </prop>
         </node>
         <node oor:name="9_SHIFT_MOD1_MOD2" oor:op="replace">
@@ -3348,12 +3356,14 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Shrink</value>
+            <value xml:lang="de">.uno:Shrink</value>
           </prop>
         </node>
         <node oor:name="9_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Grow</value>
+            <value xml:lang="de">.uno:Grow</value>
           </prop>
         </node>
         <node oor:name="ADD_MOD1" oor:op="replace">
@@ -5700,12 +5710,14 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Shrink</value>
+            <value xml:lang="de">.uno:Shrink</value>
           </prop>
         </node>
         <node oor:name="9_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Grow</value>
+            <value xml:lang="de">.uno:Grow</value>
           </prop>
         </node>
         <node oor:name="ADD_MOD1" oor:op="replace">
@@ -6505,12 +6517,14 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Shrink</value>
+            <value xml:lang="de">.uno:Shrink</value>
           </prop>
         </node>
         <node oor:name="9_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Grow</value>
+            <value xml:lang="de">.uno:Grow</value>
           </prop>
         </node>
         <node oor:name="ADD_MOD1" oor:op="replace">
