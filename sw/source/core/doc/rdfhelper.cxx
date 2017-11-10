@@ -73,6 +73,15 @@ void SwRDFHelper::addStatement(const css::uno::Reference<css::frame::XModel>& xM
     xGraph->addStatement(xSubject, xKey, xValue);
 }
 
+bool SwRDFHelper::hasMetadataGraph(const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rType)
+{
+    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+    uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, rType);
+    uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(xModel, uno::UNO_QUERY);
+    uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = xDocumentMetadataAccess->getMetadataGraphsWithType(xType);
+    return aGraphNames.hasElements();
+}
+
 void SwRDFHelper::removeStatement(const css::uno::Reference<css::frame::XModel>& xModel,
                                   const OUString& rType,
                                   const css::uno::Reference<css::rdf::XResource>& xSubject,

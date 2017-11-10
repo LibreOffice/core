@@ -45,6 +45,10 @@ public:
                              const css::uno::Reference<css::rdf::XResource>& xSubject,
                              const OUString& rKey, const OUString& rValue);
 
+    /// Check if a graph of type rType exists.
+    static bool hasMetadataGraph(const css::uno::Reference<css::frame::XModel>& xModel,
+                                 const OUString& rType);
+
     /// Remove an (XResource, key, value) statement in the graph of type rType, if it exists.
     static void removeStatement(const css::uno::Reference<css::frame::XModel>& xModel,
                                 const OUString& rType,

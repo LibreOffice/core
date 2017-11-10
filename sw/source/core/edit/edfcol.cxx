@@ -1967,6 +1967,10 @@ void SwEditShell::ClassifyDocPerHighestParagraphClass()
     if (!pDocShell)
         return;
 
+    // bail out as early as possible if we don't have paragraph classification
+    if (!SwRDFHelper::hasMetadataGraph(pDocShell->GetBaseModel(), MetaNS))
+        return;
+
     SfxClassificationHelper aHelper(pDocShell->getDocProperties());
 
     const OUString sHighestParaClass = lcl_GetHighestClassificationParagraphClass(GetCursor());
