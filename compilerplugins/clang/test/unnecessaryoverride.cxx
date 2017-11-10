@@ -11,6 +11,10 @@ struct Base
 {
     virtual ~Base();
     virtual void f();
+    void variadic(int, ...);
+    void cv() const volatile;
+    void ref();
+    static void staticFn();
 };
 
 struct SimpleDerived : Base
@@ -43,6 +47,14 @@ struct MultiClassIntermediate2 : Base
 struct MultiClassDerived : Intermediate1, MultiClassIntermediate2
 {
     void f() override { Intermediate1::f(); } // no warning
+};
+
+struct DerivedDifferent : Base
+{
+    void variadic(int x) { Base::variadic(x); } // no warning
+    void cv() { Base::cv(); } // no warning
+    void ref() && { Base::ref(); } // no warning
+    void staticFn() { Base::staticFn(); } // no warning
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

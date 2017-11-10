@@ -399,6 +399,15 @@ const CXXMethodDecl* UnnecessaryOverride::findOverriddenOrSimilarMethodInSupercl
             if (!baseMethod->getDeclName().isIdentifier() || methodDecl->getName() != baseMethod->getName()) {
                 continue;
             }
+            if (methodDecl->isStatic() != baseMethod->isStatic()
+                || methodDecl->isConst() != baseMethod->isConst()
+                || methodDecl->isVolatile() != baseMethod->isVolatile()
+                || (methodDecl->getRefQualifier()
+                    != baseMethod->getRefQualifier())
+                || methodDecl->isVariadic() != baseMethod->isVariadic())
+            {
+                continue;
+            }
             if (compat::getReturnType(*methodDecl).getCanonicalType()
                 != compat::getReturnType(*baseMethod).getCanonicalType())
             {
