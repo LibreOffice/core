@@ -579,6 +579,8 @@ public:
     void getNextTimePoint();
     void setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd);
 
+    void removeDataProviders();
+
     OpenGLWindow* getOpenGLWindow() { return mpOpenGLWindow;}
 
 private:

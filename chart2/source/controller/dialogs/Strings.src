@@ -34,6 +34,11 @@ String STR_DLG_STEPPED_LINE_PROPERTIES
     Text [ en-US ] = "Stepped Lines" ;
 };
 
+String STR_DLG_REMOVE_DATA_TABLE
+{
+    Text [ en-US ] = "Do you want to delete data table and switch to data ranges?" ;
+};
+
 String STR_PAGE_CHARTTYPE
 {
     Text [ en-US ] = "Chart Type" ;
