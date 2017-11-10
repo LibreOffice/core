@@ -513,20 +513,6 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
  */
 void SwTabPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
-#if OSL_DEBUG_LEVEL > 1
-    // We want to view the fixed width
-    if( rInf.OnWin() && OPTDBG( rInf ) &&
-        !rInf.GetOpt().IsPagePreview() &&
-        !rInf.GetOpt().IsReadonly() &&
-        SwViewOption::IsFieldShadings()    )
-    {
-        const sal_uInt16 nTmpWidth = PrtWidth();
-        const_cast<SwTabPortion*>(this)->PrtWidth( GetFixWidth() );
-        rInf.DrawViewOpt( *this, POR_TAB );
-        const_cast<SwTabPortion*>(this)->PrtWidth( nTmpWidth );
-    }
-#endif
-
     // #i89179#
     // tab portion representing the list tab of a list label gets the
     // same font as the corresponding number portion

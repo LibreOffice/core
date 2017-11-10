@@ -218,7 +218,7 @@ public:
     void WriteBookmarks_Impl(std::vector< OUString >& rStarts, std::vector< OUString >& rEnds);
     void WriteAnnotationMarks_Impl(std::vector< OUString >& rStarts, std::vector< OUString >& rEnds);
     void WriteHeaderFooter_Impl(const SwFrameFormat& rFormat, bool bHeader, const sal_Char* pStr, bool bTitlepg);
-    void WriteBookmarkInActParagraph( const OUString& /*rName*/, sal_Int32 /*nFirstRunPos*/, sal_Int32 /*nLastRunPos*/ ) override {};
+    void WriteBookmarkInActParagraph(const OUString& /*rName*/, sal_Int32 /*nFirstRunPos*/, sal_Int32 /*nLastRunPos*/) override {};
 
 protected:
     /// Output frames - the implementation.
