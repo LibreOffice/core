@@ -692,7 +692,7 @@ css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule( SdrModel*
     const SvxNumRule* pDefaultRule = nullptr;
     if( pModel )
     {
-        const SvxNumBulletItem* pItem = static_cast<const SvxNumBulletItem*>( pModel->GetItemPool().GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET) );
+        const SvxNumBulletItem* pItem = pModel->GetItemPool().GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
         if( pItem )
         {
             pDefaultRule = pItem->GetNumRule();

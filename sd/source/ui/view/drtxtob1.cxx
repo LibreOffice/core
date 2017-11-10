@@ -266,7 +266,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>(pArgs->Get(
                 GetPool().GetWhich(SID_ATTR_PARA_LRSPACE)));
 
-            SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
+            SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_LRSPACE.Which(), EE_PARA_LRSPACE.Which()>{} );
             aLRSpace.SetWhich( EE_PARA_LRSPACE );
 
             aEditAttr.Put( aLRSpace );
@@ -278,11 +278,11 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_HANGING_INDENT:
         {
-            SfxItemSet aLRSpaceSet( GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
+            SfxItemSet aLRSpaceSet( GetPool(), svl::Items<EE_PARA_LRSPACE.Which(), EE_PARA_LRSPACE.Which()>{} );
             mpView->GetAttributes( aLRSpaceSet );
-            SvxLRSpaceItem aParaMargin( static_cast<const SvxLRSpaceItem&>( aLRSpaceSet.Get( EE_PARA_LRSPACE ) ) );
+            SvxLRSpaceItem aParaMargin( aLRSpaceSet.Get( EE_PARA_LRSPACE ) );
 
-            SvxLRSpaceItem aNewMargin( EE_PARA_LRSPACE );
+            SvxLRSpaceItem aNewMargin( EE_PARA_LRSPACE.Which() );
             aNewMargin.SetTextLeft( aParaMargin.GetTextLeft() + aParaMargin.GetTextFirstLineOfst() );
             aNewMargin.SetRight( aParaMargin.GetRight() );
             aNewMargin.SetTextFirstLineOfst( ( aParaMargin.GetTextFirstLineOfst() ) * (-1) );
@@ -394,7 +394,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                                 aNewRule.SetLevel(nLevel, aFmt);
                             }
 
-                            pFirstStyleSheet->GetItemSet().Put(SvxNumBulletItem(aNewRule, EE_PARA_NUMBULLET));
+                            pFirstStyleSheet->GetItemSet().Put(SvxNumBulletItem(aNewRule, EE_PARA_NUMBULLET.Which()));
 
                             SdStyleSheet::BroadcastSdStyleSheetChange(pFirstStyleSheet, PO_OUTLINE_1, pSSPool);
                         }
@@ -601,13 +601,13 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
                 if( bLeftToRight )
                 {
-                    aNewAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR ) );
+                    aNewAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR.Which() ) );
                     if( nAdjust == SvxAdjust::Right )
                         aNewAttr.Put( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
                 }
                 else
                 {
-                    aNewAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_RL_TB, EE_PARA_WRITINGDIR ) );
+                    aNewAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_RL_TB, EE_PARA_WRITINGDIR.Which() ) );
                     if( nAdjust == SvxAdjust::Left )
                         aNewAttr.Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
                 }

@@ -1218,7 +1218,7 @@ void SdImportTest::testBulletSuffix()
     SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj(0) );
     CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
-    const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetParaAttribs(1).GetItem(EE_PARA_NUMBULLET));
+    const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(1).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's suffix is wrong!", pNumFmt->GetNumRule()->GetLevel(0).GetSuffix(), OUString() );
     xDocShRef->DoClose();
@@ -1755,7 +1755,7 @@ void SdImportTest::testTdf103477()
     CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr );
 
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
-    const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>( aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET) );
+    const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's color is wrong!", sal_uInt32(0x000000), pNumFmt->GetNumRule()->GetLevel(1).GetBulletColor().GetColor());
 
@@ -2216,7 +2216,7 @@ void SdImportTest::testTdf108925()
     CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
 
-    const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET));
+    const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
     CPPUNIT_ASSERT_EQUAL(pNumFmt->GetNumRule()->GetLevel(0).GetBulletRelSize(), sal_uInt16(25));
 

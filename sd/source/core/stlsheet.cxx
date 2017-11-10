@@ -534,7 +534,7 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
 
         if (rSet.GetItemState(EE_PARA_BULLET) != SfxItemState::SET || !bOnlyMissingItems)
         {
-            const SvxBulletItem& rBItem = static_cast<const SvxBulletItem&>(pCurSet->Get(EE_PARA_BULLET));
+            const SvxBulletItem& rBItem = pCurSet->Get(EE_PARA_BULLET);
             double fBulletFraction = double(rBItem.GetWidth()) / nOldHeight;
             SvxBulletItem aNewBItem(rBItem);
             aNewBItem.SetWidth((sal_uInt32)(fBulletFraction * nNewHeight));
@@ -543,7 +543,7 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
 
         if (rSet.GetItemState(EE_PARA_LRSPACE) != SfxItemState::SET || !bOnlyMissingItems)
         {
-            const SvxLRSpaceItem& rLRItem = static_cast<const SvxLRSpaceItem&>(pCurSet->Get(EE_PARA_LRSPACE));
+            const SvxLRSpaceItem& rLRItem = pCurSet->Get(EE_PARA_LRSPACE);
             double fIndentFraction = double(rLRItem.GetTextLeft()) / nOldHeight;
             SvxLRSpaceItem aNewLRItem(rLRItem);
             aNewLRItem.SetTextLeft(fIndentFraction * nNewHeight);
