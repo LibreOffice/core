@@ -30,18 +30,6 @@ template<typename T> css::beans::PropertyValue makePropertyValue(const OUString&
     return aValue;
 }
 
-/**
- * Overload for uno::Any where an additional toAny() is not needed (and is
- * actually a deleted function).
- */
-template<> inline css::beans::PropertyValue makePropertyValue(const OUString& rName, const css::uno::Any& rValue)
-{
-    css::beans::PropertyValue aValue;
-    aValue.Name = rName;
-    aValue.Value = rValue;
-    return aValue;
-}
-
 }
 
 #endif // INCLUDED_COMPHELPER_PROPERTYVALUE_HXX
