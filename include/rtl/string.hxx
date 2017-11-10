@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <new>
 #include <ostream>
+#include <utility>
 #include <string.h>
 
 #include "rtl/textenc.h"
@@ -266,7 +267,7 @@ public:
      @internal
     */
     template< typename T1, typename T2 >
-    OString( const OStringConcat< T1, T2 >& c )
+    OString( OStringConcat< T1, T2 >&& c )
     {
         const sal_Int32 l = c.length();
         pData = rtl_string_alloc( l );
@@ -367,7 +368,7 @@ public:
      @internal
     */
     template< typename T1, typename T2 >
-    OString& operator+=( const OStringConcat< T1, T2 >& c ) & {
+    OString& operator+=( OStringConcat< T1, T2 >&& c ) & {
         sal_Int32 l = c.length();
         if( l == 0 )
             return *this;
@@ -379,7 +380,7 @@ public:
         return *this;
     }
     template<typename T1, typename T2> void operator +=(
-        OStringConcat<T1, T2> const &) && = delete;
+        OStringConcat<T1, T2> &&) && = delete;
 #endif
 
     /**
@@ -1839,9 +1840,9 @@ struct ToStringHelper< OStringLiteral >
 */
 template< typename charT, typename traits, typename T1, typename T2 >
 inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const OStringConcat< T1, T2 >& concat)
+    std::basic_ostream<charT, traits> & stream, OStringConcat< T1, T2 >&& concat)
 {
-    return stream << OString( concat );
+    return stream << OString( std::move(concat) );
 }
 #endif
 

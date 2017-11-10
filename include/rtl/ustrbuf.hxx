@@ -208,7 +208,7 @@ public:
      @internal
     */
     template< typename T1, typename T2 >
-    OUStringBuffer( const OUStringConcat< T1, T2 >& c )
+    OUStringBuffer( OUStringConcat< T1, T2 >&& c )
     {
         const sal_Int32 l = c.length();
         nCapacity = l + 16;
@@ -313,7 +313,7 @@ public:
 #if defined LIBO_INTERNAL_ONLY
     /** @overload @since LibreOffice 5.3 */
     template<typename T1, typename T2>
-    OUStringBuffer & operator =(OUStringConcat<T1, T2> const & concat) {
+    OUStringBuffer & operator =(OUStringConcat<T1, T2> && concat) {
         sal_Int32 const n = concat.length();
         if (n >= nCapacity) {
             ensureCapacity(n + 16); //TODO: check for overflow
@@ -631,7 +631,7 @@ public:
      @internal
     */
     template< typename T1, typename T2 >
-    OUStringBuffer& append( const OUStringConcat< T1, T2 >& c )
+    OUStringBuffer& append( OUStringConcat< T1, T2 >&& c )
     {
         sal_Int32 l = c.length();
         if( l == 0 )
