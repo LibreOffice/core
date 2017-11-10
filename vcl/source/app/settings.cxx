@@ -3117,4 +3117,17 @@ AllSettings::GetSysLocale()
     return mxData->maSysLocale;
 }
 
+
+void StyleSettings::BatchSetBackgrounds( const Color &aBackColor,
+                                         bool bCheckedColorSpecialCase )
+{
+    Set3DColors( aBackColor );
+    SetFaceColor( aBackColor );
+    SetDialogColor( aBackColor );
+    SetWorkspaceColor( aBackColor );
+
+    if (bCheckedColorSpecialCase)
+        SetCheckedColorSpecialCase();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

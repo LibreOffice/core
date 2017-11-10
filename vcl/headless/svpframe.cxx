@@ -404,8 +404,14 @@ LanguageType SvpSalFrame::GetInputLanguage()
     return LANGUAGE_DONTKNOW;
 }
 
-void SvpSalFrame::UpdateSettings( AllSettings& )
+void SvpSalFrame::UpdateSettings( AllSettings& rSettings )
 {
+    StyleSettings aStyleSettings = rSettings.GetStyleSettings();
+
+    Color aBackgroundColor( 0xec, 0xec, 0xec );
+    aStyleSettings.BatchSetBackgrounds( aBackgroundColor, false );
+
+    rSettings.SetStyleSettings( aStyleSettings );
 }
 
 void SvpSalFrame::Beep()

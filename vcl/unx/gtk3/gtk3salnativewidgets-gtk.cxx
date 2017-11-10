@@ -2878,11 +2878,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     gtk_style_context_get_background_color(pStyle, gtk_style_context_get_state(pStyle), &background_color);
 
     ::Color aBackColor = getColor( background_color );
-    aStyleSet.Set3DColors( aBackColor );
-    aStyleSet.SetFaceColor( aBackColor );
-    aStyleSet.SetDialogColor( aBackColor );
-    aStyleSet.SetWorkspaceColor( aBackColor );
-    aStyleSet.SetCheckedColorSpecialCase( );
+    aStyleSet.BatchSetBackgrounds( aBackColor );
 
     // UI font
     vcl::Font aFont(getFont(pStyle, rSettings.GetUILanguageTag().getLocale()));
