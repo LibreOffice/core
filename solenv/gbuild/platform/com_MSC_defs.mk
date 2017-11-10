@@ -238,6 +238,7 @@ gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
 gb_LinkTarget_LDFLAGS := \
 	$(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),-nologo,) \
 	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
+	/NATVIS:$(SRCDIR)/solenv/vs/LibreOffice.natvis \
 
 # Prevent warning spamming
 # Happens because of the way we link our unit tests with our libraries.
