@@ -2040,32 +2040,22 @@ void SwEditShell::ClassifyDocPerHighestParagraphClass()
     if (!SwRDFHelper::hasMetadataGraph(pDocShell->GetBaseModel(), MetaNS))
         return;
 
-    SfxClassificationHelper aHelper(pDocShell->getDocProperties());
+    uno::Reference<document::XDocumentProperties> xDocumentProperties = pDocShell->getDocProperties();
+    uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
 
-    const OUString sHighestParaClass = lcl_GetHighestClassificationParagraphClass(GetCursor());
+    sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
+    SfxClassificationHelper aHelper(xDocumentProperties);
 
-    std::vector<svx::ClassificationResult> results = CollectAdvancedClassification();
-    for (const svx::ClassificationResult& rResult : results)
+    OUString sHighestClass = lcl_GetHighestClassificationParagraphClass(GetCursor());
+
+    const OUString aClassificationCategory = svx::classification::getProperty(xPropertyContainer, aKeyCreator.makeCategoryNameKey());
+
+    if (!aClassificationCategory.isEmpty())
     {
-        switch (rResult.meType)
-        {
-        case svx::ClassificationType::CATEGORY:
-        {
-            const OUString sHighestClass = aHelper.GetHigherClass(sHighestParaClass, rResult.msName);
-            const auto eType = SfxClassificationHelper::stringToPolicyType(sHighestClass);
-            SetClassification(sHighestClass, eType);
-        }
-        break;
-        default:
-        break;
-        }
+        sHighestClass = aHelper.GetHigherClass(sHighestClass, aClassificationCategory);
     }
-
-    if (results.empty())
-    {
-        const auto eType = SfxClassificationHelper::stringToPolicyType(sHighestParaClass);
-        SetClassification(sHighestParaClass, eType);
-    }
+    const SfxClassificationPolicyType eType = SfxClassificationHelper::stringToPolicyType(sHighestClass);
+    SetClassification(sHighestClass, eType);
 }
 
 // #i62675#
