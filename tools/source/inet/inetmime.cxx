@@ -197,38 +197,38 @@ inline sal_Unicode * putUTF32Character(sal_Unicode * pBuffer,
     return pBuffer;
 }
 
-void writeUTF8(INetMIMEOutputSink & rSink, sal_uInt32 nChar)
+void writeUTF8(OStringBuffer & rSink, sal_uInt32 nChar)
 {
     // See RFC 2279 for a discussion of UTF-8.
     DBG_ASSERT(nChar < 0x80000000, "writeUTF8(): Bad char");
 
     if (nChar < 0x80)
-        rSink << sal_Char(nChar);
+        rSink.append(sal_Char(nChar));
     else if (nChar < 0x800)
-        rSink << sal_Char(nChar >> 6 | 0xC0)
-              << sal_Char((nChar & 0x3F) | 0x80);
+        rSink.append(sal_Char(nChar >> 6 | 0xC0))
+             .append(sal_Char((nChar & 0x3F) | 0x80));
     else if (nChar < 0x10000)
-        rSink << sal_Char(nChar >> 12 | 0xE0)
-              << sal_Char((nChar >> 6 & 0x3F) | 0x80)
-              << sal_Char((nChar & 0x3F) | 0x80);
+        rSink.append(sal_Char(nChar >> 12 | 0xE0))
+             .append(sal_Char((nChar >> 6 & 0x3F) | 0x80))
+             .append(sal_Char((nChar & 0x3F) | 0x80));
     else if (nChar < 0x200000)
-        rSink << sal_Char(nChar >> 18 | 0xF0)
-              << sal_Char((nChar >> 12 & 0x3F) | 0x80)
-              << sal_Char((nChar >> 6 & 0x3F) | 0x80)
-              << sal_Char((nChar & 0x3F) | 0x80);
+        rSink.append(sal_Char(nChar >> 18 | 0xF0))
+             .append(sal_Char((nChar >> 12 & 0x3F) | 0x80))
+             .append(sal_Char((nChar >> 6 & 0x3F) | 0x80))
+             .append(sal_Char((nChar & 0x3F) | 0x80));
     else if (nChar < 0x4000000)
-        rSink << sal_Char(nChar >> 24 | 0xF8)
-              << sal_Char((nChar >> 18 & 0x3F) | 0x80)
-              << sal_Char((nChar >> 12 & 0x3F) | 0x80)
-              << sal_Char((nChar >> 6 & 0x3F) | 0x80)
-              << sal_Char((nChar & 0x3F) | 0x80);
+        rSink.append(sal_Char(nChar >> 24 | 0xF8))
+             .append(sal_Char((nChar >> 18 & 0x3F) | 0x80))
+             .append(sal_Char((nChar >> 12 & 0x3F) | 0x80))
+             .append(sal_Char((nChar >> 6 & 0x3F) | 0x80))
+             .append(sal_Char((nChar & 0x3F) | 0x80));
     else
-        rSink << sal_Char(nChar >> 30 | 0xFC)
-              << sal_Char((nChar >> 24 & 0x3F) | 0x80)
-              << sal_Char((nChar >> 18 & 0x3F) | 0x80)
-              << sal_Char((nChar >> 12 & 0x3F) | 0x80)
-              << sal_Char((nChar >> 6 & 0x3F) | 0x80)
-              << sal_Char((nChar & 0x3F) | 0x80);
+        rSink.append(sal_Char(nChar >> 30 | 0xFC))
+             .append(sal_Char((nChar >> 24 & 0x3F) | 0x80))
+             .append(sal_Char((nChar >> 18 & 0x3F) | 0x80))
+             .append(sal_Char((nChar >> 12 & 0x3F) | 0x80))
+             .append(sal_Char((nChar >> 6 & 0x3F) | 0x80))
+             .append(sal_Char((nChar & 0x3F) | 0x80));
 }
 
 bool translateUTF8Char(const sal_Char *& rBegin,
@@ -691,7 +691,7 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
             }
             if (pParameters)
             {
-                INetMIMEOutputSink aSink;
+                OStringBuffer aSink;
                 while (p != pEnd)
                 {
                     auto q = p;
@@ -705,14 +705,14 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
                         int nWeight2 = INetMIME::getHexWeight(p[1]);
                         if (nWeight1 >= 0 && nWeight2 >= 0)
                         {
-                            aSink << sal_Char(nWeight1 << 4 | nWeight2);
+                            aSink.append(sal_Char(nWeight1 << 4 | nWeight2));
                             p += 2;
                             continue;
                         }
                     }
                     writeUTF8(aSink, nChar);
                 }
-                aValue = aSink.takeBuffer();
+                aValue = aSink.makeStringAndClear();
             }
             else
                 while (p != pEnd && (isTokenChar(*p) || !rtl::isAscii(*p)))
@@ -721,7 +721,7 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
         else if (p != pEnd && *p == '"')
             if (pParameters)
             {
-                INetMIMEOutputSink aSink;
+                OStringBuffer aSink;
                 bool bInvalid = false;
                 for (++p;;)
                 {
@@ -756,7 +756,7 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
                 }
                 if (bInvalid)
                     break;
-                aValue = aSink.takeBuffer();
+                aValue = aSink.makeStringAndClear();
             }
             else
             {
@@ -1467,21 +1467,6 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
 
     appendISO88591(sDecoded, pCopyBegin, pEnd);
     return sDecoded;
-}
-
-void INetMIMEOutputSink::writeSequence(const sal_Char * pBegin,
-                                       const sal_Char * pEnd)
-{
-    OSL_ENSURE(pBegin && pBegin <= pEnd,
-               "INetMIMEOutputSink::writeSequence(): Bad sequence");
-
-    m_aBuffer.append(pBegin, pEnd - pBegin);
-}
-
-void INetMIMEOutputSink::writeSequence(const sal_Char * pSequence)
-{
-    sal_Size nLength = rtl_str_getLength(pSequence);
-    writeSequence(pSequence, pSequence + nLength);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

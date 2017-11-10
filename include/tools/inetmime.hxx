@@ -240,66 +240,6 @@ inline sal_uInt32 INetMIME::getUTF32Character(const sal_Unicode *& rBegin,
         return *rBegin++;
 }
 
-class INetMIMEOutputSink
-{
-private:
-    OStringBuffer m_aBuffer;
-
-    /** Write a sequence of octets.
-
-        @param pBegin  Points to the start of the sequence, must not be null.
-
-        @param pEnd  Points past the end of the sequence, must be >= pBegin.
-     */
-    void writeSequence(const sal_Char * pBegin, const sal_Char * pEnd);
-
-    /** Write a null terminated sequence of octets (without the terminating
-        null).
-
-        @param pOctets  A null terminated sequence of octets, must not be
-        null.
-     */
-    void writeSequence(const sal_Char * pSequence);
-
-public:
-
-    /** Write a single octet.
-
-        @param nOctet  Some octet.
-
-        @return  This instance.
-     */
-    inline INetMIMEOutputSink & operator <<(sal_Char nOctet);
-
-    /** Write a null terminated sequence of octets (without the terminating
-        null).
-
-        @param pOctets  A null terminated sequence of octets, must not be
-        null.
-
-        @return  This instance.
-     */
-    inline INetMIMEOutputSink & operator <<(const sal_Char * pOctets);
-
-    OString takeBuffer()
-    {
-        return m_aBuffer.makeStringAndClear();
-    }
-};
-
-
-inline INetMIMEOutputSink & INetMIMEOutputSink::operator <<(sal_Char nOctet)
-{
-    writeSequence(&nOctet, &nOctet + 1);
-    return *this;
-}
-
-inline INetMIMEOutputSink & INetMIMEOutputSink::operator <<(const sal_Char *
-                                                                pOctets)
-{
-    writeSequence(pOctets);
-    return *this;
-}
 
 #endif
 
