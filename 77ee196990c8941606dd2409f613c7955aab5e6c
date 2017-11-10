@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_22b745d9",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-11-10T08:48:44Z",
+      "side": 1,
+      "message": "This comment is close to useless now -\u003e kill it with fire",
+      "revId": "77ee196990c8941606dd2409f613c7955aab5e6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
