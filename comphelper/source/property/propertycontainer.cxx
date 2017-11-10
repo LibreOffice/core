@@ -58,13 +58,6 @@ Sequence< Type > OPropertyContainer::getBaseTypes()
     return aTypes.getTypes();
 }
 
-
-void SAL_CALL OPropertyContainer::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue )
-{
-    OPropertySetHelper::setFastPropertyValue( nHandle, rValue );
-}
-
-
 sal_Bool OPropertyContainer::convertFastPropertyValue(
     Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
 {

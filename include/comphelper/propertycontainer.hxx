@@ -72,7 +72,7 @@ protected:
                                      ) const override;
 
     // disambiguate a base class method (XFastPropertySet)
-    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    using OPropertySetHelper::setFastPropertyValue;
 };
 
 
