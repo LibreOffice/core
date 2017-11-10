@@ -1338,6 +1338,15 @@ uno::Reference<sheet::XSpreadsheets> SAL_CALL ScModelObj::getSheets()
     return nullptr;
 }
 
+css::uno::Reference< ::css::uno::XInterface > SAL_CALL ScModelObj::createDataProvider()
+{
+    if (pDocShell)
+    {
+        return ScServiceProvider::MakeInstance(ScServiceProvider::Type::CHDATAPROV, pDocShell);
+    }
+    return nullptr;
+}
+
 // XStyleFamiliesSupplier
 
 uno::Reference<container::XNameAccess> SAL_CALL ScModelObj::getStyleFamilies()

@@ -360,6 +360,7 @@ public:
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override;
     virtual void SAL_CALL
         createInternalDataProvider( sal_Bool bCloneExistingData ) override;
+    virtual void SAL_CALL clearDataProviders() override;
     virtual sal_Bool SAL_CALL hasInternalDataProvider() override;
     virtual css::uno::Reference< css::chart2::data::XDataProvider > SAL_CALL
         getDataProvider() override;
