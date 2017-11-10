@@ -335,7 +335,7 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
             }
 
             if( pItem == nullptr )
-                pItem = static_cast<const SvxNumBulletItem*>( aNewAttr.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET) );
+                pItem = aNewAttr.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
 
             //DBG_ASSERT( pItem, "No EE_PARA_NUMBULLET in the Pool!" );
 
@@ -344,14 +344,14 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
 
             if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET )
             {
-                const SvxNumBulletItem* pBulletItem = static_cast<const SvxNumBulletItem*>( aNewAttr.GetItem(EE_PARA_NUMBULLET) );
+                const SvxNumBulletItem* pBulletItem = aNewAttr.GetItem(EE_PARA_NUMBULLET);
                 SvxNumRule* pLclRule = pBulletItem->GetNumRule();
                 if(pLclRule)
                 {
                     SvxNumRule aNewRule( *pLclRule );
                     aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );
 
-                    SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
+                    SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET.Which() );
                     aNewAttr.Put(aNewItem);
                 }
             }

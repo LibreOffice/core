@@ -1203,7 +1203,7 @@ void ScTextWnd::InitEditEngine()
         EditEngine::SetFontInfoInItemSet( *pSet, aTextFont );
         lcl_ExtendEditFontAttribs( *pSet );
         // turn off script spacing to match DrawText output
-        pSet->Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
+        pSet->Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING.Which() ) );
         if ( bIsRTL )
             lcl_ModifyRTLDefaults( *pSet );
         mpEditEngine->SetDefaults( pSet );

@@ -174,6 +174,11 @@ public:
     void            SetStyleSheet( SfxStyleSheet* pS );
 
     const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const;
+    template<class T>
+    const T&           GetItem( TypedWhichId<T> nWhich ) const
+    {
+        return static_cast<const T&>(GetItem(nWhich.Which()));
+    }
     bool HasItem( sal_uInt16 nWhich ) const;
 };
 

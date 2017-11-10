@@ -937,21 +937,21 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
             }
 
             if( pItem == nullptr )
-                pItem = static_cast<const SvxNumBulletItem*>( aNewAttr.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET) );
+                pItem = aNewAttr.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
 
             std::unique_ptr<SfxPoolItem> pNewItem(pItem->CloneSetWhich(EE_PARA_NUMBULLET));
             aNewAttr.Put(*pNewItem);
 
             if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET )
             {
-                const SvxNumBulletItem* pBulletItem = static_cast<const SvxNumBulletItem*>(aNewAttr.GetItem(EE_PARA_NUMBULLET));
+                const SvxNumBulletItem* pBulletItem = aNewAttr.GetItem(EE_PARA_NUMBULLET);
                 SvxNumRule* pRule = pBulletItem->GetNumRule();
                 if(pRule)
                 {
                     SvxNumRule aNewRule( *pRule );
                     aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );
 
-                    SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
+                    SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET.Which() );
                     aNewAttr.Put(aNewItem);
                 }
             }

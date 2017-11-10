@@ -118,7 +118,7 @@ static bool InitializeFontWorkData( const SdrObject* pCustomShape, const sal_uIn
                     aParagraphData.aString = rTextObj.GetText( j );
 
                     const SfxItemSet& rParaSet = rTextObj.GetParaAttribs( j );  // retrieving some paragraph attributes
-                    aParagraphData.nFrameDirection = static_cast<const SvxFrameDirectionItem&>(rParaSet.Get( EE_PARA_WRITINGDIR )).GetValue();
+                    aParagraphData.nFrameDirection = rParaSet.Get( EE_PARA_WRITINGDIR ).GetValue();
                     aTextArea.vParagraphs.push_back( aParagraphData );
                 }
                 rFWData.vTextAreas.push_back( aTextArea );

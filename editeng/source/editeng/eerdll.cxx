@@ -94,18 +94,18 @@ DefItems::DefItems()
     // Paragraph attributes:
     SvxNumRule aDefaultNumRule( SvxNumRuleFlags::NONE, 0, false );
 
-    rDefItems[0]  = new SvxFrameDirectionItem( SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR );
+    rDefItems[0]  = new SvxFrameDirectionItem( SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR.Which() );
     rDefItems[1]  = new SvXMLAttrContainerItem( EE_PARA_XMLATTRIBS );
-    rDefItems[2]  = new SvxHangingPunctuationItem(false, EE_PARA_HANGINGPUNCTUATION);
-    rDefItems[3]  = new SvxForbiddenRuleItem(true, EE_PARA_FORBIDDENRULES);
-    rDefItems[4]  = new SvxScriptSpaceItem( true, EE_PARA_ASIANCJKSPACING );
-    rDefItems[5]  = new SvxNumBulletItem( aDefaultNumRule, EE_PARA_NUMBULLET );
-    rDefItems[6]  = new SfxBoolItem( EE_PARA_HYPHENATE, false );
-    rDefItems[7]  = new SfxBoolItem( EE_PARA_BULLETSTATE, true );
-    rDefItems[8]  = new SvxLRSpaceItem( EE_PARA_OUTLLRSPACE );
-    rDefItems[9]  = new SfxInt16Item( EE_PARA_OUTLLEVEL, -1 );
-    rDefItems[10] = new SvxBulletItem( EE_PARA_BULLET );
-    rDefItems[11] = new SvxLRSpaceItem( EE_PARA_LRSPACE );
+    rDefItems[2]  = new SvxHangingPunctuationItem(false, EE_PARA_HANGINGPUNCTUATION.Which());
+    rDefItems[3]  = new SvxForbiddenRuleItem(true, EE_PARA_FORBIDDENRULES.Which());
+    rDefItems[4]  = new SvxScriptSpaceItem( true, EE_PARA_ASIANCJKSPACING.Which() );
+    rDefItems[5]  = new SvxNumBulletItem( aDefaultNumRule, EE_PARA_NUMBULLET.Which() );
+    rDefItems[6]  = new SfxBoolItem( EE_PARA_HYPHENATE.Which(), false );
+    rDefItems[7]  = new SfxBoolItem( EE_PARA_BULLETSTATE.Which(), true );
+    rDefItems[8]  = new SvxLRSpaceItem( EE_PARA_OUTLLRSPACE.Which() );
+    rDefItems[9]  = new SfxInt16Item( EE_PARA_OUTLLEVEL.Which(), -1 );
+    rDefItems[10] = new SvxBulletItem( EE_PARA_BULLET.Which() );
+    rDefItems[11] = new SvxLRSpaceItem( EE_PARA_LRSPACE.Which() );
     rDefItems[12] = new SvxULSpaceItem( EE_PARA_ULSPACE );
     rDefItems[13] = new SvxLineSpacingItem( 0, EE_PARA_SBL );
     rDefItems[14] = new SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST );

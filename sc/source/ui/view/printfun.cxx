@@ -1703,7 +1703,7 @@ void ScPrintFunc::MakeEditEngine()
         //! there's no way to set the background for note pages
         pEditDefaults->ClearItem( EE_CHAR_COLOR );
         if (ScGlobal::IsSystemRTL())
-            pEditDefaults->Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_RL_TB, EE_PARA_WRITINGDIR ) );
+            pEditDefaults->Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_RL_TB, EE_PARA_WRITINGDIR.Which() ) );
     }
 
     pEditEngine->SetData( aFieldData );     // Set page count etc.

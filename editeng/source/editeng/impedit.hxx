@@ -852,6 +852,11 @@ public:
 
     bool            HasParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const;
     const SfxPoolItem&  GetParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const;
+    template<class T>
+    const T&            GetParaAttrib( sal_Int32 nPara, TypedWhichId<T> nWhich ) const
+    {
+        return static_cast<const T&>(GetParaAttrib(nPara, nWhich.Which()));
+    }
 
     tools::Rectangle       PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nFlags = GetCursorFlags::NONE );
     tools::Rectangle       GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex, GetCursorFlags nFlags = GetCursorFlags::NONE );

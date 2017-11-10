@@ -28,6 +28,7 @@
 
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
+#include <svl/typedwhich.hxx>
 
 class SfxItemPool;
 class SfxPoolItem;
@@ -131,6 +132,11 @@ public:
     sal_uInt16                  TotalCount() const;
 
     const SfxPoolItem&          Get( sal_uInt16 nWhich, bool bSrchInParent = true ) const;
+    template<class T>
+    const T&                    Get( TypedWhichId<T> nWhich, bool bSrchInParent = true ) const
+    {
+        return static_cast<const T&>(Get(nWhich.Which(), bSrchInParent));
+    }
 
     /** This method eases accessing single Items in the SfxItemSet.
 
@@ -149,6 +155,15 @@ public:
         assert(!pItem || pCastedItem); // if it exists, must have the correct type
         return pCastedItem;
     }
+    template<class T> const T* GetItem( TypedWhichId<T> nWhich, bool bSearchInParent = true ) const
+    {
+        const SfxPoolItem* pItem = GetItem(nWhich.Which(), bSearchInParent);
+        const T* pCastedItem = dynamic_cast<const T*>(pItem);
+
+        assert(!pItem || pCastedItem); // if it exists, must have the correct type
+        return pCastedItem;
+    }
+
 
     /// Templatized static version of GetItem() to directly return the correct type if the SfxItemSet is available.
     template<class T> static const T* GetItem(const SfxItemSet* pItemSet, sal_uInt16 nWhich, bool bSearchInParent = true)
@@ -166,12 +181,23 @@ public:
     SfxItemState                GetItemState(   sal_uInt16 nWhich,
                                                 bool bSrchInParent = true,
                                                 const SfxPoolItem **ppItem = nullptr ) const;
+    template<class T>
+    SfxItemState                GetItemState(   TypedWhichId<T> nWhich,
+                                                bool bSrchInParent = true,
+                                                const SfxPoolItem **ppItem = nullptr ) const
+    { return GetItemState(nWhich.Which(), bSrchInParent, ppItem); }
 
     bool                        HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem = nullptr) const;
 
     void                        DisableItem(sal_uInt16 nWhich);
+    template<class T> void      DisableItem( TypedWhichId<T> nWhich )
+    { DisableItem(nWhich.Which()); }
     void                        InvalidateItem( sal_uInt16 nWhich );
+    template<class T> void      InvalidateItem( TypedWhichId<T> nWhich )
+    { InvalidateItem(nWhich.Which()); }
     sal_uInt16                  ClearItem( sal_uInt16 nWhich = 0);
+    template<class T> sal_uInt16 ClearItem( TypedWhichId<T> nWhich )
+    { return ClearItem(nWhich.Which()); }
     void                        ClearInvalidItems();
     void                        InvalidateAllItems(); // HACK(via nWhich = 0) ???
 

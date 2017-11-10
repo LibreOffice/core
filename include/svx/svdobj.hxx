@@ -27,6 +27,7 @@
 #include <vcl/vclptr.hxx>
 #include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
+#include <svl/typedwhich.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/xenum.hxx>
 #include <svx/svxdllapi.h>
@@ -581,6 +582,11 @@ public:
     void ClearMergedItem(const sal_uInt16 nWhich = 0);
     void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false);
     const SfxPoolItem& GetMergedItem(const sal_uInt16 nWhich) const;
+    template<class T>
+    const T&           GetMergedItem( TypedWhichId<T> nWhich ) const
+    {
+        return static_cast<const T&>(GetMergedItem(nWhich.Which()));
+    }
 
     // syntactical sugar for ItemSet accesses
     void SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems = false);

@@ -439,7 +439,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         pView->GetAttributes( aAttrs );
         if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SfxItemState::DEFAULT )
         {
-            bool bValue = static_cast<const SfxBoolItem&>( aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
+            bool bValue = aAttrs.Get( EE_PARA_HYPHENATE ).GetValue();
             rSet.Put( SfxBoolItem( SID_ENABLE_HYPHENATION, bValue ) );
         }
     }
@@ -924,8 +924,8 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             sal_uInt16 nId = SID_ATTR_PARA_LRSPACE;
             const SvxLRSpaceItem& rItem = static_cast<const SvxLRSpaceItem&>(
                 pArgs->Get( nId ));
-            SfxItemSet aAttr( GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
-            nId = EE_PARA_LRSPACE;
+            SfxItemSet aAttr( GetPool(), svl::Items<EE_PARA_LRSPACE.Which(), EE_PARA_LRSPACE.Which()>{} );
+            nId = EE_PARA_LRSPACE.Which();
             SvxLRSpaceItem aLRSpaceItem( rItem.GetLeft(),
                 rItem.GetRight(), rItem.GetTextLeft(),
                 rItem.GetTextFirstLineOfst(), nId );
@@ -1040,7 +1040,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_RIGHT,     eAdj == SvxAdjust::Right ) );
     rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_JUSTIFIED, eAdj == SvxAdjust::Block ) );
 
-        SvxLRSpaceItem aLR = static_cast<const SvxLRSpaceItem&>(aAttrSet.Get( EE_PARA_LRSPACE ));
+        SvxLRSpaceItem aLR = aAttrSet.Get( EE_PARA_LRSPACE );
     aLR.SetWhich(SID_ATTR_PARA_LRSPACE);
     rDestSet.Put(aLR);
     Invalidate( SID_ATTR_PARA_LRSPACE );
@@ -1168,8 +1168,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     }
     else
     {
-        SvxFrameDirection eAttrDir = static_cast<const SvxFrameDirectionItem&>(
-                                        aAttrSet.Get( EE_PARA_WRITINGDIR )).GetValue();
+        SvxFrameDirection eAttrDir = aAttrSet.Get( EE_PARA_WRITINGDIR ).GetValue();
         if ( eAttrDir == SvxFrameDirection::Environment )
         {
             //  get "environment" direction from page style
