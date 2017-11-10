@@ -1148,14 +1148,13 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
 
     // Background Color
     Color aBackgroundColor( 0xEC, 0xEC, 0xEC );
-    aStyleSettings.Set3DColors( aBackgroundColor );
-    aStyleSettings.SetFaceColor( aBackgroundColor );
+    aStyleSettings.BatchSetBackgrounds( aBackgroundColor, false );
+    aStyleSettings.SetLightBorderColor( aBackgroundColor );
+
     Color aInactiveTabColor( aBackgroundColor );
     aInactiveTabColor.DecreaseLuminance( 32 );
     aStyleSettings.SetInactiveTabColor( aInactiveTabColor );
 
-    aStyleSettings.SetDialogColor( aBackgroundColor );
-    aStyleSettings.SetLightBorderColor( aBackgroundColor );
     Color aShadowColor( aStyleSettings.GetShadowColor() );
     aShadowColor.IncreaseLuminance( 32 );
     aStyleSettings.SetShadowColor( aShadowColor );

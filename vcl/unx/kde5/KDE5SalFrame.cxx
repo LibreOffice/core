@@ -240,15 +240,12 @@ void KDE5SalFrame::UpdateSettings( AllSettings& rSettings )
     // Disable color
     style.SetDisableColor( toColor( pal.color( QPalette::Disabled, QPalette::WindowText ) ) );
 
+    // Background
+    style.BatchSetBackgrounds( aBack );
+    style.SetInactiveTabColor( aBack );
+
     // Workspace
     style.SetWorkspaceColor( aMid );
-
-    // Background
-    style.Set3DColors( aBack );
-    style.SetFaceColor( aBack );
-    style.SetInactiveTabColor( aBack );
-    style.SetDialogColor( aBack );
-    style.SetCheckedColorSpecialCase( );
 
     // Selection
     style.SetHighlightColor( aHigh );

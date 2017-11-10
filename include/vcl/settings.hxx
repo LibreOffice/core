@@ -607,6 +607,10 @@ public:
 
     bool                            operator ==( const StyleSettings& rSet ) const;
     bool                            operator !=( const StyleSettings& rSet ) const;
+
+    // Batch setters used by various backends
+    void                            BatchSetBackgrounds( const Color &aBackColor,
+                                                         bool bCheckedColorSpecialCase = true);
 };
 
 
