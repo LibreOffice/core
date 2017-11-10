@@ -16,6 +16,24 @@
       "revId": "a33067c15345020c1663837224573446fc196900",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_85f723f4",
+        "filename": "sc/source/ui/unoobj/editsrc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-10T17:26:54Z",
+      "side": 1,
+      "message": "Here it\u0027s both, paragraph and line breaks, whatever may be contained in an EditTextObject (probably emphasized here because other places may ignore line breaks when setting text at the engine).\nApart from that, Calc has column breaks and row breaks which act as page breaks when printing, but unrelated here.",
+      "parentUuid": "1a430d35_02e2499f",
+      "revId": "a33067c15345020c1663837224573446fc196900",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
