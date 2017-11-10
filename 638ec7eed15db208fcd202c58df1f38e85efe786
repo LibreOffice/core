@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_42a531b3",
+        "filename": "svtools/source/control/tabbar.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-11-10T07:42:24Z",
+      "side": 1,
+      "message": "You probably mean \"asterisk\", not asterix :)",
+      "revId": "638ec7eed15db208fcd202c58df1f38e85efe786",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
