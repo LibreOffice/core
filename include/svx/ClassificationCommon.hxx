@@ -43,6 +43,14 @@ SVX_DLLPUBLIC void insertFullTextualRepresentationAsDocumentProperty(
     css::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer,
     sfx::ClassificationKeyCreator const& rKeyCreator,
     std::vector<svx::ClassificationResult> const& rResults);
+
+SVX_DLLPUBLIC void insertCreationOrigin(css::uno::Reference<css::beans::XPropertyContainer> const & rxPropertyContainer,
+                                        sfx::ClassificationKeyCreator const & rKeyCreator,
+                                        sfx::ClassificationCreationOrigin eOrigin);
+
+SVX_DLLPUBLIC sfx::ClassificationCreationOrigin getCreationOriginProperty(css::uno::Reference<css::beans::XPropertyContainer> const & rxPropertyContainer,
+                                                                          sfx::ClassificationKeyCreator const & rKeyCreator);
+
 }
 } // end svx::classification namespace
 
