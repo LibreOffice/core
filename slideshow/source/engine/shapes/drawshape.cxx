@@ -133,11 +133,26 @@ namespace slideshow
 
         ViewShape::RenderArgs DrawShape::getViewRenderArgs() const
         {
+            uno::Reference<beans::XPropertySet> const xPropSet(mxPage,
+                    uno::UNO_QUERY_THROW);
+            sal_Int32 nWidth = 0;
+            sal_Int32 nHeight = 0;
+            xPropSet->getPropertyValue("Width") >>= nWidth;
+            xPropSet->getPropertyValue("Height") >>= nHeight;
+            basegfx::B2DRectangle slideRect(0, 0, nWidth, nHeight);
+            basegfx::B2DRectangle origBounds(maBounds);
+            origBounds.intersect(slideRect);
+            basegfx::B2DRectangle updateBounds(getUpdateArea());
+            updateBounds.intersect(slideRect);
+            basegfx::B2DRectangle bounds(getBounds());
+            bounds.intersect(slideRect);
+            basegfx::B2DRectangle unitBounds(getActualUnitShapeBounds());
+            unitBounds.intersect(slideRect);
             return ViewShape::RenderArgs(
-                maBounds,
-                getUpdateArea(),
-                getBounds(),
-                getActualUnitShapeBounds(),
+                origBounds,
+                updateBounds,
+                bounds,
+                unitBounds,
                 mpAttributeLayer,
                 maSubsetting.getActiveSubsets(),
                 mnPriority);
