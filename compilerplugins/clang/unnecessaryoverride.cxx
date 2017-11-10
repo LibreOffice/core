@@ -258,13 +258,23 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
             return true;
         }
     }
-    // some very creative method hiding going on here
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/svx/source/dialog/checklbx.cxx"))
-        return true;
 
     const CXXMethodDecl* overriddenMethodDecl = findOverriddenOrSimilarMethodInSuperclasses(methodDecl);
     if (!overriddenMethodDecl) {
         return true;
+    }
+
+    // Check for differences in default parameters:
+    unsigned const numParams = methodDecl->getNumParams();
+    assert(overriddenMethodDecl->getNumParams() == numParams);
+    for (unsigned i = 0; i != numParams; ++i) {
+        if (checkIdenticalDefaultArguments(
+                methodDecl->getParamDecl(i)->getDefaultArg(),
+                overriddenMethodDecl->getParamDecl(i)->getDefaultArg())
+            != IdenticalDefaultArgumentsResult::Yes)
+        {
+            return true;
+        }
     }
 
     if (compat::getReturnType(*methodDecl).getCanonicalType()

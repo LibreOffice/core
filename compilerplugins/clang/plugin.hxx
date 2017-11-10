@@ -82,9 +82,15 @@ protected:
 
     bool containsPreprocessingConditionalInclusion(SourceRange range);
 
+    enum class IdenticalDefaultArgumentsResult { No, Yes, Maybe };
+    IdenticalDefaultArgumentsResult checkIdenticalDefaultArguments(
+        Expr const * argument1, Expr const * argument2);
+
 private:
     static void registerPlugin( Plugin* (*create)( const InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault );
     template< typename T > static Plugin* createHelper( const InstantiationData& data );
+    bool evaluate(const Expr* expr, APSInt& x);
+
     enum { isRewriter = false };
     const char* name;
 };
