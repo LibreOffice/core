@@ -1795,14 +1795,16 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
     // Del-Array for all RefMarks without extent
     SwpHts aRefMrkArr;
 
+    std::vector<std::pair<sal_Int32, sal_Int32>> metaFieldRanges;
     sal_Int32 nDeletedDummyChars(0);
     for (size_t n = 0; n < nSize; ++n)
     {
-        const sal_Int32 nAttrStartIdx = m_pSwpHints->Get(n)->GetStart();
+        SwTextAttr * const pHt = m_pSwpHints->Get(n);
+
+        const sal_Int32 nAttrStartIdx = pHt->GetStart();
         if (!( nAttrStartIdx < nEnd))
             break;
 
-        SwTextAttr * const pHt = m_pSwpHints->Get(n);
         const sal_Int32 * const pEndIdx = pHt->GetEnd();
         const sal_uInt16 nWhich = pHt->Which();
 
@@ -1836,6 +1838,13 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
             {
                 continue;
             }
+        }
+
+        if (nWhich == RES_TXTATR_METAFIELD)
+        {
+            // Skip metadata fields. Also remember the range to strip the text later.
+            metaFieldRanges.emplace_back(nAttrStartIdx, pEndIdx ? *pEndIdx : nEnd);
+            continue;
         }
 
         sal_Int32 nAttrStt = 0;
@@ -1908,6 +1917,19 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
         if( RES_TXTATR_REFMARK == nWhich && !pEndIdx && !bCopyRefMark )
         {
             aRefMrkArr.push_back( pNewHt );
+        }
+    }
+
+    // Strip the metadata fields, since we don't copy the RDF entries
+    // yet and so they are inconsistent upon copy/pasting.
+    if (!metaFieldRanges.empty())
+    {
+        // Reverse to remove without messing the offsets.
+        std::reverse(metaFieldRanges.begin(), metaFieldRanges.end());
+        for (const auto& pair : metaFieldRanges)
+        {
+            const SwIndex aIdx(pDest, pair.first);
+            pDest->EraseText(aIdx, pair.second - pair.first);
         }
     }
 
