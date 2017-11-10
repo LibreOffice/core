@@ -20,6 +20,7 @@
 #include <ViewClipboard.hxx>
 
 #include <DrawDocShell.hxx>
+#include <DrawViewShell.hxx>
 #include <View.hxx>
 #include <ViewShell.hxx>
 #include <Window.hxx>
@@ -49,8 +50,11 @@ void ViewClipboard::HandlePageDrop (const SdTransferable& rTransferable)
 {
     // Determine whether to insert the given set of slides or to assign a
     // given master page.
-    SdPage* pMasterPage = GetFirstMasterPage (rTransferable);
-    if (pMasterPage != nullptr)
+    // tdf#113405 only assign master pages to normal pages, don't attempt to assign a master
+    // page to a master page
+    sd::DrawViewShell* pDrawViewShell = dynamic_cast<::sd::DrawViewShell*>(mrView.GetViewShell());
+    SdPage* pMasterPage = (pDrawViewShell && pDrawViewShell->GetEditMode() == EditMode::Page) ? GetFirstMasterPage(rTransferable) : nullptr;
+    if (pMasterPage)
         AssignMasterPage (rTransferable, pMasterPage);
     else
         InsertSlides (rTransferable, DetermineInsertPosition (rTransferable));
