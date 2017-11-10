@@ -1354,7 +1354,14 @@ endif # SYSTEM_GRAPHITE
 
 ifneq ($(SYSTEM_ICU),)
 
-gb_LinkTarget__use_icu_headers:=
+define gb_LinkTarget__use_icu_headers
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(ICU_CFLAGS) \
+)
+
+endef
+
 gb_ExternalProject__use_icu:=
 
 define gb_LinkTarget__use_icudata
