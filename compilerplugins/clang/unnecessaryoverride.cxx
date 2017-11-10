@@ -258,9 +258,6 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
             return true;
         }
     }
-    // sometimes the disambiguation happens in a base class
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/comphelper/source/property/propertycontainer.cxx"))
-        return true;
     // not sure what is happening here
     if (loplugin::isSamePathname(aFileName, SRCDIR "/extensions/source/bibliography/datman.cxx"))
         return true;
