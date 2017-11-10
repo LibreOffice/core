@@ -529,6 +529,8 @@ void ControllerCommandDispatch::updateCommandAvailability()
     bool bShapeContext = m_xChartController.is() && m_xChartController->isShapeContext();
 
     bool bEnableDataTableDialog = false;
+    bool bCanCreateDataProvider = false;
+
     if ( m_xChartController.is() )
     {
         Reference< beans::XPropertySet > xProps( m_xChartController->getModel(), uno::UNO_QUERY );
@@ -541,6 +543,19 @@ void ControllerCommandDispatch::updateCommandAvailability()
             catch( const uno::Exception& e )
             {
                 SAL_WARN("chart2", "Exception caught. " << e );
+            }
+        }
+
+        Reference< chart2::XChartDocument > xChartDoc(m_xChartController->getModel(), uno::UNO_QUERY);
+        OSL_ENSURE(xChartDoc.is(), "Invalid XChartDocument");
+        if ( xChartDoc.is() )
+        {
+            ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartDoc.get());
+            Reference< lang::XServiceInfo > xParentServiceInfo(rModel.getParent(), uno::UNO_QUERY);
+            OSL_ENSURE(xParentServiceInfo.is(), "Invalid XServiceInfo");
+            if ( xParentServiceInfo.is() )
+            {
+                bCanCreateDataProvider = xParentServiceInfo->supportsService("com.sun.star.chart2.XDataProviderAccess");
             }
         }
     }
@@ -615,8 +630,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ ".uno:FormatLegend" ] = m_aCommandAvailability[ ".uno:Legend" ];
 
     // depending on own data
-    m_aCommandAvailability[ ".uno:DataRanges" ] = bIsWritable && bModelStateIsValid &&
-                                                  (!m_apModelState->bHasOwnData) && (!m_apModelState->bHasDataFromPivotTable);
+    m_aCommandAvailability[".uno:DataRanges"] = bIsWritable && bModelStateIsValid && !m_apModelState->bHasDataFromPivotTable && bCanCreateDataProvider;
     m_aCommandAvailability[ ".uno:DiagramData" ] = bIsWritable && bModelStateIsValid &&  m_apModelState->bHasOwnData && bEnableDataTableDialog;
 
     // titles

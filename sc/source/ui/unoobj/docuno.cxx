@@ -228,6 +228,7 @@ using sc::TwipsToHMM;
 #define SCMODELOBJ_SERVICE          "com.sun.star.sheet.SpreadsheetDocument"
 #define SCDOCSETTINGS_SERVICE       "com.sun.star.sheet.SpreadsheetDocumentSettings"
 #define SCDOC_SERVICE               "com.sun.star.document.OfficeDocument"
+#define SCDATAPROVIDERACCESS_SERVICE "com.sun.star.chart2.XDataProviderAccess"
 
 SC_SIMPLE_SERVICE_INFO( ScAnnotationsObj, "ScAnnotationsObj", "com.sun.star.sheet.CellAnnotations" )
 SC_SIMPLE_SERVICE_INFO( ScDrawPagesObj, "ScDrawPagesObj", "com.sun.star.drawing.DrawPages" )
@@ -1192,6 +1193,7 @@ uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( lang::XServiceInfo )
     SC_QUERYINTERFACE( util::XChangesNotifier )
     SC_QUERYINTERFACE( sheet::opencl::XOpenCLSelection )
+    SC_QUERYINTERFACE( chart2::XDataProviderAccess )
 
     uno::Any aRet(SfxBaseModel::queryInterface( rType ));
     if ( !aRet.hasValue()
@@ -1335,6 +1337,16 @@ uno::Reference<sheet::XSpreadsheets> SAL_CALL ScModelObj::getSheets()
     SolarMutexGuard aGuard;
     if (pDocShell)
         return new ScTableSheetsObj(pDocShell);
+    return nullptr;
+}
+
+css::uno::Reference< ::css::chart2::data::XDataProvider > SAL_CALL ScModelObj::createDataProvider()
+{
+    if (pDocShell)
+    {
+        return css::uno::Reference< ::css::chart2::data::XDataProvider > (
+            ScServiceProvider::MakeInstance(ScServiceProvider::Type::CHDATAPROV, pDocShell), uno::UNO_QUERY);
+    }
     return nullptr;
 }
 
@@ -2847,7 +2859,7 @@ sal_Bool SAL_CALL ScModelObj::supportsService( const OUString& rServiceName )
 
 uno::Sequence<OUString> SAL_CALL ScModelObj::getSupportedServiceNames()
 {
-    return {SCMODELOBJ_SERVICE, SCDOCSETTINGS_SERVICE, SCDOC_SERVICE};
+    return {SCMODELOBJ_SERVICE, SCDOCSETTINGS_SERVICE, SCDOC_SERVICE, SCDATAPROVIDERACCESS_SERVICE};
 }
 
 // XUnoTunnel
