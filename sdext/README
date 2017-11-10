@@ -18,3 +18,8 @@ source/presenter/ - Impress / Presenter Console.
 	ridiculous situations. Activating in response to
 	configuration keys (for example), and the 'XPresenterHelper'
 	interface inside sd/ used to create and manage windows.
+
+    The main screen uses a hardware-accelerated
+    canvas (e.g. cairo canvas), while the entire secondary screen
+    uses a VCL-canvas that is created in
+    sd::framework::FullScreenPane::CreateCanvas().
