@@ -23,6 +23,10 @@
 #include <algorithm>
 #include <iostream>
 
+#include <oox/core/filterbase.hxx>
+#include "docxexport.hxx"
+#include "docxexportfilter.hxx"
+
 #include <i18nlangtag/mslangid.hxx>
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
@@ -939,6 +943,62 @@ OUString &TruncateBookmark( OUString &rRet )
     return rRet;
 }
 
+OUString AttributeOutputBase::ConvertURL( const OUString& rUrl, bool bAbsoluteOut )
+{
+    OUString sURL = rUrl;
+    OUString sExportedDocumentURL = "";
+    {
+        DocxExport* pDocxExport = dynamic_cast<DocxExport*>(&GetExport());
+        if ( pDocxExport )
+        {
+            // DOCX
+            DocxExportFilter& rFilter = pDocxExport->GetFilter();
+            sExportedDocumentURL = rFilter.getFileUrl();
+        }
+        else
+        {
+            // DOC
+            WW8Export* pWW8Export = dynamic_cast<WW8Export*>(&GetExport());
+            if ( pWW8Export )
+            {
+                SwWW8Writer& rWriter = pWW8Export->GetWriter();
+                sExportedDocumentURL = rWriter.GetMedia()->GetURLObject().GetPath();
+            }
+        }
+    }
+
+    INetURLObject anAbsoluteParent( sExportedDocumentURL );
+    if ( anAbsoluteParent.GetURLPath().isEmpty() )
+    {
+        // DOC filter returns system path (without file:///)
+        anAbsoluteParent.setFSysPath( sExportedDocumentURL, FSysStyle::Detect );
+        anAbsoluteParent.setFinalSlash();
+    }
+    OUString sConvertedParent = INetURLObject::GetScheme( anAbsoluteParent.GetProtocol() ) + anAbsoluteParent.GetURLPath();
+    OUString sParentPath = sConvertedParent.isEmpty() ? sExportedDocumentURL : sConvertedParent;
+
+    if ( bAbsoluteOut )
+    {
+        INetURLObject anAbsoluteNew;
+
+        if ( anAbsoluteParent.GetNewAbsURL( rUrl, &anAbsoluteNew ) )
+            sURL = anAbsoluteNew.GetMainURL( INetURLObject::DecodeMechanism::WithCharset );
+        else
+            sURL = rUrl;
+    }
+    else
+    {
+        OUString sToConvert = rUrl.replaceAll( "\\", "/" );
+        INetURLObject aURL( sToConvert );
+        sToConvert = INetURLObject::GetScheme( aURL.GetProtocol() ) + aURL.GetURLPath();
+        OUString sRelative = INetURLObject::GetRelURL( sParentPath, sToConvert, INetURLObject::EncodeMechanism::WasEncoded, INetURLObject::DecodeMechanism::WithCharset );
+        if ( !sRelative.isEmpty() )
+            sURL = sRelative;
+    }
+
+    return sURL;
+}
+
 bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rTarget*/, OUString* pLinkURL, OUString* pMark )
 {
     bool bBookMarkOnly = false;
@@ -975,6 +1035,14 @@ bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rT
         INetURLObject aURL( rUrl, INetProtocol::NotValid );
         sURL = aURL.GetURLNoMark( INetURLObject::DecodeMechanism::Unambiguous );
         sMark = aURL.GetMark( INetURLObject::DecodeMechanism::Unambiguous );
+        INetProtocol aProtocol = aURL.GetProtocol();
+
+        if ( aProtocol == INetProtocol::File || aProtocol == INetProtocol::NotValid )
+        {
+            // INetProtocol::NotValid - may be a relative link
+            bool bExportRelative = m_aSaveOpt.IsSaveRelFSys();
+            sURL = ConvertURL( rUrl, !bExportRelative );
+        }
     }
 
     if ( !sMark.isEmpty() && sURL.isEmpty() )
