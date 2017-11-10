@@ -330,16 +330,22 @@ inline TokenPool& TokenPool::operator <<( const TokenId& rId )
     // POST: rId's are stored consecutively in Pool under a new Id;
     //       finalize with >> or Store()
     // rId -> ( sal_uInt16 ) rId - 1;
-    if ((sal_uInt16)rId >= nScTokenOff)
+    sal_uInt16 nId = static_cast<sal_uInt16>(rId);
+    if (nId >= nScTokenOff)
     {
         SAL_WARN("sc.filter", "-TokenPool::operator <<: TokenId in DefToken-Range! " << static_cast<sal_uInt16>(rId));
+
+        // Do not "invent" OpCode values by arbitrarily mapping into the Calc
+        // space. This badly smells like an overflow or binary garbage, so
+        // treat as error.
+        nId = static_cast<sal_uInt16>(ocErrNull) + nScTokenOff + 1;
     }
 
     if( nP_IdAkt >= nP_Id )
         if (!GrowId())
             return *this;
 
-    pP_Id[ nP_IdAkt ] = ( ( sal_uInt16 ) rId ) - 1;
+    pP_Id[ nP_IdAkt ] = nId - 1;
     nP_IdAkt++;
 
     return *this;
