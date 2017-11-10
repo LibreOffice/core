@@ -117,7 +117,7 @@ private:
         virtual void SAL_CALL addLoadListener( const css::uno::Reference< css::form::XLoadListener >& aListener ) override;
         virtual void SAL_CALL removeLoadListener( const css::uno::Reference< css::form::XLoadListener >& aListener ) override;
 
-        virtual void SAL_CALL disposing() override;
+        using WeakComponentImplHelperBase::disposing;
 
 public:
 

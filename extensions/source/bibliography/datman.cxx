@@ -1394,12 +1394,6 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
     return xModel;
 }
 
-void SAL_CALL BibDataManager::disposing()
-{
-    BibDataManager_Base::WeakComponentImplHelperBase::disposing();
-}
-
-
 void BibDataManager::disposing( const EventObject& /*Source*/ )
 {
     // not interested in
