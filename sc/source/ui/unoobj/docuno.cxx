@@ -218,6 +218,7 @@ using sc::TwipsToHMM;
 #define SCMODELOBJ_SERVICE          "com.sun.star.sheet.SpreadsheetDocument"
 #define SCDOCSETTINGS_SERVICE       "com.sun.star.sheet.SpreadsheetDocumentSettings"
 #define SCDOC_SERVICE               "com.sun.star.document.OfficeDocument"
+#define SCDATAPROVIDERCREATOR_SERVICE "com.sun.star.chart2.XDataProviderCreator"
 
 SC_SIMPLE_SERVICE_INFO( ScAnnotationsObj, "ScAnnotationsObj", "com.sun.star.sheet.CellAnnotations" )
 SC_SIMPLE_SERVICE_INFO( ScDrawPagesObj, "ScDrawPagesObj", "com.sun.star.drawing.DrawPages" )
@@ -980,6 +981,7 @@ uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( lang::XServiceInfo )
     SC_QUERYINTERFACE( util::XChangesNotifier )
     SC_QUERYINTERFACE( sheet::opencl::XOpenCLSelection )
+    SC_QUERYINTERFACE( chart2::XDataProviderCreator )
 
     uno::Any aRet(SfxBaseModel::queryInterface( rType ));
     if ( !aRet.hasValue()
@@ -1145,6 +1147,16 @@ uno::Reference<sheet::XSpreadsheets> SAL_CALL ScModelObj::getSheets() throw(uno:
     SolarMutexGuard aGuard;
     if (pDocShell)
         return new ScTableSheetsObj(pDocShell);
+    return nullptr;
+}
+
+css::uno::Reference< ::css::chart2::data::XDataProvider > SAL_CALL ScModelObj::createDataProvider()
+{
+    if (pDocShell)
+    {
+        return css::uno::Reference< ::css::chart2::data::XDataProvider > (
+            ScServiceProvider::MakeInstance(ScServiceProvider::Type::CHDATAPROV, pDocShell), uno::UNO_QUERY);
+    }
     return nullptr;
 }
 
@@ -2601,10 +2613,11 @@ sal_Bool SAL_CALL ScModelObj::supportsService( const OUString& rServiceName )
 uno::Sequence<OUString> SAL_CALL ScModelObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(3);
+    uno::Sequence<OUString> aRet(4);
     aRet[0] = SCMODELOBJ_SERVICE;
     aRet[1] = SCDOCSETTINGS_SERVICE;
     aRet[2] = SCDOC_SERVICE;
+    aRet[3] = SCDATAPROVIDERCREATOR_SERVICE;
     return aRet;
 }
 

@@ -22,7 +22,7 @@
 // this includes no link dependency
 #include <svl/solar.hrc>
 
-//next free is 305
+//next free is 306
 
 //chart types
 //see Strings_ChartTypes.src
@@ -220,6 +220,8 @@
 #define STR_CONTROLTEXT_ERROR_BARS_FROM_DATA (RID_APP_START + 276)
 
 #define STR_DLG_CHART_WIZARD                 (RID_APP_START + 228)
+#define STR_DLG_REMOVE_DATA_TABLE            (RID_APP_START + 305)
+
 #define STR_PAGE_CHART_ELEMENTS              (RID_APP_START + 229)
 #define STR_PAGE_CHART_LOCATION              (RID_APP_START + 230)
 
