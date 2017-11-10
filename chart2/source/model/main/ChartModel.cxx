@@ -762,6 +762,14 @@ void SAL_CALL ChartModel::createInternalDataProvider( sal_Bool bCloneExistingDat
     setModified( true );
 }
 
+void ChartModel::removeDataProviders()
+{
+    if (m_xInternalDataProvider.is())
+        m_xInternalDataProvider.clear();
+    if (m_xDataProvider.is())
+        m_xDataProvider.clear();
+}
+
 sal_Bool SAL_CALL ChartModel::hasInternalDataProvider()
 {
     return m_xDataProvider.is() && m_xInternalDataProvider.is();
