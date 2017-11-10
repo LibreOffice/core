@@ -23,7 +23,6 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/sheet/XSpreadsheets.idl>
 
-
 module com {  module sun {  module star {  module sheet {
 
 
@@ -39,6 +38,12 @@ published interface XSpreadsheetDocument: com::sun::star::uno::XInterface
         @see com::sun::star::sheet::Spreadsheets
      */
     com::sun::star::sheet::XSpreadsheets getSheets();
+
+    /** creates a data provider for chart2
+
+        @see com::sun::star::chart2::data::XDataProvider
+     */
+    com::sun::star::uno::XInterface createDataProvider();
 
 };
 

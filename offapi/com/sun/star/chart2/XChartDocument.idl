@@ -78,6 +78,10 @@ interface XChartDocument : ::com::sun::star::frame::XModel
     void createInternalDataProvider( [in] boolean bCloneExistingData )
         raises( com::sun::star::util::CloseVetoException );
 
+    /** Removes all set data providers.
+     */
+    void clearDataProviders();
+
     /** @return `TRUE` if the data provider set at the chart document
         is an internal one.
 

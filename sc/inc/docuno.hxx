@@ -156,6 +156,9 @@ public:
     virtual css::uno::Reference< css::sheet::XSpreadsheets > SAL_CALL
                             getSheets() override;
 
+    virtual ::css::uno::Reference< ::css::uno::XInterface > SAL_CALL
+                            createDataProvider() override;
+
                             /// XStyleFamiliesSupplier
     virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL
                             getStyleFamilies() override;
