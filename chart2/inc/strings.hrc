@@ -24,6 +24,7 @@
 #define STR_DLG_CHART_WIZARD                        NC_("STR_DLG_CHART_WIZARD", "Chart Wizard")
 #define STR_DLG_SMOOTH_LINE_PROPERTIES              NC_("STR_DLG_SMOOTH_LINE_PROPERTIES", "Smooth Lines")
 #define STR_DLG_STEPPED_LINE_PROPERTIES             NC_("STR_DLG_STEPPED_LINE_PROPERTIES", "Stepped Lines")
+#define STR_DLG_REMOVE_DATA_TABLE                   NC_("STR_DLG_REMOVE_DATA_TABLE", "This chart currently contains an internal data table. Do you want to proceed, deleting the internal data table, and set a new data range?")
 #define STR_PAGE_CHARTTYPE                          NC_("STR_PAGE_CHARTTYPE", "Chart Type")
 #define STR_PAGE_DATA_RANGE                         NC_("STR_PAGE_DATA_RANGE", "Data Range")
 #define STR_PAGE_CHART_ELEMENTS                     NC_("STR_PAGE_CHART_ELEMENTS", "Chart Elements")
