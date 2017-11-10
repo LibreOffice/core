@@ -24,15 +24,17 @@
 
 namespace dbaui
 {
+    constexpr sal_uInt32 FORMAT_OBJECT_ID_SBA_TABED = 1;
+
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     OTableRowExchange::OTableRowExchange(const std::vector< std::shared_ptr<OTableRow> >& _rvTableRow)
         : m_vTableRow(_rvTableRow)
     {
     }
-    bool OTableRowExchange::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const css::datatransfer::DataFlavor& /*rFlavor*/ )
+    bool OTableRowExchange::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const css::datatransfer::DataFlavor& /*rFlavor*/ )
     {
-        if(nUserObjectId == SotClipboardFormatId::SBA_TABED)
+        if(nUserObjectId == FORMAT_OBJECT_ID_SBA_TABED)
         {
             std::vector< std::shared_ptr<OTableRow> >* pRows = static_cast< std::vector< std::shared_ptr<OTableRow> >* >(pUserObject);
             if(pRows)
@@ -56,7 +58,7 @@ namespace dbaui
     {
         SotClipboardFormatId nFormat = SotExchange::GetFormat(rFlavor);
         if(nFormat == SotClipboardFormatId::SBA_TABED)
-            return SetObject(&m_vTableRow,SotClipboardFormatId::SBA_TABED,rFlavor);
+            return SetObject(&m_vTableRow,FORMAT_OBJECT_ID_SBA_TABED,rFlavor);
         return false;
     }
     void OTableRowExchange::ObjectReleased()

@@ -68,11 +68,11 @@
 
 using namespace com::sun::star;
 
-#define SCTRANS_TYPE_IMPEX              SotClipboardFormatId::STRING
-#define SCTRANS_TYPE_EDIT_RTF           SotClipboardFormatId::BITMAP
-#define SCTRANS_TYPE_EDIT_BIN           SotClipboardFormatId::GDIMETAFILE
-#define SCTRANS_TYPE_EMBOBJ             SotClipboardFormatId::PRIVATE
-#define SCTRANS_TYPE_EDIT_ODF_TEXT_FLAT SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT
+constexpr sal_uInt32 SCTRANS_TYPE_IMPEX              = 1;
+constexpr sal_uInt32 SCTRANS_TYPE_EDIT_RTF           = 2;
+constexpr sal_uInt32 SCTRANS_TYPE_EDIT_BIN           = 3;
+constexpr sal_uInt32 SCTRANS_TYPE_EMBOBJ             = 4;
+constexpr sal_uInt32 SCTRANS_TYPE_EDIT_ODF_TEXT_FLAT = 5;
 
 void ScTransferObj::GetAreaSize( const ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol )
 {
@@ -405,7 +405,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
     return bOK;
 }
 
-bool ScTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId,
+bool ScTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const datatransfer::DataFlavor& rFlavor )
 {
     // called from SetObject, put data into stream

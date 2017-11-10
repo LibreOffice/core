@@ -44,7 +44,7 @@ protected:
     // implementation of TransferableHelper methods
     virtual void        AddSupportedFormats() override;
     virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
-    virtual bool        WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId,
+    virtual bool        WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const css::datatransfer::DataFlavor& rFlavor ) override;
 
 private:

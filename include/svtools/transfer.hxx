@@ -230,13 +230,13 @@ protected:
     bool                SetTransferableObjectDescriptor( const TransferableObjectDescriptor& rDesc );
     bool                SetINetBookmark( const INetBookmark& rBmk, const css::datatransfer::DataFlavor& rFlavor );
     bool                SetINetImage( const INetImage& rINtImg, const css::datatransfer::DataFlavor& rFlavor );
-    bool                SetObject( void* pUserObject, SotClipboardFormatId nUserObjectId, const css::datatransfer::DataFlavor& rFlavor );
+    bool                SetObject( void* pUserObject, sal_uInt32 nUserObjectId, const css::datatransfer::DataFlavor& rFlavor );
 
 protected:
 
     virtual void        AddSupportedFormats() = 0;
     virtual bool        GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) = 0;
-    virtual bool        WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const css::datatransfer::DataFlavor& rFlavor );
+    virtual bool        WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const css::datatransfer::DataFlavor& rFlavor );
     virtual void        DragFinished( sal_Int8 nDropAction );
     virtual void        ObjectReleased();
 

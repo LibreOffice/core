@@ -851,7 +851,7 @@ bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
 }
 
 
-bool TransferableHelper::SetObject( void* pUserObject, SotClipboardFormatId nUserObjectId, const DataFlavor& rFlavor )
+bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjectId, const DataFlavor& rFlavor )
 {
     tools::SvRef<SotStorageStream> xStm( new SotStorageStream( OUString() ) );
 
@@ -881,7 +881,7 @@ bool TransferableHelper::SetObject( void* pUserObject, SotClipboardFormatId nUse
 }
 
 
-bool TransferableHelper::WriteObject( tools::SvRef<SotStorageStream>&, void*, SotClipboardFormatId, const DataFlavor& )
+bool TransferableHelper::WriteObject( tools::SvRef<SotStorageStream>&, void*, sal_uInt32, const DataFlavor& )
 {
     OSL_FAIL( "TransferableHelper::WriteObject( ... ) not implemented" );
     return false;

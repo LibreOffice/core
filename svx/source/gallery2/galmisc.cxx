@@ -495,7 +495,7 @@ bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, cons
 
     if( ( SotClipboardFormatId::DRAWING == nFormat ) && ( SgaObjKind::SvDraw == meObjectKind ) )
     {
-        bRet = ( mxModelStream.is() && SetObject( mxModelStream.get(), SotClipboardFormatId::NONE, rFlavor ) );
+        bRet = ( mxModelStream.is() && SetObject( mxModelStream.get(), 0, rFlavor ) );
     }
     else if( ( SotClipboardFormatId::SVIM == nFormat ) && mpImageMap )
     {
@@ -523,7 +523,7 @@ bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, cons
 }
 
 bool GalleryTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject,
-                                           SotClipboardFormatId, const datatransfer::DataFlavor& )
+                                           sal_uInt32, const datatransfer::DataFlavor& )
 {
     bool bRet = false;
 

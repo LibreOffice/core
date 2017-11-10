@@ -69,9 +69,9 @@
 
 using namespace com::sun::star;
 
-#define SCDRAWTRANS_TYPE_EMBOBJ         SotClipboardFormatId::STRING
-#define SCDRAWTRANS_TYPE_DRAWMODEL      SotClipboardFormatId::BITMAP
-#define SCDRAWTRANS_TYPE_DOCUMENT       SotClipboardFormatId::GDIMETAFILE
+constexpr sal_uInt32 SCDRAWTRANS_TYPE_EMBOBJ    = 1;
+constexpr sal_uInt32 SCDRAWTRANS_TYPE_DRAWMODEL = 2;
+constexpr sal_uInt32 SCDRAWTRANS_TYPE_DOCUMENT  = 3;
 
 ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContainerShell,
                                         const TransferableObjectDescriptor& rDesc ) :
@@ -444,7 +444,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
     return bOK;
 }
 
-bool ScDrawTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId,
+bool ScDrawTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const css::datatransfer::DataFlavor& /* rFlavor */ )
 {
     // called from SetObject, put data into stream
