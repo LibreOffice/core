@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_HELPER_PROPERTYMAP_HXX
 
 #include <map>
+#include <utility>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -67,12 +68,12 @@ public:
     /** Sets the specified property to the passed value. Does nothing, if the
         identifier is invalid. */
     template< typename Type >
-    bool                setProperty( sal_Int32 nPropId, const Type& rValue )
+    bool                setProperty( sal_Int32 nPropId, Type&& rValue )
     {
         if( nPropId < 0 )
             return false;
 
-        maProperties[ nPropId ] <<= rValue;
+        maProperties[ nPropId ] <<= std::forward<Type>(rValue);
         return true;
     }
 

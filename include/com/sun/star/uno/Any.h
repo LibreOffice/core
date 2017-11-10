@@ -79,7 +79,9 @@ public:
 
 #if defined LIBO_INTERNAL_ONLY
     template<typename T1, typename T2>
-    explicit inline Any(rtl::OUStringConcat<T1, T2> const & value);
+    explicit inline Any(rtl::OUStringConcat<T1, T2> && value);
+    template<typename T1, typename T2>
+    explicit Any(rtl::OUStringConcat<T1, T2> const &) = delete;
 #endif
 
     /** Copy constructor: Sets value of the given any.

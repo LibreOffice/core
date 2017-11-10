@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <new>
 #include <ostream>
+#include <utility>
 #include <string.h>
 
 #include "rtl/ustring.h"
@@ -391,7 +392,7 @@ public:
      @internal
     */
     template< typename T1, typename T2 >
-    OUString( const OUStringConcat< T1, T2 >& c )
+    OUString( OUStringConcat< T1, T2 >&& c )
     {
         const sal_Int32 l = c.length();
         pData = rtl_uString_alloc( l );
@@ -598,7 +599,7 @@ public:
      @internal
     */
     template< typename T1, typename T2 >
-    OUString& operator+=( const OUStringConcat< T1, T2 >& c ) & {
+    OUString& operator+=( OUStringConcat< T1, T2 >&& c ) & {
         sal_Int32 l = c.length();
         if( l == 0 )
             return *this;
@@ -610,7 +611,7 @@ public:
         return *this;
     }
     template<typename T1, typename T2> void operator +=(
-        OUStringConcat<T1, T2> const &) && = delete;
+        OUStringConcat<T1, T2> &&) && = delete;
 #endif
 
     /**
@@ -3584,9 +3585,9 @@ struct ToStringHelper< OUStringLiteral >
 */
 template< typename charT, typename traits, typename T1, typename T2 >
 inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const OUStringConcat< T1, T2 >& concat)
+    std::basic_ostream<charT, traits> & stream, OUStringConcat< T1, T2 >&& concat)
 {
-    return stream << OUString( concat );
+    return stream << OUString( std::move(concat) );
 }
 
 /// @endcond

@@ -157,6 +157,13 @@ void test::oustring::StringConcat::checkInvalid()
     rtl_uString* rus = nullptr;
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) + rs ));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) + rus ));
+
+#if 0
+    // Should fail to compile, to avoid use of OUStringConcat lvalues that
+    // contain dangling references to temporaries:
+    auto const conc = OUStringLiteral("foo") + "bar";
+    (void) OUString(conc);
+#endif
 }
 
 }} // namespace

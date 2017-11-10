@@ -10,6 +10,10 @@
 #ifndef INCLUDED_COMPHELPER_PROPERTYVALUE_HXX
 #define INCLUDED_COMPHELPER_PROPERTYVALUE_HXX
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 namespace comphelper
@@ -22,11 +26,11 @@ namespace comphelper
  *
  * instead of writing 3 extra lines to set the name and value of the beans::PropertyValue.
  */
-template<typename T> css::beans::PropertyValue makePropertyValue(const OUString& rName, const T& rValue)
+template<typename T> css::beans::PropertyValue makePropertyValue(const OUString& rName, T&& rValue)
 {
     css::beans::PropertyValue aValue;
     aValue.Name = rName;
-    aValue.Value = css::uno::toAny(rValue);
+    aValue.Value = css::uno::toAny(std::forward<T>(rValue));
     return aValue;
 }
 

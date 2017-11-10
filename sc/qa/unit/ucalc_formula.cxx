@@ -6488,8 +6488,8 @@ void Test::testFuncTableRef()
         m_pDoc->SetString( aPos, aFormula);
         // For easier "debugability" have position and formula in assertion.
         OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
-        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aNames[i].pCounta),
-                aPrefix + m_pDoc->GetString( aPos));
+        CPPUNIT_ASSERT_EQUAL( OUString(aPrefix + OUString::createFromAscii( aNames[i].pCounta)),
+                OUString(aPrefix + m_pDoc->GetString( aPos)));
     }
 
     // Use the named expressions in SUM() formulas, on row 3 that intersects.
@@ -6500,8 +6500,8 @@ void Test::testFuncTableRef()
         m_pDoc->SetString( aPos, aFormula);
         // For easier "debugability" have position and formula in assertion.
         OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
-        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aNames[i].pSum3),
-                aPrefix + m_pDoc->GetString( aPos));
+        CPPUNIT_ASSERT_EQUAL( OUString(aPrefix + OUString::createFromAscii( aNames[i].pSum3)),
+                OUString(aPrefix + m_pDoc->GetString( aPos)));
     }
 
     // Use the named expressions in SUM() formulas, on row 4 that intersects.
@@ -6512,8 +6512,8 @@ void Test::testFuncTableRef()
         m_pDoc->SetString( aPos, aFormula);
         // For easier "debugability" have position and formula in assertion.
         OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
-        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aNames[i].pSum4),
-                aPrefix + m_pDoc->GetString( aPos));
+        CPPUNIT_ASSERT_EQUAL( OUString(aPrefix + OUString::createFromAscii( aNames[i].pSum4)),
+                OUString(aPrefix + m_pDoc->GetString( aPos)));
     }
 
     // Use the named expressions in SUM() formulas, on row 5 that does not intersect.
@@ -6524,8 +6524,8 @@ void Test::testFuncTableRef()
         m_pDoc->SetString( aPos, aFormula);
         // For easier "debugability" have position and formula in assertion.
         OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
-        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aNames[i].pSumX),
-                aPrefix + m_pDoc->GetString( aPos));
+        CPPUNIT_ASSERT_EQUAL( OUString(aPrefix + OUString::createFromAscii( aNames[i].pSumX)),
+                OUString(aPrefix + m_pDoc->GetString( aPos)));
     }
 
     // Insert a column at column B to extend database range from column A,B to
@@ -6541,8 +6541,8 @@ void Test::testFuncTableRef()
         ScAddress aPos(4+i,3,0);
         // For easier "debugability" have position and formula in assertion.
         OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
-        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aNames[i].pSum4),
-                aPrefix + m_pDoc->GetString( aPos));
+        CPPUNIT_ASSERT_EQUAL( OUString(aPrefix + OUString::createFromAscii( aNames[i].pSum4)),
+                OUString(aPrefix + m_pDoc->GetString( aPos)));
     }
 
     const char* pColumn2Formula = "=SUM(table[[#Data];[Column2]])";
@@ -6662,8 +6662,8 @@ void Test::testFuncTableRef()
         m_pDoc->SetString( aPos, aFormula);
         // For easier "debugability" have position and formula in assertion.
         OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
-        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aHlNames[i].pCounta),
-                aPrefix + m_pDoc->GetString( aPos));
+        CPPUNIT_ASSERT_EQUAL( OUString(aPrefix + OUString::createFromAscii( aHlNames[i].pCounta)),
+                OUString(aPrefix + m_pDoc->GetString( aPos)));
     }
 
     // Use the named expressions in SUM() formulas, on row 11 that intersects.
@@ -6674,8 +6674,8 @@ void Test::testFuncTableRef()
         m_pDoc->SetString( aPos, aFormula);
         // For easier "debugability" have position and formula in assertion.
         OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
-        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aHlNames[i].pSum3),
-                aPrefix + m_pDoc->GetString( aPos));
+        CPPUNIT_ASSERT_EQUAL( OUString(aPrefix + OUString::createFromAscii( aHlNames[i].pSum3)),
+                OUString(aPrefix + m_pDoc->GetString( aPos)));
     }
 
     // Use the named expressions in SUM() formulas, on row 12 that intersects.
@@ -6686,8 +6686,8 @@ void Test::testFuncTableRef()
         m_pDoc->SetString( aPos, aFormula);
         // For easier "debugability" have position and formula in assertion.
         OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
-        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aHlNames[i].pSum4),
-                aPrefix + m_pDoc->GetString( aPos));
+        CPPUNIT_ASSERT_EQUAL( OUString(aPrefix + OUString::createFromAscii( aHlNames[i].pSum4)),
+                OUString(aPrefix + m_pDoc->GetString( aPos)));
     }
 
     // Use the named expressions in SUM() formulas, on row 13 that does not intersect.
@@ -6698,8 +6698,8 @@ void Test::testFuncTableRef()
         m_pDoc->SetString( aPos, aFormula);
         // For easier "debugability" have position and formula in assertion.
         OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
-        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aHlNames[i].pSumX),
-                aPrefix + m_pDoc->GetString( aPos));
+        CPPUNIT_ASSERT_EQUAL( OUString(aPrefix + OUString::createFromAscii( aHlNames[i].pSumX)),
+                OUString(aPrefix + m_pDoc->GetString( aPos)));
     }
 
     // Insert a column at column F to extend database range from column E,F to
@@ -6715,8 +6715,8 @@ void Test::testFuncTableRef()
         ScAddress aPos(8+i,11,0);
         // For easier "debugability" have position and formula in assertion.
         OUString aPrefix( aPos.Format(ScRefFlags::VALID) + " " + aFormula + " : ");
-        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aHlNames[i].pSum4),
-                aPrefix + m_pDoc->GetString( aPos));
+        CPPUNIT_ASSERT_EQUAL( OUString(aPrefix + OUString::createFromAscii( aHlNames[i].pSum4)),
+                OUString(aPrefix + m_pDoc->GetString( aPos)));
     }
 
     const char* pColumn3Formula = "=SUM(hltable[[#Data];[Column3]])";
