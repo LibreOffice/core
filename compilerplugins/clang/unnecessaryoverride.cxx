@@ -258,9 +258,6 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
             return true;
         }
     }
-    // not sure what is happening here
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/extensions/source/bibliography/datman.cxx"))
-        return true;
     // some very creative method hiding going on here
     if (loplugin::isSamePathname(aFileName, SRCDIR "/svx/source/dialog/checklbx.cxx"))
         return true;
