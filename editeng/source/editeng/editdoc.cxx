@@ -825,7 +825,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
 
     switch ( rPoolItem.Which() )
     {
-        case EE_PARA_LRSPACE:
+        case EE_PARA_LRSPACE.Which():
         {
             assert(dynamic_cast<const SvxLRSpaceItem *>(&rPoolItem) != nullptr);
             SvxLRSpaceItem& rItem = static_cast<SvxLRSpaceItem&>(rPoolItem);
@@ -2271,7 +2271,7 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs )
     ContentAttribs aContentAttribs( aPaM.GetNode()->GetContentAttribs() );
 
     // for a new paragraph we like to have the bullet/numbering visible by default
-    aContentAttribs.GetItems().Put( SfxBoolItem( EE_PARA_BULLETSTATE, true) );
+    aContentAttribs.GetItems().Put( SfxBoolItem( EE_PARA_BULLETSTATE.Which(), true) );
 
     // ContentNode constructor copies also the paragraph attributes
     ContentNode* pNode = new ContentNode( aStr, aContentAttribs );

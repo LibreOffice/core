@@ -21,6 +21,15 @@
 #define INCLUDED_EDITENG_EEITEM_HXX
 
 #include <svl/solar.hrc>
+#include <svl/typedwhich.hxx>
+
+class SvxForbiddenRuleItem;
+class SvxFrameDirectionItem;
+class SvxHangingPunctuationItem;
+class SfxBoolItem;
+class SfxInt16Item;
+class SvxLRSpaceItem;
+class SvxScriptSpaceItem;
 
 /*
  * NOTE: Changes in this file will probably require
@@ -32,18 +41,18 @@
 
 // Paragraph attributes:
 #define EE_PARA_START               (EE_ITEMS_START+0)
-#define EE_PARA_WRITINGDIR          (EE_ITEMS_START+0)
+#define EE_PARA_WRITINGDIR          TypedWhichId<SvxFrameDirectionItem>(EE_ITEMS_START+0)
 #define EE_PARA_XMLATTRIBS          (EE_ITEMS_START+1)
-#define EE_PARA_HANGINGPUNCTUATION  (EE_ITEMS_START+2)
-#define EE_PARA_FORBIDDENRULES      (EE_ITEMS_START+3)
-#define EE_PARA_ASIANCJKSPACING     (EE_ITEMS_START+4)
-#define EE_PARA_NUMBULLET           (EE_ITEMS_START+5)
-#define EE_PARA_HYPHENATE           (EE_ITEMS_START+6)
-#define EE_PARA_BULLETSTATE         (EE_ITEMS_START+7)
-#define EE_PARA_OUTLLRSPACE         (EE_ITEMS_START+8)
-#define EE_PARA_OUTLLEVEL           (EE_ITEMS_START+9)
-#define EE_PARA_BULLET              (EE_ITEMS_START+10)
-#define EE_PARA_LRSPACE             (EE_ITEMS_START+11)
+#define EE_PARA_HANGINGPUNCTUATION  TypedWhichId<SvxHangingPunctuationItem>(EE_ITEMS_START+2)
+#define EE_PARA_FORBIDDENRULES      TypedWhichId<SvxForbiddenRuleItem>(EE_ITEMS_START+3)
+#define EE_PARA_ASIANCJKSPACING     TypedWhichId<SvxScriptSpaceItem>(EE_ITEMS_START+4)
+#define EE_PARA_NUMBULLET           TypedWhichId<SvxNumBulletItem>(EE_ITEMS_START+5)
+#define EE_PARA_HYPHENATE           TypedWhichId<SfxBoolItem>(EE_ITEMS_START+6)
+#define EE_PARA_BULLETSTATE         TypedWhichId<SfxBoolItem>(EE_ITEMS_START+7)
+#define EE_PARA_OUTLLRSPACE         TypedWhichId<SvxLRSpaceItem>(EE_ITEMS_START+8)
+#define EE_PARA_OUTLLEVEL           TypedWhichId<SfxInt16Item>(EE_ITEMS_START+9)
+#define EE_PARA_BULLET              TypedWhichId<SvxBulletItem>(EE_ITEMS_START+10)
+#define EE_PARA_LRSPACE             TypedWhichId<SvxLRSpaceItem>(EE_ITEMS_START+11)
 #define EE_PARA_ULSPACE             (EE_ITEMS_START+12)
 #define EE_PARA_SBL                 (EE_ITEMS_START+13)
 #define EE_PARA_JUST                (EE_ITEMS_START+14)

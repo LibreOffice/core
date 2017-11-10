@@ -23,6 +23,7 @@
 #include <rtl/string.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
+#include <svl/typedwhich.hxx>
 #include <tools/solar.h>
 #include <memory>
 #include <vector>
@@ -101,7 +102,11 @@ public:
     SfxBroadcaster&                 BC();
 
     void                            SetPoolDefaultItem( const SfxPoolItem& );
+
     const SfxPoolItem*              GetPoolDefaultItem( sal_uInt16 nWhich ) const;
+    template<class T> const T*      GetPoolDefaultItem( TypedWhichId<T> nWhich ) const
+    { return static_cast<const T*>(GetPoolDefaultItem(nWhich.Which())); }
+
     void                            ResetPoolDefaultItem( sal_uInt16 nWhich );
 
     void                            SetDefaults(std::vector<SfxPoolItem*>* pDefaults);
@@ -147,11 +152,21 @@ public:
 
     virtual const SfxPoolItem&      Put( const SfxPoolItem&, sal_uInt16 nWhich = 0 );
     void                            Remove( const SfxPoolItem& );
+
     const SfxPoolItem&              GetDefaultItem( sal_uInt16 nWhich ) const;
+    template<class T> const T&      GetDefaultItem( TypedWhichId<T> nWhich ) const
+    { return static_cast<const T&>(GetDefaultItem(nWhich.Which())); }
 
     bool                            CheckItemInPool(const SfxPoolItem *) const;
+
     const SfxPoolItem *             GetItem2(sal_uInt16 nWhich, sal_uInt32 nSurrogate) const;
+    template<class T> const T*      GetItem2( TypedWhichId<T> nWhich, sal_uInt32 nSurrogate ) const
+    { return dynamic_cast<const T*>(GetItem2(nWhich.Which(), nSurrogate)); }
+
     const SfxPoolItem *             GetItem2Default(sal_uInt16 nWhich) const;
+    template<class T> const T*      GetItem2Default( TypedWhichId<T> nWhich ) const
+    { return static_cast<const T*>(GetItem2Default(nWhich.Which())); }
+
     sal_uInt32                      GetItemCount2(sal_uInt16 nWhich) const;
 
     sal_uInt16                      GetFirstWhich() const;
@@ -169,6 +184,8 @@ public:
                                     { return IsItemPoolable( rItem.Which() ); }
     void                            SetItemInfos( const SfxItemInfo *pInfos );
     sal_uInt16                      GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
+    template<class T> sal_uInt16    GetWhich( TypedWhichId<T> nSlot, bool bDeep = true ) const
+    { return GetWhich(nSlot.Which(), bDeep); }
     sal_uInt16                      GetSlotId( sal_uInt16 nWhich ) const;
     sal_uInt16                      GetTrueWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
     sal_uInt16                      GetTrueSlotId( sal_uInt16 nWhich ) const;

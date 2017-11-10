@@ -878,7 +878,7 @@ void OutlinerView::ToggleBullets()
                     {
                         SfxItemSet aAttrs( pOwner->GetParaAttribs( nPara ) );
                         SvxNumRule aNewNumRule( *pDefaultBulletNumRule );
-                        aAttrs.Put( SvxNumBulletItem( aNewNumRule, EE_PARA_NUMBULLET ) );
+                        aAttrs.Put( SvxNumBulletItem( aNewNumRule, EE_PARA_NUMBULLET.Which() ) );
                         pOwner->SetParaAttribs( nPara, aAttrs );
                     }
                 }
@@ -1013,7 +1013,7 @@ void OutlinerView::ApplyBulletsNumbering(
 
             const SfxItemSet& rAttrs = pOwner->GetParaAttribs(nPara);
             SfxItemSet aAttrs(rAttrs);
-            aAttrs.Put(SfxBoolItem(EE_PARA_BULLETSTATE, true));
+            aAttrs.Put(SfxBoolItem(EE_PARA_BULLETSTATE.Which(), true));
 
             // apply new numbering rule
             if ( pNewNumRule )
@@ -1083,7 +1083,7 @@ void OutlinerView::ApplyBulletsNumbering(
                         }
                     }
 
-                    aAttrs.Put(SvxNumBulletItem(aNewRule, EE_PARA_NUMBULLET));
+                    aAttrs.Put(SvxNumBulletItem(aNewRule, EE_PARA_NUMBULLET.Which()));
                 }
             }
             pOwner->SetParaAttribs(nPara, aAttrs);
@@ -1132,10 +1132,10 @@ void OutlinerView::SwitchOffBulletsNumbering(
             pOwner->SetDepth( pPara, -1 );
 
             const SfxItemSet& rAttrs = pOwner->GetParaAttribs( nPara );
-            if (rAttrs.GetItemState( EE_PARA_BULLETSTATE ) == SfxItemState::SET)
+            if (rAttrs.GetItemState( EE_PARA_BULLETSTATE.Which() ) == SfxItemState::SET)
             {
                 SfxItemSet aAttrs(rAttrs);
-                aAttrs.ClearItem( EE_PARA_BULLETSTATE );
+                aAttrs.ClearItem( EE_PARA_BULLETSTATE.Which() );
                 pOwner->SetParaAttribs( nPara, aAttrs );
             }
         }
@@ -1391,7 +1391,7 @@ void OutlinerView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueItera
         if ( eFormat == EE_FORMAT_BIN )
         {
             const SfxItemSet& rAttrs = pOwner->GetParaAttribs( n );
-            const SfxInt16Item& rLevel = static_cast<const SfxInt16Item&>( rAttrs.Get( EE_PARA_OUTLLEVEL ) );
+            const SfxInt16Item& rLevel = rAttrs.Get( EE_PARA_OUTLLEVEL );
             sal_uInt16 nDepth = rLevel.GetValue();
             pOwner->ImplInitDepth( n, nDepth, false );
         }

@@ -52,6 +52,7 @@
 #include <editeng/unoipset.hxx>
 #include <editeng/outliner.hxx>
 #include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 
 
 // Project-local header
@@ -1534,7 +1535,7 @@ namespace accessibility
             // NumberingLevel
             if (rRes.Name == "NumberingLevel")
             {
-                const SvxNumBulletItem& rNumBullet = static_cast<const SvxNumBulletItem&>(rCacheTF.GetParaAttribs(GetParagraphIndex()).Get(EE_PARA_NUMBULLET));
+                const SvxNumBulletItem& rNumBullet = rCacheTF.GetParaAttribs(GetParagraphIndex()).Get(EE_PARA_NUMBULLET);
                 if(rNumBullet.GetNumRule()->GetLevelCount()==0)
                 {
                     rRes.Value <<= (sal_Int16)-1;
@@ -1559,7 +1560,7 @@ namespace accessibility
             if (rRes.Name == "NumberingRules")
             {
                 SfxItemSet aAttribs = rCacheTF.GetParaAttribs(GetParagraphIndex());
-                bool bVis = static_cast<const SfxUInt16Item&>(aAttribs.Get( EE_PARA_BULLETSTATE )).GetValue() != 0;
+                bool bVis = aAttribs.Get( EE_PARA_BULLETSTATE ).GetValue();
                 if(bVis)
                 {
                     rRes.Value <<= (sal_Int16)-1;

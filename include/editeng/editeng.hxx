@@ -28,6 +28,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 
 #include <svl/style.hxx>
+#include <svl/typedwhich.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/editengdllapi.h>
@@ -319,6 +320,11 @@ public:
 
     bool            HasParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const;
     const SfxPoolItem&  GetParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich );
+    template<class T>
+    const T&            GetParaAttrib( sal_Int32 nPara, TypedWhichId<T> nWhich )
+    {
+        return static_cast<const T&>(GetParaAttrib(nPara, nWhich.Which()));
+    }
 
     vcl::Font       GetStandardFont( sal_Int32 nPara );
     SvxFont         GetStandardSvxFont( sal_Int32 nPara );

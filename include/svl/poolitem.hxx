@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>
+#include <svl/typedwhich.hxx>
 #include <tools/debug.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/solar.h>
@@ -149,6 +150,10 @@ public:
                                  assert(m_nRefCount==0);
                                  m_nWhich = nId;
                              }
+    template<class T> void   SetWhich( TypedWhichId<T> nId )
+    {
+        SetWhich(nId.Which());
+    }
     sal_uInt16               Which() const { return m_nWhich; }
     virtual bool             operator==( const SfxPoolItem& ) const = 0;
     bool                     operator!=( const SfxPoolItem& rItem ) const
@@ -173,6 +178,10 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const = 0;
     // clone and call SetWhich
     SfxPoolItem*             CloneSetWhich( sal_uInt16 nNewWhich ) const;
+    template<class T> T*     CloneSetWhich( TypedWhichId<T> nId ) const
+    {
+        return static_cast<T*>(CloneSetWhich(nId.Which()));
+    }
 
     sal_uInt32               GetRefCount() const { return m_nRefCount; }
     SfxItemKind       GetKind() const { return m_nKind; }
