@@ -616,8 +616,8 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ ".uno:FormatLegend" ] = m_aCommandAvailability[ ".uno:Legend" ];
 
     // depending on own data
-    m_aCommandAvailability[ ".uno:DataRanges" ] = bIsWritable && bModelStateIsValid &&
-                                                  (!m_apModelState->bHasOwnData) && (!m_apModelState->bHasDataFromPivotTable);
+    m_aCommandAvailability[ ".uno:DataRanges" ] = bIsWritable && bModelStateIsValid /*&&
+                                                  (!m_apModelState->bHasOwnData) && (!m_apModelState->bHasDataFromPivotTable)*/;
     m_aCommandAvailability[ ".uno:DiagramData" ] = bIsWritable && bModelStateIsValid &&  m_apModelState->bHasOwnData && bEnableDataTableDialog;
 
     // titles

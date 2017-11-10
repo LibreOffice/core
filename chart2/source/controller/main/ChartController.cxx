@@ -1334,10 +1334,35 @@ void ChartController::executeDispatch_SourceData()
     if( !xChartDoc.is())
         return;
 
-    UndoLiveUpdateGuard aUndoGuard(
-        SchResId(STR_ACTION_EDIT_DATA_RANGES), m_xUndoManager );
     if( xChartDoc.is())
     {
+        // If there is a data table we should ask user if we really want to destroy it
+        // and switch to data ranges.
+        ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartDoc.get());
+        if (rModel.hasInternalDataProvider() || rModel.isDataFromPivotTable())
+        {
+            SolarMutexGuard aSolarGuard;
+            OUString aQuery = "Do you want to delete data table and switch to data ranges?";
+            ScopedVclPtrInstance< MessageDialog > aQueryBox( GetChartWindow(), aQuery, VclMessageType::Question, VclButtonsType::YesNo);
+
+            // If "No" then just return
+            if (aQueryBox->Execute() == RET_NO)
+                return;
+
+            // Remova data table
+            UndoLiveUpdateGuard aUndoGuard(SchResId(STR_ACTION_EDIT_CHART_DATA), m_xUndoManager);
+
+            rModel.clearDataProviders();
+
+            /*rModel.attachDataProvider(xDataProvider);
+            rModel.attach*/
+
+            aUndoGuard.commit();
+        }
+
+        UndoLiveUpdateGuard aUndoGuard(
+            SchResId(STR_ACTION_EDIT_DATA_RANGES), m_xUndoManager);
+
         SolarMutexGuard aSolarGuard;
         ScopedVclPtrInstance< ::chart::DataSourceDialog > aDlg( GetChartWindow(), xChartDoc, m_xCC );
         if( aDlg->Execute() == RET_OK )
