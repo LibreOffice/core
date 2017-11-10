@@ -75,6 +75,19 @@ void Plugin::registerPlugin( Plugin* (*create)( const InstantiationData& ), cons
     PluginHandler::registerPlugin( create, optionName, isPPCallback, byDefault );
 }
 
+bool Plugin::evaluate(const Expr* expr, APSInt& x)
+{
+    if (expr->EvaluateAsInt(x, compiler.getASTContext()))
+    {
+        return true;
+    }
+    if (isa<CXXNullPtrLiteralExpr>(expr)) {
+        x = 0;
+        return true;
+    }
+    return false;
+}
+
 const Stmt* Plugin::getParentStmt( const Stmt* stmt )
 {
     auto parentsRange = compiler.getASTContext().getParents(*stmt);
@@ -201,6 +214,62 @@ bool Plugin::containsPreprocessingConditionalInclusion(SourceRange range)
                 1));
     }
     return false;
+}
+
+Plugin::IdenticalDefaultArgumentsResult Plugin::checkIdenticalDefaultArguments(
+    Expr const * argument1, Expr const * argument2)
+{
+    if ((argument1 == nullptr) != (argument2 == nullptr)) {
+        return IdenticalDefaultArgumentsResult::No;
+    }
+    if (argument1 == nullptr) {
+        return IdenticalDefaultArgumentsResult::Yes;
+    }
+    if (argument1->isNullPointerConstant(compiler.getASTContext(), Expr::NPC_NeverValueDependent)
+        && argument2->isNullPointerConstant(compiler.getASTContext(), Expr::NPC_NeverValueDependent))
+    {
+        return IdenticalDefaultArgumentsResult::Yes;
+    }
+    APSInt x1, x2;
+    if (evaluate(argument1, x1) && evaluate(argument2, x2))
+    {
+        return x1 == x2
+            ? IdenticalDefaultArgumentsResult::Yes
+            : IdenticalDefaultArgumentsResult::No;
+    }
+#if CLANG_VERSION >= 30900
+    APFloat f1(0.0f), f2(0.0f);
+    if (argument1->EvaluateAsFloat(f1, compiler.getASTContext())
+        && argument2->EvaluateAsFloat(f2, compiler.getASTContext()))
+    {
+        return f1.bitwiseIsEqual(f2)
+            ? IdenticalDefaultArgumentsResult::Yes
+            : IdenticalDefaultArgumentsResult::No;
+    }
+#endif
+    if (auto const lit1 = dyn_cast<clang::StringLiteral>(
+            argument1->IgnoreParenImpCasts()))
+    {
+        if (auto const lit2 = dyn_cast<clang::StringLiteral>(
+                argument2->IgnoreParenImpCasts()))
+        {
+            return lit1->getBytes() == lit2->getBytes()
+                ? IdenticalDefaultArgumentsResult::Yes
+                : IdenticalDefaultArgumentsResult::No;
+        }
+    }
+    // catch params with defaults like "= OUString()"
+    if (isa<MaterializeTemporaryExpr>(argument1)
+        && isa<MaterializeTemporaryExpr>(argument2))
+    {
+        return IdenticalDefaultArgumentsResult::Yes;
+    }
+    if (isa<CXXBindTemporaryExpr>(argument1)
+        && isa<CXXBindTemporaryExpr>(argument2))
+    {
+        return IdenticalDefaultArgumentsResult::Yes;
+    }
+    return IdenticalDefaultArgumentsResult::Maybe;
 }
 
 RewritePlugin::RewritePlugin( const InstantiationData& data )

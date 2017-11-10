@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <config_clang.h>
+
 struct Base
 {
     virtual ~Base();
@@ -15,6 +19,7 @@ struct Base
     void cv() const volatile;
     void ref();
     static void staticFn();
+    void defaults(void* = nullptr, int = 0, double = 1, Base const& = {}, char const* = "foo");
 };
 
 struct SimpleDerived : Base
@@ -55,6 +60,34 @@ struct DerivedDifferent : Base
     void cv() { Base::cv(); } // no warning
     void ref() && { Base::ref(); } // no warning
     void staticFn() { Base::staticFn(); } // no warning
+    void defaults(void* x1, int x2, double x3, Base const& x4, char const* x5)
+    {
+        Base::defaults(x1, x2, x3, x4, x5); // no warning
+    }
+};
+
+struct DerivedSame : Base
+{
+#if CLANG_VERSION >= 30900 // cf. corresponding condition in Plugin::checkIdenticalDefaultArguments
+    void
+    defaults( // expected-error {{public function just calls public parent [loplugin:unnecessaryoverride]}}
+        void* x1 = 0, int x2 = (1 - 1), double x3 = 1.0, Base const& x4 = (Base()),
+        char const* x5 = "f"
+                         "oo")
+    {
+        Base::defaults(x1, x2, x3, x4, x5);
+    }
+#endif
+};
+
+struct DerivedSlightlyDifferent : Base
+{
+    void defaults( // no warning
+        void* x1 = nullptr, int x2 = 0, double x3 = 1, Base const& x4 = DerivedSlightlyDifferent(),
+        char const* x5 = "foo")
+    {
+        Base::defaults(x1, x2, x3, x4, x5);
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

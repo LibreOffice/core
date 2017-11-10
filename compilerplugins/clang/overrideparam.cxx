@@ -38,7 +38,6 @@ public:
 
 private:
     bool hasSameDefaultParams(const ParmVarDecl * parmVarDecl, const ParmVarDecl * superParmVarDecl);
-    bool evaluate(const Expr* expr, APSInt& x);
 };
 
 void OverrideParam::run()
@@ -148,39 +147,10 @@ bool OverrideParam::hasSameDefaultParams(const ParmVarDecl * parmVarDecl, const 
     if (parmVarDecl->hasUninstantiatedDefaultArg() || superParmVarDecl->hasUninstantiatedDefaultArg()) {
         return true;
     }
-    const Expr* defaultArgExpr = parmVarDecl->getDefaultArg();
-    const Expr* superDefaultArgExpr = superParmVarDecl->getDefaultArg();
-
-    if (defaultArgExpr->isNullPointerConstant(compiler.getASTContext(), Expr::NPC_NeverValueDependent)
-        && superDefaultArgExpr->isNullPointerConstant(compiler.getASTContext(), Expr::NPC_NeverValueDependent))
-    {
-        return true;
-    }
-    APSInt x1, x2;
-    if (evaluate(defaultArgExpr, x1) && evaluate(superDefaultArgExpr, x2))
-    {
-        return x1 == x2;
-    }
-#if CLANG_VERSION >= 30900
-    APFloat f1(0.0f), f2(0.0f);
-    if (defaultArgExpr->EvaluateAsFloat(f1, compiler.getASTContext())
-        && superDefaultArgExpr->EvaluateAsFloat(f2, compiler.getASTContext()))
-    {
-        return f1.bitwiseIsEqual(f2);
-    }
-#endif
-    // catch params with defaults like "= OUString()"
-    if (isa<MaterializeTemporaryExpr>(defaultArgExpr)
-        && isa<MaterializeTemporaryExpr>(superDefaultArgExpr))
-    {
-        return true;
-    }
-    if (isa<CXXBindTemporaryExpr>(defaultArgExpr)
-        && isa<CXXBindTemporaryExpr>(superDefaultArgExpr))
-    {
-        return true;
-    }
-    return true;
+    return
+        checkIdenticalDefaultArguments(
+            parmVarDecl->getDefaultArg(), superParmVarDecl->getDefaultArg())
+        != IdenticalDefaultArgumentsResult::No;
         // for one, Clang 3.8 doesn't have EvaluateAsFloat; for another, since
         // <http://llvm.org/viewvc/llvm-project?view=revision&revision=291318>
         // "PR23135: Don't instantiate constexpr functions referenced in
@@ -194,19 +164,6 @@ bool OverrideParam::hasSameDefaultParams(const ParmVarDecl * parmVarDecl, const 
         // EvaluateAsInt etc., cf. the implementation of
         // Sema::CheckCXXDefaultArgExpr in Clang's lib/Sema/SemaExpr.cpp, but
         // that would probably have unwanted side-effects)
-}
-
-bool OverrideParam::evaluate(const Expr* expr, APSInt& x)
-{
-    if (expr->EvaluateAsInt(x, compiler.getASTContext()))
-    {
-        return true;
-    }
-    if (isa<CXXNullPtrLiteralExpr>(expr)) {
-        x = 0;
-        return true;
-    }
-    return false;
 }
 
 loplugin::Plugin::Registration< OverrideParam > X("overrideparam");
