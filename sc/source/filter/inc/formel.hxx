@@ -144,31 +144,51 @@ inline void LotusConverterBase::Ignore( const long nSeekRel )
 inline void LotusConverterBase::Read( sal_uInt8& nByte )
 {
     aIn.ReadUChar( nByte );
-    nBytesLeft--;
+    if (aIn.good())
+        nBytesLeft--;
+    else
+    {
+        // SvStream::ReadUChar() does not init a single char on failure. This
+        // behaviour is even tested in a unit test.
+        nByte = 0;
+        nBytesLeft = -1;    // bail out early
+    }
 }
 
 inline void LotusConverterBase::Read( sal_uInt16& nUINT16 )
 {
     aIn.ReadUInt16( nUINT16 );
-    nBytesLeft -= 2;
+    if (aIn.good())
+        nBytesLeft -= 2;
+    else
+        nBytesLeft = -1;    // bail out early
 }
 
 inline void LotusConverterBase::Read( sal_Int16& nINT16 )
 {
     aIn.ReadInt16( nINT16 );
-    nBytesLeft -= 2;
+    if (aIn.good())
+        nBytesLeft -= 2;
+    else
+        nBytesLeft = -1;    // bail out early
 }
 
 inline void LotusConverterBase::Read( double& fDouble )
 {
     aIn.ReadDouble( fDouble );
-    nBytesLeft -= 8;
+    if (aIn.good())
+        nBytesLeft -= 8;
+    else
+        nBytesLeft = -1;    // bail out early
 }
 
 inline void LotusConverterBase::Read( sal_uInt32& nUINT32 )
 {
     aIn.ReadUInt32( nUINT32 );
-    nBytesLeft -= 4;
+    if (aIn.good())
+        nBytesLeft -= 4;
+    else
+        nBytesLeft = -1;    // bail out early
 }
 
 #endif
