@@ -28,6 +28,7 @@
 
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
+#include <svl/typedwhich.hxx>
 
 class SfxItemPool;
 class SfxPoolItem;
@@ -131,6 +132,11 @@ public:
     sal_uInt16                  TotalCount() const;
 
     const SfxPoolItem&          Get( sal_uInt16 nWhich, bool bSrchInParent = true ) const;
+    template<typename T>
+    const T&                    Get( TypedWhich<T> nWhich, bool bSrchInParent = true ) const
+    {
+        return static_cast<const T&>(Get(nWhich.Which(), bSrchInParent));
+    }
 
     /** This method eases accessing single Items in the SfxItemSet.
 

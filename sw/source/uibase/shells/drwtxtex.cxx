@@ -836,7 +836,7 @@ ASK_ESCAPE:
                 }
                 else
                 {
-                    switch( static_cast<const SvxFrameDirectionItem&>( aEditAttr.Get( EE_PARA_WRITINGDIR ) ).GetValue() )
+                    switch( aEditAttr.Get( EE_PARA_WRITINGDIR ).GetValue() )
                     {
                         case SvxFrameDirection::Horizontal_LR_TB:
                             bFlag = nWhich == SID_ATTR_PARA_LEFT_TO_RIGHT;

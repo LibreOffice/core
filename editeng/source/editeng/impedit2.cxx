@@ -1983,7 +1983,7 @@ bool ImpEditEngine::IsRightToLeft( sal_Int32 nPara ) const
             else
             {
                 // Use pool default
-                pFrameDirItem = &static_cast<const SvxFrameDirectionItem&>(const_cast<ImpEditEngine*>(this)->GetEmptyItemSet().Get( EE_PARA_WRITINGDIR ));
+                pFrameDirItem = &const_cast<ImpEditEngine*>(this)->GetEmptyItemSet().Get( EE_PARA_WRITINGDIR );
             }
         }
     }
