@@ -433,7 +433,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
         for ( sal_Int32 n = nStartNode; n <= nEndNode; n++ )
         {
             ContentNode* pNode = mpEditEngine->GetEditDoc().GetObject( n );
-            pNode->GetContentAttribs().GetItems().Put( SfxInt16Item( EE_PARA_OUTLLEVEL, nOutlLevel ) );
+            pNode->GetContentAttribs().GetItems().Put( SfxInt16Item( EE_PARA_OUTLLEVEL.Which(), nOutlLevel ) );
         }
     }
 }

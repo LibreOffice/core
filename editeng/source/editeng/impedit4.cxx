@@ -673,7 +673,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
     sal_uInt16 nWhich = rItem.Which();
     switch ( nWhich )
     {
-        case EE_PARA_WRITINGDIR:
+        case EE_PARA_WRITINGDIR.Which():
         {
             const SvxFrameDirectionItem& rWritingMode = static_cast<const SvxFrameDirectionItem&>(rItem);
             if ( rWritingMode.GetValue() == SvxFrameDirection::Horizontal_RL_TB )
@@ -682,7 +682,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
                 rOutput.WriteCharPtr( "\\ltrpar" );
         }
         break;
-        case EE_PARA_OUTLLEVEL:
+        case EE_PARA_OUTLLEVEL.Which():
         {
             sal_Int32 nLevel = static_cast<const SfxInt16Item&>(rItem).GetValue();
             if( nLevel >= 0 )
@@ -692,8 +692,8 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             }
         }
         break;
-        case EE_PARA_OUTLLRSPACE:
-        case EE_PARA_LRSPACE:
+        case EE_PARA_OUTLLRSPACE.Which():
+        case EE_PARA_LRSPACE.Which():
         {
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FI );
             sal_Int32 nTxtFirst = static_cast<const SvxLRSpaceItem&>(rItem).GetTextFirstLineOfst();

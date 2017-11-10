@@ -391,7 +391,7 @@ long ScColumn::GetNeededSize(
 //          no longer needed, are set with the text (is faster)
 //          pEngine->SetDefaults( pSet );
 
-        if ( static_cast<const SfxBoolItem&>(pSet->Get(EE_PARA_HYPHENATE)).GetValue() ) {
+        if ( pSet->Get(EE_PARA_HYPHENATE).GetValue() ) {
 
             css::uno::Reference<css::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
             pEngine->SetHyphenator( xXHyphenator );

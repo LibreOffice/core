@@ -1090,7 +1090,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         bAutoGrowHeight = bFitShapeToText;
                     }
                 }
-                pTObj->SetMergedItem( SvxFrameDirectionItem( bVerticalText ? SvxFrameDirection::Vertical_RL_TB : SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR ) );
+                pTObj->SetMergedItem( SvxFrameDirectionItem( bVerticalText ? SvxFrameDirection::Vertical_RL_TB : SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR.Which() ) );
 
                 //Autofit text only if there is no auto grow height and width
                 //See fdo#41245
@@ -2329,11 +2329,11 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 sal_uInt32  nIsBullet2 = 0; //, nInstance = nDestinationInstance != 0xffffffff ? nDestinationInstance : pTextObj->GetInstance();
                 pPara->GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet2, nDestinationInstance );
                 if ( !nIsBullet2 )
-                    aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, false ) );
+                    aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE.Which(), false ) );
 
                 if ( !aSelection.nStartPos )    // in PPT empty paragraphs never gets a bullet
                 {
-                    aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, false ) );
+                    aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE.Which(), false ) );
                 }
                 aSelection.nStartPos = 0;
                 rOutliner.QuickSetAttribs( aParagraphAttribs, aSelection );
@@ -4396,7 +4396,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                     aRule.SetLevel( 0, aNumberFormat );
             }
         }
-        mpNumBulletItem[ i ] = new SvxNumBulletItem( aRule, EE_PARA_NUMBULLET );
+        mpNumBulletItem[ i ] = new SvxNumBulletItem( aRule, EE_PARA_NUMBULLET.Which() );
     }
 }
 
@@ -6231,7 +6231,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
     GetAttrib(PPT_ParaAttr_BulletOfs, _nBulletOfs, nDestinationInstance);
     if ( !nIsBullet2 )
     {
-        SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
+        SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE.Which() );
         sal_uInt16 nAbsLSpace = (sal_uInt16)( ( _nTextOfs * 2540 ) / 576 );
         sal_uInt16 nFirstLineOffset = nAbsLSpace - (sal_uInt16)( ( _nBulletOfs * 2540 ) / 576 );
         aLRSpaceItem.SetLeft( nAbsLSpace );
@@ -6240,7 +6240,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
     }
     else
     {
-        SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
+        SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE.Which() );
         aLRSpaceItem.SetLeft( 0 );
         aLRSpaceItem.SetTextFirstLineOfstValue( 0 );
         rSet.Put( aLRSpaceItem );
@@ -6255,12 +6255,12 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
     }
 
     if ( GetAttrib( PPT_ParaAttr_AsianLB_1, nVal, nDestinationInstance ) )
-        rSet.Put(SvxForbiddenRuleItem(nVal != 0, EE_PARA_FORBIDDENRULES));
+        rSet.Put(SvxForbiddenRuleItem(nVal != 0, EE_PARA_FORBIDDENRULES.Which()));
     if ( GetAttrib( PPT_ParaAttr_AsianLB_3, nVal, nDestinationInstance ) )
-        rSet.Put(SvxHangingPunctuationItem(nVal != 0, EE_PARA_HANGINGPUNCTUATION));
+        rSet.Put(SvxHangingPunctuationItem(nVal != 0, EE_PARA_HANGINGPUNCTUATION.Which()));
 
     if ( GetAttrib( PPT_ParaAttr_BiDi, nVal, nDestinationInstance ) )
-        rSet.Put( SvxFrameDirectionItem( nVal == 1 ? SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR ) );
+        rSet.Put( SvxFrameDirectionItem( nVal == 1 ? SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR.Which() ) );
 
     // LineSpacing
     PPTPortionObj* pPortion = First();
@@ -7406,7 +7406,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const & xCel
 
         //set textHorizontalAdjust and TextWritingMode attr
         const sal_Int32 eHA(static_cast<const SdrTextHorzAdjustItem&>(pObj->GetMergedItem(SDRATTR_TEXT_HORZADJUST)).GetValue());
-        const SvxFrameDirection eDirection = static_cast<const SvxFrameDirectionItem&>(pObj->GetMergedItem(EE_PARA_WRITINGDIR)).GetValue();
+        const SvxFrameDirection eDirection = pObj->GetMergedItem(EE_PARA_WRITINGDIR).GetValue();
         xPropSet->setPropertyValue(  "TextHorizontalAdjust" , Any( eHA ) );
         if ( eDirection == SvxFrameDirection::Vertical_RL_TB )
         {//vertical writing

@@ -30,6 +30,7 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/forbiddenruleitem.hxx>
 #include "impedit.hxx"
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
@@ -54,6 +55,7 @@
 #include <svl/ctloptions.hxx>
 #include <svl/asiancfg.hxx>
 
+#include <editeng/hngpnctitem.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 
 #include <unotools/configmgr.hxx>
@@ -638,13 +640,13 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     bool bRightToLeftPara = IsRightToLeft( nPara );
 
     SvxAdjust eJustification = GetJustification( nPara );
-    bool bHyphenatePara = static_cast<const SfxBoolItem&>(pNode->GetContentAttribs().GetItem( EE_PARA_HYPHENATE )).GetValue();
+    bool bHyphenatePara = pNode->GetContentAttribs().GetItem( EE_PARA_HYPHENATE ).GetValue();
     sal_Int32 nSpaceBefore      = 0;
     sal_Int32 nMinLabelWidth    = 0;
     sal_Int32 nSpaceBeforeAndMinLabelWidth = GetSpaceBeforeAndMinLabelWidth( pNode, &nSpaceBefore, &nMinLabelWidth );
     const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pNode );
     const SvxLineSpacingItem& rLSItem = static_cast<const SvxLineSpacingItem&>( pNode->GetContentAttribs().GetItem( EE_PARA_SBL ) );
-    const bool bScriptSpace = static_cast<const SvxScriptSpaceItem&>(pNode->GetContentAttribs().GetItem( EE_PARA_ASIANCJKSPACING )).GetValue();
+    const bool bScriptSpace = pNode->GetContentAttribs().GetItem( EE_PARA_ASIANCJKSPACING ).GetValue();
 
     const short nInvalidDiff = pParaPortion->GetInvalidDiff();
     const sal_Int32 nInvalidStart = pParaPortion->GetInvalidPosStart();
@@ -3080,8 +3082,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                         GetEditEnginePtr()->PaintingFirstLine( n, aParaStart, aTmpPos.Y(), aOrigin, nOrientation, pOutDev );
 
                         // Remember whether a bullet was painted.
-                        const SfxBoolItem& rBulletState = static_cast<const SfxBoolItem&>(
-                            pEditEngine->GetParaAttrib(n, EE_PARA_BULLETSTATE));
+                        const SfxBoolItem& rBulletState = pEditEngine->GetParaAttrib(n, EE_PARA_BULLETSTATE);
                         bPaintBullet = rBulletState.GetValue();
                     }
 
@@ -4329,7 +4330,7 @@ sal_Int32 ImpEditEngine::GetSpaceBeforeAndMinLabelWidth(
 
 const SvxLRSpaceItem& ImpEditEngine::GetLRSpaceItem( ContentNode* pNode )
 {
-    return static_cast<const SvxLRSpaceItem&>(pNode->GetContentAttribs().GetItem( aStatus.IsOutliner() ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE ));
+    return pNode->GetContentAttribs().GetItem( aStatus.IsOutliner() ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE );
 }
 
 // select a representative text language for the digit type according to the

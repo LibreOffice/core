@@ -420,7 +420,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                                     if(pFirstStyleSheet)
                                     {
-                                        pFirstStyleSheet->GetItemSet().Put( SvxNumBulletItem( aRule, EE_PARA_NUMBULLET ));
+                                        pFirstStyleSheet->GetItemSet().Put( SvxNumBulletItem( aRule, EE_PARA_NUMBULLET.Which() ));
                                         SdStyleSheet* pRealSheet = static_cast<SdStyleSheet*>(pFirstStyleSheet)->GetRealStyleSheet();
                                         pRealSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
                                     }

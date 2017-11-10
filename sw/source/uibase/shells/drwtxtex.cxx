@@ -224,7 +224,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 SfxItemState eState = aEditAttr.GetItemState( EE_PARA_LRSPACE );
                 if( eState >= SfxItemState::DEFAULT )
                 {
-                    SvxLRSpaceItem aParaMargin = static_cast<const SvxLRSpaceItem&>( aEditAttr.Get( EE_PARA_LRSPACE ) );
+                    SvxLRSpaceItem aParaMargin = aEditAttr.Get( EE_PARA_LRSPACE );
                     aParaMargin.SetWhich( EE_PARA_LRSPACE );
                     short int nFirstLineOffset = aParaMargin.GetTextFirstLineOfst();
                     aParaMargin.SetTextLeft( aParaMargin.GetTextLeft() + nFirstLineOffset );
@@ -536,7 +536,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             SfxItemSet aAttr(
                 *aNewAttr.GetPool(),
                 svl::Items<
-                    EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
+                    EE_PARA_WRITINGDIR.Which(), EE_PARA_WRITINGDIR.Which(),
                     EE_PARA_JUST, EE_PARA_JUST>{});
 
             SvxAdjust nAdjust = SvxAdjust::Left;
@@ -545,13 +545,13 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
             if( bLeftToRight )
             {
-                aAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR ) );
+                aAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR.Which() ) );
                 if( nAdjust == SvxAdjust::Right )
                     aAttr.Put( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
             }
             else
             {
-                aAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_RL_TB, EE_PARA_WRITINGDIR ) );
+                aAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_RL_TB, EE_PARA_WRITINGDIR.Which() ) );
                 if( nAdjust == SvxAdjust::Left )
                     aAttr.Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
             }
@@ -667,7 +667,7 @@ ASK_ADJUST:
                 SfxItemState eState = aEditAttr.GetItemState(EE_PARA_LRSPACE);
                 if( eState >= SfxItemState::DEFAULT )
                 {
-                    SvxLRSpaceItem aLR = static_cast<const SvxLRSpaceItem&>( aEditAttr.Get( EE_PARA_LRSPACE ) );
+                    SvxLRSpaceItem aLR = aEditAttr.Get( EE_PARA_LRSPACE );
                     aLR.SetWhich(SID_ATTR_PARA_LRSPACE);
                     rSet.Put(aLR);
                 }
@@ -836,7 +836,7 @@ ASK_ESCAPE:
                 }
                 else
                 {
-                    switch( static_cast<const SvxFrameDirectionItem&>( aEditAttr.Get( EE_PARA_WRITINGDIR ) ).GetValue() )
+                    switch( aEditAttr.Get( EE_PARA_WRITINGDIR ).GetValue() )
                     {
                         case SvxFrameDirection::Horizontal_LR_TB:
                             bFlag = nWhich == SID_ATTR_PARA_LEFT_TO_RIGHT;

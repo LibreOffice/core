@@ -107,9 +107,9 @@ void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
                 const SfxBoolItem* pItem = rReq.GetArg<SfxBoolItem>(SID_ENABLE_HYPHENATION);
                 if( pItem )
                 {
-                    SfxItemSet aSet( GetPool(), svl::Items<EE_PARA_HYPHENATE, EE_PARA_HYPHENATE>{} );
+                    SfxItemSet aSet( GetPool(), svl::Items<EE_PARA_HYPHENATE.Which(), EE_PARA_HYPHENATE.Which()>{} );
                     bool bValue = pItem->GetValue();
-                    aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
+                    aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE.Which(), bValue ) );
                     pView->SetAttributes( aSet );
                 }
                 rReq.Done();
@@ -163,12 +163,12 @@ void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
         case SID_ATTR_PARA_RIGHT_TO_LEFT:
             {
                 SfxItemSet aAttr( pView->GetModel()->GetItemPool(),
-                                    svl::Items<EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
+                                    svl::Items<EE_PARA_WRITINGDIR.Which(), EE_PARA_WRITINGDIR.Which(),
                                     EE_PARA_JUST, EE_PARA_JUST>{} );
                 bool bLeft = ( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT );
                 aAttr.Put( SvxFrameDirectionItem(
                                 bLeft ? SvxFrameDirection::Horizontal_LR_TB : SvxFrameDirection::Horizontal_RL_TB,
-                                EE_PARA_WRITINGDIR ) );
+                                EE_PARA_WRITINGDIR.Which() ) );
                 aAttr.Put( SvxAdjustItem(
                                 bLeft ? SvxAdjust::Left : SvxAdjust::Right,
                                 EE_PARA_JUST ) );
