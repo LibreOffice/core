@@ -70,8 +70,8 @@ class SvxItemPropertySet;
 #define WID_PARAISNUMBERINGRESTART  OWN_ATTR_VALUE_START+4
 
 #define SVX_UNOEDIT_NUMBERING_PROPERTIE \
-    {OUString(UNO_NAME_NUMBERING_RULES),        EE_PARA_NUMBULLET,  cppu::UnoType<css::container::XIndexReplace>::get(), 0, 0 }, \
-    {OUString(UNO_NAME_NUMBERING),              EE_PARA_BULLETSTATE,cppu::UnoType<bool>::get(), 0, 0 }
+    {OUString(UNO_NAME_NUMBERING_RULES),        EE_PARA_NUMBULLET.Which(),  cppu::UnoType<css::container::XIndexReplace>::get(), 0, 0 }, \
+    {OUString(UNO_NAME_NUMBERING),              EE_PARA_BULLETSTATE.Which(),cppu::UnoType<bool>::get(), 0, 0 }
 
 #define SVX_UNOEDIT_OUTLINER_PROPERTIES \
     SVX_UNOEDIT_NUMBERING_PROPERTIE, \
@@ -138,18 +138,18 @@ class SvxItemPropertySet;
 #define SVX_UNOEDIT_PARA_PROPERTIES \
     {OUString(UNO_NAME_EDIT_PARA_ADJUST),       EE_PARA_JUST,               ::cppu::UnoType<sal_Int16>::get(),            0, MID_PARA_ADJUST }, \
     {OUString(UNO_NAME_EDIT_PARA_BMARGIN),      EE_PARA_ULSPACE,            ::cppu::UnoType<sal_Int32>::get(),            0, MID_LO_MARGIN|SFX_METRIC_ITEM }, \
-    {OUString(UNO_NAME_EDIT_PARA_IS_HYPHEN),    EE_PARA_HYPHENATE,          cppu::UnoType<bool>::get(),                0, 0 }, \
+    {OUString(UNO_NAME_EDIT_PARA_IS_HYPHEN),    EE_PARA_HYPHENATE.Which(),  ::cppu::UnoType<bool>::get(),                0, 0 }, \
     {OUString(UNO_NAME_EDIT_PARA_LASTLINEADJ),  EE_PARA_JUST,               ::cppu::UnoType<sal_Int16>::get(),            0, MID_LAST_LINE_ADJUST }, \
-    {OUString(UNO_NAME_EDIT_PARA_LMARGIN),      EE_PARA_LRSPACE,            ::cppu::UnoType<sal_Int32>::get(),            0, MID_TXT_LMARGIN|SFX_METRIC_ITEM }, \
+    {OUString(UNO_NAME_EDIT_PARA_LMARGIN),      EE_PARA_LRSPACE.Which(),    ::cppu::UnoType<sal_Int32>::get(),            0, MID_TXT_LMARGIN|SFX_METRIC_ITEM }, \
     {OUString(UNO_NAME_EDIT_PARA_LINESPACING),  EE_PARA_SBL,                cppu::UnoType<css::style::LineSpacing>::get(),     0, CONVERT_TWIPS}, \
-    {OUString(UNO_NAME_EDIT_PARA_RMARGIN),      EE_PARA_LRSPACE,            ::cppu::UnoType<sal_Int32>::get(),            0, MID_R_MARGIN|SFX_METRIC_ITEM }, \
+    {OUString(UNO_NAME_EDIT_PARA_RMARGIN),      EE_PARA_LRSPACE.Which(),    ::cppu::UnoType<sal_Int32>::get(),            0, MID_R_MARGIN|SFX_METRIC_ITEM }, \
     {OUString(UNO_NAME_EDIT_PARA_TAPSTOPS),     EE_PARA_TABS,               cppu::UnoType<css::uno::Sequence< css::style::TabStop >>::get(), 0, 0 }, \
     {OUString(UNO_NAME_EDIT_PARA_TMARGIN),      EE_PARA_ULSPACE,            ::cppu::UnoType<sal_Int32>::get(),            0, MID_UP_MARGIN|SFX_METRIC_ITEM },\
-    {OUString(UNO_NAME_EDIT_PARA_FIRST_LINE_INDENT),     EE_PARA_LRSPACE,       ::cppu::UnoType<sal_Int32>::get(),            0, MID_FIRST_LINE_INDENT|SFX_METRIC_ITEM}, \
-    {OUString(UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION),EE_PARA_HANGINGPUNCTUATION,    cppu::UnoType<bool>::get(),                0 ,0 }, \
-    {OUString(UNO_NAME_EDIT_PARA_IS_CHARACTER_DISTANCE), EE_PARA_ASIANCJKSPACING,   cppu::UnoType<bool>::get(),                0 ,0 }, \
-    {OUString(UNO_NAME_EDIT_PARA_IS_FORBIDDEN_RULES),    EE_PARA_FORBIDDENRULES,        cppu::UnoType<bool>::get(),                0 ,0 },\
-    {OUString("WritingMode"),                   EE_PARA_WRITINGDIR,         ::cppu::UnoType<sal_Int16>::get(),            0, 0 }
+    {OUString(UNO_NAME_EDIT_PARA_FIRST_LINE_INDENT),     EE_PARA_LRSPACE.Which(),   ::cppu::UnoType<sal_Int32>::get(),            0, MID_FIRST_LINE_INDENT|SFX_METRIC_ITEM}, \
+    {OUString(UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION),EE_PARA_HANGINGPUNCTUATION.Which(),  cppu::UnoType<bool>::get(),                0 ,0 }, \
+    {OUString(UNO_NAME_EDIT_PARA_IS_CHARACTER_DISTANCE), EE_PARA_ASIANCJKSPACING.Which(),   cppu::UnoType<bool>::get(),                0 ,0 }, \
+    {OUString(UNO_NAME_EDIT_PARA_IS_FORBIDDEN_RULES),    EE_PARA_FORBIDDENRULES.Which(),     cppu::UnoType<bool>::get(),                0 ,0 },\
+    {OUString("WritingMode"),                   EE_PARA_WRITINGDIR.Which(), ::cppu::UnoType<sal_Int16>::get(),            0, 0 }
 
 class SvxEditSource;
 class SvxTextForwarder;

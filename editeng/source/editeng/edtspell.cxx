@@ -648,14 +648,12 @@ OUString const* EdtAutoCorrDoc::GetPrevPara(bool const)
     sal_Int32 nPos = rNodes.GetPos( pCurNode );
 
     // Special case: Bullet => Paragraph start => simply return NULL...
-    const SfxBoolItem& rBulletState = static_cast<const SfxBoolItem&>(
-            mpEditEngine->GetParaAttrib( nPos, EE_PARA_BULLETSTATE ));
+    const SfxBoolItem& rBulletState = mpEditEngine->GetParaAttrib( nPos, EE_PARA_BULLETSTATE );
     bool bBullet = rBulletState.GetValue();
     if ( !bBullet && (mpEditEngine->GetControlWord() & EEControlBits::OUTLINER) )
     {
         // The Outliner has still a Bullet at Level 0.
-        const SfxInt16Item& rLevel = static_cast<const SfxInt16Item&>(
-                mpEditEngine->GetParaAttrib( nPos, EE_PARA_OUTLLEVEL ));
+        const SfxInt16Item& rLevel = mpEditEngine->GetParaAttrib( nPos, EE_PARA_OUTLLEVEL );
         if ( rLevel.GetValue() == 0 )
             bBullet = true;
     }

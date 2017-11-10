@@ -56,9 +56,9 @@ ItemPropertyMapType & lcl_GetCharacterPropertyPropertyMap()
         {EE_CHAR_OUTLINE, {"CharContoured", 0}},
         {EE_CHAR_EMPHASISMARK, {"CharEmphasis", 0}},
 
-        {EE_PARA_WRITINGDIR, {"WritingMode", 0}},
+        {EE_PARA_WRITINGDIR.Which(), {"WritingMode", 0}},
 
-        {EE_PARA_ASIANCJKSPACING, {"ParaIsCharacterDistance", 0}}};
+        {EE_PARA_ASIANCJKSPACING.Which(), {"ParaIsCharacterDistance", 0}}};
 
     return aCharacterPropertyMap;
 }
@@ -296,8 +296,8 @@ void CharacterPropertyItemConverter::FillSpecialItem(
         }
         break;
 
-        case EE_PARA_FORBIDDENRULES:
-        case EE_PARA_HANGINGPUNCTUATION:
+        case EE_PARA_FORBIDDENRULES.Which():
+        case EE_PARA_HANGINGPUNCTUATION.Which():
             rOutItemSet.DisableItem( nWhichId );
             break;
     }

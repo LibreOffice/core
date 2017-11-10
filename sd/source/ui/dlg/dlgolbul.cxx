@@ -103,7 +103,7 @@ OutlineBulletDlg::OutlineBulletDlg(
         }
 
         if( pItem == nullptr )
-            pItem = static_cast<const SvxNumBulletItem*>( aInputSet.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET) );
+            pItem = aInputSet.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
 
         DBG_ASSERT( pItem, "No EE_PARA_NUMBULLET in Pool! [CL]" );
 
@@ -120,7 +120,7 @@ OutlineBulletDlg::OutlineBulletDlg(
             SvxNumRule aNewRule( *pRule );
             aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );
 
-            SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
+            SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET.Which() );
             aInputSet.Put(aNewItem);
         }
     }

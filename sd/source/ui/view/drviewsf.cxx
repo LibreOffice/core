@@ -355,7 +355,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             {
                 SfxItemSet aAttrs( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aAttrs );
-                SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>( aAttrs.Get( EE_PARA_LRSPACE ) );
+                SvxLRSpaceItem aLRSpace = aAttrs.Get( EE_PARA_LRSPACE );
                 aLRSpace.SetWhich(SID_ATTR_PARA_LRSPACE);
                 rSet.Put(aLRSpace);
                 bAttr = true;
@@ -426,7 +426,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 mpDrawView->GetAttributes( aAttrs );
                 if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SfxItemState::DEFAULT )
                 {
-                    bool bValue = static_cast<const SfxBoolItem&>( aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
+                    bool bValue = aAttrs.Get( EE_PARA_HYPHENATE ).GetValue();
                     rSet.Put( SfxBoolItem( SID_HYPHENATION, bValue ) );
                 }
             }

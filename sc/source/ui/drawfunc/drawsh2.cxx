@@ -266,7 +266,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
         pView->GetAttributes( aAttrs );
         if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SfxItemState::DEFAULT )
         {
-            bool bValue = static_cast<const SfxBoolItem&>( aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
+            bool bValue = aAttrs.Get( EE_PARA_HYPHENATE ).GetValue();
             rSet.Put( SfxBoolItem( SID_ENABLE_HYPHENATION, bValue ) );
         }
     }

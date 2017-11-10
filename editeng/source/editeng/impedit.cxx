@@ -1876,10 +1876,10 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
             pDragAndDropInfo->bOutlinerMode = true;
             EditPaM aStartPaM( pEditEngine->GetEditDoc().GetObject( nPara ), 0 );
             EditPaM aEndPaM( aStartPaM );
-            const SfxInt16Item& rLevel = static_cast<const SfxInt16Item&>(pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL ));
+            const SfxInt16Item& rLevel = pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
             for ( sal_Int32 n = nPara +1; n < pEditEngine->GetEditDoc().Count(); n++ )
             {
-                const SfxInt16Item& rL = static_cast<const SfxInt16Item&>( pEditEngine->GetParaAttrib( n, EE_PARA_OUTLLEVEL ) );
+                const SfxInt16Item& rL = pEditEngine->GetParaAttrib( n, EE_PARA_OUTLLEVEL );
                 if ( rL.GetValue() > rLevel.GetValue() )
                 {
                     aEndPaM.SetNode( pEditEngine->GetEditDoc().GetObject( n ) );
