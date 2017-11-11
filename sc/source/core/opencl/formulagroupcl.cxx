@@ -85,7 +85,7 @@ static const char* const publicFunc =
  "double strequal(unsigned a, unsigned b) { return (a==b)?1.0:0; }\n"
  ;
 
-#include <list>
+#include <vector>
 #include <map>
 #include <iostream>
 #include <sstream>
@@ -1166,17 +1166,15 @@ class SymbolTable
 public:
     typedef std::map<const formula::FormulaToken*, DynamicKernelArgumentRef> ArgumentMap;
     // This avoids instability caused by using pointer as the key type
-    typedef std::list<DynamicKernelArgumentRef> ArgumentList;
     SymbolTable() : mCurId(0) { }
     template<class T>
     const DynamicKernelArgument* DeclRefArg( const ScCalcConfig& config, FormulaTreeNodeRef, SlidingFunctionBase* pCodeGen, int nResultSize );
     /// Used to generate sliding window helpers
     void DumpSlidingWindowFunctions( std::stringstream& ss )
     {
-        for (ArgumentList::iterator it = mParams.begin(), e = mParams.end(); it != e;
-            ++it)
+        for (auto const& argument : mParams)
         {
-            (*it)->GenSlidingWindowFunction(ss);
+            argument->GenSlidingWindowFunction(ss);
             ss << "\n";
         }
     }
@@ -1187,16 +1185,15 @@ public:
 private:
     unsigned int mCurId;
     ArgumentMap mSymbols;
-    ArgumentList mParams;
+    std::vector<DynamicKernelArgumentRef> mParams;
 };
 
 void SymbolTable::Marshal( cl_kernel k, int nVectorWidth, cl_program pProgram )
 {
     int i = 1; //The first argument is reserved for results
-    for (ArgumentList::iterator it = mParams.begin(), e = mParams.end(); it != e;
-        ++it)
+    for (auto const& argument : mParams)
     {
-        i += (*it)->Marshal(k, i, nVectorWidth, pProgram);
+        i += argument->Marshal(k, i, nVectorWidth, pProgram);
     }
 }
 
@@ -3942,7 +3939,7 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, const ScToken
 {
     // Constructing "AST"
     FormulaTokenIterator aCode(rCode);
-    std::list<FormulaToken*> aTokenList;
+    std::vector<FormulaToken*> aTokenVector;
     std::map<FormulaToken*, FormulaTreeNodeRef> aHashMap;
     FormulaToken*  pCur;
     while ((pCur = const_cast<FormulaToken*>(aCode.Next())) != nullptr)
@@ -3954,8 +3951,8 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, const ScToken
             sal_uInt8 nParamCount =  pCur->GetParamCount();
             for (sal_uInt8 i = 0; i < nParamCount; i++)
             {
-                FormulaToken* pTempFormula = aTokenList.back();
-                aTokenList.pop_back();
+                FormulaToken* pTempFormula = aTokenVector.back();
+                aTokenVector.pop_back();
                 if (pTempFormula->GetOpCode() != ocPush)
                 {
                     if (aHashMap.find(pTempFormula) == aHashMap.end())
@@ -3972,11 +3969,11 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, const ScToken
             std::reverse(pCurNode->Children.begin(), pCurNode->Children.end());
             aHashMap[pCur] = pCurNode;
         }
-        aTokenList.push_back(pCur);
+        aTokenVector.push_back(pCur);
     }
 
     FormulaTreeNodeRef Root = std::make_shared<FormulaTreeNode>(nullptr);
-    Root->Children.push_back(aHashMap[aTokenList.back()]);
+    Root->Children.push_back(aHashMap[aTokenVector.back()]);
 
     DynamicKernel* pDynamicKernel = new DynamicKernel(rConfig, Root, nResultSize);
 
