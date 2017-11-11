@@ -609,7 +609,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XRangeSelection \
     qadevOOo/tests/java/ifc/sheet/_XRecentFunctions \
     qadevOOo/tests/java/ifc/sheet/_XScenario \
-    qadevOOo/tests/java/ifc/sheet/_XSheetAnnotationAnchor \
     qadevOOo/tests/java/ifc/sheet/_XSheetCellCursor \
     qadevOOo/tests/java/ifc/style/_CharacterProperties \
     qadevOOo/tests/java/ifc/style/_CharacterPropertiesAsian \

@@ -9,10 +9,15 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xcelladdressable.hxx>
+#include <test/sheet/xsheetannotationanchor.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
+#include <com/sun/star/sheet/XSheetAnnotations.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
+#include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
@@ -21,9 +26,10 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 1
+#define NUMBER_OF_TESTS 2
 
-class ScCellObj : public CalcUnoApiTest, public apitest::XCellAddressable
+class ScCellObj : public CalcUnoApiTest, public apitest::XCellAddressable,
+                                         public apitest::XSheetAnnotationAnchor
 {
 public:
     ScCellObj();
@@ -33,8 +39,13 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScCellObj);
+
     // XCellAddressable
     CPPUNIT_TEST(testGetCellAddress);
+
+    // XSheetAnnotationAnchor
+    CPPUNIT_TEST(testGetAnnotation);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -61,14 +72,16 @@ uno::Reference< uno::XInterface > ScCellObj::init()
     uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xSheetDoc.is());
 
-    // get getSheets
-    uno::Reference< sheet::XSpreadsheets > xSheets (xSheetDoc->getSheets(), UNO_QUERY_THROW);
-    uno::Any rSheet = xSheets->getByName("Sheet1");
-    // query for the XCellRange interface
-    uno::Reference< table::XCellRange > rCellRange(rSheet, UNO_QUERY);
-    uno::Reference< table::XCellRange > xCellRange = rCellRange->getCellRangeByName("A1");
+    uno::Reference<sheet::XSpreadsheets> xSheets (xSheetDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIndex(xSheets, UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), UNO_QUERY_THROW);
 
-    return xCellRange->getCellByPosition(0, 0);
+    uno::Reference<sheet::XSheetAnnotationsSupplier> xSheetAnnosSupplier(xSheet, UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetAnnotations> xSheetAnnos(xSheetAnnosSupplier->getAnnotations(),
+                                                         UNO_QUERY_THROW);
+    xSheetAnnos->insertNew(table::CellAddress(0, 2, 3), "xSheetAnnotation");
+
+    return xSheet->getCellByPosition(2, 3);
 }
 
 void ScCellObj::setUp()
