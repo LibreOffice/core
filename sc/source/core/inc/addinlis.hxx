@@ -41,7 +41,7 @@ private:
     css::uno::Any aResult;
     std::unique_ptr<ScAddInDocs> pDocs; // documents where this is used
 
-    static ::std::list<rtl::Reference<ScAddInListener>> aAllListeners;
+    static ::std::vector<rtl::Reference<ScAddInListener>> aAllListeners;
 
     // always allocated via CreateListener
     ScAddInListener( css::uno::Reference<css::sheet::XVolatileResult> const & xVR,

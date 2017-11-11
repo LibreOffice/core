@@ -30,7 +30,7 @@ using namespace com::sun::star;
 
 SC_SIMPLE_SERVICE_INFO( ScAddInListener, "ScAddInListener", "stardiv.one.sheet.AddInListener" )
 
-::std::list<rtl::Reference<ScAddInListener>> ScAddInListener::aAllListeners;
+::std::vector<rtl::Reference<ScAddInListener>> ScAddInListener::aAllListeners;
 
 ScAddInListener* ScAddInListener::CreateListener(
                         const uno::Reference<sheet::XVolatileResult>& xVR, ScDocument* pDoc )
@@ -61,11 +61,11 @@ ScAddInListener* ScAddInListener::Get( const uno::Reference<sheet::XVolatileResu
     ScAddInListener* pLst = nullptr;
     sheet::XVolatileResult* pComp = xVR.get();
 
-    for(auto iter = aAllListeners.begin(); iter != aAllListeners.end(); ++iter)
+    for (auto const& listener : aAllListeners)
     {
-        if ( pComp == (*iter)->xVolRes.get() )
+        if ( pComp == listener->xVolRes.get() )
         {
-            pLst = iter->get();
+            pLst = listener.get();
             break;
         }
     }
@@ -108,9 +108,8 @@ void SAL_CALL ScAddInListener::modified( const css::sheet::ResultEvent& aEvent )
 
     Broadcast( ScHint(SfxHintId::ScDataChanged, ScAddress()) );
 
-    for ( ScAddInDocs::iterator it = pDocs->begin(); it != pDocs->end(); ++it )
+    for (auto const& pDoc : *pDocs)
     {
-        ScDocument* pDoc = *it;
         pDoc->TrackFormulas();
         pDoc->GetDocumentShell()->Broadcast( SfxHint( SfxHintId::ScDataChanged ) );
     }
