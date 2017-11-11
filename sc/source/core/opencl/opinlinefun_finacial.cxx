@@ -10,7 +10,7 @@
 #ifndef SC_OPENCL_OPINLINFUN_finacial
 #define SC_OPENCL_OPINLINFUN_finacial
 
-std::string nKorrValDecl ="double constant nCorrVal[]"
+std::string nCorrValDecl ="double constant nCorrVal[]"
 "= {0, 9e-1, 9e-2, 9e-3, 9e-4, 9e-5, 9e-6, 9e-7, "
 "9e-8,9e-9, 9e-10, 9e-11, 9e-12, 9e-13, 9e-14, 9e-15};\n";
 
@@ -40,11 +40,11 @@ std::string Round =
 "    return fValue;\n"
 "}\n";
 
-std::string GetRmzDecl =
-"double GetRmz( double fRate, double fNper, double fPv, double fFv, int nPayType );\n";
+std::string GetPMTDecl =
+"double GetPMT( double fRate, double fNper, double fPv, double fFv, int nPayType );\n";
 
-std::string GetRmz=
-"double GetRmz( double fRate, double fNper, double fPv, double fFv, int nPayType )\n"
+std::string GetPMT=
+"double GetPMT( double fRate, double fNper, double fPv, double fFv, int nPayType )\n"
 "{\n"
 "    double      fPmt;\n"
 "    if( fRate == 0.0 )\n"
@@ -62,11 +62,11 @@ std::string GetRmz=
 "    return -fPmt;\n"
 "}\n";
 
-std::string GetRmz_newDecl =
-"double GetRmz_new( double fRate, double fNper, double fPv, double fFv,"
+std::string GetPMT_newDecl =
+"double GetPMT_new( double fRate, double fNper, double fPv, double fFv,"
 "int nPayType );\n";
-std::string GetRmz_new=
-"double GetRmz_new( double fRate, double fNper, double fPv, double fFv,"
+std::string GetPMT_new=
+"double GetPMT_new( double fRate, double fNper, double fPv, double fFv,"
 "int nPayType)\n"
 "{\n"
 "    double fPmt;\n"
@@ -79,12 +79,12 @@ std::string GetRmz_new=
 "1.0 - pow( fTerm,-1),-1 );\n"
 "    return -fPmt;\n"
 "}\n";
-std::string GetZwDecl =
-"double GetZw( double fRate, double fNper, double fPmt,"
+std::string GetFVDecl =
+"double GetFV( double fRate, double fNper, double fPmt,"
 "double fPv, int nPayType );\n";
 
-std::string GetZw =
-"double GetZw( double fRate, double fNper, double fPmt,"
+std::string GetFV =
+"double GetFV( double fRate, double fNper, double fPmt,"
 "double fPv, int nPayType )\n"
 "{\n"
 "    double      fFv;\n"
@@ -102,12 +102,12 @@ std::string GetZw =
 "    return -fFv;\n"
 "}\n";
 
-std::string GetZw_newDecl =
-"double GetZw_new( double fRate, double fNper, double fPmt,"
+std::string GetFV_newDecl =
+"double GetFV_new( double fRate, double fNper, double fPmt,"
 "double fPv, int nPayType );\n";
 
-std::string GetZw_new =
-"double GetZw_new( double fRate, double fNper, double fPmt,"
+std::string GetFV_new =
+"double GetFV_new( double fRate, double fNper, double fPmt,"
 "double fPv, int nPayType )\n"
 "{\n"
 "    double fFv;\n"
@@ -1442,12 +1442,12 @@ std::string GetDuration_new=
 "        return fDur;\n"
 "    }\n";
 
-std::string ScGetGDADecl=
-"double ScGetGDA(double fCost, double fSalvage, double fLife, double fPeriod,"
+std::string ScGetDDBDecl=
+"double ScGetDDB(double fCost, double fSalvage, double fLife, double fPeriod,"
 "double fFactor);\n";
 
-std::string ScGetGDA=
-"double ScGetGDA(double fCost, double fSalvage, double fLife, double fPeriod,"
+std::string ScGetDDB=
+"double ScGetDDB(double fCost, double fSalvage, double fLife, double fPeriod,"
 "double fFactor)\n"
 "{\n"
 "    double fDdb, fRate, fOldValue, fNewValue;\n"
@@ -1504,7 +1504,7 @@ std::string ScInterVDB=
 "    {\n"
 "        if(!nNowSln)\n"
 "        {\n"
-"            fDdb = ScGetGDA(fCost, fSalvage, fLife, (double) i, fFactor);\n"
+"            fDdb = ScGetDDB(fCost, fSalvage, fLife, (double) i, fFactor);\n"
 "            fSln = fSalvageValue/ (fLife1 - (double) (i-1));\n"
 "            if (fSln > fDdb)\n"
 "            {\n"
@@ -1547,7 +1547,7 @@ std::string VDBImplement=
 "    {\n"
 "        for (int i = nLoopStart + 1; i <= nLoopEnd; i++)\n"
 "        {\n"
-"            double fTerm = ScGetGDA(fCost, fSalvage, fLife, (double) i, fFactor"
+"            double fTerm = ScGetDDB(fCost, fSalvage, fLife, (double) i, fFactor"
 ");\n"
 "            if ( i == nLoopStart+1 )\n"
 "                fTerm *= ( DblMin( fEnd, fIntStart + 1.0 ) - fStart );\n"
