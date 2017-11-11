@@ -262,8 +262,6 @@ class SvxNumOptionsTabPage : public SfxTabPage
     VclPtr<NumericField>   m_pStartED;
     VclPtr<FixedText>      m_pBulletFT;
     VclPtr<PushButton>     m_pBulletPB;
-    VclPtr<FixedText>      m_pAlignFT;
-    VclPtr<ListBox>        m_pAlignLB;
     VclPtr<FixedText>      m_pBitmapFT;
     VclPtr<MenuButton>     m_pBitmapMB;
     sal_uInt16      m_nGalleryId;

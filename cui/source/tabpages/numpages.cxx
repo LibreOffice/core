@@ -1120,10 +1120,6 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
 
     get(m_pBulletFT, "bulletft");
     get(m_pBulletPB, "bullet");
-
-    get(m_pAlignFT, "numalignft");
-    get(m_pAlignLB, "numalign");
-
     get(m_pBitmapFT, "bitmapft");
     get(m_pBitmapMB, "bitmap");
 
@@ -1220,8 +1216,6 @@ void SvxNumOptionsTabPage::dispose()
     m_pStartED.clear();
     m_pBulletFT.clear();
     m_pBulletPB.clear();
-    m_pAlignFT.clear();
-    m_pAlignLB.clear();
     m_pBitmapFT.clear();
     m_pBitmapMB.clear();
     m_pWidthFT.clear();
@@ -1424,17 +1418,6 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
         if(LISTBOX_ENTRY_NOTFOUND != nPos)
             m_pFmtLB->RemoveEntry(nPos);
     }
-    if(pActNum->IsFeatureSupported(SvxNumRuleFlags::SYMBOL_ALIGNMENT))
-    {
-        m_pAlignFT->Show();
-        m_pAlignLB->Show();
-        m_pAlignLB->SetSelectHdl(LINK(this, SvxNumOptionsTabPage, EditListBoxHdl_Impl));
-    }
-    else
-    {
-        m_pAlignFT->Hide();
-        m_pAlignLB->Hide();
-    }
 
     // MegaHack: because of a not-fixable 'design mistake/error' in Impress
     // delete all kinds of numeric enumerations
@@ -1468,7 +1451,6 @@ void SvxNumOptionsTabPage::InitControls()
     bool bSameSize      = true;
     bool bSameBulColor  = true;
     bool bSameBulRelSize= true;
-    bool bSameAdjust    = true;
 
     const SvxNumberFormat* aNumFmtArr[SVX_MAX_NUM];
     OUString sFirstCharFmt;
@@ -1509,7 +1491,6 @@ void SvxNumOptionsTabPage::InitControls()
                     bSameSize &= aNumFmtArr[i]->GetGraphicSize() == aFirstSize;
                 bSameBulColor &= aNumFmtArr[i]->GetBulletColor() == aNumFmtArr[nLvl]->GetBulletColor();
                 bSameBulRelSize &= aNumFmtArr[i]->GetBulletRelSize() == aNumFmtArr[nLvl]->GetBulletRelSize();
-                bSameAdjust     &= aNumFmtArr[i]->GetNumAdjust() == aNumFmtArr[nLvl]->GetNumAdjust();
             }
             nHighestLevel = i;
         }
@@ -1527,7 +1508,6 @@ void SvxNumOptionsTabPage::InitControls()
     {
         nNumberingType = SVX_NUM_NUMBER_NONE;
         bAllLevel = false;
-        bSameAdjust = false;
         bSameBulRelSize = false;
         bSameBulColor = false;
         bSameStart = false;
@@ -1575,19 +1555,6 @@ void SvxNumOptionsTabPage::InitControls()
     else
     {
         m_pAllLevelNF->SetText("");
-    }
-    if(bSameAdjust)
-    {
-        sal_Int32 nPos = 1; // centered
-        if(aNumFmtArr[nLvl]->GetNumAdjust() == SvxAdjust::Left)
-            nPos = 0;
-        else if(aNumFmtArr[nLvl]->GetNumAdjust() == SvxAdjust::Right)
-            nPos = 2;
-        m_pAlignLB->SelectEntryPos(nPos);
-    }
-    else
-    {
-        m_pAlignLB->SetNoSelection();
     }
 
     if(bBullRelSize)
@@ -2258,16 +2225,6 @@ void SvxNumOptionsTabPage::EditModifyHdl_Impl( Edit* pEdit )
                 aNumFmt.SetSuffix( m_pSuffixED->GetText() );
             else if(bStart)
                 aNumFmt.SetStart( (sal_uInt16)m_pStartED->GetValue() );
-            else //align
-            {
-                sal_Int32 nPos = m_pAlignLB->GetSelectedEntryPos();
-                SvxAdjust eAdjust = SvxAdjust::Center;
-                if(nPos == 0)
-                    eAdjust = SvxAdjust::Left;
-                else if(nPos == 2)
-                    eAdjust = SvxAdjust::Right;
-                aNumFmt.SetNumAdjust( eAdjust );
-            }
             pActNum->SetLevel(i, aNumFmt);
         }
         nMask <<= 1;

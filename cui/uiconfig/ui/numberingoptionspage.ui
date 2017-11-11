@@ -329,21 +329,6 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBoxText" id="numalign">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <items>
-                              <item translatable="yes" context="numberingoptionspage|numalign">Left</item>
-                              <item translatable="yes" context="numberingoptionspage|numalign">Centered</item>
-                              <item translatable="yes" context="numberingoptionspage|numalign">Right</item>
-                            </items>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkButton" id="bullet">
                             <property name="label" translatable="yes" context="numberingoptionspage|bullet">Select...</property>
                             <property name="visible">True</property>
@@ -500,20 +485,6 @@
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="numalignft">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="numberingoptionspage|numalignft">_Alignment:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">numalign</property>
-                            <property name="xalign">1</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">2</property>
                           </packing>
                         </child>
                         <child>
