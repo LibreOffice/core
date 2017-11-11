@@ -30,7 +30,7 @@
 #include <unotools/options.hxx>
 
 #include <algorithm>
-#include <list>
+#include <vector>
 #include <map>
 #include <memory>
 #include <stack>
@@ -107,7 +107,7 @@ class ScModule: public SfxModule, public SfxListener, public utl::ConfigurationL
     bool                mbIsInSharedDocLoading:1;
     bool                mbIsInSharedDocSaving:1;
 
-    std::map<sal_uInt16, std::list<VclPtr<vcl::Window> > > m_mapRefWindow;
+    std::map<sal_uInt16, std::vector<VclPtr<vcl::Window> > > m_mapRefWindow;
 public:
                     SFX_DECL_INTERFACE(SCID_APP)
 
