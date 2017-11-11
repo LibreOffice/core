@@ -2586,7 +2586,7 @@ bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 
     {
         std::size_t nEntryLen = m_aHeader.recordLength;
 
-        OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
+        OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: invalid record position");
         std::size_t nPos = m_aHeader.headerLength + (std::size_t)(m_nFilePos-1) * nEntryLen;
 
         m_pFileStream->Seek(nPos);
@@ -2728,7 +2728,7 @@ bool ODbaseTable::AllocBuffer()
 
 bool ODbaseTable::WriteBuffer()
 {
-    OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
+    OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: invalid record position");
 
     // position on desired record:
     std::size_t nPos = m_aHeader.headerLength + (long)(m_nFilePos-1) * m_aHeader.recordLength;
