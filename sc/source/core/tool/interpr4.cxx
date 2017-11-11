@@ -502,7 +502,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                 if (!aCell.isEmpty())
                 {
                     FormulaError  nErr = FormulaError::NONE;
-                    sal_uInt16  nType = 0; // 0 = Zahl; 1 = String
+                    sal_uInt16  nType = 0; // 0 = number; 1 = string
                     double  nVal = 0.0;
                     OUString  aStr;
                     bool    bOk = true;
@@ -3244,13 +3244,13 @@ void ScInterpreter::ScMacro()
     OUString aBasicStr;
     if (pObject->GetParent())
     {
-        aBasicStr = pObject->GetParent()->GetName();    // Dokumentenbasic
+        aBasicStr = pObject->GetParent()->GetName();    // document BASIC
     }
     else
     {
-        aBasicStr = SfxGetpApp()->GetName();               // Applikationsbasic
+        aBasicStr = SfxGetpApp()->GetName();            // application BASIC
     }
-    //  Parameter-Array zusammenbauen
+    //  assemble a parameter array
 
     SbxArrayRef refPar = new SbxArray;
     bool bOk = true;

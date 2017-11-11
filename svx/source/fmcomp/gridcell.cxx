@@ -3055,7 +3055,7 @@ void DbFilterField::Update()
             Reference< XNumberFormatter >  xFormatter = m_rColumn.GetParent().getNumberFormatter();
             sal_Int16 nKeyType = ::comphelper::getNumberFormatType(xFormatter->getNumberFormatsSupplier()->getNumberFormats(), nFormatKey);
 
-            while (!xListCursor->isAfterLast() && i++ < SHRT_MAX) // max anzahl eintraege
+            while (!xListCursor->isAfterLast() && i++ < SHRT_MAX) // max number of entries
             {
                 aStr = getFormattedValue(xDataField, xFormatter, aNullDate, nFormatKey, nKeyType);
                 aStringList.push_back(aStr);

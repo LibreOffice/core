@@ -234,7 +234,7 @@ void SfxApplication::Initialize_Impl()
 
     Registrations_Impl();
 
-    // Subklasse initialisieren
+    // initialize the subclass
     pImpl->bDowning = false;
 
     // get CHAOS item pool...
@@ -244,7 +244,7 @@ void SfxApplication::Initialize_Impl()
     if ( pImpl->bDowning )
         return;
 
-    // App-Dispatcher aufbauen
+    // build the app dispatcher
     pImpl->pAppDispat->Push(*this);
     pImpl->pAppDispat->Flush();
     pImpl->pAppDispat->DoActivate_Impl( true );
