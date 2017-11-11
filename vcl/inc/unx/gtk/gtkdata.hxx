@@ -33,7 +33,7 @@
 #include <saltimer.hxx>
 #include <o3tl/enumarray.hxx>
 
-#include <list>
+#include <vector>
 
 namespace com { namespace sun { namespace star { namespace accessibility { class XAccessibleEventListener; } } } }
 

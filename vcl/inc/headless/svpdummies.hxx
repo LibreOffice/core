@@ -59,7 +59,7 @@ public:
 
     virtual int ShowNativeDialog( const OUString& rTitle,
                                   const OUString& rMessage,
-                                  const std::list< OUString >& rButtons ) override;
+                                  const std::vector< OUString >& rButtons ) override;
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPDUMMIES_HXX

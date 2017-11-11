@@ -92,7 +92,7 @@ SalGenericSystem::~SalGenericSystem()
 
 int SalGenericSystem::ShowNativeMessageBox( const OUString& rTitle, const OUString& rMessage )
 {
-    std::list< OUString > aButtons;
+    std::vector< OUString > aButtons;
     int nButtonIds[5] = {0}, nBut = 0;
 
     ImplHideSplash();
