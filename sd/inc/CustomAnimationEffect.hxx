@@ -31,6 +31,7 @@
 #include "sddllapi.h"
 
 #include <list>
+#include <vector>
 #include <map>
 #include <memory>
 
@@ -362,7 +363,7 @@ private:
 };
 
 typedef std::shared_ptr< InteractiveSequence > InteractiveSequencePtr;
-typedef std::list< InteractiveSequencePtr > InteractiveSequenceList;
+typedef std::vector< InteractiveSequencePtr > InteractiveSequenceVector;
 
 class MainSequence : public EffectSequenceHelper, public ISequenceListener
 {
@@ -389,7 +390,7 @@ public:
     virtual bool hasEffect( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
     virtual void onTextChanged( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
 
-    const InteractiveSequenceList& getInteractiveSequenceList() const { return maInteractiveSequenceList; }
+    const InteractiveSequenceVector& getInteractiveSequenceVector() const { return maInteractiveSequenceVector; }
 
     virtual void notify_change() override;
 
@@ -421,7 +422,7 @@ protected:
 
     InteractiveSequencePtr createInteractiveSequence( const css::uno::Reference< css::drawing::XShape >& xShape );
 
-    InteractiveSequenceList maInteractiveSequenceList;
+    InteractiveSequenceVector maInteractiveSequenceVector;
 
     css::uno::Reference< css::util::XChangesListener > mxChangesListener;
     css::uno::Reference< css::animations::XTimeContainer > mxTimingRootNode;
