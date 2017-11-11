@@ -121,6 +121,7 @@ SlideBackground::SlideBackground(
     maImpressOtherContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::DrawPage),
     maImpressMasterContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::MasterPage),
     maImpressHandoutContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::HandoutPage),
+    maImpressNotesContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::NotesPage),
     mbTitle(false),
     mpPageLRMarginItem( new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ) ),
     mpPageULMarginItem( new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ) ),
@@ -182,7 +183,8 @@ bool SlideBackground::IsImpress()
 {
     return ( maContext == maImpressMasterContext ||
              maContext == maImpressOtherContext ||
-             maContext == maImpressHandoutContext );
+             maContext == maImpressHandoutContext ||
+             maContext == maImpressNotesContext );
 }
 
 void SlideBackground::Initialize()
@@ -253,16 +255,16 @@ void SlideBackground::HandleContextChange(
         }
         else if ( maContext == maImpressHandoutContext )
         {
+            mpCloseMaster->Hide();
+            mpEditMaster->Hide();
+            mpMasterSlide->Disable();
+            mpDspMasterBackground->Disable();
+            mpDspMasterObjects->Disable();
             mpFillStyle->Hide();
-            mpFillLB->Hide();
-            mpFillAttr->Hide();
-            mpFillGrad->Hide();
             mpBackgroundLabel->Hide();
             mpInsertImage->Hide();
-            mpEditMaster->Hide();
-            mpCloseMaster->Hide();
         }
-        else if (maContext == maImpressOtherContext )
+        else if (maContext == maImpressOtherContext)
         {
             mpCloseMaster->Hide();
             mpEditMaster->Show();
@@ -272,6 +274,17 @@ void SlideBackground::HandleContextChange(
             mpFillStyle->Show();
             mpBackgroundLabel->Show();
             mpInsertImage->Show();
+        }
+        else if (maContext == maImpressNotesContext)
+        {
+            mpCloseMaster->Hide();
+            mpEditMaster->Hide();
+            mpMasterSlide->Disable();
+            mpDspMasterBackground->Disable();
+            mpDspMasterObjects->Disable();
+            mpFillStyle->Show();
+            mpBackgroundLabel->Show();
+            mpInsertImage->Hide();
         }
         // Need to do a relayouting, otherwise the panel size is not updated after show / hide controls
         sfx2::sidebar::Panel* pPanel = dynamic_cast<sfx2::sidebar::Panel*>(GetParent());
@@ -286,7 +299,10 @@ void SlideBackground::HandleContextChange(
 
 void SlideBackground::Update()
 {
-    const eFillStyle nPos = (eFillStyle)mpFillStyle->GetSelectedEntryPos();
+    eFillStyle nPos = (eFillStyle)mpFillStyle->GetSelectedEntryPos();
+
+    if(maContext == maImpressHandoutContext)
+        nPos = NONE;
 
     SfxObjectShell* pSh = SfxObjectShell::Current();
     if (!pSh)
@@ -305,8 +321,6 @@ void SlideBackground::Update()
         {
             mpFillAttr->Hide();
             mpFillGrad->Hide();
-            if (maContext != maImpressHandoutContext)
-                mpFillLB->Show();
             const Color aColor = GetColorSetOrDefault();
             mpFillLB->SelectEntry(aColor);
         }
@@ -540,6 +554,20 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
                         SetPanelTitle(SdResId(STR_MASTERSLIDE_NAME));
                     else
                         SetPanelTitle(SdResId(STR_SLIDE_NAME));
+                }
+                else if ( maContext == maImpressNotesContext )
+                {
+                    mpMasterLabel->SetText(SdResId(STR_MASTERSLIDE_NAME));
+                    ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
+
+                    if (pMainViewShell)
+                    {
+                        DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
+                        if ( pDrawViewShell->GetEditMode() == EditMode::MasterPage)
+                            SetPanelTitle(SdResId(STR_MASTERSLIDE_NAME));
+                        else // EditMode::Page
+                            SetPanelTitle(SdResId(STR_SLIDE_NAME));
+                    }
                 }
                 mbTitle = true;
             }
