@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e530e703",
+        "filename": "sccomp/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-11T18:58:01Z",
+      "side": 1,
+      "message": "maybe expand the DE and PSO?",
+      "revId": "8dda17998c4cd646a38ffd16371ed1e6324416cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_052c13aa",
+        "filename": "sccomp/source/solver/DifferentialEvolution.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-11T18:58:01Z",
+      "side": 1,
+      "message": "constAcceptedPercision   -\u003e constAcceptedPrecision",
+      "revId": "8dda17998c4cd646a38ffd16371ed1e6324416cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_25190f89",
+        "filename": "sccomp/source/solver/DifferentialEvolution.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-11T18:58:01Z",
+      "side": 1,
+      "message": "return as const \u0026 ?",
+      "revId": "8dda17998c4cd646a38ffd16371ed1e6324416cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_451c5b77",
+        "filename": "sccomp/source/solver/DifferentialEvolution.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-11T18:58:01Z",
+      "side": 1,
+      "message": "whit -\u003e with",
+      "revId": "8dda17998c4cd646a38ffd16371ed1e6324416cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_65131767",
+        "filename": "sccomp/source/solver/ParticelSwarmOptimization.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-11T18:58:01Z",
+      "side": 1,
+      "message": "constAcceptedPercision -\u003e constAcceptedPrecision",
+      "revId": "8dda17998c4cd646a38ffd16371ed1e6324416cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_85164353",
+        "filename": "sccomp/source/solver/ParticelSwarmOptimization.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-11T18:58:01Z",
+      "side": 1,
+      "message": "return by const \u0026 ?",
+      "revId": "8dda17998c4cd646a38ffd16371ed1e6324416cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_587d1e6d",
+        "filename": "sccomp/source/solver/SwarmSolver.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-11T18:58:01Z",
+      "side": 1,
+      "message": "should it not throw an exception or return an error if the constraints don\u0027t work?",
+      "revId": "8dda17998c4cd646a38ffd16371ed1e6324416cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_78801a47",
+        "filename": "sccomp/source/solver/SwarmSolver.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-11T18:58:01Z",
+      "side": 1,
+      "message": "return by const \u0026 ?",
+      "revId": "8dda17998c4cd646a38ffd16371ed1e6324416cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d8910e9b",
+        "filename": "sccomp/source/solver/SwarmSolver.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-11T18:58:01Z",
+      "side": 1,
+      "message": "maSolution.swap(aSolution) ?",
+      "revId": "8dda17998c4cd646a38ffd16371ed1e6324416cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
