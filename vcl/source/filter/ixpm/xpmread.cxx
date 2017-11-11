@@ -457,6 +457,9 @@ bool XPMReader::ImplGetColKey( sal_uInt8 nKey )
 {
     sal_uInt8 nTemp, nPrev = ' ';
 
+    if (mnStringSize < mnCpp + 1)
+        return false;
+
     mpPara = mpStringBuf + mnCpp + 1;
     mnParaSize = 0;
 
