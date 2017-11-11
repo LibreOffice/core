@@ -169,7 +169,6 @@ public:
     BorderWidthImpl( BorderWidthImplFlags nFlags = BorderWidthImplFlags::CHANGE_LINE1, double nRate1 = 0.0,
             double nRate2 = 0.0, double nRateGap = 0.0 );
 
-    BorderWidthImpl& operator= ( const BorderWidthImpl& r );
     bool operator== ( const BorderWidthImpl& r ) const;
 
     long GetLine1 ( long nWidth ) const;
