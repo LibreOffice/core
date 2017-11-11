@@ -680,7 +680,7 @@ void ImplStyleData::SetStandardStyles()
     if (!utl::ConfigManager::IsFuzzing())
         aStdFont.SetFamilyName(utl::DefaultFontConfiguration::get().getUserInterfaceFont(LanguageTag("en")));
     else
-        aStdFont.SetFamilyName("Liberation Serif");
+        aStdFont.SetFamilyName("Liberation Sans");
     maAppFont                   = aStdFont;
     maHelpFont                  = aStdFont;
     maMenuFont                  = aStdFont;
@@ -3128,6 +3128,23 @@ void StyleSettings::BatchSetBackgrounds( const Color &aBackColor,
 
     if (bCheckedColorSpecialCase)
         SetCheckedColorSpecialCase();
+}
+
+void StyleSettings::BatchSetFonts( const vcl::Font& aAppFont,
+                                   const vcl::Font& aLabelFont )
+{
+    SetAppFont( aAppFont );
+    SetPushButtonFont( aAppFont );
+    SetToolFont( aAppFont );
+    SetHelpFont( aAppFont );
+
+    SetMenuFont( aLabelFont );
+    SetTabFont( aLabelFont );
+    SetLabelFont( aLabelFont );
+    SetRadioCheckFont( aLabelFont );
+    SetFieldFont( aLabelFont );
+    SetGroupFont( aLabelFont );
+    SetIconFont( aLabelFont );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

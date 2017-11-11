@@ -18,6 +18,8 @@
  */
 
 #include <string.h>
+
+#include <comphelper/lok.hxx>
 #include <vcl/syswin.hxx>
 
 #include <headless/svpframe.hxx>
@@ -410,6 +412,15 @@ void SvpSalFrame::UpdateSettings( AllSettings& rSettings )
 
     Color aBackgroundColor( 0xec, 0xec, 0xec );
     aStyleSettings.BatchSetBackgrounds( aBackgroundColor, false );
+
+    if (comphelper::LibreOfficeKit::isActive()) // TODO: remove this.
+    {
+        vcl::Font aStdFont( FAMILY_SWISS, Size( 0, 14 ) );
+        aStdFont.SetCharSet( osl_getThreadTextEncoding() );
+        aStdFont.SetWeight( WEIGHT_NORMAL );
+        aStdFont.SetFamilyName( "Liberation Sans" );
+        aStyleSettings.BatchSetFonts( aStdFont, aStdFont );
+    }
 
     rSettings.SetStyleSettings( aStyleSettings );
 }

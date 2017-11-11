@@ -258,16 +258,7 @@ void KDE5SalFrame::UpdateSettings( AllSettings& rSettings )
     // Font
     vcl::Font aFont = toFont( QApplication::font(), rSettings.GetUILanguageTag().getLocale() );
 
-    style.SetAppFont( aFont );
-
-    style.SetMenuFont( aFont ); // will be changed according to pMenuBar
-    style.SetLabelFont( aFont );
-    style.SetRadioCheckFont( aFont );
-    style.SetPushButtonFont( aFont );
-    style.SetFieldFont( aFont );
-    style.SetIconFont( aFont );
-    style.SetTabFont( aFont );
-    style.SetGroupFont( aFont );
+    style.BatchSetFonts( aFont, aFont );
 
     aFont.SetWeight( WEIGHT_BOLD );
     if( !bSetTitleFont )
@@ -275,7 +266,6 @@ void KDE5SalFrame::UpdateSettings( AllSettings& rSettings )
         style.SetTitleFont( aFont );
     }
     style.SetFloatTitleFont( aFont );
-
     style.SetHelpFont( toFont( QToolTip::font(), rSettings.GetUILanguageTag().getLocale()));
 
     int flash_time = QApplication::cursorFlashTime();

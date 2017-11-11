@@ -2883,15 +2883,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     // UI font
     vcl::Font aFont(getFont(pStyle, rSettings.GetUILanguageTag().getLocale()));
 
-    aStyleSet.SetAppFont( aFont );
-    aStyleSet.SetHelpFont( aFont );
-    aStyleSet.SetMenuFont( aFont );
-    aStyleSet.SetLabelFont( aFont );
-    aStyleSet.SetRadioCheckFont( aFont );
-    aStyleSet.SetPushButtonFont( aFont );
-    aStyleSet.SetFieldFont( aFont );
-    aStyleSet.SetIconFont( aFont );
-    aStyleSet.SetGroupFont( aFont );
+    aStyleSet.BatchSetFonts( aFont, aFont);
 
     aFont.SetWeight( WEIGHT_BOLD );
     aStyleSet.SetTitleFont( aFont );
