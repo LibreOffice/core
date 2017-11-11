@@ -229,6 +229,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportQPW(SvStream &rStream)
     aDocOpt.SetLookUpColRowNames(false);
     aDocument.SetDocOptions(aDocOpt);
     aDocument.MakeTable(0);
+    aDocument.EnableExecuteLink(false);
     return ScFormatFilter::Get().ScImportQuattroPro(&rStream, &aDocument) == ERRCODE_NONE;
 }
 
@@ -240,6 +241,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportCalcRTF(SvStream &rStrea
     aDocOpt.SetLookUpColRowNames(false);
     aDocument.SetDocOptions(aDocOpt);
     aDocument.MakeTable(0);
+    aDocument.EnableExecuteLink(false);
     ScRange aRange;
     return ScFormatFilter::Get().ScImportRTF(rStream, OUString(), &aDocument, aRange) == ERRCODE_NONE;
 }
@@ -255,6 +257,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportXLS(SvStream& rStream)
     aDocOpt.SetLookUpColRowNames(false);
     aDocument.SetDocOptions(aDocOpt);
     aDocument.MakeTable(0);
+    aDocument.EnableExecuteLink(false);
     bool bRet(false);
     try
     {
@@ -277,6 +280,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportWKS(SvStream& rStream)
     aDocOpt.SetLookUpColRowNames(false);
     aDocument.SetDocOptions(aDocOpt);
     aDocument.MakeTable(0);
+    aDocument.EnableExecuteLink(false);
     return ScFormatFilter::Get().ScImportLotus123(aMedium, &aDocument, RTL_TEXTENCODING_ASCII_US) == ERRCODE_NONE;
 }
 
@@ -288,6 +292,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDIF(SvStream &rStream)
     aDocOpt.SetLookUpColRowNames(false);
     aDocument.SetDocOptions(aDocOpt);
     aDocument.MakeTable(0);
+    aDocument.EnableExecuteLink(false);
     return ScFormatFilter::Get().ScImportDif(rStream, &aDocument, ScAddress(0, 0, 0), RTL_TEXTENCODING_IBM_850) == ERRCODE_NONE;
 }
 
