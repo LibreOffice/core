@@ -69,6 +69,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xspreadsheets \
 	test/source/sheet/xspreadsheets2 \
 	test/source/sheet/xsheetannotation \
+	test/source/sheet/xsheetannotationanchor \
 	test/source/sheet/xsheetannotations \
 	test/source/sheet/xsheetannotationshapesupplier \
 	test/source/sheet/xsheetcellrangecontainer \
