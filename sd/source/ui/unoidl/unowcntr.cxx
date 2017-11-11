@@ -29,22 +29,22 @@ SvUnoWeakContainer::SvUnoWeakContainer() throw()
 
 SvUnoWeakContainer::~SvUnoWeakContainer() throw()
 {
-    for ( WeakRefList::iterator it = maList.begin(); it != maList.end(); ++it )
-            delete *it;
-    maList.clear();
+    for (auto const& elem : maVector)
+            delete elem;
+    maVector.clear();
 }
 
 /** inserts the given ref into this container */
 void SvUnoWeakContainer::insert( const uno::WeakReference< uno::XInterface >& xRef ) throw()
 {
-    for ( WeakRefList::iterator it = maList.begin(); it != maList.end(); )
+    for ( auto it = maVector.begin(); it != maVector.end(); )
     {
         uno::WeakReference< uno::XInterface >* pRef = *it;
         uno::Reference< uno::XInterface > xTestRef( *pRef );
         if ( !xTestRef.is() )
         {
             delete pRef;
-            it = maList.erase( it );
+            it = maVector.erase( it );
         }
         else
         {
@@ -53,7 +53,7 @@ void SvUnoWeakContainer::insert( const uno::WeakReference< uno::XInterface >& xR
             ++it;
         }
     }
-    maList.push_back( new uno::WeakReference< uno::XInterface >( xRef ) );
+    maVector.push_back( new uno::WeakReference< uno::XInterface >( xRef ) );
 }
 
 /** searches the container for a ref that returns true on the given
@@ -65,14 +65,14 @@ bool SvUnoWeakContainer::findRef(
     weakref_searchfunc pSearchFunc
 )
 {
-    for ( WeakRefList::iterator it = maList.begin(); it != maList.end(); )
+    for ( auto it = maVector.begin(); it != maVector.end(); )
     {
         uno::WeakReference< uno::XInterface >* pRef = *it;
         uno::Reference< uno::XInterface > xTestRef( *pRef );
         if ( !xTestRef.is() )
         {
             delete pRef;
-            it = maList.erase( it );
+            it = maVector.erase( it );
         }
         else
         {
@@ -89,9 +89,9 @@ bool SvUnoWeakContainer::findRef(
 
 void SvUnoWeakContainer::dispose()
 {
-    for ( WeakRefList::iterator it = maList.begin(); it != maList.end(); ++it )
+    for (auto const& elem : maVector)
     {
-        uno::WeakReference< uno::XInterface >* pRef = *it;
+        uno::WeakReference< uno::XInterface >* pRef = elem;
         uno::Reference< uno::XInterface > xTestRef( *pRef );
         if ( xTestRef.is() )
         {
