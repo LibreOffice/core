@@ -77,11 +77,11 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
     aStream.Seek( STREAM_SEEK_TO_END );
     sal_uInt64 const nStrmSize = aStream.Tell();
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
-    while( !rContext.bEOF && !aStream.IsEof() && (aStream.Tell() < nStrmSize) )
+    while (!rContext.bEOF && aStream.good() && (aStream.Tell() < nStrmSize))
     {
-        sal_uInt16 nOpcode, nLength;
+        sal_uInt16 nOpcode(LOTUS_EOF), nLength(0);
 
-        aStream.ReadUInt16( nOpcode ).ReadUInt16( nLength );
+        aStream.ReadUInt16(nOpcode).ReadUInt16(nLength);
         aPrgrsBar.Progress();
         if( nOpcode == LOTUS_EOF )
             rContext.bEOF = true;
@@ -137,7 +137,7 @@ WKTYP ScanVersion(SvStream& aStream)
 
     aStream.ReadUInt16( nRecLen ).ReadUInt16( nVersNr );
 
-    if( aStream.IsEof() )
+    if (!aStream.good())
         return eWK_Error;
 
     switch( nVersNr )
@@ -156,12 +156,14 @@ WKTYP ScanVersion(SvStream& aStream)
 
         case 0x1000:
             aStream.ReadUInt16( nVersNr );
-            if( aStream.IsEof() ) return eWK_Error;
+            if (!aStream.good())
+                return eWK_Error;
             if( nVersNr == 0x0004 && nRecLen == 26 )
-            {   // 4 bytes of 26 read => skip 22 (read instead of seek to make IsEof() work just in case)
+            {
+                // 4 bytes of 26 read => skip 22 (read instead of seek to make IsEof() work just in case)
                 sal_Char aDummy[22];
                 aStream.ReadBytes(aDummy, 22);
-                return aStream.IsEof() ? eWK_Error : eWK3;
+                return !aStream.good() ? eWK_Error : eWK3;
             }
             break;
         case 0x1003:
