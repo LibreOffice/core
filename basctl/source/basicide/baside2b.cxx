@@ -1015,7 +1015,7 @@ void EditorWindow::CreateEditEngine()
         pBindings->Invalidate(SID_BASICIDE_STAT_TITLE);
     }
 
-    DBG_ASSERT(rModulWindow.GetBreakPointWindow().GetCurYOffset() == 0, "CreateEditEngine: Brechpunkte verschoben?");
+    DBG_ASSERT(rModulWindow.GetBreakPointWindow().GetCurYOffset() == 0, "CreateEditEngine: breakpoints moved?");
 
     // set readonly mode for readonly libraries
     ScriptDocument aDocument(rModulWindow.GetDocument());
