@@ -67,15 +67,6 @@ BorderWidthImpl::BorderWidthImpl( BorderWidthImplFlags nFlags, double nRate1, do
 {
 }
 
-BorderWidthImpl& BorderWidthImpl::operator= ( const BorderWidthImpl& r )
-{
-    m_nFlags = r.m_nFlags;
-    m_nRate1 = r.m_nRate1;
-    m_nRate2 = r.m_nRate2;
-    m_nRateGap = r.m_nRateGap;
-    return *this;
-}
-
 bool BorderWidthImpl::operator== ( const BorderWidthImpl& r ) const
 {
     return ( m_nFlags == r.m_nFlags ) &&
