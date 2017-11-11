@@ -396,8 +396,8 @@ void OpINTRATE::GenSlidingWindowFunction(std::stringstream& ss,
 void OpFV::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(GetZwDecl);
-    funs.insert(GetZw);
+    decls.insert(GetFVDecl);
+    funs.insert(GetFV);
 }
 
 void OpFV::GenSlidingWindowFunction(std::stringstream& ss,
@@ -438,7 +438,7 @@ void OpFV::GenSlidingWindowFunction(std::stringstream& ss,
             ss << ";\n";
             }
         }
-    ss << "    tmp = GetZw(arg0, arg1, arg2, arg3, arg4);\n";
+    ss << "    tmp = GetFV(arg0, arg1, arg2, arg3, arg4);\n";
     ss << "    return tmp;\n";
     ss << "}";
 }
@@ -446,8 +446,8 @@ void OpFV::GenSlidingWindowFunction(std::stringstream& ss,
 void OpIPMT::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(GetZwDecl);
-    funs.insert(GetZw);
+    decls.insert(GetFVDecl);
+    funs.insert(GetFV);
 }
 
 void OpIPMT::GenSlidingWindowFunction(std::stringstream& ss,
@@ -509,10 +509,10 @@ void OpIPMT::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "    else\n";
     ss << "    {\n";
     ss << "        if(arg5 > 0.0)\n";
-    ss << "            tmp = GetZw(arg0, arg1 - 2.0, pmt, arg3, 1.0)";
+    ss << "            tmp = GetFV(arg0, arg1 - 2.0, pmt, arg3, 1.0)";
     ss << " - pmt;\n";
     ss << "        else\n";
-    ss << "            tmp = GetZw(arg0, arg1 - 1.0, pmt, arg3, 0.0);\n";
+    ss << "            tmp = GetFV(arg0, arg1 - 1.0, pmt, arg3, 0.0);\n";
     ss << "    }\n";
     ss << "    tmp = tmp * arg0;\n";
     ss << "    return tmp;\n";
@@ -795,8 +795,8 @@ void Fvschedule::GenSlidingWindowFunction(
 void Cumipmt::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(GetRmz_newDecl); decls.insert(GetZw_newDecl);
-    funs.insert(GetRmz_new);funs.insert(GetZw_new);
+    decls.insert(GetPMT_newDecl); decls.insert(GetFV_newDecl);
+    funs.insert(GetPMT_new);funs.insert(GetFV_new);
 }
 void Cumipmt::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string &sSymName, SubArguments &
@@ -891,7 +891,7 @@ vSubArguments)
     ss <<"    nPayType = (int)"<<vSubArguments[5]->GenSlidingWindowDeclRef();
     ss <<";\n";
     ss <<"    double fPmt;\n";
-    ss <<"    fPmt = GetRmz_new( fRate, nNumPeriods, fVal, 0.0, nPayType );\n";
+    ss <<"    fPmt = GetPMT_new( fRate, nNumPeriods, fVal, 0.0, nPayType );\n";
     ss <<"    double tmp = 0.0;\n";
     ss <<"    if( nStartPer == 1 )\n";
     ss <<"    {\n";
@@ -902,10 +902,10 @@ vSubArguments)
     ss <<"    for( ; nStartPer<= nEndPer ; nStartPer++ )\n";
     ss <<"    {\n";
     ss <<"        if( nPayType > 0 )\n";
-    ss <<"            tmp += GetZw_new( fRate,  nStartPer - 2 , ";
+    ss <<"            tmp += GetFV_new( fRate,  nStartPer - 2 , ";
     ss <<"fPmt, fVal, 1 ) - fPmt;\n";
     ss <<"        else\n";
-    ss <<"            tmp += GetZw_new( fRate,  nStartPer - 1 , ";
+    ss <<"            tmp += GetFV_new( fRate,  nStartPer - 1 , ";
     ss <<"fPmt, fVal, 0 );\n";
     ss <<"    }\n";
     ss <<"    tmp *= fRate;\n";
@@ -1592,8 +1592,8 @@ void OpTbilleq::GenSlidingWindowFunction(
 void OpCumprinc::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(GetRmz_newDecl); decls.insert(GetZw_newDecl);
-    funs.insert(GetRmz_new);funs.insert(GetZw_new);
+    decls.insert(GetPMT_newDecl); decls.insert(GetFV_newDecl);
+    funs.insert(GetPMT_new);funs.insert(GetFV_new);
 }
 void OpCumprinc::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
@@ -1689,7 +1689,7 @@ void OpCumprinc::GenSlidingWindowFunction(std::stringstream &ss,
     ss <<vSubArguments[5]->GenSlidingWindowDeclRef();
     ss <<";\n";
     ss <<"    double fPmt;\n";
-    ss <<"    fPmt = GetRmz_new( fRate, nNumPeriods,fVal,0.0,nPayType );\n";
+    ss <<"    fPmt = GetPMT_new( fRate, nNumPeriods,fVal,0.0,nPayType );\n";
     ss <<"    if(nStartPer == 1)\n";
     ss <<"    {\n";
     ss <<"        if( nPayType <= 0 )\n";
@@ -1701,10 +1701,10 @@ void OpCumprinc::GenSlidingWindowFunction(std::stringstream &ss,
     ss <<"    for( int i = nStartPer ; i <= nEndPer ; i++ )\n";
     ss <<"    {\n";
     ss <<"        if( nPayType > 0 )\n";
-    ss <<"            tmp += fPmt - ( GetZw_new( fRate,i - 2,";
+    ss <<"            tmp += fPmt - ( GetFV_new( fRate,i - 2,";
     ss <<"fPmt,fVal,1)- fPmt ) * fRate;\n";
     ss <<"        else\n";
-    ss <<"            tmp += fPmt - GetZw_new( fRate, i - 1,";
+    ss <<"            tmp += fPmt - GetFV_new( fRate, i - 1,";
     ss <<"fPmt,fVal,0 ) * fRate;\n";
     ss <<"    }\n";
     ss <<"    return tmp;\n";
@@ -2904,8 +2904,8 @@ void OpNper::GenSlidingWindowFunction(std::stringstream &ss,
 void OpPPMT::BinInlineFun(std::set<std::string>& decls,
         std::set<std::string>& funs)
 {
-    decls.insert(GetZwDecl);
-    funs.insert(GetZw);
+    decls.insert(GetFVDecl);
+    funs.insert(GetFV);
 }
 
 void OpPPMT::GenSlidingWindowFunction(std::stringstream &ss,
@@ -2981,9 +2981,9 @@ void OpPPMT::GenSlidingWindowFunction(std::stringstream &ss,
     ss<<"    else\n";
     ss<<"    {\n";
     ss<<"        if(tmp5>0.0)\n    ";
-    ss<<"            re=GetZw(tmp0, tmp1-2.0, pmt, tmp3, 1.0) - pmt;\n";
+    ss<<"            re=GetFV(tmp0, tmp1-2.0, pmt, tmp3, 1.0) - pmt;\n";
     ss<<"        else\n";
-    ss<<"            re=GetZw(tmp0, tmp1-1.0, pmt, tmp3, 0.0);\n";
+    ss<<"            re=GetFV(tmp0, tmp1-1.0, pmt, tmp3, 0.0);\n";
     ss<<"    }\n    ";
     ss<<"    re = re * tmp0;\n";
     ss<<"    tmp = pmt - re;\n";
@@ -3534,7 +3534,7 @@ void OpCoupnum::GenSlidingWindowFunction(std::stringstream &ss,
 void OpAmordegrc::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(nKorrValDecl); decls.insert(RoundDecl);
+    decls.insert(nCorrValDecl); decls.insert(RoundDecl);
     decls.insert(IsLeapYearDecl);decls.insert(DaysInMonthDecl);
     decls.insert(DaysToDateDecl); decls.insert(DateToDaysDecl);
     decls.insert(GetNullDateDecl); decls.insert(GetYearFracDecl);
@@ -3682,7 +3682,7 @@ void OpAmordegrc::GenSlidingWindowFunction(std::stringstream &ss,
 void OpAmorlinc::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(nKorrValDecl); decls.insert(RoundDecl);
+    decls.insert(nCorrValDecl); decls.insert(RoundDecl);
     decls.insert(IsLeapYearDecl);decls.insert(DaysInMonthDecl);
     decls.insert(DaysToDateDecl); decls.insert(DateToDaysDecl);
     decls.insert(GetYearFracDecl);
@@ -4067,7 +4067,7 @@ void OpTbillprice::GenSlidingWindowFunction(
  void RATE::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(nKorrValDecl);
+    decls.insert(nCorrValDecl);
     decls.insert(SCdEpsilonDecl);decls.insert(RoundDecl);
     funs.insert(Round);
 }
@@ -4520,9 +4520,9 @@ tmpCur4);
  void OpVDB::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(ScGetGDADecl);decls.insert(DblMinDecl);
+    decls.insert(ScGetDDBDecl);decls.insert(DblMinDecl);
     decls.insert(ScInterVDBDecl);decls.insert(VDBImplementDecl);
-    funs.insert(ScGetGDA);funs.insert(DblMin);
+    funs.insert(ScGetDDB);funs.insert(DblMin);
     funs.insert(ScInterVDB);funs.insert(VDBImplement);
 }
 
