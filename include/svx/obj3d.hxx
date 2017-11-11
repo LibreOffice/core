@@ -64,7 +64,7 @@ class E3DObjGeoData : public SdrObjGeoData
 {
 public:
     basegfx::B3DRange           maLocalBoundVol;    // surrounding volume of the object
-    basegfx::B3DHomMatrix       maTransformation;   // lokal transformations
+    basegfx::B3DHomMatrix       maTransformation;   // local transformations
 
     E3DObjGeoData() {}
 };
