@@ -3984,17 +3984,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     if( aInfo.m_ePitch != PITCH_DONTKNOW )
         aFont.SetPitch( aInfo.m_ePitch );
 
-    aStyleSet.SetAppFont( aFont );
-    aStyleSet.SetHelpFont( aFont );
-    aStyleSet.SetMenuFont( aFont );
-    aStyleSet.SetToolFont( aFont );
-    aStyleSet.SetLabelFont( aFont );
-    aStyleSet.SetRadioCheckFont( aFont );
-    aStyleSet.SetPushButtonFont( aFont );
-    aStyleSet.SetFieldFont( aFont );
-    aStyleSet.SetIconFont( aFont );
-    aStyleSet.SetTabFont( aFont );
-    aStyleSet.SetGroupFont( aFont );
+    aStyleSet.BatchSetFonts( aFont, aFont );
 
     aFont.SetWeight( WEIGHT_BOLD );
     aStyleSet.SetTitleFont( aFont );

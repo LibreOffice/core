@@ -1168,26 +1168,15 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetToolbarIconSize( ToolbarIconSize::Large );
 
     // TODO: better mapping of OS X<->LibreOffice font settings
-    aStyleSettings.SetAppFont( aAppFont );
-    aStyleSettings.SetHelpFont( aAppFont );
-    aStyleSettings.SetPushButtonFont( aAppFont );
+    vcl::Font aLabelFont( getFont( [NSFont labelFontOfSize: 0], nDPIY, aAppFont ) );
+    aStyleSettings.BatchSetFonts( aAppFont, aLabelFont );
+    vcl::Font aMenuFont( getFont( [NSFont menuFontOfSize: 0], nDPIY, aAppFont ) );
+    aStyleSettings.SetMenuFont( aMenuFont );
 
     vcl::Font aTitleFont( getFont( [NSFont titleBarFontOfSize: 0], nDPIY, aAppFont ) );
     aStyleSettings.SetTitleFont( aTitleFont );
     aStyleSettings.SetFloatTitleFont( aTitleFont );
 
-    vcl::Font aMenuFont( getFont( [NSFont menuFontOfSize: 0], nDPIY, aAppFont ) );
-    aStyleSettings.SetMenuFont( aMenuFont );
-
-    aStyleSettings.SetToolFont( aAppFont );
-
-    vcl::Font aLabelFont( getFont( [NSFont labelFontOfSize: 0], nDPIY, aAppFont ) );
-    aStyleSettings.SetLabelFont( aLabelFont );
-    aStyleSettings.SetRadioCheckFont( aLabelFont );
-    aStyleSettings.SetFieldFont( aLabelFont );
-    aStyleSettings.SetGroupFont( aLabelFont );
-    aStyleSettings.SetTabFont( aLabelFont );
-    aStyleSettings.SetIconFont( aLabelFont );
 
     Color aHighlightColor( getColor( [NSColor selectedTextBackgroundColor],
                                       aStyleSettings.GetHighlightColor(), mpNSWindow ) );
