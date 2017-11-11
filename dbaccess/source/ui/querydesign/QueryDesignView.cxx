@@ -1609,7 +1609,7 @@ namespace
                 if (pCondition->getChild(i)->getNodeType() == SQLNodeType::Equal)
                     i++;
 
-                // Bedingung parsen
+                // parse the condition
                 aCondition = ParseCondition(rController
                                             ,pCondition
                                             ,_pView->getDecimalSeparator()
@@ -2789,7 +2789,7 @@ OUString OQueryDesignView::getStatement()
     if( aFieldListStr.isEmpty() )
         return OUString();
 
-    // Exceptionhandling, if no fields have been passed we should not
+    // Exception handling, if no fields have been passed we should not
     // change the tab page
     // TabBarSelectHdl will query the SQL-OUString for STATEMENT_NOFIELDS
     // and trigger a error message
@@ -2804,7 +2804,7 @@ OUString OQueryDesignView::getStatement()
     // exist but no tables exist (and aFieldListStr has its length, I secure this above)
     OUStringBuffer aHavingStr,aCriteriaListStr;
 
-    // ----------------- Kriterien aufbauen ----------------------
+    // ----------------- build the criteria ----------------------
     if (!GenerateCriterias(this,aCriteriaListStr,aHavingStr,rFieldList, nTabcount > 1))
         return OUString();
 

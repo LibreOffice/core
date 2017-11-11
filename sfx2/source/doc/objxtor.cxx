@@ -809,7 +809,7 @@ void SfxObjectShell::InitBasicManager_Impl()
         Basic managers is the global BasicManagerRepository instance.
      */
 #if HAVE_FEATURE_SCRIPTING
-    DBG_ASSERT( !pImpl->bBasicInitialized && !pImpl->aBasicManager.isValid(), "Lokaler BasicManager bereits vorhanden");
+    DBG_ASSERT( !pImpl->bBasicInitialized && !pImpl->aBasicManager.isValid(), "Local BasicManager already exists");
     try
     {
         pImpl->aBasicManager.reset( BasicManagerRepository::getDocumentBasicManager( GetModel() ) );
