@@ -46,9 +46,6 @@ private:
     vector< sal_Int32 >         maWidthVec;         /// The output width of each text portion.
     Size                        maTextSize;         /// The size the text will take in the current output device.
 
-                                /** Assignment operator not implemented to prevent usage. */
-    SvtScriptedTextHelper_Impl& operator=( const SvtScriptedTextHelper_Impl& ) = delete;
-
                                 /** Gets the font of the given script type. */
     const vcl::Font&            GetFont( sal_uInt16 _nScript ) const;
                                 /** Sets a font on the output device depending on the script type. */
@@ -66,9 +63,6 @@ public:
                                 /** This constructor sets an output device and fonts for all script types. */
     explicit                    SvtScriptedTextHelper_Impl(
                                     OutputDevice& _rOutDevice );
-                                /** Copy constructor. */
-                                SvtScriptedTextHelper_Impl(
-                                    const SvtScriptedTextHelper_Impl& _rCopy );
 
                                 /** Sets new fonts and recalculates the text width. */
     void                        SetFonts( vcl::Font const * _pLatinFont, vcl::Font const * _pAsianFont, vcl::Font const * _pCmplxFont );
@@ -92,20 +86,6 @@ SvtScriptedTextHelper_Impl::SvtScriptedTextHelper_Impl(
     maAsianFont( _rOutDevice.GetFont() ),
     maCmplxFont( _rOutDevice.GetFont() ),
     maDefltFont( _rOutDevice.GetFont() )
-{
-}
-
-SvtScriptedTextHelper_Impl::SvtScriptedTextHelper_Impl( const SvtScriptedTextHelper_Impl& _rCopy ) :
-    mrOutDevice( _rCopy.mrOutDevice ),
-    maLatinFont( _rCopy.maLatinFont ),
-    maAsianFont( _rCopy.maAsianFont ),
-    maCmplxFont( _rCopy.maCmplxFont ),
-    maDefltFont( _rCopy.maDefltFont ),
-    maText( _rCopy.maText ),
-    maPosVec( _rCopy.maPosVec ),
-    maScriptVec( _rCopy.maScriptVec ),
-    maWidthVec( _rCopy.maWidthVec ),
-    maTextSize( _rCopy.maTextSize )
 {
 }
 
