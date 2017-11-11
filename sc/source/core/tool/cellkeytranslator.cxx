@@ -27,7 +27,6 @@
 #include <unotools/syslocale.hxx>
 
 using ::com::sun::star::uno::Sequence;
-using ::std::list;
 
 using namespace ::com::sun::star;
 
@@ -98,57 +97,55 @@ static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
     LocaleMatch eLocaleMatchLevel = LOCALE_MATCH_NONE;
     bool bOpCodeMatched = false;
 
-    list<ScCellKeyword>::const_iterator itrListEnd = itr->second.end();
-    list<ScCellKeyword>::const_iterator itrList = itr->second.begin();
-    for ( ; itrList != itrListEnd; ++itrList )
+    for (auto const& elem : itr->second)
     {
         if ( eOpCode != ocNone && pLocale )
         {
-            if ( itrList->meOpCode == eOpCode )
+            if (elem.meOpCode == eOpCode)
             {
-                LocaleMatch eLevel = lclLocaleCompare(itrList->mrLocale, aLanguageTag);
+                LocaleMatch eLevel = lclLocaleCompare(elem.mrLocale, aLanguageTag);
                 if ( eLevel == LOCALE_MATCH_ALL )
                 {
                     // Name with matching opcode and locale found.
-                    rName = OUString::createFromAscii( itrList->mpName );
+                    rName = OUString::createFromAscii( elem.mpName );
                     return;
                 }
                 else if ( eLevel > eLocaleMatchLevel )
                 {
                     // Name with a better matching locale.
                     eLocaleMatchLevel = eLevel;
-                    aBestMatchName = itrList->mpName;
+                    aBestMatchName = elem.mpName;
                 }
                 else if ( !bOpCodeMatched )
                     // At least the opcode matches.
-                    aBestMatchName = itrList->mpName;
+                    aBestMatchName = elem.mpName;
 
                 bOpCodeMatched = true;
             }
         }
         else if ( eOpCode != ocNone && !pLocale )
         {
-            if ( itrList->meOpCode == eOpCode )
+            if ( elem.meOpCode == eOpCode )
             {
                 // Name with a matching opcode preferred.
-                rName = OUString::createFromAscii( itrList->mpName );
+                rName = OUString::createFromAscii( elem.mpName );
                 return;
             }
         }
         else if ( pLocale )
         {
-            LocaleMatch eLevel = lclLocaleCompare(itrList->mrLocale, aLanguageTag);
+            LocaleMatch eLevel = lclLocaleCompare(elem.mrLocale, aLanguageTag);
             if ( eLevel == LOCALE_MATCH_ALL )
             {
                 // Name with matching locale preferred.
-                rName = OUString::createFromAscii( itrList->mpName );
+                rName = OUString::createFromAscii( elem.mpName );
                 return;
             }
             else if ( eLevel > eLocaleMatchLevel )
             {
                 // Name with a better matching locale.
                 eLocaleMatchLevel = eLevel;
-                aBestMatchName = itrList->mpName;
+                aBestMatchName = elem.mpName;
             }
         }
     }
@@ -214,9 +211,8 @@ void ScCellKeywordTranslator::addToMap(const OUString& rKey, const sal_Char* pNa
     if ( itr == itrEnd )
     {
         // New keyword.
-        list<ScCellKeyword> aList;
-        aList.push_back(aKeyItem);
-        maStringNameMap.emplace(rKey, aList);
+        std::vector<ScCellKeyword> aVector { aKeyItem };
+        maStringNameMap.emplace(rKey, aVector);
     }
     else
         itr->second.push_back(aKeyItem);
