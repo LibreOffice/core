@@ -152,7 +152,6 @@
 "ScCellObj";"com::sun::star::beans::XTolerantMultiPropertySet#optional";"getDirectPropertyValuesTolerant()"
 "ScCellObj";"com::sun::star::text::XTextFieldsSupplier";"getTextFields()"
 "ScCellObj";"com::sun::star::text::XTextFieldsSupplier";"getTextFieldMasters()"
-"ScCellObj";"com::sun::star::sheet::XSheetAnnotationAnchor";"getAnnotation()"
 "ScCellObj";"com::sun::star::style::CharacterProperties";"CharFontName"
 "ScCellObj";"com::sun::star::style::CharacterProperties";"CharFontStyleName"
 "ScCellObj";"com::sun::star::style::CharacterProperties";"CharFontFamily"
