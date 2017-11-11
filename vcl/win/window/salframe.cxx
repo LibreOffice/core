@@ -2749,6 +2749,8 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 
     aStyleSettings.SetToolbarIconSize(ToolbarIconSize::Large);
 
+    aStyleSettings.BatchSetFonts( aAppFont, aAppFont );
+
     aStyleSettings.SetMenuFont( aMenuFont );
     aStyleSettings.SetTitleFont( aTitleFont );
     aStyleSettings.SetFloatTitleFont( aFloatTitleFont );
@@ -2766,12 +2768,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
             aAppFont.SetFamilyName( aFontName );
         }
     }
-    aStyleSettings.SetAppFont( aAppFont );
-    aStyleSettings.SetGroupFont( aAppFont );
-    aStyleSettings.SetLabelFont( aAppFont );
-    aStyleSettings.SetRadioCheckFont( aAppFont );
-    aStyleSettings.SetPushButtonFont( aAppFont );
-    aStyleSettings.SetFieldFont( aAppFont );
+
     if ( aAppFont.GetWeight() > WEIGHT_NORMAL )
         aAppFont.SetWeight( WEIGHT_NORMAL );
     aStyleSettings.SetToolFont( aAppFont );
