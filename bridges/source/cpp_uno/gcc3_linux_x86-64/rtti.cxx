@@ -46,6 +46,7 @@ class RTTI
 
     osl::Mutex m_mutex;
     t_rtti_map m_rttis;
+    std::vector<OString> m_rttiNames;
     std::unordered_map<OUString, std::unique_ptr<std::type_info>>
         m_generatedRttis;
 
@@ -127,14 +128,16 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
                             // ensure availability of base
                             std::type_info * base_rtti = getRTTI(
                                 ctd.pBaseTypeDescription->aBase);
+                            m_rttiNames.emplace_back(OString(rttiName));
                             newRtti.reset(
                                 new __cxxabiv1::__si_class_type_info(
-                                    strdup( rttiName ), static_cast<__cxxabiv1::__class_type_info *>(base_rtti) ));
+                                    m_rttiNames.back().getStr(), static_cast<__cxxabiv1::__class_type_info *>(base_rtti) ));
                         }
                         else
                         {
                             // this class has no base class
-                            newRtti.reset(new __cxxabiv1::__class_type_info( strdup( rttiName ) ));
+                            m_rttiNames.emplace_back(OString(rttiName));
+                            newRtti.reset(new __cxxabiv1::__class_type_info(m_rttiNames.back().getStr()));
                         }
                         break;
                     }
@@ -150,20 +153,23 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
                         }
                         switch (itd.nBaseTypes) {
                         case 0:
+                            m_rttiNames.emplace_back(OString(rttiName));
                             newRtti.reset(
                                 new __cxxabiv1::__class_type_info(
-                                    strdup(rttiName)));
+                                    m_rttiNames.back().getStr()));
                             break;
                         case 1:
+                            m_rttiNames.emplace_back(OString(rttiName));
                             newRtti.reset(
                                 new __cxxabiv1::__si_class_type_info(
-                                    strdup(rttiName),
+                                    m_rttiNames.back().getStr(),
                                     static_cast<
                                         __cxxabiv1::__class_type_info *>(
                                             bases[0])));
                             break;
                         default:
                             {
+                                m_rttiNames.emplace_back(OString(rttiName));
                                 char * pad = new char[
                                     sizeof (__cxxabiv1::__vmi_class_type_info)
                                     + ((itd.nBaseTypes - 1)
@@ -172,7 +178,7 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
                                 __cxxabiv1::__vmi_class_type_info * info
                                     = new(pad)
                                         __cxxabiv1::__vmi_class_type_info(
-                                            strdup(rttiName),
+                                            m_rttiNames.back().getStr(),
                                             __cxxabiv1::__vmi_class_type_info::__flags_unknown_mask);
                                 info->__base_count = itd.nBaseTypes;
                                 for (sal_Int32 i = 0; i != itd.nBaseTypes; ++i)
