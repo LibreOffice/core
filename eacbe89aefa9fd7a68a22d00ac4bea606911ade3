@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_785c9aed",
+        "filename": "vcl/inc/salusereventlist.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-11T19:50:49Z",
+      "side": 1,
+      "message": "alignment of field names?",
+      "revId": "eacbe89aefa9fd7a68a22d00ac4bea606911ade3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
