@@ -43,9 +43,6 @@
 #include <config_gio.h>
 
 #include <unx/x11/xlimits.hxx>
-#if ENABLE_DBUS && ENABLE_GIO
-#  include <unx/gtk/gtksalmenu.hxx>
-#endif
 #if defined ENABLE_GMENU_INTEGRATION // defined in gtksalmenu.hxx above
 #  include <unx/gtk/hudawareness.h>
 #endif
