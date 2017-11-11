@@ -3127,10 +3127,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
 
     // string.
     if( What >>= sWhat )
-    {
-        if( sWhat.isEmpty() )
-            throw uno::RuntimeException("Range::Find, missing params" );
-    }
+    {}
     else if( What >>= nWhat )
     {
         sWhat = OUString::number( nWhat );
@@ -3140,7 +3137,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
         sWhat = OUString::number( fWhat );
     }
     else
-        throw uno::RuntimeException("Range::Find, missing params" );
+        throw uno::RuntimeException("Range::Find, missing search-for-what param" );
 
     OUString sSearch = VBAToRegexp( sWhat );
 
@@ -3184,7 +3181,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
                         nSearchType = SvxSearchCellType::VALUE;
                     break;
                     default:
-                        throw uno::RuntimeException("Range::Replace, illegal value for LookIn." );
+                        throw uno::RuntimeException("Range::Find, illegal value for LookIn." );
                 }
                 newOptions.SetCellType( nSearchType );
                 xDescriptor->setPropertyValue( "SearchType", uno::makeAny( static_cast<sal_uInt16>(nSearchType) ) );
@@ -3201,7 +3198,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
             else if ( nLookAt == excel::XlLookAt::xlWhole )
                 bSearchWords = true;
             else
-                throw uno::RuntimeException("Range::Replace, illegal value for LookAt" );
+                throw uno::RuntimeException("Range::Find, illegal value for LookAt" );
             newOptions.SetWordOnly( bSearchWords );
             xDescriptor->setPropertyValue( SC_UNO_SRCHWORDS, uno::makeAny( bSearchWords ) );
         }
@@ -3216,7 +3213,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
             else if ( nSearchOrder == excel::XlSearchOrder::xlByRows )
                 bSearchByRow = true;
             else
-                throw uno::RuntimeException("Range::Replace, illegal value for SearchOrder" );
+                throw uno::RuntimeException("Range::Find, illegal value for SearchOrder" );
 
             newOptions.SetRowDirection( bSearchByRow );
             xDescriptor->setPropertyValue( SC_UNO_SRCHBYROW, uno::makeAny( bSearchByRow ) );
@@ -3234,7 +3231,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
                 else if( nSearchDirection == excel::XlSearchDirection::xlPrevious )
                     bSearchBackwards = true;
                 else
-                    throw uno::RuntimeException("Range::Replace, illegal value for SearchDirection" );
+                    throw uno::RuntimeException("Range::Find, illegal value for SearchDirection" );
                 newOptions.SetBackward( bSearchBackwards );
                 xDescriptor->setPropertyValue( "SearchBackwards", uno::makeAny( bSearchBackwards ) );
             }
@@ -3246,7 +3243,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
         {
             // SearchCaseSensitive
             if( !( MatchCase >>= bMatchCase ) )
-                throw uno::RuntimeException("Range::Replace, illegal value for MatchCase" );
+                throw uno::RuntimeException("Range::Find illegal value for MatchCase" );
         }
         xDescriptor->setPropertyValue( SC_UNO_SRCHCASE, uno::makeAny( bMatchCase ) );
 
