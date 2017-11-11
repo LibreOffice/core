@@ -1401,13 +1401,18 @@ bool ImplSdPPTImport::Import()
 
     xStbMgr.reset();
 
-    // read DocumentProperties
-    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-        mpDoc->GetObjectShell()->GetModel(), uno::UNO_QUERY_THROW);
-    uno::Reference<document::XDocumentProperties> xDocProps
-        = xDPS->getDocumentProperties();
-    sfx2::LoadOlePropertySet(xDocProps, &mrStorage);
-    xDocProps->setTemplateName(OUString());
+    //ofz#3577 as an experiment disable this during fuzzing until Nov 27 2017
+    //and then reenable
+    if (!utl::ConfigManager::IsFuzzing())
+    {
+        // read DocumentProperties
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            mpDoc->GetObjectShell()->GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> xDocProps
+            = xDPS->getDocumentProperties();
+        sfx2::LoadOlePropertySet(xDocProps, &mrStorage);
+        xDocProps->setTemplateName(OUString());
+    }
 
     pSdrModel->setLock(false);
     pSdrModel->EnableUndo(bSavedUndoEnabled);
