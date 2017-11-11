@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_38edb225",
+        "filename": "sc/source/core/tool/cellkeytranslator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-11T19:00:48Z",
+      "side": 1,
+      "message": "I don\u0027t think you need the\n   \u003d {\nyou can just go\n    {",
+      "revId": "87795f9061355d2e1f827b810b16768f63df6e00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_78f73af5",
+        "filename": "sc/source/core/tool/cellkeytranslator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-11T19:00:48Z",
+      "side": 1,
+      "message": "in fact, you could probably just go\n    maStringNameMap.emplace(rKey, { aKeyItem } );",
+      "revId": "87795f9061355d2e1f827b810b16768f63df6e00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
