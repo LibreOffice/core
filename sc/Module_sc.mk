@@ -136,6 +136,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_tablevalidationobj \
 	CppunitTest_sc_tableconditionalentryobj \
 	CppunitTest_sc_tableconditionalformatobj \
+	CppunitTest_sc_scenariosobj \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\

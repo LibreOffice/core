@@ -63,6 +63,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xnamedrange \
 	test/source/sheet/xnamedranges \
 	test/source/sheet/xprintareas \
+	test/source/sheet/xscenarios \
 	test/source/sheet/xspreadsheetdocument \
 	test/source/sheet/xspreadsheet \
 	test/source/sheet/xspreadsheets \
