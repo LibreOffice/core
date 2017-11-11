@@ -23,7 +23,7 @@
 #include <global.hxx>
 #include <formula/opcode.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <list>
+#include <vector>
 #include <memory>
 #include <unordered_map>
 
@@ -40,7 +40,7 @@ struct ScCellKeyword
     ScCellKeyword(const sal_Char* pName, OpCode eOpCode, const css::lang::Locale& rLocale);
 };
 
-typedef std::unordered_map< OUString, ::std::list<ScCellKeyword> > ScCellKeywordHashMap;
+typedef std::unordered_map< OUString, ::std::vector<ScCellKeyword> > ScCellKeywordHashMap;
 
 /** Translate cell function keywords.
 
