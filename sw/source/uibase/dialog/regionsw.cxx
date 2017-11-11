@@ -55,6 +55,8 @@
 #include <swabstdlg.hxx>
 #include <memory>
 
+#include <svx/unobrushitemhelper.hxx>
+
 void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 {
     SwWrtShell& rSh = GetShell();
@@ -68,10 +70,13 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
             RES_BACKGROUND, RES_BACKGROUND,
             RES_COL, RES_COL,
             RES_FTN_AT_TXTEND, RES_FRAMEDIR,
-            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
+            XATTR_FILL_FIRST, XATTR_FILL_LAST,
+            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{} );
 
     if (!pSet || pSet->Count()==0)
     {
+        aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
+
         SwRect aRect;
         rSh.CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
 
@@ -185,7 +190,11 @@ IMPL_LINK( SwWrtShell, InsertRegionDialog, void*, p, void )
                 RES_FRM_SIZE, RES_FRM_SIZE,
                 RES_BACKGROUND, RES_BACKGROUND,
                 RES_COL, RES_COL,
-                SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
+                XATTR_FILL_FIRST, XATTR_FILL_LAST,
+                SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{} );
+
+        aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
+
         SwRect aRect;
         CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
         long nWidth = aRect.Width();

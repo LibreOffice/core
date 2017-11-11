@@ -86,6 +86,8 @@
 
 #include <memory>
 
+#include <svx/unobrushitemhelper.hxx>
+
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
@@ -100,6 +102,7 @@ void SwTableShell::InitInterface_Impl()
 
 static const sal_uInt16 aUITableAttrRange[] =
 {
+    XATTR_FILL_FIRST,               XATTR_FILL_LAST,
     FN_PARAM_TABLE_NAME,            FN_PARAM_TABLE_NAME,
     FN_PARAM_TABLE_HEADLINE,        FN_PARAM_TABLE_HEADLINE,
     FN_PARAM_TABLE_SPACE,           FN_PARAM_TABLE_SPACE,
@@ -590,6 +593,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
             else
                 aCoreSet.InvalidateItem( RES_BACKGROUND );
 
+            setSvxBrushItemAsFillAttributesToTargetSet(aBrush, aCoreSet);
+
             ScopedVclPtr<SfxAbstractTabDialog> pDlg;
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -605,6 +610,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             if ( (!pDlg && rReq.GetArgs()) || (pDlg && pDlg->Execute() == RET_OK) )
             {
+                aCoreSet.Put(getSvxBrushItemFromSourceSet(aCoreSet, RES_BACKGROUND)); // is this working? i don't think this is
+
                 const SfxItemSet* pOutSet = pDlg ? pDlg->GetOutputItemSet() : rReq.GetArgs();
                 if ( pDlg )
                 {

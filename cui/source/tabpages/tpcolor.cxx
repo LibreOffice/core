@@ -60,7 +60,7 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     , rOutAttrs           ( rInAttrs )
     // All the horrific pointers we store and should not
     , pnColorListState( nullptr )
-    , aXFillColorItem( OUString(), Color( COL_BLACK ) )
+    , aXFillColorItem( OUString(), Color( COL_TRANSPARENT ) )
     , aXFillAttr( rInAttrs.GetPool() )
     , rXFSet( aXFillAttr.GetItemSet() )
     , eCM( ColorModel::RGB )

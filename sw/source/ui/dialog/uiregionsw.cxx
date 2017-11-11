@@ -65,6 +65,8 @@
 #include <svx/flagsdef.hxx>
 #include <memory>
 
+#include <svx/unobrushitemhelper.hxx>
+
 using namespace ::com::sun::star;
 
 namespace {
@@ -1054,7 +1056,10 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, Button*, void)
                 RES_BACKGROUND, RES_BACKGROUND,
                 RES_COL, RES_COL,
                 RES_FTN_AT_TXTEND, RES_FRAMEDIR,
-                SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
+                XATTR_FILL_FIRST, XATTR_FILL_LAST,
+                SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{} );
+
+        setSvxBrushItemAsFillAttributesToTargetSet(pSectRepr->GetBackground(), aSet);
 
         aSet.Put( pSectRepr->GetCol() );
         aSet.Put( pSectRepr->GetBackground() );
@@ -1406,7 +1411,7 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     OSL_ENSURE(pFact, "Dialog creation failed!");
     m_nSectionPageId = AddTabPage("section", SwInsertSectionTabPage::Create, nullptr);
     m_nColumnPageId = AddTabPage("columns",   SwColumnPage::Create,    nullptr);
-    m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr);
+    m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr);
     m_nNotePageId = AddTabPage("notes", SwSectionFootnoteEndTabPage::Create, nullptr);
     m_nIndentPage = AddTabPage("indents", SwSectionIndentTabPage::Create, nullptr);
 
@@ -2082,7 +2087,7 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
     m_nColumnPageId = AddTabPage("columns",   SwColumnPage::Create,    nullptr);
-    m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr );
+    m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
     m_nNotePageId = AddTabPage("notes", SwSectionFootnoteEndTabPage::Create, nullptr);
     m_nIndentPage = AddTabPage("indents", SwSectionIndentTabPage::Create, nullptr);
 
