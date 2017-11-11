@@ -610,7 +610,9 @@ public:
 
     // Batch setters used by various backends
     void                            BatchSetBackgrounds( const Color &aBackColor,
-                                                         bool bCheckedColorSpecialCase = true);
+                                                         bool bCheckedColorSpecialCase = true );
+    void                            BatchSetFonts( const vcl::Font& aAppFont,
+                                                   const vcl::Font& aLabelFont );
 };
 
 

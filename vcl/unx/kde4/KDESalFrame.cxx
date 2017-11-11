@@ -175,6 +175,19 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetActiveTextColor(toColor(pal.color(QPalette::Active, QPalette::WindowText)));
     style.SetDeactiveTextColor(toColor(pal.color(QPalette::Inactive, QPalette::WindowText)));
 
+    // Font
+    vcl::Font aFont = toFont( QApplication::font(), rSettings.GetUILanguageTag().getLocale() );
+    style.BatchSetFonts( aFont, aFont );
+
+    aFont.SetWeight( WEIGHT_BOLD );
+    if( !bSetTitleFont )
+    {
+        style.SetTitleFont( aFont );
+    }
+    style.SetFloatTitleFont( aFont );
+
+    style.SetHelpFont( toFont( QToolTip::font(), rSettings.GetUILanguageTag().getLocale()));
+
     // WM settings
     KConfig *pConfig = KGlobal::config().data();
     if ( pConfig )
@@ -187,9 +200,9 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
             pKey = "titleFont";
             if (aWMGroup.hasKey(pKey))
             {
-                vcl::Font aFont = toFont(aWMGroup.readEntry(pKey, QFont()),
-                                         rSettings.GetUILanguageTag().getLocale());
-                style.SetTitleFont( aFont );
+                vcl::Font aTitleFont = toFont(aWMGroup.readEntry(pKey, QFont()),
+                                              rSettings.GetUILanguageTag().getLocale());
+                style.SetTitleFont( aTitleFont );
                 bSetTitleFont = true;
             }
         }
@@ -204,9 +217,9 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         pKey = "toolbarFont";
         if (aIconsGroup.hasKey(pKey))
         {
-            vcl::Font aFont = toFont(aIconsGroup.readEntry(pKey, QFont()),
-                                     rSettings.GetUILanguageTag().getLocale());
-            style.SetToolFont( aFont );
+            vcl::Font aToolFont = toFont(aIconsGroup.readEntry(pKey, QFont()),
+                                         rSettings.GetUILanguageTag().getLocale());
+            style.SetToolFont( aToolFont );
         }
     }
 
@@ -268,29 +281,6 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     // Tooltip
     style.SetHelpColor( toColor( QToolTip::palette().color( QPalette::Active, QPalette::ToolTipBase )));
     style.SetHelpTextColor( toColor( QToolTip::palette().color( QPalette::Active, QPalette::ToolTipText )));
-
-    // Font
-    vcl::Font aFont = toFont( QApplication::font(), rSettings.GetUILanguageTag().getLocale() );
-
-    style.SetAppFont( aFont );
-
-    style.SetMenuFont( aFont ); // will be changed according to pMenuBar
-    style.SetLabelFont( aFont );
-    style.SetRadioCheckFont( aFont );
-    style.SetPushButtonFont( aFont );
-    style.SetFieldFont( aFont );
-    style.SetIconFont( aFont );
-    style.SetTabFont( aFont );
-    style.SetGroupFont( aFont );
-
-    aFont.SetWeight( WEIGHT_BOLD );
-    if( !bSetTitleFont )
-    {
-        style.SetTitleFont( aFont );
-    }
-    style.SetFloatTitleFont( aFont );
-
-    style.SetHelpFont( toFont( QToolTip::font(), rSettings.GetUILanguageTag().getLocale()));
 
     int flash_time = QApplication::cursorFlashTime();
     style.SetCursorBlinkTime( flash_time != 0 ? flash_time/2 : STYLE_CURSOR_NOBLINKTIME );
