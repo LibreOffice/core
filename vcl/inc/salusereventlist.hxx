@@ -26,7 +26,7 @@
 
 #include <assert.h>
 
-#include <list>
+#include <deque>
 #include <unordered_set>
 
 class SalFrame;
@@ -65,8 +65,8 @@ public:
 
 protected:
     mutable osl::Mutex         m_aUserEventsMutex;
-    std::list< SalUserEvent >  m_aUserEvents;
-    std::list< SalUserEvent >  m_aProcessingUserEvents;
+    std::deque< SalUserEvent > m_aUserEvents;
+    std::deque< SalUserEvent > m_aProcessingUserEvents;
     bool                       m_bAllUserEventProcessedSignaled;
     SalFrameSet                m_aFrames;
 
