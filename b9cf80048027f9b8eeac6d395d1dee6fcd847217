@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_655b1788",
+        "filename": "test/source/sheet/xsheetannotationanchor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2017-11-11T01:44:21Z",
+      "side": 1,
+      "message": "This call only creates a SvxUnoText, but doesn\u0027t create a annotation/note (ScPostIt). So my question are:\nShould this call create a note?\nOr in this case is the test set up no correct and should be changed?",
+      "revId": "b9cf80048027f9b8eeac6d395d1dee6fcd847217",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_057413fb",
+        "filename": "test/source/sheet/xsheetannotationanchor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2017-11-11T01:44:21Z",
+      "side": 1,
+      "message": "Here is where the test case fails, because there is no note assigned to the cell. It\u0027s at sc/source/ui/docshell/docfunc.cxx:1205.",
+      "revId": "b9cf80048027f9b8eeac6d395d1dee6fcd847217",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
