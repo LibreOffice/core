@@ -24,7 +24,7 @@ void XCellAddressable::testGetCellAddress()
 {
     uno::Reference< sheet::XCellAddressable > xCellAddressable(init(), UNO_QUERY_THROW);
     table::CellAddress xCellAddress = xCellAddressable->getCellAddress();
-    table::CellAddress defaultCellAddress;
+    table::CellAddress defaultCellAddress(0, 2, 3);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("getCellAddress() didn't returned default cell address",
                                  defaultCellAddress, xCellAddress);
