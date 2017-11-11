@@ -259,9 +259,8 @@ void CustomAnimationPane::dispose()
 
     MotionPathTagVector aTags;
     aTags.swap( maMotionPathTags );
-    MotionPathTagVector::iterator aIter;
-    for( aIter = aTags.begin(); aIter != aTags.end(); ++aIter )
-        (*aIter)->Dispose();
+    for (auto const& tag : aTags)
+        tag->Dispose();
 
     mpPBAddEffect.clear();
     mpPBRemoveEffect.clear();
@@ -828,11 +827,10 @@ void CustomAnimationPane::updateMotionPathTags()
     {
         bChanges = updateMotionPathImpl( *this, *pView, mpMainSequence->getBegin(), mpMainSequence->getEnd(), aTags, maMotionPathTags );
 
-        const InteractiveSequenceList& rISL = mpMainSequence->getInteractiveSequenceList();
-        InteractiveSequenceList::const_iterator aISI( rISL.begin() );
-        while( aISI != rISL.end() )
+        auto rInteractiveSequenceVector = mpMainSequence->getInteractiveSequenceVector();
+        for (auto const& interactiveSequence : rInteractiveSequenceVector)
         {
-            InteractiveSequencePtr pIS( (*aISI++) );
+            InteractiveSequencePtr pIS(interactiveSequence);
             bChanges |= updateMotionPathImpl( *this, *pView, pIS->getBegin(), pIS->getEnd(), aTags, maMotionPathTags );
         }
     }

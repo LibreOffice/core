@@ -619,13 +619,11 @@ void CustomAnimationList::update()
         std::for_each( mpMainSequence->getBegin(), mpMainSequence->getEnd(), stl_append_effect_func( *this ) );
         mpLastParentEntry = nullptr;
 
-        const InteractiveSequenceList& rISL = mpMainSequence->getInteractiveSequenceList();
+        auto rInteractiveSequenceVector = mpMainSequence->getInteractiveSequenceVector();
 
-        InteractiveSequenceList::const_iterator aIter( rISL.begin() );
-        const InteractiveSequenceList::const_iterator aEnd( rISL.end() );
-        while( aIter != aEnd )
+        for (auto const& interactiveSequence : rInteractiveSequenceVector)
         {
-            InteractiveSequencePtr pIS( (*aIter++) );
+            InteractiveSequencePtr pIS( interactiveSequence );
 
             Reference< XShape > xShape( pIS->getTriggerShape() );
             if( xShape.is() )

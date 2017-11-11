@@ -3009,7 +3009,7 @@ void MainSequence::createMainSequence()
                 Reference< XTimeContainer > xInteractiveRoot( xChildNode, UNO_QUERY_THROW );
                 InteractiveSequencePtr pIS( new InteractiveSequence( xInteractiveRoot, this ) );
                 pIS->addListener( this );
-                maInteractiveSequenceList.push_back( pIS );
+                maInteractiveSequenceVector.push_back( pIS );
             }
         }
 
@@ -3052,10 +3052,9 @@ void MainSequence::reset()
 {
     EffectSequenceHelper::reset();
 
-    InteractiveSequenceList::iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); ++aIter )
-        (*aIter)->reset();
-    maInteractiveSequenceList.clear();
+    for (auto const& interactiveSequence : maInteractiveSequenceVector)
+        interactiveSequence->reset();
+    maInteractiveSequenceVector.clear();
 
     try
     {
@@ -3087,7 +3086,7 @@ InteractiveSequencePtr MainSequence::createInteractiveSequence( const css::uno::
     pIS.reset( new InteractiveSequence( xISRoot, this) );
     pIS->setTriggerShape( xShape );
     pIS->addListener( this );
-    maInteractiveSequenceList.push_back( pIS );
+    maInteractiveSequenceVector.push_back( pIS );
     return pIS;
 }
 
@@ -3097,10 +3096,11 @@ CustomAnimationEffectPtr MainSequence::findEffect( const css::uno::Reference< cs
 
     if( pEffect.get() == nullptr )
     {
-        InteractiveSequenceList::const_iterator aIter;
-        for( aIter = maInteractiveSequenceList.begin(); (aIter != maInteractiveSequenceList.end()) && (pEffect.get() == nullptr); ++aIter )
+        for (auto const& interactiveSequence : maInteractiveSequenceVector)
         {
-            pEffect = (*aIter)->findEffect( xNode );
+            pEffect = interactiveSequence->findEffect( xNode );
+            if (pEffect.get())
+                break;
         }
     }
     return pEffect;
@@ -3115,14 +3115,13 @@ sal_Int32 MainSequence::getOffsetFromEffect( const CustomAnimationEffectPtr& pEf
 
     nOffset = EffectSequenceHelper::getCount();
 
-    InteractiveSequenceList::const_iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); ++aIter )
+    for (auto const& interactiveSequence : maInteractiveSequenceVector)
     {
-        sal_Int32 nTemp = (*aIter)->getOffsetFromEffect( pEffect );
+        sal_Int32 nTemp = interactiveSequence->getOffsetFromEffect( pEffect );
         if( nTemp != -1 )
             return nOffset + nTemp;
 
-        nOffset += (*aIter)->getCount();
+        nOffset += interactiveSequence->getCount();
     }
 
     return -1;
@@ -3137,12 +3136,12 @@ CustomAnimationEffectPtr MainSequence::getEffectFromOffset( sal_Int32 nOffset ) 
 
         nOffset -= getCount();
 
-        InteractiveSequenceList::const_iterator aIter( maInteractiveSequenceList.begin() );
+        auto aIter( maInteractiveSequenceVector.begin() );
 
-        while( (aIter != maInteractiveSequenceList.end()) && (nOffset > (*aIter)->getCount()) )
+        while( (aIter != maInteractiveSequenceVector.end()) && (nOffset > (*aIter)->getCount()) )
             nOffset -= (*aIter++)->getCount();
 
-        if( (aIter != maInteractiveSequenceList.end()) && (nOffset >= 0) )
+        if( (aIter != maInteractiveSequenceVector.end()) && (nOffset >= 0) )
             return (*aIter)->getEffectFromOffset( nOffset );
     }
 
@@ -3154,10 +3153,9 @@ bool MainSequence::disposeShape( const Reference< XShape >& xShape )
 {
     bool bChanges = EffectSequenceHelper::disposeShape( xShape );
 
-    InteractiveSequenceList::iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end();  )
+    for (auto const& iterativeSequence : maInteractiveSequenceVector)
     {
-            bChanges |= (*aIter++)->disposeShape( xShape );
+            bChanges |= iterativeSequence->disposeShape( xShape );
     }
 
     if( bChanges )
@@ -3171,13 +3169,12 @@ bool MainSequence::hasEffect( const css::uno::Reference< css::drawing::XShape >&
     if( EffectSequenceHelper::hasEffect( xShape ) )
         return true;
 
-    InteractiveSequenceList::iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end();  )
+    for (auto const& iterativeSequence : maInteractiveSequenceVector)
     {
-        if( (*aIter)->getTriggerShape() == xShape )
+        if( iterativeSequence->getTriggerShape() == xShape )
             return true;
 
-        if( (*aIter++)->hasEffect( xShape ) )
+        if( iterativeSequence->hasEffect( xShape ) )
             return true;
     }
 
@@ -3188,10 +3185,9 @@ void MainSequence::insertTextRange( const css::uno::Any& aTarget )
 {
     EffectSequenceHelper::insertTextRange( aTarget );
 
-    InteractiveSequenceList::iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); ++aIter )
+    for (auto const& iterativeSequence : maInteractiveSequenceVector)
     {
-        (*aIter)->insertTextRange( aTarget );
+        iterativeSequence->insertTextRange( aTarget );
     }
 }
 
@@ -3199,10 +3195,9 @@ void MainSequence::disposeTextRange( const css::uno::Any& aTarget )
 {
     EffectSequenceHelper::disposeTextRange( aTarget );
 
-    InteractiveSequenceList::iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); ++aIter )
+    for (auto const& iterativeSequence : maInteractiveSequenceVector)
     {
-        (*aIter)->disposeTextRange( aTarget );
+        iterativeSequence->disposeTextRange( aTarget );
     }
 }
 
@@ -3211,10 +3206,9 @@ void MainSequence::onTextChanged( const Reference< XShape >& xShape )
 {
     EffectSequenceHelper::onTextChanged( xShape );
 
-    InteractiveSequenceList::iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); ++aIter )
+    for (auto const& iterativeSequence : maInteractiveSequenceVector)
     {
-        (*aIter)->onTextChanged( xShape );
+        iterativeSequence->onTextChanged( xShape );
     }
 }
 
@@ -3268,15 +3262,14 @@ void MainSequence::implRebuild()
 
     EffectSequenceHelper::implRebuild();
 
-    InteractiveSequenceList::iterator aIter( maInteractiveSequenceList.begin() );
-    const InteractiveSequenceList::iterator aEnd( maInteractiveSequenceList.end() );
-    while( aIter != aEnd )
+    auto aIter( maInteractiveSequenceVector.begin() );
+    while( aIter != maInteractiveSequenceVector.end() )
     {
         InteractiveSequencePtr pIS( (*aIter) );
         if( pIS->maEffects.empty() )
         {
             // remove empty interactive sequences
-            aIter = maInteractiveSequenceList.erase( aIter );
+            aIter = maInteractiveSequenceVector.erase( aIter );
 
             Reference< XChild > xChild( mxSequenceRoot, UNO_QUERY_THROW );
             Reference< XTimeContainer > xParent( xChild->getParent(), UNO_QUERY_THROW );
@@ -3306,11 +3299,9 @@ bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const cs
     EffectSequenceHelper* pNewSequence = nullptr;
     if( xTriggerShape.is() )
     {
-        InteractiveSequenceList::iterator aIter( maInteractiveSequenceList.begin() );
-        const InteractiveSequenceList::iterator aEnd( maInteractiveSequenceList.end() );
-        while( aIter != aEnd )
+        for (auto const& iteractiveSequence : maInteractiveSequenceVector)
         {
-            InteractiveSequencePtr pIS( (*aIter++) );
+            InteractiveSequencePtr pIS(iteractiveSequence);
             if( pIS->getTriggerShape() == xTriggerShape )
             {
                 pNewSequence = pIS.get();
