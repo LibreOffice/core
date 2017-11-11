@@ -127,12 +127,13 @@ void SvxRTFParser::Continue( int nToken )
 {
     SvRTFParser::Continue( nToken );
 
-    if( SvParserState::Pending != GetStatus() )
+    SvParserState eStatus = GetStatus();
+    if (eStatus != SvParserState::Pending && eStatus != SvParserState::Error)
     {
         SetAllAttrOfStk();
     //Regardless of what "color 0" is, word defaults to auto as the default colour.
     //e.g. see #i7713#
-     }
+    }
 }
 
 
