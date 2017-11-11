@@ -17,8 +17,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-gb_JavaClassSet_JAVACCOMMAND := JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8 \
-    $(ICECREAM_RUN) $(JAVACOMPILER) $(JAVAFLAGS) \
+gb_JavaClassSet_JAVACCOMMAND := $(ICECREAM_RUN) $(JAVACOMPILER) $(JAVAFLAGS) \
+    -encoding utf8 \
     -source $(JAVA_SOURCE_VER) -target $(JAVA_TARGET_VER) \
     $(if $(JAVA_CLASSPATH_NOT_SET),-Xlint:-options)
 gb_JavaClassSet_JAVACDEBUG :=
