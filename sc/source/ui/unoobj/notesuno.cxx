@@ -134,6 +134,8 @@ OUString SAL_CALL ScAnnotationObj::getString()
 void SAL_CALL ScAnnotationObj::setString( const OUString& aText )
 {
     SolarMutexGuard aGuard;
+    if( pDocShell )
+        pDocShell->GetDocument().GetOrCreateNote(aCellPos);
     GetUnoText().setString(aText);
 }
 
@@ -141,6 +143,8 @@ void SAL_CALL ScAnnotationObj::insertString( const uno::Reference<text::XTextRan
                                             const OUString& aString, sal_Bool bAbsorb )
 {
     SolarMutexGuard aGuard;
+    if( pDocShell )
+        pDocShell->GetDocument().GetOrCreateNote(aCellPos);
     GetUnoText().insertString( xRange, aString, bAbsorb );
 }
 
@@ -148,6 +152,8 @@ void SAL_CALL ScAnnotationObj::insertControlCharacter( const uno::Reference<text
                                             sal_Int16 nControlCharacter, sal_Bool bAbsorb )
 {
     SolarMutexGuard aGuard;
+    if( pDocShell )
+        pDocShell->GetDocument().GetOrCreateNote(aCellPos);
     GetUnoText().insertControlCharacter( xRange, nControlCharacter, bAbsorb );
 }
 
