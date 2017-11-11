@@ -84,7 +84,7 @@ tools::Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScree
     return aRet;
 }
 
-int X11SalSystem::ShowNativeDialog( const OUString& rTitle, const OUString& rMessage, const std::list< OUString >& rButtons )
+int X11SalSystem::ShowNativeDialog( const OUString& rTitle, const OUString& rMessage, const std::vector< OUString >& rButtons )
 {
     int nRet = -1;
 
@@ -97,9 +97,9 @@ int X11SalSystem::ShowNativeDialog( const OUString& rTitle, const OUString& rMes
     aWarn->Clear();
 
     sal_uInt16 nButton = 0;
-    for( std::list< OUString >::const_iterator it = rButtons.begin(); it != rButtons.end(); ++it )
+    for (auto const& button : rButtons)
     {
-            aWarn->AddButton( *it, nButton+1, (nButton == 0) ? ButtonDialogFlags::Default : ButtonDialogFlags::NONE );
+            aWarn->AddButton( button, nButton+1, (nButton == 0) ? ButtonDialogFlags::Default : ButtonDialogFlags::NONE );
             nButton++;
     }
     aWarn->SetFocusButton( (sal_uInt16)1 );

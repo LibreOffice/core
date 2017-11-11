@@ -59,7 +59,7 @@ tools::Rectangle SvpSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScree
 }
 
 int SvpSalSystem::ShowNativeDialog( const OUString&, const OUString&,
-                                    const std::list< OUString >& )
+                                    const std::vector< OUString >& )
 {
     return 0;
 }

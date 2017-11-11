@@ -28,7 +28,7 @@ public:
     HeadlessSalSystem() : SvpSalSystem() {}
     virtual int ShowNativeDialog( const OUString& rTitle,
                                   const OUString& rMessage,
-                                  const std::list< OUString >& rButtons ) override
+                                  const std::vector< OUString >& rButtons ) override
     {
         (void)rButtons;
         ::fprintf(stdout, "LibreOffice - dialog '%s': '%s'",
