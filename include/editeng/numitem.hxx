@@ -220,7 +220,6 @@ enum class SvxNumRuleFlags
     CHAR_STYLE          = 0x0004, // Character styles?
     BULLET_REL_SIZE     = 0x0008, // relative bullet size?
     BULLET_COLOR        = 0x0010, // Bullet color
-    SYMBOL_ALIGNMENT    = 0x0040, // alignment to be shown in the options
     NO_NUMBERS          = 0x0080, // Numbering are not allowed
     ENABLE_LINKED_BMP   = 0x0100, // linked bitmaps are available
     ENABLE_EMBEDDED_BMP = 0x0200  // embedded bitmaps are available

@@ -1154,7 +1154,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             aNumberFormat.SetNumAdjust(SvxAdjust::Left);
 
             SvxNumRule aNumRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::BULLET_COLOR |
-                                 SvxNumRuleFlags::CHAR_TEXT_DISTANCE | SvxNumRuleFlags::SYMBOL_ALIGNMENT,
+                                 SvxNumRuleFlags::CHAR_TEXT_DISTANCE,
                                  SVX_MAX_NUM, false );
             for( sal_uInt16 i = 0; i < aNumRule.GetLevelCount(); i++ )
             {
