@@ -57,7 +57,7 @@ namespace drawinglayer
             bool                mbIsGap;
 
             // not implemented
-            virtual bool operator!=(const BorderLine& rBorderLine) const = delete;
+            bool operator!=(const BorderLine& rBorderLine) const = delete;
 
         public:
             // Constructor for visible BorderLine segments
@@ -88,7 +88,7 @@ namespace drawinglayer
             double getEndAverage() const { return 0.5 * (mfEndLeft + mfEndRight); }
 
             /// compare operator
-            virtual bool operator==(const BorderLine& rBorderLine) const;
+            bool operator==(const BorderLine& rBorderLine) const;
         };
 
         /// helper to try to merge two instances of BorderLinePrimitive2D. If it was possible,
