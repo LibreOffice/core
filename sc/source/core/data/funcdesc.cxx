@@ -327,10 +327,9 @@ void ScFuncDesc::fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArgumen
     if (!bHasSuppressedArgs || !pDefArgFlags)
     {
         _rArguments.resize( nArgCount);
-        ::std::vector<sal_uInt16>::iterator iter = _rArguments.begin();
         sal_uInt16 value = 0;
-        while (iter != _rArguments.end())
-            *iter++ = value++;
+        for (auto & argument : _rArguments)
+            argument = value++;
     }
 
     _rArguments.reserve( nArgCount);
@@ -817,7 +816,7 @@ ScFunctionList::ScFunctionList()
 
     ScFuncDesc* pDesc = nullptr;
     sal_Int32 nStrLen = 0;
-    ::std::list<ScFuncDesc*> tmpFuncList;
+    ::std::vector<const ScFuncDesc*> tmpFuncVector;
 
     // Browse for all possible OpCodes. This is not the fastest method, but
     // otherwise the sub resources within the resource blocks and the
@@ -848,7 +847,7 @@ ScFunctionList::ScFunctionList()
             else
             {
                 pDesc->nFIndex = i;
-                tmpFuncList.push_back(pDesc);
+                tmpFuncVector.push_back(pDesc);
 
                 nStrLen = (*(pDesc->pFuncName)).getLength();
                 if (nStrLen > nMaxFuncNameLen)
@@ -877,10 +876,9 @@ ScFunctionList::ScFunctionList()
 
     OUString aArgName, aArgDesc;
     const LegacyFuncCollection& rLegacyFuncColl = *ScGlobal::GetLegacyFuncCollection();
-    LegacyFuncCollection::const_iterator it = rLegacyFuncColl.begin(), itEnd = rLegacyFuncColl.end();
-    for (; it != itEnd; ++it)
+    for (auto const& legacyFunc : rLegacyFuncColl)
     {
-        const LegacyFuncData *const pLegacyFuncData = it->second.get();
+        const LegacyFuncData *const pLegacyFuncData = legacyFunc.second.get();
         pDesc = new ScFuncDesc;
         sal_uInt16 nArgs = pLegacyFuncData->GetParamCount() - 1;
         pLegacyFuncData->getParamDesc( aArgName, aArgDesc, 0 );
@@ -962,7 +960,7 @@ ScFunctionList::ScFunctionList()
             }
         }
 
-        tmpFuncList.push_back(pDesc);
+        tmpFuncVector.push_back(pDesc);
         nStrLen = (*(pDesc->pFuncName)).getLength();
         if ( nStrLen > nMaxFuncNameLen)
             nMaxFuncNameLen = nStrLen;
@@ -979,7 +977,7 @@ ScFunctionList::ScFunctionList()
 
         if ( pUnoAddIns->FillFunctionDesc( nFunc, *pDesc ) )
         {
-            tmpFuncList.push_back(pDesc);
+            tmpFuncVector.push_back(pDesc);
             nStrLen = (*(pDesc->pFuncName)).getLength();
             if (nStrLen > nMaxFuncNameLen)
                 nMaxFuncNameLen = nStrLen;
@@ -988,10 +986,7 @@ ScFunctionList::ScFunctionList()
             delete pDesc;
     }
 
-    //Move list to vector for better random access performance
-    ::std::vector<const ScFuncDesc*> tmp(tmpFuncList.begin(), tmpFuncList.end());
-    tmpFuncList.clear();
-    aFunctionList.swap(tmp);
+    aFunctionList.swap(tmpFuncVector);
 
     //Initialize iterator
     aFunctionListIter = aFunctionList.end();
@@ -1096,10 +1091,10 @@ ScFunctionMgr::ScFunctionMgr() :
     }
 
     // Fill categories with the corresponding functions (still sorted by name)
-    for(::std::vector<const ScFuncDesc*>::iterator iter = aCatLists[0]->begin(); iter!=aCatLists[0]->end(); ++iter)
+    for (auto const& elemList : *aCatLists[0])
     {
-        if (((*iter)->nCategory) < MAX_FUNCCAT)
-            aCatLists[(*iter)->nCategory]->push_back(*iter);
+        if ((elemList->nCategory) < MAX_FUNCCAT)
+            aCatLists[elemList->nCategory]->push_back(elemList);
     }
 
     // Initialize iterators
