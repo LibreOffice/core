@@ -3880,11 +3880,11 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                 }
                 else
                 {
-                    double fZaehler = StringToDouble(sStrArray[nNums[0]]);
-                    double fNenner = StringToDouble(sStrArray[nNums[1]]);
-                    if (fNenner != 0.0)
+                    double fNumerator = StringToDouble(sStrArray[nNums[0]]);
+                    double fDenominator = StringToDouble(sStrArray[nNums[1]]);
+                    if (fDenominator != 0.0)
                     {
-                        fOutNumber = fZaehler/fNenner;
+                        fOutNumber = fNumerator/fDenominator;
                     }
                     else
                     {
@@ -3907,11 +3907,11 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
 
                 if (k == nNumericsCnt-2)
                 {
-                    double fZaehler = StringToDouble(sStrArray[nNums[k]]);
-                    double fNenner = StringToDouble(sStrArray[nNums[k + 1]]);
-                    if (fNenner != 0.0)
+                    double fNumerator = StringToDouble(sStrArray[nNums[k]]);
+                    double fDenominator = StringToDouble(sStrArray[nNums[k + 1]]);
+                    if (fDenominator != 0.0)
                     {
-                        fOutNumber += fZaehler/fNenner;
+                        fOutNumber += fNumerator/fDenominator;
                     }
                     else
                     {
