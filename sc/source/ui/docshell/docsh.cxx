@@ -3249,6 +3249,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportSLK(SvStream &rStream)
     aDocOpt.SetLookUpColRowNames(false);
     aDocument.SetDocOptions(aDocOpt);
     aDocument.MakeTable(0);
+    aDocument.EnableExecuteLink(false);
     ScImportExport aImpEx(&aDocument);
     return aImpEx.ImportStream(rStream, OUString(), SotClipboardFormatId::SYLK);
 }
