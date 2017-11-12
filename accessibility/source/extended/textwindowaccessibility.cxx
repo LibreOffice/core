@@ -328,7 +328,7 @@ Paragraph::getCharacterBounds(::sal_Int32 nIndex)
 ::sal_Int32 SAL_CALL Paragraph::getCharacterCount()
 {
     checkDisposed();
-    return OCommonAccessibleText::getCharacterCount();
+    return implGetText().getLength();;
 }
 
 // virtual
@@ -637,8 +637,7 @@ void Paragraph::implGetSelection(::sal_Int32 & rStartIndex,
 void Paragraph::implGetParagraphBoundary( css::i18n::Boundary& rBoundary,
                                               ::sal_Int32 nIndex )
 {
-    OUString sText( implGetText() );
-    ::sal_Int32 nLength = sText.getLength();
+    ::sal_Int32 nLength = implGetText().getLength();
 
     if ( implIsValidIndex( nIndex, nLength ) )
     {
@@ -656,8 +655,7 @@ void Paragraph::implGetParagraphBoundary( css::i18n::Boundary& rBoundary,
 void Paragraph::implGetLineBoundary( css::i18n::Boundary& rBoundary,
                                          ::sal_Int32 nIndex )
 {
-    OUString sText( implGetText() );
-    ::sal_Int32 nLength = sText.getLength();
+    ::sal_Int32 nLength = implGetText().getLength();
 
     if ( implIsValidIndex( nIndex, nLength ) || nIndex == nLength )
     {

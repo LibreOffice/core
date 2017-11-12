@@ -242,7 +242,7 @@ OUString SAL_CALL VCLXAccessibleListItem::getAccessibleName(  )
     ::osl::MutexGuard aGuard( m_aMutex );
 
     // entry text == accessible name
-    return implGetText();
+    return m_sEntryText;
 }
 
 Reference< XAccessibleRelationSet > SAL_CALL VCLXAccessibleListItem::getAccessibleRelationSet(  )
@@ -390,7 +390,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::setCaretPosition( sal_Int32 nIndex )
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
+    if ( !implIsValidRange( nIndex, nIndex, m_sEntryText.getLength() ) )
         throw IndexOutOfBoundsException();
 
     return false;
@@ -409,8 +409,7 @@ Sequence< PropertyValue > SAL_CALL VCLXAccessibleListItem::getCharacterAttribute
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    OUString sText( implGetText() );
-    if ( !implIsValidIndex( nIndex, sText.getLength() ) )
+    if ( !implIsValidIndex( nIndex, m_sEntryText.getLength() ) )
         throw IndexOutOfBoundsException();
 
     return Sequence< PropertyValue >();
@@ -421,8 +420,7 @@ awt::Rectangle SAL_CALL VCLXAccessibleListItem::getCharacterBounds( sal_Int32 nI
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    OUString sText( implGetText() );
-    if ( !implIsValidIndex( nIndex, sText.getLength() ) )
+    if ( !implIsValidIndex( nIndex, m_sEntryText.getLength() ) )
         throw IndexOutOfBoundsException();
 
     awt::Rectangle aBounds( 0, 0, 0, 0 );
@@ -443,7 +441,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getCharacterCount()
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return OCommonAccessibleText::getCharacterCount();
+    return m_sEntryText.getLength();
 }
 
 sal_Int32 SAL_CALL VCLXAccessibleListItem::getIndexAtPoint( const awt::Point& aPoint )
@@ -495,7 +493,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::setSelection( sal_Int32 nStartIndex, s
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
+    if ( !implIsValidRange( nStartIndex, nEndIndex, m_sEntryText.getLength() ) )
         throw IndexOutOfBoundsException();
 
     return false;
@@ -506,7 +504,7 @@ OUString SAL_CALL VCLXAccessibleListItem::getText()
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return implGetText();
+    return m_sEntryText;
 }
 
 OUString SAL_CALL VCLXAccessibleListItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
