@@ -48,7 +48,7 @@ namespace svx
 
     SfxPoolItem* DatabaseMapItem::Clone( SfxItemPool* ) const
     {
-        return new DatabaseMapItem( Which(), m_aRegistrations );
+        return new DatabaseMapItem( *this );
     }
 
 

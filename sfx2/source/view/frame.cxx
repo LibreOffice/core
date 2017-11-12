@@ -473,7 +473,7 @@ bool SfxUsrAnyItem::operator==( const SfxPoolItem& /*rItem*/ ) const
 
 SfxPoolItem* SfxUsrAnyItem::Clone( SfxItemPool *) const
 {
-    return new SfxUsrAnyItem( Which(), aValue );
+    return new SfxUsrAnyItem( *this );
 }
 
 bool SfxUsrAnyItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
@@ -507,7 +507,7 @@ bool SfxUnoFrameItem::operator==( const SfxPoolItem& i_rItem ) const
 
 SfxPoolItem* SfxUnoFrameItem::Clone( SfxItemPool* ) const
 {
-    return new SfxUnoFrameItem( Which(), m_xFrame );
+    return new SfxUnoFrameItem( *this );
 }
 
 bool SfxUnoFrameItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const

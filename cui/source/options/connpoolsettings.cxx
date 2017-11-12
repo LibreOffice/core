@@ -77,7 +77,7 @@ namespace offapp
 
     SfxPoolItem* DriverPoolingSettingsItem::Clone( SfxItemPool * ) const
     {
-        return new DriverPoolingSettingsItem(Which(), m_aSettings);
+        return new DriverPoolingSettingsItem(*this);
     }
 
 
