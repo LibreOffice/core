@@ -152,7 +152,7 @@ public class ProcessHandler
      *                      <code>isTimedOut()</code> if it has been terminated.
      *
      *                      timeOut > 0
-     *                      Waits specified time in miliSeconds for
+     *                      Waits specified time in milliSeconds for
      *                      process to exit and return its status.
      *
      *                      timeOut = 0

@@ -2573,7 +2573,7 @@ void GtkSalFrame::createNewWindow( ::Window aNewParent, bool bXEmbed, SalX11Scre
 
 bool GtkSalFrame::SetPluginParent( SystemParentData* pSysParent )
 {
-    GetGenericUnixSalData()->ErrorTrapPush(); // permanantly ignore unruly children's errors
+    GetGenericUnixSalData()->ErrorTrapPush(); // permanently ignore unruly children's errors
     createNewWindow( pSysParent->aWindow, (pSysParent->nSize > sizeof(long)) && pSysParent->bXEmbedSupport, m_nXScreen );
     return true;
 }

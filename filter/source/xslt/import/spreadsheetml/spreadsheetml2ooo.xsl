@@ -5056,7 +5056,7 @@
                     </xsl:call-template>
                     <xsl:text>cm</xsl:text>
                 </xsl:when>
-                <!-- Note: This is the default row hight value in spec it is written 255 point, this seems wrong -->
+                <!-- Note: This is the default row height value in spec it is written 255 point, this seems wrong -->
                 <!-- <xsl:otherwise>0.503cm</xsl:otherwise> -->
                 <xsl:otherwise>0.45cm</xsl:otherwise>
             </xsl:choose>

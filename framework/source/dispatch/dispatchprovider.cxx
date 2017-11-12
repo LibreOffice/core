@@ -175,7 +175,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
     //  It's not the right place to create a new task here - because we are queried for a dispatch object
     //  only, which can handle such request. Such dispatcher should create the required task on demand.
     //  Normally the functionality for "_blank" is provided by findFrame() - but that would create it directly
-    //  here. Thats why we must "intercept" here.
+    //  here. that's why we must "intercept" here.
 
     if (sTargetFrameName==SPECIALTARGET_BLANK)
     {
@@ -250,7 +250,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     // I.I) "_blank", "_default"
     //  It's not the right place to create a new task here. Only the desktop can do that.
     //  Normally the functionality for "_blank" is provided by findFrame() - but that would create it directly
-    //  here. Thats why we must "intercept" here.
+    //  here. that's why we must "intercept" here.
 
     if (
         (sTargetFrameName==SPECIALTARGET_BLANK  ) ||
@@ -490,8 +490,8 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
     @short      get or create new dispatch helper
     @descr      Sometimes we need some helper implementations to support dispatching of special URLs or commands.
                 But it's not a good idea to hold these services for the whole life time of this provider instance.
-                We should create it on demand ...
-                Thats why we implement this method. It return an already existing helper or create a new one otherwise.
+                We should create it on demand...
+                That's why we implement this method. It return an already existing helper or create a new one otherwise.
 
     @attention  The parameter sTarget and nSearchFlags are defaulted to "" and 0!
                 Please use it only, if you can be sure, that the really given by the outside calli!

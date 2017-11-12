@@ -423,7 +423,7 @@ long SwWrtShell::ExtSelWrd(const Point *pPt, bool )
     // Then destroy the actual an go to prev, this will be expand
     if( !HasMark() && GoPrevCursor() )
     {
-        bool bHasMark = HasMark(); // thats wrong!
+        bool bHasMark = HasMark(); // that's wrong!
         GoNextCursor();
         if( bHasMark )
         {
@@ -485,7 +485,7 @@ long SwWrtShell::ExtSelLn(const Point *pPt, bool )
     // Then destroy the actual an go to prev, this will be expand
     if( !HasMark() && GoPrevCursor() )
     {
-        bool bHasMark = HasMark(); // thats wrong!
+        bool bHasMark = HasMark(); // that's wrong!
         GoNextCursor();
         if( bHasMark )
         {

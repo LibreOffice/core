@@ -154,7 +154,7 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
     sal_Unicode*                pEndDestBuf;
     const char*             pEndSrcBuf;
 
-/* !!! Implementation not finnished !!!
+/* !!! Implementation not finished !!!
     if ( pContextData )
     {
         bShifted        = pContextData->mbShifted;
@@ -444,7 +444,7 @@ sal_Size ImplUnicodeToUTF7( SAL_UNUSED_PARAMETER const void*, void* pContext,
     char*                   pEndDestBuf;
     const sal_Unicode*          pEndSrcBuf;
 
-/* !!! Implementation not finnished !!!
+/* !!! Implementation not finished !!!
     if ( pContextData )
     {
         bShifted        = pContextData->mbShifted;

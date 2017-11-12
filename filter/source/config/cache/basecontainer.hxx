@@ -77,7 +77,7 @@ class BaseContainer : public BaseLock
         /** @short  local filter cache, which is used to collect changes on the
                     filter configuration first and flush it later.
 
-            @descr  Normally this member isn't used nor initialized. Thats true,
+            @descr  Normally this member isn't used nor initialized. That's true,
                     if this container is used for reading only. The first write access
                     (e.g. by calling insertByName()) creates a copy of the current
                     global cache m_rCache to initialize the m_pFlushCache member.

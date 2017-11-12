@@ -247,7 +247,7 @@ bool XMLStyleExport::exportStyle(
         }
     }
 
-    // style:list-style-name="..." (SW paragarph styles only)
+    // style:list-style-name="..." (SW paragraph styles only)
     if( xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
     {
         Reference< XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );

@@ -626,7 +626,7 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                 css::uno::Reference< css::container::XNameReplace > xItem (xFactory->createInstance(), css::uno::UNO_QUERY);
 
                 // special case. no exception - but not a valid item => set must be finalized or mandatory!
-                // Reject flush operation by throwing an exception. At least one item couldnt be flushed.
+                // Reject flush operation by throwing an exception. At least one item couldn't be flushed.
                 if (!xItem.is())
                     throw css::uno::Exception("Can not add item. Set is finalized or mandatory!",
                                               css::uno::Reference< css::uno::XInterface >());
@@ -643,7 +643,7 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                 xSet->getByName(sItem) >>= xItem;
 
                 // special case. no exception - but not a valid item => it must be finalized or mandatory!
-                // Reject flush operation by throwing an exception. At least one item couldnt be flushed.
+                // Reject flush operation by throwing an exception. At least one item couldn't be flushed.
                 if (!xItem.is())
                     throw css::uno::Exception("Can not change item. Its finalized or mandatory!",
                                               css::uno::Reference< css::uno::XInterface >());
@@ -1077,10 +1077,10 @@ void FilterCache::impl_validateAndOptimize()
         aType[PROPNAME_PREFERREDFILTER] >>= sPrefFilter;
         if (sPrefFilter.isEmpty())
         {
-            // OK - there is no filter for this type. But thats not an error.
-            // May be it can be handled by a ContentHandler ...
+            // OK - there is no filter for this type. But that's not an error.
+            // Maybe it can be handled by a ContentHandler...
             // But at this time it's not guaranteed that there is any ContentHandler
-            // or FrameLoader inside this cache ... but on disk ...
+            // or FrameLoader inside this cache... but on disk...
             bool bReferencedByLoader  = true;
             bool bReferencedByHandler = true;
             if (bAllLoadersShouldExist)
@@ -1283,7 +1283,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         ((m_eFillState   & E_CONTAINS_STANDARD) != E_CONTAINS_STANDARD)
        )
     {
-        // Attention! If config couldnt be opened successfully
+        // Attention! If config couldn't be opened successfully
         // and exception os thrown automatically and must be forwarded
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
@@ -1300,7 +1300,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         ((m_eFillState   & E_CONTAINS_TYPES) != E_CONTAINS_TYPES)
        )
     {
-        // Attention! If config couldnt be opened successfully
+        // Attention! If config couldn't be opened successfully
         // and exception os thrown automatically and must be forwarded
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
@@ -1317,7 +1317,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         ((m_eFillState   & E_CONTAINS_FILTERS) != E_CONTAINS_FILTERS)
        )
     {
-        // Attention! If config couldnt be opened successfully
+        // Attention! If config couldn't be opened successfully
         // and exception os thrown automatically and must be forwarded
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xFilters(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY_THROW);
@@ -1334,7 +1334,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         ((m_eFillState   & E_CONTAINS_FRAMELOADERS) != E_CONTAINS_FRAMELOADERS)
        )
     {
-        // Attention! If config couldnt be opened successfully
+        // Attention! If config couldn't be opened successfully
         // and exception os thrown automatically and must be forwarded
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xLoaders(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
@@ -1351,7 +1351,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         ((m_eFillState   & E_CONTAINS_CONTENTHANDLERS) != E_CONTAINS_CONTENTHANDLERS)
        )
     {
-        // Attention! If config couldnt be opened successfully
+        // Attention! If config couldn't be opened successfully
         // and exception os thrown automatically and must be forwarded
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xHandlers(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);

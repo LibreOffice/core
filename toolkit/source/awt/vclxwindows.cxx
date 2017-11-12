@@ -577,7 +577,7 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             css::uno::Reference< css::awt::XWindow > xKeepAlive( this );
                 // since we call listeners below, there is a potential that we will be destroyed
-                // during the listener call. To prevent the resulting crashs, we keep us
+                // during the listener call. To prevent the resulting crashes, we keep us
                 // alive as long as we're here
 
             if ( maActionListeners.getLength() )
@@ -1016,7 +1016,7 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             css::uno::Reference< css::awt::XWindow > xKeepAlive( this );
                 // since we call listeners below, there is a potential that we will be destroyed
-                // in during the listener call. To prevent the resulting crashs, we keep us
+                // in during the listener call. To prevent the resulting crashes, we keep us
                 // alive as long as we're here
 
             VclPtr< CheckBox > pCheckBox = GetAs< CheckBox >();
@@ -1289,7 +1289,7 @@ void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
 {
     css::uno::Reference< css::awt::XWindow > xKeepAlive( this );
         // since we call listeners below, there is a potential that we will be destroyed
-        // in during the listener call. To prevent the resulting crashs, we keep us
+        // in during the listener call. To prevent the resulting crashes, we keep us
         // alive as long as we're here
 
     switch ( rVclWindowEvent.GetId() )
@@ -1434,7 +1434,7 @@ void VCLXSpinField::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             css::uno::Reference< css::awt::XWindow > xKeepAlive( this );
                 // since we call listeners below, there is a potential that we will be destroyed
-                // in during the listener call. To prevent the resulting crashs, we keep us
+                // in during the listener call. To prevent the resulting crashes, we keep us
                 // alive as long as we're here
 
             if ( maSpinListeners.getLength() )
@@ -1779,7 +1779,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     css::uno::Reference< css::awt::XWindow > xKeepAlive( this );
         // since we call listeners below, there is a potential that we will be destroyed
-        // in during the listener call. To prevent the resulting crashs, we keep us
+        // in during the listener call. To prevent the resulting crashes, we keep us
         // alive as long as we're here
 
     switch ( rVclWindowEvent.GetId() )
@@ -3665,7 +3665,7 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             css::uno::Reference< css::awt::XWindow > xKeepAlive( this );
                 // since we call listeners below, there is a potential that we will be destroyed
-                // in during the listener call. To prevent the resulting crashs, we keep us
+                // in during the listener call. To prevent the resulting crashes, we keep us
                 // alive as long as we're here
 
             if ( maAdjustmentListeners.getLength() )
@@ -4076,7 +4076,7 @@ void VCLXEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             css::uno::Reference< css::awt::XWindow > xKeepAlive( this );
                 // since we call listeners below, there is a potential that we will be destroyed
-                // during the listener call. To prevent the resulting crashs, we keep us
+                // during the listener call. To prevent the resulting crashes, we keep us
                 // alive as long as we're here
 
             if ( GetTextListeners().getLength() )
@@ -4387,7 +4387,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     css::uno::Reference< css::awt::XWindow > xKeepAlive( this );
         // since we call listeners below, there is a potential that we will be destroyed
-        // during the listener call. To prevent the resulting crashs, we keep us
+        // during the listener call. To prevent the resulting crashes, we keep us
         // alive as long as we're here
 
     switch ( rVclWindowEvent.GetId() )

@@ -189,8 +189,8 @@ class Desktop : private cppu::BaseMutex,
 
             @descr      Additional to removing normal listener these method was implemented special.
                         Every listener will be asked for its uno implementation name.
-                        Some of them are well known ... and the corresponding listener was set as special member.
-                        Now those special member will be reseted also.
+                        Some of them are well known... and the corresponding listener was set as special member.
+                        Now those special member will be reset also.
                         see e.g. member m_xSfxTerminator
 
             @seealso    terminate()
@@ -413,7 +413,7 @@ class Desktop : private cppu::BaseMutex,
 
         /** special terminate listener shown inside system tray (quick starter)
           * Will hinder the office on shutdown ... but wish to allow closing
-          * of open documents. And because thats different to a normal terminate listener
+          * of open documents. And because that's different to a normal terminate listener
           * it has to be handled special .-)
           */
         css::uno::Reference< css::frame::XTerminateListener > m_xQuickLauncher;

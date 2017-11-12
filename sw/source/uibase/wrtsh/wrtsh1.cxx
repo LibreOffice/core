@@ -315,7 +315,7 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
             aGrfSize.Width()  = aBound.Width();
             aGrfSize.Height() = BigInt(aBound.Width()) * aTempHeight / aTempWidth;
         }
-        // Fit hight if necessary, scale down the width proportional thereafter.
+        // Fit height if necessary, scale down the width proportional thereafter.
         if( aGrfSize.Height() > aBound.Height() )
         {
             aGrfSize.Height() = aBound.Height();

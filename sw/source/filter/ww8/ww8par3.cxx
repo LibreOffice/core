@@ -1359,7 +1359,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
 
                 // 2.2.2 read all LFOLVL (and LVL) for the new NumRule
 
-                WW8aISet aItemSet;       // Character attribues from GrpprlChpx
+                WW8aISet aItemSet;       // Character attributes from GrpprlChpx
                 WW8aCFormat aCharFormat;       // Character Style Pointer
                 memset(&aCharFormat, 0,  sizeof( aCharFormat ));
 

@@ -3546,7 +3546,7 @@ ScVbaRange::End( ::sal_Int32 Direction )
     // #FIXME #TODO
     // euch! found my orig implementation sucked, so
     // trying this even sucker one (really need to use/expose code in
-    // around  ScTabView::MoveCursorArea(), thats the bit that calculates
+    // around  ScTabView::MoveCursorArea(), that's the bit that calculates
     // where the cursor should go)
     // Main problem with this method is the ultra hacky attempt to preserve
     // the ActiveCell, there should be no need to go to these extremes
@@ -4155,7 +4155,7 @@ ScVbaRange::getName()
 uno::Reference< excel::XWorksheet >
 ScVbaRange::getWorksheet()
 {
-    // #TODO #FIXME parent should always be set up ( currently thats not
+    // #TODO #FIXME parent should always be set up ( currently that's not
     // the case )
     uno::Reference< excel::XWorksheet > xSheet( getParent(), uno::UNO_QUERY );
     if ( !xSheet.is() )

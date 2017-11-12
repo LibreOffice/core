@@ -552,7 +552,7 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
                 if ( dynamic_cast<const SdrRectObj*>( pObj) !=  nullptr && pData->maStart.IsValid() && pData->maEnd.IsValid() )
                     pData->maStart.PutInOrder( pData->maEnd );
 
-                // Update also an untransformed anchor thats what we stored ( and still do ) to xml
+                // Update also an untransformed anchor that's what we stored ( and still do ) to xml
                 ScDrawObjData* pNoRotatedAnchor = GetNonRotatedObjData( pObj );
                 if ( pNoRotatedAnchor )
                 {
@@ -1916,7 +1916,7 @@ void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument
     GetCellAnchorFromPosition( rObj, aAnchor, rDoc, nTab, false );
     SetCellAnchored( rObj, aAnchor );
     // - keep also an anchor in terms of the Logic ( untransformed ) object
-    // because thats what we stored ( and still do ) to xml
+    // because that's what we stored ( and still do ) to xml
     ScDrawObjData aVisAnchor;
     GetCellAnchorFromPosition( rObj, aVisAnchor, rDoc, nTab );
     SetVisualCellAnchored( rObj, aVisAnchor );

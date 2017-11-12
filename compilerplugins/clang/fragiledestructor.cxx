@@ -53,7 +53,7 @@ bool FragileDestructor::TraverseCXXDestructorDecl(CXXDestructorDecl* pCXXDestruc
         || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/cppuhelper/")
         || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/cppuhelper/")
         || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/comphelper/")
-        // don't know how to detect this in clang - it is making an explicit call to it's own method, so presumably OK
+        // don't know how to detect this in clang - it is making an explicit call to its own method, so presumably OK
         || loplugin::isSamePathname(aFileName, SRCDIR "/basic/source/sbx/sbxvalue.cxx")
        )
         return RecursiveASTVisitor::TraverseCXXDestructorDecl(pCXXDestructorDecl);
@@ -79,7 +79,7 @@ bool FragileDestructor::VisitCXXMemberCallExpr(const CXXMemberCallExpr* callExpr
     if (!callExpr->getImplicitObjectArgument()->IgnoreImpCasts()->isImplicitCXXThis()) {
         return true;
     }
-    // if we see an explicit call to it's own method, thats OK
+    // if we see an explicit call to its own method, that's OK
     auto s1 = compiler.getSourceManager().getCharacterData(callExpr->getLocStart());
     auto s2 = compiler.getSourceManager().getCharacterData(callExpr->getLocEnd());
     std::string tok(s1, s2-s1);

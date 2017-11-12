@@ -1600,7 +1600,7 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
             }
           // Stay in the pLay
           // Except for SectionFrames with Follow: the first ContentFrame of the Follow
-          // will be formatted, so that it get's a chance to load in the pLay.
+          // will be formatted, so that it gets a chance to load in the pLay.
           // As long as these Frames are loading in pLay, we continue
         } while ( pFrame &&
                   ( pLay->IsAnLower( pFrame ) ||

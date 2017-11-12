@@ -178,7 +178,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     pCode = reinterpret_cast<char*>(aLegacyToNew.GetBuffer());
                     nCodeSize = aLegacyToNew.GetSize();
                     // we don't release the legacy buffer
-                    // right now, thats because the module
+                    // right now, that's because the module
                     // needs it to fix up the method
                     // nStart members. When that is done
                     // the module can release the buffer

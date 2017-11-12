@@ -3482,7 +3482,7 @@ void DomainMapper_Impl::handleToc
     {
         bNewLine = true ;
     }
-//                  \z Hides page numbers within the table of contens when shown in Web Layout View
+//                  \z Hides page numbers within the table of contents when shown in Web Layout View
                     if( lcl_FindInCommand( pContext->GetCommand(), 'z', sValue ))
                     {
                         bHideTabLeaderPageNumbers = true ;

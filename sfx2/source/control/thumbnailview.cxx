@@ -553,7 +553,7 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
                 if ( bFoundLast )
                 {
                     //If we are in the second last row just go the one in
-                    //the row below, if theres not row below just go to the
+                    //the row below, if there's not row below just go to the
                     //last item but for the last row don't do anything.
                     if ( nLastPos + mnCols < mFilteredItemList.size( ) )
                     {

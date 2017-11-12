@@ -258,7 +258,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickTargetHdl_Impl, Button*, void)
 
 /*************************************************************************
 |*
-|* Contens of combobox "Path" modified
+|* Contents of combobox "Path" modified
 |*
 |************************************************************************/
 
@@ -297,7 +297,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, TimeoutHdl_Impl, Timer *, void)
 
 /*************************************************************************
 |*
-|* Contens of editfield "Target" modified
+|* Contents of editfield "Target" modified
 |*
 |************************************************************************/
 

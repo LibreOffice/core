@@ -1257,7 +1257,7 @@ void SAL_CALL Frame::activate()
         }
         // Its necessary to send event NOW - not before.
         // Activation goes from bottom to top!
-        // Thats the reason to activate parent first and send event now.
+        // That's the reason to activate parent first and send event now.
         implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_ACTIVATED );
     }
 
@@ -1416,7 +1416,7 @@ sal_Bool SAL_CALL Frame::setComponent(const css::uno::Reference< css::awt::XWind
 {
 
     // Ignore this HACK of sfx2!
-    // He call us with an valid controller without a valid window ... Thats not allowed!
+    // He call us with an valid controller without a valid window... that's not allowed!
     if  ( xController.is() && ! xComponentWindow.is() )
         return true;
 
