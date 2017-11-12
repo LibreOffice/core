@@ -716,6 +716,17 @@ OString SAL_CALL unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "mis";   // Zsye - Emoji variant
             break;
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 60)
+        case USCRIPT_MASARAM_GONDI:
+            sRet = "gon-Gonm";  // macro language code, could be wsg,esg,gno
+            break;
+        case USCRIPT_SOYOMBO:
+            sRet = "mn-Soyo";   // abugida to write Mongolian, also Tibetan and Sanskrit
+            break;
+        case USCRIPT_ZANABAZAR_SQUARE:
+            sRet = "mn-Zanb";   // abugida to write Mongolian
+            break;
+#endif
     }
     return sRet;
 }
