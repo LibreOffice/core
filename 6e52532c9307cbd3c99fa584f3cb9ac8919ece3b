@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_7b2494ae",
+        "filename": "framework/source/inc/loadenv/loadenv.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-11-12T20:29:04Z",
+      "side": 1,
+      "message": "Please also fix \"preferr\" -\u003e \"prefer\"",
+      "range": {
+        "startLine": 279,
+        "startChar": 30,
+        "endLine": 279,
+        "endChar": 37
+      },
+      "revId": "6e52532c9307cbd3c99fa584f3cb9ac8919ece3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_9b3b00d1",
+        "filename": "framework/source/jobs/joburl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-11-12T20:29:04Z",
+      "side": 1,
+      "message": "Incorrect lowercase",
+      "range": {
+        "startLine": 115,
+        "startChar": 28,
+        "endLine": 115,
+        "endChar": 29
+      },
+      "revId": "6e52532c9307cbd3c99fa584f3cb9ac8919ece3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_db3588da",
+        "filename": "framework/source/services/frame.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1260,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-11-12T20:29:04Z",
+      "side": 1,
+      "message": "incorrect lowercase",
+      "range": {
+        "startLine": 1260,
+        "startChar": 11,
+        "endLine": 1260,
+        "endChar": 12
+      },
+      "revId": "6e52532c9307cbd3c99fa584f3cb9ac8919ece3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_fb3084ea",
+        "filename": "framework/source/services/frame.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-11-12T20:29:04Z",
+      "side": 1,
+      "message": "lowercase",
+      "range": {
+        "startLine": 1419,
+        "startChar": 69,
+        "endLine": 1419,
+        "endChar": 70
+      },
+      "revId": "6e52532c9307cbd3c99fa584f3cb9ac8919ece3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_1b4e306f",
+        "filename": "odk/examples/DevelopersGuide/Components/Addons/JobsAddon/AsyncJob.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-11-12T20:29:04Z",
+      "side": 1,
+      "message": "lowercase",
+      "range": {
+        "startLine": 300,
+        "startChar": 11,
+        "endLine": 300,
+        "endChar": 12
+      },
+      "revId": "6e52532c9307cbd3c99fa584f3cb9ac8919ece3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_3b512c0f",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2674,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-11-12T20:29:04Z",
+      "side": 1,
+      "message": "Here it should also say \"that is\"",
+      "range": {
+        "startLine": 2674,
+        "startChar": 58,
+        "endLine": 2674,
+        "endChar": 63
+      },
+      "revId": "6e52532c9307cbd3c99fa584f3cb9ac8919ece3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
