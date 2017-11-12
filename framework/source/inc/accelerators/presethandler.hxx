@@ -220,7 +220,7 @@ class PresetHandler
             @param  xDocumentRoot
                     if sResourceType is set to E_DOCUMENT, this value points to the
                     root storage inside the document, where we can save our
-                    configuration files. Note: Thats not the real root of the document ...
+                    configuration files. Note: that's not the real root of the document...
                     its only a sub storage. But we interpret it as our root storage.
 
             @param  rLanguageTag
@@ -294,7 +294,7 @@ class PresetHandler
                     the ALIAS name of the target.
 
             @return The opened target stream ... or NULL if the target does not exists
-                    or couldnt be created as new one.
+                    or couldn't be created as new one.
          */
         css::uno::Reference< css::io::XStream > openTarget(
                 const OUString& sTarget, sal_Int32 nMode);

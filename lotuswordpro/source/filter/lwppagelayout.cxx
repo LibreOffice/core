@@ -753,7 +753,7 @@ void LwpHeaderLayout::RegisterStyle(XFPageMaster* pm1)
     std::unique_ptr<XFHeaderStyle> xHeaderStyle(new XFHeaderStyle);
 
     //Modify page top margin
-    //page top marging: from top of header to the top edge
+    //page top margin: from top of header to the top edge
     double top = GetMarginsValue(MARGIN_TOP);
     pm1->SetMargins(-1, -1, top, -1);
 

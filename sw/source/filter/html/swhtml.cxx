@@ -2271,7 +2271,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
         // If we find a hint that starts before the current end position,
         // we have to set it. If we find a hint that start behind or at
         // that position, we have to take the hint value into account.
-        // If it is equal to the style, or in fact the paragarph value
+        // If it is equal to the style, or in fact the paragraph value
         // for that hint, the hint is removed. Otherwise its end position
         // is remembered.
         sal_Int32 aEndPos[15] =

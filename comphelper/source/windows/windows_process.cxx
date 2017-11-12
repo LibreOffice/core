@@ -29,7 +29,7 @@ static int ArgStrLen(const wchar_t *s)
 
     if (addDoubleQuotes)
     {
-        i += 2; // initial and final duoblequote
+        i += 2; // initial and final doublequote
     }
 
     if (hasDoubleQuote)

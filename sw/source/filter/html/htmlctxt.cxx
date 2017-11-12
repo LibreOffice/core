@@ -53,7 +53,7 @@ class HTMLAttrContext_SaveDoc
     size_t nContextStMin;           // Stack lower bound for the environment
                                     // if stack needs to be protected
     size_t nContextStAttrMin;       // Stack lower bound for the environment
-                                    // if the attribues shouldn't be preserved
+                                    // if the attributes shouldn't be preserved
     bool bStripTrailingPara : 1;
     bool bKeepNumRules : 1;
     bool bFixHeaderDist : 1;

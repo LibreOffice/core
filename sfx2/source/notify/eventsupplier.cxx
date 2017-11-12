@@ -268,7 +268,7 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const document::EventObject& aEvent )
 {
     ::osl::ClearableMutexGuard aGuard( maMutex );
 
-    // get the event name, find the coresponding data, execute the data
+    // get the event name, find the corresponding data, execute the data
 
     OUString aName   = aEvent.EventName;
     long        nCount  = maEventNames.getLength();

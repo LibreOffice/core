@@ -602,7 +602,7 @@ void EditHTMLParser::ImpSetStyleSheet( sal_uInt16 nHLevel )
         aItems.Put( aWeightItemCTL );
     }
 
-    // Font hight and margins, when LogicToLogic is possible:
+    // Font height and margins, when LogicToLogic is possible:
     MapUnit eUnit = mpEditEngine->GetRefMapMode().GetMapUnit();
     if ( ( eUnit != MapUnit::MapPixel ) && ( eUnit != MapUnit::MapSysFont ) &&
          ( eUnit != MapUnit::MapAppFont ) && ( eUnit != MapUnit::MapRelative ) )

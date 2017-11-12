@@ -92,7 +92,7 @@ class FilterCache : public BaseLock
                         the first document. After this first document was loaded successfully,
                         a special "load-on-demand-thread" will be started to fill this cache
                         with ALL other information, which was not readed before.
-                        Thats the second step. All operations on top of this cache will be
+                        That's the second step. All operations on top of this cache will be
                         blocked then.
          */
         enum EFillState

@@ -475,7 +475,7 @@ public:
     //       clipped toolbox items, so you should only touch
     //       items that you added by yourself
     //       the private toolbox items will only use item ids starting from TOOLBOX_MENUITEM_START
-    // to allow for customization of the menu the coresponding handler is called
+    // to allow for customization of the menu the corresponding handler is called
     // when the menu button was clicked and before the menu is executed
     void                SetMenuType( ToolBoxMenuType aType = ToolBoxMenuType::Customize );
     ToolBoxMenuType     GetMenuType() const;

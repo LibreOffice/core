@@ -213,7 +213,7 @@ public:
     /** @short  indicates the results of a FAILURE_SAFE operation
 
         @descr  We must know, which reason was the real one in case
-                we couldnt copy a "failure document" to a user specified path.
+                we couldn't copy a "failure document" to a user specified path.
                 We must know, if we can forget our cache entry or not.
      */
     enum EFailureSafeResult
@@ -3009,7 +3009,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
                                      const css::uno::Reference< css::task::XStatusIndicator >& xExternalProgress)
 {
     // no document? => can occur if we loaded our configuration with files,
-    // which couldnt be recovered successfully. In such case we have all needed information
+    // which couldn't be recovered successfully. In such case we have all needed information
     // excepting the real document instance!
 
     // TODO: search right place, where such "dead files" can be removed from the configuration!

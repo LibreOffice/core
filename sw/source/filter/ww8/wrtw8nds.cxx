@@ -2671,7 +2671,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
         /*
         If a given para is using the SvxFrameDirection::Environment direction we
-        cannot export that, if it's ltr then that's ok as thats word's
+        cannot export that, if it's ltr then that's ok as that is word's
         default. Otherwise we must add a RTL attribute to our export list
         */
         const SvxFrameDirectionItem* pItem = static_cast<const SvxFrameDirectionItem*>(

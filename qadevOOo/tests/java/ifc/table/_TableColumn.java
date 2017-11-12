@@ -44,7 +44,7 @@ public class _TableColumn extends MultiPropertyTest {
         try {
             XInterface tObject = tEnv.getTestObject();
             XCellRange aRange = UnoRuntime.queryInterface(XCellRange.class, tObject);
-            aRange.getCellByPosition(0,0).setFormula("Thats a pretty long text");
+            aRange.getCellByPosition(0,0).setFormula("That's a pretty long text");
             Object width_before = oObj.getPropertyValue("Width");
             log.println("Before setting to optimal width: "+width_before);
             oObj.setPropertyValue("OptimalWidth", Boolean.TRUE);
