@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_58e99e7f",
+        "filename": "accessibility/source/standard/vclxaccessiblelistitem.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-12T13:45:50Z",
+      "side": 1,
+      "message": "might as well drop the the sText var",
+      "revId": "fe2c52b0f5d39714e8352f0f5cf34015f660f1ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_78ec9a8f",
+        "filename": "accessibility/source/standard/vclxaccessiblelistitem.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-12T13:45:50Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "fe2c52b0f5d39714e8352f0f5cf34015f660f1ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
