@@ -163,8 +163,6 @@ private:
 
 public:
                     ContentAttribs( SfxItemPool& rItemPool );
-                    ContentAttribs( const ContentAttribs& );
-                    ~ContentAttribs();  // only for larger Tabs
 
     void            dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
@@ -311,7 +309,6 @@ private:
 
 public:
     EditPaM();
-    EditPaM(const EditPaM& r);
     EditPaM(ContentNode* p, sal_Int32 n);
 
     const ContentNode* GetNode() const { return pNode;}
@@ -323,7 +320,6 @@ public:
 
     bool       DbgIsBuggy( EditDoc const & rDoc );
 
-    EditPaM&    operator = ( const EditPaM& rPaM );
     friend bool operator == ( const EditPaM& r1, const EditPaM& r2 );
     friend bool operator != ( const EditPaM& r1, const EditPaM& r2 );
     bool operator !() const { return !pNode && !nIndex; }

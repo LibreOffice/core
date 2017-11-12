@@ -33,7 +33,6 @@ class EDITENG_DLLPUBLIC SfxHyphenRegionItem: public SfxPoolItem
 public:
 
     SfxHyphenRegionItem( const sal_uInt16 nId  );
-    SfxHyphenRegionItem( const SfxHyphenRegionItem& rItem );
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,

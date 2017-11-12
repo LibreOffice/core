@@ -34,10 +34,7 @@ protected:
     bool                mbParaIsNumberingRestart;
 
 public:
-    ParagraphData( const ParagraphData& );
     ParagraphData();
-
-    ParagraphData& operator=( const ParagraphData& );
 
     bool operator==(const ParagraphData& rCandidate) const;
 

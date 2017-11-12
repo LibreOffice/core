@@ -24,7 +24,6 @@ class FieldUpdaterImpl
     EditTextObjectImpl& mrObj;
 public:
     explicit FieldUpdaterImpl(EditTextObject const & rObj) : mrObj(*rObj.mpImpl) {}
-    FieldUpdaterImpl(const FieldUpdaterImpl& r) : mrObj(r.mrObj) {}
 
     void updateTableFields(int nTab)
     {

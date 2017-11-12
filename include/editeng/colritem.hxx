@@ -40,7 +40,6 @@ public:
     explicit SvxColorItem(const sal_uInt16 nId);
     SvxColorItem(const Color& aColor, const sal_uInt16 nId);
     SvxColorItem(SvStream& rStream, const sal_uInt16 nId);
-    SvxColorItem(const SvxColorItem& rCopy);
     virtual ~SvxColorItem() override;
 
     // "pure virtual Methods" from SfxPoolItem
@@ -78,7 +77,6 @@ class EDITENG_DLLPUBLIC SvxBackgroundColorItem : public SvxColorItem
 
         SvxBackgroundColorItem(const sal_uInt16 nId);
         SvxBackgroundColorItem(const Color& rCol, const sal_uInt16 nId);
-        SvxBackgroundColorItem(const SvxBackgroundColorItem& rCopy);
 
         virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
         virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;

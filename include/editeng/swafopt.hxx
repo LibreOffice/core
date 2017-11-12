@@ -115,8 +115,6 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFormatFlags
     bool bAutoCmpltKeepList : 1;
 
     SvxSwAutoFormatFlags();
-    SvxSwAutoFormatFlags( const SvxSwAutoFormatFlags& rAFFlags ) { *this = rAFFlags; }
-    SvxSwAutoFormatFlags& operator=( const SvxSwAutoFormatFlags& );
 };
 
 #endif

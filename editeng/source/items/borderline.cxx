@@ -399,30 +399,6 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderLineStyle nStyle )
     return aImpl;
 }
 
-
-SvxBorderLine::SvxBorderLine( const SvxBorderLine& r )
-{
-    *this = r;
-}
-
-
-SvxBorderLine& SvxBorderLine::operator=( const SvxBorderLine& r )
-{
-    aColor = r.aColor;
-    m_nWidth = r.m_nWidth;
-    m_aWidthImpl = r.m_aWidthImpl;
-    m_bMirrorWidths = r.m_bMirrorWidths;
-    m_nMult = r.m_nMult;
-    m_nDiv = r.m_nDiv;
-    m_nStyle = r.m_nStyle;
-    m_bUseLeftTop = r.m_bUseLeftTop;
-    m_pColorOutFn = r.m_pColorOutFn;
-    m_pColorInFn = r.m_pColorInFn;
-    m_pColorGapFn = r.m_pColorGapFn;
-    return *this;
-}
-
-
 void SvxBorderLine::ScaleMetrics( long nMult, long nDiv )
 {
     m_nMult = nMult;

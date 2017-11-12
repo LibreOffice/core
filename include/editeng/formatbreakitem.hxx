@@ -40,7 +40,6 @@ public:
 
     inline SvxFormatBreakItem( const SvxBreak eBrk /*= SvxBreak::NONE*/,
                             const sal_uInt16 nWhich );
-    inline SvxFormatBreakItem( const SvxFormatBreakItem& rBreak );
     inline SvxFormatBreakItem& operator=( const SvxFormatBreakItem& rCpy );
 
     // "pure virtual Methods" from SfxPoolItem
@@ -69,9 +68,6 @@ inline SvxFormatBreakItem::SvxFormatBreakItem( const SvxBreak eBreak,
     SfxEnumItem( _nWhich, eBreak )
 {}
 
-inline SvxFormatBreakItem::SvxFormatBreakItem( const SvxFormatBreakItem& rBreak ) :
-    SfxEnumItem( rBreak )
-{}
 
 inline SvxFormatBreakItem& SvxFormatBreakItem::operator=(
     const SvxFormatBreakItem& rBreak )

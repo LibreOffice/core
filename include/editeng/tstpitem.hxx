@@ -108,7 +108,6 @@ public:
                     const sal_uInt16 nDist,
                     const SvxTabAdjust eAdjst /*= SvxTabAdjust::Default*/,
                     sal_uInt16 nWhich  );
-    SvxTabStopItem( const SvxTabStopItem& rTSI );
 
     // Returns index of the tab or TAB_NOTFOUND
     sal_uInt16          GetPos( const SvxTabStop& rTab ) const;

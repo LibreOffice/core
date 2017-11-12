@@ -142,15 +142,6 @@ SvxFontListItem::SvxFontListItem( const FontList* pFontLst,
 }
 
 
-SvxFontListItem::SvxFontListItem( const SvxFontListItem& rItem ) :
-
-    SfxPoolItem( rItem ),
-    pFontList( rItem.GetFontList() ),
-    aFontNameSeq( rItem.aFontNameSeq )
-{
-}
-
-
 SfxPoolItem* SvxFontListItem::Clone( SfxItemPool* ) const
 {
     return new SvxFontListItem( *this );
@@ -1641,11 +1632,6 @@ SvxBackgroundColorItem::SvxBackgroundColorItem( const Color& rCol,
 {
 }
 
-SvxBackgroundColorItem::SvxBackgroundColorItem( const SvxBackgroundColorItem& rCopy ) :
-    SvxColorItem( rCopy )
-{
-}
-
 SfxPoolItem* SvxBackgroundColorItem::Clone( SfxItemPool * ) const
 {
     return new SvxBackgroundColorItem(*this);
@@ -1716,12 +1702,6 @@ SvxColorItem::SvxColorItem( SvStream &rStrm, const sal_uInt16 nId ) :
     Color aColor;
     ReadColor( rStrm, aColor );
     mColor = aColor;
-}
-
-SvxColorItem::SvxColorItem( const SvxColorItem &rCopy ) :
-    SfxPoolItem( rCopy ),
-    mColor( rCopy.mColor )
-{
 }
 
 SvxColorItem::~SvxColorItem()
@@ -2453,14 +2433,6 @@ SvxTwoLinesItem::SvxTwoLinesItem( bool bFlag, sal_Unicode nStartBracket,
                                     sal_Unicode nEndBracket, sal_uInt16 nW )
     : SfxPoolItem( nW ),
     cStartBracket( nStartBracket ), cEndBracket( nEndBracket ), bOn( bFlag )
-{
-}
-
-SvxTwoLinesItem::SvxTwoLinesItem( const SvxTwoLinesItem& rAttr )
-    : SfxPoolItem( rAttr.Which() ),
-    cStartBracket( rAttr.cStartBracket ),
-    cEndBracket( rAttr.cEndBracket ),
-    bOn( rAttr.bOn )
 {
 }
 
