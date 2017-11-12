@@ -524,6 +524,20 @@ OUString VCLXAccessibleTabPage::getText()
     return GetPageText();
 }
 
+OUString VCLXAccessibleTabPage::getTextRange(sal_Int32 nStartIndex, sal_Int32 nEndIndex)
+{
+    OExternalLockGuard aGuard( this );
+
+    return OCommonAccessibleText::implGetTextRange(GetPageText(), nStartIndex, nEndIndex);
+}
+
+sal_Unicode VCLXAccessibleTabPage::getCharacter( sal_Int32 nIndex )
+{
+     OExternalLockGuard aGuard( this );
+
+    return OCommonAccessibleText::implGetCharacter( GetPageText(), nIndex );
+}
+
 sal_Int32 VCLXAccessibleTabPage::getCharacterCount()
 {
     return GetPageText().getLength();
@@ -633,7 +647,7 @@ sal_Bool VCLXAccessibleTabPage::copyText( sal_Int32 nStartIndex, sal_Int32 nEndI
         Reference< datatransfer::clipboard::XClipboard > xClipboard = m_pTabControl->GetClipboard();
         if ( xClipboard.is() )
         {
-            OUString sText( getTextRange( nStartIndex, nEndIndex ) );
+            OUString sText( implGetTextRange( GetPageText(), nStartIndex, nEndIndex ) );
 
             vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( sText );
 
