@@ -1338,7 +1338,7 @@ namespace accessibility
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getCharacterCount: index value overflow");
 
-        return OCommonAccessibleText::getCharacterCount();
+        return implGetText().getLength();
     }
 
     sal_Int32 SAL_CALL AccessibleEditableTextPara::getIndexAtPoint( const awt::Point& rPoint )
