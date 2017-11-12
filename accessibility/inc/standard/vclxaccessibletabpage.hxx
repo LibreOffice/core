@@ -73,7 +73,7 @@ private:
     virtual css::awt::Rectangle implGetBounds(  ) override;
 
     // OCommonAccessibleText
-    virtual OUString                        implGetText() override;
+    virtual OUString                        implGetText() final;
     virtual css::lang::Locale  implGetLocale() override;
     virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override;
 
@@ -122,6 +122,8 @@ public:
     virtual OUString SAL_CALL getToolTipText(  ) override;
 
     // XAccessibleText
+    virtual OUString getText() override;
+    virtual sal_Int32 SAL_CALL getCharacterCount() override;
     virtual sal_Int32 SAL_CALL getCaretPosition() override;
     virtual sal_Bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override;
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
@@ -129,6 +131,7 @@ public:
     virtual sal_Int32 SAL_CALL getIndexAtPoint( const css::awt::Point& aPoint ) override;
     virtual sal_Bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
     virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+
 };
 
 #endif // INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLETABPAGE_HXX

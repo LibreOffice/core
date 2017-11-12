@@ -260,7 +260,7 @@ sal_Int32 VCLXAccessibleMenuItem::getCharacterCount()
 {
     OExternalLockGuard aGuard( this );
 
-    return OCommonAccessibleText::getCharacterCount();
+    return implGetText().getLength();;
 }
 
 
