@@ -422,7 +422,7 @@ namespace accessibility
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        if ( ( 0 > _nIndex ) || ( getCharacterCount() <= _nIndex ) )
+        if ( ( 0 > _nIndex ) || ( implGetText().getLength() <= _nIndex ) )
             throw IndexOutOfBoundsException();
 
         awt::Rectangle aBounds( 0, 0, 0, 0 );
@@ -470,8 +470,9 @@ namespace accessibility
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
+        EnsureIsAlive();
 
-        OUString sText = getText();
+        OUString sText = implGetText();
         if  ( ( 0 > nStartIndex ) || ( sText.getLength() <= nStartIndex )
             || ( 0 > nEndIndex ) || ( sText.getLength() <= nEndIndex ) )
             throw IndexOutOfBoundsException();
@@ -555,7 +556,7 @@ namespace accessibility
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
-        return OCommonAccessibleText::getCharacterCount(  );
+        return implGetText().getLength();;
     }
 
     OUString SAL_CALL AccessibleIconChoiceCtrlEntry::getSelectedText(  )
