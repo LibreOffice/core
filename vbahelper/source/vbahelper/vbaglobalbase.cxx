@@ -41,7 +41,7 @@ const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCt
     , msApplication( "Application" )
 {
     // overwrite context with custom one ( that contains the application )
-    // wrap the service manager as we don't want the disposing context to tear down the 'normal' ServiceManager ( or at least thats what the code appears like it wants to do )
+    // wrap the service manager as we don't want the disposing context to tear down the 'normal' ServiceManager ( or at least that's what the code appears like it wants to do )
     uno::Reference< uno::XInterface > aSrvMgr;
     if ( xContext.is() && xContext->getServiceManager().is() )
     {

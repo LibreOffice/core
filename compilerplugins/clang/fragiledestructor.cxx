@@ -79,7 +79,7 @@ bool FragileDestructor::VisitCXXMemberCallExpr(const CXXMemberCallExpr* callExpr
     if (!callExpr->getImplicitObjectArgument()->IgnoreImpCasts()->isImplicitCXXThis()) {
         return true;
     }
-    // if we see an explicit call to it's own method, thats OK
+    // if we see an explicit call to it's own method, that's OK
     auto s1 = compiler.getSourceManager().getCharacterData(callExpr->getLocStart());
     auto s2 = compiler.getSourceManager().getCharacterData(callExpr->getLocEnd());
     std::string tok(s1, s2-s1);

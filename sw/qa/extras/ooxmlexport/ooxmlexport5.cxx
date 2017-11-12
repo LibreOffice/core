@@ -480,7 +480,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo78882, "fdo78882.docx")
     // Ensure that Section Break is getting written inside second paragraph
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[2]/w:pPr[1]/w:sectPr[1]",1);
 
-    // Ensure that no dummy paragarph gets created inside second paragraph for Section Break
+    // Ensure that no dummy paragraph gets created inside second paragraph for Section Break
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[2]/w:p[1]/w:pPr[1]/w:sectPr[1]",0);
 }
 

@@ -148,10 +148,10 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
 css::uno::Sequence< OUString > SAL_CALL FilterFactory::getAvailableServiceNames()
 {
     /* Attention: Instead of getElementNames() this method have to return only filter names,
-                  which can be created as UNO Services really. Thats why we search for filters,
+                  which can be created as UNO Services really. That's why we search for filters,
                   which don't have a valid value for the property "FilterService".
                   Of course we can't check for corrupted service names here. We can check
-                  for empty strings only ...
+                  for empty strings only...
     */
     CacheItem lIProps;
     CacheItem lEProps;

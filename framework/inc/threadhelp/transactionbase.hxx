@@ -29,7 +29,7 @@ namespace framework{
     @descr          If you use a transaction manager as a member of your class and wish to use it earlier then other ones
                     you should have a look on this implementation. You must use it as the first base class
                     of your implementation - because base classes are initialized by his order and before your
-                    member! Thats why is a good place to declare this member.
+                    member! That's why is a good place to declare this member.
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 struct TransactionBase

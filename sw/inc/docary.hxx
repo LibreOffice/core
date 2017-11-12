@@ -370,11 +370,11 @@ public:
     vector_type::const_iterator end() const { return maVector.end(); }
     void                        Resort() { maVector.Resort(); }
 
-    // Notifies all LOK clients when redliens are added/modified/removed
+    // Notifies all LOK clients when redlines are added/modified/removed
     static void                 LOKRedlineNotification(RedlineNotification eType, SwRangeRedline* pRedline);
 };
 
-/// Table that holds 'extra' redlines, such as 'table row insert\delete', 'paragraph moves' etc...
+/// Table that holds 'extra' redlines, such as 'table row insert/delete', 'paragraph moves' etc...
 class SwExtraRedlineTable
 {
 private:

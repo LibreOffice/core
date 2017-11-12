@@ -64,13 +64,13 @@ public:
     // specifies a subscripted.
     static const short SUBSCRIPT = -33;
 
-    // specifies a hight of superscripted font
+    // specifies a height of superscripted font
     static const sal_Int8 SUPERSCRIPTHEIGHT = 58;
 
-    // specifies a hight of subscripted font
+    // specifies a height of subscripted font
     static const sal_Int8 SUBSCRIPTHEIGHT = 58;
 
-    // specifies a hight of normal font
+    // specifies a height of normal font
     static const short NORMALHEIGHT = 100;
 
     /// @throws css::uno::RuntimeException

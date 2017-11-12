@@ -58,7 +58,7 @@ namespace accessibility
         /** Queries for a new interface. */
         css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
 
-        /** Aquires the object (calls acquire() on base class). */
+        /** Acquires the object (calls acquire() on base class). */
         virtual void SAL_CALL acquire() throw () override;
 
         /** Releases the object (calls release() on base class). */

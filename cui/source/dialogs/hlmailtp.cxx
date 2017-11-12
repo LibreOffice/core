@@ -223,7 +223,7 @@ void SvxHyperlinkMailTp::RemoveImproperProtocol(const OUString& aProperScheme)
 
 /*************************************************************************
 |*
-|* Contens of editfield "receiver" modified
+|* Contents of editfield "receiver" modified
 |*
 |************************************************************************/
 

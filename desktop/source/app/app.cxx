@@ -372,7 +372,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 // On the other side we must make sure that no further actions will be possible within
 // the current office process ! No pipe requests, no menu/toolbar/shortcut actions
 // are allowed. Otherwise we will force a "crash inside a crash".
-// Thats why we have to use a special native message box here which does not use yield :-)
+// That's why we have to use a special native message box here which does not use yield :-)
 
 void FatalError(const OUString& sMessage)
 {

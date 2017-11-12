@@ -162,7 +162,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper<
 
         /** @short  prepare m_xCloseFrame so it should be closeable without problems.
 
-            @descr  Thats needed to be sure, that the document can't disagree
+            @descr  That's needed to be sure, that the document can't disagree
                     later with e.g. an office termination.
                     The problem: Closing of documents can show UI. If the user
                     ignores it and open/close other documents, we can't know

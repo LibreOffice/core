@@ -1682,7 +1682,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
                 rTarget >>= xShape;
                 if( xShape.is() )
                 {
-                    // thats bad, we target a shape here but the effect is only for text
+                    // that's bad, we target a shape here but the effect is only for text
                     // so change subitem
                     nSubItem = ShapeAnimationSubType::ONLY_TEXT;
                 }

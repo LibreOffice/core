@@ -1764,7 +1764,7 @@ Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(
     Reference< XComponentContext > const & xContext,
     Reference< XModel > const & xDocument )
 {
-    // single set of styles and stylenames apply to all containees
+    // single set of styles and stylenames apply to all containers
     std::shared_ptr< std::vector< OUString > > pStyleNames( new std::vector< OUString > );
     std::shared_ptr< std::vector< css::uno::Reference< css::xml::input::XElement > > > pStyles( new std::vector< css::uno::Reference< css::xml::input::XElement > > );
      return ::xmlscript::createDocumentHandler(

@@ -618,7 +618,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, const ONDXPagePtr& xPage)
             else if(nParentNodePos)
                 // replace the node value
                 // for Append the range will be enlarged, for Insert the old node from xPage will reference to this
-                // thats why the node must be updated here
+                // that's why the node must be updated here
                 aParent->SearchAndReplace((*aParent)[nParentNodePos-1].GetKey(),(*aParent)[nParentNodePos].GetKey());
 
             xPage->SetModified(false);

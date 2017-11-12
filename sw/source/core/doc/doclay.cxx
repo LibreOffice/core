@@ -813,7 +813,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
 
                 // The old one should not have a flow and it should be adjusted to above and
                 // middle.
-                // Also, the width should be 100% and it should also adjust the hight, if changed.
+                // Also, the width should be 100% and it should also adjust the height, if changed.
                 pNewSet->ClearItem();
 
                 pNewSet->Put( SwFormatSurround( css::text::WrapTextMode_NONE ) );

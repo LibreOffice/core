@@ -80,7 +80,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
     {}
 
     // no catch here ... without an task creator service we can't open ANY document window within the office.
-    // Thats IMHO not a good idea. Then we should accept the stacktrace showing us the real problem.
+    // That's IMHO not a good idea. Then we should accept the stacktrace showing us the real problem.
     // BTW: The used fallback creator service (IMPLEMENTATIONNAME_FWK_TASKCREATOR) is implemented in the same
     // library then these class here ... Why we should not be able to create it ?
     if ( ! xCreator.is())

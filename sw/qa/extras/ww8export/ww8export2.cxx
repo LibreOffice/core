@@ -330,7 +330,7 @@ DECLARE_OOXMLEXPORT_TEST( testTableCrossReference, "table_cross_reference.odt" )
     if (!mbExported)
         return;
 
-    // Check whether we have all the neccessary bookmarks exported and imported back
+    // Check whether we have all the necessary bookmarks exported and imported back
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xBookmarksByIdx->getCount());
@@ -488,7 +488,7 @@ DECLARE_OOXMLEXPORT_TEST( testTableCrossReferenceCustomFormat, "table_cross_refe
     if (!mbExported)
         return;
 
-    // Check whether we have all the neccessary bookmarks exported and imported back
+    // Check whether we have all the necessary bookmarks exported and imported back
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(16), xBookmarksByIdx->getCount());
@@ -604,7 +604,7 @@ DECLARE_OOXMLEXPORT_TEST( testObjectCrossReference, "object_cross_reference.odt"
     if (!mbExported)
         return;
 
-    // Check whether we have all the neccessary bookmarks exported and imported back
+    // Check whether we have all the necessary bookmarks exported and imported back
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(15), xBookmarksByIdx->getCount());

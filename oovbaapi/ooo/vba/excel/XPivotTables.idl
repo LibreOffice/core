@@ -31,7 +31,7 @@ interface XPivotTables
 {
 
     interface ooo::vba::XCollection;
-    // PivotCache should be a PivotCache object ( but thats not defined
+    // PivotCache should be a PivotCache object ( but that's not defined
     // yet )
     //XPivotTable Add( [in] any PivotCache, [in] any TableDestination, [in] any TableName, [in] any ReadData );
 

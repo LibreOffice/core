@@ -1187,7 +1187,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
 // Set outliner defaults (pool defaults)
 void SdDrawDocument::SetTextDefaults() const
 {
-    // BulletItem and BulletFont for Titel and Outline
+    // BulletItem and BulletFont for Title and Outline
     SvxBulletItem aBulletItem(EE_PARA_BULLET);
     vcl::Font aBulletFont( SdStyleSheetPool::GetBulletFont() );
     aBulletFont.SetFontSize(Size(0,846));       // 24 pt

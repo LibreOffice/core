@@ -134,7 +134,7 @@ bool ShellJob::impl_execute(const OUString&                       sCommand      
 
     oslProcessError eError = osl_executeProcess(sCommand.pData, pArgs, nArgs, osl_Process_WAIT, nullptr, nullptr, nullptr, 0, &hProcess);
 
-    // executable not found or couldnt be started
+    // executable not found or couldn't be started
     if (eError != osl_Process_E_None)
         return false;
 

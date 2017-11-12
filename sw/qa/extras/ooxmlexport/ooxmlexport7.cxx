@@ -1139,7 +1139,7 @@ DECLARE_OOXMLEXPORT_TEST(testFlipAndRotateCustomShape, "flip_and_rotate.odt")
     // check rotation angle
     assertXPath(pXmlDoc, "//a:xfrm", "rot", "13500000");
     // check the first few coordinates of the polygon
-#ifndef MACOSX /* Retina-related rounding rountrip error
+#ifndef MACOSX /* Retina-related rounding roundtrip error
                 * hard to smooth out due to the use of string compare
                 * instead of number */
 #if !defined(_WIN32)
