@@ -203,7 +203,7 @@ sal_Bool VCLXAccessibleMenuItem::setCaretPosition( sal_Int32 nIndex )
 
     OExternalLockGuard aGuard( this );
 
-    if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
+    if ( !implIsValidRange( nIndex, nIndex, m_sItemText.getLength() ) )
         throw IndexOutOfBoundsException();
 
     return false;
@@ -222,9 +222,7 @@ Sequence< PropertyValue > VCLXAccessibleMenuItem::getCharacterAttributes( sal_In
 {
     OExternalLockGuard aGuard( this );
 
-    OUString sText( implGetText() );
-
-    if ( !implIsValidIndex( nIndex, sText.getLength() ) )
+    if ( !implIsValidIndex( nIndex, m_sItemText.getLength() ) )
         throw IndexOutOfBoundsException();
 
     vcl::Font aFont = Application::GetSettings().GetStyleSettings().GetMenuFont();
@@ -239,7 +237,7 @@ awt::Rectangle VCLXAccessibleMenuItem::getCharacterBounds( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
-    if ( !implIsValidIndex( nIndex, implGetText().getLength() ) )
+    if ( !implIsValidIndex( nIndex, m_sItemText.getLength() ) )
         throw IndexOutOfBoundsException();
 
     awt::Rectangle aBounds( 0, 0, 0, 0 );
@@ -260,7 +258,7 @@ sal_Int32 VCLXAccessibleMenuItem::getCharacterCount()
 {
     OExternalLockGuard aGuard( this );
 
-    return OCommonAccessibleText::getCharacterCount();
+    return m_sItemText.getLength();
 }
 
 
@@ -312,7 +310,7 @@ sal_Bool VCLXAccessibleMenuItem::setSelection( sal_Int32 nStartIndex, sal_Int32 
 {
     OExternalLockGuard aGuard( this );
 
-    if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
+    if ( !implIsValidRange( nStartIndex, nEndIndex, m_sItemText.getLength() ) )
         throw IndexOutOfBoundsException();
 
     return false;
@@ -323,7 +321,7 @@ OUString VCLXAccessibleMenuItem::getText()
 {
     OExternalLockGuard aGuard( this );
 
-    return implGetText();
+    return m_sItemText;
 }
 
 

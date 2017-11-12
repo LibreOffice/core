@@ -246,7 +246,7 @@ namespace accessibility
     {
         SolarMethodGuard aGuard(getMutex());
 
-        return OCommonAccessibleText::getCharacterCount(  );
+        return implGetText().getLength();
     }
 
     OUString SAL_CALL AccessibleBrowseBoxTableCell::getSelectedText(  )

@@ -517,6 +517,17 @@ OUString VCLXAccessibleTabPage::getToolTipText(  )
 
 // XAccessibleText
 
+OUString VCLXAccessibleTabPage::getText()
+{
+    OExternalLockGuard aGuard( this );
+
+    return GetPageText();
+}
+
+sal_Int32 VCLXAccessibleTabPage::getCharacterCount()
+{
+    return GetPageText().getLength();
+}
 
 sal_Int32 VCLXAccessibleTabPage::getCaretPosition()
 {
@@ -530,7 +541,7 @@ sal_Bool VCLXAccessibleTabPage::setCaretPosition( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
-    if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
+    if ( !implIsValidRange( nIndex, nIndex, GetPageText().getLength() ) )
         throw IndexOutOfBoundsException();
 
     return false;
@@ -542,7 +553,7 @@ Sequence< PropertyValue > VCLXAccessibleTabPage::getCharacterAttributes( sal_Int
     OExternalLockGuard aGuard( this );
 
     Sequence< PropertyValue > aValues;
-    OUString sText( implGetText() );
+    OUString sText( GetPageText() );
 
     if ( !implIsValidIndex( nIndex, sText.getLength() ) )
         throw IndexOutOfBoundsException();
@@ -564,7 +575,7 @@ awt::Rectangle VCLXAccessibleTabPage::getCharacterBounds( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
-    if ( !implIsValidIndex( nIndex, implGetText().getLength() ) )
+    if ( !implIsValidIndex( nIndex, GetPageText().getLength() ) )
         throw IndexOutOfBoundsException();
 
     awt::Rectangle aBounds( 0, 0, 0, 0 );
@@ -604,7 +615,7 @@ sal_Bool VCLXAccessibleTabPage::setSelection( sal_Int32 nStartIndex, sal_Int32 n
 {
     OExternalLockGuard aGuard( this );
 
-    if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
+    if ( !implIsValidRange( nStartIndex, nEndIndex, GetPageText().getLength() ) )
         throw IndexOutOfBoundsException();
 
     return false;

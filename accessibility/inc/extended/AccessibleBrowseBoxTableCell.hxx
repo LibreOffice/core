@@ -39,7 +39,7 @@ namespace accessibility
 
     protected:
         // OCommonAccessibleText
-        virtual OUString                        implGetText() override;
+        virtual OUString                        implGetText() final override;
         virtual css::lang::Locale               implGetLocale() override;
         virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override;
 
@@ -112,7 +112,7 @@ namespace accessibility
         virtual sal_Int32 SAL_CALL getSelectionStart() override;
         virtual sal_Int32 SAL_CALL getSelectionEnd() override;
         virtual sal_Bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
-        virtual OUString SAL_CALL getText() override;
+        virtual OUString SAL_CALL getText() final override;
         virtual OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
         virtual css::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
         virtual css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
