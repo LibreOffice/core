@@ -254,7 +254,7 @@ public:
         const_iterator begin() const;
         const_iterator end() const;
         ScDBData* findByIndex(sal_uInt16 nIndex);
-        ScDBData* findByUpperName(const OUString& rName);
+        ScDBData* findByUpperName(const OUString& rName) const;
         iterator findByUpperName2(const OUString& rName);
 
         /** Takes ownership of p and attempts to insert it into the collection.

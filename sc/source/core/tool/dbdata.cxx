@@ -1138,7 +1138,7 @@ ScDBData* ScDBCollection::NamedDBs::findByIndex(sal_uInt16 nIndex)
     return itr == m_DBs.end() ? nullptr : itr->get();
 }
 
-ScDBData* ScDBCollection::NamedDBs::findByUpperName(const OUString& rName)
+ScDBData* ScDBCollection::NamedDBs::findByUpperName(const OUString& rName) const
 {
     DBsType::iterator itr = find_if(
         m_DBs.begin(), m_DBs.end(), FindByUpperName(rName));

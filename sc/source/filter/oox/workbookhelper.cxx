@@ -149,8 +149,6 @@ public:
     ScRangeData* createNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags );
     /** Creates and returns a defined name on the-fly in the correct Calc sheet. */
     ScRangeData* createLocalNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab );
-    /** Creates and returns a database range on-the-fly in the Calc document. */
-    Reference< XDatabaseRange > createDatabaseRangeObject( OUString& orName, const ScRange& rRangeAddr );
     /** Creates and returns an unnamed database range on-the-fly in the Calc document. */
     Reference< XDatabaseRange > createUnnamedDatabaseRangeObject( const ScRange& rRangeAddr );
     /** Finds the (already existing) database range of the given formula token index. */
@@ -215,6 +213,8 @@ public:
     /** Returns the text encoding used to import/export byte strings. */
     rtl_TextEncoding getTextEncoding() const { return meTextEnc; }
 
+    static OUString findUnusedName( const ScDBCollection::NamedDBs* pRangeName, const OUString& rSuggestedName );
+    static OUString findUnusedName( const ScRangeName* pRangeName, const OUString& rSuggestedName );
 private:
     /** Initializes some basic members and sets needed document properties. */
     void                initialize();
@@ -368,7 +368,9 @@ ScRangeData* lcl_addNewByNameAndTokens( ScDocument& rDoc, ScRangeName* pNames, c
     return pNew;
 }
 
-OUString findUnusedName( const ScRangeName* pRangeName, const OUString& rSuggestedName )
+}
+
+OUString WorkbookGlobals::findUnusedName( const ScRangeName* pRangeName, const OUString& rSuggestedName )
 {
     OUString aNewName = rSuggestedName;
     sal_Int32 nIndex = 0;
@@ -378,6 +380,15 @@ OUString findUnusedName( const ScRangeName* pRangeName, const OUString& rSuggest
     return aNewName;
 }
 
+OUString WorkbookGlobals::findUnusedName( const ScDBCollection::NamedDBs* pRangeName, const OUString& rSuggestedName )
+{
+    OUString aNewName = rSuggestedName;
+    sal_Int32 nIndex = 0;
+
+    while (pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(aNewName)))
+        aNewName = rSuggestedName + OUStringLiteral1('_') + OUString::number( nIndex++ );
+
+    return aNewName;
 }
 
 ScRangeData* WorkbookGlobals::createNamedRangeObject(
@@ -414,33 +425,6 @@ ScRangeData* WorkbookGlobals::createLocalNamedRangeObject(
         pScRangeData = lcl_addNewByNameAndTokens( rDoc, pNames, orName, rTokens, nIndex, nNameFlags );
     }
     return pScRangeData;
-}
-
-Reference< XDatabaseRange > WorkbookGlobals::createDatabaseRangeObject( OUString& orName, const ScRange& rRangeAddr )
-{
-    // validate cell range
-    ScRange aDestRange = rRangeAddr;
-    bool bValidRange = getAddressConverter().validateCellRange( aDestRange, true, true );
-
-    // create database range and insert it into the Calc document
-    Reference< XDatabaseRange > xDatabaseRange;
-    if( bValidRange && !orName.isEmpty() ) try
-    {
-        // find an unused name
-        PropertySet aDocProps( mxDoc );
-        Reference< XDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY_THROW );
-        orName = ContainerHelper::getUnusedName( xDatabaseRanges, orName, '_' );
-        // create the database range
-        CellRangeAddress aApiRange( aDestRange.aStart.Tab(), aDestRange.aStart.Col(), aDestRange.aStart.Row(),
-                                    aDestRange.aEnd.Col(), aDestRange.aEnd.Row() );
-        xDatabaseRanges->addNewByName( orName, aApiRange );
-        xDatabaseRange.set( xDatabaseRanges->getByName( orName ), UNO_QUERY );
-    }
-    catch( Exception& )
-    {
-    }
-    OSL_ENSURE( xDatabaseRange.is(), "WorkbookGlobals::createDatabaseRangeObject - cannot create database range" );
-    return xDatabaseRange;
 }
 
 Reference< XDatabaseRange > WorkbookGlobals::createUnnamedDatabaseRangeObject( const ScRange& rRangeAddr )
@@ -812,11 +796,6 @@ ScRangeData* WorkbookHelper::createLocalNamedRangeObject( OUString& orName, cons
     return mrBookGlob.createLocalNamedRangeObject( orName, rTokens, nIndex, nNameFlags, nTab );
 }
 
-Reference< XDatabaseRange > WorkbookHelper::createDatabaseRangeObject( OUString& orName, const ScRange& rRangeAddr ) const
-{
-    return mrBookGlob.createDatabaseRangeObject( orName, rRangeAddr );
-}
-
 Reference< XDatabaseRange > WorkbookHelper::createUnnamedDatabaseRangeObject( const ScRange& rRangeAddr ) const
 {
     return mrBookGlob.createUnnamedDatabaseRangeObject( rRangeAddr );
@@ -963,6 +942,11 @@ bool WorkbookHelper::importOoxFragment( const rtl::Reference<FragmentHandler>& r
 rtl_TextEncoding WorkbookHelper::getTextEncoding() const
 {
     return mrBookGlob.getTextEncoding();
+}
+
+OUString WorkbookHelper::findUnusedName( const ScDBCollection::NamedDBs* pRangeName, const OUString& rSuggestedName )
+{
+    return WorkbookGlobals::findUnusedName(pRangeName, rSuggestedName);
 }
 
 } // namespace xls

@@ -26,6 +26,7 @@
 #include <oox/drawingml/chart/chartconverter.hxx>
 #include "biffhelper.hxx"
 #include <rangenam.hxx>
+#include <dbdata.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
@@ -173,14 +174,6 @@ public:
                             sal_Int32 nIndex,
                             sal_Int32 nNameFlags, sal_Int32 nTab ) const;
 
-    /** Creates and returns a database range on-the-fly in the Calc document.
-        The range will not be buffered in the global table buffer.
-        @param orName  (in/out-parameter) Returns the resulting used name. */
-    css::uno::Reference< css::sheet::XDatabaseRange >
-                        createDatabaseRangeObject(
-                            OUString& orName,
-                            const ScRange& rRangeAddr ) const;
-
     /** Creates and returns an unnamed database range on-the-fly in the Calc document.
         The range will not be buffered in the global table buffer. */
     css::uno::Reference< css::sheet::XDatabaseRange >
@@ -258,6 +251,7 @@ public:
     /** Returns the text encoding used to import/export byte strings. */
     rtl_TextEncoding    getTextEncoding() const;
 
+    static OUString findUnusedName( const ScDBCollection::NamedDBs* pRangeName, const OUString& rSuggestedName );
 private:
     WorkbookGlobals&    mrBookGlob;
 };
