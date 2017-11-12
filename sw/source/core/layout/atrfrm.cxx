@@ -1315,7 +1315,7 @@ bool SwFormatVertOrient::operator==( const SfxPoolItem& rAttr ) const
 
 SfxPoolItem*  SwFormatVertOrient::Clone( SfxItemPool* ) const
 {
-    return new SwFormatVertOrient( m_nYPos, m_eOrient, m_eRelation );
+    return new SwFormatVertOrient( *this );
 }
 
 bool SwFormatVertOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1409,7 +1409,7 @@ bool SwFormatHoriOrient::operator==( const SfxPoolItem& rAttr ) const
 
 SfxPoolItem*  SwFormatHoriOrient::Clone( SfxItemPool* ) const
 {
-    return new SwFormatHoriOrient( m_nXPos, m_eOrient, m_eRelation, m_bPosToggle );
+    return new SwFormatHoriOrient( *this );
 }
 
 bool SwFormatHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1870,22 +1870,22 @@ bool SwFormatURL::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 SfxPoolItem* SwFormatEditInReadonly::Clone( SfxItemPool* ) const
 {
-    return new SwFormatEditInReadonly( Which(), GetValue() );
+    return new SwFormatEditInReadonly( *this );
 }
 
 SfxPoolItem* SwFormatLayoutSplit::Clone( SfxItemPool* ) const
 {
-    return new SwFormatLayoutSplit( GetValue() );
+    return new SwFormatLayoutSplit( *this );
 }
 
 SfxPoolItem* SwFormatRowSplit::Clone( SfxItemPool* ) const
 {
-    return new SwFormatRowSplit( GetValue() );
+    return new SwFormatRowSplit( *this );
 }
 
 SfxPoolItem* SwFormatNoBalancedColumns::Clone( SfxItemPool* ) const
 {
-    return new SwFormatNoBalancedColumns( GetValue() );
+    return new SwFormatNoBalancedColumns( *this );
 }
 
 void SwFormatNoBalancedColumns::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -2024,18 +2024,14 @@ bool SwFormatFootnoteEndAtTextEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMe
 
 SfxPoolItem* SwFormatFootnoteAtTextEnd::Clone( SfxItemPool* ) const
 {
-    SwFormatFootnoteAtTextEnd* pNew = new SwFormatFootnoteAtTextEnd;
-    *pNew = *this;
-    return pNew;
+    return new SwFormatFootnoteAtTextEnd(*this);
 }
 
 // class SwFormatEndAtTextEnd
 
 SfxPoolItem* SwFormatEndAtTextEnd::Clone( SfxItemPool* ) const
 {
-    SwFormatEndAtTextEnd* pNew = new SwFormatEndAtTextEnd;
-    *pNew = *this;
-    return pNew;
+    return new SwFormatEndAtTextEnd(*this);
 }
 
 //class SwFormatChain

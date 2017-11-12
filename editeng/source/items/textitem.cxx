@@ -1116,9 +1116,7 @@ void SvxTextLineItem::SetBoolValue( bool bVal )
 
 SfxPoolItem* SvxTextLineItem::Clone( SfxItemPool * ) const
 {
-    SvxTextLineItem* pNew = new SvxTextLineItem( *this );
-    pNew->SetColor( GetColor() );
-    return pNew;
+    return new SvxTextLineItem( *this );
 }
 
 
@@ -1244,9 +1242,7 @@ SvxUnderlineItem::SvxUnderlineItem( const FontLineStyle eSt, const sal_uInt16 nI
 
 SfxPoolItem* SvxUnderlineItem::Clone( SfxItemPool * ) const
 {
-    SvxUnderlineItem* pNew = new SvxUnderlineItem( *this );
-    pNew->SetColor( GetColor() );
-    return pNew;
+    return new SvxUnderlineItem( *this );
 }
 
 
@@ -1297,9 +1293,7 @@ SvxOverlineItem::SvxOverlineItem( const FontLineStyle eSt, const sal_uInt16 nId 
 
 SfxPoolItem* SvxOverlineItem::Clone( SfxItemPool * ) const
 {
-    SvxOverlineItem* pNew = new SvxOverlineItem( *this );
-    pNew->SetColor( GetColor() );
-    return pNew;
+    return new SvxOverlineItem( *this );
 }
 
 
@@ -2590,7 +2584,7 @@ SvxTextRotateItem::SvxTextRotateItem(sal_uInt16 nValue, const sal_uInt16 nW)
 
 SfxPoolItem* SvxTextRotateItem::Clone(SfxItemPool*) const
 {
-    return new SvxTextRotateItem(GetValue(), Which());
+    return new SvxTextRotateItem(*this);
 }
 
 sal_uInt16 SvxTextRotateItem::GetVersion(sal_uInt16 nFFVer) const
@@ -2680,7 +2674,7 @@ SvxCharRotateItem::SvxCharRotateItem( sal_uInt16 nValue,
 
 SfxPoolItem* SvxCharRotateItem::Clone( SfxItemPool* ) const
 {
-    return new SvxCharRotateItem( GetValue(), IsFitToLine(), Which() );
+    return new SvxCharRotateItem( *this );
 }
 
 sal_uInt16 SvxCharRotateItem::GetVersion( sal_uInt16 nFFVer ) const
@@ -2774,7 +2768,7 @@ SvxCharScaleWidthItem::SvxCharScaleWidthItem( sal_uInt16 nValue,
 
 SfxPoolItem* SvxCharScaleWidthItem::Clone( SfxItemPool* ) const
 {
-    return new SvxCharScaleWidthItem( GetValue(), Which() );
+    return new SvxCharScaleWidthItem( *this );
 }
 
 

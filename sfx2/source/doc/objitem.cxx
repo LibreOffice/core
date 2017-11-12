@@ -36,7 +36,7 @@ bool SfxObjectShellItem::operator==( const SfxPoolItem &rItem ) const
 
 SfxPoolItem* SfxObjectShellItem::Clone( SfxItemPool *) const
 {
-    return new SfxObjectShellItem( Which(), pObjSh );
+    return new SfxObjectShellItem( *this );
 }
 
 bool SfxObjectShellItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
@@ -97,7 +97,7 @@ bool SfxObjectItem::operator==( const SfxPoolItem &rItem ) const
 
 SfxPoolItem* SfxObjectItem::Clone( SfxItemPool *) const
 {
-    return new SfxObjectItem( Which(), _pSh );
+    return new SfxObjectItem( *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

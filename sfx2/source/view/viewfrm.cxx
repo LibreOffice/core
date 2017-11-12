@@ -1499,7 +1499,7 @@ bool SfxViewFrameItem::operator==( const SfxPoolItem &rItem ) const
 
 SfxPoolItem* SfxViewFrameItem::Clone( SfxItemPool *) const
 {
-    return new SfxViewFrameItem( pFrame);
+    return new SfxViewFrameItem( *this );
 }
 
 void SfxViewFrame::SetViewShell_Impl( SfxViewShell *pVSh )
