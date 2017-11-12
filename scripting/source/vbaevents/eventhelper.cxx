@@ -813,7 +813,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
         if ( xCntrlShape.is() )
         {
             // for sheet controls ( that fire from the api ) we don't
-            // have the real control ( thats only available from the view )
+            // have the real control ( that's only available from the view )
             // api code creates just a control instance that is transferred
             // via aEvent.Arguments[ 0 ] that control though has no
             // info like name etc.

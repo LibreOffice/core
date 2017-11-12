@@ -259,7 +259,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
     SvxULSpaceItem aULSpaceItem( (sal_uInt16)mpPage->GetUpperBorder(), (sal_uInt16)mpPage->GetLowerBorder(), mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE));
     aNewAttr.Put( aULSpaceItem );
 
-    // Applikation
+    // Application
     bool bScale = mpDoc->GetDocumentType() != DocumentType::Draw;
     aNewAttr.Put( SfxBoolItem( SID_ATTR_PAGE_EXT1, bScale ) );
 

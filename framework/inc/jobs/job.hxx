@@ -137,7 +137,7 @@ class Job : public  ::cppu::WeakImplHelper<
         /**
             Holds the state, if we are listen for desktop/frame or model closing events or not.
             The used references are not really enough to detect a valid listener connection.
-            Thats why we use this additional information here too.
+            That's why we use this additional information here too.
          */
         bool m_bListenOnDesktop;
         bool m_bListenOnFrame;

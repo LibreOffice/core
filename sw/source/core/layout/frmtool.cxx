@@ -466,7 +466,7 @@ SwLayNotify::~SwLayNotify()
                 //Proportional adoption of the internal.
                 //1. If the formatted is no Fly
                 //2. If he contains no columns
-                //3. If the Fly has a fixed hight and the columns
+                //3. If the Fly has a fixed height and the columns
                 //   are next to be.
                 //   Hoehe danebenliegen.
                 //4. Never at SectionFrames.

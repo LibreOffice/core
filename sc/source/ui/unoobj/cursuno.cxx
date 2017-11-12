@@ -140,7 +140,7 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentArray()
             SetNewRange( aMatrix );
         }
     }
-    // thats a Bug, that this assertion comes; the API Reference says, that
+    // that's a Bug, that this assertion comes; the API Reference says, that
     // if there is no Matrix, the Range is left unchanged; they says nothing
     // about a exception
     /*if (!bFound)

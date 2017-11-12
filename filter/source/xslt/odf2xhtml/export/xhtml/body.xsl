@@ -990,7 +990,7 @@
         </xsl:variable>
         <!-- if the frame is anchored on a paragraph -->
         <xsl:if test="@text:anchor-type='paragraph'">
-            <xsl:comment>Next 'div' is emulating the top hight of a draw:frame.</xsl:comment>
+            <xsl:comment>Next 'div' is emulating the top height of a draw:frame.</xsl:comment>
             <!-- When the svg:y is set relative to the paragraph content, the best way to emulate a positive height,
              is to add an invisbile division inbetween with a height.
              Often text will flow into this 'gap', which is handled separately!

@@ -453,7 +453,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
     else if( pParentData )
     {
         // plugin parent may be killed unexpectedly by plugging
-        // process; start permanantly ignoring X errors ...
+        // process; start permanently ignoring X errors...
         GetGenericUnixSalData()->ErrorTrapPush();
 
         nStyle_ |= SalFrameStyleFlags::PLUG;

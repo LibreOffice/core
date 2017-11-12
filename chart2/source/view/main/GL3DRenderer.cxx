@@ -944,7 +944,7 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
             glUniform1i(maResources.m_3DLightNumID, m_iLightNum);
             glUniform4fv(maResources.m_3DLightAmbientID, 1, &m_Ambient[0]);
             CHECK_GL_ERROR();
-            //update meterial information
+            //update material information
             glUniform4fv(maResources.m_3DMaterialAmbientID, 1, &polygon.material.ambient[0]);
             glUniform4fv(maResources.m_3DMaterialDiffuseID, 1, &polygon.material.diffuse[0]);
             glUniform4fv(maResources.m_3DMaterialSpecularID, 1, &polygon.material.specular[0]);
@@ -1675,7 +1675,7 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
             }
             else
             {
-                //update meterial information
+                //update material information
                 glUniform4fv(maResources.m_3DMaterialAmbientID, 1, &extrude3DInfo.material.ambient[0]);
                 glUniform4fv(maResources.m_3DMaterialDiffuseID, 1, &extrude3DInfo.material.diffuse[0]);
                 glUniform4fv(maResources.m_3DMaterialSpecularID, 1, &extrude3DInfo.material.specular[0]);

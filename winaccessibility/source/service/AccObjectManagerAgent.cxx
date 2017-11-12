@@ -281,7 +281,7 @@ IMAccessible* AccObjectManagerAgent::GetIMAccByXAcc(XAccessible* pXAcc)
 }
 
 /**
-   * Notify manger when a XAccessible object is destroying.
+   * Notify manager when a XAccessible object is destroying.
    * @param pXAcc Uno XAccessible interface of control.
    * @return.
    */

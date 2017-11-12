@@ -2301,7 +2301,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
     {
         // By joining together the two, the left is although reformatted,
         // however if its height does not change then the formatting receives
-        // the change of the total text hight too late...
+        // the change of the total text height too late...
         for ( sal_Int32 n = nParagraphTobeDeleted; n < GetParaPortions().Count(); n++ )
         {
             ParaPortion* pPP = GetParaPortions()[n];

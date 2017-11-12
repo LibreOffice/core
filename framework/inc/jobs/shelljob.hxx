@@ -117,8 +117,8 @@ class ShellJob : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css::tas
 
             @param  bCheckExitCode
                     bind the execution result to the exit code of the started process.
-                    If it's set to false we return false only in case executable couldnt be found
-                    or couldnt be started.
+                    If it's set to false we return false only in case executable couldn't be found
+                    or couldn't be started.
 
             @return sal_True if command was executed successfully; sal_False otherwise.
          */

@@ -2131,7 +2131,7 @@ void SwEditShell::FillByEx(SwTextFormatColl* pColl)
     const SfxItemSet* pSet = pCnt->GetpSwAttrSet();
     if( pSet )
     {
-        // JP 05.10.98: Special treatment if one of the attribues Break/PageDesc/NumRule(auto) is
+        // JP 05.10.98: Special treatment if one of the attributes Break/PageDesc/NumRule(auto) is
         //      in the ItemSet. Otherwise there will be too much or wrong processing (NumRules!)
         //      Bug 57568
 
