@@ -123,6 +123,7 @@ public:
 
     // XAccessibleText
     virtual OUString SAL_CALL getText() override;
+    virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) override;
     virtual sal_Int32 SAL_CALL getCharacterCount() override;
     virtual sal_Int32 SAL_CALL getCaretPosition() override;
     virtual sal_Bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override;
@@ -131,7 +132,7 @@ public:
     virtual sal_Int32 SAL_CALL getIndexAtPoint( const css::awt::Point& aPoint ) override;
     virtual sal_Bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
     virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
-
+    virtual OUString SAL_CALL getTextRange(sal_Int32 nStartIndex, sal_Int32 nEndIndex) override;
 };
 
 #endif // INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLETABPAGE_HXX
