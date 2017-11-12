@@ -63,7 +63,7 @@ public class Helper {
 
     /**
      *  Constructor, create a new instance of the ucb. UNO is bootstrapped and
-     *  the remote office service manger is used to create the ucb. If necessary
+     *  the remote office service manager is used to create the ucb. If necessary
      *  a new office process is started.
      */
     public Helper(String url) throws java.lang.Exception {

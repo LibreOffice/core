@@ -82,7 +82,7 @@ public class EventTest {
     private SOfficeFactory m_SOF = null;
 
     /**
-     * define the miliseconds to wait until a <CODE>EventTrigger</CODE> thread should
+     * define the milliseconds to wait until a <CODE>EventTrigger</CODE> thread should
      * be finished with its work
      */
     static final int m_threadWait = 3000;
