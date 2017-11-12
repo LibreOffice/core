@@ -3593,6 +3593,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             // there might be more elegant ways to get InitVCL() called, but
             // this one works :-)
             InitVCL();
+            SfxApplication::GetOrCreate();
 #endif
 
             if (eStage == PRE_INIT)
