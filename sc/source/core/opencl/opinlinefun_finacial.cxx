@@ -1532,18 +1532,18 @@ std::string ScInterVDB=
 
 std::string VDBImplementDecl=
 "double VDBImplement(double fCost, double fSalvage, double fLife, double fStart"
-", double fEnd, double fFactor, int nType);\n";
+", double fEnd, double fFactor, bool bNoSwitch);\n";
 
 std::string VDBImplement=
 "double VDBImplement(double fCost, double fSalvage, double fLife, double fStart"
-", double fEnd, double fFactor, int nType)\n"
+", double fEnd, double fFactor, bool bNoSwitch)\n"
 "{\n"
 "    double result=0;\n"
 "    double fIntStart = floor(fStart);\n"
 "    double fIntEnd   = ceil(fEnd);\n"
 "    int nLoopStart = (int) fIntStart;\n"
 "    int nLoopEnd   = (int) fIntEnd;\n"
-"    if (nType)\n"
+"    if (bNoSwitch)\n"
 "    {\n"
 "        for (int i = nLoopStart + 1; i <= nLoopEnd; i++)\n"
 "        {\n"

@@ -1795,11 +1795,11 @@ void ScInterpreter::ScVDB()
     if ( MustHaveParamCount( nParamCount, 5, 7 ) )
     {
         double fCost, fSalvage, fLife, fStart, fEnd, fFactor, fVdb = 0.0;
-        bool bType;
+        bool bNoSwitch;
         if (nParamCount == 7)
-            bType = GetBool();
+            bNoSwitch = GetBool();
         else
-            bType = false;
+            bNoSwitch = false;
         if (nParamCount >= 6)
             fFactor = GetDouble();
         else
@@ -1820,7 +1820,7 @@ void ScInterpreter::ScVDB()
             sal_uLong nLoopEnd   = (sal_uLong) fIntEnd;
 
             fVdb = 0.0;
-            if (bType)
+            if (bNoSwitch)
             {
                 for (sal_uLong i = nLoopStart + 1; i <= nLoopEnd; i++)
                 {
