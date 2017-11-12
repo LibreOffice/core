@@ -161,9 +161,6 @@ public:
             SvxBorderLineStyle nStyle = SvxBorderLineStyle::SOLID,
             Color (*pColorOutFn)( Color ) = &darkColor,
             Color (*pColorInFn)( Color ) = &darkColor );
-    SvxBorderLine( const SvxBorderLine& r );
-
-    SvxBorderLine& operator=( const SvxBorderLine& r );
 
     const Color&    GetColor() const { return aColor; }
     Color           GetColorOut( bool bLeftOrTop = true ) const;

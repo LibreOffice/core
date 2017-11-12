@@ -1114,7 +1114,6 @@ void EditLineList::Insert(sal_Int32 nPos, EditLine* p)
 }
 
 EditPaM::EditPaM() : pNode(nullptr), nIndex(0) {}
-EditPaM::EditPaM(const EditPaM& r) : pNode(r.pNode), nIndex(r.nIndex) {}
 EditPaM::EditPaM(ContentNode* p, sal_Int32 n) : pNode(p), nIndex(n) {}
 
 
@@ -1188,13 +1187,6 @@ bool operator == ( const EditPaM& r1, const EditPaM& r2 )
 {
     return ( r1.GetNode() == r2.GetNode() ) &&
            ( r1.GetIndex() == r2.GetIndex() );
-}
-
-EditPaM& EditPaM::operator = ( const EditPaM& rPaM )
-{
-    nIndex = rPaM.nIndex;
-    pNode = rPaM.pNode;
-    return *this;
 }
 
 bool operator != ( const EditPaM& r1, const EditPaM& r2 )
@@ -1821,15 +1813,6 @@ ContentAttribs::ContentAttribs( SfxItemPool& rPool )
 {
 }
 
-ContentAttribs::ContentAttribs( const ContentAttribs& rRef )
-: pStyle(rRef.pStyle)
-, aAttribSet( rRef.aAttribSet )
-{
-}
-
-ContentAttribs::~ContentAttribs()
-{
-}
 
 SvxTabStop ContentAttribs::FindTabStop( sal_Int32 nCurPos, sal_uInt16 nDefTab )
 {

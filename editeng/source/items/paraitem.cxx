@@ -748,13 +748,6 @@ SvxTabStopItem::SvxTabStopItem( const sal_uInt16 nTabs,
 }
 
 
-SvxTabStopItem::SvxTabStopItem( const SvxTabStopItem& rTSI ) :
-    SfxPoolItem( rTSI.Which() ),
-    maTabStops( rTSI.maTabStops )
-{
-}
-
-
 sal_uInt16 SvxTabStopItem::GetPos( const SvxTabStop& rTab ) const
 {
     SvxTabStopArr::const_iterator it = maTabStops.find( rTab );

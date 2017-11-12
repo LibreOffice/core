@@ -34,7 +34,6 @@ public:
                      sal_Unicode nStartBracket /*= 0*/,
                      sal_Unicode nEndBracket /*= 0*/,
                      sal_uInt16 nId  );
-    SvxTwoLinesItem( const SvxTwoLinesItem& rAttr );
     virtual ~SvxTwoLinesItem() override;
 
     // "pure virtual Methods" from SfxPoolItem

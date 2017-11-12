@@ -36,21 +36,6 @@ ParagraphData::ParagraphData()
 {
 }
 
-ParagraphData::ParagraphData( const ParagraphData& r )
-: nDepth( r.nDepth )
-, mnNumberingStartValue( r.mnNumberingStartValue )
-, mbParaIsNumberingRestart( r.mbParaIsNumberingRestart )
-{
-}
-
-ParagraphData& ParagraphData::operator=( const ParagraphData& r)
-{
-    nDepth = r.nDepth;
-    mnNumberingStartValue = r.mnNumberingStartValue;
-    mbParaIsNumberingRestart = r.mbParaIsNumberingRestart;
-    return *this;
-}
-
 bool ParagraphData::operator==(const ParagraphData& rCandidate) const
 {
     return (nDepth == rCandidate.nDepth

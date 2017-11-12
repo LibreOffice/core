@@ -32,16 +32,6 @@ SfxHyphenRegionItem::SfxHyphenRegionItem( const sal_uInt16 nId ) :
 }
 
 
-SfxHyphenRegionItem::SfxHyphenRegionItem( const SfxHyphenRegionItem& rItem ) :
-
-    SfxPoolItem ( rItem ),
-
-    nMinLead    ( rItem.GetMinLead() ),
-    nMinTrail   ( rItem.GetMinTrail() )
-{
-}
-
-
 bool SfxHyphenRegionItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));

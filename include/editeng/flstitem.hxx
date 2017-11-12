@@ -44,7 +44,6 @@ private:
 public:
     SvxFontListItem( const FontList* pFontLst,
                      const sal_uInt16 nId  );
-    SvxFontListItem( const SvxFontListItem& rItem );
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
