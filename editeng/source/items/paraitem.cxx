@@ -1097,7 +1097,7 @@ SvxScriptSpaceItem::SvxScriptSpaceItem( bool bOn, const sal_uInt16 nId )
 
 SfxPoolItem* SvxScriptSpaceItem::Clone( SfxItemPool * ) const
 {
-    return new SvxScriptSpaceItem( GetValue(), Which() );
+    return new SvxScriptSpaceItem( *this );
 }
 
 sal_uInt16  SvxScriptSpaceItem::GetVersion( sal_uInt16 nFFVer ) const
@@ -1130,7 +1130,7 @@ SvxHangingPunctuationItem::SvxHangingPunctuationItem(
 
 SfxPoolItem* SvxHangingPunctuationItem::Clone( SfxItemPool * ) const
 {
-    return new SvxHangingPunctuationItem( GetValue(), Which() );
+    return new SvxHangingPunctuationItem( *this );
 }
 
 sal_uInt16 SvxHangingPunctuationItem::GetVersion( sal_uInt16 nFFVer ) const
@@ -1163,7 +1163,7 @@ SvxForbiddenRuleItem::SvxForbiddenRuleItem(
 
 SfxPoolItem* SvxForbiddenRuleItem::Clone( SfxItemPool * ) const
 {
-    return new SvxForbiddenRuleItem( GetValue(), Which() );
+    return new SvxForbiddenRuleItem( *this );
 }
 
 sal_uInt16 SvxForbiddenRuleItem::GetVersion( sal_uInt16 nFFVer ) const
@@ -1199,7 +1199,7 @@ SvxParaVertAlignItem::SvxParaVertAlignItem( Align nValue,
 
 SfxPoolItem* SvxParaVertAlignItem::Clone( SfxItemPool* ) const
 {
-    return new SvxParaVertAlignItem( GetValue(), Which() );
+    return new SvxParaVertAlignItem( *this );
 }
 
 sal_uInt16 SvxParaVertAlignItem::GetVersion( sal_uInt16 nFFVer ) const
@@ -1259,7 +1259,7 @@ SvxParaGridItem::SvxParaGridItem( bool bOn, const sal_uInt16 nId )
 
 SfxPoolItem* SvxParaGridItem::Clone( SfxItemPool * ) const
 {
-    return new SvxParaGridItem( GetValue(), Which() );
+    return new SvxParaGridItem( *this );
 }
 
 sal_uInt16  SvxParaGridItem::GetVersion( sal_uInt16 nFFVer ) const

@@ -149,7 +149,7 @@ SfxPoolItem* SwCropGrf::Clone( SfxItemPool* ) const
 
 SfxPoolItem* SwRotationGrf::Clone( SfxItemPool * ) const
 {
-    return new SwRotationGrf( GetValue(), aUnrotatedSize );
+    return new SwRotationGrf( *this );
 }
 
 bool SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
