@@ -26,7 +26,7 @@ $(eval $(call gb_Module_add_l10n_targets,sd,\
 ))
 
 ifeq ($(filter DRAGONFLY FREEBSD,$(OS)),)
-$(eval $(call gb_Module_add_check_targets,sd,\
+$(eval $(call gb_Module_add_slowcheck_targets,sd,\
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
 		CppunitTest_sd_uimpress) \
     CppunitTest_sd_import_tests \
@@ -42,7 +42,7 @@ endif
 
 ifneq ($(ENABLE_HEADLESS),TRUE)
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Module_add_check_targets,sd,\
+$(eval $(call gb_Module_add_slowcheck_targets,sd,\
     CppunitTest_sd_svg_export_tests \
     CppunitTest_sd_tiledrendering \
 ))
