@@ -401,7 +401,7 @@ sal_Unicode SAL_CALL VCLXAccessibleListItem::getCharacter( sal_Int32 nIndex )
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return OCommonAccessibleText::getCharacter( nIndex );
+    return OCommonAccessibleText::implGetCharacter( m_sEntryText, nIndex );
 }
 
 Sequence< PropertyValue > SAL_CALL VCLXAccessibleListItem::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& )
@@ -420,8 +420,7 @@ awt::Rectangle SAL_CALL VCLXAccessibleListItem::getCharacterBounds( sal_Int32 nI
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    OUString sText( m_sEntryText );
-    if ( !implIsValidIndex( nIndex, sText.getLength() ) )
+    if ( !implIsValidIndex( nIndex, m_sEntryText.getLength() ) )
         throw IndexOutOfBoundsException();
 
     awt::Rectangle aBounds( 0, 0, 0, 0 );
@@ -513,7 +512,7 @@ OUString SAL_CALL VCLXAccessibleListItem::getTextRange( sal_Int32 nStartIndex, s
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return OCommonAccessibleText::getTextRange( nStartIndex, nEndIndex );
+    return OCommonAccessibleText::implGetTextRange( m_sEntryText, nStartIndex, nEndIndex );
 }
 
 css::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )

@@ -126,6 +126,8 @@ public:
     virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
     virtual OUString SAL_CALL getText() override;
     virtual sal_Int32 SAL_CALL getCharacterCount() override;
+    virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) override;
+    virtual OUString SAL_CALL getTextRange(sal_Int32 nStartIndex, sal_Int32 nEndIndex) override;
 
 };
 

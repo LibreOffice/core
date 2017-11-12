@@ -157,7 +157,7 @@ sal_Unicode VCLXAccessibleTextComponent::getCharacter( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
-    return OCommonAccessibleText::getCharacter( nIndex );
+    return OCommonAccessibleText::implGetCharacter( implGetText(), nIndex );
 }
 
 
@@ -319,7 +319,7 @@ OUString VCLXAccessibleTextComponent::getTextRange( sal_Int32 nStartIndex, sal_I
 {
     OExternalLockGuard aGuard( this );
 
-    return OCommonAccessibleText::getTextRange( nStartIndex, nEndIndex );
+    return OCommonAccessibleText::implGetTextRange( implGetText(), nStartIndex, nEndIndex );
 }
 
 

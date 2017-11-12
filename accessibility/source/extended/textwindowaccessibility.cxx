@@ -301,7 +301,7 @@ sal_Bool SAL_CALL Paragraph::setCaretPosition(::sal_Int32 nIndex)
 ::sal_Unicode SAL_CALL Paragraph::getCharacter(::sal_Int32 nIndex)
 {
     checkDisposed();
-    return OCommonAccessibleText::getCharacter(nIndex);
+    return OCommonAccessibleText::implGetCharacter(implGetText(), nIndex);
 }
 
 // virtual
@@ -386,7 +386,7 @@ OUString SAL_CALL Paragraph::getTextRange(::sal_Int32 nStartIndex,
                                                      ::sal_Int32 nEndIndex)
 {
     checkDisposed();
-    return OCommonAccessibleText::getTextRange(nStartIndex, nEndIndex);
+    return OCommonAccessibleText::implGetTextRange(implGetText(), nStartIndex, nEndIndex);
 }
 
 // virtual

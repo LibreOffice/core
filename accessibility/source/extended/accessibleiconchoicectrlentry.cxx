@@ -536,7 +536,7 @@ namespace accessibility
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
-        return OCommonAccessibleText::getCharacter( nIndex );
+        return OCommonAccessibleText::implGetCharacter( implGetText(), nIndex );
     }
     css::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleIconChoiceCtrlEntry::getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& )
     {
@@ -603,7 +603,7 @@ namespace accessibility
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
-        return OCommonAccessibleText::getTextRange( nStartIndex, nEndIndex );
+        return OCommonAccessibleText::implGetTextRange( implGetText(), nStartIndex, nEndIndex );
     }
     css::accessibility::TextSegment SAL_CALL AccessibleIconChoiceCtrlEntry::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
     {

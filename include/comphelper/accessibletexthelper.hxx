@@ -53,6 +53,8 @@ namespace comphelper
         static bool                      implIsValidBoundary( css::i18n::Boundary const & rBoundary, sal_Int32 nLength );
         static bool                      implIsValidIndex( sal_Int32 nIndex, sal_Int32 nLength );
         static bool                      implIsValidRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex, sal_Int32 nLength );
+        static sal_Unicode               implGetCharacter( const OUString& rText, sal_Int32 nIndex );
+        static OUString                  implGetTextRange( const OUString& rTest, sal_Int32 nStartIndex, sal_Int32 nEndIndex );
         virtual OUString                 implGetText() = 0;
         virtual css::lang::Locale        implGetLocale() = 0;
         virtual void                     implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) = 0;
@@ -67,16 +69,11 @@ namespace comphelper
             @throws css::lang::IndexOutOfBoundsException
             @throws css::uno::RuntimeException
         */
-        sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex );
-        /// @throws css::uno::RuntimeException
         OUString SAL_CALL getSelectedText();
         /// @throws css::uno::RuntimeException
         sal_Int32 SAL_CALL getSelectionStart();
         /// @throws css::uno::RuntimeException
         sal_Int32 SAL_CALL getSelectionEnd();
-        /// @throws css::lang::IndexOutOfBoundsException
-        /// @throws css::uno::RuntimeException
-        OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex );
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::lang::IllegalArgumentException
         /// @throws css::uno::RuntimeException
@@ -134,11 +131,9 @@ namespace comphelper
         DECLARE_XTYPEPROVIDER( )
 
         // XAccessibleText
-        virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) override;
         virtual OUString SAL_CALL getSelectedText() override;
         virtual sal_Int32 SAL_CALL getSelectionStart() override;
         virtual sal_Int32 SAL_CALL getSelectionEnd() override;
-        virtual OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
         virtual css::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
         virtual css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
         virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;

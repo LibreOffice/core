@@ -223,16 +223,13 @@ namespace comphelper
     }
 
 
-    sal_Unicode OCommonAccessibleText::getCharacter( sal_Int32 nIndex )
+    sal_Unicode OCommonAccessibleText::implGetCharacter( const OUString& rText, sal_Int32 nIndex )
     {
-        OUString sText( implGetText() );
-
-        if ( !implIsValidIndex( nIndex, sText.getLength() ) )
+        if ( !implIsValidIndex( nIndex, rText.getLength() ) )
             throw IndexOutOfBoundsException();
 
-        return sText[nIndex];
+        return rText[nIndex];
     }
-
 
     OUString OCommonAccessibleText::getSelectedText()
     {
@@ -244,7 +241,7 @@ namespace comphelper
 
         try
         {
-            sText = getTextRange( nStartIndex, nEndIndex );
+            sText = implGetTextRange( implGetText(), nStartIndex, nEndIndex );
         }
         catch ( IndexOutOfBoundsException& )
         {
@@ -276,19 +273,17 @@ namespace comphelper
     }
 
 
-    OUString OCommonAccessibleText::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+    OUString OCommonAccessibleText::implGetTextRange( const OUString& rText, sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     {
-        OUString sText( implGetText() );
 
-        if ( !implIsValidRange( nStartIndex, nEndIndex, sText.getLength() ) )
+        if ( !implIsValidRange( nStartIndex, nEndIndex, rText.getLength() ) )
             throw IndexOutOfBoundsException();
 
         sal_Int32 nMinIndex = std::min( nStartIndex, nEndIndex );
         sal_Int32 nMaxIndex = std::max( nStartIndex, nEndIndex );
 
-        return sText.copy( nMinIndex, nMaxIndex - nMinIndex );
+        return rText.copy( nMinIndex, nMaxIndex - nMinIndex );
     }
-
 
     TextSegment OCommonAccessibleText::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
     {
@@ -760,14 +755,6 @@ namespace comphelper
     // XAccessibleText
 
 
-    sal_Unicode OAccessibleTextHelper::getCharacter( sal_Int32 nIndex )
-    {
-        OExternalLockGuard aGuard( this );
-
-        return OCommonAccessibleText::getCharacter( nIndex );
-    }
-
-
     OUString OAccessibleTextHelper::getSelectedText()
     {
         OExternalLockGuard aGuard( this );
@@ -789,14 +776,6 @@ namespace comphelper
         OExternalLockGuard aGuard( this );
 
         return OCommonAccessibleText::getSelectionEnd();
-    }
-
-
-    OUString OAccessibleTextHelper::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
-    {
-        OExternalLockGuard aGuard( this );
-
-        return OCommonAccessibleText::getTextRange( nStartIndex, nEndIndex );
     }
 
 
