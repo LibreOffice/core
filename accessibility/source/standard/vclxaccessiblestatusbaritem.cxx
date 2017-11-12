@@ -446,11 +446,26 @@ OUString VCLXAccessibleStatusBarItem::getText()
     return GetItemText();
 }
 
+OUString VCLXAccessibleStatusBarItem::getTextRange(sal_Int32 nStartIndex, sal_Int32 nEndIndex)
+{
+    OExternalLockGuard aGuard( this );
+
+    return OCommonAccessibleText::implGetTextRange(GetItemText(), nStartIndex, nEndIndex);
+}
+
+
 sal_Int32 VCLXAccessibleStatusBarItem::getCharacterCount()
 {
     OExternalLockGuard aGuard( this );
 
     return GetItemText().getLength();
+}
+
+sal_Unicode VCLXAccessibleStatusBarItem::getCharacter( sal_Int32 nIndex )
+{
+     OExternalLockGuard aGuard( this );
+
+    return OCommonAccessibleText::implGetCharacter( GetItemText(), nIndex );
 }
 
 sal_Int32 VCLXAccessibleStatusBarItem::getCaretPosition()
@@ -558,7 +573,7 @@ sal_Bool VCLXAccessibleStatusBarItem::copyText( sal_Int32 nStartIndex, sal_Int32
         Reference< datatransfer::clipboard::XClipboard > xClipboard = m_pStatusBar->GetClipboard();
         if ( xClipboard.is() )
         {
-            OUString sText( getTextRange( nStartIndex, nEndIndex ) );
+            OUString sText( implGetTextRange( GetItemText(), nStartIndex, nEndIndex ) );
 
             vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( sText );
 

@@ -1191,7 +1191,7 @@ namespace accessibility
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getCharacter: index value overflow");
 
-        return OCommonAccessibleText::getCharacter( nIndex );
+        return OCommonAccessibleText::implGetCharacter( implGetText(), nIndex );
     }
 
     uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& rRequestedAttributes )
@@ -1463,7 +1463,7 @@ namespace accessibility
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getTextRange: paragraph index value overflow");
 
-        return OCommonAccessibleText::getTextRange(nStartIndex, nEndIndex);
+        return OCommonAccessibleText::implGetTextRange(implGetText(), nStartIndex, nEndIndex);
     }
 
     void AccessibleEditableTextPara::_correctValues( uno::Sequence< PropertyValue >& rValues)

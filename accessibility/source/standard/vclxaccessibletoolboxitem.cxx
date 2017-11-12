@@ -433,6 +433,19 @@ sal_Int32 VCLXAccessibleToolBoxItem::getCharacterCount()
     return GetText().getLength();
 }
 
+sal_Unicode VCLXAccessibleToolBoxItem::getCharacter( sal_Int32 nIndex )
+{
+     OExternalLockGuard aGuard( this );
+
+    return OCommonAccessibleText::implGetCharacter( GetText(), nIndex );
+}
+
+OUString VCLXAccessibleToolBoxItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+{
+     OExternalLockGuard aGuard( this );
+
+    return OCommonAccessibleText::implGetTextRange( GetText(), nStartIndex, nEndIndex );
+}
 
 sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getCaretPosition()
 {
@@ -525,7 +538,7 @@ sal_Bool SAL_CALL VCLXAccessibleToolBoxItem::copyText( sal_Int32 nStartIndex, sa
         Reference< datatransfer::clipboard::XClipboard > xClipboard = m_pToolBox->GetClipboard();
         if ( xClipboard.is() )
         {
-            OUString sText( OCommonAccessibleText::getTextRange( nStartIndex, nEndIndex ) );
+            OUString sText( OCommonAccessibleText::implGetTextRange( implGetText(), nStartIndex, nEndIndex ) );
 
             vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( sText );
 

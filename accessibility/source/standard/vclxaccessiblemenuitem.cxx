@@ -214,7 +214,7 @@ sal_Unicode VCLXAccessibleMenuItem::getCharacter( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
-    return OCommonAccessibleText::getCharacter( nIndex );
+    return OCommonAccessibleText::implGetCharacter( implGetText(), nIndex );
 }
 
 
@@ -329,7 +329,7 @@ OUString VCLXAccessibleMenuItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 
 {
     OExternalLockGuard aGuard( this );
 
-    return OCommonAccessibleText::getTextRange( nStartIndex, nEndIndex );
+    return OCommonAccessibleText::implGetTextRange( implGetText(), nStartIndex, nEndIndex );
 }
 
 
