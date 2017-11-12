@@ -16,10 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #include <tablebuffer.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <osl/diagnose.h>
@@ -29,6 +27,12 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <addressconverter.hxx>
+
+#include <document.hxx>
+#include <dbdata.hxx>
+#include <dbdocfun.hxx>
+#include <vcl/svapp.hxx>
+#include <globalnames.hxx>
 
 namespace oox {
 namespace xls {
@@ -86,41 +90,67 @@ void Table::finalizeImport()
     // ranges (or tables in their terminology) as Table1, Table2 etc.  We need
     // to import them as named db ranges because they may be referenced by
     // name in formula expressions.
-    if( (maModel.mnId > 0) && !maModel.maDisplayName.isEmpty() ) try
+    if(maModel.mnId > 0 && !maModel.maDisplayName.isEmpty()) try
     {
         maDBRangeName = maModel.maDisplayName;
 
-        Reference< XDatabaseRange > xDatabaseRange(
-            createDatabaseRangeObject( maDBRangeName, maModel.maRange ), UNO_SET_THROW);
-        ::css::table::CellRangeAddress aAddressRange = xDatabaseRange->getDataArea();
-        maDestRange = ScRange( aAddressRange.StartColumn, aAddressRange.StartRow, aAddressRange.Sheet,
-                               aAddressRange.EndColumn, aAddressRange.EndRow, aAddressRange.Sheet );
+        ScDocument& rDoc = getScDocument();
+        ScDBData* pRange;
+        ScRange aDestRange = maModel.maRange;
+        bool bValidRange = getAddressConverter().validateCellRange(aDestRange, true, true);
 
-        PropertySet aPropSet( xDatabaseRange );
+        if(!bValidRange)
+            throw RuntimeException();
+
+        ScDBCollection::NamedDBs& rRanges = rDoc.GetDBCollection()->getNamedDBs();
+        sal_Int32 nIndex = -1;
+
+        // find an unused name
+        while(rRanges.findByUpperName(ScGlobal::pCharClass->uppercase(maDBRangeName)) != nullptr)
+            maDBRangeName = maDBRangeName + OUStringLiteral1('_') + OUString::number(nIndex++);
+
+        {
+            SolarMutexGuard aGuard;
+
+            pRange = new ScDBData(maDBRangeName, aDestRange.aStart.Tab(),
+                    aDestRange.aStart.Col(), aDestRange.aStart.Row(),
+                    aDestRange.aEnd.Col(), aDestRange.aEnd.Row());
+
+            rDoc.PreprocessDBDataUpdate();
+            if (maDBRangeName == STR_DB_LOCAL_NONAME) {
+                rDoc.SetAnonymousDBData(aDestRange.aStart.Tab(), pRange);
+            } else {
+                bool bOk = rRanges.insert(pRange);
+                if (!bOk) {
+                    delete pRange;
+                    throw RuntimeException();
+                }
+            }
+            rDoc.CompileHybridFormula();
+        }
+
+        maDestRange = aDestRange;
 
         // Default HasHeader is true at ScDBData.
-        if (maModel.mnHeaderRows != 1)
-        {
-            SAL_WARN_IF( maModel.mnHeaderRows > 1, "sc.filter",
-                    "Table HeaderRows > 1 not supported: " << maModel.mnHeaderRows);
-            if (maModel.mnHeaderRows == 0)
-                aPropSet.setProperty( PROP_ContainsHeader, false);
-        }
+        if (maModel.mnHeaderRows == 0)
+            pRange->SetHeader(false);
+
+        SAL_WARN_IF(maModel.mnHeaderRows > 1,
+                "sc.filter", "Table HeaderRows > 1 not supported: " << maModel.mnHeaderRows);
 
         if (maModel.mnTotalsRows > 0)
-        {
-            SAL_WARN_IF( maModel.mnTotalsRows > 1, "sc.filter",
-                    "Table TotalsRows > 1 not supported: " << maModel.mnTotalsRows);
-            aPropSet.setProperty( PROP_TotalsRow, true);
-        }
+            pRange->SetTotals(true);
+
+        SAL_WARN_IF(maModel.mnTotalsRows > 1, "sc.filter",
+                "Table TotalsRows > 1 not supported: " << maModel.mnTotalsRows);
 
         // get formula token index of the database range
-        if( !aPropSet.getProperty( mnTokenIndex, PROP_TokenIndex ) )
+        if(!pRange->GetIndex())
             mnTokenIndex = -1;
     }
     catch( Exception& )
     {
-        OSL_FAIL( "Table::finalizeImport - cannot create database range" );
+        OSL_FAIL("Table::finalizeImport - cannot create database range");
     }
 }
 
