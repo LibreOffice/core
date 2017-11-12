@@ -3665,6 +3665,57 @@
      <table:table-cell table:style-name="ce32"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:formula="of:=VDB(100000;20000;10;4;5;1;0)" office:value-type="float" office:value="7557.14285714286" calcext:value-type="float">
+      <text:p>7557.14285714286</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="7557.14285714286" calcext:value-type="float">
+      <text:p>7557.14285714286</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=ROUND([.A72];12)=ROUND([.B72];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A72])" office:value-type="string" office:string-value="=VDB(100000;20000;10;4;5;1;0)" calcext:value-type="string">
+      <text:p>=VDB(100000;20000;10;4;5;1;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:number-columns-repeated="9"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:formula="of:=VDB(100000;20000;10;4;5;1;1)" office:value-type="float" office:value="6560.99999999999" calcext:value-type="float">
+      <text:p>6560.99999999999</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="6560.99999999999" calcext:value-type="float">
+      <text:p>6560.99999999999</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=ROUND([.A73];12)=ROUND([.B73];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A73])" office:value-type="string" office:string-value="=VDB(100000;20000;10;4;5;1;1)" calcext:value-type="string">
+      <text:p>=VDB(100000;20000;10;4;5;1;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:number-columns-repeated="9"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:formula="of:=VDB(100000;20000;10;4;5;1)" office:value-type="float" office:value="7557.14285714286" calcext:value-type="float">
+      <text:p>7557.14285714286</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="7557.14285714286" calcext:value-type="float">
+      <text:p>7557.14285714286</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=ROUND([.A74];12)=ROUND([.B74];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A74])" office:value-type="string" office:string-value="=VDB(100000;20000;10;4;5;1)" calcext:value-type="string">
+      <text:p>=VDB(100000;20000;10;4;5;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:number-columns-repeated="9"/>
+    </table:table-row>
     <table:table-row table:style-name="ro6" table:number-rows-repeated="164">
      <table:table-cell table:style-name="ce15" table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce20"/>

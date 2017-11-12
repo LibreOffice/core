@@ -624,8 +624,8 @@ const char* SC_OPCODE_VBD_ARY[] =
     NC_("SC_OPCODE_VBD", "End. The last period of the depreciation using the same time unit as for the useful life."),
     NC_("SC_OPCODE_VBD", "Factor"),
     NC_("SC_OPCODE_VBD", "Factor. The factor for the reduction of the depreciation. Factor = 2 denotes double rate depreciation."),
-    NC_("SC_OPCODE_VBD", "Type"),
-    NC_("SC_OPCODE_VBD", "Do not alter. Type = 1 denotes switch to linear depreciation, type = 0 do not switch.")
+    NC_("SC_OPCODE_VBD", "NoSwitch"),
+    NC_("SC_OPCODE_VBD", "NoSwitch = 0 denotes switch to linear depreciation, NoSwitch = 1 do not switch.")
 };
 
 // -=*# Resource for function EFFECT #*=-
