@@ -239,6 +239,9 @@ SCROW findRowFromPos(sal_uInt16 nPixelPos, const ScDocument* pDoc, SCROW nStartR
 
 void ScDataTableView::MouseButtonUp(const MouseEvent& rMEvt)
 {
+    if (!rMEvt.IsLeft())
+        return;
+
     SCCOL nStartCol = findColFromPos(mpMouseEvent->GetPosPixel().getX(), mpDoc.get());
     SCCOL nEndCol = findColFromPos(rMEvt.GetPosPixel().getX(), mpDoc.get());
     SCROW nStartRow = findRowFromPos(mpMouseEvent->GetPosPixel().getY(), mpDoc.get());
