@@ -1822,6 +1822,29 @@ void SubsetMap::InitList()
                     aAllSubsets.emplace_back( 0x18800, 0x18AFF, SvxResId(RID_SUBSETSTR_TANGUT_COMPONENTS) );
                     break;
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 60)
+                case UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_F:
+                    aAllSubsets.emplace_back( 0x2CEB0, 0x2EBE0, SvxResId(RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_F) );
+                    break;
+                case UBLOCK_KANA_EXTENDED_A:
+                    aAllSubsets.emplace_back( 0x1B100, 0x1B12F, SvxResId(RID_SUBSETSTR_KANA_EXTENDED_A) );
+                    break;
+                case UBLOCK_MASARAM_GONDI:
+                    aAllSubsets.emplace_back( 0x11D00, 0x11D5F, SvxResId(RID_SUBSETSTR_MASARAM_GONDI) );
+                    break;
+                case UBLOCK_NUSHU:
+                    aAllSubsets.emplace_back( 0x1B170, 0x1B2FF, SvxResId(RID_SUBSETSTR_NUSHU) );
+                    break;
+                case UBLOCK_SOYOMBO:
+                    aAllSubsets.emplace_back( 0x11A50, 0x11AAF, SvxResId(RID_SUBSETSTR_SOYOMBO) );
+                    break;
+                case UBLOCK_SYRIAC_SUPPLEMENT:
+                    aAllSubsets.emplace_back( 0x0860, 0x086f, SvxResId(RID_SUBSETSTR_SYRIAC_SUPPLEMENT) );
+                    break;
+                case UBLOCK_ZANABAZAR_SQUARE:
+                    aAllSubsets.emplace_back( 0x11A00, 0x11A4F, SvxResId(RID_SUBSETSTR_ZANABAZAR_SQUARE) );
+                    break;
+#endif
 
             }
 
