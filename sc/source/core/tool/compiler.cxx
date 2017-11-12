@@ -1931,7 +1931,7 @@ void ScCompiler::SetError(FormulaError nError)
 static sal_Unicode* lcl_UnicodeStrNCpy( sal_Unicode* pDst, const sal_Unicode* pSrc, sal_Int32 nMax )
 {
     const sal_Unicode* const pStop = pDst + nMax;
-    while ( *pSrc && pDst < pStop )
+    while ( pDst < pStop )
     {
         *pDst++ = *pSrc++;
     }
