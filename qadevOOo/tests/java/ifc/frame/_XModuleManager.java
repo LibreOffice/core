@@ -58,7 +58,7 @@ public class _XModuleManager extends MultiMethodTest {
      * contains a <CODE>XFrame</CODE>, <CODE>XController</CODE> or a
      * <CODE>XModel</CODE>. The name of the PropertyValue contains the expected return
      * value of method <CODE>indetify()</CODE> if the method was called with
-     * coresponding value.<p>
+     * corresponding value.<p>
      * As enhancement the method <CODE>identify()</CODE> was called with invalid
      * parameter. In this case the thrown exceptions were caught.
      */

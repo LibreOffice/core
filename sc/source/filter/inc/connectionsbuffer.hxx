@@ -51,7 +51,7 @@ struct WebPrModel
     bool                mbSourceData;       /// True = import XML source data referred by HTML table.
     bool                mbParsePre;         /// True = parse preformatted sections (<pre> tag).
     bool                mbConsecutive;      /// True = join consecutive delimiters.
-    bool                mbFirstRow;         /// True = use column withs of first row for entire <pre> tag.
+    bool                mbFirstRow;         /// True = use column widths of first row for entire <pre> tag.
     bool                mbXl97Created;      /// True = web query created with Excel 97.
     bool                mbTextDates;        /// True = read date values as text, false = parse dates.
     bool                mbXl2000Refreshed;  /// True = refreshed with Excel 2000 or newer.
