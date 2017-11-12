@@ -178,7 +178,7 @@ private:
     bool bMetaFile;             // Output to metafile (not pixels!)
 
     bool bPagebreakMode;        // Page break preview
-    bool bSolidBackground;      // white instead of transparant
+    bool bSolidBackground;      // white instead of transparent
 
     bool mbUseStyleColor;
     bool mbForceAutoColor;

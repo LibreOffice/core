@@ -45,7 +45,7 @@ public class Helper
     // __________ static helper methods __________
 
     /** Connect to an office, if no office is running a new instance is started.
-     * A new connection is established and the service manger from the running
+     * A new connection is established and the service manager from the running
      * office is returned.
      */
     public static XComponentContext connect()
