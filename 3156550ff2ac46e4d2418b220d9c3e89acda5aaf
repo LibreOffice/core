@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_d8590e5c",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-11-12T18:31:18Z",
+      "side": 1,
+      "message": "Thank you for correction! Please note that the values 0 and 1 need to be swapped as well. And maybe we could rename it \"straight-line\" depreciation while at it, which is kind of a frequently used term and to make it clearer that it refers to the SLN function?:\n\nNoSwitch \u003d 0 denotes a switch to straight-line depreciation, NoSwitch \u003d 1 do not switch",
+      "range": {
+        "startLine": 628,
+        "startChar": 26,
+        "endLine": 628,
+        "endChar": 104
+      },
+      "revId": "3156550ff2ac46e4d2418b220d9c3e89acda5aaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
