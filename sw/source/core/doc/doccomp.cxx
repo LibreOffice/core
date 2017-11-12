@@ -45,7 +45,6 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <cstddef>
-#include <list>
 #include <memory>
 #include <vector>
 
@@ -2077,7 +2076,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
         // we want to get all redlines from the SourceDoc
 
         // look for all insert redlines from the SourceDoc and determine their position in the DestDoc
-        std::list<SaveMergeRedline> vRedlines;
+        std::vector<SaveMergeRedline> vRedlines;
         const SwRedlineTable& rSrcRedlTable = rSrcDoc.getIDocumentRedlineAccess().GetRedlineTable();
         sal_uLong nEndOfExtra = rSrcDoc.GetNodes().GetEndOfExtras().GetIndex();
         sal_uLong nMyEndOfExtra = GetNodes().GetEndOfExtras().GetIndex();
