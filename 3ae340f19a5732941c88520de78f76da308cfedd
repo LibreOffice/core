@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_f82b2a92",
+        "filename": "sccomp/source/solver/SwarmSolver.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-12T18:48:43Z",
+      "side": 1,
+      "message": "since aSolution is local, you can avoid the copy and replace these 2 lines with\n   maSolution.swap(aSolution)",
+      "revId": "3ae340f19a5732941c88520de78f76da308cfedd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
