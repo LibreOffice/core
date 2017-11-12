@@ -33,7 +33,7 @@ namespace dbaui
         ::boost::optional< bool >   m_aValue;
 
     public:
-        explicit OptionalBoolItem( sal_Int16 nWhich );
+        explicit OptionalBoolItem( sal_uInt16 nWhich );
 
         virtual bool             operator==( const SfxPoolItem& _rItem ) const override;
         virtual SfxPoolItem*     Clone( SfxItemPool* _pPool = nullptr ) const override;
