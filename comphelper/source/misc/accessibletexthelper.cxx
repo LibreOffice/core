@@ -234,12 +234,6 @@ namespace comphelper
     }
 
 
-    sal_Int32 OCommonAccessibleText::getCharacterCount()
-    {
-        return implGetText().getLength();
-    }
-
-
     OUString OCommonAccessibleText::getSelectedText()
     {
         OUString sText;
@@ -774,14 +768,6 @@ namespace comphelper
     }
 
 
-    sal_Int32 OAccessibleTextHelper::getCharacterCount()
-    {
-        OExternalLockGuard aGuard( this );
-
-        return OCommonAccessibleText::getCharacterCount();
-    }
-
-
     OUString OAccessibleTextHelper::getSelectedText()
     {
         OExternalLockGuard aGuard( this );
@@ -803,14 +789,6 @@ namespace comphelper
         OExternalLockGuard aGuard( this );
 
         return OCommonAccessibleText::getSelectionEnd();
-    }
-
-
-    OUString OAccessibleTextHelper::getText()
-    {
-        OExternalLockGuard aGuard( this );
-
-        return implGetText();
     }
 
 

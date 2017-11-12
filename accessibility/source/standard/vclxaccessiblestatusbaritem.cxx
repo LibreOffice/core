@@ -439,6 +439,19 @@ OUString VCLXAccessibleStatusBarItem::getToolTipText(  )
 
 // XAccessibleText
 
+OUString VCLXAccessibleStatusBarItem::getText()
+{
+    OExternalLockGuard aGuard( this );
+
+    return GetItemText();
+}
+
+sal_Int32 VCLXAccessibleStatusBarItem::getCharacterCount()
+{
+    OExternalLockGuard aGuard( this );
+
+    return GetItemText().getLength();
+}
 
 sal_Int32 VCLXAccessibleStatusBarItem::getCaretPosition()
 {
@@ -452,7 +465,7 @@ sal_Bool VCLXAccessibleStatusBarItem::setCaretPosition( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
-    if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
+    if ( !implIsValidRange( nIndex, nIndex, GetItemText().getLength() ) )
         throw IndexOutOfBoundsException();
 
     return false;

@@ -421,6 +421,19 @@ Reference< XAccessibleStateSet > SAL_CALL VCLXAccessibleToolBoxItem::getAccessib
 
 // XAccessibleText
 
+OUString VCLXAccessibleToolBoxItem::getText()
+{
+    OExternalLockGuard aGuard( this );
+
+    return GetText();
+}
+
+sal_Int32 VCLXAccessibleToolBoxItem::getCharacterCount()
+{
+    return GetText().getLength();
+}
+
+
 sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getCaretPosition()
 {
     return -1;
@@ -430,7 +443,7 @@ sal_Bool SAL_CALL VCLXAccessibleToolBoxItem::setCaretPosition( sal_Int32 nIndex 
 {
     OExternalLockGuard aGuard( this );
 
-    if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
+    if ( !implIsValidRange( nIndex, nIndex, GetText().getLength() ) )
         throw IndexOutOfBoundsException();
 
     return false;

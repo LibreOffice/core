@@ -69,8 +69,6 @@ namespace comphelper
         */
         sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex );
         /// @throws css::uno::RuntimeException
-        sal_Int32 SAL_CALL getCharacterCount();
-        /// @throws css::uno::RuntimeException
         OUString SAL_CALL getSelectedText();
         /// @throws css::uno::RuntimeException
         sal_Int32 SAL_CALL getSelectionStart();
@@ -137,11 +135,9 @@ namespace comphelper
 
         // XAccessibleText
         virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) override;
-        virtual sal_Int32 SAL_CALL getCharacterCount() override;
         virtual OUString SAL_CALL getSelectedText() override;
         virtual sal_Int32 SAL_CALL getSelectionStart() override;
         virtual sal_Int32 SAL_CALL getSelectionEnd() override;
-        virtual OUString SAL_CALL getText() override;
         virtual OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
         virtual css::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
         virtual css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
@@ -161,11 +157,9 @@ namespace comphelper
 //  The following methods have a default implementation:
 
 //      getCharacter
-//      getCharacterCount
 //      getSelectedText
 //      getSelectionStart
 //      getSelectionEnd
-//      getText
 //      getTextRange
 //      getTextAtIndex
 //      getTextBeforeIndex
