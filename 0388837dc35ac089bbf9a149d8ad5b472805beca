@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_381cd276",
+        "filename": "accessibility/source/standard/vclxaccessiblelistitem.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-12T18:50:54Z",
+      "side": 1,
+      "message": "might as well drop sText",
+      "revId": "0388837dc35ac089bbf9a149d8ad5b472805beca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
