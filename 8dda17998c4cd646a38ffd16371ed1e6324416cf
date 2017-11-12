@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_b869a227",
+        "filename": "sccomp/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2017-11-12T09:18:04Z",
+      "side": 1,
+      "message": "What do you mean?",
+      "parentUuid": "1a430d35_e530e703",
+      "revId": "8dda17998c4cd646a38ffd16371ed1e6324416cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_052c13aa",
         "filename": "sccomp/source/solver/DifferentialEvolution.hxx",
         "patchSetId": 2
@@ -115,6 +133,24 @@
       "writtenOn": "2017-11-11T18:58:01Z",
       "side": 1,
       "message": "should it not throw an exception or return an error if the constraints don\u0027t work?",
+      "revId": "8dda17998c4cd646a38ffd16371ed1e6324416cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d8782ef5",
+        "filename": "sccomp/source/solver/SwarmSolver.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2017-11-12T09:18:04Z",
+      "side": 1,
+      "message": "Well this needs some more thought put into it. A time limited initialization would make more sense here I think.. I\u0027ll address this a later time..",
+      "parentUuid": "1a430d35_587d1e6d",
       "revId": "8dda17998c4cd646a38ffd16371ed1e6324416cf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
