@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_585b5e87",
+        "filename": "sccomp/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-12T10:11:48Z",
+      "side": 1,
+      "message": "I mean use whatever DE and PSO stands for :-) Other people might be even less smart then me :-)",
+      "parentUuid": "1a430d35_b869a227",
+      "revId": "8dda17998c4cd646a38ffd16371ed1e6324416cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_052c13aa",
         "filename": "sccomp/source/solver/DifferentialEvolution.hxx",
         "patchSetId": 2
