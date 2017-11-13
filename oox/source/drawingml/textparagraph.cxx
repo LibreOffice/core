@@ -133,6 +133,19 @@ void TextParagraph::insertAt(
                 aioBulletList.setProperty( PROP_BulletColor, (*maRuns.begin())->getTextCharacterProperties().maFillProperties.getBestSolidColor().getColor( rFilterBase.getGraphicHelper() ));
             if( !aioBulletList.hasProperty( PROP_BulletColor ) && aTextCharacterStyle.maFillProperties.moFillType.has() )
                 aioBulletList.setProperty( PROP_BulletColor, aTextCharacterStyle.maFillProperties.getBestSolidColor().getColor( rFilterBase.getGraphicHelper() ));
+            if( !aioBulletList.hasProperty( PROP_GraphicSize ) && maRuns.size() > 0
+                && aParaProp.getBulletList().maGraphic.hasValue())
+            {
+                float fFirstCharHeight = (*maRuns.begin())->getTextCharacterProperties().getCharHeightPoints(12);
+                sal_Int16 nBulletSizePct = 100;
+                if( aParaProp.getBulletList().mnSize.hasValue() )
+                    nBulletSizePct = aParaProp.getBulletList().mnSize.get<sal_Int16>();
+                float fBulletSizePts = nBulletSizePct / 100.f * fFirstCharHeight;
+
+                css::awt::Size aBulletSize;
+                aBulletSize.Width = aBulletSize.Height = static_cast< sal_Int32 >( fBulletSizePts / 72.f * 2.54 * 1000 * 0.8);
+                aioBulletList.setProperty( PROP_GraphicSize, aBulletSize);
+            }
 
             float fCharacterSize = nCharHeight > 0 ? GetFontHeight ( nCharHeight ) : pTextParagraphStyle->getCharHeightPoints( 12 );
             aParaProp.pushToPropSet( &rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), true, fCharacterSize, true );

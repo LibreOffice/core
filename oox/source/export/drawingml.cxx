@@ -1868,7 +1868,7 @@ OUString GetAutoNumType(SvxNumType nNumberingType, bool bSDot, bool bPBehind, bo
     return OUString();
 }
 
-void DrawingML::WriteParagraphNumbering( const Reference< XPropertySet >& rXPropSet, sal_Int16 nLevel )
+void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropSet, float fFirstCharHeight, sal_Int16 nLevel )
 {
     if( nLevel < 0 || !GETA( NumberingRules ) )
         return;
@@ -1902,6 +1902,7 @@ void DrawingML::WriteParagraphNumbering( const Reference< XPropertySet >& rXProp
     sal_Int16 nStartWith = 1;
     sal_uInt32 nBulletColor = 0;
     bool bHasBulletColor = false;
+    awt::Size aGraphicSize;
 
     for ( sal_Int32 i = 0; i < nPropertyCount; i++ )
     {
@@ -1961,13 +1962,8 @@ void DrawingML::WriteParagraphNumbering( const Reference< XPropertySet >& rXProp
         }
         else if ( aPropName == "GraphicSize" )
         {
-            if (auto aSize = o3tl::tryAccess<awt::Size>(pPropValue[i].Value))
-            {
-                // don't cast awt::Size to Size as on 64-bits they are not the same.
-                //aBuGraSize.nA = aSize.Width;
-                //aBuGraSize.nB = aSize.Height;
-                SAL_INFO("oox.shape", "graphic size: " << aSize->Width << "x" << aSize->Height);
-            }
+            aGraphicSize = *o3tl::tryAccess<awt::Size>(pPropValue[i].Value);
+            SAL_INFO("oox.shape", "graphic size: " << aGraphicSize.Width << "x" << aGraphicSize.Height);
         }
     }
 
@@ -1978,6 +1974,11 @@ void DrawingML::WriteParagraphNumbering( const Reference< XPropertySet >& rXProp
     {
         OUString sRelId = WriteImage( aGraphicURL );
 
+        float fGraphicSizePts = aGraphicSize.Height / 1000.f / 2.54f * 72;
+        float fBulletSizeRel = fGraphicSizePts / fFirstCharHeight * 100.f / 0.8f;
+
+        mpFS->singleElementNS( XML_a, XML_buSzPct,
+                               XML_val, IS( std::max( (sal_Int32)25000, std::min( (sal_Int32)400000, sal_Int32( 1000 * fBulletSizeRel ) ) ) ), FSEND );
         mpFS->startElementNS( XML_a, XML_buBlip, FSEND );
         mpFS->singleElementNS( XML_a, XML_blip, FSNS( XML_r, XML_embed ), USS( sRelId ), FSEND );
         mpFS->endElementNS( XML_a, XML_buBlip );
@@ -2095,7 +2096,7 @@ void DrawingML::WriteLinespacing( const LineSpacing& rSpacing )
     }
 }
 
-void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rParagraph )
+void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rParagraph, float fFirstCharHeight)
 {
     Reference< XPropertySet > rXPropSet( rParagraph, UNO_QUERY );
     Reference< XPropertyState > rXPropState( rParagraph, UNO_QUERY );
@@ -2192,7 +2193,7 @@ void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
             mpFS->endElementNS( XML_a, XML_spcAft );
         }
 
-        WriteParagraphNumbering( rXPropSet, nLevel );
+        WriteParagraphNumbering( rXPropSet, fFirstCharHeight, nLevel );
 
         mpFS->endElementNS( XML_a, XML_pPr );
     }
@@ -2221,7 +2222,11 @@ void DrawingML::WriteParagraph( const Reference< XTextContent >& rParagraph,
         {
             if( !bPropertiesWritten )
             {
-                WriteParagraphProperties( rParagraph );
+                float fFirstCharHeight = rnCharHeight / 1000.;
+                Reference < XPropertySet > xFirstRunPropSet (run, UNO_QUERY);
+                if( xFirstRunPropSet->getPropertyValue("CharHeight").hasValue() )
+                    fFirstCharHeight = xFirstRunPropSet->getPropertyValue("CharHeight").get<float>();
+                WriteParagraphProperties( rParagraph, fFirstCharHeight );
                 bPropertiesWritten = true;
             }
             WriteRun( run, rbOverridingCharHeight, rnCharHeight );
