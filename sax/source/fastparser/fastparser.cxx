@@ -1113,7 +1113,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
 
     try
     {
-        /*  #158414# Each element may define new namespaces, also for attributes.
+        /*  #158414# Each element may define new namespaces, also for attribues.
             First, process all namespaces, second, process the attributes after namespaces
             have been initialized. */
 

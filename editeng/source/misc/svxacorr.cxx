@@ -2723,7 +2723,7 @@ SvxAutocorrWordList::Content SvxAutocorrWordList::getSortedContent() const
 {
     Content aContent;
 
-    // convert from hash to set permanently
+    // convert from hash to set permanantly
     if ( mpImpl->maSet.empty() )
     {
         // This beast has some O(N log(N)) in a terribly slow ICU collate fn.

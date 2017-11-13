@@ -121,7 +121,7 @@ namespace accessibility
         return aRet;
     }
 
-    /** Acquires the object (calls acquire() on base class). */
+    /** Aquires the object (calls acquire() on base class). */
     void SAL_CALL AccessibleGridControlTableCell::acquire() throw ()
     {
         AccessibleGridControlCell::acquire();

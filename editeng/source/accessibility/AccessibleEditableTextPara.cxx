@@ -1213,7 +1213,7 @@ namespace accessibility
             aPropertyNames = getAttributeNames();
         }
 
-        // get default attributes...
+        // get default attribues...
         ::comphelper::SequenceAsHashMap aPropHashMap( getDefaultAttributes( aPropertyNames ) );
 
         // ... and override them with the direct attributes from the specific position

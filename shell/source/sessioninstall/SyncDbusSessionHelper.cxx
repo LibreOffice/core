@@ -51,7 +51,7 @@ namespace
                                &error.getRef());
         }
         if(!proxy)
-            throw RuntimeException("couldn't get a proxy!");
+            throw RuntimeException("couldnt get a proxy!");
         return proxy;
     }
 

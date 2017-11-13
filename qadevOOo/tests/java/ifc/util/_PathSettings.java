@@ -59,7 +59,7 @@ public class _PathSettings extends MultiPropertyTest {
     /**
      * This path list could be empty after SO installation.
      * And the URL is validated to match the pattern 'file:///*'
-     * that's why the custom changing of this property required.
+     * thats why the custom changing of this property required.
      */
     public void _UIConfig() {
         testProperty("UIConfig", new PropertyTester() {

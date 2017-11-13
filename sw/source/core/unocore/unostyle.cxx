@@ -996,7 +996,7 @@ void XStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement
     {
         if(!pBase->IsUserDefined())
             throw lang::IllegalArgumentException();
-        //if there's an object available to this style then it must be invalidated
+        //if theres an object available to this style then it must be invalidated
         uno::Reference<style::XStyle> xStyle = FindStyle(pBase->GetName());
         if(xStyle.is())
         {

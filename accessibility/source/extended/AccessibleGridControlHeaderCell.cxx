@@ -93,7 +93,7 @@ Reference<XAccessible > SAL_CALL AccessibleGridControlHeaderCell::getAccessibleC
         return aRet;
     }
 
-    /** Acquires the object (calls acquire() on base class). */
+    /** Aquires the object (calls acquire() on base class). */
     void SAL_CALL AccessibleGridControlHeaderCell::acquire() throw ()
     {
         AccessibleGridControlCell::acquire();
