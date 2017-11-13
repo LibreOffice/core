@@ -3523,7 +3523,7 @@ OUString AutoRecovery::implst_getJobDescription(sal_Int32 eJob)
     sFeature.append(CMD_PROTOCOL);
 
     // Attention: Because "eJob" is used as a flag field the order of checking these
-    // flags is important. We must preferr job with higher priorities!
+    // flags is important. We must prefer job with higher priorities!
     // E.g. EmergencySave has an higher prio then AutoSave ...
     // On the other side there exist a well defined order between two different jobs.
     // e.g. PrepareEmergencySave must be done before EmergencySave is started of course.
@@ -4102,7 +4102,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
 {
     // external well known frame must be preferred (because it was created by ourself
     // for loading documents into this frame)!
-    // But if no frame exists ... we can try to locate it using any frame bound to the provided
+    // But if no frame exists... we can try to locate it using any frame bound to the provided
     // document. Of course we must live without any frame in case the document does not exists at this
     // point. But this state should not occur. In such case xNewFrame should be valid ... hopefully .-)
     css::uno::Reference< css::frame::XFrame > xFrame = xNewFrame;
@@ -4167,7 +4167,7 @@ void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&       
 {
     // external well known frame must be preferred (because it was created by ourself
     // for loading documents into this frame)!
-    // But if no frame exists ... we can try to locate it using any frame bound to the provided
+    // But if no frame exists... we can try to locate it using any frame bound to the provided
     // document. Of course we must live without any frame in case the document does not exists at this
     // point. But this state should not occur. In such case xNewFrame should be valid ... hopefully .-)
     css::uno::Reference< css::frame::XFrame > xFrame = xNewFrame;

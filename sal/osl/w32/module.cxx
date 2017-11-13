@@ -231,7 +231,7 @@ static bool SAL_CALL osl_addressGetModuleURL_NT4_( void *pv, rtl_uString **pustr
     bool    bSuccess    = false;    /* Assume failure */
 
     /*  IMAGEHELP.DLL has a bug that it recursivly scans subdirectories of
-        the root when calling SymInitialize(), so we preferr DBGHELP.DLL
+        the root when calling SymInitialize(), so we prefer DBGHELP.DLL
         which exports the same symbols and is shipped with OOo */
 
     HMODULE     hModImageHelp = LoadLibraryW( L"DBGHELP.DLL" );
