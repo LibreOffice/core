@@ -78,6 +78,8 @@ namespace dnd {
     class XDropTarget;
 }}}}}
 
+VCL_DLLPUBLIC Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize);
+
 bool ImplWindowFrameProc( vcl::Window* pInst, SalEvent nEvent, const void* pEvent );
 
 struct ImplWinData
