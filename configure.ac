@@ -2847,15 +2847,15 @@ if test $_os = iOS; then
     AC_MSG_CHECKING([what iOS SDK to use])
     if test "$enable_ios_simulator" = "yes"; then
         platform=iPhoneSimulator
-        versionmin=-mios-simulator-version-min=10.3
+        versionmin=-mios-simulator-version-min=11.1
     else
         platform=iPhoneOS
-        versionmin=-miphoneos-version-min=10.3
+        versionmin=-miphoneos-version-min=11.1
     fi
     xcode_developer=`xcode-select -print-path`
 
-    current_sdk_ver=11.0
-    for sdkver in 11.1 11.0; do
+    current_sdk_ver=11.1
+    for sdkver in 11.1; do
         t=$xcode_developer/Platforms/$platform.platform/Developer/SDKs/$platform$sdkver.sdk
         if test -d $t; then
             ios_sdk=$sdkver
