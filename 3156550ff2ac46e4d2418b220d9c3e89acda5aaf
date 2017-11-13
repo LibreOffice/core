@@ -22,6 +22,30 @@
       "revId": "3156550ff2ac46e4d2418b220d9c3e89acda5aaf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_3b304c9e",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2017-11-13T07:33:36Z",
+      "side": 1,
+      "message": "Argh... The choice for NoSwitch is extremely counter-intuitive (but probably so for interoperability with Excel). I changed it right in the help text, but forgot in the help tip. Thank you for pointing out!",
+      "parentUuid": "1a430d35_d8590e5c",
+      "range": {
+        "startLine": 628,
+        "startChar": 26,
+        "endLine": 628,
+        "endChar": 104
+      },
+      "revId": "3156550ff2ac46e4d2418b220d9c3e89acda5aaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
