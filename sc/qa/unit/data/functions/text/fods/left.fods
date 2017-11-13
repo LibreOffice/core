@@ -1152,6 +1152,92 @@
      <table:table-cell table:style-name="ce17"/>
      <table:table-cell table:number-columns-repeated="4"/>
     </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:style-name="ce14" table:formula="of:=LEFT([.I11];4)" office:value-type="string" office:string-value="ab😂d" calcext:value-type="string">
+      <text:p>ab😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string">
+      <text:p>ab😂d</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce38" table:formula="of:=[.A11]=[.B11]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>WAAR</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="=LEFT(I11;4)" calcext:value-type="string">
+      <text:p>=LEFT(I11;4)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 returns the same result</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string"><text:p>ab<text:span text:style-name="T1">😂de𝔖gh𝕬𝖈𝖍𝖙𝖚𝖓𝖌!</text:span></text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:style-name="ce14" table:formula="of:=LEFT([.I12];2)" office:value-type="string" office:string-value="&quot;𧌒" calcext:value-type="string">
+      <text:p>&quot;𧌒</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string">
+      <text:p>&quot;𧌒</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce39" table:formula="of:=[.A12]=[.B12]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>WAAR</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=LEFT(I12;2)" calcext:value-type="string">
+      <text:p>=LEFT(I12;2)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 returns the same result</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce44" office:value-type="string" calcext:value-type="string"><text:p><text:span text:style-name="T2">&quot;</text:span><text:span text:style-name="T3">𧌒𧀬</text:span><text:span text:style-name="T4">&quot;</text:span></text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro3">
+     <table:table-cell table:style-name="ce14" table:formula="of:=LEFT([.I13];2)" office:value-type="string" office:string-value="&quot;u" calcext:value-type="string">
+      <text:p>&quot;u</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string">
+      <text:p>&quot;u</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce40" table:formula="of:=[.A13]=[.B13]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>WAAR</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="=LEFT(I13;2)" calcext:value-type="string">
+      <text:p>=LEFT(I13;2)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 returns the same result</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce45" office:value-type="string" calcext:value-type="string">
+      <text:p>&quot;üë&quot;</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:style-name="ce14" table:formula="of:=LEFT([.I14];4)" office:value-type="string" office:string-value="𝕬𝖈𝖍𝖙" calcext:value-type="string">
+      <text:p>𝕬𝖈𝖍𝖙</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string">
+      <text:p>𝕬𝖈𝖍𝖙</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce41" table:formula="of:=[.A14]=[.B14]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>WAAR</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="=LEFT(I14;4)" calcext:value-type="string">
+      <text:p>=LEFT(I14;4)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 returns the same result</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce46" office:value-type="string" calcext:value-type="string">
+      <text:p>𝕬𝖈𝖍𝖙𝖚𝖓𝖌!</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
     <table:table-row table:style-name="ro5" table:number-rows-repeated="27">
      <table:table-cell table:style-name="ce14"/>
      <table:table-cell table:style-name="ce17"/>
