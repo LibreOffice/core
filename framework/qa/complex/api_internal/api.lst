@@ -117,7 +117,6 @@ job117=sc.ScIndexEnumeration_TableChartsEnumeration
 job118=sc.ScIndexEnumeration_TableColumnsEnumeration
 job119=sc.ScIndexEnumeration_TableConditionalEntryEnumeration
 job120=sc.ScIndexEnumeration_TextFieldEnumeration
-job121=sc.ScLabelRangeObj
 job122=sc.ScLabelRangesObj
 job123=sc.ScNamedRangeObj
 job124=sc.ScRecentFunctionsObj
