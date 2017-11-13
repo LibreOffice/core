@@ -108,6 +108,18 @@ sub check_whitespaces($)
     }
 }
 
+# Is this binary the version we standardize on?
+sub is_matching_clang_format_version($$)
+{
+    my ($clang_format, $version) = @_;
+    if (! -x $clang_format)
+    {
+        return 0;
+    }
+
+    return `$clang_format -version` =~ /^clang-format version $version \(tags/;
+}
+
 sub check_style($)
 {
     my ($h) = @_;
@@ -119,25 +131,16 @@ sub check_style($)
     # directory.
     my $opt_lo = "/opt/lo/bin";
     my $clang_format = "$opt_lo/clang-format";
-    if (! -x $clang_format)
+    my $version = "5.0.0";
+    if (!is_matching_clang_format_version($clang_format, $version))
     {
         foreach my $dir (split /:/, $ENV{PATH})
         {
             $clang_format = "$dir/clang-format";
-            if (-x $clang_format)
+            if (is_matching_clang_format_version($clang_format, $version))
             {
                 last;
             }
-        }
-    }
-
-    # Read the blacklist.
-    if (open(LINES, "solenv/clang-format/blacklist"))
-    {
-        while (my $line = <LINES>)
-        {
-            chomp $line;
-            $blacklist_names{$line} = 1;
         }
     }
 
@@ -147,7 +150,6 @@ sub check_style($)
         # As a first step, don't do any checks in this case.
         return;
 
-        my $version = "r302580";
         my $platform = "linux64";
         my $download = "wget";
         if ($^O eq "cygwin")
@@ -168,6 +170,16 @@ sub check_style($)
         print("cp clang-format-$version-$platform clang-format\n");
         print("chmod +x clang-format\n");
         exit(1);
+    }
+
+    # Read the blacklist.
+    if (open(LINES, "solenv/clang-format/blacklist"))
+    {
+        while (my $line = <LINES>)
+        {
+            chomp $line;
+            $blacklist_names{$line} = 1;
+        }
     }
 
     if ($^O eq "cygwin")

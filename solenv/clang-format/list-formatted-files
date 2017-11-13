@@ -1,0 +1,40 @@
+#!/usr/bin/env perl
+
+# Lists source files which are not blacklisted. This is interesting if the
+# clang-format version or config changes. To trigger a reformat in that case,
+# you can do:
+#
+# clang-format -i $(solenv/clang-format/list-formatted-files)
+
+sub check_style()
+{
+    my $src = "c|cpp|cxx|h|hxx|inl";
+    my %blacklist_names = ();
+
+    # Read the blacklist.
+    if (open(LINES, "solenv/clang-format/blacklist"))
+    {
+        while (my $line = <LINES>)
+        {
+            chomp $line;
+            $blacklist_names{$line} = 1;
+        }
+    }
+
+    # Get a list of files.
+    open (FILES, "git ls-files |") ||  die "Cannot run git ls-files.";
+    while (my $filename = <FILES>)
+    {
+        chomp $filename;
+        if ($filename =~ /\.($src)$/ and !exists($blacklist_names{$filename}))
+        {
+            print($filename . "\n");
+        }
+    }
+}
+
+check_style();
+
+exit(0);
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

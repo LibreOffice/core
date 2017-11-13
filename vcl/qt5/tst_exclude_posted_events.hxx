@@ -56,7 +56,8 @@ static int tst_excludePostedEvents()
     TestExcludePostedEvents test;
     QCoreApplication::postEvent(&test, new QEvent(eventType));
     QEventLoop loop;
-    loop.processEvents(QEventLoop::ExcludeUserInputEvents | QEventLoop::ExcludeSocketNotifiers
+    loop.processEvents(QEventLoop::ExcludeUserInputEvents
+                       | QEventLoop::ExcludeSocketNotifiers
                        //        | QEventLoop::WaitForMoreEvents
                        | QEventLoop::X11ExcludeTimers);
     QVERIFY(!test.processed);
