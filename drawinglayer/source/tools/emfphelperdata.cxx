@@ -1593,13 +1593,20 @@ namespace emfplushelper
 
                         basegfx::B2DPolyPolygon aPolyPolygon(
                                     mrPropertyHolders.Current().getClipPolyPolygon());
+
+                        SAL_INFO("drawinglayer",
+                                 "EMF+\t PolyPolygon before translate: " << aPolyPolygon);
+
+                        basegfx::B2DPoint aOffset = Map(dx, dy);
                         basegfx::B2DHomMatrix transformMatrix;
-                        transformMatrix.set(0, 2, dx);
-                        transformMatrix.set(1, 2, dy);
+                        transformMatrix.set(0, 2, aOffset.getX());
+                        transformMatrix.set(1, 2, aOffset.getY());
                         aPolyPolygon.transform(transformMatrix);
 
+                        SAL_INFO("drawinglayer",
+                                 "EMF+\t PolyPolygon after translate: " << aPolyPolygon <<
+                                 ", mapped offset x" << aOffset.getX() << ", mapped offset y" << aOffset.getY());
                         HandleNewClipRegion(aPolyPolygon, mrTargetHolders, mrPropertyHolders);
-
                         break;
                     }
                     case EmfPlusRecordTypeDrawDriverString:
