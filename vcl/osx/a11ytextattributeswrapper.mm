@@ -108,20 +108,12 @@ using namespace ::com::sun::star::uno;
 @implementation AquaA11yTextAttributesWrapper : NSObject
 
 +(int)convertUnderlineStyle:(PropertyValue)property {
-#if MACOSX_SDK_VERSION >= 1090
     int underlineStyle = NSUnderlineStyleNone;
-#else
-    int underlineStyle = NSNoUnderlineStyle;
-#endif
     sal_Int16 value = 0;
     property.Value >>= value;
     if ( value != ::css_awt::FontUnderline::NONE
       && value != ::css_awt::FontUnderline::DONTKNOW) {
-#if MACOSX_SDK_VERSION >= 1090
         underlineStyle = NSUnderlineStyleSingle;
-#else
-        underlineStyle = NSSingleUnderlineStyle;
-#endif
     }
     return underlineStyle;
 }
@@ -227,11 +219,7 @@ using namespace ::com::sun::star::uno;
         if ( property.Value.hasValue() ) {
             if ( property.Name.equals ( attrUnderline ) ) {
                 int style = [ AquaA11yTextAttributesWrapper convertUnderlineStyle: property ];
-#if MACOSX_SDK_VERSION >= 1090
                 if ( style != NSUnderlineStyleNone ) {
-#else
-                if ( style != NSNoUnderlineStyle ) {
-#endif
                     [ string addAttribute: NSAccessibilityUnderlineTextAttribute value: [ NSNumber numberWithInt: style ] range: range ];
                 }
             } else if ( property.Name.equals ( attrFontname ) ) {
