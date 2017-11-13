@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_56b5efeb",
+        "filename": "cui/uiconfig/ui/baselinksdialog.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-11-13T22:15:51Z",
+      "side": 1,
+      "message": "some more generic placeholder here, such as \u0027\u003cno_file\u003e",
+      "revId": "8a26fc3acfadec8e1709ea2fbeb896ec036c921c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
