@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,0))
 $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
     external/harfbuzz/clang-cl.patch \
     external/harfbuzz/ubsan.patch \
+	external/harfbuzz/revert-make-inert.patch \
 ))
 
 ifneq ($(ENABLE_RUNTIME_OPTIMIZATIONS),TRUE)
