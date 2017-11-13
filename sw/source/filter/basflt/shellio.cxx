@@ -110,19 +110,6 @@ ErrCode SwReader::Read( const Reader& rOptions )
             po->SetTemplate( *mxDoc );
     }
 
-    const SwPosition* pPos = pPam->GetPoint();
-
-    // Split once and remember the node that has been splitted.
-    mxDoc->getIDocumentContentOperations().SplitNode(*pPos, false);
-
-    // Split again.
-    mxDoc->getIDocumentContentOperations().SplitNode(*pPos, false);
-
-    // Insert all content into the new node
-    pPam->Move(fnMoveBackward);
-    mxDoc->SetTextFormatColl
-    (*pPam, mxDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false));
-
     // Pams are connected like rings; stop when we return to the 1st element
     SwPaM *pEnd = pPam;
     SwUndoInsDoc* pUndo = nullptr;

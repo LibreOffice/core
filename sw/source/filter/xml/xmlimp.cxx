@@ -640,13 +640,14 @@ void SwXMLImport::startDocument()
 
             // Split once and remember the node that has been splitted.
             pDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
-            *m_pSttNdIdx = pPos->nNode.GetIndex()-1;
 
             // Split again.
             pDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
 
+            *m_pSttNdIdx = pPos->nNode.GetIndex()-1;
+
             // Insert all content into the new node
-            pPaM->Move( fnMoveBackward );
+            //pPaM->Move( fnMoveBackward );
             pDoc->SetTextFormatColl
                 ( *pPaM, pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false ) );
         }
