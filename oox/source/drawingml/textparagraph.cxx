@@ -20,6 +20,7 @@
 #include <drawingml/textparagraph.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <drawingml/textcharacterproperties.hxx>
+#include <svtools/unitconv.hxx>
 
 #include <rtl/ustring.hxx>
 #include <oox/mathml/importutils.hxx>
@@ -133,6 +134,19 @@ void TextParagraph::insertAt(
                 aioBulletList.setProperty( PROP_BulletColor, (*maRuns.begin())->getTextCharacterProperties().maFillProperties.getBestSolidColor().getColor( rFilterBase.getGraphicHelper() ));
             if( !aioBulletList.hasProperty( PROP_BulletColor ) && aTextCharacterStyle.maFillProperties.moFillType.has() )
                 aioBulletList.setProperty( PROP_BulletColor, aTextCharacterStyle.maFillProperties.getBestSolidColor().getColor( rFilterBase.getGraphicHelper() ));
+            if( !aioBulletList.hasProperty( PROP_GraphicSize ) && maRuns.size() > 0
+                && aParaProp.getBulletList().maGraphic.hasValue())
+            {
+                float fFirstCharHeight = maRuns.front()->getTextCharacterProperties().getCharHeightPoints(12);
+                float nBulletSizeRel = 1.f;
+                if( aParaProp.getBulletList().mnSize.hasValue() )
+                    nBulletSizeRel = aParaProp.getBulletList().mnSize.get<sal_Int16>() / 100.f;
+                float fBulletSizePts = nBulletSizeRel * fFirstCharHeight;
+
+                css::awt::Size aBulletSize;
+                aBulletSize.Width = aBulletSize.Height = std::lround(TransformMetric(fBulletSizePts * 100, FUNIT_POINT, FUNIT_MM) * OOX_BULLETLIST_SCALE_FACTOR);
+                aioBulletList.setProperty( PROP_GraphicSize, aBulletSize);
+            }
 
             float fCharacterSize = nCharHeight > 0 ? GetFontHeight ( nCharHeight ) : pTextParagraphStyle->getCharHeightPoints( 12 );
             aParaProp.pushToPropSet( &rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), true, fCharacterSize, true );

@@ -29,6 +29,7 @@
 #include <drawingml/textliststyle.hxx>
 #include <drawingml/textparagraphproperties.hxx>
 
+#define OOX_BULLETLIST_SCALE_FACTOR 0.8f
 
 namespace oox { namespace formulaimport {
     class XmlStreamBuilder;
