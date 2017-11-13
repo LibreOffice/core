@@ -605,7 +605,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XFormulaQuery \
     qadevOOo/tests/java/ifc/sheet/_XFunctionDescriptions \
     qadevOOo/tests/java/ifc/sheet/_XHeaderFooterContent \
-    qadevOOo/tests/java/ifc/sheet/_XLabelRange \
     qadevOOo/tests/java/ifc/sheet/_XMultipleOperation \
     qadevOOo/tests/java/ifc/sheet/_XRangeSelection \
     qadevOOo/tests/java/ifc/sheet/_XRecentFunctions \
@@ -1076,7 +1075,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_TableConditionalEntryEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_TableRowsEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_TextFieldEnumeration \
-    qadevOOo/tests/java/mod/_sc/ScLabelRangeObj \
     qadevOOo/tests/java/mod/_sc/ScLabelRangesObj \
     qadevOOo/tests/java/mod/_sc/ScModelObj \
     qadevOOo/tests/java/mod/_sc/ScNamedRangeObj \
