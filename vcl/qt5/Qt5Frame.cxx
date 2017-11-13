@@ -184,9 +184,10 @@ void Qt5Frame::SetTitle(const OUString& rTitle)
 
 void Qt5Frame::SetIcon(sal_uInt16 nIcon)
 {
-    if (m_nStyle & (SalFrameStyleFlags::PLUG | SalFrameStyleFlags::SYSTEMCHILD
-                    | SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::INTRO
-                    | SalFrameStyleFlags::OWNERDRAWDECORATION)
+    if (m_nStyle
+            & (SalFrameStyleFlags::PLUG | SalFrameStyleFlags::SYSTEMCHILD
+               | SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::INTRO
+               | SalFrameStyleFlags::OWNERDRAWDECORATION)
         || !m_pQWidget->isWindow())
         return;
 
@@ -268,7 +269,7 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
 
     if ((nFlags & (SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT))
         && (nWidth > 0 && nHeight > 0) // sometimes stupid things happen
-        )
+    )
     {
         m_bDefaultSize = false;
         if (isChild(false) || !m_pQWidget->isMaximized())
@@ -332,8 +333,9 @@ void Qt5Frame::SetWindowState(const SalFrameState* pState)
     if ((pState->mnMask & WindowStateMask::State) && (pState->mnState & WindowStateState::Maximized)
         && (pState->mnMask & nMaxGeometryMask) == nMaxGeometryMask)
         m_pQWidget->showMaximized();
-    else if (pState->mnMask & (WindowStateMask::X | WindowStateMask::Y | WindowStateMask::Width
-                               | WindowStateMask::Height))
+    else if (pState->mnMask
+             & (WindowStateMask::X | WindowStateMask::Y | WindowStateMask::Width
+                | WindowStateMask::Height))
     {
         sal_uInt16 nPosSizeFlags = 0;
         QPoint aPos = m_pQWidget->pos();
