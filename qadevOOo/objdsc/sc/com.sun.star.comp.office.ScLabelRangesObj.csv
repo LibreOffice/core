@@ -2,6 +2,4 @@
 "ScLabelRangesObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
 "ScLabelRangesObj";"com::sun::star::container::XElementAccess";"getElementType()"
 "ScLabelRangesObj";"com::sun::star::container::XElementAccess";"hasElements()"
-"ScLabelRangesObj";"com::sun::star::sheet::XLabelRanges";"addNew()"
-"ScLabelRangesObj";"com::sun::star::sheet::XLabelRanges";"removeByIndex()"
 "ScLabelRangesObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"
