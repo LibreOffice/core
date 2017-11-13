@@ -486,6 +486,7 @@ StringItemList
 SubViewSize
 Subtotals
 Suffix
+SignatureLineSuggestedSignerName
 Surround
 SwapXAndYAxis
 Symbol

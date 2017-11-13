@@ -105,6 +105,16 @@ private:
     bool mbInsidePaint:1;
     bool mbIsPreview:1;
 
+    bool mbIsSignatureLine;
+    OUString maSignatureLineId;
+    OUString maSignatureLineSuggestedSignerName;
+    OUString maSignatureLineSuggestedSignerTitle;
+    OUString maSignatureLineSuggestedSignerEmail;
+    OUString maSignatureLineSigningInstructions;
+    bool mbIsSignatureLineShowSignDate;
+    bool mbIsSignatureLineCanAddComment;
+    GraphicObject* mpSignatureLineUnsignedGraphic;
+
 private:
 
     void                    ImpRegisterLink();
@@ -210,6 +220,59 @@ public:
 
     // add handles for crop mode when selected
     virtual void addCropHandles(SdrHdlList& rTarget) const override;
+
+    // Signature Line
+    void setIsSignatureLine(bool bIsSignatureLine) { mbIsSignatureLine = bIsSignatureLine; };
+    bool isSignatureLine() { return mbIsSignatureLine; };
+    void setSignatureLineId(const OUString& rSignatureLineId)
+    {
+        maSignatureLineId = rSignatureLineId;
+    };
+    const OUString& getSignatureLineId() { return maSignatureLineId; };
+    void setSignatureLineSuggestedSignerName(const OUString& rSuggestedSignerName)
+    {
+        maSignatureLineSuggestedSignerName = rSuggestedSignerName;
+    };
+    const OUString& getSignatureLineSuggestedSignerName()
+    {
+        return maSignatureLineSuggestedSignerName;
+    };
+    void setSignatureLineSuggestedSignerTitle(const OUString& rSuggestedSignerTitle)
+    {
+        maSignatureLineSuggestedSignerTitle = rSuggestedSignerTitle;
+    };
+    const OUString& getSignatureLineSuggestedSignerTitle()
+    {
+        return maSignatureLineSuggestedSignerTitle;
+    };
+    void setSignatureLineSuggestedSignerEmail(const OUString& rSuggestedSignerEmail)
+    {
+        maSignatureLineSuggestedSignerEmail = rSuggestedSignerEmail;
+    };
+    const OUString& getSignatureLineSuggestedSignerEmail()
+    {
+        return maSignatureLineSuggestedSignerEmail;
+    };
+    void setSignatureLineSigningInstructions(const OUString& rSigningInstructions)
+    {
+        maSignatureLineSigningInstructions = rSigningInstructions;
+    };
+    const OUString& getSignatureLineSigningInstructions()
+    {
+        return maSignatureLineSigningInstructions;
+    };
+    void setSignatureLineShowSignDate(bool bIsSignatureLineShowSignDate)
+    {
+        mbIsSignatureLineShowSignDate = bIsSignatureLineShowSignDate;
+    };
+    bool isSignatureLineShowSignDate() { return mbIsSignatureLineShowSignDate; };
+    void setSignatureLineCanAddComment(bool bIsSignatureCanAddComment)
+    {
+        mbIsSignatureLineCanAddComment = bIsSignatureCanAddComment;
+    };
+    bool isSignatureLineCanAddComment() { return mbIsSignatureLineCanAddComment; };
+    const Graphic& getSignatureLineUnsignedGraphic();
+    void setSignatureLineUnsignedGraphic(const Graphic& rGraphic);
 };
 
 #endif // INCLUDED_SVX_SVDOGRAF_HXX

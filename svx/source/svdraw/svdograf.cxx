@@ -329,7 +329,8 @@ void SdrGrafObj::onGraphicChanged()
 SdrGrafObj::SdrGrafObj()
 :   SdrRectObj(),
     pGraphicLink    ( nullptr ),
-    bMirrored       ( false )
+    bMirrored       ( false ),
+    mbIsSignatureLine(false)
 {
     pGraphic = new GraphicObject;
     mpReplacementGraphic = nullptr;
@@ -357,6 +358,7 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const tools::Rectangle& rRect)
 {
     pGraphic = new GraphicObject( rGrf );
     mpReplacementGraphic = nullptr;
+    mpSignatureLineUnsignedGraphic = nullptr;
     pGraphic->SetSwapStreamHdl( LINK(this, SdrGrafObj, ImpSwapHdl) );
     onGraphicChanged();
 
@@ -381,6 +383,7 @@ SdrGrafObj::SdrGrafObj( const Graphic& rGrf )
 {
     pGraphic = new GraphicObject( rGrf );
     mpReplacementGraphic = nullptr;
+    mpSignatureLineUnsignedGraphic = nullptr;
     pGraphic->SetSwapStreamHdl( LINK(this, SdrGrafObj, ImpSwapHdl) );
     onGraphicChanged();
 
@@ -402,6 +405,7 @@ SdrGrafObj::~SdrGrafObj()
 {
     delete pGraphic;
     delete mpReplacementGraphic;
+    delete mpSignatureLineUnsignedGraphic;
     ImpDeregisterLink();
 }
 
@@ -1611,5 +1615,18 @@ void SdrGrafObj::addCropHandles(SdrHdlList& rTarget) const
     aPos = aMatrix * basegfx::B2DPoint(1.0, 1.0);
     rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::LowerRight, fShearX, fRotate));
 }
+
+const Graphic& SdrGrafObj::getSignatureLineUnsignedGraphic()
+{
+    //if (mpSignatureLineUnsignedGraphic)
+    return mpSignatureLineUnsignedGraphic->GetGraphic();
+    //return nullptr;
+};
+
+void SdrGrafObj::setSignatureLineUnsignedGraphic(const Graphic& rGraphic)
+{
+    mpSignatureLineUnsignedGraphic->SetGraphic(rGraphic);
+    mpSignatureLineUnsignedGraphic->SetUserData();
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

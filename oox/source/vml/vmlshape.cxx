@@ -1277,9 +1277,29 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
                     aGraphicUrl = rFilter.getGraphicHelper().createGraphicObject(xSignatureInfo[i].InvalidSignatureLineImage);
                 }
                 Reference< XShape > xShape = SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicUrl);
-                PropertySet aPropSet(xShape);
-                aPropSet.setProperty(PROP_GraphicURL, aGraphicUrl);
 
+                uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+                xPropertySet->setPropertyValue("IsSignatureLine", uno::makeAny(true));
+                xPropertySet->setPropertyValue("SignatureLineId",
+                                               uno::makeAny(getShapeModel().maSignatureId));
+                xPropertySet->setPropertyValue(
+                    "SignatureLineSuggestedSignerName",
+                    uno::makeAny(getShapeModel().maSignatureLineSuggestedSignerName));
+                xPropertySet->setPropertyValue(
+                    "SignatureLineSuggestedSignerTitle",
+                    uno::makeAny(getShapeModel().maSignatureLineSuggestedSignerTitle));
+                xPropertySet->setPropertyValue(
+                    "SignatureLineSuggestedSignerEmail",
+                    uno::makeAny(getShapeModel().maSignatureLineSuggestedSignerEmail));
+
+                if (!aGraphicPath.isEmpty())
+                {
+                    //TODO: Make this work
+                    /* Reference< XGraphic > xGraphic
+                        = rFilter.getGraphicHelper().importEmbeddedGraphic(aGraphicPath);
+                    xPropertySet->setPropertyValue("SignatureLineUnsignedImage",
+                                                   uno::makeAny(xGraphic)); */
+                }
                 return xShape;
             }
         }
