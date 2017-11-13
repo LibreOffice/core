@@ -204,8 +204,8 @@ public:
     void WriteText( const css::uno::Reference< css::uno::XInterface >& rXIface, const OUString& presetWarp, bool bBodyPr, bool bText = true, sal_Int32 nXmlNamespace = 0);
     void WriteParagraph( const css::uno::Reference< css::text::XTextContent >& rParagraph,
                          bool& rbOverridingCharHeight, sal_Int32& rnCharHeight );
-    void WriteParagraphProperties( const css::uno::Reference< css::text::XTextContent >& rParagraph );
-    void WriteParagraphNumbering( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
+    void WriteParagraphProperties(const css::uno::Reference< css::text::XTextContent >& rParagraph, float fFirstCharHeight);
+    void WriteParagraphNumbering(const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, float fFirstCharHeight,
                                   sal_Int16 nLevel );
     void WriteRun( const css::uno::Reference< css::text::XTextRange >& rRun,
                    bool& rbOverridingCharHeight, sal_Int32& rnCharHeight );
