@@ -90,6 +90,7 @@ bool LoadLibrary_ODBC3(OUString &_rPath)
 
     if (bLoaded)
         return true;
+#ifndef DISABLE_DYNLOADING
 #ifdef _WIN32
     _rPath = "ODBC32.DLL";
 #endif
@@ -106,6 +107,7 @@ bool LoadLibrary_ODBC3(OUString &_rPath)
 
     if ( !pODBCso )
         pODBCso = osl_loadModule( _rPath.pData,SAL_LOADMODULE_NOW );
+#endif
     if( !pODBCso)
         return false;
 
