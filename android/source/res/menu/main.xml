@@ -35,6 +35,7 @@
               android:title="@string/action_search"
               android:icon="@drawable/ic_search"
               android:orderInCategory="100"
+              android:visible="true"
               app:showAsAction="always"/>
 
         <item android:id="@+id/action_save"
