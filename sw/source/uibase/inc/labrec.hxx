@@ -28,24 +28,24 @@ class SwLabItem;
 class SwLabRec
 {
 public:
-    SwLabRec(): lHDist(0), lVDist(0), lWidth(0), lHeight(0), lLeft(0), lUpper(0), lPWidth(0), lPHeight(0), nCols(0), nRows(0), bCont(false) {}
+    SwLabRec(): m_nHDist(0), m_nVDist(0), m_nWidth(0), m_nHeight(0), m_nLeft(0), m_nUpper(0), m_nPWidth(0), m_nPHeight(0), m_nCols(0), m_nRows(0), m_bCont(false) {}
 
     void SetFromItem( const SwLabItem& rItem );
     void FillItem( SwLabItem& rItem ) const;
 
-    OUString        aMake;
-    OUString        aType;
-    long            lHDist;
-    long            lVDist;
-    long            lWidth;
-    long            lHeight;
-    long            lLeft;
-    long            lUpper;
-    long            lPWidth;
-    long            lPHeight;
-    sal_Int32       nCols;
-    sal_Int32       nRows;
-    bool        bCont;
+    OUString        m_aMake;
+    OUString        m_aType;
+    long            m_nHDist;
+    long            m_nVDist;
+    long            m_nWidth;
+    long            m_nHeight;
+    long            m_nLeft;
+    long            m_nUpper;
+    long            m_nPWidth;
+    long            m_nPHeight;
+    sal_Int32       m_nCols;
+    sal_Int32       m_nRows;
+    bool        m_bCont;
 };
 
 typedef std::vector<std::unique_ptr<SwLabRec>> SwLabRecs;
