@@ -654,8 +654,6 @@ public:
         VclMultiLineEdit *pSecondaryMessage);
 };
 
-VCL_DLLPUBLIC Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize);
-
 //Get first window of a pTopLevel window as
 //if any intermediate layout widgets didn't exist
 //i.e. acts like pChild = pChild->GetWindow(GetWindowType::FirstChild);
