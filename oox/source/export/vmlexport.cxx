@@ -30,6 +30,7 @@
 #include <tools/stream.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdograf.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/util.hxx>
@@ -589,7 +590,50 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
 
                     bool imageData = false;
                     EscherPropSortStruct aStruct;
-                    if ( rProps.GetOpt( ESCHER_Prop_fillBlip, aStruct ) && m_pTextExport)
+                    const SdrGrafObj* pSdrGrafObj = dynamic_cast<const SdrGrafObj*>(m_pSdrObject);
+
+                    if (pSdrGrafObj && pSdrGrafObj->isSignatureLine())
+                    {
+                        sax_fastparser::FastAttributeList* pAttrListSignatureLine
+                            = FastSerializerHelper::createAttrList();
+                        pAttrListSignatureLine->add(XML_issignatureline, "t");
+                        pAttrListSignatureLine->add(
+                            XML_id, OUStringToOString(pSdrGrafObj->getSignatureLineId(),
+                                                      RTL_TEXTENCODING_UTF8));
+                        pAttrListSignatureLine->add(
+                            FSNS(XML_o, XML_suggestedsigner),
+                            OUStringToOString(pSdrGrafObj->getSignatureLineSuggestedSignerName(),
+                                              RTL_TEXTENCODING_UTF8));
+                        pAttrListSignatureLine->add(
+                            FSNS(XML_o, XML_suggestedsigner2),
+                            OUStringToOString(pSdrGrafObj->getSignatureLineSuggestedSignerTitle(),
+                                              RTL_TEXTENCODING_UTF8));
+                        pAttrListSignatureLine->add(
+                            FSNS(XML_o, XML_suggestedsigneremail),
+                            OUStringToOString(pSdrGrafObj->getSignatureLineSuggestedSignerEmail(),
+                                              RTL_TEXTENCODING_UTF8));
+
+                        m_pSerializer->singleElementNS(
+                            XML_o, XML_signatureline,
+                            XFastAttributeListRef(pAttrListSignatureLine));
+
+
+                        // Get signature line graphic
+                        //
+                        const uno::Reference<graphic::XGraphic> xGraphic = pSdrGrafObj->getSignatureLineUnsignedGraphic();
+                        Graphic aGraphic(xGraphic);
+
+                        BitmapChecksum nChecksum = aGraphic.GetChecksum();
+                        OUString aImageId = m_pTextExport->FindRelId(nChecksum);
+                        if (aImageId.isEmpty())
+                        {
+                            aImageId = m_pTextExport->GetDrawingML().WriteImage( aGraphic );
+                            m_pTextExport->CacheRelId(nChecksum, aImageId);
+                        }
+                        pAttrList->add(FSNS(XML_r, XML_id), OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
+                        imageData = true;
+                    }
+                    else if ( rProps.GetOpt( ESCHER_Prop_fillBlip, aStruct ) && m_pTextExport)
                     {
                         SvMemoryStream aStream;
                         int nHeaderSize = 25; // The first bytes are WW8-specific, we're only interested in the PNG
@@ -611,6 +655,8 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
 
                     if ( rProps.GetOpt( ESCHER_Prop_fNoFillHitTest, nValue ) )
                         impl_AddBool( pAttrList, FSNS(XML_o, XML_detectmouseclick), nValue != 0 );
+
+
 
                     if (imageData)
                         m_pSerializer->singleElementNS( XML_v, XML_imagedata, XFastAttributeListRef( pAttrList ) );
