@@ -61,6 +61,7 @@
 
 #include <unx/gensys.h>
 #include <sallayout.hxx>
+#include <window.h>
 
 #include <sal/macros.h>
 #include <com/sun/star/uno/Exception.hpp>

@@ -33,6 +33,7 @@
 #include <QtWidgets/QApplication>
 
 #include <saldatabasic.hxx>
+#include <window.h>
 #include <vcl/layout.hxx>
 #include <vcl/syswin.hxx>
 
