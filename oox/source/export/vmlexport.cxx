@@ -31,6 +31,7 @@
 #include <tools/stream.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdograf.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/util.hxx>
@@ -601,15 +602,91 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
             case ESCHER_Prop_fillOpacity: // 386
                 {
                     sal_uInt32 nValue;
-                    sax_fastparser::FastAttributeList *pAttrList = FastSerializerHelper::createAttrList();
+                    sax_fastparser::FastAttributeList* pAttrList
+                        = FastSerializerHelper::createAttrList();
 
                     bool imageData = false;
                     EscherPropSortStruct aStruct;
-                    if ( rProps.GetOpt( ESCHER_Prop_fillBlip, aStruct ) && m_pTextExport)
+                    const SdrGrafObj* pSdrGrafObj = dynamic_cast<const SdrGrafObj*>(m_pSdrObject);
+
+                    if (pSdrGrafObj && pSdrGrafObj->isSignatureLine())
+                    {
+                        sax_fastparser::FastAttributeList* pAttrListSignatureLine
+                            = FastSerializerHelper::createAttrList();
+                        pAttrListSignatureLine->add(XML_issignatureline, "t");
+                        if (!pSdrGrafObj->getSignatureLineId().isEmpty())
+                        {
+                            pAttrListSignatureLine->add(
+                                XML_id, OUStringToOString(pSdrGrafObj->getSignatureLineId(),
+                                                          RTL_TEXTENCODING_UTF8));
+                        }
+                        if (!pSdrGrafObj->getSignatureLineSuggestedSignerName().isEmpty())
+                        {
+                            pAttrListSignatureLine->add(
+                                FSNS(XML_o, XML_suggestedsigner),
+                                OUStringToOString(
+                                    pSdrGrafObj->getSignatureLineSuggestedSignerName(),
+                                    RTL_TEXTENCODING_UTF8));
+                        }
+                        if (!pSdrGrafObj->getSignatureLineSuggestedSignerTitle().isEmpty())
+                        {
+                            pAttrListSignatureLine->add(
+                                FSNS(XML_o, XML_suggestedsigner2),
+                                OUStringToOString(
+                                    pSdrGrafObj->getSignatureLineSuggestedSignerTitle(),
+                                    RTL_TEXTENCODING_UTF8));
+                        }
+                        if (!pSdrGrafObj->getSignatureLineSuggestedSignerEmail().isEmpty())
+                        {
+                            pAttrListSignatureLine->add(
+                                FSNS(XML_o, XML_suggestedsigneremail),
+                                OUStringToOString(
+                                    pSdrGrafObj->getSignatureLineSuggestedSignerEmail(),
+                                    RTL_TEXTENCODING_UTF8));
+                        }
+                        if (!pSdrGrafObj->getSignatureLineSigningInstructions().isEmpty())
+                        {
+                            pAttrListSignatureLine->add(XML_signinginstructionsset, "t");
+                            pAttrListSignatureLine->add(
+                                FSNS(XML_o, XML_signinginstructions),
+                                OUStringToOString(
+                                    pSdrGrafObj->getSignatureLineSigningInstructions(),
+                                    RTL_TEXTENCODING_UTF8));
+                        }
+                        pAttrListSignatureLine->add(
+                            XML_showsigndate,
+                            pSdrGrafObj->isSignatureLineShowSignDate() ? "t" : "f");
+                        pAttrListSignatureLine->add(
+                            XML_allowcomments,
+                            pSdrGrafObj->isSignatureLineCanAddComment() ? "t" : "f");
+
+                        m_pSerializer->singleElementNS(
+                            XML_o, XML_signatureline,
+                            XFastAttributeListRef(pAttrListSignatureLine));
+
+                        // Get signature line graphic
+                        const uno::Reference<graphic::XGraphic> xGraphic
+                            = pSdrGrafObj->getSignatureLineUnsignedGraphic();
+                        Graphic aGraphic(xGraphic);
+
+                        BitmapChecksum nChecksum = aGraphic.GetChecksum();
+                        OUString aImageId = m_pTextExport->FindRelId(nChecksum);
+                        if (aImageId.isEmpty())
+                        {
+                            aImageId = m_pTextExport->GetDrawingML().WriteImage(aGraphic);
+                            m_pTextExport->CacheRelId(nChecksum, aImageId);
+                        }
+                        pAttrList->add(FSNS(XML_r, XML_id),
+                                       OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
+                        imageData = true;
+                    }
+                    else if (rProps.GetOpt(ESCHER_Prop_fillBlip, aStruct) && m_pTextExport)
                     {
                         SvMemoryStream aStream;
-                        int nHeaderSize = 25; // The first bytes are WW8-specific, we're only interested in the PNG
-                        aStream.WriteBytes(aStruct.pBuf + nHeaderSize, aStruct.nPropSize - nHeaderSize);
+                        // The first bytes are WW8-specific, we're only interested in the PNG
+                        int nHeaderSize = 25;
+                        aStream.WriteBytes(aStruct.pBuf + nHeaderSize,
+                                           aStruct.nPropSize - nHeaderSize);
                         aStream.Seek(0);
                         Graphic aGraphic;
                         GraphicConverter::Import(aStream, aGraphic);
@@ -618,15 +695,16 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                         OUString aImageId = m_pTextExport->FindRelId(nChecksum);
                         if (aImageId.isEmpty())
                         {
-                            aImageId = m_pTextExport->GetDrawingML().WriteImage( aGraphic );
+                            aImageId = m_pTextExport->GetDrawingML().WriteImage(aGraphic);
                             m_pTextExport->CacheRelId(nChecksum, aImageId);
                         }
-                        pAttrList->add(FSNS(XML_r, XML_id), OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
+                        pAttrList->add(FSNS(XML_r, XML_id),
+                                       OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
                         imageData = true;
                     }
 
-                    if ( rProps.GetOpt( ESCHER_Prop_fNoFillHitTest, nValue ) )
-                        impl_AddBool( pAttrList, FSNS(XML_o, XML_detectmouseclick), nValue != 0 );
+                    if (rProps.GetOpt(ESCHER_Prop_fNoFillHitTest, nValue))
+                        impl_AddBool(pAttrList, FSNS(XML_o, XML_detectmouseclick), nValue != 0);
 
                     if (imageData)
                         m_pSerializer->singleElementNS( XML_v, XML_imagedata, XFastAttributeListRef( pAttrList ) );

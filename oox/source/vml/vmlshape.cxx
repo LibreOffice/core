@@ -1323,13 +1323,13 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         uno::Sequence< security::DocumentSignatureInformation > xSignatureInfo =
             xSignatures->verifyScriptingContentSignatures(xStorage, uno::Reference< io::XInputStream >());
 
+        OUString aGraphicUrl;
         for (int i=0; i<xSignatureInfo.getLength(); i++)
         {
             // Try to find matching signature line image - if none exists that is fine,
             // then the signature line is not digitally signed.
             if (xSignatureInfo[i].SignatureLineId == getShapeModel().maSignatureId)
             {
-                OUString aGraphicUrl;
                 if (xSignatureInfo[i].SignatureIsValid)
                 {
                     // Signature is valid, use the 'valid' image
@@ -1342,14 +1342,54 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
                     SAL_WARN_IF(!xSignatureInfo[i].InvalidSignatureLineImage.is(), "oox.vml", "No InvalidSignatureLineImage!");
                     aGraphicUrl = rFilter.getGraphicHelper().createGraphicObject(xSignatureInfo[i].InvalidSignatureLineImage);
                 }
-                Reference< XShape > xShape = SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicUrl);
-                PropertySet aPropSet(xShape);
-                aPropSet.setProperty(PROP_GraphicURL, aGraphicUrl);
-
-                return xShape;
+                break;
             }
         }
-        // In case no matching signature line is found, render the unsigned signature line image (next if branch)
+
+        Reference< XShape > xShape;
+        if (!aGraphicUrl.isEmpty())
+        {
+            // If available, use the signed image from the signature
+            xShape = SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicUrl);
+        }
+        else
+        {
+            // Create shape with the fallback "unsigned" image
+            xShape = SimpleShape::createEmbeddedPictureObject(rxShapes, rShapeRect, aGraphicPath);
+        }
+
+        // Store signature line properties
+        uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+        xPropertySet->setPropertyValue("IsSignatureLine", uno::makeAny(true));
+        xPropertySet->setPropertyValue("SignatureLineId",
+                                        uno::makeAny(getShapeModel().maSignatureId));
+        xPropertySet->setPropertyValue(
+            "SignatureLineSuggestedSignerName",
+            uno::makeAny(getShapeModel().maSignatureLineSuggestedSignerName));
+        xPropertySet->setPropertyValue(
+            "SignatureLineSuggestedSignerTitle",
+            uno::makeAny(getShapeModel().maSignatureLineSuggestedSignerTitle));
+        xPropertySet->setPropertyValue(
+            "SignatureLineSuggestedSignerEmail",
+            uno::makeAny(getShapeModel().maSignatureLineSuggestedSignerEmail));
+        xPropertySet->setPropertyValue(
+            "SignatureLineSigningInstructions",
+            uno::makeAny(getShapeModel().maSignatureLineSigningInstructions));
+        xPropertySet->setPropertyValue(
+            "SignatureLineShowSignDate",
+            uno::makeAny(getShapeModel().mbSignatureLineShowSignDate));
+        xPropertySet->setPropertyValue(
+            "SignatureLineCanAddComment",
+            uno::makeAny(getShapeModel().mbSignatureLineCanAddComment));
+
+        if (!aGraphicPath.isEmpty())
+        {
+            Reference< XGraphic > xGraphic
+                = rFilter.getGraphicHelper().importEmbeddedGraphic(aGraphicPath);
+            xPropertySet->setPropertyValue("SignatureLineUnsignedImage",
+                                            uno::makeAny(xGraphic));
+        }
+        return xShape;
     }
 
     // try to create a picture object

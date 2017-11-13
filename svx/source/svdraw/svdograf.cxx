@@ -329,7 +329,8 @@ void SdrGrafObj::onGraphicChanged()
 SdrGrafObj::SdrGrafObj()
 :   SdrRectObj(),
     pGraphicLink    ( nullptr ),
-    bMirrored       ( false )
+    bMirrored       ( false ),
+    mbIsSignatureLine(false)
 {
     pGraphic = new GraphicObject;
     mpReplacementGraphic = nullptr;
@@ -357,6 +358,7 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const tools::Rectangle& rRect)
 {
     pGraphic = new GraphicObject( rGrf );
     mpReplacementGraphic = nullptr;
+    mpSignatureLineUnsignedGraphic = nullptr;
     pGraphic->SetSwapStreamHdl( LINK(this, SdrGrafObj, ImpSwapHdl) );
     onGraphicChanged();
 
@@ -381,6 +383,7 @@ SdrGrafObj::SdrGrafObj( const Graphic& rGrf )
 {
     pGraphic = new GraphicObject( rGrf );
     mpReplacementGraphic = nullptr;
+    mpSignatureLineUnsignedGraphic = nullptr;
     pGraphic->SetSwapStreamHdl( LINK(this, SdrGrafObj, ImpSwapHdl) );
     onGraphicChanged();
 
