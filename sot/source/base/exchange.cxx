@@ -31,6 +31,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/documentconstants.hxx>
 
+#include <memory>
 #include <vector>
 
 using namespace::com::sun::star::uno;
@@ -213,25 +214,11 @@ namespace
             const DataFlavorRepresentation, ImplFormatArray_Impl > {};
 
 
-    typedef std::vector<css::datatransfer::DataFlavor*> tDataFlavorList;
+    typedef std::vector<std::unique_ptr<css::datatransfer::DataFlavor>> tDataFlavorList;
 
     struct SotData_Impl
     {
-        tDataFlavorList* pDataFlavorList;
-
-        SotData_Impl(): pDataFlavorList(nullptr) {}
-        ~SotData_Impl()
-        {
-            if (pDataFlavorList)
-            {
-                for( tDataFlavorList::iterator aI = pDataFlavorList->begin(),
-                     aEnd = pDataFlavorList->end(); aI != aEnd; ++aI)
-                {
-                    delete *aI;
-                }
-                delete pDataFlavorList;
-            }
-        }
+        std::unique_ptr<tDataFlavorList> pDataFlavorList;
     };
 
     struct ImplData : public rtl::Static<SotData_Impl, ImplData> {};
@@ -241,7 +228,7 @@ static tDataFlavorList& InitFormats_Impl()
 {
     SotData_Impl *pSotData = &ImplData::get();
     if( !pSotData->pDataFlavorList )
-        pSotData->pDataFlavorList = new tDataFlavorList;
+        pSotData->pDataFlavorList.reset(new tDataFlavorList);
     return *pSotData->pDataFlavorList;
 }
 
@@ -272,17 +259,17 @@ SotClipboardFormatId SotExchange::RegisterFormatName( const OUString& rName )
     tDataFlavorList& rL = InitFormats_Impl();
     for( tDataFlavorList::size_type i = 0; i < rL.size(); i++ )
     {
-        DataFlavor* pFlavor = rL[ i ];
+        auto const& pFlavor = rL[ i ];
         if( pFlavor && rName == pFlavor->HumanPresentableName )
             return static_cast<SotClipboardFormatId>(i + static_cast<int>(SotClipboardFormatId::USER_END) + 1);
     }
 
-    DataFlavor* pNewFlavor = new DataFlavor;
+    std::unique_ptr<DataFlavor> pNewFlavor(new DataFlavor);
     pNewFlavor->MimeType = rName;
     pNewFlavor->HumanPresentableName = rName;
     pNewFlavor->DataType = cppu::UnoType<OUString>::get();
 
-    rL.push_back( pNewFlavor );
+    rL.push_back( std::move(pNewFlavor) );
 
     return static_cast<SotClipboardFormatId>(static_cast<int>(rL.size()-1) + static_cast<int>(SotClipboardFormatId::USER_END) + 1);
 }
@@ -303,17 +290,17 @@ SotClipboardFormatId SotExchange::RegisterFormatMimeType( const OUString& rMimeT
     tDataFlavorList& rL = InitFormats_Impl();
     for( tDataFlavorList::size_type i = 0; i < rL.size(); i++ )
     {
-        DataFlavor* pFlavor = rL[ i ];
+        auto const& pFlavor = rL[ i ];
         if( pFlavor && rMimeType == pFlavor->MimeType )
             return static_cast<SotClipboardFormatId>(i + static_cast<int>(SotClipboardFormatId::USER_END) + 1);
     }
 
-    DataFlavor* pNewFlavor = new DataFlavor;
+    std::unique_ptr<DataFlavor> pNewFlavor(new DataFlavor);
     pNewFlavor->MimeType = rMimeType;
     pNewFlavor->HumanPresentableName = rMimeType;
     pNewFlavor->DataType = cppu::UnoType<OUString>::get();
 
-    rL.push_back( pNewFlavor );
+    rL.push_back( std::move(pNewFlavor) );
 
     return static_cast<SotClipboardFormatId>(static_cast<int>(rL.size()-1) + static_cast<int>(SotClipboardFormatId::USER_END) + 1);
 }
@@ -332,7 +319,7 @@ SotClipboardFormatId SotExchange::RegisterFormat( const DataFlavor& rFlavor )
     {
         tDataFlavorList& rL = InitFormats_Impl();
         nRet = static_cast<SotClipboardFormatId>(rL.size() + static_cast<int>(SotClipboardFormatId::USER_END) + 1);
-        rL.push_back( new DataFlavor( rFlavor ) );
+        rL.emplace_back( new DataFlavor( rFlavor ) );
     }
 
     return nRet;
@@ -433,7 +420,7 @@ SotClipboardFormatId SotExchange::GetFormatIdFromMimeType( const OUString& rMime
 
     for( tDataFlavorList::size_type i = 0; i < rL.size(); i++ )
     {
-        DataFlavor* pFlavor = rL[ i ];
+        auto const& pFlavor = rL[ i ];
         if( pFlavor && rMimeType == pFlavor->MimeType )
             return static_cast<SotClipboardFormatId>(i + static_cast<int>(SotClipboardFormatId::USER_END) + 1);
     }
@@ -470,7 +457,7 @@ SotClipboardFormatId SotExchange::GetFormat( const DataFlavor& rFlavor )
     tDataFlavorList& rL = InitFormats_Impl();
     for( tDataFlavorList::size_type i = 0; i < rL.size(); i++ )
     {
-        DataFlavor* pFlavor = rL[ i ];
+        auto const& pFlavor = rL[ i ];
         if( pFlavor && rMimeType == pFlavor->MimeType )
             return static_cast<SotClipboardFormatId>(i + static_cast<int>(SotClipboardFormatId::USER_END) + 1);
     }
