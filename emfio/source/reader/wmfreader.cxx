@@ -553,7 +553,8 @@ namespace emfio
                         aRect = tools::Rectangle( aPt1, aPt2 );
                     }
 
-                    auto nRemainingSize = mpInputStream->remainingSize();
+                    auto nMaxStreamPos = nRecordPos + (nRecordSize << 1);
+                    auto nRemainingSize = std::min(mpInputStream->remainingSize(), nMaxStreamPos - mpInputStream->Tell());
                     if (nRemainingSize < static_cast<sal_uInt32>(nOriginalBlockLen))
                     {
                         SAL_WARN("vcl.wmf", "exttextout record claimed more data than the stream can provide");
@@ -568,7 +569,6 @@ namespace emfio
                     if ( nNewTextLen )
                     {
                         std::unique_ptr<long[]> pDXAry, pDYAry;
-                        auto nMaxStreamPos = nRecordPos + ( nRecordSize << 1 );
                         auto nDxArySize =  nMaxStreamPos - mpInputStream->Tell();
                         auto nDxAryEntries = nDxArySize >> 1;
                         bool        bUseDXAry = false;
