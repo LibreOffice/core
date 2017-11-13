@@ -3064,7 +3064,15 @@ void ScInterpreter::ScLower()
 
 void ScInterpreter::ScLen()
 {
-    PushDouble(GetString().getLength());
+    OUString aStr = GetString().getString();
+    sal_Int32 nIdx = 0;
+    sal_Int32 nCnt = 0;
+    while ( nIdx < aStr.getLength() )
+    {
+        aStr.iterateCodePoints( &nIdx );
+        ++nCnt;
+    }
+    PushDouble( nCnt );
 }
 
 void ScInterpreter::ScT()
