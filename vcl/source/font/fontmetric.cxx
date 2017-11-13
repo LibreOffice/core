@@ -320,21 +320,6 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
     mnDStrikeoutOffset1    = nStrikeoutOffset - n2LineDY2 - n2LineHeight;
     mnDStrikeoutOffset2    = mnDStrikeoutOffset1 + n2LineDY + n2LineHeight;
 
-    const vcl::Font& rFont ( pDev->GetFont() );
-    bool bCentered = true;
-    if (MsLangId::isCJK(rFont.GetLanguage()))
-    {
-        const OUString sFullstop( u'\x3001' ); // Fullwidth fullstop
-        tools::Rectangle aRect;
-        pDev->GetTextBoundRect( aRect, sFullstop );
-        const sal_uInt16 nH = rFont.GetFontSize().Height();
-        const sal_uInt16 nB = aRect.Left();
-        // Use 18.75% as a threshold to define a centered fullwidth fullstop.
-        // In general, nB/nH < 5% for most Japanese fonts.
-        bCentered = nB > (((nH >> 1)+nH)>>3);
-    }
-    SetFullstopCenteredFlag( bCentered );
-
     mnBulletOffset = ( pDev->GetTextWidth( OUString( u' ' ) ) - pDev->GetTextWidth( OUString( u'\x00b7' ) ) ) >> 1 ;
 
 }
@@ -388,6 +373,24 @@ void ImplFontMetricData::ImplInitAboveTextLineSize()
         mnAboveWUnderlineSize = ((nWCalcSize*50)+50) / 100;
 
     mnAboveWUnderlineOffset = nCeiling + (nIntLeading + 1) / 2;
+}
+
+void ImplFontMetricData::ImplInitFlags( const OutputDevice* pDev )
+{
+    const vcl::Font& rFont ( pDev->GetFont() );
+    bool bCentered = true;
+    if (MsLangId::isCJK(rFont.GetLanguage()))
+    {
+        const OUString sFullstop( u'\x3001' ); // Fullwidth fullstop
+        tools::Rectangle aRect;
+        pDev->GetTextBoundRect( aRect, sFullstop );
+        const sal_uInt16 nH = rFont.GetFontSize().Height();
+        const sal_uInt16 nB = aRect.Left();
+        // Use 18.75% as a threshold to define a centered fullwidth fullstop.
+        // In general, nB/nH < 5% for most Japanese fonts.
+        bCentered = nB > (((nH >> 1)+nH)>>3);
+    }
+    SetFullstopCenteredFlag( bCentered );
 }
 
 /*
