@@ -40,31 +40,31 @@
 
 void SwLabRec::SetFromItem( const SwLabItem& rItem )
 {
-    lHDist  = rItem.m_lHDist;
-    lVDist  = rItem.m_lVDist;
-    lWidth  = rItem.m_lWidth;
-    lHeight = rItem.m_lHeight;
-    lLeft   = rItem.m_lLeft;
-    lUpper  = rItem.m_lUpper;
-    nCols   = rItem.m_nCols;
-    nRows   = rItem.m_nRows;
-    lPWidth  = rItem.m_lPWidth;
-    lPHeight = rItem.m_lPHeight;
-    bCont   = rItem.m_bCont;
+    m_nHDist  = rItem.m_lHDist;
+    m_nVDist  = rItem.m_lVDist;
+    m_nWidth  = rItem.m_lWidth;
+    m_nHeight = rItem.m_lHeight;
+    m_nLeft   = rItem.m_lLeft;
+    m_nUpper  = rItem.m_lUpper;
+    m_nCols   = rItem.m_nCols;
+    m_nRows   = rItem.m_nRows;
+    m_nPWidth  = rItem.m_lPWidth;
+    m_nPHeight = rItem.m_lPHeight;
+    m_bCont   = rItem.m_bCont;
 }
 
 void SwLabRec::FillItem( SwLabItem& rItem ) const
 {
-    rItem.m_lHDist  = lHDist;
-    rItem.m_lVDist  = lVDist;
-    rItem.m_lWidth  = lWidth;
-    rItem.m_lHeight = lHeight;
-    rItem.m_lLeft   = lLeft;
-    rItem.m_lUpper  = lUpper;
-    rItem.m_nCols   = nCols;
-    rItem.m_lPWidth  = lPWidth;
-    rItem.m_lPHeight = lPHeight;
-    rItem.m_nRows   = nRows;
+    rItem.m_lHDist  = m_nHDist;
+    rItem.m_lVDist  = m_nVDist;
+    rItem.m_lWidth  = m_nWidth;
+    rItem.m_lHeight = m_nHeight;
+    rItem.m_lLeft   = m_nLeft;
+    rItem.m_lUpper  = m_nUpper;
+    rItem.m_nCols   = m_nCols;
+    rItem.m_lPWidth  = m_nPWidth;
+    rItem.m_lPHeight = m_nPHeight;
+    rItem.m_nRows   = m_nRows;
 }
 
 void SwLabDlg::ReplaceGroup_( const OUString &rMake )
@@ -131,15 +131,15 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
     // Read user label from writer.cfg
     SwLabItem aItem(static_cast<const SwLabItem&>(rSet.Get( FN_LABEL )));
     std::unique_ptr<SwLabRec> pRec(new SwLabRec);
-    pRec->aMake = pRec->aType = SwResId(STR_CUSTOM_LABEL);
+    pRec->m_aMake = pRec->m_aType = SwResId(STR_CUSTOM_LABEL);
     pRec->SetFromItem( aItem );
 
     bool bDouble = false;
 
     for (std::unique_ptr<SwLabRec> & i : *m_pRecs)
     {
-        if (pRec->aMake == i->aMake &&
-            pRec->aType == i->aType)
+        if (pRec->m_aMake == i->m_aMake &&
+            pRec->m_aType == i->m_aType)
         {
             bDouble = true;
             break;
@@ -208,8 +208,8 @@ SwLabRec* SwLabDlg::GetRecord(const OUString &rRecName, bool bCont)
     for (size_t i = 0; i < nCount; ++i)
     {
         pRec = Recs()[i].get();
-        if (pRec->aType != sCustom &&
-            rRecName == pRec->aType && bCont == pRec->bCont)
+        if (pRec->m_aType != sCustom &&
+            rRecName == pRec->m_aType && bCont == pRec->m_bCont)
         {
             bFound = true;
             break;
@@ -382,14 +382,14 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl, ListBox&, void)
     //insert the entries into the sorted list box
     for ( size_t i = 0; i < nCount; ++i )
     {
-        const OUString aType(GetParentSwLabDlg()->Recs()[i]->aType);
+        const OUString aType(GetParentSwLabDlg()->Recs()[i]->m_aType);
         bool bInsert = false;
-        if (GetParentSwLabDlg()->Recs()[i]->aType == sCustom)
+        if (GetParentSwLabDlg()->Recs()[i]->m_aType == sCustom)
         {
             bInsert = true;
             m_pTypeBox->InsertEntry(aType );
         }
-        else if (GetParentSwLabDlg()->Recs()[i]->bCont == bCont)
+        else if (GetParentSwLabDlg()->Recs()[i]->m_bCont == bCont)
         {
             if ( m_pHiddenSortTypeBox->GetEntryPos(aType) == LISTBOX_ENTRY_NOTFOUND )
             {
@@ -431,18 +431,18 @@ void SwLabPage::DisplayFormat()
     aField->SetMax         (LONG_MAX);
 
     SwLabRec* pRec = GetSelectedEntryPos();
-    aItem.m_aLstType = pRec->aType;
-    SETFLDVAL(*aField.get(), pRec->lWidth);
+    aItem.m_aLstType = pRec->m_aType;
+    SETFLDVAL(*aField.get(), pRec->m_nWidth);
     aField->Reformat();
     const OUString aWString = aField->GetText();
 
-    SETFLDVAL(*aField.get(), pRec->lHeight);
+    SETFLDVAL(*aField.get(), pRec->m_nHeight);
     aField->Reformat();
 
-    OUString aText = pRec->aType + ": " + aWString +
+    OUString aText = pRec->m_aType + ": " + aWString +
            " x " + aField->GetText() +
-           " (" + OUString::number( pRec->nCols ) +
-           " x " + OUString::number( pRec->nRows ) + ")";
+           " (" + OUString::number( pRec->m_nCols ) +
+           " x " + OUString::number( pRec->m_nRows ) + ")";
     m_pFormatInfo->SetText(aText);
 }
 

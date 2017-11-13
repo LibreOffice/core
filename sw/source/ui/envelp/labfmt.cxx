@@ -505,16 +505,16 @@ void SwLabFormatPage::FillItem(SwLabItem& rItem)
         rItem.m_aMake = rItem.m_aType = SwResId(STR_CUSTOM_LABEL);
 
         SwLabRec& rRec = *GetParentSwLabDlg()->Recs()[0];
-        rItem.m_lHDist  = rRec.lHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField ));
-        rItem.m_lVDist  = rRec.lVDist  = static_cast< long >(GETFLDVAL(*m_pVDistField ));
-        rItem.m_lWidth  = rRec.lWidth  = static_cast< long >(GETFLDVAL(*m_pWidthField ));
-        rItem.m_lHeight = rRec.lHeight = static_cast< long >(GETFLDVAL(*m_pHeightField));
-        rItem.m_lLeft   = rRec.lLeft   = static_cast< long >(GETFLDVAL(*m_pLeftField  ));
-        rItem.m_lUpper  = rRec.lUpper  = static_cast< long >(GETFLDVAL(*m_pUpperField ));
-        rItem.m_nCols   = rRec.nCols   = static_cast< sal_Int32 >(m_pColsField->GetValue());
-        rItem.m_nRows   = rRec.nRows   = static_cast< sal_Int32 >(m_pRowsField->GetValue());
-        rItem.m_lPWidth  = rRec.lPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
-        rItem.m_lPHeight = rRec.lPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
+        rItem.m_lHDist  = rRec.m_nHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField ));
+        rItem.m_lVDist  = rRec.m_nVDist  = static_cast< long >(GETFLDVAL(*m_pVDistField ));
+        rItem.m_lWidth  = rRec.m_nWidth  = static_cast< long >(GETFLDVAL(*m_pWidthField ));
+        rItem.m_lHeight = rRec.m_nHeight = static_cast< long >(GETFLDVAL(*m_pHeightField));
+        rItem.m_lLeft   = rRec.m_nLeft   = static_cast< long >(GETFLDVAL(*m_pLeftField  ));
+        rItem.m_lUpper  = rRec.m_nUpper  = static_cast< long >(GETFLDVAL(*m_pUpperField ));
+        rItem.m_nCols   = rRec.m_nCols   = static_cast< sal_Int32 >(m_pColsField->GetValue());
+        rItem.m_nRows   = rRec.m_nRows   = static_cast< sal_Int32 >(m_pRowsField->GetValue());
+        rItem.m_lPWidth  = rRec.m_nPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
+        rItem.m_lPHeight = rRec.m_nPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
     }
 }
 
@@ -562,17 +562,17 @@ void SwLabFormatPage::Reset(const SfxItemSet* )
 IMPL_LINK_NOARG(SwLabFormatPage, SaveHdl, Button*, void)
 {
     SwLabRec aRec;
-    aRec.lHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField));
-    aRec.lVDist  = static_cast< long >(GETFLDVAL(*m_pVDistField ));
-    aRec.lWidth  = static_cast< long >(GETFLDVAL(*m_pWidthField ));
-    aRec.lHeight = static_cast< long >(GETFLDVAL(*m_pHeightField));
-    aRec.lLeft   = static_cast< long >(GETFLDVAL(*m_pLeftField  ));
-    aRec.lUpper  = static_cast< long >(GETFLDVAL(*m_pUpperField ));
-    aRec.nCols   = static_cast< sal_Int32 >(m_pColsField->GetValue());
-    aRec.nRows   = static_cast< sal_Int32 >(m_pRowsField->GetValue());
-    aRec.lPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
-    aRec.lPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
-    aRec.bCont = aItem.m_bCont;
+    aRec.m_nHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField));
+    aRec.m_nVDist  = static_cast< long >(GETFLDVAL(*m_pVDistField ));
+    aRec.m_nWidth  = static_cast< long >(GETFLDVAL(*m_pWidthField ));
+    aRec.m_nHeight = static_cast< long >(GETFLDVAL(*m_pHeightField));
+    aRec.m_nLeft   = static_cast< long >(GETFLDVAL(*m_pLeftField  ));
+    aRec.m_nUpper  = static_cast< long >(GETFLDVAL(*m_pUpperField ));
+    aRec.m_nCols   = static_cast< sal_Int32 >(m_pColsField->GetValue());
+    aRec.m_nRows   = static_cast< sal_Int32 >(m_pRowsField->GetValue());
+    aRec.m_nPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
+    aRec.m_nPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
+    aRec.m_bCont = aItem.m_bCont;
     ScopedVclPtrInstance< SwSaveLabelDlg > pSaveDlg(this, aRec);
     pSaveDlg->SetLabel(aItem.m_aLstMake, aItem.m_aLstType);
     pSaveDlg->Execute();
@@ -653,7 +653,7 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl, Button*, void)
         if (RET_YES != aQuery->Execute())
             return;
     }
-    rLabRec.aType = sType;
+    rLabRec.m_aType = sType;
     rCfg.SaveLabel(sMake, sType, rLabRec);
     bSuccess = true;
     EndDialog(RET_OK);
@@ -670,16 +670,16 @@ bool SwSaveLabelDlg::GetLabel(SwLabItem& rItem)
     {
         rItem.m_aMake = m_pMakeCB->GetText();
         rItem.m_aType = m_pTypeED->GetText();
-        rItem.m_lHDist  = rLabRec.lHDist;
-        rItem.m_lVDist  = rLabRec.lVDist;
-        rItem.m_lWidth  = rLabRec.lWidth;
-        rItem.m_lHeight = rLabRec.lHeight;
-        rItem.m_lLeft   = rLabRec.lLeft;
-        rItem.m_lUpper  = rLabRec.lUpper;
-        rItem.m_nCols   = rLabRec.nCols;
-        rItem.m_nRows   = rLabRec.nRows;
-        rItem.m_lPWidth  = rLabRec.lPWidth;
-        rItem.m_lPHeight = rLabRec.lPHeight;
+        rItem.m_lHDist  = rLabRec.m_nHDist;
+        rItem.m_lVDist  = rLabRec.m_nVDist;
+        rItem.m_lWidth  = rLabRec.m_nWidth;
+        rItem.m_lHeight = rLabRec.m_nHeight;
+        rItem.m_lLeft   = rLabRec.m_nLeft;
+        rItem.m_lUpper  = rLabRec.m_nUpper;
+        rItem.m_nCols   = rLabRec.m_nCols;
+        rItem.m_nRows   = rLabRec.m_nRows;
+        rItem.m_lPWidth  = rLabRec.m_nPWidth;
+        rItem.m_lPHeight = rLabRec.m_nPHeight;
     }
     return bSuccess;
 }
