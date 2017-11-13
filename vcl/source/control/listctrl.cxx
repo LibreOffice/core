@@ -48,7 +48,7 @@ void ListControl::RecalcAll()
     // avoid recalculating while we are disposing
     // children. This just leads to complex invalid memory
     // access patterns that are not fixable.
-    if (IsDisposed())
+    if (isDisposed())
         return;
 
     sal_Int32 nTotalHeight = 0;
