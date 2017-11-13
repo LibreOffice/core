@@ -1078,6 +1078,7 @@ bool OutputDevice::ImplNewFont() const
 
             pFontInstance->mxFontMetric->ImplInitTextLineSize( this );
             pFontInstance->mxFontMetric->ImplInitAboveTextLineSize();
+            pFontInstance->mxFontMetric->ImplInitFlags( this );
 
             pFontInstance->mnLineHeight = pFontInstance->mxFontMetric->GetAscent() + pFontInstance->mxFontMetric->GetDescent();
 

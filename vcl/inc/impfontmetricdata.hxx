@@ -90,6 +90,7 @@ public:
 
     void            ImplInitTextLineSize( const OutputDevice* pDev );
     void            ImplInitAboveTextLineSize();
+    void            ImplInitFlags( const OutputDevice* pDev );
     void            ImplCalcLineSpacing(const std::vector<uint8_t>& rHhea,
                                         const std::vector<uint8_t>& rOS_2,
                                         int nUPEM);
