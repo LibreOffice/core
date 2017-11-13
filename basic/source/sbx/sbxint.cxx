@@ -339,13 +339,13 @@ start:
 sal_Int64 ImpDoubleToSalInt64( double d )
 {
     sal_Int64 nRes;
-    if( d > SbxMAXSALINT64 )
+    if( d > SAL_MAX_INT64 )
     {
-        SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXSALINT64;
+        SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MAX_INT64;
     }
-    else if( d < SbxMINSALINT64 )
+    else if( d < SAL_MIN_INT64 )
     {
-        SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMINSALINT64;
+        SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MIN_INT64;
     }
     else
         nRes = (sal_Int64) rtl::math::round( d );
@@ -355,9 +355,9 @@ sal_Int64 ImpDoubleToSalInt64( double d )
 sal_uInt64 ImpDoubleToSalUInt64( double d )
 {
     sal_uInt64 nRes;
-    if( d > SbxMAXSALUINT64 )
+    if( d > SAL_MAX_UINT64 )
     {
-        SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXSALUINT64;
+        SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MAX_UINT64;
     }
     else if( d < 0.0 )
     {
@@ -372,7 +372,7 @@ sal_uInt64 ImpDoubleToSalUInt64( double d )
 double ImpSalUInt64ToDouble( sal_uInt64 n )
 {
     double d = 0.0;
-    if( n > SbxMAXSALINT64 )
+    if( n > SAL_MAX_INT64 )
         SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
     else
         d = (double)(sal_Int64) n;
@@ -418,9 +418,9 @@ start:
         case SbxSALINT64:
             nRes = p->nInt64; break;
         case SbxSALUINT64:
-            if( p->uInt64 > SbxMAXSALINT64 )
+            if( p->uInt64 > SAL_MAX_INT64 )
             {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXSALINT64;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MAX_INT64;
             }
             else
                 nRes = (sal_Int64) p->uInt64;
@@ -705,9 +705,9 @@ start:
                     SbxDataType t;
                     if( ImpScan( *p->pOUString, d, t, nullptr, false ) != ERRCODE_NONE )
                         nRes = 0;
-                    else if( d > SbxMAXSALUINT64 )
+                    else if( d > SAL_MAX_UINT64 )
                     {
-                        SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXSALUINT64;
+                        SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MAX_UINT64;
                     }
                     else if( d < 0.0 )
                     {
@@ -818,7 +818,7 @@ start:
         case SbxLPSTR:
             if( !p->pOUString )
                 p->pOUString = new OUString;
-            if( n > SbxMAXSALINT64 )
+            if( n > SAL_MAX_INT64 )
                 SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
             else
             {
@@ -881,16 +881,16 @@ start:
 
             *p->pDouble = ImpSalUInt64ToDouble( n ); break;
         case SbxBYREF | SbxCURRENCY:
-            if ( n > ( SbxMAXSALINT64 / CURRENCY_FACTOR ) )
+            if ( n > ( SAL_MAX_INT64 / CURRENCY_FACTOR ) )
             {
                  SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-                 n = SbxMAXSALINT64;
+                 n = SAL_MAX_INT64;
             }
             *p->pnInt64 = ( sal_Int64) ( n * CURRENCY_FACTOR ); break;
         case SbxBYREF | SbxSALUINT64:
             *p->puInt64 = n; break;
         case SbxBYREF | SbxSALINT64:
-            if( n > SbxMAXSALINT64 )
+            if( n > SAL_MAX_INT64 )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = 0;
             }

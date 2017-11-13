@@ -204,9 +204,9 @@ start:
             // is unreachable, obviously. Avoid warning by ifdeffing
             // this out for now. Do not delete this #if 0 block unless
             // you know for sure the 'break' above is intentional.
-            if ( nRes > SbxMAXSALINT64 )
+            if ( nRes > SAL_MAX_INT64 )
             {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXSALINT64;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MAX_INT64;
             }
 #endif
         }
@@ -214,13 +214,13 @@ start:
             nRes = p->nInt64 * CURRENCY_FACTOR; break;
 #if 0
             // As above
-            if ( nRes > SbxMAXSALINT64 )
+            if ( nRes > SAL_MAX_INT64 )
             {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXSALINT64;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MAX_INT64;
             }
-            else if ( nRes < SbxMINSALINT64 )
+            else if ( nRes < SAL_MIN_INT64 )
             {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMINSALINT64;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SAL_MIN_INT64;
             }
             break;
 #endif
