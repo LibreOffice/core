@@ -1492,8 +1492,6 @@ EditTextObject* EditEngine::CreateTextObject()
 EditTextObject* EditEngine::CreateTextObject( const ESelection& rESelection )
 {
     EditSelection aSel( pImpEditEngine->CreateSel( rESelection ) );
-    if (aSel.IsInvalid())
-        return nullptr;
     return pImpEditEngine->CreateTextObject( aSel );
 }
 

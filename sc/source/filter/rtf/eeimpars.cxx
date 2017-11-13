@@ -104,6 +104,15 @@ ErrCode ScEEImport::Read( SvStream& rStream, const OUString& rBaseURL )
     return nErr;
 }
 
+namespace
+{
+    bool IsValidSel(const ScTabEditEngine& rEngine, const ESelection& rSel)
+    {
+        const auto nParaCount = rEngine.GetParagraphCount();
+        return rSel.nStartPara < nParaCount && rSel.nEndPara < nParaCount;
+    }
+}
+
 void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate )
 {
     std::unique_ptr<ScProgress> pProgress( new ScProgress( mpDoc->GetDocumentShell(),
@@ -400,7 +409,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                     mpDoc->SetString(nCol, nRow, nTab, aStr, &aParam);
                 }
             }
-            else if (EditTextObject* pTextObject = mpEngine->CreateTextObject(pE->aSel))
+            else if (EditTextObject* pTextObject = IsValidSel(*mpEngine, pE->aSel) ? mpEngine->CreateTextObject(pE->aSel) : nullptr)
             {
                 // The cell will own the text object instance.
                 mpDoc->SetEditText(ScAddress(nCol,nRow,nTab), pTextObject);
