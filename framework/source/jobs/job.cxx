@@ -182,7 +182,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     {
         // create the job
         // We must check for the supported interface on demand!
-        // But we preferr the synchronous one ...
+        // But we prefer the synchronous one ...
         m_xJob = m_xContext->getServiceManager()->createInstanceWithContext(m_aJobCfg.getService(), m_xContext);
         xSJob.set(m_xJob, css::uno::UNO_QUERY);
         if (!xSJob.is())

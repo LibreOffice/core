@@ -592,7 +592,7 @@ public class Protocol extends JComponent
         // no else - it's a bit field of possible reactions!
         // But these both conditions must be handled together.
         // Because we can't generate different types of log contents to the same log file.
-        // We preferr HTML if both types are set.
+        // We prefer HTML if both types are set.
         if (
             ((m_nMode & MODE_HTML ) == MODE_HTML ) ||
             ((m_nMode & MODE_ASCII) == MODE_ASCII)
