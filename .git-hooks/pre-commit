@@ -127,19 +127,23 @@ sub check_style($)
     my @bad_names = ();
     my %blacklist_names = ();
 
-    # Use clang-format from PATH, unless it's available in our dedicated
+    # Use clang-format from CLANG_FORMAT, or from PATH unless it's available in our dedicated
     # directory.
-    my $opt_lo = "/opt/lo/bin";
-    my $clang_format = "$opt_lo/clang-format";
     my $version = "5.0.0";
-    if (!is_matching_clang_format_version($clang_format, $version))
+    my $opt_lo = "/opt/lo/bin";
+    my $clang_format = $ENV{CLANG_FORMAT};
+    if (!(defined($clang_format) && is_matching_clang_format_version($clang_format, $version)))
     {
-        foreach my $dir (split /:/, $ENV{PATH})
+        $clang_format = "$opt_lo/clang-format";
+        if (!is_matching_clang_format_version($clang_format, $version))
         {
-            $clang_format = "$dir/clang-format";
-            if (is_matching_clang_format_version($clang_format, $version))
+            foreach my $dir (split /:/, $ENV{PATH})
             {
-                last;
+                $clang_format = "$dir/clang-format";
+                if (is_matching_clang_format_version($clang_format, $version))
+                {
+                    last;
+                }
             }
         }
     }
