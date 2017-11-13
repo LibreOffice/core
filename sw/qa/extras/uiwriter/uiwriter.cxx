@@ -3681,7 +3681,8 @@ void SwUiWriterTest::testEmbeddedDataSource()
     CPPUNIT_ASSERT(!xDatabaseContext->hasByName("calc-data-source"));
 
     // Load: should have a component and a data source, too.
-    load(DATA_DIRECTORY, "embedded-data-source.odt");
+    // Path with "#" must not cause issues
+    load(DATA_DIRECTORY + OUStringLiteral("hash%23path/"), "embedded-data-source.odt");
     CPPUNIT_ASSERT(mxComponent.is());
     CPPUNIT_ASSERT(xDatabaseContext->hasByName("calc-data-source"));
 
