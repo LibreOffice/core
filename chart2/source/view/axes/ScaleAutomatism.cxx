@@ -115,7 +115,7 @@ void ScaleAutomatism::expandValueRange( double fMinimum, double fMaximum )
 {
     // if m_fValueMinimum and m_fValueMaximum == 0, it means that they were not determined.
     // m_fValueMinimum == 0 makes impossible to determine real minimum,
-    // so they need to be reseted tdf#96807
+    // so they need to be reset tdf#96807
     if( (m_fValueMinimum == 0.0) && (m_fValueMaximum == 0.0) )
         resetValueRange();
     if( (fMinimum < m_fValueMinimum) || ::rtl::math::isNan( m_fValueMinimum ) )

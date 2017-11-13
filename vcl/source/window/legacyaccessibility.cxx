@@ -166,7 +166,7 @@ static Window* ImplGetLabeledBy( Window* pFrameWindow, WindowType nMyType, Windo
                          nType == WindowType::FIXEDLINE ||
                          nType == WindowType::GROUPBOX )
                     {
-                        // a fixed text can't be labeld by a fixed text.
+                        // a fixed text can't be labelled by a fixed text.
                         if ( ( nMyType != WindowType::FIXEDTEXT ) || ( nType != WindowType::FIXEDTEXT ) )
                             pWindow = pSWindow;
                         break;

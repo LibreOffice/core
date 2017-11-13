@@ -2120,7 +2120,7 @@ SdrHdl* SdrTableObj::GetHdl(sal_uInt32 nHdlNum) const
 }
 
 
-// Draging
+// Dragging
 
 bool SdrTableObj::hasSpecialDrag() const
 {
