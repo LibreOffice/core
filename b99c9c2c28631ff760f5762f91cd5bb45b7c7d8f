@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_7613cb0d",
+        "filename": "svtools/source/contnr/fileview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1545,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-11-13T20:42:12Z",
+      "side": 1,
+      "message": "shouldn\u0027t it be \"gets\" since we talk about \"this handler\"?",
+      "range": {
+        "startLine": 1545,
+        "startChar": 42,
+        "endLine": 1545,
+        "endChar": 45
+      },
+      "revId": "b99c9c2c28631ff760f5762f91cd5bb45b7c7d8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
