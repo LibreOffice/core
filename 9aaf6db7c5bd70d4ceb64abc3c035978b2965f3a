@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1b5f10e6",
+        "filename": "sccomp/source/solver/SwarmSolver.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-13T06:07:40Z",
+      "side": 1,
+      "message": "maEnd can be a local variable",
+      "revId": "9aaf6db7c5bd70d4ceb64abc3c035978b2965f3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
