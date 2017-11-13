@@ -165,6 +165,7 @@ public:
     void testTdf109187();
     void testTdf108926();
     void testTdf100065();
+    void testTdf90626();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -238,6 +239,7 @@ public:
     CPPUNIT_TEST(testTdf109187);
     CPPUNIT_TEST(testTdf108926);
     CPPUNIT_TEST(testTdf100065);
+    CPPUNIT_TEST(testTdf90626);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2281,6 +2283,23 @@ void SdImportTest::testTdf100065()
     sal_Int32 nAngle2;
     CPPUNIT_ASSERT(xShape2->getPropertyValue("RotateAngle") >>= nAngle2);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(18000), nAngle2);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf90626()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf90626.pptx"), PPTX);
+    const SdrPage *pPage = GetPage(1, xDocShRef);
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>(pPage->GetObj(1));
+    CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+    for(int i = 0; i < 4; i++)
+    {
+        const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(i).GetItem(EE_PARA_NUMBULLET);
+        CPPUNIT_ASSERT(pNumFmt);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(long(371), pNumFmt->GetNumRule()->GetLevel(0).GetGraphicSize().getHeight(), long(1));
+    }
 
     xDocShRef->DoClose();
 }
