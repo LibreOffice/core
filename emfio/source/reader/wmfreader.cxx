@@ -514,7 +514,7 @@ namespace emfio
                 if ( nLength )
                 {
                     std::unique_ptr<char[]> pChar(new char[ ( nLength + 1 ) &~ 1 ]);
-                    mpInputStream->ReadBytes(pChar.get(), (nLength + 1) &~ 1);
+                    nLength = std::min<sal_uInt64>(nLength, mpInputStream->ReadBytes(pChar.get(), (nLength + 1) &~ 1));
                     OUString aText( pChar.get(), nLength, GetCharSet() );
                     pChar.reset();
                     Point aPosition( ReadYX() );
