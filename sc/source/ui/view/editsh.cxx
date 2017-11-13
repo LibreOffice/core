@@ -280,6 +280,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     pDlg->Insert( SotClipboardFormatId::STRING, EMPTY_OUSTRING );
                     pDlg->Insert( SotClipboardFormatId::RTF,    EMPTY_OUSTRING );
                     pDlg->Insert( SotClipboardFormatId::RICHTEXT,    EMPTY_OUSTRING );
+                    // Do not offer SotClipboardFormatId::STRING_TSVC for
+                    // in-cell paste.
 
                     TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
@@ -798,8 +800,9 @@ const SvxURLField* ScEditShell::GetURLField()
 
 IMPL_LINK( ScEditShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )
 {
-    bPastePossible = ( pDataHelper->HasFormat( SotClipboardFormatId::STRING ) || pDataHelper->HasFormat( SotClipboardFormatId::RTF )
-        || pDataHelper->HasFormat( SotClipboardFormatId::RICHTEXT )    );
+    bPastePossible = ( pDataHelper->HasFormat( SotClipboardFormatId::STRING )
+            || pDataHelper->HasFormat( SotClipboardFormatId::RTF )
+            || pDataHelper->HasFormat( SotClipboardFormatId::RICHTEXT ));
 
     SfxBindings& rBindings = pViewData->GetBindings();
     rBindings.Invalidate( SID_PASTE );
@@ -809,6 +812,8 @@ IMPL_LINK( ScEditShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, 
 
 void ScEditShell::GetClipState( SfxItemSet& rSet )
 {
+    // Do not offer SotClipboardFormatId::STRING_TSVC for in-cell paste.
+
     if ( !mxClipEvtLstnr.is() )
     {
         // create listener
@@ -818,8 +823,9 @@ void ScEditShell::GetClipState( SfxItemSet& rSet )
 
         // get initial state
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
-        bPastePossible = ( aDataHelper.HasFormat( SotClipboardFormatId::STRING ) || aDataHelper.HasFormat( SotClipboardFormatId::RTF )
-            || aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) );
+        bPastePossible = ( aDataHelper.HasFormat( SotClipboardFormatId::STRING )
+                || aDataHelper.HasFormat( SotClipboardFormatId::RTF )
+                || aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) );
     }
 
     SfxWhichIter aIter( rSet );

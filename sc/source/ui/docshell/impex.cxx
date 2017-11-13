@@ -205,6 +205,7 @@ void ScImportExport::SetFilterOptions(const OUString& rFilterOptions)
 bool ScImportExport::IsFormatSupported( SotClipboardFormatId nFormat )
 {
     return nFormat == SotClipboardFormatId::STRING
+              || nFormat == SotClipboardFormatId::STRING_TSVC
               || nFormat == SotClipboardFormatId::SYLK
               || nFormat == SotClipboardFormatId::LINK
               || nFormat == SotClipboardFormatId::HTML
@@ -287,6 +288,7 @@ bool ScImportExport::ImportString( const OUString& rText, SotClipboardFormatId n
     {
         // formats supporting unicode
         case SotClipboardFormatId::STRING :
+        case SotClipboardFormatId::STRING_TSVC :
         {
             ScImportStringStream aStrm( rText);
             return ImportStream( aStrm, OUString(), nFmt );
@@ -306,9 +308,9 @@ bool ScImportExport::ImportString( const OUString& rText, SotClipboardFormatId n
 
 bool ScImportExport::ExportString( OUString& rText, SotClipboardFormatId nFmt )
 {
-    OSL_ENSURE( nFmt == SotClipboardFormatId::STRING, "ScImportExport::ExportString: Unicode not supported for other formats than SotClipboardFormatId::STRING" );
-    if ( nFmt != SotClipboardFormatId::STRING )
+    if ( nFmt != SotClipboardFormatId::STRING && nFmt != SotClipboardFormatId::STRING_TSVC )
     {
+        SAL_WARN("sc.ui", "ScImportExport::ExportString: Unicode not supported for other formats than SotClipboardFormatId::STRING[_TSV]");
         rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
         OString aTmp;
         bool bOk = ExportByteString( aTmp, eEnc, nFmt );
@@ -364,7 +366,7 @@ bool ScImportExport::ExportByteString( OString& rText, rtl_TextEncoding eEnc, So
 
 bool ScImportExport::ImportStream( SvStream& rStrm, const OUString& rBaseURL, SotClipboardFormatId nFmt )
 {
-    if( nFmt == SotClipboardFormatId::STRING )
+    if( nFmt == SotClipboardFormatId::STRING || nFmt == SotClipboardFormatId::STRING_TSVC )
     {
         if( ExtText2Doc( rStrm ) )      // evaluate pExtOptions
             return true;
@@ -404,7 +406,7 @@ bool ScImportExport::ImportStream( SvStream& rStrm, const OUString& rBaseURL, So
 
 bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, SotClipboardFormatId nFmt )
 {
-    if( nFmt == SotClipboardFormatId::STRING )
+    if( nFmt == SotClipboardFormatId::STRING || nFmt == SotClipboardFormatId::STRING_TSVC )
     {
         if( Doc2Text( rStrm ) )
             return true;

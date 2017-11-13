@@ -586,6 +586,8 @@ void ScViewFunc::PasteFromSystem()
                     PasteFromSystem(SotClipboardFormatId::HTML_SIMPLE);
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::SYLK))
                     PasteFromSystem(SotClipboardFormatId::SYLK);
+                else if (aDataHelper.HasFormat(SotClipboardFormatId::STRING_TSVC))
+                    PasteFromSystem(SotClipboardFormatId::STRING_TSVC);
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::STRING))
                     PasteFromSystem(SotClipboardFormatId::STRING);
                 // xxx_OLE formats come last, like in SotExchange tables
@@ -685,6 +687,8 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
                 nFormatId = SotClipboardFormatId::HTML_SIMPLE;
             else if (aDataHelper.HasFormat(SotClipboardFormatId::SYLK))
                 nFormatId = SotClipboardFormatId::SYLK;
+            else if (aDataHelper.HasFormat(SotClipboardFormatId::STRING_TSVC))
+                nFormatId = SotClipboardFormatId::STRING_TSVC;
             else if (aDataHelper.HasFormat(SotClipboardFormatId::STRING))
                 nFormatId = SotClipboardFormatId::STRING;
             else if (aDataHelper.HasFormat(SotClipboardFormatId::GDIMETAFILE))

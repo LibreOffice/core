@@ -190,6 +190,7 @@ void ScSelectionTransferObj::AddSupportedFormats()
             AddFormat( SotClipboardFormatId::LINK );
             AddFormat( SotClipboardFormatId::DIF );
             AddFormat( SotClipboardFormatId::STRING );
+            AddFormat( SotClipboardFormatId::STRING_TSVC );
             AddFormat( SotClipboardFormatId::RTF );
             AddFormat( SotClipboardFormatId::RICHTEXT );
             if ( eMode == SC_SELTRANS_CELL )

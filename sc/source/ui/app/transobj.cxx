@@ -238,6 +238,7 @@ void ScTransferObj::AddSupportedFormats()
     AddFormat( SotClipboardFormatId::LINK );
     AddFormat( SotClipboardFormatId::DIF );
     AddFormat( SotClipboardFormatId::STRING );
+    AddFormat( SotClipboardFormatId::STRING_TSVC );
 
     AddFormat( SotClipboardFormatId::RTF );
     AddFormat( SotClipboardFormatId::RICHTEXT );
@@ -319,7 +320,15 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             }
 
             ScImportExport aObj( pDoc, aReducedBlock );
-            ScExportTextOptions aTextOptions(ScExportTextOptions::None, 0, true);
+            // Plain string ("Unformatted text") contains embedded line breaks
+            // but is not enclosed in quotes. Which makes it unsuitable for
+            // multiple cells if one of them is multi-line, but otherwise is
+            // expected behavior for plain text.
+            // Add quotes only for STRING_TSVC.
+            /* TODO: a possible future STRING_TSV should not contain embedded
+             * line breaks nor tab (separator) characters and not be quoted. */
+            ScExportTextOptions aTextOptions( ScExportTextOptions::None, 0,
+                    (nFormat == SotClipboardFormatId::STRING_TSVC));
             if ( bUsedForLink )
             {
                 // For a DDE link, convert line breaks and separators to space.
