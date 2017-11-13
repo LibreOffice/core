@@ -270,13 +270,15 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
         }
 
         /* Now validate each component of the path */
+        rtl_uString * lastCorrected = path;
         while ( bValid && lpComponent )
         {
             // Correct path by merging consecutive slashes:
             if (*lpComponent == '\\' && corrected != nullptr) {
                 sal_Int32 i = lpComponent - lpszPath;
-                rtl_uString_newReplaceStrAt(corrected, path, i, 1, nullptr);
+                rtl_uString_newReplaceStrAt(corrected, lastCorrected, i, 1, nullptr);
                     //TODO: handle out-of-memory
+                lastCorrected = *corrected;
                 lpszPath = (*corrected)->buffer;
                 lpComponent = lpszPath + i;
             }
