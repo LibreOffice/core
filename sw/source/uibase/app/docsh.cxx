@@ -118,6 +118,8 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <com/sun/star/uri/VndSunStarPkgUrlReferenceFactory.hpp>
 
 #include <unomid.h>
 #include <unotextrange.hxx>
@@ -428,9 +430,15 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         uno::Reference<sdb::XDatabaseContext> xDatabaseContext = sdb::DatabaseContext::create(comphelper::getProcessComponentContext());
 
         const INetURLObject& rOldURLObject = GetMedium()->GetURLObject();
-        OUString aURL = "vnd.sun.star.pkg://";
-        aURL += INetURLObject::encode(rOldURLObject.GetMainURL(INetURLObject::DecodeMechanism::WithCharset), INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All);
-        aURL += "/" + INetURLObject::encode(m_xDoc->GetDBManager()->getEmbeddedName(), INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All);
+        auto xContext(comphelper::getProcessComponentContext());
+        auto xUri = css::uri::UriReferenceFactory::create(xContext)
+            ->parse(rOldURLObject.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+        assert(xUri.is());
+        xUri = css::uri::VndSunStarPkgUrlReferenceFactory::create(xContext)->createVndSunStarPkgUrlReference(xUri);
+        assert(xUri.is());
+        OUString const aURL = xUri->getUriReference() + "/"
+            + INetURLObject::encode(m_xDoc->GetDBManager()->getEmbeddedName(),
+                INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All);
 
         uno::Reference<sdb::XDocumentDataSource> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
         uno::Reference<frame::XStorable> xStorable(xDataSource->getDatabaseDocument(), uno::UNO_QUERY);
