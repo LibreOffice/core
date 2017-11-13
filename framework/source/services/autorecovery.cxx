@@ -943,7 +943,7 @@ private:
         @param  xNewFrame
                 must be set only in case WE create a new frame (e.g. for loading documents
                 on session restore or recovery). Then search for a frame using rInfo.Document must
-                be suppressed and xFrame must be preferred instead .-)
+                be suppressed and xFrame must be prefered instead .-)
 
         @param  rInfo
                 used e.g. to find the frame corresponding to a document.
@@ -3523,7 +3523,7 @@ OUString AutoRecovery::implst_getJobDescription(sal_Int32 eJob)
     sFeature.append(CMD_PROTOCOL);
 
     // Attention: Because "eJob" is used as a flag field the order of checking these
-    // flags is important. We must preferr job with higher priorities!
+    // flags is important. We must prefer job with higher priorities!
     // E.g. EmergencySave has an higher prio then AutoSave ...
     // On the other side there exist a well defined order between two different jobs.
     // e.g. PrepareEmergencySave must be done before EmergencySave is started of course.
@@ -4100,7 +4100,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
                                                 utl::MediaDescriptor&             rArgs    ,
                                           const css::uno::Reference< css::frame::XFrame >& xNewFrame)
 {
-    // external well known frame must be preferred (because it was created by ourself
+    // external well known frame must be prefered (because it was created by ourself
     // for loading documents into this frame)!
     // But if no frame exists ... we can try to locate it using any frame bound to the provided
     // document. Of course we must live without any frame in case the document does not exists at this
@@ -4138,7 +4138,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
 
     // HACK
     // An external provided progress (most given by the CrashSave/Recovery dialog)
-    // must be preferred. But we know that some application filters query it's own progress instance
+    // must be prefered. But we know that some application filters query it's own progress instance
     // at the frame method Frame::createStatusIndicator().
     // So we use a two step mechanism:
     // 1) we set the progress inside the MediaDescriptor, which will be provided to the filter
@@ -4165,7 +4165,7 @@ void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&       
                                              utl::MediaDescriptor&             rArgs    ,
                                        const css::uno::Reference< css::frame::XFrame >& xNewFrame)
 {
-    // external well known frame must be preferred (because it was created by ourself
+    // external well known frame must be prefered (because it was created by ourself
     // for loading documents into this frame)!
     // But if no frame exists ... we can try to locate it using any frame bound to the provided
     // document. Of course we must live without any frame in case the document does not exists at this
