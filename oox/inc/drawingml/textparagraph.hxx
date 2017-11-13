@@ -29,6 +29,8 @@
 #include <drawingml/textliststyle.hxx>
 #include <drawingml/textparagraphproperties.hxx>
 
+// The height the bullet is relative to is different in OOXML
+#define OOX_BULLET_LIST_SCALE_FACTOR 0.7f
 
 namespace oox { namespace formulaimport {
     class XmlStreamBuilder;
