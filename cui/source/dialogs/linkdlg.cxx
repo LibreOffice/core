@@ -243,6 +243,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTreeListBox *, pSvTabListBox, void 
         sfx2::LinkManager::GetDisplayNames( pLink, &sType, &aFileName, pLinkNm, pFilter );
         aFileName = INetURLObject::decode(aFileName, INetURLObject::DecodeMechanism::Unambiguous);
         m_pFtFullFileName->SetText( aFileName );
+        m_pFtFullFileName->SetURL( aFileName );
         m_pFtFullSourceName->SetText( sLink );
         m_pFtFullTypeName->SetText( sType );
     }
