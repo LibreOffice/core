@@ -327,7 +327,8 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     bRet = aObj.ImportStream( *xStream, OUString(), nFormatId );
                 // mba: clipboard always must contain absolute URLs (could be from alien source)
             }
-            else if (nFormatId == SotClipboardFormatId::STRING && aDataHelper.GetString( nFormatId, aStr ))
+            else if ((nFormatId == SotClipboardFormatId::STRING || nFormatId == SotClipboardFormatId::STRING_TSVC)
+                    && aDataHelper.GetString( nFormatId, aStr ))
             {
                 // Do CSV dialog if more than one line.
                 sal_Int32 nDelim = aStr.indexOf('\n');
@@ -362,7 +363,8 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                 else
                     bRet = aObj.ImportString( aStr, nFormatId );
             }
-            else if (nFormatId != SotClipboardFormatId::STRING && aDataHelper.GetString( nFormatId, aStr ))
+            else if ((nFormatId != SotClipboardFormatId::STRING && nFormatId != SotClipboardFormatId::STRING_TSVC)
+                    && aDataHelper.GetString( nFormatId, aStr ))
                 bRet = aObj.ImportString( aStr, nFormatId );
 
             InvalidateAttribs();

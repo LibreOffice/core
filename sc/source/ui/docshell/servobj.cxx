@@ -163,7 +163,8 @@ bool ScServerObject::GetData(
     OUString aDdeTextFmt = pDocSh->GetDdeTextFmt();
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    if( SotClipboardFormatId::STRING == SotExchange::GetFormatIdFromMimeType( rMimeType ))
+    SotClipboardFormatId eFormatId = SotExchange::GetFormatIdFromMimeType( rMimeType );
+    if (SotClipboardFormatId::STRING == eFormatId || SotClipboardFormatId::STRING_TSVC == eFormatId)
     {
         ScImportExport aObj( &rDoc, aRange );
         if( aDdeTextFmt[0] == 'F' )
@@ -182,6 +183,7 @@ bool ScServerObject::GetData(
         }
         if( aDdeTextFmt == "CSV" || aDdeTextFmt == "FCSV" )
             aObj.SetSeparator( ',' );
+        /* TODO: STRING_TSVC could preserve line breaks with added quotes. */
         aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, ' ', false ) );
         return aObj.ExportData( rMimeType, rData );
     }

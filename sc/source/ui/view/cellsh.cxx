@@ -464,6 +464,7 @@ void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFormatItem& rFormats 
     {
         lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::LINK );
         lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::STRING );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::STRING_TSVC );
         lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::DIF );
         lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::RTF );
         lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::RICHTEXT );
@@ -499,6 +500,7 @@ static bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
              rData.HasFormat( SotClipboardFormatId::LINK_SOURCE_OLE ) ||
              rData.HasFormat( SotClipboardFormatId::EMBEDDED_OBJ_OLE ) ||
              rData.HasFormat( SotClipboardFormatId::STRING ) ||
+             rData.HasFormat( SotClipboardFormatId::STRING_TSVC ) ||
              rData.HasFormat( SotClipboardFormatId::SYLK ) ||
              rData.HasFormat( SotClipboardFormatId::LINK ) ||
              rData.HasFormat( SotClipboardFormatId::HTML ) ||

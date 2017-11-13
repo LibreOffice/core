@@ -2196,7 +2196,8 @@ bool ScDocShell::DdeGetData( const OUString& rItem,
                              const OUString& rMimeType,
                              css::uno::Any & rValue )
 {
-    if( SotClipboardFormatId::STRING == SotExchange::GetFormatIdFromMimeType( rMimeType ) )
+    SotClipboardFormatId eFormatId = SotExchange::GetFormatIdFromMimeType( rMimeType );
+    if (SotClipboardFormatId::STRING == eFormatId || SotClipboardFormatId::STRING_TSVC == eFormatId)
     {
         if( rItem.equalsIgnoreAsciiCase( "Format" ) )
         {
@@ -2244,7 +2245,8 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
                              const OUString& rMimeType,
                              const css::uno::Any & rValue )
 {
-    if( SotClipboardFormatId::STRING == SotExchange::GetFormatIdFromMimeType( rMimeType ))
+    SotClipboardFormatId eFormatId = SotExchange::GetFormatIdFromMimeType( rMimeType );
+    if (SotClipboardFormatId::STRING == eFormatId || SotClipboardFormatId::STRING_TSVC == eFormatId)
     {
         if( rItem.equalsIgnoreAsciiCase( "Format" ) )
         {

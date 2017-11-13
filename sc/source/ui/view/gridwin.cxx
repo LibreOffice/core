@@ -3642,6 +3642,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                                  IsDropFormatSupported( SotClipboardFormatId::LINK_SOURCE_OLE ) ||
                                  IsDropFormatSupported( SotClipboardFormatId::EMBEDDED_OBJ_OLE ) ||
                                  IsDropFormatSupported( SotClipboardFormatId::STRING ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::STRING_TSVC ) ||
                                  IsDropFormatSupported( SotClipboardFormatId::SYLK ) ||
                                  IsDropFormatSupported( SotClipboardFormatId::LINK ) ||
                                  IsDropFormatSupported( SotClipboardFormatId::HTML ) ||
@@ -3791,6 +3792,8 @@ static SotClipboardFormatId lcl_GetDropFormatId( const uno::Reference<datatransf
         nFormatId = SotClipboardFormatId::FILE_LIST;
     else if ( aDataHelper.HasFormat( SotClipboardFormatId::SIMPLE_FILE ) )    // #i62773# FILE_LIST/FILE before STRING (Unix file managers)
         nFormatId = SotClipboardFormatId::SIMPLE_FILE;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::STRING_TSVC ) )
+        nFormatId = SotClipboardFormatId::STRING_TSVC;
     else if ( aDataHelper.HasFormat( SotClipboardFormatId::STRING ) )
         nFormatId = SotClipboardFormatId::STRING;
     else if ( aDataHelper.HasFormat( SotClipboardFormatId::GDIMETAFILE ) )

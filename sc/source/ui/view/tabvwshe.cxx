@@ -97,6 +97,7 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
             ScImportExport aObj( pDoc, aRange );
             aObj.SetFormulas( GetViewData().GetOptions().GetOption( VOPT_FORMULAS ) );
             OUString aExportOUString;
+            /* TODO: STRING_TSVC under some circumstances? */
             aObj.ExportString( aExportOUString, SotClipboardFormatId::STRING );
             aStrSelection = convertLineEnd(aExportOUString, LINEEND_CR);
 
