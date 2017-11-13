@@ -8579,8 +8579,11 @@ void ScInterpreter::ScLeft()
         else
             n = 1;
         OUString aStr = GetString().getString();
-        n = std::min(n, aStr.getLength());
-        aStr = aStr.copy( 0, n );
+        sal_Int32 nIdx = 0;
+        sal_Int32 nCnt = 0;
+        while ( nIdx < aStr.getLength() && n > nCnt++ )
+            aStr.iterateCodePoints( &nIdx );
+        aStr = aStr.copy( 0, nIdx );
         PushString( aStr );
     }
 }
