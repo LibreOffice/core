@@ -16,6 +16,24 @@
       "revId": "3ae340f19a5732941c88520de78f76da308cfedd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_fbe32431",
+        "filename": "sccomp/source/solver/SwarmSolver.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2017-11-13T00:37:24Z",
+      "side": 1,
+      "message": "This doesn\u0027t work for me as maSolution is a uno::Sequence..",
+      "parentUuid": "1a430d35_f82b2a92",
+      "revId": "3ae340f19a5732941c88520de78f76da308cfedd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
