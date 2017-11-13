@@ -176,7 +176,7 @@ namespace o3tl
 // of the implementation. Only type double is greedy and takes
 // what it gets.
 
-#define SbxMAXCHAR  u'\xFFFF'
+#define SbxMAXCHAR  (u'\xFFFF')
 #define SbxMINCHAR  (0)
 #define SbxMAXBYTE  ( 255)
 #define SbxMAXINT   ( 32767)
@@ -185,10 +185,6 @@ namespace o3tl
 #define SbxMAXLNG   ( 2147483647)
 #define SbxMINLNG   ((sal_Int32)(-2147483647-1))
 #define SbxMAXULNG  ((sal_uInt32) 0xffffffff)
-
-#define SbxMAXSALUINT64     SAL_MAX_UINT64
-#define SbxMAXSALINT64      SAL_MAX_INT64
-#define SbxMINSALINT64      SAL_MIN_INT64
 
         // Currency stored as SbxSALINT64 == sal_Int64
         // value range limits are ~(2^63 - 1)/10000
