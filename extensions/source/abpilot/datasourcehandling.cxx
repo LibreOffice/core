@@ -38,6 +38,8 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <com/sun/star/uri/VndSunStarPkgUrlReferenceFactory.hpp>
 
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
@@ -63,7 +65,7 @@ OUString lcl_getOwnURL(SfxObjectShell const * pObjectShell)
         return aRet;
 
     const INetURLObject& rURLObject = pObjectShell->GetMedium()->GetURLObject();
-    aRet = rURLObject.GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
+    aRet = rURLObject.GetMainURL(INetURLObject::DecodeMechanism::NONE);
     return aRet;
 }
 
@@ -353,8 +355,8 @@ namespace abp
             {
                 SfxViewFrame* pFrame = SfxViewFrame::Current();
                 SfxObjectShell* pObjectShell = pFrame ? pFrame->GetObjectShell() : nullptr;
-                OUString aOwnURL = lcl_getOwnURL(pObjectShell);
-                if (aOwnURL.isEmpty() || !rSettings.bEmbedDataSource || !pObjectShell)
+                OUString aOwnURL = lcl_getOwnURL(pObjectShell); // empty if pObjectShell is nullptr
+                if (aOwnURL.isEmpty() || !rSettings.bEmbedDataSource)
                 {
                     // Cannot or should not embed.
                     xStorable->storeAsURL(m_pImpl->sName,Sequence<PropertyValue>());
@@ -363,9 +365,12 @@ namespace abp
                 {
                     // Embed.
                     OUString aStreamRelPath = "EmbeddedDatabase";
-                    OUString sTmpName = "vnd.sun.star.pkg://";
-                    sTmpName += INetURLObject::encode(aOwnURL, INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All);
-                    sTmpName += "/" + aStreamRelPath;
+                    auto xContext(comphelper::getProcessComponentContext());
+                    auto xUri = css::uri::UriReferenceFactory::create(xContext)->parse(aOwnURL);
+                    assert(xUri.is());
+                    xUri = css::uri::VndSunStarPkgUrlReferenceFactory::create(xContext)->createVndSunStarPkgUrlReference(xUri);
+                    assert(xUri.is());
+                    OUString const sTmpName = xUri->getUriReference() + "/" + aStreamRelPath;
                     uno::Reference<embed::XStorage> xStorage = pObjectShell->GetStorage();
                     uno::Sequence<beans::PropertyValue> aSequence = comphelper::InitPropertySequence(
                     {
