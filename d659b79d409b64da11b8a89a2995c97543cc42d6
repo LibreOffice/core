@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_7b165456",
+        "filename": "cui/uiconfig/ui/baselinksdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-11-13T17:08:41Z",
+      "side": 0,
+      "message": "hmm, can we do without? since it needs changes in _all_ translations.",
+      "revId": "d659b79d409b64da11b8a89a2995c97543cc42d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_bb08bc2e",
+        "filename": "cui/uiconfig/ui/baselinksdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-11-13T17:08:41Z",
+      "side": 0,
+      "message": "hmm, can we do without? since it needs changes in _all_ translations.",
+      "revId": "d659b79d409b64da11b8a89a2995c97543cc42d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
