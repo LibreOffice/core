@@ -26,6 +26,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/fixedhyper.hxx>
 
 #include <svtools/svmedit.hxx>
 #include <svtools/svtabbx.hxx>
@@ -45,7 +46,7 @@ class SvBaseLinksDlg : public ModalDialog
     using Window::SetType;
 
     VclPtr<SvTabListBox> m_pTbLinks;
-    VclPtr<FixedText> m_pFtFullFileName;
+    VclPtr<FixedHyperlink> m_pFtFullFileName;
     VclPtr<FixedText> m_pFtFullSourceName;
     VclPtr<FixedText> m_pFtFullTypeName;
     VclPtr<RadioButton> m_pRbAutomatic;
