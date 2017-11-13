@@ -411,14 +411,6 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
         aPropSet.setProperty( PROP_ParaTopMargin, maParaTopMargin.toMargin( fCharacterSize != 0.0 ? fCharacterSize : getCharHeightPoints ( 12.0 ) ) );
     if ( maParaBottomMargin.bHasValue || bPushDefaultValues )
         aPropSet.setProperty( PROP_ParaBottomMargin, maParaBottomMargin.toMargin( fCharacterSize != 0.0 ? fCharacterSize : getCharHeightPoints ( 12.0 ) ) );
-    if ( nNumberingType == NumberingType::BITMAP )
-    {
-        fCharacterSize = getCharHeightPoints( fCharacterSize );
-
-        css::awt::Size aBulletSize;
-        aBulletSize.Width = aBulletSize.Height = static_cast< sal_Int32 >( ( fCharacterSize * ( 2540.0 / 72.0 ) * 0.8 ) );
-        rioBulletMap.setProperty( PROP_GraphicSize, aBulletSize);
-    }
 
     boost::optional< sal_Int32 > noParaLeftMargin( moParaLeftMargin );
     boost::optional< sal_Int32 > noFirstLineIndentation( moFirstLineIndentation );
