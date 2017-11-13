@@ -1189,13 +1189,99 @@
      <table:table-cell table:style-name="ce17"/>
      <table:table-cell table:number-columns-repeated="4"/>
     </table:table-row>
-    <table:table-row table:style-name="ro5" table:number-rows-repeated="28">
-     <table:table-cell table:style-name="ce14"/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:style-name="ce11"/>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:style-name="ce14" table:formula="of:=LEN([.I10])" office:value-type="float" office:value="16" calcext:value-type="float">
+      <text:p>16</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="16" calcext:value-type="float">
+      <text:p>16</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce40" table:formula="of:=[.A10]=[.B10]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=LEN(I10)" calcext:value-type="string">
+      <text:p>=LEN(I10)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 returns 25</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string"><text:p>ab<text:span text:style-name="T1">😂de𝔖gh𝕬𝖈𝖍𝖙𝖚𝖓𝖌!</text:span></text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="4"/>
-     <table:table-cell table:style-name="ce17"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:style-name="ce14" table:formula="of:=LEN([.I11])" office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce41" table:formula="of:=[.A11]=[.B11]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="=LEN(I11)" calcext:value-type="string">
+      <text:p>=LEN(I11)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 returns 4</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>ab😂</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:style-name="ce14" table:formula="of:=LEN([.I12])" office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce42" table:formula="of:=[.A12]=[.B12]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=LEN(I12)" calcext:value-type="string">
+      <text:p>=LEN(I12)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 returns 6</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce44" office:value-type="string" calcext:value-type="string"><text:p><text:span text:style-name="T2">&quot;</text:span><text:span text:style-name="T3">𧌒𧀬</text:span><text:span text:style-name="T4">&quot;</text:span></text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro3">
+     <table:table-cell table:style-name="ce14" table:formula="of:=LEN([.I13])" office:value-type="float" office:value="6" calcext:value-type="float">
+      <text:p>6</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="6" calcext:value-type="float">
+      <text:p>6</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce45" table:formula="of:=[.A13]=[.B13]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="=LEN(I13)" calcext:value-type="string">
+      <text:p>=LEN(I13)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 returns 6</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce48" office:value-type="string" calcext:value-type="string">
+      <text:p>&quot;üë&quot;</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5" table:number-rows-repeated="24">
+      <table:table-cell table:style-name="ce14"/>
+      <table:table-cell table:style-name="ce17"/>
+     <table:table-cell table:style-name="ce38"/>
+      <table:table-cell table:style-name="ce11"/>
+      <table:table-cell table:number-columns-repeated="4"/>
+      <table:table-cell table:style-name="ce17"/>
      <table:table-cell table:number-columns-repeated="4"/>
     </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="39">
