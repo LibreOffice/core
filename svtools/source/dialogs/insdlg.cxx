@@ -263,6 +263,7 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotClipboardFormatId nId )
         { SotClipboardFormatId::FILEGRPDESCRIPTOR,   STR_FORMAT_ID_FILEGRPDESCRIPTOR },
         { SotClipboardFormatId::HTML_NO_COMMENT,     STR_FORMAT_ID_HTML_NO_COMMENT },
         { SotClipboardFormatId::RICHTEXT,            STR_FORMAT_ID_RICHTEXT },
+        { SotClipboardFormatId::STRING_TSVC,         STR_FORMAT_ID_STRING_TSVC },
     };
 
     const char* pResId = nullptr;

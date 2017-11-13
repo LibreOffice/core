@@ -27,6 +27,7 @@
 #define STR_REPEAT                              NC_("STR_REPEAT", "~Repeat: ")
 
 #define STR_FORMAT_STRING                       NC_("STR_FORMAT_STRING", "Unformatted text")
+#define STR_FORMAT_ID_STRING_TSVC               NC_("STR_FORMAT_ID_STRING_TSVC", "Unformatted text [TSV-Calc]")
 #define STR_FORMAT_BITMAP                       NC_("STR_FORMAT_BITMAP", "Bitmap")
 #define STR_FORMAT_GDIMETAFILE                  NC_("STR_FORMAT_GDIMETAFILE", "GDI metafile")
 #define STR_FORMAT_RTF                          NC_("STR_FORMAT_RTF", "Formatted text [RTF]")
