@@ -45,7 +45,7 @@ private:
     std::string invertCondition(Expr const * condExpr, SourceRange conditionRange);
     bool checkOverlap(SourceRange);
 
-    std::stack<bool> mLastStmtInParentStack;
+    Stmt const * lastStmtInCompoundStmt = nullptr;
     std::vector<std::pair<char const *, char const *>> mvModifiedRanges;
     Stmt const * mElseBranch = nullptr;
 };
@@ -107,9 +107,16 @@ bool Flatten::TraverseCompoundStmt(CompoundStmt * compoundStmt)
     // var decls in its then block, we cannot de-indent the then block without
     // extending the lifetime of some variables, which may be problematic
     // ignore if we are part of an if/then/else/if chain
-    mLastStmtInParentStack.push(compoundStmt->size() > 0 && isa<IfStmt>(*compoundStmt->body_back()));
+    auto copy = lastStmtInCompoundStmt;
+    if (compoundStmt->size() > 0)
+        lastStmtInCompoundStmt = compoundStmt->body_back();
+    else
+        lastStmtInCompoundStmt = nullptr;
+
     bool rv = RecursiveASTVisitor<Flatten>::TraverseCompoundStmt(compoundStmt);
-    mLastStmtInParentStack.pop();
+
+    lastStmtInCompoundStmt = copy;
+    return rv;
     return rv;
 }
 
@@ -142,7 +149,7 @@ bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
         // if the "if" statement is not the last statement in its block, and it contains
         // var decls in its then block, we cannot de-indent the then block without
         // extending the lifetime of some variables, which may be problematic
-        if (!mLastStmtInParentStack.top() || containsVarDecl(ifStmt->getThen()))
+        if (ifStmt != lastStmtInCompoundStmt && containsVarDecl(ifStmt->getThen()))
             return true;
 
         if (!rewrite1(ifStmt))
@@ -164,7 +171,7 @@ bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
         // if the "if" statement is not the last statement in it's block, and it contains
         // var decls in it's else block, we cannot de-indent the else block without
         // extending the lifetime of some variables, which may be problematic
-        if (!mLastStmtInParentStack.top() || containsVarDecl(ifStmt->getElse()))
+        if (ifStmt != lastStmtInCompoundStmt && containsVarDecl(ifStmt->getElse()))
             return true;
 
         if (!rewrite2(ifStmt))

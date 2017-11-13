@@ -19,12 +19,17 @@ void top1() {
     } else {
         throw std::exception(); // expected-error {{unconditional throw in else branch, rather invert the condition, throw early, and flatten the normal case [loplugin:flatten]}}
     }
-    // no warning expected
     if (foo() == 1) {
         Class aClass;
         (void)aClass;
     } else {
-        throw std::exception();
+        throw std::exception(); // no warning expected
+    }
+    if (foo() == 1) { // expected-note {{if condition here [loplugin:flatten]}}
+        Class aClass;
+        (void)aClass;
+    } else {
+        throw std::exception(); // expected-error {{unconditional throw in else branch, rather invert the condition, throw early, and flatten the normal case [loplugin:flatten]}}
     }
 }
 
@@ -34,9 +39,14 @@ void top2() {
     } else {
         foo();
     }
-    // no warning expected
     if (foo() == 2) {
-        throw std::exception();
+        throw std::exception(); // no warning expected
+    } else {
+        Class aClass;
+        (void)aClass;
+    }
+    if (foo() == 2) {
+        throw std::exception(); // expected-error {{unconditional throw in then branch, just flatten the else [loplugin:flatten]}}
     } else {
         Class aClass;
         (void)aClass;
