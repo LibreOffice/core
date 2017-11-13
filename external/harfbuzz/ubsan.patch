@@ -1,0 +1,11 @@
+--- src/hb-ot-font.cc
++++ src/hb-ot-font.cc
+@@ -138,7 +138,7 @@
+ 	return this->default_advance;
+     }
+ 
+-    return this->table->longMetric[MIN (glyph, (uint32_t) this->num_advances - 1)].advance
++    return static_cast<OT::LongMetric const *>(this->table->longMetric)[MIN (glyph, (uint32_t) this->num_advances - 1)].advance
+ 	 + this->var->get_advance_var (glyph, font->coords, font->num_coords); // TODO Optimize?!
+   }
+ };
