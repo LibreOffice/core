@@ -24,7 +24,7 @@
 #include <com/sun/star/drawing/Text.idl>
 
 #include <com/sun/star/drawing/ShadowProperties.idl>
-
+#include <com/sun/star/drawing/SignatureLineProperties.idl>
 #include <com/sun/star/drawing/RotationDescriptor.idl>
 
 #include <com/sun/star/awt/XBitmap.idl>
@@ -48,6 +48,8 @@ published service GraphicObjectShape
     service com::sun::star::drawing::ShadowProperties;
 
     service com::sun::star::drawing::RotationDescriptor;
+
+    service com::sun::star::drawing::SignatureLineProperties;
 
     /** This is an url to the source bitmap for this graphic shape.
     */
@@ -110,6 +112,14 @@ published service GraphicObjectShape
     /** This is the graphic that represents this graphic shape
     */
     [optional, property] com::sun::star::graphic::XGraphic Graphic;
+
+    /** Whether this shape is actually a signature line.
+    */
+    [optional, property] boolean IsSignatureLine;
+
+    /** The actual properties for SignatureLine
+    */
+    //[optional, property] com::sun::star::drawing::SignatureLineProperties SignatureLineProperties;
 };
 
 

@@ -1,0 +1,57 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef __com_sun_star_drawing_SignatureLineShape_idl__
+#define __com_sun_star_drawing_SignatureLineShape_idl__
+
+#include <com/sun/star/graphic/XGraphic.idl>
+
+
+module com {  module sun {  module star {  module drawing {
+
+
+/**
+ * This service represents a Signature Line.
+ *
+ * It holds all properties a signature line has and generates the graphic on demand.
+ *
+ * Additionally, when a document is imported, the existing images for valid and invalid
+ * signatures are stored as graphics in this service.
+ */
+published service SignatureLineProperties
+{
+    /// The ID of the SignatureLine, used to connect to a signature.
+    [property] string Id;
+    /// Suggested Signer, Name of the Signer
+    [property] string SuggestedSignerName;
+    /// Suggested Signer, Line 2 (Title or additional information)
+    [property] string SuggestedSignerTitle;
+    /// Suggested Signer Email
+    [property] string SuggestedSignerEmail;
+    /// Signing instructions
+    [property] string SigningInstructions;
+    /// Whether the signing data should be shown
+    [property] boolean ShowSignDate;
+    /// Whether the user can attach a comment at signing time
+    [property] boolean CanAddComment;
+
+    /** The image representing to be shown when the signature is valid
+    */
+    [optional, property] com::sun::star::graphic::XGraphic ValidSignatureLineImage;
+
+    /** The image representing to be shown when the signature is invalid
+    */
+    [optional, property] com::sun::star::graphic::XGraphic InvalidSignatureLineImage;
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

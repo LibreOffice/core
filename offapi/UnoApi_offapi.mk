@@ -818,6 +818,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/drawing,\
 	ShadowProperties \
 	Shape \
 	Shapes \
+	SignatureLineProperties \
 	Text \
 	TextProperties \
 	TextShape \
