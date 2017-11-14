@@ -282,7 +282,9 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
     if ( !n2LineDY2 )
         n2LineDY2 = 1;
 
-    long nUnderlineOffset = mnDescent/2 + 1;
+    const vcl::Font& rFont ( pDev->GetFont() );
+    bool bCJKVertical = MsLangId::isCJK(rFont.GetLanguage()) && rFont.IsVertical();
+    long nUnderlineOffset = bCJKVertical ? mnDescent : (mnDescent/2 + 1);
     long nStrikeoutOffset = -((mnAscent - mnIntLeading) / 3);
 
     mnUnderlineSize        = nLineHeight;
@@ -305,6 +307,7 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
     }
     else
         mnWUnderlineSize = ((nWCalcSize*50)+50) / 100;
+
 
     // Don't assume that wavelines are never placed below the descent, because for most fonts the waveline
     // is drawn into the text
