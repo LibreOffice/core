@@ -316,6 +316,12 @@
                     "dest-filename": "external/tarballs/neon-0.30.2.tar.gz"
                 },
                 {
+                    "url": "https://dev-www.libreoffice.org/src/noto-fonts-20170306.tar.gz",
+                    "sha256": "8a269926a3c88dd14b124b19138b54408938a45ea6e60db65073469f45ae6ac8",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/noto-fonts-20170306.tar.gz"
+                },
+                {
                     "url": "https://dev-www.libreoffice.org/src/openldap-2.4.45.tgz",
                     "sha256": "cdd6cffdebcd95161a73305ec13fc7a78e9707b46ca9f84fb897cd5626df3824",
                     "type": "file",
