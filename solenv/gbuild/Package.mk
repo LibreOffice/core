@@ -65,7 +65,7 @@ $(dir $(call gb_Package_get_target,%))%/.dir :
 $(call gb_Package_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),PKG,2)
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,$(FILES)) \
-	&& cat $${RESPONSEFILE} | xargs $(if $(filter MACOSX,$(OS_FOR_BUILD)),-n 1000) rm -f \
+	&& cat $${RESPONSEFILE} | $(if $(filter WNT,$(OS)),env -i PATH="$$PATH") xargs $(if $(filter MACOSX,$(OS_FOR_BUILD)),-n 1000) rm -f \
 	&& rm -f $${RESPONSEFILE}
 
 $(call gb_Package_get_preparation_target,%) :
