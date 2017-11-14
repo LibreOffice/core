@@ -40,6 +40,7 @@
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/tstpitem.hxx>
+#include <svl/grabbagitem.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/whiter.hxx>
 #include <fmtpdsc.hxx>
@@ -461,6 +462,23 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby , bool bWriteCombChars
         HasItem< SwFormatCharFormat >( aRangeItems, RES_TXTATR_CHARFMT );
     if ( pCharFormatItem )
         ClearOverridesFromSet( *pCharFormatItem, aExportSet );
+
+    // tdf#113790: AutoFormat style overwrites char style, so remove all
+    // elements from CHARFMT grab bag which are set in AUTOFMT grab bag
+    if (const SfxGrabBagItem *pAutoFmtGrabBag = dynamic_cast<const SfxGrabBagItem*>(pGrabBag))
+    {
+        if (const SfxGrabBagItem *pCharFmtGrabBag = aExportSet.GetItem<SfxGrabBagItem>(RES_CHRATR_GRABBAG, false))
+        {
+            SfxGrabBagItem aNewCharFmtGrabBag(*pCharFmtGrabBag);
+            auto & rNewFmtMap = aNewCharFmtGrabBag.GetGrabBag();
+            for (auto const & item : pAutoFmtGrabBag->GetGrabBag())
+            {
+                if (item.second.hasValue())
+                    rNewFmtMap.erase(item.first);
+            }
+            aExportSet.Put(aNewCharFmtGrabBag);
+        }
+    }
 
     ww8::PoolItems aExportItems;
     GetPoolItems( aExportSet, aExportItems, false );
