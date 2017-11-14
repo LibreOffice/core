@@ -66,13 +66,13 @@ static void checkLdapReturnCode(const sal_Char *aOperation,
 {
     if (aRetCode == LDAP_SUCCESS) { return ; }
 
-    OUStringBuffer message;
+    OUString message;
 
     if (aOperation != nullptr)
     {
-        message.appendAscii(aOperation).append(": ") ;
+        message += OUString::createFromAscii(aOperation) + ": ";
     }
-    message.appendAscii(ldap_err2string(aRetCode)).append(" (") ;
+    message += OUString::createFromAscii(ldap_err2string(aRetCode)) + " (" ;
     sal_Char *stub = nullptr ;
 
 #ifndef LDAP_OPT_SIZELIMIT // for use with OpenLDAP
@@ -80,7 +80,7 @@ static void checkLdapReturnCode(const sal_Char *aOperation,
 #endif
     if (stub != nullptr)
     {
-        message.appendAscii(stub) ;
+        message += OUString::createFromAscii(stub) ;
         // It would seem the message returned is actually
         // not a copy of a string but rather some static
         // string itself. At any rate freeing it seems to
@@ -88,10 +88,9 @@ static void checkLdapReturnCode(const sal_Char *aOperation,
         // This call is thus disabled for the moment.
         //ldap_memfree(stub) ;
     }
-    else { message.append("No additional information") ; }
-    message.append(")") ;
-    throw ldap::LdapGenericException(message.makeStringAndClear(),
-                                     nullptr, aRetCode) ;
+    else { message += "No additional information" ; }
+    message += ")" ;
+    throw ldap::LdapGenericException(message, nullptr, aRetCode) ;
 }
 
 void  LdapConnection::connectSimple(const LdapDefinition& aDefinition)
@@ -234,11 +233,13 @@ void LdapConnection::initConnection()
                 nullptr, 0) ;
     }
 
-
-    OUStringBuffer filter( "(&(objectclass=" );
-
-    filter.append( mLdapDefinition.mUserObjectClass ).append(")(") ;
-    filter.append( mLdapDefinition.mUserUniqueAttr ).append("=").append(aUser).append("))") ;
+    OUString filter = "(&(objectclass="
+                    + mLdapDefinition.mUserObjectClass
+                    + ")("
+                    + mLdapDefinition.mUserUniqueAttr
+                    + "="
+                    + aUser
+                    + "))";
 
     LdapMessageHolder result;
 #ifdef _WIN32
@@ -246,13 +247,13 @@ void LdapConnection::initConnection()
     LdapErrCode retCode = ldap_search_sW(mConnection,
                                       const_cast<PWSTR>(o3tl::toW(mLdapDefinition.mBaseDN.getStr())),
                                       LDAP_SCOPE_SUBTREE,
-                                      const_cast<PWSTR>(o3tl::toW(filter.makeStringAndClear().getStr())), attributes, 0, &result.msg) ;
+                                      const_cast<PWSTR>(o3tl::toW(filter.getStr())), attributes, 0, &result.msg) ;
 #else
     sal_Char * attributes [2] = { const_cast<sal_Char *>(LDAP_NO_ATTRS), nullptr };
     LdapErrCode retCode = ldap_search_s(mConnection,
                                       OUStringToOString( mLdapDefinition.mBaseDN, RTL_TEXTENCODING_UTF8 ).getStr(),
                                       LDAP_SCOPE_SUBTREE,
-                                      OUStringToOString( filter.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr(), attributes, 0, &result.msg) ;
+                                      OUStringToOString( filter, RTL_TEXTENCODING_UTF8 ).getStr(), attributes, 0, &result.msg) ;
 #endif
     checkLdapReturnCode("FindUserDn", retCode) ;
     OUString userDn ;
