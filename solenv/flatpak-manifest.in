@@ -250,10 +250,10 @@
                     "dest-filename": "external/tarballs/librevenge-0.0.4.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libstaroffice-0.0.4.tar.xz",
-                    "sha256": "6e728784d002144716b10fe122973b3e4edda9004538386b0b58bb303404903a",
+                    "url": "https://dev-www.libreoffice.org/src/libstaroffice-0.0.5.tar.xz",
+                    "sha256": "315507add58068aa6d5c437e7c2a6fd1abe684515915152c6cf338fc588da982",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libstaroffice-0.0.4.tar.xz"
+                    "dest-filename": "external/tarballs/libstaroffice-0.0.5.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/ltm-1.0.zip",
@@ -298,10 +298,10 @@
                     "dest-filename": "external/tarballs/26b3e95ddf3d9c077c480ea45874b3b8-lp_solve_5.5.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/mdds-1.3.0.tar.bz2",
-                    "sha256": "00aa92a28af9f1168a8e5c38e46f311abb65ef5b113ef56078ff104b94211460",
+                    "url": "https://dev-www.libreoffice.org/src/mdds-1.3.1.tar.bz2",
+                    "sha256": "dcb8cd2425567a5a5ec164afea475bce57784bca3e352ad4cbdd3d1a7e08e5a1",
                     "type": "file",
-                    "dest-filename": "external/tarballs/mdds-1.3.0.tar.bz2"
+                    "dest-filename": "external/tarballs/mdds-1.3.1.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/a8c2c5b8f09e7ede322d5c602ff6a4b6-mythes-1.2.4.tar.gz",
@@ -310,16 +310,16 @@
                     "dest-filename": "external/tarballs/a8c2c5b8f09e7ede322d5c602ff6a4b6-mythes-1.2.4.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/231adebe5c2f78fded3e3df6e958878e-neon-0.30.1.tar.gz",
-                    "sha256": "00c626c0dc18d094ab374dbd9a354915bfe4776433289386ed489c2ec0845cdd",
+                    "url": "https://dev-www.libreoffice.org/src/neon-0.30.2.tar.gz",
+                    "sha256": "db0bd8cdec329b48f53a6f00199c92d5ba40b0f015b153718d1b15d3d967fbca",
                     "type": "file",
-                    "dest-filename": "external/tarballs/231adebe5c2f78fded3e3df6e958878e-neon-0.30.1.tar.gz"
+                    "dest-filename": "external/tarballs/neon-0.30.2.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/openldap-2.4.44.tgz",
-                    "sha256": "d7de6bf3c67009c95525dde3a0212cc110d0a70b92af2af8e3ee800e81b88400",
+                    "url": "https://dev-www.libreoffice.org/src/openldap-2.4.45.tgz",
+                    "sha256": "cdd6cffdebcd95161a73305ec13fc7a78e9707b46ca9f84fb897cd5626df3824",
                     "type": "file",
-                    "dest-filename": "external/tarballs/openldap-2.4.44.tgz"
+                    "dest-filename": "external/tarballs/openldap-2.4.45.tgz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/liborcus-0.12.1.tar.gz",
