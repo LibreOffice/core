@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_f64a5bab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-11-14T09:08:27Z",
+      "side": 1,
+      "message": "You lost the tdf number again.\n\nWhen updating the change in gerrit, make sure to update your local commit too, if not your changes will be overwritten next time you push.",
+      "revId": "66f51ff79443ba650d97350906f387d9deef2077",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
