@@ -20,6 +20,7 @@
 #include <tools/rc.h>
 #include <comphelper/lok.hxx>
 
+#include <vcl/IDialogRenderable.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
@@ -1156,18 +1157,23 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
         pCursor->SetPos( Point( nCursorPosX, nCursorPosY ) );
         pCursor->SetSize( Size( nCursorWidth, nTextHeight ) );
         pCursor->Show();
-    }
 
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        const long X = GetOutOffXPixel() + pCursor->GetPos().X();
-        const long Y = GetOutOffYPixel() + pCursor->GetPos().Y();
-        if (nCursorWidth == 0)
-            nCursorWidth = 2;
-        const Rectangle aRect(Point(X, Y), Size(nCursorWidth, pCursor->GetHeight()));
-        Dialog* pParentDlg = GetParentDialog();
-        if (pParentDlg)
-            pParentDlg->LOKCursorInvalidate(aRect);
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            const long X = GetOutOffXPixel() + pCursor->GetPos().X();
+            const long Y = GetOutOffYPixel() + pCursor->GetPos().Y();
+
+            if (nCursorWidth == 0)
+                nCursorWidth = 2;
+            const Rectangle aRect(Point(X, Y), Size(nCursorWidth, pCursor->GetHeight()));
+
+            std::vector<vcl::LOKPayloadItem> aPayload;
+            aPayload.push_back(std::make_pair("rectangle", aRect.toString()));
+
+            Dialog* pParentDlg = GetParentDialog();
+            if (pParentDlg)
+                pParentDlg->LOKCursor("cursor_invalidate", aPayload);
+        }
     }
 }
 
@@ -1906,6 +1912,16 @@ void Edit::GetFocus()
         SetInputContext( InputContext( GetFont(), !IsReadOnly() ? InputContextFlags::Text|InputContextFlags::ExtText : InputContextFlags::NONE ) );
     }
 
+    // notify dialog's cursor visible status
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        std::vector<vcl::LOKPayloadItem> aPayload;
+        aPayload.push_back(std::make_pair(OString("visible"), OString("true")));
+        Dialog* pParentDlg = GetParentDialog();
+        if (pParentDlg)
+            pParentDlg->LOKCursor("cursor_visible", aPayload);
+    }
+
     Control::GetFocus();
 }
 
@@ -1931,6 +1947,17 @@ void Edit::LoseFocus()
 
         if ( !mbActivePopup && !( GetStyle() & WB_NOHIDESELECTION ) && maSelection.Len() )
             ImplInvalidateOrRepaint();    // Selektion malen
+    }
+
+
+    // notify dialog's cursor visible status
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        std::vector<vcl::LOKPayloadItem> aPayload;
+        aPayload.push_back(std::make_pair(OString("visible"), OString("false")));
+        Dialog* pParentDlg = GetParentDialog();
+        if (pParentDlg)
+            pParentDlg->LOKCursor("cursor_visible", aPayload);
     }
 
     Control::LoseFocus();
