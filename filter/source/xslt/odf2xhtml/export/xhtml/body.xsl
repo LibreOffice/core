@@ -329,7 +329,7 @@
         <xsl:param name="globalData"/>
         <!-- The footnote symbol is the prefix for a footnote in the footer -->
         <xsl:param name="footnotePrefix"/>
-        <!-- 1) In ODF sometimes the followig children are nested
+        <!-- 1) In ODF sometimes the following children are nested
                 <text:p>
                     <draw:frame>
                         <draw:text-box>
