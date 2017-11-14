@@ -80,7 +80,7 @@ private:
     std::unique_ptr<double[]> mpForecast;                 // forecasted value array
     SCSIZE mnSmplInPrd;                 // samples per period
     double mfStepSize;                  // increment of X in maRange
-    double mfAlpha, mfBeta, mfGamma;    // constants to minimise the RMSE in the ES-equations
+    double mfAlpha, mfBeta, mfGamma;    // constants to minimize the RMSE in the ES-equations
     SCSIZE mnCount;                     // No of data points
     bool mbInitialised;
     int mnMonthDay;                     // n-month X-interval, value is day of month

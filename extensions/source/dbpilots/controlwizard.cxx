@@ -438,7 +438,7 @@ namespace dbp
             // set the new connection
             if ( _bAutoDispose )
             {
-                // for this, use a AutoDisposer (so the conn is cleaned up when the form dies or get's another connection)
+                // for this, use a AutoDisposer (so the conn is cleaned up when the form dies or gets another connection)
                 Reference< XRowSet > xFormRowSet( m_aContext.xForm, UNO_QUERY );
                 rtl::Reference<OAutoConnectionDisposer> pAutoDispose = new OAutoConnectionDisposer( xFormRowSet, _rxConn );
             }
