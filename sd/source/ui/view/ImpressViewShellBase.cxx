@@ -19,16 +19,18 @@
 
 #include "ImpressViewShellBase.hxx"
 
-#include "DrawDocShell.hxx"
-#include "sdresid.hxx"
-#include "strings.hrc"
-#include "app.hrc"
-#include "framework/FrameworkHelper.hxx"
-#include "framework/ImpressModule.hxx"
-#include "MasterPageObserver.hxx"
+#include <DrawDocShell.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
+#include <app.hrc>
+#include <framework/FrameworkHelper.hxx>
+#include <framework/ImpressModule.hxx>
+#include <framework/FrameworkHelper.hxx>
+#include <MasterPageObserver.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
+#include <comphelper/lok.hxx>
 
 namespace sd {
 
@@ -41,7 +43,7 @@ SfxViewShell* ImpressViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     ImpressViewShellBase* pBase = new ImpressViewShellBase(pFrame, pOldView);
-    pBase->LateInit("");
+    pBase->LateInit(comphelper::LibreOfficeKit::isActive() ? framework::FrameworkHelper::msImpressViewURL : "");
     return pBase;
 }
 void ImpressViewShellBase::RegisterFactory( sal_uInt16 nPrio )
