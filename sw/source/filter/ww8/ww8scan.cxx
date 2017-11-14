@@ -1264,8 +1264,41 @@ WW8_CP WW8PLCFx_PCD::AktPieceStartFc2Cp( WW8_FC nStartPos )
     if( nStartPos < nFcStart )
         nStartPos = nFcStart;
 
-    if( nStartPos >= nFcStart + (nCpEnd - nCpStart)     * nUnicodeFactor )
-        nStartPos  = nFcStart + (nCpEnd - nCpStart - 1) * nUnicodeFactor;
+    WW8_CP nCpLen;
+    bool bFail = o3tl::checked_sub(nCpEnd, nCpStart, nCpLen);
+    if (bFail)
+    {
+        SAL_WARN("sw.ww8", "broken offset, ignoring");
+        return WW8_CP_MAX;
+    }
+
+    WW8_CP nCpLenBytes;
+    bFail = o3tl::checked_multiply(nCpLen, nUnicodeFactor, nCpLenBytes);
+    if (bFail)
+    {
+        SAL_WARN("sw.ww8", "broken offset, ignoring");
+        return WW8_CP_MAX;
+    }
+
+    WW8_FC nFcLen;
+    bFail = o3tl::checked_add(nFcStart, nCpLenBytes, nFcLen);
+    if (bFail)
+    {
+        SAL_WARN("sw.ww8", "broken offset, ignoring");
+        return WW8_CP_MAX;
+    }
+
+    WW8_FC nFcEnd;
+    bFail = o3tl::checked_add(nFcStart, nFcLen, nFcEnd);
+    if (bFail)
+    {
+        SAL_WARN("sw.ww8", "broken offset, ignoring");
+        return WW8_CP_MAX;
+    }
+
+
+    if (nStartPos >= nFcEnd)
+        nStartPos = nFcEnd - (1 * nUnicodeFactor);
 
     return nCpStart + (nStartPos - nFcStart) / nUnicodeFactor;
 }
