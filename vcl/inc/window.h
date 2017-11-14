@@ -80,6 +80,12 @@ namespace dnd {
 
 VCL_DLLPUBLIC Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize);
 
+//return true if this window and its stack of containers are all shown
+bool isVisibleInLayout(const vcl::Window *pWindow);
+
+//return true if this window and its stack of containers are all enabled
+bool isEnabledInLayout(const vcl::Window *pWindow);
+
 bool ImplWindowFrameProc( vcl::Window* pInst, SalEvent nEvent, const void* pEvent );
 
 struct ImplWinData

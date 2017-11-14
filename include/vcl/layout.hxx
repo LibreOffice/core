@@ -703,12 +703,6 @@ Size getLegacyBestSizeForChildren(const vcl::Window &rWindow);
 //Get first parent which is not a layout widget
 VCL_DLLPUBLIC vcl::Window* getNonLayoutParent(vcl::Window *pParent);
 
-//return true if this window and its stack of containers are all shown
-bool isVisibleInLayout(const vcl::Window *pWindow);
-
-//return true if this window and its stack of containers are all enabled
-bool isEnabledInLayout(const vcl::Window *pWindow);
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
