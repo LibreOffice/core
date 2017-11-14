@@ -24,6 +24,8 @@ do
   -e 's/^Icon=libreoffice-/Icon=org.libreoffice.LibreOffice-/' "$i" \
   >/app/share/applications/org.libreoffice.LibreOffice-"${i#"${PREFIXDIR?}"/share/applications/libreoffice-}"
 done
+mv /app/share/applications/org.libreoffice.LibreOffice-startcenter.desktop \
+ /app/share/applications/org.libreoffice.LibreOffice.desktop
 
 ## icons/hicolor/*/apps/libreoffice-* ->
 ## icons/hicolor/*/apps/org.libreoffice.LibreOffice-*:
