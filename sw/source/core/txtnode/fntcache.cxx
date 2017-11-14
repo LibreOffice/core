@@ -1254,7 +1254,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 // Kashida Justification
                 if ( SwFontScript::CTL == nActual && nSpaceAdd )
                 {
-                    if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
+                    if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() )
+                        && rInf.GetOut().GetMinKashida() )
                     {
                         if ( pSI && pSI->CountKashida() &&
                             pSI->KashidaJustify( pKernArray.get(), nullptr, rInf.GetIdx(),
@@ -1458,7 +1459,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             // Kashida Justification
             if ( SwFontScript::CTL == nActual && nSpaceAdd )
             {
-                if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
+                if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() )
+                    && rInf.GetOut().GetMinKashida() )
                 {
                     if ( pSI && pSI->CountKashida() &&
                          pSI->KashidaJustify( pKernArray.get(), pScrArray.get(), rInf.GetIdx(),
@@ -2051,7 +2053,8 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
         // Kashida Justification
         if ( SwFontScript::CTL == nActual && rInf.GetSpace() )
         {
-            if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
+            if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() )
+                && rInf.GetOut().GetMinKashida() )
             {
                 if ( pSI && pSI->CountKashida() &&
                     pSI->KashidaJustify( pKernArray.get(), nullptr, rInf.GetIdx(), rInf.GetLen(),
