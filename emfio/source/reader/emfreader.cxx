@@ -468,7 +468,7 @@ namespace emfio
      * skipFirst: if the first point read is the 0th point or the 1st point in the array.
      * */
     template <class T>
-    tools::Polygon EmfReader::ReadPolygonWithSkip(const bool skipFirst)
+    tools::Polygon EmfReader::ReadPolygonWithSkip(const bool skipFirst, sal_uInt32 nNextPos)
     {
         sal_uInt32 nPoints(0), nStartIndex(0);
         mpInputStream->SeekRel( 16 );
@@ -479,7 +479,7 @@ namespace emfio
             nStartIndex ++;
         }
 
-        return ReadPolygon<T>(nStartIndex, nPoints);
+        return ReadPolygon<T>(nStartIndex, nPoints, nNextPos);
     }
 
     /**
@@ -490,12 +490,21 @@ namespace emfio
      * mpInputStream: the stream containing the polygons
      * */
     template <class T>
-    tools::Polygon EmfReader::ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints)
+    tools::Polygon EmfReader::ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints, sal_uInt32 nNextPos)
     {
         bool bRecordOk = nPoints <= SAL_MAX_UINT16;
         SAL_WARN_IF(!bRecordOk, "emfio", "polygon record has more polygons than we can handle");
         if (!bRecordOk)
             return tools::Polygon();
+
+        auto nRemainingSize = std::min(nNextPos - mpInputStream->Tell(), mpInputStream->remainingSize());
+        auto nMaxPossiblePoints = nRemainingSize / (sizeof(T) * 2);
+        auto nPointCount = nPoints - nStartIndex;
+        if (nPointCount > nMaxPossiblePoints)
+        {
+            SAL_WARN("emfio", "polygon claims more points than record can provide, truncating");
+            nPoints = nMaxPossiblePoints + nStartIndex;
+        }
 
         tools::Polygon aPolygon(nPoints);
         for (sal_uInt32 i = nStartIndex ; i < nPoints && mpInputStream->good(); i++ )
@@ -519,20 +528,21 @@ namespace emfio
      * The \<class T> parameter refers to the type of the points. (e.g. sal_uInt16 or sal_uInt32)
      * */
     template <class T>
-    void EmfReader::ReadAndDrawPolyLine()
+    void EmfReader::ReadAndDrawPolyLine(sal_uInt32 nNextPos)
     {
         sal_uInt32  nPoints;
         sal_uInt32  i, nNumberOfPolylines( 0 ), nCount( 0 );
         mpInputStream->SeekRel( 0x10 ); // TODO Skipping Bounds. A 128-bit WMF RectL object (specifies the bounding rectangle in device units.)
         mpInputStream->ReadUInt32( nNumberOfPolylines );
         mpInputStream->ReadUInt32( nCount ); // total number of points in all polylines
-        if (mpInputStream->Tell() >= mnEndPos)
+        const auto nEndPos = std::min(nNextPos, mnEndPos);
+        if (mpInputStream->Tell() >= nEndPos)
             return;
 
         // taking the amount of points of each polygon, retrieving the total number of points
         if ( mpInputStream->good() &&
              ( nNumberOfPolylines < SAL_MAX_UINT32 / sizeof( sal_uInt16 ) ) &&
-             ( nNumberOfPolylines * sizeof( sal_uInt16 ) ) <= ( mnEndPos - mpInputStream->Tell() )
+             ( nNumberOfPolylines * sizeof( sal_uInt16 ) ) <= ( nEndPos - mpInputStream->Tell() )
            )
         {
             std::unique_ptr< sal_uInt32[] > pnPolylinePointCount( new sal_uInt32[ nNumberOfPolylines ] );
@@ -544,8 +554,8 @@ namespace emfio
             // Get polyline points:
             for ( i = 0; ( i < nNumberOfPolylines ) && mpInputStream->good(); i++ )
             {
-                tools::Polygon aPolygon = ReadPolygon< T >( 0, pnPolylinePointCount[ i ] );
-                DrawPolyLine( aPolygon, false, mbRecordPath);
+                tools::Polygon aPolygon = ReadPolygon<T>(0, pnPolylinePointCount[i], nNextPos);
+                DrawPolyLine(aPolygon, false, mbRecordPath);
             }
         }
     }
@@ -555,13 +565,14 @@ namespace emfio
      * The \<class T> parameter refers to the type of the points. (e.g. sal_uInt16 or sal_uInt32)
      * */
     template <class T>
-    void EmfReader::ReadAndDrawPolyPolygon()
+    void EmfReader::ReadAndDrawPolyPolygon(sal_uInt32 nNextPos)
     {
         sal_uInt32 nPoly(0), nGesPoints(0), nReadPoints(0);
         mpInputStream->SeekRel( 0x10 );
         // Number of polygons
         mpInputStream->ReadUInt32( nPoly ).ReadUInt32( nGesPoints );
-        if (mpInputStream->Tell() >= mnEndPos)
+        const auto nEndPos = std::min(nNextPos, mnEndPos);
+        if (mpInputStream->Tell() >= nEndPos)
             return;
         if (!mpInputStream->good())
             return;
@@ -570,7 +581,7 @@ namespace emfio
             return;
         if (nPoly >= SAL_MAX_UINT32 / sizeof(sal_uInt16))
             return;
-        if (nPoly * sizeof(sal_uInt16) > mnEndPos - mpInputStream->Tell())
+        if (nPoly * sizeof(sal_uInt16) > nEndPos - mpInputStream->Tell())
             return;
 
         // Get number of points in each polygon
@@ -581,7 +592,7 @@ namespace emfio
             mpInputStream->ReadUInt32( nPoints );
             aPoints[i] = (sal_uInt16)nPoints;
         }
-        if ( mpInputStream->good() && ( nGesPoints * (sizeof(T)+sizeof(T)) ) <= ( mnEndPos - mpInputStream->Tell() ) )
+        if ( mpInputStream->good() && ( nGesPoints * (sizeof(T)+sizeof(T)) ) <= ( nEndPos - mpInputStream->Tell() ) )
         {
             // Get polygon points
             tools::PolyPolygon aPolyPoly(nPoly, nPoly);
@@ -706,30 +717,30 @@ namespace emfio
                 switch( nRecType )
                 {
                     case EMR_POLYBEZIERTO :
-                        DrawPolyBezier(ReadPolygonWithSkip<sal_Int32>(true), true, mbRecordPath);
+                        DrawPolyBezier(ReadPolygonWithSkip<sal_Int32>(true, nNextPos), true, mbRecordPath);
                     break;
                     case EMR_POLYBEZIER :
-                        DrawPolyBezier(ReadPolygonWithSkip<sal_Int32>(false), false, mbRecordPath);
+                        DrawPolyBezier(ReadPolygonWithSkip<sal_Int32>(false, nNextPos), false, mbRecordPath);
                     break;
 
                     case EMR_POLYGON :
-                        DrawPolygon(ReadPolygonWithSkip<sal_Int32>(false), mbRecordPath);
+                        DrawPolygon(ReadPolygonWithSkip<sal_Int32>(false, nNextPos), mbRecordPath);
                     break;
 
                     case EMR_POLYLINETO :
-                        DrawPolyLine(ReadPolygonWithSkip<sal_Int32>(true), true, mbRecordPath);
+                        DrawPolyLine(ReadPolygonWithSkip<sal_Int32>(true, nNextPos), true, mbRecordPath);
                     break;
 
                     case EMR_POLYLINE :
-                        DrawPolyLine(ReadPolygonWithSkip<sal_Int32>(false), false, mbRecordPath);
+                        DrawPolyLine(ReadPolygonWithSkip<sal_Int32>(false, nNextPos), false, mbRecordPath);
                     break;
 
                     case EMR_POLYPOLYLINE :
-                        ReadAndDrawPolyLine<sal_Int32>();
+                        ReadAndDrawPolyLine<sal_Int32>(nNextPos);
                     break;
 
                     case EMR_POLYPOLYGON :
-                        ReadAndDrawPolyPolygon<sal_Int32>();
+                        ReadAndDrawPolyPolygon<sal_Int32>(nNextPos);
                     break;
 
                     case EMR_SETWINDOWEXTEX :
@@ -1649,31 +1660,31 @@ namespace emfio
                     break;
 
                     case EMR_POLYBEZIERTO16 :
-                        DrawPolyBezier(ReadPolygonWithSkip<sal_Int16>(true), true, mbRecordPath);
+                        DrawPolyBezier(ReadPolygonWithSkip<sal_Int16>(true, nNextPos), true, mbRecordPath);
                     break;
 
                     case EMR_POLYBEZIER16 :
-                        DrawPolyBezier(ReadPolygonWithSkip<sal_Int16>(false), false, mbRecordPath);
+                        DrawPolyBezier(ReadPolygonWithSkip<sal_Int16>(false, nNextPos), false, mbRecordPath);
                     break;
 
                     case EMR_POLYGON16 :
-                        DrawPolygon(ReadPolygonWithSkip<sal_Int16>(false), mbRecordPath);
+                        DrawPolygon(ReadPolygonWithSkip<sal_Int16>(false, nNextPos), mbRecordPath);
                     break;
 
                     case EMR_POLYLINETO16 :
-                        DrawPolyLine(ReadPolygonWithSkip<sal_Int16>(true), true, mbRecordPath);
+                        DrawPolyLine(ReadPolygonWithSkip<sal_Int16>(true, nNextPos), true, mbRecordPath);
                     break;
 
                     case EMR_POLYLINE16 :
-                        DrawPolyLine(ReadPolygonWithSkip<sal_Int16>(false), false, mbRecordPath);
+                        DrawPolyLine(ReadPolygonWithSkip<sal_Int16>(false, nNextPos), false, mbRecordPath);
                     break;
 
                     case EMR_POLYPOLYLINE16 :
-                        ReadAndDrawPolyLine<sal_Int16>();
+                        ReadAndDrawPolyLine<sal_Int16>(nNextPos);
                     break;
 
                     case EMR_POLYPOLYGON16 :
-                        ReadAndDrawPolyPolygon<sal_Int16>();
+                        ReadAndDrawPolyPolygon<sal_Int16>(nNextPos);
                     break;
 
                     case EMR_FILLRGN :
