@@ -99,7 +99,12 @@ struct Base2
 struct Derived2 : Base2
 {
     void default1(Base const& x = Intermediate1()) { Base2::default1(x); } // no warning
-    void default2(Base const& x = SimpleDerived()) { Base2::default2(x); } // expected-error {{public function just calls public parent [loplugin:unnecessaryoverride]}}
+    void
+    default2( // expected-error {{public function just calls public parent [loplugin:unnecessaryoverride]}}
+        Base const& x = SimpleDerived())
+    {
+        Base2::default2(x);
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
