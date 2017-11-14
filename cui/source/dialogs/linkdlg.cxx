@@ -108,7 +108,6 @@ SvBaseLinksDlg::SvBaseLinksDlg( vcl::Window * pParent, LinkManager* pMgr, bool b
     get(m_pRbAutomatic, "AUTOMATIC");
     get(m_pRbManual, "MANUAL");
     get(m_pPbUpdateNow, "UPDATE_NOW");
-    get(m_pPbOpenSource, "OPEN");
     get(m_pPbChangeSource, "CHANGE_SOURCE");
     get(m_pPbBreakLink, "BREAK_LINK");
 
@@ -125,8 +124,6 @@ SvBaseLinksDlg::SvBaseLinksDlg( vcl::Window * pParent, LinkManager* pMgr, bool b
     // UpdateTimer for DDE-/Grf-links, which are waited for
     aUpdateIdle.SetInvokeHandler( LINK( this, SvBaseLinksDlg, UpdateWaitingHdl ) );
     aUpdateIdle.SetPriority( TaskPriority::LOWEST );
-
-    m_pPbOpenSource->Hide();
 
     m_pTbLinks->SetSelectHdl( LINK( this, SvBaseLinksDlg, LinksSelectHdl ) );
     m_pTbLinks->SetDoubleClickHdl( LINK( this, SvBaseLinksDlg, LinksDoubleClickHdl ) );
@@ -156,7 +153,6 @@ void SvBaseLinksDlg::dispose()
     m_pRbAutomatic.clear();
     m_pRbManual.clear();
     m_pPbUpdateNow.clear();
-    m_pPbOpenSource.clear();
     m_pPbChangeSource.clear();
     m_pPbBreakLink.clear();
     ModalDialog::dispose();

@@ -52,7 +52,6 @@ class SvBaseLinksDlg : public ModalDialog
     VclPtr<RadioButton> m_pRbAutomatic;
     VclPtr<RadioButton> m_pRbManual;
     VclPtr<PushButton> m_pPbUpdateNow;
-    VclPtr<PushButton> m_pPbOpenSource;
     VclPtr<PushButton> m_pPbChangeSource;
     VclPtr<PushButton> m_pPbBreakLink;
     OUString aStrAutolink;

@@ -65,21 +65,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="OPEN">
-                <property name="label" translatable="yes" context="baselinksdialog|OPEN">_Open</property>
-                <property name="use_action_appearance">False</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkButton" id="CHANGE_SOURCE">
                 <property name="label" translatable="yes" context="baselinksdialog|CHANGE_SOURCE">_Modify...</property>
                 <property name="use_action_appearance">False</property>
@@ -91,7 +76,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">4</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -106,7 +91,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">5</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </object>
@@ -430,7 +415,6 @@
       <action-widget response="0">CLOSE</action-widget>
       <action-widget response="0">HELP</action-widget>
       <action-widget response="0">UPDATE_NOW</action-widget>
-      <action-widget response="0">OPEN</action-widget>
       <action-widget response="0">CHANGE_SOURCE</action-widget>
       <action-widget response="0">BREAK_LINK</action-widget>
     </action-widgets>
