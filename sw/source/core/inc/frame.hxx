@@ -29,8 +29,8 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-
 #include <com/sun/star/style/TabStop.hpp>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 class SwLayoutFrame;
 class SwRootFrame;
