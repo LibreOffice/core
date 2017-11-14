@@ -105,15 +105,11 @@
   <Type Name="_sal_Sequence">
     <DisplayString Condition="nElements == 0">_sal_Sequence (empty)</DisplayString>
     <DisplayString>_sal_Sequence of {nElements,d} elements</DisplayString>
-    <Expand>
-      <Item Name="[size]">nElements,d</Item>
-    </Expand>
   </Type>
   <Type Name="com::sun::star::uno::Sequence &lt; * &gt;">
     <DisplayString Condition="_pSequence->nElements == 0">Sequence (empty)</DisplayString>
     <DisplayString>Sequence of {_pSequence->nElements,d} {"$T1",sb}</DisplayString>
     <Expand>
-      <Item Name="[size]">_pSequence->nElements,d</Item>
       <ArrayItems>
         <Size>_pSequence->nElements</Size>
         <ValuePointer>reinterpret_cast &lt; const $T1 * &gt;( _pSequence->elements )</ValuePointer>
@@ -123,8 +119,6 @@
   <Type Name="BigPtrArray">
     <DisplayString>{{{m_nSize} nodes}}</DisplayString>
     <Expand>
-      <Item Name="[size]">m_nSize</Item>
-
       <CustomListItems>
         <!-- Visualiser needs to know the type of variable (including pointer type).
              If later we try to assign an incompatible value, visualiser will error out.
@@ -164,44 +158,44 @@
     </Expand>
   </Type>
   <Type Name="SwNode">
-    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{Node}}</DisplayString>
+    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{Node}}</DisplayString>
     <Expand>
       <Item Name="Nodes">static_cast &lt; SwNodes* &gt;(m_pBlock->pBigArr)</Item>
     </Expand>
   </Type>
   <Type Name="SwEndNode">
-    <DisplayString Condition="m_pStartOfSection != nullptr">[{m_pBlock->nStart + m_nOffset}] {{EndNode}} - for {*m_pStartOfSection}</DisplayString>
-    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{EndNode}}</DisplayString>
+    <DisplayString Condition="m_pStartOfSection != nullptr">[{m_pBlock->nStart + m_nOffset,d}] {{EndNode}} - for {*m_pStartOfSection}</DisplayString>
+    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{EndNode}}</DisplayString>
   </Type>
   <Type Name="SwStartNode">
-    <DisplayString Condition="m_eStartNodeType == 0">[{m_pBlock->nStart + m_nOffset}] {{NormalStartNode}}</DisplayString>
-    <DisplayString Condition="m_eStartNodeType == 1">[{m_pBlock->nStart + m_nOffset}] {{TableBoxStartNode}}</DisplayString>
-    <DisplayString Condition="m_eStartNodeType == 2">[{m_pBlock->nStart + m_nOffset}] {{FlyStartNode}}</DisplayString>
-    <DisplayString Condition="m_eStartNodeType == 3">[{m_pBlock->nStart + m_nOffset}] {{FootnoteStartNode}}</DisplayString>
-    <DisplayString Condition="m_eStartNodeType == 4">[{m_pBlock->nStart + m_nOffset}] {{HeaderStartNode}}</DisplayString>
-    <DisplayString Condition="m_eStartNodeType == 5">[{m_pBlock->nStart + m_nOffset}] {{FooterStartNode}}</DisplayString>
-    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{StartNode}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType == 0">[{m_pBlock->nStart + m_nOffset,d}] {{NormalStartNode}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType == 1">[{m_pBlock->nStart + m_nOffset,d}] {{TableBoxStartNode}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType == 2">[{m_pBlock->nStart + m_nOffset,d}] {{FlyStartNode}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType == 3">[{m_pBlock->nStart + m_nOffset,d}] {{FootnoteStartNode}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType == 4">[{m_pBlock->nStart + m_nOffset,d}] {{HeaderStartNode}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType == 5">[{m_pBlock->nStart + m_nOffset,d}] {{FooterStartNode}}</DisplayString>
+    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{StartNode}}</DisplayString>
   </Type>
   <Type Name="SwContentNode">
-    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{ContentNode}}</DisplayString>
+    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{ContentNode}}</DisplayString>
   </Type>
   <Type Name="SwOLENode">
-    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{OLENode}}</DisplayString>
+    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{OLENode}}</DisplayString>
   </Type>
   <Type Name="SwGrfNode">
-    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{GrfNode}}</DisplayString>
+    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{GrfNode}}</DisplayString>
   </Type>
   <Type Name="SwSectionNode">
-    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{SectionNode}}</DisplayString>
+    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{SectionNode}}</DisplayString>
   </Type>
   <Type Name="SwTableNode">
-    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{TableNode}}</DisplayString>
+    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{TableNode}}</DisplayString>
   </Type>
   <Type Name="SwDummySectionNode">
-    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{DummySectionNode}}</DisplayString>
+    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{DummySectionNode}}</DisplayString>
   </Type>
   <Type Name="SwTextNode">
-    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{TextNode: {m_Text}}}</DisplayString>
+    <DisplayString>[{m_pBlock->nStart + m_nOffset,d}] {{TextNode: {m_Text}}}</DisplayString>
   </Type>
   <Type Name="SwNodeIndex">
     <DisplayString>{{{*m_pNode}}}</DisplayString>
@@ -219,7 +213,6 @@
     <DisplayString Condition="m_Array.node_count == 0">empty</DisplayString>
     <DisplayString>Size: {m_Array.node_count}</DisplayString>
     <Expand>
-      <Item Name="[size]">m_Array.node_count</Item>
       <IndexListItems>
         <Size>m_Array.node_count</Size>
         <ValueNode>**reinterpret_cast &lt; value_type* &gt; (&amp;static_cast &lt; ByPos::node_type* &gt; (static_cast &lt; ByPos::node_type::trampoline* &gt; (m_PosIndex.ptrs.spc.data_[$i]))->space)</ValueNode>
@@ -271,17 +264,40 @@
   <Type Name="SfxUsrAnyItem">
     <DisplayString>{{which={m_nWhich,x}}} {aValue}</DisplayString>
   </Type>
+  <Type Name="SvxFontItem">
+    <DisplayString>{{which={m_nWhich,x}}} Font family: {aFamilyName,sub}</DisplayString>
+  </Type>
+  <Type Name="SfxInt16Item">
+    <DisplayString>{{which={m_nWhich,x}}} Int16: {m_nValue}</DisplayString>
+  </Type>
+  <Type Name="SfxGrabBagItem">
+    <DisplayString>
+      {{which={m_nWhich,x}}} GrabBag {{size={m_aMap._Mypair._Myval2._Myval2._Mysize,d}}}
+    </DisplayString>
+    <Expand>
+      <ExpandedItem >m_aMap</ExpandedItem>
+    </Expand>
+  </Type>
   <Type Name="SfxPoolItem">
     <DisplayString>{{which={m_nWhich,x}}}</DisplayString>
   </Type>
   <Type Name="SfxItemSet">
     <DisplayString>{{size={m_nCount,d}}}</DisplayString>
     <Expand>
-      <Item Name="[size]">m_nCount,d</Item>
-      <IndexListItems>
-        <Size>m_nCount</Size>
-        <ValueNode>*(m_pItems[$i])</ValueNode>
-      </IndexListItems>
+      <CustomListItems>
+        <Variable Name='pCurItem' InitialValue='m_pItems'/>
+        <Variable Name='pCurRange' InitialValue='m_pWhichRanges'/>
+        <Variable Name='nCurWhich' InitialValue='0'/>
+        <Loop Condition='*pCurRange'>
+          <Exec>nCurWhich = *pCurRange</Exec>
+          <Loop Condition='nCurWhich&lt;=*(pCurRange+1)'>
+            <Item Condition='*pCurItem'>**pCurItem</Item>
+            <Exec>++pCurItem</Exec>
+            <Exec>++nCurWhich</Exec>
+          </Loop>
+          <Exec>pCurRange+=2</Exec>
+        </Loop>
+      </CustomListItems>
       <Synthetic Name="Which Ranges">
         <Expand>
           <CustomListItems>
@@ -297,6 +313,18 @@
         </Expand>
       </Synthetic>
       <Item Condition="m_pParent != nullptr" Name="Parent">*m_pParent</Item>
+    </Expand>
+  </Type>
+  <Type Name="sax_fastparser::FastAttributeList">
+    <DisplayString>{{size={maAttributeTokens.size(),d}}}</DisplayString>
+    <Expand>
+      <CustomListItems>
+        <Variable Name='i' InitialValue='0'/>
+        <Loop Condition='i &lt; maAttributeTokens.size()'>
+          <Item Name='{maAttributeTokens[i],x}'>mpChunk	+ maAttributeValues[i]</Item>
+          <Exec>++i</Exec>
+        </Loop>
+      </CustomListItems>
     </Expand>
   </Type>
 </AutoVisualizer>
