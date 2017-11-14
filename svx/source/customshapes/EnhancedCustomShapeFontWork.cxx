@@ -413,7 +413,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
     }
 }
 
-void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
+bool GetFontWorkOutline(FWData& rFWData, const SdrObject* pCustomShape)
 {
     SdrTextHorzAdjust eHorzAdjust( static_cast<const SdrTextHorzAdjustItem&>(pCustomShape->GetMergedItem( SDRATTR_TEXT_HORZADJUST )).GetValue() );
     drawing::TextFitToSizeType const eFTS( static_cast<const SdrTextFitToSizeTypeItem&>(pCustomShape->GetMergedItem( SDRATTR_TEXT_FITTOSIZE )).GetValue() );
@@ -423,6 +423,9 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
 
     rFWData.nSingleLineHeight = (sal_Int32)( ( (double)pCustomShape->GetLogicRect().GetHeight()
                                                 / rFWData.nMaxParagraphsPerTextArea ) * rFWData.fHorizontalTextScaling );
+
+    if (rFWData.nSingleLineHeight == SAL_MIN_INT32)
+        return false;
 
     bool bSameLetterHeights = false;
     const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
@@ -507,6 +510,8 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
         }
         ++aTextAreaIter;
     }
+
+    return true;
 }
 
 basegfx::B2DPolyPolygon GetOutlinesFromShape2d( const SdrObject* pShape2d )
@@ -867,8 +872,8 @@ SdrObject* EnhancedCustomShapeFontWork::CreateFontWork( const SdrObject* pShape2
             CalculateHorizontalScalingFactor( pCustomShape, aFWData, aOutlines2d );
 
             /* retrieving the Outlines for the each Paragraph. */
-
-            GetFontWorkOutline( aFWData, pCustomShape );
+            if (!GetFontWorkOutline(aFWData, pCustomShape))
+                return nullptr;
 
             FitTextOutlinesToShapeOutlines( aOutlines2d, aFWData );
 
