@@ -289,10 +289,12 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
     if (!compoundStmt || compoundStmt->size() != 1)
         return true;
 
-    const CXXMemberCallExpr* callExpr;
+    const CXXMemberCallExpr* callExpr = nullptr;
     if (compat::getReturnType(*methodDecl).getCanonicalType()->isVoidType())
     {
-        callExpr = dyn_cast<CXXMemberCallExpr>(*compoundStmt->body_begin());
+        if (auto const e = dyn_cast<Expr>(*compoundStmt->body_begin())) {
+            callExpr = dyn_cast<CXXMemberCallExpr>(e->IgnoreImplicit()->IgnoreParens());
+        }
     }
     else
     {
@@ -355,8 +357,13 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
     if (!expr2)
         return true;
     for (unsigned i = 0; i<callExpr->getNumArgs(); ++i) {
-        // ignore ImplicitCastExpr
-        const DeclRefExpr * declRefExpr = dyn_cast<DeclRefExpr>(callExpr->getArg(i)->IgnoreImplicit());
+        auto e = callExpr->getArg(i)->IgnoreImplicit();
+        if (auto const e1 = dyn_cast<CXXConstructExpr>(e)) {
+            if (e1->getConstructor()->isCopyOrMoveConstructor() && e1->getNumArgs() == 1) {
+                e = e1->getArg(0)->IgnoreImpCasts();
+            }
+        }
+        const DeclRefExpr * declRefExpr = dyn_cast<DeclRefExpr>(e);
         if (!declRefExpr || declRefExpr->getDecl() != methodDecl->getParamDecl(i))
             return true;
     }

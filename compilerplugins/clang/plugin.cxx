@@ -30,7 +30,7 @@ namespace {
 
 Expr const * skipImplicit(Expr const * expr) {
     if (auto const e = dyn_cast<MaterializeTemporaryExpr>(expr)) {
-        expr = e->GetTemporaryExpr();
+        expr = e->GetTemporaryExpr()->IgnoreImpCasts();
     }
     if (auto const e = dyn_cast<CXXBindTemporaryExpr>(expr)) {
         expr = e->getSubExpr();
@@ -271,18 +271,26 @@ Plugin::IdenticalDefaultArgumentsResult Plugin::checkIdenticalDefaultArguments(
         }
     }
     // catch params with defaults like "= OUString()"
-    if (auto const e1 = dyn_cast<CXXConstructExpr>(skipImplicit(desugared1))) {
-        if (auto const e2 = dyn_cast<CXXConstructExpr>(
-                skipImplicit(desugared2)))
+    for (Expr const * e1 = desugared1, * e2 = desugared2;;) {
+        auto const ce1 = dyn_cast<CXXConstructExpr>(skipImplicit(e1));
+        auto const ce2 = dyn_cast<CXXConstructExpr>(skipImplicit(e2));
+        if (ce1 == nullptr || ce2 == nullptr) {
+            break;
+        }
+        if (ce1->getConstructor()->getCanonicalDecl() != ce2->getConstructor()->getCanonicalDecl())
         {
-            if ((e1->getConstructor()->getCanonicalDecl()
-                 != e2->getConstructor()->getCanonicalDecl()))
-            {
-                return IdenticalDefaultArgumentsResult::No;
-            }
-            if (e1->getNumArgs() == 0 && e2->getNumArgs() == 0) {
-                return IdenticalDefaultArgumentsResult::Yes;
-            }
+            return IdenticalDefaultArgumentsResult::No;
+        }
+        if (ce1->isElidable() && ce2->isElidable() && ce1->getNumArgs() == 1
+            && ce2->getNumArgs() == 1)
+        {
+            assert(ce1->getConstructor()->isCopyOrMoveConstructor());
+            e1 = ce1->getArg(0)->IgnoreImpCasts();
+            e2 = ce2->getArg(0)->IgnoreImpCasts();
+            continue;
+        }
+        if (ce1->getNumArgs() == 0 && ce2->getNumArgs() == 0) {
+            return IdenticalDefaultArgumentsResult::Yes;
         }
     }
     return IdenticalDefaultArgumentsResult::Maybe;
