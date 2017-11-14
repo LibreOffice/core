@@ -285,6 +285,7 @@ public:
     void testTdf99689TableOfContents();
     void testTdf99689TableOfFigures();
     void testTdf99689TableOfTables();
+    void testTdf113790();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -452,6 +453,7 @@ public:
     CPPUNIT_TEST(testTdf99689TableOfContents);
     CPPUNIT_TEST(testTdf99689TableOfFigures);
     CPPUNIT_TEST(testTdf99689TableOfTables);
+    CPPUNIT_TEST(testTdf113790);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5551,6 +5553,29 @@ void SwUiWriterTest::testParagraphOfTextRange()
     // This failed as there were no TextParagraph property.
     auto xParagraph = getProperty< uno::Reference<text::XTextRange> >(xViewCursor->getStart(), "TextParagraph");
     CPPUNIT_ASSERT_EQUAL(OUString("In section"), xParagraph->getString());
+}
+
+void SwUiWriterTest::testTdf113790()
+{
+    SwDoc* pDoc = createDoc("tdf113790.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    // Create the clipboard document.
+    SwDoc aClipboard;
+    aClipboard.SetClipBoard(true);
+
+    // Go to fourth line - to "ABCD" bulleted list item
+    pWrtShell->Down(/*bSelect=*/false, 4);
+    pWrtShell->SelPara(nullptr);
+    CPPUNIT_ASSERT_EQUAL(OUString("ABCD"), pWrtShell->GetSelText());
+    pWrtShell->Copy(&aClipboard);
+
+    // Go down to next-to-last (empty) line above "Title3"
+    pWrtShell->Down(/*bSelect=*/false, 4);
+    pWrtShell->Paste(&aClipboard);
+
+    // Save it as DOCX & load it again
+    reload("Office Open XML Text", "tdf113790.docx");
+    CPPUNIT_ASSERT(dynamic_cast<SwXTextDocument *>(mxComponent.get()));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
