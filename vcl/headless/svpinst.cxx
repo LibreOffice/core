@@ -266,7 +266,7 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 {
     // first, process current user events
     bool bEvent = DispatchUserEvents( bHandleAllCurrentEvents );
-    if ( !bHandleAllCurrentEvents &&bEvent )
+    if ( !bHandleAllCurrentEvents && bEvent )
         return true;
 
     bEvent = CheckTimeout() || bEvent;
