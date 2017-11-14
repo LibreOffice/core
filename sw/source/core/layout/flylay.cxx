@@ -156,7 +156,7 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     const int nLoopControlMax = 10;
 
     // RotateFlyFrame3 - outer frame
-    const double fRotation(getFrameRotation());
+    const double fRotation(getLocalFrameRotation());
     const bool bRotated(!basegfx::fTools::equalZero(fRotation));
 
     if(bRotated)
@@ -166,7 +166,7 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         // needed. Reset to BoundAreas will be done below automatically
         if(isTransformableSwFrame())
         {
-            getTransformableSwFrame()->resetAreaDefinitionsToUntransformed();
+            getTransformableSwFrame()->restoreFrameAreas();
         }
     }
 
@@ -264,7 +264,7 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         getTransformableSwFrame()->createFrameAreaTransformations(
             fRotation,
             aB2DCenter);
-        getTransformableSwFrame()->resetAreaDefinitionsToTransformed();
+        getTransformableSwFrame()->adaptFrameAreasToTransformations();
     }
     else
     {
@@ -323,17 +323,17 @@ void SwFlyFreeFrame::transform_translate(const Point& rOffset)
                 rOffset.X(), rOffset.Y()));
 
         // transform using TransformableSwFrame
-        getTransformableSwFrame()->doTransform(aTransform);
+        getTransformableSwFrame()->transform(aTransform);
     }
 }
 
 // RotateFlyFrame3 - outer frame
-double getFrameRotation_from_SwNoTextFrame(const SwNoTextFrame& rNoTextFrame)
+double getLocalFrameRotation_from_SwNoTextFrame(const SwNoTextFrame& rNoTextFrame)
 {
-    return rNoTextFrame.getFrameRotation();
+    return rNoTextFrame.getLocalFrameRotation();
 }
 
-double SwFlyFreeFrame::getFrameRotation() const
+double SwFlyFreeFrame::getLocalFrameRotation() const
 {
     // SwLayoutFrame::Lower() != SwFrame::GetLower(), but SwFrame::GetLower()
     // calls SwLayoutFrame::Lower() when it's a SwLayoutFrame - so use GetLower()
@@ -341,7 +341,7 @@ double SwFlyFreeFrame::getFrameRotation() const
 
     if(nullptr != pSwNoTextFrame)
     {
-        return getFrameRotation_from_SwNoTextFrame(*pSwNoTextFrame);
+        return getLocalFrameRotation_from_SwNoTextFrame(*pSwNoTextFrame);
     }
 
     // no rotation

@@ -630,9 +630,18 @@ void SwVirtFlyDrawObj::NbcSetLogicRect(const tools::Rectangle& )
 }
 
 //  SwVirtFlyDrawObj::Move() and Resize()
-
 void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 {
+    if(GetFlyFrame()->IsFlyFreeFrame() && static_cast<SwFlyFreeFrame*>(GetFlyFrame())->isTransformableSwFrame())
+    {
+        // When we have a change in transformed state, we need to fall back to the
+        // state without possible transformations. Restore FrameArea and use aOutRect
+        // from old FrameArea. From here, all former actions below should be fine
+        TransformableSwFrame* pTransformableSwFrame(static_cast<SwFlyFreeFrame*>(GetFlyFrame())->getTransformableSwFrame());
+        pTransformableSwFrame->restoreFrameAreas();
+        aOutRect = GetFlyFrame()->getFrameArea().SVRect();
+    }
+
     MoveRect( aOutRect, rSiz );
     const Point aOldPos( GetFlyFrame()->getFrameArea().Pos() );
     const Point aNewPos( aOutRect.TopLeft() );
@@ -649,7 +658,9 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
     //anchor must be set. Anchor and the new RelPos is calculated and
     //placed by the Fly itself.
     if( GetFlyFrame()->IsFlyAtContentFrame() )
+    {
         static_cast<SwFlyAtContentFrame*>(GetFlyFrame())->SetAbsPos( aNewPos );
+    }
     else
     {
         const SwFrameFormat *pTmpFormat = GetFormat();
@@ -781,34 +792,63 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
 {
     // Get Wrt Shell
     SwWrtShell *pSh = dynamic_cast<SwWrtShell*>( GetFlyFrame()->getRootFrame()->GetCurrShell() );
+
     if (!pSh)
+    {
         return;
+    }
+
+    GraphicObject const *pGraphicObject = pSh->GetGraphicObj();
+
+    if (!pGraphicObject)
+    {
+        return;
+    }
+
+    const bool bIsTransformableSwFrame(
+        GetFlyFrame()->IsFlyFreeFrame() &&
+        static_cast<SwFlyFreeFrame*>(GetFlyFrame())->isTransformableSwFrame());
+
+    if(bIsTransformableSwFrame)
+    {
+        // When we have a change in transformed state, we need to fall back to the
+        // state without possible transformations. Restore FrameArea and use aOutRect
+        // from old FrameArea. From here, all former actions below should be fine
+        TransformableSwFrame* pTransformableSwFrame(static_cast<SwFlyFreeFrame*>(GetFlyFrame())->getTransformableSwFrame());
+        pTransformableSwFrame->restoreFrameAreas();
+        aOutRect = GetFlyFrame()->getFrameArea().SVRect();
+    }
 
     // Compute old and new rect. This will give us the deformation to apply to
     // the object to crop
-    tools::Rectangle aOldRect( aOutRect );
-
-    const long nOldWidth = aOldRect.GetWidth();
-    const long nOldHeight = aOldRect.GetHeight();
+    const long nOldWidth(aOutRect.GetWidth());
+    const long nOldHeight(aOutRect.GetHeight());
 
     if (!nOldWidth || !nOldHeight)
+    {
         return;
+    }
 
     tools::Rectangle aNewRect( aOutRect );
     ResizeRect( aNewRect, rRef, xFact, yFact );
 
     // Get graphic object size in 100th of mm
-    GraphicObject const *pGraphicObject = pSh->GetGraphicObj();
-    if (!pGraphicObject)
-        return;
     const MapMode aMapMode100thmm(MapUnit::Map100thMM);
     Size aGraphicSize(pGraphicObject->GetPrefSize());
+
     if( MapUnit::MapPixel == pGraphicObject->GetPrefMapMode().GetMapUnit() )
+    {
         aGraphicSize = Application::GetDefaultDevice()->PixelToLogic( aGraphicSize, aMapMode100thmm );
+    }
     else
+    {
         aGraphicSize = OutputDevice::LogicToLogic( aGraphicSize, pGraphicObject->GetPrefMapMode(), aMapMode100thmm);
+    }
+
     if( aGraphicSize.Width() == 0 || aGraphicSize.Height() == 0 )
+    {
         return ;
+    }
 
     // Get old values for crop in 10th of mm
     SfxItemSet aSet( pSh->GetAttrPool(), svl::Items<RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF>{} );
@@ -825,10 +865,10 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
     double fScaleX = ( aGraphicSize.Width() - aCropRectangle.Left() - aCropRectangle.Right() ) / (double)nOldWidth;
     double fScaleY = ( aGraphicSize.Height() - aCropRectangle.Top() - aCropRectangle.Bottom() ) / (double)nOldHeight;
 
-    sal_Int32 nDiffLeft = aNewRect.Left() - aOldRect.Left();
-    sal_Int32 nDiffTop = aNewRect.Top() - aOldRect.Top();
-    sal_Int32 nDiffRight = aNewRect.Right() - aOldRect.Right();
-    sal_Int32 nDiffBottom = aNewRect.Bottom() - aOldRect.Bottom();
+    sal_Int32 nDiffLeft = aNewRect.Left() - aOutRect.Left();
+    sal_Int32 nDiffTop = aNewRect.Top() - aOutRect.Top();
+    sal_Int32 nDiffRight = aNewRect.Right() - aOutRect.Right();
+    sal_Int32 nDiffBottom = aNewRect.Bottom() - aOutRect.Bottom();
 
     // Compute new values in 10th of mm
     sal_Int32 nLeftCrop = static_cast<sal_Int32>( aCropRectangle.Left() + nDiffLeft * fScaleX );
@@ -854,31 +894,117 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
     aSz.SetHeight(aNewRect.GetHeight());
     pFormat->GetDoc()->SetAttr( aSz, *pFormat );
 
+    if(bIsTransformableSwFrame)
+    {
+        // Need to correct the TopLeft position in rotated state to make
+        // the interaction look correct. First, extract rotation (and others
+        // currently not used)
+        basegfx::B2DVector aScale, aTranslate;
+        double fRotate, fShearX;
+        GetFlyFrame()->getFrameAreaTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
+
+        // calc the center of the unchanged object
+        const basegfx::B2DPoint aFormerCenter(
+            GetFlyFrame()->getFrameAreaTransformation() * basegfx::B2DPoint(0.5, 0.5));
+
+        // define the existing rotaiton around that former center
+        const basegfx::B2DHomMatrix aRotFormerCenter(
+            basegfx::utils::createRotateAroundPoint(
+                aFormerCenter.getX(),
+                aFormerCenter.getY(),
+                fRotate));
+
+        // use the new center of the unrotated object, rotate it around the
+        // former center
+        const Point aNewCenter(aNewRect.Center());
+        const basegfx::B2DPoint aRotNewCenter(
+            aRotFormerCenter * basegfx::B2DPoint(aNewCenter.X(), aNewCenter.Y()));
+
+        // Create the new TopLeft of the unrotated, cropped object by creating
+        // as if re-rceating the unrotated geometry
+        const Point aNewTopLeft(
+            basegfx::fround(aRotNewCenter.getX() - (0.5 * aNewRect.getWidth())),
+            basegfx::fround(aRotNewCenter.getY() - (0.5 * aNewRect.getHeight())));
+
+        // checvk if we have movement and execute if yes
+        const Size aDeltaMove(
+            basegfx::fround(aNewTopLeft.getX() - aOutRect.Left()),
+            basegfx::fround(aNewTopLeft.getY() - aOutRect.Top()));
+
+        if(0 != aDeltaMove.Width() || 0 != aDeltaMove.Height())
+        {
+            NbcMove(aDeltaMove);
+        }
+    }
+
 //    pSh->EndUndo(SwUndoId::END);
     pSh->EndAllAction();
-
 }
 
-void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
-            const Fraction& xFact, const Fraction& yFact)
+void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    ResizeRect( aOutRect, rRef, xFact, yFact );
-
     const SwFrame* pTmpFrame = GetFlyFrame()->GetAnchorFrame();
+
     if( !pTmpFrame )
+    {
         pTmpFrame = GetFlyFrame();
-    const bool bVertX = pTmpFrame->IsVertical();
+    }
 
-    const bool bRTL = pTmpFrame->IsRightToLeft();
+    const bool bVertX(pTmpFrame->IsVertical());
+    const bool bRTL(pTmpFrame->IsRightToLeft());
+    const bool bVertL2RX(pTmpFrame->IsVertLR());
+    const bool bUseRightEdge((bVertX && !bVertL2RX ) || bRTL);
+    const bool bIsTransformableSwFrame(
+        GetFlyFrame()->IsFlyFreeFrame() &&
+        static_cast<SwFlyFreeFrame*>(GetFlyFrame())->isTransformableSwFrame());
 
-    const bool bVertL2RX = pTmpFrame->IsVertLR();
-    const Point aNewPos( ( bVertX && !bVertL2RX ) || bRTL ?
-                         aOutRect.Right() + 1 :
-                         aOutRect.Left(),
-                         aOutRect.Top() );
+    if(bIsTransformableSwFrame)
+    {
+        // When we have a change in transformed state, we need to fall back to the
+        // state without possible transformations.
+        // In the Resize case to correctly handle the changes, apply to the transformation
+        // and extract the new, untransformed state from that modified transformation
+        basegfx::B2DHomMatrix aNewMat(GetFlyFrame()->getFrameAreaTransformation());
+        const basegfx::B2DPoint aRef(rRef.X(), rRef.Y());
 
-    Size aSz( aOutRect.Right() - aOutRect.Left() + 1,
-              aOutRect.Bottom()- aOutRect.Top()  + 1 );
+        // apply state to already valid transformation
+        aNewMat.translate(-aRef.getX(), -aRef.getY());
+        aNewMat.scale(double(xFact), double(yFact));
+        aNewMat.translate(aRef.getX(), aRef.getY());
+
+        // get center of transfomed state
+        const basegfx::B2DPoint aCenter(aNewMat * basegfx::B2DPoint(0.5, 0.5));
+
+        // decompose to extract scale
+        basegfx::B2DVector aScale, aTranslate;
+        double fRotate, fShearX;
+        aNewMat.decompose(aScale, aTranslate, fRotate, fShearX);
+
+        // create new modified OutRect
+        aOutRect = tools::Rectangle(
+            basegfx::fround(aCenter.getX() - (0.5 * aScale.getX())),
+            basegfx::fround(aCenter.getY() - (0.5 * aScale.getY())),
+            basegfx::fround(aCenter.getX() + (0.5 * aScale.getX())),
+            basegfx::fround(aCenter.getY() + (0.5 * aScale.getY())));
+
+        // restore FrameAreas so that actions below not adapted to new
+        // full transformations take the correct actions
+        TransformableSwFrame* pTransformableSwFrame(static_cast<SwFlyFreeFrame*>(GetFlyFrame())->getTransformableSwFrame());
+        pTransformableSwFrame->restoreFrameAreas();
+    }
+    else
+    {
+        ResizeRect( aOutRect, rRef, xFact, yFact );
+    }
+
+    // Position may also change, remember old one. This ois now already
+    // the one in the unrotated, old coordinate system
+    Point aOldPos(bUseRightEdge ? GetFlyFrame()->getFrameArea().TopRight() : GetFlyFrame()->getFrameArea().Pos());
+
+    // get target size in old coordinate system
+    Size aSz( aOutRect.Right() - aOutRect.Left() + 1, aOutRect.Bottom()- aOutRect.Top()  + 1 );
+
+    // compare with restored FrameArea
     if( aSz != GetFlyFrame()->getFrameArea().SSize() )
     {
         //The width of the columns should not be too narrow
@@ -903,6 +1029,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
         const SwFormatFrameSize aOldFrameSz( pFormat->GetFrameSize() );
         GetFlyFrame()->ChgSize( aSz );
         SwFormatFrameSize aFrameSz( pFormat->GetFrameSize() );
+
         if ( aFrameSz.GetWidthPercent() || aFrameSz.GetHeightPercent() )
         {
             long nRelWidth, nRelHeight;
@@ -910,6 +1037,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
                                 GetFlyFrame()->GetAnchorFrame() :
                                 GetFlyFrame()->GetAnchorFrame()->GetUpper();
             const SwViewShell *pSh = GetFlyFrame()->getRootFrame()->GetCurrShell();
+
             if ( pSh && pRel->IsBodyFrame() &&
                  pSh->GetViewOptions()->getBrowseMode() &&
                  pSh->VisArea().HasArea() )
@@ -924,40 +1052,50 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
                 nRelWidth  = pRel->getFramePrintArea().Width();
                 nRelHeight = pRel->getFramePrintArea().Height();
             }
+
             if ( aFrameSz.GetWidthPercent() && aFrameSz.GetWidthPercent() != SwFormatFrameSize::SYNCED &&
                  aOldFrameSz.GetWidth() != aFrameSz.GetWidth() )
+            {
                 aFrameSz.SetWidthPercent( sal_uInt8(aSz.Width() * 100.0 / nRelWidth + 0.5) );
+            }
+
             if ( aFrameSz.GetHeightPercent() && aFrameSz.GetHeightPercent() != SwFormatFrameSize::SYNCED &&
                  aOldFrameSz.GetHeight() != aFrameSz.GetHeight() )
+            {
                 aFrameSz.SetHeightPercent( sal_uInt8(aSz.Height() * 100.0 / nRelHeight + 0.5) );
+            }
+
             pFormat->GetDoc()->SetAttr( aFrameSz, *pFormat );
         }
     }
 
-    //Position can also be changed!
-    const Point aOldPos( ( bVertX && !bVertL2RX ) || bRTL ?
-                         GetFlyFrame()->getFrameArea().TopRight() :
-                         GetFlyFrame()->getFrameArea().Pos() );
+    //Position can also be changed, get new one
+    const Point aNewPos(bUseRightEdge ? aOutRect.Right() + 1 : aOutRect.Left(), aOutRect.Top());
+
     if ( aNewPos != aOldPos )
     {
-        //May have been altered by the ChgSize!
-        if( bVertX || bRTL )
+        // Former late change in aOutRect by ChgSize
+        // is now taken into account directly by calculating
+        // aNewPos *after* calling ChgSize (see old code).
+        // Still need to adapt aOutRect since the 'Move' is already applied
+        // here (see ResizeRect) and it's the same SdrObject
+        const Size aDeltaMove(
+                aNewPos.X() - aOldPos.X(),
+                aNewPos.Y() - aOldPos.Y());
+        MoveRect(aOutRect, Size(-aDeltaMove.Width(), -aDeltaMove.Height()));
+
+        // Now, move as needed (no empty delta which was a hack anyways)
+        if(bIsTransformableSwFrame)
         {
-            if( aOutRect.TopRight() != aNewPos )
-            {
-                SwTwips nDeltaX;
-                if ( bVertL2RX )
-                    nDeltaX = aNewPos.X() - aOutRect.Left();
-                else
-                    nDeltaX = aNewPos.X() - aOutRect.Right();
-                SwTwips nDeltaY = aNewPos.Y() - aOutRect.Top();
-                MoveRect( aOutRect, Size( nDeltaX, nDeltaY ) );
-            }
+            // need to save aOutRect to FrameArea, will be restored to aOutRect in
+            // SwVirtFlyDrawObj::NbcMove currently for TransformableSwFrames
+            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*GetFlyFrame());
+            aFrm.setSwRect(aOutRect);
         }
-        else if ( aOutRect.TopLeft() != aNewPos )
-            aOutRect.SetPos( aNewPos );
+
+        // keep old hack - not clear what happens here
         bInResize = true;
-        NbcMove( Size( 0, 0 ) );
+        NbcMove(aDeltaMove);
         bInResize = false;
     }
 }
