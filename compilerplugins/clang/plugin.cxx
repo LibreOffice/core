@@ -26,6 +26,20 @@ Base classes for plugin actions.
 namespace loplugin
 {
 
+namespace {
+
+Expr const * skipImplicit(Expr const * expr) {
+    if (auto const e = dyn_cast<MaterializeTemporaryExpr>(expr)) {
+        expr = e->GetTemporaryExpr();
+    }
+    if (auto const e = dyn_cast<CXXBindTemporaryExpr>(expr)) {
+        expr = e->getSubExpr();
+    }
+    return expr;
+}
+
+}
+
 Plugin::Plugin( const InstantiationData& data )
     : compiler( data.compiler ), handler( data.handler ), name( data.name )
 {
@@ -247,27 +261,29 @@ Plugin::IdenticalDefaultArgumentsResult Plugin::checkIdenticalDefaultArguments(
             : IdenticalDefaultArgumentsResult::No;
     }
 #endif
-    if (auto const lit1 = dyn_cast<clang::StringLiteral>(
-            argument1->IgnoreParenImpCasts()))
-    {
-        if (auto const lit2 = dyn_cast<clang::StringLiteral>(
-                argument2->IgnoreParenImpCasts()))
-        {
+    auto const desugared1 = argument1->IgnoreParenImpCasts();
+    auto const desugared2 = argument2->IgnoreParenImpCasts();
+    if (auto const lit1 = dyn_cast<clang::StringLiteral>(desugared1)) {
+        if (auto const lit2 = dyn_cast<clang::StringLiteral>(desugared2)) {
             return lit1->getBytes() == lit2->getBytes()
                 ? IdenticalDefaultArgumentsResult::Yes
                 : IdenticalDefaultArgumentsResult::No;
         }
     }
     // catch params with defaults like "= OUString()"
-    if (isa<MaterializeTemporaryExpr>(argument1)
-        && isa<MaterializeTemporaryExpr>(argument2))
-    {
-        return IdenticalDefaultArgumentsResult::Yes;
-    }
-    if (isa<CXXBindTemporaryExpr>(argument1)
-        && isa<CXXBindTemporaryExpr>(argument2))
-    {
-        return IdenticalDefaultArgumentsResult::Yes;
+    if (auto const e1 = dyn_cast<CXXConstructExpr>(skipImplicit(desugared1))) {
+        if (auto const e2 = dyn_cast<CXXConstructExpr>(
+                skipImplicit(desugared2)))
+        {
+            if ((e1->getConstructor()->getCanonicalDecl()
+                 != e2->getConstructor()->getCanonicalDecl()))
+            {
+                return IdenticalDefaultArgumentsResult::No;
+            }
+            if (e1->getNumArgs() == 0 && e2->getNumArgs() == 0) {
+                return IdenticalDefaultArgumentsResult::Yes;
+            }
+        }
     }
     return IdenticalDefaultArgumentsResult::Maybe;
 }
