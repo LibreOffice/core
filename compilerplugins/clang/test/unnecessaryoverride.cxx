@@ -90,4 +90,16 @@ struct DerivedSlightlyDifferent : Base
     }
 };
 
+struct Base2
+{
+    void default1(Base const& = SimpleDerived());
+    void default2(Base const& = SimpleDerived());
+};
+
+struct Derived2 : Base2
+{
+    void default1(Base const& x = Intermediate1()) { Base2::default1(x); } // no warning
+    void default2(Base const& x = SimpleDerived()) { Base2::default2(x); } // expected-error {{public function just calls public parent [loplugin:unnecessaryoverride]}}
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
