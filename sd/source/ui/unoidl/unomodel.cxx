@@ -2413,10 +2413,6 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
 {
     SolarMutexGuard aGuard;
 
-    if (mbImpressDoc)
-        // tiled rendering works only when we are in the 'Normal' view, switch to that
-        mpDocShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_VIEWSHELL0, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
-
     if (DrawViewShell* pViewShell = GetViewShell())
     {
         DrawView* pDrawView = pViewShell->GetDrawView();
