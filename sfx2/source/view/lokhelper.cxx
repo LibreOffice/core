@@ -144,7 +144,9 @@ void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OS
     }
 }
 
-void SfxLokHelper::notifyDialog(const OUString& rDialogID, const OUString& rAction, const tools::Rectangle* rRect)
+void SfxLokHelper::notifyDialog(const OUString& rDialogID,
+                                const OUString& rAction,
+                                const std::vector<vcl::LOKPayloadItem>& rPayload)
 {
     if (SfxLokHelper::getViewsCount() <= 0 || rDialogID.isEmpty())
         return;
@@ -152,9 +154,15 @@ void SfxLokHelper::notifyDialog(const OUString& rDialogID, const OUString& rActi
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     OString aPayload = OString("{ \"dialogId\": \"") + OUStringToOString(rDialogID, RTL_TEXTENCODING_UTF8).getStr() + OString("\"");
     aPayload += OString(", \"action\": \"") + OUStringToOString(rAction, RTL_TEXTENCODING_UTF8).getStr() + OString("\"");
-    if (!rAction.isEmpty() && rRect && !rRect->IsEmpty())
-        aPayload += OString(", \"rectangle\": \"") + rRect->toString() + OString("\"");
 
+    for (const auto& rItem: rPayload)
+    {
+        if (!rItem.first.isEmpty() && !rItem.second.isEmpty())
+        {
+            aPayload += OString(", \"") + rItem.first + OString("\": \"") +
+                rItem.second + OString("\"");
+        }
+    }
     aPayload += "}";
 
     while (pViewShell)

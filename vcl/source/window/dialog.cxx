@@ -596,7 +596,7 @@ void Dialog::dispose()
 
     if (comphelper::LibreOfficeKit::isActive() && mpDialogRenderable)
     {
-        mpDialogRenderable->notifyDialog(maID, "close", nullptr);
+        mpDialogRenderable->notifyDialog(maID, "close");
     }
 
     SystemWindow::dispose();
@@ -973,7 +973,11 @@ void Dialog::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
     if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogRenderable && !maID.isEmpty())
     {
-        mpDialogRenderable->notifyDialog(maID, "invalidate", pRectangle);
+        std::vector<vcl::LOKPayloadItem> aPayload;
+        if (pRectangle)
+            aPayload.push_back(std::make_pair(OString("rectangle"), pRectangle->toString()));
+
+        mpDialogRenderable->notifyDialog(maID, "invalidate", aPayload);
     }
 }
 
@@ -1015,13 +1019,13 @@ void Dialog::LOKKeyUp(const KeyEvent& rKeyEvent)
     ImplWindowFrameProc(this, SalEvent::ExternalKeyUp, &rKeyEvent);
 }
 
-void Dialog::LOKCursorInvalidate(const tools::Rectangle& aRect)
+void Dialog::LOKCursor(const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload)
 {
     assert(comphelper::LibreOfficeKit::isActive());
 
     if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogRenderable && !maID.isEmpty())
     {
-        mpDialogRenderable->notifyDialog(maID, "cursor_invalidate", &aRect);
+        mpDialogRenderable->notifyDialog(maID, rAction, rPayload);
     }
 }
 
@@ -1342,7 +1346,7 @@ void Dialog::Resize()
     // inform LOK clients
     if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogRenderable && !maID.isEmpty())
     {
-        mpDialogRenderable->notifyDialog(maID, "invalidate", nullptr);
+        mpDialogRenderable->notifyDialog(maID, "invalidate");
     }
 }
 
