@@ -351,9 +351,10 @@ ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
 	rm -rf $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/Frameworks/LibreOfficePython.framework/Versions/[1-9]*/lib/python[1-9]*/config-[1-9]*
 #
 ifneq ($(ENABLE_MACOSX_SANDBOX),)
-# Remove the gengal binary and unopkg script that we don't want
+# Remove the gengal binary and unopkg and unoinfo scripts that we don't want
 	rm $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/MacOS/gengal
 	rm $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/MacOS/unopkg
+	rm $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app/Contents/MacOS/unoinfo
 endif
 #
 # Then use the macosx-codesign-app-bundle script
