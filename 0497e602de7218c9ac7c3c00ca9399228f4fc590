@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_362f83f7",
+        "filename": "sot/source/sdstor/ucbstorage.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1956,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-14T08:02:15Z",
+      "side": 1,
+      "message": "judiging by the comment, you might need to clear() the vector before the m_pContent and the m_pTempFile are deleted?",
+      "revId": "0497e602de7218c9ac7c3c00ca9399228f4fc590",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_76390b41",
+        "filename": "sot/source/sdstor/ucbstorage.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2267,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-14T08:02:15Z",
+      "side": 1,
+      "message": "these 3 lines can just become:\n   m_aChildrenList.erase( m_aChildrenList.begin()() + i );\nsince std::advance is not really needed on a std::vector\u0027s iterator",
+      "revId": "0497e602de7218c9ac7c3c00ca9399228f4fc590",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
