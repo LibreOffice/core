@@ -212,7 +212,10 @@ cmd/lc_exportdirecttoepub.png cmd/lc_exportdirecttopdf.png
 cmd/sc_exportdirecttoepub.png cmd/sc_exportdirecttopdf.png
 
 # writer formatting style toolbar
+cmd/lc_defaultparastyle.png cmd/lc_controlcodes.png
+cmd/sc_defaultparastyle.png cmd/sc_controlcodes.png
 cmd/lc_bulletliststyle.png cmd/lc_defaultbullet.png
 cmd/sc_bulletliststyle.png cmd/sc_defaultbullet.png
 cmd/lc_numberliststyle.png cmd/lc_defaultnumbering.png
 cmd/sc_numberliststyle.png cmd/sc_defaultnumbering.png
+
