@@ -250,6 +250,7 @@ public:
     void testMsWordCompTrailingBlanks();
     void testCreateDocxAnnotation();
     void testTdf107976();
+    void testTdf113790();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -387,6 +388,7 @@ public:
     CPPUNIT_TEST(testMsWordCompTrailingBlanks);
     CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST(testTdf107976);
+    CPPUNIT_TEST(testTdf113790);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4960,6 +4962,29 @@ void SwUiWriterTest::testTdf107976()
     // This failed: the first shell had a pointer to the deleted shell.
     CPPUNIT_ASSERT(!pTransferable->GetShell());
     CPPUNIT_ASSERT(!pTransferable2->GetShell());
+}
+
+void SwUiWriterTest::testTdf113790()
+{
+    SwDoc* pDoc = createDoc("tdf113790.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    // Create the clipboard document.
+    SwDoc aClipboard;
+    aClipboard.SetClipBoard(true);
+
+    // Go to fourth line - to "ABCD" bulleted list item
+    pWrtShell->Down(/*bSelect=*/false, 4);
+    pWrtShell->SelPara(nullptr);
+    CPPUNIT_ASSERT_EQUAL(OUString("ABCD"), pWrtShell->GetSelText());
+    pWrtShell->Copy(&aClipboard);
+
+    // Go down to next-to-last (empty) line above "Title3"
+    pWrtShell->Down(/*bSelect=*/false, 4);
+    pWrtShell->Paste(&aClipboard);
+
+    // Save it as DOCX & load it again
+    reload("Office Open XML Text", "tdf113790.docx");
+    CPPUNIT_ASSERT(dynamic_cast<SwXTextDocument *>(mxComponent.get()));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
