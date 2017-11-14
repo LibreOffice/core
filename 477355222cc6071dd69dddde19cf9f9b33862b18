@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_b1929d9d",
+        "filename": "sc/source/core/tool/interpr8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1001302
+      },
+      "writtenOn": "2017-11-14T14:35:11Z",
+      "side": 0,
+      "message": "UK spelling verses american spelling? (No personal preference)",
+      "revId": "477355222cc6071dd69dddde19cf9f9b33862b18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
