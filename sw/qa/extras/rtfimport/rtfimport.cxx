@@ -459,6 +459,16 @@ DECLARE_RTFIMPORT_TEST(testFdo81944, "fdo81944.rtf")
     CPPUNIT_ASSERT_EQUAL(11.0f, getProperty<float>(xStyle, "CharHeightComplex"));
 }
 
+DECLARE_RTFIMPORT_TEST(testSbkodd, "sbkodd.rtf")
+{
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), xCursor->getPage());
+    xCursor->jumpToNextPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(3), xCursor->getPage());
+}
+
 DECLARE_RTFIMPORT_TEST(testPoshPosv, "posh-posv.rtf")
 {
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(getShape(1), "HoriOrient"));
