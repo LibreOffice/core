@@ -57,7 +57,7 @@ import com.sun.star.lang.XTypeProvider;
 import com.sun.star.beans.PropertyAttribute;
 
 /**
-   This component contains the followin properties:
+   This component contains the following properties:
  *  <table border>
  *  <tr>
  *  <th> Property Name </th>

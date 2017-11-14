@@ -831,7 +831,7 @@ void SbiIoSystem::ReadCon(OString& rIn)
     aPrompt.clear();
 }
 
-// output of a MessageBox, if theres a CR in the console-buffer
+// output of a MessageBox, if there's a CR in the console-buffer
 
 void SbiIoSystem::WriteCon(const OUString& rText)
 {

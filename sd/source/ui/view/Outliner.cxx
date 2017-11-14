@@ -1007,7 +1007,7 @@ void SdOutliner::RestoreStartPosition()
     // start position is not requested.
     if (mnStartPageIndex == (sal_uInt16)-1 )
         bRestore = false;
-    // Dont't restore when the view shell is not valid.
+    // Don't restore when the view shell is not valid.
     std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
     if (pViewShell == nullptr)
         bRestore = false;

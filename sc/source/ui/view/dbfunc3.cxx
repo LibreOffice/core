@@ -2158,12 +2158,12 @@ void ScDBFunc::RepeatDB( bool bRecord )
 
         if (bSort)
         {
-            pDBData->GetSortParam( aSortParam );            // range may have chaged
+            pDBData->GetSortParam( aSortParam );            // range may have changed
             Sort( aSortParam, false, false);
         }
         if (bQuery)
         {
-            pDBData->GetQueryParam( aQueryParam );          // range may have chaged
+            pDBData->GetQueryParam( aQueryParam );          // range may have changed
             ScRange aAdvSource;
             if (pDBData->GetAdvancedQuerySource(aAdvSource))
             {
@@ -2179,7 +2179,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
         }
         if (bSubTotal)
         {
-            pDBData->GetSubTotalParam( aSubTotalParam );    // range may have chaged
+            pDBData->GetSubTotalParam( aSubTotalParam );    // range may have changed
             aSubTotalParam.bRemoveOnly = false;
             DoSubTotals( aSubTotalParam, false );
         }
