@@ -455,7 +455,7 @@ public:
 typedef tools::SvRef<UCBStorageStream_Impl> UCBStorageStream_ImplRef;
 
 struct UCBStorageElement_Impl;
-typedef ::std::vector< UCBStorageElement_Impl* > UCBStorageElementList_Impl;
+typedef std::vector<std::unique_ptr<UCBStorageElement_Impl>> UCBStorageElementList_Impl;
 
 class UCBStorage_Impl : public SvRefBase
 {
@@ -1736,7 +1736,7 @@ void UCBStorage_Impl::ReadContent()
                 bool bIsFolder( xRow->getBoolean(2) );
                 sal_Int64 nSize = xRow->getLong(4);
                 UCBStorageElement_Impl* pElement = new UCBStorageElement_Impl( aTitle, bIsFolder, (sal_uLong) nSize );
-                m_aChildrenList.push_back( pElement );
+                m_aChildrenList.emplace_back( pElement );
 
                 bool bIsOfficeDocument = m_bIsLinked || ( m_aClassId != SvGlobalName() );
                 if ( bIsFolder )
@@ -1824,7 +1824,7 @@ void UCBStorage_Impl::SetError( ErrCode nError )
 sal_Int32 UCBStorage_Impl::GetObjectCount()
 {
     sal_Int32 nCount = m_aChildrenList.size();
-    for (UCBStorageElement_Impl* pElement : m_aChildrenList)
+    for (auto& pElement : m_aChildrenList)
     {
         DBG_ASSERT( !pElement->m_bIsFolder || pElement->m_xStorage.is(), "Storage should be open!" );
         if ( pElement->m_bIsFolder && pElement->m_xStorage.is() )
@@ -1880,7 +1880,7 @@ void UCBStorage_Impl::SetProps( const Sequence < Sequence < PropertyValue > >& r
         // the "FullPath" of a child always starts without '/'
         aPath.clear();
 
-    for (UCBStorageElement_Impl* pElement : m_aChildrenList)
+    for (auto& pElement : m_aChildrenList)
     {
         DBG_ASSERT( !pElement->m_bIsFolder || pElement->m_xStorage.is(), "Storage should be open!" );
         if ( pElement->m_bIsFolder && pElement->m_xStorage.is() )
@@ -1931,7 +1931,7 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
         aPath.clear();
 
     // now the properties of my elements
-    for (UCBStorageElement_Impl* pElement : m_aChildrenList)
+    for (auto& pElement : m_aChildrenList)
     {
         DBG_ASSERT( !pElement->m_bIsFolder || pElement->m_xStorage.is(), "Storage should be open!" );
         if ( pElement->m_bIsFolder && pElement->m_xStorage.is() )
@@ -1953,9 +1953,6 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
 
 UCBStorage_Impl::~UCBStorage_Impl()
 {
-    // first delete elements!
-    for (UCBStorageElement_Impl* i : m_aChildrenList)
-        delete i;
     m_aChildrenList.clear();
 
     delete m_pContent;
@@ -2037,7 +2034,7 @@ sal_Int16 UCBStorage_Impl::Commit()
             // all errors will be caught in the "catch" statement outside the loop
             for ( size_t i = 0; i < m_aChildrenList.size() && nRet; ++i )
             {
-                UCBStorageElement_Impl* pElement = m_aChildrenList[ i ];
+                auto& pElement = m_aChildrenList[ i ];
                 ::ucbhelper::Content* pContent = pElement->GetContent();
                 std::unique_ptr< ::ucbhelper::Content > xDeleteContent;
                 if ( !pContent && pElement->IsModified() )
@@ -2264,14 +2261,9 @@ sal_Int16 UCBStorage_Impl::Commit()
             // are also removed from the lists
             for ( size_t i = 0; i < m_aChildrenList.size(); )
             {
-                UCBStorageElement_Impl* pInnerElement = m_aChildrenList[ i ];
+                auto& pInnerElement = m_aChildrenList[ i ];
                 if ( pInnerElement->m_bIsRemoved )
-                {
-                    UCBStorageElementList_Impl::iterator it = m_aChildrenList.begin();
-                    ::std::advance( it, i );
-                    delete *it;
-                    m_aChildrenList.erase( it );
-                }
+                    m_aChildrenList.erase( m_aChildrenList.begin() + i );
                 else
                 {
                     pInnerElement->m_aOriginalName = pInnerElement->m_aName;
@@ -2291,15 +2283,10 @@ bool UCBStorage_Impl::Revert()
 {
     for ( size_t i = 0; i < m_aChildrenList.size(); )
     {
-        UCBStorageElement_Impl* pElement = m_aChildrenList[ i ];
+        auto& pElement = m_aChildrenList[ i ];
         pElement->m_bIsRemoved = false;
         if ( pElement->m_bIsInserted )
-        {
-            UCBStorageElementList_Impl::iterator it = m_aChildrenList.begin();
-            ::std::advance( it, i );
-            delete *it;
-            m_aChildrenList.erase( it );
-        }
+            m_aChildrenList.erase( m_aChildrenList.begin() + i );
         else
         {
             if ( pElement->m_xStream.is() )
@@ -2393,7 +2380,7 @@ OUString UCBStorage::GetUserName()
 void UCBStorage::FillInfoList( SvStorageInfoList* pList ) const
 {
     // put information in childrenlist into StorageInfoList
-    for (UCBStorageElement_Impl* pElement : pImp->GetChildrenList())
+    for (auto& pElement : pImp->GetChildrenList())
     {
         if ( !pElement->m_bIsRemoved )
         {
@@ -2488,10 +2475,10 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl const & rElemen
 UCBStorageElement_Impl* UCBStorage::FindElement_Impl( const OUString& rName ) const
 {
     DBG_ASSERT( !rName.isEmpty(), "Name is empty!" );
-    for (UCBStorageElement_Impl* pElement : pImp->GetChildrenList())
+    for (auto& pElement : pImp->GetChildrenList())
     {
         if ( pElement->m_aName == rName && !pElement->m_bIsRemoved )
-            return pElement;
+            return pElement.get();
     }
     return nullptr;
 }
@@ -2517,7 +2504,7 @@ bool UCBStorage::CopyTo( BaseStorage* pDestStg ) const
     bool bRet = true;
     for ( size_t i = 0; i < pImp->GetChildrenList().size() && bRet; ++i )
     {
-        UCBStorageElement_Impl* pElement = pImp->GetChildrenList()[ i ];
+        auto& pElement = pImp->GetChildrenList()[ i ];
         if ( !pElement->m_bIsRemoved )
             bRet = CopyStorageElement_Impl( *pElement, pDestStg, pElement->m_aName );
     }
@@ -2593,7 +2580,7 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
             // create a new UCBStorageElement and insert it into the list
             pElement = new UCBStorageElement_Impl( rEleName );
             pElement->m_bIsInserted = true;
-            pImp->m_aChildrenList.push_back( pElement );
+            pImp->m_aChildrenList.emplace_back( pElement );
         }
     }
 
@@ -2690,7 +2677,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
         // Because nothing is known about the element that should be created, an external parameter is needed !
         pElement = new UCBStorageElement_Impl( rEleName );
         pElement->m_bIsInserted = true;
-        pImp->m_aChildrenList.push_back( pElement );
+        pImp->m_aChildrenList.emplace_back( pElement );
     }
 
     if ( !pElement->m_bIsFolder && ( pElement->m_bIsStorage || !bForceUCBStorage ) )
