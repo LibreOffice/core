@@ -44,10 +44,10 @@ namespace emfio
         bool ReadEnhWMF();
 
     private:
-        template <class T> void ReadAndDrawPolyPolygon();
-        template <class T> void ReadAndDrawPolyLine();
-        template <class T> tools::Polygon ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints);
-        template <class T> tools::Polygon ReadPolygonWithSkip(const bool skipFirst);
+        template <class T> void ReadAndDrawPolyPolygon(sal_uInt32 nNextPos);
+        template <class T> void ReadAndDrawPolyLine(sal_uInt32 nNextPos);
+        template <class T> tools::Polygon ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints, sal_uInt32 nNextPos);
+        template <class T> tools::Polygon ReadPolygonWithSkip(const bool skipFirst, sal_uInt32 nNextPos);
 
         tools::Rectangle ReadRectangle();
         void ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC);
