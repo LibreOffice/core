@@ -1015,6 +1015,16 @@ void Dialog::LOKKeyUp(const KeyEvent& rKeyEvent)
     ImplWindowFrameProc(this, SalEvent::ExternalKeyUp, &rKeyEvent);
 }
 
+void Dialog::LOKCursorInvalidate(const tools::Rectangle& aRect)
+{
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogRenderable && !maID.isEmpty())
+    {
+        mpDialogRenderable->notifyDialog(maID, "cursor_invalidate", &aRect);
+    }
+}
+
 void Dialog::ensureRepaint()
 {
     // ensure repaint
