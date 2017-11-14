@@ -2030,7 +2030,7 @@ SvxCurrencyList_Impl::SvxCurrencyList_Impl(
         }
     }
     m_pCurrencyLb->SetSelectHdl( LINK( this, SvxCurrencyList_Impl, SelectHdl ) );
-    SetText( SvxResId( RID_SVXSTR_TBLAFMT_CURRENCY ) );
+    SetText( SvxResId( RID_SVXSTR_TBLAFMT_FINANCIAL ) );
     if ( nSelectedPos >= 0 )
         m_pCurrencyLb->SelectEntryPos( nSelectedPos );
     m_pCurrencyLb->Show();
