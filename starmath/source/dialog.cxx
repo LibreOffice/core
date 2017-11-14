@@ -1484,12 +1484,11 @@ IMPL_LINK_NOARG( SmSymbolDialog, GetClickHdl, Button*, void )
     const SmSym *pSym = GetSymbol();
     if (pSym)
     {
-        OUStringBuffer aText;
-        aText.append('%').append(pSym->GetName()).append(' ');
+        OUString aText = "%" + pSym->GetName() + " ";
 
         rViewSh.GetViewFrame()->GetDispatcher()->ExecuteList(
                 SID_INSERTSYMBOL, SfxCallMode::RECORD,
-                { new SfxStringItem(SID_INSERTSYMBOL, aText.makeStringAndClear()) });
+                { new SfxStringItem(SID_INSERTSYMBOL, aText) });
     }
 }
 
