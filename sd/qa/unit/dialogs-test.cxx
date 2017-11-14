@@ -466,7 +466,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
         {
             // CreateSdPresLayoutTemplateDlg(SfxObjectShell* pDocSh, vcl::Window* pParent, const SdResId& DlgId, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool) override;
             // use STR_PSEUDOSHEET_TITLE configuration, see futempl.cxx for more possible configurations
-            // may be nicer on the long run to take a configuration whch represents a selected SdrObject
+            // may be nicer on the long run to take a configuration which represents a selected SdrObject
             SfxStyleSheetBasePool* pStyleSheetPool = getDocShell()->GetStyleSheetPool();
             CPPUNIT_ASSERT(pStyleSheetPool);
             SfxStyleSheetBase* pStyleSheet = pStyleSheetPool->First();
@@ -492,7 +492,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
         {
             // CreateSdTabTemplateDlg(const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView) override;
             // pretty similar to CreateSdPresLayoutTemplateDlg, see above
-            // may be nicer on the long run to take a configuration whch represents a selected SdrObject
+            // may be nicer on the long run to take a configuration which represents a selected SdrObject
             SfxStyleSheetBasePool* pStyleSheetPool = getDocShell()->GetStyleSheetPool();
             CPPUNIT_ASSERT(pStyleSheetPool);
             SfxStyleSheetBase* pStyleSheet = pStyleSheetPool->First();
