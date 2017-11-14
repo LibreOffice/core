@@ -127,6 +127,7 @@ class SwXShape : public SwXShapeBaseClass,
 {
     friend class SwXGroupShape;
     friend class SwXDrawPage;
+    friend class SwFmDrawPage;
 
     css::uno::Reference< css::uno::XAggregation > xShapeAgg;
     // reference to <XShape>, determined in the
