@@ -97,7 +97,7 @@ public:
 
     void LOKKeyInput(const KeyEvent& rKeyEvent);
     void LOKKeyUp(const KeyEvent& rKeyEvent);
-    void LOKCursorInvalidate(const tools::Rectangle& rRect);
+    void LOKCursor(const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload);
 
 protected:
     explicit        Dialog( WindowType nType );

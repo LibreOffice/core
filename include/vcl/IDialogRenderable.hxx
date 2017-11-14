@@ -21,6 +21,8 @@
 namespace vcl
 {
 
+typedef std::pair<const OString, const OString> LOKPayloadItem;
+
 typedef OUString DialogID;
 
 class VCL_DLLPUBLIC IDialogRenderable
@@ -45,7 +47,9 @@ public:
                                            int nCount, int nButtons, int nModifier) = 0;
 
     // Callbacks
-    virtual void notifyDialog(const DialogID& rDialogID, const OUString& rAction, const tools::Rectangle* rRect) = 0;
+    virtual void notifyDialog(const DialogID& rDialogID,
+                              const OUString& rAction,
+                              const std::vector<LOKPayloadItem>& rPayload = std::vector<LOKPayloadItem>()) = 0;
 
     virtual void notifyDialogChild(const DialogID& rDialogID, const OUString& rAction, const Point& rPos) = 0;
 };

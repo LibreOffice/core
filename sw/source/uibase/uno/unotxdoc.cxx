@@ -3801,9 +3801,11 @@ void SwXTextDocument::postDialogChildMouseEvent(const vcl::DialogID& rDialogID, 
     }
 }
 
-void SwXTextDocument::notifyDialog(const vcl::DialogID& rDialogID, const OUString& rAction, const tools::Rectangle* rRect)
+void SwXTextDocument::notifyDialog(const vcl::DialogID& rDialogID,
+                                   const OUString& rAction,
+                                   const std::vector<vcl::LOKPayloadItem>& rPayload)
 {
-    SfxLokHelper::notifyDialog(rDialogID, rAction, rRect);
+    SfxLokHelper::notifyDialog(rDialogID, rAction, rPayload);
 }
 
 void SwXTextDocument::notifyDialogChild(const vcl::DialogID& rDialogID, const OUString& rAction, const Point& rPos)
