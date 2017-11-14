@@ -137,11 +137,11 @@ bool Qt5Graphics::GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&) { retur
 
 bool Qt5Graphics::GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) { return false; }
 
-SalLayout* Qt5Graphics::GetTextLayout(ImplLayoutArgs&, int nFallbackLevel)
+std::unique_ptr<SalLayout> Qt5Graphics::GetTextLayout(ImplLayoutArgs&, int nFallbackLevel)
 {
     if (m_pTextStyle[nFallbackLevel])
-        return new CommonSalLayout(*m_pTextStyle[nFallbackLevel]);
-    return nullptr;
+        return std::unique_ptr<SalLayout>(new CommonSalLayout(*m_pTextStyle[nFallbackLevel]));
+    return std::unique_ptr<SalLayout>();
 }
 
 void Qt5Graphics::DrawTextLayout(const CommonSalLayout&) {}
