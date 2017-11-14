@@ -29,7 +29,6 @@ $(call gb_ExternalProject_get_state_target,libmwaw,build) :
 			, \
 				--enable-shared --disable-static \
 			) \
-			--with-sharedptr=c++11 \
 			--without-docs \
 			--disable-tools \
 			--disable-zip \

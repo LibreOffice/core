@@ -38,7 +38,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
 endif
 
 $(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
-    external/libmwaw/0001-make-MWAW_FALLTHROUGH-decl.-more-verbose-again.patch.1 \
+    external/libmwaw/0001-fix-call-of-explicit-ctor.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:

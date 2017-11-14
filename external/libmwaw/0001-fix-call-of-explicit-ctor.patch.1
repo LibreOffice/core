@@ -1,0 +1,25 @@
+From 4bc8ec0481f89b989b0c34236c9d5d9b8038d4a9 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Wed, 15 Nov 2017 13:15:44 +0100
+Subject: [PATCH] fix call of explicit ctor
+
+---
+ src/lib/libmwaw_internal.hxx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lib/libmwaw_internal.hxx b/src/lib/libmwaw_internal.hxx
+index 2875a0fb..b844a9d5 100644
+--- a/src/lib/libmwaw_internal.hxx
++++ b/src/lib/libmwaw_internal.hxx
+@@ -1027,7 +1027,7 @@ public:
+   }
+   //! generic constructor
+   template <class U> explicit MWAWBox2(MWAWBox2<U> const &p)
+-    : m_data(p.min(), p.max())
++    : m_data(MWAWVec2<T>(p.min()), MWAWVec2<T>(p.max()))
+   {
+   }
+ 
+-- 
+2.14.3
+
