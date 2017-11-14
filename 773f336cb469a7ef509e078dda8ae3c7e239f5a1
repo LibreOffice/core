@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_91d201ff",
+        "filename": "include/svtools/tabbar.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-11-14T20:31:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a430d35_319f8db5",
+      "revId": "773f336cb469a7ef509e078dda8ae3c7e239f5a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_119c51bf",
         "filename": "sc/source/ui/inc/tabview.hxx",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2017-11-14T14:09:42Z",
       "side": 1,
       "message": "I\u0027d rather name this different, it reads as if it would actually set the protection, which it does not but only the symbol. So how about SetTabProtectionSymbol()?",
+      "revId": "773f336cb469a7ef509e078dda8ae3c7e239f5a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_b1cd3d5f",
+        "filename": "sc/source/ui/inc/tabview.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-11-14T20:31:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a430d35_119c51bf",
       "revId": "773f336cb469a7ef509e078dda8ae3c7e239f5a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_f1d7c5ea",
+        "filename": "svtools/source/control/tabbar.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1236,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-11-14T20:31:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a430d35_d163a9da",
+      "revId": "773f336cb469a7ef509e078dda8ae3c7e239f5a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_f15ee510",
         "filename": "svtools/source/control/tabbar.cxx",
         "patchSetId": 4
@@ -64,6 +118,24 @@
       "writtenOn": "2017-11-14T14:09:42Z",
       "side": 1,
       "message": "I think this should use the same GetPagePos() indirection as in IsPageSelected() above (and other functions), shouldn\u0027t it?",
+      "revId": "773f336cb469a7ef509e078dda8ae3c7e239f5a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_11053179",
+        "filename": "svtools/source/control/tabbar.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2061,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-11-14T20:31:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a430d35_f15ee510",
       "revId": "773f336cb469a7ef509e078dda8ae3c7e239f5a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
