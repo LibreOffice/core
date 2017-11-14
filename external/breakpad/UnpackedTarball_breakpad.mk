@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,breakpad,\
 	external/breakpad/breakpad-wshadow.patch.1 \
 	external/breakpad/breakpad-wshadow2.patch.1 \
 	external/breakpad/breakpad-stackwalk.patch.1 \
+	external/breakpad/ucontext.patch \
 ))
 
 ifeq ($(COM_IS_CLANG),TRUE)
