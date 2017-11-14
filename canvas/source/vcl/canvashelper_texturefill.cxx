@@ -868,7 +868,7 @@ namespace vclcanvas
                     // =================================
 
                     // calc device space direction vectors. We employ
-                    // the followin approach for tiled output: the
+                    // the following approach for tiled output: the
                     // texture bitmap is output in texture space
                     // x-major order, i.e. tile neighbors in texture
                     // space x direction are rendered back-to-back in

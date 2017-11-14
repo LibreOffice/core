@@ -1542,7 +1542,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     m_aAsyncActionFinished.reset();
 
     // don't (yet) set m_aCurrentAsyncActionHandler to pTimeout->aFinishHandler.
-    // By definition, this handler *only* get's called when the result cannot be obtained
+    // By definition, this handler *only* gets called when the result cannot be obtained
     // during the minimum wait time, so it is only set below, when needed.
     m_aCurrentAsyncActionHandler = Link<void*,void>();
 

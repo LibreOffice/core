@@ -3601,7 +3601,7 @@ void SwTabFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
         }
     }
     else if ( GetNext() )
-        //Take the marging into account when dealing with ContentFrame's. There are
+        //Take the margin into account when dealing with ContentFrame's. There are
         //two situations (both always happen at once):
         //a) The Content becomes the first in a chain
         //b) The new follower was the first in a chain before
