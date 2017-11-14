@@ -320,18 +320,27 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             }
 
             ScImportExport aObj( pDoc, aReducedBlock );
-            // Plain string ("Unformatted text") contains embedded line breaks
-            // but is not enclosed in quotes. Which makes it unsuitable for
-            // multiple cells if one of them is multi-line, but otherwise is
-            // expected behavior for plain text.
+            // Plain text ("Unformatted text") may contain embedded tabs and
+            // line breaks but is not enclosed in quotes. Which makes it
+            // unsuitable for multiple cells, especially if one of them is
+            // multi-line, but otherwise is expected behavior for plain text.
+            // For multiple cells replace embedded line breaks (and tabs) with
+            // space character, otherwise pasting would yield odd results.
+            /* XXX: it's debatable whether this is actually expected, but
+             * there's no way to satisfy all possible requirements when
+             * copy/pasting unformatted text. */
+            const bool bPlainMulti = (nFormat == SotClipboardFormatId::STRING &&
+                    aReducedBlock.aStart != aReducedBlock.aEnd);
             // Add quotes only for STRING_TSVC.
             /* TODO: a possible future STRING_TSV should not contain embedded
-             * line breaks nor tab (separator) characters and not be quoted. */
+             * line breaks nor tab (separator) characters and not be quoted.
+             * A possible STRING_CSV should. */
             ScExportTextOptions aTextOptions( ScExportTextOptions::None, 0,
                     (nFormat == SotClipboardFormatId::STRING_TSVC));
-            if ( bUsedForLink )
+            if ( bPlainMulti || bUsedForLink )
             {
-                // For a DDE link, convert line breaks and separators to space.
+                // For a DDE link or plain text multiple cells, convert line
+                // breaks and separators to space.
                 aTextOptions.meNewlineConversion = ScExportTextOptions::ToSpace;
                 aTextOptions.mcSeparatorConvertTo = ' ';
                 aTextOptions.mbAddQuotes = false;
