@@ -94,6 +94,7 @@ struct Base2
 {
     void default1(Base const& = SimpleDerived());
     void default2(Base const& = SimpleDerived());
+    void default3(Base = Base());
 };
 
 struct Derived2 : Base2
@@ -104,6 +105,12 @@ struct Derived2 : Base2
         Base const& x = SimpleDerived())
     {
         Base2::default2(x);
+    }
+    void
+    default3( // expected-error {{public function just calls public parent [loplugin:unnecessaryoverride]}}
+        Base x = Base())
+    {
+        (Base2::default3(x));
     }
 };
 
