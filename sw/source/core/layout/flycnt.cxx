@@ -1371,9 +1371,7 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
         GetPageFrame()->MoveFly( this, pTmpPage );
 
     const Point aRelPos = bVert ? Point( -nY, nX ) : Point( nX, nY );
-
     ChgRelPos( aRelPos );
-
     GetFormat()->GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
 
     if ( pOldPage != FindPageFrame() )

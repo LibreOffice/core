@@ -29,8 +29,8 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-
 #include <com/sun/star/style/TabStop.hpp>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 class SwLayoutFrame;
 class SwRootFrame;
@@ -207,10 +207,7 @@ public:
     virtual basegfx::B2DHomMatrix getFramePrintAreaTransformation() const;
 
     // RotateFlyFrame3 - Support for Transformations
-    // Diverse transformations, starting with a concrete translate that has
-    // to be mapped and currently directly changes SwRect(s) at SwFrames. For
-    // now stay on sigle actions (*_translate), bu tmaybe later unified to
-    // a single transform with a single B2DHomMatrix to apply
+    // Modify current transformations by applying given translation
     virtual void transform_translate(const Point& rOffset);
 };
 
@@ -228,7 +225,10 @@ private:
     basegfx::B2DHomMatrix   maFrameAreaTransformation;
     basegfx::B2DHomMatrix   maFramePrintAreaTransformation;
 
-    // last saved versions of SwRect(s) from SwFrameAreaDefinition
+    // last saved versions of SwRect(s) from SwFrameAreaDefinition,
+    // set from adaptFrameAreasToTransformations before modifying
+    // SwFrameAreaDefinition(s), used for restore from
+    // restoreFrameAreas
     SwRect                  maSavedFrameArea;
     SwRect                  maSavedFramePrintArea;
 
@@ -262,17 +262,17 @@ public:
     // Tooling method to reset the SwRect(s) in the current
     // SwFrameAreaDefinition which are already apapted to
     // Transformation back to the untransformed state that was
-    // last saved (see resetAreaDefinitionsToTransformed).
+    // last saved (see adaptFrameAreasToTransformations).
     // Only the SwRect(s) are changed back, not the transformations.
-    void resetAreaDefinitionsToUntransformed();
+    void restoreFrameAreas();
 
     // Re-Creates the SwRect(s) as BoundAreas based on the current
     // set Transformations, also saves the last SwRect(s) to the save
     // values.
-    void resetAreaDefinitionsToTransformed();
+    void adaptFrameAreasToTransformations();
 
-    // transform by given B2DHomMatrix
-    void doTransform(const basegfx::B2DHomMatrix aTransform);
+    // Modify current definitions by applying the given transformation
+    void transform(const basegfx::B2DHomMatrix aTransform);
 };
 
 /**
