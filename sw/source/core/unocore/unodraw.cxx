@@ -294,9 +294,25 @@ uno::Reference< uno::XInterface >   SwFmDrawPage::GetInterface( SdrObject* pObj 
     if( pObj )
     {
         SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
-        SwXShape* pxShape = SwIterator<SwXShape,SwFormat>( *pFormat ).First();
-        if(pxShape)
+
+        SwIterator<SwXShape,SwFormat> aIter(*pFormat);
+        SwXShape* pxShape = aIter.First();
+        if (pxShape)
         {
+            //tdf#113615 when mapping from SdrObject to XShape via
+            //SwFrameFormat check all the SdrObjects belonging to this
+            //SwFrameFormat to find the right one. In the case of Grouped
+            //objects there can be both the group and the elements of the group
+            //registered here so the first one isn't necessarily the right one
+            while (SwXShape* pNext = aIter.Next())
+            {
+                SvxShape* pSvxShape = pNext->GetSvxShape();
+                if (pSvxShape && pSvxShape->GetSdrObject() == pObj)
+                {
+                    pxShape = pNext;
+                    break;
+                }
+            }
             xShape =  *static_cast<cppu::OWeakObject*>(pxShape);
         }
         else
