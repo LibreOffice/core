@@ -254,7 +254,7 @@ FmFormData::FmFormData(const Reference< XForm >& _rxForm, FmFormData* _pParent)
     // set images
     m_aNormalImage = Image(RID_SVXBMP_FORM);
 
-    // set titel
+    // set title
     if (m_xForm.is())
     {
         Reference< XPropertySet >  xSet(m_xForm, UNO_QUERY);
@@ -307,7 +307,7 @@ FmControlData::FmControlData(const Reference< XFormComponent >& _rxComponent, Fm
     m_aNormalImage = GetImage();
 
 
-    // set titel
+    // set title
     Reference< XPropertySet >  xSet(m_xFormComponent, UNO_QUERY);
     if( xSet.is() )
     {

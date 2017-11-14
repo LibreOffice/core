@@ -641,7 +641,7 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void)
                     break;
                 case VclEventId::WindowMouseMove:
                     {
-                        // if we move the mouse after a button down we wan't to start draging
+                        // if we move the mouse after a button down we want to start dragging
                         mpListenWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
                         mpListenWindow = nullptr;
 
