@@ -18,6 +18,8 @@
  */
 
 #include <tools/rc.h>
+#include <comphelper/lok.hxx>
+
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
@@ -1154,6 +1156,18 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
         pCursor->SetPos( Point( nCursorPosX, nCursorPosY ) );
         pCursor->SetSize( Size( nCursorWidth, nTextHeight ) );
         pCursor->Show();
+    }
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        const long X = GetOutOffXPixel() + pCursor->GetPos().X();
+        const long Y = GetOutOffYPixel() + pCursor->GetPos().Y();
+        if (nCursorWidth == 0)
+            nCursorWidth = 2;
+        const Rectangle aRect(Point(X, Y), Size(nCursorWidth, pCursor->GetHeight()));
+        Dialog* pParentDlg = GetParentDialog();
+        if (pParentDlg)
+            pParentDlg->LOKCursorInvalidate(aRect);
     }
 }
 

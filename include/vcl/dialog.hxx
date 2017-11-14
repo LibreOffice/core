@@ -87,6 +87,7 @@ public:
 
     void LOKKeyInput(const KeyEvent& rKeyEvent);
     void LOKKeyUp(const KeyEvent& rKeyEvent);
+    void LOKCursorInvalidate(const Rectangle& rRect);
 
 protected:
     explicit        Dialog( WindowType nType );
