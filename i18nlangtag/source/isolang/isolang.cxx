@@ -668,6 +668,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_MANCHU,                "mnc", "CN", k0     },
     { LANGUAGE_USER_XIBE,                  "sjo", "CN", k0     },
     { LANGUAGE_USER_KITUBA_DRCONGO,        "ktu", "CD", k0     },
+    { LANGUAGE_USER_FON,                   "fon", "BJ", k0     },
     { LANGUAGE_MULTIPLE,                   "mul", ""  , k0     },    // multiple languages, many languages are used
     { LANGUAGE_UNDETERMINED,               "und", ""  , k0     },    // undetermined language, language cannot be identified
     { LANGUAGE_NONE,                       "zxx", ""  , k0     },    // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information

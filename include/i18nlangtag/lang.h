@@ -734,6 +734,7 @@ namespace o3tl
 #define LANGUAGE_USER_MANCHU                LanguageType(0x069A)
 #define LANGUAGE_USER_XIBE                  LanguageType(0x069B)
 #define LANGUAGE_USER_KITUBA_DRCONGO        LanguageType(0x069C)
+#define LANGUAGE_USER_FON                   LanguageType(0x069D)
 
 
 /* XXX Add new user defined LCIDs ^^^ there.

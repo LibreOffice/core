@@ -404,7 +404,8 @@ const std::pair<const char*, LanguageType> STR_ARR_SVT_LANGUAGE_TABLE[] =
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "English (Malaysia)") , LANGUAGE_ENGLISH_MALAYSIA },
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Manchu") , LANGUAGE_USER_MANCHU },
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Xibe") , LANGUAGE_USER_XIBE },
-    { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Kituba (Democratic Republic of the Congo)"), LANGUAGE_USER_KITUBA_DRCONGO }
+    { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Kituba (Democratic Republic of the Congo)"), LANGUAGE_USER_KITUBA_DRCONGO },
+    { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Fon"), LANGUAGE_USER_FON }
 };
 
 #endif
