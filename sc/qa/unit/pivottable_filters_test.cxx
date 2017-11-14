@@ -1382,15 +1382,15 @@ void ScPivotTableFiltersTest::testPivotTableDateFieldFilter()
         const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
         CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
         auto aIter = rMembers.begin();
-        ScDPSaveMember* pMember = *aIter; // "2016. január 6."
+        ScDPSaveMember* pMember = *aIter; // "2016. januÃ¡r 6."
         CPPUNIT_ASSERT(pMember);
         CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
         ++aIter;
-        pMember = *aIter; // "2016. január 7."
+        pMember = *aIter; // "2016. januÃ¡r 7."
         CPPUNIT_ASSERT(pMember);
         CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
         ++aIter;
-        pMember = *aIter; // "2016. január 8."
+        pMember = *aIter; // "2016. januÃ¡r 8."
         CPPUNIT_ASSERT(pMember);
         CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
     }
@@ -1875,11 +1875,11 @@ void ScPivotTableFiltersTest::testPivotTableDateFieldFilterXLSX()
         const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
         //CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
         auto aIter = rMembers.begin();
-        ScDPSaveMember* pMember = *aIter; // "2016. január 7."
+        ScDPSaveMember* pMember = *aIter; // "2016. januÃ¡r 7."
         CPPUNIT_ASSERT(pMember);
         CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
         ++aIter;
-        pMember = *aIter; // "2016. január 8."
+        pMember = *aIter; // "2016. januÃ¡r 8."
         CPPUNIT_ASSERT(pMember);
         CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
     }
