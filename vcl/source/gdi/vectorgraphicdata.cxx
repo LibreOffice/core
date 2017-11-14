@@ -147,7 +147,7 @@ void VectorGraphicData::ensureReplacement()
 
 void VectorGraphicData::ensureSequenceAndRange()
 {
-    if(maSequence.empty() && maVectorGraphicDataArray.hasElements())
+    if (!mbSequenceCreated && maVectorGraphicDataArray.hasElements())
     {
         // import SVG to maSequence, also set maRange
         maRange.reset();
@@ -206,6 +206,7 @@ void VectorGraphicData::ensureSequenceAndRange()
             }
         }
         mNestedBitmapSize = estimateSize(maSequence);
+        mbSequenceCreated = true;
     }
 }
 
@@ -227,6 +228,7 @@ VectorGraphicData::VectorGraphicData(
     VectorGraphicDataType eVectorDataType)
 :   maVectorGraphicDataArray(rVectorGraphicDataArray),
     maPath(rPath),
+    mbSequenceCreated(false),
     maRange(),
     maSequence(),
     maReplacement(),
@@ -241,6 +243,7 @@ VectorGraphicData::VectorGraphicData(
     VectorGraphicDataType eVectorDataType)
 :   maVectorGraphicDataArray(),
     maPath(rPath),
+    mbSequenceCreated(false),
     maRange(),
     maSequence(),
     maReplacement(),
