@@ -8,6 +8,7 @@
  */
 
 #include "../sdmodeltestbase.hxx"
+#include <app.hrc>
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <test/xmltesttools.hxx>
@@ -98,6 +99,7 @@ public:
     void testMultiViewInsertDeletePage();
     void testDisableUndoRepair();
     void testLanguageStatus();
+    void testDefaultView();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -136,6 +138,7 @@ public:
     CPPUNIT_TEST(testMultiViewInsertDeletePage);
     CPPUNIT_TEST(testDisableUndoRepair);
     CPPUNIT_TEST(testLanguageStatus);
+    CPPUNIT_TEST(testDefaultView);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1818,6 +1821,8 @@ void SdTiledRenderingTest::testDisableUndoRepair()
         CPPUNIT_ASSERT(dynamic_cast< const SfxUInt32Item* >(pItem1.get()));
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), dynamic_cast< const SfxUInt32Item * >(pItem1.get())->GetValue());
     }
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testLanguageStatus()
@@ -1836,6 +1841,30 @@ void SdTiledRenderingTest::testLanguageStatus()
         CPPUNIT_ASSERT(dynamic_cast< const SfxStringListItem* >(pItem1.get()));
         CPPUNIT_ASSERT(dynamic_cast< const SfxStringListItem* >(pItem2.get()));
     }
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testDefaultView()
+{
+    // Load the document with notes view.
+    comphelper::LibreOfficeKit::setActive();
+
+    SdXImpressDocument* pXImpressDocument = createDoc("notes-view.odp");
+    sd::ViewShell* pView = pXImpressDocument->GetDocShell()->GetViewShell();
+    {
+        std::unique_ptr<SfxPoolItem> pItem1;
+        std::unique_ptr<SfxPoolItem> pItem2;
+        pView->GetViewFrame()->GetBindings().QueryState(SID_NORMAL_MULTI_PANE_GUI, pItem1);
+        pView->GetViewFrame()->GetBindings().QueryState(SID_NOTES_MODE, pItem2);
+        const SfxBoolItem* pImpressView = dynamic_cast< const SfxBoolItem* >(pItem1.get());
+        const SfxBoolItem* pNotesView = dynamic_cast< const SfxBoolItem* >(pItem2.get());
+        CPPUNIT_ASSERT(pImpressView);
+        CPPUNIT_ASSERT(pNotesView);
+        CPPUNIT_ASSERT_EQUAL(true, pImpressView->GetValue());
+        CPPUNIT_ASSERT_EQUAL(false, pNotesView->GetValue());
+    }
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);
