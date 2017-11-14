@@ -473,7 +473,7 @@ const Size& SwNoTextFrame::GetSize() const
 void SwNoTextFrame::MakeAll(vcl::RenderContext* pRenderContext)
 {
     // RotateFlyFrame3 - inner frame. Get rotation and check if used
-    const double fRotation(getFrameRotation());
+    const double fRotation(getLocalFrameRotation());
     const bool bRotated(!basegfx::fTools::equalZero(fRotation));
 
     if(bRotated)
@@ -498,7 +498,7 @@ void SwNoTextFrame::MakeAll(vcl::RenderContext* pRenderContext)
             // is currently beyond scope
             if(pUpperFly->isTransformableSwFrame())
             {
-                pUpperFly->getTransformableSwFrame()->resetAreaDefinitionsToUntransformed();
+                pUpperFly->getTransformableSwFrame()->restoreFrameAreas();
             }
         }
 
@@ -508,7 +508,7 @@ void SwNoTextFrame::MakeAll(vcl::RenderContext* pRenderContext)
         // Reset to BoundAreas will be done below automatically
         if(isTransformableSwFrame())
         {
-            getTransformableSwFrame()->resetAreaDefinitionsToUntransformed();
+            getTransformableSwFrame()->restoreFrameAreas();
         }
     }
 
@@ -549,7 +549,7 @@ void SwNoTextFrame::MakeAll(vcl::RenderContext* pRenderContext)
             // upper frame, so it can bre re-created on the fly
             if(pUpperFly->isTransformableSwFrame())
             {
-                pUpperFly->getTransformableSwFrame()->resetAreaDefinitionsToTransformed();
+                pUpperFly->getTransformableSwFrame()->adaptFrameAreasToTransformations();
             }
         }
 
@@ -566,7 +566,7 @@ void SwNoTextFrame::MakeAll(vcl::RenderContext* pRenderContext)
         getTransformableSwFrame()->createFrameAreaTransformations(
             fRotation,
             aB2DCenter);
-        getTransformableSwFrame()->resetAreaDefinitionsToTransformed();
+        getTransformableSwFrame()->adaptFrameAreasToTransformations();
     }
     else
     {
@@ -615,13 +615,13 @@ void SwNoTextFrame::transform_translate(const Point& rOffset)
                 rOffset.X(), rOffset.Y()));
 
         // transform using TransformableSwFrame
-        getTransformableSwFrame()->doTransform(aTransform);
+        getTransformableSwFrame()->transform(aTransform);
     }
 }
 
 // RotateFlyFrame3 - inner frame
 // Check if we contain a SwGrfNode and get possible rotation from it
-double SwNoTextFrame::getFrameRotation() const
+double SwNoTextFrame::getLocalFrameRotation() const
 {
     const SwNoTextNode* pSwNoTextNode(nullptr != GetNode() ? GetNode()->GetNoTextNode() : nullptr);
 

@@ -1966,6 +1966,7 @@ Size SwFlyFrame::ChgSize( const Size& aNewSize )
             }
         }
     }
+
     if ( aAdjustedNewSize != getFrameArea().SSize() )
     {
         SwFrameFormat *pFormat = GetFormat();

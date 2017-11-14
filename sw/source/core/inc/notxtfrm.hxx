@@ -44,8 +44,8 @@ private:
     // RotateFlyFrame3 - Support for inner frame of a SwGrfNode.
     // Only for local data extraction. To uniquely access information
     // for local transformation, use getFrameArea(Print)Transformation.
-    friend double getFrameRotation_from_SwNoTextFrame(const SwNoTextFrame& rNoTextFrame);
-    double getFrameRotation() const;
+    friend double getLocalFrameRotation_from_SwNoTextFrame(const SwNoTextFrame& rNoTextFrame);
+    double getLocalFrameRotation() const;
 
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;

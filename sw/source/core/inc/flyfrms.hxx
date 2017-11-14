@@ -26,7 +26,7 @@
 // #i28701#
 class SwFlyAtContentFrame;
 
-double getFrameRotation_from_SwNoTextFrame(const SwNoTextFrame& rNoTextFrame);
+double getLocalFrameRotation_from_SwNoTextFrame(const SwNoTextFrame& rNoTextFrame);
 
 // Base class for those Flys that can "move freely" or better that are not
 // bound in Content.
@@ -63,7 +63,7 @@ private:
     // RotateFlyFrame3 - Support for outer Frame of a SwGrfNode
     // Only for local data extraction. To uniquely access information
     // for local transformation, use getFrameArea(Print)Transformation
-    double getFrameRotation() const;
+    double getLocalFrameRotation() const;
 
 protected:
     // #i28701# - new friend class <SwFlyNotify> for access to

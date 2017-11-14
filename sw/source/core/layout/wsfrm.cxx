@@ -166,7 +166,7 @@ void TransformableSwFrame::createFrameAreaTransformations(
         rFramePrintArea.Left() + rFrameArea.Left(), rFramePrintArea.Top() + rFrameArea.Top());
 }
 
-void TransformableSwFrame::resetAreaDefinitionsToTransformed()
+void TransformableSwFrame::adaptFrameAreasToTransformations()
 {
     if(!getLocalFrameAreaTransformation().isIdentity())
     {
@@ -203,7 +203,7 @@ void TransformableSwFrame::resetAreaDefinitionsToTransformed()
     }
 }
 
-void TransformableSwFrame::resetAreaDefinitionsToUntransformed()
+void TransformableSwFrame::restoreFrameAreas()
 {
     // This can be done fully based on the Transformations currently
     // set (and I did this in the beginning and it may be necessary
@@ -224,7 +224,7 @@ void TransformableSwFrame::resetAreaDefinitionsToUntransformed()
 }
 
 // transform by given B2DHomMatrix
-void TransformableSwFrame::doTransform(const basegfx::B2DHomMatrix aTransform)
+void TransformableSwFrame::transform(const basegfx::B2DHomMatrix aTransform)
 {
     if(!aTransform.isIdentity())
     {
