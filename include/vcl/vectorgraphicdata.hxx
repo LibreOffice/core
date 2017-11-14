@@ -57,6 +57,7 @@ private:
     OUString                    maPath;
 
     // on demand created content
+    bool                        mbSequenceCreated;
     basegfx::B2DRange           maRange;
     std::deque< css::uno::Reference< css::graphic::XPrimitive2D > > maSequence;
     BitmapEx                    maReplacement;
