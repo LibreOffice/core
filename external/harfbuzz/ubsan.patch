@@ -9,24 +9,3 @@
  	 + this->var->get_advance_var (glyph, font->coords, font->num_coords); // TODO Optimize?!
    }
  };
-@@ -458,8 +458,9 @@
- }
- 
- static void
--_hb_ot_font_destroy (hb_ot_font_t *ot_font)
-+_hb_ot_font_destroy (void *ot_font_)
- {
-+  hb_ot_font_t *ot_font = static_cast<hb_ot_font_t *>(ot_font_);
-   ot_font->cmap.fini ();
-   ot_font->h_metrics.fini ();
-   ot_font->v_metrics.fini ();
---- src/hb-private.hh
-+++ src/hb-private.hh
-@@ -461,6 +461,7 @@
-   template <typename T>
-   inline const Type *bsearch (T *key) const
-   {
-+    if (len == 0) return NULL;
-     return (const Type *) ::bsearch (key, array, len, sizeof (Type), (hb_compare_func_t) Type::cmp);
-   }
- 
