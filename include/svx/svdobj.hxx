@@ -75,10 +75,9 @@ class OutputDevice;
 class Fraction;
 
 namespace basegfx {
-
+class B2DPoint;
 class B2DPolyPolygon;
 class B2DHomMatrix;
-
 }
 
 namespace sdr
@@ -511,14 +510,14 @@ public:
     /// Nbc means "no broadcast".
     virtual void NbcMove  (const Size& rSiz);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual void NbcCrop  (const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+    virtual void NbcCrop  (const basegfx::B2DPoint& rRef, double fxFact, double fyFact);
     virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
     virtual void NbcShear (const Point& rRef, long nAngle, double tn, bool bVShear);
 
     virtual void Move  (const Size& rSiz);
     virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative = true);
-    virtual void Crop  (const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+    virtual void Crop  (const basegfx::B2DPoint& rRef, double fxFact, double fyFact);
     virtual void Rotate(const Point& rRef, long nAngle, double sn, double cs);
     virtual void Mirror(const Point& rRef1, const Point& rRef2);
     virtual void Shear (const Point& rRef, long nAngle, double tn, bool bVShear);

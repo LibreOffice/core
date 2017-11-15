@@ -25,6 +25,7 @@
 
 // #i28701#
 class SwFlyAtContentFrame;
+class SwNoTextFrame;
 
 double getLocalFrameRotation_from_SwNoTextFrame(const SwNoTextFrame& rNoTextFrame);
 

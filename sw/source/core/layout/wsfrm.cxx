@@ -65,6 +65,10 @@ SwFrameAreaDefinition::SwFrameAreaDefinition()
 {
 }
 
+SwFrameAreaDefinition::~SwFrameAreaDefinition()
+{
+}
+
 void SwFrameAreaDefinition::setFrameAreaPositionValid(bool bNew)
 {
     if(mbFrameAreaPositionValid != bNew)
@@ -146,6 +150,55 @@ void SwFrameAreaDefinition::transform_translate(const Point& rOffset)
     }
 }
 
+SwRect TransformableSwFrame::getUntransformedFrameArea() const
+{
+    const basegfx::B2DHomMatrix& rSource(getLocalFrameAreaTransformation());
+
+    if(rSource.isIdentity())
+    {
+        return mrSwFrameAreaDefinition.getFrameArea();
+    }
+    else
+    {
+        basegfx::B2DVector aScale, aTranslate;
+        double fRotate, fShearX;
+        rSource.decompose(aScale, aTranslate, fRotate, fShearX);
+        const basegfx::B2DPoint aCenter(rSource * basegfx::B2DPoint(0.5, 0.5));
+        const basegfx::B2DVector aAbsScale(basegfx::absolute(aScale));
+
+        return SwRect(
+            basegfx::fround(aCenter.getX() - (0.5 * aAbsScale.getX())),
+            basegfx::fround(aCenter.getY() - (0.5 * aAbsScale.getY())),
+            basegfx::fround(aAbsScale.getX()),
+            basegfx::fround(aAbsScale.getY()));
+    }
+}
+
+SwRect TransformableSwFrame::getUntransformedFramePrintArea() const
+{
+    const basegfx::B2DHomMatrix& rSource(getLocalFramePrintAreaTransformation());
+
+    if(rSource.isIdentity())
+    {
+        return mrSwFrameAreaDefinition.getFramePrintArea();
+    }
+    else
+    {
+        basegfx::B2DVector aScale, aTranslate;
+        double fRotate, fShearX;
+        rSource.decompose(aScale, aTranslate, fRotate, fShearX);
+        const basegfx::B2DPoint aCenter(rSource * basegfx::B2DPoint(0.5, 0.5));
+        const basegfx::B2DVector aAbsScale(basegfx::absolute(aScale));
+        const SwRect aUntransformedFrameArea(getUntransformedFrameArea());
+
+        return SwRect(
+            basegfx::fround(aCenter.getX() - (0.5 * aAbsScale.getX())) - aUntransformedFrameArea.Left(),
+            basegfx::fround(aCenter.getY() - (0.5 * aAbsScale.getY())) - aUntransformedFrameArea.Top(),
+            basegfx::fround(aAbsScale.getX()),
+            basegfx::fround(aAbsScale.getY()));
+    }
+}
+
 void TransformableSwFrame::createFrameAreaTransformations(
     double fRotation,
     const basegfx::B2DPoint& rCenter)
@@ -178,7 +231,6 @@ void TransformableSwFrame::adaptFrameAreasToTransformations()
 
         if(aNewFrm != mrSwFrameAreaDefinition.getFrameArea())
         {
-            maSavedFrameArea = mrSwFrameAreaDefinition.getFrameArea();
             SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(mrSwFrameAreaDefinition);
             aFrm.setSwRect(aNewFrm);
         }
@@ -196,7 +248,6 @@ void TransformableSwFrame::adaptFrameAreasToTransformations()
 
         if(aNewPrt != mrSwFrameAreaDefinition.getFramePrintArea())
         {
-            maSavedFramePrintArea = mrSwFrameAreaDefinition.getFramePrintArea();
             SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(mrSwFrameAreaDefinition);
             aPrt.setSwRect(aNewPrt);
         }
@@ -206,20 +257,17 @@ void TransformableSwFrame::adaptFrameAreasToTransformations()
 void TransformableSwFrame::restoreFrameAreas()
 {
     // This can be done fully based on the Transformations currently
-    // set (and I did this in the beginning and it may be necessary
-    // again later), but for simplicity and performance now done using
-    // the last save values for the SwRect(s), see above
-
-    if(!getLocalFrameAreaTransformation().isIdentity() && maSavedFrameArea != mrSwFrameAreaDefinition.getFrameArea())
+    // set, so use this. Only needed when transformation *is* used
+    if(!getLocalFrameAreaTransformation().isIdentity())
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(mrSwFrameAreaDefinition);
-        aFrm.setSwRect(maSavedFrameArea);
+        aFrm.setSwRect(getUntransformedFrameArea());
     }
 
-    if(!getLocalFramePrintAreaTransformation().isIdentity() && maSavedFramePrintArea != mrSwFrameAreaDefinition.getFramePrintArea())
+    if(!getLocalFramePrintAreaTransformation().isIdentity())
     {
         SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(mrSwFrameAreaDefinition);
-        aPrt.setSwRect(maSavedFramePrintArea);
+        aPrt.setSwRect(getUntransformedFramePrintArea());
     }
 }
 

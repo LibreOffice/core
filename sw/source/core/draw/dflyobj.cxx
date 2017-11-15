@@ -634,9 +634,9 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 {
     if(GetFlyFrame()->IsFlyFreeFrame() && static_cast<SwFlyFreeFrame*>(GetFlyFrame())->isTransformableSwFrame())
     {
-        // When we have a change in transformed state, we need to fall back to the
-        // state without possible transformations. Restore FrameArea and use aOutRect
-        // from old FrameArea. From here, all former actions below should be fine
+        // When we have a change and are in transformed state (e.g. rotation used),
+        // we need to fall back to the un-transformed state to keep the old code below
+        // working properly. Restore FrameArea and use aOutRect from old FrameArea.
         TransformableSwFrame* pTransformableSwFrame(static_cast<SwFlyFreeFrame*>(GetFlyFrame())->getTransformableSwFrame());
         pTransformableSwFrame->restoreFrameAreas();
         aOutRect = GetFlyFrame()->getFrameArea().SVRect();
@@ -788,7 +788,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 }
 
 
-void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, double fyFact)
 {
     // Get Wrt Shell
     SwWrtShell *pSh = dynamic_cast<SwWrtShell*>( GetFlyFrame()->getRootFrame()->GetCurrShell() );
@@ -804,33 +804,6 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
     {
         return;
     }
-
-    const bool bIsTransformableSwFrame(
-        GetFlyFrame()->IsFlyFreeFrame() &&
-        static_cast<SwFlyFreeFrame*>(GetFlyFrame())->isTransformableSwFrame());
-
-    if(bIsTransformableSwFrame)
-    {
-        // When we have a change in transformed state, we need to fall back to the
-        // state without possible transformations. Restore FrameArea and use aOutRect
-        // from old FrameArea. From here, all former actions below should be fine
-        TransformableSwFrame* pTransformableSwFrame(static_cast<SwFlyFreeFrame*>(GetFlyFrame())->getTransformableSwFrame());
-        pTransformableSwFrame->restoreFrameAreas();
-        aOutRect = GetFlyFrame()->getFrameArea().SVRect();
-    }
-
-    // Compute old and new rect. This will give us the deformation to apply to
-    // the object to crop
-    const long nOldWidth(aOutRect.GetWidth());
-    const long nOldHeight(aOutRect.GetHeight());
-
-    if (!nOldWidth || !nOldHeight)
-    {
-        return;
-    }
-
-    tools::Rectangle aNewRect( aOutRect );
-    ResizeRect( aNewRect, rRef, xFact, yFact );
 
     // Get graphic object size in 100th of mm
     const MapMode aMapMode100thmm(MapUnit::Map100thMM);
@@ -850,6 +823,48 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
         return ;
     }
 
+    const bool bIsTransformableSwFrame(
+        GetFlyFrame()->IsFlyFreeFrame() &&
+        static_cast<SwFlyFreeFrame*>(GetFlyFrame())->isTransformableSwFrame());
+
+    if(bIsTransformableSwFrame)
+    {
+        // When we have a change and are in transformed state (e.g. rotation used),
+        // we need to fall back to the un-transformed state to keep the old code below
+        // working properly. Restore FrameArea and use aOutRect from old FrameArea.
+        TransformableSwFrame* pTransformableSwFrame(static_cast<SwFlyFreeFrame*>(GetFlyFrame())->getTransformableSwFrame());
+        pTransformableSwFrame->restoreFrameAreas();
+        aOutRect = GetFlyFrame()->getFrameArea().SVRect();
+    }
+
+    // Compute old and new rect. This will give us the deformation to apply to
+    // the object to crop. OldRect is the inner frame, see getFullDragClone()
+    // below where getFramePrintAreaTransformation is used as object geometry for Crop
+    const tools::Rectangle aOldRect(
+        GetFlyFrame()->getFrameArea().TopLeft() + GetFlyFrame()->getFramePrintArea().TopLeft(),
+        GetFlyFrame()->getFramePrintArea().SSize());
+    const long nOldWidth(aOldRect.GetWidth());
+    const long nOldHeight(aOldRect.GetHeight());
+
+    if (!nOldWidth || !nOldHeight)
+    {
+        return;
+    }
+
+    // rRef is relative to the Crop-Action, si in X/Y-Ranges of [0.0 .. 1.0],
+    // to get the correct absolute position, transform using the old Rect
+    const Point aRef(
+        aOldRect.Left() + basegfx::fround(aOldRect.GetWidth() * rRef.getX()),
+        aOldRect.Top() + basegfx::fround(aOldRect.GetHeight() * rRef.getY()));
+
+    // appy transformation, use old ResizeRect for now
+    tools::Rectangle aNewRect( aOldRect );
+    ResizeRect(
+        aNewRect,
+        aRef,
+        Fraction(fxFact),
+        Fraction(fyFact));
+
     // Get old values for crop in 10th of mm
     SfxItemSet aSet( pSh->GetAttrPool(), svl::Items<RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF>{} );
     pSh->GetCurAttr( aSet );
@@ -865,10 +880,10 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
     double fScaleX = ( aGraphicSize.Width() - aCropRectangle.Left() - aCropRectangle.Right() ) / (double)nOldWidth;
     double fScaleY = ( aGraphicSize.Height() - aCropRectangle.Top() - aCropRectangle.Bottom() ) / (double)nOldHeight;
 
-    sal_Int32 nDiffLeft = aNewRect.Left() - aOutRect.Left();
-    sal_Int32 nDiffTop = aNewRect.Top() - aOutRect.Top();
-    sal_Int32 nDiffRight = aNewRect.Right() - aOutRect.Right();
-    sal_Int32 nDiffBottom = aNewRect.Bottom() - aOutRect.Bottom();
+    sal_Int32 nDiffLeft = aNewRect.Left() - aOldRect.Left();
+    sal_Int32 nDiffTop = aNewRect.Top() - aOldRect.Top();
+    sal_Int32 nDiffRight = aNewRect.Right() - aOldRect.Right();
+    sal_Int32 nDiffBottom = aNewRect.Bottom() - aOldRect.Bottom();
 
     // Compute new values in 10th of mm
     sal_Int32 nLeftCrop = static_cast<sal_Int32>( aCropRectangle.Left() + nDiffLeft * fScaleX );
@@ -878,7 +893,7 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
 
     // Apply values
     pSh->StartAllAction();
-//    pSh->StartUndo(SwUndoId::START);
+    // pSh->StartUndo(SwUndoId::START);
 
     // Set new crop values in twips
     aCrop.SetLeft  (convertMm100ToTwip(nLeftCrop));
@@ -890,15 +905,21 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
     // Set new frame size
     SwFrameFormat *pFormat = GetFormat();
     SwFormatFrameSize aSz( pFormat->GetFrameSize() );
-    aSz.SetWidth(aNewRect.GetWidth());
-    aSz.SetHeight(aNewRect.GetHeight());
+    const long aNewWidth(aNewRect.GetWidth() + (aOutRect.GetWidth() - aOldRect.GetWidth()));
+    const long aNewHeight(aNewRect.GetHeight() + (aOutRect.GetHeight() - aOldRect.GetHeight()));
+    aSz.SetWidth(aNewWidth);
+    aSz.SetHeight(aNewHeight);
     pFormat->GetDoc()->SetAttr( aSz, *pFormat );
+
+    // add move - to make result look better. Fill with defaults
+    // for the untransformed case
+    Point aNewTopLeft(aNewRect.TopLeft());
+    const Point aOldTopLeft(aOldRect.TopLeft());
 
     if(bIsTransformableSwFrame)
     {
-        // Need to correct the TopLeft position in rotated state to make
-        // the interaction look correct. First, extract rotation (and others
-        // currently not used)
+        // Need to correct the NewTopLeft position in transformed state to make
+        // the interaction look correct. First, extract rotation
         basegfx::B2DVector aScale, aTranslate;
         double fRotate, fShearX;
         GetFlyFrame()->getFrameAreaTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
@@ -922,22 +943,22 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
 
         // Create the new TopLeft of the unrotated, cropped object by creating
         // as if re-rceating the unrotated geometry
-        const Point aNewTopLeft(
+        aNewTopLeft = Point(
             basegfx::fround(aRotNewCenter.getX() - (0.5 * aNewRect.getWidth())),
             basegfx::fround(aRotNewCenter.getY() - (0.5 * aNewRect.getHeight())));
-
-        // checvk if we have movement and execute if yes
-        const Size aDeltaMove(
-            basegfx::fround(aNewTopLeft.getX() - aOutRect.Left()),
-            basegfx::fround(aNewTopLeft.getY() - aOutRect.Top()));
-
-        if(0 != aDeltaMove.Width() || 0 != aDeltaMove.Height())
-        {
-            NbcMove(aDeltaMove);
-        }
     }
 
-//    pSh->EndUndo(SwUndoId::END);
+    // check if we have movement and execute if yes
+    const Size aDeltaMove(
+        aNewTopLeft.X() - aOldTopLeft.X(),
+        aNewTopLeft.Y() - aOldTopLeft.Y());
+
+    if(0 != aDeltaMove.Width() || 0 != aDeltaMove.Height())
+    {
+        NbcMove(aDeltaMove);
+    }
+
+    // pSh->EndUndo(SwUndoId::END);
     pSh->EndAllAction();
 }
 
@@ -979,13 +1000,14 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
         basegfx::B2DVector aScale, aTranslate;
         double fRotate, fShearX;
         aNewMat.decompose(aScale, aTranslate, fRotate, fShearX);
+        const basegfx::B2DVector aAbsScale(basegfx::absolute(aScale));
 
-        // create new modified OutRect
+        // create new modified, but untransformed OutRect
         aOutRect = tools::Rectangle(
-            basegfx::fround(aCenter.getX() - (0.5 * aScale.getX())),
-            basegfx::fround(aCenter.getY() - (0.5 * aScale.getY())),
-            basegfx::fround(aCenter.getX() + (0.5 * aScale.getX())),
-            basegfx::fround(aCenter.getY() + (0.5 * aScale.getY())));
+            basegfx::fround(aCenter.getX() - (0.5 * aAbsScale.getX())),
+            basegfx::fround(aCenter.getY() - (0.5 * aAbsScale.getY())),
+            basegfx::fround(aCenter.getX() + (0.5 * aAbsScale.getX())),
+            basegfx::fround(aCenter.getY() + (0.5 * aAbsScale.getY())));
 
         // restore FrameAreas so that actions below not adapted to new
         // full transformations take the correct actions
@@ -1115,9 +1137,9 @@ void SwVirtFlyDrawObj::Resize(const Point& rRef,
     GetFormat()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
 }
 
-void SwVirtFlyDrawObj::Crop(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SwVirtFlyDrawObj::Crop(const basegfx::B2DPoint& rRef, double fxFact, double fyFact)
 {
-    NbcCrop( rRef, xFact, yFact );
+    NbcCrop( rRef, fxFact, fyFact );
     SetChanged();
     GetFormat()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
 }

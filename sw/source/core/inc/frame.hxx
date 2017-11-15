@@ -146,6 +146,7 @@ protected:
 
 public:
     SwFrameAreaDefinition();
+    virtual ~SwFrameAreaDefinition();
 
     // read access to mb*Valid flags
     bool isFrameAreaPositionValid() const { return mbFrameAreaPositionValid; }
@@ -212,8 +213,8 @@ public:
 };
 
 /// RotateFlyFrame3: Helper class when you want to make your SwFrame derivate
-/// transformable. It provides some tooling to do so. To use,
-/// derive your SwFrame from it
+/// transformable. It provides some tooling to do so. To use, add as member
+/// (see e.g. SwFlyFreeFrame which uses 'std::unique_ptr< TransformableSwFrame >')
 class SW_DLLPUBLIC TransformableSwFrame
 {
 private:
@@ -221,54 +222,50 @@ private:
     SwFrameAreaDefinition&  mrSwFrameAreaDefinition;
 
     // FrameAreaTransformation and FramePrintAreaTransformation
-    // here when more than translate/scale is used (e.g. rotation)
+    // !identtity when needed (translate/scale is used (e.g. rotation))
     basegfx::B2DHomMatrix   maFrameAreaTransformation;
     basegfx::B2DHomMatrix   maFramePrintAreaTransformation;
-
-    // last saved versions of SwRect(s) from SwFrameAreaDefinition,
-    // set from adaptFrameAreasToTransformations before modifying
-    // SwFrameAreaDefinition(s), used for restore from
-    // restoreFrameAreas
-    SwRect                  maSavedFrameArea;
-    SwRect                  maSavedFramePrintArea;
 
 public:
     TransformableSwFrame(SwFrameAreaDefinition& rSwFrameAreaDefinition)
     :   mrSwFrameAreaDefinition(rSwFrameAreaDefinition),
         maFrameAreaTransformation(),
-        maFramePrintAreaTransformation(),
-        maSavedFrameArea(),
-        maSavedFramePrintArea()
+        maFramePrintAreaTransformation()
     {
     }
 
-    // Support for Transformations for inner frame of a SwGrfNode
+    // get SwFrameArea in transformation form
     const basegfx::B2DHomMatrix& getLocalFrameAreaTransformation() const
     {
         return maFrameAreaTransformation;
     }
 
+    // get SwFramePrintArea in transformation form
     const basegfx::B2DHomMatrix& getLocalFramePrintAreaTransformation() const
     {
         return maFramePrintAreaTransformation;
     }
 
+    // Helpers to re-create the untransformed SwRect(s) originally
+    // in the SwFrameAreaDefinition, based on the current Transformations.
+    SwRect getUntransformedFrameArea() const;
+    SwRect getUntransformedFramePrintArea() const;
+
     // Helper method to re-create FrameAreaTransformations based on the
-    // curent FrameAreaDefinition, given rotation and Center
+    // curent FrameAreaDefinition transformed by given rotation and Center
     void createFrameAreaTransformations(
         double fRotation,
         const basegfx::B2DPoint& rCenter);
 
     // Tooling method to reset the SwRect(s) in the current
     // SwFrameAreaDefinition which are already apapted to
-    // Transformation back to the untransformed state that was
-    // last saved (see adaptFrameAreasToTransformations).
+    // Transformation back to the untransformed state, using
+    // the getUntransformedFrame*Area calls above when needed.
     // Only the SwRect(s) are changed back, not the transformations.
     void restoreFrameAreas();
 
     // Re-Creates the SwRect(s) as BoundAreas based on the current
-    // set Transformations, also saves the last SwRect(s) to the save
-    // values.
+    // set Transformations.
     void adaptFrameAreasToTransformations();
 
     // Modify current definitions by applying the given transformation
