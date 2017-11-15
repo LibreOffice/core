@@ -56,6 +56,7 @@ class SwPortionHandler;
 #define PORGRP_TOXREF   0x0008
 
 /// Base class for anything that can be part of a line in the Writer layout.
+/// Typically owned by SwLineLayout.
 class SwLinePortion: public SwPosSize
 {
 protected:
