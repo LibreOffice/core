@@ -371,6 +371,7 @@ namespace abp
                     xUri = css::uri::VndSunStarPkgUrlReferenceFactory::create(xContext)->createVndSunStarPkgUrlReference(xUri);
                     assert(xUri.is());
                     OUString const sTmpName = xUri->getUriReference() + "/" + aStreamRelPath;
+                    assert(pObjectShell);
                     uno::Reference<embed::XStorage> xStorage = pObjectShell->GetStorage();
                     uno::Sequence<beans::PropertyValue> aSequence = comphelper::InitPropertySequence(
                     {
