@@ -354,7 +354,7 @@ ifneq ($(ENABLE_MACOSX_SANDBOX),)
 
 # Remove the gengal binary that we hardly need and the shell scripts
 # for which code signatures (stored as extended attributes) won't
-# survice upload to the App Store anyway. See
+# survive upload to the App Store anyway. See
 # https://developer.apple.com/library/content/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html#//apple_ref/doc/uid/TP40005929-CH4-TNTAG201
 # We could put the shell scripts somewhere in Resources instead, but
 # no 3rd-party code that would be interested in them would look there
