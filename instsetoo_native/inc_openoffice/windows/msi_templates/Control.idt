@@ -45,7 +45,7 @@ CustomerInformation	Back	PushButton	164	243	66	17	3		OOO_CONTROL_32	Next
 CustomerInformation	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 CustomerInformation	BannerLine	Line	0	44	376	0	1				
 CustomerInformation	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_35	NameLabel	
-CustomerInformation	CompanyEdit	Edit	21	100	249	17	3	COMPANYNAME	OOO_CONTROL_36	SerialLabel	
+CustomerInformation	CompanyEdit	Edit	21	100	249	17	3	COMPANYNAME	OOO_CONTROL_36	RadioGroup	
 CustomerInformation	CompanyLabel	Text	21	89	75	10	3		OOO_CONTROL_37	CompanyEdit	
 CustomerInformation	DlgDesc	Text	21	23	249	25	65539		OOO_CONTROL_38		
 CustomerInformation	DlgLine	Line	0	234	376	0	1				
@@ -55,8 +55,6 @@ CustomerInformation	NameEdit	Edit	21	63	249	17	3	USERNAME	OOO_CONTROL_41	Company
 CustomerInformation	NameLabel	Text	21	52	75	10	3		OOO_CONTROL_42	NameEdit	
 CustomerInformation	Next	PushButton	230	243	66	17	3		OOO_CONTROL_43	Cancel	
 CustomerInformation	RadioGroup	RadioButtonGroup	63	170	300	50	3	ApplicationUsers		Back	
-CustomerInformation	SerialLabel	Text	21	127	109	10	2		OOO_CONTROL_45	SerialNumber	
-CustomerInformation	SerialNumber	MaskedEdit	21	138	237	17	2	ISX_SERIALNUM		RadioGroup	
 CustomSetup	Back	PushButton	164	243	66	17	3		OOO_CONTROL_46	Next	
 CustomSetup	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 CustomSetup	BannerLine	Line	0	44	376	0	1				

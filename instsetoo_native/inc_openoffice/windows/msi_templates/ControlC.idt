@@ -7,8 +7,6 @@ CustomerInformation	DlgRadioGroupText	Hide	Version9X
 CustomerInformation	RadioGroup	Hide	NOT Privileged
 CustomerInformation	RadioGroup	Hide	ProductState > 0
 CustomerInformation	RadioGroup	Hide	Version9X
-CustomerInformation	SerialLabel	Show	SERIALNUMSHOW
-CustomerInformation	SerialNumber	Show	SERIALNUMSHOW
 CustomSetup	ChangeFolder	Hide	Installed
 CustomSetup	Details	Hide	Installed
 CustomSetup	InstallLabel	Hide	Installed
