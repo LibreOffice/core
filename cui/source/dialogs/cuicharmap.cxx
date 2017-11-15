@@ -156,7 +156,7 @@ SvxCharacterMap::~SvxCharacterMap()
 
 short SvxCharacterMap::Execute()
 {
-    if( SvxShowCharSet::getSelectedChar() == ' ')
+    /*if( SvxShowCharSet::getSelectedChar() == ' ')
     {
         m_pOKBtn->Disable();
         setFavButtonState(OUString(), OUString());
@@ -170,7 +170,7 @@ short SvxCharacterMap::Execute()
 
         setFavButtonState(aOUStr, m_pShowChar->GetFont().GetFamilyName());
         m_pOKBtn->Enable();
-    }
+    }*/
 
     return ModalDialog::Execute();
 }
