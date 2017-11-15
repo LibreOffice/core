@@ -43,9 +43,6 @@ void ImpressModule::Initialize (Reference<frame::XController> const & rxControll
     new SlideSorterModule(
         rxController,
         FrameworkHelper::msLeftImpressPaneURL);
-    new ToolPanelModule(
-        rxController,
-        FrameworkHelper::msSidebarViewURL);
     new ToolBarModule(rxController);
     new ShellStackGuard(rxController);
 }
