@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_ece1ac9b",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 6734,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-11-15T21:25:02Z",
+      "side": 1,
+      "message": "if (m_pFontsAttrList \u0026\u0026 will very likely break on 5.2, please watch jenkins errors on that one ...",
+      "revId": "7804cbaf548922a1297316571a47d43283bb55d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
