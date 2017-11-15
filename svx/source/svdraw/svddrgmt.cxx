@@ -3766,25 +3766,17 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
 
     if(bExternal)
     {
-        // With Ref point (opposed to dragged point), X scale and Y scale,
+        // With aLocalStart point (opposed to dragged point), X scale and Y scale,
         // we call crop (virtual method) on pSdrObject which calls VirtFlyDrawObj
-        // crop. aRef needs to be adapted to concrete Object's boundaries which
-        // is different from Crop-Ranges. This is because the Graphic and it's
-        // SdrObject representation is inside the FlyFrame, but not identical
-        // with it.
-        const tools::Rectangle& rOutRect(pExternalSdrObject->GetCurrentBoundRect());
-        const basegfx::B2DHomMatrix aExternalTransform(
-            basegfx::utils::createScaleTranslateB2DHomMatrix(
-                rOutRect.getWidth(), rOutRect.getHeight(),
-                rOutRect.Left(), rOutRect.Top()));
-        const basegfx::B2DPoint aRef(aExternalTransform * aLocalStart);
+        // crop. Use aLocalStart unchanged, so being relative to the Crop-Action,
+        // the called instance knows best how to use it
         const double fScaleX(aRangeNewNoShearNoRotate.getWidth() / aRangeOriginalNoShearNoRotate.getWidth());
         const double fScaleY(aRangeNewNoShearNoRotate.getHeight() / aRangeOriginalNoShearNoRotate.getHeight());
 
         pExternalSdrObject->Crop(
-            Point(basegfx::fround(aRef.getX()), basegfx::fround(aRef.getY())),
-            Fraction(fScaleX),
-            Fraction(fScaleY));
+            aLocalStart,
+            fScaleX,
+            fScaleY);
     }
     else
     {

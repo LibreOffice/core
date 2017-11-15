@@ -146,6 +146,7 @@ protected:
 
 public:
     SwFrameAreaDefinition();
+    virtual ~SwFrameAreaDefinition();
 
     // read access to mb*Valid flags
     bool isFrameAreaPositionValid() const { return mbFrameAreaPositionValid; }

@@ -65,6 +65,10 @@ SwFrameAreaDefinition::SwFrameAreaDefinition()
 {
 }
 
+SwFrameAreaDefinition::~SwFrameAreaDefinition()
+{
+}
+
 void SwFrameAreaDefinition::setFrameAreaPositionValid(bool bNew)
 {
     if(mbFrameAreaPositionValid != bNew)

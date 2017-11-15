@@ -1485,8 +1485,10 @@ void SdrObject::Move(const Size& rSiz)
     }
 }
 
-void SdrObject::NbcCrop(const Point& /*rRef*/, const Fraction& /*xFact*/, const Fraction& /*yFact*/) {
-    // Default: does nothing. Real behaviour in SwVirtFlyDrawObj and SdrGrafObj
+void SdrObject::NbcCrop(const basegfx::B2DPoint& /*aRef*/, double /*fxFact*/, double /*fyFact*/)
+{
+    // Default: does nothing. Real behaviour in SwVirtFlyDrawObj and SdrDragCrop::EndSdrDrag.
+    // Where SwVirtFlyDrawObj is the only real user of it to do something local
 }
 
 void SdrObject::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative)
@@ -1507,10 +1509,10 @@ void SdrObject::Resize(const Point& rRef, const Fraction& xFact, const Fraction&
     }
 }
 
-void SdrObject::Crop(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrObject::Crop(const basegfx::B2DPoint& rRef, double fxFact, double fyFact)
 {
     tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-    NbcCrop(rRef, xFact, yFact);
+    NbcCrop(rRef, fxFact, fyFact);
     SetChanged();
     BroadcastObjectChange();
     SendUserCall(SdrUserCallType::Resize,aBoundRect0);
