@@ -7,12 +7,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,gpgme))
+$(eval $(call gb_Module_Module,gpgmepp))
 
-$(eval $(call gb_Module_add_targets,gpgme,\
-	ExternalProject_gpgme \
-	ExternalPackage_gpgme \
-	UnpackedTarball_gpgme \
+$(eval $(call gb_Module_add_targets,gpgmepp,\
+	ExternalProject_gpgmepp \
+	ExternalPackage_gpgmepp \
+	UnpackedTarball_gpgmepp \
 ))
 
 # vim: set noet sw=4 ts=4:

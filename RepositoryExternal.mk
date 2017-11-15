@@ -3484,6 +3484,15 @@ $(call gb_ExternalProject_use_external_project,$(1),libgpg-error)
 
 endef
 
+ifneq ($(filter WNT,$(OS)),)
+
+define gb_ExternalProject__use_glib2
+$(call gb_ExternalProject_use_external_project,$(1),glib2)
+
+endef
+
+endif
+
 define gb_LinkTarget__use_gpgmepp
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,gpgme)/lang/cpp/src \
@@ -3498,13 +3507,31 @@ $(call gb_LinkTarget_use_package,$(1),gpgme)
 
 endef
 
-ifneq ($(filter MACOSX LINUX,$(OS)),)
+ifneq ($(filter MACOSX LINUX WNT,$(OS)),)
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
-	gpgme \
+	gpgmepp \
 	libassuan \
 	libgpg-error \
 ))
+
+ifneq ($(filter WNT,$(OS)),)
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	glib2 \
+))
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+	gpgmepp \
+))
+
+endif
+
+define gb_Executable__register_gpgmepp
+$(call gb_Executable_add_runtime_dependencies,gpgmepp,\
+	$(if $(filter $(OS),ANDROID),,$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,$(call gb_Library_get_target,sal_textenc))) \
+)
+endef
 
 endif
 

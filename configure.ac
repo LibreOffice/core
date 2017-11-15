@@ -10153,14 +10153,16 @@ if test "$_os" = "Linux" -o "$_os" = "Darwin"; then
         AC_MSG_RESULT([internal])
         AC_DEFINE([GPGME_CAN_EXPORT_MINIMAL_KEY])
         BUILD_TYPE="$BUILD_TYPE LIBGPGERROR LIBASSUAN GPGMEPP"
+        GPG_ERROR_CFLAGS="-I${WORKDIR}/UnpackedTarball/libgpg-error/src"
+        LIBASSUAN_CFLAGS="-I${WORKDIR}/UnpackedTarball/libassuan/src"
         if test "$_os" = "WINNT"; then
             BUILD_TYPE="$BUILD_TYPE GLIB2"
+            GPG_ERROR_LIBS="-L${WORKDIR}/UnpackedTarball/libgpg-error/src/.libs -lgpg-error.lib"
+            LIBASSUAN_LIBS="-L${WORKDIR}/UnpackedTarball/libassuan/src/.libs -lassuan.lib"
+        else
+            GPG_ERROR_LIBS="-L${WORKDIR}/UnpackedTarball/libgpg-error/src/.libs -lgpg-error"
+            LIBASSUAN_LIBS="-L${WORKDIR}/UnpackedTarball/libassuan/src/.libs -lassuan"
         fi
-
-        GPG_ERROR_CFLAGS="-I${WORKDIR}/UnpackedTarball/libgpg-error/src"
-        GPG_ERROR_LIBS="-L${WORKDIR}/UnpackedTarball/libgpg-error/src/.libs -lgpg-error"
-        LIBASSUAN_CFLAGS="-I${WORKDIR}/UnpackedTarball/libassuan/src"
-        LIBASSUAN_LIBS="-L${WORKDIR}/UnpackedTarball/libassuan/src/.libs -lassuan"
     fi
 else
     # TODO(davido): Windows build must be protected with a configure option
