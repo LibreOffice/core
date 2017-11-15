@@ -1,0 +1,38 @@
+Gross hack to make libtool work with gcc-wrapper - frontended
+link.exe on Windows. Make libtool ignore all libs & simply pass
+them on as-is to the linker
+
+A proper fix would be to make gcc-wrapper behave like gcc during
+linking, by accepting cygwin path names, and correctly expanding
+-l<short_lib_name> to lib<short_lib_name>.lib
+
+diff -ur gpgmepp.org/m4/libtool.m4 gpgmepp/m4/libtool.m4
+--- gpgmepp.org/m4/libtool.m4	2016-11-16 13:20:16.000000000 +0100
++++ gpgmepp/m4/libtool.m4	2017-11-21 22:00:05.006587800 +0100
+@@ -3209,24 +3209,11 @@
+   ;;
+ 
+ cygwin*)
+-  # func_win32_libid is a shell function defined in ltmain.sh
+-  lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
+-  lt_cv_file_magic_cmd='func_win32_libid'
++  lt_cv_deplibs_check_method=pass_all
+   ;;
+ 
+ mingw* | pw32*)
+-  # Base MSYS/MinGW do not provide the 'file' command needed by
+-  # func_win32_libid shell function, so use a weaker test based on 'objdump',
+-  # unless we find 'file', for example because we are cross-compiling.
+-  # func_win32_libid assumes BSD nm, so disallow it if using MS dumpbin.
+-  if ( test "$lt_cv_nm_interface" = "BSD nm" && file / ) >/dev/null 2>&1; then
+-    lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
+-    lt_cv_file_magic_cmd='func_win32_libid'
+-  else
+-    # Keep this pattern in sync with the one in func_win32_libid.
+-    lt_cv_deplibs_check_method='file_magic file format (pei*-i386(.*architecture: i386)?|pe-arm-wince|pe-x86-64)'
+-    lt_cv_file_magic_cmd='$OBJDUMP -f'
+-  fi
++  lt_cv_deplibs_check_method=pass_all
+   ;;
+ 
+ cegcc*)

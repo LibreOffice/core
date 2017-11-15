@@ -43,7 +43,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,FREETYPE,freetype) \
 	$(call gb_Helper_optional,GLIB2,glib2) \
 	$(call gb_Helper_optional,GLM,glm) \
-	$(call gb_Helper_optional,GPGMEPP,gpgme) \
+	$(call gb_Helper_optional,GPGMEPP,gpgmepp) \
 	$(call gb_Helper_optional,GRAPHITE,graphite) \
 	$(call gb_Helper_optional,HARFBUZZ,harfbuzz) \
 	$(call gb_Helper_optional,HSQLDB,hsqldb) \
