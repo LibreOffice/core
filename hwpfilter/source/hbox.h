@@ -510,14 +510,10 @@ struct TCell
 struct Table
 {
      Table() : box(nullptr) {};
-     ~Table() {
-          for (auto const& cell : cells)
-                delete cell;
-     };
 
      Columns columns;
      Rows    rows;
-     std::vector<TCell*> cells;
+     std::vector<std::unique_ptr<TCell>> cells;
      TxtBox *box;
 };
 
