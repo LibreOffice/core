@@ -181,7 +181,7 @@ sal_uInt8 FormulaToken::GetByte() const
 
 void FormulaToken::SetByte( sal_uInt8 )
 {
-    SAL_WARN( "formula.core", "FormulaToken::SetByte: virtual dummy called" );
+    assert( !"virtual dummy called" );
 }
 
 ParamClass FormulaToken::GetInForceArray() const
@@ -192,19 +192,20 @@ ParamClass FormulaToken::GetInForceArray() const
 
 void FormulaToken::SetInForceArray( ParamClass )
 {
-    SAL_WARN( "formula.core", "FormulaToken::SetInForceArray: virtual dummy called" );
+    assert( !"virtual dummy called" );
 }
 
 double FormulaToken::GetDouble() const
 {
-    // This one is worth an assert.
-    assert( !"FormulaToken::GetDouble: virtual dummy called" );
+    // This Get is worth an assert.
+    assert( !"virtual dummy called" );
     return 0.0;
 }
 
 double & FormulaToken::GetDoubleAsReference()
 {
-    SAL_WARN( "formula.core", "FormulaToken::GetDouble: virtual dummy called" );
+    // This Get is worth an assert.
+    assert( !"virtual dummy called" );
     static double fVal = 0.0;
     return fVal;
 }
@@ -223,7 +224,7 @@ svl::SharedString FormulaToken::GetString() const
 
 void FormulaToken::SetString( const svl::SharedString& )
 {
-    SAL_WARN( "formula.core", "FormulaToken::SetString: virtual dummy called" );
+    assert( !"virtual dummy called" );
 }
 
 sal_uInt16 FormulaToken::GetIndex() const
@@ -234,7 +235,7 @@ sal_uInt16 FormulaToken::GetIndex() const
 
 void FormulaToken::SetIndex( sal_uInt16 )
 {
-    SAL_WARN( "formula.core", "FormulaToken::SetIndex: virtual dummy called" );
+    assert( !"virtual dummy called" );
 }
 
 sal_Int16 FormulaToken::GetSheet() const
@@ -245,7 +246,7 @@ sal_Int16 FormulaToken::GetSheet() const
 
 void FormulaToken::SetSheet( sal_Int16 )
 {
-    SAL_WARN( "formula.core", "FormulaToken::SetSheet: virtual dummy called" );
+    assert( !"virtual dummy called" );
 }
 
 short* FormulaToken::GetJump() const
@@ -276,7 +277,7 @@ FormulaError FormulaToken::GetError() const
 
 void FormulaToken::SetError( FormulaError )
 {
-    SAL_WARN( "formula.core", "FormulaToken::SetError: virtual dummy called" );
+    assert( !"virtual dummy called" );
 }
 
 const ScSingleRefData* FormulaToken::GetSingleRef() const
