@@ -35,7 +35,7 @@ AllocMode alloc_mode = AllocMode::UNSET;
 static void determine_alloc_mode()
 {
     assert(alloc_mode == AllocMode::UNSET);
-    alloc_mode = (getenv("G_SLICE") == nullptr ? AllocMode::CUSTOM : AllocMode::SYSTEM);
+    alloc_mode = AllocMode::SYSTEM;
 }
 
 static const sal_Size g_alloc_sizes[] =
