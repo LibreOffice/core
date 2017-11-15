@@ -544,6 +544,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -645,6 +646,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">4</property>
                   </packing>
                 </child>
@@ -787,6 +789,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">7</property>
                   </packing>
                 </child>
@@ -927,6 +930,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">12</property>
                   </packing>
                 </child>
@@ -1096,6 +1100,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">16</property>
                   </packing>
                 </child>
@@ -1330,6 +1335,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -1485,6 +1491,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
+                                <property name="padding">6</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -1539,6 +1546,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
+                                <property name="padding">6</property>
                                 <property name="pack_type">end</property>
                                 <property name="position">3</property>
                               </packing>
@@ -1554,6 +1562,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
+                                <property name="padding">6</property>
                                 <property name="position">4</property>
                               </packing>
                             </child>
@@ -1747,6 +1756,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -1914,6 +1924,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -2131,6 +2142,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -2317,6 +2329,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -2447,6 +2460,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -2668,6 +2682,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -2709,6 +2724,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">4</property>
                   </packing>
                 </child>
@@ -2889,6 +2905,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -2958,6 +2975,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">True</property>
+                                    <property name="padding">6</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
@@ -3075,6 +3093,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">True</property>
+                                    <property name="padding">6</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
@@ -3162,6 +3181,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">11</property>
                   </packing>
                 </child>
@@ -3257,6 +3277,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -3376,6 +3397,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -3929,6 +3951,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -4037,6 +4060,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -4091,6 +4115,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -4332,6 +4357,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -4378,6 +4404,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">5</property>
                   </packing>
                 </child>
@@ -4625,6 +4652,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -4813,6 +4841,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -4912,6 +4941,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -5050,6 +5080,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
+                                <property name="padding">6</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -5196,6 +5227,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
@@ -5418,6 +5450,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">6</property>
                   </packing>
                 </child>
@@ -5572,6 +5605,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -5644,6 +5678,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">12</property>
                   </packing>
                 </child>
@@ -6025,6 +6060,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">4</property>
                   </packing>
                 </child>
@@ -6201,6 +6237,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">7</property>
                   </packing>
                 </child>
@@ -6322,17 +6359,17 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="rotate1">
+                          <object class="sfxlo-NotebookbarToolBox" id="rotate2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
                             <child>
-                              <object class="GtkToolButton" id="RotateRight">
+                              <object class="GtkToolButton" id="RotateReset">
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="is_important">True</property>
-                                <property name="action_name">.uno:RotateRight</property>
+                                <property name="action_name">.uno:RotateReset</property>
                                 <property name="use_underline">True</property>
                               </object>
                               <packing>
@@ -6348,17 +6385,17 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="rotate2">
+                          <object class="sfxlo-NotebookbarToolBox" id="rotate1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
                             <child>
-                              <object class="GtkToolButton" id="RotateReset">
+                              <object class="GtkToolButton" id="RotateRight">
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="is_important">True</property>
-                                <property name="action_name">.uno:RotateReset</property>
+                                <property name="action_name">.uno:RotateRight</property>
                                 <property name="use_underline">True</property>
                               </object>
                               <packing>
@@ -6540,6 +6577,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -6614,6 +6652,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">5</property>
                   </packing>
                 </child>
@@ -6699,6 +6738,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -6896,6 +6936,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">9</property>
                   </packing>
                 </child>
@@ -7031,6 +7072,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">11</property>
                   </packing>
                 </child>
