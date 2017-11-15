@@ -250,7 +250,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/framework/module/ShellStackGuard \
 	sd/source/ui/framework/module/SlideSorterModule \
 	sd/source/ui/framework/module/ToolBarModule \
-	sd/source/ui/framework/module/ToolPanelModule \
 	sd/source/ui/framework/module/ViewTabBarModule \
 	sd/source/ui/framework/tools/FrameworkHelper \
 	sd/source/ui/func/bulmaper \

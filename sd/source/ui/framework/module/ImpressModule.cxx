@@ -23,7 +23,6 @@
 #include "ViewTabBarModule.hxx"
 #include "CenterViewFocusModule.hxx"
 #include "SlideSorterModule.hxx"
-#include "ToolPanelModule.hxx"
 #include "ToolBarModule.hxx"
 #include "ShellStackGuard.hxx"
 
