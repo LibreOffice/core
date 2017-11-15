@@ -237,7 +237,7 @@ public:
 
     // SvxUnoXPropertyTable
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() override;
-    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const throw() override;
+    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
@@ -258,7 +258,7 @@ uno::Any SvxUnoXColorTable::getAny( const XPropertyEntry* pEntry ) const throw()
     return uno::Any( (sal_Int32)static_cast<const XColorEntry*>(pEntry)->GetColor().GetColor() );
 }
 
-std::unique_ptr<XPropertyEntry> SvxUnoXColorTable::createEntry(const OUString& rName, const uno::Any& rAny) const throw()
+std::unique_ptr<XPropertyEntry> SvxUnoXColorTable::createEntry(const OUString& rName, const uno::Any& rAny) const
 {
     sal_Int32 nColor = 0;
     if( !(rAny >>= nColor) )
@@ -362,7 +362,7 @@ public:
 
     // SvxUnoXPropertyTable
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() override;
-    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const throw() override;
+    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
@@ -394,7 +394,7 @@ uno::Any SvxUnoXDashTable::getAny( const XPropertyEntry* pEntry ) const throw()
     return uno::Any(aLineDash);
 }
 
-std::unique_ptr<XPropertyEntry> SvxUnoXDashTable::createEntry(const OUString& rName, const uno::Any& rAny) const throw()
+std::unique_ptr<XPropertyEntry> SvxUnoXDashTable::createEntry(const OUString& rName, const uno::Any& rAny) const
 {
     drawing::LineDash aLineDash;
     if(!(rAny >>= aLineDash))
@@ -439,7 +439,7 @@ public:
 
     // SvxUnoXPropertyTable
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() override;
-    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const throw() override;
+    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
@@ -469,7 +469,7 @@ uno::Any SvxUnoXHatchTable::getAny( const XPropertyEntry* pEntry ) const throw()
     return uno::Any(aUnoHatch);
 }
 
-std::unique_ptr<XPropertyEntry> SvxUnoXHatchTable::createEntry(const OUString& rName, const uno::Any& rAny) const throw()
+std::unique_ptr<XPropertyEntry> SvxUnoXHatchTable::createEntry(const OUString& rName, const uno::Any& rAny) const
 {
     drawing::Hatch aUnoHatch;
     if(!(rAny >>= aUnoHatch))
@@ -511,7 +511,7 @@ public:
 
     // SvxUnoXPropertyTable
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() override;
-    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const throw() override;
+    virtual std::unique_ptr<XPropertyEntry> createEntry(const OUString& rName, const uno::Any& rAny) const override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
@@ -546,7 +546,7 @@ uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const thro
     return uno::Any(aGradient);
 }
 
-std::unique_ptr<XPropertyEntry> SvxUnoXGradientTable::createEntry(const OUString& rName, const uno::Any& rAny) const throw()
+std::unique_ptr<XPropertyEntry> SvxUnoXGradientTable::createEntry(const OUString& rName, const uno::Any& rAny) const
 {
     awt::Gradient aGradient;
     if(!(rAny >>= aGradient))
