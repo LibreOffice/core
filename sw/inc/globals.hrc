@@ -210,6 +210,8 @@
 #define SID_FAX_LIST                (RC_GLOBALS_BEGIN +  116)
 #define SID_WRT_SHELL               (RC_GLOBALS_BEGIN +  117)
 
+#define STR_BOOKMARK_HIDDEN         (RC_GLOBALS_BEGIN + 118)
+#define STR_BOOKMARK_CONDITION      (RC_GLOBALS_BEGIN + 119)
 
 #endif
 

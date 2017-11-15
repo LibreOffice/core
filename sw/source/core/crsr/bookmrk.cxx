@@ -286,6 +286,7 @@ namespace sw { namespace mark
         , ::sfx2::Metadatable()
         , m_aCode(rCode)
         , m_sShortName(rShortName)
+        , m_bHidden(false)
     {
         m_aName = rName;
     }
