@@ -865,5 +865,8 @@
     <glade-widget-class title="Command Category ListBox" name="cuilo-CommandCategoryListBox"
                         generic-name="Command Category ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Color Config Control" name="cuilo-ColorConfigCtrl"
+                        generic-name="ColorConfigCtrl" parent="GtkBox"
+                        icon-name="widget-gtk-box"/>
   </glade-widget-classes>
 </glade-catalog>
