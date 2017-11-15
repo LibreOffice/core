@@ -181,6 +181,7 @@ public:
     virtual double              GetDouble() const;
     virtual double&             GetDoubleAsReference();
     virtual short               GetDoubleType() const;
+    virtual void                SetDoubleType( short nType );
     virtual svl::SharedString   GetString() const;
     virtual void                SetString( const svl::SharedString& rStr );
     virtual sal_uInt16          GetIndex() const;
@@ -321,6 +322,7 @@ public:
 
     virtual FormulaToken*       Clone() const override { return new FormulaTypedDoubleToken(*this); }
     virtual short               GetDoubleType() const override;
+    virtual void                SetDoubleType( short nType ) override;
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaTypedDoubleToken )
