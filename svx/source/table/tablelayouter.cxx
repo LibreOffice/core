@@ -123,20 +123,24 @@ bool TableLayouter::getCellArea( const CellRef& xCell, const CellPos& rPos, base
             {
                 const sal_Int32 y = maRows[rPos.mnRow].mnPos;
 
+                sal_Int32 endy;
+                if (o3tl::checked_add(y, aCellSize.getY(), endy))
+                    return false;
+
                 if(bRTL)
                 {
                     ///For RTL Table Calculate the Right End of cell instead of Left
                     const sal_Int32 x = maColumns[rPos.mnCol].mnPos + maColumns[rPos.mnCol].mnSize;
-                    sal_Int32 startx, endy;
-                    if (o3tl::checked_sub(x, aCellSize.getX(), startx) || o3tl::checked_add(y, aCellSize.getY(), endy))
+                    sal_Int32 startx;
+                    if (o3tl::checked_sub(x, aCellSize.getX(), startx))
                         return false;
                     rArea = basegfx::B2IRectangle(startx, y, x, endy);
                 }
                 else
                 {
                     const sal_Int32 x = maColumns[rPos.mnCol].mnPos;
-                    sal_Int32 endx, endy;
-                    if (o3tl::checked_add(x, aCellSize.getX(), endx) || o3tl::checked_add(y, aCellSize.getY(), endy))
+                    sal_Int32 endx;
+                    if (o3tl::checked_add(x, aCellSize.getX(), endx))
                         return false;
                     rArea = basegfx::B2IRectangle(x, y, endx, endy);
                 }
