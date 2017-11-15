@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_ac6404e5",
+        "filename": "sw/source/uibase/docvw/PostItMgr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-11-15T10:14:36Z",
+      "side": 1,
+      "message": "So, now the iterator increments twice: below (when its *new* incremented value is assigned to it), and at the end of the loop here.",
+      "range": {
+        "startLine": 249,
+        "startChar": 68,
+        "endLine": 249,
+        "endChar": 71
+      },
+      "revId": "3813dd13157f022320b5835856b70e0e2ede03bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_cc6310db",
+        "filename": "sw/source/uibase/docvw/PostItMgr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-11-15T10:14:36Z",
+      "side": 1,
+      "message": "Previously, the it pointed to original value of i (e.g., at the first loop, to the first element of mvPostItFields); now it would point to second element at the first pass.",
+      "range": {
+        "startLine": 251,
+        "startChar": 8,
+        "endLine": 251,
+        "endChar": 21
+      },
+      "revId": "3813dd13157f022320b5835856b70e0e2ede03bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
