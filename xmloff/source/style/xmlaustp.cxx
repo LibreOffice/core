@@ -182,82 +182,83 @@ void SvXMLAutoStylePoolP::exportStyleContent(
         const SvXMLNamespaceMap&
         ) const
 {
-    if( nFamily == XML_STYLE_FAMILY_PAGE_MASTER )
+    if( nFamily != XML_STYLE_FAMILY_PAGE_MASTER )
+        return;
+
+    sal_Int32       nHeaderStartIndex(-1);
+    sal_Int32       nHeaderEndIndex(-1);
+    sal_Int32       nFooterStartIndex(-1);
+    sal_Int32       nFooterEndIndex(-1);
+    bool        bHeaderStartIndex(false);
+    bool        bHeaderEndIndex(false);
+    bool        bFooterStartIndex(false);
+    bool        bFooterEndIndex(false);
+
+    const rtl::Reference< XMLPropertySetMapper >& aPropMapper = rPropExp.getPropertySetMapper();
+
+    sal_Int32 nIndex(0);
+    while(nIndex < aPropMapper->GetEntryCount())
     {
-        sal_Int32       nHeaderStartIndex(-1);
-        sal_Int32       nHeaderEndIndex(-1);
-        sal_Int32       nFooterStartIndex(-1);
-        sal_Int32       nFooterEndIndex(-1);
-        bool        bHeaderStartIndex(false);
-        bool        bHeaderEndIndex(false);
-        bool        bFooterStartIndex(false);
-        bool        bFooterEndIndex(false);
-
-        const rtl::Reference< XMLPropertySetMapper >& aPropMapper = rPropExp.getPropertySetMapper();
-
-        sal_Int32 nIndex(0);
-        while(nIndex < aPropMapper->GetEntryCount())
+        switch( aPropMapper->GetEntryContextId( nIndex ) & CTF_PM_FLAGMASK )
         {
-            switch( aPropMapper->GetEntryContextId( nIndex ) & CTF_PM_FLAGMASK )
+            case CTF_PM_HEADERFLAG:
             {
-                case CTF_PM_HEADERFLAG:
+                if (!bHeaderStartIndex)
                 {
-                    if (!bHeaderStartIndex)
-                    {
-                        nHeaderStartIndex = nIndex;
-                        bHeaderStartIndex = true;
-                    }
-                    if (bFooterStartIndex && !bFooterEndIndex)
-                    {
-                        nFooterEndIndex = nIndex;
-                        bFooterEndIndex = true;
-                    }
+                    nHeaderStartIndex = nIndex;
+                    bHeaderStartIndex = true;
                 }
-                break;
-                case CTF_PM_FOOTERFLAG:
+                if (bFooterStartIndex && !bFooterEndIndex)
                 {
-                    if (!bFooterStartIndex)
-                    {
-                        nFooterStartIndex = nIndex;
-                        bFooterStartIndex = true;
-                    }
-                    if (bHeaderStartIndex && !bHeaderEndIndex)
-                    {
-                        nHeaderEndIndex = nIndex;
-                        bHeaderEndIndex = true;
-                    }
+                    nFooterEndIndex = nIndex;
+                    bFooterEndIndex = true;
                 }
-                break;
             }
-            nIndex++;
+            break;
+            case CTF_PM_FOOTERFLAG:
+            {
+                if (!bFooterStartIndex)
+                {
+                    nFooterStartIndex = nIndex;
+                    bFooterStartIndex = true;
+                }
+                if (bHeaderStartIndex && !bHeaderEndIndex)
+                {
+                    nHeaderEndIndex = nIndex;
+                    bHeaderEndIndex = true;
+                }
+            }
+            break;
         }
-        if (!bHeaderEndIndex)
-            nHeaderEndIndex = nIndex;
-        if (!bFooterEndIndex)
-            nFooterEndIndex = nIndex;
-
-        // export header style element
-        {
-            SvXMLElementExport aElem(
-                GetExport(), XML_NAMESPACE_STYLE, XML_HEADER_STYLE,
-                true, true );
-
-            rPropExp.exportXML(
-                GetExport(), rProperties,
-                nHeaderStartIndex, nHeaderEndIndex, SvXmlExportFlags::IGN_WS);
-        }
-
-        // export footer style
-        {
-            SvXMLElementExport aElem(
-                GetExport(), XML_NAMESPACE_STYLE, XML_FOOTER_STYLE,
-                true, true );
-
-            rPropExp.exportXML(
-                GetExport(), rProperties,
-                nFooterStartIndex, nFooterEndIndex, SvXmlExportFlags::IGN_WS);
-        }
+        nIndex++;
     }
+    if (!bHeaderEndIndex)
+        nHeaderEndIndex = nIndex;
+    if (!bFooterEndIndex)
+        nFooterEndIndex = nIndex;
+
+    // export header style element
+    {
+        SvXMLElementExport aElem(
+            GetExport(), XML_NAMESPACE_STYLE, XML_HEADER_STYLE,
+            true, true );
+
+        rPropExp.exportXML(
+            GetExport(), rProperties,
+            nHeaderStartIndex, nHeaderEndIndex, SvXmlExportFlags::IGN_WS);
+    }
+
+    // export footer style
+    {
+        SvXMLElementExport aElem(
+            GetExport(), XML_NAMESPACE_STYLE, XML_FOOTER_STYLE,
+            true, true );
+
+        rPropExp.exportXML(
+            GetExport(), rProperties,
+            nFooterStartIndex, nFooterEndIndex, SvXmlExportFlags::IGN_WS);
+    }
+
 }
 
 SvXMLAutoStylePoolP::SvXMLAutoStylePoolP( SvXMLExport& rExport )

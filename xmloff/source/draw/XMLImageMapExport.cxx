@@ -127,128 +127,129 @@ void XMLImageMapExport::ExportMapEntry(
     const Reference<XPropertySet> & rPropertySet)
 {
     Reference<XServiceInfo> xServiceInfo(rPropertySet, UNO_QUERY);
-    if (xServiceInfo.is())
+    if (!xServiceInfo.is())
+        return;
+
+    enum XMLTokenEnum eType = XML_TOKEN_INVALID;
+
+    // distinguish map entries by their service name
+    Sequence<OUString> sServiceNames =
+        xServiceInfo->getSupportedServiceNames();
+    sal_Int32 nLength = sServiceNames.getLength();
+    for( sal_Int32 i=0; i<nLength; i++ )
     {
-        enum XMLTokenEnum eType = XML_TOKEN_INVALID;
+        OUString& rName = sServiceNames[i];
 
-        // distinguish map entries by their service name
-        Sequence<OUString> sServiceNames =
-            xServiceInfo->getSupportedServiceNames();
-        sal_Int32 nLength = sServiceNames.getLength();
-        for( sal_Int32 i=0; i<nLength; i++ )
+        if ( rName == "com.sun.star.image.ImageMapRectangleObject" )
         {
-            OUString& rName = sServiceNames[i];
-
-            if ( rName == "com.sun.star.image.ImageMapRectangleObject" )
-            {
-                eType = XML_AREA_RECTANGLE;
-                break;
-            }
-            else if ( rName == "com.sun.star.image.ImageMapCircleObject" )
-            {
-                eType = XML_AREA_CIRCLE;
-                break;
-            }
-            else if ( rName == "com.sun.star.image.ImageMapPolygonObject" )
-            {
-                eType = XML_AREA_POLYGON;
-                break;
-            }
+            eType = XML_AREA_RECTANGLE;
+            break;
         }
-
-        // return from method if no proper service is found!
-        DBG_ASSERT(XML_TOKEN_INVALID != eType,
-                   "Image map element doesn't support appropriate service!");
-        if (XML_TOKEN_INVALID == eType)
-            return;
-
-        // now: handle ImageMapObject properties (those for all types)
-
-        // XLINK (URL property)
-        Any aAny = rPropertySet->getPropertyValue(msURL);
-        OUString sHref;
-        aAny >>= sHref;
-        if (!sHref.isEmpty())
+        else if ( rName == "com.sun.star.image.ImageMapCircleObject" )
         {
-            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, mrExport.GetRelativeReference(sHref));
+            eType = XML_AREA_CIRCLE;
+            break;
         }
-        mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-
-        // Target property (and xlink:show)
-        aAny = rPropertySet->getPropertyValue(msTarget);
-        OUString sTargt;
-        aAny >>= sTargt;
-        if (!sTargt.isEmpty())
+        else if ( rName == "com.sun.star.image.ImageMapPolygonObject" )
         {
-            mrExport.AddAttribute(
-                XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME, sTargt);
-
-            mrExport.AddAttribute(
-                XML_NAMESPACE_XLINK, XML_SHOW,
-                sTargt == "_blank" ? XML_NEW : XML_REPLACE );
+            eType = XML_AREA_POLYGON;
+            break;
         }
-
-        // name
-        aAny = rPropertySet->getPropertyValue(msName);
-        OUString sItemName;
-        aAny >>= sItemName;
-        if (!sItemName.isEmpty())
-        {
-            mrExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, sItemName);
-        }
-
-        // is-active
-        aAny = rPropertySet->getPropertyValue(msIsActive);
-        if (! *o3tl::doAccess<bool>(aAny))
-        {
-            mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NOHREF, XML_NOHREF);
-        }
-
-        // call specific rectangle/circle/... method
-        // also prepare element name
-        switch (eType)
-        {
-            case XML_AREA_RECTANGLE:
-                ExportRectangle(rPropertySet);
-                break;
-            case XML_AREA_CIRCLE:
-                ExportCircle(rPropertySet);
-                break;
-            case XML_AREA_POLYGON:
-                ExportPolygon(rPropertySet);
-                break;
-            default:
-                break;
-        }
-
-        // write element
-        DBG_ASSERT(XML_TOKEN_INVALID != eType,
-                   "No name?! How did this happen?");
-        SvXMLElementExport aAreaElement(mrExport, XML_NAMESPACE_DRAW, eType,
-                                        true/*bWhiteSpace*/, true/*bWhiteSpace*/);
-
-        // title property (as <svg:title> element)
-        OUString sTitle;
-        rPropertySet->getPropertyValue(msTitle) >>= sTitle;
-        if(!sTitle.isEmpty())
-        {
-            SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SVG, XML_TITLE, true/*bWhiteSpace*/, false);
-            mrExport.Characters(sTitle);
-        }
-
-        // description property (as <svg:desc> element)
-        OUString sDescription;
-        rPropertySet->getPropertyValue(msDescription) >>= sDescription;
-        if (!sDescription.isEmpty())
-        {
-            SvXMLElementExport aDesc(mrExport, XML_NAMESPACE_SVG, XML_DESC, true/*bWhiteSpace*/, false);
-            mrExport.Characters(sDescription);
-        }
-
-        // export events attached to this
-        Reference<XEventsSupplier> xSupplier(rPropertySet, UNO_QUERY);
-        mrExport.GetEventExport().Export(xSupplier);
     }
+
+    // return from method if no proper service is found!
+    DBG_ASSERT(XML_TOKEN_INVALID != eType,
+               "Image map element doesn't support appropriate service!");
+    if (XML_TOKEN_INVALID == eType)
+        return;
+
+    // now: handle ImageMapObject properties (those for all types)
+
+    // XLINK (URL property)
+    Any aAny = rPropertySet->getPropertyValue(msURL);
+    OUString sHref;
+    aAny >>= sHref;
+    if (!sHref.isEmpty())
+    {
+        mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, mrExport.GetRelativeReference(sHref));
+    }
+    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+
+    // Target property (and xlink:show)
+    aAny = rPropertySet->getPropertyValue(msTarget);
+    OUString sTargt;
+    aAny >>= sTargt;
+    if (!sTargt.isEmpty())
+    {
+        mrExport.AddAttribute(
+            XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME, sTargt);
+
+        mrExport.AddAttribute(
+            XML_NAMESPACE_XLINK, XML_SHOW,
+            sTargt == "_blank" ? XML_NEW : XML_REPLACE );
+    }
+
+    // name
+    aAny = rPropertySet->getPropertyValue(msName);
+    OUString sItemName;
+    aAny >>= sItemName;
+    if (!sItemName.isEmpty())
+    {
+        mrExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, sItemName);
+    }
+
+    // is-active
+    aAny = rPropertySet->getPropertyValue(msIsActive);
+    if (! *o3tl::doAccess<bool>(aAny))
+    {
+        mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NOHREF, XML_NOHREF);
+    }
+
+    // call specific rectangle/circle/... method
+    // also prepare element name
+    switch (eType)
+    {
+        case XML_AREA_RECTANGLE:
+            ExportRectangle(rPropertySet);
+            break;
+        case XML_AREA_CIRCLE:
+            ExportCircle(rPropertySet);
+            break;
+        case XML_AREA_POLYGON:
+            ExportPolygon(rPropertySet);
+            break;
+        default:
+            break;
+    }
+
+    // write element
+    DBG_ASSERT(XML_TOKEN_INVALID != eType,
+               "No name?! How did this happen?");
+    SvXMLElementExport aAreaElement(mrExport, XML_NAMESPACE_DRAW, eType,
+                                    true/*bWhiteSpace*/, true/*bWhiteSpace*/);
+
+    // title property (as <svg:title> element)
+    OUString sTitle;
+    rPropertySet->getPropertyValue(msTitle) >>= sTitle;
+    if(!sTitle.isEmpty())
+    {
+        SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SVG, XML_TITLE, true/*bWhiteSpace*/, false);
+        mrExport.Characters(sTitle);
+    }
+
+    // description property (as <svg:desc> element)
+    OUString sDescription;
+    rPropertySet->getPropertyValue(msDescription) >>= sDescription;
+    if (!sDescription.isEmpty())
+    {
+        SvXMLElementExport aDesc(mrExport, XML_NAMESPACE_SVG, XML_DESC, true/*bWhiteSpace*/, false);
+        mrExport.Characters(sDescription);
+    }
+
+    // export events attached to this
+    Reference<XEventsSupplier> xSupplier(rPropertySet, UNO_QUERY);
+    mrExport.GetEventExport().Export(xSupplier);
+
     // else: no service info -> can't determine type -> ignore entry
 }
 

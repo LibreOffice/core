@@ -120,32 +120,33 @@ void XMLSectionSourceDDEImportContext::StartElement(
     }
 
     // DDE not supported on all platforms; query property first
-    if (rSectionPropertySet->getPropertySetInfo()->
+    if (!rSectionPropertySet->getPropertySetInfo()->
         hasPropertyByName("DDECommandFile"))
-    {
-        // use multi property set to force single update of connection #83654#
-        Sequence<OUString> aNames(4);
-        Sequence<Any> aValues(4);
+        return;
 
-        aValues[0] <<= sApplication;
-        aNames[0] = "DDECommandFile";
+    // use multi property set to force single update of connection #83654#
+    Sequence<OUString> aNames(4);
+    Sequence<Any> aValues(4);
 
-        aValues[1] <<= sTopic;
-        aNames[1] = "DDECommandType";
+    aValues[0] <<= sApplication;
+    aNames[0] = "DDECommandFile";
 
-        aValues[2] <<= sItem;
-        aNames[2] = "DDECommandElement";
+    aValues[1] <<= sTopic;
+    aNames[1] = "DDECommandType";
 
-        aValues[3] <<= bAutomaticUpdate;
-        aNames[3] = "IsAutomaticUpdate";
+    aValues[2] <<= sItem;
+    aNames[2] = "DDECommandElement";
 
-        Reference<XMultiPropertySet> rMultiPropSet(rSectionPropertySet,
-                                                   UNO_QUERY);
-        DBG_ASSERT(rMultiPropSet.is(), "we'd really like a XMultiPropertySet");
-        if (rMultiPropSet.is())
-            rMultiPropSet->setPropertyValues(aNames, aValues);
-        // else: ignore
-    }
+    aValues[3] <<= bAutomaticUpdate;
+    aNames[3] = "IsAutomaticUpdate";
+
+    Reference<XMultiPropertySet> rMultiPropSet(rSectionPropertySet,
+                                               UNO_QUERY);
+    DBG_ASSERT(rMultiPropSet.is(), "we'd really like a XMultiPropertySet");
+    if (rMultiPropSet.is())
+        rMultiPropSet->setPropertyValues(aNames, aValues);
+    // else: ignore
+
 }
 
 void XMLSectionSourceDDEImportContext::EndElement()

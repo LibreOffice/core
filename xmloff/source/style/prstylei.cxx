@@ -453,80 +453,80 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
 
 void XMLPropStyleContext::Finish( bool bOverwrite )
 {
-    if( mxStyle.is() && (IsNew() || bOverwrite) )
+    if( !mxStyle.is() || !(IsNew() || bOverwrite) )
+        return;
+
+    // The families container must exist
+    Reference < XNameContainer > xFamilies =
+        static_cast<SvXMLStylesContext *>(mxStyles.get())->GetStylesContainer( GetFamily() );
+    SAL_WARN_IF( !xFamilies.is(), "xmloff", "Families lost" );
+    if( !xFamilies.is() )
+        return;
+
+    // connect parent
+    OUString sParent( GetParentName() );
+    if( !sParent.isEmpty() )
+        sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
+    if( !sParent.isEmpty() && !xFamilies->hasByName( sParent ) )
+        sParent.clear();
+
+    if( sParent != mxStyle->getParentStyle() )
     {
-        // The families container must exist
-        Reference < XNameContainer > xFamilies =
-            static_cast<SvXMLStylesContext *>(mxStyles.get())->GetStylesContainer( GetFamily() );
-        SAL_WARN_IF( !xFamilies.is(), "xmloff", "Families lost" );
-        if( !xFamilies.is() )
-            return;
-
-        // connect parent
-        OUString sParent( GetParentName() );
-        if( !sParent.isEmpty() )
-            sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
-        if( !sParent.isEmpty() && !xFamilies->hasByName( sParent ) )
-            sParent.clear();
-
-        if( sParent != mxStyle->getParentStyle() )
+        // this may except if setting the parent style forms a
+        // circle in the style dependencies; especially if the parent
+        // style is the same as the current style
+        try
         {
-            // this may except if setting the parent style forms a
-            // circle in the style dependencies; especially if the parent
-            // style is the same as the current style
-            try
-            {
-                mxStyle->setParentStyle( sParent );
-            }
-            catch(const uno::Exception& e)
-            {
-                // according to the API definition, I would expect a
-                // container::NoSuchElementException. But it throws an
-                // uno::RuntimeException instead. I catch
-                // uno::Exception in order to process both of them.
-
-                // We can't set the parent style. For a proper
-                // Error-Message, we should pass in the name of the
-                // style, as well as the desired parent style.
-                Sequence<OUString> aSequence(2);
-
-                // getName() throws no non-Runtime exception:
-                aSequence[0] = mxStyle->getName();
-                aSequence[1] = sParent;
-
-                GetImport().SetError(
-                    XMLERROR_FLAG_ERROR | XMLERROR_PARENT_STYLE_NOT_ALLOWED,
-                    aSequence, e.Message, nullptr );
-            }
+            mxStyle->setParentStyle( sParent );
         }
-
-        // connect follow
-        OUString sFollow( GetFollow() );
-        if( !sFollow.isEmpty() )
-            sFollow = GetImport().GetStyleDisplayName( GetFamily(), sFollow );
-        if( sFollow.isEmpty() || !xFamilies->hasByName( sFollow ) )
-            sFollow = mxStyle->getName();
-
-        Reference < XPropertySet > xPropSet( mxStyle, UNO_QUERY );
-        Reference< XPropertySetInfo > xPropSetInfo =
-            xPropSet->getPropertySetInfo();
-        if( xPropSetInfo->hasPropertyByName( msFollowStyle ) )
+        catch(const uno::Exception& e)
         {
-            Any aAny = xPropSet->getPropertyValue( msFollowStyle );
-            OUString sCurrFollow;
-            aAny >>= sCurrFollow;
-            if( sCurrFollow != sFollow )
-            {
-                xPropSet->setPropertyValue( msFollowStyle, Any(sFollow) );
-            }
-        }
+            // according to the API definition, I would expect a
+            // container::NoSuchElementException. But it throws an
+            // uno::RuntimeException instead. I catch
+            // uno::Exception in order to process both of them.
 
-        if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
-        {
-            xPropSet->setPropertyValue( "Hidden", uno::makeAny( IsHidden( ) ) );
-        }
+            // We can't set the parent style. For a proper
+            // Error-Message, we should pass in the name of the
+            // style, as well as the desired parent style.
+            Sequence<OUString> aSequence(2);
 
+            // getName() throws no non-Runtime exception:
+            aSequence[0] = mxStyle->getName();
+            aSequence[1] = sParent;
+
+            GetImport().SetError(
+                XMLERROR_FLAG_ERROR | XMLERROR_PARENT_STYLE_NOT_ALLOWED,
+                aSequence, e.Message, nullptr );
+        }
     }
+
+    // connect follow
+    OUString sFollow( GetFollow() );
+    if( !sFollow.isEmpty() )
+        sFollow = GetImport().GetStyleDisplayName( GetFamily(), sFollow );
+    if( sFollow.isEmpty() || !xFamilies->hasByName( sFollow ) )
+        sFollow = mxStyle->getName();
+
+    Reference < XPropertySet > xPropSet( mxStyle, UNO_QUERY );
+    Reference< XPropertySetInfo > xPropSetInfo =
+        xPropSet->getPropertySetInfo();
+    if( xPropSetInfo->hasPropertyByName( msFollowStyle ) )
+    {
+        Any aAny = xPropSet->getPropertyValue( msFollowStyle );
+        OUString sCurrFollow;
+        aAny >>= sCurrFollow;
+        if( sCurrFollow != sFollow )
+        {
+            xPropSet->setPropertyValue( msFollowStyle, Any(sFollow) );
+        }
+    }
+
+    if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
+    {
+        xPropSet->setPropertyValue( "Hidden", uno::makeAny( IsHidden( ) ) );
+    }
+
 }
 
 bool XMLPropStyleContext::doNewDrawingLayerFillStyleDefinitionsExist(
