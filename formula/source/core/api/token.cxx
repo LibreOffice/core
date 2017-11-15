@@ -218,7 +218,7 @@ short FormulaToken::GetDoubleType() const
 
 void FormulaToken::SetDoubleType( short )
 {
-    SAL_WARN( "formula.core", "FormulaToken::SetDoubleType: virtual dummy called" );
+    assert( !"virtual dummy called" );
 }
 
 svl::SharedString FormulaToken::GetString() const
