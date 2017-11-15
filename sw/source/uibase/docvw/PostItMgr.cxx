@@ -246,10 +246,10 @@ SwPostItMgr::~SwPostItMgr()
 void SwPostItMgr::CheckForRemovedPostIts()
 {
     bool bRemoved = false;
-    for(auto i = mvPostItFields.begin(); i != mvPostItFields.end(); ++i)
+    for(auto i = mvPostItFields.begin(); i != mvPostItFields.end(); )
     {
-        auto it = ++i;
-        if ( it != mvPostItFields.end() && !(*it)->UseElement() )
+        auto it = i++;
+        if ( !(*it)->UseElement() )
         {
             SwSidebarItem* p = (*it);
             mvPostItFields.remove(*it);
