@@ -99,6 +99,8 @@ void SdrUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "CROP")
     {
+        // RotateFlyFrame3: Note: Crop does nothing at SdrObject
+        // anymore, see comment at SdrObject::NbcCrop
         auto itrNX = rParameters.find("X");
         if (itrNX == rParameters.end())
             throw css::uno::RuntimeException("missing parameter X");
@@ -107,23 +109,21 @@ void SdrUIObject::execute(const OUString& rAction,
         if (itrNY == rParameters.end())
             throw css::uno::RuntimeException("missing parameter Y");
 
-        long nX = itrNX->second.toInt32();
-        long nY = itrNY->second.toInt32();
-        Point aPos(nX, nY);
+        const double fX(itrNX->second.toDouble());
+        const double fY(itrNY->second.toDouble());
+        const basegfx::B2DPoint aPos(fX, fY);
 
         auto itrFracX = rParameters.find("FRAC_X");
         if (itrFracX == rParameters.end())
             throw css::uno::RuntimeException("missing parameter FRAC_X");
-        double nFracX = itrFracX->second.toDouble();
-        Fraction aFracX(nFracX);
+        const double fFracX(itrFracX->second.toDouble());
 
         auto itrFracY = rParameters.find("FRAC_Y");
         if (itrFracY == rParameters.end())
             throw css::uno::RuntimeException("missing parameter FRAC_Y");
-        double nFracY = itrFracY->second.toDouble();
-        Fraction aFracY(nFracY);
+        const double fFracY(itrFracY->second.toDouble());
 
-        pObj->Crop(aPos, aFracX, aFracY);
+        pObj->Crop(aPos, fFracX, fFracY);
     }
     else if (rAction == "ROTATE")
     {

@@ -101,11 +101,11 @@ public:
     virtual       void       NbcMove  (const Size& rSiz) override;
     virtual       void       NbcResize(const Point& rRef, const Fraction& xFact,
                                        const Fraction& yFact) override;
-    virtual       void       NbcCrop(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual       void       NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, double fyFact) override;
     virtual       void       Move  (const Size& rSiz) override;
     virtual       void       Resize(const Point& rRef, const Fraction& xFact,
                                     const Fraction& yFact, bool bUnsetRelative = true) override;
-    virtual       void       Crop(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual       void       Crop(const basegfx::B2DPoint& rRef, double fxFact, double fyFact) override;
     virtual       void       addCropHandles(SdrHdlList& rTarget) const override;
     virtual       void       Rotate(const Point& rRef, long nAngle, double sn, double cs) override;
 

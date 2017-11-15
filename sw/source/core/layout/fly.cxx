@@ -62,6 +62,8 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <textboxhelper.hxx>
 #include <txtfly.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace ::com::sun::star;
 
@@ -2431,8 +2433,9 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
 {
     vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     bool bRet = false;
-    if( GetFormat()->GetSurround().IsContour() && Lower() &&
-        Lower()->IsNoTextFrame() )
+    const bool bIsCandidate(Lower() && Lower()->IsNoTextFrame());
+
+    if(bIsCandidate && GetFormat()->GetSurround().IsContour())
     {
         SwNoTextNode *pNd = const_cast<SwNoTextNode*>(static_cast<const SwNoTextNode*>(static_cast<const SwContentFrame*>(Lower())->GetNode()));
         // OD 16.04.2003 #i13147# - determine <GraphicObject> instead of <Graphic>
@@ -2524,6 +2527,31 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
             bRet = true;
         }
     }
+
+    if(bRet &&
+        rContour.Count() &&
+        IsFlyFreeFrame() &&
+        static_cast<const SwFlyFreeFrame*>(this)->isTransformableSwFrame())
+    {
+        // RotateFlyFrame: Need to adapt contour to transformation
+        basegfx::B2DVector aScale, aTranslate;
+        double fRotate, fShearX;
+        getFrameAreaTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
+
+        if(!basegfx::fTools::equalZero(fRotate))
+        {
+            basegfx::B2DPolyPolygon aSource(rContour.getB2DPolyPolygon());
+            const basegfx::B2DPoint aCenter(getFrameAreaTransformation() * basegfx::B2DPoint(0.5, 0.5));
+            const basegfx::B2DHomMatrix aRotateAroundCenter(
+                basegfx::utils::createRotateAroundPoint(
+                    aCenter.getX(),
+                    aCenter.getY(),
+                    fRotate));
+            aSource.transform(aRotateAroundCenter);
+            rContour = tools::PolyPolygon(aSource);
+        }
+    }
+
     return bRet;
 }
 
