@@ -4381,49 +4381,50 @@ static void NWEnsureGTKMenubar( SalX11Screen nScreen )
 
 static void NWEnsureGTKMenu( SalX11Screen nScreen )
 {
-    if( !gWidgetData[nScreen].gMenuWidget )
-    {
-        gWidgetData[nScreen].gMenuWidget                  = gtk_menu_new();
-        gWidgetData[nScreen].gMenuItemMenuWidget          = gtk_menu_item_new_with_label( "b" );
-        gWidgetData[nScreen].gMenuItemCheckMenuWidget     = gtk_check_menu_item_new_with_label( "b" );
-        gWidgetData[nScreen].gMenuItemRadioMenuWidget     = gtk_radio_menu_item_new_with_label( nullptr, "b" );
-        gWidgetData[nScreen].gMenuItemSeparatorMenuWidget = gtk_separator_menu_item_new();
-        gWidgetData[nScreen].gImageMenuItem               = gtk_image_menu_item_new();
+    if( gWidgetData[nScreen].gMenuWidget )
+        return;
 
-        g_object_ref_sink (gWidgetData[nScreen].gMenuWidget);
+    gWidgetData[nScreen].gMenuWidget                  = gtk_menu_new();
+    gWidgetData[nScreen].gMenuItemMenuWidget          = gtk_menu_item_new_with_label( "b" );
+    gWidgetData[nScreen].gMenuItemCheckMenuWidget     = gtk_check_menu_item_new_with_label( "b" );
+    gWidgetData[nScreen].gMenuItemRadioMenuWidget     = gtk_radio_menu_item_new_with_label( nullptr, "b" );
+    gWidgetData[nScreen].gMenuItemSeparatorMenuWidget = gtk_separator_menu_item_new();
+    gWidgetData[nScreen].gImageMenuItem               = gtk_image_menu_item_new();
 
-        gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gMenuItemMenuWidget );
-        gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gMenuItemCheckMenuWidget );
-        gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gMenuItemRadioMenuWidget );
-        gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gMenuItemSeparatorMenuWidget );
-        gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gImageMenuItem );
+    g_object_ref_sink (gWidgetData[nScreen].gMenuWidget);
 
-        // do what NWAddWidgetToCacheWindow does except adding to def container
-        gtk_widget_realize( gWidgetData[nScreen].gMenuWidget );
-        gtk_widget_ensure_style( gWidgetData[nScreen].gMenuWidget );
+    gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gMenuItemMenuWidget );
+    gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gMenuItemCheckMenuWidget );
+    gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gMenuItemRadioMenuWidget );
+    gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gMenuItemSeparatorMenuWidget );
+    gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gImageMenuItem );
 
-        gtk_widget_realize( gWidgetData[nScreen].gMenuItemMenuWidget );
-        gtk_widget_ensure_style( gWidgetData[nScreen].gMenuItemMenuWidget );
+    // do what NWAddWidgetToCacheWindow does except adding to def container
+    gtk_widget_realize( gWidgetData[nScreen].gMenuWidget );
+    gtk_widget_ensure_style( gWidgetData[nScreen].gMenuWidget );
 
-        gtk_widget_realize( gWidgetData[nScreen].gMenuItemCheckMenuWidget );
-        gtk_widget_ensure_style( gWidgetData[nScreen].gMenuItemCheckMenuWidget );
+    gtk_widget_realize( gWidgetData[nScreen].gMenuItemMenuWidget );
+    gtk_widget_ensure_style( gWidgetData[nScreen].gMenuItemMenuWidget );
 
-        gtk_widget_realize( gWidgetData[nScreen].gMenuItemRadioMenuWidget );
-        gtk_widget_ensure_style( gWidgetData[nScreen].gMenuItemRadioMenuWidget );
+    gtk_widget_realize( gWidgetData[nScreen].gMenuItemCheckMenuWidget );
+    gtk_widget_ensure_style( gWidgetData[nScreen].gMenuItemCheckMenuWidget );
 
-        gtk_widget_realize( gWidgetData[nScreen].gMenuItemSeparatorMenuWidget );
-        gtk_widget_ensure_style( gWidgetData[nScreen].gMenuItemSeparatorMenuWidget );
+    gtk_widget_realize( gWidgetData[nScreen].gMenuItemRadioMenuWidget );
+    gtk_widget_ensure_style( gWidgetData[nScreen].gMenuItemRadioMenuWidget );
 
-        gtk_widget_realize( gWidgetData[nScreen].gImageMenuItem );
-        gtk_widget_ensure_style( gWidgetData[nScreen].gImageMenuItem );
+    gtk_widget_realize( gWidgetData[nScreen].gMenuItemSeparatorMenuWidget );
+    gtk_widget_ensure_style( gWidgetData[nScreen].gMenuItemSeparatorMenuWidget );
 
-        gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gMenuWidget) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuWidget );
-        gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gMenuItemMenuWidget) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemMenuWidget );
-        gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gMenuItemCheckMenuWidget) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemCheckMenuWidget );
-        gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gMenuItemRadioMenuWidget) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemRadioMenuWidget );
-        gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gMenuItemSeparatorMenuWidget) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemSeparatorMenuWidget );
-        gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gImageMenuItem) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gImageMenuItem );
-    }
+    gtk_widget_realize( gWidgetData[nScreen].gImageMenuItem );
+    gtk_widget_ensure_style( gWidgetData[nScreen].gImageMenuItem );
+
+    gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gMenuWidget) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuWidget );
+    gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gMenuItemMenuWidget) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemMenuWidget );
+    gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gMenuItemCheckMenuWidget) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemCheckMenuWidget );
+    gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gMenuItemRadioMenuWidget) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemRadioMenuWidget );
+    gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gMenuItemSeparatorMenuWidget) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemSeparatorMenuWidget );
+    gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gImageMenuItem) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gImageMenuItem );
+
 }
 
 static void NWEnsureGTKTooltip( SalX11Screen nScreen )

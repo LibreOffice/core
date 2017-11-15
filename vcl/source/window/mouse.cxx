@@ -275,118 +275,119 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
         pParent = pParent->mpWindowImpl->mpParent;
     }
 
-    if ( ( pSVData->maWinData.mpFocusWin.get() != this &&
-           !mpWindowImpl->mbInDispose ) ||
-         ( bAsyncFocusWaiting && !bHasFocus && !bMustNotGrabFocus ) )
+    if ( !(( pSVData->maWinData.mpFocusWin.get() != this &&
+             !mpWindowImpl->mbInDispose ) ||
+           ( bAsyncFocusWaiting && !bHasFocus && !bMustNotGrabFocus )) )
+        return;
+
+    // EndExtTextInput if it is not the same window
+    if ( pSVData->maWinData.mpExtTextInputWin &&
+         (pSVData->maWinData.mpExtTextInputWin.get() != this) )
+        pSVData->maWinData.mpExtTextInputWin->EndExtTextInput();
+
+    // mark this windows as the last FocusWindow
+    vcl::Window* pOverlapWindow = ImplGetFirstOverlapWindow();
+    pOverlapWindow->mpWindowImpl->mpLastFocusWindow = this;
+    mpWindowImpl->mpFrameData->mpFocusWin = this;
+
+    if( !bHasFocus )
     {
-        // EndExtTextInput if it is not the same window
-        if ( pSVData->maWinData.mpExtTextInputWin &&
-             (pSVData->maWinData.mpExtTextInputWin.get() != this) )
-            pSVData->maWinData.mpExtTextInputWin->EndExtTextInput();
-
-        // mark this windows as the last FocusWindow
-        vcl::Window* pOverlapWindow = ImplGetFirstOverlapWindow();
-        pOverlapWindow->mpWindowImpl->mpLastFocusWindow = this;
-        mpWindowImpl->mpFrameData->mpFocusWin = this;
-
-        if( !bHasFocus )
-        {
-            // menu windows never get the system focus
-            // the application will keep the focus
-            if( bMustNotGrabFocus )
-                return;
-            else
-            {
-                // here we already switch focus as ToTop()
-                // should not give focus to another window
-                mpWindowImpl->mpFrame->ToTop( SalFrameToTop::GrabFocus | SalFrameToTop::GrabFocusOnly );
-                return;
-            }
-        }
-
-        VclPtr<vcl::Window> pOldFocusWindow = pSVData->maWinData.mpFocusWin;
-
-        pSVData->maWinData.mpFocusWin = this;
-
-        if ( pOldFocusWindow )
-        {
-            // Cursor hidden
-            if ( pOldFocusWindow->mpWindowImpl->mpCursor )
-                pOldFocusWindow->mpWindowImpl->mpCursor->ImplHide();
-        }
-
-        // !!!!! due to old SV-Office Activate/Deactivate handling
-        // !!!!! first as before
-        if ( pOldFocusWindow )
-        {
-            // remember Focus
-            vcl::Window* pOldOverlapWindow = pOldFocusWindow->ImplGetFirstOverlapWindow();
-            vcl::Window* pNewOverlapWindow = ImplGetFirstOverlapWindow();
-            if ( pOldOverlapWindow != pNewOverlapWindow )
-                ImplCallFocusChangeActivate( pNewOverlapWindow, pOldOverlapWindow );
-        }
+        // menu windows never get the system focus
+        // the application will keep the focus
+        if( bMustNotGrabFocus )
+            return;
         else
         {
-            vcl::Window* pNewOverlapWindow = ImplGetFirstOverlapWindow();
-            vcl::Window* pNewRealWindow = pNewOverlapWindow->ImplGetWindow();
-            pNewOverlapWindow->mpWindowImpl->mbActive = true;
-            pNewOverlapWindow->Activate();
-            if ( pNewRealWindow != pNewOverlapWindow )
-            {
-                pNewRealWindow->mpWindowImpl->mbActive = true;
-                pNewRealWindow->Activate();
-            }
+            // here we already switch focus as ToTop()
+            // should not give focus to another window
+            mpWindowImpl->mpFrame->ToTop( SalFrameToTop::GrabFocus | SalFrameToTop::GrabFocusOnly );
+            return;
         }
+    }
 
-        // call Get- and LoseFocus
-        if ( pOldFocusWindow && ! pOldFocusWindow->IsDisposed() )
+    VclPtr<vcl::Window> pOldFocusWindow = pSVData->maWinData.mpFocusWin;
+
+    pSVData->maWinData.mpFocusWin = this;
+
+    if ( pOldFocusWindow )
+    {
+        // Cursor hidden
+        if ( pOldFocusWindow->mpWindowImpl->mpCursor )
+            pOldFocusWindow->mpWindowImpl->mpCursor->ImplHide();
+    }
+
+    // !!!!! due to old SV-Office Activate/Deactivate handling
+    // !!!!! first as before
+    if ( pOldFocusWindow )
+    {
+        // remember Focus
+        vcl::Window* pOldOverlapWindow = pOldFocusWindow->ImplGetFirstOverlapWindow();
+        vcl::Window* pNewOverlapWindow = ImplGetFirstOverlapWindow();
+        if ( pOldOverlapWindow != pNewOverlapWindow )
+            ImplCallFocusChangeActivate( pNewOverlapWindow, pOldOverlapWindow );
+    }
+    else
+    {
+        vcl::Window* pNewOverlapWindow = ImplGetFirstOverlapWindow();
+        vcl::Window* pNewRealWindow = pNewOverlapWindow->ImplGetWindow();
+        pNewOverlapWindow->mpWindowImpl->mbActive = true;
+        pNewOverlapWindow->Activate();
+        if ( pNewRealWindow != pNewOverlapWindow )
         {
-            if ( pOldFocusWindow->IsTracking() &&
-                 (pSVData->maWinData.mnTrackFlags & StartTrackingFlags::FocusCancel) )
-                pOldFocusWindow->EndTracking( TrackingEventFlags::Cancel | TrackingEventFlags::Focus );
-            NotifyEvent aNEvt( MouseNotifyEvent::LOSEFOCUS, pOldFocusWindow );
-            if ( !ImplCallPreNotify( aNEvt ) )
-                pOldFocusWindow->CompatLoseFocus();
-            pOldFocusWindow->ImplCallDeactivateListeners( this );
+            pNewRealWindow->mpWindowImpl->mbActive = true;
+            pNewRealWindow->Activate();
+        }
+    }
+
+    // call Get- and LoseFocus
+    if ( pOldFocusWindow && ! pOldFocusWindow->IsDisposed() )
+    {
+        if ( pOldFocusWindow->IsTracking() &&
+             (pSVData->maWinData.mnTrackFlags & StartTrackingFlags::FocusCancel) )
+            pOldFocusWindow->EndTracking( TrackingEventFlags::Cancel | TrackingEventFlags::Focus );
+        NotifyEvent aNEvt( MouseNotifyEvent::LOSEFOCUS, pOldFocusWindow );
+        if ( !ImplCallPreNotify( aNEvt ) )
+            pOldFocusWindow->CompatLoseFocus();
+        pOldFocusWindow->ImplCallDeactivateListeners( this );
+    }
+
+    if ( pSVData->maWinData.mpFocusWin.get() == this )
+    {
+        if ( mpWindowImpl->mpSysObj )
+        {
+            mpWindowImpl->mpFrameData->mpFocusWin = this;
+            if ( !mpWindowImpl->mpFrameData->mbInSysObjFocusHdl )
+                mpWindowImpl->mpSysObj->GrabFocus();
         }
 
         if ( pSVData->maWinData.mpFocusWin.get() == this )
         {
-            if ( mpWindowImpl->mpSysObj )
+            if ( mpWindowImpl->mpCursor )
+                mpWindowImpl->mpCursor->ImplShow();
+            mpWindowImpl->mbInFocusHdl = true;
+            mpWindowImpl->mnGetFocusFlags = nFlags;
+            // if we're changing focus due to closing a popup floating window
+            // notify the new focus window so it can restore the inner focus
+            // eg, toolboxes can select their recent active item
+            if( pOldFocusWindow &&
+                ! pOldFocusWindow->IsDisposed() &&
+                ( pOldFocusWindow->GetDialogControlFlags() & DialogControlFlags::FloatWinPopupModeEndCancel ) )
+                mpWindowImpl->mnGetFocusFlags |= GetFocusFlags::FloatWinPopupModeEndCancel;
+            NotifyEvent aNEvt( MouseNotifyEvent::GETFOCUS, this );
+            if ( !ImplCallPreNotify( aNEvt ) && !xWindow->IsDisposed() )
+                CompatGetFocus();
+            if( !xWindow->IsDisposed() )
+                ImplCallActivateListeners( (pOldFocusWindow && ! pOldFocusWindow->IsDisposed()) ? pOldFocusWindow : nullptr );
+            if( !xWindow->IsDisposed() )
             {
-                mpWindowImpl->mpFrameData->mpFocusWin = this;
-                if ( !mpWindowImpl->mpFrameData->mbInSysObjFocusHdl )
-                    mpWindowImpl->mpSysObj->GrabFocus();
-            }
-
-            if ( pSVData->maWinData.mpFocusWin.get() == this )
-            {
-                if ( mpWindowImpl->mpCursor )
-                    mpWindowImpl->mpCursor->ImplShow();
-                mpWindowImpl->mbInFocusHdl = true;
-                mpWindowImpl->mnGetFocusFlags = nFlags;
-                // if we're changing focus due to closing a popup floating window
-                // notify the new focus window so it can restore the inner focus
-                // eg, toolboxes can select their recent active item
-                if( pOldFocusWindow &&
-                    ! pOldFocusWindow->IsDisposed() &&
-                    ( pOldFocusWindow->GetDialogControlFlags() & DialogControlFlags::FloatWinPopupModeEndCancel ) )
-                    mpWindowImpl->mnGetFocusFlags |= GetFocusFlags::FloatWinPopupModeEndCancel;
-                NotifyEvent aNEvt( MouseNotifyEvent::GETFOCUS, this );
-                if ( !ImplCallPreNotify( aNEvt ) && !xWindow->IsDisposed() )
-                    CompatGetFocus();
-                if( !xWindow->IsDisposed() )
-                    ImplCallActivateListeners( (pOldFocusWindow && ! pOldFocusWindow->IsDisposed()) ? pOldFocusWindow : nullptr );
-                if( !xWindow->IsDisposed() )
-                {
-                    mpWindowImpl->mnGetFocusFlags = GetFocusFlags::NONE;
-                    mpWindowImpl->mbInFocusHdl = false;
-                }
+                mpWindowImpl->mnGetFocusFlags = GetFocusFlags::NONE;
+                mpWindowImpl->mbInFocusHdl = false;
             }
         }
-
-        ImplNewInputContext();
     }
+
+    ImplNewInputContext();
+
 }
 
 void Window::ImplGrabFocusToDocument( GetFocusFlags nFlags )

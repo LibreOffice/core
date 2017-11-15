@@ -3790,33 +3790,34 @@ void DisclosureButton::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
     if (IsMouseOver() && GetMouseRect().IsInside(GetPointerPosPixel()))
         nState |= ControlState::ROLLOVER;
 
-    if (!rRenderContext.DrawNativeControl(ControlType::ListNode, ControlPart::Entire, aCtrlRegion,
+    if (rRenderContext.DrawNativeControl(ControlType::ListNode, ControlPart::Entire, aCtrlRegion,
                                           nState, aControlValue, OUString()))
-    {
-        ImplSVCtrlData& rCtrlData(ImplGetSVData()->maCtrlData);
-        if (!rCtrlData.mpDisclosurePlus)
-            rCtrlData.mpDisclosurePlus = new Image(BitmapEx(SV_DISCLOSURE_PLUS));
-        if (!rCtrlData.mpDisclosureMinus)
-            rCtrlData.mpDisclosureMinus = new Image(BitmapEx(SV_DISCLOSURE_MINUS));
+        return;
 
-        Image* pImg = nullptr;
-        pImg = IsChecked() ? rCtrlData.mpDisclosureMinus : rCtrlData.mpDisclosurePlus;
+    ImplSVCtrlData& rCtrlData(ImplGetSVData()->maCtrlData);
+    if (!rCtrlData.mpDisclosurePlus)
+        rCtrlData.mpDisclosurePlus = new Image(BitmapEx(SV_DISCLOSURE_PLUS));
+    if (!rCtrlData.mpDisclosureMinus)
+        rCtrlData.mpDisclosureMinus = new Image(BitmapEx(SV_DISCLOSURE_MINUS));
 
-        SAL_WARN_IF(!pImg, "vcl", "no disclosure image");
-        if (!pImg)
-            return;
+    Image* pImg = nullptr;
+    pImg = IsChecked() ? rCtrlData.mpDisclosureMinus : rCtrlData.mpDisclosurePlus;
 
-        DrawImageFlags nStyle = DrawImageFlags::NONE;
-        if (!IsEnabled())
-            nStyle |= DrawImageFlags::Disable;
+    SAL_WARN_IF(!pImg, "vcl", "no disclosure image");
+    if (!pImg)
+        return;
 
-        Size aSize(aStateRect.GetSize());
-        Size aImgSize(pImg->GetSizePixel());
-        Point aOff((aSize.Width() - aImgSize.Width()) / 2,
-                   (aSize.Height() - aImgSize.Height()) / 2);
-        aOff += aStateRect.TopLeft();
-        rRenderContext.DrawImage(aOff, *pImg, nStyle);
-    }
+    DrawImageFlags nStyle = DrawImageFlags::NONE;
+    if (!IsEnabled())
+        nStyle |= DrawImageFlags::Disable;
+
+    Size aSize(aStateRect.GetSize());
+    Size aImgSize(pImg->GetSizePixel());
+    Point aOff((aSize.Width() - aImgSize.Width()) / 2,
+               (aSize.Height() - aImgSize.Height()) / 2);
+    aOff += aStateRect.TopLeft();
+    rRenderContext.DrawImage(aOff, *pImg, nStyle);
+
 }
 
 void DisclosureButton::KeyInput( const KeyEvent& rKEvt )

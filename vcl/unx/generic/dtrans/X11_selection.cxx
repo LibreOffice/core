@@ -3475,33 +3475,34 @@ void SelectionManager::transferablesFlavorsChanged()
         pTypes[i] = *type_it;
     XChangeProperty( m_pDisplay, m_aWindow, m_nXdndTypeList, XA_ATOM, 32, PropModeReplace, reinterpret_cast<unsigned char*>(pTypes), nTypes );
 
-    if( m_aCurrentDropWindow != None && m_nCurrentProtocolVersion >= 0 )
-    {
-        // send synthetic leave and enter events
+    if( m_aCurrentDropWindow == None || m_nCurrentProtocolVersion < 0 )
+        return;
 
-        XEvent aEvent;
+    // send synthetic leave and enter events
 
-        aEvent.type = ClientMessage;
-        aEvent.xclient.display          = m_pDisplay;
-        aEvent.xclient.format           = 32;
-        aEvent.xclient.window           = m_aDropWindow;
-        aEvent.xclient.data.l[0]        = m_aWindow;
+    XEvent aEvent;
 
-        aEvent.xclient.message_type     = m_nXdndLeave;
-        aEvent.xclient.data.l[1]        = 0;
-        XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
+    aEvent.type = ClientMessage;
+    aEvent.xclient.display          = m_pDisplay;
+    aEvent.xclient.format           = 32;
+    aEvent.xclient.window           = m_aDropWindow;
+    aEvent.xclient.data.l[0]        = m_aWindow;
 
-        aEvent.xclient.message_type = m_nXdndEnter;
-        aEvent.xclient.data.l[1]    = m_nCurrentProtocolVersion << 24;
-        memset( aEvent.xclient.data.l + 2, 0, sizeof( long )*3 );
-        // fill in data types
-        if( nTypes > 3 )
-            aEvent.xclient.data.l[1] |= 1;
-        for( int j = 0; j < nTypes && j < 3; j++ )
-            aEvent.xclient.data.l[j+2] = pTypes[j];
+    aEvent.xclient.message_type     = m_nXdndLeave;
+    aEvent.xclient.data.l[1]        = 0;
+    XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
 
-        XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
-    }
+    aEvent.xclient.message_type = m_nXdndEnter;
+    aEvent.xclient.data.l[1]    = m_nCurrentProtocolVersion << 24;
+    memset( aEvent.xclient.data.l + 2, 0, sizeof( long )*3 );
+    // fill in data types
+    if( nTypes > 3 )
+        aEvent.xclient.data.l[1] |= 1;
+    for( int j = 0; j < nTypes && j < 3; j++ )
+        aEvent.xclient.data.l[j+2] = pTypes[j];
+
+    XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
+
 }
 
 /*
@@ -3892,44 +3893,45 @@ void SelectionManager::deregisterDropTarget( ::Window aWindow )
     osl::ClearableMutexGuard aGuard(m_aMutex);
 
     m_aDropTargets.erase( aWindow );
-    if( aWindow == m_aDragSourceWindow && m_aDragRunning.check() )
+    if( aWindow != m_aDragSourceWindow || !m_aDragRunning.check() )
+        return;
+
+    // abort drag
+    std::unordered_map< ::Window, DropTargetEntry >::const_iterator it =
+        m_aDropTargets.find( m_aDropWindow );
+    if( it != m_aDropTargets.end() )
     {
-        // abort drag
-        std::unordered_map< ::Window, DropTargetEntry >::const_iterator it =
-            m_aDropTargets.find( m_aDropWindow );
-        if( it != m_aDropTargets.end() )
-        {
-            DropTargetEvent dte;
-            dte.Source = static_cast< OWeakObject* >( it->second.m_pTarget );
-            aGuard.clear();
-            it->second.m_pTarget->dragExit( dte );
-        }
-        else if( m_aDropProxy != None && m_nCurrentProtocolVersion >= 0 )
-        {
-            // send XdndLeave
-            XEvent aEvent;
-            aEvent.type = ClientMessage;
-            aEvent.xclient.display      = m_pDisplay;
-            aEvent.xclient.format       = 32;
-            aEvent.xclient.message_type = m_nXdndLeave;
-            aEvent.xclient.window       = m_aDropWindow;
-            aEvent.xclient.data.l[0]    = m_aWindow;
-            memset( aEvent.xclient.data.l+1, 0, sizeof(long)*4);
-            m_aDropWindow = m_aDropProxy = None;
-            XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
-        }
-        // notify the listener
-        DragSourceDropEvent dsde;
-        dsde.Source             = static_cast< OWeakObject* >(this);
-        dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, *this );
-        dsde.DragSource         = static_cast< XDragSource* >(this);
-        dsde.DropAction         = DNDConstants::ACTION_NONE;
-        dsde.DropSuccess        = false;
-        css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
-        m_xDragSourceListener.clear();
+        DropTargetEvent dte;
+        dte.Source = static_cast< OWeakObject* >( it->second.m_pTarget );
         aGuard.clear();
-        xListener->dragDropEnd( dsde );
+        it->second.m_pTarget->dragExit( dte );
     }
+    else if( m_aDropProxy != None && m_nCurrentProtocolVersion >= 0 )
+    {
+        // send XdndLeave
+        XEvent aEvent;
+        aEvent.type = ClientMessage;
+        aEvent.xclient.display      = m_pDisplay;
+        aEvent.xclient.format       = 32;
+        aEvent.xclient.message_type = m_nXdndLeave;
+        aEvent.xclient.window       = m_aDropWindow;
+        aEvent.xclient.data.l[0]    = m_aWindow;
+        memset( aEvent.xclient.data.l+1, 0, sizeof(long)*4);
+        m_aDropWindow = m_aDropProxy = None;
+        XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
+    }
+    // notify the listener
+    DragSourceDropEvent dsde;
+    dsde.Source             = static_cast< OWeakObject* >(this);
+    dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, *this );
+    dsde.DragSource         = static_cast< XDragSource* >(this);
+    dsde.DropAction         = DNDConstants::ACTION_NONE;
+    dsde.DropSuccess        = false;
+    css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+    m_xDragSourceListener.clear();
+    aGuard.clear();
+    xListener->dragDropEnd( dsde );
+
 }
 
 /*

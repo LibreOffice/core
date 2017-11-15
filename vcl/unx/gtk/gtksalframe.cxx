@@ -3300,28 +3300,29 @@ GtkSalFrame::IMHandler::~IMHandler()
 
 void GtkSalFrame::IMHandler::createIMContext()
 {
-    if( ! m_pIMContext )
-    {
-        m_pIMContext = gtk_im_multicontext_new ();
-        g_signal_connect( m_pIMContext, "commit",
-                          G_CALLBACK (signalIMCommit), this );
-        g_signal_connect( m_pIMContext, "preedit_changed",
-                          G_CALLBACK (signalIMPreeditChanged), this );
-        g_signal_connect( m_pIMContext, "retrieve_surrounding",
-                          G_CALLBACK (signalIMRetrieveSurrounding), this );
-        g_signal_connect( m_pIMContext, "delete_surrounding",
-                          G_CALLBACK (signalIMDeleteSurrounding), this );
-        g_signal_connect( m_pIMContext, "preedit_start",
-                          G_CALLBACK (signalIMPreeditStart), this );
-        g_signal_connect( m_pIMContext, "preedit_end",
-                          G_CALLBACK (signalIMPreeditEnd), this );
+    if(  m_pIMContext )
+        return;
 
-        GetGenericUnixSalData()->ErrorTrapPush();
-        gtk_im_context_set_client_window( m_pIMContext, widget_get_window(GTK_WIDGET(m_pFrame->m_pWindow)) );
-        gtk_im_context_focus_in( m_pIMContext );
-        GetGenericUnixSalData()->ErrorTrapPop();
-        m_bFocused = true;
-   }
+    m_pIMContext = gtk_im_multicontext_new ();
+    g_signal_connect( m_pIMContext, "commit",
+                      G_CALLBACK (signalIMCommit), this );
+    g_signal_connect( m_pIMContext, "preedit_changed",
+                      G_CALLBACK (signalIMPreeditChanged), this );
+    g_signal_connect( m_pIMContext, "retrieve_surrounding",
+                      G_CALLBACK (signalIMRetrieveSurrounding), this );
+    g_signal_connect( m_pIMContext, "delete_surrounding",
+                      G_CALLBACK (signalIMDeleteSurrounding), this );
+    g_signal_connect( m_pIMContext, "preedit_start",
+                      G_CALLBACK (signalIMPreeditStart), this );
+    g_signal_connect( m_pIMContext, "preedit_end",
+                      G_CALLBACK (signalIMPreeditEnd), this );
+
+    GetGenericUnixSalData()->ErrorTrapPush();
+    gtk_im_context_set_client_window( m_pIMContext, widget_get_window(GTK_WIDGET(m_pFrame->m_pWindow)) );
+    gtk_im_context_focus_in( m_pIMContext );
+    GetGenericUnixSalData()->ErrorTrapPop();
+    m_bFocused = true;
+
 }
 
 void GtkSalFrame::IMHandler::deleteIMContext()

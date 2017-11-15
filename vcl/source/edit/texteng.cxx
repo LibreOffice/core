@@ -171,44 +171,45 @@ void TextEngine::SetActiveView( TextView* pTextView )
 
 void TextEngine::SetFont( const vcl::Font& rFont )
 {
-    if ( rFont != maFont )
+    if ( rFont == maFont )
+        return;
+
+    maFont = rFont;
+    // #i40221# As the font's color now defaults to transparent (since i35764)
+    //  we have to choose a useful textcolor in this case.
+    // Otherwise maTextColor and maFont.GetColor() are both transparent....
+    if( rFont.GetColor() == COL_TRANSPARENT )
+        maTextColor = COL_BLACK;
+    else
+        maTextColor = rFont.GetColor();
+
+    // Do not allow transparent fonts because of selection
+    // (otherwise delete the background in ImplPaint later differently)
+    maFont.SetTransparent( false );
+    // Tell VCL not to use the font color, use text color from OutputDevice
+    maFont.SetColor( COL_TRANSPARENT );
+    Color aFillColor( maFont.GetFillColor() );
+    aFillColor.SetTransparency( 0 );
+    maFont.SetFillColor( aFillColor );
+
+    maFont.SetAlignment( ALIGN_TOP );
+    mpRefDev->SetFont( maFont );
+    mnDefTab = mpRefDev->GetTextWidth("    ");
+    if ( !mnDefTab )
+        mnDefTab = mpRefDev->GetTextWidth("XXXX");
+    if ( !mnDefTab )
+        mnDefTab = 1;
+    mnCharHeight = mpRefDev->GetTextHeight();
+
+    FormatFullDoc();
+    UpdateViews();
+
+    for ( auto nView = mpViews->size(); nView; )
     {
-        maFont = rFont;
-        // #i40221# As the font's color now defaults to transparent (since i35764)
-        //  we have to choose a useful textcolor in this case.
-        // Otherwise maTextColor and maFont.GetColor() are both transparent....
-        if( rFont.GetColor() == COL_TRANSPARENT )
-            maTextColor = COL_BLACK;
-        else
-            maTextColor = rFont.GetColor();
-
-        // Do not allow transparent fonts because of selection
-        // (otherwise delete the background in ImplPaint later differently)
-        maFont.SetTransparent( false );
-        // Tell VCL not to use the font color, use text color from OutputDevice
-        maFont.SetColor( COL_TRANSPARENT );
-        Color aFillColor( maFont.GetFillColor() );
-        aFillColor.SetTransparency( 0 );
-        maFont.SetFillColor( aFillColor );
-
-        maFont.SetAlignment( ALIGN_TOP );
-        mpRefDev->SetFont( maFont );
-        mnDefTab = mpRefDev->GetTextWidth("    ");
-        if ( !mnDefTab )
-            mnDefTab = mpRefDev->GetTextWidth("XXXX");
-        if ( !mnDefTab )
-            mnDefTab = 1;
-        mnCharHeight = mpRefDev->GetTextHeight();
-
-        FormatFullDoc();
-        UpdateViews();
-
-        for ( auto nView = mpViews->size(); nView; )
-        {
-            TextView* pView = (*mpViews)[ --nView ];
-            pView->GetWindow()->SetInputContext( InputContext( GetFont(), !pView->IsReadOnly() ? InputContextFlags::Text|InputContextFlags::ExtText : InputContextFlags::NONE ) );
-        }
+        TextView* pView = (*mpViews)[ --nView ];
+        pView->GetWindow()->SetInputContext( InputContext( GetFont(), !pView->IsReadOnly() ? InputContextFlags::Text|InputContextFlags::ExtText : InputContextFlags::NONE ) );
     }
+
 }
 
 void TextEngine::SetMaxTextLen( sal_Int32 nLen )

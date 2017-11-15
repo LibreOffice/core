@@ -1102,59 +1102,60 @@ void Dialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
 
 void Dialog::EndDialog( long nResult )
 {
-    if ( mbInExecute )
+    if ( !mbInExecute )
+        return;
+
+    SetModalInputMode(false);
+
+    // remove dialog from the list of dialogs which are being executed
+    ImplSVData* pSVData = ImplGetSVData();
+    Dialog* pExeDlg = pSVData->maWinData.mpLastExecuteDlg;
+    while ( pExeDlg )
     {
-        SetModalInputMode(false);
-
-        // remove dialog from the list of dialogs which are being executed
-        ImplSVData* pSVData = ImplGetSVData();
-        Dialog* pExeDlg = pSVData->maWinData.mpLastExecuteDlg;
-        while ( pExeDlg )
+        if ( pExeDlg == this )
         {
-            if ( pExeDlg == this )
-            {
-                pSVData->maWinData.mpLastExecuteDlg = mpPrevExecuteDlg;
-                break;
-            }
-            pExeDlg = pExeDlg->mpPrevExecuteDlg;
+            pSVData->maWinData.mpLastExecuteDlg = mpPrevExecuteDlg;
+            break;
         }
-        // set focus to previous modal dialogue if it is modal for
-        // the same frame parent (or NULL)
-        if( mpPrevExecuteDlg )
-        {
-            vcl::Window* pFrameParent = ImplGetFrameWindow()->ImplGetParent();
-            vcl::Window* pPrevFrameParent = mpPrevExecuteDlg->ImplGetFrameWindow()->ImplGetParent();
-            if( ( !pFrameParent && !pPrevFrameParent ) ||
-                ( pFrameParent && pPrevFrameParent && pFrameParent->ImplGetFrame() == pPrevFrameParent->ImplGetFrame() )
-                )
-            {
-                mpPrevExecuteDlg->GrabFocus();
-            }
-        }
-        mpPrevExecuteDlg = nullptr;
-
-        Hide();
-        if ( GetParent() )
-        {
-            NotifyEvent aNEvt( MouseNotifyEvent::ENDEXECUTEDIALOG, this );
-            GetParent()->CompatNotify( aNEvt );
-        }
-
-        mpDialogImpl->mnResult = nResult;
-
-        if ( mpDialogImpl->mbStartedModal )
-        {
-            ImplEndExecuteModal();
-            if (mpDialogImpl->maEndDialogHdl.IsSet())
-            {
-                mpDialogImpl->maEndDialogHdl.Call( *this );
-                mpDialogImpl->maEndDialogHdl = Link<Dialog&,void>();
-            }
-            mpDialogImpl->mbStartedModal = false;
-            mpDialogImpl->mnResult = -1;
-        }
-        mbInExecute = false;
+        pExeDlg = pExeDlg->mpPrevExecuteDlg;
     }
+    // set focus to previous modal dialogue if it is modal for
+    // the same frame parent (or NULL)
+    if( mpPrevExecuteDlg )
+    {
+        vcl::Window* pFrameParent = ImplGetFrameWindow()->ImplGetParent();
+        vcl::Window* pPrevFrameParent = mpPrevExecuteDlg->ImplGetFrameWindow()->ImplGetParent();
+        if( ( !pFrameParent && !pPrevFrameParent ) ||
+            ( pFrameParent && pPrevFrameParent && pFrameParent->ImplGetFrame() == pPrevFrameParent->ImplGetFrame() )
+            )
+        {
+            mpPrevExecuteDlg->GrabFocus();
+        }
+    }
+    mpPrevExecuteDlg = nullptr;
+
+    Hide();
+    if ( GetParent() )
+    {
+        NotifyEvent aNEvt( MouseNotifyEvent::ENDEXECUTEDIALOG, this );
+        GetParent()->CompatNotify( aNEvt );
+    }
+
+    mpDialogImpl->mnResult = nResult;
+
+    if ( mpDialogImpl->mbStartedModal )
+    {
+        ImplEndExecuteModal();
+        if (mpDialogImpl->maEndDialogHdl.IsSet())
+        {
+            mpDialogImpl->maEndDialogHdl.Call( *this );
+            mpDialogImpl->maEndDialogHdl = Link<Dialog&,void>();
+        }
+        mpDialogImpl->mbStartedModal = false;
+        mpDialogImpl->mnResult = -1;
+    }
+    mbInExecute = false;
+
 }
 
 long Dialog::GetResult() const

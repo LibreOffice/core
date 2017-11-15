@@ -207,34 +207,35 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
         "150th pixel is not white", 1.0, pRGBStart[150].Blue, 1E-12);
 
-    if( nOriginalDepth > 8 )
+    if( nOriginalDepth <= 8 )
+        return;
+
+    uno::Sequence<rendering::ARGBColor> aARGBColor(1);
+    uno::Sequence<rendering::RGBColor>  aRGBColor(1);
+    uno::Sequence<sal_Int8> aPixel3, aPixel4;
+
+    const Color aCol(COL_GREEN);
+    aARGBColor[0].Red   = vcl::unotools::toDoubleColor(aCol.GetRed());
+    aARGBColor[0].Green = vcl::unotools::toDoubleColor(aCol.GetGreen());
+    aARGBColor[0].Blue  = vcl::unotools::toDoubleColor(aCol.GetBlue());
+    aARGBColor[0].Alpha = 1.0;
+
+    aRGBColor[0].Red   = vcl::unotools::toDoubleColor(aCol.GetRed());
+    aRGBColor[0].Green = vcl::unotools::toDoubleColor(aCol.GetGreen());
+    aRGBColor[0].Blue  = vcl::unotools::toDoubleColor(aCol.GetBlue());
+
+    aPixel3 = xBmp->convertIntegerFromARGB( aARGBColor );
+    aPixel4 = xBmp->getPixel( aLayout, geometry::IntegerPoint2D(5,0) );
+    CPPUNIT_ASSERT_MESSAGE( "Green pixel from bitmap mismatch with manually converted green pixel",
+                            bool(aPixel3 == aPixel4));
+
+    if( !aContainedBmpEx.IsTransparent() )
     {
-        uno::Sequence<rendering::ARGBColor> aARGBColor(1);
-        uno::Sequence<rendering::RGBColor>  aRGBColor(1);
-        uno::Sequence<sal_Int8> aPixel3, aPixel4;
-
-        const Color aCol(COL_GREEN);
-        aARGBColor[0].Red   = vcl::unotools::toDoubleColor(aCol.GetRed());
-        aARGBColor[0].Green = vcl::unotools::toDoubleColor(aCol.GetGreen());
-        aARGBColor[0].Blue  = vcl::unotools::toDoubleColor(aCol.GetBlue());
-        aARGBColor[0].Alpha = 1.0;
-
-        aRGBColor[0].Red   = vcl::unotools::toDoubleColor(aCol.GetRed());
-        aRGBColor[0].Green = vcl::unotools::toDoubleColor(aCol.GetGreen());
-        aRGBColor[0].Blue  = vcl::unotools::toDoubleColor(aCol.GetBlue());
-
-        aPixel3 = xBmp->convertIntegerFromARGB( aARGBColor );
-        aPixel4 = xBmp->getPixel( aLayout, geometry::IntegerPoint2D(5,0) );
-        CPPUNIT_ASSERT_MESSAGE( "Green pixel from bitmap mismatch with manually converted green pixel",
+        aPixel3 = xBmp->convertIntegerFromRGB( aRGBColor );
+        CPPUNIT_ASSERT_MESSAGE( "Green pixel from bitmap mismatch with manually RGB-converted green pixel",
                                 bool(aPixel3 == aPixel4));
-
-        if( !aContainedBmpEx.IsTransparent() )
-        {
-            aPixel3 = xBmp->convertIntegerFromRGB( aRGBColor );
-            CPPUNIT_ASSERT_MESSAGE( "Green pixel from bitmap mismatch with manually RGB-converted green pixel",
-                                    bool(aPixel3 == aPixel4));
-        }
     }
+
 }
 
 class TestBitmap : public cppu::WeakImplHelper< rendering::XIntegerReadOnlyBitmap,

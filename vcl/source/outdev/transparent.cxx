@@ -123,85 +123,86 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
 
     aSrcRect.Justify();
 
-    if( !rBmp.IsEmpty() && aSrcRect.GetWidth() && aSrcRect.GetHeight() && aDestSz.Width() && aDestSz.Height() )
+    if( rBmp.IsEmpty() || !aSrcRect.GetWidth() || !aSrcRect.GetHeight() || !aDestSz.Width() || !aDestSz.Height() )
+        return;
+
+    Bitmap  aPaint( rBmp ), aMask( rMask );
+    BmpMirrorFlags nMirrFlags = BmpMirrorFlags::NONE;
+
+    if( aMask.GetBitCount() > 1 )
+        aMask.Convert( BmpConversion::N1BitThreshold );
+
+    // mirrored horizontically
+    if( aDestSz.Width() < 0 )
     {
-        Bitmap  aPaint( rBmp ), aMask( rMask );
-        BmpMirrorFlags nMirrFlags = BmpMirrorFlags::NONE;
-
-        if( aMask.GetBitCount() > 1 )
-            aMask.Convert( BmpConversion::N1BitThreshold );
-
-        // mirrored horizontically
-        if( aDestSz.Width() < 0 )
-        {
-            aDestSz.Width() = -aDestSz.Width();
-            aDestPt.X() -= ( aDestSz.Width() - 1 );
-            nMirrFlags |= BmpMirrorFlags::Horizontal;
-        }
-
-        // mirrored vertically
-        if( aDestSz.Height() < 0 )
-        {
-            aDestSz.Height() = -aDestSz.Height();
-            aDestPt.Y() -= ( aDestSz.Height() - 1 );
-            nMirrFlags |= BmpMirrorFlags::Vertical;
-        }
-
-        // source cropped?
-        if( aSrcRect != tools::Rectangle( Point(), aPaint.GetSizePixel() ) )
-        {
-            aPaint.Crop( aSrcRect );
-            aMask.Crop( aSrcRect );
-        }
-
-        // destination mirrored
-        if( nMirrFlags != BmpMirrorFlags::NONE )
-        {
-            aPaint.Mirror( nMirrFlags );
-            aMask.Mirror( nMirrFlags );
-        }
-
-        // we always want to have a mask
-        if( aMask.IsEmpty() )
-        {
-            aMask = Bitmap( aSrcRect.GetSize(), 1 );
-            aMask.Erase( Color( COL_BLACK ) );
-        }
-
-        // do painting
-        const long nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
-        long nX, nY; // , nWorkX, nWorkY, nWorkWidth, nWorkHeight;
-        std::unique_ptr<long[]> pMapX(new long[ nSrcWidth + 1 ]);
-        std::unique_ptr<long[]> pMapY(new long[ nSrcHeight + 1 ]);
-        const bool bOldMap = mbMap;
-
-        mbMap = false;
-
-        // create forward mapping tables
-        for( nX = 0; nX <= nSrcWidth; nX++ )
-            pMapX[ nX ] = aDestPt.X() + FRound( (double) aDestSz.Width() * nX / nSrcWidth );
-
-        for( nY = 0; nY <= nSrcHeight; nY++ )
-            pMapY[ nY ] = aDestPt.Y() + FRound( (double) aDestSz.Height() * nY / nSrcHeight );
-
-        // walk through all rectangles of mask
-        const vcl::Region aWorkRgn(aMask.CreateRegion(COL_BLACK, tools::Rectangle(Point(), aMask.GetSizePixel())));
-        RectangleVector aRectangles;
-        aWorkRgn.GetRegionRectangles(aRectangles);
-
-        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
-        {
-            const Point aMapPt(pMapX[aRectIter->Left()], pMapY[aRectIter->Top()]);
-            const Size aMapSz( pMapX[aRectIter->Right() + 1] - aMapPt.X(),      // pMapX[L + W] -> L + ((R - L) + 1) -> R + 1
-                               pMapY[aRectIter->Bottom() + 1] - aMapPt.Y());    // same for Y
-            Bitmap aBandBmp(aPaint);
-
-            aBandBmp.Crop(*aRectIter);
-            DrawBitmap(aMapPt, aMapSz, Point(), aBandBmp.GetSizePixel(), aBandBmp);
-        }
-
-        mbMap = bOldMap;
+        aDestSz.Width() = -aDestSz.Width();
+        aDestPt.X() -= ( aDestSz.Width() - 1 );
+        nMirrFlags |= BmpMirrorFlags::Horizontal;
     }
+
+    // mirrored vertically
+    if( aDestSz.Height() < 0 )
+    {
+        aDestSz.Height() = -aDestSz.Height();
+        aDestPt.Y() -= ( aDestSz.Height() - 1 );
+        nMirrFlags |= BmpMirrorFlags::Vertical;
+    }
+
+    // source cropped?
+    if( aSrcRect != tools::Rectangle( Point(), aPaint.GetSizePixel() ) )
+    {
+        aPaint.Crop( aSrcRect );
+        aMask.Crop( aSrcRect );
+    }
+
+    // destination mirrored
+    if( nMirrFlags != BmpMirrorFlags::NONE )
+    {
+        aPaint.Mirror( nMirrFlags );
+        aMask.Mirror( nMirrFlags );
+    }
+
+    // we always want to have a mask
+    if( aMask.IsEmpty() )
+    {
+        aMask = Bitmap( aSrcRect.GetSize(), 1 );
+        aMask.Erase( Color( COL_BLACK ) );
+    }
+
+    // do painting
+    const long nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
+    long nX, nY; // , nWorkX, nWorkY, nWorkWidth, nWorkHeight;
+    std::unique_ptr<long[]> pMapX(new long[ nSrcWidth + 1 ]);
+    std::unique_ptr<long[]> pMapY(new long[ nSrcHeight + 1 ]);
+    const bool bOldMap = mbMap;
+
+    mbMap = false;
+
+    // create forward mapping tables
+    for( nX = 0; nX <= nSrcWidth; nX++ )
+        pMapX[ nX ] = aDestPt.X() + FRound( (double) aDestSz.Width() * nX / nSrcWidth );
+
+    for( nY = 0; nY <= nSrcHeight; nY++ )
+        pMapY[ nY ] = aDestPt.Y() + FRound( (double) aDestSz.Height() * nY / nSrcHeight );
+
+    // walk through all rectangles of mask
+    const vcl::Region aWorkRgn(aMask.CreateRegion(COL_BLACK, tools::Rectangle(Point(), aMask.GetSizePixel())));
+    RectangleVector aRectangles;
+    aWorkRgn.GetRegionRectangles(aRectangles);
+
+    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+    {
+        const Point aMapPt(pMapX[aRectIter->Left()], pMapY[aRectIter->Top()]);
+        const Size aMapSz( pMapX[aRectIter->Right() + 1] - aMapPt.X(),      // pMapX[L + W] -> L + ((R - L) + 1) -> R + 1
+                           pMapY[aRectIter->Bottom() + 1] - aMapPt.Y());    // same for Y
+        Bitmap aBandBmp(aPaint);
+
+        aBandBmp.Crop(*aRectIter);
+        DrawBitmap(aMapPt, aMapSz, Point(), aBandBmp.GetSizePixel(), aBandBmp);
+    }
+
+    mbMap = bOldMap;
+
 }
 
 // Caution: This method is nearly the same as

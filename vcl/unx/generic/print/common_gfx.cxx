@@ -721,77 +721,78 @@ void
 PrinterGfx::PSSetFont ()
 {
     GraphicsStatus& rCurrent( currentState() );
-    if( maVirtualStatus.maFont          != rCurrent.maFont          ||
-        maVirtualStatus.mnTextHeight    != rCurrent.mnTextHeight    ||
-        maVirtualStatus.maEncoding      != rCurrent.maEncoding      ||
-        maVirtualStatus.mnTextWidth     != rCurrent.mnTextWidth     ||
-        maVirtualStatus.mbArtBold       != rCurrent.mbArtBold       ||
-        maVirtualStatus.mbArtItalic     != rCurrent.mbArtItalic
+    if( !(maVirtualStatus.maFont          != rCurrent.maFont          ||
+          maVirtualStatus.mnTextHeight    != rCurrent.mnTextHeight    ||
+          maVirtualStatus.maEncoding      != rCurrent.maEncoding      ||
+          maVirtualStatus.mnTextWidth     != rCurrent.mnTextWidth     ||
+          maVirtualStatus.mbArtBold       != rCurrent.mbArtBold       ||
+          maVirtualStatus.mbArtItalic     != rCurrent.mbArtItalic)
         )
+        return;
+
+    rCurrent.maFont              = maVirtualStatus.maFont;
+    rCurrent.maEncoding          = maVirtualStatus.maEncoding;
+    rCurrent.mnTextWidth         = maVirtualStatus.mnTextWidth;
+    rCurrent.mnTextHeight        = maVirtualStatus.mnTextHeight;
+    rCurrent.mbArtItalic         = maVirtualStatus.mbArtItalic;
+    rCurrent.mbArtBold           = maVirtualStatus.mbArtBold;
+
+    sal_Int32 nTextHeight = rCurrent.mnTextHeight;
+    sal_Int32 nTextWidth  = rCurrent.mnTextWidth ? rCurrent.mnTextWidth
+                                                 : rCurrent.mnTextHeight;
+
+    sal_Char  pSetFont [256];
+    sal_Int32 nChar = 0;
+
+    // postscript based fonts need reencoding
+    if (   (   rCurrent.maEncoding == RTL_TEXTENCODING_MS_1252)
+        || (   rCurrent.maEncoding == RTL_TEXTENCODING_ISO_8859_1)
+        || (   rCurrent.maEncoding >= RTL_TEXTENCODING_USER_START
+            && rCurrent.maEncoding <= RTL_TEXTENCODING_USER_END)
+       )
     {
-        rCurrent.maFont              = maVirtualStatus.maFont;
-        rCurrent.maEncoding          = maVirtualStatus.maEncoding;
-        rCurrent.mnTextWidth         = maVirtualStatus.mnTextWidth;
-        rCurrent.mnTextHeight        = maVirtualStatus.mnTextHeight;
-        rCurrent.mbArtItalic         = maVirtualStatus.mbArtItalic;
-        rCurrent.mbArtBold           = maVirtualStatus.mbArtBold;
+        OString aReencodedFont =
+                    psp::GlyphSet::GetReencodedFontName (rCurrent.maEncoding,
+                                                            rCurrent.maFont);
 
-        sal_Int32 nTextHeight = rCurrent.mnTextHeight;
-        sal_Int32 nTextWidth  = rCurrent.mnTextWidth ? rCurrent.mnTextWidth
-                                                     : rCurrent.mnTextHeight;
-
-        sal_Char  pSetFont [256];
-        sal_Int32 nChar = 0;
-
-        // postscript based fonts need reencoding
-        if (   (   rCurrent.maEncoding == RTL_TEXTENCODING_MS_1252)
-            || (   rCurrent.maEncoding == RTL_TEXTENCODING_ISO_8859_1)
-            || (   rCurrent.maEncoding >= RTL_TEXTENCODING_USER_START
-                && rCurrent.maEncoding <= RTL_TEXTENCODING_USER_END)
-           )
-        {
-            OString aReencodedFont =
-                        psp::GlyphSet::GetReencodedFontName (rCurrent.maEncoding,
-                                                                rCurrent.maFont);
-
-            nChar += psp::appendStr  ("(",          pSetFont + nChar);
-            nChar += psp::appendStr  (aReencodedFont.getStr(),
-                                                    pSetFont + nChar);
-            nChar += psp::appendStr  (") cvn findfont ",
-                                                    pSetFont + nChar);
-        }
-        else
-        // tt based fonts mustn't reencode, the encoding is implied by the fontname
-        // same for symbol type1 fonts, don't try to touch them
-        {
-            nChar += psp::appendStr  ("(",          pSetFont + nChar);
-            nChar += psp::appendStr  (rCurrent.maFont.getStr(),
-                                                    pSetFont + nChar);
-            nChar += psp::appendStr  (") cvn findfont ",
-                                                    pSetFont + nChar);
-        }
-
-        if( ! rCurrent.mbArtItalic )
-        {
-            nChar += psp::getValueOf (nTextWidth,   pSetFont + nChar);
-            nChar += psp::appendStr  (" ",          pSetFont + nChar);
-            nChar += psp::getValueOf (-nTextHeight, pSetFont + nChar);
-            nChar += psp::appendStr  (" matrix scale makefont setfont\n", pSetFont + nChar);
-        }
-        else // skew 15 degrees to right
-        {
-            nChar += psp::appendStr  ( " [",        pSetFont + nChar);
-            nChar += psp::getValueOf (nTextWidth,   pSetFont + nChar);
-            nChar += psp::appendStr  (" 0 ",        pSetFont + nChar);
-            nChar += psp::getValueOfDouble (pSetFont + nChar, 0.27*(double)nTextWidth, 3 );
-            nChar += psp::appendStr  ( " ",         pSetFont + nChar);
-            nChar += psp::getValueOf (-nTextHeight, pSetFont + nChar);
-
-            nChar += psp::appendStr  (" 0 0] makefont setfont\n", pSetFont + nChar);
-        }
-
-        WritePS (mpPageBody, pSetFont, nChar);
+        nChar += psp::appendStr  ("(",          pSetFont + nChar);
+        nChar += psp::appendStr  (aReencodedFont.getStr(),
+                                                pSetFont + nChar);
+        nChar += psp::appendStr  (") cvn findfont ",
+                                                pSetFont + nChar);
     }
+    else
+    // tt based fonts mustn't reencode, the encoding is implied by the fontname
+    // same for symbol type1 fonts, don't try to touch them
+    {
+        nChar += psp::appendStr  ("(",          pSetFont + nChar);
+        nChar += psp::appendStr  (rCurrent.maFont.getStr(),
+                                                pSetFont + nChar);
+        nChar += psp::appendStr  (") cvn findfont ",
+                                                pSetFont + nChar);
+    }
+
+    if( ! rCurrent.mbArtItalic )
+    {
+        nChar += psp::getValueOf (nTextWidth,   pSetFont + nChar);
+        nChar += psp::appendStr  (" ",          pSetFont + nChar);
+        nChar += psp::getValueOf (-nTextHeight, pSetFont + nChar);
+        nChar += psp::appendStr  (" matrix scale makefont setfont\n", pSetFont + nChar);
+    }
+    else // skew 15 degrees to right
+    {
+        nChar += psp::appendStr  ( " [",        pSetFont + nChar);
+        nChar += psp::getValueOf (nTextWidth,   pSetFont + nChar);
+        nChar += psp::appendStr  (" 0 ",        pSetFont + nChar);
+        nChar += psp::getValueOfDouble (pSetFont + nChar, 0.27*(double)nTextWidth, 3 );
+        nChar += psp::appendStr  ( " ",         pSetFont + nChar);
+        nChar += psp::getValueOf (-nTextHeight, pSetFont + nChar);
+
+        nChar += psp::appendStr  (" 0 0] makefont setfont\n", pSetFont + nChar);
+    }
+
+    WritePS (mpPageBody, pSetFont, nChar);
+
 }
 
 void

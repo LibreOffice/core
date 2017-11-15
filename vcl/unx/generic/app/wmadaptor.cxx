@@ -2163,26 +2163,27 @@ void WMAdaptor::switchToWorkArea( int nWorkArea ) const
     if( ! getWMshouldSwitchWorkspace() )
         return;
 
-    if( m_aWMAtoms[ NET_CURRENT_DESKTOP ] )
-    {
-        XEvent aEvent;
-        aEvent.type                 = ClientMessage;
-        aEvent.xclient.display      = m_pDisplay;
-        aEvent.xclient.window       = m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() );
-        aEvent.xclient.message_type = m_aWMAtoms[ NET_CURRENT_DESKTOP ];
-        aEvent.xclient.format       = 32;
-        aEvent.xclient.data.l[0]    = nWorkArea;
-        aEvent.xclient.data.l[1]    = 0;
-        aEvent.xclient.data.l[2]    = 0;
-        aEvent.xclient.data.l[3]    = 0;
-        aEvent.xclient.data.l[4]    = 0;
-        XSendEvent( m_pDisplay,
-                    m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
-                    False,
-                    SubstructureNotifyMask | SubstructureRedirectMask,
-                    &aEvent
-                    );
-    }
+    if( !m_aWMAtoms[ NET_CURRENT_DESKTOP ] )
+        return;
+
+    XEvent aEvent;
+    aEvent.type                 = ClientMessage;
+    aEvent.xclient.display      = m_pDisplay;
+    aEvent.xclient.window       = m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() );
+    aEvent.xclient.message_type = m_aWMAtoms[ NET_CURRENT_DESKTOP ];
+    aEvent.xclient.format       = 32;
+    aEvent.xclient.data.l[0]    = nWorkArea;
+    aEvent.xclient.data.l[1]    = 0;
+    aEvent.xclient.data.l[2]    = 0;
+    aEvent.xclient.data.l[3]    = 0;
+    aEvent.xclient.data.l[4]    = 0;
+    XSendEvent( m_pDisplay,
+                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
+                False,
+                SubstructureNotifyMask | SubstructureRedirectMask,
+                &aEvent
+                );
+
 }
 
 /*
@@ -2277,26 +2278,27 @@ void WMAdaptor::answerPing( X11SalFrame const * i_pFrame, XClientMessageEvent co
 
 void WMAdaptor::activateWindow( X11SalFrame *pFrame, Time nTimestamp )
 {
-    if (pFrame->bMapped_)
-    {
-        XEvent aEvent;
+    if (!pFrame->bMapped_)
+        return;
 
-        aEvent.xclient.type = ClientMessage;
-        aEvent.xclient.window = pFrame->GetShellWindow();
-        aEvent.xclient.message_type = m_aWMAtoms[ NET_ACTIVE_WINDOW ];
-        aEvent.xclient.format = 32;
-        aEvent.xclient.data.l[0] = 1;
-        aEvent.xclient.data.l[1] = nTimestamp;
-        aEvent.xclient.data.l[2] = None;
-        aEvent.xclient.data.l[3] = 0;
-        aEvent.xclient.data.l[4] = 0;
+    XEvent aEvent;
 
-        XSendEvent( m_pDisplay,
-                    m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
-                    False,
-                    SubstructureNotifyMask | SubstructureRedirectMask,
-                    &aEvent );
-    }
+    aEvent.xclient.type = ClientMessage;
+    aEvent.xclient.window = pFrame->GetShellWindow();
+    aEvent.xclient.message_type = m_aWMAtoms[ NET_ACTIVE_WINDOW ];
+    aEvent.xclient.format = 32;
+    aEvent.xclient.data.l[0] = 1;
+    aEvent.xclient.data.l[1] = nTimestamp;
+    aEvent.xclient.data.l[2] = None;
+    aEvent.xclient.data.l[3] = 0;
+    aEvent.xclient.data.l[4] = 0;
+
+    XSendEvent( m_pDisplay,
+                m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
+                False,
+                SubstructureNotifyMask | SubstructureRedirectMask,
+                &aEvent );
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

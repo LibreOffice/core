@@ -1834,50 +1834,51 @@ void WMFWriter::WriteEmbeddedEMF( const GDIMetaFile& rMTF )
     SvMemoryStream aStream;
     EMFWriter aEMFWriter(aStream);
 
-    if( aEMFWriter.WriteEMF( rMTF ) )
+    if( !aEMFWriter.WriteEMF( rMTF ) )
+        return;
+
+    sal_uInt64 const nTotalSize = aStream.Tell();
+    if( nTotalSize > SAL_MAX_UINT32 )
+        return;
+    aStream.Seek( 0 );
+    sal_uInt32 nRemainingSize = static_cast< sal_uInt32 >( nTotalSize );
+    sal_uInt32 nRecCounts = ( (nTotalSize - 1) / 0x2000 ) + 1;
+    sal_uInt16 nCheckSum = 0, nWord;
+
+    sal_uInt32 nPos = 0;
+
+    while( nPos + 1 < nTotalSize )
     {
-        sal_uInt64 const nTotalSize = aStream.Tell();
-        if( nTotalSize > SAL_MAX_UINT32 )
-            return;
-        aStream.Seek( 0 );
-        sal_uInt32 nRemainingSize = static_cast< sal_uInt32 >( nTotalSize );
-        sal_uInt32 nRecCounts = ( (nTotalSize - 1) / 0x2000 ) + 1;
-        sal_uInt16 nCheckSum = 0, nWord;
-
-        sal_uInt32 nPos = 0;
-
-        while( nPos + 1 < nTotalSize )
-        {
-            aStream.ReadUInt16( nWord );
-            nCheckSum ^= nWord;
-            nPos += 2;
-        }
-
-        nCheckSum = static_cast< sal_uInt16 >( nCheckSum * -1 );
-
-        aStream.Seek( 0 );
-        while( nRemainingSize > 0 )
-        {
-            sal_uInt32 nCurSize;
-            if( nRemainingSize > 0x2000 )
-            {
-                nCurSize = 0x2000;
-                nRemainingSize -= 0x2000;
-            }
-            else
-            {
-                nCurSize = nRemainingSize;
-                nRemainingSize = 0;
-            }
-            WriteEMFRecord( aStream,
-                            nCurSize,
-                            nRemainingSize,
-                            nTotalSize,
-                            nRecCounts,
-                            nCheckSum );
-            nCheckSum = 0;
-        }
+        aStream.ReadUInt16( nWord );
+        nCheckSum ^= nWord;
+        nPos += 2;
     }
+
+    nCheckSum = static_cast< sal_uInt16 >( nCheckSum * -1 );
+
+    aStream.Seek( 0 );
+    while( nRemainingSize > 0 )
+    {
+        sal_uInt32 nCurSize;
+        if( nRemainingSize > 0x2000 )
+        {
+            nCurSize = 0x2000;
+            nRemainingSize -= 0x2000;
+        }
+        else
+        {
+            nCurSize = nRemainingSize;
+            nRemainingSize = 0;
+        }
+        WriteEMFRecord( aStream,
+                        nCurSize,
+                        nRemainingSize,
+                        nTotalSize,
+                        nRecCounts,
+                        nCheckSum );
+        nCheckSum = 0;
+    }
+
 }
 
 void WMFWriter::WriteEMFRecord( SvMemoryStream& rStream, sal_uInt32 nCurSize, sal_uInt32 nRemainingSize,

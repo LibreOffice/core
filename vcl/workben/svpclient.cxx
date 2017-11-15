@@ -251,29 +251,30 @@ IMPL_LINK_NOARG( MyWin, SelectHdl, ListBox&, void)
 {
     OUString aEntry = m_aSvpBitmaps->GetSelectedEntry();
     sal_Int32 nPos = aEntry.indexOf( ": " );
-    if( nPos != -1 )
-    {
-        OStringBuffer aCommand( 64 );
-        aCommand.append( "get " );
-        aCommand.append( OUStringToOString( aEntry.copy( nPos+2 ), RTL_TEXTENCODING_ASCII_US ) );
-        OString aAnswer( processCommand( aCommand.makeStringAndClear() ) );
-        SvMemoryStream aStream( aAnswer.getLength() );
-        aStream.WriteBytes( aAnswer.getStr(), aAnswer.getLength() );
-        aStream.Seek( STREAM_SEEK_TO_BEGIN );
+    if( nPos == -1 )
+        return;
 
-        Graphic aGraphicResult;
-        GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
-        rFilter.ImportGraphic( aGraphicResult, OUString("import"), aStream );
+    OStringBuffer aCommand( 64 );
+    aCommand.append( "get " );
+    aCommand.append( OUStringToOString( aEntry.copy( nPos+2 ), RTL_TEXTENCODING_ASCII_US ) );
+    OString aAnswer( processCommand( aCommand.makeStringAndClear() ) );
+    SvMemoryStream aStream( aAnswer.getLength() );
+    aStream.WriteBytes( aAnswer.getStr(), aAnswer.getLength() );
+    aStream.Seek( STREAM_SEEK_TO_BEGIN );
 
-        Bitmap aBitmap = aGraphicResult.GetBitmap();
+    Graphic aGraphicResult;
+    GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
+    rFilter.ImportGraphic( aGraphicResult, OUString("import"), aStream );
 
-        SAL_INFO("vcl", "got bitmap of size " << aBitmap.GetSizePixel().Width() << "x" << aBitmap.GetSizePixel().Height());
-        Size aFixedSize( aBitmap.GetSizePixel() );
-        aFixedSize.Width() += 10;
-        aFixedSize.Height() += 10;
-        m_aImage->SetSizePixel( aFixedSize );
-        m_aImage->SetImage( Image( BitmapEx( aBitmap ) ) );
-    }
+    Bitmap aBitmap = aGraphicResult.GetBitmap();
+
+    SAL_INFO("vcl", "got bitmap of size " << aBitmap.GetSizePixel().Width() << "x" << aBitmap.GetSizePixel().Height());
+    Size aFixedSize( aBitmap.GetSizePixel() );
+    aFixedSize.Width() += 10;
+    aFixedSize.Height() += 10;
+    m_aImage->SetSizePixel( aFixedSize );
+    m_aImage->SetImage( Image( BitmapEx( aBitmap ) ) );
+
 }
 
 
