@@ -53,7 +53,7 @@ namespace emfplushelper
     #define EmfPlusRecordTypeFillPie 0x4010
     #define EmfPlusRecordTypeDrawPie 0x4011
     #define EmfPlusRecordTypeDrawArc 0x4012
-    //TODO EmfPlusRecordTypeFillRegion 0x4013
+    #define EmfPlusRecordTypeFillRegion 0x4013
     #define EmfPlusRecordTypeFillPath 0x4014
     #define EmfPlusRecordTypeDrawPath 0x4015
     //TODO EmfPlusRecordTypeFillClosedCurve 0x4016
