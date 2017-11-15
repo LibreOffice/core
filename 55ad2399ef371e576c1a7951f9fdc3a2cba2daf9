@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_0c751897",
+        "filename": "sc/uiconfig/scalc/ui/notebookbar.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2017-11-15T10:00:20Z",
+      "side": 1,
+      "message": "remove this line so it can build fine",
+      "range": {
+        "startLine": 5,
+        "startChar": 2,
+        "endLine": 5,
+        "endChar": 35
+      },
+      "revId": "55ad2399ef371e576c1a7951f9fdc3a2cba2daf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
