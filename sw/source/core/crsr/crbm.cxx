@@ -98,6 +98,31 @@ namespace
 }
 // set CurrentCursor.SPoint
 
+// at CurrentCursor.SPoint
+::sw::mark::IMark* SwCursorShell::SetBookmark2(
+    const vcl::KeyCode& rCode,
+    const OUString& rName,
+    bool bHide,
+    const OUString& rCondition)
+{
+    StartAction();
+    ::sw::mark::IMark* pMark = getIDocumentMarkAccess()->makeMark(
+        *GetCursor(),
+        rName,
+        IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
+    ::sw::mark::IBookmark* pBookmark = dynamic_cast< ::sw::mark::IBookmark* >(pMark);
+    if (pBookmark)
+    {
+        pBookmark->SetKeyCode(rCode);
+        pBookmark->SetShortName(OUString());
+        pBookmark->Hide(bHide);
+        pBookmark->SetHideCondition(rCondition);
+    }
+    EndAction();
+    return pMark;
+}
+// set CurrentCursor.SPoint
+
 bool SwCursorShell::GotoMark(const ::sw::mark::IMark* const pMark, bool bAtStart)
 {
     // watch Cursor-Moves

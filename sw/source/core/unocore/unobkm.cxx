@@ -56,11 +56,14 @@ public:
     SwDoc* m_pDoc;
     ::sw::mark::IMark* m_pRegisteredBookmark;
     OUString m_sMarkName;
+    bool m_bHidden;
+    OUString m_HideCondition;
 
     Impl( SwDoc *const pDoc )
         : m_EventListeners(m_Mutex)
         , m_pDoc(pDoc)
         , m_pRegisteredBookmark(nullptr)
+        , m_bHidden(false)
     {
         // DO NOT registerInMark here! (because SetXBookmark would delete rThis)
     }
@@ -105,6 +108,14 @@ void SwXBookmark::Impl::registerInMark(SwXBookmark& rThis,
     else if (m_pRegisteredBookmark)
     {
         m_sMarkName = m_pRegisteredBookmark->GetName();
+
+        // the following applies only to bookmarks (not to fieldmarks)
+        IBookmark* pBookmark = dynamic_cast<IBookmark*>(m_pRegisteredBookmark);
+        if (pBookmark)
+        {
+            m_bHidden = pBookmark->IsHidden();
+            m_HideCondition = pBookmark->GetHideCondition();
+        }
         EndListeningAll();
     }
     m_pRegisteredBookmark = pBkmk;
@@ -394,8 +405,43 @@ SwXBookmark::getPropertySetInfo()
 
 void SAL_CALL
 SwXBookmark::setPropertyValue(const OUString& PropertyName,
-        const uno::Any& /*rValue*/)
+        const uno::Any& rValue)
 {
+    if (PropertyName == UNO_NAME_BOOKMARK_HIDDEN)
+    {
+        bool bNewValue = false;
+        if (!(rValue >>= bNewValue))
+            throw lang::IllegalArgumentException("Property BookmarkHidden requires value of type boolean", nullptr, 0);
+
+        IBookmark* pBookmark = dynamic_cast<IBookmark*>(m_pImpl->m_pRegisteredBookmark);
+        if (pBookmark)
+        {
+            pBookmark->Hide(bNewValue);
+        }
+        else
+        {
+            m_pImpl->m_bHidden = bNewValue;
+        }
+        return;
+    }
+    else if (PropertyName == UNO_NAME_BOOKMARK_CONDITION)
+    {
+        OUString newValue;
+        if (!(rValue >>= newValue))
+            throw lang::IllegalArgumentException("Property BookmarkCondition requires value of type string", nullptr, 0);
+
+        IBookmark* pBookmark = dynamic_cast<IBookmark*>(m_pImpl->m_pRegisteredBookmark);
+        if (pBookmark)
+        {
+            pBookmark->SetHideCondition(newValue);
+        }
+        else
+        {
+            m_pImpl->m_HideCondition = newValue;
+        }
+        return;
+    }
+
     // nothing to set here
     throw lang::IllegalArgumentException("Property is read-only: "
             + PropertyName, static_cast< cppu::OWeakObject * >(this), 0 );
@@ -411,6 +457,30 @@ uno::Any SAL_CALL SwXBookmark::getPropertyValue(const OUString& rPropertyName)
         if(rPropertyName == UNO_LINK_DISPLAY_NAME)
         {
             aRet <<= getName();
+        }
+        else if (rPropertyName == UNO_NAME_BOOKMARK_HIDDEN)
+        {
+            IBookmark* pBookmark = dynamic_cast<IBookmark*>(m_pImpl->m_pRegisteredBookmark);
+            if (pBookmark)
+            {
+                aRet <<= pBookmark->IsHidden();
+            }
+            else
+            {
+                aRet <<= m_pImpl->m_bHidden;
+            }
+        }
+        else if (rPropertyName == UNO_NAME_BOOKMARK_CONDITION)
+        {
+            IBookmark* pBookmark = dynamic_cast<IBookmark*>(m_pImpl->m_pRegisteredBookmark);
+            if (pBookmark)
+            {
+                aRet <<= pBookmark->GetHideCondition();
+            }
+            else
+            {
+                aRet <<= m_pImpl->m_HideCondition;
+            }
         }
     }
     return aRet;

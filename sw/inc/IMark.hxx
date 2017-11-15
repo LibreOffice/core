@@ -90,6 +90,10 @@ namespace sw { namespace mark
             virtual const vcl::KeyCode& GetKeyCode() const =0;
             virtual void SetShortName(const OUString&) =0;
             virtual void SetKeyCode(const vcl::KeyCode&) =0;
+            virtual bool IsHidden() const =0;
+            virtual const OUString& GetHideCondition() const =0;
+            virtual void Hide(bool hide) =0;
+            virtual void SetHideCondition(const OUString&) =0;
         private:
             IBookmark(IBookmark&) = delete;
             IBookmark &operator =(IBookmark const&) = delete;

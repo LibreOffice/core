@@ -94,7 +94,7 @@ class bookmarkDialog(UITestCase):
         x1stListEntry = xBmk.getChild("O") #  select first bookmark - name "newname"
         x1stListEntry.executeAction("SELECT", tuple())
 
-        self.assertEqual(get_state_as_dict(x1stListEntry)["Text"], "1\tnewname\t")  #check the new name "newname"
+        self.assertEqual(get_state_as_dict(x1stListEntry)["Text"], "1\tnewname\t\tNo\t")  #check the new name "newname"
 
         xCloseBtn = xBookDlg.getChild("close")
         self.ui_test.close_dialog_through_button(xCloseBtn)
