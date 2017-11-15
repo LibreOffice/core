@@ -302,6 +302,7 @@ include $(foreach class, \
 	AllLangPackage \
 	Configuration \
 	HelpTarget \
+	HelpHTMLTarget \
 	AllLangHelp \
 	Extension \
 	ExtensionPackage \
