@@ -25,6 +25,7 @@ namespace tools
 namespace cpuid
 {
     TOOLS_DLLPUBLIC bool hasSSE2();
+    TOOLS_DLLPUBLIC bool hasHyperThreading();
 }
 }
 
