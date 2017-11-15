@@ -2495,6 +2495,30 @@ void XMLTextParagraphExport::exportTextMark(
             GetExport().AddAttributesRDFa(xTextContent);
         }
 
+        // bookmark-start: add attributes hidden and condition
+        if (nElement == 1)
+        {
+            Reference<XPropertySet> bkmkProps(rPropSet->getPropertyValue(rProperty), UNO_QUERY);
+            Reference<XPropertySetInfo> bkmkPropInfo(bkmkProps->getPropertySetInfo(), UNO_QUERY);
+            OUString sHidden("BookmarkHidden");
+            if (bkmkPropInfo->hasPropertyByName(sHidden))
+            {
+                bool bHidden = false;
+                bkmkProps->getPropertyValue(sHidden) >>= bHidden;
+                if (bHidden)
+                {
+                    GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "hidden", "true");
+                    OUString sCondition("BookmarkCondition");
+                    if (bkmkPropInfo->hasPropertyByName(sCondition))
+                    {
+                        OUString sBookmarkCondition;
+                        bkmkProps->getPropertyValue(sCondition) >>= sBookmarkCondition;
+                        GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "condition", sBookmarkCondition);
+                    }
+                }
+            }
+        }
+
         // export element
         assert(pElements != nullptr);
         assert(0 <= nElement && nElement <= 2);
