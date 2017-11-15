@@ -554,7 +554,7 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
 
         if (rSet.GetItemState(EE_PARA_ULSPACE) != SfxItemState::SET || !bOnlyMissingItems)
         {
-            const SvxULSpaceItem& rULItem = static_cast<const SvxULSpaceItem&>(pCurSet->Get(EE_PARA_ULSPACE));
+            const SvxULSpaceItem& rULItem = pCurSet->Get(EE_PARA_ULSPACE);
             SvxULSpaceItem aNewULItem(rULItem);
             double fLowerFraction = double(rULItem.GetLower()) / nOldHeight;
             aNewULItem.SetLower((sal_uInt16)(fLowerFraction * nNewHeight));

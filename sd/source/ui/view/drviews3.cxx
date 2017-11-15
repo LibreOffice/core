@@ -652,8 +652,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         case SID_ATTR_TABSTOP:
             if (pArgs && mpDrawView->IsTextEdit())
             {
-                const SvxTabStopItem& rItem = static_cast<const SvxTabStopItem&>(
-                            pArgs->Get( EE_PARA_TABS ));
+                const SvxTabStopItem& rItem = pArgs->Get( EE_PARA_TABS );
 
                 SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_TABS, EE_PARA_TABS>{} );
 
@@ -898,7 +897,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                 mpDrawView->GetAttributes( aEditAttr );
                 if( aEditAttr.GetItemState( EE_PARA_TABS ) >= SfxItemState::DEFAULT )
                 {
-                    const SvxTabStopItem& rItem = static_cast<const SvxTabStopItem&>( aEditAttr.Get( EE_PARA_TABS ) );
+                    const SvxTabStopItem& rItem = aEditAttr.Get( EE_PARA_TABS );
                     rSet.Put( rItem );
 
                     const SvxLRSpaceItem& rLRSpaceItem = aEditAttr.Get( EE_PARA_LRSPACE );

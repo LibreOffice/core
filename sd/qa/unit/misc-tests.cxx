@@ -227,7 +227,7 @@ void SdMiscTest::testTdf99396TextEdit()
     {
         const EditTextObject& rEdit = pTableObject->getText(0)->GetOutlinerParaObject()->GetTextObject();
         const SfxItemSet& rParaAttribs = rEdit.GetParaAttribs(0);
-        auto pAdjust = static_cast<const SvxAdjustItem*>(rParaAttribs.GetItem(EE_PARA_JUST));
+        auto pAdjust = rParaAttribs.GetItem(EE_PARA_JUST);
         CPPUNIT_ASSERT_EQUAL(SvxAdjust::Right, pAdjust->GetAdjust());
     }
 
@@ -245,7 +245,7 @@ void SdMiscTest::testTdf99396TextEdit()
     {
         const EditTextObject& rEdit = pTableObject->getText(0)->GetOutlinerParaObject()->GetTextObject();
         const SfxItemSet& rParaAttribs = rEdit.GetParaAttribs(0);
-        auto pAdjust = static_cast<const SvxAdjustItem*>(rParaAttribs.GetItem(EE_PARA_JUST));
+        auto pAdjust = rParaAttribs.GetItem(EE_PARA_JUST);
         CPPUNIT_ASSERT_EQUAL(SvxAdjust::Center, pAdjust->GetAdjust());
     }
 

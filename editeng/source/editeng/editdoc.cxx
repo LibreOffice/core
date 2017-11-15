@@ -1816,7 +1816,7 @@ ContentAttribs::ContentAttribs( SfxItemPool& rPool )
 
 SvxTabStop ContentAttribs::FindTabStop( sal_Int32 nCurPos, sal_uInt16 nDefTab )
 {
-    const SvxTabStopItem& rTabs = static_cast<const SvxTabStopItem&>( GetItem( EE_PARA_TABS ) );
+    const SvxTabStopItem& rTabs = GetItem( EE_PARA_TABS );
     for ( sal_uInt16 i = 0; i < rTabs.Count(); i++ )
     {
         const SvxTabStop& rTab = rTabs[i];

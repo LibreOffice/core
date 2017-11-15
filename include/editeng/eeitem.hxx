@@ -23,13 +23,18 @@
 #include <svl/solar.hrc>
 #include <svl/typedwhich.hxx>
 
+class SfxBoolItem;
+class SfxInt16Item;
+class SvxAdjustItem;
 class SvxForbiddenRuleItem;
 class SvxFrameDirectionItem;
 class SvxHangingPunctuationItem;
-class SfxBoolItem;
-class SfxInt16Item;
+class SvxLineSpacingItem;
 class SvxLRSpaceItem;
+class SvXMLAttrContainerItem;
 class SvxScriptSpaceItem;
+class SvxTabStopItem;
+class SvxULSpaceItem;
 
 /*
  * NOTE: Changes in this file will probably require
@@ -42,7 +47,7 @@ class SvxScriptSpaceItem;
 // Paragraph attributes:
 #define EE_PARA_START               (EE_ITEMS_START+0)
 #define EE_PARA_WRITINGDIR          TypedWhichId<SvxFrameDirectionItem>(EE_ITEMS_START+0)
-#define EE_PARA_XMLATTRIBS          (EE_ITEMS_START+1)
+#define EE_PARA_XMLATTRIBS          TypedWhichId<SvXMLAttrContainerItem>(EE_ITEMS_START+1)
 #define EE_PARA_HANGINGPUNCTUATION  TypedWhichId<SvxHangingPunctuationItem>(EE_ITEMS_START+2)
 #define EE_PARA_FORBIDDENRULES      TypedWhichId<SvxForbiddenRuleItem>(EE_ITEMS_START+3)
 #define EE_PARA_ASIANCJKSPACING     TypedWhichId<SvxScriptSpaceItem>(EE_ITEMS_START+4)
@@ -53,12 +58,12 @@ class SvxScriptSpaceItem;
 #define EE_PARA_OUTLLEVEL           TypedWhichId<SfxInt16Item>(EE_ITEMS_START+9)
 #define EE_PARA_BULLET              TypedWhichId<SvxBulletItem>(EE_ITEMS_START+10)
 #define EE_PARA_LRSPACE             TypedWhichId<SvxLRSpaceItem>(EE_ITEMS_START+11)
-#define EE_PARA_ULSPACE             (EE_ITEMS_START+12)
-#define EE_PARA_SBL                 (EE_ITEMS_START+13)
-#define EE_PARA_JUST                (EE_ITEMS_START+14)
-#define EE_PARA_TABS                (EE_ITEMS_START+15)
-#define EE_PARA_JUST_METHOD         (EE_ITEMS_START+16)
-#define EE_PARA_VER_JUST            (EE_ITEMS_START+17)
+#define EE_PARA_ULSPACE             TypedWhichId<SvxULSpaceItem>(EE_ITEMS_START+12)
+#define EE_PARA_SBL                 TypedWhichId<SvxLineSpacingItem>(EE_ITEMS_START+13)
+#define EE_PARA_JUST                TypedWhichId<SvxAdjustItem>(EE_ITEMS_START+14)
+#define EE_PARA_TABS                TypedWhichId<SvxTabStopItem>(EE_ITEMS_START+15)
+#define EE_PARA_JUST_METHOD         TypedWhichId<SvxJustifyMethodItem>(EE_ITEMS_START+16)
+#define EE_PARA_VER_JUST            TypedWhichId<SvxVerJustifyItem>(EE_ITEMS_START+17)
 #define EE_PARA_END                 (EE_ITEMS_START+17)
 
 // Character attributes:

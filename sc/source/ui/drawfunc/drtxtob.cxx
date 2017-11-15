@@ -761,8 +761,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
         case SID_PARASPACE_INCREASE:
         case SID_PARASPACE_DECREASE:
         {
-            SvxULSpaceItem aULSpace(
-                static_cast< const SvxULSpaceItem& >( aEditAttr.Get( EE_PARA_ULSPACE ) ) );
+            SvxULSpaceItem aULSpace( aEditAttr.Get( EE_PARA_ULSPACE ) );
             sal_uInt16 nUpper = aULSpace.GetUpper();
             sal_uInt16 nLower = aULSpace.GetLower();
 
@@ -1002,7 +1001,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
         ScViewUtil::PutItemScript( rDestSet, aAttrSet, EE_CHAR_ITALIC, nScript );
     //  Alignment
 
-    SvxAdjust eAdj = static_cast<const SvxAdjustItem&>(aAttrSet.Get(EE_PARA_JUST)).GetAdjust();
+    SvxAdjust eAdj = aAttrSet.Get(EE_PARA_JUST).GetAdjust();
     switch( eAdj )
     {
     case SvxAdjust::Left:
@@ -1048,8 +1047,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     if ( eState == SfxItemState::DONTCARE )
         rDestSet.InvalidateItem(SID_ATTR_PARA_LRSPACE);
     //xuxu for Line Space
-    SvxLineSpacingItem aLineSP = static_cast<const SvxLineSpacingItem&>(aAttrSet.
-                        Get( EE_PARA_SBL ));
+    SvxLineSpacingItem aLineSP = aAttrSet.Get( EE_PARA_SBL );
     aLineSP.SetWhich(SID_ATTR_PARA_LINESPACE);
     rDestSet.Put(aLineSP);
     Invalidate(SID_ATTR_PARA_LINESPACE);
@@ -1057,8 +1055,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     if ( eState == SfxItemState::DONTCARE )
         rDestSet.InvalidateItem(SID_ATTR_PARA_LINESPACE);
     //xuxu for UL Space
-    SvxULSpaceItem aULSP = static_cast<const SvxULSpaceItem&>(aAttrSet.
-                        Get( EE_PARA_ULSPACE ));
+    SvxULSpaceItem aULSP = aAttrSet.Get( EE_PARA_ULSPACE );
     aULSP.SetWhich(SID_ATTR_PARA_ULSPACE);
     rDestSet.Put(aULSP);
     Invalidate(SID_ATTR_PARA_ULSPACE);
@@ -1079,8 +1076,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
     //  Line spacing
 
-    sal_uInt16 nLineSpace = static_cast<const SvxLineSpacingItem&>(aAttrSet.
-                        Get( EE_PARA_SBL )).GetPropLineSpace();
+    sal_uInt16 nLineSpace = aAttrSet.Get( EE_PARA_SBL ).GetPropLineSpace();
     switch( nLineSpace )
     {
         case 100:

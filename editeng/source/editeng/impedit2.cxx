@@ -2054,7 +2054,7 @@ SvxAdjust ImpEditEngine::GetJustification( sal_Int32 nPara ) const
 
     if ( !aStatus.IsOutliner() )
     {
-        eJustification = static_cast<const SvxAdjustItem&>(GetParaAttrib( nPara, EE_PARA_JUST )).GetAdjust();
+        eJustification = GetParaAttrib( nPara, EE_PARA_JUST ).GetAdjust();
 
         if ( IsRightToLeft( nPara ) )
         {
@@ -2069,15 +2069,13 @@ SvxAdjust ImpEditEngine::GetJustification( sal_Int32 nPara ) const
 
 SvxCellJustifyMethod ImpEditEngine::GetJustifyMethod( sal_Int32 nPara ) const
 {
-    const SvxJustifyMethodItem& rItem = static_cast<const SvxJustifyMethodItem&>(
-        GetParaAttrib(nPara, EE_PARA_JUST_METHOD));
+    const SvxJustifyMethodItem& rItem = GetParaAttrib(nPara, EE_PARA_JUST_METHOD);
     return static_cast<SvxCellJustifyMethod>(rItem.GetEnumValue());
 }
 
 SvxCellVerJustify ImpEditEngine::GetVerJustification( sal_Int32 nPara ) const
 {
-    const SvxVerJustifyItem& rItem = static_cast<const SvxVerJustifyItem&>(
-        GetParaAttrib(nPara, EE_PARA_VER_JUST));
+    const SvxVerJustifyItem& rItem = GetParaAttrib(nPara, EE_PARA_VER_JUST);
     return static_cast<SvxCellVerJustify>(rItem.GetEnumValue());
 }
 
@@ -3600,8 +3598,8 @@ Range ImpEditEngine::GetInvalidYOffsets( ParaPortion* pPortion )
 
     if ( pPortion->IsVisible() )
     {
-        const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>(pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE ));
-        const SvxLineSpacingItem& rLSItem = static_cast<const SvxLineSpacingItem&>(pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL ));
+        const SvxULSpaceItem& rULSpace = pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE );
+        const SvxLineSpacingItem& rLSItem = pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
         sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix )
                             ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
 
@@ -3671,7 +3669,7 @@ EditPaM ImpEditEngine::GetPaM( ParaPortion* pPortion, Point aDocPos, bool bSmart
     EditPaM aPaM;
     aPaM.SetNode( pPortion->GetNode() );
 
-    const SvxLineSpacingItem& rLSItem = static_cast<const SvxLineSpacingItem&>(pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL ));
+    const SvxLineSpacingItem& rLSItem = pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
     sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix )
                         ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
 
@@ -3698,7 +3696,7 @@ EditPaM ImpEditEngine::GetPaM( ParaPortion* pPortion, Point aDocPos, bool bSmart
     if ( !pLine ) // may happen only in the range of SA!
     {
 #if OSL_DEBUG_LEVEL > 0
-        const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>(pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE ));
+        const SvxULSpaceItem& rULSpace = pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE );
         OSL_ENSURE( nY+GetYValue( rULSpace.GetLower() ) >= aDocPos.Y() , "Index in no line, GetPaM ?" );
 #endif
         aPaM.SetIndex( pPortion->GetNode()->Len() );
@@ -4086,8 +4084,8 @@ void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
 
         if ( !aStatus.IsOutliner() )
         {
-            const SvxULSpaceItem& rULItem = static_cast<const SvxULSpaceItem&>(pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE ));
-            const SvxLineSpacingItem& rLSItem = static_cast<const SvxLineSpacingItem&>(pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL ));
+            const SvxULSpaceItem& rULItem = pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE );
+            const SvxLineSpacingItem& rLSItem = pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
             sal_Int32 nSBL = ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix ) ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
 
             if ( nSBL )
@@ -4117,8 +4115,8 @@ void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
                 ParaPortion* pPrev = GetParaPortions().SafeGetObject( nPortion-1 );
                 if (pPrev)
                 {
-                    const SvxULSpaceItem& rPrevULItem = static_cast<const SvxULSpaceItem&>(pPrev->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE ));
-                    const SvxLineSpacingItem& rPrevLSItem = static_cast<const SvxLineSpacingItem&>(pPrev->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL ));
+                    const SvxULSpaceItem& rPrevULItem = pPrev->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE );
+                    const SvxLineSpacingItem& rPrevLSItem = pPrev->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
 
                     // In relation between WinWord6/Writer3:
                     // With a proportional line spacing the paragraph spacing is
@@ -4188,7 +4186,7 @@ tools::Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 
 
     long nY = pPortion->GetFirstLineOffset();
 
-    const SvxLineSpacingItem& rLSItem = static_cast<const SvxLineSpacingItem&>(pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL ));
+    const SvxLineSpacingItem& rLSItem = pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
     sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix )
                         ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
 
