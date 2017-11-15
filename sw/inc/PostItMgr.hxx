@@ -165,8 +165,6 @@ class SwPostItMgr: public SfxListener
         // data structure to collect the <SwAnnotationWin> instances for certain <SwFrame> instances.
         sw::sidebarwindows::SwFrameSidebarWinContainer* mpFrameSidebarWinContainer;
 
-        typedef std::list<sw::annotation::SwAnnotationWin*>::iterator  SwAnnotationWin_iterator;
-
         void            AddPostIts(bool bCheckExistence = true,bool bFocus = true);
         void            RemoveSidebarWin();
         void            PreparePageContainer();
