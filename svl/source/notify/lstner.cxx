@@ -99,7 +99,7 @@ void SfxListener::StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDup
         SAL_WARN("svl", "previous StartListening call came from: " << sal::backtrace_to_string(f->second.get()));
     }
 #endif
-    assert(!(bListeningAlready && !bPreventDuplicates) && "duplicate listener, try building with DBG_UTIL to find the other insert site.");
+    //assert(!(bListeningAlready && !bPreventDuplicates) && "duplicate listener, try building with DBG_UTIL to find the other insert site.");
 
     if ( !bListeningAlready || !bPreventDuplicates )
     {
