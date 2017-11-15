@@ -1540,7 +1540,7 @@ tools::Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, boo
         if ( bAdjust && !bOutlineMode )
         {
             // Adjust when centered or align right
-            const SvxAdjustItem& rItem = static_cast<const SvxAdjustItem&>(pEditEngine->GetParaAttrib( nPara, EE_PARA_JUST ));
+            const SvxAdjustItem& rItem = pEditEngine->GetParaAttrib( nPara, EE_PARA_JUST );
             if ( ( !pEditEngine->IsRightToLeft( nPara ) && ( rItem.GetAdjust() != SvxAdjust::Left ) ) ||
                  ( pEditEngine->IsRightToLeft( nPara ) && ( rItem.GetAdjust() != SvxAdjust::Right ) ) )
             {

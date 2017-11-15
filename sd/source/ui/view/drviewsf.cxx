@@ -288,8 +288,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxItemSet aAttrs( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aAttrs );
 
-                SvxAdjustItem aItem= static_cast<const SvxAdjustItem&>( aAttrs.Get( EE_PARA_JUST ) );
-                SvxAdjust eAdj = aItem.GetAdjust();
+                SvxAdjust eAdj = aAttrs.Get( EE_PARA_JUST ).GetAdjust();
                 if ( eAdj == SvxAdjust::Left)
                 {
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, true ) );
@@ -305,8 +304,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxItemSet aAttrs( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aAttrs );
 
-                SvxAdjustItem aItem= static_cast<const SvxAdjustItem&>( aAttrs.Get( EE_PARA_JUST ) );
-                SvxAdjust eAdj = aItem.GetAdjust();
+                SvxAdjust eAdj = aAttrs.Get( EE_PARA_JUST ).GetAdjust();
                 if ( eAdj == SvxAdjust::Center)
                 {
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, true ) );
@@ -322,8 +320,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxItemSet aAttrs( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aAttrs );
 
-                SvxAdjustItem aItem= static_cast<const SvxAdjustItem&>( aAttrs.Get( EE_PARA_JUST ) );
-                SvxAdjust eAdj = aItem.GetAdjust();
+                SvxAdjust eAdj = aAttrs.Get( EE_PARA_JUST ).GetAdjust();
                 if ( eAdj == SvxAdjust::Right)
                 {
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, true ) );
@@ -339,8 +336,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxItemSet aAttrs( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aAttrs );
 
-                SvxAdjustItem aItem= static_cast<const SvxAdjustItem&>( aAttrs.Get( EE_PARA_JUST ) );
-                SvxAdjust eAdj = aItem.GetAdjust();
+                SvxAdjust eAdj = aAttrs.Get( EE_PARA_JUST ).GetAdjust();
                 if ( eAdj == SvxAdjust::Block)
                 {
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, true ) );
@@ -366,7 +362,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             {
                 SfxItemSet aAttrs( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aAttrs );
-                SvxLineSpacingItem aLineLR = static_cast<const SvxLineSpacingItem&>( aAttrs.Get( EE_PARA_SBL ) );
+                SvxLineSpacingItem aLineLR = aAttrs.Get( EE_PARA_SBL );
                 rSet.Put(aLineLR);
                 bAttr = true;
                 Invalidate(SID_ATTR_PARA_LINESPACE);
@@ -376,7 +372,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             {
                 SfxItemSet aAttrs( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aAttrs );
-                SvxULSpaceItem aULSP = static_cast<const SvxULSpaceItem&>( aAttrs.Get( EE_PARA_ULSPACE ) );
+                SvxULSpaceItem aULSP = aAttrs.Get( EE_PARA_ULSPACE );
                 aULSP.SetWhich(SID_ATTR_PARA_ULSPACE);
                 rSet.Put(aULSP);
                 bAttr = true;
