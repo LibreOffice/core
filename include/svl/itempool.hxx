@@ -105,7 +105,7 @@ public:
 
     const SfxPoolItem*              GetPoolDefaultItem( sal_uInt16 nWhich ) const;
     template<class T> const T*      GetPoolDefaultItem( TypedWhichId<T> nWhich ) const
-    { return static_cast<const T*>(GetPoolDefaultItem(nWhich.Which())); }
+    { return static_cast<const T*>(GetPoolDefaultItem(sal_uInt16(nWhich))); }
 
     void                            ResetPoolDefaultItem( sal_uInt16 nWhich );
 
@@ -155,17 +155,17 @@ public:
 
     const SfxPoolItem&              GetDefaultItem( sal_uInt16 nWhich ) const;
     template<class T> const T&      GetDefaultItem( TypedWhichId<T> nWhich ) const
-    { return static_cast<const T&>(GetDefaultItem(nWhich.Which())); }
+    { return static_cast<const T&>(GetDefaultItem(sal_uInt16(nWhich))); }
 
     bool                            CheckItemInPool(const SfxPoolItem *) const;
 
     const SfxPoolItem *             GetItem2(sal_uInt16 nWhich, sal_uInt32 nSurrogate) const;
     template<class T> const T*      GetItem2( TypedWhichId<T> nWhich, sal_uInt32 nSurrogate ) const
-    { return dynamic_cast<const T*>(GetItem2(nWhich.Which(), nSurrogate)); }
+    { return dynamic_cast<const T*>(GetItem2(sal_uInt16(nWhich), nSurrogate)); }
 
     const SfxPoolItem *             GetItem2Default(sal_uInt16 nWhich) const;
     template<class T> const T*      GetItem2Default( TypedWhichId<T> nWhich ) const
-    { return static_cast<const T*>(GetItem2Default(nWhich.Which())); }
+    { return static_cast<const T*>(GetItem2Default(sal_uInt16(nWhich))); }
 
     sal_uInt32                      GetItemCount2(sal_uInt16 nWhich) const;
 
@@ -184,8 +184,6 @@ public:
                                     { return IsItemPoolable( rItem.Which() ); }
     void                            SetItemInfos( const SfxItemInfo *pInfos );
     sal_uInt16                      GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
-    template<class T> sal_uInt16    GetWhich( TypedWhichId<T> nSlot, bool bDeep = true ) const
-    { return GetWhich(nSlot.Which(), bDeep); }
     sal_uInt16                      GetSlotId( sal_uInt16 nWhich ) const;
     sal_uInt16                      GetTrueWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
     sal_uInt16                      GetTrueSlotId( sal_uInt16 nWhich ) const;

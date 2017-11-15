@@ -585,7 +585,7 @@ public:
     template<class T>
     const T&           GetMergedItem( TypedWhichId<T> nWhich ) const
     {
-        return static_cast<const T&>(GetMergedItem(nWhich.Which()));
+        return static_cast<const T&>(GetMergedItem(sal_uInt16(nWhich)));
     }
 
     // syntactical sugar for ItemSet accesses

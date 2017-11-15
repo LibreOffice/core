@@ -177,7 +177,7 @@ public:
     template<class T>
     const T&           GetItem( TypedWhichId<T> nWhich ) const
     {
-        return static_cast<const T&>(GetItem(nWhich.Which()));
+        return static_cast<const T&>(GetItem(sal_uInt16(nWhich)));
     }
     bool HasItem( sal_uInt16 nWhich ) const;
 };

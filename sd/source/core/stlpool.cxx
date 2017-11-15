@@ -210,7 +210,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
     OUString aName(STR_LAYOUT_OUTLINE);
     OUString aHelpFile;
 
-    SvxLRSpaceItem aSvxLRSpaceItem( EE_PARA_LRSPACE.Which() );
+    SvxLRSpaceItem aSvxLRSpaceItem( EE_PARA_LRSPACE );
     SvxULSpaceItem aSvxULSpaceItem( EE_PARA_ULSPACE );
 
     for( sal_Int32 nLevel = 1; nLevel < 10; nLevel++)
@@ -459,7 +459,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         rNotesSet.Put( SvxCharReliefItem(FontRelief::NONE, EE_CHAR_RELIEF) );
         rNotesSet.Put( SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ) );
         rNotesSet.Put( SvxBackgroundColorItem( Color(COL_AUTO), EE_CHAR_BKGCOLOR ) );
-        rNotesSet.Put( SvxLRSpaceItem( 0, 0, 600, -600, EE_PARA_LRSPACE.Which()  ) );
+        rNotesSet.Put( SvxLRSpaceItem( 0, 0, 600, -600, EE_PARA_LRSPACE  ) );
         // #i16874# enable kerning by default but only for new documents
         rNotesSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
 
@@ -1106,7 +1106,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                 aNumRule.SetLevel( i, aNumberFormat );
             }
 
-            rSet.Put( SvxNumBulletItem( aNumRule, EE_PARA_NUMBULLET.Which() ) );
+            rSet.Put( SvxNumBulletItem( aNumRule, EE_PARA_NUMBULLET ) );
             static_cast<SfxStyleSheet*>(pSheet)->Broadcast(SfxHint( SfxHintId::DataChanged ) );
         }
         break;
@@ -1138,7 +1138,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                     aNumRule.SetLevel(i, aFrmt);
                 }
 
-                rSet.Put( SvxNumBulletItem( aNumRule, EE_PARA_NUMBULLET.Which() ) );
+                rSet.Put( SvxNumBulletItem( aNumRule, EE_PARA_NUMBULLET ) );
                 static_cast<SfxStyleSheet*>(pSheet)->Broadcast(SfxHint( SfxHintId::DataChanged ) );
             }
         }
@@ -1163,7 +1163,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                 aNumRule.SetLevel( i, aNumberFormat );
             }
 
-            rSet.Put( SvxNumBulletItem( aNumRule, EE_PARA_NUMBULLET.Which() ) );
+            rSet.Put( SvxNumBulletItem( aNumRule, EE_PARA_NUMBULLET ) );
             static_cast<SfxStyleSheet*>(pSheet)->Broadcast(SfxHint( SfxHintId::DataChanged ) );
         }
         break;

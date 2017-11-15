@@ -575,7 +575,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             SfxItemSet aAttr(
                 *aNewAttr.GetPool(),
                 svl::Items<
-                    EE_PARA_WRITINGDIR.Which(), EE_PARA_WRITINGDIR.Which(),
+                    EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
                     EE_PARA_JUST, EE_PARA_JUST>{});
 
             SvxAdjust nAdjust = SvxAdjust::Left;
@@ -584,13 +584,13 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
 
             if( bLeftToRight )
             {
-                aAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR.Which() ) );
+                aAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR ) );
                 if( nAdjust == SvxAdjust::Right )
                     aAttr.Put( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
             }
             else
             {
-                aAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_RL_TB, EE_PARA_WRITINGDIR.Which() ) );
+                aAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_RL_TB, EE_PARA_WRITINGDIR ) );
                 if( nAdjust == SvxAdjust::Left )
                     aAttr.Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
             }

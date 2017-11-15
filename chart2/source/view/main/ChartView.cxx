@@ -1538,7 +1538,7 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
             if( nWritingMode != -1 && nWritingMode != text::WritingMode2::PAGE )
             {
                 if( pDrawModelWrapper.get() )
-                    pDrawModelWrapper->GetItemPool().SetPoolDefaultItem(SvxFrameDirectionItem(static_cast<SvxFrameDirection>(nWritingMode), EE_PARA_WRITINGDIR.Which()) );
+                    pDrawModelWrapper->GetItemPool().SetPoolDefaultItem(SvxFrameDirectionItem(static_cast<SvxFrameDirection>(nWritingMode), EE_PARA_WRITINGDIR) );
             }
         }
         catch( const uno::Exception& ex )

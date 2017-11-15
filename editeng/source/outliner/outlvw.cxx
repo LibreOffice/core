@@ -878,7 +878,7 @@ void OutlinerView::ToggleBullets()
                     {
                         SfxItemSet aAttrs( pOwner->GetParaAttribs( nPara ) );
                         SvxNumRule aNewNumRule( *pDefaultBulletNumRule );
-                        aAttrs.Put( SvxNumBulletItem( aNewNumRule, EE_PARA_NUMBULLET.Which() ) );
+                        aAttrs.Put( SvxNumBulletItem( aNewNumRule, EE_PARA_NUMBULLET ) );
                         pOwner->SetParaAttribs( nPara, aAttrs );
                     }
                 }
@@ -1013,7 +1013,7 @@ void OutlinerView::ApplyBulletsNumbering(
 
             const SfxItemSet& rAttrs = pOwner->GetParaAttribs(nPara);
             SfxItemSet aAttrs(rAttrs);
-            aAttrs.Put(SfxBoolItem(EE_PARA_BULLETSTATE.Which(), true));
+            aAttrs.Put(SfxBoolItem(EE_PARA_BULLETSTATE, true));
 
             // apply new numbering rule
             if ( pNewNumRule )
@@ -1083,7 +1083,7 @@ void OutlinerView::ApplyBulletsNumbering(
                         }
                     }
 
-                    aAttrs.Put(SvxNumBulletItem(aNewRule, EE_PARA_NUMBULLET.Which()));
+                    aAttrs.Put(SvxNumBulletItem(aNewRule, EE_PARA_NUMBULLET));
                 }
             }
             pOwner->SetParaAttribs(nPara, aAttrs);
@@ -1132,10 +1132,10 @@ void OutlinerView::SwitchOffBulletsNumbering(
             pOwner->SetDepth( pPara, -1 );
 
             const SfxItemSet& rAttrs = pOwner->GetParaAttribs( nPara );
-            if (rAttrs.GetItemState( EE_PARA_BULLETSTATE.Which() ) == SfxItemState::SET)
+            if (rAttrs.GetItemState( EE_PARA_BULLETSTATE ) == SfxItemState::SET)
             {
                 SfxItemSet aAttrs(rAttrs);
-                aAttrs.ClearItem( EE_PARA_BULLETSTATE.Which() );
+                aAttrs.ClearItem( EE_PARA_BULLETSTATE );
                 pOwner->SetParaAttribs( nPara, aAttrs );
             }
         }

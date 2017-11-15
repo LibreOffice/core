@@ -120,7 +120,7 @@ OutlineBulletDlg::OutlineBulletDlg(
             SvxNumRule aNewRule( *pRule );
             aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );
 
-            SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET.Which() );
+            SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
             aInputSet.Put(aNewItem);
         }
     }

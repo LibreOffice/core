@@ -669,16 +669,16 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if( pItem )
             {
-                SfxItemSet aSet( GetPool(), svl::Items<EE_PARA_HYPHENATE.Which(), EE_PARA_HYPHENATE.Which()>{} );
+                SfxItemSet aSet( GetPool(), svl::Items<EE_PARA_HYPHENATE, EE_PARA_HYPHENATE>{} );
                 bool bValue = pItem->GetValue();
-                aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE.Which(), bValue ) );
+                aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
                 mpDrawView->SetAttributes( aSet );
             }
             else // only for testing purpose
             {
                 OSL_FAIL(" no value for hyphenation!");
-                SfxItemSet aSet( GetPool(), svl::Items<EE_PARA_HYPHENATE.Which(), EE_PARA_HYPHENATE.Which()>{} );
-                aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE.Which(), true ) );
+                SfxItemSet aSet( GetPool(), svl::Items<EE_PARA_HYPHENATE, EE_PARA_HYPHENATE>{} );
+                aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, true ) );
                 mpDrawView->SetAttributes( aSet );
             }
             rReq.Done();

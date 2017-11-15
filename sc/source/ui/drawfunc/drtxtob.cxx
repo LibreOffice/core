@@ -924,8 +924,8 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             sal_uInt16 nId = SID_ATTR_PARA_LRSPACE;
             const SvxLRSpaceItem& rItem = static_cast<const SvxLRSpaceItem&>(
                 pArgs->Get( nId ));
-            SfxItemSet aAttr( GetPool(), svl::Items<EE_PARA_LRSPACE.Which(), EE_PARA_LRSPACE.Which()>{} );
-            nId = EE_PARA_LRSPACE.Which();
+            SfxItemSet aAttr( GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
+            nId = EE_PARA_LRSPACE;
             SvxLRSpaceItem aLRSpaceItem( rItem.GetLeft(),
                 rItem.GetRight(), rItem.GetTextLeft(),
                 rItem.GetTextFirstLineOfst(), nId );

@@ -742,7 +742,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>(pArgs->Get(
                     GetPool().GetWhich(SID_ATTR_PARA_LRSPACE)));
 
-                SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_LRSPACE.Which(), EE_PARA_LRSPACE.Which()>{} );
+                SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
                 aLRSpace.SetWhich( EE_PARA_LRSPACE );
 
                 aEditAttr.Put( aLRSpace );
@@ -760,9 +760,9 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 
                 static const sal_uInt16 aWhichTable[]=
                 {
-                    EE_PARA_OUTLLEVEL.Which(), EE_PARA_OUTLLEVEL.Which(),
-                    EE_PARA_LRSPACE.Which(), EE_PARA_LRSPACE.Which(),
-                    EE_PARA_NUMBULLET.Which(), EE_PARA_NUMBULLET.Which(),
+                    EE_PARA_OUTLLEVEL, EE_PARA_OUTLLEVEL,
+                    EE_PARA_LRSPACE, EE_PARA_LRSPACE,
+                    EE_PARA_NUMBULLET, EE_PARA_NUMBULLET,
                     0, 0
                 };
 
@@ -770,7 +770,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                                       aWhichTable );
                 mpDrawView->GetAttributes( aEditAttr );
 
-                nId = EE_PARA_LRSPACE.Which();
+                nId = EE_PARA_LRSPACE;
                 SvxLRSpaceItem aLRSpaceItem( rItem.GetLeft(),
                         rItem.GetRight(), rItem.GetTextLeft(),
                         rItem.GetTextFirstLineOfst(), nId );
@@ -832,7 +832,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 
                 // only put lrSpace item
                 SfxItemSet aEditAttrReduced( GetDoc()->GetPool(),
-                                             svl::Items<EE_PARA_LRSPACE.Which(), EE_PARA_LRSPACE.Which()>{} );
+                                             svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
                 aEditAttrReduced.Put( aLRSpaceItem );
                 mpDrawView->SetAttributes( aEditAttrReduced );
 

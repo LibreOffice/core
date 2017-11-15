@@ -726,7 +726,7 @@ void Outliner::ImplInitDepth( sal_Int32 nPara, sal_Int16 nDepth, bool bCreateUnd
         bool bUndo = bCreateUndo && IsUndoEnabled();
 
         SfxItemSet aAttrs( pEditEngine->GetParaAttribs( nPara ) );
-        aAttrs.Put( SfxInt16Item( EE_PARA_OUTLLEVEL.Which(), nDepth ) );
+        aAttrs.Put( SfxInt16Item( EE_PARA_OUTLLEVEL, nDepth ) );
         pEditEngine->SetParaAttribs( nPara, aAttrs );
         ImplCheckNumBulletItem( nPara );
         ImplCalcBulletText( nPara, false, false );

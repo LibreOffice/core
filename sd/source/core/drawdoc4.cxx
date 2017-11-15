@@ -218,7 +218,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(SvxColorItem(Color(COL_AUTO), EE_CHAR_COLOR ));
 
     // Paragraph attributes (Edit Engine)
-    rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE.Which()));
+    rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));
     rISet.Put(SvxULSpaceItem(EE_PARA_ULSPACE));
 
     rISet.Put( makeSdrTextLeftDistItem( 250 ) );    // sj: (i33745) using text frame distances seems to be a better default
@@ -233,7 +233,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Bullet
     // BulletItem and BulletFont for title and outline
-    SvxBulletItem aBulletItem(EE_PARA_BULLET.Which());
+    SvxBulletItem aBulletItem(EE_PARA_BULLET);
                             // Identical in all layers
     aBulletItem.SetStyle(SvxBulletStyle::BULLET);
     aBulletItem.SetStart(1);
@@ -352,7 +352,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineStyleItem(drawing::LineStyle_NONE));
     pISet->Put(XFillStyleItem(drawing::FillStyle_NONE));
 
-    SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE.Which() );
+    SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
     aLRSpaceItem.SetTextFirstLineOfst(600);      // Indentation of first line: 6mm; right: 0
     pISet->Put(aLRSpaceItem);
 
@@ -411,7 +411,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(SvxFontHeightItem(1270, 100, EE_CHAR_FONTHEIGHT ));      // 36 pt
 
-    SvxLRSpaceItem aLRSpItem( 200, 200, 0, 0, EE_PARA_LRSPACE.Which());
+    SvxLRSpaceItem aLRSpItem( 200, 200, 0, 0, EE_PARA_LRSPACE);
     pISet->Put( aLRSpItem );    // Indentation of first line: 0 mm; left and right: 2 mm
 
     pISet->Put(SvxULSpaceItem(100, 100, EE_PARA_ULSPACE ));      // Paragraph margin above/below: 1 mm
@@ -578,7 +578,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
     rISet.Put(SvxColorItem(Color(COL_AUTO), EE_CHAR_COLOR ));
 
     // Paragraph attributes (Edit Engine)
-    rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE.Which()));
+    rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));
     rISet.Put(SvxULSpaceItem(EE_PARA_ULSPACE));
 
     rISet.Put( makeSdrTextLeftDistItem( 250 ) );
@@ -1188,7 +1188,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
 void SdDrawDocument::SetTextDefaults() const
 {
     // BulletItem and BulletFont for Title and Outline
-    SvxBulletItem aBulletItem(EE_PARA_BULLET.Which());
+    SvxBulletItem aBulletItem(EE_PARA_BULLET);
     vcl::Font aBulletFont( SdStyleSheetPool::GetBulletFont() );
     aBulletFont.SetFontSize(Size(0,846));       // 24 pt
     aBulletItem.SetFont(aBulletFont);
@@ -1221,7 +1221,7 @@ void SdDrawDocument::SetTextDefaults() const
         aNumRule.SetLevel( i, aNumberFormat );
     }
 
-    SvxNumBulletItem aNumBulletItem( aNumRule, EE_PARA_NUMBULLET.Which() );
+    SvxNumBulletItem aNumBulletItem( aNumRule, EE_PARA_NUMBULLET );
     pItemPool->SetPoolDefaultItem( aNumBulletItem );
 }
 
@@ -1262,7 +1262,7 @@ void SdDrawDocument::SetDefaultWritingMode(css::text::WritingMode eMode )
             return;
         }
 
-        SvxFrameDirectionItem aModeItem( nVal, EE_PARA_WRITINGDIR.Which() );
+        SvxFrameDirectionItem aModeItem( nVal, EE_PARA_WRITINGDIR );
         pItemPool->SetPoolDefaultItem( aModeItem );
 
         SvxAdjustItem aAdjust( SvxAdjust::Left, EE_PARA_JUST );

@@ -218,7 +218,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
                         {SID_ATTR_BORDER_SHADOW, SID_ATTR_BORDER_SHADOW},
                         {XATTR_FILL_FIRST, XATTR_FILL_LAST},
                         {SID_ATTR_PAGE_COLOR,SID_ATTR_PAGE_FILLSTYLE},
-                        {EE_PARA_WRITINGDIR.Which(), EE_PARA_WRITINGDIR.Which()}});
+                        {EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR}});
 
     // Retrieve additional data for dialog
 
@@ -229,7 +229,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
 
     aNewAttr.Put( SvxFrameDirectionItem(
         mpDoc->GetDefaultWritingMode() == css::text::WritingMode_RL_TB ? SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB,
-        EE_PARA_WRITINGDIR.Which() ) );
+        EE_PARA_WRITINGDIR ) );
 
     // Retrieve page-data for dialog
 
