@@ -305,7 +305,6 @@ void ScFiltersTest::testContentDIF()
 {
     ScDocShellRef xDocSh = loadDoc("universal-content.", FORMAT_DIF);
 
-    xDocSh->GetDocument();
     xDocSh->DoClose();
 }
 
