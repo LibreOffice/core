@@ -1063,72 +1063,73 @@ void XMLTextParagraphExport::exportListChange(
         bEndElement = pListElements && pListElements->size() >= 2;
     }
 
-    if (bEndElement)
+    if (!bEndElement)
+        return;
+
+    // close previous list-item
+    GetExport().EndElement(pListElements->back(), true );
+    pListElements->pop_back();
+
+    // Only for sub lists (#i103745#)
+    if ( rNextInfo.IsRestart() && !rNextInfo.HasStartValue() &&
+         rNextInfo.GetLevel() != 1 )
     {
-        // close previous list-item
+        // start new sub list respectively list on same list level
         GetExport().EndElement(pListElements->back(), true );
-        pListElements->pop_back();
-
-        // Only for sub lists (#i103745#)
-        if ( rNextInfo.IsRestart() && !rNextInfo.HasStartValue() &&
-             rNextInfo.GetLevel() != 1 )
-        {
-            // start new sub list respectively list on same list level
-            GetExport().EndElement(pListElements->back(), true );
-            GetExport().IgnorableWhitespace();
-            GetExport().StartElement(pListElements->back(), false);
-        }
-
-        // open new list-item
-        GetExport().CheckAttrList();
-        if( rNextInfo.HasStartValue() )
-        {
-            OUStringBuffer aBuffer;
-            aBuffer.append( (sal_Int32)rNextInfo.GetStartValue() );
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
-                                      aBuffer.makeStringAndClear() );
-        }
-        // Handle restart without start value on list level 1 (#i103745#)
-        else if ( rNextInfo.IsRestart() && /*!rNextInfo.HasStartValue() &&*/
-                  rNextInfo.GetLevel() == 1 )
-        {
-            OUStringBuffer aBuffer;
-            aBuffer.append( (sal_Int32)rNextInfo.GetListLevelStartValue() );
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
-                                      aBuffer.makeStringAndClear() );
-        }
-        if ( ( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) &&
-             GetExport().getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
-        {
-            const OUString& sListStyleName( rNextInfo.GetNumRulesName() );
-            if ( !mpTextListsHelper->EqualsToTopListStyleOnStack( sListStyleName ) )
-            {
-                GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                          XML_STYLE_OVERRIDE,
-                                          GetExport().EncodeStyleName( sListStyleName ) );
-            }
-        }
-        OUString aElem( GetExport().GetNamespaceMap().GetQNameByKey(
-                                XML_NAMESPACE_TEXT,
-                                GetXMLToken(XML_LIST_ITEM) ) );
         GetExport().IgnorableWhitespace();
-        GetExport().StartElement(aElem, false );
-        pListElements->push_back(aElem);
+        GetExport().StartElement(pListElements->back(), false);
+    }
 
-        // export of <text:number> element for <text:list-item>, if requested
-        if ( GetExport().exportTextNumberElement() &&
-             !rNextInfo.ListLabelString().isEmpty() )
+    // open new list-item
+    GetExport().CheckAttrList();
+    if( rNextInfo.HasStartValue() )
+    {
+        OUStringBuffer aBuffer;
+        aBuffer.append( (sal_Int32)rNextInfo.GetStartValue() );
+        GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
+                                  aBuffer.makeStringAndClear() );
+    }
+    // Handle restart without start value on list level 1 (#i103745#)
+    else if ( rNextInfo.IsRestart() && /*!rNextInfo.HasStartValue() &&*/
+              rNextInfo.GetLevel() == 1 )
+    {
+        OUStringBuffer aBuffer;
+        aBuffer.append( (sal_Int32)rNextInfo.GetListLevelStartValue() );
+        GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
+                                  aBuffer.makeStringAndClear() );
+    }
+    if ( ( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) &&
+         GetExport().getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+    {
+        const OUString& sListStyleName( rNextInfo.GetNumRulesName() );
+        if ( !mpTextListsHelper->EqualsToTopListStyleOnStack( sListStyleName ) )
         {
-            const OUString aTextNumberElem =
-                    GetExport().GetNamespaceMap().GetQNameByKey(
-                              XML_NAMESPACE_TEXT,
-                              GetXMLToken(XML_NUMBER) );
-            GetExport().IgnorableWhitespace();
-            GetExport().StartElement( aTextNumberElem, false );
-            GetExport().Characters( rNextInfo.ListLabelString() );
-            GetExport().EndElement( aTextNumberElem, true );
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                      XML_STYLE_OVERRIDE,
+                                      GetExport().EncodeStyleName( sListStyleName ) );
         }
     }
+    OUString aElem( GetExport().GetNamespaceMap().GetQNameByKey(
+                            XML_NAMESPACE_TEXT,
+                            GetXMLToken(XML_LIST_ITEM) ) );
+    GetExport().IgnorableWhitespace();
+    GetExport().StartElement(aElem, false );
+    pListElements->push_back(aElem);
+
+    // export of <text:number> element for <text:list-item>, if requested
+    if ( GetExport().exportTextNumberElement() &&
+         !rNextInfo.ListLabelString().isEmpty() )
+    {
+        const OUString aTextNumberElem =
+                GetExport().GetNamespaceMap().GetQNameByKey(
+                          XML_NAMESPACE_TEXT,
+                          GetXMLToken(XML_NUMBER) );
+        GetExport().IgnorableWhitespace();
+        GetExport().StartElement( aTextNumberElem, false );
+        GetExport().Characters( rNextInfo.ListLabelString() );
+        GetExport().EndElement( aTextNumberElem, true );
+    }
+
 }
 
 struct XMLTextParagraphExport::Impl

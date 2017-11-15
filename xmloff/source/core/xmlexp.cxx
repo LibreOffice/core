@@ -702,64 +702,65 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             mxExportInfo = xTmpPropertySet;
     }
 
-    if( mxExportInfo.is() )
+    if( !mxExportInfo.is() )
+        return;
+
+    uno::Reference< beans::XPropertySetInfo > xPropertySetInfo =
+        mxExportInfo->getPropertySetInfo();
+    OUString sPropName(
+            "BaseURI"  );
+    if( xPropertySetInfo->hasPropertyByName(sPropName) )
     {
-        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo =
-            mxExportInfo->getPropertySetInfo();
-        OUString sPropName(
-                "BaseURI"  );
-        if( xPropertySetInfo->hasPropertyByName(sPropName) )
-        {
-            uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
-            aAny >>= msOrigFileName;
-            mpImpl->msPackageURI = msOrigFileName;
-            mpImpl->SetSchemeOf( msOrigFileName );
-        }
-        OUString sRelPath;
-        sPropName = "StreamRelPath";
-        if( xPropertySetInfo->hasPropertyByName(sPropName) )
-        {
-            uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
-            aAny >>= sRelPath;
-        }
-        OUString sName;
-        sPropName = "StreamName";
-        if( xPropertySetInfo->hasPropertyByName(sPropName) )
-        {
-            uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
-            aAny >>= sName;
-        }
-        if( !msOrigFileName.isEmpty() && !sName.isEmpty() )
-        {
-            INetURLObject aBaseURL( msOrigFileName );
-            if( !sRelPath.isEmpty() )
-                aBaseURL.insertName( sRelPath );
-            aBaseURL.insertName( sName );
-            msOrigFileName = aBaseURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
-        }
-        mpImpl->mStreamName = sName; // Note: may be empty (XSLT)
-
-        // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
-        const OUString sOutlineStyleAsNormalListStyle(
-                "OutlineStyleAsNormalListStyle" );
-        if( xPropertySetInfo->hasPropertyByName( sOutlineStyleAsNormalListStyle ) )
-        {
-            uno::Any aAny = mxExportInfo->getPropertyValue( sOutlineStyleAsNormalListStyle );
-            aAny >>= (mpImpl->mbOutlineStyleAsNormalListStyle);
-        }
-
-        OUString sTargetStorage( "TargetStorage" );
-        if( xPropertySetInfo->hasPropertyByName( sTargetStorage ) )
-            mxExportInfo->getPropertyValue( sTargetStorage ) >>= mpImpl->mxTargetStorage;
-
-        const OUString sExportTextNumberElement(
-                "ExportTextNumberElement" );
-        if( xPropertySetInfo->hasPropertyByName( sExportTextNumberElement ) )
-        {
-            uno::Any aAny = mxExportInfo->getPropertyValue( sExportTextNumberElement );
-            aAny >>= (mpImpl->mbExportTextNumberElement);
-        }
+        uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
+        aAny >>= msOrigFileName;
+        mpImpl->msPackageURI = msOrigFileName;
+        mpImpl->SetSchemeOf( msOrigFileName );
     }
+    OUString sRelPath;
+    sPropName = "StreamRelPath";
+    if( xPropertySetInfo->hasPropertyByName(sPropName) )
+    {
+        uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
+        aAny >>= sRelPath;
+    }
+    OUString sName;
+    sPropName = "StreamName";
+    if( xPropertySetInfo->hasPropertyByName(sPropName) )
+    {
+        uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
+        aAny >>= sName;
+    }
+    if( !msOrigFileName.isEmpty() && !sName.isEmpty() )
+    {
+        INetURLObject aBaseURL( msOrigFileName );
+        if( !sRelPath.isEmpty() )
+            aBaseURL.insertName( sRelPath );
+        aBaseURL.insertName( sName );
+        msOrigFileName = aBaseURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
+    }
+    mpImpl->mStreamName = sName; // Note: may be empty (XSLT)
+
+    // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
+    const OUString sOutlineStyleAsNormalListStyle(
+            "OutlineStyleAsNormalListStyle" );
+    if( xPropertySetInfo->hasPropertyByName( sOutlineStyleAsNormalListStyle ) )
+    {
+        uno::Any aAny = mxExportInfo->getPropertyValue( sOutlineStyleAsNormalListStyle );
+        aAny >>= (mpImpl->mbOutlineStyleAsNormalListStyle);
+    }
+
+    OUString sTargetStorage( "TargetStorage" );
+    if( xPropertySetInfo->hasPropertyByName( sTargetStorage ) )
+        mxExportInfo->getPropertyValue( sTargetStorage ) >>= mpImpl->mxTargetStorage;
+
+    const OUString sExportTextNumberElement(
+            "ExportTextNumberElement" );
+    if( xPropertySetInfo->hasPropertyByName( sExportTextNumberElement ) )
+    {
+        uno::Any aAny = mxExportInfo->getPropertyValue( sExportTextNumberElement );
+        aAny >>= (mpImpl->mbExportTextNumberElement);
+    }
+
 
 }
 

@@ -1051,55 +1051,56 @@ void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     // create necessary shape (Line Shape)
     AddShape("com.sun.star.drawing.PolyLineShape");
 
-    if(mxShape.is())
+    if(!mxShape.is())
+        return;
+
+    // Add, set Style and properties from base shape
+    SetStyle();
+    SetLayer();
+
+    // get sizes and offsets
+    awt::Point aTopLeft(mnX1, mnY1);
+    awt::Point aBottomRight(mnX2, mnY2);
+
+    if(mnX1 > mnX2)
     {
-        // Add, set Style and properties from base shape
-        SetStyle();
-        SetLayer();
-
-        // get sizes and offsets
-        awt::Point aTopLeft(mnX1, mnY1);
-        awt::Point aBottomRight(mnX2, mnY2);
-
-        if(mnX1 > mnX2)
-        {
-            aTopLeft.X = mnX2;
-            aBottomRight.X = mnX1;
-        }
-
-        if(mnY1 > mnY2)
-        {
-            aTopLeft.Y = mnY2;
-            aBottomRight.Y = mnY1;
-        }
-
-        // set local parameters on shape
-        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-        if(xPropSet.is())
-        {
-            drawing::PointSequenceSequence aPolyPoly(1);
-            drawing::PointSequence* pOuterSequence = aPolyPoly.getArray();
-            pOuterSequence->realloc(2);
-            awt::Point* pInnerSequence = pOuterSequence->getArray();
-
-            *pInnerSequence = awt::Point( mnX1 - aTopLeft.X, mnY1 - aTopLeft.Y);
-            pInnerSequence++;
-            *pInnerSequence = awt::Point( mnX2 - aTopLeft.X, mnY2 - aTopLeft.Y);
-
-            xPropSet->setPropertyValue("Geometry", Any(aPolyPoly));
-        }
-
-        // set sizes for transformation
-        maSize.Width = aBottomRight.X - aTopLeft.X;
-        maSize.Height = aBottomRight.Y - aTopLeft.Y;
-        maPosition.X = aTopLeft.X;
-        maPosition.Y = aTopLeft.Y;
-
-        // set pos, size, shear and rotate and get copy of matrix
-        SetTransformation();
-
-        SdXMLShapeContext::StartElement(xAttrList);
+        aTopLeft.X = mnX2;
+        aBottomRight.X = mnX1;
     }
+
+    if(mnY1 > mnY2)
+    {
+        aTopLeft.Y = mnY2;
+        aBottomRight.Y = mnY1;
+    }
+
+    // set local parameters on shape
+    uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+    if(xPropSet.is())
+    {
+        drawing::PointSequenceSequence aPolyPoly(1);
+        drawing::PointSequence* pOuterSequence = aPolyPoly.getArray();
+        pOuterSequence->realloc(2);
+        awt::Point* pInnerSequence = pOuterSequence->getArray();
+
+        *pInnerSequence = awt::Point( mnX1 - aTopLeft.X, mnY1 - aTopLeft.Y);
+        pInnerSequence++;
+        *pInnerSequence = awt::Point( mnX2 - aTopLeft.X, mnY2 - aTopLeft.Y);
+
+        xPropSet->setPropertyValue("Geometry", Any(aPolyPoly));
+    }
+
+    // set sizes for transformation
+    maSize.Width = aBottomRight.X - aTopLeft.X;
+    maSize.Height = aBottomRight.Y - aTopLeft.Y;
+    maPosition.X = aTopLeft.X;
+    maPosition.Y = aTopLeft.Y;
+
+    // set pos, size, shear and rotate and get copy of matrix
+    SetTransformation();
+
+    SdXMLShapeContext::StartElement(xAttrList);
+
 }
 
 
