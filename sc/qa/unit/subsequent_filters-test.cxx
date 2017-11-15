@@ -1126,7 +1126,6 @@ void ScFiltersTest::testBugFixesXLS()
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.xls", xDocSh.is());
 
     xDocSh->DoHardRecalc();
-    xDocSh->GetDocument();
     xDocSh->DoClose();
 }
 
@@ -1136,7 +1135,6 @@ void ScFiltersTest::testBugFixesXLSX()
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.xls", xDocSh.is());
 
     xDocSh->DoHardRecalc();
-    xDocSh->GetDocument();
     xDocSh->DoClose();
 }
 
@@ -1572,7 +1570,6 @@ void ScFiltersTest::testPassword_Impl(const OUString& aFileNameBase)
     }
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load password.ods", xDocSh.is());
-    xDocSh->GetDocument();
     xDocSh->DoClose();
 }
 
