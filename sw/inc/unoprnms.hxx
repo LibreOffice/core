@@ -343,6 +343,8 @@
 #define UNO_NAME_IS_GLOBAL_DOCUMENT_SECTION "IsGlobalDocumentSection"
 #define UNO_NAME_TEXT_FIELD "TextField"
 #define UNO_NAME_BOOKMARK "Bookmark"
+#define UNO_NAME_BOOKMARK_HIDDEN "BookmarkHidden"
+#define UNO_NAME_BOOKMARK_CONDITION "BookmarkCondition"
 #define UNO_NAME_TEXT_TABLE "TextTable"
 #define UNO_NAME_CELL "Cell"
 #define UNO_NAME_TEXT_FRAME "TextFrame"
