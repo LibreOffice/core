@@ -368,7 +368,24 @@ void SwFEShell::SetFlyPos( const Point& rAbsPos )
     // Set an anchor starting from the absolute position for paragraph bound Flys
     // Anchor and new RelPos will be calculated and set by the Fly
     if ( pFly->IsFlyAtContentFrame() )
-        static_cast<SwFlyAtContentFrame*>(pFly)->SetAbsPos( rAbsPos );
+    {
+        if(pFly->IsFlyFreeFrame() && static_cast<SwFlyFreeFrame*>(pFly)->isTransformableSwFrame())
+        {
+            // RotateFlyFrame3: When we have a change and are in transformed state (e.g. rotation used),
+            // we need to correct the absolute position (rAbsPos) which was created in
+            // transformed coordinates to untransformed state
+            TransformableSwFrame* pTransformableSwFrame(static_cast<SwFlyFreeFrame*>(pFly)->getTransformableSwFrame());
+            const SwRect aUntransformedFrameArea(pTransformableSwFrame->getUntransformedFrameArea());
+            const Point aNewAbsPos(
+                rAbsPos.X() + aUntransformedFrameArea.Left() - pFly->getFrameArea().Left(),
+                rAbsPos.Y() + aUntransformedFrameArea.Top() - pFly->getFrameArea().Top());
+            static_cast<SwFlyAtContentFrame*>(pFly)->SetAbsPos(aNewAbsPos);
+        }
+        else
+        {
+            static_cast<SwFlyAtContentFrame*>(pFly)->SetAbsPos( rAbsPos );
+        }
+    }
     else
     {
             const SwFrame *pAnch = pFly->GetAnchorFrame();

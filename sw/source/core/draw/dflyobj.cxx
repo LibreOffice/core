@@ -1000,13 +1000,14 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
         basegfx::B2DVector aScale, aTranslate;
         double fRotate, fShearX;
         aNewMat.decompose(aScale, aTranslate, fRotate, fShearX);
+        const basegfx::B2DVector aAbsScale(basegfx::absolute(aScale));
 
-        // create new modified OutRect
+        // create new modified, but untransformed OutRect
         aOutRect = tools::Rectangle(
-            basegfx::fround(aCenter.getX() - (0.5 * aScale.getX())),
-            basegfx::fround(aCenter.getY() - (0.5 * aScale.getY())),
-            basegfx::fround(aCenter.getX() + (0.5 * aScale.getX())),
-            basegfx::fround(aCenter.getY() + (0.5 * aScale.getY())));
+            basegfx::fround(aCenter.getX() - (0.5 * aAbsScale.getX())),
+            basegfx::fround(aCenter.getY() - (0.5 * aAbsScale.getY())),
+            basegfx::fround(aCenter.getX() + (0.5 * aAbsScale.getX())),
+            basegfx::fround(aCenter.getY() + (0.5 * aAbsScale.getY())));
 
         // restore FrameAreas so that actions below not adapted to new
         // full transformations take the correct actions
