@@ -135,7 +135,6 @@
 "ScTableSheetObj";"com::sun::star::sheet::Spreadsheet";"IsVisible"
 "ScTableSheetObj";"com::sun::star::sheet::Spreadsheet";"PageStyle"
 "ScTableSheetObj";"com::sun::star::sheet::Spreadsheet";"AutomaticPrintArea#optional"
-"ScTableSheetObj";"com::sun::star::sheet::XSheetAnnotationsSupplier";"getAnnotations()"
 "ScTableSheetObj";"com::sun::star::table::XTableChartsSupplier";"getCharts()"
 "ScTableSheetObj";"com::sun::star::sheet::XCellRangesQuery";"queryVisibleCells()"
 "ScTableSheetObj";"com::sun::star::sheet::XCellRangesQuery";"queryEmptyCells()"
