@@ -24,6 +24,7 @@
 #include <ndtxt.hxx>
 
 #include <vcl/button.hxx>
+#include <condedit.hxx>
 #include <svtools/simptabl.hxx>
 #include <pam.hxx>
 
@@ -57,6 +58,9 @@ class SwInsertBookmarkDlg: public SvxStandardDialog
     VclPtr<PushButton>                  m_pDeleteBtn;
     VclPtr<PushButton>                  m_pGotoBtn;
     VclPtr<PushButton>                  m_pRenameBtn;
+    VclPtr<CheckBox>                    m_pHideCB;
+    VclPtr<FixedText>                   m_pConditionFT;
+    VclPtr<ConditionEdit>               m_pConditionED;
     OUString                            sRemoveWarning;
     SwWrtShell&                         rSh;
     SfxRequest&                         rReq;
@@ -70,6 +74,7 @@ class SwInsertBookmarkDlg: public SvxStandardDialog
     DECL_LINK_TYPED(GotoHdl, Button*, void);
     DECL_LINK_TYPED(SelectionChangedHdl, SvTreeListBox*, void);
     DECL_LINK_TYPED(DoubleClickHdl, SvTreeListBox*, bool);
+    DECL_LINK_TYPED(ChangeHideHdl, Button *, void);
 
     // Fill table with bookmarks
     void PopulateTable();

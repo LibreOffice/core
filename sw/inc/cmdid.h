@@ -814,6 +814,8 @@
 #define FN_PARAM_PAM                    (FN_PARAM2+27) /* Point and Mark */
 #define FN_TEXT_BOX                     (FN_PARAM2+28) /* TextBox Property*/
 #define FN_PARAM_IGNORE_PROTECTED       (FN_PARAM2+29) /* Ignore protected areas */
+#define FN_BOOKMARK_HIDDEN              (FN_PARAM2+30) /* Hidden Property of bookmarks*/
+#define FN_BOOKMARK_CONDITION           (FN_PARAM2+31) /* Condition Property of bookmarks*/
 
 // Status: not more than 19!
 #define FN_STAT_PAGE                (FN_STAT + 1)
