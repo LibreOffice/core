@@ -2,6 +2,7 @@
 <!-- Generated with glade 3.18.3 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.12"/>
+  <requires lib="" version="3.12"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkImage" id="BringToFrontImg">
     <property name="visible">True</property>
@@ -93,11 +94,6 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_paste.png</property>
   </object>
-  <object class="GtkImage" id="SignatureImg">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_signature.png</property>
-  </object>
   <object class="GtkImage" id="PlaceholderImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -147,6 +143,11 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_showannotations.png</property>
+  </object>
+  <object class="GtkImage" id="SignatureImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_signature.png</property>
   </object>
   <object class="GtkImage" id="SpellDialogImg">
     <property name="visible">True</property>
@@ -448,6 +449,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
+                        <property name="padding">6</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -544,6 +546,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
+                        <property name="padding">6</property>
                         <property name="position">3</property>
                       </packing>
                     </child>
@@ -853,6 +856,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
+                        <property name="padding">6</property>
                         <property name="position">5</property>
                       </packing>
                     </child>
@@ -1156,6 +1160,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
+                        <property name="padding">6</property>
                         <property name="position">7</property>
                       </packing>
                     </child>
@@ -1308,6 +1313,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
+                        <property name="padding">6</property>
                         <property name="position">9</property>
                       </packing>
                     </child>
@@ -1382,6 +1388,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
+                        <property name="padding">6</property>
                         <property name="position">11</property>
                       </packing>
                     </child>
@@ -1529,6 +1536,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -1557,6 +1565,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
@@ -1656,6 +1665,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">5</property>
                   </packing>
                 </child>
@@ -1808,6 +1818,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">7</property>
                   </packing>
                 </child>
@@ -1911,6 +1922,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">9</property>
                   </packing>
                 </child>
@@ -1967,6 +1979,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">11</property>
                   </packing>
                 </child>
@@ -2101,6 +2114,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -2172,6 +2186,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
@@ -2281,6 +2296,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -2501,6 +2517,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -2573,6 +2590,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">4</property>
                   </packing>
                 </child>
@@ -2644,6 +2662,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">6</property>
                   </packing>
                 </child>
@@ -2918,6 +2937,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -3086,6 +3106,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">5</property>
                   </packing>
                 </child>
