@@ -1,7 +1,7 @@
 --- configure
 +++ configure
-@@ -18255,7 +18255,7 @@
- 	CXXFLAGS="$CXXFLAGS -std=c++11"
+@@ -18918,7 +18918,7 @@
+ 	LDFLAGS="$LDFLAGS -Bsymbolic-functions"
  
  	# Make sure we don't link to libstdc++
 -	CXXFLAGS="$CXXFLAGS -fno-rtti -fno-exceptions"
