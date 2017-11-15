@@ -697,9 +697,8 @@ void SwPostItMgr::LayoutPostIts()
                 long                    mlPageBorder = 0;
                 long                    mlPageEnd = 0;
 
-                for(SwSidebarItem_iterator i = pPage->mList->begin(); i != pPage->mList->end(); ++i)
+                for (auto const& pItem : *pPage->mList)
                 {
-                    SwSidebarItem* pItem = (*i);
                     VclPtr<SwAnnotationWin> pPostIt = pItem->pPostIt;
 
                     if (pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT )
@@ -729,7 +728,7 @@ void SwPostItMgr::LayoutPostIts()
                         long aPostItHeight = 0;
                         if (!pPostIt)
                         {
-                            pPostIt = (*i)->GetSidebarWindow( mpView->GetEditWin(),
+                            pPostIt = pItem->GetSidebarWindow( mpView->GetEditWin(),
                                                               *this );
                             pPostIt->InitControls();
                             pPostIt->SetReadonly(mbReadOnly);
@@ -955,9 +954,9 @@ void SwPostItMgr::DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage)
     assert(nPage < mPages.size());
     if (nPage >= mPages.size())
         return;
-    for(SwSidebarItem_iterator i = mPages[nPage]->mList->begin(); i != mPages[nPage]->mList->end(); ++i)
+    for (auto const& pItem : *mPages[nPage]->mList)
     {
-        SwAnnotationWin* pPostIt = (*i)->pPostIt;
+        SwAnnotationWin* pPostIt = pItem->pPostIt;
         if (!pPostIt)
             continue;
         Point aPoint(mpEditWin->PixelToLogic(pPostIt->GetPosPixel()));
@@ -1002,14 +1001,14 @@ void SwPostItMgr::Scroll(const long lScroll,const unsigned long aPage)
     const bool bOldUp = ArrowEnabled(KEY_PAGEUP,aPage);
     const bool bOldDown = ArrowEnabled(KEY_PAGEDOWN,aPage);
     const long aSidebarheight = mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height();
-    for(SwSidebarItem_iterator i = mPages[aPage-1]->mList->begin(); i != mPages[aPage-1]->mList->end(); ++i)
+    for (auto const& item : *mPages[aPage-1]->mList)
     {
-        SwAnnotationWin* pPostIt = (*i)->pPostIt;
+        SwAnnotationWin* pPostIt = item->pPostIt;
         // if this is an answer, we should take the normal position and not the real, slightly moved position
         pPostIt->SetVirtualPosSize(pPostIt->GetPosPixel(),pPostIt->GetSizePixel());
         pPostIt->TranslateTopPosition(lScroll);
 
-        if ((*i)->bShow)
+        if (item->bShow)
         {
             bool bBottom  = mpEditWin->PixelToLogic(Point(0,pPostIt->VirtualPos().Y()+pPostIt->VirtualSize().Height())).Y() <= (mPages[aPage-1]->mPageRect.Bottom()-aSidebarheight);
             bool bTop = mpEditWin->PixelToLogic(Point(0,pPostIt->VirtualPos().Y())).Y() >=   (mPages[aPage-1]->mPageRect.Top()+aSidebarheight);
@@ -1070,19 +1069,21 @@ void SwPostItMgr::MakeVisible(const SwAnnotationWin* pPostIt )
 {
     long aPage = -1;
     // we don't know the page yet, lets find it ourselves
-    for (std::vector<SwPostItPageItem*>::size_type n=0;n<mPages.size();n++)
+    std::vector<SwPostItPageItem*>::size_type n=0;
+    for (auto const& page : mPages)
     {
-        if (mPages[n]->mList->size()>0)
+        if (page->mList->size()>0)
         {
-            for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i != mPages[n]->mList->end(); ++i)
+            for (auto const& item : *page->mList)
             {
-                if ((*i)->pPostIt==pPostIt)
+                if (item->pPostIt==pPostIt)
                 {
                     aPage = n+1;
                     break;
                 }
             }
         }
+        ++n;
     }
     if (aPage!=-1)
         AutoScroll(pPostIt,aPage);
@@ -1238,7 +1239,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwAnnotationWin*> &aVisiblePostItList, 
                 else
                 {
                     //(*i) is the last visible item
-                    SwAnnotationWin_iterator aPrevPostIt = i;
+                    auto aPrevPostIt = i;
                     --aPrevPostIt;
                     lTranslatePos = ( (*aPrevPostIt)->VirtualPos().Y() + (*aPrevPostIt)->VirtualSize().Height() ) - (*i)->VirtualPos().Y();
                     if (lTranslatePos > 0)
@@ -1279,7 +1280,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwAnnotationWin*> &aVisiblePostItList, 
     else
     {
         // only one left, make sure it is not hidden at the top or bottom
-        SwAnnotationWin_iterator i = aVisiblePostItList.begin();
+        auto i = aVisiblePostItList.begin();
         lTranslatePos = lTopBorder - (*i)->VirtualPos().Y();
         if (lTranslatePos>0)
         {
@@ -1977,16 +1978,16 @@ void SwPostItMgr::CorrectPositions()
         long aAnchorPosY = 0;
         for (SwPostItPageItem* pPage : mPages)
         {
-            for(SwSidebarItem_iterator i = pPage->mList->begin(); i != pPage->mList->end(); ++i)
+            for (auto const& item : *pPage->mList)
             {
                 // check, if anchor overlay object exists.
-                if ( (*i)->bShow && (*i)->pPostIt && (*i)->pPostIt->Anchor() )
+                if ( item->bShow && item->pPostIt && item->pPostIt->Anchor() )
                 {
                     aAnchorPosX = pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT
-                        ? mpEditWin->LogicToPixel( Point((long)((*i)->pPostIt->Anchor()->GetSeventhPosition().getX()),0)).X()
-                        : mpEditWin->LogicToPixel( Point((long)((*i)->pPostIt->Anchor()->GetSixthPosition().getX()),0)).X();
-                    aAnchorPosY = mpEditWin->LogicToPixel( Point(0,(long)((*i)->pPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1;
-                    (*i)->pPostIt->SetPosPixel(Point(aAnchorPosX,aAnchorPosY));
+                        ? mpEditWin->LogicToPixel( Point((long)(item->pPostIt->Anchor()->GetSeventhPosition().getX()),0)).X()
+                        : mpEditWin->LogicToPixel( Point((long)(item->pPostIt->Anchor()->GetSixthPosition().getX()),0)).X();
+                    aAnchorPosY = mpEditWin->LogicToPixel( Point(0,(long)(item->pPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1;
+                    item->pPostIt->SetPosPixel(Point(aAnchorPosX,aAnchorPosY));
                 }
             }
         }
