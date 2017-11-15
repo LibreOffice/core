@@ -323,6 +323,7 @@ SvxCharNamePage::SvxCharNamePage( vcl::Window* pParent, const SfxItemSet& rInSet
 #else
     OUString sFontFamilyString(CuiResId(RID_SVXSTR_CHARNAME_FAMILY));
 #endif
+    sFontFamilyString += ":";
     m_pWestFontNameFT->SetText(sFontFamilyString);
     m_pEastFontNameFT->SetText(sFontFamilyString);
     m_pCTLFontNameFT->SetText(sFontFamilyString);
@@ -332,6 +333,7 @@ SvxCharNamePage::SvxCharNamePage( vcl::Window* pParent, const SfxItemSet& rInSet
 #else
     OUString sFontStyleString(CuiResId(RID_SVXSTR_CHARNAME_STYLE));
 #endif
+    sFontStyleString += ":";
     m_pWestFontStyleFT->SetText(sFontStyleString);
     m_pEastFontStyleFT->SetText(sFontStyleString);
     m_pCTLFontStyleFT->SetText(sFontStyleString);
