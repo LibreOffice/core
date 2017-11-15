@@ -38,6 +38,76 @@ Expr const * skipImplicit(Expr const * expr) {
     return expr;
 }
 
+bool structurallyIdentical(Stmt const * stmt1, Stmt const * stmt2) {
+    if (stmt1->getStmtClass() != stmt2->getStmtClass()) {
+        return false;
+    }
+    switch (stmt1->getStmtClass()) {
+    case Stmt::CXXConstructExprClass:
+        if (cast<CXXConstructExpr>(stmt1)->getConstructor()->getCanonicalDecl()
+            != cast<CXXConstructExpr>(stmt2)->getConstructor()->getCanonicalDecl())
+        {
+            return false;
+        }
+        break;
+    case Stmt::DeclRefExprClass:
+        if (cast<DeclRefExpr>(stmt1)->getDecl()->getCanonicalDecl()
+            != cast<DeclRefExpr>(stmt2)->getDecl()->getCanonicalDecl())
+        {
+            return false;
+        }
+        break;
+    case Stmt::ImplicitCastExprClass:
+        {
+            auto const e1 = cast<ImplicitCastExpr>(stmt1);
+            auto const e2 = cast<ImplicitCastExpr>(stmt2);
+            if (e1->getCastKind() != e2->getCastKind()
+                || e1->getType().getCanonicalType() != e2->getType().getCanonicalType())
+            {
+                return false;
+            }
+            break;
+        }
+    case Stmt::MemberExprClass:
+        {
+            auto const e1 = cast<MemberExpr>(stmt1);
+            auto const e2 = cast<MemberExpr>(stmt2);
+            if (e1->isArrow() != e2->isArrow()
+                || e1->getType().getCanonicalType() != e2->getType().getCanonicalType())
+            {
+                return false;
+            }
+            break;
+        }
+    case Stmt::CXXMemberCallExprClass:
+    case Stmt::CXXOperatorCallExprClass:
+        if (cast<Expr>(stmt1)->getType().getCanonicalType()
+            != cast<Expr>(stmt2)->getType().getCanonicalType())
+        {
+            return false;
+        }
+        break;
+    case Stmt::MaterializeTemporaryExprClass:
+    case Stmt::ParenExprClass:
+        break;
+    default:
+        // Conservatively assume non-identical for expressions that don't happen for us in practice
+        // when compiling the LO code base (and for which the above set of supported classes would
+        // need to be extended):
+        return false;
+    }
+    auto i1 = stmt1->child_begin();
+    auto e1 = stmt1->child_end();
+    auto i2 = stmt2->child_begin();
+    auto e2 = stmt2->child_end();
+    for (; i1 != e1; ++i1, ++i2) {
+        if (i2 == e2 || !structurallyIdentical(*i1, *i2)) {
+            return false;
+        }
+    }
+    return i2 == e2;
+}
+
 }
 
 Plugin::Plugin( const InstantiationData& data )
@@ -293,6 +363,12 @@ Plugin::IdenticalDefaultArgumentsResult Plugin::checkIdenticalDefaultArguments(
             return IdenticalDefaultArgumentsResult::Yes;
         }
         break;
+    }
+    // If the EvaluateAsRValue derivatives above failed because the arguments use e.g. (constexpr)
+    // function template specializations that happen to not have been instantiated in this TU, try a
+    // structural comparison of the arguments:
+    if (structurallyIdentical(argument1, argument2)) {
+        return IdenticalDefaultArgumentsResult::Yes;
     }
     return IdenticalDefaultArgumentsResult::Maybe;
 }

@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <config_clang.h>
+#include <o3tl/typed_flags_set.hxx>
 
 struct Base
 {
@@ -90,11 +91,25 @@ struct DerivedSlightlyDifferent : Base
     }
 };
 
+enum class E
+{
+    E1 = 1,
+    E2 = 2,
+    E3 = 4
+};
+namespace o3tl
+{
+template <> struct typed_flags<E> : is_typed_flags<E, 7>
+{
+};
+}
+
 struct Base2
 {
     void default1(Base const& = SimpleDerived());
     void default2(Base const& = SimpleDerived());
     void default3(Base = Base());
+    void default4(E = (E::E1 | E::E2 | E::E3));
 };
 
 struct Derived2 : Base2
@@ -111,6 +126,12 @@ struct Derived2 : Base2
         Base x = Base())
     {
         (Base2::default3(x));
+    }
+    void
+    default4( // expected-error {{public function just calls public parent [loplugin:unnecessaryoverride]}}
+        E x = (E::E1 | E::E2 | E::E3))
+    {
+        Base2::default4(x);
     }
 };
 
