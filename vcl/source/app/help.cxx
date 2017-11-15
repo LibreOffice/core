@@ -535,28 +535,29 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
         }
     }
 
-    if (!pHelpWin && !rHelpText.isEmpty())
-    {
-        sal_uInt64 nCurTime = tools::Time::GetSystemTicks();
-        if  (   ( ( nCurTime - pSVData->maHelpData.mnLastHelpHideTime ) < pParent->GetSettings().GetHelpSettings().GetTipDelay() )
-            ||  ( nStyle & QuickHelpFlags::NoDelay )
-            )
-            nDelayMode = HELPDELAY_NONE;
+    if (pHelpWin || rHelpText.isEmpty())
+        return;
 
-        pHelpWin = VclPtr<HelpTextWindow>::Create( pParent, rHelpText, nHelpWinStyle, nStyle );
-        pSVData->maHelpData.mpHelpWin = pHelpWin;
-        pHelpWin->SetStatusText( rStatusText );
-        pHelpWin->SetHelpArea( rHelpArea );
+    sal_uInt64 nCurTime = tools::Time::GetSystemTicks();
+    if  (   ( ( nCurTime - pSVData->maHelpData.mnLastHelpHideTime ) < pParent->GetSettings().GetHelpSettings().GetTipDelay() )
+        ||  ( nStyle & QuickHelpFlags::NoDelay )
+        )
+        nDelayMode = HELPDELAY_NONE;
 
-        //  positioning
-        Size aSz = pHelpWin->CalcOutSize();
-        pHelpWin->SetOutputSizePixel( aSz );
-        ImplSetHelpWindowPos( pHelpWin, nHelpWinStyle, nStyle, rScreenPos, rHelpArea );
-        // if not called from Window::RequestHelp, then without delay...
-        if ( !pSVData->maHelpData.mbRequestingHelp )
-            nDelayMode = HELPDELAY_NONE;
-        pHelpWin->ShowHelp( nDelayMode );
-    }
+    pHelpWin = VclPtr<HelpTextWindow>::Create( pParent, rHelpText, nHelpWinStyle, nStyle );
+    pSVData->maHelpData.mpHelpWin = pHelpWin;
+    pHelpWin->SetStatusText( rStatusText );
+    pHelpWin->SetHelpArea( rHelpArea );
+
+    //  positioning
+    Size aSz = pHelpWin->CalcOutSize();
+    pHelpWin->SetOutputSizePixel( aSz );
+    ImplSetHelpWindowPos( pHelpWin, nHelpWinStyle, nStyle, rScreenPos, rHelpArea );
+    // if not called from Window::RequestHelp, then without delay...
+    if ( !pSVData->maHelpData.mbRequestingHelp )
+        nDelayMode = HELPDELAY_NONE;
+    pHelpWin->ShowHelp( nDelayMode );
+
 }
 
 void ImplDestroyHelpWindow( bool bUpdateHideTime )

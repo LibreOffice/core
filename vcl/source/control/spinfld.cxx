@@ -961,55 +961,56 @@ void SpinField::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, D
     Edit::Draw(pDev, rPos, rSize, nFlags);
 
     WinBits nFieldStyle = GetStyle();
-    if ( !(nFlags & DrawFlags::NoControls ) && ( nFieldStyle & (WB_SPIN|WB_DROPDOWN) ) )
+    if ( (nFlags & DrawFlags::NoControls ) || !( nFieldStyle & (WB_SPIN|WB_DROPDOWN) ) )
+        return;
+
+    Point aPos = pDev->LogicToPixel( rPos );
+    Size aSize = pDev->LogicToPixel( rSize );
+    OutDevType eOutDevType = pDev->GetOutDevType();
+    AllSettings aOldSettings = pDev->GetSettings();
+
+    pDev->Push();
+    pDev->SetMapMode();
+
+    if (eOutDevType == OUTDEV_PRINTER)
     {
-        Point aPos = pDev->LogicToPixel( rPos );
-        Size aSize = pDev->LogicToPixel( rSize );
-        OutDevType eOutDevType = pDev->GetOutDevType();
-        AllSettings aOldSettings = pDev->GetSettings();
-
-        pDev->Push();
-        pDev->SetMapMode();
-
-        if (eOutDevType == OUTDEV_PRINTER)
-        {
-            StyleSettings aStyleSettings = aOldSettings.GetStyleSettings();
-            aStyleSettings.SetFaceColor(COL_LIGHTGRAY);
-            aStyleSettings.SetButtonTextColor(COL_BLACK);
-            AllSettings aSettings(aOldSettings);
-            aSettings.SetStyleSettings(aStyleSettings);
-            pDev->SetSettings(aSettings);
-        }
-
-        tools::Rectangle aDD, aUp, aDown;
-        ImplCalcButtonAreas(pDev, aSize, aDD, aUp, aDown);
-        aDD.Move(aPos.X(), aPos.Y());
-        aUp.Move(aPos.X(), aPos.Y());
-        aUp.Top()++;
-        aDown.Move(aPos.X(), aPos.Y());
-
-        Color aButtonTextColor;
-        if ((nFlags & DrawFlags::Mono) || (eOutDevType == OUTDEV_PRINTER))
-            aButtonTextColor = Color( COL_BLACK );
-        else
-            aButtonTextColor = GetSettings().GetStyleSettings().GetButtonTextColor();
-
-        if (GetStyle() & WB_DROPDOWN)
-        {
-            DecorationView aView( pDev );
-            tools::Rectangle aInnerRect = aView.DrawButton( aDD, DrawButtonFlags::NoLightBorder );
-            DrawSymbolFlags nSymbolStyle = (IsEnabled() || (nFlags & DrawFlags::NoDisable)) ? DrawSymbolFlags::NONE : DrawSymbolFlags::Disable;
-            aView.DrawSymbol(aInnerRect, SymbolType::SPIN_DOWN, aButtonTextColor, nSymbolStyle);
-        }
-
-        if (GetStyle() & WB_SPIN)
-        {
-            ImplDrawSpinButton(*pDev, this, aUp, aDown, false, false);
-        }
-
-        pDev->Pop();
-        pDev->SetSettings(aOldSettings);
+        StyleSettings aStyleSettings = aOldSettings.GetStyleSettings();
+        aStyleSettings.SetFaceColor(COL_LIGHTGRAY);
+        aStyleSettings.SetButtonTextColor(COL_BLACK);
+        AllSettings aSettings(aOldSettings);
+        aSettings.SetStyleSettings(aStyleSettings);
+        pDev->SetSettings(aSettings);
     }
+
+    tools::Rectangle aDD, aUp, aDown;
+    ImplCalcButtonAreas(pDev, aSize, aDD, aUp, aDown);
+    aDD.Move(aPos.X(), aPos.Y());
+    aUp.Move(aPos.X(), aPos.Y());
+    aUp.Top()++;
+    aDown.Move(aPos.X(), aPos.Y());
+
+    Color aButtonTextColor;
+    if ((nFlags & DrawFlags::Mono) || (eOutDevType == OUTDEV_PRINTER))
+        aButtonTextColor = Color( COL_BLACK );
+    else
+        aButtonTextColor = GetSettings().GetStyleSettings().GetButtonTextColor();
+
+    if (GetStyle() & WB_DROPDOWN)
+    {
+        DecorationView aView( pDev );
+        tools::Rectangle aInnerRect = aView.DrawButton( aDD, DrawButtonFlags::NoLightBorder );
+        DrawSymbolFlags nSymbolStyle = (IsEnabled() || (nFlags & DrawFlags::NoDisable)) ? DrawSymbolFlags::NONE : DrawSymbolFlags::Disable;
+        aView.DrawSymbol(aInnerRect, SymbolType::SPIN_DOWN, aButtonTextColor, nSymbolStyle);
+    }
+
+    if (GetStyle() & WB_SPIN)
+    {
+        ImplDrawSpinButton(*pDev, this, aUp, aDown, false, false);
+    }
+
+    pDev->Pop();
+    pDev->SetSettings(aOldSettings);
+
 }
 
 FactoryFunction SpinField::GetUITestFactory() const

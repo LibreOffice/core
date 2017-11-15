@@ -2963,35 +2963,36 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
 
 void ToolBox::ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem const * pItem)
 {
-    if ( !pItem->maRect.IsEmpty() )
-    {
-        tools::Rectangle aRect( mpFloatWin->ImplGetItemEdgeClipRect() );
-        aRect.SetPos( AbsoluteScreenToOutputPixel( aRect.TopLeft() ) );
-        rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetShadowColor());
-        Point p1, p2;
+    if ( pItem->maRect.IsEmpty() )
+        return;
 
-        p1 = pItem->maRect.TopLeft();
-        p1.X()++;
-        p2 = pItem->maRect.TopRight();
-        p2.X()--;
-        rRenderContext.DrawLine( p1, p2);
-        p1 = pItem->maRect.BottomLeft();
-        p1.X()++;
-        p2 = pItem->maRect.BottomRight();
-        p2.X()--;
-        rRenderContext.DrawLine( p1, p2);
+    tools::Rectangle aRect( mpFloatWin->ImplGetItemEdgeClipRect() );
+    aRect.SetPos( AbsoluteScreenToOutputPixel( aRect.TopLeft() ) );
+    rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetShadowColor());
+    Point p1, p2;
 
-        p1 = pItem->maRect.TopLeft();
-        p1.Y()++;
-        p2 = pItem->maRect.BottomLeft();
-        p2.Y()--;
-        rRenderContext.DrawLine( p1, p2);
-        p1 = pItem->maRect.TopRight();
-        p1.Y()++;
-        p2 = pItem->maRect.BottomRight();
-        p2.Y()--;
-        rRenderContext.DrawLine( p1, p2);
-    }
+    p1 = pItem->maRect.TopLeft();
+    p1.X()++;
+    p2 = pItem->maRect.TopRight();
+    p2.X()--;
+    rRenderContext.DrawLine( p1, p2);
+    p1 = pItem->maRect.BottomLeft();
+    p1.X()++;
+    p2 = pItem->maRect.BottomRight();
+    p2.X()--;
+    rRenderContext.DrawLine( p1, p2);
+
+    p1 = pItem->maRect.TopLeft();
+    p1.Y()++;
+    p2 = pItem->maRect.BottomLeft();
+    p2.Y()--;
+    rRenderContext.DrawLine( p1, p2);
+    p1 = pItem->maRect.TopRight();
+    p1.Y()++;
+    p2 = pItem->maRect.BottomRight();
+    p2.Y()--;
+    rRenderContext.DrawLine( p1, p2);
+
 }
 
 void ToolBox::ImplFloatControl( bool bStart, FloatingWindow* pFloatWindow )

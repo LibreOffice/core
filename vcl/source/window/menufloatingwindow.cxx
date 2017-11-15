@@ -64,51 +64,52 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, vcl::Window* pParent, WinBit
 
 void MenuFloatingWindow::doShutdown()
 {
-    if( pMenu )
+    if( !pMenu )
+        return;
+
+    // #105373# notify toolkit that highlight was removed
+    // otherwise the entry will not be read when the menu is opened again
+    if( nHighlightedItem != ITEMPOS_INVALID )
+        pMenu->ImplCallEventListeners( VclEventId::MenuDehighlight, nHighlightedItem );
+    if (!bKeyInput && pMenu && pMenu->pStartedFrom && !pMenu->pStartedFrom->IsMenuBar())
     {
-        // #105373# notify toolkit that highlight was removed
-        // otherwise the entry will not be read when the menu is opened again
-        if( nHighlightedItem != ITEMPOS_INVALID )
-            pMenu->ImplCallEventListeners( VclEventId::MenuDehighlight, nHighlightedItem );
-        if (!bKeyInput && pMenu && pMenu->pStartedFrom && !pMenu->pStartedFrom->IsMenuBar())
+        // #102461# remove highlight in parent
+        size_t i, nCount = pMenu->pStartedFrom->pItemList->size();
+        for(i = 0; i < nCount; i++)
         {
-            // #102461# remove highlight in parent
-            size_t i, nCount = pMenu->pStartedFrom->pItemList->size();
-            for(i = 0; i < nCount; i++)
-            {
-                MenuItemData* pData = pMenu->pStartedFrom->pItemList->GetDataFromPos( i );
-                if( pData && ( pData->pSubMenu == pMenu ) )
-                    break;
-            }
-            if( i < nCount )
-            {
-                MenuFloatingWindow* pPWin = static_cast<MenuFloatingWindow*>(pMenu->pStartedFrom->ImplGetWindow());
-                if (pPWin)
-                    pPWin->InvalidateItem(i);
-            }
+            MenuItemData* pData = pMenu->pStartedFrom->pItemList->GetDataFromPos( i );
+            if( pData && ( pData->pSubMenu == pMenu ) )
+                break;
         }
-
-        // free the reference to the accessible component
-        SetAccessible( css::uno::Reference< css::accessibility::XAccessible >() );
-
-        aHighlightChangedTimer.Stop();
-
-        // #95056# invalidate screen area covered by system window
-        // so this can be taken into account if the commandhandler performs a scroll operation
-        if( GetParent() )
+        if( i < nCount )
         {
-            tools::Rectangle aInvRect( GetWindowExtentsRelative( GetParent() ) );
-            GetParent()->Invalidate( aInvRect );
+            MenuFloatingWindow* pPWin = static_cast<MenuFloatingWindow*>(pMenu->pStartedFrom->ImplGetWindow());
+            if (pPWin)
+                pPWin->InvalidateItem(i);
         }
-        pMenu = nullptr;
-        RemoveEventListener( LINK( this, MenuFloatingWindow, ShowHideListener ) );
-
-        aScrollTimer.Stop();
-        aSubmenuCloseTimer.Stop();
-        aSubmenuCloseTimer.Stop();
-        aHighlightChangedTimer.Stop();
-        aHighlightChangedTimer.Stop();
     }
+
+    // free the reference to the accessible component
+    SetAccessible( css::uno::Reference< css::accessibility::XAccessible >() );
+
+    aHighlightChangedTimer.Stop();
+
+    // #95056# invalidate screen area covered by system window
+    // so this can be taken into account if the commandhandler performs a scroll operation
+    if( GetParent() )
+    {
+        tools::Rectangle aInvRect( GetWindowExtentsRelative( GetParent() ) );
+        GetParent()->Invalidate( aInvRect );
+    }
+    pMenu = nullptr;
+    RemoveEventListener( LINK( this, MenuFloatingWindow, ShowHideListener ) );
+
+    aScrollTimer.Stop();
+    aSubmenuCloseTimer.Stop();
+    aSubmenuCloseTimer.Stop();
+    aHighlightChangedTimer.Stop();
+    aHighlightChangedTimer.Stop();
+
 }
 
 MenuFloatingWindow::~MenuFloatingWindow()

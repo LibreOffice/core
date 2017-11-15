@@ -139,68 +139,69 @@ void BitmapProcessor::colorizeImage(BitmapEx const & rBitmapEx, Color aColor)
     Bitmap aBitmap = rBitmapEx.GetBitmap();
     Bitmap::ScopedWriteAccess pWriteAccess(aBitmap);
 
-    if (pWriteAccess)
+    if (!pWriteAccess)
+        return;
+
+    BitmapColor aBitmapColor;
+    const long nW = pWriteAccess->Width();
+    const long nH = pWriteAccess->Height();
+    std::vector<sal_uInt8> aMapR(256);
+    std::vector<sal_uInt8> aMapG(256);
+    std::vector<sal_uInt8> aMapB(256);
+    long nX;
+    long nY;
+
+    const sal_uInt8 cR = aColor.GetRed();
+    const sal_uInt8 cG = aColor.GetGreen();
+    const sal_uInt8 cB = aColor.GetBlue();
+
+    for (nX = 0; nX < 256; ++nX)
     {
-        BitmapColor aBitmapColor;
-        const long nW = pWriteAccess->Width();
-        const long nH = pWriteAccess->Height();
-        std::vector<sal_uInt8> aMapR(256);
-        std::vector<sal_uInt8> aMapG(256);
-        std::vector<sal_uInt8> aMapB(256);
-        long nX;
-        long nY;
+        aMapR[nX] = MinMax((nX + cR) / 2, 0, 255);
+        aMapG[nX] = MinMax((nX + cG) / 2, 0, 255);
+        aMapB[nX] = MinMax((nX + cB) / 2, 0, 255);
+    }
 
-        const sal_uInt8 cR = aColor.GetRed();
-        const sal_uInt8 cG = aColor.GetGreen();
-        const sal_uInt8 cB = aColor.GetBlue();
-
-        for (nX = 0; nX < 256; ++nX)
+    if (pWriteAccess->HasPalette())
+    {
+        for (sal_uInt16 i = 0, nCount = pWriteAccess->GetPaletteEntryCount(); i < nCount; i++)
         {
-            aMapR[nX] = MinMax((nX + cR) / 2, 0, 255);
-            aMapG[nX] = MinMax((nX + cG) / 2, 0, 255);
-            aMapB[nX] = MinMax((nX + cB) / 2, 0, 255);
+            const BitmapColor& rCol = pWriteAccess->GetPaletteColor(i);
+            aBitmapColor.SetRed(aMapR[rCol.GetRed()]);
+            aBitmapColor.SetGreen(aMapG[rCol.GetGreen()]);
+            aBitmapColor.SetBlue(aMapB[rCol.GetBlue()]);
+            pWriteAccess->SetPaletteColor(i, aBitmapColor);
         }
+    }
+    else if (pWriteAccess->GetScanlineFormat() == ScanlineFormat::N24BitTcBgr)
+    {
+        for (nY = 0; nY < nH; ++nY)
+        {
+            Scanline pScan = pWriteAccess->GetScanline(nY);
 
-        if (pWriteAccess->HasPalette())
-        {
-            for (sal_uInt16 i = 0, nCount = pWriteAccess->GetPaletteEntryCount(); i < nCount; i++)
+            for (nX = 0; nX < nW; ++nX)
             {
-                const BitmapColor& rCol = pWriteAccess->GetPaletteColor(i);
-                aBitmapColor.SetRed(aMapR[rCol.GetRed()]);
-                aBitmapColor.SetGreen(aMapG[rCol.GetGreen()]);
-                aBitmapColor.SetBlue(aMapB[rCol.GetBlue()]);
-                pWriteAccess->SetPaletteColor(i, aBitmapColor);
-            }
-        }
-        else if (pWriteAccess->GetScanlineFormat() == ScanlineFormat::N24BitTcBgr)
-        {
-            for (nY = 0; nY < nH; ++nY)
-            {
-                Scanline pScan = pWriteAccess->GetScanline(nY);
-
-                for (nX = 0; nX < nW; ++nX)
-                {
-                    *pScan = aMapB[*pScan]; pScan++;
-                    *pScan = aMapG[*pScan]; pScan++;
-                    *pScan = aMapR[*pScan]; pScan++;
-                }
-            }
-        }
-        else
-        {
-            for (nY = 0; nY < nH; ++nY)
-            {
-                for (nX = 0; nX < nW; ++nX)
-                {
-                    aBitmapColor = pWriteAccess->GetPixel(nY, nX);
-                    aBitmapColor.SetRed(aMapR[aBitmapColor.GetRed()]);
-                    aBitmapColor.SetGreen(aMapG[aBitmapColor.GetGreen()]);
-                    aBitmapColor.SetBlue(aMapB[aBitmapColor.GetBlue()]);
-                    pWriteAccess->SetPixel(nY, nX, aBitmapColor);
-                }
+                *pScan = aMapB[*pScan]; pScan++;
+                *pScan = aMapG[*pScan]; pScan++;
+                *pScan = aMapR[*pScan]; pScan++;
             }
         }
     }
+    else
+    {
+        for (nY = 0; nY < nH; ++nY)
+        {
+            for (nX = 0; nX < nW; ++nX)
+            {
+                aBitmapColor = pWriteAccess->GetPixel(nY, nX);
+                aBitmapColor.SetRed(aMapR[aBitmapColor.GetRed()]);
+                aBitmapColor.SetGreen(aMapG[aBitmapColor.GetGreen()]);
+                aBitmapColor.SetBlue(aMapB[aBitmapColor.GetBlue()]);
+                pWriteAccess->SetPixel(nY, nX, aBitmapColor);
+            }
+        }
+    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

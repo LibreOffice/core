@@ -741,82 +741,83 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
 
     aSrcRect.Justify();
 
-    if( !rMask.IsEmpty() && aSrcRect.GetWidth() && aSrcRect.GetHeight() && aDestSz.Width() && aDestSz.Height() )
+    if( !(!rMask.IsEmpty() && aSrcRect.GetWidth() && aSrcRect.GetHeight() && aDestSz.Width() && aDestSz.Height()) )
+        return;
+
+    Bitmap  aMask( rMask );
+    BmpMirrorFlags nMirrFlags = BmpMirrorFlags::NONE;
+
+    if( aMask.GetBitCount() > 1 )
+        aMask.Convert( BmpConversion::N1BitThreshold );
+
+    // mirrored horizontically
+    if( aDestSz.Width() < 0 )
     {
-        Bitmap  aMask( rMask );
-        BmpMirrorFlags nMirrFlags = BmpMirrorFlags::NONE;
-
-        if( aMask.GetBitCount() > 1 )
-            aMask.Convert( BmpConversion::N1BitThreshold );
-
-        // mirrored horizontically
-        if( aDestSz.Width() < 0 )
-        {
-            aDestSz.Width() = -aDestSz.Width();
-            aDestPt.X() -= ( aDestSz.Width() - 1 );
-            nMirrFlags |= BmpMirrorFlags::Horizontal;
-        }
-
-        // mirrored vertically
-        if( aDestSz.Height() < 0 )
-        {
-            aDestSz.Height() = -aDestSz.Height();
-            aDestPt.Y() -= ( aDestSz.Height() - 1 );
-            nMirrFlags |= BmpMirrorFlags::Vertical;
-        }
-
-        // source cropped?
-        if( aSrcRect != tools::Rectangle( aPt, aMask.GetSizePixel() ) )
-            aMask.Crop( aSrcRect );
-
-        // destination mirrored
-        if( nMirrFlags != BmpMirrorFlags::NONE)
-            aMask.Mirror( nMirrFlags );
-
-        // do painting
-        const long      nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
-        long            nX, nY; //, nWorkX, nWorkY, nWorkWidth, nWorkHeight;
-        long*           pMapX = new long[ nSrcWidth + 1 ];
-        long*           pMapY = new long[ nSrcHeight + 1 ];
-        GDIMetaFile*    pOldMetaFile = mpMetaFile;
-        const bool      bOldMap = mbMap;
-
-        mpMetaFile = nullptr;
-        mbMap = false;
-        Push( PushFlags::FILLCOLOR | PushFlags::LINECOLOR );
-        SetLineColor( rMaskColor );
-        SetFillColor( rMaskColor );
-        InitLineColor();
-        InitFillColor();
-
-        // create forward mapping tables
-        for( nX = 0; nX <= nSrcWidth; nX++ )
-            pMapX[ nX ] = aDestPt.X() + FRound( (double) aDestSz.Width() * nX / nSrcWidth );
-
-        for( nY = 0; nY <= nSrcHeight; nY++ )
-            pMapY[ nY ] = aDestPt.Y() + FRound( (double) aDestSz.Height() * nY / nSrcHeight );
-
-        // walk through all rectangles of mask
-        const vcl::Region aWorkRgn(aMask.CreateRegion(COL_BLACK, tools::Rectangle(Point(), aMask.GetSizePixel())));
-        RectangleVector aRectangles;
-        aWorkRgn.GetRegionRectangles(aRectangles);
-
-        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
-        {
-            const Point aMapPt(pMapX[aRectIter->Left()], pMapY[aRectIter->Top()]);
-            const Size aMapSz(
-                pMapX[aRectIter->Right() + 1] - aMapPt.X(),      // pMapX[L + W] -> L + ((R - L) + 1) -> R + 1
-                pMapY[aRectIter->Bottom() + 1] - aMapPt.Y());    // same for Y
-
-            DrawRect(tools::Rectangle(aMapPt, aMapSz));
-        }
-
-        Pop();
-        delete[] pMapX;
-        delete[] pMapY;
-        mbMap = bOldMap;
-        mpMetaFile = pOldMetaFile;
+        aDestSz.Width() = -aDestSz.Width();
+        aDestPt.X() -= ( aDestSz.Width() - 1 );
+        nMirrFlags |= BmpMirrorFlags::Horizontal;
     }
+
+    // mirrored vertically
+    if( aDestSz.Height() < 0 )
+    {
+        aDestSz.Height() = -aDestSz.Height();
+        aDestPt.Y() -= ( aDestSz.Height() - 1 );
+        nMirrFlags |= BmpMirrorFlags::Vertical;
+    }
+
+    // source cropped?
+    if( aSrcRect != tools::Rectangle( aPt, aMask.GetSizePixel() ) )
+        aMask.Crop( aSrcRect );
+
+    // destination mirrored
+    if( nMirrFlags != BmpMirrorFlags::NONE)
+        aMask.Mirror( nMirrFlags );
+
+    // do painting
+    const long      nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
+    long            nX, nY; //, nWorkX, nWorkY, nWorkWidth, nWorkHeight;
+    long*           pMapX = new long[ nSrcWidth + 1 ];
+    long*           pMapY = new long[ nSrcHeight + 1 ];
+    GDIMetaFile*    pOldMetaFile = mpMetaFile;
+    const bool      bOldMap = mbMap;
+
+    mpMetaFile = nullptr;
+    mbMap = false;
+    Push( PushFlags::FILLCOLOR | PushFlags::LINECOLOR );
+    SetLineColor( rMaskColor );
+    SetFillColor( rMaskColor );
+    InitLineColor();
+    InitFillColor();
+
+    // create forward mapping tables
+    for( nX = 0; nX <= nSrcWidth; nX++ )
+        pMapX[ nX ] = aDestPt.X() + FRound( (double) aDestSz.Width() * nX / nSrcWidth );
+
+    for( nY = 0; nY <= nSrcHeight; nY++ )
+        pMapY[ nY ] = aDestPt.Y() + FRound( (double) aDestSz.Height() * nY / nSrcHeight );
+
+    // walk through all rectangles of mask
+    const vcl::Region aWorkRgn(aMask.CreateRegion(COL_BLACK, tools::Rectangle(Point(), aMask.GetSizePixel())));
+    RectangleVector aRectangles;
+    aWorkRgn.GetRegionRectangles(aRectangles);
+
+    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+    {
+        const Point aMapPt(pMapX[aRectIter->Left()], pMapY[aRectIter->Top()]);
+        const Size aMapSz(
+            pMapX[aRectIter->Right() + 1] - aMapPt.X(),      // pMapX[L + W] -> L + ((R - L) + 1) -> R + 1
+            pMapY[aRectIter->Bottom() + 1] - aMapPt.Y());    // same for Y
+
+        DrawRect(tools::Rectangle(aMapPt, aMapSz));
+    }
+
+    Pop();
+    delete[] pMapX;
+    delete[] pMapY;
+    mbMap = bOldMap;
+    mpMetaFile = pOldMetaFile;
+
 }
 
 SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,

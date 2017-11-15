@@ -1036,107 +1036,108 @@ void X11SalFrame::updateGraphics( bool bClear )
 
 void X11SalFrame::SetIcon( sal_uInt16 nIcon )
 {
-    if ( ! IsChildWindow() )
+    if (  IsChildWindow() )
+        return;
+
+    // 0 == default icon -> #1
+    if ( nIcon == 0 )
+        nIcon = 1;
+
+    mnIconID = nIcon;
+
+    XIconSize *pIconSize = nullptr;
+    int nSizes = 0;
+    int iconSize = 32;
+    if ( XGetIconSizes( GetXDisplay(), GetDisplay()->GetRootWindow( m_nXScreen ), &pIconSize, &nSizes ) )
     {
-        // 0 == default icon -> #1
-        if ( nIcon == 0 )
-            nIcon = 1;
-
-        mnIconID = nIcon;
-
-        XIconSize *pIconSize = nullptr;
-        int nSizes = 0;
-        int iconSize = 32;
-        if ( XGetIconSizes( GetXDisplay(), GetDisplay()->GetRootWindow( m_nXScreen ), &pIconSize, &nSizes ) )
-        {
 #if OSL_DEBUG_LEVEL > 1
-            fprintf(stderr, "X11SalFrame::SetIcon(): found %d IconSizes:\n", nSizes);
+        fprintf(stderr, "X11SalFrame::SetIcon(): found %d IconSizes:\n", nSizes);
 #endif
 
-            int i;
-            for( i=0; i<nSizes; i++)
+        int i;
+        for( i=0; i<nSizes; i++)
+        {
+           // select largest supported icon
+            if( pIconSize[i].max_width > iconSize )
             {
-               // select largest supported icon
-                if( pIconSize[i].max_width > iconSize )
-                {
-                    iconSize = pIconSize[i].max_width;
-                }
+                iconSize = pIconSize[i].max_width;
+            }
 
 #if OSL_DEBUG_LEVEL > 1
-                fprintf(stderr, "min: %d, %d\nmax: %d, %d\ninc: %d, %d\n\n",
-                        pIconSize[i].min_width, pIconSize[i].min_height,
-                        pIconSize[i].max_width, pIconSize[i].max_height,
-                        pIconSize[i].width_inc, pIconSize[i].height_inc);
+            fprintf(stderr, "min: %d, %d\nmax: %d, %d\ninc: %d, %d\n\n",
+                    pIconSize[i].min_width, pIconSize[i].min_height,
+                    pIconSize[i].max_width, pIconSize[i].max_height,
+                    pIconSize[i].width_inc, pIconSize[i].height_inc);
 #endif
-            }
-
-            XFree( pIconSize );
-        }
-        else
-        {
-            const OUString& rWM( pDisplay_->getWMAdaptor()->getWindowManagerName() );
-            if( rWM == "KWin" )         // assume KDE is running
-                iconSize = 48;
-            static bool bGnomeIconSize = false;
-            static bool bGnomeChecked = false;
-            if( ! bGnomeChecked )
-            {
-                bGnomeChecked=true;
-                int nCount = 0;
-                Atom* pProps = XListProperties( GetXDisplay(),
-                                                GetDisplay()->GetRootWindow( m_nXScreen ),
-                                                &nCount );
-                for( int i = 0; i < nCount && !bGnomeIconSize; i++ )
-                 {
-                    char* pName = XGetAtomName( GetXDisplay(), pProps[i] );
-                    if( pName )
-                    {
-                        if( !strcmp( pName, "GNOME_PANEL_DESKTOP_AREA" ) )
-                            bGnomeIconSize = true;
-                        XFree( pName );
-                    }
-                 }
-                if( pProps )
-                    XFree( pProps );
-            }
-            if( bGnomeIconSize )
-                iconSize = 48;
         }
 
-        XWMHints Hints;
-        Hints.flags = 0;
-        XWMHints *pHints = XGetWMHints( GetXDisplay(), GetShellWindow() );
-        if( pHints )
-        {
-            memcpy(&Hints, pHints, sizeof( XWMHints ));
-            XFree( pHints );
-        }
-        pHints = &Hints;
-
-        NetWmIconData netwm_icon;
-        bool bOk = lcl_SelectAppIconPixmap( GetDisplay(), m_nXScreen,
-                                                nIcon, iconSize,
-                                                pHints->icon_pixmap, pHints->icon_mask, netwm_icon );
-        if ( !bOk )
-        {
-            // load default icon (0)
-            bOk = lcl_SelectAppIconPixmap( GetDisplay(), m_nXScreen,
-                                           0, iconSize,
-                                           pHints->icon_pixmap, pHints->icon_mask, netwm_icon );
-        }
-        if( bOk )
-        {
-            pHints->flags    |= IconPixmapHint;
-            if( pHints->icon_mask )
-                pHints->flags |= IconMaskHint;
-
-            XSetWMHints( GetXDisplay(), GetShellWindow(), pHints );
-            if( !netwm_icon.empty() && GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ))
-                XChangeProperty( GetXDisplay(), mhWindow,
-                    GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ),
-                    XA_CARDINAL, 32, PropModeReplace, reinterpret_cast<unsigned char*>(netwm_icon.data()), netwm_icon.size());
-        }
+        XFree( pIconSize );
     }
+    else
+    {
+        const OUString& rWM( pDisplay_->getWMAdaptor()->getWindowManagerName() );
+        if( rWM == "KWin" )         // assume KDE is running
+            iconSize = 48;
+        static bool bGnomeIconSize = false;
+        static bool bGnomeChecked = false;
+        if( ! bGnomeChecked )
+        {
+            bGnomeChecked=true;
+            int nCount = 0;
+            Atom* pProps = XListProperties( GetXDisplay(),
+                                            GetDisplay()->GetRootWindow( m_nXScreen ),
+                                            &nCount );
+            for( int i = 0; i < nCount && !bGnomeIconSize; i++ )
+             {
+                char* pName = XGetAtomName( GetXDisplay(), pProps[i] );
+                if( pName )
+                {
+                    if( !strcmp( pName, "GNOME_PANEL_DESKTOP_AREA" ) )
+                        bGnomeIconSize = true;
+                    XFree( pName );
+                }
+             }
+            if( pProps )
+                XFree( pProps );
+        }
+        if( bGnomeIconSize )
+            iconSize = 48;
+    }
+
+    XWMHints Hints;
+    Hints.flags = 0;
+    XWMHints *pHints = XGetWMHints( GetXDisplay(), GetShellWindow() );
+    if( pHints )
+    {
+        memcpy(&Hints, pHints, sizeof( XWMHints ));
+        XFree( pHints );
+    }
+    pHints = &Hints;
+
+    NetWmIconData netwm_icon;
+    bool bOk = lcl_SelectAppIconPixmap( GetDisplay(), m_nXScreen,
+                                            nIcon, iconSize,
+                                            pHints->icon_pixmap, pHints->icon_mask, netwm_icon );
+    if ( !bOk )
+    {
+        // load default icon (0)
+        bOk = lcl_SelectAppIconPixmap( GetDisplay(), m_nXScreen,
+                                       0, iconSize,
+                                       pHints->icon_pixmap, pHints->icon_mask, netwm_icon );
+    }
+    if( bOk )
+    {
+        pHints->flags    |= IconPixmapHint;
+        if( pHints->icon_mask )
+            pHints->flags |= IconMaskHint;
+
+        XSetWMHints( GetXDisplay(), GetShellWindow(), pHints );
+        if( !netwm_icon.empty() && GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ))
+            XChangeProperty( GetXDisplay(), mhWindow,
+                GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ),
+                XA_CARDINAL, 32, PropModeReplace, reinterpret_cast<unsigned char*>(netwm_icon.data()), netwm_icon.size());
+    }
+
 }
 
 void X11SalFrame::SetMaxClientSize( long nWidth, long nHeight )

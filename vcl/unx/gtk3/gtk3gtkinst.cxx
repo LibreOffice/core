@@ -992,44 +992,45 @@ private:
     virtual void adjustToNewSize() override
     {
 #if GTK_CHECK_VERSION(3,16,0)
-        if (m_pGLArea)
-        {
-            int scale = gtk_widget_get_scale_factor(m_pGLArea);
-            int width = m_aGLWin.Width * scale;
-            int height = m_aGLWin.Height * scale;
+        if (!m_pGLArea)
+            return;
 
-            gtk_gl_area_make_current(GTK_GL_AREA(m_pGLArea));
-            glBindRenderbuffer(GL_RENDERBUFFER, m_nRenderBuffer);
-            glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB8, width, height);
-            glBindRenderbuffer(GL_RENDERBUFFER, m_nDepthBuffer);
-            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_nAreaFrameBuffer);
-            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                                         GL_RENDERBUFFER_EXT, m_nRenderBuffer);
-            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
-                                         GL_RENDERBUFFER_EXT, m_nDepthBuffer);
+        int scale = gtk_widget_get_scale_factor(m_pGLArea);
+        int width = m_aGLWin.Width * scale;
+        int height = m_aGLWin.Height * scale;
 
-            gdk_gl_context_make_current(m_pContext);
-            glBindRenderbuffer(GL_RENDERBUFFER, m_nRenderBuffer);
-            glBindRenderbuffer(GL_RENDERBUFFER, m_nDepthBuffer);
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_nFrameBuffer);
-            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                                         GL_RENDERBUFFER_EXT, m_nRenderBuffer);
-            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
-                                         GL_RENDERBUFFER_EXT, m_nDepthBuffer);
-            glViewport(0, 0, width, height);
+        gtk_gl_area_make_current(GTK_GL_AREA(m_pGLArea));
+        glBindRenderbuffer(GL_RENDERBUFFER, m_nRenderBuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB8, width, height);
+        glBindRenderbuffer(GL_RENDERBUFFER, m_nDepthBuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_nAreaFrameBuffer);
+        glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
+                                     GL_RENDERBUFFER_EXT, m_nRenderBuffer);
+        glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
+                                     GL_RENDERBUFFER_EXT, m_nDepthBuffer);
 
-            glBindRenderbuffer(GL_RENDERBUFFER, m_nRenderScratchBuffer);
-            glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB8, width, height);
-            glBindRenderbuffer(GL_RENDERBUFFER, m_nDepthScratchBuffer);
-            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_nFrameScratchBuffer);
-            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                                         GL_RENDERBUFFER_EXT, m_nRenderScratchBuffer);
-            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
-                                         GL_RENDERBUFFER_EXT, m_nDepthScratchBuffer);
-            glViewport(0, 0, width, height);
-        }
+        gdk_gl_context_make_current(m_pContext);
+        glBindRenderbuffer(GL_RENDERBUFFER, m_nRenderBuffer);
+        glBindRenderbuffer(GL_RENDERBUFFER, m_nDepthBuffer);
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_nFrameBuffer);
+        glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
+                                     GL_RENDERBUFFER_EXT, m_nRenderBuffer);
+        glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
+                                     GL_RENDERBUFFER_EXT, m_nDepthBuffer);
+        glViewport(0, 0, width, height);
+
+        glBindRenderbuffer(GL_RENDERBUFFER, m_nRenderScratchBuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB8, width, height);
+        glBindRenderbuffer(GL_RENDERBUFFER, m_nDepthScratchBuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_nFrameScratchBuffer);
+        glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
+                                     GL_RENDERBUFFER_EXT, m_nRenderScratchBuffer);
+        glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
+                                     GL_RENDERBUFFER_EXT, m_nDepthScratchBuffer);
+        glViewport(0, 0, width, height);
+
 #endif
     }
 

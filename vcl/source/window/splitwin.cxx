@@ -1794,185 +1794,186 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
     Point aMousePosPixel = rMEvt.GetPosPixel();
     mnSplitTest = ImplTestSplit( this, aMousePosPixel, mnMouseOff, &mpSplitSet, mnSplitPos );
 
-    if ( mnSplitTest && !(mnSplitTest & SPLIT_NOSPLIT) )
+    if ( !mnSplitTest || (mnSplitTest & SPLIT_NOSPLIT) )
+        return;
+
+    ImplSplitItem*  pSplitItem;
+    long            nCurMaxSize;
+    bool            bPropSmaller;
+
+    mnMouseModifier = rMEvt.GetModifier();
+    bPropSmaller = (mnMouseModifier & KEY_SHIFT) && (static_cast<sal_uInt16>(mnSplitPos+1) < mpSplitSet->mpItems.size());
+
+    // here we can set the maximum size
+    StartSplit();
+
+    if ( mnMaxSize )
+        nCurMaxSize = mnMaxSize;
+    else
     {
-        ImplSplitItem*  pSplitItem;
-        long            nCurMaxSize;
-        bool            bPropSmaller;
-
-        mnMouseModifier = rMEvt.GetModifier();
-        bPropSmaller = (mnMouseModifier & KEY_SHIFT) && (static_cast<sal_uInt16>(mnSplitPos+1) < mpSplitSet->mpItems.size());
-
-        // here we can set the maximum size
-        StartSplit();
-
-        if ( mnMaxSize )
-            nCurMaxSize = mnMaxSize;
+        Size aSize = GetParent()->GetOutputSizePixel();
+        if ( mbHorz )
+            nCurMaxSize = aSize.Height();
         else
+            nCurMaxSize = aSize.Width();
+    }
+
+    if ( !mpSplitSet->mpItems.empty() )
+    {
+        bool bDown = true;
+        if ( (mpSplitSet == mpMainSet) && mbBottomRight )
+            bDown = false;
+
+        pSplitItem          = mpSplitSet->mpItems[mnSplitPos];
+        maDragRect.Left()   = pSplitItem->mnLeft;
+        maDragRect.Top()    = pSplitItem->mnTop;
+        maDragRect.Right()  = pSplitItem->mnLeft+pSplitItem->mnWidth-1;
+        maDragRect.Bottom() = pSplitItem->mnTop+pSplitItem->mnHeight-1;
+
+        if ( mnSplitTest & SPLIT_HORZ )
         {
-            Size aSize = GetParent()->GetOutputSizePixel();
-            if ( mbHorz )
-                nCurMaxSize = aSize.Height();
+            if ( bDown )
+                maDragRect.Right() += mpSplitSet->mnSplitSize;
             else
-                nCurMaxSize = aSize.Width();
-        }
-
-        if ( !mpSplitSet->mpItems.empty() )
-        {
-            bool bDown = true;
-            if ( (mpSplitSet == mpMainSet) && mbBottomRight )
-                bDown = false;
-
-            pSplitItem          = mpSplitSet->mpItems[mnSplitPos];
-            maDragRect.Left()   = pSplitItem->mnLeft;
-            maDragRect.Top()    = pSplitItem->mnTop;
-            maDragRect.Right()  = pSplitItem->mnLeft+pSplitItem->mnWidth-1;
-            maDragRect.Bottom() = pSplitItem->mnTop+pSplitItem->mnHeight-1;
-
-            if ( mnSplitTest & SPLIT_HORZ )
-            {
-                if ( bDown )
-                    maDragRect.Right() += mpSplitSet->mnSplitSize;
-                else
-                    maDragRect.Left() -= mpSplitSet->mnSplitSize;
-            }
-            else
-            {
-                if ( bDown )
-                    maDragRect.Bottom() += mpSplitSet->mnSplitSize;
-                else
-                    maDragRect.Top() -= mpSplitSet->mnSplitSize;
-            }
-
-            if ( mnSplitPos )
-            {
-                long nTemp = mnSplitPos;
-                while ( nTemp )
-                {
-                    pSplitItem = mpSplitSet->mpItems[nTemp-1];
-                    if ( pSplitItem->mbFixed )
-                        break;
-                    else
-                    {
-                        if ( mnSplitTest & SPLIT_HORZ )
-                        {
-                            if ( bDown )
-                                maDragRect.Left() -= pSplitItem->mnPixSize;
-                            else
-                                maDragRect.Right() += pSplitItem->mnPixSize;
-                        }
-                        else
-                        {
-                            if ( bDown )
-                                maDragRect.Top() -= pSplitItem->mnPixSize;
-                            else
-                                maDragRect.Bottom() += pSplitItem->mnPixSize;
-                        }
-                    }
-                    nTemp--;
-                }
-            }
-
-            if ( (mpSplitSet == mpMainSet) && (mnWinStyle & WB_SIZEABLE) && !bPropSmaller )
-            {
-                if ( bDown )
-                {
-                    if ( mbHorz )
-                        maDragRect.Bottom() += nCurMaxSize-mnDY-mnTopBorder;
-                    else
-                        maDragRect.Right() += nCurMaxSize-mnDX-mnLeftBorder;
-                }
-                else
-                {
-                    if ( mbHorz )
-                        maDragRect.Top() -= nCurMaxSize-mnDY-mnBottomBorder;
-                    else
-                        maDragRect.Left() -= nCurMaxSize-mnDX-mnRightBorder;
-                }
-            }
-            else
-            {
-                std::vector<ImplSplitItem *>::size_type nTemp = mnSplitPos+1;
-                while ( nTemp < mpSplitSet->mpItems.size() )
-                {
-                    pSplitItem = mpSplitSet->mpItems[nTemp];
-                    if ( pSplitItem->mbFixed )
-                        break;
-                    else
-                    {
-                        if ( mnSplitTest & SPLIT_HORZ )
-                        {
-                            if ( bDown )
-                                maDragRect.Right() += pSplitItem->mnPixSize;
-                            else
-                                maDragRect.Left() -= pSplitItem->mnPixSize;
-                        }
-                        else
-                        {
-                            if ( bDown )
-                                maDragRect.Bottom() += pSplitItem->mnPixSize;
-                            else
-                                maDragRect.Top() -= pSplitItem->mnPixSize;
-                        }
-                    }
-                    nTemp++;
-                }
-            }
+                maDragRect.Left() -= mpSplitSet->mnSplitSize;
         }
         else
         {
-            maDragRect.Left()   = mnLeftBorder;
-            maDragRect.Top()    = mnTopBorder;
-            maDragRect.Right()  = mnDX-mnRightBorder-1;
-            maDragRect.Bottom() = mnDY-mnBottomBorder-1;
-            if ( mbHorz )
+            if ( bDown )
+                maDragRect.Bottom() += mpSplitSet->mnSplitSize;
+            else
+                maDragRect.Top() -= mpSplitSet->mnSplitSize;
+        }
+
+        if ( mnSplitPos )
+        {
+            long nTemp = mnSplitPos;
+            while ( nTemp )
             {
-                if ( mbBottomRight )
-                    maDragRect.Top() -= nCurMaxSize-mnDY-mnBottomBorder;
+                pSplitItem = mpSplitSet->mpItems[nTemp-1];
+                if ( pSplitItem->mbFixed )
+                    break;
                 else
+                {
+                    if ( mnSplitTest & SPLIT_HORZ )
+                    {
+                        if ( bDown )
+                            maDragRect.Left() -= pSplitItem->mnPixSize;
+                        else
+                            maDragRect.Right() += pSplitItem->mnPixSize;
+                    }
+                    else
+                    {
+                        if ( bDown )
+                            maDragRect.Top() -= pSplitItem->mnPixSize;
+                        else
+                            maDragRect.Bottom() += pSplitItem->mnPixSize;
+                    }
+                }
+                nTemp--;
+            }
+        }
+
+        if ( (mpSplitSet == mpMainSet) && (mnWinStyle & WB_SIZEABLE) && !bPropSmaller )
+        {
+            if ( bDown )
+            {
+                if ( mbHorz )
                     maDragRect.Bottom() += nCurMaxSize-mnDY-mnTopBorder;
-            }
-            else
-            {
-                if ( mbBottomRight )
-                    maDragRect.Left() -= nCurMaxSize-mnDX-mnRightBorder;
                 else
                     maDragRect.Right() += nCurMaxSize-mnDX-mnLeftBorder;
             }
-        }
-
-        StartTracking();
-
-        mbDragFull = bool(GetSettings().GetStyleSettings().GetDragFullOptions() & DragFullOptions::Split);
-
-        ImplSplitMousePos( aMousePosPixel );
-
-        if (!mbDragFull)
-        {
-            ImplDrawSplitTracking(aMousePosPixel);
+            else
+            {
+                if ( mbHorz )
+                    maDragRect.Top() -= nCurMaxSize-mnDY-mnBottomBorder;
+                else
+                    maDragRect.Left() -= nCurMaxSize-mnDX-mnRightBorder;
+            }
         }
         else
         {
-            std::vector< ImplSplitItem* >&  rItems = mpSplitSet->mpItems;
-            sal_uInt16       nItems = mpSplitSet->mpItems.size();
-            mpLastSizes = new long[nItems*2];
-            for ( sal_uInt16 i = 0; i < nItems; i++ )
+            std::vector<ImplSplitItem *>::size_type nTemp = mnSplitPos+1;
+            while ( nTemp < mpSplitSet->mpItems.size() )
             {
-                mpLastSizes[i*2]   = rItems[i]->mnSize;
-                mpLastSizes[i*2+1] = rItems[i]->mnPixSize;
+                pSplitItem = mpSplitSet->mpItems[nTemp];
+                if ( pSplitItem->mbFixed )
+                    break;
+                else
+                {
+                    if ( mnSplitTest & SPLIT_HORZ )
+                    {
+                        if ( bDown )
+                            maDragRect.Right() += pSplitItem->mnPixSize;
+                        else
+                            maDragRect.Left() -= pSplitItem->mnPixSize;
+                    }
+                    else
+                    {
+                        if ( bDown )
+                            maDragRect.Bottom() += pSplitItem->mnPixSize;
+                        else
+                            maDragRect.Top() -= pSplitItem->mnPixSize;
+                    }
+                }
+                nTemp++;
             }
         }
-        mnMStartPos = mnMSplitPos;
-
-        PointerStyle eStyle = PointerStyle::Arrow;
-        if ( mnSplitTest & SPLIT_HORZ )
-            eStyle = PointerStyle::HSplit;
-        else if ( mnSplitTest & SPLIT_VERT )
-            eStyle = PointerStyle::VSplit;
-
-        Pointer aPtr( eStyle );
-        SetPointer( aPtr );
     }
+    else
+    {
+        maDragRect.Left()   = mnLeftBorder;
+        maDragRect.Top()    = mnTopBorder;
+        maDragRect.Right()  = mnDX-mnRightBorder-1;
+        maDragRect.Bottom() = mnDY-mnBottomBorder-1;
+        if ( mbHorz )
+        {
+            if ( mbBottomRight )
+                maDragRect.Top() -= nCurMaxSize-mnDY-mnBottomBorder;
+            else
+                maDragRect.Bottom() += nCurMaxSize-mnDY-mnTopBorder;
+        }
+        else
+        {
+            if ( mbBottomRight )
+                maDragRect.Left() -= nCurMaxSize-mnDX-mnRightBorder;
+            else
+                maDragRect.Right() += nCurMaxSize-mnDX-mnLeftBorder;
+        }
+    }
+
+    StartTracking();
+
+    mbDragFull = bool(GetSettings().GetStyleSettings().GetDragFullOptions() & DragFullOptions::Split);
+
+    ImplSplitMousePos( aMousePosPixel );
+
+    if (!mbDragFull)
+    {
+        ImplDrawSplitTracking(aMousePosPixel);
+    }
+    else
+    {
+        std::vector< ImplSplitItem* >&  rItems = mpSplitSet->mpItems;
+        sal_uInt16       nItems = mpSplitSet->mpItems.size();
+        mpLastSizes = new long[nItems*2];
+        for ( sal_uInt16 i = 0; i < nItems; i++ )
+        {
+            mpLastSizes[i*2]   = rItems[i]->mnSize;
+            mpLastSizes[i*2+1] = rItems[i]->mnPixSize;
+        }
+    }
+    mnMStartPos = mnMSplitPos;
+
+    PointerStyle eStyle = PointerStyle::Arrow;
+    if ( mnSplitTest & SPLIT_HORZ )
+        eStyle = PointerStyle::HSplit;
+    else if ( mnSplitTest & SPLIT_VERT )
+        eStyle = PointerStyle::VSplit;
+
+    Pointer aPtr( eStyle );
+    SetPointer( aPtr );
+
 }
 
 void SplitWindow::StartSplit()
@@ -2041,34 +2042,35 @@ void SplitWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 void SplitWindow::MouseMove( const MouseEvent& rMEvt )
 {
-    if ( !IsTracking() )
+    if ( IsTracking() )
+        return;
+
+    Point           aPos = rMEvt.GetPosPixel();
+    long            nTemp;
+    ImplSplitSet*   pTempSplitSet;
+    sal_uInt16          nTempSplitPos;
+    sal_uInt16          nSplitTest = ImplTestSplit( this, aPos, nTemp, &pTempSplitSet, nTempSplitPos );
+    PointerStyle    eStyle = PointerStyle::Arrow;
+    tools::Rectangle       aFadeInRect;
+    tools::Rectangle       aFadeOutRect;
+
+    ImplGetFadeInRect( aFadeInRect );
+    ImplGetFadeOutRect( aFadeOutRect );
+    if ( !aFadeInRect.IsInside( aPos ) &&
+         !aFadeOutRect.IsInside( aPos ) )
     {
-        Point           aPos = rMEvt.GetPosPixel();
-        long            nTemp;
-        ImplSplitSet*   pTempSplitSet;
-        sal_uInt16          nTempSplitPos;
-        sal_uInt16          nSplitTest = ImplTestSplit( this, aPos, nTemp, &pTempSplitSet, nTempSplitPos );
-        PointerStyle    eStyle = PointerStyle::Arrow;
-        tools::Rectangle       aFadeInRect;
-        tools::Rectangle       aFadeOutRect;
-
-        ImplGetFadeInRect( aFadeInRect );
-        ImplGetFadeOutRect( aFadeOutRect );
-        if ( !aFadeInRect.IsInside( aPos ) &&
-             !aFadeOutRect.IsInside( aPos ) )
+        if ( nSplitTest && !(nSplitTest & SPLIT_NOSPLIT) )
         {
-            if ( nSplitTest && !(nSplitTest & SPLIT_NOSPLIT) )
-            {
-                if ( nSplitTest & SPLIT_HORZ )
-                    eStyle = PointerStyle::HSplit;
-                else if ( nSplitTest & SPLIT_VERT )
-                    eStyle = PointerStyle::VSplit;
-            }
+            if ( nSplitTest & SPLIT_HORZ )
+                eStyle = PointerStyle::HSplit;
+            else if ( nSplitTest & SPLIT_VERT )
+                eStyle = PointerStyle::VSplit;
         }
-
-        Pointer aPtr( eStyle );
-        SetPointer( aPtr );
     }
+
+    Pointer aPtr( eStyle );
+    SetPointer( aPtr );
+
 }
 
 void SplitWindow::Tracking( const TrackingEvent& rTEvt )

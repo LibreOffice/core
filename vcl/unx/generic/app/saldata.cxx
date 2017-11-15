@@ -440,23 +440,24 @@ void SalXLib::Init()
     OString aDisplay;
     m_pDisplay = OpenX11Display(aDisplay);
 
-    if ( !m_pDisplay )
-    {
-        OUString aProgramFileURL;
-        osl_getExecutableFile( &aProgramFileURL.pData );
-        OUString aProgramSystemPath;
-        osl_getSystemPathFromFileURL (aProgramFileURL.pData, &aProgramSystemPath.pData);
-        OString  aProgramName = OUStringToOString(
-                                            aProgramSystemPath,
-                                            osl_getThreadTextEncoding() );
-        std::fprintf( stderr, "%s X11 error: Can't open display: %s\n",
-                aProgramName.getStr(), aDisplay.getStr());
-        std::fprintf( stderr, "   Set DISPLAY environment variable, use -display option\n");
-        std::fprintf( stderr, "   or check permissions of your X-Server\n");
-        std::fprintf( stderr, "   (See \"man X\" resp. \"man xhost\" for details)\n");
-        std::fflush( stderr );
-        exit(0);
-    }
+    if ( m_pDisplay )
+        return;
+
+    OUString aProgramFileURL;
+    osl_getExecutableFile( &aProgramFileURL.pData );
+    OUString aProgramSystemPath;
+    osl_getSystemPathFromFileURL (aProgramFileURL.pData, &aProgramSystemPath.pData);
+    OString  aProgramName = OUStringToOString(
+                                        aProgramSystemPath,
+                                        osl_getThreadTextEncoding() );
+    std::fprintf( stderr, "%s X11 error: Can't open display: %s\n",
+            aProgramName.getStr(), aDisplay.getStr());
+    std::fprintf( stderr, "   Set DISPLAY environment variable, use -display option\n");
+    std::fprintf( stderr, "   or check permissions of your X-Server\n");
+    std::fprintf( stderr, "   (See \"man X\" resp. \"man xhost\" for details)\n");
+    std::fflush( stderr );
+    exit(0);
+
 }
 
 extern "C" {

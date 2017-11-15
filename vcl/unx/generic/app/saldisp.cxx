@@ -2525,51 +2525,52 @@ SalColormap::SalColormap( const SalDisplay *pDisplay, Colormap hColormap,
 
     m_nUsed = 1 << m_aVisual.GetDepth();
 
-    if( m_aVisual.GetClass() == PseudoColor )
-    {
-        int r, g, b;
+    if( m_aVisual.GetClass() != PseudoColor )
+        return;
 
-        // black, white, gray, ~gray = 4
-        GetXPixels( aColor, 0xC0, 0xC0, 0xC0 );
+    int r, g, b;
 
-        // light colors: 3 * 2 = 6
+    // black, white, gray, ~gray = 4
+    GetXPixels( aColor, 0xC0, 0xC0, 0xC0 );
 
-        GetXPixels( aColor, 0x00, 0x00, 0xFF );
-        GetXPixels( aColor, 0x00, 0xFF, 0x00 );
-        GetXPixels( aColor, 0x00, 0xFF, 0xFF );
+    // light colors: 3 * 2 = 6
 
-        // standard colors: 7 * 2 = 14
-        GetXPixels( aColor, 0x00, 0x00, 0x80 );
-        GetXPixels( aColor, 0x00, 0x80, 0x00 );
-        GetXPixels( aColor, 0x00, 0x80, 0x80 );
-        GetXPixels( aColor, 0x80, 0x00, 0x00 );
-        GetXPixels( aColor, 0x80, 0x00, 0x80 );
-        GetXPixels( aColor, 0x80, 0x80, 0x00 );
-        GetXPixels( aColor, 0x80, 0x80, 0x80 );
-        GetXPixels( aColor, 0x00, 0xB8, 0xFF ); // Blue 7
+    GetXPixels( aColor, 0x00, 0x00, 0xFF );
+    GetXPixels( aColor, 0x00, 0xFF, 0x00 );
+    GetXPixels( aColor, 0x00, 0xFF, 0xFF );
 
-        // cube: 6*6*6 - 8 = 208
-        for( r = 0; r < 0x100; r += 0x33 ) // 0x33, 0x66, 0x99, 0xCC, 0xFF
-            for( g = 0; g < 0x100; g += 0x33 )
-                for( b = 0; b < 0x100; b += 0x33 )
-                    GetXPixels( aColor, r, g, b );
+    // standard colors: 7 * 2 = 14
+    GetXPixels( aColor, 0x00, 0x00, 0x80 );
+    GetXPixels( aColor, 0x00, 0x80, 0x00 );
+    GetXPixels( aColor, 0x00, 0x80, 0x80 );
+    GetXPixels( aColor, 0x80, 0x00, 0x00 );
+    GetXPixels( aColor, 0x80, 0x00, 0x80 );
+    GetXPixels( aColor, 0x80, 0x80, 0x00 );
+    GetXPixels( aColor, 0x80, 0x80, 0x80 );
+    GetXPixels( aColor, 0x00, 0xB8, 0xFF ); // Blue 7
 
-        // gray: 16 - 6 = 10
-        for( g = 0x11; g < 0xFF; g += 0x11 )
-            GetXPixels( aColor, g, g, g );
+    // cube: 6*6*6 - 8 = 208
+    for( r = 0; r < 0x100; r += 0x33 ) // 0x33, 0x66, 0x99, 0xCC, 0xFF
+        for( g = 0; g < 0x100; g += 0x33 )
+            for( b = 0; b < 0x100; b += 0x33 )
+                GetXPixels( aColor, r, g, b );
 
-        // green: 16 - 6 = 10
-        for( g = 0x11; g < 0xFF; g += 0x11 )
-            GetXPixels( aColor, 0, g, 0 );
+    // gray: 16 - 6 = 10
+    for( g = 0x11; g < 0xFF; g += 0x11 )
+        GetXPixels( aColor, g, g, g );
 
-        // red: 16 - 6 = 10
-        for( r = 0x11; r < 0xFF; r += 0x11 )
-            GetXPixels( aColor, r, 0, 0 );
+    // green: 16 - 6 = 10
+    for( g = 0x11; g < 0xFF; g += 0x11 )
+        GetXPixels( aColor, 0, g, 0 );
 
-        // blue: 16 - 6 = 10
-        for( b = 0x11; b < 0xFF; b += 0x11 )
-            GetXPixels( aColor, 0, 0, b );
-    }
+    // red: 16 - 6 = 10
+    for( r = 0x11; r < 0xFF; r += 0x11 )
+        GetXPixels( aColor, r, 0, 0 );
+
+    // blue: 16 - 6 = 10
+    for( b = 0x11; b < 0xFF; b += 0x11 )
+        GetXPixels( aColor, 0, 0, b );
+
 }
 
 // MonoChrome

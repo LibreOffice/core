@@ -87,26 +87,27 @@ void DecoToolBox::SetImages( long nMaxHeight, bool bForce )
     if( nMaxHeight < getMinSize().Height() )
         nMaxHeight = getMinSize().Height();
 
-    if( (lastSize != nMaxHeight - border) || bForce )
-    {
-        lastSize = nMaxHeight - border;
+    if( (lastSize == nMaxHeight - border) && !bForce )
+        return;
 
-        Color       aEraseColor( 255, 255, 255, 255 );
-        BitmapEx    aBmpExDst( maImage.GetBitmapEx() );
-        BitmapEx    aBmpExSrc( aBmpExDst );
+    lastSize = nMaxHeight - border;
 
-        aEraseColor.SetTransparency( 255 );
-        aBmpExDst.Erase( aEraseColor );
-        aBmpExDst.SetSizePixel( Size( lastSize, lastSize ) );
+    Color       aEraseColor( 255, 255, 255, 255 );
+    BitmapEx    aBmpExDst( maImage.GetBitmapEx() );
+    BitmapEx    aBmpExSrc( aBmpExDst );
 
-        tools::Rectangle aSrcRect( Point(0,0), maImage.GetSizePixel() );
-        tools::Rectangle aDestRect( Point((lastSize - maImage.GetSizePixel().Width())/2,
-                                (lastSize - maImage.GetSizePixel().Height())/2 ),
-                            maImage.GetSizePixel() );
+    aEraseColor.SetTransparency( 255 );
+    aBmpExDst.Erase( aEraseColor );
+    aBmpExDst.SetSizePixel( Size( lastSize, lastSize ) );
 
-        aBmpExDst.CopyPixel( aDestRect, aSrcRect, &aBmpExSrc );
-        SetItemImage( IID_DOCUMENTCLOSE, Image( aBmpExDst ) );
-    }
+    tools::Rectangle aSrcRect( Point(0,0), maImage.GetSizePixel() );
+    tools::Rectangle aDestRect( Point((lastSize - maImage.GetSizePixel().Width())/2,
+                            (lastSize - maImage.GetSizePixel().Height())/2 ),
+                        maImage.GetSizePixel() );
+
+    aBmpExDst.CopyPixel( aDestRect, aSrcRect, &aBmpExSrc );
+    SetItemImage( IID_DOCUMENTCLOSE, Image( aBmpExDst ) );
+
 }
 
 MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :

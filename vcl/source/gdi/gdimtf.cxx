@@ -449,61 +449,62 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
     MapMode aDrawMap( GetPrefMapMode() );
     Size    aDestSize( pOut->LogicToPixel( rSize ) );
 
-    if( aDestSize.Width() && aDestSize.Height() )
-    {
-        GDIMetaFile*    pMtf = pOut->GetConnectMetaFile();
+    if( !aDestSize.Width() || !aDestSize.Height() )
+        return;
 
-        if( ImplPlayWithRenderer( pOut, rPos, rSize ) )
-            return;
+    GDIMetaFile*    pMtf = pOut->GetConnectMetaFile();
 
-        Size aTmpPrefSize( pOut->LogicToPixel( GetPrefSize(), aDrawMap ) );
+    if( ImplPlayWithRenderer( pOut, rPos, rSize ) )
+        return;
 
-        if( !aTmpPrefSize.Width() )
-            aTmpPrefSize.Width() = aDestSize.Width();
+    Size aTmpPrefSize( pOut->LogicToPixel( GetPrefSize(), aDrawMap ) );
 
-        if( !aTmpPrefSize.Height() )
-            aTmpPrefSize.Height() = aDestSize.Height();
+    if( !aTmpPrefSize.Width() )
+        aTmpPrefSize.Width() = aDestSize.Width();
 
-        Fraction aScaleX( aDestSize.Width(), aTmpPrefSize.Width() );
-        Fraction aScaleY( aDestSize.Height(), aTmpPrefSize.Height() );
+    if( !aTmpPrefSize.Height() )
+        aTmpPrefSize.Height() = aDestSize.Height();
 
-        aScaleX *= aDrawMap.GetScaleX(); aDrawMap.SetScaleX( aScaleX );
-        aScaleY *= aDrawMap.GetScaleY(); aDrawMap.SetScaleY( aScaleY );
+    Fraction aScaleX( aDestSize.Width(), aTmpPrefSize.Width() );
+    Fraction aScaleY( aDestSize.Height(), aTmpPrefSize.Height() );
 
-        // #i47260# Convert logical output position to offset within
-        // the metafile's mapmode. Therefore, disable pixel offset on
-        // outdev, it's inverse mnOutOffLogicX/Y is calculated for a
-        // different mapmode (the one currently set on pOut, that is)
-        // - thus, aDrawMap's origin would generally be wrong. And
-        // even _if_ aDrawMap is similar to pOutDev's current mapmode,
-        // it's _still_ undesirable to have pixel offset unequal zero,
-        // because one would still get round-off errors (the
-        // round-trip error for LogicToPixel( PixelToLogic() ) was the
-        // reason for having pixel offset in the first place).
-        const Size& rOldOffset( pOut->GetPixelOffset() );
-        const Size  aEmptySize;
-        pOut->SetPixelOffset( aEmptySize );
-        aDrawMap.SetOrigin( pOut->PixelToLogic( pOut->LogicToPixel( rPos ), aDrawMap ) );
-        pOut->SetPixelOffset( rOldOffset );
+    aScaleX *= aDrawMap.GetScaleX(); aDrawMap.SetScaleX( aScaleX );
+    aScaleY *= aDrawMap.GetScaleY(); aDrawMap.SetScaleY( aScaleY );
 
-        pOut->Push();
+    // #i47260# Convert logical output position to offset within
+    // the metafile's mapmode. Therefore, disable pixel offset on
+    // outdev, it's inverse mnOutOffLogicX/Y is calculated for a
+    // different mapmode (the one currently set on pOut, that is)
+    // - thus, aDrawMap's origin would generally be wrong. And
+    // even _if_ aDrawMap is similar to pOutDev's current mapmode,
+    // it's _still_ undesirable to have pixel offset unequal zero,
+    // because one would still get round-off errors (the
+    // round-trip error for LogicToPixel( PixelToLogic() ) was the
+    // reason for having pixel offset in the first place).
+    const Size& rOldOffset( pOut->GetPixelOffset() );
+    const Size  aEmptySize;
+    pOut->SetPixelOffset( aEmptySize );
+    aDrawMap.SetOrigin( pOut->PixelToLogic( pOut->LogicToPixel( rPos ), aDrawMap ) );
+    pOut->SetPixelOffset( rOldOffset );
 
-        if ( pMtf && pMtf->IsRecord() && ( pOut->GetOutDevType() != OUTDEV_PRINTER ) )
-            pOut->SetRelativeMapMode( aDrawMap );
-        else
-            pOut->SetMapMode( aDrawMap );
+    pOut->Push();
 
-        // #i23407# Set backwards-compatible text language and layout mode
-        // This is necessary, since old metafiles don't even know of these
-        // recent add-ons. Newer metafiles must of course explicitly set
-        // those states.
-        pOut->SetLayoutMode( ComplexTextLayoutFlags::Default );
-        pOut->SetDigitLanguage( LANGUAGE_SYSTEM );
+    if ( pMtf && pMtf->IsRecord() && ( pOut->GetOutDevType() != OUTDEV_PRINTER ) )
+        pOut->SetRelativeMapMode( aDrawMap );
+    else
+        pOut->SetMapMode( aDrawMap );
 
-        Play( pOut );
+    // #i23407# Set backwards-compatible text language and layout mode
+    // This is necessary, since old metafiles don't even know of these
+    // recent add-ons. Newer metafiles must of course explicitly set
+    // those states.
+    pOut->SetLayoutMode( ComplexTextLayoutFlags::Default );
+    pOut->SetDigitLanguage( LANGUAGE_SYSTEM );
 
-        pOut->Pop();
-    }
+    Play( pOut );
+
+    pOut->Pop();
+
 }
 
 void GDIMetaFile::Pause( bool _bPause )
@@ -839,462 +840,463 @@ void GDIMetaFile::Rotate( long nAngle10 )
     nAngle10 %= 3600;
     nAngle10 = ( nAngle10 < 0 ) ? ( 3599 + nAngle10 ) : nAngle10;
 
-    if( nAngle10 )
+    if( !nAngle10 )
+        return;
+
+    GDIMetaFile     aMtf;
+    ScopedVclPtrInstance< VirtualDevice > aMapVDev;
+    const double    fAngle = F_PI1800 * nAngle10;
+    const double    fSin = sin( fAngle );
+    const double    fCos = cos( fAngle );
+    tools::Rectangle       aRect=tools::Rectangle( Point(), GetPrefSize() );
+    tools::Polygon aPoly( aRect );
+
+    aPoly.Rotate( Point(), fSin, fCos );
+
+    aMapVDev->EnableOutput( false );
+    aMapVDev->SetMapMode( GetPrefMapMode() );
+
+    const tools::Rectangle aNewBound( aPoly.GetBoundRect() );
+
+    const Point aOrigin( GetPrefMapMode().GetOrigin().X(), GetPrefMapMode().GetOrigin().Y() );
+    const Size  aOffset( -aNewBound.Left(), -aNewBound.Top() );
+
+    Point     aRotAnchor( aOrigin );
+    Size      aRotOffset( aOffset );
+
+    for( MetaAction* pAction = FirstAction(); pAction; pAction = NextAction() )
     {
-        GDIMetaFile     aMtf;
-        ScopedVclPtrInstance< VirtualDevice > aMapVDev;
-        const double    fAngle = F_PI1800 * nAngle10;
-        const double    fSin = sin( fAngle );
-        const double    fCos = cos( fAngle );
-        tools::Rectangle       aRect=tools::Rectangle( Point(), GetPrefSize() );
-        tools::Polygon aPoly( aRect );
+        const MetaActionType nActionType = pAction->GetType();
 
-        aPoly.Rotate( Point(), fSin, fCos );
-
-        aMapVDev->EnableOutput( false );
-        aMapVDev->SetMapMode( GetPrefMapMode() );
-
-        const tools::Rectangle aNewBound( aPoly.GetBoundRect() );
-
-        const Point aOrigin( GetPrefMapMode().GetOrigin().X(), GetPrefMapMode().GetOrigin().Y() );
-        const Size  aOffset( -aNewBound.Left(), -aNewBound.Top() );
-
-        Point     aRotAnchor( aOrigin );
-        Size      aRotOffset( aOffset );
-
-        for( MetaAction* pAction = FirstAction(); pAction; pAction = NextAction() )
+        switch( nActionType )
         {
-            const MetaActionType nActionType = pAction->GetType();
-
-            switch( nActionType )
+            case MetaActionType::PIXEL:
             {
-                case MetaActionType::PIXEL:
+                MetaPixelAction* pAct = static_cast<MetaPixelAction*>(pAction);
+                aMtf.AddAction( new MetaPixelAction( ImplGetRotatedPoint( pAct->GetPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
+                                                                          pAct->GetColor() ) );
+            }
+            break;
+
+            case MetaActionType::POINT:
+            {
+                MetaPointAction* pAct = static_cast<MetaPointAction*>(pAction);
+                aMtf.AddAction( new MetaPointAction( ImplGetRotatedPoint( pAct->GetPoint(), aRotAnchor, aRotOffset, fSin, fCos ) ) );
+            }
+            break;
+
+            case MetaActionType::LINE:
+            {
+                MetaLineAction* pAct = static_cast<MetaLineAction*>(pAction);
+                aMtf.AddAction( new MetaLineAction( ImplGetRotatedPoint( pAct->GetStartPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
+                                                    ImplGetRotatedPoint( pAct->GetEndPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
+                                                    pAct->GetLineInfo() ) );
+            }
+            break;
+
+            case MetaActionType::RECT:
+            {
+                MetaRectAction* pAct = static_cast<MetaRectAction*>(pAction);
+                aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( pAct->GetRect(), aRotAnchor, aRotOffset, fSin, fCos ) ) );
+            }
+            break;
+
+            case MetaActionType::ROUNDRECT:
+            {
+                MetaRoundRectAction*    pAct = static_cast<MetaRoundRectAction*>(pAction);
+                const tools::Polygon aRoundRectPoly( pAct->GetRect(), pAct->GetHorzRound(), pAct->GetVertRound() );
+
+                aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( aRoundRectPoly, aRotAnchor, aRotOffset, fSin, fCos ) ) );
+            }
+            break;
+
+            case MetaActionType::ELLIPSE:
+            {
+                MetaEllipseAction*      pAct = static_cast<MetaEllipseAction*>(pAction);
+                const tools::Polygon aEllipsePoly( pAct->GetRect().Center(), pAct->GetRect().GetWidth() >> 1, pAct->GetRect().GetHeight() >> 1 );
+
+                aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( aEllipsePoly, aRotAnchor, aRotOffset, fSin, fCos ) ) );
+            }
+            break;
+
+            case MetaActionType::ARC:
+            {
+                MetaArcAction*  pAct = static_cast<MetaArcAction*>(pAction);
+                const tools::Polygon aArcPoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), PolyStyle::Arc );
+
+                aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( aArcPoly, aRotAnchor, aRotOffset, fSin, fCos ) ) );
+            }
+            break;
+
+            case MetaActionType::PIE:
+            {
+                MetaPieAction*  pAct = static_cast<MetaPieAction*>(pAction);
+                const tools::Polygon aPiePoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), PolyStyle::Pie );
+
+                aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( aPiePoly, aRotAnchor, aRotOffset, fSin, fCos ) ) );
+            }
+            break;
+
+            case MetaActionType::CHORD:
+            {
+                MetaChordAction*    pAct = static_cast<MetaChordAction*>(pAction);
+                const tools::Polygon aChordPoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), PolyStyle::Chord );
+
+                aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( aChordPoly, aRotAnchor, aRotOffset, fSin, fCos ) ) );
+            }
+            break;
+
+            case MetaActionType::POLYLINE:
+            {
+                MetaPolyLineAction* pAct = static_cast<MetaPolyLineAction*>(pAction);
+                aMtf.AddAction( new MetaPolyLineAction( ImplGetRotatedPolygon( pAct->GetPolygon(), aRotAnchor, aRotOffset, fSin, fCos ), pAct->GetLineInfo() ) );
+            }
+            break;
+
+            case MetaActionType::POLYGON:
+            {
+                MetaPolygonAction* pAct = static_cast<MetaPolygonAction*>(pAction);
+                aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( pAct->GetPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ) );
+            }
+            break;
+
+            case MetaActionType::POLYPOLYGON:
+            {
+                MetaPolyPolygonAction* pAct = static_cast<MetaPolyPolygonAction*>(pAction);
+                aMtf.AddAction( new MetaPolyPolygonAction( ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ) );
+            }
+            break;
+
+            case MetaActionType::TEXT:
+            {
+                MetaTextAction* pAct = static_cast<MetaTextAction*>(pAction);
+                aMtf.AddAction( new MetaTextAction( ImplGetRotatedPoint( pAct->GetPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
+                                                                         pAct->GetText(), pAct->GetIndex(), pAct->GetLen() ) );
+            }
+            break;
+
+            case MetaActionType::TEXTARRAY:
+            {
+                MetaTextArrayAction* pAct = static_cast<MetaTextArrayAction*>(pAction);
+                aMtf.AddAction( new MetaTextArrayAction( ImplGetRotatedPoint( pAct->GetPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
+                                                                              pAct->GetText(), pAct->GetDXArray(), pAct->GetIndex(), pAct->GetLen() ) );
+            }
+            break;
+
+            case MetaActionType::STRETCHTEXT:
+            {
+                MetaStretchTextAction* pAct = static_cast<MetaStretchTextAction*>(pAction);
+                aMtf.AddAction( new MetaStretchTextAction( ImplGetRotatedPoint( pAct->GetPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
+                                                                                pAct->GetWidth(), pAct->GetText(), pAct->GetIndex(), pAct->GetLen() ) );
+            }
+            break;
+
+            case MetaActionType::TEXTLINE:
+            {
+                MetaTextLineAction* pAct = static_cast<MetaTextLineAction*>(pAction);
+                aMtf.AddAction( new MetaTextLineAction( ImplGetRotatedPoint( pAct->GetStartPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
+                                                                             pAct->GetWidth(), pAct->GetStrikeout(), pAct->GetUnderline(), pAct->GetOverline() ) );
+            }
+            break;
+
+            case MetaActionType::BMPSCALE:
+            {
+                MetaBmpScaleAction* pAct = static_cast<MetaBmpScaleAction*>(pAction);
+                tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
+                tools::Rectangle           aBmpRect( aBmpPoly.GetBoundRect() );
+                BitmapEx            aBmpEx( pAct->GetBitmap() );
+
+                aBmpEx.Rotate( nAngle10, Color( COL_TRANSPARENT ) );
+                aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(),
+                                                          aBmpEx ) );
+            }
+            break;
+
+            case MetaActionType::BMPSCALEPART:
+            {
+                MetaBmpScalePartAction* pAct = static_cast<MetaBmpScalePartAction*>(pAction);
+                tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetDestPoint(), pAct->GetDestSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
+                tools::Rectangle               aBmpRect( aBmpPoly.GetBoundRect() );
+                BitmapEx                aBmpEx( pAct->GetBitmap() );
+
+                aBmpEx.Crop( tools::Rectangle( pAct->GetSrcPoint(), pAct->GetSrcSize() ) );
+                aBmpEx.Rotate( nAngle10, Color( COL_TRANSPARENT ) );
+
+                aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), aBmpEx ) );
+            }
+            break;
+
+            case MetaActionType::BMPEXSCALE:
+            {
+                MetaBmpExScaleAction*   pAct = static_cast<MetaBmpExScaleAction*>(pAction);
+                tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
+                tools::Rectangle               aBmpRect( aBmpPoly.GetBoundRect() );
+                BitmapEx                aBmpEx( pAct->GetBitmapEx() );
+
+                aBmpEx.Rotate( nAngle10, Color( COL_TRANSPARENT ) );
+
+                aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), aBmpEx ) );
+            }
+            break;
+
+            case MetaActionType::BMPEXSCALEPART:
+            {
+                MetaBmpExScalePartAction*   pAct = static_cast<MetaBmpExScalePartAction*>(pAction);
+                tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetDestPoint(), pAct->GetDestSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
+                tools::Rectangle                   aBmpRect( aBmpPoly.GetBoundRect() );
+                BitmapEx                    aBmpEx( pAct->GetBitmapEx() );
+
+                aBmpEx.Crop( tools::Rectangle( pAct->GetSrcPoint(), pAct->GetSrcSize() ) );
+                aBmpEx.Rotate( nAngle10, Color( COL_TRANSPARENT ) );
+
+                aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), aBmpEx ) );
+            }
+            break;
+
+            case MetaActionType::GRADIENT:
+            {
+                MetaGradientAction* pAct = static_cast<MetaGradientAction*>(pAction);
+
+                ImplAddGradientEx( aMtf, *aMapVDev.get(),
+                                   ImplGetRotatedPolygon( pAct->GetRect(), aRotAnchor, aRotOffset, fSin, fCos ),
+                                   pAct->GetGradient() );
+            }
+            break;
+
+            case MetaActionType::GRADIENTEX:
+            {
+                MetaGradientExAction* pAct = static_cast<MetaGradientExAction*>(pAction);
+                aMtf.AddAction( new MetaGradientExAction( ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ),
+                                                          pAct->GetGradient() ) );
+            }
+            break;
+
+            // Handle gradientex comment block correctly
+            case MetaActionType::COMMENT:
+            {
+                MetaCommentAction* pCommentAct = static_cast<MetaCommentAction*>(pAction);
+                if( pCommentAct->GetComment() == "XGRAD_SEQ_BEGIN" )
                 {
-                    MetaPixelAction* pAct = static_cast<MetaPixelAction*>(pAction);
-                    aMtf.AddAction( new MetaPixelAction( ImplGetRotatedPoint( pAct->GetPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
-                                                                              pAct->GetColor() ) );
-                }
-                break;
+                    int nBeginComments( 1 );
+                    pAction = NextAction();
 
-                case MetaActionType::POINT:
-                {
-                    MetaPointAction* pAct = static_cast<MetaPointAction*>(pAction);
-                    aMtf.AddAction( new MetaPointAction( ImplGetRotatedPoint( pAct->GetPoint(), aRotAnchor, aRotOffset, fSin, fCos ) ) );
-                }
-                break;
-
-                case MetaActionType::LINE:
-                {
-                    MetaLineAction* pAct = static_cast<MetaLineAction*>(pAction);
-                    aMtf.AddAction( new MetaLineAction( ImplGetRotatedPoint( pAct->GetStartPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
-                                                        ImplGetRotatedPoint( pAct->GetEndPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
-                                                        pAct->GetLineInfo() ) );
-                }
-                break;
-
-                case MetaActionType::RECT:
-                {
-                    MetaRectAction* pAct = static_cast<MetaRectAction*>(pAction);
-                    aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( pAct->GetRect(), aRotAnchor, aRotOffset, fSin, fCos ) ) );
-                }
-                break;
-
-                case MetaActionType::ROUNDRECT:
-                {
-                    MetaRoundRectAction*    pAct = static_cast<MetaRoundRectAction*>(pAction);
-                    const tools::Polygon aRoundRectPoly( pAct->GetRect(), pAct->GetHorzRound(), pAct->GetVertRound() );
-
-                    aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( aRoundRectPoly, aRotAnchor, aRotOffset, fSin, fCos ) ) );
-                }
-                break;
-
-                case MetaActionType::ELLIPSE:
-                {
-                    MetaEllipseAction*      pAct = static_cast<MetaEllipseAction*>(pAction);
-                    const tools::Polygon aEllipsePoly( pAct->GetRect().Center(), pAct->GetRect().GetWidth() >> 1, pAct->GetRect().GetHeight() >> 1 );
-
-                    aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( aEllipsePoly, aRotAnchor, aRotOffset, fSin, fCos ) ) );
-                }
-                break;
-
-                case MetaActionType::ARC:
-                {
-                    MetaArcAction*  pAct = static_cast<MetaArcAction*>(pAction);
-                    const tools::Polygon aArcPoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), PolyStyle::Arc );
-
-                    aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( aArcPoly, aRotAnchor, aRotOffset, fSin, fCos ) ) );
-                }
-                break;
-
-                case MetaActionType::PIE:
-                {
-                    MetaPieAction*  pAct = static_cast<MetaPieAction*>(pAction);
-                    const tools::Polygon aPiePoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), PolyStyle::Pie );
-
-                    aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( aPiePoly, aRotAnchor, aRotOffset, fSin, fCos ) ) );
-                }
-                break;
-
-                case MetaActionType::CHORD:
-                {
-                    MetaChordAction*    pAct = static_cast<MetaChordAction*>(pAction);
-                    const tools::Polygon aChordPoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), PolyStyle::Chord );
-
-                    aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( aChordPoly, aRotAnchor, aRotOffset, fSin, fCos ) ) );
-                }
-                break;
-
-                case MetaActionType::POLYLINE:
-                {
-                    MetaPolyLineAction* pAct = static_cast<MetaPolyLineAction*>(pAction);
-                    aMtf.AddAction( new MetaPolyLineAction( ImplGetRotatedPolygon( pAct->GetPolygon(), aRotAnchor, aRotOffset, fSin, fCos ), pAct->GetLineInfo() ) );
-                }
-                break;
-
-                case MetaActionType::POLYGON:
-                {
-                    MetaPolygonAction* pAct = static_cast<MetaPolygonAction*>(pAction);
-                    aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( pAct->GetPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ) );
-                }
-                break;
-
-                case MetaActionType::POLYPOLYGON:
-                {
-                    MetaPolyPolygonAction* pAct = static_cast<MetaPolyPolygonAction*>(pAction);
-                    aMtf.AddAction( new MetaPolyPolygonAction( ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ) );
-                }
-                break;
-
-                case MetaActionType::TEXT:
-                {
-                    MetaTextAction* pAct = static_cast<MetaTextAction*>(pAction);
-                    aMtf.AddAction( new MetaTextAction( ImplGetRotatedPoint( pAct->GetPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
-                                                                             pAct->GetText(), pAct->GetIndex(), pAct->GetLen() ) );
-                }
-                break;
-
-                case MetaActionType::TEXTARRAY:
-                {
-                    MetaTextArrayAction* pAct = static_cast<MetaTextArrayAction*>(pAction);
-                    aMtf.AddAction( new MetaTextArrayAction( ImplGetRotatedPoint( pAct->GetPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
-                                                                                  pAct->GetText(), pAct->GetDXArray(), pAct->GetIndex(), pAct->GetLen() ) );
-                }
-                break;
-
-                case MetaActionType::STRETCHTEXT:
-                {
-                    MetaStretchTextAction* pAct = static_cast<MetaStretchTextAction*>(pAction);
-                    aMtf.AddAction( new MetaStretchTextAction( ImplGetRotatedPoint( pAct->GetPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
-                                                                                    pAct->GetWidth(), pAct->GetText(), pAct->GetIndex(), pAct->GetLen() ) );
-                }
-                break;
-
-                case MetaActionType::TEXTLINE:
-                {
-                    MetaTextLineAction* pAct = static_cast<MetaTextLineAction*>(pAction);
-                    aMtf.AddAction( new MetaTextLineAction( ImplGetRotatedPoint( pAct->GetStartPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
-                                                                                 pAct->GetWidth(), pAct->GetStrikeout(), pAct->GetUnderline(), pAct->GetOverline() ) );
-                }
-                break;
-
-                case MetaActionType::BMPSCALE:
-                {
-                    MetaBmpScaleAction* pAct = static_cast<MetaBmpScaleAction*>(pAction);
-                    tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
-                    tools::Rectangle           aBmpRect( aBmpPoly.GetBoundRect() );
-                    BitmapEx            aBmpEx( pAct->GetBitmap() );
-
-                    aBmpEx.Rotate( nAngle10, Color( COL_TRANSPARENT ) );
-                    aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(),
-                                                              aBmpEx ) );
-                }
-                break;
-
-                case MetaActionType::BMPSCALEPART:
-                {
-                    MetaBmpScalePartAction* pAct = static_cast<MetaBmpScalePartAction*>(pAction);
-                    tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetDestPoint(), pAct->GetDestSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
-                    tools::Rectangle               aBmpRect( aBmpPoly.GetBoundRect() );
-                    BitmapEx                aBmpEx( pAct->GetBitmap() );
-
-                    aBmpEx.Crop( tools::Rectangle( pAct->GetSrcPoint(), pAct->GetSrcSize() ) );
-                    aBmpEx.Rotate( nAngle10, Color( COL_TRANSPARENT ) );
-
-                    aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), aBmpEx ) );
-                }
-                break;
-
-                case MetaActionType::BMPEXSCALE:
-                {
-                    MetaBmpExScaleAction*   pAct = static_cast<MetaBmpExScaleAction*>(pAction);
-                    tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
-                    tools::Rectangle               aBmpRect( aBmpPoly.GetBoundRect() );
-                    BitmapEx                aBmpEx( pAct->GetBitmapEx() );
-
-                    aBmpEx.Rotate( nAngle10, Color( COL_TRANSPARENT ) );
-
-                    aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), aBmpEx ) );
-                }
-                break;
-
-                case MetaActionType::BMPEXSCALEPART:
-                {
-                    MetaBmpExScalePartAction*   pAct = static_cast<MetaBmpExScalePartAction*>(pAction);
-                    tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetDestPoint(), pAct->GetDestSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
-                    tools::Rectangle                   aBmpRect( aBmpPoly.GetBoundRect() );
-                    BitmapEx                    aBmpEx( pAct->GetBitmapEx() );
-
-                    aBmpEx.Crop( tools::Rectangle( pAct->GetSrcPoint(), pAct->GetSrcSize() ) );
-                    aBmpEx.Rotate( nAngle10, Color( COL_TRANSPARENT ) );
-
-                    aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), aBmpEx ) );
-                }
-                break;
-
-                case MetaActionType::GRADIENT:
-                {
-                    MetaGradientAction* pAct = static_cast<MetaGradientAction*>(pAction);
-
-                    ImplAddGradientEx( aMtf, *aMapVDev.get(),
-                                       ImplGetRotatedPolygon( pAct->GetRect(), aRotAnchor, aRotOffset, fSin, fCos ),
-                                       pAct->GetGradient() );
-                }
-                break;
-
-                case MetaActionType::GRADIENTEX:
-                {
-                    MetaGradientExAction* pAct = static_cast<MetaGradientExAction*>(pAction);
-                    aMtf.AddAction( new MetaGradientExAction( ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ),
-                                                              pAct->GetGradient() ) );
-                }
-                break;
-
-                // Handle gradientex comment block correctly
-                case MetaActionType::COMMENT:
-                {
-                    MetaCommentAction* pCommentAct = static_cast<MetaCommentAction*>(pAction);
-                    if( pCommentAct->GetComment() == "XGRAD_SEQ_BEGIN" )
+                    // skip everything, except gradientex action
+                    while( pAction )
                     {
-                        int nBeginComments( 1 );
-                        pAction = NextAction();
+                        const MetaActionType nType = pAction->GetType();
 
-                        // skip everything, except gradientex action
-                        while( pAction )
+                        if( MetaActionType::GRADIENTEX == nType )
                         {
-                            const MetaActionType nType = pAction->GetType();
-
-                            if( MetaActionType::GRADIENTEX == nType )
+                            // Add rotated gradientex
+                            MetaGradientExAction* pAct = static_cast<MetaGradientExAction*>(pAction);
+                            ImplAddGradientEx( aMtf, *aMapVDev.get(),
+                                               ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ),
+                                               pAct->GetGradient() );
+                        }
+                        else if( MetaActionType::COMMENT == nType)
+                        {
+                            MetaCommentAction* pAct = static_cast<MetaCommentAction*>(pAction);
+                            if( pAct->GetComment() == "XGRAD_SEQ_END" )
                             {
-                                // Add rotated gradientex
-                                MetaGradientExAction* pAct = static_cast<MetaGradientExAction*>(pAction);
-                                ImplAddGradientEx( aMtf, *aMapVDev.get(),
-                                                   ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ),
-                                                   pAct->GetGradient() );
+                                // handle nested blocks
+                                --nBeginComments;
+
+                                // gradientex comment block: end reached, done.
+                                if( !nBeginComments )
+                                    break;
                             }
-                            else if( MetaActionType::COMMENT == nType)
+                            else if( pAct->GetComment() == "XGRAD_SEQ_BEGIN" )
                             {
-                                MetaCommentAction* pAct = static_cast<MetaCommentAction*>(pAction);
-                                if( pAct->GetComment() == "XGRAD_SEQ_END" )
-                                {
-                                    // handle nested blocks
-                                    --nBeginComments;
-
-                                    // gradientex comment block: end reached, done.
-                                    if( !nBeginComments )
-                                        break;
-                                }
-                                else if( pAct->GetComment() == "XGRAD_SEQ_BEGIN" )
-                                {
-                                    // handle nested blocks
-                                    ++nBeginComments;
-                                }
-
+                                // handle nested blocks
+                                ++nBeginComments;
                             }
 
-                            pAction =NextAction();
                         }
-                    }
-                    else
-                    {
-                        bool bPathStroke = (pCommentAct->GetComment() == "XPATHSTROKE_SEQ_BEGIN");
-                        if ( bPathStroke || pCommentAct->GetComment() == "XPATHFILL_SEQ_BEGIN" )
-                        {
-                            if ( pCommentAct->GetDataSize() )
-                            {
-                                SvMemoryStream aMemStm( const_cast<sal_uInt8 *>(pCommentAct->GetData()), pCommentAct->GetDataSize(), StreamMode::READ );
-                                SvMemoryStream aDest;
-                                if ( bPathStroke )
-                                {
-                                    SvtGraphicStroke aStroke;
-                                    ReadSvtGraphicStroke( aMemStm, aStroke );
-                                    tools::Polygon aPath;
-                                    aStroke.getPath( aPath );
-                                    aStroke.setPath( ImplGetRotatedPolygon( aPath, aRotAnchor, aRotOffset, fSin, fCos ) );
-                                    WriteSvtGraphicStroke( aDest, aStroke );
-                                    aMtf.AddAction( new MetaCommentAction( "XPATHSTROKE_SEQ_BEGIN", 0,
-                                                        static_cast<const sal_uInt8*>( aDest.GetData()), aDest.Tell() ) );
-                                }
-                                else
-                                {
-                                    SvtGraphicFill aFill;
-                                    ReadSvtGraphicFill( aMemStm, aFill );
-                                    tools::PolyPolygon aPath;
-                                    aFill.getPath( aPath );
-                                    aFill.setPath( ImplGetRotatedPolyPolygon( aPath, aRotAnchor, aRotOffset, fSin, fCos ) );
-                                    WriteSvtGraphicFill( aDest, aFill );
-                                    aMtf.AddAction( new MetaCommentAction( "XPATHFILL_SEQ_BEGIN", 0,
-                                                        static_cast<const sal_uInt8*>( aDest.GetData()), aDest.Tell() ) );
-                                }
-                            }
-                        }
-                        else if ( pCommentAct->GetComment() == "XPATHSTROKE_SEQ_END"
-                               || pCommentAct->GetComment() == "XPATHFILL_SEQ_END" )
-                        {
-                            pAction->Execute( aMapVDev.get() );
-                            pAction->Duplicate();
-                            aMtf.AddAction( pAction );
-                        }
+
+                        pAction =NextAction();
                     }
                 }
-                break;
-
-                case MetaActionType::HATCH:
+                else
                 {
-                    MetaHatchAction*    pAct = static_cast<MetaHatchAction*>(pAction);
-                    Hatch               aHatch( pAct->GetHatch() );
-
-                    aHatch.SetAngle( aHatch.GetAngle() + (sal_uInt16) nAngle10 );
-                    aMtf.AddAction( new MetaHatchAction( ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ),
-                                                                                    aHatch ) );
-                }
-                break;
-
-                case MetaActionType::Transparent:
-                {
-                    MetaTransparentAction* pAct = static_cast<MetaTransparentAction*>(pAction);
-                    aMtf.AddAction( new MetaTransparentAction( ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ),
-                                                                                          pAct->GetTransparence() ) );
-                }
-                break;
-
-                case MetaActionType::FLOATTRANSPARENT:
-                {
-                    MetaFloatTransparentAction* pAct = static_cast<MetaFloatTransparentAction*>(pAction);
-                    GDIMetaFile                 aTransMtf( pAct->GetGDIMetaFile() );
-                    tools::Polygon aMtfPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
-                    tools::Rectangle                   aMtfRect( aMtfPoly.GetBoundRect() );
-
-                    aTransMtf.Rotate( nAngle10 );
-                    aMtf.AddAction( new MetaFloatTransparentAction( aTransMtf, aMtfRect.TopLeft(), aMtfRect.GetSize(),
-                                                                    pAct->GetGradient() ) );
-                }
-                break;
-
-                case MetaActionType::EPS:
-                {
-                    MetaEPSAction*  pAct = static_cast<MetaEPSAction*>(pAction);
-                    GDIMetaFile     aEPSMtf( pAct->GetSubstitute() );
-                    tools::Polygon aEPSPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
-                    tools::Rectangle       aEPSRect( aEPSPoly.GetBoundRect() );
-
-                    aEPSMtf.Rotate( nAngle10 );
-                    aMtf.AddAction( new MetaEPSAction( aEPSRect.TopLeft(), aEPSRect.GetSize(),
-                                                       pAct->GetLink(), aEPSMtf ) );
-                }
-                break;
-
-                case MetaActionType::CLIPREGION:
-                {
-                    MetaClipRegionAction* pAct = static_cast<MetaClipRegionAction*>(pAction);
-
-                    if( pAct->IsClipping() && pAct->GetRegion().HasPolyPolygonOrB2DPolyPolygon() )
-                        aMtf.AddAction( new MetaClipRegionAction( vcl::Region( ImplGetRotatedPolyPolygon( pAct->GetRegion().GetAsPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ), true ) );
-                    else
+                    bool bPathStroke = (pCommentAct->GetComment() == "XPATHSTROKE_SEQ_BEGIN");
+                    if ( bPathStroke || pCommentAct->GetComment() == "XPATHFILL_SEQ_BEGIN" )
                     {
+                        if ( pCommentAct->GetDataSize() )
+                        {
+                            SvMemoryStream aMemStm( const_cast<sal_uInt8 *>(pCommentAct->GetData()), pCommentAct->GetDataSize(), StreamMode::READ );
+                            SvMemoryStream aDest;
+                            if ( bPathStroke )
+                            {
+                                SvtGraphicStroke aStroke;
+                                ReadSvtGraphicStroke( aMemStm, aStroke );
+                                tools::Polygon aPath;
+                                aStroke.getPath( aPath );
+                                aStroke.setPath( ImplGetRotatedPolygon( aPath, aRotAnchor, aRotOffset, fSin, fCos ) );
+                                WriteSvtGraphicStroke( aDest, aStroke );
+                                aMtf.AddAction( new MetaCommentAction( "XPATHSTROKE_SEQ_BEGIN", 0,
+                                                    static_cast<const sal_uInt8*>( aDest.GetData()), aDest.Tell() ) );
+                            }
+                            else
+                            {
+                                SvtGraphicFill aFill;
+                                ReadSvtGraphicFill( aMemStm, aFill );
+                                tools::PolyPolygon aPath;
+                                aFill.getPath( aPath );
+                                aFill.setPath( ImplGetRotatedPolyPolygon( aPath, aRotAnchor, aRotOffset, fSin, fCos ) );
+                                WriteSvtGraphicFill( aDest, aFill );
+                                aMtf.AddAction( new MetaCommentAction( "XPATHFILL_SEQ_BEGIN", 0,
+                                                    static_cast<const sal_uInt8*>( aDest.GetData()), aDest.Tell() ) );
+                            }
+                        }
+                    }
+                    else if ( pCommentAct->GetComment() == "XPATHSTROKE_SEQ_END"
+                           || pCommentAct->GetComment() == "XPATHFILL_SEQ_END" )
+                    {
+                        pAction->Execute( aMapVDev.get() );
                         pAction->Duplicate();
                         aMtf.AddAction( pAction );
                     }
                 }
-                break;
+            }
+            break;
 
-                case MetaActionType::ISECTRECTCLIPREGION:
+            case MetaActionType::HATCH:
+            {
+                MetaHatchAction*    pAct = static_cast<MetaHatchAction*>(pAction);
+                Hatch               aHatch( pAct->GetHatch() );
+
+                aHatch.SetAngle( aHatch.GetAngle() + (sal_uInt16) nAngle10 );
+                aMtf.AddAction( new MetaHatchAction( ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ),
+                                                                                aHatch ) );
+            }
+            break;
+
+            case MetaActionType::Transparent:
+            {
+                MetaTransparentAction* pAct = static_cast<MetaTransparentAction*>(pAction);
+                aMtf.AddAction( new MetaTransparentAction( ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ),
+                                                                                      pAct->GetTransparence() ) );
+            }
+            break;
+
+            case MetaActionType::FLOATTRANSPARENT:
+            {
+                MetaFloatTransparentAction* pAct = static_cast<MetaFloatTransparentAction*>(pAction);
+                GDIMetaFile                 aTransMtf( pAct->GetGDIMetaFile() );
+                tools::Polygon aMtfPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
+                tools::Rectangle                   aMtfRect( aMtfPoly.GetBoundRect() );
+
+                aTransMtf.Rotate( nAngle10 );
+                aMtf.AddAction( new MetaFloatTransparentAction( aTransMtf, aMtfRect.TopLeft(), aMtfRect.GetSize(),
+                                                                pAct->GetGradient() ) );
+            }
+            break;
+
+            case MetaActionType::EPS:
+            {
+                MetaEPSAction*  pAct = static_cast<MetaEPSAction*>(pAction);
+                GDIMetaFile     aEPSMtf( pAct->GetSubstitute() );
+                tools::Polygon aEPSPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
+                tools::Rectangle       aEPSRect( aEPSPoly.GetBoundRect() );
+
+                aEPSMtf.Rotate( nAngle10 );
+                aMtf.AddAction( new MetaEPSAction( aEPSRect.TopLeft(), aEPSRect.GetSize(),
+                                                   pAct->GetLink(), aEPSMtf ) );
+            }
+            break;
+
+            case MetaActionType::CLIPREGION:
+            {
+                MetaClipRegionAction* pAct = static_cast<MetaClipRegionAction*>(pAction);
+
+                if( pAct->IsClipping() && pAct->GetRegion().HasPolyPolygonOrB2DPolyPolygon() )
+                    aMtf.AddAction( new MetaClipRegionAction( vcl::Region( ImplGetRotatedPolyPolygon( pAct->GetRegion().GetAsPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ), true ) );
+                else
                 {
-                    MetaISectRectClipRegionAction*  pAct = static_cast<MetaISectRectClipRegionAction*>(pAction);
-                    aMtf.AddAction( new MetaISectRegionClipRegionAction(vcl::Region(
-                        ImplGetRotatedPolygon( pAct->GetRect(), aRotAnchor,
-                            aRotOffset, fSin, fCos )) ) );
-                }
-                break;
-
-                case MetaActionType::ISECTREGIONCLIPREGION:
-                {
-                    MetaISectRegionClipRegionAction*    pAct = static_cast<MetaISectRegionClipRegionAction*>(pAction);
-                    const vcl::Region&                  rRegion = pAct->GetRegion();
-
-                    if( rRegion.HasPolyPolygonOrB2DPolyPolygon() )
-                        aMtf.AddAction( new MetaISectRegionClipRegionAction( vcl::Region( ImplGetRotatedPolyPolygon( rRegion.GetAsPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ) ) );
-                    else
-                    {
-                        pAction->Duplicate();
-                        aMtf.AddAction( pAction );
-                    }
-                }
-                break;
-
-                case MetaActionType::REFPOINT:
-                {
-                    MetaRefPointAction* pAct = static_cast<MetaRefPointAction*>(pAction);
-                    aMtf.AddAction( new MetaRefPointAction( ImplGetRotatedPoint( pAct->GetRefPoint(), aRotAnchor, aRotOffset, fSin, fCos ), pAct->IsSetting() ) );
-                }
-                break;
-
-                case MetaActionType::FONT:
-                {
-                    MetaFontAction* pAct = static_cast<MetaFontAction*>(pAction);
-                    vcl::Font       aFont( pAct->GetFont() );
-
-                    aFont.SetOrientation( aFont.GetOrientation() + (sal_uInt16) nAngle10 );
-                    aMtf.AddAction( new MetaFontAction( aFont ) );
-                }
-                break;
-
-                case MetaActionType::BMP:
-                case MetaActionType::BMPEX:
-                case MetaActionType::MASK:
-                case MetaActionType::MASKSCALE:
-                case MetaActionType::MASKSCALEPART:
-                case MetaActionType::WALLPAPER:
-                case MetaActionType::TEXTRECT:
-                case MetaActionType::MOVECLIPREGION:
-                {
-                    OSL_FAIL( "GDIMetaFile::Rotate(): unsupported action" );
-                }
-                break;
-
-                default:
-                {
-                    pAction->Execute( aMapVDev.get() );
                     pAction->Duplicate();
                     aMtf.AddAction( pAction );
-
-                    // update rotation point and offset, if necessary
-                    if( ( MetaActionType::MAPMODE == nActionType ) ||
-                        ( MetaActionType::PUSH == nActionType ) ||
-                        ( MetaActionType::POP == nActionType ) )
-                    {
-                        aRotAnchor = OutputDevice::LogicToLogic( aOrigin, m_aPrefMapMode, aMapVDev->GetMapMode() );
-                        aRotOffset = OutputDevice::LogicToLogic( aOffset, m_aPrefMapMode, aMapVDev->GetMapMode() );
-                    }
                 }
-                break;
             }
+            break;
+
+            case MetaActionType::ISECTRECTCLIPREGION:
+            {
+                MetaISectRectClipRegionAction*  pAct = static_cast<MetaISectRectClipRegionAction*>(pAction);
+                aMtf.AddAction( new MetaISectRegionClipRegionAction(vcl::Region(
+                    ImplGetRotatedPolygon( pAct->GetRect(), aRotAnchor,
+                        aRotOffset, fSin, fCos )) ) );
+            }
+            break;
+
+            case MetaActionType::ISECTREGIONCLIPREGION:
+            {
+                MetaISectRegionClipRegionAction*    pAct = static_cast<MetaISectRegionClipRegionAction*>(pAction);
+                const vcl::Region&                  rRegion = pAct->GetRegion();
+
+                if( rRegion.HasPolyPolygonOrB2DPolyPolygon() )
+                    aMtf.AddAction( new MetaISectRegionClipRegionAction( vcl::Region( ImplGetRotatedPolyPolygon( rRegion.GetAsPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ) ) );
+                else
+                {
+                    pAction->Duplicate();
+                    aMtf.AddAction( pAction );
+                }
+            }
+            break;
+
+            case MetaActionType::REFPOINT:
+            {
+                MetaRefPointAction* pAct = static_cast<MetaRefPointAction*>(pAction);
+                aMtf.AddAction( new MetaRefPointAction( ImplGetRotatedPoint( pAct->GetRefPoint(), aRotAnchor, aRotOffset, fSin, fCos ), pAct->IsSetting() ) );
+            }
+            break;
+
+            case MetaActionType::FONT:
+            {
+                MetaFontAction* pAct = static_cast<MetaFontAction*>(pAction);
+                vcl::Font       aFont( pAct->GetFont() );
+
+                aFont.SetOrientation( aFont.GetOrientation() + (sal_uInt16) nAngle10 );
+                aMtf.AddAction( new MetaFontAction( aFont ) );
+            }
+            break;
+
+            case MetaActionType::BMP:
+            case MetaActionType::BMPEX:
+            case MetaActionType::MASK:
+            case MetaActionType::MASKSCALE:
+            case MetaActionType::MASKSCALEPART:
+            case MetaActionType::WALLPAPER:
+            case MetaActionType::TEXTRECT:
+            case MetaActionType::MOVECLIPREGION:
+            {
+                OSL_FAIL( "GDIMetaFile::Rotate(): unsupported action" );
+            }
+            break;
+
+            default:
+            {
+                pAction->Execute( aMapVDev.get() );
+                pAction->Duplicate();
+                aMtf.AddAction( pAction );
+
+                // update rotation point and offset, if necessary
+                if( ( MetaActionType::MAPMODE == nActionType ) ||
+                    ( MetaActionType::PUSH == nActionType ) ||
+                    ( MetaActionType::POP == nActionType ) )
+                {
+                    aRotAnchor = OutputDevice::LogicToLogic( aOrigin, m_aPrefMapMode, aMapVDev->GetMapMode() );
+                    aRotOffset = OutputDevice::LogicToLogic( aOffset, m_aPrefMapMode, aMapVDev->GetMapMode() );
+                }
+            }
+            break;
         }
-
-        aMtf.m_aPrefMapMode = m_aPrefMapMode;
-        aMtf.m_aPrefSize = aNewBound.GetSize();
-
-        *this = aMtf;
     }
+
+    aMtf.m_aPrefMapMode = m_aPrefMapMode;
+    aMtf.m_aPrefSize = aNewBound.GetSize();
+
+    *this = aMtf;
+
 }
 
 static void ImplActionBounds( tools::Rectangle& o_rOutBounds,
@@ -2107,84 +2109,85 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
                           short nChannelBPercent, double fGamma, bool bInvert, bool msoBrightness )
 {
     // nothing to do? => return quickly
-    if( nLuminancePercent || nContrastPercent ||
-        nChannelRPercent || nChannelGPercent || nChannelBPercent ||
-        ( fGamma != 1.0 ) || bInvert )
+    if( !(nLuminancePercent || nContrastPercent ||
+          nChannelRPercent || nChannelGPercent || nChannelBPercent ||
+          ( fGamma != 1.0 ) || bInvert) )
+        return;
+
+    double              fM, fROff, fGOff, fBOff, fOff;
+    ImplColAdjustParam  aColParam;
+    ImplBmpAdjustParam  aBmpParam;
+
+    aColParam.pMapR = new sal_uInt8[ 256 ];
+    aColParam.pMapG = new sal_uInt8[ 256 ];
+    aColParam.pMapB = new sal_uInt8[ 256 ];
+
+    // calculate slope
+    if( nContrastPercent >= 0 )
+        fM = 128.0 / ( 128.0 - 1.27 * MinMax( nContrastPercent, 0, 100 ) );
+    else
+        fM = ( 128.0 + 1.27 * MinMax( nContrastPercent, -100, 0 ) ) / 128.0;
+
+    if(!msoBrightness)
+        // total offset = luminance offset + contrast offset
+        fOff = MinMax( nLuminancePercent, -100, 100 ) * 2.55 + 128.0 - fM * 128.0;
+    else
+        fOff = MinMax( nLuminancePercent, -100, 100 ) * 2.55;
+
+    // channel offset = channel offset  + total offset
+    fROff = nChannelRPercent * 2.55 + fOff;
+    fGOff = nChannelGPercent * 2.55 + fOff;
+    fBOff = nChannelBPercent * 2.55 + fOff;
+
+    // calculate gamma value
+    fGamma = ( fGamma <= 0.0 || fGamma > 10.0 ) ? 1.0 : ( 1.0 / fGamma );
+    const bool bGamma = ( fGamma != 1.0 );
+
+    // create mapping table
+    for( long nX = 0; nX < 256; nX++ )
     {
-        double              fM, fROff, fGOff, fBOff, fOff;
-        ImplColAdjustParam  aColParam;
-        ImplBmpAdjustParam  aBmpParam;
-
-        aColParam.pMapR = new sal_uInt8[ 256 ];
-        aColParam.pMapG = new sal_uInt8[ 256 ];
-        aColParam.pMapB = new sal_uInt8[ 256 ];
-
-        // calculate slope
-        if( nContrastPercent >= 0 )
-            fM = 128.0 / ( 128.0 - 1.27 * MinMax( nContrastPercent, 0, 100 ) );
-        else
-            fM = ( 128.0 + 1.27 * MinMax( nContrastPercent, -100, 0 ) ) / 128.0;
-
         if(!msoBrightness)
-            // total offset = luminance offset + contrast offset
-            fOff = MinMax( nLuminancePercent, -100, 100 ) * 2.55 + 128.0 - fM * 128.0;
-        else
-            fOff = MinMax( nLuminancePercent, -100, 100 ) * 2.55;
-
-        // channel offset = channel offset  + total offset
-        fROff = nChannelRPercent * 2.55 + fOff;
-        fGOff = nChannelGPercent * 2.55 + fOff;
-        fBOff = nChannelBPercent * 2.55 + fOff;
-
-        // calculate gamma value
-        fGamma = ( fGamma <= 0.0 || fGamma > 10.0 ) ? 1.0 : ( 1.0 / fGamma );
-        const bool bGamma = ( fGamma != 1.0 );
-
-        // create mapping table
-        for( long nX = 0; nX < 256; nX++ )
         {
-            if(!msoBrightness)
-            {
-                aColParam.pMapR[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fROff ), 0, 255 );
-                aColParam.pMapG[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fGOff ), 0, 255 );
-                aColParam.pMapB[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fBOff ), 0, 255 );
-            }
-            else
-            {
-                aColParam.pMapR[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0, 255 );
-                aColParam.pMapG[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0, 255 );
-                aColParam.pMapB[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0, 255 );
-            }
-            if( bGamma )
-            {
-                aColParam.pMapR[ nX ] = GAMMA( aColParam.pMapR[ nX ], fGamma );
-                aColParam.pMapG[ nX ] = GAMMA( aColParam.pMapG[ nX ], fGamma );
-                aColParam.pMapB[ nX ] = GAMMA( aColParam.pMapB[ nX ], fGamma );
-            }
-
-            if( bInvert )
-            {
-                aColParam.pMapR[ nX ] = ~aColParam.pMapR[ nX ];
-                aColParam.pMapG[ nX ] = ~aColParam.pMapG[ nX ];
-                aColParam.pMapB[ nX ] = ~aColParam.pMapB[ nX ];
-            }
+            aColParam.pMapR[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fROff ), 0, 255 );
+            aColParam.pMapG[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fGOff ), 0, 255 );
+            aColParam.pMapB[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fBOff ), 0, 255 );
+        }
+        else
+        {
+            aColParam.pMapR[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fROff/2-128) * fM + 128 + fROff/2 ), 0, 255 );
+            aColParam.pMapG[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fGOff/2-128) * fM + 128 + fGOff/2 ), 0, 255 );
+            aColParam.pMapB[ nX ] = (sal_uInt8) MinMax( FRound( (nX+fBOff/2-128) * fM + 128 + fBOff/2 ), 0, 255 );
+        }
+        if( bGamma )
+        {
+            aColParam.pMapR[ nX ] = GAMMA( aColParam.pMapR[ nX ], fGamma );
+            aColParam.pMapG[ nX ] = GAMMA( aColParam.pMapG[ nX ], fGamma );
+            aColParam.pMapB[ nX ] = GAMMA( aColParam.pMapB[ nX ], fGamma );
         }
 
-        aBmpParam.nLuminancePercent = nLuminancePercent;
-        aBmpParam.nContrastPercent = nContrastPercent;
-        aBmpParam.nChannelRPercent = nChannelRPercent;
-        aBmpParam.nChannelGPercent = nChannelGPercent;
-        aBmpParam.nChannelBPercent = nChannelBPercent;
-        aBmpParam.fGamma = fGamma;
-        aBmpParam.bInvert = bInvert;
-
-        // do color adjustment
-        ImplExchangeColors( ImplColAdjustFnc, &aColParam, ImplBmpAdjustFnc, &aBmpParam );
-
-        delete[] aColParam.pMapR;
-        delete[] aColParam.pMapG;
-        delete[] aColParam.pMapB;
+        if( bInvert )
+        {
+            aColParam.pMapR[ nX ] = ~aColParam.pMapR[ nX ];
+            aColParam.pMapG[ nX ] = ~aColParam.pMapG[ nX ];
+            aColParam.pMapB[ nX ] = ~aColParam.pMapB[ nX ];
+        }
     }
+
+    aBmpParam.nLuminancePercent = nLuminancePercent;
+    aBmpParam.nContrastPercent = nContrastPercent;
+    aBmpParam.nChannelRPercent = nChannelRPercent;
+    aBmpParam.nChannelGPercent = nChannelGPercent;
+    aBmpParam.nChannelBPercent = nChannelBPercent;
+    aBmpParam.fGamma = fGamma;
+    aBmpParam.bInvert = bInvert;
+
+    // do color adjustment
+    ImplExchangeColors( ImplColAdjustFnc, &aColParam, ImplBmpAdjustFnc, &aBmpParam );
+
+    delete[] aColParam.pMapR;
+    delete[] aColParam.pMapG;
+    delete[] aColParam.pMapB;
+
 }
 
 void GDIMetaFile::Convert( MtfConversion eConversion )

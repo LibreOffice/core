@@ -62,45 +62,46 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
 
     Primitive2DSequence aPrimitiveSequence = xSvgParser->getDecomposition(aInputStream, sPath);
 
-    if (aPrimitiveSequence.hasElements())
+    if (!aPrimitiveSequence.hasElements())
+        return;
+
+    uno::Sequence<beans::PropertyValue> aViewParameters;
+
+    const sal_Int32 nCount(aPrimitiveSequence.getLength());
+    geometry::RealRectangle2D aRealRect;
+    basegfx::B2DRange aRange;
+    for (sal_Int32 a = 0; a < nCount; ++a)
     {
-        uno::Sequence<beans::PropertyValue> aViewParameters;
+        const Primitive2DReference xReference(aPrimitiveSequence[a]);
 
-        const sal_Int32 nCount(aPrimitiveSequence.getLength());
-        geometry::RealRectangle2D aRealRect;
-        basegfx::B2DRange aRange;
-        for (sal_Int32 a = 0; a < nCount; ++a)
+        if (xReference.is())
         {
-            const Primitive2DReference xReference(aPrimitiveSequence[a]);
-
-            if (xReference.is())
-            {
-                aRealRect = xReference->getRange(aViewParameters);
-                aRange.expand(basegfx::B2DRange(aRealRect.X1, aRealRect.Y1, aRealRect.X2, aRealRect.Y2));
-            }
-        }
-
-        aRealRect.X1 = 0;
-        aRealRect.Y1 = 0;
-        aRealRect.X2 = aRange.getMaxX() - aRange.getMinX();
-        aRealRect.Y2 = aRange.getMaxY() - aRange.getMinY();
-
-        double nDPI = 96 * fScalingFactor;
-
-        const css::uno::Reference<css::graphic::XPrimitive2DRenderer> xPrimitive2DRenderer = css::graphic::Primitive2DTools::create(xContext);
-        const css::uno::Reference<css::rendering::XBitmap> xBitmap(
-            xPrimitive2DRenderer->rasterize(aPrimitiveSequence, aViewParameters, nDPI, nDPI, aRealRect, 256*256));
-
-        if (xBitmap.is())
-        {
-            const css::uno::Reference<css::rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap, uno::UNO_QUERY_THROW);
-
-            if (xIntBmp.is())
-            {
-                rBitmapEx = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
-            }
+            aRealRect = xReference->getRange(aViewParameters);
+            aRange.expand(basegfx::B2DRange(aRealRect.X1, aRealRect.Y1, aRealRect.X2, aRealRect.Y2));
         }
     }
+
+    aRealRect.X1 = 0;
+    aRealRect.Y1 = 0;
+    aRealRect.X2 = aRange.getMaxX() - aRange.getMinX();
+    aRealRect.Y2 = aRange.getMaxY() - aRange.getMinY();
+
+    double nDPI = 96 * fScalingFactor;
+
+    const css::uno::Reference<css::graphic::XPrimitive2DRenderer> xPrimitive2DRenderer = css::graphic::Primitive2DTools::create(xContext);
+    const css::uno::Reference<css::rendering::XBitmap> xBitmap(
+        xPrimitive2DRenderer->rasterize(aPrimitiveSequence, aViewParameters, nDPI, nDPI, aRealRect, 256*256));
+
+    if (xBitmap.is())
+    {
+        const css::uno::Reference<css::rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap, uno::UNO_QUERY_THROW);
+
+        if (xIntBmp.is())
+        {
+            rBitmapEx = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
+        }
+    }
+
 }
 
 }} // end vcl::bitmap

@@ -68,186 +68,187 @@ void PDFWriterImpl::implWriteGradient( const tools::PolyPolygon& i_rPolyPoly, co
 void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSize, const BitmapEx& i_rBitmapEx, const Graphic& i_Graphic,
                                        VirtualDevice const * i_pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& i_rContext )
 {
-    if ( !i_rBitmapEx.IsEmpty() && i_rSize.Width() && i_rSize.Height() )
+    if ( i_rBitmapEx.IsEmpty() || !i_rSize.Width() || !i_rSize.Height() )
+        return;
+
+    BitmapEx        aBitmapEx( i_rBitmapEx );
+    Point           aPoint( i_rPoint );
+    Size            aSize( i_rSize );
+
+    // #i19065# Negative sizes have mirror semantics on
+    // OutputDevice. BitmapEx and co. have no idea about that, so
+    // perform that _before_ doing anything with aBitmapEx.
+    BmpMirrorFlags nMirrorFlags(BmpMirrorFlags::NONE);
+    if( aSize.Width() < 0 )
     {
-        BitmapEx        aBitmapEx( i_rBitmapEx );
-        Point           aPoint( i_rPoint );
-        Size            aSize( i_rSize );
+        aSize.Width() *= -1;
+        aPoint.X() -= aSize.Width();
+        nMirrorFlags |= BmpMirrorFlags::Horizontal;
+    }
+    if( aSize.Height() < 0 )
+    {
+        aSize.Height() *= -1;
+        aPoint.Y() -= aSize.Height();
+        nMirrorFlags |= BmpMirrorFlags::Vertical;
+    }
 
-        // #i19065# Negative sizes have mirror semantics on
-        // OutputDevice. BitmapEx and co. have no idea about that, so
-        // perform that _before_ doing anything with aBitmapEx.
-        BmpMirrorFlags nMirrorFlags(BmpMirrorFlags::NONE);
-        if( aSize.Width() < 0 )
-        {
-            aSize.Width() *= -1;
-            aPoint.X() -= aSize.Width();
-            nMirrorFlags |= BmpMirrorFlags::Horizontal;
-        }
-        if( aSize.Height() < 0 )
-        {
-            aSize.Height() *= -1;
-            aPoint.Y() -= aSize.Height();
-            nMirrorFlags |= BmpMirrorFlags::Vertical;
-        }
+    if( nMirrorFlags != BmpMirrorFlags::NONE )
+    {
+        aBitmapEx.Mirror( nMirrorFlags );
+    }
 
-        if( nMirrorFlags != BmpMirrorFlags::NONE )
-        {
-            aBitmapEx.Mirror( nMirrorFlags );
-        }
+    bool bIsJpeg = false, bIsPng = false;
+    if( i_Graphic.GetType() != GraphicType::NONE && i_Graphic.GetBitmapEx() == aBitmapEx )
+    {
+        GfxLinkType eType = i_Graphic.GetLink().GetType();
+        bIsJpeg = (eType == GfxLinkType::NativeJpg);
+        bIsPng = (eType == GfxLinkType::NativePng);
+    }
 
-        bool bIsJpeg = false, bIsPng = false;
-        if( i_Graphic.GetType() != GraphicType::NONE && i_Graphic.GetBitmapEx() == aBitmapEx )
-        {
-            GfxLinkType eType = i_Graphic.GetLink().GetType();
-            bIsJpeg = (eType == GfxLinkType::NativeJpg);
-            bIsPng = (eType == GfxLinkType::NativePng);
-        }
+    if( i_rContext.m_nMaxImageResolution > 50 )
+    {
+        // do downsampling if necessary
+        const Size      aDstSizeTwip( i_pDummyVDev->PixelToLogic(i_pDummyVDev->LogicToPixel(aSize), MapMode(MapUnit::MapTwip)) );
+        const Size      aBmpSize( aBitmapEx.GetSizePixel() );
+        const double    fBmpPixelX = aBmpSize.Width();
+        const double    fBmpPixelY = aBmpSize.Height();
+        const double    fMaxPixelX = aDstSizeTwip.Width() * i_rContext.m_nMaxImageResolution / 1440.0;
+        const double    fMaxPixelY = aDstSizeTwip.Height() * i_rContext.m_nMaxImageResolution / 1440.0;
 
-        if( i_rContext.m_nMaxImageResolution > 50 )
+        // check, if the bitmap DPI exceeds the maximum DPI (allow 4 pixel rounding tolerance)
+        if( ( ( fBmpPixelX > ( fMaxPixelX + 4 ) ) ||
+            ( fBmpPixelY > ( fMaxPixelY + 4 ) ) ) &&
+            ( fBmpPixelY > 0.0 ) && ( fMaxPixelY > 0.0 ) )
         {
-            // do downsampling if necessary
-            const Size      aDstSizeTwip( i_pDummyVDev->PixelToLogic(i_pDummyVDev->LogicToPixel(aSize), MapMode(MapUnit::MapTwip)) );
-            const Size      aBmpSize( aBitmapEx.GetSizePixel() );
-            const double    fBmpPixelX = aBmpSize.Width();
-            const double    fBmpPixelY = aBmpSize.Height();
-            const double    fMaxPixelX = aDstSizeTwip.Width() * i_rContext.m_nMaxImageResolution / 1440.0;
-            const double    fMaxPixelY = aDstSizeTwip.Height() * i_rContext.m_nMaxImageResolution / 1440.0;
+            // do scaling
+            Size            aNewBmpSize;
+            const double    fBmpWH = fBmpPixelX / fBmpPixelY;
+            const double    fMaxWH = fMaxPixelX / fMaxPixelY;
 
-            // check, if the bitmap DPI exceeds the maximum DPI (allow 4 pixel rounding tolerance)
-            if( ( ( fBmpPixelX > ( fMaxPixelX + 4 ) ) ||
-                ( fBmpPixelY > ( fMaxPixelY + 4 ) ) ) &&
-                ( fBmpPixelY > 0.0 ) && ( fMaxPixelY > 0.0 ) )
+            if( fBmpWH < fMaxWH )
             {
-                // do scaling
-                Size            aNewBmpSize;
-                const double    fBmpWH = fBmpPixelX / fBmpPixelY;
-                const double    fMaxWH = fMaxPixelX / fMaxPixelY;
+                aNewBmpSize.Width() = FRound( fMaxPixelY * fBmpWH );
+                aNewBmpSize.Height() = FRound( fMaxPixelY );
+            }
+            else if( fBmpWH > 0.0 )
+            {
+                aNewBmpSize.Width() = FRound( fMaxPixelX );
+                aNewBmpSize.Height() = FRound( fMaxPixelX / fBmpWH);
+            }
 
-                if( fBmpWH < fMaxWH )
-                {
-                    aNewBmpSize.Width() = FRound( fMaxPixelY * fBmpWH );
-                    aNewBmpSize.Height() = FRound( fMaxPixelY );
-                }
-                else if( fBmpWH > 0.0 )
-                {
-                    aNewBmpSize.Width() = FRound( fMaxPixelX );
-                    aNewBmpSize.Height() = FRound( fMaxPixelX / fBmpWH);
-                }
+            if( aNewBmpSize.Width() && aNewBmpSize.Height() )
+            {
+                // #i121233# Use best quality for PDF exports
+                aBitmapEx.Scale( aNewBmpSize, BmpScaleFlag::BestQuality );
+            }
+            else
+            {
+                aBitmapEx.SetEmpty();
+            }
+        }
+    }
 
-                if( aNewBmpSize.Width() && aNewBmpSize.Height() )
-                {
-                    // #i121233# Use best quality for PDF exports
-                    aBitmapEx.Scale( aNewBmpSize, BmpScaleFlag::BestQuality );
-                }
+    const Size aSizePixel( aBitmapEx.GetSizePixel() );
+    if ( aSizePixel.Width() && aSizePixel.Height() )
+    {
+        if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
+        {
+            BmpConversion eConv = BmpConversion::N8BitGreys;
+            int nDepth = aBitmapEx.GetBitmap().GetBitCount();
+            if( nDepth <= 4 )
+                eConv = BmpConversion::N4BitGreys;
+            if( nDepth > 1 )
+                aBitmapEx.Convert( eConv );
+        }
+        bool bUseJPGCompression = !i_rContext.m_bOnlyLosslessCompression;
+        if ( bIsPng || ( aSizePixel.Width() < 32 ) || ( aSizePixel.Height() < 32 ) )
+            bUseJPGCompression = false;
+
+        SvMemoryStream  aStrm;
+        Bitmap          aMask;
+
+        bool bTrueColorJPG = true;
+        if ( bUseJPGCompression )
+        {
+
+            sal_uInt32 nZippedFileSize = 0; // sj: we will calculate the filesize of a zipped bitmap
+            if ( !bIsJpeg )                 // to determine if jpeg compression is useful
+            {
+                SvMemoryStream aTemp;
+                aTemp.SetCompressMode( aTemp.GetCompressMode() | SvStreamCompressFlags::ZBITMAP );
+                aTemp.SetVersion( SOFFICE_FILEFORMAT_40 );  // sj: up from version 40 our bitmap stream operator
+                WriteDIBBitmapEx(aBitmapEx, aTemp); // is capable of zlib stream compression
+                aTemp.Seek( STREAM_SEEK_TO_END );
+                nZippedFileSize = aTemp.Tell();
+            }
+            if ( aBitmapEx.IsTransparent() )
+            {
+                if ( aBitmapEx.IsAlpha() )
+                    aMask = aBitmapEx.GetAlpha().GetBitmap();
                 else
-                {
-                    aBitmapEx.SetEmpty();
-                }
+                    aMask = aBitmapEx.GetMask();
             }
-        }
+            Graphic         aGraphic( aBitmapEx.GetBitmap() );
 
-        const Size aSizePixel( aBitmapEx.GetSizePixel() );
-        if ( aSizePixel.Width() && aSizePixel.Height() )
-        {
-            if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
+            Sequence< PropertyValue > aFilterData( 2 );
+            aFilterData[ 0 ].Name = "Quality";
+            aFilterData[ 0 ].Value <<= sal_Int32(i_rContext.m_nJPEGQuality);
+            aFilterData[ 1 ].Name = "ColorMode";
+            aFilterData[ 1 ].Value <<= sal_Int32(0);
+
+            try
             {
-                BmpConversion eConv = BmpConversion::N8BitGreys;
-                int nDepth = aBitmapEx.GetBitmap().GetBitCount();
-                if( nDepth <= 4 )
-                    eConv = BmpConversion::N4BitGreys;
-                if( nDepth > 1 )
-                    aBitmapEx.Convert( eConv );
-            }
-            bool bUseJPGCompression = !i_rContext.m_bOnlyLosslessCompression;
-            if ( bIsPng || ( aSizePixel.Width() < 32 ) || ( aSizePixel.Height() < 32 ) )
-                bUseJPGCompression = false;
-
-            SvMemoryStream  aStrm;
-            Bitmap          aMask;
-
-            bool bTrueColorJPG = true;
-            if ( bUseJPGCompression )
-            {
-
-                sal_uInt32 nZippedFileSize = 0; // sj: we will calculate the filesize of a zipped bitmap
-                if ( !bIsJpeg )                 // to determine if jpeg compression is useful
-                {
-                    SvMemoryStream aTemp;
-                    aTemp.SetCompressMode( aTemp.GetCompressMode() | SvStreamCompressFlags::ZBITMAP );
-                    aTemp.SetVersion( SOFFICE_FILEFORMAT_40 );  // sj: up from version 40 our bitmap stream operator
-                    WriteDIBBitmapEx(aBitmapEx, aTemp); // is capable of zlib stream compression
-                    aTemp.Seek( STREAM_SEEK_TO_END );
-                    nZippedFileSize = aTemp.Tell();
-                }
-                if ( aBitmapEx.IsTransparent() )
-                {
-                    if ( aBitmapEx.IsAlpha() )
-                        aMask = aBitmapEx.GetAlpha().GetBitmap();
-                    else
-                        aMask = aBitmapEx.GetMask();
-                }
-                Graphic         aGraphic( aBitmapEx.GetBitmap() );
-
-                Sequence< PropertyValue > aFilterData( 2 );
-                aFilterData[ 0 ].Name = "Quality";
-                aFilterData[ 0 ].Value <<= sal_Int32(i_rContext.m_nJPEGQuality);
-                aFilterData[ 1 ].Name = "ColorMode";
-                aFilterData[ 1 ].Value <<= sal_Int32(0);
-
-                try
-                {
-                    uno::Reference < io::XStream > xStream = new utl::OStreamWrapper( aStrm );
-                    uno::Reference< io::XSeekable > xSeekable( xStream, UNO_QUERY_THROW );
-                    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-                    uno::Reference< graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create(xContext) );
-                    uno::Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic() );
-                    uno::Reference < io::XOutputStream > xOut( xStream->getOutputStream() );
-                    uno::Sequence< beans::PropertyValue > aOutMediaProperties( 3 );
-                    aOutMediaProperties[0].Name = "OutputStream";
-                    aOutMediaProperties[0].Value <<= xOut;
-                    aOutMediaProperties[1].Name = "MimeType";
-                    aOutMediaProperties[1].Value <<= OUString("image/jpeg");
-                    aOutMediaProperties[2].Name = "FilterData";
-                    aOutMediaProperties[2].Value <<= aFilterData;
-                    xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );
-                    xOut->flush();
-                    if ( !bIsJpeg && xSeekable->getLength() > nZippedFileSize )
-                    {
-                        bUseJPGCompression = false;
-                    }
-                    else
-                    {
-                        aStrm.Seek( STREAM_SEEK_TO_END );
-
-                        xSeekable->seek( 0 );
-                        Sequence< PropertyValue > aArgs( 1 );
-                        aArgs[ 0 ].Name = "InputStream";
-                        aArgs[ 0 ].Value <<= xStream;
-                        uno::Reference< XPropertySet > xPropSet( xGraphicProvider->queryGraphicDescriptor( aArgs ) );
-                        if ( xPropSet.is() )
-                        {
-                            sal_Int16 nBitsPerPixel = 24;
-                            if ( xPropSet->getPropertyValue("BitsPerPixel") >>= nBitsPerPixel )
-                            {
-                                bTrueColorJPG = nBitsPerPixel != 8;
-                            }
-                        }
-                    }
-                }
-                catch( uno::Exception& )
+                uno::Reference < io::XStream > xStream = new utl::OStreamWrapper( aStrm );
+                uno::Reference< io::XSeekable > xSeekable( xStream, UNO_QUERY_THROW );
+                uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+                uno::Reference< graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create(xContext) );
+                uno::Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic() );
+                uno::Reference < io::XOutputStream > xOut( xStream->getOutputStream() );
+                uno::Sequence< beans::PropertyValue > aOutMediaProperties( 3 );
+                aOutMediaProperties[0].Name = "OutputStream";
+                aOutMediaProperties[0].Value <<= xOut;
+                aOutMediaProperties[1].Name = "MimeType";
+                aOutMediaProperties[1].Value <<= OUString("image/jpeg");
+                aOutMediaProperties[2].Name = "FilterData";
+                aOutMediaProperties[2].Value <<= aFilterData;
+                xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );
+                xOut->flush();
+                if ( !bIsJpeg && xSeekable->getLength() > nZippedFileSize )
                 {
                     bUseJPGCompression = false;
                 }
+                else
+                {
+                    aStrm.Seek( STREAM_SEEK_TO_END );
+
+                    xSeekable->seek( 0 );
+                    Sequence< PropertyValue > aArgs( 1 );
+                    aArgs[ 0 ].Name = "InputStream";
+                    aArgs[ 0 ].Value <<= xStream;
+                    uno::Reference< XPropertySet > xPropSet( xGraphicProvider->queryGraphicDescriptor( aArgs ) );
+                    if ( xPropSet.is() )
+                    {
+                        sal_Int16 nBitsPerPixel = 24;
+                        if ( xPropSet->getPropertyValue("BitsPerPixel") >>= nBitsPerPixel )
+                        {
+                            bTrueColorJPG = nBitsPerPixel != 8;
+                        }
+                    }
+                }
             }
-            if ( bUseJPGCompression )
-                m_rOuterFace.DrawJPGBitmap( aStrm, bTrueColorJPG, aSizePixel, tools::Rectangle( aPoint, aSize ), aMask, i_Graphic );
-            else if ( aBitmapEx.IsTransparent() )
-                m_rOuterFace.DrawBitmapEx( aPoint, aSize, aBitmapEx );
-            else
-                m_rOuterFace.DrawBitmap( aPoint, aSize, aBitmapEx.GetBitmap(), i_Graphic );
+            catch( uno::Exception& )
+            {
+                bUseJPGCompression = false;
+            }
         }
+        if ( bUseJPGCompression )
+            m_rOuterFace.DrawJPGBitmap( aStrm, bTrueColorJPG, aSizePixel, tools::Rectangle( aPoint, aSize ), aMask, i_Graphic );
+        else if ( aBitmapEx.IsTransparent() )
+            m_rOuterFace.DrawBitmapEx( aPoint, aSize, aBitmapEx );
+        else
+            m_rOuterFace.DrawBitmap( aPoint, aSize, aBitmapEx.GetBitmap(), i_Graphic );
     }
+
 }
 
 void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevData* i_pOutDevData, const vcl::PDFWriter::PlayMetafileContext& i_rContext, VirtualDevice* pDummyVDev )

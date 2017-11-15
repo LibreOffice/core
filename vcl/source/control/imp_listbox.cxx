@@ -3043,55 +3043,56 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
 
 void ImplListBoxFloatingWindow::StartFloat( bool bStartTracking )
 {
-    if( !IsInPopupMode() )
+    if( IsInPopupMode() )
+        return;
+
+    Size aFloatSz = CalcFloatSize();
+
+    SetSizePixel( aFloatSz );
+    mpImplLB->SetSizePixel( GetOutputSizePixel() );
+
+    sal_Int32 nPos = mpImplLB->GetEntryList()->GetSelectedEntryPos( 0 );
+    mnPopupModeStartSaveSelection = nPos;
+
+    Size aSz = GetParent()->GetSizePixel();
+    Point aPos = GetParent()->GetPosPixel();
+    aPos = GetParent()->GetParent()->OutputToScreenPixel( aPos );
+    // FIXME: this ugly hack is for Mac/Aqua
+    // should be replaced by a real mechanism to place the float rectangle
+    if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
+        GetParent()->IsNativeWidgetEnabled() )
     {
-        Size aFloatSz = CalcFloatSize();
-
-        SetSizePixel( aFloatSz );
-        mpImplLB->SetSizePixel( GetOutputSizePixel() );
-
-        sal_Int32 nPos = mpImplLB->GetEntryList()->GetSelectedEntryPos( 0 );
-        mnPopupModeStartSaveSelection = nPos;
-
-        Size aSz = GetParent()->GetSizePixel();
-        Point aPos = GetParent()->GetPosPixel();
-        aPos = GetParent()->GetParent()->OutputToScreenPixel( aPos );
-        // FIXME: this ugly hack is for Mac/Aqua
-        // should be replaced by a real mechanism to place the float rectangle
-        if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
-            GetParent()->IsNativeWidgetEnabled() )
-        {
-            const sal_Int32 nLeft = 4, nTop = 4, nRight = 4, nBottom = 4;
-            aPos.X() += nLeft;
-            aPos.Y() += nTop;
-            aSz.Width() -= nLeft + nRight;
-            aSz.Height() -= nTop + nBottom;
-        }
-        tools::Rectangle aRect( aPos, aSz );
-
-        // check if the control's parent is un-mirrored which is the case for form controls in a mirrored UI
-        // where the document is unmirrored
-        // because StartPopupMode() expects a rectangle in mirrored coordinates we have to re-mirror
-        vcl::Window *pGrandparent = GetParent()->GetParent();
-        const OutputDevice *pGrandparentOutDev = pGrandparent->GetOutDev();
-
-        if( pGrandparent->ImplIsAntiparallel() )
-            pGrandparentOutDev->ReMirror( aRect );
-
-        // mouse-button right: close the List-Box-Float-win and don't stop the handling fdo#84795
-        StartPopupMode( aRect, FloatWinPopupFlags::Down | FloatWinPopupFlags::AllMouseButtonClose );
-
-        if( nPos != LISTBOX_ENTRY_NOTFOUND )
-            mpImplLB->ShowProminentEntry( nPos );
-
-        if( bStartTracking )
-            mpImplLB->GetMainWindow()->EnableMouseMoveSelect( true );
-
-        if ( mpImplLB->GetMainWindow()->IsGrabFocusAllowed() )
-            mpImplLB->GetMainWindow()->GrabFocus();
-
-        mpImplLB->GetMainWindow()->ImplClearLayoutData();
+        const sal_Int32 nLeft = 4, nTop = 4, nRight = 4, nBottom = 4;
+        aPos.X() += nLeft;
+        aPos.Y() += nTop;
+        aSz.Width() -= nLeft + nRight;
+        aSz.Height() -= nTop + nBottom;
     }
+    tools::Rectangle aRect( aPos, aSz );
+
+    // check if the control's parent is un-mirrored which is the case for form controls in a mirrored UI
+    // where the document is unmirrored
+    // because StartPopupMode() expects a rectangle in mirrored coordinates we have to re-mirror
+    vcl::Window *pGrandparent = GetParent()->GetParent();
+    const OutputDevice *pGrandparentOutDev = pGrandparent->GetOutDev();
+
+    if( pGrandparent->ImplIsAntiparallel() )
+        pGrandparentOutDev->ReMirror( aRect );
+
+    // mouse-button right: close the List-Box-Float-win and don't stop the handling fdo#84795
+    StartPopupMode( aRect, FloatWinPopupFlags::Down | FloatWinPopupFlags::AllMouseButtonClose );
+
+    if( nPos != LISTBOX_ENTRY_NOTFOUND )
+        mpImplLB->ShowProminentEntry( nPos );
+
+    if( bStartTracking )
+        mpImplLB->GetMainWindow()->EnableMouseMoveSelect( true );
+
+    if ( mpImplLB->GetMainWindow()->IsGrabFocusAllowed() )
+        mpImplLB->GetMainWindow()->GrabFocus();
+
+    mpImplLB->GetMainWindow()->ImplClearLayoutData();
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

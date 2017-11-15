@@ -711,32 +711,33 @@ void PspSalInfoPrinter::GetPageInfo(
     JobData::constructFromStreamBuffer( pJobSetup->GetDriverData(), pJobSetup->GetDriverDataLen(), aData );
 
     // get the selected page size
-    if( aData.m_pParser )
+    if( !aData.m_pParser )
+return;
+
+
+    OUString aPaper;
+    int width, height;
+    int left = 0, top = 0, right = 0, bottom = 0;
+    int nDPI = aData.m_aContext.getRenderResolution();
+
+    if( aData.m_eOrientation == psp::orientation::Portrait )
     {
-
-        OUString aPaper;
-        int width, height;
-        int left = 0, top = 0, right = 0, bottom = 0;
-        int nDPI = aData.m_aContext.getRenderResolution();
-
-        if( aData.m_eOrientation == psp::orientation::Portrait )
-        {
-            aData.m_aContext.getPageSize( aPaper, width, height );
-            aData.m_pParser->getMargins( aPaper, left, right, top, bottom );
-        }
-        else
-        {
-            aData.m_aContext.getPageSize( aPaper, height, width );
-            aData.m_pParser->getMargins( aPaper, top, bottom, right, left );
-        }
-
-        rPageWidth  = width * nDPI / 72;
-        rPageHeight = height * nDPI / 72;
-        rPageOffX   = left * nDPI / 72;
-        rPageOffY   = top * nDPI / 72;
-        rOutWidth   = ( width  - left - right ) * nDPI / 72;
-        rOutHeight  = ( height - top  - bottom ) * nDPI / 72;
+        aData.m_aContext.getPageSize( aPaper, width, height );
+        aData.m_pParser->getMargins( aPaper, left, right, top, bottom );
     }
+    else
+    {
+        aData.m_aContext.getPageSize( aPaper, height, width );
+        aData.m_pParser->getMargins( aPaper, top, bottom, right, left );
+    }
+
+    rPageWidth  = width * nDPI / 72;
+    rPageHeight = height * nDPI / 72;
+    rPageOffX   = left * nDPI / 72;
+    rPageOffY   = top * nDPI / 72;
+    rOutWidth   = ( width  - left - right ) * nDPI / 72;
+    rOutHeight  = ( height - top  - bottom ) * nDPI / 72;
+
 }
 
 sal_uInt16 PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )

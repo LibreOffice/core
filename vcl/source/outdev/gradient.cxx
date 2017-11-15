@@ -419,25 +419,26 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
             ImplDrawPolygon( aPoly, pClixPolyPoly );
         }
     }
-    if ( !bLinear)
-    {
-        // draw middle polygon with end color
-        nRed = GetGradientColorValue(nEndRed);
-        nGreen = GetGradientColorValue(nEndGreen);
-        nBlue = GetGradientColorValue(nEndBlue);
+    if ( bLinear)
+        return;
 
-        mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
+    // draw middle polygon with end color
+    nRed = GetGradientColorValue(nEndRed);
+    nGreen = GetGradientColorValue(nEndGreen);
+    nBlue = GetGradientColorValue(nEndBlue);
 
-        aRect.Top() = (long)( fGradientLine + ((double)nSteps) * fScanInc );
-        aRect.Bottom() = (long)( fMirrorGradientLine - ((double) nSteps) * fScanInc );
-        aPoly[0] = aRect.TopLeft();
-        aPoly[1] = aRect.TopRight();
-        aPoly[2] = aRect.BottomRight();
-        aPoly[3] = aRect.BottomLeft();
-        aPoly.Rotate( aCenter, nAngle );
+    mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
-        ImplDrawPolygon( aPoly, pClixPolyPoly );
-    }
+    aRect.Top() = (long)( fGradientLine + ((double)nSteps) * fScanInc );
+    aRect.Bottom() = (long)( fMirrorGradientLine - ((double) nSteps) * fScanInc );
+    aPoly[0] = aRect.TopLeft();
+    aPoly[1] = aRect.TopRight();
+    aPoly[2] = aRect.BottomRight();
+    aPoly[3] = aRect.BottomLeft();
+    aPoly.Rotate( aCenter, nAngle );
+
+    ImplDrawPolygon( aPoly, pClixPolyPoly );
+
 }
 
 bool OutputDevice::is_double_buffered_window() const
@@ -769,25 +770,26 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
             mpMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
         }
     }
-    if ( !bLinear)
-    {
-        // draw middle polygon with end color
-        nRed = GetGradientColorValue(nEndRed);
-        nGreen = GetGradientColorValue(nEndGreen);
-        nBlue = GetGradientColorValue(nEndBlue);
+    if ( bLinear)
+        return;
 
-        mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
+    // draw middle polygon with end color
+    nRed = GetGradientColorValue(nEndRed);
+    nGreen = GetGradientColorValue(nEndGreen);
+    nBlue = GetGradientColorValue(nEndBlue);
 
-        aRect.Top() = (long)( fGradientLine + ((double)nSteps) * fScanInc );
-        aRect.Bottom() = (long)( fMirrorGradientLine - ((double) nSteps) * fScanInc );
-        aPoly[0] = aRect.TopLeft();
-        aPoly[1] = aRect.TopRight();
-        aPoly[2] = aRect.BottomRight();
-        aPoly[3] = aRect.BottomLeft();
-        aPoly.Rotate( aCenter, nAngle );
+    mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
 
-        mpMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
-    }
+    aRect.Top() = (long)( fGradientLine + ((double)nSteps) * fScanInc );
+    aRect.Bottom() = (long)( fMirrorGradientLine - ((double) nSteps) * fScanInc );
+    aPoly[0] = aRect.TopLeft();
+    aPoly[1] = aRect.TopRight();
+    aPoly[2] = aRect.BottomRight();
+    aPoly[3] = aRect.BottomLeft();
+    aPoly.Rotate( aCenter, nAngle );
+
+    mpMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
+
 }
 
 void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
@@ -1019,35 +1021,36 @@ void OutputDevice::AddGradientActions( const tools::Rectangle& rRect, const Grad
     aRect.Justify();
 
     // do nothing if the rectangle is empty
-    if ( !aRect.IsEmpty() )
-    {
-        Gradient        aGradient( rGradient );
-        GDIMetaFile*    pOldMtf = mpMetaFile;
+    if ( aRect.IsEmpty() )
+        return;
 
-        mpMetaFile = &rMtf;
-        mpMetaFile->AddAction( new MetaPushAction( PushFlags::ALL ) );
-        mpMetaFile->AddAction( new MetaISectRectClipRegionAction( aRect ) );
-        mpMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
+    Gradient        aGradient( rGradient );
+    GDIMetaFile*    pOldMtf = mpMetaFile;
 
-        // because we draw with no border line, we have to expand gradient
-        // rect to avoid missing lines on the right and bottom edge
-        aRect.Left()--;
-        aRect.Top()--;
-        aRect.Right()++;
-        aRect.Bottom()++;
+    mpMetaFile = &rMtf;
+    mpMetaFile->AddAction( new MetaPushAction( PushFlags::ALL ) );
+    mpMetaFile->AddAction( new MetaISectRectClipRegionAction( aRect ) );
+    mpMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
 
-        // calculate step count if necessary
-        if ( !aGradient.GetSteps() )
-            aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
+    // because we draw with no border line, we have to expand gradient
+    // rect to avoid missing lines on the right and bottom edge
+    aRect.Left()--;
+    aRect.Top()--;
+    aRect.Right()++;
+    aRect.Bottom()++;
 
-        if( aGradient.GetStyle() == GradientStyle::Linear || aGradient.GetStyle() == GradientStyle::Axial )
-            DrawLinearGradientToMetafile( aRect, aGradient );
-        else
-            DrawComplexGradientToMetafile( aRect, aGradient );
+    // calculate step count if necessary
+    if ( !aGradient.GetSteps() )
+        aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 
-        mpMetaFile->AddAction( new MetaPopAction() );
-        mpMetaFile = pOldMtf;
-    }
+    if( aGradient.GetStyle() == GradientStyle::Linear || aGradient.GetStyle() == GradientStyle::Axial )
+        DrawLinearGradientToMetafile( aRect, aGradient );
+    else
+        DrawComplexGradientToMetafile( aRect, aGradient );
+
+    mpMetaFile->AddAction( new MetaPopAction() );
+    mpMetaFile = pOldMtf;
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

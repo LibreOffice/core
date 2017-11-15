@@ -130,26 +130,27 @@ void ImageControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 {
     ImplDraw(rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel());
 
-    if (HasFocus())
-    {
-        vcl::Window* pBorderWindow = GetWindow(GetWindowType::Border);
+    if (!HasFocus())
+        return;
 
-        bool bFlat = (GetBorderStyle() == WindowBorderStyle::MONO);
-        tools::Rectangle aRect(Point(0,0), pBorderWindow->GetOutputSizePixel());
-        Color oldLineCol = pBorderWindow->GetLineColor();
-        Color oldFillCol = pBorderWindow->GetFillColor();
-        pBorderWindow->SetFillColor();
-        pBorderWindow->SetLineColor(bFlat ? COL_WHITE : COL_BLACK);
-        pBorderWindow->DrawRect(aRect);
-        ++aRect.Left();
-        --aRect.Right();
-        ++aRect.Top();
-        --aRect.Bottom();
-        pBorderWindow->SetLineColor(bFlat ? COL_BLACK : COL_WHITE);
-        pBorderWindow->DrawRect(aRect);
-        pBorderWindow->SetLineColor(oldLineCol);
-        pBorderWindow->SetFillColor(oldFillCol);
-    }
+    vcl::Window* pBorderWindow = GetWindow(GetWindowType::Border);
+
+    bool bFlat = (GetBorderStyle() == WindowBorderStyle::MONO);
+    tools::Rectangle aRect(Point(0,0), pBorderWindow->GetOutputSizePixel());
+    Color oldLineCol = pBorderWindow->GetLineColor();
+    Color oldFillCol = pBorderWindow->GetFillColor();
+    pBorderWindow->SetFillColor();
+    pBorderWindow->SetLineColor(bFlat ? COL_WHITE : COL_BLACK);
+    pBorderWindow->DrawRect(aRect);
+    ++aRect.Left();
+    --aRect.Right();
+    ++aRect.Top();
+    --aRect.Bottom();
+    pBorderWindow->SetLineColor(bFlat ? COL_BLACK : COL_WHITE);
+    pBorderWindow->DrawRect(aRect);
+    pBorderWindow->SetLineColor(oldLineCol);
+    pBorderWindow->SetFillColor(oldFillCol);
+
 }
 
 void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags )

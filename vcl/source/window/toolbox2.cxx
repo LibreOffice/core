@@ -1663,56 +1663,57 @@ IMPL_LINK( ToolBox, ImplCustomMenuListener, VclMenuEvent&, rEvent, void )
 IMPL_LINK_NOARG(ToolBox, ImplCallExecuteCustomMenu, void*, void)
 {
     mpData->mnEventId = nullptr;
-    if( IsMenuEnabled() )
+    if( !IsMenuEnabled() )
+        return;
+
+    if( GetMenuType() & ToolBoxMenuType::Customize )
+        // call button handler to allow for menu customization
+        mpData->maMenuButtonHdl.Call( this );
+
+    GetMenu()->AddEventListener( LINK( this, ToolBox, ImplCustomMenuListener ) );
+
+    // make sure all disabled entries will be shown
+    GetMenu()->SetMenuFlags(
+        GetMenu()->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
+
+    // toolbox might be destroyed during execute
+    bool bBorderDel = false;
+
+    VclPtr<vcl::Window> pWin = this;
+    tools::Rectangle aMenuRect = mpData->maMenuRect;
+    mpData->maMenuRect.SetEmpty();
+    VclPtr<ImplBorderWindow> pBorderWin;
+    if( aMenuRect.IsEmpty() && IsFloatingMode() )
     {
-        if( GetMenuType() & ToolBoxMenuType::Customize )
-            // call button handler to allow for menu customization
-            mpData->maMenuButtonHdl.Call( this );
-
-        GetMenu()->AddEventListener( LINK( this, ToolBox, ImplCustomMenuListener ) );
-
-        // make sure all disabled entries will be shown
-        GetMenu()->SetMenuFlags(
-            GetMenu()->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
-
-        // toolbox might be destroyed during execute
-        bool bBorderDel = false;
-
-        VclPtr<vcl::Window> pWin = this;
-        tools::Rectangle aMenuRect = mpData->maMenuRect;
-        mpData->maMenuRect.SetEmpty();
-        VclPtr<ImplBorderWindow> pBorderWin;
-        if( aMenuRect.IsEmpty() && IsFloatingMode() )
+        // custom menu is placed in the decoration
+        pBorderWin = dynamic_cast<ImplBorderWindow*>( GetWindow( GetWindowType::Border ) );
+        if( pBorderWin && !pBorderWin->GetMenuRect().IsEmpty() )
         {
-            // custom menu is placed in the decoration
-            pBorderWin = dynamic_cast<ImplBorderWindow*>( GetWindow( GetWindowType::Border ) );
-            if( pBorderWin && !pBorderWin->GetMenuRect().IsEmpty() )
-            {
-                pWin = pBorderWin;
-                aMenuRect = pBorderWin->GetMenuRect();
-                bBorderDel = true;
-            }
+            pWin = pBorderWin;
+            aMenuRect = pBorderWin->GetMenuRect();
+            bBorderDel = true;
         }
-
-        sal_uInt16 uId = GetMenu()->Execute( pWin, tools::Rectangle( ImplGetPopupPosition( aMenuRect ), Size() ),
-                                PopupMenuFlags::ExecuteDown | PopupMenuFlags::NoMouseUpClose );
-
-        if ( pWin->IsDisposed() )
-            return;
-
-        if( GetMenu() )
-            GetMenu()->RemoveEventListener( LINK( this, ToolBox, ImplCustomMenuListener ) );
-        if( bBorderDel )
-        {
-            if( pBorderWin->IsDisposed() )
-                return;
-        }
-
-        pWin->Invalidate( aMenuRect );
-
-        if( uId )
-            GrabFocusToDocument();
     }
+
+    sal_uInt16 uId = GetMenu()->Execute( pWin, tools::Rectangle( ImplGetPopupPosition( aMenuRect ), Size() ),
+                            PopupMenuFlags::ExecuteDown | PopupMenuFlags::NoMouseUpClose );
+
+    if ( pWin->IsDisposed() )
+        return;
+
+    if( GetMenu() )
+        GetMenu()->RemoveEventListener( LINK( this, ToolBox, ImplCustomMenuListener ) );
+    if( bBorderDel )
+    {
+        if( pBorderWin->IsDisposed() )
+            return;
+    }
+
+    pWin->Invalidate( aMenuRect );
+
+    if( uId )
+        GrabFocusToDocument();
+
 }
 
 void ToolBox::ExecuteCustomMenu( const tools::Rectangle& rRect )

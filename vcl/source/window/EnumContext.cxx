@@ -111,22 +111,23 @@ void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Application eAp
 
 void EnumContext::ProvideApplicationContainers()
 {
-    if (maApplicationMap.empty())
-    {
-        AddEntry("com.sun.star.text.TextDocument", EnumContext::Application::Writer);
-        AddEntry("com.sun.star.text.GlobalDocument", EnumContext::Application::WriterGlobal);
-        AddEntry("com.sun.star.text.WebDocument", EnumContext::Application::WriterWeb);
-        AddEntry("com.sun.star.xforms.XMLFormDocument", EnumContext::Application::WriterXML);
-        AddEntry("com.sun.star.sdb.FormDesign", EnumContext::Application::WriterForm);
-        AddEntry("com.sun.star.sdb.TextReportDesign", EnumContext::Application::WriterReport);
-        AddEntry("com.sun.star.sheet.SpreadsheetDocument", EnumContext::Application::Calc);
-        AddEntry("com.sun.star.chart2.ChartDocument", EnumContext::Application::Chart);
-        AddEntry("com.sun.star.drawing.DrawingDocument", EnumContext::Application::Draw);
-        AddEntry("com.sun.star.presentation.PresentationDocument", EnumContext::Application::Impress);
+    if (!maApplicationMap.empty())
+        return;
 
-        AddEntry("any", EnumContext::Application::Any);
-        AddEntry("none", EnumContext::Application::NONE);
-    }
+    AddEntry("com.sun.star.text.TextDocument", EnumContext::Application::Writer);
+    AddEntry("com.sun.star.text.GlobalDocument", EnumContext::Application::WriterGlobal);
+    AddEntry("com.sun.star.text.WebDocument", EnumContext::Application::WriterWeb);
+    AddEntry("com.sun.star.xforms.XMLFormDocument", EnumContext::Application::WriterXML);
+    AddEntry("com.sun.star.sdb.FormDesign", EnumContext::Application::WriterForm);
+    AddEntry("com.sun.star.sdb.TextReportDesign", EnumContext::Application::WriterReport);
+    AddEntry("com.sun.star.sheet.SpreadsheetDocument", EnumContext::Application::Calc);
+    AddEntry("com.sun.star.chart2.ChartDocument", EnumContext::Application::Chart);
+    AddEntry("com.sun.star.drawing.DrawingDocument", EnumContext::Application::Draw);
+    AddEntry("com.sun.star.presentation.PresentationDocument", EnumContext::Application::Impress);
+
+    AddEntry("any", EnumContext::Application::Any);
+    AddEntry("none", EnumContext::Application::NONE);
+
 }
 
 EnumContext::Application EnumContext::GetApplicationEnum (const ::rtl::OUString& rsApplicationName)
@@ -155,43 +156,44 @@ void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Context eContex
 
 void EnumContext::ProvideContextContainers()
 {
-    if (maContextMap.empty())
-    {
-        AddEntry("any", Context::Any);
-        AddEntry("default", Context::Default);
-        AddEntry("empty", Context::Empty);
-        AddEntry("3DObject", Context::ThreeDObject);
-        AddEntry("Annotation", Context::Annotation);
-        AddEntry("Auditing", Context::Auditing);
-        AddEntry("Axis", Context::Axis);
-        AddEntry("Cell", Context::Cell);
-        AddEntry("Chart", Context::Chart);
-        AddEntry("ChartElements", Context::ChartElements);
-        AddEntry("Draw", Context::Draw);
-        AddEntry("DrawLine", Context::DrawLine);
-        AddEntry("DrawPage", Context::DrawPage);
-        AddEntry("DrawText", Context::DrawText);
-        AddEntry("EditCell", Context::EditCell);
-        AddEntry("ErrorBar", Context::ErrorBar);
-        AddEntry("Form", Context::Form);
-        AddEntry("Frame", Context::Frame);
-        AddEntry("Graphic", Context::Graphic);
-        AddEntry("Grid", Context::Grid);
-        AddEntry("HandoutPage", Context::HandoutPage);
-        AddEntry("MasterPage", Context::MasterPage);
-        AddEntry("Media", Context::Media);
-        AddEntry("MultiObject", Context::MultiObject);
-        AddEntry("NotesPage", Context::NotesPage);
-        AddEntry("OLE", Context::OLE);
-        AddEntry("OutlineText", Context::OutlineText);
-        AddEntry("Pivot", Context::Pivot);
-        AddEntry("Series", Context::Series);
-        AddEntry("SlidesorterPage", Context::SlidesorterPage);
-        AddEntry("Table", Context::Table);
-        AddEntry("Text", Context::Text);
-        AddEntry("TextObject", Context::TextObject);
-        AddEntry("Trendline", Context::Trendline);
-    }
+    if (!maContextMap.empty())
+        return;
+
+    AddEntry("any", Context::Any);
+    AddEntry("default", Context::Default);
+    AddEntry("empty", Context::Empty);
+    AddEntry("3DObject", Context::ThreeDObject);
+    AddEntry("Annotation", Context::Annotation);
+    AddEntry("Auditing", Context::Auditing);
+    AddEntry("Axis", Context::Axis);
+    AddEntry("Cell", Context::Cell);
+    AddEntry("Chart", Context::Chart);
+    AddEntry("ChartElements", Context::ChartElements);
+    AddEntry("Draw", Context::Draw);
+    AddEntry("DrawLine", Context::DrawLine);
+    AddEntry("DrawPage", Context::DrawPage);
+    AddEntry("DrawText", Context::DrawText);
+    AddEntry("EditCell", Context::EditCell);
+    AddEntry("ErrorBar", Context::ErrorBar);
+    AddEntry("Form", Context::Form);
+    AddEntry("Frame", Context::Frame);
+    AddEntry("Graphic", Context::Graphic);
+    AddEntry("Grid", Context::Grid);
+    AddEntry("HandoutPage", Context::HandoutPage);
+    AddEntry("MasterPage", Context::MasterPage);
+    AddEntry("Media", Context::Media);
+    AddEntry("MultiObject", Context::MultiObject);
+    AddEntry("NotesPage", Context::NotesPage);
+    AddEntry("OLE", Context::OLE);
+    AddEntry("OutlineText", Context::OutlineText);
+    AddEntry("Pivot", Context::Pivot);
+    AddEntry("Series", Context::Series);
+    AddEntry("SlidesorterPage", Context::SlidesorterPage);
+    AddEntry("Table", Context::Table);
+    AddEntry("Text", Context::Text);
+    AddEntry("TextObject", Context::TextObject);
+    AddEntry("Trendline", Context::Trendline);
+
 }
 
 EnumContext::Context EnumContext::GetContextEnum (const ::rtl::OUString& rsContextName)
