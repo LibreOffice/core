@@ -612,7 +612,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XScenarioEnhanced \
     qadevOOo/tests/java/ifc/sheet/_XScenariosSupplier \
     qadevOOo/tests/java/ifc/sheet/_XSheetAnnotationAnchor \
-    qadevOOo/tests/java/ifc/sheet/_XSheetAnnotationsSupplier \
     qadevOOo/tests/java/ifc/sheet/_XSheetAuditing \
     qadevOOo/tests/java/ifc/sheet/_XSheetCellCursor \
     qadevOOo/tests/java/ifc/sheet/_XSpreadsheetView \

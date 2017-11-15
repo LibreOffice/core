@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xcellseries.hxx>
 #include <test/sheet/xprintareas.hxx>
+#include <test/sheet/xsheetannotationssupplier.hxx>
 #include <test/sheet/xsheetcellrange.hxx>
 #include <test/sheet/xsheetfilterable.hxx>
 #include <test/sheet/xsheetfilterableex.hxx>
@@ -31,12 +32,13 @@ using namespace css::uno;
 namespace sc_apitest
 {
 
-#define NUMBER_OF_TESTS 23
+#define NUMBER_OF_TESTS 24
 
 class ScTableSheetObj : public CalcUnoApiTest, public apitest::XCellSeries,
                                                public apitest::XPrintAreas,
                                                public apitest::XReplaceable,
                                                public apitest::XSearchable,
+                                               public apitest::XSheetAnnotationsSupplier,
                                                public apitest::XSheetCellRange,
                                                public apitest::XSheetFilterable,
                                                public apitest::XSheetFilterableEx,
@@ -71,6 +73,9 @@ public:
     // XReplaceable
     CPPUNIT_TEST(testReplaceAll);
     CPPUNIT_TEST(testCreateReplaceDescriptor);
+
+    // XSheetAnnotationsSupplier
+    CPPUNIT_TEST(testGetAnnotations);
 
     // XSearchable
     CPPUNIT_TEST(testFindAll);
