@@ -171,12 +171,14 @@ public:
     {
         double fNan;
         rtl::math::setNan(&fNan);
+        ScTokenArray aCode2;
         for (SCROW i = mnIdx; i <= mnLastIdx; ++i, maBatchTopPos.IncRow())
         {
-            ScTokenArray aCode2;
             formula::FormulaTokenArrayPlainIterator aIter(mrCode);
-            for (const formula::FormulaToken* p = aIter.First(); p; p = aIter.Next())
+            size_t nTokIdx = 0;
+            for (const formula::FormulaToken* p = aIter.First(); p; p = aIter.Next(), ++nTokIdx)
             {
+                formula::FormulaToken* pTargetTok = aCode2.TokenAt(nTokIdx);
                 switch (p->GetType())
                 {
                     case formula::svSingleVectorRef:
@@ -200,14 +202,25 @@ public:
                         {
                             // This is a string cell.
                             svl::SharedStringPool& rPool = mrDoc.GetSharedStringPool();
-                            aCode2.AddString(rPool.intern(OUString(pStr)));
+                            if ( !pTargetTok )
+                                aCode2.AddString(rPool.intern(OUString(pStr)));
+                            else
+                                pTargetTok->SetString(rPool.intern(OUString(pStr)));
                         }
                         else if (rtl::math::isNan(fVal))
+                        {
                             // Value of NaN represents an empty cell.
-                            aCode2.AddToken(ScEmptyCellToken(false, false));
+                            if ( !pTargetTok )
+                                aCode2.AddToken(ScEmptyCellToken(false, false));
+                        }
                         else
+                        {
                             // Numeric cell.
-                            aCode2.AddDouble(fVal);
+                            if ( !pTargetTok )
+                                aCode2.AddDouble(fVal);
+                            else
+                                pTargetTok->GetDoubleAsReference() = fVal;
+                        }
                     }
                     break;
                     case formula::svDoubleVectorRef:
@@ -229,17 +242,29 @@ public:
                             aRefRange.aEnd.SetRow(mrTopPos.Row() + nRowEnd);
                             aRef.InitRange(aRefRange);
                             formula::FormulaTokenRef xTok(new ScMatrixRangeToken(pMat, aRef));
-                            aCode2.AddToken(*xTok);
+                            if ( !pTargetTok )
+                                aCode2.AddToken(*xTok);
+                            else
+                                aCode2.ReplaceToken(nTokIdx, xTok.get(), formula::FormulaTokenArray::CODE_ONLY);
                         }
                         else
                         {
-                            ScMatrixToken aTok(pMat);
-                            aCode2.AddToken(aTok);
+                            if ( !pTargetTok )
+                            {
+                                ScMatrixToken aTok(pMat);
+                                aCode2.AddToken(aTok);
+                            }
+                            else
+                            {
+                                ScMatrixToken* pMatTok = new ScMatrixToken(pMat);
+                                aCode2.ReplaceToken(nTokIdx, pMatTok, formula::FormulaTokenArray::CODE_ONLY);
+                            }
                         }
                     }
                     break;
                     default:
-                        aCode2.AddToken(*p);
+                        if ( !pTargetTok )
+                            aCode2.AddToken(*p);
                 } // end of switch statement
             } // end of formula token for loop
 
