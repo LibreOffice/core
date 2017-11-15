@@ -7,34 +7,32 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,gpgme))
+$(eval $(call gb_ExternalProject_ExternalProject,gpgmepp))
 
-$(eval $(call gb_ExternalProject_register_targets,gpgme,\
+$(eval $(call gb_ExternalProject_register_targets,gpgmepp,\
 	build \
 ))
 
-$(eval $(call gb_ExternalProject_use_autoconf,gpgme,build))
+$(eval $(call gb_ExternalProject_use_autoconf,gpgmepp,build))
 
-$(eval $(call gb_ExternalProject_use_externals,gpgme,\
+$(eval $(call gb_ExternalProject_use_externals,gpgmepp,\
        libgpg-error \
        libassuan \
 ))
 
 ifeq ($(COM),MSC)
-$(call gb_ExternalProject_get_state_target,gpgme,build):
+$(call gb_ExternalProject_get_state_target,gpgmepp,build):
 	$(call gb_ExternalProject_run,build,\
 		autoreconf \
 		&& ./configure \
-		   --enable-languages="cl cpp" \
+		   --disable-shared \
+		   --disable-languages \
 		   --disable-gpgconf-test \
 		   --disable-gpg-test \
 		   --disable-gpgsm-test \
 		   --disable-g13-test \
-		   GPG_ERROR_CFLAGS="$(GPG_ERROR_CFLAGS)" \
-		   GPG_ERROR_LIBS="$(GPG_ERROR_LIBS)" \
-		   LIBASSUAN_CFLAGS="$(LIBASSUAN_CFLAGS)" \
-		   LIBASSUAN_LIBS="$(LIBASSUAN_LIBS)" \
-			CFLAGS='$(CFLAGS) \
+		   --disable-glibtest \
+		   CFLAGS='$(CFLAGS) \
 				$(if $(ENABLE_OPTIMIZED), \
 					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
 				$(if $(ENABLE_DEBUG),$(gb_DEBUG_CFLAGS)) \
@@ -42,18 +40,17 @@ $(call gb_ExternalProject_get_state_target,gpgme,build):
 		   --host=$(if $(filter INTEL,$(CPUNAME)),i686-mingw32,x86_64-w64-mingw32) \
 	  && $(MAKE) \
 	)
-
 else
-$(call gb_ExternalProject_get_state_target,gpgme,build):
+$(call gb_ExternalProject_get_state_target,gpgmepp,build):
 	$(call gb_ExternalProject_run,build,\
 		autoreconf \
 		&& ./configure \
-		   --enable-languages="cl cpp" \
+		   --enable-languages="cpp" \
 		   GPG_ERROR_CFLAGS="$(GPG_ERROR_CFLAGS)" \
 		   GPG_ERROR_LIBS="$(GPG_ERROR_LIBS)" \
 		   LIBASSUAN_CFLAGS="$(LIBASSUAN_CFLAGS)" \
 		   LIBASSUAN_LIBS="$(LIBASSUAN_LIBS)" \
-			CFLAGS='$(CFLAGS) \
+		   CFLAGS='$(CFLAGS) \
 				$(if $(ENABLE_OPTIMIZED), \
 					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
 				$(if $(ENABLE_DEBUG),$(gb_DEBUG_CFLAGS)) \
@@ -64,6 +61,6 @@ $(call gb_ExternalProject_get_state_target,gpgme,build):
 		   $(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	  && $(MAKE) \
 	)
-
 endif
+
 # vim: set noet sw=4 ts=4:

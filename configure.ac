@@ -10128,7 +10128,11 @@ fi
 AC_SUBST(ENABLE_PDFIUM)
 
 SYSTEM_GPGMEPP=
-if test "$_os" = "Linux" -o "$_os" = "Darwin"; then
+# need matching cygwin arch for building gpgme sadly, for the while
+if test "$_os" = "Linux" -o "$_os" = "Darwin" \
+   -o \( "$_os" = "WINNT" -a "$host_cpu" = "i686" -a "$WINDOWS_SDK_ARCH" = "x86" \) \
+   -o \( "$_os" = "WINNT" -a "$host_cpu" = "x86_64" -a "$WINDOWS_SDK_ARCH" = "x64" \) ; then
+
     dnl ===================================================================
     dnl Check for system gpgme
     dnl ===================================================================
@@ -10150,23 +10154,13 @@ if test "$_os" = "Linux" -o "$_os" = "Darwin"; then
         AC_MSG_RESULT([internal])
         AC_DEFINE([GPGME_CAN_EXPORT_MINIMAL_KEY])
         BUILD_TYPE="$BUILD_TYPE LIBGPGERROR LIBASSUAN GPGMEPP"
-        if test "$_os" = "WINNT"; then
-            BUILD_TYPE="$BUILD_TYPE GLIB2"
-        fi
-
         GPG_ERROR_CFLAGS="-I${WORKDIR}/UnpackedTarball/libgpg-error/src"
-        GPG_ERROR_LIBS="-L${WORKDIR}/UnpackedTarball/libgpg-error/src/.libs -lgpg-error"
         LIBASSUAN_CFLAGS="-I${WORKDIR}/UnpackedTarball/libassuan/src"
-        LIBASSUAN_LIBS="-L${WORKDIR}/UnpackedTarball/libassuan/src/.libs -lassuan"
+        if test "$_os" != "WINNT"; then
+            GPG_ERROR_LIBS="-L${WORKDIR}/UnpackedTarball/libgpg-error/src/.libs -lgpg-error"
+            LIBASSUAN_LIBS="-L${WORKDIR}/UnpackedTarball/libassuan/src/.libs -lassuan"
+        fi
     fi
-else
-    # TODO(davido): Windows build must be protected with a configure option
-    # unless CI doesn't support libtool with windres with gcc preprocessor
-    BUILD_TYPE="$BUILD_TYPE LIBASSUAN LIBGPGERROR GPGMEPP"
-    GPG_ERROR_CFLAGS="-I${WORKDIR}/UnpackedTarball/libgpg-error/src"
-    GPG_ERROR_LIBS="-L${WORKDIR}/UnpackedTarball/libgpg-error/src/.libs -lgpg-error"
-    LIBASSUAN_CFLAGS="-I${WORKDIR}/UnpackedTarball/libassuan/src"
-    LIBASSUAN_LIBS="-L${WORKDIR}/UnpackedTarball/libassuan/src/.libs -lassuan"
 fi
 AC_SUBST(SYSTEM_GPGMEPP)
 AC_SUBST(GPG_ERROR_CFLAGS)

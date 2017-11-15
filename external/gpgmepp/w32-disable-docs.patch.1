@@ -1,0 +1,15 @@
+Disable doc building the hard way - should rather be a config option
+like libgpg-error's --disable-doc
+
+diff -ur gpgmepp.org/Makefile.am gpgmepp/Makefile.am
+--- gpgmepp.org/Makefile.am	2016-11-16 13:20:18.000000000 +0100
++++ gpgmepp/Makefile.am	2017-11-20 15:34:49.086731000 +0100
+@@ -33,7 +33,7 @@
+ tests =
+ endif
+ 
+-SUBDIRS = src ${tests} doc lang
++SUBDIRS = src ${tests} lang
+ 
+ # Fix the version of the spec file and create a file named VERSION
+ # to be used for patch's Prereq: feature.

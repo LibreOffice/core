@@ -120,3 +120,14 @@ diff -ru gpgme.orig/src/vfs-mount.c gpgme/src/vfs-mount.c
      {
        if (opd->result.mount_dir)
  	free (opd->result.mount_dir);
+diff -ur gpgmepp.org/src/w32-glib-io.c gpgmepp/src/w32-glib-io.c
+--- gpgmepp.org/src/w32-glib-io.c	2016-11-16 13:22:41.000000000 +0100
++++ gpgmepp/src/w32-glib-io.c	2017-11-20 06:40:44.793945300 +0100
+@@ -37,6 +37,7 @@
+ #ifdef HAVE_SYS_TYPES_H
+ # include <sys/types.h>
+ #endif
++#include <winsock2.h>
+ #include <glib.h>
+ #include <windows.h>
+ #include <io.h>
