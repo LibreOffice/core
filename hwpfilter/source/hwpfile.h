@@ -27,6 +27,7 @@
 
 #include <algorithm>
 #include <list>
+#include <memory>
 #include <vector>
 #include <stdio.h>
 #include <string.h>
@@ -220,7 +221,7 @@ class DLLEXPORT HWPFile
         void AddDateFormat(DateCode *);
         void AddHeaderFooter(HeaderFooter *);
         void AddPageNumber(ShowPageNum *);
-        void AddTable(Table *);
+        void AddTable(std::unique_ptr<Table>);
 
         ColumnDef* GetColumnDef(int);
           int GetPageMasterNum(int page);
@@ -229,7 +230,7 @@ class DLLEXPORT HWPFile
         HWPInfo& GetHWPInfo(void) { return _hwpInfo; }
         HWPFont& GetHWPFont(void) { return _hwpFont; }
         HWPStyle& GetHWPStyle(void) { return _hwpStyle; }
-        HWPPara *GetFirstPara(void) { return plist.front(); }
+        HWPPara *GetFirstPara(void) { return plist.front().get(); }
 
         EmPicture *GetEmPicture(Picture *pic);
         EmPicture *GetEmPictureByName(char * name);
@@ -284,14 +285,14 @@ class DLLEXPORT HWPFile
         HWPInfo   _hwpInfo;
         HWPFont   _hwpFont;
         HWPStyle  _hwpStyle;
-        std::vector<ColumnInfo*> columnlist;
+        std::vector<std::unique_ptr<ColumnInfo>> columnlist;
         // paragraph list
-        std::vector<HWPPara*> plist;
+        std::vector<std::unique_ptr<HWPPara>> plist;
         // floating box list
         std::vector<FBox*> blist;
         // embedded picture list(tag datas)
-        std::vector<EmPicture*> emblist;
-        std::vector<HyperText*> hyperlist;
+        std::vector<std::unique_ptr<EmPicture>> emblist;
+        std::vector<std::unique_ptr<HyperText>> hyperlist;
         int currenthyper;
         std::vector<std::shared_ptr<ParaShape>> pslist;
         std::vector<std::shared_ptr<CharShape>> cslist;
@@ -299,7 +300,7 @@ class DLLEXPORT HWPFile
         std::vector<DateCode*> datecodes;
         std::vector<HeaderFooter*> headerfooters;
         std::vector<ShowPageNum*> pagenumbers;
-        std::vector<Table*> tables;
+        std::vector<std::unique_ptr<Table>> tables;
         //track the stack of HParas types we're currently importing
         std::vector<unsigned char> element_import_stack;
 

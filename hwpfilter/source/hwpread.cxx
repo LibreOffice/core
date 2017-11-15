@@ -311,7 +311,7 @@ bool TxtBox::Read(HWPFile & hwpf)
         if (!pArr) {
               return hwpf.SetState(HWP_InvalidFileFormat);
         }
-        Table *tbl = new Table;
+        std::unique_ptr<Table> tbl(new Table);
         for( ii = 0 ; ii < ncell; ii++)
         {
             tbl->columns.insert(cell[ii].x);
@@ -351,11 +351,11 @@ bool TxtBox::Read(HWPFile & hwpf)
             }
         }
         for( ii = 0 ; ii < ncell ; ii++ ){
-            tbl->cells.push_back(pArr[ii]);
+            tbl->cells.emplace_back(pArr[ii]);
         }
         tbl->box = this;
-        hwpf.AddTable(tbl);
-        m_pTable = tbl;
+        m_pTable = tbl.get();
+        hwpf.AddTable(std::move(tbl));
         delete[] pArr;
     }
     else

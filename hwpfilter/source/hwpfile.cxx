@@ -62,21 +62,6 @@ HWPFile::~HWPFile()
 {
     delete oledata;
     delete hiodev;
-
-    for (auto const& column : columnlist)
-        delete column;
-
-    for (auto const& paragraph : plist)
-        delete paragraph;
-
-    for (auto const& table : tables)
-        delete table;
-
-    for (auto const& emb : emblist)
-        delete emb;
-
-    for (auto const& hyperlink : hyperlist)
-        delete hyperlink;
 }
 
 int HWPFile::ReadHwpFile(HStream * stream)
@@ -323,12 +308,10 @@ void HWPFile::TagsRead()
         {
             case FILETAG_EMBEDDED_PICTURE:
             {
-                EmPicture *emb = new EmPicture(size);
+                std::unique_ptr<EmPicture> emb(new EmPicture(size));
 
                 if (emb->Read(*this))
-                    emblist.push_back(emb);
-                else
-                    delete emb;
+                    emblist.push_back(std::move(emb));
             }
             break;
             case FILETAG_OLE_OBJECT:
@@ -346,14 +329,11 @@ void HWPFile::TagsRead()
                     const int nRecords = size / nRecordLen;
                     for (int i = 0 ; i < nRecords; ++i)
                     {
-                        HyperText *hypert = new HyperText;
+                        std::unique_ptr<HyperText> hypert(new HyperText);
                         if (hypert->Read(*this))
-                            hyperlist.push_back(hypert);
+                            hyperlist.push_back(std::move(hypert));
                         else
-                        {
-                            delete hypert;
                             break;
-                        }
                     }
                 }
                 break;
@@ -454,7 +434,7 @@ HyperText *HWPFile::GetHyperText()
 {
     ++currenthyper;
     if (static_cast<size_t>(currenthyper) <= hyperlist.size())
-        return hyperlist[currenthyper-1];
+        return hyperlist[currenthyper-1].get();
     else
         return nullptr;
 }
@@ -469,7 +449,7 @@ EmPicture *HWPFile::GetEmPicture(Picture * pic)
 
     for (auto const& emb : emblist)
         if (strcmp(name, emb->name) == 0)
-            return emb;
+            return emb.get();
     return nullptr;
 }
 
@@ -481,7 +461,7 @@ EmPicture *HWPFile::GetEmPictureByName(char * name)
 
     for (auto const& emb : emblist)
         if (strcmp(name, emb->name) == 0)
-            return emb;
+            return emb.get();
     return nullptr;
 }
 
@@ -536,7 +516,7 @@ Table *HWPFile::getTable(int index)
 {
     if (index < 0 || static_cast<unsigned int>(index) >= tables.size())
         return nullptr;
-    return tables[index];
+    return tables[index].get();
 }
 
 void HWPFile::AddParaShape(std::shared_ptr<ParaShape> const & pshape)
@@ -585,14 +565,13 @@ void HWPFile::AddCharShape(std::shared_ptr<CharShape> const & cshape)
 
 void HWPFile::AddColumnInfo()
 {
-    ColumnInfo *cinfo = new ColumnInfo(m_nCurrentPage);
-    columnlist.push_back(cinfo);
+    columnlist.emplace_back(new ColumnInfo(m_nCurrentPage));
     setMaxSettedPage();
 }
 
 void HWPFile::SetColumnDef(ColumnDef *coldef)
 {
-    ColumnInfo *cinfo = columnlist.back();
+    ColumnInfo *cinfo = columnlist.back().get();
     if( cinfo->bIsSet )
         return;
     cinfo->coldef = coldef;
@@ -615,9 +594,9 @@ void HWPFile::AddHeaderFooter(HeaderFooter * hbox)
     headerfooters.push_back(hbox);
 }
 
-void HWPFile::AddTable(Table * hbox)
+void HWPFile::AddTable(std::unique_ptr<Table> hbox)
 {
-    tables.push_back(hbox);
+    tables.push_back(std::move(hbox));
 }
 
 void HWPFile::AddFBoxStyle(FBoxStyle * fbstyle)
