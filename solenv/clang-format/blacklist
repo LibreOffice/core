@@ -7200,7 +7200,6 @@ include/svtools/templatefoldercache.hxx
 include/svtools/textwindowpeer.hxx
 include/svtools/toolbarmenu.hxx
 include/svtools/toolboxcontroller.hxx
-include/svtools/toolpanelopt.hxx
 include/svtools/transfer.hxx
 include/svtools/treelist.hxx
 include/svtools/treelistbox.hxx
@@ -14000,7 +13999,6 @@ svtools/source/config/optionsdrawinglayer.cxx
 svtools/source/config/printoptions.cxx
 svtools/source/config/slidesorterbaropt.cxx
 svtools/source/config/test/test.cxx
-svtools/source/config/toolpanelopt.cxx
 svtools/source/contnr/DocumentInfoPreview.cxx
 svtools/source/contnr/contentenumeration.cxx
 svtools/source/contnr/contentenumeration.hxx
