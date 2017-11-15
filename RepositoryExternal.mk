@@ -3472,7 +3472,7 @@ endef
 else # NON-SYSTEM_GPGME
 
 define gb_ExternalProject__use_gpgmepp
-$(call gb_ExternalProject_use_external_project,$(1),gpgme)
+$(call gb_ExternalProject_use_external_project,$(1),gpgmepp)
 
 endef
 define gb_ExternalProject__use_libassuan
@@ -3483,6 +3483,36 @@ define gb_ExternalProject__use_libgpg-error
 $(call gb_ExternalProject_use_external_project,$(1),libgpg-error)
 
 endef
+
+ifneq ($(filter WNT,$(OS)),)
+
+define gb_LinkTarget__use_libgpg-error
+$(call gb_LinkTarget_use_package,$(1),libgpg-error)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	$(GPG_ERROR_CFLAGS) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+       -LIBPATH:$(call gb_UnpackedTarball_get_dir,libgpg-error)/src/.libs libgpg-error.lib \
+)
+
+endef
+
+define gb_LinkTarget__use_libassuan
+$(call gb_LinkTarget_use_package,$(1),libassuan)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	$(LIBASSUAN_CFLAGS) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+       -LIBPATH:$(call gb_UnpackedTarball_get_dir,libassuan)/src/.libs libassuan.lib \
+)
+
+endef
+
+endif
 
 define gb_LinkTarget__use_gpgmepp
 $(call gb_LinkTarget_set_include,$(1),\
@@ -3501,9 +3531,23 @@ endef
 ifneq ($(filter MACOSX LINUX,$(OS)),)
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
-	gpgme \
+	gpgmepp \
 	libassuan \
 	libgpg-error \
+))
+
+endif
+
+ifneq ($(filter WNT,$(OS)),)
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	libassuan \
+	libgpg-error \
+))
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+	gpgme \
+	gpgmepp \
 ))
 
 endif
