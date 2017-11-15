@@ -97,6 +97,7 @@ class SharedStringPool;
 }
 
 #define MAXSTACK      (4096 / sizeof(formula::FormulaToken*))
+#define TOKEN_CACHE_SIZE 8
 
 class ScTokenStack
 {
@@ -229,6 +230,8 @@ private:
     bool        bMatrixFormula;         // formula cell is a matrix formula
 
     VolatileType meVolatileType;
+    size_t       mnTokenCachePos;
+    std::vector<formula::FormulaToken*> maTokenCache;
 
     /// Merge global and document specific settings.
     void MergeCalcConfig();
@@ -395,6 +398,7 @@ private:
     sc::RangeMatrix PopRangeMatrix();
     void QueryMatrixType(const ScMatrixRef& xMat, short& rRetTypeExpr, sal_uLong& rRetIndexExpr);
 
+    formula::FormulaToken* CreateFormulaDoubleToken( double fVal, short nFmt = css::util::NumberFormat::NUMBER );
     formula::FormulaToken* CreateDoubleOrTypedToken( double fVal );
 
     void PushDouble(double nVal);
