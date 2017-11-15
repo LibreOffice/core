@@ -731,7 +731,7 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
         {
             TreatDoubleError( fVal);
             if (!IfErrorPushError())
-                PushTempTokenWithoutError( new FormulaDoubleToken( fVal));
+                PushTempTokenWithoutError( CreateFormulaDoubleToken( fVal));
         }
         else
         {
@@ -1687,7 +1687,7 @@ void ScInterpreter::QueryMatrixType(const ScMatrixRef& xMat, short& rRetTypeExpr
         {
             if ( xMat->IsEmptyPath( 0, 0))
             {   // result of empty FALSE jump path
-                FormulaTokenRef xRes = new FormulaDoubleToken( 0.0);
+                FormulaTokenRef xRes = CreateFormulaDoubleToken( 0.0);
                 PushTempToken( new ScMatrixFormulaCellToken(nCols, nRows, xMat, xRes.get()));
                 rRetTypeExpr = css::util::NumberFormat::LOGICAL;
             }
@@ -1716,7 +1716,7 @@ void ScInterpreter::QueryMatrixType(const ScMatrixRef& xMat, short& rRetTypeExpr
             if (nErr != FormulaError::NONE)
                 xRes = new FormulaErrorToken( nErr);
             else
-                xRes = new FormulaDoubleToken( nMatVal.fVal);
+                xRes = CreateFormulaDoubleToken( nMatVal.fVal);
             PushTempToken( new ScMatrixFormulaCellToken(nCols, nRows, xMat, xRes.get()));
             if ( rRetTypeExpr != css::util::NumberFormat::LOGICAL )
                 rRetTypeExpr = css::util::NumberFormat::NUMBER;
@@ -1728,14 +1728,42 @@ void ScInterpreter::QueryMatrixType(const ScMatrixRef& xMat, short& rRetTypeExpr
         SetError( FormulaError::UnknownStackVariable);
 }
 
+formula::FormulaToken* ScInterpreter::CreateFormulaDoubleToken( double fVal, short nFmt )
+{
+    if ( maTokenCache.size() != TOKEN_CACHE_SIZE )
+        maTokenCache.resize( TOKEN_CACHE_SIZE );
+
+    // Find a spare token
+    for ( auto p : maTokenCache )
+    {
+        if (p && p->GetRef() == 1)
+        {
+            p->IncRef();
+            p->GetDoubleAsReference() = fVal;
+            p->SetDoubleType( nFmt );
+            return p;
+        }
+    }
+
+    // Allocate a new token
+    auto p = new FormulaTypedDoubleToken( fVal, nFmt );
+    size_t pos = (mnTokenCachePos++) % TOKEN_CACHE_SIZE;
+    if ( maTokenCache[pos] )
+        maTokenCache[pos]->DecRef();
+    maTokenCache[pos] = p;
+    p->IncRef();
+
+    return p;
+}
+
 formula::FormulaToken* ScInterpreter::CreateDoubleOrTypedToken( double fVal )
 {
     // NumberFormat::NUMBER is the default untyped double.
     if (nFuncFmtType && nFuncFmtType != css::util::NumberFormat::NUMBER &&
             nFuncFmtType != css::util::NumberFormat::UNDEFINED)
-        return new FormulaTypedDoubleToken( fVal, nFuncFmtType);
+        return CreateFormulaDoubleToken( fVal, nFuncFmtType);
     else
-        return new FormulaDoubleToken( fVal);
+        return CreateFormulaDoubleToken( fVal);
 }
 
 void ScInterpreter::PushDouble(double nVal)
@@ -3842,6 +3870,11 @@ ScInterpreter::~ScInterpreter()
     else
         delete pStackObj;
     delete pTokenMatrixMap;
+
+    for ( auto p : maTokenCache )
+        if ( p && p->GetRef() == 1 )
+            p->DecRef();
+
 }
 
 ScCalcConfig& ScInterpreter::GetOrCreateGlobalConfig()
@@ -4583,7 +4616,7 @@ StackVar ScInterpreter::Interpret()
                                     nRetIndexExpr = 0;  // carry format index only for matching type
                                 nRetTypeExpr = nFuncFmtType = nCurFmtType;
                             }
-                            PushTempToken( new FormulaDoubleToken( fVal));
+                            PushTempToken( CreateFormulaDoubleToken( fVal));
                         }
                         if ( nFuncFmtType == css::util::NumberFormat::UNDEFINED )
                         {
