@@ -36,7 +36,8 @@ namespace vcl { class Font; }
 class SwSortedObjs;
 class SwAnchoredObject;
 
-/// A page of the document layout.
+/// A page of the document layout. Upper frame is expected to be an SwRootFrame
+/// instance. At least an SwBodyFrame lower is expected.
 class SwPageFrame: public SwFootnoteBossFrame
 {
     friend class SwFrame;

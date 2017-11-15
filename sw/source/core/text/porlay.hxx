@@ -73,7 +73,8 @@ public:
     void   SetRightOfst( const SwTwips nNew ) { nRightOfst = nNew; }
 };
 
-/// Collection of SwLinePortion instances, representing one line of text
+/// Collection of SwLinePortion instances, representing one line of text.
+/// Typically owned by an SwParaPortion.
 class SwLineLayout : public SwTextPortion
 {
 private:
@@ -226,6 +227,7 @@ public:
 };
 
 /// Collection of SwLineLayout instances, represents the paragraph text in Writer layout.
+/// Typically owned by an SwTextFrame.
 class SwParaPortion : public SwLineLayout
 {
     // Area that needs repainting
