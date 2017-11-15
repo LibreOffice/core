@@ -265,7 +265,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
     SetScaleUnit(MapUnit::Map100thMM);
     SfxItemPool& rPool = GetItemPool();
     rPool.SetDefaultMetric(MapUnit::Map100thMM);
-    SvxFrameDirectionItem aModeItem( SvxFrameDirection::Environment, EE_PARA_WRITINGDIR.Which() );
+    SvxFrameDirectionItem aModeItem( SvxFrameDirection::Environment, EE_PARA_WRITINGDIR );
     rPool.SetPoolDefaultItem( aModeItem );
 
     // #i33700#
@@ -278,7 +278,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
     if (MsLangId::isKorean(eOfficeLanguage) || eOfficeLanguage == LANGUAGE_JAPANESE)
     {
         // secondary is edit engine pool
-        rPool.GetSecondaryPool()->SetPoolDefaultItem( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING.Which() ) );
+        rPool.GetSecondaryPool()->SetPoolDefaultItem( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
     }
 
     rPool.FreezeIdRanges();                         // the pool is also used directly

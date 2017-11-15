@@ -150,10 +150,6 @@ public:
                                  assert(m_nRefCount==0);
                                  m_nWhich = nId;
                              }
-    template<class T> void   SetWhich( TypedWhichId<T> nId )
-    {
-        SetWhich(nId.Which());
-    }
     sal_uInt16               Which() const { return m_nWhich; }
     virtual bool             operator==( const SfxPoolItem& ) const = 0;
     bool                     operator!=( const SfxPoolItem& rItem ) const
@@ -180,7 +176,7 @@ public:
     SfxPoolItem*             CloneSetWhich( sal_uInt16 nNewWhich ) const;
     template<class T> T*     CloneSetWhich( TypedWhichId<T> nId ) const
     {
-        return static_cast<T*>(CloneSetWhich(nId.Which()));
+        return static_cast<T*>(CloneSetWhich(sal_uInt16(nId)));
     }
 
     sal_uInt32               GetRefCount() const { return m_nRefCount; }

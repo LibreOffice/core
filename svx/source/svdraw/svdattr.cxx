@@ -565,12 +565,12 @@ void SdrItemPool::TakeItemName(sal_uInt16 nWhich, OUString& rItemName)
         case SDRATTR_GRAFMODE           : pResId = SIP_SA_GRAFMODE;break;
         case SDRATTR_GRAFCROP           : pResId = SIP_SA_GRAFCROP;break;
 
-        case EE_PARA_HYPHENATE.Which()  : pResId = SIP_EE_PARA_HYPHENATE;break;
-        case EE_PARA_BULLETSTATE.Which(): pResId = SIP_EE_PARA_BULLETSTATE;break;
-        case EE_PARA_OUTLLRSPACE.Which(): pResId = SIP_EE_PARA_OUTLLRSPACE;break;
-        case EE_PARA_OUTLLEVEL.Which()  : pResId = SIP_EE_PARA_OUTLLEVEL;break;
-        case EE_PARA_BULLET.Which()     : pResId = SIP_EE_PARA_BULLET;break;
-        case EE_PARA_LRSPACE.Which()    : pResId = SIP_EE_PARA_LRSPACE;break;
+        case EE_PARA_HYPHENATE  : pResId = SIP_EE_PARA_HYPHENATE;break;
+        case EE_PARA_BULLETSTATE: pResId = SIP_EE_PARA_BULLETSTATE;break;
+        case EE_PARA_OUTLLRSPACE: pResId = SIP_EE_PARA_OUTLLRSPACE;break;
+        case EE_PARA_OUTLLEVEL  : pResId = SIP_EE_PARA_OUTLLEVEL;break;
+        case EE_PARA_BULLET     : pResId = SIP_EE_PARA_BULLET;break;
+        case EE_PARA_LRSPACE    : pResId = SIP_EE_PARA_LRSPACE;break;
         case EE_PARA_ULSPACE    : pResId = SIP_EE_PARA_ULSPACE;break;
         case EE_PARA_SBL        : pResId = SIP_EE_PARA_SBL;break;
         case EE_PARA_JUST       : pResId = SIP_EE_PARA_JUST;break;

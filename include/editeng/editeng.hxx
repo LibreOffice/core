@@ -323,7 +323,7 @@ public:
     template<class T>
     const T&            GetParaAttrib( sal_Int32 nPara, TypedWhichId<T> nWhich )
     {
-        return static_cast<const T&>(GetParaAttrib(nPara, nWhich.Which()));
+        return static_cast<const T&>(GetParaAttrib(nPara, sal_uInt16(nWhich)));
     }
 
     vcl::Font       GetStandardFont( sal_Int32 nPara );

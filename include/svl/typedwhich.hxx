@@ -23,27 +23,26 @@ public:
         : mnWhich(nWhich)
     {
     }
-    constexpr sal_uInt16 Which() const { return mnWhich; }
-    //constexpr operator sal_uInt16() const { return mnWhich; }
+    constexpr operator sal_uInt16() const { return mnWhich; }
 private:
     sal_uInt16 const mnWhich;
 };
 
 template <class T> constexpr bool operator==(sal_uInt16 lhs, TypedWhichId<T> const& rhs)
 {
-    return lhs == rhs.Which();
+    return lhs == sal_uInt16(rhs);
 }
 template <class T> constexpr bool operator!=(sal_uInt16 lhs, TypedWhichId<T> const& rhs)
 {
-    return lhs != rhs.Which();
+    return lhs != sal_uInt16(rhs);
 }
 template <class T> constexpr bool operator==(TypedWhichId<T> const& lhs, sal_uInt16 rhs)
 {
-    return lhs.Which() == rhs;
+    return sal_uInt16(lhs) == rhs;
 }
 template <class T> constexpr bool operator!=(TypedWhichId<T> const& lhs, sal_uInt16 rhs)
 {
-    return lhs.Which() != rhs;
+    return sal_uInt16(lhs) != rhs;
 }
 
 #endif // INCLUDED_SVL_TYPEDWHICH_HXX

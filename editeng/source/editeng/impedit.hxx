@@ -855,7 +855,7 @@ public:
     template<class T>
     const T&            GetParaAttrib( sal_Int32 nPara, TypedWhichId<T> nWhich ) const
     {
-        return static_cast<const T&>(GetParaAttrib(nPara, nWhich.Which()));
+        return static_cast<const T&>(GetParaAttrib(nPara, sal_uInt16(nWhich)));
     }
 
     tools::Rectangle       PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nFlags = GetCursorFlags::NONE );

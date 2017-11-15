@@ -63,7 +63,7 @@ DrawModelWrapper::DrawModelWrapper()
 
     SfxItemPool* pMasterPool = &GetItemPool();
     pMasterPool->SetDefaultMetric(MapUnit::Map100thMM);
-    pMasterPool->SetPoolDefaultItem(SfxBoolItem(EE_PARA_HYPHENATE.Which(), true) );
+    pMasterPool->SetPoolDefaultItem(SfxBoolItem(EE_PARA_HYPHENATE, true) );
     pMasterPool->SetPoolDefaultItem(makeSvx3DPercentDiagonalItem (5));
 
     SfxItemPool* pPool = pMasterPool;

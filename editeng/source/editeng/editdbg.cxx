@@ -64,12 +64,12 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
     OStringBuffer aDebStr;
     switch ( rItem.Which() )
     {
-        case EE_PARA_WRITINGDIR.Which():
+        case EE_PARA_WRITINGDIR:
             aDebStr.append("WritingDir=");
             aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxFrameDirectionItem&>(rItem).GetValue()));
         break;
-        case EE_PARA_OUTLLRSPACE.Which():
-        case EE_PARA_LRSPACE.Which():
+        case EE_PARA_OUTLLRSPACE:
+        case EE_PARA_LRSPACE:
             aDebStr.append("FI=");
             aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLRSpaceItem&>(rItem).GetTextFirstLineOfst()));
             aDebStr.append(", LI=");
@@ -77,7 +77,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
             aDebStr.append(", RI=");
             aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLRSpaceItem&>(rItem).GetRight()));
         break;
-        case EE_PARA_NUMBULLET.Which():
+        case EE_PARA_NUMBULLET:
             aDebStr.append("NumItem ");
             for ( sal_uInt16 nLevel = 0; nLevel < 3; nLevel++ )
             {
@@ -106,15 +106,15 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
                 }
             }
         break;
-        case EE_PARA_BULLETSTATE.Which():
+        case EE_PARA_BULLETSTATE:
             aDebStr.append("ShowBullet=");
             aDebStr.append(static_cast<sal_Int32>(static_cast<const SfxBoolItem&>(rItem).GetValue()));
         break;
-        case EE_PARA_HYPHENATE.Which():
+        case EE_PARA_HYPHENATE:
             aDebStr.append("Hyphenate=");
             aDebStr.append(static_cast<sal_Int32>(static_cast<const SfxBoolItem&>(rItem).GetValue()));
         break;
-        case EE_PARA_OUTLLEVEL.Which():
+        case EE_PARA_OUTLLEVEL:
             aDebStr.append("Level=");
             aDebStr.append(static_cast<sal_Int32>(static_cast<const SfxInt16Item&>(rItem).GetValue()));
         break;
