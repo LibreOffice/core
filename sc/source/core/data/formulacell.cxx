@@ -49,6 +49,7 @@
 #include <tokenarray.hxx>
 
 #include <comphelper/threadpool.hxx>
+#include <tools/cpuid.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/vectortoken.hxx>
 #include <svl/intitem.hxx>
@@ -4364,6 +4365,8 @@ bool ScFormulaCell::InterpretFormulaGroup()
             return false;
         }
 
+        static bool bHyperThreadingActive = tools::cpuid::hasHyperThreading();
+
         // Then do the threaded calculation
 
         class Executor : public comphelper::ThreadTask
@@ -4410,6 +4413,9 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
         comphelper::ThreadPool& rThreadPool(comphelper::ThreadPool::getSharedOptimalPool());
         sal_Int32 nThreadCount = rThreadPool.getWorkerCount();
+
+        if ( bHyperThreadingActive && nThreadCount >= 2 )
+            nThreadCount /= 2;
 
         SAL_INFO("sc.threaded", "Running " << nThreadCount << " threads");
 
