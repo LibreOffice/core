@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 
-#include <list>
+#include <vector>
 #include <map>
 
 class SvXMLExport;
@@ -37,13 +37,13 @@ namespace com { namespace sun { namespace star {
  } } }
 
 // store a list of redline properties
-typedef ::std::list<
-            css::uno::Reference<css::beans::XPropertySet> > ChangesListType;
+typedef ::std::vector<
+            css::uno::Reference<css::beans::XPropertySet> > ChangesVectorType;
 
 // store a list of redline properties for each XText
 typedef ::std::map<
             css::uno::Reference< css::text::XText>,
-            ChangesListType* > ChangesMapType;
+            ChangesVectorType* > ChangesMapType;
 
 
 /**
@@ -70,7 +70,7 @@ class XMLRedlineExport
     ChangesMapType aChangeMap;              /// map of recorded changes
 
     /// list of current changes; is NULL or points to member of aChangeMap
-    ChangesListType* pCurrentChangesList;
+    ChangesVectorType* pCurrentChangesList;
 
 
 public:

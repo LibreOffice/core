@@ -71,11 +71,9 @@ XMLRedlineExport::XMLRedlineExport(SvXMLExport& rExp)
 XMLRedlineExport::~XMLRedlineExport()
 {
     // delete changes lists
-    for( ChangesMapType::iterator aIter = aChangeMap.begin();
-         aIter != aChangeMap.end();
-         ++aIter )
+    for (auto const& change : aChangeMap)
     {
-        delete aIter->second;
+        delete change.second;
     }
     aChangeMap.clear();
 }
@@ -130,7 +128,7 @@ void XMLRedlineExport::ExportChangesList(
     ChangesMapType::iterator aFind = aChangeMap.find(rText);
     if (aFind != aChangeMap.end())
     {
-        ChangesListType* pChangesList = aFind->second;
+        ChangesVectorType* pChangesList = aFind->second;
 
         // export only if changes are found
         if (pChangesList->size() > 0)
@@ -141,11 +139,9 @@ void XMLRedlineExport::ExportChangesList(
                                         true, true);
 
             // iterate over changes list
-            for( ChangesListType::iterator aIter = pChangesList->begin();
-                 aIter != pChangesList->end();
-                 ++aIter )
+            for (auto const& change : *pChangesList)
             {
-                ExportChangedRegion( *aIter );
+                ExportChangedRegion(change);
             }
         }
         // else: changes list empty -> ignore
@@ -162,7 +158,7 @@ void XMLRedlineExport::SetCurrentXText(
         ChangesMapType::iterator aIter = aChangeMap.find(rText);
         if (aIter == aChangeMap.end())
         {
-            ChangesListType* pList = new ChangesListType;
+            ChangesVectorType* pList = new ChangesVectorType;
             aChangeMap[rText] = pList;
             pCurrentChangesList = pList;
         }
