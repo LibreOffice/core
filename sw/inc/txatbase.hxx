@@ -61,7 +61,7 @@ private:
 
 protected:
     SwTextAttr( SfxPoolItem& rAttr, sal_Int32 nStart );
-    virtual ~SwTextAttr();
+    virtual ~SwTextAttr() COVERITY_NOEXCEPT_FALSE;
 
     void SetLockExpandFlag( bool bFlag )    { m_bLockExpandFlag = bFlag; }
     void SetDontMoveAttr( bool bFlag )      { m_bDontMoveAttr = bFlag; }
