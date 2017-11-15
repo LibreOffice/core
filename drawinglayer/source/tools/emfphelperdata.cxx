@@ -63,6 +63,7 @@ namespace emfplushelper
             case EmfPlusRecordTypeFillPie: return "EmfPlusRecordTypeFillPie";
             case EmfPlusRecordTypeDrawPie: return "EmfPlusRecordTypeDrawPie";
             case EmfPlusRecordTypeDrawArc: return "EmfPlusRecordTypeDrawArc";
+            case EmfPlusRecordTypeFillRegion: return "EmfPlusRecordTypeFillRegion";
             case EmfPlusRecordTypeFillPath: return "EmfPlusRecordTypeFillPath";
             case EmfPlusRecordTypeDrawPath: return "EmfPlusRecordTypeDrawPath";
             case EmfPlusRecordTypeDrawBeziers: return "EmfPlusRecordTypeDrawBeziers";
@@ -459,9 +460,9 @@ namespace emfplushelper
         if (!polygon.count())
           return;
 
-        SAL_INFO("drawinglayer", "EMF+\tfill polygon");
         if (isColor) // use Color
         {
+            SAL_INFO("drawinglayer", "EMF+\t Fill polygon, ARGB color: 0x" << std::hex << brushIndexOrColor << std::dec);
             mrTargetHolders.Current().append(
                 o3tl::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
                     polygon,
@@ -474,7 +475,7 @@ namespace emfplushelper
         else // use Brush
         {
             EMFPBrush* brush = static_cast<EMFPBrush*>( maEMFPObjects[brushIndexOrColor & 0xff].get() );
-            SAL_INFO("drawinglayer", "EMF+\tbrush fill slot: " << brushIndexOrColor << " (type: " << (brush ? brush->GetType() : -1) << ")");
+            SAL_INFO("drawinglayer", "EMF+\t Fill polygon, brush slot: " << brushIndexOrColor << " (brush type: " << (brush ? brush->GetType() : -1) << ")");
 
             // give up in case something wrong happened
             if( !brush )
@@ -940,6 +941,16 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+ FillPath slot: " << index);
 
                         EMFPPlusFillPolygon(static_cast<EMFPPath*>(maEMFPObjects[index].get())->GetPolygon(*this), flags & 0x8000, brushIndexOrColor);
+                    }
+                    break;
+                    case EmfPlusRecordTypeFillRegion:
+                    {
+                        sal_uInt32 index = flags & 0xff;
+                        sal_uInt32 brushIndexOrColor;
+                        rMS.ReadUInt32(brushIndexOrColor);
+                        SAL_INFO("drawinglayer", "EMF+ FillRegion slot: " << index);
+
+                        EMFPPlusFillPolygon(static_cast<EMFPRegion*>(maEMFPObjects[flags & 0xff].get())->regionPolyPolygon, flags & 0x8000, brushIndexOrColor);
                     }
                     break;
                     case EmfPlusRecordTypeDrawEllipse:
