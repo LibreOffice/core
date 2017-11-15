@@ -463,7 +463,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             for( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
             {
                 const SfxItemSet& rItems = pOLV->GetOutliner()->GetParaAttribs( nPara );
-                const SvxULSpaceItem& rItem = static_cast<const SvxULSpaceItem&>( rItems.Get( EE_PARA_ULSPACE ) );
+                const SvxULSpaceItem& rItem = rItems.Get( EE_PARA_ULSPACE );
                 nUpper = std::max( nUpper, (long)rItem.GetUpper() );
             }
             if( nUpper == 0 )
@@ -479,7 +479,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         // paragraph justification
         SvxLRSpaceItem aLR = aAttrSet.Get( EE_PARA_LRSPACE );
         rSet.Put(aLR);
-        SvxAdjust eAdj = static_cast<const SvxAdjustItem&>( aAttrSet.Get( EE_PARA_JUST ) ).GetAdjust();
+        SvxAdjust eAdj = aAttrSet.Get( EE_PARA_JUST ).GetAdjust();
         switch( eAdj )
         {
             case SvxAdjust::Left:
@@ -565,8 +565,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             rSet.InvalidateItem(EE_PARA_LRSPACE);
             rSet.InvalidateItem(SID_ATTR_PARA_LRSPACE);
         }
-        sal_uInt16 nLineSpace = static_cast<const SvxLineSpacingItem&>( aAttrSet.
-                            Get( EE_PARA_SBL ) ).GetPropLineSpace();
+        sal_uInt16 nLineSpace = aAttrSet.Get( EE_PARA_SBL ).GetPropLineSpace();
         switch( nLineSpace )
         {
             case 100:

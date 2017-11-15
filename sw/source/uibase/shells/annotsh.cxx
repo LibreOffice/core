@@ -193,8 +193,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         case SID_PARASPACE_INCREASE:
         case SID_PARASPACE_DECREASE:
         {
-            SvxULSpaceItem aULSpace(
-                static_cast< const SvxULSpaceItem& >( aEditAttr.Get( EE_PARA_ULSPACE ) ) );
+            SvxULSpaceItem aULSpace( aEditAttr.Get( EE_PARA_ULSPACE ) );
             sal_uInt16 nUpper = aULSpace.GetUpper();
             sal_uInt16 nLower = aULSpace.GetLower();
 
@@ -659,7 +658,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                 SfxItemState eState = aEditAttr.GetItemState( EE_PARA_SBL );
                 if( eState >= SfxItemState::DEFAULT )
                 {
-                    SvxLineSpacingItem aLR = static_cast<const SvxLineSpacingItem&>( aEditAttr.Get( EE_PARA_SBL ) );
+                    SvxLineSpacingItem aLR = aEditAttr.Get( EE_PARA_SBL );
                     rSet.Put(aLR);
                 }
                 else
@@ -675,7 +674,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     SfxItemState eState = aEditAttr.GetItemState( EE_PARA_ULSPACE );
                     if( eState >= SfxItemState::DEFAULT )
                     {
-                        SvxULSpaceItem aULSpace = static_cast<const SvxULSpaceItem&>( aEditAttr.Get( EE_PARA_ULSPACE ) );
+                        SvxULSpaceItem aULSpace = aEditAttr.Get( EE_PARA_ULSPACE );
                         if ( !aULSpace.GetUpper() && !aULSpace.GetLower() )
                             rSet.DisableItem( SID_PARASPACE_DECREASE );
                         else if ( aULSpace.GetUpper() >= 5670 && aULSpace.GetLower() >= 5670 )
