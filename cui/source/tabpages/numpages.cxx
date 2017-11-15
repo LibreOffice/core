@@ -2246,7 +2246,7 @@ static sal_uInt16 lcl_DrawGraphic(VirtualDevice* pVDev, const SvxNumberFormat &r
             aGSize.Width() /= nDivision;
             nRet = (sal_uInt16)aGSize.Width();
             aGSize.Height() /= nDivision;
-            pGrf->Draw( pVDev, Point(nXStart,nYStart),
+            pGrf->Draw( pVDev, Point(nXStart,nYStart - ( aGSize.Height() / 2) ),
                     pVDev->PixelToLogic( aGSize ) );
         }
     }
@@ -2513,7 +2513,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                 {
                     if (rFmt.IsShowSymbol())
                     {
-                        nTextOffset = lcl_DrawGraphic(pVDev.get(), rFmt, nXStart, nYStart, nWidthRelation);
+                        nTextOffset = lcl_DrawGraphic(pVDev.get(), rFmt, nXStart, nYStart + ( nFontHeight / 2 ), nWidthRelation);
                         nTextOffset = nTextOffset + nXStep;
                     }
                 }
