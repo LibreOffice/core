@@ -241,8 +241,8 @@ vector<ScTokenRef> TokenTable::getAllRanges() const
     return aTokens;
 }
 
-typedef std::map<sal_uInt32, FormulaToken*> FormulaTokenMap;
-typedef std::map<sal_uInt32, FormulaTokenMap*> FormulaTokenMapMap;
+typedef std::map<SCROW, FormulaToken*> FormulaTokenMap;
+typedef std::map<SCCOL, FormulaTokenMap*> FormulaTokenMapMap;
 
 class Chart2PositionMap
 {
@@ -286,67 +286,66 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
     SCROW nHeaderRowCount = (bFillColumnHeader && nAllColCount && nAllRowCount) ? 1 : 0;
     SCCOL nHeaderColCount = (bFillRowHeader && nAllColCount && nAllRowCount) ? 1 : 0;
 
-    if( nHeaderColCount || nHeaderRowCount )
+    if( pDoc && (nHeaderColCount || nHeaderRowCount ) )
     {
-        const SCCOL nInitialHeaderColCount = nHeaderColCount;
         //check whether there is more than one text column or row that should be added to the headers
-        SCROW nSmallestValueRowIndex = nAllRowCount;
-        bool bFoundValues = false;
-        bool bFoundAnything = false;
-        FormulaTokenMapMap::const_iterator it1 = rCols.begin();
-        for (SCCOL nCol = 0; nCol < nAllColCount; ++nCol)
+        SCROW nMaxHeaderRow = nAllRowCount;
+        for ( const auto & rCol : rCols )
         {
-            if (it1 != rCols.end() && nCol>=nHeaderColCount)
+            // Skip header columns
+            if ( rCol.first < nHeaderColCount )
+                continue;
+
+            bool bFoundValuesInCol = false;
+            bool bFoundAnythingInCol = false;
+            for ( const auto & rCell : *rCol.second )
             {
-                bool bFoundValuesInRow = false;
-                FormulaTokenMap* pCol = it1->second;
-                FormulaTokenMap::const_iterator it2 = pCol->begin();
-                for (SCROW nRow = 0; !bFoundValuesInRow && nRow < nSmallestValueRowIndex && it2 != pCol->end(); ++nRow)
+                // Skip header rows
+                if (rCell.first < nHeaderRowCount )
+                    continue;
+
+                ScRange aRange;
+                bool bExternal = false;
+                StackVar eType = rCell.second->GetType();
+                if( eType==svExternal || eType==svExternalSingleRef || eType==svExternalDoubleRef || eType==svExternalName )
+                    bExternal = true;//lllll todo correct?
+                ScTokenRef pSharedToken(rCell.second->Clone());
+                ScRefTokenHelper::getRangeFromToken(aRange, pSharedToken, ScAddress(), bExternal);
+                SCCOL nCol1=0, nCol2=0;
+                SCROW nRow1=0, nRow2=0;
+                SCTAB nTab1=0, nTab2=0;
+                aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+                if ( pDoc->HasValueData( nCol1, nRow1, nTab1 ) )
                 {
-                    FormulaToken* pToken = it2->second;
-                    if (pToken && nRow>=nHeaderRowCount)
-                    {
-                        ScRange aRange;
-                        bool bExternal = false;
-                        StackVar eType = pToken->GetType();
-                        if( eType==svExternal || eType==svExternalSingleRef || eType==svExternalDoubleRef || eType==svExternalName )
-                            bExternal = true;//lllll todo correct?
-                        ScTokenRef pSharedToken(pToken->Clone());
-                        ScRefTokenHelper::getRangeFromToken(aRange, pSharedToken, ScAddress(), bExternal);
-                        SCCOL nCol1=0, nCol2=0;
-                        SCROW nRow1=0, nRow2=0;
-                        SCTAB nTab1=0, nTab2=0;
-                        aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-                        if (pDoc && pDoc->HasValueData( nCol1, nRow1, nTab1 ))
-                        {
-                            bFoundValuesInRow = bFoundValues = bFoundAnything = true;
-                            nSmallestValueRowIndex = std::min( nSmallestValueRowIndex, nRow );
-                        }
-                        if( !bFoundAnything )
-                        {
-                            if (pDoc && pDoc->HasData( nCol1, nRow1, nTab1 ) )
-                                bFoundAnything = true;
-                        }
-                    }
-                    ++it2;
+                    // Found some numeric data
+                    bFoundValuesInCol = true;
+                    nMaxHeaderRow = std::min(nMaxHeaderRow, nRow1);
+                    break;
                 }
-                if(!bFoundValues && nHeaderColCount>0)
-                    nHeaderColCount++;
+                if ( pDoc->HasData( nCol1, nRow1, nTab1 ) )
+                {
+                    // Found some other data (non-numeric)
+                    bFoundAnythingInCol = true;
+                }
+                else
+                {
+                    // If cell is empty, it belongs to data
+                    nMaxHeaderRow = std::min(nMaxHeaderRow, nRow1);
+                }
             }
-            ++it1;
-        }
-        if( bFoundAnything )
-        {
-            if(nHeaderRowCount>0)
+
+            if (nHeaderColCount && !bFoundValuesInCol && bFoundAnythingInCol && rCol.first == nHeaderColCount)
             {
-                if( bFoundValues )
-                    nHeaderRowCount = nSmallestValueRowIndex;
-                else if( nAllRowCount>1 )
-                    nHeaderRowCount = nAllRowCount-1;
+                // There is no values in row, but some data. And this column is next to header
+                // So lets put it to header
+                nHeaderColCount++;
             }
         }
-        else //if the cells are completely empty, just use single header rows and columns
-            nHeaderColCount = nInitialHeaderColCount;
+
+        if (nHeaderRowCount)
+        {
+            nHeaderRowCount = nMaxHeaderRow;
+        }
     }
 
     mnDataColCount = nAllColCount - nHeaderColCount;
