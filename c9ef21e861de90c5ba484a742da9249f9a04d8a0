@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_ec1c4cc3",
+        "filename": "cui/source/tabpages/numpages.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2332,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-11-15T19:32:55Z",
+      "side": 1,
+      "message": "In general it\u0027s always a good idea to use minimal scope for local variables. Since this nYMiddle is only used in some specific cases it would be better to define it inside that if branch where it\u0027s actually used.\nIt makes the code more readable, since in that case it\u0027s clear the nYMiddle is not used globally inside this function, but it\u0027s used only by that small piece of code.",
+      "range": {
+        "startLine": 2332,
+        "startChar": 19,
+        "endLine": 2332,
+        "endChar": 27
+      },
+      "revId": "c9ef21e861de90c5ba484a742da9249f9a04d8a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_ac2244ff",
+        "filename": "cui/source/tabpages/numpages.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2396,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-11-15T19:32:55Z",
+      "side": 1,
+      "message": "Just a nitpick. This two empty lines seem to be added by accident. Would be good to remove them just to reduce the noise in git history.",
+      "revId": "c9ef21e861de90c5ba484a742da9249f9a04d8a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_cc2150fd",
+        "filename": "cui/source/tabpages/numpages.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2405,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-11-15T19:32:55Z",
+      "side": 1,
+      "message": "You should change only the calls of lcl_DrawGraphic() and not lcl_DrawBullet() which should be untouched by this code change.",
+      "revId": "c9ef21e861de90c5ba484a742da9249f9a04d8a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
