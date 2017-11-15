@@ -305,7 +305,8 @@ void ScFiltersTest::testContentDIF()
 {
     ScDocShellRef xDocSh = loadDoc("universal-content.", FORMAT_DIF);
 
-    xDocSh->GetDocument();
+    CPPUNIT_ASSERT_MESSAGE("Failed to load universal-content.dif", xDocSh.is());
+
     xDocSh->DoClose();
 }
 
