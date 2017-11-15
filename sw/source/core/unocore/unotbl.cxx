@@ -3054,8 +3054,6 @@ void SwXTextTable::setName(const OUString& rName)
             {
                 static_cast<SwOLENode*>(pNd)->SetChartTableName( rName );
 
-                static_cast<SwOLENode*>(pNd)->GetOLEObj();
-
                 SwTable* pTable = SwTable::FindTable( pFormat );
                 //TL_CHART2: chart needs to be notfied about name changes
                 pFormat->GetDoc()->UpdateCharts( pTable->GetFrameFormat()->GetName() );
