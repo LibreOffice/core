@@ -51,7 +51,7 @@
 
 #include <sax/tools/converter.hxx>
 
-#include <list>
+#include <vector>
 
 #include <o3tl/make_unique.hxx>
 
@@ -741,7 +741,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
         Reference< XTransitionFilter > xTransitionFilter( mxNode, UNO_QUERY );
         Reference< XIterateContainer > xIter( mxNode, UNO_QUERY );
 
-        std::list< NamedValue > aUserData;
+        std::vector< NamedValue > aUserData;
         XMLTokenEnum meAttributeName = XML_TOKEN_INVALID;
         OUString aFrom, aBy, aTo, aValues;
         bool bHaveXmlId( false );
@@ -1201,10 +1201,8 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
         {
             Sequence< NamedValue > aUnoUserData( nUserDataCount );
             NamedValue* pData = aUnoUserData.getArray();
-            std::list< NamedValue >::iterator aIter( aUserData.begin() );
-            const std::list< NamedValue >::iterator aEnd( aUserData.end() );
-            while( aIter != aEnd )
-                *pData++ = (*aIter++);
+            for (auto const& item : aUserData)
+                *pData++ = item;
 
             mxNode->setUserData( aUnoUserData );
         }
