@@ -35,6 +35,7 @@
 #include <sal/types.h>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/frame/XModule.hpp>
@@ -136,6 +137,8 @@ throw (css::uno::RuntimeException, std::exception)
     if (!m_bShowMenu)
         return;
 
+    const Reference<XServiceInfo> xService(m_xFrame->getController()->getModel(), UNO_QUERY);
+    bool bWriter = xService.is() && xService->supportsService("com.sun.star.text.GenericTextDocument");
     //add context menu
     Reference< awt::XPopupMenu > xPopupMenu( awt::PopupMenu::create( m_xContext ) );
     //sub menu that contains all items except the last two items: Separator + Set Language for Paragraph
@@ -172,36 +175,47 @@ throw (css::uno::RuntimeException, std::exception)
         }
     }
 
-    xPopupMenu->insertItem( MID_LANG_SEL_NONE,  FWK_RESSTR(STR_LANGSTATUS_NONE), 0, MID_LANG_SEL_NONE );
-    if ( sNone == m_aCurLang )
-        xPopupMenu->checkItem( MID_LANG_SEL_NONE, true );
-    xPopupMenu->insertItem( MID_LANG_SEL_RESET, FWK_RESSTR(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_SEL_RESET );
-    xPopupMenu->insertItem( MID_LANG_SEL_MORE,  FWK_RESSTR(STR_LANGSTATUS_MORE), 0, MID_LANG_SEL_MORE );
-
-    // add entries to submenu ('set language for paragraph')
-    nItemId = static_cast< sal_Int16 >(MID_LANG_PARA_1);
-    for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
+    if (bWriter)
     {
-        const OUString & rStr( *it );
-        if( rStr != sNone &&
-            rStr != sAsterisk &&
-            !rStr.isEmpty()) // 'no language found' from language guessing
-        {
-            SAL_WARN_IF( MID_LANG_PARA_1 > nItemId || nItemId > MID_LANG_PARA_9,
-                    "fwk.uielement", "nItemId outside of expected range!" );
-            subPopupMenu->insertItem( nItemId, rStr, 0, nItemId );
-            aLangMap[nItemId] = rStr;
-            ++nItemId;
-        }
-    }
-    subPopupMenu->insertItem( MID_LANG_PARA_NONE,  FWK_RESSTR(STR_LANGSTATUS_NONE), 0, MID_LANG_PARA_NONE );
-    subPopupMenu->insertItem( MID_LANG_PARA_RESET, FWK_RESSTR(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_PARA_RESET );
-    subPopupMenu->insertItem( MID_LANG_PARA_MORE,  FWK_RESSTR(STR_LANGSTATUS_MORE), 0, MID_LANG_PARA_MORE );
+        xPopupMenu->insertItem( MID_LANG_SEL_NONE,  FwkResId(STR_LANGSTATUS_NONE), 0, MID_LANG_SEL_NONE );
+        if ( sNone == m_aCurLang )
+            xPopupMenu->checkItem( MID_LANG_SEL_NONE, true );
+        xPopupMenu->insertItem( MID_LANG_SEL_RESET, FwkResId(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_SEL_RESET );
+        xPopupMenu->insertItem( MID_LANG_SEL_MORE,  FwkResId(STR_LANGSTATUS_MORE), 0, MID_LANG_SEL_MORE );
 
-    // add last two entries to main menu
-    xPopupMenu->insertSeparator( MID_LANG_PARA_SEPARATOR );
-    xPopupMenu->insertItem( MID_LANG_PARA_STRING, FWK_RESSTR(STR_SET_LANGUAGE_FOR_PARAGRAPH), 0, MID_LANG_PARA_STRING );
-    xPopupMenu->setPopupMenu( MID_LANG_PARA_STRING, subPopupMenu );
+        // add entries to submenu ('set language for paragraph')
+        nItemId = static_cast< sal_Int16 >(MID_LANG_PARA_1);
+        for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
+        {
+            const OUString & rStr( *it );
+            if( rStr != sNone &&
+                rStr != sAsterisk &&
+                !rStr.isEmpty()) // 'no language found' from language guessing
+            {
+                SAL_WARN_IF( MID_LANG_PARA_1 > nItemId || nItemId > MID_LANG_PARA_9,
+                        "fwk.uielement", "nItemId outside of expected range!" );
+                subPopupMenu->insertItem( nItemId, rStr, 0, nItemId );
+                aLangMap[nItemId] = rStr;
+                ++nItemId;
+            }
+        }
+        subPopupMenu->insertItem( MID_LANG_PARA_NONE,  FwkResId(STR_LANGSTATUS_NONE), 0, MID_LANG_PARA_NONE );
+        subPopupMenu->insertItem( MID_LANG_PARA_RESET, FwkResId(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_PARA_RESET );
+        subPopupMenu->insertItem( MID_LANG_PARA_MORE,  FwkResId(STR_LANGSTATUS_MORE), 0, MID_LANG_PARA_MORE );
+
+        // add last two entries to main menu
+        xPopupMenu->insertSeparator( MID_LANG_PARA_SEPARATOR );
+        xPopupMenu->insertItem( MID_LANG_PARA_STRING, FwkResId(STR_SET_LANGUAGE_FOR_PARAGRAPH), 0, MID_LANG_PARA_STRING );
+        xPopupMenu->setPopupMenu( MID_LANG_PARA_STRING, subPopupMenu );
+    }
+    else
+    {
+        xPopupMenu->insertItem( MID_LANG_DEF_NONE,  FwkResId(STR_LANGSTATUS_NONE), 0, MID_LANG_DEF_NONE );
+        if ( sNone == m_aCurLang )
+            xPopupMenu->checkItem( MID_LANG_DEF_NONE, true );
+        xPopupMenu->insertItem( MID_LANG_DEF_RESET, FwkResId(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_DEF_RESET );
+        xPopupMenu->insertItem( MID_LANG_DEF_MORE,  FwkResId(STR_LANGSTATUS_MORE), 0, MID_LANG_DEF_MORE );
+    }
 
     // now display the popup menu and execute every command ...
 
@@ -217,7 +231,11 @@ throw (css::uno::RuntimeException, std::exception)
 
         if (MID_LANG_SEL_1 <= nId && nId <= MID_LANG_SEL_9)
         {
-            aBuff.append( ".uno:LanguageStatus?Language:string=Current_" );
+            if (bWriter)
+                aBuff.append( ".uno:LanguageStatus?Language:string=Current_" );
+            else
+                aBuff.append( ".uno:LanguageStatus?Language:string=Default_" );
+
             aBuff.append( aSelectedLang );
         }
         else if (nId == MID_LANG_SEL_NONE)
@@ -234,6 +252,18 @@ throw (css::uno::RuntimeException, std::exception)
         {
             //open the dialog "format/character" for current selection
             aBuff.append( ".uno:FontDialog?Page:string=font" );
+        }
+        else if (nId == MID_LANG_DEF_NONE)
+        {
+             aBuff.append( ".uno:LanguageStatus?Language:string=Default_LANGUAGE_NONE" );
+        }
+        else if (nId == MID_LANG_DEF_RESET)
+        {
+             aBuff.append( ".uno:LanguageStatus?Language:string=Default_RESET_LANGUAGES" );
+        }
+        else if (nId == MID_LANG_DEF_MORE)
+        {
+            aBuff.append( ".uno:LanguageStatus?Language:string=*" );
         }
         else if (MID_LANG_PARA_1 <= nId && nId <= MID_LANG_PARA_9)
         {
@@ -306,7 +336,10 @@ throw ( RuntimeException, std::exception )
         Sequence< OUString > aSeq;
 
         if ( Event.State >>= aStrValue )
+        {
             m_xStatusbarItem->setText( aStrValue );
+            m_aCurLang = aStrValue;
+        }
         else if ( Event.State >>= aSeq )
         {
             if ( aSeq.getLength() == 4 )
