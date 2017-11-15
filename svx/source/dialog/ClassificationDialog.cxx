@@ -166,6 +166,7 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
     , maInternationalHelper(SfxObjectShell::Current()->getDocProperties(), /*bUseLocalizedPolicy*/ false)
     , m_bPerParagraph(bPerParagraph)
     , m_aParagraphSignHandler(rParagraphSignHandler)
+    , m_nCurrentSelectedCategory(-1)
 {
     get(m_pOkButton, "ok");
     get(m_pEditWindow, "classificationEditWindow");
