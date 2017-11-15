@@ -2072,8 +2072,14 @@ namespace emfio
         }
         else if ( mnMapMode == MM_HIMETRIC )
         {
-            mnWinExtX = mnMillX * 100;
-            mnWinExtY = mnMillY * 100;
+            sal_Int32 nWinExtX, nWinExtY;
+            if (o3tl::checked_multiply<sal_Int32>(mnMillX, 100, nWinExtX) ||
+                o3tl::checked_multiply<sal_Int32>(mnMillY, 100, nWinExtY))
+            {
+                return;
+            }
+            mnWinExtX = nWinExtX;
+            mnWinExtY = nWinExtY;
         }
     }
 
