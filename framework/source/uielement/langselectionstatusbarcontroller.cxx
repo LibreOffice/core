@@ -34,6 +34,7 @@
 #include <sal/types.h>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
@@ -285,7 +286,8 @@ void SAL_CALL LangSelectionStatusbarController::statusChanged( const FeatureStat
     if ( m_bDisposed )
         return;
 
-    m_bShowMenu = true;
+    const Reference<XModuleManager> xModuleManager  = ModuleManager::create( m_xContext );
+    m_bShowMenu = xModuleManager->identify(m_xFrame) == "com.sun.star.text.TextDocument";
     m_nScriptType = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;  //set the default value
 
     if ( m_xStatusbarItem.is() )
