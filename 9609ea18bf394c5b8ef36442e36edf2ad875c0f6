@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_ccdcf014",
+        "filename": "cui/source/tabpages/numpages.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2236,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-11-15T17:40:06Z",
+      "side": 1,
+      "message": "This nYStart parameter has a different meaning after your change, so it would be good to change also the parameter name. nYStart means a top position while after your code change the actual parameter is middle position of the object. So something nYMiddle parameter name would be better to have here.",
+      "range": {
+        "startLine": 2236,
+        "startChar": 35,
+        "endLine": 2236,
+        "endChar": 42
+      },
+      "revId": "9609ea18bf394c5b8ef36442e36edf2ad875c0f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_6cb4dcd0",
+        "filename": "cui/source/tabpages/numpages.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2397,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-11-15T17:40:06Z",
+      "side": 1,
+      "message": "The same lcl_DrawGraphic() method is called from here, so it would be good to do the same change here on nYStart position. This code path is called from Bullets and Numbering dialog -\u003e Position tab page.",
+      "revId": "9609ea18bf394c5b8ef36442e36edf2ad875c0f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
