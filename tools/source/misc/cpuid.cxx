@@ -16,8 +16,6 @@ namespace tools
 namespace cpuid
 {
 
-#if defined(LO_SSE2_AVAILABLE)
-
 namespace
 {
 #if defined(_MSC_VER)
@@ -35,6 +33,8 @@ void getCpuId(uint32_t array[4])
 #endif
 }
 
+#if defined(LO_SSE2_AVAILABLE)
+
 bool hasSSE2()
 {
     uint32_t cpuInfoArray[] = {0, 0, 0, 0};
@@ -47,6 +47,13 @@ bool hasSSE2()
 bool hasSSE2() { return false; }
 
 #endif
+
+bool hasHyperThreading()
+{
+    uint32_t cpuInfoArray[] = {0, 0, 0, 0};
+    getCpuId(cpuInfoArray);
+    return (cpuInfoArray[3] & (1 << 28)) != 0;
+}
 
 }
 }

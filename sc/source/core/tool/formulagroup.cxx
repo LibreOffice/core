@@ -19,6 +19,7 @@
 #include <scmatrix.hxx>
 #include <globalnames.hxx>
 #include <comphelper/threadpool.hxx>
+#include <tools/cpuid.hxx>
 
 #include <formula/vectortoken.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -299,6 +300,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
     // The caller must ensure that the top position is the start position of
     // the group.
 
+    static bool bHyperThreadingActive = tools::cpuid::hasHyperThreading();
     ScAddress aTmpPos = rTopPos;
     std::vector<formula::FormulaConstTokenRef> aResults(xGroup->mnLength);
 
@@ -334,6 +336,9 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
     {
         comphelper::ThreadPool& rThreadPool(comphelper::ThreadPool::getSharedOptimalPool());
         sal_Int32 nThreadCount = rThreadPool.getWorkerCount();
+
+        if ( bHyperThreadingActive && nThreadCount >= 2 )
+            nThreadCount /= 2;
 
         SCROW nLen = xGroup->mnLength;
         SCROW nBatchSize = nLen / nThreadCount;
