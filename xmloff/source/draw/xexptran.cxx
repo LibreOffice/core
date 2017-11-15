@@ -1021,36 +1021,37 @@ SdXMLImExViewBox::SdXMLImExViewBox(const OUString& rNew, const SvXMLUnitConverte
     mfW( 1000.0 ),
     mfH( 1000.0 )
 {
-    if(!msString.isEmpty())
-    {
-        const OUString aStr = msString;
-        const sal_Int32 nLen(aStr.getLength());
-        sal_Int32 nPos(0);
+    if(msString.isEmpty())
+        return;
 
-        // skip starting spaces
-        Imp_SkipSpaces(aStr, nPos, nLen);
+    const OUString aStr = msString;
+    const sal_Int32 nLen(aStr.getLength());
+    sal_Int32 nPos(0);
 
-        // get mX, #100617# be prepared for doubles
-        mfX = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, mfX);
+    // skip starting spaces
+    Imp_SkipSpaces(aStr, nPos, nLen);
 
-        // skip spaces and commas
-        Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+    // get mX, #100617# be prepared for doubles
+    mfX = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, mfX);
 
-        // get mY, #100617# be prepared for doubles
-        mfY = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, mfY);
+    // skip spaces and commas
+    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-        // skip spaces and commas
-        Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+    // get mY, #100617# be prepared for doubles
+    mfY = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, mfY);
 
-        // get mW, #100617# be prepared for doubles
-        mfW = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, mfW);
+    // skip spaces and commas
+    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-        // skip spaces and commas
-        Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+    // get mW, #100617# be prepared for doubles
+    mfW = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, mfW);
 
-        // get mH, #100617# be prepared for doubles
-        mfH = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, mfH);
-    }
+    // skip spaces and commas
+    Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
+
+    // get mH, #100617# be prepared for doubles
+    mfH = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, mfH);
+
 }
 
 const OUString& SdXMLImExViewBox::GetExportString()

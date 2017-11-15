@@ -76,74 +76,75 @@ void XMLFootnoteImportContext::StartElement(
     // create footnote
     Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),
                                              UNO_QUERY);
-    if( xFactory.is() )
+    if( !xFactory.is() )
+        return;
+
+    // create endnote or footnote
+    bool bIsEndnote = false;
+    sal_Int16 nLength = xAttrList->getLength();
+    for(sal_Int16 nAttr1 = 0; nAttr1 < nLength; nAttr1++)
     {
-        // create endnote or footnote
-        bool bIsEndnote = false;
-        sal_Int16 nLength = xAttrList->getLength();
-        for(sal_Int16 nAttr1 = 0; nAttr1 < nLength; nAttr1++)
+        OUString sLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr1),
+                              &sLocalName );
+        if( XML_NAMESPACE_TEXT == nPrefix && IsXMLToken( sLocalName,
+                                                        XML_NOTE_CLASS ) )
         {
-            OUString sLocalName;
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                GetKeyByAttrName( xAttrList->getNameByIndex(nAttr1),
-                                  &sLocalName );
-            if( XML_NAMESPACE_TEXT == nPrefix && IsXMLToken( sLocalName,
-                                                            XML_NOTE_CLASS ) )
-            {
-                const OUString& rValue = xAttrList->getValueByIndex( nAttr1 );
-                if( IsXMLToken( rValue, XML_ENDNOTE ) )
-                    bIsEndnote = true;
-                break;
-            }
+            const OUString& rValue = xAttrList->getValueByIndex( nAttr1 );
+            if( IsXMLToken( rValue, XML_ENDNOTE ) )
+                bIsEndnote = true;
+            break;
         }
-
-        Reference<XInterface> xIfc = xFactory->createInstance(
-            bIsEndnote ?
-            OUString("com.sun.star.text.Endnote") :
-            OUString("com.sun.star.text.Footnote") );
-
-        // attach footnote to document
-        Reference<XTextContent> xTextContent(xIfc, UNO_QUERY);
-        rHelper.InsertTextContent(xTextContent);
-
-        // process id attribute
-        for(sal_Int16 nAttr2 = 0; nAttr2 < nLength; nAttr2++)
-        {
-            OUString sLocalName;
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                GetKeyByAttrName( xAttrList->getNameByIndex(nAttr2),
-                                  &sLocalName );
-
-            if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-                 IsXMLToken( sLocalName, XML_ID )   )
-            {
-                // get ID ...
-                Reference<XPropertySet> xPropertySet(xTextContent, UNO_QUERY);
-                Any aAny =xPropertySet->getPropertyValue("ReferenceId");
-                sal_Int16 nID = 0;
-                aAny >>= nID;
-
-                // ... and insert into map
-                rHelper.InsertFootnoteID(
-                    xAttrList->getValueByIndex(nAttr2),
-                    nID);
-            }
-        }
-
-        // save old cursor and install new one
-        xOldCursor = rHelper.GetCursor();
-        Reference<XText> xText(xTextContent, UNO_QUERY);
-        rHelper.SetCursor(xText->createTextCursor());
-
-        // remember old list item and block (#89891#) and reset them
-        // for the footnote
-        rHelper.PushListContext();
-        mbListContextPushed = true;
-
-        // remember footnote (for CreateChildContext)
-        Reference<XFootnote> xNote(xTextContent, UNO_QUERY);
-        xFootnote = xNote;
     }
+
+    Reference<XInterface> xIfc = xFactory->createInstance(
+        bIsEndnote ?
+        OUString("com.sun.star.text.Endnote") :
+        OUString("com.sun.star.text.Footnote") );
+
+    // attach footnote to document
+    Reference<XTextContent> xTextContent(xIfc, UNO_QUERY);
+    rHelper.InsertTextContent(xTextContent);
+
+    // process id attribute
+    for(sal_Int16 nAttr2 = 0; nAttr2 < nLength; nAttr2++)
+    {
+        OUString sLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr2),
+                              &sLocalName );
+
+        if ( (XML_NAMESPACE_TEXT == nPrefix) &&
+             IsXMLToken( sLocalName, XML_ID )   )
+        {
+            // get ID ...
+            Reference<XPropertySet> xPropertySet(xTextContent, UNO_QUERY);
+            Any aAny =xPropertySet->getPropertyValue("ReferenceId");
+            sal_Int16 nID = 0;
+            aAny >>= nID;
+
+            // ... and insert into map
+            rHelper.InsertFootnoteID(
+                xAttrList->getValueByIndex(nAttr2),
+                nID);
+        }
+    }
+
+    // save old cursor and install new one
+    xOldCursor = rHelper.GetCursor();
+    Reference<XText> xText(xTextContent, UNO_QUERY);
+    rHelper.SetCursor(xText->createTextCursor());
+
+    // remember old list item and block (#89891#) and reset them
+    // for the footnote
+    rHelper.PushListContext();
+    mbListContextPushed = true;
+
+    // remember footnote (for CreateChildContext)
+    Reference<XFootnote> xNote(xTextContent, UNO_QUERY);
+    xFootnote = xNote;
+
     // else: ignore footnote! Content will be merged into document.
 }
 

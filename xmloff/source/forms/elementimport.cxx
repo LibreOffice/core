@@ -807,111 +807,112 @@ namespace xmloff
         // let the base class handle all the attributes
         OElementImport::StartElement(xAttributes);
 
-        if ( !m_aValueProperties.empty() && m_xElement.is())
+        if ( m_aValueProperties.empty() || !m_xElement.is())
+            return;
+
+        // get the property set info
+        if (!m_xInfo.is())
         {
-            // get the property set info
-            if (!m_xInfo.is())
-            {
-                OSL_FAIL("OControlImport::StartElement: no PropertySetInfo!");
-                return;
-            }
-
-            const sal_Char* pValueProperty = nullptr;
-            const sal_Char* pCurrentValueProperty = nullptr;
-            const sal_Char* pMinValueProperty = nullptr;
-            const sal_Char* pMaxValueProperty = nullptr;
-
-            bool bRetrievedValues = false;
-            bool bRetrievedValueLimits = false;
-
-            // get the class id of our element
-            sal_Int16 nClassId = FormComponentType::CONTROL;
-            m_xElement->getPropertyValue(PROPERTY_CLASSID) >>= nClassId;
-
-            // translate the value properties we collected in handleAttributes
-            PropertyValueArray::iterator aEnd = m_aValueProperties.end();
-            for (   PropertyValueArray::iterator aValueProps = m_aValueProperties.begin();
-                    aValueProps != aEnd;
-                    ++aValueProps
-                )
-            {
-                bool bSuccess = false;
-                switch (aValueProps->Handle)
-                {
-                    case PROPID_VALUE:
-                    case PROPID_CURRENT_VALUE:
-                    {
-                        // get the property names
-                        if (!bRetrievedValues)
-                        {
-                            getValuePropertyNames(m_eElementType, nClassId, pCurrentValueProperty, pValueProperty);
-                            if ( !pCurrentValueProperty && !pValueProperty )
-                            {
-                                SAL_WARN( "xmloff.forms", "OControlImport::StartElement: illegal value property names!" );
-                                break;
-                            }
-
-                            bRetrievedValues = true;
-                        }
-                        if ( PROPID_VALUE == aValueProps->Handle && !pValueProperty )
-                        {
-                            SAL_WARN( "xmloff.forms", "OControlImport::StartElement: the control does not have a value property!");
-                            break;
-                        }
-
-                        if ( PROPID_CURRENT_VALUE == aValueProps->Handle && !pCurrentValueProperty )
-                        {
-                            SAL_WARN( "xmloff.forms", "OControlImport::StartElement: the control does not have a current-value property!");
-                            break;
-                        }
-
-                        // transfer the name
-                        if (PROPID_VALUE == aValueProps->Handle)
-                            aValueProps->Name = OUString::createFromAscii(pValueProperty);
-                        else
-                            aValueProps->Name = OUString::createFromAscii(pCurrentValueProperty);
-                        bSuccess = true;
-                    }
-                    break;
-                    case PROPID_MIN_VALUE:
-                    case PROPID_MAX_VALUE:
-                    {
-                        // get the property names
-                        if (!bRetrievedValueLimits)
-                        {
-                            getValueLimitPropertyNames(nClassId, pMinValueProperty, pMaxValueProperty);
-                            if ( !pMinValueProperty || !pMaxValueProperty )
-                            {
-                                SAL_WARN( "xmloff.forms", "OControlImport::StartElement: illegal value limit property names!" );
-                                break;
-                            }
-
-                            bRetrievedValueLimits = true;
-                        }
-                        OSL_ENSURE((PROPID_MIN_VALUE != aValueProps->Handle) || pMinValueProperty,
-                            "OControlImport::StartElement: the control does not have a value property!");
-                        OSL_ENSURE((PROPID_MAX_VALUE != aValueProps->Handle) || pMaxValueProperty,
-                            "OControlImport::StartElement: the control does not have a current-value property!");
-
-                        // transfer the name
-                        if (PROPID_MIN_VALUE == aValueProps->Handle)
-                            aValueProps->Name = OUString::createFromAscii(pMinValueProperty);
-                        else
-                            aValueProps->Name = OUString::createFromAscii(pMaxValueProperty);
-                        bSuccess = true;
-                    }
-                    break;
-                }
-
-                if ( !bSuccess )
-                    continue;
-
-                // translate the value
-                implTranslateValueProperty(m_xInfo, *aValueProps);
-                // add the property to the base class' array
-                implPushBackPropertyValue(*aValueProps);
-            }
+            OSL_FAIL("OControlImport::StartElement: no PropertySetInfo!");
+            return;
         }
+
+        const sal_Char* pValueProperty = nullptr;
+        const sal_Char* pCurrentValueProperty = nullptr;
+        const sal_Char* pMinValueProperty = nullptr;
+        const sal_Char* pMaxValueProperty = nullptr;
+
+        bool bRetrievedValues = false;
+        bool bRetrievedValueLimits = false;
+
+        // get the class id of our element
+        sal_Int16 nClassId = FormComponentType::CONTROL;
+        m_xElement->getPropertyValue(PROPERTY_CLASSID) >>= nClassId;
+
+        // translate the value properties we collected in handleAttributes
+        PropertyValueArray::iterator aEnd = m_aValueProperties.end();
+        for (   PropertyValueArray::iterator aValueProps = m_aValueProperties.begin();
+                aValueProps != aEnd;
+                ++aValueProps
+            )
+        {
+            bool bSuccess = false;
+            switch (aValueProps->Handle)
+            {
+                case PROPID_VALUE:
+                case PROPID_CURRENT_VALUE:
+                {
+                    // get the property names
+                    if (!bRetrievedValues)
+                    {
+                        getValuePropertyNames(m_eElementType, nClassId, pCurrentValueProperty, pValueProperty);
+                        if ( !pCurrentValueProperty && !pValueProperty )
+                        {
+                            SAL_WARN( "xmloff.forms", "OControlImport::StartElement: illegal value property names!" );
+                            break;
+                        }
+
+                        bRetrievedValues = true;
+                    }
+                    if ( PROPID_VALUE == aValueProps->Handle && !pValueProperty )
+                    {
+                        SAL_WARN( "xmloff.forms", "OControlImport::StartElement: the control does not have a value property!");
+                        break;
+                    }
+
+                    if ( PROPID_CURRENT_VALUE == aValueProps->Handle && !pCurrentValueProperty )
+                    {
+                        SAL_WARN( "xmloff.forms", "OControlImport::StartElement: the control does not have a current-value property!");
+                        break;
+                    }
+
+                    // transfer the name
+                    if (PROPID_VALUE == aValueProps->Handle)
+                        aValueProps->Name = OUString::createFromAscii(pValueProperty);
+                    else
+                        aValueProps->Name = OUString::createFromAscii(pCurrentValueProperty);
+                    bSuccess = true;
+                }
+                break;
+                case PROPID_MIN_VALUE:
+                case PROPID_MAX_VALUE:
+                {
+                    // get the property names
+                    if (!bRetrievedValueLimits)
+                    {
+                        getValueLimitPropertyNames(nClassId, pMinValueProperty, pMaxValueProperty);
+                        if ( !pMinValueProperty || !pMaxValueProperty )
+                        {
+                            SAL_WARN( "xmloff.forms", "OControlImport::StartElement: illegal value limit property names!" );
+                            break;
+                        }
+
+                        bRetrievedValueLimits = true;
+                    }
+                    OSL_ENSURE((PROPID_MIN_VALUE != aValueProps->Handle) || pMinValueProperty,
+                        "OControlImport::StartElement: the control does not have a value property!");
+                    OSL_ENSURE((PROPID_MAX_VALUE != aValueProps->Handle) || pMaxValueProperty,
+                        "OControlImport::StartElement: the control does not have a current-value property!");
+
+                    // transfer the name
+                    if (PROPID_MIN_VALUE == aValueProps->Handle)
+                        aValueProps->Name = OUString::createFromAscii(pMinValueProperty);
+                    else
+                        aValueProps->Name = OUString::createFromAscii(pMaxValueProperty);
+                    bSuccess = true;
+                }
+                break;
+            }
+
+            if ( !bSuccess )
+                continue;
+
+            // translate the value
+            implTranslateValueProperty(m_xInfo, *aValueProps);
+            // add the property to the base class' array
+            implPushBackPropertyValue(*aValueProps);
+        }
+
     }
 
     void OControlImport::implTranslateValueProperty(const Reference< XPropertySetInfo >& _rxPropInfo,

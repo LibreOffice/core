@@ -1855,99 +1855,100 @@ void XMLShapeExport::ImpExportTextBoxShape(
     XmlShapeType eShapeType, XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-    if(xPropSet.is())
+    if(!xPropSet.is())
+        return;
+
+    // presentation attribute (if presentation)
+    bool bIsPresShape(false);
+    bool bIsEmptyPresObj(false);
+    OUString aStr;
+
+    switch(eShapeType)
     {
-        // presentation attribute (if presentation)
-        bool bIsPresShape(false);
-        bool bIsEmptyPresObj(false);
-        OUString aStr;
-
-        switch(eShapeType)
+        case XmlShapeTypePresSubtitleShape:
         {
-            case XmlShapeTypePresSubtitleShape:
-            {
-                aStr = GetXMLToken(XML_PRESENTATION_SUBTITLE);
-                bIsPresShape = true;
-                break;
-            }
-            case XmlShapeTypePresTitleTextShape:
-            {
-                aStr = GetXMLToken(XML_PRESENTATION_TITLE);
-                bIsPresShape = true;
-                break;
-            }
-            case XmlShapeTypePresOutlinerShape:
-            {
-                aStr = GetXMLToken(XML_PRESENTATION_OUTLINE);
-                bIsPresShape = true;
-                break;
-            }
-            case XmlShapeTypePresNotesShape:
-            {
-                aStr = GetXMLToken(XML_PRESENTATION_NOTES);
-                bIsPresShape = true;
-                break;
-            }
-            case XmlShapeTypePresHeaderShape:
-            {
-                aStr = GetXMLToken(XML_HEADER);
-                bIsPresShape = true;
-                break;
-            }
-            case XmlShapeTypePresFooterShape:
-            {
-                aStr = GetXMLToken(XML_FOOTER);
-                bIsPresShape = true;
-                break;
-            }
-            case XmlShapeTypePresSlideNumberShape:
-            {
-                aStr = GetXMLToken(XML_PAGE_NUMBER);
-                bIsPresShape = true;
-                break;
-            }
-            case XmlShapeTypePresDateTimeShape:
-            {
-                aStr = GetXMLToken(XML_DATE_TIME);
-                bIsPresShape = true;
-                break;
-            }
-            default:
-                break;
+            aStr = GetXMLToken(XML_PRESENTATION_SUBTITLE);
+            bIsPresShape = true;
+            break;
         }
-
-        // Transformation
-        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
-
-        if(bIsPresShape)
-            bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, aStr );
-
-        bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
-        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
-                                  XML_FRAME, bCreateNewline, true );
-
-        // evtl. corner radius?
-        sal_Int32 nCornerRadius(0);
-        xPropSet->getPropertyValue("CornerRadius") >>= nCornerRadius;
-        if(nCornerRadius)
+        case XmlShapeTypePresTitleTextShape:
         {
-            OUStringBuffer sStringBuffer;
-            mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
-                    nCornerRadius);
-            mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CORNER_RADIUS, sStringBuffer.makeStringAndClear());
+            aStr = GetXMLToken(XML_PRESENTATION_TITLE);
+            bIsPresShape = true;
+            break;
         }
-
+        case XmlShapeTypePresOutlinerShape:
         {
-            // write text-box
-            SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_TEXT_BOX, true, true);
-            if(!bIsEmptyPresObj)
-                ImpExportText( xShape );
+            aStr = GetXMLToken(XML_PRESENTATION_OUTLINE);
+            bIsPresShape = true;
+            break;
         }
-
-        ImpExportDescription( xShape ); // #i68101#
-        ImpExportEvents( xShape );
-        ImpExportGluePoints( xShape );
+        case XmlShapeTypePresNotesShape:
+        {
+            aStr = GetXMLToken(XML_PRESENTATION_NOTES);
+            bIsPresShape = true;
+            break;
+        }
+        case XmlShapeTypePresHeaderShape:
+        {
+            aStr = GetXMLToken(XML_HEADER);
+            bIsPresShape = true;
+            break;
+        }
+        case XmlShapeTypePresFooterShape:
+        {
+            aStr = GetXMLToken(XML_FOOTER);
+            bIsPresShape = true;
+            break;
+        }
+        case XmlShapeTypePresSlideNumberShape:
+        {
+            aStr = GetXMLToken(XML_PAGE_NUMBER);
+            bIsPresShape = true;
+            break;
+        }
+        case XmlShapeTypePresDateTimeShape:
+        {
+            aStr = GetXMLToken(XML_DATE_TIME);
+            bIsPresShape = true;
+            break;
+        }
+        default:
+            break;
     }
+
+    // Transformation
+    ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+    if(bIsPresShape)
+        bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, aStr );
+
+    bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
+    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
+                              XML_FRAME, bCreateNewline, true );
+
+    // evtl. corner radius?
+    sal_Int32 nCornerRadius(0);
+    xPropSet->getPropertyValue("CornerRadius") >>= nCornerRadius;
+    if(nCornerRadius)
+    {
+        OUStringBuffer sStringBuffer;
+        mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                nCornerRadius);
+        mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CORNER_RADIUS, sStringBuffer.makeStringAndClear());
+    }
+
+    {
+        // write text-box
+        SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_TEXT_BOX, true, true);
+        if(!bIsEmptyPresObj)
+            ImpExportText( xShape );
+    }
+
+    ImpExportDescription( xShape ); // #i68101#
+    ImpExportEvents( xShape );
+    ImpExportGluePoints( xShape );
+
 }
 
 void XMLShapeExport::ImpExportRectangleShape(
@@ -1987,110 +1988,111 @@ void XMLShapeExport::ImpExportLineShape(
     XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-    if(xPropSet.is())
+    if(!xPropSet.is())
+        return;
+
+    OUString aStr;
+    OUStringBuffer sStringBuffer;
+    awt::Point aStart(0,0);
+    awt::Point aEnd(1,1);
+
+    // #85920# use 'Geometry' to get the points of the line
+    // since this slot take anchor pos into account.
+
+    // get matrix
+    ::basegfx::B2DHomMatrix aMatrix;
+    ImpExportNewTrans_GetB2DHomMatrix(aMatrix, xPropSet);
+
+    // decompose and correct about pRefPoint
+    ::basegfx::B2DTuple aTRScale;
+    double fTRShear(0.0);
+    double fTRRotate(0.0);
+    ::basegfx::B2DTuple aTRTranslate;
+    ImpExportNewTrans_DecomposeAndRefPoint(aMatrix, aTRScale, fTRShear, fTRRotate, aTRTranslate, pRefPoint);
+
+    // create base position
+    awt::Point aBasePosition(FRound(aTRTranslate.getX()), FRound(aTRTranslate.getY()));
+
+    // get the two points
+    uno::Any aAny(xPropSet->getPropertyValue("Geometry"));
+    if (auto pSourcePolyPolygon
+            = o3tl::tryAccess<drawing::PointSequenceSequence>(aAny))
     {
-        OUString aStr;
-        OUStringBuffer sStringBuffer;
-        awt::Point aStart(0,0);
-        awt::Point aEnd(1,1);
-
-        // #85920# use 'Geometry' to get the points of the line
-        // since this slot take anchor pos into account.
-
-        // get matrix
-        ::basegfx::B2DHomMatrix aMatrix;
-        ImpExportNewTrans_GetB2DHomMatrix(aMatrix, xPropSet);
-
-        // decompose and correct about pRefPoint
-        ::basegfx::B2DTuple aTRScale;
-        double fTRShear(0.0);
-        double fTRRotate(0.0);
-        ::basegfx::B2DTuple aTRTranslate;
-        ImpExportNewTrans_DecomposeAndRefPoint(aMatrix, aTRScale, fTRShear, fTRRotate, aTRTranslate, pRefPoint);
-
-        // create base position
-        awt::Point aBasePosition(FRound(aTRTranslate.getX()), FRound(aTRTranslate.getY()));
-
-        // get the two points
-        uno::Any aAny(xPropSet->getPropertyValue("Geometry"));
-        if (auto pSourcePolyPolygon
-                = o3tl::tryAccess<drawing::PointSequenceSequence>(aAny))
+        drawing::PointSequence* pOuterSequence = const_cast<css::drawing::PointSequenceSequence *>(pSourcePolyPolygon)->getArray();
+        if(pOuterSequence)
         {
-            drawing::PointSequence* pOuterSequence = const_cast<css::drawing::PointSequenceSequence *>(pSourcePolyPolygon)->getArray();
-            if(pOuterSequence)
+            drawing::PointSequence* pInnerSequence = pOuterSequence++;
+            if(pInnerSequence)
             {
-                drawing::PointSequence* pInnerSequence = pOuterSequence++;
-                if(pInnerSequence)
+                awt::Point* pArray = pInnerSequence->getArray();
+                if(pArray)
                 {
-                    awt::Point* pArray = pInnerSequence->getArray();
-                    if(pArray)
+                    if(pInnerSequence->getLength() > 0)
                     {
-                        if(pInnerSequence->getLength() > 0)
-                        {
-                            aStart = awt::Point(
-                                pArray->X + aBasePosition.X,
-                                pArray->Y + aBasePosition.Y);
-                            pArray++;
-                        }
+                        aStart = awt::Point(
+                            pArray->X + aBasePosition.X,
+                            pArray->Y + aBasePosition.Y);
+                        pArray++;
+                    }
 
-                        if(pInnerSequence->getLength() > 1)
-                        {
-                            aEnd = awt::Point(
-                                pArray->X + aBasePosition.X,
-                                pArray->Y + aBasePosition.Y);
-                        }
+                    if(pInnerSequence->getLength() > 1)
+                    {
+                        aEnd = awt::Point(
+                            pArray->X + aBasePosition.X,
+                            pArray->Y + aBasePosition.Y);
                     }
                 }
             }
         }
-
-        if( nFeatures & XMLShapeExportFlags::X )
-        {
-            // svg: x1
-            mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
-                    aStart.X);
-            aStr = sStringBuffer.makeStringAndClear();
-            mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X1, aStr);
-        }
-        else
-        {
-            aEnd.X -= aStart.X;
-        }
-
-        if( nFeatures & XMLShapeExportFlags::Y )
-        {
-            // svg: y1
-            mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
-                    aStart.Y);
-            aStr = sStringBuffer.makeStringAndClear();
-            mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y1, aStr);
-        }
-        else
-        {
-            aEnd.Y -= aStart.Y;
-        }
-
-        // svg: x2
-        mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
-                aEnd.X);
-        aStr = sStringBuffer.makeStringAndClear();
-        mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X2, aStr);
-
-        // svg: y2
-        mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
-                aEnd.Y);
-        aStr = sStringBuffer.makeStringAndClear();
-        mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y2, aStr);
-
-        // write line
-        bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
-        SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_LINE, bCreateNewline, true);
-
-        ImpExportDescription( xShape ); // #i68101#
-        ImpExportEvents( xShape );
-        ImpExportGluePoints( xShape );
-        ImpExportText( xShape );
     }
+
+    if( nFeatures & XMLShapeExportFlags::X )
+    {
+        // svg: x1
+        mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                aStart.X);
+        aStr = sStringBuffer.makeStringAndClear();
+        mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X1, aStr);
+    }
+    else
+    {
+        aEnd.X -= aStart.X;
+    }
+
+    if( nFeatures & XMLShapeExportFlags::Y )
+    {
+        // svg: y1
+        mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                aStart.Y);
+        aStr = sStringBuffer.makeStringAndClear();
+        mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y1, aStr);
+    }
+    else
+    {
+        aEnd.Y -= aStart.Y;
+    }
+
+    // svg: x2
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+            aEnd.X);
+    aStr = sStringBuffer.makeStringAndClear();
+    mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X2, aStr);
+
+    // svg: y2
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+            aEnd.Y);
+    aStr = sStringBuffer.makeStringAndClear();
+    mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y2, aStr);
+
+    // write line
+    bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
+    SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_LINE, bCreateNewline, true);
+
+    ImpExportDescription( xShape ); // #i68101#
+    ImpExportEvents( xShape );
+    ImpExportGluePoints( xShape );
+    ImpExportText( xShape );
+
 }
 
 void XMLShapeExport::ImpExportEllipseShape(
@@ -2098,56 +2100,56 @@ void XMLShapeExport::ImpExportEllipseShape(
     XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-    if(xPropSet.is())
+    if(!xPropSet.is())
+        return;
+
+    // get size to decide between Circle and Ellipse
+    awt::Size aSize = xShape->getSize();
+    sal_Int32 nRx((aSize.Width + 1) / 2);
+    sal_Int32 nRy((aSize.Height + 1) / 2);
+    bool bCircle(nRx == nRy);
+
+    // Transformation
+    ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+    drawing::CircleKind eKind = drawing::CircleKind_FULL;
+    xPropSet->getPropertyValue("CircleKind") >>= eKind;
+    if( eKind != drawing::CircleKind_FULL )
     {
-        // get size to decide between Circle and Ellipse
-        awt::Size aSize = xShape->getSize();
-        sal_Int32 nRx((aSize.Width + 1) / 2);
-        sal_Int32 nRy((aSize.Height + 1) / 2);
-        bool bCircle(nRx == nRy);
+        OUStringBuffer sStringBuffer;
+        sal_Int32 nStartAngle = 0;
+        sal_Int32 nEndAngle = 0;
+        xPropSet->getPropertyValue("CircleStartAngle") >>= nStartAngle;
+        xPropSet->getPropertyValue("CircleEndAngle") >>= nEndAngle;
 
-        // Transformation
-        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+        const double dStartAngle = nStartAngle / 100.0;
+        const double dEndAngle = nEndAngle / 100.0;
 
-        drawing::CircleKind eKind = drawing::CircleKind_FULL;
-        xPropSet->getPropertyValue("CircleKind") >>= eKind;
-        if( eKind != drawing::CircleKind_FULL )
-        {
-            OUStringBuffer sStringBuffer;
-            sal_Int32 nStartAngle = 0;
-            sal_Int32 nEndAngle = 0;
-            xPropSet->getPropertyValue("CircleStartAngle") >>= nStartAngle;
-            xPropSet->getPropertyValue("CircleEndAngle") >>= nEndAngle;
+        // export circle kind
+        SvXMLUnitConverter::convertEnum( sStringBuffer, eKind, aXML_CircleKind_EnumMap );
+        mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_KIND, sStringBuffer.makeStringAndClear() );
 
-            const double dStartAngle = nStartAngle / 100.0;
-            const double dEndAngle = nEndAngle / 100.0;
+        // export start angle
+        ::sax::Converter::convertDouble( sStringBuffer, dStartAngle );
+        mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_START_ANGLE, sStringBuffer.makeStringAndClear() );
 
-            // export circle kind
-            SvXMLUnitConverter::convertEnum( sStringBuffer, eKind, aXML_CircleKind_EnumMap );
-            mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_KIND, sStringBuffer.makeStringAndClear() );
-
-            // export start angle
-            ::sax::Converter::convertDouble( sStringBuffer, dStartAngle );
-            mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_START_ANGLE, sStringBuffer.makeStringAndClear() );
-
-            // export end angle
-            ::sax::Converter::convertDouble( sStringBuffer, dEndAngle );
-            mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_END_ANGLE, sStringBuffer.makeStringAndClear() );
-        }
-
-        bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
-
-        // write ellipse or circle
-        SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW,
-                                bCircle ? XML_CIRCLE : XML_ELLIPSE,
-                                bCreateNewline, true);
-
-        ImpExportDescription( xShape ); // #i68101#
-        ImpExportEvents( xShape );
-        ImpExportGluePoints( xShape );
-        ImpExportText( xShape );
-
+        // export end angle
+        ::sax::Converter::convertDouble( sStringBuffer, dEndAngle );
+        mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_END_ANGLE, sStringBuffer.makeStringAndClear() );
     }
+
+    bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
+
+    // write ellipse or circle
+    SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW,
+                            bCircle ? XML_CIRCLE : XML_ELLIPSE,
+                            bCreateNewline, true);
+
+    ImpExportDescription( xShape ); // #i68101#
+    ImpExportEvents( xShape );
+    ImpExportGluePoints( xShape );
+    ImpExportText( xShape );
+
 }
 
 void XMLShapeExport::ImpExportPolygonShape(
@@ -2155,105 +2157,106 @@ void XMLShapeExport::ImpExportPolygonShape(
     XmlShapeType eShapeType, XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-    if(xPropSet.is())
+    if(!xPropSet.is())
+        return;
+
+    bool bBezier(eShapeType == XmlShapeTypeDrawClosedBezierShape
+        || eShapeType == XmlShapeTypeDrawOpenBezierShape);
+
+    // get matrix
+    ::basegfx::B2DHomMatrix aMatrix;
+    ImpExportNewTrans_GetB2DHomMatrix(aMatrix, xPropSet);
+
+    // decompose and correct abour pRefPoint
+    ::basegfx::B2DTuple aTRScale;
+    double fTRShear(0.0);
+    double fTRRotate(0.0);
+    ::basegfx::B2DTuple aTRTranslate;
+    ImpExportNewTrans_DecomposeAndRefPoint(aMatrix, aTRScale, fTRShear, fTRRotate, aTRTranslate, pRefPoint);
+
+    // use features and write
+    ImpExportNewTrans_FeaturesAndWrite(aTRScale, fTRShear, fTRRotate, aTRTranslate, nFeatures);
+
+    // create and export ViewBox
+    awt::Size aSize(FRound(aTRScale.getX()), FRound(aTRScale.getY()));
+    SdXMLImExViewBox aViewBox(0, 0, aSize.Width, aSize.Height);
+    mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString());
+
+    bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
+
+    // prepare name (with most used)
+    enum ::xmloff::token::XMLTokenEnum eName(XML_PATH);
+
+    if(bBezier)
     {
-        bool bBezier(eShapeType == XmlShapeTypeDrawClosedBezierShape
-            || eShapeType == XmlShapeTypeDrawOpenBezierShape);
+        // get PolygonBezier
+        uno::Any aAny( xPropSet->getPropertyValue("Geometry") );
+        const basegfx::B2DPolyPolygon aPolyPolygon(
+            basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(*o3tl::doAccess<drawing::PolyPolygonBezierCoords>(aAny)));
 
-        // get matrix
-        ::basegfx::B2DHomMatrix aMatrix;
-        ImpExportNewTrans_GetB2DHomMatrix(aMatrix, xPropSet);
-
-        // decompose and correct abour pRefPoint
-        ::basegfx::B2DTuple aTRScale;
-        double fTRShear(0.0);
-        double fTRRotate(0.0);
-        ::basegfx::B2DTuple aTRTranslate;
-        ImpExportNewTrans_DecomposeAndRefPoint(aMatrix, aTRScale, fTRShear, fTRRotate, aTRTranslate, pRefPoint);
-
-        // use features and write
-        ImpExportNewTrans_FeaturesAndWrite(aTRScale, fTRShear, fTRRotate, aTRTranslate, nFeatures);
-
-        // create and export ViewBox
-        awt::Size aSize(FRound(aTRScale.getX()), FRound(aTRScale.getY()));
-        SdXMLImExViewBox aViewBox(0, 0, aSize.Width, aSize.Height);
-        mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString());
-
-        bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
-
-        // prepare name (with most used)
-        enum ::xmloff::token::XMLTokenEnum eName(XML_PATH);
-
-        if(bBezier)
+        if(aPolyPolygon.count())
         {
-            // get PolygonBezier
-            uno::Any aAny( xPropSet->getPropertyValue("Geometry") );
-            const basegfx::B2DPolyPolygon aPolyPolygon(
-                basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(*o3tl::doAccess<drawing::PolyPolygonBezierCoords>(aAny)));
+            // complex polygon shape, write as svg:d
+            const OUString aPolygonString(
+                basegfx::utils::exportToSvgD(
+                    aPolyPolygon,
+                    true,       // bUseRelativeCoordinates
+                    false,      // bDetectQuadraticBeziers: not used in old, but maybe activated now
+                    true));     // bHandleRelativeNextPointCompatible
 
-            if(aPolyPolygon.count())
-            {
-                // complex polygon shape, write as svg:d
-                const OUString aPolygonString(
-                    basegfx::utils::exportToSvgD(
-                        aPolyPolygon,
-                        true,       // bUseRelativeCoordinates
-                        false,      // bDetectQuadraticBeziers: not used in old, but maybe activated now
-                        true));     // bHandleRelativeNextPointCompatible
+            // write point array
+            mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
+        }
+    }
+    else
+    {
+        // get non-bezier polygon
+        uno::Any aAny( xPropSet->getPropertyValue("Geometry") );
+        const basegfx::B2DPolyPolygon aPolyPolygon(
+            basegfx::utils::UnoPointSequenceSequenceToB2DPolyPolygon(*o3tl::doAccess<drawing::PointSequenceSequence>(aAny)));
 
-                // write point array
-                mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
-            }
+        if(!aPolyPolygon.areControlPointsUsed() && 1 == aPolyPolygon.count())
+        {
+            // simple polygon shape, can be written as svg:points sequence
+            const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(0));
+            const OUString aPointString(basegfx::utils::exportToSvgPoints(aPolygon));
+
+            // write point array
+            mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_POINTS, aPointString);
+
+            // set name
+            eName = aPolygon.isClosed() ? XML_POLYGON : XML_POLYLINE;
         }
         else
         {
-            // get non-bezier polygon
-            uno::Any aAny( xPropSet->getPropertyValue("Geometry") );
-            const basegfx::B2DPolyPolygon aPolyPolygon(
-                basegfx::utils::UnoPointSequenceSequenceToB2DPolyPolygon(*o3tl::doAccess<drawing::PointSequenceSequence>(aAny)));
+            // complex polygon shape, write as svg:d
+            const OUString aPolygonString(
+                basegfx::utils::exportToSvgD(
+                    aPolyPolygon,
+                    true,       // bUseRelativeCoordinates
+                    false,      // bDetectQuadraticBeziers: not used in old, but maybe activated now
+                    true));     // bHandleRelativeNextPointCompatible
 
-            if(!aPolyPolygon.areControlPointsUsed() && 1 == aPolyPolygon.count())
-            {
-                // simple polygon shape, can be written as svg:points sequence
-                const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(0));
-                const OUString aPointString(basegfx::utils::exportToSvgPoints(aPolygon));
-
-                // write point array
-                mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_POINTS, aPointString);
-
-                // set name
-                eName = aPolygon.isClosed() ? XML_POLYGON : XML_POLYLINE;
-            }
-            else
-            {
-                // complex polygon shape, write as svg:d
-                const OUString aPolygonString(
-                    basegfx::utils::exportToSvgD(
-                        aPolyPolygon,
-                        true,       // bUseRelativeCoordinates
-                        false,      // bDetectQuadraticBeziers: not used in old, but maybe activated now
-                        true));     // bHandleRelativeNextPointCompatible
-
-                // write point array
-                mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
-            }
+            // write point array
+            mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
         }
-
-        // write object, but after attributes are added since this call will
-        // consume all of these added attributes and the destructor will close the
-        // scope. Also before text is added; this may add sub-scopes as needed
-        SvXMLElementExport aOBJ(
-            mrExport,
-            XML_NAMESPACE_DRAW,
-            eName,
-            bCreateNewline,
-            true);
-
-        ImpExportDescription( xShape ); // #i68101#
-        ImpExportEvents( xShape );
-        ImpExportGluePoints( xShape );
-        ImpExportText( xShape );
     }
+
+    // write object, but after attributes are added since this call will
+    // consume all of these added attributes and the destructor will close the
+    // scope. Also before text is added; this may add sub-scopes as needed
+    SvXMLElementExport aOBJ(
+        mrExport,
+        XML_NAMESPACE_DRAW,
+        eName,
+        bCreateNewline,
+        true);
+
+    ImpExportDescription( xShape ); // #i68101#
+    ImpExportEvents( xShape );
+    ImpExportGluePoints( xShape );
+    ImpExportText( xShape );
+
 }
 
 void XMLShapeExport::ImpExportGraphicObjectShape(
@@ -2261,140 +2264,141 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
     XmlShapeType eShapeType, XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-    if(xPropSet.is())
+    if(!xPropSet.is())
+        return;
+
+    bool bIsEmptyPresObj = false;
+
+    // Transformation
+    ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+    OUString sImageURL;
+
+    if(eShapeType == XmlShapeTypePresGraphicObjectShape)
+        bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_GRAPHIC) );
+
+    bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
+    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
+                              XML_FRAME, bCreateNewline, true );
+
+    const bool bSaveBackwardsCompatible = bool( mrExport.getExportFlags() & SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE );
+
+    if( !bIsEmptyPresObj || bSaveBackwardsCompatible )
     {
-        bool bIsEmptyPresObj = false;
-
-        // Transformation
-        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
-
-        OUString sImageURL;
-
-        if(eShapeType == XmlShapeTypePresGraphicObjectShape)
-            bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_GRAPHIC) );
-
-        bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
-        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
-                                  XML_FRAME, bCreateNewline, true );
-
-        const bool bSaveBackwardsCompatible = bool( mrExport.getExportFlags() & SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE );
-
-        if( !bIsEmptyPresObj || bSaveBackwardsCompatible )
+        if( !bIsEmptyPresObj )
         {
-            if( !bIsEmptyPresObj )
+            OUString aStreamURL;
+
+            xPropSet->getPropertyValue("GraphicStreamURL") >>= aStreamURL;
+            xPropSet->getPropertyValue("GraphicURL") >>= sImageURL;
+
+            OUString aResolveURL( sImageURL );
+            const OUString sPackageURL( "vnd.sun.star.Package:" );
+
+            // trying to preserve the filename for embedded images which already have its stream inside the package
+            bool bIsEmbeddedImageWithExistingStreamInPackage = false;
+            if ( aStreamURL.match( sPackageURL ) )
             {
-                OUString aStreamURL;
+                bIsEmbeddedImageWithExistingStreamInPackage = true;
 
-                xPropSet->getPropertyValue("GraphicStreamURL") >>= aStreamURL;
-                xPropSet->getPropertyValue("GraphicURL") >>= sImageURL;
-
-                OUString aResolveURL( sImageURL );
-                const OUString sPackageURL( "vnd.sun.star.Package:" );
-
-                // trying to preserve the filename for embedded images which already have its stream inside the package
-                bool bIsEmbeddedImageWithExistingStreamInPackage = false;
-                if ( aStreamURL.match( sPackageURL ) )
+                OUString sRequestedName = aStreamURL.copy( sPackageURL.getLength() );
+                sal_Int32 nLastIndex = sRequestedName.lastIndexOf( '/' ) + 1;
+                if ( ( nLastIndex > 0 ) && ( nLastIndex < sRequestedName.getLength() ) )
+                    sRequestedName = sRequestedName.copy( nLastIndex );
+                nLastIndex = sRequestedName.lastIndexOf( '.' );
+                if ( nLastIndex >= 0 )
+                    sRequestedName = sRequestedName.copy( 0, nLastIndex );
+                if ( !sRequestedName.isEmpty() )
                 {
-                    bIsEmbeddedImageWithExistingStreamInPackage = true;
-
-                    OUString sRequestedName = aStreamURL.copy( sPackageURL.getLength() );
-                    sal_Int32 nLastIndex = sRequestedName.lastIndexOf( '/' ) + 1;
-                    if ( ( nLastIndex > 0 ) && ( nLastIndex < sRequestedName.getLength() ) )
-                        sRequestedName = sRequestedName.copy( nLastIndex );
-                    nLastIndex = sRequestedName.lastIndexOf( '.' );
-                    if ( nLastIndex >= 0 )
-                        sRequestedName = sRequestedName.copy( 0, nLastIndex );
-                    if ( !sRequestedName.isEmpty() )
-                    {
-                        aResolveURL += "?requestedName=" + sRequestedName;
-                    }
-                }
-
-                const OUString aStr = mrExport.AddEmbeddedGraphicObject( aResolveURL );
-                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr );
-
-                if( !aStr.isEmpty() )
-                {
-                    // apply possible changed stream URL to embedded image object
-                    if ( bIsEmbeddedImageWithExistingStreamInPackage )
-                    {
-                        OUString newStreamURL = sPackageURL;
-                        if ( aStr[0] == '#' )
-                        {
-                            newStreamURL += aStr.copy( 1, aStr.getLength() - 1 );
-                        }
-                        else
-                        {
-                            newStreamURL += aStr;
-                        }
-
-                        if (newStreamURL != aStreamURL)
-                        {
-                            xPropSet->setPropertyValue("GraphicStreamURL", uno::Any(newStreamURL));
-                        }
-                    }
-
-                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+                    aResolveURL += "?requestedName=" + sRequestedName;
                 }
             }
-            else
+
+            const OUString aStr = mrExport.AddEmbeddedGraphicObject( aResolveURL );
+            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr );
+
+            if( !aStr.isEmpty() )
             {
-                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, OUString() );
+                // apply possible changed stream URL to embedded image object
+                if ( bIsEmbeddedImageWithExistingStreamInPackage )
+                {
+                    OUString newStreamURL = sPackageURL;
+                    if ( aStr[0] == '#' )
+                    {
+                        newStreamURL += aStr.copy( 1, aStr.getLength() - 1 );
+                    }
+                    else
+                    {
+                        newStreamURL += aStr;
+                    }
+
+                    if (newStreamURL != aStreamURL)
+                    {
+                        xPropSet->setPropertyValue("GraphicStreamURL", uno::Any(newStreamURL));
+                    }
+                }
+
                 mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
                 mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
                 mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
             }
+        }
+        else
+        {
+            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, OUString() );
+            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+        }
 
+        {
+            SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
+
+            if( !sImageURL.isEmpty() )
             {
-                SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
-
-                if( !sImageURL.isEmpty() )
-                {
-                    // optional office:binary-data
-                    mrExport.AddEmbeddedGraphicObjectAsBase64( sImageURL );
-                }
-                if( !bIsEmptyPresObj )
-                    ImpExportText( xShape );
+                // optional office:binary-data
+                mrExport.AddEmbeddedGraphicObjectAsBase64( sImageURL );
             }
-
-            //Resolves: fdo#62461 put preferred image first above, followed by
-            //fallback here
             if( !bIsEmptyPresObj )
+                ImpExportText( xShape );
+        }
+
+        //Resolves: fdo#62461 put preferred image first above, followed by
+        //fallback here
+        if( !bIsEmptyPresObj )
+        {
+            OUString aReplacementUrl;
+            xPropSet->getPropertyValue("ReplacementGraphicURL") >>= aReplacementUrl;
+
+            // If there is no url, then the graphic is empty
+            if(!aReplacementUrl.isEmpty())
             {
-                OUString aReplacementUrl;
-                xPropSet->getPropertyValue("ReplacementGraphicURL") >>= aReplacementUrl;
+                const OUString aStr = mrExport.AddEmbeddedGraphicObject(aReplacementUrl);
 
-                // If there is no url, then the graphic is empty
-                if(!aReplacementUrl.isEmpty())
+                if(aStr.getLength())
                 {
-                    const OUString aStr = mrExport.AddEmbeddedGraphicObject(aReplacementUrl);
+                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr);
+                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
 
-                    if(aStr.getLength())
-                    {
-                        mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr);
-                        mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-                        mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-                        mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+                    // xlink:href for replacement, only written for Svg content
+                    SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
 
-                        // xlink:href for replacement, only written for Svg content
-                        SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
-
-                        // optional office:binary-data
-                        mrExport.AddEmbeddedGraphicObjectAsBase64(aReplacementUrl);
-                    }
+                    // optional office:binary-data
+                    mrExport.AddEmbeddedGraphicObjectAsBase64(aReplacementUrl);
                 }
             }
         }
-
-        ImpExportEvents( xShape );
-        ImpExportGluePoints( xShape );
-
-        // image map
-        GetExport().GetImageMapExport().Export( xPropSet );
-        ImpExportDescription( xShape ); // #i68101#
     }
+
+    ImpExportEvents( xShape );
+    ImpExportGluePoints( xShape );
+
+    // image map
+    GetExport().GetImageMapExport().Export( xPropSet );
+    ImpExportDescription( xShape ); // #i68101#
+
 }
 
 void XMLShapeExport::ImpExportChartShape(
@@ -2749,149 +2753,150 @@ void XMLShapeExport::ImpExportOLE2Shape(
     uno::Reference< container::XNamed > xNamed(xShape, uno::UNO_QUERY);
 
     SAL_WARN_IF( !xPropSet.is() || !xNamed.is(), "xmloff", "ole shape is not implementing needed interfaces");
-    if(xPropSet.is() && xNamed.is())
+    if(!(xPropSet.is() && xNamed.is()))
+        return;
+
+    // Transformation
+    ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+    bool bIsEmptyPresObj = false;
+
+    // presentation settings
+    if(eShapeType == XmlShapeTypePresOLE2Shape)
+        bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_OBJECT) );
+    else if(eShapeType == XmlShapeTypePresChartShape)
+        bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_CHART) );
+    else if(eShapeType == XmlShapeTypePresSheetShape)
+        bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_TABLE) );
+
+    bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
+    bool bExportEmbedded(mrExport.getExportFlags() & SvXMLExportFlags::EMBEDDED);
+    OUString sPersistName;
+    SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW,
+                              XML_FRAME, bCreateNewline, true );
+
+    const bool bSaveBackwardsCompatible = bool( mrExport.getExportFlags() & SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE );
+
+    if( !bIsEmptyPresObj || bSaveBackwardsCompatible )
     {
-        // Transformation
-        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
-
-        bool bIsEmptyPresObj = false;
-
-        // presentation settings
-        if(eShapeType == XmlShapeTypePresOLE2Shape)
-            bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_OBJECT) );
-        else if(eShapeType == XmlShapeTypePresChartShape)
-            bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_CHART) );
-        else if(eShapeType == XmlShapeTypePresSheetShape)
-            bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_TABLE) );
-
-        bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
-        bool bExportEmbedded(mrExport.getExportFlags() & SvXMLExportFlags::EMBEDDED);
-        OUString sPersistName;
-        SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW,
-                                  XML_FRAME, bCreateNewline, true );
-
-        const bool bSaveBackwardsCompatible = bool( mrExport.getExportFlags() & SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE );
-
-        if( !bIsEmptyPresObj || bSaveBackwardsCompatible )
+        if (pAttrList)
         {
-            if (pAttrList)
+            mrExport.AddAttributeList(pAttrList);
+        }
+
+        OUString sClassId;
+        OUString sURL;
+        bool bInternal = false;
+        xPropSet->getPropertyValue("IsInternal") >>= bInternal;
+
+        if( !bIsEmptyPresObj )
+        {
+
+            if ( bInternal )
             {
-                mrExport.AddAttributeList(pAttrList);
+                // OOo internal links have no storage persistence, URL is stored in the XML file
+                // the result LinkURL is empty in case the object is not a link
+                xPropSet->getPropertyValue("LinkURL") >>= sURL;
             }
 
-            OUString sClassId;
-            OUString sURL;
-            bool bInternal = false;
-            xPropSet->getPropertyValue("IsInternal") >>= bInternal;
-
-            if( !bIsEmptyPresObj )
+            xPropSet->getPropertyValue("PersistName") >>= sPersistName;
+            if ( sURL.isEmpty() )
             {
-
-                if ( bInternal )
+                if( !sPersistName.isEmpty() )
                 {
-                    // OOo internal links have no storage persistence, URL is stored in the XML file
-                    // the result LinkURL is empty in case the object is not a link
-                    xPropSet->getPropertyValue("LinkURL") >>= sURL;
+                    sURL = "vnd.sun.star.EmbeddedObject:" + sPersistName;
                 }
+            }
 
-                xPropSet->getPropertyValue("PersistName") >>= sPersistName;
-                if ( sURL.isEmpty() )
+            if( !bInternal )
+                xPropSet->getPropertyValue("CLSID") >>= sClassId;
+
+            if( !sClassId.isEmpty() )
+                mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CLASS_ID, sClassId );
+
+            if(!bExportEmbedded)
+            {
+                // xlink:href
+                if( !sURL.isEmpty() )
                 {
-                    if( !sPersistName.isEmpty() )
-                    {
-                        sURL = "vnd.sun.star.EmbeddedObject:" + sPersistName;
-                    }
+                    // #96717# in theorie, if we don't have a url we shouldn't even
+                    // export this ole shape. But practical its to risky right now
+                    // to change this so we better dispose this on load
+                    sURL = mrExport.AddEmbeddedObject( sURL );
+
+                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL );
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
                 }
+            }
+        }
+        else
+        {
+            // export empty href for empty placeholders to be valid ODF
+            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, "" );
+            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+        }
 
-                if( !bInternal )
-                    xPropSet->getPropertyValue("CLSID") >>= sClassId;
+        enum XMLTokenEnum eElem = sClassId.isEmpty() ? XML_OBJECT : XML_OBJECT_OLE ;
+        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, eElem, true, true );
 
-                if( !sClassId.isEmpty() )
-                    mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CLASS_ID, sClassId );
+        // tdf#112547 export text as child of draw:object, where import expects it
+        if (!bIsEmptyPresObj && supportsText(eShapeType))
+        {
+            // #i118485# Add text export, the draw OLE shape allows text now
+            ImpExportText( xShape, TextPNS::EXTENSION );
+        }
 
-                if(!bExportEmbedded)
-                {
-                    // xlink:href
-                    if( !sURL.isEmpty() )
-                    {
-                        // #96717# in theorie, if we don't have a url we shouldn't even
-                        // export this ole shape. But practical its to risky right now
-                        // to change this so we better dispose this on load
-                        sURL = mrExport.AddEmbeddedObject( sURL );
-
-                        mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL );
-                        mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-                        mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-                        mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
-                    }
-                }
+        if(bExportEmbedded && !bIsEmptyPresObj)
+        {
+            if(bInternal)
+            {
+                // embedded XML
+                uno::Reference< lang::XComponent > xComp;
+                xPropSet->getPropertyValue("Model") >>= xComp;
+                SAL_WARN_IF( !xComp.is(), "xmloff", "no xModel for own OLE format" );
+                mrExport.ExportEmbeddedOwnObject( xComp );
             }
             else
             {
-                // export empty href for empty placeholders to be valid ODF
-                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, "" );
-                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
-            }
+                // embed as Base64
+                // this is an alien object ( currently MSOLE is the only supported type of such objects )
+                // in case it is not an OASIS format the object should be asked to store replacement image if possible
 
-            enum XMLTokenEnum eElem = sClassId.isEmpty() ? XML_OBJECT : XML_OBJECT_OLE ;
-            SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, eElem, true, true );
-
-            // tdf#112547 export text as child of draw:object, where import expects it
-            if (!bIsEmptyPresObj && supportsText(eShapeType))
-            {
-                // #i118485# Add text export, the draw OLE shape allows text now
-                ImpExportText( xShape, TextPNS::EXTENSION );
-            }
-
-            if(bExportEmbedded && !bIsEmptyPresObj)
-            {
-                if(bInternal)
-                {
-                    // embedded XML
-                    uno::Reference< lang::XComponent > xComp;
-                    xPropSet->getPropertyValue("Model") >>= xComp;
-                    SAL_WARN_IF( !xComp.is(), "xmloff", "no xModel for own OLE format" );
-                    mrExport.ExportEmbeddedOwnObject( xComp );
-                }
-                else
-                {
-                    // embed as Base64
-                    // this is an alien object ( currently MSOLE is the only supported type of such objects )
-                    // in case it is not an OASIS format the object should be asked to store replacement image if possible
-
-                    OUString sURLRequest( sURL );
-                    if ( !( mrExport.getExportFlags() & SvXMLExportFlags::OASIS ) )
-                        sURLRequest +=  "?oasis=false";
-                    mrExport.AddEmbeddedObjectAsBase64( sURLRequest );
-                }
+                OUString sURLRequest( sURL );
+                if ( !( mrExport.getExportFlags() & SvXMLExportFlags::OASIS ) )
+                    sURLRequest +=  "?oasis=false";
+                mrExport.AddEmbeddedObjectAsBase64( sURLRequest );
             }
         }
-        if( !bIsEmptyPresObj )
-        {
-            OUString sURL(  "vnd.sun.star.GraphicObject:"  );
-            sURL += sPersistName;
-            if( !bExportEmbedded )
-            {
-                sURL = GetExport().AddEmbeddedObject( sURL );
-                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL );
-                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
-            }
-
-            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
-                                      XML_IMAGE, false, true );
-
-            if( bExportEmbedded )
-                GetExport().AddEmbeddedObjectAsBase64( sURL );
-        }
-
-        ImpExportEvents( xShape );
-        ImpExportGluePoints( xShape );
-        ImpExportDescription( xShape ); // #i68101#
     }
+    if( !bIsEmptyPresObj )
+    {
+        OUString sURL(  "vnd.sun.star.GraphicObject:"  );
+        sURL += sPersistName;
+        if( !bExportEmbedded )
+        {
+            sURL = GetExport().AddEmbeddedObject( sURL );
+            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL );
+            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+        }
+
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
+                                  XML_IMAGE, false, true );
+
+        if( bExportEmbedded )
+            GetExport().AddEmbeddedObjectAsBase64( sURL );
+    }
+
+    ImpExportEvents( xShape );
+    ImpExportGluePoints( xShape );
+    ImpExportDescription( xShape ); // #i68101#
+
 }
 
 void XMLShapeExport::ImpExportPageShape(
@@ -2935,49 +2940,50 @@ void XMLShapeExport::ImpExportCaptionShape(
     XMLShapeExportFlags nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-    if(xPropSet.is())
+    if(!xPropSet.is())
+        return;
+
+    // Transformation
+    ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+    // evtl. corner radius?
+    sal_Int32 nCornerRadius(0);
+    xPropSet->getPropertyValue("CornerRadius") >>= nCornerRadius;
+    if(nCornerRadius)
     {
-        // Transformation
-        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
-
-        // evtl. corner radius?
-        sal_Int32 nCornerRadius(0);
-        xPropSet->getPropertyValue("CornerRadius") >>= nCornerRadius;
-        if(nCornerRadius)
-        {
-            OUStringBuffer sStringBuffer;
-            mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
-                    nCornerRadius);
-            mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CORNER_RADIUS, sStringBuffer.makeStringAndClear());
-        }
-
-        awt::Point aCaptionPoint;
-        xPropSet->getPropertyValue("CaptionPoint") >>= aCaptionPoint;
-
-        mrExport.GetMM100UnitConverter().convertMeasureToXML(msBuffer,
-                aCaptionPoint.X);
-        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CAPTION_POINT_X, msBuffer.makeStringAndClear() );
-        mrExport.GetMM100UnitConverter().convertMeasureToXML(msBuffer,
-                aCaptionPoint.Y);
-        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CAPTION_POINT_Y, msBuffer.makeStringAndClear() );
-
-        // write Caption shape. Add export later.
-        bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
-        bool bAnnotation( (nFeatures & XMLShapeExportFlags::ANNOTATION) == XMLShapeExportFlags::ANNOTATION );
-
-        SvXMLElementExport aObj( mrExport,
-                                 (bAnnotation ? XML_NAMESPACE_OFFICE
-                                               : XML_NAMESPACE_DRAW),
-                                 (bAnnotation ? XML_ANNOTATION : XML_CAPTION),
-                                 bCreateNewline, true );
-
-        ImpExportDescription( xShape ); // #i68101#
-        ImpExportEvents( xShape );
-        ImpExportGluePoints( xShape );
-        if( bAnnotation )
-            mrExport.exportAnnotationMeta( xShape );
-        ImpExportText( xShape );
+        OUStringBuffer sStringBuffer;
+        mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                nCornerRadius);
+        mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CORNER_RADIUS, sStringBuffer.makeStringAndClear());
     }
+
+    awt::Point aCaptionPoint;
+    xPropSet->getPropertyValue("CaptionPoint") >>= aCaptionPoint;
+
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(msBuffer,
+            aCaptionPoint.X);
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CAPTION_POINT_X, msBuffer.makeStringAndClear() );
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(msBuffer,
+            aCaptionPoint.Y);
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CAPTION_POINT_Y, msBuffer.makeStringAndClear() );
+
+    // write Caption shape. Add export later.
+    bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
+    bool bAnnotation( (nFeatures & XMLShapeExportFlags::ANNOTATION) == XMLShapeExportFlags::ANNOTATION );
+
+    SvXMLElementExport aObj( mrExport,
+                             (bAnnotation ? XML_NAMESPACE_OFFICE
+                                           : XML_NAMESPACE_DRAW),
+                             (bAnnotation ? XML_ANNOTATION : XML_CAPTION),
+                             bCreateNewline, true );
+
+    ImpExportDescription( xShape ); // #i68101#
+    ImpExportEvents( xShape );
+    ImpExportGluePoints( xShape );
+    if( bAnnotation )
+        mrExport.exportAnnotationMeta( xShape );
+    ImpExportText( xShape );
+
 }
 
 void XMLShapeExport::ImpExportFrameShape(
@@ -2985,33 +2991,34 @@ void XMLShapeExport::ImpExportFrameShape(
     XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-    if(xPropSet.is())
+    if(!xPropSet.is())
+        return;
+
+    // Transformation
+    ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+    bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
+    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
+                              XML_FRAME, bCreateNewline, true );
+
+    // export frame url
+    OUString aStr;
+    xPropSet->getPropertyValue("FrameURL") >>= aStr;
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(aStr) );
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+
+    // export name
+    xPropSet->getPropertyValue("FrameName") >>= aStr;
+    if( !aStr.isEmpty() )
+        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_FRAME_NAME, aStr );
+
+    // write floating frame
     {
-        // Transformation
-        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
-
-        bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
-        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
-                                  XML_FRAME, bCreateNewline, true );
-
-        // export frame url
-        OUString aStr;
-        xPropSet->getPropertyValue("FrameURL") >>= aStr;
-        mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(aStr) );
-        mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-        mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-        mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
-
-        // export name
-        xPropSet->getPropertyValue("FrameName") >>= aStr;
-        if( !aStr.isEmpty() )
-            mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_FRAME_NAME, aStr );
-
-        // write floating frame
-        {
-            SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_FLOATING_FRAME, true, true);
-        }
+        SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_FLOATING_FRAME, true, true);
     }
+
 }
 
 void XMLShapeExport::ImpExportAppletShape(
@@ -3019,54 +3026,55 @@ void XMLShapeExport::ImpExportAppletShape(
     XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-    if(xPropSet.is())
+    if(!xPropSet.is())
+        return;
+
+    // Transformation
+    ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+    bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
+    SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW,
+                              XML_FRAME, bCreateNewline, true );
+
+    // export frame url
+    OUString aStr;
+    xPropSet->getPropertyValue("AppletCodeBase") >>= aStr;
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(aStr) );
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+
+    // export draw:applet-name
+    xPropSet->getPropertyValue("AppletName") >>= aStr;
+    if( !aStr.isEmpty() )
+        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_APPLET_NAME, aStr );
+
+    // export draw:code
+    xPropSet->getPropertyValue("AppletCode") >>= aStr;
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CODE, aStr );
+
+    // export draw:may-script
+    bool bIsScript = false;
+    xPropSet->getPropertyValue("AppletIsScript") >>= bIsScript;
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MAY_SCRIPT, bIsScript ? XML_TRUE : XML_FALSE );
+
     {
-        // Transformation
-        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+        // write applet
+        SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_APPLET, true, true);
 
-        bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
-        SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW,
-                                  XML_FRAME, bCreateNewline, true );
-
-        // export frame url
-        OUString aStr;
-        xPropSet->getPropertyValue("AppletCodeBase") >>= aStr;
-        mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(aStr) );
-        mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-        mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-        mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
-
-        // export draw:applet-name
-        xPropSet->getPropertyValue("AppletName") >>= aStr;
-        if( !aStr.isEmpty() )
-            mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_APPLET_NAME, aStr );
-
-        // export draw:code
-        xPropSet->getPropertyValue("AppletCode") >>= aStr;
-        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CODE, aStr );
-
-        // export draw:may-script
-        bool bIsScript = false;
-        xPropSet->getPropertyValue("AppletIsScript") >>= bIsScript;
-        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MAY_SCRIPT, bIsScript ? XML_TRUE : XML_FALSE );
-
+        // export parameters
+        uno::Sequence< beans::PropertyValue > aCommands;
+        xPropSet->getPropertyValue("AppletCommands") >>= aCommands;
+        const sal_Int32 nCount = aCommands.getLength();
+        for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
         {
-            // write applet
-            SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_APPLET, true, true);
-
-            // export parameters
-            uno::Sequence< beans::PropertyValue > aCommands;
-            xPropSet->getPropertyValue("AppletCommands") >>= aCommands;
-            const sal_Int32 nCount = aCommands.getLength();
-            for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
-            {
-                aCommands[nIndex].Value >>= aStr;
-                mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aCommands[nIndex].Name );
-                mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aStr );
-                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
-            }
+            aCommands[nIndex].Value >>= aStr;
+            mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aCommands[nIndex].Name );
+            mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aStr );
+            SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
         }
     }
+
 }
 
 void XMLShapeExport::ImpExportPluginShape(
@@ -3074,45 +3082,46 @@ void XMLShapeExport::ImpExportPluginShape(
     XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-    if(xPropSet.is())
+    if(!xPropSet.is())
+        return;
+
+    // Transformation
+    ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+    bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
+    SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW,
+                              XML_FRAME, bCreateNewline, true );
+
+    // export plugin url
+    OUString aStr;
+    xPropSet->getPropertyValue("PluginURL") >>= aStr;
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(aStr) );
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+
+    // export mime-type
+    xPropSet->getPropertyValue("PluginMimeType") >>= aStr;
+    if(!aStr.isEmpty())
+        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, aStr );
+
     {
-        // Transformation
-        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+        // write plugin
+        SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, true, true);
 
-        bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
-        SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW,
-                                  XML_FRAME, bCreateNewline, true );
-
-        // export plugin url
-        OUString aStr;
-        xPropSet->getPropertyValue("PluginURL") >>= aStr;
-        mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(aStr) );
-        mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-        mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-        mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
-
-        // export mime-type
-        xPropSet->getPropertyValue("PluginMimeType") >>= aStr;
-        if(!aStr.isEmpty())
-            mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, aStr );
-
+        // export parameters
+        uno::Sequence< beans::PropertyValue > aCommands;
+        xPropSet->getPropertyValue("PluginCommands") >>= aCommands;
+        const sal_Int32 nCount = aCommands.getLength();
+        for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
         {
-            // write plugin
-            SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, true, true);
-
-            // export parameters
-            uno::Sequence< beans::PropertyValue > aCommands;
-            xPropSet->getPropertyValue("PluginCommands") >>= aCommands;
-            const sal_Int32 nCount = aCommands.getLength();
-            for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
-            {
-                aCommands[nIndex].Value >>= aStr;
-                mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aCommands[nIndex].Name );
-                mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aStr );
-                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
-            }
+            aCommands[nIndex].Value >>= aStr;
+            mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aCommands[nIndex].Name );
+            mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aStr );
+            SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
         }
     }
+
 }
 
 static void lcl_CopyStream(
@@ -3188,89 +3197,90 @@ void XMLShapeExport::ImpExportMediaShape(
     XmlShapeType eShapeType, XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-    if(xPropSet.is())
+    if(!xPropSet.is())
+        return;
+
+    // Transformation
+    ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+    if(eShapeType == XmlShapeTypePresMediaShape)
     {
-        // Transformation
-        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
-
-        if(eShapeType == XmlShapeTypePresMediaShape)
-        {
-            (void)ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_OBJECT) );
-        }
-        bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
-        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
-                                  XML_FRAME, bCreateNewline, true );
-
-        // export media url
-        OUString aMediaURL;
-        xPropSet->getPropertyValue("MediaURL") >>= aMediaURL;
-        OUString sMimeType;
-        xPropSet->getPropertyValue("MediaMimeType") >>= sMimeType;
-
-        OUString const persistentURL =
-            lcl_StoreMediaAndGetURL(GetExport(), xPropSet, aMediaURL, sMimeType);
-
-        mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, persistentURL );
-        mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-        mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-        mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
-
-        // export mime-type
-        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, sMimeType );
-
-        // write plugin
-        auto pPluginOBJ = o3tl::make_unique<SvXMLElementExport>(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, !( nFeatures & XMLShapeExportFlags::NO_WS ), true);
-
-        // export parameters
-        const OUString aFalseStr(  "false"  ), aTrueStr(  "true"  );
-
-        bool bLoop = false;
-        const OUString aLoopStr(  "Loop"  );
-        xPropSet->getPropertyValue( aLoopStr ) >>= bLoop;
-        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aLoopStr );
-        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bLoop ? aTrueStr : aFalseStr );
-        delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true ) );
-
-        bool bMute = false;
-        const OUString aMuteStr(  "Mute"  );
-        xPropSet->getPropertyValue( aMuteStr ) >>= bMute;
-        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aMuteStr );
-        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bMute ? aTrueStr : aFalseStr );
-        delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true ) );
-
-        sal_Int16 nVolumeDB = 0;
-        const OUString aVolumeDBStr(  "VolumeDB"  );
-        xPropSet->getPropertyValue("VolumeDB") >>= nVolumeDB;
-        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aVolumeDBStr );
-        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, OUString::number( nVolumeDB ) );
-        delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true ) );
-
-        media::ZoomLevel eZoom;
-        const OUString aZoomStr(  "Zoom"  );
-        OUString aZoomValue;
-        xPropSet->getPropertyValue("Zoom") >>= eZoom;
-        switch( eZoom )
-        {
-            case media::ZoomLevel_ZOOM_1_TO_4  : aZoomValue = "25%"; break;
-            case media::ZoomLevel_ZOOM_1_TO_2  : aZoomValue = "50%"; break;
-            case media::ZoomLevel_ORIGINAL     : aZoomValue = "100%"; break;
-            case media::ZoomLevel_ZOOM_2_TO_1  : aZoomValue = "200%"; break;
-            case media::ZoomLevel_ZOOM_4_TO_1  : aZoomValue = "400%"; break;
-            case media::ZoomLevel_FIT_TO_WINDOW: aZoomValue = "fit"; break;
-            case media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT: aZoomValue = "fixedfit"; break;
-            case media::ZoomLevel_FULLSCREEN   : aZoomValue = "fullscreen"; break;
-
-            default:
-            break;
-        }
-
-        if( !aZoomValue.isEmpty() )
-        {
-            mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aZoomStr );
-            mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aZoomValue );
-            delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true ) );
-        }
+        (void)ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_OBJECT) );
     }
+    bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
+    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
+                              XML_FRAME, bCreateNewline, true );
+
+    // export media url
+    OUString aMediaURL;
+    xPropSet->getPropertyValue("MediaURL") >>= aMediaURL;
+    OUString sMimeType;
+    xPropSet->getPropertyValue("MediaMimeType") >>= sMimeType;
+
+    OUString const persistentURL =
+        lcl_StoreMediaAndGetURL(GetExport(), xPropSet, aMediaURL, sMimeType);
+
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, persistentURL );
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+    mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+
+    // export mime-type
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, sMimeType );
+
+    // write plugin
+    auto pPluginOBJ = o3tl::make_unique<SvXMLElementExport>(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, !( nFeatures & XMLShapeExportFlags::NO_WS ), true);
+
+    // export parameters
+    const OUString aFalseStr(  "false"  ), aTrueStr(  "true"  );
+
+    bool bLoop = false;
+    const OUString aLoopStr(  "Loop"  );
+    xPropSet->getPropertyValue( aLoopStr ) >>= bLoop;
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aLoopStr );
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bLoop ? aTrueStr : aFalseStr );
+    delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true ) );
+
+    bool bMute = false;
+    const OUString aMuteStr(  "Mute"  );
+    xPropSet->getPropertyValue( aMuteStr ) >>= bMute;
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aMuteStr );
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bMute ? aTrueStr : aFalseStr );
+    delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true ) );
+
+    sal_Int16 nVolumeDB = 0;
+    const OUString aVolumeDBStr(  "VolumeDB"  );
+    xPropSet->getPropertyValue("VolumeDB") >>= nVolumeDB;
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aVolumeDBStr );
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, OUString::number( nVolumeDB ) );
+    delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true ) );
+
+    media::ZoomLevel eZoom;
+    const OUString aZoomStr(  "Zoom"  );
+    OUString aZoomValue;
+    xPropSet->getPropertyValue("Zoom") >>= eZoom;
+    switch( eZoom )
+    {
+        case media::ZoomLevel_ZOOM_1_TO_4  : aZoomValue = "25%"; break;
+        case media::ZoomLevel_ZOOM_1_TO_2  : aZoomValue = "50%"; break;
+        case media::ZoomLevel_ORIGINAL     : aZoomValue = "100%"; break;
+        case media::ZoomLevel_ZOOM_2_TO_1  : aZoomValue = "200%"; break;
+        case media::ZoomLevel_ZOOM_4_TO_1  : aZoomValue = "400%"; break;
+        case media::ZoomLevel_FIT_TO_WINDOW: aZoomValue = "fit"; break;
+        case media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT: aZoomValue = "fixedfit"; break;
+        case media::ZoomLevel_FULLSCREEN   : aZoomValue = "fullscreen"; break;
+
+        default:
+        break;
+    }
+
+    if( !aZoomValue.isEmpty() )
+    {
+        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aZoomStr );
+        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aZoomValue );
+        delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true ) );
+    }
+
 }
 
 void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShape >& xShape, XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)
@@ -4705,37 +4715,38 @@ void XMLShapeExport::ImpExportCustomShape(
     XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint )
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-    if ( xPropSet.is() )
+    if ( !xPropSet.is() )
+        return;
+
+    OUString aStr;
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
+
+    // Transformation
+    ImpExportNewTrans( xPropSet, nFeatures, pRefPoint );
+
+    if ( xPropSetInfo.is() )
     {
-        OUString aStr;
-        uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
-
-        // Transformation
-        ImpExportNewTrans( xPropSet, nFeatures, pRefPoint );
-
-        if ( xPropSetInfo.is() )
+        if ( xPropSetInfo->hasPropertyByName( "CustomShapeEngine" ) )
         {
-            if ( xPropSetInfo->hasPropertyByName( "CustomShapeEngine" ) )
-            {
-                uno::Any aEngine( xPropSet->getPropertyValue( "CustomShapeEngine" ) );
-                if ( ( aEngine >>= aStr ) && !aStr.isEmpty() )
-                    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ENGINE, aStr );
-            }
-            if ( xPropSetInfo->hasPropertyByName( "CustomShapeData" ) )
-            {
-                uno::Any aData( xPropSet->getPropertyValue( "CustomShapeData" ) );
-                if ( ( aData >>= aStr ) && !aStr.isEmpty() )
-                    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DATA, aStr );
-            }
+            uno::Any aEngine( xPropSet->getPropertyValue( "CustomShapeEngine" ) );
+            if ( ( aEngine >>= aStr ) && !aStr.isEmpty() )
+                mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ENGINE, aStr );
         }
-        bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
-        SvXMLElementExport aOBJ( mrExport, XML_NAMESPACE_DRAW, XML_CUSTOM_SHAPE, bCreateNewline, true );
-        ImpExportDescription( xShape ); // #i68101#
-        ImpExportEvents( xShape );
-        ImpExportGluePoints( xShape );
-        ImpExportText( xShape );
-        ImpExportEnhancedGeometry( mrExport, xPropSet );
+        if ( xPropSetInfo->hasPropertyByName( "CustomShapeData" ) )
+        {
+            uno::Any aData( xPropSet->getPropertyValue( "CustomShapeData" ) );
+            if ( ( aData >>= aStr ) && !aStr.isEmpty() )
+                mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DATA, aStr );
+        }
     }
+    bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
+    SvXMLElementExport aOBJ( mrExport, XML_NAMESPACE_DRAW, XML_CUSTOM_SHAPE, bCreateNewline, true );
+    ImpExportDescription( xShape ); // #i68101#
+    ImpExportEvents( xShape );
+    ImpExportGluePoints( xShape );
+    ImpExportText( xShape );
+    ImpExportEnhancedGeometry( mrExport, xPropSet );
+
 }
 
 void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint )

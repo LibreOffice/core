@@ -869,45 +869,46 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
     uno::Reference< chart2::data::XDataSequence > xNewSequence(
         xDataProvider->createDataSequenceByRangeRepresentation( aRange ));
 
-    if( xNewSequence.is())
-    {
-        SchXMLTools::setXMLRangePropertyAtDataSequence(xNewSequence,aXMLRange);
+    if( !xNewSequence.is())
+        return;
 
-        OUStringBuffer aRoleBuffer("error-bars-");
-        if( bYError )
-            aRoleBuffer.append( 'y' );
-        else
-            aRoleBuffer.append( 'x');
+    SchXMLTools::setXMLRangePropertyAtDataSequence(xNewSequence,aXMLRange);
 
-        aRoleBuffer.append( '-' );
+    OUStringBuffer aRoleBuffer("error-bars-");
+    if( bYError )
+        aRoleBuffer.append( 'y' );
+    else
+        aRoleBuffer.append( 'x');
 
-        if( bPositiveValue )
-            aRoleBuffer = aRoleBuffer.append( "positive" );
-        else
-            aRoleBuffer = aRoleBuffer.append( "negative" );
+    aRoleBuffer.append( '-' );
 
-        OUString aRole = aRoleBuffer.makeStringAndClear();
+    if( bPositiveValue )
+        aRoleBuffer = aRoleBuffer.append( "positive" );
+    else
+        aRoleBuffer = aRoleBuffer.append( "negative" );
 
-        Reference< beans::XPropertySet > xSeqProp( xNewSequence, uno::UNO_QUERY );
+    OUString aRole = aRoleBuffer.makeStringAndClear();
 
-        xSeqProp->setPropertyValue("Role", uno::makeAny( aRole ));
+    Reference< beans::XPropertySet > xSeqProp( xNewSequence, uno::UNO_QUERY );
 
-        Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    xSeqProp->setPropertyValue("Role", uno::makeAny( aRole ));
 
-        Reference< chart2::data::XLabeledDataSequence > xLabelSeq( chart2::data::LabeledDataSequence::create(xContext),
-            uno::UNO_QUERY_THROW );
+    Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
 
-        rSequences.emplace( tSchXMLIndexWithPart( -2, SCH_XML_PART_ERROR_BARS ), xLabelSeq );
+    Reference< chart2::data::XLabeledDataSequence > xLabelSeq( chart2::data::LabeledDataSequence::create(xContext),
+        uno::UNO_QUERY_THROW );
 
-        xLabelSeq->setValues( xNewSequence );
+    rSequences.emplace( tSchXMLIndexWithPart( -2, SCH_XML_PART_ERROR_BARS ), xLabelSeq );
 
-        uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences(
-            xDataSource->getDataSequences());
+    xLabelSeq->setValues( xNewSequence );
 
-        aSequences.realloc( aSequences.getLength() + 1 );
-        aSequences[ aSequences.getLength() - 1 ] = xLabelSeq;
-        xDataSink->setData( aSequences );
-    }
+    uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences(
+        xDataSource->getDataSequences());
+
+    aSequences.realloc( aSequences.getLength() + 1 );
+    aSequences[ aSequences.getLength() - 1 ] = xLabelSeq;
+    xDataSink->setData( aSequences );
+
 }
 
 SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
@@ -962,100 +963,101 @@ void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, const uno::
     uno::Any aAny = SchXMLTools::getPropertyFromContext("ErrorBarStyle",
             pSeriesStyleContext,pStylesCtxt);
 
-    if ( aAny.hasValue() )
+    if ( !aAny.hasValue() )
+        return;
+
+    sal_Int32 aBarStyle = css::chart::ErrorBarStyle::NONE;
+    aAny >>= aBarStyle;
+    xBarProp->setPropertyValue("ErrorBarStyle", aAny);
+
+    aAny = SchXMLTools::getPropertyFromContext("ShowPositiveError",
+            pSeriesStyleContext,pStylesCtxt);
+
+    if(aAny.hasValue())
+        xBarProp->setPropertyValue("ShowPositiveError",aAny);
+
+    aAny = SchXMLTools::getPropertyFromContext("ShowNegativeError",
+            pSeriesStyleContext,pStylesCtxt);
+
+    if(aAny.hasValue())
+        xBarProp->setPropertyValue("ShowNegativeError",aAny);
+
+    aAny = SchXMLTools::getPropertyFromContext("PositiveError",
+            pSeriesStyleContext, pStylesCtxt);
+
+    if(aAny.hasValue())
+        xBarProp->setPropertyValue("PositiveError", aAny);
+    else
     {
-        sal_Int32 aBarStyle = css::chart::ErrorBarStyle::NONE;
-        aAny >>= aBarStyle;
-        xBarProp->setPropertyValue("ErrorBarStyle", aAny);
-
-        aAny = SchXMLTools::getPropertyFromContext("ShowPositiveError",
-                pSeriesStyleContext,pStylesCtxt);
-
-        if(aAny.hasValue())
-            xBarProp->setPropertyValue("ShowPositiveError",aAny);
-
-        aAny = SchXMLTools::getPropertyFromContext("ShowNegativeError",
-                pSeriesStyleContext,pStylesCtxt);
-
-        if(aAny.hasValue())
-            xBarProp->setPropertyValue("ShowNegativeError",aAny);
-
-        aAny = SchXMLTools::getPropertyFromContext("PositiveError",
+        aAny = SchXMLTools::getPropertyFromContext("ConstantErrorHigh",
                 pSeriesStyleContext, pStylesCtxt);
 
         if(aAny.hasValue())
             xBarProp->setPropertyValue("PositiveError", aAny);
-        else
-        {
-            aAny = SchXMLTools::getPropertyFromContext("ConstantErrorHigh",
-                    pSeriesStyleContext, pStylesCtxt);
-
-            if(aAny.hasValue())
-                xBarProp->setPropertyValue("PositiveError", aAny);
-        }
-
-        aAny = SchXMLTools::getPropertyFromContext("NegativeError",
-                pSeriesStyleContext, pStylesCtxt);
-
-        if(aAny.hasValue())
-            xBarProp->setPropertyValue("NegativeError", aAny);
-        else
-        {
-            aAny = SchXMLTools::getPropertyFromContext("ConstantErrorLow",
-                    pSeriesStyleContext, pStylesCtxt);
-
-            if(aAny.hasValue())
-                xBarProp->setPropertyValue("NegativeError", aAny);
-        }
-
-        aAny = SchXMLTools::getPropertyFromContext("ErrorBarRangePositive",
-                pSeriesStyleContext, pStylesCtxt);
-        if( aAny.hasValue() )
-        {
-            aAny >>= aPosRange;
-        }
-
-        aAny = SchXMLTools::getPropertyFromContext("ErrorBarRangeNegative",
-                pSeriesStyleContext, pStylesCtxt);
-        if( aAny.hasValue() )
-        {
-            aAny >>= aNegRange;
-        }
-
-        aAny = SchXMLTools::getPropertyFromContext("Weight",
-                pSeriesStyleContext, pStylesCtxt);
-        if( aAny.hasValue() )
-        {
-            xBarProp->setPropertyValue("Weight", aAny);
-        }
-
-        aAny = SchXMLTools::getPropertyFromContext("PercentageError",
-                pSeriesStyleContext, pStylesCtxt);
-        if( aAny.hasValue() && aBarStyle == css::chart::ErrorBarStyle::RELATIVE )
-        {
-            xBarProp->setPropertyValue("PositiveError", aAny);
-            xBarProp->setPropertyValue("NegativeError", aAny);
-        }
-
-        switch(aBarStyle)
-        {
-            case css::chart::ErrorBarStyle::ERROR_MARGIN:
-                {
-                    aAny = SchXMLTools::getPropertyFromContext("NegativeError",
-                            pSeriesStyleContext,pStylesCtxt);
-
-                    xBarProp->setPropertyValue("NegativeError",aAny);
-
-                    aAny = SchXMLTools::getPropertyFromContext("PositiveError",
-                            pSeriesStyleContext,pStylesCtxt);
-
-                    xBarProp->setPropertyValue("PositiveError",aAny);
-                }
-                break;
-            default:
-                break;
-        }
     }
+
+    aAny = SchXMLTools::getPropertyFromContext("NegativeError",
+            pSeriesStyleContext, pStylesCtxt);
+
+    if(aAny.hasValue())
+        xBarProp->setPropertyValue("NegativeError", aAny);
+    else
+    {
+        aAny = SchXMLTools::getPropertyFromContext("ConstantErrorLow",
+                pSeriesStyleContext, pStylesCtxt);
+
+        if(aAny.hasValue())
+            xBarProp->setPropertyValue("NegativeError", aAny);
+    }
+
+    aAny = SchXMLTools::getPropertyFromContext("ErrorBarRangePositive",
+            pSeriesStyleContext, pStylesCtxt);
+    if( aAny.hasValue() )
+    {
+        aAny >>= aPosRange;
+    }
+
+    aAny = SchXMLTools::getPropertyFromContext("ErrorBarRangeNegative",
+            pSeriesStyleContext, pStylesCtxt);
+    if( aAny.hasValue() )
+    {
+        aAny >>= aNegRange;
+    }
+
+    aAny = SchXMLTools::getPropertyFromContext("Weight",
+            pSeriesStyleContext, pStylesCtxt);
+    if( aAny.hasValue() )
+    {
+        xBarProp->setPropertyValue("Weight", aAny);
+    }
+
+    aAny = SchXMLTools::getPropertyFromContext("PercentageError",
+            pSeriesStyleContext, pStylesCtxt);
+    if( aAny.hasValue() && aBarStyle == css::chart::ErrorBarStyle::RELATIVE )
+    {
+        xBarProp->setPropertyValue("PositiveError", aAny);
+        xBarProp->setPropertyValue("NegativeError", aAny);
+    }
+
+    switch(aBarStyle)
+    {
+        case css::chart::ErrorBarStyle::ERROR_MARGIN:
+            {
+                aAny = SchXMLTools::getPropertyFromContext("NegativeError",
+                        pSeriesStyleContext,pStylesCtxt);
+
+                xBarProp->setPropertyValue("NegativeError",aAny);
+
+                aAny = SchXMLTools::getPropertyFromContext("PositiveError",
+                        pSeriesStyleContext,pStylesCtxt);
+
+                xBarProp->setPropertyValue("PositiveError",aAny);
+            }
+            break;
+        default:
+            break;
+    }
+
 }
 
 }

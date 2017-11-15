@@ -76,94 +76,95 @@ void XMLIndexMarkExport::ExportIndexMark(
     bool bAutoStyles)
 {
     /// index marks have no styles!
-    if (!bAutoStyles)
+    if (bAutoStyles)
+        return;
+
+    const enum XMLTokenEnum * pElements = nullptr;
+    sal_Int8 nElementNo = -1;
+
+    // get index mark
+    Any aAny;
+    aAny = rPropSet->getPropertyValue(sDocumentIndexMark);
+    Reference<XPropertySet> xIndexMarkPropSet;
+    aAny >>= xIndexMarkPropSet;
+
+    // common: handling of start, end, collapsed entries and
+    // alternative text
+
+    // collapsed/alternative text entry?
+    aAny = rPropSet->getPropertyValue(sIsCollapsed);
+    if (*o3tl::doAccess<bool>(aAny))
     {
-        const enum XMLTokenEnum * pElements = nullptr;
-        sal_Int8 nElementNo = -1;
+        // collapsed entry: needs alternative text
+        nElementNo = 0;
 
-        // get index mark
-        Any aAny;
-        aAny = rPropSet->getPropertyValue(sDocumentIndexMark);
-        Reference<XPropertySet> xIndexMarkPropSet;
-        aAny >>= xIndexMarkPropSet;
+        aAny = xIndexMarkPropSet->getPropertyValue(sAlternativeText);
+        OUString sTmp;
+        aAny >>= sTmp;
+        DBG_ASSERT(!sTmp.isEmpty(),
+                   "collapsed index mark without alternative text");
+        rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STRING_VALUE, sTmp);
+    }
+    else
+    {
+        // start and end entries: has ID
+        aAny = rPropSet->getPropertyValue(sIsStart);
+        nElementNo = *o3tl::doAccess<bool>(aAny) ? 1 : 2;
 
-        // common: handling of start, end, collapsed entries and
-        // alternative text
+        // generate ID
+        OUStringBuffer sBuf;
+        GetID(sBuf, xIndexMarkPropSet);
+        rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_ID,
+                             sBuf.makeStringAndClear());
+    }
 
-        // collapsed/alternative text entry?
-        aAny = rPropSet->getPropertyValue(sIsCollapsed);
-        if (*o3tl::doAccess<bool>(aAny))
+    // distinguish between TOC, user, alphab. index marks by
+    // asking for specific properties
+    // Export attributes for -mark-start and -mark elements,
+    // but not for -mark-end
+    Reference<XPropertySetInfo> xPropertySetInfo =
+        xIndexMarkPropSet->getPropertySetInfo();
+    if (xPropertySetInfo->hasPropertyByName(sUserIndexName))
+    {
+        // user index mark
+        pElements = lcl_pUserIndexMarkName;
+        if (nElementNo != 2)
         {
-            // collapsed entry: needs alternative text
-            nElementNo = 0;
-
-            aAny = xIndexMarkPropSet->getPropertyValue(sAlternativeText);
-            OUString sTmp;
-            aAny >>= sTmp;
-            DBG_ASSERT(!sTmp.isEmpty(),
-                       "collapsed index mark without alternative text");
-            rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STRING_VALUE, sTmp);
-        }
-        else
-        {
-            // start and end entries: has ID
-            aAny = rPropSet->getPropertyValue(sIsStart);
-            nElementNo = *o3tl::doAccess<bool>(aAny) ? 1 : 2;
-
-            // generate ID
-            OUStringBuffer sBuf;
-            GetID(sBuf, xIndexMarkPropSet);
-            rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_ID,
-                                 sBuf.makeStringAndClear());
-        }
-
-        // distinguish between TOC, user, alphab. index marks by
-        // asking for specific properties
-        // Export attributes for -mark-start and -mark elements,
-        // but not for -mark-end
-        Reference<XPropertySetInfo> xPropertySetInfo =
-            xIndexMarkPropSet->getPropertySetInfo();
-        if (xPropertySetInfo->hasPropertyByName(sUserIndexName))
-        {
-            // user index mark
-            pElements = lcl_pUserIndexMarkName;
-            if (nElementNo != 2)
-            {
-                ExportUserIndexMarkAttributes(xIndexMarkPropSet);
-            }
-        }
-        else if (xPropertySetInfo->hasPropertyByName(sPrimaryKey))
-        {
-            // alphabetical index mark
-            pElements = lcl_pAlphaIndexMarkName;
-            if (nElementNo != 2)
-            {
-                ExportAlphabeticalIndexMarkAttributes(xIndexMarkPropSet);
-            }
-        }
-        else
-        {
-            // table of content:
-            pElements = lcl_pTocMarkNames;
-            if (nElementNo != 2)
-            {
-                ExportTOCMarkAttributes(xIndexMarkPropSet);
-            }
-        }
-
-        // export element
-        DBG_ASSERT(pElements != nullptr, "illegal element array");
-        DBG_ASSERT(nElementNo >= 0, "illegal name array index");
-        DBG_ASSERT(nElementNo <= 2, "illegal name array index");
-
-        if ((pElements != nullptr) && (nElementNo != -1))
-        {
-            SvXMLElementExport aElem(rExport,
-                                     XML_NAMESPACE_TEXT,
-                                     pElements[nElementNo],
-                                     false, false);
+            ExportUserIndexMarkAttributes(xIndexMarkPropSet);
         }
     }
+    else if (xPropertySetInfo->hasPropertyByName(sPrimaryKey))
+    {
+        // alphabetical index mark
+        pElements = lcl_pAlphaIndexMarkName;
+        if (nElementNo != 2)
+        {
+            ExportAlphabeticalIndexMarkAttributes(xIndexMarkPropSet);
+        }
+    }
+    else
+    {
+        // table of content:
+        pElements = lcl_pTocMarkNames;
+        if (nElementNo != 2)
+        {
+            ExportTOCMarkAttributes(xIndexMarkPropSet);
+        }
+    }
+
+    // export element
+    DBG_ASSERT(pElements != nullptr, "illegal element array");
+    DBG_ASSERT(nElementNo >= 0, "illegal name array index");
+    DBG_ASSERT(nElementNo <= 2, "illegal name array index");
+
+    if ((pElements != nullptr) && (nElementNo != -1))
+    {
+        SvXMLElementExport aElem(rExport,
+                                 XML_NAMESPACE_TEXT,
+                                 pElements[nElementNo],
+                                 false, false);
+    }
+
 }
 
 void XMLIndexMarkExport::ExportTOCMarkAttributes(
