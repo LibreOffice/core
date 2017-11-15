@@ -3184,6 +3184,8 @@ bool ScCompiler::IsReference( const OUString& rName, const OUString* pErrRef )
             return true;
         // Now try with a symbol up to the range operator, rewind source
         // position.
+        if (mnRangeOpPosInSymbol == MAXSTRLEN-1)
+            return false;
         sal_Int32 nLen = mnRangeOpPosInSymbol;
         while (cSymbol[++nLen])
             ;
