@@ -97,33 +97,35 @@
 
 #define STR_BOOKMARK_NAME           (RC_GLOBALS_BEGIN + 36)
 #define STR_BOOKMARK_TEXT           (RC_GLOBALS_BEGIN + 37)
+#define STR_BOOKMARK_HIDDEN         (RC_GLOBALS_BEGIN + 38)
+#define STR_BOOKMARK_CONDITION      (RC_GLOBALS_BEGIN + 39)
 
-#define STR_LOAD_HTML_DOC           (RC_GLOBALS_BEGIN + 38)
+#define STR_LOAD_HTML_DOC           (RC_GLOBALS_BEGIN + 40)
 
-#define STR_JAVA_EDIT               (RC_GLOBALS_BEGIN + 39)
+#define STR_JAVA_EDIT               (RC_GLOBALS_BEGIN + 41)
 
-#define STR_REMOVE_WARNING          (RC_GLOBALS_BEGIN + 40)
+#define STR_REMOVE_WARNING          (RC_GLOBALS_BEGIN + 42)
 
-#define SW_STR_NONE                 (RC_GLOBALS_BEGIN + 41)
+#define SW_STR_NONE                 (RC_GLOBALS_BEGIN + 43)
 
-#define STR_CAPTION_BEGINNING       (RC_GLOBALS_BEGIN + 42)
-#define STR_CAPTION_END             (RC_GLOBALS_BEGIN + 43)
-#define STR_CAPTION_ABOVE           (RC_GLOBALS_BEGIN + 44)
-#define STR_CAPTION_BELOW           (RC_GLOBALS_BEGIN + 45)
+#define STR_CAPTION_BEGINNING       (RC_GLOBALS_BEGIN + 44)
+#define STR_CAPTION_END             (RC_GLOBALS_BEGIN + 45)
+#define STR_CAPTION_ABOVE           (RC_GLOBALS_BEGIN + 46)
+#define STR_CAPTION_BELOW           (RC_GLOBALS_BEGIN + 47)
 
-#define SW_STR_READONLY             (RC_GLOBALS_BEGIN + 46)
+#define SW_STR_READONLY             (RC_GLOBALS_BEGIN + 48)
 
-#define STR_READONLY_PATH           (RC_GLOBALS_BEGIN + 47)
-#define IL_SECTION_BITMAPS          (RC_GLOBALS_BEGIN + 48)
-#define IL_VALUES                   (RC_GLOBALS_BEGIN + 49)
+#define STR_READONLY_PATH           (RC_GLOBALS_BEGIN + 49)
+#define IL_SECTION_BITMAPS          (RC_GLOBALS_BEGIN + 50)
+#define IL_VALUES                   (RC_GLOBALS_BEGIN + 51)
 
 // INFOBOX ------------------------------------------------------------
 
-#define STR_ERROR_CLPBRD_READ       (RC_GLOBALS_BEGIN + 50)
-#define STR_ERROR_PASSWD            (RC_GLOBALS_BEGIN + 51)
+#define STR_ERROR_CLPBRD_READ       (RC_GLOBALS_BEGIN + 52)
+#define STR_ERROR_PASSWD            (RC_GLOBALS_BEGIN + 53)
 
 // Strings for the context menu of the content tree
-#define STR_CONTEXT_FIRST            (RC_GLOBALS_BEGIN + 52)
+#define STR_CONTEXT_FIRST            (RC_GLOBALS_BEGIN + 54)
 #define STR_OUTLINE_LEVEL            (STR_CONTEXT_FIRST + 0)
 #define STR_DRAGMODE                 (STR_CONTEXT_FIRST + 1)
 #define STR_HYPERLINK                (STR_CONTEXT_FIRST + 2)
