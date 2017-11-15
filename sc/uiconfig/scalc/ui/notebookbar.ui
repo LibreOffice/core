@@ -128,11 +128,6 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">sfx2/res/placeholder.png</property>
   </object>
-  <object class="GtkImage" id="SignatureImg">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_signature.png</property>
-  </object>
   <object class="GtkImage" id="PrintImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -157,6 +152,11 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_sendtoback.png</property>
+  </object>
+  <object class="GtkImage" id="SignatureImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_signature.png</property>
   </object>
   <object class="GtkImage" id="SpellDialogImg">
     <property name="visible">True</property>
@@ -499,6 +499,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
@@ -667,7 +668,7 @@
                                 <property name="tooltip_text" translatable="yes" context="notebookbar|bordertype|tooltip_text">Specify the borders of the selected cells.</property>
                                 <property name="halign">start</property>
                                 <property name="action_name">.uno:SetBorderStyle</property>
-                                <property name="label" translatable="no">toolbutton1</property>
+                                <property name="label">toolbutton1</property>
                                 <property name="use_underline">True</property>
                               </object>
                               <packing>
@@ -884,6 +885,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -1214,8 +1216,8 @@
                 <child>
                   <object class="sfxlo-DropdownBox" id="box7">
                     <property name="visible">True</property>
-                    <property name="valign">center</property>
                     <property name="can_focus">False</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="box50">
                         <property name="visible">True</property>
@@ -1229,6 +1231,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -1380,14 +1383,15 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox" id="box40">
                             <property name="visible">True</property>
-                            <property name="valign">center</property>
                             <property name="can_focus">False</property>
+                            <property name="valign">center</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="svtlo-ManagedMenuButton" id="ConditionalFormatMenu">
@@ -1446,8 +1450,8 @@
                 <child>
                   <object class="sfxlo-DropdownBox" id="box12">
                     <property name="visible">True</property>
-                    <property name="valign">center</property>
                     <property name="can_focus">False</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="box41">
                         <property name="visible">True</property>
@@ -1461,6 +1465,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -1596,14 +1601,15 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox" id="box42">
                             <property name="visible">True</property>
-                            <property name="valign">center</property>
                             <property name="can_focus">False</property>
+                            <property name="valign">center</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkButton" id="SearchDialog">
@@ -1720,6 +1726,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -1822,6 +1829,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">5</property>
                   </packing>
                 </child>
@@ -1965,6 +1973,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -2133,6 +2142,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -2295,6 +2305,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
+                            <property name="padding">6</property>
                             <property name="position">2</property>
                           </packing>
                         </child>
@@ -2340,6 +2351,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
@@ -2485,6 +2497,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">8</property>
                   </packing>
                 </child>
@@ -2794,6 +2807,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
@@ -2938,6 +2952,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">7</property>
                   </packing>
                 </child>
@@ -3087,6 +3102,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -3173,6 +3189,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
@@ -3255,6 +3272,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">5</property>
                   </packing>
                 </child>
@@ -3504,6 +3522,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -3672,6 +3691,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">6</property>
                     <property name="position">5</property>
                   </packing>
                 </child>
