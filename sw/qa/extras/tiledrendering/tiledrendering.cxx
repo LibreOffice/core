@@ -1828,12 +1828,13 @@ void SwTiledRenderingTest::testAllTrackedChanges()
 
     // view #1
     SwView* pView1 = dynamic_cast<SwView*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView1);
     SwWrtShell* pWrtShell1 = pView1->GetWrtShellPtr();
 
     // view #2
     SfxLokHelper::createView();
     SwView* pView2 = dynamic_cast<SwView*>(SfxViewShell::Current());
-    CPPUNIT_ASSERT(pView1 != pView2);
+    CPPUNIT_ASSERT(pView2 && pView1 != pView2);
     SwWrtShell* pWrtShell2 = pView2->GetWrtShellPtr();
     // Insert text and reject all
     {
