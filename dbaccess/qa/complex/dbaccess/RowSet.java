@@ -47,6 +47,7 @@ import java.lang.reflect.Method;
 import java.util.Random;
 
 // ---------- junit imports -----------------
+import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -127,6 +128,11 @@ public class RowSet extends TestCase
         }
     }
 
+    @After public final void closeAndDeleteDatabase() {
+        if (m_database != null) {
+            m_database.closeAndDelete();
+        }
+    }
 
     /** creates a com.sun.star.sdb.RowSet to use during the test
      *  @param command

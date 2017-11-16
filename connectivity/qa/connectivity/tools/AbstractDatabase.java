@@ -124,14 +124,7 @@ public abstract class AbstractDatabase implements DatabaseAccess
         delete();
     }
 
-    private void delete()
-    {
-        if (m_databaseDocumentFile != null)
-        {
-            final File file = new File(m_databaseDocumentFile);
-            file.delete();
-        }
-    }
+    protected void delete() {}
 
     /** returns the underlying database document
      */

@@ -33,6 +33,7 @@ import helper.URLHelper;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.Assert;
 
 public class HsqlDatabase extends AbstractDatabase
 {
@@ -54,10 +55,11 @@ public class HsqlDatabase extends AbstractDatabase
      */
     private void createDBDocument() throws Exception
     {
-        final File documentFile = File.createTempFile("testdb", ".odb");
-        if ( documentFile.exists() )
-            documentFile.delete();
-        m_databaseDocumentFile = URLHelper.getFileURLFromSystemPath(documentFile);
+        Assert.assertNull(m_documentFile);
+        m_documentFile = File.createTempFile("testdb", ".odb");
+        if ( m_documentFile.exists() )
+            m_documentFile.delete();
+        m_databaseDocumentFile = URLHelper.getFileURLFromSystemPath(m_documentFile);
 
         m_databaseDocument = UnoRuntime.queryInterface(
                 XOfficeDatabaseDocument.class, m_orb.createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
@@ -70,6 +72,13 @@ public class HsqlDatabase extends AbstractDatabase
         storable.storeAsURL( m_databaseDocumentFile, new PropertyValue[]
             {   new PropertyValue( "PickListEntry", 0, false, PropertyState.DIRECT_VALUE )
             } );
+    }
+
+    @Override protected final void delete() {
+        if (m_documentFile != null) {
+            boolean ok = m_documentFile.delete();
+            Assert.assertTrue("delete " + m_documentFile.getPath(), ok);
+        }
     }
 
     /** drops the table with a given name
@@ -188,4 +197,6 @@ public class HsqlDatabase extends AbstractDatabase
         final XAppend appendTable = UnoRuntime.queryInterface( XAppend.class, suppTables.getTables() );
         appendTable.appendByDescriptor(sdbcxDescriptor);
     }
+
+    private File m_documentFile;
 }
