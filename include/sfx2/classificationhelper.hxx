@@ -143,12 +143,12 @@ public:
 
     OUString makeTextKey() const
     {
-        return getPolicyKey() + "Marking:Text";
+        return getPolicyKey() + "Text";
     }
 
     OUString makeNumberedTextKey()
     {
-        return makeTextKey() + ":" + OUString::number(m_nTextNumber++);
+        return makeTextKey() + ":n" + OUString::number(m_nTextNumber++);
     }
 
     bool isMarkingTextKey(OUString const & aKey) const
@@ -178,12 +178,12 @@ public:
 
     OUString makeMarkingKey() const
     {
-        return getPolicyKey() + "Extension:Marking";
+        return getPolicyKey() + "Marking";
     }
 
     OUString makeNumberedMarkingKey()
     {
-        return makeMarkingKey() + ":" + OUString::number(m_nMarkingNumber++);
+        return makeMarkingKey() + ":n" + OUString::number(m_nMarkingNumber++);
     }
 
     bool isMarkingKey(OUString const & aKey) const
@@ -193,12 +193,12 @@ public:
 
     OUString makeIntellectualPropertyPartKey() const
     {
-        return getPolicyKey() + "Extension:IntellectualPropertyPart";
+        return getPolicyKey() + "IntellectualPropertyPart";
     }
 
     OUString makeNumberedIntellectualPropertyPartKey()
     {
-        return makeIntellectualPropertyPartKey() + ":" + OUString::number(m_nIPPartNumber++);
+        return makeIntellectualPropertyPartKey() + ":n" + OUString::number(m_nIPPartNumber++);
     }
 
     bool isIntellectualPropertyPartKey(OUString const & aKey) const
@@ -208,7 +208,7 @@ public:
 
     OUString makeFullTextualRepresentationKey() const
     {
-        return getPolicyKey() + "Extension:FullTexturalRepresentation";
+        return getPolicyKey() + "FullTexturalRepresentation";
     }
 
     /// Classification creation origin key
