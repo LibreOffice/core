@@ -1031,7 +1031,7 @@ MultiSalLayout::MultiSalLayout( std::unique_ptr<SalLayout> pBaseLayout )
 {
     //maFallbackRuns[0].Clear();
     mpFallbackFonts[ 0 ] = nullptr;
-    mpLayouts[ 0 ]  = pBaseLayout.release();
+    mpLayouts[ 0 ]  = std::move(pBaseLayout);
     mnUnitsPerPixel = mpLayouts[ 0 ]->GetUnitsPerPixel();
 }
 
@@ -1043,8 +1043,6 @@ void MultiSalLayout::SetIncomplete(bool bIncomplete)
 
 MultiSalLayout::~MultiSalLayout()
 {
-    for( int i = 0; i < mnLevel; ++i )
-        delete mpLayouts[ i ];
 }
 
 void MultiSalLayout::AddFallback( std::unique_ptr<SalLayout> pFallback,
@@ -1054,7 +1052,7 @@ void MultiSalLayout::AddFallback( std::unique_ptr<SalLayout> pFallback,
         return;
 
     mpFallbackFonts[ mnLevel ]  = pFallbackFont;
-    mpLayouts[ mnLevel ]        = pFallback.release();
+    mpLayouts[ mnLevel ]        = std::move(pFallback);
     maFallbackRuns[ mnLevel-1 ] = rFallbackRuns;
     ++mnLevel;
 }
@@ -1187,14 +1185,14 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         if( (n > 0) && !nValid[ nLevel ] )
         {
             // an empty fallback layout can be released
-            delete mpLayouts[n];
+            mpLayouts[n].reset();
         }
         else
         {
             // reshuffle used fallbacks if needed
             if( nLevel != n )
             {
-                mpLayouts[ nLevel ]         = mpLayouts[ n ];
+                mpLayouts[ nLevel ]         = std::move(mpLayouts[ n ]);
                 mpFallbackFonts[ nLevel ]   = mpFallbackFonts[ n ];
                 maFallbackRuns[ nLevel ]    = maFallbackRuns[ n ];
             }
