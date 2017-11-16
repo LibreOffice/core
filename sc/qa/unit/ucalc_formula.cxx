@@ -390,7 +390,7 @@ void Test::testFormulaParseReference()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), aRange.aStart.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), aRange.aStart.Row());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aEnd.Tab());
-    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(MAXCOL), aRange.aEnd.Col());
+    CPPUNIT_ASSERT_EQUAL(short(16383), aRange.aEnd.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), aRange.aEnd.Row());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID | ScRefFlags::TAB_VALID |
                                                  ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID),
@@ -439,7 +439,7 @@ void Test::testFormulaParseReference()
 
     // Both columns at sheet bounds and relative => convert to absolute => entire row reference.
     aRange.aStart.SetTab(0);
-    nRes = aRange.Parse("A2:AMJ2", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse("A2:XFD2", m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), aRange.aStart.Col());
@@ -465,10 +465,10 @@ void Test::testFormulaParseReference()
             { "=B$1:B1048576",  "B$1:B1048576" },
             { "=B$1:B$1048576", "B:B" },
             { "=2:2",           "2:2" },
-            { "=A2:AMJ2",       "2:2" },
-            { "=A2:$AMJ2",      "A2:$AMJ2" },
-            { "=$A2:AMJ2",      "$A2:AMJ2" },
-            { "=$A2:$AMJ2",     "2:2" }
+            { "=A2:XFD2",       "2:2" },
+            { "=A2:$XFD2",      "A2:$XFD2" },
+            { "=$A2:XFD2",      "$A2:XFD2" },
+            { "=$A2:$XFD2",     "2:2" }
         };
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
@@ -1726,14 +1726,14 @@ void Test::testFormulaRefUpdateRange()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong result in C1.", 1.0, m_pDoc->GetValue(2,0,1));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Reference in C2 not invalidated.", OUString("#REF!"), m_pDoc->GetString(2,1,1));
 
-    // Enter values in A23 and AMJ23 (last column).
+    // Enter values in A23 and XFD23 (last column).
     m_pDoc->SetValue( 0,22,1, 1.0);
     m_pDoc->SetValue( MAXCOL,22,1, 2.0);
     // C3 with sticky reference including last column.
     m_pDoc->SetString( 2,2,1, "=SUM(23:23)");
     // C4 with reference to last column.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("MAXCOL changed, adapt unit test.", 1023, (int)MAXCOL);
-    m_pDoc->SetString( 2,3,1, "=SUM(AMJ22:AMJ23)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("MAXCOL changed, adapt unit test.", 16383, (int)MAXCOL);
+    m_pDoc->SetString( 2,3,1, "=SUM(XFD22:XFD23)");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong result in C3.", 3.0, m_pDoc->GetValue(2,2,1));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong result in C4.", 2.0, m_pDoc->GetValue(2,3,1));
     // Delete last column.
@@ -6129,14 +6129,14 @@ void Test::testExternalRefFunctions()
     // external range reference should be 1x1 and have one error value.
     // XXX NOTE: in case we supported sparse matrix that can hold this large
     // areas these tests may be adapted.
-    m_pDoc->SetString(0, 0, 0, "=SUM('file:///extdata.fake'#Data.B1:AMJ1048575)");
+    m_pDoc->SetString(0, 0, 0, "=SUM('file:///extdata.fake'#Data.B1:XFD1048575)");
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell( ScAddress(0,0,0));
     FormulaError nErr = pFC->GetErrCode();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("huge external range reference expected to yield FormulaError::MatrixSize", (int)FormulaError::MatrixSize, (int)nErr);
 
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    m_pDoc->InsertMatrixFormula(0,0,0,0, aMark, "'file:///extdata.fake'#Data.B1:AMJ1048575");
+    m_pDoc->InsertMatrixFormula(0,0,0,0, aMark, "'file:///extdata.fake'#Data.B1:XFD1048575");
     pFC = m_pDoc->GetFormulaCell( ScAddress(0,0,0));
     nErr = pFC->GetErrCode();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("huge external range reference expected to yield FormulaError::MatrixSize", (int)FormulaError::MatrixSize, (int)nErr);
