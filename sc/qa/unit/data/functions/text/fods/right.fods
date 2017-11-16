@@ -1251,9 +1251,12 @@
      <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string">
       <text:p>un</text:p>
      </table:table-cell>
+     <table:table-cell table:style-name="ce49" table:formula="of:=[.A11]=[.B11]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
      <table:table-cell table:style-name="ce29"/>
      <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>b</text:p>
      </table:table-cell>
@@ -1282,55 +1285,110 @@
      </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce14"/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce29"/>
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce14" table:formula="of:=RIGHT(&quot;ab😂de𝔖gh𝕬𝖈𝖍𝖙𝖚𝖓𝖌!&quot;;11)" office:value-type="string" office:string-value="𝔖gh𝕬𝖈𝖍𝖙𝖚𝖓𝖌!" calcext:value-type="string">
+      <text:p>𝔖gh𝕬𝖈𝖍𝖙𝖚𝖓𝖌!</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce41" office:value-type="string" calcext:value-type="string">
+      <text:p>𝔖gh𝕬𝖈𝖍𝖙𝖚𝖓𝖌!</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce45" table:formula="of:=[.A12]=[.B12]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=RIGHT(&quot;ab😂de𝔖gh𝕬𝖈𝖍𝖙𝖚𝖓𝖌!&quot;;11)" calcext:value-type="string">
+      <text:p>=RIGHT(&quot;ab😂de𝔖gh𝕬𝖈𝖍𝖙𝖚𝖓𝖌!&quot;;11)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 returns same result</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>c</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="22"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce14"/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce29"/>
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce14" table:formula="of:=RIGHT(&quot;ab😂&quot;;2)" office:value-type="string" office:string-value="b😂" calcext:value-type="string">
+      <text:p>b😂</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce41" office:value-type="string" calcext:value-type="string">
+      <text:p>b😂</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce46" table:formula="of:=[.A13]=[.B13]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="=RIGHT(&quot;ab😂&quot;;2)" calcext:value-type="string">
+      <text:p>=RIGHT(&quot;ab😂&quot;;2)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 returns same result</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>d</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="22"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce14"/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce29"/>
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce14" table:formula="of:=RIGHT(&quot;&quot;&quot;𧌒𧀬&quot;&quot;&quot;;2)" office:value-type="string" office:string-value="𧀬&quot;" calcext:value-type="string">
+      <text:p>𧀬&quot;</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce41" office:value-type="string" calcext:value-type="string">
+      <text:p>𧀬&quot;</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce47" table:formula="of:=[.A14]=[.B14]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="=RIGHT(&quot;&quot;&quot;𧌒𧀬&quot;&quot;&quot;;2)" calcext:value-type="string">
+      <text:p>=RIGHT(&quot;&quot;&quot;𧌒𧀬&quot;&quot;&quot;;2)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 returns same result</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>E</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="22"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce14"/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce29"/>
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce14" table:formula="of:=RIGHT(&quot;&quot;&quot;üë&quot;&quot;&quot;;2)" office:value-type="string" office:string-value="̈&quot;" calcext:value-type="string">
+      <text:p>̈&quot;</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce41" office:value-type="string" calcext:value-type="string">
+      <text:p>̈&quot;</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce48" table:formula="of:=[.A15]=[.B15]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A15])" office:value-type="string" office:string-value="=RIGHT(&quot;&quot;&quot;üë&quot;&quot;&quot;;2)" calcext:value-type="string">
+      <text:p>=RIGHT(&quot;&quot;&quot;üë&quot;&quot;&quot;;2)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 returns same result</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>f</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="22"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce14"/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce29"/>
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell table:style-name="ce14" table:formula="of:=RIGHT(&quot;𝕬𝖈𝖍𝖙𝖚𝖓𝖌!&quot;;4)" office:value-type="string" office:string-value="𝖚𝖓𝖌!" calcext:value-type="string">
+      <text:p>𝖚𝖓𝖌!</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce41" office:value-type="string" calcext:value-type="string">
+      <text:p>𝖚𝖓𝖌!</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce49" table:formula="of:=[.A16]=[.B16]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A16])" office:value-type="string" office:string-value="=RIGHT(&quot;𝕬𝖈𝖍𝖙𝖚𝖓𝖌!&quot;;4)" calcext:value-type="string">
+      <text:p>=RIGHT(&quot;𝕬𝖈𝖍𝖙𝖚𝖓𝖌!&quot;;4)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Excel 2016 returns same result</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>g</text:p>
      </table:table-cell>
