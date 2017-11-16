@@ -29,7 +29,7 @@ namespace sd {
 class SdGlobalResource
 {
 public:
-    virtual ~SdGlobalResource() {};
+    virtual ~SdGlobalResource() COVERITY_NOEXCEPT_FALSE {};
 };
 
 /** The purpose of this container is to hold references to resources that
