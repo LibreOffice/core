@@ -19,7 +19,7 @@
 template <class T> class TypedWhichId final
 {
 public:
-    constexpr TypedWhichId(sal_uInt16 nWhich)
+    explicit constexpr TypedWhichId(sal_uInt16 nWhich)
         : mnWhich(nWhich)
     {
     }

@@ -262,11 +262,11 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
 
     // BGCOLOR
     drawing::FillStyle eFillStyle =
-        static_cast<const XFillStyleItem&>(rItemSet.Get(XATTR_FILLSTYLE)).GetValue();
+        rItemSet.Get(XATTR_FILLSTYLE).GetValue();
     if( drawing::FillStyle_SOLID==eFillStyle )
     {
         const Color& rFillColor =
-            static_cast<const XFillColorItem&>(rItemSet.Get(XATTR_FILLCOLOR)).GetColorValue();
+            rItemSet.Get(XATTR_FILLCOLOR).GetColorValue();
 
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_bgcolor).append("=");
         rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );

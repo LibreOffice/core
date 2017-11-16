@@ -201,7 +201,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet& rSet )
         else
             aString += aURL.getBase();
 
-        sal_Int32 nPos = SearchGradientList( static_cast<const XFillGradientItem&>( rSet.Get(XATTR_FILLGRADIENT) ).GetName() );
+        sal_Int32 nPos = SearchGradientList( rSet.Get(XATTR_FILLGRADIENT).GetName() );
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             sal_uInt16 nId = m_pGradientLB->GetItemId( static_cast<size_t>( nPos ) );

@@ -151,7 +151,7 @@ void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxI
 
 sal_uInt16 getTransparenceForSvxBrushItem(const SfxItemSet& rSourceSet, bool bSearchInParents)
 {
-    sal_uInt16 nFillTransparence(static_cast< const XFillTransparenceItem& >(rSourceSet.Get(XATTR_FILLTRANSPARENCE, bSearchInParents)).GetValue());
+    sal_uInt16 nFillTransparence(rSourceSet.Get(XATTR_FILLTRANSPARENCE, bSearchInParents).GetValue());
     const SfxPoolItem* pGradientItem = nullptr;
 
     if(SfxItemState::SET == rSourceSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, bSearchInParents, &pGradientItem)
@@ -170,7 +170,7 @@ sal_uInt16 getTransparenceForSvxBrushItem(const SfxItemSet& rSourceSet, bool bSe
 
 SvxBrushItem getSvxBrushItemForSolid(const SfxItemSet& rSourceSet, bool bSearchInParents, sal_uInt16 nBackgroundID)
 {
-    Color aFillColor(static_cast< const XFillColorItem& >(rSourceSet.Get(XATTR_FILLCOLOR, bSearchInParents)).GetColorValue());
+    Color aFillColor(rSourceSet.Get(XATTR_FILLCOLOR, bSearchInParents).GetColorValue());
 
     // get evtl. mixed transparence
     const sal_uInt16 nFillTransparence(getTransparenceForSvxBrushItem(rSourceSet, bSearchInParents));
@@ -195,7 +195,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
     if(!pXFillStyleItem || drawing::FillStyle_NONE == pXFillStyleItem->GetValue())
     {
         // no fill, still need to rescue the evtl. set RGB color, but use as transparent color (we have drawing::FillStyle_NONE)
-        Color aFillColor(static_cast< const XFillColorItem& >(rSourceSet.Get(XATTR_FILLCOLOR, bSearchInParents)).GetColorValue());
+        Color aFillColor(rSourceSet.Get(XATTR_FILLCOLOR, bSearchInParents).GetColorValue());
 
         // for writerfilter: when fill style is none, then don't allow anything other than 0 or auto.
         if (!bXMLImportHack && aFillColor.GetColor() != 0)
@@ -225,7 +225,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
         case drawing::FillStyle_GRADIENT:
         {
             // cannot be directly supported, but do the best possible
-            const XGradient aXGradient(static_cast< const XFillGradientItem& >(rSourceSet.Get(XATTR_FILLGRADIENT)).GetGradientValue());
+            const XGradient aXGradient(rSourceSet.Get(XATTR_FILLGRADIENT).GetGradientValue());
             const basegfx::BColor aStartColor(aXGradient.GetStartColor().getBColor() * (aXGradient.GetStartIntens() * 0.01));
             const basegfx::BColor aEndColor(aXGradient.GetEndColor().getBColor() * (aXGradient.GetEndIntens() * 0.01));
 
@@ -251,8 +251,8 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
         case drawing::FillStyle_HATCH:
         {
             // cannot be directly supported, but do the best possible
-            const XHatch& rHatch(static_cast< const XFillHatchItem& >(rSourceSet.Get(XATTR_FILLHATCH)).GetHatchValue());
-            const bool bFillBackground(static_cast< const XFillBackgroundItem& >(rSourceSet.Get(XATTR_FILLBACKGROUND)).GetValue());
+            const XHatch& rHatch(rSourceSet.Get(XATTR_FILLHATCH).GetHatchValue());
+            const bool bFillBackground(rSourceSet.Get(XATTR_FILLBACKGROUND).GetValue());
 
             if(bFillBackground)
             {
@@ -285,13 +285,13 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
         case drawing::FillStyle_BITMAP:
         {
             // create SvxBrushItem with bitmap info and flags
-            const XFillBitmapItem& rBmpItm = static_cast< const XFillBitmapItem& >(rSourceSet.Get(XATTR_FILLBITMAP, bSearchInParents));
+            const XFillBitmapItem& rBmpItm = rSourceSet.Get(XATTR_FILLBITMAP, bSearchInParents);
             const Graphic aGraphic(rBmpItm.GetGraphicObject().GetGraphic());
 
             // continue idependent of evtl. GraphicType::NONE as aGraphic.GetType(), we still need to rescue positions
             SvxGraphicPosition aSvxGraphicPosition(GPOS_NONE);
-            const XFillBmpStretchItem& rStretchItem = static_cast< const XFillBmpStretchItem& >(rSourceSet.Get(XATTR_FILLBMP_STRETCH, bSearchInParents));
-            const XFillBmpTileItem& rTileItem = static_cast< const XFillBmpTileItem& >(rSourceSet.Get(XATTR_FILLBMP_TILE, bSearchInParents));
+            const XFillBmpStretchItem& rStretchItem = rSourceSet.Get(XATTR_FILLBMP_STRETCH, bSearchInParents);
+            const XFillBmpTileItem& rTileItem = rSourceSet.Get(XATTR_FILLBMP_TILE, bSearchInParents);
 
             if(rTileItem.GetValue())
             {
@@ -303,7 +303,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
             }
             else
             {
-                const XFillBmpPosItem& rPosItem = static_cast< const XFillBmpPosItem& >(rSourceSet.Get(XATTR_FILLBMP_POS, bSearchInParents));
+                const XFillBmpPosItem& rPosItem = rSourceSet.Get(XATTR_FILLBMP_POS, bSearchInParents);
 
                 switch(rPosItem.GetValue())
                 {

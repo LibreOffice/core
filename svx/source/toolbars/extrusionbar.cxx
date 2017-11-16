@@ -1161,7 +1161,7 @@ void getExtrusionColorState( SdrView const * pSdrView, SfxItemSet& rSet )
 
             if( bUseColor )
             {
-                const XSecondaryFillColorItem& rItem = *static_cast<const XSecondaryFillColorItem*>(&(pObj->GetMergedItem( XATTR_SECONDARYFILLCOLOR )));
+                const XSecondaryFillColorItem& rItem = pObj->GetMergedItem( XATTR_SECONDARYFILLCOLOR );
                 aColor = rItem.GetColorValue();
             }
             else

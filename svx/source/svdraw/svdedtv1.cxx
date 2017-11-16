@@ -1032,7 +1032,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
 
         if(bLineWidthChange)
         {
-            nNewLineWidth = static_cast<const XLineWidthItem&>(aAttr.Get(XATTR_LINEWIDTH)).GetValue();
+            nNewLineWidth = aAttr.Get(XATTR_LINEWIDTH).GetValue();
         }
 
         for (size_t nm=0; nm<nMarkCount; ++nm)
@@ -1081,7 +1081,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
 
             if(bLineWidthChange)
             {
-                nOldLineWidth = static_cast<const XLineWidthItem&>(pObj->GetMergedItem(XATTR_LINEWIDTH)).GetValue();
+                nOldLineWidth = pObj->GetMergedItem(XATTR_LINEWIDTH).GetValue();
             }
 
             // set attributes at object
@@ -1095,7 +1095,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
                 {
                     if(SfxItemState::DONTCARE != rSet.GetItemState(XATTR_LINESTARTWIDTH))
                     {
-                        const sal_Int32 nValAct(static_cast<const XLineStartWidthItem&>(rSet.Get(XATTR_LINESTARTWIDTH)).GetValue());
+                        const sal_Int32 nValAct(rSet.Get(XATTR_LINESTARTWIDTH).GetValue());
                         const sal_Int32 nValNewStart(std::max((sal_Int32)0, nValAct + (((nNewLineWidth - nOldLineWidth) * 15) / 10)));
 
                         pObj->SetMergedItem(XLineStartWidthItem(nValNewStart));
@@ -1103,7 +1103,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
 
                     if(SfxItemState::DONTCARE != rSet.GetItemState(XATTR_LINEENDWIDTH))
                     {
-                        const sal_Int32 nValAct(static_cast<const XLineEndWidthItem&>(rSet.Get(XATTR_LINEENDWIDTH)).GetValue());
+                        const sal_Int32 nValAct(rSet.Get(XATTR_LINEENDWIDTH).GetValue());
                         const sal_Int32 nValNewEnd(std::max((sal_Int32)0, nValAct + (((nNewLineWidth - nOldLineWidth) * 15) / 10)));
 
                         pObj->SetMergedItem(XLineEndWidthItem(nValNewEnd));

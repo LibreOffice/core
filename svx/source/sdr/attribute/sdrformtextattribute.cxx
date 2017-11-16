@@ -86,7 +86,7 @@ namespace
         }
         else
         {
-            nRetval = (sal_uInt8)((static_cast<const XLineTransparenceItem&>(rSet.Get(XATTR_LINETRANSPARENCE)).GetValue() * 255) / 100);
+            nRetval = (sal_uInt8)((rSet.Get(XATTR_LINETRANSPARENCE).GetValue() * 255) / 100);
         }
 
         return nRetval;
@@ -103,13 +103,13 @@ namespace
         }
         else
         {
-            const Color aLineColor(static_cast<const XLineColorItem&>(rSet.Get(XATTR_LINECOLOR)).GetColorValue());
+            const Color aLineColor(rSet.Get(XATTR_LINECOLOR).GetColorValue());
             aColorAttribute = aLineColor.getBColor();
         }
 
-        const sal_uInt32 nLineWidth = static_cast<const XLineWidthItem&>(rSet.Get(XATTR_LINEWIDTH)).GetValue();
-        const css::drawing::LineJoint eLineJoint = static_cast<const XLineJointItem&>(rSet.Get(XATTR_LINEJOINT)).GetValue();
-        const css::drawing::LineCap eLineCap = static_cast<const XLineCapItem&>(rSet.Get(XATTR_LINECAP)).GetValue();
+        const sal_uInt32 nLineWidth = rSet.Get(XATTR_LINEWIDTH).GetValue();
+        const css::drawing::LineJoint eLineJoint = rSet.Get(XATTR_LINEJOINT).GetValue();
+        const css::drawing::LineCap eLineCap = rSet.Get(XATTR_LINECAP).GetValue();
 
         return drawinglayer::attribute::LineAttribute(
             aColorAttribute,
@@ -120,17 +120,17 @@ namespace
 
     drawinglayer::attribute::StrokeAttribute impGetStrokeAttribute(const SfxItemSet& rSet)
     {
-        const css::drawing::LineStyle eLineStyle = static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue();
+        const css::drawing::LineStyle eLineStyle = rSet.Get(XATTR_LINESTYLE).GetValue();
         double fFullDotDashLen(0.0);
         ::std::vector< double > aDotDashArray;
 
         if(css::drawing::LineStyle_DASH == eLineStyle)
         {
-            const XDash& rDash = static_cast<const XLineDashItem&>(rSet.Get(XATTR_LINEDASH)).GetDashValue();
+            const XDash& rDash = rSet.Get(XATTR_LINEDASH).GetDashValue();
 
             if(rDash.GetDots() || rDash.GetDashes())
             {
-                const sal_uInt32 nLineWidth = static_cast<const XLineWidthItem&>(rSet.Get(XATTR_LINEWIDTH)).GetValue();
+                const sal_uInt32 nLineWidth = rSet.Get(XATTR_LINEWIDTH).GetValue();
                 fFullDotDashLen = rDash.CreateDotDashArray(aDotDashArray, (double)nLineWidth);
             }
         }
@@ -167,19 +167,19 @@ namespace drawinglayer
             bool                                    mbFormTextOutline : 1;  // show contour of objects
 
             explicit ImpSdrFormTextAttribute(const SfxItemSet& rSet)
-            :   mnFormTextDistance(static_cast<const XFormTextDistanceItem&>(rSet.Get(XATTR_FORMTXTDISTANCE)).GetValue()),
-                mnFormTextStart(static_cast<const XFormTextStartItem&>(rSet.Get(XATTR_FORMTXTSTART)).GetValue()),
-                mnFormTextShdwXVal(static_cast<const XFormTextShadowXValItem&>(rSet.Get(XATTR_FORMTXTSHDWXVAL)).GetValue()),
-                mnFormTextShdwYVal(static_cast<const XFormTextShadowYValItem&>(rSet.Get(XATTR_FORMTXTSHDWYVAL)).GetValue()),
-                mnFormTextShdwTransp(static_cast<const XFormTextShadowTranspItem&>(rSet.Get(XATTR_FORMTXTSHDWTRANSP)).GetValue()),
-                meFormTextStyle(static_cast<const XFormTextStyleItem&>(rSet.Get(XATTR_FORMTXTSTYLE)).GetValue()),
-                meFormTextAdjust(static_cast<const XFormTextAdjustItem&>(rSet.Get(XATTR_FORMTXTADJUST)).GetValue()),
-                meFormTextShadow(static_cast<const XFormTextShadowItem&>(rSet.Get(XATTR_FORMTXTSHADOW)).GetValue()),
-                maFormTextShdwColor(static_cast<const XFormTextShadowColorItem&>(rSet.Get(XATTR_FORMTXTSHDWCOLOR)).GetColorValue()),
+            :   mnFormTextDistance(rSet.Get(XATTR_FORMTXTDISTANCE).GetValue()),
+                mnFormTextStart(rSet.Get(XATTR_FORMTXTSTART).GetValue()),
+                mnFormTextShdwXVal(rSet.Get(XATTR_FORMTXTSHDWXVAL).GetValue()),
+                mnFormTextShdwYVal(rSet.Get(XATTR_FORMTXTSHDWYVAL).GetValue()),
+                mnFormTextShdwTransp(rSet.Get(XATTR_FORMTXTSHDWTRANSP).GetValue()),
+                meFormTextStyle(rSet.Get(XATTR_FORMTXTSTYLE).GetValue()),
+                meFormTextAdjust(rSet.Get(XATTR_FORMTXTADJUST).GetValue()),
+                meFormTextShadow(rSet.Get(XATTR_FORMTXTSHADOW).GetValue()),
+                maFormTextShdwColor(rSet.Get(XATTR_FORMTXTSHDWCOLOR).GetColorValue()),
                 maOutline(),
                 maShadowOutline(),
-                mbFormTextMirror(static_cast<const XFormTextMirrorItem&>(rSet.Get(XATTR_FORMTXTMIRROR)).GetValue()),
-                mbFormTextOutline(static_cast<const XFormTextOutlineItem&>(rSet.Get(XATTR_FORMTXTOUTLINE)).GetValue())
+                mbFormTextMirror(rSet.Get(XATTR_FORMTXTMIRROR).GetValue()),
+                mbFormTextOutline(rSet.Get(XATTR_FORMTXTOUTLINE).GetValue())
             {
                 if(getFormTextOutline())
                 {

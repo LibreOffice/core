@@ -1334,11 +1334,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             XFillAttrSetItem*   pSetItem = aFillData.GetXFillAttrSetItem();
             SfxItemSet          rSet = pSetItem->GetItemSet();
-            drawing::FillStyle eFill = static_cast<const XFillStyleItem&>( rSet.Get( XATTR_FILLSTYLE ) ).GetValue();
+            drawing::FillStyle eFill = rSet.Get( XATTR_FILLSTYLE ).GetValue();
 
             if( eFill == drawing::FillStyle_SOLID || eFill == drawing::FillStyle_NONE )
             {
-                const XFillColorItem&   rColItem = static_cast<const XFillColorItem&>( rSet.Get( XATTR_FILLCOLOR ) );
+                const XFillColorItem&   rColItem = rSet.Get( XATTR_FILLCOLOR );
                 Color                   aColor( rColItem.GetColorValue() );
                 OUString                aName( rColItem.GetName() );
                 SfxItemSet              aSet( mrDoc.GetPool() );

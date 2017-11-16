@@ -99,27 +99,21 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
             case drawing::FillStyle_SOLID:
                 if( SfxItemState::DONTCARE != m_rOutAttrs.GetItemState( XATTR_FILLCOLOR ) )
                 {
-                    XFillColorItem aColorItem( static_cast<const XFillColorItem&>(
-                                        m_rOutAttrs.Get( XATTR_FILLCOLOR ) ) );
-                    m_rXFSet.Put( aColorItem );
+                    m_rXFSet.Put( m_rOutAttrs.Get( XATTR_FILLCOLOR ) );
                 }
             break;
 
             case drawing::FillStyle_GRADIENT:
                 if( SfxItemState::DONTCARE != m_rOutAttrs.GetItemState( XATTR_FILLGRADIENT ) )
                 {
-                    XFillGradientItem aGradientItem( static_cast<const XFillGradientItem&>(
-                                            m_rOutAttrs.Get( XATTR_FILLGRADIENT ) ) );
-                    m_rXFSet.Put( aGradientItem );
+                    m_rXFSet.Put( m_rOutAttrs.Get( XATTR_FILLGRADIENT ) );
                 }
             break;
 
             case drawing::FillStyle_HATCH:
                 if( SfxItemState::DONTCARE != m_rOutAttrs.GetItemState( XATTR_FILLHATCH ) )
                 {
-                    XFillHatchItem aHatchItem( static_cast<const XFillHatchItem& >(
-                                    m_rOutAttrs.Get( XATTR_FILLHATCH ) ) );
-                    m_rXFSet.Put( aHatchItem );
+                    m_rXFSet.Put( m_rOutAttrs.Get( XATTR_FILLHATCH ) );
                 }
             break;
 
@@ -127,9 +121,7 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
             {
                 if( SfxItemState::DONTCARE != m_rOutAttrs.GetItemState( XATTR_FILLBITMAP ) )
                 {
-                    XFillBitmapItem aBitmapItem( static_cast<const XFillBitmapItem& >(
-                                        m_rOutAttrs.Get( XATTR_FILLBITMAP ) ) );
-                    m_rXFSet.Put( aBitmapItem );
+                    m_rXFSet.Put( m_rOutAttrs.Get( XATTR_FILLBITMAP ) );
                 }
             }
             break;

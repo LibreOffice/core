@@ -150,12 +150,12 @@ sal_Int32 SdrAttrObj::ImpGetLineWdt() const
 
 bool SdrAttrObj::HasFill() const
 {
-    return bClosedObj && static_cast<const XFillStyleItem&>(GetProperties().GetObjectItemSet().Get(XATTR_FILLSTYLE)).GetValue() != drawing::FillStyle_NONE;
+    return bClosedObj && GetProperties().GetObjectItemSet().Get(XATTR_FILLSTYLE).GetValue() != drawing::FillStyle_NONE;
 }
 
 bool SdrAttrObj::HasLine() const
 {
-    return static_cast<const XLineStyleItem&>(GetProperties().GetObjectItemSet().Get(XATTR_LINESTYLE)).GetValue() != drawing::LineStyle_NONE;
+    return GetProperties().GetObjectItemSet().Get(XATTR_LINESTYLE).GetValue() != drawing::LineStyle_NONE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

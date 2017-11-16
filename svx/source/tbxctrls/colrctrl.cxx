@@ -409,7 +409,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
                         if ( aAttrSet.GetItemState( XATTR_LINESTYLE ) != SfxItemState::DONTCARE )
                         {
                             drawing::LineStyle eXLS = (drawing::LineStyle)
-                                static_cast<const XLineStyleItem&>(aAttrSet.Get( XATTR_LINESTYLE ) ).GetValue();
+                                aAttrSet.Get( XATTR_LINESTYLE ).GetValue();
                             if ( eXLS == drawing::LineStyle_NONE )
                             {
                                 XLineStyleItem aXLineStyleItem( drawing::LineStyle_SOLID );

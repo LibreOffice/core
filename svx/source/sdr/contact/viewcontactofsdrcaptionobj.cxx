@@ -111,7 +111,7 @@ namespace sdr
                 const XColorItem& rShadColItem = static_cast<const XColorItem&>(rItemSet.Get(SDRATTR_SHADOWCOLOR));
                 const sal_uInt16 nShadowTransparence(static_cast<const SdrPercentItem&>(rItemSet.Get(SDRATTR_SHADOWTRANSPARENCE)).GetValue());
                 const Color aShadowColor(rShadColItem.GetColorValue());
-                const drawing::FillStyle eShadowStyle = static_cast<const XFillStyleItem&>(rItemSet.Get(XATTR_FILLSTYLE)).GetValue();
+                const drawing::FillStyle eShadowStyle = rItemSet.Get(XATTR_FILLSTYLE).GetValue();
 
                 // Create own ItemSet and modify as needed
                 // Always hide lines for special calc shadow
@@ -121,7 +121,7 @@ namespace sdr
                 if(drawing::FillStyle_HATCH == eShadowStyle)
                 {
                     // #41666# Hatch color is set hard to shadow color
-                    XHatch aHatch = static_cast<const XFillHatchItem&>(rItemSet.Get(XATTR_FILLHATCH)).GetHatchValue();
+                    XHatch aHatch = rItemSet.Get(XATTR_FILLHATCH).GetHatchValue();
                     aHatch.SetColor(aShadowColor);
                     aSet.Put(XFillHatchItem(OUString(),aHatch));
                 }

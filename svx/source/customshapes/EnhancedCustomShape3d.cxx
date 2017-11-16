@@ -57,7 +57,6 @@
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
 
-#define ITEMVALUE(ItemSet,Id,Cast)  (static_cast<const Cast&>((ItemSet).Get(Id))).GetValue()
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
@@ -331,7 +330,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         drawing::ShadeMode eShadeMode( GetShadeMode( rGeometryItem, drawing::ShadeMode_FLAT ) );
         bool bUseExtrusionColor = GetBool( rGeometryItem, "Color", false );
 
-        drawing::FillStyle eFillStyle( ITEMVALUE( aSet, XATTR_FILLSTYLE, XFillStyleItem ) );
+        drawing::FillStyle eFillStyle( aSet.Get(XATTR_FILLSTYLE).GetValue() );
         pScene->GetProperties().SetObjectItem( Svx3DShadeModeItem( 0 ) );
         aSet.Put( makeSvx3DPercentDiagonalItem( 0 ) );
         aSet.Put( Svx3DTextureModeItem( 1 ) );
@@ -371,8 +370,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         while( aIter.IsMore() )
         {
             const SdrObject* pNext = aIter.Next();
-            bool bIsPlaceholderObject = (static_cast<const XFillStyleItem&>(pNext->GetMergedItem( XATTR_FILLSTYLE )).GetValue() == drawing::FillStyle_NONE )
-                                        && (static_cast<const XLineStyleItem&>(pNext->GetMergedItem( XATTR_LINESTYLE )).GetValue() == drawing::LineStyle_NONE );
+            bool bIsPlaceholderObject = (pNext->GetMergedItem( XATTR_FILLSTYLE ).GetValue() == drawing::FillStyle_NONE )
+                                        && (pNext->GetMergedItem( XATTR_LINESTYLE ).GetValue() == drawing::LineStyle_NONE );
             basegfx::B2DPolyPolygon aPolyPoly;
             SfxItemSet aLocalSet(aSet);
             drawing::FillStyle aLocalFillStyle(eFillStyle);
@@ -388,7 +387,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 // invisible (all this 'hidden' logic should be migrated to primitives).
                 if(!bMultipleSubObjects)
                 {
-                    const drawing::FillStyle eStyle(static_cast<const XFillStyleItem&>(rSet.Get(XATTR_FILLSTYLE)).GetValue());
+                    const drawing::FillStyle eStyle(rSet.Get(XATTR_FILLSTYLE).GetValue());
 
                     if(drawing::FillStyle_NONE == eStyle)
                     {
@@ -435,9 +434,9 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                                 // switch from line to fill, copy line attr to fill attr (color, transparence)
                                 aLocalSet.Put(XLineWidthItem(0));
                                 aLocalSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
-                                aLocalSet.Put(XFillColorItem(OUString(), static_cast<const XLineColorItem&>(aLocalSet.Get(XATTR_LINECOLOR)).GetColorValue()));
+                                aLocalSet.Put(XFillColorItem(OUString(), aLocalSet.Get(XATTR_LINECOLOR).GetColorValue()));
                                 aLocalSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
-                                aLocalSet.Put(XFillTransparenceItem(static_cast<const XLineTransparenceItem&>(aLocalSet.Get(XATTR_LINETRANSPARENCE)).GetValue()));
+                                aLocalSet.Put(XFillTransparenceItem(aLocalSet.Get(XATTR_LINETRANSPARENCE).GetValue()));
                                 aLocalFillStyle = drawing::FillStyle_SOLID;
                             }
                         }
@@ -486,10 +485,10 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 else if ( bUseTwoFillStyles )
                 {
                     BitmapEx aFillBmp;
-                    bool bFillBmpTile = static_cast<const XFillBmpTileItem&>(p3DObj->GetMergedItem( XATTR_FILLBMP_TILE )).GetValue();
+                    bool bFillBmpTile = p3DObj->GetMergedItem( XATTR_FILLBMP_TILE ).GetValue();
                     if ( bFillBmpTile )
                     {
-                        const XFillBitmapItem& rBmpItm = static_cast<const XFillBitmapItem&>(p3DObj->GetMergedItem(XATTR_FILLBITMAP));
+                        const XFillBitmapItem& rBmpItm = p3DObj->GetMergedItem(XATTR_FILLBITMAP);
                         aFillBmp = rBmpItm.GetGraphicObject().GetGraphic().GetBitmapEx();
 
                         // #i122777# old adaption of FillStyle bitmap size to 5-times the original size; this is not needed
@@ -511,7 +510,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                     {
                         if ( aSnapRect != aBoundRect && aSnapRect.GetWidth() > 0 && aSnapRect.GetHeight() > 0)
                         {
-                            const XFillBitmapItem& rBmpItm = static_cast<const XFillBitmapItem&>(p3DObj->GetMergedItem(XATTR_FILLBITMAP));
+                            const XFillBitmapItem& rBmpItm = p3DObj->GetMergedItem(XATTR_FILLBITMAP);
                             aFillBmp = rBmpItm.GetGraphicObject().GetGraphic().GetBitmapEx();
                             Size aBmpSize( aFillBmp.GetSizePixel() );
                             double fXScale = (double)aBoundRect.GetWidth() / (double)aSnapRect.GetWidth();
@@ -531,7 +530,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                     p3DObj->NbcSetLayer( pShape2d->GetLayer() );
                     p3DObj->SetMergedItemSet( aLocalSet );
                     if ( bUseExtrusionColor )
-                        p3DObj->SetMergedItem( XFillColorItem( "", static_cast<const XSecondaryFillColorItem&>(pCustomShape->GetMergedItem( XATTR_SECONDARYFILLCOLOR )).GetColorValue() ) );
+                        p3DObj->SetMergedItem( XFillColorItem( "", pCustomShape->GetMergedItem( XATTR_SECONDARYFILLCOLOR ).GetColorValue() ) );
                     p3DObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_SOLID ) );
                     p3DObj->SetMergedItem( Svx3DCloseFrontItem( false ) );
                     p3DObj->SetMergedItem( Svx3DCloseBackItem( false ) );
@@ -554,7 +553,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 }
                 else if ( aLocalFillStyle == drawing::FillStyle_NONE )
                 {
-                    const XLineColorItem& rLineColor = static_cast<const XLineColorItem&>(p3DObj->GetMergedItem( XATTR_LINECOLOR ));
+                    const XLineColorItem& rLineColor = p3DObj->GetMergedItem( XATTR_LINECOLOR );
                     p3DObj->SetMergedItem( XFillColorItem( "", rLineColor.GetColorValue() ) );
                     p3DObj->SetMergedItem( makeSvx3DDoubleSidedItem( true ) );
                     p3DObj->SetMergedItem( Svx3DCloseFrontItem( false ) );

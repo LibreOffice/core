@@ -1492,7 +1492,7 @@ bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName,
                 return false;
 
             const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nPos);
-            if( XATTR_LINEEND == nWID )
+            if( sal_uInt16(XATTR_LINEEND) == nWID )
             {
                 XLineEndItem aLEItem(rName, pEntry->GetLineEnd());
                 rSet.Put( aLEItem );
@@ -1542,7 +1542,7 @@ bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName,
         case XATTR_LINESTART:
             {
                 const basegfx::B2DPolyPolygon aEmptyPoly;
-                if( nWID == XATTR_LINEEND )
+                if( nWID == sal_uInt16(XATTR_LINEEND) )
                     rSet.Put( XLineEndItem( "", aEmptyPoly ) );
                 else
                     rSet.Put( XLineStartItem( "", aEmptyPoly ) );
@@ -2720,8 +2720,8 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     {
         const SfxItemSet& rObjItemSet = mpObj->GetMergedItemSet();
 
-        const XFillBmpStretchItem* pStretchItem = static_cast<const XFillBmpStretchItem*>(&rObjItemSet.Get(XATTR_FILLBMP_STRETCH));
-        const XFillBmpTileItem* pTileItem = static_cast<const XFillBmpTileItem*>(&rObjItemSet.Get(XATTR_FILLBMP_TILE));
+        const XFillBmpStretchItem* pStretchItem = &rObjItemSet.Get(XATTR_FILLBMP_STRETCH);
+        const XFillBmpTileItem* pTileItem = &rObjItemSet.Get(XATTR_FILLBMP_TILE);
 
         if( pTileItem && pTileItem->GetValue() )
         {

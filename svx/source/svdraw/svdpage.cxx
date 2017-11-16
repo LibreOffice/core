@@ -1705,7 +1705,7 @@ Color SdrPage::GetPageBackgroundColor( SdrPageView const * pView, bool bScreenDi
 
     if(!IsMasterPage() && TRG_HasMasterPage())
     {
-        if(drawing::FillStyle_NONE == static_cast<const XFillStyleItem&>(pBackgroundFill->Get(XATTR_FILLSTYLE)).GetValue())
+        if(drawing::FillStyle_NONE == pBackgroundFill->Get(XATTR_FILLSTYLE).GetValue())
         {
             pBackgroundFill = &TRG_GetMasterPage().getSdrPageProperties().GetItemSet();
         }

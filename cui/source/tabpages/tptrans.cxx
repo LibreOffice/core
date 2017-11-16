@@ -507,17 +507,17 @@ bool SvxTransparenceTabPage::InitPreview ( const SfxItemSet& rSet )
     }
 
     // Get fillstyle for preview
-    rXFSet.Put ( static_cast<const XFillStyleItem&>(     rSet.Get(XATTR_FILLSTYLE)) );
-    rXFSet.Put ( static_cast<const XFillColorItem&>(     rSet.Get(XATTR_FILLCOLOR)) );
-    rXFSet.Put ( static_cast<const XFillGradientItem&>(  rSet.Get(XATTR_FILLGRADIENT)) );
-    rXFSet.Put ( static_cast<const XFillHatchItem&>(     rSet.Get(XATTR_FILLHATCH)) );
-    rXFSet.Put ( static_cast<const XFillBackgroundItem&>(rSet.Get(XATTR_FILLBACKGROUND)) );
-    rXFSet.Put ( static_cast<const XFillBitmapItem&>(    rSet.Get(XATTR_FILLBITMAP)) );
+    rXFSet.Put ( rSet.Get(XATTR_FILLSTYLE) );
+    rXFSet.Put ( rSet.Get(XATTR_FILLCOLOR) );
+    rXFSet.Put ( rSet.Get(XATTR_FILLGRADIENT) );
+    rXFSet.Put ( rSet.Get(XATTR_FILLHATCH) );
+    rXFSet.Put ( rSet.Get(XATTR_FILLBACKGROUND) );
+    rXFSet.Put ( rSet.Get(XATTR_FILLBITMAP) );
 
     m_pCtlXRectPreview->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlBitmapPreview->SetAttributes( aXFillAttr.GetItemSet() );
 
-    bBitmap = static_cast<const XFillStyleItem&>( rSet.Get(XATTR_FILLSTYLE) ).GetValue() == drawing::FillStyle_BITMAP;
+    bBitmap = rSet.Get(XATTR_FILLSTYLE).GetValue() == drawing::FillStyle_BITMAP;
 
     // show the right preview window
     if ( bBitmap )

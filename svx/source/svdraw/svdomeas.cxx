@@ -369,21 +369,21 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     bool bPfeileAussen = false;
 
     const SfxItemSet& rSet = GetObjectItemSet();
-    sal_Int32 nLineWdt = static_cast<const XLineWidthItem&>(rSet.Get(XATTR_LINEWIDTH)).GetValue(); // line width
+    sal_Int32 nLineWdt = rSet.Get(XATTR_LINEWIDTH).GetValue(); // line width
     rPol.nLineWdt2 = (nLineWdt + 1) / 2;
 
-    nArrow1Wdt = static_cast<const XLineStartWidthItem&>(rSet.Get(XATTR_LINESTARTWIDTH)).GetValue();
+    nArrow1Wdt = rSet.Get(XATTR_LINESTARTWIDTH).GetValue();
     if(nArrow1Wdt < 0)
         nArrow1Wdt = -nLineWdt * nArrow1Wdt / 100; // <0 = relative
 
-    nArrow2Wdt = static_cast<const XLineEndWidthItem&>(rSet.Get(XATTR_LINEENDWIDTH)).GetValue();
+    nArrow2Wdt = rSet.Get(XATTR_LINEENDWIDTH).GetValue();
     if(nArrow2Wdt < 0)
         nArrow2Wdt = -nLineWdt * nArrow2Wdt / 100; // <0 = relative
 
-    basegfx::B2DPolyPolygon aPol1(static_cast<const XLineStartItem&>(rSet.Get(XATTR_LINESTART)).GetLineStartValue());
-    basegfx::B2DPolyPolygon aPol2(static_cast<const XLineEndItem&>(rSet.Get(XATTR_LINEEND)).GetLineEndValue());
-    bArrow1Center = static_cast<const XLineStartCenterItem&>(rSet.Get(XATTR_LINESTARTCENTER)).GetValue();
-    bArrow2Center = static_cast<const XLineEndCenterItem&>(rSet.Get(XATTR_LINEENDCENTER)).GetValue();
+    basegfx::B2DPolyPolygon aPol1(rSet.Get(XATTR_LINESTART).GetLineStartValue());
+    basegfx::B2DPolyPolygon aPol2(rSet.Get(XATTR_LINEEND).GetLineEndValue());
+    bArrow1Center = rSet.Get(XATTR_LINESTARTCENTER).GetValue();
+    bArrow2Center = rSet.Get(XATTR_LINEENDCENTER).GetValue();
     nArrow1Len = impGetLineStartEndDistance(aPol1, nArrow1Wdt, bArrow1Center) - 1;
     nArrow2Len = impGetLineStartEndDistance(aPol2, nArrow2Wdt, bArrow2Center) - 1;
 
@@ -1166,7 +1166,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
     {
         // four lines, middle line with gap, so there are two lines used
         // which have one arrow each
-        sal_Int32 nEndWidth = static_cast<const XLineEndWidthItem&>(aSet.Get(XATTR_LINEENDWIDTH)).GetValue();
+        sal_Int32 nEndWidth = aSet.Get(XATTR_LINEENDWIDTH).GetValue();
         aSet.Put(XLineEndWidthItem(0));
 
         aPolyPoly.clear();
@@ -1196,7 +1196,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
     else if(nCount == 5)
     {
         // five lines, first two are the outer ones
-        sal_Int32 nEndWidth = static_cast<const XLineEndWidthItem&>(aSet.Get(XATTR_LINEENDWIDTH)).GetValue();
+        sal_Int32 nEndWidth = aSet.Get(XATTR_LINEENDWIDTH).GetValue();
 
         aSet.Put(XLineEndWidthItem(0));
 

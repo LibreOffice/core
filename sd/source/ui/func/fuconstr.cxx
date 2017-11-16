@@ -327,7 +327,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
             // applying style sheet for background objects
             pObj->SetStyleSheet(pSheet, false);
             SfxItemSet& rSet = pSheet->GetItemSet();
-            const XFillStyleItem& rFillStyle = static_cast<const XFillStyleItem&>(rSet.Get(XATTR_FILLSTYLE));
+            const XFillStyleItem& rFillStyle = rSet.Get(XATTR_FILLSTYLE);
             if ( bForceFillStyle )
             {
                 if (rFillStyle.GetValue() == drawing::FillStyle_NONE)

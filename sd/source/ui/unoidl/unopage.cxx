@@ -2556,7 +2556,7 @@ void SdDrawPage::getBackground( Any& rValue ) throw()
 {
     const SfxItemSet& rFillAttributes = GetPage()->getSdrPageProperties().GetItemSet();
 
-       if(drawing::FillStyle_NONE == static_cast<const XFillStyleItem&>(rFillAttributes.Get(XATTR_FILLSTYLE)).GetValue())
+       if(drawing::FillStyle_NONE == rFillAttributes.Get(XATTR_FILLSTYLE).GetValue())
     {
         // no fill set (switched off by drawing::FillStyle_NONE), clear rValue to represent this
         rValue.clear();
@@ -2969,7 +2969,7 @@ void SdMasterPage::getBackground( Any& rValue )
             // should NOT happen and is an error
             const SfxItemSet& rFallbackItemSet(SvxFmDrawPage::mpPage->getSdrPageProperties().GetItemSet());
 
-            if(drawing::FillStyle_NONE == static_cast<const XFillStyleItem&>(rFallbackItemSet.Get(XATTR_FILLSTYLE)).GetValue())
+            if(drawing::FillStyle_NONE == rFallbackItemSet.Get(XATTR_FILLSTYLE).GetValue())
             {
                 rValue <<= Reference< beans::XPropertySet >(
                     new SdUnoPageBackground(GetModel()->GetDoc(), &rFallbackItemSet));

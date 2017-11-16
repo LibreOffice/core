@@ -738,8 +738,8 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
             if(bUseSolidDragging)
             {
                 const SfxItemSet& rSet = pAktCreate->GetMergedItemSet();
-                const drawing::FillStyle eFill(static_cast<const XFillStyleItem&>(rSet.Get(XATTR_FILLSTYLE)).GetValue());
-                const drawing::LineStyle eLine(static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue());
+                const drawing::FillStyle eFill(rSet.Get(XATTR_FILLSTYLE).GetValue());
+                const drawing::LineStyle eLine(rSet.Get(XATTR_LINESTYLE).GetValue());
 
                 if(drawing::LineStyle_NONE == eLine && drawing::FillStyle_NONE == eFill)
                 {

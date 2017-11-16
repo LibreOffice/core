@@ -162,7 +162,7 @@ namespace sdr
             const bool bFillHatch = rItemSet.GetItemState(XATTR_FILLHATCH, false) == SfxItemState::SET;
             if( bFillBitmap || bFillGradient || bFillHatch )
             {
-                const XFillStyleItem* pFillStyleItem = dynamic_cast< const XFillStyleItem* >( rItemSet.GetItem(XATTR_FILLSTYLE) );
+                const XFillStyleItem* pFillStyleItem = rItemSet.GetItem(XATTR_FILLSTYLE);
                 if( pFillStyleItem )
                 {
                     if( bFillBitmap && (pFillStyleItem->GetValue() != drawing::FillStyle_BITMAP) )

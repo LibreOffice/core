@@ -180,7 +180,7 @@ void MergePageBackgroundFilling(SdPage *pPage, SdStyleSheet *pStyleSheet, bool b
         // Only this page, get attributes for background fill
         const SfxItemSet& rBackgroundAttributes = pPage->getSdrPageProperties().GetItemSet();
 
-        if(drawing::FillStyle_NONE != static_cast<const XFillStyleItem&>(rBackgroundAttributes.Get(XATTR_FILLSTYLE)).GetValue())
+        if(drawing::FillStyle_NONE != rBackgroundAttributes.Get(XATTR_FILLSTYLE).GetValue())
         {
             // page attributes are used, take them
             rMergedAttr.Put(rBackgroundAttributes);
@@ -188,7 +188,7 @@ void MergePageBackgroundFilling(SdPage *pPage, SdStyleSheet *pStyleSheet, bool b
         else
         {
             if(pStyleSheet
-                && drawing::FillStyle_NONE != static_cast<const XFillStyleItem&>(pStyleSheet->GetItemSet().Get(XATTR_FILLSTYLE)).GetValue())
+                && drawing::FillStyle_NONE != pStyleSheet->GetItemSet().Get(XATTR_FILLSTYLE).GetValue())
             {
                 // if the page has no fill style, use the settings from the
                 // background stylesheet (if used)
@@ -294,12 +294,10 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
     const sal_uInt16 nId = GetSlotID();
     if (nId == SID_SAVE_BACKGROUND)
     {
-        const XFillStyleItem& rStyleItem =
-            static_cast<const XFillStyleItem&>(aMergedAttr.Get(XATTR_FILLSTYLE));
+        const XFillStyleItem& rStyleItem = aMergedAttr.Get(XATTR_FILLSTYLE);
         if (drawing::FillStyle_BITMAP == (drawing::FillStyle)rStyleItem.GetValue())
         {
-            const XFillBitmapItem& rBitmap =
-                static_cast<const XFillBitmapItem&>(aMergedAttr.Get(XATTR_FILLBITMAP));
+            const XFillBitmapItem& rBitmap = aMergedAttr.Get(XATTR_FILLBITMAP);
             const GraphicObject& rGraphicObj = rBitmap.GetGraphicObject();
             GraphicHelper::ExportGraphic(pParent, rGraphicObj.GetGraphic(), "");
         }
@@ -441,7 +439,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
                     SdPage *pPage = mpDoc->GetSdPage(i, ePageKind);
 
                     const SfxItemSet& rFillAttributes = pPage->getSdrPageProperties().GetItemSet();
-                       if(drawing::FillStyle_NONE != static_cast<const XFillStyleItem&>(rFillAttributes.Get(XATTR_FILLSTYLE)).GetValue())
+                       if(drawing::FillStyle_NONE != rFillAttributes.Get(XATTR_FILLSTYLE).GetValue())
                     {
                         SdBackgroundObjUndoAction *pBackgroundObjUndoAction = new SdBackgroundObjUndoAction(*mpDoc, *pPage, rFillAttributes);
                         pUndoGroup->AddAction(pBackgroundObjUndoAction);

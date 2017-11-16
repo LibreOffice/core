@@ -812,7 +812,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
         {
             case SID_GETFILLSTYLE :
             {
-                const XFillStyleItem &rFillStyleItem = static_cast<const XFillStyleItem &>(aAttr.Get (XATTR_FILLSTYLE));
+                const XFillStyleItem &rFillStyleItem = aAttr.Get (XATTR_FILLSTYLE);
 
                 rSet.Put (SfxUInt32Item (nWhich, (long) rFillStyleItem.GetValue ()));
                 break;
@@ -820,7 +820,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
 
             case SID_GETLINESTYLE :
             {
-                const XLineStyleItem &rLineStyleItem = static_cast<const XLineStyleItem &>( aAttr.Get (XATTR_LINESTYLE) );
+                const XLineStyleItem &rLineStyleItem = aAttr.Get (XATTR_LINESTYLE);
 
                 rSet.Put (SfxUInt32Item (nWhich, (long) rLineStyleItem.GetValue ()));
                 break;
@@ -828,7 +828,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
 
             case SID_GETLINEWIDTH :
             {
-                const XLineWidthItem &rLineWidthItem = static_cast<const XLineWidthItem &>( aAttr.Get (XATTR_LINEWIDTH) );
+                const XLineWidthItem &rLineWidthItem = aAttr.Get (XATTR_LINEWIDTH);
 
                 rSet.Put (SfxUInt32Item (nWhich, (long) rLineWidthItem.GetValue ()));
                 break;
@@ -845,7 +845,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
                 {
                     case 1 :
                     {
-                        const XLineColorItem &rLineColorItem = static_cast<const XLineColorItem &>( aAttr.Get (XATTR_LINECOLOR) );
+                        const XLineColorItem &rLineColorItem = aAttr.Get (XATTR_LINECOLOR);
 
                         aColor = rLineColorItem.GetColorValue ();
                         break;
@@ -853,7 +853,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
 
                     case 2 :
                     {
-                        const XFillColorItem &rFillColorItem = static_cast<const XFillColorItem &>( aAttr.Get (XATTR_FILLCOLOR) );
+                        const XFillColorItem &rFillColorItem = aAttr.Get (XATTR_FILLCOLOR);
 
                         aColor = rFillColorItem.GetColorValue ();
                         break;
@@ -862,7 +862,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
                     case 3 :
                     case 4 :
                     {
-                        const XFillGradientItem &rFillGradientItem = static_cast<const XFillGradientItem &>( aAttr.Get (XATTR_FILLGRADIENT) );
+                        const XFillGradientItem &rFillGradientItem = aAttr.Get (XATTR_FILLGRADIENT);
                         const XGradient         &rGradient         = rFillGradientItem.GetGradientValue ();
 
                         aColor = (rWhatKind.GetValue () == 3)
@@ -873,7 +873,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
 
                     case 5:
                     {
-                        const XFillHatchItem &rFillHatchItem = static_cast<const XFillHatchItem &>( aAttr.Get (XATTR_FILLHATCH) );
+                        const XFillHatchItem &rFillHatchItem = aAttr.Get (XATTR_FILLHATCH);
                         const XHatch         &rHatch         = rFillHatchItem.GetHatchValue ();
 
                         aColor = rHatch.GetColor ();

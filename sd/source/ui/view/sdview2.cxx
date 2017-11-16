@@ -680,7 +680,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
                                 XFillExchangeData aFillData( XFillAttrSetItem( &mrDoc.GetPool() ) );
 
                                 ReadXFillExchangeData( *xStm, aFillData );
-                                const Color aColor( static_cast<const XFillColorItem&>( aFillData.GetXFillAttrSetItem()->GetItemSet().Get( XATTR_FILLCOLOR ) ).GetColorValue() );
+                                const Color aColor( aFillData.GetXFillAttrSetItem()->GetItemSet().Get( XATTR_FILLCOLOR ).GetColorValue() );
                                 static_cast< SdrHdlColor* >( pIAOHandle )->SetColor( aColor, true );
                                 nRet = nDropAction;
                             }

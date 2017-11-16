@@ -246,28 +246,28 @@ bool OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
 
 bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 {
-    drawing::FillStyle eFill=static_cast<const XFillStyleItem&>(rSet.Get(XATTR_FILLSTYLE)).GetValue();
+    drawing::FillStyle eFill=rSet.Get(XATTR_FILLSTYLE).GetValue();
     bool bRetval = false;
 
     switch(eFill)
     {
         case drawing::FillStyle_SOLID:
         {
-            rCol = static_cast<const XFillColorItem&>(rSet.Get(XATTR_FILLCOLOR)).GetColorValue();
+            rCol = rSet.Get(XATTR_FILLCOLOR).GetColorValue();
             bRetval = true;
 
             break;
         }
         case drawing::FillStyle_HATCH:
         {
-            Color aCol1(static_cast<const XFillHatchItem&>(rSet.Get(XATTR_FILLHATCH)).GetHatchValue().GetColor());
+            Color aCol1(rSet.Get(XATTR_FILLHATCH).GetHatchValue().GetColor());
             Color aCol2(COL_WHITE);
 
             // when hatched background is activated, use object fill color as hatch color
-            bool bFillHatchBackground = static_cast<const XFillBackgroundItem&>(rSet.Get(XATTR_FILLBACKGROUND)).GetValue();
+            bool bFillHatchBackground = rSet.Get(XATTR_FILLBACKGROUND).GetValue();
             if(bFillHatchBackground)
             {
-                aCol2 = static_cast<const XFillColorItem&>(rSet.Get(XATTR_FILLCOLOR)).GetColorValue();
+                aCol2 = rSet.Get(XATTR_FILLCOLOR).GetColorValue();
             }
 
             const basegfx::BColor aAverageColor(basegfx::average(aCol1.getBColor(), aCol2.getBColor()));
@@ -277,7 +277,7 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
             break;
         }
         case drawing::FillStyle_GRADIENT: {
-            const XGradient& rGrad=static_cast<const XFillGradientItem&>(rSet.Get(XATTR_FILLGRADIENT)).GetGradientValue();
+            const XGradient& rGrad=rSet.Get(XATTR_FILLGRADIENT).GetGradientValue();
             Color aCol1(rGrad.GetStartColor());
             Color aCol2(rGrad.GetEndColor());
             const basegfx::BColor aAverageColor(basegfx::average(aCol1.getBColor(), aCol2.getBColor()));
@@ -288,7 +288,7 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
         }
         case drawing::FillStyle_BITMAP:
         {
-            Bitmap aBitmap(static_cast<const XFillBitmapItem&>(rSet.Get(XATTR_FILLBITMAP)).GetGraphicObject().GetGraphic().GetBitmapEx().GetBitmap());
+            Bitmap aBitmap(rSet.Get(XATTR_FILLBITMAP).GetGraphicObject().GetGraphic().GetBitmapEx().GetBitmap());
             const Size aSize(aBitmap.GetSizePixel());
             const sal_uInt32 nWidth = aSize.Width();
             const sal_uInt32 nHeight = aSize.Height();

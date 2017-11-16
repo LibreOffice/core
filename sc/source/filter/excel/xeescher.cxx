@@ -1209,8 +1209,8 @@ XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
                     mbLocked    = pCaption->IsMoveProtect() || pCaption->IsResizeProtect();
 
                     // AutoFill style would change if Postit.cxx object creation values are changed
-                    OUString aCol(GETITEM(aItemSet, XFillColorItem , XATTR_FILLCOLOR).GetValue());
-                    mbAutoFill  = aCol.isEmpty() && (GETITEM(aItemSet, XFillStyleItem, XATTR_FILLSTYLE).GetValue() == drawing::FillStyle_SOLID);
+                    OUString aCol(aItemSet.Get(XATTR_FILLCOLOR).GetValue());
+                    mbAutoFill  = aCol.isEmpty() && (aItemSet.Get(XATTR_FILLSTYLE).GetValue() == drawing::FillStyle_SOLID);
                     mbRowHidden = (rRoot.GetDoc().RowHidden(maScPos.Row(),maScPos.Tab()));
                     mbColHidden = (rRoot.GetDoc().ColHidden(maScPos.Col(),maScPos.Tab()));
                 }
