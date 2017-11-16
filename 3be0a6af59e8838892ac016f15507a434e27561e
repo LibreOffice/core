@@ -34,6 +34,24 @@
       "revId": "3be0a6af59e8838892ac016f15507a434e27561e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_5b1ef35f",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-11-16T19:55:53Z",
+      "side": 1,
+      "message": "If CPPUNIT_ASSERT_EQUAL(static_cast\u003cSCCOL\u003e(MAXCOL), aRange.aEnd.Col()); fails to compile or does not work correctly your patch is horribly broken.\n\nIf there is an issue with that I don\u0027t see how other code can work correctly at all.",
+      "parentUuid": "1a430d35_6716b756",
+      "revId": "3be0a6af59e8838892ac016f15507a434e27561e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
