@@ -235,7 +235,7 @@ void ColumnSpanSet::executeColumnAction(ScDocument& rDoc, ColumnAction& ac, doub
             continue;
 
         const TableType& rTab = *maDoc[nTab];
-        for (size_t nCol = 0; nCol < rTab.size(); ++nCol)
+        for (SCCOL nCol = 0; nCol < SCCOL(rTab.size()); ++nCol)
         {
             if (!rTab[nCol])
                 continue;
@@ -244,7 +244,7 @@ void ColumnSpanSet::executeColumnAction(ScDocument& rDoc, ColumnAction& ac, doub
             if (!pTab)
                 continue;
 
-            if (!ValidCol(nCol))
+            if (!ValidCol(nCol) || nCol >= pTab->GetAllocatedColumnsCount())
             {
                 // End the loop.
                 nCol = rTab.size();

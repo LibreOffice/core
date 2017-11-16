@@ -703,6 +703,8 @@ public:
     ScRangePairListRef& GetColNameRangesRef() { return xColNameRanges; }
     ScRangePairListRef& GetRowNameRangesRef() { return xRowNameRanges; }
 
+    SCCOL ClampToAllocatedColumns(SCTAB nTab, SCCOL nCol) const;
+
     SC_DLLPUBLIC ScDBCollection* GetDBCollection() const { return pDBCollection;}
     void                         SetDBCollection( ScDBCollection* pNewDBCollection,
                                                   bool bRemoveAutoFilter = false );

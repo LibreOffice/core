@@ -450,9 +450,11 @@ public:
 
     CellType    GetCellType( const ScAddress& rPos ) const
                     {
-                        return ValidColRow(rPos.Col(),rPos.Row()) ?
-                            aCol[rPos.Col()].GetCellType( rPos.Row() ) :
-                            CELLTYPE_NONE;
+                        if (!ValidColRow(rPos.Col(),rPos.Row()))
+                            return CELLTYPE_NONE;
+                        if (rPos.Col() >= aCol.size())
+                            return CELLTYPE_NONE;
+                        return aCol[rPos.Col()].GetCellType( rPos.Row() );
                     }
     CellType    GetCellType( SCCOL nCol, SCROW nRow ) const;
     ScRefCellValue GetCellValue( SCCOL nCol, SCROW nRow ) const;
@@ -1057,6 +1059,8 @@ public:
     static void UpdateSearchItemAddressForReplace( const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow );
 
     ScColumnsRange GetColumnsRange(SCCOL begin, SCCOL end) const;
+    SCCOL ClampToAllocatedColumns(SCCOL nCol) const;
+    SCCOL GetAllocatedColumnsCount() const;
 
 private:
 

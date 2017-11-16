@@ -235,7 +235,7 @@ bool SetOptimalHeightsToRows(
 
 ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
                     bool bColInfo, bool bRowInfo ) :
-    aCol( MAXCOLCOUNT ),
+    aCol( 1 ),
     aName( rNewName ),
     aCodeName( rNewName ),
     nLinkRefreshDelay( 0 ),
@@ -1578,7 +1578,7 @@ void ScTable::UpdateReference(
         mpRangeName->UpdateReference(rCxt, nTab);
 
     for ( ; i<=iMax; i++)
-        bUpdated |= aCol[i].UpdateReference(rCxt, pUndoDoc);
+        bUpdated |= CreateColumnIfNotExists(i).UpdateReference(rCxt, pUndoDoc);
 
     if ( bIncludeDraw )
         UpdateDrawRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz, bUpdateNoteCaptionPos );
@@ -2370,9 +2370,39 @@ const ScConditionalFormatList* ScTable::GetCondFormList() const
 
 ScColumnsRange ScTable::GetColumnsRange(SCCOL nColBegin, SCCOL nColEnd) const
 {
+    ScColContainer::ScColumnVector::const_iterator beginIter;
+    ScColContainer::ScColumnVector::const_iterator endIter;
+
     // because the range is inclusive, some code will pass nColEnd<nColBegin to indicate an empty range
-    return ScColumnsRange(ScColumnsRange::Iterator(aCol.begin() + nColBegin),
-                          ScColumnsRange::Iterator(nColEnd < nColBegin ? (aCol.begin() + nColBegin) : (aCol.begin() + nColEnd + 1)));
+    if (nColEnd < nColBegin)
+    {
+        beginIter = aCol.begin() + nColBegin;
+        endIter = aCol.begin() + nColBegin;
+    }
+    else
+    {
+        // clamp begin of range to available columns
+        if (nColBegin >= aCol.size())
+            nColBegin = aCol.size() - 1;
+        // clamp end of range to available columns
+        if (nColEnd >= aCol.size())
+            nColEnd = aCol.size() - 1;
+        beginIter = aCol.begin() + nColBegin;
+        endIter = aCol.begin() + nColEnd + 1;
+    }
+    return ScColumnsRange(ScColumnsRange::Iterator(beginIter), ScColumnsRange::Iterator(endIter));
+}
+
+SCCOL ScTable::ClampToAllocatedColumns(SCCOL nCol) const
+{
+    if (nCol >= aCol.size())
+        nCol = aCol.size() - 1;
+    return nCol;
+}
+
+SCCOL ScTable::GetAllocatedColumnsCount() const
+{
+    return aCol.size();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

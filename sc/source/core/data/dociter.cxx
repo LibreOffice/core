@@ -831,6 +831,7 @@ ScCellIterator::ScCellIterator( ScDocument* pDoc, const ScRange& rRange, Subtota
     maEndPos(rRange.aEnd),
     mnSubTotalFlags(nSubTotalFlags)
 {
+    maEndPos.SetCol( pDoc->ClampToAllocatedColumns(maStartPos.Tab(), maEndPos.Col()) );
     init();
 }
 

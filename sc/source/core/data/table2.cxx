@@ -147,8 +147,11 @@ bool ScTable::TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SC
     if ( nStartCol==0 && nEndCol==MAXCOL && pOutlineTable )
         bTest = pOutlineTable->TestInsertRow(nSize);
 
-    for (SCCOL i=nStartCol; (i<=nEndCol) && bTest; i++)
+    for (SCCOL i : GetColumnsRange(nStartCol,nEndCol)) {
+        if (!bTest)
+            break;
         bTest = aCol[i].TestInsertRow(nStartRow, nSize);
+    }
 
     return bTest;
 }
@@ -499,7 +502,7 @@ void ScTable::CopyToClip(
     SCCOL i;
 
     for ( i = nCol1; i <= nCol2; i++)
-        aCol[i].CopyToClip(rCxt, nRow1, nRow2, pTable->aCol[i]);  // notes are handled at column level
+        aCol[i].CopyToClip(rCxt, nRow1, nRow2, pTable->CreateColumnIfNotExists(i));  // notes are handled at column level
 
     //  copy widths/heights, and only "hidden", "filtered" and "manual" flags
     //  also for all preceding columns/rows, to have valid positions for drawing objects
@@ -1010,7 +1013,7 @@ ScColumn* ScTable::FetchColumn( SCCOL nCol )
     if (!ValidCol(nCol))
         return nullptr;
 
-    return &aCol[nCol];
+    return &CreateColumnIfNotExists(nCol);
 }
 
 const ScColumn* ScTable::FetchColumn( SCCOL nCol ) const
@@ -1090,9 +1093,9 @@ void ScTable::CopyToTable(
     {
         InsertDeleteFlags nTempFlags( nFlags &
                 ~InsertDeleteFlags( InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES));
-        for (SCCOL i = nCol1; i <= nCol2; i++)
+        for (SCCOL i = nCol1; i <= ClampToAllocatedColumns(nCol2); i++)
             aCol[i].CopyToColumn(rCxt, nRow1, nRow2, nTempFlags, bMarked,
-                                pDestTab->aCol[i], pMarkData, bAsLink, bGlobalNamesToLocal);
+                                pDestTab->CreateColumnIfNotExists(i), pMarkData, bAsLink, bGlobalNamesToLocal);
     }
 
     if (!bColRowFlags)      // Column widths/Row heights/Flags
@@ -1219,9 +1222,10 @@ void ScTable::CopyCaptionsToTable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
     if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
         return;
 
+    nCol2 = ClampToAllocatedColumns(nCol2);
     for (SCCOL i = nCol1; i <= nCol2; i++)
     {
-        aCol[i].CopyCellNotesToDocument(nRow1, nRow2, pDestTab->aCol[i], bCloneCaption);
+        aCol[i].CopyCellNotesToDocument(nRow1, nRow2, pDestTab->CreateColumnIfNotExists(i), bCloneCaption);
         pDestTab->aCol[i].UpdateNoteCaptions(nRow1, nRow2);
     }
 }
@@ -1379,7 +1383,7 @@ bool ScTable::SetEditText( SCCOL nCol, SCROW nRow, EditTextObject* pEditText )
         return false;
     }
 
-    aCol[nCol].SetEditText(nRow, pEditText);
+    CreateColumnIfNotExists(nCol).SetEditText(nRow, pEditText);
     return true;
 }
 
@@ -1440,7 +1444,7 @@ void ScTable::SetFormula(
     if (!ValidColRow(nCol, nRow))
         return;
 
-    aCol[nCol].SetFormula(nRow, rFormula, eGram);
+    CreateColumnIfNotExists(nCol).SetFormula(nRow, rFormula, eGram);
 }
 
 ScFormulaCell* ScTable::SetFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* pCell )
@@ -1549,8 +1553,7 @@ ScFormulaCell* ScTable::GetFormulaCell( SCCOL nCol, SCROW nRow )
 {
     if (!ValidColRow(nCol, nRow))
         return nullptr;
-
-    return aCol[nCol].GetFormulaCell(nRow);
+    return CreateColumnIfNotExists(nCol).GetFormulaCell(nRow);
 }
 
 ScPostIt* ScTable::ReleaseNote( SCCOL nCol, SCROW nRow )
@@ -2269,6 +2272,8 @@ bool ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
             *pOnlyNotBecauseOfMatrix = false;
         return false;
     }
+    nCol1 = ClampToAllocatedColumns(nCol1);
+    nCol2 = ClampToAllocatedColumns(nCol2);
 
     bool bIsEditable = true;
     if ( nLockCount )
