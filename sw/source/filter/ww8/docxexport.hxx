@@ -228,7 +228,7 @@ private:
     virtual void WriteNumbering() override;
 
     /// Write reference to a header/footer + the actual xml containing the text.
-    void WriteHeaderFooter( const SwFormat& rFormat, bool bHeader, const char* pType );
+    void WriteHeaderFooter( const SwFormat* pFormat, bool bHeader, const char* pType );
 
     /// Write word/fontTable.xml.
     void WriteFonts();

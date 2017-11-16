@@ -178,6 +178,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113258, "tdf113258.docx")
                          getProperty<sal_Int32>(xShape->getStart(), "ParaTopMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf44832_testSectionWithDifferentHeader, "tdf44832_section_new_header.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if(!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:headerReference", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
