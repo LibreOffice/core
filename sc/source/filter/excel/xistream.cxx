@@ -793,10 +793,10 @@ void XclImpStream::Ignore( std::size_t nBytes )
     while( mbValid && (nBytesLeft > 0) )
     {
         sal_uInt16 nReadSize = GetMaxRawReadSize( nBytesLeft );
-        mrStrm.SeekRel( nReadSize );
+        mbValid = checkSeek(mrStrm, mrStrm.Tell() + nReadSize);
         mnRawRecLeft = mnRawRecLeft - nReadSize;
         nBytesLeft -= nReadSize;
-        if( nBytesLeft > 0 )
+        if (mbValid && nBytesLeft > 0)
             JumpToNextContinue();
         OSL_ENSURE( mbValid, "XclImpStream::Ignore - record overread" );
     }
