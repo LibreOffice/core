@@ -16,6 +16,24 @@
       "revId": "3be0a6af59e8838892ac016f15507a434e27561e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_6716b756",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-16T19:04:24Z",
+      "side": 1,
+      "message": "to make the assert work",
+      "parentUuid": "1a430d35_8703a341",
+      "revId": "3be0a6af59e8838892ac016f15507a434e27561e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
