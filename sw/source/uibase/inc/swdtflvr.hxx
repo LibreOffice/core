@@ -26,6 +26,7 @@
 #include <sfx2/lnkbase.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 
 class Graphic;
 class ImageMap;
@@ -67,10 +68,12 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
        SwWrtShell. */
     const SwFrameShell *m_pCreatorView;
     SwDocFac        *m_pClpDocFac;
-    Graphic         *m_pClpGraphic, *m_pClpBitmap, *m_pOrigGraphic;
-    INetBookmark    *m_pBookmark;     // URL and description!
-    ImageMap        *m_pImageMap;
-    INetImage       *m_pTargetURL;
+    std::unique_ptr<Graphic>        m_pClpGraphic;
+    std::unique_ptr<Graphic>        m_pClpBitmap;
+    Graphic                         *m_pOrigGraphic;
+    std::unique_ptr<INetBookmark>   m_pBookmark;     // URL and description!
+    std::unique_ptr<ImageMap>       m_pImageMap;
+    std::unique_ptr<INetImage>      m_pTargetURL;
 
     TransferBufferType m_eBufferType;
 
