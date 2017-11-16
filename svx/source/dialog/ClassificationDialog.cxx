@@ -154,6 +154,9 @@ void writeResultToXml(tools::XmlWriter & rXmlWriter,
         rXmlWriter.startElement("abbreviatedString");
         rXmlWriter.content(rResult.msAbbreviatedName);
         rXmlWriter.endElement();
+        rXmlWriter.startElement("identifier");
+        rXmlWriter.content(rResult.msIdentifier);
+        rXmlWriter.endElement();
         rXmlWriter.endElement();
     }
 }
@@ -333,6 +336,7 @@ void ClassificationDialog::readRecentlyUsed()
                         svx::ClassificationType eType = svx::ClassificationType::TEXT;
                         OUString sString;
                         OUString sAbbreviatedString;
+                        OUString sIdentifier;
 
                         // Convert string to classification type, but continue only if
                         // conversion was successful.
@@ -350,11 +354,15 @@ void ClassificationDialog::readRecentlyUsed()
                                 {
                                     sAbbreviatedString = OStringToOUString(aWalker.content(), RTL_TEXTENCODING_UTF8);
                                 }
+                                else if (aWalker.name() == "identifier")
+                                {
+                                    sIdentifier = OStringToOUString(aWalker.content(), RTL_TEXTENCODING_UTF8);
+                                }
                                 aWalker.next();
                             }
                             aWalker.parent();
 
-                            aResults.push_back({ eType, sString, sAbbreviatedString, OUString() });
+                            aResults.push_back({ eType, sString, sAbbreviatedString, sIdentifier });
                         }
                     }
                     aWalker.next();
