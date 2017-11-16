@@ -292,6 +292,7 @@ Plugin::IdenticalDefaultArgumentsResult Plugin::checkIdenticalDefaultArguments(
         if (ce1->getNumArgs() == 0 && ce2->getNumArgs() == 0) {
             return IdenticalDefaultArgumentsResult::Yes;
         }
+        break;
     }
     return IdenticalDefaultArgumentsResult::Maybe;
 }
