@@ -87,6 +87,9 @@ HWPPara::~HWPPara()
 
 bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
 {
+    DepthGuard aGuard(hwpf);
+    if (aGuard.toodeep())
+        return false;
     int ii;
     scflag = flag;
 // Paragraph Information

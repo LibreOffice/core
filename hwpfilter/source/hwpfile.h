@@ -275,6 +275,7 @@ class DLLEXPORT HWPFile
         int   error_code;
         OlePicture *oledata;
         unsigned char scratch[SAL_MAX_UINT16];
+        int readdepth;
 
     private:
 /* hwp 파일 이름 */
@@ -308,6 +309,26 @@ class DLLEXPORT HWPFile
         static HWPFile *cur_doc;
         friend HWPFile *GetCurrentDoc(void);
         friend HWPFile *SetCurrentDoc(HWPFile *);
+};
+
+class DLLEXPORT DepthGuard
+{
+private:
+    HWPFile& m_rFile;
+public:
+    DepthGuard(HWPFile &rFile)
+        : m_rFile(rFile)
+    {
+        ++m_rFile.readdepth;
+    }
+    bool toodeep() const
+    {
+        return m_rFile.readdepth == 1024;
+    }
+    ~DepthGuard()
+    {
+        --m_rFile.readdepth;
+    }
 };
 
 HWPFile *GetCurrentDoc(void);
