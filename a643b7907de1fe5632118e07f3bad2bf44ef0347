@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_47b7fb85",
+        "filename": "sw/uiconfig/swriter/ui/insertbookmark.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-11-16T17:13:46Z",
+      "side": 1,
+      "message": "Pls add 12 px margin here to denote widget hierarchy (1st level: checkbox, 2nd level: this container). See also: https://wiki.documentfoundation.org/Development/WidgetLayout#Widgets_requiring_HIG_guidelines_review",
+      "revId": "a643b7907de1fe5632118e07f3bad2bf44ef0347",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_87b1e391",
+        "filename": "sw/uiconfig/swriter/ui/insertbookmark.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-11-16T17:13:46Z",
+      "side": 1,
+      "message": "It\u0027s okay to have those buttons in extra box (doesn\u0027t have to be GtkButtonBox) ...",
+      "revId": "a643b7907de1fe5632118e07f3bad2bf44ef0347",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_27c02fe0",
+        "filename": "sw/uiconfig/swriter/ui/insertbookmark.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-11-16T17:13:46Z",
+      "side": 1,
+      "message": "... but by convention, the bottom-most row of buttons where Help usually is, is a child of internal GtkButtonBox w/ ID dialog_action_area1",
+      "revId": "a643b7907de1fe5632118e07f3bad2bf44ef0347",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_67ba3770",
+        "filename": "sw/uiconfig/swriter/ui/insertbookmark.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-11-16T17:13:46Z",
+      "side": 1,
+      "message": "Yeah ... this one I mean. Please move \u0027help\u0027 and \u0027close\u0027 here",
+      "revId": "a643b7907de1fe5632118e07f3bad2bf44ef0347",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
