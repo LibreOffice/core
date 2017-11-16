@@ -255,23 +255,36 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
 
     // headers
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_EVEN )
-        WriteHeaderFooter( rLeftFormat, true, "even" );
+        WriteHeaderFooter( &rLeftFormat, true, "even" );
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_ODD )
-        WriteHeaderFooter( rFormat, true, "default" );
+        WriteHeaderFooter( &rFormat, true, "default" );
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_FIRST )
-        WriteHeaderFooter( rFirstPageFormat, true, "first" );
+        WriteHeaderFooter( &rFirstPageFormat, true, "first" );
+
+    if( (nHeadFootFlags & (nsHdFtFlags::WW8_HEADER_EVEN
+                         | nsHdFtFlags::WW8_HEADER_ODD
+                         | nsHdFtFlags::WW8_HEADER_FIRST)) == 0
+            && m_bHasHdr )
+        WriteHeaderFooter( nullptr, true, "default" );
+
 
     // footers
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_EVEN )
-        WriteHeaderFooter( rLeftFormat, false, "even" );
+        WriteHeaderFooter( &rLeftFormat, false, "even" );
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_ODD )
-        WriteHeaderFooter( rFormat, false, "default" );
+        WriteHeaderFooter( &rFormat, false, "default" );
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_FIRST )
-        WriteHeaderFooter( rFirstPageFormat, false, "first" );
+        WriteHeaderFooter( &rFirstPageFormat, false, "first" );
+
+    if( (nHeadFootFlags & (nsHdFtFlags::WW8_FOOTER_EVEN
+                         | nsHdFtFlags::WW8_FOOTER_ODD
+                         | nsHdFtFlags::WW8_FOOTER_FIRST)) == 0
+            && m_bHasFtr )
+        WriteHeaderFooter( nullptr, false, "");
 
     if ( nHeadFootFlags & ( nsHdFtFlags::WW8_FOOTER_EVEN | nsHdFtFlags::WW8_HEADER_EVEN ))
         m_aSettings.evenAndOddHeaders = true;
@@ -752,7 +765,7 @@ void DocxExport::WriteNumbering()
     m_pAttrOutput->SetSerializer( m_pDocumentFS );
 }
 
-void DocxExport::WriteHeaderFooter( const SwFormat& rFormat, bool bHeader, const char* pType )
+void DocxExport::WriteHeaderFooter( const SwFormat* pFormat, bool bHeader, const char* pType )
 {
     // setup the xml stream
     OUString aRelId;
@@ -798,7 +811,10 @@ void DocxExport::WriteHeaderFooter( const SwFormat& rFormat, bool bHeader, const
     //So clearing the alternate content graphic cache.
     m_pAttrOutput->PushRelIdCache();
     // do the work
-    WriteHeaderFooterText( rFormat, bHeader );
+    if( pFormat == NULL )
+        AttrOutput().EmptyParagraph();
+    else
+        WriteHeaderFooterText( *pFormat, bHeader );
     m_pAttrOutput->PopRelIdCache();
     m_pAttrOutput->popFromTableExportContext(aTableExportContext);
     m_pAttrOutput->EndParaSdtBlock();
