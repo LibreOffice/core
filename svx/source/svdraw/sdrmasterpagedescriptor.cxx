@@ -87,7 +87,7 @@ namespace sdr
         const SdrPage* pCorrectPage = &GetOwnerPage();
         const SdrPageProperties* pCorrectProperties = &pCorrectPage->getSdrPageProperties();
 
-        if(drawing::FillStyle_NONE == static_cast<const XFillStyleItem&>(pCorrectProperties->GetItemSet().Get(XATTR_FILLSTYLE)).GetValue())
+        if(drawing::FillStyle_NONE == pCorrectProperties->GetItemSet().Get(XATTR_FILLSTYLE).GetValue())
         {
             pCorrectPage = &GetUsedPage();
             pCorrectProperties = &pCorrectPage->getSdrPageProperties();

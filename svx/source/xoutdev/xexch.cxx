@@ -92,7 +92,7 @@ SvStream& ReadXFillExchangeData( SvStream& rIStm, XFillExchangeData& rData )
 
     rIStm.ReadUInt32( nItemCount );
 
-    if( nItemCount > ( XATTR_FILL_LAST - XATTR_FILL_FIRST + 1 ) )
+    if( nItemCount > sal_uInt16( XATTR_FILL_LAST - XATTR_FILL_FIRST + 1 ) )
         nItemCount = ( XATTR_FILL_LAST - XATTR_FILL_FIRST + 1 );
 
     for( sal_uInt32 i = 0; i < nItemCount; i++ )

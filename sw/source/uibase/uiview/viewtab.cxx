@@ -1132,7 +1132,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             {
                 case SID_ATTR_PAGE_FILLSTYLE:
                 {
-                    XFillStyleItem aFSItem( static_cast<const XFillStyleItem&>(pReqArgs->Get( XATTR_FILLSTYLE )) );
+                    XFillStyleItem aFSItem( pReqArgs->Get( XATTR_FILLSTYLE ) );
                     drawing::FillStyle eXFS = aFSItem.GetValue();
 
                     if ( eXFS == drawing::FillStyle_NONE )
@@ -1142,7 +1142,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
 
                 case SID_ATTR_PAGE_COLOR:
                 {
-                    XFillColorItem aColorItem( static_cast<const XFillColorItem&>(pReqArgs->Get( XATTR_FILLCOLOR )) );
+                    XFillColorItem aColorItem( pReqArgs->Get( XATTR_FILLCOLOR ) );
                     rMaster.SetFormatAttr( XFillStyleItem( drawing::FillStyle_SOLID ) );
                     rMaster.SetFormatAttr( aColorItem );
                 }
@@ -1150,7 +1150,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
 
                 case SID_ATTR_PAGE_GRADIENT:
                 {
-                    XFillGradientItem aGradientItem( static_cast<const XFillGradientItem&>(pReqArgs->Get( XATTR_FILLGRADIENT )) );
+                    XFillGradientItem aGradientItem( pReqArgs->Get( XATTR_FILLGRADIENT ) );
                     rMaster.SetFormatAttr( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
                     rMaster.SetFormatAttr( aGradientItem );
                 }
@@ -1158,7 +1158,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
 
                 case SID_ATTR_PAGE_HATCH:
                 {
-                    XFillHatchItem aHatchItem( static_cast<const XFillHatchItem&>(pReqArgs->Get( XATTR_FILLHATCH )) );
+                    XFillHatchItem aHatchItem( pReqArgs->Get( XATTR_FILLHATCH ) );
                     rMaster.SetFormatAttr( XFillStyleItem( drawing::FillStyle_HATCH ) );
                     rMaster.SetFormatAttr( aHatchItem );
                 }
@@ -1166,7 +1166,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
 
                 case SID_ATTR_PAGE_BITMAP:
                 {
-                    XFillBitmapItem aBitmapItem( static_cast<const XFillBitmapItem&>(pReqArgs->Get( XATTR_FILLBITMAP )) );
+                    XFillBitmapItem aBitmapItem( pReqArgs->Get( XATTR_FILLBITMAP ) );
                     rMaster.SetFormatAttr( XFillStyleItem( drawing::FillStyle_BITMAP ) );
                     rMaster.SetFormatAttr( aBitmapItem );
                 }
@@ -2309,8 +2309,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         case SID_ATTR_PAGE_BITMAP:
         {
             SfxItemSet aSet = rDesc.GetMaster().GetAttrSet();
-            drawing::FillStyle eXFS = (drawing::FillStyle) ( static_cast<const XFillStyleItem*>(
-                                        aSet.GetItem(XATTR_FILLSTYLE) )->GetValue() );
+            drawing::FillStyle eXFS = (drawing::FillStyle)
+                                        aSet.GetItem(XATTR_FILLSTYLE)->GetValue();
             XFillStyleItem aFillStyleItem( eXFS );
             aFillStyleItem.SetWhich( SID_ATTR_PAGE_FILLSTYLE );
             rSet.Put(aFillStyleItem);
