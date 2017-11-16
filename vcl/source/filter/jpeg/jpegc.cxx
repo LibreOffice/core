@@ -38,6 +38,8 @@ extern "C" {
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graphicfilter.hxx>
 
+#define WarningLimit 1000
+
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable to __declspec(align()) aligned warning */
 #pragma warning (disable: 4324)
@@ -67,6 +69,23 @@ extern "C" void outputMessage (j_common_ptr cinfo)
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message) (cinfo, buffer);
     SAL_WARN("vcl.filter", "failure reading JPEG: " << buffer);
+}
+
+extern "C" void emitMessage (j_common_ptr cinfo, int msg_level)
+{
+    if (msg_level < 0)
+    {
+        // ofz#3002 try to retain some degree of recoverability up to some
+        // reasonable limit (initially using ImageMagick's current limit of
+        // 1000), then bail.
+        // https://libjpeg-turbo.org/pmwiki/uploads/About/TwoIssueswiththeJPEGStandard.pdf
+        if (cinfo->err->num_warnings++ > WarningLimit)
+            cinfo->err->error_exit(cinfo);
+        else
+            cinfo->err->output_message(cinfo);
+    }
+    else if (cinfo->err->trace_level >= msg_level)
+        cinfo->err->output_message(cinfo);
 }
 
 class JpegDecompressOwner
@@ -125,6 +144,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
     cinfo.err = jpeg_std_error( &jerr.pub );
     jerr.pub.error_exit = errorExit;
     jerr.pub.output_message = outputMessage;
+    jerr.pub.emit_message = emitMessage;
 
     jpeg_create_decompress( &cinfo );
     aOwner.set(&cinfo);
