@@ -115,6 +115,7 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     pFormatter = pFormatterP;
     xNFC = css::i18n::NumberFormatMapper::create( pFormatter->GetComponentContext() );
     bConvertMode = false;
+    mbConvertForExcelExport = false;
     bConvertSystemToSystem = false;
 
     sKeyword[NF_KEY_E] =     sEnglishKeyword[NF_KEY_E];        // Exponent
@@ -1725,7 +1726,10 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
         pLoc = pFormatter->GetLocaleData();
         //! init new keywords
         InitKeywords();
-        bNewDateOrder = (eOldDateOrder != pLoc->getDateOrder());
+        // Adapt date order to target locale, but Excel does not handle date
+        // particle re-ordering for the target locale when loading documents,
+        // though it does exchange separators, tdf#113889
+        bNewDateOrder = (!mbConvertForExcelExport && eOldDateOrder != pLoc->getDateOrder());
     }
     const CharClass* pChrCls = pFormatter->GetCharClass();
 

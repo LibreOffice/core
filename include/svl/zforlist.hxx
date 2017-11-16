@@ -402,7 +402,8 @@ public:
         language/country eNewLnge */
     bool PutandConvertEntry( OUString& rString, sal_Int32& nCheckPos,
                              short& nType, sal_uInt32& nKey,
-                             LanguageType eLnge, LanguageType eNewLnge );
+                             LanguageType eLnge, LanguageType eNewLnge,
+                             bool bForExcelExport = false );
 
     /** Same as <method>PutandConvertEntry</method> but the format code string
          is considered to be of the System language/country eLnge and is
