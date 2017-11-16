@@ -16,6 +16,24 @@
       "revId": "7804cbaf548922a1297316571a47d43283bb55d8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_470a9b22",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 6734,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2017-11-16T08:58:50Z",
+      "side": 1,
+      "message": "Didn\u0027t yet checked the error from jenkins, but in the code of the branch, I see following check that is often used:\n\nif (m_pFontsAttrList.is() \u0026\u0026",
+      "parentUuid": "1a430d35_ece1ac9b",
+      "revId": "7804cbaf548922a1297316571a47d43283bb55d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
