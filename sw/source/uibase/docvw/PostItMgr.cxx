@@ -238,9 +238,6 @@ SwPostItMgr::~SwPostItMgr()
     for(std::vector<SwPostItPageItem*>::iterator i = mPages.begin(); i != mPages.end() ; ++i)
         delete (*i);
     mPages.clear();
-
-    delete mpFrameSidebarWinContainer;
-    mpFrameSidebarWinContainer = nullptr;
 }
 
 void SwPostItMgr::CheckForRemovedPostIts()
@@ -2318,7 +2315,7 @@ void SwPostItMgr::ConnectSidebarWinToFrame( const SwFrame& rFrame,
 {
     if ( mpFrameSidebarWinContainer == nullptr )
     {
-        mpFrameSidebarWinContainer = new SwFrameSidebarWinContainer();
+        mpFrameSidebarWinContainer.reset(new SwFrameSidebarWinContainer());
     }
 
     const bool bInserted = mpFrameSidebarWinContainer->insert( rFrame, rFormatField, rSidebarWin );
