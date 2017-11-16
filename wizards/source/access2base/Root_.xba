@@ -202,7 +202,7 @@ Public Function CurrentDocument(ByVal Optional piDocIndex As Integer) As Variant
 &apos;	Returns the CurrentDoc(...) referring to the current document or to the argument
 
 Dim iDocIndex As Integer
-	If IsMissing(piDocIndex) Then iDocIndex = CurrentDocIndex() Else iDocIndex = piDocIndex
+	If IsMissing(piDocIndex) Then iDocIndex = CurrentDocIndex(, False) Else iDocIndex = piDocIndex
 	If iDocIndex &gt;= 0 And iDocIndex &lt;= UBound(CurrentDoc) Then Set CurrentDocument = CurrentDoc(iDocIndex) Else Set CurrentDocument = Nothing
 
 End Function

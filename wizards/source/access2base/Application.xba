@@ -195,6 +195,7 @@ Dim iMode As Integer, vDialogs() As Variant, i As Integer, j As Integer, iCount 
 Dim oMacLibraries As Object, vAllDialogs As Variant, oLibrary As Object, vNames() As Variant, bFound As Boolean
 Dim oLibDialog As Object, sLibrary As String, oDocLibraries As Object, bLocalStorage As Boolean
 Dim vLibraries() As Variant, vMacLibraries() As Variant, vDocLibraries() As Variant, oDocMacLib As Object
+Dim vCurrentDocument As Variant
 Const cstCount = 0
 Const cstByIndex = 1
 Const cstByName = 2
@@ -209,8 +210,14 @@ Const cstSepar = &quot;!&quot;
 
 	Set vAllDialogs = Nothing
 
-	Set oDocLibraries = _A2B_.CurrentDocument.Document.DialogLibraries	&apos;	ThisComponent.DialogLibraries
-	vDocLibraries = oDocLibraries.getElementNames()
+	Set vCurrentDocument = _A2B_.CurrentDocument
+	If IsNull(vCurrentDocument) Then
+		Set oDocLibraries = Nothing
+		vDocLibraries = Array()
+	Else
+		Set oDocLibraries = _A2B_.CurrentDocument.Document.DialogLibraries	&apos;	ThisComponent.DialogLibraries
+		vDocLibraries = oDocLibraries.getElementNames()
+	End If
 	Set oMacLibraries = DialogLibraries
 	vMacLibraries = oMacLibraries.getElementNames()
 	&apos;Remove Access2Base from the list
