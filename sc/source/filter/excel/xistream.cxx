@@ -963,9 +963,8 @@ void XclImpStream::RestorePosition( const XclImpStreamPos& rPos )
 
 bool XclImpStream::ReadNextRawRecHeader()
 {
-    std::size_t nSeekedPos = mrStrm.Seek( mnNextRecPos );
-    bool bRet = (nSeekedPos == mnNextRecPos) && (mnNextRecPos + 4 <= mnStreamSize);
-    if( bRet )
+    bool bRet = checkSeek(mrStrm, mnNextRecPos) && (mnNextRecPos + 4 <= mnStreamSize);
+    if (bRet)
     {
         mrStrm.ReadUInt16( mnRawRecId ).ReadUInt16( mnRawRecSize );
         bRet = mrStrm.good();
