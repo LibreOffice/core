@@ -828,6 +828,15 @@ void ScalePropertyBox::setValue( const Any& rValue, const OUString& )
         else
             mnDirection = 3;
 
+        // Shrink animation is represented by negative value
+        // Shrink factor is calculated as (1 + $fValue)
+        // e.g 1 + (-0.75) = 0.25 => shrink to 25% of the size
+        // 0.25 = -0.75 + 1
+        if ( fValue1 < 0.0 )
+            fValue1 += 1;
+        if ( fValue2 < 0.0 )
+            fValue2 += 1;
+
         long nValue;
         if( fValue1 )
             nValue = (long)(fValue1 * 100.0);
@@ -841,6 +850,14 @@ void ScalePropertyBox::setValue( const Any& rValue, const OUString& )
 Any ScalePropertyBox::getValue()
 {
     double fValue1 = (double)mpMetric->GetValue() / 100.0;
+
+    // Shrink animation is represented by value < 1 (< 100%)
+    // Shrink factor is calculated as (1 + $fValue)
+    // e.g shrink to 25% of the size: 0.25 = 1 + $fValue =>
+    // $fValue = -0.75; -0.75 = 0.25 -1
+    if ( fValue1 < 1.0 )
+        fValue1 -= 1;
+
     double fValue2 = fValue1;
 
     if( mnDirection == 1 )
