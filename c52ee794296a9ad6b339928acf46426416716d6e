@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_475b7b87",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 814,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-11-16T15:25:25Z",
+      "side": 1,
+      "message": "pFormat \u003d\u003d nullptr or just !pFormat)",
+      "revId": "c52ee794296a9ad6b339928acf46426416716d6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
