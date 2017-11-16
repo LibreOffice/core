@@ -27,6 +27,7 @@
 #include <rtl/ustring.hxx>
 
 #include <cstdio>
+#include <memory>
 #include <vector>
 #include <boost/optional.hpp>
 #include <ndole.hxx>
@@ -75,10 +76,10 @@ class DocxExport : public MSWordExportBase
     ::sax_fastparser::FSHelperPtr mpFS;
 
     /// Access to the DrawingML writer.
-    oox::drawingml::DrawingML *m_pDrawingML;
+    std::unique_ptr<oox::drawingml::DrawingML> m_pDrawingML;
 
     /// Attribute output for document.
-    DocxAttributeOutput *m_pAttrOutput;
+    std::unique_ptr<DocxAttributeOutput> m_pAttrOutput;
 
     /// Sections/headers/footers
     MSWordSections *m_pSections;
@@ -99,10 +100,10 @@ class DocxExport : public MSWordExportBase
     sal_Int32 m_nHeadersFootersInSection;
 
     /// Exporter of the VML shapes.
-    oox::vml::VMLExport *m_pVMLExport;
+    std::unique_ptr<oox::vml::VMLExport> m_pVMLExport;
 
     /// Exporter of drawings.
-    DocxSdrExport* m_pSdrExport;
+    std::unique_ptr<DocxSdrExport> m_pSdrExport;
 
     /// If the result will be a .docm file or not.
     bool m_bDocm;

@@ -480,7 +480,7 @@ void DocxExport::OutputDML(uno::Reference<drawing::XShape> const & xShape)
         nNamespace = XML_wpg;
     else if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
         nNamespace = XML_pic;
-    oox::drawingml::ShapeExport aExport(nNamespace, m_pAttrOutput->GetSerializer(), nullptr, m_pFilter, oox::drawingml::DOCUMENT_DOCX, m_pAttrOutput);
+    oox::drawingml::ShapeExport aExport(nNamespace, m_pAttrOutput->GetSerializer(), nullptr, m_pFilter, oox::drawingml::DOCUMENT_DOCX, m_pAttrOutput.get());
     aExport.WriteShape(xShape);
 }
 
@@ -1557,28 +1557,20 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
     SetFS(m_pDocumentFS);
 
     // the DrawingML access
-    m_pDrawingML = new oox::drawingml::DrawingML(m_pDocumentFS, m_pFilter, oox::drawingml::DOCUMENT_DOCX);
+    m_pDrawingML.reset(new oox::drawingml::DrawingML(m_pDocumentFS, m_pFilter, oox::drawingml::DOCUMENT_DOCX));
 
     // the attribute output for the document
-    m_pAttrOutput = new DocxAttributeOutput( *this, m_pDocumentFS, m_pDrawingML );
+    m_pAttrOutput.reset(new DocxAttributeOutput( *this, m_pDocumentFS, m_pDrawingML.get() ));
 
     // the related VMLExport
-    m_pVMLExport = new VMLExport( m_pDocumentFS, m_pAttrOutput );
+    m_pVMLExport.reset(new VMLExport( m_pDocumentFS, m_pAttrOutput.get() ));
 
     // the related drawing export
-    m_pSdrExport = new DocxSdrExport( *this, m_pDocumentFS, m_pDrawingML );
+    m_pSdrExport.reset(new DocxSdrExport( *this, m_pDocumentFS, m_pDrawingML.get() ));
 }
 
 DocxExport::~DocxExport()
 {
-    delete m_pSdrExport;
-    m_pSdrExport = nullptr;
-    delete m_pVMLExport;
-    m_pVMLExport = nullptr;
-    delete m_pAttrOutput;
-    m_pAttrOutput = nullptr;
-    delete m_pDrawingML;
-    m_pDrawingML = nullptr;
 }
 
 DocxSettingsData::DocxSettingsData()
