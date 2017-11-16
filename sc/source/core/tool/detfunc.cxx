@@ -130,7 +130,7 @@ static bool lcl_HasThickLine( const SdrObject& rObj )
 {
     // thin lines get width 0 -> everything greater 0 is a thick line
 
-    return static_cast<const XLineWidthItem&>(rObj.GetMergedItem(XATTR_LINEWIDTH)).GetValue() > 0;
+    return rObj.GetMergedItem(XATTR_LINEWIDTH).GetValue() > 0;
 }
 
 ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
@@ -401,9 +401,9 @@ bool ScDetectiveFunc::HasArrow( const ScAddress& rStart,
             const SfxItemSet& rSet = pObject->GetMergedItemSet();
 
             bool bObjStartAlien =
-                lcl_IsOtherTab( static_cast<const XLineStartItem&>(rSet.Get(XATTR_LINESTART)).GetLineStartValue() );
+                lcl_IsOtherTab( rSet.Get(XATTR_LINESTART).GetLineStartValue() );
             bool bObjEndAlien =
-                lcl_IsOtherTab( static_cast<const XLineEndItem&>(rSet.Get(XATTR_LINEEND)).GetLineEndValue() );
+                lcl_IsOtherTab( rSet.Get(XATTR_LINEEND).GetLineEndValue() );
 
             bool bStartHit = bStartAlien ? bObjStartAlien :
                                 ( !bObjStartAlien && aStartRect.IsInside(pObject->GetPoint(0)) );
@@ -427,9 +427,9 @@ bool ScDetectiveFunc::IsNonAlienArrow( const SdrObject* pObject )
         const SfxItemSet& rSet = pObject->GetMergedItemSet();
 
         bool bObjStartAlien =
-            lcl_IsOtherTab( static_cast<const XLineStartItem&>(rSet.Get(XATTR_LINESTART)).GetLineStartValue() );
+            lcl_IsOtherTab( rSet.Get(XATTR_LINESTART).GetLineStartValue() );
         bool bObjEndAlien =
-            lcl_IsOtherTab( static_cast<const XLineEndItem&>(rSet.Get(XATTR_LINEEND)).GetLineEndValue() );
+            lcl_IsOtherTab( rSet.Get(XATTR_LINEEND).GetLineEndValue() );
 
         return !bObjStartAlien && !bObjEndAlien;
     }
@@ -1580,7 +1580,7 @@ ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject, 
                     FindFrameForObject( pObject, rSource );     // modifies rSource
                 }
 
-                ColorData nObjColor = static_cast<const XLineColorItem&>(pObject->GetMergedItem(XATTR_LINECOLOR)).GetColorValue().GetColor();
+                ColorData nObjColor = pObject->GetMergedItem(XATTR_LINECOLOR).GetColorValue().GetColor();
                 if ( nObjColor == GetErrorColor() && nObjColor != GetArrowColor() )
                     rRedLine = true;
             }

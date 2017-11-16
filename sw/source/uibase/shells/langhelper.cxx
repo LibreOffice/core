@@ -242,9 +242,9 @@ namespace SwLangHelper
             bool bIsSingleScriptType = true;
             switch (SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ))
             {
-                case SvtScriptType::LATIN :    nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE : RES_CHRATR_LANGUAGE; break;
-                case SvtScriptType::ASIAN :    nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE_CJK : RES_CHRATR_CJK_LANGUAGE; break;
-                case SvtScriptType::COMPLEX :  nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE_CTL : RES_CHRATR_CTL_LANGUAGE; break;
+                case SvtScriptType::LATIN :    nLangWhichId = pEditEngine ? sal_uInt16(EE_CHAR_LANGUAGE) : sal_uInt16(RES_CHRATR_LANGUAGE); break;
+                case SvtScriptType::ASIAN :    nLangWhichId = pEditEngine ? sal_uInt16(EE_CHAR_LANGUAGE_CJK) : sal_uInt16(RES_CHRATR_CJK_LANGUAGE); break;
+                case SvtScriptType::COMPLEX :  nLangWhichId = pEditEngine ? sal_uInt16(EE_CHAR_LANGUAGE_CTL) : sal_uInt16(RES_CHRATR_CTL_LANGUAGE); break;
                 default:
                     bIsSingleScriptType = false;
                     OSL_FAIL("unexpected case" );

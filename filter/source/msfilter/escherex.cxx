@@ -553,7 +553,7 @@ void    EscherPropertyContainer::CreateFillProperties(
             SfxItemSet aAttr( pObj->GetMergedItemSet() );
             // tranparency with gradient. Means the third setting in transparency page is set
             bool bTransparentGradient =  ( aAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE ) == SfxItemState::SET ) &&
-                static_cast<const XFillFloatTransparenceItem&>( aAttr.Get( XATTR_FILLFLOATTRANSPARENCE ) ).IsEnabled();
+                aAttr.Get( XATTR_FILLFLOATTRANSPARENCE ).IsEnabled();
             CreateFillProperties(  rXPropSet, bEdge, bTransparentGradient );
         }
     }
@@ -851,7 +851,7 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, sLineName ) )
             {
                 OUString        aArrowStartName = *o3tl::doAccess<OUString>(aAny);
-                sal_Int16       nWhich = bLineStart ? XATTR_LINESTART : XATTR_LINEEND;
+                sal_uInt16      nWhich = bLineStart ? sal_uInt16(XATTR_LINESTART) : sal_uInt16(XATTR_LINEEND);
 
                 OUString aApiName = SvxUnogetApiNameForItem(nWhich, aArrowStartName);
                 bool bIsMapped = true;

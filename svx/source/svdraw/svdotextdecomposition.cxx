@@ -888,14 +888,14 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     Color aOriginalBackColor(rOutliner.GetBackgroundColor());
     const SfxItemSet* pBackgroundFillSet = &GetObjectItemSet();
 
-    if (drawing::FillStyle_NONE == static_cast<const XFillStyleItem&>(pBackgroundFillSet->Get(XATTR_FILLSTYLE)).GetValue())
+    if (drawing::FillStyle_NONE == pBackgroundFillSet->Get(XATTR_FILLSTYLE).GetValue())
     {
         SdrPage *pOwnerPage = GetPage();
         if (pOwnerPage)
         {
             pBackgroundFillSet = &pOwnerPage->getSdrPageProperties().GetItemSet();
 
-            if (drawing::FillStyle_NONE == static_cast<const XFillStyleItem&>(pBackgroundFillSet->Get(XATTR_FILLSTYLE)).GetValue())
+            if (drawing::FillStyle_NONE == pBackgroundFillSet->Get(XATTR_FILLSTYLE).GetValue())
             {
                 if (!pOwnerPage->IsMasterPage() && pOwnerPage->TRG_HasMasterPage())
                 {
@@ -905,7 +905,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         }
     }
 
-    if (drawing::FillStyle_NONE != static_cast<const XFillStyleItem&>(pBackgroundFillSet->Get(XATTR_FILLSTYLE)).GetValue())
+    if (drawing::FillStyle_NONE != pBackgroundFillSet->Get(XATTR_FILLSTYLE).GetValue())
     {
         Color aColor(rOutliner.GetBackgroundColor());
         GetDraftFillColor(*pBackgroundFillSet, aColor);

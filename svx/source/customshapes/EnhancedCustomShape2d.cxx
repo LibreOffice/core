@@ -702,8 +702,8 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     nXRef               ( 0x80000000 ),
     nYRef               ( 0x80000000 ),
     nColorData          ( 0 ),
-    bFilled             ( static_cast<const XFillStyleItem&>(pAObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue() != drawing::FillStyle_NONE ),
-    bStroked            ( static_cast<const XLineStyleItem&>(pAObj->GetMergedItem( XATTR_LINESTYLE )).GetValue() != drawing::LineStyle_NONE ),
+    bFilled             ( pAObj->GetMergedItem( XATTR_FILLSTYLE ).GetValue() != drawing::FillStyle_NONE ),
+    bStroked            ( pAObj->GetMergedItem( XATTR_LINESTYLE ).GetValue() != drawing::LineStyle_NONE ),
     bFlipH              ( false ),
     bFlipV              ( false )
 {
@@ -1388,14 +1388,14 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
 void EnhancedCustomShape2d::SwapStartAndEndArrow( SdrObject* pObj ) //#108274
 {
     XLineStartItem       aLineStart;
-    aLineStart.SetLineStartValue(static_cast<const XLineEndItem&>(pObj->GetMergedItem( XATTR_LINEEND )).GetLineEndValue());
-    XLineStartWidthItem  aLineStartWidth(static_cast<const XLineEndWidthItem&>(pObj->GetMergedItem( XATTR_LINEENDWIDTH )).GetValue());
-    XLineStartCenterItem aLineStartCenter(static_cast<const XLineEndCenterItem&>(pObj->GetMergedItem( XATTR_LINEENDCENTER )).GetValue());
+    aLineStart.SetLineStartValue(pObj->GetMergedItem( XATTR_LINEEND ).GetLineEndValue());
+    XLineStartWidthItem  aLineStartWidth(pObj->GetMergedItem( XATTR_LINEENDWIDTH ).GetValue());
+    XLineStartCenterItem aLineStartCenter(pObj->GetMergedItem( XATTR_LINEENDCENTER ).GetValue());
 
     XLineEndItem         aLineEnd;
-    aLineEnd.SetLineEndValue(static_cast<const XLineStartItem&>(pObj->GetMergedItem( XATTR_LINESTART )).GetLineStartValue());
-    XLineEndWidthItem    aLineEndWidth(static_cast<const XLineStartWidthItem&>(pObj->GetMergedItem( XATTR_LINESTARTWIDTH )).GetValue());
-    XLineEndCenterItem   aLineEndCenter(static_cast<const XLineStartCenterItem&>(pObj->GetMergedItem( XATTR_LINESTARTCENTER )).GetValue());
+    aLineEnd.SetLineEndValue(pObj->GetMergedItem( XATTR_LINESTART ).GetLineStartValue());
+    XLineEndWidthItem    aLineEndWidth(pObj->GetMergedItem( XATTR_LINESTARTWIDTH ).GetValue());
+    XLineEndCenterItem   aLineEndCenter(pObj->GetMergedItem( XATTR_LINESTARTCENTER ).GetValue());
 
     pObj->SetMergedItem( aLineStart );
     pObj->SetMergedItem( aLineStartWidth );
@@ -2147,7 +2147,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
 {
     if ( !rObj.IsLine() )
     {
-        const drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(rObj.GetMergedItem(XATTR_FILLSTYLE)).GetValue();
+        const drawing::FillStyle eFillStyle = rObj.GetMergedItem(XATTR_FILLSTYLE).GetValue();
         switch( eFillStyle )
         {
             default:
@@ -2157,7 +2157,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
                 if ( nColorCount || rObj.GetBrightness() != 0.0 )
                 {
                     aFillColor = GetColorData(
-                        static_cast<const XFillColorItem&>(rCustomShapeSet.Get( XATTR_FILLCOLOR )).GetColorValue(),
+                        rCustomShapeSet.Get( XATTR_FILLCOLOR ).GetColorValue(),
                         std::min(nColorIndex, nColorCount-1), rObj.GetBrightness() );
                     rObj.SetMergedItem( XFillColorItem( "", aFillColor ) );
                 }
@@ -2165,7 +2165,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
             }
             case drawing::FillStyle_GRADIENT:
             {
-                XGradient aXGradient(static_cast<const XFillGradientItem&>(rObj.GetMergedItem(XATTR_FILLGRADIENT)).GetGradientValue());
+                XGradient aXGradient(rObj.GetMergedItem(XATTR_FILLGRADIENT).GetGradientValue());
                 if ( nColorCount || rObj.GetBrightness() != 0.0 )
                 {
                     aXGradient.SetStartColor(
@@ -2183,7 +2183,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
             }
             case drawing::FillStyle_HATCH:
             {
-                XHatch aXHatch(static_cast<const XFillHatchItem&>(rObj.GetMergedItem(XATTR_FILLHATCH)).GetHatchValue());
+                XHatch aXHatch(rObj.GetMergedItem(XATTR_FILLHATCH).GetHatchValue());
                 if ( nColorCount || rObj.GetBrightness() != 0.0 )
                 {
                     aXHatch.SetColor(
@@ -2199,7 +2199,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
             {
                 if ( nColorCount || rObj.GetBrightness() != 0.0 )
                 {
-                    Bitmap aBitmap(static_cast<const XFillBitmapItem&>(rObj.GetMergedItem(XATTR_FILLBITMAP)).GetGraphicObject().GetGraphic().GetBitmapEx().GetBitmap());
+                    Bitmap aBitmap(rObj.GetMergedItem(XATTR_FILLBITMAP).GetGraphicObject().GetGraphic().GetBitmapEx().GetBitmap());
 
                     aBitmap.Adjust(
                         static_cast< short > ( GetLuminanceChange(
@@ -2251,8 +2251,8 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
 
             for(SdrPathObj* pObj : vObjectList)
             {
-                const drawing::LineStyle eLineStyle =static_cast<const XLineStyleItem&>(pObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
-                const drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE)).GetValue();
+                const drawing::LineStyle eLineStyle = pObj->GetMergedItem(XATTR_LINESTYLE).GetValue();
+                const drawing::FillStyle eFillStyle = pObj->GetMergedItem(XATTR_FILLSTYLE).GetValue();
 
                 // #i40600# if bLineGeometryNeededOnly is set, linestyle does not matter
                 if( !bLineGeometryNeededOnly && ( drawing::LineStyle_NONE == eLineStyle ) && ( drawing::FillStyle_NONE == eFillStyle ) )

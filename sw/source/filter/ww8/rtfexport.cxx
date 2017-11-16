@@ -1223,7 +1223,7 @@ void RtfExport::OutColorTable()
     nMaxItem = rPool.GetItemCount2(XATTR_FILLCOLOR);
     for (sal_uInt32 i = 0; i < nMaxItem; ++i)
     {
-        if (auto pItem = static_cast<const XFillColorItem*>(rPool.GetItem2(XATTR_FILLCOLOR, i)))
+        if (auto pItem = rPool.GetItem2(XATTR_FILLCOLOR, i))
             InsColor(pItem->GetColorValue());
     }
 

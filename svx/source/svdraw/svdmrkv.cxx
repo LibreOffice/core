@@ -1079,8 +1079,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                 if(SfxItemState::SET != rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, false))
                 {
                     // add this item, it's not yet there
-                    XFillFloatTransparenceItem aNewItem(
-                        static_cast<const XFillFloatTransparenceItem&>(rSet.Get(XATTR_FILLFLOATTRANSPARENCE)));
+                    XFillFloatTransparenceItem aNewItem(rSet.Get(XATTR_FILLFLOATTRANSPARENCE));
                     XGradient aGrad = aNewItem.GetGradientValue();
 
                     aNewItem.SetEnabled(true);
@@ -1106,7 +1105,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                 GradTransVector aGradTransVector;
                 GradTransGradient aGradTransGradient;
 
-                aGradTransGradient.aGradient = static_cast<const XFillFloatTransparenceItem&>(rSet.Get(XATTR_FILLFLOATTRANSPARENCE)).GetGradientValue();
+                aGradTransGradient.aGradient = rSet.Get(XATTR_FILLFLOATTRANSPARENCE).GetGradientValue();
                 GradTransformer::GradToVec(aGradTransGradient, aGradTransVector, pObj);
 
                 // build handles
@@ -1138,7 +1137,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
             {
                 SdrObject* pObj = GetMarkedObjectByIndex(0);
                 const SfxItemSet& rSet = pObj->GetMergedItemSet();
-                drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(rSet.Get(XATTR_FILLSTYLE)).GetValue();
+                drawing::FillStyle eFillStyle = rSet.Get(XATTR_FILLSTYLE).GetValue();
 
                 if(eFillStyle == drawing::FillStyle_GRADIENT)
                 {
@@ -1148,7 +1147,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                     GradTransGradient aGradTransGradient;
                     Size aHdlSize(15, 15);
 
-                    aGradTransGradient.aGradient = static_cast<const XFillGradientItem&>(rSet.Get(XATTR_FILLGRADIENT)).GetGradientValue();
+                    aGradTransGradient.aGradient = rSet.Get(XATTR_FILLGRADIENT).GetGradientValue();
                     GradTransformer::GradToVec(aGradTransGradient, aGradTransVector, pObj);
 
                     // build handles

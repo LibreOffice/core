@@ -115,7 +115,7 @@ namespace drawinglayer
             }
 
             // get object color
-            const ::basegfx::BColor aObjectColor(static_cast<const XFillColorItem&>(rSet.Get(XATTR_FILLCOLOR)).GetColorValue().getBColor());
+            const ::basegfx::BColor aObjectColor(rSet.Get(XATTR_FILLCOLOR).GetColorValue().getBColor());
 
             // get specular color
             const ::basegfx::BColor aSpecular(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DOBJ_MAT_SPECULAR)).GetValue().getBColor());

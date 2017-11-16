@@ -1104,7 +1104,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
 
             for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
             {
-                const XLineStartItem* pItem = static_cast<const XLineStartItem*>(pPool1->GetItem2( XATTR_LINESTART, nSurrogate ));
+                const XLineStartItem* pItem = pPool1->GetItem2( XATTR_LINESTART, nSurrogate );
 
                 if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
                 {
@@ -1126,7 +1126,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
 
                 for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
                 {
-                    const XLineEndItem* pItem = static_cast<const XLineEndItem*>(pPool1->GetItem2( XATTR_LINEEND, nSurrogate ));
+                    const XLineEndItem* pItem = pPool1->GetItem2( XATTR_LINEEND, nSurrogate );
 
                     if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
                     {
@@ -1150,7 +1150,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
             nCount = pPool2->GetItemCount2( XATTR_LINESTART );
             for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
             {
-                const XLineStartItem* pItem = static_cast<const XLineStartItem*>(pPool2->GetItem2( XATTR_LINESTART, nSurrogate ));
+                const XLineStartItem* pItem = pPool2->GetItem2( XATTR_LINESTART, nSurrogate );
 
                 if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
                 {
@@ -1171,7 +1171,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                 nCount = pPool2->GetItemCount2( XATTR_LINEEND );
                 for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
                 {
-                    const XLineEndItem* pItem = static_cast<const XLineEndItem*>(pPool2->GetItem2( XATTR_LINEEND, nSurrogate ));
+                    const XLineEndItem* pItem = pPool2->GetItem2( XATTR_LINEEND, nSurrogate );
 
                     if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
                     {
@@ -1205,7 +1205,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
 
                 for( nSurrogate2 = 0; nSurrogate2 < nCount; nSurrogate2++ )
                 {
-                    const XLineStartItem* pItem = static_cast<const XLineStartItem*>(pPool1->GetItem2( XATTR_LINESTART, nSurrogate2 ));
+                    const XLineStartItem* pItem = pPool1->GetItem2( XATTR_LINESTART, nSurrogate2 );
 
                     if( pItem && !pItem->GetName().isEmpty() )
                     {
@@ -1228,7 +1228,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                 nCount = pPool1->GetItemCount2( XATTR_LINEEND );
                 for( nSurrogate2 = 0; nSurrogate2 < nCount; nSurrogate2++ )
                 {
-                    const XLineEndItem* pItem = static_cast<const XLineEndItem*>(pPool1->GetItem2( XATTR_LINEEND, nSurrogate2 ));
+                    const XLineEndItem* pItem = pPool1->GetItem2( XATTR_LINEEND, nSurrogate2 );
 
                     if( pItem && !pItem->GetName().isEmpty() )
                     {
@@ -1358,7 +1358,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
 
             for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
             {
-                const XLineStartItem* pItem = static_cast<const XLineStartItem*>(pPool1->GetItem2( XATTR_LINESTART, nSurrogate ));
+                const XLineStartItem* pItem = pPool1->GetItem2( XATTR_LINESTART, nSurrogate );
 
                 if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
                 {
@@ -1380,7 +1380,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
 
                 for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
                 {
-                    const XLineEndItem* pItem = static_cast<const XLineEndItem*>(pPool1->GetItem2( XATTR_LINEEND, nSurrogate ));
+                    const XLineEndItem* pItem = pPool1->GetItem2( XATTR_LINEEND, nSurrogate );
 
                     if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
                     {
@@ -1404,7 +1404,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
             nCount = pPool2->GetItemCount2( XATTR_LINESTART );
             for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
             {
-                const XLineStartItem* pItem = static_cast<const XLineStartItem*>(pPool2->GetItem2( XATTR_LINESTART, nSurrogate ));
+                const XLineStartItem* pItem = pPool2->GetItem2( XATTR_LINESTART, nSurrogate );
 
                 if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
                 {
@@ -1425,7 +1425,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                 nCount = pPool2->GetItemCount2( XATTR_LINEEND );
                 for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
                 {
-                    const XLineEndItem* pItem = static_cast<const XLineEndItem*>(pPool2->GetItem2( XATTR_LINEEND, nSurrogate ));
+                    const XLineEndItem* pItem = pPool2->GetItem2( XATTR_LINEEND, nSurrogate );
 
                     if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
                     {
@@ -1459,7 +1459,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
 
                 for( nSurrogate2 = 0; nSurrogate2 < nCount; nSurrogate2++ )
                 {
-                    const XLineStartItem* pItem = static_cast<const XLineStartItem*>(pPool1->GetItem2( XATTR_LINESTART, nSurrogate2 ));
+                    const XLineStartItem* pItem = pPool1->GetItem2( XATTR_LINESTART, nSurrogate2 );
 
                     if( pItem && !pItem->GetName().isEmpty() )
                     {
@@ -1482,7 +1482,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                 nCount = pPool1->GetItemCount2( XATTR_LINEEND );
                 for( nSurrogate2 = 0; nSurrogate2 < nCount; nSurrogate2++ )
                 {
-                    const XLineEndItem* pItem = static_cast<const XLineEndItem*>(pPool1->GetItem2( XATTR_LINEEND, nSurrogate2 ));
+                    const XLineEndItem* pItem = pPool1->GetItem2( XATTR_LINEEND, nSurrogate2 );
 
                     if( pItem && !pItem->GetName().isEmpty() )
                     {
