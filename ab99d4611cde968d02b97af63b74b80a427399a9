@@ -16,6 +16,24 @@
       "revId": "ab99d4611cde968d02b97af63b74b80a427399a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_6713170e",
+        "filename": ".git-hooks/pre-commit",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-11-16T14:04:02Z",
+      "side": 0,
+      "message": "I would ignore that part, it\u0027s really up to you if you use sudo or su or something else. You could also pick a directory that is already in your PATH (~/bin), etc.",
+      "parentUuid": "1a430d35_c7568bd1",
+      "revId": "ab99d4611cde968d02b97af63b74b80a427399a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
