@@ -6,10 +6,34 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.0"
    width="16"
    height="16"
-   id="svg2528">
+   id="svg2528"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="sc_closedoc.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1272"
+     inkscape:window-height="999"
+     id="namedview21"
+     showgrid="false"
+     inkscape:zoom="29.5"
+     inkscape:cx="5.8046345"
+     inkscape:cy="11.245227"
+     inkscape:window-x="912"
+     inkscape:window-y="78"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2528" />
   <metadata
      id="metadata26">
     <rdf:RDF>
@@ -78,7 +102,7 @@
      id="path2555-7-8-5-0-9"
      d="m 7.9999999,0.50000026 c -4.138243,0 -7.49999996,3.36175724 -7.49999996,7.49999984 C 0.49999994,12.138243 3.8617569,15.5 7.9999999,15.5 12.138243,15.5 15.500007,12.138243 15.5,8.0000001 15.5,3.8617575 12.138243,0.50000026 7.9999999,0.50000026 Z" />
   <path
-     style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:0.5;fill:none;stroke:#7a0000;stroke-width:0.99999988;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+     style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:none;stroke:#b10000;stroke-width:0.99999988;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
      id="path2555-7-8-5-1"
      d="m 7.9999999,0.50000016 c -4.138243,0 -7.49999996,3.36175724 -7.49999996,7.49999994 C 0.49999994,12.138243 3.8617569,15.5 7.9999999,15.5 12.138243,15.5 15.500007,12.138243 15.5,8.0000001 15.5,3.8617574 12.138243,0.50000016 7.9999999,0.50000016 Z" />
   <path
