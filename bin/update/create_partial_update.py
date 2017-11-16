@@ -18,7 +18,7 @@ from path import UpdaterPath, mkdir_p, convert_to_unix, convert_to_native
 BUF_SIZE = 1024
 current_dir_path = os.path.dirname(os.path.realpath(convert_to_unix(__file__)))
 
-def InvalidFileException(Exception):
+class InvalidFileException(Exception):
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
@@ -36,7 +36,7 @@ def download_file(filepath, url, hash_string):
     file_hash = get_hash(filepath)
 
     if file_hash != hash_string:
-        raise InvalidFileException()
+        raise InvalidFileException("file hash does not match for file %s: Expected %s, Got: %s" % (url, hash_string, file_hash))
 
 def handle_language(lang_entries, filedir):
     mar = os.environ.get('MAR', 'mar')
