@@ -3157,6 +3157,22 @@ SvxBrushItem::~SvxBrushItem()
 {
 }
 
+bool SvxBrushItem::isUsed() const
+{
+    if (GPOS_NONE != GetGraphicPos())
+    {
+        // graphic used
+        return true;
+    }
+    else if (0xff != GetColor().GetTransparency())
+    {
+        // color used
+        return true;
+    }
+
+    return false;
+}
+
 sal_uInt16 SvxBrushItem::GetVersion( sal_uInt16 /*nFileVersion*/ ) const
 {
     return BRUSH_GRAPHIC_VERSION;

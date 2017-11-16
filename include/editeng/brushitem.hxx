@@ -79,6 +79,8 @@ public:
     virtual ~SvxBrushItem() override;
 
 public:
+    // check if it's used
+    bool isUsed() const;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
