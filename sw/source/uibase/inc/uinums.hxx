@@ -56,7 +56,7 @@ class SW_DLLPUBLIC SwNumRulesWithName final
         SwNumFormat MakeNumFormat(SwWrtShell& rSh) const;
     };
 
-    SwNumFormatGlobal* aFormats[ MAXLEVEL ];
+    std::unique_ptr<SwNumFormatGlobal> aFormats[ MAXLEVEL ];
 
     friend class sw::StoredChapterNumberingRules;
     friend class SwChapterNumRules;
@@ -82,7 +82,7 @@ class SW_DLLPUBLIC SwChapterNumRules final
 public:
     enum { nMaxRules = MAX_NUM_RULES };         // currently 9 defined forms
 private:
-    SwNumRulesWithName   *pNumRules[ MAX_NUM_RULES ];
+    std::unique_ptr<SwNumRulesWithName> pNumRules[ MAX_NUM_RULES ];
 
     void Init();
     void Save();
@@ -100,7 +100,7 @@ public:
 inline const SwNumRulesWithName *SwChapterNumRules::GetRules(sal_uInt16 nIdx) const
 {
     assert(nIdx < nMaxRules);
-    return pNumRules[nIdx];
+    return pNumRules[nIdx].get();
 }
 
 
