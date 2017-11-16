@@ -34,6 +34,24 @@
       "revId": "7804cbaf548922a1297316571a47d43283bb55d8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_e719c77a",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 6734,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2017-11-16T09:07:53Z",
+      "side": 1,
+      "message": "See patch https://gerrit.libreoffice.org/#/c/44804/",
+      "parentUuid": "1a430d35_470a9b22",
+      "revId": "7804cbaf548922a1297316571a47d43283bb55d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
