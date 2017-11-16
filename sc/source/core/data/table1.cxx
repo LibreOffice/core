@@ -235,7 +235,7 @@ bool SetOptimalHeightsToRows(
 
 ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
                     bool bColInfo, bool bRowInfo ) :
-    aCol( MAXCOLCOUNT ),
+    aCol( 0 ),
     aName( rNewName ),
     aCodeName( rNewName ),
     nLinkRefreshDelay( 0 ),
@@ -2370,9 +2370,19 @@ const ScConditionalFormatList* ScTable::GetCondFormList() const
 
 ScColumnsRange ScTable::GetColumnsRange(SCCOL nColBegin, SCCOL nColEnd) const
 {
+    ScColContainer::ScColumnVector::const_iterator beginIter = aCol.begin() + nColBegin;
+    ScColContainer::ScColumnVector::const_iterator endIter;
+
     // because the range is inclusive, some code will pass nColEnd<nColBegin to indicate an empty range
-    return ScColumnsRange(ScColumnsRange::Iterator(aCol.begin() + nColBegin),
-                          ScColumnsRange::Iterator(nColEnd < nColBegin ? (aCol.begin() + nColBegin) : (aCol.begin() + nColEnd + 1)));
+    if (nColEnd < nColBegin)
+        endIter = aCol.begin() + nColBegin;
+    else {
+        // clamp end of range to available columns
+        if (nColEnd >= aCol.size())
+            nColEnd = aCol.size() - 1;
+        endIter = aCol.begin() + nColEnd + 1;
+    }
+    return ScColumnsRange(ScColumnsRange::Iterator(beginIter), ScColumnsRange::Iterator(endIter));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
