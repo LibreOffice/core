@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 16 16"
+   id="svg22"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="sc_basicshapes.ring.svg"><metadata
+   id="metadata30">
+  <rdf:RDF>
+    <cc:Work
+       rdf:about="">
+      <dc:format>image/svg+xml</dc:format>
+      <dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+    </cc:Work>
+  </rdf:RDF>
+</metadata>
+<defs
+   id="defs28" />
+<sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1360"
+   inkscape:window-height="713"
+   id="namedview26"
+   showgrid="true"
+   inkscape:zoom="20.85965"
+   inkscape:cx="2.3735246"
+   inkscape:cy="7.6985947"
+   inkscape:window-x="0"
+   inkscape:window-y="28"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="svg22">
+  <inkscape:grid
+     type="xygrid"
+     id="grid4136" />
+</sodipodi:namedview>
+
+
+     /&gt;
+ <path
+   style="fill:#e9e9e9;fill-opacity:1;stroke:#8c8c8c;stroke-opacity:1"
+   d="M 8 0.5 C 3.857866 0.5 0.5 3.8578746 0.5 8 C 0.5 12.142125 3.857866 15.5 8 15.5 C 12.142134 15.5 15.5 12.142125 15.5 8 C 15.5 3.8578746 12.142134 0.5 8 0.5 z M 8 5 A 3 3 0 0 1 11 8 A 3 3 0 0 1 8 11 A 3 3 0 0 1 5 8 A 3 3 0 0 1 8 5 z "
+   id="path24" />
+<path
+   style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.884;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+   d="M 8 1 A 7 7 0 0 0 1 8 A 7 7 0 0 0 8 15 A 7 7 0 0 0 15 8 A 7 7 0 0 0 8 1 z M 8 2 A 6 6 0 0 1 14 8 A 6 6 0 0 1 8 14 A 6 6 0 0 1 2 8 A 6 6 0 0 1 8 2 z "
+   id="path4142" />
+</svg>
