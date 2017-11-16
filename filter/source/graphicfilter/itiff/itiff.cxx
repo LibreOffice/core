@@ -1309,7 +1309,11 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     if( DataTypeSize() * nDataLen > 4 )
                     {
                         pTIFF->ReadUInt32( nOffset );
-                        pTIFF->Seek(nOrigPos + nOffset);
+                        if (!checkSeek(*pTIFF, nOrigPos + nOffset))
+                        {
+                            bStatus = false;
+                            break;
+                        }
                     }
                     ReadTagData( nTagType, nDataLen );
                     nPos += 12; pTIFF->Seek( nPos );
