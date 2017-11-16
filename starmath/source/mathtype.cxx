@@ -592,7 +592,7 @@ bool MathType::Parse(SotStorage *pStor)
 #ifdef CAOLAN
     //sanity check
 
-    //sigh, theres no point! MathType (in some bizarre subvarient) pads
+    //sigh, there's no point! MathType (in some bizarre subvarient) pads
     //the end of the formula with ENDs (0)'s
     auto nEnd = pS->Tell();
     SAL_WARN_IF(nEnd == pS->Seek(STREAM_SEEK_TO_END), "starmath", "Possibly unfully parsed formula");
@@ -2057,7 +2057,7 @@ int MathType::StartTemplate(sal_uInt16 nSelector,sal_uInt16 nVariation)
     pS->WriteUChar( nVariation ); //variation
     pS->WriteUChar( 0x00 ); //options
     pS->WriteUChar( LINE );
-    //theres just no way we can now handle any character
+    //there's just no way we can now handle any character
     //attributes (from mathtypes perspective) centered
     //over an expression but above template attribute
     //such as widevec and similar constructs
@@ -3176,7 +3176,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
         switch (pTemp->GetToken().eType)
         {
         case TWIDEVEC:
-            //theres just no way we can now handle any character
+            //there's just no way we can now handle any character
             //attributes (from mathtypes perspective) centered
             //over an expression but above template attributes
             //such as widevec and similar constructs

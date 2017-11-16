@@ -195,7 +195,7 @@ public class utils {
 
     /**
      *
-     * This method get's the user dir of the connected office
+     * This method gets the user dir of the connected office
      *
      */
     public static String getOfficeUserPath(XMultiServiceFactory msf) {
@@ -258,7 +258,7 @@ public class utils {
 
     /**
      *
-     * This method get's the temp dir of the connected office
+     * This method gets the temp dir of the connected office
      *
      */
     public static String getOfficeTemp(XMultiServiceFactory msf) {

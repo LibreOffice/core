@@ -78,7 +78,7 @@ public class _TableAutoFormatField extends MultiPropertyTest {
     /**
     * Only some values can be used (which identify font name).
     * In this property value is changed from 'Times New Roman'
-    * to 'Courier' and vise versa.
+    * to 'Courier' and viceversa.
     */
     public void _CharFontName() {
         testProperty("CharFontName", new PropertyTester() {

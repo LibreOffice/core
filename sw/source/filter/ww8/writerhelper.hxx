@@ -540,7 +540,7 @@ namespace sw
 
             There are two differing types of numbering formats that may be on a
             paragraph, normal and outline. The outline is that numbering you
-            see in tools->outline numbering. Theres no difference in the
+            see in tools->outline numbering. There's no difference in the
             numbering itself, just how you get it from the SwTextNode. Needless
             to say the filter generally couldn't care less what type of
             numbering is in use.
@@ -574,7 +574,7 @@ namespace sw
 
             There are two differing types of numbering formats that may be on a
             paragraph, normal and outline. The outline is that numbering you
-            see in tools->outline numbering. Theres no difference in the
+            see in tools->outline numbering. There's no difference in the
             numbering itself, just how you get it from the SwTextNode. Needless
             to say the filter generally couldn't care less what type of
             numbering is in use.

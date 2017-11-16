@@ -2264,7 +2264,7 @@ SvXMLImportContextRef SmXMLDocContext_Impl::CreateChildContext(
                 rLocalName);
             break;
         default:
-            /*Basically theres an implicit mrow around certain bare
+            /*Basically there's an implicit mrow around certain bare
              *elements, use a RowContext to see if this is one of
              *those ones*/
             rtl::Reference<SmXMLRowContext_Impl> aTempContext(new SmXMLRowContext_Impl(GetSmImport(),nPrefix,

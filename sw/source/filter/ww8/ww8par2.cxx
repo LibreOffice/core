@@ -2684,7 +2684,7 @@ void WW8TabDesc::MergeCells()
                         // declared invalid because of sharing the exact same dimensions
                         // as their previous cell
 
-                        //If theres anything underneath/above we're ok.
+                        //If there's anything underneath/above we're ok.
                         if (rCell.bVertMerge || rCell.bVertRestart)
                             bMerge = true;
                         else
@@ -4086,7 +4086,7 @@ void WW8RStyle::PostProcessStyles()
 
     /*
      In the same loop apply the tabstop changes required because we need to
-     change their location if theres a special indentation for the first line,
+     change their location if there's a special indentation for the first line,
      By avoiding making use of each styles margins during reading of their
      tabstops we don't get problems with doubly adjusting tabstops that
      are inheritied.
