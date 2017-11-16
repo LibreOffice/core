@@ -975,6 +975,16 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWrapPolygon, "picture-wrap-polygon.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11), aSeq.getLength());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf44832_testSectionWithDifferentHeader, "tdf44832_section_new_header.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if(!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:headerReference", 1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testPictureColormodeGrayscale, "picture_colormode_grayscale.docx")
 {
     // THe problem was that the grayscale was not exported
