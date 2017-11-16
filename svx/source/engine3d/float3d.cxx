@@ -567,7 +567,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     eState = rAttrs.GetItemState(XATTR_FILLSTYLE);
     if(eState != SfxItemState::DONTCARE)
     {
-        drawing::FillStyle eXFS = (drawing::FillStyle)static_cast<const XFillStyleItem&>(rAttrs.Get(XATTR_FILLSTYLE)).GetValue();
+        drawing::FillStyle eXFS = (drawing::FillStyle)rAttrs.Get(XATTR_FILLSTYLE).GetValue();
         bBitmap = (eXFS == drawing::FillStyle_BITMAP || eXFS == drawing::FillStyle_GRADIENT || eXFS == drawing::FillStyle_HATCH);
     }
 
@@ -1492,7 +1492,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     eState = rAttrs.GetItemState(XATTR_FILLCOLOR);
     if( eState != SfxItemState::DONTCARE )
     {
-        aColor = static_cast<const XFillColorItem&>(rAttrs.Get(XATTR_FILLCOLOR)).GetColorValue();
+        aColor = rAttrs.Get(XATTR_FILLCOLOR).GetColorValue();
         SvxColorListBox* pLb = m_pLbMatColor;
         if( aColor != pLb->GetSelectEntryColor() )
         {
