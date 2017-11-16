@@ -41,7 +41,7 @@ public:
         mnCol = 0;
     }
 
-    void cell(const char* p, size_t n)
+    void cell(const char* p, size_t n, bool /*transient*/)
     {
         if (mnCol > MAXCOL)
             return;
