@@ -7412,14 +7412,14 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const & xCel
         {//vertical writing
             xPropSet->setPropertyValue(  "TextWritingMode" , Any( css::text::WritingMode_TB_RL ) );
         }
-        drawing::FillStyle eFillStyle(static_cast<const XFillStyleItem&>(pObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue());
+        drawing::FillStyle eFillStyle(pObj->GetMergedItem( XATTR_FILLSTYLE ).GetValue());
         css::drawing::FillStyle eFS( css::drawing::FillStyle_NONE );
         switch( eFillStyle )
         {
             case drawing::FillStyle_SOLID :
                 {
                     eFS = css::drawing::FillStyle_SOLID;
-                    Color aFillColor( static_cast<const XFillColorItem&>(pObj->GetMergedItem( XATTR_FILLCOLOR )).GetColorValue() );
+                    Color aFillColor( pObj->GetMergedItem( XATTR_FILLCOLOR ).GetColorValue() );
                     sal_Int32 nFillColor( aFillColor.GetColor() );
                     xPropSet->setPropertyValue( "FillColor", Any( nFillColor ) );
                 }
@@ -7427,7 +7427,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const & xCel
             case drawing::FillStyle_GRADIENT :
                 {
                     eFS = css::drawing::FillStyle_GRADIENT;
-                    XGradient aXGradient(static_cast<const XFillGradientItem&>(pObj->GetMergedItem(XATTR_FILLGRADIENT)).GetGradientValue());
+                    XGradient aXGradient(pObj->GetMergedItem(XATTR_FILLGRADIENT).GetGradientValue());
 
                     css::awt::Gradient aGradient;
                     aGradient.Style = (awt::GradientStyle) aXGradient.GetGradientStyle();
@@ -7451,7 +7451,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const & xCel
                 {
                     eFS = css::drawing::FillStyle_BITMAP;
 
-                    const XFillBitmapItem aXFillBitmapItem(static_cast<const XFillBitmapItem&>(pObj->GetMergedItem( XATTR_FILLBITMAP )));
+                    const XFillBitmapItem aXFillBitmapItem(pObj->GetMergedItem( XATTR_FILLBITMAP ));
                     OUString aURL( UNO_NAME_GRAPHOBJ_URLPREFIX);
                     aURL += OStringToOUString(
                         aXFillBitmapItem.GetGraphicObject().GetUniqueID(),
@@ -7459,8 +7459,8 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const & xCel
 
                     xPropSet->setPropertyValue("FillBitmapURL", Any( aURL ) );
 
-                    const XFillBmpStretchItem aStretchItem(static_cast<const XFillBmpStretchItem&>(pObj->GetMergedItem( XATTR_FILLBMP_STRETCH )));
-                    const XFillBmpTileItem aTileItem(static_cast<const XFillBmpTileItem&>(pObj->GetMergedItem( XATTR_FILLBMP_TILE )));
+                    const XFillBmpStretchItem aStretchItem(pObj->GetMergedItem( XATTR_FILLBMP_STRETCH ));
+                    const XFillBmpTileItem aTileItem(pObj->GetMergedItem( XATTR_FILLBMP_TILE ));
                     if( aTileItem.GetValue() )
                         xPropSet->setPropertyValue( "FillBitmapMode", Any( css::drawing::BitmapMode_REPEAT ) );
                     else if( aStretchItem.GetValue() )
@@ -7478,7 +7478,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const & xCel
         xPropSet->setPropertyValue( "FillStyle", Any( eFS ) );
         if ( eFillStyle != drawing::FillStyle_NONE )
         {
-            sal_Int16 nFillTransparence( static_cast<const XFillTransparenceItem&>(pObj->GetMergedItem( XATTR_FILLTRANSPARENCE ) ).GetValue() );
+            sal_Int16 nFillTransparence( pObj->GetMergedItem( XATTR_FILLTRANSPARENCE ).GetValue() );
             xPropSet->setPropertyValue( "FillTransparence", Any( nFillTransparence ) );
         }
     }
@@ -7491,17 +7491,17 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable > const 
 {
     try
     {
-        drawing::LineStyle eLineStyle(static_cast<const XLineStyleItem&>(pLine->GetMergedItem( XATTR_LINESTYLE )).GetValue());
+        drawing::LineStyle eLineStyle(pLine->GetMergedItem( XATTR_LINESTYLE ).GetValue());
         css::table::BorderLine2 aBorderLine;
         switch( eLineStyle )
         {
             case drawing::LineStyle_DASH :
             case drawing::LineStyle_SOLID :
                 {
-                    Color aLineColor( static_cast<const XLineColorItem&>(pLine->GetMergedItem( XATTR_LINECOLOR )).GetColorValue() );
+                    Color aLineColor( pLine->GetMergedItem( XATTR_LINECOLOR ).GetColorValue() );
                     aBorderLine.Color = aLineColor.GetColor();
                     // Avoid width = 0, the min value should be 1.
-                    sal_Int32 nLineWidth = std::max(sal_Int32(1), static_cast<const XLineWidthItem&>(pLine->GetMergedItem(XATTR_LINEWIDTH)) .GetValue() / 4);
+                    sal_Int32 nLineWidth = std::max(sal_Int32(1), pLine->GetMergedItem(XATTR_LINEWIDTH) .GetValue() / 4);
                     aBorderLine.LineWidth = static_cast< sal_Int16 >( nLineWidth );
                     aBorderLine.LineStyle = eLineStyle == drawing::LineStyle_SOLID ? table::BorderLineStyle::SOLID : table::BorderLineStyle::DASHED;
                 }

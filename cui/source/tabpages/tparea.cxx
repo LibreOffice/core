@@ -199,7 +199,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
         }
         case drawing::FillStyle_HATCH:
         {
-            m_rXFSet.Put( static_cast<const XFillHatchItem&>( rSet.Get(XATTR_FILLHATCH) ) );
+            m_rXFSet.Put( rSet.Get(XATTR_FILLHATCH) );
             SelectFillTypeHdl_Impl( m_pBtnHatch );
             break;
         }
