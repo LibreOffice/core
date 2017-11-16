@@ -1731,11 +1731,10 @@ sal_Int32 SwScriptInfo::KashidaJustify( long* pKernArray,
     if ( nCntKash < CountKashida() )
     {
         // skip any invalid kashidas
-        while ( ! IsKashidaValid ( nCntKash ) && nCntKash < nCntKashEnd )
+        while (nCntKash < nCntKashEnd && !IsKashidaValid(nCntKash))
             ++nCntKash;
 
-        sal_Int32 nKashidaPos = GetKashida( nCntKash );
-        sal_Int32 nIdx = nKashidaPos;
+        sal_Int32 nIdx = nCntKash < nCntKashEnd && IsKashidaValid(nCntKash) ? GetKashida(nCntKash) : nEnd;
         long nKashAdd = nSpaceAdd;
 
         while ( nIdx < nEnd )
@@ -1744,10 +1743,10 @@ sal_Int32 SwScriptInfo::KashidaJustify( long* pKernArray,
 
             // next kashida position
             ++nCntKash;
-            while ( ! IsKashidaValid ( nCntKash ) && nCntKash < nCntKashEnd )
+            while (nCntKash < nCntKashEnd && !IsKashidaValid(nCntKash))
                 ++nCntKash;
 
-            nIdx = nCntKash < CountKashida() && IsKashidaValid ( nCntKash ) ? GetKashida( nCntKash ) : nEnd;
+            nIdx = nCntKash < nCntKashEnd && IsKashidaValid(nCntKash) ? GetKashida(nCntKash) : nEnd;
             if ( nIdx > nEnd )
                 nIdx = nEnd;
 
