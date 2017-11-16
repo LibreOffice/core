@@ -67,8 +67,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/odf_namespace_types \
 	UnpackedTarball/liborcus/src/liborcus/odf_number_formatting_context \
 	UnpackedTarball/liborcus/src/liborcus/odf_para_context \
-	UnpackedTarball/liborcus/src/liborcus/odf_styles_context \
 	UnpackedTarball/liborcus/src/liborcus/odf_styles \
+	UnpackedTarball/liborcus/src/liborcus/odf_styles_context \
 	UnpackedTarball/liborcus/src/liborcus/odf_tokens \
 	UnpackedTarball/liborcus/src/liborcus/ods_content_xml_context \
 	UnpackedTarball/liborcus/src/liborcus/ods_content_xml_handler \
@@ -86,23 +86,24 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/orcus_import_ods \
 	UnpackedTarball/liborcus/src/liborcus/orcus_import_xlsx \
 	UnpackedTarball/liborcus/src/liborcus/orcus_ods \
-	UnpackedTarball/liborcus/src/liborcus/orcus_xlsx \
 	UnpackedTarball/liborcus/src/liborcus/orcus_xls_xml \
+	UnpackedTarball/liborcus/src/liborcus/orcus_xlsx \
 	UnpackedTarball/liborcus/src/liborcus/orcus_xml \
 	UnpackedTarball/liborcus/src/liborcus/session_context \
 	UnpackedTarball/liborcus/src/liborcus/spreadsheet_interface \
 	UnpackedTarball/liborcus/src/liborcus/spreadsheet_types \
 	UnpackedTarball/liborcus/src/liborcus/string_helper \
-	UnpackedTarball/liborcus/src/liborcus/xlsx_autofilter_context \
-	UnpackedTarball/liborcus/src/liborcus/xlsx_conditional_format_context \
-	UnpackedTarball/liborcus/src/liborcus/xlsx_context \
-	UnpackedTarball/liborcus/src/liborcus/xlsx_handler \
-	UnpackedTarball/liborcus/src/liborcus/xlsx_helper \
 	UnpackedTarball/liborcus/src/liborcus/xls_xml_context \
 	UnpackedTarball/liborcus/src/liborcus/xls_xml_detection_handler \
 	UnpackedTarball/liborcus/src/liborcus/xls_xml_handler \
 	UnpackedTarball/liborcus/src/liborcus/xls_xml_namespace_types \
 	UnpackedTarball/liborcus/src/liborcus/xls_xml_tokens \
+	UnpackedTarball/liborcus/src/liborcus/xlsx_autofilter_context \
+	UnpackedTarball/liborcus/src/liborcus/xlsx_conditional_format_context \
+	UnpackedTarball/liborcus/src/liborcus/xlsx_context \
+	UnpackedTarball/liborcus/src/liborcus/xlsx_drawing_context \
+	UnpackedTarball/liborcus/src/liborcus/xlsx_handler \
+	UnpackedTarball/liborcus/src/liborcus/xlsx_helper \
 	UnpackedTarball/liborcus/src/liborcus/xlsx_pivot_context \
 	UnpackedTarball/liborcus/src/liborcus/xlsx_revision_context \
 	UnpackedTarball/liborcus/src/liborcus/xlsx_session_data \
