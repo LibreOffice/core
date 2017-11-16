@@ -25,6 +25,7 @@
 
 #include <cstddef>
 #include <list>
+#include <memory>
 #include <vector>
 #include <editeng/outlobj.hxx>
 #include <rtl/ustring.hxx>
@@ -163,7 +164,7 @@ class SwPostItMgr: public SfxListener
         bool                            mbIsShowAnchor;
 
         // data structure to collect the <SwAnnotationWin> instances for certain <SwFrame> instances.
-        sw::sidebarwindows::SwFrameSidebarWinContainer* mpFrameSidebarWinContainer;
+        std::unique_ptr<sw::sidebarwindows::SwFrameSidebarWinContainer> mpFrameSidebarWinContainer;
 
         void            AddPostIts(bool bCheckExistence = true,bool bFocus = true);
         void            RemoveSidebarWin();
