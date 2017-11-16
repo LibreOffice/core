@@ -783,6 +783,8 @@ public:
     ScRangePairListRef& GetColNameRangesRef() { return xColNameRanges; }
     ScRangePairListRef& GetRowNameRangesRef() { return xRowNameRanges; }
 
+    SCCOL ClampToAllocatedColumns(SCTAB nTab, SCCOL nCol) const;
+    
     SC_DLLPUBLIC ScDBCollection* GetDBCollection() const { return pDBCollection.get();}
     void                         SetDBCollection( std::unique_ptr<ScDBCollection> pNewDBCollection,
                                                   bool bRemoveAutoFilter = false );
