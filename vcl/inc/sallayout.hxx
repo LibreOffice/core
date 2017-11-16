@@ -22,6 +22,7 @@
 
 #include <iostream>
 #include <list>
+#include <memory>
 #include <vector>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -243,7 +244,7 @@ private:
                     MultiSalLayout& operator=( const MultiSalLayout& ) = delete;
 
 private:
-    SalLayout*      mpLayouts[ MAX_FALLBACK ];
+    std::unique_ptr<SalLayout> mpLayouts[ MAX_FALLBACK ];
     const PhysicalFontFace* mpFallbackFonts[ MAX_FALLBACK ];
     ImplLayoutRuns  maFallbackRuns[ MAX_FALLBACK ];
     int             mnLevel;
