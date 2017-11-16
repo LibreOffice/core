@@ -310,7 +310,7 @@ void SvxLineDefTabPage::Reset( const SfxItemSet* rAttrs )
 
             case drawing::LineStyle_DASH:
             {
-                const XLineDashItem& rDashItem = static_cast<const XLineDashItem&>( rAttrs->Get( XATTR_LINEDASH ) );
+                const XLineDashItem& rDashItem = rAttrs->Get( XATTR_LINEDASH );
                 aDash = rDashItem.GetDashValue();
 
                 m_pLbLineStyles->SetNoSelection();

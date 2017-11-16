@@ -230,11 +230,11 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         while(aIterator.IsMore())
         {
             SdrObject* pObj = aIterator.Next();
-            drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE)).GetValue();
+            drawing::FillStyle eFillStyle = pObj->GetMergedItem(XATTR_FILLSTYLE).GetValue();
 
             if(!bLineUsed)
             {
-                drawing::LineStyle eLineStyle = static_cast<const XLineStyleItem&>(pObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
+                drawing::LineStyle eLineStyle = pObj->GetMergedItem(XATTR_LINESTYLE).GetValue();
 
                 if(drawing::LineStyle_NONE != eLineStyle)
                 {
@@ -301,7 +301,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         // gradient and transparency like shadow
         if(bGradientFillUsed)
         {
-            XGradient aGradient(static_cast<const XFillGradientItem&>(rOriginalSet.Get(XATTR_FILLGRADIENT)).GetGradientValue());
+            XGradient aGradient(rOriginalSet.Get(XATTR_FILLGRADIENT).GetGradientValue());
             sal_uInt8 nStartLuminance(aGradient.GetStartColor().GetLuminance());
             sal_uInt8 nEndLuminance(aGradient.GetEndColor().GetLuminance());
 
@@ -334,7 +334,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         // hatch and transparency like shadow
         if(bHatchFillUsed)
         {
-            XHatch aHatch(static_cast<const XFillHatchItem&>(rOriginalSet.Get(XATTR_FILLHATCH)).GetHatchValue());
+            XHatch aHatch(rOriginalSet.Get(XATTR_FILLHATCH).GetHatchValue());
             aHatch.SetColor(aShadowColor);
             aTempSet.Put(XFillHatchItem(aHatch));
             aTempSet.Put(XFillTransparenceItem(nShadowTransparence));
@@ -343,7 +343,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         // bitmap and transparency like shadow
         if(bBitmapFillUsed)
         {
-            GraphicObject aGraphicObject(static_cast<const XFillBitmapItem&>(rOriginalSet.Get(XATTR_FILLBITMAP)).GetGraphicObject());
+            GraphicObject aGraphicObject(rOriginalSet.Get(XATTR_FILLBITMAP).GetGraphicObject());
             const BitmapEx aBitmapEx(aGraphicObject.GetGraphic().GetBitmapEx());
             Bitmap aBitmap(aBitmapEx.GetBitmap());
 

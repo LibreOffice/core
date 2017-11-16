@@ -47,6 +47,11 @@
 #include <svx/sdsxyitm.hxx>
 #include <svx/sdshcitm.hxx>
 #include <svx/sdshtitm.hxx>
+#include <svx/xflbmsxy.hxx>
+#include <svx/xflbtoxy.hxx>
+#include <svx/xflboxy.hxx>
+#include <svx/xflbmtit.hxx>
+#include <svx/xflbstit.hxx>
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <svx/svdotext.hxx>
@@ -64,6 +69,7 @@
 #include <svx/sdtfchim.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/xflbmsli.hxx>
 #include <editeng/editstat.hxx>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
@@ -215,11 +221,11 @@ namespace drawinglayer
     {
         attribute::SdrLineAttribute createNewSdrLineAttribute(const SfxItemSet& rSet)
         {
-            const css::drawing::LineStyle eStyle(static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue());
+            const css::drawing::LineStyle eStyle(rSet.Get(XATTR_LINESTYLE).GetValue());
 
             if(drawing::LineStyle_NONE != eStyle)
             {
-                sal_uInt16 nTransparence(static_cast<const XLineTransparenceItem&>(rSet.Get(XATTR_LINETRANSPARENCE)).GetValue());
+                sal_uInt16 nTransparence(rSet.Get(XATTR_LINETRANSPARENCE).GetValue());
 
                 if(nTransparence > 100)
                 {
@@ -228,16 +234,16 @@ namespace drawinglayer
 
                 if(100 != nTransparence)
                 {
-                    const sal_uInt32 nWidth(static_cast<const XLineWidthItem&>(rSet.Get(XATTR_LINEWIDTH)).GetValue());
-                    const Color aColor(static_cast<const XLineColorItem&>(rSet.Get(XATTR_LINECOLOR)).GetColorValue());
-                    const css::drawing::LineJoint eJoint(static_cast<const XLineJointItem&>(rSet.Get(XATTR_LINEJOINT)).GetValue());
-                    const css::drawing::LineCap eCap(static_cast<const XLineCapItem&>(rSet.Get(XATTR_LINECAP)).GetValue());
+                    const sal_uInt32 nWidth(rSet.Get(XATTR_LINEWIDTH).GetValue());
+                    const Color aColor(rSet.Get(XATTR_LINECOLOR).GetColorValue());
+                    const css::drawing::LineJoint eJoint(rSet.Get(XATTR_LINEJOINT).GetValue());
+                    const css::drawing::LineCap eCap(rSet.Get(XATTR_LINECAP).GetValue());
                     ::std::vector< double > aDotDashArray;
                     double fFullDotDashLen(0.0);
 
                     if(drawing::LineStyle_DASH == eStyle)
                     {
-                        const XDash& rDash = static_cast<const XLineDashItem&>(rSet.Get(XATTR_LINEDASH)).GetDashValue();
+                        const XDash& rDash = rSet.Get(XATTR_LINEDASH).GetDashValue();
 
                         if(rDash.GetDots() || rDash.GetDashes())
                         {
@@ -263,8 +269,8 @@ namespace drawinglayer
             const SfxItemSet& rSet,
             double fWidth)
         {
-            const sal_Int32 nTempStartWidth(static_cast<const XLineStartWidthItem&>(rSet.Get(XATTR_LINESTARTWIDTH)).GetValue());
-            const sal_Int32 nTempEndWidth(static_cast<const XLineEndWidthItem&>(rSet.Get(XATTR_LINEENDWIDTH)).GetValue());
+            const sal_Int32 nTempStartWidth(rSet.Get(XATTR_LINESTARTWIDTH).GetValue());
+            const sal_Int32 nTempEndWidth(rSet.Get(XATTR_LINEENDWIDTH).GetValue());
             basegfx::B2DPolyPolygon aStartPolyPolygon;
             basegfx::B2DPolyPolygon aEndPolyPolygon;
             double fStartWidth(0.0);
@@ -287,12 +293,12 @@ namespace drawinglayer
 
                 if(0.0 != fStartWidth)
                 {
-                    aStartPolyPolygon = basegfx::B2DPolyPolygon(static_cast<const XLineStartItem&>(rSet.Get(XATTR_LINESTART)).GetLineStartValue());
+                    aStartPolyPolygon = basegfx::B2DPolyPolygon(rSet.Get(XATTR_LINESTART).GetLineStartValue());
 
                     if(aStartPolyPolygon.count() && aStartPolyPolygon.getB2DPolygon(0).count())
                     {
                         bStartActive = true;
-                        bStartCentered = static_cast<const XLineStartCenterItem&>(rSet.Get(XATTR_LINESTARTCENTER)).GetValue();
+                        bStartCentered = rSet.Get(XATTR_LINESTARTCENTER).GetValue();
                     }
                 }
             }
@@ -310,12 +316,12 @@ namespace drawinglayer
 
                 if(0.0 != fEndWidth)
                 {
-                    aEndPolyPolygon = basegfx::B2DPolyPolygon(static_cast<const XLineEndItem&>(rSet.Get(XATTR_LINEEND)).GetLineEndValue());
+                    aEndPolyPolygon = basegfx::B2DPolyPolygon(rSet.Get(XATTR_LINEEND).GetLineEndValue());
 
                     if(aEndPolyPolygon.count() && aEndPolyPolygon.getB2DPolygon(0).count())
                     {
                         bEndActive = true;
-                        bEndCentered = static_cast<const XLineEndCenterItem&>(rSet.Get(XATTR_LINEENDCENTER)).GetValue();
+                        bEndCentered = rSet.Get(XATTR_LINEENDCENTER).GetValue();
                     }
                 }
             }
@@ -345,7 +351,7 @@ namespace drawinglayer
 
                 if(nTransparence)
                 {
-                    sal_uInt16 nFillTransparence(static_cast<const XFillTransparenceItem&>(rSet.Get(XATTR_FILLTRANSPARENCE)).GetValue());
+                    sal_uInt16 nFillTransparence(rSet.Get(XATTR_FILLTRANSPARENCE).GetValue());
 
                     if(nFillTransparence > 100)
                     {
@@ -378,9 +384,9 @@ namespace drawinglayer
 
         attribute::SdrFillAttribute createNewSdrFillAttribute(const SfxItemSet& rSet)
         {
-            const drawing::FillStyle eStyle(static_cast<const XFillStyleItem&>(rSet.Get(XATTR_FILLSTYLE)).GetValue());
+            const drawing::FillStyle eStyle(rSet.Get(XATTR_FILLSTYLE).GetValue());
 
-            sal_uInt16 nTransparence(static_cast<const XFillTransparenceItem&>(rSet.Get(XATTR_FILLTRANSPARENCE)).GetValue());
+            sal_uInt16 nTransparence(rSet.Get(XATTR_FILLTRANSPARENCE).GetValue());
 
             if(nTransparence > 100)
             {
@@ -411,7 +417,7 @@ namespace drawinglayer
 
                 if(100 != nTransparence)
                 {
-                    const Color aColor(static_cast<const XFillColorItem&>(rSet.Get(XATTR_FILLCOLOR)).GetColorValue());
+                    const Color aColor(rSet.Get(XATTR_FILLCOLOR).GetColorValue());
                     attribute::FillGradientAttribute aGradient;
                     attribute::FillHatchAttribute aHatch;
                     attribute::SdrFillGraphicAttribute aFillGraphic;
@@ -425,7 +431,7 @@ namespace drawinglayer
                         }
                         case drawing::FillStyle_GRADIENT :
                         {
-                            XGradient aXGradient(static_cast<const XFillGradientItem&>(rSet.Get(XATTR_FILLGRADIENT)).GetGradientValue());
+                            XGradient aXGradient(rSet.Get(XATTR_FILLGRADIENT).GetGradientValue());
 
                             const Color aStartColor(aXGradient.GetStartColor());
                             const sal_uInt16 nStartIntens(aXGradient.GetStartIntens());
@@ -455,13 +461,13 @@ namespace drawinglayer
                                 (double)aXGradient.GetAngle() * F_PI1800,
                                 aStart,
                                 aEnd,
-                                static_cast<const XGradientStepCountItem&>(rSet.Get(XATTR_GRADIENTSTEPCOUNT)).GetValue());
+                                rSet.Get(XATTR_GRADIENTSTEPCOUNT).GetValue());
 
                             break;
                         }
                         case drawing::FillStyle_HATCH :
                         {
-                            const XHatch& rHatch(static_cast<const XFillHatchItem&>(rSet.Get(XATTR_FILLHATCH)).GetHatchValue());
+                            const XHatch& rHatch(rSet.Get(XATTR_FILLHATCH).GetHatchValue());
                             const Color aColorB(rHatch.GetColor());
 
                             aHatch = attribute::FillHatchAttribute(
@@ -470,7 +476,7 @@ namespace drawinglayer
                                 (double)rHatch.GetAngle() * F_PI1800,
                                 aColorB.getBColor(),
                                 3, // same default as VCL, a minimum of three discrete units (pixels) offset
-                                static_cast<const XFillBackgroundItem&>(rSet.Get(XATTR_FILLBACKGROUND)).GetValue());
+                                rSet.Get(XATTR_FILLBACKGROUND).GetValue());
 
                             break;
                         }
@@ -564,7 +570,7 @@ namespace drawinglayer
                 return attribute::SdrTextAttribute(
                     rText,
                     aOutlinerParaObject,
-                    static_cast<const XFormTextStyleItem&>(rSet.Get(XATTR_FORMTXTSTYLE)).GetValue(),
+                    rSet.Get(XATTR_FORMTXTSTYLE).GetValue(),
                     pLeft ? *pLeft : rTextObj.GetTextLeftDistance(),
                     pUpper ? *pUpper : rTextObj.GetTextUpperDistance(),
                     pRight ? *pRight : rTextObj.GetTextRightDistance(),
@@ -574,7 +580,7 @@ namespace drawinglayer
                     static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_TEXT_CONTOURFRAME)).GetValue(),
                     rTextObj.IsFitToSize(),
                     rTextObj.IsAutoFit(),
-                    static_cast<const XFormTextHideFormItem&>(rSet.Get(XATTR_FORMTXTHIDEFORM)).GetValue(),
+                    rSet.Get(XATTR_FORMTXTHIDEFORM).GetValue(),
                     SdrTextAniKind::Blink == eAniKind,
                     SdrTextAniKind::Scroll == eAniKind || SdrTextAniKind::Alternate == eAniKind || SdrTextAniKind::Slide == eAniKind,
                     bInEditMode,
@@ -626,7 +632,7 @@ namespace drawinglayer
 
         attribute::SdrFillGraphicAttribute createNewSdrFillGraphicAttribute(const SfxItemSet& rSet)
         {
-            Graphic aGraphic(static_cast<const XFillBitmapItem&>(rSet.Get(XATTR_FILLBITMAP)).GetGraphicObject().GetGraphic());
+            Graphic aGraphic(rSet.Get(XATTR_FILLBITMAP).GetGraphicObject().GetGraphic());
 
             if(!(GraphicType::Bitmap == aGraphic.GetType() || GraphicType::GdiMetafile == aGraphic.GetType()))
             {
@@ -685,14 +691,14 @@ namespace drawinglayer
 
             // get size
             const basegfx::B2DVector aSize(
-                (double) static_cast<const SfxMetricItem&>(rSet.Get(XATTR_FILLBMP_SIZEX)).GetValue(),
-                (double) static_cast<const SfxMetricItem&>(rSet.Get(XATTR_FILLBMP_SIZEY)).GetValue());
+                (double) rSet.Get(XATTR_FILLBMP_SIZEX).GetValue(),
+                (double) rSet.Get(XATTR_FILLBMP_SIZEY).GetValue());
             const basegfx::B2DVector aOffset(
-                (double) static_cast<const SfxUInt16Item&>(rSet.Get(XATTR_FILLBMP_TILEOFFSETX)).GetValue(),
-                (double) static_cast<const SfxUInt16Item&>(rSet.Get(XATTR_FILLBMP_TILEOFFSETY)).GetValue());
+                (double) rSet.Get(XATTR_FILLBMP_TILEOFFSETX).GetValue(),
+                (double) rSet.Get(XATTR_FILLBMP_TILEOFFSETY).GetValue());
             const basegfx::B2DVector aOffsetPosition(
-                (double) static_cast<const SfxUInt16Item&>(rSet.Get(XATTR_FILLBMP_POSOFFSETX)).GetValue(),
-                (double) static_cast<const SfxUInt16Item&>(rSet.Get(XATTR_FILLBMP_POSOFFSETY)).GetValue());
+                (double) rSet.Get(XATTR_FILLBMP_POSOFFSETX).GetValue(),
+                (double) rSet.Get(XATTR_FILLBMP_POSOFFSETY).GetValue());
 
             return attribute::SdrFillGraphicAttribute(
                 aGraphic,
@@ -701,9 +707,9 @@ namespace drawinglayer
                 aOffset,
                 aOffsetPosition,
                 RectPointToB2DVector(rSet.GetItem<XFillBmpPosItem>(XATTR_FILLBMP_POS)->GetValue()),
-                static_cast<const SfxBoolItem&>(rSet.Get(XATTR_FILLBMP_TILE)).GetValue(),
-                static_cast<const SfxBoolItem&>(rSet.Get(XATTR_FILLBMP_STRETCH)).GetValue(),
-                static_cast<const SfxBoolItem&>(rSet.Get(XATTR_FILLBMP_SIZELOG)).GetValue());
+                rSet.Get(XATTR_FILLBMP_TILE).GetValue(),
+                rSet.Get(XATTR_FILLBMP_STRETCH).GetValue(),
+                rSet.Get(XATTR_FILLBMP_SIZELOG).GetValue());
         }
 
         attribute::SdrShadowTextAttribute createNewSdrShadowTextAttribute(

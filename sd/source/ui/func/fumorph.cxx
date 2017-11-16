@@ -50,8 +50,6 @@ using namespace com::sun::star;
 
 namespace sd {
 
-#define  ITEMVALUE( ItemSet, Id, Cast ) ( static_cast<const Cast&>( (ItemSet).Get( (Id) ) ).GetValue() )
-
 FuMorph::FuMorph (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -354,10 +352,10 @@ void FuMorph::ImpInsertPolygons(
     aSet1.Put(pObj1->GetMergedItemSet());
     aSet2.Put(pObj2->GetMergedItemSet());
 
-    const drawing::LineStyle eLineStyle1 = ITEMVALUE( aSet1, XATTR_LINESTYLE, XLineStyleItem );
-    const drawing::LineStyle eLineStyle2 = ITEMVALUE( aSet2, XATTR_LINESTYLE, XLineStyleItem );
-    const drawing::FillStyle eFillStyle1 = ITEMVALUE( aSet1, XATTR_FILLSTYLE, XFillStyleItem );
-    const drawing::FillStyle eFillStyle2 = ITEMVALUE( aSet2, XATTR_FILLSTYLE, XFillStyleItem );
+    const drawing::LineStyle eLineStyle1 = aSet1.Get(XATTR_LINESTYLE).GetValue();
+    const drawing::LineStyle eLineStyle2 = aSet2.Get(XATTR_LINESTYLE).GetValue();
+    const drawing::FillStyle eFillStyle1 = aSet1.Get(XATTR_FILLSTYLE).GetValue();
+    const drawing::FillStyle eFillStyle2 = aSet2.Get(XATTR_FILLSTYLE).GetValue();
 
     if ( bAttributeFade )
     {
@@ -365,13 +363,11 @@ void FuMorph::ImpInsertPolygons(
         {
             bLineWidth = bLineColor = true;
 
-            aStartLineCol = static_cast< XLineColorItem const & >(
-                aSet1.Get(XATTR_LINECOLOR)).GetColorValue();
-            aEndLineCol = static_cast< XLineColorItem const & >(
-                aSet2.Get(XATTR_LINECOLOR)).GetColorValue();
+            aStartLineCol = aSet1.Get(XATTR_LINECOLOR).GetColorValue();
+            aEndLineCol = aSet2.Get(XATTR_LINECOLOR).GetColorValue();
 
-            nStartLineWidth = ITEMVALUE( aSet1, XATTR_LINEWIDTH, XLineWidthItem );
-            nEndLineWidth = ITEMVALUE( aSet2, XATTR_LINEWIDTH, XLineWidthItem );
+            nStartLineWidth = aSet1.Get(XATTR_LINEWIDTH).GetValue();
+            nEndLineWidth = aSet2.Get(XATTR_LINEWIDTH).GetValue();
         }
         else if ( ( eLineStyle1 == drawing::LineStyle_NONE ) && ( eLineStyle2 == drawing::LineStyle_NONE ) )
             bIgnoreLine = true;
@@ -379,10 +375,8 @@ void FuMorph::ImpInsertPolygons(
         if ( ( eFillStyle1 == drawing::FillStyle_SOLID ) && ( eFillStyle2 == drawing::FillStyle_SOLID ) )
         {
             bFillColor = true;
-            aStartFillCol = static_cast< XFillColorItem const & >(
-                aSet1.Get(XATTR_FILLCOLOR)).GetColorValue();
-            aEndFillCol = static_cast< XFillColorItem const & >(
-                aSet2.Get(XATTR_FILLCOLOR)).GetColorValue();
+            aStartFillCol = aSet1.Get(XATTR_FILLCOLOR).GetColorValue();
+            aEndFillCol = aSet2.Get(XATTR_FILLCOLOR).GetColorValue();
         }
         else if ( ( eFillStyle1 == drawing::FillStyle_NONE ) && ( eFillStyle2 == drawing::FillStyle_NONE ) )
             bIgnoreFill = true;

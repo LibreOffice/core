@@ -187,7 +187,7 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet& rSet )
         else
             aString += aURL.getBase();
 
-        sal_Int32 nPos = SearchPatternList( static_cast<const XFillBitmapItem&>( rSet.Get(XATTR_FILLBITMAP)).GetName() );
+        sal_Int32 nPos = SearchPatternList( rSet.Get(XATTR_FILLBITMAP).GetName() );
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             sal_uInt16 nId = m_pPatternLB->GetItemId( static_cast<size_t>( nPos ) );
