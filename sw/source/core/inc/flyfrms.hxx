@@ -37,10 +37,10 @@ private:
     // #i34753# - flag for at-page anchored Writer fly frames
     // to prevent a positioning - call of method <MakeObjPos()> -, if Writer
     // fly frame is already clipped during its format by the object formatter.
-    bool mbNoMakePos;
+    bool            mbNoMakePos : 1;
 
     // #i37068# - flag to prevent move in method <CheckClip(..)>
-    bool mbNoMoveOnCheckClip;
+    bool            mbNoMoveOnCheckClip : 1;
 
     SwRect maUnclippedFrame;
 
@@ -133,6 +133,9 @@ public:
     bool isTransformableSwFrame() const { return bool(mpTransformableSwFrame); }
     TransformableSwFrame* getTransformableSwFrame() { return mpTransformableSwFrame.get(); }
     const TransformableSwFrame* getTransformableSwFrame() const { return mpTransformableSwFrame.get(); }
+
+    // RotateFlyFrame3 - Support for AutoContour
+    bool supportsAutoContour() const;
 
     // RotateFlyFrame3 - Support for Transformations
     virtual basegfx::B2DHomMatrix getFrameAreaTransformation() const override;

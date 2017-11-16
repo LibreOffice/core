@@ -2303,8 +2303,18 @@ void SwFlyFrame::NotifyDrawObj()
     pObj->SetRectsDirty();
     pObj->SetChanged();
     pObj->BroadcastObjectChange();
+
     if ( GetFormat()->GetSurround().IsContour() )
+    {
         ClrContourCache( pObj );
+    }
+    else if(IsFlyFreeFrame() && static_cast< const SwFlyFreeFrame* >(this)->supportsAutoContour())
+    {
+        // RotateFlyFrame3: Also need to clear when changes happen
+        // Caution: isTransformableSwFrame is already reset when resetting rotation, so
+        // *additionally* reset in SwFlyFreeFrame::MakeAll when no more rotation
+        ClrContourCache( pObj );
+    }
 }
 
 Size SwFlyFrame::CalcRel( const SwFormatFrameSize &rSz ) const
@@ -2435,120 +2445,141 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
     bool bRet = false;
     const bool bIsCandidate(Lower() && Lower()->IsNoTextFrame());
 
-    if(bIsCandidate && GetFormat()->GetSurround().IsContour())
+    if(bIsCandidate)
     {
-        SwNoTextNode *pNd = const_cast<SwNoTextNode*>(static_cast<const SwNoTextNode*>(static_cast<const SwContentFrame*>(Lower())->GetNode()));
-        // OD 16.04.2003 #i13147# - determine <GraphicObject> instead of <Graphic>
-        // in order to avoid load of graphic, if <SwNoTextNode> contains a graphic
-        // node and method is called for paint.
-        const GraphicObject* pGrfObj = nullptr;
-        bool bGrfObjCreated = false;
-        const SwGrfNode* pGrfNd = pNd->GetGrfNode();
-        if ( pGrfNd && _bForPaint )
+        const SwFlyFreeFrame* pSwFlyFreeFrame(static_cast< const SwFlyFreeFrame* >(this));
+
+        if(GetFormat()->GetSurround().IsContour())
         {
-            pGrfObj = &(pGrfNd->GetGrfObj());
-        }
-        else
-        {
-            pGrfObj = new GraphicObject( pNd->GetGraphic() );
-            bGrfObjCreated = true;
-        }
-        OSL_ENSURE( pGrfObj, "SwFlyFrame::GetContour() - No Graphic/GraphicObject found at <SwNoTextNode>." );
-        if ( pGrfObj && pGrfObj->GetType() != GraphicType::NONE )
-        {
-            if( !pNd->HasContour() )
+            SwNoTextNode *pNd = const_cast<SwNoTextNode*>(static_cast<const SwNoTextNode*>(static_cast<const SwContentFrame*>(Lower())->GetNode()));
+            // OD 16.04.2003 #i13147# - determine <GraphicObject> instead of <Graphic>
+            // in order to avoid load of graphic, if <SwNoTextNode> contains a graphic
+            // node and method is called for paint.
+            const GraphicObject* pGrfObj = nullptr;
+            bool bGrfObjCreated = false;
+            const SwGrfNode* pGrfNd = pNd->GetGrfNode();
+            if ( pGrfNd && _bForPaint )
             {
-                // OD 16.04.2003 #i13147# - no <CreateContour> for a graphic
-                // during paint. Thus, return (value of <bRet> should be <false>).
-                if ( pGrfNd && _bForPaint )
-                {
-                    OSL_FAIL( "SwFlyFrame::GetContour() - No Contour found at <SwNoTextNode> during paint." );
-                    return bRet;
-                }
-                pNd->CreateContour();
+                pGrfObj = &(pGrfNd->GetGrfObj());
             }
-            pNd->GetContour( rContour );
-            // The Node holds the Polygon matching the original size of the graphic
-            // We need to include the scaling here
-            SwRect aClip;
-            SwRect aOrig;
-            Lower()->Calc(pRenderContext);
-            static_cast<const SwNoTextFrame*>(Lower())->GetGrfArea( aClip, &aOrig );
-            // OD 16.04.2003 #i13147# - copy method code <SvxContourDlg::ScaleContour(..)>
-            // in order to avoid that graphic has to be loaded for contour scale.
-            //SvxContourDlg::ScaleContour( rContour, aGrf, MapUnit::MapTwip, aOrig.SSize() );
+            else
             {
-                OutputDevice*   pOutDev = Application::GetDefaultDevice();
-                const MapMode   aDispMap( MapUnit::MapTwip );
-                const MapMode   aGrfMap( pGrfObj->GetPrefMapMode() );
-                const Size      aGrfSize( pGrfObj->GetPrefSize() );
-                Size            aOrgSize;
-                Point           aNewPoint;
-                bool            bPixelMap = aGrfMap.GetMapUnit() == MapUnit::MapPixel;
-
-                if ( bPixelMap )
-                    aOrgSize = pOutDev->PixelToLogic( aGrfSize, aDispMap );
-                else
-                    aOrgSize = OutputDevice::LogicToLogic( aGrfSize, aGrfMap, aDispMap );
-
-                if ( aOrgSize.Width() && aOrgSize.Height() )
+                pGrfObj = new GraphicObject( pNd->GetGraphic() );
+                bGrfObjCreated = true;
+            }
+            OSL_ENSURE( pGrfObj, "SwFlyFrame::GetContour() - No Graphic/GraphicObject found at <SwNoTextNode>." );
+            if ( pGrfObj && pGrfObj->GetType() != GraphicType::NONE )
+            {
+                if( !pNd->HasContour() )
                 {
-                    double fScaleX = (double) aOrig.Width() / aOrgSize.Width();
-                    double fScaleY = (double) aOrig.Height() / aOrgSize.Height();
-
-                    for ( sal_uInt16 j = 0, nPolyCount = rContour.Count(); j < nPolyCount; j++ )
+                    // OD 16.04.2003 #i13147# - no <CreateContour> for a graphic
+                    // during paint. Thus, return (value of <bRet> should be <false>).
+                    if ( pGrfNd && _bForPaint )
                     {
-                        tools::Polygon& rPoly = rContour[ j ];
+                        OSL_FAIL( "SwFlyFrame::GetContour() - No Contour found at <SwNoTextNode> during paint." );
+                        return bRet;
+                    }
+                    pNd->CreateContour();
+                }
+                pNd->GetContour( rContour );
+                // The Node holds the Polygon matching the original size of the graphic
+                // We need to include the scaling here
+                SwRect aClip;
+                SwRect aOrig;
+                Lower()->Calc(pRenderContext);
+                static_cast<const SwNoTextFrame*>(Lower())->GetGrfArea( aClip, &aOrig );
+                // OD 16.04.2003 #i13147# - copy method code <SvxContourDlg::ScaleContour(..)>
+                // in order to avoid that graphic has to be loaded for contour scale.
+                //SvxContourDlg::ScaleContour( rContour, aGrf, MapUnit::MapTwip, aOrig.SSize() );
+                {
+                    OutputDevice*   pOutDev = Application::GetDefaultDevice();
+                    const MapMode   aDispMap( MapUnit::MapTwip );
+                    const MapMode   aGrfMap( pGrfObj->GetPrefMapMode() );
+                    const Size      aGrfSize( pGrfObj->GetPrefSize() );
+                    Size            aOrgSize;
+                    Point           aNewPoint;
+                    bool            bPixelMap = aGrfMap.GetMapUnit() == MapUnit::MapPixel;
 
-                        for ( sal_uInt16 i = 0, nCount = rPoly.GetSize(); i < nCount; i++ )
+                    if ( bPixelMap )
+                        aOrgSize = pOutDev->PixelToLogic( aGrfSize, aDispMap );
+                    else
+                        aOrgSize = OutputDevice::LogicToLogic( aGrfSize, aGrfMap, aDispMap );
+
+                    if ( aOrgSize.Width() && aOrgSize.Height() )
+                    {
+                        double fScaleX = (double) aOrig.Width() / aOrgSize.Width();
+                        double fScaleY = (double) aOrig.Height() / aOrgSize.Height();
+
+                        for ( sal_uInt16 j = 0, nPolyCount = rContour.Count(); j < nPolyCount; j++ )
                         {
-                            if ( bPixelMap )
-                                aNewPoint = pOutDev->PixelToLogic( rPoly[ i ], aDispMap  );
-                            else
-                                aNewPoint = OutputDevice::LogicToLogic( rPoly[ i ], aGrfMap, aDispMap  );
+                            tools::Polygon& rPoly = rContour[ j ];
 
-                            rPoly[ i ] = Point( FRound( aNewPoint.getX() * fScaleX ), FRound( aNewPoint.getY() * fScaleY ) );
+                            for ( sal_uInt16 i = 0, nCount = rPoly.GetSize(); i < nCount; i++ )
+                            {
+                                if ( bPixelMap )
+                                    aNewPoint = pOutDev->PixelToLogic( rPoly[ i ], aDispMap  );
+                                else
+                                    aNewPoint = OutputDevice::LogicToLogic( rPoly[ i ], aGrfMap, aDispMap  );
+
+                                rPoly[ i ] = Point( FRound( aNewPoint.getX() * fScaleX ), FRound( aNewPoint.getY() * fScaleY ) );
+                            }
                         }
                     }
                 }
+                // OD 17.04.2003 #i13147# - destroy created <GraphicObject>.
+                if ( bGrfObjCreated )
+                {
+                    delete pGrfObj;
+                }
+                rContour.Move( aOrig.Left(), aOrig.Top() );
+                if( !aClip.Width() )
+                    aClip.Width( 1 );
+                if( !aClip.Height() )
+                    aClip.Height( 1 );
+                rContour.Clip( aClip.SVRect() );
+                rContour.Optimize(PolyOptimizeFlags::CLOSE);
+                bRet = true;
             }
-            // OD 17.04.2003 #i13147# - destroy created <GraphicObject>.
-            if ( bGrfObjCreated )
-            {
-                delete pGrfObj;
-            }
-            rContour.Move( aOrig.Left(), aOrig.Top() );
-            if( !aClip.Width() )
-                aClip.Width( 1 );
-            if( !aClip.Height() )
-                aClip.Height( 1 );
-            rContour.Clip( aClip.SVRect() );
-            rContour.Optimize(PolyOptimizeFlags::CLOSE);
-            bRet = true;
         }
-    }
-
-    if(bRet &&
-        rContour.Count() &&
-        IsFlyFreeFrame() &&
-        static_cast<const SwFlyFreeFrame*>(this)->isTransformableSwFrame())
-    {
-        // RotateFlyFrame: Need to adapt contour to transformation
-        basegfx::B2DVector aScale, aTranslate;
-        double fRotate, fShearX;
-        getFrameAreaTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
-
-        if(!basegfx::fTools::equalZero(fRotate))
+        else
         {
-            basegfx::B2DPolyPolygon aSource(rContour.getB2DPolyPolygon());
-            const basegfx::B2DPoint aCenter(getFrameAreaTransformation() * basegfx::B2DPoint(0.5, 0.5));
-            const basegfx::B2DHomMatrix aRotateAroundCenter(
-                basegfx::utils::createRotateAroundPoint(
-                    aCenter.getX(),
-                    aCenter.getY(),
-                    fRotate));
-            aSource.transform(aRotateAroundCenter);
-            rContour = tools::PolyPolygon(aSource);
+            if(nullptr != pSwFlyFreeFrame &&
+                pSwFlyFreeFrame->supportsAutoContour() &&
+                // isTransformableSwFrame already used in supportsAutoContour(), but
+                // better check twice when it may get changed there...
+                pSwFlyFreeFrame->isTransformableSwFrame())
+            {
+                // RotateFlyFrame: use untransformed SwFrame to allow text floating around.
+                // Will be transformed below
+                const TransformableSwFrame* pTransformableSwFrame(pSwFlyFreeFrame->getTransformableSwFrame());
+                const SwRect aFrameArea(pTransformableSwFrame->getUntransformedFrameArea());
+                rContour = tools::PolyPolygon(tools::Polygon(aFrameArea.SVRect()));
+                bRet = (0 != rContour.Count());
+            }
+        }
+
+        if(bRet &&
+            0 != rContour.Count() &&
+            nullptr != pSwFlyFreeFrame &&
+            pSwFlyFreeFrame->isTransformableSwFrame())
+        {
+            // Need to adapt contour to transformation
+            basegfx::B2DVector aScale, aTranslate;
+            double fRotate, fShearX;
+            getFrameAreaTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
+
+            if(!basegfx::fTools::equalZero(fRotate))
+            {
+                basegfx::B2DPolyPolygon aSource(rContour.getB2DPolyPolygon());
+                const basegfx::B2DPoint aCenter(getFrameAreaTransformation() * basegfx::B2DPoint(0.5, 0.5));
+                const basegfx::B2DHomMatrix aRotateAroundCenter(
+                    basegfx::utils::createRotateAroundPoint(
+                        aCenter.getX(),
+                        aCenter.getY(),
+                        fRotate));
+                aSource.transform(aRotateAroundCenter);
+                rContour = tools::PolyPolygon(aSource);
+            }
         }
     }
 

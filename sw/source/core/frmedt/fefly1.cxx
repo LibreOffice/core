@@ -369,7 +369,7 @@ void SwFEShell::SetFlyPos( const Point& rAbsPos )
     // Anchor and new RelPos will be calculated and set by the Fly
     if ( pFly->IsFlyAtContentFrame() )
     {
-        if(pFly->IsFlyFreeFrame() && static_cast<SwFlyFreeFrame*>(pFly)->isTransformableSwFrame())
+        if(pFly->IsFlyFreeFrame() && static_cast< SwFlyFreeFrame* >(pFly)->isTransformableSwFrame())
         {
             // RotateFlyFrame3: When we have a change and are in transformed state (e.g. rotation used),
             // we need to correct the absolute position (rAbsPos) which was created in

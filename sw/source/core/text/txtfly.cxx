@@ -177,7 +177,22 @@ const SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj
 {
     SwRect aRet;
     const SwFrameFormat* pFormat = &(pAnchoredObj->GetFrameFormat());
-    if( pFormat->GetSurround().IsContour() &&
+    bool bHandleContour(pFormat->GetSurround().IsContour());
+
+    if(!bHandleContour)
+    {
+        // RotateFlyFrame3: Object has no set contour, but for rotated
+        // FlyFrames we can create a 'default' contour to make text
+        // flow around the free, non-covered
+        const SwFlyFreeFrame* pSwFlyFreeFrame(dynamic_cast< const SwFlyFreeFrame* >(pAnchoredObj));
+
+        if(nullptr != pSwFlyFreeFrame && pSwFlyFreeFrame->supportsAutoContour())
+        {
+            bHandleContour = true;
+        }
+    }
+
+    if( bHandleContour &&
         ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) ==  nullptr ||
           ( static_cast<const SwFlyFrame*>(pAnchoredObj)->Lower() &&
             static_cast<const SwFlyFrame*>(pAnchoredObj)->Lower()->IsNoTextFrame() ) ) )
