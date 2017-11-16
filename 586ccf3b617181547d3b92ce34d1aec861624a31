@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_8c5f4840",
+        "filename": "xmloff/source/text/XMLRedlineExport.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-16T07:15:26Z",
+      "side": 1,
+      "message": "as a followup, would be nice to change this to\n\n    ::std::map\u003c\n            css::uno::Reference\u003c css::text::XText\u003e,\n            std::unique_ptr\u003cChangesVectorType\u003e \u003e",
+      "revId": "586ccf3b617181547d3b92ce34d1aec861624a31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
