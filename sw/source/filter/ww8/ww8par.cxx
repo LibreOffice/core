@@ -4828,7 +4828,11 @@ void WW8Customizations::Import( SwDocShell* pShell )
     {
         Tcg aTCG;
         long nCur = mpTableStream->Tell();
-        mpTableStream->Seek( mWw8Fib.m_fcCmds ); // point at tgc record
+        if (!checkSeek(*mpTableStream, mWw8Fib.m_fcCmds)) // point at tgc record
+        {
+            SAL_WARN("sw.ww8", "** Seek to Customization data failed!!!! ");
+            return;
+        }
         bool bReadResult = aTCG.Read( *mpTableStream );
         mpTableStream->Seek( nCur ); // return to previous position, is that necessary?
         if ( !bReadResult )
