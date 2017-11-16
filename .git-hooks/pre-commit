@@ -201,6 +201,8 @@ sub check_style($)
                 print("\nWARNING: Commit touches new (non-blacklisted) files, but no clang-format"
                       . " ${version}\n");
                 print(" found (via CLANG_FORMAT or PATH env vars, or in ${opt_lo}).\n\n");
+                print("You can get a suitable binary (or instructions how to build it yourself) at\n");
+                print(" <https://dev-www.libreoffice.org/bin/>.\n\n");
                 return;
             }
             if (system("$clang_format $filename | git --no-pager diff --no-index --exit-code $filename -") != 0)
