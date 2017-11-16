@@ -136,7 +136,10 @@ bool StgHeader::Load( SvStream& r )
      .ReadUInt16( m_nByteOrder )                 // 1C Unicode byte order indicator
      .ReadInt16( m_nPageSize )                  // 1E 1 << nPageSize = block size
      .ReadInt16( m_nDataPageSize );             // 20 1 << this size == data block size
-    r.SeekRel( 10 );
+    if (!r.good())
+        return false;
+    if (!checkSeek(r, r.Tell() + 10))
+        return false;
     r.ReadInt32( m_nFATSize )                   // 2C total number of FAT pages
      .ReadInt32( m_nTOCstrm )                   // 30 starting page for the TOC stream
      .ReadInt32( m_nReserved )                  // 34
@@ -148,7 +151,7 @@ bool StgHeader::Load( SvStream& r )
     for(sal_Int32 & i : m_nMasterFAT)
         r.ReadInt32( i );
 
-    return (r.GetErrorCode() == ERRCODE_NONE) && Check();
+    return r.good() && Check();
 }
 
 bool StgHeader::Store( StgIo& rIo )
