@@ -6060,6 +6060,9 @@ return !(i != 0 && j != 0);
 AC_LANG_POP([C++])
 CXXFLAGS=$save_CXXFLAGS
 
+dnl Clang 3.9 supports __float128 since
+dnl <http://llvm.org/viewvc/llvm-project?view=revision&revision=268898> "Enable support for
+dnl __float128 in Clang and enable it on pertinent platforms":
 AC_MSG_CHECKING([whether $CXX supports C++11 without __float128 compile error])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
