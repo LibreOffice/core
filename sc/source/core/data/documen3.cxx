@@ -2095,4 +2095,9 @@ void ScDocument::SetSortParam( const ScSortParam& rParam, SCTAB nTab )
     mSheetSortParams[ nTab ] = rParam;
 }
 
+SCCOL ScDocument::ClampToAllocatedColumns(SCTAB nTab, SCCOL nCol) const
+{
+    return maTabs[nTab]->ClampToAllocatedColumns(nCol);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
