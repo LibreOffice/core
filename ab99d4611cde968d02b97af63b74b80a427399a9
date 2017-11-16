@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_c7568bd1",
+        "filename": ".git-hooks/pre-commit",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-16T13:27:24Z",
+      "side": 0,
+      "message": "not sure how important it is, but I had to use sudo to make the dirs and copy stuff there",
+      "revId": "ab99d4611cde968d02b97af63b74b80a427399a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
