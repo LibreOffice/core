@@ -582,7 +582,7 @@ void ScDocument::UpdateFontCharSet()
             nCount = rDrawPool.GetItemCount2(EE_CHAR_FONTINFO);
             for (i=0; i<nCount; i++)
             {
-                pItem = const_cast<SvxFontItem*>(static_cast<const SvxFontItem*>(rDrawPool.GetItem2(EE_CHAR_FONTINFO, i)));
+                pItem = const_cast<SvxFontItem*>(rDrawPool.GetItem2(EE_CHAR_FONTINFO, i));
                 if ( pItem && ( pItem->GetCharSet() == eSrcSet ||
                                 ( bUpdateOld && pItem->GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
                     pItem->SetCharSet( eSysSet );

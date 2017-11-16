@@ -171,7 +171,7 @@ void FuHangulHanjaConversion::ConvertStyles( LanguageType nTargetLanguage, const
             ( !bHasParent || rSet.GetItemState( EE_CHAR_FONTINFO_CJK, false ) == SfxItemState::SET ) )
         {
             // set new font attribute
-            SvxFontItem aFontItem( static_cast<const SvxFontItem&>( rSet.Get( EE_CHAR_FONTINFO_CJK ) ) );
+            SvxFontItem aFontItem( rSet.Get( EE_CHAR_FONTINFO_CJK ) );
             aFontItem.SetFamilyName(   pTargetFont->GetFamilyName());
             aFontItem.SetFamily(       pTargetFont->GetFamilyType());
             aFontItem.SetStyleName(    pTargetFont->GetStyleName());

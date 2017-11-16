@@ -444,8 +444,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 {
                     case SID_ATTR_CHAR_WEIGHT:
                     {
-                        FontWeight eFW = static_cast<const SvxWeightItem&>( aEditAttr.
-                                        Get( EE_CHAR_WEIGHT ) ).GetWeight();
+                        FontWeight eFW = aEditAttr.Get( EE_CHAR_WEIGHT ).GetWeight();
                         aNewAttr.Put( SvxWeightItem( eFW == WEIGHT_NORMAL ?
                                             WEIGHT_BOLD : WEIGHT_NORMAL,
                                             EE_CHAR_WEIGHT ) );
@@ -453,8 +452,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     break;
                     case SID_ATTR_CHAR_POSTURE:
                     {
-                        FontItalic eFI = static_cast<const SvxPostureItem&>( aEditAttr.
-                                        Get( EE_CHAR_ITALIC ) ).GetPosture();
+                        FontItalic eFI = aEditAttr.Get( EE_CHAR_ITALIC ).GetPosture();
                         aNewAttr.Put( SvxPostureItem( eFI == ITALIC_NORMAL ?
                                             ITALIC_NONE : ITALIC_NORMAL,
                                             EE_CHAR_ITALIC ) );
@@ -462,8 +460,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     break;
                     case SID_ATTR_CHAR_UNDERLINE:
                     {
-                        FontLineStyle eFU = static_cast<const SvxUnderlineItem&>( aEditAttr.
-                                        Get( EE_CHAR_UNDERLINE ) ).GetLineStyle();
+                        FontLineStyle eFU = aEditAttr.Get( EE_CHAR_UNDERLINE ).GetLineStyle();
                         aNewAttr.Put( SvxUnderlineItem( eFU == LINESTYLE_SINGLE ?
                                             LINESTYLE_NONE : LINESTYLE_SINGLE,
                                             EE_CHAR_UNDERLINE ) );
@@ -471,8 +468,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     break;
                     case SID_ATTR_CHAR_OVERLINE:
                     {
-                        FontLineStyle eFO = static_cast<const SvxOverlineItem&>( aEditAttr.
-                                        Get( EE_CHAR_OVERLINE ) ).GetLineStyle();
+                        FontLineStyle eFO = aEditAttr.Get( EE_CHAR_OVERLINE ).GetLineStyle();
                         aNewAttr.Put( SvxOverlineItem( eFO == LINESTYLE_SINGLE ?
                                             LINESTYLE_NONE : LINESTYLE_SINGLE,
                                             EE_CHAR_OVERLINE ) );
@@ -480,26 +476,22 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     break;
                     case SID_ATTR_CHAR_CONTOUR:
                     {
-                        aNewAttr.Put( SvxContourItem( !static_cast<const SvxContourItem&>( aEditAttr.
-                                        Get( EE_CHAR_OUTLINE ) ).GetValue(), EE_CHAR_OUTLINE ) );
+                        aNewAttr.Put( SvxContourItem( !aEditAttr.Get( EE_CHAR_OUTLINE ).GetValue(), EE_CHAR_OUTLINE ) );
                     }
                     break;
                     case SID_ATTR_CHAR_SHADOWED:
                     {
-                        aNewAttr.Put( SvxShadowedItem( !static_cast<const SvxShadowedItem&>( aEditAttr.
-                                        Get( EE_CHAR_SHADOW ) ).GetValue(), EE_CHAR_SHADOW ) );
+                        aNewAttr.Put( SvxShadowedItem( !aEditAttr.Get( EE_CHAR_SHADOW ).GetValue(), EE_CHAR_SHADOW ) );
                     }
                     break;
                     case SID_ATTR_CHAR_CASEMAP:
                     {
-                        aNewAttr.Put( SvxCaseMapItem( static_cast<const SvxCaseMapItem&>( aEditAttr.
-                                        Get( EE_CHAR_CASEMAP ) ) ) );
+                        aNewAttr.Put( SvxCaseMapItem( aEditAttr.Get( EE_CHAR_CASEMAP ) ) );
                     }
                     break;
                     case SID_ATTR_CHAR_STRIKEOUT:
                     {
-                        FontStrikeout eFSO = ( static_cast<const SvxCrossedOutItem&>( aEditAttr.
-                                        Get( EE_CHAR_STRIKEOUT ) ).GetStrikeout() );
+                        FontStrikeout eFSO = aEditAttr.Get( EE_CHAR_STRIKEOUT ).GetStrikeout();
                         aNewAttr.Put( SvxCrossedOutItem( eFSO == STRIKEOUT_SINGLE ?
                                             STRIKEOUT_NONE : STRIKEOUT_SINGLE, EE_CHAR_STRIKEOUT ) );
                     }
@@ -549,8 +541,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     case SID_SET_SUPER_SCRIPT:
                     {
                         SvxEscapementItem aItem( EE_CHAR_ESCAPEMENT );
-                        SvxEscapement eEsc = (SvxEscapement ) static_cast<const SvxEscapementItem&>(
-                                        aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+                        SvxEscapement eEsc = (SvxEscapement )
+                                        aEditAttr.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
 
                         if( eEsc == SvxEscapement::Superscript )
                             aItem.SetEscapement( SvxEscapement::Off );
@@ -562,8 +554,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     case SID_SET_SUB_SCRIPT:
                     {
                         SvxEscapementItem aItem( EE_CHAR_ESCAPEMENT );
-                        SvxEscapement eEsc = (SvxEscapement ) static_cast<const SvxEscapementItem&>(
-                                        aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+                        SvxEscapement eEsc = (SvxEscapement )
+                                        aEditAttr.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
 
                         if( eEsc == SvxEscapement::Subscript )
                             aItem.SetEscapement( SvxEscapement::Off );
@@ -674,8 +666,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             else if(nSlot ==  SID_SET_SUPER_SCRIPT )
             {
                 SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
-                SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
-                                aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+                SvxEscapement eEsc = (SvxEscapement)
+                                aEditAttr.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
 
                 if( eEsc == SvxEscapement::Superscript )
                     aItem.SetEscapement( SvxEscapement::Off );
@@ -688,8 +680,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             else if( nSlot ==  SID_SET_SUB_SCRIPT )
             {
                 SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
-                SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
-                                aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+                SvxEscapement eEsc = (SvxEscapement)
+                                aEditAttr.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
 
                 if( eEsc == SvxEscapement::Subscript )
                     aItem.SetEscapement( SvxEscapement::Off );

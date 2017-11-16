@@ -27,6 +27,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svx/unomid.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/unofored.hxx>

@@ -1310,7 +1310,7 @@ bool EditView::ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFo
 {
     static const sal_uInt16 gFontSizeWichMap[] = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL, 0 };
 
-    const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(&rSet.Get( EE_CHAR_FONTINFO ));
+    const SvxFontItem* pFontItem = &rSet.Get( EE_CHAR_FONTINFO );
     if( !pFontItem || !pFontList )
         return false;
 

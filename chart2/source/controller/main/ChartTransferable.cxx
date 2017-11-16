@@ -122,8 +122,7 @@ bool ChartTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
                     // for the changed pool defaults from drawing layer pool set those
                     // attributes as hard attributes to preserve them for saving
                     const SfxItemPool& rItemPool = pMarkedObjModel->GetItemPool();
-                    const SvxFontHeightItem& rDefaultFontHeight = static_cast< const SvxFontHeightItem& >(
-                        rItemPool.GetDefaultItem( EE_CHAR_FONTHEIGHT ) );
+                    const SvxFontHeightItem& rDefaultFontHeight = rItemPool.GetDefaultItem( EE_CHAR_FONTHEIGHT );
                     sal_uInt16 nCount = pMarkedObjModel->GetPageCount();
                     for ( sal_uInt16 i = 0; i < nCount; ++i )
                     {
@@ -132,8 +131,7 @@ bool ChartTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
                         while ( aIter.IsMore() )
                         {
                             SdrObject* pObj = aIter.Next();
-                            const SvxFontHeightItem& rItem = static_cast< const SvxFontHeightItem& >(
-                                pObj->GetMergedItem( EE_CHAR_FONTHEIGHT ) );
+                            const SvxFontHeightItem& rItem = pObj->GetMergedItem( EE_CHAR_FONTHEIGHT );
                             if ( rItem.GetHeight() == rDefaultFontHeight.GetHeight() )
                             {
                                 pObj->SetMergedItem( rDefaultFontHeight );

@@ -25,6 +25,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/msgbox.hxx>

@@ -157,7 +157,7 @@ void CalculateHorizontalScalingFactor( const SdrObject* pCustomShape,
     sal_uInt16 nOutlinesCount2d = rOutline2d.Count();
 
     vcl::Font aFont;
-    const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(pCustomShape->GetMergedItem( EE_CHAR_FONTINFO ));
+    const SvxFontItem& rFontItem = pCustomShape->GetMergedItem( EE_CHAR_FONTINFO );
     aFont.SetFontHeight( pCustomShape->GetLogicRect().GetHeight() / rFWData.nMaxParagraphsPerTextArea );
     aFont.SetAlignment( ALIGN_TOP );
     aFont.SetFamilyName( rFontItem.GetFamilyName() );
@@ -253,10 +253,10 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             aFont.SetStyleName( rFontItem.GetStyleName() );
             aFont.SetOrientation( 0 );
 
-            const SvxPostureItem& rPostureItem = static_cast<const SvxPostureItem&>(pCustomShape->GetMergedItem( EE_CHAR_ITALIC ));
+            const SvxPostureItem& rPostureItem = pCustomShape->GetMergedItem( EE_CHAR_ITALIC );
             aFont.SetItalic( rPostureItem.GetPosture() );
 
-            const SvxWeightItem& rWeightItem = static_cast<const SvxWeightItem&>(pCustomShape->GetMergedItem( EE_CHAR_WEIGHT ));
+            const SvxWeightItem& rWeightItem = pCustomShape->GetMergedItem( EE_CHAR_WEIGHT );
             aFont.SetWeight( rWeightItem.GetWeight() );
 
             // initializing virtual device
@@ -267,7 +267,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             if ( aParagraphIter->nFrameDirection == SvxFrameDirection::Horizontal_RL_TB )
                 pVirDev->SetLayoutMode( ComplexTextLayoutFlags::BiDiRtl );
 
-            const SvxCharScaleWidthItem& rCharScaleWidthItem = static_cast<const SvxCharScaleWidthItem&>(pCustomShape->GetMergedItem( EE_CHAR_FONTWIDTH ));
+            const SvxCharScaleWidthItem& rCharScaleWidthItem = pCustomShape->GetMergedItem( EE_CHAR_FONTWIDTH );
             sal_uInt16 nCharScaleWidth = rCharScaleWidthItem.GetValue();
             std::unique_ptr<long[]> pDXArry;
             sal_Int32 nWidth = 0;
