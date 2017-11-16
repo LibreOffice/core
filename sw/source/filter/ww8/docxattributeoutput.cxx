@@ -6731,7 +6731,7 @@ void DocxAttributeOutput::CharBackground( const SvxBrushItem& rBrush )
 
 void DocxAttributeOutput::CharFontCJK( const SvxFontItem& rFont )
 {
-    if (m_pFontsAttrList && m_pFontsAttrList->hasAttribute(FSNS(XML_w, XML_eastAsia)))
+    if (m_pFontsAttrList.is() && m_pFontsAttrList->hasAttribute(FSNS(XML_w, XML_eastAsia)))
     {
         // tdf#38778: do to fields output into DOC the font could be added before and after field declaration
         // that all sub runs of the field will have correct font inside.
