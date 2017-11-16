@@ -49,6 +49,7 @@
 #include <xlstyle.hxx>
 #include <xlchart.hxx>
 #include <xltracer.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/useroptions.hxx>
 #include <root.hxx>
 
@@ -98,8 +99,9 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     mnScTab( 0 ),
     mbExport( bExport )
 {
- maUserName = SvtUserOptions().GetLastName();
-    if( maUserName.isEmpty() )
+    if (!utl::ConfigManager::IsFuzzing())
+        maUserName = SvtUserOptions().GetLastName();
+    if (maUserName.isEmpty())
         maUserName = "Calc";
 
     switch( ScGlobal::GetDefaultScriptType() )
