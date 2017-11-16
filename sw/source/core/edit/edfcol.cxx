@@ -1144,7 +1144,8 @@ void lcl_ApplyParagraphClassification(SwDoc* pDoc,
         const bool isLast = nIndex == 0;
         const bool isFirst = nIndex == aResults.size() - 1;
         OUString sKey;
-        switch(rResult.meType)
+        OUString sValue = rResult.msName;
+        switch (rResult.meType)
         {
             case svx::ClassificationType::TEXT:
             {
@@ -1155,10 +1156,14 @@ void lcl_ApplyParagraphClassification(SwDoc* pDoc,
             case svx::ClassificationType::CATEGORY:
             {
                 if (rResult.msIdentifier.isEmpty())
+                {
                     sKey = aKeyCreator.makeCategoryNameKey();
+                }
                 else
+                {
+                    sValue = rResult.msIdentifier;
                     sKey = aKeyCreator.makeCategoryIdentifierKey();
-
+                }
                 SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xNodeSubject, ParagraphClassificationAbbrRDFName, rResult.msAbbreviatedName);
             }
             break;
@@ -1182,7 +1187,7 @@ void lcl_ApplyParagraphClassification(SwDoc* pDoc,
         OUString sDisplayText = (isFirst ? ("(" + rResult.msAbbreviatedName) : rResult.msAbbreviatedName);
         if (isLast)
             sDisplayText += ")";
-        lcl_UpdateParagraphClassificationField(pDoc, xModel, xParent, sKey, rResult.msName, sDisplayText);
+        lcl_UpdateParagraphClassificationField(pDoc, xModel, xParent, sKey, sValue, sDisplayText);
         aFieldNames.emplace_back(sKey);
     }
 
@@ -1261,9 +1266,13 @@ std::vector<svx::ClassificationResult> lcl_CollectParagraphClassification(const 
         {
             aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, sBlank });
         }
-        else if (aKeyCreator.isCategoryNameKey(aName) || aKeyCreator.isCategoryIdentifierKey(aName))
+        else if (aKeyCreator.isCategoryNameKey(aName))
         {
             aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
+        }
+        else if (aKeyCreator.isCategoryIdentifierKey(aName))
+        {
+            aResult.push_back({ svx::ClassificationType::CATEGORY, sBlank, sBlank, aValue });
         }
         else if (aKeyCreator.isMarkingKey(aName))
         {
