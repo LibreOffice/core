@@ -9529,10 +9529,29 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
             if( aBitmap.GetBitCount() == 1 )
             {
                 // #i47395# 1 bit bitmaps occasionally have an inverted grey palette
-                sal_Int32 nBlackIndex = pAccess->GetBestPaletteIndex( BitmapColor( Color( COL_BLACK ) ) );
-                SAL_WARN_IF( nBlackIndex != 0 && nBlackIndex != 1, "vcl.pdfwriter", "wrong black index" );
-                if( nBlackIndex == 1 )
-                    aLine.append( "/Decode[1 0]\n" );
+                sal_uInt16 nBlackIndex = pAccess->GetBestPaletteIndex( BitmapColor( Color( COL_BLACK ) ) );
+                assert( nBlackIndex == 0 || nBlackIndex == 1);
+                sal_uInt16 nWhiteIndex = pAccess->GetBestPaletteIndex( BitmapColor( Color( COL_WHITE ) ) );
+                if( pAccess->GetPalette()[nBlackIndex] == BitmapColor( Color( COL_BLACK ) ) &&
+                    pAccess->GetPalette()[nWhiteIndex] == BitmapColor( Color( COL_WHITE ) ) )
+                {
+                    // It is black and white
+                    if( nBlackIndex == 1 )
+                        aLine.append( "/Decode[1 0]\n" );
+                }
+                else
+                {
+                    // It is two levels of grey
+                    aLine.append( "/Decode[" );
+                    assert( pAccess->GetPalette()[0].GetRed() == pAccess->GetPalette()[0].GetGreen() &&
+                            pAccess->GetPalette()[0].GetRed() == pAccess->GetPalette()[0].GetBlue() &&
+                            pAccess->GetPalette()[1].GetRed() == pAccess->GetPalette()[1].GetGreen() &&
+                            pAccess->GetPalette()[1].GetRed() == pAccess->GetPalette()[1].GetBlue() );
+                    aLine.append( pAccess->GetPalette()[0].GetRed() / 255.0 );
+                    aLine.append( " " );
+                    aLine.append( pAccess->GetPalette()[1].GetRed() / 255.0 );
+                    aLine.append( "]\n" );
+                }
             }
         }
         else
