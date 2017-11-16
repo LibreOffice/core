@@ -265,12 +265,6 @@ SwTransferable::~SwTransferable()
             pMod->m_pXSelection = nullptr;
     }
 
-    delete m_pClpGraphic;
-    delete m_pClpBitmap;
-    delete m_pImageMap;
-    delete m_pTargetURL;
-    delete m_pBookmark;
-
     m_eBufferType = TransferBufferType::NONE;
 }
 
@@ -418,19 +412,19 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         // SEL_GRF is from ContentType of editsh
         if(bPending || ((SelectionType::Graphic | SelectionType::DbForm) & nSelectionType))
         {
-            m_pClpGraphic = new Graphic;
+            m_pClpGraphic.reset(new Graphic);
             if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::GDIMETAFILE, *m_pClpGraphic ))
-                m_pOrigGraphic = m_pClpGraphic;
-            m_pClpBitmap = new Graphic;
+                m_pOrigGraphic = m_pClpGraphic.get();
+            m_pClpBitmap.reset(new Graphic);
             if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::BITMAP, *m_pClpBitmap ))
-                m_pOrigGraphic = m_pClpBitmap;
+                m_pOrigGraphic = m_pClpBitmap.get();
 
             // is it an URL-Button ?
             OUString sURL;
             OUString sDesc;
             if( m_pWrtShell->GetURLFromButton( sURL, sDesc ) )
             {
-                m_pBookmark = new INetBookmark( sURL, sDesc );
+                m_pBookmark.reset(new INetBookmark( sURL, sDesc ));
                 m_eBufferType = TransferBufferType::InetField;
             }
         }
@@ -458,9 +452,9 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
                             !m_pWrtShell->GetView().GetDocShell()->IsReadOnly();
             if( m_pWrtShell->GetContentAtPos( aPos, aContentAtPos, bSelect ) )
             {
-                m_pBookmark = new INetBookmark(
+                m_pBookmark.reset(new INetBookmark(
                         static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr)->GetValue(),
-                        aContentAtPos.sStr );
+                        aContentAtPos.sStr ));
                 m_eBufferType = TransferBufferType::InetField;
                 if( bSelect )
                     m_pWrtShell->SelectTextAttr( RES_TXTATR_INETFMT );
@@ -472,10 +466,10 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
             m_pWrtShell->GetFlyFrameAttr( aSet );
             const SwFormatURL& rURL = static_cast<const SwFormatURL&>(aSet.Get( RES_URL ));
             if( rURL.GetMap() )
-                m_pImageMap = new ImageMap( *rURL.GetMap() );
+                m_pImageMap.reset(new ImageMap( *rURL.GetMap() ));
             else if( !rURL.GetURL().isEmpty() )
-                m_pTargetURL = new INetImage( aEmptyOUStr, rURL.GetURL(),
-                                            rURL.GetTargetFrameName() );
+                m_pTargetURL.reset(new INetImage( aEmptyOUStr, rURL.GetURL(),
+                                            rURL.GetTargetFrameName() ));
         }
     }
 
@@ -792,12 +786,12 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
     const SelectionType nSelection = m_pWrtShell->GetSelectionType();
     if( nSelection == SelectionType::Graphic )
     {
-        m_pClpGraphic = new Graphic;
+        m_pClpGraphic.reset(new Graphic);
         if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::GDIMETAFILE, *m_pClpGraphic ))
-            m_pOrigGraphic = m_pClpGraphic;
-        m_pClpBitmap = new Graphic;
+            m_pOrigGraphic = m_pClpGraphic.get();
+        m_pClpBitmap.reset(new Graphic);
         if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::BITMAP, *m_pClpBitmap ))
-            m_pOrigGraphic = m_pClpBitmap;
+            m_pOrigGraphic = m_pClpBitmap.get();
 
         m_pClpDocFac = new SwDocFac;
         SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
@@ -942,12 +936,12 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
             }
             m_eBufferType = (TransferBufferType)( TransferBufferType::Graphic | m_eBufferType );
 
-            m_pClpGraphic = new Graphic;
+            m_pClpGraphic.reset(new Graphic);
             if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::GDIMETAFILE, *m_pClpGraphic ))
-                m_pOrigGraphic = m_pClpGraphic;
-            m_pClpBitmap = new Graphic;
+                m_pOrigGraphic = m_pClpGraphic.get();
+            m_pClpBitmap.reset(new Graphic);
             if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::BITMAP, *m_pClpBitmap ))
-                m_pOrigGraphic = m_pClpBitmap;
+                m_pOrigGraphic = m_pClpBitmap.get();
 
             // is it an URL-Button ?
             OUString sURL;
@@ -994,13 +988,13 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         const SwFormatURL& rURL = static_cast<const SwFormatURL&>(aSet.Get( RES_URL ));
         if( rURL.GetMap() )
         {
-            m_pImageMap = new ImageMap( *rURL.GetMap() );
+            m_pImageMap.reset( new ImageMap( *rURL.GetMap() ) );
             AddFormat( SotClipboardFormatId::SVIM );
         }
         else if( !rURL.GetURL().isEmpty() )
         {
-            m_pTargetURL = new INetImage( sGrfNm, rURL.GetURL(),
-                                        rURL.GetTargetFrameName() );
+            m_pTargetURL.reset(new INetImage( sGrfNm, rURL.GetURL(),
+                                        rURL.GetTargetFrameName() ));
             AddFormat( SotClipboardFormatId::INET_IMAGE );
         }
     }
@@ -3074,12 +3068,12 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
             }
             m_eBufferType = TransferBufferType::Graphic | m_eBufferType;
 
-            m_pClpGraphic = new Graphic;
+            m_pClpGraphic.reset(new Graphic);
             if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::GDIMETAFILE, *m_pClpGraphic ))
-                m_pOrigGraphic = m_pClpGraphic;
-            m_pClpBitmap = new Graphic;
+                m_pOrigGraphic = m_pClpGraphic.get();
+            m_pClpBitmap.reset(new Graphic);
             if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::BITMAP, *m_pClpBitmap ))
-                m_pOrigGraphic = m_pClpBitmap;
+                m_pOrigGraphic = m_pClpBitmap.get();
 
             // is it an URL-Button ?
             OUString sURL;
@@ -3130,13 +3124,13 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         const SwFormatURL& rURL = static_cast<const SwFormatURL&>(aSet.Get( RES_URL ));
         if( rURL.GetMap() )
         {
-            m_pImageMap = new ImageMap( *rURL.GetMap() );
+            m_pImageMap.reset( new ImageMap( *rURL.GetMap() ) );
             AddFormat( SotClipboardFormatId::SVIM );
         }
         else if( !rURL.GetURL().isEmpty() )
         {
-            m_pTargetURL = new INetImage( sGrfNm, rURL.GetURL(),
-                                        rURL.GetTargetFrameName() );
+            m_pTargetURL.reset(new INetImage( sGrfNm, rURL.GetURL(),
+                                        rURL.GetTargetFrameName() ));
             AddFormat( SotClipboardFormatId::INET_IMAGE );
         }
     }
