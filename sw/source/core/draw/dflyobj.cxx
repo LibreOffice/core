@@ -632,9 +632,9 @@ void SwVirtFlyDrawObj::NbcSetLogicRect(const tools::Rectangle& )
 //  SwVirtFlyDrawObj::Move() and Resize()
 void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 {
-    if(GetFlyFrame()->IsFlyFreeFrame() && static_cast<SwFlyFreeFrame*>(GetFlyFrame())->isTransformableSwFrame())
+    if(GetFlyFrame()->IsFlyFreeFrame() && static_cast< SwFlyFreeFrame* >(GetFlyFrame())->isTransformableSwFrame())
     {
-        // When we have a change and are in transformed state (e.g. rotation used),
+        // RotateFlyFrame3: When we have a change and are in transformed state (e.g. rotation used),
         // we need to fall back to the un-transformed state to keep the old code below
         // working properly. Restore FrameArea and use aOutRect from old FrameArea.
         TransformableSwFrame* pTransformableSwFrame(static_cast<SwFlyFreeFrame*>(GetFlyFrame())->getTransformableSwFrame());
@@ -825,7 +825,7 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
 
     const bool bIsTransformableSwFrame(
         GetFlyFrame()->IsFlyFreeFrame() &&
-        static_cast<SwFlyFreeFrame*>(GetFlyFrame())->isTransformableSwFrame());
+        static_cast< SwFlyFreeFrame* >(GetFlyFrame())->isTransformableSwFrame());
 
     if(bIsTransformableSwFrame)
     {
@@ -977,7 +977,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
     const bool bUseRightEdge((bVertX && !bVertL2RX ) || bRTL);
     const bool bIsTransformableSwFrame(
         GetFlyFrame()->IsFlyFreeFrame() &&
-        static_cast<SwFlyFreeFrame*>(GetFlyFrame())->isTransformableSwFrame());
+        static_cast< SwFlyFreeFrame* >(GetFlyFrame())->isTransformableSwFrame());
 
     if(bIsTransformableSwFrame)
     {

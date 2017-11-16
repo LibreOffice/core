@@ -2740,11 +2740,23 @@ void Notify( SwFlyFrame *pFly, SwPageFrame *pOld, const SwRect &rOld,
             pFly->NotifyBackground( pOld, aTmp, PREP_FLY_CHGD );
         }
     }
-    else if ( pOldPrt && *pOldPrt != pFly->getFramePrintArea() &&
-              pFly->GetFormat()->GetSurround().IsContour() )
+    else if(pOldPrt && *pOldPrt != pFly->getFramePrintArea())
     {
-        // #i24097#
-        pFly->NotifyBackground( pFly->FindPageFrame(), aFrame, PREP_FLY_ARRIVE );
+        bool bNotifyBackground(pFly->GetFormat()->GetSurround().IsContour());
+
+        if(!bNotifyBackground &&
+            pFly->IsFlyFreeFrame() &&
+            static_cast< const SwFlyFreeFrame* >(pFly)->supportsAutoContour())
+        {
+            // RotateFlyFrame3: Also notify for FlyFrames which allow AutoContour
+            bNotifyBackground = true;
+        }
+
+        if(bNotifyBackground)
+        {
+            // #i24097#
+            pFly->NotifyBackground( pFly->FindPageFrame(), aFrame, PREP_FLY_ARRIVE );
+        }
     }
 }
 

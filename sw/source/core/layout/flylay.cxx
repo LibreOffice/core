@@ -27,6 +27,7 @@
 #include <hints.hxx>
 #include <sectfrm.hxx>
 #include <notxtfrm.hxx>
+#include <txtfly.hxx>
 
 #include <svx/svdpage.hxx>
 #include <editeng/ulspitem.hxx>
@@ -87,6 +88,8 @@ void SwFlyFreeFrame::DestroyImpl()
 
 SwFlyFreeFrame::~SwFlyFreeFrame()
 {
+    // we are possibly in ContourCache, make sure we vanish
+    ::ClrContourCache(GetVirtDrawObj());
 }
 
 // #i28701#
@@ -268,6 +271,14 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     }
     else
     {
+        // RotateFlyFrame3: Also need to clear ContourCache (if used),
+        // usually done in SwFlyFrame::NotifyDrawObj, but there relies on
+        // being in transform mode which is already resetted then
+        if(isTransformableSwFrame())
+        {
+            ::ClrContourCache(GetVirtDrawObj());
+        }
+
         // reset transformations to show that they are not used
         mpTransformableSwFrame.reset();
     }
@@ -281,6 +292,37 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             "SwFlyFreeFrame::Format(), flipping Fly." );
 
 #endif
+}
+
+bool SwFlyFreeFrame::supportsAutoContour() const
+{
+    if(!isTransformableSwFrame())
+    {
+        // support only when transformed, else there is no free space
+        return false;
+    }
+
+    // Check for Borders. If we have Borders, do (currently) not support,
+    // since borders do not transform with the object.
+    // (Will need to be enhanced to take into account if we have Borders and if these
+    // transform with the object)
+    SwBorderAttrAccess aAccess(SwFrame::GetCache(), this);
+    const SwBorderAttrs &rAttrs(*aAccess.Get());
+
+    if(rAttrs.IsLine())
+    {
+        return false;
+    }
+
+    // Check for Padding. Do not support when padding is used, this will
+    // produce a covered space around the object (filled with fill defines)
+
+
+
+
+
+    // else, support
+    return true;
 }
 
 // RotateFlyFrame3 - Support for Transformations - outer frame
