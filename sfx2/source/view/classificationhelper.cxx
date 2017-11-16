@@ -614,6 +614,21 @@ const OUString& SfxClassificationHelper::GetAbbreviatedBACName(const OUString& s
     return sFullName;
 }
 
+OUString SfxClassificationHelper::GetBACNameForIdentifier(const OUString& sIdentifier)
+{
+    OUString aRet;
+    if (sIdentifier.isEmpty())
+        return aRet;
+
+    for (const auto& category : m_pImpl->m_aCategories)
+    {
+        if (category.m_aIdentifier == sIdentifier)
+            return category.m_aName;
+    }
+
+    return aRet;
+}
+
 OUString SfxClassificationHelper::GetHigherClass(const OUString& first, const OUString& second)
 {
     size_t nFirstConfidentiality = 0;

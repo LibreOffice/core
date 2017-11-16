@@ -410,11 +410,9 @@ void ClassificationDialog::writeRecentlyUsed()
 void ClassificationDialog::readIn(std::vector<ClassificationResult> const & rInput)
 {
     sal_Int32 nParagraph = -1;
+
     for (ClassificationResult const & rClassificationResult : rInput)
     {
-        OUString sAbbreviatedName = rClassificationResult.msAbbreviatedName;
-        if (sAbbreviatedName.isEmpty())
-            sAbbreviatedName = maHelper.GetAbbreviatedBACName(rClassificationResult.msName);
 
         switch (rClassificationResult.meType)
         {
@@ -426,24 +424,34 @@ void ClassificationDialog::readIn(std::vector<ClassificationResult> const & rInp
 
             case svx::ClassificationType::CATEGORY:
             {
-                m_pClassificationListBox->SelectEntry(rClassificationResult.msName);
+                OUString sName;
+                if (rClassificationResult.msName.isEmpty())
+                    sName = maHelper.GetBACNameForIdentifier(rClassificationResult.msIdentifier);
+                else
+                    sName = rClassificationResult.msName;
+
+                OUString sAbbreviatedName = rClassificationResult.msAbbreviatedName;
+                if (sAbbreviatedName.isEmpty())
+                    sAbbreviatedName = maHelper.GetAbbreviatedBACName(sName);
+
+                m_pClassificationListBox->SelectEntry(sName);
                 m_nCurrentSelectedCategory = m_pClassificationListBox->GetSelectedEntryPos();
                 m_pInternationalClassificationListBox->SelectEntryPos(m_pClassificationListBox->GetSelectedEntryPos());
 
-                insertField(rClassificationResult.meType, sAbbreviatedName, rClassificationResult.msName, rClassificationResult.msIdentifier);
+                insertField(rClassificationResult.meType, sAbbreviatedName, sName, rClassificationResult.msIdentifier);
             }
             break;
 
             case svx::ClassificationType::MARKING:
             {
                 m_pMarkingListBox->SelectEntry(rClassificationResult.msName);
-                insertField(rClassificationResult.meType, sAbbreviatedName, rClassificationResult.msName, rClassificationResult.msIdentifier);
+                insertField(rClassificationResult.meType, rClassificationResult.msName, rClassificationResult.msName, rClassificationResult.msIdentifier);
             }
             break;
 
             case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
             {
-                insertField(rClassificationResult.meType, sAbbreviatedName, rClassificationResult.msName, rClassificationResult.msIdentifier);
+                insertField(rClassificationResult.meType, rClassificationResult.msName, rClassificationResult.msName, rClassificationResult.msIdentifier);
             }
             break;
 
