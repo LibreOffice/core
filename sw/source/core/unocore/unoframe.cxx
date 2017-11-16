@@ -2266,8 +2266,8 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             }
             else if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
             {
-                const XFillBmpStretchItem* pStretchItem = dynamic_cast< const XFillBmpStretchItem* >(&rSet.Get(XATTR_FILLBMP_STRETCH));
-                const XFillBmpTileItem* pTileItem = dynamic_cast< const XFillBmpTileItem* >(&rSet.Get(XATTR_FILLBMP_TILE));
+                const XFillBmpStretchItem* pStretchItem = &rSet.Get(XATTR_FILLBMP_STRETCH);
+                const XFillBmpTileItem* pTileItem = &rSet.Get(XATTR_FILLBMP_TILE);
 
                 if( pTileItem && pTileItem->GetValue() )
                 {

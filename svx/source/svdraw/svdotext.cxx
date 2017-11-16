@@ -1795,13 +1795,13 @@ long SdrTextObj::GetMaxTextFrameWidth() const
 bool SdrTextObj::IsFontwork() const
 {
     return !bTextFrame // Default is FALSE
-        && static_cast<const XFormTextStyleItem&>(GetObjectItemSet().Get(XATTR_FORMTXTSTYLE)).GetValue() != XFormTextStyle::NONE;
+        && GetObjectItemSet().Get(XATTR_FORMTXTSTYLE).GetValue() != XFormTextStyle::NONE;
 }
 
 bool SdrTextObj::IsHideContour() const
 {
     return !bTextFrame // Default is: no, don't HideContour; HideContour not together with TextFrames
-        && static_cast<const XFormTextHideFormItem&>(GetObjectItemSet().Get(XATTR_FORMTXTHIDEFORM)).GetValue();
+        && GetObjectItemSet().Get(XATTR_FORMTXTHIDEFORM).GetValue();
 }
 
 bool SdrTextObj::IsContourTextFrame() const

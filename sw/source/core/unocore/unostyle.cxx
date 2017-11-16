@@ -2284,10 +2284,10 @@ uno::Any SwXStyle::GetStyleProperty<OWN_ATTR_FILLBMP_MODE>(const SfxItemProperty
 {
     PrepareStyleBase(rBase);
     const SfxItemSet& rSet = rBase.GetItemSet();
-    const XFillBmpTileItem* pTileItem = dynamic_cast<const XFillBmpTileItem*>(&rSet.Get(XATTR_FILLBMP_TILE));
+    const XFillBmpTileItem* pTileItem = &rSet.Get(XATTR_FILLBMP_TILE);
     if(pTileItem && pTileItem->GetValue())
         return uno::makeAny(drawing::BitmapMode_REPEAT);
-    const XFillBmpStretchItem* pStretchItem = dynamic_cast<const XFillBmpStretchItem*>(&rSet.Get(XATTR_FILLBMP_STRETCH));
+    const XFillBmpStretchItem* pStretchItem = &rSet.Get(XATTR_FILLBMP_STRETCH);
     if(pStretchItem && pStretchItem->GetValue())
         return uno::makeAny(drawing::BitmapMode_STRETCH);
     return uno::makeAny(drawing::BitmapMode_NO_REPEAT);
@@ -3974,8 +3974,8 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
                 }
                 case OWN_ATTR_FILLBMP_MODE:
                 {
-                    const XFillBmpStretchItem* pStretchItem = dynamic_cast< const XFillBmpStretchItem* >(&mpSet->Get(XATTR_FILLBMP_STRETCH));
-                    const XFillBmpTileItem* pTileItem = dynamic_cast< const XFillBmpTileItem* >(&mpSet->Get(XATTR_FILLBMP_TILE));
+                    const XFillBmpStretchItem* pStretchItem = &mpSet->Get(XATTR_FILLBMP_STRETCH);
+                    const XFillBmpTileItem* pTileItem = &mpSet->Get(XATTR_FILLBMP_TILE);
 
                     if( pTileItem && pTileItem->GetValue() )
                     {
