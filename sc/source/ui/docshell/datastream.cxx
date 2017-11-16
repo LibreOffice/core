@@ -71,7 +71,7 @@ public:
     static void begin_row() {}
     static void end_row() {}
 
-    void cell(const char* p, size_t n)
+    void cell(const char* p, size_t n, bool /*transient*/)
     {
         if (mnCols >= mnColCount)
             return;
