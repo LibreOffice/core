@@ -197,7 +197,7 @@ void DrawCommandDispatch::setLineEnds( SfxItemSet& rAttr )
             long nWidth = 300; // (1/100th mm)
             if ( aSet.GetItemState( XATTR_LINEWIDTH ) != SfxItemState::DONTCARE )
             {
-                long nValue = static_cast<const XLineWidthItem&>( aSet.Get( XATTR_LINEWIDTH ) ).GetValue();
+                long nValue = aSet.Get( XATTR_LINEWIDTH ).GetValue();
                 if ( nValue > 0 )
                 {
                     nWidth = nValue * 3;

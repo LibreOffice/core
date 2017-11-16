@@ -1348,9 +1348,9 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, bool bSetItemOnObject, bool
         aGradTransVector.aCol2 = pColHdl2->GetColor();
 
     if(IsGradient())
-        aOldGradTransGradient.aGradient = static_cast<const XFillGradientItem&>(rSet.Get(XATTR_FILLGRADIENT)).GetGradientValue();
+        aOldGradTransGradient.aGradient = rSet.Get(XATTR_FILLGRADIENT).GetGradientValue();
     else
-        aOldGradTransGradient.aGradient = static_cast<const XFillFloatTransparenceItem&>(rSet.Get(XATTR_FILLFLOATTRANSPARENCE)).GetGradientValue();
+        aOldGradTransGradient.aGradient = rSet.Get(XATTR_FILLFLOATTRANSPARENCE).GetGradientValue();
 
     // transform vector data to gradient
     GradTransformer::VecToGrad(aGradTransVector, aGradTransGradient, aOldGradTransGradient, _pObj, bMoveSingleHandle, bMoveFirstHandle);

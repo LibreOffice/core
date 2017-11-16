@@ -68,8 +68,6 @@
 
 using namespace com::sun::star;
 
-#define ITEMVALUE(ItemSet,Id,Cast)  (static_cast<const Cast&>((ItemSet).Get(Id))).GetValue()
-
 
 // Migrate Marking
 
@@ -677,9 +675,9 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
     if(dynamic_cast<const SdrPathObj*>( pObj) !=  nullptr)
     {
         const SfxItemSet& rSet = pObj->GetMergedItemSet();
-        sal_Int32 nLineWidth = static_cast<const XLineWidthItem&>(rSet.Get(XATTR_LINEWIDTH)).GetValue();
-        drawing::LineStyle eLineStyle = (drawing::LineStyle)static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue();
-        drawing::FillStyle eFillStyle = ITEMVALUE(rSet, XATTR_FILLSTYLE, XFillStyleItem);
+        sal_Int32 nLineWidth = rSet.Get(XATTR_LINEWIDTH).GetValue();
+        drawing::LineStyle eLineStyle = (drawing::LineStyle)rSet.Get(XATTR_LINESTYLE).GetValue();
+        drawing::FillStyle eFillStyle = rSet.Get(XATTR_FILLSTYLE).GetValue();
 
         if(static_cast<SdrPathObj*>(pObj)->IsClosed()
             && eLineStyle == drawing::LineStyle_SOLID
@@ -710,7 +708,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
         // Get Itemset of the original object
         SfxItemSet aSet(pObj->GetMergedItemSet());
 
-        drawing::FillStyle eFillStyle = ITEMVALUE(aSet, XATTR_FILLSTYLE, XFillStyleItem);
+        drawing::FillStyle eFillStyle = aSet.Get(XATTR_FILLSTYLE).GetValue();
 
         // line style turned off
         aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
@@ -730,7 +728,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
 
             // Fill color must be the color line, because the object was
             // previously just a line
-            Color aColorLine = static_cast<const XLineColorItem&>(aSet.Get(XATTR_LINECOLOR)).GetColorValue();
+            Color aColorLine = aSet.Get(XATTR_LINECOLOR).GetColorValue();
             aSet.Put(XFillColorItem(OUString(), aColorLine));
         }
 
@@ -1054,8 +1052,8 @@ void E3dView::DoDepthArrange(E3dScene const * pScene, double fDepth)
                 const basegfx::B2DPolyPolygon aExtrudePoly(
                     basegfx::utils::prepareForPolygonOperation(pExtrudeObj->GetExtrudePolygon()));
                 const SfxItemSet& rLocalSet = pExtrudeObj->GetMergedItemSet();
-                const drawing::FillStyle eLocalFillStyle = ITEMVALUE(rLocalSet, XATTR_FILLSTYLE, XFillStyleItem);
-                const Color aLocalColor = static_cast<const XFillColorItem&>(rLocalSet.Get(XATTR_FILLCOLOR)).GetColorValue();
+                const drawing::FillStyle eLocalFillStyle = rLocalSet.Get(XATTR_FILLSTYLE).GetValue();
+                const Color aLocalColor = rLocalSet.Get(XATTR_FILLCOLOR).GetColorValue();
 
                 // sort in ExtrudeObj
                 if(pLayer)
@@ -1080,13 +1078,13 @@ void E3dView::DoDepthArrange(E3dScene const * pScene, double fDepth)
                             // second criteria: is another fillstyle or color used?
                             const SfxItemSet& rCompareSet = pAct->mpObj->GetMergedItemSet();
 
-                            drawing::FillStyle eCompareFillStyle = ITEMVALUE(rCompareSet, XATTR_FILLSTYLE, XFillStyleItem);
+                            drawing::FillStyle eCompareFillStyle = rCompareSet.Get(XATTR_FILLSTYLE).GetValue();
 
                             if(eLocalFillStyle == eCompareFillStyle)
                             {
                                 if(eLocalFillStyle == drawing::FillStyle_SOLID)
                                 {
-                                    Color aCompareColor = static_cast<const XFillColorItem&>(rCompareSet.Get(XATTR_FILLCOLOR)).GetColorValue();
+                                    Color aCompareColor = rCompareSet.Get(XATTR_FILLCOLOR).GetColorValue();
 
                                     if(aCompareColor == aLocalColor)
                                     {

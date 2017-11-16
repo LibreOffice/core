@@ -51,8 +51,6 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
-#define ITEMVALUE(ItemSet,Id,Cast)  static_cast<const Cast&>((ItemSet).Get(Id)).GetValue()
-
 /**
  * Handle SfxRequests for EffekteWindow
  */
@@ -144,7 +142,7 @@ void DrawViewShell::AssignFrom3DWindow()
 
                     // Determine if a FILL attribute is set.
                     // If not, hard set a fill attribute
-                    drawing::FillStyle eFillStyle = ITEMVALUE( aSet, XATTR_FILLSTYLE, XFillStyleItem );
+                    drawing::FillStyle eFillStyle = aSet.Get(XATTR_FILLSTYLE).GetValue();
                     if(eFillStyle == drawing::FillStyle_NONE)
                         aSet.Put(XFillStyleItem (drawing::FillStyle_SOLID));
 

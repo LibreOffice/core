@@ -188,7 +188,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
         else
             aString += aURL.getBase();
 
-        sal_Int32 nPos = SearchHatchList( static_cast<const XFillHatchItem&>( rSet.Get(XATTR_FILLHATCH) ).GetName() );
+        sal_Int32 nPos = SearchHatchList( rSet.Get(XATTR_FILLHATCH).GetName() );
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             sal_uInt16 nId = m_pHatchLB->GetItemId( static_cast<size_t>( nPos ) );
@@ -198,13 +198,13 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
         ChangeHatchHdl_Impl();
     }
 
-    XFillBackgroundItem aBckItem( static_cast<const XFillBackgroundItem&>(rSet.Get(XATTR_FILLBACKGROUND)));
+    XFillBackgroundItem aBckItem( rSet.Get(XATTR_FILLBACKGROUND));
     m_rXFSet.Put( aBckItem );
 
     if(aBckItem.GetValue())
     {
         m_pCbBackgroundColor->SetState(TRISTATE_TRUE);
-        XFillColorItem aColorItem( static_cast<const XFillColorItem&>(rSet.Get(XATTR_FILLCOLOR)) );
+        XFillColorItem aColorItem( rSet.Get(XATTR_FILLCOLOR) );
         Color aColor(aColorItem.GetColorValue());
         m_pLbBackgroundColor->Enable();
         m_pLbBackgroundColor->SelectEntry(aColor);
@@ -282,14 +282,14 @@ void SvxHatchTabPage::Reset( const SfxItemSet* rSet )
 {
     ChangeHatchHdl_Impl();
 
-    XFillBackgroundItem aBckItem( static_cast<const XFillBackgroundItem&>(rSet->Get(XATTR_FILLBACKGROUND)) );
+    XFillBackgroundItem aBckItem( rSet->Get(XATTR_FILLBACKGROUND) );
     if(aBckItem.GetValue())
         m_pCbBackgroundColor->SetState(TRISTATE_TRUE);
     else
         m_pCbBackgroundColor->SetState(TRISTATE_FALSE);
     m_rXFSet.Put( aBckItem );
 
-    XFillColorItem aColItem( static_cast<const XFillColorItem&>(rSet->Get(XATTR_FILLCOLOR)) );
+    XFillColorItem aColItem( rSet->Get(XATTR_FILLCOLOR) );
     m_pLbBackgroundColor->SelectEntry(aColItem.GetColorValue());
     m_rXFSet.Put( aColItem );
 

@@ -1200,7 +1200,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
         aSet.Put(pObj->GetMergedItemSet());
 
-        const XFillStyleItem& rFillStyle = static_cast<const XFillStyleItem&>( aSet.Get(XATTR_FILLSTYLE) );
+        const XFillStyleItem& rFillStyle = aSet.Get(XATTR_FILLSTYLE);
         bFilled = rFillStyle.GetValue() != drawing::FillStyle_NONE;
     }
 

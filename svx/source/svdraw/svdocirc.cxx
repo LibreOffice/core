@@ -165,25 +165,25 @@ bool SdrCircObj::PaintNeedsXPolyCirc() const
     if(!bNeed)
     {
         // XPoly is necessary for everything that isn't LineSolid or LineNone
-        drawing::LineStyle eLine = static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue();
+        drawing::LineStyle eLine = rSet.Get(XATTR_LINESTYLE).GetValue();
         bNeed = eLine != drawing::LineStyle_NONE && eLine != drawing::LineStyle_SOLID;
 
         // XPoly is necessary for thick lines
         if(!bNeed && eLine != drawing::LineStyle_NONE)
-            bNeed = static_cast<const XLineWidthItem&>(rSet.Get(XATTR_LINEWIDTH)).GetValue() != 0;
+            bNeed = rSet.Get(XATTR_LINEWIDTH).GetValue() != 0;
 
         // XPoly is necessary for circle arcs with line ends
         if(!bNeed && meCircleKind == OBJ_CARC)
         {
             // start of the line is here if StartPolygon, StartWidth!=0
-            bNeed=static_cast<const XLineStartItem&>(rSet.Get(XATTR_LINESTART)).GetLineStartValue().count() != 0 &&
-                  static_cast<const XLineStartWidthItem&>(rSet.Get(XATTR_LINESTARTWIDTH)).GetValue() != 0;
+            bNeed=rSet.Get(XATTR_LINESTART).GetLineStartValue().count() != 0 &&
+                  rSet.Get(XATTR_LINESTARTWIDTH).GetValue() != 0;
 
             if(!bNeed)
             {
                 // end of the line is here if EndPolygon, EndWidth!=0
-                bNeed = static_cast<const XLineEndItem&>(rSet.Get(XATTR_LINEEND)).GetLineEndValue().count() != 0 &&
-                        static_cast<const XLineEndWidthItem&>(rSet.Get(XATTR_LINEENDWIDTH)).GetValue() != 0;
+                bNeed = rSet.Get(XATTR_LINEEND).GetLineEndValue().count() != 0 &&
+                        rSet.Get(XATTR_LINEENDWIDTH).GetValue() != 0;
             }
         }
     }
@@ -191,7 +191,7 @@ bool SdrCircObj::PaintNeedsXPolyCirc() const
     // XPoly is necessary if Fill !=None and !=Solid
     if(!bNeed && meCircleKind != OBJ_CARC)
     {
-        drawing::FillStyle eFill=static_cast<const XFillStyleItem&>(rSet.Get(XATTR_FILLSTYLE)).GetValue();
+        drawing::FillStyle eFill=rSet.Get(XATTR_FILLSTYLE).GetValue();
         bNeed = eFill != drawing::FillStyle_NONE && eFill != drawing::FillStyle_SOLID;
     }
 
