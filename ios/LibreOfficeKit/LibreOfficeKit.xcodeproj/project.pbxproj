@@ -283,9 +283,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3950BAE11F9CA739001A4E96 /* loKit.xcconfig */;
 			buildSettings = {
+				ENABLE_BITCODE = NO;
 				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "";
-				PRELINK_FLAGS = "-ios_version_min 11.0";
+				PRELINK_FLAGS = "-ios_version_min 11.1";
 				PRELINK_LIBS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -296,9 +297,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3950BAE11F9CA739001A4E96 /* loKit.xcconfig */;
 			buildSettings = {
+				ENABLE_BITCODE = NO;
 				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "";
-				PRELINK_FLAGS = "-ios_version_min 11.0";
+				PRELINK_FLAGS = "-ios_version_min 11.1";
 				PRELINK_LIBS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
