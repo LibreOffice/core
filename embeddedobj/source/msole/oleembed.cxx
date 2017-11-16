@@ -538,7 +538,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                         return;
                 }
 
-                // so now the object is either switched from Active to Running state or vise versa
+                // so now the object is either switched from Active to Running state or viceversa
                 // the notification about object state change will be done asynchronously
                 if ( m_nObjectState == embed::EmbedStates::RUNNING && nNewState == embed::EmbedStates::ACTIVE )
                 {

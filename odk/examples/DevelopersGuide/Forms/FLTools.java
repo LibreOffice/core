@@ -130,7 +130,7 @@ public class FLTools
     }
 
     /* ------------------------------------------------------------------ */
-    /** get's the XControlModel for a control
+    /** gets the XControlModel for a control
     */
     public static <T> T getModel( Object aControl, Class<T> aInterfaceClass )
     {

@@ -85,7 +85,7 @@ public class ButtonOperator implements XActionListener, XFeatureInvalidation
     }
 
     /* ------------------------------------------------------------------ */
-    /** get's the button which we operate and which is responsible for a given URL
+    /** gets the button which we operate and which is responsible for a given URL
     */
     private XPropertySet getButton( short _formFeature )
     {

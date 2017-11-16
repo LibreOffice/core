@@ -576,7 +576,7 @@ void SbaGridHeader::dispose()
 void SbaGridHeader::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
     SolarMutexGuard aGuard;
-        // in the new DnD API, the solar mutex is not locked when StartDrag get's called
+        // in the new DnD API, the solar mutex is not locked when StartDrag is called
 
     ImplStartColumnDrag( _nAction, _rPosPixel );
 }
@@ -587,7 +587,7 @@ void SbaGridHeader::MouseButtonDown( const MouseEvent& _rMEvt )
         if (_rMEvt.GetClicks() != 2)
         {
             // the base class will start a column move here, which we don't want to allow
-            // (at the moment. If we store relative positions with the columns, we can allow column moves ....)
+            // (at the moment. If we store relative positions with the columns, we can allow column moves...)
 
         }
 
@@ -1023,7 +1023,7 @@ void SbaGridControl::MouseButtonDown( const BrowserMouseEvent& rMEvt)
 void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
     SolarMutexGuard aGuard;
-        // in the new DnD API, the solar mutex is not locked when StartDrag get's called
+        // in the new DnD API, the solar mutex is not locked when StartDrag is called
 
     bool bHandled = false;
 

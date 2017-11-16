@@ -139,7 +139,7 @@ IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton, void )
     m_pCB_PrimaryColumn->Enable(bKey);
     m_pCB_UseHeaderLine->Enable(m_bUseHeaderAllowed && IsOptionDefData());
 
-    // set typ what to do
+    // set type what to do
     if( IsOptionDefData() )
         m_pParent->setOperation( CopyTableOperation::CopyDefinitionAndData );
     else if( IsOptionDef() )
