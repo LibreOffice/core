@@ -354,8 +354,8 @@ void ScRawToken::SetExternal( const sal_Unicode* pStr )
     eOp   = ocExternal;
     eType = svExternal;
     sal_Int32 nLen = GetStrLen( pStr ) + 1;
-    if( nLen >= MAXSTRLEN )
-        nLen = MAXSTRLEN-1;
+    if( nLen > MAXSTRLEN )
+        nLen = MAXSTRLEN;
     // Leave space for byte parameter!
     memcpy( cStr+1, pStr, nLen * sizeof(sal_Unicode) );
     cStr[ nLen+1 ] = 0;

@@ -2000,7 +2000,7 @@ static bool lcl_isUnicodeIgnoreAscii( const sal_Unicode* p1, const char* p2, siz
 
 sal_Int32 ScCompiler::NextSymbol(bool bInArray)
 {
-    cSymbol[MAXSTRLEN-1] = 0;       // end
+    cSymbol[MAXSTRLEN] = 0;       // end
     sal_Unicode* pSym = cSymbol;
     const sal_Unicode* const pStart = aFormula.getStr();
     const sal_Unicode* pSrc = pStart + nSrcPos;
@@ -2175,7 +2175,7 @@ Label_MaskStateMachine:
             {
                 if ( nMask & ScCharFlags::Ident )
                 {   // This catches also $Sheet1.A$1, for example.
-                    if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
+                    if( pSym == &cSymbol[ MAXSTRLEN ] )
                     {
                         SetError(FormulaError::StringOverflow);
                         eState = ssStop;
@@ -2195,7 +2195,7 @@ Label_MaskStateMachine:
                     int i = 0;
                     for ( ; i<5; ++i)
                     {
-                        if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
+                        if( pSym == &cSymbol[ MAXSTRLEN ] )
                         {
                             SetError(FormulaError::StringOverflow);
                             eState = ssStop;
@@ -2215,7 +2215,7 @@ Label_MaskStateMachine:
                     // One range operator may form Sheet1.A:A, which we need to
                     // pass as one entity to IsReference().
                     mnRangeOpPosInSymbol = pSym - &cSymbol[0];
-                    if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
+                    if( pSym == &cSymbol[ MAXSTRLEN ] )
                     {
                         SetError(FormulaError::StringOverflow);
                         eState = ssStop;
@@ -2253,7 +2253,7 @@ Label_MaskStateMachine:
             break;
             case ssGetValue :
             {
-                if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
+                if( pSym == &cSymbol[ MAXSTRLEN ] )
                 {
                     SetError(FormulaError::StringOverflow);
                     eState = ssStop;
@@ -2324,7 +2324,7 @@ Label_MaskStateMachine:
                 }
                 if ( !bQuote )
                 {
-                    if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
+                    if( pSym == &cSymbol[ MAXSTRLEN ] )
                     {
                         SetError(FormulaError::StringOverflow);
                         eState = ssSkipString;
@@ -2382,7 +2382,7 @@ Label_MaskStateMachine:
                         --pSrc;
                     else
                     {
-                        if (pSym == &cSymbol[ MAXSTRLEN-1 ])
+                        if (pSym == &cSymbol[ MAXSTRLEN ])
                         {
                             SetError( FormulaError::StringOverflow);
                             eState = ssStop;
@@ -2397,7 +2397,7 @@ Label_MaskStateMachine:
                     // Scan whatever up to the next ']' closer.
                     if (c != ']')
                     {
-                        if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
+                        if( pSym == &cSymbol[ MAXSTRLEN ] )
                         {
                             SetError( FormulaError::StringOverflow);
                             eState = ssStop;
@@ -2417,7 +2417,7 @@ Label_MaskStateMachine:
                     // Scan whatever up to the next unescaped ']' closer.
                     if (c != ']' || cLast == '\'')
                     {
-                        if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
+                        if( pSym == &cSymbol[ MAXSTRLEN ] )
                         {
                             SetError( FormulaError::StringOverflow);
                             eState = ssStop;
@@ -2433,7 +2433,7 @@ Label_MaskStateMachine:
                 }
                 break;
             case ssGetReference:
-                if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
+                if( pSym == &cSymbol[ MAXSTRLEN ] )
                 {
                     SetError( FormulaError::StringOverflow);
                     eState = ssSkipReference;
@@ -2666,10 +2666,10 @@ Label_MaskStateMachine:
             }
         } while ( bi18n && nErr == FormulaError::NONE );
         sal_Int32 nLen = aSymbol.getLength();
-        if ( nLen >= MAXSTRLEN )
+        if ( nLen > MAXSTRLEN )
         {
             SetError( FormulaError::StringOverflow );
-            nLen = MAXSTRLEN-1;
+            nLen = MAXSTRLEN;
             if (mnRangeOpPosInSymbol > nLen)
                 mnRangeOpPosInSymbol = -1;
         }
@@ -2988,7 +2988,7 @@ bool ScCompiler::IsString()
         p++;
     sal_Int32 nLen = sal::static_int_cast<sal_Int32>( p - cSymbol - 1 );
     bool bQuote = ((cSymbol[0] == '"') && (cSymbol[nLen] == '"'));
-    if ((bQuote ? nLen-2 : nLen) > MAXSTRLEN-1)
+    if ((bQuote ? nLen-2 : nLen) > MAXSTRLEN)
     {
         SetError(FormulaError::StringOverflow);
         return false;
@@ -3917,8 +3917,8 @@ void ScCompiler::AutoCorrectParsedSymbol()
                     ((GetCharTableFlags(aCorrectedSymbol[nPos], aCorrectedSymbol[nPos-1]) &
                     (ScCharFlags::Word | ScCharFlags::CharDontCare)) == ScCharFlags::NONE)) )
                 nPos--;
-            if ( nPos == MAXSTRLEN - 2 )
-                aCorrectedSymbol = aCorrectedSymbol.replaceAt( nPos, 1, OUString(cQuote) );   // '"' the 255th character
+            if ( nPos == MAXSTRLEN - 1 )
+                aCorrectedSymbol = aCorrectedSymbol.replaceAt( nPos, 1, OUString(cQuote) );   // '"' the MAXSTRLENth character
             else
                 aCorrectedSymbol = aCorrectedSymbol.replaceAt( nPos + 1, 0, OUString(cQuote) );
             bCorrected = true;

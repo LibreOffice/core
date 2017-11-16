@@ -131,7 +131,7 @@ public:
         } sharedstring;
         ScMatrix*    pMat;
         FormulaError nError;
-        sal_Unicode  cStr[ MAXSTRLEN+1 ];   // string (up to 255 characters + 0)
+        sal_Unicode  cStr[ MAXSTRLEN+1 ];   // string (up to MAXSTRLEN characters + 0)
         short        nJump[ FORMULA_MAXJUMPCOUNT + 1 ];     // If/Chose token
     };
 
@@ -273,7 +273,7 @@ private:
     // For CONV_XL_OOX, may be set via API by MOOXML filter.
     css::uno::Sequence<css::sheet::ExternalLinkInfo> maExternalLinks;
 
-    sal_Unicode cSymbol[MAXSTRLEN];                 // current Symbol
+    sal_Unicode cSymbol[MAXSTRLEN+1];               // current Symbol + 0
     OUString    aFormula;                           // formula source code
     sal_Int32   nSrcPos;                            // tokenizer position (source code)
     mutable ScRawToken maRawToken;
