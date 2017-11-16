@@ -78,6 +78,7 @@
 #include <txtfly.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 
 using namespace com::sun::star;
 
@@ -348,9 +349,14 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
 {
     // Currently only used for scaling, cropping and mirroring the contour of graphics!
     // Everything else is handled by GraphicObject
-
     // We put the graphic's visible rectangle into rRect.
     // pOrigRect contains position and size of the whole graphic.
+
+    // RotateFlyFrame3: SwFrame may be transformed. Get untransformed
+    // SwRect(s) as base of calculation
+    const TransformableSwFrame* pTransformableSwFrame(getTransformableSwFrame());
+    const SwRect aFrameArea(pTransformableSwFrame ? pTransformableSwFrame->getUntransformedFrameArea() : getFrameArea());
+    const SwRect aFramePrintArea(pTransformableSwFrame ? pTransformableSwFrame->getUntransformedFramePrintArea() : getFramePrintArea());
 
     const SwAttrSet& rAttrSet = GetNode()->GetSwAttrSet();
     const SwCropGrf& rCrop = rAttrSet.GetCropGrf();
@@ -376,7 +382,7 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
     Size aOrigSz( static_cast<const SwNoTextNode*>(GetNode())->GetTwipSize() );
     if ( !aOrigSz.Width() )
     {
-        aOrigSz.Width() = getFramePrintArea().Width();
+        aOrigSz.Width() = aFramePrintArea.Width();
         nLeftCrop  = -rCrop.GetLeft();
         nRightCrop = -rCrop.GetRight();
     }
@@ -384,7 +390,7 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
     {
         nLeftCrop = std::max( aOrigSz.Width() -
                             (rCrop.GetRight() + rCrop.GetLeft()), long(1) );
-        const double nScale = double(getFramePrintArea().Width())  / double(nLeftCrop);
+        const double nScale = double(aFramePrintArea.Width())  / double(nLeftCrop);
         nLeftCrop  = long(nScale * -rCrop.GetLeft() );
         nRightCrop = long(nScale * -rCrop.GetRight() );
     }
@@ -399,14 +405,14 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
 
     if( !aOrigSz.Height() )
     {
-        aOrigSz.Height() = getFramePrintArea().Height();
+        aOrigSz.Height() = aFramePrintArea.Height();
         nTopCrop   = -rCrop.GetTop();
         nBottomCrop= -rCrop.GetBottom();
     }
     else
     {
         nTopCrop = std::max( aOrigSz.Height() - (rCrop.GetTop() + rCrop.GetBottom()), long(1) );
-        const double nScale = double(getFramePrintArea().Height()) / double(nTopCrop);
+        const double nScale = double(aFramePrintArea.Height()) / double(nTopCrop);
         nTopCrop   = long(nScale * -rCrop.GetTop() );
         nBottomCrop= long(nScale * -rCrop.GetBottom() );
     }
@@ -419,9 +425,9 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
         nBottomCrop= nTmpCrop;
     }
 
-    Size  aVisSz( getFramePrintArea().SSize() );
+    Size  aVisSz( aFramePrintArea.SSize() );
     Size  aGrfSz( aVisSz );
-    Point aVisPt( getFrameArea().Pos() + getFramePrintArea().Pos() );
+    Point aVisPt( aFrameArea.Pos() + aFramePrintArea.Pos() );
     Point aGrfPt( aVisPt );
 
     // Set the "visible" rectangle first
@@ -999,6 +1005,28 @@ void paintGraphicUsingPrimitivesHelper(
             rGraphicTransform,
             rGrfObj,
             rGraphicAttr);
+
+        // RotateFlyFrame3: If ClipRegion is set at OutputDevice, we
+        // need to use that. Usually the renderer would be a VCL-based
+        // PrimitiveRenderer, but there are system-specific shortcuts that
+        // will *not* use the VCL-Paint of Bitmap and thus ignore this.
+        // Anyways, indirectly using a CLipRegion set at the taget OutDev
+        // when using a PrimitiveRenderer is a non-valid implication.
+        // First tried only to use when HasPolyPolygonOrB2DPolyPolygon(),
+        // but there is an optimization at ClipRegion creation that detects
+        // a single Rectangle in a tools::PolyPolygon and forces to a simple
+        // RegionBand-based implementation, so cannot use it here.
+        if(rOutputDevice.IsClipRegion())
+        {
+            const basegfx::B2DPolyPolygon aClip(rOutputDevice.GetClipRegion().GetAsB2DPolyPolygon());
+
+            if(0 != aClip.count())
+            {
+                aContent[0] = new drawinglayer::primitive2d::MaskPrimitive2D(
+                    aClip,
+                    aContent);
+            }
+        }
     }
 
     basegfx::B2DRange aTargetRange(0.0, 0.0, 1.0, 1.0);
