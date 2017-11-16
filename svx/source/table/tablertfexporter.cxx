@@ -200,9 +200,9 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
 
     const SfxItemSet& rCellSet = xCell->GetItemSet();
 
-    const SvxWeightItem&        rWeightItem     = static_cast<const SvxWeightItem&>   ( rCellSet.Get( EE_CHAR_WEIGHT ) );
-    const SvxPostureItem&       rPostureItem    = static_cast<const SvxPostureItem&>  ( rCellSet.Get( EE_CHAR_ITALIC ) );
-    const SvxUnderlineItem&     rUnderlineItem  = static_cast<const SvxUnderlineItem&>( rCellSet.Get( EE_CHAR_UNDERLINE ) );
+    const SvxWeightItem&        rWeightItem     = rCellSet.Get( EE_CHAR_WEIGHT );
+    const SvxPostureItem&       rPostureItem    = rCellSet.Get( EE_CHAR_ITALIC );
+    const SvxUnderlineItem&     rUnderlineItem  = rCellSet.Get( EE_CHAR_UNDERLINE );
 
     const sal_Char* pChar;
 

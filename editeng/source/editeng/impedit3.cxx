@@ -2681,14 +2681,14 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         rFont.SetLanguage( static_cast<const SvxLanguageItem&>(pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType ))).GetLanguage() );
     }
 
-    sal_uInt16 nRelWidth = static_cast<const SvxCharScaleWidthItem&>(pNode->GetContentAttribs().GetItem( EE_CHAR_FONTWIDTH)).GetValue();
+    sal_uInt16 nRelWidth = pNode->GetContentAttribs().GetItem( EE_CHAR_FONTWIDTH).GetValue();
 
     /*
      * Set output device's line and overline colors
     */
     if ( pOut )
     {
-        const SvxUnderlineItem& rTextLineColor = static_cast<const SvxUnderlineItem&>(pNode->GetContentAttribs().GetItem( EE_CHAR_UNDERLINE ));
+        const SvxUnderlineItem& rTextLineColor = pNode->GetContentAttribs().GetItem( EE_CHAR_UNDERLINE );
         if ( rTextLineColor.GetColor() != COL_TRANSPARENT )
             pOut->SetTextLineColor( rTextLineColor.GetColor() );
         else
@@ -2697,7 +2697,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
 
     if ( pOut )
     {
-        const SvxOverlineItem& rOverlineColor = static_cast<const SvxOverlineItem&>(pNode->GetContentAttribs().GetItem( EE_CHAR_OVERLINE ));
+        const SvxOverlineItem& rOverlineColor = pNode->GetContentAttribs().GetItem( EE_CHAR_OVERLINE );
         if ( rOverlineColor.GetColor() != COL_TRANSPARENT )
             pOut->SetOverlineColor( rOverlineColor.GetColor() );
         else
@@ -2746,7 +2746,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
     }
 
     if ( !pCJKLanguageItem )
-        pCJKLanguageItem = static_cast<const SvxLanguageItem*>( &pNode->GetContentAttribs().GetItem( EE_CHAR_LANGUAGE_CJK ) );
+        pCJKLanguageItem = &pNode->GetContentAttribs().GetItem( EE_CHAR_LANGUAGE_CJK );
 
     rFont.SetCJKContextLanguage( pCJKLanguageItem->GetLanguage() );
 

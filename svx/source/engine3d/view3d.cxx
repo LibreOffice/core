@@ -652,7 +652,7 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
     if(dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr)
     {
         const SfxItemSet& rSet = pObj->GetMergedItemSet();
-        const SvxColorItem& rTextColorItem = static_cast<const SvxColorItem&>(rSet.Get(EE_CHAR_COLOR));
+        const SvxColorItem& rTextColorItem = rSet.Get(EE_CHAR_COLOR);
         if(rTextColorItem.GetValue() == RGB_Color(COL_BLACK))
         {
             //For black text objects, the color set to gray

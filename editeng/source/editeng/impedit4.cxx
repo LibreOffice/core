@@ -304,9 +304,9 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     // Generate and write out Font table  ...
     std::vector<SvxFontItem*> aFontTable;
     // default font must be up front, so DEF font in RTF
-    aFontTable.push_back( new SvxFontItem( static_cast<const SvxFontItem&>(aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO ) ) ) );
-    aFontTable.push_back( new SvxFontItem( static_cast<const SvxFontItem&>(aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO_CJK ) ) ) );
-    aFontTable.push_back( new SvxFontItem( static_cast<const SvxFontItem&>(aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO_CTL ) ) ) );
+    aFontTable.push_back( new SvxFontItem( aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO ) ) );
+    aFontTable.push_back( new SvxFontItem( aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO_CJK ) ) );
+    aFontTable.push_back( new SvxFontItem( aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO_CTL ) ) );
     for ( sal_uInt16 nScriptType = 0; nScriptType < 3; nScriptType++ )
     {
         sal_uInt16 nWhich = EE_CHAR_FONTINFO;
@@ -387,15 +387,13 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     SvxColorList aColorList;
     // COL_AUTO should be the default color, always put it first
     aColorList.emplace_back(COL_AUTO);
-    SvxColorItem const& rDefault(static_cast<SvxColorItem const&>(
-                aEditDoc.GetItemPool().GetDefaultItem(EE_CHAR_COLOR)));
+    SvxColorItem const& rDefault(aEditDoc.GetItemPool().GetDefaultItem(EE_CHAR_COLOR));
     if (rDefault.GetValue() != COL_AUTO) // is the default always AUTO?
     {
         aColorList.push_back(rDefault.GetValue());
     }
     sal_uInt32 i = 0;
-    SvxColorItem const* pColorItem = static_cast<SvxColorItem const*>(
-            aEditDoc.GetItemPool().GetItem2( EE_CHAR_COLOR, i));
+    SvxColorItem const* pColorItem = aEditDoc.GetItemPool().GetItem2( EE_CHAR_COLOR, i);
     while ( pColorItem )
     {
         ++i;
@@ -403,8 +401,7 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         {
             aColorList.push_back(pColorItem->GetValue());
         }
-        pColorItem = static_cast<SvxColorItem const*>(
-                aEditDoc.GetItemPool().GetItem2(EE_CHAR_COLOR, i));
+        pColorItem = aEditDoc.GetItemPool().GetItem2(EE_CHAR_COLOR, i);
     }
 
     rOutput.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_COLORTBL );

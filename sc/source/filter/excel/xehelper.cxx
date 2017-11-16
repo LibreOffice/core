@@ -453,7 +453,7 @@ XclExpStringRef lclCreateFormattedString(
             ScPatternAttr::GetFromEditItemSet( aItemSet, aEditSet );
 
             // get escapement value
-            short nEsc = GETITEM( aEditSet, SvxEscapementItem, EE_CHAR_ESCAPEMENT ).GetEsc();
+            short nEsc = aEditSet.Get( EE_CHAR_ESCAPEMENT ).GetEsc();
 
             // process text fields
             bool bIsHyperlink = false;
@@ -752,7 +752,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 // height
                 // is calculated wrong in ScPatternAttr::GetFromEditItemSet, because already in twips and not 100thmm
                 // -> get it directly from edit engine item set
-                aNewData.mnHeight = ulimit_cast< sal_uInt16 >( GETITEM( aEditSet, SvxFontHeightItem, EE_CHAR_FONTHEIGHT ).GetHeight() );
+                aNewData.mnHeight = ulimit_cast< sal_uInt16 >( aEditSet.Get( EE_CHAR_FONTHEIGHT ).GetHeight() );
                 (aNewData.mnHeight += 10) /= 20;
                 bool bFontHtChanged = (aFontData.mnHeight != aNewData.mnHeight);
                 if( bFontHtChanged )
@@ -782,7 +782,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                     aParaText += "&S";
 
                 // super/sub script
-                const SvxEscapementItem& rEscapeItem = GETITEM( aEditSet, SvxEscapementItem, EE_CHAR_ESCAPEMENT );
+                const SvxEscapementItem& rEscapeItem = aEditSet.Get( EE_CHAR_ESCAPEMENT );
                 aNewData.SetScEscapement( rEscapeItem.GetEsc() );
                 if( aFontData.mnEscapem != aNewData.mnEscapem )
                 {

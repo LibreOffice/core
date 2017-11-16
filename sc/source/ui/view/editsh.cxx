@@ -970,8 +970,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
         case SID_ULINE_VAL_DOUBLE:
         case SID_ULINE_VAL_DOTTED:
             {
-                FontLineStyle eOld = static_cast<const SvxUnderlineItem&>( pEditView->
-                                    GetAttribs().Get(EE_CHAR_UNDERLINE)).GetLineStyle();
+                FontLineStyle eOld = pEditView->GetAttribs().Get(EE_CHAR_UNDERLINE).GetLineStyle();
                 FontLineStyle eNew = eOld;
                 switch (nSlot)
                 {
@@ -1003,8 +1002,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_OVERLINE:
             {
-                FontLineStyle eOld = static_cast<const SvxOverlineItem&>( pEditView->
-                                    GetAttribs().Get(EE_CHAR_OVERLINE)).GetLineStyle();
+                FontLineStyle eOld = pEditView->GetAttribs().Get(EE_CHAR_OVERLINE).GetLineStyle();
                 FontLineStyle eNew = ( eOld != LINESTYLE_NONE ) ? LINESTYLE_NONE : LINESTYLE_SINGLE;
                 aSet.Put( SvxOverlineItem( eNew, EE_CHAR_OVERLINE ) );
                 rBindings.Invalidate( nSlot );
@@ -1013,8 +1011,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_STRIKEOUT:
             {
-                bool bOld = static_cast<const SvxCrossedOutItem&>( pEditView->GetAttribs().
-                                Get(EE_CHAR_STRIKEOUT)).GetValue() != STRIKEOUT_NONE;
+                bool bOld = pEditView->GetAttribs().Get(EE_CHAR_STRIKEOUT).GetValue() != STRIKEOUT_NONE;
                 aSet.Put( SvxCrossedOutItem( bOld ? STRIKEOUT_NONE : STRIKEOUT_SINGLE, EE_CHAR_STRIKEOUT ) );
                 rBindings.Invalidate( nSlot );
             }
@@ -1022,8 +1019,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_SHADOWED:
             {
-                bool bOld = static_cast<const SvxShadowedItem&>(pEditView->GetAttribs().
-                                Get(EE_CHAR_SHADOW)).GetValue();
+                bool bOld = pEditView->GetAttribs().Get(EE_CHAR_SHADOW).GetValue();
                 aSet.Put( SvxShadowedItem( !bOld, EE_CHAR_SHADOW ) );
                 rBindings.Invalidate( nSlot );
             }
@@ -1031,8 +1027,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_CONTOUR:
             {
-                bool bOld = static_cast<const SvxContourItem&>(pEditView->GetAttribs().
-                                Get(EE_CHAR_OUTLINE)).GetValue();
+                bool bOld = pEditView->GetAttribs().Get(EE_CHAR_OUTLINE).GetValue();
                 aSet.Put( SvxContourItem( !bOld, EE_CHAR_OUTLINE ) );
                 rBindings.Invalidate( nSlot );
             }
@@ -1040,8 +1035,8 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_SET_SUPER_SCRIPT:
             {
-                SvxEscapement eOld = (SvxEscapement) static_cast<const SvxEscapementItem&>(
-                        pEditView->GetAttribs().Get(EE_CHAR_ESCAPEMENT)).GetEnumValue();
+                SvxEscapement eOld = (SvxEscapement)
+                        pEditView->GetAttribs().Get(EE_CHAR_ESCAPEMENT).GetEnumValue();
                 SvxEscapement eNew = (eOld == SvxEscapement::Superscript) ?
                                         SvxEscapement::Off : SvxEscapement::Superscript;
                 aSet.Put( SvxEscapementItem( eNew, EE_CHAR_ESCAPEMENT ) );
@@ -1050,8 +1045,8 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             break;
         case SID_SET_SUB_SCRIPT:
             {
-                SvxEscapement eOld = (SvxEscapement) static_cast<const SvxEscapementItem&>(
-                        pEditView->GetAttribs().Get(EE_CHAR_ESCAPEMENT)).GetEnumValue();
+                SvxEscapement eOld = (SvxEscapement)
+                        pEditView->GetAttribs().Get(EE_CHAR_ESCAPEMENT).GetEnumValue();
                 SvxEscapement eNew = (eOld == SvxEscapement::Subscript) ?
                                         SvxEscapement::Off : SvxEscapement::Subscript;
                 aSet.Put( SvxEscapementItem( eNew, EE_CHAR_ESCAPEMENT ) );
@@ -1144,8 +1139,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     }
     else
     {
-        FontLineStyle eUnderline = static_cast<const SvxUnderlineItem&>(
-                    aAttribs.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
+        FontLineStyle eUnderline = aAttribs.Get(EE_CHAR_UNDERLINE).GetLineStyle();
         sal_uInt16 nId = SID_ULINE_VAL_NONE;
         switch (eUnderline)
         {
@@ -1163,8 +1157,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     if ( pHdl && pHdl->IsFormulaMode() )
         rSet.ClearItem( EE_CHAR_WEIGHT );   // Highlighted brace not here
 
-    SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
-                    aAttribs.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+    SvxEscapement eEsc = (SvxEscapement) aAttribs.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
     if( eEsc == SvxEscapement::Superscript )
     {
         rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );

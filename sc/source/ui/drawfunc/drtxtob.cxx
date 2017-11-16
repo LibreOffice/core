@@ -206,8 +206,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_CHARMAP:
             {
-                const SvxFontItem& rItem = static_cast<const SvxFontItem&>(
-                            pOutView->GetAttribs().Get(EE_CHAR_FONTINFO));
+                const SvxFontItem& rItem = pOutView->GetAttribs().Get(EE_CHAR_FONTINFO);
 
                 OUString aString;
                 SvxFontItem aNewItem( EE_CHAR_FONTINFO );
@@ -553,8 +552,7 @@ void ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
     pView->GetAttributes(aViewAttr);
 
     //  Underline
-    FontLineStyle eOld = static_cast<const SvxUnderlineItem&>( aViewAttr.
-                                        Get(EE_CHAR_UNDERLINE)).GetLineStyle();
+    FontLineStyle eOld = aViewAttr.Get(EE_CHAR_UNDERLINE).GetLineStyle();
     FontLineStyle eNew = eOld;
     switch (nSlot)
     {
@@ -720,8 +718,8 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
         case SID_SET_SUPER_SCRIPT:
             {
                 SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
-                SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
-                                aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+                SvxEscapement eEsc = (SvxEscapement)
+                                aEditAttr.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
 
                 if( eEsc == SvxEscapement::Superscript )
                     aItem.SetEscapement( SvxEscapement::Off );
@@ -734,8 +732,8 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
         case SID_SET_SUB_SCRIPT:
             {
                 SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
-                SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
-                                aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+                SvxEscapement eEsc = (SvxEscapement)
+                                aEditAttr.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
 
                 if( eEsc == SvxEscapement::Subscript )
                     aItem.SetEscapement( SvxEscapement::Off );
@@ -844,31 +842,31 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                 break;
 
             case SID_ATTR_CHAR_WEIGHT:
-                aNewAttr.Put( static_cast<const SvxWeightItem&>(aEditAttr.Get( EE_CHAR_WEIGHT )) );
+                aNewAttr.Put( aEditAttr.Get( EE_CHAR_WEIGHT ) );
                 break;
 
             case SID_ATTR_CHAR_POSTURE:
-                aNewAttr.Put( static_cast<const SvxPostureItem&>(aEditAttr.Get( EE_CHAR_ITALIC )) );
+                aNewAttr.Put( aEditAttr.Get( EE_CHAR_ITALIC ) );
                 break;
 
             case SID_ATTR_CHAR_UNDERLINE:
-                aNewAttr.Put( static_cast<const SvxUnderlineItem&>(aEditAttr.Get( EE_CHAR_UNDERLINE )) );
+                aNewAttr.Put( aEditAttr.Get( EE_CHAR_UNDERLINE ) );
                 break;
 
             case SID_ATTR_CHAR_OVERLINE:
-                aNewAttr.Put( static_cast<const SvxOverlineItem&>(aEditAttr.Get( EE_CHAR_OVERLINE )) );
+                aNewAttr.Put( aEditAttr.Get( EE_CHAR_OVERLINE ) );
                 break;
 
             case SID_ATTR_CHAR_CONTOUR:
-                aNewAttr.Put( static_cast<const SvxContourItem&>(aEditAttr.Get( EE_CHAR_OUTLINE )) );
+                aNewAttr.Put( aEditAttr.Get( EE_CHAR_OUTLINE ) );
                 break;
 
             case SID_ATTR_CHAR_SHADOWED:
-                aNewAttr.Put( static_cast<const SvxShadowedItem&>(aEditAttr.Get( EE_CHAR_SHADOW )) );
+                aNewAttr.Put( aEditAttr.Get( EE_CHAR_SHADOW ) );
                 break;
 
             case SID_ATTR_CHAR_STRIKEOUT:
-                aNewAttr.Put( static_cast<const SvxCrossedOutItem&>(aEditAttr.Get( EE_CHAR_STRIKEOUT )) );
+                aNewAttr.Put( aEditAttr.Get( EE_CHAR_STRIKEOUT ) );
                 break;
 
             case SID_DRAWTEXT_ATTR_DLG:
@@ -1092,8 +1090,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
     //  super-/subscript
 
-    SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
-                    aAttrSet.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+    SvxEscapement eEsc = (SvxEscapement) aAttrSet.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
     if( eEsc == SvxEscapement::Superscript )
         rDestSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );
     else if( eEsc == SvxEscapement::Subscript )
@@ -1111,8 +1108,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     }
     else
     {
-        FontLineStyle eUnderline = static_cast<const SvxUnderlineItem&>(
-                    aAttrSet.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
+        FontLineStyle eUnderline = aAttrSet.Get(EE_CHAR_UNDERLINE).GetLineStyle();
         sal_uInt16 nId = SID_ULINE_VAL_NONE;
         switch (eUnderline)
         {

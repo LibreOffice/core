@@ -35,6 +35,7 @@
 #include <editeng/pbinitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/sizeitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <editeng/ulspitem.hxx>
 #include <sfx2/app.hxx>

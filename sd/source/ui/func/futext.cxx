@@ -27,6 +27,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
 #include <editeng/editstat.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/svdotext.hxx>

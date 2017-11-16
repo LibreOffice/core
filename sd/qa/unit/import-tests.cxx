@@ -590,7 +590,7 @@ void SdImportTest::testFdo68594()
     SdrObject *pObj = pPage->GetObj(1);
     SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
     CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
-    const SvxColorItem *pC = dynamic_cast<const SvxColorItem *>(&pTxtObj->GetMergedItem(EE_CHAR_COLOR));
+    const SvxColorItem *pC = &pTxtObj->GetMergedItem(EE_CHAR_COLOR);
     CPPUNIT_ASSERT_MESSAGE( "no color item", pC != nullptr);
     // Color should be black
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Placeholder color mismatch", static_cast<ColorData>(0), pC->GetValue().GetColor());

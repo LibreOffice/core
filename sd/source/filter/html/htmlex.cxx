@@ -1477,7 +1477,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet const * pSet, HtmlState*
 
     if ( pSet->GetItemState( EE_CHAR_WEIGHT ) == SfxItemState::SET )
     {
-        bTemp = static_cast<const SvxWeightItem&>(pSet->Get( EE_CHAR_WEIGHT )).GetWeight() == WEIGHT_BOLD;
+        bTemp = pSet->Get( EE_CHAR_WEIGHT ).GetWeight() == WEIGHT_BOLD;
         aTemp = pState->SetWeight( bTemp );
         if( bTemp )
             aStr.insert(0, aTemp);
@@ -1487,7 +1487,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet const * pSet, HtmlState*
 
     if ( pSet->GetItemState( EE_CHAR_UNDERLINE ) == SfxItemState::SET )
     {
-        bTemp = static_cast<const SvxUnderlineItem&>(pSet->Get( EE_CHAR_UNDERLINE )).GetLineStyle() != LINESTYLE_NONE;
+        bTemp = pSet->Get( EE_CHAR_UNDERLINE ).GetLineStyle() != LINESTYLE_NONE;
         aTemp = pState->SetUnderline( bTemp );
         if( bTemp )
             aStr.insert(0, aTemp);
@@ -1497,7 +1497,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet const * pSet, HtmlState*
 
     if ( pSet->GetItemState( EE_CHAR_STRIKEOUT ) == SfxItemState::SET )
     {
-        bTemp = static_cast<const SvxCrossedOutItem&>(pSet->Get( EE_CHAR_STRIKEOUT )).GetStrikeout() != STRIKEOUT_NONE;
+        bTemp = pSet->Get( EE_CHAR_STRIKEOUT ).GetStrikeout() != STRIKEOUT_NONE;
         aTemp = pState->SetStrikeout( bTemp );
         if( bTemp )
             aStr.insert(0, aTemp);
@@ -1507,7 +1507,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet const * pSet, HtmlState*
 
     if ( pSet->GetItemState( EE_CHAR_ITALIC ) == SfxItemState::SET )
     {
-        bTemp = static_cast<const SvxPostureItem&>(pSet->Get( EE_CHAR_ITALIC )).GetPosture() != ITALIC_NONE;
+        bTemp = pSet->Get( EE_CHAR_ITALIC ).GetPosture() != ITALIC_NONE;
         aTemp = pState->SetItalic( bTemp );
         if( bTemp )
             aStr.insert(0, aTemp);
@@ -1519,7 +1519,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet const * pSet, HtmlState*
     {
         if ( pSet->GetItemState( EE_CHAR_COLOR ) == SfxItemState::SET )
         {
-            Color aTextColor = static_cast<const SvxColorItem&>(pSet->Get( EE_CHAR_COLOR )).GetValue();
+            Color aTextColor = pSet->Get( EE_CHAR_COLOR ).GetValue();
             if( aTextColor == COL_AUTO )
             {
                 if( !rBackgroundColor.IsDark() )

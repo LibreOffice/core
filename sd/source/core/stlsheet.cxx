@@ -529,8 +529,8 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
         rSet.GetItemState(EE_CHAR_FONTHEIGHT) == SfxItemState::SET)
     {
         const SfxItemSet* pCurSet = &GetItemSet();
-        sal_uInt32 nNewHeight = static_cast<const SvxFontHeightItem&>(rSet.Get(EE_CHAR_FONTHEIGHT)).GetHeight();
-        sal_uInt32 nOldHeight = static_cast<const SvxFontHeightItem&>(pCurSet->Get(EE_CHAR_FONTHEIGHT)).GetHeight();
+        sal_uInt32 nNewHeight = rSet.Get(EE_CHAR_FONTHEIGHT).GetHeight();
+        sal_uInt32 nOldHeight = pCurSet->Get(EE_CHAR_FONTHEIGHT).GetHeight();
 
         if (rSet.GetItemState(EE_PARA_BULLET) != SfxItemState::SET || !bOnlyMissingItems)
         {

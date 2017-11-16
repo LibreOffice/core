@@ -24,17 +24,38 @@
 #include <svl/typedwhich.hxx>
 
 class SfxBoolItem;
+class SfxGrabBagItem;
 class SfxInt16Item;
 class SvxAdjustItem;
+class SvxAutoKernItem;
+class SvxBackgroundColorItem;
+class SvxCaseMapItem;
+class SvxCharReliefItem;
+class SvxCharScaleWidthItem;
+class SvxColorItem;
+class SvxContourItem;
+class SvxCrossedOutItem;
+class SvxEmphasisMarkItem;
+class SvxEscapementItem;
+class SvxFontHeightItem;
+class SvxFontItem;
 class SvxForbiddenRuleItem;
 class SvxFrameDirectionItem;
 class SvxHangingPunctuationItem;
+class SvxKerningItem;
+class SvxLanguageItem;
 class SvxLineSpacingItem;
 class SvxLRSpaceItem;
+class SvxOverlineItem;
+class SvxPostureItem;
 class SvXMLAttrContainerItem;
 class SvxScriptSpaceItem;
+class SvxShadowedItem;
 class SvxTabStopItem;
 class SvxULSpaceItem;
+class SvxUnderlineItem;
+class SvxWeightItem;
+class SvxWordLineModeItem;
 
 /*
  * NOTE: Changes in this file will probably require
@@ -68,39 +89,39 @@ class SvxULSpaceItem;
 
 // Character attributes:
 #define EE_CHAR_START               (EE_ITEMS_START+18)
-#define EE_CHAR_COLOR               (EE_ITEMS_START+18)
-#define EE_CHAR_FONTINFO            (EE_ITEMS_START+19)
-#define EE_CHAR_FONTHEIGHT          (EE_ITEMS_START+20)
-#define EE_CHAR_FONTWIDTH           (EE_ITEMS_START+21)
-#define EE_CHAR_WEIGHT              (EE_ITEMS_START+22)
-#define EE_CHAR_UNDERLINE           (EE_ITEMS_START+23)
-#define EE_CHAR_STRIKEOUT           (EE_ITEMS_START+24)
-#define EE_CHAR_ITALIC              (EE_ITEMS_START+25)
-#define EE_CHAR_OUTLINE             (EE_ITEMS_START+26)
-#define EE_CHAR_SHADOW              (EE_ITEMS_START+27)
-#define EE_CHAR_ESCAPEMENT          (EE_ITEMS_START+28)
-#define EE_CHAR_PAIRKERNING         (EE_ITEMS_START+29)
-#define EE_CHAR_KERNING             (EE_ITEMS_START+30)
-#define EE_CHAR_WLM                 (EE_ITEMS_START+31)
-#define EE_CHAR_LANGUAGE            (EE_ITEMS_START+32)
-#define EE_CHAR_LANGUAGE_CJK        (EE_ITEMS_START+33)
-#define EE_CHAR_LANGUAGE_CTL        (EE_ITEMS_START+34)
-#define EE_CHAR_FONTINFO_CJK        (EE_ITEMS_START+35)
-#define EE_CHAR_FONTINFO_CTL        (EE_ITEMS_START+36)
-#define EE_CHAR_FONTHEIGHT_CJK      (EE_ITEMS_START+37)
-#define EE_CHAR_FONTHEIGHT_CTL      (EE_ITEMS_START+38)
-#define EE_CHAR_WEIGHT_CJK          (EE_ITEMS_START+39)
-#define EE_CHAR_WEIGHT_CTL          (EE_ITEMS_START+40)
-#define EE_CHAR_ITALIC_CJK          (EE_ITEMS_START+41)
-#define EE_CHAR_ITALIC_CTL          (EE_ITEMS_START+42)
-#define EE_CHAR_EMPHASISMARK        (EE_ITEMS_START+43)
-#define EE_CHAR_RELIEF              (EE_ITEMS_START+44)
-#define EE_CHAR_RUBI_DUMMY          (EE_ITEMS_START+45)
-#define EE_CHAR_XMLATTRIBS          (EE_ITEMS_START+46)
-#define EE_CHAR_OVERLINE            (EE_ITEMS_START+47)
-#define EE_CHAR_CASEMAP             (EE_ITEMS_START+48)
-#define EE_CHAR_GRABBAG             (EE_ITEMS_START+49)
-#define EE_CHAR_BKGCOLOR            (EE_ITEMS_START+50)
+#define EE_CHAR_COLOR               TypedWhichId<SvxColorItem>(EE_ITEMS_START+18)
+#define EE_CHAR_FONTINFO            TypedWhichId<SvxFontItem>(EE_ITEMS_START+19)
+#define EE_CHAR_FONTHEIGHT          TypedWhichId<SvxFontHeightItem>(EE_ITEMS_START+20)
+#define EE_CHAR_FONTWIDTH           TypedWhichId<SvxCharScaleWidthItem>(EE_ITEMS_START+21)
+#define EE_CHAR_WEIGHT              TypedWhichId<SvxWeightItem>(EE_ITEMS_START+22)
+#define EE_CHAR_UNDERLINE           TypedWhichId<SvxUnderlineItem>(EE_ITEMS_START+23)
+#define EE_CHAR_STRIKEOUT           TypedWhichId<SvxCrossedOutItem>(EE_ITEMS_START+24)
+#define EE_CHAR_ITALIC              TypedWhichId<SvxPostureItem>(EE_ITEMS_START+25)
+#define EE_CHAR_OUTLINE             TypedWhichId<SvxContourItem>(EE_ITEMS_START+26)
+#define EE_CHAR_SHADOW              TypedWhichId<SvxShadowedItem>(EE_ITEMS_START+27)
+#define EE_CHAR_ESCAPEMENT          TypedWhichId<SvxEscapementItem>(EE_ITEMS_START+28)
+#define EE_CHAR_PAIRKERNING         TypedWhichId<SvxAutoKernItem>(EE_ITEMS_START+29)
+#define EE_CHAR_KERNING             TypedWhichId<SvxKerningItem>(EE_ITEMS_START+30)
+#define EE_CHAR_WLM                 TypedWhichId<SvxWordLineModeItem>(EE_ITEMS_START+31)
+#define EE_CHAR_LANGUAGE            TypedWhichId<SvxLanguageItem>(EE_ITEMS_START+32)
+#define EE_CHAR_LANGUAGE_CJK        TypedWhichId<SvxLanguageItem>(EE_ITEMS_START+33)
+#define EE_CHAR_LANGUAGE_CTL        TypedWhichId<SvxLanguageItem>(EE_ITEMS_START+34)
+#define EE_CHAR_FONTINFO_CJK        TypedWhichId<SvxFontItem>(EE_ITEMS_START+35)
+#define EE_CHAR_FONTINFO_CTL        TypedWhichId<SvxFontItem>(EE_ITEMS_START+36)
+#define EE_CHAR_FONTHEIGHT_CJK      TypedWhichId<SvxFontHeightItem>(EE_ITEMS_START+37)
+#define EE_CHAR_FONTHEIGHT_CTL      TypedWhichId<SvxFontHeightItem>(EE_ITEMS_START+38)
+#define EE_CHAR_WEIGHT_CJK          TypedWhichId<SvxWeightItem>(EE_ITEMS_START+39)
+#define EE_CHAR_WEIGHT_CTL          TypedWhichId<SvxWeightItem>(EE_ITEMS_START+40)
+#define EE_CHAR_ITALIC_CJK          TypedWhichId<SvxPostureItem>(EE_ITEMS_START+41)
+#define EE_CHAR_ITALIC_CTL          TypedWhichId<SvxPostureItem>(EE_ITEMS_START+42)
+#define EE_CHAR_EMPHASISMARK        TypedWhichId<SvxEmphasisMarkItem>(EE_ITEMS_START+43)
+#define EE_CHAR_RELIEF              TypedWhichId<SvxCharReliefItem>(EE_ITEMS_START+44)
+#define EE_CHAR_RUBI_DUMMY          TypedWhichId<SfxVoidItem>(EE_ITEMS_START+45)
+#define EE_CHAR_XMLATTRIBS          TypedWhichId<SvXMLAttrContainerItem>(EE_ITEMS_START+46)
+#define EE_CHAR_OVERLINE            TypedWhichId<SvxOverlineItem>(EE_ITEMS_START+47)
+#define EE_CHAR_CASEMAP             TypedWhichId<SvxCaseMapItem>(EE_ITEMS_START+48)
+#define EE_CHAR_GRABBAG             TypedWhichId<SfxGrabBagItem>(EE_ITEMS_START+49)
+#define EE_CHAR_BKGCOLOR            TypedWhichId<SvxBackgroundColorItem>(EE_ITEMS_START+50)
 
 #define EE_CHAR_END                 (EE_ITEMS_START+50)
 

@@ -470,7 +470,7 @@ CellInfo::CellInfo( const Reference< XStyle >& xStyle )
             maCellColor.SetColor( COL_TRANSPARENT );
 
         // get style text color
-        const SvxColorItem* pTextColor = dynamic_cast<const SvxColorItem*>( rSet.GetItem(EE_CHAR_COLOR) );
+        const SvxColorItem* pTextColor = rSet.GetItem(EE_CHAR_COLOR);
         if( pTextColor )
             maTextColor = pTextColor->GetValue();
         else

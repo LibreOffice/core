@@ -39,6 +39,9 @@
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svl/itemset.hxx>
 #include <editutil.hxx>
 // *** edit engine ***

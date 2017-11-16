@@ -37,6 +37,7 @@
 #include <editeng/unofored.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/unoedhlp.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <vcl/virdev.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/adjustitem.hxx>

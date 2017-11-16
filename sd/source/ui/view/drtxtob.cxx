@@ -134,7 +134,7 @@ void TextObjectBar::GetCharState( SfxItemSet& rSet )
     aNewAttr.Put(aCharAttrSet, false);
     rSet.Put(aNewAttr, false);
 
-    SvxKerningItem aKern = static_cast<const SvxKerningItem&>( aCharAttrSet.Get( EE_CHAR_KERNING ) );
+    SvxKerningItem aKern = aCharAttrSet.Get( EE_CHAR_KERNING );
     //aKern.SetWhich(SID_ATTR_CHAR_KERNING);
     rSet.Put(aKern);
 
@@ -581,8 +581,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
     }
 
     // justification (superscript, subscript) is also needed in outline-mode
-    SvxEscapement eEsc = (SvxEscapement ) static_cast<const SvxEscapementItem&>(
-                    aAttrSet.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+    SvxEscapement eEsc = (SvxEscapement ) aAttrSet.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
 
     if( eEsc == SvxEscapement::Superscript )
         rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );

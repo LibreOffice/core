@@ -2192,9 +2192,9 @@ static void lcl_ScaleFonts( EditEngine& rEngine, long nPercent )
             ESelection aSel( nPar, nStart, nPar, nEnd );
             SfxItemSet aAttribs = rEngine.GetAttribs( aSel );
 
-            long nWestern = static_cast<const SvxFontHeightItem&>(aAttribs.Get(EE_CHAR_FONTHEIGHT)).GetHeight();
-            long nCJK = static_cast<const SvxFontHeightItem&>(aAttribs.Get(EE_CHAR_FONTHEIGHT_CJK)).GetHeight();
-            long nCTL = static_cast<const SvxFontHeightItem&>(aAttribs.Get(EE_CHAR_FONTHEIGHT_CTL)).GetHeight();
+            long nWestern = aAttribs.Get(EE_CHAR_FONTHEIGHT).GetHeight();
+            long nCJK = aAttribs.Get(EE_CHAR_FONTHEIGHT_CJK).GetHeight();
+            long nCTL = aAttribs.Get(EE_CHAR_FONTHEIGHT_CTL).GetHeight();
 
             nWestern = ( nWestern * nPercent ) / 100;
             nCJK     = ( nCJK     * nPercent ) / 100;
