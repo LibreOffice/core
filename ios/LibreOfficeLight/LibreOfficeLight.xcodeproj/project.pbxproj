@@ -38,26 +38,22 @@
 		39022C1C1EDC2A2C00100066 /* services */ = {isa = PBXFileReference; lastKnownFileType = folder; name = services; path = ../generated/resources/services; sourceTree = "<group>"; };
 		39022C1E1EDC2AB000100066 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../generated/resources/share; sourceTree = "<group>"; };
 		39022C201EDC2D0800100066 /* icudt59l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt59l.dat; path = ../generated/resources/icudt59l.dat; sourceTree = "<group>"; };
+		391FE7591FBC89BE00C592BA /* LibreOfficeKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LibreOfficeKit.h; path = ../LibreOfficeKit/LibreOfficeKit/LibreOfficeKit.h; sourceTree = "<group>"; };
 		39284DB01FA5E150006F43E4 /* dummyLOkit.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = dummyLOkit.c; sourceTree = "<group>"; };
 		39284DB21FA5F207006F43E4 /* DocumentActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentActions.swift; sourceTree = "<group>"; };
 		392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewPrintManager.swift; path = LibreOfficeLight/ViewPrintManager.swift; sourceTree = SOURCE_ROOT; };
 		393975771F8BECB0002DC80B /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		393975791F8BECC1002DC80B /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		3944C2061FB7701100A06096 /* init.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = init.cxx; path = ../../desktop/source/lib/init.cxx; sourceTree = "<group>"; };
 		39503A6F1F94C4AC00F19C78 /* lokit-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "lokit-Bridging-Header.h"; sourceTree = "<group>"; };
 		39503A741F94D44900F19C78 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
-		3956B72E1FAB3E0D00BF5DE4 /* appquit.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = appquit.cxx; path = ../../sfx2/source/appl/appquit.cxx; sourceTree = "<group>"; };
-		3956B7301FAB3E4700BF5DE4 /* appdata.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = appdata.cxx; path = ../../sfx2/source/appl/appdata.cxx; sourceTree = "<group>"; };
-		3956B7321FAB3E7300BF5DE4 /* docinsert.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = docinsert.cxx; path = ../../sfx2/source/doc/docinsert.cxx; sourceTree = "<group>"; };
 		396F92F61E7AE62400A28C82 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		397275391E77D9F1006ACDCC /* LibreOfficeLight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LibreOfficeLight.entitlements; sourceTree = "<group>"; };
+		3975A8C91FBD70EE00A87B3A /* LibreOfficeKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LibreOfficeKit.h; path = ../../include/LibreOfficeKit/LibreOfficeKit.h; sourceTree = "<group>"; };
 		397868D71E59A3EA007F9248 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		397E08FA1E597BD8001374E0 /* LibreOfficeLight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LibreOfficeLight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		397E08FD1E597BD8001374E0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = LibreOfficeLight/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		397E09021E597BD8001374E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
 		397E09071E597BD8001374E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = LibreOfficeLight/Assets.xcassets; sourceTree = SOURCE_ROOT; };
-		398F37C81FB5E37400707604 /* sofficemain.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sofficemain.cxx; path = ../../desktop/source/app/sofficemain.cxx; sourceTree = "<group>"; };
-		398F37CA1FB5E3D800707604 /* salmain.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = salmain.cxx; path = ../../vcl/source/salmain/salmain.cxx; sourceTree = "<group>"; };
 		3992D8591E5B762A00BEA987 /* DocumentController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DocumentController.swift; path = LibreOfficeLight/DocumentController.swift; sourceTree = SOURCE_ROOT; };
 		399648461E5B87DC00E73E83 /* ViewProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewProperties.swift; path = LibreOfficeLight/ViewProperties.swift; sourceTree = SOURCE_ROOT; };
 		39ACF4181F8A317600DA7334 /* loApp.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = loApp.xcconfig; path = ../../../../../../../Users/jani/lo_ios/workdir/ios/loApp.xcconfig; sourceTree = "<group>"; };
@@ -69,12 +65,9 @@
 		39B08B9B1E5F0BB600682A59 /* udkapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = udkapi.rdb; path = ../generated/resources/udkapi.rdb; sourceTree = SOURCE_ROOT; };
 		39B08B9C1E5F0BB600682A59 /* unorc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = unorc; path = ../generated/resources/unorc; sourceTree = SOURCE_ROOT; };
 		39B092501E5F3DEA00682A59 /* LibreOfficeLight-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LibreOfficeLight-Prefix.pch"; sourceTree = "<group>"; };
+		39E7CD5D1FB9C7F000FD9BE1 /* LibreOfficeKit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = LibreOfficeKit.c; path = ../LibreOfficeKit/LibreOfficeKit/LibreOfficeKit.c; sourceTree = "<group>"; };
 		39EE81531FA644E800B73AB8 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		39EF4E2E1FA500C9001914AC /* PropertiesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertiesController.swift; sourceTree = "<group>"; };
-		39F5C6EA1FADE79000728B10 /* app.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = app.cxx; path = ../../sfx2/source/appl/app.cxx; sourceTree = "<group>"; };
-		39F5C6EC1FADEA8300728B10 /* module.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = module.cxx; path = ../../sfx2/source/appl/module.cxx; sourceTree = "<group>"; };
-		39F5C6EE1FADEC4000728B10 /* globalevents.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = globalevents.cxx; path = ../../sfx2/source/notify/globalevents.cxx; sourceTree = "<group>"; };
-		39FCD43C1FB5DDB000644AA3 /* svmain.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svmain.cxx; path = ../../vcl/source/app/svmain.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,16 +100,9 @@
 		3956B72D1FAB3DBF00BF5DE4 /* extra */ = {
 			isa = PBXGroup;
 			children = (
-				3944C2061FB7701100A06096 /* init.cxx */,
-				398F37CA1FB5E3D800707604 /* salmain.cxx */,
-				398F37C81FB5E37400707604 /* sofficemain.cxx */,
-				39FCD43C1FB5DDB000644AA3 /* svmain.cxx */,
-				39F5C6EE1FADEC4000728B10 /* globalevents.cxx */,
-				39F5C6EC1FADEA8300728B10 /* module.cxx */,
-				39F5C6EA1FADE79000728B10 /* app.cxx */,
-				3956B7321FAB3E7300BF5DE4 /* docinsert.cxx */,
-				3956B7301FAB3E4700BF5DE4 /* appdata.cxx */,
-				3956B72E1FAB3E0D00BF5DE4 /* appquit.cxx */,
+				391FE7591FBC89BE00C592BA /* LibreOfficeKit.h */,
+				39E7CD5D1FB9C7F000FD9BE1 /* LibreOfficeKit.c */,
+				3975A8C91FBD70EE00A87B3A /* LibreOfficeKit.h */,
 			);
 			name = extra;
 			sourceTree = "<group>";
@@ -487,7 +473,7 @@
 				CLANG_WARN_INFINITE_RECURSION = NO;
 				CODE_SIGN_ENTITLEMENTS = LibreOfficeLight/LibreOfficeLight.entitlements;
 				DEVELOPMENT_TEAM = TM977DU7EF;
-				ENABLE_TESTABILITY = YES;
+				ENABLE_TESTABILITY = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LibreOfficeLight/LibreOfficeLight-Prefix.pch";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
@@ -502,7 +488,7 @@
 					"$(LO_WORKDIR)/ios/generated",
 				);
 				INFOPLIST_FILE = LibreOfficeLight/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
@@ -527,11 +513,11 @@
 				CODE_SIGN_ENTITLEMENTS = LibreOfficeLight/LibreOfficeLight.entitlements;
 				COPY_PHASE_STRIP = YES;
 				DEVELOPMENT_TEAM = TM977DU7EF;
-				ENABLE_TESTABILITY = YES;
+				ENABLE_TESTABILITY = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LibreOfficeLight/LibreOfficeLight-Prefix.pch";
 				INFOPLIST_FILE = LibreOfficeLight/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
@@ -639,7 +625,7 @@
 				CLANG_WARN_INFINITE_RECURSION = NO;
 				CODE_SIGN_ENTITLEMENTS = LibreOfficeLight/LibreOfficeLight.entitlements;
 				DEVELOPMENT_TEAM = TM977DU7EF;
-				ENABLE_TESTABILITY = YES;
+				ENABLE_TESTABILITY = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LibreOfficeLight/LibreOfficeLight-Prefix.pch";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
@@ -654,7 +640,7 @@
 					"$(LO_WORKDIR)/ios/generated",
 				);
 				INFOPLIST_FILE = LibreOfficeLight/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";

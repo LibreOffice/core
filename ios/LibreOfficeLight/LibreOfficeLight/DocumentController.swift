@@ -207,7 +207,6 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
         openMenu?.browserUserInterfaceStyle = UIDocumentBrowserViewController.BrowserUserInterfaceStyle.dark
         openMenu?.delegate = self
         self.present(openMenu!, animated: true, completion: nil)
-        print("menu Open... to be done")
     }
 
 
@@ -319,8 +318,8 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
     // Real open and presentation of document
     public func doOpen(_ docURL : URL)
     {
-        //FIXME
         BridgeLOkit_open(docURL.absoluteString);
+        BridgeLOkit_Sizing(4, 4, 256, 256);
     }
 }
 

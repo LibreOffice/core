@@ -28,6 +28,12 @@ static LibreOfficeKit* kit;
 static LibreOfficeKitDocument* document;
 
 
+// Tile variables
+static int tileSizeX, tileSizeY, tileMaxY, documentParts;
+static double twipsPerXtile, twipsPerYtile;
+
+
+
 // Bridge functions to LibreOfficeKit
 int BridgeLOkit_Init(const char *path)
 {
@@ -41,6 +47,30 @@ int BridgeLOkit_Init(const char *path)
         if (!kit)
             return 1;
     }
+    return 0;
+}
+
+
+
+int BridgeLOkit_Sizing(const int countXtiles, const int countYtiles,
+                       const int pixelsXtile, const int pixelsYtile)
+{
+    long docWidth, docHeight;
+
+    // Remember for later
+    tileSizeX = pixelsXtile;
+    tileSizeY = pixelsYtile;
+
+    // Calculate twips to pixels in X,Y direction
+    document->pClass->getDocumentSize(document, &docWidth, &docHeight);
+    twipsPerXtile = docWidth / countXtiles;
+    double ratio = (double)docHeight / (double)docWidth + 0.05;
+    int x0 = (int)((ratio - (int)ratio) * 10.0);
+    int x1 = x0 * countXtiles / 10;
+    int x2 = (int)ratio;
+    tileMaxY = x1 + x2;
+    twipsPerYtile = docHeight / tileMaxY;
+    documentParts = document->pClass->getParts(document);
     return 0;
 }
 

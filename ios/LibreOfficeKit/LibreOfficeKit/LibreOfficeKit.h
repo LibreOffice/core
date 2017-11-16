@@ -12,6 +12,8 @@
 // The functions (LibreOfficeKit.mm) calls functions directly in LibreOffice
 
 int BridgeLOkit_Init(const char *path);
+int BridgeLOkit_Sizing(const int countXtiles, const int countYtiles,
+                       const int pixelsXtile, const int pixelsYtile);
 int BridgeLOkit_open(const char *path);
 int BridgeLOkit_ClientCommand(const char *input);
 int BridgeLOkit_Hipernate(void);
