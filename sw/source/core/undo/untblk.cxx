@@ -76,7 +76,18 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     }
 }
 
-// set destination after reading input
+// This method does two things:
+// 1. Ajusts SwUndoRng members, required for Undo.
+//  Members are:
+//  SwUndoRng::nSttNode - all nodes, starting from this node will be deleted during Undo (in SwUndoInserts::UndoImpl)
+//  SwUndoRng::nSttContent - corresponding content index in SwUndoRng::nSttNode (symbol number in paragraph)
+//  SwUndoRng::nEndNode - end node for deletion
+//  SwUndoRng::nEndContent - end content index
+// All these members are filled in during construction of SwUndoInserts instance, and can be ajusted using this method
+//
+// 2. Fills in m_FlyUndos array with flys anchored ONLY to first and last paragraphs (first == rPam.Start(), last == rPam.End())
+//  Flys, anchored to any paragraph, but not first and last, cared by DelContentIndex (see SwUndoInserts::UndoImpl) and not stored in m_FlyUndos
+
 void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
                                     bool bSttIsTextNd )
 {
@@ -100,7 +111,9 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
         }
     }
 
-    if( bScanFlys && !nSttContent )
+    // Fill m_FlyUndos with flys anchored to first and last paragraphs
+
+    if( bScanFlys)
     {
         // than collect all new Flys
         SwDoc* pDoc = rPam.GetDoc();
@@ -112,7 +125,7 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
             SwPosition const*const pAPos = pAnchor->GetContentAnchor();
             if (pAPos &&
                 (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA) &&
-                nSttNode == pAPos->nNode.GetIndex() )
+                (nSttNode == pAPos->nNode.GetIndex() || nEndNode == pAPos->nNode.GetIndex()))
             {
                 std::vector<SwFrameFormat*>::iterator it;
                 if( !pFrameFormats ||
@@ -144,6 +157,27 @@ SwUndoInserts::~SwUndoInserts()
     delete pFrameFormats;
     delete pRedlData;
 }
+
+// Undo Insert operation
+//  It's important to note that Undo stores absolute node indexes. I.e. if during insertion, you insert nodes 31 to 33,
+//  during Undo nodes with indices from 31 to 33 will be deleted. Undo doesn't checks that nodes 31 to 33 are the same nodes, whoch were inserted.
+//  It jsut deletes them.
+//  This may seem as bad programming practice, but Undo actions are strongly ordered. If you change your document in some way, new Undo action added.
+//  During Undo most recent actions will be executed first. So during execution of particular Undo action indices will be correct.
+//  But storing absolute indices leads to crushes, if some action in Undo fails to roll back some modifications.
+
+//  Has followinf main steps:
+//  1. DelContentIndex to delete footnotes, flys, bookmarks, Directories (see comment for this function)
+//     Deleted flys stored in pHystory array
+//     First and last paragraphs flys cared later in this function! They are not deleted by DelContentIndex!
+//     For flys, anchored to last paragraph, DelContentIndex re-anchor them to last paragraph, that will remain after Undo.
+//     This is not fully correct, as everything btwn nSttNode and nEndNode should be deleted (these nodes marks range of inserted nodes).
+//     But due to bug in paste (probably there), during paste all flys anchored to last paragraph (see https://bugs.documentfoundation.org/show_bug.cgi?id=94225#c38).
+//     So they should be re-anchored.
+//  2. MoveToUndoNds moves nodes to Undo nodes array and removes them from document
+//  3. m_FlyUndos removes flys anchored to first and last paragraph in Undo range. If all flys anchored in between first and last paragraphs, this array is empty
+//  4. Lastly (starting form if(pTextNode)), text from last paragraph joined to last remaining paragraph and FormatColl for last paragraph is restored.
+//     Format coll for last paragraph is removed during execution of UndoImpl
 
 void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -238,6 +272,9 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         }
     }
 }
+
+// See SwUndoInserts::UndoImpl comments
+// All actions here should be done in reverse order to what is done in SwUndoInserts::UndoImpl!
 
 void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
 {
