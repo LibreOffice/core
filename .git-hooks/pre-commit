@@ -148,33 +148,30 @@ sub check_style($)
         }
     }
 
-    # Check if clang-format is installed.
-    if (! -x $clang_format)
-    {
-        # As a first step, don't do any checks in this case.
-        return;
-
-        my $platform = "linux64";
-        my $download = "wget";
-        if ($^O eq "cygwin")
-        {
-            $platform = "win.exe";
-        }
-        elsif ($^O eq "darwin")
-        {
-            $platform = "mac";
-            $download = "curl -O";
-        }
-
-        print("Error: clang-format is not found in $opt_lo or in your PATH.\n");
-        print("To get a clang-format binary for your platform, please do:\n\n");
-        print("mkdir -p $opt_lo\n");
-        print("cd $opt_lo\n");
-        print("$download https://dev-www.libreoffice.org/bin/clang-format-$version-$platform\n");
-        print("cp clang-format-$version-$platform clang-format\n");
-        print("chmod +x clang-format\n");
-        exit(1);
-    }
+#   # Check if clang-format is installed.
+#   if (! -x $clang_format)
+#   {
+#       my $platform = "linux64";
+#       my $download = "wget";
+#       if ($^O eq "cygwin")
+#       {
+#           $platform = "win.exe";
+#       }
+#       elsif ($^O eq "darwin")
+#       {
+#           $platform = "mac";
+#           $download = "curl -O";
+#       }
+#
+#       print("Error: clang-format is not found in $opt_lo or in your PATH.\n");
+#       print("To get a clang-format binary for your platform, please do:\n\n");
+#       print("mkdir -p $opt_lo\n");
+#       print("cd $opt_lo\n");
+#       print("$download https://dev-www.libreoffice.org/bin/clang-format-$version-$platform\n");
+#       print("cp clang-format-$version-$platform clang-format\n");
+#       print("chmod +x clang-format\n");
+#       exit(1);
+#   }
 
     # Read the blacklist.
     if (open(LINES, "solenv/clang-format/blacklist"))
@@ -199,6 +196,13 @@ sub check_style($)
         chomp $filename;
         if ($filename =~ /\.($src)$/ and !exists($blacklist_names{$filename}))
         {
+            if (! -x $clang_format)
+            {
+                print("\nWARNING: Commit touches new (non-blacklisted) files, but no clang-format"
+                      . " ${version}\n");
+                print(" found (via CLANG_FORMAT or PATH env vars, or in ${opt_lo}).\n\n");
+                return;
+            }
             if (system("$clang_format $filename | git --no-pager diff --no-index --exit-code $filename -") != 0)
             {
                 push @bad_names, $filename;
