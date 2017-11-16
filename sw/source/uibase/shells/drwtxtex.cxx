@@ -175,7 +175,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             }
             else
             {
-                FontLineStyle eFU = static_cast<const SvxUnderlineItem&>(aEditAttr.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
+                FontLineStyle eFU = aEditAttr.Get(EE_CHAR_UNDERLINE).GetLineStyle();
                 aNewAttr.Put( SvxUnderlineItem(eFU == LINESTYLE_SINGLE ? LINESTYLE_NONE : LINESTYLE_SINGLE, EE_CHAR_UNDERLINE) );
             }
         }
@@ -183,7 +183,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
         case SID_ATTR_CHAR_OVERLINE:
         {
-            FontLineStyle eFO = static_cast<const SvxOverlineItem&>(aEditAttr.Get(EE_CHAR_OVERLINE)).GetLineStyle();
+            FontLineStyle eFO = aEditAttr.Get(EE_CHAR_OVERLINE).GetLineStyle();
             aNewAttr.Put(SvxOverlineItem(eFO == LINESTYLE_SINGLE ? LINESTYLE_NONE : LINESTYLE_SINGLE, EE_CHAR_OVERLINE));
         }
         break;
@@ -302,8 +302,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case FN_SET_SUPER_SCRIPT:
         {
             SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
-            SvxEscapement eEsc = (SvxEscapement ) static_cast<const SvxEscapementItem&>(
-                            aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+            SvxEscapement eEsc = (SvxEscapement )
+                            aEditAttr.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
 
             if( eEsc == SvxEscapement::Superscript )
                 aItem.SetEscapement( SvxEscapement::Off );
@@ -315,8 +315,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case FN_SET_SUB_SCRIPT:
         {
             SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
-            SvxEscapement eEsc = (SvxEscapement ) static_cast<const SvxEscapementItem&>(
-                            aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+            SvxEscapement eEsc = (SvxEscapement )
+                            aEditAttr.Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
 
             if( eEsc == SvxEscapement::Subscript )
                 aItem.SetEscapement( SvxEscapement::Off );

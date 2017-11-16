@@ -718,8 +718,8 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             rSet.InvalidateItem(SID_ATTR_PARA_ULSPACE);
         }
 
-        SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
-                        pSet->Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+        SvxEscapement eEsc = (SvxEscapement)
+                        pSet->Get( EE_CHAR_ESCAPEMENT ).GetEnumValue();
         if( eEsc == SvxEscapement::Superscript )
         {
             rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );

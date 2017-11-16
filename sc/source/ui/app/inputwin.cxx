@@ -29,6 +29,10 @@
 #include <editeng/editstat.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/lspcitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/langitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>

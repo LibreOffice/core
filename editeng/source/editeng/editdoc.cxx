@@ -1989,30 +1989,30 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_Language ) == SfxItemState::SET ) )
         rFont.SetLanguage( static_cast<const SvxLanguageItem&>(rSet.Get( nWhich_Language )).GetLanguage() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_COLOR ) == SfxItemState::SET ) )
-        rFont.SetColor( static_cast<const SvxColorItem&>(rSet.Get( EE_CHAR_COLOR )).GetValue() );
+        rFont.SetColor( rSet.Get( EE_CHAR_COLOR ).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_BKGCOLOR ) == SfxItemState::SET ) )
-        rFont.SetFillColor( static_cast<const SvxBackgroundColorItem&>(rSet.Get( EE_CHAR_BKGCOLOR )).GetValue() );
+        rFont.SetFillColor( rSet.Get( EE_CHAR_BKGCOLOR ).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_FontHeight ) == SfxItemState::SET ) )
         rFont.SetFontSize( Size( rFont.GetFontSize().Width(), static_cast<const SvxFontHeightItem&>(rSet.Get( nWhich_FontHeight ) ).GetHeight() ) );
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_Weight ) == SfxItemState::SET ) )
         rFont.SetWeight( static_cast<const SvxWeightItem&>(rSet.Get( nWhich_Weight )).GetWeight() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_UNDERLINE ) == SfxItemState::SET ) )
-        rFont.SetUnderline( static_cast<const SvxUnderlineItem&>(rSet.Get( EE_CHAR_UNDERLINE )).GetLineStyle() );
+        rFont.SetUnderline( rSet.Get( EE_CHAR_UNDERLINE ).GetLineStyle() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_OVERLINE ) == SfxItemState::SET ) )
-        rFont.SetOverline( static_cast<const SvxOverlineItem&>(rSet.Get( EE_CHAR_OVERLINE )).GetLineStyle() );
+        rFont.SetOverline( rSet.Get( EE_CHAR_OVERLINE ).GetLineStyle() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_STRIKEOUT ) == SfxItemState::SET ) )
-        rFont.SetStrikeout( static_cast<const SvxCrossedOutItem&>(rSet.Get( EE_CHAR_STRIKEOUT )).GetStrikeout() );
+        rFont.SetStrikeout( rSet.Get( EE_CHAR_STRIKEOUT ).GetStrikeout() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_CASEMAP ) == SfxItemState::SET ) )
-        rFont.SetCaseMap( static_cast<const SvxCaseMapItem&>(rSet.Get( EE_CHAR_CASEMAP )).GetCaseMap() );
+        rFont.SetCaseMap( rSet.Get( EE_CHAR_CASEMAP ).GetCaseMap() );
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_Italic ) == SfxItemState::SET ) )
         rFont.SetItalic( static_cast<const SvxPostureItem&>(rSet.Get( nWhich_Italic )).GetPosture() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_OUTLINE ) == SfxItemState::SET ) )
-        rFont.SetOutline( static_cast<const SvxContourItem&>(rSet.Get( EE_CHAR_OUTLINE )).GetValue() );
+        rFont.SetOutline( rSet.Get( EE_CHAR_OUTLINE ).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_SHADOW ) == SfxItemState::SET ) )
-        rFont.SetShadow( static_cast<const SvxShadowedItem&>(rSet.Get( EE_CHAR_SHADOW )).GetValue() );
+        rFont.SetShadow( rSet.Get( EE_CHAR_SHADOW ).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_ESCAPEMENT ) == SfxItemState::SET ) )
     {
-        const SvxEscapementItem& rEsc = static_cast<const SvxEscapementItem&>( rSet.Get( EE_CHAR_ESCAPEMENT ) );
+        const SvxEscapementItem& rEsc = rSet.Get( EE_CHAR_ESCAPEMENT );
 
         sal_uInt16 const nProp = rEsc.GetProportionalHeight();
         rFont.SetPropr( (sal_uInt8)nProp );
@@ -2025,15 +2025,15 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
         rFont.SetEscapement( nEsc );
     }
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_PAIRKERNING ) == SfxItemState::SET ) )
-        rFont.SetKerning( static_cast<const SvxAutoKernItem&>(rSet.Get( EE_CHAR_PAIRKERNING )).GetValue() ? FontKerning::FontSpecific : FontKerning::NONE );
+        rFont.SetKerning( rSet.Get( EE_CHAR_PAIRKERNING ).GetValue() ? FontKerning::FontSpecific : FontKerning::NONE );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_KERNING ) == SfxItemState::SET ) )
-        rFont.SetFixKerning( static_cast<const SvxKerningItem&>(rSet.Get( EE_CHAR_KERNING )).GetValue() );
+        rFont.SetFixKerning( rSet.Get( EE_CHAR_KERNING ).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_WLM ) == SfxItemState::SET ) )
-        rFont.SetWordLineMode( static_cast<const SvxWordLineModeItem&>(rSet.Get( EE_CHAR_WLM )).GetValue() );
+        rFont.SetWordLineMode( rSet.Get( EE_CHAR_WLM ).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_EMPHASISMARK ) == SfxItemState::SET ) )
-        rFont.SetEmphasisMark( static_cast<const SvxEmphasisMarkItem&>(rSet.Get( EE_CHAR_EMPHASISMARK )).GetEmphasisMark() );
+        rFont.SetEmphasisMark( rSet.Get( EE_CHAR_EMPHASISMARK ).GetEmphasisMark() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_RELIEF ) == SfxItemState::SET ) )
-        rFont.SetRelief( static_cast<const SvxCharReliefItem&>(rSet.Get( EE_CHAR_RELIEF )).GetValue() );
+        rFont.SetRelief( rSet.Get( EE_CHAR_RELIEF ).GetValue() );
 
     // If comparing the entire font, or if checking before each alteration
     // whether the value changes, remains relatively the same thing.

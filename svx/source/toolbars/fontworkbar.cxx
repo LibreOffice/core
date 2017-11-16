@@ -107,7 +107,7 @@ void SetCharacterSpacingState( SdrView const * pSdrView, SfxItemSet& rSet )
         if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
             sal_Int32 nOldCharacterSpacing = nCharacterSpacing;
-            const SvxCharScaleWidthItem& rCharScaleWidthItem = static_cast<const SvxCharScaleWidthItem&>(pObj->GetMergedItem( EE_CHAR_FONTWIDTH ));
+            const SvxCharScaleWidthItem& rCharScaleWidthItem = pObj->GetMergedItem( EE_CHAR_FONTWIDTH );
             nCharacterSpacing = rCharScaleWidthItem.GetValue();
             if ( ( nOldCharacterSpacing != -1 ) && ( nOldCharacterSpacing != nCharacterSpacing ) )
             {
@@ -131,7 +131,7 @@ void SetKernCharacterPairsState( SdrView const * pSdrView, SfxItemSet& rSet )
         SdrObject* pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
         if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
-            const SvxKerningItem& rKerningItem = static_cast<const SvxKerningItem&>(pObj->GetMergedItem( EE_CHAR_KERNING ));
+            const SvxKerningItem& rKerningItem = pObj->GetMergedItem( EE_CHAR_KERNING );
             if ( rKerningItem.GetValue() )
                 bChecked = true;
         }
