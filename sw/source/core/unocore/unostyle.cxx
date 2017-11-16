@@ -1606,7 +1606,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_STYLE_INTEROP_GRAB_BAG>(const SfxItemProp
     SetPropertyValue<HINT_BEGIN>(rEntry, rPropSet, rValue, o_rStyleBase);
 }
 template<>
-void SwXStyle::SetPropertyValue<XATTR_FILLGRADIENT>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<sal_uInt16(XATTR_FILLGRADIENT)>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     uno::Any aValue(rValue);
     const auto nMemberId(lcl_TranslateMetric(rEntry, m_pDoc, aValue));
@@ -1620,7 +1620,7 @@ void SwXStyle::SetPropertyValue<XATTR_FILLGRADIENT>(const SfxItemPropertySimpleE
     }
     else if(MID_GRAFURL == nMemberId)
     {
-        if(XATTR_FILLBITMAP == rEntry.nWID)
+        if(sal_uInt16(XATTR_FILLBITMAP) == rEntry.nWID)
         {
             // Bitmap also has the MID_GRAFURL mode where a Bitmap URL is used
             const Graphic aNullGraphic;
@@ -1980,10 +1980,10 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry, const 
             // these explicit std::mem_fn() calls shouldn't be needed, but apparently MSVC is currently too stupid for C++11 again
             { FN_UNO_HIDDEN,                 std::mem_fn(&SwXStyle::SetPropertyValue<FN_UNO_HIDDEN>)                 },
             { FN_UNO_STYLE_INTEROP_GRAB_BAG, std::mem_fn(&SwXStyle::SetPropertyValue<FN_UNO_STYLE_INTEROP_GRAB_BAG>) },
-            { XATTR_FILLGRADIENT,            std::mem_fn(&SwXStyle::SetPropertyValue<XATTR_FILLGRADIENT>)            },
-            { XATTR_FILLHATCH,               std::mem_fn(&SwXStyle::SetPropertyValue<XATTR_FILLGRADIENT>)            },
-            { XATTR_FILLBITMAP,              std::mem_fn(&SwXStyle::SetPropertyValue<XATTR_FILLGRADIENT>)            },
-            { XATTR_FILLFLOATTRANSPARENCE,   std::mem_fn(&SwXStyle::SetPropertyValue<XATTR_FILLGRADIENT>)            },
+            { XATTR_FILLGRADIENT,            std::mem_fn(&SwXStyle::SetPropertyValue<sal_uInt16(XATTR_FILLGRADIENT)>)            },
+            { XATTR_FILLHATCH,               std::mem_fn(&SwXStyle::SetPropertyValue<sal_uInt16(XATTR_FILLGRADIENT)>)            },
+            { XATTR_FILLBITMAP,              std::mem_fn(&SwXStyle::SetPropertyValue<sal_uInt16(XATTR_FILLGRADIENT)>)            },
+            { XATTR_FILLFLOATTRANSPARENCE,   std::mem_fn(&SwXStyle::SetPropertyValue<sal_uInt16(XATTR_FILLGRADIENT)>)            },
             { RES_BACKGROUND,                std::mem_fn(&SwXStyle::SetPropertyValue<RES_BACKGROUND>)                },
             { OWN_ATTR_FILLBMP_MODE,         std::mem_fn(&SwXStyle::SetPropertyValue<OWN_ATTR_FILLBMP_MODE>)         },
             { RES_PAPER_BIN,                 std::mem_fn(&SwXStyle::SetPropertyValue<RES_PAPER_BIN>)                 },
@@ -2284,10 +2284,10 @@ uno::Any SwXStyle::GetStyleProperty<OWN_ATTR_FILLBMP_MODE>(const SfxItemProperty
 {
     PrepareStyleBase(rBase);
     const SfxItemSet& rSet = rBase.GetItemSet();
-    const XFillBmpTileItem* pTileItem = dynamic_cast<const XFillBmpTileItem*>(&rSet.Get(XATTR_FILLBMP_TILE));
+    const XFillBmpTileItem* pTileItem = &rSet.Get(XATTR_FILLBMP_TILE);
     if(pTileItem && pTileItem->GetValue())
         return uno::makeAny(drawing::BitmapMode_REPEAT);
-    const XFillBmpStretchItem* pStretchItem = dynamic_cast<const XFillBmpStretchItem*>(&rSet.Get(XATTR_FILLBMP_STRETCH));
+    const XFillBmpStretchItem* pStretchItem = &rSet.Get(XATTR_FILLBMP_STRETCH);
     if(pStretchItem && pStretchItem->GetValue())
         return uno::makeAny(drawing::BitmapMode_STRETCH);
     return uno::makeAny(drawing::BitmapMode_NO_REPEAT);
@@ -3974,8 +3974,8 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
                 }
                 case OWN_ATTR_FILLBMP_MODE:
                 {
-                    const XFillBmpStretchItem* pStretchItem = dynamic_cast< const XFillBmpStretchItem* >(&mpSet->Get(XATTR_FILLBMP_STRETCH));
-                    const XFillBmpTileItem* pTileItem = dynamic_cast< const XFillBmpTileItem* >(&mpSet->Get(XATTR_FILLBMP_TILE));
+                    const XFillBmpStretchItem* pStretchItem = &mpSet->Get(XATTR_FILLBMP_STRETCH);
+                    const XFillBmpTileItem* pTileItem = &mpSet->Get(XATTR_FILLBMP_TILE);
 
                     if( pTileItem && pTileItem->GetValue() )
                     {

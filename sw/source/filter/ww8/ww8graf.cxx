@@ -1668,8 +1668,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
     {
         // Now, that we know there is a line style we will make use the
         // parameter given to us when calling the method...  :-)
-        const Color aLineColor = static_cast< XLineColorItem const & >(
-            rOldSet.Get(XATTR_LINECOLOR)).GetColorValue();
+        const Color aLineColor = rOldSet.Get(XATTR_LINECOLOR).GetColorValue();
         nLineThick = WW8ITEMVALUE(rOldSet, XATTR_LINEWIDTH, XLineWidthItem);
 
         if( !nLineThick )
@@ -1813,8 +1812,8 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
             case drawing::FillStyle_SOLID:
             case drawing::FillStyle_GRADIENT:
                 {
-                    const Color aColor = static_cast< XFillColorItem const & >(
-                        rOldSet.Get(XATTR_FILLCOLOR)).GetColorValue();
+                    const Color aColor =
+                        rOldSet.Get(XATTR_FILLCOLOR).GetColorValue();
                     aBrushItem.SetColor(aColor);
 
                     if (bBrushItemOk) // has trans
@@ -1827,7 +1826,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
             break;
             case drawing::FillStyle_BITMAP:
                 {
-                    GraphicObject aGrfObj(static_cast< XFillBitmapItem const & >(rOldSet.Get(XATTR_FILLBITMAP)).GetGraphicObject());
+                    GraphicObject aGrfObj(rOldSet.Get(XATTR_FILLBITMAP).GetGraphicObject());
                     const bool bTile(WW8ITEMVALUE(rOldSet, XATTR_FILLBMP_TILE, SfxBoolItem));
 
                     if(bBrushItemOk) // has trans

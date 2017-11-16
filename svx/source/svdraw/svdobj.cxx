@@ -927,7 +927,7 @@ void SdrObject::SingleObjectPainter(OutputDevice& rOut) const
 
 bool SdrObject::LineGeometryUsageIsNecessary() const
 {
-    drawing::LineStyle eXLS = (drawing::LineStyle)static_cast<const XLineStyleItem&>(GetMergedItem(XATTR_LINESTYLE)).GetValue();
+    drawing::LineStyle eXLS = (drawing::LineStyle)GetMergedItem(XATTR_LINESTYLE).GetValue();
     return (eXLS != drawing::LineStyle_NONE);
 }
 
@@ -2379,7 +2379,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
         if(aMergedLineFillPolyPolygon.count() || (bForceLineDash && aMergedHairlinePolyPolygon.count()))
         {
             SfxItemSet aSet(pRet->GetMergedItemSet());
-            drawing::FillStyle eOldFillStyle = static_cast<const XFillStyleItem&>(aSet.Get(XATTR_FILLSTYLE)).GetValue();
+            drawing::FillStyle eOldFillStyle = aSet.Get(XATTR_FILLSTYLE).GetValue();
             SdrPathObj* aLinePolygonPart = nullptr;
             SdrPathObj* aLineHairlinePart = nullptr;
             bool bBuildGroup(false);
@@ -2393,8 +2393,8 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
                 // correct item properties
                 aSet.Put(XLineWidthItem(0));
                 aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
-                Color aColorLine = static_cast<const XLineColorItem&>(aSet.Get(XATTR_LINECOLOR)).GetColorValue();
-                sal_uInt16 nTransLine = static_cast<const XLineTransparenceItem&>(aSet.Get(XATTR_LINETRANSPARENCE)).GetValue();
+                Color aColorLine = aSet.Get(XATTR_LINECOLOR).GetColorValue();
+                sal_uInt16 nTransLine = aSet.Get(XATTR_LINETRANSPARENCE).GetValue();
                 aSet.Put(XFillColorItem(OUString(), aColorLine));
                 aSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
                 aSet.Put(XFillTransparenceItem(nTransLine));

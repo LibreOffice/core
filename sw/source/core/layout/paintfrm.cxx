@@ -6443,7 +6443,7 @@ void SwFrame::PaintBackground( const SwRect &rRect, const SwPageFrame *pPage,
                         // thus need to check the model data itself for FillStyle (do not rely on
                         // SdrAllFillAttributesHelper since it already contains optimized information,
                         // e.g. transparency leads to no fill)
-                        const drawing::FillStyle eFillStyle(static_cast< const XFillStyleItem& >(GetAttrSet()->Get(XATTR_FILLSTYLE)).GetValue());
+                        const drawing::FillStyle eFillStyle(GetAttrSet()->Get(XATTR_FILLSTYLE).GetValue());
 
                         if(drawing::FillStyle_NONE != eFillStyle)
                         {
@@ -7360,7 +7360,7 @@ bool SwFrame::GetBackgroundBrush(
             {
                 // maybe optimized already when 100% transparency is used somewhere, need to test
                 // XFillStyleItem directly from the model data
-                const drawing::FillStyle eFillStyle(static_cast< const XFillStyleItem& >(pFrame->GetAttrSet()->Get(XATTR_FILLSTYLE)).GetValue());
+                const drawing::FillStyle eFillStyle(pFrame->GetAttrSet()->Get(XATTR_FILLSTYLE).GetValue());
 
                 if(drawing::FillStyle_NONE != eFillStyle)
                 {

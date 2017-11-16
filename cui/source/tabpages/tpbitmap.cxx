@@ -179,7 +179,7 @@ void SvxBitmapTabPage::Construct()
 
 void SvxBitmapTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    XFillBitmapItem aItem( static_cast<const XFillBitmapItem&>(rSet.Get(XATTR_FILLBITMAP)) );
+    XFillBitmapItem aItem( rSet.Get(XATTR_FILLBITMAP) );
 
     sal_Int32 nPos = SearchBitmapList( aItem.GetName() );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -298,7 +298,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     double fTmpHeight((OutputDevice::LogicToLogic(static_cast<sal_Int32>(m_fObjectHeight), mePoolUnit, MapUnit::Map100thMM )) / fUIScale);
     m_fObjectHeight = fTmpHeight;
 
-    XFillBitmapItem aItem( static_cast<const XFillBitmapItem&>(rAttrs->Get(XATTR_FILLBITMAP)) );
+    XFillBitmapItem aItem( rAttrs->Get(XATTR_FILLBITMAP) );
 
     if(!aItem.isPattern())
     {
@@ -323,7 +323,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
 
     if(rAttrs->GetItemState( XATTR_FILLBMP_TILE ) != SfxItemState::DONTCARE)
     {
-        if( static_cast<const XFillBmpTileItem&>( rAttrs->Get( XATTR_FILLBMP_TILE ) ).GetValue() )
+        if( rAttrs->Get( XATTR_FILLBMP_TILE ).GetValue() )
         {
             m_pBitmapStyleLB->SelectEntryPos(static_cast<sal_Int32>(TILED));
         }
@@ -331,7 +331,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
 
     if( m_pBitmapStyleLB->GetSelectedEntryPos() == 0 && rAttrs->GetItemState( XATTR_FILLBMP_STRETCH ) != SfxItemState::DONTCARE)
     {
-        if( static_cast<const XFillBmpStretchItem&>( rAttrs->Get( XATTR_FILLBMP_STRETCH ) ).GetValue() )
+        if( rAttrs->Get( XATTR_FILLBMP_STRETCH ).GetValue() )
         {
             m_pBitmapStyleLB->SelectEntryPos( static_cast<sal_Int32>(STRETCHED) );
         }
@@ -355,7 +355,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
 
     if(rAttrs->GetItemState( XATTR_FILLBMP_SIZEY ) != SfxItemState::DONTCARE)
     {
-        nHeight = static_cast<const XFillBmpSizeYItem&>( rAttrs->Get( XATTR_FILLBMP_SIZEY ) ).GetValue();
+        nHeight = rAttrs->Get( XATTR_FILLBMP_SIZEY ).GetValue();
         if(nHeight == 0)
             nHeight = rBitmapSize.Height();
         else if(nHeight < 0)
@@ -402,13 +402,13 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
 
     if( rAttrs->GetItemState( XATTR_FILLBMP_POS ) != SfxItemState::DONTCARE )
     {
-        RectPoint eValue = static_cast<const XFillBmpPosItem&>( rAttrs->Get( XATTR_FILLBMP_POS ) ).GetValue();
+        RectPoint eValue = rAttrs->Get( XATTR_FILLBMP_POS ).GetValue();
         m_pPositionLB->SelectEntryPos( static_cast< sal_Int32 >(eValue) );
     }
 
     if( rAttrs->GetItemState( XATTR_FILLBMP_POSOFFSETX ) != SfxItemState::DONTCARE )
     {
-        sal_Int32 nValue = static_cast<const XFillBmpPosOffsetXItem&>( rAttrs->Get( XATTR_FILLBMP_POSOFFSETX ) ).GetValue();
+        sal_Int32 nValue = rAttrs->Get( XATTR_FILLBMP_POSOFFSETX ).GetValue();
         m_pPositionOffX->SetValue( nValue );
     }
     else
@@ -416,7 +416,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
 
     if( rAttrs->GetItemState( XATTR_FILLBMP_POSOFFSETY ) != SfxItemState::DONTCARE )
     {
-        sal_Int32 nValue = static_cast<const XFillBmpPosOffsetYItem&>( rAttrs->Get( XATTR_FILLBMP_POSOFFSETY ) ).GetValue();
+        sal_Int32 nValue = rAttrs->Get( XATTR_FILLBMP_POSOFFSETY ).GetValue();
         m_pPositionOffY->SetValue( nValue );
     }
     else
@@ -424,7 +424,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
 
     if( rAttrs->GetItemState( XATTR_FILLBMP_TILEOFFSETX ) != SfxItemState::DONTCARE)
     {
-        sal_Int32 nValue = static_cast<const XFillBmpTileOffsetXItem&>( rAttrs->Get( XATTR_FILLBMP_TILEOFFSETX ) ).GetValue();
+        sal_Int32 nValue = rAttrs->Get( XATTR_FILLBMP_TILEOFFSETX ).GetValue();
         if(nValue > 0)
         {
             m_pTileOffLB->SelectEntryPos(static_cast<sal_Int32>(ROW));
@@ -434,7 +434,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
 
     if( rAttrs->GetItemState( XATTR_FILLBMP_TILEOFFSETY ) != SfxItemState::DONTCARE )
     {
-        sal_Int32 nValue = static_cast<const XFillBmpTileOffsetYItem&>( rAttrs->Get( XATTR_FILLBMP_TILEOFFSETY ) ).GetValue();
+        sal_Int32 nValue = rAttrs->Get( XATTR_FILLBMP_TILEOFFSETY ).GetValue();
         if(nValue > 0)
         {
             m_pTileOffLB->SelectEntryPos(static_cast<sal_Int32>(COLUMN));
