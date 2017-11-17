@@ -34,7 +34,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-clang-cl.patch.1 \
 	$(if $(filter-out ANDROID,$(OS)),external/icu/icu4c-icudata-stdlibs.patch.1) \
 	external/icu/icu4c-khmerbreakengine.patch.1 \
+	external/icu/icu4c-59-werror-undef.patch.1 \
 	external/icu/icu4c-59-werror-shadow.patch.1 \
+	external/icu/icu4c-59-icu13329-xlocale.patch.1 \
+	external/icu/icu4c-changeset-40324.patch.1 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,icu,source/data/brkitr/khmerdict.dict,external/icu/khmerdict.dict))

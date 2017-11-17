@@ -1,3 +1,45 @@
+diff -ur icu.org/source/common/unicode/char16ptr.h icu/source/common/unicode/char16ptr.h
+# https://ssl.icu-project.org/trac/ticket/13176
+--- icu.org/source/common/unicode/char16ptr.h	2017-03-29 06:44:37.000000000 +0200
++++ icu/source/common/unicode/char16ptr.h	2017-04-24 11:56:47.707572355 +0200
+@@ -107,14 +107,14 @@
+ 
+ #ifdef U_ALIASING_BARRIER
+ 
+-Char16Ptr::Char16Ptr(char16_t *p) : p(p) {}
++Char16Ptr::Char16Ptr(char16_t *p_) : p(p_) {}
+ #if !U_CHAR16_IS_TYPEDEF
+-Char16Ptr::Char16Ptr(uint16_t *p) : p(cast(p)) {}
++Char16Ptr::Char16Ptr(uint16_t *p_) : p(cast(p_)) {}
+ #endif
+ #if U_SIZEOF_WCHAR_T==2
+-Char16Ptr::Char16Ptr(wchar_t *p) : p(cast(p)) {}
++Char16Ptr::Char16Ptr(wchar_t *p_) : p(cast(p_)) {}
+ #endif
+-Char16Ptr::Char16Ptr(std::nullptr_t p) : p(p) {}
++Char16Ptr::Char16Ptr(std::nullptr_t p_) : p(p_) {}
+ Char16Ptr::~Char16Ptr() {
+     U_ALIASING_BARRIER(p);
+ }
+@@ -215,14 +215,14 @@
+ 
+ #ifdef U_ALIASING_BARRIER
+ 
+-ConstChar16Ptr::ConstChar16Ptr(const char16_t *p) : p(p) {}
++ConstChar16Ptr::ConstChar16Ptr(const char16_t *p_) : p(p_) {}
+ #if !U_CHAR16_IS_TYPEDEF
+-ConstChar16Ptr::ConstChar16Ptr(const uint16_t *p) : p(cast(p)) {}
++ConstChar16Ptr::ConstChar16Ptr(const uint16_t *p_) : p(cast(p_)) {}
+ #endif
+ #if U_SIZEOF_WCHAR_T==2
+-ConstChar16Ptr::ConstChar16Ptr(const wchar_t *p) : p(cast(p)) {}
++ConstChar16Ptr::ConstChar16Ptr(const wchar_t *p_) : p(cast(p_)) {}
+ #endif
+-ConstChar16Ptr::ConstChar16Ptr(const std::nullptr_t p) : p(p) {}
++ConstChar16Ptr::ConstChar16Ptr(const std::nullptr_t p_) : p(p_) {}
+ ConstChar16Ptr::~ConstChar16Ptr() {
+     U_ALIASING_BARRIER(p);
+ }
 diff -ur icu.org/source/common/unicode/unistr.h icu/source/common/unicode/unistr.h
 --- icu.org/source/common/unicode/unistr.h	2017-03-29 06:44:37.000000000 +0200
 +++ icu/source/common/unicode/unistr.h	2017-04-24 11:59:51.782076511 +0200

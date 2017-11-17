@@ -65,6 +65,18 @@ diff -ur icu.org/source/common/ubidiimp.h icu/source/common/ubidiimp.h
  #define REMOVE_ODD_BIT(x)                 ((x)&=~INDEX_ODD_BIT)
  
  #define GET_INDEX(x)   ((x)&~INDEX_ODD_BIT)
+diff -ur icu.org/source/common/ucharstriebuilder.cpp icu/source/common/ucharstriebuilder.cpp
+--- icu.org/source/common/ucharstriebuilder.cpp	2017-02-03 19:57:23.000000000 +0100
++++ icu/source/common/ucharstriebuilder.cpp	2017-04-21 22:46:25.375651159 +0200
+@@ -287,7 +287,7 @@
+ 
+ UCharsTrieBuilder::UCTLinearMatchNode::UCTLinearMatchNode(const UChar *units, int32_t len, Node *nextNode)
+         : LinearMatchNode(len, nextNode), s(units) {
+-    hash=hash*37+ustr_hashUCharsN(units, len);
++    hash=hash*37U+ustr_hashUCharsN(units, len);
+ }
+ 
+ UBool
 diff -ur icu.org/source/common/ucmndata.cpp icu/source/common/ucmndata.cpp
 --- icu.org/source/common/ucmndata.cpp	2017-03-08 16:34:47.000000000 +0100
 +++ icu/source/common/ucmndata.cpp	2017-04-21 22:46:25.376651159 +0200
@@ -89,3 +101,71 @@ diff -ur icu.org/source/common/ucmndata.h icu/source/common/ucmndata.h
  } UDataOffsetTOC;
  
  /**
+diff -ur icu.org/source/common/unicode/stringtriebuilder.h icu/source/common/unicode/stringtriebuilder.h
+--- icu.org/source/common/unicode/stringtriebuilder.h	2017-03-10 23:01:34.000000000 +0100
++++ icu/source/common/unicode/stringtriebuilder.h	2017-04-21 22:47:43.395634383 +0200
+@@ -276,7 +276,7 @@
+         void setValue(int32_t v) {
+             hasValue=TRUE;
+             value=v;
+-            hash=hash*37+v;
++            hash=hash*37U+v;
+         }
+     protected:
+         UBool hasValue;
+@@ -307,7 +307,7 @@
+     class LinearMatchNode : public ValueNode {
+     public:
+         LinearMatchNode(int32_t len, Node *nextNode)
+-                : ValueNode((0x333333*37+len)*37+hashCode(nextNode)),
++                : ValueNode((0x333333U*37+len)*37+hashCode(nextNode)),
+                   length(len), next(nextNode) {}
+         virtual UBool operator==(const Node &other) const;
+         virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
+@@ -342,7 +342,7 @@
+             equal[length]=NULL;
+             values[length]=value;
+             ++length;
+-            hash=(hash*37+c)*37+value;
++            hash=(hash*37U+c)*37+value;
+         }
+         // Adds a unit which leads to another match node.
+         void add(int32_t c, Node *node) {
+@@ -350,7 +350,7 @@
+             equal[length]=node;
+             values[length]=0;
+             ++length;
+-            hash=(hash*37+c)*37+hashCode(node);
++            hash=(hash*37U+c)*37+hashCode(node);
+         }
+     protected:
+         Node *equal[kMaxBranchLinearSubNodeLength];  // NULL means "has final value".
+@@ -365,7 +365,7 @@
+     class SplitBranchNode : public BranchNode {
+     public:
+         SplitBranchNode(char16_t middleUnit, Node *lessThanNode, Node *greaterOrEqualNode)
+-                : BranchNode(((0x555555*37+middleUnit)*37+
++                : BranchNode(((0x555555U*37+middleUnit)*37+
+                               hashCode(lessThanNode))*37+hashCode(greaterOrEqualNode)),
+                   unit(middleUnit), lessThan(lessThanNode), greaterOrEqual(greaterOrEqualNode) {}
+         virtual UBool operator==(const Node &other) const;
+@@ -382,7 +382,7 @@
+     class BranchHeadNode : public ValueNode {
+     public:
+         BranchHeadNode(int32_t len, Node *subNode)
+-                : ValueNode((0x666666*37+len)*37+hashCode(subNode)),
++                : ValueNode((0x666666U*37+len)*37+hashCode(subNode)),
+                   length(len), next(subNode) {}
+         virtual UBool operator==(const Node &other) const;
+         virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
+diff -ur icu.org/source/i18n/collationdatareader.cpp icu/source/i18n/collationdatareader.cpp
+--- icu.org/source/i18n/collationdatareader.cpp	2017-01-20 01:20:31.000000000 +0100
++++ icu/source/i18n/collationdatareader.cpp	2017-04-21 22:46:25.380651158 +0200
+@@ -419,6 +419,7 @@
+             tailoring.data, ts, fastLatinPrimaries, UPRV_LENGTHOF(fastLatinPrimaries));
+     if(options == ts.options && ts.variableTop != 0 &&
+             reorderCodesLength == ts.reorderCodesLength &&
++            reorderCodesLength != 0 &&
+             uprv_memcmp(reorderCodes, ts.reorderCodes, reorderCodesLength * 4) == 0 &&
+             fastLatinOptions == ts.fastLatinOptions &&
+             (fastLatinOptions < 0 ||
