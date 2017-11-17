@@ -1366,13 +1366,6 @@ void ScTextWnd::MouseButtonUp( const MouseEvent& rMEvt )
 
 void ScTextWnd::Command( const CommandEvent& rCEvt )
 {
-    //pass alt press/release to parent impl
-    if (rCEvt.GetCommand() == CommandEventId::ModKeyChange)
-    {
-        Window::Command(rCEvt);
-        return;
-    }
-
     bInputMode = true;
     CommandEventId nCommand = rCEvt.GetCommand();
     if ( mpEditView /* && nCommand == CommandEventId::StartDrag */ )
