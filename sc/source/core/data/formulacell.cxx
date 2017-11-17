@@ -4399,10 +4399,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
             virtual void doWork() override
             {
-                std::unique_ptr<SvNumberFormatter> pFormatterForThisThread
-                    (new SvNumberFormatter(mpFormatter->GetComponentContext(),
-                                           mpFormatter->GetLanguage()));
-                ScInterpreterContext aContext(*mpDocument, pFormatterForThisThread.get());
+                ScInterpreterContext aContext(*mpDocument, mpFormatter);
 
                 mpDocument->CalculateInColumnInThread(aContext, mrTopPos, mnLength, mnThisThread, mnThreadsTotal).MergeBackIntoNonThreadedData(mpDocument->maNonThreaded);
             }

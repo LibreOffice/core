@@ -830,6 +830,8 @@ private:
     SVL_DLLPRIVATE static sal_uInt16            nSystemCurrencyPosition;
     SVL_DLLPRIVATE static SvNumberFormatterRegistry_Impl* pFormatterRegistry;
 
+    ::osl::Mutex maInstanceMutex;
+
     // get the registry, create one if none exists
     SVL_DLLPRIVATE static SvNumberFormatterRegistry_Impl& GetFormatterRegistry();
 
