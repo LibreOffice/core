@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1ef0d966",
+        "filename": "binaryurp/source/bridge.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-17T19:58:39Z",
+      "side": 1,
+      "message": "if find() returns an iterator to the first element, this will erase the entire listeners vector!",
+      "revId": "7bc4ab8c50534486c5d5d02dc896d541ba378900",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_3ef59556",
+        "filename": "binaryurp/source/bridgefactory.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-11-17T19:58:39Z",
+      "side": 1,
+      "message": "also wrong",
+      "revId": "7bc4ab8c50534486c5d5d02dc896d541ba378900",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
