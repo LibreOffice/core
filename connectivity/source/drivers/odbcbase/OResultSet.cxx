@@ -118,7 +118,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
     catch(Exception&)
     { // we don't want our result destroy here
     }
-    SQLINTEGER nCurType = 0;
+    SQLULEN nCurType = 0;
     try
     {
         N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,&nCurType,SQL_IS_UINTEGER,0);
@@ -1263,7 +1263,7 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const  Sequence<  Any >& 
 //------------------------------------------------------------------------------
 sal_Int32 OResultSet::getResultSetConcurrency() const
 {
-    sal_uInt32 nValue = 0;
+    SQLULEN nValue = 0;
     SQLRETURN nReturn = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CONCURRENCY,&nValue,SQL_IS_UINTEGER,0);
     OSL_UNUSED( nReturn );
     if(SQL_CONCUR_READ_ONLY == nValue)
@@ -1276,7 +1276,7 @@ sal_Int32 OResultSet::getResultSetConcurrency() const
 //------------------------------------------------------------------------------
 sal_Int32 OResultSet::getResultSetType() const
 {
-    sal_uInt32 nValue = 0;
+    SQLULEN nValue = 0;
     N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_SENSITIVITY,&nValue,SQL_IS_UINTEGER,0);
     if(SQL_SENSITIVE == nValue)
         nValue = ResultSetType::SCROLL_SENSITIVE;
@@ -1284,7 +1284,7 @@ sal_Int32 OResultSet::getResultSetType() const
         nValue = ResultSetType::SCROLL_INSENSITIVE;
     else
     {
-        SQLINTEGER nCurType = 0;
+        SQLULEN nCurType = 0;
         N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,&nCurType,SQL_IS_UINTEGER,0);
         if(SQL_CURSOR_KEYSET_DRIVEN == nCurType)
             nValue = ResultSetType::SCROLL_SENSITIVE;
@@ -1305,7 +1305,7 @@ sal_Int32 OResultSet::getFetchDirection() const
 //------------------------------------------------------------------------------
 sal_Int32 OResultSet::getFetchSize() const
 {
-    sal_uInt32 nValue = 0;
+    SQLULEN nValue = 0;
     N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,&nValue,SQL_IS_UINTEGER,0);
     return nValue;
 }
@@ -1323,7 +1323,7 @@ sal_Bool  OResultSet::isBookmarkable() const
     if(!m_aConnectionHandle)
         return sal_False;
 
-    sal_uInt32 nValue = 0;
+    SQLULEN nValue = 0;
     N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,&nValue,SQL_IS_UINTEGER,0);
 
     sal_Int32 nAttr = 0;
@@ -1674,10 +1674,10 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
 // -----------------------------------------------------------------------------
 sal_Int32 OResultSet::getDriverPos() const
 {
-    sal_Int32 nValue = 0;
+    SQLULEN nValue = 0;
     SQLRETURN nRet = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_NUMBER,&nValue,SQL_IS_UINTEGER,0);
     OSL_UNUSED( nRet );
-    OSL_TRACE( __FILE__": OResultSet::getDriverPos() = Ret = %d, RowNum = %d, RowPos = %d",nRet,nValue , m_nRowPos);
+    OSL_TRACE( __FILE__": OResultSet::getDriverPos() = Ret = %d, RowNum = %lu, RowPos = %d",nRet,nValue , m_nRowPos);
     return nValue ? nValue : m_nRowPos;
 }
 // -----------------------------------------------------------------------------

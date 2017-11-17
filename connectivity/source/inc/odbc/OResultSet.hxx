@@ -137,7 +137,7 @@ namespace connectivity
             rtl_TextEncoding                            m_nTextEncoding;
             sal_Int32                                   m_nRowPos;
             sal_Int32                                   m_nLastColumnPos;       // used for m_aRow just to know where we are
-            mutable sal_uInt32                          m_nUseBookmarks;
+            mutable SQLULEN                            m_nUseBookmarks;
             SQLRETURN                                   m_nCurrentFetchState;
             sal_Bool                                    m_bWasNull;
             sal_Bool                                    m_bEOF;                 // after last record
