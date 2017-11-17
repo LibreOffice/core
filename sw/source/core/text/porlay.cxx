@@ -257,7 +257,7 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
     {
         if( pPos->IsFlyPortion() )
         {
-            // The FlyPortion get's sucked out ...
+            // The FlyPortion gets sucked out...
             pLeft->Join( static_cast<SwGluePortion*>(pPos) );
             pPos = pLeft->GetPortion();
             if( GetpKanaComp() && !GetKanaComp().empty() )
