@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_9e3cc9c9",
+        "filename": "offapi/com/sun/star/drawing/GraphicObjectShape.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2017-11-17T11:29:24Z",
+      "side": 1,
+      "message": "I would more do a \u0027SubType\u0027 property that returns empty by default, so it\u0027s clear it\u0027s just a GraphicShape.\nDepending of the \u0027SubType\u0027, have another sequence of properties where the rest of data is stored.\nFor documentation I would document the \u0027SubType\u0027 and what extra properties can be there in the sequence of properties if that specific SubType is there.\nThat will allow adding other types easily in the future, and not \u0027overcrowd\u0027 the idl definition.\n\nJust my 2ct..",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 86
+      },
+      "revId": "c9d3fe6b6e10e2024413efa6a6a9853673b8d874",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
