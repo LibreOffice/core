@@ -445,7 +445,7 @@ Reference< XResultSet > OStatement_Base::getResultSet (sal_Bool checkCount) thro
 
 sal_Int32 OStatement_Base::getStmtOption (short fOption) const
 {
-    sal_Int32   result = 0;
+    SQLLEN  result = 0;
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     N3SQLGetStmtAttr(m_aStatementHandle, fOption,&result,SQL_IS_INTEGER,NULL);
     return result;
