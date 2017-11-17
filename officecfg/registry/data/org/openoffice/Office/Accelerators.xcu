@@ -1294,6 +1294,12 @@
             <value xml:lang="en-US">.uno:PasteSpecial</value>
           </prop>
         </node>
+        <node oor:name="V_SHIFT_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:PasteUnformatted</value>
+          </prop>
+        </node>
         <node oor:name="Z_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>

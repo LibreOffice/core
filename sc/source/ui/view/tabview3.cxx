@@ -519,6 +519,7 @@ void ScTabView::SelectionChanged()
     rBindings.Invalidate( SID_COPY );
     rBindings.Invalidate( SID_PASTE );
     rBindings.Invalidate( SID_PASTE_SPECIAL );
+    rBindings.Invalidate( SID_PASTE_UNFORMATTED );
 
     rBindings.Invalidate( FID_INS_ROW );
     rBindings.Invalidate( FID_INS_COLUMN );

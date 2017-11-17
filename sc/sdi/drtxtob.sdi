@@ -52,6 +52,7 @@ interface TableDrawText
     SID_COPY            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_PASTE           [ ExecMethod = Execute; StateMethod = GetClipState; Export = FALSE; ]
     SID_PASTE_SPECIAL   [ ExecMethod = Execute; StateMethod = GetClipState; Export = FALSE; ]
+    SID_PASTE_UNFORMATTED [ ExecMethod = Execute; StateMethod = GetClipState; Export = FALSE; ]
     SID_CLIPBOARD_FORMAT_ITEMS [ ExecMethod = Execute; StateMethod = GetClipState; Export = FALSE; ]
     SID_SELECTALL       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_CHARMAP         [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
