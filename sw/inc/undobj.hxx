@@ -179,7 +179,7 @@ protected:
 
 public:
     SwUndoSaveContent();
-    ~SwUndoSaveContent();
+    ~SwUndoSaveContent() COVERITY_NOEXCEPT_FALSE;
 };
 
 // Save a complete section in nodes-array.

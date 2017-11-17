@@ -89,6 +89,7 @@
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <o3tl/deleter.hxx>
 #include <o3tl/make_unique.hxx>
 #include <osl/file.hxx>
 #include <paratr.hxx>
@@ -833,7 +834,7 @@ void SwUiWriterTest::testExportRTF()
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 3, /*bBasicCall=*/false);
 
     // Create the clipboard document.
-    std::shared_ptr<SwDoc> xClpDoc(new SwDoc());
+    std::shared_ptr<SwDoc> xClpDoc(new SwDoc, o3tl::default_delete<SwDoc>());
     xClpDoc->SetClipBoard(true);
     pWrtShell->Copy(xClpDoc.get());
 

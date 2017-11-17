@@ -42,7 +42,7 @@ class InsertionIndicatorHandler
 {
 public:
     InsertionIndicatorHandler (SlideSorter& rSlideSorter);
-    ~InsertionIndicatorHandler();
+    ~InsertionIndicatorHandler() COVERITY_NOEXCEPT_FALSE;
 
     enum Mode { CopyMode, MoveMode, UnknownMode };
     static Mode GetModeFromDndAction (const sal_Int8 nDndAction);
