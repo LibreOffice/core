@@ -458,6 +458,8 @@ private:
     // plain thread_local static member.
     thread_local static ScDocumentThreadSpecific maThreadSpecific;
 
+    mutable ScInterpreterContext maInterpreterContext;
+
     sal_uInt16              nSrcVer;                        // file version (load/save)
     sal_uInt16              nFormulaTrackCount;
     HardRecalcState         eHardRecalcState;               // off, temporary, eternal
@@ -560,10 +562,11 @@ public:
 
     SC_DLLPUBLIC void  InitDrawLayer( SfxObjectShell* pDocShell = nullptr );
 
-    ScInterpreterContext GetNonThreadedContext() const
+    ScInterpreterContext& GetNonThreadedContext() const
     {
         // GetFormatTable() asserts that we are not in a threaded calculation
-        return ScInterpreterContext(*this, GetFormatTable());
+        maInterpreterContext.mpFormatter = GetFormatTable();
+        return maInterpreterContext;
     }
 
     SC_DLLPUBLIC sfx2::LinkManager*       GetLinkManager();
@@ -2056,7 +2059,7 @@ public:
     void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const double* pResults, size_t nLen );
     void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const formula::FormulaConstTokenRef* pResults, size_t nLen );
 
-    ScDocumentThreadSpecific CalculateInColumnInThread( const ScInterpreterContext& rContext, const ScAddress& rTopPos, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal);
+    ScDocumentThreadSpecific CalculateInColumnInThread( ScInterpreterContext& rContext, const ScAddress& rTopPos, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal);
     void HandleStuffAfterParallelCalculation( const ScAddress& rTopPos, size_t nLen );
 
     /**

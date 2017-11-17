@@ -583,7 +583,7 @@ public:
     void SetFormulaResults( SCROW nRow, const double* pResults, size_t nLen );
     void SetFormulaResults( SCROW nRow, const formula::FormulaConstTokenRef* pResults, size_t nLen );
 
-    void CalculateInThread( const ScInterpreterContext& rContext, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal );
+    void CalculateInThread( ScInterpreterContext& rContext, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal );
     void HandleStuffAfterParallelCalculation( SCROW nRow, size_t nLen );
 
     void SetNumberFormat( SCROW nRow, sal_uInt32 nNumberFormat );
