@@ -26,6 +26,10 @@ ifneq ($(OS),WNT)
 INVOKE_FPA:="CPU=\$$(EMPTY) $${FB_CPU_ARG}"
 endif
 
+ifeq ($(COM_IS_CLANG),TRUE)
+firebird_NO_CXX11_NARROWING := -Wno-c++11-narrowing
+endif
+
 MAKE_PRE=$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,icu)/source/lib) LC_ALL=C
 
 MAKE_POST=$(if $(filter MACOSX,$(OS)),&& $(PERL) \
@@ -70,6 +74,8 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			$(if $(SYSTEM_LIBTOMMATH),$(LIBTOMMATH_CFLAGS), \
 				-L$(call gb_UnpackedTarball_get_dir,libtommath) \
 			) \
+			$(CXXFLAGS_CXX11) \
+			$(firebird_NO_CXX11_NARROWING) \
 		" \
 		&& export LDFLAGS=" \
 			$(if $(SYSTEM_ICU),$(ICU_LIBS), \
