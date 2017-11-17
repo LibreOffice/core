@@ -250,8 +250,8 @@ int write_addStreamArray( const char* pOutFile, PDFArray* pStreams, PDFFile* pPD
     unsigned int nArrayElements = pStreams->m_aSubElements.size();
     for( unsigned int i = 0; i < nArrayElements-1 && nRet == 0; i++ )
     {
-        PDFName* pMimeType = dynamic_cast<PDFName*>(pStreams->m_aSubElements[i]);
-        PDFObjectRef* pStreamRef = dynamic_cast<PDFObjectRef*>(pStreams->m_aSubElements[i+1]);
+        PDFName* pMimeType = dynamic_cast<PDFName*>(pStreams->m_aSubElements[i].get());
+        PDFObjectRef* pStreamRef = dynamic_cast<PDFObjectRef*>(pStreams->m_aSubElements[i+1].get());
         if( ! pMimeType )
             fprintf( stderr, "error: no mimetype element\n" );
         if( ! pStreamRef )
@@ -292,7 +292,7 @@ int write_addStreams( const char* pInFile, const char* pOutFile, PDFFile* pPDFFi
     unsigned int nElements = pPDFFile->m_aSubElements.size();
     for( unsigned i = 0; i < nElements && nRet == 0; i++ )
     {
-        PDFTrailer* pTrailer = dynamic_cast<PDFTrailer*>(pPDFFile->m_aSubElements[i]);
+        PDFTrailer* pTrailer = dynamic_cast<PDFTrailer*>(pPDFFile->m_aSubElements[i].get());
         if( pTrailer && pTrailer->m_pDict )
         {
             // search for AdditionalStreams entry
@@ -316,7 +316,7 @@ int write_fonts( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFF
     for( unsigned i = 0; i < nElements && nRet == 0; i++ )
     {
         // search FontDescriptors
-        PDFObject* pObj = dynamic_cast<PDFObject*>(i_pPDFFile->m_aSubElements[i]);
+        PDFObject* pObj = dynamic_cast<PDFObject*>(i_pPDFFile->m_aSubElements[i].get());
         if( ! pObj )
             continue;
         PDFDict* pDict = dynamic_cast<PDFDict*>(pObj->m_pObject);

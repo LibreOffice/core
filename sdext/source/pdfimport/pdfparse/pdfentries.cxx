@@ -442,9 +442,6 @@ PDFEntry* PDFObjectRef::clone() const
 
 PDFContainer::~PDFContainer()
 {
-    int nEle = m_aSubElements.size();
-    for( int i = 0; i < nEle; i++ )
-        delete m_aSubElements[i];
 }
 
 bool PDFContainer::emitSubElements( EmitContext& rWriteContext ) const
@@ -454,7 +451,7 @@ bool PDFContainer::emitSubElements( EmitContext& rWriteContext ) const
     {
         if( rWriteContext.m_bDecrypt )
         {
-            const PDFName* pName = dynamic_cast<PDFName*>(m_aSubElements[i]);
+            const PDFName* pName = dynamic_cast<PDFName*>(m_aSubElements[i].get());
             if (pName && pName->m_aName == "Encrypt")
             {
                 i++;
@@ -467,11 +464,11 @@ bool PDFContainer::emitSubElements( EmitContext& rWriteContext ) const
     return true;
 }
 
-void PDFContainer::cloneSubElements( std::vector<PDFEntry*>& rNewSubElements ) const
+void PDFContainer::cloneSubElements( std::vector<std::unique_ptr<PDFEntry>>& rNewSubElements ) const
 {
     int nEle = m_aSubElements.size();
     for( int i = 0; i < nEle; i++ )
-        rNewSubElements.push_back( m_aSubElements[i]->clone() );
+        rNewSubElements.emplace_back( m_aSubElements[i]->clone() );
 }
 
 PDFObject* PDFContainer::findObject( unsigned int nNumber, unsigned int nGeneration ) const
@@ -479,7 +476,7 @@ PDFObject* PDFContainer::findObject( unsigned int nNumber, unsigned int nGenerat
     unsigned int nEle = m_aSubElements.size();
     for( unsigned int i = 0; i < nEle; i++ )
     {
-        PDFObject* pObject = dynamic_cast<PDFObject*>(m_aSubElements[i]);
+        PDFObject* pObject = dynamic_cast<PDFObject*>(m_aSubElements[i].get());
         if( pObject &&
             pObject->m_nNumber == nNumber &&
             pObject->m_nGeneration == nGeneration )
@@ -532,16 +529,15 @@ void PDFDict::insertValue( const OString& rName, PDFEntry* pValue )
     if( it == m_aMap.end() )
     {
         // new name/value, pair, append it
-        m_aSubElements.push_back( new PDFName( rName ) );
-        m_aSubElements.push_back( pValue );
+        m_aSubElements.emplace_back( new PDFName( rName ) );
+        m_aSubElements.emplace_back( pValue );
     }
     else
     {
         unsigned int nSub = m_aSubElements.size();
         for( unsigned int i = 0; i < nSub; i++ )
-            if( m_aSubElements[i] == it->second )
-                m_aSubElements[i] = pValue;
-        delete it->second;
+            if( m_aSubElements[i].get() == it->second )
+                m_aSubElements[i].reset(pValue);
     }
     m_aMap[ rName ] = pValue;
 }
@@ -551,17 +547,14 @@ void PDFDict::eraseValue( const OString& rName )
     unsigned int nEle = m_aSubElements.size();
     for( unsigned int i = 0; i < nEle; i++ )
     {
-        PDFName* pName = dynamic_cast<PDFName*>(m_aSubElements[i]);
+        PDFName* pName = dynamic_cast<PDFName*>(m_aSubElements[i].get());
         if( pName && pName->m_aName == rName )
         {
             for( unsigned int j = i+1; j < nEle; j++ )
             {
-                if( dynamic_cast<PDFComment*>(m_aSubElements[j]) == nullptr )
+                if( dynamic_cast<PDFComment*>(m_aSubElements[j].get()) == nullptr )
                 {
-                    // free name and value
-                    delete m_aSubElements[j];
-                    delete m_aSubElements[i];
-                    // remove subelements from vector
+                    // remove and free subelements from vector
                     m_aSubElements.erase( m_aSubElements.begin()+j );
                     m_aSubElements.erase( m_aSubElements.begin()+i );
                     buildMap();
@@ -581,15 +574,15 @@ PDFEntry* PDFDict::buildMap()
     PDFName* pName = nullptr;
     for( unsigned int i = 0; i < nEle; i++ )
     {
-        if( dynamic_cast<PDFComment*>(m_aSubElements[i]) == nullptr )
+        if( dynamic_cast<PDFComment*>(m_aSubElements[i].get()) == nullptr )
         {
             if( pName )
             {
-                m_aMap[ pName->m_aName ] = m_aSubElements[i];
+                m_aMap[ pName->m_aName ] = m_aSubElements[i].get();
                 pName = nullptr;
             }
-            else if( (pName = dynamic_cast<PDFName*>(m_aSubElements[i])) == nullptr )
-                return m_aSubElements[i];
+            else if( (pName = dynamic_cast<PDFName*>(m_aSubElements[i].get())) == nullptr )
+                return m_aSubElements[i].get();
         }
     }
     return pName;
@@ -635,7 +628,7 @@ unsigned int PDFStream::getDictLength( const PDFContainer* pContainer ) const
             int nEle = pContainer->m_aSubElements.size();
             for( int i = 0; i < nEle && ! pNum; i++ )
             {
-                PDFObject* pObj = dynamic_cast<PDFObject*>(pContainer->m_aSubElements[i]);
+                PDFObject* pObj = dynamic_cast<PDFObject*>(pContainer->m_aSubElements[i].get());
                 if( pObj &&
                     pObj->m_nNumber == pRef->m_nNumber &&
                     pObj->m_nGeneration == pRef->m_nGeneration )
@@ -682,7 +675,7 @@ bool PDFObject::getDeflatedStream( char** ppStream, unsigned int* pBytes, const 
                 PDFArray* pArray = dynamic_cast<PDFArray*>(it->second);
                 if( pArray && ! pArray->m_aSubElements.empty() )
                 {
-                    pFilter = dynamic_cast<PDFName*>(pArray->m_aSubElements.front());
+                    pFilter = dynamic_cast<PDFName*>(pArray->m_aSubElements.front().get());
                 }
             }
 
@@ -850,7 +843,7 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
                             PDFArray* pArray = dynamic_cast<PDFArray*>(it->second);
                             if( pArray && ! pArray->m_aSubElements.empty() )
                             {
-                                pFilter = dynamic_cast<PDFName*>(pArray->m_aSubElements.front());
+                                pFilter = dynamic_cast<PDFName*>(pArray->m_aSubElements.front().get());
                                 if (pFilter && pFilter->m_aName == "FlateDecode")
                                 {
                                     delete pFilter;
@@ -866,7 +859,7 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
                 unsigned int nEle = pClone->m_aSubElements.size();
                 for( unsigned int i = 0; i < nEle && bRet; i++ )
                 {
-                    if( pClone->m_aSubElements[i] != pClone->m_pStream )
+                    if( pClone->m_aSubElements[i].get() != pClone->m_pStream )
                         bRet = pClone->m_aSubElements[i]->emit( rWriteContext );
                 }
                 delete pClone;
@@ -903,11 +896,11 @@ PDFEntry* PDFObject::clone() const
     unsigned int nEle = m_aSubElements.size();
     for( unsigned int i = 0; i < nEle; i++ )
     {
-        if( m_aSubElements[i] == m_pObject )
-            pNewOb->m_pObject = pNewOb->m_aSubElements[i];
-        else if( m_aSubElements[i] == m_pStream && pNewOb->m_pObject )
+        if( m_aSubElements[i].get() == m_pObject )
+            pNewOb->m_pObject = pNewOb->m_aSubElements[i].get();
+        else if( m_aSubElements[i].get() == m_pStream && pNewOb->m_pObject )
         {
-            pNewOb->m_pStream = dynamic_cast<PDFStream*>(pNewOb->m_aSubElements[i]);
+            pNewOb->m_pStream = dynamic_cast<PDFStream*>(pNewOb->m_aSubElements[i].get());
             PDFDict* pNewDict = dynamic_cast<PDFDict*>(pNewOb->m_pObject);
             if (pNewDict && pNewOb->m_pStream)
                 pNewOb->m_pStream->m_pDict = pNewDict;
@@ -995,9 +988,9 @@ PDFEntry* PDFTrailer::clone() const
     unsigned int nEle = m_aSubElements.size();
     for( unsigned int i = 0; i < nEle; i++ )
     {
-        if( m_aSubElements[i] == m_pDict )
+        if( m_aSubElements[i].get() == m_pDict )
         {
-            pNewTr->m_pDict = dynamic_cast<PDFDict*>(pNewTr->m_aSubElements[i]);
+            pNewTr->m_pDict = dynamic_cast<PDFDict*>(pNewTr->m_aSubElements[i].get());
             break;
         }
     }
@@ -1273,7 +1266,7 @@ PDFFileImplData* PDFFile::impl_getData() const
     unsigned int nElements = m_aSubElements.size();
     while( nElements-- > 0 )
     {
-        PDFTrailer* pTrailer = dynamic_cast<PDFTrailer*>(m_aSubElements[nElements]);
+        PDFTrailer* pTrailer = dynamic_cast<PDFTrailer*>(m_aSubElements[nElements].get());
         if( pTrailer && pTrailer->m_pDict )
         {
             // search doc id
@@ -1283,7 +1276,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                 PDFArray* pArr = dynamic_cast<PDFArray*>(doc_id->second);
                 if( pArr && pArr->m_aSubElements.size() > 0 )
                 {
-                    PDFString* pStr = dynamic_cast<PDFString*>(pArr->m_aSubElements[0]);
+                    PDFString* pStr = dynamic_cast<PDFString*>(pArr->m_aSubElements[0].get());
                     if( pStr )
                         m_pData->m_aDocID = pStr->getFilteredString();
 #if OSL_DEBUG_LEVEL > 0
