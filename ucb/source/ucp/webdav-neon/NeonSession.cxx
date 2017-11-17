@@ -679,133 +679,134 @@ void NeonSession::Init()
         }
     }
 
-    if ( bCreateNewSession )
+    if ( !bCreateNewSession )
+        return;
+
+    const sal_Int32    nConnectTimeoutMax = 180;
+    const sal_Int32    nConnectTimeoutMin = 2;
+    const sal_Int32    nReadTimeoutMax = 180;
+    const sal_Int32    nReadTimeoutMin = 20;
+
+    // @@@ For FTP over HTTP proxy inUserInfo is needed to be able to
+    //     build the complete request URI (including user:pass), but
+    //     currently (0.22.0) neon does not allow to pass the user info
+    //     to the session
+
     {
-        const sal_Int32    nConnectTimeoutMax = 180;
-        const sal_Int32    nConnectTimeoutMin = 2;
-        const sal_Int32    nReadTimeoutMax = 180;
-        const sal_Int32    nReadTimeoutMin = 20;
-
-        // @@@ For FTP over HTTP proxy inUserInfo is needed to be able to
-        //     build the complete request URI (including user:pass), but
-        //     currently (0.22.0) neon does not allow to pass the user info
-        //     to the session
-
-        {
-            osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
-            m_pHttpSession = ne_session_create(
-                OUStringToOString( m_aScheme, RTL_TEXTENCODING_UTF8 ).getStr(),
-                /* theUri.GetUserInfo(),
-                   @@@ for FTP via HTTP proxy, but not supported by Neon */
-                OUStringToOString( m_aHostName, RTL_TEXTENCODING_UTF8 ).getStr(),
-                m_nPort );
-        }
-
-        if ( m_pHttpSession == nullptr )
-            throw DAVException( DAVException::DAV_SESSION_CREATE,
-                                NeonUri::makeConnectionEndPointString(
-                                    m_aHostName, m_nPort ) );
-
-        // Register the session with the lock store
-        m_aNeonLockStore.registerSession( m_pHttpSession );
-
-        if ( m_aScheme.equalsIgnoreAsciiCase("https") )
-        {
-            // Set a failure callback for certificate check
-            ne_ssl_set_verify(
-                m_pHttpSession, NeonSession_CertificationNotify, this);
-
-            // Tell Neon to tell the SSL library used (OpenSSL or
-            // GnuTLS, I guess) to use a default set of root
-            // certificates.
-            ne_ssl_trust_default_ca(m_pHttpSession);
-        }
-
-        // Add hooks (i.e. for adding additional headers to the request)
-
-#if 0
-        /* Hook called when a request is created. */
-        //typedef void (*ne_create_request_fn)(ne_request *req, void *userdata,
-        //                 const char *method, const char *path);
-
-        ne_hook_create_request( m_pHttpSession, create_req_hook_fn, this );
-#endif
-
-        /* Hook called before the request is sent.  'header' is the raw HTTP
-         * header before the trailing CRLF is added: add in more here. */
-        //typedef void (*ne_pre_send_fn)(ne_request *req, void *userdata,
-        //               ne_buffer *header);
-
-        ne_hook_pre_send( m_pHttpSession, NeonSession_PreSendRequest, this );
-#if 0
-        /* Hook called after the request is sent. May return:
-         *  NE_OK     everything is okay
-         *  NE_RETRY  try sending the request again.
-         * anything else signifies an error, and the request is failed. The
-         * return code is passed back the _dispatch caller, so the session error
-         * must also be set appropriately (ne_set_error).
-         */
-        //typedef int (*ne_post_send_fn)(ne_request *req, void *userdata,
-        //               const ne_status *status);
-
-        ne_hook_post_send( m_pHttpSession, post_send_req_hook_fn, this );
-
-        /* Hook called when the request is destroyed. */
-        //typedef void (*ne_destroy_req_fn)(ne_request *req, void *userdata);
-
-        ne_hook_destroy_request( m_pHttpSession, destroy_req_hook_fn, this );
-
-        /* Hook called when the session is destroyed. */
-        //typedef void (*ne_destroy_sess_fn)(void *userdata);
-
-        ne_hook_destroy_session( m_pHttpSession, destroy_sess_hook_fn, this );
-#endif
-
-        if ( !m_aProxyName.isEmpty() )
-        {
-            ne_session_proxy( m_pHttpSession,
-                              OUStringToOString(
-                                  m_aProxyName,
-                                  RTL_TEXTENCODING_UTF8 ).getStr(),
-                              m_nProxyPort );
-        }
-
-        // avoid KeepAlive?
-        if ( noKeepAlive(m_aFlags) )
-            ne_set_session_flag( m_pHttpSession, NE_SESSFLAG_PERSIST, 0 );
-
-        // Register for redirects.
-        ne_redirect_register( m_pHttpSession );
-
-        // authentication callbacks.
-#if 1
-        ne_add_server_auth( m_pHttpSession, NE_AUTH_ALL, NeonSession_NeonAuth, this );
-        ne_add_proxy_auth ( m_pHttpSession, NE_AUTH_ALL, NeonSession_NeonAuth, this );
-#else
-        ne_set_server_auth( m_pHttpSession, NeonSession_NeonAuth, this );
-        ne_set_proxy_auth ( m_pHttpSession, NeonSession_NeonAuth, this );
-#endif
-        // set timeout to connect
-        // if connect_timeout is not set, neon returns NE_CONNECT when the TCP socket default
-        // timeout elapses
-        // with connect_timeout set neon returns NE_TIMEOUT if elapsed when the connection
-        // didn't succeed
-        // grab it from configuration
-        uno::Reference< uno::XComponentContext > rContext = m_xFactory->getComponentContext();
-
-        // set the timeout (in seconds) used when making a connection
-        sal_Int32 nConnectTimeout = officecfg::Inet::Settings::ConnectTimeout::get( rContext );
-        ne_set_connect_timeout( m_pHttpSession,
-                                std::max( nConnectTimeoutMin,
-                                          std::min( nConnectTimeout, nConnectTimeoutMax ) ) );
-
-        // provides a read time out facility as well
-        // set the timeout (in seconds) used when reading from a socket.
-        sal_Int32 nReadTimeout =  officecfg::Inet::Settings::ReadTimeout::get( rContext );
-        ne_set_read_timeout( m_pHttpSession,
-                             std::max( nReadTimeoutMin,
-                                       std::min( nReadTimeout, nReadTimeoutMax ) ) );
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        m_pHttpSession = ne_session_create(
+            OUStringToOString( m_aScheme, RTL_TEXTENCODING_UTF8 ).getStr(),
+            /* theUri.GetUserInfo(),
+               @@@ for FTP via HTTP proxy, but not supported by Neon */
+            OUStringToOString( m_aHostName, RTL_TEXTENCODING_UTF8 ).getStr(),
+            m_nPort );
     }
+
+    if ( m_pHttpSession == nullptr )
+        throw DAVException( DAVException::DAV_SESSION_CREATE,
+                            NeonUri::makeConnectionEndPointString(
+                                m_aHostName, m_nPort ) );
+
+    // Register the session with the lock store
+    m_aNeonLockStore.registerSession( m_pHttpSession );
+
+    if ( m_aScheme.equalsIgnoreAsciiCase("https") )
+    {
+        // Set a failure callback for certificate check
+        ne_ssl_set_verify(
+            m_pHttpSession, NeonSession_CertificationNotify, this);
+
+        // Tell Neon to tell the SSL library used (OpenSSL or
+        // GnuTLS, I guess) to use a default set of root
+        // certificates.
+        ne_ssl_trust_default_ca(m_pHttpSession);
+    }
+
+    // Add hooks (i.e. for adding additional headers to the request)
+
+#if 0
+    /* Hook called when a request is created. */
+    //typedef void (*ne_create_request_fn)(ne_request *req, void *userdata,
+    //                 const char *method, const char *path);
+
+    ne_hook_create_request( m_pHttpSession, create_req_hook_fn, this );
+#endif
+
+    /* Hook called before the request is sent.  'header' is the raw HTTP
+     * header before the trailing CRLF is added: add in more here. */
+    //typedef void (*ne_pre_send_fn)(ne_request *req, void *userdata,
+    //               ne_buffer *header);
+
+    ne_hook_pre_send( m_pHttpSession, NeonSession_PreSendRequest, this );
+#if 0
+    /* Hook called after the request is sent. May return:
+     *  NE_OK     everything is okay
+     *  NE_RETRY  try sending the request again.
+     * anything else signifies an error, and the request is failed. The
+     * return code is passed back the _dispatch caller, so the session error
+     * must also be set appropriately (ne_set_error).
+     */
+    //typedef int (*ne_post_send_fn)(ne_request *req, void *userdata,
+    //               const ne_status *status);
+
+    ne_hook_post_send( m_pHttpSession, post_send_req_hook_fn, this );
+
+    /* Hook called when the request is destroyed. */
+    //typedef void (*ne_destroy_req_fn)(ne_request *req, void *userdata);
+
+    ne_hook_destroy_request( m_pHttpSession, destroy_req_hook_fn, this );
+
+    /* Hook called when the session is destroyed. */
+    //typedef void (*ne_destroy_sess_fn)(void *userdata);
+
+    ne_hook_destroy_session( m_pHttpSession, destroy_sess_hook_fn, this );
+#endif
+
+    if ( !m_aProxyName.isEmpty() )
+    {
+        ne_session_proxy( m_pHttpSession,
+                          OUStringToOString(
+                              m_aProxyName,
+                              RTL_TEXTENCODING_UTF8 ).getStr(),
+                          m_nProxyPort );
+    }
+
+    // avoid KeepAlive?
+    if ( noKeepAlive(m_aFlags) )
+        ne_set_session_flag( m_pHttpSession, NE_SESSFLAG_PERSIST, 0 );
+
+    // Register for redirects.
+    ne_redirect_register( m_pHttpSession );
+
+    // authentication callbacks.
+#if 1
+    ne_add_server_auth( m_pHttpSession, NE_AUTH_ALL, NeonSession_NeonAuth, this );
+    ne_add_proxy_auth ( m_pHttpSession, NE_AUTH_ALL, NeonSession_NeonAuth, this );
+#else
+    ne_set_server_auth( m_pHttpSession, NeonSession_NeonAuth, this );
+    ne_set_proxy_auth ( m_pHttpSession, NeonSession_NeonAuth, this );
+#endif
+    // set timeout to connect
+    // if connect_timeout is not set, neon returns NE_CONNECT when the TCP socket default
+    // timeout elapses
+    // with connect_timeout set neon returns NE_TIMEOUT if elapsed when the connection
+    // didn't succeed
+    // grab it from configuration
+    uno::Reference< uno::XComponentContext > rContext = m_xFactory->getComponentContext();
+
+    // set the timeout (in seconds) used when making a connection
+    sal_Int32 nConnectTimeout = officecfg::Inet::Settings::ConnectTimeout::get( rContext );
+    ne_set_connect_timeout( m_pHttpSession,
+                            std::max( nConnectTimeoutMin,
+                                      std::min( nConnectTimeout, nConnectTimeoutMax ) ) );
+
+    // provides a read time out facility as well
+    // set the timeout (in seconds) used when reading from a socket.
+    sal_Int32 nReadTimeout =  officecfg::Inet::Settings::ReadTimeout::get( rContext );
+    ne_set_read_timeout( m_pHttpSession,
+                         std::max( nReadTimeoutMin,
+                                   std::min( nReadTimeout, nReadTimeoutMax ) ) );
+
 }
 
 bool NeonSession::CanUse( const OUString & inUri,
