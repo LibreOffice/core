@@ -3014,8 +3014,8 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     //Spawn off a helper program that will attempt to set this fullscreen
-    //window to span all displays.
-    if (pThis->m_bFullscreen && pThis->m_bSpanMonitorsWhenFullscreen)
+    //window either to span all displays or the current monitor
+    if (pThis->m_bFullscreen)
     {
         GdkWindow* gdkwin = widget_get_window(pThis->m_pWindow);
         if (gdkwin)
@@ -3026,7 +3026,8 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
             if (osl::FileBase::getSystemPathFromFileURL(sProgramURL, sProgram) == osl::File::E_None)
             {
                 OString sFinalProgram(OUStringToOString(sProgram, osl_getThreadTextEncoding())
-                    + " " + OString::number((int)GDK_WINDOW_XID(gdkwin)));
+                    + " " + OString::number((int)GDK_WINDOW_XID(gdkwin))
+                    + " " + OString::number((int)pThis->m_bSpanMonitorsWhenFullscreen));
                 OString sDisplay(getDisplayString());
                 if (!sDisplay.isEmpty())
                 {

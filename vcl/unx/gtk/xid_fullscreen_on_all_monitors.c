@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
     GdkEvent *event;
     GdkWindow *window;
     int windowid;
+    int spanmonitors;
 
     handle = dlopen("libgtk-3.so.0", RTLD_LAZY);
     if( NULL == handle )
@@ -75,6 +76,7 @@ int main(int argc, char *argv[])
     gtk_init(&argc, &argv);
 
     windowid = atoi(argv[1]);
+    spanmonitors = atoi(argv[2]);
 
     window = gdk_x11_window_foreign_new_for_display(gdk_display_get_default(), windowid);
     if (!window)
@@ -83,7 +85,7 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    gdk_window_set_fullscreen_mode(window, GDK_FULLSCREEN_ON_ALL_MONITORS);
+    gdk_window_set_fullscreen_mode(window, spanmonitors ? GDK_FULLSCREEN_ON_ALL_MONITORS : GDK_FULLSCREEN_ON_CURRENT_MONITOR);
     gdk_window_fullscreen(window);
 
     while ((event = gdk_event_get()) != NULL)
