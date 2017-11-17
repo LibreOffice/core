@@ -217,6 +217,11 @@ sub find_msvs()
 	    $ver->{'product_dir'} = $install;
 	    return $ver;
 	}
+	$install = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Wow6432Node/" . $ver->{'key'});
+	if (defined $install && $install ne '') {
+	    $ver->{'product_dir'} = $install;
+	    return $ver;
+	}
     }
     die "Can't find MS Visual Studio / VC++";
 }
@@ -228,6 +233,11 @@ sub find_msvc()
     for $ver (@ms_versions)
     {
 	my $install = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/" . $ver->{'key'});
+	if (defined $install && $install ne '') {
+	    $ver->{'product_dir'} = $install;
+	    return $ver;
+	}
+	$install = reg_get_value("HKEY_LOCAL_MACHINE/SOFTWARE/Wow6432Node/" . $ver->{'key'});
 	if (defined $install && $install ne '') {
 	    $ver->{'product_dir'} = $install;
 	    return $ver;
