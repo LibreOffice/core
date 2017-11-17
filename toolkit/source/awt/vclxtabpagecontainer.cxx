@@ -179,24 +179,25 @@ void SAL_CALL VCLXTabPageContainer::elementInserted( const css::container::Conta
     SolarMutexGuard aGuard;
     VclPtr<TabControl> pTabCtrl = GetAs<TabControl>();
     Reference< css::awt::tab::XTabPage > xTabPage(Event.Element,uno::UNO_QUERY);
-    if ( pTabCtrl && xTabPage.is() )
-    {
-        Reference< awt::XControl > xControl(xTabPage,UNO_QUERY );
-        Reference< awt::tab::XTabPageModel > xP( xControl->getModel(), UNO_QUERY );
-        sal_Int16 nPageID = xP->getTabPageID();
+    if ( !pTabCtrl || !xTabPage.is() )
+        return;
 
-        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xControl->getPeer());
-        TabPage* pPage = static_cast<TabPage*>(pWindow.get());
-        pTabCtrl->InsertPage(nPageID,pPage->GetText());
+    Reference< awt::XControl > xControl(xTabPage,UNO_QUERY );
+    Reference< awt::tab::XTabPageModel > xP( xControl->getModel(), UNO_QUERY );
+    sal_Int16 nPageID = xP->getTabPageID();
 
-        pPage->Hide();
-        pTabCtrl->SetTabPage(nPageID,pPage);
-        pTabCtrl->SetHelpText(nPageID,xP->getToolTip());
-        pTabCtrl->SetPageImage(nPageID,TkResMgr::getImageFromURL(xP->getImageURL()));
-        pTabCtrl->SelectTabPage(nPageID);
-        pTabCtrl->EnablePage(nPageID,xP->getEnabled());
-        m_aTabPages.push_back(xTabPage);
-    }
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xControl->getPeer());
+    TabPage* pPage = static_cast<TabPage*>(pWindow.get());
+    pTabCtrl->InsertPage(nPageID,pPage->GetText());
+
+    pPage->Hide();
+    pTabCtrl->SetTabPage(nPageID,pPage);
+    pTabCtrl->SetHelpText(nPageID,xP->getToolTip());
+    pTabCtrl->SetPageImage(nPageID,TkResMgr::getImageFromURL(xP->getImageURL()));
+    pTabCtrl->SelectTabPage(nPageID);
+    pTabCtrl->EnablePage(nPageID,xP->getEnabled());
+    m_aTabPages.push_back(xTabPage);
+
 }
 void SAL_CALL VCLXTabPageContainer::elementRemoved( const css::container::ContainerEvent& Event )
 {

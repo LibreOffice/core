@@ -38,83 +38,84 @@ using namespace tdoc_ucp;
 void Uri::init() const
 {
     // Already inited?
-    if ( m_eState == UNKNOWN )
+    if ( m_eState != UNKNOWN )
+        return;
+
+    m_eState = INVALID;
+
+    // Check for proper length: must be at least length of <sheme>:/
+    if ( m_aUri.getLength() < TDOC_URL_SCHEME_LENGTH + 2 )
     {
-        m_eState = INVALID;
-
-        // Check for proper length: must be at least length of <sheme>:/
-        if ( m_aUri.getLength() < TDOC_URL_SCHEME_LENGTH + 2 )
-        {
-            // Invalid length (to short).
-            return;
-        }
-
-        // Check for proper scheme. (Scheme is case insensitive.)
-        OUString aScheme
-            = m_aUri.copy( 0, TDOC_URL_SCHEME_LENGTH ).toAsciiLowerCase();
-        if ( aScheme != TDOC_URL_SCHEME )
-        {
-            // Invalid scheme.
-            return;
-        }
-
-        // Remember normalized scheme string.
-        m_aUri = m_aUri.replaceAt( 0, aScheme.getLength(), aScheme );
-
-        if ( m_aUri[ TDOC_URL_SCHEME_LENGTH ] != ':' )
-        {
-            // Invalid (no ':' after <scheme>).
-            return;
-        }
-
-        if ( m_aUri[ TDOC_URL_SCHEME_LENGTH + 1 ] != '/' )
-        {
-            // Invalid (no '/' after <scheme>:).
-            return;
-        }
-
-        m_aPath = m_aUri.copy( TDOC_URL_SCHEME_LENGTH + 1 );
-
-        // Note: There must be at least one slash; see above.
-        sal_Int32 nLastSlash = m_aUri.lastIndexOf( '/' );
-        bool bTrailingSlash = false;
-        if ( nLastSlash == m_aUri.getLength() - 1 )
-        {
-            // ignore trailing slash
-            bTrailingSlash = true;
-            nLastSlash = m_aUri.lastIndexOf( '/', nLastSlash );
-        }
-
-        if ( nLastSlash != -1 ) // -1 is valid for the root folder
-        {
-            m_aParentUri = m_aUri.copy( 0, nLastSlash + 1 );
-
-            if ( bTrailingSlash )
-                m_aName = m_aUri.copy( nLastSlash + 1,
-                                       m_aUri.getLength() - nLastSlash - 2 );
-            else
-                m_aName = m_aUri.copy( nLastSlash + 1 );
-
-            m_aDecodedName = ::ucb_impl::urihelper::decodeSegment( m_aName );
-
-            sal_Int32 nSlash = m_aPath.indexOf( '/', 1 );
-            if ( nSlash == -1 )
-                m_aDocId = m_aPath.copy( 1 );
-            else
-                m_aDocId = m_aPath.copy( 1, nSlash - 1 );
-        }
-
-        if ( !m_aDocId.isEmpty() )
-        {
-            sal_Int32 nSlash = m_aPath.indexOf( '/', 1 );
-            if ( nSlash != - 1 )
-                m_aInternalPath = m_aPath.copy( nSlash );
-            else
-                m_aInternalPath = "/";
-        }
-
-        m_eState = VALID;
+        // Invalid length (to short).
+        return;
     }
+
+    // Check for proper scheme. (Scheme is case insensitive.)
+    OUString aScheme
+        = m_aUri.copy( 0, TDOC_URL_SCHEME_LENGTH ).toAsciiLowerCase();
+    if ( aScheme != TDOC_URL_SCHEME )
+    {
+        // Invalid scheme.
+        return;
+    }
+
+    // Remember normalized scheme string.
+    m_aUri = m_aUri.replaceAt( 0, aScheme.getLength(), aScheme );
+
+    if ( m_aUri[ TDOC_URL_SCHEME_LENGTH ] != ':' )
+    {
+        // Invalid (no ':' after <scheme>).
+        return;
+    }
+
+    if ( m_aUri[ TDOC_URL_SCHEME_LENGTH + 1 ] != '/' )
+    {
+        // Invalid (no '/' after <scheme>:).
+        return;
+    }
+
+    m_aPath = m_aUri.copy( TDOC_URL_SCHEME_LENGTH + 1 );
+
+    // Note: There must be at least one slash; see above.
+    sal_Int32 nLastSlash = m_aUri.lastIndexOf( '/' );
+    bool bTrailingSlash = false;
+    if ( nLastSlash == m_aUri.getLength() - 1 )
+    {
+        // ignore trailing slash
+        bTrailingSlash = true;
+        nLastSlash = m_aUri.lastIndexOf( '/', nLastSlash );
+    }
+
+    if ( nLastSlash != -1 ) // -1 is valid for the root folder
+    {
+        m_aParentUri = m_aUri.copy( 0, nLastSlash + 1 );
+
+        if ( bTrailingSlash )
+            m_aName = m_aUri.copy( nLastSlash + 1,
+                                   m_aUri.getLength() - nLastSlash - 2 );
+        else
+            m_aName = m_aUri.copy( nLastSlash + 1 );
+
+        m_aDecodedName = ::ucb_impl::urihelper::decodeSegment( m_aName );
+
+        sal_Int32 nSlash = m_aPath.indexOf( '/', 1 );
+        if ( nSlash == -1 )
+            m_aDocId = m_aPath.copy( 1 );
+        else
+            m_aDocId = m_aPath.copy( 1, nSlash - 1 );
+    }
+
+    if ( !m_aDocId.isEmpty() )
+    {
+        sal_Int32 nSlash = m_aPath.indexOf( '/', 1 );
+        if ( nSlash != - 1 )
+            m_aInternalPath = m_aPath.copy( nSlash );
+        else
+            m_aInternalPath = "/";
+    }
+
+    m_eState = VALID;
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

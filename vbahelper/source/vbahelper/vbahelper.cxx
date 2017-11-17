@@ -362,48 +362,48 @@ void PrintOutHelper( SfxViewShell const * pViewShell, const uno::Any& From, cons
     SfxViewFrame* pViewFrame = nullptr;
     if ( pViewShell )
         pViewFrame = pViewShell->GetViewFrame();
-    if ( pViewFrame )
+    if ( !pViewFrame )
+        return;
+
+    SfxAllItemSet aArgs( SfxGetpApp()->GetPool() );
+
+    SfxBoolItem sfxCollate( SID_PRINT_COLLATE, bCollate );
+    aArgs.Put( sfxCollate, sfxCollate.Which() );
+    SfxInt16Item sfxCopies( SID_PRINT_COPIES, nCopies );
+    aArgs.Put( sfxCopies, sfxCopies.Which() );
+    if ( !sFileName.isEmpty() )
     {
-        SfxAllItemSet aArgs( SfxGetpApp()->GetPool() );
-
-        SfxBoolItem sfxCollate( SID_PRINT_COLLATE, bCollate );
-        aArgs.Put( sfxCollate, sfxCollate.Which() );
-        SfxInt16Item sfxCopies( SID_PRINT_COPIES, nCopies );
-        aArgs.Put( sfxCopies, sfxCopies.Which() );
-        if ( !sFileName.isEmpty() )
-        {
-            SfxStringItem sfxFileName( SID_FILE_NAME, sFileName);
-            aArgs.Put( sfxFileName, sfxFileName.Which() );
-
-        }
-        if (  !sRange.isEmpty() )
-        {
-            SfxStringItem sfxRange( SID_PRINT_PAGES, sRange );
-            aArgs.Put( sfxRange, sfxRange.Which() );
-        }
-        SfxBoolItem sfxSelection( SID_SELECTION, bSelection );
-        aArgs.Put( sfxSelection, sfxSelection.Which() );
-        SfxBoolItem sfxAsync( SID_ASYNCHRON, false );
-        aArgs.Put( sfxAsync, sfxAsync.Which() );
-        SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
-
-        if ( pDispatcher )
-        {
-            if ( bPreview )
-            {
-                if ( !pViewFrame->GetFrame().IsInPlace() )
-                {
-                    // #TODO is this necessary ( calc specific )
-//                  SC_MOD()->InputEnterHandler();
-                    pViewFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SfxCallMode::SYNCHRON );
-                    WaitUntilPreviewIsClosed( pViewFrame );
-                }
-            }
-            else
-                pDispatcher->Execute( (sal_uInt16)SID_PRINTDOC, SfxCallMode::SYNCHRON, aArgs );
-        }
+        SfxStringItem sfxFileName( SID_FILE_NAME, sFileName);
+        aArgs.Put( sfxFileName, sfxFileName.Which() );
 
     }
+    if (  !sRange.isEmpty() )
+    {
+        SfxStringItem sfxRange( SID_PRINT_PAGES, sRange );
+        aArgs.Put( sfxRange, sfxRange.Which() );
+    }
+    SfxBoolItem sfxSelection( SID_SELECTION, bSelection );
+    aArgs.Put( sfxSelection, sfxSelection.Which() );
+    SfxBoolItem sfxAsync( SID_ASYNCHRON, false );
+    aArgs.Put( sfxAsync, sfxAsync.Which() );
+    SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
+
+    if ( pDispatcher )
+    {
+        if ( bPreview )
+        {
+            if ( !pViewFrame->GetFrame().IsInPlace() )
+            {
+                // #TODO is this necessary ( calc specific )
+//                  SC_MOD()->InputEnterHandler();
+                pViewFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SfxCallMode::SYNCHRON );
+                WaitUntilPreviewIsClosed( pViewFrame );
+            }
+        }
+        else
+            pDispatcher->Execute( (sal_uInt16)SID_PRINTDOC, SfxCallMode::SYNCHRON, aArgs );
+    }
+
 
     // #FIXME #TODO
     // 1 ActivePrinter ( how/can we switch a printer via API? )

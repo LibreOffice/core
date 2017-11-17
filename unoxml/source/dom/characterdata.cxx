@@ -82,30 +82,31 @@ namespace DOM
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
-        if (m_aNodePtr != nullptr)
-        {
-            // get current data
-            std::shared_ptr<xmlChar const> const pContent(
-                xmlNodeGetContent(m_aNodePtr), xmlFree);
-            OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
-            OUString tmp(OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
-            if (offset > tmp.getLength() || offset < 0 || count < 0) {
-                DOMException e;
-                e.Code = DOMExceptionType_INDEX_SIZE_ERR;
-                throw e;
-            }
-            if ((offset+count) > tmp.getLength())
-                count = tmp.getLength() - offset;
+        if (m_aNodePtr == nullptr)
+            return;
 
-            OUString tmp2 = tmp.copy(0, offset);
-            tmp2 += tmp.copy(offset+count);
-            OUString oldValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
-            xmlNodeSetContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
-            OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
-
-            guard.clear(); // release mutex before calling event handlers
-            dispatchEvent_Impl(oldValue, newValue);
+        // get current data
+        std::shared_ptr<xmlChar const> const pContent(
+            xmlNodeGetContent(m_aNodePtr), xmlFree);
+        OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
+        OUString tmp(OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
+        if (offset > tmp.getLength() || offset < 0 || count < 0) {
+            DOMException e;
+            e.Code = DOMExceptionType_INDEX_SIZE_ERR;
+            throw e;
         }
+        if ((offset+count) > tmp.getLength())
+            count = tmp.getLength() - offset;
+
+        OUString tmp2 = tmp.copy(0, offset);
+        tmp2 += tmp.copy(offset+count);
+        OUString oldValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
+        xmlNodeSetContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
+        OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
+
+        guard.clear(); // release mutex before calling event handlers
+        dispatchEvent_Impl(oldValue, newValue);
+
     }
 
 
@@ -152,29 +153,30 @@ namespace DOM
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
-        if (m_aNodePtr != nullptr)
-        {
-            // get current data
-            std::shared_ptr<xmlChar const> const pContent(
-                xmlNodeGetContent(m_aNodePtr), xmlFree);
-            OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
-            OUString tmp(OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
-            if (offset > tmp.getLength() || offset < 0) {
-                DOMException e;
-                e.Code = DOMExceptionType_INDEX_SIZE_ERR;
-                throw e;
-            }
+        if (m_aNodePtr == nullptr)
+            return;
 
-            OUString tmp2 = tmp.copy(0, offset);
-            tmp2 += arg;
-            tmp2 += tmp.copy(offset);
-            OUString oldValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
-            xmlNodeSetContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
-            OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
-
-            guard.clear(); // release mutex before calling event handlers
-            dispatchEvent_Impl(oldValue, newValue);
+        // get current data
+        std::shared_ptr<xmlChar const> const pContent(
+            xmlNodeGetContent(m_aNodePtr), xmlFree);
+        OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
+        OUString tmp(OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
+        if (offset > tmp.getLength() || offset < 0) {
+            DOMException e;
+            e.Code = DOMExceptionType_INDEX_SIZE_ERR;
+            throw e;
         }
+
+        OUString tmp2 = tmp.copy(0, offset);
+        tmp2 += arg;
+        tmp2 += tmp.copy(offset);
+        OUString oldValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
+        xmlNodeSetContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
+        OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
+
+        guard.clear(); // release mutex before calling event handlers
+        dispatchEvent_Impl(oldValue, newValue);
+
     }
 
 
@@ -186,31 +188,32 @@ namespace DOM
     {
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
-        if (m_aNodePtr != nullptr)
-        {
-            // get current data
-            std::shared_ptr<xmlChar const> const pContent(
-                xmlNodeGetContent(m_aNodePtr), xmlFree);
-            OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
-            OUString tmp(OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
-            if (offset > tmp.getLength() || offset < 0 || count < 0){
-                DOMException e;
-                e.Code = DOMExceptionType_INDEX_SIZE_ERR;
-                throw e;
-            }
-            if ((offset+count) > tmp.getLength())
-                count = tmp.getLength() - offset;
+        if (m_aNodePtr == nullptr)
+            return;
 
-            OUString tmp2 = tmp.copy(0, offset);
-            tmp2 += arg;
-            tmp2 += tmp.copy(offset+count);
-            OUString oldValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
-            xmlNodeSetContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
-            OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
-
-            guard.clear(); // release mutex before calling event handlers
-            dispatchEvent_Impl(oldValue, newValue);
+        // get current data
+        std::shared_ptr<xmlChar const> const pContent(
+            xmlNodeGetContent(m_aNodePtr), xmlFree);
+        OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
+        OUString tmp(OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
+        if (offset > tmp.getLength() || offset < 0 || count < 0){
+            DOMException e;
+            e.Code = DOMExceptionType_INDEX_SIZE_ERR;
+            throw e;
         }
+        if ((offset+count) > tmp.getLength())
+            count = tmp.getLength() - offset;
+
+        OUString tmp2 = tmp.copy(0, offset);
+        tmp2 += arg;
+        tmp2 += tmp.copy(offset+count);
+        OUString oldValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
+        xmlNodeSetContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
+        OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
+
+        guard.clear(); // release mutex before calling event handlers
+        dispatchEvent_Impl(oldValue, newValue);
+
     }
 
     /**
