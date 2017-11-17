@@ -231,6 +231,7 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
 
     bool bExpand = officecfg::Office::Common::Classification::IntellectualPropertySectionExpanded::get();
     m_pIntellectualPropertyExpander->set_expanded(bExpand);
+    m_pIntellectualPropertyExpander->SetExpandedHdl(LINK(this, ClassificationDialog, ExpandedHdl));
 
     m_pEditWindow->SetModifyHdl(LINK(this, ClassificationDialog, EditWindowModifiedHdl));
 }
@@ -697,6 +698,12 @@ IMPL_LINK_NOARG(ClassificationDialog, EditWindowModifiedHdl, LinkParamNone*, voi
     toggleWidgetsDependingOnCategory();
 }
 
+IMPL_LINK(ClassificationDialog, ExpandedHdl, VclExpander&, rExpander, void)
+{
+    std::shared_ptr<comphelper::ConfigurationChanges> aConfigurationChanges(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Classification::IntellectualPropertySectionExpanded::set(rExpander.get_expanded(), aConfigurationChanges);
+    aConfigurationChanges->commit();
+}
 
 } // end svx
 

@@ -69,7 +69,7 @@ private:
     DECL_LINK(SelectRecentlyUsedHdl, ListBox&, void);
     DECL_LINK(SelectIPPartHdl, ListBox&, void);
     DECL_LINK(EditWindowModifiedHdl, LinkParamNone*, void);
-
+    DECL_LINK(ExpandedHdl, VclExpander&, void);
 
     void insertField(ClassificationType eType, OUString const & rString, OUString const & rFullString, OUString const & rIdentifier = OUString());
 
