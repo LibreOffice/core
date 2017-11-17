@@ -310,6 +310,18 @@ void ScEditShell::Execute( SfxRequest& rReq )
             }
             break;
 
+        case SID_PASTE_UNFORMATTED:
+            {
+                pTableView->Paste();
+
+                if (pTopView)
+                {
+                    pTopView->Paste();
+                    pTopView->GetWindow()->GrabFocus();
+                }
+            }
+            break;
+
         case SID_SELECTALL:
             {
                 sal_Int32 nPar = pEngine->GetParagraphCount();
@@ -807,6 +819,7 @@ IMPL_LINK( ScEditShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, 
     SfxBindings& rBindings = pViewData->GetBindings();
     rBindings.Invalidate( SID_PASTE );
     rBindings.Invalidate( SID_PASTE_SPECIAL );
+    rBindings.Invalidate( SID_PASTE_UNFORMATTED );
     rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
 }
 
@@ -836,6 +849,7 @@ void ScEditShell::GetClipState( SfxItemSet& rSet )
         {
             case SID_PASTE:
             case SID_PASTE_SPECIAL:
+            case SID_PASTE_UNFORMATTED:
                 if( !bPastePossible )
                     rSet.DisableItem( nWhich );
                 break;

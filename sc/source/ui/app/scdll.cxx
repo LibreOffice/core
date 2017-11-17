@@ -161,6 +161,7 @@ void ScDLL::Init()
     SvxLineWidthToolBoxControl      ::RegisterControl(0, pMod);
     SvxStyleToolBoxControl          ::RegisterControl(SID_STYLE_APPLY,          pMod);
     SvxClipBoardControl             ::RegisterControl(SID_PASTE,                pMod );
+    SvxClipBoardControl             ::RegisterControl(SID_PASTE_UNFORMATTED,    pMod );
     SvxUndoRedoControl              ::RegisterControl(SID_UNDO,                 pMod );
     SvxUndoRedoControl              ::RegisterControl(SID_REDO,                 pMod );
     svx::ParaLineSpacingPopup       ::RegisterControl(SID_ATTR_PARA_LINESPACE,  pMod );

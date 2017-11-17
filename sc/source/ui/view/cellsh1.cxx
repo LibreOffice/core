@@ -1641,6 +1641,22 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
             break;
 
+        case SID_PASTE_UNFORMATTED:
+            // differentiate between own cell data and draw objects/external data
+            // this makes FID_INS_CELL_CONTENTS superfluous
+            {
+                WaitObject aWait( GetViewData()->GetDialogParent() );
+                bool bRet = pTabViewShell->PasteFromSystem(SotClipboardFormatId::STRING, true); // TRUE: no error messages
+                if ( bRet )
+                {
+                    rReq.SetReturnValue(SfxInt16Item(nSlot, bRet ? 1 : 0)); // 1 = success, 0 = fail
+                    rReq.Done();
+                }
+
+                pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
+            }
+            break;
+
         //  other
 
         case FID_INS_ROWBRK:

@@ -222,6 +222,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
 
             case SID_PASTE:
             case SID_PASTE_SPECIAL:
+            case SID_PASTE_UNFORMATTED:
             case SID_PASTE_ONLY_VALUE:
             case SID_PASTE_ONLY_TEXT:
             case SID_PASTE_ONLY_FORMULA:
@@ -520,6 +521,7 @@ IMPL_LINK( ScCellShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, 
     SfxBindings& rBindings = GetViewData()->GetBindings();
     rBindings.Invalidate( SID_PASTE );
     rBindings.Invalidate( SID_PASTE_SPECIAL );
+    rBindings.Invalidate( SID_PASTE_UNFORMATTED );
     rBindings.Invalidate( SID_PASTE_ONLY_VALUE );
     rBindings.Invalidate( SID_PASTE_ONLY_TEXT );
     rBindings.Invalidate( SID_PASTE_ONLY_FORMULA );
@@ -576,6 +578,7 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
 {
 // SID_PASTE
 // SID_PASTE_SPECIAL
+// SID_PASTE_UNFORMATTED
 // SID_CLIPBOARD_FORMAT_ITEMS
 
     if ( !pImpl->m_xClipEvtLstnr.is() )
@@ -634,6 +637,7 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
     {
         rSet.DisableItem( SID_PASTE );
         rSet.DisableItem( SID_PASTE_SPECIAL );
+        rSet.DisableItem( SID_PASTE_UNFORMATTED );
         rSet.DisableItem( SID_PASTE_ONLY_VALUE );
         rSet.DisableItem( SID_PASTE_ONLY_TEXT );
         rSet.DisableItem( SID_PASTE_ONLY_FORMULA );
