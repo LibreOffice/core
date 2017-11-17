@@ -444,6 +444,20 @@ void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 break;
         }
     }
+    else
+    {
+        switch ( rHint.GetId() )
+        {
+            case SFX_HINT_LANGUAGECHANGED:
+            {
+                GetViewFrame()->GetBindings().Invalidate(SID_LANGUAGE_STATUS);
+            }
+            break;
+
+            default:
+                break;
+        }
+    }
 }
 
 void ViewShellBase::InitializeFramework()
