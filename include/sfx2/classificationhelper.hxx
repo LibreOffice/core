@@ -220,6 +220,10 @@ public:
     }
 };
 
+SFX2_DLLPUBLIC sfx::ClassificationCreationOrigin getCreationOriginProperty(
+    css::uno::Reference<css::beans::XPropertyContainer> const & rxPropertyContainer,
+    sfx::ClassificationKeyCreator const & rKeyCreator);
+
 }
 
 #endif

@@ -2075,7 +2075,7 @@ void SwEditShell::ClassifyDocPerHighestParagraphClass()
 
     // Check the origin, if "manual" (created via advanced classification dialog),
     // then we just need to set the category name.
-    if (svx::classification::getCreationOriginProperty(xPropertyContainer, aKeyCreator) == sfx::ClassificationCreationOrigin::MANUAL)
+    if (sfx::getCreationOriginProperty(xPropertyContainer, aKeyCreator) == sfx::ClassificationCreationOrigin::MANUAL)
     {
         aHelper.SetBACName(sHighestClass, eHighestClassType);
     }
