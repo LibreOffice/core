@@ -210,14 +210,9 @@ namespace emfplushelper
 
                 if (additionalFlags & 0x02)
                 {
-                    SAL_INFO("drawinglayer", "EMF+\tuse transformation");
                     EmfPlusHelperData::readXForm(s, brush_transformation);
                     hasTransformation = true;
-                    SAL_INFO("drawinglayer",
-                                "EMF+\tm11: " << brush_transformation.get(0,0) << " m12: " << brush_transformation.get(1,0) <<
-                                "\nEMF+\tm21: " << brush_transformation.get(0,1) << " m22: " << brush_transformation.get(1,1) <<
-                                "\nEMF+\tdx: " << brush_transformation.get(0,2) << " dy: " << brush_transformation.get(1,2));
-
+                    SAL_INFO("drawinglayer", "EMF+\tuse brush transformation: " << brush_transformation);
                 }
 
                 if (additionalFlags & 0x08)
@@ -296,13 +291,9 @@ namespace emfplushelper
 
                 if (additionalFlags & 0x02)
                 {
-                    SAL_INFO("drawinglayer", "EMF+\tuse transformation");
                     EmfPlusHelperData::readXForm(s, brush_transformation);
                     hasTransformation = true;
-                    SAL_INFO("drawinglayer",
-                        "EMF+\tm11: " << brush_transformation.get(0,0) << " m12: " << brush_transformation.get(1,0) <<
-                        "\nEMF+\tm21: " << brush_transformation.get(0,1) << " m22: " << brush_transformation.get(1,1) <<
-                        "\nEMF+\tdx: " << brush_transformation.get(0,2) << " dy: " << brush_transformation.get(1,2));
+                    SAL_INFO("drawinglayer", "EMF+\tuse brush transformation: " << brush_transformation);
                 }
 
                 if (additionalFlags & 0x08)
