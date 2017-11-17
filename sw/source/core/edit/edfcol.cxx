@@ -2028,16 +2028,21 @@ bool SwEditShell::RemoveParagraphMetadataFieldAtCursor(const bool bBackspaceNotD
     return false;
 }
 
-OUString lcl_GetParagraphClassification(sfx::ClassificationKeyCreator const & rKeyCreator, const uno::Reference<frame::XModel>& xModel, const uno::Reference<text::XTextContent>& xParagraph)
+OUString lcl_GetParagraphClassification(SfxClassificationHelper & rHelper, sfx::ClassificationKeyCreator const & rKeyCreator,
+                                        const uno::Reference<frame::XModel>& xModel, const uno::Reference<text::XTextContent>& xParagraph)
 {
-
-    uno::Reference<text::XTextField> xTextField = lcl_FindParagraphClassificationField(xModel, xParagraph, rKeyCreator.makeCategoryNameKey());
-    if (!xTextField.is())
-        xTextField = lcl_FindParagraphClassificationField(xModel, xParagraph, rKeyCreator.makeCategoryIdentifierKey());
-
+    uno::Reference<text::XTextField> xTextField;
+    xTextField = lcl_FindParagraphClassificationField(xModel, xParagraph, rKeyCreator.makeCategoryIdentifierKey());
     if (xTextField.is())
     {
         const std::pair<OUString, OUString> rdfValuePair = lcl_getRDF(xModel, xTextField, ParagraphClassificationValueRDFName);
+        return rHelper.GetBACNameForIdentifier(rdfValuePair.second);
+    }
+
+    xTextField = lcl_FindParagraphClassificationField(xModel, xParagraph, rKeyCreator.makeCategoryNameKey());
+    if (xTextField.is())
+    {
+        const std::pair<OUString, OUString> rdfValuePair = lcl_getRDF(xModel, xTextField, ParagraphClassificationNameRDFName);
         return rdfValuePair.second;
     }
 
@@ -2068,7 +2073,8 @@ OUString lcl_GetHighestClassificationParagraphClass(SwPaM* pCursor)
     while (xParagraphs->hasMoreElements())
     {
         uno::Reference<text::XTextContent> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
-        sHighestClass = aHelper.GetHigherClass(sHighestClass, lcl_GetParagraphClassification(aKeyCreator, xModel, xParagraph));
+        OUString sCurrentClass = lcl_GetParagraphClassification(aHelper, aKeyCreator, xModel, xParagraph);
+        sHighestClass = aHelper.GetHigherClass(sHighestClass, sCurrentClass);
     }
 
     return sHighestClass;
@@ -2106,6 +2112,7 @@ void SwEditShell::ClassifyDocPerHighestParagraphClass()
     if (sfx::getCreationOriginProperty(xPropertyContainer, aKeyCreator) == sfx::ClassificationCreationOrigin::MANUAL)
     {
         aHelper.SetBACName(sHighestClass, eHighestClassType);
+        ApplyAdvancedClassification(CollectAdvancedClassification());
     }
     else
     {
