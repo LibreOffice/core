@@ -427,7 +427,7 @@ void ScDocument::SetFormulaResults(
     pTab->SetFormulaResults(rTopPos.Col(), rTopPos.Row(), pResults, nLen);
 }
 
-ScDocumentThreadSpecific ScDocument::CalculateInColumnInThread( const ScInterpreterContext& rContext, const ScAddress& rTopPos, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
+ScDocumentThreadSpecific ScDocument::CalculateInColumnInThread( ScInterpreterContext& rContext, const ScAddress& rTopPos, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
 {
     ScTable* pTab = FetchTable(rTopPos.Tab());
     if (!pTab)

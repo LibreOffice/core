@@ -1730,15 +1730,13 @@ void ScInterpreter::QueryMatrixType(const ScMatrixRef& xMat, short& rRetTypeExpr
 
 formula::FormulaToken* ScInterpreter::CreateFormulaDoubleToken( double fVal, short nFmt )
 {
-    if ( maTokenCache.size() != TOKEN_CACHE_SIZE )
-        maTokenCache.resize( TOKEN_CACHE_SIZE );
+    assert( mrContext.maTokens.size() == TOKEN_CACHE_SIZE );
 
     // Find a spare token
-    for ( auto p : maTokenCache )
+    for ( auto p : mrContext.maTokens )
     {
         if (p && p->GetRef() == 1)
         {
-            p->IncRef();
             p->GetDoubleAsReference() = fVal;
             p->SetDoubleType( nFmt );
             return p;
@@ -1747,12 +1745,11 @@ formula::FormulaToken* ScInterpreter::CreateFormulaDoubleToken( double fVal, sho
 
     // Allocate a new token
     auto p = new FormulaTypedDoubleToken( fVal, nFmt );
-    size_t pos = (mnTokenCachePos++) % TOKEN_CACHE_SIZE;
-    if ( maTokenCache[pos] )
-        maTokenCache[pos]->DecRef();
-    maTokenCache[pos] = p;
+    if ( mrContext.maTokens[mrContext.mnTokenCachePos] )
+        mrContext.maTokens[mrContext.mnTokenCachePos]->DecRef();
+    mrContext.maTokens[mrContext.mnTokenCachePos] = p;
     p->IncRef();
-
+    mrContext.mnTokenCachePos = (mrContext.mnTokenCachePos + 1) % TOKEN_CACHE_SIZE;
     return p;
 }
 
@@ -3811,7 +3808,7 @@ void ScInterpreter::ScTTT()
     PushError(FormulaError::NoValue);
 }
 
-ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc, const ScInterpreterContext& rContext,
+ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc, ScInterpreterContext& rContext,
         const ScAddress& rPos, ScTokenArray& r )
     : aCode(r)
     , aPos(rPos)
@@ -3871,11 +3868,6 @@ ScInterpreter::~ScInterpreter()
     else
         delete pStackObj;
     delete pTokenMatrixMap;
-
-    for ( auto p : maTokenCache )
-        if ( p && p->GetRef() == 1 )
-            p->DecRef();
-
 }
 
 ScCalcConfig& ScInterpreter::GetOrCreateGlobalConfig()

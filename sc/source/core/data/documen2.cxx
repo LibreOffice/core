@@ -177,6 +177,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         nInterpretLevel(0),
         nMacroInterpretLevel(0),
         nInterpreterTableOpLevel(0),
+        maInterpreterContext( *this, nullptr ),
         nSrcVer( SC_CURRENT_VERSION ),
         nFormulaTrackCount(0),
         eHardRecalcState(HardRecalcState::OFF),
