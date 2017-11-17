@@ -315,8 +315,6 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                         else
                             lcl_setLanguage( pDoc, aNewLangTxt );
 
-                        mpViewShell->GetFrame()->GetBindings().Invalidate( SID_LANGUAGE_STATUS );
-
                         if ( pDoc->GetOnlineSpell() )
                         {
                             pDoc->StartOnlineSpelling();
@@ -324,6 +322,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                     }
                 }
             }
+            Broadcast(SfxHint(SFX_HINT_LANGUAGECHANGED));
         }
         break;
 
