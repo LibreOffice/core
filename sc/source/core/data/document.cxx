@@ -6742,33 +6742,6 @@ void ScDocument::SetAutoNameCache(  ScAutoNameCache* pCache )
     pAutoNameCache = pCache;
 }
 
-ScMutationGuard::ScMutationGuard(ScDocument* pDocument, ScMutationGuardFlags nFlags) :
-    mpDocument(pDocument),
-    mnFlags(nFlags)
-{
-    (void) mpDocument;
-    for (unsigned b = 0; b < static_cast<std::size_t>(ScMutationGuardFlags::N); b++)
-    {
-        if (static_cast<std::size_t>(mnFlags) & (static_cast<std::size_t>(1) << b))
-        {
-            assert(mpDocument->maMutationGuard[b].try_lock());
-        }
-    }
-}
-
-ScMutationGuard::~ScMutationGuard()
-{
-#ifndef NDEBUG
-    for (unsigned b = 0; b < static_cast<std::size_t>(ScMutationGuardFlags::N); b++)
-    {
-        if (static_cast<std::size_t>(mnFlags) & (static_cast<std::size_t>(1) << b))
-        {
-            mpDocument->maMutationGuard[b].unlock();
-        }
-    }
-#endif
-}
-
 thread_local ScDocumentThreadSpecific ScDocument::maThreadSpecific;
 
 ScRecursionHelper& ScDocument::GetRecursionHelper()

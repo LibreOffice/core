@@ -4416,7 +4416,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
             assert(!pDocument->mbThreadedGroupCalcInProgress);
             pDocument->mbThreadedGroupCalcInProgress = true;
 
-            ScMutationGuard aGuard(pDocument, ScMutationGuardFlags::CORE);
+            ScMutationDisable aGuard(pDocument, ScMutationGuardFlags::CORE);
 
             // Start nThreadCount new threads
             std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();

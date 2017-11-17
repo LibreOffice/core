@@ -294,14 +294,11 @@ struct ScDocumentThreadSpecific
     void MergeBackIntoNonThreadedData(ScDocumentThreadSpecific& rNonThreadedData);
 };
 
-enum class ScMutationGuardFlags
+/// Enumeration to determine which pieces of the code should not be mutated when set.
+enum ScMutationGuardFlags
 {
     // Bit mask bits
-    CORE                = 0x0001,
-    FORMULA             = 0x0002,
-    RECURSIVE_INTERPRET = 0x0004,
-    // How many bits there are
-    N = 3
+    CORE = 0x0001, /// Core calc data structures should not be mutated
 };
 
 class ScDocument
@@ -330,7 +327,8 @@ friend class sc::ColumnSpanSet;
 friend class sc::EditTextIterator;
 friend class sc::FormulaGroupAreaListener;
 friend class sc::TableColumnBlockPositionSet;
-friend class ScMutationGuard;
+friend struct ScMutationGuard;
+friend struct ScMutationDisable;
 
     typedef std::vector<ScTable*> TableContainer;
 
@@ -536,7 +534,7 @@ private:
     bool                mbTrackFormulasPending  : 1;
     bool                mbFinalTrackFormulas    : 1;
 
-    std::recursive_mutex maMutationGuard[static_cast<std::size_t>(ScMutationGuardFlags::N)];
+    size_t              mnMutationGuardFlags;
 
 public:
     bool                     IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBorder);
@@ -550,7 +548,7 @@ public:
                                                                 // number formatter
 public:
     SC_DLLPUBLIC                ScDocument( ScDocumentMode eMode = SCDOCMODE_DOCUMENT,
-                                SfxObjectShell* pDocShell = nullptr );
+                                            SfxObjectShell* pDocShell = nullptr );
     SC_DLLPUBLIC                ~ScDocument();
 
     void              SetName( const OUString& r ) { aDocName = r; }
@@ -2460,17 +2458,64 @@ private:
 
 typedef std::unique_ptr<ScDocument, o3tl::default_delete<ScDocument>> ScDocumentUniquePtr;
 
-class ScMutationGuard
+/**
+ * Instantiate this to ensure that subsequent modification of
+ * the document will cause an assertion failure while this is
+ * in-scope.
+ */
+struct ScMutationDisable
 {
-public:
-    ScMutationGuard(ScDocument* pDocument, ScMutationGuardFlags nFlags);
-    ~ScMutationGuard();
-
-private:
-    ScDocument* const mpDocument;
-    const ScMutationGuardFlags mnFlags;
+    ScMutationDisable(ScDocument* pDocument, ScMutationGuardFlags nFlags)
+    {
+#ifndef NDEBUG
+        mpDocument = pDocument;
+        mnFlagRestore = pDocument->mnMutationGuardFlags;
+        assert((mnFlagRestore & nFlags) == 0);
+        mpDocument->mnMutationGuardFlags |= static_cast<size_t>(nFlags);
+#else
+        (void)pDocument; (void)nFlags;
+#endif
+    }
+#ifndef NDEBUG
+    ~ScMutationDisable()
+    {
+        mpDocument->mnMutationGuardFlags = mnFlagRestore;
+    }
+    size_t mnFlagRestore;
+    ScDocument* mpDocument;
+#endif
 };
 
+/**
+ * A pretty assertion that checks that the relevant bits in
+ * the @nFlags are not set on the document at entry and exit.
+ *
+ * Its primary use is for debugging threading. As such, an
+ * @ScMutationDisable is created to forbid mutation, and this
+ * condition is then asserted on at prominent sites that
+ * mutate @nFlags.
+ */
+struct ScMutationGuard
+{
+    ScMutationGuard(ScDocument* pDocument, ScMutationGuardFlags nFlags)
+    {
+#ifndef NDEBUG
+        mpDocument = pDocument;
+        mnFlags = static_cast<size_t>(nFlags);
+        assert((mpDocument->mnMutationGuardFlags & mnFlags) == 0);
+#else
+        (void)pDocument; (void)nFlags;
+#endif
+    }
+#ifndef NDEBUG
+    ~ScMutationGuard()
+    {
+        assert((mpDocument->mnMutationGuardFlags & mnFlags) == 0);
+    }
+    size_t mnFlags;
+    ScDocument* mpDocument;
+#endif
+};
 
 #endif
 
