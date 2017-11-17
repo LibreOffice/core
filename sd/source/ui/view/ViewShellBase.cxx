@@ -429,6 +429,21 @@ void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 break;
         }
     }
+    else
+    {
+        const SfxHintId nSlot = rHint.GetId();
+        switch ( nSlot )
+        {
+            case SfxHintId::LanguageChanged:
+            {
+                GetViewFrame()->GetBindings().Invalidate(SID_LANGUAGE_STATUS);
+            }
+            break;
+
+            default:
+                break;
+        }
+    }
 }
 
 void ViewShellBase::InitializeFramework()

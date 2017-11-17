@@ -275,47 +275,37 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
             break;
             case SID_LANGUAGE_STATUS:
             {
-                if ( comphelper::LibreOfficeKit::isActive() )
+                SdrObject* pObj = nullptr;
+                bool bLanguageFound = false;
+                OutlinerParaObject* pParaObj = nullptr;
+                LanguageType eLanguage( LANGUAGE_DONTKNOW );
+                sal_uInt16 nCount = mpDoc->GetPageCount();
+                for ( sal_uInt16 itPage = 0; itPage < nCount && !bLanguageFound; itPage++ )
                 {
-                    SdrObject* pObj = nullptr;
-                    bool bLanguageFound = false;
-                    OutlinerParaObject* pParaObj = nullptr;
-                    LanguageType eLanguage( LANGUAGE_DONTKNOW );
-                    sal_uInt16 nCount = mpDoc->GetPageCount();
-                    for ( sal_uInt16 itPage = 0; itPage < nCount && !bLanguageFound; itPage++ )
+                    SdrObjListIter aListIter(*mpDoc->GetPage(itPage), SdrIterMode::DeepWithGroups);
+                    while ( aListIter.IsMore() && !bLanguageFound )
                     {
-                        SdrObjListIter aListIter(*mpDoc->GetPage(itPage), SdrIterMode::DeepWithGroups);
-                        while ( aListIter.IsMore() && !bLanguageFound )
+                        pObj = aListIter.Next();
+                        if ( pObj )
                         {
-                            pObj = aListIter.Next();
-                            if ( pObj )
+                            pParaObj = pObj->GetOutlinerParaObject();
+                            if ( pParaObj )
                             {
-                                pParaObj = pObj->GetOutlinerParaObject();
-                                if ( pParaObj )
-                                {
-                                    SdrOutliner aOutliner(&mpDoc->GetPool(), OutlinerMode::TextObject);
-                                    aOutliner.SetText(*pParaObj);
-                                    eLanguage = aOutliner.GetLanguage(0, 0);
-                                    bLanguageFound = eLanguage != LANGUAGE_DONTKNOW;
-                                }
+                                SdrOutliner aOutliner(&mpDoc->GetPool(), OutlinerMode::TextObject);
+                                aOutliner.SetText(*pParaObj);
+                                eLanguage = aOutliner.GetLanguage(0, 0);
+                                bLanguageFound = eLanguage != LANGUAGE_DONTKNOW;
                             }
                         }
                     }
-
-                    if ( eLanguage == LANGUAGE_DONTKNOW )
-                    {
-                        eLanguage = mpDoc->GetLanguage( EE_CHAR_LANGUAGE );
-                    }
-
-                    css::uno::Sequence< OUString > aSeq( 1 );
-                    aSeq[0] = SvtLanguageTable::GetLanguageString(eLanguage);
-                    SfxStringListItem aItem( SID_LANGUAGE_STATUS );
-                    aItem.SetStringList( aSeq );
-                    rSet.Put(aItem);
                 }
-                else
-                    // Keeping this enabled for the time being
-                    rSet.Put(SfxVisibilityItem(nWhich, true));
+
+                if ( eLanguage == LANGUAGE_DONTKNOW )
+                {
+                    eLanguage = mpDoc->GetLanguage( EE_CHAR_LANGUAGE );
+                }
+
+                rSet.Put(SfxStringItem(nWhich, SvtLanguageTable::GetLanguageString(eLanguage)));
             }
             break;
 
