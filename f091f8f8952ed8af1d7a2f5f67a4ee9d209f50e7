@@ -16,6 +16,24 @@
       "revId": "f091f8f8952ed8af1d7a2f5f67a4ee9d209f50e7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_1e2d39fe",
+        "filename": "cui/uiconfig/ui/gradientpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2017-11-17T17:13:24Z",
+      "side": 1,
+      "message": "would be ideal if the .ui parser didnt ignore this, but if that wont be fixed, then we should likely remove it from /core/cui/uiconfig/ui/colorpage.ui as its set there for spinboxes. I normally just set an invisible label to solve this issue, as that is quite common in the .ui files.",
+      "parentUuid": "1a430d35_1e2e1943",
+      "revId": "f091f8f8952ed8af1d7a2f5f67a4ee9d209f50e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
