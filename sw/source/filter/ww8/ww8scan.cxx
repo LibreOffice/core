@@ -1300,7 +1300,17 @@ WW8_CP WW8PLCFx_PCD::AktPieceStartFc2Cp( WW8_FC nStartPos )
     if (nStartPos >= nFcEnd)
         nStartPos = nFcEnd - (1 * nUnicodeFactor);
 
-    return nCpStart + (nStartPos - nFcStart) / nUnicodeFactor;
+    WW8_FC nFcDiff = (nStartPos - nFcStart) / nUnicodeFactor;
+
+    WW8_FC nCpRet;
+    bFail = o3tl::checked_add(nCpStart, nFcDiff, nCpRet);
+    if (bFail)
+    {
+        SAL_WARN("sw.ww8", "broken offset, ignoring");
+        return WW8_CP_MAX;
+    }
+
+    return nCpRet;
 }
 
 //      Helper routines for all
