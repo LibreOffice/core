@@ -70,6 +70,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			$(if $(SYSTEM_LIBTOMMATH),$(LIBTOMMATH_CFLAGS), \
 				-L$(call gb_UnpackedTarball_get_dir,libtommath) \
 			) \
+			$(CXXFLAGS_CXX11) \
 		" \
 		&& export LDFLAGS=" \
 			$(if $(SYSTEM_ICU),$(ICU_LIBS), \
