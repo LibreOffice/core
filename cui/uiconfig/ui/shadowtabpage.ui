@@ -113,13 +113,12 @@
                       <object class="GtkAlignment" id="alignment2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="xalign">0</property>
                         <property name="left_padding">12</property>
                         <child>
                           <object class="GtkLabel" id="FT_DISTANCE">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="xalign">1</property>
                             <property name="label" translatable="yes" context="shadowtabpage|FT_DISTANCE">_Distance:</property>
                             <property name="use_underline">True</property>
                           </object>
@@ -149,13 +148,12 @@
                       <object class="GtkAlignment" id="alignment4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="margin_left">12</property>
                         <property name="left_padding">12</property>
                         <child>
                           <object class="GtkLabel" id="FT_TRANSPARENT">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="xalign">1</property>
                             <property name="label" translatable="yes" context="shadowtabpage|FT_TRANSPARENT">_Transparency:</property>
                             <property name="use_underline">True</property>
                           </object>
@@ -170,13 +168,12 @@
                       <object class="GtkAlignment" id="alignment5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="margin_left">12</property>
                         <property name="left_padding">12</property>
                         <child>
                           <object class="GtkLabel" id="FT_SHADOW_COLOR">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="xalign">1</property>
                             <property name="label" translatable="yes" context="shadowtabpage|FT_SHADOW_COLOR">_Color:</property>
                             <property name="use_underline">True</property>
                           </object>
