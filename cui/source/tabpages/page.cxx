@@ -996,8 +996,19 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeModify_Impl, Edit&, void)
     MapUnit eUnit = GetItemSet().GetPool()->GetMetric( nWhich );
     Size aSize( GetCoreValue( *m_pPaperWidthEdit, eUnit ),
                 GetCoreValue( *m_pPaperHeightEdit, eUnit ) );
-    Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, eUnit );
 
+    if ( aSize.Width() > aSize.Height() )
+    {
+        m_pLandscapeBtn->Check(true);
+        bLandscape = true;
+    }
+    else
+    {
+        m_pPortraitBtn->Check(true);
+        bLandscape = false;
+    }
+
+    Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, eUnit );
     m_pPaperSizeBox->SetSelection( ePaper );
     UpdateExample_Impl( true );
 }
