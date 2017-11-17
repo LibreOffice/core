@@ -17,6 +17,7 @@
 extern "C" {
 void * unoxml_component_getFactory( const char* , void* , void* );
 void * i18npool_component_getFactory( const char* , void* , void* );
+void * ucb_component_getFactory( const char* , void* , void* );
 void * emfio_component_getFactory( const char* , void* , void* );
 
 void * com_sun_star_comp_framework_Desktop_get_implementation( void *, void * );
@@ -34,6 +35,7 @@ void * com_sun_star_comp_uui_UUIInteractionHandler_get_implementation( void *, v
 void * com_sun_star_comp_comphelper_OPropertyBag( void *, void * );
 void * com_sun_star_i18n_Transliteration_get_implementation( void *, void * );
 void * com_sun_star_text_DefaultNumberingProvider_get_implementation( void *, void * );
+void * com_sun_star_comp_uri_UriReferenceFactory_get_implementation( void *, void * );
 }
 
 const lib_to_factory_mapping *
@@ -43,6 +45,7 @@ lo_get_factory_map(void)
         { "libunoxmllo.a", unoxml_component_getFactory },
         { "libi18npoollo.a", i18npool_component_getFactory },
         { "libemfiolo.a", emfio_component_getFactory },
+        { "libucb1.a", ucb_component_getFactory },
         { 0, 0 }
     };
 
@@ -68,6 +71,7 @@ lo_get_constructor_map(void)
         { "com_sun_star_comp_comphelper_OPropertyBag", com_sun_star_comp_comphelper_OPropertyBag },
         { "com_sun_star_i18n_Transliteration_get_implementation", com_sun_star_i18n_Transliteration_get_implementation },
         { "com_sun_star_text_DefaultNumberingProvider_get_implementation", com_sun_star_text_DefaultNumberingProvider_get_implementation },
+        { "com_sun_star_comp_uri_UriReferenceFactory_get_implementation", com_sun_star_comp_uri_UriReferenceFactory_get_implementation},
         { 0, 0 }
     };
 
