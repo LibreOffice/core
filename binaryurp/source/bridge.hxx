@@ -23,7 +23,6 @@
 #include <sal/config.h>
 
 #include <cstddef>
-#include <list>
 #include <map>
 #include <vector>
 
@@ -221,7 +220,7 @@ private:
     void checkDisposed();
 
     typedef
-        std::list<
+        std::vector<
             com::sun::star::uno::Reference<
                 com::sun::star::lang::XEventListener > >
         Listeners;
