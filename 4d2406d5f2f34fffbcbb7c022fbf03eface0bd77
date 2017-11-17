@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_fe15cde4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-11-17T14:46:35Z",
+      "side": 1,
+      "message": "I\u0027d specify why the given commit is reverted (because one can\u0027t use left Ctrl+Alt as an equivalent of AltGr on non-US keyboards) and add reference to bugs this resolves, tdf#97908 for example",
+      "revId": "4d2406d5f2f34fffbcbb7c022fbf03eface0bd77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
