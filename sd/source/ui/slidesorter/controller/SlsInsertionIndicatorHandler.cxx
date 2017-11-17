@@ -47,7 +47,7 @@ InsertionIndicatorHandler::InsertionIndicatorHandler (SlideSorter& rSlideSorter)
 {
 }
 
-InsertionIndicatorHandler::~InsertionIndicatorHandler()
+InsertionIndicatorHandler::~InsertionIndicatorHandler() COVERITY_NOEXCEPT_FALSE
 {
 }
 

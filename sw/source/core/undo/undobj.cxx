@@ -692,7 +692,7 @@ SwUndoSaveContent::SwUndoSaveContent()
     : pHistory( nullptr )
 {}
 
-SwUndoSaveContent::~SwUndoSaveContent()
+SwUndoSaveContent::~SwUndoSaveContent() COVERITY_NOEXCEPT_FALSE
 {
 }
 

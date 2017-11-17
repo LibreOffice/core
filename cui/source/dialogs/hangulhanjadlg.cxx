@@ -71,9 +71,9 @@ namespace svx
                 m_rDev.Push( PushFlags::FONT );
                 m_rDev.SetFont( _rTemporaryFont );
             }
-            ~FontSwitch( )
+            ~FontSwitch() COVERITY_NOEXCEPT_FALSE
             {
-                m_rDev.Pop( );
+                m_rDev.Pop();
             }
         };
     }

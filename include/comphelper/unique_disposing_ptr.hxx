@@ -62,7 +62,7 @@ public:
         return static_cast< bool >(m_xItem);
     }
 
-    virtual ~unique_disposing_ptr()
+    virtual ~unique_disposing_ptr() COVERITY_NOEXCEPT_FALSE
     {
         reset();
     }

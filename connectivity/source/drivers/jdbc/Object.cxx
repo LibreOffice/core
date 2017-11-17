@@ -114,7 +114,7 @@ java_lang_Object::java_lang_Object( JNIEnv * pXEnv, jobject myObj )
         object = pXEnv->NewGlobalRef( myObj );
 }
 
-java_lang_Object::~java_lang_Object()
+java_lang_Object::~java_lang_Object() COVERITY_NOEXCEPT_FALSE
 {
     if( object )
     {
