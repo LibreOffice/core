@@ -25,8 +25,18 @@
             <menu:menuitem menu:id=".uno:RecentFileList"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
+            <menu:menu menu:id=".uno:TemplateMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:OpenTemplate"/>
+                    <menu:menuitem menu:id=".uno:NewDoc"/>
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SignPDF"/>
+            <menu:menu menu:id=".uno:SignaturesMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:SignPDF"/>
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Quit"/>
         </menu:menupopup>
@@ -35,7 +45,6 @@
         <menu:menupopup>
             <menu:menu menu:id=".uno:MacrosMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:MacroRecorder"/>
                     <menu:menuitem menu:id=".uno:RunMacro"/>
                     <menu:menuitem menu:id=".uno:ScriptOrganizer"/>
                     <menu:menuseparator/>
