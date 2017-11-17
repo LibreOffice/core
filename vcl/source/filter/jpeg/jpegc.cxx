@@ -124,39 +124,41 @@ private:
     jpeg_compress_struct *m_cinfo = nullptr;
 };
 
-void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
-               Size const & previewSize, GraphicFilterImportFlags nImportFlags,
-               Bitmap::ScopedWriteAccess* ppAccess )
+struct JpegStuff
 {
     jpeg_decompress_struct cinfo;
     ErrorManagerStruct jerr;
-
     JpegDecompressOwner aOwner;
     std::unique_ptr<Bitmap::ScopedWriteAccess> pScopedAccess;
     std::vector<sal_uInt8> pScanLineBuffer;
     std::vector<sal_uInt8> pCYMKBuffer;
+};
 
-    if ( setjmp( jerr.setjmp_buffer ) )
+void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
+              Size const & previewSize, GraphicFilterImportFlags nImportFlags,
+              Bitmap::ScopedWriteAccess* ppAccess)
+{
+    if (setjmp(rContext.jerr.setjmp_buffer))
     {
         return;
     }
 
-    cinfo.err = jpeg_std_error( &jerr.pub );
-    jerr.pub.error_exit = errorExit;
-    jerr.pub.output_message = outputMessage;
-    jerr.pub.emit_message = emitMessage;
+    rContext.cinfo.err = jpeg_std_error(&rContext.jerr.pub);
+    rContext.jerr.pub.error_exit = errorExit;
+    rContext.jerr.pub.output_message = outputMessage;
+    rContext.jerr.pub.emit_message = emitMessage;
 
-    jpeg_create_decompress( &cinfo );
-    aOwner.set(&cinfo);
-    jpeg_svstream_src( &cinfo, pInputStream );
-    SourceManagerStruct *source = reinterpret_cast<SourceManagerStruct*>(cinfo.src);
-    jpeg_read_header( &cinfo, TRUE );
+    jpeg_create_decompress(&rContext.cinfo);
+    rContext.aOwner.set(&rContext.cinfo);
+    jpeg_svstream_src(&rContext.cinfo, pInputStream);
+    SourceManagerStruct *source = reinterpret_cast<SourceManagerStruct*>(rContext.cinfo.src);
+    jpeg_read_header(&rContext.cinfo, TRUE);
 
-    cinfo.scale_num = 1;
-    cinfo.scale_denom = 1;
-    cinfo.output_gamma = 1.0;
-    cinfo.raw_data_out = FALSE;
-    cinfo.quantize_colors = FALSE;
+    rContext.cinfo.scale_num = 1;
+    rContext.cinfo.scale_denom = 1;
+    rContext.cinfo.output_gamma = 1.0;
+    rContext.cinfo.raw_data_out = FALSE;
+    rContext.cinfo.quantize_colors = FALSE;
 
     /* change scale for preview import */
     long nPreviewWidth = previewSize.Width();
@@ -165,7 +167,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
     {
         if( nPreviewWidth == 0 )
         {
-            nPreviewWidth = ( cinfo.image_width * nPreviewHeight ) / cinfo.image_height;
+            nPreviewWidth = (rContext.cinfo.image_width * nPreviewHeight) / rContext.cinfo.image_height;
             if( nPreviewWidth <= 0 )
             {
                 nPreviewWidth = 1;
@@ -173,44 +175,44 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
         }
         else if( nPreviewHeight == 0 )
         {
-            nPreviewHeight = ( cinfo.image_height * nPreviewWidth ) / cinfo.image_width;
+            nPreviewHeight = (rContext.cinfo.image_height * nPreviewWidth) / rContext.cinfo.image_width;
             if( nPreviewHeight <= 0 )
             {
                 nPreviewHeight = 1;
             }
         }
 
-        for( cinfo.scale_denom = 1; cinfo.scale_denom < 8; cinfo.scale_denom *= 2 )
+        for (rContext.cinfo.scale_denom = 1; rContext.cinfo.scale_denom < 8; rContext.cinfo.scale_denom *= 2)
         {
-            if( cinfo.image_width < nPreviewWidth * cinfo.scale_denom )
+            if (rContext.cinfo.image_width < nPreviewWidth * rContext.cinfo.scale_denom)
                 break;
-            if( cinfo.image_height < nPreviewHeight * cinfo.scale_denom )
+            if (rContext.cinfo.image_height < nPreviewHeight * rContext.cinfo.scale_denom)
                 break;
         }
 
-        if( cinfo.scale_denom > 1 )
+        if (rContext.cinfo.scale_denom > 1)
         {
-            cinfo.dct_method            = JDCT_FASTEST;
-            cinfo.do_fancy_upsampling   = FALSE;
-            cinfo.do_block_smoothing    = FALSE;
+            rContext.cinfo.dct_method            = JDCT_FASTEST;
+            rContext.cinfo.do_fancy_upsampling   = FALSE;
+            rContext.cinfo.do_block_smoothing    = FALSE;
         }
     }
 
-    jpeg_calc_output_dimensions(&cinfo);
+    jpeg_calc_output_dimensions(&rContext.cinfo);
 
-    long nWidth = cinfo.output_width;
-    long nHeight = cinfo.output_height;
+    long nWidth = rContext.cinfo.output_width;
+    long nHeight = rContext.cinfo.output_height;
 
-    bool bGray = (cinfo.output_components == 1);
+    bool bGray = (rContext.cinfo.output_components == 1);
 
     JPEGCreateBitmapParam aCreateBitmapParam;
 
     aCreateBitmapParam.nWidth = nWidth;
     aCreateBitmapParam.nHeight = nHeight;
 
-    aCreateBitmapParam.density_unit = cinfo.density_unit;
-    aCreateBitmapParam.X_density = cinfo.X_density;
-    aCreateBitmapParam.Y_density = cinfo.Y_density;
+    aCreateBitmapParam.density_unit = rContext.cinfo.density_unit;
+    aCreateBitmapParam.X_density = rContext.cinfo.X_density;
+    aCreateBitmapParam.Y_density = rContext.cinfo.Y_density;
     aCreateBitmapParam.bGray = bGray;
 
     const auto bOnlyCreateBitmap = static_cast<bool>(nImportFlags & GraphicFilterImportFlags::OnlyCreateBitmap);
@@ -225,9 +227,9 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
             // ppAccess must be set if this flag is used.
             assert(ppAccess);
         else
-            pScopedAccess.reset(new Bitmap::ScopedWriteAccess(pJPEGReader->GetBitmap()));
+            rContext.pScopedAccess.reset(new Bitmap::ScopedWriteAccess(pJPEGReader->GetBitmap()));
 
-        Bitmap::ScopedWriteAccess& pAccess = bUseExistingBitmap ? *ppAccess : *pScopedAccess.get();
+        Bitmap::ScopedWriteAccess& pAccess = bUseExistingBitmap ? *ppAccess : *rContext.pScopedAccess.get();
 
         if (pAccess)
         {
@@ -261,39 +263,39 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                 nPixelSize = 4;
             }
 
-            if (cinfo.jpeg_color_space == JCS_YCCK)
-                cinfo.out_color_space = JCS_CMYK;
+            if (rContext.cinfo.jpeg_color_space == JCS_YCCK)
+                rContext.cinfo.out_color_space = JCS_CMYK;
 
-            if (cinfo.out_color_space != JCS_CMYK)
-                cinfo.out_color_space = best_out_color_space;
+            if (rContext.cinfo.out_color_space != JCS_CMYK)
+                rContext.cinfo.out_color_space = best_out_color_space;
 
-            jpeg_start_decompress(&cinfo);
+            jpeg_start_decompress(&rContext.cinfo);
 
-            JSAMPLE* aRangeLimit = cinfo.sample_range_limit;
+            JSAMPLE* aRangeLimit = rContext.cinfo.sample_range_limit;
 
-            pScanLineBuffer.resize(nWidth * nPixelSize);
+            rContext.pScanLineBuffer.resize(nWidth * nPixelSize);
 
-            if (cinfo.out_color_space == JCS_CMYK)
+            if (rContext.cinfo.out_color_space == JCS_CMYK)
             {
-                pCYMKBuffer.resize(nWidth * 4);
+                rContext.pCYMKBuffer.resize(nWidth * 4);
             }
 
             for (*pLines = 0; *pLines < nHeight && !source->no_data_available; (*pLines)++)
             {
                 size_t yIndex = *pLines;
 
-                sal_uInt8* p = (cinfo.out_color_space == JCS_CMYK) ? pCYMKBuffer.data() : pScanLineBuffer.data();
-                jpeg_read_scanlines(&cinfo, reinterpret_cast<JSAMPARRAY>(&p), 1);
+                sal_uInt8* p = (rContext.cinfo.out_color_space == JCS_CMYK) ? rContext.pCYMKBuffer.data() : rContext.pScanLineBuffer.data();
+                jpeg_read_scanlines(&rContext.cinfo, reinterpret_cast<JSAMPARRAY>(&p), 1);
 
-                if (cinfo.out_color_space == JCS_CMYK)
+                if (rContext.cinfo.out_color_space == JCS_CMYK)
                 {
                     // convert CMYK to RGB
                     for (long cmyk = 0, x = 0; cmyk < nWidth * 4; cmyk += 4, ++x)
                     {
-                        int color_C = 255 - pCYMKBuffer[cmyk + 0];
-                        int color_M = 255 - pCYMKBuffer[cmyk + 1];
-                        int color_Y = 255 - pCYMKBuffer[cmyk + 2];
-                        int color_K = 255 - pCYMKBuffer[cmyk + 3];
+                        int color_C = 255 - rContext.pCYMKBuffer[cmyk + 0];
+                        int color_M = 255 - rContext.pCYMKBuffer[cmyk + 1];
+                        int color_Y = 255 - rContext.pCYMKBuffer[cmyk + 2];
+                        int color_K = 255 - rContext.pCYMKBuffer[cmyk + 3];
 
                         sal_uInt8 cRed = aRangeLimit[255L - (color_C + color_K)];
                         sal_uInt8 cGreen = aRangeLimit[255L - (color_M + color_K)];
@@ -304,28 +306,36 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                 }
                 else
                 {
-                    pAccess->CopyScanline(yIndex, pScanLineBuffer.data(), eScanlineFormat, pScanLineBuffer.size());
+                    pAccess->CopyScanline(yIndex, rContext.pScanLineBuffer.data(), eScanlineFormat, rContext.pScanLineBuffer.size());
                 }
 
                 /* PENDING ??? */
-                if (cinfo.err->msg_code == 113)
+                if (rContext.cinfo.err->msg_code == 113)
                     break;
             }
 
-            pScanLineBuffer.clear();
-            pCYMKBuffer.clear();
+            rContext.pScanLineBuffer.clear();
+            rContext.pCYMKBuffer.clear();
         }
-        pScopedAccess.reset();
+        rContext.pScopedAccess.reset();
     }
 
     if (bBitmapCreated && !bOnlyCreateBitmap)
     {
-        jpeg_finish_decompress( &cinfo );
+        jpeg_finish_decompress(&rContext.cinfo);
     }
     else
     {
-        jpeg_abort_decompress( &cinfo );
+        jpeg_abort_decompress(&rContext.cinfo);
     }
+}
+
+void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
+               Size const & previewSize, GraphicFilterImportFlags nImportFlags,
+               Bitmap::ScopedWriteAccess* ppAccess )
+{
+    JpegStuff aContext;
+    ReadJPEG(aContext, pJPEGReader, pInputStream, pLines, previewSize, nImportFlags, ppAccess);
 }
 
 bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
