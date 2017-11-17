@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_61078218",
+        "filename": "cui/uiconfig/ui/charnamepage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2017-11-17T22:54:57Z",
+      "side": 0,
+      "message": "Please use translatable\u003d\"no\" instead of removing the attribute. \nThat\u0027s an explicit indication that these are intentionally not translatable and bin/ui-translatable.sh won\u0027t flag them untranslated.",
+      "range": {
+        "startLine": 106,
+        "startChar": 38,
+        "endLine": 106,
+        "endChar": 58
+      },
+      "revId": "3bb58b6b42ca4b96dfbe2c3ac82f77a8e98b7db6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
