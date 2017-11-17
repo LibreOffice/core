@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1e2e1943",
+        "filename": "cui/uiconfig/ui/gradientpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-11-17T14:28:44Z",
+      "side": 1,
+      "message": "well yeah, this property is ignored by .ui parser\n\nWouldn\u0027t AtkObject::accessible-name do the trick?",
+      "revId": "f091f8f8952ed8af1d7a2f5f67a4ee9d209f50e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
