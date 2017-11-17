@@ -119,7 +119,7 @@ public class TextReplace {
             xTextCursor.gotoEnd(false);
             xCPS.setPropertyValue( "CharColor", Integer.valueOf( 0 ) );
 
-            xText.insertString( xTextCursor, "in the alley. Like lightening he darted off to the left and disappeared between the two warehouses almost falling over the trash can lying in the ", false  );
+            xText.insertString( xTextCursor, "in the alley. Like lightning he darted off to the left and disappeared between the two warehouses almost falling over the trash can lying in the ", false  );
 
             xText.insertString( xTextCursor, "centre ", true );
             xCPS = UnoRuntime.queryInterface(
