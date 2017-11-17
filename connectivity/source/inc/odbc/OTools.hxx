@@ -105,8 +105,7 @@ namespace connectivity
                                         SQLHANDLE _pContext,
                                         SQLSMALLINT _nHandleType,
                                         const css::uno::Reference< css::uno::XInterface >& _xInterface,
-                                        bool _bNoFound=true,
-                                        rtl_TextEncoding _nTextEncoding = RTL_TEXTENCODING_MS_1252);
+                                        bool _bNoFound=true);
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
