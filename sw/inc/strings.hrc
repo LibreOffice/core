@@ -1338,6 +1338,12 @@
 #define STR_MENU_DOWN                           NC_("STR_MENU_DOWN", "Do~wnwards")
 
 /*--------------------------------------------------------------------
+    Description: Classification strings
+ --------------------------------------------------------------------*/
+
+#define STR_CLASSIFICATION_LEVEL_CHANGED        NC_("STR_CLASSIFICATION_LEVEL_CHANGED", "Document classification has changed because a paragraph classification level is higher")
+
+/*--------------------------------------------------------------------
     Description: Paragraph Signature
  --------------------------------------------------------------------*/
 #define STR_VALID                               NC_("STR_VALID", " Valid ")
