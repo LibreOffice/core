@@ -97,7 +97,6 @@ class SharedStringPool;
 }
 
 #define MAXSTACK      (4096 / sizeof(formula::FormulaToken*))
-#define TOKEN_CACHE_SIZE 8
 
 class ScTokenStack
 {
@@ -200,7 +199,7 @@ private:
     formula::FormulaTokenIterator aCode;
     ScAddress   aPos;
     ScTokenArray& rArr;
-    const ScInterpreterContext& mrContext;
+    ScInterpreterContext& mrContext;
     ScDocument* pDok;
     sfx2::LinkManager* mpLinkManager;
     svl::SharedStringPool& mrStrPool;
@@ -230,8 +229,6 @@ private:
     bool        bMatrixFormula;         // formula cell is a matrix formula
 
     VolatileType meVolatileType;
-    size_t       mnTokenCachePos;
-    std::vector<formula::FormulaToken*> maTokenCache;
 
     /// Merge global and document specific settings.
     void MergeCalcConfig();
@@ -994,7 +991,7 @@ private:
     double GetTInv( double fAlpha, double fSize, int nType );
 
 public:
-    ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc, const ScInterpreterContext& rContext,
+    ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc, ScInterpreterContext& rContext,
                     const ScAddress&, ScTokenArray& );
     ~ScInterpreter();
 
