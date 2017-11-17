@@ -196,6 +196,19 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             ExecutePasteContents( rReq );
             break;
 
+        case SID_PASTE_UNFORMATTED:
+            {
+                // Based on ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ ) implementation.
+
+                SdrView* pView = pViewData->GetScDrawView();
+                OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+
+                //! test if outliner view is still valid
+
+                pOutView->Paste();
+            }
+            break;
+
         case SID_SELECTALL:
             {
                 sal_Int32 nCount = pOutliner->GetParagraphCount();
@@ -477,6 +490,7 @@ IMPL_LINK( ScDrawTextObjectBar, ClipboardChanged, TransferableDataHelper*, pData
     SfxBindings& rBindings = pViewData->GetBindings();
     rBindings.Invalidate( SID_PASTE );
     rBindings.Invalidate( SID_PASTE_SPECIAL );
+    rBindings.Invalidate( SID_PASTE_UNFORMATTED );
     rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
 }
 
@@ -510,6 +524,7 @@ void ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
         {
             case SID_PASTE:
             case SID_PASTE_SPECIAL:
+            case SID_PASTE_UNFORMATTED:
                 if( !bPastePossible )
                     rSet.DisableItem( nWhich );
                 break;
