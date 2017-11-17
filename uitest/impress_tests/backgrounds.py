@@ -123,11 +123,6 @@ class ImpressBackgrounds(UITestCase):
             xOkBtn = xPageSetupDlg.getChild("ok")
             xOkBtn.executeAction("CLICK", tuple())
 
-            xConfirmDlg = self.xUITest.getTopFocusWindow()
-
-            xNoBtn = xConfirmDlg.getChild("no")
-            xNoBtn.executeAction("CLICK", tuple())
-
             self.checkDefaultBackground(button)
 
             self.ui_test.execute_dialog_through_command(".uno:PageSetup")
