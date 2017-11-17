@@ -1060,6 +1060,8 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
                                        sal_uInt32& F_Index,
                                        double& fOutNumber)
 {
+    ::osl::MutexGuard aGuard( GetMutex() );
+
     short FType;
     const SvNumberformat* pFormat = ImpSubstituteEntry( GetFormatEntry(F_Index));
     if (!pFormat)
