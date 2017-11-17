@@ -295,7 +295,7 @@ uno::Sequence< frame::DispatchInformation > SAL_CALL BibFrameController_Impl::ge
     const CmdToInfoCache& rCmdCache = GetCommandToInfoCache();
 
     frame::DispatchInformation                  aDispatchInfo;
-    std::list< frame::DispatchInformation >     aDispatchInfoList;
+    std::vector< frame::DispatchInformation >   aDispatchInfoVector;
 
     if (( nCommandGroup == frame::CommandGroup::EDIT ) ||
         ( nCommandGroup == frame::CommandGroup::DOCUMENT ) ||
@@ -303,24 +303,21 @@ uno::Sequence< frame::DispatchInformation > SAL_CALL BibFrameController_Impl::ge
         ( nCommandGroup == frame::CommandGroup::VIEW ))
     {
         bool bGroupFound = false;
-        CmdToInfoCache::const_iterator pIter = rCmdCache.begin();
-        while ( pIter != rCmdCache.end() )
+        for (auto const& item : rCmdCache)
         {
-            if ( pIter->second.nGroupId == nCommandGroup )
+            if ( item.second.nGroupId == nCommandGroup )
             {
                 bGroupFound = true;
-                aDispatchInfo.Command = pIter->first;
-                aDispatchInfo.GroupId = pIter->second.nGroupId;
-                aDispatchInfoList.push_back( aDispatchInfo );
+                aDispatchInfo.Command = item.first;
+                aDispatchInfo.GroupId = item.second.nGroupId;
+                aDispatchInfoVector.push_back( aDispatchInfo );
             }
             else if ( bGroupFound )
                 break;
-
-            ++pIter;
         }
     }
 
-    return comphelper::containerToSequence( aDispatchInfoList );
+    return comphelper::containerToSequence( aDispatchInfoVector );
 }
 
 bool canInsertRecords(const Reference< beans::XPropertySet>& _rxCursorSet)
