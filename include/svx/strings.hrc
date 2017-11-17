@@ -1645,13 +1645,6 @@
 #define RID_SUBSETSTR_OSAGE                                 NC_("RID_SUBSETMAP", "Osage")
 #define RID_SUBSETSTR_TANGUT                                NC_("RID_SUBSETMAP", "Tangut")
 #define RID_SUBSETSTR_TANGUT_COMPONENTS                     NC_("RID_SUBSETMAP", "Tangut Components")
-#define RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_F    NC_("RID_SUBSETMAP", "CJK Unified Ideographs Extension F")
-#define RID_SUBSETSTR_KANA_EXTENDED_A                       NC_("RID_SUBSETMAP", "Kana Extended-A")
-#define RID_SUBSETSTR_MASARAM_GONDI                         NC_("RID_SUBSETMAP", "Masaram Gondi")
-#define RID_SUBSETSTR_NUSHU                                 NC_("RID_SUBSETMAP", "Nushu")
-#define RID_SUBSETSTR_SOYOMBO                               NC_("RID_SUBSETMAP", "Soyombo")
-#define RID_SUBSETSTR_SYRIAC_SUPPLEMENT                     NC_("RID_SUBSETMAP", "Syriac Supplement")
-#define RID_SUBSETSTR_ZANABAZAR_SQUARE                      NC_("RID_SUBSETMAP", "Zanabazar Square")
 
 // TSCP Classification
 #define RID_CLASSIFICATION_CHANGE_CATEGORY                  NC_("RID_CLASSIFICATION_CHANGE_CATEGORY", "Do you really want to change the classification category?")

@@ -310,7 +310,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 @@ -886,180 +1035,204 @@
                                                  int32_t rangeStart,
                                                  int32_t rangeEnd,
-                                                 UVector32 &foundBreaks ) const {
+                                                 UStack &foundBreaks ) const {
 -    if ((rangeEnd - rangeStart) < KHMER_MIN_WORD_SPAN) {
 -        return 0;       // Not enough characters for two words
 -    }
@@ -760,7 +760,7 @@ diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
     * @param text A UText representing the text. The iterator is left at
 -   * the end of the run of characters which the engine is capable of handling 
 +   * the end of the run of characters which the engine is capable of handling
-    * that starts from the first character in the range.
+    * that starts from the first (or last) character in the range.
     * @param startPos The start of the run within the supplied text.
     * @param endPos The end of the run within the supplied text.
 @@ -245,118 +306,120 @@
@@ -819,7 +819,7 @@ diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
 -  virtual int32_t divideUpDictionaryRange( UText *text, 
 -                                           int32_t rangeStart, 
 -                                           int32_t rangeEnd, 
--                                           UVector32 &foundBreaks ) const; 
+-                                           UStack &foundBreaks ) const; 
 - 
 -}; 
 - 
@@ -875,7 +875,7 @@ diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
 -  virtual int32_t divideUpDictionaryRange( UText *text, 
 -                                           int32_t rangeStart, 
 -                                           int32_t rangeEnd, 
--                                           UVector32 &foundBreaks ) const; 
+-                                           UStack &foundBreaks ) const; 
 - 
 -}; 
 - 
@@ -931,7 +931,7 @@ diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
 +  virtual int32_t divideUpDictionaryRange( UText *text,
 +                                           int32_t rangeStart,
 +                                           int32_t rangeEnd,
-+                                           UVector32 &foundBreaks ) const;
++                                           UStack &foundBreaks ) const;
 +
 +};
 +
@@ -989,7 +989,7 @@ diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
 +  virtual int32_t divideUpDictionaryRange( UText *text,
 +                                           int32_t rangeStart,
 +                                           int32_t rangeEnd,
-+                                           UVector32 &foundBreaks ) const;
++                                           UStack &foundBreaks ) const;
 +
 +};
 +

@@ -544,27 +544,6 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
         } else { //word boundary break
             lbr.breakIndex = pLineBI->preceding(nStartPos);
             lbr.breakType = BreakType::WORDBOUNDARY;
-
-            // Special case for Slash U+002F SOLIDUS in URI and path names.
-            // TR14 defines that as SY: Symbols Allowing Break After (A).
-            // This is unwanted in paths, see also i#17155
-            if (lbr.breakIndex > 0 && Text[lbr.breakIndex-1] == '/')
-            {
-                // Look backward and take any whitespace before as a break
-                // opportunity. This also glues something like "w/o".
-                // Avoid an overly long path and break it as was indicated.
-                // Overly long here is arbitrarily defined.
-                const sal_Int32 nOverlyLong = 66;
-                sal_Int32 nPos = lbr.breakIndex - 1;
-                while (nPos > 0 && lbr.breakIndex - nPos < nOverlyLong)
-                {
-                    if (u_isWhitespace(Text.iterateCodePoints( &nPos, -1)))
-                    {
-                        lbr.breakIndex = nPos + 1;
-                        break;
-                    }
-                }
-            }
         }
 
 #define WJ 0x2060   // Word Joiner

@@ -1,0 +1,14 @@
+# xlocale.h is gone with glibc 2.26 and should never had been included.
+# https://ssl.icu-project.org/trac/ticket/13329
+diff -ur icu.org/source/i18n/digitlst.cpp icu/source/i18n/digitlst.cpp
+--- icu.org/source/i18n/digitlst.cpp	2017-01-20 01:20:31.000000000 +0100
++++ icu/source/i18n/digitlst.cpp	2017-09-13 13:25:59.980160603 +0200
+@@ -63,6 +63,8 @@
+ #if U_USE_STRTOD_L
+ # if U_PLATFORM_USES_ONLY_WIN32_API || U_PLATFORM == U_PF_CYGWIN
+ #   include <locale.h>
++# elif U_PLATFORM_IS_LINUX_BASED
++#   include <ctype.h>   // should be for all POSIX.2008 compliant platforms, but..
+ # else
+ #   include <xlocale.h>
+ # endif
