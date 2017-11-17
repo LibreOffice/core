@@ -206,13 +206,26 @@ public:
                             if ( !pTargetTok )
                                 aCode2.AddString(rPool.intern(OUString(pStr)));
                             else
-                                pTargetTok->SetString(rPool.intern(OUString(pStr)));
+                            {
+                                if ( pTargetTok->GetType() == formula::svString )
+                                    pTargetTok->SetString(rPool.intern(OUString(pStr)));
+                                else
+                                {
+                                    formula::FormulaStringToken* pStrTok = new formula::FormulaStringToken(rPool.intern(OUString(pStr)));
+                                    aCode2.ReplaceToken(nTokIdx, pStrTok, formula::FormulaTokenArray::CODE_ONLY);
+                                }
+                            }
                         }
                         else if (rtl::math::isNan(fVal))
                         {
                             // Value of NaN represents an empty cell.
                             if ( !pTargetTok )
                                 aCode2.AddToken(ScEmptyCellToken(false, false));
+                            else if ( pTargetTok->GetType() != formula::svEmptyCell )
+                            {
+                                ScEmptyCellToken* pEmptyTok = new ScEmptyCellToken(false, false);
+                                aCode2.ReplaceToken(nTokIdx, pEmptyTok, formula::FormulaTokenArray::CODE_ONLY);
+                            }
                         }
                         else
                         {
@@ -220,7 +233,15 @@ public:
                             if ( !pTargetTok )
                                 aCode2.AddDouble(fVal);
                             else
-                                pTargetTok->GetDoubleAsReference() = fVal;
+                            {
+                                if ( pTargetTok->GetType() == formula::svDouble )
+                                    pTargetTok->GetDoubleAsReference() = fVal;
+                                else
+                                {
+                                    formula::FormulaDoubleToken* pDoubleTok = new formula::FormulaDoubleToken( fVal );
+                                    aCode2.ReplaceToken(nTokIdx, pDoubleTok, formula::FormulaTokenArray::CODE_ONLY);
+                                }
+                            }
                         }
                     }
                     break;
