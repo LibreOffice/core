@@ -4210,7 +4210,7 @@ namespace {
                                     const SfxPoolItem& pItem );
             HandleSetAttrAtTextNode( SwTextNode& rTextNode,
                                     const SfxItemSet& rItemSet );
-            ~HandleSetAttrAtTextNode();
+            ~HandleSetAttrAtTextNode() COVERITY_NOEXCEPT_FALSE;
 
         private:
             SwTextNode& mrTextNode;
@@ -4440,7 +4440,7 @@ namespace {
         }
     }
 
-    HandleSetAttrAtTextNode::~HandleSetAttrAtTextNode()
+    HandleSetAttrAtTextNode::~HandleSetAttrAtTextNode() COVERITY_NOEXCEPT_FALSE
     {
         if ( mbAddTextNodeToList )
         {
@@ -4549,7 +4549,7 @@ namespace {
                                       const std::vector<sal_uInt16>& rWhichArr );
             explicit HandleResetAttrAtTextNode( SwTextNode& rTextNode );
 
-            ~HandleResetAttrAtTextNode();
+            ~HandleResetAttrAtTextNode() COVERITY_NOEXCEPT_FALSE;
 
         private:
             SwTextNode& mrTextNode;
@@ -4737,7 +4737,7 @@ namespace {
         mrTextNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
     }
 
-    HandleResetAttrAtTextNode::~HandleResetAttrAtTextNode()
+    HandleResetAttrAtTextNode::~HandleResetAttrAtTextNode() COVERITY_NOEXCEPT_FALSE
     {
         if ( mbListStyleOrIdReset && !mrTextNode.IsInList() )
         {

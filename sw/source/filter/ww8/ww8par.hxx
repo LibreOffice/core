@@ -152,7 +152,7 @@ public:
     SwNumRule* GetNumRuleForActivation(sal_uInt16 nLFOPosition, const sal_uInt8 nLevel,
         std::vector<sal_uInt8> &rParaSprms, SwTextNode *pNode=nullptr);
     SwNumRule* CreateNextRule(bool bSimple);
-    ~WW8ListManager();
+    ~WW8ListManager() COVERITY_NOEXCEPT_FALSE;
     SwNumRule* GetNumRule(size_t i);
     size_t GetWW8LSTInfoNum() const{return maLSTInfos.size();}
 private:

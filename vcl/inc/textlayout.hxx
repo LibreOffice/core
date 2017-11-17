@@ -37,7 +37,7 @@ namespace vcl
         virtual bool        DecomposeTextRectAction() const = 0;
 
     protected:
-        ~ITextLayout() {}
+        ~ITextLayout() COVERITY_NOEXCEPT_FALSE {}
     };
 
     /** is an implementation of the ITextLayout interface which simply delegates its calls to the respective
