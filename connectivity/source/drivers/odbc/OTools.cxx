@@ -306,8 +306,7 @@ void OTools::ThrowException(const OConnection* _pConnection,
                             const SQLHANDLE _pContext,
                             const SQLSMALLINT _nHandleType,
                             const Reference< XInterface >& _xInterface,
-                            const bool _bNoFound,
-                            const rtl_TextEncoding _nTextEncoding)
+                            const bool _bNoFound)
 {
     switch(_rRetCode)
     {
@@ -350,6 +349,7 @@ void OTools::ThrowException(const OConnection* _pConnection,
     OSL_ENSURE(n != SQL_INVALID_HANDLE,"SdbODBC3_SetStatus: SQLError returned SQL_INVALID_HANDLE");
     OSL_ENSURE(n == SQL_SUCCESS || n == SQL_SUCCESS_WITH_INFO || n == SQL_NO_DATA_FOUND || n == SQL_ERROR,"SdbODBC3_SetStatus: SQLError failed");
 
+    rtl_TextEncoding _nTextEncoding = osl_getThreadTextEncoding();
     // For the Return Code of SQLError see ODBC 2.0 Programmer's Reference Page 287ff
     throw SQLException( OUString(reinterpret_cast<char *>(szErrorMessage), pcbErrorMsg, _nTextEncoding),
                                     _xInterface,
