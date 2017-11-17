@@ -131,7 +131,7 @@ public:
         } sharedstring;
         ScMatrix*    pMat;
         FormulaError nError;
-        sal_Unicode  cStr[ MAXSTRLEN+1 ];   // string (up to MAXSTRLEN characters + 0)
+        sal_Unicode  cStr[ 1+MAXSTRLEN+1 ];   // string (byteparam + up to MAXSTRLEN characters + 0)
         short        nJump[ FORMULA_MAXJUMPCOUNT + 1 ];     // If/Chose token
     };
 
