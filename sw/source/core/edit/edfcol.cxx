@@ -921,6 +921,12 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
     if (!pDocShell || !SfxObjectShell::Current())
         return aResult;
 
+    const OUString sBlank;
+
+    uno::Reference<document::XDocumentProperties> xDocumentProperties = SfxObjectShell::Current()->getDocProperties();
+    uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
+    sfx::ClassificationKeyCreator aCreator(SfxClassificationHelper::getPolicyType());
+
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
@@ -933,7 +939,13 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
     bool bHeaderIsOn = false;
     xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;
     if (!bHeaderIsOn)
+    {
+        const OUString aValue = svx::classification::getProperty(xPropertyContainer, aCreator.makeCategoryNameKey());
+        if (!aValue.isEmpty())
+            aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
+
         return aResult;
+    }
 
     uno::Reference<text::XText> xHeaderText;
     xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
@@ -941,12 +953,8 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
     uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(xHeaderText, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xParagraphEnumerationAccess->createEnumeration();
 
-    uno::Reference<document::XDocumentProperties> xDocumentProperties = SfxObjectShell::Current()->getDocProperties();
-    uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
-
-    sfx::ClassificationKeyCreator aCreator(SfxClassificationHelper::getPolicyType());
-
-    const OUString sBlank("");
+    // set to true if category was found in the header
+    bool bFoundClassificationCategory = false;
 
     while (xParagraphs->hasMoreElements())
     {
@@ -987,11 +995,19 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
                 if (!aValue.isEmpty())
                     aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, sBlank });
             }
-            else if (aCreator.isCategoryNameKey(aName) || aCreator.isCategoryIdentifierKey(aName))
+            else if (aCreator.isCategoryNameKey(aName))
             {
                 const OUString aValue = svx::classification::getProperty(xPropertyContainer, aName);
                 if (!aValue.isEmpty())
                     aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
+                bFoundClassificationCategory = true;
+            }
+            else if (aCreator.isCategoryIdentifierKey(aName))
+            {
+                const OUString aValue = svx::classification::getProperty(xPropertyContainer, aName);
+                if (!aValue.isEmpty())
+                    aResult.push_back({ svx::ClassificationType::CATEGORY, sBlank, sBlank, aValue });
+                bFoundClassificationCategory = true;
             }
             else if (aCreator.isMarkingKey(aName))
             {
@@ -1006,6 +1022,13 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
                     aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, sBlank, sBlank });
             }
         }
+    }
+
+    if (!bFoundClassificationCategory)
+    {
+        const OUString aValue = svx::classification::getProperty(xPropertyContainer, aCreator.makeCategoryNameKey());
+        if (!aValue.isEmpty())
+            aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, sBlank, sBlank });
     }
 
     return aResult;
