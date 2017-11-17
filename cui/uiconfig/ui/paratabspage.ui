@@ -331,7 +331,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonBTN_FILLCHAR_POINTS">
-                    <property name="label" translatable="yes" context="paratabspage|radiobuttonBTN_FILLCHAR_POINTS">_........</property>
+                    <property name="label" context="paratabspage|radiobuttonBTN_FILLCHAR_POINTS">_........</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -348,7 +348,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonBTN_FILLCHAR_DASHLINE">
-                    <property name="label" translatable="yes" context="paratabspage|radiobuttonBTN_FILLCHAR_DASHLINE">_--------</property>
+                    <property name="label" context="paratabspage|radiobuttonBTN_FILLCHAR_DASHLINE">_--------</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -365,7 +365,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonBTN_FILLCHAR_UNDERSCORE">
-                    <property name="label" translatable="yes" context="paratabspage|radiobuttonBTN_FILLCHAR_UNDERSCORE">______</property>
+                    <property name="label" context="paratabspage|radiobuttonBTN_FILLCHAR_UNDERSCORE">______</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
