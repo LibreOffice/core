@@ -285,7 +285,7 @@ namespace emfplushelper
         maMapTransform = maWorldTransform;
         maMapTransform *= basegfx::utils::createScaleB2DHomMatrix(100.0 * mnMmX / mnPixX, 100.0 * mnMmY / mnPixY);
         maMapTransform *= basegfx::utils::createTranslateB2DHomMatrix(double(-mnFrameLeft), double(-mnFrameTop));
-        maMapTransform *= basegfx::utils::createScaleB2DHomMatrix(maBaseTransform.get(0, 0), maBaseTransform.get(1, 1));
+        maMapTransform *= maBaseTransform;
     }
 
     ::basegfx::B2DPoint EmfPlusHelperData::Map(double ix, double iy) const
@@ -689,6 +689,7 @@ namespace emfplushelper
         rMS.ReadInt32(mnPixX).ReadInt32(mnPixY).ReadInt32(mnMmX).ReadInt32(mnMmY);
         SAL_INFO("drawinglayer", "EMF+ ref device pixel size: " << mnPixX << "x" << mnPixY << " mm size: " << mnMmX << "x" << mnMmY);
         readXForm(rMS, maBaseTransform);
+        SAL_INFO("drawinglayer", "EMF+ base transform: " << maBaseTransform);
         mappingChanged();
     }
 
