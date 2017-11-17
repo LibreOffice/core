@@ -75,6 +75,7 @@ void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
 
         case SID_PASTE:
         case SID_PASTE_SPECIAL:
+        case SID_PASTE_UNFORMATTED:
         case SID_CLIPBOARD_FORMAT_ITEMS:
         case SID_HYPERLINK_SETLINK:
             {
