@@ -72,7 +72,7 @@ namespace cppu_threadpool {
             rtl::Reference<ORequestThread> const & theThread);
     };
 
-    typedef std::list < struct ::cppu_threadpool::WaitingThread * > WaitingThreadList;
+    typedef std::deque< struct ::cppu_threadpool::WaitingThread * > WaitingThreadDeque;
 
     class DisposedCallerAdmin;
     typedef std::shared_ptr<DisposedCallerAdmin> DisposedCallerAdminHolder;
@@ -90,7 +90,7 @@ namespace cppu_threadpool {
 
     private:
         ::osl::Mutex m_mutex;
-        std::vector< sal_Int64 > m_lst;
+        std::vector< sal_Int64 > m_vector;
     };
 
     class ThreadAdmin
@@ -107,7 +107,7 @@ namespace cppu_threadpool {
         ::osl::Mutex m_mutex;
 
     private:
-        std::list< rtl::Reference< ORequestThread > > m_lst;
+        std::deque< rtl::Reference< ORequestThread > > m_deque;
         bool m_disposed;
     };
 
@@ -150,7 +150,7 @@ namespace cppu_threadpool {
         ::osl::Mutex m_mutex;
 
         ::osl::Mutex m_mutexWaitingThreadList;
-        WaitingThreadList m_lstThreads;
+        WaitingThreadDeque m_dequeThreads;
 
         DisposedCallerAdminHolder m_DisposedCallerAdmin;
         ThreadAdmin m_aThreadAdmin;

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CPPU_SOURCE_THREADPOOL_JOBQUEUE_HXX
 #define INCLUDED_CPPU_SOURCE_THREADPOOL_JOBQUEUE_HXX
 
-#include <list>
 #include <deque>
 #include <memory>
 #include <sal/types.h>
@@ -37,8 +36,6 @@ namespace cppu_threadpool
         void *pThreadSpecificData;
         RequestFun * doRequest;
     };
-
-    typedef std::list < struct Job > JobList;
 
     class DisposedCallerAdmin;
     typedef std::shared_ptr<DisposedCallerAdmin> DisposedCallerAdminHolder;
@@ -62,7 +59,7 @@ namespace cppu_threadpool
 
     private:
         mutable ::osl::Mutex m_mutex;
-        JobList      m_lstJob;
+        std::deque < struct Job > m_lstJob;
         std::deque<sal_Int64>  m_lstCallstack;
         sal_Int32 m_nToDo;
         bool m_bSuspended;
