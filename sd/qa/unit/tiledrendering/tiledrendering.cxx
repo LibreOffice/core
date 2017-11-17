@@ -1856,8 +1856,8 @@ void SdTiledRenderingTest::testLanguageStatus()
         std::unique_ptr<SfxPoolItem> pItem2;
         pView1->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, pItem1);
         pView2->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, pItem2);
-        CPPUNIT_ASSERT(dynamic_cast< const SfxStringListItem* >(pItem1.get()));
-        CPPUNIT_ASSERT(dynamic_cast< const SfxStringListItem* >(pItem2.get()));
+        CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(pItem1.get()));
+        CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(pItem2.get()));
     }
 
     comphelper::LibreOfficeKit::setActive(false);
