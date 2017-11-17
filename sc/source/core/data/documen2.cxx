@@ -221,7 +221,8 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mnNamedRangesLockCount(0),
         mbUseEmbedFonts(false),
         mbTrackFormulasPending(false),
-        mbFinalTrackFormulas(false)
+        mbFinalTrackFormulas(false),
+        mnMutationGuardFlags(0)
 {
     SetStorageGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT);
 
@@ -485,7 +486,7 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
     if ( pSourceValid )
         pValidationList = new ScValidationDataList(this, *pSourceValid);
 
-                        // store Links in Stream
+    // store Links in Stream
     delete pClipData;
     if (pSourceDoc->GetDocLinkManager().hasDdeLinks())
     {
