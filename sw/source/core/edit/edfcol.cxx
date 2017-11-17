@@ -57,6 +57,7 @@
 #include <svx/ClassificationCommon.hxx>
 #include <svl/cryptosign.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/msgbox.hxx>
 
 #include <hintids.hxx>
 #include <doc.hxx>
@@ -2103,6 +2104,12 @@ void SwEditShell::ClassifyDocPerHighestParagraphClass()
     if (!aClassificationCategory.isEmpty())
     {
         sHighestClass = aHelper.GetHigherClass(sHighestClass, aClassificationCategory);
+    }
+
+    if (aClassificationCategory != sHighestClass)
+    {
+        ScopedVclPtrInstance<QueryBox> aQueryBox(nullptr, MessBoxStyle::Ok, SwResId(STR_CLASSIFICATION_LEVEL_CHANGED));
+        aQueryBox->Execute();
     }
 
     const SfxClassificationPolicyType eHighestClassType = SfxClassificationHelper::stringToPolicyType(sHighestClass);
