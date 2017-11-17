@@ -15,6 +15,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/layout.hxx>
@@ -40,7 +41,7 @@ private:
     VclPtr<PushButton> m_pOkButton;
     VclPtr<ClassificationEditView> m_pEditWindow;
     VclPtr<PushButton> m_pSignButton;
-    VclPtr<PushButton> m_pBoldButton;
+    VclPtr<ToolBox> m_pToolBox;
     VclPtr<ListBox> m_pClassificationListBox;
     VclPtr<ListBox> m_pRecentlyUsedListBox;
     VclPtr<ListBox> m_pInternationalClassificationListBox;
@@ -61,6 +62,7 @@ private:
     sal_Int32 m_nCurrentSelectedCategory;
 
     DECL_LINK(ButtonClicked, Button*, void);
+    DECL_LINK(SelectToolboxHdl, ToolBox*, void);
     DECL_LINK(SelectClassificationHdl, ListBox&, void);
     DECL_LINK(SelectMarkingHdl, ListBox&, void);
     DECL_LINK(SelectIPPartNumbersHdl, ListBox&, void);
