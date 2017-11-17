@@ -37,6 +37,7 @@
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/pathoptions.hxx>
+#include <memory>
 
 namespace treeview {
 
@@ -54,23 +55,17 @@ namespace treeview {
         {
         }
 
-        ~TVDom()
-        {
-            for(TVDom* p : children)
-                delete p;
-        }
-
         TVDom* newChild()
         {
-            children.push_back( new TVDom( this ) );
-            return children.back();
+            children.emplace_back( new TVDom( this ) );
+            return children.back().get();
         }
 
         TVDom* newChild(TVDom* p)
         {
-            children.push_back( p );
+            children.emplace_back( p );
             p->parent = this;
-            return children.back();
+            return children.back().get();
         }
 
         TVDom* getParent() const
@@ -158,7 +153,7 @@ namespace treeview {
         OUString  targetURL;
 
         TVDom *parent;
-        std::vector< TVDom* > children;
+        std::vector< std::unique_ptr<TVDom> > children;
     };
 
 }
@@ -382,7 +377,7 @@ TVChildTarget::TVChildTarget( const ConfigData& configData,TVDom* tvDom )
 {
     Elements.resize( tvDom->children.size() );
     for( size_t i = 0; i < Elements.size(); ++i )
-        Elements[i] = new TVRead( configData,tvDom->children[i] );
+        Elements[i] = new TVRead( configData,tvDom->children[i].get() );
 }
 
 TVChildTarget::TVChildTarget( const Reference< XComponentContext >& xContext )
@@ -428,7 +423,7 @@ TVChildTarget::TVChildTarget( const Reference< XComponentContext >& xContext )
 
     Elements.resize( tvDom.children.size() );
     for( size_t i = 0; i < Elements.size(); ++i )
-        Elements[i] = new TVRead( configData,tvDom.children[i] );
+        Elements[i] = new TVRead( configData,tvDom.children[i].get() );
 }
 
 TVChildTarget::~TVChildTarget()
@@ -450,11 +445,11 @@ void TVChildTarget::Check(TVDom* tvDom)
             if (((tvDom->children[i])->application == (tvDom->children[tvDom->children.size()-1])->application) &&
                 ((tvDom->children[i])->id == (tvDom->children[tvDom->children.size()-1])->id))
             {
-                TVDom* p = tvDom->children[tvDom->children.size()-1];
+                TVDom* p = tvDom->children.back().get();
 
-                for(TVDom* k : p->children)
-                    if (!SearchAndInsert(k, tvDom->children[i]))
-                        tvDom->children[i]->newChild(k);
+                for(auto & k : p->children)
+                    if (!SearchAndInsert(k.get(), tvDom->children[i].get()))
+                        tvDom->children[i]->newChild(k.get());
 
                 tvDom->children.pop_back();
                 h = true;
@@ -470,7 +465,7 @@ bool TVChildTarget::SearchAndInsert(TVDom* p, TVDom* tvDom)
     bool h = false;
     sal_Int32 max = 0;
 
-    std::vector< TVDom* >::iterator max_It, i;
+    std::vector< std::unique_ptr<TVDom> >::iterator max_It, i;
     max_It = tvDom->children.begin();
 
     sal_Int32 c_int;
@@ -486,7 +481,7 @@ bool TVChildTarget::SearchAndInsert(TVDom* p, TVDom* tvDom)
 
             if (p_int==c_int)
             {
-                (*(tvDom->children.insert(i+1, p)))->parent = tvDom;
+                (*(tvDom->children.insert(i+1, std::unique_ptr<TVDom>(p))))->parent = tvDom;
                 return true;
             }
             else if(c_int>max && c_int < p_int)
@@ -495,13 +490,14 @@ bool TVChildTarget::SearchAndInsert(TVDom* p, TVDom* tvDom)
                 max_It = i+1;
             }
         }
-    if (h) (*(tvDom->children.insert(max_It, p)))->parent = tvDom;
+    if (h)
+        (*(tvDom->children.insert(max_It, std::unique_ptr<TVDom>(p))))->parent = tvDom;
     else
     {
         i = tvDom->children.begin();
         while ((i!=tvDom->children.end()) && (!h))
         {
-            h = SearchAndInsert(p, *i);
+            h = SearchAndInsert(p, i->get());
             ++i;
         }
     }
