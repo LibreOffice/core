@@ -60,25 +60,25 @@ namespace cppu_threadpool
 
     DisposedCallerAdmin::~DisposedCallerAdmin()
     {
-        SAL_WARN_IF( !m_lst.empty(), "cppu.threadpool", "DisposedCallerList :  " << m_lst.size() << " left");
+        SAL_WARN_IF( !m_vector.empty(), "cppu.threadpool", "DisposedCallerList :  " << m_vector.size() << " left");
     }
 
     void DisposedCallerAdmin::dispose( sal_Int64 nDisposeId )
     {
         MutexGuard guard( m_mutex );
-        m_lst.push_back( nDisposeId );
+        m_vector.push_back( nDisposeId );
     }
 
     void DisposedCallerAdmin::destroy( sal_Int64 nDisposeId )
     {
         MutexGuard guard( m_mutex );
-        for( auto it = m_lst.begin() ;
-             it != m_lst.end() ;
+        for( auto it = m_vector.begin() ;
+             it != m_vector.end() ;
              ++ it )
         {
             if( (*it) == nDisposeId )
             {
-                m_lst.erase( it );
+                m_vector.erase( it );
                 break;
             }
         }
@@ -87,11 +87,9 @@ namespace cppu_threadpool
     bool DisposedCallerAdmin::isDisposed( sal_Int64 nDisposeId )
     {
         MutexGuard guard( m_mutex );
-        for( auto it = m_lst.begin() ;
-             it != m_lst.end() ;
-             ++ it )
+        for (auto const& item : m_vector)
         {
-            if( (*it) == nDisposeId )
+            if( item == nDisposeId )
             {
                 return true;
             }
@@ -115,17 +113,15 @@ namespace cppu_threadpool
         m_DisposedCallerAdmin->dispose( nDisposeId );
 
         MutexGuard guard( m_mutex );
-        for( ThreadIdHashMap::iterator ii = m_mapQueue.begin() ;
-             ii != m_mapQueue.end();
-             ++ii)
+        for (auto const& item :  m_mapQueue)
         {
-            if( (*ii).second.first )
+            if( item.second.first )
             {
-                (*ii).second.first->dispose( nDisposeId );
+                item.second.first->dispose( nDisposeId );
             }
-            if( (*ii).second.second )
+            if( item.second.second )
             {
-                (*ii).second.second->dispose( nDisposeId );
+                item.second.second->dispose( nDisposeId );
             }
         }
     }
@@ -145,7 +141,7 @@ namespace cppu_threadpool
         WaitingThread waitingThread(pThread);
         {
             MutexGuard guard( m_mutexWaitingThreadList );
-            m_lstThreads.push_front( &waitingThread );
+            m_dequeThreads.push_front( &waitingThread );
         }
 
         // let the thread wait 2 seconds
@@ -156,10 +152,10 @@ namespace cppu_threadpool
             if( waitingThread.thread.is() )
             {
                 // thread wasn't reused, remove it from the list
-                WaitingThreadList::iterator ii = find(
-                    m_lstThreads.begin(), m_lstThreads.end(), &waitingThread );
-                OSL_ASSERT( ii != m_lstThreads.end() );
-                m_lstThreads.erase( ii );
+                WaitingThreadDeque::iterator ii = find(
+                    m_dequeThreads.begin(), m_dequeThreads.end(), &waitingThread );
+                OSL_ASSERT( ii != m_dequeThreads.end() );
+                m_dequeThreads.erase( ii );
             }
         }
     }
@@ -168,12 +164,10 @@ namespace cppu_threadpool
     {
         {
             MutexGuard guard( m_mutexWaitingThreadList );
-            for( WaitingThreadList::iterator ii = m_lstThreads.begin() ;
-                 ii != m_lstThreads.end() ;
-                 ++ ii )
+            for (auto const& thread : m_dequeThreads)
             {
                 // wake the threads up
-                (*ii)->condition.set();
+                thread->condition.set();
             }
         }
         m_aThreadAdmin.join();
@@ -186,15 +180,15 @@ namespace cppu_threadpool
         {
             // Can a thread be reused ?
             MutexGuard guard( m_mutexWaitingThreadList );
-            if( ! m_lstThreads.empty() )
+            if( ! m_dequeThreads.empty() )
             {
                 // inform the thread and let it go
-                struct WaitingThread *pWaitingThread = m_lstThreads.back();
+                struct WaitingThread *pWaitingThread = m_dequeThreads.back();
                 pWaitingThread->thread->setTask( pQueue , aThreadId , bAsynchron );
                 pWaitingThread->thread = nullptr;
 
                 // remove from list
-                m_lstThreads.pop_back();
+                m_dequeThreads.pop_back();
 
                 // let the thread go
                 pWaitingThread->condition.set();
