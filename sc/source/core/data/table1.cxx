@@ -2338,7 +2338,7 @@ void ScTable::SetFormulaResults(
     aCol[nCol].SetFormulaResults(nRow, pResults, nLen);
 }
 
-void ScTable::CalculateInColumnInThread( const ScInterpreterContext& rContext, SCCOL nCol, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
+void ScTable::CalculateInColumnInThread( ScInterpreterContext& rContext, SCCOL nCol, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
 {
     if (!ValidCol(nCol))
         return;
