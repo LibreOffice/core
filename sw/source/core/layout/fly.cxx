@@ -2447,8 +2447,6 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
 
     if(bIsCandidate)
     {
-        const SwFlyFreeFrame* pSwFlyFreeFrame(static_cast< const SwFlyFreeFrame* >(this));
-
         if(GetFormat()->GetSurround().IsContour())
         {
             SwNoTextNode *pNd = const_cast<SwNoTextNode*>(static_cast<const SwNoTextNode*>(static_cast<const SwContentFrame*>(Lower())->GetNode()));
@@ -2543,6 +2541,8 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
         }
         else
         {
+            const SwFlyFreeFrame* pSwFlyFreeFrame(dynamic_cast< const SwFlyFreeFrame* >(this));
+
             if(nullptr != pSwFlyFreeFrame &&
                 pSwFlyFreeFrame->supportsAutoContour() &&
                 // isTransformableSwFrame already used in supportsAutoContour(), but
@@ -2558,27 +2558,29 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
             }
         }
 
-        if(bRet &&
-            0 != rContour.Count() &&
-            nullptr != pSwFlyFreeFrame &&
-            pSwFlyFreeFrame->isTransformableSwFrame())
+        if(bRet && 0 != rContour.Count())
         {
-            // Need to adapt contour to transformation
-            basegfx::B2DVector aScale, aTranslate;
-            double fRotate, fShearX;
-            getFrameAreaTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
+            const SwFlyFreeFrame* pSwFlyFreeFrame(dynamic_cast< const SwFlyFreeFrame* >(this));
 
-            if(!basegfx::fTools::equalZero(fRotate))
+            if(nullptr != pSwFlyFreeFrame && pSwFlyFreeFrame->isTransformableSwFrame())
             {
-                basegfx::B2DPolyPolygon aSource(rContour.getB2DPolyPolygon());
-                const basegfx::B2DPoint aCenter(getFrameAreaTransformation() * basegfx::B2DPoint(0.5, 0.5));
-                const basegfx::B2DHomMatrix aRotateAroundCenter(
-                    basegfx::utils::createRotateAroundPoint(
-                        aCenter.getX(),
-                        aCenter.getY(),
-                        fRotate));
-                aSource.transform(aRotateAroundCenter);
-                rContour = tools::PolyPolygon(aSource);
+                // Need to adapt contour to transformation
+                basegfx::B2DVector aScale, aTranslate;
+                double fRotate, fShearX;
+                getFrameAreaTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
+
+                if(!basegfx::fTools::equalZero(fRotate))
+                {
+                    basegfx::B2DPolyPolygon aSource(rContour.getB2DPolyPolygon());
+                    const basegfx::B2DPoint aCenter(getFrameAreaTransformation() * basegfx::B2DPoint(0.5, 0.5));
+                    const basegfx::B2DHomMatrix aRotateAroundCenter(
+                        basegfx::utils::createRotateAroundPoint(
+                            aCenter.getX(),
+                            aCenter.getY(),
+                            fRotate));
+                    aSource.transform(aRotateAroundCenter);
+                    rContour = tools::PolyPolygon(aSource);
+                }
             }
         }
     }
