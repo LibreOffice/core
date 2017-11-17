@@ -425,7 +425,7 @@
                                       <object class="GtkLabel" id="texttextdelimiter">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes" context="textimportcsv|texttextdelimiter">Te_xt delimiter:</property>
+                                        <property name="label" translatable="yes" context="textimportcsv|texttextdelimiter">Strin_g delimiter:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">textdelimiter</property>
                                         <property name="xalign">0</property>
@@ -510,7 +510,7 @@
                         <property name="homogeneous">True</property>
                         <child>
                           <object class="GtkCheckButton" id="quotedfieldastext">
-                            <property name="label" translatable="yes" context="textimportcsv|quotedfieldastext">_Quoted field as text</property>
+                            <property name="label" translatable="yes" context="textimportcsv|quotedfieldastext">F_ormat quoted field as text</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
