@@ -313,21 +313,23 @@ void Bridge::terminate(bool final) {
             osl::MutexGuard g(mutex_);
             s.swap(stubs_);
         }
-        for (Stubs::iterator i(s.begin()); i != s.end(); ++i) {
-            for (Stub::iterator j(i->second.begin()); j != i->second.end(); ++j)
+        for (auto & stub : s)
+        {
+            for (auto & item : stub.second)
             {
                 SAL_INFO(
                     "binaryurp",
-                    "stub '" << i->first << "', '" << toString(j->first)
+                    "stub '" << stub.first << "', '" << toString(item.first)
                         << "' still mapped at Bridge::terminate");
                 binaryUno_.get()->pExtEnv->revokeInterface(
-                    binaryUno_.get()->pExtEnv, j->second.object.get());
+                    binaryUno_.get()->pExtEnv, item.second.object.get());
             }
         }
         factory_->removeBridge(this);
-        for (Listeners::iterator i(ls.begin()); i != ls.end(); ++i) {
+        for (auto const& listener : ls)
+        {
             try {
-                (*i)->disposing(
+                listener->disposing(
                     css::lang::EventObject(
                         static_cast< cppu::OWeakObject * >(this)));
             } catch (const css::uno::RuntimeException & e) {
@@ -464,11 +466,12 @@ css::uno::UnoInterfaceReference Bridge::findStub(
         if (j != i->second.end()) {
             return j->second.object;
         }
-        for (j = i->second.begin(); j != i->second.end(); ++j) {
+        for (auto const& item : i->second)
+        {
             if (typelib_typedescription_isAssignableFrom(
-                    type.get(), j->first.get()))
+                    type.get(), item.first.get()))
             {
-                return j->second.object;
+                return item.second.object;
             }
         }
     }
@@ -924,11 +927,7 @@ void Bridge::removeEventListener(
     css::uno::Reference< css::lang::XEventListener > const & aListener)
 {
     osl::MutexGuard g(mutex_);
-    Listeners::iterator i(
-        std::find(listeners_.begin(), listeners_.end(), aListener));
-    if (i != listeners_.end()) {
-        listeners_.erase(i);
-    }
+    listeners_.erase(std::remove(listeners_.begin(), listeners_.end(), aListener), listeners_.end());
 }
 
 void Bridge::sendCommitChangeRequest() {
