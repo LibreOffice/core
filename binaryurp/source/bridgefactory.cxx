@@ -64,17 +64,15 @@ void BridgeFactory::removeBridge(
     assert(bridge.is());
     OUString n(bridge->getName());
     osl::MutexGuard g(m_aMutex);
-    if (n.isEmpty()) {
-        BridgeList::iterator i(
-            std::find(unnamed_.begin(), unnamed_.end(), bridge));
-        if (i != unnamed_.end()) {
-            unnamed_.erase(i);
-        }
-    } else {
+    if (n.isEmpty())
+    {
+        unnamed_.erase(std::remove(unnamed_.begin(), unnamed_.end(), bridge), unnamed_.end());
+    }
+    else
+    {
         BridgeMap::iterator i(named_.find(n));
-        if (i != named_.end() && i->second == bridge) {
+        if (i != named_.end() && i->second == bridge)
             named_.erase(i);
-        }
     }
 }
 
@@ -161,35 +159,37 @@ BridgeFactory::getExistingBridges() {
     n = static_cast< sal_Int32 >(n + named_.size());
     css::uno::Sequence< css::uno::Reference< css::bridge::XBridge > > s(n);
     sal_Int32 i = 0;
-    for (BridgeList::iterator j(unnamed_.begin()); j != unnamed_.end(); ++j) {
-        s[i++] = *j;
-    }
-    for (BridgeMap::iterator j(named_.begin()); j != named_.end(); ++j) {
-        s[i++] = j->second;
-    }
+    for (auto const& item : unnamed_)
+        s[i++] = item;
+
+    for (auto const& item : named_)
+        s[i++] = item.second;
+
     return s;
 }
 
 void BridgeFactory::disposing() {
-    BridgeList l1;
+    BridgeVector l1;
     BridgeMap l2;
     {
         osl::MutexGuard g(m_aMutex);
         l1.swap(unnamed_);
         l2.swap(named_);
     }
-    for (BridgeList::iterator i(l1.begin()); i != l1.end(); ++i) {
+    for (auto const& item : l1)
+    {
         try {
             css::uno::Reference<css::lang::XComponent>(
-                *i, css::uno::UNO_QUERY_THROW)->dispose();
+                item, css::uno::UNO_QUERY_THROW)->dispose();
         } catch (css::uno::Exception & e) {
             SAL_WARN("binaryurp", "ignoring " << e);
         }
     }
-    for (BridgeMap::iterator i(l2.begin()); i != l2.end(); ++i) {
+    for (auto const& item : l2)
+    {
         try {
             css::uno::Reference<css::lang::XComponent>(
-                i->second, css::uno::UNO_QUERY_THROW)->dispose();
+                item.second, css::uno::UNO_QUERY_THROW)->dispose();
         } catch (css::uno::Exception & e) {
             SAL_WARN("binaryurp", "ignoring " << e);
         }
