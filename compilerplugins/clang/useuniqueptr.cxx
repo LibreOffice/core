@@ -373,7 +373,7 @@ void UseUniquePtr::CheckForDeleteOfPOD(const CompoundStmt* compoundStmt)
 
 
 
-loplugin::Plugin::Registration< UseUniquePtr > X("useuniqueptr", false);
+loplugin::Plugin::Registration< UseUniquePtr > X("useuniqueptr", true);
 
 }
 
