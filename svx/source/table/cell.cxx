@@ -351,8 +351,8 @@ namespace sdr
                 tools::Rectangle aObjectRect = rObj.GetSnapRect();
 
                 const SfxItemSet& rSet = rObj.GetObjectItemSet();
-                bool bAutoGrowWidth = static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue();
-                bool bAutoGrowHeight = static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
+                bool bAutoGrowWidth = rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH).GetValue();
+                bool bAutoGrowHeight = rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue();
 
                 // prepare ItemSet to set exchanged width and height items
                 SfxItemSet aNewSet(*rSet.GetPool(),
@@ -765,37 +765,37 @@ sal_Int32 Cell::getMinimumHeight()
 
 long Cell::GetTextLeftDistance() const
 {
-    return static_cast<const SdrMetricItem&>(GetItemSet().Get(SDRATTR_TEXT_LEFTDIST)).GetValue();
+    return GetItemSet().Get(SDRATTR_TEXT_LEFTDIST).GetValue();
 }
 
 
 long Cell::GetTextRightDistance() const
 {
-    return static_cast<const SdrMetricItem&>(GetItemSet().Get(SDRATTR_TEXT_RIGHTDIST)).GetValue();
+    return GetItemSet().Get(SDRATTR_TEXT_RIGHTDIST).GetValue();
 }
 
 
 long Cell::GetTextUpperDistance() const
 {
-    return static_cast<const SdrMetricItem&>(GetItemSet().Get(SDRATTR_TEXT_UPPERDIST)).GetValue();
+    return GetItemSet().Get(SDRATTR_TEXT_UPPERDIST).GetValue();
 }
 
 
 long Cell::GetTextLowerDistance() const
 {
-    return static_cast<const SdrMetricItem&>(GetItemSet().Get(SDRATTR_TEXT_LOWERDIST)).GetValue();
+    return GetItemSet().Get(SDRATTR_TEXT_LOWERDIST).GetValue();
 }
 
 
 SdrTextVertAdjust Cell::GetTextVerticalAdjust() const
 {
-    return static_cast<const SdrTextVertAdjustItem&>(GetItemSet().Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
+    return GetItemSet().Get(SDRATTR_TEXT_VERTADJUST).GetValue();
 }
 
 
 SdrTextHorzAdjust Cell::GetTextHorizontalAdjust() const
 {
-    return static_cast<const SdrTextHorzAdjustItem&>(GetItemSet().Get(SDRATTR_TEXT_HORZADJUST)).GetValue();
+    return GetItemSet().Get(SDRATTR_TEXT_HORZADJUST).GetValue();
 }
 
 

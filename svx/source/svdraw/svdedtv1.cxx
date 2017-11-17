@@ -1351,7 +1351,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         }
 
         SfxItemState eState=aMarkAttr.GetItemState(SDRATTR_TEXT_AUTOGROWWIDTH);
-        bool bAutoGrow=static_cast<const SdrOnOffItem&>(aMarkAttr.Get(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue();
+        bool bAutoGrow=aMarkAttr.Get(SDRATTR_TEXT_AUTOGROWWIDTH).GetValue();
         if (eState==SfxItemState::DONTCARE) {
             aRetSet.InvalidateItem(SID_ATTR_TRANSFORM_AUTOWIDTH);
         } else if (eState==SfxItemState::SET) {
@@ -1359,7 +1359,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         }
 
         eState=aMarkAttr.GetItemState(SDRATTR_TEXT_AUTOGROWHEIGHT);
-        bAutoGrow=static_cast<const SdrOnOffItem&>(aMarkAttr.Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
+        bAutoGrow=aMarkAttr.Get(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue();
         if (eState==SfxItemState::DONTCARE) {
             aRetSet.InvalidateItem(SID_ATTR_TRANSFORM_AUTOHEIGHT);
         } else if (eState==SfxItemState::SET) {
@@ -1367,7 +1367,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         }
 
         eState=aMarkAttr.GetItemState(SDRATTR_ECKENRADIUS);
-        long nRadius=static_cast<const SdrMetricItem&>(aMarkAttr.Get(SDRATTR_ECKENRADIUS)).GetValue();
+        long nRadius=aMarkAttr.Get(SDRATTR_ECKENRADIUS).GetValue();
         if (eState==SfxItemState::DONTCARE) {
             aRetSet.InvalidateItem(SDRATTR_ECKENRADIUS);
         } else if (eState==SfxItemState::SET) {

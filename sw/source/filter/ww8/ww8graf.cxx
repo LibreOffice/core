@@ -1745,8 +1745,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
     {
         SvxShadowItem aShadow( RES_SHADOW );
 
-        const Color aShdColor = static_cast< XColorItem const & >(
-            rOldSet.Get(SDRATTR_SHADOWCOLOR)).GetColorValue();
+        const Color aShdColor = rOldSet.Get(SDRATTR_SHADOWCOLOR).GetColorValue();
         const sal_Int32 nShdDistX = WW8ITEMVALUE(rOldSet, SDRATTR_SHADOWXDIST,
             SdrMetricItem);
         const sal_Int32 nShdDistY = WW8ITEMVALUE(rOldSet, SDRATTR_SHADOWYDIST,

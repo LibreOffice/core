@@ -850,7 +850,7 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, OutlinerVie
     if (pText!=nullptr)
     {
         pOutlView->SetAnchorMode(pText->GetOutlinerViewAnchorMode());
-        pTextEditOutliner->SetFixedCellHeight(static_cast<const SdrTextFixedCellHeightItem&>(pText->GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
+        pTextEditOutliner->SetFixedCellHeight(pText->GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
     }
     // do update before setting output area so that aTextEditArea can be recalculated
     pTextEditOutliner->SetUpdateMode(true);

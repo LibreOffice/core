@@ -338,11 +338,11 @@ namespace drawinglayer
 
         attribute::SdrShadowAttribute createNewSdrShadowAttribute(const SfxItemSet& rSet)
         {
-            const bool bShadow(static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_SHADOW)).GetValue());
+            const bool bShadow(rSet.Get(SDRATTR_SHADOW).GetValue());
 
             if(bShadow)
             {
-                sal_uInt16 nTransparence(static_cast<const SdrPercentItem&>(rSet.Get(SDRATTR_SHADOWTRANSPARENCE)).GetValue());
+                sal_uInt16 nTransparence(rSet.Get(SDRATTR_SHADOWTRANSPARENCE).GetValue());
 
                 if(nTransparence > 100)
                 {
@@ -371,9 +371,9 @@ namespace drawinglayer
                 if(100 != nTransparence)
                 {
                     const basegfx::B2DVector aOffset(
-                        (double)static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_SHADOWXDIST)).GetValue(),
-                        (double)static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_SHADOWYDIST)).GetValue());
-                    const Color aColor(static_cast<const XColorItem&>(rSet.Get(SDRATTR_SHADOWCOLOR)).GetColorValue());
+                        (double)rSet.Get(SDRATTR_SHADOWXDIST).GetValue(),
+                        (double)rSet.Get(SDRATTR_SHADOWYDIST).GetValue());
+                    const Color aColor(rSet.Get(SDRATTR_SHADOWCOLOR).GetColorValue());
 
                     return attribute::SdrShadowAttribute(aOffset, (double)nTransparence * 0.01, aColor.getBColor());
                 }
@@ -577,14 +577,14 @@ namespace drawinglayer
                     pLower ? *pLower : rTextObj.GetTextLowerDistance(),
                     rTextObj.GetTextHorizontalAdjust(rSet),
                     rTextObj.GetTextVerticalAdjust(rSet),
-                    static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_TEXT_CONTOURFRAME)).GetValue(),
+                    rSet.Get(SDRATTR_TEXT_CONTOURFRAME).GetValue(),
                     rTextObj.IsFitToSize(),
                     rTextObj.IsAutoFit(),
                     rSet.Get(XATTR_FORMTXTHIDEFORM).GetValue(),
                     SdrTextAniKind::Blink == eAniKind,
                     SdrTextAniKind::Scroll == eAniKind || SdrTextAniKind::Alternate == eAniKind || SdrTextAniKind::Slide == eAniKind,
                     bInEditMode,
-                    static_cast<const SdrTextFixedCellHeightItem&>(rSet.Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue(),
+                    rSet.Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue(),
                     bWrongSpell,
                     bChainable);
             }

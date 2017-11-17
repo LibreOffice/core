@@ -415,8 +415,8 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
 
 bool GetFontWorkOutline(FWData& rFWData, const SdrObject* pCustomShape)
 {
-    SdrTextHorzAdjust eHorzAdjust( static_cast<const SdrTextHorzAdjustItem&>(pCustomShape->GetMergedItem( SDRATTR_TEXT_HORZADJUST )).GetValue() );
-    drawing::TextFitToSizeType const eFTS( static_cast<const SdrTextFitToSizeTypeItem&>(pCustomShape->GetMergedItem( SDRATTR_TEXT_FITTOSIZE )).GetValue() );
+    SdrTextHorzAdjust eHorzAdjust( pCustomShape->GetMergedItem( SDRATTR_TEXT_HORZADJUST ).GetValue() );
+    drawing::TextFitToSizeType const eFTS( pCustomShape->GetMergedItem( SDRATTR_TEXT_FITTOSIZE ).GetValue() );
 
     std::vector< FWTextArea >::iterator aTextAreaIter = rFWData.vTextAreas.begin();
     std::vector< FWTextArea >::const_iterator aTextAreaIEnd = rFWData.vTextAreas.end();

@@ -2329,12 +2329,12 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                     if ( pSheet2 )
                     {
                         SfxItemSet& rItemSet = pSheet2->GetItemSet();
-                        rItemSet.Put( static_cast<const SdrMetricItem&>(pText->GetMergedItem( SDRATTR_TEXT_LEFTDIST ) ) );
-                        rItemSet.Put( static_cast<const SdrMetricItem&>(pText->GetMergedItem( SDRATTR_TEXT_RIGHTDIST )) );
-                        rItemSet.Put( static_cast<const SdrMetricItem&>(pText->GetMergedItem( SDRATTR_TEXT_UPPERDIST )) );
-                        rItemSet.Put( static_cast<const SdrMetricItem&>(pText->GetMergedItem( SDRATTR_TEXT_LOWERDIST )) );
-                        rItemSet.Put( static_cast<const SdrTextVertAdjustItem&>(pText->GetMergedItem( SDRATTR_TEXT_VERTADJUST )) );
-                        rItemSet.Put( static_cast<const SdrTextHorzAdjustItem&>(pText->GetMergedItem( SDRATTR_TEXT_HORZADJUST )) );
+                        rItemSet.Put( pText->GetMergedItem( SDRATTR_TEXT_LEFTDIST ) );
+                        rItemSet.Put( pText->GetMergedItem( SDRATTR_TEXT_RIGHTDIST ) );
+                        rItemSet.Put( pText->GetMergedItem( SDRATTR_TEXT_UPPERDIST ) );
+                        rItemSet.Put( pText->GetMergedItem( SDRATTR_TEXT_LOWERDIST ) );
+                        rItemSet.Put( pText->GetMergedItem( SDRATTR_TEXT_VERTADJUST ) );
+                        rItemSet.Put( pText->GetMergedItem( SDRATTR_TEXT_HORZADJUST ) );
                         if (  pTextObj->GetInstance() ==  TSS_Type::Title
                             || pTextObj->GetInstance() == TSS_Type::Subtitle)
                         {

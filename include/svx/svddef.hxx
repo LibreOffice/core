@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SVDDEF_HXX
 
 #include <svx/xdef.hxx>
+#include <svl/typedwhich.hxx>
 
 /*************************************************************************/
 // SdrItemPool V2, 09-11-1995:
@@ -59,59 +60,78 @@
 //     V3:  1000..1126, 1127..1140
 //     V4:  1000..1126, 1172..1185
 
+
+class SdrAngleItem;
+class SdrCaptionEscAbsItem;
+class SdrCaptionEscDirItem;
+class SdrCaptionEscIsRelItem;
+class SdrCaptionEscRelItem;
+class SdrCaptionFitLineLenItem;
+class SdrCaptionLineLenItem;
+class SdrCaptionTypeItem;
+class SdrMetricItem;
+class SdrOnOffItem;
+class SdrPercentItem;
+class SdrTextFitToSizeTypeItem;
+class SdrTextFixedCellHeightItem;
+class SdrTextVertAdjustItem;
+class SfxStringItem;
+class SfxVoidItem;
+class XColorItem;
+
 #define SDRATTR_START               XATTR_START                    /* 1000   */
-                                                                   /* Pool V4*/ /* Pool V3*/ /* Pool V2*/
-#define SDRATTR_SHADOW_FIRST            (XATTR_END + 1)            /* 1067   */ /* 1067   */ /* 1050   */ /* Pool V1: 1036 */
-#define SDRATTR_SHADOW                  (SDRATTR_SHADOW_FIRST+ 0)  /*   1067 */ /*   1067 */ /*   1050 */
-#define SDRATTR_SHADOWCOLOR             (SDRATTR_SHADOW_FIRST+ 1)  /*   1068 */ /*   1068 */ /*   1051 */
-#define SDRATTR_SHADOWXDIST             (SDRATTR_SHADOW_FIRST+ 2)  /*   1069 */ /*   1069 */ /*   1052 */
-#define SDRATTR_SHADOWYDIST             (SDRATTR_SHADOW_FIRST+ 3)  /*   1070 */ /*   1070 */ /*   1053 */
-#define SDRATTR_SHADOWTRANSPARENCE      (SDRATTR_SHADOW_FIRST+ 4)  /*   1071 */ /*   1071 */ /*   1054 */ /* Pool V2 */
-#define SDRATTR_SHADOW3D                (SDRATTR_SHADOW_FIRST+ 5)  /*   1072 */ /*   1072 */ /*   1055 */ /* Pool V2 */
-#define SDRATTR_SHADOWPERSP             (SDRATTR_SHADOW_FIRST+ 6)  /*   1073 */ /*   1073 */ /*   1056 */ /* Pool V2 */
-#define SDRATTR_SHADOW_LAST             (SDRATTR_SHADOWPERSP)   /* 1078   */ /* 1078   */ /* 1061   */ /* Pool V1: 1039 */
+                                                                                                         /* Pool V4*/ /* Pool V3*/ /* Pool V2*/
+#define SDRATTR_SHADOW_FIRST            (XATTR_END + 1)                                                  /* 1067   */ /* 1067   */ /* 1050   */ /* Pool V1: 1036 */
+#define SDRATTR_SHADOW                  TypedWhichId<SdrOnOffItem>(SDRATTR_SHADOW_FIRST+ 0)              /*   1067 */ /*   1067 */ /*   1050 */
+#define SDRATTR_SHADOWCOLOR             TypedWhichId<XColorItem>(SDRATTR_SHADOW_FIRST+ 1)                /*   1068 */ /*   1068 */ /*   1051 */
+#define SDRATTR_SHADOWXDIST             TypedWhichId<SdrMetricItem>(SDRATTR_SHADOW_FIRST+ 2)             /*   1069 */ /*   1069 */ /*   1052 */
+#define SDRATTR_SHADOWYDIST             TypedWhichId<SdrMetricItem>(SDRATTR_SHADOW_FIRST+ 3)             /*   1070 */ /*   1070 */ /*   1053 */
+#define SDRATTR_SHADOWTRANSPARENCE      TypedWhichId<SdrPercentItem>(SDRATTR_SHADOW_FIRST+ 4)            /*   1071 */ /*   1071 */ /*   1054 */ /* Pool V2 */
+#define SDRATTR_SHADOW3D                TypedWhichId<SfxVoidItem>(SDRATTR_SHADOW_FIRST+ 5)               /*   1072 */ /*   1072 */ /*   1055 */ /* Pool V2 */
+#define SDRATTR_SHADOWPERSP             TypedWhichId<SfxVoidItem>(SDRATTR_SHADOW_FIRST+ 6)               /*   1073 */ /*   1073 */ /*   1056 */ /* Pool V2 */
+#define SDRATTR_SHADOW_LAST             (SDRATTR_SHADOWPERSP)                                            /* 1078   */ /* 1078   */ /* 1061   */ /* Pool V1: 1039 */
 
-#define SDRATTR_CAPTION_FIRST           (SDRATTR_SHADOW_LAST + 1)    /* 1080   */ /* 1080   */ /* 1063   */ /* Pool V1: 1041 */
-#define SDRATTR_CAPTIONTYPE             (SDRATTR_CAPTION_FIRST+ 0) /*   1080 */ /*   1080 */ /*   1063 */
-#define SDRATTR_CAPTIONFIXEDANGLE       (SDRATTR_CAPTION_FIRST+ 1) /*   1081 */ /*   1081 */ /*   1064 */
-#define SDRATTR_CAPTIONANGLE            (SDRATTR_CAPTION_FIRST+ 2) /*   1082 */ /*   1082 */ /*   1065 */
-#define SDRATTR_CAPTIONGAP              (SDRATTR_CAPTION_FIRST+ 3) /*   1083 */ /*   1083 */ /*   1066 */
-#define SDRATTR_CAPTIONESCDIR           (SDRATTR_CAPTION_FIRST+ 4) /*   1084 */ /*   1084 */ /*   1067 */
-#define SDRATTR_CAPTIONESCISREL         (SDRATTR_CAPTION_FIRST+ 5) /*   1085 */ /*   1085 */ /*   1068 */
-#define SDRATTR_CAPTIONESCREL           (SDRATTR_CAPTION_FIRST+ 6) /*   1086 */ /*   1086 */ /*   1069 */
-#define SDRATTR_CAPTIONESCABS           (SDRATTR_CAPTION_FIRST+ 7) /*   1087 */ /*   1087 */ /*   1070 */
-#define SDRATTR_CAPTIONLINELEN          (SDRATTR_CAPTION_FIRST+ 8) /*   1088 */ /*   1088 */ /*   1071 */
-#define SDRATTR_CAPTIONFITLINELEN       (SDRATTR_CAPTION_FIRST+ 9) /*   1089 */ /*   1089 */ /*   1072 */
-#define SDRATTR_CAPTION_LAST            (SDRATTR_CAPTIONFITLINELEN)  /* 1094   */ /* 1094   */ /* 1077   */ /* Pool V1: 1050 */
+#define SDRATTR_CAPTION_FIRST           (SDRATTR_SHADOW_LAST + 1)                                        /* 1080   */ /* 1080   */ /* 1063   */ /* Pool V1: 1041 */
+#define SDRATTR_CAPTIONTYPE             TypedWhichId<SdrCaptionTypeItem>(SDRATTR_CAPTION_FIRST+ 0)       /*   1080 */ /*   1080 */ /*   1063 */
+#define SDRATTR_CAPTIONFIXEDANGLE       TypedWhichId<SdrOnOffItem>(SDRATTR_CAPTION_FIRST+ 1)             /*   1081 */ /*   1081 */ /*   1064 */
+#define SDRATTR_CAPTIONANGLE            TypedWhichId<SdrAngleItem>(SDRATTR_CAPTION_FIRST+ 2)             /*   1082 */ /*   1082 */ /*   1065 */
+#define SDRATTR_CAPTIONGAP              TypedWhichId<SdrMetricItem>(SDRATTR_CAPTION_FIRST+ 3)            /*   1083 */ /*   1083 */ /*   1066 */
+#define SDRATTR_CAPTIONESCDIR           TypedWhichId<SdrCaptionEscDirItem>(SDRATTR_CAPTION_FIRST+ 4)     /*   1084 */ /*   1084 */ /*   1067 */
+#define SDRATTR_CAPTIONESCISREL         TypedWhichId<SdrCaptionEscIsRelItem>(SDRATTR_CAPTION_FIRST+ 5)   /*   1085 */ /*   1085 */ /*   1068 */
+#define SDRATTR_CAPTIONESCREL           TypedWhichId<SdrCaptionEscRelItem>(SDRATTR_CAPTION_FIRST+ 6)     /*   1086 */ /*   1086 */ /*   1069 */
+#define SDRATTR_CAPTIONESCABS           TypedWhichId<SdrCaptionEscAbsItem>(SDRATTR_CAPTION_FIRST+ 7)     /*   1087 */ /*   1087 */ /*   1070 */
+#define SDRATTR_CAPTIONLINELEN          TypedWhichId<SdrCaptionLineLenItem>(SDRATTR_CAPTION_FIRST+ 8)    /*   1088 */ /*   1088 */ /*   1071 */
+#define SDRATTR_CAPTIONFITLINELEN       TypedWhichId<SdrCaptionFitLineLenItem>(SDRATTR_CAPTION_FIRST+ 9) /*   1089 */ /*   1089 */ /*   1072 */
+#define SDRATTR_CAPTION_LAST            (SDRATTR_CAPTIONFITLINELEN)                                      /* 1094   */ /* 1094   */ /* 1077   */ /* Pool V1: 1050 */
 
-#define SDRATTR_MISC_FIRST              (SDRATTR_CAPTION_LAST + 1)  /* 1097   */ /* 1097   */ /* 1080   */ /* Pool V1: 1053 */
-#define SDRATTR_ECKENRADIUS             (SDRATTR_MISC_FIRST + 0)   /*   1097 */ /*   1097 */ /*   1080 long, def=0       */
-#define SDRATTR_TEXT_MINFRAMEHEIGHT     (SDRATTR_MISC_FIRST + 1)   /*   1098 */ /*   1098 */ /*   1081 long, def=0       */
-#define SDRATTR_TEXT_AUTOGROWHEIGHT     (SDRATTR_MISC_FIRST + 2)   /*   1099 */ /*   1099 */ /*   1082 sal_Bool, def=sal_True    */
-#define SDRATTR_TEXT_FITTOSIZE          (SDRATTR_MISC_FIRST + 3)   /*   1100 */ /*   1100 */ /*   1083 enum, def=css::drawing::TextFitToSizeType_NONE */
-#define SDRATTR_TEXT_LEFTDIST           (SDRATTR_MISC_FIRST + 4)   /*   1101 */ /*   1101 */ /*   1084 long, def=0 */ /* Pool V2 */
-#define SDRATTR_TEXT_RIGHTDIST          (SDRATTR_MISC_FIRST + 5)   /*   1102 */ /*   1102 */ /*   1085 long, def=0 */ /* Pool V2 */
-#define SDRATTR_TEXT_UPPERDIST          (SDRATTR_MISC_FIRST + 6)   /*   1103 */ /*   1103 */ /*   1086 long, def=0 */ /* Pool V2 */
-#define SDRATTR_TEXT_LOWERDIST          (SDRATTR_MISC_FIRST + 7)   /*   1104 */ /*   1104 */ /*   1087 long, def=0 */ /* Pool V2 */
-#define SDRATTR_TEXT_VERTADJUST         (SDRATTR_MISC_FIRST + 8)   /*   1105 */ /*   1105 */ /*   1088 enum, def=SDRTEXTVERTADJUST_TOP */ /* Pool V2 */
-#define SDRATTR_TEXT_MAXFRAMEHEIGHT     (SDRATTR_MISC_FIRST + 9)   /*   1106 */ /*   1106 */ /*   1089 long, def=0     - Pool V2 */
-#define SDRATTR_TEXT_MINFRAMEWIDTH      (SDRATTR_MISC_FIRST +10)   /*   1107 */ /*   1107 */ /*   1090 long, def=0     - Pool V2 */
-#define SDRATTR_TEXT_MAXFRAMEWIDTH      (SDRATTR_MISC_FIRST +11)   /*   1108 */ /*   1108 */ /*   1091 long, def=0     - Pool V2 */
-#define SDRATTR_TEXT_AUTOGROWWIDTH      (SDRATTR_MISC_FIRST +12)   /*   1109 */ /*   1109 */ /*   1092 sal_Bool, def=sal_False - Pool V2 */
-#define SDRATTR_TEXT_HORZADJUST         (SDRATTR_MISC_FIRST +13)   /*   1110 */ /*   1110 */ /*   1093 enum, def=SDRTEXTHORZADJUST_LEFT */ /* Pool V2+ (04-12-1995) */
-#define SDRATTR_TEXT_ANIKIND            (SDRATTR_MISC_FIRST +14)   /*   1111 */ /*   1111 */ /*   1094 enum, def=SdrTextAniKind::NONE - Pool V2/V4 */
-#define SDRATTR_TEXT_ANIDIRECTION       (SDRATTR_MISC_FIRST +15)   /*   1112 */ /*   1112 */ /*   1095 enum, def=SdrTextAniDirection::Left - Pool V2/V4 */
-#define SDRATTR_TEXT_ANISTARTINSIDE     (SDRATTR_MISC_FIRST +16)   /*   1113 */ /*   1113 */ /*   1096 sal_Bool, def=sal_False - Pool V2/V4 */
-#define SDRATTR_TEXT_ANISTOPINSIDE      (SDRATTR_MISC_FIRST +17)   /*   1114 */ /*   1114 */ /*   1097 sal_Bool, def=sal_False - Pool V2/V4 */
-#define SDRATTR_TEXT_ANICOUNT           (SDRATTR_MISC_FIRST +18)   /*   1115 */ /*   1115 */ /*   1098 sal_uInt16, def=0   - Pool V2/V4 */
-#define SDRATTR_TEXT_ANIDELAY           (SDRATTR_MISC_FIRST +19)   /*   1116 */ /*   1116 */ /*   1099 sal_uInt16, def=0   - Pool V2/V4 */
-#define SDRATTR_TEXT_ANIAMOUNT          (SDRATTR_MISC_FIRST +20)   /*   1117 */ /*   1117 */ /*   1100 sal_uInt16, def=0   - Pool V2/V4 */
-#define SDRATTR_TEXT_CONTOURFRAME       (SDRATTR_MISC_FIRST +21)   /*   1118 */ /*   1118 */ /*   1101 */             /* Pool V2 */
-#define SDRATTR_XMLATTRIBUTES           (SDRATTR_MISC_FIRST +22)   /*   1120 */ /*   1120 */ /*   1103 */             /* Pool V2 */
-#define SDRATTR_TEXT_USEFIXEDCELLHEIGHT (SDRATTR_MISC_FIRST +23)   /*   1121 */ /*   1121 */ /*   1104 */             /* Pool V2 */
-#define SDRATTR_TEXT_WORDWRAP           (SDRATTR_MISC_FIRST +24)   /*   1122 */ /*   1122 */ /*   1105 */             /* Pool V2 */
-#define SDRATTR_TEXT_CHAINNEXTNAME      (SDRATTR_MISC_FIRST +25)   /*   1123 */ /*   1123 */ /*   1106 */             /* Pool V2 */
-#define SDRATTR_MISC_LAST               (SDRATTR_TEXT_CHAINNEXTNAME)        /* 1125   */ /* 1125   */ /* 1108   */ /* Pool V1: 1056 */
+#define SDRATTR_MISC_FIRST              (SDRATTR_CAPTION_LAST + 1)                                       /* 1097   */ /* 1097   */ /* 1080   */ /* Pool V1: 1053 */
+#define SDRATTR_ECKENRADIUS             TypedWhichId<SdrMetricItem>(SDRATTR_MISC_FIRST + 0)              /*   1097 */ /*   1097 */ /*   1080 long, def=0       */
+#define SDRATTR_TEXT_MINFRAMEHEIGHT     TypedWhichId<SdrMetricItem>(SDRATTR_MISC_FIRST + 1)              /*   1098 */ /*   1098 */ /*   1081 long, def=0       */
+#define SDRATTR_TEXT_AUTOGROWHEIGHT     TypedWhichId<SdrOnOffItem>(SDRATTR_MISC_FIRST + 2)               /*   1099 */ /*   1099 */ /*   1082 sal_Bool, def=sal_True    */
+#define SDRATTR_TEXT_FITTOSIZE          TypedWhichId<SdrTextFitToSizeTypeItem>(SDRATTR_MISC_FIRST + 3)   /*   1100 */ /*   1100 */ /*   1083 enum, def=css::drawing::TextFitToSizeType_NONE */
+#define SDRATTR_TEXT_LEFTDIST           TypedWhichId<SdrMetricItem>(SDRATTR_MISC_FIRST + 4)              /*   1101 */ /*   1101 */ /*   1084 long, def=0 */ /* Pool V2 */
+#define SDRATTR_TEXT_RIGHTDIST          TypedWhichId<SdrMetricItem>(SDRATTR_MISC_FIRST + 5)              /*   1102 */ /*   1102 */ /*   1085 long, def=0 */ /* Pool V2 */
+#define SDRATTR_TEXT_UPPERDIST          TypedWhichId<SdrMetricItem>(SDRATTR_MISC_FIRST + 6)              /*   1103 */ /*   1103 */ /*   1086 long, def=0 */ /* Pool V2 */
+#define SDRATTR_TEXT_LOWERDIST          TypedWhichId<SdrMetricItem>(SDRATTR_MISC_FIRST + 7)              /*   1104 */ /*   1104 */ /*   1087 long, def=0 */ /* Pool V2 */
+#define SDRATTR_TEXT_VERTADJUST         TypedWhichId<SdrTextVertAdjustItem>(SDRATTR_MISC_FIRST + 8)      /*   1105 */ /*   1105 */ /*   1088 enum, def=SDRTEXTVERTADJUST_TOP */ /* Pool V2 */
+#define SDRATTR_TEXT_MAXFRAMEHEIGHT     TypedWhichId<SdrMetricItem>(SDRATTR_MISC_FIRST + 9)              /*   1106 */ /*   1106 */ /*   1089 long, def=0     - Pool V2 */
+#define SDRATTR_TEXT_MINFRAMEWIDTH      TypedWhichId<SdrMetricItem>(SDRATTR_MISC_FIRST +10)              /*   1107 */ /*   1107 */ /*   1090 long, def=0     - Pool V2 */
+#define SDRATTR_TEXT_MAXFRAMEWIDTH      TypedWhichId<SdrMetricItem>(SDRATTR_MISC_FIRST +11)              /*   1108 */ /*   1108 */ /*   1091 long, def=0     - Pool V2 */
+#define SDRATTR_TEXT_AUTOGROWWIDTH      TypedWhichId<SdrOnOffItem>(SDRATTR_MISC_FIRST +12)               /*   1109 */ /*   1109 */ /*   1092 sal_Bool, def=sal_False - Pool V2 */
+#define SDRATTR_TEXT_HORZADJUST         TypedWhichId<SdrTextHorzAdjustItem>(SDRATTR_MISC_FIRST +13)      /*   1110 */ /*   1110 */ /*   1093 enum, def=SDRTEXTHORZADJUST_LEFT */ /* Pool V2+ (04-12-1995) */
+#define SDRATTR_TEXT_ANIKIND            TypedWhichId<SdrTextAniKindItem>(SDRATTR_MISC_FIRST +14)         /*   1111 */ /*   1111 */ /*   1094 enum, def=SdrTextAniKind::NONE - Pool V2/V4 */
+#define SDRATTR_TEXT_ANIDIRECTION       TypedWhichId<SdrTextAniDirectionItem>(SDRATTR_MISC_FIRST +15)    /*   1112 */ /*   1112 */ /*   1095 enum, def=SdrTextAniDirection::Left - Pool V2/V4 */
+#define SDRATTR_TEXT_ANISTARTINSIDE     TypedWhichId<SdrTextAniStartInsideItem>(SDRATTR_MISC_FIRST +16)  /*   1113 */ /*   1113 */ /*   1096 sal_Bool, def=sal_False - Pool V2/V4 */
+#define SDRATTR_TEXT_ANISTOPINSIDE      TypedWhichId<SdrTextAniStopInsideItem>(SDRATTR_MISC_FIRST +17)   /*   1114 */ /*   1114 */ /*   1097 sal_Bool, def=sal_False - Pool V2/V4 */
+#define SDRATTR_TEXT_ANICOUNT           TypedWhichId<SdrTextAniCountItem>(SDRATTR_MISC_FIRST +18)        /*   1115 */ /*   1115 */ /*   1098 sal_uInt16, def=0   - Pool V2/V4 */
+#define SDRATTR_TEXT_ANIDELAY           TypedWhichId<SdrTextAniDelayItem>(SDRATTR_MISC_FIRST +19)        /*   1116 */ /*   1116 */ /*   1099 sal_uInt16, def=0   - Pool V2/V4 */
+#define SDRATTR_TEXT_ANIAMOUNT          TypedWhichId<SdrTextAniAmountItem>(SDRATTR_MISC_FIRST +20)       /*   1117 */ /*   1117 */ /*   1100 sal_uInt16, def=0   - Pool V2/V4 */
+#define SDRATTR_TEXT_CONTOURFRAME       TypedWhichId<SdrOnOffItem>(SDRATTR_MISC_FIRST +21)               /*   1118 */ /*   1118 */ /*   1101 */             /* Pool V2 */
+#define SDRATTR_XMLATTRIBUTES           TypedWhichId<SvXMLAttrContainerItem>(SDRATTR_MISC_FIRST +22)     /*   1120 */ /*   1120 */ /*   1103 */             /* Pool V2 */
+#define SDRATTR_TEXT_USEFIXEDCELLHEIGHT TypedWhichId<SdrTextFixedCellHeightItem>(SDRATTR_MISC_FIRST +23) /*   1121 */ /*   1121 */ /*   1104 */             /* Pool V2 */
+#define SDRATTR_TEXT_WORDWRAP           TypedWhichId<SdrOnOffItem>(SDRATTR_MISC_FIRST +24)               /*   1122 */ /*   1122 */ /*   1105 */             /* Pool V2 */
+#define SDRATTR_TEXT_CHAINNEXTNAME      TypedWhichId<SfxStringItem>(SDRATTR_MISC_FIRST +25)              /*   1123 */ /*   1123 */ /*   1106 */             /* Pool V2 */
+#define SDRATTR_MISC_LAST               (SDRATTR_TEXT_CHAINNEXTNAME)                                     /* 1125   */ /* 1125   */ /* 1108   */ /* Pool V1: 1056 */
 
 #define SDRATTR_EDGE_FIRST              (SDRATTR_MISC_LAST + 1)      /* 1127   */ /* Pool V4 */
 #define SDRATTR_EDGEKIND                (SDRATTR_EDGE_FIRST + 0)   /*   1127 */ /* Pool V4 */

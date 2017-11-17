@@ -447,7 +447,7 @@ void SvxTableController::GetState( SfxItemSet& rSet )
                         SdrTextVertAdjust eAdj = SDRTEXTVERTADJUST_BLOCK;
 
                         if (xSet->GetItemState( SDRATTR_TEXT_VERTADJUST ) != SfxItemState::DONTCARE)
-                            eAdj = static_cast<const SdrTextVertAdjustItem&>(xSet->Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
+                            eAdj = xSet->Get(SDRATTR_TEXT_VERTADJUST).GetValue();
 
                         rSet.Put(SfxBoolItem(SID_TABLE_VERT_BOTTOM, eAdj == SDRTEXTVERTADJUST_BOTTOM));
                         rSet.Put(SfxBoolItem(SID_TABLE_VERT_CENTER, eAdj == SDRTEXTVERTADJUST_CENTER));
@@ -883,10 +883,10 @@ namespace
     {
         // merge drawing layer text distance items into SvxBoxItem used by the dialog
         SvxBoxItem aBoxItem( static_cast< const SvxBoxItem& >( rAttrSet.Get( SDRATTR_TABLE_BORDER ) ) );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(rAttrSet.Get(SDRATTR_TEXT_LEFTDIST)).GetValue()), SvxBoxItemLine::LEFT );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(rAttrSet.Get(SDRATTR_TEXT_RIGHTDIST)).GetValue()), SvxBoxItemLine::RIGHT );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(rAttrSet.Get(SDRATTR_TEXT_UPPERDIST)).GetValue()), SvxBoxItemLine::TOP );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(rAttrSet.Get(SDRATTR_TEXT_LOWERDIST)).GetValue()), SvxBoxItemLine::BOTTOM );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( rAttrSet.Get(SDRATTR_TEXT_LEFTDIST).GetValue()), SvxBoxItemLine::LEFT );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( rAttrSet.Get(SDRATTR_TEXT_RIGHTDIST).GetValue()), SvxBoxItemLine::RIGHT );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( rAttrSet.Get(SDRATTR_TEXT_UPPERDIST).GetValue()), SvxBoxItemLine::TOP );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( rAttrSet.Get(SDRATTR_TEXT_LOWERDIST).GetValue()), SvxBoxItemLine::BOTTOM );
         return aBoxItem;
     }
 }

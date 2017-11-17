@@ -768,10 +768,10 @@ void SdImportTest::testBnc870237()
     // Simulate a:ext inside dsp:txXfrm with changing the lower distance
     const SdrObjGroup* pObj = dynamic_cast<SdrObjGroup*>( pPage->GetObj( 0 ) );
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST))).GetValue());
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(9919), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST))).GetValue());
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST))).GetValue());
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST))).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(9919), pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST).GetValue());
 
     xDocShRef->DoClose();
 }
