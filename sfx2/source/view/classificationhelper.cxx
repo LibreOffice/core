@@ -939,6 +939,42 @@ SfxClassificationPolicyType SfxClassificationHelper::getPolicyType()
     sal_Int32 nPolicyTypeNumber = officecfg::Office::Common::Classification::Policy::get();
     auto eType = static_cast<SfxClassificationPolicyType>(nPolicyTypeNumber);
     return eType;
+}
+
+namespace sfx
+{
+
+namespace
+{
+
+OUString getProperty(uno::Reference<beans::XPropertyContainer> const& rxPropertyContainer,
+                     OUString const& rName)
+{
+    try
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
+        return xPropertySet->getPropertyValue(rName).get<OUString>();
+    }
+    catch (const css::uno::Exception&)
+    {
+    }
+
+    return OUString();
+}
+
+} // end anonymous namespace
+
+sfx::ClassificationCreationOrigin getCreationOriginProperty(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer,
+                                                            sfx::ClassificationKeyCreator const & rKeyCreator)
+{
+    OUString sValue = getProperty(rxPropertyContainer, rKeyCreator.makeCreationOriginKey());
+    if (sValue.isEmpty())
+        return sfx::ClassificationCreationOrigin::NONE;
+
+    return (sValue == "BAF_POLICY")
+                ? sfx::ClassificationCreationOrigin::BAF_POLICY
+                : sfx::ClassificationCreationOrigin::MANUAL;
+}
 
 }
 

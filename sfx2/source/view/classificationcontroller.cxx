@@ -58,7 +58,7 @@ class ClassificationCategoriesController : public ClassificationCategoriesContro
     rtl::Reference<comphelper::ConfigurationListener> m_xListener;
     ClassificationPropertyListener m_aPropertyListener;
 
-    DECL_STATIC_LINK(ClassificationCategoriesController, SelectHdl, ListBox&, void);
+    DECL_LINK(SelectHdl, ListBox&, void);
 
 public:
     explicit ClassificationCategoriesController(const uno::Reference<uno::XComponentContext>& rContext);
@@ -97,6 +97,9 @@ public:
     {
         return m_pCategory;
     }
+    sfx::ClassificationCreationOrigin getExistingClassificationOrigin();
+    void toggleInteractivityOnOrigin();
+    void setCategoryStateFromPolicy(SfxClassificationHelper & rHelper);
 };
 
 namespace
@@ -168,16 +171,29 @@ uno::Reference<awt::XWindow> ClassificationCategoriesController::createItemWindo
     return uno::Reference<awt::XWindow>(VCLUnoHelper::GetInterface(m_pClassification));
 }
 
-IMPL_STATIC_LINK(ClassificationCategoriesController, SelectHdl, ListBox&, rCategory, void)
+IMPL_LINK(ClassificationCategoriesController, SelectHdl, ListBox&, rCategory, void)
 {
-    OUString aEntry = rCategory.GetSelectedEntry();
+    m_pClassification->toggleInteractivityOnOrigin();
 
-    OUString aType = getCategoryType();
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
-        {"Name", uno::makeAny(aEntry)},
-        {"Type", uno::makeAny(aType)},
-    }));
-    comphelper::dispatchCommand(".uno:ClassificationApply", aPropertyValues);
+    if (m_pClassification->getExistingClassificationOrigin() == sfx::ClassificationCreationOrigin::MANUAL)
+    {
+        SfxObjectShell* pObjectShell = SfxObjectShell::Current();
+        if (!pObjectShell)
+            return;
+        SfxClassificationHelper aHelper(pObjectShell->getDocProperties());
+        m_pClassification->setCategoryStateFromPolicy(aHelper);
+    }
+    else
+    {
+        OUString aEntry = rCategory.GetSelectedEntry();
+
+        OUString aType = getCategoryType();
+        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
+            {"Name", uno::makeAny(aEntry)},
+            {"Type", uno::makeAny(aType)},
+        }));
+        comphelper::dispatchCommand(".uno:ClassificationApply", aPropertyValues);
+    }
 }
 
 void ClassificationCategoriesController::statusChanged(const frame::FeatureStateEvent& /*rEvent*/)
@@ -191,22 +207,26 @@ void ClassificationCategoriesController::statusChanged(const frame::FeatureState
 
     SfxClassificationHelper aHelper(pObjectShell->getDocProperties());
 
-    VclPtr<ListBox> pCategories = m_pClassification->getCategory();
-    if (pCategories->GetEntryCount() == 0)
+    //toggle if the pop-up is enabled/disabled
+    m_pClassification->toggleInteractivityOnOrigin();
+
+    // check if classification was set via the advanced dialog
+    if (m_pClassification->getExistingClassificationOrigin() != sfx::ClassificationCreationOrigin::MANUAL)
     {
-        std::vector<OUString> aNames = aHelper.GetBACNames();
-        for (const OUString& rName : aNames)
-            pCategories->InsertEntry(rName);
-        // Normally VclBuilder::makeObject() does this.
-        pCategories->EnableAutoSize(true);
+        VclPtr<ListBox> pCategories = m_pClassification->getCategory();
+        if (pCategories->GetEntryCount() == 0)
+        {
+            std::vector<OUString> aNames = aHelper.GetBACNames();
+            for (const OUString& rName : aNames)
+                pCategories->InsertEntry(rName);
+            // Normally VclBuilder::makeObject() does this.
+            pCategories->EnableAutoSize(true);
+        }
     }
 
     // Restore state based on the doc. model.
-    const OUString& rCategoryName = aHelper.GetBACName(SfxClassificationHelper::getPolicyType());
-    if (!rCategoryName.isEmpty())
-    {
-        m_pClassification->getCategory()->SelectEntry(rCategoryName);
-    }
+    m_pClassification->setCategoryStateFromPolicy(aHelper);
+
 }
 
 void ClassificationCategoriesController::removeEntries()
@@ -236,6 +256,7 @@ ClassificationControl::ClassificationControl(vcl::Window* pParent)
         break;
     }
     Size aTextSize(m_pLabel->GetTextWidth(aText), m_pLabel->GetTextHeight());
+
     // Padding.
     aTextSize.Width() += 12;
     m_pLabel->SetText(aText);
@@ -298,7 +319,43 @@ void ClassificationControl::DataChanged(const DataChangedEvent& rEvent)
     if ((rEvent.GetType() == DataChangedEventType::SETTINGS) && (rEvent.GetFlags() & AllSettingsFlags::STYLE))
         SetOptimalSize();
 
+    toggleInteractivityOnOrigin();
+
     Window::DataChanged(rEvent);
+}
+
+sfx::ClassificationCreationOrigin ClassificationControl::getExistingClassificationOrigin()
+{
+    SfxObjectShell* pObjectShell = SfxObjectShell::Current();
+    if (!pObjectShell)
+        return sfx::ClassificationCreationOrigin::NONE;
+
+    uno::Reference<document::XDocumentProperties> xDocumentProperties = pObjectShell->getDocProperties();
+    uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
+
+    sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
+    return sfx::getCreationOriginProperty(xPropertyContainer, aKeyCreator);
+}
+
+void ClassificationControl::toggleInteractivityOnOrigin()
+{
+    if (getExistingClassificationOrigin() == sfx::ClassificationCreationOrigin::MANUAL)
+    {
+        Disable();
+    }
+    else
+    {
+        Enable();
+    }
+}
+
+void ClassificationControl::setCategoryStateFromPolicy(SfxClassificationHelper & rHelper)
+{
+    const OUString& rCategoryName = rHelper.GetBACName(SfxClassificationHelper::getPolicyType());
+    if (!rCategoryName.isEmpty())
+    {
+        getCategory()->SelectEntry(rCategoryName);
+    }
 }
 
 } // namespace sfx2
