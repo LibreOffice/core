@@ -157,14 +157,14 @@ struct PDFObject;
 struct PDFContainer : public PDFEntry
 {
     sal_Int32              m_nOffset;
-    std::vector<PDFEntry*> m_aSubElements;
+    std::vector<std::unique_ptr<PDFEntry>> m_aSubElements;
 
     // this is an abstract base class for identifying
     // entries that can contain sub elements besides comments
     PDFContainer() : PDFEntry(), m_nOffset( 0 ) {}
     virtual ~PDFContainer() override;
     bool emitSubElements( EmitContext& rWriteContext ) const;
-    void cloneSubElements( std::vector<PDFEntry*>& rNewSubElements ) const;
+    void cloneSubElements( std::vector<std::unique_ptr<PDFEntry>>& rNewSubElements ) const;
 
     PDFObject* findObject( unsigned int nNumber, unsigned int nGeneration ) const;
     PDFObject* findObject( PDFObjectRef const * pRef ) const

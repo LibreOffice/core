@@ -486,7 +486,7 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
             unsigned int nElements = pPDFFile->m_aSubElements.size();
             while( nElements-- > 0 )
             {
-                pdfparse::PDFTrailer* pTrailer = dynamic_cast<pdfparse::PDFTrailer*>(pPDFFile->m_aSubElements[nElements]);
+                pdfparse::PDFTrailer* pTrailer = dynamic_cast<pdfparse::PDFTrailer*>(pPDFFile->m_aSubElements[nElements].get());
                 if( pTrailer && pTrailer->m_pDict )
                 {
                     // search document checksum entry
@@ -527,8 +527,8 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
                         continue;
 
                     // extract addstream and mimetype
-                    pdfparse::PDFName* pMimeType = dynamic_cast<pdfparse::PDFName*>(pStreams->m_aSubElements[0]);
-                    pdfparse::PDFObjectRef* pStreamRef = dynamic_cast<pdfparse::PDFObjectRef*>(pStreams->m_aSubElements[1]);
+                    pdfparse::PDFName* pMimeType = dynamic_cast<pdfparse::PDFName*>(pStreams->m_aSubElements[0].get());
+                    pdfparse::PDFObjectRef* pStreamRef = dynamic_cast<pdfparse::PDFObjectRef*>(pStreams->m_aSubElements[1].get());
 
                     SAL_WARN_IF( !pMimeType, "sdext.pdfimport", "error: no mimetype element" );
                     SAL_WARN_IF( !pStreamRef, "sdext.pdfimport", "error: no stream ref element" );

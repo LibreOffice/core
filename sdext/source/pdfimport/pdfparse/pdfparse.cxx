@@ -309,7 +309,7 @@ public:
         PDFContainer* pContainer = dynamic_cast<PDFContainer*>(m_aObjectStack.back());
         if( pContainer == nullptr )
             parseError( "comment without container", first );
-        pContainer->m_aSubElements.push_back( pComment );
+        pContainer->m_aSubElements.emplace_back( pComment );
     }
 
     void insertNewValue( PDFEntry* pNewValue, iteratorT pPos )
@@ -351,7 +351,7 @@ public:
             }
         }
         if( pContainer )
-            pContainer->m_aSubElements.push_back( pNewValue );
+            pContainer->m_aSubElements.emplace_back( pNewValue );
         else
         {
             if( ! pMsg )
@@ -410,7 +410,7 @@ public:
             ( dynamic_cast<PDFFile*>(pContainer) ||
               dynamic_cast<PDFPart*>(pContainer) ) )
         {
-            pContainer->m_aSubElements.push_back( pObj );
+            pContainer->m_aSubElements.emplace_back( pObj );
             m_aObjectStack.push_back( pObj );
         }
         else
@@ -502,7 +502,7 @@ public:
                 PDFStream* pStream = new PDFStream( first - m_aGlobalBegin, last - m_aGlobalBegin, pDict );
 
                 pObj->m_pStream = pStream;
-                pObj->m_aSubElements.push_back( pStream );
+                pObj->m_aSubElements.emplace_back( pStream );
             }
         }
         else
@@ -522,7 +522,7 @@ public:
             ( dynamic_cast<PDFFile*>(pContainer) ||
               dynamic_cast<PDFPart*>(pContainer) ) )
         {
-            pContainer->m_aSubElements.push_back( pTrailer );
+            pContainer->m_aSubElements.emplace_back( pTrailer );
             m_aObjectStack.push_back( pTrailer );
         }
         else
