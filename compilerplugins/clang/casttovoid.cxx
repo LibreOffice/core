@@ -414,7 +414,7 @@ private:
     }
 
     bool isSharedCAndCppCode(VarDecl const * decl) const {
-        auto loc = decl->getLocStart();
+        auto loc = decl->getLocation();
         while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
             loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
         }

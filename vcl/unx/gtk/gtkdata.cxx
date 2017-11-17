@@ -644,9 +644,8 @@ void GtkSalData::ErrorTrapPush()
     gdk_error_trap_push ();
 }
 
-bool GtkSalData::ErrorTrapPop( bool bIgnoreError )
+bool GtkSalData::ErrorTrapPop( bool )
 {
-    (void) bIgnoreError;
     return gdk_error_trap_pop () != 0;
 }
 
