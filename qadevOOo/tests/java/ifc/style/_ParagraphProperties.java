@@ -102,16 +102,16 @@ import com.sun.star.xml.AttributeData;
 public class _ParagraphProperties extends MultiPropertyTest {
     /**
      * Custom tester for numbering style properties. Switches between
-     * 'Numbering 1' and 'Numbering 2' styles.
+     * 'Numbering 123' and 'Numbering ABC' styles.
      */
     protected PropertyTester NumberingStyleTester = new PropertyTester() {
         @Override
         protected Object getNewValue(String propName, Object oldValue)
                               throws java.lang.IllegalArgumentException {
-            if ((oldValue != null) && (oldValue.equals("Numbering 1"))) {
-                return "Numbering 2";
+            if ((oldValue != null) && (oldValue.equals("Numbering 123"))) {
+                return "Numbering ABC";
             } else {
-                return "Numbering 1";
+                return "Numbering 123";
             }
         }
     };
