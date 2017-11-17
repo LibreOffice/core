@@ -57,7 +57,7 @@ public:
     {
     public:
         Context (SlideSorter const & rSlideSorter);
-        ~Context();
+        ~Context() COVERITY_NOEXCEPT_FALSE;
         void Abort();
     private:
         std::shared_ptr<SelectionObserver> mpSelectionObserver;

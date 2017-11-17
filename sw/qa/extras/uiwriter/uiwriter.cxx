@@ -833,7 +833,7 @@ void SwUiWriterTest::testExportRTF()
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 3, /*bBasicCall=*/false);
 
     // Create the clipboard document.
-    std::shared_ptr<SwDoc> xClpDoc(new SwDoc());
+    std::shared_ptr<SwDoc, o3tl::default_delete<SwDoc>()> xClpDoc(new SwDoc);
     xClpDoc->SetClipBoard(true);
     pWrtShell->Copy(xClpDoc.get());
 
