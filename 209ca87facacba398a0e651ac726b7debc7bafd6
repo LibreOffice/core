@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_5b427369",
+        "filename": "sw/source/core/undo/untblk.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-11-17T10:04:07Z",
+      "side": 1,
+      "message": "typo \"Adjusts\"",
+      "range": {
+        "startLine": 80,
+        "startChar": 6,
+        "endLine": 80,
+        "endChar": 12
+      },
+      "revId": "209ca87facacba398a0e651ac726b7debc7bafd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_7b472f77",
+        "filename": "sw/source/core/undo/untblk.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-11-17T10:04:07Z",
+      "side": 1,
+      "message": "typo \"just\"",
+      "range": {
+        "startLine": 164,
+        "startChar": 7,
+        "endLine": 164,
+        "endChar": 11
+      },
+      "revId": "209ca87facacba398a0e651ac726b7debc7bafd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_9b605b03",
+        "filename": "sw/source/core/undo/untblk.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-11-17T10:04:07Z",
+      "side": 1,
+      "message": "typo \"following\"",
+      "range": {
+        "startLine": 169,
+        "startChar": 8,
+        "endLine": 169,
+        "endChar": 17
+      },
+      "revId": "209ca87facacba398a0e651ac726b7debc7bafd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
