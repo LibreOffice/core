@@ -833,6 +833,11 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
         xPageStyle->getPropertyValue(UNO_NAME_FOOTER_TEXT) >>= xFooterText;
         equaliseNumberOfParagraph(rResults, xFooterText);
 
+        // SET/DELETE WATERMARK
+        SfxWatermarkItem aWatermarkItem;
+        aWatermarkItem.SetText(aHelper.GetDocumentWatermark());
+        SetWatermark(aWatermarkItem);
+
         uno::Reference<text::XParagraphCursor> xHeaderParagraphCursor(xHeaderText->createTextCursor(), uno::UNO_QUERY);
         uno::Reference<text::XParagraphCursor> xFooterParagraphCursor(xFooterText->createTextCursor(), uno::UNO_QUERY);
 
