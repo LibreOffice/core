@@ -1308,15 +1308,47 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
 bool SwNoTextFrame::IsTransparent() const
 {
     const SwViewShell* pSh = getRootFrame()->GetCurrShell();
+
     if ( !pSh || !pSh->GetViewOptions()->IsGraphic() )
+    {
         return true;
+    }
 
     const SwGrfNode *pNd;
+
     if( nullptr != (pNd = GetNode()->GetGrfNode()) )
-        return pNd->IsTransparent();
+    {
+        if(pNd->IsTransparent())
+        {
+            return true;
+        }
+    }
+
+    // RotateFlyFrame3: If we are transformed, there are 'free' areas between
+    // the Graphic and the Border/Padding stuff - at least as long as those
+    // (Border and Padding) are not transformed, too
+    if(isTransformableSwFrame())
+    {
+        // we can be more specific - rotations of multiples of
+        // 90 degrees will leave no gaps. Go from [0.0 .. F_2PI]
+        // to [0 .. 360] and check modulo 90
+        const long nRot(static_cast<long>(getLocalFrameRotation() / F_PI180));
+        const bool bMultipleOf90(0 == (nRot % 90));
+
+        if(!bMultipleOf90)
+        {
+            return true;
+        }
+    }
 
     //#29381# OLE are always transparent
-    return true;
+    if(nullptr != GetNode()->GetOLENode())
+    {
+        return true;
+    }
+
+    // return false by default to avoid background paint
+    return false;
 }
 
 void SwNoTextFrame::StopAnimation( OutputDevice* pOut ) const

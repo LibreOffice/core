@@ -43,6 +43,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -316,10 +317,38 @@ bool SwFlyFreeFrame::supportsAutoContour() const
 
     // Check for Padding. Do not support when padding is used, this will
     // produce a covered space around the object (filled with fill defines)
+    const SfxPoolItem* pItem(nullptr);
 
+    if(GetFormat() && SfxItemState::SET == GetFormat()->GetItemState(RES_BOX, false, &pItem))
+    {
+        const SvxBoxItem& rBox = *static_cast< const SvxBoxItem* >(pItem);
 
+        if(rBox.HasBorder(/*bTreatPaddingAsBorder*/true))
+        {
+            return false;
+        }
+    }
 
+    // check for Fill - if we have fill, it will fill the gaps and we will not
+    // support AutoContour
+    if(GetFormat() && GetFormat()->supportsFullDrawingLayerFillAttributeSet())
+    {
+        const drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes(GetFormat()->getSdrAllFillAttributesHelper());
 
+        if(aFillAttributes.get() && aFillAttributes->isUsed())
+        {
+            return false;
+        }
+    }
+    else
+    {
+        const SvxBrushItem aBack(GetFormat()->makeBackgroundBrushItem());
+
+        if(aBack.isUsed())
+        {
+            return false;
+        }
+    }
 
     // else, support
     return true;
