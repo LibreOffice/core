@@ -91,7 +91,7 @@ class SbiIoSystem
     void      WriteCon(const OUString&);
 public:
     SbiIoSystem();
-   ~SbiIoSystem();
+   ~SbiIoSystem() COVERITY_NOEXCEPT_FALSE;
     ErrCode GetError();
     void  Shutdown();
     void  SetPrompt(const OString& r) { aPrompt = r; }
