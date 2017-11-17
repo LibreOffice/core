@@ -630,23 +630,6 @@ IMPL_LINK(ClassificationDialog, SelectMarkingHdl, ListBox&, rBox, void)
     sal_Int32 nSelected = rBox.GetSelectedEntryPos();
     if (nSelected >= 0)
     {
-        std::unique_ptr<EditTextObject> pEditText(m_pEditWindow->pEdEngine->CreateTextObject());
-        std::vector<editeng::Section> aSections;
-        pEditText->GetAllSections(aSections);
-
-        for (editeng::Section const & rSection : aSections)
-        {
-            const SvxFieldItem* pFieldItem = findField(rSection);
-            if (pFieldItem)
-            {
-                const ClassificationField* pClassificationField = dynamic_cast<const ClassificationField*>(pFieldItem->GetField());
-                if (pClassificationField && pClassificationField->meType == ClassificationType::MARKING)
-                {
-                    m_pEditWindow->pEdView->SetSelection(ESelection(rSection.mnParagraph, rSection.mnStart, rSection.mnParagraph, rSection.mnEnd));
-                }
-            }
-        }
-
         const OUString aString = maHelper.GetMarkings()[nSelected];
         insertField(ClassificationType::MARKING, aString, aString);
     }
