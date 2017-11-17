@@ -174,7 +174,7 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
     get(m_pOkButton, "ok");
     get(m_pEditWindow, "classificationEditWindow");
     get(m_pSignButton, "signButton");
-    get(m_pBoldButton, "boldButton");
+    get(m_pToolBox, "toolbox");
     get(m_pRecentlyUsedListBox, "recentlyUsedCB");
     get(m_pClassificationListBox, "classificationCB");
     get(m_pInternationalClassificationListBox, "internationalClassificationCB");
@@ -190,7 +190,8 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPer
     m_pSignButton->SetClickHdl(LINK(this, ClassificationDialog, ButtonClicked));
     m_pSignButton->Show(m_bPerParagraph);
 
-    m_pBoldButton->SetClickHdl(LINK(this, ClassificationDialog, ButtonClicked));
+    m_pToolBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectToolboxHdl));
+
     m_pIntellectualPropertyPartAddButton->SetClickHdl(LINK(this, ClassificationDialog, ButtonClicked));
 
     m_pClassificationListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectClassificationHdl));
@@ -244,7 +245,7 @@ void ClassificationDialog::dispose()
     m_pOkButton.clear();
     m_pEditWindow.clear();
     m_pSignButton.clear();
-    m_pBoldButton.clear();
+    m_pToolBox.clear();
     m_pRecentlyUsedListBox.clear();
     m_pClassificationListBox.clear();
     m_pInternationalClassificationListBox.clear();
@@ -685,11 +686,7 @@ IMPL_LINK(ClassificationDialog, SelectIPPartHdl, ListBox&, rBox, void)
 
 IMPL_LINK(ClassificationDialog, ButtonClicked, Button*, pButton, void)
 {
-    if (pButton == m_pBoldButton)
-    {
-        m_pEditWindow->InvertSelectionWeight();
-    }
-    else if (pButton == m_pSignButton)
+    if (pButton == m_pSignButton)
     {
         m_aParagraphSignHandler();
     }
@@ -699,6 +696,18 @@ IMPL_LINK(ClassificationDialog, ButtonClicked, Button*, pButton, void)
         insertField(ClassificationType::INTELLECTUAL_PROPERTY_PART, sString, sString);
     }
 }
+
+
+IMPL_LINK_NOARG(ClassificationDialog, SelectToolboxHdl, ToolBox*, void)
+{
+    sal_uInt16 nId = m_pToolBox->GetCurItemId();
+    const OUString sCommand = m_pToolBox->GetItemCommand(nId);
+    if (sCommand == "bold")
+    {
+        m_pEditWindow->InvertSelectionWeight();
+    }
+}
+
 
 IMPL_LINK_NOARG(ClassificationDialog, EditWindowModifiedHdl, LinkParamNone*, void)
 {
