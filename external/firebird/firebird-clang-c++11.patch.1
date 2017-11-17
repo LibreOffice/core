@@ -1,0 +1,23 @@
+diff -ur firebird.org/src/common/StatementMetadata.cpp firebird/src/common/StatementMetadata.cpp
+--- firebird.org/src/common/StatementMetadata.cpp	2016-04-14 16:07:29.000000000 +0200
++++ firebird/src/common/StatementMetadata.cpp	2017-11-17 17:14:42.843756359 +0100
+@@ -167,7 +167,7 @@
+ 
+ 	if (plan->isEmpty())
+ 	{
+-		UCHAR info[] = {detailed ? isc_info_sql_explain_plan : isc_info_sql_get_plan};
++		UCHAR info[] = {detailed ? static_cast<UCHAR>(isc_info_sql_explain_plan) : static_cast<UCHAR>(isc_info_sql_get_plan)};
+ 		UCHAR result[INFO_BUFFER_SIZE];
+ 
+ 		getAndParse(sizeof(info), info, sizeof(result), result);
+@@ -484,8 +484,8 @@
+ 		{
+ 			isc_info_sql_sqlda_start,
+ 			2,
+-			(startIndex & 0xFF),
+-			((startIndex >> 8) & 0xFF),
++			static_cast<UCHAR>(startIndex & 0xFF),
++			static_cast<UCHAR>((startIndex >> 8) & 0xFF),
+ 			code
+ 		};
+ 		memcpy(items + 5, DESCRIBE_VARS, sizeof(DESCRIBE_VARS));
