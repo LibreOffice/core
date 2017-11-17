@@ -1645,11 +1645,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             // this makes FID_INS_CELL_CONTENTS superfluous
             {
                 WaitObject aWait( GetViewData()->GetDialogParent() );
-                bool bRet = pTabViewShell->PasteFromSystem(SotClipboardFormatId::STRING, true); // TRUE: no error messages
+
+                const bool bRet = pTabViewShell->PasteFromSystem(SotClipboardFormatId::STRING, true); // TRUE: no error messages
                 if ( bRet )
                 {
-                    rReq.SetReturnValue(SfxInt16Item(nSlot, bRet ? 1 : 0)); // 1 = success, 0 = fail
+                    rReq.SetReturnValue(SfxInt16Item(nSlot, 1)); // 1 = success
                     rReq.Done();
+                }
+                else
+                {
+                    rReq.SetReturnValue(SfxInt16Item(nSlot, 0)); // 0 = fail
                 }
 
                 pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
