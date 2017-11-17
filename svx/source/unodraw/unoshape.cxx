@@ -1616,7 +1616,10 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
     }
 
     if (!pMap)
+    {
+        SAL_WARN("svx.uno", "Unknown Property: " << rPropertyName);
         throw beans::UnknownPropertyException( rPropertyName, static_cast<cppu::OWeakObject*>(this));
+    }
 
     if ((pMap->nFlags & beans::PropertyAttribute::READONLY) != 0)
         throw beans::PropertyVetoException(
