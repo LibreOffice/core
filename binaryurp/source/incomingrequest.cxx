@@ -174,7 +174,7 @@ bool IncomingRequest::execute_throw(
         {
             assert(object_.is());
             css::uno::TypeDescription retType;
-            std::list< std::vector< char > > outBufs;
+            std::vector< std::vector< char > > outBufs;
             std::vector< void * > args;
             switch (member_.get()->eTypeClass) {
             case typelib_TypeClass_INTERFACE_ATTRIBUTE:
@@ -257,7 +257,7 @@ bool IncomingRequest::execute_throw(
                             typelib_InterfaceMethodTypeDescription * >(
                                 member_.get());
                     std::vector< BinaryAny >::iterator i(outArguments->begin());
-                    std::list< std::vector< char > >::iterator j(
+                    std::vector< std::vector< char > >::iterator j(
                         outBufs.begin());
                     for (sal_Int32 k = 0; k != mtd->nParams; ++k) {
                         if (mtd->pParams[k].bOut) {
