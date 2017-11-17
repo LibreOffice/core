@@ -2877,7 +2877,7 @@ void ScColumn::SetFormulaResults( SCROW nRow, const formula::FormulaConstTokenRe
     }
 }
 
-void ScColumn::CalculateInThread( const ScInterpreterContext& rContext, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
+void ScColumn::CalculateInThread( ScInterpreterContext& rContext, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
 {
     assert(pDocument->mbThreadedGroupCalcInProgress);
 

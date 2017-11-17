@@ -155,6 +155,7 @@ public:
                             ScAddress aBatchTopPos,
                             const ScAddress& rTopPos,
                             ScDocument& rDoc,
+                            SvNumberFormatter* pFormatter,
                             std::vector<formula::FormulaConstTokenRef>& rRes,
                             SCROW nIndex,
                             SCROW nLastIndex) :
@@ -162,6 +163,7 @@ public:
         maBatchTopPos(aBatchTopPos),
         mrTopPos(rTopPos),
         mrDoc(rDoc),
+        mpFormatter(pFormatter),
         mrResults(rRes),
         mnIdx(nIndex),
         mnLastIdx(nLastIndex)
@@ -296,7 +298,8 @@ public:
 
             ScCompiler aComp(&mrDoc, maBatchTopPos, aCode2);
             aComp.CompileTokenArray();
-            ScInterpreter aInterpreter(pDest, &mrDoc, mrDoc.GetNonThreadedContext(), maBatchTopPos, aCode2);
+            ScInterpreterContext aContext(mrDoc, mpFormatter);
+            ScInterpreter aInterpreter(pDest, &mrDoc, aContext, maBatchTopPos, aCode2);
             aInterpreter.Interpret();
             mrResults[i] = aInterpreter.GetResultToken();
         } // Row iteration for loop end
@@ -307,6 +310,7 @@ private:
     ScAddress maBatchTopPos;
     const ScAddress& mrTopPos;
     ScDocument& mrDoc;
+    SvNumberFormatter* mpFormatter;
     std::vector<formula::FormulaConstTokenRef>& mrResults;
     SCROW mnIdx;
     SCROW mnLastIdx;
@@ -333,11 +337,12 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                  ScAddress aBatchTopPos,
                  const ScAddress& rTopPos2,
                  ScDocument& rDoc2,
+                 SvNumberFormatter* pFormatter2,
                  std::vector<formula::FormulaConstTokenRef>& rRes,
                  SCROW nIndex,
                  SCROW nLastIndex) :
             comphelper::ThreadTask(rTag),
-            maSWIFunc(rCode2, aBatchTopPos, rTopPos2, rDoc2, rRes, nIndex, nLastIndex)
+            maSWIFunc(rCode2, aBatchTopPos, rTopPos2, rDoc2, pFormatter2, rRes, nIndex, nLastIndex)
         {
         }
         virtual void doWork() override
@@ -352,6 +357,8 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
     static const bool bThreadingProhibited = std::getenv("SC_NO_THREADED_CALCULATION");
 
     bool bUseThreading = !bThreadingProhibited && officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get();
+
+    SvNumberFormatter* pFormatter = rDoc.GetNonThreadedContext().GetFormatTable();
 
     if (bUseThreading)
     {
@@ -381,7 +388,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
             if ( nRemaining )
                 --nRemaining;
             SCROW nLast = nStart + nCount - 1;
-            rThreadPool.pushTask(new Executor(aTag, rCode, aTmpPos, rTopPos, rDoc, aResults, nStart, nLast));
+            rThreadPool.pushTask(new Executor(aTag, rCode, aTmpPos, rTopPos, rDoc, pFormatter, aResults, nStart, nLast));
             aTmpPos.IncRow(nCount);
             nLeft -= nCount;
             nStart = nLast + 1;
@@ -392,7 +399,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
     }
     else
     {
-        SoftwareInterpreterFunc aSWIFunc(rCode, aTmpPos, rTopPos, rDoc, aResults, 0, xGroup->mnLength - 1);
+        SoftwareInterpreterFunc aSWIFunc(rCode, aTmpPos, rTopPos, rDoc, pFormatter, aResults, 0, xGroup->mnLength - 1);
         aSWIFunc();
     }
 

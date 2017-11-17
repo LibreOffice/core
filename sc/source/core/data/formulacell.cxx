@@ -1746,7 +1746,7 @@ class StackCleaner
 };
 }
 
-void ScFormulaCell::InterpretTail( const ScInterpreterContext& rContext, ScInterpretTailParameter eTailParam )
+void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTailParameter eTailParam )
 {
     RecursionCounter aRecursionCounter( pDocument->GetRecursionHelper(), this);
     nSeenInIteration = pDocument->GetRecursionHelper().GetIteration();
