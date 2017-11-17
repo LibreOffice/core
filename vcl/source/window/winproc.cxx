@@ -1599,7 +1599,8 @@ static void KillOwnPopups( vcl::Window* pWindow )
 
 void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight )
 {
-    if( pWindow->GetStyle() & (WB_MOVEABLE|WB_SIZEABLE) )
+    const bool bChanged = (nNewWidth != pWindow->GetOutputWidthPixel()) || (nNewHeight != pWindow->GetOutputHeightPixel());
+    if (bChanged && pWindow->GetStyle() & (WB_MOVEABLE|WB_SIZEABLE))
     {
         KillOwnPopups( pWindow );
         if( pWindow->ImplGetWindow() != ImplGetSVData()->maHelpData.mpHelpWin )
@@ -1611,7 +1612,7 @@ void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight )
          pWindow->ImplGetWindow()->ImplGetWindowImpl()->mbAllResize
        )
     {
-        if ( (nNewWidth != pWindow->GetOutputWidthPixel()) || (nNewHeight != pWindow->GetOutputHeightPixel()) )
+        if (bChanged)
         {
             pWindow->mnOutWidth  = nNewWidth;
             pWindow->mnOutHeight = nNewHeight;
