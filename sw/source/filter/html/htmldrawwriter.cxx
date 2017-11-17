@@ -187,25 +187,19 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
     }
 
     // LOOP
-    sal_Int32 nCount =
-        static_cast<const SdrTextAniCountItem&>(rItemSet.Get( SDRATTR_TEXT_ANICOUNT ))
-                                             .GetValue();
+    sal_Int32 nCount = rItemSet.Get( SDRATTR_TEXT_ANICOUNT ).GetValue();
     if( 0==nCount )
         nCount = SdrTextAniKind::Slide==eAniKind ? 1 : -1;
     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_loop).append("=\"").
         append(nCount).append("\"");
 
     // SCROLLDELAY
-    sal_uInt16 nDelay =
-        static_cast<const SdrTextAniDelayItem&>(rItemSet.Get( SDRATTR_TEXT_ANIDELAY ))
-                                            .GetValue();
+    sal_uInt16 nDelay = rItemSet.Get( SDRATTR_TEXT_ANIDELAY ).GetValue();
     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_scrolldelay).
         append("=\"").append(static_cast<sal_Int32>(nDelay)).append("\"");
 
     // SCROLLAMOUNT
-    sal_Int16 nAmount =
-        static_cast<const SdrTextAniAmountItem&>(rItemSet.Get( SDRATTR_TEXT_ANIAMOUNT ))
-                                             .GetValue();
+    sal_Int16 nAmount = rItemSet.Get( SDRATTR_TEXT_ANIAMOUNT ).GetValue();
     if( nAmount < 0 )
     {
         nAmount = -nAmount;

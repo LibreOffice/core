@@ -66,7 +66,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrRectObj::createV
         aObjectRange.getMinX(), aObjectRange.getMinY()));
 
     // calculate corner radius
-    sal_uInt32 nCornerRadius(static_cast<const SdrMetricItem&>(rItemSet.Get(SDRATTR_ECKENRADIUS)).GetValue());
+    sal_uInt32 nCornerRadius(rItemSet.Get(SDRATTR_ECKENRADIUS).GetValue());
     double fCornerRadiusX;
     double fCornerRadiusY;
     drawinglayer::primitive2d::calculateRelativeCornerRadius(nCornerRadius, aObjectRange, fCornerRadiusX, fCornerRadiusY);

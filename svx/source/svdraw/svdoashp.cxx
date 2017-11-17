@@ -206,15 +206,15 @@ static bool ImpVerticalSwitch( const SdrObjCustomShape& rCustoShape )
 SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemSet& rOriginalSet)
 {
     SdrObject* pRetval = nullptr;
-    const bool bShadow(static_cast<const SdrOnOffItem&>(rOriginalSet.Get(SDRATTR_SHADOW)).GetValue());
+    const bool bShadow(rOriginalSet.Get(SDRATTR_SHADOW).GetValue());
 
     if(bShadow)
     {
         // create a shadow representing object
-        const sal_Int32 nXDist(static_cast<const SdrMetricItem&>(rOriginalSet.Get(SDRATTR_SHADOWXDIST)).GetValue());
-        const sal_Int32 nYDist(static_cast<const SdrMetricItem&>(rOriginalSet.Get(SDRATTR_SHADOWYDIST)).GetValue());
-        const ::Color aShadowColor(static_cast<const XColorItem&>(rOriginalSet.Get(SDRATTR_SHADOWCOLOR)).GetColorValue());
-        const sal_uInt16 nShadowTransparence(static_cast<const SdrPercentItem&>(rOriginalSet.Get(SDRATTR_SHADOWTRANSPARENCE)).GetValue());
+        const sal_Int32 nXDist(rOriginalSet.Get(SDRATTR_SHADOWXDIST).GetValue());
+        const sal_Int32 nYDist(rOriginalSet.Get(SDRATTR_SHADOWYDIST).GetValue());
+        const ::Color aShadowColor(rOriginalSet.Get(SDRATTR_SHADOWCOLOR).GetColorValue());
+        const sal_uInt16 nShadowTransparence(rOriginalSet.Get(SDRATTR_SHADOWTRANSPARENCE).GetValue());
         pRetval = rOriginal.Clone();
         DBG_ASSERT(pRetval, "ImpCreateShadowObjectClone: Could not clone object (!)");
 
@@ -455,7 +455,7 @@ const SdrObject* SdrObjCustomShape::GetSdrObjectShadowFromCustomShape() const
         if(pSdrObject)
         {
             const SfxItemSet& rOriginalSet = GetObjectItemSet();
-            const bool bShadow(static_cast<const SdrOnOffItem&>(rOriginalSet.Get( SDRATTR_SHADOW )).GetValue());
+            const bool bShadow(rOriginalSet.Get( SDRATTR_SHADOW ).GetValue());
 
             if(bShadow)
             {
@@ -2158,17 +2158,17 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::TakeCreatePoly(const SdrDragStat& /*r
 bool SdrObjCustomShape::IsAutoGrowHeight() const
 {
     const SfxItemSet& rSet = GetMergedItemSet();
-    bool bIsAutoGrowHeight = static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
+    bool bIsAutoGrowHeight = rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue();
     if ( bIsAutoGrowHeight && IsVerticalWriting() )
-        bIsAutoGrowHeight = !static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_TEXT_WORDWRAP)).GetValue();
+        bIsAutoGrowHeight = !rSet.Get(SDRATTR_TEXT_WORDWRAP).GetValue();
     return bIsAutoGrowHeight;
 }
 bool SdrObjCustomShape::IsAutoGrowWidth() const
 {
     const SfxItemSet& rSet = GetMergedItemSet();
-    bool bIsAutoGrowWidth = static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
+    bool bIsAutoGrowWidth = rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue();
     if ( bIsAutoGrowWidth && !IsVerticalWriting() )
-        bIsAutoGrowWidth = !static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_TEXT_WORDWRAP)).GetValue();
+        bIsAutoGrowWidth = !rSet.Get(SDRATTR_TEXT_WORDWRAP).GetValue();
     return bIsAutoGrowWidth;
 }
 
@@ -2192,8 +2192,8 @@ void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
             const SfxItemSet& rSet = GetObjectItemSet();
 
             // Also exchange horizontal and vertical adjust items
-            SdrTextHorzAdjust eHorz = static_cast<const SdrTextHorzAdjustItem&>(rSet.Get(SDRATTR_TEXT_HORZADJUST)).GetValue();
-            SdrTextVertAdjust eVert = static_cast<const SdrTextVertAdjustItem&>(rSet.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
+            SdrTextHorzAdjust eHorz = rSet.Get(SDRATTR_TEXT_HORZADJUST).GetValue();
+            SdrTextVertAdjust eVert = rSet.Get(SDRATTR_TEXT_VERTADJUST).GetValue();
 
             // rescue object size
             tools::Rectangle aObjectRect = GetSnapRect();
@@ -2307,7 +2307,7 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
                     if( pOutlinerParaObject != nullptr )
                     {
                         rOutliner.SetText(*pOutlinerParaObject);
-                        rOutliner.SetFixedCellHeight(static_cast<const SdrTextFixedCellHeightItem&>(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
+                        rOutliner.SetFixedCellHeight(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
                     }
                     if ( bWdtGrow )
                     {
@@ -2529,7 +2529,7 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools
     if ( nMaxHgt == 0 || nMaxHgt > aMaxSiz.Height() )
         nMaxHgt=aMaxSiz.Height();
 
-    if (static_cast<const SdrOnOffItem&>(GetMergedItem(SDRATTR_TEXT_WORDWRAP)).GetValue())
+    if (GetMergedItem(SDRATTR_TEXT_WORDWRAP).GetValue())
     {
         if ( IsVerticalWriting() )
         {
@@ -2631,7 +2631,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& 
     long nAnkWdt=aAnkRect.GetWidth();
     long nAnkHgt=aAnkRect.GetHeight();
 
-    if (static_cast<const SdrOnOffItem&>(GetMergedItem(SDRATTR_TEXT_WORDWRAP)).GetValue())
+    if (GetMergedItem(SDRATTR_TEXT_WORDWRAP).GetValue())
     {
         if ( IsVerticalWriting() )
             nMaxAutoPaperHeight = nAnkHgt;
@@ -2834,7 +2834,7 @@ SdrObject* SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bool bAddText) co
 
         if(pRetval)
         {
-            const bool bShadow(static_cast<const SdrOnOffItem&>(GetMergedItem(SDRATTR_SHADOW)).GetValue());
+            const bool bShadow(GetMergedItem(SDRATTR_SHADOW).GetValue());
             if(bShadow)
             {
                 pRetval->SetMergedItem(makeSdrShadowItem(true));

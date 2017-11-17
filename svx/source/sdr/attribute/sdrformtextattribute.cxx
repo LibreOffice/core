@@ -82,7 +82,7 @@ namespace
 
         if(bShadow)
         {
-            nRetval = (sal_uInt8)((static_cast<const SdrPercentItem&>(rSet.Get(SDRATTR_SHADOWTRANSPARENCE)).GetValue() * 255) / 100);
+            nRetval = (sal_uInt8)((rSet.Get(SDRATTR_SHADOWTRANSPARENCE).GetValue() * 255) / 100);
         }
         else
         {
@@ -98,7 +98,7 @@ namespace
 
         if(bShadow)
         {
-            const Color aShadowColor(static_cast<const XColorItem&>(rSet.Get(SDRATTR_SHADOWCOLOR)).GetColorValue());
+            const Color aShadowColor(rSet.Get(SDRATTR_SHADOWCOLOR).GetColorValue());
             aColorAttribute = aShadowColor.getBColor();
         }
         else

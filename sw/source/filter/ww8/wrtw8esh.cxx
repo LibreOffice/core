@@ -694,7 +694,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                     {
                         const SfxItemSet& rSet = pObj->GetMergedItemSet();
                         long nHeight = aRect.GetHeight();
-                        if (const SdrMetricItem* pItem = static_cast<const SdrMetricItem*>(rSet.GetItem(SDRATTR_TEXT_UPPERDIST)))
+                        if (const SdrMetricItem* pItem = rSet.GetItem(SDRATTR_TEXT_UPPERDIST))
                             nHeight += pItem->GetValue();
                         aRect.SetSize(Size(aRect.GetWidth(), nHeight));
                     }

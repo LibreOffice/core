@@ -1314,8 +1314,8 @@ void SdrDragObjOwn::MoveSdrDrag(const Point& rNoSnapPnt)
     // also this (pretty indirect) property change is possible. If it gets
     // changed, it needs to be copied to the original since nothing will
     // happen when it only changes in the drag clone
-    const bool bOldAutoGrowWidth(static_cast<const SdrOnOffItem&>(pObj->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue());
-    const bool bNewAutoGrowWidth(static_cast<const SdrOnOffItem&>(mpClone->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue());
+    const bool bOldAutoGrowWidth(pObj->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH).GetValue());
+    const bool bNewAutoGrowWidth(mpClone->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH).GetValue());
 
     if (bOldAutoGrowWidth != bNewAutoGrowWidth)
     {

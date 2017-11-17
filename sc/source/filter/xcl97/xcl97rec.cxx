@@ -752,7 +752,7 @@ static sal_uInt8 lcl_GetVerAlignFromItemSet( const SfxItemSet& rItemSet )
 {
     sal_uInt8 nVerAlign = EXC_OBJ_VER_TOP;
 
-    switch( static_cast< const SdrTextVertAdjustItem& >( rItemSet.Get( SDRATTR_TEXT_VERTADJUST ) ).GetValue() )
+    switch( rItemSet.Get( SDRATTR_TEXT_VERTADJUST ).GetValue() )
     {
         case SDRTEXTVERTADJUST_TOP:     nVerAlign = EXC_OBJ_VER_TOP;       break;
         case SDRTEXTVERTADJUST_CENTER:  nVerAlign = EXC_OBJ_VER_CENTER;    break;

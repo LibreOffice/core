@@ -313,17 +313,17 @@ void SdOOXMLExportTest1::testFdo71961()
     SdrObjCustomShape *pTxtObj = dynamic_cast<SdrObjCustomShape *>( pPage->GetObj( 1 ));
     CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( OUString( "Text to be always wrapped" ), pTxtObj->GetOutlinerParaObject()->GetTextObject().GetText(0));
-    CPPUNIT_ASSERT_EQUAL( true, (static_cast<const SdrOnOffItem&>(pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue());
+    CPPUNIT_ASSERT_EQUAL( true, pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP).GetValue());
 
     pTxtObj = dynamic_cast<SdrObjCustomShape *>( pPage->GetObj( 2 ));
     CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( OUString( "Custom shape non-wrapped text" ), pTxtObj->GetOutlinerParaObject()->GetTextObject().GetText(0));
-    CPPUNIT_ASSERT_EQUAL( false, (static_cast<const SdrOnOffItem&>(pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue());
+    CPPUNIT_ASSERT_EQUAL( false, pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP).GetValue());
 
     pTxtObj = dynamic_cast<SdrObjCustomShape *>( pPage->GetObj( 3 ));
     CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( OUString( "Custom shape wrapped text" ), pTxtObj->GetOutlinerParaObject()->GetTextObject().GetText(0));
-    CPPUNIT_ASSERT_EQUAL( true, (static_cast<const SdrOnOffItem&>(pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue());
+    CPPUNIT_ASSERT_EQUAL( true, pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP).GetValue());
 
     xDocShRef->DoClose();
 }
@@ -397,10 +397,10 @@ void SdOOXMLExportTest1::testBnc862510_5()
     CPPUNIT_ASSERT(pObjGroup);
     const SdrObject* pObj = pObjGroup->GetSubList()->GetObj(1);
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST))).GetValue());
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST))).GetValue());
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(7510), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST))).GetValue());
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST))).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(7510), pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST).GetValue());
 
     xDocShRef->DoClose();
 }

@@ -108,8 +108,8 @@ namespace sdr
             {
                 // for SC, the caption object may have a specialized shadow. The usual object shadow is off
                 // and a specialized shadow gets created here (see old paint)
-                const XColorItem& rShadColItem = static_cast<const XColorItem&>(rItemSet.Get(SDRATTR_SHADOWCOLOR));
-                const sal_uInt16 nShadowTransparence(static_cast<const SdrPercentItem&>(rItemSet.Get(SDRATTR_SHADOWTRANSPARENCE)).GetValue());
+                const XColorItem& rShadColItem = rItemSet.Get(SDRATTR_SHADOWCOLOR);
+                const sal_uInt16 nShadowTransparence(rItemSet.Get(SDRATTR_SHADOWTRANSPARENCE).GetValue());
                 const Color aShadowColor(rShadColItem.GetColorValue());
                 const drawing::FillStyle eShadowStyle = rItemSet.Get(XATTR_FILLSTYLE).GetValue();
 
@@ -145,8 +145,8 @@ namespace sdr
                 if(!aFill.isDefault() && 1.0 != aFill.getTransparence())
                 {
                     // add shadow offset to object matrix
-                    const sal_uInt32 nXDist(static_cast<const SdrMetricItem&>(rItemSet.Get(SDRATTR_SHADOWXDIST)).GetValue());
-                    const sal_uInt32 nYDist(static_cast<const SdrMetricItem&>(rItemSet.Get(SDRATTR_SHADOWYDIST)).GetValue());
+                    const sal_uInt32 nXDist(rItemSet.Get(SDRATTR_SHADOWXDIST).GetValue());
+                    const sal_uInt32 nYDist(rItemSet.Get(SDRATTR_SHADOWYDIST).GetValue());
 
                     if(nXDist || nYDist)
                     {

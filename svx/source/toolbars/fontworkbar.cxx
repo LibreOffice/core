@@ -64,8 +64,8 @@ void SetAlignmentState( SdrView const * pSdrView, SfxItemSet& rSet )
         if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
             sal_Int32 nOldAlignment = nAlignment;
-            const SdrTextHorzAdjustItem&      rTextHorzAdjustItem    = static_cast<const SdrTextHorzAdjustItem&>(pObj->GetMergedItem( SDRATTR_TEXT_HORZADJUST ));
-            const SdrTextFitToSizeTypeItem&   rTextFitToSizeTypeItem = static_cast<const SdrTextFitToSizeTypeItem&>(pObj->GetMergedItem( SDRATTR_TEXT_FITTOSIZE ));
+            const SdrTextHorzAdjustItem&      rTextHorzAdjustItem    = pObj->GetMergedItem( SDRATTR_TEXT_HORZADJUST );
+            const SdrTextFitToSizeTypeItem&   rTextFitToSizeTypeItem = pObj->GetMergedItem( SDRATTR_TEXT_FITTOSIZE );
             switch ( rTextHorzAdjustItem.GetValue() )
             {
                 case SDRTEXTHORZADJUST_LEFT   : nAlignment = 0; break;

@@ -415,15 +415,15 @@ OUString SdrCaptionObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 void SdrCaptionObj::ImpGetCaptParams(ImpCaptParams& rPara) const
 {
     const SfxItemSet& rSet = GetObjectItemSet();
-    rPara.eType      =static_cast<const SdrCaptionTypeItem&>      (rSet.Get(SDRATTR_CAPTIONTYPE      )).GetValue();
-    rPara.bFixedAngle=static_cast<const SdrOnOffItem&>            (rSet.Get(SDRATTR_CAPTIONFIXEDANGLE)).GetValue();
+    rPara.eType      =rSet.Get(SDRATTR_CAPTIONTYPE      ).GetValue();
+    rPara.bFixedAngle=rSet.Get(SDRATTR_CAPTIONFIXEDANGLE).GetValue();
     rPara.nGap       =static_cast<const SdrCaptionGapItem&>       (rSet.Get(SDRATTR_CAPTIONGAP       )).GetValue();
-    rPara.eEscDir    =static_cast<const SdrCaptionEscDirItem&>    (rSet.Get(SDRATTR_CAPTIONESCDIR    )).GetValue();
-    rPara.bEscRel    =static_cast<const SdrCaptionEscIsRelItem&>  (rSet.Get(SDRATTR_CAPTIONESCISREL  )).GetValue();
-    rPara.nEscRel    =static_cast<const SdrCaptionEscRelItem&>    (rSet.Get(SDRATTR_CAPTIONESCREL    )).GetValue();
-    rPara.nEscAbs    =static_cast<const SdrCaptionEscAbsItem&>    (rSet.Get(SDRATTR_CAPTIONESCABS    )).GetValue();
-    rPara.nLineLen   =static_cast<const SdrCaptionLineLenItem&>   (rSet.Get(SDRATTR_CAPTIONLINELEN   )).GetValue();
-    rPara.bFitLineLen=static_cast<const SdrCaptionFitLineLenItem&>(rSet.Get(SDRATTR_CAPTIONFITLINELEN)).GetValue();
+    rPara.eEscDir    =rSet.Get(SDRATTR_CAPTIONESCDIR    ).GetValue();
+    rPara.bEscRel    =rSet.Get(SDRATTR_CAPTIONESCISREL  ).GetValue();
+    rPara.nEscRel    =rSet.Get(SDRATTR_CAPTIONESCREL    ).GetValue();
+    rPara.nEscAbs    =rSet.Get(SDRATTR_CAPTIONESCABS    ).GetValue();
+    rPara.nLineLen   =rSet.Get(SDRATTR_CAPTIONLINELEN   ).GetValue();
+    rPara.bFitLineLen=rSet.Get(SDRATTR_CAPTIONFITLINELEN).GetValue();
 }
 
 void SdrCaptionObj::ImpRecalcTail()

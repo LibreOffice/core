@@ -7387,16 +7387,16 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const & xCel
     {
         Reference< XPropertySet > xPropSet( xCell, UNO_QUERY_THROW );
 
-        const sal_Int32 nLeftDist(static_cast<const SdrMetricItem&>(pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST)).GetValue());
-        const sal_Int32 nRightDist(static_cast<const SdrMetricItem&>(pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
-        const sal_Int32 nUpperDist(static_cast<const SdrMetricItem&>(pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
-        const sal_Int32 nLowerDist(static_cast<const SdrMetricItem&>(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
+        const sal_Int32 nLeftDist(pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST).GetValue());
+        const sal_Int32 nRightDist(pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST).GetValue());
+        const sal_Int32 nUpperDist(pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST).GetValue());
+        const sal_Int32 nLowerDist(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST).GetValue());
         xPropSet->setPropertyValue( "TextUpperDistance", Any( nUpperDist ) );
         xPropSet->setPropertyValue( "TextRightDistance", Any( nRightDist ) );
         xPropSet->setPropertyValue( "TextLeftDistance", Any( nLeftDist ) );
         xPropSet->setPropertyValue( "TextLowerDistance", Any( nLowerDist ) );
 
-        const SdrTextVertAdjust eTextVertAdjust(static_cast<const SdrTextVertAdjustItem&>(pObj->GetMergedItem(SDRATTR_TEXT_VERTADJUST)).GetValue());
+        const SdrTextVertAdjust eTextVertAdjust(pObj->GetMergedItem(SDRATTR_TEXT_VERTADJUST).GetValue());
         drawing::TextVerticalAdjust eVA( drawing::TextVerticalAdjust_TOP );
         if ( eTextVertAdjust == SDRTEXTVERTADJUST_CENTER )
             eVA = drawing::TextVerticalAdjust_CENTER;
@@ -7405,7 +7405,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const & xCel
         xPropSet->setPropertyValue( "TextVerticalAdjust", Any( eVA ) );
 
         //set textHorizontalAdjust and TextWritingMode attr
-        const sal_Int32 eHA(static_cast<const SdrTextHorzAdjustItem&>(pObj->GetMergedItem(SDRATTR_TEXT_HORZADJUST)).GetValue());
+        const sal_Int32 eHA(pObj->GetMergedItem(SDRATTR_TEXT_HORZADJUST).GetValue());
         const SvxFrameDirection eDirection = pObj->GetMergedItem(EE_PARA_WRITINGDIR).GetValue();
         xPropSet->setPropertyValue(  "TextHorizontalAdjust" , Any( eHA ) );
         if ( eDirection == SvxFrameDirection::Vertical_RL_TB )

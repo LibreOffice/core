@@ -215,7 +215,7 @@ namespace sdr
                     }
 
                     // check if SdrTextWordWrapItem is set
-                    bWordWrap = static_cast<const SdrOnOffItem&>(GetCustomShapeObj().GetMergedItem(SDRATTR_TEXT_WORDWRAP)).GetValue();
+                    bWordWrap = GetCustomShapeObj().GetMergedItem(SDRATTR_TEXT_WORDWRAP).GetValue();
                 }
 
                 // create primitive

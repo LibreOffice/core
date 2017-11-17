@@ -1224,7 +1224,7 @@ void ScDrawTextObjectBar::GetStatePropPanelAttr(SfxItemSet &rSet)
                 SfxItemState eConState = aEditAttr.GetItemState( SDRATTR_TEXT_CONTOURFRAME );
                 if( eConState != SfxItemState::DONTCARE )
                 {
-                    bContour = static_cast<const SdrOnOffItem&>( aEditAttr.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
+                    bContour = aEditAttr.Get( SDRATTR_TEXT_CONTOURFRAME ).GetValue();
                 }
                 if (bContour) break;
 
@@ -1234,7 +1234,7 @@ void ScDrawTextObjectBar::GetStatePropPanelAttr(SfxItemSet &rSet)
                 //if(SfxItemState::DONTCARE != eVState && SfxItemState::DONTCARE != eHState)
                 if(SfxItemState::DONTCARE != eVState)
                 {
-                    SdrTextVertAdjust eTVA = static_cast<const SdrTextVertAdjustItem&>(aEditAttr.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
+                    SdrTextVertAdjust eTVA = aEditAttr.Get(SDRATTR_TEXT_VERTADJUST).GetValue();
                     bool bSet = (nSlotId == SID_TABLE_VERT_NONE && eTVA == SDRTEXTVERTADJUST_TOP) ||
                             (nSlotId == SID_TABLE_VERT_CENTER && eTVA == SDRTEXTVERTADJUST_CENTER) ||
                             (nSlotId == SID_TABLE_VERT_BOTTOM && eTVA == SDRTEXTVERTADJUST_BOTTOM);

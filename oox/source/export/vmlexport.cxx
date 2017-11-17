@@ -389,7 +389,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
             // Watermark need some padding to be compatible with MSO
             long nPaddingY = 0;
             const SfxItemSet& rSet = m_pSdrObject->GetMergedItemSet();
-            if ( const SdrMetricItem* pItem = static_cast<const SdrMetricItem*>( rSet.GetItem( SDRATTR_TEXT_UPPERDIST ) ) )
+            if ( const SdrMetricItem* pItem = rSet.GetItem( SDRATTR_TEXT_UPPERDIST ) )
                 nPaddingY += pItem->GetValue();
 
             tools::Rectangle aRect( rRect );
