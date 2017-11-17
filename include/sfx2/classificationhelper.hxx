@@ -145,7 +145,7 @@ public:
 
     OUString makeTextKey() const
     {
-        return getPolicyKey() + "Text";
+        return getPolicyKey() + "Custom:Text";
     }
 
     OUString makeNumberedTextKey()
@@ -180,7 +180,7 @@ public:
 
     OUString makeMarkingKey() const
     {
-        return getPolicyKey() + "Marking";
+        return getPolicyKey() + "Custom:Marking";
     }
 
     OUString makeNumberedMarkingKey()
@@ -195,7 +195,7 @@ public:
 
     OUString makeIntellectualPropertyPartKey() const
     {
-        return getPolicyKey() + "IntellectualPropertyPart";
+        return getPolicyKey() + "Custom:IntellectualPropertyPart";
     }
 
     OUString makeNumberedIntellectualPropertyPartKey()
@@ -210,7 +210,7 @@ public:
 
     OUString makeFullTextualRepresentationKey() const
     {
-        return getPolicyKey() + "FullTexturalRepresentation";
+        return getPolicyKey() + "Custom:FullTexturalRepresentation";
     }
 
     /// Classification creation origin key
