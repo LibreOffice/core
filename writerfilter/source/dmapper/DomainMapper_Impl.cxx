@@ -3147,38 +3147,39 @@ void  DomainMapper_Impl::handleRubyEQField( const FieldContextPtr& pContext)
     }
 
     nIndex = rCommand.indexOf("\\o");
-    if (nIndex != -1 && (nIndex = rCommand.indexOf('(', nIndex)) != -1 && (nEnd = rCommand.lastIndexOf(')'))!=-1 && nEnd > nIndex)
+    if (nIndex == -1 || (nIndex = rCommand.indexOf('(', nIndex)) == -1 || (nEnd = rCommand.lastIndexOf(')'))==-1 || nEnd <= nIndex)
+        return;
+
+    OUString sRubyParts = rCommand.copy(nIndex+1,nEnd-nIndex-1);
+    nIndex = 0;
+    OUString sPart1 = sRubyParts.getToken(0, ',', nIndex);
+    OUString sPart2 = sRubyParts.getToken(0, ',', nIndex);
+    if ((nIndex = sPart1.indexOf('(')) != -1 && (nEnd = sPart1.lastIndexOf(')'))!=-1  && nEnd > nIndex)
     {
-        OUString sRubyParts = rCommand.copy(nIndex+1,nEnd-nIndex-1);
-        nIndex = 0;
-        OUString sPart1 = sRubyParts.getToken(0, ',', nIndex);
-        OUString sPart2 = sRubyParts.getToken(0, ',', nIndex);
-        if ((nIndex = sPart1.indexOf('(')) != -1 && (nEnd = sPart1.lastIndexOf(')'))!=-1  && nEnd > nIndex)
-        {
-            aInfo.sRubyText = sPart1.copy(nIndex+1,nEnd-nIndex-1);
-        }
-
-        PropertyMapPtr pRubyContext(new PropertyMap());
-        pRubyContext->InsertProps(GetTopContext());
-        if (aInfo.nHps > 0)
-        {
-            double fVal = double(aInfo.nHps) / 2.;
-            uno::Any aVal = uno::makeAny( fVal );
-
-            pRubyContext->Insert(PROP_CHAR_HEIGHT, aVal);
-            pRubyContext->Insert(PROP_CHAR_HEIGHT_ASIAN, aVal);
-        }
-        PropertyValueVector_t aProps = comphelper::sequenceToContainer< PropertyValueVector_t >(pRubyContext->GetPropertyValues());
-        aInfo.sRubyStyle = m_rDMapper.getOrCreateCharStyle(aProps, /*bAlwaysCreate=*/false);
-        PropertyMapPtr pCharContext(new PropertyMap());
-        if (m_pLastCharacterContext.get())
-            pCharContext->InsertProps(m_pLastCharacterContext);
-        pCharContext->InsertProps(pContext->getProperties());
-        pCharContext->Insert(PROP_RUBY_TEXT, uno::makeAny( aInfo.sRubyText ) );
-        pCharContext->Insert(PROP_RUBY_ADJUST, uno::makeAny((sal_Int16)ConversionHelper::convertRubyAlign(aInfo.nRubyAlign)));
-        pCharContext->Insert(PROP_RUBY_STYLE, uno::makeAny(aInfo.sRubyStyle));
-        appendTextPortion(sPart2, pCharContext);
+        aInfo.sRubyText = sPart1.copy(nIndex+1,nEnd-nIndex-1);
     }
+
+    PropertyMapPtr pRubyContext(new PropertyMap());
+    pRubyContext->InsertProps(GetTopContext());
+    if (aInfo.nHps > 0)
+    {
+        double fVal = double(aInfo.nHps) / 2.;
+        uno::Any aVal = uno::makeAny( fVal );
+
+        pRubyContext->Insert(PROP_CHAR_HEIGHT, aVal);
+        pRubyContext->Insert(PROP_CHAR_HEIGHT_ASIAN, aVal);
+    }
+    PropertyValueVector_t aProps = comphelper::sequenceToContainer< PropertyValueVector_t >(pRubyContext->GetPropertyValues());
+    aInfo.sRubyStyle = m_rDMapper.getOrCreateCharStyle(aProps, /*bAlwaysCreate=*/false);
+    PropertyMapPtr pCharContext(new PropertyMap());
+    if (m_pLastCharacterContext.get())
+        pCharContext->InsertProps(m_pLastCharacterContext);
+    pCharContext->InsertProps(pContext->getProperties());
+    pCharContext->Insert(PROP_RUBY_TEXT, uno::makeAny( aInfo.sRubyText ) );
+    pCharContext->Insert(PROP_RUBY_ADJUST, uno::makeAny((sal_Int16)ConversionHelper::convertRubyAlign(aInfo.nRubyAlign)));
+    pCharContext->Insert(PROP_RUBY_STYLE, uno::makeAny(aInfo.sRubyStyle));
+    appendTextPortion(sPart2, pCharContext);
+
 }
 
 void DomainMapper_Impl::handleAutoNum
@@ -3230,94 +3231,95 @@ void DomainMapper_Impl::handleAuthor
 {
     //some docproperties should be imported as document statistic fields, some as DocInfo fields
     //others should be user fields
-    if (!rFirstParam.isEmpty())
-    {
-        #define SET_ARABIC      0x01
-        #define SET_DATE        0x04
-        struct DocPropertyMap
-        {
-            const sal_Char* pDocPropertyName;
-            const sal_Char* pServiceName;
-            sal_uInt8       nFlags;
-        };
-        static const DocPropertyMap aDocProperties[] =
-        {
-            {"CreateTime",       "DocInfo.CreateDateTime",  SET_DATE},
-            {"Characters",       "CharacterCount",          SET_ARABIC},
-            {"Comments",         "DocInfo.Description",     0},
-            {"Keywords",         "DocInfo.KeyWords",        0},
-            {"LastPrinted",      "DocInfo.PrintDateTime",   0},
-            {"LastSavedBy",      "DocInfo.ChangeAuthor",    0},
-            {"LastSavedTime",    "DocInfo.ChangeDateTime",  SET_DATE},
-            {"Paragraphs",       "ParagraphCount",          SET_ARABIC},
-            {"RevisionNumber",   "DocInfo.Revision",        0},
-            {"Subject",          "DocInfo.Subject",         0},
-            {"Template",         "TemplateName",            0},
-            {"Title",            "DocInfo.Title",           0},
-            {"TotalEditingTime", "DocInfo.EditTime",        0},
-            {"Words",            "WordCount",               SET_ARABIC}
+    if (rFirstParam.isEmpty())
+        return;
 
-            //other available DocProperties:
-            //Bytes, Category, CharactersWithSpaces, Company
-            //HyperlinkBase,
-            //Lines, Manager, NameofApplication, ODMADocId, Pages,
-            //Security,
-        };
-        uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(m_xTextDocument, uno::UNO_QUERY);
-        uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
-        uno::Reference<beans::XPropertySet>  xUserDefinedProps(xDocumentProperties->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
-        uno::Reference<beans::XPropertySetInfo> xPropertySetInfo =  xUserDefinedProps->getPropertySetInfo();
-        //search for a field mapping
-        OUString sFieldServiceName;
-        sal_uInt16 nMap = 0;
-        for( ; nMap < SAL_N_ELEMENTS(aDocProperties); ++nMap )
+    #define SET_ARABIC      0x01
+    #define SET_DATE        0x04
+    struct DocPropertyMap
+    {
+        const sal_Char* pDocPropertyName;
+        const sal_Char* pServiceName;
+        sal_uInt8       nFlags;
+    };
+    static const DocPropertyMap aDocProperties[] =
+    {
+        {"CreateTime",       "DocInfo.CreateDateTime",  SET_DATE},
+        {"Characters",       "CharacterCount",          SET_ARABIC},
+        {"Comments",         "DocInfo.Description",     0},
+        {"Keywords",         "DocInfo.KeyWords",        0},
+        {"LastPrinted",      "DocInfo.PrintDateTime",   0},
+        {"LastSavedBy",      "DocInfo.ChangeAuthor",    0},
+        {"LastSavedTime",    "DocInfo.ChangeDateTime",  SET_DATE},
+        {"Paragraphs",       "ParagraphCount",          SET_ARABIC},
+        {"RevisionNumber",   "DocInfo.Revision",        0},
+        {"Subject",          "DocInfo.Subject",         0},
+        {"Template",         "TemplateName",            0},
+        {"Title",            "DocInfo.Title",           0},
+        {"TotalEditingTime", "DocInfo.EditTime",        0},
+        {"Words",            "WordCount",               SET_ARABIC}
+
+        //other available DocProperties:
+        //Bytes, Category, CharactersWithSpaces, Company
+        //HyperlinkBase,
+        //Lines, Manager, NameofApplication, ODMADocId, Pages,
+        //Security,
+    };
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(m_xTextDocument, uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
+    uno::Reference<beans::XPropertySet>  xUserDefinedProps(xDocumentProperties->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySetInfo> xPropertySetInfo =  xUserDefinedProps->getPropertySetInfo();
+    //search for a field mapping
+    OUString sFieldServiceName;
+    sal_uInt16 nMap = 0;
+    for( ; nMap < SAL_N_ELEMENTS(aDocProperties); ++nMap )
+    {
+        if ((rFirstParam.equalsAscii(aDocProperties[nMap].pDocPropertyName)) && (!xPropertySetInfo->hasPropertyByName(rFirstParam)))
         {
-            if ((rFirstParam.equalsAscii(aDocProperties[nMap].pDocPropertyName)) && (!xPropertySetInfo->hasPropertyByName(rFirstParam)))
-            {
-                sFieldServiceName =
-                OUString::createFromAscii
-                (aDocProperties[nMap].pServiceName);
-                break;
-            }
-        }
-        OUString sServiceName("com.sun.star.text.TextField.");
-        bool bIsCustomField = false;
-        if(sFieldServiceName.isEmpty())
-        {
-            //create a custom property field
-            sServiceName += "DocInfo.Custom";
-            bIsCustomField = true;
-        }
-        else
-        {
-            sServiceName += sFieldServiceName;
-        }
-        if (m_xTextFactory.is())
-            xFieldInterface = m_xTextFactory->createInstance(sServiceName);
-        uno::Reference<beans::XPropertySet> xFieldProperties =
-            uno::Reference< beans::XPropertySet >( xFieldInterface,
-                uno::UNO_QUERY_THROW);
-        if( bIsCustomField )
-        {
-            xFieldProperties->setPropertyValue(
-                getPropertyName(PROP_NAME), uno::makeAny(rFirstParam));
-            pContext->SetCustomField( xFieldProperties );
-        }
-        else
-        {
-            if(0 != (aDocProperties[nMap].nFlags & SET_ARABIC))
-                xFieldProperties->setPropertyValue(
-                    getPropertyName(PROP_NUMBERING_TYPE),
-                    uno::makeAny( style::NumberingType::ARABIC ));
-            else if(0 != (aDocProperties[nMap].nFlags & SET_DATE))
-            {
-                xFieldProperties->setPropertyValue(
-                    getPropertyName(PROP_IS_DATE),
-                        uno::makeAny( true ));
-                SetNumberFormat( pContext->GetCommand(), xFieldProperties );
-            }
+            sFieldServiceName =
+            OUString::createFromAscii
+            (aDocProperties[nMap].pServiceName);
+            break;
         }
     }
+    OUString sServiceName("com.sun.star.text.TextField.");
+    bool bIsCustomField = false;
+    if(sFieldServiceName.isEmpty())
+    {
+        //create a custom property field
+        sServiceName += "DocInfo.Custom";
+        bIsCustomField = true;
+    }
+    else
+    {
+        sServiceName += sFieldServiceName;
+    }
+    if (m_xTextFactory.is())
+        xFieldInterface = m_xTextFactory->createInstance(sServiceName);
+    uno::Reference<beans::XPropertySet> xFieldProperties =
+        uno::Reference< beans::XPropertySet >( xFieldInterface,
+            uno::UNO_QUERY_THROW);
+    if( bIsCustomField )
+    {
+        xFieldProperties->setPropertyValue(
+            getPropertyName(PROP_NAME), uno::makeAny(rFirstParam));
+        pContext->SetCustomField( xFieldProperties );
+    }
+    else
+    {
+        if(0 != (aDocProperties[nMap].nFlags & SET_ARABIC))
+            xFieldProperties->setPropertyValue(
+                getPropertyName(PROP_NUMBERING_TYPE),
+                uno::makeAny( style::NumberingType::ARABIC ));
+        else if(0 != (aDocProperties[nMap].nFlags & SET_DATE))
+        {
+            xFieldProperties->setPropertyValue(
+                getPropertyName(PROP_IS_DATE),
+                    uno::makeAny( true ));
+            SetNumberFormat( pContext->GetCommand(), xFieldProperties );
+        }
+    }
+
 
 #undef SET_ARABIC
 #undef SET_DATE

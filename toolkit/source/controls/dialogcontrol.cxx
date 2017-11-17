@@ -488,65 +488,67 @@ void SAL_CALL UnoDialogControl::windowResized( const css::awt::WindowEvent& e )
 {
     OutputDevice*pOutDev = Application::GetDefaultDevice();
     DBG_ASSERT( pOutDev, "Missing Default Device!" );
-    if ( pOutDev && !mbSizeModified )
+    if ( !pOutDev || mbSizeModified )
+        return;
+
+    // Currentley we are simply using MapUnit::MapAppFont
+    ::Size aAppFontSize( e.Width, e.Height );
+
+    Reference< XControl > xDialogControl( *this, UNO_QUERY_THROW );
+    Reference< XDevice > xDialogDevice( xDialogControl->getPeer(), UNO_QUERY );
+    OSL_ENSURE( xDialogDevice.is(), "UnoDialogControl::windowResized: no peer, but a windowResized event?" );
+
+    // #i87592 In design mode the drawing layer works with sizes with decoration.
+    // Therefore we have to subtract them before writing back to the properties (model).
+    if ( xDialogDevice.is() && mbDesignMode )
     {
-        // Currentley we are simply using MapUnit::MapAppFont
-        ::Size aAppFontSize( e.Width, e.Height );
-
-        Reference< XControl > xDialogControl( *this, UNO_QUERY_THROW );
-        Reference< XDevice > xDialogDevice( xDialogControl->getPeer(), UNO_QUERY );
-        OSL_ENSURE( xDialogDevice.is(), "UnoDialogControl::windowResized: no peer, but a windowResized event?" );
-
-        // #i87592 In design mode the drawing layer works with sizes with decoration.
-        // Therefore we have to subtract them before writing back to the properties (model).
-        if ( xDialogDevice.is() && mbDesignMode )
-        {
-            DeviceInfo aDeviceInfo( xDialogDevice->getInfo() );
-            aAppFontSize.Width() -= aDeviceInfo.LeftInset + aDeviceInfo.RightInset;
-            aAppFontSize.Height() -= aDeviceInfo.TopInset + aDeviceInfo.BottomInset;
-        }
-
-        aAppFontSize = ImplMapPixelToAppFont( pOutDev, aAppFontSize );
-
-        // Remember that changes have been done by listener. No need to
-        // update the position because of property change event.
-        mbSizeModified = true;
-        Sequence< OUString > aProps( 2 );
-        Sequence< Any > aValues( 2 );
-        // Properties in a sequence must be sorted!
-        aProps[0] = "Height";
-        aProps[1] = "Width";
-        aValues[0] <<= aAppFontSize.Height();
-        aValues[1] <<= aAppFontSize.Width();
-
-        ImplSetPropertyValues( aProps, aValues, true );
-        mbSizeModified = false;
+        DeviceInfo aDeviceInfo( xDialogDevice->getInfo() );
+        aAppFontSize.Width() -= aDeviceInfo.LeftInset + aDeviceInfo.RightInset;
+        aAppFontSize.Height() -= aDeviceInfo.TopInset + aDeviceInfo.BottomInset;
     }
+
+    aAppFontSize = ImplMapPixelToAppFont( pOutDev, aAppFontSize );
+
+    // Remember that changes have been done by listener. No need to
+    // update the position because of property change event.
+    mbSizeModified = true;
+    Sequence< OUString > aProps( 2 );
+    Sequence< Any > aValues( 2 );
+    // Properties in a sequence must be sorted!
+    aProps[0] = "Height";
+    aProps[1] = "Width";
+    aValues[0] <<= aAppFontSize.Height();
+    aValues[1] <<= aAppFontSize.Width();
+
+    ImplSetPropertyValues( aProps, aValues, true );
+    mbSizeModified = false;
+
 }
 
 void SAL_CALL UnoDialogControl::windowMoved( const css::awt::WindowEvent& e )
 {
     OutputDevice*pOutDev = Application::GetDefaultDevice();
     DBG_ASSERT( pOutDev, "Missing Default Device!" );
-    if ( pOutDev && !mbPosModified )
-    {
-        // Currentley we are simply using MapUnit::MapAppFont
-        ::Size aTmp( e.X, e.Y );
-        aTmp = ImplMapPixelToAppFont( pOutDev, aTmp );
+    if ( !pOutDev || mbPosModified )
+        return;
 
-        // Remember that changes have been done by listener. No need to
-        // update the position because of property change event.
-        mbPosModified = true;
-        Sequence< OUString > aProps( 2 );
-        Sequence< Any > aValues( 2 );
-        aProps[0] = "PositionX";
-        aProps[1] = "PositionY";
-        aValues[0] <<= aTmp.Width();
-        aValues[1] <<= aTmp.Height();
+    // Currentley we are simply using MapUnit::MapAppFont
+    ::Size aTmp( e.X, e.Y );
+    aTmp = ImplMapPixelToAppFont( pOutDev, aTmp );
 
-        ImplSetPropertyValues( aProps, aValues, true );
-        mbPosModified = false;
-    }
+    // Remember that changes have been done by listener. No need to
+    // update the position because of property change event.
+    mbPosModified = true;
+    Sequence< OUString > aProps( 2 );
+    Sequence< Any > aValues( 2 );
+    aProps[0] = "PositionX";
+    aProps[1] = "PositionY";
+    aValues[0] <<= aTmp.Width();
+    aValues[1] <<= aTmp.Height();
+
+    ImplSetPropertyValues( aProps, aValues, true );
+    mbPosModified = false;
+
 }
 
 void SAL_CALL UnoDialogControl::windowShown( const EventObject& ) {}
