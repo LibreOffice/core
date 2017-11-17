@@ -324,16 +324,11 @@ namespace emfplushelper
 
         if ( iter != map.end() )
         {
-            wmfemfhelper::PropertyHolder state = iter->second;
             map.erase( iter );
-
             SAL_INFO("drawinglayer", "stack index: " << index << " found and erased");
         }
 
-        wmfemfhelper::PropertyHolder state;
-
-        state = mrPropertyHolders.Current();
-
+        wmfemfhelper::PropertyHolder state = mrPropertyHolders.Current();
         map[ index ] = state;
     }
 
@@ -343,12 +338,12 @@ namespace emfplushelper
 
         if ( iter != map.end() )
         {
-            SAL_INFO("drawinglayer", "stack index: " << index << " found");
-
             wmfemfhelper::PropertyHolder state = iter->second;
 
             maWorldTransform = state.getTransformation();
             rState.setClipPolyPolygon( state.getClipPolyPolygon() );
+            mappingChanged();
+            SAL_INFO("drawinglayer", "stack index: " << index << " found, maWorldTransform: " << maWorldTransform);
         }
     }
 
@@ -382,7 +377,7 @@ namespace emfplushelper
             }
 
             // transform and compare to 5 (the value 5 is determined by comparison to MSO)
-            const double transformedPenWidth = std::max( MapSize(adjustedPenWidth,0).getX() , 5.);
+            const double transformedPenWidth = std::max( MapSize(adjustedPenWidth, 0).getX(), 5.);
             drawinglayer::attribute::LineAttribute lineAttribute(pen->GetColor().getBColor(),
                                                                 transformedPenWidth,
                                                                 lineJoin,
@@ -627,7 +622,7 @@ namespace emfplushelper
                 {
                     basegfx::B2DPoint aStartPoint = Map(brush->areaX,brush->areaY);
                     aStartPoint = aPolygonTransformation * aStartPoint;
-                    basegfx::B2DPoint aEndPoint = Map(brush->areaX + brush->areaWidth ,brush->areaY + brush->areaHeight);
+                    basegfx::B2DPoint aEndPoint = Map(brush->areaX + brush->areaWidth, brush->areaY + brush->areaHeight);
                     aEndPoint = aPolygonTransformation * aEndPoint;
 
                     // create the same one used for SVG
@@ -1234,7 +1229,7 @@ namespace emfplushelper
                             {
                                 break;
                             }
-                            mrPropertyHolders.Current().setFont(vcl::Font(font->family , Size(font->emSize,font->emSize)));
+                            mrPropertyHolders.Current().setFont(vcl::Font(font->family, Size(font->emSize, font->emSize)));
                             // done reading
 
                             // transform to TextSimplePortionPrimitive2D
@@ -1461,8 +1456,8 @@ namespace emfplushelper
                         transform.set(0, 0, eSx);
                         transform.set(1, 1, eSy);
 
-                        SAL_INFO("drawinglayer", "EMF+ ScaleWorldTransform Sx: " << transform.get(0,0) <<
-                                 " Sy: " << transform.get(1,1) << ", Post multiply:" << (flags & 0x2000));
+                        SAL_INFO("drawinglayer", "EMF+ ScaleWorldTransform Sx: " << eSx <<
+                                 " Sy: " << eSy << ", Post multiply:" << (flags & 0x2000));
                         SAL_INFO("drawinglayer",
                                  "EMF+\t World transform matrix: " << maWorldTransform);
 
@@ -1613,9 +1608,7 @@ namespace emfplushelper
                             if (hasMatrix)
                             {
                                 readXForm(rMS, transform);
-                                SAL_INFO("drawinglayer", "EMF+\tmatrix: " << transform.get(0,0) << ", " << transform.get(1,0) <<
-                                    ", " << transform.get(0,1) << ", " << transform.get(1,1) <<
-                                    ", " << transform.get(0,2) << ", " << transform.get(1,2));
+                                SAL_INFO("drawinglayer", "EMF+\tmatrix: " << transform);
                             }
 
                             // get the font from the flags
