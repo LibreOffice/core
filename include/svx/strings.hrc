@@ -844,7 +844,7 @@
 #define RID_SVXSTR_BMP70                                    NC_("RID_SVXSTR_BMP70", "Vertical")
 #define RID_SVXSTR_BMP71                                    NC_("RID_SVXSTR_BMP71", "Horizontal")
 #define RID_SVXSTR_BMP72                                    NC_("RID_SVXSTR_BMP72", "Downward Diagonal")
-#define RID_SVXSTR_BMP73                                    NC_("RID_SVXSTR_BMP72", "Upward Diagonal")
+#define RID_SVXSTR_BMP73                                    NC_("RID_SVXSTR_BMP73", "Upward Diagonal")
 #define RID_SVXSTR_BMP74                                    NC_("RID_SVXSTR_BMP74", "Cross")
 #define RID_SVXSTR_BMP75                                    NC_("RID_SVXSTR_BMP75", "Diagonal Cross")
 #define RID_SVXSTR_DASH0                                    NC_("RID_SVXSTR_DASH0", "Ultrafine Dashed")
