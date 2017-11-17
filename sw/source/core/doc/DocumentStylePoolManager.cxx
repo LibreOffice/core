@@ -1885,8 +1885,8 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
 
             static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
                 {
-//              cm: 0,5  1,0  1,5  2,0   2,5   3,0   3,5   4,0   4,5   5,0
-                    283, 567, 850, 1134, 1417, 1701, 1984, 2268, 2551, 2835
+//              cm: 0.7 cm intervals, with 1 cm = 567
+                    397, 794, 1191, 1588, 1985, 2381, 2778, 3175, 3572, 3969
                 };
             const sal_uInt16* pArr = aAbsSpace;
 
@@ -1904,12 +1904,12 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             {
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    aFormat.SetAbsLSpace( *pArr );
+                    aFormat.SetAbsLSpace( *pArr + 357 ); // 357 is indent of 0.63 cm
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
                     aFormat.SetListtabPos( *pArr );
-                    aFormat.SetIndentAt( *pArr );
+                    aFormat.SetIndentAt( *pArr + 357 );
                 }
 
                 pNewRule->Set( n, aFormat );
@@ -1921,25 +1921,27 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
         {
             static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
                 {
-                    283,  283,  567,  709,      // 0.50, 0.50, 1.00, 1.25
-                    850, 1021, 1304, 1474,      // 1.50, 1.80, 2.30, 2.60
-                   1588, 1758                   // 2.80, 3.10
+                    397,  397,  397,  397,      // 0.70 cm intervals
+                    397, 397, 397, 397,
+                   397, 397
                 };
 
             const sal_uInt16* pArr = aAbsSpace;
             SwNumFormat aFormat;
 
             aFormat.SetPositionAndSpaceMode( eNumberFormatPositionAndSpaceMode );
-            aFormat.SetNumberingType(SVX_NUM_ARABIC);
+            aFormat.SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER);
             aFormat.SetCharFormat( pNumCFormat );
+            aFormat.SetStart( 1 );
             aFormat.SetIncludeUpperLevels( 1 );
+            aFormat.SetSuffix( "." );
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
             {
                 aFormat.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
             }
 
-            sal_uInt16 nSpace = 0;
+            sal_uInt16 nSpace = 357; // indent of 0.63 cm
             for (sal_uInt16 n = 0; n < MAXLEVEL; ++n)
             {
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
@@ -1954,7 +1956,6 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
                     aFormat.SetFirstLineIndent( - pArr[ n ] );
                 }
 
-                aFormat.SetStart( n+1 );
                 pNewRule->Set( n, aFormat );
             }
         }
@@ -1964,11 +1965,13 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             SwNumFormat aFormat;
 
             aFormat.SetPositionAndSpaceMode( eNumberFormatPositionAndSpaceMode );
-            aFormat.SetNumberingType(SVX_NUM_ARABIC);
+            aFormat.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER);
             aFormat.SetCharFormat( pNumCFormat );
+            aFormat.SetStart( 1 );
             aFormat.SetIncludeUpperLevels( 1 );
+            aFormat.SetSuffix( "." );
 
-            sal_uInt16 nOffs = GetMetricVal( CM_1 ) * 3;
+            sal_uInt16 nOffs = 397; // 0.70 cm
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -1984,16 +1987,15 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             {
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    aFormat.SetAbsLSpace( (n+1) * nOffs );
+                    aFormat.SetAbsLSpace( (n+1) * nOffs + 357 ); // 357 is indent of 0.63 cm
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
                     long nPos = (n+1) * static_cast<long>(nOffs);
-                    aFormat.SetListtabPos(nPos);
-                    aFormat.SetIndentAt(nPos);
+                    aFormat.SetListtabPos(nPos + 357);
+                    aFormat.SetIndentAt(nPos + 357);
                 }
 
-                aFormat.SetStart( n+1 );
                 pNewRule->Set( n, aFormat );
             }
         }
@@ -2005,29 +2007,30 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             aFormat.SetPositionAndSpaceMode( eNumberFormatPositionAndSpaceMode );
             aFormat.SetNumberingType(SVX_NUM_ROMAN_UPPER);
             aFormat.SetCharFormat( pNumCFormat );
+            aFormat.SetStart( 1 );
             aFormat.SetIncludeUpperLevels( 1 );
             aFormat.SetSuffix( "." );
+            aFormat.SetNumAdjust( SvxAdjust::Right );
 
             static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
                 {
-//              cm: 0,5  1,0  1,5  2,0   2,5   3,0   3,5   4,0   4,5   5,0
-                    283, 567, 850, 1134, 1417, 1701, 1984, 2268, 2551, 2835
+//              cm: 1.33 cm intervals
+                    754, 1508, 1191, 2262, 3016, 3771, 4525, 5279, 6033, 6787
                 };
             const sal_uInt16* pArr = aAbsSpace;
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
-                aFormat.SetFirstLineOffset( - (*pArr) );
+                aFormat.SetFirstLineOffset( 580 - (*pArr) ); // 1 cm space
             }
             else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
             {
-                aFormat.SetLabelFollowedBy( SvxNumberFormat::SPACE );
-                aFormat.SetFirstLineIndent( - (*pArr) );
+                aFormat.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
+                aFormat.SetFirstLineIndent( 580 - (*pArr) );
             }
 
             for (sal_uInt16 n = 0; n < MAXLEVEL; ++n, ++pArr)
             {
-                aFormat.SetStart( n + 1 );
 
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
@@ -2048,19 +2051,20 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             // [ First, LSpace ]
             static const sal_uInt16 aAbsSpace0to2[] =
                 {
-                    227,  227,      // 0.40, 0.40,
-                    369,  624,      // 0.65, 1.10,
-                    255,  879       // 0.45, 1.55
+                    174,  754,      // 0.33, 1.33,
+                    567,  1151,      // 1.03, 2.03,
+                    397,  1548       // 2.03, 2.73
                 };
 
             const sal_uInt16* pArr0to2 = aAbsSpace0to2;
             SwNumFormat aFormat;
 
             aFormat.SetPositionAndSpaceMode( eNumberFormatPositionAndSpaceMode );
-            aFormat.SetNumberingType(SVX_NUM_ARABIC);
+            aFormat.SetNumberingType(SVX_NUM_ROMAN_LOWER);
             aFormat.SetStart( 1 );
             aFormat.SetIncludeUpperLevels( 1 );
             aFormat.SetSuffix( "." );
+            aFormat.SetNumAdjust( SvxAdjust::Right );
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
             {
@@ -2069,8 +2073,8 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
-                aFormat.SetFirstLineOffset( -pArr0to2[0] );    // == 0.40 cm
-                aFormat.SetAbsLSpace( pArr0to2[1] );           // == 0.40 cm
+                aFormat.SetFirstLineOffset( -pArr0to2[0] );    // == 0.33 cm
+                aFormat.SetAbsLSpace( pArr0to2[1] );           // == 1.33 cm
             }
             else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
             {
@@ -2082,13 +2086,13 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             aFormat.SetCharFormat( pNumCFormat );
             pNewRule->Set( 0, aFormat );
 
-            aFormat.SetIncludeUpperLevels( 2 );
-            aFormat.SetStart( 2 );
+            aFormat.SetIncludeUpperLevels( 1 );
+            aFormat.SetStart( 1 );
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
-                aFormat.SetFirstLineOffset( -pArr0to2[2] );    // == 0.65 cm
-                aFormat.SetAbsLSpace( pArr0to2[3] );           // == 1.10 cm
+                aFormat.SetFirstLineOffset( -pArr0to2[2] );    // == 1.03 cm
+                aFormat.SetAbsLSpace( pArr0to2[3] );           // == 2.03 cm
             }
             else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
             {
@@ -2106,8 +2110,8 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
-                aFormat.SetFirstLineOffset( - pArr0to2[4] );   // == 0.45cm
-                aFormat.SetAbsLSpace( pArr0to2[5] );           // == 1.55 cm
+                aFormat.SetFirstLineOffset( - pArr0to2[4] );   // == 2.03 cm
+                aFormat.SetAbsLSpace( pArr0to2[5] );           // == 2.73 cm
             }
             else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
             {
