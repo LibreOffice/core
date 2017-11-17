@@ -82,7 +82,7 @@ public:
     ScopedBitmapAccess(const ScopedBitmapAccess&) = delete;
     ScopedBitmapAccess &operator=(const ScopedBitmapAccess&) = delete;
 
-    ~ScopedBitmapAccess()
+    ~ScopedBitmapAccess() COVERITY_NOEXCEPT_FALSE
     {
         if (mpAccess)
            mpBitmap->ReleaseAccess( mpAccess );

@@ -644,7 +644,7 @@ SbiIoSystem::SbiIoSystem()
     nError = ERRCODE_NONE;
 }
 
-SbiIoSystem::~SbiIoSystem()
+SbiIoSystem::~SbiIoSystem() COVERITY_NOEXCEPT_FALSE
 {
     Shutdown();
 }

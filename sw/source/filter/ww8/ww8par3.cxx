@@ -1458,7 +1458,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     rSt.Seek( nOriginalPos );
 }
 
-WW8ListManager::~WW8ListManager()
+WW8ListManager::~WW8ListManager() COVERITY_NOEXCEPT_FALSE
 {
     /*
      named lists remain in document
