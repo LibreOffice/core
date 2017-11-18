@@ -20,11 +20,11 @@
 $(eval $(call gb_Module_Module,sccomp))
 
 $(eval $(call gb_Module_add_targets,sccomp,\
-	$(if $(ENABLE_COINMP)$(ENABLE_LPSOLVE), Library_solver) \
+	Library_solver \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,sccomp,\
-	$(if $(ENABLE_COINMP)$(ENABLE_LPSOLVE), AllLangMoTarget_scc) \
+	AllLangMoTarget_scc \
 ))
 
 $(eval $(call gb_Module_add_check_targets,sccomp,\
