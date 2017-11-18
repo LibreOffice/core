@@ -58,14 +58,13 @@
 
 #include <utility>
 #include <vector>
-#include <list>
 #include <algorithm>
 #include <memory>
 #include <o3tl/make_unique.hxx>
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-typedef std::list< uno::Reference< XAccessible > > ScXAccList;
+typedef std::vector< uno::Reference< XAccessible > > ScXAccVector;
 
 struct ScAccNote
 {
@@ -110,10 +109,10 @@ private:
     sal_Int32 AddNotes(const ScPreviewLocationData& rData, const tools::Rectangle& rVisRect, bool bMark, ScAccNotes& rNotes);
 
     static sal_Int8 CompareCell(const ScAddress& aCell1, const ScAddress& aCell2);
-    static void CollectChildren(const ScAccNote& rNote, ScXAccList& rList);
+    static void CollectChildren(const ScAccNote& rNote, ScXAccVector& rVector);
     sal_Int32 CheckChanges(const ScPreviewLocationData& rData, const tools::Rectangle& rVisRect,
         bool bMark, ScAccNotes& rOldNotes, ScAccNotes& rNewNotes,
-        ScXAccList& rOldParas, ScXAccList& rNewParas);
+        ScXAccVector& rOldParas, ScXAccVector& rNewParas);
 
     inline ScDocument* GetDocument() const;
 };
@@ -311,16 +310,16 @@ sal_Int8 ScNotesChildren::CompareCell(const ScAddress& aCell1, const ScAddress& 
     return nResult;
 }
 
-void ScNotesChildren::CollectChildren(const ScAccNote& rNote, ScXAccList& rList)
+void ScNotesChildren::CollectChildren(const ScAccNote& rNote, ScXAccVector& rVector)
 {
     if (rNote.mpTextHelper)
         for (sal_Int32 i = 0; i < rNote.mnParaCount; ++i)
-            rList.push_back(rNote.mpTextHelper->GetChild(i + rNote.mpTextHelper->GetStartIndex()));
+            rVector.push_back(rNote.mpTextHelper->GetChild(i + rNote.mpTextHelper->GetStartIndex()));
 }
 
 sal_Int32 ScNotesChildren::CheckChanges(const ScPreviewLocationData& rData,
             const tools::Rectangle& rVisRect, bool bMark, ScAccNotes& rOldNotes,
-            ScAccNotes& rNewNotes, ScXAccList& rOldParas, ScXAccList& rNewParas)
+            ScAccNotes& rNewNotes, ScXAccVector& rOldParas, ScXAccVector& rNewParas)
 {
     sal_Int32 nCount = rData.GetNoteCountInRange(rVisRect, bMark);
 
@@ -456,8 +455,8 @@ void ScNotesChildren::DataChanged(const tools::Rectangle& rVisRect)
 {
     if (mpViewShell && mpAccDoc)
     {
-        ScXAccList aNewParas;
-        ScXAccList aOldParas;
+        ScXAccVector aNewParas;
+        ScXAccVector aOldParas;
         ScAccNotes aNewMarks;
         mnParagraphs = CheckChanges(mpViewShell->GetLocationData(), rVisRect, true, maMarks, aNewMarks, aOldParas, aNewParas);
         maMarks = aNewMarks;
@@ -810,15 +809,12 @@ namespace
 
 void ScShapeChildren::VisAreaChanged() const
 {
-    ScShapeRangeVec::const_iterator aEndItr = maShapeRanges.end();
-    ScShapeRangeVec::const_iterator aItr = maShapeRanges.begin();
-    while (aItr != aEndItr)
+    for (auto const& shape : maShapeRanges)
     {
         ScVisAreaChanged aVisAreaChanged;
-        std::for_each(aItr->maBackShapes.begin(), aItr->maBackShapes.end(), aVisAreaChanged);
-        std::for_each(aItr->maControls.begin(), aItr->maControls.end(), aVisAreaChanged);
-        std::for_each(aItr->maForeShapes.begin(), aItr->maForeShapes.end(), aVisAreaChanged);
-        ++aItr;
+        std::for_each(shape.maBackShapes.begin(), shape.maBackShapes.end(), aVisAreaChanged);
+        std::for_each(shape.maControls.begin(), shape.maControls.end(), aVisAreaChanged);
+        std::for_each(shape.maForeShapes.begin(), shape.maForeShapes.end(), aVisAreaChanged);
     }
 }
 
@@ -854,9 +850,8 @@ void ScShapeChildren::Init()
 sal_Int32 ScShapeChildren::GetBackShapeCount() const
 {
     sal_Int32 nCount(0);
-    ScShapeRangeVec::const_iterator aEndItr = maShapeRanges.end();
-    for ( ScShapeRangeVec::const_iterator aItr = maShapeRanges.begin(); aItr != aEndItr; ++aItr )
-        nCount += aItr->maBackShapes.size();
+    for (auto const& shape : maShapeRanges)
+        nCount += shape.maBackShapes.size();
     return nCount;
 }
 
@@ -884,9 +879,8 @@ uno::Reference<XAccessible> ScShapeChildren::GetBackShape(sal_Int32 nIndex) cons
 sal_Int32 ScShapeChildren::GetForeShapeCount() const
 {
     sal_Int32 nCount(0);
-    ScShapeRangeVec::const_iterator aEndItr = maShapeRanges.end();
-    for ( ScShapeRangeVec::const_iterator aItr = maShapeRanges.begin(); aItr != aEndItr; ++aItr )
-        nCount += aItr->maForeShapes.size();
+    for (auto const& shape : maShapeRanges)
+        nCount += shape.maForeShapes.size();
     return nCount;
 }
 
@@ -914,9 +908,8 @@ uno::Reference<XAccessible> ScShapeChildren::GetForeShape(sal_Int32 nIndex) cons
 sal_Int32 ScShapeChildren::GetControlCount() const
 {
     sal_Int32 nCount(0);
-    ScShapeRangeVec::const_iterator aEndItr = maShapeRanges.end();
-    for ( ScShapeRangeVec::const_iterator aItr = maShapeRanges.begin(); aItr != aEndItr; ++aItr )
-        nCount += aItr->maControls.size();
+    for (auto const& shape : maShapeRanges)
+        nCount += shape.maControls.size();
     return nCount;
 }
 
