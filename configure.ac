@@ -631,7 +631,6 @@ darwin*) # Mac OS X or iOS
         test_cups=no
         enable_mpl_subset=yes
         enable_lotuswordpro=no
-        enable_coinmp=no
         enable_lpsolve=no
         enable_postgresql_sdbc=no
         enable_extension_integration=no
