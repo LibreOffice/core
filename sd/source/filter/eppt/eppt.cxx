@@ -750,7 +750,7 @@ bool PPTWriter::ImplCreateDocument()
     mpPptEscherEx->CloseContainer();        // EPP_SlideListWithText
 
     css::uno::Reference< css::presentation::XPresentationSupplier >
-        aXPresSupplier( mXModel, css::uno::UNO_QUERY );            ;
+        aXPresSupplier( mXModel, css::uno::UNO_QUERY );
     if ( aXPresSupplier.is() )
     {
         css::uno::Reference< css::presentation::XPresentation > aXPresentation( aXPresSupplier->getPresentation() );

@@ -127,7 +127,7 @@ Reference<XResource> SAL_CALL BasicToolBarFactory::createResource (
     if (rxToolBarId->getResourceURL() != FrameworkHelper::msViewTabBarURL)
         throw lang::IllegalArgumentException();
 
-    Reference<XResource> xToolBar = new ViewTabBar(rxToolBarId, mxController);;
+    Reference<XResource> xToolBar = new ViewTabBar(rxToolBarId, mxController);
     return xToolBar;
 }
 

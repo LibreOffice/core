@@ -328,7 +328,7 @@ Paragraph::getCharacterBounds(::sal_Int32 nIndex)
 ::sal_Int32 SAL_CALL Paragraph::getCharacterCount()
 {
     checkDisposed();
-    return implGetText().getLength();;
+    return implGetText().getLength();
 }
 
 // virtual

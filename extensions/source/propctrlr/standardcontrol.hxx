@@ -61,7 +61,7 @@ namespace pcr
             TListboxWindow::SetSelectHdl( LINK(this, ListLikeControlWithModifyHandler, OnSelect) );
         }
 
-        void SetModifyHdl( const Link<TListboxWindow&,void>& _rLink ) { aModifyHdl = _rLink;; }
+        void SetModifyHdl( const Link<TListboxWindow&,void>& _rLink ) { aModifyHdl = _rLink; }
     private:
         DECL_LINK(OnSelect, TListboxWindow&, void);
         Link<TListboxWindow&,void> aModifyHdl;

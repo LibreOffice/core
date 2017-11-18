@@ -152,7 +152,7 @@ sal_Int32 SAL_CALL SvNumberFormatterServiceObj::detectNumberFormat( sal_Int32 nK
     sal_uInt32 nUKey = nKey;
     double fValue = 0.0;
     if ( !pFormatter->IsNumberFormat(aString, nUKey, fValue) )
-        throw util::NotNumericException();;
+        throw util::NotNumericException();
 
     return nUKey;
 }
@@ -168,7 +168,7 @@ double SAL_CALL SvNumberFormatterServiceObj::convertStringToNumber( sal_Int32 nK
     sal_uInt32 nUKey = nKey;
     double fValue = 0.0;
     if ( !pFormatter->IsNumberFormat(aString, nUKey, fValue) )
-        throw util::NotNumericException();;
+        throw util::NotNumericException();
 
     return fValue;
 }

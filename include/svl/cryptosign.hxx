@@ -57,7 +57,7 @@ public:
     }
 
     void SetSignTSA(const OUString& tsa) { m_aSignTSA = tsa; }
-    void SetSignPassword(const OUString& password) { m_aSignPassword = password;; }
+    void SetSignPassword(const OUString& password) { m_aSignPassword = password; }
 
     /// Signs one or more data blocks (as a single, contiguous, array).
     /// Returns the signature (in PKCS#7 format) as string (hex).

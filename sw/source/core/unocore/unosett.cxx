@@ -839,13 +839,13 @@ void SwXLineNumberingProperties::setPropertyValue(
             switch(nTmp)
             {
                 case  style::LineNumberPosition::LEFT:
-                     aFontMetric.SetPos(LINENUMBER_POS_LEFT); ;
+                     aFontMetric.SetPos(LINENUMBER_POS_LEFT);
                 break;
                 case style::LineNumberPosition::RIGHT :
-                     aFontMetric.SetPos(LINENUMBER_POS_RIGHT);       ;
+                     aFontMetric.SetPos(LINENUMBER_POS_RIGHT);
                 break;
                 case  style::LineNumberPosition::INSIDE:
-                    aFontMetric.SetPos(LINENUMBER_POS_INSIDE);      ;
+                    aFontMetric.SetPos(LINENUMBER_POS_INSIDE);
                 break;
                 case  style::LineNumberPosition::OUTSIDE:
                     aFontMetric.SetPos(LINENUMBER_POS_OUTSIDE);

@@ -932,7 +932,7 @@ void SAL_CALL SwAccessibleContext::grabFocus()
 {
     SolarMutexGuard aGuard;
 
-    ThrowIfDisposed();;
+    ThrowIfDisposed();
 
     if( GetFrame()->IsFlyFrame() )
     {

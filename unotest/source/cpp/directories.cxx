@@ -48,7 +48,7 @@ OUString test::Directories::getURLFromSrc( const OUString& rPath )
 
 OUString test::Directories::getPathFromSrc(const OUString& rPath)
 {
-    return m_aSrcRootPath + rPath;;
+    return m_aSrcRootPath + rPath;
 }
 
 OUString test::Directories::getURLFromWorkdir( const OUString& rPath )

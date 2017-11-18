@@ -2086,7 +2086,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, Button*, void)
             if(nActNumLvl & _nMask)
             {
                 SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
-                aNumFmt.SetBulletFont(&aActBulletFont); ;
+                aNumFmt.SetBulletFont(&aActBulletFont);
                 aNumFmt.SetBulletChar( (sal_Unicode) pMap->GetChar() );
                 pActNum->SetLevel(i, aNumFmt);
             }

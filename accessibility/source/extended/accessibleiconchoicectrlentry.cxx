@@ -556,7 +556,7 @@ namespace accessibility
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
-        return implGetText().getLength();;
+        return implGetText().getLength();
     }
 
     OUString SAL_CALL AccessibleIconChoiceCtrlEntry::getSelectedText(  )

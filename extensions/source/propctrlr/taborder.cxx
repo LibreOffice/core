@@ -77,7 +77,7 @@ namespace pcr
             }
         }
 
-        return Image(BitmapEx(sImageId));;
+        return Image(BitmapEx(sImageId));
     }
 
     }

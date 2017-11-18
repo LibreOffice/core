@@ -1916,7 +1916,7 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl()
                 }
             }
             bDontUpdate = false; //if everything is deleted set bDontUpdate back to false
-            UpdateStyles_Impl(StyleFlags::UpdateFamilyList);; //and force-update the list
+            UpdateStyles_Impl(StyleFlags::UpdateFamilyList); //and force-update the list
         }
     }
 }

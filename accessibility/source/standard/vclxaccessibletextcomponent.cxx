@@ -255,7 +255,7 @@ sal_Int32 VCLXAccessibleTextComponent::getCharacterCount()
 {
     OExternalLockGuard aGuard( this );
 
-    return implGetText().getLength();;
+    return implGetText().getLength();
 }
 
 

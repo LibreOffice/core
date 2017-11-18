@@ -209,7 +209,7 @@ bool SdDrawDocument::IsPageNameUnique( const OUString& rPgName ) const
         pPage = const_cast<SdPage*>(static_cast<const SdPage*>(GetMasterPage(nPage)));
 
         if (pPage && pPage->GetName() == rPgName)
-            nCount++;;
+            nCount++;
 
         nPage++;
     }
