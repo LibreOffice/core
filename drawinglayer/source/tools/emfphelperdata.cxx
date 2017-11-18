@@ -329,6 +329,8 @@ namespace emfplushelper
         }
 
         wmfemfhelper::PropertyHolder state = mrPropertyHolders.Current();
+        // tdf#112500 We need to save world transform somehow, during graphic state push
+        state.setTransformation(maWorldTransform);
         map[ index ] = state;
     }
 
