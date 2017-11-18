@@ -275,7 +275,7 @@
       {{which={m_nWhich,x}}} GrabBag {{size={m_aMap._Mypair._Myval2._Myval2._Mysize,d}}}
     </DisplayString>
     <Expand>
-      <ExpandedItem >m_aMap</ExpandedItem>
+      <ExpandedItem>m_aMap</ExpandedItem>
     </Expand>
   </Type>
   <Type Name="SfxPoolItem">
@@ -325,6 +325,46 @@
           <Exec>++i</Exec>
         </Loop>
       </CustomListItems>
+    </Expand>
+  </Type>
+  <Type Name='writerfilter::ooxml::OOXMLProperty'>
+    <DisplayString>{meType,en} {mId,d}: {*mpValue}</DisplayString>
+    <Expand HideRawView='true'>
+      <Item Name='Type'>meType</Item>
+      <Item Name='Id'>mId,d</Item> <!-- see workdir/CustomTarget/writerfilter/source/ooxml/resourceids.hxx -->
+      <Item Name='Value'>*mpValue</Item>
+    </Expand>
+  </Type>
+  <Type Name='writerfilter::ooxml::OOXMLStringValue'>
+    <DisplayString>"{mStr,sub}"</DisplayString>
+    <StringView>mStr</StringView>
+  </Type>
+  <Type Name='writerfilter::ooxml::OOXMLBooleanValue'>
+    <DisplayString>{mbValue}</DisplayString>
+  </Type>
+  <Type Name='writerfilter::ooxml::OOXMLIntegerValue'>
+    <DisplayString>{mnValue}</DisplayString>
+  </Type>
+  <Type Name='writerfilter::ooxml::OOXMLNthPtMeasureValue&lt;*&gt;'>
+    <DisplayString>{mnValue,d}/{$T1,d}={mnValue*1.0/$T1,g} pt</DisplayString>
+  </Type>
+  <Type Name='writerfilter::ooxml::OOXMLPropertySetValue'>
+    <DisplayString>{{Property set size={mpPropertySet->mProperties.size(),d}}}</DisplayString>
+    <Expand>
+      <IndexListItems>
+        <Size>mpPropertySet->mProperties.size()</Size>
+        <ValueNode>*mpPropertySet->mProperties[$i]</ValueNode>
+      </IndexListItems>
+    </Expand>
+  </Type>
+  <Type Name='writerfilter::ooxml::OOXMLPropertySet'>
+    <DisplayString>{{{maType} {{size={mProperties.size(),d}}}}}</DisplayString>
+    <Expand HideRawView='true'>
+      <IndexListItems>
+        <Size>mProperties.size()</Size>
+        <ValueNode>*mProperties[$i]</ValueNode>
+      </IndexListItems>
+      <Item Name='Type'>maType</Item>
     </Expand>
   </Type>
 </AutoVisualizer>
