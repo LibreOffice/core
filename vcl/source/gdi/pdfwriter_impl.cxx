@@ -4999,7 +4999,7 @@ bool PDFWriterImpl::emitCatalog()
     sal_Int32 nMetadataObject = emitDocumentMetadata();
 
     sal_Int32 nStructureDict = 0;
-    if(m_aStructure.size() > 1)
+    if(!m_aStructure.empty())
     {
         // check if dummy structure containers are needed
         addInternalStructureContainer(m_aStructure[0]);
