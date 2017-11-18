@@ -321,7 +321,7 @@ public:
 };
 
 ScMergeColumnTransformationControl::ScMergeColumnTransformationControl(vcl::Window* pParent):
-    ScDataTransformationBaseControl(pParent, "modules/scalc/ui/mergecolumnentry.ui")
+    ScDataTransformationBaseControl(pParent, "modules/scalc/ui/dataproviderentry.ui")
 {
 }
 
