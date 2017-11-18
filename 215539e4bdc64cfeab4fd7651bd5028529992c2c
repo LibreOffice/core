@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_618062f8",
+        "filename": "sc/source/core/data/postit.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-11-18T09:26:28Z",
+      "side": 1,
+      "message": "Eike or Bubli: any problem here with encapsulation wrt core vs. ui?",
+      "revId": "215539e4bdc64cfeab4fd7651bd5028529992c2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
