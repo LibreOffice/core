@@ -21,7 +21,6 @@
 #include <worksheethelper.hxx>
 
 #include <algorithm>
-#include <list>
 #include <utility>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -327,7 +326,6 @@ private:
     typedef ::std::map< sal_Int32, ColumnModelRange >   ColumnModelRangeMap;
     typedef ::std::pair< RowModel, sal_Int32 >          RowModelRange;
     typedef ::std::map< sal_Int32, RowModelRange >      RowModelRangeMap;
-    typedef ::std::list< ValidationModel >              ValidationModelList;
 
     /** Inserts all imported hyperlinks into their cell ranges. */
     void finalizeHyperlinkRanges();
