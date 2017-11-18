@@ -476,6 +476,7 @@ public:
     void setEmbeddedName(const OUString& rEmbeddedName, SwDocShell& rDocShell);
     const OUString& getEmbeddedName() const;
 
+    // rOwnURL should be taken using INetURLObject::GetMainURL(INetURLObject::DecodeMechanism::NONE)
     static void StoreEmbeddedDataSource(const css::uno::Reference<css::frame::XStorable>& xStorable,
                                         const css::uno::Reference<css::embed::XStorage>& xStorage,
                                         const OUString& rStreamRelPath,
