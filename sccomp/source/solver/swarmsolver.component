@@ -8,7 +8,7 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    xmlns="http://openoffice.org/2010/uno-components">
+    prefix="solver" xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.Calc.SwarmSolver" constructor="com_sun_star_comp_Calc_SwarmSolver_get_implementation">
     <service name="com.sun.star.sheet.Solver"/>
   </implementation>
