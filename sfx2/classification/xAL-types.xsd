@@ -51,7 +51,7 @@
 	</xs:simpleType>
 	<xs:simpleType name="AddressIDTypeList">
 		<xs:annotation>
-			<xs:documentation>A list of types of address identiifers </xs:documentation>
+			<xs:documentation>A list of types of address identifiers </xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:normalizedString"/>
 	</xs:simpleType>

@@ -896,7 +896,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
             // resize/position the shape to *full* size e.g. how it would be ( if no hidden rows/cols affected things )
             pObj->SetLogicRect(aFullRect);
 
-            // Ok, here is more nastyness, from xml the Anchor is in terms of the LogicRect which is the
+            // Ok, here is more nastiness, from xml the Anchor is in terms of the LogicRect which is the
             // untransformed unrotated shape, here we swap out that initial anchor and from now on use
             // an Anchor based on the SnapRect ( which is what you see on the screen )
             ScDrawLayer::GetCellAnchorFromPosition( *pObj, rData, *pDoc, nTab1, false, false );

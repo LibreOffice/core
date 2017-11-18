@@ -53,7 +53,7 @@ IDI_DIALOG ICON ICON_PATH
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Embedded an identifier to uniquely identiy this as a Mozilla updater.
+// Embedded an identifier to uniquely identify this as a Mozilla updater.
 //
 
 STRINGTABLE

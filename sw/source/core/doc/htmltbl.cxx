@@ -1763,7 +1763,7 @@ bool SwHTMLTableLayout::Resize( sal_uInt16 nAbsAvail, bool bRecalc,
     }
 
     // Optimisation:
-    // If the minimums or maximums should not be recalculated and
+    // If the minimum or maximum should not be recalculated and
     // - the table's width never needs to be recalculated, or
     // - the table was already calculated for the passed width, or
     // - the available space is less or equal to the minimum width
