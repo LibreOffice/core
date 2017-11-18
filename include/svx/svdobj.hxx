@@ -798,7 +798,7 @@ public:
     // #i121917#
     virtual bool HasText() const;
 
-    bool Equals(const SdrObject&) const;;
+    bool Equals(const SdrObject&) const;
 
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 

@@ -1120,7 +1120,7 @@ ScXMLInsertionContext::ScXMLInsertionContext( ScXMLImport& rImport,
                 nTable = aIter.toInt32();
                 break;
             case XML_ELEMENT( TABLE, XML_COUNT ):
-                nCount = aIter.toInt32();;
+                nCount = aIter.toInt32();
                 break;
             }
         }

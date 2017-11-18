@@ -4453,7 +4453,7 @@ void SwXOutlineTarget::setPropertyValue(
 Any SwXOutlineTarget::getPropertyValue(const OUString& rPropertyName)
 {
     if(rPropertyName != UNO_LINK_DISPLAY_NAME)
-        throw UnknownPropertyException();;
+        throw UnknownPropertyException();
 
     return Any(sOutlineText);
 }
