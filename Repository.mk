@@ -255,7 +255,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,calc, \
 	scfilt \
 	scui \
 	wpftcalc \
-	$(if $(ENABLE_COINMP)$(ENABLE_LPSOLVE),solver) \
+	solver \
 	$(call gb_Helper_optional,SCRIPTING,vbaobj) \
 ))
 
@@ -1082,7 +1082,7 @@ $(eval $(call gb_Helper_register_mos,\
 	$(call gb_Helper_optional,SCRIPTING,sb) \
 	sc \
 	sca \
-	$(if $(ENABLE_COINMP)$(ENABLE_LPSOLVE),scc) \
+	scc \
 	sd \
 	sfx \
 	sm \
