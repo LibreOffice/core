@@ -507,18 +507,18 @@ OUString SvxNumberFormat::CreateRomanString( sal_uLong nNo, bool bUpper )
     sal_uInt16 nMask = 1000;
     while( nMask )
     {
-        sal_uInt8 nZahl = sal_uInt8(nNo / nMask);
+        sal_uInt8 nNumber = sal_uInt8(nNo / nMask);
         sal_uInt8 nDiff = 1;
         nNo %= nMask;
 
-        if( 5 < nZahl )
+        if( 5 < nNumber )
         {
-            if( nZahl < 9 )
+            if( nNumber < 9 )
                 sRet += OUString(*(cRomanArr-1));
             ++nDiff;
-            nZahl -= 5;
+            nNumber -= 5;
         }
-        switch( nZahl )
+        switch( nNumber )
         {
         case 3:     { sRet += OUString(*cRomanArr); SAL_FALLTHROUGH; }
         case 2:     { sRet += OUString(*cRomanArr); SAL_FALLTHROUGH; }
