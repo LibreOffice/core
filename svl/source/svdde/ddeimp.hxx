@@ -37,8 +37,6 @@ struct Conversation
     DdeTopic*   pTopic;
 };
 
-typedef ::std::vector< Conversation* > ConvList;
-
 
 class DdeInternal
 {

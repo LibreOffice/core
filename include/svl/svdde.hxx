@@ -48,7 +48,7 @@ struct Conversation;
 
 typedef ::std::vector< DdeService* > DdeServices;
 typedef ::std::vector< long > DdeFormats;
-typedef ::std::vector< Conversation* > ConvList;
+typedef std::vector<std::unique_ptr<Conversation>> ConvList;
 
 
 class SVL_DLLPUBLIC DdeData
@@ -297,7 +297,7 @@ private:
     DdeFormats      aFormats;
     DdeTopic*       pSysTopic;
     DdeString*      pName;
-    ConvList*       pConv;
+    ConvList        m_vConv;
     short           nStatus;
 
     SVL_DLLPRIVATE bool HasCbFormat( sal_uInt16 );
@@ -305,6 +305,9 @@ private:
 public:
                     DdeService( SAL_UNUSED_PARAMETER const OUString& );
     virtual        ~DdeService();
+
+                    DdeService( const DdeService& ) = delete;
+    DdeService&     operator= ( const DdeService& ) = delete;
 
     const OUString  GetName() const;
     short           GetError()              { return nStatus; }
