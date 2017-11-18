@@ -5391,6 +5391,8 @@ void DomainMapper_Impl::ApplySettingsTable()
             xSettings->setPropertyValue("AddParaTableSpacing", uno::makeAny(m_pSettingsTable->GetDoNotUseHTMLParagraphAutoSpacing()));
             if( m_pSettingsTable->GetProtectForm() )
                 xSettings->setPropertyValue("ProtectForm", uno::makeAny( true ));
+
+            m_pSettingsTable->CreateEmbeddedDataSource(GetTextDocument());
         }
         catch(const uno::Exception&)
         {

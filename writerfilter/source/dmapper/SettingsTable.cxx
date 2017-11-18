@@ -29,11 +29,307 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <comphelper/sequence.hxx>
 #include <ooxml/resourceids.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfile.hxx>
 #include "ConversionHelper.hxx"
 #include "DomainMapper.hxx"
 #include "util.hxx"
 
 using namespace com::sun::star;
+
+namespace {
+using namespace writerfilter;
+
+class CT_MailMerge : public writerfilter::LoggedProperties
+{
+public:
+    enum class MainDocumentType { catalog, envelopes, mailingLabels, formLetters, email, fax };
+    enum class DataType { textFile, database, spreadsheet, query, odbc, native };
+    enum class Destination { newDocument, printer, email, fax };
+
+    struct Odso
+    {
+        enum class Type { database, addressBook, document1, document2, text, email, native, legacy, master };
+
+        struct FieldMapData
+        {
+            enum class Type { null, dbColumn };
+
+            unsigned column = 0;
+            bool dynamicAddress = false; // the form of address shall be dynamically determined based on the country
+            OUString lid; // "ja-JP"
+            OUString mappedName;
+            OUString name;
+            Type type = Type::null;
+
+            void setType(const OUString& strVal)
+            {
+                if (strVal == "null")
+                    type = Type::null;
+                else if (strVal == "dbColumn")
+                    type = Type::dbColumn;
+            }
+        };
+
+        OUString udl; // UDL Connection String
+        OUString table;
+        OUString src; // r:id attribute
+        sal_Unicode colDelim = L'\0';
+        Type type = Type(); // suggestion
+        bool fHdr = false;
+        std::vector<std::unique_ptr<FieldMapData>> fieldMapData;
+        OUString recipientData; // r:id attribute
+
+        void setType(const OUString& strVal)
+        {
+            if (strVal == "database")
+                type = Type::database;
+            else if (strVal == "addressBook")
+                type = Type::addressBook;
+            else if (strVal == "document1")
+                type = Type::document1;
+            else if (strVal == "document2")
+                type = Type::document2;
+            else if (strVal == "text")
+                type = Type::text;
+            else if (strVal == "email")
+                type = Type::email;
+            else if (strVal == "native")
+                type = Type::native;
+            else if (strVal == "legacy")
+                type = Type::legacy;
+            else if (strVal == "master")
+                type = Type::master;
+        }
+    };
+
+    MainDocumentType mainDocumentType = MainDocumentType::formLetters;
+    bool linkToQuery = false;
+    DataType dataType = DataType(); // suggestion
+    OUString connectString; // should be ignored if odso provides enough information
+    OUString query;
+    OUString dataSource; // r:id attribute
+    OUString headerSource; // r:id attribute
+    bool doNotSuppressBlankLines = false;
+    Destination destination = Destination::newDocument;
+    OUString addressFieldName;
+    OUString mailSubject;
+    bool mailAsAttachment = false;
+    bool viewMergedData = false;
+    int activeRecord = 1; // only meaningful when viewMergedData is true
+    int checkErrors = 2; // 1=simulate and report in new doc; 2=pause at each error; 3=report in new doc; other=app-defined
+    Odso odso;
+
+    CT_MailMerge()
+        : LoggedProperties("CT_MailMerge")
+    {}
+
+    void setMainDocumentType(const OUString& strVal)
+    {
+        if (strVal == "catalog")
+            mainDocumentType = MainDocumentType::catalog;
+        else if (strVal == "envelopes")
+            mainDocumentType = MainDocumentType::envelopes;
+        else if (strVal == "mailingLabels")
+            mainDocumentType = MainDocumentType::mailingLabels;
+        else if (strVal == "formLetters")
+            mainDocumentType = MainDocumentType::formLetters;
+        else if (strVal == "email")
+            mainDocumentType = MainDocumentType::email;
+        else if (strVal == "fax")
+            mainDocumentType = MainDocumentType::fax;
+    }
+
+    void setDataType(const OUString& strVal)
+    {
+        if (strVal == "textFile")
+            dataType = DataType::textFile;
+        else if (strVal == "database")
+            dataType = DataType::database;
+        else if (strVal == "spreadsheet")
+            dataType = DataType::spreadsheet;
+        else if (strVal == "query")
+            dataType = DataType::query;
+        else if (strVal == "odbc")
+            dataType = DataType::odbc;
+        else if (strVal == "native")
+            dataType = DataType::native;
+    }
+
+    void setDestination(const OUString& strVal)
+    {
+        if (strVal == "newDocument")
+            destination = Destination::newDocument;
+        else if (strVal == "printer")
+            destination = Destination::printer;
+        else if (strVal == "email")
+            destination = Destination::email;
+        else if (strVal == "fax")
+            destination = Destination::fax;
+    }
+private:
+    OUString* pCurRelId = nullptr;
+
+    // Properties
+    virtual void lcl_attribute(Id Name, Value & val) override;
+    virtual void lcl_sprm(Sprm & sprm) override;
+
+    void resolveIdProp(OUString& idStrDest, Sprm & rSprm)
+    {
+        pCurRelId = &idStrDest;
+        dmapper::resolveSprmProps(*this, rSprm);
+        pCurRelId = nullptr;
+    }
+};
+
+void CT_MailMerge::lcl_attribute(Id nName, Value & val)
+{
+//    int nIntValue = val.getInt();
+    OUString sStringValue = val.getString();
+
+    switch (nName)
+    {
+    case NS_ooxml::LN_CT_Rel_id:
+        if (pCurRelId && !sStringValue.isEmpty())
+            *pCurRelId = sStringValue;
+        break;
+    default:
+    {
+#ifdef DEBUG_WRITERFILTER
+        TagLogger::getInstance().element("unhandled");
+#endif
+    }
+    }
+}
+
+void CT_MailMerge::lcl_sprm(Sprm& rSprm)
+{
+    assert(odso.fieldMapData.empty() || odso.fieldMapData.back().get());
+
+    sal_uInt32 nSprmId = rSprm.getId();
+
+    Value::Pointer_t pValue = rSprm.getValue();
+    sal_Int32 nIntValue = pValue->getInt();
+    OUString sStringValue = pValue->getString();
+
+    switch (nSprmId)
+    {
+    case NS_ooxml::LN_CT_MailMerge_mainDocumentType:
+        setMainDocumentType(sStringValue);
+        break;
+    case NS_ooxml::LN_CT_MailMerge_linkToQuery:
+        linkToQuery = nIntValue != 0;
+        break;
+    case NS_ooxml::LN_CT_MailMerge_dataType:
+        setDataType(sStringValue);
+        break;
+    case NS_ooxml::LN_CT_MailMerge_connectString:
+        if (!sStringValue.isEmpty())
+            connectString = sStringValue;
+        break;
+    case NS_ooxml::LN_CT_MailMerge_query:
+        if (!sStringValue.isEmpty())
+            query = sStringValue;
+        break;
+    case NS_ooxml::LN_CT_MailMerge_dataSource:
+        resolveIdProp(dataSource, rSprm);
+        break;
+    case NS_ooxml::LN_CT_MailMerge_headerSource:
+        resolveIdProp(headerSource, rSprm);
+        break;
+    case NS_ooxml::LN_CT_MailMerge_doNotSuppressBlankLines:
+        doNotSuppressBlankLines = nIntValue != 0;
+        break;
+    case NS_ooxml::LN_CT_MailMerge_destination:
+        setDestination(sStringValue);
+        break;
+    case NS_ooxml::LN_CT_MailMerge_addressFieldName:
+        if (!sStringValue.isEmpty())
+            addressFieldName = sStringValue;
+        break;
+    case NS_ooxml::LN_CT_MailMerge_mailSubject:
+        if (!sStringValue.isEmpty())
+            mailSubject = sStringValue;
+        break;
+    case NS_ooxml::LN_CT_MailMerge_mailAsAttachment:
+        mailAsAttachment = nIntValue != 0;
+        break;
+    case NS_ooxml::LN_CT_MailMerge_viewMergedData:
+        viewMergedData = nIntValue != 0;
+        break;
+    case NS_ooxml::LN_CT_MailMerge_activeRecord:
+        activeRecord = nIntValue;
+        break;
+    case NS_ooxml::LN_CT_MailMerge_checkErrors:
+        checkErrors = nIntValue;
+        break;
+    case NS_ooxml::LN_CT_MailMerge_odso:
+        dmapper::resolveSprmProps(*this, rSprm);
+        break;
+
+    case NS_ooxml::LN_CT_Odso_udl:
+        if (!sStringValue.isEmpty())
+            odso.udl = sStringValue;
+        break;
+    case NS_ooxml::LN_CT_Odso_table:
+        if (!sStringValue.isEmpty())
+            odso.table = sStringValue;
+        break;
+    case NS_ooxml::LN_CT_Odso_src:
+        resolveIdProp(odso.src, rSprm);
+        break;
+    case NS_ooxml::LN_CT_Odso_colDelim:
+        odso.colDelim = static_cast<sal_Unicode>(nIntValue);
+        break;
+    case NS_ooxml::LN_CT_Odso_type:
+        odso.setType(sStringValue);
+        break;
+    case NS_ooxml::LN_CT_Odso_fHdr:
+        odso.fHdr = nIntValue != 0;
+        break;
+    case NS_ooxml::LN_CT_Odso_fieldMapData:
+        odso.fieldMapData.push_back(std::unique_ptr<Odso::FieldMapData>(new Odso::FieldMapData));
+        dmapper::resolveSprmProps(*this, rSprm);
+        break;
+    case NS_ooxml::LN_CT_Odso_recipientData:
+        resolveIdProp(odso.recipientData, rSprm);
+        break;
+
+    case NS_ooxml::LN_CT_OdsoFieldMapData_type:
+        if (!odso.fieldMapData.empty())
+            odso.fieldMapData.back()->setType(sStringValue);
+        break;
+    case NS_ooxml::LN_CT_OdsoFieldMapData_name:
+        if (!sStringValue.isEmpty() && !odso.fieldMapData.empty())
+            odso.fieldMapData.back()->name = sStringValue;
+        break;
+    case NS_ooxml::LN_CT_OdsoFieldMapData_mappedName:
+        if (!sStringValue.isEmpty() && !odso.fieldMapData.empty())
+            odso.fieldMapData.back()->mappedName = sStringValue;
+        break;
+    case NS_ooxml::LN_CT_OdsoFieldMapData_column:
+        if (!odso.fieldMapData.empty() && nIntValue >= 0)
+            odso.fieldMapData.back()->column = static_cast<sal_uInt32>(nIntValue);
+        break;
+    case NS_ooxml::LN_CT_OdsoFieldMapData_lid:
+        if (!sStringValue.isEmpty() && !odso.fieldMapData.empty())
+            odso.fieldMapData.back()->lid = sStringValue;
+        break;
+    case NS_ooxml::LN_CT_OdsoFieldMapData_dynamicAddress:
+        if (!odso.fieldMapData.empty())
+            odso.fieldMapData.back()->dynamicAddress = nIntValue != 0;
+        break;
+
+    default:
+    {
+#ifdef DEBUG_WRITERFILTER
+        TagLogger::getInstance().element("unhandled");
+#endif
+    }
+    }
+}
+
+}
 
 namespace writerfilter {
 
@@ -242,6 +538,8 @@ struct SettingsTable_Impl
     uno::Sequence<beans::PropertyValue> m_pCurrentCompatSetting;
 
     DocumentProtection_Impl m_DocumentProtection;
+
+    CT_MailMerge m_aMailMerge;
 
     SettingsTable_Impl() :
       m_nDefaultTabStop( 720 ) //default is 1/2 in
@@ -473,6 +771,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_displayBackgroundShape:
         m_pImpl->m_bDisplayBackgroundShape = nIntValue;
         break;
+    case NS_ooxml::LN_CT_Settings_mailMerge:
+        resolveSprmProps(m_pImpl->m_aMailMerge, rSprm);
+        break;
     default:
     {
 #ifdef DEBUG_WRITERFILTER
@@ -615,6 +916,39 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
             xPropertySet->setPropertyValue("ParaOrphans", aAny);
         }
     }
+}
+
+void SettingsTable::CreateEmbeddedDataSource(css::uno::Reference<css::text::XTextDocument> const& xDoc)
+{
+    // TODO: get access to SwDBManager::LoadAndRegisterEmbeddedDataSource
+//    SfxObjectShell* pShell = SfxObjectShell::GetShellFromComponent(xDoc);
+//    if (!pShell)
+//        return;
+
+//    auto url = pShell->GetMedium()->GetURLObject();
+
+
+    uno::Reference< lang::XMultiServiceFactory > xFac(xDoc, uno::UNO_QUERY);
+    if (!xFac.is())
+        return;
+
+    uno::Reference< beans::XPropertySet > xProps(xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+    if (!xProps.is())
+        return;
+
+//    try
+//    {
+//        if (m_pImpl->m_aMailMerge.)
+
+//        xProps->setPropertyValue("CurrentDatabaseDataSource", uno::Any("names"));
+//        xProps->setPropertyValue("CurrentDatabaseCommand", uno::Any("Sheet1"));
+//        xProps->setPropertyValue("CurrentDatabaseCommandType", uno::Any(0));
+//        xProps->setPropertyValue("EmbeddedDatabaseName", uno::Any("EmbeddedDatabase"));
+//    }
+//    catch (uno::Exception&)
+//    {
+//        OSL_FAIL("SwXMLImport::SetConfigurationSettings: Exception!");
+//    }
 }
 
 }//namespace dmapper

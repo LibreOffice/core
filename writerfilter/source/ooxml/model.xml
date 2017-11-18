@@ -18524,6 +18524,24 @@
       <attribute name="val" tokenid="ooxml:CT_MailMergeSourceType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
+    <resource name="CT_OdsoFieldMapData" resource="Properties">
+      <element name="type" tokenid="ooxml:CT_OdsoFieldMapData_type"/>
+      <element name="name" tokenid="ooxml:CT_OdsoFieldMapData_name"/>
+      <element name="mappedName" tokenid="ooxml:CT_OdsoFieldMapData_mappedName"/>
+      <element name="column" tokenid="ooxml:CT_OdsoFieldMapData_column"/>
+      <element name="lid" tokenid="ooxml:CT_OdsoFieldMapData_lid"/>
+      <element name="dynamicAddress" tokenid="ooxml:CT_OdsoFieldMapData_dynamicAddress"/>
+    </resource>
+    <resource name="CT_Odso" resource="Properties">
+      <element name="udl" tokenid="ooxml:CT_Odso_udl"/>
+      <element name="table" tokenid="ooxml:CT_Odso_table"/>
+      <element name="src" tokenid="ooxml:CT_Odso_src"/>
+      <element name="colDelim" tokenid="ooxml:CT_Odso_colDelim"/>
+      <element name="type" tokenid="ooxml:CT_Odso_type"/>
+      <element name="fHdr" tokenid="ooxml:CT_Odso_fHdr"/>
+      <element name="fieldMapData" tokenid="ooxml:CT_Odso_fieldMapData"/>
+      <element name="recipientData" tokenid="ooxml:CT_Odso_recipientData"/>
+    </resource>
     <resource name="CT_MailMerge" resource="Properties">
       <element name="mainDocumentType" tokenid="ooxml:CT_MailMerge_mainDocumentType"/>
       <element name="linkToQuery" tokenid="ooxml:CT_MailMerge_linkToQuery"/>

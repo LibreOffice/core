@@ -83,6 +83,8 @@ class SettingsTable : public LoggedProperties, public LoggedTable
 
     void ApplyProperties(css::uno::Reference<css::text::XTextDocument> const& xDoc);
 
+    void CreateEmbeddedDataSource(css::uno::Reference<css::text::XTextDocument> const& xDoc);
+
  private:
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) override;
