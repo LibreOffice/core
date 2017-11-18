@@ -178,7 +178,7 @@
 /* Begin PBXNativeTarget section */
 		397E08F91E597BD8001374E0 /* LibreOfficeLight */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 397E09251E597BD8001374E0 /* Build configuration list for PBXNativeTarget "LibreOfficeLight" */;
+			buildConfigurationList = 397E08F51E597BD8001374E0 /* Build configuration list for PBXNativeTarget "LibreOfficeLight" */;
 			buildPhases = (
 				397E08F61E597BD8001374E0 /* Sources */,
 				397E08F71E597BD8001374E0 /* Frameworks */,
@@ -464,74 +464,6 @@
 			};
 			name = Release;
 		};
-		397E09261E597BD8001374E0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				CLANG_WARN_INFINITE_RECURSION = NO;
-				CODE_SIGN_ENTITLEMENTS = LibreOfficeLight/LibreOfficeLight.entitlements;
-				DEVELOPMENT_TEAM = TM977DU7EF;
-				ENABLE_TESTABILITY = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "LibreOfficeLight/LibreOfficeLight-Prefix.pch";
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				"HEADER_SEARCH_PATHS[arch=*]" = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"$(LO_BUILDDIR)/config_host",
-					"$(LO_SRCDIR)/include",
-					"$(LO_WORKDIR)/UnoApiHeadersTarget/udkapi/comprehensive",
-					"$(LO_WORKDIR)/UnoApiHeadersTarget/offapi/comprehensive",
-					"$(LO_WORKDIR)/UnpackedTarball/icu/source/common",
-					"$(LO_WORKDIR)/ios/generated",
-				);
-				INFOPLIST_FILE = LibreOfficeLight/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jani.Editors.LibreOfficeLight;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "LibreOfficeLight/lokit-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = 2;
-				VALID_ARCHS = "arm64 x86_64";
-			};
-			name = Debug;
-		};
-		397E09271E597BD8001374E0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				CLANG_WARN_INFINITE_RECURSION = NO;
-				CODE_SIGN_ENTITLEMENTS = LibreOfficeLight/LibreOfficeLight.entitlements;
-				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = TM977DU7EF;
-				ENABLE_TESTABILITY = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "LibreOfficeLight/LibreOfficeLight-Prefix.pch";
-				INFOPLIST_FILE = LibreOfficeLight/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jani.Editors.LibreOfficeLight;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "LibreOfficeLight/lokit-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = 2;
-				VALID_ARCHS = "arm64 x86_64";
-			};
-			name = Release;
-		};
 		39ACF41A1F8A358000DA7334 /* Simulator */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 39ACF4181F8A317600DA7334 /* loApp.xcconfig */;
@@ -616,45 +548,6 @@
 			};
 			name = Simulator;
 		};
-		39ACF41B1F8A358000DA7334 /* Simulator */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				CLANG_WARN_INFINITE_RECURSION = NO;
-				CODE_SIGN_ENTITLEMENTS = LibreOfficeLight/LibreOfficeLight.entitlements;
-				DEVELOPMENT_TEAM = TM977DU7EF;
-				ENABLE_TESTABILITY = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "LibreOfficeLight/LibreOfficeLight-Prefix.pch";
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				"HEADER_SEARCH_PATHS[arch=*]" = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"$(LO_BUILDDIR)/config_host",
-					"$(LO_SRCDIR)/include",
-					"$(LO_WORKDIR)/UnoApiHeadersTarget/udkapi/comprehensive",
-					"$(LO_WORKDIR)/UnoApiHeadersTarget/offapi/comprehensive",
-					"$(LO_WORKDIR)/UnpackedTarball/icu/source/common",
-					"$(LO_WORKDIR)/ios/generated",
-				);
-				INFOPLIST_FILE = LibreOfficeLight/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jani.Editors.LibreOfficeLight;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "LibreOfficeLight/lokit-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = 2;
-				VALID_ARCHS = "arm64 x86_64";
-			};
-			name = Simulator;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -664,16 +557,6 @@
 				397E09231E597BD8001374E0 /* Debug */,
 				39ACF41A1F8A358000DA7334 /* Simulator */,
 				397E09241E597BD8001374E0 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Simulator;
-		};
-		397E09251E597BD8001374E0 /* Build configuration list for PBXNativeTarget "LibreOfficeLight" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				397E09261E597BD8001374E0 /* Debug */,
-				39ACF41B1F8A358000DA7334 /* Simulator */,
-				397E09271E597BD8001374E0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Simulator;
