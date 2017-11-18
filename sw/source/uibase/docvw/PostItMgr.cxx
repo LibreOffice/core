@@ -1069,15 +1069,12 @@ void SwPostItMgr::MakeVisible(const SwAnnotationWin* pPostIt )
     std::vector<SwPostItPageItem*>::size_type n=0;
     for (auto const& page : mPages)
     {
-        if (page->mList->size()>0)
+        for (auto const& item : *page->mList)
         {
-            for (auto const& item : *page->mList)
+            if (item->pPostIt==pPostIt)
             {
-                if (item->pPostIt==pPostIt)
-                {
-                    aPage = n+1;
-                    break;
-                }
+                aPage = n+1;
+                break;
             }
         }
         ++n;
