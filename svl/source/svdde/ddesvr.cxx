@@ -153,7 +153,7 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
                     pC = new Conversation;
                     pC->hConv = hConv;
                     pC->pTopic = pTopic;
-                    pService->pConv->push_back( pC );
+                    pService->m_vConv.emplace_back( pC );
                 }
             }
             return nullptr;
@@ -162,9 +162,9 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
     for (DdeServices::iterator aI = rAll.begin(); aI != rAll.end(); ++aI)
     {
         pService = *aI;
-        for ( size_t i = 0, n = pService->pConv->size(); i < n; ++i )
+        for ( size_t i = 0, n = pService->m_vConv.size(); i < n; ++i )
         {
-            pC = (*pService->pConv)[ i ];
+            pC = pService->m_vConv[ i ].get();
             if ( pC->hConv == hConv )
                 goto found;
         }
@@ -176,14 +176,13 @@ found:
     if ( nCode == XTYP_DISCONNECT)
     {
         DisconnectTopic(*pC->pTopic, hConv);
-        for ( ConvList::iterator it = pService->pConv->begin();
-              it != pService->pConv->end();
+        for ( ConvList::iterator it = pService->m_vConv.begin();
+              it != pService->m_vConv.end();
               ++it
         ) {
-            if ( *it == pC )
+            if ( it->get() == pC )
             {
-                delete *it;
-                pService->pConv->erase( it );
+                pService->m_vConv.erase( it );
                 break;
             }
         }
@@ -435,8 +434,6 @@ DdeService::DdeService( const OUString& rService )
     else
         nStatus = DMLERR_NO_ERROR;
 
-    pConv = new ConvList;
-
     if ( pInst->pServicesSvr )
         pInst->pServicesSvr->push_back( this );
 
@@ -482,7 +479,6 @@ DdeService::~DdeService()
                 ImpDeinitInstData();
         }
     }
-    delete pConv;
 }
 
 const OUString DdeService::GetName() const
@@ -513,16 +509,11 @@ void DdeService::RemoveTopic( const DdeTopic& rTopic )
             aTopics.erase(iter);
             // Delete all conversions!
             // Or else we work on deleted topics!
-            for( size_t n = pConv->size(); n; )
+            for( size_t n = m_vConv.size(); n; )
             {
-                Conversation* pC = (*pConv)[ --n ];
+                auto const& pC = m_vConv[ --n ];
                 if( pC->pTopic == &rTopic )
-                {
-                    ConvList::iterator it = pConv->begin();
-                    ::std::advance( it, n );
-                    delete *it;
-                    pConv->erase( it );
-                }
+                    m_vConv.erase( m_vConv.begin() + n );
             }
             break;
         }

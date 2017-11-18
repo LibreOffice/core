@@ -20,6 +20,10 @@
 #include <svl/svdde.hxx>
 #include <rtl/instance.hxx>
 
+struct Conversation
+{
+};
+
 struct DdeDataImp
 {
 };
@@ -202,7 +206,6 @@ const OUString DdeTopic::GetName() const
 DdeService::DdeService( const OUString& )
     : pSysTopic(nullptr)
     , pName(nullptr)
-    , pConv(nullptr)
     , nStatus(0)
 {
 }
