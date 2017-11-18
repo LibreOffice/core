@@ -103,7 +103,7 @@
               <object class="GtkLabel" id="westfontnameft-nocjk">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="charnamepage|westfontnameft-nocjk">Family:</property>
+                <property name="label" translatable="no" context="charnamepage|westfontnameft-nocjk">Family:</property>
               </object>
             </child>
           </object>
@@ -142,7 +142,7 @@
               <object class="GtkLabel" id="weststyleft-nocjk">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="charnamepage|weststyleft-nocjk">Style:</property>
+                <property name="label" translatable="no" context="charnamepage|weststyleft-nocjk">Style:</property>
               </object>
             </child>
           </object>
@@ -224,7 +224,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes" context="charnamepage|westfontnameft-cjk">Family:</property>
+                    <property name="label" translatable="no" context="charnamepage|westfontnameft-cjk">Family:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">westfontnamelb-cjk</property>
                   </object>
@@ -239,7 +239,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes" context="charnamepage|weststyleft-cjk">Style:</property>
+                    <property name="label" translatable="no" context="charnamepage|weststyleft-cjk">Style:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">weststylelb-cjk</property>
                   </object>
@@ -382,7 +382,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes" context="charnamepage|eastfontnameft">Family:</property>
+                    <property name="label" translatable="no" context="charnamepage|eastfontnameft">Family:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">eastfontnamelb</property>
                   </object>
@@ -397,7 +397,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes" context="charnamepage|eaststyleft">Style:</property>
+                    <property name="label" translatable="no" context="charnamepage|eaststyleft">Style:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">eaststylelb</property>
                   </object>
@@ -539,7 +539,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes" context="charnamepage|ctlfontnameft">Family:</property>
+                    <property name="label" translatable="no" context="charnamepage|ctlfontnameft">Family:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">ctlfontnamelb</property>
                   </object>
@@ -554,7 +554,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes" context="charnamepage|ctlstyleft">Style:</property>
+                    <property name="label" translatable="no" context="charnamepage|ctlstyleft">Style:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">ctlstylelb</property>
                   </object>
