@@ -1259,12 +1259,15 @@ namespace emfio
                         mpInputStream->ReadUInt32( BkColorSrc ).ReadUInt32( iUsageSrc ).ReadUInt32( offBmiSrc ).ReadUInt32( cbBmiSrc )
                                    .ReadUInt32( offBitsSrc ).ReadUInt32( cbBitsSrc ).ReadInt32( cxSrc ).ReadInt32( cySrc ) ;
 
-                        tools::Rectangle aRect( Point( xDest, yDest ), Size( cxDest+1, cyDest+1 ) );
-
-                        if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
+                        if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) ||
+                             cxDest == SAL_MAX_INT32 || cyDest == SAL_MAX_INT32 )
+                        {
                             bStatus = false;
+                        }
                         else
                         {
+                            tools::Rectangle aRect(Point(xDest, yDest), Size(cxDest + 1, cyDest + 1));
+
                             const sal_uInt32 nSourceSize = cbBmiSrc + cbBitsSrc + 14;
                             bool bSafeRead = nSourceSize <= (mnEndPos - mnStartPos);
                             sal_uInt32 nDeltaToDIB5HeaderSize(0);
