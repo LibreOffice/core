@@ -46,7 +46,6 @@
 #include <rtl/ustring.hxx>
 #include <svl/itemprop.hxx>
 
-#include <list>
 #include <memory>
 #include <unordered_set>
 #include <vector>
@@ -183,8 +182,7 @@ public:
 private:
 
     ScDocument*                 m_pDocument;
-    typedef std::list < css::uno::Reference< css::chart2::data::XLabeledDataSequence > >  LabeledList;
-    LabeledList                 m_aLabeledSequences;
+    std::vector < css::uno::Reference< css::chart2::data::XLabeledDataSequence > > m_aLabeledSequences;
 
 };
 
