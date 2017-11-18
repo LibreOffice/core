@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_813e2ed8",
+        "filename": "sccomp/source/solver/DifferentialEvolution.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-11-18T19:46:09Z",
+      "side": 1,
+      "message": "shouldn\u0027t it be \"chosen\"?",
+      "range": {
+        "startLine": 100,
+        "startChar": 32,
+        "endLine": 100,
+        "endChar": 38
+      },
+      "revId": "fc71a435ee64c0d19379ebf630c48f8808e7a538",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_e12d32a9",
+        "filename": "sfx2/classification/xAL-types.xsd",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-11-18T19:46:09Z",
+      "side": 1,
+      "message": "\"types\"?",
+      "range": {
+        "startLine": 60,
+        "startChar": 31,
+        "endLine": 60,
+        "endChar": 35
+      },
+      "revId": "fc71a435ee64c0d19379ebf630c48f8808e7a538",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
