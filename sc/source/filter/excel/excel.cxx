@@ -293,6 +293,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDIF(SvStream &rStream)
     aDocument.SetDocOptions(aDocOpt);
     aDocument.MakeTable(0);
     aDocument.EnableExecuteLink(false);
+    aDocument.InitDrawLayer(nullptr);
     return ScFormatFilter::Get().ScImportDif(rStream, &aDocument, ScAddress(0, 0, 0), RTL_TEXTENCODING_IBM_850) == ERRCODE_NONE;
 }
 
