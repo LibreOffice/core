@@ -580,7 +580,6 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             int32_t nEndRunPos = std::min(pTextLayout->runs[k].nEnd, nBidiEndRunPos);
             hb_direction_t aDirection = bRightToLeft ? HB_DIRECTION_RTL : HB_DIRECTION_LTR;
             hb_script_t aScript = hb_icu_script_to_script(pTextLayout->runs[k].nCode);
-
             // For vertical text, further divide the runs based on character
             // orientation.
             if (rArgs.mnFlags & SalLayoutFlags::Vertical)
@@ -742,8 +741,8 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                             &pHbPositions[i].x_offset ,
                             &pHbPositions[i].y_offset );
                     nAdvance = -pHbPositions[i].y_advance;
-                    nXOffset =  pHbPositions[i].y_offset;
-                    nYOffset =  pHbPositions[i].x_offset;
+                    nXOffset = -pHbPositions[i].y_offset;
+                    nYOffset = -pHbPositions[i].x_offset;
                 }
                 else
                 {
