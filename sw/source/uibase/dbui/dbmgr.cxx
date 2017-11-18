@@ -2692,7 +2692,7 @@ OUString lcl_getOwnURL(SwDocShell const * pDocShell)
         return aRet;
 
     const INetURLObject& rURLObject = pDocShell->GetMedium()->GetURLObject();
-    aRet = rURLObject.GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
+    aRet = rURLObject.GetMainURL(INetURLObject::DecodeMechanism::NONE);
     return aRet;
 }
 
@@ -2781,11 +2781,11 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
 
             uno::Reference<sdb::XDocumentDataSource> xDS(xNewInstance, uno::UNO_QUERY_THROW);
             uno::Reference<frame::XStorable> xStore(xDS->getDatabaseDocument(), uno::UNO_QUERY_THROW);
-            OUString sOutputExt = ".odb";
             OUString aOwnURL = lcl_getOwnURL(pDocShell);
             if (aOwnURL.isEmpty())
             {
                 // Cannot embed, as embedded data source would need the URL of the parent document.
+                OUString const sOutputExt = ".odb";
                 OUString sHomePath(SvtPathOptions().GetWorkPath());
                 utl::TempFile aTempFile(sNewName, true, &sOutputExt, pDestDir ? pDestDir : &sHomePath);
                 OUString sTmpName = aTempFile.GetURL();
@@ -2816,15 +2816,30 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
     return sFind;
 }
 
+namespace {
+// Construct vnd.sun.star.pkg:// URL
+OUString ConstructVndSunStarPkgUrl(const OUString& rMainURL, const OUString& rStreamRelPath)
+{
+    auto xContext(comphelper::getProcessComponentContext());
+    auto xUri = css::uri::UriReferenceFactory::create(xContext)->parse(rMainURL);
+    assert(xUri.is());
+    xUri = css::uri::VndSunStarPkgUrlReferenceFactory::create(xContext)
+        ->createVndSunStarPkgUrlReference(xUri);
+    assert(xUri.is());
+    return xUri->getUriReference() + "/"
+        + INetURLObject::encode(
+            rStreamRelPath, INetURLObject::PART_FPATH,
+            INetURLObject::EncodeMechanism::All);
+}
+}
+
 void SwDBManager::StoreEmbeddedDataSource(const uno::Reference<frame::XStorable>& xStorable,
                                           const uno::Reference<embed::XStorage>& xStorage,
                                           const OUString& rStreamRelPath,
                                           const OUString& rOwnURL)
 {
     // Construct vnd.sun.star.pkg:// URL for later loading, and TargetStorage/StreamRelPath for storing.
-    OUString sTmpName = "vnd.sun.star.pkg://";
-    sTmpName += INetURLObject::encode(rOwnURL, INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All);
-    sTmpName += "/" + rStreamRelPath;
+    OUString const sTmpName = ConstructVndSunStarPkgUrl(rOwnURL, rStreamRelPath);
 
     uno::Sequence<beans::PropertyValue> aSequence = comphelper::InitPropertySequence(
     {
@@ -2863,17 +2878,9 @@ void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const
 
     // Encode the stream name and the real path into a single URL.
     const INetURLObject& rURLObject = rDocShell.GetMedium()->GetURLObject();
-    auto xContext(comphelper::getProcessComponentContext());
-    auto xUri = css::uri::UriReferenceFactory::create(xContext)
-        ->parse(rURLObject.GetMainURL(INetURLObject::DecodeMechanism::NONE));
-    assert(xUri.is());
-    xUri = css::uri::VndSunStarPkgUrlReferenceFactory::create(xContext)
-        ->createVndSunStarPkgUrlReference(xUri);
-    assert(xUri.is());
-    OUString const aURL = xUri->getUriReference() + "/"
-        + INetURLObject::encode(
-            m_sEmbeddedName, INetURLObject::PART_FPATH,
-            INetURLObject::EncodeMechanism::All);
+    OUString const aURL = ConstructVndSunStarPkgUrl(
+        rURLObject.GetMainURL(INetURLObject::DecodeMechanism::NONE),
+        m_sEmbeddedName);
 
     uno::Reference<uno::XInterface> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
     xDatabaseContext->registerObject( sDataSource, xDataSource );
