@@ -1010,7 +1010,7 @@ void paintGraphicUsingPrimitivesHelper(
         // need to use that. Usually the renderer would be a VCL-based
         // PrimitiveRenderer, but there are system-specific shortcuts that
         // will *not* use the VCL-Paint of Bitmap and thus ignore this.
-        // Anyways, indirectly using a CLipRegion set at the taget OutDev
+        // Anyways, indirectly using a CLipRegion set at the target OutDev
         // when using a PrimitiveRenderer is a non-valid implication.
         // First tried only to use when HasPolyPolygonOrB2DPolyPolygon(),
         // but there is an optimization at ClipRegion creation that detects
