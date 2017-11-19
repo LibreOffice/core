@@ -857,7 +857,7 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
         aOldRect.Left() + basegfx::fround(aOldRect.GetWidth() * rRef.getX()),
         aOldRect.Top() + basegfx::fround(aOldRect.GetHeight() * rRef.getY()));
 
-    // appy transformation, use old ResizeRect for now
+    // apply transformation, use old ResizeRect for now
     tools::Rectangle aNewRect( aOldRect );
     ResizeRect(
         aNewRect,
@@ -928,7 +928,7 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
         const basegfx::B2DPoint aFormerCenter(
             GetFlyFrame()->getFrameAreaTransformation() * basegfx::B2DPoint(0.5, 0.5));
 
-        // define the existing rotaiton around that former center
+        // define the existing rotation around that former center
         const basegfx::B2DHomMatrix aRotFormerCenter(
             basegfx::utils::createRotateAroundPoint(
                 aFormerCenter.getX(),
@@ -942,7 +942,7 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
             aRotFormerCenter * basegfx::B2DPoint(aNewCenter.X(), aNewCenter.Y()));
 
         // Create the new TopLeft of the unrotated, cropped object by creating
-        // as if re-rceating the unrotated geometry
+        // as if re-creating the unrotated geometry
         aNewTopLeft = Point(
             basegfx::fround(aRotNewCenter.getX() - (0.5 * aNewRect.getWidth())),
             basegfx::fround(aRotNewCenter.getY() - (0.5 * aNewRect.getHeight())));
@@ -993,7 +993,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
         aNewMat.scale(double(xFact), double(yFact));
         aNewMat.translate(aRef.getX(), aRef.getY());
 
-        // get center of transfomed state
+        // get center of transformed state
         const basegfx::B2DPoint aCenter(aNewMat * basegfx::B2DPoint(0.5, 0.5));
 
         // decompose to extract scale

@@ -51,13 +51,13 @@
 	</xs:simpleType>
 	<xs:simpleType name="AddressIDTypeList">
 		<xs:annotation>
-			<xs:documentation>A list of types of address identiifers </xs:documentation>
+			<xs:documentation>A list of types of address identifiers </xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:normalizedString"/>
 	</xs:simpleType>
 	<xs:simpleType name="AddressLineTypeList">
 		<xs:annotation>
-			<xs:documentation>A list of ypes of address line., e.g. street details, locality details</xs:documentation>
+			<xs:documentation>A list of types of address line, e.g. street details, locality details</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:normalizedString"/>
 	</xs:simpleType>

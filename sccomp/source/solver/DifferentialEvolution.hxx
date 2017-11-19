@@ -97,7 +97,7 @@ public:
             size_t x = agentIndex; // randomPopulation(generator);
             size_t a, b, c;
 
-            // create a copy of choosen random agent in population
+            // create a copy of chosen random agent in population
             Individual& rOriginal = maPopulation[x];
             Individual aCandidate(rOriginal);
 

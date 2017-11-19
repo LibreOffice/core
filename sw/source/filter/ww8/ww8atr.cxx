@@ -278,7 +278,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
         {
             AttrOutput().OutputItem( *pItem );
 
-            // switch off the numerbering?
+            // switch off the numbering?
             if ( static_cast<const SwNumRuleItem*>(pItem)->GetValue().isEmpty() &&
                  SfxItemState::SET != rSet.GetItemState( RES_LR_SPACE, false) &&
                  SfxItemState::SET == rSet.GetItemState( RES_LR_SPACE, true, &pItem ) )

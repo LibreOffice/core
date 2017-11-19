@@ -201,7 +201,7 @@ public:
     // for the FrameArea and FramePrintArea.
     // FramePrintArea is not relative to FrameArea in this
     // transformation representation (to make it easier to use and understand).
-    // There is no 'set' method since SwFrame is a layout obejct. For
+    // There is no 'set' method since SwFrame is a layout object. For
     // some cases rotation will be included (used for SwGrfNode in inner
     // SwFrame of a SwFlyFrame)
     virtual basegfx::B2DHomMatrix getFrameAreaTransformation() const;
@@ -222,7 +222,7 @@ private:
     SwFrameAreaDefinition&  mrSwFrameAreaDefinition;
 
     // FrameAreaTransformation and FramePrintAreaTransformation
-    // !identtity when needed (translate/scale is used (e.g. rotation))
+    // !identity when needed (translate/scale is used (e.g. rotation))
     basegfx::B2DHomMatrix   maFrameAreaTransformation;
     basegfx::B2DHomMatrix   maFramePrintAreaTransformation;
 
@@ -252,13 +252,13 @@ public:
     SwRect getUntransformedFramePrintArea() const;
 
     // Helper method to re-create FrameAreaTransformations based on the
-    // curent FrameAreaDefinition transformed by given rotation and Center
+    // current FrameAreaDefinition transformed by given rotation and Center
     void createFrameAreaTransformations(
         double fRotation,
         const basegfx::B2DPoint& rCenter);
 
     // Tooling method to reset the SwRect(s) in the current
-    // SwFrameAreaDefinition which are already apapted to
+    // SwFrameAreaDefinition which are already adapted to
     // Transformation back to the untransformed state, using
     // the getUntransformedFrame*Area calls above when needed.
     // Only the SwRect(s) are changed back, not the transformations.
