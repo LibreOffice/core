@@ -308,7 +308,7 @@ public:
      * Point rPt: The point that should be used to find the page
      * Size pSize: If given, we return the (first) page that overlaps with the
      * rectangle defined by rPt and pSize
-     * bool bExtend: Extend each page to the left/right/top/botton up to the
+     * bool bExtend: Extend each page to the left/right/top/bottom up to the
      * next page margin
      */
     const SwPageFrame* GetPageAtPos( const Point& rPt, const Size* pSize = nullptr, bool bExtend = false ) const;

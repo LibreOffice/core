@@ -431,7 +431,7 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
     }
 
     // shift visible preview document area to the top,
-    // if on the botton is an area left blank.
+    // if on the bottom is an area left blank.
     if ( mbBookPreviewModeToggled &&
          maPaintedPreviewDocRect.Bottom() == maPreviewDocRect.Bottom() &&
          maPaintedPreviewDocRect.GetHeight() < maWinSize.Height() )

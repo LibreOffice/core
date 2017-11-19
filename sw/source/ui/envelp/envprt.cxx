@@ -88,7 +88,7 @@ IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl, Button*, void)
 {
     if (m_pBottomButton->IsChecked())
     {
-        // Envelope from botton
+        // Envelope from bottom
         m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_LEFT], Image(BitmapEx(BMP_HOR_LEFT_LOWER)));
         m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_CNTR], Image(BitmapEx(BMP_HOR_CNTR_LOWER)));
         m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_RGHT], Image(BitmapEx(BMP_HOR_RGHT_LOWER)));

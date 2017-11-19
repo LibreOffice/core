@@ -5203,7 +5203,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     }
                                 }
 
-                                // TOPBOTTON and BOTTOMTOP are handled in DrawStrings/DrawEdit
+                                // TOPBOTTOM and BOTTOMTOP are handled in DrawStrings/DrawEdit
                                 OSL_ENSURE( eOrient == SvxCellOrientation::Standard && nAttrRotate,
                                             "DrawRotated: no rotation" );
 
