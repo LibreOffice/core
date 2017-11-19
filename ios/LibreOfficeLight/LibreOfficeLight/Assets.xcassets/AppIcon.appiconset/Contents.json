@@ -1,22 +1,16 @@
 {
   "images" : [
     {
-      "idiom" : "ipad",
-      "size" : "20x20",
-      "filename" : "LibreOffice-20.png",
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "ipad",
-      "size" : "20x20",
-      "filename" : "LibreOffice-40.png",
-      "scale" : "2x"
-    },
-    {
       "size" : "29x29",
       "idiom" : "ipad",
       "filename" : "LibreOffice-29.png",
       "scale" : "1x"
+    },
+    {
+      "size" : "29x29",
+      "idiom" : "iphone",
+      "filename" : "LibreOffice-58.png",
+      "scale" : "2x"
     },
     {
       "size" : "29x29",
@@ -25,8 +19,8 @@
       "scale" : "2x"
     },
     {
-      "idiom" : "ipad",
       "size" : "40x40",
+      "idiom" : "ipad",
       "filename" : "LibreOffice-40.png",
       "scale" : "1x"
     },
@@ -34,6 +28,18 @@
       "size" : "40x40",
       "idiom" : "ipad",
       "filename" : "LibreOffice-80.png",
+      "scale" : "2x"
+    },
+    {
+      "size" : "40x40",
+      "idiom" : "iphone",
+      "filename" : "LibreOffice-80.png",
+      "scale" : "2x"
+    },
+    {
+      "size" : "60x60",
+      "idiom" : "iphone",
+      "filename" : "LibreOffice-120.png",
       "scale" : "2x"
     },
     {
@@ -49,14 +55,8 @@
       "scale" : "2x"
     },
     {
-      "size" : "83.5x83.5",
-      "idiom" : "ipad",
-      "filename" : "LibreOffice-167.png",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "ios-marketing",
       "size" : "1024x1024",
+      "idiom" : "ios-marketing",
       "filename" : "LibreOffice-1024.png",
       "scale" : "1x"
     }
