@@ -118,8 +118,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(ENABLE_LPSOLVE), \
 		sccomp/source/solver/lpsolvesolver \
 	) \
-	$(if $(filter-out $(OS),IOS), \
-	    sccomp/source/solver/swarmsolver) \
+	sccomp/source/solver/swarmsolver \
 	writerfilter/util/writerfilter \
 	writerperfect/source/draw/wpftdraw \
 	writerperfect/source/impress/wpftimpress \

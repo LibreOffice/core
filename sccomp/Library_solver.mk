@@ -22,9 +22,7 @@ $(eval $(call gb_Library_Library,solver))
 $(if $(ENABLE_COINMP),$(eval $(call gb_Library_set_componentfile,solver,sccomp/source/solver/coinmpsolver)))
 $(if $(ENABLE_LPSOLVE),$(eval $(call gb_Library_set_componentfile,solver,sccomp/source/solver/lpsolvesolver)))
 
-ifneq ($(OS),IOS)
 $(eval $(call gb_Library_set_componentfile,solver,sccomp/source/solver/swarmsolver))
-endif
 
 $(eval $(call gb_Library_use_sdk_api,solver))
 
@@ -49,8 +47,7 @@ $(eval $(call gb_Library_use_externals,solver,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,solver,\
-	$(if $(filter-out $(OS),IOS), \
-	    sccomp/source/solver/SwarmSolver) \
+	sccomp/source/solver/SwarmSolver \
 	sccomp/source/solver/SolverComponent \
 	$(if $(ENABLE_COINMP), sccomp/source/solver/CoinMPSolver) \
 	$(if $(ENABLE_LPSOLVE), sccomp/source/solver/LpsolveSolver) \
