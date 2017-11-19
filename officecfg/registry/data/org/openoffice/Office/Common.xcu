@@ -155,6 +155,17 @@
           <value>_default</value>
         </prop>
       </node>
+      <node oor:name="m10" oor:op="replace" install:module="math">
+        <prop oor:name="URL" oor:type="xs:string">
+          <value>private:factory/smath</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="en-US">F~ormula</value>
+        </prop>
+        <prop oor:name="TargetName" oor:type="xs:string">
+          <value>_default</value>
+        </prop>
+      </node>
       <node oor:name="m4" oor:op="replace" install:module="base">
         <prop oor:name="URL" oor:type="xs:string">
           <value>private:factory/sdatabase?Interactive</value>
@@ -213,17 +224,6 @@
       <node oor:name="m9" oor:op="replace">
         <prop oor:name="URL" oor:type="xs:string">
           <value>private:separator</value>
-        </prop>
-        <prop oor:name="TargetName" oor:type="xs:string">
-          <value>_default</value>
-        </prop>
-      </node>
-      <node oor:name="m10" oor:op="replace" install:module="math">
-        <prop oor:name="URL" oor:type="xs:string">
-          <value>private:factory/smath</value>
-        </prop>
-        <prop oor:name="Title">
-          <value xml:lang="en-US">F~ormula</value>
         </prop>
         <prop oor:name="TargetName" oor:type="xs:string">
           <value>_default</value>
