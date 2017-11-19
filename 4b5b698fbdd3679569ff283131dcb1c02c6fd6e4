@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_84b71cf4",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1001502
+      },
+      "writtenOn": "2017-11-19T18:28:02Z",
+      "side": 1,
+      "message": "maybe it is more elegant to update the worldtransform of the current PropertyHolder in \"mappingChanged()\"",
+      "range": {
+        "startLine": 331,
+        "startChar": 37,
+        "endLine": 331,
+        "endChar": 42
+      },
+      "revId": "4b5b698fbdd3679569ff283131dcb1c02c6fd6e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
