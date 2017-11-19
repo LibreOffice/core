@@ -33,29 +33,38 @@
    guidetolerance="10"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-width="1360"
-   inkscape:window-height="713"
+   inkscape:window-width="2560"
+   inkscape:window-height="1375"
    id="namedview6"
-   showgrid="false"
-   inkscape:zoom="14.75"
-   inkscape:cx="3.6041919"
-   inkscape:cy="2.0019698"
+   showgrid="true"
+   inkscape:zoom="29.5"
+   inkscape:cx="11.420275"
+   inkscape:cy="3.0650321"
    inkscape:window-x="0"
-   inkscape:window-y="28"
+   inkscape:window-y="36"
    inkscape:window-maximized="1"
-   inkscape:current-layer="svg2" />
+   inkscape:current-layer="svg2">
+  <inkscape:grid
+     type="xygrid"
+     id="grid3359" />
+</sodipodi:namedview>
+
 
      /&gt;
- <path
-   style="fill:#e9e9e9;fill-opacity:1;stroke:#8c8c8c;stroke-linejoin:round;stroke-opacity:1"
-   d="m 8,4.25 c -4.142125,0 -7.5,3.3578625 -7.5,7.5 l 3.5,0 c 0.053027,-5.0422417 7.975568,-4.6588973 8,0 l 3.5,0 C 15.5,7.6078625 12.142138,4.25 8,4.25 Z"
-   id="path4"
-   inkscape:connector-curvature="0"
-   sodipodi:nodetypes="sccccs" />
-<path
-   style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-   d="M 1.3902439,11.301935 C 2.5129775,3.9401957 12.709845,2.2364315 14.549621,11.253995"
-   id="path4148"
-   inkscape:connector-curvature="0"
-   sodipodi:nodetypes="cc" />
+ <g
+   id="g3344"
+   transform="matrix(0.99801056,0,0,1.0626878,0.0159155,-0.00150233)">
+  <path
+     sodipodi:nodetypes="sccccs"
+     inkscape:connector-curvature="0"
+     id="path4"
+     d="m 8,4.25 c -4.142125,0 -7.5,3.3578625 -7.5,7.5 l 3.5,0 c 0.053027,-5.0422417 7.975568,-4.6588973 8,0 l 3.5,0 C 15.5,7.6078625 12.142138,4.25 8,4.25 Z"
+     style="fill:#e9e9e9;fill-opacity:1;stroke:#8c8c8c;stroke-linejoin:round;stroke-opacity:1" />
+  <path
+     sodipodi:nodetypes="cc"
+     inkscape:connector-curvature="0"
+     id="path4148"
+     d="M 1.3902439,11.301935 C 2.5129775,3.9401957 12.709845,2.2364315 14.549621,11.253995"
+     style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+</g>
 </svg>
