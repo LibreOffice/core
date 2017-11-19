@@ -175,6 +175,7 @@ OUString SAL_CALL AccessibleBrowseBoxBase::getAccessibleName()
 Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL
 AccessibleBrowseBoxBase::getAccessibleRelationSet()
 {
+    ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     // BrowseBox does not have relations.
        return new utl::AccessibleRelationSetHelper;
@@ -433,6 +434,7 @@ void AccessibleBrowseBoxBase::commitEvent(
 
 sal_Int16 SAL_CALL AccessibleBrowseBoxBase::getAccessibleRole()
 {
+    osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     sal_Int16 nRole = AccessibleRole::UNKNOWN;
     switch ( meObjType )
@@ -525,6 +527,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( BrowseBoxAccessibleElement, AccessibleBrowseBo
 
 Reference< css::accessibility::XAccessibleContext > SAL_CALL BrowseBoxAccessibleElement::getAccessibleContext()
 {
+    osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     return this;
 }
