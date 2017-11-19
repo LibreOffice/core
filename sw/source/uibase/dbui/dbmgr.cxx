@@ -2735,7 +2735,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
 
         OUString sNewName = INetURLObject::decode( aURL.getName(),
                                                  INetURLObject::DecodeMechanism::Unambiguous );
-        sal_Int32 nExtLen = aURL.GetExtension().getLength();
+        sal_Int32 nExtLen = sExt.getLength();
         sNewName = sNewName.replaceAt( sNewName.getLength() - nExtLen - 1, nExtLen + 1, "" );
         if (pPrefix)
             sNewName = *pPrefix + sNewName;
