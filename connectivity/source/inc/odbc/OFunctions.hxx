@@ -188,7 +188,7 @@ bool LoadLibrary_ODBC3(OUString &_rPath);
                                                     SQLSMALLINT         RecNumber,
                                                     SQLSMALLINT         Type,
                                                     SQLSMALLINT         SubType,
-                                                    SQLINTEGER          Length,
+                                                    SQLLEN              Length,
                                                     SQLSMALLINT         Precision,
                                                     SQLSMALLINT         Scale,
                                                     SQLPOINTER          DataPtr,
@@ -242,15 +242,6 @@ bool LoadLibrary_ODBC3(OUString &_rPath);
                                                     SQLINTEGER          TextLength);
 
     #define N3SQLExecDirect(a,b,c) (*reinterpret_cast<T3SQLExecDirect>(getOdbcFunction(ODBC3SQLFunctionId::ExecDirect)))(a,b,c)
-
-    /*typedef SQLRETURN  (SQL_API  *T3SQLNativeSql) (   SQLHDBC             ConnectionHandle,
-                                                    SQLCHAR *           InStatementText,
-                                                    SQLINTEGER          TextLength1,
-                                                    SQLCHAR *           utStatementText,
-                                                    SQLINTEGER          BufferLength,
-                                                    SQLINTEGER *        TextLength2Ptr);
-
-    #define N3SQLNativeSql(a,b,c,d,e,f) (*reinterpret_cast<T3SQLNativeSql>(getOdbcFunction(ODBC3SQLFunctionId::NativeSql)))(a,b,c,d,e,f)*/
 
     typedef SQLRETURN (SQL_API  *T3SQLDescribeParam) (SQLHSTMT          StatementHandle,
                                                     SQLUSMALLINT        ParameterNumber,
