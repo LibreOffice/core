@@ -9,7 +9,6 @@
  */
 
 #include <sal/config.h>
-#include <config_lgpl.h>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
