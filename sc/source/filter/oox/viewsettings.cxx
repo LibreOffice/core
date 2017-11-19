@@ -90,7 +90,7 @@ const sal_Int16 API_SPLITMODE_NONE                  = 0;        /// No splits in
 const sal_Int16 API_SPLITMODE_SPLIT                 = 1;        /// Window is split.
 const sal_Int16 API_SPLITMODE_FREEZE                = 2;        /// Window has frozen panes.
 
-// no predefined constants for pane idetifiers
+// no predefined constants for pane identifiers
 const sal_Int16 API_SPLITPANE_TOPLEFT               = 0;        /// Top-left, or top pane.
 const sal_Int16 API_SPLITPANE_TOPRIGHT              = 1;        /// Top-right pane.
 const sal_Int16 API_SPLITPANE_BOTTOMLEFT            = 2;        /// Bottom-left, bottom, left, or single pane.

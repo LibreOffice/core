@@ -174,7 +174,7 @@ namespace cppcanvas
 
 
             // element of the Renderer's action vector. Need to be
-            // public, since some functors need it, too.
+            // public, since some functions need it, too.
             struct MtfAction
             {
                 MtfAction( const std::shared_ptr<Action>&   rAction,
