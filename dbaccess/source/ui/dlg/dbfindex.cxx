@@ -95,19 +95,6 @@ void ODbaseIndexDialog::dispose()
     ModalDialog::dispose();
 }
 
-bool ODbaseIndexDialog::GetTable(const OUString& _rName, TableInfoList::iterator& _rPosition)
-{
-    for (   _rPosition = m_aTableInfoList.begin();
-            _rPosition != m_aTableInfoList.end();
-            ++_rPosition
-        )
-    {
-        if (_rPosition->aTableName == _rName)
-            return true;
-    }
-    return false;
-}
-
 void ODbaseIndexDialog::checkButtons()
 {
     m_pAdd->Enable(0 != m_pLB_FreeIndexes->GetSelectedEntryCount());
@@ -162,8 +149,10 @@ OTableIndex ODbaseIndexDialog::RemoveTableIndex( const OUString& _rTableName, co
     OTableIndex aReturn;
 
     // does the table exist ?
-    TableInfoList::iterator aTablePos;
-    if (!GetTable(_rTableName, aTablePos))
+    TableInfoList::iterator aTablePos = std::find_if(m_aTableInfoList.begin(), m_aTableInfoList.end(),
+                                           [&] (const OTableInfo& arg) { return arg.aTableName == _rTableName; });
+
+    if (aTablePos == m_aTableInfoList.end())
         return aReturn;
 
     return implRemoveIndex(_rIndexName, aTablePos->aIndexList, *m_pLB_TableIndexes, true/*_bMustExist*/);
@@ -171,8 +160,10 @@ OTableIndex ODbaseIndexDialog::RemoveTableIndex( const OUString& _rTableName, co
 
 void ODbaseIndexDialog::InsertTableIndex( const OUString& _rTableName, const OTableIndex& _rIndex)
 {
-    TableInfoList::iterator aTablePos;
-    if (!GetTable(_rTableName, aTablePos))
+    TableInfoList::iterator aTablePos = std::find_if(m_aTableInfoList.begin(), m_aTableInfoList.end(),
+                                           [&] (const OTableInfo& arg) { return arg.aTableName == _rTableName; });
+
+    if (aTablePos == m_aTableInfoList.end())
         return;
 
     implInsertIndex(_rIndex, aTablePos->aIndexList, *m_pLB_TableIndexes);
@@ -182,11 +173,8 @@ IMPL_LINK_NOARG( ODbaseIndexDialog, OKClickHdl, Button*, void )
 {
     // let all tables write their INF file
 
-    for (   TableInfoList::const_iterator aLoop = m_aTableInfoList.begin();
-            aLoop != m_aTableInfoList.end();
-            ++aLoop
-        )
-        aLoop->WriteInfFile(m_aDSN);
+    for (auto const& tableInfo : m_aTableInfoList)
+        tableInfo.WriteInfFile(m_aDSN);
 
     EndDialog();
 }
@@ -241,19 +229,18 @@ IMPL_LINK_NOARG( ODbaseIndexDialog, OnListEntrySelected, ListBox&, void )
 IMPL_LINK( ODbaseIndexDialog, TableSelectHdl, ComboBox&, rComboBox, void )
 {
     // search the table
-    TableInfoList::iterator aTablePos;
-    if (!GetTable(rComboBox.GetText(), aTablePos))
+    TableInfoList::iterator aTablePos = std::find_if(m_aTableInfoList.begin(), m_aTableInfoList.end(),
+                                           [&] (const OTableInfo& arg) { return arg.aTableName == rComboBox.GetText() ; });
+
+    if (aTablePos == m_aTableInfoList.end())
         return;
 
     // fill the listbox for the indexes
     m_pLB_TableIndexes->Clear();
-    for (   TableIndexList::const_iterator aLoop = aTablePos->aIndexList.begin();
-            aLoop != aTablePos->aIndexList.end();
-            ++aLoop
-        )
-        m_pLB_TableIndexes->InsertEntry( aLoop->GetIndexFileName() );
+    for (auto const& index : aTablePos->aIndexList)
+        m_pLB_TableIndexes->InsertEntry( index.GetIndexFileName() );
 
-    if ( aTablePos->aIndexList.size() )
+    if ( !aTablePos->aIndexList.empty() )
         m_pLB_TableIndexes->SelectEntryPos(0);
 
     checkButtons();
@@ -352,13 +339,10 @@ void ODbaseIndexDialog::Init()
         }
     }
 
-    for (   std::vector< OUString >::const_iterator aUsedIndex = aUsedIndexes.begin();
-            aUsedIndex != aUsedIndexes.end();
-            ++aUsedIndex
-        )
-        RemoveFreeIndex( *aUsedIndex, false );
+    for (auto const& usedIndex : aUsedIndexes)
+        RemoveFreeIndex( usedIndex, false );
 
-    if (m_aTableInfoList.size())
+    if (!m_aTableInfoList.empty())
     {
         m_pPB_OK->Enable();
         m_pIndexes->Enable();
@@ -370,37 +354,28 @@ void ODbaseIndexDialog::Init()
 void ODbaseIndexDialog::SetCtrls()
 {
     // ComboBox tables
-    for (   TableInfoList::const_iterator aLoop = m_aTableInfoList.begin();
-            aLoop != m_aTableInfoList.end();
-            ++aLoop
-        )
-        m_pCB_Tables->InsertEntry( aLoop->aTableName );
+    for (auto const& tableInfo : m_aTableInfoList)
+        m_pCB_Tables->InsertEntry( tableInfo.aTableName );
 
     // put the first dataset into Edit
-    if( m_aTableInfoList.size() )
+    if( !m_aTableInfoList.empty() )
     {
         const OTableInfo& rTabInfo = m_aTableInfoList.front();
         m_pCB_Tables->SetText( rTabInfo.aTableName );
 
         // build ListBox of the table indices
-        for (   TableIndexList::const_iterator aIndex = rTabInfo.aIndexList.begin();
-                aIndex != rTabInfo.aIndexList.end();
-                ++aIndex
-            )
-            m_pLB_TableIndexes->InsertEntry( aIndex->GetIndexFileName() );
+        for (auto const& index : rTabInfo.aIndexList)
+            m_pLB_TableIndexes->InsertEntry( index.GetIndexFileName() );
 
-        if( rTabInfo.aIndexList.size() )
+        if( !rTabInfo.aIndexList.empty() )
             m_pLB_TableIndexes->SelectEntryPos( 0 );
     }
 
     // ListBox of the free indices
-    for (   TableIndexList::const_iterator aFree = m_aFreeIndexList.begin();
-            aFree != m_aFreeIndexList.end();
-            ++aFree
-        )
-        m_pLB_FreeIndexes->InsertEntry( aFree->GetIndexFileName() );
+    for (auto const& freeIndex : m_aFreeIndexList)
+        m_pLB_FreeIndexes->InsertEntry( freeIndex.GetIndexFileName() );
 
-    if( m_aFreeIndexList.size() )
+    if( !m_aFreeIndexList.empty() )
         m_pLB_FreeIndexes->SelectEntryPos( 0 );
 
     TableSelectHdl(*m_pCB_Tables);
@@ -449,18 +424,16 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
 
     // now add all saved indices
     sal_uInt16 nPos = 0;
-    for (   TableIndexList::const_iterator aIndex = aIndexList.begin();
-            aIndex != aIndexList.end();
-            ++aIndex, ++nPos
-        )
+    for (auto const& index : aIndexList)
     {
         OStringBuffer aKeyName("NDX");
         if( nPos > 0 )  // first index contains no number
             aKeyName.append(static_cast<sal_Int32>(nPos));
         aInfFile.WriteKey(
             aKeyName.makeStringAndClear(),
-            OUStringToOString(aIndex->GetIndexFileName(),
+            OUStringToOString(index.GetIndexFileName(),
                 osl_getThreadTextEncoding()));
+        ++nPos;
     }
 
     aInfFile.Flush();
