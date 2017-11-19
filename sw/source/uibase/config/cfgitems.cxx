@@ -46,12 +46,6 @@ SwDocDisplayItem::SwDocDisplayItem() :
 };
 
 // Item for the Settings dialog, page document view
-SwDocDisplayItem::SwDocDisplayItem( const SwDocDisplayItem& rDocDisplayItem ):
-            SfxPoolItem(rDocDisplayItem)
-{
-    *this = rDocDisplayItem;
-};
-
 SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt ) :
             SfxPoolItem( FN_PARAM_DOCDISP )
 {
@@ -88,20 +82,6 @@ bool SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
               bShowHiddenPara       == rItem.bShowHiddenPara );
 }
 
-SwDocDisplayItem& SwDocDisplayItem::operator=( const SwDocDisplayItem& rDocDisplayItem)
-{
-    bParagraphEnd       = rDocDisplayItem.bParagraphEnd         ;
-    bTab                = rDocDisplayItem.bTab                  ;
-    bSpace              = rDocDisplayItem.bSpace                ;
-    bNonbreakingSpace   = rDocDisplayItem.bNonbreakingSpace     ;
-    bSoftHyphen         = rDocDisplayItem.bSoftHyphen           ;
-    bCharHiddenText     = rDocDisplayItem.bCharHiddenText           ;
-    bFieldHiddenText      = rDocDisplayItem.bFieldHiddenText           ;
-    bManualBreak        = rDocDisplayItem.bManualBreak          ;
-    bShowHiddenPara     = rDocDisplayItem.bShowHiddenPara       ;
-    return *this;
-}
-
 void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
 {
     rVOpt.SetParagraph  (bParagraphEnd      );
@@ -127,12 +107,6 @@ SwElemItem::SwElemItem() :
     bDrawing            =
     bFieldName          =
     bNotes              = false;
-}
-
-SwElemItem::SwElemItem( const SwElemItem& rElemItem ):
-            SfxPoolItem(rElemItem)
-{
-    *this = rElemItem;
 }
 
 SwElemItem::SwElemItem(const SwViewOption& rVOpt) :
@@ -172,20 +146,6 @@ bool SwElemItem::operator==( const SfxPoolItem& rAttr ) const
                 bNotes                == rItem.bNotes             );
 }
 
-SwElemItem& SwElemItem::operator=( const SwElemItem& rElemItem)
-{
-    bVertRuler      = rElemItem.  bVertRuler        ;
-    bVertRulerRight = rElemItem.  bVertRulerRight   ;
-    bCrosshair      = rElemItem.  bCrosshair        ;
-    bSmoothScroll   = rElemItem.  bSmoothScroll     ;
-    bTable              = rElemItem.bTable                ;
-    bGraphic            = rElemItem.bGraphic              ;
-    bDrawing            = rElemItem.bDrawing              ;
-    bFieldName          = rElemItem.bFieldName            ;
-    bNotes              = rElemItem.bNotes                ;
-    return *this;
-}
-
 void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
 {
     rVOpt.SetViewVRuler(bVertRuler    );
@@ -198,13 +158,6 @@ void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetControl    (bDrawing           );
     rVOpt.SetFieldName    (bFieldName         );
     rVOpt.SetPostIts    (bNotes             );
-}
-
-// CopyCTOR
-SwAddPrinterItem::SwAddPrinterItem( const SwAddPrinterItem& rAddPrinterItem ):
-            SfxPoolItem(rAddPrinterItem),
-            SwPrintData( rAddPrinterItem )
-{
 }
 
 // CTOR for empty Item
@@ -242,14 +195,6 @@ SwShadowCursorItem::SwShadowCursorItem()
 {
 }
 
-SwShadowCursorItem::SwShadowCursorItem( const SwShadowCursorItem& rCpy )
-    : SfxPoolItem( rCpy.Which() ),
-    eMode( rCpy.GetMode() )
-    ,bOn( rCpy.IsOn() )
-
-{
-}
-
 SwShadowCursorItem::SwShadowCursorItem( const SwViewOption& rVOpt )
     : SfxPoolItem( FN_PARAM_SHADOWCURSOR ),
     eMode( rVOpt.GetShdwCursorFillMode() )
@@ -269,13 +214,6 @@ bool SwShadowCursorItem::operator==( const SfxPoolItem& rCmp ) const
             GetMode() == static_cast<const SwShadowCursorItem&>(rCmp).GetMode();
 }
 
-SwShadowCursorItem& SwShadowCursorItem::operator=( const SwShadowCursorItem& rCpy )
-{
-    SetOn( rCpy.IsOn() );
-    SetMode( rCpy.GetMode() );
-    return *this;
-}
-
 void SwShadowCursorItem::FillViewOptions( SwViewOption& rVOpt ) const
 {
     rVOpt.SetShadowCursor( bOn );
@@ -283,21 +221,6 @@ void SwShadowCursorItem::FillViewOptions( SwViewOption& rVOpt ) const
 }
 
 #ifdef DBG_UTIL
-SwTestItem::SwTestItem( const SwTestItem& rTestItem ):
-            SfxPoolItem(rTestItem)
-{
-    bTest1=rTestItem.bTest1;
-    bTest2=rTestItem.bTest2;
-    bTest3=rTestItem.bTest3;
-    bTest4=rTestItem.bTest4;
-    bTest5=rTestItem.bTest5;
-    bTest6=rTestItem.bTest6;
-    bTest7=rTestItem.bTest7;
-    bTest8=rTestItem.bTest8;
-    bTest9=rTestItem.bTest9;
-    bTest10=rTestItem.bTest10;
-};
-
 SfxPoolItem* SwTestItem::Clone( SfxItemPool* ) const
 {
     return new SwTestItem( *this );

@@ -110,24 +110,6 @@ SwEnvItem::SwEnvItem() :
     lAddrFromTop    = std::min(lWidth, lHeight) / 2;
 }
 
-SwEnvItem::SwEnvItem(const SwEnvItem& rItem) :
-    SfxPoolItem(FN_ENVELOP),
-    aAddrText      (rItem.aAddrText),
-    bSend          (rItem.bSend),
-    aSendText      (rItem.aSendText),
-    lAddrFromLeft  (rItem.lAddrFromLeft),
-    lAddrFromTop   (rItem.lAddrFromTop),
-    lSendFromLeft  (rItem.lSendFromLeft),
-    lSendFromTop   (rItem.lSendFromTop),
-    lWidth         (rItem.lWidth),
-    lHeight        (rItem.lHeight),
-    eAlign         (rItem.eAlign),
-    bPrintFromAbove(rItem.bPrintFromAbove),
-    lShiftRight    (rItem.lShiftRight),
-    lShiftDown     (rItem.lShiftDown)
-{
-}
-
 SwEnvItem& SwEnvItem::operator =(const SwEnvItem& rItem)
 {
     aAddrText       = rItem.aAddrText;

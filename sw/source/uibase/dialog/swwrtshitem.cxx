@@ -25,11 +25,6 @@ SwWrtShellItem::SwWrtShellItem( SwWrtShell* pSh )
 {
 
 }
-SwWrtShellItem::SwWrtShellItem( const SwWrtShellItem& rItem) :
-    SfxPoolItem( rItem.Which() ),
-    pWrtSh( rItem.pWrtSh )
-{
-}
 
 bool SwWrtShellItem::operator==( const SfxPoolItem& rItem) const
 {

@@ -37,12 +37,6 @@ SwPageFootnoteInfoItem::SwPageFootnoteInfoItem( SwPageFootnoteInfo const & rInfo
 {
 }
 
-SwPageFootnoteInfoItem::SwPageFootnoteInfoItem( const SwPageFootnoteInfoItem& rItem ) :
-    SfxPoolItem( rItem ),
-    aFootnoteInfo(rItem.GetPageFootnoteInfo())
-{
-}
-
  SwPageFootnoteInfoItem::~SwPageFootnoteInfoItem()
 {
 }
@@ -197,13 +191,6 @@ SwPtrItem::SwPtrItem( const sal_uInt16 nId, void* pPtr ) :
 {
 }
 
-// Copy constructor
-
-SwPtrItem::SwPtrItem( const SwPtrItem& rItem ) : SfxPoolItem( rItem )
-{
-    pMisc = rItem.pMisc;
-}
-
 // Cloning
 
 SfxPoolItem* SwPtrItem::Clone( SfxItemPool * /*pPool*/ ) const
@@ -272,11 +259,6 @@ SwPaMItem::SwPaMItem( const sal_uInt16 nId, SwPaM* pPaM ) :
     SfxPoolItem( nId ),
     m_pPaM(pPaM)
 {
-}
-
-SwPaMItem::SwPaMItem( const SwPaMItem& rItem ) : SfxPoolItem( rItem )
-{
-    m_pPaM = rItem.m_pPaM;
 }
 
 SfxPoolItem* SwPaMItem::Clone( SfxItemPool * /*pPool*/ ) const

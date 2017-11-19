@@ -37,7 +37,6 @@ class SW_DLLPUBLIC SwPageFootnoteInfoItem : public SfxPoolItem
 public:
 
     SwPageFootnoteInfoItem(SwPageFootnoteInfo const & rInfo);
-    SwPageFootnoteInfoItem(const SwPageFootnoteInfoItem& rItem );
     virtual ~SwPageFootnoteInfoItem() override;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -61,7 +60,6 @@ class SW_DLLPUBLIC SwPtrItem : public SfxPoolItem
 
 public:
     SwPtrItem( const sal_uInt16 nId, void* pPtr = nullptr);
-    SwPtrItem( const SwPtrItem& rItem );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
@@ -94,7 +92,6 @@ class SW_DLLPUBLIC SwPaMItem : public SfxPoolItem
 
 public:
     SwPaMItem( const sal_uInt16 nId, SwPaM* pPaM = nullptr);
-    SwPaMItem( const SwPaMItem& rItem );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
