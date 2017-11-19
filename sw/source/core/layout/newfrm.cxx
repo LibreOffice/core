@@ -61,7 +61,7 @@ static SwRectFnCollection aHorizontal = {
     /*.fnGetTop =*/&SwRect::Top_,
     /*.fnGetBottom =*/&SwRect::Bottom_,
     /*.fnGetLeft =*/&SwRect::Left_,
-    /*.fnGetRight =*/&SwRect::Rigth_,
+    /*.fnGetRight =*/&SwRect::Right_,
     /*.fnGetWidth =*/&SwRect::Width_,
     /*.fnGetHeight =*/&SwRect::Height_,
     /*.fnGetPos =*/&SwRect::TopLeft,
@@ -70,7 +70,7 @@ static SwRectFnCollection aHorizontal = {
     /*.fnSetTop =*/&SwRect::Top_,
     /*.fnSetBottom =*/&SwRect::Bottom_,
     /*.fnSetLeft =*/&SwRect::Left_,
-    /*.fnSetRight =*/&SwRect::Rigth_,
+    /*.fnSetRight =*/&SwRect::Right_,
     /*.fnSetWidth =*/&SwRect::Width_,
     /*.fnSetHeight =*/&SwRect::Height_,
 
@@ -113,7 +113,7 @@ static SwRectFnCollection aHorizontal = {
 };
 
 static SwRectFnCollection aVertical = {
-    /*.fnGetTop =*/&SwRect::Rigth_,
+    /*.fnGetTop =*/&SwRect::Right_,
     /*.fnGetBottom =*/&SwRect::Left_,
     /*.fnGetLeft =*/&SwRect::Top_,
     /*.fnGetRight =*/&SwRect::Bottom_,
@@ -122,7 +122,7 @@ static SwRectFnCollection aVertical = {
     /*.fnGetPos =*/&SwRect::TopRight,
     /*.fnGetSize =*/&SwRect::SwappedSize,
 
-    /*.fnSetTop =*/&SwRect::Rigth_,
+    /*.fnSetTop =*/&SwRect::Right_,
     /*.fnSetBottom =*/&SwRect::Left_,
     /*.fnSetLeft =*/&SwRect::Top_,
     /*.fnSetRight =*/&SwRect::Bottom_,
@@ -171,7 +171,7 @@ static SwRectFnCollection aBottomToTop = {
     /*.fnGetTop =*/&SwRect::Bottom_,
     /*.fnGetBottom =*/&SwRect::Top_,
     /*.fnGetLeft =*/&SwRect::Left_,
-    /*.fnGetRight =*/&SwRect::Rigth_,
+    /*.fnGetRight =*/&SwRect::Right_,
     /*.fnGetWidth =*/&SwRect::Width_,
     /*.fnGetHeight =*/&SwRect::Height_,
     /*.fnGetPos =*/&SwRect::BottomLeft,
@@ -180,7 +180,7 @@ static SwRectFnCollection aBottomToTop = {
     /*.fnSetTop =*/&SwRect::Bottom_,
     /*.fnSetBottom =*/&SwRect::Top_,
     /*.fnSetLeft =*/&SwRect::Left_,
-    /*.fnSetRight =*/&SwRect::Rigth_,
+    /*.fnSetRight =*/&SwRect::Right_,
     /*.fnSetWidth =*/&SwRect::Width_,
     /*.fnSetHeight =*/&SwRect::Height_,
 
@@ -224,7 +224,7 @@ static SwRectFnCollection aBottomToTop = {
 
 static SwRectFnCollection aVerticalRightToLeft = {
     /*.fnGetTop =*/&SwRect::Left_,
-    /*.fnGetBottom =*/&SwRect::Rigth_,
+    /*.fnGetBottom =*/&SwRect::Right_,
     /*.fnGetLeft =*/&SwRect::Top_,
     /*.fnGetRight =*/&SwRect::Bottom_,
     /*.fnGetWidth =*/&SwRect::Height_,
@@ -233,7 +233,7 @@ static SwRectFnCollection aVerticalRightToLeft = {
     /*.fnGetSize =*/&SwRect::SwappedSize,
 
     /*.fnSetTop =*/&SwRect::Left_,
-    /*.fnSetBottom =*/&SwRect::Rigth_,
+    /*.fnSetBottom =*/&SwRect::Right_,
     /*.fnSetLeft =*/&SwRect::Top_,
     /*.fnSetRight =*/&SwRect::Bottom_,
     /*.fnSetWidth =*/&SwRect::Height_,
@@ -279,7 +279,7 @@ static SwRectFnCollection aVerticalRightToLeft = {
 
 static SwRectFnCollection aVerticalLeftToRight = {
     /*.fnGetTop =*/&SwRect::Left_,
-    /*.fnGetBottom =*/&SwRect::Rigth_,
+    /*.fnGetBottom =*/&SwRect::Right_,
     /*.fnGetLeft =*/&SwRect::Top_,
     /*.fnGetRight =*/&SwRect::Bottom_,
     /*.fnGetWidth =*/&SwRect::Height_,
@@ -288,7 +288,7 @@ static SwRectFnCollection aVerticalLeftToRight = {
     /*.fnGetSize =*/&SwRect::SwappedSize,
 
     /*.fnSetTop =*/&SwRect::Left_,
-    /*.fnSetBottom =*/&SwRect::Rigth_,
+    /*.fnSetBottom =*/&SwRect::Right_,
     /*.fnSetLeft =*/&SwRect::Top_,
     /*.fnSetRight =*/&SwRect::Bottom_,
     /*.fnSetWidth =*/&SwRect::Height_,
