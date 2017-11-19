@@ -168,12 +168,14 @@ void SwView::StateFormatPaintbrush(SfxItemSet &rSet)
         return;
 
     bool bHasContent = m_pFormatClipboard && m_pFormatClipboard->HasContent();
-    rSet.Put(SfxBoolItem(SID_FORMATPAINTBRUSH, bHasContent));
-    if(!bHasContent)
+    if( !bHasContent &&
+        !SwFormatClipboard::CanCopyThisType( GetWrtShell().GetSelectionType())
+      )
     {
-        if( !SwFormatClipboard::CanCopyThisType( GetWrtShell().GetSelectionType() ) )
-            rSet.DisableItem( SID_FORMATPAINTBRUSH );
+        rSet.DisableItem( SID_FORMATPAINTBRUSH );
     }
+    else
+        rSet.Put(SfxBoolItem(SID_FORMATPAINTBRUSH, bHasContent));
 }
 
 void SwView::UpdateWordCount(SfxShell* pShell, sal_uInt16 nSlot)
