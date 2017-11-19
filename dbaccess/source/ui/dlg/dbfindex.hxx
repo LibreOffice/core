@@ -96,7 +96,6 @@ protected:
 
     void        Init();
     void        SetCtrls();
-    bool    GetTable(const OUString& rName, TableInfoList::iterator& _rPosition);
 
     static OTableIndex implRemoveIndex(const OUString& _rName, TableIndexList& _rList, ListBox& _rDisplay, bool _bMustExist);
     static void implInsertIndex(const OTableIndex& _rIndex, TableIndexList& _rList, ListBox& _rDisplay);
