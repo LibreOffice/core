@@ -197,6 +197,7 @@ namespace accessibility
     /** @return  The XAccessibleContext interface of this object. */
     Reference< XAccessibleContext > SAL_CALL AccessibleBrowseBoxTableCell::getAccessibleContext()
     {
+        osl::MutexGuard aGuard( getMutex() );
         ensureIsAlive();
         return this;
     }

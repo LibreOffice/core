@@ -98,7 +98,7 @@ Reference<XAccessible > SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChi
 /** Grabs the focus to the column header. */
 void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
 {
-    SolarMethodGuard aGuard(getMutex());
+    osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
 
     if ( isRowBarCell() )

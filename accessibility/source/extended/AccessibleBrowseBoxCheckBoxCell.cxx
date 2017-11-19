@@ -46,6 +46,7 @@ namespace accessibility
 
     Reference< XAccessibleContext > SAL_CALL AccessibleCheckBoxCell::getAccessibleContext(  )
     {
+        osl::MutexGuard aGuard( getMutex() );
         ensureIsAlive();
         return this;
     }
