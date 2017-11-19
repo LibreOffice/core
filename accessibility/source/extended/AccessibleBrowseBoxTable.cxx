@@ -60,6 +60,7 @@ AccessibleBrowseBoxTable::getAccessibleChild( sal_Int32 nChildIndex )
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxTable::getAccessibleIndexInParent()
 {
+    osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
     return BBINDEX_TABLE;
 }

@@ -86,6 +86,8 @@ AccessibleBrowseBoxHeaderBar::getAccessibleAtPoint( const awt::Point& rPoint )
 
 void SAL_CALL AccessibleBrowseBoxHeaderBar::grabFocus()
 {
+    SolarMethodGuard aGuard(getMutex());
+
     ensureIsAlive();
     // focus on header not supported
 }
@@ -112,12 +114,16 @@ OUString SAL_CALL AccessibleBrowseBoxHeaderBar::getAccessibleColumnDescription( 
 
 Reference< XAccessibleTable > SAL_CALL AccessibleBrowseBoxHeaderBar::getAccessibleRowHeaders()
 {
+    SolarMethodGuard aGuard(getMutex());
+
     ensureIsAlive();
     return nullptr;        // no headers in headers
 }
 
 Reference< XAccessibleTable > SAL_CALL AccessibleBrowseBoxHeaderBar::getAccessibleColumnHeaders()
 {
+   SolarMethodGuard aGuard(getMutex());
+
     ensureIsAlive();
     return nullptr;        // no headers in headers
 }
