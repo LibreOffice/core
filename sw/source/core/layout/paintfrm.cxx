@@ -2530,8 +2530,8 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                 // borders match the subsidiary lines of the upper:
                 if (aStart.X() == aUpper.Left())
                     aPaintStart.X() = aUpperAligned.Left();
-                else if (aStart.X() == aUpper.Rigth_())
-                    aPaintStart.X() = aUpperAligned.Rigth_();
+                else if (aStart.X() == aUpper.Right_())
+                    aPaintStart.X() = aUpperAligned.Right_();
                 if (aStart.Y() == aUpper.Top())
                     aPaintStart.Y() = aUpperAligned.Top();
                 else if (aStart.Y() == aUpper.Bottom_())
@@ -2539,8 +2539,8 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
 
                 if (aEnd.X() == aUpper.Left())
                     aPaintEnd.X() = aUpperAligned.Left();
-                else if (aEnd.X() == aUpper.Rigth_())
-                    aPaintEnd.X() = aUpperAligned.Rigth_();
+                else if (aEnd.X() == aUpper.Right_())
+                    aPaintEnd.X() = aUpperAligned.Right_();
                 if (aEnd.Y() == aUpper.Top())
                     aPaintEnd.Y() = aUpperAligned.Top();
                 else if (aEnd.Y() == aUpper.Bottom_())
@@ -2784,7 +2784,7 @@ void SwTabFramePainter::Insert( const SwFrame& rFrame, const SvxBoxItem& rBoxIte
     aB.MirrorSelf();
 
     const SwTwips nLeft   = aBorderRect.Left_();
-    const SwTwips nRight  = aBorderRect.Rigth_();
+    const SwTwips nRight  = aBorderRect.Right_();
     const SwTwips nTop    = aBorderRect.Top_();
     const SwTwips nBottom = aBorderRect.Bottom_();
 

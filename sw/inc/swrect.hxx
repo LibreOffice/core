@@ -108,13 +108,13 @@ public:
     void Top_(      const long nTop );
     void Bottom_(   const long nBottom );
     void Left_(     const long nLeft );
-    void Rigth_(    const long nRight );
+    void Right_(    const long nRight );
     void Width_(    const long nNew );
     void Height_(   const long nNew );
     long Top_()     const;
     long Bottom_()  const;
     long Left_()    const;
-    long Rigth_()   const;
+    long Right_()   const;
     long Width_()   const;
     long Height_()  const;
     void SubTop(    const long nSub );

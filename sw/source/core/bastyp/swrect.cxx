@@ -153,14 +153,14 @@ void SwRect::Justify()
 void SwRect::Width_( const long nNew ) { m_Size.setWidth(nNew); }
 void SwRect::Height_( const long nNew ) { m_Size.setHeight(nNew); }
 void SwRect::Left_( const long nLeft ){ m_Size.Width() += m_Point.getX() - nLeft; m_Point.setX(nLeft); }
-void SwRect::Rigth_( const long nRight ){ m_Size.setWidth(nRight - m_Point.getX()); }
+void SwRect::Right_( const long nRight ){ m_Size.setWidth(nRight - m_Point.getX()); }
 void SwRect::Top_( const long nTop ){ m_Size.Height() += m_Point.getY() - nTop; m_Point.setY(nTop); }
 void SwRect::Bottom_( const long nBottom ){ m_Size.setHeight(nBottom - m_Point.getY()); }
 
 long SwRect::Width_() const{ return m_Size.getWidth(); }
 long SwRect::Height_() const{ return m_Size.getHeight(); }
 long SwRect::Left_() const{ return m_Point.getX(); }
-long SwRect::Rigth_() const{ return m_Point.getX() + m_Size.getWidth(); }
+long SwRect::Right_() const{ return m_Point.getX() + m_Size.getWidth(); }
 long SwRect::Top_() const{ return m_Point.getY(); }
 long SwRect::Bottom_() const{ return m_Point.getY() + m_Size.getHeight(); }
 
