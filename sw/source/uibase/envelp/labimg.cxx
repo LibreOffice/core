@@ -55,12 +55,6 @@ SwLabItem::SwLabItem() :
     m_lPHeight = 5669; // 10 cm
 }
 
-SwLabItem::SwLabItem(const SwLabItem& rItem) :
-    SfxPoolItem(FN_LABEL)
-{
-        *this = rItem;
-}
-
 SwLabItem& SwLabItem::operator =(const SwLabItem& rItem)
 {
     m_bAddr    = rItem.m_bAddr;

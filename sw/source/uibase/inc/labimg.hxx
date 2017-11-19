@@ -32,7 +32,6 @@ class SW_DLLPUBLIC SwLabItem : public SfxPoolItem
 public:
 
     SwLabItem();
-    SwLabItem(const SwLabItem& rItem);
 
     SwLabItem& operator =(const SwLabItem& rItem);
 

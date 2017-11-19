@@ -490,24 +490,9 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&                rDocument,
     nHelpId = UCHAR_MAX;
 }
 
-SwDocStyleSheet::SwDocStyleSheet( const SwDocStyleSheet& rOrg) :
-    SfxStyleSheetBase(rOrg),
-    pCharFormat(rOrg.pCharFormat),
-    pColl(rOrg.pColl),
-    pFrameFormat(rOrg.pFrameFormat),
-    pDesc(rOrg.pDesc),
-    pNumRule(rOrg.pNumRule),
-    pTableFormat(rOrg.pTableFormat),
-    pBoxFormat(rOrg.pBoxFormat),
-    rDoc(rOrg.rDoc),
-    aCoreSet(rOrg.aCoreSet),
-    bPhysical(rOrg.bPhysical)
-{
-}
+SwDocStyleSheet::SwDocStyleSheet( const SwDocStyleSheet& ) = default;
 
- SwDocStyleSheet::~SwDocStyleSheet()
-{
-}
+SwDocStyleSheet::~SwDocStyleSheet() = default;
 
 void  SwDocStyleSheet::Reset()
 {

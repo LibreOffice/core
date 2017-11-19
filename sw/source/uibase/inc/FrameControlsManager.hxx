@@ -38,9 +38,6 @@ class SwFrameControlsManager
         ~SwFrameControlsManager();
         void dispose();
 
-        SwFrameControlsManager( const SwFrameControlsManager& rCopy );
-        SwFrameControlsManager& operator=( const SwFrameControlsManager& rCopy );
-
         SwFrameControlPtr GetControl( FrameControlType eType, const SwFrame* pFrame );
         void RemoveControls( const SwFrame* pFrame );
         void RemoveControlsByType( FrameControlType eType, const SwFrame* pFrame );

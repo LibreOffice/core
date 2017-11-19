@@ -54,7 +54,6 @@ public:
     sal_Int32       lShiftDown;      // shift down (twips)
 
     SwEnvItem();
-    SwEnvItem(const SwEnvItem& rItem);
 
     static SfxPoolItem* CreateDefault();
     SwEnvItem& operator =(const SwEnvItem& rItem);

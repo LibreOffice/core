@@ -44,7 +44,6 @@ private:
 
 public:
     InsCaptionOpt(const SwCapObjType eType = FRAME_CAP, const SvGlobalName* pOleId = nullptr);
-    InsCaptionOpt(const InsCaptionOpt&);
     ~InsCaptionOpt();
 
     bool&            UseCaption()                    { return bUseCaption; }
@@ -84,8 +83,6 @@ public:
 
     bool&            CopyAttributes()                { return bCopyAttributes; }
     bool             CopyAttributes() const          { return bCopyAttributes; }
-
-    InsCaptionOpt&          operator= ( const InsCaptionOpt& rOpt );
 };
 
 #endif

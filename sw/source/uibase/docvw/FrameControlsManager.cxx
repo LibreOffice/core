@@ -28,22 +28,9 @@ SwFrameControlsManager::~SwFrameControlsManager()
 {
 }
 
-SwFrameControlsManager::SwFrameControlsManager( const SwFrameControlsManager& rCopy ) :
-    m_pEditWin( rCopy.m_pEditWin ),
-    m_aControls( rCopy.m_aControls )
-{
-}
-
 void SwFrameControlsManager::dispose()
 {
     m_aControls.clear();
-}
-
-SwFrameControlsManager& SwFrameControlsManager::operator=( const SwFrameControlsManager& rCopy )
-{
-    m_pEditWin = rCopy.m_pEditWin;
-    m_aControls = rCopy.m_aControls;
-    return *this;
 }
 
 SwFrameControlPtr SwFrameControlsManager::GetControl( FrameControlType eType, const SwFrame* pFrame )

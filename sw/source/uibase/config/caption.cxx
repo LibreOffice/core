@@ -36,32 +36,6 @@ InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleI
         aOleId = *pOleId;
 }
 
-InsCaptionOpt::InsCaptionOpt(const InsCaptionOpt& rOpt)
-{
-    *this = rOpt;
-}
-
-InsCaptionOpt::~InsCaptionOpt()
-{
-}
-
-InsCaptionOpt& InsCaptionOpt::operator=( const InsCaptionOpt& rOpt )
-{
-    bUseCaption = rOpt.bUseCaption;
-    eObjType = rOpt.eObjType;
-    aOleId = rOpt.aOleId;
-    sCategory = rOpt.sCategory;
-    nNumType = rOpt.nNumType;
-    sNumberSeparator = rOpt.sNumberSeparator;
-    sCaption = rOpt.sCaption;
-    nPos = rOpt.nPos;
-    nLevel = rOpt.nLevel;
-    sSeparator = rOpt.sSeparator;
-    bIgnoreSeqOpts = rOpt.bIgnoreSeqOpts;
-    sCharacterStyle = rOpt.sCharacterStyle;
-    bCopyAttributes = rOpt.bCopyAttributes;
-
-    return *this;
-}
+InsCaptionOpt::~InsCaptionOpt() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
