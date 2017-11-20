@@ -9,6 +9,18 @@
  
    BMPDecompressor m_Bmp;
    UnownedPtr<CCodec_BmpModule> const m_pModule;
+--- core/fxcrt/string_data_template.h
++++ core/fxcrt/string_data_template.h
+@@ -78,7 +78,8 @@
+ 
+   void CopyContentsAt(size_t offset, const CharType* pStr, size_t nLen) {
+     ASSERT(offset >= 0 && nLen >= 0 && offset + nLen <= m_nAllocLength);
+-    memcpy(m_String + offset, pStr, nLen * sizeof(CharType));
++    if (nLen != 0)
++      memcpy(m_String + offset, pStr, nLen * sizeof(CharType));
+     m_String[offset + nLen] = 0;
+   }
+ 
 --- core/fxge/cfx_facecache.cpp
 +++ core/fxge/cfx_facecache.cpp
 @@ -223,7 +223,8 @@ std::unique_ptr<CFX_GlyphBitmap> CFX_FaceCache::RenderGlyph(
