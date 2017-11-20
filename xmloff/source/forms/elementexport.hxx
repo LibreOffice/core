@@ -199,7 +199,7 @@ namespace xmloff
         */
         void exportListSourceAsElements();
 
-        /** get's a Sequence&lt; sal_Int16 &gt; property value as set of sal_Int16's
+        /** gets a Sequence&lt; sal_Int16 &gt; property value as set of sal_Int16's
             @param _rPropertyName
                 the property name to use
             @param _rOut

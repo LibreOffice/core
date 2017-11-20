@@ -492,7 +492,7 @@ void ControlModelContainerBase::replaceByName( const OUString& aName, const Any&
     Reference< XNameContainer > xAllChildren( getPropertyValue( GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ) ), UNO_QUERY );
     if ( xAllChildren.is() )
     {
-        // remove old control (and children) from global list of containees
+        // remove old control (and children) from global list of containes
         updateUserFormChildren( xAllChildren, aName, Remove, uno::Reference< XControlModel >() );
         // Add new control (and containees if they exist)
         updateUserFormChildren( xAllChildren, aName, Insert, xNewModel );
