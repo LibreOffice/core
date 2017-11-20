@@ -32,12 +32,14 @@
 
 #include <dialmgr.hxx>
 #include <strings.hrc>
+#include <bitmaps.hlst>
 #include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/make_unique.hxx>
 #include <i18nutil/searchopt.hxx>
 
 CommandCategoryListBox::CommandCategoryListBox(vcl::Window* pParent)
     : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
+    , pStylesInfo( nullptr )
 {
     SetDropDownLineCount(25);
 
@@ -64,6 +66,16 @@ void CommandCategoryListBox::dispose()
 void CommandCategoryListBox::ClearAll()
 {
     //TODO: Handle SfxCfgKind::GROUP_SCRIPTCONTAINER when it gets added to Init
+    // Clear style info objects from m_aGroupInfo vector to avoid memory leak
+    for (const auto & It : m_aGroupInfo)
+    {
+        if ( It->nKind == SfxCfgKind::GROUP_STYLES && It->pObject )
+        {
+            SfxStyleInfo_Impl* pStyle = static_cast<SfxStyleInfo_Impl*>(It->pObject);
+            delete pStyle;
+        }
+    }
+
     m_aGroupInfo.clear();
     Clear();
 }
@@ -83,6 +95,17 @@ void CommandCategoryListBox::Init(
     m_xGlobalCategoryInfo = css::ui::theUICategoryDescription::get( m_xContext );
     m_xModuleCategoryInfo.set(m_xGlobalCategoryInfo->getByName(m_sModuleLongName), css::uno::UNO_QUERY_THROW);
     m_xUICmdDescription   = css::frame::theUICommandDescription::get( m_xContext );
+
+    // Support style commands
+    css::uno::Reference<css::frame::XController> xController;
+    css::uno::Reference<css::frame::XModel> xModel;
+    if (xFrame.is())
+        xController = xFrame->getController();
+    if (xController.is())
+        xModel = xController->getModel();
+
+    m_aStylesInfo.init(sModuleLongName, xModel);
+    SetStylesInfo(&m_aStylesInfo);
 
 /**** InitModule Start ****/
     try
@@ -124,7 +147,12 @@ void CommandCategoryListBox::Init(
             SetEntryData( nEntryPos, m_aGroupInfo.back().get() );
         }
 
-
+        // Add styles
+        OUString sStyle( CuiResId(RID_SVXSTR_GROUP_STYLES) );
+        nEntryPos = InsertEntry( sStyle );
+        //TODO: last param should contain user data?
+        m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, nullptr ) );
+        SetEntryData( nEntryPos, m_aGroupInfo.back().get() );
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
@@ -250,7 +278,69 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
         }
         case SfxCfgKind::GROUP_STYLES:
         {
-            //TODO:Implement
+            const std::vector< SfxStyleInfo_Impl > lStyleFamilies = pStylesInfo->getStyleFamilies();
+
+            for ( const auto & pIt : lStyleFamilies )
+            {
+                if ( pIt.sLabel.isEmpty() )
+                {
+                    continue;
+                }
+
+                SvTreeListEntry* pFuncEntry = pFunctionListBox->InsertEntry(
+                    pIt.sLabel, // Name of the style family
+                    Image( BitmapEx(RID_CUIBMP_EXPANDED) ), Image( BitmapEx(RID_CUIBMP_COLLAPSED) ) );
+
+                m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0 ) );
+                SfxGroupInfo_Impl* pGrpInfo = m_aGroupInfo.back().get();
+                pFuncEntry->SetUserData(pGrpInfo);
+                pFuncEntry->EnableChildrenOnDemand();
+
+                const std::vector< SfxStyleInfo_Impl > lStyles = pStylesInfo->getStyles(pIt.sFamily);
+
+                // Setup search filter parameters
+                m_searchOptions.searchString = filterTerm;
+                utl::TextSearch textSearch( m_searchOptions );
+
+                // Insert children (styles)
+                for ( const auto & pStyleIt : lStyles )
+                {
+                    OUString sUIName = pStyleIt.sLabel;
+                    sal_Int32 aStartPos = 0;
+                    sal_Int32 aEndPos = sUIName.getLength();
+
+                    // Apply the search filter
+                    if (!filterTerm.isEmpty()
+                            && !textSearch.SearchForward( sUIName, &aStartPos, &aEndPos ) )
+                    {
+                        continue;
+                    }
+
+                    SfxStyleInfo_Impl* pStyle = new SfxStyleInfo_Impl(pStyleIt);
+
+                    SvTreeListEntry* pSubFuncEntry = pFunctionListBox->InsertEntry(
+                                sUIName, pFuncEntry );
+
+                    m_aGroupInfo.push_back(
+                                o3tl::make_unique<SfxGroupInfo_Impl>(
+                                    SfxCfgKind::GROUP_STYLES, 0, pStyle ) );
+
+                    m_aGroupInfo.back()->sCommand = pStyle->sCommand;
+                    m_aGroupInfo.back()->sLabel = pStyle->sLabel;
+                    pSubFuncEntry->SetUserData( m_aGroupInfo.back().get() );
+                }
+
+                // Remove the style group from the list if no children
+                if (!pFuncEntry->HasChildren())
+                {
+                    pFunctionListBox->RemoveEntry(pFuncEntry);
+                }
+                else
+                {
+                    pFunctionListBox->Expand(pFuncEntry);
+                }
+            }
+
             break;
         }
         default:
@@ -263,6 +353,11 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
         pFunctionListBox->Select( pFunctionListBox->GetEntry( nullptr, 0 ) );
 
     pFunctionListBox->SetUpdateMode(true);
+}
+
+void CommandCategoryListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
+{
+    pStylesInfo = pStyles;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
