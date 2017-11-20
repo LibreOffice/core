@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_aaa5bfa2",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-11-20T23:25:54Z",
+      "side": 1,
+      "message": "This is leaking. So if pointers are absolutely needed here, pls delete what you allocate w/ \u0027new\u0027 once you don\u0027t need it anymore, or use smart pointer",
+      "revId": "3f8489f211ed866679103ebac643bee432afef29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_caa20b99",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-11-20T23:25:54Z",
+      "side": 1,
+      "message": "Not being too familiar w/ this code, but can\u0027t you do \u0027pIt.sLabel\u0027 simply? Ignore me if not possible",
+      "revId": "3f8489f211ed866679103ebac643bee432afef29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_0aa9737b",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-11-20T23:25:54Z",
+      "side": 1,
+      "message": "Another leaky bucket",
+      "revId": "3f8489f211ed866679103ebac643bee432afef29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
