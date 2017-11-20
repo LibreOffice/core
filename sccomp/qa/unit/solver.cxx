@@ -26,18 +26,28 @@ class LpSolverTest: public test::BootstrapFixture
 {
     uno::Reference<sheet::XSpreadsheetDocument> m_xDocument;
 
+#ifdef ENABLE_LPSOLVE
     void testLpSolver();
+#endif
+#ifdef ENABLE_COINMP
     void testCoinMPSolver();
+#endif
 
+#if defined(ENABLE_LPSOLVE) || defined(ENABLE_COINMP)
     void testSolver(OUString const & rName);
+#endif
 
 public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(LpSolverTest);
+#ifdef ENABLE_LPSOLVE
     CPPUNIT_TEST(testLpSolver);
+#endif
+#ifdef ENABLE_COINMP
     CPPUNIT_TEST(testCoinMPSolver);
+#endif
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -57,20 +67,21 @@ void LpSolverTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
+#ifdef ENABLE_LPSOLVE
 void LpSolverTest::testLpSolver()
 {
-#ifdef ENABLE_LPSOLVE
     testSolver("com.sun.star.comp.Calc.LpsolveSolver");
-#endif
 }
+#endif
 
+#ifdef ENABLE_COINMP
 void LpSolverTest::testCoinMPSolver()
 {
-#ifdef ENABLE_COINMP
     testSolver("com.sun.star.comp.Calc.CoinMPSolver");
-#endif
 }
+#endif
 
+#if defined(ENABLE_LPSOLVE) || defined(ENABLE_COINMP)
 void LpSolverTest::testSolver(OUString const & rName)
 {
     uno::Reference<sheet::XSolver> xSolver(m_xContext->getServiceManager()->
@@ -106,6 +117,7 @@ void LpSolverTest::testSolver(OUString const & rName)
     const OString sMessage("Empty description for " + OUStringToOString(rName, RTL_TEXTENCODING_UTF8));
     CPPUNIT_ASSERT_MESSAGE(sMessage.getStr(), !xDesc->getComponentDescription().isEmpty());
 }
+#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LpSolverTest);
 
