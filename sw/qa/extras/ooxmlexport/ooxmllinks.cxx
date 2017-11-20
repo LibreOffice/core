@@ -39,7 +39,8 @@ protected: \
         /* Get original link */ \
         OUString sOriginalFileName = getProperty<OUString>(xText, "HyperLinkURL"); \
         INetURLObject aOriginalURL; \
-        aOriginalURL.setFSysPath(sOriginalFileName, FSysStyle::Detect); \
+        bool bOk = aOriginalURL.setFSysPath(sOriginalFileName, FSysStyle::Detect); \
+        if(!bOk) aOriginalURL = INetURLObject(sOriginalFileName); \
         OUString sFileName = aOriginalURL.GetName().isEmpty() ? sOriginalFileName : aOriginalURL.GetName(); \
         \
         /* Get temp path */ \
@@ -139,7 +140,8 @@ DECLARE_LINKS_IMPORT_TEST(testAbsoluteToAbsoluteImport, "absolute-link.docx", US
 {
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<text::XTextRange> xText = getRun(xParagraph, 1);
-    CPPUNIT_ASSERT_EQUAL(OUString("file:///B:\\Users\\user\\Desktop\\test.docx"), getProperty<OUString>(xText, "HyperLinkURL"));
+    // # should be encoded
+    CPPUNIT_ASSERT_EQUAL(OUString("file:///B:/Users/user/Desktop/a%23b/test.docx"), getProperty<OUString>(xText, "HyperLinkURL"));
 }
 
 DECLARE_LINKS_IMPORT_TEST(testAbsoluteToRelativeImport, "absolute-link.docx", USE_RELATIVE)
@@ -147,7 +149,7 @@ DECLARE_LINKS_IMPORT_TEST(testAbsoluteToRelativeImport, "absolute-link.docx", US
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<text::XTextRange> xText = getRun(xParagraph, 1);
     // when target file (B:\\...) & document with link (temp dir) are placed on different partitions, absolute path will be loaded
-    CPPUNIT_ASSERT_EQUAL(OUString("file:///B:\\Users\\user\\Desktop\\test.docx"), getProperty<OUString>(xText, "HyperLinkURL"));
+    CPPUNIT_ASSERT_EQUAL(OUString("file:///B:/Users/user/Desktop/a%23b/test.docx"), getProperty<OUString>(xText, "HyperLinkURL"));
 }
 
 /* EXPORT */

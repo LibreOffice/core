@@ -982,7 +982,7 @@ OUString AttributeOutputBase::ConvertURL( const OUString& rUrl, bool bAbsoluteOu
         INetURLObject anAbsoluteNew;
 
         if ( anAbsoluteParent.GetNewAbsURL( rUrl, &anAbsoluteNew ) )
-            sURL = anAbsoluteNew.GetMainURL( INetURLObject::DecodeMechanism::WithCharset );
+            sURL = anAbsoluteNew.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         else
             sURL = rUrl;
     }
@@ -991,7 +991,7 @@ OUString AttributeOutputBase::ConvertURL( const OUString& rUrl, bool bAbsoluteOu
         OUString sToConvert = rUrl.replaceAll( "\\", "/" );
         INetURLObject aURL( sToConvert );
         sToConvert = INetURLObject::GetScheme( aURL.GetProtocol() ) + aURL.GetURLPath();
-        OUString sRelative = INetURLObject::GetRelURL( sParentPath, sToConvert, INetURLObject::EncodeMechanism::WasEncoded, INetURLObject::DecodeMechanism::WithCharset );
+        OUString sRelative = INetURLObject::GetRelURL( sParentPath, sToConvert, INetURLObject::EncodeMechanism::WasEncoded, INetURLObject::DecodeMechanism::NONE );
         if ( !sRelative.isEmpty() )
             sURL = sRelative;
     }

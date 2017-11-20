@@ -528,7 +528,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
         bCorrectURL &= aURL.insertName( sFileURL );
 
         if( bCorrectURL )
-            sFileURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::WithCharset );
+            sFileURL = aURL.getFSysPath( FSysStyle::Detect );
     }
 
     // We are doing tiledRendering, let the client handles the URL loading.
