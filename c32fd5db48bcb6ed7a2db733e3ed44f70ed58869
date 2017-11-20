@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_6fe689b1",
+        "filename": "cui/uiconfig/ui/gradientpage.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-11-20T16:49:03Z",
+      "side": 1,
+      "message": "Pls add underline to some character in this word or drop use_underline 1 line below",
+      "revId": "c32fd5db48bcb6ed7a2db733e3ed44f70ed58869",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_8febb577",
+        "filename": "cui/uiconfig/ui/gradientpage.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-11-20T16:49:03Z",
+      "side": 1,
+      "message": "Same here and on 2 other instances below",
+      "revId": "c32fd5db48bcb6ed7a2db733e3ed44f70ed58869",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_4ff54d55",
+        "filename": "cui/uiconfig/ui/gradientpage.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-11-20T16:49:03Z",
+      "side": 1,
+      "message": "Glade has eaten context tag :)",
+      "revId": "c32fd5db48bcb6ed7a2db733e3ed44f70ed58869",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
