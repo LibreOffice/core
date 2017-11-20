@@ -457,7 +457,7 @@ void ScUndoSetCell::SetValue( const ScCellValue& rVal )
         {
             ScSetStringParam aParam;
             aParam.setTextInput();
-            rDoc.SetString(maPos, rVal.mpString->getString());
+            rDoc.SetString(maPos, rVal.mpString->getString(), &aParam);
         }
         break;
         case CELLTYPE_EDIT:
