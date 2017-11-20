@@ -287,10 +287,6 @@ struct ScDocumentThreadSpecific
     {
     }
 
-    ~ScDocumentThreadSpecific()
-    {
-    }
-
     // To be called in the thread at start
     void SetupFromNonThreadedData(const ScDocumentThreadSpecific& rNonThreadedData);
 
