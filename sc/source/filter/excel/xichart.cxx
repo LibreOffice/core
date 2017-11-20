@@ -1909,7 +1909,7 @@ void XclImpChSeries::FinalizeDataFormats()
         for (auto const& trendLine : maTrendLines)
         {
             trendLine->SetDataFormat(mxSeriesFmt);
-            if (mxTitleLink->HasString())
+            if (mxTitleLink && mxTitleLink->HasString())
             {
                 trendLine->SetTrendlineName(mxTitleLink->GetString());
             }
