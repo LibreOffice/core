@@ -344,7 +344,7 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
                 nBlockStart +=  m_aBlockSize.Width;
             }
         }
-        // draw vertikal progressbar
+        // draw vertical progressbar
         // decision in "recalcRange()"
         else
         {

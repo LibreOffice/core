@@ -89,7 +89,7 @@ namespace connectivity
         // finds out, if we have an international keyword (only ASCII allowed)
         virtual InternationalKeyCode getIntlKeyCode(const OString& rToken) const = 0;
 
-        /** get's a locale instance which should be used when parsing in the context specified by this instance
+        /** gets a locale instance which should be used when parsing in the context specified by this instance
             <p>if this is not overridden by derived classes, it returns the static default locale.</p>
         */
         virtual css::lang::Locale getPreferredLocale( ) const = 0;

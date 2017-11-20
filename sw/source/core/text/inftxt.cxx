@@ -1169,7 +1169,7 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
             aFillColor = *m_pFnt->GetBackColor();
         }
 
-        // tdf#104349 do not hightlight portions of space chars before end of line if the compatibility option is enabled
+        // tdf#104349 do not highlight portions of space chars before end of line if the compatibility option is enabled
         // for LTR mode only
         if ( !GetTextFrame()->IsRightToLeft() )
         {
