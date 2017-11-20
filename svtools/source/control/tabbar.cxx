@@ -126,17 +126,6 @@ public:
             mrRenderContext.DrawCtrlText(aPos, aText, 0, aText.getLength(), (DrawTextFlags::Disable | DrawTextFlags::Mnemonic));
     }
 
-    void drawProtectionSymbol(const OUString &aProtectionSymbol)
-    {
-        tools::Rectangle aRect = maRect;
-        long nSymbolHeight = mrRenderContext.GetTextHeight();
-        Point aPos = aRect.TopLeft();
-        aPos.X() += 2;
-        aPos.Y() += (aRect.getHeight() - nSymbolHeight) / 2;
-
-        mrRenderContext.DrawText(aPos, aProtectionSymbol);
-    }
-
     void drawOverTopBorder()
     {
         Point aTopLeft  = maRect.TopLeft()  + Point(1, 0);
@@ -241,6 +230,18 @@ struct ImplTabBarItem
     bool IsSelected(ImplTabBarItem const * pCurItem) const
     {
         return mbSelect || (pCurItem == this);
+    }
+
+    OUString GetRenderText() const
+    {
+        if (!mbProtect)
+            return maText;
+        else
+        {
+            constexpr sal_uInt32 cLockChar[] = { 0x1F512, 0x2002 };   // Lock + EN SPACE
+            const OUString aLockSymbol( cLockChar, SAL_N_ELEMENTS(cLockChar));
+            return aLockSymbol + maText;
+        }
     }
 };
 
@@ -676,7 +677,7 @@ bool TabBar::ImplCalcWidth()
     bool bChanged = false;
     for (ImplTabBarItem* pItem : mpImpl->mpItemList)
     {
-        long nNewWidth = GetTextWidth(pItem->maText);
+        long nNewWidth = GetTextWidth(pItem->GetRenderText());
         if (mnCurMaxWidth && (nNewWidth > mnCurMaxWidth))
         {
             pItem->mbShort = true;
@@ -1187,7 +1188,9 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
             bool bSelected = pItem->IsSelected(pCurItem);
             // We disable custom background color in high contrast mode.
             bool bCustomBgColor = !pItem->IsDefaultTabBgColor() && !rStyleSettings.GetHighContrastMode();
-            OUString aText = pItem->mbShort ? rRenderContext.GetEllipsisString(pItem->maText, mnCurMaxWidth) : pItem->maText;
+            OUString aText = pItem->mbShort ?
+                rRenderContext.GetEllipsisString(pItem->GetRenderText(), mnCurMaxWidth) :
+                pItem->GetRenderText();
 
             aDrawer.setRect(aRect);
             aDrawer.setSelected(bSelected);
@@ -1231,13 +1234,6 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
             }
 
             aDrawer.drawText(aText);
-
-            if (pItem->mbProtect)
-            {
-                constexpr sal_uInt32 cLockChar = 0x1F512;
-                OUString aLockSymbol( &cLockChar, 1);
-                aDrawer.drawProtectionSymbol(aLockSymbol);
-            }
 
             if (bCurrent)
             {
@@ -2064,8 +2060,15 @@ void TabBar::SetProtectionSymbol(sal_uInt16 nPageId, bool bProtection)
     sal_uInt16 nPos = GetPagePos(nPageId);
     if (nPos != PAGE_NOT_FOUND)
     {
-        mpImpl->mpItemList[nPos]->mbProtect = bProtection;
-        Invalidate(mpImpl->mpItemList[nPos]->maRect);
+        if (mpImpl->mpItemList[nPos]->mbProtect != bProtection)
+        {
+            mpImpl->mpItemList[nPos]->mbProtect = bProtection;
+            mbSizeFormat = true;    // render text width changes, thus bar width
+
+            // redraw bar
+            if (IsReallyVisible() && IsUpdateMode())
+                Invalidate();
+        }
     }
 }
 
