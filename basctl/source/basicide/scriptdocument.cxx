@@ -641,7 +641,7 @@ namespace basctl
             if ( _eType == E_SCRIPTS )
             {
                 Reference< XVBAModuleInfo > xVBAModuleInfo( xLib, UNO_QUERY );
-                if ( xVBAModuleInfo->hasModuleInfo( _rOldName ) )
+                if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( _rOldName ) )
                 {
                     ModuleInfo sModuleInfo = xVBAModuleInfo->getModuleInfo( _rOldName );
                     xVBAModuleInfo->removeModuleInfo( _rOldName );
