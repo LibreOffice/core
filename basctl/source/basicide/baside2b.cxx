@@ -763,7 +763,7 @@ void EditorWindow::HandleProcedureCompletion()
             aHighlighter.getHighlightPortions( aCurrLine, aCurrPortions );
 
             if( aCurrPortions.size() >= 3 )
-            {//at least 3 tokens: (sub|function) whitespace idetifier ....
+            {//at least 3 tokens: (sub|function) whitespace identifier...
                 HighlightPortion& r = aCurrPortions.front();
                 OUString sStr = aCurrLine.copy(r.nBegin, r.nEnd - r.nBegin);
 
