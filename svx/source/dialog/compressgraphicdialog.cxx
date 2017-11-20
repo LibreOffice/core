@@ -47,7 +47,7 @@ CompressGraphicsDialog::CompressGraphicsDialog( vcl::Window* pParent, SdrGrafObj
     m_rBindings       ( rBindings ),
     m_dResolution     ( 96.0 )
 {
-    const SdrGrafCropItem& rCrop = static_cast<const SdrGrafCropItem&>( m_pGraphicObj->GetMergedItem(SDRATTR_GRAFCROP) );
+    const SdrGrafCropItem& rCrop = m_pGraphicObj->GetMergedItem(SDRATTR_GRAFCROP);
     m_aCropRectangle = tools::Rectangle(rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom());
 
     Initialize();

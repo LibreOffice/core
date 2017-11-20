@@ -64,7 +64,6 @@ using namespace ::com::sun::star::lang;
 #include <svx/svxdlg.hxx>
 
 #define SYMBOL_TO_FIELD_OFFSET      4
-#define ITEMVALUE(ItemSet,Id,Cast)  static_cast<const Cast&>((ItemSet).Get(Id)).GetValue()
 #define TOOLBOX_NAME                "colorbar"
 #define RID_SVXSTR_UNDO_GRAFCROP    RID_SVXSTR_GRAFCROP
 
@@ -692,7 +691,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                     aCropDlgAttr.Put( SvxSizeItem( SID_ATTR_GRAF_FRMSIZE, OutputDevice::LogicToLogic(
                                                 pObj->GetLogicRect().GetSize(), aMap100, aMapTwip ) ) );
 
-                    const SdrGrafCropItem&  rCrop = static_cast<const SdrGrafCropItem&>( aGrfAttr.Get( SDRATTR_GRAFCROP ) );
+                    const SdrGrafCropItem&  rCrop = aGrfAttr.Get( SDRATTR_GRAFCROP );
                     Size                    aLTSize( OutputDevice::LogicToLogic(
                                                     Size( rCrop.GetLeft(), rCrop.GetTop() ), aMap100, aMapTwip ) );
                     Size                    aRBSize( OutputDevice::LogicToLogic(
@@ -726,7 +725,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                             // set crop attributes
                             if( SfxItemState::SET <= pOutAttr->GetItemState( SDRATTR_GRAFCROP ) )
                             {
-                                const SdrGrafCropItem& rNewCrop = static_cast<const SdrGrafCropItem&>( pOutAttr->Get( SDRATTR_GRAFCROP ) );
+                                const SdrGrafCropItem& rNewCrop = pOutAttr->Get( SDRATTR_GRAFCROP );
 
                                 aLTSize = OutputDevice::LogicToLogic( Size( rNewCrop.GetLeft(), rNewCrop.GetTop() ), aMapTwip, aMap100 );
                                 aRBSize = OutputDevice::LogicToLogic( Size( rNewCrop.GetRight(), rNewCrop.GetBottom() ), aMapTwip, aMap100 );
@@ -870,7 +869,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rVie
                     if( bEnableColors )
                     {
                         rSet.Put( SfxUInt16Item( nSlotId,
-                            sal::static_int_cast< sal_uInt16 >( ITEMVALUE( aAttrSet, SDRATTR_GRAFMODE, SdrGrafModeItem ) ) ) );
+                            sal::static_int_cast< sal_uInt16 >( aAttrSet.Get(SDRATTR_GRAFMODE).GetValue() ) ) );
                     }
                     else
                     {
@@ -886,8 +885,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rVie
                 {
                     if( bEnableColors )
                     {
-                        rSet.Put( SfxInt16Item( nSlotId,
-                            ITEMVALUE( aAttrSet, SDRATTR_GRAFRED, SdrGrafRedItem ) ) );
+                        rSet.Put( SfxInt16Item( nSlotId, aAttrSet.Get(SDRATTR_GRAFRED).GetValue() ) );
                     }
                     else
                     {
@@ -903,8 +901,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rVie
                 {
                     if( bEnableColors )
                     {
-                        rSet.Put( SfxInt16Item( nSlotId,
-                            ITEMVALUE( aAttrSet, SDRATTR_GRAFGREEN, SdrGrafGreenItem ) ) );
+                        rSet.Put( SfxInt16Item( nSlotId, aAttrSet.Get(SDRATTR_GRAFGREEN).GetValue()) );
                     }
                     else
                     {
@@ -920,8 +917,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rVie
                 {
                     if( bEnableColors )
                     {
-                        rSet.Put( SfxInt16Item( nSlotId,
-                            ITEMVALUE( aAttrSet, SDRATTR_GRAFBLUE, SdrGrafBlueItem ) ) );
+                        rSet.Put( SfxInt16Item( nSlotId, aAttrSet.Get(SDRATTR_GRAFBLUE).GetValue()) );
                     }
                     else
                     {
@@ -937,8 +933,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rVie
                 {
                     if( bEnableColors )
                     {
-                        rSet.Put( SfxInt16Item( nSlotId,
-                            ITEMVALUE( aAttrSet, SDRATTR_GRAFLUMINANCE, SdrGrafLuminanceItem ) ) );
+                        rSet.Put( SfxInt16Item( nSlotId, aAttrSet.Get(SDRATTR_GRAFLUMINANCE).GetValue()) );
                     }
                     else
                     {
@@ -955,7 +950,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rVie
                     if( bEnableColors )
                     {
                         rSet.Put( SfxInt16Item( nSlotId,
-                            ITEMVALUE( aAttrSet, SDRATTR_GRAFCONTRAST, SdrGrafContrastItem ) ) );
+                            aAttrSet.Get(SDRATTR_GRAFCONTRAST).GetValue()) );
                     }
                     else
                     {
@@ -972,7 +967,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rVie
                     if( bEnableColors )
                     {
                         rSet.Put( SfxUInt32Item( nSlotId,
-                            ITEMVALUE( aAttrSet, SDRATTR_GRAFGAMMA, SdrGrafGamma100Item ) ) );
+                            aAttrSet.Get(SDRATTR_GRAFGAMMA).GetValue() ) );
                     }
                     else
                     {
@@ -989,7 +984,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rVie
                     if( bEnableTransparency )
                     {
                         rSet.Put( SfxUInt16Item( nSlotId,
-                            ITEMVALUE( aAttrSet, SDRATTR_GRAFTRANSPARENCE, SdrGrafTransparenceItem ) ) );
+                            aAttrSet.Get(SDRATTR_GRAFTRANSPARENCE).GetValue() ) );
                     }
                     else
                     {

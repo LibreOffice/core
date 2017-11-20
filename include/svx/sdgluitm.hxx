@@ -33,7 +33,8 @@ class SVX_DLLPUBLIC SdrGrafLuminanceItem : public SdrSignedPercentItem
 public:
 
 
-                            SdrGrafLuminanceItem( short nLuminancePercent = 0 ) : SdrSignedPercentItem( SDRATTR_GRAFLUMINANCE, nLuminancePercent ) {}
+                            SdrGrafLuminanceItem( short nLuminancePercent = 0 ) : SdrSignedPercentItem(
+                            SDRATTR_GRAFLUMINANCE, nLuminancePercent ) {}
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
 };

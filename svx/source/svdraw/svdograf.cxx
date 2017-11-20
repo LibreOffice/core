@@ -1252,18 +1252,18 @@ void SdrGrafObj::SetMirrored( bool _bMirrored )
 void SdrGrafObj::ImpSetAttrToGrafInfo()
 {
     const SfxItemSet& rSet = GetObjectItemSet();
-    const sal_uInt16 nTrans = static_cast<const SdrGrafTransparenceItem&>( rSet.Get( SDRATTR_GRAFTRANSPARENCE ) ).GetValue();
-    const SdrGrafCropItem&  rCrop = static_cast<const SdrGrafCropItem&>( rSet.Get( SDRATTR_GRAFCROP ) );
+    const sal_uInt16 nTrans = rSet.Get( SDRATTR_GRAFTRANSPARENCE ).GetValue();
+    const SdrGrafCropItem&  rCrop = rSet.Get( SDRATTR_GRAFCROP );
 
-    aGrafInfo.SetLuminance( static_cast<const SdrGrafLuminanceItem&>( rSet.Get( SDRATTR_GRAFLUMINANCE ) ).GetValue() );
-    aGrafInfo.SetContrast( static_cast<const SdrGrafContrastItem&>( rSet.Get( SDRATTR_GRAFCONTRAST ) ).GetValue() );
-    aGrafInfo.SetChannelR( static_cast<const SdrGrafRedItem&>( rSet.Get( SDRATTR_GRAFRED ) ).GetValue() );
-    aGrafInfo.SetChannelG( static_cast<const SdrGrafGreenItem&>( rSet.Get( SDRATTR_GRAFGREEN ) ).GetValue() );
-    aGrafInfo.SetChannelB( static_cast<const SdrGrafBlueItem&>( rSet.Get( SDRATTR_GRAFBLUE ) ).GetValue() );
-    aGrafInfo.SetGamma( static_cast<const SdrGrafGamma100Item&>( rSet.Get( SDRATTR_GRAFGAMMA ) ).GetValue() * 0.01 );
+    aGrafInfo.SetLuminance( rSet.Get( SDRATTR_GRAFLUMINANCE ).GetValue() );
+    aGrafInfo.SetContrast( rSet.Get( SDRATTR_GRAFCONTRAST ).GetValue() );
+    aGrafInfo.SetChannelR( rSet.Get( SDRATTR_GRAFRED ).GetValue() );
+    aGrafInfo.SetChannelG( rSet.Get( SDRATTR_GRAFGREEN ).GetValue() );
+    aGrafInfo.SetChannelB( rSet.Get( SDRATTR_GRAFBLUE ).GetValue() );
+    aGrafInfo.SetGamma( rSet.Get( SDRATTR_GRAFGAMMA ).GetValue() * 0.01 );
     aGrafInfo.SetTransparency( (sal_uInt8) FRound( std::min( nTrans, (sal_uInt16) 100 )  * 2.55 ) );
-    aGrafInfo.SetInvert( static_cast<const SdrGrafInvertItem&>( rSet.Get( SDRATTR_GRAFINVERT ) ).GetValue() );
-    aGrafInfo.SetDrawMode( static_cast<const SdrGrafModeItem&>( rSet.Get( SDRATTR_GRAFMODE ) ).GetValue() );
+    aGrafInfo.SetInvert( rSet.Get( SDRATTR_GRAFINVERT ).GetValue() );
+    aGrafInfo.SetDrawMode( rSet.Get( SDRATTR_GRAFMODE ).GetValue() );
     aGrafInfo.SetCrop( rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom() );
 
     SetXPolyDirty();
@@ -1532,7 +1532,7 @@ void SdrGrafObj::addCropHandles(SdrHdlList& rTarget) const
     }
 
     // get crop values
-    const SdrGrafCropItem& rCrop = static_cast< const SdrGrafCropItem& >(GetMergedItem(SDRATTR_GRAFCROP));
+    const SdrGrafCropItem& rCrop = GetMergedItem(SDRATTR_GRAFCROP);
 
     if(rCrop.GetLeft() || rCrop.GetTop() || rCrop.GetRight() ||rCrop.GetBottom())
     {

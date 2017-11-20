@@ -84,11 +84,11 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
     FieldUnit eModUIUnit(FUNIT_NONE);
 
     const SfxItemSet& rSet = GetMergedItemSet();
-    bTextRota90 = static_cast<const SdrMeasureTextRota90Item&>(rSet.Get(SDRATTR_MEASURETEXTROTA90)).GetValue();
-    eMeasureUnit = static_cast<const SdrMeasureUnitItem&>(rSet.Get(SDRATTR_MEASUREUNIT)).GetValue();
-    aMeasureScale = static_cast<const SdrMeasureScaleItem&>(rSet.Get(SDRATTR_MEASURESCALE)).GetValue();
-    bShowUnit = static_cast<const SdrYesNoItem&>(rSet.Get(SDRATTR_MEASURESHOWUNIT)).GetValue();
-    sal_Int16 nNumDigits = static_cast<const SdrMeasureDecimalPlacesItem&>(rSet.Get(SDRATTR_MEASUREDECIMALPLACES)).GetValue();
+    bTextRota90 = rSet.Get(SDRATTR_MEASURETEXTROTA90).GetValue();
+    eMeasureUnit = rSet.Get(SDRATTR_MEASUREUNIT).GetValue();
+    aMeasureScale = rSet.Get(SDRATTR_MEASURESCALE).GetValue();
+    bShowUnit = rSet.Get(SDRATTR_MEASURESHOWUNIT).GetValue();
+    sal_Int16 nNumDigits = rSet.Get(SDRATTR_MEASUREDECIMALPLACES).GetValue();
 
     switch(eMeasureFieldKind)
     {
@@ -317,19 +317,19 @@ void SdrMeasureObj::ImpTakeAttr(ImpMeasureRec& rRec) const
     rRec.aPt2 = aPt2;
 
     const SfxItemSet& rSet = GetObjectItemSet();
-    rRec.eWantTextHPos     =static_cast<const SdrMeasureTextHPosItem&         >(rSet.Get(SDRATTR_MEASURETEXTHPOS        )).GetValue();
-    rRec.eWantTextVPos     =static_cast<const SdrMeasureTextVPosItem&         >(rSet.Get(SDRATTR_MEASURETEXTVPOS        )).GetValue();
-    rRec.nLineDist         =static_cast<const SdrMetricItem&                  >(rSet.Get(SDRATTR_MEASURELINEDIST        )).GetValue();
-    rRec.nHelplineOverhang =static_cast<const SdrMetricItem&                  >(rSet.Get(SDRATTR_MEASUREHELPLINEOVERHANG)).GetValue();
-    rRec.nHelplineDist     =static_cast<const SdrMetricItem&                  >(rSet.Get(SDRATTR_MEASUREHELPLINEDIST    )).GetValue();
-    rRec.nHelpline1Len     =static_cast<const SdrMetricItem&                  >(rSet.Get(SDRATTR_MEASUREHELPLINE1LEN    )).GetValue();
-    rRec.nHelpline2Len     =static_cast<const SdrMetricItem&                  >(rSet.Get(SDRATTR_MEASUREHELPLINE2LEN    )).GetValue();
-    rRec.bBelowRefEdge     =static_cast<const SdrMeasureBelowRefEdgeItem&     >(rSet.Get(SDRATTR_MEASUREBELOWREFEDGE    )).GetValue();
-    rRec.bTextRota90       =static_cast<const SdrMeasureTextRota90Item&       >(rSet.Get(SDRATTR_MEASURETEXTROTA90      )).GetValue();
+    rRec.eWantTextHPos     =rSet.Get(SDRATTR_MEASURETEXTHPOS        ).GetValue();
+    rRec.eWantTextVPos     =rSet.Get(SDRATTR_MEASURETEXTVPOS        ).GetValue();
+    rRec.nLineDist         =rSet.Get(SDRATTR_MEASURELINEDIST        ).GetValue();
+    rRec.nHelplineOverhang =rSet.Get(SDRATTR_MEASUREHELPLINEOVERHANG).GetValue();
+    rRec.nHelplineDist     =rSet.Get(SDRATTR_MEASUREHELPLINEDIST    ).GetValue();
+    rRec.nHelpline1Len     =rSet.Get(SDRATTR_MEASUREHELPLINE1LEN    ).GetValue();
+    rRec.nHelpline2Len     =rSet.Get(SDRATTR_MEASUREHELPLINE2LEN    ).GetValue();
+    rRec.bBelowRefEdge     =rSet.Get(SDRATTR_MEASUREBELOWREFEDGE    ).GetValue();
+    rRec.bTextRota90       =rSet.Get(SDRATTR_MEASURETEXTROTA90      ).GetValue();
     rRec.bTextUpsideDown   =static_cast<const SdrMeasureTextUpsideDownItem&   >(rSet.Get(SDRATTR_MEASURETEXTUPSIDEDOWN  )).GetValue();
-    rRec.aMeasureScale     =static_cast<const SdrMeasureScaleItem&            >(rSet.Get(SDRATTR_MEASURESCALE           )).GetValue();
-    rRec.aFormatString     =static_cast<const SdrMeasureFormatStringItem&     >(rSet.Get(SDRATTR_MEASUREFORMATSTRING    )).GetValue();
-    rRec.bTextAutoAngle    =static_cast<const SdrMeasureTextAutoAngleItem&    >(rSet.Get(SDRATTR_MEASURETEXTAUTOANGLE    )).GetValue();
+    rRec.aMeasureScale     =rSet.Get(SDRATTR_MEASURESCALE           ).GetValue();
+    rRec.aFormatString     =rSet.Get(SDRATTR_MEASUREFORMATSTRING    ).GetValue();
+    rRec.bTextAutoAngle    =rSet.Get(SDRATTR_MEASURETEXTAUTOANGLE    ).GetValue();
     rRec.nTextAutoAngleView=static_cast<const SdrMeasureTextAutoAngleViewItem&>(rSet.Get(SDRATTR_MEASURETEXTAUTOANGLEVIEW)).GetValue();
 }
 

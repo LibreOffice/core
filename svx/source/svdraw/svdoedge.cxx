@@ -187,10 +187,10 @@ SdrEdgeObj::~SdrEdgeObj()
 void SdrEdgeObj::ImpSetAttrToEdgeInfo()
 {
     const SfxItemSet& rSet = GetObjectItemSet();
-    SdrEdgeKind eKind = static_cast<const SdrEdgeKindItem&>(rSet.Get(SDRATTR_EDGEKIND)).GetValue();
-    sal_Int32 nVal1 = static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_EDGELINE1DELTA)).GetValue();
-    sal_Int32 nVal2 = static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_EDGELINE2DELTA)).GetValue();
-    sal_Int32 nVal3 = static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_EDGELINE3DELTA)).GetValue();
+    SdrEdgeKind eKind = rSet.Get(SDRATTR_EDGEKIND).GetValue();
+    sal_Int32 nVal1 = rSet.Get(SDRATTR_EDGELINE1DELTA).GetValue();
+    sal_Int32 nVal2 = rSet.Get(SDRATTR_EDGELINE2DELTA).GetValue();
+    sal_Int32 nVal3 = rSet.Get(SDRATTR_EDGELINE3DELTA).GetValue();
 
     if(eKind == SdrEdgeKind::OrthoLines || eKind == SdrEdgeKind::Bezier)
     {
@@ -257,11 +257,11 @@ void SdrEdgeObj::ImpSetAttrToEdgeInfo()
 void SdrEdgeObj::ImpSetEdgeInfoToAttr()
 {
     const SfxItemSet& rSet = GetObjectItemSet();
-    SdrEdgeKind eKind = static_cast<const SdrEdgeKindItem&>(rSet.Get(SDRATTR_EDGEKIND)).GetValue();
-    sal_Int32 nValAnz = static_cast<const SdrEdgeLineDeltaCountItem&>(rSet.Get(SDRATTR_EDGELINEDELTACOUNT)).GetValue();
-    sal_Int32 nVal1 = static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_EDGELINE1DELTA)).GetValue();
-    sal_Int32 nVal2 = static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_EDGELINE2DELTA)).GetValue();
-    sal_Int32 nVal3 = static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_EDGELINE3DELTA)).GetValue();
+    SdrEdgeKind eKind = rSet.Get(SDRATTR_EDGEKIND).GetValue();
+    sal_Int32 nValAnz = rSet.Get(SDRATTR_EDGELINEDELTACOUNT).GetValue();
+    sal_Int32 nVal1 = rSet.Get(SDRATTR_EDGELINE1DELTA).GetValue();
+    sal_Int32 nVal2 = rSet.Get(SDRATTR_EDGELINE2DELTA).GetValue();
+    sal_Int32 nVal3 = rSet.Get(SDRATTR_EDGELINE3DELTA).GetValue();
     sal_Int32 nVals[3] = { nVal1, nVal2, nVal3 };
     sal_uInt16 n = 0;
 
@@ -726,8 +726,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         aBoundRect1.Move(rCon1.aObjOfs.X(),rCon1.aObjOfs.Y());
         aBewareRect1=aBoundRect1;
 
-        sal_Int32 nH = static_cast<const SdrEdgeNode1HorzDistItem&>(rSet.Get(SDRATTR_EDGENODE1HORZDIST)).GetValue();
-        sal_Int32 nV = static_cast<const SdrEdgeNode1VertDistItem&>(rSet.Get(SDRATTR_EDGENODE1VERTDIST)).GetValue();
+        sal_Int32 nH = rSet.Get(SDRATTR_EDGENODE1HORZDIST).GetValue();
+        sal_Int32 nV = rSet.Get(SDRATTR_EDGENODE1VERTDIST).GetValue();
 
         aBewareRect1.Left()-=nH;
         aBewareRect1.Right()+=nH;
@@ -749,8 +749,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         aBoundRect2.Move(rCon2.aObjOfs.X(),rCon2.aObjOfs.Y());
         aBewareRect2=aBoundRect2;
 
-        sal_Int32 nH = static_cast<const SdrEdgeNode2HorzDistItem&>(rSet.Get(SDRATTR_EDGENODE2HORZDIST)).GetValue();
-        sal_Int32 nV = static_cast<const SdrEdgeNode2VertDistItem&>(rSet.Get(SDRATTR_EDGENODE2VERTDIST)).GetValue();
+        sal_Int32 nH = rSet.Get(SDRATTR_EDGENODE2HORZDIST).GetValue();
+        sal_Int32 nV = rSet.Get(SDRATTR_EDGENODE2VERTDIST).GetValue();
 
         aBewareRect2.Left()-=nH;
         aBewareRect2.Right()+=nH;
