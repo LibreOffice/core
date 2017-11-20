@@ -254,6 +254,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
     switch ( rReq.GetSlot() )
     {
         case SID_EDITDOC:
+        case SID_READONLYDOC:
         {
             // Due to Double occupancy in toolboxes (with or without Ctrl),
             // it is also possible that the slot is enabled, but Ctrl-click
@@ -791,6 +792,7 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
         switch ( nWhich )
         {
             case SID_EDITDOC:
+            case SID_READONLYDOC:
             {
                 const SfxViewShell *pVSh;
                 const SfxShell *pFSh;
@@ -800,14 +802,19 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
                        ( !(pVSh = pSh->GetViewShell())  ||
                          !(pFSh = pVSh->GetFormShell()) ||
                          !pFSh->IsDesignMode())))
-                    rSet.DisableItem( SID_EDITDOC );
+                    rSet.DisableItem( nWhich );
                 else
                 {
                     const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(pSh->GetMedium()->GetItemSet(), SID_EDITDOC, false);
                     if ( pItem && !pItem->GetValue() )
-                        rSet.DisableItem( SID_EDITDOC );
+                        rSet.DisableItem( nWhich );
                     else
-                        rSet.Put( SfxBoolItem( nWhich, !pSh->IsReadOnly() ) );
+                    {
+                        if (nWhich==SID_EDITDOC)
+                            rSet.Put( SfxBoolItem( nWhich, !pSh->IsReadOnly() ) );
+                        else if (nWhich==SID_READONLYDOC)
+                            rSet.Put( SfxBoolItem( nWhich, pSh->IsReadOnly() ) );
+                    }
                 }
                 break;
             }
