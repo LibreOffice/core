@@ -117,7 +117,7 @@
     </Expand>
   </Type>
   <Type Name="BigPtrArray">
-    <DisplayString>{{{m_nSize} nodes}}</DisplayString>
+    <DisplayString>{{{m_nSize,d} nodes}}</DisplayString>
     <Expand>
       <CustomListItems>
         <!-- Visualiser needs to know the type of variable (including pointer type).
