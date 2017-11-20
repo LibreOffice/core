@@ -44,6 +44,7 @@
             <property name="no_show_all">True</property>
             <property name="label" translatable="yes" context="backgroundpage|asft">A_s:</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">selectlb</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -67,9 +68,10 @@
           <object class="GtkLabel" id="forft">
             <property name="can_focus">False</property>
             <property name="no_show_all">True</property>
-            <property name="xalign">0</property>
             <property name="label" translatable="yes" context="backgroundpage|forft">F_or:</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">tablelb</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
             <property name="left_attach">2</property>
@@ -258,8 +260,8 @@
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="hexpand">True</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="no">&lt;FILENAME&gt;</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -271,8 +273,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="backgroundpage|unlinkedft">Unlinked image</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -283,8 +285,8 @@
                           <object class="GtkLabel" id="findgraphicsft">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="backgroundpage|findgraphicsft">Find images</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -473,8 +475,6 @@
                 <property name="left_attach">0</property>
                 <property name="top_attach">1</property>
               </packing>
-            </child>
-            <child>
             </child>
           </object>
           <packing>
