@@ -22,6 +22,30 @@
       "revId": "4b5b698fbdd3679569ff283131dcb1c02c6fd6e4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_2f6001a5",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-11-20T12:59:37Z",
+      "side": 1,
+      "message": "I would like to remove maWorldTransform variable and store world transform matrix inside tranformation from  mrPropertyHolders.\n\nTo set it I would use:\n mrPropertyHolders.Current().setTransformation(newTransformMatrix);\nTo get I would use:\ntransformMatrix \u003d mrPropertyHolders.Current().getTransformation();",
+      "parentUuid": "1a430d35_84b71cf4",
+      "range": {
+        "startLine": 331,
+        "startChar": 37,
+        "endLine": 331,
+        "endChar": 42
+      },
+      "revId": "4b5b698fbdd3679569ff283131dcb1c02c6fd6e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
