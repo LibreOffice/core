@@ -2293,51 +2293,52 @@ void SwContentFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     else
         UpdateAttr_( pOld, pNew, nInvFlags );
 
-    if ( nInvFlags != 0 )
+    if ( nInvFlags == 0 )
+        return;
+
+    SwPageFrame *pPage = FindPageFrame();
+    InvalidatePage( pPage );
+    if ( nInvFlags & 0x01 )
+        SetCompletePaint();
+    if ( nInvFlags & 0x02 )
+        InvalidatePos_();
+    if ( nInvFlags & 0x04 )
+        InvalidateSize_();
+    if ( nInvFlags & 0x88 )
     {
-        SwPageFrame *pPage = FindPageFrame();
-        InvalidatePage( pPage );
-        if ( nInvFlags & 0x01 )
-            SetCompletePaint();
-        if ( nInvFlags & 0x02 )
-            InvalidatePos_();
-        if ( nInvFlags & 0x04 )
-            InvalidateSize_();
-        if ( nInvFlags & 0x88 )
+        if( IsInSct() && !GetPrev() )
         {
-            if( IsInSct() && !GetPrev() )
+            SwSectionFrame *pSect = FindSctFrame();
+            if( pSect->ContainsAny() == this )
             {
-                SwSectionFrame *pSect = FindSctFrame();
-                if( pSect->ContainsAny() == this )
-                {
-                    pSect->InvalidatePrt_();
-                    pSect->InvalidatePage( pPage );
-                }
-            }
-            InvalidatePrt_();
-        }
-        SwFrame* pNextFrame = GetIndNext();
-        if ( pNextFrame && nInvFlags & 0x10)
-        {
-            pNextFrame->InvalidatePrt_();
-            pNextFrame->InvalidatePage( pPage );
-        }
-        if ( pNextFrame && nInvFlags & 0x80 )
-        {
-            pNextFrame->SetCompletePaint();
-        }
-        if ( nInvFlags & 0x20 )
-        {
-            SwFrame* pPrevFrame = GetPrev();
-            if ( pPrevFrame )
-            {
-                pPrevFrame->InvalidatePrt_();
-                pPrevFrame->InvalidatePage( pPage );
+                pSect->InvalidatePrt_();
+                pSect->InvalidatePage( pPage );
             }
         }
-        if ( nInvFlags & 0x40 )
-            InvalidateNextPos();
+        InvalidatePrt_();
     }
+    SwFrame* pNextFrame = GetIndNext();
+    if ( pNextFrame && nInvFlags & 0x10)
+    {
+        pNextFrame->InvalidatePrt_();
+        pNextFrame->InvalidatePage( pPage );
+    }
+    if ( pNextFrame && nInvFlags & 0x80 )
+    {
+        pNextFrame->SetCompletePaint();
+    }
+    if ( nInvFlags & 0x20 )
+    {
+        SwFrame* pPrevFrame = GetPrev();
+        if ( pPrevFrame )
+        {
+            pPrevFrame->InvalidatePrt_();
+            pPrevFrame->InvalidatePage( pPage );
+        }
+    }
+    if ( nInvFlags & 0x40 )
+        InvalidateNextPos();
+
 }
 
 void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pNew,

@@ -49,66 +49,67 @@ using namespace com::sun::star;
 void SwTextBoxHelper::create(SwFrameFormat* pShape)
 {
     // If TextBox wasn't enabled previously
-    if (!pShape->GetAttrSet().HasItem(RES_CNTNT))
+    if (pShape->GetAttrSet().HasItem(RES_CNTNT))
+        return;
+
+    // Create the associated TextFrame and insert it into the document.
+    uno::Reference<text::XTextContent> xTextFrame(SwXServiceProvider::MakeInstance(SwServiceType::TypeTextFrame, *pShape->GetDoc()), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(pShape->GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
+    uno::Reference<text::XTextContentAppend> xTextContentAppend(xTextDocument->getText(), uno::UNO_QUERY);
+    xTextContentAppend->appendTextContent(xTextFrame, uno::Sequence<beans::PropertyValue>());
+
+    // Link FLY and DRAW formats, so it becomes a text box (needed for syncProperty calls).
+    uno::Reference<text::XTextFrame> xRealTextFrame(xTextFrame, uno::UNO_QUERY);
+    auto pTextFrame = dynamic_cast<SwXTextFrame*>(xRealTextFrame.get());
+    assert(nullptr != pTextFrame);
+    SwFrameFormat* pFormat = pTextFrame->GetFrameFormat();
+
+    assert(nullptr != dynamic_cast<SwDrawFrameFormat*>(pShape));
+    assert(nullptr != dynamic_cast<SwFlyFrameFormat*>(pFormat));
+
+    pShape->SetOtherTextBoxFormat(pFormat);
+    pFormat->SetOtherTextBoxFormat(pShape);
+
+    // Initialize properties.
+    uno::Reference<beans::XPropertySet> xPropertySet(xTextFrame, uno::UNO_QUERY);
+    uno::Any aEmptyBorder = uno::makeAny(table::BorderLine2());
+    xPropertySet->setPropertyValue(UNO_NAME_TOP_BORDER, aEmptyBorder);
+    xPropertySet->setPropertyValue(UNO_NAME_BOTTOM_BORDER, aEmptyBorder);
+    xPropertySet->setPropertyValue(UNO_NAME_LEFT_BORDER, aEmptyBorder);
+    xPropertySet->setPropertyValue(UNO_NAME_RIGHT_BORDER, aEmptyBorder);
+
+    xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::makeAny(sal_Int32(100)));
+
+    xPropertySet->setPropertyValue(UNO_NAME_SIZE_TYPE, uno::makeAny(text::SizeType::FIX));
+
+    uno::Reference<container::XNamed> xNamed(xTextFrame, uno::UNO_QUERY);
+    xNamed->setName(pShape->GetDoc()->GetUniqueFrameName());
+
+    // Link its text range to the original shape.
+    uno::Reference<text::XTextRange> xTextBox(xTextFrame, uno::UNO_QUERY_THROW);
+    SwUnoInternalPaM aInternalPaM(*pShape->GetDoc());
+    if (sw::XTextRangeToSwPaM(aInternalPaM, xTextBox))
     {
-        // Create the associated TextFrame and insert it into the document.
-        uno::Reference<text::XTextContent> xTextFrame(SwXServiceProvider::MakeInstance(SwServiceType::TypeTextFrame, *pShape->GetDoc()), uno::UNO_QUERY);
-        uno::Reference<text::XTextDocument> xTextDocument(pShape->GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
-        uno::Reference<text::XTextContentAppend> xTextContentAppend(xTextDocument->getText(), uno::UNO_QUERY);
-        xTextContentAppend->appendTextContent(xTextFrame, uno::Sequence<beans::PropertyValue>());
-
-        // Link FLY and DRAW formats, so it becomes a text box (needed for syncProperty calls).
-        uno::Reference<text::XTextFrame> xRealTextFrame(xTextFrame, uno::UNO_QUERY);
-        auto pTextFrame = dynamic_cast<SwXTextFrame*>(xRealTextFrame.get());
-        assert(nullptr != pTextFrame);
-        SwFrameFormat* pFormat = pTextFrame->GetFrameFormat();
-
-        assert(nullptr != dynamic_cast<SwDrawFrameFormat*>(pShape));
-        assert(nullptr != dynamic_cast<SwFlyFrameFormat*>(pFormat));
-
-        pShape->SetOtherTextBoxFormat(pFormat);
-        pFormat->SetOtherTextBoxFormat(pShape);
-
-        // Initialize properties.
-        uno::Reference<beans::XPropertySet> xPropertySet(xTextFrame, uno::UNO_QUERY);
-        uno::Any aEmptyBorder = uno::makeAny(table::BorderLine2());
-        xPropertySet->setPropertyValue(UNO_NAME_TOP_BORDER, aEmptyBorder);
-        xPropertySet->setPropertyValue(UNO_NAME_BOTTOM_BORDER, aEmptyBorder);
-        xPropertySet->setPropertyValue(UNO_NAME_LEFT_BORDER, aEmptyBorder);
-        xPropertySet->setPropertyValue(UNO_NAME_RIGHT_BORDER, aEmptyBorder);
-
-        xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::makeAny(sal_Int32(100)));
-
-        xPropertySet->setPropertyValue(UNO_NAME_SIZE_TYPE, uno::makeAny(text::SizeType::FIX));
-
-        uno::Reference<container::XNamed> xNamed(xTextFrame, uno::UNO_QUERY);
-        xNamed->setName(pShape->GetDoc()->GetUniqueFrameName());
-
-        // Link its text range to the original shape.
-        uno::Reference<text::XTextRange> xTextBox(xTextFrame, uno::UNO_QUERY_THROW);
-        SwUnoInternalPaM aInternalPaM(*pShape->GetDoc());
-        if (sw::XTextRangeToSwPaM(aInternalPaM, xTextBox))
-        {
-            SwAttrSet aSet(pShape->GetAttrSet());
-            SwFormatContent aContent(aInternalPaM.GetNode().StartOfSectionNode());
-            aSet.Put(aContent);
-            pShape->SetFormatAttr(aSet);
-        }
-
-        // Also initialize the properties, which are not constant, but inherited from the shape's ones.
-        uno::Reference<drawing::XShape> xShape(pShape->FindRealSdrObject()->getUnoShape(), uno::UNO_QUERY);
-        syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::makeAny(xShape->getSize()));
-
-        uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
-        syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_ORIENT, xShapePropertySet->getPropertyValue(UNO_NAME_HORI_ORIENT));
-        syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_RELATION, xShapePropertySet->getPropertyValue(UNO_NAME_HORI_ORIENT_RELATION));
-        syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_ORIENT, xShapePropertySet->getPropertyValue(UNO_NAME_VERT_ORIENT));
-        syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_RELATION, xShapePropertySet->getPropertyValue(UNO_NAME_VERT_ORIENT_RELATION));
-        syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_POSITION, xShapePropertySet->getPropertyValue(UNO_NAME_HORI_ORIENT_POSITION));
-        syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_POSITION, xShapePropertySet->getPropertyValue(UNO_NAME_VERT_ORIENT_POSITION));
-        syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_IS_AUTO_HEIGHT, xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT));
-        syncProperty(pShape, RES_TEXT_VERT_ADJUST, 0, xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_VERT_ADJUST));
+        SwAttrSet aSet(pShape->GetAttrSet());
+        SwFormatContent aContent(aInternalPaM.GetNode().StartOfSectionNode());
+        aSet.Put(aContent);
+        pShape->SetFormatAttr(aSet);
     }
+
+    // Also initialize the properties, which are not constant, but inherited from the shape's ones.
+    uno::Reference<drawing::XShape> xShape(pShape->FindRealSdrObject()->getUnoShape(), uno::UNO_QUERY);
+    syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::makeAny(xShape->getSize()));
+
+    uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
+    syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_ORIENT, xShapePropertySet->getPropertyValue(UNO_NAME_HORI_ORIENT));
+    syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_RELATION, xShapePropertySet->getPropertyValue(UNO_NAME_HORI_ORIENT_RELATION));
+    syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_ORIENT, xShapePropertySet->getPropertyValue(UNO_NAME_VERT_ORIENT));
+    syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_RELATION, xShapePropertySet->getPropertyValue(UNO_NAME_VERT_ORIENT_RELATION));
+    syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_POSITION, xShapePropertySet->getPropertyValue(UNO_NAME_HORI_ORIENT_POSITION));
+    syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_POSITION, xShapePropertySet->getPropertyValue(UNO_NAME_VERT_ORIENT_POSITION));
+    syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_IS_AUTO_HEIGHT, xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT));
+    syncProperty(pShape, RES_TEXT_VERT_ADJUST, 0, xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_VERT_ADJUST));
+
 }
 
 void SwTextBoxHelper::destroy(SwFrameFormat* pShape)

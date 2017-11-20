@@ -704,91 +704,92 @@ MAKENUMSTR:
 
     }
 
-    if (!cellString.isEmpty())
+    if (cellString.isEmpty())
+        return;
+
+    SvtScriptedTextHelper aScriptedText(rRenderContext);
+    Size aStrSize;
+    sal_uInt8 nFormatIndex = GetFormatIndex( nCol, nRow );
+    const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow ));
+    const tools::Rectangle cellRect(
+        basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
+        basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY()));
+    Point aPos = cellRect.TopLeft();
+    long nRightX = 0;
+
+    Size theMaxStrSize(cellRect.GetWidth() - FRAME_OFFSET,
+                       cellRect.GetHeight() - FRAME_OFFSET);
+    if (aCurData.IsFont())
     {
-        SvtScriptedTextHelper aScriptedText(rRenderContext);
-        Size aStrSize;
-        sal_uInt8 nFormatIndex = GetFormatIndex( nCol, nRow );
-        const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow ));
-        const tools::Rectangle cellRect(
-            basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
-            basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY()));
-        Point aPos = cellRect.TopLeft();
-        long nRightX = 0;
+        vcl::Font aFont, aCJKFont, aCTLFont;
+        MakeFonts(nFormatIndex, aFont, aCJKFont, aCTLFont);
+        aScriptedText.SetFonts(&aFont, &aCJKFont, &aCTLFont);
+    }
+    else
+        aScriptedText.SetDefaultFont();
 
-        Size theMaxStrSize(cellRect.GetWidth() - FRAME_OFFSET,
-                           cellRect.GetHeight() - FRAME_OFFSET);
-        if (aCurData.IsFont())
-        {
-            vcl::Font aFont, aCJKFont, aCTLFont;
-            MakeFonts(nFormatIndex, aFont, aCJKFont, aCTLFont);
-            aScriptedText.SetFonts(&aFont, &aCJKFont, &aCTLFont);
-        }
-        else
+    aScriptedText.SetText(cellString, m_xBreak);
+    aStrSize = aScriptedText.GetTextSize();
+
+    if (aCurData.IsFont() &&
+        theMaxStrSize.Height() < aStrSize.Height())
+    {
+            // If the string in this font does not
+            // fit into the cell, the standard font
+            // is taken again:
             aScriptedText.SetDefaultFont();
+            aStrSize = aScriptedText.GetTextSize();
+    }
 
+    while (theMaxStrSize.Width() <= aStrSize.Width() &&
+           cellString.getLength() > 1)
+    {
+        cellString = cellString.copy(0, cellString.getLength() - 1);
         aScriptedText.SetText(cellString, m_xBreak);
         aStrSize = aScriptedText.GetTextSize();
+    }
 
-        if (aCurData.IsFont() &&
-            theMaxStrSize.Height() < aStrSize.Height())
+    nRightX = cellRect.GetWidth() - aStrSize.Width() - FRAME_OFFSET;
+
+    // vertical (always centering):
+    aPos.Y() += (nRowHeight - aStrSize.Height()) / 2;
+
+    // horizontal
+    if (mbRTL)
+        aPos.X() += nRightX;
+    else if (aCurData.IsJustify())
+    {
+        const SvxAdjustItem& rAdj = aCurData.GetBoxFormat(nFormatIndex).GetAdjust();
+        switch (rAdj.GetAdjust())
         {
-                // If the string in this font does not
-                // fit into the cell, the standard font
-                // is taken again:
-                aScriptedText.SetDefaultFont();
-                aStrSize = aScriptedText.GetTextSize();
+            case SvxAdjust::Left:
+                aPos.X() += FRAME_OFFSET;
+                break;
+            case SvxAdjust::Right:
+                aPos.X() += nRightX;
+                break;
+            default:
+                aPos.X() += (cellRect.GetWidth() - aStrSize.Width()) / 2;
+                break;
         }
-
-        while (theMaxStrSize.Width() <= aStrSize.Width() &&
-               cellString.getLength() > 1)
+    }
+    else
+    {
+        // Standard align:
+        if (nCol == 0 || nIndex == 4)
         {
-            cellString = cellString.copy(0, cellString.getLength() - 1);
-            aScriptedText.SetText(cellString, m_xBreak);
-            aStrSize = aScriptedText.GetTextSize();
-        }
-
-        nRightX = cellRect.GetWidth() - aStrSize.Width() - FRAME_OFFSET;
-
-        // vertical (always centering):
-        aPos.Y() += (nRowHeight - aStrSize.Height()) / 2;
-
-        // horizontal
-        if (mbRTL)
-            aPos.X() += nRightX;
-        else if (aCurData.IsJustify())
-        {
-            const SvxAdjustItem& rAdj = aCurData.GetBoxFormat(nFormatIndex).GetAdjust();
-            switch (rAdj.GetAdjust())
-            {
-                case SvxAdjust::Left:
-                    aPos.X() += FRAME_OFFSET;
-                    break;
-                case SvxAdjust::Right:
-                    aPos.X() += nRightX;
-                    break;
-                default:
-                    aPos.X() += (cellRect.GetWidth() - aStrSize.Width()) / 2;
-                    break;
-            }
+            // Text-Label left or sum left aligned
+            aPos.X() += FRAME_OFFSET;
         }
         else
         {
-            // Standard align:
-            if (nCol == 0 || nIndex == 4)
-            {
-                // Text-Label left or sum left aligned
-                aPos.X() += FRAME_OFFSET;
-            }
-            else
-            {
-                // numbers/dates right aligned
-                aPos.X() += nRightX;
-            }
+            // numbers/dates right aligned
+            aPos.X() += nRightX;
         }
-
-        aScriptedText.DrawText(aPos);
     }
+
+    aScriptedText.DrawText(aPos);
+
 }
 
 #undef FRAME_OFFSET

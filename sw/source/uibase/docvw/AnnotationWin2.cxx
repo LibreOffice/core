@@ -310,26 +310,27 @@ void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz
         pProcessor->process(mpTextRangeOverlay->getOverlayObjectPrimitive2DSequence());
     pProcessor.reset();
 
-    if (mpVScrollbar->IsVisible())
-    {
-        vcl::Font aOrigFont(mpMetadataDate->GetControlFont());
-        Color aOrigBg( mpMetadataDate->GetControlBackground() );
-        OUString sOrigText(mpMetadataDate->GetText());
+    if (!mpVScrollbar->IsVisible())
+        return;
 
-        Size aSize(PixelToLogic(mpMenuButton->GetSizePixel()));
-        Point aPos(PixelToLogic(mpMenuButton->GetPosPixel()));
-        aPos += rPt;
+    vcl::Font aOrigFont(mpMetadataDate->GetControlFont());
+    Color aOrigBg( mpMetadataDate->GetControlBackground() );
+    OUString sOrigText(mpMetadataDate->GetText());
 
-        vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetFieldFont() );
-        mpMetadataDate->SetControlFont( aFont );
-        mpMetadataDate->SetControlBackground( 0xFFFFFF );
-        mpMetadataDate->SetText("...");
-        mpMetadataDate->Draw(pDev, aPos, aSize, nInFlags);
+    Size aSize(PixelToLogic(mpMenuButton->GetSizePixel()));
+    Point aPos(PixelToLogic(mpMenuButton->GetPosPixel()));
+    aPos += rPt;
 
-        mpMetadataDate->SetText(sOrigText);
-        mpMetadataDate->SetControlFont( aOrigFont );
-        mpMetadataDate->SetControlBackground( aOrigBg );
-    }
+    vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetFieldFont() );
+    mpMetadataDate->SetControlFont( aFont );
+    mpMetadataDate->SetControlBackground( 0xFFFFFF );
+    mpMetadataDate->SetText("...");
+    mpMetadataDate->Draw(pDev, aPos, aSize, nInFlags);
+
+    mpMetadataDate->SetText(sOrigText);
+    mpMetadataDate->SetControlFont( aOrigFont );
+    mpMetadataDate->SetControlBackground( aOrigBg );
+
 }
 
 void SwAnnotationWin::KeyInput(const KeyEvent& rKeyEvent)

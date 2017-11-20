@@ -365,29 +365,30 @@ SwLabCfgItem::SwLabCfgItem(bool bLabel) :
             }
         }
     }
-    if(!bIsLabel && bNoConfigValues)
-    {
 
-        SvtUserOptions& rUserOpt = SW_MOD()->GetUserOptions();
-        aItem.m_aPrivFirstName = rUserOpt.GetFirstName();
-        aItem.m_aPrivName = rUserOpt.GetLastName();
-        aItem.m_aPrivShortCut = rUserOpt.GetID();
-        aItem.m_aCompCompany = rUserOpt.GetCompany();
-        aItem.m_aCompStreet = aItem.m_aPrivStreet = rUserOpt.GetStreet();
+    if(bIsLabel || !bNoConfigValues)
+        return;
 
-        aItem.m_aCompCountry = aItem.m_aPrivCountry = rUserOpt.GetCountry();
-        aItem.m_aCompZip = aItem.m_aPrivZip= rUserOpt.GetZip();
-        aItem.m_aCompCity = aItem.m_aPrivCity = rUserOpt.GetCity();
-        aItem.m_aPrivTitle = rUserOpt.GetTitle();
-        aItem.m_aCompPosition = rUserOpt.GetPosition();
-        aItem.m_aPrivPhone = rUserOpt.GetTelephoneHome();
-        aItem.m_aCompPhone = rUserOpt.GetTelephoneWork();
-        aItem.m_aCompFax = aItem.m_aPrivFax = rUserOpt.GetFax();
-        aItem.m_aCompMail = aItem.m_aPrivMail = rUserOpt.GetEmail();
-        aItem.m_aCompState = aItem.m_aPrivState = rUserOpt.GetState();
-        aItem.m_bSynchron = true;
-        SetModified();
-    }
+    SvtUserOptions& rUserOpt = SW_MOD()->GetUserOptions();
+    aItem.m_aPrivFirstName = rUserOpt.GetFirstName();
+    aItem.m_aPrivName = rUserOpt.GetLastName();
+    aItem.m_aPrivShortCut = rUserOpt.GetID();
+    aItem.m_aCompCompany = rUserOpt.GetCompany();
+    aItem.m_aCompStreet = aItem.m_aPrivStreet = rUserOpt.GetStreet();
+
+    aItem.m_aCompCountry = aItem.m_aPrivCountry = rUserOpt.GetCountry();
+    aItem.m_aCompZip = aItem.m_aPrivZip= rUserOpt.GetZip();
+    aItem.m_aCompCity = aItem.m_aPrivCity = rUserOpt.GetCity();
+    aItem.m_aPrivTitle = rUserOpt.GetTitle();
+    aItem.m_aCompPosition = rUserOpt.GetPosition();
+    aItem.m_aPrivPhone = rUserOpt.GetTelephoneHome();
+    aItem.m_aCompPhone = rUserOpt.GetTelephoneWork();
+    aItem.m_aCompFax = aItem.m_aPrivFax = rUserOpt.GetFax();
+    aItem.m_aCompMail = aItem.m_aPrivMail = rUserOpt.GetEmail();
+    aItem.m_aCompState = aItem.m_aPrivState = rUserOpt.GetState();
+    aItem.m_bSynchron = true;
+    SetModified();
+
 }
 
 void SwLabCfgItem::Notify( const css::uno::Sequence< OUString >& ) {}

@@ -378,64 +378,65 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, ListBox&, void)
         }
     }
 
-    if (nOld != GetTypeSel())
+    if (nOld == GetTypeSel())
+        return;
+
+    sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+
+    // fill selection-ListBox
+    OUString sFilter = comphelper::string::strip(m_pFilterED->GetText(), ' ');
+    UpdateSubType(sFilter);
+
+    bool bName = false;
+    nFieldDlgFormatSel = 0;
+
+    if ( ( !IsFieldEdit() || m_pSelectionLB->GetEntryCount() ) &&
+         nOld != LISTBOX_ENTRY_NOTFOUND )
     {
-        sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
-
-        // fill selection-ListBox
-        OUString sFilter = comphelper::string::strip(m_pFilterED->GetText(), ' ');
-        UpdateSubType(sFilter);
-
-        bool bName = false;
-        nFieldDlgFormatSel = 0;
-
-        if ( ( !IsFieldEdit() || m_pSelectionLB->GetEntryCount() ) &&
-             nOld != LISTBOX_ENTRY_NOTFOUND )
-        {
-            m_pNameED->SetText(aEmptyOUStr);
-            m_pValueED->SetText(aEmptyOUStr);
-            m_pFilterED->SetText(aEmptyOUStr);
-        }
-
-        switch (nTypeId)
-        {
-            case TYP_GETREFFLD:
-                if (REFFLDFLAG & (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(nOld)))
-                    // the old one stays
-                    nFieldDlgFormatSel = m_pFormatLB->GetSelectedEntryPos();
-                bName = true;
-                break;
-
-            case TYP_SETREFFLD:
-                bName = true;
-                break;
-
-            case REFFLDFLAG_BOOKMARK:
-                bName = true;
-                SAL_FALLTHROUGH;
-            default:
-                if( REFFLDFLAG & nTypeId )
-                {
-                    const sal_uInt16 nOldId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(nOld));
-                    if( nOldId & REFFLDFLAG || nOldId == TYP_GETREFFLD )
-                        // then the old one stays
-                        nFieldDlgFormatSel = m_pFormatLB->GetSelectedEntryPos();
-                }
-                break;
-        }
-
-        m_pNameED->Enable(bName);
-        m_pNameFT->Enable(bName);
-
-        // fill Format-Listbox
-        sal_Int32 nSize = FillFormatLB(nTypeId);
-        bool bFormat = nSize != 0;
-        m_pFormat->Enable(bFormat);
-
-        SubTypeHdl();
-        ModifyHdl(*m_pNameED);
-        ModifyHdl(*m_pFilterED);
+        m_pNameED->SetText(aEmptyOUStr);
+        m_pValueED->SetText(aEmptyOUStr);
+        m_pFilterED->SetText(aEmptyOUStr);
     }
+
+    switch (nTypeId)
+    {
+        case TYP_GETREFFLD:
+            if (REFFLDFLAG & (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(nOld)))
+                // the old one stays
+                nFieldDlgFormatSel = m_pFormatLB->GetSelectedEntryPos();
+            bName = true;
+            break;
+
+        case TYP_SETREFFLD:
+            bName = true;
+            break;
+
+        case REFFLDFLAG_BOOKMARK:
+            bName = true;
+            SAL_FALLTHROUGH;
+        default:
+            if( REFFLDFLAG & nTypeId )
+            {
+                const sal_uInt16 nOldId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(nOld));
+                if( nOldId & REFFLDFLAG || nOldId == TYP_GETREFFLD )
+                    // then the old one stays
+                    nFieldDlgFormatSel = m_pFormatLB->GetSelectedEntryPos();
+            }
+            break;
+    }
+
+    m_pNameED->Enable(bName);
+    m_pNameFT->Enable(bName);
+
+    // fill Format-Listbox
+    sal_Int32 nSize = FillFormatLB(nTypeId);
+    bool bFormat = nSize != 0;
+    m_pFormat->Enable(bFormat);
+
+    SubTypeHdl();
+    ModifyHdl(*m_pNameED);
+    ModifyHdl(*m_pFilterED);
+
 }
 
 IMPL_LINK_NOARG(SwFieldRefPage, SubTypeTreeListBoxHdl, SvTreeListBox*, void)

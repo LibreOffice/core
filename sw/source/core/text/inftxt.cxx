@@ -1003,49 +1003,50 @@ void SwTextPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
 
 void SwTextPaintInfo::DrawPostIts( bool bScript ) const
 {
-    if( OnWin() && m_pOpt->IsPostIts() )
+    if( !OnWin() || !m_pOpt->IsPostIts() )
+        return;
+
+    Size aSize;
+    Point aTmp;
+
+    const sal_uInt16 nPostItsWidth = SwViewOption::GetPostItsWidth( GetOut() );
+    const sal_uInt16 nFontHeight = m_pFnt->GetHeight( m_pVsh, *GetOut() );
+    const sal_uInt16 nFontAscent = m_pFnt->GetAscent( m_pVsh, *GetOut() );
+
+    switch ( m_pFnt->GetOrientation( GetTextFrame()->IsVertical() ) )
     {
-        Size aSize;
-        Point aTmp;
-
-        const sal_uInt16 nPostItsWidth = SwViewOption::GetPostItsWidth( GetOut() );
-        const sal_uInt16 nFontHeight = m_pFnt->GetHeight( m_pVsh, *GetOut() );
-        const sal_uInt16 nFontAscent = m_pFnt->GetAscent( m_pVsh, *GetOut() );
-
-        switch ( m_pFnt->GetOrientation( GetTextFrame()->IsVertical() ) )
-        {
-        case 0 :
-            aSize.Width() = nPostItsWidth;
-            aSize.Height() = nFontHeight;
-            aTmp.X() = aPos.X();
-            aTmp.Y() = aPos.Y() - nFontAscent;
-            break;
-        case 900 :
-            aSize.Height() = nPostItsWidth;
-            aSize.Width() = nFontHeight;
-            aTmp.X() = aPos.X() - nFontAscent;
-            aTmp.Y() = aPos.Y();
-            break;
-        case 2700 :
-            aSize.Height() = nPostItsWidth;
-            aSize.Width() = nFontHeight;
-            aTmp.X() = aPos.X() - nFontHeight +
-                                  nFontAscent;
-            aTmp.Y() = aPos.Y();
-            break;
-        }
-
-        SwRect aTmpRect( aTmp, aSize );
-
-        if ( GetTextFrame()->IsRightToLeft() )
-            GetTextFrame()->SwitchLTRtoRTL( aTmpRect );
-
-        if ( GetTextFrame()->IsVertical() )
-            GetTextFrame()->SwitchHorizontalToVertical( aTmpRect );
-
-        const tools::Rectangle aRect( aTmpRect.SVRect() );
-        SwViewOption::PaintPostIts( const_cast<OutputDevice*>(GetOut()), aRect, bScript );
+    case 0 :
+        aSize.Width() = nPostItsWidth;
+        aSize.Height() = nFontHeight;
+        aTmp.X() = aPos.X();
+        aTmp.Y() = aPos.Y() - nFontAscent;
+        break;
+    case 900 :
+        aSize.Height() = nPostItsWidth;
+        aSize.Width() = nFontHeight;
+        aTmp.X() = aPos.X() - nFontAscent;
+        aTmp.Y() = aPos.Y();
+        break;
+    case 2700 :
+        aSize.Height() = nPostItsWidth;
+        aSize.Width() = nFontHeight;
+        aTmp.X() = aPos.X() - nFontHeight +
+                              nFontAscent;
+        aTmp.Y() = aPos.Y();
+        break;
     }
+
+    SwRect aTmpRect( aTmp, aSize );
+
+    if ( GetTextFrame()->IsRightToLeft() )
+        GetTextFrame()->SwitchLTRtoRTL( aTmpRect );
+
+    if ( GetTextFrame()->IsVertical() )
+        GetTextFrame()->SwitchHorizontalToVertical( aTmpRect );
+
+    const tools::Rectangle aRect( aTmpRect.SVRect() );
+    SwViewOption::PaintPostIts( const_cast<OutputDevice*>(GetOut()), aRect, bScript );
+
 }
 
 void SwTextPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool bChecked) const

@@ -1292,58 +1292,59 @@ bool SwSectionNode::IsContentHidden() const
 void SwSectionNode::NodesArrChgd()
 {
     SwSectionFormat *const pFormat = m_pSection->GetFormat();
-    if( pFormat )
+    if( !pFormat )
+        return;
+
+    SwNodes& rNds = GetNodes();
+    SwDoc* pDoc = pFormat->GetDoc();
+
+    if( !rNds.IsDocNodes() )
     {
-        SwNodes& rNds = GetNodes();
-        SwDoc* pDoc = pFormat->GetDoc();
-
-        if( !rNds.IsDocNodes() )
-        {
-            SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFormat );
-            pFormat->ModifyNotification( &aMsgHint, &aMsgHint );
-        }
-
-        pFormat->LockModify();
-        pFormat->SetFormatAttr( SwFormatContent( this ));
-        pFormat->UnlockModify();
-
-        SwSectionNode* pSectNd = StartOfSectionNode()->FindSectionNode();
-        // set the correct parent from the new section
-        pFormat->SetDerivedFrom( pSectNd ? pSectNd->GetSection().GetFormat()
-                                      : pDoc->GetDfltFrameFormat() );
-
-        // Set the right StartNode for all in this Area
-        sal_uLong nStart = GetIndex()+1, nEnde = EndOfSectionIndex();
-        for( sal_uLong n = nStart; n < nEnde; ++n )
-            // Make up the Format's nesting
-            if( nullptr != ( pSectNd = rNds[ n ]->GetSectionNode() ) )
-            {
-                pSectNd->GetSection().GetFormat()->SetDerivedFrom( pFormat );
-                n = pSectNd->EndOfSectionIndex();
-            }
-
-        // Moving Nodes to the UndoNodes array?
-        if( rNds.IsDocNodes() )
-        {
-            OSL_ENSURE( pDoc == GetDoc(),
-                    "Moving to different Documents?" );
-            if( m_pSection->IsLinkType() ) // Remove the Link
-                m_pSection->CreateLink( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ? CREATE_CONNECT : CREATE_NONE );
-
-            if (m_pSection->IsServer())
-                pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertServer( m_pSection->GetObject() );
-        }
-        else
-        {
-            if (CONTENT_SECTION != m_pSection->GetType()
-                && m_pSection->IsConnected())
-            {
-                pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( &m_pSection->GetBaseLink() );
-            }
-            if (m_pSection->IsServer())
-                pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( m_pSection->GetObject() );
-        }
+        SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFormat );
+        pFormat->ModifyNotification( &aMsgHint, &aMsgHint );
     }
+
+    pFormat->LockModify();
+    pFormat->SetFormatAttr( SwFormatContent( this ));
+    pFormat->UnlockModify();
+
+    SwSectionNode* pSectNd = StartOfSectionNode()->FindSectionNode();
+    // set the correct parent from the new section
+    pFormat->SetDerivedFrom( pSectNd ? pSectNd->GetSection().GetFormat()
+                                  : pDoc->GetDfltFrameFormat() );
+
+    // Set the right StartNode for all in this Area
+    sal_uLong nStart = GetIndex()+1, nEnde = EndOfSectionIndex();
+    for( sal_uLong n = nStart; n < nEnde; ++n )
+        // Make up the Format's nesting
+        if( nullptr != ( pSectNd = rNds[ n ]->GetSectionNode() ) )
+        {
+            pSectNd->GetSection().GetFormat()->SetDerivedFrom( pFormat );
+            n = pSectNd->EndOfSectionIndex();
+        }
+
+    // Moving Nodes to the UndoNodes array?
+    if( rNds.IsDocNodes() )
+    {
+        OSL_ENSURE( pDoc == GetDoc(),
+                "Moving to different Documents?" );
+        if( m_pSection->IsLinkType() ) // Remove the Link
+            m_pSection->CreateLink( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ? CREATE_CONNECT : CREATE_NONE );
+
+        if (m_pSection->IsServer())
+            pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertServer( m_pSection->GetObject() );
+    }
+    else
+    {
+        if (CONTENT_SECTION != m_pSection->GetType()
+            && m_pSection->IsConnected())
+        {
+            pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( &m_pSection->GetBaseLink() );
+        }
+        if (m_pSection->IsServer())
+            pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( m_pSection->GetObject() );
+    }
+
 }
 
 OUString SwDoc::GetUniqueSectionName( const OUString* pChkStr ) const

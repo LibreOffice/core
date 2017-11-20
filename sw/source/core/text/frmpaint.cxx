@@ -296,111 +296,112 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
     if( eHor != text::HoriOrientation::NONE && !IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() ) )
         eHor = text::HoriOrientation::NONE;
     bool bRedLine = eHor != text::HoriOrientation::NONE;
-    if ( bLineNum || bRedLine )
+    if ( !bLineNum && !bRedLine )
+        return;
+
+    if( IsLocked() || IsHiddenNow() || !getFramePrintArea().Height() )
+        return;
+    SwViewShell *pSh = getRootFrame()->GetCurrShell();
+
+    SwSwapIfNotSwapped swap(const_cast<SwTextFrame *>(this));
+    SwRect rOldRect( rRect );
+
+    if ( IsVertical() )
+        SwitchVerticalToHorizontal( const_cast<SwRect&>(rRect) );
+
+    SwLayoutModeModifier aLayoutModeModifier( *pSh->GetOut() );
+    aLayoutModeModifier.Modify( false );
+
+    // #i16816# tagged pdf support
+    SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pSh->GetOut() );
+
+    SwExtraPainter aExtra( this, pSh, rLineInf, rRect, eHor, bLineNum );
+
+    if( HasPara() )
     {
-        if( IsLocked() || IsHiddenNow() || !getFramePrintArea().Height() )
-            return;
-        SwViewShell *pSh = getRootFrame()->GetCurrShell();
+        TextFrameLockGuard aLock(const_cast<SwTextFrame*>(this));
 
-        SwSwapIfNotSwapped swap(const_cast<SwTextFrame *>(this));
-        SwRect rOldRect( rRect );
+        SwTextLineAccess aAccess( this );
+        aAccess.GetPara();
 
-        if ( IsVertical() )
-            SwitchVerticalToHorizontal( const_cast<SwRect&>(rRect) );
+        SwTextPaintInfo aInf( const_cast<SwTextFrame*>(this), rRect );
 
-        SwLayoutModeModifier aLayoutModeModifier( *pSh->GetOut() );
         aLayoutModeModifier.Modify( false );
 
-        // #i16816# tagged pdf support
-        SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pSh->GetOut() );
+        SwTextPainter  aLine( const_cast<SwTextFrame*>(this), &aInf );
+        bool bNoDummy = !aLine.GetNext(); // Only one empty line!
 
-        SwExtraPainter aExtra( this, pSh, rLineInf, rRect, eHor, bLineNum );
-
-        if( HasPara() )
+        while( aLine.Y() + aLine.GetLineHeight() <= rRect.Top() )
         {
-            TextFrameLockGuard aLock(const_cast<SwTextFrame*>(this));
-
-            SwTextLineAccess aAccess( this );
-            aAccess.GetPara();
-
-            SwTextPaintInfo aInf( const_cast<SwTextFrame*>(this), rRect );
-
-            aLayoutModeModifier.Modify( false );
-
-            SwTextPainter  aLine( const_cast<SwTextFrame*>(this), &aInf );
-            bool bNoDummy = !aLine.GetNext(); // Only one empty line!
-
-            while( aLine.Y() + aLine.GetLineHeight() <= rRect.Top() )
+            if( !aLine.GetCurr()->IsDummy() &&
+                ( rLineInf.IsCountBlankLines() ||
+                  aLine.GetCurr()->HasContent() ) )
+                aExtra.IncLineNr();
+            if( !aLine.Next() )
             {
-                if( !aLine.GetCurr()->IsDummy() &&
-                    ( rLineInf.IsCountBlankLines() ||
-                      aLine.GetCurr()->HasContent() ) )
+                const_cast<SwRect&>(rRect) = rOldRect;
+                return;
+            }
+        }
+
+        long nBottom = rRect.Bottom();
+
+        bool bNoPrtLine = 0 == GetMinPrtLine();
+        if( !bNoPrtLine )
+        {
+            while ( aLine.Y() < GetMinPrtLine() )
+            {
+                if( ( rLineInf.IsCountBlankLines() || aLine.GetCurr()->HasContent() )
+                    && !aLine.GetCurr()->IsDummy() )
                     aExtra.IncLineNr();
                 if( !aLine.Next() )
-                {
-                    const_cast<SwRect&>(rRect) = rOldRect;
-                    return;
-                }
+                    break;
             }
-
-            long nBottom = rRect.Bottom();
-
-            bool bNoPrtLine = 0 == GetMinPrtLine();
-            if( !bNoPrtLine )
-            {
-                while ( aLine.Y() < GetMinPrtLine() )
-                {
-                    if( ( rLineInf.IsCountBlankLines() || aLine.GetCurr()->HasContent() )
-                        && !aLine.GetCurr()->IsDummy() )
-                        aExtra.IncLineNr();
-                    if( !aLine.Next() )
-                        break;
-                }
-                bNoPrtLine = aLine.Y() >= GetMinPrtLine();
-            }
-            if( bNoPrtLine )
-            {
-                do
-                {
-                    if( bNoDummy || !aLine.GetCurr()->IsDummy() )
-                    {
-                        bool bRed = bRedLine && aLine.GetCurr()->HasRedline();
-                        if( rLineInf.IsCountBlankLines() || aLine.GetCurr()->HasContent() )
-                        {
-                            if( bLineNum &&
-                                ( aExtra.HasNumber() || aExtra.HasDivider() ) )
-                            {
-                                sal_uInt16 nTmpHeight, nTmpAscent;
-                                aLine.CalcAscentAndHeight( nTmpAscent, nTmpHeight );
-                                aExtra.PaintExtra( aLine.Y(), nTmpAscent,
-                                    nTmpHeight, bRed );
-                                bRed = false;
-                            }
-                            aExtra.IncLineNr();
-                        }
-                        if( bRed )
-                            aExtra.PaintRedline( aLine.Y(), aLine.GetLineHeight() );
-                    }
-                } while( aLine.Next() && aLine.Y() <= nBottom );
-            }
+            bNoPrtLine = aLine.Y() >= GetMinPrtLine();
         }
-        else
+        if( bNoPrtLine )
         {
-            if ( SwRedlineTable::npos == rIDRA.GetRedlinePos(rTextNode, USHRT_MAX) )
-                bRedLine = false;
-
-            if( bLineNum && rLineInf.IsCountBlankLines() &&
-                ( aExtra.HasNumber() || aExtra.HasDivider() ) )
+            do
             {
-                aExtra.PaintExtra( getFrameArea().Top()+getFramePrintArea().Top(), aExtra.GetFont()
-                    ->GetAscent( pSh, *pSh->GetOut() ), getFramePrintArea().Height(), bRedLine );
-            }
-            else if( bRedLine )
-                aExtra.PaintRedline( getFrameArea().Top()+getFramePrintArea().Top(), getFramePrintArea().Height() );
+                if( bNoDummy || !aLine.GetCurr()->IsDummy() )
+                {
+                    bool bRed = bRedLine && aLine.GetCurr()->HasRedline();
+                    if( rLineInf.IsCountBlankLines() || aLine.GetCurr()->HasContent() )
+                    {
+                        if( bLineNum &&
+                            ( aExtra.HasNumber() || aExtra.HasDivider() ) )
+                        {
+                            sal_uInt16 nTmpHeight, nTmpAscent;
+                            aLine.CalcAscentAndHeight( nTmpAscent, nTmpHeight );
+                            aExtra.PaintExtra( aLine.Y(), nTmpAscent,
+                                nTmpHeight, bRed );
+                            bRed = false;
+                        }
+                        aExtra.IncLineNr();
+                    }
+                    if( bRed )
+                        aExtra.PaintRedline( aLine.Y(), aLine.GetLineHeight() );
+                }
+            } while( aLine.Next() && aLine.Y() <= nBottom );
         }
-
-        const_cast<SwRect&>(rRect) = rOldRect;
     }
+    else
+    {
+        if ( SwRedlineTable::npos == rIDRA.GetRedlinePos(rTextNode, USHRT_MAX) )
+            bRedLine = false;
+
+        if( bLineNum && rLineInf.IsCountBlankLines() &&
+            ( aExtra.HasNumber() || aExtra.HasDivider() ) )
+        {
+            aExtra.PaintExtra( getFrameArea().Top()+getFramePrintArea().Top(), aExtra.GetFont()
+                ->GetAscent( pSh, *pSh->GetOut() ), getFramePrintArea().Height(), bRedLine );
+        }
+        else if( bRedLine )
+            aExtra.PaintRedline( getFrameArea().Top()+getFramePrintArea().Top(), getFramePrintArea().Height() );
+    }
+
+    const_cast<SwRect&>(rRect) = rOldRect;
+
 }
 
 SwRect SwTextFrame::Paint()
@@ -581,120 +582,121 @@ void SwTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
     Frame_Info aFrameInfo( *this );
     SwTaggedPDFHelper aTaggedPDFHelperParagraph( nullptr, &aFrameInfo, nullptr, rRenderContext );
 
-    if( !IsEmpty() || !PaintEmpty( rRect, true ) )
-    {
-        if( IsLocked() || IsHiddenNow() || ! getFramePrintArea().HasArea() )
-            return;
+    if( IsEmpty() && PaintEmpty( rRect, true ) )
+        return;
 
-        // It can happen that the IdleCollector withdrew my cached information
+    if( IsLocked() || IsHiddenNow() || ! getFramePrintArea().HasArea() )
+        return;
+
+    // It can happen that the IdleCollector withdrew my cached information
+    if( !HasPara() )
+    {
+        OSL_ENSURE( isFrameAreaPositionValid(), "+SwTextFrame::Paint: no Calc()" );
+
+        // #i29062# pass info that we are currently
+        // painting.
+        const_cast<SwTextFrame*>(this)->GetFormatted( true );
+        if( IsEmpty() )
+        {
+            PaintEmpty( rRect, false );
+            return;
+        }
         if( !HasPara() )
         {
-            OSL_ENSURE( isFrameAreaPositionValid(), "+SwTextFrame::Paint: no Calc()" );
-
-            // #i29062# pass info that we are currently
-            // painting.
-            const_cast<SwTextFrame*>(this)->GetFormatted( true );
-            if( IsEmpty() )
-            {
-                PaintEmpty( rRect, false );
-                return;
-            }
-            if( !HasPara() )
-            {
-                OSL_ENSURE( false, "+SwTextFrame::Paint: missing format information" );
-                return;
-            }
+            OSL_ENSURE( false, "+SwTextFrame::Paint: missing format information" );
+            return;
         }
-
-        // We don't want to be interrupted while painting.
-        // Do that after thr Format()!
-        TextFrameLockGuard aLock(const_cast<SwTextFrame*>(this));
-
-        // We only paint the part of the TextFrame which changed, is within the
-        // range and was requested to paint.
-        // One could think that the area rRect _needs_ to be painted, although
-        // rRepaint is set. Indeed, we cannot avoid this problem from a formal
-        // perspective. Luckily we can assume rRepaint to be empty when we need
-        // paint the while Frame.
-        SwTextLineAccess aAccess( this );
-        SwParaPortion *pPara = aAccess.GetPara();
-
-        SwRepaint &rRepaint = pPara->GetRepaint();
-
-        // Switch off recycling when in the FlyContentFrame.
-        // A DrawRect is called for repainting the line anyways.
-        if( rRepaint.GetOfst() )
-        {
-            const SwFlyFrame *pFly = FindFlyFrame();
-            if( pFly && pFly->IsFlyInContentFrame() )
-                rRepaint.SetOfst( 0 );
-        }
-
-        // Ge the String for painting. The length is of special interest.
-
-        // Rectangle
-        OSL_ENSURE( ! IsSwapped(), "A frame is swapped before Paint" );
-        SwRect aOldRect( rRect );
-
-        {
-            SwSwapIfNotSwapped swap(const_cast<SwTextFrame *>(this));
-
-            if ( IsVertical() )
-                SwitchVerticalToHorizontal( const_cast<SwRect&>(rRect) );
-
-            if ( IsRightToLeft() )
-                SwitchRTLtoLTR( const_cast<SwRect&>(rRect) );
-
-            SwTextPaintInfo aInf( const_cast<SwTextFrame*>(this), rRect );
-            aInf.SetWrongList( const_cast<SwTextNode*>(GetTextNode())->GetWrong() );
-            aInf.SetGrammarCheckList( const_cast<SwTextNode*>(GetTextNode())->GetGrammarCheck() );
-            aInf.SetSmartTags( const_cast<SwTextNode*>(GetTextNode())->GetSmartTags() );
-            aInf.GetTextFly().SetTopRule();
-
-            SwTextPainter  aLine( const_cast<SwTextFrame*>(this), &aInf );
-            // Optimization: if no free flying Frame overlaps into our line, the
-            // SwTextFly just switches off
-            aInf.GetTextFly().Relax();
-
-            OutputDevice* pOut = aInf.GetOut();
-            const bool bOnWin = pSh->GetWin() != nullptr;
-
-            SwSaveClip aClip( bOnWin || IsUndersized() ? pOut : nullptr );
-
-            // Output loop: For each Line ... (which is still visible) ...
-            //   adapt rRect (Top + 1, Bottom - 1)
-            // Because the Iterator attaches the Lines without a gap to each other
-            aLine.TwipsToLine( rRect.Top() + 1 );
-            long nBottom = rRect.Bottom();
-
-            bool bNoPrtLine = 0 == GetMinPrtLine();
-            if( !bNoPrtLine )
-            {
-                while ( aLine.Y() < GetMinPrtLine() && aLine.Next() )
-                    ;
-                bNoPrtLine = aLine.Y() >= GetMinPrtLine();
-            }
-            if( bNoPrtLine )
-            {
-                do
-                {
-                    aLine.DrawTextLine( rRect, aClip, IsUndersized() );
-
-                } while( aLine.Next() && aLine.Y() <= nBottom );
-            }
-
-            // Once is enough:
-            if( aLine.IsPaintDrop() )
-                aLine.PaintDropPortion();
-
-            if( rRepaint.HasArea() )
-                rRepaint.Clear();
-        }
-
-        const_cast<SwRect&>(rRect) = aOldRect;
-
-        OSL_ENSURE( ! IsSwapped(), "A frame is swapped after Paint" );
     }
+
+    // We don't want to be interrupted while painting.
+    // Do that after thr Format()!
+    TextFrameLockGuard aLock(const_cast<SwTextFrame*>(this));
+
+    // We only paint the part of the TextFrame which changed, is within the
+    // range and was requested to paint.
+    // One could think that the area rRect _needs_ to be painted, although
+    // rRepaint is set. Indeed, we cannot avoid this problem from a formal
+    // perspective. Luckily we can assume rRepaint to be empty when we need
+    // paint the while Frame.
+    SwTextLineAccess aAccess( this );
+    SwParaPortion *pPara = aAccess.GetPara();
+
+    SwRepaint &rRepaint = pPara->GetRepaint();
+
+    // Switch off recycling when in the FlyContentFrame.
+    // A DrawRect is called for repainting the line anyways.
+    if( rRepaint.GetOfst() )
+    {
+        const SwFlyFrame *pFly = FindFlyFrame();
+        if( pFly && pFly->IsFlyInContentFrame() )
+            rRepaint.SetOfst( 0 );
+    }
+
+    // Ge the String for painting. The length is of special interest.
+
+    // Rectangle
+    OSL_ENSURE( ! IsSwapped(), "A frame is swapped before Paint" );
+    SwRect aOldRect( rRect );
+
+    {
+        SwSwapIfNotSwapped swap(const_cast<SwTextFrame *>(this));
+
+        if ( IsVertical() )
+            SwitchVerticalToHorizontal( const_cast<SwRect&>(rRect) );
+
+        if ( IsRightToLeft() )
+            SwitchRTLtoLTR( const_cast<SwRect&>(rRect) );
+
+        SwTextPaintInfo aInf( const_cast<SwTextFrame*>(this), rRect );
+        aInf.SetWrongList( const_cast<SwTextNode*>(GetTextNode())->GetWrong() );
+        aInf.SetGrammarCheckList( const_cast<SwTextNode*>(GetTextNode())->GetGrammarCheck() );
+        aInf.SetSmartTags( const_cast<SwTextNode*>(GetTextNode())->GetSmartTags() );
+        aInf.GetTextFly().SetTopRule();
+
+        SwTextPainter  aLine( const_cast<SwTextFrame*>(this), &aInf );
+        // Optimization: if no free flying Frame overlaps into our line, the
+        // SwTextFly just switches off
+        aInf.GetTextFly().Relax();
+
+        OutputDevice* pOut = aInf.GetOut();
+        const bool bOnWin = pSh->GetWin() != nullptr;
+
+        SwSaveClip aClip( bOnWin || IsUndersized() ? pOut : nullptr );
+
+        // Output loop: For each Line ... (which is still visible) ...
+        //   adapt rRect (Top + 1, Bottom - 1)
+        // Because the Iterator attaches the Lines without a gap to each other
+        aLine.TwipsToLine( rRect.Top() + 1 );
+        long nBottom = rRect.Bottom();
+
+        bool bNoPrtLine = 0 == GetMinPrtLine();
+        if( !bNoPrtLine )
+        {
+            while ( aLine.Y() < GetMinPrtLine() && aLine.Next() )
+                ;
+            bNoPrtLine = aLine.Y() >= GetMinPrtLine();
+        }
+        if( bNoPrtLine )
+        {
+            do
+            {
+                aLine.DrawTextLine( rRect, aClip, IsUndersized() );
+
+            } while( aLine.Next() && aLine.Y() <= nBottom );
+        }
+
+        // Once is enough:
+        if( aLine.IsPaintDrop() )
+            aLine.PaintDropPortion();
+
+        if( rRepaint.HasArea() )
+            rRepaint.Clear();
+    }
+
+    const_cast<SwRect&>(rRect) = aOldRect;
+
+    OSL_ENSURE( ! IsSwapped(), "A frame is swapped after Paint" );
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

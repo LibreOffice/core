@@ -309,105 +309,106 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
         }
     }
 
-    if( bTextColl )
+    if( !bTextColl )
+        return;
+
+    if( bOutStyles )
     {
-        if( bOutStyles )
+        // We have to add hard attributes for any script dependent
+        // item that is not accessed by the style
+        static const sal_uInt16 aWhichIds[3][4] =
         {
-            // We have to add hard attributes for any script dependent
-            // item that is not accessed by the style
-            static const sal_uInt16 aWhichIds[3][4] =
-            {
-                { RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
-                    RES_CHRATR_POSTURE, RES_CHRATR_WEIGHT },
-                { RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONTSIZE,
-                    RES_CHRATR_CJK_POSTURE, RES_CHRATR_CJK_WEIGHT },
-                { RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONTSIZE,
-                    RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT }
-            };
+            { RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
+                RES_CHRATR_POSTURE, RES_CHRATR_WEIGHT },
+            { RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONTSIZE,
+                RES_CHRATR_CJK_POSTURE, RES_CHRATR_CJK_WEIGHT },
+            { RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONTSIZE,
+                RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT }
+        };
 
-            sal_uInt16 nRef = 0;
-            sal_uInt16 aSets[2] = {0,0};
-            switch( nCSS1Script )
-            {
-            case CSS1_OUTMODE_WESTERN:
-                nRef = 0;
-                aSets[0] = 1;
-                aSets[1] = 2;
-                break;
-            case CSS1_OUTMODE_CJK:
-                nRef = 1;
-                aSets[0] = 0;
-                aSets[1] = 2;
-                break;
-            case CSS1_OUTMODE_CTL:
-                nRef = 2;
-                aSets[0] = 0;
-                aSets[1] = 1;
-                break;
-            }
-            for( int i=0; i<4; ++i )
-            {
-                const SfxPoolItem& rRef = pFormat->GetFormatAttr( aWhichIds[nRef][i] );
-                for(sal_uInt16 nSet : aSets)
-                {
-                    const SfxPoolItem& rSet = pFormat->GetFormatAttr( aWhichIds[nSet][i] );
-                    if( rSet != rRef )
-                    {
-                        if( !pItemSet )
-                            pItemSet.reset( new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
-                                                       pFormat->GetAttrSet().GetRanges() ) );
-                        pItemSet->Put( rSet );
-                    }
-                }
-            }
+        sal_uInt16 nRef = 0;
+        sal_uInt16 aSets[2] = {0,0};
+        switch( nCSS1Script )
+        {
+        case CSS1_OUTMODE_WESTERN:
+            nRef = 0;
+            aSets[0] = 1;
+            aSets[1] = 2;
+            break;
+        case CSS1_OUTMODE_CJK:
+            nRef = 1;
+            aSets[0] = 0;
+            aSets[1] = 2;
+            break;
+        case CSS1_OUTMODE_CTL:
+            nRef = 2;
+            aSets[0] = 0;
+            aSets[1] = 1;
+            break;
         }
-
-        // remember all the different default spacings from the style or
-        // the comparison style.
-        const SvxLRSpaceItem &rLRSpace =
-            (pReferenceFormat ? pReferenceFormat : pFormat)->GetLRSpace();
-        nLeftMargin = rLRSpace.GetTextLeft();
-        nRightMargin = rLRSpace.GetRight();
-        nFirstLineIndent = rLRSpace.GetTextFirstLineOfst();
-
-        const SvxULSpaceItem &rULSpace =
-            (pReferenceFormat ? pReferenceFormat : pFormat)->GetULSpace();
-        nTopMargin = rULSpace.GetUpper();
-        nBottomMargin = rULSpace.GetLower();
-
-        // export language if it differs from the default language
-        sal_uInt16 nWhichId =
-            SwHTMLWriter::GetLangWhichIdFromScript( nCSS1Script );
-        const SvxLanguageItem& rLang =
-            static_cast<const SvxLanguageItem&>(pFormat->GetFormatAttr( nWhichId ));
-        LanguageType eLang = rLang.GetLanguage();
-        if( eLang != eDfltLang )
+        for( int i=0; i<4; ++i )
         {
-            if( !pItemSet )
-                pItemSet.reset( new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
-                                           pFormat->GetAttrSet().GetRanges() ) );
-            pItemSet->Put( rLang );
-        }
-
-        static const sal_uInt16 aWhichIds[3] =
-            { RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
-                RES_CHRATR_CTL_LANGUAGE };
-        for(sal_uInt16 i : aWhichIds)
-        {
-            if( i != nWhichId )
+            const SfxPoolItem& rRef = pFormat->GetFormatAttr( aWhichIds[nRef][i] );
+            for(sal_uInt16 nSet : aSets)
             {
-                const SvxLanguageItem& rTmpLang =
-                    static_cast<const SvxLanguageItem&>(pFormat->GetFormatAttr(i));
-                if( rTmpLang.GetLanguage() != eLang )
+                const SfxPoolItem& rSet = pFormat->GetFormatAttr( aWhichIds[nSet][i] );
+                if( rSet != rRef )
                 {
                     if( !pItemSet )
                         pItemSet.reset( new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
                                                    pFormat->GetAttrSet().GetRanges() ) );
-                    pItemSet->Put( rTmpLang );
+                    pItemSet->Put( rSet );
                 }
             }
         }
     }
+
+    // remember all the different default spacings from the style or
+    // the comparison style.
+    const SvxLRSpaceItem &rLRSpace =
+        (pReferenceFormat ? pReferenceFormat : pFormat)->GetLRSpace();
+    nLeftMargin = rLRSpace.GetTextLeft();
+    nRightMargin = rLRSpace.GetRight();
+    nFirstLineIndent = rLRSpace.GetTextFirstLineOfst();
+
+    const SvxULSpaceItem &rULSpace =
+        (pReferenceFormat ? pReferenceFormat : pFormat)->GetULSpace();
+    nTopMargin = rULSpace.GetUpper();
+    nBottomMargin = rULSpace.GetLower();
+
+    // export language if it differs from the default language
+    sal_uInt16 nWhichId =
+        SwHTMLWriter::GetLangWhichIdFromScript( nCSS1Script );
+    const SvxLanguageItem& rLang =
+        static_cast<const SvxLanguageItem&>(pFormat->GetFormatAttr( nWhichId ));
+    LanguageType eLang = rLang.GetLanguage();
+    if( eLang != eDfltLang )
+    {
+        if( !pItemSet )
+            pItemSet.reset( new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
+                                       pFormat->GetAttrSet().GetRanges() ) );
+        pItemSet->Put( rLang );
+    }
+
+    static const sal_uInt16 aWhichIds[3] =
+        { RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
+            RES_CHRATR_CTL_LANGUAGE };
+    for(sal_uInt16 i : aWhichIds)
+    {
+        if( i != nWhichId )
+        {
+            const SvxLanguageItem& rTmpLang =
+                static_cast<const SvxLanguageItem&>(pFormat->GetFormatAttr(i));
+            if( rTmpLang.GetLanguage() != eLang )
+            {
+                if( !pItemSet )
+                    pItemSet.reset( new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
+                                               pFormat->GetAttrSet().GetRanges() ) );
+                pItemSet->Put( rTmpLang );
+            }
+        }
+    }
+
 }
 
 SwHTMLFormatInfo::~SwHTMLFormatInfo()

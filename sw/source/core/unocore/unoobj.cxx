@@ -174,36 +174,37 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
     WriterRef xWrt;
     // TODO/MBA: looks like a BaseURL doesn't make sense here
     SwReaderWriter::GetWriter( FILTER_TEXT_DLG, OUString(), xWrt );
-    if( xWrt.is() )
+    if( !xWrt.is() )
+        return;
+
+    SwWriter aWriter( aStream, rPam );
+    xWrt->bASCII_NoLastLineEnd = true;
+    xWrt->bExportPargraphNumbering = false;
+    SwAsciiOptions aOpt = xWrt->GetAsciiOptions();
+    aOpt.SetCharSet( RTL_TEXTENCODING_UNICODE );
+    xWrt->SetAsciiOptions( aOpt );
+    xWrt->bUCS2_WithStartChar = false;
+    // #i68522#
+    const bool bOldShowProgress = xWrt->bShowProgress;
+    xWrt->bShowProgress = false;
+
+    if( ! aWriter.Write( xWrt ).IsError() )
     {
-        SwWriter aWriter( aStream, rPam );
-        xWrt->bASCII_NoLastLineEnd = true;
-        xWrt->bExportPargraphNumbering = false;
-        SwAsciiOptions aOpt = xWrt->GetAsciiOptions();
-        aOpt.SetCharSet( RTL_TEXTENCODING_UNICODE );
-        xWrt->SetAsciiOptions( aOpt );
-        xWrt->bUCS2_WithStartChar = false;
-        // #i68522#
-        const bool bOldShowProgress = xWrt->bShowProgress;
-        xWrt->bShowProgress = false;
-
-        if( ! aWriter.Write( xWrt ).IsError() )
+        const sal_uInt64 lUniLen = aStream.GetSize()/sizeof( sal_Unicode );
+        if (lUniLen < static_cast<sal_uInt64>(SAL_MAX_INT32-1))
         {
-            const sal_uInt64 lUniLen = aStream.GetSize()/sizeof( sal_Unicode );
-            if (lUniLen < static_cast<sal_uInt64>(SAL_MAX_INT32-1))
-            {
-                aStream.WriteUInt16( '\0' );
+            aStream.WriteUInt16( '\0' );
 
-                aStream.Seek( 0 );
-                aStream.ResetError();
+            aStream.Seek( 0 );
+            aStream.ResetError();
 
-                rtl_uString *pStr = rtl_uString_alloc(lUniLen);
-                aStream.ReadBytes(pStr->buffer, lUniLen * sizeof(sal_Unicode));
-                rBuffer = OUString(pStr, SAL_NO_ACQUIRE);
-            }
+            rtl_uString *pStr = rtl_uString_alloc(lUniLen);
+            aStream.ReadBytes(pStr->buffer, lUniLen * sizeof(sal_Unicode));
+            rBuffer = OUString(pStr, SAL_NO_ACQUIRE);
         }
-        xWrt->bShowProgress = bOldShowProgress;
     }
+    xWrt->bShowProgress = bOldShowProgress;
+
 }
 
 /// @throws lang::IllegalArgumentException
@@ -2835,40 +2836,41 @@ SwXTextCursor::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
 
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    if (rUnoCursor.HasMark())
+    if (!rUnoCursor.HasMark())
+        return;
+
+    SwSortOptions aSortOpt;
+    if (!SwUnoCursorHelper::ConvertSortProperties(rDescriptor, aSortOpt))
     {
-        SwSortOptions aSortOpt;
-        if (!SwUnoCursorHelper::ConvertSortProperties(rDescriptor, aSortOpt))
-        {
-            throw uno::RuntimeException("Bad sort properties");
-        }
-        UnoActionContext aContext( rUnoCursor.GetDoc() );
-
-        SwPosition & rStart = *rUnoCursor.Start();
-        SwPosition & rEnd   = *rUnoCursor.End();
-
-        SwNodeIndex aPrevIdx( rStart.nNode, -1 );
-        const sal_uLong nOffset = rEnd.nNode.GetIndex() - rStart.nNode.GetIndex();
-        const sal_Int32 nCntStt  = rStart.nContent.GetIndex();
-
-        rUnoCursor.GetDoc()->SortText(rUnoCursor, aSortOpt);
-
-        // update selection
-        rUnoCursor.DeleteMark();
-        rUnoCursor.GetPoint()->nNode.Assign( aPrevIdx.GetNode(), +1 );
-        SwContentNode *const pCNd = rUnoCursor.GetContentNode();
-        sal_Int32 nLen = pCNd->Len();
-        if (nLen > nCntStt)
-        {
-            nLen = nCntStt;
-        }
-        rUnoCursor.GetPoint()->nContent.Assign(pCNd, nLen );
-        rUnoCursor.SetMark();
-
-        rUnoCursor.GetPoint()->nNode += nOffset;
-        SwContentNode *const pCNd2 = rUnoCursor.GetContentNode();
-        rUnoCursor.GetPoint()->nContent.Assign( pCNd2, pCNd2->Len() );
+        throw uno::RuntimeException("Bad sort properties");
     }
+    UnoActionContext aContext( rUnoCursor.GetDoc() );
+
+    SwPosition & rStart = *rUnoCursor.Start();
+    SwPosition & rEnd   = *rUnoCursor.End();
+
+    SwNodeIndex aPrevIdx( rStart.nNode, -1 );
+    const sal_uLong nOffset = rEnd.nNode.GetIndex() - rStart.nNode.GetIndex();
+    const sal_Int32 nCntStt  = rStart.nContent.GetIndex();
+
+    rUnoCursor.GetDoc()->SortText(rUnoCursor, aSortOpt);
+
+    // update selection
+    rUnoCursor.DeleteMark();
+    rUnoCursor.GetPoint()->nNode.Assign( aPrevIdx.GetNode(), +1 );
+    SwContentNode *const pCNd = rUnoCursor.GetContentNode();
+    sal_Int32 nLen = pCNd->Len();
+    if (nLen > nCntStt)
+    {
+        nLen = nCntStt;
+    }
+    rUnoCursor.GetPoint()->nContent.Assign(pCNd, nLen );
+    rUnoCursor.SetMark();
+
+    rUnoCursor.GetPoint()->nNode += nOffset;
+    SwContentNode *const pCNd2 = rUnoCursor.GetContentNode();
+    rUnoCursor.GetPoint()->nContent.Assign( pCNd2, pCNd2->Len() );
+
 }
 
 uno::Reference< container::XEnumeration > SAL_CALL

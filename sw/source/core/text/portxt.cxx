@@ -463,33 +463,36 @@ bool SwTextPortion::Format( SwTextFormatInfo &rInf )
 // rInf.nIdx points to the next word, nIdx-1 is the portion's last char
 void SwTextPortion::FormatEOL( SwTextFormatInfo &rInf )
 {
-    if( ( !GetPortion() || ( GetPortion()->IsKernPortion() &&
-        !GetPortion()->GetPortion() ) ) && GetLen() &&
+    if( !(
+        ( !GetPortion() || ( GetPortion()->IsKernPortion() &&
+          !GetPortion()->GetPortion() ) ) &&
+        GetLen() &&
         rInf.GetIdx() < rInf.GetText().getLength() &&
-        1 < rInf.GetIdx() && ' ' == rInf.GetChar( rInf.GetIdx() - 1 )
-        && !rInf.GetLast()->IsHolePortion() )
-    {
-        // calculate number of blanks
-        sal_Int32 nX = rInf.GetIdx() - 1;
-        sal_Int32 nHoleLen = 1;
-        while( nX && nHoleLen < GetLen() && CH_BLANK == rInf.GetChar( --nX ) )
-            nHoleLen++;
+        1 < rInf.GetIdx() && ' ' == rInf.GetChar( rInf.GetIdx() - 1 ) &&
+        !rInf.GetLast()->IsHolePortion()) )
+        return;
 
-        // First set ourselves and the insert, because there could be
-        // a SwLineLayout
-        sal_uInt16 nBlankSize;
-        if( nHoleLen == GetLen() )
-            nBlankSize = Width();
-        else
-            nBlankSize = nHoleLen * rInf.GetTextSize(OUString(' ')).Width();
-        Width( Width() - nBlankSize );
-        rInf.X( rInf.X() - nBlankSize );
-        SetLen( GetLen() - nHoleLen );
-        SwLinePortion *pHole = new SwHolePortion( *this );
-        static_cast<SwHolePortion *>( pHole )->SetBlankWidth( nBlankSize );
-        static_cast<SwHolePortion *>( pHole )->SetLen( nHoleLen );
-        Insert( pHole );
-    }
+    // calculate number of blanks
+    sal_Int32 nX = rInf.GetIdx() - 1;
+    sal_Int32 nHoleLen = 1;
+    while( nX && nHoleLen < GetLen() && CH_BLANK == rInf.GetChar( --nX ) )
+        nHoleLen++;
+
+    // First set ourselves and the insert, because there could be
+    // a SwLineLayout
+    sal_uInt16 nBlankSize;
+    if( nHoleLen == GetLen() )
+        nBlankSize = Width();
+    else
+        nBlankSize = nHoleLen * rInf.GetTextSize(OUString(' ')).Width();
+    Width( Width() - nBlankSize );
+    rInf.X( rInf.X() - nBlankSize );
+    SetLen( GetLen() - nHoleLen );
+    SwLinePortion *pHole = new SwHolePortion( *this );
+    static_cast<SwHolePortion *>( pHole )->SetBlankWidth( nBlankSize );
+    static_cast<SwHolePortion *>( pHole )->SetLen( nHoleLen );
+    Insert( pHole );
+
 }
 
 sal_Int32 SwTextPortion::GetCursorOfst( const sal_uInt16 nOfst ) const

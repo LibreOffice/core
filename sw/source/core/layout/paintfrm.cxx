@@ -864,24 +864,89 @@ void SwLineRects::PaintLines( OutputDevice *pOut, SwPaintProperties const &prope
 {
     // Paint the borders. Sadly two passes are needed.
     // Once for the inside and once for the outside edges of tables
-    if ( aLineRects.size() != nLastCount )
+    if ( aLineRects.size() == nLastCount )
+        return;
+
+    // #i16816# tagged pdf support
+    SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pOut );
+
+    pOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
+    pOut->SetFillColor();
+    pOut->SetLineColor();
+    ConnectEdges( pOut, properties );
+    const Color *pLast = nullptr;
+
+    bool bPaint2nd = false;
+    size_t nMinCount = aLineRects.size();
+
+    for ( size_t i = 0; i < aLineRects.size(); ++i )
     {
-        // #i16816# tagged pdf support
-        SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pOut );
+        SwLineRect &rLRect = aLineRects[i];
 
-        pOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
-        pOut->SetFillColor();
-        pOut->SetLineColor();
-        ConnectEdges( pOut, properties );
-        const Color *pLast = nullptr;
+        if ( rLRect.IsPainted() )
+            continue;
 
-        bool bPaint2nd = false;
-        size_t nMinCount = aLineRects.size();
+        if ( rLRect.IsLocked() )
+        {
+            nMinCount = std::min( nMinCount, i );
+            continue;
+        }
 
+        // Paint it now or in the second pass?
+        bool bPaint = true;
+        if ( rLRect.GetTab() )
+        {
+            if ( rLRect.Height() > rLRect.Width() )
+            {
+                // Vertical edge, overlapping with the table edge?
+                SwTwips nLLeft  = rLRect.Left()  - 30,
+                        nLRight = rLRect.Right() + 30,
+                        nTLeft  = rLRect.GetTab()->getFrameArea().Left() + rLRect.GetTab()->getFramePrintArea().Left(),
+                        nTRight = rLRect.GetTab()->getFrameArea().Left() + rLRect.GetTab()->getFramePrintArea().Right();
+                if ( (nTLeft >= nLLeft && nTLeft <= nLRight) ||
+                     (nTRight>= nLLeft && nTRight<= nLRight) )
+                    bPaint = false;
+            }
+            else
+            {
+                // Horizontal edge, overlapping with the table edge?
+                SwTwips nLTop    = rLRect.Top()    - 30,
+                        nLBottom = rLRect.Bottom() + 30,
+                        nTTop    = rLRect.GetTab()->getFrameArea().Top()  + rLRect.GetTab()->getFramePrintArea().Top(),
+                        nTBottom = rLRect.GetTab()->getFrameArea().Top()  + rLRect.GetTab()->getFramePrintArea().Bottom();
+                if ( (nTTop    >= nLTop && nTTop      <= nLBottom) ||
+                     (nTBottom >= nLTop && nTBottom <= nLBottom) )
+                    bPaint = false;
+            }
+        }
+        if ( bPaint )
+        {
+            if ( !pLast || *pLast != rLRect.GetColor() )
+            {
+                pLast = &rLRect.GetColor();
+
+                DrawModeFlags nOldDrawMode = pOut->GetDrawMode();
+                if( properties.pSGlobalShell->GetWin() &&
+                    Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+                    pOut->SetDrawMode( DrawModeFlags::Default );
+
+                pOut->SetLineColor( *pLast );
+                pOut->SetFillColor( *pLast );
+                pOut->SetDrawMode( nOldDrawMode );
+            }
+
+            if( !rLRect.IsEmpty() )
+                lcl_DrawDashedRect( pOut, rLRect );
+            rLRect.SetPainted();
+        }
+        else
+            bPaint2nd = true;
+    }
+    if ( bPaint2nd )
+    {
         for ( size_t i = 0; i < aLineRects.size(); ++i )
         {
             SwLineRect &rLRect = aLineRects[i];
-
             if ( rLRect.IsPainted() )
                 continue;
 
@@ -891,92 +956,28 @@ void SwLineRects::PaintLines( OutputDevice *pOut, SwPaintProperties const &prope
                 continue;
             }
 
-            // Paint it now or in the second pass?
-            bool bPaint = true;
-            if ( rLRect.GetTab() )
+            if ( !pLast || *pLast != rLRect.GetColor() )
             {
-                if ( rLRect.Height() > rLRect.Width() )
+                pLast = &rLRect.GetColor();
+
+                DrawModeFlags nOldDrawMode = pOut->GetDrawMode();
+                if( properties.pSGlobalShell->GetWin() &&
+                    Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
                 {
-                    // Vertical edge, overlapping with the table edge?
-                    SwTwips nLLeft  = rLRect.Left()  - 30,
-                            nLRight = rLRect.Right() + 30,
-                            nTLeft  = rLRect.GetTab()->getFrameArea().Left() + rLRect.GetTab()->getFramePrintArea().Left(),
-                            nTRight = rLRect.GetTab()->getFrameArea().Left() + rLRect.GetTab()->getFramePrintArea().Right();
-                    if ( (nTLeft >= nLLeft && nTLeft <= nLRight) ||
-                         (nTRight>= nLLeft && nTRight<= nLRight) )
-                        bPaint = false;
+                    pOut->SetDrawMode( DrawModeFlags::Default );
                 }
-                else
-                {
-                    // Horizontal edge, overlapping with the table edge?
-                    SwTwips nLTop    = rLRect.Top()    - 30,
-                            nLBottom = rLRect.Bottom() + 30,
-                            nTTop    = rLRect.GetTab()->getFrameArea().Top()  + rLRect.GetTab()->getFramePrintArea().Top(),
-                            nTBottom = rLRect.GetTab()->getFrameArea().Top()  + rLRect.GetTab()->getFramePrintArea().Bottom();
-                    if ( (nTTop    >= nLTop && nTTop      <= nLBottom) ||
-                         (nTBottom >= nLTop && nTBottom <= nLBottom) )
-                        bPaint = false;
-                }
+
+                pOut->SetFillColor( *pLast );
+                pOut->SetDrawMode( nOldDrawMode );
             }
-            if ( bPaint )
-            {
-                if ( !pLast || *pLast != rLRect.GetColor() )
-                {
-                    pLast = &rLRect.GetColor();
-
-                    DrawModeFlags nOldDrawMode = pOut->GetDrawMode();
-                    if( properties.pSGlobalShell->GetWin() &&
-                        Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-                        pOut->SetDrawMode( DrawModeFlags::Default );
-
-                    pOut->SetLineColor( *pLast );
-                    pOut->SetFillColor( *pLast );
-                    pOut->SetDrawMode( nOldDrawMode );
-                }
-
-                if( !rLRect.IsEmpty() )
-                    lcl_DrawDashedRect( pOut, rLRect );
-                rLRect.SetPainted();
-            }
-            else
-                bPaint2nd = true;
+            if( !rLRect.IsEmpty() )
+                lcl_DrawDashedRect( pOut, rLRect );
+            rLRect.SetPainted();
         }
-        if ( bPaint2nd )
-        {
-            for ( size_t i = 0; i < aLineRects.size(); ++i )
-            {
-                SwLineRect &rLRect = aLineRects[i];
-                if ( rLRect.IsPainted() )
-                    continue;
-
-                if ( rLRect.IsLocked() )
-                {
-                    nMinCount = std::min( nMinCount, i );
-                    continue;
-                }
-
-                if ( !pLast || *pLast != rLRect.GetColor() )
-                {
-                    pLast = &rLRect.GetColor();
-
-                    DrawModeFlags nOldDrawMode = pOut->GetDrawMode();
-                    if( properties.pSGlobalShell->GetWin() &&
-                        Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-                    {
-                        pOut->SetDrawMode( DrawModeFlags::Default );
-                    }
-
-                    pOut->SetFillColor( *pLast );
-                    pOut->SetDrawMode( nOldDrawMode );
-                }
-                if( !rLRect.IsEmpty() )
-                    lcl_DrawDashedRect( pOut, rLRect );
-                rLRect.SetPainted();
-            }
-        }
-        nLastCount = nMinCount;
-        pOut->Pop();
     }
+    nLastCount = nMinCount;
+    pOut->Pop();
+
 }
 
 void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
@@ -5274,96 +5275,97 @@ void SwFrame::PaintBorder( const SwRect& rRect, const SwPageFrame *pPage,
 
     // - add condition <bFoundCellForTopOrBorderAttrs>
     //-hack
-    if ( bLine || bShadow || bFoundCellForTopOrBorderAttrs )
+    if ( !(bLine || bShadow || bFoundCellForTopOrBorderAttrs) )
+        return;
+
+    //If the rectangle is completely inside the PrtArea, no border needs to
+    //be painted.
+    //For the PrtArea the aligned value needs to be used, otherwise it could
+    //happen, that some parts won't be processed.
+    SwRect aRect( getFramePrintArea() );
+    aRect += getFrameArea().Pos();
+    ::SwAlignRect( aRect, gProp.pSGlobalShell, gProp.pSGlobalShell->GetOut() );
+    // OD 27.09.2002 #103636# - new local boolean variable in order to
+    // suspend border paint under special cases - see below.
+    // NOTE: This is a fix for the implementation of feature #99657#.
+    bool bDrawOnlyShadowForTransparentFrame = false;
+    if ( aRect.IsInside( rRect ) )
     {
-        //If the rectangle is completely inside the PrtArea, no border needs to
-        //be painted.
-        //For the PrtArea the aligned value needs to be used, otherwise it could
-        //happen, that some parts won't be processed.
-        SwRect aRect( getFramePrintArea() );
-        aRect += getFrameArea().Pos();
-        ::SwAlignRect( aRect, gProp.pSGlobalShell, gProp.pSGlobalShell->GetOut() );
-        // OD 27.09.2002 #103636# - new local boolean variable in order to
-        // suspend border paint under special cases - see below.
-        // NOTE: This is a fix for the implementation of feature #99657#.
-        bool bDrawOnlyShadowForTransparentFrame = false;
-        if ( aRect.IsInside( rRect ) )
+        // OD 27.09.2002 #103636# - paint shadow, if background is transparent.
+        // Because of introduced transparent background for fly frame #99657#,
+        // the shadow have to be drawn if the background is transparent,
+        // in spite the fact that the paint rectangle <rRect> lies fully
+        // in the printing area.
+        // NOTE to chosen solution:
+        //     On transparent background, continue processing, but suspend
+        //     drawing of border by setting <bDrawOnlyShadowForTransparentFrame>
+        //     to true.
+        if ( IsLayoutFrame() &&
+             static_cast<const SwLayoutFrame*>(this)->GetFormat()->IsBackgroundTransparent() )
         {
-            // OD 27.09.2002 #103636# - paint shadow, if background is transparent.
-            // Because of introduced transparent background for fly frame #99657#,
-            // the shadow have to be drawn if the background is transparent,
-            // in spite the fact that the paint rectangle <rRect> lies fully
-            // in the printing area.
-            // NOTE to chosen solution:
-            //     On transparent background, continue processing, but suspend
-            //     drawing of border by setting <bDrawOnlyShadowForTransparentFrame>
-            //     to true.
-            if ( IsLayoutFrame() &&
-                 static_cast<const SwLayoutFrame*>(this)->GetFormat()->IsBackgroundTransparent() )
+             bDrawOnlyShadowForTransparentFrame = true;
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    if ( !pPage )
+        pPage = FindPageFrame();
+
+    ::lcl_CalcBorderRect( aRect, this, rAttrs, true, gProp );
+    rAttrs.SetGetCacheLine( true );
+    if ( bShadow )
+        PaintShadow( rRect, aRect, rAttrs );
+    // OD 27.09.2002 #103636# - suspend drawing of border
+    // add condition < NOT bDrawOnlyShadowForTransparentFrame > - see above
+    // - add condition <bFoundCellForTopOrBorderAttrs>
+    //-hack.
+    if ( ( bLine || bFoundCellForTopOrBorderAttrs ) &&
+         !bDrawOnlyShadowForTransparentFrame )
+    {
+        const SwFrame* pDirRefFrame = IsCellFrame() ? FindTabFrame() : this;
+        SwRectFnSet aRectFnSet(pDirRefFrame);
+        ::lcl_PaintLeftRightLine ( true, *(this), aRect, rAttrs, aRectFnSet.FnRect(), gProp);
+        ::lcl_PaintLeftRightLine ( false, *(this), aRect, rAttrs, aRectFnSet.FnRect(), gProp);
+        if ( !IsContentFrame() || rAttrs.GetTopLine( *(this) ) )
+        {
+            // -
+            //-hack
+            // paint is found, paint its top border.
+            if ( IsCellFrame() && pCellFrameForTopBorderAttrs != this )
             {
-                 bDrawOnlyShadowForTransparentFrame = true;
+                SwBorderAttrAccess aAccess( SwFrame::GetCache(),
+                                            pCellFrameForTopBorderAttrs );
+                const SwBorderAttrs &rTopAttrs = *aAccess.Get();
+                ::lcl_PaintTopBottomLine( true, aRect, rTopAttrs, aRectFnSet.FnRect(), gProp);
             }
             else
             {
-                return;
+                ::lcl_PaintTopBottomLine( true, aRect, rAttrs, aRectFnSet.FnRect(), gProp );
             }
         }
-
-        if ( !pPage )
-            pPage = FindPageFrame();
-
-        ::lcl_CalcBorderRect( aRect, this, rAttrs, true, gProp );
-        rAttrs.SetGetCacheLine( true );
-        if ( bShadow )
-            PaintShadow( rRect, aRect, rAttrs );
-        // OD 27.09.2002 #103636# - suspend drawing of border
-        // add condition < NOT bDrawOnlyShadowForTransparentFrame > - see above
-        // - add condition <bFoundCellForTopOrBorderAttrs>
-        //-hack.
-        if ( ( bLine || bFoundCellForTopOrBorderAttrs ) &&
-             !bDrawOnlyShadowForTransparentFrame )
+        if ( !IsContentFrame() || rAttrs.GetBottomLine( *(this) ) )
         {
-            const SwFrame* pDirRefFrame = IsCellFrame() ? FindTabFrame() : this;
-            SwRectFnSet aRectFnSet(pDirRefFrame);
-            ::lcl_PaintLeftRightLine ( true, *(this), aRect, rAttrs, aRectFnSet.FnRect(), gProp);
-            ::lcl_PaintLeftRightLine ( false, *(this), aRect, rAttrs, aRectFnSet.FnRect(), gProp);
-            if ( !IsContentFrame() || rAttrs.GetTopLine( *(this) ) )
+            // -
+            //-hack
+            // paint is found, paint its bottom border.
+            if ( IsCellFrame() && pCellFrameForBottomBorderAttrs != this )
             {
-                // -
-                //-hack
-                // paint is found, paint its top border.
-                if ( IsCellFrame() && pCellFrameForTopBorderAttrs != this )
-                {
-                    SwBorderAttrAccess aAccess( SwFrame::GetCache(),
-                                                pCellFrameForTopBorderAttrs );
-                    const SwBorderAttrs &rTopAttrs = *aAccess.Get();
-                    ::lcl_PaintTopBottomLine( true, aRect, rTopAttrs, aRectFnSet.FnRect(), gProp);
-                }
-                else
-                {
-                    ::lcl_PaintTopBottomLine( true, aRect, rAttrs, aRectFnSet.FnRect(), gProp );
-                }
+                SwBorderAttrAccess aAccess( SwFrame::GetCache(),
+                                            pCellFrameForBottomBorderAttrs );
+                const SwBorderAttrs &rBottomAttrs = *aAccess.Get();
+                ::lcl_PaintTopBottomLine(false, aRect, rBottomAttrs, aRectFnSet.FnRect(), gProp);
             }
-            if ( !IsContentFrame() || rAttrs.GetBottomLine( *(this) ) )
+            else
             {
-                // -
-                //-hack
-                // paint is found, paint its bottom border.
-                if ( IsCellFrame() && pCellFrameForBottomBorderAttrs != this )
-                {
-                    SwBorderAttrAccess aAccess( SwFrame::GetCache(),
-                                                pCellFrameForBottomBorderAttrs );
-                    const SwBorderAttrs &rBottomAttrs = *aAccess.Get();
-                    ::lcl_PaintTopBottomLine(false, aRect, rBottomAttrs, aRectFnSet.FnRect(), gProp);
-                }
-                else
-                {
-                    ::lcl_PaintTopBottomLine(false, aRect, rAttrs, aRectFnSet.FnRect(), gProp);
-                }
+                ::lcl_PaintTopBottomLine(false, aRect, rAttrs, aRectFnSet.FnRect(), gProp);
             }
         }
-        rAttrs.SetGetCacheLine( false );
     }
+    rAttrs.SetGetCacheLine( false );
+
 }
 
 /**

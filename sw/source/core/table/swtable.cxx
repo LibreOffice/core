@@ -1957,212 +1957,214 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
                     bool bChgAlign,sal_uLong nNdPos )
 {
 
-    if( ULONG_MAX != nNdPos )
+    if( ULONG_MAX == nNdPos )
+        return;
+
+    SwDoc* pDoc = rBox.GetFrameFormat()->GetDoc();
+    SwTextNode* pTNd = pDoc->GetNodes()[ nNdPos ]->GetTextNode();
+    const SfxPoolItem* pItem;
+
+    // assign adjustment
+    if( bChgAlign )
     {
-        SwDoc* pDoc = rBox.GetFrameFormat()->GetDoc();
-        SwTextNode* pTNd = pDoc->GetNodes()[ nNdPos ]->GetTextNode();
-        const SfxPoolItem* pItem;
-
-        // assign adjustment
-        if( bChgAlign )
+        pItem = &pTNd->SwContentNode::GetAttr( RES_PARATR_ADJUST );
+        SvxAdjust eAdjust = static_cast<const SvxAdjustItem*>(pItem)->GetAdjust();
+        if( SvxAdjust::Left == eAdjust || SvxAdjust::Block == eAdjust )
         {
-            pItem = &pTNd->SwContentNode::GetAttr( RES_PARATR_ADJUST );
-            SvxAdjust eAdjust = static_cast<const SvxAdjustItem*>(pItem)->GetAdjust();
-            if( SvxAdjust::Left == eAdjust || SvxAdjust::Block == eAdjust )
-            {
-                SvxAdjustItem aAdjust( *static_cast<const SvxAdjustItem*>(pItem) );
-                aAdjust.SetAdjust( SvxAdjust::Right );
-                pTNd->SetAttr( aAdjust );
-            }
-        }
-
-        // assign color or save "user color"
-        if( !pTNd->GetpSwAttrSet() || SfxItemState::SET != pTNd->GetpSwAttrSet()->
-            GetItemState( RES_CHRATR_COLOR, false, &pItem ))
-            pItem = nullptr;
-
-        const Color* pOldNumFormatColor = rBox.GetSaveNumFormatColor();
-        const Color* pNewUserColor = pItem ? &static_cast<const SvxColorItem*>(pItem)->GetValue() : nullptr;
-
-        if( ( pNewUserColor && pOldNumFormatColor &&
-                *pNewUserColor == *pOldNumFormatColor ) ||
-            ( !pNewUserColor && !pOldNumFormatColor ))
-        {
-            // Keep the user color, set updated values, delete old NumFormatColor if needed
-            if( pCol )
-                // if needed, set the color
-                pTNd->SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
-            else if( pItem )
-            {
-                pNewUserColor = rBox.GetSaveUserColor();
-                if( pNewUserColor )
-                    pTNd->SetAttr( SvxColorItem( *pNewUserColor, RES_CHRATR_COLOR ));
-                else
-                    pTNd->ResetAttr( RES_CHRATR_COLOR );
-            }
-        }
-        else
-        {
-            // Save user color, set NumFormat color if needed, but never reset the color
-            rBox.SetSaveUserColor( pNewUserColor );
-
-            if( pCol )
-                // if needed, set the color
-                pTNd->SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
-
-        }
-        rBox.SetSaveNumFormatColor( pCol );
-
-        if( pTNd->GetText() != rText )
-        {
-            // Exchange text. Bugfix to keep Tabs (front and back!) and annotations (inword comment anchors)
-            const OUString& rOrig = pTNd->GetText();
-            sal_Int32 n;
-
-            for( n = 0; n < rOrig.getLength() && ('\x9' == rOrig[n] || CH_TXTATR_INWORD == rOrig[n]); ++n )
-                ;
-            for( ; n < rOrig.getLength() && '\x01' == rOrig[n]; ++n )
-                ;
-            SwIndex aIdx( pTNd, n );
-            for( n = rOrig.getLength(); n && ('\x9' == rOrig[--n] || CH_TXTATR_INWORD == rOrig[n]); )
-                ;
-            sal_Int32 nEndPos = n;
-            n -= aIdx.GetIndex() - 1;
-
-            // Reset DontExpand-Flags before exchange, to retrigger expansion
-            {
-                SwIndex aResetIdx( aIdx, n );
-                pTNd->DontExpandFormat( aResetIdx, false, false );
-            }
-
-            if( !pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
-            {
-                SwPaM aTemp(*pTNd, 0, *pTNd, rOrig.getLength());
-                pDoc->getIDocumentRedlineAccess().DeleteRedline(aTemp, true, USHRT_MAX);
-            }
-
-            // preserve comments inside of the number by deleting number portions starting from the back
-            sal_Int32 nCommentPos = pTNd->GetText().lastIndexOf( CH_TXTATR_INWORD, nEndPos );
-            while( nCommentPos > aIdx.GetIndex() )
-            {
-                pTNd->EraseText( SwIndex(pTNd, nCommentPos+1), nEndPos - nCommentPos, SwInsertFlags::EMPTYEXPAND );
-                // find the next non-sequential comment anchor
-                do
-                {
-                    nEndPos = nCommentPos;
-                    n = nEndPos - aIdx.GetIndex();
-                    nCommentPos = pTNd->GetText().lastIndexOf( CH_TXTATR_INWORD, nEndPos );
-                    --nEndPos;
-                }
-                while( nCommentPos > aIdx.GetIndex() && nCommentPos == nEndPos );
-            }
-
-            pTNd->EraseText( aIdx, n, SwInsertFlags::EMPTYEXPAND );
-            pTNd->InsertText( rText, aIdx, SwInsertFlags::EMPTYEXPAND );
-
-            if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
-            {
-                SwPaM aTemp(*pTNd, 0, *pTNd, rText.getLength());
-                pDoc->getIDocumentRedlineAccess().AppendRedline(new SwRangeRedline(nsRedlineType_t::REDLINE_INSERT, aTemp), true);
-            }
-        }
-
-        // assign vertical orientation
-        if( bChgAlign &&
-            ( SfxItemState::SET != rBox.GetFrameFormat()->GetItemState(
-                RES_VERT_ORIENT, true, &pItem ) ||
-                text::VertOrientation::TOP == static_cast<const SwFormatVertOrient*>(pItem)->GetVertOrient() ))
-        {
-            rBox.GetFrameFormat()->SetFormatAttr( SwFormatVertOrient( 0, text::VertOrientation::BOTTOM ));
+            SvxAdjustItem aAdjust( *static_cast<const SvxAdjustItem*>(pItem) );
+            aAdjust.SetAdjust( SvxAdjust::Right );
+            pTNd->SetAttr( aAdjust );
         }
     }
+
+    // assign color or save "user color"
+    if( !pTNd->GetpSwAttrSet() || SfxItemState::SET != pTNd->GetpSwAttrSet()->
+        GetItemState( RES_CHRATR_COLOR, false, &pItem ))
+        pItem = nullptr;
+
+    const Color* pOldNumFormatColor = rBox.GetSaveNumFormatColor();
+    const Color* pNewUserColor = pItem ? &static_cast<const SvxColorItem*>(pItem)->GetValue() : nullptr;
+
+    if( ( pNewUserColor && pOldNumFormatColor &&
+            *pNewUserColor == *pOldNumFormatColor ) ||
+        ( !pNewUserColor && !pOldNumFormatColor ))
+    {
+        // Keep the user color, set updated values, delete old NumFormatColor if needed
+        if( pCol )
+            // if needed, set the color
+            pTNd->SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
+        else if( pItem )
+        {
+            pNewUserColor = rBox.GetSaveUserColor();
+            if( pNewUserColor )
+                pTNd->SetAttr( SvxColorItem( *pNewUserColor, RES_CHRATR_COLOR ));
+            else
+                pTNd->ResetAttr( RES_CHRATR_COLOR );
+        }
+    }
+    else
+    {
+        // Save user color, set NumFormat color if needed, but never reset the color
+        rBox.SetSaveUserColor( pNewUserColor );
+
+        if( pCol )
+            // if needed, set the color
+            pTNd->SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
+
+    }
+    rBox.SetSaveNumFormatColor( pCol );
+
+    if( pTNd->GetText() != rText )
+    {
+        // Exchange text. Bugfix to keep Tabs (front and back!) and annotations (inword comment anchors)
+        const OUString& rOrig = pTNd->GetText();
+        sal_Int32 n;
+
+        for( n = 0; n < rOrig.getLength() && ('\x9' == rOrig[n] || CH_TXTATR_INWORD == rOrig[n]); ++n )
+            ;
+        for( ; n < rOrig.getLength() && '\x01' == rOrig[n]; ++n )
+            ;
+        SwIndex aIdx( pTNd, n );
+        for( n = rOrig.getLength(); n && ('\x9' == rOrig[--n] || CH_TXTATR_INWORD == rOrig[n]); )
+            ;
+        sal_Int32 nEndPos = n;
+        n -= aIdx.GetIndex() - 1;
+
+        // Reset DontExpand-Flags before exchange, to retrigger expansion
+        {
+            SwIndex aResetIdx( aIdx, n );
+            pTNd->DontExpandFormat( aResetIdx, false, false );
+        }
+
+        if( !pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
+        {
+            SwPaM aTemp(*pTNd, 0, *pTNd, rOrig.getLength());
+            pDoc->getIDocumentRedlineAccess().DeleteRedline(aTemp, true, USHRT_MAX);
+        }
+
+        // preserve comments inside of the number by deleting number portions starting from the back
+        sal_Int32 nCommentPos = pTNd->GetText().lastIndexOf( CH_TXTATR_INWORD, nEndPos );
+        while( nCommentPos > aIdx.GetIndex() )
+        {
+            pTNd->EraseText( SwIndex(pTNd, nCommentPos+1), nEndPos - nCommentPos, SwInsertFlags::EMPTYEXPAND );
+            // find the next non-sequential comment anchor
+            do
+            {
+                nEndPos = nCommentPos;
+                n = nEndPos - aIdx.GetIndex();
+                nCommentPos = pTNd->GetText().lastIndexOf( CH_TXTATR_INWORD, nEndPos );
+                --nEndPos;
+            }
+            while( nCommentPos > aIdx.GetIndex() && nCommentPos == nEndPos );
+        }
+
+        pTNd->EraseText( aIdx, n, SwInsertFlags::EMPTYEXPAND );
+        pTNd->InsertText( rText, aIdx, SwInsertFlags::EMPTYEXPAND );
+
+        if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
+        {
+            SwPaM aTemp(*pTNd, 0, *pTNd, rText.getLength());
+            pDoc->getIDocumentRedlineAccess().AppendRedline(new SwRangeRedline(nsRedlineType_t::REDLINE_INSERT, aTemp), true);
+        }
+    }
+
+    // assign vertical orientation
+    if( bChgAlign &&
+        ( SfxItemState::SET != rBox.GetFrameFormat()->GetItemState(
+            RES_VERT_ORIENT, true, &pItem ) ||
+            text::VertOrientation::TOP == static_cast<const SwFormatVertOrient*>(pItem)->GetVertOrient() ))
+    {
+        rBox.GetFrameFormat()->SetFormatAttr( SwFormatVertOrient( 0, text::VertOrientation::BOTTOM ));
+    }
+
 }
 
 void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
 {
     sal_uLong nNdPos = rBox.IsValidNumTextNd( false );
-    if( ULONG_MAX != nNdPos )
+    if( ULONG_MAX == nNdPos )
+        return;
+
+    SwDoc* pDoc = rBox.GetFrameFormat()->GetDoc();
+    SwTextNode* pTNd = pDoc->GetNodes()[ nNdPos ]->GetTextNode();
+    bool bChgAlign = pDoc->IsInsTableAlignNum();
+    const SfxPoolItem* pItem;
+
+    Color* pCol = nullptr;
+    if( css::util::NumberFormat::TEXT != static_cast<sal_Int16>(nFormat) )
     {
-        SwDoc* pDoc = rBox.GetFrameFormat()->GetDoc();
-        SwTextNode* pTNd = pDoc->GetNodes()[ nNdPos ]->GetTextNode();
-        bool bChgAlign = pDoc->IsInsTableAlignNum();
-        const SfxPoolItem* pItem;
-
-        Color* pCol = nullptr;
-        if( css::util::NumberFormat::TEXT != static_cast<sal_Int16>(nFormat) )
+        // special text format:
+        OUString sTmp;
+        const OUString sText( pTNd->GetText() );
+        pDoc->GetNumberFormatter()->GetOutputString( sText, nFormat, sTmp, &pCol );
+        if( sText != sTmp )
         {
-            // special text format:
-            OUString sTmp;
-            const OUString sText( pTNd->GetText() );
-            pDoc->GetNumberFormatter()->GetOutputString( sText, nFormat, sTmp, &pCol );
-            if( sText != sTmp )
-            {
-                // exchange text
-                SwIndex aIdx( pTNd, sText.getLength() );
-                // Reset DontExpand-Flags before exchange, to retrigger expansion
-                pTNd->DontExpandFormat( aIdx, false, false );
-                aIdx = 0;
-                pTNd->EraseText( aIdx, SAL_MAX_INT32, SwInsertFlags::EMPTYEXPAND );
-                pTNd->InsertText( sTmp, aIdx, SwInsertFlags::EMPTYEXPAND );
-            }
-        }
-
-        const SfxItemSet* pAttrSet = pTNd->GetpSwAttrSet();
-
-        // assign adjustment
-        if( bChgAlign && pAttrSet && SfxItemState::SET == pAttrSet->GetItemState(
-            RES_PARATR_ADJUST, false, &pItem ) &&
-                SvxAdjust::Right == static_cast<const SvxAdjustItem*>(pItem)->GetAdjust() )
-        {
-            pTNd->SetAttr( SvxAdjustItem( SvxAdjust::Left, RES_PARATR_ADJUST ) );
-        }
-
-        // assign color or save "user color"
-        if( !pAttrSet || SfxItemState::SET != pAttrSet->
-            GetItemState( RES_CHRATR_COLOR, false, &pItem ))
-            pItem = nullptr;
-
-        const Color* pOldNumFormatColor = rBox.GetSaveNumFormatColor();
-        const Color* pNewUserColor = pItem ? &static_cast<const SvxColorItem*>(pItem)->GetValue() : nullptr;
-
-        if( ( pNewUserColor && pOldNumFormatColor &&
-                *pNewUserColor == *pOldNumFormatColor ) ||
-            ( !pNewUserColor && !pOldNumFormatColor ))
-        {
-            // Keep the user color, set updated values, delete old NumFormatColor if needed
-            if( pCol )
-                // if needed, set the color
-                pTNd->SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
-            else if( pItem )
-            {
-                pNewUserColor = rBox.GetSaveUserColor();
-                if( pNewUserColor )
-                    pTNd->SetAttr( SvxColorItem( *pNewUserColor, RES_CHRATR_COLOR ));
-                else
-                    pTNd->ResetAttr( RES_CHRATR_COLOR );
-            }
-        }
-        else
-        {
-            // Save user color, set NumFormat color if needed, but never reset the color
-            rBox.SetSaveUserColor( pNewUserColor );
-
-            if( pCol )
-                // if needed, set the color
-                pTNd->SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
-
-        }
-        rBox.SetSaveNumFormatColor( pCol );
-
-        // assign vertical orientation
-        if( bChgAlign &&
-            SfxItemState::SET == rBox.GetFrameFormat()->GetItemState(
-            RES_VERT_ORIENT, false, &pItem ) &&
-            text::VertOrientation::BOTTOM == static_cast<const SwFormatVertOrient*>(pItem)->GetVertOrient() )
-        {
-            rBox.GetFrameFormat()->SetFormatAttr( SwFormatVertOrient( 0, text::VertOrientation::TOP ));
+            // exchange text
+            SwIndex aIdx( pTNd, sText.getLength() );
+            // Reset DontExpand-Flags before exchange, to retrigger expansion
+            pTNd->DontExpandFormat( aIdx, false, false );
+            aIdx = 0;
+            pTNd->EraseText( aIdx, SAL_MAX_INT32, SwInsertFlags::EMPTYEXPAND );
+            pTNd->InsertText( sTmp, aIdx, SwInsertFlags::EMPTYEXPAND );
         }
     }
+
+    const SfxItemSet* pAttrSet = pTNd->GetpSwAttrSet();
+
+    // assign adjustment
+    if( bChgAlign && pAttrSet && SfxItemState::SET == pAttrSet->GetItemState(
+        RES_PARATR_ADJUST, false, &pItem ) &&
+            SvxAdjust::Right == static_cast<const SvxAdjustItem*>(pItem)->GetAdjust() )
+    {
+        pTNd->SetAttr( SvxAdjustItem( SvxAdjust::Left, RES_PARATR_ADJUST ) );
+    }
+
+    // assign color or save "user color"
+    if( !pAttrSet || SfxItemState::SET != pAttrSet->
+        GetItemState( RES_CHRATR_COLOR, false, &pItem ))
+        pItem = nullptr;
+
+    const Color* pOldNumFormatColor = rBox.GetSaveNumFormatColor();
+    const Color* pNewUserColor = pItem ? &static_cast<const SvxColorItem*>(pItem)->GetValue() : nullptr;
+
+    if( ( pNewUserColor && pOldNumFormatColor &&
+            *pNewUserColor == *pOldNumFormatColor ) ||
+        ( !pNewUserColor && !pOldNumFormatColor ))
+    {
+        // Keep the user color, set updated values, delete old NumFormatColor if needed
+        if( pCol )
+            // if needed, set the color
+            pTNd->SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
+        else if( pItem )
+        {
+            pNewUserColor = rBox.GetSaveUserColor();
+            if( pNewUserColor )
+                pTNd->SetAttr( SvxColorItem( *pNewUserColor, RES_CHRATR_COLOR ));
+            else
+                pTNd->ResetAttr( RES_CHRATR_COLOR );
+        }
+    }
+    else
+    {
+        // Save user color, set NumFormat color if needed, but never reset the color
+        rBox.SetSaveUserColor( pNewUserColor );
+
+        if( pCol )
+            // if needed, set the color
+            pTNd->SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
+
+    }
+    rBox.SetSaveNumFormatColor( pCol );
+
+    // assign vertical orientation
+    if( bChgAlign &&
+        SfxItemState::SET == rBox.GetFrameFormat()->GetItemState(
+        RES_VERT_ORIENT, false, &pItem ) &&
+        text::VertOrientation::BOTTOM == static_cast<const SwFormatVertOrient*>(pItem)->GetVertOrient() )
+    {
+        rBox.GetFrameFormat()->SetFormatAttr( SwFormatVertOrient( 0, text::VertOrientation::TOP ));
+    }
+
 }
 
 // for detection of modifications (mainly TableBoxAttribute)

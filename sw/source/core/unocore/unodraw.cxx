@@ -906,44 +906,45 @@ SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape) :
     pImpl(new SwShapeDescriptor_Impl()),
     m_bDescriptor(true)
 {
-    if(xShape.is())  // default Ctor
+    if(!xShape.is())  // default Ctor
+        return;
+
+    const uno::Type& rAggType = cppu::UnoType<uno::XAggregation>::get();
+    //aAgg contains a reference of the SvxShape!
     {
-        const uno::Type& rAggType = cppu::UnoType<uno::XAggregation>::get();
-        //aAgg contains a reference of the SvxShape!
+        uno::Any aAgg = xShape->queryInterface(rAggType);
+        aAgg >>= xShapeAgg;
+        // #i31698#
+        if ( xShapeAgg.is() )
         {
-            uno::Any aAgg = xShape->queryInterface(rAggType);
-            aAgg >>= xShapeAgg;
-            // #i31698#
-            if ( xShapeAgg.is() )
-            {
-                xShapeAgg->queryAggregation( cppu::UnoType<drawing::XShape>::get()) >>= mxShape;
-                OSL_ENSURE( mxShape.is(),
-                        "<SwXShape::SwXShape(..)> - no XShape found at <xShapeAgg>" );
-            }
-        }
-        xShape = nullptr;
-        m_refCount++;
-        if( xShapeAgg.is() )
-            xShapeAgg->setDelegator( static_cast<cppu::OWeakObject*>(this) );
-        m_refCount--;
-
-        uno::Reference< lang::XUnoTunnel > xShapeTunnel(xShapeAgg, uno::UNO_QUERY);
-        SvxShape* pShape = nullptr;
-        if(xShapeTunnel.is())
-            pShape = reinterpret_cast< SvxShape * >(
-                    sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
-
-        SdrObject* pObj = pShape ? pShape->GetSdrObject() : nullptr;
-        if(pObj)
-        {
-            SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
-            if(pFormat)
-                pFormat->Add(this);
-
-            lcl_addShapePropertyEventFactories( *pObj, *this );
-            pImpl->bInitializedPropertyNotifier = true;
+            xShapeAgg->queryAggregation( cppu::UnoType<drawing::XShape>::get()) >>= mxShape;
+            OSL_ENSURE( mxShape.is(),
+                    "<SwXShape::SwXShape(..)> - no XShape found at <xShapeAgg>" );
         }
     }
+    xShape = nullptr;
+    m_refCount++;
+    if( xShapeAgg.is() )
+        xShapeAgg->setDelegator( static_cast<cppu::OWeakObject*>(this) );
+    m_refCount--;
+
+    uno::Reference< lang::XUnoTunnel > xShapeTunnel(xShapeAgg, uno::UNO_QUERY);
+    SvxShape* pShape = nullptr;
+    if(xShapeTunnel.is())
+        pShape = reinterpret_cast< SvxShape * >(
+                sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
+
+    SdrObject* pObj = pShape ? pShape->GetSdrObject() : nullptr;
+    if(pObj)
+    {
+        SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
+        if(pFormat)
+            pFormat->Add(this);
+
+        lcl_addShapePropertyEventFactories( *pObj, *this );
+        pImpl->bInitializedPropertyNotifier = true;
+    }
+
 }
 
 void SwXShape::AddExistingShapeToFormat( SdrObject const & _rObj )

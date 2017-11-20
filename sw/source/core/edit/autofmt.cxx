@@ -2578,51 +2578,52 @@ void SwEditShell::AutoFormatBySplitNode()
 {
     SET_CURR_SHELL( this );
     SwPaM* pCursor = GetCursor();
-    if( !pCursor->IsMultiSelection() && pCursor->Move( fnMoveBackward, GoInNode ) )
-    {
-        StartAllAction();
-        StartUndo( SwUndoId::AUTOFORMAT );
+    if( pCursor->IsMultiSelection() || !pCursor->Move( fnMoveBackward, GoInNode ) )
+        return;
 
-        bool bRange = false;
-        pCursor->SetMark();
-        SwIndex* pContent = &pCursor->GetMark()->nContent;
-        if( pContent->GetIndex() )
+    StartAllAction();
+    StartUndo( SwUndoId::AUTOFORMAT );
+
+    bool bRange = false;
+    pCursor->SetMark();
+    SwIndex* pContent = &pCursor->GetMark()->nContent;
+    if( pContent->GetIndex() )
+    {
+        *pContent = 0;
+        bRange = true;
+    }
+    else
+    {
+        // then go one node backwards
+        SwNodeIndex aNdIdx( pCursor->GetMark()->nNode, -1 );
+        SwTextNode* pTextNd = aNdIdx.GetNode().GetTextNode();
+        if (pTextNd && !pTextNd->GetText().isEmpty())
         {
-            *pContent = 0;
+            pContent->Assign( pTextNd, 0 );
+            pCursor->GetMark()->nNode = aNdIdx;
             bRange = true;
         }
-        else
-        {
-            // then go one node backwards
-            SwNodeIndex aNdIdx( pCursor->GetMark()->nNode, -1 );
-            SwTextNode* pTextNd = aNdIdx.GetNode().GetTextNode();
-            if (pTextNd && !pTextNd->GetText().isEmpty())
-            {
-                pContent->Assign( pTextNd, 0 );
-                pCursor->GetMark()->nNode = aNdIdx;
-                bRange = true;
-            }
-        }
-
-        if( bRange )
-        {
-            Push();     // save cursor
-
-            SvxSwAutoFormatFlags aAFFlags = *GetAutoFormatFlags(); // use default values so far
-
-            SwAutoFormat aFormat( this, aAFFlags, &pCursor->GetMark()->nNode,
-                                    &pCursor->GetPoint()->nNode );
-
-            //JP 30.09.96: DoTable() builds on PopCursor and MoveCursor!
-            Pop(PopMode::DeleteCurrent);
-            pCursor = GetCursor();
-        }
-        pCursor->DeleteMark();
-        pCursor->Move( fnMoveForward, GoInNode );
-
-        EndUndo( SwUndoId::AUTOFORMAT );
-        EndAllAction();
     }
+
+    if( bRange )
+    {
+        Push();     // save cursor
+
+        SvxSwAutoFormatFlags aAFFlags = *GetAutoFormatFlags(); // use default values so far
+
+        SwAutoFormat aFormat( this, aAFFlags, &pCursor->GetMark()->nNode,
+                                &pCursor->GetPoint()->nNode );
+
+        //JP 30.09.96: DoTable() builds on PopCursor and MoveCursor!
+        Pop(PopMode::DeleteCurrent);
+        pCursor = GetCursor();
+    }
+    pCursor->DeleteMark();
+    pCursor->Move( fnMoveForward, GoInNode );
+
+    EndUndo( SwUndoId::AUTOFORMAT );
+    EndAllAction();
+
 }
 
 SvxSwAutoFormatFlags* SwEditShell::GetAutoFormatFlags()
