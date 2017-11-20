@@ -807,30 +807,31 @@ IMPL_LINK_NOARG(SwCaptionOptPage, SaveEntryHdl, SvTreeListBox*, void)
 
 void SwCaptionOptPage::SaveEntry(SvTreeListEntry const * pEntry)
 {
-    if (pEntry)
-    {
-        InsCaptionOpt* pOpt = static_cast<InsCaptionOpt*>(pEntry->GetUserData());
+    if (!pEntry)
+        return;
 
-        pOpt->UseCaption() = m_pCheckLB->IsChecked(m_pCheckLB->GetModel()->GetAbsPos(pEntry));
-        const OUString aName( m_pCategoryBox->GetText() );
-        if (aName == m_sNone)
-            pOpt->SetCategory("");
-        else
-            pOpt->SetCategory(comphelper::string::strip(aName, ' '));
-        pOpt->SetNumType((sal_uInt16)reinterpret_cast<sal_uLong>(m_pFormatBox->GetSelectedEntryData()));
-        pOpt->SetCaption(m_pTextEdit->IsEnabled() ? m_pTextEdit->GetText() : OUString() );
-        pOpt->SetPos(m_pPosBox->GetSelectedEntryPos());
-        sal_Int32 nPos = m_pLbLevel->GetSelectedEntryPos();
-        sal_Int32 nLevel = ( nPos > 0 && nPos != LISTBOX_ENTRY_NOTFOUND ) ? nPos - 1 : MAXLEVEL;
-        pOpt->SetLevel(nLevel);
-        pOpt->SetSeparator(m_pEdDelim->GetText());
-        pOpt->SetNumSeparator( m_pNumberingSeparatorED->GetText());
-        if(!m_pCharStyleLB->GetSelectedEntryPos())
-            pOpt->SetCharacterStyle("");
-        else
-            pOpt->SetCharacterStyle(m_pCharStyleLB->GetSelectedEntry());
-        pOpt->CopyAttributes() = m_pApplyBorderCB->IsChecked();
-    }
+    InsCaptionOpt* pOpt = static_cast<InsCaptionOpt*>(pEntry->GetUserData());
+
+    pOpt->UseCaption() = m_pCheckLB->IsChecked(m_pCheckLB->GetModel()->GetAbsPos(pEntry));
+    const OUString aName( m_pCategoryBox->GetText() );
+    if (aName == m_sNone)
+        pOpt->SetCategory("");
+    else
+        pOpt->SetCategory(comphelper::string::strip(aName, ' '));
+    pOpt->SetNumType((sal_uInt16)reinterpret_cast<sal_uLong>(m_pFormatBox->GetSelectedEntryData()));
+    pOpt->SetCaption(m_pTextEdit->IsEnabled() ? m_pTextEdit->GetText() : OUString() );
+    pOpt->SetPos(m_pPosBox->GetSelectedEntryPos());
+    sal_Int32 nPos = m_pLbLevel->GetSelectedEntryPos();
+    sal_Int32 nLevel = ( nPos > 0 && nPos != LISTBOX_ENTRY_NOTFOUND ) ? nPos - 1 : MAXLEVEL;
+    pOpt->SetLevel(nLevel);
+    pOpt->SetSeparator(m_pEdDelim->GetText());
+    pOpt->SetNumSeparator( m_pNumberingSeparatorED->GetText());
+    if(!m_pCharStyleLB->GetSelectedEntryPos())
+        pOpt->SetCharacterStyle("");
+    else
+        pOpt->SetCharacterStyle(m_pCharStyleLB->GetSelectedEntry());
+    pOpt->CopyAttributes() = m_pApplyBorderCB->IsChecked();
+
 }
 
 IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl, Edit&, void)

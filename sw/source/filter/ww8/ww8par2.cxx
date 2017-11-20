@@ -1359,44 +1359,45 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
 
 void WW8TabBandDesc::ProcessSprmTSetBRC(int nBrcVer, const sal_uInt8* pParamsTSetBRC)
 {
-    if( pParamsTSetBRC && pTCs ) // set one or more cell border(s)
+    if( !pParamsTSetBRC || !pTCs ) // set one or more cell border(s)
+        return;
+
+    sal_uInt8 nitcFirst= pParamsTSetBRC[0];// first col to be changed
+    sal_uInt8 nitcLim  = pParamsTSetBRC[1];// (last col to be changed)+1
+    sal_uInt8 nFlag    = *(pParamsTSetBRC+2);
+
+    if (nitcFirst >= nWwCols)
+        return;
+
+    if (nitcLim > nWwCols)
+        nitcLim = nWwCols;
+
+    bool bChangeRight  = (nFlag & 0x08) != 0;
+    bool bChangeBottom = (nFlag & 0x04) != 0;
+    bool bChangeLeft   = (nFlag & 0x02) != 0;
+    bool bChangeTop    = (nFlag & 0x01) != 0;
+
+    WW8_TCell* pAktTC  = pTCs + nitcFirst;
+    WW8_BRCVer9 brcVer9;
+    if( nBrcVer == 6 )
+        brcVer9 = WW8_BRCVer9(WW8_BRC(*reinterpret_cast<WW8_BRCVer6 const *>(pParamsTSetBRC+3)));
+    else if( nBrcVer == 8 )
+        brcVer9 = WW8_BRCVer9(*reinterpret_cast<WW8_BRC const *>(pParamsTSetBRC+3));
+    else
+        brcVer9 = *reinterpret_cast<WW8_BRCVer9 const *>(pParamsTSetBRC+3);
+
+    for( int i = nitcFirst; i < nitcLim; ++i, ++pAktTC )
     {
-        sal_uInt8 nitcFirst= pParamsTSetBRC[0];// first col to be changed
-        sal_uInt8 nitcLim  = pParamsTSetBRC[1];// (last col to be changed)+1
-        sal_uInt8 nFlag    = *(pParamsTSetBRC+2);
-
-        if (nitcFirst >= nWwCols)
-            return;
-
-        if (nitcLim > nWwCols)
-            nitcLim = nWwCols;
-
-        bool bChangeRight  = (nFlag & 0x08) != 0;
-        bool bChangeBottom = (nFlag & 0x04) != 0;
-        bool bChangeLeft   = (nFlag & 0x02) != 0;
-        bool bChangeTop    = (nFlag & 0x01) != 0;
-
-        WW8_TCell* pAktTC  = pTCs + nitcFirst;
-        WW8_BRCVer9 brcVer9;
-        if( nBrcVer == 6 )
-            brcVer9 = WW8_BRCVer9(WW8_BRC(*reinterpret_cast<WW8_BRCVer6 const *>(pParamsTSetBRC+3)));
-        else if( nBrcVer == 8 )
-            brcVer9 = WW8_BRCVer9(*reinterpret_cast<WW8_BRC const *>(pParamsTSetBRC+3));
-        else
-            brcVer9 = *reinterpret_cast<WW8_BRCVer9 const *>(pParamsTSetBRC+3);
-
-        for( int i = nitcFirst; i < nitcLim; ++i, ++pAktTC )
-        {
-            if( bChangeTop )
-                pAktTC->rgbrc[ WW8_TOP   ] = brcVer9;
-            if( bChangeLeft )
-                pAktTC->rgbrc[ WW8_LEFT  ] = brcVer9;
-            if( bChangeBottom )
-                pAktTC->rgbrc[ WW8_BOT   ] = brcVer9;
-            if( bChangeRight )
-                pAktTC->rgbrc[ WW8_RIGHT ] = brcVer9;
-        }
+        if( bChangeTop )
+            pAktTC->rgbrc[ WW8_TOP   ] = brcVer9;
+        if( bChangeLeft )
+            pAktTC->rgbrc[ WW8_LEFT  ] = brcVer9;
+        if( bChangeBottom )
+            pAktTC->rgbrc[ WW8_BOT   ] = brcVer9;
+        if( bChangeRight )
+            pAktTC->rgbrc[ WW8_RIGHT ] = brcVer9;
     }
+
 }
 
 void WW8TabBandDesc::ProcessSprmTTableBorders(int nBrcVer, const sal_uInt8* pParams)
@@ -1443,73 +1444,74 @@ void WW8TabBandDesc::ProcessSprmTDxaCol(const sal_uInt8* pParamsTDxaCol)
 
 void WW8TabBandDesc::ProcessSprmTInsert(const sal_uInt8* pParamsTInsert)
 {
-    if( nWwCols && pParamsTInsert )        // set one or more cell length(s)
+    if( !nWwCols || !pParamsTInsert )        // set one or more cell length(s)
+        return;
+
+    sal_uInt8 nitcInsert = pParamsTInsert[0]; // position at which to insert
+    if (nitcInsert >= MAX_COL)  // cannot insert into cell outside max possible index
+        return;
+    sal_uInt8 nctc  = pParamsTInsert[1];      // number of cells
+    sal_uInt16 ndxaCol = SVBT16ToShort( pParamsTInsert+2 );
+
+    short nNewWwCols;
+    if (nitcInsert > nWwCols)
     {
-        sal_uInt8 nitcInsert = pParamsTInsert[0]; // position at which to insert
-        if (nitcInsert >= MAX_COL)  // cannot insert into cell outside max possible index
-            return;
-        sal_uInt8 nctc  = pParamsTInsert[1];      // number of cells
-        sal_uInt16 ndxaCol = SVBT16ToShort( pParamsTInsert+2 );
-
-        short nNewWwCols;
-        if (nitcInsert > nWwCols)
+        nNewWwCols = nitcInsert+nctc;
+        //if new count would be outside max possible count, clip it, and calc a new replacement
+        //legal nctc
+        if (nNewWwCols > MAX_COL)
         {
-            nNewWwCols = nitcInsert+nctc;
-            //if new count would be outside max possible count, clip it, and calc a new replacement
-            //legal nctc
-            if (nNewWwCols > MAX_COL)
-            {
-                nNewWwCols = MAX_COL;
-                nctc = ::sal::static_int_cast<sal_uInt8>(nNewWwCols-nitcInsert);
-            }
+            nNewWwCols = MAX_COL;
+            nctc = ::sal::static_int_cast<sal_uInt8>(nNewWwCols-nitcInsert);
         }
-        else
-        {
-            nNewWwCols = nWwCols+nctc;
-            //if new count would be outside max possible count, clip it, and calc a new replacement
-            //legal nctc
-            if (nNewWwCols > MAX_COL)
-            {
-                nNewWwCols = MAX_COL;
-                nctc = ::sal::static_int_cast<sal_uInt8>(nNewWwCols-nWwCols);
-            }
-        }
-
-        WW8_TCell *pTC2s = new WW8_TCell[nNewWwCols];
-        setcelldefaults(pTC2s, nNewWwCols);
-
-        if (pTCs)
-        {
-            memcpy( pTC2s, pTCs, nWwCols * sizeof( WW8_TCell ) );
-            delete[] pTCs;
-        }
-        pTCs = pTC2s;
-
-        //If we have to move some cells
-        if (nitcInsert <= nWwCols)
-        {
-            // adjust the left x-position of the dummy at the very end
-            nCenter[nWwCols + nctc] = nCenter[nWwCols]+nctc*ndxaCol;
-            for( int i = nWwCols-1; i >= nitcInsert; i--)
-            {
-                // adjust the left x-position
-                nCenter[i + nctc] = nCenter[i]+nctc*ndxaCol;
-
-                // adjust the cell's borders
-                pTCs[i + nctc] = pTCs[i];
-            }
-        }
-
-        //if itcMac is larger than full size, fill in missing ones first
-        for( int i = nWwCols; i > nitcInsert+nWwCols; i--)
-            nCenter[i] = i ? (nCenter[i - 1]+ndxaCol) : 0;
-
-        //now add in our new cells
-        for( int j = 0;j < nctc; j++)
-            nCenter[j + nitcInsert] = (j + nitcInsert) ? (nCenter[j + nitcInsert -1]+ndxaCol) : 0;
-
-        nWwCols = nNewWwCols;
     }
+    else
+    {
+        nNewWwCols = nWwCols+nctc;
+        //if new count would be outside max possible count, clip it, and calc a new replacement
+        //legal nctc
+        if (nNewWwCols > MAX_COL)
+        {
+            nNewWwCols = MAX_COL;
+            nctc = ::sal::static_int_cast<sal_uInt8>(nNewWwCols-nWwCols);
+        }
+    }
+
+    WW8_TCell *pTC2s = new WW8_TCell[nNewWwCols];
+    setcelldefaults(pTC2s, nNewWwCols);
+
+    if (pTCs)
+    {
+        memcpy( pTC2s, pTCs, nWwCols * sizeof( WW8_TCell ) );
+        delete[] pTCs;
+    }
+    pTCs = pTC2s;
+
+    //If we have to move some cells
+    if (nitcInsert <= nWwCols)
+    {
+        // adjust the left x-position of the dummy at the very end
+        nCenter[nWwCols + nctc] = nCenter[nWwCols]+nctc*ndxaCol;
+        for( int i = nWwCols-1; i >= nitcInsert; i--)
+        {
+            // adjust the left x-position
+            nCenter[i + nctc] = nCenter[i]+nctc*ndxaCol;
+
+            // adjust the cell's borders
+            pTCs[i + nctc] = pTCs[i];
+        }
+    }
+
+    //if itcMac is larger than full size, fill in missing ones first
+    for( int i = nWwCols; i > nitcInsert+nWwCols; i--)
+        nCenter[i] = i ? (nCenter[i - 1]+ndxaCol) : 0;
+
+    //now add in our new cells
+    for( int j = 0;j < nctc; j++)
+        nCenter[j + nitcInsert] = (j + nitcInsert) ? (nCenter[j + nitcInsert -1]+ndxaCol) : 0;
+
+    nWwCols = nNewWwCols;
+
 }
 
 void WW8TabBandDesc::ProcessDirection(const sal_uInt8* pParams)

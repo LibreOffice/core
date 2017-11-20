@@ -194,96 +194,97 @@ SwFieldSlot::~SwFieldSlot()
 void SwFieldPortion::CheckScript( const SwTextSizeInfo &rInf )
 {
     OUString aText;
-    if (GetExpText(rInf, aText) && !aText.isEmpty())
+    if (!GetExpText(rInf, aText) || aText.isEmpty())
+        return;
+
+    SwFontScript nActual = m_pFont ? m_pFont->GetActual() : rInf.GetFont()->GetActual();
+    sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( aText, 0 );
+    sal_Int32 nChg = 0;
+    if( i18n::ScriptType::WEAK == nScript )
     {
-        SwFontScript nActual = m_pFont ? m_pFont->GetActual() : rInf.GetFont()->GetActual();
-        sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( aText, 0 );
-        sal_Int32 nChg = 0;
-        if( i18n::ScriptType::WEAK == nScript )
-        {
-            nChg = g_pBreakIt->GetBreakIter()->endOfScript(aText,0,nScript);
-            if (nChg < aText.getLength() && nChg >= 0)
-                nScript = g_pBreakIt->GetBreakIter()->getScriptType( aText, nChg );
-        }
-
-        // nNextScriptChg will be evaluated during SwFieldPortion::Format()
-
+        nChg = g_pBreakIt->GetBreakIter()->endOfScript(aText,0,nScript);
         if (nChg < aText.getLength() && nChg >= 0)
-            m_nNextScriptChg = g_pBreakIt->GetBreakIter()->endOfScript( aText, nChg, nScript );
-        else
-            m_nNextScriptChg = aText.getLength();
+            nScript = g_pBreakIt->GetBreakIter()->getScriptType( aText, nChg );
+    }
 
-        SwFontScript nTmp;
-        switch ( nScript ) {
-            case i18n::ScriptType::LATIN : nTmp = SwFontScript::Latin; break;
-            case i18n::ScriptType::ASIAN : nTmp = SwFontScript::CJK; break;
-            case i18n::ScriptType::COMPLEX : nTmp = SwFontScript::CTL; break;
-            default: nTmp = nActual;
-        }
+    // nNextScriptChg will be evaluated during SwFieldPortion::Format()
 
-        // #i16354# Change script type for RTL text to CTL.
-        const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
-        // #i98418#
-        const sal_uInt8 nFieldDir = ( IsNumberPortion() || IsFootnoteNumPortion() ) ?
-                             rSI.GetDefaultDir() :
-                             rSI.DirType( IsFollow() ? rInf.GetIdx() - 1 : rInf.GetIdx() );
+    if (nChg < aText.getLength() && nChg >= 0)
+        m_nNextScriptChg = g_pBreakIt->GetBreakIter()->endOfScript( aText, nChg, nScript );
+    else
+        m_nNextScriptChg = aText.getLength();
 
+    SwFontScript nTmp;
+    switch ( nScript ) {
+        case i18n::ScriptType::LATIN : nTmp = SwFontScript::Latin; break;
+        case i18n::ScriptType::ASIAN : nTmp = SwFontScript::CJK; break;
+        case i18n::ScriptType::COMPLEX : nTmp = SwFontScript::CTL; break;
+        default: nTmp = nActual;
+    }
+
+    // #i16354# Change script type for RTL text to CTL.
+    const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
+    // #i98418#
+    const sal_uInt8 nFieldDir = ( IsNumberPortion() || IsFootnoteNumPortion() ) ?
+                         rSI.GetDefaultDir() :
+                         rSI.DirType( IsFollow() ? rInf.GetIdx() - 1 : rInf.GetIdx() );
+
+    {
+        UErrorCode nError = U_ZERO_ERROR;
+        UBiDi* pBidi = ubidi_openSized( aText.getLength(), 0, &nError );
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.getStr()), aText.getLength(), nFieldDir, nullptr, &nError );
+        int32_t nEnd;
+        UBiDiLevel nCurrDir;
+        ubidi_getLogicalRun( pBidi, 0, &nEnd, &nCurrDir );
+        ubidi_close( pBidi );
+        const sal_Int32 nNextDirChg = nEnd;
+        m_nNextScriptChg = std::min( m_nNextScriptChg, nNextDirChg );
+
+        // #i89825# change the script type also to CTL
+        // if there is no strong LTR char in the LTR run (numbers)
+        if (nCurrDir != UBIDI_RTL &&
+            (UBIDI_LTR != nFieldDir || i18n::ScriptType::COMPLEX == nScript))
         {
-            UErrorCode nError = U_ZERO_ERROR;
-            UBiDi* pBidi = ubidi_openSized( aText.getLength(), 0, &nError );
-            ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.getStr()), aText.getLength(), nFieldDir, nullptr, &nError );
-            int32_t nEnd;
-            UBiDiLevel nCurrDir;
-            ubidi_getLogicalRun( pBidi, 0, &nEnd, &nCurrDir );
-            ubidi_close( pBidi );
-            const sal_Int32 nNextDirChg = nEnd;
-            m_nNextScriptChg = std::min( m_nNextScriptChg, nNextDirChg );
-
-            // #i89825# change the script type also to CTL
-            // if there is no strong LTR char in the LTR run (numbers)
-            if (nCurrDir != UBIDI_RTL &&
-                (UBIDI_LTR != nFieldDir || i18n::ScriptType::COMPLEX == nScript))
+            nCurrDir = UBIDI_RTL;
+            for( sal_Int32 nCharIdx = 0; nCharIdx < nEnd; ++nCharIdx )
             {
-                nCurrDir = UBIDI_RTL;
-                for( sal_Int32 nCharIdx = 0; nCharIdx < nEnd; ++nCharIdx )
+                UCharDirection nCharDir = u_charDirection ( aText[ nCharIdx ]);
+                if ( nCharDir == U_LEFT_TO_RIGHT ||
+                     nCharDir == U_LEFT_TO_RIGHT_EMBEDDING ||
+                     nCharDir == U_LEFT_TO_RIGHT_OVERRIDE )
                 {
-                    UCharDirection nCharDir = u_charDirection ( aText[ nCharIdx ]);
-                    if ( nCharDir == U_LEFT_TO_RIGHT ||
-                         nCharDir == U_LEFT_TO_RIGHT_EMBEDDING ||
-                         nCharDir == U_LEFT_TO_RIGHT_OVERRIDE )
-                    {
-                        nCurrDir = UBIDI_LTR;
-                        break;
-                    }
+                    nCurrDir = UBIDI_LTR;
+                    break;
                 }
             }
-
-            if (nCurrDir == UBIDI_RTL)
-            {
-                nTmp = SwFontScript::CTL;
-                // If we decided that this range was RTL after all and the
-                // previous range was complex but clipped to the start of this
-                // range, then extend it to be complex over the additional RTL range
-                if (nScript == i18n::ScriptType::COMPLEX)
-                    m_nNextScriptChg = nNextDirChg;
-            }
         }
 
-        // #i98418#
-        // keep determined script type for footnote portions as preferred script type.
-        // For footnote portions a font can not be created directly - see footnote
-        // portion format method.
-        if ( IsFootnotePortion() )
+        if (nCurrDir == UBIDI_RTL)
         {
-            static_cast<SwFootnotePortion*>(this)->SetPreferredScriptType( nTmp );
-        }
-        else if ( nTmp != nActual )
-        {
-            if( !m_pFont )
-                m_pFont = new SwFont( *rInf.GetFont() );
-            m_pFont->SetActual( nTmp );
+            nTmp = SwFontScript::CTL;
+            // If we decided that this range was RTL after all and the
+            // previous range was complex but clipped to the start of this
+            // range, then extend it to be complex over the additional RTL range
+            if (nScript == i18n::ScriptType::COMPLEX)
+                m_nNextScriptChg = nNextDirChg;
         }
     }
+
+    // #i98418#
+    // keep determined script type for footnote portions as preferred script type.
+    // For footnote portions a font can not be created directly - see footnote
+    // portion format method.
+    if ( IsFootnotePortion() )
+    {
+        static_cast<SwFootnotePortion*>(this)->SetPreferredScriptType( nTmp );
+    }
+    else if ( nTmp != nActual )
+    {
+        if( !m_pFont )
+            m_pFont = new SwFont( *rInf.GetFont() );
+        m_pFont->SetActual( nTmp );
+    }
+
 }
 
 bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
@@ -1091,54 +1092,55 @@ SwCombinedPortion::SwCombinedPortion( const OUString &rText )
 void SwCombinedPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     OSL_ENSURE( GetLen() <= 1, "SwFieldPortion::Paint: rest-portion pollution?" );
-    if( Width() )
+    if( !Width() )
+        return;
+
+    rInf.DrawBackBrush( *this );
+    rInf.DrawViewOpt( *this, POR_FLD );
+
+    // do we have to repaint a post it portion?
+    if( rInf.OnWin() && pPortion && !pPortion->Width() )
+        pPortion->PrePaint( rInf, this );
+
+    const sal_Int32 nCount = m_aExpand.getLength();
+    if( !nCount )
+        return;
+    OSL_ENSURE( nCount < 7, "Too much combined characters" );
+
+    // the first character of the second row
+    const sal_Int32 nTop = ( nCount + 1 ) / 2;
+
+    SwFont aTmpFont( *rInf.GetFont() );
+    aTmpFont.SetProportion( nProportion );  // a smaller font
+    SwFontSave aFontSave( rInf, &aTmpFont );
+
+    Point aOldPos = rInf.GetPos();
+    Point aOutPos( aOldPos.X(), aOldPos.Y() - nUpPos );// Y of the first row
+    for( sal_Int32 i = 0 ; i < nCount; ++i )
     {
-        rInf.DrawBackBrush( *this );
-        rInf.DrawViewOpt( *this, POR_FLD );
+        if( i == nTop ) // change the row
+            aOutPos.Y() = aOldPos.Y() + nLowPos;    // Y of the second row
+        aOutPos.X() = aOldPos.X() + aPos[i];        // X position
+        const SwFontScript nAct = aScrType[i];        // script type
+        aTmpFont.SetActual( nAct );
 
-        // do we have to repaint a post it portion?
-        if( rInf.OnWin() && pPortion && !pPortion->Width() )
-            pPortion->PrePaint( rInf, this );
-
-        const sal_Int32 nCount = m_aExpand.getLength();
-        if( !nCount )
-            return;
-        OSL_ENSURE( nCount < 7, "Too much combined characters" );
-
-        // the first character of the second row
-        const sal_Int32 nTop = ( nCount + 1 ) / 2;
-
-        SwFont aTmpFont( *rInf.GetFont() );
-        aTmpFont.SetProportion( nProportion );  // a smaller font
-        SwFontSave aFontSave( rInf, &aTmpFont );
-
-        Point aOldPos = rInf.GetPos();
-        Point aOutPos( aOldPos.X(), aOldPos.Y() - nUpPos );// Y of the first row
-        for( sal_Int32 i = 0 ; i < nCount; ++i )
+        // if there're more than 4 characters to display, we choose fonts
+        // with 2/3 of the original font width.
+        if( aWidth[ nAct ] )
         {
-            if( i == nTop ) // change the row
-                aOutPos.Y() = aOldPos.Y() + nLowPos;    // Y of the second row
-            aOutPos.X() = aOldPos.X() + aPos[i];        // X position
-            const SwFontScript nAct = aScrType[i];        // script type
-            aTmpFont.SetActual( nAct );
-
-            // if there're more than 4 characters to display, we choose fonts
-            // with 2/3 of the original font width.
-            if( aWidth[ nAct ] )
+            Size aTmpSz = aTmpFont.GetSize( nAct );
+            if( aTmpSz.Width() != aWidth[ nAct ] )
             {
-                Size aTmpSz = aTmpFont.GetSize( nAct );
-                if( aTmpSz.Width() != aWidth[ nAct ] )
-                {
-                    aTmpSz.Width() = aWidth[ nAct ];
-                    aTmpFont.SetSize( aTmpSz, nAct );
-                }
+                aTmpSz.Width() = aWidth[ nAct ];
+                aTmpFont.SetSize( aTmpSz, nAct );
             }
-            const_cast<SwTextPaintInfo&>(rInf).SetPos( aOutPos );
-            rInf.DrawText( m_aExpand, *this, i, 1 );
         }
-        // rInf is const, so we have to take back our manipulations
-        const_cast<SwTextPaintInfo&>(rInf).SetPos( aOldPos );
+        const_cast<SwTextPaintInfo&>(rInf).SetPos( aOutPos );
+        rInf.DrawText( m_aExpand, *this, i, 1 );
     }
+    // rInf is const, so we have to take back our manipulations
+    const_cast<SwTextPaintInfo&>(rInf).SetPos( aOldPos );
+
 }
 
 bool SwCombinedPortion::Format( SwTextFormatInfo &rInf )

@@ -304,61 +304,62 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
                     rDirItem.GetValue() == SvxFrameDirection::Vertical_LR_TB;
     }
 
-    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_PAGE_SIZE ))
+    if( SfxItemState::SET != rSet.GetItemState( SID_ATTR_PAGE_SIZE ))
+        return;
+
+    const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(rSet.Get(
+                                        SID_ATTR_PAGE_SIZE));
+    const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(rSet.Get(
+                                                        RES_LR_SPACE ));
+    const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>(rSet.Get(
+                                                        RES_UL_SPACE ));
+    const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>( rSet.Get(RES_BOX));
+    sal_Int32 nDistanceLR = rLRSpace.GetLeft() + rLRSpace.GetRight();
+    sal_Int32 nDistanceUL = rULSpace.GetUpper() + rULSpace.GetLower();
+
+    sal_Int32 nValue1 = rSize.GetSize().Height() - nDistanceUL -
+            rBox.GetDistance(SvxBoxItemLine::TOP) -
+                                rBox.GetDistance(SvxBoxItemLine::BOTTOM);
+    sal_Int32 nValue2 = rSize.GetSize().Width() - nDistanceLR -
+            rBox.GetDistance(SvxBoxItemLine::LEFT) -
+                                rBox.GetDistance(SvxBoxItemLine::RIGHT);
+    if(m_bVertical)
     {
-        const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(rSet.Get(
-                                            SID_ATTR_PAGE_SIZE));
-        const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(rSet.Get(
-                                                            RES_LR_SPACE ));
-        const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>(rSet.Get(
-                                                            RES_UL_SPACE ));
-        const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>( rSet.Get(RES_BOX));
-        sal_Int32 nDistanceLR = rLRSpace.GetLeft() + rLRSpace.GetRight();
-        sal_Int32 nDistanceUL = rULSpace.GetUpper() + rULSpace.GetLower();
+        m_aPageSize.Width() = nValue1;
+        m_aPageSize.Height() = nValue2;
+    }
+    else
+    {
+        m_aPageSize.Width() = nValue2;
+        m_aPageSize.Height() = nValue1;
+    }
 
-        sal_Int32 nValue1 = rSize.GetSize().Height() - nDistanceUL -
-                rBox.GetDistance(SvxBoxItemLine::TOP) -
-                                    rBox.GetDistance(SvxBoxItemLine::BOTTOM);
-        sal_Int32 nValue2 = rSize.GetSize().Width() - nDistanceLR -
-                rBox.GetDistance(SvxBoxItemLine::LEFT) -
-                                    rBox.GetDistance(SvxBoxItemLine::RIGHT);
-        if(m_bVertical)
-        {
-            m_aPageSize.Width() = nValue1;
-            m_aPageSize.Height() = nValue2;
-        }
-        else
-        {
-            m_aPageSize.Width() = nValue2;
-            m_aPageSize.Height() = nValue1;
-        }
+    sal_Int32 nTextSize = static_cast< sal_Int32 >(m_bRubyUserValue ?
+                m_nRubyUserValue :
+                    m_pTextSizeMF->Denormalize(m_pTextSizeMF->GetValue(FUNIT_TWIP)));
 
-        sal_Int32 nTextSize = static_cast< sal_Int32 >(m_bRubyUserValue ?
-                    m_nRubyUserValue :
-                        m_pTextSizeMF->Denormalize(m_pTextSizeMF->GetValue(FUNIT_TWIP)));
-
-        if ( m_bSquaredMode )
-        {
-            m_pCharsPerLineNF->SetValue(m_aPageSize.Width() / nTextSize);
-        m_pCharsPerLineNF->SetMax( m_pCharsPerLineNF->GetValue() );
-            m_pLinesPerPageNF->SetMax( m_aPageSize.Height() /
-        (   m_pTextSizeMF->Denormalize(m_pTextSizeMF->GetValue(FUNIT_TWIP)) +
-                    m_pRubySizeMF->Denormalize(m_pRubySizeMF->GetValue(FUNIT_TWIP))));
-            SetLinesOrCharsRanges( *m_pCharsRangeFT , m_pCharsPerLineNF->GetMax() );
-            SetLinesOrCharsRanges( *m_pLinesRangeFT , m_pLinesPerPageNF->GetMax() );
-        }
-        else
-        {
-            sal_Int32 nTextWidth = static_cast< sal_Int32 >(m_pCharWidthMF->Denormalize(m_pCharWidthMF->GetValue(FUNIT_TWIP)));
-            m_pLinesPerPageNF->SetValue(m_aPageSize.Height() / nTextSize);
-            if (nTextWidth)
-                m_pCharsPerLineNF->SetValue(m_aPageSize.Width() / nTextWidth);
-            else
-                m_pCharsPerLineNF->SetValue( 45 );
+    if ( m_bSquaredMode )
+    {
+        m_pCharsPerLineNF->SetValue(m_aPageSize.Width() / nTextSize);
+    m_pCharsPerLineNF->SetMax( m_pCharsPerLineNF->GetValue() );
+        m_pLinesPerPageNF->SetMax( m_aPageSize.Height() /
+    (   m_pTextSizeMF->Denormalize(m_pTextSizeMF->GetValue(FUNIT_TWIP)) +
+                m_pRubySizeMF->Denormalize(m_pRubySizeMF->GetValue(FUNIT_TWIP))));
         SetLinesOrCharsRanges( *m_pCharsRangeFT , m_pCharsPerLineNF->GetMax() );
         SetLinesOrCharsRanges( *m_pLinesRangeFT , m_pLinesPerPageNF->GetMax() );
-        }
     }
+    else
+    {
+        sal_Int32 nTextWidth = static_cast< sal_Int32 >(m_pCharWidthMF->Denormalize(m_pCharWidthMF->GetValue(FUNIT_TWIP)));
+        m_pLinesPerPageNF->SetValue(m_aPageSize.Height() / nTextSize);
+        if (nTextWidth)
+            m_pCharsPerLineNF->SetValue(m_aPageSize.Width() / nTextWidth);
+        else
+            m_pCharsPerLineNF->SetValue( 45 );
+    SetLinesOrCharsRanges( *m_pCharsRangeFT , m_pCharsPerLineNF->GetMax() );
+    SetLinesOrCharsRanges( *m_pLinesRangeFT , m_pLinesPerPageNF->GetMax() );
+    }
+
 }
 
 void SwTextGridPage::SetLinesOrCharsRanges(FixedText & rField, const sal_Int32 nValue )

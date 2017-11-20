@@ -955,42 +955,43 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog&, rDlg, void )
 
     const SwRangeRedline *pRedline = pSh->GetCurrRedline();
 
-    if (pRedline)
+    if (!pRedline)
+        return;
+
+    // Traveling only if more than one field.
+    if( !pSh->IsCursorPtAtEnd() )
+        pSh->SwapPam(); // Move the cursor behind the Redline.
+
+    pSh->Push();
+    const SwRangeRedline *pActRed = pSh->SelNextRedline();
+    pSh->Pop((pActRed != nullptr) ? SwCursorShell::PopMode::DeleteStack : SwCursorShell::PopMode::DeleteCurrent);
+
+    bool bEnable = false;
+
+    if (pActRed)
     {
-        // Traveling only if more than one field.
-        if( !pSh->IsCursorPtAtEnd() )
-            pSh->SwapPam(); // Move the cursor behind the Redline.
-
+        pSh->StartAction();
         pSh->Push();
-        const SwRangeRedline *pActRed = pSh->SelNextRedline();
-        pSh->Pop((pActRed != nullptr) ? SwCursorShell::PopMode::DeleteStack : SwCursorShell::PopMode::DeleteCurrent);
-
-        bool bEnable = false;
-
-        if (pActRed)
-        {
-            pSh->StartAction();
-            pSh->Push();
-            bEnable = pSh->SelNextRedline() != nullptr;
-            pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
-            pSh->EndAction();
-        }
-
-        rDlg.EnableTravel(bEnable, true);
-
-        if( pSh->IsCursorPtAtEnd() )
-            pSh->SwapPam();
-
-        pRedline = pSh->GetCurrRedline();
-        OUString sComment = convertLineEnd(pRedline->GetComment(), GetSystemLineEnd());
-
-        rDlg.SetNote(sComment);
-        rDlg.ShowLastAuthor( pRedline->GetAuthorString(),
-                    GetAppLangDateTimeString(
-                                pRedline->GetRedlineData().GetTimeStamp() ));
-
-        rDlg.SetText(lcl_BuildTitleWithRedline(pRedline));
+        bEnable = pSh->SelNextRedline() != nullptr;
+        pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
+        pSh->EndAction();
     }
+
+    rDlg.EnableTravel(bEnable, true);
+
+    if( pSh->IsCursorPtAtEnd() )
+        pSh->SwapPam();
+
+    pRedline = pSh->GetCurrRedline();
+    OUString sComment = convertLineEnd(pRedline->GetComment(), GetSystemLineEnd());
+
+    rDlg.SetNote(sComment);
+    rDlg.ShowLastAuthor( pRedline->GetAuthorString(),
+                GetAppLangDateTimeString(
+                            pRedline->GetRedlineData().GetTimeStamp() ));
+
+    rDlg.SetText(lcl_BuildTitleWithRedline(pRedline));
+
 }
 
 IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog&, rDlg, void )
@@ -1002,36 +1003,37 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog&, rDlg, void )
 
     const SwRangeRedline *pRedline = pSh->GetCurrRedline();
 
-    if (pRedline)
+    if (!pRedline)
+        return;
+
+    // Traveling only if more than one field.
+    pSh->Push();
+    const SwRangeRedline *pActRed = pSh->SelPrevRedline();
+    pSh->Pop((pActRed != nullptr) ? SwCursorShell::PopMode::DeleteStack : SwCursorShell::PopMode::DeleteCurrent);
+
+    bool bEnable = false;
+
+    if (pActRed)
     {
-        // Traveling only if more than one field.
+        pSh->StartAction();
         pSh->Push();
-        const SwRangeRedline *pActRed = pSh->SelPrevRedline();
-        pSh->Pop((pActRed != nullptr) ? SwCursorShell::PopMode::DeleteStack : SwCursorShell::PopMode::DeleteCurrent);
-
-        bool bEnable = false;
-
-        if (pActRed)
-        {
-            pSh->StartAction();
-            pSh->Push();
-            bEnable = pSh->SelPrevRedline() != nullptr;
-            pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
-            pSh->EndAction();
-        }
-
-        rDlg.EnableTravel(true, bEnable);
-
-        pRedline = pSh->GetCurrRedline();
-        OUString sComment = convertLineEnd(pRedline->GetComment(), GetSystemLineEnd());
-
-        rDlg.SetNote(sComment);
-        rDlg.ShowLastAuthor(pRedline->GetAuthorString(),
-                GetAppLangDateTimeString(
-                                pRedline->GetRedlineData().GetTimeStamp() ));
-
-        rDlg.SetText(lcl_BuildTitleWithRedline(pRedline));
+        bEnable = pSh->SelPrevRedline() != nullptr;
+        pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
+        pSh->EndAction();
     }
+
+    rDlg.EnableTravel(true, bEnable);
+
+    pRedline = pSh->GetCurrRedline();
+    OUString sComment = convertLineEnd(pRedline->GetComment(), GetSystemLineEnd());
+
+    rDlg.SetNote(sComment);
+    rDlg.ShowLastAuthor(pRedline->GetAuthorString(),
+            GetAppLangDateTimeString(
+                            pRedline->GetRedlineData().GetTimeStamp() ));
+
+    rDlg.SetText(lcl_BuildTitleWithRedline(pRedline));
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

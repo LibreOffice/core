@@ -2315,151 +2315,153 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     if ( m_pFrame->IsVertical() )
         m_pFrame->SwitchVerticalToHorizontal( aInter );
 
-    if( aInter.IsOver( aLine ) )
+    if( !aInter.IsOver( aLine ) )
+        return;
+
+    aLine.Left( rInf.X() + nLeftMar );
+    bool bForced = false;
+    if( aInter.Left() <= nLeftMin )
     {
-        aLine.Left( rInf.X() + nLeftMar );
-        bool bForced = false;
-        if( aInter.Left() <= nLeftMin )
+        SwTwips nFrameLeft = GetTextFrame()->getFrameArea().Left();
+        if( GetTextFrame()->getFramePrintArea().Left() < 0 )
+            nFrameLeft += GetTextFrame()->getFramePrintArea().Left();
+        if( aInter.Left() < nFrameLeft )
+            aInter.Left( nFrameLeft );
+
+        long nAddMar = 0;
+        if ( m_pFrame->IsRightToLeft() )
         {
-            SwTwips nFrameLeft = GetTextFrame()->getFrameArea().Left();
-            if( GetTextFrame()->getFramePrintArea().Left() < 0 )
-                nFrameLeft += GetTextFrame()->getFramePrintArea().Left();
-            if( aInter.Left() < nFrameLeft )
-                aInter.Left( nFrameLeft );
-
-            long nAddMar = 0;
-            if ( m_pFrame->IsRightToLeft() )
-            {
-                nAddMar = m_pFrame->getFrameArea().Right() - Right();
-                if ( nAddMar < 0 )
-                    nAddMar = 0;
-            }
-            else
-                nAddMar = nLeftMar - nFrameLeft;
-
-            aInter.Width( aInter.Width() + nAddMar );
-            // For a negative first line indent, we set this flag to show
-            // that the indentation/margin has been moved.
-            // This needs to be respected by the DefaultTab at the zero position.
-            if( IsFirstTextLine() && HasNegFirst() )
-                bForced = true;
+            nAddMar = m_pFrame->getFrameArea().Right() - Right();
+            if ( nAddMar < 0 )
+                nAddMar = 0;
         }
-        aInter.Intersection( aLine );
-        if( !aInter.HasArea() )
-            return;
+        else
+            nAddMar = nLeftMar - nFrameLeft;
 
-        const bool bFullLine =  aLine.Left()  == aInter.Left() &&
-                                aLine.Right() == aInter.Right();
+        aInter.Width( aInter.Width() + nAddMar );
+        // For a negative first line indent, we set this flag to show
+        // that the indentation/margin has been moved.
+        // This needs to be respected by the DefaultTab at the zero position.
+        if( IsFirstTextLine() && HasNegFirst() )
+            bForced = true;
+    }
+    aInter.Intersection( aLine );
+    if( !aInter.HasArea() )
+        return;
 
-        // Although no text is left, we need to format another line,
-        // because also empty lines need to avoid a Fly with no wrapping.
-        if( bFullLine && rInf.GetIdx() == rInf.GetText().getLength() )
+    const bool bFullLine =  aLine.Left()  == aInter.Left() &&
+                            aLine.Right() == aInter.Right();
+
+    // Although no text is left, we need to format another line,
+    // because also empty lines need to avoid a Fly with no wrapping.
+    if( bFullLine && rInf.GetIdx() == rInf.GetText().getLength() )
+    {
+        rInf.SetNewLine( true );
+        // We know that for dummies, it holds ascent == height
+        m_pCurr->SetDummy(true);
+    }
+
+    // aInter becomes frame-local
+    aInter.Pos().X() -= nLeftMar;
+    SwFlyPortion *pFly = new SwFlyPortion( aInter );
+    if( bForced )
+    {
+        m_pCurr->SetForcedLeftMargin();
+        rInf.ForcedLeftMargin( (sal_uInt16)aInter.Width() );
+    }
+
+    if( bFullLine )
+    {
+        // In order to properly flow around Flys with different
+        // wrapping attributes, we need to increase by units of line height.
+        // The last avoiding line should be adjusted in height, so that
+        // we don't get a frame spacing effect.
+        // It is important that ascent == height, because the FlyPortion
+        // values are transferred to pCurr in CalcLine and IsDummy() relies
+        // on this behaviour.
+        // To my knowledge we only have two places where DummyLines can be
+        // created: here and in MakeFlyDummies.
+        // IsDummy() is evaluated in IsFirstTextLine(), when moving lines
+        // and in relation with DropCaps.
+        pFly->Height( sal_uInt16(aInter.Height()) );
+
+        // nNextTop now contains the margin's bottom edge, which we avoid
+        // or the next margin's top edge, which we need to respect.
+        // That means we can comfortably grow up to this value; that's how
+        // we save a few empty lines.
+        long nNextTop = rTextFly.GetNextTop();
+        if ( m_pFrame->IsVertical() )
+            nNextTop = m_pFrame->SwitchVerticalToHorizontal( nNextTop );
+        if( nNextTop > aInter.Bottom() )
         {
-            rInf.SetNewLine( true );
-            // We know that for dummies, it holds ascent == height
-            m_pCurr->SetDummy(true);
+            SwTwips nH = nNextTop - aInter.Top();
+            if( nH < USHRT_MAX )
+                pFly->Height( sal_uInt16( nH ) );
         }
-
-        // aInter becomes frame-local
-        aInter.Pos().X() -= nLeftMar;
-        SwFlyPortion *pFly = new SwFlyPortion( aInter );
-        if( bForced )
+        if( nAscent < pFly->Height() )
+            pFly->SetAscent( sal_uInt16(nAscent) );
+        else
+            pFly->SetAscent( pFly->Height() );
+    }
+    else
+    {
+        if( rInf.GetIdx() == rInf.GetText().getLength() )
         {
-            m_pCurr->SetForcedLeftMargin();
-            rInf.ForcedLeftMargin( (sal_uInt16)aInter.Width() );
+            // Don't use nHeight, or we have a huge descent
+            pFly->Height( pLast->Height() );
+            pFly->SetAscent( pLast->GetAscent() );
         }
-
-        if( bFullLine )
+        else
         {
-            // In order to properly flow around Flys with different
-            // wrapping attributes, we need to increase by units of line height.
-            // The last avoiding line should be adjusted in height, so that
-            // we don't get a frame spacing effect.
-            // It is important that ascent == height, because the FlyPortion
-            // values are transferred to pCurr in CalcLine and IsDummy() relies
-            // on this behaviour.
-            // To my knowledge we only have two places where DummyLines can be
-            // created: here and in MakeFlyDummies.
-            // IsDummy() is evaluated in IsFirstTextLine(), when moving lines
-            // and in relation with DropCaps.
             pFly->Height( sal_uInt16(aInter.Height()) );
-
-            // nNextTop now contains the margin's bottom edge, which we avoid
-            // or the next margin's top edge, which we need to respect.
-            // That means we can comfortably grow up to this value; that's how
-            // we save a few empty lines.
-            long nNextTop = rTextFly.GetNextTop();
-            if ( m_pFrame->IsVertical() )
-                nNextTop = m_pFrame->SwitchVerticalToHorizontal( nNextTop );
-            if( nNextTop > aInter.Bottom() )
-            {
-                SwTwips nH = nNextTop - aInter.Top();
-                if( nH < USHRT_MAX )
-                    pFly->Height( sal_uInt16( nH ) );
-            }
             if( nAscent < pFly->Height() )
                 pFly->SetAscent( sal_uInt16(nAscent) );
             else
                 pFly->SetAscent( pFly->Height() );
         }
-        else
-        {
-            if( rInf.GetIdx() == rInf.GetText().getLength() )
-            {
-                // Don't use nHeight, or we have a huge descent
-                pFly->Height( pLast->Height() );
-                pFly->SetAscent( pLast->GetAscent() );
-            }
-            else
-            {
-                pFly->Height( sal_uInt16(aInter.Height()) );
-                if( nAscent < pFly->Height() )
-                    pFly->SetAscent( sal_uInt16(nAscent) );
-                else
-                    pFly->SetAscent( pFly->Height() );
-            }
-        }
-
-        rInf.SetFly( pFly );
-
-        if( pFly->GetFix() < rInf.Width() )
-            rInf.Width( pFly->GetFix() );
-
-        SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
-        if ( pGrid )
-        {
-            const SwPageFrame* pPageFrame = m_pFrame->FindPageFrame();
-            const SwLayoutFrame* pBody = pPageFrame->FindBodyCont();
-
-            SwRectFnSet aRectFnSet(pPageFrame);
-
-            const long nGridOrigin = pBody ?
-                                    aRectFnSet.GetPrtLeft(*pBody) :
-                                    aRectFnSet.GetPrtLeft(*pPageFrame);
-
-            const SwDoc *pDoc = rInf.GetTextFrame()->GetNode()->GetDoc();
-            const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
-
-            SwTwips nStartX = GetLeftMargin();
-            if ( aRectFnSet.IsVert() )
-            {
-                Point aPoint( nStartX, 0 );
-                m_pFrame->SwitchHorizontalToVertical( aPoint );
-                nStartX = aPoint.Y();
-            }
-
-            const SwTwips nOfst = nStartX - nGridOrigin;
-            const SwTwips nTmpWidth = rInf.Width() + nOfst;
-
-            const sal_uLong i = nTmpWidth / nGridWidth + 1;
-
-            const long nNewWidth = ( i - 1 ) * nGridWidth - nOfst;
-            if ( nNewWidth > 0 )
-                rInf.Width( (sal_uInt16)nNewWidth );
-            else
-                rInf.Width( 0 );
-        }
     }
+
+    rInf.SetFly( pFly );
+
+    if( pFly->GetFix() < rInf.Width() )
+        rInf.Width( pFly->GetFix() );
+
+    SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
+    if ( !pGrid )
+        return;
+
+    const SwPageFrame* pPageFrame = m_pFrame->FindPageFrame();
+    const SwLayoutFrame* pBody = pPageFrame->FindBodyCont();
+
+    SwRectFnSet aRectFnSet(pPageFrame);
+
+    const long nGridOrigin = pBody ?
+                            aRectFnSet.GetPrtLeft(*pBody) :
+                            aRectFnSet.GetPrtLeft(*pPageFrame);
+
+    const SwDoc *pDoc = rInf.GetTextFrame()->GetNode()->GetDoc();
+    const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
+
+    SwTwips nStartX = GetLeftMargin();
+    if ( aRectFnSet.IsVert() )
+    {
+        Point aPoint( nStartX, 0 );
+        m_pFrame->SwitchHorizontalToVertical( aPoint );
+        nStartX = aPoint.Y();
+    }
+
+    const SwTwips nOfst = nStartX - nGridOrigin;
+    const SwTwips nTmpWidth = rInf.Width() + nOfst;
+
+    const sal_uLong i = nTmpWidth / nGridWidth + 1;
+
+    const long nNewWidth = ( i - 1 ) * nGridWidth - nOfst;
+    if ( nNewWidth > 0 )
+        rInf.Width( (sal_uInt16)nNewWidth );
+    else
+        rInf.Width( 0 );
+
+
 }
 
 SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,

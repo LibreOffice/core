@@ -140,25 +140,26 @@ SwFntObj::~SwFntObj()
 
 void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
 {
-    if ( m_nPropWidth != 100 && m_pPrinter != &rPrt )
-    {
-        if( m_pScrFont != m_pPrtFont )
-            delete m_pScrFont;
-        if( m_pPrtFont != &m_aFont )
-            delete m_pPrtFont;
+    if ( m_nPropWidth == 100 || m_pPrinter == &rPrt )
+        return;
 
-        const vcl::Font aOldFnt( rPrt.GetFont() );
-        const_cast<OutputDevice&>(rPrt).SetFont( m_aFont );
-        const FontMetric aWinMet( rPrt.GetFontMetric() );
-        const_cast<OutputDevice&>(rPrt).SetFont( aOldFnt );
-        long nWidth = ( aWinMet.GetFontSize().Width() * m_nPropWidth ) / 100;
+    if( m_pScrFont != m_pPrtFont )
+        delete m_pScrFont;
+    if( m_pPrtFont != &m_aFont )
+        delete m_pPrtFont;
 
-        if( !nWidth )
-            ++nWidth;
-        m_pPrtFont = new vcl::Font( m_aFont );
-        m_pPrtFont->SetFontSize( Size( nWidth, m_aFont.GetFontSize().Height() ) );
-        m_pScrFont = nullptr;
-    }
+    const vcl::Font aOldFnt( rPrt.GetFont() );
+    const_cast<OutputDevice&>(rPrt).SetFont( m_aFont );
+    const FontMetric aWinMet( rPrt.GetFontMetric() );
+    const_cast<OutputDevice&>(rPrt).SetFont( aOldFnt );
+    long nWidth = ( aWinMet.GetFontSize().Width() * m_nPropWidth ) / 100;
+
+    if( !nWidth )
+        ++nWidth;
+    m_pPrtFont = new vcl::Font( m_aFont );
+    m_pPrtFont->SetFontSize( Size( nWidth, m_aFont.GetFontSize().Height() ) );
+    m_pScrFont = nullptr;
+
 }
 
 /*

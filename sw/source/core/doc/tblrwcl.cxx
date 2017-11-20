@@ -901,61 +901,62 @@ lcl_SaveUpperLowerBorder( SwTable& rTable, const SwTableBox& rBox,
     const SvxBoxItem& rBoxItem = rBox.GetFrameFormat()->GetBox();
 
     // then the top/bottom edges
-    if( rBoxItem.GetTop() || rBoxItem.GetBottom() )
+    if( !rBoxItem.GetTop() && !rBoxItem.GetBottom() )
+        return;
+
+    bool bChgd = false;
+    const SwTableLines* pTableLns;
+    if( pUpperBox )
+        pTableLns = &pUpperBox->GetTabLines();
+    else
+        pTableLns = &rTable.GetTabLines();
+
+    sal_uInt16 nLnPos = pTableLns->GetPos( pLine );
+
+    // Calculate the attribute position of the top-be-deleted Box and then
+    // search in the top/bottom Line of the respective counterparts.
+    SwTwips nBoxStt = 0;
+    for( sal_uInt16 n = 0; n < nDelPos; ++n )
+        nBoxStt += rTableBoxes[ n ]->GetFrameFormat()->GetFrameSize().GetWidth();
+    SwTwips nBoxWidth = rBox.GetFrameFormat()->GetFrameSize().GetWidth();
+
+    SwTableBox *pPrvBox = nullptr, *pNxtBox = nullptr;
+    if( nLnPos )        // Predecessor?
+        pPrvBox = ::lcl_FndNxtPrvDelBox( *pTableLns, nBoxStt, nBoxWidth,
+                            nLnPos, false, pAllDelBoxes, pCurPos );
+
+    if( nLnPos + 1 < (sal_uInt16)pTableLns->size() )     // Successor?
+        pNxtBox = ::lcl_FndNxtPrvDelBox( *pTableLns, nBoxStt, nBoxWidth,
+                            nLnPos, true, pAllDelBoxes, pCurPos );
+
+    if( pNxtBox && pNxtBox->GetSttNd() )
     {
-        bool bChgd = false;
-        const SwTableLines* pTableLns;
-        if( pUpperBox )
-            pTableLns = &pUpperBox->GetTabLines();
-        else
-            pTableLns = &rTable.GetTabLines();
-
-        sal_uInt16 nLnPos = pTableLns->GetPos( pLine );
-
-        // Calculate the attribute position of the top-be-deleted Box and then
-        // search in the top/bottom Line of the respective counterparts.
-        SwTwips nBoxStt = 0;
-        for( sal_uInt16 n = 0; n < nDelPos; ++n )
-            nBoxStt += rTableBoxes[ n ]->GetFrameFormat()->GetFrameSize().GetWidth();
-        SwTwips nBoxWidth = rBox.GetFrameFormat()->GetFrameSize().GetWidth();
-
-        SwTableBox *pPrvBox = nullptr, *pNxtBox = nullptr;
-        if( nLnPos )        // Predecessor?
-            pPrvBox = ::lcl_FndNxtPrvDelBox( *pTableLns, nBoxStt, nBoxWidth,
-                                nLnPos, false, pAllDelBoxes, pCurPos );
-
-        if( nLnPos + 1 < (sal_uInt16)pTableLns->size() )     // Successor?
-            pNxtBox = ::lcl_FndNxtPrvDelBox( *pTableLns, nBoxStt, nBoxWidth,
-                                nLnPos, true, pAllDelBoxes, pCurPos );
-
-        if( pNxtBox && pNxtBox->GetSttNd() )
+        const SvxBoxItem& rNxtBoxItem = pNxtBox->GetFrameFormat()->GetBox();
+        if( !rNxtBoxItem.GetTop() && ( !pPrvBox ||
+            !pPrvBox->GetFrameFormat()->GetBox().GetBottom()) )
         {
-            const SvxBoxItem& rNxtBoxItem = pNxtBox->GetFrameFormat()->GetBox();
-            if( !rNxtBoxItem.GetTop() && ( !pPrvBox ||
-                !pPrvBox->GetFrameFormat()->GetBox().GetBottom()) )
-            {
-                SvxBoxItem aTmp( rNxtBoxItem );
-                aTmp.SetLine( rBoxItem.GetTop() ? rBoxItem.GetTop()
-                                                : rBoxItem.GetBottom(),
-                                                SvxBoxItemLine::TOP );
-                rShareFormats.SetAttr( *pNxtBox, aTmp );
-                bChgd = true;
-            }
-        }
-        if( !bChgd && pPrvBox && pPrvBox->GetSttNd() )
-        {
-            const SvxBoxItem& rPrvBoxItem = pPrvBox->GetFrameFormat()->GetBox();
-            if( !rPrvBoxItem.GetTop() && ( !pNxtBox ||
-                !pNxtBox->GetFrameFormat()->GetBox().GetTop()) )
-            {
-                SvxBoxItem aTmp( rPrvBoxItem );
-                aTmp.SetLine( rBoxItem.GetTop() ? rBoxItem.GetTop()
-                                                : rBoxItem.GetBottom(),
-                                                SvxBoxItemLine::BOTTOM );
-                rShareFormats.SetAttr( *pPrvBox, aTmp );
-            }
+            SvxBoxItem aTmp( rNxtBoxItem );
+            aTmp.SetLine( rBoxItem.GetTop() ? rBoxItem.GetTop()
+                                            : rBoxItem.GetBottom(),
+                                            SvxBoxItemLine::TOP );
+            rShareFormats.SetAttr( *pNxtBox, aTmp );
+            bChgd = true;
         }
     }
+    if( !bChgd && pPrvBox && pPrvBox->GetSttNd() )
+    {
+        const SvxBoxItem& rPrvBoxItem = pPrvBox->GetFrameFormat()->GetBox();
+        if( !rPrvBoxItem.GetTop() && ( !pNxtBox ||
+            !pNxtBox->GetFrameFormat()->GetBox().GetTop()) )
+        {
+            SvxBoxItem aTmp( rPrvBoxItem );
+            aTmp.SetLine( rBoxItem.GetTop() ? rBoxItem.GetTop()
+                                            : rBoxItem.GetBottom(),
+                                            SvxBoxItemLine::BOTTOM );
+            rShareFormats.SetAttr( *pPrvBox, aTmp );
+        }
+    }
+
 }
 
 bool SwTable::DeleteSel(

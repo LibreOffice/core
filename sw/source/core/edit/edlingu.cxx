@@ -1112,151 +1112,152 @@ void SwEditShell::ApplyChangedSentence(const svx::SpellPortions& rNewPortions, b
     // sentence got removed in the dialog
 
     OSL_ENSURE(  g_pSpellIter, "SpellIter missing" );
-    if (g_pSpellIter &&
-        g_pSpellIter->GetLastPortions().size() > 0) // no portions -> no text to be changed
+    if (!g_pSpellIter ||
+        g_pSpellIter->GetLastPortions().size() <= 0) // no portions -> no text to be changed
+        return;
+
+    const SpellPortions& rLastPortions = g_pSpellIter->GetLastPortions();
+    const SpellContentPositions  rLastPositions = g_pSpellIter->GetLastPositions();
+    OSL_ENSURE(rLastPortions.size() > 0 &&
+            rLastPortions.size() == rLastPositions.size(),
+            "last vectors of spelling results are not set or not equal");
+
+    // iterate over the new portions, beginning at the end to take advantage of the previously
+    // saved content positions
+
+    mxDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::UI_TEXT_CORRECTION, nullptr );
+    StartAction();
+
+    SwPaM *pCursor = GetCursor();
+    // save cursor position (which should be at the end of the current sentence)
+    // for later restoration
+    Push();
+
+    sal_uInt32 nRedlinePortions = lcl_CountRedlines(rLastPortions);
+    if((rLastPortions.size() - nRedlinePortions) == rNewPortions.size())
     {
-        const SpellPortions& rLastPortions = g_pSpellIter->GetLastPortions();
-        const SpellContentPositions  rLastPositions = g_pSpellIter->GetLastPositions();
-        OSL_ENSURE(rLastPortions.size() > 0 &&
-                rLastPortions.size() == rLastPositions.size(),
-                "last vectors of spelling results are not set or not equal");
+        OSL_ENSURE( !rNewPortions.empty(), "rNewPortions should not be empty here" );
+        OSL_ENSURE( !rLastPortions.empty(), "rLastPortions should not be empty here" );
+        OSL_ENSURE( !rLastPositions.empty(), "rLastPositions should not be empty here" );
 
-        // iterate over the new portions, beginning at the end to take advantage of the previously
-        // saved content positions
-
-        mxDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::UI_TEXT_CORRECTION, nullptr );
-        StartAction();
-
-        SwPaM *pCursor = GetCursor();
-        // save cursor position (which should be at the end of the current sentence)
-        // for later restoration
-        Push();
-
-        sal_uInt32 nRedlinePortions = lcl_CountRedlines(rLastPortions);
-        if((rLastPortions.size() - nRedlinePortions) == rNewPortions.size())
+        // the simple case: the same number of elements on both sides
+        // each changed element has to be applied to the corresponding source element
+        svx::SpellPortions::const_iterator aCurrentNewPortion = rNewPortions.end();
+        SpellPortions::const_iterator aCurrentOldPortion = rLastPortions.end();
+        SpellContentPositions::const_iterator aCurrentOldPosition = rLastPositions.end();
+        do
         {
-            OSL_ENSURE( !rNewPortions.empty(), "rNewPortions should not be empty here" );
-            OSL_ENSURE( !rLastPortions.empty(), "rLastPortions should not be empty here" );
-            OSL_ENSURE( !rLastPositions.empty(), "rLastPositions should not be empty here" );
-
-            // the simple case: the same number of elements on both sides
-            // each changed element has to be applied to the corresponding source element
-            svx::SpellPortions::const_iterator aCurrentNewPortion = rNewPortions.end();
-            SpellPortions::const_iterator aCurrentOldPortion = rLastPortions.end();
-            SpellContentPositions::const_iterator aCurrentOldPosition = rLastPositions.end();
-            do
+            --aCurrentNewPortion;
+            --aCurrentOldPortion;
+            --aCurrentOldPosition;
+            //jump over redline portions
+            while(aCurrentOldPortion->bIsHidden)
             {
-                --aCurrentNewPortion;
-                --aCurrentOldPortion;
-                --aCurrentOldPosition;
-                //jump over redline portions
-                while(aCurrentOldPortion->bIsHidden)
+                if (aCurrentOldPortion  != rLastPortions.begin() &&
+                    aCurrentOldPosition != rLastPositions.begin())
                 {
-                    if (aCurrentOldPortion  != rLastPortions.begin() &&
-                        aCurrentOldPosition != rLastPositions.begin())
-                    {
-                        --aCurrentOldPortion;
-                        --aCurrentOldPosition;
-                    }
-                    else
-                    {
-                        OSL_FAIL("ApplyChangedSentence: iterator positions broken" );
-                        break;
-                    }
+                    --aCurrentOldPortion;
+                    --aCurrentOldPosition;
                 }
-                if ( !pCursor->HasMark() )
-                    pCursor->SetMark();
-                pCursor->GetPoint()->nContent = aCurrentOldPosition->nLeft;
-                pCursor->GetMark()->nContent = aCurrentOldPosition->nRight;
-                sal_uInt16 nScriptType = SvtLanguageOptions::GetI18NScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
-                sal_uInt16 nLangWhichId = RES_CHRATR_LANGUAGE;
-                switch(nScriptType)
+                else
                 {
-                    case css::i18n::ScriptType::ASIAN : nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
-                    case css::i18n::ScriptType::COMPLEX : nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
-                }
-                if(aCurrentNewPortion->sText != aCurrentOldPortion->sText)
-                {
-                    // change text ...
-                    mxDoc->getIDocumentContentOperations().DeleteAndJoin(*pCursor);
-                    // ... and apply language if necessary
-                    if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
-                        SetAttrItem( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId) );
-                    mxDoc->getIDocumentContentOperations().InsertString(*pCursor, aCurrentNewPortion->sText);
-                }
-                else if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
-                {
-                    // apply language
-                    SetAttrItem( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId) );
-                }
-                else if( aCurrentNewPortion->bIgnoreThisError )
-                {
-                    // add the 'ignore' markup to the TextNode's grammar ignore markup list
-                    IgnoreGrammarErrorAt( *pCursor );
-                    OSL_FAIL("TODO: add ignore mark to text node");
-                }
-                if(aCurrentNewPortion == rNewPortions.begin())
+                    OSL_FAIL("ApplyChangedSentence: iterator positions broken" );
                     break;
-            }
-            while(aCurrentNewPortion != rNewPortions.begin());
-        }
-        else
-        {
-            OSL_ENSURE( !rLastPositions.empty(), "rLastPositions should not be empty here" );
-
-            // select the complete sentence
-            SpellContentPositions::const_iterator aCurrentEndPosition = rLastPositions.end();
-            --aCurrentEndPosition;
-            SpellContentPositions::const_iterator aCurrentStartPosition = rLastPositions.begin();
-            pCursor->GetPoint()->nContent = aCurrentStartPosition->nLeft;
-            pCursor->GetMark()->nContent = aCurrentEndPosition->nRight;
-
-            // delete the sentence completely
-            mxDoc->getIDocumentContentOperations().DeleteAndJoin(*pCursor);
-            svx::SpellPortions::const_iterator aCurrentNewPortion = rNewPortions.begin();
-            while(aCurrentNewPortion != rNewPortions.end())
-            {
-                // set the language attribute
-                SvtScriptType nScriptType = GetScriptType();
-                sal_uInt16 nLangWhichId = RES_CHRATR_LANGUAGE;
-                switch(nScriptType)
-                {
-                    case SvtScriptType::ASIAN : nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
-                    case SvtScriptType::COMPLEX : nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
-                    default: break;
                 }
-                SfxItemSet aSet(GetAttrPool(), {{nLangWhichId, nLangWhichId}});
-                GetCurAttr( aSet );
-                const SvxLanguageItem& rLang = static_cast<const SvxLanguageItem& >(aSet.Get(nLangWhichId));
-                if(rLang.GetLanguage() != aCurrentNewPortion->eLanguage)
-                    SetAttrItem( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId) );
-                // insert the new string
-                mxDoc->getIDocumentContentOperations().InsertString(*pCursor, aCurrentNewPortion->sText);
-
-                // set the cursor to the end of the inserted string
-                *pCursor->Start() = *pCursor->End();
-                ++aCurrentNewPortion;
             }
+            if ( !pCursor->HasMark() )
+                pCursor->SetMark();
+            pCursor->GetPoint()->nContent = aCurrentOldPosition->nLeft;
+            pCursor->GetMark()->nContent = aCurrentOldPosition->nRight;
+            sal_uInt16 nScriptType = SvtLanguageOptions::GetI18NScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
+            sal_uInt16 nLangWhichId = RES_CHRATR_LANGUAGE;
+            switch(nScriptType)
+            {
+                case css::i18n::ScriptType::ASIAN : nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
+                case css::i18n::ScriptType::COMPLEX : nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
+            }
+            if(aCurrentNewPortion->sText != aCurrentOldPortion->sText)
+            {
+                // change text ...
+                mxDoc->getIDocumentContentOperations().DeleteAndJoin(*pCursor);
+                // ... and apply language if necessary
+                if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
+                    SetAttrItem( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId) );
+                mxDoc->getIDocumentContentOperations().InsertString(*pCursor, aCurrentNewPortion->sText);
+            }
+            else if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
+            {
+                // apply language
+                SetAttrItem( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId) );
+            }
+            else if( aCurrentNewPortion->bIgnoreThisError )
+            {
+                // add the 'ignore' markup to the TextNode's grammar ignore markup list
+                IgnoreGrammarErrorAt( *pCursor );
+                OSL_FAIL("TODO: add ignore mark to text node");
+            }
+            if(aCurrentNewPortion == rNewPortions.begin())
+                break;
         }
-
-        // restore cursor to the end of the sentence
-        // (will work also if the sentence length has changed,
-        // since cursors get updated automatically!)
-        Pop(PopMode::DeleteCurrent);
-
-        // collapse cursor to the end of the modified sentence
-        *pCursor->Start() = *pCursor->End();
-        if (bRecheck)
-        {
-            // in grammar check the current sentence has to be checked again
-            GoStartSentence();
-        }
-        // set continuation position for spell/grammar checking to the end of this sentence
-        g_pSpellIter->SetCurr( new SwPosition(*pCursor->Start()) );
-
-        mxDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::UI_TEXT_CORRECTION, nullptr );
-        EndAction();
+        while(aCurrentNewPortion != rNewPortions.begin());
     }
+    else
+    {
+        OSL_ENSURE( !rLastPositions.empty(), "rLastPositions should not be empty here" );
+
+        // select the complete sentence
+        SpellContentPositions::const_iterator aCurrentEndPosition = rLastPositions.end();
+        --aCurrentEndPosition;
+        SpellContentPositions::const_iterator aCurrentStartPosition = rLastPositions.begin();
+        pCursor->GetPoint()->nContent = aCurrentStartPosition->nLeft;
+        pCursor->GetMark()->nContent = aCurrentEndPosition->nRight;
+
+        // delete the sentence completely
+        mxDoc->getIDocumentContentOperations().DeleteAndJoin(*pCursor);
+        svx::SpellPortions::const_iterator aCurrentNewPortion = rNewPortions.begin();
+        while(aCurrentNewPortion != rNewPortions.end())
+        {
+            // set the language attribute
+            SvtScriptType nScriptType = GetScriptType();
+            sal_uInt16 nLangWhichId = RES_CHRATR_LANGUAGE;
+            switch(nScriptType)
+            {
+                case SvtScriptType::ASIAN : nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
+                case SvtScriptType::COMPLEX : nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
+                default: break;
+            }
+            SfxItemSet aSet(GetAttrPool(), {{nLangWhichId, nLangWhichId}});
+            GetCurAttr( aSet );
+            const SvxLanguageItem& rLang = static_cast<const SvxLanguageItem& >(aSet.Get(nLangWhichId));
+            if(rLang.GetLanguage() != aCurrentNewPortion->eLanguage)
+                SetAttrItem( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId) );
+            // insert the new string
+            mxDoc->getIDocumentContentOperations().InsertString(*pCursor, aCurrentNewPortion->sText);
+
+            // set the cursor to the end of the inserted string
+            *pCursor->Start() = *pCursor->End();
+            ++aCurrentNewPortion;
+        }
+    }
+
+    // restore cursor to the end of the sentence
+    // (will work also if the sentence length has changed,
+    // since cursors get updated automatically!)
+    Pop(PopMode::DeleteCurrent);
+
+    // collapse cursor to the end of the modified sentence
+    *pCursor->Start() = *pCursor->End();
+    if (bRecheck)
+    {
+        // in grammar check the current sentence has to be checked again
+        GoStartSentence();
+    }
+    // set continuation position for spell/grammar checking to the end of this sentence
+    g_pSpellIter->SetCurr( new SwPosition(*pCursor->Start()) );
+
+    mxDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::UI_TEXT_CORRECTION, nullptr );
+    EndAction();
+
 }
 /** Collect all deleted redlines of the current text node
  *  beginning at the start of the cursor position
@@ -1567,43 +1568,44 @@ void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > const & xAl
     svx::SpellPortion aPortion;
     OUString sText;
     GetSh()->GetSelectedText( sText );
-    if(!sText.isEmpty())
+    if(sText.isEmpty())
+        return;
+
+    // in case of redlined deletions the selection of an error is not the same as the _real_ word
+    if(xAlt.is())
+        aPortion.sText = xAlt->getWord();
+    else if(pGrammarResult)
     {
-        // in case of redlined deletions the selection of an error is not the same as the _real_ word
-        if(xAlt.is())
-            aPortion.sText = xAlt->getWord();
-        else if(pGrammarResult)
+        aPortion.bIsGrammarError = true;
+        if(pGrammarResult->aErrors.getLength())
         {
-            aPortion.bIsGrammarError = true;
-            if(pGrammarResult->aErrors.getLength())
+            aPortion.aGrammarError = pGrammarResult->aErrors[0];
+            aPortion.sText = pGrammarResult->aText.copy( aPortion.aGrammarError.nErrorStart, aPortion.aGrammarError.nErrorLength );
+            aPortion.xGrammarChecker = pGrammarResult->xProofreader;
+            const beans::PropertyValue* pProperties = pGrammarResult->aProperties.getConstArray();
+            for( sal_Int32 nProp = 0; nProp < pGrammarResult->aProperties.getLength(); ++nProp )
             {
-                aPortion.aGrammarError = pGrammarResult->aErrors[0];
-                aPortion.sText = pGrammarResult->aText.copy( aPortion.aGrammarError.nErrorStart, aPortion.aGrammarError.nErrorLength );
-                aPortion.xGrammarChecker = pGrammarResult->xProofreader;
-                const beans::PropertyValue* pProperties = pGrammarResult->aProperties.getConstArray();
-                for( sal_Int32 nProp = 0; nProp < pGrammarResult->aProperties.getLength(); ++nProp )
+                if ( pProperties->Name == "DialogTitle" )
                 {
-                    if ( pProperties->Name == "DialogTitle" )
-                    {
-                        pProperties->Value >>= aPortion.sDialogTitle;
-                        break;
-                    }
+                    pProperties->Value >>= aPortion.sDialogTitle;
+                    break;
                 }
             }
         }
-        else
-            aPortion.sText = sText;
-        aPortion.eLanguage = lcl_GetLanguage(*GetSh());
-        aPortion.bIsField = bIsField;
-        aPortion.bIsHidden = bIsHidden;
-        aPortion.xAlternatives = xAlt;
-        SpellContentPosition aPosition;
-        SwPaM *pCursor = GetSh()->GetCursor();
-        aPosition.nLeft = pCursor->Start()->nContent.GetIndex();
-        aPosition.nRight = pCursor->End()->nContent.GetIndex();
-        aLastPortions.push_back(aPortion);
-        aLastPositions.push_back(aPosition);
     }
+    else
+        aPortion.sText = sText;
+    aPortion.eLanguage = lcl_GetLanguage(*GetSh());
+    aPortion.bIsField = bIsField;
+    aPortion.bIsHidden = bIsHidden;
+    aPortion.xAlternatives = xAlt;
+    SpellContentPosition aPosition;
+    SwPaM *pCursor = GetSh()->GetCursor();
+    aPosition.nLeft = pCursor->Start()->nContent.GetIndex();
+    aPosition.nRight = pCursor->End()->nContent.GetIndex();
+    aLastPortions.push_back(aPortion);
+    aLastPositions.push_back(aPosition);
+
 }
 
 void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > const & xAlt,

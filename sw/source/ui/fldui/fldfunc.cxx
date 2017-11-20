@@ -233,183 +233,184 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, ListBox&, void)
         m_pTypeLB->SelectEntryPos(0);
     }
 
-    if (nOld != GetTypeSel())
+    if (nOld == GetTypeSel())
+        return;
+
+    const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+
+    // fill Selection-Listbox
+    UpdateSubType();
+
+    // fill Format-Listbox
+    m_pFormatLB->Clear();
+
+    const sal_uInt16 nSize = GetFieldMgr().GetFormatCount(nTypeId, IsFieldDlgHtmlMode());
+
+    for (sal_uInt16 i = 0; i < nSize; i++)
     {
-        const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+        sal_Int32 nPos = m_pFormatLB->InsertEntry(GetFieldMgr().GetFormatStr(nTypeId, i));
+        m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>(GetFieldMgr().GetFormatId( nTypeId, i )) );
+    }
 
-        // fill Selection-Listbox
-        UpdateSubType();
+    if (nSize)
+    {
+        if (IsFieldEdit() && nTypeId == TYP_JUMPEDITFLD)
+            m_pFormatLB->SelectEntry(SwResId(FMT_MARK_ARY[GetCurField()->GetFormat()]));
 
-        // fill Format-Listbox
-        m_pFormatLB->Clear();
+        if (!m_pFormatLB->GetSelectedEntryCount())
+            m_pFormatLB->SelectEntryPos(0);
+    }
 
-        const sal_uInt16 nSize = GetFieldMgr().GetFormatCount(nTypeId, IsFieldDlgHtmlMode());
+    bool bValue = false, bName = false, bMacro = false, bInsert = true;
+    bool bFormat = nSize != 0;
 
-        for (sal_uInt16 i = 0; i < nSize; i++)
+    // two controls for conditional text
+    bool bDropDown = TYP_DROPDOWN == nTypeId;
+    bool bCondTextField = TYP_CONDTXTFLD == nTypeId;
+
+    m_pCond1FT->Show(!bDropDown && bCondTextField);
+    m_pCond1ED->Show(!bDropDown && bCondTextField);
+    m_pCond2FT->Show(!bDropDown && bCondTextField);
+    m_pCond2ED->Show(!bDropDown && bCondTextField);
+    m_pValueGroup->Show(!bDropDown && !bCondTextField);
+    m_pMacroBT->Show(!bDropDown);
+    m_pNameED->Show(!bDropDown);
+    m_pNameFT->Show(!bDropDown);
+
+    m_pListGroup->Show(bDropDown);
+
+    m_pNameED->SetDropEnable(false);
+
+    if (IsFieldEdit())
+    {
+        if(bDropDown)
         {
-            sal_Int32 nPos = m_pFormatLB->InsertEntry(GetFieldMgr().GetFormatStr(nTypeId, i));
-            m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>(GetFieldMgr().GetFormatId( nTypeId, i )) );
-        }
-
-        if (nSize)
-        {
-            if (IsFieldEdit() && nTypeId == TYP_JUMPEDITFLD)
-                m_pFormatLB->SelectEntry(SwResId(FMT_MARK_ARY[GetCurField()->GetFormat()]));
-
-            if (!m_pFormatLB->GetSelectedEntryCount())
-                m_pFormatLB->SelectEntryPos(0);
-        }
-
-        bool bValue = false, bName = false, bMacro = false, bInsert = true;
-        bool bFormat = nSize != 0;
-
-        // two controls for conditional text
-        bool bDropDown = TYP_DROPDOWN == nTypeId;
-        bool bCondTextField = TYP_CONDTXTFLD == nTypeId;
-
-        m_pCond1FT->Show(!bDropDown && bCondTextField);
-        m_pCond1ED->Show(!bDropDown && bCondTextField);
-        m_pCond2FT->Show(!bDropDown && bCondTextField);
-        m_pCond2ED->Show(!bDropDown && bCondTextField);
-        m_pValueGroup->Show(!bDropDown && !bCondTextField);
-        m_pMacroBT->Show(!bDropDown);
-        m_pNameED->Show(!bDropDown);
-        m_pNameFT->Show(!bDropDown);
-
-        m_pListGroup->Show(bDropDown);
-
-        m_pNameED->SetDropEnable(false);
-
-        if (IsFieldEdit())
-        {
-            if(bDropDown)
-            {
-                const SwDropDownField* pDrop = static_cast<const SwDropDownField*>(GetCurField());
-                uno::Sequence<OUString> aItems = pDrop->GetItemSequence();
-                const OUString* pArray = aItems.getConstArray();
-                m_pListItemsLB->Clear();
-                for(sal_Int32 i = 0; i < aItems.getLength(); i++)
-                    m_pListItemsLB->InsertEntry(pArray[i]);
-                m_pListItemsLB->SelectEntry(pDrop->GetSelectedItem());
-                m_pListNameED->SetText(pDrop->GetPar2());
-                m_pListNameED->SaveValue();
-                bDropDownLBChanged = false;
-            }
-            else
-            {
-                m_pNameED->SetText(GetCurField()->GetPar1());
-                m_pValueED->SetText(GetCurField()->GetPar2());
-            }
+            const SwDropDownField* pDrop = static_cast<const SwDropDownField*>(GetCurField());
+            uno::Sequence<OUString> aItems = pDrop->GetItemSequence();
+            const OUString* pArray = aItems.getConstArray();
+            m_pListItemsLB->Clear();
+            for(sal_Int32 i = 0; i < aItems.getLength(); i++)
+                m_pListItemsLB->InsertEntry(pArray[i]);
+            m_pListItemsLB->SelectEntry(pDrop->GetSelectedItem());
+            m_pListNameED->SetText(pDrop->GetPar2());
+            m_pListNameED->SaveValue();
+            bDropDownLBChanged = false;
         }
         else
         {
-            m_pNameED->SetText(OUString());
-            m_pValueED->SetText(OUString());
+            m_pNameED->SetText(GetCurField()->GetPar1());
+            m_pValueED->SetText(GetCurField()->GetPar2());
         }
-        if(bDropDown)
-            ListEnableHdl(*m_pListItemED);
+    }
+    else
+    {
+        m_pNameED->SetText(OUString());
+        m_pValueED->SetText(OUString());
+    }
+    if(bDropDown)
+        ListEnableHdl(*m_pListItemED);
 
-        if (m_pNameFT->GetText() != m_sOldNameFT)
-            m_pNameFT->SetText(m_sOldNameFT);
-        if (m_pValueFT->GetText() != m_sOldValueFT)
-            m_pValueFT->SetText(m_sOldValueFT);
+    if (m_pNameFT->GetText() != m_sOldNameFT)
+        m_pNameFT->SetText(m_sOldNameFT);
+    if (m_pValueFT->GetText() != m_sOldValueFT)
+        m_pValueFT->SetText(m_sOldValueFT);
 
-        switch (nTypeId)
+    switch (nTypeId)
+    {
+        case TYP_MACROFLD:
+            bMacro = true;
+            if (!GetFieldMgr().GetMacroPath().isEmpty())
+                bValue = true;
+            else
+                bInsert = false;
+
+            m_pNameFT->SetText(SwResId(STR_MACNAME));
+            m_pValueFT->SetText(SwResId(STR_PROMPT));
+            m_pNameED->SetText(GetFieldMgr().GetMacroName());
+            m_pNameED->SetAccessibleName(m_pNameFT->GetText());
+            m_pValueED->SetAccessibleName(m_pValueFT->GetText());
+            break;
+
+        case TYP_HIDDENPARAFLD:
+            m_pNameFT->SetText(SwResId(STR_COND));
+            m_pNameED->SetDropEnable(true);
+            bName = true;
+            m_pNameED->SetAccessibleName(m_pNameFT->GetText());
+            m_pValueED->SetAccessibleName(m_pValueFT->GetText());
+            break;
+
+        case TYP_HIDDENTXTFLD:
         {
-            case TYP_MACROFLD:
-                bMacro = true;
-                if (!GetFieldMgr().GetMacroPath().isEmpty())
-                    bValue = true;
-                else
-                    bInsert = false;
+            m_pNameFT->SetText(SwResId(STR_COND));
+            m_pNameED->SetDropEnable(true);
+            m_pValueFT->SetText(SwResId(STR_INSTEXT));
+            SwWrtShell* pSh = GetActiveWrtShell();
+            if (!IsFieldEdit() && pSh )
+                m_pValueED->SetText(pSh->GetSelText());
+            bName = bValue = true;
+            m_pNameED->SetAccessibleName(m_pNameFT->GetText());
+            m_pValueED->SetAccessibleName(m_pValueFT->GetText());
+        }
+        break;
 
-                m_pNameFT->SetText(SwResId(STR_MACNAME));
-                m_pValueFT->SetText(SwResId(STR_PROMPT));
-                m_pNameED->SetText(GetFieldMgr().GetMacroName());
-                m_pNameED->SetAccessibleName(m_pNameFT->GetText());
-                m_pValueED->SetAccessibleName(m_pValueFT->GetText());
-                break;
+        case TYP_CONDTXTFLD:
+            m_pNameFT->SetText(SwResId(STR_COND));
+            m_pNameED->SetDropEnable(true);
+            if (IsFieldEdit())
+            {
+                m_pCond1ED->SetText(GetCurField()->GetPar2().getToken(0, '|'));
+                m_pCond2ED->SetText(GetCurField()->GetPar2().getToken(1, '|'));
+            }
 
-            case TYP_HIDDENPARAFLD:
-                m_pNameFT->SetText(SwResId(STR_COND));
+            bName = bValue = true;
+            m_pNameED->SetAccessibleName(m_pNameFT->GetText());
+            m_pValueED->SetAccessibleName(m_pValueFT->GetText());
+            break;
+
+        case TYP_JUMPEDITFLD:
+            m_pNameFT->SetText(SwResId(STR_JUMPEDITFLD));
+            m_pValueFT->SetText(SwResId(STR_PROMPT));
+            bName = bValue = true;
+            m_pNameED->SetAccessibleName(m_pNameFT->GetText());
+            m_pValueED->SetAccessibleName(m_pValueFT->GetText());
+            break;
+
+        case TYP_INPUTFLD:
+            m_pValueFT->SetText(SwResId(STR_PROMPT));
+            bValue = true;
+            m_pNameED->SetAccessibleName(m_pNameFT->GetText());
+            m_pValueED->SetAccessibleName(m_pValueFT->GetText());
+            break;
+
+        case TYP_COMBINED_CHARS:
+            {
+                m_pNameFT->SetText(SwResId(STR_COMBCHRS_FT));
                 m_pNameED->SetDropEnable(true);
                 bName = true;
-                m_pNameED->SetAccessibleName(m_pNameFT->GetText());
-                m_pValueED->SetAccessibleName(m_pValueFT->GetText());
-                break;
 
-            case TYP_HIDDENTXTFLD:
-            {
-                m_pNameFT->SetText(SwResId(STR_COND));
-                m_pNameED->SetDropEnable(true);
-                m_pValueFT->SetText(SwResId(STR_INSTEXT));
-                SwWrtShell* pSh = GetActiveWrtShell();
-                if (!IsFieldEdit() && pSh )
-                    m_pValueED->SetText(pSh->GetSelText());
-                bName = bValue = true;
+                const sal_Int32 nLen = m_pNameED->GetText().getLength();
+                if( !nLen || nLen > MAX_COMBINED_CHARACTERS )
+                    bInsert = false;
                 m_pNameED->SetAccessibleName(m_pNameFT->GetText());
                 m_pValueED->SetAccessibleName(m_pValueFT->GetText());
             }
             break;
-
-            case TYP_CONDTXTFLD:
-                m_pNameFT->SetText(SwResId(STR_COND));
-                m_pNameED->SetDropEnable(true);
-                if (IsFieldEdit())
-                {
-                    m_pCond1ED->SetText(GetCurField()->GetPar2().getToken(0, '|'));
-                    m_pCond2ED->SetText(GetCurField()->GetPar2().getToken(1, '|'));
-                }
-
-                bName = bValue = true;
-                m_pNameED->SetAccessibleName(m_pNameFT->GetText());
-                m_pValueED->SetAccessibleName(m_pValueFT->GetText());
-                break;
-
-            case TYP_JUMPEDITFLD:
-                m_pNameFT->SetText(SwResId(STR_JUMPEDITFLD));
-                m_pValueFT->SetText(SwResId(STR_PROMPT));
-                bName = bValue = true;
-                m_pNameED->SetAccessibleName(m_pNameFT->GetText());
-                m_pValueED->SetAccessibleName(m_pValueFT->GetText());
-                break;
-
-            case TYP_INPUTFLD:
-                m_pValueFT->SetText(SwResId(STR_PROMPT));
-                bValue = true;
-                m_pNameED->SetAccessibleName(m_pNameFT->GetText());
-                m_pValueED->SetAccessibleName(m_pValueFT->GetText());
-                break;
-
-            case TYP_COMBINED_CHARS:
-                {
-                    m_pNameFT->SetText(SwResId(STR_COMBCHRS_FT));
-                    m_pNameED->SetDropEnable(true);
-                    bName = true;
-
-                    const sal_Int32 nLen = m_pNameED->GetText().getLength();
-                    if( !nLen || nLen > MAX_COMBINED_CHARACTERS )
-                        bInsert = false;
-                    m_pNameED->SetAccessibleName(m_pNameFT->GetText());
-                    m_pValueED->SetAccessibleName(m_pValueFT->GetText());
-                }
-                break;
-            case TYP_DROPDOWN :
+        case TYP_DROPDOWN :
+        break;
+        default:
             break;
-            default:
-                break;
-        }
-
-        m_pSelectionLB->Hide();
-
-        m_pFormat->Enable(bFormat);
-        m_pNameFT->Enable(bName);
-        m_pNameED->Enable(bName);
-        m_pValueGroup->Enable(bValue);
-        m_pMacroBT->Enable(bMacro);
-
-        EnableInsert( bInsert );
     }
+
+    m_pSelectionLB->Hide();
+
+    m_pFormat->Enable(bFormat);
+    m_pNameFT->Enable(bName);
+    m_pNameED->Enable(bName);
+    m_pValueGroup->Enable(bValue);
+    m_pMacroBT->Enable(bMacro);
+
+    EnableInsert( bInsert );
+
 }
 
 IMPL_LINK_NOARG(SwFieldFuncPage, SelectHdl, ListBox&, void)
