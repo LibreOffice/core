@@ -28,6 +28,7 @@
  <toolbar:toolbaritem xlink:href=".uno:SendMail" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:EditDoc" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ReadOnlyDoc" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF"/>
  <toolbar:toolbaritem xlink:href=".uno:ExportDirectToEPUB" toolbar:visible="false"/>
