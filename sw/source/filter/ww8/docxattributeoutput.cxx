@@ -606,95 +606,96 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
                                          OUString& rSdtPrAlias,
                                          bool bPara )
 {
-    if( nSdtPrToken > 0 || pSdtPrDataBindingAttrs.is() )
+    if( nSdtPrToken <= 0 && !pSdtPrDataBindingAttrs.is() )
+        return;
+
+    // sdt start mark
+    m_pSerializer->mark(Tag_WriteSdtBlock);
+
+    m_pSerializer->startElementNS( XML_w, XML_sdt, FSEND );
+
+    // output sdt properties
+    m_pSerializer->startElementNS( XML_w, XML_sdtPr, FSEND );
+
+    if( nSdtPrToken > 0 && pSdtPrTokenChildren.is() )
     {
-        // sdt start mark
-        m_pSerializer->mark(Tag_WriteSdtBlock);
-
-        m_pSerializer->startElementNS( XML_w, XML_sdt, FSEND );
-
-        // output sdt properties
-        m_pSerializer->startElementNS( XML_w, XML_sdtPr, FSEND );
-
-        if( nSdtPrToken > 0 && pSdtPrTokenChildren.is() )
-        {
-            if (!pSdtPrTokenAttributes.is())
-                m_pSerializer->startElement( nSdtPrToken, FSEND );
-            else
-            {
-                XFastAttributeListRef xAttrList(pSdtPrTokenAttributes.get());
-                pSdtPrTokenAttributes.clear();
-                m_pSerializer->startElement(nSdtPrToken, xAttrList);
-            }
-
-            if (nSdtPrToken ==  FSNS( XML_w, XML_date ) || nSdtPrToken ==  FSNS( XML_w, XML_docPartObj ) || nSdtPrToken ==  FSNS( XML_w, XML_docPartList ) || nSdtPrToken ==  FSNS( XML_w14, XML_checkbox )) {
-                uno::Sequence<xml::FastAttribute> aChildren = pSdtPrTokenChildren->getFastAttributes();
-                for( sal_Int32 i=0; i < aChildren.getLength(); ++i )
-                    m_pSerializer->singleElement( aChildren[i].Token,
-                                                  FSNS(XML_w, XML_val),
-                                                  OUStringToOString( aChildren[i].Value, RTL_TEXTENCODING_UTF8 ).getStr(),
-                                                  FSEND );
-            }
-
-            m_pSerializer->endElement( nSdtPrToken );
-        }
-        else if( (nSdtPrToken > 0) && nSdtPrToken != FSNS( XML_w, XML_id ) && !(m_bRunTextIsOn && m_rExport.SdrExporter().IsParagraphHasDrawing()))
-        {
-            if (!pSdtPrTokenAttributes.is())
-                m_pSerializer->singleElement( nSdtPrToken, FSEND );
-            else
-            {
-                XFastAttributeListRef xAttrList(pSdtPrTokenAttributes.get());
-                pSdtPrTokenAttributes.clear();
-                m_pSerializer->singleElement(nSdtPrToken, xAttrList);
-            }
-        }
-
-        if( nSdtPrToken == FSNS( XML_w, XML_id ) || ( bPara && m_bParagraphSdtHasId ) )
-            //Word won't open a document with an empty id tag, we fill it with a random number
-            m_pSerializer->singleElementNS(XML_w, XML_id, FSNS(XML_w, XML_val),
-                                          OString::number(comphelper::rng::uniform_int_distribution(0, std::numeric_limits<int>::max())),
-                                          FSEND);
-
-        if( pSdtPrDataBindingAttrs.is() && !m_rExport.SdrExporter().IsParagraphHasDrawing())
-        {
-            XFastAttributeListRef xAttrList( pSdtPrDataBindingAttrs.get() );
-            pSdtPrDataBindingAttrs.clear();
-            m_pSerializer->singleElementNS( XML_w, XML_dataBinding, xAttrList );
-        }
-
-        if (!rSdtPrAlias.isEmpty())
-            m_pSerializer->singleElementNS(XML_w, XML_alias, FSNS(XML_w, XML_val),
-                                           OUStringToOString(rSdtPrAlias, RTL_TEXTENCODING_UTF8).getStr(),
-                                           FSEND);
-
-        m_pSerializer->endElementNS( XML_w, XML_sdtPr );
-
-        // sdt contents start tag
-        m_pSerializer->startElementNS( XML_w, XML_sdtContent, FSEND );
-
-        // prepend the tags since the sdt start mark before the paragraph
-        m_pSerializer->mergeTopMarks(Tag_WriteSdtBlock, sax_fastparser::MergeMarks::PREPEND);
-
-        // write the ending tags after the paragraph
-        if (bPara)
-        {
-            m_bStartedParaSdt = true;
-            if (m_tableReference->m_bTableCellOpen)
-                m_tableReference->m_bTableCellParaSdtOpen = true;
-            if (m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen())
-                m_rExport.SdrExporter().setParagraphSdtOpen(true);
-        }
+        if (!pSdtPrTokenAttributes.is())
+            m_pSerializer->startElement( nSdtPrToken, FSEND );
         else
-            // Support multiple runs inside a run-level SDT: don't close the SDT block yet.
-            m_bStartedCharSdt = true;
+        {
+            XFastAttributeListRef xAttrList(pSdtPrTokenAttributes.get());
+            pSdtPrTokenAttributes.clear();
+            m_pSerializer->startElement(nSdtPrToken, xAttrList);
+        }
 
-        // clear sdt status
-        nSdtPrToken = 0;
-        pSdtPrTokenChildren.clear();
-        pSdtPrDataBindingAttrs.clear();
-        rSdtPrAlias.clear();
+        if (nSdtPrToken ==  FSNS( XML_w, XML_date ) || nSdtPrToken ==  FSNS( XML_w, XML_docPartObj ) || nSdtPrToken ==  FSNS( XML_w, XML_docPartList ) || nSdtPrToken ==  FSNS( XML_w14, XML_checkbox )) {
+            uno::Sequence<xml::FastAttribute> aChildren = pSdtPrTokenChildren->getFastAttributes();
+            for( sal_Int32 i=0; i < aChildren.getLength(); ++i )
+                m_pSerializer->singleElement( aChildren[i].Token,
+                                              FSNS(XML_w, XML_val),
+                                              OUStringToOString( aChildren[i].Value, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                              FSEND );
+        }
+
+        m_pSerializer->endElement( nSdtPrToken );
     }
+    else if( (nSdtPrToken > 0) && nSdtPrToken != FSNS( XML_w, XML_id ) && !(m_bRunTextIsOn && m_rExport.SdrExporter().IsParagraphHasDrawing()))
+    {
+        if (!pSdtPrTokenAttributes.is())
+            m_pSerializer->singleElement( nSdtPrToken, FSEND );
+        else
+        {
+            XFastAttributeListRef xAttrList(pSdtPrTokenAttributes.get());
+            pSdtPrTokenAttributes.clear();
+            m_pSerializer->singleElement(nSdtPrToken, xAttrList);
+        }
+    }
+
+    if( nSdtPrToken == FSNS( XML_w, XML_id ) || ( bPara && m_bParagraphSdtHasId ) )
+        //Word won't open a document with an empty id tag, we fill it with a random number
+        m_pSerializer->singleElementNS(XML_w, XML_id, FSNS(XML_w, XML_val),
+                                      OString::number(comphelper::rng::uniform_int_distribution(0, std::numeric_limits<int>::max())),
+                                      FSEND);
+
+    if( pSdtPrDataBindingAttrs.is() && !m_rExport.SdrExporter().IsParagraphHasDrawing())
+    {
+        XFastAttributeListRef xAttrList( pSdtPrDataBindingAttrs.get() );
+        pSdtPrDataBindingAttrs.clear();
+        m_pSerializer->singleElementNS( XML_w, XML_dataBinding, xAttrList );
+    }
+
+    if (!rSdtPrAlias.isEmpty())
+        m_pSerializer->singleElementNS(XML_w, XML_alias, FSNS(XML_w, XML_val),
+                                       OUStringToOString(rSdtPrAlias, RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSEND);
+
+    m_pSerializer->endElementNS( XML_w, XML_sdtPr );
+
+    // sdt contents start tag
+    m_pSerializer->startElementNS( XML_w, XML_sdtContent, FSEND );
+
+    // prepend the tags since the sdt start mark before the paragraph
+    m_pSerializer->mergeTopMarks(Tag_WriteSdtBlock, sax_fastparser::MergeMarks::PREPEND);
+
+    // write the ending tags after the paragraph
+    if (bPara)
+    {
+        m_bStartedParaSdt = true;
+        if (m_tableReference->m_bTableCellOpen)
+            m_tableReference->m_bTableCellParaSdtOpen = true;
+        if (m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen())
+            m_rExport.SdrExporter().setParagraphSdtOpen(true);
+    }
+    else
+        // Support multiple runs inside a run-level SDT: don't close the SDT block yet.
+        m_bStartedCharSdt = true;
+
+    // clear sdt status
+    nSdtPrToken = 0;
+    pSdtPrTokenChildren.clear();
+    pSdtPrDataBindingAttrs.clear();
+    rSdtPrAlias.clear();
+
 }
 
 void DocxAttributeOutput::EndSdtBlock()
@@ -6028,52 +6029,53 @@ void DocxAttributeOutput::SectionPageBorders( const SwFrameFormat* pFormat, cons
     const SvxBorderLine* pRight = rBox.GetRight( );
     const SvxBorderLine* pBottom = rBox.GetBottom( );
 
-    if ( pBottom || pTop || pLeft || pRight )
+    if ( !(pBottom || pTop || pLeft || pRight) )
+        return;
+
+    bool bExportDistanceFromPageEdge = false;
+    if ( boxHasLineLargerThan31(rBox) )
     {
-        bool bExportDistanceFromPageEdge = false;
-        if ( boxHasLineLargerThan31(rBox) )
-        {
-            // The distance is larger than '31'. This cannot be exported as 'distance from text'.
-            // Instead - it should be exported as 'distance from page edge'.
-            // This is based on http://wiki.openoffice.org/wiki/Writer/MSInteroperability/PageBorder
-            // Specifically 'export case #2'
-            bExportDistanceFromPageEdge = true;
-        }
-
-        // All distances are relative to the text margins
-        m_pSerializer->startElementNS( XML_w, XML_pgBorders,
-               FSNS( XML_w, XML_display ), "allPages",
-               FSNS( XML_w, XML_offsetFrom ), bExportDistanceFromPageEdge ? "page" : "text",
-               FSEND );
-
-        OutputBorderOptions aOutputBorderOptions = lcl_getBoxBorderOptions();
-
-        // Check if the distance is larger than 31 points
-        aOutputBorderOptions.bCheckDistanceSize = true;
-
-        // Check if there is a shadow item
-        const SfxPoolItem* pItem = GetExport().HasItem( RES_SHADOW );
-        if ( pItem )
-        {
-            const SvxShadowItem* pShadowItem = static_cast<const SvxShadowItem*>(pItem);
-            aOutputBorderOptions.aShadowLocation = pShadowItem->GetLocation();
-        }
-
-        // By top margin, impl_borders() means the distance between the top of the page and the header frame.
-        PageMargins aMargins = m_pageMargins;
-        HdFtDistanceGlue aGlue(pFormat->GetAttrSet());
-        if (aGlue.HasHeader())
-            aMargins.nPageMarginTop = aGlue.dyaHdrTop;
-        // Ditto for bottom margin.
-        if (aGlue.HasFooter())
-            aMargins.nPageMarginBottom = aGlue.dyaHdrBottom;
-
-        std::map<SvxBoxItemLine, css::table::BorderLine2> aEmptyMap; // empty styles map
-        impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &aMargins,
-                      aEmptyMap );
-
-        m_pSerializer->endElementNS( XML_w, XML_pgBorders );
+        // The distance is larger than '31'. This cannot be exported as 'distance from text'.
+        // Instead - it should be exported as 'distance from page edge'.
+        // This is based on http://wiki.openoffice.org/wiki/Writer/MSInteroperability/PageBorder
+        // Specifically 'export case #2'
+        bExportDistanceFromPageEdge = true;
     }
+
+    // All distances are relative to the text margins
+    m_pSerializer->startElementNS( XML_w, XML_pgBorders,
+           FSNS( XML_w, XML_display ), "allPages",
+           FSNS( XML_w, XML_offsetFrom ), bExportDistanceFromPageEdge ? "page" : "text",
+           FSEND );
+
+    OutputBorderOptions aOutputBorderOptions = lcl_getBoxBorderOptions();
+
+    // Check if the distance is larger than 31 points
+    aOutputBorderOptions.bCheckDistanceSize = true;
+
+    // Check if there is a shadow item
+    const SfxPoolItem* pItem = GetExport().HasItem( RES_SHADOW );
+    if ( pItem )
+    {
+        const SvxShadowItem* pShadowItem = static_cast<const SvxShadowItem*>(pItem);
+        aOutputBorderOptions.aShadowLocation = pShadowItem->GetLocation();
+    }
+
+    // By top margin, impl_borders() means the distance between the top of the page and the header frame.
+    PageMargins aMargins = m_pageMargins;
+    HdFtDistanceGlue aGlue(pFormat->GetAttrSet());
+    if (aGlue.HasHeader())
+        aMargins.nPageMarginTop = aGlue.dyaHdrTop;
+    // Ditto for bottom margin.
+    if (aGlue.HasFooter())
+        aMargins.nPageMarginBottom = aGlue.dyaHdrBottom;
+
+    std::map<SvxBoxItemLine, css::table::BorderLine2> aEmptyMap; // empty styles map
+    impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &aMargins,
+                  aEmptyMap );
+
+    m_pSerializer->endElementNS( XML_w, XML_pgBorders );
+
 }
 
 void DocxAttributeOutput::SectionBiDi( bool bBiDi )

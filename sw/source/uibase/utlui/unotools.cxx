@@ -112,42 +112,43 @@ void SwOneExampleFrame::CreateControl()
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     uno::Reference< uno::XInterface >  xInst = xMgr->createInstance( "com.sun.star.frame.FrameControl" );
     m_xControl.set(xInst, uno::UNO_QUERY);
-    if(m_xControl.is())
-    {
-        uno::Reference< awt::XWindowPeer >  xParent( m_aTopWindow->GetComponentInterface() );
+    if(!m_xControl.is())
+        return;
 
-        uno::Reference< awt::XToolkit >  xToolkit( awt::Toolkit::create(xContext), uno::UNO_QUERY_THROW );
+    uno::Reference< awt::XWindowPeer >  xParent( m_aTopWindow->GetComponentInterface() );
 
-        m_xControl->createPeer( xToolkit, xParent );
+    uno::Reference< awt::XToolkit >  xToolkit( awt::Toolkit::create(xContext), uno::UNO_QUERY_THROW );
 
-        uno::Reference< awt::XWindow >  xWin( m_xControl, uno::UNO_QUERY );
-        xWin->setVisible(false);
-        Size aWinSize(m_aTopWindow->GetOutputSizePixel());
-        xWin->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
+    m_xControl->createPeer( xToolkit, xParent );
 
-        uno::Reference< beans::XPropertySet >  xPrSet(xInst, uno::UNO_QUERY);
-        uno::Any aURL;
-        // create new doc
-        OUString sTempURL(cFactory);
-        if(!m_sArgumentURL.isEmpty())
-            sTempURL = m_sArgumentURL;
-        aURL <<= sTempURL;
+    uno::Reference< awt::XWindow >  xWin( m_xControl, uno::UNO_QUERY );
+    xWin->setVisible(false);
+    Size aWinSize(m_aTopWindow->GetOutputSizePixel());
+    xWin->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
 
-        uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
-                { "OpenFlags", uno::Any(OUString("-RB")) },
-                { "Referer", uno::Any(OUString("private:user")) },
-                { "ReadOnly", uno::Any(true) }
-            }));
-        uno::Any aArgs(aSeq);
+    uno::Reference< beans::XPropertySet >  xPrSet(xInst, uno::UNO_QUERY);
+    uno::Any aURL;
+    // create new doc
+    OUString sTempURL(cFactory);
+    if(!m_sArgumentURL.isEmpty())
+        sTempURL = m_sArgumentURL;
+    aURL <<= sTempURL;
 
-        xPrSet->setPropertyValue( "LoaderArguments", aArgs );
-        //save and set readonly???
+    uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
+            { "OpenFlags", uno::Any(OUString("-RB")) },
+            { "Referer", uno::Any(OUString("private:user")) },
+            { "ReadOnly", uno::Any(true) }
+        }));
+    uno::Any aArgs(aSeq);
 
-        xPrSet->setPropertyValue("ComponentURL", aURL);
+    xPrSet->setPropertyValue( "LoaderArguments", aArgs );
+    //save and set readonly???
 
-        m_aLoadedIdle.Start();
-        m_bServiceAvailable = true;
-    }
+    xPrSet->setPropertyValue("ComponentURL", aURL);
+
+    m_aLoadedIdle.Start();
+    m_bServiceAvailable = true;
+
 }
 
 void    SwOneExampleFrame::DisposeControl()

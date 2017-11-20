@@ -1281,92 +1281,93 @@ void    SwGlobalTree::DataChanged( const DataChangedEvent& rDCEvt )
 void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequence< OUString >& _rFiles )
 {
     sal_Int32 nFiles = _rFiles.getLength();
-    if ( nFiles )
+    if ( !nFiles )
+        return;
+
+    bool bMove = false;
+    if ( !_pContent )
     {
-        bool bMove = false;
-        if ( !_pContent )
-        {
-            SvTreeListEntry* pLast = LastVisible();
-            _pContent = static_cast<SwGlblDocContent*>(pLast->GetUserData());
-            bMove = true;
-        }
-        sal_uLong nEntryCount = GetEntryCount();
-        const OUString* pFileNames = _rFiles.getConstArray();
-        SwWrtShell& rSh = GetParentWindow()->GetCreateView()->GetWrtShell();
-        rSh.StartAction();
-        // after insertion of the first new content the 'pCont' parameter becomes invalid
-        // find the index of the 'anchor' content to always use a current anchor content
-        size_t nAnchorContent = m_pSwGlblDocContents->size() - 1;
-        if ( !bMove )
-        {
-            for (size_t nContent = 0; nContent < m_pSwGlblDocContents->size();
-                    ++nContent)
-            {
-                if( *_pContent == *(*m_pSwGlblDocContents)[ nContent ] )
-                {
-                    nAnchorContent = nContent;
-                    break;
-                }
-            }
-        }
-        SwGlblDocContents aTempContents;
-        for ( sal_Int32 nFile = 0; nFile < nFiles; ++nFile )
-        {
-            //update the global document content after each inserted document
-            rSh.GetGlobalDocContent(aTempContents);
-            SwGlblDocContent* pAnchorContent = nullptr;
-            OSL_ENSURE(aTempContents.size() > (nAnchorContent + nFile), "invalid anchor content -> last insertion failed");
-            if ( aTempContents.size() > (nAnchorContent + nFile) )
-                pAnchorContent = aTempContents[nAnchorContent + nFile];
-            else
-                pAnchorContent = aTempContents.back();
-            OUString sFileName(pFileNames[nFile]);
-            INetURLObject aFileUrl;
-            aFileUrl.SetSmartURL( sFileName );
-            OUString sSectionName(aFileUrl.GetLastName(
-                INetURLObject::DecodeMechanism::Unambiguous).getToken(0, sfx2::cTokenSeparator));
-            sal_uInt16 nSectCount = rSh.GetSectionFormatCount();
-            OUString sTempSectionName(sSectionName);
-            sal_uInt16 nAddNumber = 0;
-            sal_uInt16 nCount = 0;
-            // if applicable: add index if the range name is already in use.
-            while ( nCount < nSectCount )
-            {
-                const SwSectionFormat& rFormat = rSh.GetSectionFormat(nCount);
-                if ((rFormat.GetSection()->GetSectionName() == sTempSectionName)
-                    && rFormat.IsInNodesArr())
-                {
-                    nCount = 0;
-                    nAddNumber++;
-                    sTempSectionName = sSectionName + ":" + OUString::number( nAddNumber );
-                }
-                else
-                    nCount++;
-            }
-
-            if ( nAddNumber )
-                sSectionName = sTempSectionName;
-
-            SwSectionData aSectionData(CONTENT_SECTION, sSectionName);
-            aSectionData.SetProtectFlag(true);
-            aSectionData.SetHidden(false);
-
-            aSectionData.SetLinkFileName(sFileName);
-            aSectionData.SetType(FILE_LINK_SECTION);
-            aSectionData.SetLinkFilePassword( OUString() );
-
-            rSh.InsertGlobalDocContent( *pAnchorContent, aSectionData );
-        }
-        if ( bMove )
-        {
-            Update( false );
-            rSh.MoveGlobalDocContent(
-                *m_pSwGlblDocContents, nEntryCount, nEntryCount + nFiles, nEntryCount - nFiles );
-        }
-        rSh.EndAction();
-        Update( false );
-        Display();
+        SvTreeListEntry* pLast = LastVisible();
+        _pContent = static_cast<SwGlblDocContent*>(pLast->GetUserData());
+        bMove = true;
     }
+    sal_uLong nEntryCount = GetEntryCount();
+    const OUString* pFileNames = _rFiles.getConstArray();
+    SwWrtShell& rSh = GetParentWindow()->GetCreateView()->GetWrtShell();
+    rSh.StartAction();
+    // after insertion of the first new content the 'pCont' parameter becomes invalid
+    // find the index of the 'anchor' content to always use a current anchor content
+    size_t nAnchorContent = m_pSwGlblDocContents->size() - 1;
+    if ( !bMove )
+    {
+        for (size_t nContent = 0; nContent < m_pSwGlblDocContents->size();
+                ++nContent)
+        {
+            if( *_pContent == *(*m_pSwGlblDocContents)[ nContent ] )
+            {
+                nAnchorContent = nContent;
+                break;
+            }
+        }
+    }
+    SwGlblDocContents aTempContents;
+    for ( sal_Int32 nFile = 0; nFile < nFiles; ++nFile )
+    {
+        //update the global document content after each inserted document
+        rSh.GetGlobalDocContent(aTempContents);
+        SwGlblDocContent* pAnchorContent = nullptr;
+        OSL_ENSURE(aTempContents.size() > (nAnchorContent + nFile), "invalid anchor content -> last insertion failed");
+        if ( aTempContents.size() > (nAnchorContent + nFile) )
+            pAnchorContent = aTempContents[nAnchorContent + nFile];
+        else
+            pAnchorContent = aTempContents.back();
+        OUString sFileName(pFileNames[nFile]);
+        INetURLObject aFileUrl;
+        aFileUrl.SetSmartURL( sFileName );
+        OUString sSectionName(aFileUrl.GetLastName(
+            INetURLObject::DecodeMechanism::Unambiguous).getToken(0, sfx2::cTokenSeparator));
+        sal_uInt16 nSectCount = rSh.GetSectionFormatCount();
+        OUString sTempSectionName(sSectionName);
+        sal_uInt16 nAddNumber = 0;
+        sal_uInt16 nCount = 0;
+        // if applicable: add index if the range name is already in use.
+        while ( nCount < nSectCount )
+        {
+            const SwSectionFormat& rFormat = rSh.GetSectionFormat(nCount);
+            if ((rFormat.GetSection()->GetSectionName() == sTempSectionName)
+                && rFormat.IsInNodesArr())
+            {
+                nCount = 0;
+                nAddNumber++;
+                sTempSectionName = sSectionName + ":" + OUString::number( nAddNumber );
+            }
+            else
+                nCount++;
+        }
+
+        if ( nAddNumber )
+            sSectionName = sTempSectionName;
+
+        SwSectionData aSectionData(CONTENT_SECTION, sSectionName);
+        aSectionData.SetProtectFlag(true);
+        aSectionData.SetHidden(false);
+
+        aSectionData.SetLinkFileName(sFileName);
+        aSectionData.SetType(FILE_LINK_SECTION);
+        aSectionData.SetLinkFilePassword( OUString() );
+
+        rSh.InsertGlobalDocContent( *pAnchorContent, aSectionData );
+    }
+    if ( bMove )
+    {
+        Update( false );
+        rSh.MoveGlobalDocContent(
+            *m_pSwGlblDocContents, nEntryCount, nEntryCount + nFiles, nEntryCount - nFiles );
+    }
+    rSh.EndAction();
+    Update( false );
+    Display();
+
 }
 
 IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )

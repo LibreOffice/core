@@ -160,36 +160,37 @@ void SwSelectDBTableDialog::dispose()
 IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, Button*, pButton, void)
 {
     SvTreeListEntry* pEntry = m_pTable->FirstSelected();
-    if(pEntry)
+    if(!pEntry)
+        return;
+
+    OUString sTableOrQuery = SvTabListBox::GetEntryText(pEntry, 0);
+    sal_Int32 nCommandType = nullptr == pEntry->GetUserData() ? 0 : 1;
+
+    OUString sDataSourceName;
+    Reference<XChild> xChild(m_xConnection, UNO_QUERY);
+    if(xChild.is())
     {
-        OUString sTableOrQuery = SvTabListBox::GetEntryText(pEntry, 0);
-        sal_Int32 nCommandType = nullptr == pEntry->GetUserData() ? 0 : 1;
-
-        OUString sDataSourceName;
-        Reference<XChild> xChild(m_xConnection, UNO_QUERY);
-        if(xChild.is())
-        {
-            Reference<XDataSource> xSource(xChild->getParent(), UNO_QUERY);
-            Reference<XPropertySet> xPrSet(xSource, UNO_QUERY);
-            xPrSet->getPropertyValue("Name") >>= sDataSourceName;
-        }
-        OSL_ENSURE(!sDataSourceName.isEmpty(), "no data source found");
-        Sequence<PropertyValue> aProperties(5);
-        PropertyValue* pProperties = aProperties.getArray();
-        pProperties[0].Name = "DataSourceName";
-        pProperties[0].Value <<= sDataSourceName;
-        pProperties[1].Name = "Command";
-        pProperties[1].Value <<= sTableOrQuery;
-        pProperties[2].Name = "CommandType";
-        pProperties[2].Value <<= nCommandType;
-        pProperties[3].Name = "ShowTreeView";
-        pProperties[3].Value <<= false;
-        pProperties[4].Name = "ShowTreeViewButton";
-        pProperties[4].Value <<= false;
-
-        VclPtrInstance< SwDBTablePreviewDialog > pDlg(pButton, aProperties);
-        pDlg->Execute();
+        Reference<XDataSource> xSource(xChild->getParent(), UNO_QUERY);
+        Reference<XPropertySet> xPrSet(xSource, UNO_QUERY);
+        xPrSet->getPropertyValue("Name") >>= sDataSourceName;
     }
+    OSL_ENSURE(!sDataSourceName.isEmpty(), "no data source found");
+    Sequence<PropertyValue> aProperties(5);
+    PropertyValue* pProperties = aProperties.getArray();
+    pProperties[0].Name = "DataSourceName";
+    pProperties[0].Value <<= sDataSourceName;
+    pProperties[1].Name = "Command";
+    pProperties[1].Value <<= sTableOrQuery;
+    pProperties[2].Name = "CommandType";
+    pProperties[2].Value <<= nCommandType;
+    pProperties[3].Name = "ShowTreeView";
+    pProperties[3].Value <<= false;
+    pProperties[4].Name = "ShowTreeViewButton";
+    pProperties[4].Value <<= false;
+
+    VclPtrInstance< SwDBTablePreviewDialog > pDlg(pButton, aProperties);
+    pDlg->Execute();
+
 }
 
 OUString    SwSelectDBTableDialog::GetSelectedTable(bool& bIsTable)

@@ -513,98 +513,99 @@ void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point
 {
     SwPageExample::DrawPage(rRenderContext, rOrg, bSecond, bEnabled);
 
-    if (pGridItem && pGridItem->GetGridType())
+    if (!pGridItem || !pGridItem->GetGridType())
+        return;
+
+    //paint the grid now
+    Color aLineColor = pGridItem->GetColor();
+    if (aLineColor.GetColor() == COL_AUTO)
     {
-        //paint the grid now
-        Color aLineColor = pGridItem->GetColor();
-        if (aLineColor.GetColor() == COL_AUTO)
-        {
-            aLineColor = rRenderContext.GetFillColor();
-            aLineColor.Invert();
-        }
-        rRenderContext.SetLineColor(aLineColor);
-        long nL = GetLeft();
-        long nR = GetRight();
-
-        if (GetUsage() == SvxPageUsage::Mirror && !bSecond)
-        {
-            // rotate for mirrored
-            nL = GetRight();
-            nR = GetLeft();
-        }
-
-        tools::Rectangle aRect;
-        aRect.Right() = rOrg.X() + GetSize().Width() - nR;
-        aRect.Left()  = rOrg.X() + nL;
-        aRect.Top()   = rOrg.Y() + GetTop() + GetHdHeight() + GetHdDist();
-        aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist();
-
-        //increase the values to get a 'viewable' preview
-        sal_Int32 nBaseHeight = pGridItem->GetBaseHeight() * 3;
-        sal_Int32 nRubyHeight = pGridItem->GetRubyHeight() * 3;
-
-        //detect height of rectangles
-        tools::Rectangle aRubyRect(aRect.TopLeft(),
-                    m_bVertical ?
-                    Size(nRubyHeight, aRect.GetHeight()) :
-                    Size(aRect.GetWidth(), nRubyHeight));
-        tools::Rectangle aCharRect(aRect.TopLeft(),
-                    m_bVertical ?
-                    Size(nBaseHeight, aRect.GetHeight()) :
-                    Size(aRect.GetWidth(), nBaseHeight));
-
-        sal_Int32 nLineHeight = nBaseHeight + nRubyHeight;
-
-        //detect count of rectangles
-        sal_Int32 nLines = (m_bVertical ? aRect.GetWidth(): aRect.GetHeight()) / nLineHeight;
-        if (nLines > pGridItem->GetLines())
-            nLines = pGridItem->GetLines();
-
-        // determine start position
-        if (m_bVertical)
-        {
-            sal_Int16 nXStart = static_cast<sal_Int16>(aRect.GetWidth() / 2 - nLineHeight * nLines /2);
-            aRubyRect.Move(nXStart, 0);
-            aCharRect.Move(nXStart, 0);
-        }
-        else
-        {
-            sal_Int16 nYStart = static_cast<sal_Int16>(aRect.GetHeight() / 2 - nLineHeight * nLines /2);
-            aRubyRect.Move(0, nYStart);
-            aCharRect.Move(0, nYStart);
-        }
-
-        if (pGridItem->IsRubyTextBelow())
-            m_bVertical ? aRubyRect.Move(nBaseHeight, 0) : aRubyRect.Move(0, nBaseHeight);
-        else
-            m_bVertical ? aCharRect.Move(nRubyHeight, 0) : aCharRect.Move(0, nRubyHeight);
-
-        //vertical lines
-        bool bBothLines = pGridItem->GetGridType() == GRID_LINES_CHARS;
-        rRenderContext.SetFillColor(Color(COL_TRANSPARENT));
-        sal_Int32 nXMove = m_bVertical ? nLineHeight : 0;
-        sal_Int32 nYMove = m_bVertical ? 0 : nLineHeight;
-        for (sal_Int32 nLine = 0; nLine < nLines; nLine++)
-        {
-            rRenderContext.DrawRect(aRubyRect);
-            rRenderContext.DrawRect(aCharRect);
-            if (bBothLines)
-            {
-                Point aStart = aCharRect.TopLeft();
-                Point aEnd = m_bVertical ? aCharRect.TopRight() : aCharRect.BottomLeft();
-                while (m_bVertical ? aStart.Y() < aRect.Bottom(): aStart.X() < aRect.Right())
-                {
-                    rRenderContext.DrawLine(aStart, aEnd);
-                    if(m_bVertical)
-                        aStart.Y() = aEnd.Y() += nBaseHeight;
-                    else
-                        aStart.X() = aEnd.X() += nBaseHeight;
-                }
-            }
-            aRubyRect.Move(nXMove, nYMove);
-            aCharRect.Move(nXMove, nYMove);
-        }
+        aLineColor = rRenderContext.GetFillColor();
+        aLineColor.Invert();
     }
+    rRenderContext.SetLineColor(aLineColor);
+    long nL = GetLeft();
+    long nR = GetRight();
+
+    if (GetUsage() == SvxPageUsage::Mirror && !bSecond)
+    {
+        // rotate for mirrored
+        nL = GetRight();
+        nR = GetLeft();
+    }
+
+    tools::Rectangle aRect;
+    aRect.Right() = rOrg.X() + GetSize().Width() - nR;
+    aRect.Left()  = rOrg.X() + nL;
+    aRect.Top()   = rOrg.Y() + GetTop() + GetHdHeight() + GetHdDist();
+    aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist();
+
+    //increase the values to get a 'viewable' preview
+    sal_Int32 nBaseHeight = pGridItem->GetBaseHeight() * 3;
+    sal_Int32 nRubyHeight = pGridItem->GetRubyHeight() * 3;
+
+    //detect height of rectangles
+    tools::Rectangle aRubyRect(aRect.TopLeft(),
+                m_bVertical ?
+                Size(nRubyHeight, aRect.GetHeight()) :
+                Size(aRect.GetWidth(), nRubyHeight));
+    tools::Rectangle aCharRect(aRect.TopLeft(),
+                m_bVertical ?
+                Size(nBaseHeight, aRect.GetHeight()) :
+                Size(aRect.GetWidth(), nBaseHeight));
+
+    sal_Int32 nLineHeight = nBaseHeight + nRubyHeight;
+
+    //detect count of rectangles
+    sal_Int32 nLines = (m_bVertical ? aRect.GetWidth(): aRect.GetHeight()) / nLineHeight;
+    if (nLines > pGridItem->GetLines())
+        nLines = pGridItem->GetLines();
+
+    // determine start position
+    if (m_bVertical)
+    {
+        sal_Int16 nXStart = static_cast<sal_Int16>(aRect.GetWidth() / 2 - nLineHeight * nLines /2);
+        aRubyRect.Move(nXStart, 0);
+        aCharRect.Move(nXStart, 0);
+    }
+    else
+    {
+        sal_Int16 nYStart = static_cast<sal_Int16>(aRect.GetHeight() / 2 - nLineHeight * nLines /2);
+        aRubyRect.Move(0, nYStart);
+        aCharRect.Move(0, nYStart);
+    }
+
+    if (pGridItem->IsRubyTextBelow())
+        m_bVertical ? aRubyRect.Move(nBaseHeight, 0) : aRubyRect.Move(0, nBaseHeight);
+    else
+        m_bVertical ? aCharRect.Move(nRubyHeight, 0) : aCharRect.Move(0, nRubyHeight);
+
+    //vertical lines
+    bool bBothLines = pGridItem->GetGridType() == GRID_LINES_CHARS;
+    rRenderContext.SetFillColor(Color(COL_TRANSPARENT));
+    sal_Int32 nXMove = m_bVertical ? nLineHeight : 0;
+    sal_Int32 nYMove = m_bVertical ? 0 : nLineHeight;
+    for (sal_Int32 nLine = 0; nLine < nLines; nLine++)
+    {
+        rRenderContext.DrawRect(aRubyRect);
+        rRenderContext.DrawRect(aCharRect);
+        if (bBothLines)
+        {
+            Point aStart = aCharRect.TopLeft();
+            Point aEnd = m_bVertical ? aCharRect.TopRight() : aCharRect.BottomLeft();
+            while (m_bVertical ? aStart.Y() < aRect.Bottom(): aStart.X() < aRect.Right())
+            {
+                rRenderContext.DrawLine(aStart, aEnd);
+                if(m_bVertical)
+                    aStart.Y() = aEnd.Y() += nBaseHeight;
+                else
+                    aStart.X() = aEnd.X() += nBaseHeight;
+            }
+        }
+        aRubyRect.Move(nXMove, nYMove);
+        aCharRect.Move(nXMove, nYMove);
+    }
+
 }
 
 void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )

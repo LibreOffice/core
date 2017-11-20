@@ -986,50 +986,51 @@ void DocxSdrExport::writeDMLEffectLst(const SwFrameFormat& rFrameFormat)
     const SvxShadowItem& aShadowItem = rFrameFormat.GetShadow();
 
     // Output effects
-    if (aShadowItem.GetLocation() != SvxShadowLocation::NONE)
-    {
-        // Distance is measured diagonally from corner
-        double nShadowDist = sqrt((double)aShadowItem.GetWidth()*aShadowItem.GetWidth()*2.0);
-        OString aShadowDist(OString::number(TwipsToEMU(nShadowDist)));
-        OString aShadowColor = msfilter::util::ConvertColor(aShadowItem.GetColor());
-        OString aShadowAlpha = lcl_ConvertTransparency(aShadowItem.GetColor());
-        sal_uInt32 nShadowDir = 0;
-        switch (aShadowItem.GetLocation())
-        {
-        case SvxShadowLocation::TopLeft:
-            nShadowDir = 13500000;
-            break;
-        case SvxShadowLocation::TopRight:
-            nShadowDir = 18900000;
-            break;
-        case SvxShadowLocation::BottomLeft:
-            nShadowDir = 8100000;
-            break;
-        case SvxShadowLocation::BottomRight:
-            nShadowDir = 2700000;
-            break;
-        case SvxShadowLocation::NONE:
-        case SvxShadowLocation::End:
-            break;
-        }
-        OString aShadowDir(OString::number(nShadowDir));
+    if (aShadowItem.GetLocation() == SvxShadowLocation::NONE)
+        return;
 
-        m_pImpl->m_pSerializer->startElementNS(XML_a, XML_effectLst, FSEND);
-        m_pImpl->m_pSerializer->startElementNS(XML_a, XML_outerShdw,
-                                               XML_dist, aShadowDist.getStr(),
-                                               XML_dir, aShadowDir.getStr(), FSEND);
-        if (aShadowAlpha.isEmpty())
-            m_pImpl->m_pSerializer->singleElementNS(XML_a, XML_srgbClr,
-                                                    XML_val, aShadowColor.getStr(), FSEND);
-        else
-        {
-            m_pImpl->m_pSerializer->startElementNS(XML_a, XML_srgbClr, XML_val, aShadowColor.getStr(), FSEND);
-            m_pImpl->m_pSerializer->singleElementNS(XML_a, XML_alpha, XML_val, aShadowAlpha.getStr(), FSEND);
-            m_pImpl->m_pSerializer->endElementNS(XML_a, XML_srgbClr);
-        }
-        m_pImpl->m_pSerializer->endElementNS(XML_a, XML_outerShdw);
-        m_pImpl->m_pSerializer->endElementNS(XML_a, XML_effectLst);
+    // Distance is measured diagonally from corner
+    double nShadowDist = sqrt((double)aShadowItem.GetWidth()*aShadowItem.GetWidth()*2.0);
+    OString aShadowDist(OString::number(TwipsToEMU(nShadowDist)));
+    OString aShadowColor = msfilter::util::ConvertColor(aShadowItem.GetColor());
+    OString aShadowAlpha = lcl_ConvertTransparency(aShadowItem.GetColor());
+    sal_uInt32 nShadowDir = 0;
+    switch (aShadowItem.GetLocation())
+    {
+    case SvxShadowLocation::TopLeft:
+        nShadowDir = 13500000;
+        break;
+    case SvxShadowLocation::TopRight:
+        nShadowDir = 18900000;
+        break;
+    case SvxShadowLocation::BottomLeft:
+        nShadowDir = 8100000;
+        break;
+    case SvxShadowLocation::BottomRight:
+        nShadowDir = 2700000;
+        break;
+    case SvxShadowLocation::NONE:
+    case SvxShadowLocation::End:
+        break;
     }
+    OString aShadowDir(OString::number(nShadowDir));
+
+    m_pImpl->m_pSerializer->startElementNS(XML_a, XML_effectLst, FSEND);
+    m_pImpl->m_pSerializer->startElementNS(XML_a, XML_outerShdw,
+                                           XML_dist, aShadowDist.getStr(),
+                                           XML_dir, aShadowDir.getStr(), FSEND);
+    if (aShadowAlpha.isEmpty())
+        m_pImpl->m_pSerializer->singleElementNS(XML_a, XML_srgbClr,
+                                                XML_val, aShadowColor.getStr(), FSEND);
+    else
+    {
+        m_pImpl->m_pSerializer->startElementNS(XML_a, XML_srgbClr, XML_val, aShadowColor.getStr(), FSEND);
+        m_pImpl->m_pSerializer->singleElementNS(XML_a, XML_alpha, XML_val, aShadowAlpha.getStr(), FSEND);
+        m_pImpl->m_pSerializer->endElementNS(XML_a, XML_srgbClr);
+    }
+    m_pImpl->m_pSerializer->endElementNS(XML_a, XML_outerShdw);
+    m_pImpl->m_pSerializer->endElementNS(XML_a, XML_effectLst);
+
 
 }
 

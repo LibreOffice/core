@@ -407,132 +407,133 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
 {
     // get node index of cursor position, SwDoc can do everything else itself
     SwContentFrame *pCnt = LTYPE_DRAW==eType ? nullptr : GetCurrFrame( false );
-    if( LTYPE_DRAW==eType || pCnt )
+    if( LTYPE_DRAW!=eType && !pCnt )
+        return;
+
+    StartAllAction();
+    SwRewriter aRewriter(SwUndoInsertLabel::CreateRewriter(rText));
+    StartUndo(SwUndoId::INSERTLABEL, &aRewriter);
+
+    sal_uLong nIdx = 0;
+    bool bInnerCntIsFly = false;
+    SwFlyFrameFormat* pFlyFormat = nullptr;
+    switch( eType )
     {
-        StartAllAction();
-        SwRewriter aRewriter(SwUndoInsertLabel::CreateRewriter(rText));
-        StartUndo(SwUndoId::INSERTLABEL, &aRewriter);
-
-        sal_uLong nIdx = 0;
-        bool bInnerCntIsFly = false;
-        SwFlyFrameFormat* pFlyFormat = nullptr;
-        switch( eType )
+    case LTYPE_OBJECT:
+    case LTYPE_FLY:
+        bInnerCntIsFly = pCnt->IsInFly();
+        if (bInnerCntIsFly)
         {
-        case LTYPE_OBJECT:
-        case LTYPE_FLY:
-            bInnerCntIsFly = pCnt->IsInFly();
-            if (bInnerCntIsFly)
-            {
-                // pass down index to the startnode for flys
-                nIdx = pCnt->FindFlyFrame()->
-                            GetFormat()->GetContent().GetContentIdx()->GetIndex();
-            }
-            break;
-        case LTYPE_TABLE:
-            if( pCnt->IsInTab() )
-            {
-                // pass down index to the TableNode for tables
-                const SwTable& rTable = *pCnt->FindTabFrame()->GetTable();
-                nIdx = rTable.GetTabSortBoxes()[ 0 ]
-                            ->GetSttNd()->FindTableNode()->GetIndex();
-            }
-            break;
-        case LTYPE_DRAW:
-            if( Imp()->GetDrawView() )
-            {
-                SwDrawView *pDView = Imp()->GetDrawView();
-                const SdrMarkList& rMrkList = pDView->GetMarkedObjectList();
+            // pass down index to the startnode for flys
+            nIdx = pCnt->FindFlyFrame()->
+                        GetFormat()->GetContent().GetContentIdx()->GetIndex();
+        }
+        break;
+    case LTYPE_TABLE:
+        if( pCnt->IsInTab() )
+        {
+            // pass down index to the TableNode for tables
+            const SwTable& rTable = *pCnt->FindTabFrame()->GetTable();
+            nIdx = rTable.GetTabSortBoxes()[ 0 ]
+                        ->GetSttNd()->FindTableNode()->GetIndex();
+        }
+        break;
+    case LTYPE_DRAW:
+        if( Imp()->GetDrawView() )
+        {
+            SwDrawView *pDView = Imp()->GetDrawView();
+            const SdrMarkList& rMrkList = pDView->GetMarkedObjectList();
 
-                // copy marked drawing objects to
-                // local list to perform the corresponding action for each object
-                std::vector<SdrObject*> aDrawObjs;
+            // copy marked drawing objects to
+            // local list to perform the corresponding action for each object
+            std::vector<SdrObject*> aDrawObjs;
+            {
+                for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
                 {
-                    for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
-                    {
-                        SdrObject* pDrawObj = rMrkList.GetMark(i)->GetMarkedSdrObj();
-                        if( pDrawObj )
-                        aDrawObjs.push_back( pDrawObj );
-                    }
+                    SdrObject* pDrawObj = rMrkList.GetMark(i)->GetMarkedSdrObj();
+                    if( pDrawObj )
+                    aDrawObjs.push_back( pDrawObj );
                 }
-                // loop on marked drawing objects
-                while ( !aDrawObjs.empty() )
+            }
+            // loop on marked drawing objects
+            while ( !aDrawObjs.empty() )
+            {
+                SdrObject* pDrawObj = aDrawObjs.back();
+                if ( dynamic_cast<const SwVirtFlyDrawObj*>( pDrawObj) ==  nullptr &&
+                     dynamic_cast<const SwFlyDrawObj*>( pDrawObj) ==  nullptr )
                 {
-                    SdrObject* pDrawObj = aDrawObjs.back();
-                    if ( dynamic_cast<const SwVirtFlyDrawObj*>( pDrawObj) ==  nullptr &&
-                         dynamic_cast<const SwFlyDrawObj*>( pDrawObj) ==  nullptr )
-                    {
-                        SwFlyFrameFormat *pFormat =
-                            GetDoc()->InsertDrawLabel( rText, rSeparator, rNumberSeparator, nId, rCharacterStyle, *pDrawObj );
-                        if( !pFlyFormat )
-                            pFlyFormat = pFormat;
-                    }
-
-                    aDrawObjs.pop_back();
+                    SwFlyFrameFormat *pFormat =
+                        GetDoc()->InsertDrawLabel( rText, rSeparator, rNumberSeparator, nId, rCharacterStyle, *pDrawObj );
+                    if( !pFlyFormat )
+                        pFlyFormat = pFormat;
                 }
 
+                aDrawObjs.pop_back();
             }
-            break;
-        default:
-            OSL_ENSURE( false, "Cursor neither in table nor in fly." );
+
         }
-
-        if( nIdx )
-        {
-            pFlyFormat = GetDoc()->InsertLabel(eType, rText, rSeparator,
-                                               rNumberSeparator, bBefore, nId,
-                                               nIdx, rCharacterStyle, bCpyBrd);
-
-            //if we succeeded in putting a caption on the content, and the
-            //content was a frame/graphic, then set the contained element
-            //to as-char anchoring because that's all msword is able to
-            //do when inside a frame, and in writer for freshly captioned
-            //elements it's largely irrelevant what the anchor of the contained
-            //type is but making it as-char by default results in very
-            //good roundtripping
-            if (pFlyFormat && bInnerCntIsFly)
-            {
-                SwNodeIndex aAnchIdx(*pFlyFormat->GetContent().GetContentIdx(), 1);
-                SwTextNode *pTextNode = aAnchIdx.GetNode().GetTextNode();
-
-                SwFormatAnchor aAnc(RndStdIds::FLY_AS_CHAR);
-                sal_Int32 nInsertPos = bBefore ? pTextNode->Len() : 0;
-                SwPosition aPos(*pTextNode, nInsertPos);
-
-                aAnc.SetAnchor(&aPos);
-
-                SwFlyFrame *pFly = GetSelectedOrCurrFlyFrame();
-                OSL_ENSURE(pFly, "SetFlyFrameAttr, no Fly selected.");
-                if (pFly)
-                {
-                    SfxItemSet aSet(makeItemSetFromFormatAnchor(GetDoc()->GetAttrPool(), aAnc));
-                    SwFlyFrameFormat* pInnerFlyFormat = pFly->GetFormat();
-                    GetDoc()->SetFlyFrameAttr(*pInnerFlyFormat, aSet);
-                }
-                //put a hard-break after the graphic to keep it separated
-                //from the caption text if the outer frame is resized
-                const sal_Int32 nIndex = bBefore ? nInsertPos : 1;
-                SwIndex aIdx(pTextNode, nIndex);
-                pTextNode->InsertText("\n", aIdx);
-                //set the hard-break to be hidden, otherwise it has
-                //non-zero width in word and so hard-break flows on
-                //the next line, pushing the caption text out of
-                //the frame making the caption apparently disappear
-                SvxCharHiddenItem aHidden(true, RES_CHRATR_HIDDEN);
-                SfxItemSet aSet(GetDoc()->GetAttrPool(), {{aHidden.Which(), aHidden.Which()}});
-                aSet.Put(aHidden);
-                pTextNode->SetAttr(aSet, nIndex, nIndex + 1);
-            }
-        }
-
-        if (pFlyFormat)
-        {
-            const Point aPt(GetCursorDocPos());
-            if (SwFlyFrame* pFrame = pFlyFormat->GetFrame(&aPt))
-                SelectFlyFrame(*pFrame);
-        }
-        EndUndo();
-        EndAllActionAndCall();
+        break;
+    default:
+        OSL_ENSURE( false, "Cursor neither in table nor in fly." );
     }
+
+    if( nIdx )
+    {
+        pFlyFormat = GetDoc()->InsertLabel(eType, rText, rSeparator,
+                                           rNumberSeparator, bBefore, nId,
+                                           nIdx, rCharacterStyle, bCpyBrd);
+
+        //if we succeeded in putting a caption on the content, and the
+        //content was a frame/graphic, then set the contained element
+        //to as-char anchoring because that's all msword is able to
+        //do when inside a frame, and in writer for freshly captioned
+        //elements it's largely irrelevant what the anchor of the contained
+        //type is but making it as-char by default results in very
+        //good roundtripping
+        if (pFlyFormat && bInnerCntIsFly)
+        {
+            SwNodeIndex aAnchIdx(*pFlyFormat->GetContent().GetContentIdx(), 1);
+            SwTextNode *pTextNode = aAnchIdx.GetNode().GetTextNode();
+
+            SwFormatAnchor aAnc(RndStdIds::FLY_AS_CHAR);
+            sal_Int32 nInsertPos = bBefore ? pTextNode->Len() : 0;
+            SwPosition aPos(*pTextNode, nInsertPos);
+
+            aAnc.SetAnchor(&aPos);
+
+            SwFlyFrame *pFly = GetSelectedOrCurrFlyFrame();
+            OSL_ENSURE(pFly, "SetFlyFrameAttr, no Fly selected.");
+            if (pFly)
+            {
+                SfxItemSet aSet(makeItemSetFromFormatAnchor(GetDoc()->GetAttrPool(), aAnc));
+                SwFlyFrameFormat* pInnerFlyFormat = pFly->GetFormat();
+                GetDoc()->SetFlyFrameAttr(*pInnerFlyFormat, aSet);
+            }
+            //put a hard-break after the graphic to keep it separated
+            //from the caption text if the outer frame is resized
+            const sal_Int32 nIndex = bBefore ? nInsertPos : 1;
+            SwIndex aIdx(pTextNode, nIndex);
+            pTextNode->InsertText("\n", aIdx);
+            //set the hard-break to be hidden, otherwise it has
+            //non-zero width in word and so hard-break flows on
+            //the next line, pushing the caption text out of
+            //the frame making the caption apparently disappear
+            SvxCharHiddenItem aHidden(true, RES_CHRATR_HIDDEN);
+            SfxItemSet aSet(GetDoc()->GetAttrPool(), {{aHidden.Which(), aHidden.Which()}});
+            aSet.Put(aHidden);
+            pTextNode->SetAttr(aSet, nIndex, nIndex + 1);
+        }
+    }
+
+    if (pFlyFormat)
+    {
+        const Point aPt(GetCursorDocPos());
+        if (SwFlyFrame* pFrame = pFlyFormat->GetFrame(&aPt))
+            SelectFlyFrame(*pFrame);
+    }
+    EndUndo();
+    EndAllActionAndCall();
+
 }
 
 bool SwFEShell::Sort(const SwSortOptions& rOpt)

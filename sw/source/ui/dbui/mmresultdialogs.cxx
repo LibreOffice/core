@@ -441,32 +441,33 @@ void SwMMResultEmailDialog::FillInEmailSettings()
     }
 
     //fill mail address ListBox
-    if (!m_pMailToLB->GetEntryCount())
-    {
-        //select first column
-        uno::Reference< sdbcx::XColumnsSupplier > xColsSupp(xConfigItem->GetResultSet(), uno::UNO_QUERY);
-        //get the name of the actual columns
-        uno::Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
-        uno::Sequence< OUString > aFields;
-        if (xColAccess.is())
-            aFields = xColAccess->getElementNames();
-        const OUString* pFields = aFields.getConstArray();
-        for (sal_Int32 nField = 0; nField < aFields.getLength(); ++nField)
-            m_pMailToLB->InsertEntry(pFields[nField]);
+    if (m_pMailToLB->GetEntryCount())
+        return;
 
-        m_pMailToLB->SelectEntryPos(0);
-        // then select the right one - may not be available
-        const std::vector<std::pair<OUString, int>>& rHeaders = xConfigItem->GetDefaultAddressHeaders();
-        OUString sEMailColumn = rHeaders[MM_PART_E_MAIL].first;
-        Sequence< OUString> aAssignment = xConfigItem->GetColumnAssignment(xConfigItem->GetCurrentDBData());
-        if (aAssignment.getLength() > MM_PART_E_MAIL && !aAssignment[MM_PART_E_MAIL].isEmpty())
-            sEMailColumn = aAssignment[MM_PART_E_MAIL];
-        m_pMailToLB->SelectEntry(sEMailColumn);
+    //select first column
+    uno::Reference< sdbcx::XColumnsSupplier > xColsSupp(xConfigItem->GetResultSet(), uno::UNO_QUERY);
+    //get the name of the actual columns
+    uno::Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
+    uno::Sequence< OUString > aFields;
+    if (xColAccess.is())
+        aFields = xColAccess->getElementNames();
+    const OUString* pFields = aFields.getConstArray();
+    for (sal_Int32 nField = 0; nField < aFields.getLength(); ++nField)
+        m_pMailToLB->InsertEntry(pFields[nField]);
 
-        // HTML format pre-selected
-        m_pSendAsLB->SelectEntryPos(3);
-        SendTypeHdl_Impl(*m_pSendAsLB);
-    }
+    m_pMailToLB->SelectEntryPos(0);
+    // then select the right one - may not be available
+    const std::vector<std::pair<OUString, int>>& rHeaders = xConfigItem->GetDefaultAddressHeaders();
+    OUString sEMailColumn = rHeaders[MM_PART_E_MAIL].first;
+    Sequence< OUString> aAssignment = xConfigItem->GetColumnAssignment(xConfigItem->GetCurrentDBData());
+    if (aAssignment.getLength() > MM_PART_E_MAIL && !aAssignment[MM_PART_E_MAIL].isEmpty())
+        sEMailColumn = aAssignment[MM_PART_E_MAIL];
+    m_pMailToLB->SelectEntry(sEMailColumn);
+
+    // HTML format pre-selected
+    m_pSendAsLB->SelectEntryPos(3);
+    SendTypeHdl_Impl(*m_pSendAsLB);
+
 }
 
 IMPL_LINK(SwMMResultSaveDialog, DocumentSelectionHdl_Impl, Button*, pButton, void)

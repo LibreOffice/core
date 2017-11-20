@@ -158,27 +158,28 @@ using namespace ::com::sun::star::ui::dialogs;
 
 static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, sal_uInt16 nWhichId )
 {
-    if (nWhichId == RES_CHRATR_LANGUAGE ||
-        nWhichId == RES_CHRATR_CJK_LANGUAGE ||
-        nWhichId == RES_CHRATR_CTL_LANGUAGE)
-    {
-        rWrtSh.StartAction();
-        rWrtSh.LockView( true );
-        rWrtSh.Push();
+    if (!(nWhichId == RES_CHRATR_LANGUAGE ||
+          nWhichId == RES_CHRATR_CJK_LANGUAGE ||
+          nWhichId == RES_CHRATR_CTL_LANGUAGE))
+        return;
 
-        // prepare to apply new language to all text in document
-        rWrtSh.SelAll();
-        rWrtSh.ExtendedSelectAll();
+    rWrtSh.StartAction();
+    rWrtSh.LockView( true );
+    rWrtSh.Push();
 
-        // set language attribute to default for all text
-        std::set<sal_uInt16> aAttribs;
-        aAttribs.insert( nWhichId );
-        rWrtSh.ResetAttr( aAttribs );
+    // prepare to apply new language to all text in document
+    rWrtSh.SelAll();
+    rWrtSh.ExtendedSelectAll();
 
-        rWrtSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
-        rWrtSh.LockView( false );
-        rWrtSh.EndAction();
-    }
+    // set language attribute to default for all text
+    std::set<sal_uInt16> aAttribs;
+    aAttribs.insert( nWhichId );
+    rWrtSh.ResetAttr( aAttribs );
+
+    rWrtSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+    rWrtSh.LockView( false );
+    rWrtSh.EndAction();
+
 }
 
 /**

@@ -1778,63 +1778,64 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         }
     }
 
-    if( !sSym.isEmpty() )
+    if( sSym.isEmpty() )
+        return;
+
+    // do not flicker
+    pOLV->HideCursor();
+    Outliner * pOutliner = pOLV->GetOutliner();
+    pOutliner->SetUpdateMode(false);
+
+    SfxItemSet aOldSet( pOLV->GetAttribs() );
+    SfxItemSet aFontSet(
+        *aOldSet.GetPool(),
+        svl::Items<
+            EE_CHAR_FONTINFO, EE_CHAR_FONTINFO,
+            EE_CHAR_FONTINFO_CJK, EE_CHAR_FONTINFO_CTL>{});
+    aFontSet.Set( aOldSet );
+
+    // Insert string
+    pOLV->InsertText( sSym);
+
+    // Attributing (set font)
+    SfxItemSet aSetFont( *aFontSet.GetPool(), aFontSet.GetRanges() );
+    SvxFontItem aFontItem (aFont.GetFamilyType(), aFont.GetFamilyName(),
+                            aFont.GetStyleName(), aFont.GetPitch(),
+                            aFont.GetCharSet(),
+                            EE_CHAR_FONTINFO );
+    SvtScriptType nScriptBreak = g_pBreakIt->GetAllScriptsOfText( sSym );
+    if( SvtScriptType::LATIN & nScriptBreak )
+        aSetFont.Put( aFontItem );
+    if( SvtScriptType::ASIAN & nScriptBreak )
     {
-        // do not flicker
-        pOLV->HideCursor();
-        Outliner * pOutliner = pOLV->GetOutliner();
-        pOutliner->SetUpdateMode(false);
-
-        SfxItemSet aOldSet( pOLV->GetAttribs() );
-        SfxItemSet aFontSet(
-            *aOldSet.GetPool(),
-            svl::Items<
-                EE_CHAR_FONTINFO, EE_CHAR_FONTINFO,
-                EE_CHAR_FONTINFO_CJK, EE_CHAR_FONTINFO_CTL>{});
-        aFontSet.Set( aOldSet );
-
-        // Insert string
-        pOLV->InsertText( sSym);
-
-        // Attributing (set font)
-        SfxItemSet aSetFont( *aFontSet.GetPool(), aFontSet.GetRanges() );
-        SvxFontItem aFontItem (aFont.GetFamilyType(), aFont.GetFamilyName(),
-                                aFont.GetStyleName(), aFont.GetPitch(),
-                                aFont.GetCharSet(),
-                                EE_CHAR_FONTINFO );
-        SvtScriptType nScriptBreak = g_pBreakIt->GetAllScriptsOfText( sSym );
-        if( SvtScriptType::LATIN & nScriptBreak )
-            aSetFont.Put( aFontItem );
-        if( SvtScriptType::ASIAN & nScriptBreak )
-        {
-            aFontItem.SetWhich(EE_CHAR_FONTINFO_CJK);
-            aSetFont.Put( aFontItem );
-        }
-        if( SvtScriptType::COMPLEX & nScriptBreak )
-        {
-            aFontItem.SetWhich(EE_CHAR_FONTINFO_CTL);
-            aSetFont.Put( aFontItem );
-        }
-        pOLV->SetAttribs(aSetFont);
-
-        // Erase selection
-        ESelection aSel(pOLV->GetSelection());
-        aSel.nStartPara = aSel.nEndPara;
-        aSel.nStartPos = aSel.nEndPos;
-        pOLV->SetSelection(aSel);
-
-        // Restore old font
-        pOLV->SetAttribs( aFontSet );
-
-        // From now on show it again
-        pOutliner->SetUpdateMode(true);
-        pOLV->ShowCursor();
-
-        rReq.AppendItem( SfxStringItem( GetPool().GetWhich(SID_CHARMAP), sSym ) );
-        if(!aFont.GetFamilyName().isEmpty())
-            rReq.AppendItem( SfxStringItem( SID_ATTR_SPECIALCHAR, aFont.GetFamilyName() ) );
-        rReq.Done();
+        aFontItem.SetWhich(EE_CHAR_FONTINFO_CJK);
+        aSetFont.Put( aFontItem );
     }
+    if( SvtScriptType::COMPLEX & nScriptBreak )
+    {
+        aFontItem.SetWhich(EE_CHAR_FONTINFO_CTL);
+        aSetFont.Put( aFontItem );
+    }
+    pOLV->SetAttribs(aSetFont);
+
+    // Erase selection
+    ESelection aSel(pOLV->GetSelection());
+    aSel.nStartPara = aSel.nEndPara;
+    aSel.nStartPos = aSel.nEndPos;
+    pOLV->SetSelection(aSel);
+
+    // Restore old font
+    pOLV->SetAttribs( aFontSet );
+
+    // From now on show it again
+    pOutliner->SetUpdateMode(true);
+    pOLV->ShowCursor();
+
+    rReq.AppendItem( SfxStringItem( GetPool().GetWhich(SID_CHARMAP), sSym ) );
+    if(!aFont.GetFamilyName().isEmpty())
+        rReq.AppendItem( SfxStringItem( SID_ATTR_SPECIALCHAR, aFont.GetFamilyName() ) );
+    rReq.Done();
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

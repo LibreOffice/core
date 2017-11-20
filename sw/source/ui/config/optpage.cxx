@@ -1356,25 +1356,26 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage( vcl::Window* pParent,
     m_pFillSpaceRB->Check( FILL_SPACE == eMode );
     m_pFillTabAndSpaceRB->Check( FILL_TAB_SPACE == eMode );
 
-    if(SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem )
-        && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON)
-    {
-        m_pTabCB->Hide();
-        m_pCharHiddenCB->Hide();
-        m_pFieldHiddenCB->Hide();
-        m_pFieldHiddenParaCB->Hide();
+    if(SfxItemState::SET != rSet.GetItemState(SID_HTML_MODE, false, &pItem )
+        || !(static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON))
+        return;
 
-        m_pDirectCursorFrame->Hide();
-        m_pOnOffCB->Hide();
-        m_pFillMarginRB->Hide();
-        m_pFillIndentRB->Hide();
-        m_pFillTabRB->Hide();
-        m_pFillSpaceRB->Hide();
-        m_pFillTabAndSpaceRB->Hide();
+    m_pTabCB->Hide();
+    m_pCharHiddenCB->Hide();
+    m_pFieldHiddenCB->Hide();
+    m_pFieldHiddenParaCB->Hide();
 
-        m_pCursorProtFrame->Hide();
-        m_pCursorInProtCB->Hide();
-    }
+    m_pDirectCursorFrame->Hide();
+    m_pOnOffCB->Hide();
+    m_pFillMarginRB->Hide();
+    m_pFillIndentRB->Hide();
+    m_pFillTabRB->Hide();
+    m_pFillSpaceRB->Hide();
+    m_pFillTabAndSpaceRB->Hide();
+
+    m_pCursorProtFrame->Hide();
+    m_pCursorInProtCB->Hide();
+
 }
 
 SwShdwCursorOptionsTabPage::~SwShdwCursorOptionsTabPage()

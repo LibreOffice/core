@@ -251,111 +251,43 @@ SwFootnoteInfo::SwFootnoteInfo() :
 void SwDoc::SetFootnoteInfo(const SwFootnoteInfo& rInfo)
 {
     SwRootFrame* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
-    if( !(GetFootnoteInfo() == rInfo) )
+    if( GetFootnoteInfo() == rInfo )
+        return;
+
+    const SwFootnoteInfo &rOld = GetFootnoteInfo();
+
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        const SwFootnoteInfo &rOld = GetFootnoteInfo();
-
-        if (GetIDocumentUndoRedo().DoesUndo())
-        {
-            GetIDocumentUndoRedo().AppendUndo( new SwUndoFootNoteInfo(rOld, this) );
-        }
-
-        bool bFootnotePos  = rInfo.ePos != rOld.ePos;
-        bool bFootnoteDesc = rOld.ePos == FTNPOS_CHAPTER &&
-                            rInfo.GetPageDesc( *this ) != rOld.GetPageDesc( *this );
-        bool bExtra   = rInfo.aQuoVadis != rOld.aQuoVadis ||
-                            rInfo.aErgoSum != rOld.aErgoSum ||
-                            rInfo.aFormat.GetNumberingType() != rOld.aFormat.GetNumberingType() ||
-                            rInfo.GetPrefix() != rOld.GetPrefix() ||
-                            rInfo.GetSuffix() != rOld.GetSuffix();
-        SwCharFormat *pOldChrFormat = rOld.GetCharFormat( *this ),
-                  *pNewChrFormat = rInfo.GetCharFormat( *this );
-        bool bFootnoteChrFormats = pOldChrFormat != pNewChrFormat;
-
-        *mpFootnoteInfo = rInfo;
-
-        if (pTmpRoot)
-        {
-            std::set<SwRootFrame*> aAllLayouts = GetAllLayouts();
-            if ( bFootnotePos )
-                for( auto aLayout : aAllLayouts )
-                    aLayout->AllRemoveFootnotes();
-            else
-            {
-                for( auto aLayout : aAllLayouts )
-                    aLayout->UpdateFootnoteNums();
-                if ( bFootnoteDesc )
-                    for( auto aLayout : aAllLayouts )
-                        aLayout->CheckFootnotePageDescs(false);
-                if ( bExtra )
-                {
-                    // For messages regarding ErgoSum etc. we save the extra code and use the
-                    // available methods.
-                    SwFootnoteIdxs& rFootnoteIdxs = GetFootnoteIdxs();
-                    for( size_t nPos = 0; nPos < rFootnoteIdxs.size(); ++nPos )
-                    {
-                        SwTextFootnote *pTextFootnote = rFootnoteIdxs[ nPos ];
-                        const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
-                        if ( !rFootnote.IsEndNote() )
-                            pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumStr());
-                    }
-                }
-            }
-        }
-        if( FTNNUM_PAGE != rInfo.eNum )
-            GetFootnoteIdxs().UpdateAllFootnote();
-        else if( bFootnoteChrFormats )
-        {
-            SwFormatChg aOld( pOldChrFormat );
-            SwFormatChg aNew( pNewChrFormat );
-            mpFootnoteInfo->ModifyNotification( &aOld, &aNew );
-        }
-
-        // #i81002# no update during loading
-        if ( !IsInReading() )
-        {
-            getIDocumentFieldsAccess().UpdateRefFields();
-        }
-        getIDocumentState().SetModified();
+        GetIDocumentUndoRedo().AppendUndo( new SwUndoFootNoteInfo(rOld, this) );
     }
-}
 
-void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
-{
-    SwRootFrame* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
-    if( !(GetEndNoteInfo() == rInfo) )
+    bool bFootnotePos  = rInfo.ePos != rOld.ePos;
+    bool bFootnoteDesc = rOld.ePos == FTNPOS_CHAPTER &&
+                        rInfo.GetPageDesc( *this ) != rOld.GetPageDesc( *this );
+    bool bExtra   = rInfo.aQuoVadis != rOld.aQuoVadis ||
+                        rInfo.aErgoSum != rOld.aErgoSum ||
+                        rInfo.aFormat.GetNumberingType() != rOld.aFormat.GetNumberingType() ||
+                        rInfo.GetPrefix() != rOld.GetPrefix() ||
+                        rInfo.GetSuffix() != rOld.GetSuffix();
+    SwCharFormat *pOldChrFormat = rOld.GetCharFormat( *this ),
+              *pNewChrFormat = rInfo.GetCharFormat( *this );
+    bool bFootnoteChrFormats = pOldChrFormat != pNewChrFormat;
+
+    *mpFootnoteInfo = rInfo;
+
+    if (pTmpRoot)
     {
-        if(GetIDocumentUndoRedo().DoesUndo())
+        std::set<SwRootFrame*> aAllLayouts = GetAllLayouts();
+        if ( bFootnotePos )
+            for( auto aLayout : aAllLayouts )
+                aLayout->AllRemoveFootnotes();
+        else
         {
-            SwUndo *const pUndo( new SwUndoEndNoteInfo( GetEndNoteInfo(), this ) );
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
-        }
-
-        bool bNumChg  = rInfo.nFootnoteOffset != GetEndNoteInfo().nFootnoteOffset;
-        // this seems to be an optimization: UpdateAllFootnote() is only called
-        // if the offset changes; if the offset is the same,
-        // but type/prefix/suffix changes, just set new numbers.
-        bool const bExtra = !bNumChg &&
-                (   (rInfo.aFormat.GetNumberingType() !=
-                        GetEndNoteInfo().aFormat.GetNumberingType())
-                ||  (rInfo.GetPrefix() != GetEndNoteInfo().GetPrefix())
-                ||  (rInfo.GetSuffix() != GetEndNoteInfo().GetSuffix())
-                );
-        bool bFootnoteDesc = rInfo.GetPageDesc( *this ) !=
-                            GetEndNoteInfo().GetPageDesc( *this );
-        SwCharFormat *pOldChrFormat = GetEndNoteInfo().GetCharFormat( *this ),
-                  *pNewChrFormat = rInfo.GetCharFormat( *this );
-        bool bFootnoteChrFormats = pOldChrFormat != pNewChrFormat;
-
-        *mpEndNoteInfo = rInfo;
-
-        if ( pTmpRoot )
-        {
+            for( auto aLayout : aAllLayouts )
+                aLayout->UpdateFootnoteNums();
             if ( bFootnoteDesc )
-            {
-                for( auto aLayout : GetAllLayouts() )
-                    aLayout->CheckFootnotePageDescs(true);
-            }
+                for( auto aLayout : aAllLayouts )
+                    aLayout->CheckFootnotePageDescs(false);
             if ( bExtra )
             {
                 // For messages regarding ErgoSum etc. we save the extra code and use the
@@ -365,27 +297,97 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
                 {
                     SwTextFootnote *pTextFootnote = rFootnoteIdxs[ nPos ];
                     const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
-                    if ( rFootnote.IsEndNote() )
+                    if ( !rFootnote.IsEndNote() )
                         pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumStr());
                 }
             }
         }
-        if( bNumChg )
-            GetFootnoteIdxs().UpdateAllFootnote();
-        else if( bFootnoteChrFormats )
-        {
-            SwFormatChg aOld( pOldChrFormat );
-            SwFormatChg aNew( pNewChrFormat );
-            mpEndNoteInfo->ModifyNotification( &aOld, &aNew );
-        }
-
-        // #i81002# no update during loading
-        if ( !IsInReading() )
-        {
-            getIDocumentFieldsAccess().UpdateRefFields();
-        }
-        getIDocumentState().SetModified();
     }
+    if( FTNNUM_PAGE != rInfo.eNum )
+        GetFootnoteIdxs().UpdateAllFootnote();
+    else if( bFootnoteChrFormats )
+    {
+        SwFormatChg aOld( pOldChrFormat );
+        SwFormatChg aNew( pNewChrFormat );
+        mpFootnoteInfo->ModifyNotification( &aOld, &aNew );
+    }
+
+    // #i81002# no update during loading
+    if ( !IsInReading() )
+    {
+        getIDocumentFieldsAccess().UpdateRefFields();
+    }
+    getIDocumentState().SetModified();
+
+}
+
+void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
+{
+    SwRootFrame* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
+    if( GetEndNoteInfo() == rInfo )
+        return;
+
+    if(GetIDocumentUndoRedo().DoesUndo())
+    {
+        SwUndo *const pUndo( new SwUndoEndNoteInfo( GetEndNoteInfo(), this ) );
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
+    }
+
+    bool bNumChg  = rInfo.nFootnoteOffset != GetEndNoteInfo().nFootnoteOffset;
+    // this seems to be an optimization: UpdateAllFootnote() is only called
+    // if the offset changes; if the offset is the same,
+    // but type/prefix/suffix changes, just set new numbers.
+    bool const bExtra = !bNumChg &&
+            (   (rInfo.aFormat.GetNumberingType() !=
+                    GetEndNoteInfo().aFormat.GetNumberingType())
+            ||  (rInfo.GetPrefix() != GetEndNoteInfo().GetPrefix())
+            ||  (rInfo.GetSuffix() != GetEndNoteInfo().GetSuffix())
+            );
+    bool bFootnoteDesc = rInfo.GetPageDesc( *this ) !=
+                        GetEndNoteInfo().GetPageDesc( *this );
+    SwCharFormat *pOldChrFormat = GetEndNoteInfo().GetCharFormat( *this ),
+              *pNewChrFormat = rInfo.GetCharFormat( *this );
+    bool bFootnoteChrFormats = pOldChrFormat != pNewChrFormat;
+
+    *mpEndNoteInfo = rInfo;
+
+    if ( pTmpRoot )
+    {
+        if ( bFootnoteDesc )
+        {
+            for( auto aLayout : GetAllLayouts() )
+                aLayout->CheckFootnotePageDescs(true);
+        }
+        if ( bExtra )
+        {
+            // For messages regarding ErgoSum etc. we save the extra code and use the
+            // available methods.
+            SwFootnoteIdxs& rFootnoteIdxs = GetFootnoteIdxs();
+            for( size_t nPos = 0; nPos < rFootnoteIdxs.size(); ++nPos )
+            {
+                SwTextFootnote *pTextFootnote = rFootnoteIdxs[ nPos ];
+                const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
+                if ( rFootnote.IsEndNote() )
+                    pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumStr());
+            }
+        }
+    }
+    if( bNumChg )
+        GetFootnoteIdxs().UpdateAllFootnote();
+    else if( bFootnoteChrFormats )
+    {
+        SwFormatChg aOld( pOldChrFormat );
+        SwFormatChg aNew( pNewChrFormat );
+        mpEndNoteInfo->ModifyNotification( &aOld, &aNew );
+    }
+
+    // #i81002# no update during loading
+    if ( !IsInReading() )
+    {
+        getIDocumentFieldsAccess().UpdateRefFields();
+    }
+    getIDocumentState().SetModified();
+
 }
 
 bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,

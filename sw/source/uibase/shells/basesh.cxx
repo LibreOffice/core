@@ -1840,99 +1840,100 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
 {
     SwWrtShell &rSh = GetShell();
     bool bObj = 0 != rSh.IsObjSelected();
-    if( bObj || rSh.IsFrameSelected())
+    if( !bObj && !rSh.IsFrameSelected())
+        return;
+
+    SfxItemSet aSet(GetPool(), svl::Items<RES_OPAQUE, RES_SURROUND>{});
+    if(bObj)
+        rSh.GetObjAttr(aSet);
+    else
+        rSh.GetFlyFrameAttr(aSet);
+    SwFormatSurround aWrap( static_cast<const SwFormatSurround&>(aSet.Get(RES_SURROUND)) );
+    css::text::WrapTextMode nOldSurround(aWrap.GetSurround());
+    css::text::WrapTextMode nSurround = css::text::WrapTextMode_PARALLEL;
+
+    switch (nSlot)
     {
-        SfxItemSet aSet(GetPool(), svl::Items<RES_OPAQUE, RES_SURROUND>{});
-        if(bObj)
-            rSh.GetObjAttr(aSet);
-        else
-            rSh.GetFlyFrameAttr(aSet);
-        SwFormatSurround aWrap( static_cast<const SwFormatSurround&>(aSet.Get(RES_SURROUND)) );
-        css::text::WrapTextMode nOldSurround(aWrap.GetSurround());
-        css::text::WrapTextMode nSurround = css::text::WrapTextMode_PARALLEL;
+        case FN_FRAME_NOWRAP:
+            nSurround = css::text::WrapTextMode_NONE;
+            if (aWrap.IsContour())
+                aWrap.SetContour(false);
+            break;
+        case FN_FRAME_WRAP_IDEAL:
+            nSurround = css::text::WrapTextMode_DYNAMIC;
+            break;
+        case FN_WRAP_ANCHOR_ONLY:
+            aWrap.SetAnchorOnly(!aWrap.IsAnchorOnly());
 
-        switch (nSlot)
-        {
-            case FN_FRAME_NOWRAP:
-                nSurround = css::text::WrapTextMode_NONE;
-                if (aWrap.IsContour())
-                    aWrap.SetContour(false);
-                break;
-            case FN_FRAME_WRAP_IDEAL:
-                nSurround = css::text::WrapTextMode_DYNAMIC;
-                break;
-            case FN_WRAP_ANCHOR_ONLY:
-                aWrap.SetAnchorOnly(!aWrap.IsAnchorOnly());
+            // keep previous wrapping
 
-                // keep previous wrapping
-
-                // switch to wrap css::text::WrapTextMode_PARALLEL, if previous wrap is css::text::WrapTextMode_NONE
-                if ( nOldSurround != css::text::WrapTextMode_NONE )
-                {
-                    nSurround = nOldSurround;
-                }
-                break;
-            case FN_FRAME_WRAP_CONTOUR:
-                aWrap.SetContour(!aWrap.IsContour());
-                break;
-            case FN_FRAME_WRAPTHRU_TRANSP:
-            case FN_FRAME_WRAPTHRU_TOGGLE:
-                if (aWrap.IsContour())
-                    aWrap.SetContour(false);
-                SAL_FALLTHROUGH;
-            case FN_FRAME_WRAPTHRU:
-                nSurround = css::text::WrapTextMode_THROUGH;
-                break;
-
-            case FN_FRAME_WRAP_LEFT:
-                nSurround = css::text::WrapTextMode_LEFT;
-                break;
-
-            case FN_FRAME_WRAP_RIGHT:
-                nSurround = css::text::WrapTextMode_RIGHT;
-                break;
-
-            default:
-                break;
-        }
-        aWrap.SetSurround(nSurround);
-
-        if (nSlot != FN_FRAME_WRAP_CONTOUR)
-        {
-            // Defaulting the contour wrap on draw objects.
-            if (bObj && nOldSurround != nSurround &&
-                (nOldSurround == css::text::WrapTextMode_NONE || nOldSurround == css::text::WrapTextMode_THROUGH))
+            // switch to wrap css::text::WrapTextMode_PARALLEL, if previous wrap is css::text::WrapTextMode_NONE
+            if ( nOldSurround != css::text::WrapTextMode_NONE )
             {
-                aWrap.SetContour(true);
+                nSurround = nOldSurround;
             }
-        }
+            break;
+        case FN_FRAME_WRAP_CONTOUR:
+            aWrap.SetContour(!aWrap.IsContour());
+            break;
+        case FN_FRAME_WRAPTHRU_TRANSP:
+        case FN_FRAME_WRAPTHRU_TOGGLE:
+            if (aWrap.IsContour())
+                aWrap.SetContour(false);
+            SAL_FALLTHROUGH;
+        case FN_FRAME_WRAPTHRU:
+            nSurround = css::text::WrapTextMode_THROUGH;
+            break;
 
-        aSet.Put( aWrap );
+        case FN_FRAME_WRAP_LEFT:
+            nSurround = css::text::WrapTextMode_LEFT;
+            break;
 
-        bool bOpaque = nSlot != FN_FRAME_WRAPTHRU_TRANSP && nSlot != FN_FRAME_WRAPTHRU_TOGGLE;
-        if( nSlot == FN_FRAME_WRAPTHRU_TOGGLE )
-        {
-            if( bObj )
-                bOpaque = !rSh.GetLayerId();
-            else
-            {
-                const SvxOpaqueItem aOpaque( static_cast<const SvxOpaqueItem&>(aSet.Get(RES_OPAQUE)) );
-                bOpaque = !aOpaque.GetValue();
-            }
-        }
-        aSet.Put(SvxOpaqueItem(RES_OPAQUE, bOpaque ));
+        case FN_FRAME_WRAP_RIGHT:
+            nSurround = css::text::WrapTextMode_RIGHT;
+            break;
 
-        if(bObj)
-        {
-            rSh.SetObjAttr(aSet);
-            if ( bOpaque )
-                rSh.SelectionToHeaven();
-            else
-                rSh.SelectionToHell();
-        }
-        else
-            rSh.SetFlyFrameAttr(aSet);
+        default:
+            break;
     }
+    aWrap.SetSurround(nSurround);
+
+    if (nSlot != FN_FRAME_WRAP_CONTOUR)
+    {
+        // Defaulting the contour wrap on draw objects.
+        if (bObj && nOldSurround != nSurround &&
+            (nOldSurround == css::text::WrapTextMode_NONE || nOldSurround == css::text::WrapTextMode_THROUGH))
+        {
+            aWrap.SetContour(true);
+        }
+    }
+
+    aSet.Put( aWrap );
+
+    bool bOpaque = nSlot != FN_FRAME_WRAPTHRU_TRANSP && nSlot != FN_FRAME_WRAPTHRU_TOGGLE;
+    if( nSlot == FN_FRAME_WRAPTHRU_TOGGLE )
+    {
+        if( bObj )
+            bOpaque = !rSh.GetLayerId();
+        else
+        {
+            const SvxOpaqueItem aOpaque( static_cast<const SvxOpaqueItem&>(aSet.Get(RES_OPAQUE)) );
+            bOpaque = !aOpaque.GetValue();
+        }
+    }
+    aSet.Put(SvxOpaqueItem(RES_OPAQUE, bOpaque ));
+
+    if(bObj)
+    {
+        rSh.SetObjAttr(aSet);
+        if ( bOpaque )
+            rSh.SelectionToHeaven();
+        else
+            rSh.SelectionToHell();
+    }
+    else
+        rSh.SetFlyFrameAttr(aSet);
+
 }
 
 //Force update of the status line

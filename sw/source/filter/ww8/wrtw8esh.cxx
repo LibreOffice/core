@@ -2961,33 +2961,35 @@ void SwBasicEscherEx::WriteOLEPicture(EscherPropertyContainer &rPropOpt,
 
 void SwEscherEx::WriteOCXControl( const SwFrameFormat& rFormat, sal_uInt32 nShapeId )
 {
-    if (const SdrObject* pSdrObj = rFormat.FindRealSdrObject())
-    {
-        OpenContainer( ESCHER_SpContainer );
+    const SdrObject* pSdrObj = rFormat.FindRealSdrObject();
+    if (!pSdrObj)
+        return;
 
-        SwDrawModel *pModel = rWrt.m_pDoc->getIDocumentDrawModelAccess().GetDrawModel();
-        OutputDevice *pDevice = Application::GetDefaultDevice();
-        OSL_ENSURE(pModel && pDevice, "no model or device");
+    OpenContainer( ESCHER_SpContainer );
 
-        // #i71538# use complete SdrViews
-        // SdrExchangeView aExchange(pModel, pDevice);
-        SdrView aExchange(pModel, pDevice);
+    SwDrawModel *pModel = rWrt.m_pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+    OutputDevice *pDevice = Application::GetDefaultDevice();
+    OSL_ENSURE(pModel && pDevice, "no model or device");
 
-        Graphic aGraphic(SdrExchangeView::GetObjGraphic(pModel, pSdrObj));
+    // #i71538# use complete SdrViews
+    // SdrExchangeView aExchange(pModel, pDevice);
+    SdrView aExchange(pModel, pDevice);
 
-        EscherPropertyContainer aPropOpt;
-        WriteOLEPicture(aPropOpt,
-            ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty | ShapeFlag::OLEShape, aGraphic,
-            *pSdrObj, nShapeId, nullptr );
+    Graphic aGraphic(SdrExchangeView::GetObjGraphic(pModel, pSdrObj));
 
-        WriteFlyFrameAttr( rFormat, mso_sptPictureFrame , aPropOpt );
-        aPropOpt.Commit( GetStream() );
+    EscherPropertyContainer aPropOpt;
+    WriteOLEPicture(aPropOpt,
+        ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty | ShapeFlag::OLEShape, aGraphic,
+        *pSdrObj, nShapeId, nullptr );
 
-        // store anchor attribute
-        WriteFrameExtraData( rFormat );
+    WriteFlyFrameAttr( rFormat, mso_sptPictureFrame , aPropOpt );
+    aPropOpt.Commit( GetStream() );
 
-        CloseContainer();   // ESCHER_SpContainer
-    }
+    // store anchor attribute
+    WriteFrameExtraData( rFormat );
+
+    CloseContainer();   // ESCHER_SpContainer
+
 }
 
 void SwEscherEx::MakeZOrderArrAndFollowIds(

@@ -948,32 +948,33 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
 {
     const SwPosition& rPos = *GetCursor()->GetPoint();
     SwExtTextInput* pInput = GetDoc()->GetExtTextInput( rPos.nNode.GetNode() );
-    if( pInput )
-    {
-        StartAllAction();
-        SET_CURR_SHELL( this );
+    if( !pInput )
+        return;
 
-        if( !rData.IsOnlyCursorChanged() )
-            pInput->SetInputData( rData );
-        // position cursor
-        const SwPosition& rStt = *pInput->Start();
-        const sal_Int32 nNewCursorPos = rStt.nContent.GetIndex() + rData.GetCursorPos();
+    StartAllAction();
+    SET_CURR_SHELL( this );
 
-        // ugly but works
-        ShowCursor();
-        const sal_Int32 nDiff = nNewCursorPos - rPos.nContent.GetIndex();
-        if( 0 > nDiff )
-            Left( -nDiff, CRSR_SKIP_CHARS );
-        else if( 0 < nDiff )
-            Right( nDiff, CRSR_SKIP_CHARS );
+    if( !rData.IsOnlyCursorChanged() )
+        pInput->SetInputData( rData );
+    // position cursor
+    const SwPosition& rStt = *pInput->Start();
+    const sal_Int32 nNewCursorPos = rStt.nContent.GetIndex() + rData.GetCursorPos();
 
-        SetOverwriteCursor( rData.IsCursorOverwrite() );
+    // ugly but works
+    ShowCursor();
+    const sal_Int32 nDiff = nNewCursorPos - rPos.nContent.GetIndex();
+    if( 0 > nDiff )
+        Left( -nDiff, CRSR_SKIP_CHARS );
+    else if( 0 < nDiff )
+        Right( nDiff, CRSR_SKIP_CHARS );
 
-        EndAllAction();
+    SetOverwriteCursor( rData.IsCursorOverwrite() );
 
-        if( !rData.IsCursorVisible() )  // must be called after the EndAction
-            HideCursor();
-    }
+    EndAllAction();
+
+    if( !rData.IsCursorVisible() )  // must be called after the EndAction
+        HideCursor();
+
 }
 
 void SwEditShell::TransliterateText( TransliterationFlags nType )

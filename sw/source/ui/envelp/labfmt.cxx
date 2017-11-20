@@ -500,22 +500,23 @@ DeactivateRC SwLabFormatPage::DeactivatePage(SfxItemSet* _pSet)
 
 void SwLabFormatPage::FillItem(SwLabItem& rItem)
 {
-    if (bModified)
-    {
-        rItem.m_aMake = rItem.m_aType = SwResId(STR_CUSTOM_LABEL);
+    if (!bModified)
+        return;
 
-        SwLabRec& rRec = *GetParentSwLabDlg()->Recs()[0];
-        rItem.m_lHDist  = rRec.m_nHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField ));
-        rItem.m_lVDist  = rRec.m_nVDist  = static_cast< long >(GETFLDVAL(*m_pVDistField ));
-        rItem.m_lWidth  = rRec.m_nWidth  = static_cast< long >(GETFLDVAL(*m_pWidthField ));
-        rItem.m_lHeight = rRec.m_nHeight = static_cast< long >(GETFLDVAL(*m_pHeightField));
-        rItem.m_lLeft   = rRec.m_nLeft   = static_cast< long >(GETFLDVAL(*m_pLeftField  ));
-        rItem.m_lUpper  = rRec.m_nUpper  = static_cast< long >(GETFLDVAL(*m_pUpperField ));
-        rItem.m_nCols   = rRec.m_nCols   = static_cast< sal_Int32 >(m_pColsField->GetValue());
-        rItem.m_nRows   = rRec.m_nRows   = static_cast< sal_Int32 >(m_pRowsField->GetValue());
-        rItem.m_lPWidth  = rRec.m_nPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
-        rItem.m_lPHeight = rRec.m_nPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
-    }
+    rItem.m_aMake = rItem.m_aType = SwResId(STR_CUSTOM_LABEL);
+
+    SwLabRec& rRec = *GetParentSwLabDlg()->Recs()[0];
+    rItem.m_lHDist  = rRec.m_nHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField ));
+    rItem.m_lVDist  = rRec.m_nVDist  = static_cast< long >(GETFLDVAL(*m_pVDistField ));
+    rItem.m_lWidth  = rRec.m_nWidth  = static_cast< long >(GETFLDVAL(*m_pWidthField ));
+    rItem.m_lHeight = rRec.m_nHeight = static_cast< long >(GETFLDVAL(*m_pHeightField));
+    rItem.m_lLeft   = rRec.m_nLeft   = static_cast< long >(GETFLDVAL(*m_pLeftField  ));
+    rItem.m_lUpper  = rRec.m_nUpper  = static_cast< long >(GETFLDVAL(*m_pUpperField ));
+    rItem.m_nCols   = rRec.m_nCols   = static_cast< sal_Int32 >(m_pColsField->GetValue());
+    rItem.m_nRows   = rRec.m_nRows   = static_cast< sal_Int32 >(m_pRowsField->GetValue());
+    rItem.m_lPWidth  = rRec.m_nPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
+    rItem.m_lPHeight = rRec.m_nPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
+
 }
 
 bool SwLabFormatPage::FillItemSet(SfxItemSet* rSet)

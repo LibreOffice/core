@@ -1216,71 +1216,72 @@ class ExtraFormatToPositionObjs
         {
             vcl::RenderContext* pRenderContext = mpSectFrame->getRootFrame()->GetCurrShell()->GetOut();
             // perform extra format for multi-columned section.
-            if ( mpSectFrame->Lower() && mpSectFrame->Lower()->IsColumnFrame() &&
-                 mpSectFrame->Lower()->GetNext() )
+            if ( !(mpSectFrame->Lower() && mpSectFrame->Lower()->IsColumnFrame() &&
+                 mpSectFrame->Lower()->GetNext()) )
+                return;
+
+            // grow section till bottom of printing area of upper frame
+            SwRectFnSet aRectFnSet(mpSectFrame);
+            SwTwips nTopMargin = aRectFnSet.GetTopMargin(*mpSectFrame);
+            Size aOldSectPrtSize( mpSectFrame->getFramePrintArea().SSize() );
+            SwTwips nDiff = aRectFnSet.BottomDist( mpSectFrame->getFrameArea(), aRectFnSet.GetPrtBottom(*mpSectFrame->GetUpper()) );
+
             {
-                // grow section till bottom of printing area of upper frame
-                SwRectFnSet aRectFnSet(mpSectFrame);
-                SwTwips nTopMargin = aRectFnSet.GetTopMargin(*mpSectFrame);
-                Size aOldSectPrtSize( mpSectFrame->getFramePrintArea().SSize() );
-                SwTwips nDiff = aRectFnSet.BottomDist( mpSectFrame->getFrameArea(), aRectFnSet.GetPrtBottom(*mpSectFrame->GetUpper()) );
-
-                {
-                    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*mpSectFrame);
-                    aRectFnSet.AddBottom( aFrm, nDiff );
-                }
-
-                aRectFnSet.SetYMargins( *mpSectFrame, nTopMargin, 0 );
-                // #i59789#
-                // suppress formatting, if printing area of section is too narrow
-                if ( aRectFnSet.GetHeight(mpSectFrame->getFramePrintArea()) <= 0 )
-                {
-                    return;
-                }
-                mpSectFrame->ChgLowersProp( aOldSectPrtSize );
-
-                // format column frames and its body and footnote container
-                SwColumnFrame* pColFrame = static_cast<SwColumnFrame*>(mpSectFrame->Lower());
-                while ( pColFrame )
-                {
-                    pColFrame->Calc(pRenderContext);
-                    pColFrame->Lower()->Calc(pRenderContext);
-                    if ( pColFrame->Lower()->GetNext() )
-                    {
-                        pColFrame->Lower()->GetNext()->Calc(pRenderContext);
-                    }
-
-                    pColFrame = static_cast<SwColumnFrame*>(pColFrame->GetNext());
-                }
-
-                // unlock position of lower floating screen objects for the extra format
-                // #i81555#
-                // Section frame can already have changed the page and its content
-                // can still be on the former page.
-                // Thus, initialize objects via lower-relationship
-                InitObjs( *mpSectFrame );
-
-                // format content - first with collecting its foot-/endnotes before content
-                // format, second without collecting its foot-/endnotes.
-                ::CalcContent( mpSectFrame );
-                ::CalcContent( mpSectFrame, true );
-
-                // keep locked position of lower floating screen objects
-                SwPageFrame* pPageFrame = mpSectFrame->FindPageFrame();
-                SwSortedObjs* pObjs = pPageFrame ? pPageFrame->GetSortedObjs() : nullptr;
-                if ( pObjs )
-                {
-                    for (SwAnchoredObject* pAnchoredObj : *pObjs)
-                    {
-                        if ( mpSectFrame->IsAnLower( pAnchoredObj->GetAnchorFrame() ) )
-                        {
-                            pAnchoredObj->SetKeepPosLocked( true );
-                        }
-                    }
-                }
-
-                mbExtraFormatPerformed = true;
+                SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*mpSectFrame);
+                aRectFnSet.AddBottom( aFrm, nDiff );
             }
+
+            aRectFnSet.SetYMargins( *mpSectFrame, nTopMargin, 0 );
+            // #i59789#
+            // suppress formatting, if printing area of section is too narrow
+            if ( aRectFnSet.GetHeight(mpSectFrame->getFramePrintArea()) <= 0 )
+            {
+                return;
+            }
+            mpSectFrame->ChgLowersProp( aOldSectPrtSize );
+
+            // format column frames and its body and footnote container
+            SwColumnFrame* pColFrame = static_cast<SwColumnFrame*>(mpSectFrame->Lower());
+            while ( pColFrame )
+            {
+                pColFrame->Calc(pRenderContext);
+                pColFrame->Lower()->Calc(pRenderContext);
+                if ( pColFrame->Lower()->GetNext() )
+                {
+                    pColFrame->Lower()->GetNext()->Calc(pRenderContext);
+                }
+
+                pColFrame = static_cast<SwColumnFrame*>(pColFrame->GetNext());
+            }
+
+            // unlock position of lower floating screen objects for the extra format
+            // #i81555#
+            // Section frame can already have changed the page and its content
+            // can still be on the former page.
+            // Thus, initialize objects via lower-relationship
+            InitObjs( *mpSectFrame );
+
+            // format content - first with collecting its foot-/endnotes before content
+            // format, second without collecting its foot-/endnotes.
+            ::CalcContent( mpSectFrame );
+            ::CalcContent( mpSectFrame, true );
+
+            // keep locked position of lower floating screen objects
+            SwPageFrame* pPageFrame = mpSectFrame->FindPageFrame();
+            SwSortedObjs* pObjs = pPageFrame ? pPageFrame->GetSortedObjs() : nullptr;
+            if ( pObjs )
+            {
+                for (SwAnchoredObject* pAnchoredObj : *pObjs)
+                {
+                    if ( mpSectFrame->IsAnLower( pAnchoredObj->GetAnchorFrame() ) )
+                    {
+                        pAnchoredObj->SetKeepPosLocked( true );
+                    }
+                }
+            }
+
+            mbExtraFormatPerformed = true;
+
         }
 };
 
@@ -1320,204 +1321,205 @@ void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderA
         aRectFnSet.SetYMargins( *this, nUpper, 0 );
     }
 
-    if ( !isFrameAreaSizeValid() )
+    if ( isFrameAreaSizeValid() )
+        return;
+
+    PROTOCOL_ENTER( this, PROT::Size, DbgAction::NONE, nullptr )
+    const long nOldHeight = aRectFnSet.GetHeight(getFrameArea());
+    bool bOldLock = IsColLocked();
+    ColLock();
+
+    setFrameAreaSizeValid(true);
+
+    // The size is only determined by the content, if the SectFrame does not have a
+    // Follow. Otherwise it fills (occupies) the Upper down to the lower edge.
+    // It is not responsible for the text flow, but the content is.
+    bool bMaximize = ToMaximize( false );
+
+    // OD 2004-05-17 #i28701# - If the wrapping style has to be considered
+    // on object positioning, an extra formatting has to be performed
+    // to determine the correct positions the floating screen objects.
+    // #i40147#
+    // use new helper class <ExtraFormatToPositionObjs>.
+    // This class additionally keep the locked position of the objects
+    // and releases this position lock keeping on destruction.
+    ExtraFormatToPositionObjs aExtraFormatToPosObjs( *this );
+    if ( !bMaximize &&
+         GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
+         !GetFormat()->GetBalancedColumns().GetValue() )
     {
-        PROTOCOL_ENTER( this, PROT::Size, DbgAction::NONE, nullptr )
-        const long nOldHeight = aRectFnSet.GetHeight(getFrameArea());
-        bool bOldLock = IsColLocked();
-        ColLock();
+        aExtraFormatToPosObjs.FormatSectionToPositionObjs();
+    }
 
-        setFrameAreaSizeValid(true);
+    // Column widths have to be adjusted before calling CheckClipping.
+    // CheckClipping can cause the formatting of the lower frames
+    // which still have a width of 0.
+    const bool bHasColumns = Lower() && Lower()->IsColumnFrame();
+    if ( bHasColumns && Lower()->GetNext() )
+        AdjustColumns( nullptr, false );
 
-        // The size is only determined by the content, if the SectFrame does not have a
-        // Follow. Otherwise it fills (occupies) the Upper down to the lower edge.
-        // It is not responsible for the text flow, but the content is.
-        bool bMaximize = ToMaximize( false );
+    if( GetUpper() )
+    {
+        const long nWidth = aRectFnSet.GetWidth(GetUpper()->getFramePrintArea());
 
-        // OD 2004-05-17 #i28701# - If the wrapping style has to be considered
-        // on object positioning, an extra formatting has to be performed
-        // to determine the correct positions the floating screen objects.
-        // #i40147#
-        // use new helper class <ExtraFormatToPositionObjs>.
-        // This class additionally keep the locked position of the objects
-        // and releases this position lock keeping on destruction.
-        ExtraFormatToPositionObjs aExtraFormatToPosObjs( *this );
-        if ( !bMaximize &&
-             GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
-             !GetFormat()->GetBalancedColumns().GetValue() )
         {
-            aExtraFormatToPosObjs.FormatSectionToPositionObjs();
+            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+            aRectFnSet.SetWidth( aFrm, nWidth );
         }
 
-        // Column widths have to be adjusted before calling CheckClipping.
-        // CheckClipping can cause the formatting of the lower frames
-        // which still have a width of 0.
-        const bool bHasColumns = Lower() && Lower()->IsColumnFrame();
-        if ( bHasColumns && Lower()->GetNext() )
-            AdjustColumns( nullptr, false );
-
-        if( GetUpper() )
+        // #109700# LRSpace for sections
         {
-            const long nWidth = aRectFnSet.GetWidth(GetUpper()->getFramePrintArea());
+            const SvxLRSpaceItem& rLRSpace = GetFormat()->GetLRSpace();
+            SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
+            aRectFnSet.SetWidth( aPrt, nWidth - rLRSpace.GetLeft() - rLRSpace.GetRight() );
+        }
+
+        // OD 15.10.2002 #103517# - allow grow in online layout
+        // Thus, set <..IsBrowseMode()> as parameter <bGrow> on calling
+        // method <CheckClipping(..)>.
+        const SwViewShell *pSh = getRootFrame()->GetCurrShell();
+        CheckClipping( pSh && pSh->GetViewOptions()->getBrowseMode(), bMaximize );
+        bMaximize = ToMaximize( false );
+        setFrameAreaSizeValid(true);
+    }
+
+    // Check the width of the columns and adjust if necessary
+    if ( bHasColumns && ! Lower()->GetNext() && bMaximize )
+        static_cast<SwColumnFrame*>(Lower())->Lower()->Calc(pRenderContext);
+
+    if ( !bMaximize )
+    {
+        SwTwips nRemaining = aRectFnSet.GetTopMargin(*this);
+        SwFrame *pFrame = m_pLower;
+        if( pFrame )
+        {
+            if( pFrame->IsColumnFrame() && pFrame->GetNext() )
+            {
+                // #i61435#
+                // suppress formatting, if upper frame has height <= 0
+                if ( aRectFnSet.GetHeight(GetUpper()->getFrameArea()) > 0 )
+                {
+                    FormatWidthCols( *pAttr, nRemaining, MINLAY );
+                }
+                // #126020# - adjust check for empty section
+                // #130797# - correct fix #126020#
+                while( HasFollow() && !GetFollow()->ContainsContent() &&
+                       !GetFollow()->ContainsAny( true ) )
+                {
+                    SwFrame* pOld = GetFollow();
+                    GetFollow()->DelEmpty( false );
+                    if( pOld == GetFollow() )
+                        break;
+                }
+                bMaximize = ToMaximize( false );
+                nRemaining += aRectFnSet.GetHeight(pFrame->getFrameArea());
+            }
+            else
+            {
+                if( pFrame->IsColumnFrame() )
+                {
+                    pFrame->Calc(pRenderContext);
+                    pFrame = static_cast<SwColumnFrame*>(pFrame)->Lower();
+                    pFrame->Calc(pRenderContext);
+                    pFrame = static_cast<SwLayoutFrame*>(pFrame)->Lower();
+                    CalcFootnoteContent();
+                }
+                // If we are in a columned frame which calls a CalcContent
+                // in the FormatWidthCols, the content might need calculating
+                if( pFrame && !pFrame->isFrameAreaDefinitionValid() && IsInFly() &&
+                    FindFlyFrame()->IsColLocked() )
+                    ::CalcContent( this );
+                nRemaining += InnerHeight();
+                bMaximize = HasFollow();
+            }
+        }
+
+        SwTwips nDiff = aRectFnSet.GetHeight(getFrameArea()) - nRemaining;
+        if( nDiff < 0)
+        {
+            SwTwips nDeadLine = aRectFnSet.GetPrtBottom(*GetUpper());
+            {
+                long nBottom = aRectFnSet.GetBottom(getFrameArea());
+                nBottom = aRectFnSet.YInc( nBottom, -nDiff );
+                long nTmpDiff = aRectFnSet.YDiff( nBottom, nDeadLine );
+                if( nTmpDiff > 0 )
+                {
+                    nTmpDiff = GetUpper()->Grow( nTmpDiff, true );
+                    nDeadLine = aRectFnSet.YInc( nDeadLine, nTmpDiff );
+                    nTmpDiff = aRectFnSet.YDiff( nBottom, nDeadLine );
+                    if( nTmpDiff > 0 )
+                        nDiff += nTmpDiff;
+                    if( nDiff > 0 )
+                        nDiff = 0;
+                }
+            }
+        }
+        if( nDiff )
+        {
+            long nTmp = nRemaining - aRectFnSet.GetHeight(getFrameArea());
+            long nTop = aRectFnSet.GetTopMargin(*this);
 
             {
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-                aRectFnSet.SetWidth( aFrm, nWidth );
+                aRectFnSet.AddBottom( aFrm, nTmp );
             }
 
-            // #109700# LRSpace for sections
+            aRectFnSet.SetYMargins( *this, nTop, 0 );
+            InvalidateNextPos();
+
+            if (m_pLower && (!m_pLower->IsColumnFrame() || !m_pLower->GetNext()))
             {
-                const SvxLRSpaceItem& rLRSpace = GetFormat()->GetLRSpace();
-                SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-                aRectFnSet.SetWidth( aPrt, nWidth - rLRSpace.GetLeft() - rLRSpace.GetRight() );
+                // If a single-column section just created the space that
+                // was requested by the "undersized" paragraphs, then they
+                // have to be invalidated and calculated, so they fully cover it
+                pFrame = m_pLower;
+                if( pFrame->IsColumnFrame() )
+                {
+                    pFrame->InvalidateSize_();
+                    pFrame->InvalidatePos_();
+                    pFrame->Calc(pRenderContext);
+                    pFrame = static_cast<SwColumnFrame*>(pFrame)->Lower();
+                    pFrame->Calc(pRenderContext);
+                    pFrame = static_cast<SwLayoutFrame*>(pFrame)->Lower();
+                    CalcFootnoteContent();
+                }
+                bool bUnderSz = false;
+                while( pFrame )
+                {
+                    if( pFrame->IsTextFrame() && static_cast<SwTextFrame*>(pFrame)->IsUndersized() )
+                    {
+                        pFrame->Prepare( PREP_ADJUST_FRM );
+                        bUnderSz = true;
+                    }
+                    pFrame = pFrame->GetNext();
+                }
+                if( bUnderSz && !IsContentLocked() )
+                    ::CalcContent( this );
             }
-
-            // OD 15.10.2002 #103517# - allow grow in online layout
-            // Thus, set <..IsBrowseMode()> as parameter <bGrow> on calling
-            // method <CheckClipping(..)>.
-            const SwViewShell *pSh = getRootFrame()->GetCurrShell();
-            CheckClipping( pSh && pSh->GetViewOptions()->getBrowseMode(), bMaximize );
-            bMaximize = ToMaximize( false );
-            setFrameAreaSizeValid(true);
-        }
-
-        // Check the width of the columns and adjust if necessary
-        if ( bHasColumns && ! Lower()->GetNext() && bMaximize )
-            static_cast<SwColumnFrame*>(Lower())->Lower()->Calc(pRenderContext);
-
-        if ( !bMaximize )
-        {
-            SwTwips nRemaining = aRectFnSet.GetTopMargin(*this);
-            SwFrame *pFrame = m_pLower;
-            if( pFrame )
-            {
-                if( pFrame->IsColumnFrame() && pFrame->GetNext() )
-                {
-                    // #i61435#
-                    // suppress formatting, if upper frame has height <= 0
-                    if ( aRectFnSet.GetHeight(GetUpper()->getFrameArea()) > 0 )
-                    {
-                        FormatWidthCols( *pAttr, nRemaining, MINLAY );
-                    }
-                    // #126020# - adjust check for empty section
-                    // #130797# - correct fix #126020#
-                    while( HasFollow() && !GetFollow()->ContainsContent() &&
-                           !GetFollow()->ContainsAny( true ) )
-                    {
-                        SwFrame* pOld = GetFollow();
-                        GetFollow()->DelEmpty( false );
-                        if( pOld == GetFollow() )
-                            break;
-                    }
-                    bMaximize = ToMaximize( false );
-                    nRemaining += aRectFnSet.GetHeight(pFrame->getFrameArea());
-                }
-                else
-                {
-                    if( pFrame->IsColumnFrame() )
-                    {
-                        pFrame->Calc(pRenderContext);
-                        pFrame = static_cast<SwColumnFrame*>(pFrame)->Lower();
-                        pFrame->Calc(pRenderContext);
-                        pFrame = static_cast<SwLayoutFrame*>(pFrame)->Lower();
-                        CalcFootnoteContent();
-                    }
-                    // If we are in a columned frame which calls a CalcContent
-                    // in the FormatWidthCols, the content might need calculating
-                    if( pFrame && !pFrame->isFrameAreaDefinitionValid() && IsInFly() &&
-                        FindFlyFrame()->IsColLocked() )
-                        ::CalcContent( this );
-                    nRemaining += InnerHeight();
-                    bMaximize = HasFollow();
-                }
-            }
-
-            SwTwips nDiff = aRectFnSet.GetHeight(getFrameArea()) - nRemaining;
-            if( nDiff < 0)
-            {
-                SwTwips nDeadLine = aRectFnSet.GetPrtBottom(*GetUpper());
-                {
-                    long nBottom = aRectFnSet.GetBottom(getFrameArea());
-                    nBottom = aRectFnSet.YInc( nBottom, -nDiff );
-                    long nTmpDiff = aRectFnSet.YDiff( nBottom, nDeadLine );
-                    if( nTmpDiff > 0 )
-                    {
-                        nTmpDiff = GetUpper()->Grow( nTmpDiff, true );
-                        nDeadLine = aRectFnSet.YInc( nDeadLine, nTmpDiff );
-                        nTmpDiff = aRectFnSet.YDiff( nBottom, nDeadLine );
-                        if( nTmpDiff > 0 )
-                            nDiff += nTmpDiff;
-                        if( nDiff > 0 )
-                            nDiff = 0;
-                    }
-                }
-            }
-            if( nDiff )
-            {
-                long nTmp = nRemaining - aRectFnSet.GetHeight(getFrameArea());
-                long nTop = aRectFnSet.GetTopMargin(*this);
-
-                {
-                    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-                    aRectFnSet.AddBottom( aFrm, nTmp );
-                }
-
-                aRectFnSet.SetYMargins( *this, nTop, 0 );
-                InvalidateNextPos();
-
-                if (m_pLower && (!m_pLower->IsColumnFrame() || !m_pLower->GetNext()))
-                {
-                    // If a single-column section just created the space that
-                    // was requested by the "undersized" paragraphs, then they
-                    // have to be invalidated and calculated, so they fully cover it
-                    pFrame = m_pLower;
-                    if( pFrame->IsColumnFrame() )
-                    {
-                        pFrame->InvalidateSize_();
-                        pFrame->InvalidatePos_();
-                        pFrame->Calc(pRenderContext);
-                        pFrame = static_cast<SwColumnFrame*>(pFrame)->Lower();
-                        pFrame->Calc(pRenderContext);
-                        pFrame = static_cast<SwLayoutFrame*>(pFrame)->Lower();
-                        CalcFootnoteContent();
-                    }
-                    bool bUnderSz = false;
-                    while( pFrame )
-                    {
-                        if( pFrame->IsTextFrame() && static_cast<SwTextFrame*>(pFrame)->IsUndersized() )
-                        {
-                            pFrame->Prepare( PREP_ADJUST_FRM );
-                            bUnderSz = true;
-                        }
-                        pFrame = pFrame->GetNext();
-                    }
-                    if( bUnderSz && !IsContentLocked() )
-                        ::CalcContent( this );
-                }
-            }
-        }
-
-        // Do not exceed the lower edge of the Upper.
-        // Do not extend below the lower edge with Sections with Follows
-        if ( GetUpper() )
-            CheckClipping( true, bMaximize );
-        if( !bOldLock )
-            ColUnlock();
-        long nDiff = nOldHeight - aRectFnSet.GetHeight(getFrameArea());
-
-        if( nDiff > 0 )
-        {
-            if( !GetNext() )
-                SetRetouche(); // Take over the retouching ourselves
-            if( GetUpper() && !GetUpper()->IsFooterFrame() )
-                GetUpper()->Shrink( nDiff );
-        }
-
-        if( IsUndersized() )
-        {
-            setFramePrintAreaValid(true);
         }
     }
+
+    // Do not exceed the lower edge of the Upper.
+    // Do not extend below the lower edge with Sections with Follows
+    if ( GetUpper() )
+        CheckClipping( true, bMaximize );
+    if( !bOldLock )
+        ColUnlock();
+    long nDiff = nOldHeight - aRectFnSet.GetHeight(getFrameArea());
+
+    if( nDiff > 0 )
+    {
+        if( !GetNext() )
+            SetRetouche(); // Take over the retouching ourselves
+        if( GetUpper() && !GetUpper()->IsFooterFrame() )
+            GetUpper()->Shrink( nDiff );
+    }
+
+    if( IsUndersized() )
+    {
+        setFramePrintAreaValid(true);
+    }
+
 }
 
 /// Returns the next layout sheet where the frame can be moved in.
