@@ -31,7 +31,7 @@ class SvNumberFormatter;
  * Store parameters used in the ScDocument::SetString() method.  Various
  * options for string-setting operation are specified herein.
  */
-struct SC_DLLPUBLIC ScSetStringParam
+struct SAL_WARN_UNUSED SC_DLLPUBLIC ScSetStringParam
 {
     enum TextFormatPolicy
     {
