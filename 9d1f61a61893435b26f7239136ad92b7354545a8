@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_048faccc",
+        "filename": "binaryurp/source/bridgefactory.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-11-20T08:58:38Z",
+      "side": 1,
+      "message": "I would appreciate it if you tried to keep your changes\u0027 diffs small by not mixing unrelated trivial layout changes into them.",
+      "revId": "9d1f61a61893435b26f7239136ad92b7354545a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
