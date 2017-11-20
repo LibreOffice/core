@@ -95,21 +95,21 @@ struct SwInsertField_Data
 class SW_DLLPUBLIC SwFieldMgr
 {
 private:
-    SwField*            pCurField;
-    SwWrtShell*         pWrtShell; // can be ZERO too!
-    OUString          aCurPar1;
-    OUString          aCurPar2;
-    OUString          sCurFrame;
+    SwField*            m_pCurField;
+    SwWrtShell*         m_pWrtShell; // can be ZERO too!
+    OUString          m_aCurPar1;
+    OUString          m_aCurPar2;
+    OUString          m_sCurFrame;
 
-    OUString          sMacroPath;
-    OUString          sMacroName;
+    OUString          m_sMacroPath;
+    OUString          m_sMacroName;
 
-    sal_uInt32          nCurFormat;
-    bool            bEvalExp;
+    sal_uInt32          m_nCurFormat;
+    bool            m_bEvalExp;
 
     SAL_DLLPRIVATE LanguageType    GetCurrLanguage() const;
 
-    css::uno::Reference<css::text::XNumberingTypeInfo> xNumberingInfo;
+    css::uno::Reference<css::text::XNumberingTypeInfo> m_xNumberingInfo;
     SAL_DLLPRIVATE css::uno::Reference<css::text::XNumberingTypeInfo> const & GetNumberingInfo()const;
 
 public:
@@ -117,7 +117,7 @@ public:
     ~SwFieldMgr();
 
     void                SetWrtShell( SwWrtShell* pShell )
-                        {   pWrtShell = pShell;     }
+                        {   m_pWrtShell = pShell;     }
 
      // insert field using TypeID (TYP_ ...)
     bool InsertField( const SwInsertField_Data& rData );
@@ -128,8 +128,8 @@ public:
                                  const OUString& rPar2,
                                  SwField * _pField = nullptr);
 
-    const OUString& GetCurFieldPar1() const { return aCurPar1; }
-    const OUString& GetCurFieldPar2() const { return aCurPar2; }
+    const OUString& GetCurFieldPar1() const { return m_aCurPar1; }
+    const OUString& GetCurFieldPar2() const { return m_aCurPar2; }
 
     // determine a field
     SwField*        GetCurField();
@@ -138,8 +138,8 @@ public:
 
     bool            ChooseMacro();
     void            SetMacroPath(const OUString& rPath);
-    const OUString& GetMacroPath() const         { return sMacroPath; }
-    const OUString& GetMacroName() const         { return sMacroName; }
+    const OUString& GetMacroPath() const         { return m_sMacroPath; }
+    const OUString& GetMacroName() const         { return m_sMacroName; }
 
     // previous and next of the same type
     bool GoNextPrev( bool bNext = true, SwFieldType* pTyp = nullptr );
@@ -192,7 +192,7 @@ public:
 };
 
 inline void SwFieldMgr::SetEvalExpFields(bool bEval)
-    { bEvalExp = bEval; }
+    { m_bEvalExp = bEval; }
 
 #endif
 
