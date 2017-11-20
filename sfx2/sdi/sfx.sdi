@@ -1050,6 +1050,25 @@ SfxVoidItem EditDoc SID_EDITDOC
 ]
 
 
+SfxVoidItem ReadOnlyDoc SID_READONLYDOC
+(SfxBoolItem Editable SID_EDITDOC)
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Document;
+]
+
+
 SfxVoidItem EditMacro SID_BASICIDE_EDITMACRO
 (SfxMacroInfoItem aMacroInfo SID_BASICIDE_ARG_MACROINFO)
 [

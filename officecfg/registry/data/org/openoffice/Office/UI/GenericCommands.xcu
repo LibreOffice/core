@@ -2841,6 +2841,14 @@
           <value>9</value>
         </prop>
       </node>
+      <node oor:name=".uno:ReadOnlyDoc" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Read Only Mode</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Toggle Read Only Mode</value>
+        </prop>
+      </node>
       <node oor:name=".uno:InsertImageControl" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Image Control</value>

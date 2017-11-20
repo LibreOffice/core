@@ -147,7 +147,7 @@
 #define SID_CREATELINK                      (SID_SFX_START + 1309)
 #define SID_EDITDOC                         (SID_SFX_START + 1312)
 #define SID_BROWSER_MODE                    (SID_SFX_START + 1313)
-// FREE (was SID_PLUGINS_ACTIVE)                  (SID_SFX_START + 1314)
+#define SID_READONLYDOC                     (SID_SFX_START + 1314)
 #define SID_BROWSER                         (SID_SFX_START + 1318)
 #define SID_MACROEXECMODE                   (SID_SFX_START + 1319)
 
