@@ -531,10 +531,19 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
         {
             switch ( mnPngDepth )
             {
+                case 1 :
+#if defined(UNX) && !defined(MACOSX)
+                    // 1bpp indexed images are so badly mishandled by rest of LO on X11 that we
+                    // don't even bother, and turn them into 8bpp indexed ones with just two palette
+                    // entries instead.
+                    mnTargetDepth = 8;  // we have to expand the bitmap
+#endif
+                    mbPalette = false;
+                    break;
                 case 2 :
                     mnTargetDepth = 4;  // we have to expand the bitmap
-                    SAL_FALLTHROUGH;
-                case 1 :
+                    mbPalette = false;
+                    break;
                 case 4 :
                 case 8 :
                     mbPalette = false;
@@ -1327,7 +1336,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 }
                 else // neither alpha nor transparency
                 {
-                    if ( mnPngDepth == 8 )  // maybe the source is a 16 bit grayscale
+                    if ( mnPngDepth == 8 )  // maybe the source is a 16 bit grayscale or 1 bit indexed
                     {
                         if( nXAdd == 1 && mnPreviewShift == 0 )  // copy raw line data if possible
                         {
@@ -1340,6 +1349,22 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                         {
                             for ( long nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd )
                                 ImplSetPixel( nY, nX, *pTmp++ );
+                        }
+                    }
+                    else if (mnPngDepth == 1 )
+                    {
+                        for ( long nX = nXStart, nShift = 0; nX < maOrigSize.Width(); nX += nXAdd )
+                        {
+                            nShift = (nShift - 1) & 7;
+
+                            sal_uInt8 nCol;
+                            if ( nShift == 0 )
+                                nCol = *(pTmp++);
+                            else
+                                nCol = static_cast<sal_uInt8>( *pTmp >> nShift );
+                            nCol &= 1;
+
+                            ImplSetPixel( nY, nX, nCol );
                         }
                     }
                     else
