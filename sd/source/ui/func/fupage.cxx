@@ -208,8 +208,6 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
     if (!mpDrawViewShell)
         return nullptr;
 
-    PageKind ePageKind = mpDrawViewShell->GetPageKind();
-
     SfxItemSet aNewAttr(mpDoc->GetPool(),
                         {{mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE),
                         mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE)},
@@ -363,38 +361,23 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
                     ( aMergedAttr.GetItem<XFillStyleItem>( XATTR_FILLSTYLE )->GetValue() == drawing::FillStyle_NONE ) ) )
                 mbPageBckgrdDeleted = true;
 
-            bool bSetToAllPages = false;
-
-            // Ask, whether the setting are for the background-page or for the current page
-            if( !mbMasterPage && bChanges )
+            if( !mbMasterPage && bChanges && mbPageBckgrdDeleted )
             {
-                // But don't ask in notice-view, because we can't change the background of
-                // notice-masterpage (at the moment)
-                if( ePageKind != PageKind::Notes )
-                {
-                    ScopedVclPtrInstance<MessageDialog> aQuestionBox(
-                        pParent, SdResId(STR_PAGE_BACKGROUND_TXT),
-                        VclMessageType::Question, VclButtonsType::YesNo);
-                    aQuestionBox->SetText(SdResId(STR_PAGE_BACKGROUND_TITLE));
-                    bSetToAllPages = ( RET_YES == aQuestionBox->Execute() );
-                }
+                 mpBackgroundObjUndoAction.reset( new SdBackgroundObjUndoAction(
+                     *mpDoc, *mpPage, mpPage->getSdrPageProperties().GetItemSet()) );
 
-                if( mbPageBckgrdDeleted )
-                {
-                    mpBackgroundObjUndoAction.reset( new SdBackgroundObjUndoAction(
-                        *mpDoc, *mpPage, mpPage->getSdrPageProperties().GetItemSet()) );
-
-                    if(!mpPage->IsMasterPage())
-                    {
-                        // on normal pages, switch off fill attribute usage
-                        SdrPageProperties& rPageProperties = mpPage->getSdrPageProperties();
-                        rPageProperties.ClearItem( XATTR_FILLBITMAP );
-                        rPageProperties.ClearItem( XATTR_FILLGRADIENT );
-                        rPageProperties.ClearItem( XATTR_FILLHATCH );
-                        rPageProperties.PutItem(XFillStyleItem(drawing::FillStyle_NONE));
-                    }
-                }
+                 if(!mpPage->IsMasterPage())
+                 {
+                     // on normal pages, switch off fill attribute usage
+                     SdrPageProperties& rPageProperties = mpPage->getSdrPageProperties();
+                     rPageProperties.ClearItem( XATTR_FILLBITMAP );
+                     rPageProperties.ClearItem( XATTR_FILLGRADIENT );
+                     rPageProperties.ClearItem( XATTR_FILLHATCH );
+                     rPageProperties.PutItem(XFillStyleItem(drawing::FillStyle_NONE));
+                 }
             }
+
+
             /* Special treatment: reset the INVALIDS to
                NULL-Pointer (otherwise INVALIDs or pointer point
                to DefaultItems in the template; both would
@@ -409,58 +392,9 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
                 sdr::properties::CleanupFillProperties( pStyleSheet->GetItemSet() );
                 pStyleSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
             }
-            else if( bSetToAllPages )
-            {
-                OUString aComment(SdResId(STR_UNDO_CHANGE_PAGEFORMAT));
-                ::svl::IUndoManager* pUndoMgr = mpDocSh->GetUndoManager();
-                pUndoMgr->EnterListAction(aComment, aComment, 0, mpViewShell->GetViewShellBase().GetViewShellId());
-                SdUndoGroup* pUndoGroup = new SdUndoGroup(mpDoc);
-                pUndoGroup->SetComment(aComment);
-
-                //Set background on all master pages
-                sal_uInt16 nMasterPageCount = mpDoc->GetMasterSdPageCount(ePageKind);
-                for (sal_uInt16 i = 0; i < nMasterPageCount; ++i)
-                {
-                    SdPage *pMasterPage = mpDoc->GetMasterSdPage(i, ePageKind);
-                    SdStyleSheet *pStyle =
-                        pMasterPage->getPresentationStyle(HID_PSEUDOSHEET_BACKGROUND);
-                    StyleSheetUndoAction* pAction =
-                        new StyleSheetUndoAction(mpDoc, static_cast<SfxStyleSheet*>(pStyle), &(*pTempSet.get()));
-                    pUndoGroup->AddAction(pAction);
-                    pStyle->GetItemSet().Put( *(pTempSet.get()) );
-                    sdr::properties::CleanupFillProperties( pStyleSheet->GetItemSet() );
-                    pStyle->Broadcast(SfxHint(SfxHintId::DataChanged));
-                }
-
-                //Remove background from all pages to reset to the master bg
-                sal_uInt16 nPageCount(mpDoc->GetSdPageCount(ePageKind));
-                for(sal_uInt16 i=0; i<nPageCount; ++i)
-                {
-                    SdPage *pPage = mpDoc->GetSdPage(i, ePageKind);
-
-                    const SfxItemSet& rFillAttributes = pPage->getSdrPageProperties().GetItemSet();
-                       if(drawing::FillStyle_NONE != rFillAttributes.Get(XATTR_FILLSTYLE).GetValue())
-                    {
-                        SdBackgroundObjUndoAction *pBackgroundObjUndoAction = new SdBackgroundObjUndoAction(*mpDoc, *pPage, rFillAttributes);
-                        pUndoGroup->AddAction(pBackgroundObjUndoAction);
-
-                        SdrPageProperties& rPageProperties = pPage->getSdrPageProperties();
-                        rPageProperties.ClearItem( XATTR_FILLBITMAP );
-                        rPageProperties.ClearItem( XATTR_FILLGRADIENT );
-                        rPageProperties.ClearItem( XATTR_FILLHATCH );
-                        rPageProperties.PutItem(XFillStyleItem(drawing::FillStyle_NONE));
-
-                        pPage->ActionChanged();
-                    }
-                }
-
-                pUndoMgr->AddUndoAction(pUndoGroup);
-                pUndoMgr->LeaveListAction();
-
-            }
 
             // if background filling is set to master pages then clear from page set
-            if( mbMasterPage || bSetToAllPages )
+            if( mbMasterPage )
             {
                 for( sal_uInt16 nWhich = XATTR_FILL_FIRST; nWhich <= XATTR_FILL_LAST; nWhich++ )
                 {
