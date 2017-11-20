@@ -722,36 +722,37 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTableNd )
     const SwTable& rTable = rTableNd.GetTable();
     const SwFrameFormat *pTableFormat = rTable.GetFrameFormat();
 
-    if( pTableFormat )
+    if( !pTableFormat )
+        return;
+
+    sal_Int16 eTabHoriOri = pTableFormat->GetHoriOrient().GetHoriOrient();
+    const SwFormatFrameSize& rFrameSize = pTableFormat->GetFrameSize();
+
+    sal_uInt32 nAbsWidth = rFrameSize.GetSize().Width();
+    sal_uInt32 nBaseWidth = 0;
+    sal_Int8 nPrcWidth = rFrameSize.GetWidthPercent();
+
+    bool bFixAbsWidth = nPrcWidth != 0 || /*text::*/HoriOrientation::NONE == eTabHoriOri
+                                       || /*text::*/HoriOrientation::FULL == eTabHoriOri;
+    if( bFixAbsWidth )
     {
-        sal_Int16 eTabHoriOri = pTableFormat->GetHoriOrient().GetHoriOrient();
-        const SwFormatFrameSize& rFrameSize = pTableFormat->GetFrameSize();
-
-        sal_uInt32 nAbsWidth = rFrameSize.GetSize().Width();
-        sal_uInt32 nBaseWidth = 0;
-        sal_Int8 nPrcWidth = rFrameSize.GetWidthPercent();
-
-        bool bFixAbsWidth = nPrcWidth != 0 || /*text::*/HoriOrientation::NONE == eTabHoriOri
-                                           || /*text::*/HoriOrientation::FULL == eTabHoriOri;
-        if( bFixAbsWidth )
+        nBaseWidth = nAbsWidth;
+        nAbsWidth = pTableFormat->FindLayoutRect(true).Width();
+        if( !nAbsWidth )
         {
-            nBaseWidth = nAbsWidth;
-            nAbsWidth = pTableFormat->FindLayoutRect(true).Width();
-            if( !nAbsWidth )
-            {
-                // TODO?
-            }
+            // TODO?
         }
-        ExportTableFormat( *pTableFormat, nAbsWidth );
-
-        SwXMLTableColumnsSortByWidth_Impl aExpCols;
-        SwXMLTableFrameFormatsSort_Impl aExpRows;
-        SwXMLTableFrameFormatsSort_Impl aExpCells;
-        SwXMLTableInfo_Impl aTableInfo( &rTable, XML_NAMESPACE_TABLE );
-        ExportTableLinesAutoStyles( rTable.GetTabLines(), nAbsWidth, nBaseWidth,
-                                    pTableFormat->GetName(), aExpCols, aExpRows, aExpCells,
-                                    aTableInfo, true);
     }
+    ExportTableFormat( *pTableFormat, nAbsWidth );
+
+    SwXMLTableColumnsSortByWidth_Impl aExpCols;
+    SwXMLTableFrameFormatsSort_Impl aExpRows;
+    SwXMLTableFrameFormatsSort_Impl aExpCells;
+    SwXMLTableInfo_Impl aTableInfo( &rTable, XML_NAMESPACE_TABLE );
+    ExportTableLinesAutoStyles( rTable.GetTabLines(), nAbsWidth, nBaseWidth,
+                                pTableFormat->GetName(), aExpCols, aExpRows, aExpCells,
+                                aTableInfo, true);
+
 }
 
 void SwXMLExport::ExportTableBox( const SwTableBox& rBox,

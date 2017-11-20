@@ -2670,84 +2670,85 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
     }
 
     //Translate and apply
-    if (!sRuby.isEmpty() && !sText.isEmpty() && !sFontName.isEmpty() && nFontSize)
+    if (sRuby.isEmpty() || sText.isEmpty() || sFontName.isEmpty() || !nFontSize)
+        return;
+
+    css::text::RubyAdjust eRubyAdjust;
+    switch (nJustificationCode)
     {
-        css::text::RubyAdjust eRubyAdjust;
-        switch (nJustificationCode)
-        {
-            case 0:
-                eRubyAdjust = css::text::RubyAdjust_CENTER;
-                break;
-            case 1:
-                eRubyAdjust = css::text::RubyAdjust_BLOCK;
-                break;
-            case 2:
-                eRubyAdjust = css::text::RubyAdjust_INDENT_BLOCK;
-                break;
-            default:
-            case 3:
-                eRubyAdjust = css::text::RubyAdjust_LEFT;
-                break;
-            case 4:
-                eRubyAdjust = css::text::RubyAdjust_RIGHT;
-                break;
-        }
+        case 0:
+            eRubyAdjust = css::text::RubyAdjust_CENTER;
+            break;
+        case 1:
+            eRubyAdjust = css::text::RubyAdjust_BLOCK;
+            break;
+        case 2:
+            eRubyAdjust = css::text::RubyAdjust_INDENT_BLOCK;
+            break;
+        default:
+        case 3:
+            eRubyAdjust = css::text::RubyAdjust_LEFT;
+            break;
+        case 4:
+            eRubyAdjust = css::text::RubyAdjust_RIGHT;
+            break;
+    }
 
-        SwFormatRuby aRuby(sRuby);
-        const SwCharFormat *pCharFormat=nullptr;
-        //Make a guess at which of asian of western we should be setting
-        assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
-        sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType(sRuby, 0);
+    SwFormatRuby aRuby(sRuby);
+    const SwCharFormat *pCharFormat=nullptr;
+    //Make a guess at which of asian of western we should be setting
+    assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
+    sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType(sRuby, 0);
 
-        //Check to see if we already have a ruby charstyle that this fits
-        std::vector<const SwCharFormat*>::const_iterator aEnd =
-            m_aRubyCharFormats.end();
-        for(std::vector<const SwCharFormat*>::const_iterator aIter
-            = m_aRubyCharFormats.begin(); aIter != aEnd; ++aIter)
+    //Check to see if we already have a ruby charstyle that this fits
+    std::vector<const SwCharFormat*>::const_iterator aEnd =
+        m_aRubyCharFormats.end();
+    for(std::vector<const SwCharFormat*>::const_iterator aIter
+        = m_aRubyCharFormats.begin(); aIter != aEnd; ++aIter)
+    {
+        const SvxFontHeightItem &rFH =
+            ItemGet<SvxFontHeightItem>(*(*aIter),
+            GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript));
+        if (rFH.GetHeight() == nFontSize*10)
         {
-            const SvxFontHeightItem &rFH =
-                ItemGet<SvxFontHeightItem>(*(*aIter),
-                GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript));
-            if (rFH.GetHeight() == nFontSize*10)
+            const SvxFontItem &rF = ItemGet<SvxFontItem>(*(*aIter),
+                GetWhichOfScript(RES_CHRATR_FONT,nScript));
+            if (rF.GetFamilyName() == sFontName)
             {
-                const SvxFontItem &rF = ItemGet<SvxFontItem>(*(*aIter),
-                    GetWhichOfScript(RES_CHRATR_FONT,nScript));
-                if (rF.GetFamilyName() == sFontName)
-                {
-                    pCharFormat=*aIter;
-                    break;
-                }
+                pCharFormat=*aIter;
+                break;
             }
         }
-
-        //Create a new char style if necessary
-        if (!pCharFormat)
-        {
-            OUString aNm;
-            //Take this as the base name
-            SwStyleNameMapper::FillUIName(RES_POOLCHR_RUBYTEXT,aNm);
-            aNm+=OUString::number(m_aRubyCharFormats.size()+1);
-            SwCharFormat *pFormat = m_rDoc.MakeCharFormat(aNm, m_rDoc.GetDfltCharFormat());
-            SvxFontHeightItem aHeightItem(nFontSize*10, 100, RES_CHRATR_FONTSIZE);
-            SvxFontItem aFontItem(FAMILY_DONTKNOW,sFontName,
-                OUString(), PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);
-            aHeightItem.SetWhich(GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript));
-            aFontItem.SetWhich(GetWhichOfScript(RES_CHRATR_FONT,nScript));
-            pFormat->SetFormatAttr(aHeightItem);
-            pFormat->SetFormatAttr(aFontItem);
-            m_aRubyCharFormats.push_back(pFormat);
-            pCharFormat = pFormat;
-        }
-
-        //Set the charstyle and justification
-        aRuby.SetCharFormatName(pCharFormat->GetName());
-        aRuby.SetCharFormatId(pCharFormat->GetPoolFormatId());
-        aRuby.SetAdjustment(eRubyAdjust);
-
-        NewAttr(aRuby);
-        m_rDoc.getIDocumentContentOperations().InsertString( *m_pPaM, sText );
-        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_TXTATR_CJK_RUBY );
     }
+
+    //Create a new char style if necessary
+    if (!pCharFormat)
+    {
+        OUString aNm;
+        //Take this as the base name
+        SwStyleNameMapper::FillUIName(RES_POOLCHR_RUBYTEXT,aNm);
+        aNm+=OUString::number(m_aRubyCharFormats.size()+1);
+        SwCharFormat *pFormat = m_rDoc.MakeCharFormat(aNm, m_rDoc.GetDfltCharFormat());
+        SvxFontHeightItem aHeightItem(nFontSize*10, 100, RES_CHRATR_FONTSIZE);
+        SvxFontItem aFontItem(FAMILY_DONTKNOW,sFontName,
+            OUString(), PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);
+        aHeightItem.SetWhich(GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript));
+        aFontItem.SetWhich(GetWhichOfScript(RES_CHRATR_FONT,nScript));
+        pFormat->SetFormatAttr(aHeightItem);
+        pFormat->SetFormatAttr(aFontItem);
+        m_aRubyCharFormats.push_back(pFormat);
+        pCharFormat = pFormat;
+    }
+
+    //Set the charstyle and justification
+    aRuby.SetCharFormatName(pCharFormat->GetName());
+    aRuby.SetCharFormatId(pCharFormat->GetPoolFormatId());
+    aRuby.SetAdjustment(eRubyAdjust);
+
+    NewAttr(aRuby);
+    m_rDoc.getIDocumentContentOperations().InsertString( *m_pPaM, sText );
+    m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_TXTATR_CJK_RUBY );
+
 }
 
 //        "table of ..." fields

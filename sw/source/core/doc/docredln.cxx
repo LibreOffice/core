@@ -1364,78 +1364,79 @@ void SwRangeRedline::MoveToSection()
 
 void SwRangeRedline::CopyToSection()
 {
-    if( !pContentSect )
+    if( pContentSect )
+        return;
+
+    const SwPosition* pStt = Start(),
+                    * pEnd = pStt == GetPoint() ? GetMark() : GetPoint();
+
+    SwContentNode* pCSttNd = pStt->nNode.GetNode().GetContentNode();
+    SwContentNode* pCEndNd = pEnd->nNode.GetNode().GetContentNode();
+
+    SwStartNode* pSttNd;
+    SwDoc* pDoc = GetDoc();
+    SwNodes& rNds = pDoc->GetNodes();
+
+    bool bSaveCopyFlag = pDoc->IsCopyIsMove(),
+         bSaveRdlMoveFlg = pDoc->getIDocumentRedlineAccess().IsRedlineMove();
+    pDoc->SetCopyIsMove( true );
+
+    // The IsRedlineMove() flag causes the behaviour of the
+    // SwDoc::_CopyFlyInFly method to change, which will eventually be
+    // called by the pDoc->Copy line below (through SwDoc::Copy_,
+    // SwDoc::CopyWithFlyInFly). This rather obscure bugfix
+    // apparently never really worked.
+    pDoc->getIDocumentRedlineAccess().SetRedlineMove( pStt->nContent == 0 );
+
+    if( pCSttNd )
     {
-        const SwPosition* pStt = Start(),
-                        * pEnd = pStt == GetPoint() ? GetMark() : GetPoint();
+        SwTextFormatColl* pColl = (pCSttNd && pCSttNd->IsTextNode() )
+                                ? pCSttNd->GetTextNode()->GetTextColl()
+                                : pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD);
 
-        SwContentNode* pCSttNd = pStt->nNode.GetNode().GetContentNode();
-        SwContentNode* pCEndNd = pEnd->nNode.GetNode().GetContentNode();
+        pSttNd = rNds.MakeTextSection( SwNodeIndex( rNds.GetEndOfRedlines() ),
+                                        SwNormalStartNode, pColl );
 
-        SwStartNode* pSttNd;
-        SwDoc* pDoc = GetDoc();
-        SwNodes& rNds = pDoc->GetNodes();
+        SwNodeIndex aNdIdx( *pSttNd, 1 );
+        SwTextNode* pTextNd = aNdIdx.GetNode().GetTextNode();
+        SwPosition aPos( aNdIdx, SwIndex( pTextNd ));
+        pDoc->getIDocumentContentOperations().CopyRange( *this, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
 
-        bool bSaveCopyFlag = pDoc->IsCopyIsMove(),
-             bSaveRdlMoveFlg = pDoc->getIDocumentRedlineAccess().IsRedlineMove();
-        pDoc->SetCopyIsMove( true );
-
-        // The IsRedlineMove() flag causes the behaviour of the
-        // SwDoc::_CopyFlyInFly method to change, which will eventually be
-        // called by the pDoc->Copy line below (through SwDoc::Copy_,
-        // SwDoc::CopyWithFlyInFly). This rather obscure bugfix
-        // apparently never really worked.
-        pDoc->getIDocumentRedlineAccess().SetRedlineMove( pStt->nContent == 0 );
-
-        if( pCSttNd )
+        // Take over the style from the EndNode if needed
+        // We don't want this in Doc::Copy
+        if( pCEndNd && pCEndNd != pCSttNd )
         {
-            SwTextFormatColl* pColl = (pCSttNd && pCSttNd->IsTextNode() )
-                                    ? pCSttNd->GetTextNode()->GetTextColl()
-                                    : pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD);
-
-            pSttNd = rNds.MakeTextSection( SwNodeIndex( rNds.GetEndOfRedlines() ),
-                                            SwNormalStartNode, pColl );
-
-            SwNodeIndex aNdIdx( *pSttNd, 1 );
-            SwTextNode* pTextNd = aNdIdx.GetNode().GetTextNode();
-            SwPosition aPos( aNdIdx, SwIndex( pTextNd ));
-            pDoc->getIDocumentContentOperations().CopyRange( *this, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
-
-            // Take over the style from the EndNode if needed
-            // We don't want this in Doc::Copy
-            if( pCEndNd && pCEndNd != pCSttNd )
+            SwContentNode* pDestNd = aPos.nNode.GetNode().GetContentNode();
+            if( pDestNd )
             {
-                SwContentNode* pDestNd = aPos.nNode.GetNode().GetContentNode();
-                if( pDestNd )
-                {
-                    if( pDestNd->IsTextNode() && pCEndNd->IsTextNode() )
-                        pCEndNd->GetTextNode()->CopyCollFormat(*pDestNd->GetTextNode());
-                    else
-                        pDestNd->ChgFormatColl( pCEndNd->GetFormatColl() );
-                }
+                if( pDestNd->IsTextNode() && pCEndNd->IsTextNode() )
+                    pCEndNd->GetTextNode()->CopyCollFormat(*pDestNd->GetTextNode());
+                else
+                    pDestNd->ChgFormatColl( pCEndNd->GetFormatColl() );
             }
+        }
+    }
+    else
+    {
+        pSttNd = SwNodes::MakeEmptySection( SwNodeIndex( rNds.GetEndOfRedlines() ) );
+
+        if( pCEndNd )
+        {
+            SwPosition aPos( *pSttNd->EndOfSectionNode() );
+            pDoc->getIDocumentContentOperations().CopyRange( *this, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
         }
         else
         {
-            pSttNd = SwNodes::MakeEmptySection( SwNodeIndex( rNds.GetEndOfRedlines() ) );
-
-            if( pCEndNd )
-            {
-                SwPosition aPos( *pSttNd->EndOfSectionNode() );
-                pDoc->getIDocumentContentOperations().CopyRange( *this, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
-            }
-            else
-            {
-                SwNodeIndex aInsPos( *pSttNd->EndOfSectionNode() );
-                SwNodeRange aRg( pStt->nNode, 0, pEnd->nNode, 1 );
-                pDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly( aRg, 0, aInsPos );
-            }
+            SwNodeIndex aInsPos( *pSttNd->EndOfSectionNode() );
+            SwNodeRange aRg( pStt->nNode, 0, pEnd->nNode, 1 );
+            pDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly( aRg, 0, aInsPos );
         }
-        pContentSect = new SwNodeIndex( *pSttNd );
-
-        pDoc->SetCopyIsMove( bSaveCopyFlag );
-        pDoc->getIDocumentRedlineAccess().SetRedlineMove( bSaveRdlMoveFlg );
     }
+    pContentSect = new SwNodeIndex( *pSttNd );
+
+    pDoc->SetCopyIsMove( bSaveCopyFlag );
+    pDoc->getIDocumentRedlineAccess().SetRedlineMove( bSaveRdlMoveFlg );
+
 }
 
 void SwRangeRedline::DelCopyOfSection(size_t nMyPos)

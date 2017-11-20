@@ -2821,68 +2821,69 @@ void RtfAttributeOutput::ParaNumRule_Impl(const SwTextNode* pTextNd, sal_Int32 n
 
     const SwNumRule* pRule = pTextNd->GetNumRule();
 
-    if (pRule && pTextNd->IsInList())
+    if (!pRule || !pTextNd->IsInList())
+        return;
+
+    SAL_WARN_IF(pTextNd->GetActualListLevel() < 0 || pTextNd->GetActualListLevel() >= MAXLEVEL, "sw.rtf", "text node does not have valid list level");
+
+    const SwNumFormat* pFormat = pRule->GetNumFormat(nLvl);
+    if (!pFormat)
+        pFormat = &pRule->Get(nLvl);
+
+    const SfxItemSet& rNdSet = pTextNd->GetSwAttrSet();
+
+    m_aStyles.append('{');
+    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LISTTEXT);
+    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_PARD);
+    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_PLAIN);
+    m_aStyles.append(' ');
+
+    SvxLRSpaceItem aLR(static_cast<const SvxLRSpaceItem&>(rNdSet.Get(RES_LR_SPACE)));
+    aLR.SetTextLeft(aLR.GetTextLeft() + pFormat->GetIndentAt());
+    aLR.SetTextFirstLineOfst(pFormat->GetFirstLineOffset());
+
+    sal_uInt16 nStyle = m_rExport.GetId(pFormat->GetCharFormat());
+    OString* pString = m_rExport.GetStyle(nStyle);
+    if (pString)
+        m_aStyles.append(*pString);
+
     {
-        SAL_WARN_IF(pTextNd->GetActualListLevel() < 0 || pTextNd->GetActualListLevel() >= MAXLEVEL, "sw.rtf", "text node does not have valid list level");
+        OUString sText;
+        if (SVX_NUM_CHAR_SPECIAL == pFormat->GetNumberingType() || SVX_NUM_BITMAP == pFormat->GetNumberingType())
+            sText = OUString(pFormat->GetBulletChar());
+        else
+            sText = pTextNd->GetNumString();
 
-        const SwNumFormat* pFormat = pRule->GetNumFormat(nLvl);
-        if (!pFormat)
-            pFormat = &pRule->Get(nLvl);
-
-        const SfxItemSet& rNdSet = pTextNd->GetSwAttrSet();
-
-        m_aStyles.append('{');
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LISTTEXT);
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_PARD);
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_PLAIN);
-        m_aStyles.append(' ');
-
-        SvxLRSpaceItem aLR(static_cast<const SvxLRSpaceItem&>(rNdSet.Get(RES_LR_SPACE)));
-        aLR.SetTextLeft(aLR.GetTextLeft() + pFormat->GetIndentAt());
-        aLR.SetTextFirstLineOfst(pFormat->GetFirstLineOffset());
-
-        sal_uInt16 nStyle = m_rExport.GetId(pFormat->GetCharFormat());
-        OString* pString = m_rExport.GetStyle(nStyle);
-        if (pString)
-            m_aStyles.append(*pString);
-
+        if (!sText.isEmpty())
         {
-            OUString sText;
-            if (SVX_NUM_CHAR_SPECIAL == pFormat->GetNumberingType() || SVX_NUM_BITMAP == pFormat->GetNumberingType())
-                sText = OUString(pFormat->GetBulletChar());
-            else
-                sText = pTextNd->GetNumString();
-
-            if (!sText.isEmpty())
-            {
-                m_aStyles.append(' ');
-                m_aStyles.append(msfilter::rtfutil::OutString(sText, m_rExport.m_eDefaultEncoding));
-            }
-
-            if (OUTLINE_RULE != pRule->GetRuleType())
-            {
-                if (!sText.isEmpty())
-                    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB);
-                m_aStyles.append('}');
-                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ILVL);
-                if (nLvl > 8)             // RTF knows only 9 levels
-                {
-                    m_aStyles.append((sal_Int32)8);
-                    m_aStyles.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SOUTLVL);
-                    m_aStyles.append(nLvl);
-                    m_aStyles.append('}');
-                }
-                else
-                    m_aStyles.append(nLvl);
-            }
-            else
-                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB "}");
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LS);
-            m_aStyles.append((sal_Int32)m_rExport.GetId(*pRule)+1);
             m_aStyles.append(' ');
+            m_aStyles.append(msfilter::rtfutil::OutString(sText, m_rExport.m_eDefaultEncoding));
         }
-        FormatLRSpace(aLR);
+
+        if (OUTLINE_RULE != pRule->GetRuleType())
+        {
+            if (!sText.isEmpty())
+                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB);
+            m_aStyles.append('}');
+            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ILVL);
+            if (nLvl > 8)             // RTF knows only 9 levels
+            {
+                m_aStyles.append((sal_Int32)8);
+                m_aStyles.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SOUTLVL);
+                m_aStyles.append(nLvl);
+                m_aStyles.append('}');
+            }
+            else
+                m_aStyles.append(nLvl);
+        }
+        else
+            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB "}");
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LS);
+        m_aStyles.append((sal_Int32)m_rExport.GetId(*pRule)+1);
+        m_aStyles.append(' ');
     }
+    FormatLRSpace(aLR);
+
 }
 
 void RtfAttributeOutput::ParaScriptSpace(const SfxBoolItem& rScriptSpace)

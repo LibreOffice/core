@@ -326,52 +326,53 @@ void SwSrcEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
 void  SwSrcEditWindow::Resize()
 {
     // ScrollBars, etc. happens in Adjust...
-    if ( m_pTextView )
+    if ( !m_pTextView )
+        return;
+
+    long nVisY = m_pTextView->GetStartDocPos().Y();
+    m_pTextView->ShowCursor();
+    Size aOutSz( GetOutputSizePixel() );
+    long nMaxVisAreaStart = m_pTextView->GetTextEngine()->GetTextHeight() - aOutSz.Height();
+    if ( nMaxVisAreaStart < 0 )
+        nMaxVisAreaStart = 0;
+    if ( m_pTextView->GetStartDocPos().Y() > nMaxVisAreaStart )
     {
-        long nVisY = m_pTextView->GetStartDocPos().Y();
+        Point aStartDocPos( m_pTextView->GetStartDocPos() );
+        aStartDocPos.Y() = nMaxVisAreaStart;
+        m_pTextView->SetStartDocPos( aStartDocPos );
         m_pTextView->ShowCursor();
-        Size aOutSz( GetOutputSizePixel() );
-        long nMaxVisAreaStart = m_pTextView->GetTextEngine()->GetTextHeight() - aOutSz.Height();
-        if ( nMaxVisAreaStart < 0 )
-            nMaxVisAreaStart = 0;
-        if ( m_pTextView->GetStartDocPos().Y() > nMaxVisAreaStart )
+    }
+    long nScrollStd = GetSettings().GetStyleSettings().GetScrollBarSize();
+    Size aScrollSz(aOutSz.Width() - nScrollStd, nScrollStd );
+    Point aScrollPos(0, aOutSz.Height() - nScrollStd);
+
+    m_pHScrollbar->SetPosSizePixel( aScrollPos, aScrollSz);
+
+    aScrollSz.Width() = aScrollSz.Height();
+    aScrollSz.Height() = aOutSz.Height();
+    aScrollPos = Point(aOutSz.Width() - nScrollStd, 0);
+
+    m_pVScrollbar->SetPosSizePixel( aScrollPos, aScrollSz);
+    aOutSz.Width()  -= nScrollStd;
+    aOutSz.Height()     -= nScrollStd;
+    m_pOutWin->SetOutputSizePixel(aOutSz);
+    InitScrollBars();
+
+    // set line in first Resize
+    if(USHRT_MAX != m_nStartLine)
+    {
+        if(m_nStartLine < m_pTextEngine->GetParagraphCount())
         {
-            Point aStartDocPos( m_pTextView->GetStartDocPos() );
-            aStartDocPos.Y() = nMaxVisAreaStart;
-            m_pTextView->SetStartDocPos( aStartDocPos );
+            TextSelection aSel(TextPaM( m_nStartLine, 0 ), TextPaM( m_nStartLine, 0x0 ));
+            m_pTextView->SetSelection(aSel);
             m_pTextView->ShowCursor();
         }
-        long nScrollStd = GetSettings().GetStyleSettings().GetScrollBarSize();
-        Size aScrollSz(aOutSz.Width() - nScrollStd, nScrollStd );
-        Point aScrollPos(0, aOutSz.Height() - nScrollStd);
-
-        m_pHScrollbar->SetPosSizePixel( aScrollPos, aScrollSz);
-
-        aScrollSz.Width() = aScrollSz.Height();
-        aScrollSz.Height() = aOutSz.Height();
-        aScrollPos = Point(aOutSz.Width() - nScrollStd, 0);
-
-        m_pVScrollbar->SetPosSizePixel( aScrollPos, aScrollSz);
-        aOutSz.Width()  -= nScrollStd;
-        aOutSz.Height()     -= nScrollStd;
-        m_pOutWin->SetOutputSizePixel(aOutSz);
-        InitScrollBars();
-
-        // set line in first Resize
-        if(USHRT_MAX != m_nStartLine)
-        {
-            if(m_nStartLine < m_pTextEngine->GetParagraphCount())
-            {
-                TextSelection aSel(TextPaM( m_nStartLine, 0 ), TextPaM( m_nStartLine, 0x0 ));
-                m_pTextView->SetSelection(aSel);
-                m_pTextView->ShowCursor();
-            }
-            m_nStartLine = USHRT_MAX;
-        }
-
-        if ( nVisY != m_pTextView->GetStartDocPos().Y() )
-            Invalidate();
+        m_nStartLine = USHRT_MAX;
     }
+
+    if ( nVisY != m_pTextView->GetStartDocPos().Y() )
+        Invalidate();
+
 
 }
 
@@ -649,24 +650,25 @@ void SwSrcEditWindow::DoSyntaxHighlight( sal_uInt16 nPara )
 {
     // Because of DelayedSyntaxHighlight it could happen,
     // that the line doesn't exist anymore!
-    if ( nPara < m_pTextEngine->GetParagraphCount() )
-    {
-        bool bTempModified = IsModified();
-        m_pTextEngine->RemoveAttribs( nPara );
-        OUString aSource( m_pTextEngine->GetText( nPara ) );
-        m_pTextEngine->SetUpdateMode( false );
-        ImpDoHighlight( aSource, nPara );
-        TextView* pTmp = m_pTextEngine->GetActiveView();
-        pTmp->SetAutoScroll(false);
-        m_pTextEngine->SetActiveView(nullptr);
-        m_pTextEngine->SetUpdateMode( true );
-        m_pTextEngine->SetActiveView(pTmp);
-        pTmp->SetAutoScroll(true);
-        pTmp->ShowCursor( false/*pTmp->IsAutoScroll()*/ );
+    if ( nPara >= m_pTextEngine->GetParagraphCount() )
+        return;
 
-        if(!bTempModified)
-            ClearModifyFlag();
-    }
+    bool bTempModified = IsModified();
+    m_pTextEngine->RemoveAttribs( nPara );
+    OUString aSource( m_pTextEngine->GetText( nPara ) );
+    m_pTextEngine->SetUpdateMode( false );
+    ImpDoHighlight( aSource, nPara );
+    TextView* pTmp = m_pTextEngine->GetActiveView();
+    pTmp->SetAutoScroll(false);
+    m_pTextEngine->SetActiveView(nullptr);
+    m_pTextEngine->SetUpdateMode( true );
+    m_pTextEngine->SetActiveView(pTmp);
+    pTmp->SetAutoScroll(true);
+    pTmp->ShowCursor( false/*pTmp->IsAutoScroll()*/ );
+
+    if(!bTempModified)
+        ClearModifyFlag();
+
 }
 
 void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineOff )

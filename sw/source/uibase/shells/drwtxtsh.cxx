@@ -753,63 +753,64 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         }
     }
 
-    if( !sSym.isEmpty() )
+    if( sSym.isEmpty() )
+        return;
+
+    // do not flicker
+    pOLV->HideCursor();
+    SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
+    pOutliner->SetUpdateMode(false);
+
+    SfxItemSet aOldSet( pOLV->GetAttribs() );
+    SfxItemSet aFontSet(
+        *aOldSet.GetPool(),
+        svl::Items<
+            EE_CHAR_FONTINFO, EE_CHAR_FONTINFO,
+            EE_CHAR_FONTINFO_CJK, EE_CHAR_FONTINFO_CTL>{});
+    aFontSet.Set( aOldSet );
+
+    // Insert string
+    pOLV->InsertText( sSym );
+
+    // assign attributes (Set font)
+    SfxItemSet aFontAttribSet( *aFontSet.GetPool(), aFontSet.GetRanges() );
+    SvxFontItem aFontItem (aFont.GetFamilyType(), aFont.GetFamilyName(),
+                            aFont.GetStyleName(), aFont.GetPitch(),
+                            aFont.GetCharSet(),
+                            EE_CHAR_FONTINFO );
+    nScript = g_pBreakIt->GetAllScriptsOfText( sSym );
+    if( SvtScriptType::LATIN & nScript )
+        aFontAttribSet.Put( aFontItem );
+    if( SvtScriptType::ASIAN & nScript )
     {
-        // do not flicker
-        pOLV->HideCursor();
-        SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
-        pOutliner->SetUpdateMode(false);
-
-        SfxItemSet aOldSet( pOLV->GetAttribs() );
-        SfxItemSet aFontSet(
-            *aOldSet.GetPool(),
-            svl::Items<
-                EE_CHAR_FONTINFO, EE_CHAR_FONTINFO,
-                EE_CHAR_FONTINFO_CJK, EE_CHAR_FONTINFO_CTL>{});
-        aFontSet.Set( aOldSet );
-
-        // Insert string
-        pOLV->InsertText( sSym );
-
-        // assign attributes (Set font)
-        SfxItemSet aFontAttribSet( *aFontSet.GetPool(), aFontSet.GetRanges() );
-        SvxFontItem aFontItem (aFont.GetFamilyType(), aFont.GetFamilyName(),
-                                aFont.GetStyleName(), aFont.GetPitch(),
-                                aFont.GetCharSet(),
-                                EE_CHAR_FONTINFO );
-        nScript = g_pBreakIt->GetAllScriptsOfText( sSym );
-        if( SvtScriptType::LATIN & nScript )
-            aFontAttribSet.Put( aFontItem );
-        if( SvtScriptType::ASIAN & nScript )
-        {
-            aFontItem.SetWhich(EE_CHAR_FONTINFO_CJK);
-            aFontAttribSet.Put( aFontItem );
-        }
-        if( SvtScriptType::COMPLEX & nScript )
-        {
-            aFontItem.SetWhich(EE_CHAR_FONTINFO_CTL);
-            aFontAttribSet.Put( aFontItem );
-        }
-        pOLV->SetAttribs(aFontAttribSet);
-
-        // Remove selection
-        ESelection aSel(pOLV->GetSelection());
-        aSel.nStartPara = aSel.nEndPara;
-        aSel.nStartPos = aSel.nEndPos;
-        pOLV->SetSelection(aSel);
-
-        // Restore old font
-        pOLV->SetAttribs( aFontSet );
-
-        // From now on show again
-        pOutliner->SetUpdateMode(true);
-        pOLV->ShowCursor();
-
-        rReq.AppendItem( SfxStringItem( GetPool().GetWhich(SID_CHARMAP), sSym ) );
-        if(!aFont.GetFamilyName().isEmpty())
-            rReq.AppendItem( SfxStringItem( SID_ATTR_SPECIALCHAR, aFont.GetFamilyName() ) );
-        rReq.Done();
+        aFontItem.SetWhich(EE_CHAR_FONTINFO_CJK);
+        aFontAttribSet.Put( aFontItem );
     }
+    if( SvtScriptType::COMPLEX & nScript )
+    {
+        aFontItem.SetWhich(EE_CHAR_FONTINFO_CTL);
+        aFontAttribSet.Put( aFontItem );
+    }
+    pOLV->SetAttribs(aFontAttribSet);
+
+    // Remove selection
+    ESelection aSel(pOLV->GetSelection());
+    aSel.nStartPara = aSel.nEndPara;
+    aSel.nStartPos = aSel.nEndPos;
+    pOLV->SetSelection(aSel);
+
+    // Restore old font
+    pOLV->SetAttribs( aFontSet );
+
+    // From now on show again
+    pOutliner->SetUpdateMode(true);
+    pOLV->ShowCursor();
+
+    rReq.AppendItem( SfxStringItem( GetPool().GetWhich(SID_CHARMAP), sSym ) );
+    if(!aFont.GetFamilyName().isEmpty())
+        rReq.AppendItem( SfxStringItem( SID_ATTR_SPECIALCHAR, aFont.GetFamilyName() ) );
+    rReq.Done();
+
 }
 
 ::svl::IUndoManager* SwDrawTextShell::GetUndoManager()

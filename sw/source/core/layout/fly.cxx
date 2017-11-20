@@ -634,42 +634,43 @@ void SwFlyFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     else
         UpdateAttr_( pOld, pNew, nInvFlags );
 
-    if ( nInvFlags != 0 )
-    {
-        Invalidate_();
-        if ( nInvFlags & 0x01 )
-        {
-            InvalidatePos_();
-            // #i68520#
-            InvalidateObjRectWithSpaces();
-        }
-        if ( nInvFlags & 0x02 )
-        {
-            InvalidateSize_();
-            // #i68520#
-            InvalidateObjRectWithSpaces();
-        }
-        if ( nInvFlags & 0x04 )
-            InvalidatePrt_();
-        if ( nInvFlags & 0x08 )
-            SetNotifyBack();
-        if ( nInvFlags & 0x10 )
-            SetCompletePaint();
-        if ( ( nInvFlags & 0x40 ) && Lower() && Lower()->IsNoTextFrame() )
-            ClrContourCache( GetVirtDrawObj() );
-        SwRootFrame *pRoot;
-        if ( nInvFlags & 0x20 && nullptr != (pRoot = getRootFrame()) )
-            pRoot->InvalidateBrowseWidth();
-        // #i28701#
-        if ( nInvFlags & 0x80 )
-        {
-            // update sorted object lists, the Writer fly frame is registered at.
-            UpdateObjInSortedList();
-        }
+    if ( nInvFlags == 0 )
+        return;
 
-        // #i87645# - reset flags for the layout process (only if something has been invalidated)
-        ResetLayoutProcessBools();
+    Invalidate_();
+    if ( nInvFlags & 0x01 )
+    {
+        InvalidatePos_();
+        // #i68520#
+        InvalidateObjRectWithSpaces();
     }
+    if ( nInvFlags & 0x02 )
+    {
+        InvalidateSize_();
+        // #i68520#
+        InvalidateObjRectWithSpaces();
+    }
+    if ( nInvFlags & 0x04 )
+        InvalidatePrt_();
+    if ( nInvFlags & 0x08 )
+        SetNotifyBack();
+    if ( nInvFlags & 0x10 )
+        SetCompletePaint();
+    if ( ( nInvFlags & 0x40 ) && Lower() && Lower()->IsNoTextFrame() )
+        ClrContourCache( GetVirtDrawObj() );
+    SwRootFrame *pRoot;
+    if ( nInvFlags & 0x20 && nullptr != (pRoot = getRootFrame()) )
+        pRoot->InvalidateBrowseWidth();
+    // #i28701#
+    if ( nInvFlags & 0x80 )
+    {
+        // update sorted object lists, the Writer fly frame is registered at.
+        UpdateObjInSortedList();
+    }
+
+    // #i87645# - reset flags for the layout process (only if something has been invalidated)
+    ResetLayoutProcessBools();
+
 }
 
 void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
@@ -1046,116 +1047,117 @@ void SwFlyFrame::Invalidate_( SwPageFrame const *pPage )
  */
 void SwFlyFrame::ChgRelPos( const Point &rNewPos )
 {
-    if ( GetCurrRelPos() != rNewPos )
-    {
-        SwFrameFormat *pFormat = GetFormat();
-        const bool bVert = GetAnchorFrame()->IsVertical();
-        const SwTwips nNewY = bVert ? rNewPos.X() : rNewPos.Y();
-        SwTwips nTmpY = nNewY == LONG_MAX ? 0 : nNewY;
-        if( bVert )
-            nTmpY = -nTmpY;
-        SfxItemSet aSet( pFormat->GetDoc()->GetAttrPool(),
-                         svl::Items<RES_VERT_ORIENT, RES_HORI_ORIENT>{});
+    if ( GetCurrRelPos() == rNewPos )
+        return;
 
-        SwFormatVertOrient aVert( pFormat->GetVertOrient() );
-        const SwTextFrame *pAutoFrame = nullptr;
-        // #i34948# - handle also at-page and at-fly anchored
-        // Writer fly frames
-        const RndStdIds eAnchorType = GetFrameFormat().GetAnchor().GetAnchorId();
-        if ( eAnchorType == RndStdIds::FLY_AT_PAGE )
+    SwFrameFormat *pFormat = GetFormat();
+    const bool bVert = GetAnchorFrame()->IsVertical();
+    const SwTwips nNewY = bVert ? rNewPos.X() : rNewPos.Y();
+    SwTwips nTmpY = nNewY == LONG_MAX ? 0 : nNewY;
+    if( bVert )
+        nTmpY = -nTmpY;
+    SfxItemSet aSet( pFormat->GetDoc()->GetAttrPool(),
+                     svl::Items<RES_VERT_ORIENT, RES_HORI_ORIENT>{});
+
+    SwFormatVertOrient aVert( pFormat->GetVertOrient() );
+    const SwTextFrame *pAutoFrame = nullptr;
+    // #i34948# - handle also at-page and at-fly anchored
+    // Writer fly frames
+    const RndStdIds eAnchorType = GetFrameFormat().GetAnchor().GetAnchorId();
+    if ( eAnchorType == RndStdIds::FLY_AT_PAGE )
+    {
+        aVert.SetVertOrient( text::VertOrientation::NONE );
+        aVert.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
+    }
+    else if ( eAnchorType == RndStdIds::FLY_AT_FLY )
+    {
+        aVert.SetVertOrient( text::VertOrientation::NONE );
+        aVert.SetRelationOrient( text::RelOrientation::FRAME );
+    }
+    else if ( IsFlyAtContentFrame() || text::VertOrientation::NONE != aVert.GetVertOrient() )
+    {
+        if( text::RelOrientation::CHAR == aVert.GetRelationOrient() && IsAutoPos() )
         {
-            aVert.SetVertOrient( text::VertOrientation::NONE );
-            aVert.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
+            if( LONG_MAX != nNewY )
+            {
+                aVert.SetVertOrient( text::VertOrientation::NONE );
+                sal_Int32 nOfs =
+                    pFormat->GetAnchor().GetContentAnchor()->nContent.GetIndex();
+                OSL_ENSURE( GetAnchorFrame()->IsTextFrame(), "TextFrame expected" );
+                pAutoFrame = static_cast<const SwTextFrame*>(GetAnchorFrame());
+                while( pAutoFrame->GetFollow() &&
+                       pAutoFrame->GetFollow()->GetOfst() <= nOfs )
+                {
+                    if( pAutoFrame == GetAnchorFrame() )
+                        nTmpY += pAutoFrame->GetRelPos().Y();
+                    nTmpY -= pAutoFrame->GetUpper()->getFramePrintArea().Height();
+                    pAutoFrame = pAutoFrame->GetFollow();
+                }
+                nTmpY = static_cast<SwFlyAtContentFrame*>(this)->GetRelCharY(pAutoFrame)-nTmpY;
+            }
+            else
+                aVert.SetVertOrient( text::VertOrientation::CHAR_BOTTOM );
         }
-        else if ( eAnchorType == RndStdIds::FLY_AT_FLY )
+        else
         {
             aVert.SetVertOrient( text::VertOrientation::NONE );
             aVert.SetRelationOrient( text::RelOrientation::FRAME );
         }
-        else if ( IsFlyAtContentFrame() || text::VertOrientation::NONE != aVert.GetVertOrient() )
+    }
+    aVert.SetPos( nTmpY );
+    aSet.Put( aVert );
+
+    // For Flys in the Cnt, the horizontal orientation is of no interest,
+    // as it's always 0
+    if ( !IsFlyInContentFrame() )
+    {
+        const SwTwips nNewX = bVert ? rNewPos.Y() : rNewPos.X();
+        SwTwips nTmpX = nNewX == LONG_MAX ? 0 : nNewX;
+        SwFormatHoriOrient aHori( pFormat->GetHoriOrient() );
+        // #i34948# - handle also at-page and at-fly anchored
+        // Writer fly frames
+        if ( eAnchorType == RndStdIds::FLY_AT_PAGE )
         {
-            if( text::RelOrientation::CHAR == aVert.GetRelationOrient() && IsAutoPos() )
+            aHori.SetHoriOrient( text::HoriOrientation::NONE );
+            aHori.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
+            aHori.SetPosToggle( false );
+        }
+        else if ( eAnchorType == RndStdIds::FLY_AT_FLY )
+        {
+            aHori.SetHoriOrient( text::HoriOrientation::NONE );
+            aHori.SetRelationOrient( text::RelOrientation::FRAME );
+            aHori.SetPosToggle( false );
+        }
+        else if ( IsFlyAtContentFrame() || text::HoriOrientation::NONE != aHori.GetHoriOrient() )
+        {
+            aHori.SetHoriOrient( text::HoriOrientation::NONE );
+            if( text::RelOrientation::CHAR == aHori.GetRelationOrient() && IsAutoPos() )
             {
-                if( LONG_MAX != nNewY )
+                if( LONG_MAX != nNewX )
                 {
-                    aVert.SetVertOrient( text::VertOrientation::NONE );
-                    sal_Int32 nOfs =
-                        pFormat->GetAnchor().GetContentAnchor()->nContent.GetIndex();
-                    OSL_ENSURE( GetAnchorFrame()->IsTextFrame(), "TextFrame expected" );
-                    pAutoFrame = static_cast<const SwTextFrame*>(GetAnchorFrame());
-                    while( pAutoFrame->GetFollow() &&
-                           pAutoFrame->GetFollow()->GetOfst() <= nOfs )
+                    if( !pAutoFrame )
                     {
-                        if( pAutoFrame == GetAnchorFrame() )
-                            nTmpY += pAutoFrame->GetRelPos().Y();
-                        nTmpY -= pAutoFrame->GetUpper()->getFramePrintArea().Height();
-                        pAutoFrame = pAutoFrame->GetFollow();
+                        sal_Int32 nOfs = pFormat->GetAnchor().GetContentAnchor()
+                                      ->nContent.GetIndex();
+                        OSL_ENSURE( GetAnchorFrame()->IsTextFrame(), "TextFrame expected");
+                        pAutoFrame = static_cast<const SwTextFrame*>(GetAnchorFrame());
+                        while( pAutoFrame->GetFollow() &&
+                               pAutoFrame->GetFollow()->GetOfst() <= nOfs )
+                            pAutoFrame = pAutoFrame->GetFollow();
                     }
-                    nTmpY = static_cast<SwFlyAtContentFrame*>(this)->GetRelCharY(pAutoFrame)-nTmpY;
+                    nTmpX -= static_cast<SwFlyAtContentFrame*>(this)->GetRelCharX(pAutoFrame);
                 }
-                else
-                    aVert.SetVertOrient( text::VertOrientation::CHAR_BOTTOM );
             }
             else
-            {
-                aVert.SetVertOrient( text::VertOrientation::NONE );
-                aVert.SetRelationOrient( text::RelOrientation::FRAME );
-            }
-        }
-        aVert.SetPos( nTmpY );
-        aSet.Put( aVert );
-
-        // For Flys in the Cnt, the horizontal orientation is of no interest,
-        // as it's always 0
-        if ( !IsFlyInContentFrame() )
-        {
-            const SwTwips nNewX = bVert ? rNewPos.Y() : rNewPos.X();
-            SwTwips nTmpX = nNewX == LONG_MAX ? 0 : nNewX;
-            SwFormatHoriOrient aHori( pFormat->GetHoriOrient() );
-            // #i34948# - handle also at-page and at-fly anchored
-            // Writer fly frames
-            if ( eAnchorType == RndStdIds::FLY_AT_PAGE )
-            {
-                aHori.SetHoriOrient( text::HoriOrientation::NONE );
-                aHori.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
-                aHori.SetPosToggle( false );
-            }
-            else if ( eAnchorType == RndStdIds::FLY_AT_FLY )
-            {
-                aHori.SetHoriOrient( text::HoriOrientation::NONE );
                 aHori.SetRelationOrient( text::RelOrientation::FRAME );
-                aHori.SetPosToggle( false );
-            }
-            else if ( IsFlyAtContentFrame() || text::HoriOrientation::NONE != aHori.GetHoriOrient() )
-            {
-                aHori.SetHoriOrient( text::HoriOrientation::NONE );
-                if( text::RelOrientation::CHAR == aHori.GetRelationOrient() && IsAutoPos() )
-                {
-                    if( LONG_MAX != nNewX )
-                    {
-                        if( !pAutoFrame )
-                        {
-                            sal_Int32 nOfs = pFormat->GetAnchor().GetContentAnchor()
-                                          ->nContent.GetIndex();
-                            OSL_ENSURE( GetAnchorFrame()->IsTextFrame(), "TextFrame expected");
-                            pAutoFrame = static_cast<const SwTextFrame*>(GetAnchorFrame());
-                            while( pAutoFrame->GetFollow() &&
-                                   pAutoFrame->GetFollow()->GetOfst() <= nOfs )
-                                pAutoFrame = pAutoFrame->GetFollow();
-                        }
-                        nTmpX -= static_cast<SwFlyAtContentFrame*>(this)->GetRelCharX(pAutoFrame);
-                    }
-                }
-                else
-                    aHori.SetRelationOrient( text::RelOrientation::FRAME );
-                aHori.SetPosToggle( false );
-            }
-            aHori.SetPos( nTmpX );
-            aSet.Put( aHori );
+            aHori.SetPosToggle( false );
         }
-        SetCurrRelPos( rNewPos );
-        pFormat->GetDoc()->SetAttr( aSet, *pFormat );
+        aHori.SetPos( nTmpX );
+        aSet.Put( aHori );
     }
+    SetCurrRelPos( rNewPos );
+    pFormat->GetDoc()->SetAttr( aSet, *pFormat );
+
 }
 
 /** "Formats" the Frame; Frame and PrtArea.
@@ -1689,61 +1691,62 @@ void SwFlyFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
 
 void SwFlyFrame::MakeContentPos( const SwBorderAttrs &rAttrs )
 {
-    if ( !m_bValidContentPos )
+    if ( m_bValidContentPos )
+        return;
+
+    m_bValidContentPos = true;
+
+    const SwTwips nUL = rAttrs.CalcTopLine()  + rAttrs.CalcBottomLine();
+    Size aRelSize( CalcRel( GetFormat()->GetFrameSize() ) );
+
+    SwRectFnSet aRectFnSet(this);
+    long nMinHeight = 0;
+    if( IsMinHeight() )
+        nMinHeight = aRectFnSet.IsVert() ? aRelSize.Width() : aRelSize.Height();
+
+    Point aNewContentPos;
+    aNewContentPos = getFramePrintArea().Pos();
+    const SdrTextVertAdjust nAdjust = GetFormat()->GetTextVertAdjust().GetValue();
+
+    if( nAdjust != SDRTEXTVERTADJUST_TOP )
     {
-        m_bValidContentPos = true;
+        const SwTwips nContentHeight = CalcContentHeight(&rAttrs, nMinHeight, nUL);
+        SwTwips nDiff = 0;
 
-        const SwTwips nUL = rAttrs.CalcTopLine()  + rAttrs.CalcBottomLine();
-        Size aRelSize( CalcRel( GetFormat()->GetFrameSize() ) );
+        if( nContentHeight != 0)
+            nDiff = aRectFnSet.GetHeight(getFramePrintArea()) - nContentHeight;
 
-        SwRectFnSet aRectFnSet(this);
-        long nMinHeight = 0;
-        if( IsMinHeight() )
-            nMinHeight = aRectFnSet.IsVert() ? aRelSize.Width() : aRelSize.Height();
-
-        Point aNewContentPos;
-        aNewContentPos = getFramePrintArea().Pos();
-        const SdrTextVertAdjust nAdjust = GetFormat()->GetTextVertAdjust().GetValue();
-
-        if( nAdjust != SDRTEXTVERTADJUST_TOP )
+        if( nDiff > 0 )
         {
-            const SwTwips nContentHeight = CalcContentHeight(&rAttrs, nMinHeight, nUL);
-            SwTwips nDiff = 0;
-
-            if( nContentHeight != 0)
-                nDiff = aRectFnSet.GetHeight(getFramePrintArea()) - nContentHeight;
-
-            if( nDiff > 0 )
+            if( nAdjust == SDRTEXTVERTADJUST_CENTER )
             {
-                if( nAdjust == SDRTEXTVERTADJUST_CENTER )
-                {
-                    if( aRectFnSet.IsVertL2R() )
-                        aNewContentPos.setX(aNewContentPos.getX() + nDiff/2);
-                    else if( aRectFnSet.IsVert() )
-                        aNewContentPos.setX(aNewContentPos.getX() - nDiff/2);
-                    else
-                        aNewContentPos.setY(aNewContentPos.getY() + nDiff/2);
-                }
-                else if( nAdjust == SDRTEXTVERTADJUST_BOTTOM )
-                {
-                    if( aRectFnSet.IsVertL2R() )
-                        aNewContentPos.setX(aNewContentPos.getX() + nDiff);
-                    else if( aRectFnSet.IsVert() )
-                        aNewContentPos.setX(aNewContentPos.getX() - nDiff);
-                    else
-                        aNewContentPos.setY(aNewContentPos.getY() + nDiff);
-                }
+                if( aRectFnSet.IsVertL2R() )
+                    aNewContentPos.setX(aNewContentPos.getX() + nDiff/2);
+                else if( aRectFnSet.IsVert() )
+                    aNewContentPos.setX(aNewContentPos.getX() - nDiff/2);
+                else
+                    aNewContentPos.setY(aNewContentPos.getY() + nDiff/2);
             }
-        }
-        if( aNewContentPos != ContentPos() )
-        {
-            ContentPos() = aNewContentPos;
-            for( SwFrame *pFrame = Lower(); pFrame; pFrame = pFrame->GetNext())
+            else if( nAdjust == SDRTEXTVERTADJUST_BOTTOM )
             {
-                pFrame->InvalidatePos();
+                if( aRectFnSet.IsVertL2R() )
+                    aNewContentPos.setX(aNewContentPos.getX() + nDiff);
+                else if( aRectFnSet.IsVert() )
+                    aNewContentPos.setX(aNewContentPos.getX() - nDiff);
+                else
+                    aNewContentPos.setY(aNewContentPos.getY() + nDiff);
             }
         }
     }
+    if( aNewContentPos != ContentPos() )
+    {
+        ContentPos() = aNewContentPos;
+        for( SwFrame *pFrame = Lower(); pFrame; pFrame = pFrame->GetNext())
+        {
+            pFrame->InvalidatePos();
+        }
+    }
+
 }
 
 void SwFlyFrame::InvalidateContentPos()
