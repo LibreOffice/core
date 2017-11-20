@@ -778,7 +778,7 @@ void ScViewData::CreateTabData( std::vector< SCTAB >& rvTabs )
 
 void ScViewData::SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs )
 {
-    bool bAll = ( tabs.empty() );
+    bool bAll = tabs.empty();
 
     if ( !bAll ) // create associated table data
         CreateTabData( tabs );
@@ -818,7 +818,7 @@ void ScViewData::SetZoomType( SvxZoomType eNew, bool bAll )
 
 void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vector< SCTAB >& tabs )
 {
-    bool bAll = ( tabs.empty() );
+    bool bAll = tabs.empty();
     if ( !bAll ) // create associated table data
         CreateTabData( tabs );
 

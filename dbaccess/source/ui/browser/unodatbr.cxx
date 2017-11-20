@@ -751,7 +751,7 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                         if ( aDefault.hasValue() )
                             aDefault <<= (comphelper::getString(aDefault).toInt32() == 0) ? (sal_Int16)TRISTATE_FALSE : (sal_Int16)TRISTATE_TRUE;
                         else
-                            aDefault <<= ((sal_Int16)TRISTATE_INDET);
+                            aDefault <<= (sal_Int16)TRISTATE_INDET;
                     }
                 }
 

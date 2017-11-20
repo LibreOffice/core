@@ -161,7 +161,7 @@ DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, vcl::Window
 
     if( rInAttrs.GetItemState(SCHATTR_DATADESCR_NO_PERCENTVALUE, true, &pPoolItem) == SfxItemState::SET )
     {
-        bool bForbidPercentValue = (static_cast< const SfxBoolItem & >( rInAttrs.Get( SCHATTR_DATADESCR_NO_PERCENTVALUE )).GetValue() );
+        bool bForbidPercentValue = static_cast< const SfxBoolItem & >( rInAttrs.Get( SCHATTR_DATADESCR_NO_PERCENTVALUE )).GetValue();
         if( bForbidPercentValue )
             m_pCBPercent->Enable(false);
     }

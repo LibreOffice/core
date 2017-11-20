@@ -79,11 +79,13 @@ public:
     bool VisitCaseStmt(const CaseStmt *);
     bool VisitReturnStmt(const ReturnStmt* );
     bool VisitCallExpr(const CallExpr *);
+    bool VisitVarDecl(const VarDecl *);
+    bool VisitCXXOperatorCallExpr(const CXXOperatorCallExpr *);
     bool TraverseUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr *);
     bool TraverseCaseStmt(CaseStmt *);
     bool TraverseConditionalOperator(ConditionalOperator *);
 private:
-    void VisitSomeStmt(const Stmt *parent, const Expr* cond, StringRef stmtName);
+    void VisitSomeStmt(Stmt const * stmt, const Expr* cond, StringRef stmtName);
     Expr const * insideSizeof = nullptr;
     Expr const * insideCaseStmt = nullptr;
     Expr const * insideConditionalOperator = nullptr;
@@ -234,11 +236,11 @@ bool UnnecessaryParen::VisitReturnStmt(const ReturnStmt* returnStmt)
     return true;
 }
 
-void UnnecessaryParen::VisitSomeStmt(const Stmt *parent, const Expr* cond, StringRef stmtName)
+void UnnecessaryParen::VisitSomeStmt(const Stmt * stmt, const Expr* cond, StringRef stmtName)
 {
-    if (ignoreLocation(parent))
+    if (ignoreLocation(stmt))
         return;
-    if (parent->getLocStart().isMacroID())
+    if (stmt->getLocStart().isMacroID())
         return;
 
     auto parenExpr = dyn_cast<ParenExpr>(ignoreAllImplicit(cond));
@@ -273,18 +275,90 @@ bool UnnecessaryParen::VisitCallExpr(const CallExpr* callExpr)
         return true;
 
     auto parenExpr = dyn_cast<ParenExpr>(ignoreAllImplicit(callExpr->getArg(0)));
-    if (parenExpr) {
-        if (parenExpr->getLocStart().isMacroID())
-            return true;
-        // assignments need extra parentheses or they generate a compiler warning
-        auto binaryOp = dyn_cast<BinaryOperator>(parenExpr->getSubExpr());
-        if (binaryOp && binaryOp->getOpcode() == BO_Assign)
-            return true;
-        report(
-            DiagnosticsEngine::Warning, "parentheses immediately inside single-arg call",
-            parenExpr->getLocStart())
-            << parenExpr->getSourceRange();
-    }
+    if (!parenExpr)
+        return true;
+    if (parenExpr->getLocStart().isMacroID())
+        return true;
+    // assignments need extra parentheses or they generate a compiler warning
+    auto binaryOp = dyn_cast<BinaryOperator>(parenExpr->getSubExpr());
+    if (binaryOp && binaryOp->getOpcode() == BO_Assign)
+        return true;
+    report(
+        DiagnosticsEngine::Warning, "parentheses immediately inside single-arg call",
+        parenExpr->getLocStart())
+        << parenExpr->getSourceRange();
+    return true;
+}
+
+bool UnnecessaryParen::VisitCXXOperatorCallExpr(const CXXOperatorCallExpr* callExpr)
+{
+    if (ignoreLocation(callExpr))
+        return true;
+    if (callExpr->getLocStart().isMacroID())
+        return true;
+    if (callExpr->getNumArgs() != 2)
+        return true;
+
+    // Same logic as CXXOperatorCallExpr::isAssignmentOp(), which our supported clang
+    // doesn't have yet.
+    auto Opc = callExpr->getOperator();
+    if (Opc != OO_Equal && Opc != OO_StarEqual &&
+        Opc != OO_SlashEqual && Opc != OO_PercentEqual &&
+        Opc != OO_PlusEqual && Opc != OO_MinusEqual &&
+        Opc != OO_LessLessEqual && Opc != OO_GreaterGreaterEqual &&
+        Opc != OO_AmpEqual && Opc != OO_CaretEqual &&
+        Opc != OO_PipeEqual)
+        return true;
+
+    auto parenExpr = dyn_cast<ParenExpr>(ignoreAllImplicit(callExpr->getArg(1)));
+    if (!parenExpr)
+        return true;
+    if (parenExpr->getLocStart().isMacroID())
+        return true;
+    // Sometimes parentheses make the RHS of an assignment easier to read by
+    // visually disambiguating the = from a call to ==
+    auto sub = parenExpr->getSubExpr();
+    if (isa<BinaryOperator>(sub)
+        || isa<CXXOperatorCallExpr>(sub)
+        || isa<ConditionalOperator>(sub))
+        return true;
+
+    report(
+        DiagnosticsEngine::Warning, "parentheses immediately inside assignment",
+        parenExpr->getLocStart())
+        << parenExpr->getSourceRange();
+    return true;
+}
+
+bool UnnecessaryParen::VisitVarDecl(const VarDecl* varDecl)
+{
+    if (ignoreLocation(varDecl))
+        return true;
+    if (varDecl->getLocStart().isMacroID())
+        return true;
+    if (!varDecl->getInit())
+        return true;
+
+    auto parenExpr = dyn_cast<ParenExpr>(ignoreAllImplicit(varDecl->getInit()));
+    if (!parenExpr)
+        return true;
+    if (parenExpr->getLocStart().isMacroID())
+        return true;
+    auto sub = parenExpr->getSubExpr();
+    if (isa<BinaryOperator>(sub)
+        || isa<CXXOperatorCallExpr>(sub)
+        || isa<ConditionalOperator>(sub)
+            // these two are for "parentheses were disambiguated as a function declaration [-Werror,-Wvexing-parse]"
+        || isa<CXXBindTemporaryExpr>(sub)
+        || isa<CXXFunctionalCastExpr>(sub))
+        return true;
+
+//varDecl->dump();
+
+    report(
+        DiagnosticsEngine::Warning, "parentheses immediately inside vardecl statement",
+        parenExpr->getLocStart())
+        << parenExpr->getSourceRange();
     return true;
 }
 

@@ -1965,8 +1965,8 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     {
         // Check on undo already done above
 
-        ScStyleSheetPool* pStylePool = (pViewData->GetDocument()->
-                                            GetStyleSheetPool());
+        ScStyleSheetPool* pStylePool = pViewData->GetDocument()->
+                                            GetStyleSheetPool();
         if ( pStylePool )
         {
             SfxStyleSheet* pStyleSheet = static_cast<SfxStyleSheet*>(

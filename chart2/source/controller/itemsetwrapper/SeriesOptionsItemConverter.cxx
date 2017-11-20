@@ -295,8 +295,8 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
 
         case SCHATTR_CLOCKWISE:
         {
-            bool bClockwise = (static_cast< const SfxBoolItem & >(
-                     rItemSet.Get( nWhichId )).GetValue() );
+            bool bClockwise = static_cast< const SfxBoolItem & >(
+                     rItemSet.Get( nWhichId )).GetValue();
             if( m_xCooSys.is() )
             {
                 uno::Reference< chart2::XAxis > xAxis( AxisHelper::getAxis( 1, 0, m_xCooSys ) );

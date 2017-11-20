@@ -457,7 +457,7 @@ void SwPaM::SetMark()
     {
         m_pMark = &m_Bound1;
     }
-    (*m_pMark) = (*m_pPoint);
+    (*m_pMark) = *m_pPoint;
 }
 
 #ifdef DBG_UTIL

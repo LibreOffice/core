@@ -101,7 +101,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             OString outputFile;
             if ( options.isValid("-O") )
             {
-                outputFile = (options.getOption("-O"));
+                outputFile = options.getOption("-O");
                 if (!outputFile.endsWith("/")) {
                     outputFile += OString('/');
                 }

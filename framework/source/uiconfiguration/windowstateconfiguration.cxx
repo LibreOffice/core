@@ -1170,9 +1170,9 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
                     {
                         OUString aSizeStr;
                         if ( i == PROPERTY_SIZE )
-                            aSizeStr = ( OUString::number( rWinStateInfo.aSize.Width ));
+                            aSizeStr = OUString::number( rWinStateInfo.aSize.Width );
                         else
-                            aSizeStr = ( OUString::number( rWinStateInfo.aDockSize.Width ));
+                            aSizeStr = OUString::number( rWinStateInfo.aDockSize.Width );
                         aSizeStr += aDelim;
                         if ( i == PROPERTY_SIZE )
                             aSizeStr += OUString::number( rWinStateInfo.aSize.Height );

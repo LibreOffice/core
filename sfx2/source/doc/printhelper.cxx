@@ -277,16 +277,16 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter()
     uno::Sequence< beans::PropertyValue > aPrinter(8);
 
     aPrinter.getArray()[7].Name = "CanSetPaperSize";
-    aPrinter.getArray()[7].Value <<= ( pPrinter->HasSupport( PrinterSupport::SetPaperSize ) );
+    aPrinter.getArray()[7].Value <<= pPrinter->HasSupport( PrinterSupport::SetPaperSize );
 
     aPrinter.getArray()[6].Name = "CanSetPaperFormat";
-    aPrinter.getArray()[6].Value <<= ( pPrinter->HasSupport( PrinterSupport::SetPaper ) );
+    aPrinter.getArray()[6].Value <<= pPrinter->HasSupport( PrinterSupport::SetPaper );
 
     aPrinter.getArray()[5].Name = "CanSetPaperOrientation";
-    aPrinter.getArray()[5].Value <<= ( pPrinter->HasSupport( PrinterSupport::SetOrientation ) );
+    aPrinter.getArray()[5].Value <<= pPrinter->HasSupport( PrinterSupport::SetOrientation );
 
     aPrinter.getArray()[4].Name = "IsBusy";
-    aPrinter.getArray()[4].Value <<= ( pPrinter->IsPrinting() );
+    aPrinter.getArray()[4].Value <<= pPrinter->IsPrinting();
 
     aPrinter.getArray()[3].Name = "PaperSize";
     awt::Size aSize = impl_Size_Object2Struct(pPrinter->GetPaperSize() );

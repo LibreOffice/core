@@ -695,7 +695,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
         {
             long nTol = ( pTols[i] * 255L ) / 100L;
 
-            long nVal = ( (long) pSrcCols[i].GetRed() );
+            long nVal = (long) pSrcCols[i].GetRed();
             pMinR[i] = std::max( nVal - nTol, 0L );
             pMaxR[i] = std::min( nVal + nTol, 255L );
 

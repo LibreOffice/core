@@ -299,7 +299,7 @@ namespace dbp
     {
         bool bHaveSome = (0 != m_pExistingRadios->GetEntryCount());
         bool bSelectedSome = (0 != m_pExistingRadios->GetSelectedEntryCount());
-        bool bUnfinishedInput = (!m_pRadioName->GetText().isEmpty());
+        bool bUnfinishedInput = !m_pRadioName->GetText().isEmpty();
 
         m_pMoveLeft->Enable(bSelectedSome);
         m_pMoveRight->Enable(bUnfinishedInput);

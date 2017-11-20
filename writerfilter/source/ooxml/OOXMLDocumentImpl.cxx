@@ -271,7 +271,7 @@ OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, Id aType,
                                   const sal_Int32 nId)
 {
     OOXMLStream::Pointer_t pStream =
-        (OOXMLDocumentFactory::createStream(mpStream, nType));
+        OOXMLDocumentFactory::createStream(mpStream, nType);
     // See above, no status indicator for the note stream, either.
     OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages, maMediaDescriptor);
     pDocument->setXNoteId(nId);

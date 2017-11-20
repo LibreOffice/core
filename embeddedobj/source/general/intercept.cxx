@@ -176,7 +176,7 @@ Interceptor::addStatusListener(
         aStateEvent.FeatureDescriptor = "SaveCopyTo";
         aStateEvent.IsEnabled = true;
         aStateEvent.Requery = false;
-        aStateEvent.State <<= (OUString( "($3)"));
+        aStateEvent.State <<= OUString("($3)");
         Control->statusChanged(aStateEvent);
 
         {

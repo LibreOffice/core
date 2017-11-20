@@ -557,7 +557,7 @@ void ORowSetCache::updateNull(sal_Int32 columnIndex,ORowSetValueVector::Vector& 
 {
     checkUpdateConditions(columnIndex);
 
-    ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
+    ORowSetValueVector::Vector& rInsert = (*m_aInsertRow)->get();
     if ( !rInsert[columnIndex].isNull() )
     {
         rInsert[columnIndex].setBound(true);
@@ -577,7 +577,7 @@ void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x
 {
     checkUpdateConditions(columnIndex);
 
-    ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
+    ORowSetValueVector::Vector& rInsert = (*m_aInsertRow)->get();
     if ( rInsert[columnIndex] != x )
     {
         rInsert[columnIndex].setBound(true);
@@ -601,7 +601,7 @@ void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference
     if(x.is())
         x->readBytes(aSeq,length);
 
-    ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
+    ORowSetValueVector::Vector& rInsert = (*m_aInsertRow)->get();
     rInsert[columnIndex].setBound(true);
     rInsert[columnIndex] = aSeq;
     rInsert[columnIndex].setModified();
@@ -618,7 +618,7 @@ void ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x
 {
     checkUpdateConditions(columnIndex);
 
-    ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
+    ORowSetValueVector::Vector& rInsert = (*m_aInsertRow)->get();
     ORowSetValue aTemp;
     aTemp.fill(x);
     if ( rInsert[columnIndex] != aTemp )
@@ -640,7 +640,7 @@ void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x
 {
     checkUpdateConditions(columnIndex);
 
-    ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
+    ORowSetValueVector::Vector& rInsert = (*m_aInsertRow)->get();
     ORowSetValue aTemp;
     aTemp.fill(x);
     if ( rInsert[columnIndex] != aTemp )

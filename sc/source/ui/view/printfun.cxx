@@ -2139,8 +2139,8 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
 
     //  partition the page
 
-    long nStartX = ((long) ( nLeftSpace * nScaleX ));
-    long nStartY = ((long) ( nTopSpace  * nScaleY ));
+    long nStartX = (long) ( nLeftSpace * nScaleX );
+    long nStartY = (long) ( nTopSpace  * nScaleY );
     long nInnerStartX = nStartX;
     long nInnerStartY = nStartY;
     if (pBorderItem)

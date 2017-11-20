@@ -530,8 +530,7 @@ void SmTableNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         SmTmpDevice aTmpDev (rDev, true);
         aTmpDev.SetFont(GetFont());
 
-        SmRect aRect = (SmRect(aTmpDev, &rFormat, "a",
-                               GetFont().GetBorderWidth()));
+        SmRect aRect(aTmpDev, &rFormat, "a", GetFont().GetBorderWidth());
         mnFormulaBaseline = GetAlignM();
         // move from middle position by constant - distance
         // between middle and baseline for single letter

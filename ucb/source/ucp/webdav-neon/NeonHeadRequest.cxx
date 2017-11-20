@@ -69,7 +69,7 @@ void process_headers( ne_request * req,
         SAL_INFO( "ucb.ucp.webdav", "HEAD - received header: " << aHeaderName << ":" << aHeaderValue);
 
         // Note: Empty vector means that all headers are requested.
-        bool bIncludeIt = ( rHeaderNames.empty() );
+        bool bIncludeIt = rHeaderNames.empty();
 
         if ( !bIncludeIt )
         {

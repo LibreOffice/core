@@ -1215,7 +1215,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
             {
                 AccessibleEventObject aEvent;
                 aEvent.EventId = AccessibleEventId::CHILD;
-                aEvent.NewValue <<= (rChildFrameOrObj.GetWindow()->GetAccessible());
+                aEvent.NewValue <<= rChildFrameOrObj.GetWindow()->GetAccessible();
                 FireAccessibleEvent( aEvent );
             }
         }

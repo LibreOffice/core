@@ -704,14 +704,14 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                         aProps[nProp]. Name = "Wait";
                         bool bAsynchron = false;
                         aProps[nProp].Value >>= bAsynchron;
-                        aProps[nProp].Value <<= (!bAsynchron);
+                        aProps[nProp].Value <<= !bAsynchron;
                     }
                     else if ( aProps[nProp].Name == "Silent" )
                     {
                         aProps[nProp]. Name = "MonitorVisible";
                         bool bPrintSilent = false;
                         aProps[nProp].Value >>= bPrintSilent;
-                        aProps[nProp].Value <<= (!bPrintSilent);
+                        aProps[nProp].Value <<= !bPrintSilent;
                     }
                 }
             }

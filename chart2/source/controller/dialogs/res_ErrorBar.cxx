@@ -232,7 +232,7 @@ void ErrorBarResources::UpdateControlStates()
 
     // range buttons
     m_pRbRange->Enable( !m_bHasInternalDataProvider || m_bEnableDataTableDialog );
-    bool bShowRange = ( m_pRbRange->IsChecked());
+    bool bShowRange = m_pRbRange->IsChecked();
     bool bCanChooseRange =
         ( bShowRange &&
           m_apRangeSelectionHelper.get() &&

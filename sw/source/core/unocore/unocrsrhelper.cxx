@@ -637,9 +637,8 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             std::vector<SwTextAttr *> marks;
             if (rPam.GetNode().IsTextNode())
             {
-                marks = (
-                rPam.GetNode().GetTextNode()->GetTextAttrsAt(
-                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK));
+                marks = rPam.GetNode().GetTextNode()->GetTextAttrsAt(
+                            rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK);
             }
             if (marks.size())
             {
@@ -1209,7 +1208,7 @@ void makeRedline( SwPaM const & rPaM,
             nMap = PROPERTY_MAP_PARAGRAPH;
         else
             nMap = PROPERTY_MAP_TEXTPORTION_EXTENSIONS;
-        SfxItemPropertySet const& rPropSet = (*aSwMapProvider.GetPropertySet(nMap));
+        SfxItemPropertySet const& rPropSet = *aSwMapProvider.GetPropertySet(nMap);
 
         // Check if there are any properties
         if (aRevertProperties.getLength())

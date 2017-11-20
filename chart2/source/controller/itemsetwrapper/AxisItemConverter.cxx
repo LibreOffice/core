@@ -549,8 +549,8 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
         case SCHATTR_AXIS_REVERSE:
         {
             bool bWasReverse = ( aScale.Orientation == AxisOrientation_REVERSE );
-            bool bNewReverse = (static_cast< const SfxBoolItem & >(
-                     rItemSet.Get( nWhichId )).GetValue() );
+            bool bNewReverse = static_cast< const SfxBoolItem & >(
+                     rItemSet.Get( nWhichId )).GetValue();
             if( bWasReverse != bNewReverse )
             {
                 aScale.Orientation = bNewReverse ? AxisOrientation_REVERSE : AxisOrientation_MATHEMATICAL;
@@ -891,8 +891,8 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             if( m_pExplicitScale )
             {
                 bool bUseSourceFormat =
-                    (static_cast< const SfxBoolItem & >(
-                        rItemSet.Get( SID_ATTR_NUMBERFORMAT_SOURCE )).GetValue() );
+                    static_cast< const SfxBoolItem & >(
+                        rItemSet.Get( SID_ATTR_NUMBERFORMAT_SOURCE )).GetValue();
 
                 if( ! bUseSourceFormat )
                 {
@@ -914,8 +914,8 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
         case SID_ATTR_NUMBERFORMAT_SOURCE:
         {
             bool bUseSourceFormat =
-                (static_cast< const SfxBoolItem & >(
-                    rItemSet.Get( nWhichId )).GetValue() );
+                static_cast< const SfxBoolItem & >(
+                    rItemSet.Get( nWhichId )).GetValue();
             GetPropertySet()->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, uno::Any(bUseSourceFormat));
 
             bool bNumberFormatIsSet = GetPropertySet()->getPropertyValue(CHART_UNONAME_NUMFMT).hasValue();

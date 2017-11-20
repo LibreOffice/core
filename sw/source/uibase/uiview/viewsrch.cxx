@@ -699,8 +699,8 @@ void SwView::Replace()
         {
             /* check that the selection match the search string*/
             //save state
-            SwPosition aStartPos = (* m_pWrtShell->GetSwCursor()->Start());
-            SwPosition aEndPos = (* m_pWrtShell->GetSwCursor()->End());
+            SwPosition aStartPos = * m_pWrtShell->GetSwCursor()->Start();
+            SwPosition aEndPos = * m_pWrtShell->GetSwCursor()->End();
             bool   bHasSelection = m_pSrchItem->GetSelection();
             SvxSearchCmd nOldCmd = m_pSrchItem->GetCommand();
 

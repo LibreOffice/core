@@ -2002,7 +2002,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
             aRet <<= DataPilotFieldSortInfo(*pInfo);
     }
     else if ( aPropertyName == SC_UNONAME_ISGROUP )
-        aRet <<= (hasGroupInfo());
+        aRet <<= hasGroupInfo();
     else if ( aPropertyName == SC_UNONAME_GROUPINFO )
     {
         aRet <<= getGroupInfo();

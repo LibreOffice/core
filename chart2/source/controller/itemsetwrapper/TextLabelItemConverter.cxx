@@ -96,7 +96,7 @@ bool numberFormatFromItemToPropertySet(
         return bChanged;
 
     uno::Any aValue;
-    bool bUseSourceFormat = (static_cast<const SfxBoolItem&>(rItemSet.Get(nSourceWhich)).GetValue());
+    bool bUseSourceFormat = static_cast<const SfxBoolItem&>(rItemSet.Get(nSourceWhich)).GetValue();
     if (!bUseSourceFormat)
     {
         SfxItemState aState = rItemSet.GetItemState(nWhichId);
@@ -144,8 +144,8 @@ bool useSourceFormatFromItemToPropertySet(
         return bChanged;
 
     uno::Any aNewValue;
-    bool bUseSourceFormat = (static_cast<const SfxBoolItem&>(
-            rItemSet.Get(nWhichId)).GetValue());
+    bool bUseSourceFormat = static_cast<const SfxBoolItem&>(
+            rItemSet.Get(nWhichId)).GetValue();
     if (!bUseSourceFormat)
     {
         SfxItemState aState = rItemSet.GetItemState(nFormatWhich);
@@ -550,7 +550,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
         break;
         case SCHATTR_PERCENT_NUMBERFORMAT_SOURCE:
         {
-            bool bNumberFormatIsSet = (GetPropertySet()->getPropertyValue("PercentageNumberFormat").hasValue());
+            bool bNumberFormatIsSet = GetPropertySet()->getPropertyValue("PercentageNumberFormat").hasValue();
             rOutItemSet.Put(SfxBoolItem(nWhichId, !bNumberFormatIsSet));
         }
         break;

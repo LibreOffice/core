@@ -746,7 +746,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
     if( xPropertySetInfo->hasPropertyByName( sOutlineStyleAsNormalListStyle ) )
     {
         uno::Any aAny = mxExportInfo->getPropertyValue( sOutlineStyleAsNormalListStyle );
-        aAny >>= (mpImpl->mbOutlineStyleAsNormalListStyle);
+        aAny >>= mpImpl->mbOutlineStyleAsNormalListStyle;
     }
 
     OUString sTargetStorage( "TargetStorage" );
@@ -758,7 +758,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
     if( xPropertySetInfo->hasPropertyByName( sExportTextNumberElement ) )
     {
         uno::Any aAny = mxExportInfo->getPropertyValue( sExportTextNumberElement );
-        aAny >>= (mpImpl->mbExportTextNumberElement);
+        aAny >>= mpImpl->mbExportTextNumberElement;
     }
 
 

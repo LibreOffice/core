@@ -709,7 +709,7 @@ void SwIndexMarkPane::ModifyHdl(Control const * pBox)
     }
     else //m_pEntryED  !!m_pEntryED is not a ListBox but a Edit
     {
-        bool bHasText = (!m_pEntryED->GetText().isEmpty());
+        bool bHasText = !m_pEntryED->GetText().isEmpty();
         if(!bHasText)
         {
             m_pPhoneticED0->SetText(OUString());
@@ -933,8 +933,8 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, Edit&, rEdit, void )
                 m_pPhoneticED2->SetText(GetDefaultPhoneticReading(pBox->GetText()));
         }
     }
-    bool    bKey1HasText    = (!m_pKey1DCB->GetText().isEmpty());
-    bool    bKey2HasText    = (!m_pKey2DCB->GetText().isEmpty());
+    bool    bKey1HasText    = !m_pKey1DCB->GetText().isEmpty();
+    bool    bKey2HasText    = !m_pKey2DCB->GetText().isEmpty();
 
     m_pPhoneticFT1->Enable(bKey1HasText && bIsPhoneticReadingEnabled);
     m_pPhoneticED1->Enable(bKey1HasText && bIsPhoneticReadingEnabled);

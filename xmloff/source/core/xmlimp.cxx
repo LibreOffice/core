@@ -1105,13 +1105,13 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
-                    aAny >>= (mpImpl->mbShapePositionInHoriL2R);
+                    aAny >>= mpImpl->mbShapePositionInHoriL2R;
                 }
                 sPropName = "TextDocInOOoFileFormat";
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
-                    aAny >>= (mpImpl->mbTextDocInOOoFileFormat);
+                    aAny >>= mpImpl->mbTextDocInOOoFileFormat;
                 }
 
                 sPropName = "SourceStorage";

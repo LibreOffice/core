@@ -2981,9 +2981,9 @@ bool SwpHints::TryInsertHint(
         const sal_uInt16 *pRanges = pSet->GetRanges();
         while( (*pRanges) != 0 )
         {
-            const sal_uInt16 nBeg = (*pRanges);
+            const sal_uInt16 nBeg = *pRanges;
             ++pRanges;
-            const sal_uInt16 nEnd = (*pRanges);
+            const sal_uInt16 nEnd = *pRanges;
             ++pRanges;
             for( sal_uInt16 nSubElem = nBeg; nSubElem <= nEnd; ++nSubElem )
                 if( pSet->HasItem( nSubElem ) )

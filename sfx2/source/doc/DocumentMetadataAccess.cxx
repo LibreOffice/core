@@ -246,8 +246,8 @@ splitPath(OUString const & i_rPath,
         // input must not start or end with '/'
         return false;
     } else {
-        o_rDir  = (i_rPath.copy(0, idx));
-        o_rRest = (i_rPath.copy(idx+1));
+        o_rDir  = i_rPath.copy(0, idx);
+        o_rRest = i_rPath.copy(idx+1);
         return true;
     }
 }
@@ -260,8 +260,8 @@ splitXmlId(OUString const & i_XmlId,
     if ((idx <= 0) || (idx >= i_XmlId.getLength() - 1)) {
         return false;
     } else {
-        o_StreamName = (i_XmlId.copy(0, idx));
-        o_Idref      = (i_XmlId.copy(idx+1));
+        o_StreamName = i_XmlId.copy(0, idx);
+        o_Idref      = i_XmlId.copy(idx+1);
         return isValidXmlId(o_StreamName, o_Idref);
     }
 }

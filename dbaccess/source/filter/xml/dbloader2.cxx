@@ -464,7 +464,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         // If it already *does* have an URL, then it was either passed in the arguments, or a previous incarnation
         // of that model existed before (which can happen if a model is closed, but an associated DataSource is kept
         // alive 'til loading the document again).
-        bool bNeedLoad = ( xModel->getURL().isEmpty() );
+        bool bNeedLoad = xModel->getURL().isEmpty();
         try
         {
             aMediaDesc.put( "FileName", _rURL );

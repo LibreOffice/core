@@ -379,7 +379,7 @@ storeError PageCache::removePageAt (sal_uInt32 nOffset)
         if ((*ppEntry)->m_nOffset == nOffset)
         {
             // Existing entry.
-            Entry * entry = (*ppEntry);
+            Entry * entry = *ppEntry;
 
             // Dequeue and destroy entry.
             (*ppEntry) = entry->m_pNext;

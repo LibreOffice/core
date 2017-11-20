@@ -816,7 +816,7 @@ void SdrPageView::LeaveOneGroup()
 {
     if(GetAktGroup())
     {
-        bool bGlueInvalidate = (GetView().ImpIsGlueVisible());
+        bool bGlueInvalidate = GetView().ImpIsGlueVisible();
 
         if(bGlueInvalidate)
             GetView().GlueInvalidate();
@@ -853,7 +853,7 @@ void SdrPageView::LeaveAllGroup()
 {
     if(GetAktGroup())
     {
-        bool bGlueInvalidate = (GetView().ImpIsGlueVisible());
+        bool bGlueInvalidate = GetView().ImpIsGlueVisible();
 
         if(bGlueInvalidate)
             GetView().GlueInvalidate();

@@ -490,8 +490,8 @@ static bool splitPath(::rtl::OUString const & i_rPath,
         // input must not start or end with '/'
         return false;
     } else {
-        o_rDir  = (i_rPath.copy(0, idx));
-        o_rRest = (i_rPath.copy(idx+1));
+        o_rDir  = i_rPath.copy(0, idx);
+        o_rRest = i_rPath.copy(idx+1);
         return true;
     }
 }
