@@ -1259,7 +1259,6 @@ chart2/source/inc/chartview/ExplicitScaleValues.hxx
 chart2/source/inc/chartview/ExplicitValueProvider.hxx
 chart2/source/inc/chartview/chartviewdllapi.hxx
 chart2/source/inc/defines.hxx
-chart2/source/inc/macros.hxx
 chart2/source/inc/servicenames.hxx
 chart2/source/inc/servicenames_charttypes.hxx
 chart2/source/inc/servicenames_coosystems.hxx
@@ -10256,7 +10255,6 @@ sc/qa/extras/sccellcursorobj.cxx
 sc/qa/extras/sccellobj.cxx
 sc/qa/extras/sccellrangeobj.cxx
 sc/qa/extras/sccellrangesobj.cxx
-sc/qa/extras/sccondformats.cxx
 sc/qa/extras/scdatabaserangeobj.cxx
 sc/qa/extras/scdatapilotfieldobj.cxx
 sc/qa/extras/scdatapilotitemobj.cxx
@@ -10864,11 +10862,6 @@ sc/source/filter/rtf/expbase.cxx
 sc/source/filter/rtf/rtfexp.cxx
 sc/source/filter/rtf/rtfimp.cxx
 sc/source/filter/rtf/rtfparse.cxx
-sc/source/filter/starcalc/collect.cxx
-sc/source/filter/starcalc/collect.hxx
-sc/source/filter/starcalc/scflt.cxx
-sc/source/filter/starcalc/scflt.hxx
-sc/source/filter/starcalc/scfobj.cxx
 sc/source/filter/xcl97/XclExpChangeTrack.cxx
 sc/source/filter/xcl97/XclImpChangeTrack.cxx
 sc/source/filter/xcl97/xcl97esc.cxx
@@ -12142,8 +12135,6 @@ sd/source/ui/framework/module/SlideSorterModule.cxx
 sd/source/ui/framework/module/SlideSorterModule.hxx
 sd/source/ui/framework/module/ToolBarModule.cxx
 sd/source/ui/framework/module/ToolBarModule.hxx
-sd/source/ui/framework/module/ToolPanelModule.cxx
-sd/source/ui/framework/module/ToolPanelModule.hxx
 sd/source/ui/framework/module/ViewTabBarModule.cxx
 sd/source/ui/framework/module/ViewTabBarModule.hxx
 sd/source/ui/framework/tools/FrameworkHelper.cxx
@@ -14371,7 +14362,6 @@ svx/source/dialog/linkwarn.cxx
 svx/source/dialog/measctrl.cxx
 svx/source/dialog/optgrid.cxx
 svx/source/dialog/orienthelper.cxx
-svx/source/dialog/page.h
 svx/source/dialog/pagectrl.cxx
 svx/source/dialog/pagenumberlistbox.cxx
 svx/source/dialog/papersizelistbox.cxx
@@ -18221,14 +18211,6 @@ vcl/source/filter/jpeg/jpegc.cxx
 vcl/source/filter/jpeg/jpegcomp.h
 vcl/source/filter/jpeg/transupp.c
 vcl/source/filter/jpeg/transupp.h
-vcl/source/filter/sgfbram.cxx
-vcl/source/filter/sgfbram.hxx
-vcl/source/filter/sgffilt.hxx
-vcl/source/filter/sgvmain.cxx
-vcl/source/filter/sgvmain.hxx
-vcl/source/filter/sgvspln.cxx
-vcl/source/filter/sgvspln.hxx
-vcl/source/filter/sgvtext.cxx
 vcl/source/filter/wmf/emfwr.cxx
 vcl/source/filter/wmf/emfwr.hxx
 vcl/source/filter/wmf/wmf.cxx

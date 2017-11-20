@@ -1,0 +1,79 @@
+#!/usr/bin/env perl
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Checks the style of the files changed in the last commit, for CI purposes.
+
+use strict;
+use warnings;
+use lib "solenv/clang-format";
+use ClangFormat;
+
+sub check_style()
+{
+    if ( ! -e ".git" )
+    {
+        # Can't diff when this is not a git checkout.
+        return;
+    }
+
+    my $src = ClangFormat::get_extension_regex();
+    my @good_names = ();
+    my @bad_names = ();
+    my $blacklist_names = ClangFormat::get_blacklist();
+    my $clang_format = ClangFormat::find();
+
+    # Get a list of non-deleted changed files.
+    # Explicitly use the low-level 'git diff-tree' (rathern that plain 'git
+    # diff') so we get the new, but not the old files for renames and/or
+    # copies.
+    open (FILES, "git diff-tree -r --diff-filter=AM --name-only HEAD^ HEAD |") ||  die "Cannot run git diff.";
+    while (my $filename = <FILES>)
+    {
+        chomp $filename;
+        if ($filename =~ /\.($src)$/ and !exists($blacklist_names->{$filename}))
+        {
+            if (! -x $clang_format)
+            {
+                my $version = ClangFormat::get_wanted_version();
+
+                print("solenv/clang-format/check-last-commit: ");
+                print("ERROR: no clang-format ${version} was found.\n\n");
+
+                exit(1);
+            }
+            if (ClangFormat::check_style($clang_format, $filename))
+            {
+                push @good_names, $filename;
+            }
+            else
+            {
+                push @bad_names, $filename;
+            }
+        }
+    }
+
+    # Enforce style.
+    if (scalar @bad_names)
+    {
+        print("\nERROR: The above differences were found between the code to commit \n");
+        print("and the clang-format rules.\n");
+        print("\nsolenv/clang-format/check-last-commit: KO\n");
+        exit(1);
+    }
+    else
+    {
+        print("solenv/clang-format/check-last-commit: checked the following files:\n");
+        print(join("\n", @good_names));
+        print("\nsolenv/clang-format/check-last-commit: OK\n");
+    }
+}
+
+check_style();
+
+exit(0);
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:
