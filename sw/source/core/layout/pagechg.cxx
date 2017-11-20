@@ -218,32 +218,33 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
     // create and insert body area if it is not a blank page
     SwDoc *pDoc = pFormat->GetDoc();
     m_bEmptyPage = pFormat == pDoc->GetEmptyPageFormat();
-    if ( !m_bEmptyPage )
+    if ( m_bEmptyPage )
+        return;
+
+    m_bEmptyPage = false;
+    Calc(pRenderContext); // so that the PrtArea is correct
+    SwBodyFrame *pBodyFrame = new SwBodyFrame( pDoc->GetDfltFrameFormat(), this );
+    pBodyFrame->ChgSize( getFramePrintArea().SSize() );
+    pBodyFrame->Paste( this );
+    pBodyFrame->Calc(pRenderContext); // so that the columns can be inserted correctly
+    pBodyFrame->InvalidatePos();
+
+    if ( bBrowseMode )
+        InvalidateSize_();
+
+    // insert header/footer,, but only if active.
+    if ( pFormat->GetHeader().IsActive() )
+        PrepareHeader();
+    if ( pFormat->GetFooter().IsActive() )
+        PrepareFooter();
+
+    const SwFormatCol &rCol = pFormat->GetCol();
+    if ( rCol.GetNumCols() > 1 )
     {
-        m_bEmptyPage = false;
-        Calc(pRenderContext); // so that the PrtArea is correct
-        SwBodyFrame *pBodyFrame = new SwBodyFrame( pDoc->GetDfltFrameFormat(), this );
-        pBodyFrame->ChgSize( getFramePrintArea().SSize() );
-        pBodyFrame->Paste( this );
-        pBodyFrame->Calc(pRenderContext); // so that the columns can be inserted correctly
-        pBodyFrame->InvalidatePos();
-
-        if ( bBrowseMode )
-            InvalidateSize_();
-
-        // insert header/footer,, but only if active.
-        if ( pFormat->GetHeader().IsActive() )
-            PrepareHeader();
-        if ( pFormat->GetFooter().IsActive() )
-            PrepareFooter();
-
-        const SwFormatCol &rCol = pFormat->GetCol();
-        if ( rCol.GetNumCols() > 1 )
-        {
-            const SwFormatCol aOld; //ChgColumns() needs an old value
-            pBodyFrame->ChgColumns( aOld, rCol );
-        }
+        const SwFormatCol aOld; //ChgColumns() needs an old value
+        pBodyFrame->ChgColumns( aOld, rCol );
     }
+
 }
 
 void SwPageFrame::DestroyImpl()

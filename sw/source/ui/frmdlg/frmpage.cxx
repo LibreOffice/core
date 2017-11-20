@@ -2614,35 +2614,37 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl, Button*, void)
     uno::Reference < ui::dialogs::XFilePickerControlAccess > xCtrlAcc(xFP, uno::UNO_QUERY);
     xCtrlAcc->setValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, uno::makeAny(true) );
 
-    if ( pGrfDlg->Execute() == ERRCODE_NONE )
-    {   // remember selected filter
-        aFilterName = pGrfDlg->GetCurrentFilter();
-        aNewGrfName = INetURLObject::decode( pGrfDlg->GetPath(),
-                                           INetURLObject::DecodeMechanism::Unambiguous );
-        m_pConnectED->SetModifyFlag();
-        m_pConnectED->SetText( aNewGrfName );
-        //reset mirrors because maybe a Bitmap was swapped with
-        //another type of graphic that cannot be mirrored.
-        m_pMirrorVertBox->Check(false);
-        m_pMirrorHorzBox->Check(false);
-        m_pAllPagesRB->Enable(false);
-        m_pLeftPagesRB->Enable(false);
-        m_pRightPagesRB->Enable(false);
-        m_pBmpWin->MirrorHorz(false);
-        m_pBmpWin->MirrorVert(false);
+    if ( pGrfDlg->Execute() != ERRCODE_NONE )
+        return;
 
-        Graphic aGraphic;
-        (void)GraphicFilter::LoadGraphic(pGrfDlg->GetPath(), OUString(), aGraphic);
-        m_pBmpWin->SetGraphic(aGraphic);
+// remember selected filter
+    aFilterName = pGrfDlg->GetCurrentFilter();
+    aNewGrfName = INetURLObject::decode( pGrfDlg->GetPath(),
+                                       INetURLObject::DecodeMechanism::Unambiguous );
+    m_pConnectED->SetModifyFlag();
+    m_pConnectED->SetText( aNewGrfName );
+    //reset mirrors because maybe a Bitmap was swapped with
+    //another type of graphic that cannot be mirrored.
+    m_pMirrorVertBox->Check(false);
+    m_pMirrorHorzBox->Check(false);
+    m_pAllPagesRB->Enable(false);
+    m_pLeftPagesRB->Enable(false);
+    m_pRightPagesRB->Enable(false);
+    m_pBmpWin->MirrorHorz(false);
+    m_pBmpWin->MirrorVert(false);
 
-        bool bEnable = GraphicType::Bitmap      == aGraphic.GetType() ||
-                            GraphicType::GdiMetafile == aGraphic.GetType();
-        m_pMirrorVertBox->Enable(bEnable);
-        m_pMirrorHorzBox->Enable(bEnable);
-        m_pAllPagesRB->Enable(bEnable);
-        m_pLeftPagesRB->Enable(bEnable);
-        m_pRightPagesRB->Enable(bEnable);
-    }
+    Graphic aGraphic;
+    (void)GraphicFilter::LoadGraphic(pGrfDlg->GetPath(), OUString(), aGraphic);
+    m_pBmpWin->SetGraphic(aGraphic);
+
+    bool bEnable = GraphicType::Bitmap      == aGraphic.GetType() ||
+                        GraphicType::GdiMetafile == aGraphic.GetType();
+    m_pMirrorVertBox->Enable(bEnable);
+    m_pMirrorHorzBox->Enable(bEnable);
+    m_pAllPagesRB->Enable(bEnable);
+    m_pLeftPagesRB->Enable(bEnable);
+    m_pRightPagesRB->Enable(bEnable);
+
 }
 
 IMPL_LINK_NOARG(SwGrfExtPage, MirrorHdl, Button*, void)
@@ -3252,28 +3254,28 @@ IMPL_LINK(SwFrameAddPage, ChainModifyHdl, ListBox&, rBox, void)
     if(m_pNextLB->GetSelectedEntryPos())
         sCurrentNextChain = m_pNextLB->GetSelectedEntry();
     SwFrameFormat* pFormat = m_pWrtSh->GetFlyFrameFormat();
-    if (pFormat)
-    {
-        bool bNextBox = m_pNextLB == &rBox;
-        ListBox& rChangeLB = bNextBox ? *m_pPrevLB : *m_pNextLB;
-        for(sal_Int32 nEntry = rChangeLB.GetEntryCount(); nEntry > 1; nEntry--)
-            rChangeLB.RemoveEntry(nEntry - 1);
-        //determine chainable frames
-        std::vector< OUString > aPrevPageFrames;
-        std::vector< OUString > aThisPageFrames;
-        std::vector< OUString > aNextPageFrames;
-        std::vector< OUString > aRemainFrames;
-        m_pWrtSh->GetConnectableFrameFormats(*pFormat, bNextBox ? sCurrentNextChain : sCurrentPrevChain, !bNextBox,
-                        aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
-        lcl_InsertVectors(rChangeLB,
-                aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
-        const OUString sToSelect = bNextBox ? sCurrentPrevChain : sCurrentNextChain;
-        if(rChangeLB.GetEntryPos(sToSelect) != LISTBOX_ENTRY_NOTFOUND)
-            rChangeLB.SelectEntry(sToSelect);
-        else
-            rChangeLB.SelectEntryPos(0);
+    if (!pFormat)
+        return;
 
-    }
+    bool bNextBox = m_pNextLB == &rBox;
+    ListBox& rChangeLB = bNextBox ? *m_pPrevLB : *m_pNextLB;
+    for(sal_Int32 nEntry = rChangeLB.GetEntryCount(); nEntry > 1; nEntry--)
+        rChangeLB.RemoveEntry(nEntry - 1);
+    //determine chainable frames
+    std::vector< OUString > aPrevPageFrames;
+    std::vector< OUString > aThisPageFrames;
+    std::vector< OUString > aNextPageFrames;
+    std::vector< OUString > aRemainFrames;
+    m_pWrtSh->GetConnectableFrameFormats(*pFormat, bNextBox ? sCurrentNextChain : sCurrentPrevChain, !bNextBox,
+                    aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
+    lcl_InsertVectors(rChangeLB,
+            aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
+    const OUString sToSelect = bNextBox ? sCurrentPrevChain : sCurrentNextChain;
+    if(rChangeLB.GetEntryPos(sToSelect) != LISTBOX_ENTRY_NOTFOUND)
+        rChangeLB.SelectEntry(sToSelect);
+    else
+        rChangeLB.SelectEntryPos(0);
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

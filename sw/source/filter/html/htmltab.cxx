@@ -2512,99 +2512,100 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
     }
 
     // Finally, we'll do a garbage collection for the top level table
-    if( this==m_pTopTable )
+    if( this!=m_pTopTable )
+        return;
+
+    if( 1==m_nRows && m_nHeight && 1==m_pSwTable->GetTabLines().size() )
     {
-        if( 1==m_nRows && m_nHeight && 1==m_pSwTable->GetTabLines().size() )
-        {
-            // Set height of a one-row table as the minimum width of the row
-            // Was originally a fixed height, but that made problems
-            // and is not Netscape 4.0 compliant
-            m_nHeight = SwHTMLParser::ToTwips( m_nHeight );
-            if( m_nHeight < MINLAY )
-                m_nHeight = MINLAY;
+        // Set height of a one-row table as the minimum width of the row
+        // Was originally a fixed height, but that made problems
+        // and is not Netscape 4.0 compliant
+        m_nHeight = SwHTMLParser::ToTwips( m_nHeight );
+        if( m_nHeight < MINLAY )
+            m_nHeight = MINLAY;
 
-            (m_pSwTable->GetTabLines())[0]->ClaimFrameFormat();
-            (m_pSwTable->GetTabLines())[0]->GetFrameFormat()
-                ->SetFormatAttr( SwFormatFrameSize( ATT_MIN_SIZE, 0, m_nHeight ) );
+        (m_pSwTable->GetTabLines())[0]->ClaimFrameFormat();
+        (m_pSwTable->GetTabLines())[0]->GetFrameFormat()
+            ->SetFormatAttr( SwFormatFrameSize( ATT_MIN_SIZE, 0, m_nHeight ) );
+    }
+
+    if( GetBGBrush() )
+        m_pSwTable->GetFrameFormat()->SetFormatAttr( *GetBGBrush() );
+
+    const_cast<SwTable *>(m_pSwTable)->SetRowsToRepeat( static_cast< sal_uInt16 >(m_nHeadlineRepeat) );
+    const_cast<SwTable *>(m_pSwTable)->GCLines();
+
+    bool bIsInFlyFrame = m_pContext && m_pContext->GetFrameFormat();
+    if( bIsInFlyFrame && !m_nWidth )
+    {
+        SvxAdjust eAdjust = GetTableAdjust(false);
+        if (eAdjust != SvxAdjust::Left &&
+            eAdjust != SvxAdjust::Right)
+        {
+            // If a table with a width attribute isn't flowed around left or right
+            // we'll stack it with a border of 100% width, so its size will
+            // be adapted. That text frame mustn't be modified
+            OSL_ENSURE( HasToFly(), "Why is the table in a frame?" );
+            sal_uInt32 nMin = m_pLayoutInfo->GetMin();
+            if( nMin > USHRT_MAX )
+                nMin = USHRT_MAX;
+            SwFormatFrameSize aFlyFrameSize( ATT_VAR_SIZE, (SwTwips)nMin, MINLAY );
+            aFlyFrameSize.SetWidthPercent( 100 );
+            m_pContext->GetFrameFormat()->SetFormatAttr( aFlyFrameSize );
+            bIsInFlyFrame = false;
         }
-
-        if( GetBGBrush() )
-            m_pSwTable->GetFrameFormat()->SetFormatAttr( *GetBGBrush() );
-
-        const_cast<SwTable *>(m_pSwTable)->SetRowsToRepeat( static_cast< sal_uInt16 >(m_nHeadlineRepeat) );
-        const_cast<SwTable *>(m_pSwTable)->GCLines();
-
-        bool bIsInFlyFrame = m_pContext && m_pContext->GetFrameFormat();
-        if( bIsInFlyFrame && !m_nWidth )
+        else
         {
-            SvxAdjust eAdjust = GetTableAdjust(false);
-            if (eAdjust != SvxAdjust::Left &&
-                eAdjust != SvxAdjust::Right)
+            // left or right adjusted table without width mustn't be adjusted in width
+            // as they would only shrink but never grow
+            m_pLayoutInfo->SetMustNotRecalc( true );
+            if( m_pContext->GetFrameFormat()->GetAnchor().GetContentAnchor()
+                ->nNode.GetNode().FindTableNode() )
             {
-                // If a table with a width attribute isn't flowed around left or right
-                // we'll stack it with a border of 100% width, so its size will
-                // be adapted. That text frame mustn't be modified
-                OSL_ENSURE( HasToFly(), "Why is the table in a frame?" );
-                sal_uInt32 nMin = m_pLayoutInfo->GetMin();
-                if( nMin > USHRT_MAX )
-                    nMin = USHRT_MAX;
-                SwFormatFrameSize aFlyFrameSize( ATT_VAR_SIZE, (SwTwips)nMin, MINLAY );
-                aFlyFrameSize.SetWidthPercent( 100 );
+                sal_uInt32 nMax = m_pLayoutInfo->GetMax();
+                if( nMax > USHRT_MAX )
+                    nMax = USHRT_MAX;
+                SwFormatFrameSize aFlyFrameSize( ATT_VAR_SIZE, (SwTwips)nMax, MINLAY );
                 m_pContext->GetFrameFormat()->SetFormatAttr( aFlyFrameSize );
                 bIsInFlyFrame = false;
             }
             else
             {
-                // left or right adjusted table without width mustn't be adjusted in width
-                // as they would only shrink but never grow
-                m_pLayoutInfo->SetMustNotRecalc( true );
-                if( m_pContext->GetFrameFormat()->GetAnchor().GetContentAnchor()
-                    ->nNode.GetNode().FindTableNode() )
-                {
-                    sal_uInt32 nMax = m_pLayoutInfo->GetMax();
-                    if( nMax > USHRT_MAX )
-                        nMax = USHRT_MAX;
-                    SwFormatFrameSize aFlyFrameSize( ATT_VAR_SIZE, (SwTwips)nMax, MINLAY );
-                    m_pContext->GetFrameFormat()->SetFormatAttr( aFlyFrameSize );
-                    bIsInFlyFrame = false;
-                }
-                else
-                {
-                    m_pLayoutInfo->SetMustNotResize( true );
-                }
-            }
-        }
-        m_pLayoutInfo->SetMayBeInFlyFrame( bIsInFlyFrame );
-
-        // Only tables with relative width or without width should be modified
-        m_pLayoutInfo->SetMustResize( m_bPrcWidth || !m_nWidth );
-
-        m_pLayoutInfo->SetWidths();
-
-        const_cast<SwTable *>(m_pSwTable)->SetHTMLTableLayout( m_pLayoutInfo );
-
-        if( m_pResizeDrawObjects )
-        {
-            sal_uInt16 nCount = m_pResizeDrawObjects->size();
-            for( sal_uInt16 i=0; i<nCount; i++ )
-            {
-                SdrObject *pObj = (*m_pResizeDrawObjects)[i];
-                sal_uInt16 nRow = (*m_pDrawObjectPrcWidths)[3*i];
-                sal_uInt16 nCol = (*m_pDrawObjectPrcWidths)[3*i+1];
-                sal_uInt8 nPrcWidth = (sal_uInt8)(*m_pDrawObjectPrcWidths)[3*i+2];
-
-                SwHTMLTableLayoutCell *pLayoutCell =
-                    m_pLayoutInfo->GetCell( nRow, nCol );
-                sal_uInt16 nColSpan = pLayoutCell->GetColSpan();
-
-                sal_uInt16 nWidth2, nDummy;
-                m_pLayoutInfo->GetAvail( nCol, nColSpan, nWidth2, nDummy );
-                nWidth2 = static_cast< sal_uInt16 >(((long)m_nWidth * nPrcWidth) / 100);
-
-                SwHTMLParser::ResizeDrawObject( pObj, nWidth2 );
+                m_pLayoutInfo->SetMustNotResize( true );
             }
         }
     }
+    m_pLayoutInfo->SetMayBeInFlyFrame( bIsInFlyFrame );
+
+    // Only tables with relative width or without width should be modified
+    m_pLayoutInfo->SetMustResize( m_bPrcWidth || !m_nWidth );
+
+    m_pLayoutInfo->SetWidths();
+
+    const_cast<SwTable *>(m_pSwTable)->SetHTMLTableLayout( m_pLayoutInfo );
+
+    if( m_pResizeDrawObjects )
+    {
+        sal_uInt16 nCount = m_pResizeDrawObjects->size();
+        for( sal_uInt16 i=0; i<nCount; i++ )
+        {
+            SdrObject *pObj = (*m_pResizeDrawObjects)[i];
+            sal_uInt16 nRow = (*m_pDrawObjectPrcWidths)[3*i];
+            sal_uInt16 nCol = (*m_pDrawObjectPrcWidths)[3*i+1];
+            sal_uInt8 nPrcWidth = (sal_uInt8)(*m_pDrawObjectPrcWidths)[3*i+2];
+
+            SwHTMLTableLayoutCell *pLayoutCell =
+                m_pLayoutInfo->GetCell( nRow, nCol );
+            sal_uInt16 nColSpan = pLayoutCell->GetColSpan();
+
+            sal_uInt16 nWidth2, nDummy;
+            m_pLayoutInfo->GetAvail( nCol, nColSpan, nWidth2, nDummy );
+            nWidth2 = static_cast< sal_uInt16 >(((long)m_nWidth * nPrcWidth) / 100);
+
+            SwHTMLParser::ResizeDrawObject( pObj, nWidth2 );
+        }
+    }
+
 }
 
 void HTMLTable::SetTable( const SwStartNode *pStNd, HTMLTableContext *pCntxt,

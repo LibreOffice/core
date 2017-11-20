@@ -93,69 +93,70 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
                             const bool _bIsPageRightToLeft,
                             sdr::contact::ViewObjectContactRedirector* pRedirector )
 {
-    if ( HasDrawView() )
+    if ( !HasDrawView() )
+        return;
+
+    //change the draw mode in high contrast mode
+    OutputDevice* pOutDev = GetShell()->GetOut();
+    DrawModeFlags nOldDrawMode = pOutDev->GetDrawMode();
+    if( GetShell()->GetWin() &&
+        Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
+        (!GetShell()->IsPreview()||SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews()))
     {
-        //change the draw mode in high contrast mode
-        OutputDevice* pOutDev = GetShell()->GetOut();
-        DrawModeFlags nOldDrawMode = pOutDev->GetDrawMode();
-        if( GetShell()->GetWin() &&
-            Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
-            (!GetShell()->IsPreview()||SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews()))
-        {
-            pOutDev->SetDrawMode( nOldDrawMode | DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill |
-                                DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient );
-        }
-
-        // For correct handling of accessibility, high contrast, the
-        // page background color is set as the background color at the
-        // outliner of the draw view.  Only necessary for the layers
-        // hell and heaven
-        Color aOldOutlinerBackgrdColor;
-        // set default horizontal text direction on painting <hell> or
-        // <heaven>.
-        EEHorizontalTextDirection aOldEEHoriTextDir = EE_HTEXTDIR_L2R;
-        const IDocumentDrawModelAccess& rIDDMA = GetShell()->getIDocumentDrawModelAccess();
-        if ( (_nLayerID == rIDDMA.GetHellId()) ||
-             (_nLayerID == rIDDMA.GetHeavenId()) )
-        {
-            OSL_ENSURE( _pPageBackgrdColor,
-                    "incorrect usage of SwViewShellImp::PaintLayer: pPageBackgrdColor have to be set for painting layer <hell> or <heaven>");
-            if ( _pPageBackgrdColor )
-            {
-                aOldOutlinerBackgrdColor =
-                        GetDrawView()->GetModel()->GetDrawOutliner().GetBackgroundColor();
-                GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( *_pPageBackgrdColor );
-            }
-
-            aOldEEHoriTextDir =
-                GetDrawView()->GetModel()->GetDrawOutliner().GetDefaultHorizontalTextDirection();
-            EEHorizontalTextDirection aEEHoriTextDirOfPage =
-                _bIsPageRightToLeft ? EE_HTEXTDIR_R2L : EE_HTEXTDIR_L2R;
-            GetDrawView()->GetModel()->GetDrawOutliner().SetDefaultHorizontalTextDirection( aEEHoriTextDirOfPage );
-        }
-
-        pOutDev->Push( PushFlags::LINECOLOR );
-        if (pPrintData)
-        {
-            // hide drawings but not form controls (form controls are handled elsewhere)
-            SdrView &rSdrView = GetPageView()->GetView();
-            rSdrView.setHideDraw( !pPrintData->IsPrintDraw() );
-        }
-        basegfx::B2IRectangle const pageFrame(
-            vcl::unotools::b2IRectangleFromRectangle(rPageFrame.getFrameArea().SVRect()));
-        GetPageView()->DrawLayer(_nLayerID, pOutDev, pRedirector, aPaintRect.SVRect(), &pageFrame);
-        pOutDev->Pop();
-
-        // reset background color of the outliner & default horiz. text dir.
-        if ( (_nLayerID == rIDDMA.GetHellId()) ||
-             (_nLayerID == rIDDMA.GetHeavenId()) )
-        {
-            GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( aOldOutlinerBackgrdColor );
-            GetDrawView()->GetModel()->GetDrawOutliner().SetDefaultHorizontalTextDirection( aOldEEHoriTextDir );
-        }
-
-        pOutDev->SetDrawMode( nOldDrawMode );
+        pOutDev->SetDrawMode( nOldDrawMode | DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill |
+                            DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient );
     }
+
+    // For correct handling of accessibility, high contrast, the
+    // page background color is set as the background color at the
+    // outliner of the draw view.  Only necessary for the layers
+    // hell and heaven
+    Color aOldOutlinerBackgrdColor;
+    // set default horizontal text direction on painting <hell> or
+    // <heaven>.
+    EEHorizontalTextDirection aOldEEHoriTextDir = EE_HTEXTDIR_L2R;
+    const IDocumentDrawModelAccess& rIDDMA = GetShell()->getIDocumentDrawModelAccess();
+    if ( (_nLayerID == rIDDMA.GetHellId()) ||
+         (_nLayerID == rIDDMA.GetHeavenId()) )
+    {
+        OSL_ENSURE( _pPageBackgrdColor,
+                "incorrect usage of SwViewShellImp::PaintLayer: pPageBackgrdColor have to be set for painting layer <hell> or <heaven>");
+        if ( _pPageBackgrdColor )
+        {
+            aOldOutlinerBackgrdColor =
+                    GetDrawView()->GetModel()->GetDrawOutliner().GetBackgroundColor();
+            GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( *_pPageBackgrdColor );
+        }
+
+        aOldEEHoriTextDir =
+            GetDrawView()->GetModel()->GetDrawOutliner().GetDefaultHorizontalTextDirection();
+        EEHorizontalTextDirection aEEHoriTextDirOfPage =
+            _bIsPageRightToLeft ? EE_HTEXTDIR_R2L : EE_HTEXTDIR_L2R;
+        GetDrawView()->GetModel()->GetDrawOutliner().SetDefaultHorizontalTextDirection( aEEHoriTextDirOfPage );
+    }
+
+    pOutDev->Push( PushFlags::LINECOLOR );
+    if (pPrintData)
+    {
+        // hide drawings but not form controls (form controls are handled elsewhere)
+        SdrView &rSdrView = GetPageView()->GetView();
+        rSdrView.setHideDraw( !pPrintData->IsPrintDraw() );
+    }
+    basegfx::B2IRectangle const pageFrame(
+        vcl::unotools::b2IRectangleFromRectangle(rPageFrame.getFrameArea().SVRect()));
+    GetPageView()->DrawLayer(_nLayerID, pOutDev, pRedirector, aPaintRect.SVRect(), &pageFrame);
+    pOutDev->Pop();
+
+    // reset background color of the outliner & default horiz. text dir.
+    if ( (_nLayerID == rIDDMA.GetHellId()) ||
+         (_nLayerID == rIDDMA.GetHeavenId()) )
+    {
+        GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( aOldOutlinerBackgrdColor );
+        GetDrawView()->GetModel()->GetDrawOutliner().SetDefaultHorizontalTextDirection( aOldEEHoriTextDir );
+    }
+
+    pOutDev->SetDrawMode( nOldDrawMode );
+
 }
 
 #define FUZZY_EDGE 400

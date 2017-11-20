@@ -177,29 +177,30 @@ IMPL_LINK( SwWrtShell, InsertRegionDialog, void*, p, void )
 {
     SwSectionData* pSect = static_cast<SwSectionData*>(p);
     std::unique_ptr<SwSectionData> xSectionData(pSect);
-    if (xSectionData.get())
-    {
-        SfxItemSet aSet(
-            GetView().GetPool(),
-            svl::Items<
-                RES_FRM_SIZE, RES_FRM_SIZE,
-                RES_BACKGROUND, RES_BACKGROUND,
-                RES_COL, RES_COL,
-                SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
-        SwRect aRect;
-        CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
-        long nWidth = aRect.Width();
-        aSet.Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth));
-        // height=width for more consistent preview (analog to edit region)
-        aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
-        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "Dialog creation failed!");
-        ScopedVclPtr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
-            &GetView().GetViewFrame()->GetWindow(),aSet , *this));
-        OSL_ENSURE(aTabDlg, "Dialog creation failed!");
-        aTabDlg->SetSectionData(*xSectionData);
-        aTabDlg->Execute();
-    }
+    if (!xSectionData.get())
+        return;
+
+    SfxItemSet aSet(
+        GetView().GetPool(),
+        svl::Items<
+            RES_FRM_SIZE, RES_FRM_SIZE,
+            RES_BACKGROUND, RES_BACKGROUND,
+            RES_COL, RES_COL,
+            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
+    SwRect aRect;
+    CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
+    long nWidth = aRect.Width();
+    aSet.Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth));
+    // height=width for more consistent preview (analog to edit region)
+    aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+    OSL_ENSURE(pFact, "Dialog creation failed!");
+    ScopedVclPtr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
+        &GetView().GetViewFrame()->GetWindow(),aSet , *this));
+    OSL_ENSURE(aTabDlg, "Dialog creation failed!");
+    aTabDlg->SetSectionData(*xSectionData);
+    aTabDlg->Execute();
+
 }
 
 void SwBaseShell::EditRegionDialog(SfxRequest const & rReq)
