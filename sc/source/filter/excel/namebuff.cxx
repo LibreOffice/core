@@ -47,7 +47,10 @@ sal_uInt32 StringHashEntry::MakeHashCode( const OUString& r )
     return n;
 }
 
-SharedFormulaBuffer::SharedFormulaBuffer( RootData* pRD ) : ExcRoot(pRD) {}
+SharedFormulaBuffer::SharedFormulaBuffer(RootData* pRD)
+    : ExcRoot(pRD)
+{
+}
 
 SharedFormulaBuffer::~SharedFormulaBuffer()
 {
@@ -56,18 +59,14 @@ SharedFormulaBuffer::~SharedFormulaBuffer()
 
 void SharedFormulaBuffer::Clear()
 {
-    TokenArraysType::iterator it = maTokenArrays.begin(), itEnd = maTokenArrays.end();
-    for (; it != itEnd; ++it)
-        delete it->second;
-
     maTokenArrays.clear();
 }
 
 void SharedFormulaBuffer::Store( const ScAddress& rPos, const ScTokenArray& rArray )
 {
-    ScTokenArray* pCode = rArray.Clone();
-    pCode->GenHash();
-    maTokenArrays.emplace(rPos, pCode);
+    std::unique_ptr<ScTokenArray> xCode(rArray.Clone());
+    xCode->GenHash();
+    maTokenArrays.emplace(rPos, std::move(xCode));
 }
 
 const ScTokenArray* SharedFormulaBuffer::Find( const ScAddress& rRefPos ) const
@@ -76,7 +75,7 @@ const ScTokenArray* SharedFormulaBuffer::Find( const ScAddress& rRefPos ) const
     if (it == maTokenArrays.end())
         return nullptr;
 
-    return it->second;
+    return it->second.get();
 }
 
 sal_Int16 ExtSheetBuffer::Add( const OUString& rFPAN, const OUString& rTN, const bool bSWB )
