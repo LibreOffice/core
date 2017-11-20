@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_0f5185d8",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-20T12:59:03Z",
+      "side": 1,
+      "message": "Please do not invent BIFF function identifiers (200). Instead, the existing ocClean should now be ocClean_MS, and probably ocClean be added to saFuncTable_OOoLO[]. Still not sure how we should treat them and if they shouldn\u0027t be mapped to the same BIFF-ID despite the slightly different functionality.",
+      "revId": "18cd274fb73af7771ca132bd793352e1b78eb6cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_0fe34534",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-20T12:59:03Z",
+      "side": 1,
+      "message": "The first name needs to be the ODFF name, so \"COM.MICROSOFT.CLEAN\". The second name needs to be the Excel name, so \"CLEAN\".\n\nAlso, please don\u0027t make up a BIFF function identifier (200), that should be 162 as well.\n\nIt\u0027s unclear to me how we should treat the now duplicate case of (ODFF) CLEAN, whether to store it as _xlfn.ORG.LIBREOFFICE.CLEAN or both as CLEAN (maybe best).",
+      "revId": "18cd274fb73af7771ca132bd793352e1b78eb6cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
