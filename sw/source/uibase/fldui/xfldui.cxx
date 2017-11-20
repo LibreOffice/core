@@ -50,7 +50,7 @@ bool SwFieldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTableQry
 {
     bool bNumeric = true;
 
-    SwDBManager* pDBManager = pWrtShell ? pWrtShell->GetDBManager() :
+    SwDBManager* pDBManager = m_pWrtShell ? m_pWrtShell->GetDBManager() :
                             ::GetActiveView()->GetWrtShell().GetDBManager();
 
     Reference< XConnection> xConnection =
