@@ -393,8 +393,6 @@ private:
 
     void fillTheOutliner(Outliner* pOutliner, std::vector<svx::ClassificationResult> const & rResults)
     {
-        pOutliner->SetStyleSheet(0, nullptr);
-
         sal_Int32 nParagraph = -1;
         for (svx::ClassificationResult const & rResult : rResults)
         {
@@ -445,6 +443,9 @@ private:
                         aItemSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
                     else
                         aItemSet.Put(SvxWeightItem(WEIGHT_NORMAL, EE_CHAR_WEIGHT));
+
+                    SvxNumRule aDefaultNumRule(SvxNumRuleFlags::NONE, 0, false);
+                    aItemSet.Put(SvxNumBulletItem(aDefaultNumRule, EE_PARA_NUMBULLET));
 
                     pOutliner->SetParaAttribs(nParagraph, aItemSet);
                 }
