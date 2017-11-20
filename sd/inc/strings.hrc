@@ -228,8 +228,6 @@
 #define STR_HTMLEXP_ERROR_CREATE_FILE                   NC_("STR_HTMLEXP_ERROR_CREATE_FILE", "Cannot create the file $(URL1).")
 #define STR_HTMLEXP_ERROR_OPEN_FILE                     NC_("STR_HTMLEXP_ERROR_OPEN_FILE", "Could not open the file $(URL1).")
 #define STR_HTMLEXP_ERROR_COPY_FILE                     NC_("STR_HTMLEXP_ERROR_COPY_FILE", "The file $(URL1) could not be copied to $(URL2)")
-#define STR_PAGE_BACKGROUND_TITLE                       NC_("STR_PAGE_BACKGROUND_TITLE", "Page Settings" )
-#define STR_PAGE_BACKGROUND_TXT                         NC_("STR_PAGE_BACKGROUND_TXT", "Background settings for all pages?" )
 #define STR_STATUSBAR_MASTERPAGE                        NC_("STR_STATUSBAR_MASTERPAGE", "Slide Master name. Right-click for list and double-click for dialog.")
 #define STR_TITLE_RENAMESLIDE                           NC_("STR_TITLE_RENAMESLIDE", "Rename Slide")
 #define STR_DESC_RENAMESLIDE                            NC_("STR_DESC_RENAMESLIDE", "Name")
