@@ -3840,7 +3840,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
             return false;
         }
 
-        const SdrGrafCropItem& rOldCrop = static_cast<const SdrGrafCropItem&>(pObj->GetMergedItem(SDRATTR_GRAFCROP));
+        const SdrGrafCropItem& rOldCrop = pObj->GetMergedItem(SDRATTR_GRAFCROP);
         double fScaleX = ( aGraphicSize.Width() - rOldCrop.GetLeft() - rOldCrop.GetRight() ) / (double)aOldRect.GetWidth();
         double fScaleY = ( aGraphicSize.Height() - rOldCrop.GetTop() - rOldCrop.GetBottom() ) / (double)aOldRect.GetHeight();
 

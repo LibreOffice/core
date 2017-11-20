@@ -263,7 +263,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     // SdrMeasureBelowRefEdgeItem
     if( rAttrs->GetItemState( SDRATTR_MEASUREBELOWREFEDGE ) != SfxItemState::DONTCARE )
     {
-        m_pTsbBelowRefEdge->SetState( static_cast<const SdrMeasureBelowRefEdgeItem&>( rAttrs->Get( SDRATTR_MEASUREBELOWREFEDGE ) ).
+        m_pTsbBelowRefEdge->SetState( rAttrs->Get( SDRATTR_MEASUREBELOWREFEDGE ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbBelowRefEdge->EnableTriState( false );
     }
@@ -292,7 +292,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     // Attention: negate !
     if( rAttrs->GetItemState( SDRATTR_MEASURETEXTROTA90 ) != SfxItemState::DONTCARE )
     {
-        m_pTsbParallel->SetState( static_cast<const SdrMeasureTextRota90Item&>( rAttrs->Get( SDRATTR_MEASURETEXTROTA90 ) ).
+        m_pTsbParallel->SetState( rAttrs->Get( SDRATTR_MEASURETEXTROTA90 ).
                         GetValue() ? TRISTATE_FALSE : TRISTATE_TRUE );
         m_pTsbParallel->EnableTriState( false );
     }
@@ -305,7 +305,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     // SdrMeasureShowUnitItem
     if( rAttrs->GetItemState( SDRATTR_MEASURESHOWUNIT ) != SfxItemState::DONTCARE )
     {
-        m_pTsbShowUnit->SetState( static_cast<const SdrYesNoItem&>( rAttrs->Get( SDRATTR_MEASURESHOWUNIT ) ).
+        m_pTsbShowUnit->SetState( rAttrs->Get( SDRATTR_MEASURESHOWUNIT ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbShowUnit->EnableTriState( false );
     }
@@ -318,8 +318,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     // SdrMeasureUnitItem
     if( rAttrs->GetItemState( SDRATTR_MEASUREUNIT ) != SfxItemState::DONTCARE )
     {
-        long nFieldUnit = (long) static_cast<const SdrMeasureUnitItem&>( rAttrs->
-                                    Get( SDRATTR_MEASUREUNIT ) ).GetValue();
+        long nFieldUnit = (long) rAttrs->Get( SDRATTR_MEASUREUNIT ).GetValue();
 
         for( sal_Int32 i = 0; i < m_pLbUnit->GetEntryCount(); ++i )
         {
@@ -340,7 +339,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTVPOS ) != SfxItemState::DONTCARE )
     {
         css::drawing::MeasureTextVertPos eVPos =
-                    static_cast<const SdrMeasureTextVPosItem&>( rAttrs->Get( SDRATTR_MEASURETEXTVPOS ) ).GetValue();
+                    rAttrs->Get( SDRATTR_MEASURETEXTVPOS ).GetValue();
         {
             if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTHPOS ) != SfxItemState::DONTCARE )
             {
@@ -348,7 +347,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
                 m_pTsbAutoPosH->EnableTriState( false );
 
                 css::drawing::MeasureTextHorzPos eHPos =
-                            static_cast<const SdrMeasureTextHPosItem&>( rAttrs->Get( SDRATTR_MEASURETEXTHPOS ) ).GetValue();
+                            rAttrs->Get( SDRATTR_MEASURETEXTHPOS ).GetValue();
                 RectPoint eRP = RectPoint::MM;
                 switch( eVPos )
                 {
@@ -556,7 +555,7 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
 
         if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTVPOS ) != SfxItemState::DONTCARE )
         {
-            eOldVPos = static_cast<const SdrMeasureTextVPosItem&>(rOutAttrs.Get(SDRATTR_MEASURETEXTVPOS)).GetValue();
+            eOldVPos = rOutAttrs.Get(SDRATTR_MEASURETEXTVPOS).GetValue();
             if( eOldVPos != eVPos )
             {
                 rAttrs->Put( SdrMeasureTextVPosItem( eVPos ) );
@@ -571,7 +570,7 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
 
         if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTHPOS ) != SfxItemState::DONTCARE )
         {
-            eOldHPos = static_cast<const SdrMeasureTextHPosItem&>( rOutAttrs.Get( SDRATTR_MEASURETEXTHPOS ) ).GetValue();
+            eOldHPos = rOutAttrs.Get( SDRATTR_MEASURETEXTHPOS ).GetValue();
             if( eOldHPos != eHPos )
             {
                 rAttrs->Put( SdrMeasureTextHPosItem( eHPos ) );

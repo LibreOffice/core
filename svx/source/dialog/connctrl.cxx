@@ -245,7 +245,7 @@ sal_uInt16 SvxXConnectionPreview::GetLineDeltaCount()
     sal_uInt16 nCount(0);
 
     if(SfxItemState::DONTCARE != rSet.GetItemState(SDRATTR_EDGELINEDELTACOUNT))
-        nCount = static_cast<const SdrEdgeLineDeltaCountItem&>(rSet.Get(SDRATTR_EDGELINEDELTACOUNT)).GetValue();
+        nCount = rSet.Get(SDRATTR_EDGELINEDELTACOUNT).GetValue();
 
     return nCount;
 }

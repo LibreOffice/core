@@ -1056,7 +1056,7 @@ void SdrCircObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 void SdrCircObj::ImpSetAttrToCircInfo()
 {
     const SfxItemSet& rSet = GetObjectItemSet();
-    SdrCircKind eNewKindA = static_cast<const SdrCircKindItem&>(rSet.Get(SDRATTR_CIRCKIND)).GetValue();
+    SdrCircKind eNewKindA = rSet.Get(SDRATTR_CIRCKIND).GetValue();
     SdrObjKind eNewKind = meCircleKind;
 
     if(eNewKindA == SDRCIRC_FULL)
@@ -1068,8 +1068,8 @@ void SdrCircObj::ImpSetAttrToCircInfo()
     else if(eNewKindA == SDRCIRC_CUT)
         eNewKind = OBJ_CCUT;
 
-    sal_Int32 nNewStart = static_cast<const SdrAngleItem&>(rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
-    sal_Int32 nNewEnd = static_cast<const SdrAngleItem&>(rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
+    sal_Int32 nNewStart = rSet.Get(SDRATTR_CIRCSTARTANGLE).GetValue();
+    sal_Int32 nNewEnd = rSet.Get(SDRATTR_CIRCENDANGLE).GetValue();
 
     bool bKindChg = meCircleKind != eNewKind;
     bool bAngleChg = nNewStart != nStartAngle || nNewEnd != nEndAngle;
@@ -1100,9 +1100,9 @@ void SdrCircObj::ImpSetCircInfoToAttr()
     else if(meCircleKind == OBJ_CCUT)
         eNewKindA = SDRCIRC_CUT;
 
-    SdrCircKind eOldKindA = static_cast<const SdrCircKindItem&>(rSet.Get(SDRATTR_CIRCKIND)).GetValue();
-    sal_Int32 nOldStartAngle = static_cast<const SdrAngleItem&>(rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
-    sal_Int32 nOldEndAngle = static_cast<const SdrAngleItem&>(rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
+    SdrCircKind eOldKindA = rSet.Get(SDRATTR_CIRCKIND).GetValue();
+    sal_Int32 nOldStartAngle = rSet.Get(SDRATTR_CIRCSTARTANGLE).GetValue();
+    sal_Int32 nOldEndAngle = rSet.Get(SDRATTR_CIRCENDANGLE).GetValue();
 
     if(eNewKindA != eOldKindA || nStartAngle != nOldStartAngle || nEndAngle != nOldEndAngle)
     {

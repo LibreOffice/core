@@ -703,8 +703,7 @@ bool SvxTextAttrPage::IsTextDirectionLeftToRight() const
 
     if(SfxItemState::DONTCARE != eState)
     {
-        const SvxWritingModeItem& rItem = static_cast<const SvxWritingModeItem&> (
-            rOutAttrs.Get (SDRATTR_TEXTDIRECTION));
+        const SvxWritingModeItem& rItem = rOutAttrs.Get(SDRATTR_TEXTDIRECTION);
         if (rItem.GetValue() == css::text::WritingMode_TB_RL)
             bLeftToRightDirection = false;
     }

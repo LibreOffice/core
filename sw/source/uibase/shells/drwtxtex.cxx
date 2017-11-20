@@ -804,7 +804,7 @@ ASK_ESCAPE:
                 else
                 {
                     text::WritingMode eMode = (text::WritingMode)
-                                    static_cast<const SvxWritingModeItem&>( aEditAttr.Get( SDRATTR_TEXTDIRECTION ) ).GetValue();
+                                    aEditAttr.Get( SDRATTR_TEXTDIRECTION ).GetValue();
 
                     if( nSlotId == SID_TEXTDIRECTION_LEFT_TO_RIGHT )
                     {

@@ -377,7 +377,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                             bLeftToRight = false;
                     }
                     else
-                        bLeftToRight = static_cast<const SvxWritingModeItem&>( aAttrSet.Get( SDRATTR_TEXTDIRECTION ) ).GetValue() == css::text::WritingMode_LR_TB;
+                        bLeftToRight = aAttrSet.Get( SDRATTR_TEXTDIRECTION ).GetValue() == css::text::WritingMode_LR_TB;
 
                     rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT, bLeftToRight ) );
                     rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, !bLeftToRight ) );

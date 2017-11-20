@@ -832,7 +832,7 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObje
         SetVerAlign( lcl_GetVerAlignFromItemSet( rItemSet ) );
 
         // orientation alignment
-        const SvxWritingModeItem& rItem = static_cast< const SvxWritingModeItem& >( rItemSet.Get( SDRATTR_TEXTDIRECTION ) );
+        const SvxWritingModeItem& rItem = rItemSet.Get( SDRATTR_TEXTDIRECTION );
         if( rItem.GetValue() == css::text::WritingMode_TB_RL )
             mnRotation = EXC_OBJ_ORIENT_90CW;
     }

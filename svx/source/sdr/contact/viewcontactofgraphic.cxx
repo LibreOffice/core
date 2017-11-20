@@ -298,17 +298,17 @@ namespace sdr
 
             // create and fill GraphicAttr
             GraphicAttr aLocalGrafInfo;
-            const sal_uInt16 nTrans(static_cast<const SdrGrafTransparenceItem&>(rItemSet.Get(SDRATTR_GRAFTRANSPARENCE)).GetValue());
-            const SdrGrafCropItem& rCrop(static_cast<const SdrGrafCropItem&>(rItemSet.Get(SDRATTR_GRAFCROP)));
-            aLocalGrafInfo.SetLuminance(static_cast<const SdrGrafLuminanceItem&>(rItemSet.Get(SDRATTR_GRAFLUMINANCE)).GetValue());
-            aLocalGrafInfo.SetContrast(static_cast<const SdrGrafContrastItem&>(rItemSet.Get(SDRATTR_GRAFCONTRAST)).GetValue());
-            aLocalGrafInfo.SetChannelR(static_cast<const SdrGrafRedItem&>(rItemSet.Get(SDRATTR_GRAFRED)).GetValue());
-            aLocalGrafInfo.SetChannelG(static_cast<const SdrGrafGreenItem&>(rItemSet.Get(SDRATTR_GRAFGREEN)).GetValue());
-            aLocalGrafInfo.SetChannelB(static_cast<const SdrGrafBlueItem&>(rItemSet.Get(SDRATTR_GRAFBLUE)).GetValue());
-            aLocalGrafInfo.SetGamma(static_cast<const SdrGrafGamma100Item&>(rItemSet.Get(SDRATTR_GRAFGAMMA)).GetValue() * 0.01);
+            const sal_uInt16 nTrans(rItemSet.Get(SDRATTR_GRAFTRANSPARENCE).GetValue());
+            const SdrGrafCropItem& rCrop(rItemSet.Get(SDRATTR_GRAFCROP));
+            aLocalGrafInfo.SetLuminance(rItemSet.Get(SDRATTR_GRAFLUMINANCE).GetValue());
+            aLocalGrafInfo.SetContrast(rItemSet.Get(SDRATTR_GRAFCONTRAST).GetValue());
+            aLocalGrafInfo.SetChannelR(rItemSet.Get(SDRATTR_GRAFRED).GetValue());
+            aLocalGrafInfo.SetChannelG(rItemSet.Get(SDRATTR_GRAFGREEN).GetValue());
+            aLocalGrafInfo.SetChannelB(rItemSet.Get(SDRATTR_GRAFBLUE).GetValue());
+            aLocalGrafInfo.SetGamma(rItemSet.Get(SDRATTR_GRAFGAMMA).GetValue() * 0.01);
             aLocalGrafInfo.SetTransparency((sal_uInt8)::basegfx::fround(std::min(nTrans, (sal_uInt16)100) * 2.55));
-            aLocalGrafInfo.SetInvert(static_cast<const SdrGrafInvertItem&>(rItemSet.Get(SDRATTR_GRAFINVERT)).GetValue());
-            aLocalGrafInfo.SetDrawMode(static_cast<const SdrGrafModeItem&>(rItemSet.Get(SDRATTR_GRAFMODE)).GetValue());
+            aLocalGrafInfo.SetInvert(rItemSet.Get(SDRATTR_GRAFINVERT).GetValue());
+            aLocalGrafInfo.SetDrawMode(rItemSet.Get(SDRATTR_GRAFMODE).GetValue());
             aLocalGrafInfo.SetCrop(rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom());
 
             // we have content if graphic is not completely transparent
