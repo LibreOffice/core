@@ -527,6 +527,9 @@ namespace basctl
                 if ( xLib.is() )
                 {
                     xLib->removeByName( _rModuleName );
+                    Reference< XVBAModuleInfo > xVBAModuleInfo(xLib, UNO_QUERY);
+                    if(xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo(_rModuleName))
+                        xVBAModuleInfo->removeModuleInfo(_rModuleName);
                     return true;
                 }
             }
