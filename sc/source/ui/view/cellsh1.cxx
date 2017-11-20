@@ -1646,11 +1646,36 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             // this makes FID_INS_CELL_CONTENTS superfluous
             {
                 WaitObject aWait( GetViewData()->GetDialogParent() );
-                bool bRet = pTabViewShell->PasteFromSystem(SotClipboardFormatId::STRING, true); // TRUE: no error messages
+
+                // we should differentiate between SotClipboardFormatId::STRING and SotClipboardFormatId::STRING_TSVC,
+                // and paste the SotClipboardFormatId::STRING_TSVC if it is available.
+                // Which makes a difference if the clipboard contains cells with embedded line breaks.
+
+                SotClipboardFormatId nFormat = SotClipboardFormatId::STRING;
+                {
+                    SvxClipboardFormatItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
+                    GetPossibleClipboardFormats( aFormats );
+
+                    const sal_uInt16 nFormatCount = aFormats.Count();
+                    for (sal_uInt16 i=0; i<nFormatCount; i++)
+                    {
+                        if (SotClipboardFormatId::STRING_TSVC == aFormats.GetClipbrdFormatId( i ))
+                        {
+                            nFormat = SotClipboardFormatId::STRING_TSVC;
+                            break;
+                        }
+                    }
+                }
+
+                const bool bRet = pTabViewShell->PasteFromSystem(nFormat, true); // TRUE: no error messages
                 if ( bRet )
                 {
-                    rReq.SetReturnValue(SfxInt16Item(nSlot, bRet ? 1 : 0)); // 1 = success, 0 = fail
+                    rReq.SetReturnValue(SfxInt16Item(nSlot, 1)); // 1 = success
                     rReq.Done();
+                }
+                else
+                {
+                    rReq.SetReturnValue(SfxInt16Item(nSlot, 0)); // 0 = fail
                 }
 
                 pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
