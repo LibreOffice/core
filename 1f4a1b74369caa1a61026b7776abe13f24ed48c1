@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_6f7a0979",
+        "filename": "sc/source/ui/view/gridwin5.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-20T11:44:49Z",
+      "side": 0,
+      "message": "If this is removed, what happens in\na) split windows where several windows show the note\nb) zoom changes\nc) when in ScCaptionCreator::FitCaptionToRect() ViewData was not available to call SyncForGrid()",
+      "revId": "1f4a1b74369caa1a61026b7776abe13f24ed48c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

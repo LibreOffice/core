@@ -34,6 +34,59 @@
       "revId": "215539e4bdc64cfeab4fd7651bd5028529992c2c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_0f5ee511",
+        "filename": "sc/source/core/data/postit.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-20T11:44:49Z",
+      "side": 1,
+      "message": "Yes. Please don\u0027t do such thing.",
+      "parentUuid": "1a430d35_618062f8",
+      "revId": "215539e4bdc64cfeab4fd7651bd5028529992c2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_4f89cd74",
+        "filename": "sc/source/core/data/postit.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-20T11:44:49Z",
+      "side": 1,
+      "message": "That TiledRendering should be an exceptional case (and having ScDocument::GetTiledRenderingArea() there for this reason IMHO is equally wrong).",
+      "parentUuid": "1a430d35_af6a31b1",
+      "revId": "215539e4bdc64cfeab4fd7651bd5028529992c2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_afb15149",
+        "filename": "sc/source/core/data/postit.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-20T11:44:49Z",
+      "side": 1,
+      "message": "This is wrong. The grid offset depends on the zoom of the current active view, which is not known in all cases when FitCaptionToRect() is called.",
+      "revId": "215539e4bdc64cfeab4fd7651bd5028529992c2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
