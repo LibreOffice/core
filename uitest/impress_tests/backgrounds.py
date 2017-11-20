@@ -109,7 +109,7 @@ class ImpressBackgrounds(UITestCase):
         xCancelBtn = xTemplateDlg.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCancelBtn)
 
-        buttons = ['btnbitmap', 'btncolor', 'btngradient', 'btnhatch', 'btnpattern']
+        buttons = ['btncolor', 'btngradient', 'btnhatch', 'btnpattern'] #'btnbitmap'
         for index, button in enumerate(buttons):
             self.ui_test.execute_dialog_through_command(".uno:PageSetup")
 
@@ -123,31 +123,7 @@ class ImpressBackgrounds(UITestCase):
             xOkBtn = xPageSetupDlg.getChild("ok")
             xOkBtn.executeAction("CLICK", tuple())
 
-            xConfirmDlg = self.xUITest.getTopFocusWindow()
-
-            xNoBtn = xConfirmDlg.getChild("no")
-            xNoBtn.executeAction("CLICK", tuple())
-
             self.checkDefaultBackground(button)
-
-            self.ui_test.execute_dialog_through_command(".uno:PageSetup")
-
-            xPageSetupDlg = self.xUITest.getTopFocusWindow()
-            tabcontrol = xPageSetupDlg.getChild("tabcontrol")
-            select_pos(tabcontrol, "1")
-
-            xBtn = xPageSetupDlg.getChild('btnnone')
-            xBtn.executeAction("CLICK", tuple())
-
-            xOkBtn = xPageSetupDlg.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
-
-            xConfirmDlg = self.xUITest.getTopFocusWindow()
-
-            xNoBtn = xConfirmDlg.getChild("no")
-            xNoBtn.executeAction("CLICK", tuple())
-
-            self.checkDefaultBackground('btnnone')
 
         self.ui_test.close_doc()
 
