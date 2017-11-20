@@ -11784,6 +11784,7 @@ scaddins/source/pricing/black_scholes.cxx
 scaddins/source/pricing/black_scholes.hxx
 scaddins/source/pricing/pricing.cxx
 scaddins/source/pricing/pricing.hxx
+sccomp/qa/unit/SwarmSolverTest.cxx
 sccomp/qa/unit/solver.cxx
 sccomp/source/solver/CoinMPSolver.cxx
 sccomp/source/solver/LpsolveSolver.cxx
