@@ -12289,7 +12289,7 @@
         <attribute name="text:number-position" a:defaultValue="left">
             <choice>
                 <value>left</value>
-                <value>rigth</value>
+                <value>right</value>
                 <value>inner</value>
                 <value>outer</value>
             </choice>
