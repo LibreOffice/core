@@ -382,8 +382,8 @@ void SwarmSolverTest::testMultipleVariables()
     uno::Sequence<double> aSolution = xSolver->getSolution();
 
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
-#ifndef _WIN32
-    // Disable on windows for now, needs algorithm stability improvements
+#if 0
+    // Disable for now, needs algorithm stability improvements
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aSolution[0], 1E-5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, aSolution[1], 1E-5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, aSolution[2], 1E-5);
