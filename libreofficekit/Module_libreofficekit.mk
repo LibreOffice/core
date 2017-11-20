@@ -24,10 +24,13 @@ ifneq ($(ENABLE_GTK3),)
 $(eval $(call gb_Module_add_targets,libreofficekit,\
     Library_libreofficekitgtk \
     Executable_gtktiledviewer \
+))
+endif # ($(ENABLE_GTK3),)
+
+$(eval $(call gb_Module_add_targets,libreofficekit,\
     Executable_tilebench \
     Package_selectionhandles \
 ))
-endif # ($(ENABLE_GTK3),)
 
 endif
 
