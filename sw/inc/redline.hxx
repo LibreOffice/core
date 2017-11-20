@@ -83,7 +83,7 @@ public:
 /*
  * This class is used to store 'redline' data regarding formatting changes,
  * e.g. - a text portion *was* italic and now is not italic,
- * e.g. - a text portion got a hightlight to it
+ * e.g. - a text portion got a highlight to it
  *
  * The way the information is stored is in an 'SfxItemSet' that holds all
  * the WhichIds with their values.

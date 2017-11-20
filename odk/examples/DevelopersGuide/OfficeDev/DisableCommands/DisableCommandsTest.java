@@ -376,7 +376,7 @@ public class DisableCommandsTest {
      * reset URL so it can be reused
      *
      * @param aURL
-     *          the URL that should be reseted
+     *          the URL that should be reset
      */
     private static void resetURL( com.sun.star.util.URL aURL )
     {

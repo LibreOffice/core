@@ -131,7 +131,7 @@ namespace rtl_ustr
                 rtl::OUString aStr2("LINE MUST BE EQUAL.");
 
                 sal_Int32 nValue = rtl_ustr_compareIgnoreAsciiCase( aStr1.getStr(), aStr2.getStr());
-                CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal (if case insensitve).", nValue == 0);
+                CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal (if case insensitive).", nValue == 0);
             }
 
         void compare_003()
@@ -199,7 +199,7 @@ namespace rtl_ustr
                 sal_Int32 nValue = rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(),
                                                                                        aStr2.getStr(), aStr2.getLength(),
                                                                                        aStr1.getLength());
-                CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal (if case insensitve).", nValue == 0);
+                CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal (if case insensitive).", nValue == 0);
             }
 
         void compare_003()
@@ -1187,7 +1187,7 @@ namespace rtl_ustr
                 rtl::OString sStr2 =                                 "LINE MUST BE EQUAL, WHEN IGNORE CASE.";
 
                 sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase( suStr1.getStr(), sStr2.getStr());
-                CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal (if case insensitve).", nValue == 0);
+                CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal (if case insensitive).", nValue == 0);
             }
 
         void ascii_compareIgnoreAsciiCase_003()
@@ -1284,7 +1284,7 @@ namespace rtl_ustr
                 rtl::OString sStr2 =                                 "LINE MUST BE EQUAL, WHEN IGNORE CASE.";
 
                 sal_Int32 nValue = rtl_ustr_ascii_compareIgnoreAsciiCase( suStr1.getStr(), sStr2.getStr());
-                CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal (if case insensitve).", nValue == 0);
+                CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal (if case insensitive).", nValue == 0);
             }
 
         void ascii_compareIgnoreAsciiCase_003()

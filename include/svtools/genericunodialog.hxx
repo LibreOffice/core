@@ -114,7 +114,7 @@ namespace svt
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     protected:
-        /** create the concrete dialog instance. note that m_aMutex is not locked when this method get's called,
+        /** create the concrete dialog instance. Note that m_aMutex is not locked when this method get called,
             but the application-wide solar mutex is (to guard the not thread-safe ctor of the dialog).
             @param      pParent     the parent window for the new dialog
         */

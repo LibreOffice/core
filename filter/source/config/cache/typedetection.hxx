@@ -107,7 +107,7 @@ private:
 
         @param      rLastChance
                     the internal name of a "suggested type" ... (see before)
-                    Note: it will be reseted to an empty string every time. So
+                    Note: it will be reset to an empty string every time. So
                     a set value of "rLastChance" can be detected outside very easy.
 
         @param      rUsedDetectors

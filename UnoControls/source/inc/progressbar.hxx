@@ -135,7 +135,7 @@ protected:
 
 private:
 
-    bool            m_bHorizontal;   // orientation for steps            [true=horizontal/false=vertikal]
+    bool            m_bHorizontal;   // orientation for steps            [true=horizontal/false=vertical]
     css::awt::Size  m_aBlockSize;   // width and height of a block      [>=0,0]
     sal_Int32       m_nForegroundColor;   //                                  (alpha,r,g,b)
     sal_Int32       m_nBackgroundColor;   //                                  (alpha,r,g,b)
