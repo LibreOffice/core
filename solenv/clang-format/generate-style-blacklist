@@ -1,0 +1,31 @@
+#!/usr/bin/env perl
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Generates a blacklist containing all existing cxx/hxx files.
+
+use strict;
+use warnings;
+use lib "solenv/clang-format";
+use ClangFormat;
+
+my $src = ClangFormat::get_extension_regex();
+my @filenames = ();
+
+# Get a list of files.
+open (FILES, "git ls-files |") ||  die "Cannot run git ls-files.";
+while (my $filename = <FILES>)
+{
+    chomp $filename;
+    if ($filename =~ /\.($src)$/)
+    {
+        push @filenames, $filename;
+    }
+}
+
+ClangFormat::set_blacklist(\@filenames);
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

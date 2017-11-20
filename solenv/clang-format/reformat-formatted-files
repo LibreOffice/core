@@ -1,0 +1,35 @@
+#!/usr/bin/env perl
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Reformat files which are not blacklisted. This is interesting if the
+# clang-format version or config changes.
+
+use strict;
+use warnings;
+use lib "solenv/clang-format";
+use ClangFormat;
+
+my $clang_format = ClangFormat::find();
+my $src = ClangFormat::get_extension_regex();
+my $blacklist_names = ClangFormat::get_blacklist();
+my @filenames = ();
+
+# Get a list of files.
+open (FILES, "git ls-files |") ||  die "Cannot run git ls-files.";
+while (my $filename = <FILES>)
+{
+    chomp $filename;
+    if ($filename =~ /\.($src)$/ and !exists($blacklist_names->{$filename}))
+    {
+        push @filenames, $filename;
+    }
+}
+
+print("$clang_format -i " . join(" ", @filenames) . "\n");
+system("$clang_format -i " . join(" ", @filenames) . "\n");
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:

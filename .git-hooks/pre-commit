@@ -6,6 +6,8 @@
 # if it wants to stop the commit.
 
 use strict;
+use lib "solenv/clang-format";
+use ClangFormat;
 #use File::Copy;
 #use Cwd;
 
@@ -108,71 +110,26 @@ sub check_whitespaces($)
     }
 }
 
-# Is this binary the version we standardize on?
-sub is_matching_clang_format_version($$)
-{
-    my ($clang_format, $version) = @_;
-    if (! -x $clang_format)
-    {
-        return 0;
-    }
-
-    return `$clang_format -version` =~ /^clang-format version $version \(tags/;
-}
-
 sub check_style($)
 {
     my ($h) = @_;
-    my $src = "c|cpp|cxx|h|hxx|inl";
+    my $src = ClangFormat::get_extension_regex();
     my @bad_names = ();
-    my %blacklist_names = ();
-
-    # Use clang-format from CLANG_FORMAT, or from PATH unless it's available in our dedicated
-    # directory.
-    my $version = "5.0.0";
-    my $opt_lo = "/opt/lo/bin";
-    my $clang_format = $ENV{CLANG_FORMAT};
-    if (!(defined($clang_format) && is_matching_clang_format_version($clang_format, $version)))
-    {
-        $clang_format = "$opt_lo/clang-format";
-        if (!is_matching_clang_format_version($clang_format, $version))
-        {
-            foreach my $dir (split /:/, $ENV{PATH})
-            {
-                $clang_format = "$dir/clang-format";
-                if (is_matching_clang_format_version($clang_format, $version))
-                {
-                    last;
-                }
-            }
-        }
-    }
-
-    # Read the blacklist.
-    if (open(LINES, "solenv/clang-format/blacklist"))
-    {
-        while (my $line = <LINES>)
-        {
-            chomp $line;
-            $blacklist_names{$line} = 1;
-        }
-    }
-
-    if ($^O eq "cygwin")
-    {
-        $clang_format = `cygpath -m $clang_format`;
-        chomp $clang_format;
-    }
+    my $blacklist_names = ClangFormat::get_blacklist();
+    my $clang_format = ClangFormat::find();
 
     # Get a list of non-deleted changed files.
     open (FILES, "git diff-index --cached --diff-filter=AM --name-only $h |") ||  die "Cannot run git diff.";
     while (my $filename = <FILES>)
     {
         chomp $filename;
-        if ($filename =~ /\.($src)$/ and !exists($blacklist_names{$filename}))
+        if ($filename =~ /\.($src)$/ and !exists($blacklist_names->{$filename}))
         {
             if (! -x $clang_format)
             {
+                my $version = ClangFormat::get_wanted_version();
+                my $opt_lo = ClangFormat::get_own_directory();
+
                 print("\nWARNING: Commit touches new (non-blacklisted) files, but no clang-format"
                       . " ${version}\n");
                 print(" found (via CLANG_FORMAT or PATH env vars, or in ${opt_lo}).\n\n");
@@ -200,7 +157,7 @@ sub check_style($)
                 print("<https://dev-www.libreoffice.org/bin/README.clang-format.txt>).\n\n");
                 return;
             }
-            if (system("$clang_format $filename | git --no-pager diff --no-index --exit-code $filename -") != 0)
+            if (!ClangFormat::check_style($clang_format, $filename))
             {
                 push @bad_names, $filename;
             }

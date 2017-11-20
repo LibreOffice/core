@@ -24,6 +24,7 @@ public:
     {
     }
     constexpr operator sal_uInt16() const { return mnWhich; }
+
 private:
     sal_uInt16 const mnWhich;
 };
