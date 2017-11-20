@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_c43e8427",
+        "filename": "cppcanvas/source/inc/implrenderer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-11-20T06:09:57Z",
+      "side": 1,
+      "message": "\"functor\" exists too. Here I\u0027m not sure what word to use so I wouldn\u0027t change it.",
+      "range": {
+        "startLine": 177,
+        "startChar": 34,
+        "endLine": 177,
+        "endChar": 44
+      },
+      "revId": "af5257faac04cc1f01c4b30927d3f9b8ed67c00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
