@@ -70,7 +70,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
         svptest \
         svpclient \
         pixelctl ) \
-	$(if $(and $(ENABLE_GTK3), $(filter LINUX %BSD SOLARIS,$(OS))), tilebench) \
+	$(if $(filter LINUX %BSD SOLARIS,$(OS)), tilebench) \
 	$(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)),icontest \
 	    outdevgrind) \
 	vcldemo \
