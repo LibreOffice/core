@@ -7,17 +7,17 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CppunitTest_CppunitTest,swarm_solver_test))
+$(eval $(call gb_CppunitTest_CppunitTest,sccomp_swarmsolvertest))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,swarm_solver_test,\
+$(eval $(call gb_CppunitTest_add_exception_objects,sccomp_swarmsolvertest,\
 	sccomp/qa/unit/SwarmSolverTest \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,swarm_solver_test,\
+$(eval $(call gb_CppunitTest_use_externals,sccomp_swarmsolvertest,\
 	boost_headers \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,swarm_solver_test,\
+$(eval $(call gb_CppunitTest_use_libraries,sccomp_swarmsolvertest,\
 	basegfx \
 	comphelper \
 	cppu \
@@ -54,18 +54,18 @@ $(eval $(call gb_CppunitTest_use_libraries,swarm_solver_test,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,swarm_solver_test,\
+$(eval $(call gb_CppunitTest_set_include,sccomp_swarmsolvertest,\
 	-I$(SRCDIR)/sc/inc \
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,swarm_solver_test))
+$(eval $(call gb_CppunitTest_use_sdk_api,sccomp_swarmsolvertest))
 
-$(eval $(call gb_CppunitTest_use_ure,swarm_solver_test))
-$(eval $(call gb_CppunitTest_use_vcl,swarm_solver_test))
+$(eval $(call gb_CppunitTest_use_ure,sccomp_swarmsolvertest))
+$(eval $(call gb_CppunitTest_use_vcl,sccomp_swarmsolvertest))
 
-$(eval $(call gb_CppunitTest_use_rdb,swarm_solver_test,services))
+$(eval $(call gb_CppunitTest_use_rdb,sccomp_swarmsolvertest,services))
 
-$(eval $(call gb_CppunitTest_use_configuration,swarm_solver_test))
+$(eval $(call gb_CppunitTest_use_configuration,sccomp_swarmsolvertest))
 
 # vim: set noet sw=4 ts=4:
