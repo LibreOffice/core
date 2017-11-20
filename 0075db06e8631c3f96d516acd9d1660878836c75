@@ -16,6 +16,24 @@
       "revId": "0075db06e8631c3f96d516acd9d1660878836c75",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_cfa21d99",
+        "filename": "cui/uiconfig/ui/bitmaptabpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2017-11-20T14:19:33Z",
+      "side": 1,
+      "message": "Wasnt me, must have been glade.",
+      "parentUuid": "1a430d35_04024c0b",
+      "revId": "0075db06e8631c3f96d516acd9d1660878836c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
