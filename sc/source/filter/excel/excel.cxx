@@ -38,6 +38,7 @@
 #include <optuno.hxx>
 #include <xistream.hxx>
 
+#include <docsh.hxx>
 #include <scerrors.hxx>
 #include <root.hxx>
 #include <imp_op.hxx>
@@ -252,20 +253,31 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportXLS(SvStream& rStream)
     SfxMedium aMedium;
     css::uno::Reference<css::io::XInputStream> xStm(new utl::OInputStreamWrapper(rStream));
     aMedium.GetItemSet()->Put(SfxUsrAnyItem(SID_INPUTSTREAM, css::uno::makeAny(xStm)));
-    ScDocument aDocument;
-    ScDocOptions aDocOpt = aDocument.GetDocOptions();
+
+    ScDocShellRef xDocShell = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT |
+                                             SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
+                                             SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+
+    xDocShell->DoInitNew();
+
+    ScDocument& rDoc = xDocShell->GetDocument();
+
+    ScDocOptions aDocOpt = rDoc.GetDocOptions();
     aDocOpt.SetLookUpColRowNames(false);
-    aDocument.SetDocOptions(aDocOpt);
-    aDocument.MakeTable(0);
-    aDocument.EnableExecuteLink(false);
+    rDoc.SetDocOptions(aDocOpt);
+    rDoc.MakeTable(0);
+    rDoc.EnableExecuteLink(false);
+    rDoc.InitDrawLayer(xDocShell.get());
     bool bRet(false);
     try
     {
-        bRet = ScFormatFilter::Get().ScImportExcel(aMedium, &aDocument, EIF_AUTO) == ERRCODE_NONE;
+        bRet = ScFormatFilter::Get().ScImportExcel(aMedium, &rDoc, EIF_AUTO) == ERRCODE_NONE;
     }
     catch (const css::ucb::ContentCreationException &)
     {
     }
+    xDocShell->DoClose();
+    xDocShell.clear();
     return bRet;
 }
 
@@ -293,7 +305,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDIF(SvStream &rStream)
     aDocument.SetDocOptions(aDocOpt);
     aDocument.MakeTable(0);
     aDocument.EnableExecuteLink(false);
-    aDocument.InitDrawLayer(nullptr);
     return ScFormatFilter::Get().ScImportDif(rStream, &aDocument, ScAddress(0, 0, 0), RTL_TEXTENCODING_IBM_850) == ERRCODE_NONE;
 }
 
