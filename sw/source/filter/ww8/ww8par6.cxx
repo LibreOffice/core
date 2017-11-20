@@ -5109,7 +5109,7 @@ bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
     if (nullptr != aRes.pSprm)
     {
         WW8TabBandDesc aDesc;
-        aDesc.ReadDef(false, aRes.pSprm);
+        aDesc.ReadDef(false, aRes.pSprm, aRes.nRemainingData);
         int nTableWidth = aDesc.nCenter[aDesc.nWwCols] - aDesc.nCenter[0];
         int nTextAreaWidth = m_aSectionManager.GetTextAreaWidth();
         // If the table is wider than the text area, then don't create a fly
