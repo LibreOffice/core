@@ -3634,7 +3634,7 @@ void SAL_CALL ToolbarLayoutManager::toggleFloatingMode( const lang::EventObject&
     if ( !bDockingInProgress )
     {
         aUIDockingElement = implts_findToolbar( e.Source );
-        bool bWinFound = ( !aUIDockingElement.m_aName.isEmpty() );
+        bool bWinFound = !aUIDockingElement.m_aName.isEmpty();
 
         if ( bWinFound && xWindow.is() )
         {

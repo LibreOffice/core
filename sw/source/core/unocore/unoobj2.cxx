@@ -1539,7 +1539,7 @@ uno::Any SAL_CALL SwXTextRangesImpl::getByIndex(sal_Int32 nIndex)
     if ((nIndex < 0) || (static_cast<size_t>(nIndex) >= m_Ranges.size()))
         throw lang::IndexOutOfBoundsException();
     uno::Any ret;
-    ret <<= (m_Ranges.at(nIndex));
+    ret <<= m_Ranges.at(nIndex);
     return ret;
 }
 

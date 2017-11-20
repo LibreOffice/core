@@ -84,9 +84,9 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 
     while( (*pRanges) != 0)
     {
-        sal_uInt16 nBeg = (*pRanges);
+        sal_uInt16 nBeg = *pRanges;
         ++pRanges;
-        sal_uInt16 nEnd = (*pRanges);
+        sal_uInt16 nEnd = *pRanges;
         ++pRanges;
 
         OSL_ASSERT( nBeg <= nEnd );

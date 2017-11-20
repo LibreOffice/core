@@ -2102,7 +2102,7 @@ void ExtensionsTabPage::CreateDialogWithHandler()
 {
     try
     {
-        bool bWithHandler = ( !m_sEventHdl.isEmpty() );
+        bool bWithHandler = !m_sEventHdl.isEmpty();
         if ( bWithHandler )
         {
             Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );

@@ -417,7 +417,7 @@ struct OStoreDirectoryDataBlock
 
     /** direct.
     */
-    static const sal_uInt16 directCount = ((sal_uInt16)(STORE_LIMIT_DATAPAGE_DIRECT));
+    static const sal_uInt16 directCount = (sal_uInt16)(STORE_LIMIT_DATAPAGE_DIRECT);
 
     sal_uInt32 directLink (sal_uInt16 nIndex) const
     {
@@ -434,7 +434,7 @@ struct OStoreDirectoryDataBlock
 
     /** single.
     */
-    static const sal_uInt16 singleCount = ((sal_uInt16)(STORE_LIMIT_DATAPAGE_SINGLE));
+    static const sal_uInt16 singleCount = (sal_uInt16)(STORE_LIMIT_DATAPAGE_SINGLE);
 
     sal_uInt32 singleLink (sal_uInt16 nIndex) const
     {
@@ -451,7 +451,7 @@ struct OStoreDirectoryDataBlock
 
     /** double.
     */
-    static const sal_uInt16 doubleCount = ((sal_uInt16)(STORE_LIMIT_DATAPAGE_DOUBLE));
+    static const sal_uInt16 doubleCount = (sal_uInt16)(STORE_LIMIT_DATAPAGE_DOUBLE);
 
     sal_uInt32 doubleLink (sal_uInt16 nIndex) const
     {
@@ -468,7 +468,7 @@ struct OStoreDirectoryDataBlock
 
     /** triple.
     */
-    static const sal_uInt16 tripleCount = ((sal_uInt16)(STORE_LIMIT_DATAPAGE_TRIPLE));
+    static const sal_uInt16 tripleCount = (sal_uInt16)(STORE_LIMIT_DATAPAGE_TRIPLE);
 
     sal_uInt32 tripleLink (sal_uInt16 nIndex) const
     {

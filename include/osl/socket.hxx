@@ -136,7 +136,7 @@ namespace osl
 
     inline SocketAddr & SAL_CALL SocketAddr::operator= (const SocketAddr& Addr)
     {
-        *this = (Addr.getHandle());
+        *this = Addr.getHandle();
         return *this;
     }
 

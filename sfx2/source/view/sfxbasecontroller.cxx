@@ -710,7 +710,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
                 SfxChildWindow* pChildWin = pFrame->GetChildWindow( SID_BROWSER );
                 Reference < frame::XFrame > xFrame;
                 if ( pChildWin )
-                    xFrame = ( pChildWin->GetFrame() );
+                    xFrame = pChildWin->GetFrame();
                 if ( xFrame.is() )
                     xFrame->setName( sTargetFrameName );
 

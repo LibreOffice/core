@@ -693,7 +693,7 @@ void ORowSet::updateValue(sal_Int32 columnIndex,const ORowSetValue& x)
     checkUpdateConditions(columnIndex);
     checkUpdateIterator();
 
-    ORowSetValueVector::Vector& rRow = ((*m_aCurrentRow)->get());
+    ORowSetValueVector::Vector& rRow = (*m_aCurrentRow)->get();
     ORowSetNotifier aNotify(this,rRow);
     m_pCache->updateValue(columnIndex,x,rRow,aNotify.getChangedColumns());
     m_bModified = m_bModified || !aNotify.getChangedColumns().empty();
@@ -709,7 +709,7 @@ void SAL_CALL ORowSet::updateNull( sal_Int32 columnIndex )
     checkUpdateConditions(columnIndex);
     checkUpdateIterator();
 
-    ORowSetValueVector::Vector& rRow = ((*m_aCurrentRow)->get());
+    ORowSetValueVector::Vector& rRow = (*m_aCurrentRow)->get();
     ORowSetNotifier aNotify(this,rRow);
     m_pCache->updateNull(columnIndex,rRow,aNotify.getChangedColumns());
     m_bModified = m_bModified || !aNotify.getChangedColumns().empty();
@@ -797,7 +797,7 @@ void SAL_CALL ORowSet::updateCharacterStream( sal_Int32 columnIndex, const Refer
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkUpdateConditions(columnIndex);
     checkUpdateIterator();
-    ORowSetValueVector::Vector& rRow = ((*m_aCurrentRow)->get());
+    ORowSetValueVector::Vector& rRow = (*m_aCurrentRow)->get();
     ORowSetNotifier aNotify(this,rRow);
     m_pCache->updateCharacterStream(columnIndex,x,length,rRow,aNotify.getChangedColumns());
     m_bModified = m_bModified || !aNotify.getChangedColumns().empty();
@@ -841,7 +841,7 @@ void SAL_CALL ORowSet::updateObject( sal_Int32 columnIndex, const Any& x )
 
     if (!::dbtools::implUpdateObject(this, columnIndex, aNewValue))
     {   // there is no other updateXXX call which can handle the value in x
-        ORowSetValueVector::Vector& rRow = ((*m_aCurrentRow)->get());
+        ORowSetValueVector::Vector& rRow = (*m_aCurrentRow)->get();
         ORowSetNotifier aNotify(this,rRow);
         m_pCache->updateObject(columnIndex,aNewValue,rRow,aNotify.getChangedColumns());
         m_bModified = m_bModified || !aNotify.getChangedColumns().empty();
@@ -855,7 +855,7 @@ void SAL_CALL ORowSet::updateNumericObject( sal_Int32 columnIndex, const Any& x,
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkUpdateConditions(columnIndex);
     checkUpdateIterator();
-    ORowSetValueVector::Vector& rRow = ((*m_aCurrentRow)->get());
+    ORowSetValueVector::Vector& rRow = (*m_aCurrentRow)->get();
     ORowSetNotifier aNotify(this,rRow);
     m_pCache->updateNumericObject(columnIndex,x,rRow,aNotify.getChangedColumns());
     m_bModified = m_bModified || !aNotify.getChangedColumns().empty();

@@ -374,8 +374,8 @@ static std::vector< OUString > lookupKeys(
     if( keySupplier.is() )
     {
         Reference< XPropertySet > set( keySupplier, UNO_QUERY );
-        set->getPropertyValue( getStatics().NAME ) >>= (*pTable);
-        set->getPropertyValue( getStatics().SCHEMA_NAME ) >>= (*pSchema );
+        set->getPropertyValue( getStatics().NAME ) >>= *pTable;
+        set->getPropertyValue( getStatics().SCHEMA_NAME ) >>= *pSchema;
         set.clear();
 
         Reference< XEnumerationAccess > keys ( keySupplier->getKeys(), UNO_QUERY );

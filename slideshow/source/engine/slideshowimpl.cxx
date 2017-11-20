@@ -2016,8 +2016,8 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
         }
         // Time held until here
 
-        const bool bActivitiesLeft = (! maActivitiesQueue.isEmpty());
-        const bool bTimerEventsLeft = (! maEventQueue.isEmpty());
+        const bool bActivitiesLeft = ! maActivitiesQueue.isEmpty();
+        const bool bTimerEventsLeft = ! maEventQueue.isEmpty();
         const bool bRet = (bActivitiesLeft || bTimerEventsLeft);
 
         if (bRet)

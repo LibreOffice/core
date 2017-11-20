@@ -789,8 +789,8 @@ DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
         tools::Rectangle aRect;
         pDevice->SetFont(aFont);
         pDevice->GetTextBoundRect(aRect, rText);
-        int screenWidth = (aRect.BottomRight().X());
-        int screenHeight = (aRect.BottomRight().Y());
+        int screenWidth = aRect.BottomRight().X();
+        int screenHeight = aRect.BottomRight().Y();
         pDevice->SetOutputSizePixel(Size(screenWidth * 3, screenHeight));
         pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
         pDevice->DrawText(Point(0, 0), rText);

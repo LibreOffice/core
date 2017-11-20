@@ -1139,7 +1139,7 @@ void XMLFilterSettingsDialog::initFilterList()
                                         {
                                             if( n > 0 )
                                                 pTempFilter->maExtension += ";";
-                                            pTempFilter->maExtension += (*pExtensions++);
+                                            pTempFilter->maExtension += *pExtensions++;
                                         }
                                     }
                                 }

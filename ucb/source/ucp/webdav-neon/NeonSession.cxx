@@ -1987,7 +1987,7 @@ void runResponseHeaderHandler( void * userdata,
             = static_cast< NeonRequestContext * >( userdata );
 
         // Note: Empty vector means that all headers are requested.
-        bool bIncludeIt = ( pCtx->pHeaderNames->empty() );
+        bool bIncludeIt = pCtx->pHeaderNames->empty();
 
         if ( !bIncludeIt )
         {

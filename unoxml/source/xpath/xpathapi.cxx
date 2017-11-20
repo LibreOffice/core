@@ -73,7 +73,7 @@ namespace XPath
         Sequence<OUString> aSequence;
         for (int i=0; aSupportedServiceNames[i]!=nullptr; i++) {
             aSequence.realloc(i+1);
-            aSequence[i]=(OUString::createFromAscii(aSupportedServiceNames[i]));
+            aSequence[i] = OUString::createFromAscii(aSupportedServiceNames[i]);
         }
         return aSequence;
     }

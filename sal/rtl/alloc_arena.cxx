@@ -1005,7 +1005,7 @@ void * SAL_CALL rtl_machdep_alloc(
 )
 {
     void *   addr;
-    sal_Size size = (*pSize);
+    sal_Size size = *pSize;
 
     assert(pArena == gp_machdep_arena);
 

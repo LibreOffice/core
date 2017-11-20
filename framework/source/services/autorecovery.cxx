@@ -2028,7 +2028,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
         {
             // new/modify
             css::uno::Reference< css::beans::XPropertySet > xSet;
-            bool                                        bNew = (!xCheck->hasByName(sID));
+            bool                                        bNew = !xCheck->hasByName(sID);
             if (bNew)
                 xSet.set(xCreate->createInstance(), css::uno::UNO_QUERY_THROW);
             else
@@ -2296,7 +2296,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired, Timer *, void)
 
         if (m_eTimerType == AutoRecovery::E_POLL_FOR_USER_IDLE)
         {
-            bool bUserIdle = (Application::GetLastInputInterval()>MIN_TIME_FOR_USER_IDLE);
+            bool bUserIdle = Application::GetLastInputInterval() > MIN_TIME_FOR_USER_IDLE;
             if (!bUserIdle)
             {
                 g.clear();

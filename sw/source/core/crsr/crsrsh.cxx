@@ -3314,7 +3314,7 @@ void SwCursorShell::ClearUpCursors()
             // If the start entry of the ring is invalid replace it with a
             // cursor pointing to the beginning of the first content node in the
             // document.
-            aIdx = (*(aNodes.GetEndOfContent().StartOfSectionNode()));
+            aIdx = *(aNodes.GetEndOfContent().StartOfSectionNode());
             pNode = aNodes.GoNext( &aIdx );
         }
         bool bFound = (pNode != nullptr);

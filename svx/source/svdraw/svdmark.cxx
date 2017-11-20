@@ -592,11 +592,11 @@ const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
 
         if(1 == nMarkPtCnt)
         {
-            aStr1 = (ImpGetResStr(bGlue ? STR_ViewMarkedGluePoint : STR_ViewMarkedPoint));
+            aStr1 = ImpGetResStr(bGlue ? STR_ViewMarkedGluePoint : STR_ViewMarkedPoint);
         }
         else
         {
-            aStr1 = (ImpGetResStr(bGlue ? STR_ViewMarkedGluePoints : STR_ViewMarkedPoints));
+            aStr1 = ImpGetResStr(bGlue ? STR_ViewMarkedGluePoints : STR_ViewMarkedPoints);
             aStr1 = aStr1.replaceFirst("%2", OUString::number( nMarkPtCnt ));
         }
 

@@ -74,7 +74,7 @@ ScVbaWorkbook::ResetColors(  )
         uno::Sequence< sal_Int32 > dDefaultColors( nLen );
         sal_Int32* pDest = dDefaultColors.getArray();
         for ( sal_Int32 index=0; index < nLen; ++pDest, ++index )
-            xIndexAccess->getByIndex( index )  >>= (*pDest);
+            xIndexAccess->getByIndex( index )  >>= *pDest;
         initColorData( dDefaultColors );
 }
 

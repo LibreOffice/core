@@ -1465,7 +1465,7 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
         if( !rIStm.GetError() && aLink.LoadNative( aGraphic ) )
         {
             // set link only, if no other link was set
-            const bool bSetLink = ( !rImpGraphic.mpGfxLink );
+            const bool bSetLink = !rImpGraphic.mpGfxLink;
 
             // assign graphic
             rImpGraphic = *aGraphic.ImplGetImpGraphic();

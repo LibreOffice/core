@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <string>
+#include <rtl/ustring.hxx>
+
 bool foo(int);
 
 enum class EFoo { Bar };
@@ -20,7 +23,7 @@ int main()
 
     foo((1)); // expected-error {{parentheses immediately inside single-arg call [loplugin:unnecessaryparen]}}
 
-    int y = (x); // expected-error {{unnecessary parentheses around identifier [loplugin:unnecessaryparen]}}
+    int y = (x); // expected-error {{unnecessary parentheses around identifier [loplugin:unnecessaryparen]}} expected-error {{parentheses immediately inside vardecl statement [loplugin:unnecessaryparen]}}
     (void)y;
 
     EFoo foo = EFoo::Bar;
@@ -40,6 +43,13 @@ int main()
         return 0;
     }
     x = (true) ? 0 : 1;
+
+    int v2 = (1); // expected-error {{parentheses immediately inside vardecl statement [loplugin:unnecessaryparen]}}
+    (void)v2;
+
+    std::string v3;
+    v3 = (std::string("xx") + "xx"); // expected-error {{parentheses immediately inside assignment [loplugin:unnecessaryparen]}}
+    (void)v3;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

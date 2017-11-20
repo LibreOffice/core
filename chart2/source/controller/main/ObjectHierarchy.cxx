@@ -432,7 +432,7 @@ void ImplObjectHierarchy::createDataSeriesTree(
                     if( DataSeriesHelper::hasDataLabelsAtSeries( xSeries ) )
                     {
                         OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) );
-                        aChildParticle+=("=");
+                        aChildParticle += "=";
                         aSeriesSubContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierForParticles( aSeriesParticle, aChildParticle ) );
                     }
 

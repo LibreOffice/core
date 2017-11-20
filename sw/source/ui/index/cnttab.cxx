@@ -3470,7 +3470,7 @@ bool SwTokenWindow::CreateQuickHelp(Control const * pCtrl,
         bool bBalloon = Help::IsBalloonHelpEnabled();
         OUString sEntry;
         if(bBalloon || rToken.eTokenType != TOKEN_AUTHORITY)
-            sEntry = (m_aButtonHelpTexts[rToken.eTokenType]);
+            sEntry = m_aButtonHelpTexts[rToken.eTokenType];
         if(rToken.eTokenType == TOKEN_AUTHORITY )
         {
              sEntry += SwAuthorityFieldType::GetAuthFieldName(
