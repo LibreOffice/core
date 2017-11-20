@@ -526,6 +526,10 @@ namespace basctl
                 Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, true ) );
                 if ( xLib.is() )
                 {
+                    Reference< XVBAModuleInfo > xVBAModuleInfo(xLib, UNO_QUERY);
+                    if(xVBAModuleInfo->hasModuleInfo(_rModuleName))
+                        xVBAModuleInfo->removeModuleInfo(_rModuleName);
+
                     xLib->removeByName( _rModuleName );
                     return true;
                 }
