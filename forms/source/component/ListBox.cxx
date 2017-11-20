@@ -1778,7 +1778,7 @@ namespace frm
     void OListBoxModel::disconnectedExternalListSource( )
     {
         // TODO: in case we're part of an already loaded form, we should probably simulate
-        // an onConnectedDbColumn, so our list get's filled with the data as indicated
+        // an onConnectedDbColumn, so our list gets filled with the data as indicated
         // by our SQL-binding related properties
     }
 
