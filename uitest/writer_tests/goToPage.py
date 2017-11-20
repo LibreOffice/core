@@ -1,0 +1,33 @@
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+from uitest.framework import UITestCase
+from libreoffice.uno.propertyvalue import mkPropertyValues
+from uitest.uihelper.common import get_state_as_dict
+import time
+from uitest.path import get_srcdir_url
+
+def get_url_for_data_file(file_name):
+    return get_srcdir_url() + "/uitest/writer_tests/data/" + file_name
+
+class documentProperties(UITestCase):
+
+   def test_go_to_page(self):
+    writer_doc = self.ui_test.load_file(get_url_for_data_file("3pages.odt"))
+    self.ui_test.execute_dialog_through_command(".uno:GotoPage")
+    xDialog = self.xUITest.getTopFocusWindow()
+    xPageText = xDialog.getChild("page")
+    xPageText.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
+    xOkBtn = xDialog.getChild("ok")
+    xOkBtn.executeAction("CLICK", tuple())
+    self.ui_test.execute_dialog_through_command(".uno:GotoPage")
+    xDialog = self.xUITest.getTopFocusWindow()
+    xPageText = xDialog.getChild("page")
+    xPageText.executeAction("TYPE", mkPropertyValues({"TEXT":"3a"}))
+    xOkBtn = xDialog.getChild("ok")
+    xOkBtn.executeAction("CLICK", tuple())
+
+
+    self.ui_test.close_doc()
