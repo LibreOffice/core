@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_247bc8f6",
+        "filename": "sw/source/uibase/dialog/regionsw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2017-11-20T07:46:23Z",
+      "side": 1,
+      "message": "this include isn\u0027t needed",
+      "revId": "072899cfec8d747947e3055fc9da48b9cee82e80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_041c0cc0",
+        "filename": "sw/source/uibase/shells/tabsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2017-11-20T07:46:23Z",
+      "side": 1,
+      "message": "this line isn\u0027t needed",
+      "range": {
+        "startLine": 613,
+        "startChar": 0,
+        "endLine": 613,
+        "endChar": 127
+      },
+      "revId": "072899cfec8d747947e3055fc9da48b9cee82e80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
