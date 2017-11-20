@@ -1031,7 +1031,7 @@ struct WW8TabBandDesc
     WW8TabBandDesc(WW8TabBandDesc const & rBand);    // deep copy
     ~WW8TabBandDesc();
     static void setcelldefaults(WW8_TCell *pCells, short nCells);
-    void ReadDef(bool bVer67, const sal_uInt8* pS);
+    void ReadDef(bool bVer67, const sal_uInt8* pS, short nLen);
     void ProcessDirection(const sal_uInt8* pParams);
     void ProcessSprmTSetBRC(int nBrcVer, const sal_uInt8* pParamsTSetBRC);
     void ProcessSprmTTableBorders(int nBrcVer, const sal_uInt8* pParams);

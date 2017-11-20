@@ -2522,7 +2522,7 @@ bool SwWW8ImplReader::FloatingTableConversion(WW8PLCFx_Cp_FKP* pPap)
     {
         bResult = false;
         WW8TabBandDesc aDesc;
-        aDesc.ReadDef(false, aRes.pSprm);
+        aDesc.ReadDef(false, aRes.pSprm, aRes.nRemainingData);
         int nTextAreaWidth = m_aSectionManager.GetTextAreaWidth();
         int nTableWidth = aDesc.nCenter[aDesc.nWwCols] - aDesc.nCenter[0];
 

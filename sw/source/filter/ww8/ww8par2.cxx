@@ -1223,27 +1223,35 @@ WW8TabBandDesc::WW8TabBandDesc( WW8TabBandDesc const & rBand )
 }
 
 // ReadDef reads the cell position and the borders of a band
-void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
+void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS, short nLen)
 {
     if (!bVer67)
+    {
+        //the ww8 version of this is unusual in masquerading as a a srpm with a
+        //single byte len arg while it really has a word len arg, after this
+        //increment nLen is correct to describe the remaining amount of data
         pS++;
+    }
 
-    short nLen = (sal_Int16)SVBT16ToShort( pS - 2 ); // not beautiful
-
+    --nLen; //reduce len by expected nCols arg
+    if (nLen < 0)
+        return;
     sal_uInt8 nCols = *pS;                       // number of cells
-    short nOldCols = nWwCols;
 
-    if( nCols > MAX_COL )
+    if (nCols > MAX_COL)
         return;
 
+    short nOldCols = nWwCols;
     nWwCols = nCols;
 
+    nLen -= 2 * (nCols + 1); //reduce len by claimed amount of next x-borders arguments
+    if (nLen < 0)
+        return;
+
     const sal_uInt8* pT = &pS[1];
-    nLen --;
-    int i;
-    for(i=0; i<=nCols; i++, pT+=2 )
+    for (int i = 0; i <= nCols; i++, pT+=2)
         nCenter[i] = (sal_Int16)SVBT16ToShort( pT );    // X-borders
-    nLen -= 2 * ( nCols + 1 );
+
     if( nCols != nOldCols ) // different column count
     {
         delete[] pTCs;
@@ -1263,11 +1271,9 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
         setcelldefaults(pTCs,nCols);
     }
 
-    short nColsToRead = nFileCols;
-    if (nColsToRead > nCols)
-        nColsToRead = nCols;
+    short nColsToRead = std::min<short>(nFileCols, nCols);
 
-    if( nColsToRead )
+    if (nColsToRead > 0)
     {
         // read TCs
 
@@ -1283,7 +1289,7 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
         if( bVer67 )
         {
             WW8_TCellVer6 const * pTc = reinterpret_cast<WW8_TCellVer6 const *>(pT);
-            for(i=0; i<nColsToRead; i++, ++pAktTC,++pTc)
+            for (int i = 0; i < nColsToRead; i++, ++pAktTC,++pTc)
             {
                 if( i < nColsToRead )
                 {               // TC from file ?
@@ -1918,6 +1924,9 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
             while (aSprmIter.GetSprms() && nullptr != (pParams = aSprmIter.GetAktParams()))
             {
                 sal_uInt16 nId = aSprmIter.GetAktId();
+                sal_uInt16 nFixedLen = aSprmParser.DistanceToData(nId);
+                sal_uInt16 nL = aSprmParser.GetSprmSize(nId, aSprmIter.GetSprms(), aSprmIter.GetRemLen());
+                sal_uInt16 nLen = nL - nFixedLen;
                 wwTableSprm eSprm = GetTableSprm(nId, m_pIo->GetFib().GetFIBVersion());
                 switch (eSprm)
                 {
@@ -1973,7 +1982,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         m_bClaimLineFormat = true;
                         break;
                     case sprmTDefTable:
-                        pNewBand->ReadDef(bOldVer, pParams);
+                        pNewBand->ReadDef(bOldVer, pParams, nLen);
                         bTabRowJustRead = true;
                         break;
                     case sprmTDefTableShd:
