@@ -807,7 +807,7 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
                     if ( pItem && !pItem->GetValue() )
                         rSet.DisableItem( SID_EDITDOC );
                     else
-                        rSet.Put( SfxBoolItem( nWhich, !pSh->IsReadOnly() ) );
+                        rSet.Put( SfxBoolItem( nWhich, pSh->IsReadOnly() ) );
                 }
                 break;
             }
