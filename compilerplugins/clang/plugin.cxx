@@ -292,6 +292,11 @@ Plugin::IdenticalDefaultArgumentsResult Plugin::checkIdenticalDefaultArguments(
         if (ce1->getNumArgs() == 0 && ce2->getNumArgs() == 0) {
             return IdenticalDefaultArgumentsResult::Yes;
         }
+report(DiagnosticsEngine::Fatal,"TODO",argument1->getExprLoc())<<argument1->getSourceRange();
+report(DiagnosticsEngine::Note,"TODO",argument2->getExprLoc())<<argument2->getSourceRange();
+argument1->dump();argument2->dump();
+e1->dump();e2->dump();
+        break;
     }
     return IdenticalDefaultArgumentsResult::Maybe;
 }
