@@ -14,6 +14,7 @@
 #include <vector>
 #include <osl/time.h>
 
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
 
@@ -21,7 +22,7 @@ using namespace lok;
 
 static int help()
 {
-    fprintf( stderr, "Usage: tilebench <absolute-path-to-libreoffice-install> [path to document]\n" );
+    fprintf( stderr, "Usage: tilebench <absolute-path-to-libreoffice-install> [path to document] [max parts|-1] [max tiles|-1]\n" );
     fprintf( stderr, "renders a selection of small tiles from the document, checksums them and times the process\n" );
     return 1;
 }
@@ -42,7 +43,11 @@ int main( int argc, char* argv[] )
 
         TimeRecord() : mpName(nullptr), mfTime(getTimeNow()) { }
         explicit TimeRecord(const char *pName) :
-                       mpName(pName ), mfTime(getTimeNow()) { }
+                       mpName(pName), mfTime(getTimeNow())
+        {
+            static const double origin = getTimeNow();
+            fprintf(stderr, "%2.4f - %s\n", (mfTime - origin) * 1000.0, mpName);
+        }
     };
     std::vector< TimeRecord > aTimes;
     if( argc < 2 ||
@@ -55,10 +60,19 @@ int main( int argc, char* argv[] )
         return 1;
     }
 
+    // Use realistic dimensions, similar to the Online client.
+    long nTilePixelWidth = 512;
+    long nTilePixelHeight = 512;
+    long nTileTwipWidth = 3840;
+    long nTileTwipHeight = 3840;
+
     aTimes.push_back(TimeRecord("initialization"));
     // coverity[tainted_string] - build time test tool
     Office *pOffice = lok_cpp_init(argv[1]);
     aTimes.push_back(TimeRecord());
+
+    const int max_parts = (argc > 3 ? atoi(argv[3]) : -1);
+    const int max_tiles = (argc > 4 ? atoi(argv[4]) : -1);
 
     if (argv[2] != nullptr)
     {
@@ -67,12 +81,17 @@ int main( int argc, char* argv[] )
         aTimes.push_back(TimeRecord());
 
         aTimes.push_back(TimeRecord("getparts"));
-        int nParts = pDocument->getParts();
+        const int nOriginalPart = pDocument->getPart();
+        // Writer really has 1 part (the full doc).
+        const int nTotalParts = (pDocument->getDocumentType() == LOK_DOCTYPE_TEXT ? 1 : pDocument->getParts());
+        const int nParts = (max_parts < 0 ? nTotalParts : std::min(max_parts, nTotalParts));
+        fprintf(stderr, "Parts to render: %d, Total Parts: %d, Max parts: %d, Max tiles: %d\n", nParts, nTotalParts, max_parts, max_tiles);
         aTimes.push_back(TimeRecord());
 
         aTimes.push_back(TimeRecord("get size of parts"));
-        for (int nPart = 0; nPart < nParts; nPart++)
+        for (int n = 0; n < nParts; ++n)
         {
+            const int nPart = (nOriginalPart + n) % nTotalParts;
             char* pName = pDocument->getPartName(nPart);
             pDocument->setPart(nPart);
             long nWidth = 0, nHeight = 0;
@@ -82,9 +101,12 @@ int main( int argc, char* argv[] )
         }
         aTimes.push_back(TimeRecord());
 
-        unsigned char pPixels[256*256*4];
-        for (int nPart = 0; nPart < nParts; nPart++)
+        std::vector<unsigned char> vBuffer(nTilePixelWidth * nTilePixelHeight * 4);
+        unsigned char* pPixels = &vBuffer[0];
+
+        for (int n = 0; n < nParts; ++n)
         {
+            const int nPart = (nOriginalPart + n) % nTotalParts;
             {
                 char* pName = pDocument->getPartName(nPart);
                 fprintf (stderr, "render '%s'\n", pName);
@@ -94,9 +116,10 @@ int main( int argc, char* argv[] )
             long nWidth = 0, nHeight = 0;
             pDocument->getDocumentSize(&nWidth, &nHeight);
 
-            { // whole document
-                aTimes.push_back(TimeRecord("render whole document"));
-                pDocument->paintTile(pPixels, 256, 256,
+            if (pDocument->getDocumentType() != LOK_DOCTYPE_TEXT)
+            { // whole part; meaningful only for non-writer documents.
+                aTimes.push_back(TimeRecord("render whole part"));
+                pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
                                      0, 0, nWidth, nHeight); // not square
                 aTimes.push_back(TimeRecord());
             }
@@ -104,15 +127,20 @@ int main( int argc, char* argv[] )
             { // 1:1
                 aTimes.push_back(TimeRecord("render sub-region at 1:1"));
                 int nTiles = 0;
-                int nSplit = nWidth / 4;
-                for (int nX = 0; nX < 4; nX++)
+                for (int nY = 0; nY < (nHeight + nTilePixelHeight - 1) / nTilePixelHeight; nY++)
                 {
-                    for (int nY = 0; nY < nHeight / nSplit; nY++)
+                    for (int nX = 0; nX < (nWidth + nTilePixelWidth - 1) / nTilePixelWidth; nX++)
                     {
-                        int nTilePosX = nX * nSplit;
-                        int nTilePosY = nY * nSplit;
-                        pDocument->paintTile(pPixels, 256, 256,
-                                             nTilePosX, nTilePosY, 256, 256);
+                        if (max_tiles >= 0 && nTiles >= max_tiles)
+                        {
+                            nY = nHeight;
+                            break;
+                        }
+
+                        const int nTilePosX = nX * nTileTwipWidth;
+                        const int nTilePosY = nY * nTileTwipHeight;
+                        pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
+                                             nTilePosX, nTilePosY, nTilePixelWidth, nTilePixelHeight);
                         nTiles++;
                         fprintf (stderr, "   rendered tile %d at %d, %d\n",
                                  nTiles, nTilePosX, nTilePosY);
@@ -124,15 +152,20 @@ int main( int argc, char* argv[] )
             { // scaled
                 aTimes.push_back(TimeRecord("render sub-regions at scale"));
                 int nTiles = 0;
-                int nSplit = nWidth / 4;
-                for (int nX = 0; nX < 4; nX++)
+                for (int nY = 0; nY < (nHeight + nTileTwipHeight - 1) / nTileTwipHeight; nY++)
                 {
-                    for (int nY = 0; nY < nHeight / nSplit; nY++)
+                    for (int nX = 0; nX < (nWidth + nTileTwipWidth -1 ) / nTileTwipWidth; nX++)
                     {
-                        int nTilePosX = nX * nSplit;
-                        int nTilePosY = nY * nSplit;
-                        pDocument->paintTile(pPixels, 256, 256,
-                                             nTilePosX, nTilePosY, nSplit, nSplit);
+                        if (max_tiles >= 0 && nTiles >= max_tiles)
+                        {
+                            nY = nHeight;
+                            break;
+                        }
+
+                        const int nTilePosX = nX * nTileTwipWidth;
+                        const int nTilePosY = nY * nTileTwipHeight;
+                        pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
+                                             nTilePosX, nTilePosY, nTileTwipWidth, nTileTwipHeight);
                         nTiles++;
                         fprintf (stderr, "   rendered tile %d at %d, %d\n",
                                  nTiles, nTilePosX, nTilePosY);
@@ -153,7 +186,7 @@ int main( int argc, char* argv[] )
     fprintf (stderr, "profile run:\n");
     for (size_t i = 0; i < aTimes.size() - 1; i++)
     {
-        double nDelta = aTimes[i+1].mfTime - aTimes[i].mfTime;
+        const double nDelta = aTimes[i+1].mfTime - aTimes[i].mfTime;
         fprintf (stderr, "  %s - %2.4f(ms)\n", aTimes[i].mpName, nDelta * 1000.0);
         if (aTimes[i+1].mpName == nullptr)
             i++; // skip it.
