@@ -155,7 +155,18 @@
           <value>_default</value>
         </prop>
       </node>
-      <node oor:name="m4" oor:op="replace" install:module="base">
+      <node oor:name="m4" oor:op="replace" install:module="math">
+        <prop oor:name="URL" oor:type="xs:string">
+          <value>private:factory/smath</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="en-US">F~ormula</value>
+        </prop>
+        <prop oor:name="TargetName" oor:type="xs:string">
+          <value>_default</value>
+        </prop>
+      </node>
+      <node oor:name="m5" oor:op="replace" install:module="base">
         <prop oor:name="URL" oor:type="xs:string">
           <value>private:factory/sdatabase?Interactive</value>
         </prop>
@@ -169,7 +180,7 @@
           <value>private:image/3245</value>
         </prop>
       </node>
-      <node oor:name="m5" oor:op="replace">
+      <node oor:name="m6" oor:op="replace">
         <prop oor:name="URL" oor:type="xs:string">
           <value>private:separator</value>
         </prop>
@@ -177,7 +188,7 @@
           <value>_default</value>
         </prop>
       </node>
-      <node oor:name="m6" oor:op="replace" install:module="writer">
+      <node oor:name="m7" oor:op="replace" install:module="writer">
         <prop oor:name="URL" oor:type="xs:string">
           <value>private:factory/swriter/web</value>
         </prop>
@@ -188,7 +199,7 @@
           <value>_default</value>
         </prop>
       </node>
-      <node oor:name="m7" oor:op="replace" install:module="writer">
+      <node oor:name="m8" oor:op="replace" install:module="writer">
         <prop oor:name="URL" oor:type="xs:string">
           <value>private:factory/swriter?slot=21053</value>
         </prop>
@@ -199,7 +210,7 @@
           <value>_default</value>
         </prop>
       </node>
-      <node oor:name="m8" oor:op="replace" install:module="writer">
+      <node oor:name="m9" oor:op="replace" install:module="writer">
         <prop oor:name="URL" oor:type="xs:string">
           <value>private:factory/swriter/GlobalDocument</value>
         </prop>
@@ -210,20 +221,9 @@
           <value>_default</value>
         </prop>
       </node>
-      <node oor:name="m9" oor:op="replace">
+      <node oor:name="m10" oor:op="replace">
         <prop oor:name="URL" oor:type="xs:string">
           <value>private:separator</value>
-        </prop>
-        <prop oor:name="TargetName" oor:type="xs:string">
-          <value>_default</value>
-        </prop>
-      </node>
-      <node oor:name="m10" oor:op="replace" install:module="math">
-        <prop oor:name="URL" oor:type="xs:string">
-          <value>private:factory/smath</value>
-        </prop>
-        <prop oor:name="Title">
-          <value xml:lang="en-US">F~ormula</value>
         </prop>
         <prop oor:name="TargetName" oor:type="xs:string">
           <value>_default</value>
