@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_cf885dc8",
+        "filename": "cui/uiconfig/ui/gradientpage.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2017-11-20T17:36:40Z",
+      "side": 1,
+      "message": "These are hidden labels, so use_underline isnt needed, but without it enabled glade wont let you set mnemonic_widget in the gui.",
+      "parentUuid": "1a430d35_6fe689b1",
+      "revId": "c32fd5db48bcb6ed7a2db733e3ed44f70ed58869",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_8febb577",
         "filename": "cui/uiconfig/ui/gradientpage.ui",
         "patchSetId": 3
@@ -47,6 +65,24 @@
       "writtenOn": "2017-11-20T16:49:03Z",
       "side": 1,
       "message": "Glade has eaten context tag :)",
+      "revId": "c32fd5db48bcb6ed7a2db733e3ed44f70ed58869",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_af8b11c2",
+        "filename": "cui/uiconfig/ui/gradientpage.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2017-11-20T17:36:40Z",
+      "side": 1,
+      "message": "if glad is eating this, then its likely not a correct tag attribute.",
+      "parentUuid": "1a430d35_4ff54d55",
       "revId": "c32fd5db48bcb6ed7a2db733e3ed44f70ed58869",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
