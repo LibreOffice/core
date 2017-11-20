@@ -293,17 +293,6 @@ public:
     SwDBManager(SwDoc* pDoc);
     ~SwDBManager() COVERITY_NOEXCEPT_FALSE;
 
-    enum DBConnURITypes {
-        DBCONN_UNKNOWN = 0,
-        DBCONN_ODB,
-        DBCONN_CALC,
-        DBCONN_DBASE,
-        DBCONN_FLAT,
-        DBCONN_MSJET,
-        DBCONN_MSACE,
-        DBCONN_WRITER
-    };
-
     /// MailMergeEvent source
     const SwXMailMerge *    GetMailMergeEvtSrc() const  { return pMergeEvtSrc; }
     void SetMailMergeEvtSrc( const SwXMailMerge *pSrc ) { pMergeEvtSrc = pSrc; }
@@ -406,8 +395,6 @@ public:
 
     static css::uno::Sequence<OUString> GetExistingDatabaseNames();
 
-    static DBConnURITypes GetDBunoURI(const OUString &rURI, css::uno::Any &aURLAny);
-
     /**
      Loads a data source from file and registers it.
 
@@ -417,16 +404,6 @@ public:
      */
     static OUString            LoadAndRegisterDataSource(const vcl::Window* pParent, SwDocShell* pDocShell = nullptr);
 
-    /**
-     Loads a data source from file and registers it.
-
-     In case of success it returns the registered name, otherwise an empty string.
-     Optionally add a prefix to the registered DB name.
-     */
-    static OUString            LoadAndRegisterDataSource(const DBConnURITypes type, const css::uno::Any &rUnoURI,
-                                                         const css::uno::Reference < css::beans::XPropertySet > *pSettings,
-                                                         const OUString &rURI, const OUString *pPrefix, const OUString *pDestDir,
-                                                         SwDocShell* pDocShell = nullptr);
     /**
      Loads a data source from file and registers it.
 

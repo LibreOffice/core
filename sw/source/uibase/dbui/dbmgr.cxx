@@ -2555,6 +2555,282 @@ uno::Sequence<OUString> SwDBManager::GetExistingDatabaseNames()
     return xDBContext->getElementNames();
 }
 
+namespace {
+enum class DBConnURIType {
+    UNKNOWN = 0,
+    ODB,
+    CALC,
+    DBASE,
+    FLAT,
+    MSJET,
+    MSACE,
+    WRITER
+};
+
+DBConnURIType GetDBunoType(const INetURLObject &rURL)
+{
+    OUString sExt(rURL.GetExtension());
+    DBConnURIType type = DBConnURIType::UNKNOWN;
+
+    if (sExt == "odb")
+    {
+        type = DBConnURIType::ODB;
+    }
+    else if (sExt.equalsIgnoreAsciiCase("sxc")
+        || sExt.equalsIgnoreAsciiCase("ods")
+        || sExt.equalsIgnoreAsciiCase("xls")
+        || sExt.equalsIgnoreAsciiCase("xlsx"))
+    {
+        type = DBConnURIType::CALC;
+    }
+    else if (sExt.equalsIgnoreAsciiCase("sxw") || sExt.equalsIgnoreAsciiCase("odt") || sExt.equalsIgnoreAsciiCase("doc") || sExt.equalsIgnoreAsciiCase("docx"))
+    {
+        type = DBConnURIType::WRITER;
+    }
+    else if (sExt.equalsIgnoreAsciiCase("dbf"))
+    {
+        type = DBConnURIType::DBASE;
+    }
+    else if (sExt.equalsIgnoreAsciiCase("csv") || sExt.equalsIgnoreAsciiCase("txt"))
+    {
+        type = DBConnURIType::FLAT;
+    }
+#ifdef _WIN32
+    else if (sExt.equalsIgnoreAsciiCase("mdb") || sExt.equalsIgnoreAsciiCase("mde"))
+    {
+        type = DBConnURIType::MSJET;
+    }
+    else if (sExt.equalsIgnoreAsciiCase("accdb") || sExt.equalsIgnoreAsciiCase("accde"))
+    {
+        type = DBConnURIType::MSACE;
+    }
+#endif
+    return type;
+}
+
+uno::Any GetDBunoURI(const INetURLObject &rURL, DBConnURIType& rType)
+{
+    uno::Any aURLAny;
+
+    if (rType == DBConnURIType::UNKNOWN)
+        rType = GetDBunoType(rURL);
+
+    switch (rType) {
+    case DBConnURIType::UNKNOWN:
+    case DBConnURIType::ODB:
+        break;
+    case DBConnURIType::CALC:
+    {
+        OUString sDBURL("sdbc:calc:");
+        sDBURL += rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        aURLAny <<= sDBURL;
+    }
+    break;
+    case DBConnURIType::WRITER:
+    {
+        OUString sDBURL("sdbc:writer:");
+        sDBURL += rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        aURLAny <<= sDBURL;
+    }
+    break;
+    case DBConnURIType::DBASE:
+    {
+        INetURLObject aUrlTmp(rURL);
+        aUrlTmp.removeSegment();
+        aUrlTmp.removeFinalSlash();
+        OUString sDBURL("sdbc:dbase:");
+        sDBURL += aUrlTmp.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        aURLAny <<= sDBURL;
+    }
+    break;
+    case DBConnURIType::FLAT:
+    {
+        INetURLObject aUrlTmp(rURL);
+        aUrlTmp.removeSegment();
+        aUrlTmp.removeFinalSlash();
+        OUString sDBURL("sdbc:flat:");
+        //only the 'path' has to be added
+        sDBURL += aUrlTmp.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        aURLAny <<= sDBURL;
+    }
+    break;
+    case DBConnURIType::MSJET:
+#ifdef _WIN32
+    {
+        OUString sDBURL("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=");
+        sDBURL += rURL.PathToFileName();
+        aURLAny <<= sDBURL;
+    }
+#endif
+    break;
+    case DBConnURIType::MSACE:
+#ifdef _WIN32
+    {
+        OUString sDBURL("sdbc:ado:PROVIDER=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=");
+        sDBURL += rURL.PathToFileName();
+        aURLAny <<= sDBURL;
+    }
+#endif
+    break;
+    }
+    return aURLAny;
+}
+
+/// Returns the URL of this SwDoc.
+OUString getOwnURL(SfxObjectShell const * pDocShell)
+{
+    OUString aRet;
+
+    if (!pDocShell)
+        return aRet;
+
+    const INetURLObject& rURLObject = pDocShell->GetMedium()->GetURLObject();
+    aRet = rURLObject.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+    return aRet;
+}
+
+/**
+Loads a data source from file and registers it.
+
+In case of success it returns the registered name, otherwise an empty string.
+Optionally add a prefix to the registered DB name.
+*/
+OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference< beans::XPropertySet > *pSettings,
+    const INetURLObject &rURL, const OUString *pPrefix, const OUString *pDestDir, SfxObjectShell* pDocShell)
+{
+    OUString sExt(rURL.GetExtension());
+    uno::Any aTableFilterAny;
+    uno::Any aSuppressVersionsAny;
+    uno::Any aInfoAny;
+    bool bStore = true;
+    OUString sFind;
+    uno::Sequence<OUString> aFilters(1);
+
+    uno::Any aURLAny = GetDBunoURI(rURL, type);
+    switch (type) {
+    case DBConnURIType::UNKNOWN:
+    case DBConnURIType::CALC:
+    case DBConnURIType::WRITER:
+        break;
+    case DBConnURIType::ODB:
+        bStore = false;
+        break;
+    case DBConnURIType::FLAT:
+    case DBConnURIType::DBASE:
+        //set the filter to the file name without extension
+        aFilters[0] = rURL.getBase();
+        aTableFilterAny <<= aFilters;
+        break;
+    case DBConnURIType::MSJET:
+    case DBConnURIType::MSACE:
+        aSuppressVersionsAny <<= true;
+        break;
+    }
+
+    try
+    {
+        uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+        uno::Reference<sdb::XDatabaseContext> xDBContext = sdb::DatabaseContext::create(xContext);
+
+        OUString sNewName = INetURLObject::decode(rURL.getName(),
+            INetURLObject::DecodeMechanism::Unambiguous);
+        sal_Int32 nExtLen = sExt.getLength();
+        sNewName = sNewName.replaceAt(sNewName.getLength() - nExtLen - 1, nExtLen + 1, "");
+        if (pPrefix)
+            sNewName = *pPrefix + sNewName;
+
+        //find a unique name if sNewName already exists
+        sFind = sNewName;
+        sal_Int32 nIndex = 0;
+        while (xDBContext->hasByName(sFind))
+        {
+            sFind = sNewName;
+            sFind += OUString::number(++nIndex);
+        }
+
+        uno::Reference<uno::XInterface> xNewInstance;
+        if (!bStore)
+        {
+            //odb-file
+            uno::Any aDataSource = xDBContext->getByName(rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            aDataSource >>= xNewInstance;
+        }
+        else
+        {
+            xNewInstance = xDBContext->createInstance();
+            uno::Reference<beans::XPropertySet> xDataProperties(xNewInstance, uno::UNO_QUERY);
+
+            if (aURLAny.hasValue())
+                xDataProperties->setPropertyValue("URL", aURLAny);
+            if (aTableFilterAny.hasValue())
+                xDataProperties->setPropertyValue("TableFilter", aTableFilterAny);
+            if (aSuppressVersionsAny.hasValue())
+                xDataProperties->setPropertyValue("SuppressVersionColumns", aSuppressVersionsAny);
+            if (aInfoAny.hasValue())
+                xDataProperties->setPropertyValue("Info", aInfoAny);
+
+            if (DBConnURIType::FLAT == type && pSettings)
+            {
+                uno::Any aSettings = xDataProperties->getPropertyValue("Settings");
+                uno::Reference < beans::XPropertySet > xDSSettings;
+                aSettings >>= xDSSettings;
+                ::comphelper::copyProperties(*pSettings, xDSSettings);
+                xDSSettings->setPropertyValue("Extension", uno::makeAny(sExt));
+            }
+
+            uno::Reference<sdb::XDocumentDataSource> xDS(xNewInstance, uno::UNO_QUERY_THROW);
+            uno::Reference<frame::XStorable> xStore(xDS->getDatabaseDocument(), uno::UNO_QUERY_THROW);
+            OUString aOwnURL = getOwnURL(pDocShell);
+            if (aOwnURL.isEmpty())
+            {
+                // Cannot embed, as embedded data source would need the URL of the parent document.
+                OUString const sOutputExt = ".odb";
+                OUString sHomePath(SvtPathOptions().GetWorkPath());
+                utl::TempFile aTempFile(sNewName, true, &sOutputExt, pDestDir ? pDestDir : &sHomePath);
+                OUString sTmpName = aTempFile.GetURL();
+                xStore->storeAsURL(sTmpName, uno::Sequence<beans::PropertyValue>());
+            }
+            else
+            {
+                // Embed.
+                OUString aStreamRelPath = "EmbeddedDatabase";
+                uno::Reference<embed::XStorage> xStorage = pDocShell->GetStorage();
+
+                // Refer to the sub-storage name in the document settings, so
+                // we can load it again next time the file is imported.
+                uno::Reference<lang::XMultiServiceFactory> xFactory(pDocShell->GetModel(), uno::UNO_QUERY);
+                uno::Reference<beans::XPropertySet> xPropertySet(xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+                xPropertySet->setPropertyValue("EmbeddedDatabaseName", uno::makeAny(aStreamRelPath));
+
+                // Store it only after setting the above property, so that only one data source gets registered.
+                SwDBManager::StoreEmbeddedDataSource(xStore, xStorage, aStreamRelPath, aOwnURL);
+            }
+        }
+        xDBContext->registerObject(sFind, xNewInstance);
+    }
+    catch (const uno::Exception&)
+    {
+        sFind.clear();
+    }
+    return sFind;
+}
+
+// Construct vnd.sun.star.pkg:// URL
+OUString ConstructVndSunStarPkgUrl(const OUString& rMainURL, const OUString& rStreamRelPath)
+{
+    auto xContext(comphelper::getProcessComponentContext());
+    auto xUri = css::uri::UriReferenceFactory::create(xContext)->parse(rMainURL);
+    assert(xUri.is());
+    xUri = css::uri::VndSunStarPkgUrlReferenceFactory::create(xContext)
+        ->createVndSunStarPkgUrlReference(xUri);
+    assert(xUri.is());
+    return xUri->getUriReference() + "/"
+        + INetURLObject::encode(
+            rStreamRelPath, INetURLObject::PART_FPATH,
+            INetURLObject::EncodeMechanism::All);
+}
+}
+
 OUString SwDBManager::LoadAndRegisterDataSource(const vcl::Window* pParent, SwDocShell* pDocShell)
 {
     sfx2::FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, pParent);
@@ -2599,238 +2875,22 @@ OUString SwDBManager::LoadAndRegisterDataSource(const vcl::Window* pParent, SwDo
     OUString sFind;
     if( ERRCODE_NONE == aDlgHelper.Execute() )
     {
-        uno::Any aURLAny;
         uno::Reference< beans::XPropertySet > aSettings;
-        const OUString aURI( xFP->getSelectedFiles().getConstArray()[0] );
-        const DBConnURITypes type = GetDBunoURI( aURI, aURLAny );
+        const INetURLObject aURL( xFP->getSelectedFiles().getConstArray()[0] );
+        const DBConnURIType type = GetDBunoType( aURL );
 
-        if( DBCONN_FLAT == type )
+        if( DBConnURIType::FLAT == type )
         {
             uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
             uno::Reference < sdb::XTextConnectionSettings > xSettingsDlg = sdb::TextConnectionSettings::create(xContext);
             if( xSettingsDlg->execute() )
                 aSettings.set( uno::Reference < beans::XPropertySet >( xSettingsDlg, uno::UNO_QUERY_THROW ) );
         }
-        sFind = LoadAndRegisterDataSource( type, aURLAny, DBCONN_FLAT == type ? &aSettings : nullptr, aURI, nullptr, nullptr, pDocShell );
+        sFind = LoadAndRegisterDataSource_Impl( type, DBConnURIType::FLAT == type ? &aSettings : nullptr, aURL, nullptr, nullptr, pDocShell );
 
         m_aUncommitedRegistrations.push_back(std::pair<SwDocShell*, OUString>(pDocShell, sFind));
     }
     return sFind;
-}
-
-SwDBManager::DBConnURITypes SwDBManager::GetDBunoURI(const OUString &rURI, uno::Any &aURLAny)
-{
-    INetURLObject aURL( rURI );
-    OUString sExt( aURL.GetExtension() );
-    DBConnURITypes type = DBCONN_UNKNOWN;
-
-    if(sExt == "odb")
-    {
-        type = DBCONN_ODB;
-    }
-    else if(sExt.equalsIgnoreAsciiCase("sxc")
-        || sExt.equalsIgnoreAsciiCase("ods")
-            || sExt.equalsIgnoreAsciiCase("xls")
-            || sExt.equalsIgnoreAsciiCase("xlsx"))
-    {
-        OUString sDBURL("sdbc:calc:");
-        sDBURL += aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-        aURLAny <<= sDBURL;
-        type = DBCONN_CALC;
-    }
-    else if (sExt.equalsIgnoreAsciiCase("sxw") || sExt.equalsIgnoreAsciiCase("odt") || sExt.equalsIgnoreAsciiCase("doc") || sExt.equalsIgnoreAsciiCase("docx"))
-    {
-        OUString sDBURL("sdbc:writer:");
-        sDBURL += aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-        aURLAny <<= sDBURL;
-        type = DBCONN_WRITER;
-    }
-    else if(sExt.equalsIgnoreAsciiCase("dbf"))
-    {
-        aURL.removeSegment();
-        aURL.removeFinalSlash();
-        OUString sDBURL("sdbc:dbase:");
-        sDBURL += aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-        aURLAny <<= sDBURL;
-        type = DBCONN_DBASE;
-    }
-    else if(sExt.equalsIgnoreAsciiCase("csv") || sExt.equalsIgnoreAsciiCase("txt"))
-    {
-        aURL.removeSegment();
-        aURL.removeFinalSlash();
-        OUString sDBURL("sdbc:flat:");
-        //only the 'path' has to be added
-        sDBURL += aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-        aURLAny <<= sDBURL;
-        type = DBCONN_FLAT;
-    }
-#ifdef _WIN32
-    else if (sExt.equalsIgnoreAsciiCase("mdb") || sExt.equalsIgnoreAsciiCase("mde"))
-    {
-        OUString sDBURL("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=");
-        sDBURL += aURL.PathToFileName();
-        aURLAny <<= sDBURL;
-        type = DBCONN_MSJET;
-    }
-    else if (sExt.equalsIgnoreAsciiCase("accdb") || sExt.equalsIgnoreAsciiCase("accde"))
-    {
-        OUString sDBURL("sdbc:ado:PROVIDER=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=");
-        sDBURL += aURL.PathToFileName();
-        aURLAny <<= sDBURL;
-        type = DBCONN_MSACE;
-    }
-#endif
-    return type;
-}
-
-/// Returns the URL of this SwDoc.
-OUString lcl_getOwnURL(SwDocShell const * pDocShell)
-{
-    OUString aRet;
-
-    if (!pDocShell)
-        return aRet;
-
-    const INetURLObject& rURLObject = pDocShell->GetMedium()->GetURLObject();
-    aRet = rURLObject.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-    return aRet;
-}
-
-OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const uno::Any &aURLAny, const uno::Reference< beans::XPropertySet > *pSettings,
-                                                const OUString &rURI, const OUString *pPrefix, const OUString *pDestDir, SwDocShell* pDocShell)
-{
-    INetURLObject aURL( rURI );
-    OUString sExt( aURL.GetExtension() );
-    uno::Any aTableFilterAny;
-    uno::Any aSuppressVersionsAny;
-    uno::Any aInfoAny;
-    bool bStore = true;
-    OUString sFind;
-    uno::Sequence<OUString> aFilters(1);
-
-    switch (type) {
-    case DBCONN_UNKNOWN:
-    case DBCONN_CALC:
-    case DBCONN_WRITER:
-        break;
-    case DBCONN_ODB:
-        bStore = false;
-        break;
-    case DBCONN_FLAT:
-    case DBCONN_DBASE:
-        //set the filter to the file name without extension
-        aFilters[0] = aURL.getBase();
-        aTableFilterAny <<= aFilters;
-        break;
-    case DBCONN_MSJET:
-    case DBCONN_MSACE:
-        aSuppressVersionsAny <<= true;
-        break;
-    }
-
-    try
-    {
-        uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-        uno::Reference<sdb::XDatabaseContext> xDBContext = sdb::DatabaseContext::create(xContext);
-
-        OUString sNewName = INetURLObject::decode( aURL.getName(),
-                                                 INetURLObject::DecodeMechanism::Unambiguous );
-        sal_Int32 nExtLen = sExt.getLength();
-        sNewName = sNewName.replaceAt( sNewName.getLength() - nExtLen - 1, nExtLen + 1, "" );
-        if (pPrefix)
-            sNewName = *pPrefix + sNewName;
-
-        //find a unique name if sNewName already exists
-        sFind = sNewName;
-        sal_Int32 nIndex = 0;
-        while(xDBContext->hasByName(sFind))
-        {
-            sFind = sNewName;
-            sFind += OUString::number(++nIndex);
-        }
-
-        uno::Reference<uno::XInterface> xNewInstance;
-        if(!bStore)
-        {
-            //odb-file
-            uno::Any aDataSource = xDBContext->getByName(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
-            aDataSource >>= xNewInstance;
-        }
-        else
-        {
-            xNewInstance = xDBContext->createInstance();
-            uno::Reference<beans::XPropertySet> xDataProperties(xNewInstance, uno::UNO_QUERY);
-
-            if(aURLAny.hasValue())
-                xDataProperties->setPropertyValue("URL", aURLAny);
-            if(aTableFilterAny.hasValue())
-                xDataProperties->setPropertyValue("TableFilter", aTableFilterAny);
-            if(aSuppressVersionsAny.hasValue())
-                xDataProperties->setPropertyValue("SuppressVersionColumns", aSuppressVersionsAny);
-            if(aInfoAny.hasValue())
-                xDataProperties->setPropertyValue("Info", aInfoAny);
-
-            if( DBCONN_FLAT == type && pSettings )
-            {
-                    uno::Any aSettings = xDataProperties->getPropertyValue( "Settings" );
-                    uno::Reference < beans::XPropertySet > xDSSettings;
-                    aSettings >>= xDSSettings;
-                    ::comphelper::copyProperties( *pSettings, xDSSettings );
-                    xDSSettings->setPropertyValue( "Extension", uno::makeAny( sExt ));
-            }
-
-            uno::Reference<sdb::XDocumentDataSource> xDS(xNewInstance, uno::UNO_QUERY_THROW);
-            uno::Reference<frame::XStorable> xStore(xDS->getDatabaseDocument(), uno::UNO_QUERY_THROW);
-            OUString aOwnURL = lcl_getOwnURL(pDocShell);
-            if (aOwnURL.isEmpty())
-            {
-                // Cannot embed, as embedded data source would need the URL of the parent document.
-                OUString const sOutputExt = ".odb";
-                OUString sHomePath(SvtPathOptions().GetWorkPath());
-                utl::TempFile aTempFile(sNewName, true, &sOutputExt, pDestDir ? pDestDir : &sHomePath);
-                OUString sTmpName = aTempFile.GetURL();
-                xStore->storeAsURL(sTmpName, uno::Sequence<beans::PropertyValue>());
-            }
-            else
-            {
-                // Embed.
-                OUString aStreamRelPath = "EmbeddedDatabase";
-                uno::Reference<embed::XStorage> xStorage = pDocShell->GetStorage();
-
-                // Refer to the sub-storage name in the document settings, so
-                // we can load it again next time the file is imported.
-                uno::Reference<lang::XMultiServiceFactory> xFactory(pDocShell->GetModel(), uno::UNO_QUERY);
-                uno::Reference<beans::XPropertySet> xPropertySet(xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
-                xPropertySet->setPropertyValue("EmbeddedDatabaseName", uno::makeAny(aStreamRelPath));
-
-                // Store it only after setting the above property, so that only one data source gets registered.
-                SwDBManager::StoreEmbeddedDataSource(xStore, xStorage, aStreamRelPath, aOwnURL);
-            }
-        }
-        xDBContext->registerObject( sFind, xNewInstance );
-    }
-    catch(const uno::Exception&)
-    {
-        sFind.clear();
-    }
-    return sFind;
-}
-
-namespace {
-// Construct vnd.sun.star.pkg:// URL
-OUString ConstructVndSunStarPkgUrl(const OUString& rMainURL, const OUString& rStreamRelPath)
-{
-    auto xContext(comphelper::getProcessComponentContext());
-    auto xUri = css::uri::UriReferenceFactory::create(xContext)->parse(rMainURL);
-    assert(xUri.is());
-    xUri = css::uri::VndSunStarPkgUrlReferenceFactory::create(xContext)
-        ->createVndSunStarPkgUrlReference(xUri);
-    assert(xUri.is());
-    return xUri->getUriReference() + "/"
-        + INetURLObject::encode(
-            rStreamRelPath, INetURLObject::PART_FPATH,
-            INetURLObject::EncodeMechanism::All);
-}
 }
 
 void SwDBManager::StoreEmbeddedDataSource(const uno::Reference<frame::XStorable>& xStorable,
@@ -2852,9 +2912,7 @@ void SwDBManager::StoreEmbeddedDataSource(const uno::Reference<frame::XStorable>
 
 OUString SwDBManager::LoadAndRegisterDataSource(const OUString &rURI, const OUString *pDestDir)
 {
-    uno::Any aURLAny;
-    DBConnURITypes type = GetDBunoURI( rURI, aURLAny );
-    return LoadAndRegisterDataSource( type, aURLAny, nullptr, rURI, nullptr, pDestDir );
+    return LoadAndRegisterDataSource_Impl( DBConnURIType::UNKNOWN, nullptr, INetURLObject(rURI), nullptr, pDestDir, nullptr );
 }
 
 void SwDBManager::RevokeDataSource(const OUString& rName)
