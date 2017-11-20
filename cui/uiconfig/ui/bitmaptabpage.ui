@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.18.3 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="BitmapTabPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -62,8 +62,8 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
             <property name="label" translatable="yes" context="bitmaptabpage|label1">Bitmap</property>
+            <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -107,8 +107,10 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="bitmaptabpage|label3">Style:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">bitmapstyle</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -152,8 +154,8 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="bitmaptabpage|label4">Size:</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -170,7 +172,9 @@
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="bitmaptabpage|label5">W:</property>
+                            <property name="label" translatable="yes" context="bitmaptabpage|label5">Width:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">width:0%</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -194,7 +198,9 @@
                           <object class="GtkLabel" id="label6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="bitmaptabpage|label6">H:</property>
+                            <property name="label" translatable="yes" context="bitmaptabpage|label6">Height:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">height:0%</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -253,8 +259,10 @@
                       <object class="GtkLabel" id="label7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="bitmaptabpage|label7">Position:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">positionlb</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -301,8 +309,8 @@
                       <object class="GtkLabel" id="label9">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="bitmaptabpage|label9">Tiling Position:</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -320,7 +328,9 @@
                           <object class="GtkLabel" id="label10">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="bitmaptabpage|label10">X:</property>
+                            <property name="label" translatable="yes" context="bitmaptabpage|label10">X-Offset:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">posoffx:0%</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -343,7 +353,9 @@
                           <object class="GtkLabel" id="label11">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="bitmaptabpage|label11">Y:</property>
+                            <property name="label" translatable="yes" context="bitmaptabpage|label11">Y-Offset:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">posoffy:0%</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -386,8 +398,10 @@
                       <object class="GtkLabel" id="label15">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="bitmaptabpage|label15">Tiling Offset:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">tileofflb</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -487,16 +501,16 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="svxlo-SvxXRectPreview" id="CTL_BITMAP_PREVIEW">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="CTL_BITMAP_PREVIEW-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="bitmaptabpage|CTL_BITMAP_PREVIEW-atkobject">Example</property>
-                          </object>
-                        </child>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="CTL_BITMAP_PREVIEW-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="bitmaptabpage|CTL_BITMAP_PREVIEW-atkobject">Example</property>
                       </object>
+                    </child>
+                  </object>
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
