@@ -15,7 +15,6 @@ $(eval $(call gb_Executable_set_include,tilebench,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,tilebench,\
-    libreofficekitgtk \
 	sal \
 ))
 
