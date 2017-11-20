@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_2f7641a4",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1649,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-20T11:12:05Z",
+      "side": 1,
+      "message": "This should differentiate between SotClipboardFormatId::STRING and SotClipboardFormatId::STRING_TSVC and paste the latter if it is available. Which makes a difference if the clipboard contains cells with embedded line breaks.\n\nSee commit f435cdba5b4ea98dc30b4b4879de21a542c8a84d",
+      "revId": "2865210607364feaff2c0275b7cd6c5439f5f070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_4f7b8d8c",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1652,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-20T11:12:05Z",
+      "side": 1,
+      "message": "bRet is always true here, so 0\u003dfail can never be set.",
+      "revId": "2865210607364feaff2c0275b7cd6c5439f5f070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_6f6cc9d0",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1654,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-11-20T11:12:05Z",
+      "side": 1,
+      "message": "Else\n\n rReq.SetReturnValue(SfxInt16Item(nSlot, 0));\n\nshould be set.",
+      "revId": "2865210607364feaff2c0275b7cd6c5439f5f070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
