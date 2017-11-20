@@ -882,11 +882,11 @@ double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex )
                     fNumber = aResult.fValue = (*vNodesSharedPtr[ nIndex ])();
                     aResult.bReady = true;
 
-                    if ( !rtl::math::isFinite( fNumber ) )
-                        fNumber = 0.0;
                     SAL_INFO("svx", "equation " << nLevel << " (level: " << seqEquations[nIndex] << "): "
                              << fNumber << " --> " << 180.0*fNumber/10800000.0);
                 }
+                if ( !rtl::math::isFinite( fNumber ) )
+                    fNumber = 0.0;
             }
             catch ( ... )
             {
