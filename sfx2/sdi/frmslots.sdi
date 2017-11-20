@@ -208,6 +208,11 @@ interface BrowseWindow : Window
         ExecMethod = ExecReload_Impl ;
         StateMethod = StateReload_Impl ;
     ]
+    SID_READONLYDOC // ole(?opt) api(play/rec)
+    [
+        ExecMethod = ExecReload_Impl ;
+        StateMethod = StateReload_Impl ;
+    ]
     SID_RELOAD // ole(?opt) api(play/rec)
     [
         ExecMethod = ExecReload_Impl ;
