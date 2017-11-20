@@ -19,6 +19,7 @@ build_goal:=$(if $(filter build check,$(MAKECMDGOALS)),all)\
 
 SRCDIR := @SRC_ROOT@
 BUILDDIR := @BUILDDIR@
+COMPILER_PLUGINS := @COMPILER_PLUGINS@
 GIT_BUILD := $(if $(wildcard $(SRCDIR)/.git),T)
 
 # Run autogen.sh if needed and force make to restart itself.
@@ -262,6 +263,7 @@ bootstrap: check-if-root compilerplugins
 #       with some translations like "build"->"all" for historic reasons
 #
 build: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset) \
+        $(if $(filter check,$(MAKECMDGOALS)),$(if $(COMPILER_PLUGINS),$(if $(LODE_HOME),clang-format-check))) \
         install-gdb-printers
 	$(MAKE) $(PARALLELISM_OPTION) $(IWYU_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(build_goal)
 ifeq ($(OS),IOS)
@@ -451,6 +453,9 @@ dump-deps-png:
 
 dump-deps-sort:
 	@$(SRCDIR)/bin/module-deps.pl -t $(MAKE) $(SRCDIR)/Makefile.gbuild
+
+clang-format-check:
+	@$(SRCDIR)/solenv/clang-format/check-last-commit
 
 define gb_Top_GbuildToIdeIntegration
 $(1)-ide-integration: gbuildtojson $(if $(filter MACOSX,$(OS_FOR_BUILD)),python3.all)
