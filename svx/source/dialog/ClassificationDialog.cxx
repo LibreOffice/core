@@ -276,13 +276,8 @@ short ClassificationDialog::Execute()
         for (std::vector<ClassificationResult> const & rResults : m_aRecentlyUsedValuesCollection)
         {
             OUString rContentRepresentation = svx::classification::convertClassificationResultToString(rResults);
-            OUString rDescription = OUString::number(nNumber) + ": ";
+            OUString rDescription = OUString::number(nNumber) + ": " + rContentRepresentation;
             nNumber++;
-
-            if (rContentRepresentation.getLength() >= 18)
-                rDescription += rContentRepresentation.copy(0, 17) + "...";
-            else
-                rDescription += rContentRepresentation;
 
             m_pRecentlyUsedListBox->InsertEntry(rDescription);
         }
