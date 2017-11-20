@@ -739,24 +739,25 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox, void )
 
 IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox, void )
 {
-    if( !pBox->GetSelectionCount() )
-    {
-        m_pHideCB->Enable(false);
-        m_pProtectCB->Enable(false);
-        // edit in readonly sections
-        m_pEditInReadonlyCB->Enable(false);
+    if( pBox->GetSelectionCount() )
+        return;
 
-        m_pPasswdCB->Enable(false);
-        m_pConditionFT->Enable(false);
-        m_pConditionED->Enable(false);
-        m_pFileCB->Enable(false);
-        m_pDDEFrame->Enable(false);
-        m_pDDECB->Enable(false);
-        m_pCurName->Enable(false);
+    m_pHideCB->Enable(false);
+    m_pProtectCB->Enable(false);
+    // edit in readonly sections
+    m_pEditInReadonlyCB->Enable(false);
 
-        UseFileHdl(m_pFileCB);
-        DDEHdl(m_pDDECB);
-    }
+    m_pPasswdCB->Enable(false);
+    m_pConditionFT->Enable(false);
+    m_pConditionED->Enable(false);
+    m_pFileCB->Enable(false);
+    m_pDDEFrame->Enable(false);
+    m_pDDECB->Enable(false);
+    m_pCurName->Enable(false);
+
+    UseFileHdl(m_pFileCB);
+    DDEHdl(m_pDDECB);
+
 }
 
 // in OkHdl the modified settings are being applied and reversed regions are deleted
@@ -948,26 +949,27 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl, Button*, void)
             m_pTree->GetModel()->Remove( pRemove );
     }
 
-    if ( m_pTree->FirstSelected() == nullptr )
-    {
-        m_pConditionFT->Enable(false);
-        m_pConditionED->Enable(false);
-        m_pDismiss->       Enable(false);
-        m_pCurName->Enable(false);
-        m_pProtectCB->Enable(false);
-        m_pPasswdCB->Enable(false);
-        m_pHideCB->Enable(false);
-        // edit in readonly sections
-        m_pEditInReadonlyCB->Enable(false);
-        m_pEditInReadonlyCB->SetState(TRISTATE_FALSE);
-        m_pProtectCB->SetState(TRISTATE_FALSE);
-        m_pPasswdCB->Check(false);
-        m_pHideCB->SetState(TRISTATE_FALSE);
-        m_pFileCB->Check(false);
-        // otherwise the focus would be on HelpButton
-        m_pOK->GrabFocus();
-        UseFileHdl(m_pFileCB);
-    }
+    if ( m_pTree->FirstSelected() )
+        return;
+
+    m_pConditionFT->Enable(false);
+    m_pConditionED->Enable(false);
+    m_pDismiss->       Enable(false);
+    m_pCurName->Enable(false);
+    m_pProtectCB->Enable(false);
+    m_pPasswdCB->Enable(false);
+    m_pHideCB->Enable(false);
+    // edit in readonly sections
+    m_pEditInReadonlyCB->Enable(false);
+    m_pEditInReadonlyCB->SetState(TRISTATE_FALSE);
+    m_pProtectCB->SetState(TRISTATE_FALSE);
+    m_pPasswdCB->Check(false);
+    m_pHideCB->SetState(TRISTATE_FALSE);
+    m_pFileCB->Check(false);
+    // otherwise the focus would be on HelpButton
+    m_pOK->GrabFocus();
+    UseFileHdl(m_pFileCB);
+
 }
 
 // link CheckBox to file?
@@ -1043,96 +1045,97 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, Button*, void)
         return;
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
 
-    if(pEntry)
+    if(!pEntry)
+        return;
+
+    SectRepr* pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
+    SfxItemSet aSet(
+        rSh.GetView().GetPool(),
+        svl::Items<
+            RES_FRM_SIZE, RES_FRM_SIZE,
+            RES_LR_SPACE, RES_LR_SPACE,
+            RES_BACKGROUND, RES_BACKGROUND,
+            RES_COL, RES_COL,
+            RES_FTN_AT_TXTEND, RES_FRAMEDIR,
+            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
+
+    aSet.Put( pSectRepr->GetCol() );
+    aSet.Put( pSectRepr->GetBackground() );
+    aSet.Put( pSectRepr->GetFootnoteNtAtEnd() );
+    aSet.Put( pSectRepr->GetEndNtAtEnd() );
+    aSet.Put( pSectRepr->GetBalance() );
+    aSet.Put( pSectRepr->GetFrameDir() );
+    aSet.Put( pSectRepr->GetLRSpace() );
+
+    const SwSectionFormats& rDocFormats = rSh.GetDoc()->GetSections();
+    SwSectionFormats aOrigArray(rDocFormats);
+
+    SwSectionFormat* pFormat = aOrigArray[pSectRepr->GetArrPos()];
+    long nWidth = rSh.GetSectionWidth(*pFormat);
+    aOrigArray.clear();
+    if (!nWidth)
+        nWidth = USHRT_MAX;
+
+    aSet.Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth));
+    aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
+
+    ScopedVclPtrInstance< SwSectionPropertyTabDialog > aTabDlg(this, aSet, rSh);
+    if(RET_OK == aTabDlg->Execute())
     {
-        SectRepr* pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
-        SfxItemSet aSet(
-            rSh.GetView().GetPool(),
-            svl::Items<
-                RES_FRM_SIZE, RES_FRM_SIZE,
-                RES_LR_SPACE, RES_LR_SPACE,
-                RES_BACKGROUND, RES_BACKGROUND,
-                RES_COL, RES_COL,
-                RES_FTN_AT_TXTEND, RES_FRAMEDIR,
-                SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
-
-        aSet.Put( pSectRepr->GetCol() );
-        aSet.Put( pSectRepr->GetBackground() );
-        aSet.Put( pSectRepr->GetFootnoteNtAtEnd() );
-        aSet.Put( pSectRepr->GetEndNtAtEnd() );
-        aSet.Put( pSectRepr->GetBalance() );
-        aSet.Put( pSectRepr->GetFrameDir() );
-        aSet.Put( pSectRepr->GetLRSpace() );
-
-        const SwSectionFormats& rDocFormats = rSh.GetDoc()->GetSections();
-        SwSectionFormats aOrigArray(rDocFormats);
-
-        SwSectionFormat* pFormat = aOrigArray[pSectRepr->GetArrPos()];
-        long nWidth = rSh.GetSectionWidth(*pFormat);
-        aOrigArray.clear();
-        if (!nWidth)
-            nWidth = USHRT_MAX;
-
-        aSet.Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth));
-        aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
-
-        ScopedVclPtrInstance< SwSectionPropertyTabDialog > aTabDlg(this, aSet, rSh);
-        if(RET_OK == aTabDlg->Execute())
+        const SfxItemSet* pOutSet = aTabDlg->GetOutputItemSet();
+        if( pOutSet && pOutSet->Count() )
         {
-            const SfxItemSet* pOutSet = aTabDlg->GetOutputItemSet();
-            if( pOutSet && pOutSet->Count() )
+            const SfxPoolItem *pColItem, *pBrushItem,
+                              *pFootnoteItem, *pEndItem, *pBalanceItem,
+                              *pFrameDirItem, *pLRSpaceItem;
+            SfxItemState eColState = pOutSet->GetItemState(
+                                    RES_COL, false, &pColItem );
+            SfxItemState eBrushState = pOutSet->GetItemState(
+                                    RES_BACKGROUND, false, &pBrushItem );
+            SfxItemState eFootnoteState = pOutSet->GetItemState(
+                                    RES_FTN_AT_TXTEND, false, &pFootnoteItem );
+            SfxItemState eEndState = pOutSet->GetItemState(
+                                    RES_END_AT_TXTEND, false, &pEndItem );
+            SfxItemState eBalanceState = pOutSet->GetItemState(
+                                    RES_COLUMNBALANCE, false, &pBalanceItem );
+            SfxItemState eFrameDirState = pOutSet->GetItemState(
+                                    RES_FRAMEDIR, false, &pFrameDirItem );
+            SfxItemState eLRState = pOutSet->GetItemState(
+                                    RES_LR_SPACE, false, &pLRSpaceItem);
+
+            if( SfxItemState::SET == eColState ||
+                SfxItemState::SET == eBrushState ||
+                SfxItemState::SET == eFootnoteState ||
+                SfxItemState::SET == eEndState ||
+                SfxItemState::SET == eBalanceState||
+                SfxItemState::SET == eFrameDirState||
+                SfxItemState::SET == eLRState)
             {
-                const SfxPoolItem *pColItem, *pBrushItem,
-                                  *pFootnoteItem, *pEndItem, *pBalanceItem,
-                                  *pFrameDirItem, *pLRSpaceItem;
-                SfxItemState eColState = pOutSet->GetItemState(
-                                        RES_COL, false, &pColItem );
-                SfxItemState eBrushState = pOutSet->GetItemState(
-                                        RES_BACKGROUND, false, &pBrushItem );
-                SfxItemState eFootnoteState = pOutSet->GetItemState(
-                                        RES_FTN_AT_TXTEND, false, &pFootnoteItem );
-                SfxItemState eEndState = pOutSet->GetItemState(
-                                        RES_END_AT_TXTEND, false, &pEndItem );
-                SfxItemState eBalanceState = pOutSet->GetItemState(
-                                        RES_COLUMNBALANCE, false, &pBalanceItem );
-                SfxItemState eFrameDirState = pOutSet->GetItemState(
-                                        RES_FRAMEDIR, false, &pFrameDirItem );
-                SfxItemState eLRState = pOutSet->GetItemState(
-                                        RES_LR_SPACE, false, &pLRSpaceItem);
-
-                if( SfxItemState::SET == eColState ||
-                    SfxItemState::SET == eBrushState ||
-                    SfxItemState::SET == eFootnoteState ||
-                    SfxItemState::SET == eEndState ||
-                    SfxItemState::SET == eBalanceState||
-                    SfxItemState::SET == eFrameDirState||
-                    SfxItemState::SET == eLRState)
+                SvTreeListEntry* pSelEntry = m_pTree->FirstSelected();
+                while( pSelEntry )
                 {
-                    SvTreeListEntry* pSelEntry = m_pTree->FirstSelected();
-                    while( pSelEntry )
-                    {
-                        SectRepr* pRepr = static_cast<SectRepr*>(pSelEntry->GetUserData());
-                        if( SfxItemState::SET == eColState )
-                            pRepr->GetCol() = *static_cast<const SwFormatCol*>(pColItem);
-                        if( SfxItemState::SET == eBrushState )
-                            pRepr->GetBackground() = *static_cast<const SvxBrushItem*>(pBrushItem);
-                        if( SfxItemState::SET == eFootnoteState )
-                            pRepr->GetFootnoteNtAtEnd() = *static_cast<const SwFormatFootnoteAtTextEnd*>(pFootnoteItem);
-                        if( SfxItemState::SET == eEndState )
-                            pRepr->GetEndNtAtEnd() = *static_cast<const SwFormatEndAtTextEnd*>(pEndItem);
-                        if( SfxItemState::SET == eBalanceState )
-                            pRepr->GetBalance().SetValue(static_cast<const SwFormatNoBalancedColumns*>(pBalanceItem)->GetValue());
-                        if( SfxItemState::SET == eFrameDirState )
-                            pRepr->GetFrameDir().SetValue(static_cast<const SvxFrameDirectionItem*>(pFrameDirItem)->GetValue());
-                        if( SfxItemState::SET == eLRState )
-                            pRepr->GetLRSpace() = *static_cast<const SvxLRSpaceItem*>(pLRSpaceItem);
+                    SectRepr* pRepr = static_cast<SectRepr*>(pSelEntry->GetUserData());
+                    if( SfxItemState::SET == eColState )
+                        pRepr->GetCol() = *static_cast<const SwFormatCol*>(pColItem);
+                    if( SfxItemState::SET == eBrushState )
+                        pRepr->GetBackground() = *static_cast<const SvxBrushItem*>(pBrushItem);
+                    if( SfxItemState::SET == eFootnoteState )
+                        pRepr->GetFootnoteNtAtEnd() = *static_cast<const SwFormatFootnoteAtTextEnd*>(pFootnoteItem);
+                    if( SfxItemState::SET == eEndState )
+                        pRepr->GetEndNtAtEnd() = *static_cast<const SwFormatEndAtTextEnd*>(pEndItem);
+                    if( SfxItemState::SET == eBalanceState )
+                        pRepr->GetBalance().SetValue(static_cast<const SwFormatNoBalancedColumns*>(pBalanceItem)->GetValue());
+                    if( SfxItemState::SET == eFrameDirState )
+                        pRepr->GetFrameDir().SetValue(static_cast<const SvxFrameDirectionItem*>(pFrameDirItem)->GetValue());
+                    if( SfxItemState::SET == eLRState )
+                        pRepr->GetLRSpace() = *static_cast<const SvxLRSpaceItem*>(pLRSpaceItem);
 
-                        pSelEntry = m_pTree->NextSelected(pSelEntry);
-                    }
+                    pSelEntry = m_pTree->NextSelected(pSelEntry);
                 }
             }
         }
     }
+
 }
 
 // Applying of the filename or the linked region

@@ -293,110 +293,111 @@ void SwFieldDBPage::TypeHdl( ListBox const * pBox )
         m_pTypeLB->SelectEntryPos(0);
     }
 
-    if (nOld != GetTypeSel())
+    if (nOld == GetTypeSel())
+        return;
+
+    SwWrtShell *pSh = GetWrtShell();
+    if(!pSh)
+        pSh = ::GetActiveWrtShell();
+    bool bCond = false, bSetNo = false, bFormat = false, bDBFormat = false;
+    const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
+
+    m_pDatabaseTLB->ShowColumns(nTypeId == TYP_DBFLD);
+
+    if (IsFieldEdit())
     {
-        SwWrtShell *pSh = GetWrtShell();
-        if(!pSh)
-            pSh = ::GetActiveWrtShell();
-        bool bCond = false, bSetNo = false, bFormat = false, bDBFormat = false;
-        const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
-
-        m_pDatabaseTLB->ShowColumns(nTypeId == TYP_DBFLD);
-
-        if (IsFieldEdit())
+        SwDBData aData;
+        OUString sColumnName;
+        if (nTypeId == TYP_DBFLD)
         {
-            SwDBData aData;
-            OUString sColumnName;
-            if (nTypeId == TYP_DBFLD)
-            {
-                aData = static_cast<SwDBField*>(GetCurField())->GetDBData();
-                sColumnName = static_cast<SwDBFieldType*>(GetCurField()->GetTyp())->GetColumnName();
-            }
-            else
-            {
-                aData = static_cast<SwDBNameInfField*>(GetCurField())->GetDBData(pSh->GetDoc());
-            }
-            m_pDatabaseTLB->Select(aData.sDataSource, aData.sCommand, sColumnName);
+            aData = static_cast<SwDBField*>(GetCurField())->GetDBData();
+            sColumnName = static_cast<SwDBFieldType*>(GetCurField()->GetTyp())->GetColumnName();
         }
-
-        switch (nTypeId)
+        else
         {
-            case TYP_DBFLD:
-                bFormat = true;
-                bDBFormat = true;
-                m_pNumFormatLB->Show();
-                m_pFormatLB->Hide();
-
-                if (pBox)   // type was changed by user
-                    m_pDBFormatRB->Check();
-
-                if (IsFieldEdit())
-                {
-                    if (GetCurField()->GetFormat() != 0 && GetCurField()->GetFormat() != SAL_MAX_UINT32)
-                        m_pNumFormatLB->SetDefFormat(GetCurField()->GetFormat());
-
-                    if (GetCurField()->GetSubType() & nsSwExtendedSubType::SUB_OWN_FMT)
-                        m_pNewFormatRB->Check();
-                    else
-                        m_pDBFormatRB->Check();
-                }
-                break;
-
-            case TYP_DBNUMSETFLD:
-                bSetNo = true;
-                SAL_FALLTHROUGH;
-            case TYP_DBNEXTSETFLD:
-                bCond = true;
-                if (IsFieldEdit())
-                {
-                    m_pConditionED->SetText(GetCurField()->GetPar1());
-                    m_pValueED->SetText(GetCurField()->GetPar2());
-                }
-                break;
-
-            case TYP_DBNAMEFLD:
-                break;
-
-            case TYP_DBSETNUMBERFLD:
-                bFormat = true;
-                m_pNewFormatRB->Check();
-                m_pNumFormatLB->Hide();
-                m_pFormatLB->Show();
-                if( IsFieldEdit() )
-                {
-                    for( sal_Int32 nI = m_pFormatLB->GetEntryCount(); nI; )
-                        if( GetCurField()->GetFormat() == reinterpret_cast<sal_uLong>(
-                            m_pFormatLB->GetEntryData( --nI )))
-                        {
-                            m_pFormatLB->SelectEntryPos( nI );
-                            break;
-                        }
-                }
-                break;
+            aData = static_cast<SwDBNameInfField*>(GetCurField())->GetDBData(pSh->GetDoc());
         }
-
-        m_pCondition->Enable(bCond);
-        m_pValue->Enable(bSetNo);
-        if (nTypeId != TYP_DBFLD)
-        {
-            m_pDBFormatRB->Enable(bDBFormat);
-            m_pNewFormatRB->Enable(bDBFormat || bFormat);
-            m_pNumFormatLB->Enable(bDBFormat);
-            m_pFormatLB->Enable(bFormat);
-        }
-        m_pFormat->Enable(bDBFormat || bFormat);
-
-        if (!IsFieldEdit())
-        {
-            m_pValueED->SetText(aEmptyOUStr);
-            if (bCond)
-                m_pConditionED->SetText("TRUE");
-            else
-                m_pConditionED->SetText(aEmptyOUStr);
-        }
-
-        CheckInsert();
+        m_pDatabaseTLB->Select(aData.sDataSource, aData.sCommand, sColumnName);
     }
+
+    switch (nTypeId)
+    {
+        case TYP_DBFLD:
+            bFormat = true;
+            bDBFormat = true;
+            m_pNumFormatLB->Show();
+            m_pFormatLB->Hide();
+
+            if (pBox)   // type was changed by user
+                m_pDBFormatRB->Check();
+
+            if (IsFieldEdit())
+            {
+                if (GetCurField()->GetFormat() != 0 && GetCurField()->GetFormat() != SAL_MAX_UINT32)
+                    m_pNumFormatLB->SetDefFormat(GetCurField()->GetFormat());
+
+                if (GetCurField()->GetSubType() & nsSwExtendedSubType::SUB_OWN_FMT)
+                    m_pNewFormatRB->Check();
+                else
+                    m_pDBFormatRB->Check();
+            }
+            break;
+
+        case TYP_DBNUMSETFLD:
+            bSetNo = true;
+            SAL_FALLTHROUGH;
+        case TYP_DBNEXTSETFLD:
+            bCond = true;
+            if (IsFieldEdit())
+            {
+                m_pConditionED->SetText(GetCurField()->GetPar1());
+                m_pValueED->SetText(GetCurField()->GetPar2());
+            }
+            break;
+
+        case TYP_DBNAMEFLD:
+            break;
+
+        case TYP_DBSETNUMBERFLD:
+            bFormat = true;
+            m_pNewFormatRB->Check();
+            m_pNumFormatLB->Hide();
+            m_pFormatLB->Show();
+            if( IsFieldEdit() )
+            {
+                for( sal_Int32 nI = m_pFormatLB->GetEntryCount(); nI; )
+                    if( GetCurField()->GetFormat() == reinterpret_cast<sal_uLong>(
+                        m_pFormatLB->GetEntryData( --nI )))
+                    {
+                        m_pFormatLB->SelectEntryPos( nI );
+                        break;
+                    }
+            }
+            break;
+    }
+
+    m_pCondition->Enable(bCond);
+    m_pValue->Enable(bSetNo);
+    if (nTypeId != TYP_DBFLD)
+    {
+        m_pDBFormatRB->Enable(bDBFormat);
+        m_pNewFormatRB->Enable(bDBFormat || bFormat);
+        m_pNumFormatLB->Enable(bDBFormat);
+        m_pFormatLB->Enable(bFormat);
+    }
+    m_pFormat->Enable(bDBFormat || bFormat);
+
+    if (!IsFieldEdit())
+    {
+        m_pValueED->SetText(aEmptyOUStr);
+        if (bCond)
+            m_pConditionED->SetText("TRUE");
+        else
+            m_pConditionED->SetText(aEmptyOUStr);
+    }
+
+    CheckInsert();
+
 }
 
 IMPL_LINK( SwFieldDBPage, NumSelectHdl, ListBox&, rLB, void )

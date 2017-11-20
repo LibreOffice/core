@@ -1478,72 +1478,73 @@ void AddressMultiLineEdit::MoveCurrentItem(MoveItemFlags nMove)
     TextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
     const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
-    if(pBeginAttrib &&
-            (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
-                            && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
+    if(!pBeginAttrib ||
+       !(pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex() &&
+         pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
+        return;
+
+    //current item has been found
+    sal_uInt32 nPara = rSelection.GetStart().GetPara();
+    sal_Int32 nIndex = pBeginAttrib->GetStart();
+    TextSelection aEntrySel(TextPaM( nPara, pBeginAttrib->GetStart()), TextPaM(nPara, pBeginAttrib->GetEnd()));
+    const OUString sCurrentItem = pTextEngine->GetText(aEntrySel);
+    pTextEngine->RemoveAttrib( nPara, *pBeginAttrib );
+    pTextEngine->ReplaceText(aEntrySel, OUString());
+    switch(nMove)
     {
-        //current item has been found
-        sal_uInt32 nPara = rSelection.GetStart().GetPara();
-        sal_Int32 nIndex = pBeginAttrib->GetStart();
-        TextSelection aEntrySel(TextPaM( nPara, pBeginAttrib->GetStart()), TextPaM(nPara, pBeginAttrib->GetEnd()));
-        const OUString sCurrentItem = pTextEngine->GetText(aEntrySel);
-        pTextEngine->RemoveAttrib( nPara, *pBeginAttrib );
-        pTextEngine->ReplaceText(aEntrySel, OUString());
-        switch(nMove)
-        {
-            case MoveItemFlags::Left :
-                if(nIndex)
-                {
-                    //go left to find a predecessor or simple text
-                    --nIndex;
-                    const OUString sPara = pTextEngine->GetText( nPara );
-                    sal_Int32 nSearchIndex = sPara.lastIndexOf( '>', nIndex+1 );
-                    if( nSearchIndex != -1 && nSearchIndex == nIndex )
-                    {
-                        nSearchIndex = sPara.lastIndexOf( '<', nIndex );
-                        if( nSearchIndex != -1 )
-                            nIndex = nSearchIndex;
-                    }
-                }
-            break;
-            case MoveItemFlags::Right:
+        case MoveItemFlags::Left :
+            if(nIndex)
             {
-                //go right to find a successor or simple text
-                ++nIndex;
-                const TextCharAttrib* pEndAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
-                if(pEndAttrib && pEndAttrib->GetEnd() >= nIndex)
+                //go left to find a predecessor or simple text
+                --nIndex;
+                const OUString sPara = pTextEngine->GetText( nPara );
+                sal_Int32 nSearchIndex = sPara.lastIndexOf( '>', nIndex+1 );
+                if( nSearchIndex != -1 && nSearchIndex == nIndex )
                 {
-                    nIndex = pEndAttrib->GetEnd();
+                    nSearchIndex = sPara.lastIndexOf( '<', nIndex );
+                    if( nSearchIndex != -1 )
+                        nIndex = nSearchIndex;
                 }
             }
-            break;
-            case MoveItemFlags::Up   :
-                --nPara;
-                nIndex = 0;
-            break;
-            case MoveItemFlags::Down :
-                ++nPara;
-                nIndex = 0;
-            break;
-            default: break;
-        }
-        //add a new paragraph if there is none yet
-        if(nPara >= pTextEngine->GetParagraphCount())
+        break;
+        case MoveItemFlags::Right:
         {
-
-            TextPaM aTemp(nPara - 1, pTextEngine->GetTextLen( nPara - 1 ));
-            pTextEngine->ReplaceText(aTemp, "\n");
+            //go right to find a successor or simple text
+            ++nIndex;
+            const TextCharAttrib* pEndAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
+            if(pEndAttrib && pEndAttrib->GetEnd() >= nIndex)
+            {
+                nIndex = pEndAttrib->GetEnd();
+            }
         }
-        InsertNewEntryAtPosition( sCurrentItem, nPara, nIndex );
-
-        // select the new entry [#i40817]
-        const TextCharAttrib *pAttrib = pTextEngine->FindCharAttrib(TextPaM(nPara, nIndex),TEXTATTR_PROTECTED);
-        if (pAttrib)
-            aEntrySel = TextSelection(TextPaM(nPara, nIndex), TextPaM(nPara, pAttrib->GetEnd()));
-        pTextView->SetSelection(aEntrySel);
-        Invalidate();
-        Modify();
+        break;
+        case MoveItemFlags::Up   :
+            --nPara;
+            nIndex = 0;
+        break;
+        case MoveItemFlags::Down :
+            ++nPara;
+            nIndex = 0;
+        break;
+        default: break;
     }
+    //add a new paragraph if there is none yet
+    if(nPara >= pTextEngine->GetParagraphCount())
+    {
+
+        TextPaM aTemp(nPara - 1, pTextEngine->GetTextLen( nPara - 1 ));
+        pTextEngine->ReplaceText(aTemp, "\n");
+    }
+    InsertNewEntryAtPosition( sCurrentItem, nPara, nIndex );
+
+    // select the new entry [#i40817]
+    const TextCharAttrib *pAttrib = pTextEngine->FindCharAttrib(TextPaM(nPara, nIndex),TEXTATTR_PROTECTED);
+    if (pAttrib)
+        aEntrySel = TextSelection(TextPaM(nPara, nIndex), TextPaM(nPara, pAttrib->GetEnd()));
+    pTextView->SetSelection(aEntrySel);
+    Invalidate();
+    Modify();
+
 }
 
 MoveItemFlags  AddressMultiLineEdit::IsCurrentItemMoveable()

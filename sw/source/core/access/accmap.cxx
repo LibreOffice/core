@@ -1438,151 +1438,152 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
             pShapes = mpShapeMap->Copy( nShapes, pFESh, &pSelShape );
     }
 
-    if( pShapes )
+    if( !pShapes )
+        return;
+
+    typedef std::vector< ::rtl::Reference < ::accessibility::AccessibleShape >  >  VEC_SHAPE;
+    VEC_SHAPE vecxShapeAdd;
+    VEC_SHAPE vecxShapeRemove;
+    int nCountSelectedShape=0;
+
+    vcl::Window *pWin = GetShell()->GetWin();
+    bool bFocused = pWin && pWin->HasFocus();
+    SwAccessibleObjShape_Impl *pShape = pShapes;
+    int nShapeCount = nShapes;
+    while( nShapeCount )
     {
-        typedef std::vector< ::rtl::Reference < ::accessibility::AccessibleShape >  >  VEC_SHAPE;
-        VEC_SHAPE vecxShapeAdd;
-        VEC_SHAPE vecxShapeRemove;
-        int nCountSelectedShape=0;
-
-        vcl::Window *pWin = GetShell()->GetWin();
-        bool bFocused = pWin && pWin->HasFocus();
-        SwAccessibleObjShape_Impl *pShape = pShapes;
-        int nShapeCount = nShapes;
-        while( nShapeCount )
+        if (pShape->second.is() && IsInSameLevel(pShape->first, pFESh))
         {
-            if (pShape->second.is() && IsInSameLevel(pShape->first, pFESh))
+            if( pShape < pSelShape )
             {
-                if( pShape < pSelShape )
+                if(pShape->second->ResetState( AccessibleStateType::SELECTED ))
                 {
-                    if(pShape->second->ResetState( AccessibleStateType::SELECTED ))
-                    {
-                        vecxShapeRemove.push_back(pShape->second);
-                    }
+                    vecxShapeRemove.push_back(pShape->second);
+                }
+                pShape->second->ResetState( AccessibleStateType::FOCUSED );
+            }
+        }
+        --nShapeCount;
+        ++pShape;
+    }
+
+    VEC_SHAPE::iterator vi =vecxShapeRemove.begin();
+    for (; vi != vecxShapeRemove.end(); ++vi)
+    {
+        ::accessibility::AccessibleShape *pAccShape = vi->get();
+        if (pAccShape)
+        {
+            pAccShape->CommitChange(AccessibleEventId::SELECTION_CHANGED_REMOVE, uno::Any(), uno::Any());
+        }
+    }
+
+    pShape = pShapes;
+
+    while( nShapes )
+    {
+        if (pShape->second.is() && IsInSameLevel(pShape->first, pFESh))
+        {
+            if( pShape >= pSelShape )
+            {
+                //first fire focus event
+                if( bFocused && 1 == nSelShapes )
+                    pShape->second->SetState( AccessibleStateType::FOCUSED );
+                else
                     pShape->second->ResetState( AccessibleStateType::FOCUSED );
-                }
-            }
-            --nShapeCount;
-            ++pShape;
-        }
 
-        VEC_SHAPE::iterator vi =vecxShapeRemove.begin();
-        for (; vi != vecxShapeRemove.end(); ++vi)
-        {
-            ::accessibility::AccessibleShape *pAccShape = vi->get();
-            if (pAccShape)
-            {
-                pAccShape->CommitChange(AccessibleEventId::SELECTION_CHANGED_REMOVE, uno::Any(), uno::Any());
-            }
-        }
-
-        pShape = pShapes;
-
-        while( nShapes )
-        {
-            if (pShape->second.is() && IsInSameLevel(pShape->first, pFESh))
-            {
-                if( pShape >= pSelShape )
+                if(pShape->second->SetState( AccessibleStateType::SELECTED ))
                 {
-                    //first fire focus event
-                    if( bFocused && 1 == nSelShapes )
-                        pShape->second->SetState( AccessibleStateType::FOCUSED );
-                    else
-                        pShape->second->ResetState( AccessibleStateType::FOCUSED );
-
-                    if(pShape->second->SetState( AccessibleStateType::SELECTED ))
-                    {
-                        vecxShapeAdd.push_back(pShape->second);
-                    }
-                    ++nCountSelectedShape;
+                    vecxShapeAdd.push_back(pShape->second);
                 }
+                ++nCountSelectedShape;
             }
-
-            --nShapes;
-            ++pShape;
         }
 
-        const unsigned int SELECTION_WITH_NUM = 10;
-        if (vecxShapeAdd.size() > SELECTION_WITH_NUM )
+        --nShapes;
+        ++pShape;
+    }
+
+    const unsigned int SELECTION_WITH_NUM = 10;
+    if (vecxShapeAdd.size() > SELECTION_WITH_NUM )
+    {
+         uno::Reference< XAccessible > xDoc = GetDocumentView( );
+         SwAccessibleContext * pCont = static_cast<SwAccessibleContext *>(xDoc.get());
+         if (pCont)
+         {
+             AccessibleEventObject aEvent;
+             aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
+             pCont->FireAccessibleEvent(aEvent);
+         }
+    }
+    else
+    {
+        short nEventID = AccessibleEventId::SELECTION_CHANGED_ADD;
+        if (nCountSelectedShape <= 1 && vecxShapeAdd.size() == 1 )
         {
-             uno::Reference< XAccessible > xDoc = GetDocumentView( );
-             SwAccessibleContext * pCont = static_cast<SwAccessibleContext *>(xDoc.get());
-             if (pCont)
-             {
-                 AccessibleEventObject aEvent;
-                 aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
-                 pCont->FireAccessibleEvent(aEvent);
-             }
+            nEventID = AccessibleEventId::SELECTION_CHANGED;
         }
-        else
-        {
-            short nEventID = AccessibleEventId::SELECTION_CHANGED_ADD;
-            if (nCountSelectedShape <= 1 && vecxShapeAdd.size() == 1 )
-            {
-                nEventID = AccessibleEventId::SELECTION_CHANGED;
-            }
-            vi = vecxShapeAdd.begin();
-            for (; vi != vecxShapeAdd.end(); ++vi)
-            {
-                ::accessibility::AccessibleShape *pAccShape = vi->get();
-                if (pAccShape)
-                {
-                    pAccShape->CommitChange(nEventID, uno::Any(), uno::Any());
-                }
-            }
-        }
-
         vi = vecxShapeAdd.begin();
         for (; vi != vecxShapeAdd.end(); ++vi)
         {
             ::accessibility::AccessibleShape *pAccShape = vi->get();
             if (pAccShape)
             {
-                SdrObject *pObj = GetSdrObjectFromXShape(pAccShape->GetXShape());
-                SwFrameFormat *pFrameFormat = pObj ? FindFrameFormat( pObj ) : nullptr;
-                if (pFrameFormat)
+                pAccShape->CommitChange(nEventID, uno::Any(), uno::Any());
+            }
+        }
+    }
+
+    vi = vecxShapeAdd.begin();
+    for (; vi != vecxShapeAdd.end(); ++vi)
+    {
+        ::accessibility::AccessibleShape *pAccShape = vi->get();
+        if (pAccShape)
+        {
+            SdrObject *pObj = GetSdrObjectFromXShape(pAccShape->GetXShape());
+            SwFrameFormat *pFrameFormat = pObj ? FindFrameFormat( pObj ) : nullptr;
+            if (pFrameFormat)
+            {
+                const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
+                if( rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR )
                 {
-                    const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-                    if( rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR )
+                    uno::Reference< XAccessible > xPara = pAccShape->getAccessibleParent();
+                    if (xPara.is())
                     {
-                        uno::Reference< XAccessible > xPara = pAccShape->getAccessibleParent();
-                        if (xPara.is())
+                        uno::Reference< XAccessibleContext > xParaContext = xPara->getAccessibleContext();
+                        if (xParaContext.is() && xParaContext->getAccessibleRole() == AccessibleRole::PARAGRAPH)
                         {
-                            uno::Reference< XAccessibleContext > xParaContext = xPara->getAccessibleContext();
-                            if (xParaContext.is() && xParaContext->getAccessibleRole() == AccessibleRole::PARAGRAPH)
+                            SwAccessibleParagraph* pAccPara = static_cast< SwAccessibleParagraph *>(xPara.get());
+                            if (pAccPara)
                             {
-                                SwAccessibleParagraph* pAccPara = static_cast< SwAccessibleParagraph *>(xPara.get());
-                                if (pAccPara)
-                                {
-                                    m_setParaAdd.insert(pAccPara);
-                                }
+                                m_setParaAdd.insert(pAccPara);
                             }
                         }
                     }
                 }
             }
         }
-        vi = vecxShapeRemove.begin();
-        for (; vi != vecxShapeRemove.end(); ++vi)
+    }
+    vi = vecxShapeRemove.begin();
+    for (; vi != vecxShapeRemove.end(); ++vi)
+    {
+        ::accessibility::AccessibleShape *pAccShape = vi->get();
+        if (pAccShape)
         {
-            ::accessibility::AccessibleShape *pAccShape = vi->get();
-            if (pAccShape)
+            uno::Reference< XAccessible > xPara = pAccShape->getAccessibleParent();
+            uno::Reference< XAccessibleContext > xParaContext = xPara->getAccessibleContext();
+            if (xParaContext.is() && xParaContext->getAccessibleRole() == AccessibleRole::PARAGRAPH)
             {
-                uno::Reference< XAccessible > xPara = pAccShape->getAccessibleParent();
-                uno::Reference< XAccessibleContext > xParaContext = xPara->getAccessibleContext();
-                if (xParaContext.is() && xParaContext->getAccessibleRole() == AccessibleRole::PARAGRAPH)
+                SwAccessibleParagraph* pAccPara = static_cast< SwAccessibleParagraph *>(xPara.get());
+                if (m_setParaAdd.count(pAccPara) == 0 )
                 {
-                    SwAccessibleParagraph* pAccPara = static_cast< SwAccessibleParagraph *>(xPara.get());
-                    if (m_setParaAdd.count(pAccPara) == 0 )
-                    {
-                        m_setParaRemove.insert(pAccPara);
-                    }
+                    m_setParaRemove.insert(pAccPara);
                 }
             }
         }
-
-        delete[] pShapes;
     }
+
+    delete[] pShapes;
+
 }
 
 //Marge with DoInvalidateShapeSelection

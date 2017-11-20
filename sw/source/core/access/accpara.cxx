@@ -480,34 +480,35 @@ void SwAccessibleParagraph::InvalidateCursorPos_()
     }
 
     vcl::Window *pWin = GetWindow();
-    if( nOld != nNew )
+    if( nOld == nNew )
+        return;
+
+    // The cursor's node position is simulated by the focus!
+    if( pWin && pWin->HasFocus() && -1 == nOld )
+        FireStateChangedEvent( AccessibleStateType::FOCUSED, true );
+
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::CARET_CHANGED;
+    aEvent.OldValue <<= nOld;
+    aEvent.NewValue <<= nNew;
+
+    FireAccessibleEvent( aEvent );
+
+    if( pWin && pWin->HasFocus() && -1 == nNew )
+        FireStateChangedEvent( AccessibleStateType::FOCUSED, false );
+    //To send TEXT_SELECTION_CHANGED event
+    sal_Int32 nStart=0;
+    sal_Int32 nEnd  =0;
+    bool bCurSelection=GetSelection(nStart,nEnd);
+    if(m_bLastHasSelection || bCurSelection )
     {
-        // The cursor's node position is simulated by the focus!
-        if( pWin && pWin->HasFocus() && -1 == nOld )
-            FireStateChangedEvent( AccessibleStateType::FOCUSED, true );
-
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::CARET_CHANGED;
-        aEvent.OldValue <<= nOld;
-        aEvent.NewValue <<= nNew;
-
-        FireAccessibleEvent( aEvent );
-
-        if( pWin && pWin->HasFocus() && -1 == nNew )
-            FireStateChangedEvent( AccessibleStateType::FOCUSED, false );
-        //To send TEXT_SELECTION_CHANGED event
-        sal_Int32 nStart=0;
-        sal_Int32 nEnd  =0;
-        bool bCurSelection=GetSelection(nStart,nEnd);
-        if(m_bLastHasSelection || bCurSelection )
-        {
-            aEvent.EventId = AccessibleEventId::TEXT_SELECTION_CHANGED;
-            aEvent.OldValue.clear();
-            aEvent.NewValue.clear();
-            FireAccessibleEvent(aEvent);
-        }
-        m_bLastHasSelection =bCurSelection;
+        aEvent.EventId = AccessibleEventId::TEXT_SELECTION_CHANGED;
+        aEvent.OldValue.clear();
+        aEvent.NewValue.clear();
+        FireAccessibleEvent(aEvent);
     }
+    m_bLastHasSelection =bCurSelection;
+
 }
 
 void SwAccessibleParagraph::InvalidateFocus_()

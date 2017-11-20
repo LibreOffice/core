@@ -855,135 +855,136 @@ static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView 
  */
 void SwEditWin::FlushInBuffer()
 {
-    if ( !m_aInBuffer.isEmpty() )
+    if ( m_aInBuffer.isEmpty() )
+        return;
+
+    SwWrtShell& rSh = m_rView.GetWrtShell();
+
+    // generate new sequence input checker if not already done
+    if ( !pCheckIt )
+        pCheckIt = new SwCheckIt;
+
+    uno::Reference < i18n::XExtendedInputSequenceChecker > xISC = pCheckIt->xCheck;
+    if ( xISC.is() && IsInputSequenceCheckingRequired( m_aInBuffer, *rSh.GetCursor() ) )
     {
-        SwWrtShell& rSh = m_rView.GetWrtShell();
 
-        // generate new sequence input checker if not already done
-        if ( !pCheckIt )
-            pCheckIt = new SwCheckIt;
+        // apply (Thai) input sequence checking/correction
 
-        uno::Reference < i18n::XExtendedInputSequenceChecker > xISC = pCheckIt->xCheck;
-        if ( xISC.is() && IsInputSequenceCheckingRequired( m_aInBuffer, *rSh.GetCursor() ) )
+        rSh.Push(); // push current cursor to stack
+
+        // get text from the beginning (i.e left side) of current selection
+        // to the start of the paragraph
+        rSh.NormalizePam();     // make point be the first (left) one
+        if (!rSh.GetCursor()->HasMark())
+            rSh.GetCursor()->SetMark();
+        rSh.GetCursor()->GetMark()->nContent = 0;
+
+        const OUString aOldText( rSh.GetCursor()->GetText() );
+        const sal_Int32 nOldLen = aOldText.getLength();
+
+        SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
+
+        sal_Int32 nExpandSelection = 0;
+        if (nOldLen > 0)
         {
+            sal_Int32 nTmpPos = nOldLen;
+            sal_Int16 nCheckMode = rCTLOptions.IsCTLSequenceCheckingRestricted() ?
+                    i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
 
-            // apply (Thai) input sequence checking/correction
-
-            rSh.Push(); // push current cursor to stack
-
-            // get text from the beginning (i.e left side) of current selection
-            // to the start of the paragraph
-            rSh.NormalizePam();     // make point be the first (left) one
-            if (!rSh.GetCursor()->HasMark())
-                rSh.GetCursor()->SetMark();
-            rSh.GetCursor()->GetMark()->nContent = 0;
-
-            const OUString aOldText( rSh.GetCursor()->GetText() );
-            const sal_Int32 nOldLen = aOldText.getLength();
-
-            SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
-
-            sal_Int32 nExpandSelection = 0;
-            if (nOldLen > 0)
+            OUString aNewText( aOldText );
+            if (rCTLOptions.IsCTLSequenceCheckingTypeAndReplace())
             {
-                sal_Int32 nTmpPos = nOldLen;
-                sal_Int16 nCheckMode = rCTLOptions.IsCTLSequenceCheckingRestricted() ?
-                        i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
-
-                OUString aNewText( aOldText );
-                if (rCTLOptions.IsCTLSequenceCheckingTypeAndReplace())
+                for( sal_Int32 k = 0;  k < m_aInBuffer.getLength();  ++k)
                 {
-                    for( sal_Int32 k = 0;  k < m_aInBuffer.getLength();  ++k)
-                    {
-                        const sal_Unicode cChar = m_aInBuffer[k];
-                        const sal_Int32 nPrevPos =xISC->correctInputSequence( aNewText, nTmpPos - 1, cChar, nCheckMode );
+                    const sal_Unicode cChar = m_aInBuffer[k];
+                    const sal_Int32 nPrevPos =xISC->correctInputSequence( aNewText, nTmpPos - 1, cChar, nCheckMode );
 
-                        // valid sequence or sequence could be corrected:
-                        if (nPrevPos != aNewText.getLength())
-                            nTmpPos = nPrevPos + 1;
-                    }
+                    // valid sequence or sequence could be corrected:
+                    if (nPrevPos != aNewText.getLength())
+                        nTmpPos = nPrevPos + 1;
+                }
 
-                    // find position of first character that has changed
-                    sal_Int32 nNewLen = aNewText.getLength();
-                    const sal_Unicode *pOldText = aOldText.getStr();
-                    const sal_Unicode *pNewText = aNewText.getStr();
-                    sal_Int32 nChgPos = 0;
-                    while ( nChgPos < nOldLen && nChgPos < nNewLen &&
-                            pOldText[nChgPos] == pNewText[nChgPos] )
-                        ++nChgPos;
+                // find position of first character that has changed
+                sal_Int32 nNewLen = aNewText.getLength();
+                const sal_Unicode *pOldText = aOldText.getStr();
+                const sal_Unicode *pNewText = aNewText.getStr();
+                sal_Int32 nChgPos = 0;
+                while ( nChgPos < nOldLen && nChgPos < nNewLen &&
+                        pOldText[nChgPos] == pNewText[nChgPos] )
+                    ++nChgPos;
 
-                    const sal_Int32 nChgLen = nNewLen - nChgPos;
-                    if (nChgLen)
-                    {
-                        m_aInBuffer = aNewText.copy( nChgPos, nChgLen );
-                        nExpandSelection = nOldLen - nChgPos;
-                    }
-                    else
-                        m_aInBuffer.clear();
+                const sal_Int32 nChgLen = nNewLen - nChgPos;
+                if (nChgLen)
+                {
+                    m_aInBuffer = aNewText.copy( nChgPos, nChgLen );
+                    nExpandSelection = nOldLen - nChgPos;
                 }
                 else
+                    m_aInBuffer.clear();
+            }
+            else
+            {
+                for( sal_Int32 k = 0;  k < m_aInBuffer.getLength(); ++k )
                 {
-                    for( sal_Int32 k = 0;  k < m_aInBuffer.getLength(); ++k )
+                    const sal_Unicode cChar = m_aInBuffer[k];
+                    if (xISC->checkInputSequence( aNewText, nTmpPos - 1, cChar, nCheckMode ))
                     {
-                        const sal_Unicode cChar = m_aInBuffer[k];
-                        if (xISC->checkInputSequence( aNewText, nTmpPos - 1, cChar, nCheckMode ))
-                        {
-                            // character can be inserted:
-                            aNewText += OUStringLiteral1( cChar );
-                            ++nTmpPos;
-                        }
+                        // character can be inserted:
+                        aNewText += OUStringLiteral1( cChar );
+                        ++nTmpPos;
                     }
-                    m_aInBuffer = aNewText.copy( aOldText.getLength() );  // copy new text to be inserted to buffer
                 }
-            }
-
-            // at this point now we will insert the buffer text 'normally' some lines below...
-
-            rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
-
-            if (m_aInBuffer.isEmpty())
-                return;
-
-            // if text prior to the original selection needs to be changed
-            // as well, we now expand the selection accordingly.
-            SwPaM &rCursor = *rSh.GetCursor();
-            const sal_Int32 nCursorStartPos = rCursor.Start()->nContent.GetIndex();
-            OSL_ENSURE( nCursorStartPos >= nExpandSelection, "cannot expand selection as specified!!" );
-            if (nExpandSelection && nCursorStartPos >= nExpandSelection)
-            {
-                if (!rCursor.HasMark())
-                    rCursor.SetMark();
-                rCursor.Start()->nContent -= nExpandSelection;
+                m_aInBuffer = aNewText.copy( aOldText.getLength() );  // copy new text to be inserted to buffer
             }
         }
 
-        uno::Reference< frame::XDispatchRecorder > xRecorder =
-                m_rView.GetViewFrame()->GetBindings().GetRecorder();
-        if ( xRecorder.is() )
+        // at this point now we will insert the buffer text 'normally' some lines below...
+
+        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+
+        if (m_aInBuffer.isEmpty())
+            return;
+
+        // if text prior to the original selection needs to be changed
+        // as well, we now expand the selection accordingly.
+        SwPaM &rCursor = *rSh.GetCursor();
+        const sal_Int32 nCursorStartPos = rCursor.Start()->nContent.GetIndex();
+        OSL_ENSURE( nCursorStartPos >= nExpandSelection, "cannot expand selection as specified!!" );
+        if (nExpandSelection && nCursorStartPos >= nExpandSelection)
         {
-            // determine shell
-            SfxShell *pSfxShell = lcl_GetTextShellFromDispatcher( m_rView );
-            // generate request and record
-            if (pSfxShell)
-            {
-                SfxRequest aReq( m_rView.GetViewFrame(), FN_INSERT_STRING );
-                aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, m_aInBuffer ) );
-                aReq.Done();
-            }
+            if (!rCursor.HasMark())
+                rCursor.SetMark();
+            rCursor.Start()->nContent -= nExpandSelection;
         }
-
-        sal_uInt16 nWhich = lcl_isNonDefaultLanguage(m_eBufferLanguage, m_rView, m_aInBuffer);
-        if (nWhich != INVALID_HINT )
-        {
-            SvxLanguageItem aLangItem( m_eBufferLanguage, nWhich );
-            rSh.SetAttrItem( aLangItem );
-        }
-
-        rSh.Insert( m_aInBuffer );
-        m_eBufferLanguage = LANGUAGE_DONTKNOW;
-        m_aInBuffer.clear();
-        g_bFlushCharBuffer = false;
     }
+
+    uno::Reference< frame::XDispatchRecorder > xRecorder =
+            m_rView.GetViewFrame()->GetBindings().GetRecorder();
+    if ( xRecorder.is() )
+    {
+        // determine shell
+        SfxShell *pSfxShell = lcl_GetTextShellFromDispatcher( m_rView );
+        // generate request and record
+        if (pSfxShell)
+        {
+            SfxRequest aReq( m_rView.GetViewFrame(), FN_INSERT_STRING );
+            aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, m_aInBuffer ) );
+            aReq.Done();
+        }
+    }
+
+    sal_uInt16 nWhich = lcl_isNonDefaultLanguage(m_eBufferLanguage, m_rView, m_aInBuffer);
+    if (nWhich != INVALID_HINT )
+    {
+        SvxLanguageItem aLangItem( m_eBufferLanguage, nWhich );
+        rSh.SetAttrItem( aLangItem );
+    }
+
+    rSh.Insert( m_aInBuffer );
+    m_eBufferLanguage = LANGUAGE_DONTKNOW;
+    m_aInBuffer.clear();
+    g_bFlushCharBuffer = false;
+
 }
 
 #define MOVE_LEFT_SMALL     0
@@ -1005,183 +1006,184 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
     SwRect aTmp = rSh.GetFlyRect();
-    if( aTmp.HasArea() &&
-        rSh.IsSelObjProtected( FlyProtectFlags::Pos ) == FlyProtectFlags::NONE )
+    if( !aTmp.HasArea() ||
+        rSh.IsSelObjProtected( FlyProtectFlags::Pos ) != FlyProtectFlags::NONE )
+        return;
+
+    SfxItemSet aSet(
+        rSh.GetAttrPool(),
+        svl::Items<
+            RES_FRM_SIZE, RES_FRM_SIZE,
+            RES_PROTECT, RES_PROTECT,
+            RES_VERT_ORIENT, RES_ANCHOR,
+            RES_COL, RES_COL,
+            RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW>{});
+    rSh.GetFlyFrameAttr( aSet );
+    RndStdIds eAnchorId = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
+    Size aSnap;
+    bool bHuge(MOVE_LEFT_HUGE == nDir ||
+        MOVE_UP_HUGE == nDir ||
+        MOVE_RIGHT_HUGE == nDir ||
+        MOVE_DOWN_HUGE == nDir);
+
+    if(MOVE_LEFT_SMALL == nDir ||
+        MOVE_UP_SMALL == nDir ||
+        MOVE_RIGHT_SMALL == nDir ||
+        MOVE_DOWN_SMALL == nDir )
     {
-        SfxItemSet aSet(
-            rSh.GetAttrPool(),
-            svl::Items<
-                RES_FRM_SIZE, RES_FRM_SIZE,
-                RES_PROTECT, RES_PROTECT,
-                RES_VERT_ORIENT, RES_ANCHOR,
-                RES_COL, RES_COL,
-                RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW>{});
-        rSh.GetFlyFrameAttr( aSet );
-        RndStdIds eAnchorId = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
-        Size aSnap;
-        bool bHuge(MOVE_LEFT_HUGE == nDir ||
-            MOVE_UP_HUGE == nDir ||
-            MOVE_RIGHT_HUGE == nDir ||
-            MOVE_DOWN_HUGE == nDir);
+        aSnap = PixelToLogic(Size(1,1));
+    }
+    else
+    {
+        aSnap = rSh.GetViewOptions()->GetSnapSize();
+        short nDiv = rSh.GetViewOptions()->GetDivisionX();
+        if ( nDiv > 0 )
+            aSnap.Width() = std::max( (sal_uLong)1, (sal_uLong)aSnap.Width() / nDiv );
+        nDiv = rSh.GetViewOptions()->GetDivisionY();
+        if ( nDiv > 0 )
+            aSnap.Height() = std::max( (sal_uLong)1, (sal_uLong)aSnap.Height() / nDiv );
+    }
 
-        if(MOVE_LEFT_SMALL == nDir ||
-            MOVE_UP_SMALL == nDir ||
-            MOVE_RIGHT_SMALL == nDir ||
-            MOVE_DOWN_SMALL == nDir )
-        {
-            aSnap = PixelToLogic(Size(1,1));
-        }
-        else
-        {
-            aSnap = rSh.GetViewOptions()->GetSnapSize();
-            short nDiv = rSh.GetViewOptions()->GetDivisionX();
-            if ( nDiv > 0 )
-                aSnap.Width() = std::max( (sal_uLong)1, (sal_uLong)aSnap.Width() / nDiv );
-            nDiv = rSh.GetViewOptions()->GetDivisionY();
-            if ( nDiv > 0 )
-                aSnap.Height() = std::max( (sal_uLong)1, (sal_uLong)aSnap.Height() / nDiv );
-        }
+    if(bHuge)
+    {
+        // #i121236# 567twips == 1cm, but just take three times the normal snap
+        aSnap = Size(aSnap.Width() * 3, aSnap.Height() * 3);
+    }
 
-        if(bHuge)
-        {
-            // #i121236# 567twips == 1cm, but just take three times the normal snap
-            aSnap = Size(aSnap.Width() * 3, aSnap.Height() * 3);
-        }
+    SwRect aBoundRect;
+    Point aRefPoint;
+    // adjustment for allowing vertical position
+    // aligned to page for fly frame anchored to paragraph or to character.
+    {
+        SwFormatVertOrient aVert( static_cast<const SwFormatVertOrient&>(aSet.Get(RES_VERT_ORIENT)) );
+        const bool bFollowTextFlow =
+                static_cast<const SwFormatFollowTextFlow&>(aSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
+        const SwPosition* pToCharContentPos = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR)).GetContentAnchor();
+        rSh.CalcBoundRect( aBoundRect, eAnchorId,
+                           text::RelOrientation::FRAME, aVert.GetRelationOrient(),
+                           pToCharContentPos, bFollowTextFlow,
+                           false, &aRefPoint );
+    }
+    long nLeft = std::min( aTmp.Left() - aBoundRect.Left(), aSnap.Width() );
+    long nRight = std::min( aBoundRect.Right() - aTmp.Right(), aSnap.Width() );
+    long nUp = std::min( aTmp.Top() - aBoundRect.Top(), aSnap.Height() );
+    long nDown = std::min( aBoundRect.Bottom() - aTmp.Bottom(), aSnap.Height() );
 
-        SwRect aBoundRect;
-        Point aRefPoint;
-        // adjustment for allowing vertical position
-        // aligned to page for fly frame anchored to paragraph or to character.
-        {
-            SwFormatVertOrient aVert( static_cast<const SwFormatVertOrient&>(aSet.Get(RES_VERT_ORIENT)) );
-            const bool bFollowTextFlow =
-                    static_cast<const SwFormatFollowTextFlow&>(aSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
-            const SwPosition* pToCharContentPos = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR)).GetContentAnchor();
-            rSh.CalcBoundRect( aBoundRect, eAnchorId,
-                               text::RelOrientation::FRAME, aVert.GetRelationOrient(),
-                               pToCharContentPos, bFollowTextFlow,
-                               false, &aRefPoint );
-        }
-        long nLeft = std::min( aTmp.Left() - aBoundRect.Left(), aSnap.Width() );
-        long nRight = std::min( aBoundRect.Right() - aTmp.Right(), aSnap.Width() );
-        long nUp = std::min( aTmp.Top() - aBoundRect.Top(), aSnap.Height() );
-        long nDown = std::min( aBoundRect.Bottom() - aTmp.Bottom(), aSnap.Height() );
+    switch ( nDir )
+    {
+        case MOVE_LEFT_BIG:
+        case MOVE_LEFT_HUGE:
+        case MOVE_LEFT_SMALL: aTmp.Left( aTmp.Left() - nLeft );
+            break;
 
-        switch ( nDir )
-        {
-            case MOVE_LEFT_BIG:
-            case MOVE_LEFT_HUGE:
-            case MOVE_LEFT_SMALL: aTmp.Left( aTmp.Left() - nLeft );
+        case MOVE_UP_BIG:
+        case MOVE_UP_HUGE:
+        case MOVE_UP_SMALL: aTmp.Top( aTmp.Top() - nUp );
+            break;
+
+        case MOVE_RIGHT_SMALL:
+            if( aTmp.Width() < aSnap.Width() + MINFLY )
                 break;
+            nRight = aSnap.Width();
+            SAL_FALLTHROUGH;
+        case MOVE_RIGHT_HUGE:
+        case MOVE_RIGHT_BIG: aTmp.Left( aTmp.Left() + nRight );
+            break;
 
-            case MOVE_UP_BIG:
-            case MOVE_UP_HUGE:
-            case MOVE_UP_SMALL: aTmp.Top( aTmp.Top() - nUp );
+        case MOVE_DOWN_SMALL:
+            if( aTmp.Height() < aSnap.Height() + MINFLY )
                 break;
+            nDown = aSnap.Height();
+            SAL_FALLTHROUGH;
+        case MOVE_DOWN_HUGE:
+        case MOVE_DOWN_BIG: aTmp.Top( aTmp.Top() + nDown );
+            break;
 
-            case MOVE_RIGHT_SMALL:
-                if( aTmp.Width() < aSnap.Width() + MINFLY )
-                    break;
-                nRight = aSnap.Width();
-                SAL_FALLTHROUGH;
-            case MOVE_RIGHT_HUGE:
-            case MOVE_RIGHT_BIG: aTmp.Left( aTmp.Left() + nRight );
-                break;
-
-            case MOVE_DOWN_SMALL:
-                if( aTmp.Height() < aSnap.Height() + MINFLY )
-                    break;
-                nDown = aSnap.Height();
-                SAL_FALLTHROUGH;
-            case MOVE_DOWN_HUGE:
-            case MOVE_DOWN_BIG: aTmp.Top( aTmp.Top() + nDown );
-                break;
-
-            default: OSL_ENSURE(true, "ChangeFly: Unknown direction." );
-        }
-        bool bSet = false;
-        if ((RndStdIds::FLY_AS_CHAR == eAnchorId) && ( nDir % 2 ))
+        default: OSL_ENSURE(true, "ChangeFly: Unknown direction." );
+    }
+    bool bSet = false;
+    if ((RndStdIds::FLY_AS_CHAR == eAnchorId) && ( nDir % 2 ))
+    {
+        long aDiff = aTmp.Top() - aRefPoint.Y();
+        if( aDiff > 0 )
+            aDiff = 0;
+        else if ( aDiff < -aTmp.Height() )
+            aDiff = -aTmp.Height();
+        SwFormatVertOrient aVert( static_cast<const SwFormatVertOrient&>(aSet.Get(RES_VERT_ORIENT)) );
+        sal_Int16 eNew;
+        if( bWeb )
         {
-            long aDiff = aTmp.Top() - aRefPoint.Y();
-            if( aDiff > 0 )
-                aDiff = 0;
-            else if ( aDiff < -aTmp.Height() )
-                aDiff = -aTmp.Height();
-            SwFormatVertOrient aVert( static_cast<const SwFormatVertOrient&>(aSet.Get(RES_VERT_ORIENT)) );
-            sal_Int16 eNew;
-            if( bWeb )
-            {
-                eNew = aVert.GetVertOrient();
-                bool bDown = 0 != ( nDir & 0x02 );
-                switch( eNew )
-                {
-                    case text::VertOrientation::CHAR_TOP:
-                        if( bDown ) eNew = text::VertOrientation::CENTER;
-                    break;
-                    case text::VertOrientation::CENTER:
-                        eNew = bDown ? text::VertOrientation::TOP : text::VertOrientation::CHAR_TOP;
-                    break;
-                    case text::VertOrientation::TOP:
-                        if( !bDown ) eNew = text::VertOrientation::CENTER;
-                    break;
-                    case text::VertOrientation::LINE_TOP:
-                        if( bDown ) eNew = text::VertOrientation::LINE_CENTER;
-                    break;
-                    case text::VertOrientation::LINE_CENTER:
-                        eNew = bDown ? text::VertOrientation::LINE_BOTTOM : text::VertOrientation::LINE_TOP;
-                    break;
-                    case text::VertOrientation::LINE_BOTTOM:
-                        if( !bDown ) eNew = text::VertOrientation::LINE_CENTER;
-                    break;
-                    default:; //prevent warning
-                }
-            }
-            else
-            {
-                aVert.SetPos( aDiff );
-                eNew = text::VertOrientation::NONE;
-            }
-            aVert.SetVertOrient( eNew );
-            aSet.Put( aVert );
-            bSet = true;
-        }
-        if (bWeb && (RndStdIds::FLY_AT_PARA == eAnchorId)
-            && ( nDir==MOVE_LEFT_SMALL || nDir==MOVE_RIGHT_BIG ))
-        {
-            SwFormatHoriOrient aHori( static_cast<const SwFormatHoriOrient&>(aSet.Get(RES_HORI_ORIENT)) );
-            sal_Int16 eNew;
-            eNew = aHori.GetHoriOrient();
+            eNew = aVert.GetVertOrient();
+            bool bDown = 0 != ( nDir & 0x02 );
             switch( eNew )
             {
-                case text::HoriOrientation::RIGHT:
-                    if( nDir==MOVE_LEFT_SMALL )
-                        eNew = text::HoriOrientation::LEFT;
+                case text::VertOrientation::CHAR_TOP:
+                    if( bDown ) eNew = text::VertOrientation::CENTER;
                 break;
-                case text::HoriOrientation::LEFT:
-                    if( nDir==MOVE_RIGHT_BIG )
-                        eNew = text::HoriOrientation::RIGHT;
+                case text::VertOrientation::CENTER:
+                    eNew = bDown ? text::VertOrientation::TOP : text::VertOrientation::CHAR_TOP;
+                break;
+                case text::VertOrientation::TOP:
+                    if( !bDown ) eNew = text::VertOrientation::CENTER;
+                break;
+                case text::VertOrientation::LINE_TOP:
+                    if( bDown ) eNew = text::VertOrientation::LINE_CENTER;
+                break;
+                case text::VertOrientation::LINE_CENTER:
+                    eNew = bDown ? text::VertOrientation::LINE_BOTTOM : text::VertOrientation::LINE_TOP;
+                break;
+                case text::VertOrientation::LINE_BOTTOM:
+                    if( !bDown ) eNew = text::VertOrientation::LINE_CENTER;
                 break;
                 default:; //prevent warning
             }
-            if( eNew != aHori.GetHoriOrient() )
-            {
-                aHori.SetHoriOrient( eNew );
-                aSet.Put( aHori );
-                bSet = true;
-            }
         }
-        rSh.StartAllAction();
-        if( bSet )
-            rSh.SetFlyFrameAttr( aSet );
-        bool bSetPos = (RndStdIds::FLY_AS_CHAR != eAnchorId);
-        if(bSetPos && bWeb)
+        else
         {
-            bSetPos = RndStdIds::FLY_AT_PAGE == eAnchorId;
+            aVert.SetPos( aDiff );
+            eNew = text::VertOrientation::NONE;
         }
-        if( bSetPos )
-            rSh.SetFlyPos( aTmp.Pos() );
-        rSh.EndAllAction();
+        aVert.SetVertOrient( eNew );
+        aSet.Put( aVert );
+        bSet = true;
     }
+    if (bWeb && (RndStdIds::FLY_AT_PARA == eAnchorId)
+        && ( nDir==MOVE_LEFT_SMALL || nDir==MOVE_RIGHT_BIG ))
+    {
+        SwFormatHoriOrient aHori( static_cast<const SwFormatHoriOrient&>(aSet.Get(RES_HORI_ORIENT)) );
+        sal_Int16 eNew;
+        eNew = aHori.GetHoriOrient();
+        switch( eNew )
+        {
+            case text::HoriOrientation::RIGHT:
+                if( nDir==MOVE_LEFT_SMALL )
+                    eNew = text::HoriOrientation::LEFT;
+            break;
+            case text::HoriOrientation::LEFT:
+                if( nDir==MOVE_RIGHT_BIG )
+                    eNew = text::HoriOrientation::RIGHT;
+            break;
+            default:; //prevent warning
+        }
+        if( eNew != aHori.GetHoriOrient() )
+        {
+            aHori.SetHoriOrient( eNew );
+            aSet.Put( aHori );
+            bSet = true;
+        }
+    }
+    rSh.StartAllAction();
+    if( bSet )
+        rSh.SetFlyFrameAttr( aSet );
+    bool bSetPos = (RndStdIds::FLY_AS_CHAR != eAnchorId);
+    if(bSetPos && bWeb)
+    {
+        bSetPos = RndStdIds::FLY_AT_PAGE == eAnchorId;
+    }
+    if( bSetPos )
+        rSh.SetFlyPos( aTmp.Pos() );
+    rSh.EndAllAction();
+
 }
 
 void SwEditWin::ChangeDrawing( sal_uInt8 nDir )

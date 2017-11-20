@@ -194,59 +194,60 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
         pSet = pDlg->GetOutputItemSet();
     }
 
-    if ( pSet)
+    if ( !pSet)
+        return;
+
+    SfxItemSet aTmpSet( *pSet );
+    ::ConvertAttrGenToChar(aTmpSet, aCoreSet, CONV_ATTR_STD);
+
+    const SfxPoolItem* pSelectionItem;
+    bool bInsert = false;
+    sal_Int32 nInsert = 0;
+
+    // The old item is for unknown reasons back in the set again.
+    if( !bSelectionPut && SfxItemState::SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, false, &pSelectionItem) )
     {
-        SfxItemSet aTmpSet( *pSet );
-        ::ConvertAttrGenToChar(aTmpSet, aCoreSet, CONV_ATTR_STD);
-
-        const SfxPoolItem* pSelectionItem;
-        bool bInsert = false;
-        sal_Int32 nInsert = 0;
-
-        // The old item is for unknown reasons back in the set again.
-        if( !bSelectionPut && SfxItemState::SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, false, &pSelectionItem) )
-        {
-            OUString sInsert = static_cast<const SfxStringItem*>(pSelectionItem)->GetValue();
-            bInsert = !sInsert.isEmpty();
-            if(bInsert)
-            {
-                nInsert = sInsert.getLength();
-                rWrtSh.StartAction();
-                rWrtSh.Insert( sInsert );
-                rWrtSh.SetMark();
-                rWrtSh.ExtendSelection(false, sInsert.getLength());
-                SfxRequest aReq( rWrtSh.GetView().GetViewFrame(), FN_INSERT_STRING );
-                aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, sInsert ) );
-                aReq.Done();
-                SfxRequest aReq1( rWrtSh.GetView().GetViewFrame(), FN_CHAR_LEFT );
-                aReq1.AppendItem( SfxInt32Item(FN_PARAM_MOVE_COUNT, nInsert) );
-                aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, true) );
-                aReq1.Done();
-            }
-        }
-        aTmpSet.ClearItem(FN_PARAM_SELECTION);
-
-        SwTextFormatColl* pColl = rWrtSh.GetCurTextFormatColl();
-        if(bSel && rWrtSh.IsSelFullPara() && pColl && pColl->IsAutoUpdateFormat())
-        {
-            rWrtSh.AutoUpdatePara(pColl, aTmpSet);
-        }
-        else
-            rWrtSh.SetAttrSet( aTmpSet );
-        if (pReq)
-            pReq->Done(aTmpSet);
+        OUString sInsert = static_cast<const SfxStringItem*>(pSelectionItem)->GetValue();
+        bInsert = !sInsert.isEmpty();
         if(bInsert)
         {
-            SfxRequest aReq1( rWrtSh.GetView().GetViewFrame(), FN_CHAR_RIGHT );
+            nInsert = sInsert.getLength();
+            rWrtSh.StartAction();
+            rWrtSh.Insert( sInsert );
+            rWrtSh.SetMark();
+            rWrtSh.ExtendSelection(false, sInsert.getLength());
+            SfxRequest aReq( rWrtSh.GetView().GetViewFrame(), FN_INSERT_STRING );
+            aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, sInsert ) );
+            aReq.Done();
+            SfxRequest aReq1( rWrtSh.GetView().GetViewFrame(), FN_CHAR_LEFT );
             aReq1.AppendItem( SfxInt32Item(FN_PARAM_MOVE_COUNT, nInsert) );
-            aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, false) );
+            aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, true) );
             aReq1.Done();
-            rWrtSh.SwapPam();
-            rWrtSh.ClearMark();
-            rWrtSh.DontExpandFormat();
-            rWrtSh.EndAction();
         }
     }
+    aTmpSet.ClearItem(FN_PARAM_SELECTION);
+
+    SwTextFormatColl* pColl = rWrtSh.GetCurTextFormatColl();
+    if(bSel && rWrtSh.IsSelFullPara() && pColl && pColl->IsAutoUpdateFormat())
+    {
+        rWrtSh.AutoUpdatePara(pColl, aTmpSet);
+    }
+    else
+        rWrtSh.SetAttrSet( aTmpSet );
+    if (pReq)
+        pReq->Done(aTmpSet);
+    if(bInsert)
+    {
+        SfxRequest aReq1( rWrtSh.GetView().GetViewFrame(), FN_CHAR_RIGHT );
+        aReq1.AppendItem( SfxInt32Item(FN_PARAM_MOVE_COUNT, nInsert) );
+        aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, false) );
+        aReq1.Done();
+        rWrtSh.SwapPam();
+        rWrtSh.ClearMark();
+        rWrtSh.DontExpandFormat();
+        rWrtSh.EndAction();
+    }
+
 }
 
 static short lcl_AskRedlineFlags(vcl::Window *pWin)

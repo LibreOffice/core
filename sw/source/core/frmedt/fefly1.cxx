@@ -2015,48 +2015,49 @@ void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedO
     SwFrameFormat * pFrameFormat = pFly ? pFly->GetFormat() : nullptr;
 
     // baseline to baseline alignment should only be applied to formulas anchored as char
-    if ( pFly && pFrameFormat && RndStdIds::FLY_AS_CHAR == pFrameFormat->GetAnchor().GetAnchorId() )
+    if ( !pFly || !pFrameFormat || RndStdIds::FLY_AS_CHAR != pFrameFormat->GetAnchor().GetAnchorId() )
+        return;
+
+    // get baseline from Math object
+    uno::Any aBaseline;
+    if( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
     {
-        // get baseline from Math object
-        uno::Any aBaseline;
-        if( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
+        uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+        if ( xSet.is() )
         {
-            uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
-            if ( xSet.is() )
+            try
             {
-                try
-                {
-                    aBaseline = xSet->getPropertyValue("BaseLine");
-                }
-                catch ( uno::Exception& )
-                {
-                    OSL_FAIL( "Baseline could not be retrieved from Starmath!" );
-                }
+                aBaseline = xSet->getPropertyValue("BaseLine");
+            }
+            catch ( uno::Exception& )
+            {
+                OSL_FAIL( "Baseline could not be retrieved from Starmath!" );
             }
         }
-
-        sal_Int32 nBaseline = ::comphelper::getINT32(aBaseline);
-        const MapMode aSourceMapMode( MapUnit::Map100thMM );
-        const MapMode aTargetMapMode( MapUnit::MapTwip );
-        nBaseline = OutputDevice::LogicToLogic( nBaseline, aSourceMapMode.GetMapUnit(), aTargetMapMode.GetMapUnit() );
-
-        OSL_ENSURE( nBaseline > 0, "Wrong value of Baseline while retrieving from Starmath!" );
-        //nBaseline must be moved by aPrt position
-        const SwFlyFrameFormat *pFlyFrameFormat = pFly->GetFormat();
-        OSL_ENSURE( pFlyFrameFormat, "fly frame format missing!" );
-        if ( pFlyFrameFormat )
-            nBaseline += pFlyFrameFormat->GetLastFlyFramePrtRectPos().Y();
-
-        const SwFormatVertOrient &rVert = pFrameFormat->GetVertOrient();
-        SwFormatVertOrient aVert( rVert );
-        aVert.SetPos( -nBaseline );
-        aVert.SetVertOrient( css::text::VertOrientation::NONE );
-
-        pFrameFormat->LockModify();
-        pFrameFormat->SetFormatAttr( aVert );
-        pFrameFormat->UnlockModify();
-        pFly->InvalidatePos();
     }
+
+    sal_Int32 nBaseline = ::comphelper::getINT32(aBaseline);
+    const MapMode aSourceMapMode( MapUnit::Map100thMM );
+    const MapMode aTargetMapMode( MapUnit::MapTwip );
+    nBaseline = OutputDevice::LogicToLogic( nBaseline, aSourceMapMode.GetMapUnit(), aTargetMapMode.GetMapUnit() );
+
+    OSL_ENSURE( nBaseline > 0, "Wrong value of Baseline while retrieving from Starmath!" );
+    //nBaseline must be moved by aPrt position
+    const SwFlyFrameFormat *pFlyFrameFormat = pFly->GetFormat();
+    OSL_ENSURE( pFlyFrameFormat, "fly frame format missing!" );
+    if ( pFlyFrameFormat )
+        nBaseline += pFlyFrameFormat->GetLastFlyFramePrtRectPos().Y();
+
+    const SwFormatVertOrient &rVert = pFrameFormat->GetVertOrient();
+    SwFormatVertOrient aVert( rVert );
+    aVert.SetPos( -nBaseline );
+    aVert.SetVertOrient( css::text::VertOrientation::NONE );
+
+    pFrameFormat->LockModify();
+    pFrameFormat->SetFormatAttr( aVert );
+    pFrameFormat->UnlockModify();
+    pFly->InvalidatePos();
+
 }
 
 void SwFEShell::AlignAllFormulasToBaseline()
