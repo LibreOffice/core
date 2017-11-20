@@ -497,7 +497,7 @@
 		</xs:attribute>
 		<xs:attribute name="AddressID" type="ct:String">
 			<xs:annotation>
-				<xs:documentation>A unique address identifier such as postal delivery idetifier assigned to the address by local postal authority, e.g. DPID in Australia.</xs:documentation>
+				<xs:documentation>A unique address identifier such as postal delivery identifier assigned to the address by local postal authority, e.g. DPID in Australia.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="AddressIDType" type="AddressIDTypeList">

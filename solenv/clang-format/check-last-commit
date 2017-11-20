@@ -27,7 +27,7 @@ sub check_style()
     my $clang_format = ClangFormat::find();
 
     # Get a list of non-deleted changed files.
-    # Explicitly use the low-level 'git diff-tree' (rathern that plain 'git
+    # Explicitly use the low-level 'git diff-tree' (rather than plain 'git
     # diff') so we get the new, but not the old files for renames and/or
     # copies.
     open (FILES, "git diff-tree -r --diff-filter=AM --name-only HEAD^ HEAD |") ||  die "Cannot run git diff.";

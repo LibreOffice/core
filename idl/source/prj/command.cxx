@@ -54,7 +54,7 @@ char const * const SyntaxStrings[] = {
 "\ttype definition:",
 "\tstruct identifier",
 "\t'{'",
-"\t\t{ type idetifier }",
+"\t\t{ type identifier }",
 "\t'}'",
 "\t|",
 "\tenum identifier",

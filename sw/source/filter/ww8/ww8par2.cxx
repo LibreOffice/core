@@ -4601,7 +4601,7 @@ void WW8RStyle::Import()
                  && pi->m_pFormat                        // Format ok ?
                  && pj->m_pFormat                        // Derived-Format ok ?
                  && pi->m_bColl                       // only possible for paragraph templates (WW)
-                 && pj->m_bColl ){                    // identical Typ ?
+                 && pj->m_bColl ){                    // identical Type ?
                     static_cast<SwTextFormatColl*>(pi->m_pFormat)->SetNextTextFormatColl(
                      *static_cast<SwTextFormatColl*>(pj->m_pFormat) );    // ok, register
             }
