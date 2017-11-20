@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_84471c76",
+        "filename": "sw/source/uibase/wrtsh/wrtsh2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-11-20T09:30:11Z",
+      "side": 1,
+      "message": "INetURLObject::GetMainURL(DecodeMechanism::WithCharset) is hardly ever the right choice.  (Consider a filesystem pathname /foo#bar, represented as a \u003cfile:///foo%23bar\u003e URL, for which DecodeMechanism::WithCharset will return the string \"file:///foo#bar\" representing a rather different file URL (representing the filesystem pathname /foo plus URL fragment \"bar\").",
+      "revId": "4b9e237850efe36f7e35d65e14d6953f1e1f3a45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
