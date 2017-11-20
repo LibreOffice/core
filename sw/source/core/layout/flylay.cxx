@@ -89,8 +89,10 @@ void SwFlyFreeFrame::DestroyImpl()
 
 SwFlyFreeFrame::~SwFlyFreeFrame()
 {
+#if 0
     // we are possibly in ContourCache, make sure we vanish
     ::ClrContourCache(GetVirtDrawObj());
+#endif
 }
 
 // #i28701#
