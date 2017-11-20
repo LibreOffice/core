@@ -47,11 +47,12 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>
-#include <unotools/pathoptions.hxx>
 #include <svl/itempool.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <unotools/configmgr.hxx>
+#include <unotools/pathoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -232,7 +233,7 @@ static void lcl_ReverseTwipsToMM( tools::Rectangle& rRect )
 }
 
 ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
-    FmFormModel( SvtPathOptions().GetPalettePath(),
+    FmFormModel( !utl::ConfigManager::IsFuzzing() ? SvtPathOptions().GetPalettePath() : OUString(),
                  nullptr,                          // SfxItemPool* Pool
                  pGlobalDrawPersist ?
                      pGlobalDrawPersist :
