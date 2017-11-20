@@ -51,6 +51,6 @@ SVX_DLLPUBLIC void insertCreationOrigin(css::uno::Reference<css::beans::XPropert
 }
 } // end svx::classification namespace
 
-#endif // INCLUDED_SVX_CLASSIFICATIONCOMMON_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
