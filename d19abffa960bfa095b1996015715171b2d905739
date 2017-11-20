@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_6f8049f8",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-11-20T14:10:54Z",
+      "side": 1,
+      "message": "I\u0027m a bit scared of the 0 column case. Did you check that the default cell style handling works in that case. Personally I would prefer if there is always at least one column.\n\nI suppose there are many corner cases in our code that somehow assume that the top left cell is always there is everything else fails.",
+      "revId": "d19abffa960bfa095b1996015715171b2d905739",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
