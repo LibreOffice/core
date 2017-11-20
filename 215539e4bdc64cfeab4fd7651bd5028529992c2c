@@ -16,6 +16,24 @@
       "revId": "215539e4bdc64cfeab4fd7651bd5028529992c2c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_af6a31b1",
+        "filename": "sc/source/core/data/postit.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-11-20T11:32:21Z",
+      "side": 1,
+      "message": "Tiled rendering, lokit code respectively (sc/source/core/data/documen2.cxx: GetTiledRenderingArea) queries ViewData too\n\nso maybe you can implement ScViewData::SyncForGrid( SdrObject *theObject ) that would do what the code below does",
+      "parentUuid": "1a430d35_618062f8",
+      "revId": "215539e4bdc64cfeab4fd7651bd5028529992c2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
