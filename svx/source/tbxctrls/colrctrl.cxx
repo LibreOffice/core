@@ -259,29 +259,29 @@ void SvxColorDockingWindow::Notify( SfxBroadcaster& , const SfxHint& rHint )
 
 void SvxColorDockingWindow::FillValueSet()
 {
-    if( pColorList.is() )
-    {
-        nCount = pColorList->Count();
-        aColorSet->Clear();
+    if( !pColorList.is() )
+        return;
 
-        // create the first entry for 'invisible/none'
-        const Size aColorSize(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength());
-        long nPtX = aColorSize.Width() - 1;
-        long nPtY = aColorSize.Height() - 1;
-        ScopedVclPtrInstance< VirtualDevice > pVD;
+    nCount = pColorList->Count();
+    aColorSet->Clear();
 
-        pVD->SetOutputSizePixel( aColorSize );
-        pVD->SetLineColor( Color( COL_BLACK ) );
-        pVD->SetBackground( Wallpaper( Color( COL_WHITE ) ) );
-        pVD->DrawLine( Point(), Point( nPtX, nPtY ) );
-        pVD->DrawLine( Point( 0, nPtY ), Point( nPtX, 0 ) );
+    // create the first entry for 'invisible/none'
+    const Size aColorSize(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength());
+    long nPtX = aColorSize.Width() - 1;
+    long nPtY = aColorSize.Height() - 1;
+    ScopedVclPtrInstance< VirtualDevice > pVD;
 
-        Bitmap aBmp( pVD->GetBitmap( Point(), aColorSize ) );
+    pVD->SetOutputSizePixel( aColorSize );
+    pVD->SetLineColor( Color( COL_BLACK ) );
+    pVD->SetBackground( Wallpaper( Color( COL_WHITE ) ) );
+    pVD->DrawLine( Point(), Point( nPtX, nPtY ) );
+    pVD->DrawLine( Point( 0, nPtY ), Point( nPtX, 0 ) );
 
-        aColorSet->InsertItem( (sal_uInt16)1, Image(aBmp), SvxResId( RID_SVXSTR_INVISIBLE ) );
+    Bitmap aBmp( pVD->GetBitmap( Point(), aColorSize ) );
 
-        aColorSet->addEntriesForXColorList(*pColorList, 2);
-    }
+    aColorSet->InsertItem( (sal_uInt16)1, Image(aBmp), SvxResId( RID_SVXSTR_INVISIBLE ) );
+
+    aColorSet->addEntriesForXColorList(*pColorList, 2);
 }
 
 void SvxColorDockingWindow::SetSize()

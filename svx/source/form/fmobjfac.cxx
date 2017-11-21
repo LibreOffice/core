@@ -53,34 +53,34 @@ static bool bInit = false;
 
 FmFormObjFactory::FmFormObjFactory()
 {
-    if ( !bInit )
-    {
-        SdrObjFactory::InsertMakeObjectHdl(LINK(this, FmFormObjFactory, MakeObject));
+    if ( bInit )
+        return;
+
+    SdrObjFactory::InsertMakeObjectHdl(LINK(this, FmFormObjFactory, MakeObject));
 
 
-        // register the configuration css::frame::Controller and the NavigationBar
-        SvxFmTbxCtlAbsRec::RegisterControl( SID_FM_RECORD_ABSOLUTE );
-        SvxFmTbxCtlRecText::RegisterControl( SID_FM_RECORD_TEXT );
-        SvxFmTbxCtlRecFromText::RegisterControl( SID_FM_RECORD_FROM_TEXT );
-        SvxFmTbxCtlRecTotal::RegisterControl( SID_FM_RECORD_TOTAL );
-        SvxFmTbxPrevRec::RegisterControl( SID_FM_RECORD_PREV );
-        SvxFmTbxNextRec::RegisterControl( SID_FM_RECORD_NEXT );
+    // register the configuration css::frame::Controller and the NavigationBar
+    SvxFmTbxCtlAbsRec::RegisterControl( SID_FM_RECORD_ABSOLUTE );
+    SvxFmTbxCtlRecText::RegisterControl( SID_FM_RECORD_TEXT );
+    SvxFmTbxCtlRecFromText::RegisterControl( SID_FM_RECORD_FROM_TEXT );
+    SvxFmTbxCtlRecTotal::RegisterControl( SID_FM_RECORD_TOTAL );
+    SvxFmTbxPrevRec::RegisterControl( SID_FM_RECORD_PREV );
+    SvxFmTbxNextRec::RegisterControl( SID_FM_RECORD_NEXT );
 
-        // registering global windows
-        FmFieldWinMgr::RegisterChildWindow();
-        FmPropBrwMgr::RegisterChildWindow();
-        NavigatorFrameManager::RegisterChildWindow();
-        DataNavigatorManager::RegisterChildWindow();
+    // registering global windows
+    FmFieldWinMgr::RegisterChildWindow();
+    FmPropBrwMgr::RegisterChildWindow();
+    NavigatorFrameManager::RegisterChildWindow();
+    DataNavigatorManager::RegisterChildWindow();
 #if HAVE_FEATURE_DBCONNECTIVITY
-        FmFilterNavigatorWinMgr::RegisterChildWindow();
+    FmFilterNavigatorWinMgr::RegisterChildWindow();
 #endif
 
-        // register the interface for the Formshell
-        FmFormShell::RegisterInterface();
+    // register the interface for the Formshell
+    FmFormShell::RegisterInterface();
 
-        ImplSmartRegisterUnoServices();
-        bInit = true;
-    }
+    ImplSmartRegisterUnoServices();
+    bInit = true;
 }
 
 FmFormObjFactory::~FmFormObjFactory()

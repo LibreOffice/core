@@ -189,23 +189,23 @@ void SdrTextObj::FitFrameToTextSize()
     ImpJustifyRect(maRect);
 
     SdrText* pText = getActiveText();
-    if( pText!=nullptr && pText->GetOutlinerParaObject() && pModel!=nullptr)
-    {
-        SdrOutliner& rOutliner=ImpGetDrawOutliner();
-        rOutliner.SetPaperSize(Size(maRect.Right()-maRect.Left(),maRect.Bottom()-maRect.Top()));
-        rOutliner.SetUpdateMode(true);
-        rOutliner.SetText(*pText->GetOutlinerParaObject());
-        Size aNewSize(rOutliner.CalcTextSize());
-        rOutliner.Clear();
-        aNewSize.Width()++; // because of possible rounding errors
-        aNewSize.Width()+=GetTextLeftDistance()+GetTextRightDistance();
-        aNewSize.Height()+=GetTextUpperDistance()+GetTextLowerDistance();
-        tools::Rectangle aNewRect(maRect);
-        aNewRect.SetSize(aNewSize);
-        ImpJustifyRect(aNewRect);
-        if (aNewRect!=maRect) {
-            SetLogicRect(aNewRect);
-        }
+    if( pText==nullptr || !pText->GetOutlinerParaObject() || pModel==nullptr)
+        return;
+
+    SdrOutliner& rOutliner=ImpGetDrawOutliner();
+    rOutliner.SetPaperSize(Size(maRect.Right()-maRect.Left(),maRect.Bottom()-maRect.Top()));
+    rOutliner.SetUpdateMode(true);
+    rOutliner.SetText(*pText->GetOutlinerParaObject());
+    Size aNewSize(rOutliner.CalcTextSize());
+    rOutliner.Clear();
+    aNewSize.Width()++; // because of possible rounding errors
+    aNewSize.Width()+=GetTextLeftDistance()+GetTextRightDistance();
+    aNewSize.Height()+=GetTextUpperDistance()+GetTextLowerDistance();
+    tools::Rectangle aNewRect(maRect);
+    aNewRect.SetSize(aNewSize);
+    ImpJustifyRect(aNewRect);
+    if (aNewRect!=maRect) {
+        SetLogicRect(aNewRect);
     }
 }
 
@@ -1530,60 +1530,60 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
         pOutlinerParaObject = GetOutlinerParaObject();
     }
 
-    if (pOutlinerParaObject &&
-        (pOutlinerParaObject->IsVertical() != bVertical))
+    if (!pOutlinerParaObject ||
+        (pOutlinerParaObject->IsVertical() == bVertical))
+        return;
+
+    // get item settings
+    const SfxItemSet& rSet = GetObjectItemSet();
+    bool bAutoGrowWidth = rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH).GetValue();
+    bool bAutoGrowHeight = rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue();
+
+    // Also exchange hor/ver adjust items
+    SdrTextHorzAdjust eHorz = rSet.Get(SDRATTR_TEXT_HORZADJUST).GetValue();
+    SdrTextVertAdjust eVert = rSet.Get(SDRATTR_TEXT_VERTADJUST).GetValue();
+
+    // rescue object size
+    tools::Rectangle aObjectRect = GetSnapRect();
+
+    // prepare ItemSet to set exchanged width and height items
+    SfxItemSet aNewSet(*rSet.GetPool(),
+        svl::Items<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
+        // Expanded item ranges to also support hor and ver adjust.
+        SDRATTR_TEXT_VERTADJUST, SDRATTR_TEXT_VERTADJUST,
+        SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_HORZADJUST>{});
+
+    aNewSet.Put(rSet);
+    aNewSet.Put(makeSdrTextAutoGrowWidthItem(bAutoGrowHeight));
+    aNewSet.Put(makeSdrTextAutoGrowHeightItem(bAutoGrowWidth));
+
+    // Exchange horz and vert adjusts
+    switch (eVert)
     {
-        // get item settings
-        const SfxItemSet& rSet = GetObjectItemSet();
-        bool bAutoGrowWidth = rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH).GetValue();
-        bool bAutoGrowHeight = rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue();
-
-        // Also exchange hor/ver adjust items
-        SdrTextHorzAdjust eHorz = rSet.Get(SDRATTR_TEXT_HORZADJUST).GetValue();
-        SdrTextVertAdjust eVert = rSet.Get(SDRATTR_TEXT_VERTADJUST).GetValue();
-
-        // rescue object size
-        tools::Rectangle aObjectRect = GetSnapRect();
-
-        // prepare ItemSet to set exchanged width and height items
-        SfxItemSet aNewSet(*rSet.GetPool(),
-            svl::Items<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
-            // Expanded item ranges to also support hor and ver adjust.
-            SDRATTR_TEXT_VERTADJUST, SDRATTR_TEXT_VERTADJUST,
-            SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_HORZADJUST>{});
-
-        aNewSet.Put(rSet);
-        aNewSet.Put(makeSdrTextAutoGrowWidthItem(bAutoGrowHeight));
-        aNewSet.Put(makeSdrTextAutoGrowHeightItem(bAutoGrowWidth));
-
-        // Exchange horz and vert adjusts
-        switch (eVert)
-        {
-            case SDRTEXTVERTADJUST_TOP: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT)); break;
-            case SDRTEXTVERTADJUST_CENTER: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER)); break;
-            case SDRTEXTVERTADJUST_BOTTOM: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT)); break;
-            case SDRTEXTVERTADJUST_BLOCK: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK)); break;
-        }
-        switch (eHorz)
-        {
-            case SDRTEXTHORZADJUST_LEFT: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BOTTOM)); break;
-            case SDRTEXTHORZADJUST_CENTER: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER)); break;
-            case SDRTEXTHORZADJUST_RIGHT: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP)); break;
-            case SDRTEXTHORZADJUST_BLOCK: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BLOCK)); break;
-        }
-
-        SetObjectItemSet(aNewSet);
-
-        pOutlinerParaObject = GetOutlinerParaObject();
-        if (pOutlinerParaObject)
-        {
-            // set ParaObject orientation accordingly
-            pOutlinerParaObject->SetVertical(bVertical);
-        }
-
-        // restore object size
-        SetSnapRect(aObjectRect);
+        case SDRTEXTVERTADJUST_TOP: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT)); break;
+        case SDRTEXTVERTADJUST_CENTER: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER)); break;
+        case SDRTEXTVERTADJUST_BOTTOM: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT)); break;
+        case SDRTEXTVERTADJUST_BLOCK: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK)); break;
     }
+    switch (eHorz)
+    {
+        case SDRTEXTHORZADJUST_LEFT: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BOTTOM)); break;
+        case SDRTEXTHORZADJUST_CENTER: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER)); break;
+        case SDRTEXTHORZADJUST_RIGHT: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP)); break;
+        case SDRTEXTHORZADJUST_BLOCK: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BLOCK)); break;
+    }
+
+    SetObjectItemSet(aNewSet);
+
+    pOutlinerParaObject = GetOutlinerParaObject();
+    if (pOutlinerParaObject)
+    {
+        // set ParaObject orientation accordingly
+        pOutlinerParaObject->SetVertical(bVertical);
+    }
+
+    // restore object size
+    SetSnapRect(aObjectRect);
 }
 
 // transformation interface for StarOfficeAPI. This implements support for

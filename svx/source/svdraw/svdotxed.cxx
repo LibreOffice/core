@@ -345,24 +345,25 @@ EEAnchorMode SdrTextObj::GetOutlinerViewAnchorMode() const
 
 void SdrTextObj::ImpSetTextEditParams() const
 {
-    if (pEdtOutl!=nullptr) {
-        bool bUpdMerk=pEdtOutl->GetUpdateMode();
-        if (bUpdMerk) pEdtOutl->SetUpdateMode(false);
-        Size aPaperMin;
-        Size aPaperMax;
-        tools::Rectangle aEditArea;
-        TakeTextEditArea(&aPaperMin,&aPaperMax,&aEditArea,nullptr);
-        bool bContourFrame=IsContourTextFrame();
-        pEdtOutl->SetMinAutoPaperSize(aPaperMin);
-        pEdtOutl->SetMaxAutoPaperSize(aPaperMax);
-        pEdtOutl->SetPaperSize(Size());
-        if (bContourFrame) {
-            tools::Rectangle aAnchorRect;
-            TakeTextAnchorRect(aAnchorRect);
-            ImpSetContourPolygon(*pEdtOutl,aAnchorRect, true);
-        }
-        if (bUpdMerk) pEdtOutl->SetUpdateMode(true);
+    if (pEdtOutl==nullptr)
+        return;
+
+    bool bUpdMerk=pEdtOutl->GetUpdateMode();
+    if (bUpdMerk) pEdtOutl->SetUpdateMode(false);
+    Size aPaperMin;
+    Size aPaperMax;
+    tools::Rectangle aEditArea;
+    TakeTextEditArea(&aPaperMin,&aPaperMax,&aEditArea,nullptr);
+    bool bContourFrame=IsContourTextFrame();
+    pEdtOutl->SetMinAutoPaperSize(aPaperMin);
+    pEdtOutl->SetMaxAutoPaperSize(aPaperMax);
+    pEdtOutl->SetPaperSize(Size());
+    if (bContourFrame) {
+        tools::Rectangle aAnchorRect;
+        TakeTextAnchorRect(aAnchorRect);
+        ImpSetContourPolygon(*pEdtOutl,aAnchorRect, true);
     }
+    if (bUpdMerk) pEdtOutl->SetUpdateMode(true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

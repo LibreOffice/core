@@ -1164,58 +1164,58 @@ void SvxTableController::SetTableStyleSettings( const SfxItemSet* pArgs )
 void SvxTableController::SetVertical( sal_uInt16 nSId )
 {
     SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
-    if( mxTable.is() && pTableObj )
+    if( !mxTable.is() || !pTableObj )
+        return;
+
+    TableModelNotifyGuard aGuard( mxTable.get() );
+
+    bool bUndo = mpModel && mpModel->IsUndoEnabled();
+    if (bUndo)
     {
-        TableModelNotifyGuard aGuard( mxTable.get() );
+        mpModel->BegUndo(ImpGetResStr(STR_TABLE_NUMFORMAT));
+        mpModel->AddUndo(mpModel->GetSdrUndoFactory().CreateUndoAttrObject(*pTableObj));
+    }
 
-        bool bUndo = mpModel && mpModel->IsUndoEnabled();
-        if (bUndo)
+    CellPos aStart, aEnd;
+    getSelectedCells( aStart, aEnd );
+
+    SdrTextVertAdjust eAdj = SDRTEXTVERTADJUST_TOP;
+
+    switch( nSId )
+    {
+        case SID_TABLE_VERT_BOTTOM:
+            eAdj = SDRTEXTVERTADJUST_BOTTOM;
+            break;
+        case SID_TABLE_VERT_CENTER:
+            eAdj = SDRTEXTVERTADJUST_CENTER;
+            break;
+        //case SID_TABLE_VERT_NONE:
+        default:
+            break;
+    }
+
+    SdrTextVertAdjustItem aItem( eAdj );
+
+    for( sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++ )
+    {
+        for( sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++ )
         {
-            mpModel->BegUndo(ImpGetResStr(STR_TABLE_NUMFORMAT));
-            mpModel->AddUndo(mpModel->GetSdrUndoFactory().CreateUndoAttrObject(*pTableObj));
-        }
-
-        CellPos aStart, aEnd;
-        getSelectedCells( aStart, aEnd );
-
-        SdrTextVertAdjust eAdj = SDRTEXTVERTADJUST_TOP;
-
-        switch( nSId )
-        {
-            case SID_TABLE_VERT_BOTTOM:
-                eAdj = SDRTEXTVERTADJUST_BOTTOM;
-                break;
-            case SID_TABLE_VERT_CENTER:
-                eAdj = SDRTEXTVERTADJUST_CENTER;
-                break;
-            //case SID_TABLE_VERT_NONE:
-            default:
-                break;
-        }
-
-        SdrTextVertAdjustItem aItem( eAdj );
-
-        for( sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++ )
-        {
-            for( sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++ )
+            CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
+            if( xCell.is() )
             {
-                CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
-                if( xCell.is() )
-                {
-                    if (bUndo)
-                        xCell->AddUndo();
-                    SfxItemSet aSet(xCell->GetItemSet());
-                    aSet.Put(aItem);
-                    xCell->SetMergedItemSetAndBroadcast(aSet, /*bClearAllItems=*/false);
-                }
+                if (bUndo)
+                    xCell->AddUndo();
+                SfxItemSet aSet(xCell->GetItemSet());
+                aSet.Put(aItem);
+                xCell->SetMergedItemSetAndBroadcast(aSet, /*bClearAllItems=*/false);
             }
         }
-
-        UpdateTableShape();
-
-        if (bUndo)
-            mpModel->EndUndo();
     }
+
+    UpdateTableShape();
+
+    if (bUndo)
+        mpModel->EndUndo();
 }
 
 void SvxTableController::MergeMarkedCells()
@@ -2507,52 +2507,51 @@ void SvxTableController::UpdateTableShape()
 
 void SvxTableController::SetAttrToSelectedCells(const SfxItemSet& rAttr, bool bReplaceAll)
 {
-    if( mxTable.is() )
+    if( !mxTable.is() )
+        return;
+
+    const bool bUndo = mpModel && mpModel->IsUndoEnabled();
+
+    if( bUndo )
+        mpModel->BegUndo( ImpGetResStr(STR_TABLE_NUMFORMAT) );
+
+    CellPos aStart, aEnd;
+    getSelectedCells( aStart, aEnd );
+
+    SfxItemSet aAttr(*rAttr.GetPool(), rAttr.GetRanges());
+    aAttr.Put(rAttr);
+
+    const bool bFrame = (rAttr.GetItemState( SDRATTR_TABLE_BORDER ) == SfxItemState::SET) || (rAttr.GetItemState( SDRATTR_TABLE_BORDER_INNER ) == SfxItemState::SET);
+
+    if( bFrame )
     {
-        const bool bUndo = mpModel && mpModel->IsUndoEnabled();
+        aAttr.ClearItem( SDRATTR_TABLE_BORDER );
+        aAttr.ClearItem( SDRATTR_TABLE_BORDER_INNER );
+    }
 
-        if( bUndo )
-            mpModel->BegUndo( ImpGetResStr(STR_TABLE_NUMFORMAT) );
-
-        CellPos aStart, aEnd;
-        getSelectedCells( aStart, aEnd );
-
-        SfxItemSet aAttr(*rAttr.GetPool(), rAttr.GetRanges());
-        aAttr.Put(rAttr);
-
-        const bool bFrame = (rAttr.GetItemState( SDRATTR_TABLE_BORDER ) == SfxItemState::SET) || (rAttr.GetItemState( SDRATTR_TABLE_BORDER_INNER ) == SfxItemState::SET);
-
-        if( bFrame )
+    for( sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++ )
+    {
+        for( sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++ )
         {
-            aAttr.ClearItem( SDRATTR_TABLE_BORDER );
-            aAttr.ClearItem( SDRATTR_TABLE_BORDER_INNER );
-        }
-
-        for( sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++ )
-        {
-            for( sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++ )
+            CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
+            if( xCell.is() )
             {
-                CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
-                if( xCell.is() )
-                {
-                    if( bUndo )
-                        xCell->AddUndo();
-                    xCell->SetMergedItemSetAndBroadcast(aAttr, bReplaceAll);
-                }
+                if( bUndo )
+                    xCell->AddUndo();
+                xCell->SetMergedItemSetAndBroadcast(aAttr, bReplaceAll);
             }
         }
-
-        if( bFrame )
-        {
-            ApplyBorderAttr( rAttr );
-        }
-
-        UpdateTableShape();
-
-        if( bUndo )
-            mpModel->EndUndo();
-
     }
+
+    if( bFrame )
+    {
+        ApplyBorderAttr( rAttr );
+    }
+
+    UpdateTableShape();
+
+    if( bUndo )
+        mpModel->EndUndo();
 }
 
 

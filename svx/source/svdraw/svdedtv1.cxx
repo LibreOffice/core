@@ -951,218 +951,218 @@ std::vector<sal_uInt16> GetAllCharPropIds(const SfxItemSet& rSet)
 
 void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
 {
-    if (AreObjectsMarked())
-    {
+    if (!AreObjectsMarked())
+        return;
+
 #ifdef DBG_UTIL
-        {
-            bool bHasEEFeatureItems=false;
-            SfxItemIter aIter(rAttr);
-            const SfxPoolItem* pItem=aIter.FirstItem();
-            while (!bHasEEFeatureItems && pItem!=nullptr) {
-                if (!IsInvalidItem(pItem)) {
-                    sal_uInt16 nW=pItem->Which();
-                    if (nW>=EE_FEATURE_START && nW<=EE_FEATURE_END) bHasEEFeatureItems=true;
-                }
-                pItem=aIter.NextItem();
+    {
+        bool bHasEEFeatureItems=false;
+        SfxItemIter aIter(rAttr);
+        const SfxPoolItem* pItem=aIter.FirstItem();
+        while (!bHasEEFeatureItems && pItem!=nullptr) {
+            if (!IsInvalidItem(pItem)) {
+                sal_uInt16 nW=pItem->Which();
+                if (nW>=EE_FEATURE_START && nW<=EE_FEATURE_END) bHasEEFeatureItems=true;
             }
-            if(bHasEEFeatureItems)
-            {
-                OUString aMessage("SdrEditView::SetAttrToMarked(): Setting EE_FEATURE items at the SdrView does not make sense! It only leads to overhead and unreadable documents.");
-                ScopedVclPtrInstance<InfoBox>(nullptr, aMessage)->Execute();
-            }
+            pItem=aIter.NextItem();
         }
+        if(bHasEEFeatureItems)
+        {
+            OUString aMessage("SdrEditView::SetAttrToMarked(): Setting EE_FEATURE items at the SdrView does not make sense! It only leads to overhead and unreadable documents.");
+            ScopedVclPtrInstance<InfoBox>(nullptr, aMessage)->Execute();
+        }
+    }
 #endif
 
-        // #103836# if the user sets character attributes to the complete shape,
-        //          we want to remove all hard set character attributes with same
-        //          which ids from the text. We do that later but here we remember
-        //          all character attribute which id's that are set.
-        std::vector<sal_uInt16> aCharWhichIds(GetAllCharPropIds(rAttr));
+    // #103836# if the user sets character attributes to the complete shape,
+    //          we want to remove all hard set character attributes with same
+    //          which ids from the text. We do that later but here we remember
+    //          all character attribute which id's that are set.
+    std::vector<sal_uInt16> aCharWhichIds(GetAllCharPropIds(rAttr));
 
-        // To make Undo reconstruct text attributes correctly after Format.Standard
-        bool bHasEEItems=SearchOutlinerItems(rAttr,bReplaceAll);
+    // To make Undo reconstruct text attributes correctly after Format.Standard
+    bool bHasEEItems=SearchOutlinerItems(rAttr,bReplaceAll);
 
-        // save additional geometry information when paragraph or character attributes
-        // are changed and the geometrical shape of the text object might be changed
-        bool bPossibleGeomChange(false);
-        SfxWhichIter aIter(rAttr);
-        sal_uInt16 nWhich = aIter.FirstWhich();
-        while(!bPossibleGeomChange && nWhich)
+    // save additional geometry information when paragraph or character attributes
+    // are changed and the geometrical shape of the text object might be changed
+    bool bPossibleGeomChange(false);
+    SfxWhichIter aIter(rAttr);
+    sal_uInt16 nWhich = aIter.FirstWhich();
+    while(!bPossibleGeomChange && nWhich)
+    {
+        SfxItemState eState = rAttr.GetItemState(nWhich);
+        if(eState == SfxItemState::SET)
         {
-            SfxItemState eState = rAttr.GetItemState(nWhich);
-            if(eState == SfxItemState::SET)
+            if((nWhich >= SDRATTR_TEXT_MINFRAMEHEIGHT && nWhich <= SDRATTR_TEXT_CONTOURFRAME)
+                || nWhich == SDRATTR_3DOBJ_PERCENT_DIAGONAL
+                || nWhich == SDRATTR_3DOBJ_BACKSCALE
+                || nWhich == SDRATTR_3DOBJ_DEPTH
+                || nWhich == SDRATTR_3DOBJ_END_ANGLE
+                || nWhich == SDRATTR_3DSCENE_DISTANCE)
             {
-                if((nWhich >= SDRATTR_TEXT_MINFRAMEHEIGHT && nWhich <= SDRATTR_TEXT_CONTOURFRAME)
-                    || nWhich == SDRATTR_3DOBJ_PERCENT_DIAGONAL
-                    || nWhich == SDRATTR_3DOBJ_BACKSCALE
-                    || nWhich == SDRATTR_3DOBJ_DEPTH
-                    || nWhich == SDRATTR_3DOBJ_END_ANGLE
-                    || nWhich == SDRATTR_3DSCENE_DISTANCE)
-                {
-                    bPossibleGeomChange = true;
-                }
+                bPossibleGeomChange = true;
             }
-            nWhich = aIter.NextWhich();
         }
+        nWhich = aIter.NextWhich();
+    }
 
-        const bool bUndo = IsUndoEnabled();
+    const bool bUndo = IsUndoEnabled();
+    if( bUndo )
+    {
+        OUString aStr;
+        ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
+        BegUndo(aStr);
+    }
+
+    const size_t nMarkCount(GetMarkedObjectCount());
+    std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
+
+    // create ItemSet without SfxItemState::DONTCARE. Put()
+    // uses its second parameter (bInvalidAsDefault) to
+    // remove all such items to set them to default.
+    SfxItemSet aAttr(*rAttr.GetPool(), rAttr.GetRanges());
+    aAttr.Put(rAttr);
+
+    // #i38135#
+    bool bResetAnimationTimer(false);
+
+    // check if LineWidth is part of the change
+    const bool bLineWidthChange(SfxItemState::SET == aAttr.GetItemState(XATTR_LINEWIDTH));
+    sal_Int32 nNewLineWidth(0);
+    sal_Int32 nOldLineWidth(0);
+
+    if(bLineWidthChange)
+    {
+        nNewLineWidth = aAttr.Get(XATTR_LINEWIDTH).GetValue();
+    }
+
+    for (size_t nm=0; nm<nMarkCount; ++nm)
+    {
+        SdrMark* pM=GetSdrMarkByIndex(nm);
+        SdrObject* pObj = pM->GetMarkedSdrObj();
+
         if( bUndo )
         {
-            OUString aStr;
-            ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
-            BegUndo(aStr);
+            std::vector< SdrUndoAction* > vConnectorUndoActions;
+            SdrEdgeObj* pEdgeObj = dynamic_cast< SdrEdgeObj* >( pObj );
+            if ( pEdgeObj )
+                bPossibleGeomChange = true;
+            else if( bUndo )
+                vConnectorUndoActions = CreateConnectorUndo( *pObj );
+
+            AddUndoActions( vConnectorUndoActions );
         }
 
-        const size_t nMarkCount(GetMarkedObjectCount());
-        std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
+        // new geometry undo
+        if(bPossibleGeomChange && bUndo)
+        {
+            // save position and size of object, too
+            AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
+        }
 
-        // create ItemSet without SfxItemState::DONTCARE. Put()
-        // uses its second parameter (bInvalidAsDefault) to
-        // remove all such items to set them to default.
-        SfxItemSet aAttr(*rAttr.GetPool(), rAttr.GetRanges());
-        aAttr.Put(rAttr);
+        if( bUndo )
+        {
+            // #i8508#
+            // If this is a text object also rescue the OutlinerParaObject since
+            // applying attributes to the object may change text layout when
+            // multiple portions exist with multiple formats. If a OutlinerParaObject
+            // really exists and needs to be rescued is evaluated in the undo
+            // implementation itself.
+            const bool bRescueText = dynamic_cast< SdrTextObj* >(pObj) != nullptr;
 
-        // #i38135#
-        bool bResetAnimationTimer(false);
+            // add attribute undo
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj,false,bHasEEItems || bPossibleGeomChange || bRescueText));
+        }
 
-        // check if LineWidth is part of the change
-        const bool bLineWidthChange(SfxItemState::SET == aAttr.GetItemState(XATTR_LINEWIDTH));
-        sal_Int32 nNewLineWidth(0);
-        sal_Int32 nOldLineWidth(0);
+        // set up a scene updater if object is a 3d object
+        if(dynamic_cast< E3dObject* >(pObj))
+        {
+            aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(pObj));
+        }
 
         if(bLineWidthChange)
         {
-            nNewLineWidth = aAttr.Get(XATTR_LINEWIDTH).GetValue();
+            nOldLineWidth = pObj->GetMergedItem(XATTR_LINEWIDTH).GetValue();
         }
 
-        for (size_t nm=0; nm<nMarkCount; ++nm)
+        // set attributes at object
+        pObj->SetMergedItemSetAndBroadcast(aAttr, bReplaceAll);
+
+        if(bLineWidthChange)
         {
-            SdrMark* pM=GetSdrMarkByIndex(nm);
-            SdrObject* pObj = pM->GetMarkedSdrObj();
+            const SfxItemSet& rSet = pObj->GetMergedItemSet();
 
-            if( bUndo )
+            if(nOldLineWidth != nNewLineWidth)
             {
-                std::vector< SdrUndoAction* > vConnectorUndoActions;
-                SdrEdgeObj* pEdgeObj = dynamic_cast< SdrEdgeObj* >( pObj );
-                if ( pEdgeObj )
-                    bPossibleGeomChange = true;
-                else if( bUndo )
-                    vConnectorUndoActions = CreateConnectorUndo( *pObj );
-
-                AddUndoActions( vConnectorUndoActions );
-            }
-
-            // new geometry undo
-            if(bPossibleGeomChange && bUndo)
-            {
-                // save position and size of object, too
-                AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
-            }
-
-            if( bUndo )
-            {
-                // #i8508#
-                // If this is a text object also rescue the OutlinerParaObject since
-                // applying attributes to the object may change text layout when
-                // multiple portions exist with multiple formats. If a OutlinerParaObject
-                // really exists and needs to be rescued is evaluated in the undo
-                // implementation itself.
-                const bool bRescueText = dynamic_cast< SdrTextObj* >(pObj) != nullptr;
-
-                // add attribute undo
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj,false,bHasEEItems || bPossibleGeomChange || bRescueText));
-            }
-
-            // set up a scene updater if object is a 3d object
-            if(dynamic_cast< E3dObject* >(pObj))
-            {
-                aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(pObj));
-            }
-
-            if(bLineWidthChange)
-            {
-                nOldLineWidth = pObj->GetMergedItem(XATTR_LINEWIDTH).GetValue();
-            }
-
-            // set attributes at object
-            pObj->SetMergedItemSetAndBroadcast(aAttr, bReplaceAll);
-
-            if(bLineWidthChange)
-            {
-                const SfxItemSet& rSet = pObj->GetMergedItemSet();
-
-                if(nOldLineWidth != nNewLineWidth)
+                if(SfxItemState::DONTCARE != rSet.GetItemState(XATTR_LINESTARTWIDTH))
                 {
-                    if(SfxItemState::DONTCARE != rSet.GetItemState(XATTR_LINESTARTWIDTH))
-                    {
-                        const sal_Int32 nValAct(rSet.Get(XATTR_LINESTARTWIDTH).GetValue());
-                        const sal_Int32 nValNewStart(std::max((sal_Int32)0, nValAct + (((nNewLineWidth - nOldLineWidth) * 15) / 10)));
+                    const sal_Int32 nValAct(rSet.Get(XATTR_LINESTARTWIDTH).GetValue());
+                    const sal_Int32 nValNewStart(std::max((sal_Int32)0, nValAct + (((nNewLineWidth - nOldLineWidth) * 15) / 10)));
 
-                        pObj->SetMergedItem(XLineStartWidthItem(nValNewStart));
-                    }
-
-                    if(SfxItemState::DONTCARE != rSet.GetItemState(XATTR_LINEENDWIDTH))
-                    {
-                        const sal_Int32 nValAct(rSet.Get(XATTR_LINEENDWIDTH).GetValue());
-                        const sal_Int32 nValNewEnd(std::max((sal_Int32)0, nValAct + (((nNewLineWidth - nOldLineWidth) * 15) / 10)));
-
-                        pObj->SetMergedItem(XLineEndWidthItem(nValNewEnd));
-                    }
+                    pObj->SetMergedItem(XLineStartWidthItem(nValNewStart));
                 }
-            }
 
-            if(dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr)
-            {
-                SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObj);
-
-                if(!aCharWhichIds.empty())
+                if(SfxItemState::DONTCARE != rSet.GetItemState(XATTR_LINEENDWIDTH))
                 {
-                    tools::Rectangle aOldBoundRect = pTextObj->GetLastBoundRect();
+                    const sal_Int32 nValAct(rSet.Get(XATTR_LINEENDWIDTH).GetValue());
+                    const sal_Int32 nValNewEnd(std::max((sal_Int32)0, nValAct + (((nNewLineWidth - nOldLineWidth) * 15) / 10)));
 
-                    // #110094#-14 pTextObj->SendRepaintBroadcast(pTextObj->GetBoundRect());
-                    pTextObj->RemoveOutlinerCharacterAttribs( aCharWhichIds );
-
-                    // object has changed, should be called from
-                    // RemoveOutlinerCharacterAttribs. This will change when the text
-                    // object implementation changes.
-                    pTextObj->SetChanged();
-
-                    pTextObj->BroadcastObjectChange();
-                    pTextObj->SendUserCall(SdrUserCallType::ChangeAttr, aOldBoundRect);
-                }
-            }
-
-            // #i38495#
-            if(!bResetAnimationTimer)
-            {
-                if(pObj->GetViewContact().isAnimatedInAnyViewObjectContact())
-                {
-                    bResetAnimationTimer = true;
+                    pObj->SetMergedItem(XLineEndWidthItem(nValNewEnd));
                 }
             }
         }
 
-        // fire scene updaters
-        while(!aUpdaters.empty())
+        if(dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr)
         {
-            delete aUpdaters.back();
-            aUpdaters.pop_back();
+            SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObj);
+
+            if(!aCharWhichIds.empty())
+            {
+                tools::Rectangle aOldBoundRect = pTextObj->GetLastBoundRect();
+
+                // #110094#-14 pTextObj->SendRepaintBroadcast(pTextObj->GetBoundRect());
+                pTextObj->RemoveOutlinerCharacterAttribs( aCharWhichIds );
+
+                // object has changed, should be called from
+                // RemoveOutlinerCharacterAttribs. This will change when the text
+                // object implementation changes.
+                pTextObj->SetChanged();
+
+                pTextObj->BroadcastObjectChange();
+                pTextObj->SendUserCall(SdrUserCallType::ChangeAttr, aOldBoundRect);
+            }
         }
 
-        // #i38135#
-        if(bResetAnimationTimer)
+        // #i38495#
+        if(!bResetAnimationTimer)
         {
-            SetAnimationTimer(0);
+            if(pObj->GetViewContact().isAnimatedInAnyViewObjectContact())
+            {
+                bResetAnimationTimer = true;
+            }
         }
-
-        // better check before what to do:
-        // pObj->SetAttr() or SetNotPersistAttr()
-        // TODO: missing implementation!
-        SetNotPersistAttrToMarked(rAttr);
-
-        if( bUndo )
-            EndUndo();
     }
+
+    // fire scene updaters
+    while(!aUpdaters.empty())
+    {
+        delete aUpdaters.back();
+        aUpdaters.pop_back();
+    }
+
+    // #i38135#
+    if(bResetAnimationTimer)
+    {
+        SetAnimationTimer(0);
+    }
+
+    // better check before what to do:
+    // pObj->SetAttr() or SetNotPersistAttr()
+    // TODO: missing implementation!
+    SetNotPersistAttrToMarked(rAttr);
+
+    if( bUndo )
+        EndUndo();
 }
 
 SfxStyleSheet* SdrEditView::GetStyleSheetFromMarked() const

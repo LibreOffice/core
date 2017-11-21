@@ -711,77 +711,77 @@ void CreateBorderPrimitives(
     // get offset color pairs for  style, one per visible line
     const StyleVectorCombination aCombination(rBorder, rX, 0.0, false, pForceColor);
 
-    if(!aCombination.empty())
+    if(aCombination.empty())
+        return;
+
+    const basegfx::B2DVector aPerpendX(basegfx::getNormalizedPerpendicular(rX));
+    const bool bHasStartStyles(!rStartStyleVectorTable.empty());
+    const bool bHasEndStyles(!rEndStyleVectorTable.empty());
+    const size_t nOffsets(aCombination.size());
+    std::vector<ExtendSet> aExtendSetStart(nOffsets);
+    std::vector<ExtendSet> aExtendSetEnd(nOffsets);
+
+    if(bHasStartStyles)
     {
-        const basegfx::B2DVector aPerpendX(basegfx::getNormalizedPerpendicular(rX));
-        const bool bHasStartStyles(!rStartStyleVectorTable.empty());
-        const bool bHasEndStyles(!rEndStyleVectorTable.empty());
-        const size_t nOffsets(aCombination.size());
-        std::vector<ExtendSet> aExtendSetStart(nOffsets);
-        std::vector<ExtendSet> aExtendSetEnd(nOffsets);
-
-        if(bHasStartStyles)
-        {
-            // create extends for line starts, use given point/vector and offsets
-            getExtends(aExtendSetStart, rOrigin, aCombination, aPerpendX, rStartStyleVectorTable.getEntries());
-        }
-
-        if(bHasEndStyles)
-        {
-            // Create extends for line ends, create inverse point/vector and inverse offsets.
-            const StyleVectorCombination aMirroredCombination(rBorder, -rX, 0.0, true, pForceColor);
-
-            getExtends(aExtendSetEnd, rOrigin + rX, aMirroredCombination, -aPerpendX, rEndStyleVectorTable.getEntries());
-
-            // also need to inverse the result to apply to the correct lines
-            std::reverse(aExtendSetEnd.begin(), aExtendSetEnd.end());
-        }
-
-        std::vector< drawinglayer::primitive2d::BorderLine > aBorderlines;
-        const double fNegLength(-rX.getLength());
-
-        for(size_t a(0); a < nOffsets; a++)
-        {
-            Color aMyColor;
-            double fMyOffset(0.0);
-            double fMyHalfWidth(0.0);
-            aCombination.getColorAndOffsetAndHalfWidth(a, aMyColor, fMyOffset, fMyHalfWidth);
-            const ExtendSet& rExtStart(aExtendSetStart[a]);
-            const ExtendSet& rExtEnd(aExtendSetEnd[a]);
-
-            if(0xff == aMyColor.GetTransparency())
-            {
-                aBorderlines.push_back(
-                    drawinglayer::primitive2d::BorderLine(
-                        fMyHalfWidth * 2.0));
-            }
-            else
-            {
-                aBorderlines.push_back(
-                    drawinglayer::primitive2d::BorderLine(
-                        drawinglayer::attribute::LineAttribute(
-                            aMyColor.getBColor(),
-                            fMyHalfWidth * 2.0),
-                        fNegLength * rExtStart.mfExtLeft,
-                        fNegLength * rExtStart.mfExtRight,
-                        fNegLength * rExtEnd.mfExtRight,
-                        fNegLength * rExtEnd.mfExtLeft));
-            }
-        }
-
-        static double fPatScFact(10.0); // 10.0 multiply, see old code
-        const std::vector<double> aDashing(svtools::GetLineDashing(rBorder.Type(), rBorder.PatternScale() * fPatScFact));
-        const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(aDashing);
-        const basegfx::B2DPoint aStart(rOrigin + (aPerpendX * aCombination.getRefModeOffset()));
-
-        rTarget.append(
-            drawinglayer::primitive2d::Primitive2DReference(
-                new drawinglayer::primitive2d::BorderLinePrimitive2D(
-                    aStart,
-                    aStart + rX,
-                    aBorderlines,
-                    aStrokeAttribute)));
+        // create extends for line starts, use given point/vector and offsets
+        getExtends(aExtendSetStart, rOrigin, aCombination, aPerpendX, rStartStyleVectorTable.getEntries());
     }
+
+    if(bHasEndStyles)
+    {
+        // Create extends for line ends, create inverse point/vector and inverse offsets.
+        const StyleVectorCombination aMirroredCombination(rBorder, -rX, 0.0, true, pForceColor);
+
+        getExtends(aExtendSetEnd, rOrigin + rX, aMirroredCombination, -aPerpendX, rEndStyleVectorTable.getEntries());
+
+        // also need to inverse the result to apply to the correct lines
+        std::reverse(aExtendSetEnd.begin(), aExtendSetEnd.end());
+    }
+
+    std::vector< drawinglayer::primitive2d::BorderLine > aBorderlines;
+    const double fNegLength(-rX.getLength());
+
+    for(size_t a(0); a < nOffsets; a++)
+    {
+        Color aMyColor;
+        double fMyOffset(0.0);
+        double fMyHalfWidth(0.0);
+        aCombination.getColorAndOffsetAndHalfWidth(a, aMyColor, fMyOffset, fMyHalfWidth);
+        const ExtendSet& rExtStart(aExtendSetStart[a]);
+        const ExtendSet& rExtEnd(aExtendSetEnd[a]);
+
+        if(0xff == aMyColor.GetTransparency())
+        {
+            aBorderlines.push_back(
+                drawinglayer::primitive2d::BorderLine(
+                    fMyHalfWidth * 2.0));
+        }
+        else
+        {
+            aBorderlines.push_back(
+                drawinglayer::primitive2d::BorderLine(
+                    drawinglayer::attribute::LineAttribute(
+                        aMyColor.getBColor(),
+                        fMyHalfWidth * 2.0),
+                    fNegLength * rExtStart.mfExtLeft,
+                    fNegLength * rExtStart.mfExtRight,
+                    fNegLength * rExtEnd.mfExtRight,
+                    fNegLength * rExtEnd.mfExtLeft));
+        }
+    }
+
+    static double fPatScFact(10.0); // 10.0 multiply, see old code
+    const std::vector<double> aDashing(svtools::GetLineDashing(rBorder.Type(), rBorder.PatternScale() * fPatScFact));
+    const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(aDashing);
+    const basegfx::B2DPoint aStart(rOrigin + (aPerpendX * aCombination.getRefModeOffset()));
+
+    rTarget.append(
+        drawinglayer::primitive2d::Primitive2DReference(
+            new drawinglayer::primitive2d::BorderLinePrimitive2D(
+                aStart,
+                aStart + rX,
+                aBorderlines,
+                aStrokeAttribute)));
 }
 
 }

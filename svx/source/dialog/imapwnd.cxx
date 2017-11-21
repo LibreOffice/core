@@ -632,30 +632,30 @@ void IMapWindow::DoMacroAssign()
 {
     SdrObject*  pSdrObj = GetSelectedSdrObject();
 
-    if ( pSdrObj )
+    if ( !pSdrObj )
+        return;
+
+    SfxItemSet      aSet( *pIMapPool, svl::Items<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG>{} );
+
+    SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);
+    aNamesItem.AddEvent( "MouseOver", "", SvMacroItemId::OnMouseOver );
+    aNamesItem.AddEvent( "MouseOut", "", SvMacroItemId::OnMouseOut );
+    aSet.Put( aNamesItem );
+
+    SvxMacroItem    aMacroItem(SID_ATTR_MACROITEM);
+    IMapObject*     pIMapObj = GetIMapObj( pSdrObj );
+    aMacroItem.SetMacroTable( pIMapObj->GetMacroTable() );
+    aSet.Put( aMacroItem );
+
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    ScopedVclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateSfxDialog( this, aSet, mxDocumentFrame, SID_EVENTCONFIG ));
+
+    if ( pMacroDlg && pMacroDlg->Execute() == RET_OK )
     {
-        SfxItemSet      aSet( *pIMapPool, svl::Items<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG>{} );
-
-        SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);
-        aNamesItem.AddEvent( "MouseOver", "", SvMacroItemId::OnMouseOver );
-        aNamesItem.AddEvent( "MouseOut", "", SvMacroItemId::OnMouseOut );
-        aSet.Put( aNamesItem );
-
-        SvxMacroItem    aMacroItem(SID_ATTR_MACROITEM);
-        IMapObject*     pIMapObj = GetIMapObj( pSdrObj );
-        aMacroItem.SetMacroTable( pIMapObj->GetMacroTable() );
-        aSet.Put( aMacroItem );
-
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateSfxDialog( this, aSet, mxDocumentFrame, SID_EVENTCONFIG ));
-
-        if ( pMacroDlg && pMacroDlg->Execute() == RET_OK )
-        {
-            const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
-            pIMapObj->SetMacroTable( static_cast<const SvxMacroItem& >(pOutSet->Get( SID_ATTR_MACROITEM )).GetMacroTable() );
-            pModel->SetChanged();
-            UpdateInfo( false );
-        }
+        const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
+        pIMapObj->SetMacroTable( static_cast<const SvxMacroItem& >(pOutSet->Get( SID_ATTR_MACROITEM )).GetMacroTable() );
+        pModel->SetChanged();
+        UpdateInfo( false );
     }
 }
 
@@ -735,53 +735,53 @@ void IMapWindow::CreateDefaultObject()
 {
     SdrPageView* pPageView = pView->GetSdrPageView();
 
-    if(pPageView)
+    if(!pPageView)
+        return;
+
+    // calc position and size
+    Point aPagePos(0, 0); // = pPageView->GetOffset();
+    Size aPageSize = pPageView->GetPage()->GetSize();
+    sal_uInt32 nDefaultObjectSizeWidth = aPageSize.Width() / 4;
+    sal_uInt32 nDefaultObjectSizeHeight = aPageSize.Height() / 4;
+    aPagePos.X() += (aPageSize.Width() / 2) - (nDefaultObjectSizeWidth / 2);
+    aPagePos.Y() += (aPageSize.Height() / 2) - (nDefaultObjectSizeHeight / 2);
+    tools::Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
+
+    SdrObject* pObj = SdrObjFactory::MakeNewObject( pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(), nullptr, pModel);
+    pObj->SetLogicRect(aNewObjectRectangle);
+
+    switch( pObj->GetObjIdentifier() )
     {
-        // calc position and size
-        Point aPagePos(0, 0); // = pPageView->GetOffset();
-        Size aPageSize = pPageView->GetPage()->GetSize();
-        sal_uInt32 nDefaultObjectSizeWidth = aPageSize.Width() / 4;
-        sal_uInt32 nDefaultObjectSizeHeight = aPageSize.Height() / 4;
-        aPagePos.X() += (aPageSize.Width() / 2) - (nDefaultObjectSizeWidth / 2);
-        aPagePos.Y() += (aPageSize.Height() / 2) - (nDefaultObjectSizeHeight / 2);
-        tools::Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
-
-        SdrObject* pObj = SdrObjFactory::MakeNewObject( pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(), nullptr, pModel);
-        pObj->SetLogicRect(aNewObjectRectangle);
-
-        switch( pObj->GetObjIdentifier() )
+    case OBJ_POLY:
+    case OBJ_PATHPOLY:
         {
-        case OBJ_POLY:
-        case OBJ_PATHPOLY:
-            {
-                basegfx::B2DPolygon aInnerPoly;
-                aInnerPoly.append(basegfx::B2DPoint(aNewObjectRectangle.BottomLeft().X(), aNewObjectRectangle.BottomLeft().Y()));
-                aInnerPoly.append(basegfx::B2DPoint(aNewObjectRectangle.TopLeft().X(), aNewObjectRectangle.TopLeft().Y()));
-                aInnerPoly.append(basegfx::B2DPoint(aNewObjectRectangle.TopCenter().X(), aNewObjectRectangle.TopCenter().Y()));
-                aInnerPoly.append(basegfx::B2DPoint(aNewObjectRectangle.Center().X(), aNewObjectRectangle.Center().Y()));
-                aInnerPoly.append(basegfx::B2DPoint(aNewObjectRectangle.RightCenter().X(), aNewObjectRectangle.RightCenter().Y()));
-                aInnerPoly.append(basegfx::B2DPoint(aNewObjectRectangle.BottomRight().X(), aNewObjectRectangle.BottomRight().Y()));
-                aInnerPoly.setClosed(true);
-                static_cast<SdrPathObj*>(pObj)->SetPathPoly(basegfx::B2DPolyPolygon(aInnerPoly));
-                break;
-            }
-        case OBJ_FREEFILL:
-        case OBJ_PATHFILL:
-            {
-                sal_Int32 nWdt(aNewObjectRectangle.GetWidth() / 2);
-                sal_Int32 nHgt(aNewObjectRectangle.GetHeight() / 2);
-                basegfx::B2DPolygon aInnerPoly(XPolygon(aNewObjectRectangle.Center(), nWdt, nHgt).getB2DPolygon());
-                static_cast<SdrPathObj*>(pObj)->SetPathPoly(basegfx::B2DPolyPolygon(aInnerPoly));
-                break;
-            }
-
+            basegfx::B2DPolygon aInnerPoly;
+            aInnerPoly.append(basegfx::B2DPoint(aNewObjectRectangle.BottomLeft().X(), aNewObjectRectangle.BottomLeft().Y()));
+            aInnerPoly.append(basegfx::B2DPoint(aNewObjectRectangle.TopLeft().X(), aNewObjectRectangle.TopLeft().Y()));
+            aInnerPoly.append(basegfx::B2DPoint(aNewObjectRectangle.TopCenter().X(), aNewObjectRectangle.TopCenter().Y()));
+            aInnerPoly.append(basegfx::B2DPoint(aNewObjectRectangle.Center().X(), aNewObjectRectangle.Center().Y()));
+            aInnerPoly.append(basegfx::B2DPoint(aNewObjectRectangle.RightCenter().X(), aNewObjectRectangle.RightCenter().Y()));
+            aInnerPoly.append(basegfx::B2DPoint(aNewObjectRectangle.BottomRight().X(), aNewObjectRectangle.BottomRight().Y()));
+            aInnerPoly.setClosed(true);
+            static_cast<SdrPathObj*>(pObj)->SetPathPoly(basegfx::B2DPolyPolygon(aInnerPoly));
+            break;
+        }
+    case OBJ_FREEFILL:
+    case OBJ_PATHFILL:
+        {
+            sal_Int32 nWdt(aNewObjectRectangle.GetWidth() / 2);
+            sal_Int32 nHgt(aNewObjectRectangle.GetHeight() / 2);
+            basegfx::B2DPolygon aInnerPoly(XPolygon(aNewObjectRectangle.Center(), nWdt, nHgt).getB2DPolygon());
+            static_cast<SdrPathObj*>(pObj)->SetPathPoly(basegfx::B2DPolyPolygon(aInnerPoly));
+            break;
         }
 
-        pView->InsertObjectAtView(pObj, *pPageView);
-        SdrObjCreated( *pObj );
-        SetCurrentObjState( true );
-        pView->MarkObj( pObj, pPageView );
     }
+
+    pView->InsertObjectAtView(pObj, *pPageView);
+    SdrObjCreated( *pObj );
+    SetCurrentObjState( true );
+    pView->MarkObj( pObj, pPageView );
 }
 
 void IMapWindow::SelectFirstObject()

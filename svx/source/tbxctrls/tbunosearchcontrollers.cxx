@@ -1401,52 +1401,52 @@ css::uno::Sequence < css::uno::Reference< css::frame::XDispatch > > SAL_CALL Fin
 void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css::uno::Sequence < css::beans::PropertyValue >& /*lArgs*/ )
 {
     //vnd.sun.star.findbar:FocusToFindbar  - set cursor to the FindTextFieldControl of the findbar
-    if ( aURL.Path == "FocusToFindbar" )
+    if ( aURL.Path != "FocusToFindbar" )
+        return;
+
+    css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY);
+    if(!xPropSet.is())
+        return;
+
+    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+    css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
+    aValue >>= xLayoutManager;
+    if (!xLayoutManager.is())
+        return;
+
+    const OUString sResourceURL( "private:resource/toolbar/findbar" );
+    css::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
+    if (!xUIElement.is())
     {
-        css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY);
-        if(!xPropSet.is())
+        // show the findbar if necessary
+        xLayoutManager->createElement( sResourceURL );
+        xLayoutManager->showElement( sResourceURL );
+        xUIElement = xLayoutManager->getElement( sResourceURL );
+        if ( !xUIElement.is() )
             return;
+    }
 
-        css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-        css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
-        aValue >>= xLayoutManager;
-        if (!xLayoutManager.is())
-            return;
-
-        const OUString sResourceURL( "private:resource/toolbar/findbar" );
-        css::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
-        if (!xUIElement.is())
+    css::uno::Reference< css::awt::XWindow > xWindow(xUIElement->getRealInterface(), css::uno::UNO_QUERY);
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
+    ToolBox* pToolBox = static_cast<ToolBox*>(pWindow.get());
+    if ( pToolBox )
+    {
+        ToolBox::ImplToolItems::size_type nItemCount = pToolBox->GetItemCount();
+        for ( ToolBox::ImplToolItems::size_type i=0; i<nItemCount; ++i )
         {
-            // show the findbar if necessary
-            xLayoutManager->createElement( sResourceURL );
-            xLayoutManager->showElement( sResourceURL );
-            xUIElement = xLayoutManager->getElement( sResourceURL );
-            if ( !xUIElement.is() )
-                return;
-        }
-
-        css::uno::Reference< css::awt::XWindow > xWindow(xUIElement->getRealInterface(), css::uno::UNO_QUERY);
-        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
-        ToolBox* pToolBox = static_cast<ToolBox*>(pWindow.get());
-        if ( pToolBox )
-        {
-            ToolBox::ImplToolItems::size_type nItemCount = pToolBox->GetItemCount();
-            for ( ToolBox::ImplToolItems::size_type i=0; i<nItemCount; ++i )
+            sal_uInt16 id = pToolBox->GetItemId(i);
+            OUString sItemCommand = pToolBox->GetItemCommand(id);
+            if ( sItemCommand == COMMAND_FINDTEXT )
             {
-                sal_uInt16 id = pToolBox->GetItemId(i);
-                OUString sItemCommand = pToolBox->GetItemCommand(id);
-                if ( sItemCommand == COMMAND_FINDTEXT )
+                vcl::Window* pItemWin = pToolBox->GetItemWindow( id );
+                if ( pItemWin )
                 {
-                    vcl::Window* pItemWin = pToolBox->GetItemWindow( id );
-                    if ( pItemWin )
-                    {
-                        SolarMutexGuard aSolarMutexGuard;
-                        FindTextFieldControl* pFindTextFieldControl = dynamic_cast<FindTextFieldControl*>(pItemWin);
-                        if ( pFindTextFieldControl )
-                            pFindTextFieldControl->SetTextToSelected_Impl();
-                        pItemWin->GrabFocus();
-                        return;
-                    }
+                    SolarMutexGuard aSolarMutexGuard;
+                    FindTextFieldControl* pFindTextFieldControl = dynamic_cast<FindTextFieldControl*>(pItemWin);
+                    if ( pFindTextFieldControl )
+                        pFindTextFieldControl->SetTextToSelected_Impl();
+                    pItemWin->GrabFocus();
+                    return;
                 }
             }
         }
