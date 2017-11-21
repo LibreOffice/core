@@ -1667,6 +1667,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     aGraphic = pGrfObj->GetGraphic();
                     bApply = true;
                 }
+                delete pGrfObj;
             }
             else
             {
