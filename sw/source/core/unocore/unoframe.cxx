@@ -1661,8 +1661,8 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     OString sId(OUStringToOString(
                         aGrfUrl.copy(sizeof(sGraphicObjectProtocol)-1),
                         RTL_TEXTENCODING_ASCII_US));
-                    auto pGrfObj = o3tl::make_unique<GraphicObject>( sId );
-                    aGraphic = pGrfObj->GetGraphic();
+                    GraphicObject pGrfObj( sId );
+                    aGraphic = pGrfObj.GetGraphic();
                     bApply = true;
                 }
             }
