@@ -4326,7 +4326,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
     static const bool bThreadingProhibited = std::getenv("SC_NO_THREADED_CALCULATION");
 
-    // To temporary use threading for sc unit tests regardless of the size of the formula group,
+    // To temporarily use threading for sc unit tests regardless of the size of the formula group,
     // add the condition !std::getenv("LO_TESTNAME") below (with &&)
     if (GetWeight() < ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize)
     {

@@ -438,7 +438,7 @@ IMAGE_SETEVENT:
 
             pTextNode->SetCountedInList( true );
 
-            // It's necessary to invalide the rule, because between the reading
+            // It's necessary to invalidate the rule, because between the reading
             // of LI and the graphic an EndAction could be called.
             if( GetNumInfo().GetNumRule() )
                 GetNumInfo().GetNumRule()->SetInvalidRule( true );

@@ -106,11 +106,11 @@ SwCache::~SwCache()
         m_aName << "; number of new entries: " << m_nAppend
             << "; number of insert on free places: " << m_nInsertFree
             << "; number of replacements: " << m_nReplace
-            << "; number of successful Get's: " << m_nGetSuccess
-            << "; number of failed Get's: " << m_nGetFail
+            << "; number of successful Gets: " << m_nGetSuccess
+            << "; number of failed Gets: " << m_nGetFail
             << "; number or reordering (LRU): " << m_nToTop
             << "; number of suppressions: " << m_nDelete
-            << "; number of Get's without Index: " << m_nGetSeek
+            << "; number of Gets without Index: " << m_nGetSeek
             << "; number of Seek for Get without Index: " << m_nAverageSeekCnt
             << "; number of Flush calls: " << m_nFlushCnt
             << "; number of flushed objects: " << m_nFlushedObjects

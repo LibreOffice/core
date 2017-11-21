@@ -147,10 +147,10 @@ class SwUndoFormatColl : public SwUndo, private SwUndRng
     std::unique_ptr<SwHistory> pHistory;
     SwFormatColl* pFormatColl;
     // for correct <ReDo(..)> and <Repeat(..)>
-    // boolean, which indicates that the attributes are reseted at the nodes
+    // boolean, which indicates that the attributes are reset at the nodes
     // before the format has been applied.
     const bool mbReset;
-    // boolean, which indicates that the list attributes had been reseted at
+    // boolean, which indicates that the list attributes had been reset at
     // the nodes before the format has been applied.
     const bool mbResetListAttrs;
 

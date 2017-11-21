@@ -880,7 +880,7 @@ void atk_object_wrapper_add_child(AtkObjectWrapper* wrapper, AtkObject *child, g
 void atk_object_wrapper_remove_child(AtkObjectWrapper* wrapper, AtkObject *child, gint index)
 {
     /*
-     * the atk-bridge GTK+ module get's back to the event source to ref the child just
+     * the atk-bridge GTK+ module gets back to the event source to ref the child just
      * vanishing, so we keep this reference because the semantic on OOo side is different.
      */
     wrapper->child_about_to_be_removed = child;
