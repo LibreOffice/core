@@ -1401,7 +1401,7 @@ class SwNotifyAccAboutInvalidTextSelections
             : mrCursorSh( _rCursorSh )
         {}
 
-        ~SwNotifyAccAboutInvalidTextSelections()
+        ~SwNotifyAccAboutInvalidTextSelections() COVERITY_NOEXCEPT_FALSE
         {
             mrCursorSh.InvalidateAccessibleParaTextSelection();
         }

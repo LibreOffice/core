@@ -25,6 +25,7 @@
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <o3tl/deleter.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
 #include <tools/gen.hxx>
@@ -118,7 +119,7 @@ private:
     css::uno::Sequence< css::datatransfer::DataFlavor >       m_ClipboardDataFlavors;
     css::uno::Sequence< css::datatransfer::DataFlavor >       m_ClipboardDataFlavorsResource;
     css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xSupplier;
-    std::unique_ptr<DlgEdFactory> pObjFac; // never nullptr
+    std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory>> pObjFac; // never nullptr
     vcl::Window&                    rWindow; // DialogWindow
     std::unique_ptr<DlgEdFunc>    pFunc;
     DialogWindowLayout& rLayout;

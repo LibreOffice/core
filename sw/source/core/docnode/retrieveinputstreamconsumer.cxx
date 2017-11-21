@@ -34,7 +34,7 @@ SwAsyncRetrieveInputStreamThreadConsumer::SwAsyncRetrieveInputStreamThreadConsum
 {
 }
 
-SwAsyncRetrieveInputStreamThreadConsumer::~SwAsyncRetrieveInputStreamThreadConsumer()
+SwAsyncRetrieveInputStreamThreadConsumer::~SwAsyncRetrieveInputStreamThreadConsumer() COVERITY_NOEXCEPT_FALSE
 {
     SwThreadManager::GetThreadManager().RemoveThread( mnThreadID );
 }

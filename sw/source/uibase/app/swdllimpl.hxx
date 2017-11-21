@@ -26,7 +26,7 @@ public:
     static void RegisterControls();
 
     SwDLL();
-    ~SwDLL();
+    ~SwDLL() COVERITY_NOEXCEPT_FALSE;
 
     sw::Filters & getFilters();
 

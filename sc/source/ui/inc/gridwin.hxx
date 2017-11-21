@@ -24,6 +24,7 @@
 #include "viewutil.hxx"
 #include "viewdata.hxx"
 #include "cbutton.hxx"
+#include <o3tl/deleter.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -137,7 +138,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     ScHSplitPos             eHWhich;
     ScVSplitPos             eVWhich;
 
-    std::unique_ptr<ScNoteMarker> mpNoteMarker;
+    std::unique_ptr<ScNoteMarker, o3tl::default_delete<ScNoteMarker>> mpNoteMarker;
 
     VclPtr<ScFilterListBox>          mpFilterBox;
     VclPtr<FloatingWindow>           mpFilterFloat;

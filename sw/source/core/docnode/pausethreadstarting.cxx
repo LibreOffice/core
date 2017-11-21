@@ -37,7 +37,7 @@ SwPauseThreadStarting::SwPauseThreadStarting()
     }
 }
 
-SwPauseThreadStarting::~SwPauseThreadStarting()
+SwPauseThreadStarting::~SwPauseThreadStarting() COVERITY_NOEXCEPT_FALSE
 {
     if ( mbPausedThreadStarting )
     {
